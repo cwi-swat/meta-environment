@@ -160,15 +160,20 @@ Enumerators generate all the values in a given bag or relation.
 They come in two flavors: 
 
 \begin{itemize}
-\item {\tt $V$~:~$E$}: the elements of the bag or relation that results from the evaluation
-of expression $E$ are enumerated and subsequently assigned to the new variable $V$.
+\item {\tt $Type V$~:~$E$}: the elements of the bag or relation $BR$ that results from the evaluation
+of expression $E$ are enumerated and subsequently assigned to the new variable $V$ of type $Type$.
 
-
-\item {\tt <$V_1$,~...,~$V_n$>~:~$E$}: the elements of the bag or relation
+\item {\tt <$T_1$,~...,~$T_n$>~:~$E$}: the elements of the bag or relation $BR$
 that results from the evaluation of expression $E$ are enumerated. The
-elements of the resulting $n$-tuple are subsequently assigned to the
-new variables $V_1 ,..., V_n$.
-
+$i$-the element ($i=1,...,n$) of the resulting $n$-tuple is subsequently combined with each target $T_i$ as follows:
+\begin{itemize}
+  \item If $T_i$ is a variable declaration of the form $Type V_i$, then the $i$-th element is assigned to $V_i$.
+  \item If $T_i$ is an arbitrary expression $E_i$, then the value of
+   the $i$-th element should be equal to the value of $E_i$. If they
+   are unequal, computation continues with enumerating the next
+   element of the bag or relation $BR$.
+\end{itemize}
+  
 \end{itemize}
 
 \paragraph{Test}
@@ -185,8 +190,16 @@ Assignments assign a value to one or more variables and also come in two flavors
 
 \item {\tt $V$ <- $E$}: assigns the value of expression $E$ to the new variable $V$.
 
-\item {\tt <$V_1$, ..., $V_n$> <- $E$}: assigns the elements of the $n$-tuple
-resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., V_n$.
+\item {\tt <$T_1$, ..., $T_n$> <- $E$}: combines the elements of the $n$-tuple
+resulting from the evaluation of expression $E$ with each $T_i$ as follows:
+
+\begin{itemize}
+
+\item If $T_i$ is a variable declaration of the form $Type V_i$, then the $i$-th element is assigned to $V_i$.
+\item If $T_i$ is an arbitrary expression $E_i$, then the value of
+   the $i$-th element should be equal to the value of $E_i$. If they
+   are unequal, the assignment acts as a test that fails (see above).
+\end{itemize}
 
 \end{itemize}
 
@@ -195,15 +208,15 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 
 \paragraph{Example}
 
-{\tt \{X | X : \{1, 2, 3, 4, 5\},  X >= 3\}} yields the bag {\tt \{3,4,5\}}.
+{\tt \{X | int X : \{1, 2, 3, 4, 5\},  X >= 3\}} yields the bag {\tt \{3,4,5\}}.
 
 \paragraph{Example}
 
-{\tt \{<X, Y> | X :\{1, 2, 3\}, Y :\{2, 3, 4\}, X >= Y\}} yields the relation
+{\tt \{<X, Y> | int X :\{1, 2, 3\}, int Y :\{2, 3, 4\}, X >= Y\}} yields the relation
 {\tt \{<2, 2>, <3, 2>, <3, 3>\}}.
 
 \paragraph{Example}
-{\tt \{<Y, X> | <X, Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
+{\tt \{<Y, X> | <int X, int Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
 the given relation: {\tt \{<10,1>, <20,2>\}}.
 
 \paragraph{Example}
@@ -258,7 +271,7 @@ get their value when $F$ is invoked from another expression.
 
 \paragraph{Example} The function declaration
 \begin{quote}
-{\tt rel[int, int] invert(rel[int,int] R) = \{<Y, X> | <X, Y> : R \}} 
+{\tt rel[int, int] invert(rel[int,int] R) = \{<Y, X> | <int X, int Y> : R \}} 
 \end{quote}
 yields the inverse of the argument relation {\tt R}. For instance,
 \begin{itemize}
@@ -273,7 +286,7 @@ types.
 \begin{sloppypar}
 \paragraph{Example} The declaration
 \begin{quote}
-{\tt rel[T2, T1] invert2(rel[T1,T2] R) = \{<Y, X> | <X, Y> : R \}} 
+{\tt rel[T2, T1] invert2(rel[T1,T2] R) = \{<Y, X> | <int X, int Y> : R \}} 
 \end{quote}
 yields an inversion function that is applicable to any binary relation.
 For instance,
@@ -570,7 +583,7 @@ in \emph{bag}$_1$  and \emph{bag}$_2$.
 \item  {\tt \{1, 2, 3\} union \{1, 2, 3\}} yields  {\tt \{1, 2, 3\}}.
 \item {\tt \{1, 1, 2, 3\} union \{4, 4, 5, 6\}} yields {\tt \{1, 1, 2, 3, 4, 4, 5, 6\}}.
 
-\item \item {\tt \{1, 2, 3\} inter \{4, 5, 6\}} yields {\tt \{ \}}.
+\item {\tt \{1, 2, 3\} inter \{4, 5, 6\}} yields {\tt \{ \}}.
 \item  {\tt \{1, 1, 2, 3\} inter \{1, 2, 3\}} yields  {\tt \{1, 2, 3\}}.
 
 \item  {\tt \{1, 1, 2, 3\}  \verb+\+ \{1, 2, 3\}} yields  {\tt \{1\}}.
@@ -611,7 +624,7 @@ The composition operator combines two relations and can be defined as follows:
 
 \begin{verbatim}
 rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
-   {<V, Y> | <V, W> : R1, <X, Y> :  R2, W == X }
+   {<V, Y> | <T1 V, T2 W> : R1, <T2 X, T3 Y> : R2, W == X }
 \end{verbatim}
 
 \paragraph{Example}
@@ -626,7 +639,7 @@ The product operator combines two bags into a relation and can be defined as
 follows:
 
 \begin{verbatim}
-rel[T1,T2] x(bag[T1] B1, bag[T2] B2) = {<V, W> | V : B1, W : B2 }
+rel[T1,T2] x(bag[T1] B1, bag[T2] B2) = {<V, W> | T1 V : B1, T2 W : B2 }
 \end{verbatim}
 
 \paragraph{Example}
@@ -647,14 +660,14 @@ follows:
   allow {\tt .} as function name. The same applies to some of the following definitions.}
 
 \begin{verbatim}
-bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
+bag[T1] .(rel[T1,T2] R, T2 E) = { V | <T1 V, T2 W> : R, W == E }
 \end{verbatim}
 
 The left image operator can be extended to take a bag of elements as second
 element instead of a single element:
 
 \begin{verbatim}
-bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
+bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <T1 V, T2 W> : R, W in B }
 \end{verbatim}
 
 \paragraph{Examples}
@@ -675,14 +688,14 @@ that occur in tuples of the form {\tt <E$_i$, E>}. It can be defined as
 follows:
 
 \begin{verbatim}
-bag[T2] .(T1 E, rel[T1,T2] R) = { W | <V, W> : R, V == E }
+bag[T2] .(T1 E, rel[T1,T2] R) = { W | <T1 V, T2 W> : R, V == E }
 \end{verbatim}
 
 The right image operator can be extended to take a bag of elements as first
 element instead of a single element:
 
 \begin{verbatim}
-bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
+bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <T1 V, T2 W> : R, V in B}
 \end{verbatim}
 
 Since both versions of the right image operator occur so frequently, we also provide
@@ -716,7 +729,7 @@ Assume in the following examples that {\tt Rel} has value {\tt \{<1,10>, <2,20>,
 \tabletail{\hline}
 
 
-\newcommand{\function}[5]{\subsection{#1: {\tt #2}}\label{BI:#2}
+\newcommand{\function}[5]{\subsubsection{#1: {\tt #2}}\label{BI:#2}
 Definition:
 \begin{quote}
 #3
@@ -728,8 +741,10 @@ Example(s):
 \end{itemize}
 }
 
+\subsection{Elementary Functions on Bags and Relations}
+
 \function{Identity relation}{id}
-{\tt rel[$T$,$T$] id(bag[$T$] B) = \{ <X, X> | X : B \}}
+{\tt rel[$T$,$T$] id(bag[$T$] B) = \{ <X, X> | $T$ X : B \}}
 {Yields the relation that results from transforming
 each element in {\tt B} into a pair with that element as first and
 second element.
@@ -740,8 +755,47 @@ second element.
   <"tue","tue">, <"wed","wed">\}}. \end{sloppypar}
 }
 
+\function{Inverse of a relation}{inv}
+{\tt rel[$T_2$,$T_1$] inv (rel[$T_1$,$T_2$] R) = \{ <Y, X> | <$T_1$ X, $T_2$ Y> : R \}}
+{ Yields the relation that is the inverse of the
+argument relation {\tt R}, i.e. the relation in which the elements of all
+tuples in {\tt R} have been
+interchanged.
+}
+{
+\item {\tt inv(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>,<20,2>\}}.
+}
+\function{Complement of a relation}{compl}
+{\tt rel[$T_1$, $T_2$] compl(rel[$T_1$,$T_2$] R) = (domain(R) x range(R)) BACKSLASH R}
+{ Yields the relation that is the complement of the
+argument relation {\tt R}, using the carrier set of {\tt R} as universe.
+}
+{
+\item {\tt compl(\{<1,10>\}}  yields {\tt \{<1, 1>, <10, 1>, <10, 10>\}}.
+}
+
+\function{Powerset of a bag}{power0}
+{\tt bag[bag[$T$]] power0(bag[$T$] B) = primitive}
+{ Yields the powerset of bag {\tt B} (including the empty bag).}
+{
+\item \begin{sloppypar} {\tt power0(\{1, 2, 3, 4})\} yields {\tt \{ \{\}, \{1\},
+    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
+    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
+}
+
+\function{Powerset of a bag}{power1}
+{\tt bag[bag[$T$]] power1(bag[$T$] B) = primitive}
+{ Yields the powerset of bag {\tt B} (excluding the empty bag).}
+{
+\item \begin{sloppypar} {\tt power1(\{1, 2, 3, 4})\} yields {\tt \{ \{1\},
+    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
+    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
+}
+
+\subsection{Extraction from Relations}
+
 \function{Domain of a relation}{domain}
-{\tt bag[$T_1$] domain (rel[$T_1$,$T_2$] R) = \{ X | <X, Y> : R \}}
+{\tt bag[$T_1$] domain (rel[$T_1$,$T_2$] R) = \{ X | <$T_1$ X, $T_2$ Y> : R \}}
 {Yields the bag that results from taking
 the first element of each tuple in relation {\tt R}.
 }
@@ -752,7 +806,7 @@ the first element of each tuple in relation {\tt R}.
 }
 
 \function {Range of a relation}{range}
-{\tt bag[$T_2$] range (rel[$T_1$,$T_2$] R) = \{ Y | <X, Y> : R \}}
+{\tt bag[$T_2$] range (rel[$T_1$,$T_2$] R) = \{ Y | <$T_1$ X, $T_2$ Y> : R \}}
 {Yields the bag that results from taking
 the second element of each tuple in relation {\tt R}.
 }
@@ -771,6 +825,87 @@ Note that the domain and range type of {\tt R} should be the same.
 \item {\tt carrier(\{<1,10>, <2,20>\})} yields {\tt \{1, 10, 2, 20\}}.
 }
 
+\subsection{Restrictions and Exclusions on Relations}
+
+\function{Domain restriction of a relation}{domainR}
+{\tt rel[$T_1$,$T_2$] domainR (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
+   \{ <X, Y> | <$T_1$ X, $T_2$ Y> : R, X in B \}}
+{ Yields a relation identical to the relation {\tt R}
+  but only containing tuples whose first element occurs in bag {\tt B}.
+}
+{
+\item {\tt domainR(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<1,10>, <3,30>\}}.
+}
+
+\function{Range restriction of a relation}{rangeR}
+{\tt rel[$T_1$,$T_2$] rangeR (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) =  \\
+   \{ <X, Y> | <$T_1$ X, $T_2$ Y> : R, Y in B \}}
+{ Yields a relation identical to relation {\tt R} but only containing tuples
+  whose second element occurs in bag {\tt B}.
+}
+{
+ \item {\tt rangeR(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<1,10>, <3,30>\}}.
+}
+
+\function{Carrier restriction of a relation}{carrierR}
+{\tt rel[$T$,$T$] carrierR (rel[$T$,$T$] R, Bag[$T$] B) = \\ 
+   \{ <X, Y> | <$T$ X, $T$ Y> : R, X in B, Y in B \}}
+{ Yields a relation identical to relation {\tt R}
+  but only containing tuples whose first and second element occur in bag {\tt
+    B}.
+}
+{
+ \item {\tt carrierR(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<1,10>\}}.
+}
+
+\function{Domain exclusion of a relation}{domainX}
+{\tt rel[$T_1$,$T_2$] domainX (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
+   \{ <X, Y> | <$T_1$ X, $T_2$ Y> : R, X notin B \}}
+{ Yields a relation identical to relation {\tt R}
+  but with all tuples removed whose first element occurs in bag {\tt B}.}
+{
+\item {\tt domainX(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<2, 20>\}}.
+}
+
+\function{Range exclusion of a relation}{rangeX}
+{\tt rel[$T_1$,$T_2$] rangeX (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) = \\
+	   \{ <X, Y> | <$T_1$ X, $T_2$ Y> : R, Y notin B \}}
+{ Yields a relation identical to relation {\tt R} but with all tuples removed
+  whose  second element occurs in bag {\tt B}.}
+{
+ \item {\tt rangeX(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<2, 20>\}}.
+}
+
+\function{Carrier exclusion of a relation}{carrierX}
+{\tt rel[$T$,$T$] carrierX (rel[$T$,$T$] R, Bag[$T$] B) = \\
+   \{ <X, Y> | <$T_1$ X, $T_2$ Y> : R, X notin B, Y notin B \}}
+{ Yields a relation identical to relation {\tt R}
+  but with all tuples removed whose first or second element occurs in bag {\tt
+    B}.}
+{
+ \item {\tt carrierX(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<3,30>\}}.
+}
+
+subsection{Tuples}
+
+\function{First element of a tuple}{first}
+{\tt $T_1$ first(<$T_1$, $T_2$> P) = primitive}
+{ Yields the first element of the tuple {\tt P}.}
+{
+\item {\tt first(<1, 10>)} yields {\tt 1}.
+\item {\tt first(<"mon", 1>)} yields {\tt "mon"}.
+}
+
+\function{Second element of a tuple}{second}
+{\tt $T_2$ second(<$T_1$, $T_2$> P) = primitive}
+{ Yields the second element of the tuple {\tt P}.}
+{
+\item {\tt second(<1, 10>)} yields {\tt 10}.
+\item {\tt second(<"mon", 1>)} yields {\tt 1}.
+}
+
+\subsection{Relations viewed as graphs}
+
 \function {Top of a relation}{top}
 {\tt bag[$T$] top(rel[$T$, $T$] R) = domain(R) BACKSLASH range(R)}
 {Yields the bag of all roots when the relation {\tt R} is
@@ -788,100 +923,6 @@ the same.
 }
 {
 \item {\tt bottom(\{<1,2>, <1,3>, <2,4>, <3,4>\}} yields {\tt \{4\}}.
-}
-
-\function{Inverse of a relation}{inv}
-{\tt rel[$T_2$,$T_1$] inv (rel[$T_1$,$T_2$] R) = \{ <Y, X> | <X, Y> : R \}}
-{ Yields the relation that is the inverse of the
-argument relation {\tt R}, i.e. the relation in which the elements of all
-tuples in {\tt R} have been
-interchanged.
-}
-{
-\item {\tt inv(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>,<20,2>\}}.
-}
-\function{Complement of a relation}{compl}
-{\tt rel[$T_1$, $T_2$] compl(rel[$T_1$,$T_2$] R) = (domain(R) x range(R)) BACKSLASH R}
-{ Yields the relation that is the complement of the
-argument relation {\tt R}, using the carrier set of {\tt R} as universe.
-}
-{
-\item {\tt compl(\{<1,10>\}}  yields {\tt \{<1, 1>, <10, 1>, <10, 10>\}}.
-}
-
-\function{Domain restriction of a relation}{domainR}
-{\tt rel[$T_1$,$T_2$] domainR (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
-   \{ <X, Y> | <X, Y> : R, X in B \}}
-{ Yields a relation identical to the relation {\tt R}
-  but only containing tuples whose first element occurs in bag {\tt B}.
-}
-{
-\item {\tt domainR(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<1,10>, <3,30>\}}.
-}
-
-\function{Range restriction of a relation}{rangeR}
-{\tt rel[$T_1$,$T_2$] rangeR (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) =  \\
-   \{ <X, Y> | <X, Y> : R, Y in B \}}
-{ Yields a relation identical to relation {\tt R} but only containing tuples
-  whose second element occurs in bag {\tt B}.
-}
-{
- \item {\tt rangeR(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<1,10>, <3,30>\}}.
-}
-
-\function{Carrier restriction of a relation}{carrierR}
-{\tt rel[$T$,$T$] carrierR (rel[$T$,$T$] R, Bag[$T$] B) = \\ 
-   \{ <X, Y> | <X, Y> : R, X in B, Y in B \}}
-{ Yields a relation identical to relation {\tt R}
-  but only containing tuples whose first and second element occur in bag {\tt
-    B}.
-}
-{
- \item {\tt carrierR(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<1,10>\}}.
-}
-
-\function{Domain exclusion of a relation}{domainX}
-{\tt rel[$T_1$,$T_2$] domainX (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
-   \{ <X, Y> | <X, Y> : R, X notin B \}}
-{ Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first element occurs in bag {\tt B}.}
-{
-\item {\tt domainX(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<2, 20>\}}.
-}
-
-\function{Range exclusion of a relation}{rangeX}
-{\tt rel[$T_1$,$T_2$] rangeX (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) = \\
-	   \{ <X, Y> | <X, Y> : R, Y notin B \}}
-{ Yields a relation identical to relation {\tt R} but with all tuples removed
-  whose  second element occurs in bag {\tt B}.}
-{
- \item {\tt rangeX(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<2, 20>\}}.
-}
-
-\function{Carrier exclusion of a relation}{carrierX}
-{\tt rel[$T$,$T$] carrierX (rel[$T$,$T$] R, Bag[$T$] B) = \\
-   \{ <X, Y> | <X, Y> : R, X notin B, Y notin B \}}
-{ Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first or second element occurs in bag {\tt
-    B}.}
-{
- \item {\tt carrierX(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<3,30>\}}.
-}
-
-\function{First element of a tuple}{first}
-{\tt $T_1$ first(<$T_1$, $T_2$> P) = primitive}
-{ Yields the first element of the tuple {\tt P}.}
-{
-\item {\tt first(<1, 10>)} yields {\tt 1}.
-\item {\tt first(<"mon", 1>)} yields {\tt "mon"}.
-}
-
-\function{Second element of a tuple}{second}
-{\tt $T_2$ second(<$T_1$, $T_2$> P) = primitive}
-{ Yields the second element of the tuple {\tt P}.}
-{
-\item {\tt second(<1, 10>)} yields {\tt 10}.
-\item {\tt second(<"mon", 1>)} yields {\tt 1}.
 }
 
 \function{Reachability with restriction}{reachR}
@@ -908,23 +949,9 @@ bag {\tt Excl} are used.
   \{<1,3>, <1, 4>\}}.
 }
 
-\function{Powerset of a bag}{power0}
-{\tt bag[bag[$T$]] power0(bag[$T$] B) = primitive}
-{ Yields the powerset of bag {\tt B} (including the empty bag).}
-{
-\item \begin{sloppypar} {\tt power0(\{1, 2, 3, 4})\} yields {\tt \{ \{\}, \{1\},
-    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
-    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
-}
 
-\function{Powerset of a bag}{power1}
-{\tt bag[bag[$T$]] power1(bag[$T$] B) = primitive}
-{ Yields the powerset of bag {\tt B} (excluding the empty bag).}
-{
-\item \begin{sloppypar} {\tt power1(\{1, 2, 3, 4})\} yields {\tt \{ \{1\},
-    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
-    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
-}
+
+\subsection{Functions on Areas}
 
 \function{File name of an area}{filename}
 {\tt str filename(area A) = primitive}
@@ -960,6 +987,8 @@ bag {\tt Excl} are used.
 {  
 \item {\tt endcol(area("pico1.trm",5,2,6,8))} yields {\tt 8}.
 }
+
+\subsection{Functions on Bags of Integers}
 
 \function{Sum of a bag of integers}{sum}
 {\tt int sum(bag[int] B) = primitive}
@@ -1168,7 +1197,7 @@ inheritance and containment. This is achieved as follows:
 
 \begin{quote}
 {\tt rel[str,str] USE = CALL union CONTAINMENT union INHERITANCE\\
-bag[str] ClassesInCycle = \{C1 | <C1, C2> : USE+, C1 == C2\}}
+bag[str] ClassesInCycle = \{C1 | <str C1, str C2> : USE+, C1 == C2\}}
 \end{quote}
 First, we define the {\tt USE} relation as the union of the three avalaible
 relations {\tt CALL}, {\tt CONTAINMENT} and {\tt INHERITANCE}. Next, we consider all
@@ -1186,7 +1215,7 @@ that are responsible for the cyclic dependency. This can be done as follows.
 bag[str] CLASSES = carrier(USE)\\
 rel[str,str] USETRANS = USE+\\
 rel[str,bag[str]] ClassCycles = \\
-\hspace*{1cm}\{<C, USETRANS[C]> | C : CLASSES, <C, C> in USETRANS \}}
+\hspace*{1cm}\{<C, USETRANS[C]> | str C : CLASSES, <C, C> in USETRANS \}}
 \end{quote}
 First, we introduce two new shorthands: {\tt CLASSES} and {\tt USETRANS}.  Next,
 we consider all classes {\tt C} with a cyclic dependency and add the pair {\tt
@@ -1268,17 +1297,14 @@ more of these path do \emph{not} contain a definition of \emph{V}, then
 \emph{V} may be uninitialized in statement \emph{S}. This can be formalized as
 follows:
 \begin{verbatim}
-rel[str,int] UNINIT = 
-   { <V,S> | <V, S>: USES, <ROOT, S> in reachX({ROOT}, DEFS[V], PRED)
-   }
 rel[int,str] UNINIT = 
-   { <S, V> | <S, V>: USES, <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)
+   { <S, V> | <int S, str V>: USES, <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)
     }
 \end{verbatim}
 
 \noindent We analyze this definition in detail:
 \begin{itemize}
-\item {\tt <S, V> : USES} enumerates all tuples in the {\tt USES} relation.
+\item {\tt <int S, str V> : USES} enumerates all tuples in the {\tt USES} relation.
 In other words, we consider the use of each variable in turn.
 
 \item {\tt <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)} is a test that
@@ -1425,7 +1451,7 @@ Now we are ready to define an important new relation {\tt KILL}.
  statement and is defined as follows:
 \begin{verbatim}
 rel[int, <int, str>] KILL = 
-   {<S1, <S2, V2>> | <S1, V1> : DEFS, <S2, V2> : DEFS, 
+   {<S1, <S2, V2>> | <int S1, str V1> : DEFS, <int S2, str V2> : DEFS, 
                      V1 == V2, S1 != S2}
 \end{verbatim}
 In this definition, all variable definitions are compared with each other,
@@ -1475,8 +1501,8 @@ equations
     rel[int,<int,str>] IN init {}
     rel[int,<int,str>] OUT init DEF
   satisfy
-    IN  =  {{S} x OUT[P] | S : STATEMENTS, P : PRED-OF[S]}
-    OUT =  {{S} x (DEF[S] union (IN[S] \ KILL[S])) | S : STATEMENTS }
+    IN  =  {<S, OP> | int S : STATEMENTS, int P : PRED-OF[S], <int,str> OP : OUT[P]}
+    OUT =  {<S, OS> | int S : STATEMENTS, <int,str> OS : DEF[S] union (IN[S] \ KILL[S])}
 end equations
 \end{verbatim}
 First, the relations {\tt IN} and {\tt OUT} are declared and initialized. Next, 
