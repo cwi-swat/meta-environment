@@ -20,6 +20,12 @@
 #
 # $Id$
 
+2000/5/13 (js@cwi.nl)
+   * Documented (pod) the SGLR API
+   * Cleaned up function naming to strictly use thepublic vs. private
+     convention; accordingly, several cleanups/reshuffles in bits
+     containing public routines especially
+
 2000/5/12 (markvdb@cwi.nl)
    * C version of the structure editor activated. It is still a prototype
      further improvements are still needed.
