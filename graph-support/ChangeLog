@@ -1,5 +1,9 @@
 $Id$
 
+Fri Nov 26 15:19:11 CET 2004 <jurgenv@cwi.nl>
+ * Removed flipping an edge in layoutgraph, somewhere else this
+   bug must be solved now ;-)
+
 Fri Jun 18 10:32:42 CEST 2004 <jurgenv@cwi.nl>
  * Added dependency on aterm-java in .pkg file
 
