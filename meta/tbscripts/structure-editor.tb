@@ -6,9 +6,9 @@ tool se is {
 
 process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
 let
-Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
-I: int, T: term, T1: term, Ch: int, Li: int, Co: int,
-Char: term, G: str, ErrList: list
+  Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
+  I: int, T: term, T1: term, Ch: int, Li: int, Co: int,
+  Char: term, G: str, ErrList: list, Cycle: list
 in
   Id := process-id.
 /* We're not selective about start symbols yet */
@@ -44,12 +44,16 @@ in
 /*        printf("Replacement term: %t\n",T).*/
           snd-eval(SE,replaceFocus(Fid, T)).
           rec-value(SE,Fl?)
-        + rec-msg(parse-result-asfix1(Id,ambiguities(I?))).
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,ambiguities(I?)))).
           printf("Parse of %s returned %d ambiguities",Str,I).
           printf("Term is: %t\n",T).
           FF :=join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?))).
-          printf("Error while parsing %s\n",Str).
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
+          printf("Parse of %s returned a cycle\n",Str).
+          printf("Cycle is: %t\n",Cycle).
+          FF :=join(FF,Foc)
+        + rec-msg(parse-result-asfix1(Id,parse-error([ErrList?]))).
+          printf("Error parsing %s\n",Str).
           printf("Error: %l\n", ErrList).
           FF := join(FF,Foc)
         )

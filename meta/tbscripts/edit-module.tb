@@ -3,7 +3,7 @@ let
 Id    : term,
 T     : term,
 Tid   : int,
-Fn:  str,
+Fn    : str,
 TE    : text-edit,
 Src: str
 in
