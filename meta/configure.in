@@ -7,7 +7,6 @@ dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ./config"
 
 dnl Which compiler to use?
-AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
 dnl Handle cflags option
