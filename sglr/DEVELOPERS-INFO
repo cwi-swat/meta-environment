@@ -15,4 +15,4 @@ It is essential that you have an up-to-date version of automake
 (version 1.4 or above).
 
 Note for CWI developers. Adding "automake" to your ~/.pkgrc file
-in order to use the latest versions of automake and libtool.
+in order to use an up-to-date version of automake.
