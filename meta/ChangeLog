@@ -1,5 +1,9 @@
 # $Id$
 
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 0.11
+ * LGPL license
+
 2003/01/17 (jong@cwi.nl)
  * Removed superfluous message in text/structure editor and simplified
    detection of dirty text-editors vs. known state in structure editor
