@@ -1,0 +1,13 @@
+equations
+
+[bug-1]
+
+bug () =
+
+[bug-2]
+
+#Id*1 = AAP ,
+#Ids  = #Id*1 #Id*2 ,
+#Id*' = bug ( #Id*2 ) 
+====>
+bug ( #Ids ) = #Id*'

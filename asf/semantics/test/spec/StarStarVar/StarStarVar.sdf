@@ -1,0 +1,23 @@
+module StarStarVar
+imports basic/Whitespace
+
+exports
+sorts Id Ids
+
+lexical syntax
+
+[A-Z]+ -> Id
+
+context-free syntax
+
+Id* -> Ids
+
+bug ( Ids ) -> Ids
+
+
+hiddens
+variables
+
+"#Id"  [0-9\']* -> Id
+"#Id*" [0-9\']* -> Id*
+"#Ids" [0-9\']* -> Ids
