@@ -29,6 +29,7 @@ libasc_support_me_a_SOURCES = asc-apply.c \
                               asc-support.c \
                               nametable.c \
                               muasf2pt.c \
+                              prod2str.c \
                               main.c
 
 # Default include directories

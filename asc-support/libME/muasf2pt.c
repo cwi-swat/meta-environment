@@ -88,7 +88,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
 
 PT_Tree termToTree(ATerm tree)
 {
-  PT_Tree result = NULL;
+  PT_Tree result = (PT_Tree) tree;
   ATerm prod = NULL;
   PT_Production ptProd = NULL;
   PT_Symbols formalargs = NULL;
@@ -108,13 +108,10 @@ PT_Tree termToTree(ATerm tree)
       actualargs = termsToArgs(formalargs, (ATermAppl)tree);
     }
     else { /* a list */
-      return listToTree(ptProd,ATgetArguments((ATermAppl)tree));
+      return listToTree(ptProd,(ATermList) ATgetArgument((ATermAppl)tree,0));
     }
 
     result = PT_makeTreeAppl(ptProd,actualargs);
-  }
-  else {
-    ATabort("cannot handle term type: %d\n", ATgetType(tree));
   }
 
   return result;
