@@ -178,7 +178,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-i file    : input from |file|                    [%s]\n"
               "\t-l         : toggle statistics logging            [%s]\n"
               "\t-m         : use AsFix2ME output format           [%s]\n"
-              "\t-n         : do not create parse tree             [%s]\n"
+              "\t-n         : toggle parse tree creation           [%s]\n"
               "\t-o file    : output to |file|                     [%s]\n"
               "\t-p file    : use parse table |file| (required)    [%s]\n"
               "\t-P         : toggle position information          [%s]\n"
