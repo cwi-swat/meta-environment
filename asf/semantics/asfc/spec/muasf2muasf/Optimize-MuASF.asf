@@ -359,7 +359,7 @@ equations
 [default-ret] remove-emb-term(Term, FunIdHasEmbeddingAt, IgnoreOrRemove) = Term
 
 [reas-0] remove-emb-args(Term, Term+, Embedding at 0, IgnoreOrRemove) =
-          remove-emb-arg(Term, Embedding, IgnoreOrRemove)
+          remove-emb-arg(Term, Embedding, IgnoreOrRemove), Term+
 
 [reas-1] remove-emb-args(Term, Embedding at 0, IgnoreOrRemove) =
           remove-emb-arg(Term, Embedding, IgnoreOrRemove)
