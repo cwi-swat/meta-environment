@@ -196,6 +196,7 @@ AC_CONFIG_FILES([Makefile
    meta-studio/metastudio/components/infolist/Makefile
    meta-studio/metastudio/components/dialogtool/Makefile
    meta-studio/metastudio/components/graphnodesizer/Makefile
+   meta-studio/metastudio/components/treebrowser/Makefile
    meta-studio/metastudio/data/Makefile
    meta-studio/metastudio/data/graph/Makefile
    meta-studio/metastudio/utils/Makefile

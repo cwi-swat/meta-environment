@@ -29,8 +29,8 @@ in
   . snd-do(UI, initialize-ui(EnvironmentName))
   .
     (
-      rec-msg(ui-display-graph(GraphId?, Graph?))
-      . snd-do(UI, display-graph(GraphId, Graph))
+      rec-msg(ui-display-graph("import-graph", Graph?))
+      . snd-do(UI, display-graph("import-graph", Graph))
     +
       rec-msg(ui-display-treelist(Str?, List?))
       . snd-do(UI, display-treelist(Str, List))
@@ -39,10 +39,6 @@ in
       . snd-msg(clear-all)
       . rec-msg(cleared-all)
       . snd-ack-event(UI,clear-all)
-    +
-      rec-event(UI,debugging(On?))
-      . snd-msg(debugging(On))
-      . snd-ack-event(UI,debugging(On))
     +
       rec-event(UI, get-events(Type?))
       . snd-msg(cm-get-events(Type))

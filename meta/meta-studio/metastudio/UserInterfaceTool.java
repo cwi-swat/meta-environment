@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 3:45:05 PM
+// generation time: Nov 26, 2004 9:44:36 AM
 
 package metastudio;
 
@@ -20,7 +20,6 @@ abstract public class UserInterfaceTool
   private ATerm PdisplayGraph0;
   private ATerm PaddEvents0;
   private ATerm PaddEvents1;
-  private ATerm PrenderGraph0;
   private ATerm PinitializeUi0;
   private ATerm PdisplayTreelist0;
   private ATerm PrecAckEvent0;
@@ -48,7 +47,6 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-treelist(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,render-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
@@ -64,7 +62,6 @@ abstract public class UserInterfaceTool
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
     PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
-    PrenderGraph0 = factory.parse("rec-do(render-graph(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -93,11 +90,6 @@ abstract public class UserInterfaceTool
     result = term.match(PaddEvents1);
     if (result != null) {
       addEvents((ATerm)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PrenderGraph0);
-    if (result != null) {
-      renderGraph((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PinitializeUi0);

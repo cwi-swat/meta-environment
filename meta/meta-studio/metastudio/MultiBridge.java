@@ -33,15 +33,6 @@ public class MultiBridge extends UserInterfaceTool {
 		}
 	}
 
-	public void renderGraph(String id, ATerm graphTerm) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.renderGraph(id, graphTerm);
-		}
-	}
-
 	public void addEvents(ATerm type, ATerm events) {
 		Iterator iter = getToolComponents().iterator();
 

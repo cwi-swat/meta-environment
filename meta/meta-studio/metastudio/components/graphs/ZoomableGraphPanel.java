@@ -3,6 +3,7 @@ package metastudio.components.graphs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -16,33 +17,30 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
-import metastudio.MultiBridge;
-import metastudio.UserInterfacePanel;
 import metastudio.components.graphnodesizer.GraphNodeSizer;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 import metastudio.utils.Preferences;
-import aterm.ATerm;
 
 // TODO: extract functionality from the GraphPanel that should be here.
-public class ZoomableGraphPanel extends UserInterfacePanel {
+public class ZoomableGraphPanel extends JPanel {
 	private int SLIDER_STEP_SIZE;
 	private int SLIDER_MINIMUM;
 	private int SLIDER_MAXIMUM;
 	private int SLIDER_DEFAULT;
 	private GraphPanel graphPanel;
 	private JSlider slider;
-	private MetaGraphFactory factory;
+	protected MetaGraphFactory factory;
 	private JViewport view;
 	private JLabel zoomToFit;
 
-	public ZoomableGraphPanel(MetaGraphFactory factory, MultiBridge bridge,
-			String id) {
-		super(factory.getPureFactory(), bridge);
+	public ZoomableGraphPanel(MetaGraphFactory factory, String id) {
 		this.factory = factory;
 
 		graphPanel = new GraphPanel(id);
+		
+		setLayout(new BorderLayout());
 
 		// TODO: get this spaghetti crosslink out!
 		GraphNodeSizer.registerFontMetrics(graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT)));
@@ -117,18 +115,6 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 		return slider;
 	}
 
-	public void displayGraph(String id, ATerm graphTerm) {
-		if (id.equals(getId())) {
-			Graph graph = factory.GraphFromTerm(graphTerm);
-			setGraph(graph);
-			setVisible(true);
-			graphPanel.repaint();
-			fireValueChangedListener();
-		}
-	}
-
-	
-
 	public GraphPanel getGraphPanel() {
 		return graphPanel;
 	}
@@ -149,7 +135,19 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 		graphPanel.setGraph(graph);
 	}
 
+	public void setSelectedNode(Node node) {
+		graphPanel.setSelectedNode(node);
+	}
+	
 	public int getIndex() {
 		return graphPanel.getIndex();
+	}
+
+	public Node getNode(String string) {
+		return graphPanel.getNode(string);
+	}
+	
+	public synchronized void addMouseListener(MouseListener l) {
+		graphPanel.addMouseListener(l);
 	}
 }

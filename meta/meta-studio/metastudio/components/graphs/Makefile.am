@@ -10,8 +10,6 @@ EXTRA_DIST = ${java_JAVA}
 java_JAVA = \
 	BoxTree.java \
 	GraphPanel.java \
-	ImportGraphPanel.java \
 	NodeBox.java \
 	NodeSizer.java \
-	ParseTreePanel.java \
 	ZoomableGraphPanel.java

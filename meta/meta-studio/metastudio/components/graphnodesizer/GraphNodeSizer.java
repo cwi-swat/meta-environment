@@ -36,8 +36,6 @@ public class GraphNodeSizer implements GraphNodeSizerTif, Runnable {
 	public ATerm sizeGraph(ATerm graphTerm) {
 		Graph graph = factory.GraphFromTerm(graphTerm);
 
-		System.err.println("Sizing a graph");
-		
 		if (metrics != null) {
 			NodeSizer sizer = new NodeSizer() {
 				public int getWidth(Node node) {

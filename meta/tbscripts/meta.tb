@@ -23,6 +23,7 @@
 #include "infolist.idef"
 #include "dialogtool.idef"
 #include "graphnodesizer.idef"
+#include "treebrowser.idef"
 
 /* tide support */
 #define TIDE_PASSIVE

@@ -10,6 +10,7 @@ SUBDIRS = \
 	infolist \
 	dialogtool \
 	graphnodesizer \
+	treebrowser \
 	.
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
@@ -25,5 +26,4 @@ java_JAVA = \
 	ModulePopupMenu.java \
 	ModuleSelectionListener.java \
 	ModuleTree.java \
-	ParseTreeBrowser.java \
 	TideControl.java 
