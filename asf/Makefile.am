@@ -20,4 +20,6 @@
 #
 # $Id$
 
-SUBDIRS = src test
+SUBDIRS = lib addeqssyntax removevarsyntax asfc asfe utils test
+
+EXTRA_DIST = reconf make_rules

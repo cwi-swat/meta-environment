@@ -20,24 +20,4 @@
 #
 # $Id$
 
-include $(top_srcdir)/make_rules
-
-SUBDIRS          = c-source test
-
-bin_PROGRAMS     = compiler
-data_DATA        = compiler.idef
-
-EXTRA_DIST       = compiler.idef
-
-CLEANFILES       = compiler.tif.h compiler.tif.c compiler.tifs
-
-compiler_SOURCES = compiler.c
-compiler_LDADD   = compiler.tif.o \
-                   -L./c-source  -lAsFix2C \
-                   -L$(ASC_SUPPORT)/lib -lasc-support \
-                   -L$(ASFIX)/lib -lAsFix \
-                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
-
-INCLUDES         = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
-
-compiler.o : compiler.tif.h c-source/libAsFix2C.a
+SUBDIRS          = c-source src test

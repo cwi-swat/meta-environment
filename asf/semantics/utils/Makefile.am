@@ -19,5 +19,3 @@
 #
 #
 # $Id$
-
-SUBDIRS = src test

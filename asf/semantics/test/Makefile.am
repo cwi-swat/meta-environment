@@ -20,4 +20,3 @@
 #
 # $Id$
 
-SUBDIRS = src test

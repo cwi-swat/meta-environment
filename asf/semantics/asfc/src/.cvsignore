@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+*.deps
+compiler
+compiler.tif.h 
+compiler.tif.c
