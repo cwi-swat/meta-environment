@@ -70,38 +70,58 @@ in
   else MDB-DisplayGraph fi
 endlet
 
+
 process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
 let
-  Imports : list,
-  MoreImports : list,
-  Closed : list,
-  Import : str
+  TransitiveImports : list,
+  Runner : list,
+  StillNeededModules : list,
+  Import : str,
+  ToBeClosed : list
 in
-  Status := success.
-  snd-msg(get-imported-modules(ModuleName)).
-  rec-msg(imported-modules(Imports?)).
-  SoftCloseModuleInDB(ModuleName, Status?).
-  if equal(Status, success) then
-    Closed := [].
-    if not(equal(Imports, [])) then
-      Import := first(Imports).
-      Imports := next(Imports).
-      FilterElement(Import, Imports?).
-      snd-msg(get-imported-modules(Import)).
-      rec-msg(imported-modules(MoreImports?)).
-      SoftCloseModuleInDB(Import, Status?).
-      if equal(Status,success) then
-        Closed := join(Import, Closed).
-        /* continue only if closing succeeded */
-        Imports := join(Imports, MoreImports)
-      else tau fi
-    fi*
-    if equal(Imports,[]) then 
-      /* only give error if top module could not be closed */
-      Status := success 
-    fi
-  else tau fi
+  snd-msg(get-all-imported-module-names(ModuleName)) .
+  rec-msg(all-imported-module-names(TransitiveImports?)) .
+  GetNeededModules(TransitiveImports, StillNeededModules?) .
+  ToBeClosed := diff(TransitiveImports, StillNeededModules) .
+  if not(equal(ToBeClosed, [])) then
+    Import := first(ToBeClosed) .
+    ToBeClosed := next(ToBeClosed) .
+    HardCloseModuleInDB(Import)
+  fi *
+  if equal(ToBeClosed, []) then
+    snd-msg(is-module-in-db(ModuleName)) .
+    (
+      rec-msg(not-exists-in-module-db(ModuleName)) .
+      Status := success
+    +
+      rec-msg(exists-in-module-db(ModuleName)) .
+      Status := module-not-closed
+    )
+  fi
 endlet
+
+process GetNeededModules(Modules : list, Needed : list?) is
+let
+  Runner : list,
+  Head : str,
+  Depending : list
+in
+  Needed := [] .
+  Runner := Modules .
+  if not(equal(Runner, [])) then
+    Head := first(Runner) .
+    Runner := next(Runner) .
+    MDB-GetAllDependingModules(Head, Depending?) .
+    if not(subset(Depending, Modules)) then
+       Needed := join(Head, Needed) 
+    else
+       tau
+    fi
+  fi *
+  if equal(Runner, []) then
+    tau
+  fi
+endlet  
 
 process FilterElement(Elem : term, List : list?) is
 let
