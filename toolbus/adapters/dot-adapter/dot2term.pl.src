@@ -69,9 +69,16 @@ do {
     my $from = $1;
     my $to   = $2;
     @points = split /\s/,$3;
-    $last = shift @points;
-    $last =~ s/^e,//;
-    push @points, $last;
+
+    $head = shift @points;
+    if ($head =~ s/^e,//) {
+      push @points, $head;
+    } elsif ($head =~ s/^s,//) {
+      unshift @points, $head;
+    } else {
+      unshift @points, $head;
+    }
+ 
     @pointlist = qw//;
     foreach my $point (@points) {
       $point =~ /^(\d+),(\d+)$/ || die "malformed point: $point";
