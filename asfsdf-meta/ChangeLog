@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/10/02 (markvdb@cwi.nl)
+ * Added ASF to Equations topsort.
+
 2003/09/25 (jurgenv@cwi.nl)
  * Added Format menu option to term editor that pops up a new
    editor with the same term formatted by ptpretty
