@@ -2,6 +2,7 @@
 
 2003/11/09 (jurgenv@cwi.nl)
  * Top sort of ASF module changed from ASF-Equations to ASF-Module
+ * Version bumped to 1.5
 
 2003/11/06 (jurgenv@cwi.nl)
  * Removed addapisyntax functionality
