@@ -729,7 +729,7 @@ visible through the status message {\tt Generating Parse Table}.  The
 entry {\tt Reduce} in the {\tt Meta-Environment} menu of the editor
 has no effect when editing equations.
 
-\subsection{Editing Terms}
+\subsection{Editing Terms} \label{EditingTerms}
 
 An editor for editing a term over a module is activated via the button
 {\tt Edit Term}.  An example is shown in Figure
@@ -1902,7 +1902,7 @@ either `{\tt x}' or `{\tt xy}'.
 
 This is achieved by defining a restriction on this lexical sort. This
 can be done in context-free restrictions 
-section (see Section \ref{cf-restrict}).
+section (see Section \ref{ContextFreeRestrictions}).
 Figure \ref{CODE:restrict-id} shows how to enforce the longest match
 for the sort {\tt Id}.
 
@@ -2129,7 +2129,7 @@ is {\em not} automatically inserted. These rules should
 be written in the {\tt syntax}-section.}.
 The automatic insertion of this optional layout non-terminal
 gives rise to the ``safe'' layout definition presented
-in Figure \ref{safe-layout}. A member may recognize the empty string
+in Figure \ref{CODE:safe-layout}. A member may recognize the empty string
 and thus causing ambiguity.
 
 \subsubsection{Context-free Functions}
@@ -2217,7 +2217,7 @@ sort $S$ separated by the literal $sep$.
 \end{itemize}
 
 Lists may be used in the left-hand side of a context-free function and in the
-right-hand side of a variable declaration, see Section \ref{variables}. They
+right-hand side of a variable declaration, see Section \ref{Variables}. They
 may {\em not} be used as result sort in the right-hand side of a context-free
 function\footnote{This restriction is \sdf1 specific \sdf2 does no longer
 impose this restriction}.
@@ -2292,7 +2292,7 @@ included in the abstract syntax. Figure \ref{CODE:bracket-expr} shows the
 definition of a bracket function for the sort {\tt EXPR}.
 
 Since brackets are necessary for overruling the priority and associativity of
-functions (see Section \ref{priorities}),  it is required that bracket 
+functions (see Section \ref{Priorities}),  it is required that bracket 
 functions are declared for the argument and result sorts of
 
 \begin{itemize}
@@ -2332,7 +2332,7 @@ exports
 
 %\subsection{Tupling Operator}
 
-\subsection{Priorities} \label{ContextFreePriorities}
+\subsection{Priorities} \label{ContextFreePriorities} \label{Priorities}
 
 The context-free syntax defined in an \asfsdf\ specification may be 
 ambiguous: there are sentences which have more than one associated tree. 
@@ -2587,7 +2587,8 @@ exports
 \caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
 \end{figure}
 
-\subsection{Restrictions} \label{Restrictions}
+\subsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
+\label{LexicalRestrictions}
 
 The use of restrictions have already been demonstrated in Section 
 \ref{lexical-syntax} where this mechanism is used to specified
@@ -2696,7 +2697,7 @@ or negative (and have the form `{\tt $S$ != $T$}').
 %circumvented by introducing a new sort for the list.
 
 Equations establish equalities between terms. How they are executed is
-discussed in Section \ref{executing-spec}.
+discussed in Section \ref{ExecutingSpecifications}.
 The evaluation strategy is based on innermost rewriting.
 One thing the specification writer has to keep in mind
 that there is {\em no} semantics related to the order in which
@@ -2842,8 +2843,162 @@ equations
 
 \subsubsection{Delaying}
 
-\section{Executing Specifications}
-\label{executing-specs}
+\section{Executing Specifications} \label{ExecutingSpecifications}
+
+Some (but not all!) \asfsdf\ specifications can be executed by interpreting
+each equation as a (conditional) rewrite rule from left to right.
+
+When you have created a term (using a term editor, see
+Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt Reduce}
+entry from the {\tt Meta-Environment} menu of the term editor).  As a result,
+rewrite rules will be applied until a normal form is reached (a term for which
+no applicable rule can be found). This normal form is the result of the
+execution and is displayed in the window from which the \ASmetaenv\ was
+started.
+
+\subsection{Which Rule Will Be Applied Where?}
+
+A term is always reduced in the context of a certain module, say $M$. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in $M$ itself and in the modules that are (directly or indirectly)
+imported by $M$.
+
+The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the leftmost-innermost reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+
+Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+\emph{specificity}: more general rules come before more specific rules and
+default rules come last.  If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a \emph{redex} has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper \emph{substitutions}. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+
+\subsection{The Evaluation of Conditions}
+
+The conditions of an equation are evaluated from left to right. Let,
+initially, $V$ be the set of variables occurring in the left-hand side of the
+conclusion of the equation. For the evaluation of each positive condition we
+distinguish the following cases:
+
+\begin{itemize}
+  
+\item The condition contains only variables in $V$. Reduce both sides of the
+  condition to normal form and the condition succeeds if both normal forms are
+  identical.
+  
+\item One of the sides of the condition contains new variables not in $V$.
+  Reduce the side that does not contain new variables to normal form and the
+  condition succeeds if this normal form and the other (unnormalized) side of
+  the condition match. The new variables resulting from this match are added
+  to $V$.
+
+\end{itemize}
+  
+The evaluation of negative conditions is described by replacing in the above
+description `identical'' and "``match'' by ``not identical'' and ``do not
+match''. A warning is appropriate here: a negative condition that introduces
+new variables nearly always succeeds (unless the sort has exactly one element)
+and this is almost certainly not what you want.
+
+After the successful evaluation of the conditions, all variables occurring in
+the right-hand side of the conclusion of the equation should be in $V$.
+
+New variables (see above) should therefore {\bf not} occur on \emph{both} sides of a
+condition or in the right-hand side of the conclusion.
+
+\subsection{The Treatment of List Variables}
+
+Unlike the matching of ordinary (non-list) variables, the matching of a list
+variable may have more than one solution since the variable can match lists of
+arbitrary length.
+
+As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
+expression containing the two list variables {\tt X} and {\tt Y} indicating
+the division of a list into two sublists) with the list {\tt ab} (a list
+containing two elements) the following three alternatives have to be
+considered:
+
+\begin{quote}
+{\tt X = (empty), Y = ab, \\
+X = a, Y = b, \\
+X = ab, Y = (empty)}.\\
+\end{quote}
+
+In the unconditional case, backtracking occurs only during matching. When
+conditions are present, the failure of a condition following the match of a
+list variable leads to the trial of the next possible match of the list
+variable and the repeated evaluation of following conditions.
+
+This is exemplified by the following specification of lists without
+duplicates, in which the single equation removes duplicate elements:
+
+\begin{verbatim}
+
+module RemoveDuplicates
+
+  sorts ITEM LIST
+
+  imports Layout 
+
+  lexical syntax
+    [a-z]+ -> ITEM 
+
+  context-free syntax
+    "{" { ITEM "," }* "}" -> LIST 
+
+  variables
+     i [0-9]* -> ITEM 
+     l [0-9]* -> {ITEM "," }* 
+
+  equations
+
+  [1] {l1, i, l2, i, l3} = {l1, i, l2, l3}
+
+\end{verbatim}
+
+\subsection{Which Specifications are Executable?}
+
+Which ASF+SDF specifications can be executed? The following specification of
+sets illustrates a non-executable specification, since equation {\tt [2]}, that
+expresses that two elements in a set may be exchanged, will lead to an
+infinite loop during rewriting.
+
+\begin{verbatim}
+module xxx
+  sorts ITEM SET 
+
+  imports layout
+
+  lexical syntax
+    [a-z]+ -> ITEM 
+
+  context-free syntax
+    "{" { ITEM "," }* "}" -> SET
+
+  variables
+    i [0-9]* -> ITEM 
+    l [0-9]* -> {ITEM "," }* 
+
+  equations
+
+  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
+  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
+\end{verbatim}
+
+\subsection{Common Errors when Executing Specifications}
+
+(** new variable in !=, lacking equation, infinite loops, WARNING when a condition contains both instantiated and uninstantiated variables**)
 
 \subsection{Evaluating Terms}
 \label{eval-term}
@@ -3169,7 +3324,7 @@ frequently occurring problem: how do we maintain global information (in this
 case: the last label name generated)? A standard solution is to introduce an
 auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
 sequence and the last label name generated so far.
-Figure \ref{CODE:codegeneration} show the module containing this actual
+Figure \ref{CODE:codegenerator} show the module containing this actual
 translation function.
 
 This completes the specification of our code generator.
