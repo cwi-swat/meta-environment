@@ -1,0 +1,770 @@
+\documentclass{article}
+
+\usepackage{latexsym}
+\usepackage{a4}
+\usepackage{ASF+SDF}
+\usepackage{ASF+SDF-options}
+\usepackage{epsfig}
+
+\title{Memory Management in an Algebraic Compiler}
+\author{Mark van den Brand$^{^1}$,
+        Paul Klint$^{^{1,2}}$,
+        Pieter Olivier$^{^2}$\\
+        \vspace{.1cm}\\
+        {\small\sl $^1$CWI,
+        Department of Software Engineering\vspace{-.2cm}}\\
+        {\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}
+        \vspace{.1cm}\\
+        {\small\sl $^2$University of Amsterdam,
+        Programming Research Group\vspace{-.2cm}}\\
+        {\small\sl Kruislaan 403, 1098 SJ Amsterdam, The Netherlands}
+        \vspace{.1cm}\\
+        {\small \sl\tt Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
+}
+
+\newcommand{\muasf}{$\mu\mbox{\sc Asf}$}
+\newcommand{\asdf}{{\sc Asf+Sdf}}
+\newcommand{\asf}{{\sc Asf}}
+\newcommand{\sdf}{{\sc Sdf}}
+\newcommand{\asfix}{{\sc AsFix}}
+\newcommand{\epic}{{\sc Epic}}
+\newcommand{\arm}{{\sc Arm}}
+\newcommand{\rnx}{{\sc RNx}}
+\newcommand{\asfc}{{\sc Asf+Sdf2c}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The compilation of algebraic specifications is a road with many
+pitfalls and deviations. The goal of producing fast executables is
+preferred above the production of memory efficient executables. Too often
+is the quality of these compilers measured in terms of
+the number of rewrite steps performed per second.  We developed
+a compiler for an algebraic specification formalism (\asdf) which is
+not only time efficient but also very memory efficient.  This
+is achieved by a combination of sharing terms and garbage
+collection based on reference counting.  Only ten percent of
+memory is used compared to comparable compilers for algebraic formalisms.
+Of course there is a trade-off between space and time,
+but the loss of execution speed is restricted.
+\end{abstract}
+
+\section{Introduction}
+
+Efficient implementation based on mainstream technology is a
+prerequisite for the application and acceptance of declarative
+languages or specification formalisms in real industrial settings.
+The main characteristic of industrial applications is their
+\emph{size} and the predominant implementation consideration should
+therefore be the ability to handle huge problems.
+
+In this paper we take the algebraic specification formalism \asdf\
+\cite{BHK89,HHKR89.update} as point of departure. 
+Its main focus is on language prototyping \cite{DHK96} and on the
+development of language specific tools, such as unparsers \cite{BV96} and
+program transformation tools \cite{Bru96}.
+\asdf\ is based on general context-free grammars for describing syntax and
+on conditional equations for describing semantics.  In this way, one
+can easily describe the syntax of a (new or existing) language and
+specify operations on programs in that language such as static type
+checking, interpretation, compilation or transformation.
+
+\asdf\ has been applied successfully in a number of industrial 
+projects \cite{BDKKM96}, such as the development of a domain-specific
+language for describing interest products (in the financial domain)
+\cite{ADR95} and a renovation factory for restructuring of COBOL code
+\cite{BSV97b}.  In such industrial applications, the execution speed
+is very important, but when processing huge COBOL programs memory
+usage becomes a critical issue as well.  Other applications of
+\asdf\ include the development of a GLR parser generator \cite{Vis97}, an
+unparser generator \cite{BV96}, and the compiler discussed in this
+paper.
+
+Writing a compiler for an algebraic specification formalism like
+\asdf\ is a road with many pittfalls and deviations.  The focus is too
+easily limited to the number of rewrite steps performed per second for
+specific benchmarks.  The amount of run-time memory needed by the
+generated executables is not measured or of no interest due to the
+small sizes of the problems used in the benchmarks.  In \cite{HF96} an
+attempt is made to benchmark various declarative programs for solving
+a real-world problem.
+
+In this paper, we will present a compilation scheme which generates C
+code that executes so efficiently and uses memory so efficiently that
+scaling up to large applications is enabled.  The generated C code
+uses a library based on a term representation with maximal sharing,
+thus ensuring efficient memory usage.
+
+The contribution of this paper is to bring executable specifications
+based on term rewriting into the realm of industrial applications.
+This is achieved by taking both execution speed \emph{and} memory
+usage as primary concerns; we carefully tune the representation of
+terms and select or improve techniques for pattern matching and memory
+management.
+
+(**Nog verder aanpaassen ***)
+We will noew first give a brief introduction to \asdf\ by means of an
+example. The compilation to C is a multi-step process, we use an
+intermediate representation (\muasf) to bridge the gap between \asdf\
+and C and to perform a number of transformations.  We will briefly
+discuss the intermediate representation as well.
+
+\subsection{\asdf}
+
+The specification formalism \asdf\ \cite{BHK89,HHKR89.update}
+is a combination of the algebraic specification formalism
+\asf\ and the syntax definition formalism \sdf. An overview
+can be found in \cite{DHK96}. As an illustration,
+Figure~\ref{boolexmpl} presents the definition of the Boolean datatype
+in \asdf.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+{\NOAUTOHEADER  \input{./Booleans.mtx}}
+\end{minipage}
+}
+}
+\caption{\label{boolexmpl} \asdf\ specification of the Booleans.}
+\end{figure}
+
+\asdf\ specifications consist of modules,
+each module has an \sdf-part (defining lexical and context-free
+syntax) and an \asf-part (defining equations).
+
+The \sdf\ part corresponds to signatures in ordinary algebraic
+specifications formalisms. However, syntax is not restricted to plain
+prefix notation, but the syntax defined in the \sdf\ part of a module
+can be used immediately when defining equations, the syntax in
+equation is thus \emph{user-defined}.
+
+The emphasis in this paper will be on the compilation of the equations
+appearing in a specification. They have the following distinctive features:
+
+\begin{itemize}
+\item Conditional equations with positive and negative conditions.
+\item Non left-linear equations.
+\item List matching or associative matching.
+\item Default equations.
+\end{itemize}
+
+It is possible to execute specifications by interpreting the equations
+as conditional rewrite rules.  The semantics of \asdf\ is based on
+innermost rewriting.  Default equations are tried when all other
+applicable equations have failed, because either the arguments did not
+match or one of the conditions failed.
+
+One of the powerful features of the \asdf\ specification language is
+list matching. It allows a concise way of writing down equations, see
+Figure \ref{setexmpl} for the equation which removes multiple
+occurrences of identifiers from a set.  The implementation of list
+matching may involve backtracking to find a match.
+
+The development of \asdf\ specifications is supported by an interactive
+programming environment, the \asdf\ Meta-Environment \cite{Kli93.meta}.
+In this environment specifications can be developed and tested.
+It provides syntax-directed editors, a parser generator, and a rewrite engine.
+Given this rewrite engine terms can be reduced by interpreting the equations
+as rewrite rules.
+For instance, the term
+\begin{quote}
+{\tt true \& ( false | true )}
+\end{quote}
+reduces to {\tt true} when applying the equations of Figure
+\ref{boolexmpl}.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+{\NOAUTOHEADER  \input{./Sets.mtx}}
+\end{minipage}
+}
+}
+\caption{\label{setexmpl} \asdf\ specification of the Set equation.}
+\end{figure}
+
+\subsection{Intermediate Representation Language: \muasf}
+
+The \asdf-compiler (or \asfc\ compiler
+%%\footnote{\asfix\ stands
+%%for \asdf\ fixed format, which is a formalism to represent the parse
+%%trees of the \asdf\ modules in a human readable and machine 
+%%processable format. The user defined syntax is replaced by prefix
+%%functions. The parse trees in this \asfix\ format are
+%%self contained.}, 
+for short) uses a simplified
+language \muasf\ as an intermediate representation to ease the
+compilation process and to perform various transformations before
+generating C code.
+\muasf\ is in fact a single sorted (algebraic) specification formalism
+using only prefix notation.
+\muasf\ can be considered as the abstract syntax representation
+of \asdf.
+
+A module in \muasf\ consists of a module name, a list of functions, and
+a set of equations. The main differences
+between \muasf\ and \asdf\ are:
+\begin{itemize}
+\item Only prefix functions are allowed.
+\item Lists are represented using binary list constructors instead
+      of the built-in list construct as in \asdf, associative matching
+      is used to implement list matching.
+\item Functions in \muasf\ are untyped.
+\item All identifiers starting with capitals are variables, so
+      variable declarations are no longer needed.
+\item Priority declarations are not needed because all functions are prefix.
+\end{itemize}
+
+In Figure~\ref{boolexmpl2} the \muasf\ specification is given
+corresponding to the one give earlier in Figure~\ref{boolexmpl}.  To
+increase the readability of the generated code in this paper, we have
+consistently renamed generated names by more readable ones, like {\tt
+true}, {\tt false}, etc.  In Figure \ref{setexmpl2} the 
+\muasf\ specification for the set example (Figure~\ref{setexmpl}) is
+presented. Figure~\ref{setexmpl3} gives this same \muasf\ specification
+after making the equation left-linear.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+\begin{tabbing}
+{\tt module Booleans}\\
+{\tt si}\={\tt gnature}\\
+\>{\tt true;}\\
+\>{\tt false;}\\
+\>{\tt and(\_,\_);}\\
+\>{\tt or(\_,\_);}\\
+\>{\tt not(\_);}\\
+{\tt rules}\\
+\>{\tt and(true,B) = B;}\\
+\>{\tt and(false,B) = false;}\\
+\>{\tt or(true,B) = true;}\\
+\>{\tt or(false,B) = B;}\\
+\>{\tt not(true) = false;}\\
+\>{\tt not(false) = true;}
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{boolexmpl2} \muasf\ specification of the Booleans.}
+\end{figure}
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+\begin{tabbing}
+{\tt module Set}\\
+{\tt si}\={\tt gnature}\\
+\>{\tt \{list\}(\_);}\\
+\>{\tt set(\_);}\\
+\>{\tt cons(\_,\_);}\\
+{\tt rules}\\
+\>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
+\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}\\
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{setexmpl2} \muasf\ specification of Set.}
+\end{figure}
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+\begin{tabbing}
+{\tt module Set}\\
+{\tt si}\={\tt gnature}\\
+\>{\tt \{list\}(\_);}\\
+\>{\tt set(\_);}\\
+\>{\tt cons(\_,\_);}\\
+\>{\tt t;}\\
+\>{\tt term-equal(\_,\_);}\\
+{\tt rules}\\
+\>{\tt term-equal(Id1,Id2) == t} \\
+\>{\tt ==>}\\
+\>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
+\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}\\
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{setexmpl3} \muasf\ specification of Set.}
+\end{figure}
+
+\section{C Code Generation}
+
+The \asfc\ compiler uses the intermediate representation language
+\muasf, and given this intermediate language C code is generated.
+The compiler consists of several independent phases.
+
+A number of transformations are performed to remove ``complex'' features
+such as non left-linear rewrite rules, simplification of
+matching patterns, introduction of ``assignment'' conditions, etc.
+Some of these transformations are performed to improve the efficiency
+of the resulting code whereas others are performed to simplify
+code generation.
+
+Given an \asdf\ specification, the compiler generates C code
+which implements the rewrite rules in the specification.
+In the C code a number of primitives are used, provided by a library
+which takes care of the manipulation of the terms that are being rewritten.
+The datatype {\tt term} is the most important datatype in the
+generated C code. Terms consist of a function symbol/name and
+zero or more arguments, e.g., {\tt and(true,false)}.
+The C library provides predicates, such as {\tt check\_sym}
+to check whether the function symbol of a term corresponds
+with the given function symbol, and functions, like {\tt make\_nf}$i$ to
+construct a term (normal form)
+given a function symbol and $i$ arguments ($i \geq 0$),
+see Figure \ref{boolexmpl3} for an example of their usage.
+There are also access functions to obtain the $i$-th argument ($i\geq 0$)  of
+a term, e.g., {\tt arg\_1(and(true,false))} yields {\tt false}.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+\begin{tabbing}
+{\tt ATe}\={\tt rm}\=\ {\tt and(ATerm arg0, ATerm arg1) \{}\\
+\>{\tt if (check\_sym(arg0, truesym))}\\
+\>\>{\tt return arg1;}\\
+\>{\tt if (check\_sym(arg0, falsesym))}\\
+\>\>{\tt return arg0;}\\
+\>{\tt return make\_nf2(andsym,arg0,arg1);}\\
+{\tt \}}
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{boolexmpl3} Generated C for {\tt and} function of the Booleans.}
+\end{figure}
+
+In the last phase of the compilation process C code is generated.
+Special care must to be taken in constructing the most efficient
+matching automaton, identifying common and reusable (sub)expressions, and
+efficiently implementing list matching.
+For each \muasf\ function (even the constructors) a separate
+C function is generated. The right hand side of an equation
+is directly translated to a function call if necessary.
+
+Consider in the C function of Figure \ref{boolexmpl3} the alternative
+where the first argument is false, instead of building a normal form
+for {\tt false} or calling the function {\tt false()} the first argument
+is returned.
+This is an example of detection of reusable subexpressions.
+
+%%One of the features of \asdf\ is list matching which
+%%is comparable to associative matching, see Figure \ref{setexmpl} for an
+%%example. 
+%%The problem of list matching is that backtracking may be needed
+%%to find a correct match.
+
+List matching is translated into nested while loops in order to find
+the matching elements in the list, see Figure \ref{setexmpl4} for the
+C code generated for the set equation of Figure \ref{setexmpl}.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[htb]{\textwidth}
+\begin{tabbing}
+{\tt ATe}\={\tt rm set(ATerm arg0) \{}\\
+\>{\tt if}\={\tt (check\_sym(arg0,listsym)) \{}\\
+\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 0}}$\ {\tt = arg\_0(arg0);}\\
+\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [2];}\\
+\>\>$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0] =}\ $\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt ;}\\
+\>\>$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1] =}\ $\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt ;}\\
+\>\>{\tt wh}\={\tt ile(not\_empty\_list(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )) \{}\\
+\>\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 3}}$\ {\tt = list\_head(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
+\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}$\ {\tt = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
+\>\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [2];}\\
+\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0] =}\ $\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt ;}\\
+\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1] =}\ $\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt ;}\\
+\>\>\>{\tt wh}\={\tt ile(not\_empty\_list(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )) \{}\\
+\>\>\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 4}}$\ {\tt = list\_head(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
+\>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
+\>\>\>\>{\tt if}\={\tt (term\_equal(}$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}$\mbox{\tt tmp}_{\mbox{\tt 4}}${\tt )) \{}\\
+\>\>\>\>\>{\tt set(list(cons(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
+\>\>\>\>\>\>{\tt cons(}\={\tt }$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}\\
+\>\>\>\>\>\>\>{\tt cons(slice(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
+\>\>\>\>{\tt \}}\\
+\>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1] = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]);}\\
+\>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  =}\ $\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1];}\\
+\>\>\>{\tt \}}\\
+\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1] = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]);}\\
+\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  =}\ $\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1];}\\
+\>\>{\tt \}}\\
+\>{\tt \}}\\
+\>{\tt return make\_nf1(setsym,arg0);}\\
+{\tt \}}
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{setexmpl4} C code for the Set specification.}
+\end{figure}
+
+The functions {\tt not\_empty\_list}, {\tt list\_head}, 
+{\tt list\_tail}, {\tt cons}, and {\tt slice} in Figure \ref{setexmpl4}
+are library functions which give access to
+the C data structure which represents the \asdf\ lists.
+In this way the generated C code needs no knowledge of the internal
+list structure, see Section \ref{lists} for a more elaborate discussion of 
+the implementation of lists. We can even change the internal representation
+of lists \emph{without adapting the C code}, by just replacing
+the library functions.
+The function {\tt term\_equal} checks the equality of two terms.
+
+\subsection{Incremental Compilation}
+
+There are two ``problematic'' issues related to the (incremental)
+compilation of \asdf\ specifications.
+
+The first problem has to do with the derivation of names for C functions,
+this translating the \asdf\ names into C names.
+A straightforward translation of the prefix names used in \muasf, which
+are directly derived from the \asfix\ representation, is not possible
+because of the length of the resulting names.
+
+There are two solutions for this problem.
+The first solution is to use a list of pairs containing the \asfix\ name and a
+corresponding unique C anmes, e.g., a letter followed by a number.
+During the compilation of a module this list is inspected for retrieving
+C function names and updated when nuew information is derived.
+This second solution is to make the compilation of each module self contained,
+this not depending on some global data structure.
+Each generated C file contains a ``register'' function which stores
+the derived C names and corresponding \asfix\ names in a data structure
+at run time for locally defined functions.
+Furthermore contains the C file a ``resolve'' function
+which connects local function calls to the corresponding definitions
+baes on the \asfix\ names.
+We have chosen the latter solution because it ensures incrementality in
+a more flexible way.
+
+The second problem is related to the incremental compilation of
+modules.
+In most programming language environments, the basic compilation unit
+is a file. If we look at C for example, a C source file can be compiled to an
+object file and multiple object files can be linked into one executable.
+If we change a statement in one of the source files, that complete
+source file has to be recompiled and linked with the other object
+files.
+
+However, this strategy is not usable for \asdf, because
+functions can be defined using multiple equations across multiple
+source files cq.\ modules.
+This makes it unfortunately impossible to use modules as basic compilation
+unit.
+Rather than using a module as basic compilation unit,
+we use a single function for this purpose.
+Before an \asdf\ specification is translated to C code a {\em reshuffling}
+of the equations is performed.
+Equations are not only stored based on
+the module they occur in, they are also stored based on their outermost
+function symbol. In this way, when the user changes an equation,
+only those functions that are actually affected can be recompiled to C
+code. The resulting C code is then compiled, and combined with
+all other compiled functions in the link stage.
+
+\subsection{Optimizable C Code}
+
+One of the main characteristics of \asdf\ specifications
+is the heavy use of recursion, mainly caused by the absence of a loop
+construct. When naively translating every function invocation in
+\asdf\ into a C function call, the stack overhead would become much
+too large. One solution would be to eliminate tail recursion by
+replacing the tail recursive call with a goto to the start of the
+function. This is only a partial solution, because only direct
+tail recursive calls can be removed in this way. 
+
+Another approach, like the one taken in the Haskell compiler\cite{},
+is to still use separate functions for every function in the original
+language, but to generate parameterless functions that each return the 
+address of the next function to call. A small interpreter
+is used to actually call these functions, effectively limiting the
+call depth on the C stack to a depth of one function call. In this setting,
+a separate stack is used to store function arguments and
+function addresses. This stack is manipulated by the
+generated code, making it possible to explicitly eliminate all tail calls.
+
+The last approach to solve the problem of tail calls accumulating on 
+the C stack by managing their own stacks to be able to eliminate these
+tail calls. But most processors have special instructions to manipulate
+the C stack that are not exploited when managing your own stack, resulting
+in a severe loss of performance. 
+
+The solution we propose is based on the observation that most
+optimizing C compilers provide implicit tail call elimination
+as an optimization.
+Therefore, the \asfc\ compiler generates
+code that does use the C stack, but makes it easy for the C compiler
+to eliminate all tail calls, effectively relieving the C stack but
+still exploiting any special hardware stack instructions. 
+
+\section{Memory Management}
+
+As pointed out in the introduction 
+the memory efficiency of the generated code is a major issue
+when compiling and executing large specifications.
+The values being manipulated during rewriting are represented
+as terms.
+The amount of memory used during rewriting depends entirely
+on the number of terms being constructed.
+
+During rewriting (intermediate) terms are created and most of the rewriting
+time is spent on term construction. In case of innermost rewriting
+a lot of redundant terms are constructed.
+There are various mechanisms to reduce the amount of work:
+\begin{enumerate}
+\item Storage of all original terms to be rewritten and their resulting
+normal forms, so that if the same term must be rewritten again its
+normal form is immediately available.
+\item Postponing of term construction, this can be relevant when
+a lot of intermediate terms are constructed which do not return in the
+normal form.
+%%\item Local sharing of terms, only those terms are shared that result from
+%%non linear right hand sides, e.g., {\tt f(X) = g(X,X)}.
+%%\item Maximal sharing of (sub)terms.
+\end{enumerate}
+
+\paragraph{Ad.\ 1} The most obvious way of storing this information
+is by means of pairs consisting of the original term and the calculated
+normal form term. However, even for small specifications and terms an
+explosion of pairs may occur. The amount of data to be manipulated makes
+this technique useless.
+
+An alternative and more workable solution is to store the results for only
+specific functions, a kind of ``memo-functions'' explicitly annotated
+by the user, see Section \ref{future} for more details.
+
+\paragraph{Ad.\ 2} In fact only the (sub)terms of the normal form must
+be constructed, {\em all} other (sub)terms are constructed to direct
+the rewriting process. By postponing the construction of these terms
+the amount of constructed terms can be reduced enormously.
+However this involves a transformation of the specification.
+Extra rewrite rules are needed to intercept the rewriting process.
+The resulting gain in efficiency is rather unclear.
+
+%%\paragraph{Ad.\ 3} Only those terms will be shared of which the sharing
+%%can be established during rewriting, this technique is applied in ELAN \cite{}.
+%%The amount of sharing is rather restricted. UITBREIDEN!!!
+
+%%\paragraph{Ad.\ 4} The \asfc\ compiler uses this technique. In the rest
+%%of this section this technique will be discussed.
+
+An entirely different approach is to reduce the amount of work ...
+
+\subsection{Maximal Sharing}
+
+Our approach is to minimize memory usage during rewriting
+by fully exploiting
+redundancy that is typically present in the terms that are build.
+We do this by only creating terms if they do not
+exist already. If a term to be constructed already exists, that term
+is reused. This ensure maximal sharing.
+
+The sharing of terms is invisible to the user, so no extra precautions
+are necessary in the code generated by the compiler to ensure this sharing.
+The library functions to construct normal forms
+take care of building shared terms whenever possible.
+
+The maximal sharing of terms can only be maintained when we check
+at term creation time if a particular term already exists. This term
+lookup must be executed {\em extremely fast}, in order to implement term
+creation efficiently. We decided to use the fastest algorithm available
+in this situation, hashing. Using a hash function that depends on the
+addresses of the function symbol and the arguments of a function
+application, we can quickly search for a function application before
+creating it.
+A modest price is paid at term creation time, because a hash table
+lookup is needed to see if the term already exists. 
+But part of these costs are offset by the reduced memory usage.
+
+Even more efficiency is
+gained because a frequently occuring operation in the generated code, namely
+the equality check on terms, by the function {\tt equal\_term},
+becomes very cheap.
+In a case where
+terms are not fully shared, equality check has a complexity that is
+linear in the number of subterms because every node in the two terms
+has to be visited in order to make sure that two terms are equal.
+In our case however, the check can be done in constant time, because
+terms are only equal when they are in fact the same term.
+
+\subsection{Destructive updates}
+
+From the previous arguments, one could easily be tricked into thinking
+that the use of optimally shared terms actually increases performance
+instead of decreasing it.
+
+Unfortunately, this strategy has a large drawback. Terms can be
+shared in a number of places at the same time, therefore
+terms cannot be modified without causing unpredictable side effects. 
+
+This means that all operations on terms
+must be functional, and terms are effectively \emph{immutable} after
+creation. This makes operations on lists, like list concatenation and 
+list slicing, expensive.
+
+During rewriting of terms by the generated code this restriction
+causes no problems.
+The rewriting process itself terms are constructed in a fully functional
+way.
+Normal forms are construct in a bottom-up way, there is no need to
+replace in a constructed term one of the subterms.
+However, when dealing with lists this is unfortunately no longer the case.
+When concatenating two lists one of the lists must be replaced by
+the concatenation result. So a destructive update has to take place,
+this can only be solved by copying this list and appending the other
+one and return its result.
+
+\subsection{Recycling of unused terms}
+
+During rewriting, a large number of terms is created, most of which
+will not appear in the end result. These terms are used as intermediate
+results to guide the rewriting process. This means that terms that are
+no longer used have to be recycled in some way.
+
+The most common strategies for automatic recycling of unused space
+are reference counting, mark-compact garbage collection, and
+mark-sweep garbage collection. We have used the mark-sweep garbage collection
+algorithm.
+
+Mark-sweep garbage collection works using three (sometimes two) phases.
+In the first phase, all the objects on the heap are marked as `dead'.
+In the second phase, all objects reachable from the known set of root
+objects are marked as `live'. In the third phase, all `dead' objects
+are swept into a list of free objects.
+
+Mark-sweep garbage collection is very attractive, because it
+can be implemented in C, both efficiently and without support from the
+programmer or compiler \cite{BW88}. Mark-sweep collection is more efficient,
+both in time and space than reference counting \cite{JL96}.
+The typical space overhead for a mark-sweep garbage collection algorithm is
+only 1 bit per object.
+
+Given these facts, we opted for a variant of Mark-sweep garbage collection
+to reclaim unused terms because this gives us the highest possible performance,
+and acceptable small pauses due to garbage collection.
+
+{\tt <PO> Needs expansion}
+
+\section{Benchmarks for Memory Usage}
+
+In theory, the idea of maximal sharing looks pretty impressive. But
+when the overhead at term creation time is too large, the whole concept
+of maximal sharing falls to pieces. We are prepared to pay a small price
+in the worst case where the use of maximal sharing does not provide any
+significant memory gain but it is essential that this price does not
+disqualify the technique from being used in situations where high 
+performance is essential.
+
+In order to test our ideas and implementation, we have developed three
+relatively simple benchmarks to compare our work with that of other 
+efficient functional and algebraic language implementations. 
+All three benchmarks are based
+on symbolic evaluation of expressions modulo 17. A nice feature of this
+kind of calculations is that there are a lot of ways to calculate the
+end result, giving plenty of opportunities to check the validity of
+the programs. The actual source of the benchmarks can be obtained
+at {\tt http://adam.wins.uva.nl/~olivierp/benchmark/index.html}.
+
+\subsection{Tested implementations}
+
+We have tested our implementation against a number of fast
+functional and algebraic language implementations, in order
+gain a good understanding of the performance characteristics
+of our approach compared to those based on more traditional 
+implementation techniques. So far we benchmarked the following
+implementations:
+
+\begin{itemize}
+\item The Opal compiler developed at the Technische Universit\"{a}t
+Berlin
+\item The Clean compiler developed at the University of Nijmegen.
+\item The Glasgow Haskell compiler.
+\end{itemize}
+
+\subsection{The {\tt evalsym} benchmark}
+
+The first benchmark is called {\tt evalsym}, and uses an algorithm
+that is CPU intensive, but doesn't use a lot of memory. In some sense,
+this benchmark is a 'worst case' for our implementation, because little
+can be gained from maximal sharing. 
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=evalsym-tlog.eps}}
+  \caption{\label{evalsym-tlog}Time efficiency of the {\tt evalsym} benchmark}
+\end{figure}
+
+The results of this benchmark (shown in Figure \ref{evalsym-tlog}) are quite
+satisfactory. Even in this benchmark where we do not gain much from
+maximal sharing, we do not loose much either. The differences between
+all of these state of the art implementations are very small.
+
+\subsection{The {\tt evalexp} benchmark}
+
+The second benchmark is called {\tt evalexp}, which is based on an algorithm
+that uses a lot of memory when a typical eager (strict) implementation
+is used. Using a lazy implementation, the amount of memory needed is
+relatively small.
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=evalexp-mlin.eps}}
+  \caption{\label{evalexp-tlog}Memory efficiency of the {\tt evalexp} benchmark}
+\end{figure}
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=evalexp-tlog.eps}}
+  \caption{\label{evalexp-tlog}Time efficiency of the {\tt evalexp} benchmark}
+\end{figure}
+
+The memory usage during this benchmark is shown in Figure \ref{evalexp-mem}.
+It is clear that normal strict implementations cannot cope with the excessive
+memory requirements of this benchmark. Our own implementation that is also
+based on strict evaluation has no problems whatsoever due to the use of
+maximal sharing. The time efficiency is plotted in Figure \ref{evalexp-tlog}.
+It is interesting to see that the lazy implementations seem to loose more
+time in order to keep the memory usage down than our implementation based
+on maximal sharing. Although Opal and Clean are still faster, the difference
+has been reduced considerably. The Haskell implementation has even become
+slower than our implementations.
+
+\subsection{The {\tt evaltree} benchmark}
+
+The third benchmark is called {\tt evaltree}, and is based on an algorithm 
+that uses a lot of memory both with lazy and eager implementations. 
+Figure \ref{evaltree-mlin} shows that neither the lazy nor the strict 
+implementations can cope with the memory requirements of this benchmark.
+Only our implementation based on maximal sharing can keep the memory
+requirements at an acceptable level.
+
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=evaltree-mlin.eps}}
+  \caption{\label{evaltree-mlin}Memory efficiency of the {\tt evaltree} benchmark}
+\end{figure}
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=evaltree-tlog.eps}}
+  \caption{\label{evaltree-tlog}Time efficiency of the {\tt evaltree} benchmark}
+\end{figure}
+
+
+\section{Related Work}
+
+\begin{itemize}
+\item There exists old work with a title like ``hash consing'' from the
+LISP world.
+\item Compile time analyse with respect to reducing the generation
+of run-time garbage.
+\item References to work of Kaplan \cite{Kap87a}, Dik \cite{Dik89}, ELAN.
+\end{itemize}
+
+\section{Conclusions and Future Activities}
+\label{future}
+
+\bibliographystyle{plain}
+\bibliography{/home/gipe/lib/tex/LanguageProto,metabib}
+
+\end{document}
