@@ -1,6 +1,4 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
 /*{{{  standard includes */
 
@@ -78,7 +76,7 @@ int main (int argc, char **argv)
       default :  usage();                      exit(1);
   }
 
-  ATinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+  ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
   PTPT_initPTMEPTApi();
 

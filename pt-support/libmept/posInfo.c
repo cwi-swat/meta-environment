@@ -2,7 +2,7 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
-#include <ErrorAPI.h>
+#include <Error.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -76,7 +76,7 @@ static ATerm PT_makePosInfo(const char *path, int line1, int col1,
                                               int offset, int length)
 {
   ERR_Area area = ERR_makeAreaArea(line1, col1, line2, col2, offset, length);
-  ERR_Location location = ERR_makeLocationLocation((char*) path, area);
+  ERR_Location location = ERR_makeLocationAreaInFile(path, area);
 
   return (ATerm) location;
 }

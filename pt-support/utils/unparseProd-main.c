@@ -1,4 +1,4 @@
-/*  $Id$  */
+/* $Id$ */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -20,9 +20,6 @@ static char myversion[] = "1.0";
 
 static char myarguments[] = "hi:o:vV";
 
-/*
- Usage: displays helpful usage information
- */
 void usage(void)
 {
   ATwarning("Usage: %s [%s]\n"
@@ -72,7 +69,7 @@ int main(int argc, char **argv)
   argc -= optind;
   argv += optind;
 
-  ATinit(argc, argv, &bottomOfStack);       /* Initialize Aterm library */
+  ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
 
   if (proceed) {

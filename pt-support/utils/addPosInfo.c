@@ -1,12 +1,16 @@
+/* $Id$ */
+
+/*{{{  includes */
+
 #include <stdio.h>
 #include <assert.h>
 #include "MEPT-utils.h"
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef WITHOUT_TOOLBUS
 #include "position-annotator.tif.h"
-#endif
+
+/*}}}  */
 
 static char version[] = "1.3";
 
@@ -129,7 +133,7 @@ int main(int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    ERR_initErrorApi();
+    initErrorApi();
 
     cid = ATBconnect(NULL, NULL, -1, position_annotator_handler);
     ATBeventloop();
@@ -139,7 +143,7 @@ int main(int argc, char *argv[])
   {
     ATinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    ERR_initErrorApi();
+    initErrorApi();
 
     if (argc == 1) {
       /* no arguments */

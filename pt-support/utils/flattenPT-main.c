@@ -1,4 +1,4 @@
-/*  $Id$  */
+/* $Id$ */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
   argc -= optind;
   argv += optind;
 
-  ATinit(argc, argv, &bottomOfStack);       /* Initialize Aterm library */
+  ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
   PT_initAsFix2Api();
 

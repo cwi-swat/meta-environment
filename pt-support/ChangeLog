@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar 10 09:06:33 CET 2004 <kooiker@cwi.nl>
+ * Use new error-api 
+
 Mon Mar  8 14:20:01 CET 2004 <{jong,kooiker}@cwi.nl>
  * regenerated using APIgen that generates 'const char *'
  * removed legacy calls to "makeXXXToTerm" and "makeTermToXXX"

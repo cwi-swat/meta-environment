@@ -2,7 +2,7 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -122,8 +122,8 @@ static ERR_SubjectList getAmbiguities(const char *path,
     ambArea = ERR_makeAreaArea(here.line, here.col,
 			       current->line, current->col,
                                here.offset, (current->offset - here.offset));
-    ambLocation = ERR_makeLocationLocation((char*) path, ambArea);
-    ambSubject = ERR_makeSubjectSubject(ambString, ambLocation);
+    ambLocation = ERR_makeLocationAreaInFile(path, ambArea);
+    ambSubject = ERR_makeSubjectLocalized(ambString, ambLocation);
 
     ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
   /*}}}  */
@@ -141,12 +141,12 @@ static ERR_SubjectList getAmbiguities(const char *path,
 
 ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
 {
-  PT_Amb_Position pos = {1,0,0}; 
+  PT_Amb_Position pos = {1, 0, 0}; 
   ERR_SubjectList ambs = getAmbiguities(path, tree, &pos);
   if (!ERR_isSubjectListEmpty(ambs)) {
-    ERR_Feedback ambFeedback = ERR_makeFeedbackError("Ambiguity", ambs);
+    ERR_Error ambError = ERR_makeErrorError("Ambiguity", ambs);
 
-    return ERR_FeedbackToTerm(ambFeedback);
+    return ERR_ErrorToTerm(ambError);
   }
   else {
     return NULL;

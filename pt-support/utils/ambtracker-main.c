@@ -1,6 +1,4 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
 /*{{{  standard includes */
 
@@ -14,7 +12,7 @@
 
 #include <aterm2.h>
 #include "MEPT-utils.h"
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 
 /*}}}  */
@@ -49,10 +47,10 @@ static void prettyPrint(ATerm t, FILE *fp)
 {
   int count;
   int i;
-  ERR_Feedback feedback = ERR_FeedbackFromTerm(t);
+  ERR_Error error = ERR_ErrorFromTerm(t);
 
-  if (ERR_isFeedbackError(feedback)) {
-    ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+  if (ERR_isErrorError(error)) {
+    ERR_SubjectList subjects = ERR_getErrorList(error);
     if (ERR_isSubjectListEmpty(subjects)) {
       ATfprintf(fp,"No ambiguities\n");
     }
@@ -114,8 +112,8 @@ int main (int argc, char **argv)
       default :  usage();                      exit(1);
   }
 
-  ATinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
-  ERR_initErrorApi();
+  ATinit(argc, argv, &bottomOfStack);
+  initErrorApi();
   PT_initMEPTApi();
 
   parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));

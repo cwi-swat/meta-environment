@@ -8,7 +8,7 @@
 #include <aterm2.h>
 #include <deprecated.h>
 #include "MEPT.h" 
-#include <ErrorAPI.h>
+#include <Error.h>
 
 int PT_compareTree(PT_Tree tree1, PT_Tree tree2);
 
