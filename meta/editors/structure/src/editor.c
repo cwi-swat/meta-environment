@@ -65,18 +65,8 @@ static SE_Editor moveFocusRight(SE_Editor editor)
 
   focus = createFocus(parse_tree, path, FOCUS_PARSED);
   editor = SE_setEditorFocus(editor, focus);
-/*
-  if (PT_isTreeAppl(tree)
-      || PT_isTreeList(tree)
-      || PT_isTreeLexical(tree)
-      || PT_isTreeVar(tree)) {
-*/
-  if (PT_isTreeAppl(tree)
-      || PT_isTreeList(tree)) {
-    return editor;
-  }
 
-  return moveFocusRight(editor);
+  return editor;
 }
 
 /*}}}  */
@@ -107,17 +97,8 @@ static SE_Editor moveFocusDown(SE_Editor editor)
       assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
       focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
-/*
-      if (PT_isTreeAppl(tree)
-	  || PT_isTreeList(tree)
-	  || PT_isTreeLexical(tree)
-	  || PT_isTreeVar(tree)) {
-*/
-      if (PT_isTreeAppl(tree)
-	  || PT_isTreeList(tree)) {
-	return editor;
-      }
-      return moveFocusRight(editor);
+
+      return editor;
     }
   }
 
@@ -142,17 +123,8 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
       assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
       focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
-/*
-      if (PT_isTreeAppl(tree)
-	  || PT_isTreeList(tree)
-	  || PT_isTreeLexical(tree)
-	  || PT_isTreeVar(tree)) {
-*/
-      if (PT_isTreeAppl(tree)
-	  || PT_isTreeList(tree)) {
-	return editor;
-      }
-      return moveFocusLeft(editor);
+
+     return editor;
     }
   }
   return moveFocusUp(editor);
