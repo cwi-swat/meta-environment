@@ -5,3 +5,14 @@ equations
   &Rstore2 = extractClass(&CompilationUnit, &Rstore1, &Area)
   ===>
   extractClass(&CompilationUnit, &Rstore1) = &Rstore2
+
+[extractClass-0]
+  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
+  &ClassId = get-area(&Identifier),
+  &Tuple1 = <&ClassId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&Area, &ClassId>,
+  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Rstore4 = extractClass(&ClassBody, &Rstore3, &ClassId)
+  ===>
+  extractClass(&ClassDeclaration, &Rstore1, &Area) = &Rstore4

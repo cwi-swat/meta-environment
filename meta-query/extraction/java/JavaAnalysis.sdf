@@ -1,8 +1,9 @@
 module JavaAnalysis
 
-imports ExtPackage
+imports ExtClass
 imports ExtCompilationUnit
 imports ExtInterface
+imports ExtPackage
 
 exports
   context-free syntax
