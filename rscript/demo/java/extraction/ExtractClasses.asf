@@ -1,8 +1,8 @@
 equations
 
 [extract-classes-start]
-	&Rstore1 := assign-when-undef(CLASSES, rel[Class,area], {}, &Rstore),
-	&Rstore2 := assign-when-undef(CLASS_USES, rel[ClassUse,area], {}, &Rstore1),
+	&Rstore1 := assign-when-undef(CLASSES, rel[Class,loc], {}, &Rstore),
+	&Rstore2 := assign-when-undef(CLASS_USES, rel[ClassUse,loc], {}, &Rstore1),
 	&Rstore3 := extract(&CompilationUnit, &Rstore2)
 	============================================================================
 	extractClasses(&CompilationUnit, &Rstore) = &Rstore3

@@ -9,9 +9,9 @@ exports
 %% Main evaluation functions for Rscripts
 
         eval-rscript(RSCRIPT)                 				-> RSTORE
-        eval-rscript-and-yield(RSCRIPT, String)             		-> Elem
+        eval-rscript-and-yield(RSCRIPT, StrCon)             		-> Elem
 	eval-rscript-with-rstore(RSCRIPT,RSTORE)			-> RSTORE
-        eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, String)   	-> Elem
+        eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, StrCon)   	-> Elem
 
 %% should be hidden
 
@@ -130,6 +130,7 @@ hiddens
         "$Integer" [0-9\']*            -> Integer
 
         "$String" [0-9\']*             -> String
+        "$StrCon" [0-9\']*             -> StrCon
 
 	"$Etype" [0-9\']*              -> REXPTYPE
 	"$Etype*" [0-9\']*             -> {REXPTYPE ","}*

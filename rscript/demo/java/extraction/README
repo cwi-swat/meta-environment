@@ -2,6 +2,8 @@
 
 	 extract-java /home/paulk/software/source/sources/CH/ifa/draw
 
+   This will take 3 minutes on a 1 Gig machine for 15 Kloc of souce code.
+
    This command creates a local directory called `extracted-rstores'.
    For each file F.java it creates a new file rstore/F.java.rstore.pt
 
@@ -18,6 +20,8 @@
 2. Merge the resulting rstores, e.g.
 
 	 merge-rstores extracted-rstores/*.pt
+
+   This will take another minute.
 
    The result is a combined Rstore called `result.rstore.pt'
 

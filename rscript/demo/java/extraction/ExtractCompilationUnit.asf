@@ -1,7 +1,7 @@
 equations
 
 [extractCompilationUnit-start]
-	&Rstore2 := assign-when-undef(FILES, rel[File, area], {}, &Rstore1),
+	&Rstore2 := assign-when-undef(FILES, rel[File, loc], {}, &Rstore1),
 	&Loc := get-location(&CompilationUnit),
 	&FileName := get-filename(&Loc),
 	&Tuple := <&FileName, &Loc>,
