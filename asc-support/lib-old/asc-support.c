@@ -561,38 +561,38 @@ ATerm innermost(ATerm t)
   funcptr f;
   char *lex;
 
-	if(ATgetType(t) == AT_APPL) {
-		ATermAppl appl = (ATermAppl)t;
-		Symbol sym = ATgetSymbol(appl);
-		if(sym == symbol_asfix_appl) {
-			prod = ATgetArgument(appl, 0);
-			args = (ATermList)ATgetArgument(appl, 2);
-			if(AFisBracketCfFunc(prod))
-				result = innermost(ATelementAt(args, 2));
-			else
-				result = call(prod, innermost_list(args));
-		} else if(sym == symbol_asfix_lex) {
-			lex = ATgetName(ATgetSymbol((ATermAppl)ATgetArgument(appl, 0)));
-			sort = ATgetArgument(appl, 1);
-			l = string2list(lex);
-			t = ATmake("[\"listtype(sort(\\\"CHAR\\\"))\"([<list>])]", l);
-			prod = make_caller_prod(sort);
-			f = basic_lookup_func(prod);
-                        if(f) {
-			  result = call(prod, (ATermList)t);
-			}
-			else {
-			  prod = make_term_caller_prod(sort);
-                          result = call(prod, (ATermList)t);
-			}
-		} else if(sym == symbol_asfix_list) {
-			list = ATgetArgument(appl, 0);
-			args = (ATermList)ATgetArgument(appl, 2);
-			newargs = innermost_list(args);
-			result = make_list_type(list, newargs);
-		}
-	}
-	return result;
+  if(ATgetType(t) == AT_APPL) {
+    ATermAppl appl = (ATermAppl)t;
+    Symbol sym = ATgetSymbol(appl);
+    if(sym == symbol_asfix_appl) {
+      prod = ATgetArgument(appl, 0);
+      args = (ATermList)ATgetArgument(appl, 2);
+      if(AFisBracketCfFunc(prod))
+      	result = innermost(ATelementAt(args, 2));
+      else
+        result = call(prod, innermost_list(args));
+    } else if(sym == symbol_asfix_lex) {
+      lex = ATgetName(ATgetSymbol((ATermAppl)ATgetArgument(appl, 0)));
+      sort = ATgetArgument(appl, 1);
+      l = string2list(lex);
+      t = ATmake("[\"listtype(sort(\\\"CHAR\\\"))\"([<list>])]", l);
+      prod = make_caller_prod(sort);
+      f = basic_lookup_func(prod);
+      if(f) {
+        result = call(prod, (ATermList)t);
+      }
+      else {
+        prod = make_term_caller_prod(sort);
+        result = call(prod, (ATermList)t);
+      }
+    } else if(sym == symbol_asfix_list) {
+      list = ATgetArgument(appl, 0);
+      args = (ATermList)ATgetArgument(appl, 2);
+      newargs = innermost_list(args);
+      result = make_list_type(list, newargs);
+    }
+  }
+  return result;
 }
 
 /*}}}  */
