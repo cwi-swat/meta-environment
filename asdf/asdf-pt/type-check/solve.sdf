@@ -17,31 +17,23 @@ sorts
 
 context-free syntax
 
-  solve(VariableMap, List[[Constraint]], Environment)   
-				-> <VariableMap, List[[Constraint]]>
+  solve(VariableMap, Environment)  	-> VariableMap
 
   solve-constraints(List[[Constraint]], Environment)	
 				-> <VariableMap, List[[Constraint]]>
   solve-constraint(Constraint, Environment)    -> VariableMap {memo}
 
-  replace-vars(List[[Constraint]], VariableMap)	   
-	      -> List[[Constraint]] {traversal(trafo, top-down, break), memo}
-  replace-vars(Constraint, VariableMap)	   
-	      -> Constraint {traversal(trafo, top-down, break), memo}
-  replace-vars(Type, VariableMap)   
-			    -> Type {traversal(trafo, top-down, break), memo}
-  replace-vars(<Variable, Type>, VariableMap)   
-		-> <Variable, Type> {traversal(trafo, top-down, break), memo}
-  replace-vars(VariableMap, VariableMap)   
-		     -> VariableMap {traversal(trafo, top-down, break), memo}
-  replace-vars(ActionType, VariableMap)	   
-                      -> ActionType {traversal(trafo, top-down, break), memo}
-  replace-vars(<Variable, Type, Type>, VariableMap)	   
-          -> <Variable, Type, Type> {traversal(trafo, top-down, break), memo}
+  transitive(VariableMap)      -> VariableMap
+
+  subtype(VariableMap, Environment)      -> VariableMap
 
   handle-error(VariableMap, VariableMap, Constraint, 
 	       List[[Constraint]])
 			    -> <VariableMap, List[[Constraint]]>
+
+  check-last-constraints(List[[Constraint]], VariableMap) -> List[[Constraint]]
+
+  check-con(Constraint, VariableMap)	     -> Answer
 
 hiddens variables
 
@@ -54,7 +46,7 @@ hiddens variables
   "$M"[0-9]?		-> VariableMap
   "$EM"[0-9]?		-> ErrorMap
   "$EN"[0-9]?		-> Environment
-  "$VT"[0-9]?"*"	-> {<Variable, Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
   "$TY"[0-9]?		-> Type
   "$TV"[0-9]?		-> TypeVariable
-  "$VR"[0-9]?		-> Variable
+  "$VR"[0-9]?		-> (TypeVariable | "(" ActionTypeVariable ")")

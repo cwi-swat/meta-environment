@@ -20,6 +20,14 @@ context-free syntax
   typecheck(Action, Environment)  
        -> <ActionType, VariableMap, List[[Constraint]], Environment>
 
+lexical syntax
+
+  [a-z\-]+	-> AtomicType
+
+context-free restrictions
+
+  AtomicType -/- [a-z\-]  
+
 hiddens variables
 
   "$A"[0-9]?	-> Action

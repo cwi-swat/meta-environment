@@ -12,37 +12,21 @@ sorts
 
 context-free syntax
 
-  vmap({<Variable, Type, Type> ","}*)	-> VariableMap
-
-  ActionTypeVariable | TypeVariable	-> Variable
+  vmap({<Type, Type> ","}*)		-> VariableMap
 
   "empty-map"			-> VariableMap {prefer}
 
-  single(Variable, Type, Type)	-> VariableMap
-
-  lookup(Variable, VariableMap)	-> <Type, Type>   {memo}
-  "not-in-map"			-> <Type, Type>
-  "TOP"				-> Type
-  "BOT"				-> Type
-
-  update-bottom(Variable, Type, VariableMap)	-> VariableMap
-  update-top(Variable, Type, VariableMap)	-> VariableMap
-
-  rem-dubs(VariableMap, Environment)    -> VariableMap
+  single(Type, Type)		-> VariableMap
 
   insert(VariableMap, VariableMap)	-> VariableMap
 
-  close(VariableMap, Environment)	-> VariableMap
+  contains(<Type, Type>, VariableMap)	-> Answer
+
+  length(VariableMap)			-> Integer
 
   ErrorMap				-> VariableMap
 
   error(Type, Type)		-> ErrorMap
-
-  sort(VariableMap)		-> VariableMap
-
-  prec(Variable, Variable)	-> Boolean {memo}
-
-  map-consistent(VariableMap, Environment)	-> Answer
 
 hiddens variables
 
@@ -52,6 +36,6 @@ hiddens variables
   "$TY"[0-9]?	-> Type
   "$ATV"[0-9]?	-> ActionTypeVariable
   "$TV"[0-9]?	-> TypeVariable
-  "$VT"[0-9]?"*" -> {<Variable, Type, Type> ","}*
+  "$VT"[0-9]?"*" -> {<Type, Type> ","}*
   "$EN"[0-9]?	-> Environment
   "$N"[0-9]?	-> Integer

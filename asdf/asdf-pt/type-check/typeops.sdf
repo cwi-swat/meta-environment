@@ -40,6 +40,9 @@ context-free syntax
   has-variable(ActionTypeVariable, Answer)
 		-> Answer {traversal(top-down,accu,break)}
 
+  split-right-tuple(Type, Type)		-> <Type, Type>
+  split-left-tuple(Type, Type)		-> <Type, Type>
+
 hiddens variables
 
   "$ATY"[0-9]?		-> AtomicType
@@ -54,4 +57,4 @@ hiddens variables
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
   "$M"[0-9]?		-> VariableMap
   "$AN"[0-9]?		-> Answer
-  "$VT"[0-9]?"*"	-> {<Variable, Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*

@@ -7,7 +7,8 @@ equations
 
    <$TV, $EN2> := new-type-var($EN1)
    ======================================================================
-   typecheck-action(copy, $EN1) = <using $TV & giving $TV & std-at, $EN2>
+   typecheck-action(copy, $EN1) = <using $TV & giving $TV & 
+				   raising empty & std-at, $EN2>
 
 [tca-then] 
 
@@ -16,7 +17,7 @@ equations
    $TY1 := get-giving($AT1),
    $EN4 := not-equal($TY1, empty, $EN3),
    $TY2 := get-using($AT2),
-   $EN5 := subtype-of($TY1, $TY2, $EN4),
+   $EN5 := subtype-of((giving $TY1), (giving $TY2), $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $EN5),
    <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6)
    ===================================================================
@@ -47,10 +48,9 @@ equations
 
 [tca-result] 
 
-   <$AT1, $EN2> := typecheck-data($D, $EN1),
-   <$TV, $EN3> := new-type-var($EN2)
+   <$AT1, $EN2> := typecheck-data($D, $EN1)
    =========================================================
-   typecheck-action(result $D, $EN1) = <$AT1 & using $TV & std-at, $EN3> 
+   typecheck-action(result $D, $EN1) = <$AT1 & raising empty & std-at, $EN2> 
 
 [default-result] 
 
@@ -75,7 +75,7 @@ equations
 
    <$TV, $EN2> := new-type-var($EN1)
    ======================================================================
-   typecheck-action(throw, $EN1) = <using $TV & raising $TV & std-at, $EN2>
+   typecheck-action(throw, $EN1) = <using $TV & giving empty & raising $TV & std-at, $EN2>
 
 [tca-catch] 
 
@@ -84,7 +84,7 @@ equations
    $TY1 := get-raising($AT1),
    $EN4 := not-equal($TY1, empty, $EN3),
    $TY2 := get-using($AT2),
-   $EN5 := subtype-of($TY1, $TY2, $EN4),
+   $EN5 := subtype-of((giving $TY1), (giving $TY2), $EN4),
    <$TY3, $EN6> := lub(get-giving($AT1), get-giving($AT2), $EN5),
    <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6)
    ===================================================================

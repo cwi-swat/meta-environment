@@ -42,7 +42,7 @@ equations
 	===================================================
 	typecheck-data($A, $EN1) = <giving ($AT), $EN2>
 
-[tcd-8] typecheck-data(token($TK), $EN) = <giving token($TK), $EN>
+[tcd-8] typecheck-data(token($TK), $EN) = <giving token, $EN>
 
 [tcd-9] typecheck-data(no-bindings, $EN) = <giving bindings, $EN>
 
@@ -50,7 +50,8 @@ equations
 
 [tcd-10] [$DT1*, <$DO, $TY>, $DT2*] := get-data-constants($EN)
 	 ==============================================================
-	 typecheck-dataop($DO, $EN) = <giving $TY & std-at, $EN>
+	 typecheck-dataop($DO, $EN) = <giving $TY & raising empty & 
+					      std-at, $EN>
 
 [tcdo-1] [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN)
 	 ==============================================================
@@ -62,24 +63,28 @@ equations
          <$TV, $EN2> := new-type-var($EN1)
 	 ===================================================================
 	 typecheck-dataop(#1, $EN1) = 
-			     <using ($TV, data) & giving $TV & std-at, $EN2>
+			     <using ($TV, data) & giving $TV & 
+				    raising empty & std-at, $EN2>
 
 [tcdo-select-2] 
 
      <$TV, $EN2> := new-type-var($EN1)
      ===================================================================
      typecheck-dataop(#2, $EN1) = 
- 		  <using (datum, $TV, data) & giving $TV & std-at, $EN2>
+ 		  <using (datum, $TV, data) & giving $TV & 
+			 raising empty & std-at, $EN2>
 
 [tcdo-select-3] 
 
      <$TV, $EN2> := new-type-var($EN1)
      =========================================================================
      typecheck-dataop(#3, $EN1) = 
-	         <using (datum, datum, $TV, data) & giving $TV & std-at, $EN2>
+	         <using (datum, datum, $TV, data) & giving $TV & 
+			raising empty & std-at, $EN2>
 
 [tcdo-select-1] typecheck-dataop(#$IN, $EN) = 
-				      <using data & giving data & std-at, $EN>
+				      <using data & giving data & 
+					     raising empty & std-at, $EN>
 
 [default-tcdo] 
 
@@ -91,7 +96,10 @@ equations
 
 [tcdo-the-sort-1] 
 
-      typecheck-dataop(the $TY, $EN) = <using data & giving $TY & std-at, $EN>
+      <$TV, $EN2> := new-type-var($EN1)
+      ==================================================================
+      typecheck-dataop(the $TY, $EN1) = <using $TV & giving $TY & 
+					      raising () & std-at, $EN2>
 	 	
 [default-tcdo] 
 
@@ -104,15 +112,18 @@ equations
 
      <$TV, $EN2> := new-type-var($EN1)
      ====================================================================
-     typecheck-dataop(it, $EN1) = <using $TV & giving $TV & std-at, $EN2>
+     typecheck-dataop(it, $EN1) = <using $TV & giving $TV & 
+				raising empty & std-at, $EN2>
 
 [tcdo-equal] 
 
      typecheck-dataop(=, $EN) = 
-		    <using (datum, datum) & giving boolean & std-at, $EN>
+		    <using (datum, datum) & giving boolean & 
+			   raising empty & std-at, $EN>
 
 [tcdo-def] typecheck-dataop(def, $EN) = 
-			      <using data & giving boolean & std-at, $EN>
+			      <using data & giving boolean & 
+				     raising empty & std-at, $EN>
 
 [tcdp-1] <$AT, $EN2> := typecheck-dataop($DO, $EN1),
 	 boolean == get-giving($AT),

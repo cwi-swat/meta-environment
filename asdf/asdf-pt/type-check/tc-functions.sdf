@@ -19,11 +19,8 @@ sorts
 context-free syntax
 
   typecheck(AS-Module, TypeInfo)		-> Summary
+
   typecheck-definitions(FunctionDefs, Environment) -> Answers
-
-  check-typing(AS-FunctionDef, AS-FunctionSig, Environment)
-				-> Answers
-
 
   gen-summary(Answers)	-> Summary
 
@@ -73,6 +70,7 @@ variables
 
   "$M"[0-9]?	-> VariableMap		
   "$LC"[0-9]?	-> List[[Constraint]]
+  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
 
 
 sorts

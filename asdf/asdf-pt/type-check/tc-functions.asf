@@ -4,7 +4,7 @@ equations
 	=====================================================
 	typecheck($AM, $TI) = gen-summary(yes)
 
-[tcm-1] <sigs($AFS1*), $STS, $DOS1, $DCS> := $TI,	
+[tcm-2] <sigs($AFS1*), $STS, $DOS1, $DCS> := $TI,	
 	defs($FD+) := get-function-defs($AM),
 	sigs($AFS2*) := remove-dobble-sigs(sigs($AFS1*),type-info-to-env($TI)),
 	$EN1 := set-signatures(type-info-to-env($TI), sigs($AFS2*)),
@@ -23,48 +23,67 @@ equations
         ====================================================
         typecheck-definitions(defs($FD, $FD+), $EN) = $ANS1 $ANS2
 
-[tcd-3] 	
+[tcd-2] 	
 
       $ET $LT $CO = $AC := $FD,
       sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
       $LT == get-fun-name($AFS1),
-      $ANS1 := check-typing($FD, $AFS1, $EN)
+      <$AT1, $EN2> := typecheck-action($AC, $EN),
+      $ER := $AT1
       ===================================================
-      typecheck-definitions(defs($FD), $EN) = $ANS1
+      typecheck-definitions(defs($FD), $EN) = $ER
 
-[check-typing-1]
+[tcd-3] 	
 
-      <$AT1, $EN2> := typecheck-action($AC, $EN1),
-      <$M1, $LC> := solve(vmap(), get-constraints($EN2), $EN2),
-      $AT2 := replace-vars($AT1, $M1),
-      $LT : $SO -> $AT3 := $AFS,
-      $M2 := st(($AT2), ($AT3), $EN1),
-      $ANS1 := map-consistent(insert($M2, $M1), $EN1)
-      =====================================================================
-      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = $ANS1
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      $M2 := solve($M1, $EN2),
+      error($TY1, $TY2) := $M2
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = error("Type error", 
+	     [localized("Error in function definitions", get-location($FD))])
 
-%%[check-typing-2] 
+[tcd-4] 	
 
-%%      <$ER, $EN2> := typecheck-action($AC, $EN1)
-%%      ========================================================================
-%%      check-typing($ET $LT $CO = $AC, $AFS, $EN1) = $ER
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      vmap($VT*) := solve($M1, $EN2),
+      $LC3 := check-last-constraints($LC2, vmap($VT*)),
+      [] != $LC3
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = error("Type error", 
+	     [localized("Unsolved constraints", get-location($FD))])
 
-%%[default-check-typing] 
+[tcd-5] 	
 
-%%  check-typing($FD, $AFS, $EN) = 
-%%	 error("Type error", 
-%%	     [localized("Error in function definitions", get-location($FD))])
+      $ET $LT $CO = $AC := $FD,
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
+      $LT : $SO -> $AT1 := $AFS1,
+      <$AT2, $EN2> := typecheck-action($AC, $EN),
+      $ER !:= $AT2,
+      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      <$M1, $LC2> := solve-constraints($LC1, $EN2),
+      vmap($VT*) := solve($M1, $EN2),
+      $LC3 := check-last-constraints($LC2, vmap($VT*)),
+      [] == $LC3
+      ===================================================
+      typecheck-definitions(defs($FD), $EN) = error("Type error", 
+	     [localized("Type check OK", get-location($FD))])
+
 
 [tca-function] 
 
       sigs($AFS1*, $LT : $SO -> $AT, $AFS2*) := get-signatures($EN)
       ============================================================
       typecheck-action($LT $CO, $EN) = <$AT, $EN>
-
-[default-function] typecheck-action($LT $CO, $EN) = 
-		<error("Type error", 
-          [localized("Unable to find semantic function with right type", 
-			get-location($LT $CO))]), $EN>
 
 [feedback-0] yes $ANS = $ANS
 

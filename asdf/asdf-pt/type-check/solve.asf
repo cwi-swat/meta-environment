@@ -1,28 +1,29 @@
 equations
 
-[solve-1] $M2 := close($M1, $EN),
-	  $M3 := rem-dubs($M2, $EN),
-	  $M4 := replace-vars($M3, $M3),
-	  $LC2 := replace-vars($LC1, $M4),
-	  <$M5, $LC3> := solve-constraints($LC2, $EN),
-	  $M6 := insert($M4, $M5),
-	  <$M3, $LC1> != <$M6, $LC3>
-	  ===============================
-	  solve($M1, $LC1, $EN) = solve($M6, $LC3, $EN)
+[solve-1]
+	  $M2 := transitive($M1),
+	  vmap($VT1*) := subtype($M2, $EN),
+	  length($M1) < length(vmap($VT1*)) == true 
+	  =========================================
+	  solve($M1, $EN) = solve(vmap($VT1*), $EN)
 
-[default-solve-1] solve($M1, $LC1, $EN) = <$M1, $LC1>
+[solve-1]
+	  $M2 := transitive($M1),
+	  $EM := subtype($M2, $EN)
+	  =========================================
+	  solve($M1, $EN) = $EM
+
+[default-solve-1] solve($M1, $EN) = $M1
 
 [solve-con-1] 
 
 	  $LC1 != [],
 	  <$M1, $LC2> := solve-constraints(tail($LC1), $EN),
 	  $CO1 := head($LC1),
-	  $M2 := rem-dubs($M1, $EN),
-	  $CO2 := replace-vars($CO1, $M2),
-	  $M3 := solve-constraint($CO2, $EN),
-	  <$M4, $LC3> := handle-error($M3, $M2, $CO2, $LC2)
+	  $M2 := solve-constraint($CO1, $EN),
+	  <$M3, $LC3> := handle-error($M2, $M1, $CO1, $LC2)
 	  ==================================================
-	  solve-constraints($LC1, $EN) = <$M4, $LC3>
+	  solve-constraints($LC1, $EN) = <$M3, $LC3>
 
 [default-solve-con-2] solve-constraints([], $EN) = <empty-map, []>
 
@@ -46,6 +47,13 @@ equations
 	solve-constraint(action-type-and-con($AT1, $AT2, $AT3), $EN) = 
 								vmap($VT*)
 
+[default-action-type-and-con-1] 
+
+	vmap($VT*) := insert(single(($AT1), ($AT3)), single(($AT2), ($AT3)))
+	=================================================================
+	solve-constraint(action-type-and-con($AT1, $AT2, $AT3), $EN) = 
+								vmap($VT*)
+
 [concat-con-1]         
 
 	vmap($VT*) := st($TY1+$TY2, $TY3, $EN)
@@ -61,7 +69,16 @@ equations
 [default-infallible-con-1]         
 
 	yes == at-contains(infallible, $AT),
-	vmap($VT*) := single($ATV, infallible, infallible)
+	vmap($VT*) := insert(single(($ATV), (infallible)), 
+			     single((infallible), ($ATV)))
+	=====================================================
+	solve-constraint(infallible-con($AT, $ATV), $EN) = vmap($VT*)
+
+[default-infallible-con-2]         
+
+	no == at-contains(infallible, $AT),
+	vmap($VT*) := insert(single(($ATV), (Action)), 
+			     single((Action), ($ATV)))
 	=====================================================
 	solve-constraint(infallible-con($AT, $ATV), $EN) = vmap($VT*)
 
@@ -74,7 +91,8 @@ equations
 [default-closed-con-1]         
 
 	yes == at-contains(closed, $AT),
-	vmap($VT*) := single($ATV, closed, closed)
+	vmap($VT*) := insert(single(($ATV), (closed)), 
+			     single((closed), ($ATV)))
 	=========================================================
 	solve-constraint(closed-con($AT, $ATV), $EN) = vmap($VT*)
 
@@ -87,7 +105,7 @@ equations
 
 [default-not-in-con-1] 
 
-        vmap($VT*) := st((using data & giving data & raising data & 
+        vmap($VT*) := st((using data & giving empty & raising empty & 
 			  std-at \ $SAT), ($AT), $EN)
 	=========================================================
 	solve-constraint(not-in-con($SAT, $AT), $EN) = vmap($VT*)
@@ -121,6 +139,12 @@ equations
 	=========================================================
 	solve-constraint(lub-con($TY1, $TY2, $TY3), $EN) = $M
 
+[default-lub-con-1]
+
+	$M := insert(st($TY1, $TY3, $EN), st($TY2, $TY3, $EN))
+	=========================================================
+	solve-constraint(lub-con($TY1, $TY2, $TY3), $EN) = $M
+
 [glb-con-1]         
 
 	st($TY2, $TY1, $EN) == empty-map,
@@ -135,15 +159,88 @@ equations
 	=========================================================
 	solve-constraint(glb-con($TY1, $TY2, $TY3), $EN) = $M
 
-[rep-var-1] <($SAT3*), ($SAT3*)> := lookup($ATV, $M)
-	    =======================================================
-	    replace-vars($SAT1* & $ATV & $SAT2*, $M) = 
-			    replace-vars($SAT1* & $SAT3* & $SAT2*, $M)
+[default-glb-con-1]
 
-[rep-var-2] <$TY, $TY> := lookup($TV, $M)
-	    =========================================
-	    replace-vars($TV, $M) = replace-vars($TY, $M)
+	$M := insert(st($TY3, $TY1, $EN), st($TY3, $TY2, $EN))
+	=========================================================
+	solve-constraint(glb-con($TY1, $TY2, $TY3), $EN) = $M
 
-[rep-var-3] replace-vars(<$VR, $TY1, $TY2>, $M) = 
-			<$VR, replace-vars($TY1, $M), replace-vars($TY2, $M)>
+[transitive-1] 
 
+	vmap($VT1*, <$TY1, $TV>, $VT2*, <$TV, $TY2>, $VT3*) := $M,
+	$TY1 != $TY2,
+	no == contains(<$TY1, $TY2>, $M)
+	==========================================================
+        transitive($M) = transitive(insert(single($TY1, $TY2), $M))
+
+[transitive-2] 
+
+	vmap($VT1*, <$TV, $TY2>, $VT2*, <$TY1, $TV>, $VT3*) := $M,
+	$TY1 != $TY2,
+	no == contains(<$TY1, $TY2>, $M)
+	==========================================================
+        transitive($M) = transitive(insert(single($TY1, $TY2), $M))
+
+[transitive-3] 
+
+	vmap($VT1*, <$TY1, ($ATV)>, $VT2*, <($ATV), $TY2>, $VT3*) := $M,
+	$TY1 != $TY2,
+	no == contains(<$TY1, $TY2>, $M)
+	==========================================================
+        transitive($M) = transitive(insert(single($TY1, $TY2), $M))
+
+[transitive-4] 
+
+	vmap($VT1*, <($ATV), $TY2>, $VT2*, <$TY1, ($ATV)>, $VT3*) := $M,
+	$TY1 != $TY2,
+	no == contains(<$TY1, $TY2>, $M)
+	==========================================================
+        transitive($M) = transitive(insert(single($TY1, $TY2), $M))
+
+[default-transitive-1] transitive($M) = $M
+	
+[subtype-1] 
+
+	vmap(<$TY1, $TY2>, $VT1*) := $M,
+	$EM := st($TY1, $TY2, $EN)
+	================================
+	subtype($M, $EN) = $EM
+
+[subtype-2] 
+
+	vmap(<$TY1, $TY2>, $VT1*) := $M1,
+	$M2 := subtype(vmap($VT1*), $EN),
+	$M3 := st($TY1, $TY2, $EN),
+	$M4 := insert(single($TY1, $TY2), insert($M2, $M3))
+	=================================================================
+	subtype($M1, $EN) = $M4
+
+[subtype-3] subtype(vmap(), $EN) = vmap()
+
+[check-last-constraints-1] 
+
+	$CO := head($LC),
+	yes == check-con($CO, $M)
+	===========================================
+	check-last-constraints($LC, $M) = 
+	       check-last-constraints(tail($LC), $M)
+
+[check-last-constraints-2] 
+
+	$CO := head($LC),
+	no == check-con($CO, $M)
+	===============================================
+	check-last-constraints($LC, $M) = 
+	       $CO:check-last-constraints(tail($LC), $M)
+
+[check-last-constraints-3] 
+
+	check-last-constraints([], $M) = []
+
+[check-con-1] vmap($VT1*, <$TY, $TV1>, $VT2*) := $M,
+	      $TV2 !:= $TY,
+	      empty != $TY
+	      ===================================================
+	      check-con(not-equal-con($TV1, empty), $M) = yes
+
+[default-check-con-1] check-con($CO, $M) = no

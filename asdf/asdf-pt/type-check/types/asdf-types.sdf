@@ -27,12 +27,9 @@ context-free syntax
   "stable" | "ineffective" | "uncreative" 	-> SingleActionType {prefer}
 
   "infallible" | "terminates" | "closed" | 
-  "stable" | "ineffective" | "uncreative"	-> AtomicType {reject}
+  "stable" | "ineffective" | "uncreative"	-> Type {reject}
     
   {SingleActionType "&"}*	-> ActionType 
-
-%%  ActionType "&" ActionType	-> ActionType {left, prefer}
-%%  SingleActionType		-> ActionType
 
   "(" ActionType ")"	     -> Type {avoid}
 
@@ -44,13 +41,10 @@ context-free syntax
   rm-raising(ActionType)	-> ActionType 
   rm-ugr(ActionType)		-> ActionType 
 
-%%  get-using(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
-%%  get-giving(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
-%%  get-raising(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
-
 lexical syntax
 
-  [a-z\-]+	-> AtomicType
+%%  [a-z\-]+	-> AtomicType
+  "notpresent"   -> Type
 
 context-free restrictions
 

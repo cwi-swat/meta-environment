@@ -22,6 +22,10 @@ equations
    ===================================
    glb($TY1, $TY2, $EN1) = <$TY2, $EN1>
 
+[glb-3] glb($TY, notpresent, $EN1) = <$TY, $EN1>
+
+[glb-4] glb(notpresent, $TY, $EN1) = <$TY, $EN1>
+
 [default-glb-1] 
 
    <$TV, $EN2> := new-type-var($EN1),
@@ -44,6 +48,10 @@ equations
    st($TY2, $TY1, $EN1) == empty-map
    ===================================
    lub($TY1, $TY2, $EN1) = <$TY1, $EN1>
+
+[lub-3] lub($TY, notpresent, $EN1) = <$TY, $EN1>
+
+[lub-4] lub(notpresent, $TY, $EN1) = <$TY, $EN1>
 
 [default-lub-1] 
 
@@ -76,18 +84,30 @@ equations
 
 [st-4] st(empty, $TY, $EN) = empty-map
 
-[st-5] st(($AT1), ($AT2), $EN) = at-st($AT1, $AT2, $EN)
+[st-5a] st(($AT1), ($AT2), $EN) = at-st($AT1, $AT2, $EN)
+
+[st-5b] st((using $TY1), (using notpresent), $EN) = empty-map
+
+[st-5c] st((using $TY1), (using $TY2), $EN) = st($TY2, $TY1, $EN)
+
+[st-5d] st((giving $TY1), (giving notpresent), $EN) = empty-map
+
+[st-5e] st((giving $TY1), (giving $TY2), $EN) = st($TY1, $TY2, $EN)
+
+[st-5f] st((raising $TY1), (raising notpresent), $EN) = empty-map
+
+[st-5g] st((raising $TY1), (raising $TY2), $EN) = st($TY1, $TY2, $EN)
 
 [st-6] $TV2 !:= $TY
        =============================================
-       st($TV1, $TY, $EN) = single($TV1, empty, $TY)
+       st($TV1, $TY, $EN) = single($TV1, $TY)
 
 [st-7] $TV2 !:= $TY
        ============================================
-       st($TY, $TV1, $EN) = single($TV1, $TY, data)
+       st($TY, $TV1, $EN) = single($TY, $TV1)
 
 [st-8] $TV2 != $TV1,
-       $M := insert(single($TV1, empty, $TV2), single($TV2, $TV1, data))
+       $M := single($TV1, $TV2)
        =================================================================
        st($TV1, $TV2, $EN) = $M
 
@@ -96,6 +116,30 @@ equations
        $M3 := insert($M1, $M2)
        ====================================================
        st(($TY1, $TY1*), ($TY2, $TY2*), $EN) = $M3
+
+[st-10a] $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY1, $TY3, $EN), single($TV1, $TY4))
+	 ====================================================
+	 st($TY1+$TV1, ($TY2, $TY2*), $EN) = $M
+
+[st-10b] $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY1, $TY4, $EN), single($TV1, $TY3))
+	 ====================================================
+	 st($TV1+$TY1, ($TY2, $TY2*), $EN) = $M
+
+[st-10c] $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY3, $TY1, $EN), single($TY4, $TV1))
+	 ====================================================
+	 st(($TY2, $TY2*), $TY1+$TV1, $EN) = $M
+
+[st-10d] $TV2 !:= $TY1,
+	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
+	 $M := insert(st($TY4, $TY1, $EN), single($TY3, $TV1))
+	 ====================================================
+	 st($TV1+$TY1, ($TY2, $TY2*), $EN) = $M
 
 [st-12] $TY != data
 	=================================
@@ -132,11 +176,17 @@ equations
 
 [plus-1] ($TY1*) + ($TY2*) = ($TY1*, $TY2*)
 
-[plus-2] $TY1 + ($TY2*) = ($TY1, $TY2*)
+[plus-2] $TV !:= $TY1
+	 ==============================
+	 $TY1 + ($TY2*) = ($TY1, $TY2*)
 
-[plus-3] ($TY1*) + $TY2 = ($TY1*, $TY2)
+[plus-3] $TV !:= $TY2
+	 ==============================
+	 ($TY1*) + $TY2 = ($TY1*, $TY2)
 
-[plus-4] $TY1 + $TY2 = ($TY1, $TY2)
+[plus-4] $TV1 !:= $TY1, $TV2 !:= $TY2
+	 ==============================
+	 $TY1 + $TY2 = ($TY1, $TY2)
 
 [not-equal-1] 
 
@@ -146,5 +196,43 @@ equations
 
 [has-variable-1] has-variable($TV, $AN) = yes
 
-[has-variable-1] has-variable($ATV, $AN) = yes
+[has-variable-2] has-variable($ATV, $AN) = yes
+
+[split-right-tuple-1]
+
+        <($TY3*), ($TY4*)> := split-right-tuple(($TY1*), ($TY2*))
+	=========================================================
+	split-right-tuple(($TY1*, $TY1), ($TY2, $TY2*)) = 
+					 <($TY3*), ($TY4*, $TY1)>
+
+[split-right-tuple-2]
+
+	split-right-tuple(($TY1*, $TY1), $TY2) = <($TY1*), $TY1>
+
+[split-right-tuple-3]
+
+	split-right-tuple($TY1, $TY2) = <(), $TY1>
+
+[split-right-tuple-4]
+
+	split-right-tuple(($TY1*), ()) = <($TY1*), ()>
+
+[split-left-tuple-1]
+
+        <($TY3*), ($TY4*)> := split-right-tuple(($TY1*), ($TY2*))
+	=========================================================
+	split-left-tuple(($TY1, $TY1*), ($TY2, $TY2*)) = 
+					 <($TY1, $TY3*), ($TY4*)>
+
+[split-left-tuple-2]
+
+	split-left-tuple(($TY1, $TY1*), $TY2) = <$TY1, ($TY1*)>
+
+[split-left-tuple-3]
+
+	split-left-tuple($TY1, $TY2) = <$TY1, ()>
+
+[split-left-tuple-4]
+
+	split-left-tuple(($TY1*), ()) = <(), ($TY1*)>
 

@@ -51,10 +51,6 @@ context-free syntax
 
   st-empty(Type, Type, Environment)			-> VariableMap
 
-  get-giving(ActionType, Environment)			-> <Type, Environment>
-  get-using(ActionType, Environment)			-> <Type, Environment>
-  get-raising(ActionType, Environment)			-> <Type, Environment>
-
 hiddens variables
 
   "$ATY"[0-9]?		-> AtomicType
@@ -69,4 +65,4 @@ hiddens variables
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
   "$M"[0-9]?		-> VariableMap
-  "$VT"[0-9]?"*"	-> {<Variable, Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
