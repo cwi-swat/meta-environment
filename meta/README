@@ -10,7 +10,8 @@ To compile this distribution you will need the following tools:
  -- noweb (The noweb set of literate programming utilities, from 
       <http://www.cs.virginia.edu/~nr/noweb/>)
  -- jdk (The Java Development Kit, from 
-      <http://www.javasoft.com/products/jdk/>)
+      <http://www.javasoft.com/products/jdk/>). Make sure you get version
+      1.1 or higher.
  -- wish (A user-interface system, part of Tcl/Tk, from 
       <http://www.tclconsortium.org/resources/download.html>) Make sure you
       get version 8.0 or higher.
