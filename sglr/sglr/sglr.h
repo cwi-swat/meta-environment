@@ -23,11 +23,9 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN);
 ATerm SGparseString(int conn, char *L, char *G, char *S);
 
 enum SG_NrAmbKind {SG_NRAMB_ASK, SG_NRAMB_ZERO, SG_NRAMB_INC, SG_NRAMB_DEC};
-
 int  SGnrAmb(int mode);
 
 enum SG_SORTOPS { SG_SET, SG_GET };
-
 char *SGsort(int Mode, ATerm t);
 
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);

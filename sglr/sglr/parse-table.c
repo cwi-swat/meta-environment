@@ -402,16 +402,6 @@ void SG_AddPTPriorities(ATermList prios, parse_table *pt)
   }
 }
 
-void SG_Dump_ATtable(ATermTable t, char *s)
-{
-  ATermList keys;
-
-  if(t) for(keys = ATtableKeys(t); keys && !ATisEmpty(keys);
-            keys=ATgetNext(keys))
-    ATfprintf(stderr,"%s %t == %t\n", s, ATgetFirst(keys), ATtableGet(t, ATgetFirst(keys)));
-}
-
-
 /*
 
   \paragraph{Build Parse Table}

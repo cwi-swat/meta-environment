@@ -113,7 +113,7 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
   FILE *file;
 
   if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-")) {
-      if (std_error == NULL)
+      if (std_error == NULL || !strcmp(FN, "-"))
         return stdin;
 
       ATfprintf(stderr,"%s: %s\n", prgname, std_error);
@@ -159,6 +159,19 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
   }
 }
 
+
+void SG_Dump_ATtable(ATermTable t, char *s)
+{
+  ATerm     key;
+  ATermList keys;
+
+  if(t) for(keys = ATtableKeys(t); keys && !ATisEmpty(keys);
+            keys=ATgetNext(keys)) {
+    key = ATgetFirst(keys);
+    ATfprintf(stderr,"%s%s%t: %t\n", s?s:"", s?" ":"", key, ATtableGet(t, key));
+  }
+}
+
 /*
    \paragraph{Parse String}
 
@@ -191,7 +204,8 @@ ATerm SGparseString(int conn, char *L, char *G, char *S)
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  ret = SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:0):NULL, SG_GetCharFromString);
+  ret = SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:0):NULL,
+                 SG_GetCharFromString);
   return ATmake("snd-value(<term>)", ret ? ret : (ATerm) ATempty);
 }
 

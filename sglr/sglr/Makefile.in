@@ -74,7 +74,7 @@ LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRC}}
 LIBOBJA2TOA1GC  = ${patsubst %.c,%-a2toa1-gc.o,${LIBSRC}}
 LIBOBJPROF      = ${patsubst %.c,%-prof.o,${LIBSRC}}
 
-PROG            = sglr
+PROG            = sglr dump-prods
 PURE            = ${patsubst %,%.pure,${PROG}}
 PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-a2toa1-gc sglr-prof
 PUREPROGS       = ${patsubst %,%.pure,${PROGS}}
@@ -184,10 +184,8 @@ sglr-a2toa1-gc: ${GETOPTOBJ} ${OBJA2TOA1} ${SGLRLIBA2TOA1GC}
 sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
 	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} ${SGLRLIBPROF} ${LIBSPROF} -o $@
 
-sglr-main.o:	sglr.tif.c
-
-parse-table.o: parse-table.h
-
+dump-prods:	dump-prods.o ${SGLRLIB}
+	${CC} ${LDFLAGS} $< ${SGLRLIB} ${LIBS} -o $@	
 
 # ObTribute to Larry Wall
 love:
