@@ -991,6 +991,23 @@ RMI offers security-related support using \texttt{SecurityManagers}.
 
 \subsubsection{Java RMI over IIOP}
 
+By making RMI programs conform to some restrictions, they can be made
+available over the Internet Inter-ORB Protocol (IIOP). This means that
+functionality offered by the RMI program can be made available to CORBA
+clients written in any (CORBA supported) language. The restrictions
+are mostly namespace oriented: programmers need to take special care
+not to use certain names that might collide with CORBA generated names,
+but some reservations should also be made regarding sharing preservation
+of object references. References to objects that equal according to the
+\texttt{==} operator in one component, need not necessarily be equal in
+a remote component. Instead the \texttt{equals} method should be used
+to discern equality.
+
+RMI over IIOP is best used when combining several Java tools for which
+the programmer would like to use RMI, and some tools written in another
+CORBA-supported language need to use (some of) the services provided by
+the Java tools. The component's interface is established by writing a
+Java interface, just as in plain RMI.
 
 \subsubsection{Java IDL}
 
