@@ -3,7 +3,7 @@ module Pico-Xml
 imports Pico-syntax
 
 exports
-sorts PROGRAM # PICO-INT
+sorts <PROGRAM , PICO-INT>
 
 context-free syntax
 
@@ -12,5 +12,5 @@ context-free syntax
 context-free syntax
 
 xml(PROGRAM) -> PROGRAM
-xml(PROGRAM      , PICO-INT) -> PROGRAM      # PICO-INT {traversal(trafo,accu,bottom-up)}
-xml(PICO-STR-CON , PICO-INT) -> PICO-STR-CON # PICO-INT {traversal(trafo,accu,bottom-up)}
+xml(PROGRAM      , PICO-INT) -> <PROGRAM      , PICO-INT> {traversal(trafo,accu,bottom-up, continue)}
+xml(PICO-STR-CON , PICO-INT) -> <PICO-STR-CON , PICO-INT> {traversal(trafo,accu,bottom-up, continue)}
