@@ -1,7 +1,4 @@
 /*GENERATED AUTOMATICALLY, DO NOT MODIFY */
-extern void register_Basic_Integers();
-extern void resolve_Basic_Integers();
-extern void init_Basic_Integers();
 extern void register_AUX_Priority_Sdf_Normalization10();
 extern void resolve_AUX_Priority_Sdf_Normalization10();
 extern void init_AUX_Priority_Sdf_Normalization10();
@@ -1605,7 +1602,6 @@ extern void register_AUX_Regular_Sdf_Normalization3();
 extern void resolve_AUX_Regular_Sdf_Normalization3();
 extern void init_AUX_Regular_Sdf_Normalization3();
 void register_all() {
-  register_Basic_Integers();
   register_AUX_Priority_Sdf_Normalization10();
   register_AUX_Priority_Sdf_Normalization7();
   register_AUX_Modular_Sdf_Normalization6();
@@ -2142,7 +2138,6 @@ void register_all() {
   register_AUX_Regular_Sdf_Normalization3();
 }
 void resolve_all() {
-  resolve_Basic_Integers();
   resolve_AUX_Priority_Sdf_Normalization10();
   resolve_AUX_Priority_Sdf_Normalization7();
   resolve_AUX_Modular_Sdf_Normalization6();
@@ -2679,7 +2674,6 @@ void resolve_all() {
   resolve_AUX_Regular_Sdf_Normalization3();
 }
 void init_all() {
-  init_Basic_Integers();
   init_AUX_Priority_Sdf_Normalization10();
   init_AUX_Priority_Sdf_Normalization7();
   init_AUX_Modular_Sdf_Normalization6();

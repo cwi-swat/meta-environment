@@ -111,7 +111,6 @@ FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 if ( term_equal ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( ( * ef2 ) ( atmp1000 ) ) ) , tmp [ 0 ] ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
-FUNC_EXIT ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( atmp101 ) ) ) ;
 }
 }
 }
@@ -122,6 +121,25 @@ FUNC_EXIT ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( atmp10
 }
 if ( check_sym ( arg1 , ef9sym ) ) {
 FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+}
+if ( check_sym ( arg1 , ef1sym ) ) {
+{
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( check_sym ( atmp10 , ef10sym ) ) {
+{
+ATerm atmp100 = arg_0 ( atmp10 ) ;
+if ( check_sym ( atmp100 , ef2sym ) ) {
+{
+ATerm atmp1000 = arg_0 ( atmp100 ) ;
+{
+ATerm atmp101 = arg_1 ( atmp10 ) ;
+FUNC_EXIT ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( atmp101 ) ) ) ;
+}
+}
+}
+}
+}
+}
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Character_Class_Normalization12_1sym , arg0 , arg1 ) ) ;
 }

@@ -42,6 +42,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
+/*
 if ( not_empty_list ( atmp100 ) ) {
 tmp [ 0 ] = list_head ( atmp100 ) ;
 {
@@ -57,6 +58,15 @@ FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 else {
 FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
+*/
+while ( not_empty_list ( atmp100 ) ) {
+  tmp [ 0 ] = list_head ( atmp100 ) ;
+  if ( term_equal ( arg0 , tmp [ 0 ] ) ) {
+    FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+  }
+  atmp100 = list_tail ( atmp100 ) ;
+}
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
 }

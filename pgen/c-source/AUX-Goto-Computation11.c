@@ -1,4 +1,5 @@
 #include  "support.h"
+
 static Symbol lf_AUX_Goto_Computation11_1sym ;
 static ATerm lf_AUX_Goto_Computation11_1 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol ef2sym ;
@@ -55,6 +56,7 @@ ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Goto-Computation\"),w(\"\"),[
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"Goto-Computation\"),w(\"\"),[l(\"vertex\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Parse-Table\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Int\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parse-Table\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
+static ATerm global_tmp = NULL;
 void init_AUX_Goto_Computation11 ( ) {
 ATprotect ( & constant0 ) ;
 }
@@ -74,8 +76,9 @@ if ( check_sym ( arg2 , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( term_equal ( ( * ef9 ) ( ( * ef3 ) ( ( * ef4 ) ( arg1 ) ) , arg2 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
-tmp [ 0 ] = ( * ef10 ) ( arg0 , arg1 , arg2 ) ;
-FUNC_EXIT ( lf_AUX_Goto_Computation11_1 ( arg0 , tmp [ 0 ] , ( * ef6 ) ( arg2 , ( * ef1 ) ( ( * ef7 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+global_tmp = ( * ef10 ) ( arg0 , arg1 , arg2 ) ;
+arg1 = NULL;
+FUNC_EXIT ( lf_AUX_Goto_Computation11_1 ( arg0 , global_tmp , ( * ef6 ) ( arg2 , ( * ef1 ) ( ( * ef7 ) ( ( * ef8 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

@@ -78,12 +78,14 @@ tmp [ 0 ] = ( * ef5 ) ( ( * ef4 ) ( arg1 ) , arg2 ) ;
 tmp [ 1 ] = ( * ef6 ) ( tmp [ 0 ] ) ;
 tmp [ 2 ] = ( * ef7 ) ( arg0 , tmp [ 1 ] ) ;
 tmp [ 3 ] = ( * ef8 ) ( arg0 , tmp [ 2 ] ) ;
-tmp [ 4 ] = ( * ef10 ) ( arg0 , arg1 , tmp [ 2 ] , tmp [ 3 ] ) ;
+tmp [ 4 ] = ( * ef10 ) ( arg0 , arg1 , tmp [ 2 ] , tmp [ 3 ] ) ; 
 if ( check_sym ( tmp [ 4 ] , ef9sym ) ) {
+arg1 = NULL;
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 tmp [ 6 ] = arg_1 ( tmp [ 4 ] ) ;
 tmp [ 7 ] = ( * ef11 ) ( arg0 , tmp [ 5 ] , tmp [ 2 ] , tmp [ 6 ] ) ;
 tmp [ 8 ] = ( * ef12 ) ( ( * ef13 ) ( ( * ef14 ) ( tmp [ 0 ] , tmp [ 2 ] ) , tmp [ 6 ] ) , tmp [ 7 ] ) ;
+tmp [ 6 ] = NULL;
 FUNC_EXIT ( ( * ef2 ) ( tmp [ 5 ] , ( * ef3 ) ( ( * ef4 ) ( tmp [ 5 ] ) , arg2 , tmp [ 8 ] ) ) ) ;
 }
 }
