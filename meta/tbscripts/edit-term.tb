@@ -345,16 +345,26 @@ in
 	  snd-msg(error-stack, EditorId)
 	fi
       +
-        rec-msg(edit(NewModName?, EditorName?), Stack?, EditorId) .
+        rec-msg(push-editor-name, Stack?, EditorId) .
+        snd-msg(get-editor-name(EditorId)) .
+        rec-msg(editor-name(FileName?)) .
+        RTree := quote(str(FileName)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack), EditorId)
+      +
+        rec-msg(edit-given-filename(NewModName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
-	FunSym := fun(STree) .
-	if equal(FunSym, "str") then
-	  String := first(args(STree)) .
-          ActivateEditorWithString(String, NewModName, EditorName)
+        FileName := first(args(STree)) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        FunSym := fun(STree) .
+        if equal(FunSym, "str") then
+          String := first(args(STree)) .
+          ActivateEditorWithString(String, NewModName, FileName)
         else
-          ActivateEditorWithTree(STree, NewModName, EditorName) 
-        fi .
+          ActivateEditorWithTree(STree, NewModName, FileName) 
+        fi .    
         snd-msg(stack(Stack), EditorId)
       + 
         rec-msg(send, Stack?, EditorId) .

@@ -58,6 +58,7 @@ in
     +
       rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, ErrContent?))) .
       Tree := error-tree .
+printf("content = %t\n", ErrContent).
       ParseError := quote(parse-error(ErrList, ErrContent))
     ) .
     snd-note(ui-status(endstat(Id)))
@@ -147,6 +148,7 @@ let
   ModuleName   : str,
   Type         : str
 in
+printf("error = %t\n", ParseError).
   ModuleName := first(args(ModuleId)).
   Type := fun(ModuleId) .  
   if equal(Type, "eqs") then 
@@ -176,6 +178,7 @@ in
     fi .
     if equal(FunSym, "cycle") then
       Cycle := first(args(ErrorContent)) .
+printf("contents = %t\n", Cycle).
       snd-note(ui-status(errorf("Parse returned a cycle: %t\n", [Cycle]))) .
       snd-msg(parse-failed(ModuleId, Focus))
     else
