@@ -2219,12 +2219,12 @@ are used for defining the associativity of functions
 (Section~\ref{Priorities}).
 
 \item {\tt prefer} and {\tt avoid} are used to define that a function should
-be preferred or only be used as last resort in certain cases of
-syntactic ambiguity (Section~\ref{XXX}).
+either be preferred over other or only be used as a last resort in certain cases of
+syntactic ambiguity (Section~\ref{PreferAvoidReject}).
 
 
 \item {\tt reject} can be used to explicitly forbid certain syntactic
-  constructs (Section~\ref{XXX}).
+  constructs (Section~\ref{PreferAvoidReject}).
 
 \end{itemize}
 
@@ -2443,10 +2443,7 @@ exports
 \caption{More complex associativity and priority definitions}\label{CODE:complex-prio}
 \end{figure}   
 
-
-
-
-\subsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
+\subsubsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
 \label{LexicalRestrictions}
 
 Lexical syntax can be highly ambiguous.  Consider a simple lexical definition
@@ -2587,6 +2584,31 @@ exports
 \caption{Definition of C comments}\label{CODE:c-comment}
 \end{figure}
 
+\subsubsection{Preferring, avoiding or rejecting parses} \label{PreferAvoidReject}
+
+Priorities can be used to define a priority between two functions or between
+two groups of functions. In both cases the functions involved have to be
+listed explicitly in the priority declaration. In certain cases, however, it
+is desirable to define that a single rules has higher or lower priority than
+all other functions or the explicitly reject certain syntactic constructs.
+The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
+latter by the attribute {\tt reject}.
+
+If a function $F$ is attributed with {\tt prefer} and there is a syntactic
+ambiguity in which it is involved, only the parse using $F$ will remain.
+
+If a function $F$ is attributed with {\tt avoid} and there is no ambiguity,
+then $F$ will be used. If there is an ambiguity, then $F$ will be immediately
+removed from the set of ambiguities.
+
+If a function $F$ is attributed with {\tt reject}, then independent of the
+number of ambiguities, the parse using $F$ will be removed.  While
+restrictions (Section~\ref{Restrictions}) only impose restrictions on the
+immediate look ahead that follows a symbol, the reject mechanism can be used
+to eliminate complicated syntactic structures.
+
+Examples of {\tt prefer}, {\tt avoid} and {\tt reject} will be given in
+Section~\ref{Disambiguation}.
 
 \subsection{Variables} \label{Variables}
 
@@ -2631,7 +2653,7 @@ exports
     "Id-ne-list"   -> {ID ","}+
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Variable declarations}\label{CODE:variables}
+\caption{Variable declarations using naming schemes}\label{CODE:variables}
 \end{figure}         
 
 Declared variables can only be used when defining equations. It is not
@@ -2640,7 +2662,7 @@ allowed to use them in terms.
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
 strategy that is further discussed in Section \ref{lex-ambiguity}.
 
-\subsection{Disambiguation}
+\subsection{Disambiguation} \label{Disambiguation}
 
 \subsubsection{Lexical Ambiguities}
 \label{lex-ambiguity}
@@ -2659,8 +2681,8 @@ will thus lead to recognition of the identifier `{\tt xyz}' and not to
 either `{\tt x}' or `{\tt xy}'.
 
 This is achieved by defining a restriction on this lexical sort. This
-can be done in context-free restrictions 
-section (see Section \ref{ContextFreeRestrictions}).
+can be done in either the lexical restrictions or the context-free restrictions 
+section (see Section \ref{Restrictions}).
 Figure \ref{CODE:restrict-id} shows how to enforce the longest match
 for the sort {\tt Id}.
 
@@ -2697,15 +2719,15 @@ identifier given the lexical definition of Figure \ref{CODE:restrict-id}.
 There are two approaches to implement Prefer Literals.
 
 In the first approach, we can explicitly forbid the recognition of literals as
-tokens of a specific sort. As a matter of fact, \sdf\ supports a very general
-reject mechanism (see Section~\ref{XXX}) that can be used for this purpose.
-The idea is to define context-free grammar rules for all literals with the
-undesired lexical sort (e.g., {\tt Id} )in the right-hand side followed by the
-attribute {\tt reject}.  Figure \ref{CODE:reject-id} illustrates this.  The
-{\tt reject} attribute indicates that the recognizition of a keyword as a
-literal of the given sort should be rejected. This approach has the major
-disadvantage that the addition of a literal in any context-free rule also
-requires the addition of a new reject rule for that literal.
+tokens of a specific sort using the reject mechanism (see
+Section~\ref{PreferAvoidReject}).  The idea is to define context-free grammar
+rules for all literals with the undesired lexical sort (e.g., {\tt Id} )in the
+right-hand side followed by the attribute {\tt reject}.  Figure
+\ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute indicates
+that the recognizition of a keyword as a literal of the given sort should be
+rejected. This approach has the major disadvantage that the addition of a
+literal in any context-free rule also requires the addition of a new reject
+rule for that literal.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2728,12 +2750,13 @@ exports
 \caption{Using {\tt reject} to implement Prefer Literals}\label{CODE:reject-id}
 \end{figure}   
 
-The second approach is more attractive. The lexical definition of the
-general notion that interferes with our literals is written in such a way that
-it is only used as a last resort. In other words, it is avoided as much as
-possible and is only used when no alternative exists.  The attribute {\tt
-  avoid} defines precisely this behaviour.  Figure \ref{CODE:avoid-id} shows
-how the lexical definition of {\tt Id} is attribued with {\tt avoid}.
+The second approach is more attractive. The lexical definition of the general
+notion that interferes with our literals is written in such a way that it is
+only used as a last resort. In other words, it is avoided as much as possible
+and is only used when no alternative exists.  The attribute {\tt avoid}
+defines precisely this behaviour (Section~\ref{PreferAvoidReject}.  Figure
+\ref{CODE:avoid-id} shows how the lexical definition of {\tt Id} is attributed
+with {\tt avoid}.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2754,16 +2777,17 @@ exports
 \end{figure}   
 
 \paragraph{Prefer Non-Layout} Eliminate all interpretations of the text 
-as layout symbol. 
+as layout symbol. This built-in behaviour of \asfsdf.
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
 variable (as defined in a variables section) over interpretation as a lexical
-token. To achieve this, the parser generator automatically decorates each
-variable declaration with the attribute {\tt prefer} (Section~\ref{XXX}).
+token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
+extending each variable declaration with the attribute {\tt prefer}
+(Section~\ref{PreferAvoidReject}).
 
-\subsection{Context-free ambiguities}
+\subsubsection{Context-free ambiguities}
 
-\subsubsection{Removing Trees using Priorities}
+\paragraph{Removing Trees using Priorities}
 
 The priority and associativity declarations are used to eliminate trees in two
 phases: 
@@ -2780,7 +2804,7 @@ ordering on context-free functions to an ordering on trees.
 
 \end{itemize}
 
-\subsubsection{Removing Trees Containing Conflicts}
+\paragraph{Removing Trees Containing Conflicts}
 
 The simplest application of priority and associativity declarations is the
 elimination of trees that contain conflicts:
