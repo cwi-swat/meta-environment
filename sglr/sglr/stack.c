@@ -195,7 +195,10 @@ stacks *SG_DeleteStacks(stacks *sts)
 void SG_DeleteStack(stack *st)
 {
 //  ATfprintf(stderr, " deleting stack %xd\n", (int) st);
-  if(st->freed) ATfprintf(stderr, "freeing already freed stack %xd\n", st);
+  if(st->freed) {
+    ATfprintf(stderr, "freeing already freed stack %xd\n", st);
+    return;
+  }
   st->freed = ATtrue;
 SG_AllocStats(DEC);
   SG_DeleteLinks(SG_ST_LINKS(st));
