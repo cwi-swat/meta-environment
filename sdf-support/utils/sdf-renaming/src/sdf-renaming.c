@@ -54,7 +54,8 @@ static SDF_ImportList getRelevantImports(char *moduleName, SDF_ImportList import
     SDF_ModuleId importId = SDF_getModuleNameModuleId(name);
 
     assert(!SDF_hasModuleNameParams(name) && 
-	   "parameters are supposed to be resolved before using this tool");
+	   "parameters are supposed to be resolved before using this tool."
+	   " See get-import.c in sdf-support/lib");
 
     if (SDF_isEqualModuleId(id, importId)) {
       relevantImports = SDF_concatImportList(relevantImports,
