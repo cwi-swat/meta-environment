@@ -98,7 +98,7 @@ STD-OBJS	:= $(SRCS:.c=.o)
 DEBUG-OBJS	:= $(SRCS:.c=-${DEBUG_EXT}.o)
 PROFILE-OBJS	:= $(SRCS:.c=-${PROFILE_EXT}.o)
 
-STD-LIB		:= lib${TARGET}-$(CC).a
+STD-LIB		:= lib${TARGET}.a
 DEBUG-LIB	:= lib${DEBUG_TARGET}.a
 PROFILE-LIB	:= lib${PROFILE_TARGET}.a
 
