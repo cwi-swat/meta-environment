@@ -11,7 +11,7 @@
 
 #ifndef WIN32
 #include <atb-tool.h>
-#include "sglr.tif.c"
+#include "sglr.tif.h"
 #endif
 
 #include "getopt.h"

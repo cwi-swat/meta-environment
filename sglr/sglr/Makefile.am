@@ -1,6 +1,9 @@
 # $Id$
 
-include $(top_srcdir)/make_rules
+include ${top_srcdir}/make_rules
+
+EXTRA_DIST		= sglr.idef
+CLEANFILES		= sglr.tifs sglr.tif.[ch]
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(top_srcdir)/libtree2dot \
@@ -8,26 +11,15 @@ INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(TOOLBUS)/include \
 			-I$(ATERM)/include
 
-bin_PROGRAMS		= sglr 
-sglr_SOURCES		= sglr-main.c getopt.c getopt1.c
-
 data_DATA		= sglr.idef
 noinst_HEADERS		= getopt.h
 
-EXTRA_DIST		= sglr.idef sglr.tif.c sglr.tif.h
-CLEANFILES		= sglr.tifs
+bin_PROGRAMS		= sglr 
 
-#CFLAGS			+= -pg
-
+sglr_SOURCES		= sglr.tif.c sglr.tif.h sglr-main.c getopt.c getopt1.c
 sglr_LDADD		= -L$(top_builddir)/libsglr -lsglr \
 			-L$(top_builddir)/libtree2dot -ltree2dot \
 			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
 			-L$(TOOLBUS)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
-
-sglr_INCLUDE            = $(INCLUDES)
-
-# extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a \
-              $(top_builddir)/libtree2dot/libtree2dot.a

@@ -1,33 +1,11 @@
-#
-#    SGLR - the Scannerless Generalized LR parser.
-#    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
-#    The Netherlands. 
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
 # $Id$
-#
-
-#INCLUDES = -I${top_srcdir}/libtree2dot -I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
 
 %.tif.c %.tif.h: %.tifs
-	@PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
+	${TOOLBUS}/bin/tifstoc -tool $* $<
 
 # The output of idef2tif and toolbus is moved to $@ to make sure the
 # generated .tifs file exists in the current directory. The ToolBus and
@@ -35,13 +13,13 @@ POD2HTML=pod2html
 # the location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.idef
-	@PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
+	${TOOLBUS}/bin/idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
 %.tifs: %.tb
-	@PATH=${TOOLBUS}/bin:${PATH} toolbus -gentifs $<
+	${TOOLBUS}/bin/toolbus -gentifs $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
