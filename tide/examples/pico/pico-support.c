@@ -350,7 +350,7 @@ static void init_debugging()
 {
   char *name;
 
-  TA_connect();
+  TA_connect(TIDE_PORT);
 
   TA_registerFunction(ATmakeAFun("resume", 0, ATfalse), eval_resume);
   TA_registerFunction(ATmakeAFun("break",  0, ATfalse), eval_break);
