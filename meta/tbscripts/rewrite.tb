@@ -15,7 +15,8 @@ in
     snd-msg(retrieve-eqs(Mod)).
     rec-msg(finished-retrieval). 
     snd-eval(Eval, interpret(Mod,Term)).
-    rec-value(Eval,result(NF?)) 
+    rec-value(Eval,result(NF?)).
+    snd-msg(result(NF))
   ) * 
   delta
 endlet 
