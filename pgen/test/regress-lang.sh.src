@@ -113,7 +113,9 @@ Abort () {
 Notify () {
 	if [ $verbose -gt 0 ] ; then
 		Warn $*
-	fi
+	else
+	        echo -n "."
+        fi		
 }
 
 
