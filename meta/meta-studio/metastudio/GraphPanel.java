@@ -405,10 +405,11 @@ private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, C
 
   private void paintEdge(Graphics2D g, Edge edge)
   {
+      System.err.println("hierp: " + edge);
     if (!edge.isPositioned()) {
       return;
     }
-
+System.err.println("hier: " + edge);
     Polygon poly = edge.getPolygon();
     Point from = poly.getHead();
     poly = poly.getTail();
