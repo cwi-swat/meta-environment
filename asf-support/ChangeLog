@@ -1,8 +1,11 @@
-2002/11/04 (jurgenv@cwi.nl)
+2002/11/05 (vinju@loria.fr)
+ * Moved libME to lib
+
+2002/11/04 (vinju@loria.fr)
  * Regenerated library with new sdf-apigen features
  * Removed dependency on pt-support where possible
 
-2002/10/07 (jurgenv@cwi.nl)
+2002/10/07 (vinju@loria.fr)
  * Regenerated library to obtain improved start constructors
 
 2002/10/03 (jurgenv@cwi.nl)

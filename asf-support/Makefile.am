@@ -1,5 +1,5 @@
 # $Id$
 
-SUBDIRS		= libME utils
+SUBDIRS		= lib utils
 
 EXTRA_DIST	= program-check.m4
