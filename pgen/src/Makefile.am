@@ -26,7 +26,7 @@ SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 
 HDRS         = parsetablegen.tif.h atsets.h ksdf2table.h statistics.h \
 		flatten.h predicted.h goto.h follow.h intset.h \
-		characters.h item.h first.h priorities.h itemset.h
+		characters.h item.h first.h priorities.h itemset.h \
 		pgen-symbol.h
 
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
