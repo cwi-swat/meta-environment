@@ -89,8 +89,6 @@ int main( int argc, char* argv[] )
    /* Initialize AsFix library functions ans ASF+SDF Compiler functions */
    ATinit(argc, argv, &bottomOfStack);
    SDF_initSDFApi();
-   PT_initPTApi();
-   ASF_initASFApi();
    asc_init();
    
    /* parse command line options */

@@ -79,8 +79,7 @@ ATerm normalize(ATerm sdf2term, char* topModule )
 
 void asc_init()
 {
-   init_patterns();
-   c_rehash(INITIAL_TABLE_SIZE);
+   ASC_initRunTime(INITIAL_TABLE_SIZE);
    register_all();
    resolve_all();
    init_all();
