@@ -9,6 +9,9 @@ equations
 
 [get-sig-2] getSigs(AS-FS, sigs(AS-FS*)) = sigs(AS-FS, AS-FS*)
 
+[join-sigs-1] joinSignatures(sigs(AS-FS*1), sigs(AS-FS*2)) = 
+					    sigs(AS-FS*1, AS-FS*2)
+
 [get-fun-1] 
 
   getFunctions(module ModName ImpSec* AS-Sec*, $FD*) = 

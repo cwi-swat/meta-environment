@@ -185,11 +185,11 @@ Sort sort("I""n""f""i""x"$CH+) Sort -> sort($CH+)
   [default-trhs-5] $transform-requires-rhs(Sort, Sort1 Literal Sort2) = 
 Sort1 qliteral(""")Literalqliteral(""") Sort2	-> Sort
 
-  [tv-1] $transform-variable(sort($CH+) : Symbol) = 
+  [tv-1] $transform-variable(varlexprefix($CH+) : Sort) = 
 sorts Symbol
-variables qliteral("""$CH+""")[0-9\']* 		-> Symbol
-	  qliteral("""$CH+""")[0-9\']*"+"	-> Symbol+
-	  qliteral("""$CH+""")[0-9\']*"*"	-> Symbol*
+variables qliteral("""$CH+""")[0-9\']* 		-> Sort
+	  qliteral("""$CH+""")[0-9\']*"+"	-> Sort+
+	  qliteral("""$CH+""")[0-9\']*"*"	-> Sort*
 
   [tc-1] $transform-constant(Literal : Symbol) = 
 context-free syntax
@@ -208,7 +208,7 @@ context-free syntax
 
   [ei-3] $extract-imports(sdf-section Section*,Import*) = Import*
 
-  [ei-4] $extract-imports(Sort : Symbol, Import*) = $extract-imports(Symbol, Import*)
+  [ei-4] $extract-imports(VarLexPrefix : Sort, Import*) = $extract-imports(Sort, Import*)
 
   [ei-4] $extract-req-imports(sort($CH+),Import*) = 
          $add-to(moduleid("D""a""t""a""/"$CH+), Import*)

@@ -14,8 +14,8 @@ exports
     AS-Module AS-Section AS-Syntax AS-Requires AS-Semantics 
     AS-Variable AS-Syntax-Production AS-Requires-Production 
     AS-Syntax-Rhs AS-Requires-Rhs AS-Function AS-FunctionSig
-    AS-FunctionDef AS-Constant AS-Eqs-Tag AS-Eqs-Rhs AS-Eqs-Lhs
-    AS-Eqs-Symbols Constructor Special Word Token Symbol
+    AS-FunctionDef AS-Constant AS-Eqs-Tag AS-Eqs-Lhs
+    Constructor Token Symbol
 
   context-free syntax
 
@@ -44,7 +44,7 @@ exports
 
   context-free syntax
 
-    Sort ":" Symbol			-> AS-Variable {cons("variable")}
+    VarLexPrefix ":" Sort		-> AS-Variable {cons("variable")}
 
   context-free syntax
 
@@ -77,30 +77,22 @@ exports
     Literal ":" Sort "->" Sort 		   -> AS-FunctionSig {cons("funsig")}
     AS-Eqs-Tag AS-Eqs-Lhs "=" Action	   -> AS-FunctionDef {cons("fundef")}
 
-
   context-free syntax
 
     Literal Constructor 		-> AS-Eqs-Lhs {cons("eqs-lhs")} 
-    Literal "(" {Symbol ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
-    Literal "(" Symbol* ")"	   -> Constructor {cons("cons-seq")}
-    Symbol			   -> Constructor {cons("cons-symbol")}
+    Literal "(" {VarLex ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
+    Literal "(" VarLex* ")"	   -> Constructor {cons("cons-seq")}
+    VarLex			   -> Constructor {cons("cons-symbol")}
     "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
 
-    AS-Eqs-Symbols+ 		-> AS-Eqs-Rhs {cons("eqs-rhs")}
-    "(" AS-Eqs-Rhs ")"  	-> AS-Eqs-Symbols {cons("eqs-sym-par")}
-    Word | VarWord| Special | NatCon 	-> AS-Eqs-Symbols {cons("eqs-sym")}
     "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
 
   lexical syntax
 
-    [\#\_\,\=\-\*\+\\\/]	-> Special 
     [a-zA-Z0-9\-]+		-> Token 
-    [a-zA-Z]+			-> Word  
-    [A-Z][A-Za-z0-9\-\'\+\*]*   -> VarWord
 
-  lexical restrictions
+    [A-Z]+			-> VarLexPrefix
+    [A-Z]+[0-9\']*[\+\*]?	-> VarLex
+    
 
-    Token -/- [a-zA-Z0-9\-]
-    Word -/- [a-zA-Z]
-    VarWord -/- [A-Za-z0-9\-\'\+\*]
 

@@ -17,6 +17,11 @@ sorts
 context-free syntax
 
   "result" Data		-> Action
+  "give" DataOp		-> Action
+  "check" DataOp	-> Action
+
+lexical syntax
+
   "copy"		-> Action
   "skip"		-> Action
   "then"		-> InfixAction
@@ -32,8 +37,6 @@ context-free syntax
   "fail"		-> Action
   "maybe"		-> PrefixAction
   "else"		-> InfixAction
-  "give" DataOp		-> Action
-  "check" DataOp	-> Action
   "choose-nat"		-> Action
 
   "copy-bindings"	-> Action

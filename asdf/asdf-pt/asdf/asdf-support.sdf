@@ -16,6 +16,8 @@ context-free syntax
 
   getSignatures(AS-Module)	-> Signatures
 
+  joinSignatures(Signatures, Signatures)  -> Signatures
+
   sigs({AS-FunctionSig ","}*)		-> Signatures
 
   getFunctions(AS-Module, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
@@ -41,7 +43,7 @@ hiddens variables
   "Imp+"		-> Import+
   "Imp"[1-9]?		-> Import
   "AS-Sec*"		-> AS-Section*
-  "AS-FS*"		-> {AS-FunctionSig ","}*
+  "AS-FS*"[0-9]?	-> {AS-FunctionSig ","}*
   "AS-FS"		-> AS-FunctionSig
   "$FD*"		-> AS-FunctionDef*
   "$FD"			-> AS-FunctionDef

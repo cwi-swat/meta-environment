@@ -124,11 +124,11 @@ exports
     "Symbs"[0-9]*         -> Symbols
     "Symbol,*"[0-9]*       -> {Symbol ","}*
     "Symbol+"[0-9]*        -> Symbol+
+    "VarLexPrefix"[0-9]*   -> VarLexPrefix
     "Production"[0-9]*     -> Production
     "Production*"[0-9]*    -> Production*
     "Production+"[0-9]*    -> Production+
     "$CH+"[0-9]*          -> CHAR+
     "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
-    "AS-Eqs-Rhs"[0-9]?	   -> AS-Eqs-Rhs
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
     "A"[0-9]?		   -> Action
