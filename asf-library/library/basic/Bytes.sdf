@@ -29,12 +29,12 @@ hiddens
   context-free syntax
     chars-to-bytes(String) -> Bytes 
 
-    octal-to-byte(Integer) -> Byte
+    octal-to-byte(Integer) -> Byte {memo}
 
     bytes-to-chars(Bytes)    -> String  
     octal-to-string(Integer) -> String 
 
-    byte-to-octal(Byte) -> Integer
+    byte-to-octal(Byte) -> Integer {memo}
 
   variables
     "string"[0-9\']* -> String
