@@ -203,6 +203,9 @@ int TB_handle_one(int cid)
   assert_valid_cid(cid);
 
   trm = TB_receive(cid);
+  if(!trm) {
+    err_fatal("contact with ToolBus lost.\n");
+  }
   if(streq(get_txt(fun_sym(trm)), "rec-do"))
     sndvoid = TBtrue;
   result = connections[cid]->handler(cid, trm);
