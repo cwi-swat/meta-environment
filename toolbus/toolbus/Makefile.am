@@ -36,7 +36,7 @@ ctif_LDADD           = -L$(TOOLBUSLIB)/lib -ltb
 # txt_dbg_SOURCES    = txt_dbg.c
 # txt_dbg_LDADD      = -L$(TOOLBUSLIB)/lib -ltb
 
-CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
+CLEANFILES           = lex.yy.c y.tab.c y.tab.h idef2tif
 
 YFLAGS               = -d
 
