@@ -57,7 +57,7 @@ static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = ASC_applyFunction("add-equation-module",
+    newTree = PT_applyFunctionToTree("add-equation-module",
                 		     "Add-Eqs-Syntax",
 				     "SDF",
 				     2,

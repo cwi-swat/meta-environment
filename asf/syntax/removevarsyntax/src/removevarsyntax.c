@@ -57,7 +57,7 @@ static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = ASC_applyFunction("remove-var-syntax",
+    newTree = PT_applyFunctionToTree("remove-var-syntax",
                 		     "Remove-Var-Syntax",
 				     "SDF",
 				     2,
