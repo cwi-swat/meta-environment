@@ -32,7 +32,7 @@ let
   Table     : term,
   ModuleId  : term,
   Syntax    : term,
-  OldSyntax    : term,
+  OldSyntaxTree : term,
   SyntaxTree: term,
   SyntaxText: str,
   EqsTree   : term,
@@ -108,18 +108,23 @@ in
     snd-msg(sm-is-valid-modulename-in-path(Path, Name)) .
     (
       rec-msg(sm-modulename-is-valid) .
-      printf("DEBUG: addPosInfo still needs an extension concatenated\n") .
-      snd-msg(addPosInfo(Path, SyntaxTree)) .
-      rec-msg(tree-with-pos-info(SyntaxTree?)) .
-      snd-msg(sm-get-module-id(SyntaxTree)) .
-      rec-msg(module-id(ModuleId?)) .
+      if not-equal(SyntaxTree, no-tree) then
+        snd-msg(sm-get-module-id(SyntaxTree)) .
+        rec-msg(module-id(ModuleId?)) .
+        printf("DEBUG: addPosInfo still needs an extension concatenated\n") .
+        snd-msg(addPosInfo(Path, SyntaxTree)) .
+        rec-msg(tree-with-pos-info(SyntaxTree?)) .
+        snd-msg(ts-put-value("sdf-tree", ModuleId, tree(SyntaxTree))) .
+	snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+	rec-msg(sm-imported-module-names(Modules?)) 
+      else 
+        ModuleId := Name .
+	Modules := []
+      fi .
       snd-msg(ts-put-value("active-modules", ModuleId, path(Path))) .
-      snd-msg(ts-put-value("sdf-tree", ModuleId, tree(SyntaxTree))) .
       snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
       snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
       printf("DEBUG: just get the imported modules, not just the new ones?\n").
-      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
-      rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(adding-succeeded(Name,ModuleId, Modules))
     +
       rec-msg(sm-modulename-is-invalid) .
@@ -129,26 +134,21 @@ in
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))
   +
-    rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
-    printf("module-db: missing new text file for updated module?\n") .
-    snd-msg(sm-get-module-id(Syntax)) .
+    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?)).
+    snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
       snd-msg(ts-get-value("sdf-tree", Name)) .
-      rec-msg(ts-value(tree(OldSyntax?))) .
-      if equal(Syntax, OldSyntax) then
+      rec-msg(ts-value(tree(OldSyntaxTree?))) .
+      if equal(SyntaxTree, OldSyntaxTree) then
         printf("DEBUG: Nothing has changed in %s\n", Name) .
-	snd-msg(extra-modules([]))
+	snd-msg(updating-succeeded([],[]))
       else
-        snd-msg(sm-get-imports(Syntax)) .
+        snd-msg(sm-get-imported-module-names(SyntaxTree)) .
 	printf("DEBUG: just get all imports, not just the new ones?") .
-	rec-msg(sm-imports(Modules?)) .
+	rec-msg(sm-imported-module-names(Modules?)) .
         MDB-GetAllDependingModules(Name, DependingModules?) .
-	snd-msg(notify-about-changed-modules(DependingModules,"sdf")).
-	rec-msg(notify-about-changed-modules-done).
-	MDB-RetrieveImportGraph(Nodes?, Edges?) .
-	snd-note(import-graph(Nodes, Edges)).
-	snd-msg(extra-modules(Modules))
+	snd-msg(updating-succeeded(DependingModules,Modules))
       fi
     else
       snd-msg(error-opening(Name, name-inconsistent))
