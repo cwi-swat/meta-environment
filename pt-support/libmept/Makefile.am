@@ -20,7 +20,7 @@ libmept_a_SOURCES = \
 	symbol-renaming.c \
 	ordering.c
 
-CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 INCLUDES =\
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include

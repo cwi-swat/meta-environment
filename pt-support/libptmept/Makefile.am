@@ -13,7 +13,7 @@ INCLUDES		= -I. \
 			  -I${ERROR_SUPPORT}/include \
                           -I${ATERM}/include  
 
-CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 # Developers only:
 api: AsFix.def
