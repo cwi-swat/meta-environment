@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Feb 13 15:04:43 CET 2003 <{jong,olivierp}@cwi.nl>
+ * Several patches to fix "make distcheck"
+
 2003/02/12 <jurgenv@cwi.nl>
  * Added ModuleName to postprocess-collected-semantics-hook
 

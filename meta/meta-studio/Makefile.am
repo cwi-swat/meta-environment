@@ -9,13 +9,15 @@ pkgdata_DATA	= meta-studio.jar
 
 CLEANFILES	= meta-studio.jar
 
-JARCLASSDIRS	= metastudio metastudio/graph
-JARCLASSES	= ${JARCLASSDIRS:%=%/*.class}
-JARIMAGES	= ${srcdir}/images/*.gif
-JARFILES	= ${srcdir}/META-INF/MANIFEST.MF \
-		${srcdir}/META-INF/default.properties \
-		${JARIMAGES} ${JARCLASSES}
+JARCLASSES	= `find ${JARCLASSDIRS} -name '*.class'`
+JARIMAGES	= $(wildcard ${srcdir}/images/*.gif)
 
-meta-studio.jar: ${JARFILES}
+JARFILES = \
+	 ${srcdir}/META-INF/MANIFEST.MF \
+	 ${srcdir}/META-INF/default.properties \
+	 ${JARIMAGES} \
+	${JARCLASSES}
+
+meta-studio.jar: ${top_builddir}/meta-studio/metastudio/classjava.stamp ${top_builddir}/meta-studio/metastudio/graph/classjava.stamp
 	FILES="${JARFILES}"; \
 	jar cf meta-studio.jar $$FILES

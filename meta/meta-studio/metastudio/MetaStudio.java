@@ -663,10 +663,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     treePanel.add(listPane, BorderLayout.CENTER);
 
     JSplitPane leftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePanel, moduleStatus);
-    //		leftPanel.setResizeWeight(0.8);
+    leftPanel.setResizeWeight(0.8);
 
     JSplitPane rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphPane, historyPanel);
-    //		rightPanel.setResizeWeight(0.8);
+    rightPanel.setResizeWeight(0.8);
 
     JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 

@@ -16,7 +16,7 @@ TESTS = \
 
 TOOL = query-tool
 
-EXTRA_DIST = $(TOOL).idef
+EXTRA_DIST = $(TOOL).idef ${QUERIES:.c=.h}
 
 bin_PROGRAMS = $(TOOL)
 noinst_PROGRAMS = $(TESTS)

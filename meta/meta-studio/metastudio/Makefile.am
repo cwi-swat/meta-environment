@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS		= graph
+SUBDIRS = graph
 
 ACSOURCES	= Module.java
 java_JAVA	= \

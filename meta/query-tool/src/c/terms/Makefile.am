@@ -1,6 +1,8 @@
 term: Bool.sdf.pt boollist.pt boolseplist.pt booland.pt boolor.pt id.pt
 
-TERM_FILES = $(wildcard *.pt *.trm.tbl)
+EXTRA_DIST = $(TERM_FILES)
+
+TERM_FILES = $(wildcard *.pt *.trm.tbl) $(wildcard *.trm)
 
 term-clean:
 	rm -f $(TERM_FILES)
