@@ -41,8 +41,14 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
-ATERM           = @ATERM@
-TOOLBUS         = @TOOLBUS@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
+TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 A2TOA1DIR	= ${srcdir}/../a2toa1
 PARSERDIR	= ${srcdir}/../parser
@@ -52,7 +58,7 @@ XCFLAGS		= ${DEFS}
 
 XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
 ATLIBS 		= -lATerm -lAsFix -lATB
-XLIBS		= -L$(ATERM)/lib -ltree2dot -lsglr -la2toa1 ${addsuffix -${CC},${ATLIBS}}
+XLIBS		= -L$(ATERMLIB) -ltree2dot -lsglr -la2toa1 ${addsuffix -${CC},${ATLIBS}}
 
 LIBSRC          = tree-to-dot.c
 LIBOBJ		= ${patsubst %.c,%.o,${LIBSRC}}

@@ -38,13 +38,19 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
-ATERM           = @ATERM@
-TOOLBUS         = @TOOLBUS@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
+TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 XCFLAGS		= ${DEFS}
 XINCLUDES	= -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix -lATB
-XLIBS		=  -L${libdir} -L$(ATERM)/lib ${addsuffix -${CC},${ATLIBS}}
+XLIBS		=  -L${libdir} -L$(ATERMLIB) ${addsuffix -${CC},${ATLIBS}}
 
 PROG		= parse-client
 SRC		= ${addsuffix .c,${PROG}}
@@ -82,10 +88,10 @@ clean:
 # Generic rules
 
 %.tif.c: %.tifs
-	$(ATERM)/bin/tifstoc -tool $* $<
+	$(ATERMBIN)/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	$(TOOLBUS)/bin/toolbus -gentifs $<
+	$(TOOLBUSBIN)/toolbus -gentifs $<
 
 
 # Specific ones

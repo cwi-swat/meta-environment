@@ -7,12 +7,12 @@ let
 in
   printf("Parse-client connected.\n") .
   (
-    rec-event(R, parsetext-asfix1(N?))
+    rec-event(R, parsetext-asfix1(N?)) .
     snd-msg(parsetext-asfix1(N)) .
     rec-msg(result(T?)) .
     snd-ack-event(R, parsetext-asfix1(N, T))
   +
-    rec-event(R, parsetext(N?))
+    rec-event(R, parsetext(N?)) .
     snd-msg(parsetext(N)) .
     rec-msg(result(T?)) .
     snd-ack-event(R, parsetext(N, T))

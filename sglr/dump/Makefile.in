@@ -38,8 +38,14 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
-ATERM           = @ATERM@
-TOOLBUS         = @TOOLBUS@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
+TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 
 A2TOA1DIR	= ${srcdir}/../a2toa1
@@ -49,7 +55,7 @@ TREE2DOTDIR	= ${srcdir}/../tree2dot
 XCFLAGS		= ${DEFS}
 XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix -lATB
-XLIBS		= -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir} -L$(ATERM)/lib	\
+XLIBS		= -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir} -L$(ATERMLIB)	\
 		  -lsglr -la2toa1 -ltree2dot ${addsuffix -${CC},${ATLIBS}}
 
 PROG		= dump-actions dump-gotos dump-priorities dump-productions
