@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 19 13:32:10 CEST 2003 <jong@cwi.nl>
+ * Added explicit ATBunpack and ATBpack to restore-term-brackets
+
 2003/06/18 ({jong,markvdb}@cwi.nl)
  * Added explicit ATBpack to parsetrees.
 

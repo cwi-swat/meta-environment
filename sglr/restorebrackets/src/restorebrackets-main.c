@@ -165,19 +165,22 @@ static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, parse_table *pt)
   return PT_setParseTreeTop(pttree, newTree);
 }
 
-ATerm restore_brackets(int cid, ATerm term, ATerm packedTbl)
+ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable)
 {
   parse_table *pt = NULL;
   ATerm restoredTerm;
 
-  ATerm tbl = ATBunpack(packedTbl);
+  ATerm table = ATBunpack(packedTable);
+  ATerm term = ATBunpack(packedTerm);
 
-  pt = SG_BuildParseTable((ATermAppl) tbl);
-  restoredTerm = PT_ParseTreeToTerm(
-                   RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
+  pt = SG_BuildParseTable((ATermAppl) table);
+
+  restoredTerm
+    = PT_ParseTreeToTerm(RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
+
   SG_DiscardParseTable(pt);
 
-  return ATmake("snd-value(brackets-restored(<term>))", restoredTerm);
+  return ATmake("snd-value(brackets-restored(<term>))", ATBpack(restoredTerm));
 }
 
 static void usage(void)
