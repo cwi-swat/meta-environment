@@ -1,105 +1,146 @@
 equations
 
-[get-formal-parameters-1]
-  get-formal-parameters($ProcessName) =
+  [atom2string]
+    sign2str($Term) = term2str($Term)
 
-[get-formal-parameters-2]
-  get-formal-parameters($ProcessName($FormalParams)) = $FormalParams
+  [term2string]
+    term2str(id(Char*)) = strcon(""" Char* """)
 
-[get-local-variables-1]
-  get-local-variables($ProcessExpr) =
+  [term2string]
+    term2str(id(Char*)($TermPlus)) = 
+      strcon(""" Char* """) 
+      || strcon(""" "(" """) 
+      || terms2str($TermPlus) 
+      || strcon(""" ")" """)
 
-[get-local-variables-2]
-  get-local-variables(let $VarDecls in $ProcessExpr endlet) = $VarDecls
+  [term2string]
+    term2str(*undefined*)
+    = strcon(""" "*" "u" "n" "d" "e" "f" "i" "n" "e" "d" "*" """)
 
-[make-signature-send]
-  $TermPlus2 := make-simple-signature($TermPlus1)
-  ===>
-  make-signature(snd-msg($TermPlus1), $FormalParams, $VarDecls) = 
-    msg($TermPlus2)
+  [term2string-chars]
+    term2str($String) = strcon(""" "s" "t" "r" """)
 
-[make-signature-receive]
-  $TermPlus2 := make-simple-signature($TermPlus1)
-  ===>
-  make-signature(rec-msg($TermPlus1), $FormalParams, $VarDecls) = 
-    msg($TermPlus2)
+  [term2string-int]
+    term2str($Int) = strcon(""" "i" "n" "t" """)
 
-[getType-var-formal]
-  getType($Var, 
-          $FormalParams1, $Var : $Term, $FormalParams2, 
-          $VarDecls) = $Term
+  [term2string-real]
+    term2str($Real) = strcon(""" "r" "e" "a" "l" """)
 
-[getType-vary-formal]
-  getType($Var,
-          $FormalParams1, $Var : $Term?, $FormalParams2,
-          $VarDecls) = $Term
+  [term2string-bool]
+    term2str($Bool) = strcon(""" "b" "o" "o" "l" """)
 
-[getType-varq-formal]
-  getType($Var?,  
-          $FormalParams1, $Var : $Term?, $FormalParams2,  
-          $VarDecls) = $Term
+  [term2string-ph]
+    term2str(<$Term>)
+    = strcon(""" "<" """) || terms2str($Term) || strcon(""" ">" """)
 
-[getType-var-decl]
-  getType($Var,  
-          $FormalParams,  
-          $VarDecls1, $Var : $Term, $VarDecls2) = $Term
+  [term2string-list]
+    term2str([$Terms])
+    = strcon(""" "[" """) || terms2str($Terms) || strcon(""" "]" """)
 
-[getType-varq-decl]
-  getType($Var?,  
-          $FormalParams,  
-          $VarDecls1, $Var : $Term, $VarDecls2) = $Term
+  [terms2string-empty]
+   terms2str() = strcon(""" """)
 
-[default-getType]
-  getType($GenVar, $FormalParams, $VarDecls) = *undefined*
 
-[getType-id]
-  getType($Id, $FormalParams, $VarDecls) = term
+  [terms2string-term]
+    terms2str($Term) = term2str($Term) 
 
-[getType-compound]
-  getType($Id($TermPlus), $FormalParams, $VarDecls) = term
+  [terms2string-terms]
+    terms2str($Term, $TermPlus) = 
+      term2str($Term) || strcon(""" "," """) || terms2str($TermPlus)
 
-[getType-str]
-  getType($String, $FormalParams, $VarDecls) = str
+  [make-signature-send]
+    make-simple-signature($TermPlus1) = $TermPlus2
+    ===>
+    make-signature(snd-msg($TermPlus1), $FormalParams, $VarDecls) = 
+      msg($TermPlus2)
 
-[getType-int]
-  getType($Int, $FormalParams, $VarDecls) = int
+  [make-signature-receive]
+    make-simple-signature($TermPlus1) = $TermPlus2
+    ===>
+    make-signature(rec-msg($TermPlus1), $FormalParams, $VarDecls) = 
+      msg($TermPlus2)
 
-[getType-real]
-  getType($Real, $FormalParams, $VarDecls) = real
+  [getType-var-formal]
+    getType($Var, 
+            $FormalParams1, $Var : $Term, $FormalParams2, 
+            $VarDecls) = $Term
 
-[getType-bool]
-  getType($Bool, $FormalParams, $VarDecls) = bool
+  [getType-vary-formal]
+    getType($Var,
+            $FormalParams1, $Var : $Term?, $FormalParams2,
+            $VarDecls) = $Term
 
-[getType-list]
-  getType([$Terms], $FormalParams, $VarDecls) = list
+  [getType-varq-formal]
+    getType($Var?,  
+            $FormalParams1, $Var : $Term?, $FormalParams2,  
+            $VarDecls) = $Term
 
-[getType-list]
-  getType(<$Term>, $FormalParams, $VarDecls) = <getType($Term)>
+  [getType-var-decl]
+    getType($Var,  
+            $FormalParams,  
+            $VarDecls1, $Var : $Term, $VarDecls2) = $Term
 
-[make-simple-signature-var]
-  make-simple-signature($Var) = term
+  [getType-varq-decl]
+    getType($Var?,  
+            $FormalParams,  
+            $VarDecls1, $Var : $Term, $VarDecls2) = $Term
 
-[make-simple-signature-varq]
-  make-simple-signature($Var?) = term
+  [default-getType]
+    getType($GenVar, $FormalParams, $VarDecls) = *undefined*
 
-[make-simple-signature-id]
-  make-simple-signature($Id) = term
+  [getType-id]
+    getType($Id, $FormalParams, $VarDecls) = term
 
-[make-simple-signature-str]
-  make-simple-signature($String) = term
+  [getType-compound]
+    getType($Id($TermPlus), $FormalParams, $VarDecls) = term
 
-[make-simple-signature-int]
-  make-simple-signature($Int) = term
+  [getType-str]
+    getType($String, $FormalParams, $VarDecls) = str
 
-[make-simple-signature-real]
-  make-simple-signature($Real) = term
+  [getType-int]
+    getType($Int, $FormalParams, $VarDecls) = int
 
-[make-simple-signature-bool]
-  make-simple-signature($Bool) = term
+  [getType-real]
+    getType($Real, $FormalParams, $VarDecls) = real
 
-[make-simple-signature-list]
-  make-simple-signature([$Terms]) = term
+  [getType-bool]
+    getType($Bool, $FormalParams, $VarDecls) = bool
 
-[make-simple-signature-ph]
-  make-simple-signature(<$Term>) = term
+  [getType-list]
+    getType([$Terms], $FormalParams, $VarDecls) = list
 
+  [getType-list]
+    getType(<$Term>, $FormalParams, $VarDecls) = <getType($Term)>
+
+  [make-simple-signature-var]
+    make-simple-signature($Var) = term
+
+  [make-simple-signature-varq]
+    make-simple-signature($Var?) = term
+
+  [make-simple-signature-id]
+    make-simple-signature($Id) = term
+
+  [make-simple-signature-str]
+    make-simple-signature($String) = term
+
+  [make-simple-signature-int]
+    make-simple-signature($Int) = term
+
+  [make-simple-signature-real]
+    make-simple-signature($Real) = term
+
+  [make-simple-signature-bool]
+    make-simple-signature($Bool) = term
+
+  [make-simple-signature-list]
+    make-simple-signature([$Terms]) = term
+
+  [make-simple-signature-ph]
+    make-simple-signature(<$Term>) = term
+  
+ [get-local-variables-1]
+    get-local-variables($ProcessExpr) =
+
+  [get-local-variables-2]
+    get-local-variables(let $VarDecls in $ProcessExpr endlet) = $VarDecls

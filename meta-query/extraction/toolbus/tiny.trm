@@ -1,4 +1,4 @@
-extractAll(
+extractMessages(
 tool aap is { command = "/bin/aap" }
 
 process UI is
@@ -11,7 +11,7 @@ in
   (
     rec-event(UI, parse-file(FileName?)) .
     Parser().
-    snd-msg(parse-file(FileName)) .
+    snd-msg(parse-file(FileName, "hallo")) .
     rec-msg(parse-file-result(FileName, ParseTree?)) .
     snd-do(UI, show-tree(ParseTree)) .
     snd-ack-event(UI, parse-file(FileName))
@@ -39,4 +39,5 @@ in
 endlet
 
 toolbus(UI)
+,rstore()
 )

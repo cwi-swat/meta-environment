@@ -1,34 +1,50 @@
 module ToolBusOperations
 
-imports basic/Strings
 imports Tscript
+imports basic/Strings
+
+exports
+  context-free syntax
+    var2str(Var) -> String
+    sign2str(Term) -> String
+    term2str(Term) -> String
+
+hiddens
+  context-free syntax
+    terms2str({Term ","}*) -> String
 
 exports
   context-free syntax    
-    get-formal-parameters(ProcessSignature) -> {FormalParam ","}* get-local-variables(ProcessBody) -> {VarDecl ","}* make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term getType(Term, {FormalParam ","}*, {VarDecl ","}*) -> Term hiddens
-  context-free syntax
-    make-simple-signature({Term ","}+) -> {Term ","}+ {traversal(trafo,top-down,break)}
+    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term
+    getType(Term, {FormalParam ","}*, {VarDecl ","}*) -> Term
+    get-local-variables(ProcessBody) -> {VarDecl ","}*
 
-    make-simple-signature(Term) -> Term {traversal(trafo,top-down,break)}
+hiddens
+  context-free syntax
+    make-simple-signature({Term ","}+)
+	-> {Term ","}+ {traversal(trafo,top-down,break)}
+
+    make-simple-signature(Term)
+	-> Term {traversal(trafo,top-down,break)}
 
 hiddens
   variables
-    "$Atom"[0-9]* -> Atom
-    "$AtomArgs" -> AtomArgs
-    "$Bool" -> Boolean
-    "$FormalParam"[0-9]* -> FormalParam
-    "$FormalParams"[0-9]* -> {FormalParam ","}*
-    "$GenVar"[0-9]* -> GenVar
-    "$Id"[0-9]* -> Id
-    "$Int" -> Integer
-    "$ProcessExpr"[0-9]* -> ProcessExpr    
-    "$ProcessName"[0-9]* -> ProcessName    
-    "$Real" -> Real
-    "$String" -> String
-    "$Term"[0-9]* -> Term
-    "$TermPlus"[0-9]* -> {Term ","}+
-    "$Terms"[0-9]* -> {Term ","}*
-    "$ToolName"[0-9]* -> ProcessName    
-    "$Var"[0-9]* -> Var
-    "$VarDecl"[0-9]* -> VarDecl
-    "$VarDecls"[0-9]* -> {VarDecl ","}*
+    "$Atom"[0-9]* 		-> Atom
+    "$Bool"			-> TBBoolCon
+    "$FormalParam"[0-9]*	-> FormalParam
+    "$FormalParams"[0-9]*	-> {FormalParam ","}*
+    "$GenVar"[0-9]*		-> GenVar
+    "$Id"[0-9]*			-> Id
+    "$Int"			-> TBNatCon
+    "$ProcessExpr"[0-9]*	-> ProcessExpr    
+    "$ProcessName"[0-9]*	-> ProcessName    
+    "$Real"			-> Real
+    "$String"			-> TBStrCon
+    "$Term"[0-9]*		-> Term
+    "$TermPlus"[0-9]*		-> {Term ","}+
+    "$Terms"[0-9]*		-> {Term ","}*
+    "$Var"[0-9]*		-> Var
+    "$VarDecl"[0-9]*		-> VarDecl
+    "$VarDecls"[0-9]*		-> {VarDecl ","}*
+    "Char*"[0-9]* 		-> CHAR*
+

@@ -13,6 +13,7 @@ equations
   $Rstore9 := extractInitialProcesses($Tscript, $Rstore8),
   $Rstore10 := extractProcessUses($Tscript, $Rstore9),
   $Rstore11 := extractProcessReferences($Tscript, $Rstore10),
-  $Rstore12 := extractParameters($Tscript, $Rstore11)
+  $Rstore12 := extractParameters($Tscript, $Rstore11),
+  $Rstore13 := extractMessages($Tscript, $Rstore12)
   ===>
-  extractAll($Tscript) = $Rstore12
+  extractAll($Tscript) = $Rstore13
