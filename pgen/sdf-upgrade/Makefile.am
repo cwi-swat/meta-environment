@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = spec src
+SUBDIRS = spec
