@@ -160,10 +160,8 @@ buttons([
           message("Upgrading syntax ..."),
           apply("sdf-upgrade", "Module", 1),
           unpack-tree,
-          activate-given-tree("__ASF__/bin/asfe -t -e __PGEN__/share/pgen/SdfUpgrade.eqs"),
-          push-filename("intermediate"),
-          save-text,
-          push-filename("intermediate"),
+          activate-given-tree("__ASF__/bin/asfe -t -e __PGEN__/share/pgen/SdfUpgrade.eqs -o intermediate.txt"),
+          push-filename("intermediate.txt"),
           read-tree,
           message("Upgrading syntax done"),
           set-root
