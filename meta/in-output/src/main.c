@@ -14,7 +14,6 @@
 
 #include "in-output.tif.h"
 static char *expand_path(const char *relative_path);
-static char* normalize_filename(const char *path);
 
 /*}}}  */
 /*{{{  defines */
@@ -22,7 +21,6 @@ static char* normalize_filename(const char *path);
 
 #define PATH_LEN (_POSIX_PATH_MAX)
 #define MAX_PATHS 256
-#define BAF_EXT ".baf" 
 #define SEP "/"
 
 /*}}}  */
@@ -45,14 +43,6 @@ static char *paths[MAX_PATHS];
 
 /*}}}  */
 
-/*{{{  static ATerm open_error(char *error_message) */
-
-static ATerm open_error(char *error_message)
-{
-  return ATmake("snd-value(error-opening(<str>))", error_message);
-}
-
-/*}}}  */
 /*{{{  static ATerm createErrorMessage(char *message) */
 
 static ATerm createErrorMessage(char *message)
@@ -79,29 +69,12 @@ static int fileexists(const char *fname)
 }
 
 /*}}}  */
-/*{{{  static time_t filetime(const char *fname) */
-
-static time_t filetime(const char *fname)
-{
-  struct stat st;
-  return stat(fname,&st)!=EOF ? st.st_mtime : -1L;
-}
-
-/*}}}  */
 /*{{{  static size_t filesize(const char *s) */
 
 static size_t filesize(const char *s)
 {
   struct stat st;
   return (stat((char*)s,&st)!=EOF) ? st.st_size : -1L;
-}
-
-/*}}}  */
-/*{{{  static int newerfile(const char *s1, const char *s2) */
-
-static int newerfile(const char *s1, const char *s2)
-{
-  return filetime(s1) > filetime(s2);
 }
 
 /*}}}  */
@@ -142,50 +115,6 @@ static char *readFileContents(char *fnam, size_t *size)
 }
 
 /*}}}  */
-/*{{{  static ATerm read_term_from_named_file(char *fn, char *n) */
-
-static ATerm read_term_from_named_file(char *fn, char *n)
-{
-  ATerm t;
-  static char pn[PATH_LEN];
-
-  if(!(t = ATreadFromNamedFile(fn))) {
-    if (run_verbose) {
-      ATwarning("error reading %s\n", fn);
-    }
-    return open_error(n);
-  }
-
-  /* Remove BAF_EXT from filename */
-  strncpy(pn,fn,strlen(fn)-strlen(BAF_EXT));
-  pn[strlen(fn)-strlen(BAF_EXT)] = '\0';
-
-  return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
-		"timestamp(<int>)))",
-		n, t, pn, filetime(fn));
-}
-
-/*}}}  */
-/*{{{  static ATerm write_term_to_named_file(ATerm t, char *fn, char *n) */
-
-
-static ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
-{
-  static char pn[PATH_LEN];
-  FILE   *fd;
-
-  sprintf(pn, "%s%s",fn, BAF_EXT);
-  if(!(fd = fopen(pn, "w"))) {
-    ATwarning("%s: cannot create\n", pn);
-  }
-  else {
-    ATwriteToBinaryFile(t,fd);
-    fclose(fd);
-  }
-  return ATmake("snd-value(save-done(<str>))", n);
-}
-
-/*}}}  */
 /*{{{  static ATerm read_raw_from_named_file(char *fn, char *n) */
 
 static ATerm read_raw_from_named_file(char *fileName)
@@ -201,53 +130,6 @@ static ATerm read_raw_from_named_file(char *fileName)
     free(buf);
   }
   return t;
-}
-
-/*}}}  */
-/*{{{  static char* normalize_filename(const char *path) */
-
-static char* normalize_filename(const char *path)
-{
-  int i;
-  int len = strlen(path);
-  char *prefix;
-  char *newprefix = NULL;
-  char *newpath = NULL;
-
-  for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
-
-  prefix = strdup(path);
-  if (prefix == NULL) {
-    ATerror("normalize_filename: out of memory.\n");
-    return NULL;
-  }
-
-  prefix[i >= 0 ? i : 0] = '\0';
-
-  /* if the path is empty, we assume the current directory */
-  if (strlen(prefix) == 0) {
-    free(prefix);
-    prefix = strdup(".");
-  }
-
-  newprefix = expand_path(prefix);
-
-  if (newprefix != NULL) {
-    newpath = (char*) malloc(strlen(newprefix) + (len - i) + 1);
-
-    if (newpath == NULL) {
-      ATerror("normalize_filename: out of memory.\n");
-      return NULL;
-    }
-  
-    strcpy(newpath,newprefix);
-    newpath[strlen(newpath)] = '/';
-    strcpy(newpath+strlen(newprefix)+1,path+i+1);
-  }
-  free(prefix);
-
-
-  return newpath;
 }
 
 /*}}}  */
@@ -371,54 +253,6 @@ static char *makePath(char *path, char *name)
   }
 
   return newPath;
-}
-
-/*}}}  */
-
-/*{{{  ATerm read_file(int cid, char *name)  */
-
-ATerm read_file(int cid, char *name) 
-{
-  ATerm t;
-  char   *buf;
-  size_t size;
-
-  if (!(buf = readFileContents(name, &size))) {
-    if (run_verbose) {
-      ATwarning("error reading %s\n", name);
-    }
-    t = createErrorMessage("could not read file");
-  }
-  else {
-    if (run_verbose) {
-      ATwarning("reading %s (ascii)\n", name);
-    }
-    t = ATmake("snd-value(file-contents(<str>,<str>))", name, buf);
-    free(buf);
-  }
-  return t; 
-}
-
-/*}}}  */
-/*{{{  ATerm read_aterm_file(int cid, char *name)  */
-
-ATerm read_aterm_file(int cid, char *name) 
-{
-  ATerm ft, t;
-
-  if(!(t = ATreadFromNamedFile(name))) {
-    if (run_verbose) {
-      ATwarning("error reading %s\n", name);
-    }
-    return open_error(name);
-  }
-  else {
-    if (run_verbose) {
-      ATwarning("reading %s (ascii)\n", name);
-    }
-    ft = ATmake("snd-value(file-contents(<str>,<term>))", name, t);
-  }
-  return ft; 
 }
 
 /*}}}  */

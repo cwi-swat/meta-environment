@@ -14,15 +14,16 @@
 
 process ProcessButtons(CMNG : configmanager) is
 let
-  Term          : term
+  Term         : str,
+  ErrorMessage : str
 in
-  snd-msg(get-button-file(BUTTON_FILE)) .
+  snd-msg(open-file(BUTTON_FILE, "")) .
   (
-    rec-msg(button-file(BUTTON_FILE, Term?)) .
+    rec-msg(opened-file(text(Term?))) .
     snd-eval(CMNG, process-button-file(BUTTON_FILE, Term))
   +
-    rec-msg(no-button-file(BUTTON_FILE)) .
-    snd-eval(CMNG, process-button-file(BUTTON_FILE, buttons([])))
+    rec-msg(error-opening(ErrorMessage?)) .
+    snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
   ) .
   rec-value(CMNG, buttons-processed) .
   snd-note(search-paths-processed)
@@ -42,15 +43,16 @@ let
   Tree          : term,
   Term          : term,
   Pid           : int,
-  LibraryPath   : str
+  LibraryPath   : str,
+  ErrorMessage  : str
 in
   execute(configmanager, CMNG?) .
-  snd-msg(get-config-file(CONFIG_FILE)) .
+  snd-msg(open-file(CONFIG_FILE, "")) .
   (
-    rec-msg(config-file(CONFIG_FILE, Text?)) .
+    rec-msg(opened-file(text(Text?))) .
     snd-eval(CMNG, process-config-file(CONFIG_FILE, Text))
   +
-    rec-msg(no-config-file(CONFIG_FILE)) .
+    rec-msg(error-opening(ErrorMessage?)) .
     snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
   ) .
   rec-value(CMNG, search-paths(Paths?)) .

@@ -77,12 +77,13 @@ ATerm process_config_file(int cid, char *filename, char *contents)
 /*}}}  */
 /*{{{  ATerm process_button_file(int cid, char *filename, ATerm contents) */
 
-ATerm process_button_file(int cid, char *filename, ATerm contents)
+ATerm process_button_file(int cid, char *filename, char *contents)
 {
+  ATerm atButtons = ATreadFromString(contents);
   buttons = MB_makeButtonListEmpty();
 
-  if (MB_isValidButtons(MB_ButtonsFromTerm(contents))) {
-    buttons = MB_getButtonsList(MB_ButtonsFromTerm(contents));
+  if (MB_isValidButtons(MB_ButtonsFromTerm(atButtons))) {
+    buttons = MB_getButtonsList(MB_ButtonsFromTerm(atButtons));
   }
   
   return ATmake("snd-value(buttons-processed)");

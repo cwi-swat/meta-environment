@@ -25,31 +25,11 @@ let
   TermExt    : str,
   Extension  : str,
   RealName   : str,
-  EditorId   : term,
+  EditorId     : term,
   ErrorMessage : str
 in
   execute(in-output,IO?).
   (
-    rec-msg(get-config-file(Name?)) .
-    snd-eval(IO, read-file(Name)) .
-    (
-      rec-value(IO, file-contents(Name, Text?)) .
-      snd-msg(config-file(Name, Text))
-      +
-      rec-value(IO, error-opening(Name)).
-      snd-msg(no-config-file(Name))
-    ) 
-    +
-    rec-msg(get-button-file(Name?)) .
-    snd-eval(IO, read-aterm-file(Name)) .
-    (
-      rec-value(IO, file-contents(Name, Term?)) .
-      snd-msg(button-file(Name, Term))
-      +
-      rec-value(IO, error-opening(Name)).
-      snd-msg(no-button-file(Name))
-    ) 
-    +
     rec-msg(process-search-paths(Name?, Paths?)) .
     snd-eval(IO, process-search-paths(Paths)) .
     rec-value(IO, search-paths-processed) .
@@ -100,10 +80,6 @@ in
       snd-msg(file-not-written(Text))
     )
   +
-    rec-msg(compute-module-name(Path?, Name?)) .
-    printf("compute-module-name not yet implemented\n") .
-    snd-msg(computed-module-name(Name))
-  +
     rec-msg(open-named-file(Path?)).
     snd-eval(IO,open-named-text-file(Path)).
     (
@@ -133,54 +109,6 @@ in
       rec-value(IO, failure(ErrorMessage?)) .
       snd-msg(file-not-exists(Name))
     )
-    /*
-  +
-    %% Check if a file exists.
-    rec-msg(locate-file(Name?)) .
-    snd-eval(IO, locate-file(Name)) .
-    (
-      rec-value(IO, location(Path?)) .
-      snd-msg(file-location(Name, Path))
-    +
-      rec-value(IO, not-exists) .
-      snd-msg(file-not-exists(Name))
-    )
-  +
-    rec-msg(save-tree(Name?, Path?, Tree?)) .
-    snd-eval(IO, save-tree(Name, Path, Tree)) .
-    rec-value(IO, save-done(Name?)) .
-    snd-msg(save-done)
-  +
-    rec-msg(save-text-file(Path?, Text?)) .
-    snd-eval(IO, save-text-file(Path, Text)) .
-    rec-value(IO, save-done(Path)) .
-    snd-msg(save-done(Path))
-  +
-    rec-msg(print-module-text(Name?, Path?, SyntaxText?, RulesText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SyntaxText, RulesText)) .
-    rec-value(IO, module-text-printed(Name)) .
-    snd-msg(module-text-printed(Name))
-  +
-    rec-msg(print-module-text(Name?, Path?, SyntaxText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SyntaxText, "")) .
-    rec-value(IO, module-text-printed(Name)) .
-    snd-msg(module-text-printed(Name))
-  +
-    rec-msg(create-equations-dump-file(Name?, Path?, Tree?)) .
-    snd-eval(IO, create-equations-dump-file(Name, Path, Tree)) .
-    (
-      rec-value(IO, create-equations-dump-file-done(Name)) .
-      snd-msg(create-equations-dump-file-done(Name))
-    +
-      rec-value(IO, create-equations-dump-file-failed(Name, Text?)) .
-	  snd-msg(create-equations-dump-file-failed(Name, Text))
-    )
-  +
-    rec-msg(remove-module(Name?)) .
-    snd-eval(IO, remove-module(Name)) .
-    rec-value(IO, removed-module) .
-    snd-msg(removed-module)
-    */
   ) *
   delta
 endlet
