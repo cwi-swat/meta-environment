@@ -209,10 +209,10 @@ ATerm get_imported_modules(int cid, char *moduleName)
   if (!entry) {
     ATwarning("Module %s not in database!", moduleName);
   }
-
-  mod = SDF_getStartTopModule(SDF_StartFromTerm(MDB_getEntrySdfTree(entry)));
-
-  result = SDF_getImports(mod);
+  else {
+    mod = SDF_getStartTopModule(SDF_StartFromTerm(MDB_getEntrySdfTree(entry)));
+    result = SDF_getImports(mod);
+  }
 
   return ATmake("snd-value(imported-modules([<list>]))", result);
 
