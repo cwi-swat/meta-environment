@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jul 28 11:39:18 2003
+ * Generated at Tue Oct  7 15:12:01 2003
  */
 
 #include "TextEditor_dict.h"
@@ -81,7 +81,7 @@ ATerm TE_patternActionToFront = NULL;
  *
  */
 
-static ATermList _TextEditor_dict = NULL;
+static ATerm _TextEditor_dict = NULL;
 
 #define _TextEditor_dict_LEN 492
 
@@ -123,11 +123,11 @@ void init_TextEditor_dict()
 {
   ATermList afuns, terms;
 
-  _TextEditor_dict = (ATermList)ATreadFromBinaryString(_TextEditor_dict_baf, _TextEditor_dict_LEN);
+  _TextEditor_dict = ATreadFromBinaryString(_TextEditor_dict_baf, _TextEditor_dict_LEN);
 
-  ATprotect((ATerm *)&_TextEditor_dict);
+  ATprotect(&_TextEditor_dict);
 
-  afuns = (ATermList)ATelementAt(_TextEditor_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_TextEditor_dict, 0);
 
   TE_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -164,7 +164,7 @@ void init_TextEditor_dict()
   TE_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt(_TextEditor_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_TextEditor_dict, 1);
 
   TE_patternPipeDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);
