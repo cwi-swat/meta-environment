@@ -51,7 +51,7 @@ FUNC_EXIT ( make_nf1 ( lf_list_1sym , ltmp [ 0 ] ) ) ;
 }
 }
 }
-#ifdef MAIN_OutermostList                                           
+#ifdef ASF_MAIN                                           
 int main(int argc, char *argv[])                         
 {                                                        
   return asc_support_main(argc, argv,                    

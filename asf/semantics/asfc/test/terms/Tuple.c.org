@@ -1716,7 +1716,7 @@ ATerm lf_list_1 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_list_1sym , ATmakeAppl ( lf_list_1sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_list_1sym , arg0 ) ) ;
 }
-#ifdef MAIN_Tuple                                           
+#ifdef ASF_MAIN                                           
 int main(int argc, char *argv[])                         
 {                                                        
   return asc_support_main(argc, argv,                    

@@ -84,7 +84,7 @@ ATerm lf_true_1 ( ) {
 CONS_ENTRY ( lf_true_1sym , ATmakeAppl0 ( lf_true_1sym ) ) ;
 CONS_EXIT ( make_nf0 ( lf_true_1sym ) ) ;
 }
-#ifdef MAIN_Pico_Booleans                                           
+#ifdef ASF_MAIN                                           
 int main(int argc, char *argv[])                         
 {                                                        
   return asc_support_main(argc, argv,                    
