@@ -1,0 +1,8 @@
+equations
+  
+  [create-bag-basic]
+    getTopProduction($ParseTree) = $Production,
+    ptProduction2String($Production) = $String,
+    add-elem(NEEDLE, $String, $Rstore1) = $Rstore2
+    ===>
+    add-production-to-rstore($ParseTree, $Rstore1) = $Rstore2
