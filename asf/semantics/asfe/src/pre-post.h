@@ -4,6 +4,8 @@
 #include <MEPT.h>
 #include <aterm2.h>
 
+ASF_ASFCondition prepareCondition(ASF_ASFCondition cond);
+ASF_ASFConditions prepareConditions(ASF_ASFConditions conds);
 PT_Tree RWprepareTerm(PT_Tree tree, ATbool allow_ambs);
 ASF_ASFConditionalEquationList RWprepareEquations(ASF_ASFConditionalEquationList eqsList, 
 					ATbool mark_layout);

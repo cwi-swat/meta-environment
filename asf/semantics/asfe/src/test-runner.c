@@ -15,10 +15,15 @@
 
 static ATerm prettyTag(ASF_ASFTag tag)
 {
-  ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
-  AFun fun = ATmakeAFun(PT_yieldTree((PT_Tree) ASF_ASFTagIdToTerm(id)),
-			0, ATfalse);
-  return (ATerm) ATmakeAppl0(fun);
+  if (!ASF_isASFTagEmpty(tag)) {
+    ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
+    AFun fun = ATmakeAFun(PT_yieldTree((PT_Tree) ASF_ASFTagIdToTerm(id)),
+			  0, ATfalse);
+    return (ATerm) ATmakeAppl0(fun);
+  }
+  else {
+    return ATparse("unnamed-test");
+  }
 }
 
 /*}}}  */
@@ -28,39 +33,41 @@ static ATerm prettyTag(ASF_ASFTag tag)
 static ASF_ASFTag testOne(ASF_ASFTestEquation test)
 {
   ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
-  ASF_ASFCondition condition = ASF_getASFTestEquationASFCondition(test);
-  ATbool equals = ATfalse;
+  ASF_ASFCondition tobetested = ASF_getASFTestEquationASFCondition(test);
   ATerm environment = (ATerm) ATempty;
+  PT_Tree lhs;
+  PT_Tree rhs;
+  ATbool equal = ATfalse;
 
-  PT_Tree lhs = (PT_Tree) ASF_getASFConditionLhs(condition);
-  PT_Tree rhs = (PT_Tree) ASF_getASFConditionRhs(condition);
-
-  lhs = RWprepareTerm(lhs, ATfalse);
-  rhs = RWprepareTerm(rhs, ATfalse);
- 
-  lhs = rewriteInnermost(lhs, environment, 0, NO_TRAVERSAL);
+  tobetested = prepareCondition(tobetested);
 
   if (ASF_hasASFTestEquationASFConditions(test)) {
-    ASF_ASFConditionList conds = ASF_getASFConditionsList(
-      ASF_getASFTestEquationASFConditions(test));
-    environment = matchConditions(conds, environment, 0);
+    ASF_ASFConditions conditions;
+    ASF_ASFConditionList condList;
+
+    conditions = ASF_getASFTestEquationASFConditions(test);
+    conditions = prepareConditions(conditions);
+    
+    condList = ASF_getASFConditionsList(conditions);
+    environment = matchConditions(condList, environment, 0);
 
     if (is_fail_env(environment)) {
       return tag;
     }
   }
 
-  rhs = rewriteInnermost(rhs, environment, 0, NO_TRAVERSAL);
+  lhs = rewriteInnermost((PT_Tree) ASF_getASFConditionLhs(tobetested),
+			 environment, 0, NO_TRAVERSAL);
+  rhs = rewriteInnermost((PT_Tree) ASF_getASFConditionRhs(tobetested),
+			 environment, 0, NO_TRAVERSAL);
+		
+  equal = isAsFixEqual(lhs, rhs);
 
-  if (isAsFixEqual(lhs, rhs)) {
-    equals = ATtrue;
-  }  
-
-  if (ASF_isASFConditionNegative(condition)) {
-    equals = !equals;
+  if (ASF_isASFConditionNegative(tobetested)) {
+    equal = !equal;
   }
 
-  if (equals) {
+  if (equal) {
     return NULL;
   }
   else {

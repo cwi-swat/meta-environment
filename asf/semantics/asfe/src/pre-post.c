@@ -23,7 +23,7 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data);
 
 /*{{{  ASF_ASFCondition prepare_cond(ASF_ASFCondition cond) */
 
-ASF_ASFCondition prepare_cond(ASF_ASFCondition cond)
+ASF_ASFCondition prepareCondition(ASF_ASFCondition cond)
 {
   PT_Tree lhs, rhs;
   
@@ -43,7 +43,7 @@ ASF_ASFConditions prepareConditions(ASF_ASFConditions conds)
 {
   ASF_ASFConditionList  condList = ASF_getASFConditionsList(conds);
   
-  condList = ASF_visitASFConditionList(condList, prepare_cond, NULL, NULL, NULL);
+  condList = ASF_visitASFConditionList(condList, prepareCondition, NULL, NULL, NULL);
 
   return ASF_setASFConditionsList(conds, condList);
 }

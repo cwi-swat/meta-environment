@@ -29,7 +29,7 @@
 
 /*{{{  local function declarations */
 
-static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
+ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
 			    ATerm env, int depth);
 static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 				    PT_Tree lhs, PT_Tree rhs, 
@@ -169,8 +169,8 @@ static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree 
 /*}}}  */
 /*{{{  static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds, */
 
-static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
-			    ATerm env, int depth)
+ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
+		     ATerm env, int depth)
 {
   PT_Tree lhs = ASFtoPT(ASF_getASFConditionLhs(cond));
   PT_Tree rhs = ASFtoPT(ASF_getASFConditionRhs(cond));

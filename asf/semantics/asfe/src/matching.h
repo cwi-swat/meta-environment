@@ -8,4 +8,6 @@
 
 ATerm matchEquation(equation_entry *entry, PT_Tree trm, int depth);
 ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth);
+ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
+		     ATerm env, int depth);
 #endif
