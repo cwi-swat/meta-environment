@@ -1,0 +1,32 @@
+/*
+  $Id$
+ */
+
+process DumpParseTable is
+let
+  Id         : term,
+  ModuleName : str,
+  Equations  : term,
+  Table      : term,
+  Path       : str,
+  Text       : str
+in
+  Id := process-id.
+
+  (
+    rec-msg(dump-parse-table(ModuleName?)) .
+    snd-note(ui-status(statf(Id, "Dumping parse table for %s",[ModuleName]))) .
+    snd-msg(get-parsetable(trm(ModuleName))) .
+    (
+      rec-msg(table(Table?, Path?)) .
+      snd-msg(save-table(ModuleName, Path, Table)) .
+      rec-msg(save-done)
+    +
+      rec-msg(no-table)
+    ) .
+    snd-note(ui-status(endstat(Id)))
+
+  ) * delta
+
+endlet
+

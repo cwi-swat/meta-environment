@@ -141,6 +141,10 @@ in
      snd-msg(dump-equations(Str)).
      snd-ack-event(UI, dump-equations(Str))
    )+
+   ( rec-event(UI, dump-parse-table(Str?)).
+     snd-msg(dump-parse-table(Str)).
+     snd-ack-event(UI, dump-parse-table(Str))
+   )+
    ( rec-event(UI,parse-equations(Str?)).
      snd-msg(process-eqs(Str)).
      rec-msg(eqs-processed(Str)).

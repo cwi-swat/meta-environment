@@ -622,6 +622,15 @@ proc CompileModules { modlist } {
 }
 
 #--
+# DumpParseTable(M)
+#-
+# generates the toolbus event to request dump the parse table for module M
+#--
+proc DumpParseTable { module } {
+  GBevent "dump-parse-table([ToId $module])"
+}
+   
+#--
 # DumpEquations(M)
 #-
 # generates the toolbus event to request dump of equations for module M
@@ -1282,9 +1291,11 @@ proc define-module-popup {} {
         -command {CompileModules [GetObjectName $c]}
     $m add command -label "Dump Equations..." \
         -command {DumpEquations [GetObjectName $c]}
+    $m add command -label "Dump Parse Table..." \
+        -command {DumpParseTable [GetObjectName $c]}
     $m add separator
-    $m add command -label "Rename Module..." \
-        -command {RenameModuleWidget [GetObjectName $c]}
+#    $m add command -label "Rename Module..." \
+#        -command {RenameModuleWidget [GetObjectName $c]}
     $m add command -label "Print Module" \
         -command {PrintModules [GetObjectName $c]}
     $m add command -label "Module Info" \
@@ -1324,9 +1335,11 @@ proc define-modlist-popup {} {
         -command {CompileModules [SelectedModules]}
     $m add command -label "Dump Equations..." \
         -command {DumpEquations [SelectedModules]}
+    $m add command -label "Dump Parse Table..." \
+        -command {DumpParseTable [SelectedModules]}  
     $m add separator
-    $m add command -label "Rename Module..." \
-        -command {RenameModuleWidget [SelectedModules]}
+#    $m add command -label "Rename Module..." \
+#        -command {RenameModuleWidget [SelectedModules]}
     $m add command -label "Print Module" \
         -command {PrintModules [SelectedModules]}
     $m add command -label "Module Info" \

@@ -1,0 +1,86 @@
+/*
+   $Id$
+   Get a parsetable for language X
+*/
+
+
+/* get the table from the database or create a new table */
+process GetParseTable is
+let
+  ModuleId   : term, 
+  TableType  : term,
+  Table      : term,
+  Syntax     : term,
+  Path       : str,
+  ErrorMsg   : str,
+  Id         : int
+in
+Id := process-id.
+( 
+  rec-msg(get-parsetable(ModuleId?)) .
+  snd-msg(get-table-from-db(ModuleId)) .
+  (
+    rec-msg(table(Table?, Path?)).
+    snd-msg(table(Table, Path))
+  +
+    rec-msg(no-table) .
+    snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleId]))).
+    snd-msg(get-all-sdf2-definitions(ModuleId)).
+    (
+      rec-msg(syntax(Syntax?)).
+
+      snd-msg(make-asf-syntax(ModuleId, Syntax)).
+      rec-msg(asf-syntax(Syntax?)).
+
+      snd-msg(generate-parsetable(Syntax, ModuleId)).
+      rec-msg(parsetable(Table?)).
+
+      snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
+      rec-msg(parse-table-added).
+
+      snd-msg(get-table-from-db(ModuleId)) .
+      rec-msg(table(Table?, Path?)) .
+      snd-note(ui-status(endstat(Id))) .
+      snd-msg(table(Table, Path))
+    +
+      rec-msg(no-syntax(ErrorMsg?)) .
+      snd-note(ui-status(endstat(Id))) .
+      snd-note(ui-status(errorf("%s",[ErrorMsg]))).
+      snd-msg(no-table)
+    )
+  )
+) *
+delta
+endlet
+
+/* add asf syntax and generate a parse table */
+process MakeTable(ModuleId : term) is
+let
+  Syntax    : term,
+  Table     : term,
+  Path      : str,
+  ErrorMsg  : str,
+  TimeStamp : term
+in
+  snd-msg(get-all-sdf2-definitions(ModuleId)).
+  (
+    rec-msg(syntax(Syntax?)).
+
+    snd-msg(make-asf-syntax(ModuleId, Syntax)).
+    rec-msg(asf-syntax(Syntax?)).
+
+    snd-msg(generate-parsetable(Syntax, ModuleId)).
+    rec-msg(parsetable(Table?)).
+
+    snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
+    rec-msg(parse-table-added).
+
+    snd-msg(get-table-from-db(ModuleId)) .
+    rec-msg(table(Table?, Path?)).
+    snd-msg(table(Table, Path))
+    +
+    rec-msg(no-syntax(ErrorMsg?)).
+    snd-note(ui-status(errorf("%s",[ErrorMsg]))).
+    snd-msg(parsetable-not-set(ModuleId))
+  )
+endlet

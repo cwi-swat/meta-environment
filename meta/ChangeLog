@@ -1,5 +1,9 @@
 # $Id$
 
+2001/07/09 (markvdb@cwi.nl)
+ * Added functionality to dump the parse table of a module to parse terms
+   over this module.
+
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Removed AsFix1 dependency, parse-file, header/license stuff, 
    change-extension stuff.

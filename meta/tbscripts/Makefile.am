@@ -7,8 +7,8 @@ TBSCRIPTS     = clear-all.tb close-module.tb editor-creator.tb \
                 file-creator.tb meta.tb notification.tb \
                 open-modules.tb process-eqs.tb parse-focusses.tb \
                 revert-module.tb rewrite-errors.tb save-module.tb \
-                set-parsetable.tb status-display.tb \
-                ui.tb asf-syntax.tb dump-equations.tb \
+                set-parsetable.tb get-parsetable.tb status-display.tb \
+                ui.tb asf-syntax.tb dump-equations.tb dump-parsetable.tb \
                 rename-module.tb print-module.tb compile-module.tb
 
 GEN_TBSCRIPTS = sdf2-language.tb help.tb
