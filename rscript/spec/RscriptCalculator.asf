@@ -35,7 +35,7 @@
 
 [ERS3]	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore))
 	===================================================
-	eval-rscript($Stat*, $Var, $Rstore) = $Elem
+	eval-rscript-with-rstore($Stat*, $Var, $Rstore) = $Elem
 
 %% ---- Eval statements
 
