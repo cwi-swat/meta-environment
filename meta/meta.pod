@@ -64,4 +64,4 @@ L<sglr>, L<a2toa1>, L<sdf2table>, L<graph-browser>
 
 =head1 AUTHOR
 
-Mark van den Brand S<Mark.van.den.Brand@cwi.nl>>
+Mark van den Brand S<<Mark.van.den.Brand@cwi.nl>>
