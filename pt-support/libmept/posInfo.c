@@ -10,6 +10,7 @@
 /*}}}  */
 /*{{{  defines*/
 
+#define POS_INFO_ANNO "pos-info"
 #define UNLIMITED_DEPTH -1
 
 /*}}}  */
@@ -36,12 +37,20 @@ typedef struct PT_Position_Tag {
 
 /*}}}  */
 
+/*{{{  ATbool PT_hasTreeLocation(PT_Tree tree) */
+
+ATbool PT_hasTreeLocation(PT_Tree tree)
+{
+  return ATgetAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)) != NULL;
+}
+
+/*}}}  */
 /*{{{  LOC_Location PT_getTreeLocation(PT_Tree tree) */
 
 LOC_Location PT_getTreeLocation(PT_Tree tree)
 {
   return LOC_LocationFromTerm(
-           ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info")));
+           ATgetAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)));
 }
 
 /*}}}  */
@@ -91,7 +100,7 @@ static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
 {
   ATerm t = PT_TreeToTerm(tree);
 
-  t = ATsetAnnotation(t, ATparse("pos-info"), 
+  t = ATsetAnnotation(t, ATparse(POS_INFO_ANNO), 
 		      PT_makePosInfo(path, start_line, start_col, 
                                            to_line, to_col, 
                                            offset, length));
@@ -371,6 +380,24 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
   }
 
   return tree;
+}
+
+/*}}}  */
+
+/*{{{  PT_Args PT_findArgsWithLocation(PT_Args args) */
+
+PT_Args PT_findArgsWithLocation(PT_Args args)
+{
+  assert(args != NULL);
+
+  while (!PT_isArgsEmpty(args)) {
+    if (PT_hasTreeLocation(PT_getArgsHead(args))) {
+      return args;
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  return args;
 }
 
 /*}}}  */

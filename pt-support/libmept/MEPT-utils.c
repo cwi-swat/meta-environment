@@ -615,6 +615,37 @@ PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree)
 
 /*}}}  */
 
+/*{{{  PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack) */
+
+PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
+{
+  assert(needle != NULL);
+  assert(haystack != NULL);
+
+  assert(needle != haystack);
+
+  if (PT_hasTreeArgs(haystack)) {
+    PT_Args children = PT_getTreeArgs(haystack);
+    while (!PT_isArgsEmpty(children)) {
+      PT_Tree child = PT_getArgsHead(children);
+      if (PT_isEqualTree(child, needle)) {
+	return haystack;
+      }
+      else {
+	PT_Tree suspect = PT_findTreeParent(needle, child);
+	if (suspect != NULL) {
+	  return suspect;
+	}
+      }
+      children = PT_getArgsTail(children);
+    }
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
 /* Args */
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
 
