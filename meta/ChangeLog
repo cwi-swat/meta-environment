@@ -8,6 +8,9 @@
 
 2003/09/25 <markvdb@cwi.nl>
  * Refactoring the manipulation of the name of the termstore.
+ * Fixed a serious bug in case the user introduced a syntax
+   error in a SDF module outside the Meta-Environment and
+   there is a valid term-store.
 
 2003/09/24 <markvdb@cwi.nl>
  * First version of a script to check action scripts.
