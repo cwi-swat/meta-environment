@@ -81,7 +81,7 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 test:	all
 	$(top_srcdir)/utils/test-help ./evaluator
 	$(top_srcdir)/utils/test-version ./evaluator
-	@cd test; make test
+	@cd test; $(MAKE) test
 
 	
 MODULES	= evaluator.o preparation.o
