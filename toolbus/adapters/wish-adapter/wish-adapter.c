@@ -150,7 +150,7 @@ static void print_string(char* s, int n)
 	case '[':
 	case ']':
 /*	case ' ':*/
-	case ';':
+/*	case ';':  --Tobias */
 	case '$':	wputc('\\');
 	default:	wputc(*s);
       }
