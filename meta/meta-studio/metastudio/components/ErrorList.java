@@ -15,9 +15,7 @@ import metastudio.UserInterfacePanel;
 import metastudio.data.ErrorItem;
 import metastudio.data.ErrorListModel;
 import metastudio.utils.Preferences;
-import metastudio.utils.StringFormatter;
 import aterm.ATerm;
-import aterm.ATermList;
 import aterm.pure.PureFactory;
 import errorapi.Factory;
 import errorapi.types.Error;
@@ -99,57 +97,8 @@ public class ErrorList extends UserInterfacePanel {
         parent.setSelectedComponent(this);
     }
 
-    private Error makeError(String msg) {
-        return getErrorFactory().makeError_Error(
-                msg,
-                getErrorFactory().makeSubjectList());
-    }
-
-    private Error makeWarning(String msg) {
-        return  getErrorFactory().makeError_Warning(
-                msg,
-                getErrorFactory().makeSubjectList());
-    }
-    private Error makeInfo(String msg) {
-        return  getErrorFactory().makeError_Info(
-                msg,
-                getErrorFactory().makeSubjectList());
-    }
-    
     private void addAnonymousErrorItem(Error error) {
         data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, error);
-    }
-
-    public void errorf(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousErrorItem(makeError(message));
-    }
-
-    public void error(String message) {
-        addAnonymousErrorItem(makeError(message));
-    }
-
-    public void messagef(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousErrorItem(makeInfo(message));
-    }
-
-    public void message(String message) {
-        addAnonymousErrorItem(makeInfo(message));
-    }
-
-    public void warningf(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousErrorItem(makeWarning(message));
-    }
-
-    public void warning(String message) {
-        addAnonymousErrorItem(makeWarning(message));
-    }
-
-    public void showFeedbackSummary(ATerm t0) {
-        Summary summary = factory.SummaryFromTerm(t0);
-        setFeedbackList(summary);
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {

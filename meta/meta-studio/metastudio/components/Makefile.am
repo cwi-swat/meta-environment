@@ -26,4 +26,5 @@ java_JAVA = \
 	ParseTreeBrowser.java \
 	QuestionDialog.java \
 	StatusBar.java \
-	ToolBar.java
+	ToolBar.java \
+	SystemInfoPanel.java
