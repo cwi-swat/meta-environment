@@ -4,7 +4,7 @@
 #include "TB.h"
 
 /* Prototypes for functions used in event handler */
-void   writeLog(char *, int);
+void   writeLog(char *, term *);
 term * readLog(void);
 void   rec_terminate(term *);
 
@@ -12,11 +12,10 @@ void   rec_terminate(term *);
 
 term *log_handler(term *e){
 	term *term_arg[1];
-	int int_arg[1];
 	char *str_arg[1];
 
-	if(TBmatch(e, "rec-do(writeLog(%s, %d))", &str_arg[0], &int_arg[0])){
-		writeLog(str_arg[0], int_arg[0]);
+	if(TBmatch(e, "rec-do(writeLog(%s, %t))", &str_arg[0], &term_arg[0])){
+		writeLog(str_arg[0], term_arg[0]);
 	return NULL;
 	} else if(TBmatch(e, "rec-eval(readLog())" )){
 		return readLog();
@@ -40,7 +39,7 @@ term *log_check_in_sign(term_list *reqs){
 	char *in_sign[3];
 	int i;
 
-	in_sign[0] = "rec-do(<log>,writeLog(<str>,<int>))";
+	in_sign[0] = "rec-do(<log>,writeLog(<str>,<term>))";
 	in_sign[1] = "rec-eval(<log>,readLog)";
 	in_sign[2] = "rec-terminate(<log>,<term>)";
 

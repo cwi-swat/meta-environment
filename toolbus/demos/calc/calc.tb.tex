@@ -1,7 +1,7 @@
 \small
 \begin{verbatim}
 process CALC is
-  let Tid : calc, E : str, V : int
+  let Tid : calc, E : str, V : term
   in
      execute(calc, Tid?) .
      ( rec-msg(compute, E?) . snd-eval(Tid, expr(E)) .
@@ -98,6 +98,8 @@ process UI is
      ( ( CALC-BUTTON(Tid) + LOG-BUTTON(Tid) ) * delta
      ||
        TIME-BUTTON(Tid) * delta
+     ||
+       QUIT-BUTTON(Tid)
      )
   endlet
 
@@ -120,7 +122,7 @@ tool ui is {command = "wish-adapter -script ui-calc.tcl"}
 \small
 \begin{verbatim}
 process CALC-BUTTON(Tid : ui) is
-  let  N : int, E : str, V : int
+  let  N : int, E : str, V : term
   in
      rec-event(Tid, N?, button(calc)) .
      snd-eval(Tid, get-expr-dialog).
@@ -148,6 +150,11 @@ process TIME-BUTTON(Tid : ui) is
       snd-do(Tid, display-time(T)) .
       snd-ack-event(Tid, N)
   endlet
+
+process QUIT-BUTTON(Tid : ui) is
+  rec-event(Tid, button(quit)) .
+  shutdown("End of calc demo")
+
 
 \end{verbatim}
 \noindent
@@ -180,9 +187,9 @@ tool batch is {command = "./batch"}
 \small
 \begin{verbatim}
 process LOG is
-  let Tid : log, E : str, V : int, L : term
+  let Tid : log, E : str, V : term, L : term
   in
-     subscribe(compute(<str>,<int>)) .
+     subscribe(compute(<str>,<term>)) .
      execute(log, Tid?) .
      ( rec-note(compute(E?, V?)) . snd-do(Tid, writeLog(E, V))
      + rec-msg(showLog) . snd-eval(Tid, readLog) .
@@ -202,9 +209,9 @@ tool log is {command = "./log"}
 \small
 \begin{verbatim}
 process LOG1 is
-  let TheLog : list, E : str, V : int
+  let TheLog : list, E : str, V : term
   in
-     subscribe(compute(<str>,<int>)) .
+     subscribe(compute(<str>,<term>)) .
      TheLog := [] .
      ( rec-note(compute(E?, V?)) . TheLog := join(TheLog, [[E, V]])
      + rec-msg(showLog) .  snd-msg(showLog, TheLog)

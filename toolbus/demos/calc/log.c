@@ -7,8 +7,8 @@ term *readLog(void){
   return TBmake("snd-value(history(%t))", history);
 }
 
-void writeLog(char *expr, int val){
-  history = TBmake("[pair(%s,%d),%l])", expr, val, history);
+void writeLog(char *expr, term *val){
+  history = TBmake("[pair(%s,%t),%l])", expr, val, history);
   TBprintf(stderr, "writeLog, history = %t\n", history);
 }
 

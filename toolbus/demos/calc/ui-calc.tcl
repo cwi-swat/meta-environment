@@ -6,13 +6,22 @@
 #
 # (requires tb.tcl, which is loaded automatically by the wish-adapter)
 
+option add *Background GhostWhite
+option add *Foreground RoyalBlue
+
 proc display-value {trm} {
     show Value "Value is:" $trm 1
 }
 
+proc display-expr-error {msg} {
+  show Error "Error is: $msg 1
+}
+
 proc display-log {trm} {
-    show Log "Log is:" $trm 1
+    show_list Log "Log is:" $trm 1
   }
+
+
 
 proc display-time {trm} {
     show Time "Time is:" [TCLstring $trm] 2
@@ -74,9 +83,12 @@ button .time -text "showTime" -command {
   disable 2
 }
 
-pack .calc .log .time
+button .quit -text "Quit" -command {
+  sendTB "snd-event(button(quit))";
+  exit
+}
 
-
+pack .calc .log .time .quit -fill both
 
 proc get-expr-dialog { } {
   global w oldFocus expr
@@ -110,6 +122,30 @@ proc show {name text value group} {
 	label $w.top.label1 -text $text
 	label $w.top.label2 -text $value
 	pack $w.top.label1 $w.top.label2 -side left
+
+	button $w.bot.ok -text ok -command "global ok; destroy $w; set ok($group) 1; enable $group"
+	pack $w.bot.ok
+	bind $w <Return> { destroy $w }
+}
+
+
+proc show_list {name text value group} {
+	set w .show$name
+	toplevel $w -class Dialog
+	wm title $w show$name
+	frame $w.top -relief raised -bd 1
+	pack $w.top -side top -fill both
+	frame $w.bot -relief raised -bd 1
+	pack $w.bot -side bottom -fill both
+	
+	listbox $w.top.list -relief raised -borderwidth 2 -geometry 40x10 -yscrollcommand "$w.top.scroll set"
+	pack $w.top.list -side left
+        scrollbar $w.top.scroll -command "$w.top.list yview"
+        pack $w.top.scroll -side right -fill y
+
+        foreach e $value {
+          $w.top.list insert end "[lindex $e 0] = [lindex $e 1]"
+        }
 
 	button $w.bot.ok -text ok -command "global ok; destroy $w; set ok($group) 1; enable $group"
 	pack $w.bot.ok
