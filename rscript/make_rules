@@ -14,7 +14,7 @@ SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src .conf .button
 
 # ---- Convert from .eqs to .c
 
-AM_CPPFLAGS       = -g -Wall -Wno-unused -O1 -DASF_MAIN \
+AM_CPPFLAGS       = -g -Wall -Wno-unused -O1 -DASF_MAIN -DASF_WITH_ANNOS \
 		 -I$(ASC_SUPPORT)/include \
 		-I$(PT_SUPPORT)/include \
 		-I$(SDF_SUPPORT)/include \
@@ -35,7 +35,7 @@ LDADD 		= \
         	$(SOCKLIBS)
 
 .eqs.c:
-	 asfc -i $< -o $@ -v
+	 asfc -i $< -o $@ -v -a
 
 # ---- Substitute in shell source
 

@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Apr 29 11:15:45 CEST 2004 <jurgenv@cwi.nl,paulk@cwi.nl>
+ * Brought RscriptChecker up-to-date with changes in Error api
+ * Compiled specifications are configured for rewriting with annotations
+   in make_rules.
+
 Thu Apr 29 10:22:37 CEST 2004 <jurgenv@cwi.nl>
  * Added basic/AreaOperations and basic/LocationOperations as imports
    to MyArea to be up-to-date with latest asf-library.
