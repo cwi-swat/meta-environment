@@ -1,5 +1,10 @@
 # $Id$
 
+2003/08/14 (jurgenv@cwi.nl)
+ * Regenerated graph API with new apigen and based on latest aterm-java lib
+ * Fixed code to handle new generated API
+ * Added experimental arrow-head drawing in graphs
+ 
 Thu Aug 14 08:45:06 CEST 2003 <jong@cwi.nl>
  * editors/text/common/Makefile.am: add $(TOOLBUSLIB)/INCLUDE to includes
  * ./reconf: add -I ${LIBTOOL_INCLUDE} to aclocal's include paths
