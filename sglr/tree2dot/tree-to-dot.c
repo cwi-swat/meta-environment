@@ -388,7 +388,7 @@ char *SG_TYAuxBuf(int Mode, char c) {
   switch(Mode) {
     case TYA_INIT:
         if(!tmp) {
-          tmp = (char *) SG_Malloc(TYA_TMPCHUNK);
+          tmp = (char *) SG_Malloc(1, TYA_TMPCHUNK);
           if(!tmp) {
             ATfprintf(stderr, "memory allocation error\n");
             exit(1);

@@ -8,7 +8,7 @@ SUBDIRS		= a2toa1 client tree2dot parser dump sdf1tosdf2
 
 all doc install:	libs
 
-libs:	configure
+libs:	config.status
 
 all libs doc clean install uninstall distclean:
 	@for DIR in $(SUBDIRS);	\
@@ -21,7 +21,11 @@ all libs doc clean install uninstall distclean:
 		fi \
 	done
 
+config.status:	configure
+	@echo "Warning: no up to date configuration"
+	@if [ ! -f $@ ] ; then eche "Configure,  please" ; false ; fi
+	@echo "Please consider rerunning configure"
+
 configure:	configure.in
-	@echo "Warning: configure script is out of date."
-	@echo "Please (re)run autoconf and configure."
-	@false
+	@echo "Warning: configure script is out of date"
+	@echo "Please consider (re)running autoconf"
