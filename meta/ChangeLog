@@ -20,6 +20,10 @@
 #
 # $Id$
 
+2000/4/25 (mdejonge@cwi.nl)
+   * utils/genamakefile.sh.src added. A script to generate an automake file
+     for a compiled ASF+SDF sepecification.
+
 2000/4/17 (mdejonge@cwi.nl)
    * Updated README file and refer to the Meta Completa distribution
    * Upgraded to version 0.0.13

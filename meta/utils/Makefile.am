@@ -24,7 +24,8 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header
+                     insert-header genamakefile
+
 man_MANS           = parse-sdf2.1
 
 data_DATA          = genmakefile.proto lang.types
@@ -37,10 +38,10 @@ EXTRA_DIST         = genmakefile.in parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src README test-help test-version \
                      genmakefile.proto lang.types perform-test.sh.src \
-                     parse-sdf2.pod
+                     parse-sdf2.pod genamakefile.sh.src
 
 CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
-                     insert-license perform-test parse-sdf2.1
+                     insert-license perform-test parse-sdf2.1 genamakefile
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
@@ -61,6 +62,7 @@ INCLUDES           = -I$(ASFIXINC) -I$(ATERMINC)
 	sed 's@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
+	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \
 	chmod +x $@
 
