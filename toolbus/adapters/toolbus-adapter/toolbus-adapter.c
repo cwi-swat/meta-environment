@@ -107,7 +107,13 @@ ATerm toolbus_start(int conn, const char *script, ATerm args)
 	argc++;
       }
     }
-    argv[argc++] = script;
+
+    /* Jurgen added this (char*) cast to prevent a compiler warning. 
+     * But this code has more problems: we know that updating
+     * argv[] arrays is not portable, so the following code is actually
+     * wrong:
+     */
+    argv[argc++] = (char*) script;
     argv[argc] = NULL;
 
     for (i=0; i<argc; i++) {
