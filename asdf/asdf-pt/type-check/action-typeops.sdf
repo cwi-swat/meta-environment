@@ -45,6 +45,8 @@ context-free syntax
 
   at-st(ActionType, ActionType, Subject, Environment)	-> VariableMap
 
+  at-st-def(ActionType, ActionType, Subject, Environment)	-> VariableMap
+
 hiddens variables
 
   "$ATY"[0-9]?		-> AtomicType

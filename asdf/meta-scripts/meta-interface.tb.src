@@ -248,7 +248,8 @@ let
   ModuleNames : list,
   Modules : list,
   Table : term,
-  Checking : term
+  Checking : term,
+  Type : term
 in
   Id := process-id.
   Create-Asf-Processes.
@@ -299,6 +300,10 @@ in
   +
     rec-msg(add-initial-syntax-modules-hook(Modules?, sdf)) .
     snd-msg(initial-modules-added(Modules)) 
+  + 
+    rec-msg(get-module-type(Module?)) .
+    GetModuleType(Module, Type?) .
+    snd-msg(module-type(Type))
   ) * delta
 endlet
 

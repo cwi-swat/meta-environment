@@ -116,35 +116,69 @@ equations
 
 [default-norm-2] norm($AT) = $AT
 
-[at-st-2] at-st($AT, Action, $SU, $EN) = empty-map
+[at-st-1] at-st($AT, $AT, $SU, $EN) = empty-map
 
-[at-st-3] at-st($ATV1, $AT2, $SU, $EN) = single(($ATV1), ($AT2), $SU)
+[default-at-st-1] at-st($AT1, $AT2, $SU, $EN) = at-st-def($AT1, $AT2, $SU, $EN)
 
-[at-st-4] at-st($AT1, $ATV2, $SU, $EN) = single(($AT1), ($ATV2), $SU)
+[at-st-2] at-st-def($AT, Action, $SU, $EN) = empty-map
 
-[at-st-5] at-st($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $SU, $EN) =
+[at-st-3] at-st-def($ATV1, $AT2, $SU, $EN) = single(($ATV1), ($AT2), $SU)
+
+[at-st-4] at-st-def($AT1, $ATV2, $SU, $EN) = single(($AT1), ($ATV2), $SU)
+
+[at-st-5] at-st-def($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $SU, $EN) =
 
 	     at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN)
 
-[at-st-6] at-st($SAT1* & using $TY1 & $SAT2*, 
-		$SAT3* & using $TY2 & $SAT4*, $SU, $EN) = 
+[at-st-6a] $TY1 := get-using($AT)
+	   ===============================
+	   at-st-def($AT, $SAT1* & using $TY2 & $SAT2*, $SU, $EN) = 
             insert(st((using $TY1), (using $TY2), $SU, $EN), 
-		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
+		 at-st(rm-using($AT), norm($SAT1* & $SAT2*), $SU, $EN))
 
-[at-st-7] at-st($SAT1* & giving $TY1 & $SAT2*, 
-		$SAT3* & giving $TY2 & $SAT4*, $SU, $EN) = 
+[at-st-6b] $TY2 := get-using($AT)
+	   ===============================
+	   at-st-def($SAT1* & using $TY1 & $SAT2*, $AT, $SU, $EN) = 
+            insert(st((using $TY1), (using $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), rm-using($AT), $SU, $EN))
+
+[at-st-7a] $TY1 := get-giving($AT)
+	   ===============================
+	   at-st-def($AT, $SAT1* & giving $TY2 & $SAT2*, $SU, $EN) = 
             insert(st((giving $TY1), (giving $TY2), $SU, $EN), 
-		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
+		 at-st(rm-giving($AT), norm($SAT1* & $SAT2*), $SU, $EN))
 
-[at-st-8] at-st($SAT1* & raising $TY1 & $SAT2*, 
-		$SAT3* & raising $TY2 & $SAT4*, $SU, $EN) = 
+[at-st-7b] $TY2 := get-giving($AT)
+	   ===============================
+	   at-st-def($SAT1* & giving $TY1 & $SAT2*, $AT, $SU, $EN) = 
+            insert(st((giving $TY1), (giving $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), rm-giving($AT), $SU, $EN))
+
+[at-st-8a] $TY1 := get-raising($AT)
+	   ===============================
+	   at-st-def($AT, $SAT1* & raising $TY2 & $SAT2*, $SU, $EN) = 
             insert(st((raising $TY1), (raising $TY2), $SU, $EN), 
-		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
+		 at-st(rm-raising($AT), norm($SAT1* & $SAT2*), $SU, $EN))
 
-[default-at-st-1] at-st($SAT1* & $ATV1 & $SAT2*, 
+[at-st-8b] $TY2 := get-raising($AT)
+	   ===============================
+	   at-st-def($SAT1* & raising $TY1 & $SAT2*, $AT, $SU, $EN) = 
+            insert(st((raising $TY1), (raising $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), rm-raising($AT), $SU, $EN))
+
+
+[default-at-st-2] at-st-def($SAT1* & $ATV1 & $SAT2*, 
 		        $SAT3* & $ATV2 & $SAT4*, $SU, $EN) = 
 		insert(single(($ATV1), ($SAT3* & $ATV2 & $SAT4*), $SU),
 		       single(($SAT1* & $SAT2*), ($ATV2), $SU))
+
+[default-at-st-3] 
+
+        $SAT1* & $ATV1 & $SAT2* !:= $AT1, 
+        $SAT3* & $ATV2 & $SAT4* !:= $AT2
+	==================================
+	at-st-def($AT1, $AT2, $SU, $EN) = error(($AT1), ($AT2), $SU)
+
 
 [diff-1] $SAT1* & $SAT & $SAT2* \ $SAT = $SAT1* & $SAT2* \ $SAT
 

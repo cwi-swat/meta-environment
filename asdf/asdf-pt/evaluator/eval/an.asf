@@ -169,7 +169,7 @@ equations
 
 	E2 := update-cell(C, D, E1) 
 	==============================================
-	eval(update, (C, D), BS, E1) = <normal (), E2>
+	eval(update, (C, D1), BS, E1) = <normal (), E2>
 
 [default-update-1] eval(update, D, BS, E1) = <excep (), E1>
 

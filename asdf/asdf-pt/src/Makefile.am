@@ -31,7 +31,7 @@ Asdfsupport_LDADD =\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib -lATerm -ltide-adapter \
 	${SOCKLIBS}
 
 Typecheck_LDADD =\
@@ -41,7 +41,7 @@ Typecheck_LDADD =\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib -lATerm -ltide-adapter\
 	${SOCKLIBS}
 
 Eval_LDADD =\
@@ -51,7 +51,7 @@ Eval_LDADD =\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib -lATerm -ltide-adapter\
 	${SOCKLIBS}
 
 INCLUDES = \

@@ -139,7 +139,7 @@ equations
 	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
 	 $M := insert(st($TY4, $TY1, $SU, $EN), single($TY3, $TV1, $SU))
 	 ====================================================
-	 st($TV1+$TY1, ($TY2, $TY2*), $SU, $EN) = $M
+	 st(($TY2, $TY2*), $TV1+$TY1, $SU, $EN) = $M
 
 [st-12] $TY != data
 	=================================
