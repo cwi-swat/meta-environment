@@ -72,7 +72,6 @@ static TA_Process processes[MAX_PROCESSES];
 static int nr_functions = 0;
 static TA_FunctionRecord functions[MAX_FUNCTIONS];
 
-#define DEVELOP 1
 #if DEVELOP
 static int message_mask = TA_WARNING | TA_DEBUG;
 #else
