@@ -1,5 +1,5 @@
-SUBDIRS=asf basic containers functions aterm system sdf2 \
-        strategies disambiguation
+SUBDIRS=asf basic aterm sdf2 
+# disambiguation containers strategies functions system 
 
 Everything.sdf:
 	echo "module Everything " > $@;
