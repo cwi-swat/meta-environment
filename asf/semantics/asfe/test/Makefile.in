@@ -31,8 +31,10 @@ ATERMINC    = @ATERMINC@
 INCLUDES   = -I$(ATERMINC)
 LIBS       = -L$(ATERMLIB) -lAsFix -lATerm -lATB
 
-TESTCASES	= reduce-test prepare-restore-test equalModuloWhitespace-test
-BINS            = prepare-restore equalModuloWhitespace
+TESTCASES	= reduce-test prepare-restore-test equalModuloWhitespace-test \
+		  whitespace-test
+BINS            = prepare-restore equalModuloWhitespace whitespace
+OBJS            = preparation.o evaluator.o evaluator.tif.o
 
 # CLEANFILES are removed by 'make clean'
 CLEANFILES	=  ${BINS} *.o
@@ -43,22 +45,19 @@ test: ${TESTCASES} ${BINS}
 		sh ./$${testcase}; \
 	done 
 
-prepare-restore: prepare-restore.c preparation.o evaluator.o evaluator.tif.o
-	$(CC) -o prepare-restore prepare-restore.c preparation.o evaluator.o evaluator.tif.o $(INCLUDES) $(LIBS) 
+prepare-restore: prepare-restore.c $(OBJS)
+	$(CC) -o prepare-restore $(INCLUDES) $< $(OBJS) $(LIBS)
 
-equalModuloWhitespace: equalModuloWhitespace.c preparation.o evaluator.o evaluator.tif.o
-	$(CC) -o equalModuloWhitespace equalModuloWhitespace.c preparation.o evaluator.o evaluator.tif.o $(INCLUDES) $(LIBS)
+equalModuloWhitespace: equalModuloWhitespace.c $(OBJS)
+	$(CC) -o equalModuloWhitespace $(INCLUDES) $< $(OBJS) $(LIBS)
+
+whitespace: whitespace.c $(OBJS)
+	$(CC) -o whitespace $(INCLUDES) $< $(OBJS) $(LIBS)
 
 # Notice that we use a commandline macro to remove the main function
 # from evaluator.c
-evaluator.o: ../evaluator.c
-	$(CC) -c -Dmain=move_main_away $< $(INCLUDES) 
-
-preparation.o: ../preparation.c
-	$(CC) -c $< $(INCLUDES)
-
-evaluator.tif.o: ../evaluator.tif.c
-	$(CC) -c $< $(INCLUDES)
+%.o: ../%.c
+	$(CC) -c $< $(INCLUDES) -Dmain=move_main_away
 
 clean:
 	@rm -f *.o *~ $(CLEANFILES)
