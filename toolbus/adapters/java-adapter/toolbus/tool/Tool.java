@@ -267,9 +267,9 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ protected synchronized void send(ATermRef term)
+  //{ public synchronized void send(ATermRef term)
 
-  protected synchronized void send(ATermRef term)
+  public synchronized void send(ATermRef term)
     throws ToolException
   {
     try {
@@ -310,10 +310,22 @@ abstract public class Tool implements Runnable
 
   public void run()
   {
-    while(running) {
-      if(istream != null)
-	handleOne();
-      Thread.yield();
+    try {
+      while(running && istream != null) {
+	channel.reset();
+	channel.read();
+	ATermRef t = ATermParser.parseATerm(channel);
+	if(verbose) {
+	  System.err.print("tool " + name + " has read term: ");
+	  t.print(System.err);
+	  System.err.println("");
+	}
+	handleOne(t);
+      }
+    } catch (IOException e) {
+      error("IOException while reading incoming ToolBus term", null);
+    } catch (ParseError e) {
+      error("parse error while reading incoming ToolBus term", null);
     }
   }
 
@@ -338,6 +350,27 @@ abstract public class Tool implements Runnable
       error("IOException while reading incoming ToolBus term", null);
     } catch (ParseError e) {
       error("parse error while reading incoming ToolBus term", null);
+    } catch (ToolException e) {
+      error("ToolException generated while handling term", e);
+    }
+  }
+
+  //}
+  //{ private synchronized void handleOne(ATermRef term)
+
+  private synchronized void handleOne(ATermRef term)
+  {
+    ATermRef result;
+    try {
+      result = handler(term);
+      if(patternRecTerminate.match(term))
+        running = false;
+      if(patternRecDo.match(term))
+	send(termSndVoid);
+      if(patternRecAckEvent.match(term))
+	ackEvent((ATermApplRef)patternRecAckEvent.elementAt(0));
+      if(result != null)
+        send(result);
     } catch (ToolException e) {
       error("ToolException generated while handling term", e);
     }
@@ -374,23 +407,21 @@ abstract public class Tool implements Runnable
 
   //}
 
-  //{ protected void event(ATermApplRef appl)
+  //{ public void event(ATermApplRef appl)
 
   /**
    * Send an event, without looking at the event queues.
    * @exception ToolException when a ToolBus connection error occurs.
    */
 
-  protected void event(ATermApplRef appl)
+  public void event(ATermApplRef appl)
      throws ToolException
   {
-    try {
-      send(patternEvent.make(appl));
-    } catch (IllegalPlaceholder e) { }
+    send(patternEvent.make(appl));
   }
 
   //}
-  //{ protected void post(ATermApplRef appl)
+  //{ public void post(ATermApplRef appl)
 
   /**
    * Post an event. If no corresponding ack is waiting,
@@ -399,7 +430,7 @@ abstract public class Tool implements Runnable
    * @exception ToolException when a ToolBus connection error occurs.
    */
 
-  protected void post(ATermApplRef appl)
+  public void post(ATermApplRef appl)
      throws ToolException
   {
     EventQueue Queue = (EventQueue)queues.get(appl.getFun());
@@ -410,9 +441,7 @@ abstract public class Tool implements Runnable
     if(Queue.ackWaiting())
       Queue.addEvent(appl);
     else {
-      try {
-        send(patternEvent.make(appl));
-      } catch (IllegalPlaceholder e) { }
+      send(patternEvent.make(appl));
       Queue.setAckWaiting();
     }
   }
@@ -434,18 +463,17 @@ abstract public class Tool implements Runnable
     if(queue != null && queue.ackWaiting()) {
       appl = queue.nextEvent();
       if(appl != null) {
-	try {
-	  send(patternEvent.make(appl));
-	} catch (IllegalPlaceholder e) { }
+	send(patternEvent.make(appl));
       }
     }
   }
 
   //}
 
-  boolean getVerbose()                  { return verbose; }
-  void setVerbose(boolean on)           { verbose = on; }
-  String  getName()                     { return name; }
+  public boolean getVerbose()                  { return verbose; }
+  public void setVerbose(boolean on)           { verbose = on; }
+  public String  getName()                     { return name; }
+  public int getTid()                          { return toolid; }
 }
 
 //}
