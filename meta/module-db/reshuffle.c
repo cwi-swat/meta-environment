@@ -335,6 +335,43 @@ ATfprintf(stderr,"Reshuffling sort: %t\n",sort);
   }
 }
 
+extern ATermList GetallKeys(ATermList compile_db);
+
+void gen_makefile(ATerm name)
+{
+  char *text, *mtext;
+  char buf[1024];
+  FILE *output;
+  ATerm module;
+  ATermList modules = GetallKeys((ATermList) compile_db);
+
+  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
+
+    sprintf(buf, "%s/%s.module-list", output_path, text);
+    ATfprintf(stderr,"Writing: %s\n", buf);
+    output = fopen(buf,"w");
+    if(!output)
+      ATfprintf(stderr,"Cannot open file %s\n",buf);
+    else {   
+      while (!ATisEmpty(modules)) {
+        module = ATgetFirst(modules);
+        if(ATmatchTerm(module,pattern_asfix_id,&mtext)) {
+          ATfprintf(output,"%s.c\\\n", mtext);
+        }
+        modules = ATgetNext(modules);
+      }
+      fclose( output );
+       
+        
+      sprintf( buf, "cd %s ; %s/genmakefile.sh %s >Makefile", output_path, BINDIR, text );
+      ATfprintf(stderr,"Executing: %s\n", buf );
+      system( buf );
+    }
+  }
+  else
+    ATerror("illegal name %t\n", name);
+}
+
 void reshuffle_modules(int cid,ATermList mods)
 {
   ATerm mod, newmod, newmodname, oldamod, cffunc;
@@ -378,125 +415,13 @@ ATfprintf(stderr,"reshuffle_per_sort finished\n");
     mods = ATgetNext(mods);
   }
   if(!compiling && ATisEmpty(modules_to_process))
+  {
+    gen_makefile( top_module );
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
-}
-
-extern ATermList GetallKeys(ATermList compile_db);
-
-void print_makefile(ATerm name)
-{
-  char *text, *mtext, *fname;
-  int len;
-  FILE *output;
-  ATerm module;
-  ATermList modules = GetallKeys((ATermList) compile_db);
-
-  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
-    len = strlen(output_path) + 1 + strlen("Makefile-") + strlen(text);
-    fname = malloc(len + 1);
-    if(!fname) 
-      ATerror("Not enough memory\n");
-    sprintf(fname, "%s/Makefile-%s", output_path, text);
-    /* Check whether it is necessary to generate new C code. */
-    output = fopen(fname,"w");
-    if(!output)
-      ATfprintf(stderr,"Cannot open file %s\n",fname);
-    else {   
-      ATfprintf(output,"# Makefile for target \"%s\" automatically generated.\n",text);
-      ATfprintf(output,"#\n\n");
-      ATfprintf(output,"# DEBUG-LIBS:     libraries containing debugging information\n");
-      ATfprintf(output,"# DEBUG-CC-FLAGS: compiler flags to store debugging information in object files\n");
-      ATfprintf(output,"# DEBUG-LD-FLAGS: optional flags for linking with debugging information\n");
-      ATfprintf(output,"# DEBUG-COMP:     compiler to use\n");
-      ATfprintf(output,"DEBUG-LIBS     = -lsupport-dbg -lATB-dbg -lAsFix-dbg -lATerm-dbg\n");
-      ATfprintf(output,"DEBUG-CC-FLAGS = -g -Wall -pedantic\n");
-      ATfprintf(output,"DEBUG-LD-FLAGS =\n");
-      ATfprintf(output,"DEBUG-COMP     = gcc\n\n");
-      ATfprintf(output,"# PROFILE-LIBS:     libraries containing profile information\n");
-      ATfprintf(output,"# PROFILE-CC-FLAGS: compiler flags to store profile information in object files\n");
-      ATfprintf(output,"# PROFILE-LD-FLAGS: optional flags for linking profiled object code\n");
-      ATfprintf(output,"# PROFILE-COMP:     compiler to use\n");
-      ATfprintf(output,"PROFILE-LIBS     = -lsupport-prof -lATB-prof -lAsFix-prof -lATerm-prof\n");
-      ATfprintf(output,"PROFILE-CC-FLAGS = -pg\n");
-      ATfprintf(output,"PROFILE-LD-FLAGS = -pg\n");
-      ATfprintf(output,"PROFILE-COMP     = gcc\n\n");
-      ATfprintf(output,"# There should be no need to change anything below\n\n");
-      ATfprintf(output,"prefix          = /home/gipe/petr\n");
-      ATfprintf(output,"exec_prefix     = \n");
-      ATfprintf(output,"bindir          = $(exec_prefix)/bin\n");
-      ATfprintf(output,"libdir          = $(exec_prefix)/lib\n");
-      ATfprintf(output,"includedir      = $(prefix)/include\n\n");
-      ATfprintf(output,"SHELL           = /bin/sh\n");
-      ATfprintf(output,"CC              = cc\n");
-      ATfprintf(output,"CPP             = gcc -E\n");
-      ATfprintf(output,"CPPFLAGS        = gcc -E $(XCPPFLAGS)\n");
-      ATfprintf(output,"DEFS            =  -DHAVE_LIBDL=1  $(XDEFS)\n");
-      ATfprintf(output,"INCLUDES        =  $(XINCLUDES)\n");
-      ATfprintf(output,"LIBS            = -ldl  $(XLIBS)\n");
-      ATfprintf(output,"SOCKLIBS        = -lsocket -lnsl\n\n");
-      ATfprintf(output,"ATERM           = $(prefix)\n\n");
-      ATfprintf(output,"XINCLUDES       = -I$(ATERM)/include -I$(includedir)\n");
-      ATfprintf(output,"XLIBS           = -L$(prefix)/lib -L$(ATERM)/lib\\\n");
-      ATfprintf(output,"                  $(VAR-LIBS) $(SOCKLIBS) $(GELLIBS)\n");
-      ATfprintf(output,"VAR-LIBS        = -lsupport-cc -lATB-cc -lAsFix-cc -lATerm-cc\n");
-      ATfprintf(output,"VAR-FLAGS       = -O $(XCFLAGS)\n\n");
-      ATfprintf(output,"SRCS=\\\n");
-      while (!ATisEmpty(modules)) {
-        module = ATgetFirst(modules);
-        if(ATmatchTerm(module,pattern_asfix_id,&mtext)) {
-          ATfprintf(output,"    %s.c\\\n", mtext);
-        }
-        modules = ATgetNext(modules);
-      }
-      ATfprintf(output,"    init.c\n\n");
-      ATfprintf(output,"OBJS=$(SRCS:.c=.o)\n\n");
-      ATfprintf(output,"# Make rules\n");
-      ATfprintf(output,".c.o:\n");
-      ATfprintf(output,"\t$(CC) $(CFLAGS) $(VAR-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@\n\n");
-      ATfprintf(output,"%s : $(OBJS)\n",text);
-      ATfprintf(output,"\t$(CC) $(LDFLAGS) -o %s $(OBJS) $(LIBDIR) $(LIBS)\n\n",text);
-      ATfprintf(output,"debug:\n");
-      ATfprintf(output,"\t$(MAKE) -f Makefile-%s %s-dbg CC=\"$(DEBUG-COMP)\" VAR-FLAGS=\"$(DEBUG-FLAGS)\" VAR-LIBS=\"$(DEBUG-LIBS)\"\n\n",text,text);
-      ATfprintf(output,"profile:\n");
-      ATfprintf(output,"\t$(MAKE) -f Makefile-%s %s-prof CC=\"$(PROFILE-COMP)\" VAR-FLAGS=\"$(PROFILE-CC-FLAGS)\" VAR-LIBS=\"$(PROFILE-LIBS)\"\n\n",text,text);
-      ATfprintf(output,"%s-dbg: $(OBJS)\n",text);
-      ATfprintf(output,"\t$(CC) $(LDFLAGS) $(DEBUG-LD-FLAGS) -o %s-dbg $(OBJS) $(LIBDIR) $(LIBS)\n\n",text);
-      ATfprintf(output,"%s-prof: $(OBJS)\n",text);
-      ATfprintf(output,"\t$(CC) $(LDFLAGS) $(PROFILE-LD-FLAGS) -o %s-prof $(OBJS) $(LIBDIR) $(LIBS)\n\n",text);
-      ATfprintf(output,"init.c:\n");
-      ATfprintf(output,"\t(echo \"/*GENERATED AUTOMATICALLY, DO NOT MODIFY */\" ;\\\n");
-      ATfprintf(output,"\tNAMES=`ls AUX*.c | sed 's/.c$$//g;s/-/_/g'`; export NAMES ;\\\n");
-      ATfprintf(output,"\tfor file in $${NAMES}; do \\\n");
-      ATfprintf(output,"\techo \"extern void register_$$file();\" ;\\\n");
-      ATfprintf(output,"\techo \"extern void resolve_$$file();\"  ;\\\n");
-      ATfprintf(output,"\techo \"extern void init_$$file();\"  ;\\\n");
-      ATfprintf(output,"\tdone ;\\\n");
-      ATfprintf(output,"\techo \"void register_all() {\" ;\\\n");
-      ATfprintf(output,"\tfor file in $${NAMES}; do \\\n");
-      ATfprintf(output,"\techo \"  register_$$file();\" ;\\\n");
-      ATfprintf(output,"\tdone ;\\\n");
-      ATfprintf(output,"\techo \"}\" ;\\\n");
-      ATfprintf(output,"\techo \"void resolve_all() {\" ;\\\n");
-      ATfprintf(output,"\tfor file in $${NAMES}; do \\\n");
-      ATfprintf(output,"\techo \"  resolve_$$file();\"  ;\\\n");
-      ATfprintf(output,"\tdone ;\\\n");
-      ATfprintf(output,"\techo \"}\" ;\\\n");
-      ATfprintf(output,"\techo \"void init_all() {\" ;\\\n");
-      ATfprintf(output,"\tfor file in $${NAMES}; do \\\n");
-      ATfprintf(output,"\techo \"  init_$$file();\"  ;\\\n");
-      ATfprintf(output,"\tdone ;\\\n");
-      ATfprintf(output,"\techo \"}\" ) > $@\n\n");
-      ATfprintf(output,"clean:\n");
-      ATfprintf(output,"\t$(RM) $(OBJS) init.c %s %s-db %s-prof\n",text,text,text);
-      ATfprintf(output, "\n");
-      fclose(output);
-    }
-    /* write full path name instead of only module name */
-    ATfprintf(stderr,"Writing: %s\n", fname);
   }
-  else
-    ATerror("illegal name %t\n", name);
 }
+
+
 
 ATermList get_imported_modules(ATerm name);
 ATbool complete_specification(ATerm module);
@@ -513,7 +438,7 @@ ATfprintf(stderr,"process_next_module entered\n");
     ATBwriteTerm(cid,event);
   }
   else {
-    print_makefile(top_module);
+    gen_makefile(top_module);
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
   }
 }
