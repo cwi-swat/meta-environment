@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:10 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 8.1 A Stand-alone Boolean Tool</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_47.html"><img alt="8.2 A Stand-alone Pico Typechecker" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.1 A Stand-alone Boolean Tool</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>8.1 A Stand-alone Boolean Tool</h2>
+<p>A stand-alone tool for parsing and reducing Boolean terms can be created in
+the following steps:
+<ul><li>Goto the directory <tt>demo/pico</tt>.
+<li>Start the ASF+SDF Meta-Environment.
+<li>Create a parse table for <tt>Pico-Booleans</tt>:
+  <ul><li>Right click on <tt>Pico-Booleans</tt> and select <tt>New Term</tt>.
+  <li>Enter the text <tt>true | false</tt>.
+  <li>Save this text as <tt>term.txt</tt>.
+  <li>Push the <tt>Parse</tt> button in the <tt>Meta-Environment</tt> menu of the
+    editor.
+  <li>Push the <tt>Save</tt> button of the <tt>File</tt> menu of the ASF+SDF Meta-Environment.
+  </ul>
+  The parse table <tt>Pico-Booleans.trm.tbl</tt> has now been created.
+<li>Dump the equations for <tt>Pico-Booleans</tt>:
+  <ul><li>Right click on  <tt>Pico-Booleans</tt> and select <tt>Dump Equations</tt>.
+  </ul>
+   The equations file <tt>Pico-Booleans.eqs</tt> has now been created.
+<li>Parse <tt>term.txt</tt>:
+<pre>
+  sglr -p Pico-Booleans.trm.tbl -i term.txt -o term.tree
+</pre>
+The result is the parse tree <tt>term.tree</tt>
+<li>Reduce <tt>term.tree</tt>:
+<pre>
+  asfe -e Pico-Booleans.eqs  &lt;term.tree &gt;reduct.tree   
+</pre>
+<li>Unparse <tt>reduct.tree</tt>:
+<pre>
+  unparsePT &lt;reduct.tree &gt;reduct.txt
+</pre>
+<p>The result (in textual form) of reducing <tt>term.txt</tt> is now <tt>reduct.txt</tt>
+</ul>
+<p>Of course, the last steps can be written more concisely in a pipeline:
+<pre>
+  sglr -p Pico-Booleans.trm.tbl -i term.txt | \
+  asfe -e Pico-Booleans.eqs | asource &gt; reduct.txt
+</pre>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_47.html"><img alt="8.2 A Stand-alone Pico Typechecker" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.1 A Stand-alone Boolean Tool</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

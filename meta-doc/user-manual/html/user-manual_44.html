@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:10 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 7.8 Applying a Function to a Term</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_43.html"><img alt="7.7 Unparsing a (Parsed/Normalized) Term" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.8 Applying a Function to a Term</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>7.8 Applying a Function to a Term</h2>
+<p>In many applications it is desirable to apply a function to a given term
+before reducing it. A typical example is the type checking of a program: given
+a parse tree <tt>T</tt> for a program we first want to apply the typecheck
+function <tt>tc</tt> to it
+before reduction. In the context of term rewriting this means first
+constructing the term <tt>tc(T)</tt> and then reducing it.
+<p>The construction of this new term is achieved by the following command:
+<pre>
+   apply-function -f &lt;name&gt; -s &lt;sort&gt; -m &lt;modulename&gt; -i &lt;in&gt; -o &lt;out&gt; 
+</pre>
+<p>A term is constructed consisting of an application of function <tt>&lt;name&gt;</tt>
+with result sort <tt>&lt;sort&gt;</tt> defined in module <tt>&lt;modulename&gt;</tt> to a term
+<tt>&lt;in&gt;</tt>.  The resulting term is written to <tt>&lt;out&gt;</tt>.
+In order to actually <em>apply</em> <tt>&lt;name&gt;</tt>, the term <tt>out</tt> has to
+be reduced by <a HREF="user-manual_40.html"><tt>asfe</tt></a>.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_43.html"><img alt="7.7 Unparsing a (Parsed/Normalized) Term" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.8 Applying a Function to a Term</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

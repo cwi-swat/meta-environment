@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.11 Disambiguation</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_21.html"><img alt="2.12 Parameterization and Renaming" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10.6 Preferring, Avoiding or Rejecting Parses" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.11 Disambiguation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.11 Disambiguation</h2>
+
+<h3><A NAME="lex-ambiguity">2.11.1 Lexical Ambiguities</a></h3>
+
+<p>SDF&#32;provides a number of elementary lexical disambiguation features but does
+not offer <em>fully automated</em> lexical disambiguation.
+As a result, the specification writer has to be aware of lexical ambiguities
+and has to specify disambiguation rules explicitly.
+We will discuss various
+approaches to lexical disambiguation and illustrate them by means of examples.
+<p>We will discuss:
+<menu>
+<li><a HREF="#2">Prefer Longest Match per Sort</a>
+<li><a HREF="#4">Prefer Literals</a>
+<li><a HREF="#7">Prefer Non-Layout</a>
+<li><a HREF="#8">Prefer Variables</a>
+</menu>
+
+<h4><A NAME="2">Prefer Longest Match per Sort</a></h4>
+Reject all interpretations of 
+the input text that are included in a longer interpretation of the same 
+sort. Given a standard definition of identifiers, the input `<tt>xyz</tt>' 
+will thus lead to recognition of the identifier `<tt>xyz</tt>' and not to 
+either `<tt>x</tt>' or `<tt>xy</tt>'.
+<p>This is achieved by defining a restriction on this lexical sort. This
+can be done using either lexical or context-free
+<a HREF="user-manual_19.html#LexicalRestrictions">restrictions</a>.
+The specification <a HREF="#3">below</a> 
+shows how to enforce the longest match for the sort <tt>Id</tt>.
+<p><p><A NAME="3">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-restrict
+
+imports Layout
+
+exports
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using context-free restrictions to define a longest match for
+    identifiers</div>
+</a>
+   
+<h4><A NAME="4">Prefer Literals</a></h4>
+<p>In the left-hand side of a context-free syntax rule literals (keywords
+and/or operators) may be used.  If these literals overlap with  more
+general lexical tokens (such as identifier) this causes ambiguities.
+<p>The strategy <em>Prefer Literals</em> gives preference to interpretation
+as a literal, over interpretation as a more general lexical token.
+For instance, the keyword <tt>begin</tt> may be recognized as an identifier
+given the lexical definition <a HREF="#3">below</a>.
+<p>There are two approaches to implement Prefer Literals.
+<p>In the first approach, we can explicitly forbid the recognition of
+literals as tokens of a specific sort using the
+<a HREF="user-manual_19.html#PreferAvoidReject">reject mechanism</a>.  
+The idea is to define context-free
+grammar rules for all literals with the undesired lexical sort (e.g.,
+<tt>Id</tt>) in the right-hand side followed by the attribute <tt>reject</tt>.
+This is illustrated <a HREF="#5">below</a>.
+The <tt>reject</tt> attribute
+indicates here that the recognition of a keyword as a literal of the sort
+<tt>Id</tt> should be rejected. This approach has the major disadvantage
+that the addition of a literal in any context-free rule also requires
+the addition of a new reject rule for that literal.
+<p><p><A NAME="5">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-reject
+
+imports Layout
+
+exports
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+
+  context-free syntax
+    "begin" -&gt; Id {reject}
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using <tt>reject</tt> to implement Prefer Literals</div>
+</a>
+<p>   
+<p>The second approach is more attractive. The lexical definition of the general
+notion that interferes with our literals is written in such a way that it is
+only used as a last resort. In other words, it is avoided as much as possible
+and is only used when no alternative exists.  
+The attribute <tt>avoid</tt> defines precisely this behaviour
+(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+<a HREF="#6">The next example</a> shows
+how the lexical definition of <tt>Id</tt> is attributed with <tt>avoid</tt>.
+<p>Although the first approach is more tedious, it allows more flexibility
+than the second one.
+<p><p><A NAME="6">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-avoid
+
+imports Layout
+
+exports
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id {avoid}
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using <tt>avoid</tt> to implement Prefer Literals</div>
+</a>
+   
+<h4><A NAME="7">Prefer Non-Layout</a></h4>
+If there are interpretations of the text as
+layout symbol and as non-layout symbol, eliminate all interpretations as layout
+symbol. This is built-in behaviour of ASF+SDF.
+<h4><A NAME="8">Prefer Variables</a></h4>
+Give preference to interpretation as a 
+variable (as defined in a variables section) over interpretation as a lexical
+token. Thus built-in behaviour of ASF+SDF. It is achieved by automatically
+extending each variable declaration with 
+the attribute <tt>prefer</tt>
+(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+<h3><A NAME="cf-ambiguity">2.11.2 Context-free Ambiguities</a></h3>
+
+<p>Context-free grammars may be ambiguous and, as a result, the parser may yield
+different parses of a text. More precisely, the result of a parse is a single
+tree in which the ambiguities are explicitly marked. Each marked ambiguity
+consists of a set of different parse trees for that ambiguity.  Many--but not
+all!-- of these different parses can be eliminated by the following
+strategies that are built-in the ASF+SDF Meta-Environment. These strategies use the
+priorities and associativities as defined in the specification. In addition,
+some standard heuristics are used.
+<h4><A NAME="10">Associativity filtering</a></h4>
+The associativity filtering
+is performed during the generation of the parse table. Based
+on the associativity relations certain entries in the parse table
+are removed.
+<h4><A NAME="11">Removing Trees containing Conflicts</a></h4>
+<p>The simplest application of priority and associativity declarations is the
+elimination of trees that contain conflicts:
+<ul><li>A parent node has a child with a lower priority than the parent itself.
+<li>A parent has a first or last child that is in conflict with
+  an associativity relation between this parent and child.
+</ul>
+<p>Reconsidering the example of complex priorities shown <a HREF="user-manual_19.html#8">earlier</a> we will give a number of example sentences and
+the interpretation given to them by that language definition.
+<div align="center">
+<table><tr><td colspan="1" align="LEFT">
+
+  Sentence   </td><td colspan="1" align="LEFT"> Interpretation </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1^2^3</code> </td><td colspan="1" align="LEFT"> <code>1^(2^3)</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1^2*3</code> </td><td colspan="1" align="LEFT"> <code>(1^2)*3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1*2*3</code> </td><td colspan="1" align="LEFT"> <code>(1*2)*3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1/2/3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1*2/3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1-2-3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1+2+3</code> </td><td colspan="1" align="LEFT"> <code>(1+2)+3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1-2+3</code> </td><td colspan="1" align="LEFT"> <code>(1-2)+3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1+2-3</code> </td><td colspan="1" align="LEFT"> <code>(1+2)-3</code></td></tr>
+<tr><td colspan="1" align="LEFT">
+</td></tr></table>
+
+</div>
+<h4><A NAME="12">Removing Trees using <tt>prefer</tt>/<tt>avoid</tt> Attributes at the Root</a></h4>
+<p>The priority declarations are used to eliminate trees 
+in three phases: 
+<ol><li>If there are trees of which the syntax rule at the top node has a <tt>prefer</tt> attribute, all other trees are removed.
+<li>If there are trees of which the syntax rule at the top node has an <tt>avoid</tt> attribute and there are other trees without an <tt>avoid</tt> attribute at
+  the root node, then all trees with <tt>avoid</tt> attribute are removed.
+</ol>
+<h4><A NAME="13">Removing Trees containing <tt>prefer</tt>/<tt>avoid</tt> Attributes</a></h4>
+<p>After removing all trees containing conflicts, more than one tree may
+still remain.  To further reduce this set of remaining trees, the number
+of context-free functions with <tt>prefer</tt>/<tt>avoid</tt> attributes is
+calculated and compared.  A tree in the set is then rejected if there
+is another tree in the set with more <tt>prefer</tt>s and less or equal
+<tt>avoid</tt>s, or with equal <tt>prefer</tt>s and more <tt>avoid</tt>s.
+<h4><A NAME="14">Injection count</a></h4>
+Finally, the number of injections in each of the resulting trees
+is calculated, the tree with the smallest number of injections
+is prefered.
+<h4><A NAME="15">Examples</a></h4>
+<p>The following examples show how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using <tt>prefer</tt> attribute. 
+<p>The <a HREF="#16">first example</a> concerns expressions
+for describing subscripts and superscripts in the typesetting language EQN.
+The crucial point is that, for typesetting reasons, we want to treat a
+subscript followed by a superscript in a special way. Therefore, the special
+case `<tt>E sub E sup E -&gt; E</tt>' is introduced, which is prefered over a
+combination of the two functions `<tt>E sub E -&gt; E</tt>' and `<tt>E sup E -&gt;
+  E</tt>'.
+<p><p><A NAME="16">
+
+   <HR >
+<font size="-1">
+<pre>
+module Eqn
+
+imports Layout
+
+exports
+  sorts E 
+
+  context-free syntax
+    E "sub" E         -&gt; E {left}
+    E "sup" E         -&gt; E {left}
+    E "sub" E "sup" E -&gt; E {prefer}
+    "{" E "}"         -&gt; E {bracket}
+    "a"               -&gt; E 
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Syntax definition of EQN expressions</div>
+</a>
+<p><p>In the <a HREF="#17">second example</a>
+the <tt>prefer</tt> attribute is used to
+solve the dangling else problem in a nice way.
+The input sentence <tt>"if 0 then if 1 then hi else ho"</tt> can be parsed
+in two ways: <tt>if 0 then (if 1 then hi) else ho</tt> and
+<tt>if 0 then (if 1 then hi else ho)</tt>.
+We can select the latter derivation by adding the <tt>prefer</tt>
+attribute to the production without the <tt>else</tt> part.
+The parser will still construct an ambiguity node containing both
+deriviations,
+namely, <tt>if 0 then (if 1 then hi &#123;prefer&#125;) else ho</tt> and
+<tt>if 0 then (if 1 then hi else ho) &#123;prefer&#125;</tt>.
+But given the fact that the <em>top</em> node of the latter derivation tree
+has the prefer attribute this derivation is selected and the other
+tree is removed from the ambiguity node.
+<p><p><A NAME="17">
+
+   <HR >
+<font size="-1">
+<pre>
+module DanglingElse
+
+imports Layout
+
+exports
+  sorts E S
+
+  context-free syntax
+    "a"                      -&gt; E 
+    "if" E "then" S          -&gt; S {prefer}
+    "if" E "then" S "else" S -&gt; S
+    "s"                      -&gt; S
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Syntax definition of conditionals</div>
+</a>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_21.html"><img alt="2.12 Parameterization and Renaming" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10.6 Preferring, Avoiding or Rejecting Parses" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.11 Disambiguation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

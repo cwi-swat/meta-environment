@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.9 Attributes of Lexical and Context-free Functions</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10 Priorities" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8.6 Lists in combination with optionals or empty producing
+sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Attributes of Lexical and Context-free Functions</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.9 Attributes of Lexical and Context-free Functions</h2>
+
+<p>The definition of a lexical or context-free functions may be followed by
+<em>attributes</em> that define additional (syntactic or semantic) properties of
+that function.  The following syntax-related attributes exist:
+<ul><p><A NAME="1">&nbsp;</A>
+<li><tt>bracket</tt> allows the definitions of parenthesis and other
+kinds of brackets that are mostly used for overruling the priorities
+of operators in expressions
+(see <a HREF="user-manual_19.html#BracketFunctions">Bracket Functions</a>).
+<p><A NAME="2">&nbsp;</A>
+
+
+
+<li><tt>left</tt>, <tt>right</tt>, <tt>non-assoc</tt>, and <tt>assoc</tt>
+are used to define the associativity of functions 
+(see <a HREF="user-manual_19.html">Priorities</a>).
+<p><A NAME="3">&nbsp;</A>
+<li><tt>prefer</tt> is used to indicate that the attributed function should
+always be preferred over other functions (without this attribute)
+in certain cases of syntactic ambiguity
+(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+<p><A NAME="4">&nbsp;</A>
+<li><tt>avoid</tt> is used to indicate that a function should
+only be used as a last resort in certain cases of
+syntactic ambiguity
+(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+<p><A NAME="5">&nbsp;</A>
+<li><tt>reject</tt> can be used to explicitly forbid certain syntactic
+  constructs
+  (see  <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+</ul>
+<p>The remaining attributes define semantic properties of a function:
+<ul><p><A NAME="6">&nbsp;</A>
+<li><tt>constructor</tt> declares a function to be a <em>constructor
+function</em>, this means that for this function <em>no</em> equations
+may be defined with this function as outermost function symbol
+in the left hand side.
+<p><A NAME="7">&nbsp;</A>
+<li><tt>memo</tt> declares a function to be a <em>memo function</em> for
+which all calls and results will be cached during evaluation
+(see <a HREF="user-manual_23.html#MemoFunctions">Memo Functions</a>).
+<p><A NAME="8">&nbsp;</A>
+<li><tt>traversal</tt> is used to declare so-called traversal functions
+that greatly simply the specification of functions that have to visit
+(parts of) a term 
+(see <a HREF="user-manual_23.html#Traversal">Traversal Functions</a>).
+</ul>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10 Priorities" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8.6 Lists in combination with optionals or empty producing
+sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Attributes of Lexical and Context-free Functions</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

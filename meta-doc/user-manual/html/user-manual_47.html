@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:10 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 8.2 A Stand-alone Pico Typechecker</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_48.html"><img alt="9 Future Developments" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_46.html"><img alt="8.1 A Stand-alone Boolean Tool" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.2 A Stand-alone Pico Typechecker</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>8.2 A Stand-alone Pico Typechecker</h2>
+<p>Now we show how to create a stand-alone typechecker for the Pico language.  We
+follow the same steps as in the previous example, but there is one additional
+step required: given a parsed Pico program, we have to wrap the function
+symbol <tt>tcp( )</tt> around the Pico program, before we reduce the term.  The
+steps are as follows:
+<ul><li>As before, generate a parse table for <tt>Pico-syntax</tt> (result: <tt>Pico-syntax.trm.tbl</tt>) and equations for <tt>Pico-typecheck</tt> (result: <tt>Pico-typecheck.eqs</tt>).
+<li>Parse the input term <tt>term.txt</tt> (result: <tt>term.tree</tt>).
+<li>Wrap  <tt>tcp(  )</tt> around <tt>term.tree</tt>:
+<pre>
+  apply-function -f tcp                       \
+                 -s PICO-BOOL                 \
+                 -m Pico-typecheck            \
+                 -i term.tree -o tcterm.tree
+</pre>
+<li>Reduce <tt>tcterm.tree</tt> and unparse the result as before.
+</ul>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_48.html"><img alt="9 Future Developments" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_45.html"><img alt="8 Examples of Stand-alone Tools" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_46.html"><img alt="8.1 A Stand-alone Boolean Tool" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.2 A Stand-alone Pico Typechecker</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

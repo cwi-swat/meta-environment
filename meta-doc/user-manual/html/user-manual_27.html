@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 3.3 Code Generation</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_28.html"><img alt="3.4 Large ASF+SDF&#32;Specifications" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_24.html"><img alt="3 Examples of ASF+SDF&#32;Specifications" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_26.html"><img alt="3.2 Sorting" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>3.3 Code Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>3.3 Code Generation</h2>
+<p>Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
+<table><tr><td colspan="1" align="LEFT">
+
+<tt>push <i>N</i></tt>      </td><td colspan="1" align="LEFT"> Push the number <i>N</i></td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>rvalue <i>I</i></tt>    </td><td colspan="1" align="LEFT"> Push the contents of data location <i>I</i></td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>lvalue <i>I</i></tt>    </td><td colspan="1" align="LEFT"> Push the address of data location <i>I</i></td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>pop</tt>           </td><td colspan="1" align="LEFT"> Remove the top of the stack</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>copy</tt>          </td><td colspan="1" align="LEFT"> Push a copy of the top value on the stack</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>assign</tt>        </td><td colspan="1" align="LEFT"> The r-value on top of the stack is stored in the l-value
+  below it and both are popped</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>add, sub, mul</tt> </td><td colspan="1" align="LEFT"> Replace the two values on top of the stack by their sum (difference,
+product)</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>label <i>L</i></tt>     </td><td colspan="1" align="LEFT"> Place a label (target of jumps)</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>goto <i>L</i></tt>      </td><td colspan="1" align="LEFT"> Next instruction is taken from statement following label
+  <i>L</i></td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>gotrue <i>L</i></tt>    </td><td colspan="1" align="LEFT"> Pop the top value; jump if it is nonzero</td></tr>
+<tr><td colspan="1" align="LEFT">
+<tt>gofalse <i>L</i></tt>  </td><td colspan="1" align="LEFT"> Pop the top value; jump if it is zero</td></tr>
+<tr><td colspan="1" align="LEFT">
+</td></tr></table>
+
+<p>The statement:
+<div class="quote" align="center">
+<tt>while a do a := a - 1; b := a * c od </tt>
+</div>
+<p>will now be translated to the following instruction sequence:
+<pre>
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx
+</pre>
+
+<h4><A NAME="1">Basic notions</a></h4>
+The specification <a HREF="#2">below</a> defines the 
+sorts <tt>Nat</tt> (numbers) and <tt>Id</tt> (identifiers).
+<p><p><A NAME="2">
+
+   <HR >
+<font size="-1">
+<pre>
+module BasicNotions 
+exports
+  sorts Nat Id 
+  lexical syntax
+    [0-9]+         -&gt; Nat 
+    [a-z][a-z0-9]* -&gt; Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for BasicNotions</div>
+</a>
+<h4><A NAME="3">Expressions and Statements</a></h4>
+Given these basic notions the <a HREF="#4">expressions</a>, and 
+<a HREF="#5">statements</a>
+of our little source language are defined.
+<p><p><A NAME="4">
+
+   <HR >
+<font size="-1">
+<pre>
+module Expressions 
+
+imports BasicNotions
+
+exports
+  sorts Exp 
+  context-free syntax
+    Nat         -&gt; Exp 
+    Id          -&gt; Exp 
+    Exp "+" Exp -&gt; Exp {left}
+    Exp "-" Exp -&gt; Exp {left}
+    Exp "*" Exp -&gt; Exp {left}
+
+  context-free priorities
+    Exp "*" Exp -&gt; Exp &gt; {left: Exp "+" Exp -&gt; Exp
+                                Exp "-" Exp -&gt; Exp}
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for Expressions</div>
+</a>
+<p><p><p><A NAME="5">
+
+   <HR >
+<font size="-1">
+<pre>
+module Statements 
+
+imports Expressions 
+
+exports
+  sorts Stat Stats 
+  context-free syntax
+    Id ":=" Exp                 -&gt; Stat 
+    "if" Exp "then" Stats "fi"  -&gt; Stat 
+    "while" Exp "do" Stats "od" -&gt; Stat
+    {Stat ";"}+                 -&gt; Stats 
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for Statements</div>
+</a>
+
+<h4><A NAME="6">Assembly language</a></h4>
+The instructions of the assembly language for the stack machine are defined
+<a HREF="#7">below</a>.
+<p><p><A NAME="7">
+
+   <HR >
+<font size="-1">
+<pre>
+module AssemblyLanguage
+
+imports BasicNotions 
+exports 
+  sorts Label Instr Instrs
+  lexical syntax
+    [a-z0-9]+ -&gt; Label 
+  context-free syntax
+    "push" Nat      -&gt; Instr
+    "rvalue" Id     -&gt; Instr 
+    "lvalue" Id     -&gt; Instr 
+    "assign"        -&gt; Instr 
+    "add"           -&gt; Instr 
+    "sub"           -&gt; Instr 
+    "mul"           -&gt; Instr 
+    "label" Label   -&gt; Instr 
+    "goto" Label    -&gt; Instr 
+    "gotrue" Label  -&gt; Instr 
+    "gofalse" Label -&gt; Instr
+    {Instr ";"}+    -&gt; Instrs 
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for AssemblyLanguage</div>
+</a>
+<h4><A NAME="8">Label generation</a></h4>
+<p>Next, we define a function to construct a next label given the previous one
+<a HREF="#9">as follows</a>.  It is defined on the
+lexical notion of labels (<tt>Label</tt>).  The scheme of appending the character
+`<tt>x</tt>' to the previous label is, of course, naive and will in real life be
+replaced by a more sophisticated one.
+<p><p><A NAME="9">
+
+   <HR >
+<font size="-1">
+<pre>
+module NextLabel
+  
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -&gt; Label 
+
+hiddens
+  variables
+    "Char*"[0-9]* -&gt; CHAR*
+
+equations
+
+ [1] nextlabel(label(Char*)) = label(Char* "x")
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for NextLabel</div>
+</a>
+<h4><A NAME="10">Codegenerator</a></h4>
+It remains to define a function `<tt>tr</tt>' that translates statements into
+instructions. During code generation we should generate new label names for
+the translation of if- and while-statements. This is an instance of a
+frequently occurring problem: how do we maintain global information (in this
+case: the last label name generated)? A standard solution is to introduce an
+auxiliary sort (<tt>Instrs-Lab</tt>) that contains both the generated instruction
+sequence and the last label name generated so far.
+The <a HREF="#11">SDF&#32;part</a> and the
+<a HREF="#12">ASF&#32;part</a> 
+of module <tt>CodeGenerator</tt> define
+the actual translation function.
+<p><p><p><A NAME="11">
+
+   <HR >
+<font size="-1">
+<pre>
+module CodeGenerator
+
+imports Statements AssemblyLanguage NextLabel 
+  
+exports
+  context-free syntax
+    "tr" "(" Stats ")" -&gt; Instrs
+  
+hiddens
+  sorts Instrs-lab 
+  context-free syntax
+    Instrs # Label               -&gt; Instrs-lab 
+    "tr" "(" Stats "," Label ")" -&gt; Instrs-lab 
+    "tr" "(" Exp ")"             -&gt; Instrs
+
+hiddens
+  variables
+    "Exp"[0-9\']*        -&gt; Exp 
+    "Id"[0-9\']*         -&gt; Id
+    "Instr"[0-9\']*      -&gt; Instr 
+    "Instr-list"[0-9\']* -&gt; {Instr ";"}+
+    "Label"[0-9\']*      -&gt; Label
+    "Nat"[0-9\']*        -&gt; Nat 
+    "Stat"[0-9\']*       -&gt; Stat
+    "Stat+"[0-9\']*      -&gt; {Stat ";"}+
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for CodeGenerator</div>
+</a>
+<p><p>    
+<p><A NAME="12">
+
+   <HR >
+<font size="-1">
+<pre>
+equations 
+
+[1] tr(Stat-list, x) = &lt;Instr-list, Label&gt;
+    ======================================
+    tr(Stat-list) = Instr-list
+
+[2] tr(Stat, Label) = &lt;Instr-list1, Label'&gt;, 
+    tr(Stat-list, Label') = &lt;Instr-list2, Label''&gt;
+    ================================================================== 
+    tr(Stat ; Stat-list, Label) = &lt;Instr-list1 ; Instr-list2, Label''&gt;
+
+[3] tr(Exp) = Instr-list
+    ============================================================= 
+    tr(Id := Exp, Label) = &lt;lvalue Id; Instr-list; assign, Label&gt;
+
+[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = &lt;Instr-list2, Label'&gt;,
+    Label'' = nextlabel(Label') 
+    ================================================================ 
+    tr(if Exp then Stat-list fi, Label) =
+    &lt;Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''&gt;
+
+[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = &lt;Instr-list2, Label'&gt;,
+    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
+    ================================================================ 
+    tr(while Exp do Stat-list od, Label) =
+    &lt;label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''&gt;
+
+[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat 
+[10] tr(Id) = rvalue Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">ASF+SDF&#32;specification for
+CodeGenerator</div>
+</a>
+<p><p>This completes the specification of our code generator.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_28.html"><img alt="3.4 Large ASF+SDF&#32;Specifications" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_24.html"><img alt="3 Examples of ASF+SDF&#32;Specifications" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_26.html"><img alt="3.2 Sorting" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>3.3 Code Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

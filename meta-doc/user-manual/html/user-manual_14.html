@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.5 Aliases</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_15.html"><img alt="2.6 Sorts" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_13.html"><img alt="2.4.9 Parameterized Sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.5 Aliases</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.5 Aliases</h2>
+
+<p>In ordinary programming it is good practice to use named constants to
+represent literals or constant values.  In SDF&#32;it is good practice to give a
+name ("alias") to complicated symbols that occur repeatedly in the
+specification.  An alias is thus a named abbreviation for a complicated
+symbol.  For example,
+<pre>
+aliases
+  Bool # Int # Id -&gt; Tuple3
+</pre>
+introduces the alias <tt>Tuple3</tt> for the symbol <tt>Bool &#35; Int &#35; Id</tt> and
+instead of using <tt>Bool &#35; Int &#35; Id</tt> one can use the alias <tt>Tuple3</tt>.
+During parse table generation the alias is replaced by the actual symbol.  It
+is not allowed to give an alias for an alias or to redefine aliases.
+For example, the following definitions are illegal:
+<pre>
+aliases
+  Tuple3          -&gt; SuperTuple
+  Bool # Int # Id -&gt; Tuple3
+</pre>
+(An alias is defined for the alias <tt>Tuple3</tt>.)
+<pre>
+aliases
+  Bool # Int # Id -&gt; Tuple3
+  Bool # Int      -&gt; Tuple3
+</pre>
+(The alias <tt>Tuple3</tt> is redefined.)
+<p>Note, the aliases are a convenient short hand for more complex symbols,
+but a drawback is that during parse table generation the aliases completely
+disappear. They are replaced by the actual symbols. This can have some
+unexpected behaviour when parsing or reducing terms.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_15.html"><img alt="2.6 Sorts" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_13.html"><img alt="2.4.9 Parameterized Sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.5 Aliases</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

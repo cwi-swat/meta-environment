@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:10 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- Contents</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_55.html"><img alt="Footnotes" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_0.html"><img alt="ASF+SDF Meta-Environment User Manual" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_53.html"><img alt="Index" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>Contents</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h1>Contents</h1>
+<menu>
+<li><a HREF="user-manual_1.html">Update with respect to previous version</a>
+<li><a HREF="user-manual_2.html">1 Overview</a>
+<menu>
+<li><a HREF="user-manual_3.html">1.1 When to use the ASF+SDF Meta-Environment?</a>
+<li><a HREF="user-manual_4.html">1.2 Global Structure of the Meta-Environment</a>
+<li><a HREF="user-manual_5.html">1.3 About this Manual</a>
+<li><a HREF="user-manual_6.html">1.4 Downloading the ASF+SDF Meta-Environment</a>
+<li><a HREF="user-manual_7.html">1.5 Further Reading</a>
+</menu>
+<li><a HREF="user-manual_8.html">Acknowledgements</a>
+<li><a HREF="user-manual_9.html">2 An Introduction to ASF+SDF</a>
+<menu>
+<li><a HREF="user-manual_10.html">2.1 Modules and Modular Structure</a>
+<li><a HREF="user-manual_11.html">2.2 SDF&#32;comment convention</a>
+<li><a HREF="user-manual_12.html">2.3 Imports</a>
+<li><a HREF="user-manual_13.html">2.4 Symbols</a>
+<menu>
+<li><a HREF="user-manual_13.html#OptionOperator">2.4.1 Option</a>
+<li><a HREF="user-manual_13.html#SequenceOperator">2.4.2 Sequence</a>
+<li><a HREF="user-manual_13.html#RepetitionOperator">2.4.3 Repetition</a>
+<li><a HREF="user-manual_13.html#AlternativeOperator">2.4.4 Alternative</a>
+<li><a HREF="user-manual_13.html#TupleOperator">2.4.5 Tuple</a>
+<li><a HREF="user-manual_13.html#PermutationOperator">2.4.6 Permutation (deprecated)</a>
+<li><a HREF="user-manual_13.html#SetOperator">2.4.7 Set (deprecated)</a>
+<li><a HREF="user-manual_13.html#FunctionOperator">2.4.8 Function</a>
+<li><a HREF="user-manual_13.html#ParameterizedSorts">2.4.9 Parameterized Sorts</a>
+</menu>
+<li><a HREF="user-manual_14.html">2.5 Aliases</a>
+<li><a HREF="user-manual_15.html">2.6 Sorts</a>
+<li><a HREF="user-manual_16.html">2.7 Lexical Syntax</a>
+<menu>
+<li><a HREF="user-manual_16.html#LexicalFunctions">2.7.1 Lexical Functions</a>
+<menu>
+<li><a HREF="user-manual_16.html#3">Lexical constructor functions</a>
+</menu>
+<li><a HREF="user-manual_16.html#CharacterClasses">2.7.2 Character Classes</a>
+<menu>
+<li><a HREF="user-manual_16.html#7">Escape Conventions</a>
+<li><a HREF="user-manual_16.html#8">Character Class Operators</a>
+</menu>
+<li><a HREF="user-manual_16.html#11">2.7.3 Repetition</a>
+<li><a HREF="user-manual_16.html#13">2.7.4 Option</a>
+<li><a HREF="user-manual_16.html#15">2.7.5 Alternative</a>
+<li><a HREF="user-manual_16.html#18">2.7.6 Miscellaneous Operators</a>
+<li><a HREF="user-manual_16.html#19">2.7.7 Examples of Lexical Syntax Definitions</a>
+<menu>
+<li><a HREF="user-manual_16.html#20">Defining Numbers</a>
+<li><a HREF="user-manual_16.html#22">Defining Strings</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_17.html">2.8 Context-free Syntax</a>
+<menu>
+<li><a HREF="user-manual_17.html#1">2.8.1 Context-free Functions</a>
+<li><a HREF="user-manual_17.html#PrefixFunctions">2.8.2 Prefix Functions</a>
+<li><a HREF="user-manual_17.html#5">2.8.3 Lists</a>
+<li><a HREF="user-manual_17.html#7">2.8.4 Chain Functions</a>
+<li><a HREF="user-manual_17.html#9">2.8.5 Miscellaneous Operators</a>
+<menu>
+<li><a HREF="user-manual_17.html#10">Definition of lists</a>
+<li><a HREF="user-manual_17.html#12">Alternative alternatives</a>
+</menu>
+<li><a HREF="user-manual_17.html#14">2.8.6 Lists in combination with optionals or empty producing
+sorts</a>
+</menu>
+<li><a HREF="user-manual_18.html">2.9 Attributes of Lexical and Context-free Functions</a>
+<li><a HREF="user-manual_19.html">2.10 Priorities</a>
+<menu>
+<li><a HREF="user-manual_19.html#BracketFunctions">2.10.1 Bracket Functions</a>
+<li><a HREF="user-manual_19.html#RelativePriorities">2.10.2 Relative Priorities</a>
+<li><a HREF="user-manual_19.html#AssociativeFunctions">2.10.3 Associative Functions</a>
+<li><a HREF="user-manual_19.html#GroupAssoc">2.10.4 Groups of Associative Functions</a>
+<li><a HREF="user-manual_19.html#LexicalRestrictions">2.10.5 Restrictions</a>
+<li><a HREF="user-manual_19.html#PreferAvoidReject">2.10.6 Preferring, Avoiding or Rejecting Parses</a>
+</menu>
+<li><a HREF="user-manual_20.html">2.11 Disambiguation</a>
+<menu>
+<li><a HREF="user-manual_20.html#lex-ambiguity">2.11.1 Lexical Ambiguities</a>
+<menu>
+<li><a HREF="user-manual_20.html#2">Prefer Longest Match per Sort</a>
+<li><a HREF="user-manual_20.html#4">Prefer Literals</a>
+<li><a HREF="user-manual_20.html#7">Prefer Non-Layout</a>
+<li><a HREF="user-manual_20.html#8">Prefer Variables</a>
+</menu>
+<li><a HREF="user-manual_20.html#cf-ambiguity">2.11.2 Context-free Ambiguities</a>
+<menu>
+<li><a HREF="user-manual_20.html#10">Associativity filtering</a>
+<li><a HREF="user-manual_20.html#11">Removing Trees containing Conflicts</a>
+<li><a HREF="user-manual_20.html#12">Removing Trees using <tt>prefer</tt>/<tt>avoid</tt> Attributes at the Root</a>
+<li><a HREF="user-manual_20.html#13">Removing Trees containing <tt>prefer</tt>/<tt>avoid</tt> Attributes</a>
+<li><a HREF="user-manual_20.html#14">Injection count</a>
+<li><a HREF="user-manual_20.html#15">Examples</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_21.html">2.12 Parameterization and Renaming</a>
+<menu>
+<li><a HREF="user-manual_21.html#Parameters">2.12.1 Parameterization</a>
+<li><a HREF="user-manual_21.html#Renamings">2.12.2 Symbol Renaming</a>
+</menu>
+<li><a HREF="user-manual_22.html">2.13 Variables</a>
+<menu>
+<li><a HREF="user-manual_22.html#2">2.13.1 Set Operator</a>
+</menu>
+<li><a HREF="user-manual_23.html">2.14 Equations</a>
+<menu>
+<li><a HREF="user-manual_23.html#1">2.14.1 Unconditional Equations</a>
+<li><a HREF="user-manual_23.html#2">2.14.2 Conditional Equations</a>
+<li><a HREF="user-manual_23.html#ExecutingEquations">2.14.3 Executing Equations</a>
+<li><a HREF="user-manual_23.html#4">2.14.4 List Matching</a>
+<li><a HREF="user-manual_23.html#7">2.14.5 Lexical Constructor Functions</a>
+<li><a HREF="user-manual_23.html#DefaultEquations">2.14.6 Default Equations</a>
+<li><a HREF="user-manual_23.html#MemoFunctions">2.14.7 Memo Functions</a>
+<li><a HREF="user-manual_23.html#Traversal">2.14.8 Traversal Functions</a>
+<li><a HREF="user-manual_23.html#20">2.14.9 Which Specifications are Executable?</a>
+<li><a HREF="user-manual_23.html#22">2.14.10 Common Errors when Executing Specifications</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_24.html">3 Examples of ASF+SDF&#32;Specifications</a>
+<menu>
+<li><a HREF="user-manual_25.html">3.1 Symbolic Differentiation</a>
+<li><a HREF="user-manual_26.html">3.2 Sorting</a>
+<li><a HREF="user-manual_27.html">3.3 Code Generation</a>
+<menu>
+<menu>
+<li><a HREF="user-manual_27.html#1">Basic notions</a>
+<li><a HREF="user-manual_27.html#3">Expressions and Statements</a>
+<li><a HREF="user-manual_27.html#6">Assembly language</a>
+<li><a HREF="user-manual_27.html#8">Label generation</a>
+<li><a HREF="user-manual_27.html#10">Codegenerator</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_28.html">3.4 Large ASF+SDF&#32;Specifications</a>
+</menu>
+<li><a HREF="user-manual_29.html">4 Compiling Specifications</a>
+<li><a HREF="user-manual_30.html">5 Technology and Architecture of the ASF+SDF Meta-Environment</a>
+<menu>
+<li><a HREF="user-manual_31.html">5.1 Technological Background</a>
+<menu>
+<menu>
+<li><a HREF="user-manual_31.html#1">ToolBus</a>
+<li><a HREF="user-manual_31.html#2">ATerms</a>
+<li><a HREF="user-manual_31.html#3">SGLR</a>
+<li><a HREF="user-manual_31.html#4">Term rewriting</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_32.html">5.2 Architecture</a>
+</menu>
+<li><a HREF="user-manual_33.html">6 Well-formedness checks on SDF</a>
+<menu>
+<li><a HREF="user-manual_34.html">6.1 SDF&#32;specific well-formedness checks</a>
+<menu>
+<menu>
+<li><a HREF="user-manual_34.html#1">Undeclared sorts</a>
+<li><a HREF="user-manual_34.html#2">Double declared symbols</a>
+<li><a HREF="user-manual_34.html#3">Defined symbols without corresponding productions</a>
+<li><a HREF="user-manual_34.html#4">Redefinition of aliased symbols</a>
+<li><a HREF="user-manual_34.html#5">Illegal attributes</a>
+</menu>
+</menu>
+<li><a HREF="user-manual_35.html">6.2 ASF+SDF&#32;specific well-formedness checks</a>
+</menu>
+<li><a HREF="user-manual_36.html">7 Selected Components of the ASF+SDF Meta-Environment</a>
+<menu>
+<li><a HREF="user-manual_37.html">7.1 Parse Table Generation</a>
+<li><a HREF="user-manual_38.html">7.2 Parsing</a>
+<li><a HREF="user-manual_39.html">7.3 Obtaining Equations</a>
+<li><a HREF="user-manual_40.html">7.4 Rewriting a Term using the Evaluator</a>
+<li><a HREF="user-manual_41.html">7.5 Compiling a Specification</a>
+<li><a HREF="user-manual_42.html">7.6 Rewriting a Term using a Compiled Specification</a>
+<li><a HREF="user-manual_43.html">7.7 Unparsing a (Parsed/Normalized) Term</a>
+<li><a HREF="user-manual_44.html">7.8 Applying a Function to a Term</a>
+</menu>
+<li><a HREF="user-manual_45.html">8 Examples of Stand-alone Tools</a>
+<menu>
+<li><a HREF="user-manual_46.html">8.1 A Stand-alone Boolean Tool</a>
+<li><a HREF="user-manual_47.html">8.2 A Stand-alone Pico Typechecker</a>
+</menu>
+<li><a HREF="user-manual_48.html">9 Future Developments</a>
+<menu>
+<li><a HREF="user-manual_49.html">9.1 Near Future (within 6 months)</a>
+<li><a HREF="user-manual_50.html">9.2 Medium Term (within 1.5 years)</a>
+<li><a HREF="user-manual_51.html">9.3 Long Term (more than 1.5 years)</a>
+</menu>
+<li><a HREF="user-manual_52.html">References</a>
+<li><a HREF="user-manual_53.html">Index</a>
+<li><a HREF="user-manual_54.html">Contents</a>
+<li><a HREF="user-manual_55.html">Footnotes</a>
+<li><a HREF="user-manual_toc.html">Navigation</a>
+</menu>
+
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_55.html"><img alt="Footnotes" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_0.html"><img alt="ASF+SDF Meta-Environment User Manual" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_53.html"><img alt="Index" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>Contents</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.7 Lexical Syntax</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8 Context-free Syntax" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_15.html"><img alt="2.6 Sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.7 Lexical Syntax</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.7 Lexical Syntax</h2>
+
+
+<p>The lexical syntax describes the low level structure of text by means of
+<em>lexical tokens</em>. A lexical token consists of a sort name (used to
+distinguish classes of tokens like identifiers and numbers), and the actual text
+of the token. The lexical syntax also defines which substrings of the text are
+layout symbols or comments and are to be skipped.
+<p>A lexical syntax contains a set of declarations for <em>lexical functions</em>,
+each consisting of a regular expression and a result sort. All functions with
+the same result sort together define the lexical syntax of tokens of that
+sort. Regular expressions may contain any basic symbol and any symbol
+operator as described in  <a HREF="user-manual_13.html">Symbols</a>.
+Spaces are only significant inside strings and character classes.
+<p>The sort name <tt>LAYOUT</tt> is predefined and may not be redeclared.  
+<tt>LAYOUT</tt> defines which parts of the text are <em>layout symbols</em> (also
+known as <em>white space</em>) between lexical tokens and are to be skipped
+during lexical analysis. It may only be used as result sort of
+<a HREF="#LexicalFunctions">lexical functions</a>.
+When a string is matched by both a
+LAYOUT function and by other non-LAYOUT functions, then the interpretation as
+layout symbol is ignored. <tt>LAYOUT</tt> is typically used for defining layout
+and comment conventions.
+<p>Traditionally, lexical syntax and context-free syntax are treated
+differently.  They are defined by different notations and implemented
+by means of different techniques. SDF&#32;provides a much more uniform
+treatment.  In SDF, the only significant difference between the two
+is that no layout will be accepted while recognizing the members of
+the left-hand side of a lexical function, whereas layout <em>will</em>
+be accepted between the members of the left-hand side of a
+context-free function. At the implementation level, both are
+implemented using a single parsing technique.
+<p>Technically, there exist only <em>syntax</em> sections. Both lexical
+syntax sections and context-free syntax sections are transformed into
+such syntax sections after appropriate insertion of optional layout
+between the elements of context-free functions. In rare cases,
+the specification writer may want to control this process explicitly
+and write syntax sections directly. This will not be discussed
+in this manual, but further details can be found in <a HREF="user-manual_52.html#Vis97">[35]</a>.
+<h3><A NAME="LexicalFunctions">2.7.1 Lexical Functions</a></h3>
+
+<p>In their simplest form, declarations of lexical functions consist of a
+sequence of zero or more symbols followed by `<i> -&gt; </i>' and a
+result symbol, say <i>L</i>.  A lexical function may be followed by a list
+of attributes. The regular expression associated with <i>L</i> consists of the
+logical <em>or</em> of all left-hand sides of lexical functions with result sort
+<i>L</i>.  All sort names appearing in left-hand sides of declarations are replaced
+by the regular expression associated with them. 
+<a HREF="#2">Below</a> we give
+an example of a
+simple lexical function definition for defining the first three words that
+Dutch children learn to read.  The three sorts <tt>Aap</tt>, <tt>Noot</tt> and <tt>Mies</tt>, each recognize, respectively, the strings <tt>aap</tt>, <tt>noot</tt> and
+<tt>mies</tt>. The sort <tt>LeesPlank</tt> (a reading-desk used in primary
+education) recognizes the single string <tt>aapnootmies</tt>.
+<p><p><A NAME="2">
+
+   <HR >
+<font size="-1">
+<pre>
+module LeesPlank
+
+imports Layout
+
+exports
+  sorts Aap Noot Mies
+  lexical syntax
+    "aap"         -&gt; Aap
+    "noot"        -&gt; Noot
+    "mies"        -&gt; Mies
+    Aap Noot Mies -&gt; LeesPlank  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Simple lexical functions</div>
+</a>
+   
+
+<h4><A NAME="3">Lexical constructor functions</a></h4>
+For each sort <tt>L</tt> that appears as result sort in the lexical syntax a lexical
+constructor function of the form <tt>l "(" CHAR+ ")" -&gt; L</tt> is automatically
+added to the context-free syntax of the specification.  Here, `<tt>l</tt>' is the
+name of sort `<tt>L</tt>' written in lower-case letters.  In this way, you can
+get access to the characters of lexical tokens.
+<p>The lexical constructor functions will be discussed in more detail
+in the section on equations XXX.
+<h3><A NAME="CharacterClasses">2.7.2 Character Classes</a></h3>
+
+<p>Enumerations of characters occur frequently in lexical definitions. They can
+be abbreviated by using character classes enclosed by `<tt>[</tt>' and 
+`<tt>]</tt>'. 
+A character class contains a list of zero or more characters (which
+stand for themselves) or character ranges such as, for instance, <tt>[0-9]</tt>
+as an abbreviation for the characters <tt>0</tt>, <tt>1</tt>, ..., <tt>9</tt>. 
+In a character range of the form <tt><i>c<sub>1</sub></i>-<i>c<sub>2</sub></i></tt> one of the following 
+restrictions should apply:
+<ul><li><i>c<sub>1</sub></i> and <i>c<sub>2</sub></i> are both lower-case letters and <i>c<sub>2</sub></i> follows <i>c<sub>1</sub></i> in
+  the alphabet, or 
+<li><i>c<sub>1</sub></i> and <i>c<sub>2</sub></i> are both upper-case letters and <i>c<sub>2</sub></i> follows <i>c<sub>1</sub></i> in
+  the alphabet, or 
+<li><i>c<sub>1</sub></i> and <i>c<sub>2</sub></i> are both digits and the numeric value of <i>c<sub>2</sub></i> is
+  greater than that of <i>c<sub>1</sub></i>, or 
+<li><i>c<sub>1</sub></i> and <i>c<sub>2</sub></i> are both escaped non-printable characters and the 
+character code of <i>c<sub>2</sub></i> is greater than that of <i>c<sub>1</sub></i>.
+</ul>
+<p>Definitions for lower-case letter (<tt>LCLetter</tt>), upper-case letters
+(<tt>UCLetter</tt>), lower-case and upper-case letters (<tt>Letter</tt>) and
+digits (<tt>Digit</tt>) are shown in
+in the first example <a HREF="#5">below</a>. 
+<p><p><A NAME="5">
+
+   <HR >
+<font size="-1">
+<pre>
+module LettersDigits1
+
+imports Layout
+
+exports
+  sorts LCLetter UCLetter Letter Digit
+  lexical syntax
+    [a-z]    -&gt; LCLetter
+    [A-Z]    -&gt; UCLetter
+    [a-zA-Z] -&gt; Letter
+    [0-9]    -&gt; Digit
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Defining letter (lower-case and upper-case) and digit</div>
+</a>
+<p>   
+<p>The <a HREF="#6">next example</a>
+gives
+a definition of the sort <tt>LetterOrDigit</tt> that recognizes a single letter
+(upper-case or lower-case) or digit.
+<p><p><A NAME="6">
+
+   <HR >
+<font size="-1">
+<pre>
+module LettersDigits2
+imports Layout
+
+exports
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z]    -&gt; LetterOrDigit
+    [A-Z]    -&gt; LetterOrDigit
+    [0-9]    -&gt; LetterOrDigit
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Defining a single letter or digit</div>
+</a>
+   
+<h4><A NAME="7">Escape Conventions</a></h4>
+<p>Characters with a special meaning in ASF+SDF&#32;may cause problems when they are
+needed as ordinary characters in the lexical syntax. The backslash character
+(`<tt><code>\</code></tt>') is used as escape character for 
+the quoting of special characters. You
+should use `<tt><code>\</code><i>c</i></tt>' whenever you need special 
+character <i>c</i> as ordinary character in a definition.
+All individual characters in character classes, except digits and letters,
+are <em>always</em> escaped with a backslash.
+<p>In literal strings, the following characters are special and should be
+escaped:
+<ul><li><tt>"</tt>: double quote 
+<li><code>\</code>: escape character.
+</ul>
+<p>You may use the following abbreviations in literals and in character classes:
+<ul><li><code>\n</code>: newline character 
+<li><code>\r</code>: carriage return
+<li><code>\t</code>: horizontal tabulation 
+<li><code>\</code><i>nr</i>: a non-printable character with the decimal code <i>nr</i>.
+</ul>
+<h4><A NAME="8">Character Class Operators</a></h4>
+<p>The following operators are available for character classes
+<ul><li><tt>~</tt>: complement of character class. Accepts all characters not in the original class.
+<li><tt>/</tt>: difference of two character classes. Accepts all characters in
+  the first class unless they are in the second class.
+<li><tt>/<code>\</code></tt>: intersection of two character classes. Accepts all
+  characters that are accepted by both character classes.
+<li><tt><code>\</code>/</tt>: union of two character classes. Accepts all characters
+  that are accepted by either character class.
+</ul>
+The first operator is a unary operator, whereas the other three are
+left-associative binary operators.
+<p>The example <a HREF="#9">below</a> gives
+the definion of a single letter or digit
+using the alternative operator <tt><code>\</code>/</tt>.
+This definition is equivalent to the one given 
+<a HREF="#6">earlier</a>.
+<p><p><A NAME="9">
+
+   <HR >
+<font size="-1">
+<pre>
+module LettersDigits3
+exports
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z] \/ [A-Z] \/ [0-9]   -&gt; LetterOrDigit
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Defining a single letter or digit using the alternative operator</div>
+</a>
+<p><p>Another example is shown 
+<a HREF="#10">below</a>.
+This definition of characters contains
+all possible characters, either by means of the ordinary representation
+or via their decimal representation.
+<p><p><A NAME="10">
+
+   <HR >
+<font size="-1">
+<pre>
+module Characters
+
+imports Layout
+
+exports
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+  lexical syntax
+    "\\" ~[]                 -&gt; AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]    -&gt; DecimalEscChar
+    "\\" "2" [0-4] [0-9]     -&gt; DecimalEscChar
+    "\\" "2" "5" [0-5]       -&gt; DecimalEscChar
+
+    AlphaNumericalEscChar    -&gt; EscChar
+    DecimalEscChar           -&gt; EscChar
+
+    ~[\0-\31\"\\] \/ [\t\n]  -&gt; L-Char
+    EscChar                  -&gt; L-Char
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Example of character classes</div>
+</a>
+  
+
+<h3><A NAME="11">2.7.3 Repetition</a></h3>
+<p>
+Lexical tokens are often described by patterns that exhibit a certain
+repetition. The operator described in 
+<a HREF="user-manual_13.html#RepetitionOperator">Repetition</a> 
+can be used to express repetitions.
+<p>The example <a HREF="#12">below</a> demonstrates
+the use of the repetition
+operator <tt>*</tt> for defining identifiers consisting of a letter
+followed by zero or more letters or digits.
+<p><p><A NAME="12">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-repetition
+
+imports Layout
+
+exports
+  sorts Letter DigitLetter
+  lexical syntax
+    [a-z]       -&gt; Letter
+    [a-z0-9]    -&gt; DigitLetter
+
+    Letter DigitLetter* -&gt; Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Defining identifiers using the repetition operator <tt>*</tt></div>
+</a>
+   
+<h3><A NAME="13">2.7.4 Option</a></h3>
+<p>
+If zero or exactly one occurrence of a lexical token is desired the
+option operator described in 
+<a HREF="user-manual_13.html#OptionOperator">Option</a>
+can be used.
+<p>The use of the option operator is illustrated 
+<a HREF="#14">below</a>.
+Identifiers are defined consisting of one letter followed by one, optional,
+digit. This definition accepts <tt>a</tt> and <tt>z8</tt>, but rejects <tt>ab</tt> or <tt>z789</tt>.
+<p><p><A NAME="14">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-optional
+
+imports Layout
+
+exports
+  sorts Letter Digit
+  lexical syntax
+    [a-z]  -&gt; Letter
+    [0-9]  -&gt; Digit
+
+    Letter Digit? -&gt; Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Defining a letter followed by an optional number using the option
+  operator <tt>?</tt> </div>
+</a>
+   
+<h3><A NAME="15">2.7.5 Alternative</a></h3>
+<p>
+Functions with the same result sort together define the lexical syntax of
+tokens for that sort. The left-hand sides of these function definitions form
+the alternatives for this function. Sometimes, it is more convenient to list
+these alternatives explicitly in a single left-hand side or to list
+alternative parts inside a left-hand side.  This is precisely the role of the
+alternative operator described in 
+<a HREF="user-manual_13.html#AlternativeOperator">Alternative</a>.
+<p>The example <a HREF="#16">below</a>
+shows how this operator can be used.  
+It describes identifiers starting with an upper-case letter
+followed by one of the following:
+<ul><li>zero or more lower-case letters, 
+<li>zero or more upper-case letters, or
+<li>zero or more digits.
+</ul>
+<p>According to this definition, 
+<tt>Aap</tt>, <tt>NOOT</tt>, and <tt>B49</tt> are acceptable, but <tt>MiES</tt>, <tt>B49a</tt> and <tt>007</tt> are not.
+<p><p><A NAME="16">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-alternative1
+
+imports Layout
+
+exports
+  sorts UCLetter Digit
+  lexical syntax
+    [A-Z]   -&gt; UCLetter
+    [a-z]   -&gt; LCLetter
+    [0-9]   -&gt; Digit
+
+  UCLetter LCLetter* | UCLetter* | Digit* -&gt; Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Example of alternative operator <tt>|</tt> </div>
+</a>
+<p>   
+<p>Note that the relation between juxtaposition and alternative operator is best
+understood by looking at the line defining <tt>Id</tt>. A parenthesized
+version of this same line would read as follows:
+<div class="quote" align="center">
+<pre>
+  UCLetter (LCLetter* | UCLetter* | Digit*) -&gt; Id
+</pre>
+</div>
+As an aside, note that moving the <tt>*</tt> outside the parentheses as in
+<div class="quote" align="center">
+<pre>
+  UCLetter (LCLetter | UCLetter | Digit)* -&gt; Id
+</pre>
+</div>
+yields a completely different definition: it describes identifiers starting
+with an uppercase letter followed by zero or more lower-case letters,
+uppercase letters or digits. According to this definition <tt>MiES</tt>, <tt>B49a</tt> and <tt>007</tt> would, for instance, be acceptable.
+<p>A slightly more readable definition that is equivalent to the 
+<a HREF="#16">previous one</a>
+is shown <a HREF="#17">below</a>.
+In any case, we recommend to use parentheses to make the scope of alternatives
+explicit.
+<p><p><A NAME="17">
+
+   <HR >
+<font size="-1">
+<pre>
+module Identifiers-alternative2
+
+imports Layout
+
+exports
+  sorts UCLetter LCLetterDigit
+  lexical syntax
+    [A-Z]   -&gt; UCLetter
+    [a-z]   -&gt; LCLetter
+    [0-9]   -&gt; Digit
+
+    (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -&gt; Id
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Example of alternative operator <tt>|</tt> </div>
+</a>
+   
+<h3><A NAME="18">2.7.6 Miscellaneous Operators</a></h3>
+The other operators described in <a HREF="user-manual_13.html">Symbols</a>
+are less frequently used within lexical syntax definitions 
+and will not be illustrated by means of an example.
+<h3><A NAME="19">2.7.7 Examples of Lexical Syntax Definitions</a></h3>
+<p>We will present a number of non-trivial lexical syntax definitions
+in order to get some ideas what can be specified using 
+SDF.
+<h4><A NAME="20">Defining Numbers</a></h4>
+<p>Definitions of integers and real numbers are shown 
+<a HREF="#21">below</a>.
+Note the use of the alternative operator in the
+definitions of <tt>UnsignedInt</tt> and <tt>Number</tt>.  Also note the use
+of the option operator in the definitions of <tt>SignedReal</tt> and <tt>UnsignedReal</tt>.
+<p><p><A NAME="21">
+
+   <HR >
+<font size="-1">
+<pre>
+module Numbers
+
+imports Layout
+
+exports
+  sorts UnsignedInt SignedInt UnsignedReal Number 
+
+  lexical syntax
+    [0] | ([1-9][0-9]*)                           -&gt; UnsignedInt
+
+    [\+\-]? UnsignedInt                           -&gt; SignedInt
+
+    UnsignedInt "." UnsignedInt ([eE] SignedInt)? -&gt; UnsignedReal 
+    UnsignedInt [eE] SignedInt                    -&gt; UnsignedReal
+
+    UnsignedInt | UnsignedReal                    -&gt; Number
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Lexical definition of Numbers</div>
+</a>
+   
+<h4><A NAME="22">Defining Strings</a></h4>
+<p>The specification <a HREF="#23">below</a>
+gives the lexical definition of
+strings which may contain escaped double quote characters.
+It defines a <tt>StringChar</tt> as either
+<ul><li>zero or more
+arbitrary characters except double quote or newline, or
+<li>an escaped double quote, i.e., <code>\"</code>.
+</ul>
+<p>A string consists of zero or more <tt>StringChar</tt>s surrounded by
+double quotes.
+<p><p><A NAME="23">
+
+   <HR >
+<font size="-1">
+<pre>
+module Strings
+
+imports Layout
+
+exports
+  sorts String StringChar
+
+  lexical syntax
+    ~[\"\n]*              -&gt; StringChar
+    [\\][\"]              -&gt; StringChar
+    "\"" StringChar* "\"" -&gt; String
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Lexical definition of String</div>
+</a>
+   
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8 Context-free Syntax" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_15.html"><img alt="2.6 Sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.7 Lexical Syntax</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

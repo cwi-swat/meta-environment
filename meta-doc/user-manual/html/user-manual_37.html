@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 7.1 Parse Table Generation</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.1 Parse Table Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>7.1 Parse Table Generation</h2>
+<p>Before you can parse terms over a module <tt>M</tt> outside the
+ASF+SDF Meta-Environment&#32;you have to obtain a parse table for this module.  There
+are currently three ways to achieve this:
+<ul><li>Interactively using the ASF+SDF Meta-Environment&#10;by selecting module <tt>M</tt> and pushing the <tt>Dump Parse Table...</tt> button in 
+the pop-up menu.
+<li>From the command line using the command <tt>pt-dump</tt>.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated.
+For further information use <tt>pt-dump -h</tt>.
+<li>From the command line using the command <tt>sdf2table</tt>.  You should
+be aware that <tt>sdf2table</tt> needs as input the <em>complete</em> grammar
+of <tt>M</tt>. This means in particular that all imports of <tt>M</tt> should
+be expanded before <tt>sdf2table</tt> can be used. Command line tools are
+available to do this, but we will not describe them here.
+<p>For further information use <tt>sdf2table -h</tt>.
+</ul>
+<p>Before a parse table is generated the SDF&#32;definition is checked with
+respect to well-formedness. When using the <tt>sdf2table</tt> only the 
+checks on SDF&#32;are performed, in the other two cases the checks
+on SDF&#32;and on ASF+SDF&#32;specific features are performed as well.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.1 Parse Table Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 5.1 Technological Background</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_32.html"><img alt="5.2 Architecture" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_30.html"><img alt="5 Technology and Architecture of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_30.html"><img alt="5 Technology and Architecture of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technological Background</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>5.1 Technological Background</h2>
+<h4><A NAME="1">ToolBus</a></h4>
+<p>In many large systems control flow and actual computation are complete
+entangled. This leads to poor extensibility and maintenance problems.  To
+separate coordination from computation we use the ToolBus coordination
+architecture&nbsp;<a HREF="user-manual_52.html#BK98">[2]</a>, a programmable software bus based on process
+algebra.  Coordination is expressed by a formal description of the cooperation
+protocol between components while computation is expressed in components that
+may be written in any language. We thus obtain interoperability of
+heterogeneous components in a (possibly) distributed system.
+<h4><A NAME="2">ATerms</a></h4>
+<p>Coordination protocol and components have to share data. We use
+ATerms&nbsp;<a HREF="user-manual_52.html#BJKO00">[8]</a> for this purpose. These are trees with optional annotations on
+each node.  The annotations are used to store tool-specific information
+like text coordinates or color attributes. The implementation of ATerms
+has two essential properties: terms are stored using maximal subterm
+sharing (reducing memory requirements and making deep equality tests
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over <i>1,000,000</i> nodes)
+can be processed.
+<h4><A NAME="3">SGLR</a></h4>
+<p>In our language-centric approach the parser is an essential tool.  We
+use scannerless, generalized-LR parsing&nbsp;<a HREF="user-manual_52.html#Vis97">[35]</a>.  In this way we
+can parse arbitrary context-free grammars, an essential property when
+combining and parsing large grammars for (dialects of) real-world
+languages.
+<h4><A NAME="4">Term rewriting</a></h4>
+<p>ASF+SDF&#32;specifications are executed as (conditional) rewrite rules. Both
+interpretation and compilation (using the ASF2C compiler&nbsp;<a HREF="user-manual_52.html#BKO99">[10]</a>) of
+these rewrite rules are supported. The compiler generates very efficient
+C code that implements pattern matching and term traversal. The generated
+code uses ATerms as its main data representation, and ensures a minimal
+use of memory during normalization of terms.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_32.html"><img alt="5.2 Architecture" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_30.html"><img alt="5 Technology and Architecture of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_30.html"><img alt="5 Technology and Architecture of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.1 Technological Background</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

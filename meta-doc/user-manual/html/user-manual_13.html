@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.4 Symbols</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_14.html"><img alt="2.5 Aliases" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_12.html"><img alt="2.3 Imports" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.4 Symbols</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.4 Symbols</h2>
+
+<p>The elementary building block of SDF&#32;syntax rules is the "symbol".  It is
+comparable to terminals and non-terminals in other grammar definition
+formalisms. The elementary symbols are:
+<ul><li><em>sort</em>: corresponds to a non-terminal, e.g., <tt>Bool</tt>.  Sort
+  names always start with a capital letter and may be followed by letters
+  and/or digits.  Hyphens ("<tt>-</tt>") may be embedded in a sort name.
+<li><em>literal</em>: corresponds to a terminal, e.g., <tt>true</tt> or 
+<tt>"&#38;"</tt>. It is advisable to quote always your terminals, also
+the terminals consisting of only letters. <em>This is certainly needed
+in case of terminals starting with a capital letter, otherwise these
+literals are interpreted as sorts.</em>
+<li><em>character class</em>: corresponds to a set of characters, 
+e.g., <tt>[a-z]</tt>.
+Character classes will be explained in
+<a HREF="user-manual_16.html#CharacterClasses">Character Classes</a>, 
+they are mainly used when describing the lexical syntax of a language.
+</ul>
+<p>Starting with the elementary symbols, more complex symbols can be constructed
+by way of the following operators.
+<menu>
+<li><a HREF="#OptionOperator">2.4.1 Option</a>
+<li><a HREF="#SequenceOperator">2.4.2 Sequence</a>
+<li><a HREF="#RepetitionOperator">2.4.3 Repetition</a>
+<li><a HREF="#AlternativeOperator">2.4.4 Alternative</a>
+<li><a HREF="#TupleOperator">2.4.5 Tuple</a>
+<li><a HREF="#PermutationOperator">2.4.6 Permutation (deprecated)</a>
+<li><a HREF="#SetOperator">2.4.7 Set (deprecated)</a>
+<li><a HREF="#FunctionOperator">2.4.8 Function</a>
+<li><a HREF="#ParameterizedSorts">2.4.9 Parameterized Sorts</a>
+</menu>
+
+<p>Examples of the use of the various operators will be given in
+<a HREF="user-manual_16.html">Lexical Syntax</a> and 
+<a HREF="user-manual_17.html">Context-freeSyntax</a>. 
+<h3><A NAME="OptionOperator">2.4.1 Option</a></h3>
+
+<p>
+The postfix option operator <tt>?</tt> describes an optional part in a syntax
+rule. For instance, <tt>ElsePart?</tt>  defines zero or exactly one occurrence of
+<tt>ElsePart</tt>.
+<h3><A NAME="SequenceOperator">2.4.2 Sequence</a></h3>
+
+<p>
+The sequence operator <tt>(...)</tt> describes the grouping of two or more
+symbols, e.g., <tt>(Bool "&#38;")</tt>.  Sequences are mostly used to group symbols
+together to form a more complex symbol using one of the available operators,
+e.g., <tt>(Bool "&#38;")*</tt>.  It has no effect to construct a sequence consisting
+of a single symbol.  The empty sequence is represented as <tt>()</tt>.
+<h3><A NAME="RepetitionOperator">2.4.3 Repetition</a></h3>
+
+<p>
+
+
+Repetition operators express that a symbol should occur several times.  In
+this way it is possible to construct flat lists and therefore we usually refer
+to repetitions as <em>lists</em>.
+<p>Repetition operators come in two flavors, with and without separators.
+Furthermore, it is possible to express the minimal number of repetitions of
+the symbol: at least zero times (<tt>*</tt>), at least one time (<tt>+</tt>), or at
+least <i>n</i> times (<tt>n+</tt>). Examples are:
+<ul><li><tt>Bool*</tt> (a list of zero or more <tt>Bool</tt>s).
+<li><tt>&#123;Bool ","&#125;+</tt> (a list of one or more <tt>Bool</tt>s separated by comma's).
+<li><tt>Bool3+</tt> (a list of at least 3 <tt>Bool</tt>s).
+</ul>
+<p>In case of a separated list the element can be an arbitrary symbol, but
+the separator can only be a plain literal.  It is possible to write,
+for instance <tt>&#123;Int Bool&#125;*</tt> or <tt>&#123;Int (","|";")&#125;*</tt>,
+but the <a HREF="user-manual_33.html"><tt>asfsdf-checker</tt></a>, 
+will produce a warning indicating
+that this type of symbol is not supported. 
+Both the <a HREF="user-manual_40.html">interpreter</a> 
+and the <a HREF="user-manual_42.html">compiler</a> do
+not support this type of separated lists.
+<h3><A NAME="AlternativeOperator">2.4.4 Alternative</a></h3>
+
+<p>
+The alternative operator <tt>|</tt> expresses the choice between two symbols,
+e.g., <tt>true | false</tt> represents that either a <tt>true</tt> symbol or a <tt>false</tt> symbol may occur here.  The alternative operator is right associative
+and binds stronger than any other operator on symbols. This is important
+because <tt>Bool "," | Bool ";"</tt> expresses <tt>Bool ("," | Bool) ";"</tt>
+instead of <tt>(Bool ",") | (Bool ";")</tt>. So, in case of doubt use the
+sequence operator in combination with the alternative operator.
+<h3><A NAME="TupleOperator">2.4.5 Tuple</a></h3>
+
+<p>
+The tuple operator <tt>&#35;</tt> describes the grouping of a sequence of symbols of
+a fixed length into a tuple. The notation for tuples is <tt>&lt; , , &gt;</tt>, i.e., a
+comma-separated list of elements enclosed in angle brackets.  For example,
+<tt>Bool &#35; Int &#35; Id</tt> describes a tuple with three elements consisting of a
+<tt>Bool</tt>, an <tt>Int</tt> and an <tt>Id</tt> (in that order).  For instance, <tt>&lt;true, 3, x&gt;</tt> is a valid example of such a tuple.  The tuple operator is
+right associative and binds weaker than the alternative operator.
+<h3><A NAME="PermutationOperator">2.4.6 Permutation (deprecated)</a></h3>
+
+<p>
+The permutation operator <tt>&lt;&lt;...&gt;&gt;</tt> describes an arbitrary permutation of
+a given sequence of symbols.  For example, <tt>&lt;&lt;Bool Int Id&gt;&gt;</tt> represents a
+permutation of the symbols <tt>Bool</tt>, <tt>Int</tt>, and <tt>Id</tt>.  Valid
+instantiations are, for instance, <tt>true 3 x</tt> and <tt>x 3 true</tt>.  There
+are six valid instantiations for this permutation.
+<h3><A NAME="SetOperator">2.4.7 Set (deprecated)</a></h3>
+
+
+
+<p>This operator is deprecated and will disappear from ASF+SDF&#32;specification 
+formalism in the near future. It is advisable not to use this operator
+any more.
+<p>The set operator <tt>Set[...]</tt> is an abbreviation for defining a set of
+elements of a given symbol.  For example, <tt>Set[Int]</tt> abbreviates the
+definition <tt>"&#123;" &#123;Int ","&#125;* "&#125;"</tt>. As a consequence, <tt>&#123;1, 2, 3&#125;</tt> is
+a valid instantiation for the given definition.
+<p>This operator is deprecated and will disappear from ASF+SDF&#32;specification 
+formalism in the near future. It is advisable not to use this operator
+any more.
+<h3><A NAME="FunctionOperator">2.4.8 Function</a></h3>
+
+<p>
+The function operator <tt>(...=&gt;...)</tt> allows the definition of function
+types. Left of <tt>=&gt;</tt> zero or more symbols may occur, right of <tt>=&gt;</tt>
+exactly one symbol may occur.  For example, <tt>(Bool Int) =&gt; Int</tt> represents
+a function with two argument (of types <tt>Bool</tt> and <tt>Int</tt>, respectively)
+and a result type <tt>Int</tt>.
+<h3><A NAME="ParameterizedSorts">2.4.9 Parameterized Sorts</a></h3>
+
+<p>
+Sort names can have parameters. This provides a way of distinguishing 
+a generic sort <tt>List</tt> for integers, e.g. <tt>List[[Int]]</tt>,
+from booleans, e.g. <tt>List[[Bool]]</tt>.
+These sort parameters can be instantiated via the parameters of 
+the module name. A parameterized sort may have the form
+<tt>List[[X,Y]]</tt> where <tt>X</tt> and <tt>Y</tt> are generic sorts
+which will be provided via the parameters of the module name.
+See <a HREF="user-manual_21.html">Parameterization and Renamings</a>
+for more details.
+The context-free syntax rule describing parameterized sorts is:
+<pre>
+   Sort "[[" {Symbol ","}+ "]]" -&gt; Symbol
+</pre>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_14.html"><img alt="2.5 Aliases" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_12.html"><img alt="2.3 Imports" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.4 Symbols</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

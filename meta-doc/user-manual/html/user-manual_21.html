@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.12 Parameterization and Renaming</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_22.html"><img alt="2.13 Variables" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_20.html"><img alt="Examples" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.12 Parameterization and Renaming</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.12 Parameterization and Renaming</h2>
+
+<p>Parameterization and renaming were in fact features of 
+the original ASF&#32;as described
+in <a HREF="user-manual_52.html#BHK89">[1]</a>, but they were never supported by the ASF+SDF&#10;used in the first version of the ASF+SDF Meta-Environment&nbsp;<a HREF="user-manual_52.html#Kli93">[30]</a>. 
+Based on the work described in <a HREF="user-manual_52.html#Vis97">[35]</a>, ASF+SDF&#32;is extended
+with parameterization and symbol renaming<sup><a HREF="user-manual_55.html#footnote-2">2</a></sup>. We will first explain the notion
+of parameterization, later we will give details on symbol renaming.
+<h3><A NAME="Parameters">2.12.1 Parameterization</a></h3>
+
+<p>Module parameterization allows the definition of generic modules
+for lists, pairs, sets, etc. The operations defined in these
+modules are independent of a specific type. When importing a
+parameterized module and instantiating the formal by actual
+parameters the operations become "sort" specific.
+<p>Modules can have formal parameters when defining them. The module name
+is then followed by a list of symbols, representing the formal
+parameters of this module. 
+The specification <a HREF="#2">below</a> shows 
+an example of a parameterized module. In this example the
+formal parameters are used in the parameterized sorts as well,
+in order to increase readability and to avoid name clashes between
+different instances of the same module.
+<p><p><A NAME="2">
+
+   <HR >
+<font size="-1">
+<pre>
+module Pair[X Y]
+
+imports Booleans
+
+hiddens
+  sorts X Y
+exports
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Bool
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Definition of generic pairs</div>
+</a>
+<p><p>When importing a parameterized module the formal parameters have
+to be replaced by actual parameters. 
+The specification <a HREF="#3">below</a> shows 
+an example of a rather complicated import of a parameterized module. 
+The symbols <tt>Pair[[Bool,Bool]]</tt> and <tt>Pair[[Int,Int]]</tt> are the
+actual parameters of the module <tt>Pair[X Y]</tt> in the last import.
+<p><p><A NAME="3">
+
+   <HR >
+<font size="-1">
+<pre>
+module TestPair
+
+imports Booleans Pair[Bool Bool]
+        Integers Pair[Int Int]
+        Pair[Pair[[Bool,Bool]] Pair[[Int,Int]]]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Use of generic pair module</div>
+</a>
+<h3><A NAME="Renamings">2.12.2 Symbol Renaming</a></h3>
+
+<p>Symbol renaming is in fact very similar to parameterization except
+that it is not necessary to add formal parameters to a module.
+The mechanism of symbol renaming allows the overriding of one
+symbol or a set of symbols by another symbol or symbols, respectively. 
+It allows a flexible and concise way of adapting specifications.
+The specification <a HREF="#5">below</a> shows 
+an example of the <tt>Pair</tt> module without parameters. 
+The idea is to achieve the same effect as parameterization
+by explicitly renaming <tt>X</tt> and <tt>Y</tt> to the desired
+names when <tt>Pair</tt> is imported.
+<p><p><A NAME="5">
+
+   <HR >
+<font size="-1">
+<pre>
+module Pair
+
+imports Booleans
+
+hiddens
+  sorts X Y
+exports
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Bool
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Definition of generic pairs</div>
+</a>
+<p><p>During import such module symbols can be renamed via symbol renaming.
+The specification <a HREF="#6">below</a> shows 
+an example of a rather complicated import of the module <tt>Pair</tt>
+using renamings. Renaming <tt>X</tt> to <tt>Bool</tt> is, for instance,
+written as <tt>X =&gt; Bool</tt>.
+<p><p><A NAME="6">
+
+   <HR >
+<font size="-1">
+<pre>
+module TestPair
+
+imports Booleans Pair[X =&gt; Bool Y =&gt; Bool]
+        Integers Pair[X =&gt; Int  Y =&gt; Int]
+        Pair[X =&gt; Pair[[Bool,Bool]] Y =&gt; Pair[[Int,Int]]]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Use of generic pair module</div>
+</a>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_22.html"><img alt="2.13 Variables" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_20.html"><img alt="Examples" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.12 Parameterization and Renaming</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

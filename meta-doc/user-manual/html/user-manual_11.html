@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.2 SDF&#32;comment convention</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_12.html"><img alt="2.3 Imports" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_10.html"><img alt="2.1 Modules and Modular Structure" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.2 SDF&#32;comment convention</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.2 SDF&#32;comment convention</h2>
+
+<p>The comment convention within an SDF&#32;specification is that character
+between <tt>"&#37;&#37;"</tt> and the end of line is comment as well as every
+character between two <tt>"&#37;"</tt> including the newline character.
+An example of the use of comments is given
+<a HREF="#1">below</a>.
+<p><p><A NAME="1">
+
+   <HR >
+<font size="-1">
+<pre>
+module Layout
+
+%% In this module we define the 
+%% comment convention for Sdf.
+
+exports
+  lexical syntax
+    "%%" ~[\n]* [\n]   -&gt; LAYOUT
+    "%" ~[\n\%]+ "%"   -&gt; LAYOUT
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">SDF&#32;comment</div>
+</a>
+<p>  
+<p>This definition also defines the comment convention in SDF&#32;itself.
+More details on defining layout can be found in
+ <a HREF="user-manual_19.html#LexicalRestrictions">Restrictions</a>.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_12.html"><img alt="2.3 Imports" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_10.html"><img alt="2.1 Modules and Modular Structure" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.2 SDF&#32;comment convention</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

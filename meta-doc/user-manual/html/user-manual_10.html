@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.1 Modules and Modular Structure</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_11.html"><img alt="2.2 SDF&#32;comment convention" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.1 Modules and Modular Structure</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.1 Modules and Modular Structure</h2>
+
+<p>An ASF+SDF&#32;specification consists of a sequence of module declarations. Each
+module may define syntax rules as well as semantic rules and the notation used
+in the semantic rules depends on the definition of syntax rules. The entities
+declared in a module may be visible or invisible to other modules. A module
+can use another module from the specification by importing it. As a result,
+all visible names of the imported module become available in the importing
+module.
+<p>The overall structure of a module is:
+<pre>
+module &lt;ModuleName&gt;
+
+  &lt;ImportSection&gt;*
+ 
+  &lt;ExportOrHiddenSection&gt;*
+
+equations
+  &lt;ConditionalEquation&gt;*
+</pre>
+<p>A module consists of a module header, followed by a list of zero or more
+import sections, followed by zero or more hidden or export
+sections and an optional equations section that defines conditional equations.
+<a HREF="user-manual_21.html">Later</a>
+we will see that modules can alse be <em>parameterized</em> and
+that they can be <em>renamed on import</em>.
+<p>Conceptually, a module is a single unit but for technical reasons the
+syntax sections and the equations section are stored in physically
+separate files.  For each module <i>M</i> in a specification two files
+exist: `<tt><i>M</i>.sdf</tt>' contains the syntax sections of <i>M</i> and `<tt><i>M</i>.asf</tt>' contains the equations section of <i>M</i>.
+<p>A <tt>&lt;ModuleName&gt;</tt> is either a simple <tt>&lt;ModuleId&gt;</tt> or a <tt>&lt;ModuleId&gt;</tt> followed by zero or more parameter symbols, e.g., 
+<tt>&lt;Module&gt;[&lt;Symbol&gt;*]</tt>, the symbols will be explained in 
+<a HREF="user-manual_13.html">Symbols</a>.
+<p>An <tt>&lt;ExportOrHiddenSection&gt;</tt> is either an <em>export section</em> or a
+<em>hidden section</em>. The former starts with the keyword <tt>exports</tt> and
+makes all entities in the section visible to other modules.  The latter starts
+with the keyword <tt>hiddens</tt> and makes all entities in the section local to
+the module.
+<p>An <tt>&lt;ExportOrHiddenSection&gt;</tt> has thus one of the two forms:
+<pre>
+exports 
+  &lt;Grammar&gt;+
+</pre>
+or
+<pre>
+hiddens
+  &lt;Grammar&gt;+
+</pre>
+<p>A <tt>&lt;Grammar&gt;</tt> 
+can be a definition of one of the following: 
+<ul><li><a HREF="user-manual_12.html">Imports</a>.
+<li><a HREF="user-manual_14.html">Aliases</a>.
+<li><a HREF="user-manual_15.html">Sorts</a>.
+<li><a HREF="user-manual_16.html">Lexical syntax</a>.
+<li><a HREF="user-manual_17.html">Context-free syntax</a>.
+<li><a HREF="user-manual_19.html">Priorities</a>.
+<li><a HREF="user-manual_22.html">Variables</a>.
+</ul>
+<p>Note that it is possible to have hidden imports as well, this means that
+the contents of a hidden imported module in some module <i>M</i> is visible 
+in <i>M</i> but is not exported to modules which import <i>M</i>.
+<p>There are a number of related properties which have an effect across the
+various grammar items, these items are intermixed with the discussion
+of the grammars:
+<ul><li><a HREF="user-manual_11.html">SDF&#32;comment convention</a>.
+<li><a HREF="user-manual_13.html">Symbols</a>.
+<li><a HREF="user-manual_18.html">Attributes of Lexical and Context-free Functions</a>.
+<li><a HREF="user-manual_20.html">Disambiguation</a>.
+<li><a HREF="user-manual_21.html">Parameterization and Renamings</a>.
+<li><a HREF="user-manual_23.html">Equations</a>.
+</ul>
+<p>Each of these entities and properties
+will now be described and illustrated by examples.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_11.html"><img alt="2.2 SDF&#32;comment convention" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.1 Modules and Modular Structure</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.13 Variables</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_23.html"><img alt="2.14 Equations" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_21.html"><img alt="2.12.2 Symbol Renaming" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Variables</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.13 Variables</h2>
+
+<p>Variables are declared in the `<tt>variables</tt>' section of a module.  Like all
+other entities in a 
+module--except equations--variables may be exported
+(see <a HREF="user-manual_10.html">Modules</a>). 
+A variables section consists of a list of variable
+names followed by a symbol. In fact, a variable declaration can define an
+infinite collection of variables by using a <em>naming scheme</em> instead of a
+simple variable name.  A naming scheme is a regular expression like the ones
+allowed in the <a HREF="user-manual_16.html">lexical syntax</a> except that sorts
+are not allowed. A variable may represent any symbol. 
+<p>In the specification <a HREF="#1">below</a>,
+`<tt>Id</tt>', `<tt>Type3</tt>', and `<tt>Id-list</tt>'
+are examples of variables declared by the naming schemes in 
+the <tt>variables</tt> section.
+Strings that occur in the left-hand side of variable declarations
+should <em>always</em> be quoted.
+<p><p><A NAME="1">
+
+   <HR >
+<font size="-1">
+<pre>
+module VarDecls
+
+imports Layout
+
+exports
+  sorts ID DECL TYPE 
+
+  lexical syntax
+    [a-z]+ -&gt; ID
+ 
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -&gt; DECL 
+    "integer"                 -&gt; TYPE 
+    "real"                    -&gt; TYPE 
+
+hiddens
+  variables
+    "Id"           -&gt; ID 
+    "Type"[0-9]*   -&gt; TYPE 
+    "Id-list"[\']* -&gt; {ID ","}* 
+    "Id-ne-list"   -&gt; {ID ","}+
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Variable declarations using naming schemes</div>
+</a>
+<p>         
+<p>Declared variables can only be used when defining equations. It is not
+allowed to use them in terms.
+<p>Ambiguities due to variables are resolved by the <em>Prefer Variables</em>
+strategy that was discussed in
+<a HREF="user-manual_20.html#lex-ambiguity">Lexical Ambiguities</a>.
+<h3><A NAME="2">2.13.1 Set Operator</a></h3>
+<p>The <a HREF="user-manual_13.html#SetOperator">set operator</a> 
+is an abbrevation for
+representing sets. However, to obtain access to the elements of such
+a set an auxilary variable has to be defined
+as shown <a HREF="#3">below</a>.
+<p><p><A NAME="3">
+
+   <HR >
+<font size="-1">
+<pre>
+module Set
+
+imports Layout
+
+exports
+  sorts Id IdSet
+
+  lexical syntax
+    [a-z]+ -&gt; Id
+ 
+  context-free syntax
+    Set[ID] -&gt; IdSet 
+
+hiddens
+  variables
+    "Id"[0-9]*     -&gt; Id
+    "Id*"[0-9]*    -&gt; {Id ","}* 
+    "IdSet"[0-9]*  -&gt; IdSet
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Variable declarations for Set</div>
+</a>
+         
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_23.html"><img alt="2.14 Equations" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_21.html"><img alt="2.12.2 Symbol Renaming" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.13 Variables</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

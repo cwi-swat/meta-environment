@@ -1,0 +1,688 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.14 Equations</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_24.html"><img alt="3 Examples of ASF+SDF&#32;Specifications" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_22.html"><img alt="2.13.1 Set Operator" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Equations</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.14 Equations</h2>
+
+<p>
+With equations a meaning or semantics may be added to functions declared in
+the lexical and context-free syntax sections. 
+In particular, equations consist of two <em>open terms</em>, i.e.
+terms possibly containing variables.
+<p>In the context of ASF+SDF, an open term is any string that can be parsed
+according to one of the sorts in the specification (possibly including
+variables).  
+Examples of (open) terms are `<tt>true</tt>', `<tt>not(false)</tt>',
+and `<tt>true | Bool</tt>'.
+<p>We will discuss the following aspects of equations:
+<menu>
+<li><a HREF="#1">2.14.1 Unconditional Equations</a>
+<li><a HREF="#2">2.14.2 Conditional Equations</a>
+<li><a HREF="#ExecutingEquations">2.14.3 Executing Equations</a>
+<li><a HREF="#4">2.14.4 List Matching</a>
+<li><a HREF="#7">2.14.5 Lexical Constructor Functions</a>
+<li><a HREF="#DefaultEquations">2.14.6 Default Equations</a>
+<li><a HREF="#MemoFunctions">2.14.7 Memo Functions</a>
+<li><a HREF="#Traversal">2.14.8 Traversal Functions</a>
+<li><a HREF="#20">2.14.9 Which Specifications are Executable?</a>
+<li><a HREF="#22">2.14.10 Common Errors when Executing Specifications</a>
+</menu>
+
+<h3><A NAME="1">2.14.1 Unconditional Equations</a></h3>
+<p>
+An equality then consists of two (possibly open) terms <i>L</i> (lefthand side) and <i>R</i> (righthand
+side) such that:
+<ul><li><i>L</i> and <i>R</i> are of the same sort.
+<li><i>L</i> is not a single variable.
+<li>The variables that occur in <i>R</i> also occur in <i>L</i>.
+</ul>
+<p>It is assumed that the
+variables occurring in the equation are universally quantified. In other
+words, the equality holds for all possible values of the variables.
+<p>The equality of two terms <i>L</i> and <i>R</i> is defined  in ASF+SDF&#32;by the following
+<em>unconditional</em> equation:
+<div class="quote" align="center">
+<tt>[<i>TagId</i>] <i>L</i> = <i>R</i></tt> 
+</div>
+<p>where <i>TagId</i> is a sequence of letters, digits, and/or minus
+signs (<tt>-</tt>) starting with a letter or a digit.
+<h3><A NAME="2">2.14.2 Conditional Equations</a></h3>
+<p>
+An unconditional equation is a special case of a <em>conditional equation</em>,
+i.e., an equality with one or more associated conditions (premises).  The
+equality is sometimes called the <em>conclusion</em> of the conditional
+equation.
+<p>In ASF+SDF&#32;a conditional equation can be written in three (syntactically
+different, but semantically equivalent) ways:
+<table cellspacing="1" cellpadding="0"><tr>
+<td nowrap colspan="1" align="left">
+(a) </td><td nowrap colspan="1" align="left"> <tt>[<i>TagId</i>]</tt> </td><td nowrap colspan="99" align="left"> <tt><i>L</i> = <i>R</i> when <i>C<sub>1</sub></i>, <i>C<sub>2</sub></i>, ...</tt> </td></tr>
+<tr>
+<td nowrap colspan="99" align="left"></td></tr>
+<tr>
+<td nowrap colspan="1" align="left">(b) </td><td nowrap colspan="1" align="left"> <tt>[<i>TagId</i>]</tt> </td><td nowrap colspan="99" align="left"> <tt><i>C<sub>1</sub></i>, <i>C<sub>2</sub></i>, ... ===&gt; <i>L</i> = <i>R</i></tt> </td></tr>
+<tr>
+<td nowrap colspan="1" align="left">(c) </td><td nowrap colspan="1" align="left"> <tt>[<i>TagId</i>]</tt> </td><td nowrap colspan="99" align="left"> <tt><i>C<sub>1</sub></i>, <i>C<sub>2</sub></i>, ...</tt> </td></tr>
+<tr>
+<td nowrap colspan="1" align="left"></td><td nowrap colspan="1" align="left">    </td><td nowrap colspan="99" align="left"> <tt>=================</tt> </td></tr>
+<tr>
+<td nowrap colspan="1" align="left"></td><td nowrap colspan="1" align="left">    </td><td nowrap colspan="99" align="left"> &#32;&#32;&#32;&#32;&#32;<tt><i>L</i> = <i>R</i></tt>
+</td></tr></table>
+
+<p>where <i><tt>C</tt><sub>1</sub></i>, <i><tt>C</tt><sub>2</sub></i>, ...  are conditions which may be 
+either positive (and have  the form `<tt><i>S</i> = <i>T</i></tt>'), 
+or negative (and have the form `<tt><i>S</i> != <i>T</i></tt>').
+<p>The conditions of an equation are evaluated from left to right. Let,
+initially, <i>V</i> be the set of variables occurring in the left-hand side <i>L</i> of the
+conclusion of the equation. For the evaluation of each positive condition we
+distinguish the following cases:
+<ul><li>The condition contains only variables in <i>V</i>. Reduce both sides of the
+  condition to normal form and the condition succeeds if both normal forms are
+  identical. Technically, this is called a <em>join</em> condition.
+<li>One of the sides of the condition contains new variables not in <i>V</i>.
+  Reduce the side that does not contain new variables to normal form and the
+  condition succeeds if this normal form and the other (unnormalized) side of
+  the condition match. The new variables resulting from this match are added
+  to <i>V</i>. This kind of condition is called a <em>match</em> condition.
+</ul>
+<p>The evaluation of negative conditions is described by replacing in the above
+description `identical' and `match' by `not identical' and `do not
+match', respectively.
+<p>	<img  src="warning.gif">
+	
+
+It is not allowed to introduce new variables in a negative condition.
+After the successful evaluation of the conditions, all variables occurring in
+the right-hand side of the conclusion of the equation should be in <i>V</i>.
+<p>New variables (see above) should therefore <b>not</b> occur on <em>both</em> 
+sides of a positive condition, in a negative condition, 
+or in the right-hand side of the conclusion.
+
+<h3><A NAME="ExecutingEquations">2.14.3 Executing Equations</a></h3>
+
+<p>
+
+In the ASF+SDF Meta-Environment, equations can be executed as <em>rewrite rules</em>.  The
+above equation is thus executed as the rewrite rule <i>L  -&gt; R</i>. This
+can be used to reduce some initial closed term (i.e., not containing
+variables) to a <em>normal form</em> (i.e., a term that is not reducible any
+further) by repeatedly applying rules from the specification.
+<p>A term is always reduced in the context of a certain module, say <i>M</i>. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in <i>M</i> itself and in the modules that are (directly or indirectly)
+imported by <i>M</i>.
+<p>The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the <em>leftmost-innermost</em> reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+<p>Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+<em>specificity</em>: more specific rules come before more general rules and
+<a HREF="#DefaultEquations">default equations</a> come last.  
+If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a <em>redex</em> has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper <em>substitutions</em>. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+<h3><A NAME="4">2.14.4 List Matching</a></h3>
+<p>
+
+List matching, also known as <em>associative matching</em>, is a powerful
+mechanism to describe complex functionality in a compact way.  
+<p>The example <a HREF="#5">below</a>
+shows a compact specification to remove double elements from a set.
+<p>Unlike the matching of ordinary (non-list) variables, the matching of a list
+variable may have more than one solution since the variable can match lists of
+arbitrary length.
+<p>As a result, backtracking is needed. For instance, to match <tt>X Y</tt> (a list
+expression containing the two list variables <tt>X</tt> and <tt>Y</tt> indicating
+the division of a list into two sublists) with the list <tt>ab</tt> (a list
+containing two elements) the following three alternatives have to be
+considered:
+<div class="quote" align="center">
+<tt>X = (empty), Y = ab, <br>X = a, Y = b, <br>X = ab, Y = (empty)</tt>.
+</div>
+<p>In the unconditional case, backtracking occurs only during matching. When
+conditions are present, the failure of a condition following the match of a
+list variable leads to the trial of the next possible match of the list
+variable and the repeated evaluation of following conditions.
+<p><p><A NAME="5">
+
+   <HR >
+<font size="-1">
+<pre>
+module Sets
+
+imports Layout
+
+exports
+  sorts Elem Set
+
+  lexical syntax
+    [a-z]+ -&gt; Elem
+
+  context-free syntax
+    Set[Elem] -&gt; Set
+
+hiddens
+  variables
+    "Elem"[0-9]*  -&gt; Elem
+    "Elem*"[0-9]* -&gt; {Elem ","}*
+
+equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Set specification</div>
+</a>
+<p>   
+<p>Another example of list matching in combination with the evaluation
+of conditions is shown <a HREF="#6">below</a>.
+A list of elements is split into two parts of equal length, if the list
+has an even number of elements. In case of a list of uneven length
+the middle element is ignored. The first part of the list is returned
+as result.
+<p><p><A NAME="6">
+
+   <HR >
+<font size="-1">
+<pre>
+module Split
+
+imports Integers
+
+exports
+  sorts El List
+  lexical syntax
+    [a-z]+ -&gt; El
+  context-free syntax
+    {El ","}* -&gt; List
+    "length" "(" List ")"       -&gt; Int
+    "split-in-two" "(" List ")" -&gt; List
+
+hiddens
+  variables
+    "El"[0-9]*  -&gt; El
+    "El*"[0-9]* -&gt; {El ","}* 
+
+equations
+
+  [l-1] length() = 0
+
+  [l-2] length(El, El*) = 1 + length(El*)
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El*2) = El*1
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El, El*2) = El*1 
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Split-in-two specification</div>
+</a>
+  
+
+<h3><A NAME="7">2.14.5 Lexical Constructor Functions</a></h3>
+<p>The only way to access the actual characters of a lexical token is
+by means of the so-called <em>lexical constructor functions</em>.
+For each lexical sort <i>LEX</i> a lexical constructor function is automatically
+derived, the corresponding syntax definition is:
+<i>lex</i><tt>( CHAR* ) -&gt; </tt><i>LEX</i>.
+The sort <tt>CHAR</tt> is a predefined sort to access the characters.
+<p>Characters can be directly addressed by the representation or via
+variables which may be of the sorts <tt>CHAR</tt>, <tt>CHAR*</tt>, or
+<tt>CHAR+</tt>.
+The latter two represent lists of characters.
+In the example <a HREF="#8">below</a> 
+the lexical constructor function <tt>nat-con</tt> is used to remove the leading
+zeros from a number.
+<p>	<img  src="warning.gif">
+	
+
+The argument of a lexical constructor may be an
+arbitrary list of characters and there is <em>no check that they match
+the lexical definition of the corresponding sort</em>.
+This means that when writing a specification one should be aware that
+it is possible to construct illegal lexical entities, for instance,
+by inserting letters in an integer.
+In the example <a HREF="#9">below</a> 
+via the lexical constructor function <tt>nat-con</tt> a natural
+number containing the letter <tt>a</tt> is constructed.
+<p><p><A NAME="8">
+
+   <HR >
+<font size="-1">
+<pre>
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -&gt; NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -&gt; CHAR+
+
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Use of lexical constructor functions</div>
+</a>
+<p>    
+<p><p><A NAME="9">
+
+   <HR >
+<font size="-1">
+<pre>
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -&gt; NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -&gt; CHAR+
+
+equations
+
+  [1] nat-con(Char+) = nat-con(Char+ "a")  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Illegal use of lexical constructor functions</div>
+</a>
+    
+<h3><A NAME="DefaultEquations">2.14.6 Default Equations</a></h3>
+
+<p>The evaluation strategy for normalizing terms given the equations is
+based on innermost rewriting. All equations have the same priority.
+Given the outermost function symbol of a redex the set of equations with
+this outermost function symbol in the left-hand side is selected and all
+these rules will be tried.  However, sometimes a specification writer
+would like to write down a rule with a special status "<em>try this rule
+if all other rules fail</em>".  A kind of default behaviour is needed. ASF&#10;offers functionality in order to obtain this behaviour. If the <i>TagId</i>
+of an equation starts with <tt>default-</tt> this equation is considered to
+be a special equation which will only be applied if no other rule matches.
+The specification <a HREF="#11">below</a> shows
+an example of the use of a default equation.
+<p><p><A NAME="11">
+
+   <HR >
+<font size="-1">
+<pre>
+module Types
+
+imports Booleans
+
+exports
+  sorts Type
+  context-free syntax
+    "natural"     -&gt; Type
+    "string"      -&gt; Type
+    "nil-type"    -&gt; Type
+    "compatible" "(" Type "," Type ")" -&gt; Bool 
+
+hiddens
+  variables
+    "Type"[0-9]*  -&gt; Type
+
+equations
+
+  [Type-1]  compatible(natural, natural) = true
+
+  [Type-2]  compatible(string, string) = true
+
+  [default-Type] compatible(Type1,Type2) = false
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using a default equation</div>
+</a>
+   
+<h3><A NAME="MemoFunctions">2.14.7 Memo Functions</a></h3>
+
+<p> 
+<p>Computations may contain unnecessary repetitions.  This is the case when a
+function with the same argument values is computed more than once.  Memo
+functions exploit this behaviour and can improve the efficiency of ASF+SDF&#32;
+specifications.
+<p>Given a set of argument values for some function the normal form can be
+obtained via rewriting. It is possible that some function is called with the
+same set of arguments over and over again. Each time the function is rewritten
+to obtain the same normal again. By means of adding the <tt>memo</tt> attribute,
+this behaviour is improved by storing the set of argument values and the
+derived normal form in a memo-table.  For each set of argument values it is
+checked whether there exists a normal form in the memo-table. If so, this
+normal form is returned.  If not, the function given this set of argument
+values is normalized and stored in the memo-table.
+There is some overhead involved in accessing the memo-table.  Therefore,
+it is not wise to add the memo attribute to each function.  With respect
+to the operational behaviour adding a memo attribute does not have any
+effect.
+<p>The Fibonacci function shown <a HREF="#13">below</a>
+is decorated with the memo attribute to improve its efficiency.
+<p><p><A NAME="13">
+
+   <HR >
+<font size="-1">
+<pre>
+module Fib
+
+imports Layout
+
+exports
+  sorts Int
+  context-free syntax
+    "0"             -&gt; Int
+    "s" "(" Int ")" -&gt; Int
+
+  context-free syntax
+    add(Int, Int) -&gt; Int
+
+    fib(Int)      -&gt; Int {memo}
+
+hiddens
+  variables
+    [xy][0-9]* -&gt; Int
+
+equations
+
+  [add-s] add(s(x), y) = s(add(x, y))
+  [add-z] add(0, y) = y
+
+  [fib-z] fib(0) = s(0)
+  [fib-o] fib(s(0)) = s(0)
+  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))
+
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using the memo attribute when defining Fibonacci</div>
+</a>
+<p>   
+<p>The resulting improvement in performance is shown
+as follows:
+<div align="center">
+<A NAME="14">
+<table><tr><td colspan="1" align="LEFT">
+ fib(n) </td><td colspan="1" align="CENTER"> Time without memo (sec) </td><td colspan="1" align="CENTER"> Time with memo (sec) </td></tr>
+<tr><td colspan="1" align="LEFT">
+fib(16)          </td><td colspan="1" align="CENTER"> &#32;2.0 </td><td colspan="1" align="CENTER"> 0.7  </td></tr>
+<tr><td colspan="1" align="LEFT">
+fib(17)          </td><td colspan="1" align="CENTER"> &#32;3.5 </td><td colspan="1" align="CENTER"> 1.1  </td></tr>
+<tr><td colspan="1" align="LEFT">
+fib(18)          </td><td colspan="1" align="CENTER"> &#32;5.9 </td><td colspan="1" align="CENTER"> 1.8  </td></tr>
+<tr><td colspan="1" align="LEFT">
+fib(19)          </td><td colspan="1" align="CENTER">  10.4 </td><td colspan="1" align="CENTER"> 3.3  </td></tr>
+<tr><td colspan="1" align="LEFT">
+</td></tr></table>
+
+<div align="center">Execution times for the evaluation of <i><em>&nbsp;fib(n)</i></div>
+<p></em></a>
+</div>
+
+<h3><A NAME="Traversal">2.14.8 Traversal Functions</a></h3>
+
+<p>
+
+Program analysis and program transformation usually take the syntax
+tree of a program as starting point.  One common
+problem that one encounters is how to express the <em>traversal</em> of
+the tree: visit all the nodes of the tree and extract information from
+some nodes or make changes to certain other nodes.
+<p>The kinds of nodes that may appear in a program's syntax tree are
+determined by the grammar of the language the program is written
+in. Typically, each rule in the grammar corresponds to a node category
+in the syntax tree. Real-life languages are described by grammars which
+can easily contain several hundred, if not thousands of grammar rules.
+This immediately reveals a hurdle for writing tree traversals: a naive
+recursive traversal function should consider many node categories and
+the size of its definition will grow accordingly.  This becomes even
+more dramatic if we realize that the traversal function will only do
+some real work (apart from traversing) for very few node categories.
+<p>Traversal functions in ASF+SDF&nbsp;<a HREF="user-manual_52.html#BKV03">[13]</a> solve this problem.
+We distinguish three kinds of traversal functions, defined as follows.
+<dl><dt><b>Transformer:</b><dd> a sort-preserving transformation that 
+will traverse its first argument. Possible extra arguments may contain
+additional data that can be used (but not modified) during the traversal.
+A transformer is declared as follows:
+<blockquote><i>f(S<sub>1</sub> , ..., S<sub>n</sub>)  -&gt; S<sub>1</sub> <tt>&nbsp;&#123;traversal(trafo,&nbsp;...)&#125;</i></tt></blockquote>
+<p>Because a transformer always returns the same sort, it is type-safe. A
+transformer is used to transform a tree.
+<dt><b>Accumulator:</b><dd> a mapping of all node types to a single type. 
+It will traverse its first argument, while the second
+argument keeps the accumulated value. An accumulator is declared as follows:
+<blockquote><i>f(S<sub>1</sub> , S<sub>2</sub> , ..., S<sub>n</sub>)  -&gt; S<sub>2</sub> <tt>&nbsp;&#123;traversal(accu,&nbsp;...)&#125;</i></tt></blockquote> 
+<p>After each application of an accumulator, the accumulated argument is updated.
+The next application of the accumulator, possibly somewhere else in the term,
+will use the <em>new</em> value of the accumulated argument. In other words,
+the accumulator acts as a global, modifiable, state during the traversal.
+<p>An accumulator function never changes the tree, only its accumulated argument.
+Furthermore, the type of the second argument has to be equal to the result
+type. The end-result of an accumulator is the value of the accumulated
+argument. By these restrictions, an accumulator is also type-safe for every
+instantiation.
+<p>An accumulator is meant to be used to extract information from a tree.
+<dt><b>Accumulating transformer:</b><dd> a sort preserving transformation
+that accumulates information while traversing its first argument. The
+second argument maintains the accumulated value. The return value of
+an accumulating transformer is a tuple consisting of the transformed
+first argument and accumulated value. An accumulating transformer
+is declared as follows:
+<blockquote><i>f(S<sub>1</sub> , S<sub>2</sub> , ..., S<sub>n</sub>)  -&gt; S<sub>1</sub> &#35; S<sub>2</sub> &#123;<tt>&nbsp;traversal(accu,&nbsp;trafo,&nbsp;...)</tt>&#125;</i></blockquote>
+<p>An accumulating transformer is used to simultaneously extract information from a
+tree and transform it.
+</dl>
+<p>Having these three types of traversals, they must be provided with visiting
+strategies. Visiting strategies determine the order of traversal and the
+"depth" of the traversal. We provide the following two strategies for each
+type of traversal:
+<dl><dt><b>Bottom-up:</b><dd> the traversal visits <em>all</em> the subtrees of a node where
+  the visiting function applies in an <em>bottom-up</em>&#32;fashion.  The
+  annotation <tt>bottom-up</tt> selects this behavior.  A traversal function without an
+  explicit indication of a visiting strategy also uses the bottom-up strategy.
+<dt><b>Top-down:</b><dd> the traversal visits the subtrees of a node in an top-down
+  fashion and stops recurring at the first node where the visiting function
+  applies and does not visit the subtrees of that node. The annotation
+  <tt>top-down</tt> selects this behavior.
+</dl>
+<p>Beside the three types of traversals and the order of visiting, we can also
+influence whether we want to stop or continue at the matching occurrences:
+<dl><dt><b>Break:</b><dd> the traversal stops at matching occurrences.
+<dt><b>Continue:</b><dd> the traversal continues at matching occurrences.
+</dl>
+<p>The visiting strategies in combination with the continuation strategies
+is visualized in the <a HREF="#16">"traversal cube"</a>. The current implementation of the
+traversal mechanism only supports the left-to-right visiting strategy.
+<div align="center">
+<A NAME="16">
+<img  src="order.gif">
+<div align="center">The "traversal cube": principal ways of traversing a tree</div>
+</a>
+</div>
+<p><p>We give two simple examples of traversal functions that are both
+based on the <a HREF="#17">tree language</a>
+that describes binary prefix expressions with natural numbers as leaves.
+Examples are <tt>f(0,1)</tt> and <tt>f(g(1,2), h(3,4))</tt>.
+<p><p><A NAME="17">
+
+   <HR >
+<font size="-1">
+<pre>
+module Tree-syntax
+imports Naturals
+exports
+  sorts TREE
+  context-free syntax
+    NAT           -&gt; TREE
+    f(TREE, TREE) -&gt; TREE
+    g(TREE, TREE) -&gt; TREE
+    h(TREE, TREE) -&gt; TREE
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">A simple tree language</div>
+</a>
+<p>     
+<p>Our <a HREF="#18">first example</a> 
+transforms a given tree into a new tree in which
+all numbers have been incremented. 
+<p><p><A NAME="18">
+
+   <HR >
+<font size="-1">
+<pre>
+module Tree-inc
+imports Tree-syntax
+  exports
+    context-free syntax
+      inc(TREE) -&gt; TREE {traversal(trafo, top-down, continue)}
+equations
+[1] inc(N) = N + 1  
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">The transformer <tt>inc</tt> increments all numbers in a tree</div>
+</a>
+<p>   
+<p>Our <a HREF="#19">second example</a>
+computes the sum of all numbers in a tree.
+For many more examples and a detailed description of traversal functions
+see&nbsp;<a HREF="user-manual_52.html#BKV01">[11]</a>.
+<p><p><A NAME="19"> 
+
+   <HR >
+<font size="-1">
+<pre>
+module Tree-sum
+imports Tree-syntax
+exports
+  context-free syntax
+    sum(TREE, NAT) -&gt; NAT {traversal(accu, top-down, continue)}
+equations
+[1] sum(N1, N2) = N1 + N2
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">The accumulator <tt>sum</tt> that sums all numbers in a tree.</div>
+</a>
+<p>   
+<p>The SDF&#32;definition of a traversal function has to fulfill a number of 
+requirements:
+<ul><li>Traversal functions can only be defined in the context-free syntax
+section.
+<li>Traversal functions must be <a HREF="user-manual_17.html#PrefixFunctions">prefix functions</a>.
+<li>The first argument of the prefix function is always a sort of a node
+of the tree that is traversed, for both accumulating as well as
+transformation functions.
+<li>In case of a transformation function the result sort should always
+be same as the sort of the first argument.
+<li>In case of an accumulating function, the second argument represents
+the accumulator and the result sort should be of the same sort.
+<li>In case of an accumulating transformation function, the first
+argument
+represents the tree node, the second the accumulator, and the result sort
+should be a tuple consisting of the tree node sort (first element
+of the tuple) and the accumulator (second element of the tuple).
+<li>The traversal functions may have more arguments, the only restriction
+is that they should be consistent over the various occurrences of the
+same traversal function.
+<li>The order of the traversal attributes is free, but should be used
+consistently.
+</ul>
+In the SDF&#32;part of a module it is needed to define traversal functions
+for all sorts which are needed in the equations. 
+<h3><A NAME="20">2.14.9 Which Specifications are Executable?</a></h3>
+<p>Which ASF+SDF&#32;specifications can be executed? 
+The <a HREF="#21">specification of sets</a> 
+illustrates a non-executable specification,
+since equation <tt>[2]</tt>, which expresses that two elements in a set may
+be exchanged, will lead to an infinite rewriting loop.
+<p><p><A NAME="21">
+
+   <HR >
+<font size="-1">
+<pre>
+module ItemSet
+
+imports Layout
+
+exports
+  sorts Item Set 
+
+  lexical syntax
+    [a-z]+ -&gt; Item 
+
+  context-free syntax
+    Set[Item] -&gt; Set
+
+hiddens
+  variables
+    "i"[0-9]* -&gt; Item
+    "l"[0-9]* -&gt; {Item ","}* 
+
+equations
+
+  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
+  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Non-executable specification for sets</div>
+</a>
+   
+<h3><A NAME="22">2.14.10 Common Errors when Executing Specifications</a></h3>
+<ul><li>When using the inequality operator <tt>!=</tt> in a condition,
+no new variables may be introduced in either side of the inequality.
+<li>If the normal form of a term still contains function symbols
+that should have been removed during rewriting, you probably have
+forgotten one or more equations that define the function.
+A typical situation is that you have given an <em>incomplete</em> set of equations
+defining the function.
+<li>The rewriting process does not stop. Your equations probably contain
+an infinite loop.
+<li>Be careful when a condition contains both instantiated and 
+uninstantiated variables.
+</ul>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_24.html"><img alt="3 Examples of ASF+SDF&#32;Specifications" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_22.html"><img alt="2.13.1 Set Operator" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Equations</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

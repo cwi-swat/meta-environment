@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:10 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 7.6 Rewriting a Term using a Compiled Specification</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_43.html"><img alt="7.7 Unparsing a (Parsed/Normalized) Term" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_41.html"><img alt="7.5 Compiling a Specification" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.6 Rewriting a Term using a Compiled Specification</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>7.6 Rewriting a Term using a Compiled Specification</h2>
+
+<p>In <a HREF="user-manual_29.html">Compiling Specifications</a>
+we explained how a given module <tt>M</tt>
+can be compiled into C code. Here we describe how to compile and
+use this generated C code. The steps are as follows:
+<ul><li>Go to the directory where the ASF+SDF2C compiler has generated
+the C code.
+<li>Check whether there is a <tt>Makefile</tt>. If this is not the case
+or you expect it to be invalid, generate a new one as follows:
+<pre>
+   genmakefile -m M &gt; Makefile
+</pre>
+where <tt>M</tt> is the name of the top module for which the C code was
+generated.  There should also exist a file <tt>ModuleName.module-list</tt> in the directory with generated C code.
+<li>Use <tt>make</tt> to compile the generated C code.
+The result is both a library <tt>libM.a</tt>
+and an executable <tt>M</tt>. This library can be used 
+when several compiled specifications have to be combined into a single executable
+or when compiled specifications have to be combined with hand-written C code.
+<li><p>After 
+<a HREF="user-manual_38.html">parsing the term</a>
+that has to be reduced, this term can
+be reduced via the compiled code as follows:
+<pre>
+COMPILER_OUTPUT/ModuleName &lt; term.tree &gt; reduct.tree
+</pre>
+<p><a HREF="user-manual_43.html">Unparsing</a> 
+explains how <tt>reduct.tree</tt> can be
+converted to a textual representation.
+</ul>
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_43.html"><img alt="7.7 Unparsing a (Parsed/Normalized) Term" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_41.html"><img alt="7.5 Compiling a Specification" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.6 Rewriting a Term using a Compiled Specification</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

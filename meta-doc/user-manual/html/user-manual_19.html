@@ -1,0 +1,427 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.10 Priorities</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_20.html"><img alt="2.11 Disambiguation" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_18.html"><img alt="2.9 Attributes of Lexical and Context-free Functions" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.10 Priorities</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.10 Priorities</h2>
+
+<p>The context-free syntax defined in an ASF+SDF&#32;specification may be 
+ambiguous: there are sentences which have more than one associated tree. 
+The common example is the arithmetic expression in which definitions 
+of the priority or associativity of operators are missing. There are 
+three mechanisms for defining associativity and priority:
+<ul><li><a HREF="#RelativePriorities">Relative priorities of functions</a>
+  defined in the <tt>context-free priorities</tt> section.
+<p><A NAME="1">&nbsp;</A>
+<li><a HREF="#AssociativeFunctions">Associativity of functions</a>
+ defined as attributes following the function declaration.
+<li><a HREF="#GroupAssoc">Associativity of groups of functions</a>
+  defined in the <tt>context-free priorities</tt> section.
+</ul>
+<p>Closely related with priorities are brackets that can be used to
+overrule priorities.  We will first describe bracket functions,
+and then the various methods for defining priorities.
+<h3><A NAME="BracketFunctions">2.10.1 Bracket Functions</a></h3>
+
+<p>A bracket function has the form `<tt><i>open</i> <i>S</i> <i>close</i> -&gt; <i>S</i></tt>' where <i>open</i>
+and <i>close</i> are literals acting as opening and closing parenthesis for sort
+<i>S</i>. Examples are `<tt>(</tt>' and `<tt>)</tt>' in arithmetic expressions.
+In most cases, such brackets are only
+introduced for grouping and disambiguation, but have no further meaning. By
+adding the attribute <tt>bracket</tt> to the function declaration, it will not be
+included in the abstract syntax.
+The definition of a bracket function for the sort <tt>EXPR</tt> 
+is given
+<a HREF="#3">below</a>.
+<p><p><A NAME="3">
+
+   <HR >
+<font size="-1">
+<pre>
+module BracketExpr
+
+imports Layout
+
+exports
+  sorts EXPR
+
+  lexical syntax
+    [0-9]+ -&gt; EXPR
+
+  context-free syntax
+    "(" EXPR ")" -&gt; EXPR {bracket}
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Syntax definition with a bracket function</div>
+</a>
+<p><p>Since brackets are necessary for overruling the priority and associativity of
+functions,  it is required that bracket 
+functions are declared for the argument and result sorts of
+<ul><li>all functions appearing in priority declarations, and
+<li>all functions having one of the attributes <tt>left</tt>, <tt>right</tt>, 
+<tt>assoc</tt>, or <tt>non-assoc</tt>.
+</ul>
+<h3><A NAME="RelativePriorities">2.10.2 Relative Priorities</a></h3>
+
+<p>The relative priority of two functions is defined 
+in the `<tt>context-free priorities</tt>' section 
+by including <tt><i>F</i> &gt; <i>G</i></tt>,
+where <i>F</i> and <i>G</i> are 
+as written in the context-free grammar. Functions with a higher 
+priority bind more strongly than functions with lower priorities and 
+the nodes corresponding to them should
+thus appear at lower levels in the tree than nodes corresponding to functions
+with lower priorities. Lists of functions may be used in a priority
+declaration: <tt><i>F</i> &gt; &#123;<i>G</i>, <i>H</i>&#125;</tt> is an 
+abbreviation for <tt><i>F</i> &gt; <i>G</i>, <i>F</i> &gt; <i>H</i></tt>.
+Note that this tells us nothing about the priority relation between <i>G</i> and <i>H</i>. 
+<h3><A NAME="AssociativeFunctions">2.10.3 Associative Functions</a></h3>
+
+<p>Associativity attributes can be attached to binary functions of the form 
+`<tt><i>S</i> <i>op</i> <i>S</i> -&gt; <i>S</i></tt>', where <i>op</i> is a symbol or empty. 
+Without associativity attributes, nested occurrences of such 
+functions immediately lead to ambiguities, as is shown by the 
+sentence `<tt>S-string op S-string op S-string</tt>' where 
+`<tt>S-string</tt>' is a string produced by symbol <i>S</i>. 
+The particular associativity 
+associated with <i>op</i> determines the intended interpretation of such sentences.
+<p>We call two occurrences of functions <i>F</i> and <i>G</i> <em>related</em>, when the node
+corresponding to <i>F</i> has a node corresponding to <i>G</i> as first or last child.
+The associativity attributes define how to accept or reject trees containing
+related occurrences of the same function, <i>F</i>:
+<ul><li><tt>left</tt>: related occurrences of <i>F</i> associate from left to right. 
+<li><tt>right</tt>: related occurrences of <i>F</i> associate from right to left. 
+<li><tt>assoc</tt>: related occurrences of <i>F</i> associate from left to right.
+<li><tt>non-assoc</tt>: related occurrences of <i>F</i> are not allowed.
+</ul>
+<p>Currently, there is no syntactic or semantic difference between `<tt>left</tt>'
+and `<tt>assoc</tt>', but we may change the semantics of the `<tt>assoc</tt>'
+attribute in the future.
+<p><a HREF="#6">Below</a> we give
+an example of a definition of
+simple arithmetic expressions with the usual priorities and
+associativities.
+<p><p><A NAME="6">
+
+   <HR >
+<font size="-1">
+<pre>
+module SimpleExpr
+
+imports Layout
+
+exports
+  sorts E 
+
+  lexical syntax
+    [0-9]+ -&gt; E 
+
+  context-free syntax
+    E "+" E   -&gt; E {left}
+    E "*" E   -&gt; E {left}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "*" E -&gt; E &gt; 
+    E "+" E -&gt; E
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Simple context-free priority definition</div>
+</a>
+   
+<h3><A NAME="GroupAssoc">2.10.4 Groups of Associative Functions</a></h3>
+
+<p>Groups of associative functions define how to accept or reject trees
+containing related occurrences of different functions with the same priority.
+They are defined by prefixing a list of context-free functions in a priority
+declaration with one of the following attributes:
+<ul><li><tt>left</tt>: related occurrences of <i>F</i> and <i>G</i> associate from left to right. 
+<li><tt>right</tt>: related occurrences of <i>F</i> and <i>G</i> associate from right to left.
+<li><tt>non-assoc</tt>: related occurrences of <i>F</i> and <i>G</i> are not allowed.
+</ul>
+<p>where <i>F</i> and <i>G</i> are functions appearing in the list.
+<a HREF="#8">below</a>,
+an example of the use of grouped associativity.
+<p><p><A NAME="8">
+
+   <HR >
+<font size="-1">
+<pre>
+module ComplexExpr
+
+imports Layout
+
+exports
+  sorts E 
+
+  lexical syntax
+    [0-9]+ -&gt; E
+
+  context-free syntax
+    E "+" E   -&gt; E {left}
+    E "-" E   -&gt; E {non-assoc}
+    E "*" E   -&gt; E {left}
+    E "/" E   -&gt; E {non-assoc}
+    E "^" E   -&gt; E {right}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "^" E -&gt; E &gt; 
+    {non-assoc: E "*" E -&gt; E
+                E "/" E -&gt; E} &gt;
+    {left: E "+" E -&gt; E
+           E "-" E -&gt; E}
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">More complex associativity and priority definitions</div>
+</a>
+   
+<h3><A NAME="LexicalRestrictions">2.10.5 Restrictions</a></h3>
+
+
+
+<p>
+
+
+
+Lexical syntax can be highly ambiguous.  Consider 
+a simple lexical definition for identifiers
+like the one given <a HREF="user-manual_16.html#12">earlier</a>.
+When recognizing the text <tt>abc</tt>, what should we return: <tt>a</tt>, <tt>ab</tt>
+or, <tt>abc</tt>? 
+We discuss the strategy <em>Prefer Longest Match</em> for
+resolving this kind of ambiguity in
+<a HREF="user-manual_20.html#lex-ambiguity">Lexical Ambiguities</a>.
+<p>Here, we describe the notion of <em>restrictions</em> that enable the formulation
+of this and other lexical disambiguation strategies.
+<p>A restriction limits the <em>lookahead</em> for a given symbol; it indicates
+that a symbol may not be followed by a character from a given character class.
+A lookahead may consist of more than one character class.  Restrictions come
+in two flavors:
+<ul><li>lexical restrictions;
+<li>context-free restrictions.
+</ul>
+<p>The general form of a restriction is 
+<pre>
+&lt;Symbol&gt;+ -/- &lt;Lookaheads&gt;
+</pre>
+<p>In case of lexical restrictions <tt>&lt;Symbol&gt;</tt> may be   
+either a literal or sort.  
+In case of context-free restrictions only a sort or symbol is allowed.
+The restriction operator <tt>-/-</tt> should be read as "may not be
+followed by".
+Before the restriction operator <tt>-/-</tt> a list of symbols
+is given for which the restriction holds.
+<p>In the example<sup><a HREF="user-manual_55.html#footnote-1">1</a></sup>
+<a HREF="#10">below</a>
+both <tt>let</tt> and <tt>in</tt> may not be followed by a letter.
+This example shows how lexical restrictions can be used to prevent
+the recognition of erroneous expressions in a small functional language.
+The lexical restriction deals with the possible confusion between
+the reserved words <tt>let</tt> and <tt>in</tt> and variables (of sort <tt>Var</tt>).
+It forbids the recognition of, for instance, <tt>let</tt> as part
+of <tt>letter</tt>. Without this restriction <tt>letter</tt> would be recognized
+as the keyword <tt>let</tt> followed by the variable  <tt>ter</tt>.
+The context-free restriction forbids that a variable is directly
+followed by a letter. It does not forbid layout characters between
+the letters, e.g. <tt>a b</tt> is a legal recognizable string.
+<p><p><A NAME="10">
+
+   <HR >
+<font size="-1">
+<pre>
+module Functional
+
+imports Layout
+
+exports
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -&gt; Var
+  context-free syntax
+    Var                          -&gt; Term
+    Term Term                    -&gt; Term {left}
+    "let" Var "=" Term "in" Term -&gt; Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Using restrictions in the definition of a simple functional language</div>
+</a>
+<p>   
+<p><tt>&lt;Lookaheads&gt;</tt> are slightly more complex.  The most compact way is to
+give the SDF&#32;definition of the <tt>&lt;Lookaheads&gt;</tt> and illustrate their use by
+means of some examples.
+<pre>
+context-free syntax
+  CharClass                    -&gt; Lookahead
+  CharClass "." Lookaheads     -&gt; Lookahead
+  Lookahead                    -&gt; Lookaheads
+  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
+  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads 
+</pre>
+<p>The next example illustrates the use of restrictions to define a
+`safe' way of layout.  
+<a HREF="user-manual_16.html">Recall</a>
+that optional layout, represented by the symbol <tt>LAYOUT?</tt>,
+may be recognized between the 
+members of the left-hand side of a context-free syntax rule.
+<p>However, if a such a member recognizes the empty string, this gives rise to a
+<a HREF="user-manual_20.html#lex-ambiguity">lexical ambiguity</a>. 
+This problem is avoided by the definition 
+given <a HREF="#11">below</a>:
+it simply forbids that optional layout is followed by layout characters.
+<p><p><A NAME="11">
+
+   <HR >
+<font size="-1">
+<pre>
+module Layout
+
+exports
+  lexical syntax
+    [\ \t\n] -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Safe way of defining <tt>LAYOUT</tt></div>
+</a>
+<p><p>The example shown <a HREF="#12">below</a>
+illustrates the
+use of restrictions to extend the previous layout definition with C-style
+comments. For readability we give here <em>two</em> restrictions whereas the
+first one is already imported from 
+<a HREF="#11">module <tt>Layout</tt></a>.  
+The repetition of this first restriction is
+redundant and could be eliminated.
+<p><p><A NAME="12">
+
+   <HR >
+<font size="-1">
+<pre>
+module Comment
+
+imports Layout
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -&gt; ComWord
+
+  context-free syntax
+    "/*" ComWord* "*/" -&gt; Comment
+    Comment            -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\/].[\*]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Definition of C comments</div>
+</a>
+<p><p>A frequently asked question is when to use <em>lexical</em> restrictions
+and when to use <em>context-free</em> restrictions. 
+In one of the <a HREF="#10">previous examples</a>
+the lexical restrictions on <tt>let</tt> and <tt>in</tt>
+cannot be defined using context-free restrictions
+because these keywords do not "live" at the context-free level.
+Is it possible to put a lexical restriction on <tt>Var</tt>?
+Yes, but it will have no effect, because internally the
+lexical <tt>Var</tt> is injected in the context-free <tt>Var</tt>.
+The general rule is to define the restrictions always on the
+context-free level and not on the lexical level unless a situation 
+as will be discussed in the next paragraph occurs.
+<p>The specification 
+<a HREF="#13">below</a> is an example of
+an erroneous use of
+context-free expressions, because it prevents the recognition of
+<tt>(abc)def</tt>. If we want to enforce the correct restriction, it
+is necessary to transform this context-free restriction into
+a lexical restriction.
+<p><p><A NAME="13">
+
+   <HR >
+<font size="-1">
+<pre>
+module RestrictedExpressions
+
+imports Layout
+
+exports
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -&gt; Expr
+
+  context-free syntax
+    Expr Expr    -&gt; Expr {left}
+    "(" Expr ")" -&gt; Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]
+</pre>
+</font></font> 
+   <HR >
+
+<div align="center">Erroneous use of restrictions in the definition of simple expressions</div>
+</a>
+   
+
+<h3><A NAME="PreferAvoidReject">2.10.6 Preferring, Avoiding or Rejecting Parses</a></h3>
+
+<p>Priorities can be used to define a priority between two functions or between
+two groups of functions. In both cases the functions involved have to be
+listed explicitly in the priority declaration. In certain cases, however, it
+is desirable to define that a single rule has higher or lower priority than
+all other functions or to explicitly reject certain syntactic constructs.
+The former is achieved by the attributes <tt>prefer</tt> and <tt>avoid</tt>. The
+latter by the attribute <tt>reject</tt>. 
+<p>The use of the <tt>reject</tt> attribute leads also to improvements in the 
+performance of the parser, see <a HREF="user-manual_52.html#BSVV02">[17]</a> for more implementation
+details.
+<p>If a function <i>F</i> is attributed with <tt>prefer</tt> and there is a syntactic
+ambiguity in which it is involved, only the parse using <i>F</i> will remain.
+<p>If a function <i>F</i> is attributed with <tt>avoid</tt> and there is no ambiguity,
+then <i>F</i> will be used. If there is an ambiguity, then <i>F</i> will be immediately
+removed from the set of ambiguities.
+<p>If a function <i>F</i> is attributed with <tt>reject</tt>, then independently of the
+number of ambiguities, the parse using <i>F</i> will be removed.  While
+<a HREF="#LexicalRestrictions">restrictions</a>
+only impose limitations on the
+immediate lookahead that follows a symbol, the reject mechanism can be used
+to eliminate complicated syntactic structures.
+<p>Examples of the use of <tt>prefer</tt>, <tt>avoid</tt> and <tt>reject</tt> in order
+to solve lexical ambiguities are discussed in
+<a HREF="user-manual_20.html#lex-ambiguity">Lexical Ambiguities</a>.
+In <a HREF="user-manual_20.html#cf-ambiguity">Context-free Ambiguities</a>
+we will give examples of how to use
+these attributes to solve context-free ambiguities, such as the
+famous dangling else problem.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_20.html"><img alt="2.11 Disambiguation" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_18.html"><img alt="2.9 Attributes of Lexical and Context-free Functions" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.10 Priorities</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.6 Sorts</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_16.html"><img alt="2.7 Lexical Syntax" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_14.html"><img alt="2.5 Aliases" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.6 Sorts</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.6 Sorts</h2>
+
+Sorts are declared by listing their name in a sorts section of the form:
+<pre>
+sorts
+  &lt;Symbol&gt;*
+</pre>
+<p>The keyword <tt>sorts</tt> is in fact misleading, since not only plain <tt>Sort</tt>s
+can be declared, but more complex <tt>Symbol</tt>s can be declare in the 
+sorts section as well.
+<p>The definition of symbols in the sorts section is two-fold. 
+First of all, it is required that all sorts that occur in some symbol 
+in the specification are declared. 
+Secondly, symbols declared in the sorts section act as start symbol
+for the underlying grammar.
+This has the effect that input sentences corresponding to
+these symbols can be parsed. 
+<p>Sorts sections can either be hidden or exported. The effect of defined
+symbols as start symbols for the grammar may lead to an explosion
+of start states for the parser and thus lead to performance loss.
+To prevent this it can be advisable to hide sort sections. The
+symbols defined are only visible in the module containing this
+hidden sorts section, but not in modules importing this module.
+<p>Recall that a sort name should start with a capital letter and 
+may be followed by letters and/or digits. 
+Hyphens (`<tt>-</tt>') may be embedded in sort names.
+There is one predefined sort name (<tt>LAYOUT</tt>). It is described in
+<a HREF="user-manual_16.html">Lexical Syntax</a>.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_16.html"><img alt="2.7 Lexical Syntax" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_14.html"><img alt="2.5 Aliases" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.6 Sorts</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>

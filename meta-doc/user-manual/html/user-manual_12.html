@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<!-- XML file produced from file: manual.ltx --
+ -- using Hyperlatex v 2.5 (c) Otfried Cheong--
+ -- on Emacs 21.2.1, Thu Sep 18 17:55:08 2003 -->
+<head>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.3 Imports</title>
+
+</head><body bgcolor= "#ffffe6">
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_13.html"><img alt="2.4 Symbols" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_11.html"><img alt="2.2 SDF&#32;comment convention" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.3 Imports</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
+<h2>2.3 Imports</h2>
+
+<p>
+Each <tt>&lt;ImportSection&gt;</tt> starts with the keyword <tt>imports</tt> followed
+by one or more module names:
+<pre>
+imports
+  &lt;ModuleName&gt;+
+</pre>
+<p>Modules can be combined by importing one module in another. 
+Imports can occur as <tt>&lt;ImportSection&gt;</tt> at the topmost level of a module
+or they can occur within an exports or hiddens section.
+<p>When importing modules at the topmost level of a module or when the import
+section occurs within the scope of an exports keyword, all exported entities
+of the imported module (and of all modules that are imported indirectly by it)
+become available in the importing module. In addition, they are also exported
+by the importing module.  However, if the import section occurs within the
+scope of a hiddens keyword, the exported entities are only visible in the
+importing module but they are not exported by the importing module.
+<p>An imported module can be parameterized or decorated with renamings, see
+<a HREF="user-manual_21.html">ParametersRenamings</a>
+for more details.
+<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<table width="100%" cellpadding=0 cellspacing=2><tr>
+  <td bgcolor="#99ccff"><a HREF="user-manual_13.html"><img alt="2.4 Symbols" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_11.html"><img alt="2.2 SDF&#32;comment convention" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.3 Imports</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>
