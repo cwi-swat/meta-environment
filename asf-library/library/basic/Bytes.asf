@@ -4,19 +4,19 @@ equations
 	string-to-bytes(strcon(\" \")) = bytes()
 
 [loop]
-	byte(b) := strchar-to-byte(c),
-	bytes(b*) := string-to-bytes(strcon(\" c* \"))
+	byte := strchar-to-byte(char),
+	bytes(byte*) := string-to-bytes(strcon(\" char* \"))
 	===>
-	string-to-bytes(strcon(\" c c* \")) = bytes(byte(b) b*) 
+	string-to-bytes(strcon(\" char char* \")) = bytes(byte byte*) 
 
 equations
 
-[normal]
-	strchar-to-byte(strchar(n)) = byte(n)
+[default-normal]
+	strchar-to-byte(strchar(any)) = byte(any)
 
 [octal]
-	strchar-to-byte(strchar(\ a1 a2 a3)) = 
-	decimal-to-byte(natcon(a1 a2 a3))
+	strchar-to-byte(strchar(\ digit1 digit2 digit3)) = 
+	decimal-to-byte(natcon(digit1 digit2 digit3))
 
 [newline]
 	strchar-to-byte(strchar(\n)) = byte(\n)
@@ -36,10 +36,10 @@ equations
 	bytes-to-string(bytes()) = strcon(\" \")
 
 [loop]
-	c := byte-to-strchar(byte),
-	strcon(\" c* \") := bytes-to-string(bytes(b*))
+	char := byte-to-strchar(byte),
+	strcon(\" char* \") := bytes-to-string(bytes(byte*))
 	===
-	bytes-to-string(bytes(byte b*)) = strcon(\" c c* \")
+	bytes-to-string(bytes(byte byte*)) = strcon(\" char char* \")
 
 [newline]
 	byte-to-strchar(byte(\n)) = strchar(\n)
@@ -54,37 +54,37 @@ equations
 	byte-to-strchar(byte(\")) = strchar(\")
 
 [default-octal]
-	n := byte-to-decimal(byte(b)),
+	n := byte-to-decimal(byte),
 	n >= 40 & n <= 176 == false,
-	natcon(a1 a2 a3) := n
+	natcon(digit1 digit2 digit3) := n
 	===>
-	byte-to-strchar(byte(b)) = strchar(\ a1 a2 a3)
+	byte-to-strchar(byte) = strchar(\ digit1 digit2 digit3)
 
 [default-normal]
-	n := byte-to-decimal(byte(b)),
+	n := byte-to-decimal(byte(any)),
 	n >= 40 & n <= 176 == true
 	===>
-	byte-to-strchar(byte(b)) = strchar(b)
+	byte-to-strchar(byte(any)) = strchar(any)
 
 equations
 
 [nob1]	num-of-bytes(bytes()) = 0
 
-[nob2]	num-of-bytes(bytes(byte b*)) = 1 + num-of-bytes(bytes(b*))
+[nob2]	num-of-bytes(bytes(_byte byte*)) = 1 + num-of-bytes(bytes(byte*))
 
 equations
 
 [less-0] bytes < bytes = false
 [less-1] 
-bytes(byte b*1) < bytes(byte b*2) = bytes(b*1) < bytes(b*2)
+bytes(byte byte*1) < bytes(byte byte*2) = bytes(byte*1) < bytes(byte*2)
 
 [less-2] 
 byte1 != byte2,
 byte-to-decimal(byte1) < byte-to-decimal(byte2) == true
 ===>
-bytes(byte1 b*2) < bytes(byte2 b*2) = true
+bytes(byte1 byte*2) < bytes(byte2 byte*2) = true
 
-[default-less] bytes1 < bytes2 = false
+[default-less] _bytes1 < _bytes2 = false
 
 [greater] bytes1 > bytes2 = not(bytes1 <= bytes2)
 

@@ -1,12 +1,8 @@
 module basic/Strings
 
-%% This module defines strings with continuations and escaped newlines, 
-%% tabs and backslashes
-
-
 imports basic/StrCon
 imports basic/Integers
-imports	basic/Bytes
+imports basic/Bytes
 
 hiddens 
   sorts Escaped Normal

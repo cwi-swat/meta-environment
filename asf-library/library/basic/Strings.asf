@@ -20,10 +20,10 @@ subst(Str1,Str2,Str3) = Str3
 
 equations
 
-equations
-
 [forward-length]	
 length(Str) = num-of-bytes(string-to-bytes(Str))
+
+equations
 
 [forward-less]
 Str1 < Str2 = string-to-bytes(Str1) <string-to-bytes(Str2)
