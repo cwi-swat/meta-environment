@@ -2,42 +2,44 @@ module PosAnalysis
 
 imports Pico-syntax
 imports basic/Integers
+imports MyPosInfo
 
 exports
-  sorts Area NodeId Item
+  sorts NodeId Item
 
   context-free syntax
      Area		-> NodeId
      PICO-ID | NodeId   -> Item
 
 imports RelationCalculator[Item]
-imports asf/tools/PosInfo[STATEMENT]
+
 
 exports
   context-free syntax
 
-     area(Literal, IntCon, IntCon, IntCon, IntCon) -> Area
-     root					  -> Area
-     get-area(STATEMENT)			  -> Area
+     "list" "(" "[" { ListItem "," }* "]" ")"        -> List
+     "listitem" "(" String "," "[" String "]" "," ATerm ")"  -> ListItem
 
       get-first({STATEMENT ";"}*)                 -> NodeId
       get-last({STATEMENT ";"}*)                  -> Bag[[Item]]
 
       add-succ(Rel[[Item]], RSTORE)               -> RSTORE
-      add-last({STATEMENT ";"}*, NodeId, RSTORE) -> RSTORE
+      add-last({STATEMENT ";"}*, NodeId, RSTORE)  -> RSTORE
 
       controlflow(PROGRAM, RSTORE)                -> RSTORE {traversal(accu, bottom-up, continue)}
-      controlflow(STATEMENT, RSTORE)              -> RSTORE {traversal(accu, bottom-up, continue)}
+%%      controlflow(STATEMENT, RSTORE)              -> RSTORE {traversal(accu, bottom-up, continue)}
       controlflow({ STATEMENT ";"}*, RSTORE)      -> RSTORE {traversal(accu, bottom-up, continue)}
 
-      use-defs(PROGRAM, RSTORE, NodeId)           -> RSTORE  {traversal(accu,top-down,break)}
-      use-defs(STATEMENT, RSTORE, NodeId)         -> RSTORE  {traversal(accu,top-down,break)}
-      use-defs(EXP, RSTORE, NodeId)               -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(PROGRAM, RSTORE)                   -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(STATEMENT, RSTORE)                 -> RSTORE  {traversal(accu,top-down,break)}
+
+      use-exp(STATEMENT, RSTORE, NodeId)          -> RSTORE  {traversal(accu,top-down,break)}
+      use-exp(EXP, RSTORE, NodeId)                -> RSTORE  {traversal(accu,top-down,break)}
 
       analyze(PROGRAM)                            -> Rel[[Item]]
       undefined-query(RSTORE)	                  -> RSTORE
 
-
+ hiddens
   imports asf/syntax/Comments
 
   variables
@@ -48,3 +50,4 @@ exports
       "Rel" [0-9\']*     -> Rel[[Item]]
       "Bag" [0-9\']*     -> Bag[[Item]]
       "NodeId" [0-9\']*	 -> NodeId
+ 

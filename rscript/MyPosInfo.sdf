@@ -1,0 +1,25 @@
+module MyPosInfo
+
+imports Pico-syntax
+
+imports basic/Integers basic/Strings
+
+exports
+  sorts Area
+  context-free syntax
+
+    area(StrCon, IntCon, IntCon, IntCon, IntCon) -> Area
+    get-area(STATEMENT)			        -> Area
+
+ hiddens
+
+   imports asf/tools/PosInfo[STATEMENT]
+
+   context-free syntax
+
+   convert(Literal)	-> StrCon
+
+  
+  variables
+    "X" [0-9\']*     -> STATEMENT
+    "Char*" [0-9\']* -> CHAR*
