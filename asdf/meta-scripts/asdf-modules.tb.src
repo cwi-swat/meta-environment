@@ -156,26 +156,6 @@ in
     fi
     . snd-note(ui-status(endstat(Id)))
   +
-   /* Generates SDF for parsing ASDF module */
-   rec-msg(generate-asdf-pt-for-modules(Modules?)) .
-    Status := success .
-    (
-      if not-equal(Modules, []) then
-         Module := first(Modules) .
-         Modules := next(Modules) .
-         GenerateASDF-PT(Module, Status?)
-      fi
-    )*
-    if or(equal(Modules, []), not-equal(Status, success))  then
-      tau
-    fi .
-    if equal(Status, success) then
-      snd-msg(asdf-pt-generated)
-    else
-      ErrorMsg := first(args(Status)) .
-      snd-msg(asdf-pt-not-generated(ErrorMsg)) 
-    fi
-  +
     /* Removes asf-parse-trees for changed ASDF modules */
     /* (Is this correct behaviour, 
        or should also sdf be removed?) */ 
@@ -196,6 +176,35 @@ in
 
   ) * 
   delta
+endlet
+
+
+/* Generates SDF for parsing ASDF module */
+process Generate-ASDF-PT is
+let
+  ErrorMsg: str,
+  Module : str,
+  Modules: list,
+  Status : term
+in
+  rec-msg(generate-asdf-pt-for-modules(Modules?)) .
+  Status := success .
+  (
+    if not-equal(Modules, []) then
+       Module := first(Modules) .
+       Modules := next(Modules) .
+       GenerateASDF-PT(Module, Status?)
+    fi
+  )*
+  if or(equal(Modules, []), not-equal(Status, success))  then
+    tau
+  fi .
+  if equal(Status, success) then
+    snd-msg(asdf-pt-generated)
+  else
+    ErrorMsg := first(args(Status)) .
+    snd-msg(asdf-pt-not-generated(ErrorMsg)) 
+  fi
 endlet
 
 
@@ -301,7 +310,7 @@ in
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
   +
     /* Update changed ASDF module in database.
-       Called from ParseActionSDF */
+       Called from ParseASDFSecond */
     rec-msg(update-module-in-db(Name?, SyntaxTree?, asdf)).
     snd-msg(asdf-get-module-id(SyntaxTree)) .
     rec-msg(asdf-module-id(ModuleId?)) .
@@ -321,7 +330,7 @@ in
     fi
   +
     /* Update text of changed ASDF module.
-       Called from ParseASDF */
+       Called from ParseASDFSecond */
     rec-msg(update-module-text-in-db(Name?, SyntaxText?, SyntaxTree?, asdf)).
     if equal(SyntaxTree, no-tree) then
       ModuleId := Name
@@ -455,56 +464,69 @@ process GetASDFTree(ModuleName: str, Tree: term?) is
 /* Creates an ASDFEditor
    Almost a copy of EditSyntax in editing.tb.
    Perhaps we can refactor EditSyntax. */
-process EditASDF (Path : str) is
+process EditASDF(Path : str) is
 let
+  AnnotatedTree: term,
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   HasText: bool,
   HasStructure: bool,
   Id: int,
-  ModuleId: str,
+  ModuleName: str,
   ParseSucceeded: bool,
+  Pid: int,
   Sid: term,
+  Summary: term,
+  Text: str,
   Tree: term
 
 in
   Id := process-id
   . EditorType := asdf-editor
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType, AlreadyExists?)
-  . snd-msg(asdf-editor-started(Path, Sid))
+  . IsTextEditorRegistered(Sid, AlreadyExists?)
   .
   if equal(AlreadyExists, false) then
     snd-msg(ts-get-str-value("path-modulename", Path))
     .
     (
-      rec-msg(ts-value(ModuleId?))
-      . snd-msg(em-bind-session(Sid, ModuleId))
-      . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetASDFTree(ModuleId, Tree?)
-
-      /* It looks like we assume that the parsetree is allways available,
-         time will tell heather we are mistaking */
-      . EditStructure(Sid, Tree)
+      rec-msg(ts-value(ModuleName?))
+      . snd-msg(em-bind-session(Sid, ModuleName))
+      . rec-msg(em-session-bound(Sid, ModuleName))
       /* Do a parse of the ASDF module,
          this makes the semantics section appear with the correct
-         syntatic sort */
-      . ParseASDF(Sid, ParseSucceeded?)
+         syntatic sorts */
+      . ReadFile(Path, Text?)
+      . create(ASDFEditParseHandler(Path), Pid?)
+      . ParseASDFText(Pid, Text, ModuleName)
       .
-      if equal(ParseSucceeded, true) then
-        snd-note(ui-status(statf(Id, "Parse succesful of %s", [ModuleId])))
-      else
-        snd-note(ui-status(errorf(Id, "Error during parse of %s", [ModuleId])))
-      fi
+      (
+        rec-msg(parse-asdf-edit-ok(Tree?))
+        . ParseSucceeded := true
+        . EditText(Sid, EditorType, AlreadyExists?)
+        . EditStructure(Sid, Tree)
+      +
+        rec-msg(parse-asdf-edit-failed(Tree?))
+        . ParseSucceeded := false
+        . EditText(Sid, EditorType, AlreadyExists?)
+        . EditStructure(Sid, Tree)
+      +
+        rec-msg(parse-asdf-edit-failed(Summary?))
+        . ParseSucceeded := false
+        . EditText(Sid, EditorType, AlreadyExists?)
+      )
+      . snd-msg(asdf-editor-started(Path, Sid))
+      . ASDFParseInfoOutput(ModuleName, Id, Sid, ParseSucceeded)
+
     +
       rec-msg(ts-no-value)
       . snd-msg(ts-get-str-value("path-weak-modulename", Path))
       .
       (
-        rec-msg(ts-value(ModuleId?))
-        . snd-msg(em-bind-session(Sid, ModuleId))
-        . rec-msg(em-session-bound(Sid, ModuleId))
+        rec-msg(ts-value(ModuleName?))
+        . snd-msg(em-bind-session(Sid, ModuleName))
+        . rec-msg(em-session-bound(Sid, ModuleName))
       +
         rec-msg(ts-no-value)
       )
@@ -529,7 +551,7 @@ in
       tau
     fi
   else
-    tau
+    snd-msg(te-editor-to-front(Sid))
   fi
 endlet
 
@@ -838,7 +860,8 @@ let
   Path : str,
   Table : term,
   TermType : term,
-  Checking : term
+  Checking : term,
+  Pid : int
 in
   (
     rec-msg(kill-editor-unknown-type-hook(EditorId?, Type?, Module?)).
@@ -848,6 +871,7 @@ in
     /* Generate ASDF parse table and return table name where parse
        table can be found */
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, asdf)) .
+    create(Generate-ASDF-PT(), Pid?) .
     snd-msg(generate-asdf-pt-for-modules(ModuleNames)) .
     (
       rec-msg(asdf-pt-generated) .
@@ -1177,8 +1201,11 @@ in
   ReturnSuccess(EditorId, Stack)	
 +
   /* ASDF editor, Parse ASDF */
-  rec-msg(parse-asdf-action, Stack?, EditorId?) .
-  ParseASDF(EditorId, ParseSucceeded?) .
+  rec-msg(parse-asdf-action, Stack?, EditorId?)
+  . StackPopString(Stack,Stack?,ModuleName?)
+  . ASDFEditorParse(EditorId, ModuleName, ParseSucceeded?)
+  . ASDFParseInfoOutput(ModuleName, Id, EditorId, ParseSucceeded)
+  .
   if equal(ParseSucceeded, true) then
     ReturnSuccess(EditorId, Stack)
   else
@@ -1273,9 +1300,205 @@ printf("Stack = %t\n", Stack) .
 ) * delta
 endlet
 
+process ParseASDFText(Pid: int, Text: str, ModuleName: str) is
+let
+  APid: int,
+  Id : int,
+  ModuleId: str,
+  Nonterminal: term,
+  Table: term,
+  Type: term
+in
+  Id := process-id
+  . Type := asdf
+  . snd-note(ui-status(statf(Id, "Parsing ASDF of %s", [ModuleName])))
+  . snd-msg(get-module-id-hook(Type))
+  . rec-msg(get-module-id-hook-result(ModuleId?))
 
-/* Parse the asdf */
-process ParseASDF(Sid: term, ParseSucceeded: bool?) is
+  /* The type parameter 'asdf1' is important */
+  . GetParseTable(ModuleId, asdf1, true, Table?)
+  . snd-msg(syntax-top-sort-hook(asdf))
+  . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+  . create(ParseASDFSecond(Pid, Text, ModuleName), APid?)
+  . ParseText(APid, Text, Table, Nonterminal)
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+/* Do the second parse of an ASDF module */
+process ParseASDFSecond(Pid: int, Text: str, ModuleName: str) is
+let
+  AnnotatedTree: term,
+  APid: int,
+  AnText: str,
+  DependingModules: list,
+  Directory: str,
+  Error: term,
+  NewModules: list,
+  Nonterminal: term,
+  ParseResult: term,
+  Path: str,
+  Table: term,
+  Tree: term,
+  Type: term
+in
+  APid := process-id
+  . Type := asdf
+  .
+  (
+    /* First parse executed succesfull */
+    rec-msg(parse-tree(APid, ParseResult?))
+    . snd-msg(ts-get-str-value("module-path", ModuleName))
+    . rec-msg(ts-value(Path?))
+    . AnnotateTree(ParseResult, Path, AnnotatedTree?)
+    . snd-msg(unparse(AnnotatedTree))
+    . rec-msg(unparsed-text(AnText?))
+    . snd-msg(update-module-text-in-db(ModuleName, AnText, AnnotatedTree, Type))
+    .
+    (
+      rec-msg(no-updating-needed)
+      . SecondParse(Pid, APid, Text, ModuleName)
+    +
+      rec-msg(updating-succeeded(DependingModules?))
+      . snd-msg(update-module-in-db(ModuleName, AnnotatedTree, Type))
+      .
+      (
+      rec-msg(updating-succeeded(NewModules?))
+      . OpenModules(NewModules, Type)
+      . SecondParse(Pid, APid, Text, ModuleName)
+      +
+      rec-msg(error-opening(ModuleName, name-inconsistent))
+      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [ModuleName])))
+      . snd-msg(invalidate-sdf-in-db(ModuleName))
+      . snd-msg(invalidate-asdf-in-db(ModuleName))
+      . snd-msg(parse-error(Pid, error("name Changing the name of module is not permitted.", [])))
+      )
+     +
+      rec-msg(error-opening(ModuleName, name-inconsistent))
+      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.", [ModuleName])))
+      . snd-msg(invalidate-sdf-in-db(ModuleName))
+      . snd-msg(invalidate-asdf-in-db(ModuleName))
+      . snd-msg(parse-error(Pid, error("name Changing the name of module is not permitted.", [])))
+    )
+  +
+     /* First parse was ambigius */
+    rec-msg(parse-forest(APid, ParseResult?, Error?))
+    . snd-msg(parse-forest(Pid, ParseResult, Error))
+  +
+    /* First parse was error prone */
+    rec-msg(parse-error(APid, Error?))
+    . snd-msg(parse-error(Pid, Error))
+  )
+endlet
+
+process SecondParse(Pid: int, APid: int, Text: str, ModuleName: str) is
+let
+  Nonterminal: term,
+  Table: term
+in
+   snd-note(ui-status(statf(APid, "Second parse of %s", [ModuleName])))
+     /* The type parameter 'asdf' is important */
+    . GetParseTable(ModuleName, asdf, true, Table?)
+    .
+    if not-equal(Table, no-table) then
+      snd-msg(other-top-sort-hook(asdf))
+      . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+      . ParseText(Pid, Text, Table, Nonterminal)
+      . snd-note(ui-status(endstat(APid)))
+    else
+      snd-msg(invalidate-sdf-in-db(ModuleName))
+      . snd-msg(invalidate-asdf-in-db(ModuleName))
+      . snd-msg(parse-error(Pid, error))
+    fi
+endlet
+
+
+process ASDFEditParseHandler(Filename: str) is
+let
+  AnnotatedTree: term,
+  Error: term,
+  Pid: int,
+  ParseResult: term,
+  Summary: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(parse-tree(Pid, ParseResult?))
+    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
+    . snd-msg(parse-asdf-edit-ok(AnnotatedTree))
+  +
+    rec-msg(parse-forest(Pid, ParseResult?, Error?))
+    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
+    . ParseErrorToSummary(Error, Filename, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . snd-msg(parse-asdf-edit-failed(AnnotatedTree))
+  +
+    rec-msg(parse-error(Pid, Error?))
+    . printf("doing summ..\n")
+    . ParseErrorToSummary(Error, Filename, Summary?)
+    . printf("doing summ..\n")
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . snd-msg(parse-asdf-edit-failed(Summary))
+  )
+endlet
+
+
+process ASDFParseEditor(Sid: term, ModulName: str) is
+let
+  Path: str,
+  Pid: int,
+  StructureEditor: bool,
+  Text: str,
+  TextChanged: bool
+in
+  HasTextChanged(Sid, TextChanged?)
+  .
+  if equal(TextChanged, quote(true)) then
+    snd-msg(te-write-contents(Sid))
+    . rec-msg(te-contents-written(Sid))
+    . StructureEditor := false
+  else
+    IsStructureEditorRegistered(Sid, StructureEditor?)
+  fi
+  .
+  if equal(StructureEditor, quote(true)) then
+    snd-msg(parse-editor-ok(Sid))
+  else
+    GetPath(Sid, Path?)
+    . snd-msg(ui-remove-feedback-summary("sglr", Path))
+    . ReadFile(Path, Text?)
+    . create(EditorParseHandler(Sid), Pid?)
+    . ParseASDFText(Pid, Text, ModulName)
+  fi
+endlet
+
+process ASDFEditorParse(Sid: term, ModuleName: str, ParseSucceeded: bool?) is
+let
+  Id: int,
+  Pid: int,
+  Text: str
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing ASDF of %s", [ModuleName])))
+  . create(ASDFParseEditor(Sid, ModuleName), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . ParseSucceeded := true
+  +
+    rec-msg(parse-editor-failed(Sid))
+    . ParseSucceeded := false
+  +
+    rec-msg(parse-editor-failed(Sid))
+    . ParseSucceeded := false
+  )
+
+endlet
+
+
+/* Not used any more scheduled for removal. */
+/*
+process ParseASDFA(Sid: term, ParseSucceeded: bool?) is
 let
   DependingModules: list,
   Directory: str,
@@ -1298,12 +1521,14 @@ in
   . snd-note(ui-status(statf(Id, "Parsing ASDF of %s", [Modulename])))
   . snd-msg(get-module-id-hook(Type))
   . rec-msg(get-module-id-hook-result(ModuleId?))
-
+*/
   /* The type parameter 'asdf1' is important */
+/*
   . GetParseTable(ModuleId, asdf1, true, Table?)
   . snd-msg(syntax-top-sort-hook(asdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+
   .
   (
     rec-msg(parse-editor-ok(Sid))
@@ -1329,7 +1554,9 @@ in
         rec-msg(updating-succeeded(NewModules?))
         . OpenModules(NewModules, Type)
         . snd-msg(te-clear-focus(Sid))
+*/
 	/* First parse went okay, and now we do the second... */
+/*
  	. SecondParse(Sid, Modulename, ParseSucceeded?)
       +
         rec-msg(error-opening(Modulename, name-inconsistent))
@@ -1343,18 +1570,12 @@ in
     rec-msg(parse-editor-failed(Sid))
     . ParseSucceeded := false
   )
-  .
-  if equal(ParseSucceeded, true) then
-    snd-msg(te-display-message(Sid, "Second parse successful"))
-  else
-    snd-msg(invalidate-sdf-in-db(Modulename))
-    . snd-msg(invalidate-asdf-in-db(Modulename))
-  fi
-  . snd-note(ui-status(endstat(Id)))
 endlet
+*/
 
-
+/* Not used any more scheduled for removal. */
 /* Do the second parse of an ASDF module */
+/*
 process SecondParse(Sid : term, ModuleName : str, ParseSucceeded : term?) is
 let
   Id: int,
@@ -1366,7 +1587,9 @@ in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Second parse of %s", [ModuleName])))
   . ParseSucceeded := true
+*/
      /* The type parameter 'asdf' is important */
+/*
   . GetParseTable(ModuleName, asdf, true, Table?)
   .
   if not-equal(Table, no-table) then
@@ -1391,6 +1614,18 @@ in
     . snd-note(ui-status(errorf("Could not generate parse table for %s", [ModuleName])))
   fi
 endlet
+*/
+process ASDFParseInfoOutput(Modulename: str, Id: int, Sid: term, ParseSucceeded: bool) is
+  if equal(ParseSucceeded, true) then
+      snd-note(ui-status(statf(Id, "Parse succesful of %s", [Modulename])))
+      . snd-msg(te-display-message(Sid, "Parse successful"))
+    else
+      snd-note(ui-status(errorf(Id, "Error during parse of %s", [Modulename])))
+      . snd-msg(invalidate-sdf-in-db(Modulename))
+      . snd-msg(invalidate-asdf-in-db(Modulename))
+    fi
+    . snd-note(ui-status(endstat(Id)))
+
 
 process ReduceASDFTerm(Tree: term, Modulename: str, NormalForm: term?) is
 let
@@ -1516,8 +1751,7 @@ let
 in
   /* and concat it with already collected info */
   Id := process-id
-  . snd-note(ui-status(endstat(Id)))
-  . snd-note(ui-status(statf(Id, "Joining collected information")))
+  . snd-note(ui-status(stat(Id, "Joining collected information")))
   . snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo1, EvalInfo2]))
   . rec-msg(normalform("Asdfsupport", EvalInfo2?)) 
 endlet
@@ -1541,7 +1775,6 @@ in
     . ModuleTree := help-the-garbage-collector
     . EvalInfo := error-info
   )
-  . snd-note(ui-status(endstat(Id)))
 endlet
 
 process GetEvalInfos(InfoModuleNames: list, EvalInfo: term?) is
@@ -1624,11 +1857,11 @@ in
   . snd-msg(io-write-term-in-baf(".info", AllInfo))
   . rec-msg(io-file-written)
   . snd-note(ui-status(endstat(Id)))
-  . snd-note(ui-status(statf(Id, "Executing evaluator...")))
+  . snd-note(ui-status(stat(Id, "Executing evaluator...")))
   . snd-msg(gen-adapter-string-to-string-evaluate(asdf-eval-id,"__ASDF_BIN__/evaluation", "hest"))
   . rec-msg(gen-adapter-string-to-string-result(asdf-eval-id, ErrorText?))
   . snd-note(ui-status(endstat(Id)))
-  . snd-note(ui-status(statf(Id, "Evaluation done, starting editor.")))
+  . snd-note(ui-status(stat(Id, "Evaluation done, editor started.")))
   .
   if equal(ErrorText, "") then
     RTree := error-tree
@@ -1637,6 +1870,7 @@ in
   else
     RTree := quote(str(ErrorText))
   fi
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
 /* Prints the contents of the given list */
