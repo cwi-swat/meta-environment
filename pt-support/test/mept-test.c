@@ -10,6 +10,8 @@
 
 #define test_assert(msg,exp) (assert(exp && msg))
 
+/*{{{  void testCompare() */
+
 void testCompare()
 {
   test_assert("true > false", 
@@ -55,6 +57,10 @@ void testCompare()
 	      > 0);
 }
 
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
@@ -67,4 +73,6 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
+/*}}}  */
 

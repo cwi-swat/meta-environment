@@ -21,4 +21,4 @@ terms.dict: genTermsDict.sh ${srcdir}/*.pt
 %.sh: %.sh.src Makefile
 	sed 's@__ATERM__@$(ATERM)@g' < $< > $@ && chmod +x $@	
 
-CLEANFILES=*.[ch] *.dict
+CLEANFILES=*.[ch] *.dict *.sh
