@@ -47,6 +47,13 @@ extern long sg_nr_rejects;
 
 ATermTable resolvedtable = NULL;
 
+/* struct used by AmbTracker to generate handy error messages */
+typedef struct linecolpos_tag {
+  size_t line;
+  size_t col;
+  size_t pos;
+} linecolpos;
+
 int SG_InjectionFilterSucceeded(int mode)
 {
   static int count = 0;
@@ -454,10 +461,11 @@ tree SG_YieldTree(parse_table *pt, tree t)
   return t;
 }
 
-ATermList  SG_AmbTrackerRecursive(tree t, size_t *currpos)
+
+ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
 {
   ATermList allambs, args, kidambs, ambs;
-  size_t ambpos;
+  linecolpos ambpos;
   tree      amb;
   AFun      fun;
   int       treetype;
@@ -470,7 +478,14 @@ ATermList  SG_AmbTrackerRecursive(tree t, size_t *currpos)
   switch(treetype) 
   {
   case AT_INT:
-    (*currpos)++;
+    switch(ATgetInt((ATermInt) t)) {
+      case '\n':
+	(currpos->line)++;
+	(currpos->col) = 0;
+      default:
+	(currpos->col)++;
+        (currpos->pos)++;
+    }
     break;
   case AT_LIST:
     args = (ATermList) t;
@@ -486,6 +501,7 @@ ATermList  SG_AmbTrackerRecursive(tree t, size_t *currpos)
     if(fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
       ambpos = *currpos;
+
       prods = ATempty; /* the productions of the topnodes in this cluster */
 
       for(; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
@@ -506,8 +522,13 @@ ATermList  SG_AmbTrackerRecursive(tree t, size_t *currpos)
       /* construct the error message for this cluster */ 
       amb_with_pos = 
         (ATerm) ATmakeAppl2(SG_Amb_Node_AFun,
-                            (ATerm) ATmakeAppl1(SG_Position_AFun,
-                                                (ATerm) ATmakeInt(ambpos)),
+                            (ATerm) ATmakeAppl3(SG_Position_AFun,
+			    (ATerm) ATmakeAppl1(SG_Line_AFun, 
+						(ATerm) ATmakeInt(ambpos.line)),
+			    (ATerm) ATmakeAppl1(SG_Col_AFun,
+						(ATerm) ATmakeInt(ambpos.col)),
+			    (ATerm) ATmakeAppl1(SG_Character_AFun,
+                                                (ATerm) ATmakeInt(ambpos.pos))),
                             (ATerm) ATmakeAppl1(SG_Productions_AFun,
                                                 (ATerm) ATreverse(prods)));  
  
@@ -530,7 +551,7 @@ ATermList  SG_AmbTrackerRecursive(tree t, size_t *currpos)
 
 ATerm SG_AmbTracker(tree t)
 {
-  size_t    currpos = 0;
+  linecolpos currpos = { 1, 0, 0 };
   ATermList amblist = ATempty;
   AFun fun;
 

@@ -105,7 +105,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
   SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
   SG_AFUN_INIT(SG_Amb_Node_AFun,    ATmakeAFun(SG_AMBIGUITY_AFUN,   2, ATfalse));
-  SG_AFUN_INIT(SG_Position_AFun,    ATmakeAFun(SG_POSITION_AFUN,    1, ATfalse));
+  SG_AFUN_INIT(SG_Position_AFun,    ATmakeAFun(SG_POSITION_AFUN,    3, ATfalse));
   SG_AFUN_INIT(SG_Productions_AFun, ATmakeAFun(SG_PRODUCTIONS_AFUN, 1, ATfalse));
   SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 2, ATfalse));
 
