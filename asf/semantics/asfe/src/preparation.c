@@ -37,8 +37,6 @@ static equation_table *equations = NULL;
 
 extern ATbool runVerbose;
 
-static ATerm prepare_annos(ATermList annos);
-
 /*
 Allocate memory for an equation table.
 */
@@ -474,41 +472,15 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   return ASFtoPT(newTree);
 }
 
-
-/* Strip all annotations except "pos-info" */
-
-static ATerm prepare_annos(ATermList annos)
-{
-  extern ATerm posinfo;
-
-  ATermList anno;
-  ATerm key;
-
-  while (!ATisEmpty(annos)) {
-    anno = (ATermList) ATgetFirst(annos);
-    annos = ATgetNext(annos);
-
-    key = ATgetFirst(anno);
-    if (ATisEqual(key, posinfo)) {
-      return (ATerm) ATmakeList1((ATerm) anno);
-    }
-  }
-  return NULL;
-}
-
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
 
-
-  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(tree));
-
-
   if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
-    return tree;
+    result = tree;
   }
-  if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
+  else if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
     result = PT_setTreeArgs(tree, newargs);
@@ -520,27 +492,16 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = tree;
   }
 
-
-  if (annos) {
-    ATerm preparedAnnos = prepare_annos((ATermList) annos);
-    if (preparedAnnos) {
-      result = PT_makeTreeFromTerm(
-                 AT_setAnnotations(PT_makeTermFromTree(result), 
-                                   preparedAnnos));
-    }
-    else {
-      result = PT_makeTreeFromTerm(
-                 AT_removeAnnotations(PT_makeTermFromTree(result)));
-    }
-  }
-
+  /* remove all annotations from the term to make matching more easy */
+  result = PT_makeTreeFromTerm(
+             ATremoveAllAnnotations(PT_makeTermFromTree(result)));
 
   return result;
 }
 
 PT_Tree RWprepareTerm(PT_Tree tree)
 {
-  return prepareTerm(tree, NULL);
+return  prepareTerm(tree, NULL);
 }
 
 /*
