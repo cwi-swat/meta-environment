@@ -338,48 +338,11 @@ int SG_Batch (int argc, char **argv)
     ERR_Location location = ERR_getSubjectLocation(subject);
     char *errorType = ERR_getSubjectDescription(subject);
     ERR_Area area = ERR_getLocationArea(location);
-    int c    = 0;
     int line = ERR_getAreaBeginLine(area);
     int col = ERR_getAreaBeginColumn(area);
 
-    if (strcmp(errorType, "eof") == 0) {
-      ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
-                program_name, input_file_name, line, col);
-    }
-    else if (strcmp(errorType, "plain") == 0) {
-      if (isprint(c)) {
-        ATwarning("%s: error in %s, line %d, col %d: character `%c' (\\x%2.2x)"
-                  " unexpected\n",
-                  program_name, input_file_name, line, col, c, c);
-      }
-      else {
-        ATwarning("%s: error in %s, line %d, col %d: character \\x%2.2x"
-                  " unexpected\n",
-                  program_name, input_file_name, line, col, c);
-      }
-    } 
-    else if (strcmp(errorType, "cycle") == 0) {
-      ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: \n",
-                program_name, 
-                input_file_name, 
-                line, 
-                col);
-    }
-    else if (strcmp(errorType, "ambiguity") == 0) {
-      ATwarning("%s: error in %s, line %d, col %d: cannot represent ambiguities\n",
-                program_name, 
-                input_file_name, 
-                line, 
-                col);
-    }
-    else if (strcmp(errorType, "too-many-ambiguity") == 0) {
-      ATwarning("%s: error in %s, line %d, col %d: too many ambiguities\n",
-                program_name, input_file_name, line, col);
-    }
-    else {
-      ATwarning("%s: error in %s, line %d, col %d: unknown error\n",
-                program_name, input_file_name, line, col);
-    }
+    ATwarning("%s: error in %s, line %d, col %d: %s\n",
+                program_name, input_file_name, line, col, errorType);
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {
