@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jul 10 15:33:16 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
+ * utils/tree2graph/PT2graph.c:
+   "Show Source" adapted to new button format
+
 2003/07/09 (markvdb@cwi.nl)
  * Limited the number of nodes in the graph to MAX_NR_OF_NODES (3000)!
 
