@@ -1,5 +1,9 @@
 # $Id$
 
+2001/09/25 (jong@cwi.nl)
+ * Introduced gvim support as text-editor.
+   Requires gvim (v6.0) in $PATH, invoke "meta -g" to use it.
+
 2001/08/28 (jong@cwi.nl)
  * Several code improvements to satisfy gcc-3.0.1
 

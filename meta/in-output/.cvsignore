@@ -4,3 +4,4 @@ Makefile
 in-output.tif.h
 in-output.tif.c
 in-output
+.libs

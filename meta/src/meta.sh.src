@@ -22,6 +22,9 @@ export PATH
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
+# use xemacs by default
+editor="emacs-editor"
+
 ###
 #  Handle the command line, &c.
 ###
@@ -34,7 +37,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:dhT:vV"
+myarguments="C:deghT:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -43,6 +46,8 @@ Usage: $myname [options]
 Options:
     -C file         specifies the configuration file to be processed
     -d              run in debug mode (with viewer)
+    -e              use xemacs editor [default]
+    -g              use gvim editor
     -h              display help information (usage)
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)
@@ -82,7 +87,7 @@ set -- $args
 
 # Argument interpretation...
 
-configfile="meta.conf"        
+configfile="meta.conf"
 
 while [ $#  -gt 0 ]
 do
@@ -94,6 +99,10 @@ do
                 ;;    
         -d)
 		xargs="$xargs -viewer" ;;
+	-e)
+		editor="emacs-editor" ;;
+	-g)
+		editor="gvim-editor" ;;
         -h)
 		Usage ; exit 0 ;;
         -t)
@@ -118,7 +127,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DCONFIG_FILE=\\\"${configfile}\\\""
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
 
 if [ $verbose -gt 0 ] ; then
    set -x
