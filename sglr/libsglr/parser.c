@@ -36,6 +36,7 @@ typedef struct shift_pair {
 #define SG_SP_STACK(x)                  (x).stack
 
 typedef struct shift_tuple {
+  struct shift_tuple *next;
   state     state;
   ATermList token;
   int       index;
@@ -43,11 +44,11 @@ typedef struct shift_tuple {
   stack     *stack;
 } shift_tuple;
 
-#define SG_STPL_STATE(x)                  (x).state
-#define SG_STPL_TOKEN(x)                  (x).token
-#define SG_STPL_INDEX(x)                  (x).index
-#define SG_STPL_STACK(x)                  (x).stack
-#define SG_STPL_LENGTH(x)                 (x).length
+#define SG_STPL_STATE(x)                  (x)->state
+#define SG_STPL_TOKEN(x)                  (x)->token
+#define SG_STPL_INDEX(x)                  (x)->index
+#define SG_STPL_STACK(x)                  (x)->stack
+#define SG_STPL_LENGTH(x)                 (x)->length
 
 /*
  A path is a pair of a stack and a list of terms.  A path represents the
@@ -123,8 +124,8 @@ size_t sg_total_tokens; /* total number of tokens */
 
 void SG_ResetCoordinates(void)
 {
-  line           = 1;
-  col            = 0;
+  line = 1;
+  col = 0;
 }
 
 void SG_InitInput(void)
@@ -134,7 +135,7 @@ void SG_InitInput(void)
 }
 
 
-#define     SG_SP_CHUNK 16
+#define     SG_SHIFT_PAIR_CHUNK 16
 shift_pair  *sg_shift_pairs = NULL;
 int         sg_sp_max = 0, sg_sp_maxidx, sg_sp_idx, sg_sp_maxtoken,
 sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset;
@@ -142,11 +143,11 @@ sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset;
 void SG_AddShiftPair(stack *st, state s)
 {
   if(sg_shift_pairs == NULL) {
-    sg_sp_max = SG_SP_CHUNK;
-    sg_shift_pairs = SG_Malloc(SG_SP_CHUNK, sizeof(shift_pair));
+    sg_sp_max = SG_SHIFT_PAIR_CHUNK;
+    sg_shift_pairs = SG_Malloc(SG_SHIFT_PAIR_CHUNK, sizeof(shift_pair));
   }
   if(sg_sp_idx >= sg_sp_max) {
-    sg_sp_max += SG_SP_CHUNK;
+    sg_sp_max += SG_SHIFT_PAIR_CHUNK;
     sg_shift_pairs = SG_Realloc(sg_shift_pairs, sg_sp_max, sizeof(shift_pair));
   }
   sg_shift_pairs[sg_sp_idx].stack = st;
@@ -173,41 +174,73 @@ void  SG_DiscardShiftPairs(void)
   sg_sp_idx = 0;
 }
 
-#define     SG_STPL_CHUNK 16
-shift_tuple  *sg_shift_tuples = NULL;
-int         sg_stpl_max = 0, sg_stpl_idx;
+#define SG_SHIFT_TUPLE_CHUNK 16
+static shift_tuple *sg_shift_tuple_pool = NULL;
 
-void SG_AddShiftTuple(stack *st, action a)
-{
-  if(sg_shift_tuples == NULL) {
-    sg_stpl_max = SG_STPL_CHUNK;
-    sg_shift_tuples = SG_Malloc(SG_STPL_CHUNK, sizeof(shift_tuple));
-  }
-  if(sg_stpl_idx >= sg_stpl_max) {
-    sg_stpl_max += SG_STPL_CHUNK;
-    sg_shift_tuples = SG_Realloc(sg_shift_tuples, sg_stpl_max, sizeof(shift_tuple));
-  }
-  sg_shift_tuples[sg_stpl_idx].stack = st;
-  sg_shift_tuples[sg_stpl_idx].state = SG_A_STATE(a);
-  sg_shift_tuples[sg_stpl_idx].token = (ATermList)SG_A_TOKEN(a);
-  sg_shift_tuples[sg_stpl_idx].index = 0;
-  sg_shift_tuples[sg_stpl_idx].length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
-//  ATwarning("token = %t\n", SG_A_TOKEN(a));
-  sg_stpl_idx++;
-  IF_STATISTICS(
-    if(sg_stpl_idx > sg_sp_maxidx) {
-      sg_sp_maxidx    = sg_stpl_idx;
-      sg_sp_maxtoken  = current_token;
-      sg_sp_maxline   = line;
-      sg_sp_maxcol    = col;
-      sg_sp_maxoffset = sg_tokens_read;
+static shift_tuple *alloc_shift_tuple() {
+  shift_tuple *new_tuple;
+
+  if (sg_shift_tuple_pool == NULL) {
+    int i;
+    sg_shift_tuple_pool = SG_Calloc(SG_SHIFT_TUPLE_CHUNK, sizeof(shift_tuple));
+    for (i=SG_SHIFT_TUPLE_CHUNK-1; i>0; i--) {
+      sg_shift_tuple_pool[i-1].next = &sg_shift_tuple_pool[i];
     }
-  );
+  }
+
+  new_tuple = sg_shift_tuple_pool;
+  sg_shift_tuple_pool = new_tuple->next;
+  new_tuple->next = NULL;
+
+  return new_tuple;
 }
 
-void  SG_DiscardShiftTuple(void)
+static void free_shift_tuple(shift_tuple *tuple)
 {
-  sg_stpl_idx--;
+  tuple->next = sg_shift_tuple_pool;
+  sg_shift_tuple_pool = tuple;
+}
+
+
+static shift_tuple *sg_shift_tuples = NULL;
+
+static shift_tuple *SG_AddShiftTuple(stack *st, action a)
+{
+  shift_tuple *tuple;
+
+  /*ATwarning("SG_AddShiftTuple: token = %t\n", SG_A_TOKEN(a));*/
+  
+  tuple = alloc_shift_tuple();
+  tuple->next = sg_shift_tuples;
+  sg_shift_tuples = tuple;
+
+  tuple->stack = st;
+  tuple->state = SG_A_STATE(a);
+  tuple->token = (ATermList)SG_A_TOKEN(a);
+  tuple->index = 0;
+  tuple->length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
+
+  return tuple;
+}
+
+static void SG_DiscardShiftTuple(shift_tuple *tuple)
+{
+  if (sg_shift_tuples == tuple) {
+    sg_shift_tuples = tuple->next;
+  }
+  else {
+    shift_tuple *cur;
+    for (cur = sg_shift_tuples; cur; cur = cur->next) {
+      if (cur->next == tuple) {
+	break;
+      }
+    }
+    assert(cur != NULL);
+    assert(cur->next == tuple);
+    cur->next = tuple->next;
+  }
+
+  free_shift_tuple(tuple);
 }
 
 path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
@@ -935,12 +968,13 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 
 void SG_Shifter(void)
 {
-  production   t;
-  stack        *st0, *st1;
-  stacks       *new_active_stacks = NULL;
-  state        s;
-  st_link      *l;
-  int          i;
+  production t;
+  stack *st0, *st1;
+  stacks *new_active_stacks = NULL;
+  state s;
+  st_link *l;
+  shift_tuple *cur_tuple, *next_tuple;
+  int i;
 
   IF_DEBUG(
     fprintf(SG_log(), "#%ld: shifting %d parser(s) -- token ",
@@ -951,14 +985,16 @@ void SG_Shifter(void)
 
   t = SG_LookupProduction(table, current_token);
 
-  for (i = 0; i < sg_stpl_idx; i++) {
-    ATermList token = SG_STPL_TOKEN(sg_shift_tuples[i]);
-    int index       = SG_STPL_INDEX(sg_shift_tuples[i]);
-    int length      = SG_STPL_LENGTH(sg_shift_tuples[i]);
-    s               = SG_STPL_STATE(sg_shift_tuples[i]);
-    st0             = SG_STPL_STACK(sg_shift_tuples[i]);
+  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
+    next_tuple = cur_tuple->next;
+    ATermList token = SG_STPL_TOKEN(cur_tuple);
+    int index       = SG_STPL_INDEX(cur_tuple);
+    int length      = SG_STPL_LENGTH(cur_tuple);
+    s               = SG_STPL_STATE(cur_tuple);
+    st0             = SG_STPL_STACK(cur_tuple);
 
-//ATwarning("entering shifter with %t and %d\n", token, index);  
+    /*ATwarning("entering shifter with %t and %d\n", token, index);  */
+
     if (index == length) { 
       if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
         if (!(st1 = SG_FindStack(s, new_active_stacks))) {
@@ -967,17 +1003,16 @@ void SG_Shifter(void)
         }
         l = SG_AddLink(st1, st0, (tree) t, 1);
       }
-      SG_DiscardShiftTuple();
+      SG_DiscardShiftTuple(cur_tuple);
     }
     else {
       if (current_token == ATgetInt((ATermInt) ATelementAt(token, index))) {
         index++;
-        sg_shift_tuples[i].index = index;
-
+	SG_STPL_INDEX(cur_tuple) = index;
         new_active_stacks = SG_AddStack(st0, new_active_stacks);
       } 
       else {
-        SG_DiscardShiftTuple();
+        SG_DiscardShiftTuple(cur_tuple);
       }
     }
   }

@@ -1,5 +1,8 @@
 $Id$
 
+2002/07/31 (jong@cwi.nl)
+ * Refactored shift-tuple data structure.
+
 2002/07/31 (vandenbr@loria.fr)
  * Bumped to version 3.9beta.
  * Started working on an improved treatement of keywords.
