@@ -1,5 +1,8 @@
 # $Id$
 
+2003/02/18 (markvdb@cwi.nl)
+ * Activated ViewTree button.
+
 Mon Feb 17 10:00:23 CET 2003 <jong@cwi.nl>
  * text-editor.idef: fix rec-event for Queries acknowledged a Move event
 
