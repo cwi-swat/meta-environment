@@ -189,9 +189,10 @@ void add_table(int conn, const char *table, const char *valueType)
 /*}}}  */
 /*{{{  void remove_value_from_all_tables(int conn, ATerm key) */
 
-void remove_value_from_all_tables(int conn, ATerm key)
+ATerm remove_value_from_all_tables(int conn, ATerm key)
 {
-  TS_removeValueFromAllTables(key);
+  return ATmake("snd-value(removed-from-tables([<list>]))", 
+		TS_removeValueFromAllTables(key));
 }
 
 /*}}}  */
@@ -218,7 +219,7 @@ ATerm load_snapshot(int conn, ATerm snapshot)
 {
   TS_loadSnapshot(snapshot);
 
-  return RESULT(ATparse("snapshot-loaded"));
+  return ATmake("snd-value(tables-loaded([<list>]))", TS_getTableNames());
 }
 
 /*}}}  */

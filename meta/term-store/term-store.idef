@@ -7,6 +7,7 @@ let
   TS: term-store,
   TableName: str,
   Key: term,
+  TableNames: list,
   TermValue: term,
   StrValue: str,
   Keys: list,
@@ -26,15 +27,17 @@ in
   +
     rec-msg(ts-clear-table(TableName?))
     . snd-do(TS, clear-table(TableName))
+    . NotifyTableObservers([TableName])
   +
     rec-msg(ts-put-term-value(TableName?, Key?, TermValue?))
     . snd-do(TS, put-term-value(TableName, Key, TermValue))
-    . snd-note(ts-table-updated(TableName))
-    . TermValue := []
+    . NotifyTableObservers([TableName])
+    . TermValue := help-the-garbage-collector 
   +
     rec-msg(ts-put-str-value(TableName?, Key?, StrValue?))
     . snd-do(TS, put-str-value(TableName, Key, StrValue))
-    . StrValue := ""
+    . NotifyTableObservers([TableName])
+    . StrValue := "help-the-garbage-collector"
   +
     rec-msg(ts-get-str-value(TableName?, Key?))
     . snd-eval(TS, get-str-value(TableName, Key))
@@ -42,7 +45,7 @@ in
     (
       rec-value(TS, result(StrValue?))
       . snd-msg(ts-value(StrValue))
-      . StrValue := ""
+      . StrValue := "help-the-garbage-collector"
     +
       rec-value(TS, no-result)
       . snd-msg(ts-no-value)
@@ -62,6 +65,7 @@ in
   +
     rec-msg(ts-remove-value(TableName?, Key?))
     . snd-do(TS, remove-value(TableName, Key))
+    . NotifyTableObservers([TableName])
   +
     rec-msg(ts-contains-key(TableName?, Key?))
     . snd-eval(TS, contains-key(TableName, Key))
@@ -108,10 +112,12 @@ in
       rec-value(TS, no-result)
       . snd-msg(ts-no-values)
     )
-    . Values := []
+    . Values := help-the-garbage-collector
   +
     rec-msg(ts-remove-value-from-all-tables(Key?))
-    . snd-do(TS, remove-value-from-all-tables(Key))
+    . snd-eval(TS, remove-value-from-all-tables(Key))
+    . rec-value(TS, removed-from-tables(TableNames?))
+    . NotifyTableObservers(TableNames)
   +
     rec-msg(ts-get-snapshot)
     . snd-eval(TS, get-snapshot)
@@ -120,10 +126,30 @@ in
   +
     rec-msg(ts-load-snapshot(Snapshot?))
     . snd-eval(TS, load-snapshot(Snapshot))
-    . rec-value(TS, result(snapshot-loaded))
+    . rec-value(TS, tables-loaded(TableNames?))
+    . NotifyTableObservers(TableNames)
     . snd-msg(ts-snapshot-loaded)
-    . snd-note(ts-table-updated("import-relations"))
   )
   *
   delta
+endlet
+
+process NotifyTableObservers(TableNames: list) is
+let
+  TableName: str,
+  Todo: list
+in
+  Todo := TableNames
+  . 
+  (
+    if not(equal(Todo, [])) then
+      TableName := first(Todo)
+      . snd-note(ts-table-updated(TableName))
+      . Todo := next(Todo)
+    fi
+  )
+  * if equal(Todo, []) then
+    tau
+  fi 
+
 endlet

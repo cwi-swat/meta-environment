@@ -18,15 +18,16 @@ char* TS_getTableValueType(const char *name);
 /* Table operations */
 void      TS_putValue(const char* table, ATerm key, ATerm value);
 ATerm     TS_getValue(const char* table, ATerm key);
-void      TS_removeValue(const char* table, ATerm key);
-void      TS_removeValueFromAllTables(ATerm key);
+ATbool    TS_removeValue(const char* table, ATerm key);
+ATermList TS_removeValueFromAllTables(ATerm key);
 ATbool    TS_containsKey(const char* table, ATerm key);
 ATermList TS_getAllKeys(const char* table);
 ATermList TS_getAllValues(const char* table);
 ATermList TS_getValues(const char* table, ATermList keys);
 ATermList TS_getAllKeyValuePairs(const char *table);
+ATermList TS_getTableNames(void);
 ATermList TS_filterKeys(const char* table, ATermList keys);
 ATerm     TS_getSnapshot();
-void	  TS_loadSnapshot(ATerm snapshot);
+void      TS_loadSnapshot(ATerm snapshot);
 
 #endif

@@ -22,7 +22,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<term-store>,filter-keys(<str>,<list>))",
   "rec-eval(<term-store>,get-all-values(<str>))",
   "rec-eval(<term-store>,get-values(<str>,<list>))",
-  "rec-do(<term-store>,remove-value-from-all-tables(<term>))",
+  "rec-eval(<term-store>,remove-value-from-all-tables(<term>))",
   "rec-eval(<term-store>,get-snapshot)",
   "rec-eval(<term-store>,load-snapshot(<term>))",
   "rec-terminate(<term-store>,<term>)",
@@ -76,9 +76,8 @@ ATerm term_store_handler(int conn, ATerm term)
     clear_table(conn, s0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(remove-value-from-all-tables(<term>))", &t0)) {
-    remove_value_from_all_tables(conn, t0);
-    return NULL;
+  if(ATmatch(term, "rec-eval(remove-value-from-all-tables(<term>))", &t0)) {
+    return remove_value_from_all_tables(conn, t0);
   }
   if(ATmatch(term, "rec-do(remove-table(<str>))", &s0)) {
     remove_table(conn, s0);

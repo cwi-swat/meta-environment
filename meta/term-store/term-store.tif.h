@@ -21,7 +21,7 @@ ATerm get_all_values(int conn, const char *);
 void put_term_value(int conn, const char *, ATerm, ATerm);
 ATerm get_values(int conn, const char *, ATerm);
 void clear_table(int conn, const char *);
-void remove_value_from_all_tables(int conn, ATerm);
+ATerm remove_value_from_all_tables(int conn, ATerm);
 void remove_table(int conn, const char *);
 ATerm get_snapshot(int conn);
 void add_table(int conn, const char *, const char *);

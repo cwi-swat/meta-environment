@@ -162,17 +162,26 @@ void TS_clearTable(const char *name)
 }
 
 /*}}}  */
-/*{{{  void TS_removeValueFromAllTables(ATerm key) */
+/*{{{  ATermList TS_removeValueFromAllTables(ATerm key) */
 
-void TS_removeValueFromAllTables(ATerm key)
+ATermList TS_removeValueFromAllTables(ATerm key)
 {
   int i;
+  ATermList changedTables = ATempty;
 
   for(i = 0; i < MAX_NR_OF_TABLES; i++) {
     if (tableStore[i].name != NULL) {
-      T_removeValue(tableStore[i].table, key);
+      Table table = tableStore[i].table;
+      if (T_containsKey(table, key)) {
+	AFun fun = ATmakeAFun(tableStore[i].name, 0, ATtrue);
+	ATermAppl appl = ATmakeAppl0(fun);
+	changedTables = ATinsert(changedTables, (ATerm)appl);
+
+        T_removeValue(table, key);
+      }
     }
   }
+  return changedTables;
 }
 
 /*}}}  */
@@ -202,15 +211,19 @@ ATerm TS_getValue(const char* name, ATerm key)
 }
 
 /*}}}  */
-/*{{{  void TS_removeValue(const char * name, ATerm key) */
+/*{{{  ATbool TS_removeValue(const char * name, ATerm key) */
 
-void TS_removeValue(const char * name, ATerm key)
+ATbool TS_removeValue(const char * name, ATerm key)
 {
   Table table = TS_getTable(name);
 
   if (table != NULL) {
-    return T_removeValue(table, key);
+    if (T_containsKey(table, key)) {
+      T_removeValue(table, key);
+      return ATtrue;
+    }
   }
+  return ATfalse;
 }
 
 /*}}}  */
@@ -281,6 +294,24 @@ ATermList TS_getAllKeyValuePairs(const char *table)
   }
 
   return ATempty;
+}
+
+/*}}}  */
+/*{{{  ATermList TS_getTableNames(void)  */
+
+ATermList TS_getTableNames(void) 
+{
+  ATermList tableNames = ATempty;
+  int i;
+
+  for(i = 0; i < MAX_NR_OF_TABLES; i++) {
+    if (tableStore[i].name != NULL) {
+      AFun fun = ATmakeAFun(tableStore[i].name, 0, ATtrue);
+      ATermAppl appl = ATmakeAppl0(fun);
+      tableNames = ATinsert(tableNames, (ATerm)appl);
+    } 
+  }
+  return tableNames;
 }
 
 /*}}}  */
@@ -385,16 +416,13 @@ void loadTables(SS_Tables tables)
 void TS_loadSnapshot(ATerm s)
 {
   SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
-  SS_Tables tables;
 
-  if (!SS_isValidSnapshot(snapshot)) {
-    ATwarning("TS_loadSnapshot: Invalid snapshot ignored\n");
-    return;
+  if (SS_isValidSnapshot(snapshot)) {
+    loadTables(SS_getSnapshotTables(snapshot));
   }
-
-  tables = SS_getSnapshotTables(snapshot);
-
-  loadTables(tables);
+  else {
+    ATwarning("TS_loadSnapshot: Invalid snapshot ignored\n");
+  }
 }
 
 /*}}}  */
