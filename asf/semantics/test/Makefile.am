@@ -20,7 +20,8 @@ TEST_MODULES=Bracket \
              Tuple \
              Combination-Typecheck \
              Pico-Xml \
-             Lookup
+             Lookup \
+             RelationsTest
 
 TEST_MODULES_ASFE_ONLY=BoolAPI Tree
 

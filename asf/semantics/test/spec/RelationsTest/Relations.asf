@@ -1,0 +1,6 @@
+equations
+
+[un-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 union Rel2 = BagEE1 union BagEE2
+

@@ -1,0 +1,5 @@
+module RelationsTest
+  imports asf/syntax/Comments
+  imports basic/Integers
+  imports Bags[Integer]
+  imports Relations[Integer]
