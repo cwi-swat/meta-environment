@@ -978,16 +978,21 @@ public class MetaStudio
 	}
 
 	//}}}
-	//{{{ public void deleteModule(String module)
+	//{{{ public void deleteModules(ATermList modules)
 
-	public void deleteModule(String name) {
-		Module module = moduleManager.getModule(name);
-		if (module != null) {
-			moduleManager.removeModule(name);
-			graph.deleteNode(name);
-			layoutGraph();
-			moduleManager.selectModule(currentModule);
-		}
+	public void deleteModules(ATerm mods) {
+    ATermList modules = (ATermList) mods;
+    
+    for (;!modules.isEmpty(); modules = modules.getNext()) {
+      String name = ((ATermAppl) modules.getFirst()).getAFun().getName();
+		  Module module = moduleManager.getModule(name);
+		  if (module != null) {
+		  	moduleManager.removeModule(name);
+		  	graph.deleteNode(name); 	 	
+		  }
+    }
+    moduleManager.selectModule(currentModule);
+    layoutGraph();
 	}
 
 	//}}}

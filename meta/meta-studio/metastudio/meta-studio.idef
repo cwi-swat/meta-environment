@@ -118,8 +118,8 @@ in
       snd-msg(delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))
     ) +
-    ( rec-msg(ui-delete-module(ModName?)).
-      snd-do(UI, delete-module(ModName))
+    ( rec-msg(ui-delete-modules(Mods?)).
+      snd-do(UI, delete-modules(Mods))
     ) +
     ( rec-event(UI, close-module(ModName?,Recursive?)).
       snd-msg(close-module(ModName, Recursive)).
