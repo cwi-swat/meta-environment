@@ -84,6 +84,7 @@ NAME=""
 # binaries
 SDF2TOADT=${SDF2ADT}
 ADTTOJAVA=${APIGEN}/bin/adt-to-java
+CONCATADT=${APIGEN}/bin/concat-adt
 # }}}
 
 # {{{  handle command line options
@@ -183,6 +184,7 @@ if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || err
+${CONCATADT} ${BASE}.adt ${PKGDATA}/string.adt -o ${BASE}.adt
 fi
 
 

@@ -11,11 +11,13 @@ EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-c.sh.src \
 	     CHARLIST_StringImpl.java.template \
 	     CHARLIST.h.template \
-	     CHARLIST.c.template
+	     CHARLIST.c.template \
+	     string.adt
 
 pkgdata_DATA= CHARLIST_StringImpl.java.template \
 	      CHARLIST.c.template \
-	      CHARLIST.h.template
+	      CHARLIST.h.template \
+	      string.adt
 
 
 bin_SCRIPTS = sdf2-to-adt sdf2-to-java sdf2-to-c 
