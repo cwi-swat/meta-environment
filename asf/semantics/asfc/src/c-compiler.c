@@ -23,11 +23,10 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -L" PT_SUPPORT "/lib" " -lmept \\\n"
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
 	 "  -DASF_MAIN"
-	 "%s\n",
+	 "\n",
 	 run_verbose ? "-Wall" : "",
 	 binary, 
-	 source,
-	 run_verbose ? "" : ">& /dev/null" 
+	 source
 	 );
 
   if (run_verbose) {
