@@ -33,8 +33,7 @@ static char *id = NULL;
 static int vim_fd = -1;
 static int tb_fd = -1;
 static char filename[BUFSIZ] = { 0 };
-
-static char parseMenuName[BUFSIZ];
+static char parseMenuName[BUFSIZ] = { 0 };
 
 /*}}}  */
 
@@ -123,7 +122,6 @@ static void handleVimInput(const char *cmd)
 
     event = ATmake("menu-event(<str>,<str>,<str>)", menu, item, fid);
   }
-
 
   ATBpostEvent(tb_fd, event);
 }
@@ -219,7 +217,7 @@ ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
   }
 
   if (contents == NULL) {
-    ATwarning("meta-gvim: No focus text available, winging it so we don't crash.\n");
+    ATwarning("meta-gvim: No focus text available, winging it.\n");
     contents = strdup("");
   }
 
