@@ -175,7 +175,7 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   PT_ParseTree  parseTree;
   SDF_Module    sdfModule;
 
-  if(!strcmp(changed, "changed")) {
+  if (!strcmp(changed, "changed")) {
     isChanged = Mtrue;
   }
   else {
@@ -1045,13 +1045,12 @@ modules_depend_on(ATerm name, ATermList dependent)
 static ATerm 
 get_syntax(ATerm name, ATermList modules)
 {
-  SDF_ModuleList sdfModules = NULL;
-  SDF_Layout emptyWs = ATparse("w(\"\")");
-  PT_Layout layout = PT_makeLayoutFromTerm(emptyWs);
-  SDF_Definition sdfDefinition;
-  SDF_SDF sdfSDF;
-  PT_ParseTree parseTree;
-  PT_Tree tree;
+  char           *emptyString = "\"\"";
+  SDF_ModuleList  sdfModules = NULL;
+  SDF_Definition  sdfDefinition;
+  SDF_SDF         sdfSDF;
+  PT_ParseTree    parseTree;
+  PT_Tree         tree;
 
   if (ATisEmpty(modules)) {
     sdfModules = SDF_makeModuleListEmpty();
@@ -1067,17 +1066,17 @@ get_syntax(ATerm name, ATermList modules)
       if (sdfModules == NULL) {
 	sdfModules = SDF_makeModuleListSingle(sdfModule);
       } else {
-	sdfModules = SDF_makeModuleListMany(sdfModule, emptyWs, sdfModules);
+	sdfModules = SDF_makeModuleListMany(sdfModule, emptyString, sdfModules);
       }
 
       modules = ATgetNext(modules);
     }
   }
   sdfDefinition = SDF_makeDefinitionDefault(sdfModules);
-  sdfSDF = SDF_makeSDFDefinition(emptyWs, sdfDefinition);
+  sdfSDF = SDF_makeSDFDefinition(emptyString, sdfDefinition);
 
   tree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(sdfSDF));
-  parseTree = PT_makeParseTreeTree(layout, tree, layout);
+  parseTree = PT_makeParseTreeTree(emptyString, tree, emptyString);
 
   return PT_makeTermFromParseTree(parseTree);
 }
