@@ -182,8 +182,9 @@ ATerm get_module_path(int cid, char *path, char *id)
    * then we should return "/bla/basic"
    */
   
-  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--);
-  path[p+1] = '\0';
+  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--) {
+    path[p] = '\0';
+  }
   
   for(i = strlen(id) - 1; i >= 0 && id[i] != SEP; i--);
 
@@ -205,8 +206,9 @@ ATerm get_module_path(int cid, char *path, char *id)
   }
 
   /* remove trailing directory separators */
-  for(p = strlen(path) - 1; p >= 0 && path[p] == SEP; p--);
-  path[p+1] = '\0';
+  for(; p >= 0 && path[p] == SEP; p--) {
+    path[p] = '\0';
+  }
 
   return ATmake("snd-value(module-path(<str>))", path);
 }
