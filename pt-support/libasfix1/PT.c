@@ -264,11 +264,11 @@ PT_Tree PT_makeTreeLayout(char * string)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeVar(char * name, PT_Symbol symbol) */
+/*{{{  PT_Tree PT_makeTreeVar(char * string, PT_Symbol symbol) */
 
-PT_Tree PT_makeTreeVar(char * name, PT_Symbol symbol)
+PT_Tree PT_makeTreeVar(char * string, PT_Symbol symbol)
 {
-  return (PT_Tree)ATmakeTerm(PT_patternTreeVar, name, symbol);
+  return (PT_Tree)ATmakeTerm(PT_patternTreeVar, string, symbol);
 }
 
 /*}}}  */
@@ -926,6 +926,9 @@ ATbool PT_hasTreeString(PT_Tree arg)
   else if (PT_isTreeLayout(arg)) {
     return ATtrue;
   }
+  else if (PT_isTreeVar(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -947,6 +950,9 @@ char * PT_getTreeString(PT_Tree arg)
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
   else if (PT_isTreeLayout(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (PT_isTreeVar(arg)) {
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
 
@@ -972,6 +978,9 @@ PT_Tree PT_setTreeString(PT_Tree arg, char * string)
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
   }
   else if (PT_isTreeLayout(arg)) {
+    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
+  }
+  else if (PT_isTreeVar(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
   }
 
@@ -1022,43 +1031,6 @@ PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol)
   }
 
   ATabort("Tree has no Symbol: %t\n", arg);
-  return (PT_Tree)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasTreeName(PT_Tree arg) */
-
-ATbool PT_hasTreeName(PT_Tree arg)
-{
-  if (PT_isTreeVar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char * PT_getTreeName(PT_Tree arg) */
-
-char * PT_getTreeName(PT_Tree arg)
-{
-  if (PT_isTreeVar(arg)) {
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
-  }
-
-  ATabort("Tree has no Name: %t\n", arg);
-  return (char *)NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_setTreeName(PT_Tree arg, char * name) */
-
-PT_Tree PT_setTreeName(PT_Tree arg, char * name)
-{
-  if (PT_isTreeVar(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), 0);
-  }
-
-  ATabort("Tree has no Name: %t\n", arg);
   return (PT_Tree)NULL;
 }
 
@@ -2028,9 +2000,9 @@ PT_ModuleName PT_visitModuleName(PT_ModuleName arg, char * (*acceptId)(char *))
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol), char * (*acceptName)(char *)) */
+/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol)) */
 
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol), char * (*acceptName)(char *))
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol))
 {
   if (PT_isTreeAppl(arg)) {
     return PT_makeTreeAppl(
@@ -2065,7 +2037,7 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
   }
   if (PT_isTreeVar(arg)) {
     return PT_makeTreeVar(
-        acceptName ? acceptName(PT_getTreeName(arg)) : PT_getTreeName(arg),
+        acceptString ? acceptString(PT_getTreeString(arg)) : PT_getTreeString(arg),
         acceptSymbol ? acceptSymbol(PT_getTreeSymbol(arg)) : PT_getTreeSymbol(arg));
   }
   ATabort("not a Tree: %t\n", arg);

@@ -28,7 +28,7 @@
   [Tree, quoted-literal, ql(<string(str)>)],
   [Tree, separator, sep(<string(str)>)],
   [Tree, layout, w(<string(str)>)],
-  [Tree, var, var(<name(str)>,<symbol(Symbol)>)], 
+  [Tree, var, var(<string(str)>,<symbol(Symbol)>)], 
 
   [Production, default, prod(id(<module-name(str)>),
                        w(""),

@@ -65,7 +65,7 @@ PT_Tree PT_makeTreeUnquotedLiteral(char * string);
 PT_Tree PT_makeTreeQuotedLiteral(char * string);
 PT_Tree PT_makeTreeSeparator(char * string);
 PT_Tree PT_makeTreeLayout(char * string);
-PT_Tree PT_makeTreeVar(char * name, PT_Symbol symbol);
+PT_Tree PT_makeTreeVar(char * string, PT_Symbol symbol);
 PT_Production PT_makeProductionDefault(char * moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes);
 PT_Attributes PT_makeAttributesNoAttrs();
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
@@ -153,9 +153,6 @@ PT_Tree PT_setTreeString(PT_Tree arg, char * string);
 ATbool PT_hasTreeSymbol(PT_Tree arg);
 PT_Symbol PT_getTreeSymbol(PT_Tree arg);
 PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol);
-ATbool PT_hasTreeName(PT_Tree arg);
-char * PT_getTreeName(PT_Tree arg);
-PT_Tree PT_setTreeName(PT_Tree arg, char * name);
 
 /*}}}  */
 /*{{{  PT_Production accessors */
@@ -263,7 +260,7 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, char * (*acceptLayoutBeforeTree)(char *), PT_Tree (*acceptTree)(PT_Tree), char * (*acceptLayoutAfterTree)(char *));
 PT_ModuleName PT_visitModuleName(PT_ModuleName arg, char * (*acceptId)(char *));
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol), char * (*acceptName)(char *));
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), char * (*acceptString)(char *), PT_Symbol (*acceptSymbol)(PT_Symbol));
 PT_Production PT_visitProduction(PT_Production arg, char * (*acceptModuleName)(char *), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
