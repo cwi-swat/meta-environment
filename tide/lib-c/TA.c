@@ -4,10 +4,48 @@
 #include <deprecated.h>
 #include "TA.h"
 
+/*{{{  conversion functions */
+
+ATerm TA_stringToChars(const char *str)
+{
+  int len = strlen(str);
+  int i;
+  ATermList result = ATempty;
+
+  for (i = len - 1; i >= 0; i--) {
+    result = ATinsert(result, (ATerm) ATmakeInt(str[i]));
+  }
+
+  return (ATerm) result;
+}
+
+char *TA_charsToString(ATerm arg)
+{
+  ATermList list = (ATermList) arg;
+  int len = ATgetLength(list);
+  int i;
+  char *str;
+
+  str = (char *) malloc(len+1);
+  if (str == NULL) {
+      return NULL;
+  }
+
+  for (i = 0; !ATisEmpty(list); list = ATgetNext(list), i++) {
+    str[i] = (char) ATgetInt((ATermInt) ATgetFirst(list));
+  }
+  str[i] = '\0';
+
+  return str;
+}
+
+
+/*}}}  */
+
 /*{{{  typedefs */
 
-typedef struct _ATerm _TA_Location;
-typedef struct _ATerm _TA_Port;
+typedef struct ATerm _TA_Location;
+typedef struct ATerm _TA_Port;
 
 /*}}}  */
 
@@ -20,6 +58,20 @@ void TA_initTAApi(void)
 
 /*}}}  */
 
+/*{{{  protect functions */
+
+void TA_protectLocation(TA_Location *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void TA_protectPort(TA_Port *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 /*{{{  TA_Location TA_LocationFromTerm(ATerm t) */
@@ -56,61 +108,65 @@ ATerm TA_PortToTerm(TA_Port arg)
 /*}}}  */
 
 /*}}}  */
+/*{{{  list functions */
+
+
+/*}}}  */
 /*{{{  constructors */
 
-/*{{{  TA_Location TA_makeLocationLine(char * file, int line) */
+/*{{{  TA_Location TA_makeLocationLine(const char* file, int line) */
 
-TA_Location TA_makeLocationLine(char * file, int line)
+TA_Location TA_makeLocationLine(const char* file, int line)
 {
-  return (TA_Location)(ATerm)ATmakeAppl2(TA_afun0, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), (ATerm)ATmakeInt(line));
+  return (TA_Location)(ATerm)ATmakeAppl2(TA_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue)), (ATerm) (ATerm) ATmakeInt(line));
 }
 
 /*}}}  */
-/*{{{  TA_Location TA_makeLocationArea(char * file, int startLine, int startCol, int endLine, int endCol) */
+/*{{{  TA_Location TA_makeLocationArea(const char* file, int startLine, int startCol, int endLine, int endCol, int offset, int length) */
 
-TA_Location TA_makeLocationArea(char * file, int startLine, int startCol, int endLine, int endCol)
+TA_Location TA_makeLocationArea(const char* file, int startLine, int startCol, int endLine, int endCol, int offset, int length)
 {
-  return (TA_Location)(ATerm)ATmakeAppl5(TA_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), (ATerm)ATmakeInt(startLine), (ATerm)ATmakeInt(startCol), (ATerm)ATmakeInt(endLine), (ATerm)ATmakeInt(endCol));
+  return (TA_Location)(ATerm)ATmakeAppl2(TA_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue)), (ATerm)ATmakeAppl6(TA_afun2, (ATerm) (ATerm) ATmakeInt(startLine), (ATerm) (ATerm) ATmakeInt(startCol), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endCol), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length)));
 }
 
 /*}}}  */
-/*{{{  TA_Location TA_makeLocationLineCol(char * file, int line, int col) */
+/*{{{  TA_Location TA_makeLocationLineCol(const char* file, int line, int col) */
 
-TA_Location TA_makeLocationLineCol(char * file, int line, int col)
+TA_Location TA_makeLocationLineCol(const char* file, int line, int col)
 {
-  return (TA_Location)(ATerm)ATmakeAppl3(TA_afun2, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), (ATerm)ATmakeInt(line), (ATerm)ATmakeInt(col));
+  return (TA_Location)(ATerm)ATmakeAppl3(TA_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue)), (ATerm) (ATerm) ATmakeInt(line), (ATerm) (ATerm) ATmakeInt(col));
 }
 
 /*}}}  */
-/*{{{  TA_Location TA_makeLocationUnknown() */
+/*{{{  TA_Location TA_makeLocationUnknown(void) */
 
-TA_Location TA_makeLocationUnknown()
+TA_Location TA_makeLocationUnknown(void)
 {
-  return (TA_Location)(ATerm)ATmakeAppl0(TA_afun3);
+  return (TA_Location)(ATerm)ATmakeAppl0(TA_afun4);
 }
 
 /*}}}  */
-/*{{{  TA_Port TA_makePortStep() */
+/*{{{  TA_Port TA_makePortStep(void) */
 
-TA_Port TA_makePortStep()
-{
-  return (TA_Port)(ATerm)ATmakeAppl0(TA_afun4);
-}
-
-/*}}}  */
-/*{{{  TA_Port TA_makePortStopped() */
-
-TA_Port TA_makePortStopped()
+TA_Port TA_makePortStep(void)
 {
   return (TA_Port)(ATerm)ATmakeAppl0(TA_afun5);
 }
 
 /*}}}  */
-/*{{{  TA_Port TA_makePortStarted() */
+/*{{{  TA_Port TA_makePortStopped(void) */
 
-TA_Port TA_makePortStarted()
+TA_Port TA_makePortStopped(void)
 {
   return (TA_Port)(ATerm)ATmakeAppl0(TA_afun6);
+}
+
+/*}}}  */
+/*{{{  TA_Port TA_makePortStarted(void) */
+
+TA_Port TA_makePortStarted(void)
+{
+  return (TA_Port)(ATerm)ATmakeAppl0(TA_afun7);
 }
 
 /*}}}  */
@@ -155,14 +211,21 @@ ATbool TA_isValidLocation(TA_Location arg)
 
 inline ATbool TA_isLocationLine(TA_Location arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(TA_patternLocationLine)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternLocationLine, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TA_patternLocationLine, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -170,14 +233,21 @@ inline ATbool TA_isLocationLine(TA_Location arg)
 
 inline ATbool TA_isLocationArea(TA_Location arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(TA_patternLocationArea)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternLocationArea, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TA_patternLocationArea, NULL, NULL, NULL, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -185,14 +255,21 @@ inline ATbool TA_isLocationArea(TA_Location arg)
 
 inline ATbool TA_isLocationLineCol(TA_Location arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(TA_patternLocationLineCol)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternLocationLineCol, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TA_patternLocationLineCol, NULL, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -200,7 +277,21 @@ inline ATbool TA_isLocationLineCol(TA_Location arg)
 
 inline ATbool TA_isLocationUnknown(TA_Location arg)
 {
-  return ATmatchTerm((ATerm)arg, TA_patternLocationUnknown);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternLocationUnknown);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -221,40 +312,6 @@ ATbool TA_hasLocationFile(TA_Location arg)
 }
 
 /*}}}  */
-/*{{{  char * TA_getLocationFile(TA_Location arg) */
-
-char * TA_getLocationFile(TA_Location arg)
-{
-  if (TA_isLocationLine(arg)) {
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else if (TA_isLocationArea(arg)) {
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else 
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
-}
-
-/*}}}  */
-/*{{{  TA_Location TA_setLocationFile(TA_Location arg, char * file) */
-
-TA_Location TA_setLocationFile(TA_Location arg, char * file)
-{
-  if (TA_isLocationLine(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), 0);
-  }
-  else if (TA_isLocationArea(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), 0);
-  }
-  else if (TA_isLocationLineCol(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), 0);
-  }
-
-  ATabort("Location has no File: %t\n", arg);
-  return (TA_Location)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool TA_hasLocationLine(TA_Location arg) */
 
 ATbool TA_hasLocationLine(TA_Location arg)
@@ -269,34 +326,6 @@ ATbool TA_hasLocationLine(TA_Location arg)
 }
 
 /*}}}  */
-/*{{{  int TA_getLocationLine(TA_Location arg) */
-
-int TA_getLocationLine(TA_Location arg)
-{
-  if (TA_isLocationLine(arg)) {
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-  }
-  else 
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-}
-
-/*}}}  */
-/*{{{  TA_Location TA_setLocationLine(TA_Location arg, int line) */
-
-TA_Location TA_setLocationLine(TA_Location arg, int line)
-{
-  if (TA_isLocationLine(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(line), 1);
-  }
-  else if (TA_isLocationLineCol(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(line), 1);
-  }
-
-  ATabort("Location has no Line: %t\n", arg);
-  return (TA_Location)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool TA_hasLocationStartLine(TA_Location arg) */
 
 ATbool TA_hasLocationStartLine(TA_Location arg)
@@ -305,28 +334,6 @@ ATbool TA_hasLocationStartLine(TA_Location arg)
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TA_getLocationStartLine(TA_Location arg) */
-
-int TA_getLocationStartLine(TA_Location arg)
-{
-  
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-}
-
-/*}}}  */
-/*{{{  TA_Location TA_setLocationStartLine(TA_Location arg, int startLine) */
-
-TA_Location TA_setLocationStartLine(TA_Location arg, int startLine)
-{
-  if (TA_isLocationArea(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(startLine), 1);
-  }
-
-  ATabort("Location has no StartLine: %t\n", arg);
-  return (TA_Location)NULL;
 }
 
 /*}}}  */
@@ -341,28 +348,6 @@ ATbool TA_hasLocationStartCol(TA_Location arg)
 }
 
 /*}}}  */
-/*{{{  int TA_getLocationStartCol(TA_Location arg) */
-
-int TA_getLocationStartCol(TA_Location arg)
-{
-  
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
-}
-
-/*}}}  */
-/*{{{  TA_Location TA_setLocationStartCol(TA_Location arg, int startCol) */
-
-TA_Location TA_setLocationStartCol(TA_Location arg, int startCol)
-{
-  if (TA_isLocationArea(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(startCol), 2);
-  }
-
-  ATabort("Location has no StartCol: %t\n", arg);
-  return (TA_Location)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool TA_hasLocationEndLine(TA_Location arg) */
 
 ATbool TA_hasLocationEndLine(TA_Location arg)
@@ -371,28 +356,6 @@ ATbool TA_hasLocationEndLine(TA_Location arg)
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int TA_getLocationEndLine(TA_Location arg) */
-
-int TA_getLocationEndLine(TA_Location arg)
-{
-  
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
-}
-
-/*}}}  */
-/*{{{  TA_Location TA_setLocationEndLine(TA_Location arg, int endLine) */
-
-TA_Location TA_setLocationEndLine(TA_Location arg, int endLine)
-{
-  if (TA_isLocationArea(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(endLine), 3);
-  }
-
-  ATabort("Location has no EndLine: %t\n", arg);
-  return (TA_Location)NULL;
 }
 
 /*}}}  */
@@ -407,25 +370,25 @@ ATbool TA_hasLocationEndCol(TA_Location arg)
 }
 
 /*}}}  */
-/*{{{  int TA_getLocationEndCol(TA_Location arg) */
+/*{{{  ATbool TA_hasLocationOffset(TA_Location arg) */
 
-int TA_getLocationEndCol(TA_Location arg)
+ATbool TA_hasLocationOffset(TA_Location arg)
 {
-  
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 4));
+  if (TA_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /*}}}  */
-/*{{{  TA_Location TA_setLocationEndCol(TA_Location arg, int endCol) */
+/*{{{  ATbool TA_hasLocationLength(TA_Location arg) */
 
-TA_Location TA_setLocationEndCol(TA_Location arg, int endCol)
+ATbool TA_hasLocationLength(TA_Location arg)
 {
   if (TA_isLocationArea(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(endCol), 4);
+    return ATtrue;
   }
-
-  ATabort("Location has no EndCol: %t\n", arg);
-  return (TA_Location)NULL;
+  return ATfalse;
 }
 
 /*}}}  */
@@ -440,12 +403,206 @@ ATbool TA_hasLocationCol(TA_Location arg)
 }
 
 /*}}}  */
+/*{{{  char* TA_getLocationFile(TA_Location arg) */
+
+char* TA_getLocationFile(TA_Location arg)
+{
+  if (TA_isLocationLine(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (TA_isLocationArea(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationLine(TA_Location arg) */
+
+int TA_getLocationLine(TA_Location arg)
+{
+  if (TA_isLocationLine(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else 
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationStartLine(TA_Location arg) */
+
+int TA_getLocationStartLine(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 0));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationStartCol(TA_Location arg) */
+
+int TA_getLocationStartCol(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 1));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationEndLine(TA_Location arg) */
+
+int TA_getLocationEndLine(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 2));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationEndCol(TA_Location arg) */
+
+int TA_getLocationEndCol(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 3));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationOffset(TA_Location arg) */
+
+int TA_getLocationOffset(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 4));
+}
+
+/*}}}  */
+/*{{{  int TA_getLocationLength(TA_Location arg) */
+
+int TA_getLocationLength(TA_Location arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), 5));
+}
+
+/*}}}  */
 /*{{{  int TA_getLocationCol(TA_Location arg) */
 
 int TA_getLocationCol(TA_Location arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 2));
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationFile(TA_Location arg, const char* file) */
+
+TA_Location TA_setLocationFile(TA_Location arg, const char* file)
+{
+  if (TA_isLocationLine(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue))), 0);
+  }
+  else if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue))), 0);
+  }
+  else if (TA_isLocationLineCol(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(file, 0, ATtrue))), 0);
+  }
+
+  ATabort("Location has no File: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationLine(TA_Location arg, int line) */
+
+TA_Location TA_setLocationLine(TA_Location arg, int line)
+{
+  if (TA_isLocationLine(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(line)), 1);
+  }
+  else if (TA_isLocationLineCol(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(line)), 1);
+  }
+
+  ATabort("Location has no Line: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationStartLine(TA_Location arg, int startLine) */
+
+TA_Location TA_setLocationStartLine(TA_Location arg, int startLine)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(startLine)), 0), 1);
+  }
+
+  ATabort("Location has no StartLine: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationStartCol(TA_Location arg, int startCol) */
+
+TA_Location TA_setLocationStartCol(TA_Location arg, int startCol)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(startCol)), 1), 1);
+  }
+
+  ATabort("Location has no StartCol: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationEndLine(TA_Location arg, int endLine) */
+
+TA_Location TA_setLocationEndLine(TA_Location arg, int endLine)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(endLine)), 2), 1);
+  }
+
+  ATabort("Location has no EndLine: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationEndCol(TA_Location arg, int endCol) */
+
+TA_Location TA_setLocationEndCol(TA_Location arg, int endCol)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(endCol)), 3), 1);
+  }
+
+  ATabort("Location has no EndCol: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationOffset(TA_Location arg, int offset) */
+
+TA_Location TA_setLocationOffset(TA_Location arg, int offset)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(offset)), 4), 1);
+  }
+
+  ATabort("Location has no Offset: %t\n", arg);
+  return (TA_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  TA_Location TA_setLocationLength(TA_Location arg, int length) */
+
+TA_Location TA_setLocationLength(TA_Location arg, int length)
+{
+  if (TA_isLocationArea(arg)) {
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) (ATerm) ATmakeInt(length)), 5), 1);
+  }
+
+  ATabort("Location has no Length: %t\n", arg);
+  return (TA_Location)NULL;
 }
 
 /*}}}  */
@@ -454,7 +611,7 @@ int TA_getLocationCol(TA_Location arg)
 TA_Location TA_setLocationCol(TA_Location arg, int col)
 {
   if (TA_isLocationLineCol(arg)) {
-    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(col), 2);
+    return (TA_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(col)), 2);
   }
 
   ATabort("Location has no Col: %t\n", arg);
@@ -487,7 +644,21 @@ ATbool TA_isValidPort(TA_Port arg)
 
 inline ATbool TA_isPortStep(TA_Port arg)
 {
-  return ATmatchTerm((ATerm)arg, TA_patternPortStep);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternPortStep);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -495,7 +666,21 @@ inline ATbool TA_isPortStep(TA_Port arg)
 
 inline ATbool TA_isPortStopped(TA_Port arg)
 {
-  return ATmatchTerm((ATerm)arg, TA_patternPortStopped);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternPortStopped);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -503,7 +688,21 @@ inline ATbool TA_isPortStopped(TA_Port arg)
 
 inline ATbool TA_isPortStarted(TA_Port arg)
 {
-  return ATmatchTerm((ATerm)arg, TA_patternPortStarted);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TA_patternPortStarted);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -511,9 +710,9 @@ inline ATbool TA_isPortStarted(TA_Port arg)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TA_Location TA_visitLocation(TA_Location arg, char * (*acceptFile)(char *), int (*acceptLine)(int), int (*acceptStartLine)(int), int (*acceptStartCol)(int), int (*acceptEndLine)(int), int (*acceptEndCol)(int), int (*acceptCol)(int)) */
+/*{{{  TA_Location TA_visitLocation(TA_Location arg, char* (*acceptFile)(char*), int (*acceptLine)(int), int (*acceptStartLine)(int), int (*acceptStartCol)(int), int (*acceptEndLine)(int), int (*acceptEndCol)(int), int (*acceptOffset)(int), int (*acceptLength)(int), int (*acceptCol)(int)) */
 
-TA_Location TA_visitLocation(TA_Location arg, char * (*acceptFile)(char *), int (*acceptLine)(int), int (*acceptStartLine)(int), int (*acceptStartCol)(int), int (*acceptEndLine)(int), int (*acceptEndCol)(int), int (*acceptCol)(int))
+TA_Location TA_visitLocation(TA_Location arg, char* (*acceptFile)(char*), int (*acceptLine)(int), int (*acceptStartLine)(int), int (*acceptStartCol)(int), int (*acceptEndLine)(int), int (*acceptEndCol)(int), int (*acceptOffset)(int), int (*acceptLength)(int), int (*acceptCol)(int))
 {
   if (TA_isLocationLine(arg)) {
     return TA_makeLocationLine(
@@ -526,7 +725,9 @@ TA_Location TA_visitLocation(TA_Location arg, char * (*acceptFile)(char *), int 
         acceptStartLine ? acceptStartLine(TA_getLocationStartLine(arg)) : TA_getLocationStartLine(arg),
         acceptStartCol ? acceptStartCol(TA_getLocationStartCol(arg)) : TA_getLocationStartCol(arg),
         acceptEndLine ? acceptEndLine(TA_getLocationEndLine(arg)) : TA_getLocationEndLine(arg),
-        acceptEndCol ? acceptEndCol(TA_getLocationEndCol(arg)) : TA_getLocationEndCol(arg));
+        acceptEndCol ? acceptEndCol(TA_getLocationEndCol(arg)) : TA_getLocationEndCol(arg),
+        acceptOffset ? acceptOffset(TA_getLocationOffset(arg)) : TA_getLocationOffset(arg),
+        acceptLength ? acceptLength(TA_getLocationLength(arg)) : TA_getLocationLength(arg));
   }
   if (TA_isLocationLineCol(arg)) {
     return TA_makeLocationLineCol(

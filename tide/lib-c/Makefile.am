@@ -14,7 +14,7 @@ debug-adapter.tif.c debug-adapter.tif.h: ../toolbus/tide.tifs
 		../toolbus/tide.tifs
 
 regen:
-	adt-to-c -i TA.adt --prefix TA_
+	adt-to-c -i TA.adt --prefix TA_ --name TA
 
 
 EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c

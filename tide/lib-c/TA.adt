@@ -1,11 +1,11 @@
 [
-  [Location, line,     line(<file(str)>,<line(int)>)],
-  [Location, area,     area(<file(str)>,<start-line(int)>,<start-col(int)>,
-                            <end-line(int)>,<end-col(int)>)],
-  [Location, line-col, lc(<file(str)>,<line(int)>,<col(int)>)],
-  [Location, unknown,  unknown],
+  constructor(Location, line,     line(<file(str)>,<line(int)>)),
+  constructor(Location, area,     area-in-file(<file(str)>,area(<start-line(int)>,<start-col(int)>,
+                            <end-line(int)>,<end-col(int)>,<offset(int)>,<length(int)>))),
+  constructor(Location, line-col, lc(<file(str)>,<line(int)>,<col(int)>)),
+  constructor(Location, unknown,  unknown),
 
-  [Port, step,     step],
-  [Port, stopped,  stopped],
-  [Port, started,  started]
+  constructor(Port, step,     step),
+  constructor(Port, stopped,  stopped),
+  constructor(Port, started,  started)
 ]
