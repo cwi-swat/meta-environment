@@ -33,34 +33,36 @@ import metastudio.components.graphs.ParseTreePanel;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
-public class MetaStudio extends JFrame implements Runnable {
+public class MetaStudio extends JFrame  {
     private static PureFactory factory;
     private MultiBridge bridge;
 
     private HistoryPanel historyPanel;
 
     public static final void main(String[] args) throws IOException {
-        MetaStudio studio = new MetaStudio(args);
-        studio.bridge.run();
+        new MetaStudio(args);
     }
 
     private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar(factory, bridge, this);
+        MenuBar menuBar = new MenuBar(factory, getBridge(), this);
 
         return menuBar;
     }
 
     public MetaStudio(String[] args) throws IOException {
         factory = new PureFactory();
-
-        initializeProperties();
         createToolBusBridge(args);
+        
+        initializeProperties();
         handleCloseRequests();
 
         createContentPane();
         createPopupHandlers();
 
         makeStudioVisible();
+        
+        // should be done after construction of all components
+        getBridge().run();
     }
     private void initializeProperties() throws IOException {
         InputStream propertyStream =
@@ -78,9 +80,9 @@ public class MetaStudio extends JFrame implements Runnable {
     }
     
     private void createPopupHandlers() {
-        bridge.addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
-        bridge.addToolComponent(new FileDialog(factory, bridge));
-        bridge.addToolComponent(new ModulePopupMenu(factory, bridge));
+        getBridge().addToolComponent(new QuestionDialog(factory, getBridge(), this.getRootPane()));
+        getBridge().addToolComponent(new FileDialog(factory, getBridge()));
+        getBridge().addToolComponent(new ModulePopupMenu(factory, getBridge()));
     }
     
     private void createContentPane() {
@@ -89,7 +91,7 @@ public class MetaStudio extends JFrame implements Runnable {
         Container content = getContentPane();
         content.setLayout(new BorderLayout());
 
-        ToolComponent toolbar = new ToolBar(factory, bridge);
+        ToolComponent toolbar = new ToolBar(factory, getBridge());
         content.add(toolbar, BorderLayout.NORTH);
 
         content.add(createMainPane(), BorderLayout.CENTER);
@@ -116,12 +118,12 @@ public class MetaStudio extends JFrame implements Runnable {
         container.add(createMessageTabs(), BorderLayout.CENTER);
 
         if (historyPanel == null) {
-            historyPanel = new HistoryPanel(factory, bridge);
-            bridge.addToolComponent(historyPanel);
+            historyPanel = new HistoryPanel(factory, getBridge());
+            getBridge().addToolComponent(historyPanel);
         }
 
-        StatusBar bar = new StatusBar(factory, bridge, historyPanel);
-        bridge.addToolComponent(bar);
+        StatusBar bar = new StatusBar(factory, getBridge(), historyPanel);
+        getBridge().addToolComponent(bar);
         container.add(bar, BorderLayout.SOUTH);
 
         return container;
@@ -143,10 +145,10 @@ public class MetaStudio extends JFrame implements Runnable {
     private JTabbedPane createMainTabs() {
         JTabbedPane tabs = new JTabbedPane();
 
-        ToolComponent moduleBrowser = new ModuleBrowser(factory, bridge);
+        ToolComponent moduleBrowser = new ModuleBrowser(factory, getBridge());
         tabs.insertTab("Modules", null, moduleBrowser, null, tabs.getTabCount());
 
-        ToolComponent parseTreePanel = new ParseTreePanel(factory, bridge);
+        ToolComponent parseTreePanel = new ParseTreePanel(factory, getBridge());
         tabs.insertTab("Parse tree", null, parseTreePanel, null, tabs.getTabCount());
 
         return tabs;
@@ -157,21 +159,21 @@ public class MetaStudio extends JFrame implements Runnable {
         JTabbedPane messageTabs = new JTabbedPane();
 
         if (historyPanel == null) {
-            historyPanel = new HistoryPanel(factory, bridge);
+            historyPanel = new HistoryPanel(factory, getBridge());
         }
         messageTabs.insertTab("history", null, historyPanel, "Execution history", 0);
 
-        ToolComponent messageList = new MessageList(factory, bridge);
+        ToolComponent messageList = new MessageList(factory, getBridge());
         messageTabs.insertTab("messages", null, messageList, "Message list", 1);
 
-        ToolComponent feedbackList = new FeedbackList(factory, bridge);
+        ToolComponent feedbackList = new FeedbackList(factory, getBridge());
         messageTabs.insertTab("errors", null, feedbackList, "Clickable messages", 2);
 
         return messageTabs;
     }
 
     private void postQuitEvent() {
-        bridge.sendEvent(factory.parse("quit"));
+        getBridge().sendEvent(factory.parse("quit"));
     }
 
     private void handleCloseRequests() {
@@ -185,10 +187,10 @@ public class MetaStudio extends JFrame implements Runnable {
     private void createToolBusBridge(String[] args)
         throws UnknownHostException, IOException {
 
-        bridge = new MultiBridge(factory);
-        bridge.init(args);
-        bridge.connect();
-        bridge.setLockObject(getTreeLock());
+        setBridge(new MultiBridge(factory));
+        getBridge().init(args);
+        getBridge().connect();
+        getBridge().setLockObject(getTreeLock());
     }
 
     public void initializeUi(String name) {
@@ -196,7 +198,13 @@ public class MetaStudio extends JFrame implements Runnable {
         Preferences.setString("metastudio.name", name);
     }
 
-    public void run() {
-        // TODO: why do we implement runnable ?
+    private void setBridge(MultiBridge bridge) {
+        this.bridge = bridge;
     }
+
+    private MultiBridge getBridge() {
+        return bridge;
+    }
+
+   
 }
