@@ -32,6 +32,8 @@ libasc_support_a_SOURCES = $(SRCS)
 libasc_support_a_LIBADD  = rewriter.tif.o
 
 # Default include directories
-INCLUDES   = -I. -I$(PT_SUPPORT)/include -I$(ATERM)/include
+INCLUDES   = -I. -I$(ASF_SUPPORT)/include \
+                 -I$(PT_SUPPORT)/include \
+                 -I$(ATERM)/include
 
 rewriter.o: rewriter.tif.h
