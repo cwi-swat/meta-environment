@@ -38,7 +38,7 @@ call_toolbus () {
     echo "Failed: " $script ": " ${result}
     failed=`expr $failed + 1`
   else
-    echo -n .
+    printf .
   fi
 }
 

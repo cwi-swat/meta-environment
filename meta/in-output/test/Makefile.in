@@ -32,7 +32,7 @@ CLEANFILES	= ${TESTCASES}
 
 test: ${TESTCASES}
 	@for testcase in ${TESTCASES}; do \
-		echo -n "Running $${testcase}"; \
+		printf "Running $${testcase}"; \
 		./$${testcase}; \
 	done
 
