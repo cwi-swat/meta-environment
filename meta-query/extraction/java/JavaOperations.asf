@@ -23,37 +23,40 @@ equations
 [type2string-0]
   type2str(#Name) = name2str(#Name)
 
-[type2string-1]
+[type2string-1a]
   type2str(boolean) = strcon(""" "b" "o" "o" "l" "e" "a" "n" """)
 
-[type2string-2]
+[type2string-1b]
   type2str(byte) = strcon(""" "b" "y" "t" "e" """)
 
-[type2string-3]
+[type2string-1c]
   type2str(short) = strcon(""" "s" "h" "o" "r" "t" """)
 
-[type2string-4]
+[type2string-1d]
   type2str(int) = strcon(""" "i" "n" "t" """)
 
-[type2string-5]
+[type2string-1e]
   type2str(long) = strcon(""" "l" "o" "n" "g" """)
 
-[type2string-6]
+[type2string-1f]
   type2str(char) = strcon(""" "c" "h" "a" "r" """)
 
-[type2string-7]
+[type2string-1g]
   type2str(float) = strcon(""" "f" "l" "o" "a" "t" """)
 
-[type2string-8]
+[type2string-1h]
+  type2str(double) = strcon(""" "d" "o" "u" "b" "l" "e" """)
+
+[type2string-2]
   #ArrayType1 = #ArrayType2 [ ],
   #String = type2str(#ArrayType2)
   ===>
   type2str(#ArrayType1) = #String || "[]"
 
-[type2string-9]
+[type2string-3]
   type2str(#Name [ ]) = name2str(#Name) || "[]"
 
-[type2string-10]
+[type2string-4]
   type2str(#PrimitiveType [ ]) = type2str(#PrimitiveType) || "[]"
 
 [var2string-0]
