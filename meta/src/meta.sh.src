@@ -140,7 +140,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${toolbus}/share \
    -I${prefix}/share/meta \
    -I${aterm}/share \
-   -I${pt_support}/share \
+   -I${pt_support}/share/pt-support \
    -I${sglr}/share \
    -I${pgen}/share \
    -I${asf}/share/asf \
