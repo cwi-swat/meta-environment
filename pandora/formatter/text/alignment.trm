@@ -1,0 +1,5 @@
+box2text(V vs=2 [ "leesplankje" 
+                  I is=4 [A (l,c,r,l,c,r) vs=2 hs=3 [ 
+                            R ["aap" "noot" "mies" "wim" "zus" "jet"] 
+                            R ["teun" "vuur" "gijs" "lam" "kees" "bok"]
+                            R [H hs=0 ["wei" "-" "de"] "does" "hok" "duif" "schapen"]]]])
