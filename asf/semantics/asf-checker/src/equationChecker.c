@@ -1,5 +1,13 @@
 #include "equationChecker.h"
 
+static ATerm makeMessage(const char *msg, ASF_Tag tag, ATerm subject)
+{
+ return ATmake("[<str>,<term>,<term>]",
+	       msg,
+	       ASF_makeTermFromTag(tag),
+	       subject);
+}
+
 static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 {
   while (!PT_isArgsEmpty(variables)) {
@@ -23,10 +31,8 @@ static ATermList checkTreeGivenVariables(ASF_Tag tag,
 
   if (PT_isTreeVar(tree)) {
     if (!lookupVariable(tree, variables)) {
-      message = ATmake("[<str>,<term>,<term>]", 
-                       "uninstantiated variable occurrence",
-                       ASF_makeTermFromTag(tag),
-                       tree);
+      message = makeMessage("uninstantiated variable occurrence", tag, 
+			    PT_TreeToTerm(tree));
       return ATmakeList1(message);
     }
   }
@@ -122,6 +128,49 @@ static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
   }
 }
 
+static ATermList checkNegativeCondition(ASF_Tag tag,
+					ASF_Condition condition,
+                                        ASF_Tree lhsCond,
+					ASF_Tree rhsCond,
+                                        PT_Args *variables) 
+{
+  ATermList messages = ATempty;
+  
+  if (!noNewVariables((PT_Tree)lhsCond, *variables) ||
+      !noNewVariables((PT_Tree)rhsCond, *variables)) {
+    return ATmakeList1(
+            makeMessage(
+              "uninstantiated variables introduced in negative condition", 
+	      tag,
+	      ASF_makeTermFromCondition(condition)));
+  }
+  else {
+    return messages;
+  }
+}
+
+static ATermList checkMatchingSide(ASF_Tag tag,
+				   ASF_Condition condition,
+				   ASF_Tree matchingSide,
+				   PT_Args *variables)
+{
+  ATermList messages = ATempty;
+
+  if (!instantiatedVariables((PT_Tree)matchingSide, *variables)) {
+    *variables = collectVariables((PT_Tree)matchingSide, *variables);
+    return messages;
+  }
+  else {
+    *variables = collectVariables((PT_Tree)matchingSide, *variables);
+    return ATmakeList1(
+	       makeMessage(
+		      "instantiated and uninstantiated variables in "
+		      "one side of condition", 
+		      tag,
+		      ASF_makeTermFromCondition(condition)));
+  }
+}
+
 static ATermList checkCondition(ASF_Tag tag,
                                 ASF_Condition condition,
                                 PT_Args *variables) 
@@ -132,17 +181,7 @@ static ATermList checkCondition(ASF_Tag tag,
   ASF_Tree rhsCond = ASF_getConditionRhs(condition);
   
   if (ASF_isConditionNegative(condition)) {
-    if (!noNewVariables((PT_Tree)lhsCond, *variables) ||
-        !noNewVariables((PT_Tree)rhsCond, *variables)) {
-      return ATmakeList1(
-               ATmake("[<str>,<term>,<term>]", 
-                      "uninstantiated variables introduced in negative condition", 
-                      ASF_makeTermFromTag(tag),
-                      ASF_makeTermFromCondition(condition)));
-    }
-    else {
-      return messages;
-    }
+    return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
   }
   else {
     if (noNewVariables((PT_Tree)lhsCond, *variables)) {
@@ -150,40 +189,18 @@ static ATermList checkCondition(ASF_Tag tag,
         return messages;
       }
       else {
-        if (!instantiatedVariables((PT_Tree)rhsCond, *variables)) {
-          *variables = collectVariables((PT_Tree)rhsCond, *variables);
-          return messages;
-        }
-        else {
-          *variables = collectVariables((PT_Tree)rhsCond, *variables);
-          return ATmakeList1(
-                   ATmake("[<str>,<term>,<term>]", 
-                          "instantiated and uninstantiated variables in right hand side of condition", 
-                          ASF_makeTermFromTag(tag),
-                          ASF_makeTermFromCondition(condition)));
-        }
+	return checkMatchingSide(tag, condition, rhsCond, variables);
       }
     }
     else {
       if (noNewVariables((PT_Tree)rhsCond, *variables)) {
-        if (!instantiatedVariables((PT_Tree)lhsCond, *variables)) {
-          *variables = collectVariables((PT_Tree)lhsCond, *variables);
-          return messages;
-        }
-        else {
-          *variables = collectVariables((PT_Tree)lhsCond, *variables);
-          return ATmakeList1(
-                   ATmake("[<str>,<term>,<term>]", 
-                          "instantiated and uninstantiated variables in left hand side of condition", 
-                          ASF_makeTermFromTag(tag),
-                          ASF_makeTermFromCondition(condition)));
-        }
+	return checkMatchingSide(tag, condition, lhsCond, variables);
       }
       else {
         return ATmakeList1(
-                 ATmake("[<str>,<term>,<term>]",
+                 makeMessage(
                         "uninstantiated variables in both sides of condition",
-                        ASF_makeTermFromTag(tag),
+                        tag,
                         ASF_makeTermFromCondition(condition)));
       }
     }
