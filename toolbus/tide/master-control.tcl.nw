@@ -217,13 +217,15 @@ proc get-selected-dap { } {
 A new tool has announced its arrival.
 
 <<new-tool>>=
-proc new-tool { Name event } {
+proc new-tool { Name tool event } {
   global Tools Tool
 
   set name [TCLstring $Name]
   set w .middle.tools
 
   set Tool($name,event) $event
+  set Tool($name,tool) $tool
+
   foreach tool $Tools {
     destroy $Tool($tool,button)
   }
@@ -233,7 +235,7 @@ proc new-tool { Name event } {
   set Tools [lsort $Tools]
   set i 0
   foreach tool $Tools {
-    button $w.button$i -text $tool -command "do-activate $Tool($tool,event)"
+    button $w.button$i -text $tool -command "do-activate \{$name\}"
     pack $w.button$i -fill x
     set Tool($name,button) $w.button$i
     incr i
@@ -243,15 +245,19 @@ proc new-tool { Name event } {
 @
 
 %}}}
-%{{{ proc do-activate { event }
+%{{{ proc do-activate { name }
 
 The user double-clicked on a tool button.
 
 <<do-activate>>=
-proc do-activate { event } {
+proc do-activate { name } {
+  global Tool
+
+  set tool $Tool($name,tool)
+  set event $Tool($name,event)
   set dap [get-selected-dap]
   if { $dap != "" } {
-    TBpost "activate($event,$dap)"
+    TBpost "button($tool,$event,$dap)"
   }
 }
 @
@@ -269,10 +275,10 @@ proc do-shutdown {} {
 
 %}}}
 
-%{{{ proc tide-dap-connected-master { dap info }
+%{{{ proc tide-dap-connected-master { dap info procs }
 
 <<tide-dap-connected-master>>=
-proc tide-dap-connected-master { dap info } {
+proc tide-dap-connected-master { dap info procs } {
   global Daps
 
   update-dap-list $Daps

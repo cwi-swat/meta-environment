@@ -5,11 +5,12 @@
 <<process DAP-CONNECT>>
 <<process EVENT-RULES>>
 <<process BROADCAST>>
+<<process SOURCE-VIEWER>>
 <<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
-toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST)
+toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, SOURCE-VIEWER)
 @
 
 %}}}
@@ -22,9 +23,8 @@ In this section, we define the tools used in this ToolBus script.
 
 <<tool definitions>>=
 tool debug-adapter is { }
-tool synthesizer is { command = "./synthesizer" }
-tool master-control is { command =
-	"tcltk-adapter -script master-control.tcl" }
+tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
+tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 %%tool viewer is { command = "./buscontrol" }
 @
 
@@ -36,18 +36,21 @@ tool master-control is { command =
 process DAP-CONNECT is
 let
   D    : debug-adapter,
+  P    : list,
   Pid  : int,
   Info : list
 in
   ( rec-connect(D?) .
-    snd-msg(get-info(D)) .
-    rec-msg(get-info(D, Info?)) .
-    printf("%t info: %t\n", D, Info) .
-    snd-note(dap-connected(D, Info)) .
+    snd-eval(D, get-info) .
+    rec-value(D, info(Info?)) .
+    snd-eval(D, get-processes) .
+    rec-value(D, processes(P?)) .
+    printf("%t info: %t, procs: %t\n", D, Info, P) .
+    snd-note(event(proc(D,all), dap-connected(Info,P))) .
     create(EVENT-RULES(D), Pid?)
     +
     rec-disconnect(D?) .
-    snd-note(dap-disconnected(D))
+    snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
 @
@@ -107,58 +110,20 @@ in
   ( rec-msg(proc(D,P?), create-rule(Port?,Cond?,Acts?,Life?)) .
     snd-eval(D, create-rule(P, Port,Cond,Acts,Life)) .
     rec-value(D, create-rule(P, Port,Cond,Acts,Life,Rid?)) .
-    snd-note(event(proc(D,P), rule-created(Port,Cond,Acts,Life,Rid)))
+    snd-note(event(proc(D,P), rule-created(Port,Cond,Acts,Life,Rid))) .
+    snd-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid))
     +
     rec-msg(proc(D,P?), destroy-rule(Rid?)) .
-    snd-do(D, destroy-rule(P,Rid)) .
-    snd-note(event(proc(D,P), rule-destroyed(Rid)))
+    snd-do(D, destroy-rule(P,Rid))
     +
-    rec-event(D, watchpoint(P?,Port?,Rid?,Expr?,Value?)) .
-    snd-note(event(proc(D,P), watchpoint(Port,Rid,Expr,Value))) .
-    snd-ack-event(D, watchpoint(P,Port,Rid,Expr,Value))
+    rec-event(D, watchpoint(P?, Rid?, Expr?, Value?)) .
+    snd-note(event(proc(D,P), watchpoint(Rid, Expr, Value))) .
+    snd-ack-event(D, watchpoint(P, Rid, Expr, Value))
     +
     rec-event(D, rule-destroyed(Rid?)) .
     snd-note(event(proc(D,P), rule-destroyed(Rid))) .
     snd-ack-event(D, rule-destroyed(Rid))
    ) * delta
-endlet
-@
-
-%}}}
-%{{{ process SYNTHESIZER
-
-<<process SYNTHESIZER>>=
-process SYNTHESIZER is
-let
-  S     : synthesizer,
-  Src   : term,
-  Event : term,
-  Port  : term,
-  Cond  : term,
-  Acts  : term,
-  Life  : term
-in
-  execute(synthesizer, S?) .
-  subscribe(event(<term>, <term>)) .
-  ( rec-note(event(Src?, Event?)) .
-    snd-do(S, event(Src, Event))
-    +
-    rec-event(S, event(Src?, Event?)) .
-    snd-note(event(Src, Event)) .
-    snd-ack-event(S, event(Src, Event))
-    +
-    rec-msg(synthesize-on(Event?)) .
-    snd-eval(S, synthesize-on(Event)) .
-    rec-value(S, synthesize-on(Event, Id?)) .
-    snd-msg(synthesize-on(Event, Id))
-    +
-    rec-msg(synthesize-off(Id?)) .
-    snd-do(synthesize-off(Id))
-    +
-    rec-event(S, create-rule(Src?, Port?, Cond?, Acts?, Life?)) .
-    snd-msg(Src, create-rule(Port, Cond, Acts, Life)) .
-    snd-ack-event(S, create-rule(Src, Port, Cond, Acts, Life))
-  ) * delta
 endlet
 @
 
@@ -175,26 +140,29 @@ process MASTER-CONTROL is
 let
   M     : master-control,
   D     : debug-adapter,
+  P     : term,
   Name  : str,
+  Tool  : term,
   Info  : list,
   Event : term
 in
-  subscribe(tool-connected(<str>,<list>)) .
+  subscribe(new-tool(<str>,<term>,<term>)) .
   execute(master-control, M?) .
-  subscribe(dap-connected(<debug-adapter>,<list>)) .
-  subscribe(dap-disconnected(<debug-adapter>)) .
-  ( rec-note(new-tool(Name?, Event?)) .
-    snd-do(M, new-tool(Name, Event))
+  subscribe(event(<term>, dap-connected(<list>,<list>))) .
+  subscribe(event(<term>, dap-disconnected(<debug-adapter>))) .
+  ( rec-note(new-tool(Name?, Tool?, Event?)) .
+    snd-do(M, new-tool(Name, Tool, Event))
     +
-    rec-note(dap-connected(D?, Info?)) .
-    snd-do(M, dap-connected(D, Info))
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    printf("dap-connected received: %t\n", D) .
+    snd-do(M, dap-connected(D, Info, P))
     +
-    rec-note(dap-disconnected(D?)) .
+    rec-note(event(proc(D?,P?), dap-disconnected(D?))) .
     snd-do(M, dap-disconnected(D))
     +
-    rec-event(M, button(Event?)) .
-    snd-msg(Event) .
-    snd-ack-event(M, button(Event))
+    rec-event(M, button(Tool?, Event?, D?)) .
+    snd-msg(Tool, Event, D) .
+    snd-ack-event(M, button(Tool, Event, D))
   ) * rec-event(M, tide-shutdown) .
   snd-ack-event(M, tide-shutdown) .
   shutdown("Thank you for using tide!\n")
@@ -217,6 +185,69 @@ let
 in
   ( rec-msg(event(From?, Ev?)) .
     snd-note(event(From, Ev))
+  ) * delta
+endlet
+@
+
+%}}}
+
+%{{{ process SOURCE-VIEWER
+
+<<process SOURCE-VIEWER>>=
+process SOURCE-VIEWER is
+let
+  S : source-viewer,
+  D : debug-adapter,	%% Which debug adapter
+  P : term,		%% List of processes (or in some cases 'all')
+  Info : list,		%% Information about a debug adapter
+  Rid : int,		%% Event rule identifier
+  Port : term,		%% Event rule port
+  Cond : term,		%% Event rule condition
+  Acts : term,		%% Event rule actions
+  Life : term,		%% Event rule lifetime
+  Expr : term,		%% Watchpoint expression
+  Val : term,		%% Watchpoint value 
+  Type : term		%% Rule type (handy to recognize the ack w.o. matching)
+in
+  execute(source-viewer, S?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,rule-created(<term>,<term>,<term>,<term>,<int>))) .
+  subscribe(event(<term>,rule-destroyed(<int>))) .
+  subscribe(event(<term>,watchpoint(<int>,cpe,<term>))) .
+  subscribe(event(<term>,watchpoint(<int>,exec-state,<term>))) .
+  subscribe(event(<term>,watchpoint(<int>,process-name,<term>))) .
+  snd-note(new-tool("Source viewer", S, view-source)) .
+  ( rec-msg(S, view-source, D?) .
+    snd-do(S, view-source(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(S, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(S, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), rule-created(Port?,Cond?,Acts?,Life?,Rid?))) .
+    snd-do(S, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
+    snd-do(S, rule-destroyed(D,P, Rid))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?,Expr?,Val?))) .
+    snd-do(S, watchpoint(D, P, Rid, Expr,  Val))
+    +
+    rec-event(S, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
+    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
+    snd-ack-event(S, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(S, destroy-rule(D?,P?,Rid?)) .
+    snd-msg(proc(D,P), destroy-rule(Rid)) .
+    snd-ack-event(S, destroy-rule(D,P,Rid))
+    +
+    rec-event(S, current-port(D?,P?,Port?)) .
+    snd-note(event(proc(D,P),current-port(Port))) .
+    snd-ack-event(S, current-port(D,P,Port))
   ) * delta
 endlet
 @

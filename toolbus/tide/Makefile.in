@@ -47,23 +47,23 @@ LINK = $(CC) $(LDFLAGS) $(LIB) -o $@
 INCLUDE	= -I$(top_srcdir)/src -I$(srcdir)
 LIB	= -L$(top_srcdir)/src -L$(top_srcdir)/tide
 
-PROGS	= buscontrol synthesizer
+PROGS	= buscontrol
 LIBFILES= tide.tb libtide.a
-INCFILES= tide.h dap-util.h admin.h admin-daps.h
-NWSRC	= buscontrol.c.nw synthesizer.c.nw dap-util.c.nw admin.c.nw \
-	source-browser.tcl.nw process-viewer.tcl.nw master-control.tcl.nw \
+INCFILES= tide.h dap-admin.h dap.h
+NWSRC	= buscontrol.c.nw dap.c.nw dap-admin.c.nw \
+	source-viewer.tcl.nw process-viewer.tcl.nw master-control.tcl.nw \
 	opoint-viewer.tcl.nw tide-modules.tcl.nw tide.tb.nw \
 	watchpoint-viewer.tcl.nw
-TIDEMODS= dap-util.o admin.o admin-daps.o
+TIDEMODS= dap.o dap-admin.o
 TCLMODS	= tide-modules.tcl tide-daps.tcl tide-processes.tcl \
-	tide-observation-points.tcl tide-cpe.tcl \
+	tide-event-rules.tcl tide-cpe.tcl \
 	tide-exec-state.tcl tide-exec-control.tcl tide-current-port.tcl
-GENCSRC	= buscontrol.c synthesizer.c dap-util.c
-GENCHDR	= viewer.tif.c synthesizer.tif.c debug-adapter.tif.c dap-util.h
-GENTCL	= source-browser.tcl process-viewer.tcl master-control.tcl \
+GENCSRC	= buscontrol.c dap.c dap-admin.c dap.c
+GENCHDR	= viewer.tif.c debug-adapter.tif.c dap-admin.h dap.h
+GENTCL	= source-viewer.tcl process-viewer.tcl master-control.tcl \
 	opoint-viewer.tcl watchpoint-viewer.tcl $(TCLMODS)
-GENTEX	= buscontrol.c.tex synthesizer.c.tex \
-	source-browser.tcl.tex process-viewer.tcl.tex master-control.tcl.tex \
+GENTEX	= buscontrol.c.tex \
+	source-viewer.tcl.tex process-viewer.tcl.tex master-control.tcl.tex \
 	tide.tb.tex opoint-viewer.tcl.tex tide-modules.tcl.tex \
 	watchpoint-viewer.tcl.tex
 DIRS	= bitmaps test help
@@ -106,14 +106,8 @@ debug-adapter.tif.c: tide.tifs
 viewer.tif.c: slave-example.tifs
 	$(CTIF) -newstyle -tool viewer -tifs slave-example.tifs
 
-synthesizer.tif.c: tide.tifs
-	$(CTIF) -newstyle -tool synthesizer -tifs tide.tifs
-
 buscontrol: buscontrol.o
-	$(LINK) buscontrol.o -ltb $(LIBS)
-
-synthesizer: synthesizer.o
-	$(LINK) synthesizer.o -ltb $(LIBS)
+	$(LINK) buscontrol.o -ltide -ltb $(LIBS)
 
 libtide.a: $(TIDEMODS)
 	ar cr libtide.a $(TIDEMODS)
@@ -136,35 +130,31 @@ tide.tifs: tide.tb
 slave-example.tifs: slave-example.tb
 
 # Noweb dependencies
-source-browser.tcl: source-browser.tcl.nw
+source-viewer.tcl: source-viewer.tcl.nw
 opoint-viewer.tcl: opoint-viewer.tcl.nw
 watchpoint-viewer.tcl: watchpoint-viewer.tcl.nw
 process-viewer.tcl: process-viewer.tcl.nw
 master-control.tcl: master-control.tcl.nw
 buscontrol.c: buscontrol.c.nw
-synthesizer.c: synthesizer.c.nw
-dap-util.c: dap-util.c.nw
-dap-util.h: dap-util.c.nw
-admin.c: admin.c.nw
-admin.h: admin.c.nw
-admin-daps.c: admin.c.nw
-admin-daps.h: admin.c.nw
+dap.c: dap.c.nw
+dap.h: dap.c.nw
+dap-admin.c: dap-admin.c.nw
+dap-admin.h: dap-admin.c.nw
 
 # Tcl modules
 tide-support.tcl: tide-modules.tcl.nw
 tide-daps.tcl: tide-modules.tcl.nw
 tide-processes.tcl: tide-modules.tcl.nw
-tide-observation-points.tcl: tide-modules.tcl.nw
+tide-event-rules.tcl: tide-modules.tcl.nw
 tide-cpe.tcl: tide-modules.tcl.nw
 tide-exec-state.tcl: tide-modules.tcl.nw
 tide-exec-control.tcl: tide-modules.tcl.nw
 tide-current-port.tcl: tide-modules.tcl.nw
 
 # C dependencies
-buscontrol.o: buscontrol.c viewer.tif.c debug-adapter.tif.c
-dap-util.o: dap-util.c dap-util.h
-admin.o: admin.h admin.c
-admin-daps.o: admin-daps.c admin-daps.h admin.h
+buscontrol.o: buscontrol.c dap.h dap-admin.h viewer.tif.c debug-adapter.tif.c
+dap-admin.o: dap-admin.c dap-admin.h
+dap.o: dap.c dap.h dap-admin.h
 
 # clean
 clean:

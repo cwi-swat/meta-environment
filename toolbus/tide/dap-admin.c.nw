@@ -1,0 +1,831 @@
+
+%{{{ dap-admin.h
+
+<<dap-admin.h*>>=
+#ifndef _DAP_ADMIN_H_
+#define _DAP_ADMIN_H_
+
+#include <TB.h>
+
+#define MAX_DAPS	 128
+#define MAX_EVENT_RULES 1024
+#define MAX_PROCESSES	1024
+
+#define PUF_START	1
+
+<<exec state constants>>
+<<port types>>
+
+<<struct location>>
+<<struct port>>
+<<struct event_rule>>
+<<struct process>>
+<<struct dap>>
+
+/* Debug adapters */
+void dap_init();
+void dap_dap_connected(term *dap, term_list *info);
+void dap_dap_disconnected(term *dap);
+dap *dap_get(int dapid);
+
+/* Event rules */
+void dap_rule_created(int dapid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime, int rid);
+void dap_rule_destroyed(int dapid, int rid);
+event_rule *dap_get_rule(int dapid, int ruleid);
+int dap_id(term *d);
+int dap_eventport(term *port);
+int dap_eventwhen(term *when);
+int dap_eventlife(term *life);
+void dap_eventlocation(term *locdata, location *loc);
+
+/* Processes */
+void  dap_process_created(int dapid, int pid, char *name, int exec_state);
+void  dap_process_destroyed(int dapid, int pid);
+process *dap_get_process(int dapid, int pid);
+int   dap_get_es(int dapid, int pid);
+int   dap_term2es(term *t);
+term *dap_es2term(int es);
+int   dap_get_stop_level(int dapid, int pid);
+int   dap_get_exec_state(int dapid, int pid);
+char *dap_get_process_name(int dapid, int pid);
+void  dap_set_process_data(int dapid, int pid, void *udata);
+void *data_get_user_data(int dapid, int pid);
+void  dap_set_process_flags(int dapid, int pid, int uflags);
+void  dap_clear_process_flags(int dapid, int pid, int uflags);
+unsigned  dap_check_process_flags(int dapid, int pid, int uflags);
+
+/* External callbacks, must be provided by the user */
+extern void cbdap_process_created(int dapid, int pid);
+extern void cbdap_process_destroyed(int dapid, int pid);
+
+#endif
+@
+
+%{{{ struct dap
+
+<<struct dap>>=
+typedef struct dap
+{
+  int id;
+  process    *procs[MAX_PROCESSES];
+  event_rule *rules[MAX_EVENT_RULES];
+  event_rule *ports[NR_PORT_TYPES];
+  term_list *info;
+} dap;
+@
+
+%}}}
+%{{{ struct process
+
+<<struct process>>=
+typedef struct process
+{
+  int pid;			/* process id of this process */
+  char *name;			/* name of this process */
+  location cpe;			/* current point of execution */
+  int exec_state;		/* execution state */
+  int hw_exec_state;		/* execution state when high water reached */
+  int stop_level;		/* stop level for ES_STEP_OVER and RUN_UNTIL_PARENT */
+  int ruleid;			/* current event rule id */
+  term_list *subterms;		/* subterms that matched with placeholders */
+  unsigned uflags;		/* user flags */
+  void *udata;			/* user data */
+} process;
+@
+
+%}}}
+%{{{ struct event_rule
+
+<<struct event_rule>>=
+typedef struct event_rule
+{ 
+  struct event_rule *next;
+  int id;
+  term *pids;
+  port port;
+  term *cond;
+  term_list *acts;
+  int lifetime;
+} event_rule;
+@
+
+%}}}
+
+%{{{ struct location
+
+<<struct location>>=
+typedef struct location
+{
+  char *module;
+  int start_line;
+  int start_col;
+  int end_line;
+  int end_col;
+  int when;
+} location;
+@
+
+%}}}
+%{{{ struct port
+
+<<struct port>>=
+typedef struct port
+{
+  int type;
+  int when;
+  union {
+    struct location loc;
+    char *function;
+    char *exception;
+    char *var;
+    int   exec_state;
+    term *msg;
+  } u;
+} port;
+@
+
+%}}}
+
+%{{{ port types
+
+<<port types>>=
+#define PORT_EXEC_STATE		0
+#define PORT_ALWAYS		1
+#define PORT_LOCATION		2
+#define PORT_CALL		3
+#define PORT_RETRY		4
+#define PORT_FAIL		5
+#define PORT_SUCCEED		6
+#define PORT_EXCEPTION		7
+#define PORT_VARIABLE		8
+#define PORT_SEND		11
+#define PORT_RECEIVE		12
+#define PORT_PROCESS_CREATION	13
+#define PORT_PROCESS_DESTRUCTION 14
+#define NR_PORT_TYPES		15
+
+#define WHEN_AT		0
+#define WHEN_BEFORE	1
+#define WHEN_AFTER	2
+
+#define ONE_SHOT	0
+#define PERSISTENT	1
+@
+@
+
+%}}}
+%{{{ exec state constants
+
+<<exec state constants>>=
+#define ES_UNKNOWN		0
+#define ES_STOP			0x0001
+#define ES_RUN			0x0002
+#define ES_SINGLE_STEP		0x0004
+#define ES_STEP_OVER		0x0008
+#define ES_RUN_UNTIL_PARENT	0x0010
+#define ES_HIGH_WATER		0x0020
+
+#define ES_ALL			0x003F
+@
+
+%}}}
+
+%}}}
+%{{{ dap-admin.c
+
+<<dap-admin.c*>>=
+#include "dap-admin.h"
+
+dap *daps[MAX_DAPS];
+
+<<dap_admin_init>>
+<<dap_new>>
+<<dap_delete>>
+<<dap_get>>
+<<dap_id>>
+
+<<dap_rule_created>>
+<<dap_rule_destroyed>>
+<<dap_get_rule>>
+<<dap_eventport>>
+<<dap_eventwhen>>
+<<dap_when2term>>
+<<dap_eventlife>>
+<<dap_eventlocation>>
+
+<<dap_process_created>>
+<<dap_process_destroyed>>
+<<dap_get_process>>
+<<dap_term2es>>
+<<dap_es2term>>
+<<dap_get_stop_level>>
+<<dap_get_exec_state>>
+<<dap_get_process_name>>
+
+<<dap_get_process_data>>
+<<dap_set_process_data>>
+<<dap_set_process_flags>>
+<<dap_clear_process_flags>>
+<<dap_check_process_flags>>
+@
+
+%}}}
+
+%{{{ void dap_admin_init()
+
+Initialize dap administration routines.
+
+<<dap_admin_init>>=
+void dap_admin_init()
+{
+  int i;
+
+  for(i=0; i<MAX_DAPS; i++)
+    daps[i] = NULL;
+}
+@
+
+%}}}
+%{{{ void dap_new(int dapid, term_list *info)
+
+Record a new debug adapter in the database.
+
+<<dap_new>>=
+void dap_new(int dapid, term_list *info)
+{
+  int i;
+
+  if(!daps[dapid]) {
+    daps[dapid] = (dap *)malloc(sizeof(dap));
+    if(!daps[dapid]) {
+      fprintf(stderr, "out of memory in dap_dap_connected\n");
+      exit(1);
+    }
+    daps[dapid]->id = dapid;
+    daps[dapid]->info = NULL;
+    TBprotect(&daps[dapid]->info);
+    for(i=0; i<MAX_PROCESSES; i++)
+      daps[dapid]->procs[i] = NULL;
+    for(i=0; i<MAX_EVENT_RULES; i++)
+      daps[dapid]->rules[i] = NULL;
+    for(i=0; i<NR_PORT_TYPES; i++)
+      daps[dapid]->ports[i] = NULL;
+  }
+  if(info)
+    daps[dapid]->info = info;
+}
+@
+
+%}}}
+%{{{ void dap_delete(int dapid)
+
+Remove a debug adapter from the database.
+
+<<dap_delete>>=
+void dap_delete(int dapid)
+{
+  int i;
+
+  assert(daps[dapid]);
+  for(i=0; i<MAX_PROCESSES; i++) {
+    if(daps[dapid]->procs[i])
+      dap_process_destroyed(dapid, i);
+  }
+  for(i=0; i<MAX_EVENT_RULES; i++) {
+    if(daps[dapid]->rules[i])
+      free(daps[dapid]->rules[i]);
+  }
+  TBunprotect(&daps[dapid]->info);
+}
+@
+
+%}}}
+%{{{ dap *dap_get(int dapid)
+
+Get a debug adapter dap structure.
+
+<<dap_get>>=
+dap *dap_get(int dapid)
+{
+  return daps[dapid];
+}
+@
+
+%}}}
+%{{{ int dap_id(term *d)
+
+Get the numeric id of a debug adapter from its term description.
+
+<<dap_id>>=
+int dap_id(term *d)
+{
+  int dapid;
+
+  if(!TB_match(d, "debug-adapter(<int>)", &dapid)) {
+    TBprintf(stderr, "illegal dap term: %t\n", d);
+    exit(1);
+  }
+  return dapid;
+}
+@
+
+%}}}
+
+%{{{ void dap_rule_created(dapid, procs, port, cond, acts, lifetime, rid)
+
+<<dap_rule_created>>=
+void dap_rule_created(int dapid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime, int rid)
+{
+  event_rule *rule;
+
+  assert(daps[dapid]);
+  assert(!daps[dapid]->rules[rid]);
+  <<new rule>>
+  assert(rule);
+
+  rule->pids = procs;
+  rule->cond = cond;
+  rule->acts = acts;
+  rule->lifetime = dap_eventlife(lifetime);
+
+  <<update port>>
+  <<update lifetime>>
+
+  rule->next = daps[dapid]->ports[rule->port.type];
+  daps[dapid]->ports[rule->port.type] = rule;
+}
+@
+
+%{{{ new rule
+
+<<new rule>>=
+  daps[dapid]->rules[rid] = (event_rule *)malloc(sizeof(event_rule));
+  rule = daps[dapid]->rules[rid];
+  if(!rule) {
+    fprintf(stderr, "out of memory in dap_rule_created\n");
+    exit(1);
+  }
+  rule->id = rid;
+  rule->pids = NULL;
+  rule->cond = NULL;
+  rule->acts = NULL;
+  TBprotect(&rule->pids);
+  TBprotect(&rule->cond);
+  TBprotect(&rule->acts);
+@
+
+%}}}
+%{{{ update port
+
+Interpret the port term. Analyze which port type it indicates,
+and read detailed port information when necessary.
+
+
+<<update port>>=
+{
+  term *type = list_index(port, 1);
+  term *when = list_index(port, 2);
+
+  rule->port.when = dap_eventwhen(when);
+  rule->port.type = dap_eventport(type);
+  switch(rule->port.type) {  
+    case PORT_EXEC_STATE:
+			rule->port.u.exec_state = 
+					dap_term2es(list_index(port, 3));
+			break;
+    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(list_next(port))),
+				&rule->port.u.loc);
+			break;
+    case PORT_CALL:
+    case PORT_FAIL:
+    case PORT_RETRY:
+    case PORT_SUCCEED:	
+	rule->port.u.function = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_EXCEPTION:
+	rule->port.u.exception = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_VARIABLE:
+	rule->port.u.var = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_SEND:
+    case PORT_RECEIVE:
+	rule->port.u.msg = list_index(port, 3);
+	TBprotect(&rule->port.u.msg);
+	break;
+  }
+}
+@
+
+%}}}
+%{{{ update lifetime
+
+<<update lifetime>>=
+  if(TBmatch(lifetime, "one-shot"))
+    rule->lifetime = ONE_SHOT;
+  else
+    rule->lifetime = PERSISTENT;
+@
+
+%}}}
+
+%}}}
+%{{{ void dap_rule_destroyed(int dapid, int rid)
+
+Remove all traces of an event rule.
+
+<<dap_rule_destroyed>>=
+void dap_rule_destroyed(int dapid, int rid)
+{
+  event_rule *prev = NULL, *cur, *rule = daps[dapid]->rules[rid];
+  assert(rule);
+  daps[dapid]->rules[rid] = NULL;
+  cur = daps[dapid]->ports[rule->port.type];
+  while(cur && cur != rule) {
+    prev = cur;
+    cur = cur->next;
+  }
+  assert(cur);
+  if(prev)
+    prev->next = cur->next;
+  else
+    daps[dapid]->ports[rule->port.type] = cur->next;
+
+  TBunprotect(&rule->pids);
+  TBunprotect(&rule->cond);
+  TBunprotect(&rule->acts);
+  switch(rule->port.type) {
+    case PORT_LOCATION:	if(rule->port.u.loc.module)
+			  free(rule->port.u.loc.module);
+    case PORT_CALL:
+    case PORT_FAIL:
+    case PORT_RETRY:
+    case PORT_SUCCEED:	free(rule->port.u.function);
+			break;
+    case PORT_EXCEPTION:
+			free(rule->port.u.exception);
+			break;
+    case PORT_VARIABLE:	free(rule->port.u.var);
+			break;
+			
+  }
+}
+@
+
+%}}}
+%{{{ event_rule dap_get_rule(int dapid, int ruleid)
+
+Retrieve a specific rule of a debug adapter.
+
+<<dap_get_rule>>=
+event_rule *dap_get_rule(int dapid, int ruleid)
+{
+  return daps[dapid]->rules[ruleid];
+}
+@
+
+%}}}
+%{{{ int dap_eventport(term *port)
+
+Analyze the port-type of an event.
+
+<<dap_eventport>>=
+int dap_eventport(term *type)
+{
+  if(TBmatch(type, "exec-state")) {
+    return PORT_EXEC_STATE;
+  } else if(TBmatch(type, "always")) {
+    return PORT_ALWAYS;
+  } else if(TBmatch(type, "location")) {
+    return PORT_LOCATION;
+  } else if(TBmatch(type, "call")) {
+    return PORT_CALL;
+  } else if(TBmatch(type, "fail")) {
+    return PORT_FAIL;
+  } else if(TBmatch(type, "succeed")) {
+    return PORT_SUCCEED;
+  } else if(TBmatch(type, "fail")) {
+    return PORT_FAIL;
+  } else if(TBmatch(type, "exception")) {
+    return PORT_EXCEPTION;
+  } else if(TBmatch(type, "variable")) {
+    return PORT_VARIABLE;
+  } else if(TBmatch(type, "send")) {
+    return PORT_SEND;
+  } else if(TBmatch(type, "receive")) {
+    return PORT_RECEIVE;
+  } else if(TBmatch(type, "process-creation")) {
+    return PORT_PROCESS_CREATION;
+  } else if(TBmatch(type, "process-destruction")) {
+    return PORT_PROCESS_DESTRUCTION;
+  } else {
+    TBprintf(stderr, "illegal porttype: %t\n", type);
+    exit(1);
+  }
+}
+@
+
+%}}}
+%{{{ int dap_eventwhen(term *when)
+
+<<dap_eventwhen>>=
+int dap_eventwhen(term *when)
+{
+  if(TBmatch(when, "at"))
+    return WHEN_AT;
+  if(TBmatch(when, "before"))
+    return WHEN_BEFORE;
+  if(TBmatch(when, "after"))
+    return WHEN_AFTER;
+
+  TBprintf(stderr, "illegal activation moment: %t\n", when);
+  return WHEN_AT;
+}
+@
+
+%}}}
+%{{{ term *dap_when2term(int when)
+
+<<dap_when2term>>=
+term *dap_when2term(int when)
+{
+  switch(when) {
+    case WHEN_AT:	return TBmake("at");
+    case WHEN_BEFORE:	return TBmake("before");
+    case WHEN_AFTER:	return TBmake("after");
+  }
+  assert(0);
+  return NULL;
+}
+@
+
+%}}}
+%{{{ int dap_eventlife(term *life)
+
+Determine the lifetime of an event.
+
+<<dap_eventlife>>=
+int dap_eventlife(term *life)
+{
+  if(TBmatch(life, "one-shot"))
+    return ONE_SHOT;
+  if(!TBmatch(life, "persistent"))
+    TBprintf(stderr, "illegal event lifetime: %t\n", life);
+
+  return PERSISTENT;  
+}
+@
+
+%}}}
+%{{{ void dap_eventlocation(term_list *loc_data, location *l)
+
+Analyze location data and fill the location structure {\tt l}.
+
+<<dap_eventlocation>>=
+void dap_eventlocation(term_list *loc_data, location *l)
+{
+  if(TB_match(loc_data, "[lcp,<str>,<int>,<int>,<int>,<int>]",
+		&l->module,
+		&l->start_line, &l->start_col, &l->end_line, &l->end_col))
+    return;
+
+  if(TB_match(loc_data, "[lc,<str>,<int>,<int>]", 
+	&l->module, &l->start_line, &l->start_col)) {
+    l->end_line = l->start_line;
+    l->end_col = l->start_col;
+    return;
+  }
+   
+  TBprintf(stderr, "Illegal location data: %t\n", loc_data);
+  l->module = NULL;
+  l->start_line = -1;
+  l->end_line = -1;
+  return;
+}
+@
+
+%}}}
+
+%{{{ void dap_process_created(int dapid, int pid, char *name, int exec_state)
+
+Add a new process to a debug adapter.
+
+<<dap_process_created>>=
+void dap_process_created(int dapid, int pid, char *name, int exec_state)
+{
+  dap *d = daps[dapid];
+  process *p = NULL;
+
+  assert(d);
+  assert(!d->procs[pid]);
+  p = (process *)malloc(sizeof(process));
+  if(!p) {
+    fprintf(stderr, "out of memory in dap_process_created\n");
+    exit(1);
+  }
+
+  p->pid = pid;
+  p->name = strdup(name);
+  if(!p->name) {
+    fprintf(stderr, "out of memory in dap_process_created.\n");
+    exit(1);
+  }
+  
+  p->cpe.module = NULL;
+  p->cpe.start_line = -1;
+  p->cpe.start_col  = -1;
+  p->cpe.end_line   = -1;
+  p->cpe.end_col    = -1;
+  p->cpe.when	    = WHEN_AT;
+  p->exec_state = exec_state;
+  p->ruleid = -1;
+  p->subterms = NULL;
+
+  TBprotect(&p->subterms);
+
+  p->uflags = 0;
+  p->udata = NULL;
+  d->procs[pid] = p;
+
+  cbdap_process_created(dapid, pid);
+}
+@
+
+%}}}
+%{{{ void dap_process_destroyed(int dapid, int pid)
+
+Destroy an existing process.
+
+<<dap_process_destroyed>>=
+void dap_process_destroyed(int dapid, int pid)
+{
+  assert(daps[dapid]);
+  assert(daps[dapid]->procs[pid]);
+  cbdap_process_destroyed(dapid, pid);
+  TBunprotect(&daps[dapid]->procs[pid]->subterms);
+  if(daps[dapid]->procs[pid]->udata)
+    free(daps[dapid]->procs[pid]->udata);
+  free(daps[dapid]->procs[pid]->name);
+  free(daps[dapid]->procs[pid]);
+  daps[dapid]->procs[pid] = NULL;
+}
+@
+
+%}}}
+%{{{ process *dap_get_process(int dapid, int pid)
+
+<<dap_get_process>>=
+process *dap_get_process(int dapid, int pid)
+{
+  assert(daps[dapid]);
+  return daps[dapid]->procs[pid];  
+}
+@
+
+%}}}
+%{{{ int dap_term2es(term *t)
+
+Interpret an exec-state term.
+
+<<dap_term2es>>=
+int dap_term2es(term *t)
+{
+  if(TBmatch(t, "stop"))
+    return ES_STOP;
+  if(TBmatch(t, "single-step"))
+    return ES_SINGLE_STEP;
+  if(TBmatch(t, "step-over"))
+    return ES_STEP_OVER;
+  if(TBmatch(t, "run"))
+    return ES_RUN;
+  if(TBmatch(t, "run-until-parent"))
+    return ES_RUN_UNTIL_PARENT;
+
+  if(TBmatch(t, "all"))
+    return ES_ALL;
+
+  TBprintf(stderr, "illegal exec-control: %t, stop assumed\n", t);
+  return ES_STOP;
+}
+@
+
+%}}}
+%{{{ term *dap_es2term(int es)
+
+Translate an exec-state to a term.
+
+<<dap_es2term>>=
+term *dap_es2term(int es)
+{
+  switch(es) {
+    case ES_STOP:		return TBmake("stop");
+    case ES_SINGLE_STEP:	return TBmake("single-step");
+    case ES_STEP_OVER:		return TBmake("step-over");
+    case ES_RUN:		return TBmake("run");
+    case ES_RUN_UNTIL_PARENT:	return TBmake("run-until-parent");
+  }
+  return TBmake("unknown");
+}
+@
+
+%}}}
+%{{{ int dap_get_stop_level(int dapid, int pid)
+
+<<dap_get_stop_level>>=
+int dap_get_stop_level(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->stop_level;
+}
+@
+
+%}}}
+%{{{ int dap_get_exec_state(int dapid, int pid)
+
+<<dap_get_exec_state>>=
+int dap_get_exec_state(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->exec_state;
+}
+@
+
+%}}}
+%{{{ char *dap_get_process_name(int dapid, int pid)
+
+<<dap_get_process_name>>=
+char *dap_get_process_name(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->name;
+}
+@
+
+%}}}
+
+%{{{ void  dap_set_process_data(int dapid, int pid, void *udata)
+
+Every {\tt process} structure has a pointer to user data in it.
+This function can be used to change this pointer.
+
+<<dap_set_process_data>>=
+void  dap_set_process_data(int dapid, int pid, void *udata)
+{
+  dap_get_process(dapid, pid)->udata = udata;
+}
+@
+
+%}}}
+%{{{ void *dap_get_process_data(int dapid, int pid)
+
+This function retrieves the user data of a {\tt process} object.
+
+<<dap_get_process_data>>=
+void *dap_get_process_data(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->udata;
+}
+@
+
+%}}}
+%{{{ void  dap_set_process_flags(int dapid, int pid, int uflags)
+
+Every {\tt process} object has a set of user flags associated with it.
+This function can be used to set some flags.
+
+<<dap_set_process_flags>>=
+void  dap_set_process_flags(int dapid, int pid, int uflags)
+{
+  dap_get_process(dapid, pid)->uflags |= uflags;
+}
+@
+
+%}}}
+%{{{ void  dap_clear_process_flags(int dapid, int pid, int uflags)
+
+Every {\tt process} object has a set of user flags associated with it.
+This function can be used to clear some flags.
+
+<<dap_clear_process_flags>>=
+void  dap_clear_process_flags(int dapid, int pid, int uflags)
+{
+  dap_get_process(dapid, pid)->uflags &= ~uflags;
+}
+@
+
+%}}}
+%{{{ unsigned  dap_check_process_flags(int dapid, int pid, int uflags)
+
+Every {\tt process} object has a set of user flags associated with it.
+This function can be used to check if some of these flags are set.
+
+<<dap_check_process_flags>>=
+unsigned  dap_check_process_flags(int dapid, int pid, int uflags)
+{
+  return dap_get_process(dapid, pid)->uflags & uflags;
+}
+@
+
+%}}}
