@@ -1,0 +1,23 @@
+/* $Id$ */
+
+tool errorsupport is {
+  command = "error-support"
+}
+
+process ErrorSupport is
+let
+  ES : errorsupport,
+  Feedback : term,
+  NewFeedback : term
+in
+  (
+    rec-msg(convert-feedback(Feedback?)) .
+    execute(errorsupport, ES?) .
+    snd-eval(ES, convert-feedback(Feedback)) .
+    rec-value(ES, new-feedback(NewFeedback?)) .
+    snd-terminate(ES, "done") .
+    snd-msg(converted-feedback(NewFeedback))
+  ) * delta
+endlet
+
+toolbus(ErrorSupport)
