@@ -146,5 +146,4 @@ AC_OUTPUT(
    asfe/test/terms/Makefile
    test/Makefile
    utils/Makefile
-   utils/genmakefile
 )
