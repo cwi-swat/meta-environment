@@ -1,3 +1,7 @@
+2003/02/13 (jurgenv@cwi.nl)
+ * The directories of the installed ASF+SDF library are no longer
+   write-protected automatically.
+   
 2003/02/12 (markvdb@cs.vu.nl)
  * Improved the asfchecker with respect to ambiguities.
  
