@@ -30,7 +30,7 @@ link_test_LDADD=-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 		-L${ATERM}/lib -lATerm \
                 -L${TOOLBUSLIB} -lATB 
 
-INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
+INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include -I(TOOLBUSLIB)/include
 
 UTILS=${top_srcdir}/semantics/builtins/utils
 GENFWD=${UTILS}/gen-forward.sh
