@@ -19,7 +19,7 @@
 
 */
 tool se is {
-  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -arg -mx64M"
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -arg -mx256M"
 }
 
 process SE is
