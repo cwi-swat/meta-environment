@@ -4,6 +4,7 @@ This is the README file for the ASF+SDF Meta-Environment distribution.
 
 Installation instructions:
 
+
  * Prerequisite tools
 
    To compile this distribution you will need the following items:
@@ -75,10 +76,10 @@ Installation instructions:
 
     -- cd to the directory just above new-meta (new-meta/..)
     -- issue the following commands:
-         $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
-         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout toolbus
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout aterm
        (and, if you hadn't done so already)
-         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout new-meta
 
     You should now have a directory containing the `aterm', `toolbus'
     and `new-meta' directories.  If so, then everything is set up for
