@@ -74,13 +74,13 @@ in
     Directories := next(Directories) .
     snd-msg(io-get-filename(Directory, Name, Extension)) .
     rec-msg(io-filename(FileName?)) .
-    snd-msg(compare-files(FileName, Chosen)) .
+    snd-msg(io-compare-files(FileName, Chosen)) .
     (
-      rec-msg(files-equal) .
+      rec-msg(io-files-equal) .
       snd-note(ui-status(errorf("Multiple occurrences of %s:\n%s and %s",
                                 [Name,Chosen,FileName])))
     +
-      rec-msg(files-differ)
+      rec-msg(io-files-differ)
     )
   fi
   *
