@@ -37,7 +37,13 @@ equations
 
 [subtype-7] (TY*) subtype-of data = yes
 
+[subtype-7] data subtype-of TY = yes
+
+[subtype-7] data subtype-of (TY*) = yes
+
 [subtype-8] TY subtype-of datum = yes
+
+[subtype-8] TY subtype-of data = yes
 
 [subtype-9] cell(TY) subtype-of cell = yes
 

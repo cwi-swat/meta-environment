@@ -415,6 +415,20 @@ equations
        [localized("Apply expects an action and data", get-location(A))])
 
 
+[tca-close]
+	
+    TY1 subtype-of action[using data giving empty raising empty] == yes
+    ===================================================================
+    typecheck-action(close, TY1, EN) = AR[nor=TY1, exc=empty, no]
+
+[default-tca-close]
+	
+    A == close
+    ===================================================================
+    typecheck-action(A, TY1, EN) = error("Type error", 
+       [localized("Close expects an action", get-location(A))])
+
+
 [tca-create] 
 
     TY subtype-of storable == yes 

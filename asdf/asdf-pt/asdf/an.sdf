@@ -64,7 +64,7 @@ context-free syntax
 
   Action InfixAction Action	-> Action {left}
 	
-  Action	-> Data {avoid}
+  Action	-> Datum {avoid}
 
 context-free priorities
 
@@ -147,6 +147,8 @@ lexical syntax
 context-free syntax
 
   Datum 	-> Data 
+
+  "(" Data ")"	-> Data	{bracket}
      
 lexical syntax
 

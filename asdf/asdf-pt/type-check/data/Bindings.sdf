@@ -1,6 +1,6 @@
 module type-check/data/Bindings
 
-imports type-check/data/Data
+%%imports type-check/data/Data
 
 exports
 
