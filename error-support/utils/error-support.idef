@@ -47,6 +47,9 @@ in
     snd-eval(ES, get-first-error-description(Summary)) .
     rec-value(ES, error-description(Description?)) .
     snd-msg(error-description(Description))
+  +
+    rec-msg(display-feedback(Summary?)) .
+    snd-do(ES, display-feedback(Summary))
   ) * delta
 endlet
 

@@ -140,6 +140,11 @@ ATerm get_first_error_description(int cid, ATerm error)
 
 /*}}}  */
 
+void display_feedback(int cid, ATerm summary)
+{
+  ERR_displayFeedback(ERR_SummaryFromTerm(summary));
+}
+
 
 /*{{{  int main(int argc, char *argv[]) */
 
