@@ -43,6 +43,9 @@ ATermTable modules_db;
 ATermTable import_db;
 ATermTable trans_db;
 
+/* adding position info can stop at the condition level */
+#define DEPTH_OF_CONDITIONS 8
+
 /*}}}  */
 
 /*{{{  Forward declarations */
@@ -430,7 +433,7 @@ void add_tree_eqs_section(int cid, char *moduleName, char* path,
   atEqsText = ATmake("<str>", eqsText);
 
   eqsTree = PT_makeTermFromParseTree(
-              PT_addParseTreePosInfo(path, PT_makeParseTreeFromTerm(eqsTree)));
+              PT_addParseTreePosInfoToDepth(path, PT_makeParseTreeFromTerm(eqsTree), DEPTH_OF_CONDITIONS));
 
   entry = GetValue(modules_db, atModuleName);
   entry = (ATerm)ATreplace((ATermList)entry,
