@@ -191,7 +191,7 @@ ATerm read_raw_from_named_file(char *fn, char *n)
   return t;
 }
 
-ATerm locate_parse_table_file(int cid, char *name)
+/*ATerm locate_parse_table_file(int cid, char *name)
 {
   char  *full, newesttbl[PATH_LEN], newestbaf[PATH_LEN], *newest;
 
@@ -214,6 +214,17 @@ ATerm locate_parse_table_file(int cid, char *name)
   return ATmake("snd-value(located-parse-table-file(<str>,<str>,"
                 "timestamp(<int>)))",
                  name, newest, filetime(newest));
+}
+*/
+/*ATerm get_table_timestamp(char *tbl) {
+    return get_timestamp(tbl, ".tbl");
+}
+*/
+ATerm get_timestamp(int cid, char *name, char *ext) {
+    char file[PATH_LEN];
+  
+    sprintf(file, "%s%s", name, ext);
+    return ATmake("snd-value(timestamp(<int>))", filetime(find_newest_in_path(file)));
 }
 
 ATerm open_old_asfix_file(int cid, char *name)
