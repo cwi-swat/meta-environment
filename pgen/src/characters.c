@@ -7,6 +7,9 @@
 #include <aterm2.h>
 
 #include "characters.h"
+#include "first.h"
+#include "ksdf2table.h"
+#include "symbol.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -33,7 +36,6 @@ static unsigned long last_mask = 0;
 static CC_Class **char_classes     = NULL;
 static int        nr_char_classes  = 0;
 static int        max_char_classes = 0;
-static ATermIndexedSet symbol_set  = NULL;
 
 /*}}}  */
 
@@ -51,11 +53,10 @@ void CC_init()
   last_bits = CC_BITS-((CC_LONGS-1)*BITS_PER_LONG);
   last_mask = (1<<last_bits) - 1;
 
-  symbol_set = ATindexedSetCreate(512, 75);
   max_char_classes = 512;
-  char_classes = (CC_Class **)malloc(max_char_classes*sizeof(CC_Class *));
+  char_classes = (CC_Class **)calloc(max_char_classes, sizeof(CC_Class *));
   if (!char_classes) {
-    ATerror("out of memory in init_goto %d\n", max_char_classes);
+    ATerror("out of memory in CC_init %d\n", max_char_classes);
   }
 }
 
@@ -65,9 +66,6 @@ void CC_init()
 void CC_cleanup()
 {
   int i;
-
-  ATindexedSetDestroy(symbol_set);
-  symbol_set = NULL;
 
   for (i=0; i<nr_char_classes; i++) {
     CC_free(char_classes[i]);
@@ -232,40 +230,25 @@ CC_Class *CC_ClassFromInt(ATermInt i)
 CC_Class *CC_ClassFromTerm(ATerm t)
 {
   CC_Class *c;
-  ATermList range_set;
 
-  assert(afun_range >= 0);
+  c = CC_makeClassEmpty();
+  CC_addATermClass(c, t);
+
+  return c;
+}
+
+/*}}}  */
+/*{{{  CC_Class *CC_ClassFromTermList(ATermList l) */
+
+CC_Class *CC_ClassFromTermList(ATermList l)
+{
+  CC_Class *c;
 
   c = CC_makeClassEmpty();
 
-  /*
-  assert(ATgetType(t) == AT_LIST);
-  range_set = (ATermList)t;
-  */
-
-  if (!ATmatch(t, "char-class(<term>)", &range_set)) {
-    return c;
-  }
-
-  while (!ATisEmpty(range_set)) {
-    ATerm range_or_char = ATgetFirst(range_set);
-    range_set = ATgetNext(range_set);
-
-    switch (ATgetType(range_or_char)) {
-      case AT_APPL:
-	/* Must be a range */
-	{
-	  ATermAppl appl = (ATermAppl)range_or_char;
-	  ATermInt start = (ATermInt)ATgetArgument(appl, 0);
-	  ATermInt end   = (ATermInt)ATgetArgument(appl, 1);
-	  CC_addRange(c, ATgetInt(start), ATgetInt(end));
-	}
-	break;
-      case AT_INT:
-	/* Must be a single character */
-	CC_addChar(c, ATgetInt((ATermInt)range_or_char));
-	break;
-    }
+  while (!ATisEmpty(l)) {
+    CC_addATermClass(c, ATgetFirst(l));
+    l = ATgetNext(l);
   }
 
   return c;
@@ -283,6 +266,13 @@ ATerm CC_ClassToTerm(CC_Class *cc)
   assert(afun_range >= 0);
 
   for (i=CC_BITS-1; i>=0; i--) {
+    while (i % 32 == 31 && cc[i/32] == 0) {
+      i -= 32;
+      if (i == -1) {
+	return (ATerm)range_set;
+      }
+    }
+
     if (CC_containsChar(cc, i)) {
       end   = i;
       start = end-1;
@@ -306,7 +296,6 @@ ATerm CC_ClassToTerm(CC_Class *cc)
   }
 
   return (ATerm)range_set;
-  /*return (ATerm)ATmakeAppl1(afun_char_class, (ATerm)range_set);*/
 }
 
 /*}}}  */
@@ -315,11 +304,40 @@ ATerm CC_ClassToTerm(CC_Class *cc)
 
 void CC_addATermClass(CC_Class *cc, ATerm t)
 {
-  CC_Class *temp;
+  ATermList range_set;
 
-  temp = CC_ClassFromTerm(t);
-  CC_union(cc, temp, cc);
-  CC_free(temp);
+  assert(afun_range >= 0);
+
+  if (ATisEqual(t, empty_set)) {
+    CC_addChar(cc, CC_EPSILON);
+    return;
+  }
+
+  if (!ATmatch(t, "char-class(<term>)", &range_set)) {
+    return;
+  }
+
+  while (!ATisEmpty(range_set)) {
+    ATerm range_or_char = ATgetFirst(range_set);
+    range_set = ATgetNext(range_set);
+
+    switch (ATgetType(range_or_char)) {
+      case AT_APPL:
+	/* Must be a range */
+	{
+	  ATermAppl appl = (ATermAppl)range_or_char;
+	  ATermInt start = (ATermInt)ATgetArgument(appl, 0);
+	  ATermInt end   = (ATermInt)ATgetArgument(appl, 1);
+	  CC_addRange(cc, ATgetInt(start), ATgetInt(end));
+	}
+	
+	break;
+      case AT_INT:
+	/* Must be a single character */
+	CC_addChar(cc, ATgetInt((ATermInt)range_or_char));
+	break;
+    }
+  }
 }
 
 /*}}}  */
@@ -402,6 +420,7 @@ ATbool CC_complement(CC_Class *cc, CC_Class *result)
 
 /*}}}  */
 
+#if 0
 /*{{{  ATbool CC_containsChar(CC_Class *cc, int c) */
 
 ATbool CC_containsChar(CC_Class *cc, int c)
@@ -417,6 +436,8 @@ ATbool CC_containsChar(CC_Class *cc, int c)
 }
 
 /*}}}  */
+#endif
+
 /*{{{  ATbool CC_isEmpty(CC_Class *cc) */
 
 ATbool CC_isEmpty(CC_Class *cc)
@@ -760,22 +781,25 @@ void CC_writeSetToFile(FILE *f, CC_Set *set)
 
 CC_Class *CC_getCharClass(ATerm symbol)
 {
-  ATbool isnew;
   long index;
+  int old_size;
 
-  index = ATindexedSetPut(symbol_set, symbol, &isnew);
-  if (isnew) {
-    nr_char_classes = index;
-    if (index >= max_char_classes) {
-      max_char_classes *= 2;
-      char_classes = (CC_Class **)realloc(char_classes,
-					  max_char_classes*sizeof(CC_Class *));
-      if (!char_classes) {
-	ATerror("out of memory in get_charclass %d\n", max_char_classes);
-      }
+  index = internSymbol(symbol);
+  if (index >= max_char_classes) {
+    old_size = max_char_classes;
+    max_char_classes *= 2;
+    char_classes = (CC_Class **)realloc(char_classes,
+					max_char_classes*sizeof(CC_Class *));
+    if (!char_classes) {
+      ATerror("out of memory in get_charclass %d\n", max_char_classes);
     }
+    memset(&char_classes[old_size], 0, old_size*sizeof(CC_Class *));
+  }
+
+  if (char_classes[index] == NULL) {
     char_classes[index] = CC_ClassFromTerm(symbol);
   }
+
   return char_classes[index];
 }
 

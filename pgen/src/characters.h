@@ -5,10 +5,11 @@
 #include <aterm1.h>
 
 #define BITS_PER_LONG (sizeof(unsigned long)*8)
-#define CC_BITS	      257
+#define CC_BITS	      258
 #define CC_LONGS      (((CC_BITS-1)/BITS_PER_LONG)+1)
 
 #define CC_EOF	       256
+#define CC_EPSILON     257
 
 typedef unsigned long CC_Class[CC_LONGS];
 typedef struct
@@ -26,6 +27,7 @@ CC_Class *CC_makeClassEmpty();
 CC_Class *CC_makeClassAllChars();
 CC_Class *CC_ClassFromInt(ATermInt i);
 CC_Class *CC_ClassFromTerm(ATerm t);
+CC_Class *CC_ClassFromTermList(ATermList l);
 ATerm	 CC_ClassToTerm(CC_Class *cc);
 void     CC_addATermClass(CC_Class *cc, ATerm t);
 
@@ -40,7 +42,12 @@ ATbool CC_intersection(CC_Class *cc1, CC_Class *cc2, CC_Class *result);
 ATbool CC_difference(CC_Class *cc, CC_Class *to_remove, CC_Class *result);
 ATbool CC_complement(CC_Class *cc, CC_Class *result);
 
+/*
 ATbool	 CC_containsChar(CC_Class *cc, int c);
+*/
+#define CC_containsChar(cc, c) \
+  (((*(cc))[(c)/BITS_PER_LONG] & (1 << ((c) % BITS_PER_LONG))) == 0 ? ATfalse : ATtrue)
+
 ATbool   CC_isEmpty(CC_Class *cc);
 ATbool	 CC_isEOF(CC_Class *cc);
 ATbool   CC_isSubset(CC_Class *needle, CC_Class *haystack);
@@ -62,5 +69,6 @@ void      CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result);
 void      CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result);
 
 CC_Class *CC_getCharClass(ATerm symbol);
+CC_Class *CC_getFirstSet(ATerm symbol);
 
 #endif

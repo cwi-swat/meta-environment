@@ -10,6 +10,8 @@
 #include "statistics.h"
 #include "characters.h"
 #include "intset.h"
+#include "first.h"
+#include "symbol.h"
 
 /*}}}  */
 
@@ -43,8 +45,6 @@ extern ATbool statisticsMode;
 /*}}}  */
 /*{{{  function declarations */
 
-void init_first(ATerm prod);
-void calc_first_table();
 void calc_follow_table();
 void calc_goto_graph();
 
@@ -75,7 +75,6 @@ ATermTable nr_spec_attr_pairs;
 ATermTable symbol_lookaheads_table;
 ATermIndexedSet priority_table;
 ATermTable rhs_prods_pairs;
-ATermTable first_table;
 ATerm *nr_prod_table;
 ATerm **symbol_table;
 
@@ -103,7 +102,6 @@ void init_table_gen()
   priority_table = ATindexedSetCreate(1024,75);
   symbol_lookaheads_table = ATtableCreate(1024,75);
   rhs_prods_pairs = ATtableCreate(1024,75);
-  first_table = ATtableCreate(1024,75);
   state_nr_pairs = ATtableCreate(1024,75);
   nr_state_pairs = ATtableCreate(1024,75);
   state_gotos_pairs = ATtableCreate(1024,75);
@@ -148,6 +146,9 @@ void init_table_gen()
   ATprotectAFun(afun_label);
   afun_lit = ATmakeAFun("lit", 1, ATfalse);
   ATprotectAFun(afun_lit);
+
+  initSymbols();
+  init_first();
 }
 
 /*}}}  */
@@ -156,6 +157,9 @@ void init_table_gen()
 void destroy_table_gen()
 {
   int i;
+
+  destroy_first();
+  destroySymbols();
 
   ATunprotectArray((ATerm *)nr_prod_table+MIN_PROD);
   free(nr_prod_table);
@@ -172,7 +176,6 @@ void destroy_table_gen()
   ATindexedSetDestroy(priority_table);
   ATtableDestroy(symbol_lookaheads_table);
   ATtableDestroy(rhs_prods_pairs);
-  ATtableDestroy(first_table);
   ATtableDestroy(state_nr_pairs);
   ATtableDestroy(nr_state_pairs);
   ATtableDestroy(state_gotos_pairs);
@@ -303,7 +306,7 @@ ATerm process_productions(SDF_ProductionList prods)
     }
 
     sort_on_rhs_symbol(flatprod, aint);
-    init_first(flatprod);
+    init_prod_first(flatprod);
 
     labelentry = (ATerm)ATmakeAppl2(afun_label, flatprod, aint);
     labelentries = ATinsert(labelentries,labelentry);
@@ -603,6 +606,7 @@ void process_restrictions(SDF_RestrictionList restricts)
 
 /*}}}  */
 
+#if 0
 /*{{{  static ATerm intset_to_term(IS_IntSet set) */
 
 static ATerm intset_to_term(IS_IntSet set)
@@ -646,7 +650,6 @@ static ATerm intset_to_term(IS_IntSet set)
 }
 
 /*}}}  */
-
 /*{{{  static ATermList compress_gotos(ATermList goto_list) */
 
 static ATermList compress_gotos(ATermList goto_list)
@@ -714,6 +717,7 @@ static ATermList compress_gotos(ATermList goto_list)
 }
 
 /*}}}  */
+#endif
 
 /*{{{  ATerm generate_parse_table(ATerm t) */
 

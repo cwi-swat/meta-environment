@@ -1,12 +1,36 @@
-#include "ksdf2table.h"
 #include <assert.h>
 
-extern ATerm empty_set;
+#include "ksdf2table.h"
+#include "characters.h"
+#include "symbol.h"
+#include "first.h"
+
 extern int MAX_PROD;
 
-extern ATermTable first_table;
 extern ATerm *nr_prod_table;
 
+static ATermTable first_table = NULL;
+
+static int max_first_sets = 0;
+static CC_Class **first_sets = NULL;
+
+#if 0
+/*{{{  static void printFirstSets() */
+
+static void printFirstSets()
+{
+  int i;
+
+  for (i=0; i<max_first_sets; i++) {
+    if (first_sets[i] != NULL) {
+      ATwarning("first_set of %t (%d): %t\n",
+		getSymbol(i), i, CC_ClassToTerm(first_sets[i]));
+    }
+  }
+}
+
+/*}}}  */
+#endif
 
 /*{{{  ATbool contains_epsilon(ATermList set)  */
 
@@ -28,33 +52,43 @@ ATermList remove_epsilon(ATermList set)
 
 /*}}}  */
 
+/*{{{  void first(CC_Class *cc, ATermList symbols, CC_Class *firstset) */
 
-/*{{{  ATermList first(ATermList symbols, ATermList firstset) */
-
-ATermList first(ATermList symbols, ATermList firstset)
+static void first(CC_Class *cc, ATermList symbols)
 {
-  ATermList set, newset = ATempty;
   ATerm symbol;
+  CC_Class *set;
 
-  if(ATisEmpty(symbols)) {
-    return firstset;
-  }
-  else {
-    while(!ATisEmpty(symbols)) {
-      symbol = ATgetFirst(symbols);
-      symbols = ATgetNext(symbols);
+  while(!ATisEmpty(symbols)) {
+    symbol = ATgetFirst(symbols);
+    symbols = ATgetNext(symbols);
 
-      set = (ATermList)ATtableGet(first_table,symbol);
-      if(contains_epsilon(set))
-        newset = ATunion3(newset,remove_epsilon(set));
-      else
-        return ATunion4(newset,set);
+    set = get_first_set(symbol, ATtrue);
+    CC_union(cc, set, cc);
+    if (!CC_containsChar(set, CC_EPSILON)) {
+      CC_removeChar(cc, CC_EPSILON);
+      return;
     }
-    return ATunion5(newset,firstset);
   }
+  CC_addChar(cc, CC_EPSILON);
 }
 
 /*}}}  */
+/*{{{  CC_Class *first_no_epsilon(ATermList symbols) */
+
+CC_Class *first_no_epsilon(ATermList symbols)
+{
+  CC_Class *result;
+
+  result = CC_makeClassEmpty();
+  first(result, symbols);
+  CC_removeChar(result, CC_EPSILON);
+
+  return result;
+}
+
+/*}}}  */
+
 /*{{{  void calc_first_table() */
 
 /**
@@ -64,7 +98,8 @@ ATermList first(ATermList symbols, ATermList firstset)
 void calc_first_table()
 {
   int ip;
-  ATermList symbols, firstset, tmpset;
+  ATermList symbols;
+  CC_Class *firstset, copy;
   ATerm symbol;
   ATerm prod;
   ATbool changed = ATtrue;
@@ -74,54 +109,122 @@ void calc_first_table()
     for(ip=MIN_PROD;ip<MAX_PROD;ip++) {
       prod = nr_prod_table[ip];
 
-      if(IS_PROD(prod)) {
-        symbols = GET_LIST_ARG(prod,0);
-        symbol  = GET_ARG(prod,1);
-        tmpset = (ATermList)ATtableGet(first_table,symbol);
-        if(tmpset) {
-          firstset = first(symbols,ATmakeList1(empty_set));
-          firstset = ATunion6(tmpset, firstset);
-          if (!ATsetEqual(tmpset,firstset)) {
-            ATtablePut(first_table,symbol,(ATerm)firstset);
-            changed = ATtrue;
-          }
-        }
-        else {
-          firstset = first(symbols,ATmakeList1(empty_set));
-          ATtablePut(first_table,symbol,(ATerm)firstset);
-          changed = ATtrue;
-        }
+      assert(IS_PROD(prod));
+      symbols = GET_LIST_ARG(prod,0);
+      symbol  = GET_ARG(prod,1);
+      firstset = get_first_set(symbol, ATfalse);
+
+      if(firstset) {
+	CC_copy(firstset, &copy);
+	first(firstset, symbols);
+	CC_union(firstset, &copy, firstset);
+
+	changed |= !CC_isEqual(&copy, firstset);
+      }
+      else {
+	firstset = get_first_set(symbol, ATtrue);
+	first(firstset, symbols);
+	changed = ATtrue;
       }
     }
   }
 }
 
 /*}}}  */
-/*{{{  void init_first(ATerm prod) */
-
+/*{{{  void init_prod_first(ATerm prod) */
 /**
  * Initialize the symbol table in order to be
  * able to perform the first calculation.
  **/
 
-void init_first(ATerm prod)
+
+void init_prod_first(ATerm prod)
 {
   ATermList symbols;
-  ATerm symbol, entry;
+  ATerm symbol;
+  CC_Class *set, *newset;
 
-  if(IS_PROD(prod)) {
-    symbols = GET_LIST_ARG(prod, 0);
-    while(!ATisEmpty(symbols)) {
-      symbol = ATgetFirst(symbols);
-      symbols = ATgetNext(symbols);
+  symbols = GET_LIST_ARG(prod, 0);
+  while(!ATisEmpty(symbols)) {
+    symbol = ATgetFirst(symbols);
 
-      entry = ATtableGet(first_table,symbol);
-      if(!entry) {
-         entry = (ATerm)ATmakeList1(symbol);
-        ATtablePut(first_table,symbol,entry);
-      }
-    }
+    set = get_first_set(symbol, ATtrue);
+    newset = CC_getCharClass(symbol);
+
+    /*assert(CC_isEmpty(set) || CC_isEqual(set, newset));*/
+
+    CC_copy(newset, set);
+
+    symbols = ATgetNext(symbols);
   }
 }
 
 /*}}}  */
+
+/*{{{  void init_first() */
+
+void init_first()
+{
+  first_table = ATtableCreate(1024, 75);
+  max_first_sets = 512;
+  first_sets = (CC_Class **)calloc(max_first_sets, sizeof(CC_Class *));
+  if (!first_sets) {
+    ATerror("out of memory in CC_init (2) %d\n", max_first_sets);
+  }
+}
+
+/*}}}  */
+/*{{{  void destroy_first() */
+
+void destroy_first()
+{
+  int i;
+
+  for (i=0; i<max_first_sets; i++) {
+    if (first_sets[i] != NULL) {
+      CC_free(first_sets[i]);
+    }
+  }
+
+  free(first_sets);
+  first_sets = NULL;
+  max_first_sets = 0;
+
+  ATtableDestroy(first_table);
+  first_table = NULL;
+}
+
+/*}}}  */
+
+/*{{{  CC_Class *get_first_set(ATerm symbol) */
+
+CC_Class *get_first_set(ATerm symbol, ATbool create)
+{
+  long index;
+  int old_size;
+
+  index = internSymbol(symbol);
+  if (index >= max_first_sets) {
+    old_size = max_first_sets;
+    max_first_sets *= 2;
+    first_sets = (CC_Class **)realloc(first_sets, max_first_sets*sizeof(CC_Class *));
+    if (!first_sets) {
+      ATerror("out of memory in get_first_set %d\n", max_first_sets);
+    }
+    memset(&first_sets[old_size], 0, old_size*sizeof(CC_Class *));
+  }
+  if (create && first_sets[index] == NULL) {
+    first_sets[index] = CC_makeClassEmpty();
+  }
+  /*
+    ATermList first_set = (ATermList)ATtableGet(first_table, symbol);
+    assert(first_set);
+    first_sets[index] = CC_ClassFromTermList(first_set);
+  }
+  */
+
+  return first_sets[index];
+}
+
+/*}}}  */
+

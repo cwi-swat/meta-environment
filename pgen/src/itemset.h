@@ -16,7 +16,13 @@ int ITS_size(ItemSet set);
 
 void ITS_iterator(ItemSet set, ItemSetIterator *iterator);
 void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator);
+
+/*
 Item ITS_next(ItemSetIterator *iterator);
 ATbool ITS_hasNext(ItemSetIterator *iterator);
+*/
+
+#define ITS_next(iter) (*((*(iter))++))
+#define ITS_hasNext(iter) (**(iter) != NO_ITEM)
 
 #endif

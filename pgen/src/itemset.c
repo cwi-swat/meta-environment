@@ -264,6 +264,7 @@ void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator)
 
 /*}}}  */
 
+#if 0
 /*{{{  Item ITS_next(ItemSetIterator iterator) */
 
 Item ITS_next(ItemSetIterator *iterator)
@@ -280,5 +281,6 @@ ATbool ITS_hasNext(ItemSetIterator *iterator)
 }
 
 /*}}}  */
+#endif
 
 

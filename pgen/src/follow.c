@@ -10,8 +10,6 @@
 extern ATerm empty_set;
 extern int MAX_PROD;
 
-static ATermList *local_follow_table = NULL;
-
 CC_Class  **follow_table = NULL;
 static ATermList *dependencies = NULL;
 static IS_IntSet *depend_closure = NULL;
@@ -70,39 +68,6 @@ ATermList followset_filtering(ATermList followset)
 
 /*}}}  */
 
-/*{{{  ATermList calc_first(ATermList symbols, int prodnr) */
-
-ATermList calc_first(ATermList symbols, int prodnr)
-{
-  ATermList set, lset, followset, newset = ATempty;
-  ATerm symbol;
-
-  followset = local_follow_table[prodnr];
-  if (!followset)
-    followset = ATempty;
-
-  if (ATisEmpty(symbols))
-    return followset;
-  else {
-    while (!ATisEmpty(symbols)) {
-      symbol = ATgetFirst(symbols);
-      symbols = ATgetNext(symbols);
-
-      set = (ATermList)ATtableGet(first_table,symbol);
-      if (contains_epsilon(set)) {
-	lset = remove_epsilon(set);
-	newset = ATunion(newset, lset);
-      }
-      else {
-	return ATunion(newset, set);
-      }
-    }
-    return ATunion(newset,followset);
-  }
-}
-
-/*}}}  */
-
 /*{{{  static ATermList init_dependency(int prod) */
 
 /**
@@ -155,8 +120,13 @@ static ATermList init_dependency(int prodid)
       }
     }
 
+    if (!CC_containsChar(get_first_set(elem, ATtrue), CC_EPSILON)) {
+      break;
+    }
+    /*
     if (!contains_epsilon((ATermList)ATtableGet(first_table, elem)))
       break;
+      */
   }
 
   /* Remove yourself if present */
@@ -298,42 +268,13 @@ static void closure_dependencies()
 
 /*}}}  */
 
-/*{{{  ATermList calculate_first(ATermList symbols) */
-
-ATermList calculate_first(ATermList symbols)
-{
-  ATermList set, lset, followset, newset = ATempty;
-  ATerm symbol;
-
-  followset = ATempty;
-
-  if (ATisEmpty(symbols))
-    return followset;
-  else {
-    while (!ATisEmpty(symbols)) {
-      symbol = ATgetFirst(symbols);
-      symbols = ATgetNext(symbols);
-
-      set = (ATermList)ATtableGet(first_table,symbol);
-      if (contains_epsilon(set)) {
-	lset = remove_epsilon(set);
-	newset = ATunion(newset, lset);
-      }
-      else {
-	return ATunion(newset, set);
-      }
-    }
-    return ATunion(newset,followset);
-  }
-}
-
-/*}}}  */
 /*{{{  static void init_follow_set(int prodid) */
 
 static void init_follow_set(int prodid)
 {
   ATerm prod, symbol;
-  ATermList symbols, follow, list, prods;
+  ATermList symbols, prods;
+  CC_Class *follow;
   CC_Class *set;
   int iptr, len;
 
@@ -350,22 +291,17 @@ static void init_follow_set(int prodid)
       if (!ATisEmpty(symbols)) {
 	prods = (ATermList)ATtableGet(rhs_prods_pairs, symbol);
 	if (prods) {
-	  follow = calculate_first(symbols);
+	  follow = first_no_epsilon(symbols);
 	  while (!ATisEmpty(prods)) {
 	    ATerm lhs_prodnr = ATgetFirst(prods);
 	    prods = ATgetNext(prods);
 	    if (!conflicts(IT_createItemDot(prodid, iptr), lhs_prodnr)) {
 	      int lhs_prodid = ATgetInt((ATermInt)lhs_prodnr);
 	      set = initial_follow_sets[lhs_prodid];
-	      list = follow;
-	      while (!ATisEmpty(list)) {
-		ATerm symbol = ATgetFirst(list);
-		CC_Class *cc = CC_getCharClass(symbol);
-		CC_union(set, cc, set);
-		list = ATgetNext(list);
-	      }
+	      CC_union(set, follow, set);
 	    }
 	  }
+	  CC_free(follow);
 	}
       }
     }
