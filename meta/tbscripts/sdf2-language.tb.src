@@ -25,12 +25,12 @@
 process Open-Sdf2-Language is
   (
     rec-msg(open-sdf2-language) .
-    snd-msg(open-language("Sdf2", "__DATADIR__/Sdf2.baf")) .
+    snd-msg(open-language(trm("Sdf2"), "__DATADIR__/Sdf2.baf")) .
     (
-      rec-msg(language-opened("Sdf2")) .
+      rec-msg(language-opened(trm("Sdf2"))) .
       snd-msg(sdf2-language-opened)
     +
-      rec-msg(language-not-opened("Sdf2")) .
+      rec-msg(language-not-opened(trm("Sdf2"))) .
       snd-msg(sdf2-language-not-opened)
     )
   ) *

@@ -67,9 +67,9 @@ in
       snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
     +
       rec-msg(sdf2-language-opened) .
-      snd-msg(parse-focusses(EditorId, "Sdf2", "Module")) .
+      snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
       (
-        rec-msg(parse-ok("Sdf2")) .
+        rec-msg(parse-ok(trm("Sdf2"))) .
         snd-msg(get-tree(EditorId)) .
         rec-msg(tree(Tree?)) .
         snd-msg(update-module-in-db(Tree, "Sdf2")).
@@ -78,7 +78,7 @@ in
         rec-msg(finished-opening-modules) .
         snd-msg(clear-focus(EditorId))
       +
-        rec-msg(parse-failed("Sdf2", ErrorFoci?)) .
+        rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
         snd-msg(set-focus(EditorId, ErrorFoci))
       )
     )

@@ -31,6 +31,7 @@ let
   DirtyFoci    : list,
   ErrorFoci    : list,
   Text         : str,
+  Fun          : str,
   EditorId     : term,
   StartSymbols : term,
   Pos          : int,
@@ -45,8 +46,8 @@ in
   Id := process-id . 
   (
     rec-msg(parse-focusses(EditorId?, ModuleId?)) .
-    Text := fun(ModuleId) .
-    if equal(Text, "eqs") then
+    Fun := fun(ModuleId) .
+    if equal(Fun, "eqs") then
       Nonterminal := "Equations"
     else
       Nonterminal := ""
