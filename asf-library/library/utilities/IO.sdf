@@ -7,25 +7,20 @@ exports
 
 context-free syntax
 
-  parse-file(file:Bytes)  -> ParseResult {built-in("parse-file")}
-  unparse-to-file(file:Bytes,Sort) -> Sort  {built-in("unparse-to-file")}
+  parse-file(file:Bytes)           -> ParseResult {built-in("parse-file")}
+  unparse-to-file(file:Bytes,Sort) -> Sort        {built-in("unparse-to-file")}
+
+context-free syntax
+
+  read-term(file:Bytes)       -> ParseResult {built-in("read-term-from-file")}
+  write-term(file:Bytes,Sort) -> Sort        {built-in("write-term-to-file")}
+
+context-free syntax
 
   parse-bytes(Bytes)      -> ParseResult {built-in("parse-bytes")}
-  unparse-to-bytes(Sort)           -> Bytes {built-in("unparse-to-bytes")}
+  unparse-to-bytes(Sort)  -> Bytes       {built-in("unparse-to-bytes")}
 
 context-free syntax
 
-  read-term-from-file(file:Bytes)     -> ParseResult 
-  {built-in("read-term-from-file")}
-
-  write-term-to-file(file:Bytes,Sort) -> Sort 
-  {built-in("write-term-to-file")}
-
-context-free syntax
-
-  read-bytes-from-file(file:Bytes)      -> Bytes 
-  {built-in("read-bytes-from-file")}
-
-  write-bytes-to-file(file:Bytes,Bytes) -> Bytes 
-  {built-in("read-bytes-from-file")}
-  
+  read-bytes(file:Bytes)        -> Bytes {built-in("read-bytes-from-file")}
+  write-bytes(file:Bytes,Bytes) -> Bytes {built-in("read-bytes-from-file")}
