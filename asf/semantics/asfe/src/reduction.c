@@ -186,7 +186,6 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
     reduct = rewriteTraversalAppl(trm, env, depth, extra);
   }
   else if ((builtin = getTreeBuiltin(trm)) != NULL) {
-    ATwarning("builtin: %t\n", builtin);
     reduct = rewriteBuiltinAppl(builtin, trm, env, depth, extra);
   }
   else if (PT_isTreeAppl(trm)) {
