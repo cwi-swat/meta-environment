@@ -1,5 +1,9 @@
 # $Id$
 
+
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 0.10
+
 2002/07/04 (jurgenv@cwi.nl)
  * Fixed a bug in module parameterization for ASF. If a module parameter
    was bound to a list symbol, variables of the parametrized symbol were not
