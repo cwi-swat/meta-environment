@@ -52,8 +52,8 @@ in
       snd-msg(exists-file(Path, ".asf")) .
       (
         rec-msg(file-exists) .
-	snd-msg(open-file(Path, ".asf")) .
-	rec-msg(opened-file(text(Text?))) .
+	snd-msg(read-file(Path, ".asf")) .
+	rec-msg(file-contents(text(Text?))) .
 	snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
 	rec-msg(eqs-added) .
 	snd-msg(new-equations-created)
@@ -62,8 +62,8 @@ in
 	snd-msg(write-text-file(Path, ".asf", [])) .
         (
           rec-msg(file-written) .
-	  snd-msg(open-file(Path, ".asf")) .
-	  rec-msg(opened-file(text(Text?))) .
+	  snd-msg(read-file(Path, ".asf")) .
+	  rec-msg(file-contents(Text?)) .
           snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
           rec-msg(eqs-added) .
           snd-msg(new-equations-created)

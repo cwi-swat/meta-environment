@@ -4,13 +4,8 @@
 
 process StandalonePtDumper is
 let
-  Id         : term,
   ModuleName : str
 in
-  Id := process-id.
-  subscribe(search-paths-processed) .
-
-  rec-note(search-paths-processed) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME)) .

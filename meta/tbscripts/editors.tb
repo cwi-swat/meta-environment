@@ -51,11 +51,11 @@ in
     rec-msg(syntax(Tree?))
   +
     rec-msg(unavailable).
-    snd-msg(open-syntax-file(FileName, ModuleName)) .
+    snd-msg(read-file(FileName, ".sdf")) .
     (
-      rec-msg(opened-file(text(Text?)))
+      rec-msg(file-contents(Text?))
     +
-      rec-msg(error-opening(Message?))
+      rec-msg(error-reading(Message?))
     )
   ) .
   CreateEditor("syntax",ModuleName,FileName,".sdf",Text,Tree)
@@ -107,11 +107,11 @@ let
   ErrorMessage : str
 in
   Text := "".
-  snd-msg(open-file(FileName,"")) .
+  snd-msg(read-file(FileName,"")) .
   (
-    rec-msg(opened-file(text(Text?)))
+    rec-msg(file-contents(Text?))
     +
-    rec-msg(error-opening(ErrorMessage?)) 
+    rec-msg(error-reading(ErrorMessage?)) 
   ).
   CreateEditor("term",ModuleName,FileName,"",Text,Tree)
 endlet

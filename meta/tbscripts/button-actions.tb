@@ -480,16 +480,7 @@ in
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) . 
 	printf("not yet implemented at line %d", __LINE__) .
-        snd-msg(open-named-file(Path)).
-        (
-          rec-msg(opened-file(tree(Tree?))) .
-          StackPushTerm(Stack,Stack?,Tree) .
-          ReturnSuccess(EditorId,Stack)
-        +
-          rec-msg(error-opening(Path?)).
-          /* This could be ReturnFailed as well: */
-          ReturnAbort(EditorId,Stack) 
-        )
+        ReturnAbort(EditorId,Stack) 
   ) * delta
 endlet
 
@@ -557,11 +548,11 @@ process GetTextFromFile(FileName: str, Text: str?) is
 let
   ErrorMessage      : str
 in
-  snd-msg(open-named-file(FileName)).
+  snd-msg(read-named-file(FileName)).
   (
-    rec-msg(opened-file(text(Text?))) 
+    rec-msg(file-contents(Text?)) 
   +
-    rec-msg(error-opening(ErrorMessage?)) .
+    rec-msg(error-reading(ErrorMessage?)) .
     Text := error-text
   )
 endlet

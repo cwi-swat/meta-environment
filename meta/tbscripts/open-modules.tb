@@ -35,27 +35,55 @@ in
   snd-msg(display-import-graph(Nodes,Vertices))
 endlet
 
-process Locate-File(FileName : str, Extension : str,
-                    Path : str?) is
+process LocateFile(Name : str, Extension : str, Path : str?) is
 let
-  Paths : list,
-  SPath : str
+  Directories : list,
+  Chosen : str
 in
-  Path := "" .
-  snd-msg(retrieve-search-paths) .
-  rec-msg(search-paths(Paths?)) .
-  if not-equal(Paths, []) then
-    SPath := first(Paths) .
-    Paths := next(Paths) .
-    snd-msg(find-file(SPath, FileName, Extension)) .
-    ( 
-      rec-msg(file-found(Path?)) .
-      Paths := []
+  snd-msg(get-search-paths) .
+  rec-msg(search-paths(Directories?)) .
+  snd-msg(find-file(Directories, Name, Extension)) .
+  (
+    rec-msg(file-not-found) .
+    Path := "" 
+  +
+    rec-msg(file-found(Directories?)) .
+    Path := first(Directories) .
+    Directories := next(Directories) .
+    if not-equal(Directories, []) then
+      snd-msg(get-filename(Path, Name, Extension)) .
+      rec-msg(filename(Chosen?)) .
+      DealWithMultipleOccurrences(Chosen, Name, Extension, Directories)
+    else
+      tau
+    fi
+  )
+endlet
+
+process DealWithMultipleOccurrences(Chosen : str, Name : str,
+                                    Extension : str, Peers : list) is
+let
+  Directories : list,
+  Directory : str,
+  FileName : str
+in
+  Directories := Peers .
+  if not-equal(Directories, []) then
+    Directory := first(Directories) .
+    Directories := next(Directories) .
+    snd-msg(get-filename(Directory, Name, Extension)) .
+    rec-msg(filename(FileName?)) .
+    snd-msg(compare-files(FileName, Chosen)) .
+    (
+      rec-msg(files-equal) .
+      snd-note(ui-status(errorf("Multiple occurrences of %s:\n%s and %s",
+                                [Name,Chosen,FileName])))
     +
-      rec-msg(file-not-found)
+      rec-msg(files-differ)
     )
-  fi *
-  if equal(Paths, []) then
+  fi
+  *
+  if equal(Directories, []) then
     tau
   fi
 endlet
@@ -85,7 +113,7 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-	Locate-File(Module, ".sdf", Path?) .
+	LocateFile(Module, ".sdf", Path?) .
         Open-Module(Module, Path, Status?, RealModule?, Imports?).
         Modules := join(Imports, Modules).
         RealModules := join(RealModules, RealModule)
@@ -159,12 +187,12 @@ let
 in
   Tree := no-tree.
   if not-equal(Path, "") then
-    snd-msg(open-file(Path, ".sdf")) .
+    snd-msg(read-file(Path, ".sdf")) .
     (
-      rec-msg(opened-file(text(Text?))) .
+      rec-msg(file-contents(Text?)) .
       Parse-Syntax(Text, Status?, Tree?)
     +
-      rec-msg(error-opening(Message?)) .
+      rec-msg(error-reading(Message?)) .
       Status := no-such-file
     )
   else
@@ -208,12 +236,12 @@ let
   RealPath : str,
   ErrorMessage : str
 in
-  snd-msg(open-file(Path, ".asf")).
+  snd-msg(read-file(Path, ".asf")).
   (
-    rec-msg(opened-file(text(Text?))) .
+    rec-msg(file-contents(Text?)) .
     snd-msg(add-eqs-to-db(Module, text(Text))) .
     rec-msg(eqs-added)
   +
-    rec-msg(error-opening(ErrorMessage?))
+    rec-msg(error-reading(ErrorMessage?))
   )
 endlet

@@ -7,9 +7,6 @@ let
   ModuleName : str,
   Equations  : term
 in
-  subscribe(search-paths-processed) .
-
-  rec-note(search-paths-processed) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
   snd-msg(get-all-equations(MODULENAME)) .
