@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <string.h>
 
 #include <aterm1.h>
 
