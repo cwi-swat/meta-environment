@@ -9,31 +9,39 @@ view, it is a \emph{debug-nub}.
 
 <<buscontrol.c*>>=
 <<includes>>
+<<typedefs>>
 <<global variables>>
+
+<<post_event>>
+<<change_exec_state>>
 <<init>>
+
+<<term_true>>
+<<term_eval>>
+<<in_pid_list>>
+
 <<get_var_value>>
 <<set_var_value>>
 <<init_process>>
 <<continue_process>>
 <<update_process>>
 <<create_process>>
-<<build_cpe>>
-<<change_cpe>>
 <<start_processes>>
 <<stop_processes>>
+<<create_obs_point>>
+<<remove_obs_point>>
+<<check_obs_points>>
 
 <<rec_monitor>>
 <<rec_ack_event>>
 <<rec_terminate>>
 
-<<start>>
-<<stop>>
 <<get_info>>
-<<get_cpe>>
-<<get_var_list>>
-<<watch_vars>>
-<<change_var>>
-<<get_scopes>>
+
+<<set_observation_point>>
+<<clear_observation_point>>
+<<exec_control>>
+<<execute_actions>>
 
 <<sigint_handler>>
 <<main>>
@@ -53,7 +61,24 @@ view, it is a \emph{debug-nub}.
 #include <tool2.h>
 #include "evq.h"
 #include "viewer.tif.c"
-#include "debug-nub.tif.c"
+#include "debug-adapter.tif.c"
+@
+
+%}}}
+%{{{ typedefs
+
+<<typedefs>>=
+typedef struct obs_point
+{
+  struct obs_point *next;
+  int id;
+  term *pids;
+  char *module;
+  int line;
+  int col;
+  term *cond;
+  term_list *actions;
+} obs_point;
 @
 
 %}}}
@@ -64,13 +89,20 @@ view, it is a \emph{debug-nub}.
 #define INITIAL_PROCS	256
 #define INIT_PID 	0
 
-#define ES_NONE		-1
-#define ES_STOPPED	0
-#define ES_RUNNING	1
-#define ES_STEP_IN	2
-#define ES_STEP_OVER	3
+#define ES_NONE		0
+#define ES_STOP		1
+#define ES_RUN		2
+#define ES_SINGLE_STEP	3
 #define ES_HIGH_WATER	4
-int global_exec_state = ES_STOPPED;
+int global_exec_state = ES_STOP;
+static char *state_name[] =
+{ "unknown",
+  "stop",
+  "run",
+  "single-step",
+  "high-water",
+  NULL
+};
 
 int Tid = -1;
 int control_bus;
@@ -89,22 +121,27 @@ int last_proc = 0;
 
 /* Some event queues */
 #define MAX_QUEUE_SIZE		512
-#define QUEUE_HIGH_WATER	32
-#define EVQ_CPE			0
-#define EVQ_ATOM_EXECUTED	1
+#define HIGH_WATER_MARK		128	/* Must be <<< MAX_QUEUE_SIZE */
+#define LOW_WATER_MARK		8	/* Not all events have to be ack'd */
+#define EVQ_WATCHPOINT		0
+#define EVQ_EXEC_STATE		1
 #define EVQ_PROCESS_CREATED	2
 #define EVQ_PROCESS_DESTROYED	3
 #define EVQ_COMMUNICATION	4
-#define EVQ_VARS_CHANGED	5
-#define EVQ_LAST		EVQ_VARS_CHANGED
+#define EVQ_LAST		EVQ_COMMUNICATION
 
 event_queue *evq[EVQ_LAST+1] = { NULL };
+int outstanding_events = 0;
+TBbool high_water_reached = TBfalse;
 
+obs_point *obs_points_halt = NULL;
+obs_point *obs_points_cpe  = NULL;
+int OID = 0;
 @
 
 %}}}
 
-%{{{ init
+%{{{ void init()
 
 The {\tt init} process takes care of the initialization
 of the {\tt buscontrol} tool.
@@ -116,7 +153,20 @@ void init()
   void init_process(int pid);
 @
 
-{\tt init} starts by initializing the process database.
+
+The event queues need to be created.
+
+<<init>>=
+  for(i=0; i<=EVQ_LAST; i++) {
+    evq[i] = TBevq_create(MAX_QUEUE_SIZE, control_bus);
+    if(!evq[i]) {
+      fprintf(stderr, "not enough memory!\n");
+      exit(1);
+    }
+  }
+@
+
+{\tt init} needs to initialize the process database.
 
 <<init>>=
   proc_db = malloc(sizeof(proc *)*INITIAL_PROCS);
@@ -129,6 +179,27 @@ void init()
     proc_db[i] = NULL;
 @
 
+and creating the ever-present cpe observation point.
+This observation point is activated on halt of every process
+on every source position.
+<<init>>=
+obs_points_halt = malloc(sizeof(obs_point));
+if(!obs_points_halt) {
+  fprintf(stderr, "not enough memory!\n");
+  exit(1);
+}
+obs_points_halt->next = NULL;
+obs_points_halt->id   = OID++;
+obs_points_halt->pids = TB_make("all");	/* every process */
+obs_points_halt->line = -1;     /* every source position */
+obs_points_halt->col  = -1;
+obs_points_halt->module = NULL;
+obs_points_halt->cond = NULL;   /* no conditions */
+obs_points_halt->actions = TB_make("[watch(cpe)]"); /* show the current point of execution */
+TBprotect(&obs_points_halt->pids);
+TBprotect(&obs_points_halt->actions);
+@
+
 The {\tt INIT} process is always present, so initialize
 it.
 
@@ -138,25 +209,83 @@ it.
   proc_db[INIT_PID]->name = "INIT";
 @
 
-The event queues need to be created.
-<<init>>=
-  for(i=0; i<=EVQ_LAST; i++) {
-    evq[i] = TBcreate_evq(MAX_QUEUE_SIZE, control_bus);
-    if(!evq[i]) {
-      fprintf(stderr, "not enough memory!\n");
-      exit(1);
-    }
-  }
-@
-
 Now we can notify the world that {\tt INIT} is already there!
 <<init>>=
-  TBpost_event(evq[EVQ_PROCESS_CREATED], 
+  post_event(EVQ_PROCESS_CREATED, 
       TB_make("process-created(<int>,<str>)", INIT_PID, proc_db[INIT_PID]->name));
 }
 @
 
 %}}}
+
+%{{{ term *term_eval(term *t, term *cpe)
+
+Evaluate a term.
+
+<<term_eval>>=
+term *term_eval(term *t, term *cpe)
+{
+  term *mod;
+
+  if(TB_match(t, "cpe")) {
+    if(cpe) {
+      mod = list_first(cpe);
+      cpe = list_next(cpe);
+      return list_concat(mk_list4(TB_make("loc"), TB_make("after"),
+			 mod, TB_make("lcp")), cpe);
+    } else {
+      return TB_make("[loc,after,\"\",lcp,-1,-1,-1,-1]");
+    }
+  }
+  if(TB_match(t, "\"\"")) {
+    return NULL;
+  }
+
+  /* <PO> We need to propagate an evaluation error here! */
+  return t;
+}
+@
+
+%}}}
+%{{{ TBbool term_true(term *t)
+
+Check if a term represents a `true' value.
+<<term_true>>=
+TBbool term_true(term *t)
+{
+  if(TB_match(t, "false"))
+    return TBfalse;
+  if(TB_match(t, "0"))
+    return TBfalse;
+  if(TB_match(t, "[]"))
+    return TBfalse;
+
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ TBbool in_pid_list(term *pids, int pid)
+
+Check if a specific pid is part of a list of pids.
+
+<<in_pid_list>>=
+TBbool in_pid_list(term *pids, int pid)
+{
+  if(TBmatch(pids, "all"))
+    return TBtrue;
+
+  while(pids) {
+    if(int_val(list_first(pids)) == pid)
+      return TBtrue;
+    pids = list_next(pids);
+  }
+  return TBfalse;
+}
+@
+
+%}}}
+
 %{{{ get_var_value
 
 <<get_var_value>>=
@@ -236,13 +365,30 @@ void init_process(int pid)
     proc_db[pid]->name = "<unknown>";
     proc_db[pid]->vars = NULL;
     proc_db[pid]->cpe  = NULL;
-    proc_db[pid]->exec_state = global_exec_state;
+    proc_db[pid]->exec_state = ES_NONE;
     proc_db[pid]->waiting = TBfalse;
     TBprotect(&proc_db[pid]->vars);
     TBprotect(&proc_db[pid]->cpe);
 
+    change_exec_state(pid, global_exec_state);
+   
     if(pid > last_proc)
       last_proc = pid;
+  }
+}
+@
+
+%}}}
+%{{{ void change_exec_state(int pid, int state)
+
+<<change_exec_state>>=
+void change_exec_state(int pid, int state)
+{
+  fprintf(stderr, "exec_state: %d\n", state);
+  if(proc_db[pid]->exec_state != state) {
+    proc_db[pid]->exec_state = state;
+    post_event(EVQ_EXEC_STATE, TB_make("exec-state([<int>],<appl>)", pid,
+						state_name[state], NULL));
   }
 }
 @
@@ -293,9 +439,10 @@ void update_process(int pid, term *env)
     env = next(env);    
   }
   if(changed) {
-    /*TBmsg("VARIABLES OF PROCESS %d CHANGED: %t\n", pid, proc_db[pid]->vars);*/
-    TBpost_event(evq[EVQ_VARS_CHANGED], TB_make("vars-changed([[<int>,<str>,<term>]])",
+    /*TBmsg("VARIABLES OF PROCESS %d CHANGED: %t\n", pid, proc_db[pid]->vars);
+    TBevq_post(evq[EVQ_VARS_CHANGED], TB_make("vars-changed([[<int>,<str>,<term>]])",
  		pid, proc_db[pid]->name, proc_db[pid]->vars));
+    */
   } else {
     /*TBmsg("VARIABLES OF PROCESS %d DIDN'T CHANGE!\n");*/
   }
@@ -323,7 +470,7 @@ void create_process(int pid, term *args)
     TBmatch(first(args), "%f", &proc_db[new_pid]->name);
     /*TBprintf(stderr, "create_process: %t (%d, %s)\n", 
 		args, new_pid, proc_db[new_pid]->name);*/
-    TBpost_event(evq[EVQ_PROCESS_CREATED], 
+    post_event(EVQ_PROCESS_CREATED, 
 	TB_make("process-created(<int>,<str>)", new_pid, proc_db[new_pid]->name));
   } else {
     TBprintf(stderr, "cannot find pid of created process: %t", args);
@@ -332,52 +479,24 @@ void create_process(int pid, term *args)
 @
 
 %}}}
-%{{{ build_cpe
+%{{{ void post_event(int queue, term *event)
 
-Build the global {\tt cpe} by simply concatenating the individual
-process {\tt cpe}'s.
-
-<<build_cpe>>=
-term *build_cpe()
+Post an event. Implement a simple control-flow mechanism
+by setting a flag when the high-water mark of outstanding
+events is reached.
+<<post_event>>=
+void post_event(int queue, term *event)
 {
-  int i;
-  term_list *cpe = NULL;
- term *entry;
-
-  for(i=0; i<= last_proc; i++) {
-    if(proc_db[i] && proc_db[i]->cpe) {
-      if(!proc_db[i]->name) {
-        entry = TBmake("[\"*\",\"lcp\",%l]", proc_db[i]->cpe);
-      } else {
-	entry = TBmake("[%s,\"lcp\",%l]", 
-			proc_db[i]->name, proc_db[i]->cpe);
-      }
-      cpe = list_concat_term(cpe, entry);
-    }
-  }
-  return cpe;
+  TBprintf(stderr, "posting event %t in queue %d\n", event, queue);
+  TBevq_post(evq[queue], event);
+  outstanding_events++;
+  if(outstanding_events >= HIGH_WATER_MARK)
+    high_water_reached = TBtrue;
 }
 @
 
 %}}}
-%{{{ change_cpe
-
-<<change_cpe>>=
-void change_cpe(int pid, term *at_coords)
-{
-  assert(proc_db[pid]);
-  /* at_coords could be NULL, for instance when the action belongs to
-     the INIT process (pid == 0) */
-  if(at_coords != NULL) {
-    proc_db[pid]->cpe = at_coords;
-    /*TBmsg("posting event cpe(%t)\n", build_cpe());*/
-    TBpost_event(evq[EVQ_CPE], TB_make("cpe(<term>)", build_cpe()));
-  }
-}
-@
-
-%}}}
-%{{{ start_processes
+%{{{ void start_processes(term *procs, int es)
 
 Start a number of processes. Start all processes when
 the list is empty.
@@ -391,9 +510,9 @@ void start_processes(term_list *procs, int es)
     global_exec_state = es;
     for(pid=0; pid <= last_proc; pid++) {
        /* Only continue a process when it wasn't stopped */
-       if(proc_db[pid]->exec_state == ES_STOPPED) {
+       if(proc_db[pid]->exec_state == ES_STOP) {
 	 continue_process(pid);
-	 proc_db[pid]->exec_state = es;
+	 change_exec_state(pid, es);
        }
     }
   } else {
@@ -403,9 +522,9 @@ void start_processes(term_list *procs, int es)
       } else {
 	TBmsg("proc_db[%d]->exec_state = %d, waiting = %d\n", pid,
 		proc_db[pid]->exec_state, proc_db[pid]->waiting);
-        if(proc_db[pid]->exec_state == ES_STOPPED)
+        if(proc_db[pid]->exec_state == ES_STOP)
           continue_process(pid);
-        proc_db[pid]->exec_state = es;
+	change_exec_state(pid, es);
       }
       procs = next(procs);
     }
@@ -414,7 +533,7 @@ void start_processes(term_list *procs, int es)
 @
 
 %}}}
-%{{{ stop_processes
+%{{{ void stop_processes(term *procs)
 
 Stop a list of processes.
 
@@ -425,22 +544,201 @@ void stop_processes(term_list *procs)
   int pid;
 
   if(!procs) {
-    global_exec_state = ES_STOPPED;
+    global_exec_state = ES_STOP;
     for(pid=0; pid <= last_proc; pid++)
-      proc_db[pid]->exec_state = ES_STOPPED;
+      change_exec_state(pid, ES_STOP);
   } else {
     while(procs) {
       if(!TBmatch(first(procs), "%d", &pid)) {
         TBmsg("%t is not a list of proc-ids!\n", procs);
         return;
       } else {
-        proc_db[pid]->exec_state == ES_STOPPED; /* Stop this process */
+	change_exec_state(pid, ES_STOP); /* Stop this process */
       }
       procs = next(procs);
     }
   }
 }
 
+@
+
+%}}}
+%{{{ int create_obs_point(term *pids, term *port, term *cond, term_list *acts)
+
+<<create_obs_point>>=
+int create_obs_point(term *pids, term *port, term *cond, term_list *acts)
+{
+  char *module;
+  int line = -1, col = -1;
+  obs_point *cur, *prev;
+  obs_point **list;
+
+  if(TB_match(port, "on-halt")) {
+    list = &obs_points_halt;
+  } else if(TB_match(port, "every-stat")) {
+    list = &obs_points_cpe;
+  } else if(TB_match(port, "[loc,after,<str>,lc,<int>,<int>]", 
+						&module, &line, &col)) {
+    list = &obs_points_cpe;
+  } else {
+    return -1;
+  }
+  
+  prev = NULL;
+  cur = *list;
+  while(cur) {
+    if(term_equal(cur->pids, pids) && cur->line == line && cur->col == col)
+      return cur->id;
+    prev = cur;
+    cur = cur->next;
+  }
+  cur = (obs_point *)malloc(sizeof(obs_point));
+  if(prev)
+    prev->next = cur;
+  else
+    *list = cur;
+  cur->id   = OID++;
+  cur->pids = pids;
+  cur->module = module;
+  cur->line = line;
+  cur->col  = col;
+  cur->actions = acts;
+  cur->cond = cond;
+  cur->next = NULL;
+
+  TBprotect(&cur->pids);
+  TBprotect(&cur->actions);
+  TBprotect(&cur->cond);
+
+  return cur->id;
+}
+@
+
+%}}}
+%{{{ void remove_obs_point(int oid)
+
+Remove an existing observation point.
+
+<<remove_obs_point>>=
+<<del_obs_point>>
+void remove_obs_point(int oid)
+{
+  if(!del_obs_point(&obs_points_cpe, oid))
+    del_obs_point(&obs_points_halt, oid);
+}
+@
+
+This function does the actual work, by deleting an observation
+point from a list if it exists.
+<<del_obs_point>>=
+static int del_obs_point(obs_point **l, int oid)
+{
+  obs_point *prev = NULL, *cur = *l;
+  
+  while(cur) {
+    if(cur->id == oid) {
+      if(prev)
+        prev->next = cur->next;
+      else
+        *l = cur->next;
+      free(cur);
+      return 1;
+    }
+    prev = cur;
+    cur = cur->next;
+  }
+  return 0;
+}
+@
+
+%}}}
+%{{{ void check_obs_points(obs_point **l, int pid, term *cpe)
+
+<<check_obs_points>>=
+<<cond_trigger_obs_point>>
+
+void check_obs_points(obs_point *l, int pid, term *cpe)
+{
+  char *module;
+  int start_line, start_col;
+  int end_line, end_col;
+  obs_point *cur = l;
+  TBbool after_start = TBfalse;
+  TBbool before_end = TBfalse;
+
+  TBprintf(stderr, "checking obs points: cpe=%t, pid=%d\n", cpe, pid);
+  while(cur) {
+    TBprintf(stderr, "  obs point, id=%d, pids=%t, ",
+		cur->id, cur->pids);
+    TBprintf(stderr, "mod=%s, line=%d, col=%d, cond=%t, actions: %t\n",
+		cur->module, cur->line, cur->col, cur->cond, cur->actions);
+
+    if(in_pid_list(cur->pids, pid)) {
+      TBprintf(stderr, "\t-> in pid list\n");
+
+      TB_match(cpe, "[<str>,<int>,<int>,<int>,<int>]", &module,
+		 &start_line, &start_col, &end_line, &end_col);
+
+      /* Check if we are talking about the same module */
+      if(cur->module && (!module || !streq(module, cur->module)))
+        return;
+      TBprintf(stderr, "\t-> modules are ok\n");
+
+      if(cur->line == -1)
+        cond_trigger_obs_point(cur, pid, cpe);
+
+      if(cur->line > start_line || 
+         (cur->line == start_line && cur->col >= start_col))
+        after_start = TBtrue;
+      if(cur->line < end_line ||
+         (cur->line == end_line && cur->col < end_col))
+        before_end = TBtrue;
+      TBprintf(stderr, "\t  after_start=%d, before_end=%d\n", 
+					after_start, before_end);
+      if(after_start && before_end)
+        cond_trigger_obs_point(cur, pid, cpe);
+    }
+    cur = cur->next;
+  }
+}
+@
+
+Trigger an observation point, only when its conditions are satisfied.
+
+<<cond_trigger_obs_point>>=
+void check_obs_points(obs_point *l, int pid, term *cpe);
+
+void cond_trigger_obs_point(obs_point *p, int pid, term *cpe)
+{
+  term_list *acts;
+  term *act, *expr;
+
+  TBprintf(stderr, "cond_trigger_obs_point: %d, %t\n", pid, cpe);
+
+  if(p->cond && !term_true(term_eval(p->cond, cpe)))
+    return;
+
+  acts = p->actions;
+  TBprintf(stderr, "triggering opoint! (%d): %t\n", 
+				proc_db[pid]->exec_state, acts);
+
+  while(acts) {
+    act = list_first(acts);
+    acts = list_next(acts);
+    if(TBmatch(act, "break")) {
+      if(proc_db[pid]->exec_state != ES_STOP) {
+	change_exec_state(pid, ES_STOP);
+	check_obs_points(obs_points_halt, pid, cpe);
+      }
+    } else if(TB_match(act, "watch(<term>)", &expr)) {
+      	post_event(EVQ_WATCHPOINT, 
+		TB_make("watchpoint([<int>],<int>,<term>,<term>)",
+		       pid, p->id, expr, term_eval(expr, cpe)));
+    } else {
+      TBprintf(stderr, "illegal action: %t\n", act);
+    }
+  }
+}
 @
 
 %}}}
@@ -478,35 +776,36 @@ term *rec_monitor(int cid, term *T)
       /* Endlet monitoring */
     } else if(pid2 >= 0) {
       /* Process <-> process communication */
-        TBpost_event(evq[EVQ_COMMUNICATION],
+        /*TBevq_post(evq[EVQ_COMMUNICATION],
 	  TB_make("communication(proc-proc,<int>,<int>,<appl>,<term>)", 
 					pid1, pid2, at_fun, NULL, at_args));
+        */
     } else {
       /* Other atoms (assignment, printf, tau, etc.) */
     }
 
+    /* Now we can check for observation points */
+    check_obs_points(obs_points_cpe, pid1, at_coords);
+
     /* Any common code postfix goes here */
     switch(proc_db[pid1]->exec_state) {
-	case ES_STOPPED:
-	case ES_STEP_IN:
-	case ES_STEP_OVER:	/* Later, we need to do something more
+	case ES_STOP:
+	case ES_SINGLE_STEP:	/* Later, we need to do something more
 				   sophisticated here later. */
-				proc_db[pid1]->exec_state = ES_STOPPED;
+				change_exec_state(pid1, ES_STOP);
+				check_obs_points(obs_points_halt, pid1, at_coords);
 				break;
-	case ES_RUNNING:	continue_process(pid1);
+	case ES_RUN:		if(high_water_reached)
+				  proc_db[pid1]->exec_state = ES_HIGH_WATER;
+				else
+				  continue_process(pid1);
 				break;
         case ES_HIGH_WATER:	break;
-	default:	/* An illegal exec status? better crash and burn! */
+	default:	/* An illegal exec state? better crash and burn! */
 			TBmsg("process %d, exec_state = %d\n",
 					pid1, proc_db[pid1]->exec_state);
 			assert(0);
     }
-    /* Now it's time to let the controlling ToolBus know something
-       interesting has happened. */
-    change_cpe(pid1, at_coords);
-    TBpost_event(evq[EVQ_ATOM_EXECUTED], 
-	TB_make("atom-executed(<int>,<appl>,<term>,<int>)", 
-			pid1, at_fun, NULL, at_args, pid2));
   } else {
     err_fatal("badly formed monitor function: %t\n", T);
   }
@@ -551,8 +850,18 @@ void rec_ack_event(int cid, term *ev)
 
   /*TBprintf(stderr, "Received acknowledment: %t", ev);*/
   for(i=0; i<=EVQ_LAST; i++) {
-    if(TBcheck_ack_event(evq[i], ev)) {
-      /*TBprintf(stderr, ", handled by queue %d\n", i);*/
+    if(TBevq_ack_event(evq[i], ev)) {
+      outstanding_events--;
+      if(high_water_reached && outstanding_events <= LOW_WATER_MARK) {
+        int i;
+        high_water_reached = TBfalse;
+        for(i=0; i<last_proc; i++) {
+          if(proc_db[i] && proc_db[i]->exec_state == ES_HIGH_WATER) {
+            proc_db[i]->exec_state = ES_RUN;
+            continue_process(i);
+          }
+        }
+      }
       return;
     }
   }
@@ -575,224 +884,179 @@ void rec_terminate(int cid, term *Arg)
 
 %}}}
 
-%{{{ start
-
-Start the ToolBus or just a set of processes.
-
-<<start>>=
-void start(int cid, term *who, term *mode)
-{
-  term_list *procs;
-  int es = ES_NONE;
-
-  if(TBmatch(mode, "step")) {
-    es = ES_STEP_IN;
-  } else if(TBmatch(mode, "run")) {
-    es = ES_RUNNING;
-  } else {
-    TBmsg("cannot-start %t in mode %t: %s\n", who, mode, 
-			"mode not implemented in buscontrol tool");
-    return;
-  }
-
-  if(TBmatch(who, "tb")) {
-    /*TBmsg("starting processes in mode %d\n", es);*/
-    start_processes(NULL, es);
-  } else if (TBmatch(who, "processes(%t)", &procs)) {
-    if(procs)
-      start_processes(procs, es);    
-  } else {
-    TBmsg("don't now how to start %t\n", who);
-  }
-}
-@
-
-%}}}
-%{{{ stop
-
-Stop current exection at the time indicated by {\tt when}.
-
-<<stop>>=
-void stop(int cid, term *who, term *when)
-{
-  term_list *procs;
-
-  if(TBmatch(who, "tb")) {
-    stop_processes(NULL);
-  } else if(TBmatch(who, "processes(%t)", &procs)) {
-    stop_processes(procs);
-  } else {
-    TBmsg("cannot-stop %t at %t: %s\n", who, when, 
-			"not implemented in buscontrol tool");
-  }
-}
-@
-
-%}}}
 %{{{ get_info
 
 <<get_info>>=
-<<attribute_pairs>>
-<<get_value>>
+<<info_search_paths>>
+<<info_observation_ports>>
+<<info_observation_conditions>>
+<<info_observation_actions>>
+<<info_expressions>>
+<<info_exec_control>>
+<<info_parallelism>>
 
 term *get_info(int cid)
 {
-  term_list *info_list = NULL;
-  char **pair = attribute_pairs;
-  char *attrib, *value;
-  
-  while(*pair) {
-    attrib = *pair++;
-    value  = *pair++;
-    if(!value)		/* When value == NULL, it should be fetched now! */
-      value = get_value(attrib);
-    info_list = mk_list(TB_make("[<str>,<term>]", attrib, TB_make(value)), info_list);
-  }
-
-  return TB_make("snd-value(info(<term>))", info_list);
+  return TB_make("snd-value(info([<term>,<term>,<term>,<term>,<term>,<term>,<term>]))",
+	info_search_paths(), info_observation_ports(), 
+	info_observation_conditions(), info_observation_actions(),
+	info_expressions(), info_exec_control(), info_parallelism());
 }
 @
 
-%{{{ attribute_pairs
+%{{{ term *info_search_paths()
 
-<<attribute_pairs>>=
-static char *attribute_pairs[] = 
+Return information about the search-paths for this debugging adapter.
+
+<<info_search_paths>>=
+term *info_search_paths()
 {
-  "connections", NULL,	/* NULL pointer value means 'fill in at runtime' */ 
-  "type",	 "\"viewer\"",
-  "language",	 "\"T-script\"",
-  "toolbus",	 NULL,
-  "tid",	 NULL,
-  "name",	 NULL,
-  NULL,		 NULL	/* Sentennial */
-};
-@
-
-%}}}
-%{{{ get_value
-
-<<get_value>>=
-#define MAX_VALUE_LEN 32
-
-char *get_value(char *attrib)
-{
-  extern int WellKnownSocketPort;
-  static char buf[MAX_VALUE_LEN];
   static char path[_POSIX_PATH_MAX];
+  getcwd(path, _POSIX_PATH_MAX);
 
-  if(streq(attrib, "connections")) {
-    sprintf(buf, "[tb(\"%s\",%d)]", TB_getHost(viewer), TB_getPort(viewer));
-  } else if(streq(attrib, "toolbus")) {
-    getcwd(path, _POSIX_PATH_MAX);
-    sprintf(buf, "tb(\"%s\",%d,\"%s\")", 
-				TB_getHost(viewer), TB_getPort(viewer), path);
-  } else if(streq(attrib, "tid")) {
-    sprintf(buf, "%d", TB_getTid(viewer));
-  } else if(streq(attrib, "name")) {
-    sprintf(buf, "\"%s\"", TB_getTool(viewer));
+  return TB_make("[search-paths, [[config, [<str>]], [source, [<str>]]]]", 
+								path, path);
+}
+@
+
+%}}}
+%{{{ term *info_observation_ports()
+
+<<info_observation_ports>>=
+term *info_observation_ports()
+{
+  return TB_make("[observation-ports,"\
+	"[[on-halt,at,[]], [every-stat,after,[]], [loc,after,[lc]]]]");
+}
+@
+
+%}}}
+%{{{ term *info_observation_conditions()
+
+<<info_observation_conditions>>=
+term *info_observation_conditions()
+{
+  return TB_make("[observation-conditions, [always, expr]]");
+}
+@
+
+%}}}
+%{{{ term *info_observation_actions()
+
+<<info_observation_actions>>=
+term *info_observation_actions()
+{
+  return TB_make("[observation-actions, [break, watch]]");
+}
+@
+
+%}}}
+%{{{ term *info_expressions()
+
+<<info_expressions>>=
+term *info_expressions()
+{
+  return TB_make("[expressions, [functions, [cpe, eval]]]");
+}
+@
+
+%}}}
+%{{{ term *info_exec_control()
+
+Return information about the execution control capabilities of this
+debugging adapter.
+
+<<info_exec_control>>=
+term *info_exec_control()
+{
+  return TB_make("[exec-control, [single-step, run, stop]]");
+}
+@
+
+%}}}
+%{{{ term *info_parallelism()
+
+Return information about the parallel debugging capabilities of this
+debugging tool.
+
+<<info_parallelism>>=
+term *info_parallelism()
+{
+  return TB_make("[multi-process]");
+}
+@
+
+%}}}
+
+%}}}
+
+%{{{ void set_observation_point(int cid, term *pids, term *port, term *cond, term *acts)
+
+Set an observation point.
+
+<<set_observation_point>>=
+term *set_observation_point(int cid, term *pids, term *port, term *cond, term_list *acts)
+{
+  int oid;
+
+  oid = create_obs_point(pids, port, cond, acts);
+  return TB_make("snd-value(set-observation-point" \
+		 "(<term>,<term>,<term>,<term>,<int>))",
+		pids, port, cond, acts, oid);
+}
+@
+
+%}}}
+%{{{ void clear_observation_point(int cid, term *pids, int oid)
+
+Remove an observation point.
+
+<<clear_observation_point>>=
+void clear_observation_point(int cid, term *pids, int oid)
+{
+  remove_obs_point(oid);
+}
+@
+
+%}}}
+%{{{ void exec_control(int cid, term_list *procs, term *mode)
+
+<<exec_control>>=
+void exec_control(int cid, term_list *procs, term *mode)
+{
+  if(!procs)
+    return;
+
+  if(TB_match(procs, "all"))
+    procs = NULL;
+  if(TB_match(mode, "stop")) {
+    stop_processes(procs);
   } else {
-    assert(0);
+    int action;
+
+    if(!is_list(procs))
+      procs = mk_list1(procs);
+    if(TB_match(mode, "single-step"))
+      action = ES_SINGLE_STEP;
+    if(TB_match(mode, "run"))
+      action = ES_RUN;
+
+    start_processes(procs, action);
   }
-
-  return buf;
 }
 @
 
 %}}}
+%{{{ term *execute_actions(int cid, term *pids, term_list *actions)
 
-%}}}
-%{{{ get_cpe
-
-Retrieve the value of the global {\tt cpe}.
-
-<<get_cpe>>=
-term *get_cpe(int cid)
+<<execute_actions>>=
+term *execute_actions(int cid, term *pids, term_list *actions)
 {
-  return TB_make("snd-value(cpe(<term>))", build_cpe());
+  return TB_make("snd-value(execute-actions(<ter>,<term>,error(<str>)))",
+			pids, actions, "not implemented yet");
 }
 @
 
-%}}}
-%{{{ get_var_list
-
-<<get_var_list>>=
-term *get_var_list(int cid, term *scope_id)
-{
-  int pid;
-
-  if(TB_match(scope_id, "<int>", &pid))
-    return TB_make("[<int>,<str>,<term>]", pid, proc_db[pid]->name, proc_db[pid]->vars);
-  else
-    return TB_make("no-var-list(\"illegal scope type for viewer\")");
-}
-@
-
-%}}}
-%{{{ watch_vars
-
-Because the amount of variables in a ToolBus script is usually
-small, mainly because there are only \emph{local} variables,
-all variables are automatically watched.
-
-<<watch_vars>>=
-term *watch_vars(int cid, term_list *scope, term_list *names)
-{
-  return TB_make("cannot-watch(\"all viewer vars are automatically watched\")");
-}
-@
-
-%}}}
-%{{{ change_var
-
-<<change_var>>=
-term *change_var(int cid, term_list *scope, char *name, term *val)
-{
-  return TB_make("cannot-change(\"change-var not implemented yet!\")");
-}
-@
-
-%}}}
-%{{{ get_scopes
-
-<<get_scopes>>=
-<<proc_satisfies>>
-
-term *get_scopes(int cid, term *constraints)
-{
-  int pid;
-  term_list *scopes = NULL;
-
-  for(pid=0; pid<last_proc; pid++) {
-    if(proc_satisfies(pid, constraints))
-      scopes = list_concat_term(scopes, TB_make("[<int>,<str>]", 
-					pid, proc_db[pid]->name));
-  }
-  return TB_make("snd-value(scopes(<term>,<list>))", constraints, scopes); 
-}
-@
-
-<<proc_satisfies>>=
-TBbool proc_satisfies(int pid, term *constraints)
-{
-  char *name;
-
-  if(is_list(constraints)) {
-    while(constraints) {
-      if(!proc_satisfies(pid, first(constraints)))
-        return TBfalse;
-      constraints = next(constraints);
-    }
-    return TBtrue;
-  }
-  if(TBmatch(constraints, "name(%s)", &name)) {
-    if(streq(proc_db[pid]->name, name))
-      return TBtrue;
-    return TBfalse;
-  }
-
-  return TBfalse;
-}
-@
 %}}}
 
 %{{{ sigint_handler
@@ -857,19 +1121,15 @@ int main(int argc, char *argv[])
   TB_connect(viewer);
 
   fprintf(stderr, "Opening second connection to debugging toolbus\n");
-  control_bus = TB_newConnection("debug-nub", NULL, 9500,
-		         debug_nub_handler, debug_nub_check_in_sign);
+  control_bus = TB_newConnection("debug-adapter", NULL, 9500,
+	         debug_adapter_handler, debug_adapter_check_in_sign);
   TB_connect(control_bus);
 
   init();
   signal(SIGINT, sigint_handler);
 
-  TB_eventloop();
+  return TB_eventloop();
 }
 @
 
 %}}}
-
-
-
-

@@ -17,7 +17,8 @@ includedir	= $(prefix)/include
 CLEAN		= @CLEAN@
 
 MODULES		= 
-SUBDIRS		= src test tide adapters demos doc www
+SUBDIRS		= @SUBDIRS@
+DISTDIRS	= @DISTDIRS@
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
@@ -26,8 +27,8 @@ all clean distclean install uninstall:
 	case $@ in \
 	  clean) ${CLEAN} ;;\
 	  distclean) ${CLEAN};rm -f Makefile config.status config.log config.cache; rm -f lib/* include/* bin/* ;;\
-	  install) SUBDIRS="src test adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
-	  all) SUBDIRS="src test adapters";;\
+	  install) SUBDIRS="src tide test adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
+	  all) SUBDIRS="src tide test adapters";;\
 	esac; \
 	for SUBDIR in $$SUBDIRS; \
 	do \
@@ -55,7 +56,7 @@ dist: $(DISTFILES)
 	  ln $(srcdir)/$$file ../$(PRODUCT)-$(VERSION) 2> /dev/null \
 	  || cp $(srcdir)/$$file ../$(PRODUCT)-$(VERSION); \
 	done
-	@for subdir in $(SUBDIRS); do \
+	@for subdir in $(SUBDIRS) $(DISTDIRS); do \
 	  echo Making $@ in $$subdir; \
 	  mkdir ../$(PRODUCT)-$(VERSION)/$$subdir; \
 	  chmod 777 ../$(PRODUCT)-$(VERSION)/$$subdir; \

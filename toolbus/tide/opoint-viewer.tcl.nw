@@ -1,0 +1,783 @@
+
+%{{{ observation-point-viewer
+
+This Tcl/Tk script enables the user to inspect and add/remove observation
+points.
+
+<<opoint-viewer.tcl>>=
+<<create-observation-point-viewer>>
+<<update-viewer>>
+<<get-port>>
+<<get-cond>>
+<<get-acts>>
+<<get-selected-procs>>
+<<get-selected-observation-point>>
+<<clear-observation-point-selection>>
+<<change-curopoint>>
+<<change-opoint-line>>
+
+<<tide-process-selected-bv>>
+<<do-set-observation-point>>
+<<do-clear-observation-point>>
+
+<<show-observation-points>>
+
+<<tide-dap-connected-bv>>
+<<tide-dap-disconnected-bv>>
+<<tide-process-created-bv>>
+<<tide-process-destroyed-bv>>
+<<tide-observation-point-set-bv>>
+<<tide-observation-point-cleared-bv>>
+<<tide-current-port-bv>>
+
+set TOOL "observation-point-viewer"
+set Viewers { }
+set Tide(actions) 1
+
+wm withdraw .
+source "tide-modules.tcl"
+tide-init "Observation-Point viewer" { 
+	daps
+	processes
+	observation-points
+	current-port 
+	ui-process-list
+}
+@
+
+%}}}
+
+%{{{ proc create-observation-point-viewer { dap }
+
+%{{{ create main window
+
+<<create-observation-point-viewer>>=
+proc create-observation-point-viewer { dap } {
+  global Viewer Dap OPoint
+
+  set w .bp$dap
+  set Dap($dap,viewer) 1
+  set Viewer($dap,win) $w
+  set Viewer($dap,pids) all
+  set Viewer($dap,curopoint) ""
+
+  toplevel $w
+  wm positionfrom $w program
+  wm sizefrom $w program
+  wm title $w "Observation-Point Viewer: $dap"
+  wm maxsize $w 1152 900
+  
+  frame $w.top
+  create-opoint-frame $dap $w.top.opoints
+  create-pids-frame $dap $w.top.pids
+  create-port-frame $dap $w.port
+  create-cond-frame $dap $w.cond
+  create-acts-frame $dap $w.acts
+
+  pack $w.top.opoints -side left -expand 1 -fill both
+  pack $w.top.pids -side left -expand 1 -fill both
+  pack $w.top -side top -fill both -expand 1
+  pack $w.port -side top -fill both
+  pack $w.cond -side top -fill both
+  pack $w.acts -side top -expand 1 -fill both
+
+  update-viewer $dap
+}
+<<create-opoint-frame>>
+<<create-port-frame>>
+<<create-cond-frame>>
+<<create-acts-frame>>
+<<create-pids-frame>>
+@
+
+%}}}
+%{{{ proc create-opoint-frame { dap w }
+
+Build the observation-point frame consisting of a label and a scrolled
+(hierarchical) listbox.
+
+<<create-opoint-frame>>=
+proc create-opoint-frame { dap w } {
+  global Dap Viewer
+
+  frame $w -relief groove -borderwidth 2
+  label $w.label -text "Observation points:"
+  frame $w.list
+  listbox $w.list.box -width 18 -height 6 \
+		-xscrollcommand "$w.list.y set" \
+		-yscrollcommand "$w.x set"
+  bind $w.list.box <ButtonPress-1> "change-curopoint $dap"
+  scrollbar $w.list.y -command "$w.list.box yview" -orient vert
+  scrollbar $w.x -command "$w.list.box xview" -orient hor
+
+  pack $w.label -fill x
+  pack $w.list.box -side left -expand 1 -fill both
+  pack $w.list.y -side left -fill y
+  pack $w.list -side top -expand 1 -fill both
+  pack $w.x -side top -fill x
+
+  set Viewer($dap,wopoints) $w.list.box
+
+  foreach oid $Dap($dap,opoints) {
+    set text [format "%3d" $oid]
+    $Viewer($dap,wopoints) insert end $text
+  }
+
+  frame $w.buttons
+  button $w.buttons.add \
+	-text "Add" \
+	-command "do-set-observation-point $dap" \
+	-width 6
+  button $w.buttons.remove \
+	-text "Remove" \
+	-command "do-clear-observation-point $dap" \
+	-width 6
+  pack $w.buttons.add -side left -expand 1
+  pack $w.buttons.remove -side left -expand 1
+
+  pack $w.buttons -side top -fill x
+}
+@
+
+%}}}
+%{{{ proc create-port-frame { dap w }
+
+Create the port frame.
+
+<<create-port-frame>>=
+proc create-port-frame { dap f } {
+  global Dap Viewer
+
+  frame $f -borderwidth 2 -relief groove
+
+  set Viewer($dap,mod) ""
+  set type [lindex $Dap($dap,ports) 0]
+  set Viewer($dap,port) $Dap($dap,port,$type,when)-$type
+
+  label $f.label -text "Port:"
+  pack $f.label -side top -fill x
+
+  <<module>>
+  <<on halt>>
+  <<before location>>
+  <<after location>>
+  <<before every stat>>
+  <<after every stat>>
+  <<function/predicate ports>>
+}
+@
+
+%{{{ The module frame
+
+The module frame.
+
+<<module>>=
+  frame $f.module
+  label $f.module.label -text "Module:"
+  entry $f.module.entry -textvariable Viewer($dap,port,module)
+  bind $f.module.entry <KeyPress> "+clear-observation-point-selection $dap"
+  pack $f.module.label -side left
+  pack $f.module.entry -side left -expand 1 -fill x
+  pack $f.module -side top -fill x
+@
+
+%}}}
+%{{{ The on halt frame
+
+<<on halt>>=
+  if { $Dap($dap,port,halt) } {
+    radiobutton $f.halt -text "On halt" \
+		-value on-halt \
+		-variable Viewer($dap,port) \
+		-command "clear-observation-point-selection $dap"
+    pack $f.halt -side top -anchor w
+  }
+@
+
+%}}}
+%{{{ The before location frame
+
+<<before location>>=
+  if { $Dap($dap,port,loc) && $Dap($dap,port,loc,when) == "before" } {
+    frame $f.beforeloc
+    radiobutton $f.beforeloc.radio -text "Before location:" \
+		-value before-loc \
+		-variable Viewer($dap,port) \
+		-command "clear-observation-point-selection $dap"
+    frame $f.beforeloc.dummy -width 24
+    label $f.beforeloc.l1 -text "line"
+    entry $f.beforeloc.line -textvariable Viewer($dap,port,line) \
+	-width 4
+    label $f.beforeloc.l2 -text "column"
+    entry $f.beforeloc.col -textvariable Viewer($dap,port,col) \
+	-width 3
+    bind $f.beforeloc.line <KeyPress> "+clear-observation-point-selection $dap"
+    bind $f.beforeloc.col <KeyPress> "+clear-observation-point-selection $dap"
+
+    pack $f.beforeloc.radio -side left
+    pack $f.beforeloc.l1 -side left
+    pack $f.beforeloc.line -side left -expand 1 -fill x
+    pack $f.beforeloc.l2 -side left
+    pack $f.beforeloc.col -side left -expand 1 -fill x
+    pack $f.beforeloc -side top -fill x
+  }
+@
+
+%}}}
+%{{{ The after location frame
+
+The \emph{after location} frame.
+
+<<after location>>=
+  if { $Dap($dap,port,loc) && $Dap($dap,port,loc,when) == "after" } {
+    frame $f.afterloc
+    radiobutton $f.afterloc.radio -text "After location:" \
+		 -value after-loc \
+		-variable Viewer($dap,port) \
+		-command "clear-observation-point-selection $dap"
+    frame $f.afterloc.dummy -width 24
+    label $f.afterloc.l1 -text "line"
+    entry $f.afterloc.line -textvariable Viewer($dap,port,line) \
+	-width 4
+    label $f.afterloc.l2 -text "column"
+    entry $f.afterloc.col -textvariable Viewer($dap,port,col) \
+	-width 3
+    bind $f.afterloc.line <KeyPress> "+clear-observation-point-selection $dap"
+    bind $f.afterloc.col <KeyPress> "+clear-observation-point-selection $dap"
+
+    pack $f.afterloc.radio -side left
+    pack $f.afterloc.l1 -side left
+    pack $f.afterloc.line -side left -expand 1 -fill x
+    pack $f.afterloc.l2 -side left
+    pack $f.afterloc.col -side left -expand 1 -fill x
+    pack $f.afterloc -side top -fill x
+  }
+@
+
+%}}}
+%{{{ The before every statement frame
+
+<<before every stat>>=
+  if { $Dap($dap,port,every-stat) && 
+	$Dap($dap,port,every-stat,when) == "before" } {
+    radiobutton $f.beforestats -text "Before every statement" \
+		-value before-every-stat \
+		-variable Viewer($dap,port) \
+		-command "clear-observation-point-selection $dap"
+
+    pack $f.beforestats -side top -anchor w
+  }
+@
+
+%}}}
+%{{{ The after every statement frame
+
+The \emph{after every statement} frame.
+
+<<after every stat>>=
+  if { $Dap($dap,port,every-stat) && 
+	$Dap($dap,port,every-stat,when) == "after" } {
+    radiobutton $f.afterstats -text "After every statement" \
+		-value after-every-stat \
+		-variable Viewer($dap,port) \
+		-command "clear-observation-point-selection $dap"
+
+    pack $f.afterstats -side top -anchor w
+  }
+@
+
+%}}}
+%{{{ The function/predicate ports
+
+The function/predicate ports.
+
+<<function/predicate ports>>=
+  if { $Dap($dap,port,call) || $Dap($dap,port,retry) ||
+       $Dap($dap,port,fail) || $Dap($dap,port,succeed) } {
+    label $f.funcpred -text "Function/predicate:"
+    pack $f.funcpred -side top -anchor w
+    if { $Dap($dap,port,call) } {
+      checkbutton $f.call -text "Call" \
+		-onvalue 1 -offvalue 0 \
+		-variable Viewer($dap,port,call)
+      pack $f.call -side top -anchor w
+    }
+    if { $Dap($dap,port,retry) } {
+      checkbutton $f.retry -text "Retry/backtrack" \
+		-onvalue 1 -offvalue 0 \
+		-variable Viewer($dap,port,retry)
+      pack $f.retry -side top -anchor w
+    }
+    if { $Dap($dap,port,fail) } {
+      checkbutton $f.fail -text "Fail" \
+		-onvalue 1 -offvalue 0 \
+		-variable Viewer($dap,port,fail)
+      pack $f.fail -side top -anchor w
+    }
+    if { $Dap($dap,port,succeed) } {
+      checkbutton $f.succeed -text "Succeed" \
+		-onvalue 1 -offvalue 0 \
+		-variable Viewer($dap,port,succeed)
+      pack $f.succeed -side top -anchor w
+    }
+  }
+@
+
+%}}}
+
+%}}}
+%{{{ proc create-cond-frame { dap w }
+
+Create the page containing the conditions.
+
+<<create-cond-frame>>=
+proc create-cond-frame { dap f } {
+  global Dap Viewer
+
+  frame $f -borderwidth 2 -relief groove
+  label $f.label -text "Condition:"
+  pack $f.label -side top -fill x
+
+  frame $f.expr
+  frame $f.expr.dummy -width 24
+  entry $f.expr.e  -textvariable Viewer($dap,cond)
+  bind $f.expr.e <KeyPress> "+clear-observation-point-selection $dap"
+
+  pack $f.expr.dummy -side left
+  pack $f.expr.e -side left -expand 1 -fill x
+  pack $f.expr -side top -expand 1 -fill both
+}
+@
+
+%}}}
+%{{{ proc create-acts-frame { dap w }
+
+Create the frame enabling the user to select the actions
+associated with an observation point.
+
+<<create-acts-frame>>=
+proc create-acts-frame { dap w } {
+  global Dap Viewer
+
+  frame $w -borderwidth 2 -relief groove
+  label $w.label -text "Actions:"
+  pack $w.label -side top -fill x
+
+  set Viewer($dap,acts) ""
+  frame $w.f
+  text $w.f.acts \
+	-xscrollcommand "$w.x set" \
+	-yscrollcommand "$w.f.y set" \
+	-borderwidth 2 -relief sunken \
+	-width 24 -height 8
+
+  bind $w.f.acts <KeyPress> "+clear-observation-point-selection $dap"
+
+  scrollbar $w.f.y -orient vert -command "$w.f.acts yview"
+  scrollbar $w.x -orient hor -command "$w.f.acts xview"
+  set Viewer($dap,wacts) $w.f.acts
+
+  pack $w.f -side top -expand 1 -fill both
+  pack $w.f.acts -side left -expand 1 -fill both
+  pack $w.f.y -side left -fill y
+  pack $w.x -side top -fill x
+}
+@
+
+%}}}
+%{{{ proc create-pids-frame { dap w }
+
+Create the frame that enables the user to select which
+pids an observation point ranges over.
+
+<<create-pids-frame>>=
+proc create-pids-frame { dap w } {
+  tide-ui-process-list-create $dap $w
+}
+@
+
+%}}}
+
+%}}}
+%{{{ proc update-viewer { dap }
+
+Update all observation-point related widget to reflect the values
+present in the current widget.
+
+<<update-viewer>>=
+proc update-viewer { dap } {
+  global Dap Viewer OPoint
+
+  set cur $Viewer($dap,curopoint)
+  if { $cur != "" } {
+    <<update port widgets>>
+    <<update condition widgets>>
+    tide-ui-select-processes $dap $OPoint($dap,$cur,pids)
+  }
+}
+@
+%{{{ update port widgets
+
+<<update port widgets>>=
+  set port $OPoint($dap,$cur,port)
+
+  puts stderr "update port widgets: $port"
+
+  set type [lindex $port 0]
+  set when [lindex $port 1]
+  set module [lindex $port 2]
+
+  set Viewer($dap,port,module) $module
+  set Viewer($dap,port) $when-$type
+  if { $type == "loc" } {
+     set fmt [lindex $port 3]
+     set Viewer($dap,port,line) [lindex $port 4]
+     set Viewer($dap,port,col)  [lindex $port 5]
+  }
+@
+
+%}}}
+%{{{ update condition widgets
+
+<<update condition widgets>>=
+  set cond $OPoint($dap,$cur,cond)
+
+  if { $cond == "always" } {
+    set Viewer($dap,cond) "always"
+  } else {
+    set Viewer($dap,cond) "expr"
+    set Viewer($dap,cond,expr) $cond
+  }
+@
+
+%}}}
+
+%}}}
+
+%{{{ proc get-cond { dap }
+
+Retrieve condition information from a viewer.
+
+<<get-cond>>=
+proc get-cond { dap } {
+  global Viewer
+
+  return [string trim $Viewer($dap,cond)]
+}
+@
+
+%}}}
+%{{{ proc get-port { dap }
+
+Retrieve port information from a viewer.
+
+<<get-port>>=
+proc get-port { dap } {
+  global Viewer
+
+  set port ""
+  set mod  $Viewer($dap,port,module)
+  if { $mod == {} } {
+    set mod ""
+  }
+
+  set line $Viewer($dap,port,line)
+  set col  $Viewer($dap,port,col)
+  switch $Viewer($dap,port) {
+    on-halt		{ set port [list halt on $mod] }
+    after-every-stat	{ set port [list every-stat after $mod] }
+    before-every-stat	{ set port [list every-stat before $mod] }
+    before-loc		{ set port [list loc before $mod lc $line $col] }
+    after-loc		{  set port [list loc after $mod lc $line $col] }
+  }
+  return $port
+}
+@
+
+%}}}
+%{{{ proc get-acts { dap }
+
+Retrieve the actions from a viewer.
+
+<<get-acts>>=
+proc get-acts { dap } {
+  global Viewer
+
+  set acts {}
+  return [string trim [$Viewer($dap,wacts) get 1.0 end]]
+}
+@
+
+%}}}
+%{{{ proc get-selected-procs { dap }
+
+Retrieve a list of selected processes from a certain adapter.
+
+<<get-selected-procs>>=
+proc get-selected-procs { dap } {
+  global Viewer
+
+  return $Viewer($dap,pids)
+}
+@
+
+%}}}
+%{{{ proc get-selected-observation-point { dap }
+
+Retrieve the selected observation-point. Return "" when no
+observation-point was selected.
+
+<<get-selected-observation-point>>=
+proc get-selected-observation-point { dap } {
+  global Dap Viewer
+
+  if { $Dap($dap,viewer) } {
+    return [$Viewer($dap,wopoints) curselection]
+  }
+  return ""
+}
+@
+
+%}}}
+%{{{ proc clear-observation-point-selection { dap }
+
+Clear the selection in the observation-point list.
+
+<<clear-observation-point-selection>>=
+proc clear-observation-point-selection { dap } {
+  global Dap Viewer
+
+  if { $Dap($dap,viewer) } {
+    $Viewer($dap,wopoints) selection clear 0 end
+  }
+}
+@
+
+%}}}
+%{{{ proc change-curopoint { dap x y }
+
+Change the current observation-point to reflect the selection in the
+observation-points listbox.
+
+<<change-curopoint>>=
+proc change-curopoint { dap x y } {
+  global Dap Viewer
+
+  set w $Viewer($dap,wopoints)
+  set idx [$w nearest $y]
+  $w selection clear
+  $w selection set $idx
+
+  set oid [lindex $Dap($dap,opoints) $idx]
+  if { $Viewer($dap,curopoint) != $oid } {
+    set Viewer($dap,curopoint) $oid
+    update-viewer $dap
+  }
+}
+@
+
+%}}}
+
+%{{{ proc change-opoint-line { dap id }
+
+<<change-opoint-line>>=
+proc change-opoint-line { dap line } {
+  global Viewer
+
+  set Viewer($dap,port,bp,line,line) $line
+  set Viewer($dap,port,bp,line,module) $Viewer($dap,file) 
+}
+@
+
+%}}}
+
+%{{{ proc tide-process-selected { dap pid }
+
+The user selected a process.
+
+<<tide-process-selected-bv>>=
+proc do-process-selected-bv { dap args } {
+  clear-observation-point-selection $dap  
+}
+@
+
+%}}}
+%{{{ proc do-set-observation-point { dap }
+
+<<do-set-observation-point>>=
+proc do-set-observation-point { dap } {
+  set procs [get-selected-procs $dap]
+  set port [get-port $dap]
+  set cond [get-cond $dap]
+  set acts [get-acts $dap]
+
+  if { $procs != {} } {
+    tide-set-observation-point $dap $procs $port $cond $acts
+  }
+}
+@
+
+%}}}
+%{{{ proc do-clear-observation-point { dap }
+
+The user has pushed the 'clear observation-point' button.
+
+<<do-clear-observation-point>>=
+proc do-clear-observation-point { dap } {
+  set oid [get-selected-observation-point $dap]
+
+  if { $oid != "" } {
+    tide-clear-observation-point $dap $oid
+  }
+}
+@
+
+%}}}
+
+%{{{ show-observation-points { dap }
+
+<<show-observation-points>>=
+proc show-observation-points { dap } {
+  global Dap Viewers Viewer
+
+  if { [lsearch $Viewers $dap] == -1 } {
+    lappend Viewers $dap
+    set Viewer($dap,pid-selection)	"all"
+    set Viewer($dap,port)		"line"
+    create-observation-point-viewer $dap
+    if { $Dap($dap,current-port) != "" } {
+      tide-current-port-bv $dap $Dap($dap,current-pids) $Dap($dap,current-port)
+    }
+  } else {
+    raise $Viewer($dap,win)
+  }
+}
+@
+
+%}}}
+
+%{{{ proc tide-dap-connected-bv { dap info }
+
+A debugging adapter was connected to the debugging ToolBus.
+
+<<tide-dap-connected-bv>>=
+proc tide-dap-connected-bv { dap info } {
+  global Dap
+
+  set Dap($dap,viewer) 0
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-bv { dap }
+
+A debugging adapter was disconnected from the debugging ToolBus.
+
+<<tide-dap-disconnected-bv>>=
+proc tide-dap-disconnected-bv { dap } {
+  global Dap Viewers Viewer
+
+  set index [lsearch $Viewers $dap]
+  if { $index != -1 } {
+    unset Dap($dap,viewer)
+    set Viewers [lreplace $Viewers $index $index]
+    destroy $Viewer($dap,win)
+    unset Viewer($dap,win)
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-process-created-bv { dap pid name }
+
+Handle process creation.
+
+<<tide-process-created-bv>>=
+proc tide-process-created-bv { dap pid name } {
+  global Dap
+
+  if { $Dap($dap,viewer) } {
+    clear-observation-point-selection $dap  
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-process-destroyed-bv { dap pid }
+
+A process has been destroyed. Remove all traces of it.
+
+<<tide-process-destroyed-bv>>=
+proc tide-process-destroyed-bv { dap pid } {
+  global Dap
+
+  if { $Dap($dap,viewer) } {
+    clear-observation-point-selection $dap  
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-observation-point-set-bv { dap oid pids port cond acts }
+
+A new observation-point has been set.
+
+<<tide-observation-point-set-bv>>=
+proc tide-observation-point-set-bv { dap oid pids port cond acts } {
+  global Dap Viewer
+
+  if { $Dap($dap,viewer) } {
+    $Viewer($dap,wopoints) insert end "[format "%3d" $oid]"    
+    if { $Viewer($dap,curopoint) == $oid } {
+      update-viewer $dap
+    }
+  }  
+}
+@
+
+%}}}
+%{{{ proc tide-observation-point-cleared-bv { dap oid }
+
+A observation-point was cleared.
+
+<<tide-observation-point-cleared-bv>>=
+proc tide-observation-point-cleared-bv { P oid } {
+  global Dap Viewer
+
+  if { $Dap($dap,viewer) } {
+    set idx $Dap($dap,opoints) $oid 
+    $Viewer($dap,wopoints) delete $idx $idx
+  }
+}
+@
+
+%}}}
+
+%{{{ proc tide-current-port-bv { dap pids port }
+
+A new current port was selected for a debug adapter.
+Update its viewer if present.
+
+<<tide-current-port-bv>>=
+proc tide-current-port-bv { dap pids port } {
+  global Dap Viewer
+
+  set type [lindex $port 0]
+  set when [lindex $port 1]
+  set mod  [lindex $port 2]
+  if { $Dap($dap,viewer) && $type == "loc" && [lindex $port 3] == "lc" } {
+    set line [lindex $port 4]
+    set col  [lindex $port 5]
+
+    clear-observation-point-selection $dap
+    set Viewer($dap,port) "${when}-loc"
+    set Viewer($dap,port,module)  $mod
+    set Viewer($dap,port,line) $line
+    set Viewer($dap,port,col)  $col
+  }
+}
+@
+
+%}}}
+
+

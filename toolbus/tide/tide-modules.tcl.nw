@@ -1,0 +1,1482 @@
+
+%{{{ tide-modules
+
+This file contains a number of {\tt Tcl} modules that implement
+support for specific protocols. This enables debugger modules
+to {\tt source} only the modules necessary for the support they
+need.
+
+%}}}
+
+%{{{ module tide-modules.tcl
+
+This module sets up the event handling.
+It also defines a number of constants.
+
+<<tide-modules.tcl>>=
+<<tide-init>>
+<<tide-init-modules>>
+<<tide-register-handler>>
+<<tide-call>>
+<<rec-ack-event>>
+<<rec-terminate>>
+
+<<TCLport>>
+<<TBport>>
+
+set PAT_PROC	{proc\(([a-zA-Z()0-9\-]+),([0-9]+)\)}
+set PAT_PROCS	{proc\(([a-zA-Z()0-9\-]+),\{([^\}]+)\}\)}
+set PAT_ALL	{proc\(([a-zA-Z()0-9\-]+),all\)}
+
+set Daps { }
+
+if { ![info exists Tide(actions)] } {
+  set Tide(actions) 0
+}
+
+global Handlers
+@
+
+%{{{ proc tide-init { tool modules }
+
+Initialize a tide debugger module by loading all modules
+it depends on.
+
+<<tide-init>>=
+proc tide-init { tool modules } {
+  global Tide
+
+  set Tide(modules) { }
+  set Tide(tool)    $tool
+  tide-init-modules $modules
+}
+@
+
+%}}}
+%{{{ proc tide-init-modules { modules }
+
+Load and initialize a number of tide modules.
+
+<<tide-init-modules>>=
+proc tide-init-modules { modules } {
+    global Tide
+
+    foreach mod $modules {
+      # puts stderr "loading module $mod"
+      if { [lsearch $Tide(modules) $mod] == -1 } {
+        if { [catch "uplevel #0 \"source tide-$mod.tcl\"" err] } {
+          puts stderr "Error while loading file tide-$mod.tcl: $err"
+        } else {
+          lappend Tide(modules) $mod
+          if { [info proc tide-init-$mod] != "" } {
+            tide-init-$mod
+          }
+        }
+      }
+    }
+}
+@
+
+%}}}
+%{{{ proc tide-register-handler { type handler }
+
+Register a new handler.
+
+<<tide-register-handler>>=
+proc tide-register-handler { type handler } {
+  global Handlers
+
+  lappend Handlers($type) $handler
+}
+@
+
+%}}}
+%{{{ proc tide-call { type args }
+
+Call all the handlers associated with a handler type.
+
+<<tide-call>>=
+proc tide-call { type args } {
+
+  if { [info exists Handlers($type)] } {
+    foreach h $Handlers($type) {
+      eval $h $args
+    }
+  }
+  set l [info procs tide-$type*]
+  set l [lsort $l]
+  foreach h $l {
+    eval $h $args
+  }
+}
+@
+
+%}}}
+
+%{{{ proc rec-ack-event { event }
+
+Handle event acknowledgement.
+
+<<rec-ack-event>>=
+proc rec-ack-event { event } {
+  TBack $event
+
+  foreach p [info procs tide-ack-event*] {
+    $p $event
+  }
+}
+@
+
+%}}}
+%{{{ proc rec-terminate { arg }
+
+Handle a termination request.
+
+<<rec-terminate>>=
+proc rec-terminate { arg } {
+  foreach p [info procs tide-terminate*] {
+    $p $arg
+  }
+  exit
+}
+@
+
+%}}}
+
+%{{{ proc TCLport { port }
+
+Translate the ToolBus representation of a port to an
+equivalent TCL representation.
+
+<<TCLport>>=
+proc TCLport { port } {
+  set port [lreplace $port 2 2 [TCLstring [lindex $port 2]]]
+  return $port
+}
+@
+
+%}}}
+%{{{ proc TBport { port }
+
+Translate the TCL representation of a port to an
+equivalent ToolBus representation.
+
+<<TBport>>=
+proc TBport { port } {
+  set port [lreplace $port 2 2 [TBstring [lindex $port 2]]]
+
+  return [TBlist $port]
+}
+@
+
+
+%}}}
+
+%}}}
+
+# The first set of modules covers the 'debugging-adapter'
+# side of the debugger.
+%{{{ module tide-daps
+
+This module handles all events related to tide debugging adapters.
+
+<<tide-daps.tcl>>=
+<<dap-connected>>
+<<dap-disconnected>>
+<<tide-get-search-paths>>
+
+<<dap variables>>
+@
+
+This module exports the variables {\tt Daps} and {\tt Dap}.
+{\tt Daps} contains a list of all debugging adapters present,
+{\tt Dap} is an array containing more specific information about
+each debugging adapter.
+
+<<dap variables>>=
+global Daps Dap
+set Daps {}
+@
+
+%{{{ proc dap-connected { dap info }
+
+When a new debugging adapter connects to the ToolBus,
+this procedure is called.
+
+<<dap-connected>>=
+proc dap-connected { dap info } {
+  global Tide Daps Dap
+
+  puts stderr "dap-connected: $dap"
+  set propagate 0
+  if { [lsearch $Daps $dap] == -1 } {
+    <<initialize dap>>
+  }
+
+  <<analyze capability information>>
+
+  if { $propagate } {
+    # Call any tide-dap-connected* procedures present
+    tide-call dap-connected $dap $info
+  }
+}
+<<analyze-obs-port-info>>
+<<analyze-action-info>>
+<<analyze-expression-info>>
+<<analyze-exec-control-info>>
+@
+
+%{{{ initialize dap
+
+Initialize all the debug adapter related variables to
+a sensible default value.
+
+<<initialize dap>>=
+  lappend Daps $dap
+  set Dap($dap,info) {}
+  set Dap($dap,info,multi-process) 0
+  set propagate 1
+  analyze-obs-port-info $dap {}
+  analyze-action-info $dap {}
+  analyze-expression-info $dap {}
+  analyze-exec-control-info $dap {}
+@
+
+%}}}
+%{{{ analyze capability information
+
+Analyze the information about the capabilities of a certain
+debug adapter.
+
+<<analyze capability information>>=
+  foreach entry $info {
+    set class [lindex $entry 0]
+    set options [lindex $entry 1]
+
+    if { [lsearch $Dap($dap,info) $class] == -1 } {
+      lappend Dap($dap,info) $class
+      puts stderr "class: $class, options: $options"
+      set Dap($dap,info,$class) $options
+      switch $class {
+        observation-ports	{ analyze-obs-port-info $dap $options }
+        actions			{ if { $Tide(actions) } {
+				    analyze-action-info $dap $options } }
+        expressions		{ analyze-expression-info $dap $options }
+        exec-control		{ analyze-exec-control-info $dap $options }
+	multi-process		{ set Dap($dap,info,multi-process) 1 }
+      } 
+    }
+  }
+@
+
+%}}}
+
+%{{{ proc analyze-obs-port-info { dap options }
+
+<<analyze-obs-port-info>>=
+proc analyze-obs-port-info { dap options } {
+  global Dap
+
+  set Dap($dap,port,halt)	0
+  set Dap($dap,port,loc)	0
+  set Dap($dap,port,every-stat)	0
+  set Dap($dap,port,call)	0
+  set Dap($dap,port,retry)	0
+  set Dap($dap,port,fail)	0
+  set Dap($dap,port,succeed)	0
+
+  foreach port $options {
+    set type [lindex $port 0]
+    lappend Dap($dap,ports) $type
+    set Dap($dap,port,$type) 1
+    set Dap($dap,port,$type,when) [lindex $port 1]
+    set Dap($dap,port,type,input) [lindex $port 2]
+  }
+}
+@
+
+%}}}
+%{{{ proc analyze-action-info { dap acts }
+
+<<analyze-action-info>>=
+proc analyze-action-info { dap acts } {
+  global Dap
+
+  set Dap($dap,acts) {}
+  foreach action $acts {
+    set name  [TCLstring [lindex $action 0]]
+    set arity [lindex $action 1]
+    set doc   [TCLstring [lindex $action 2]]
+    puts stderr "action: $name, $arity, $doc"
+    lappend Dap($dap,acts) $name
+    set Dap($dap,act$name,arity) $arity
+    set Dap($dap,act$name,doc) $doc
+  }
+}
+@
+
+%}}}
+%{{{ proc analyze-expression-info { dap options }
+
+<<analyze-expression-info>>=
+proc analyze-expression-info { dap options } {
+  global Dap
+
+  foreach opt $options {
+    set type [lindex $opt 0]
+    switch $type {
+      functions		{ set Dap($dap,functions) [lindex $opt 2] }
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc analyze-exec-control-info { dap acts }
+
+<<analyze-exec-control-info>>=
+proc analyze-exec-control-info { dap options } {
+  global Dap
+
+  set Dap($dap,ec,single-step)	0
+  set Dap($dap,ec,step-over)	0
+  set Dap($dap,ec,run)		0
+  set Dap($dap,ec,stop)		0
+
+  foreach ec $options {
+    set Dap($dap,ec,$ec) 1
+  }
+}
+@
+
+%}}}
+
+%}}}
+%{{{ proc dap-disconnected { dap }
+
+A debugging adapter is disconnected.
+
+<<dap-disconnected>>=
+proc dap-disconnected { dap } {
+  global Daps Dap
+
+  puts stderr "dap-disconnected: $dap"
+  
+  # Call any tide-dap-disconnected* procs present
+  tide-call dap-disconnected $dap
+
+  set index [lsearch $Daps $dap]
+  set Daps [lreplace $Daps $index $index]
+  foreach class $Dap($dap,info) {
+    unset Dap($dap,info,$class)
+  }
+  unset Dap($dap,info)
+}
+@
+
+%}}}
+%{{{ proc tide-get-search-paths { dap categorie }
+
+<<tide-get-search-paths>>=
+proc tide-get-search-paths { dap categorie } {
+  global Dap
+
+  foreach paths $Dap($dap,info,search-paths) {
+    if {[lindex $paths 0] == $categorie} {
+      return [lindex $paths 1]
+    }
+  }
+  return {}
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-processes
+
+This module keeps track of all the processes in the system,
+and relates each one with a particular debugging adapter.
+
+<<tide-processes.tcl>>=
+<<tide-init-processes>>
+<<tide-dap-connected-processes>>
+<<tide-dap-disconnected-processes>>
+<<process-created>>
+<<process-destroyed>>
+@
+
+%{{{ proc tide-init-processes { }
+
+Make sure all necessary modules are loaded.
+
+<<tide-init-processes>>=
+proc tide-init-processes { } {
+  puts stderr "tide-init-processes called"
+
+  tide-init-modules daps
+}
+@
+
+%}}}
+%{{{ proc tide-dap-connected-processes { dap info }
+
+Initialize any debugging adapter related variables belonging to this module.
+
+<<tide-dap-connected-processes>>=
+proc tide-dap-connected-processes { dap info } {
+  global Dap
+
+  set Dap($dap,pids) {}
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-processes
+
+When a debugging adapter is disconnected, we just cleanup
+any variables set by this module.
+
+<<tide-dap-disconnected-processes>>=
+proc tide-dap-disconnected-processes { dap } {
+  global Dap
+
+  unset Dap($dap,pids)
+}
+@
+
+%}}}
+%{{{ proc process-created { P Name }
+
+This procedure is called when a new process is created.
+
+<<process-created>>=
+proc process-created { P Name } {
+  global Dap Daps Proc PAT_PROC
+
+  regexp $PAT_PROC $P P dap pid
+  set name "[TCLstring $Name]($pid)"
+  puts stderr "process created: $dap, $pid, $name"
+
+  # The debugging adapter might not be connected yet!
+  if { [lsearch $Daps $dap] == -1 } {
+    dap-connected $dap {}
+  }
+
+  lappend Dap($dap,pids) $pid
+  set Proc($dap,$pid,name) $name
+
+  # Call all tide-process-created procedures
+  tide-call process-created $dap $pid $name
+}
+@
+
+%}}}
+%{{{ proc process-destroyed { P }
+
+A process has been destroyed, remove all traces of it.
+
+<<process-destroyed>>=
+proc process-destroyed { P } {
+  global Dap Daps Proc
+
+  regexp $PAT_PROC $P P dap pid
+  puts stderr "proc destroyed: $dap, $pid"
+
+  tide-call process-destroyed $dap $pid
+
+  set index [lsearch $Dap($dap,pids) $pid]
+  set Dap($dap,pids) [lreplace $Dap($dap,pids) $index $index]
+  unset Proc($dap,$pid,name)
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-observation-points
+
+This module takes care of all observation-point related events.
+It also provides a couple of functions to set and clear observation-points.
+
+<<tide-observation-points.tcl>>=
+<<tide-init-observation-points>>
+<<tide-dap-connected-observation-points>>
+<<tide-dap-disconnected-observation-points>>
+<<observation-point-set>>
+<<observation-point-cleared>>
+<<watchpoint>>
+<<tide-set-observation-point>>
+<<tide-clear-observation-point>>
+
+<<observation-point variables>>
+@
+
+The array {\tt OPoint} contains information about observation-points.
+<<observation-point variables>>=
+global OPoint
+@
+
+%{{{ proc tide-init-observation-points { }
+
+Initizialize the {\tt observation-points} module by loading the
+{\tt daps} and {\tt processes} modules.
+
+<<tide-init-observation-points>>=
+proc tide-init-observation-points { } {
+  tide-init-modules { daps processes }
+}
+@
+
+%}}}
+%{{{ proc tide-dap-connected-observation-points { dap info }
+
+Initialize any debugging adapter related variables belonging to this module.
+
+<<tide-dap-connected-observation-points>>=
+proc tide-dap-connected-observation-points { dap info } {
+  global Dap
+
+  set Dap($dap,opoints) {}
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-observation-points
+
+When a debugging adapter is disconnected, we just cleanup
+any variables set by this module.
+
+<<tide-dap-disconnected-observation-points>>=
+proc tide-dap-disconnected-x-observation-points { dap } {
+  global Dap
+
+  unset Dap($dap,opoints)
+}
+@
+
+%}}}
+
+%{{{ proc observation-point-set { P oid port cond acts }
+
+A new observation-point has been set.
+
+<<observation-point-set>>=
+proc observation-point-set { P oid port cond acts } {
+  global Dap OPoint
+  global PAT_PROCS PAT_ALL
+
+  set port [TCLport $port]
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** observation-point-set: wrongly formatted process spec $P"
+    return
+  }
+  puts stderr "observation-point-set: $dap, $oid, $pids, $port, $cond, $acts"
+
+  if { $oid != -1 && [lsearch $Dap($dap,opoints) $oid] == -1 } {
+    lappend Dap($dap,opoints)  $oid
+    set OPoint($dap,$oid,port) $port
+    set OPoint($dap,$oid,cond) $cond
+    set OPoint($dap,$oid,acts) $acts
+    set OPoint($dap,$oid,pids) $pids
+
+    set count 0
+    foreach act $acts {
+      set OPoint($dap,$oid,value$count) ""
+      set OPoint($dap,$oid,expr$count) ""
+      if { [string match watch* $act] } {
+        set end [expr [string length $act] -2]
+        set OPoint($dap,$oid,expr$count) [string range $act 6 $end]  
+      }
+      incr count
+    }
+    set OPoint($dap,$oid,count) $count
+
+    tide-call observation-point-set $dap $oid $pids $port $cond $acts
+  } else {
+    puts stderr "observation-point failed: $oid, $P, $port, $cond, $acts"
+  }
+}
+@
+
+%}}}
+%{{{ proc observation-point-cleared { P oid }
+
+A observation-point was cleared.
+
+<<observation-point-cleared>>=
+proc observation-point-cleared { P oid } {
+  global Dap OPoint PAT_ALL PAT_PROCS
+
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** observation-point-cleared: wrongly formatted process spec $P"
+    return
+  }
+  puts stderr "observation-point-cleared: $dap, $oid"
+
+  tide-call observation-point-cleared $dap $oid
+
+  set idx [lsearch $Dap($dap,opoints) $oid]
+  set Dap($dap,opoints) [lreplace $Dap($dap,opoints) $idx $idx]
+
+  unset OPoint($dap,$oid,port)
+  unset OPoint($dap,$oid,cond)
+  unset OPoint($dap,$oid,acts)
+  unset OPoint($dap,$oid,pids)
+  unset OPoint($dap,$oid,value)
+}
+@
+
+%}}}
+%{{{ proc watchpoint { P oid act val }
+
+<<watchpoint>>=
+proc watchpoint { P oid expr val } {
+  global Dap OPoint
+  global PAT_PROCS PAT_ALL
+
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** watchpoint: wrongly formatted process spec $P"
+    return
+  }
+  puts stderr "watchpoint: $dap, $oid, $pids, $expr, $val"
+
+  tide-call watchpoint $dap $oid $pids $expr $val
+}
+@
+
+%}}}
+
+%{{{ proc tide-set-observation-point { dap pids port cond acts }
+
+Set a observation-point.
+
+<<tide-set-observation-point>>=
+proc tide-set-observation-point { dap pids port cond acts } {
+  set Acts \[$acts\]
+  if { $cond == "" } {
+    set cond always
+  }
+  if { $pids == "all" } {
+    TBpost "set-observation-point(proc($dap,all),[TBport $port],$cond,$Acts)"
+  } else {
+    set Pids [TBlist $pids]
+    set Port [TBport $port]
+    TBpost "set-observation-point(proc($dap,$Pids),$Port,$cond,$Acts)"
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-clear-observation-point { dap oid }
+
+Clear a observation-point.
+
+<<tide-clear-observation-point>>=
+proc tide-clear-observation-point { dap oid } {
+  TBpost "clear-observation-point(proc($dap,all),$oid)"
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-cpe
+
+The {\tt cpe} module keeps track of the current point of execution
+of all processes.
+
+<<tide-cpe.tcl>>=
+<<tide-init-cpe>>
+<<tide-dap-connected-cpe>>
+<<tide-dap-disconnected-cpe>>
+<<tide-process-created-cpe>>
+<<tide-process-destroyed-cpe>>
+<<tide-watchpoint-set-cpe>>
+<<tide-watchpoint-cleared-cpe>>
+
+<<cpe>>
+
+<<tide-watch-cpe>>
+<<tide-unwatch-cpe>>
+@
+
+%{{{ proc tide-init-cpe { }
+
+Initialize this module by initializing the {\tt daps} and {\tt processes}
+modules.
+
+<<tide-init-cpe>>=
+proc tide-init-cpe { } {
+  tide-init-modules { daps processes }
+}
+@
+
+%}}}
+%{{{ proc tide-dap-connected-cpe { dap info }
+
+A new debugging adapter was connected.
+
+<<tide-dap-connected-cpe>>=
+proc tide-dap-connected-cpe { dap info } {
+  global Dap
+
+  set Dap($dap,cpe-wid) ""
+  set Dap($dap,cpe-pids) {}
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-cpe { dap }
+
+Unset any dap-related variables.
+
+<<tide-dap-disconnected-cpe>>=
+proc tide-dap-disconnected { dap } {
+  global Dap
+
+  unset Dap($dap,cpe-wid)
+  unset Dap($dap,cpe-pids)
+}
+@
+
+%}}}
+%{{{ proc tide-process-created-cpe { dap pid name }
+
+A new process was created. Initialize the {\tt cpe} fields.
+
+<<tide-process-created-cpe>>=
+proc tide-process-created-cpe { dap pid name } {
+  global Proc
+
+  set Proc($dap,$pid,cpe-class) ""
+  set Proc($dap,$pid,cpe-type)  ""
+  set Proc($dap,$pid,cpe-when)  ""
+  set Proc($dap,$pid,cpe-mod)   ""
+  set Proc($dap,$pid,cpe-data)  ""
+}
+@
+
+%}}}
+%{{{ proc tide-process-destroyed-cpe { dap pid }
+
+A process was disconnected. Destroy the {\tt cpe} field.
+
+<<tide-process-destroyed-cpe>>=
+proc tide-process-destroyed-cpe { dap pid } {
+  global Proc
+
+  unset Proc($dap,$pid,cpe-class)
+  unset Proc($dap,$pid,cpe-type)
+  unset Proc($dap,$pid,cpe-when)
+  unset Proc($dap,$pid,cpe-mod)
+  unset Proc($dap,$pid,cpe-data)
+}
+@
+
+%}}}
+
+%{{{ proc cpe { P port }
+
+<<cpe>>=
+proc cpe { P port } {
+  global Daps Proc PAT_PROC PAT_PROCS PAT_ALL
+
+  set port [TCLport $port]
+
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** current-port: wrongly formatted process spec $P"
+    return
+  }
+
+  # The debugging adapter might not be connected yet!
+  if { [lsearch $Daps $dap] == -1 } {
+    dap-connected $dap {}
+  }
+
+  foreach pid $pids {
+    set Proc($dap,$pid,cpe-type) [lindex $port 0]
+    set Proc($dap,$pid,cpe-when)  [lindex $port 1]
+    set Proc($dap,$pid,cpe-mod)  [lindex $port 2]
+    set Proc($dap,$pid,cpe-format)   [lindex $port 3]
+    set Proc($dap,$pid,cpe-data)  [lrange $port 4 end]
+
+    tide-call cpe $dap $pid $port
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-watchpoint-set-cpe { dap wid pids port cond expr }
+
+A new watchpoint was set.
+
+<<tide-watchpoint-set-cpe>>=
+proc tide-watchpoint-set-cpe { dap wid pids port cond expr } {
+  global Dap
+
+  if { $port == "every-stat" && $cond == "true" && expr == "cpe" } {
+    set Dap($dap,cpe-wid) $wid
+    set Dap($dap,cpe-pids) $pids    
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-watchpoint-cleared-cpe { dap pids wid }
+
+<<tide-watchpoint-cleared-cpe>>=
+proc tide-watchpoint-cleared-cpe { dap pids wid } {
+  global Dap
+
+  if { $wid == $Dap($dap,cpe-wid) } {
+    set Dap($dap,cpe-wid) ""
+    set Dap($dap,cpe-pids) {}
+  }
+}
+@
+
+%}}}
+
+%{{{ proc tide-watch-cpe { dap pids }
+
+Stat watching the cpe's of a set of processes.
+{\tt pids} can be {\tt "all"} to indicate all processes of a
+debugging adapter.
+
+<<tide-watch-cpe>>=
+proc tide-watch-cpe { dap pids } {
+  tide-unwatch-cpe $dap
+  if { $pids == "all" } {
+    set Pids all
+  } else {
+    set Pids [TBlist $pids]
+  }
+  set Cond [TBstring true]
+  set Expr [TBstring cpe]
+  TBpost "set-watchpoint(proc($dap,$Pids),after-every-stat,$Cond,$Expr)"
+}
+@
+
+%}}}
+%{{{ proc tide-unwatch-cpe { dap }
+
+Stop watching the cpe of a debugging adapter.
+
+<<tide-unwatch-cpe>>=
+proc tide-unwatch-cpe { dap } {
+  global Dap
+
+  if { $Dap($dap,cpe-wid) != "" } {
+    TBpost "clear-watchpoint(proc($dap,$Pids),$Dap($dap,cpe-wid))"
+  }
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-exec-state
+
+<<tide-exec-state.tcl>>=
+<<tide-init-exec-state>>
+<<tide-process-created-es>>
+<<tide-process-destroyed-es>>
+
+<<exec-state>>
+@
+
+%{{{ proc tide-init-exec-state { }
+
+Initialize the exec-state module by loading any needed modules.
+
+<<tide-init-exec-state>>=
+proc tide-init-exec-state { } {
+  tide-init-modules { daps processes }
+}
+@
+
+%}}}
+%{{{ proc tide-process-created-es { dap pid name }
+
+Initialize any exec-state related fields.
+
+<<tide-process-created-es>>=
+proc tide-process-created-es { dap pid name } {
+  global Proc
+
+  if { ![info exists Proc($dap,$pid,es)] } {
+    set Proc($dap,$pid,es) unknown
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-process-destroyed-es { dap pid }
+
+Remove any exec-state related fields.
+
+<<tide-process-destroyed-es>>=
+proc tide-process-destroyed-es { dap pid } {
+  global Proc
+
+  unset Proc($dap,$pid,es)
+}
+@
+
+%}}}
+
+%{{{ proc exec-state { P es }
+
+The exec-state of a process has changed.
+
+<<exec-state>>=
+proc exec-state { P es } {
+  global Daps Proc PAT_PROC PAT_PROCS PAT_ALL
+
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** current-port: wrongly formatted process spec $P"
+    return
+  }
+
+  # The debugging adapter might not be connected yet!
+  if { [lsearch $Daps $dap] == -1 } {
+    dap-connected $dap {}
+  }
+
+  foreach pid $pids {
+    set Proc($dap,$pid,es) $es
+  }
+
+  tide-call exec-state $dap $pids $es
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-exec-control
+
+This module gives control over the execution of processes.
+
+<<tide-exec-control.tcl>>=
+<<tide-exec-control>>
+@
+
+<<tide-exec-control>>=
+proc tide-exec-control { dap pids mode } {
+  if { $pids == "all" } {
+    TBpost "exec-control(proc($dap,$pids),$mode)"
+  } else {
+    TBpost "exec-control(proc($dap,[TBlist $pids]),$mode)"
+  }
+}
+@
+
+%}}}
+%{{{ module tide-current-port
+
+<<tide-current-port.tcl>>=
+<<tide-dap-connected-current-port>>
+<<tide-dap-disconnected-current-port>>
+<<current-port>>
+<<tide-change-current-port>>
+@
+
+%{{{ proc tide-dap-connected-current-port { dap info }
+
+Initialize current-port related fields.
+
+<<tide-dap-connected-current-port>>=
+proc tide-dap-connected-current-port { dap info } {
+  global Dap
+
+  set Dap($dap,current-port) ""
+  set Dap($dap,current-pids) all
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-current-port { dap }
+
+Destroy current-port related fields.
+
+<<tide-dap-disconnected-current-port>>=
+proc tide-dap-disconnected-current-port { dap } {
+  global Dap
+
+  unset Dap($dap,current-port)
+  unset Dap($dap,current-pids)
+}
+@
+
+%}}}
+%{{{ proc current-port { P port }
+
+The current port has changed. Notify any interested parties.
+
+<<current-port>>=
+proc current-port { P port } {
+  global Dap Break
+  global PAT_PROCS PAT_ALL
+
+  set port [TCLport $port]
+  if { [regexp $PAT_ALL $P P dap] } {
+    set pids all
+  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
+      set pids $Pids
+  } else {
+    puts stderr "*** current-port: wrongly formatted process spec $P"
+    return
+  }
+  set Dap($dap,current-port) $port
+  set Dap($dap,current-pids) $pids
+
+  tide-call current-port $dap $pids $port
+}
+@
+
+%}}}
+%{{{ proc tide-change-current-port { dap pids port }
+
+Change the current port in the system.
+
+<<tide-change-current-port>>=
+proc tide-change-current-port { dap pids port } {
+  if { $pids == "all" } {
+    TBpost "current-port(proc($dap,all),[TBport $port])"
+  } else {
+    TBpost "current-port(proc($dap,[TBlist $pids]),[TBport $port])"
+  }
+}
+@
+
+%}}}
+
+%}}}
+
+# The second set of modules covers the 'debug-tool'
+# side of the debugger
+
+%{{{ module tide-ui-process-list
+
+<<tide-ui-process-list.tcl>>=
+# Module initialization
+<<tide-init-ui-process-list>>
+
+# Process list creation/destruction
+<<tide-ui-process-list-create>>
+<<tide-ui-process-list-destroy>>
+
+# Update process selection
+<<tide-ui-select-processes>>
+
+# Callbacks
+<<tide-process-created-process-list>>
+<<tide-process-destroyed-process-list>>
+<<tide-current-port-process-list>>
+<<tide-exec-state-process-list>>
+
+# Local functions
+<<pl-draw-process-list>>
+<<pl-update-process>>
+<<pl-update-process-list>>
+<<pl-do-select-all>>
+<<pl-do-process-selected>>
+<<pl-do-exec-control-button>>
+
+# Global variables
+
+set ES(unknown)		bitmaps/unknown.xbm
+set ES(stop)		bitmaps/stop.xbm
+set ES(run)		bitmaps/run.xbm
+set ES(single-step)	bitmaps/single-step.xbm
+set ES(step-over)	bitmaps/step-over.xbm
+
+set IMG(unknown)	[image create bitmap -file bitmaps/unknown.xbm]
+set IMG(stop)		[image create bitmap -file bitmaps/stop.xbm]
+set IMG(run)		[image create bitmap -file bitmaps/run.xbm]
+set IMG(single-step)	[image create bitmap -file bitmaps/single-step.xbm]
+set IMG(step-over)	[image create bitmap -file bitmaps/step-over.xbm]
+
+set IMG(selected,1)	[image create bitmap -file bitmaps/selected.xbm]
+set IMG(selected,0)	[image create bitmap -file bitmaps/unselected.xbm]
+@
+
+%{{{ proc tide-init-ui-process-list { }
+
+Load the necessary modules.
+
+<<tide-init-ui-process-list>>=
+proc tide-init-ui-process-list { } {
+  tide-init-modules { daps processes exec-state exec-control current-port }
+}
+@
+
+%}}}
+%{{{ proc tide-ui-process-list-create { dap w }
+
+Process list creation
+<<tide-ui-process-list-create>>=
+proc tide-ui-process-list-create { dap w } {
+  global Viewer Dap Proc ES IMG
+
+  set Viewer($dap,pid-selection) $dap
+  set Viewer($dap,pids) all
+  set Viewer($dap,pid-selection) all
+  set Viewer($dap,wprocess-list) $w
+
+  frame $w -borderwidth 2 -relief groove
+  label $w.label -text "Processes:" -width 16
+  frame $w.toolbar
+
+  if { [lsearch $Dap($dap,info) exec-control] != -1 } {
+    foreach elem $Dap($dap,info,exec-control) {
+      button $w.toolbar.button$elem \
+		-bitmap @$ES($elem) \
+		-command "pl-do-exec-control-button $dap exec-control $elem" \
+		-state normal \
+		-anchor c
+      pack $w.toolbar.button$elem -side left
+      set Viewer($dap,button,$elem) $w.toolbar.button$elem
+    }
+    frame $w.toolbar.f1 -width 8
+    pack $w.toolbar.f1
+  }
+
+  if { $Dap($dap,info,multi-process) } {
+    frame $w.list
+    canvas $w.list.c -width 40 -height 60\
+	-xscrollcommand "$w.x set" \
+	-yscrollcommand "$w.list.y set"
+    scrollbar $w.x -command "$w.list.c xview" -orient hor
+    scrollbar $w.list.y -command "$w.list.c yview" -orient vert
+
+    pack $w.list.c -side left -expand 1 -fill both
+    pack $w.list.y -side right -fill y
+
+    checkbutton $w.selection \
+	-text "Select all" \
+	-onvalue all \
+	-offvalue partial \
+	-variable Viewer($dap,pid-selection) \
+	-command "pl-do-select-all $dap"
+
+    set Viewer($dap,wprocs) $w.list.c
+    foreach pid $Dap($dap,pids) {
+      set Viewer($dap,$pid,mapped) 0
+    }
+    pl-draw-process-list $dap
+
+    pack $w.label -side top -fill x
+    pack $w.list -side top -expand 1 -fill both
+    pack $w.x -side top -fill x
+    pack $w.selection -side bottom -fill x
+
+    pl-update-process-list $dap
+  } else {
+    label $w.toolbar.state -image $IMG(unknown)
+    pack $w.toolbar.state -side right
+    set Viewer($dap,wstate) $w.toolbar.state
+  }
+  pack $w.toolbar -side top -fill x
+}
+@
+
+%}}}
+%{{{ proc tide-ui-process-list-destroy { dap }
+
+Destroy a process-list window
+
+<<tide-ui-process-list-destroy>>=
+proc tide-ui-process-list-destroy { dap } {
+  global Dap Viewer
+  destroy $Viewer($dap,wprocess-list)
+  unset Viewer($dap,wprocess-list)
+  unset Viewer($dap,wprocs)
+  # <PO>: etc.
+}
+@
+
+%}}}
+%{{{ proc tide-ui-select-processes { dap pids }
+
+Change the list of selected processes.
+
+<<tide-ui-select-processes>>=
+proc tide-ui-select-processes { dap pids } {
+  global Viewer
+
+  set Viewer($dap,pids) $pids
+  pl-update-process-list $dap
+}
+@
+
+%}}}
+
+%{{{ proc tide-process-created-process-list { dap pid name }
+
+The process-create callback.
+
+<<tide-process-created-process-list>>=
+proc tide-process-created-process-list { dap pid name } {
+  global Viewer Proc ES
+
+  set Viewer($dap,$pid,mapped) 0
+  set Viewer($dap,$pid,selected) 1
+  pl-draw-process-list $dap
+}
+@
+
+%}}}
+%{{{ proc tide-process-destroyed-process-list { dap pid }
+
+Process destruction callback.
+
+<<tide-process-destroyed-process-list>>=
+proc tide-process-destroyed-process-list { dap pid } {
+  global Viewer Dap
+
+  if { [info exists $Viewer($dap,wprocs) } {
+    $Viewer($dap,wprocs) delete entry $pid
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-current-port-process-list { dap pids port }
+
+Current port callback.
+
+<<tide-current-port-process-list>>=
+proc tide-current-port-process-list { dap pids port } {
+  global Viewer
+
+  set Viewer($dap,pids) $pids
+  pl-update-process-list $dap
+
+  if { $pids == "all" } {
+    set Viewer($dap,pid-selection) all
+  } else {
+    set Viewer($dap,pid-selection) partial
+  }
+  pl-update-process-list $dap
+}
+@
+
+%}}}
+%{{{ proc tide-exec-state-process-list { dap pids state }
+
+Exec status change callback.
+
+<<tide-exec-state-process-list>>=
+proc tide-exec-state-process-list { dap pids state } {
+  global Dap Viewer IMG
+
+  if { [info exists Viewer($dap,wprocess-list)] } {
+    if { $Dap($dap,info,multi-process) } {
+      foreach pid $pids {
+        pl-update-process $dap $pid
+      }
+    } else {
+      $Viewer($dap,wstate) configure -image $IMG($state)
+    }
+  } else {
+    puts stderr "Viewer($dap,wprocess-list) does not exist"
+  }
+}
+@
+
+%}}}
+
+%{{{ proc pl-draw-process-list { dap }
+
+Draw the complete list of processes.
+
+<<pl-draw-process-list>>=
+proc pl-draw-process-list { dap } {
+  global Dap Proc Viewer IMG
+
+  # First, we clean up all existing items
+  if { [info exists Viewer($dap,wprocs)] } {
+    foreach pid $Dap($dap,pids) {
+      if { $Viewer($dap,$pid,mapped) } {
+        $Viewer($dap,wprocs) delete $Viewer($dap,$pid,check-item)
+        $Viewer($dap,wprocs) delete $Viewer($dap,$pid,state-item)
+        $Viewer($dap,wprocs) delete $Viewer($dap,$pid,name-item)
+      }
+    }
+
+    # Now we draw all the processes
+    set y 16
+    set w $Viewer($dap,wprocs)
+    foreach pid $Dap($dap,pids) {
+      # Create 'checked' item
+      set item [$w create image 10 $y -anchor c -image $IMG(selected,1)]
+      set Viewer($dap,$pid,check-item) $item
+      $w bind $item <ButtonPress-1> "pl-do-process-selected $dap $pid"
+
+      # Create 'state' item
+      set item [$w create image 30 $y -anchor c -image $IMG(unknown)]
+      set Viewer($dap,$pid,state-item) $item
+      $w bind $item <ButtonPress-1> "pl-do-process-selected $dap $pid"
+
+      # Create 'name' item    
+      set item [$w create text 42 $y -anchor w -text $Proc($dap,$pid,name)]
+      set Viewer($dap,$pid,name-item) $item
+      $w bind $item <ButtonPress-1> "pl-do-process-selected $dap $pid"
+
+      set Viewer($dap,$pid,mapped) 1
+      incr y 24
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc pl-update-process { dap pid }
+
+Update the appearance of a process in the process list.
+
+<<pl-update-process>>=
+proc pl-update-process { dap pid } {
+  global Dap Viewer Proc ES IMG
+
+  if { [info exists Viewer($dap,wprocs)] 
+       && [lsearch $Dap($dap,pids) $pid] != -1 &&
+	$Viewer($dap,$pid,mapped) } {
+    $Viewer($dap,wprocs) itemconfigure $Viewer($dap,$pid,check-item) \
+		-image $IMG(selected,$Viewer($dap,$pid,selected))
+    $Viewer($dap,wprocs) itemconfigure $Viewer($dap,$pid,state-item) \
+		-image $IMG($Proc($dap,$pid,es))
+  }
+}
+@
+
+%}}}
+%{{{ proc pl-update-proces-list { dap }
+
+Update the selection status of all processes in the process list.
+
+<<pl-update-process-list>>=
+proc pl-update-process-list { dap } {
+  global Dap Viewer
+
+  if { [info exists Viewer($dap,wprocs)] } {
+    set pids $Viewer($dap,pids)
+    if { $pids == "all" } {
+      set pids $Dap($dap,pids)
+    } else {
+      foreach pid $Dap($dap,pids) {
+        set Viewer($dap,$pid,selected) 0     
+      }
+    }
+    foreach pid $pids {
+      set Viewer($dap,$pid,selected) 1
+    }
+  }
+  foreach pid $Dap($dap,pids) {
+    pl-update-process $dap $pid
+  } 
+}
+@
+
+%}}}
+
+%{{{ proc pl-do-select-all { dap }
+
+The user clicked on the 'Selection All' button.
+
+<<pl-do-select-all>>=
+proc pl-do-select-all { dap } {
+  global Dap Viewer
+
+  if { $Viewer($dap,pid-selection) == "all" } {
+    set Viewer($dap,pids) "all"
+    pl-update-process-list $dap
+  } else {
+    set Viewer($dap,pids) $Dap($dap,pids)
+    pl-update-process-list $dap
+  }
+}
+@
+
+%}}}
+%{{{ proc pl-do-process-selected { dap nr }
+
+The user clicked on one of the processes in the process list window.
+
+<<pl-do-process-selected>>=
+proc pl-do-process-selected { dap pid } {
+  global Dap Viewer
+
+  if { $Viewer($dap,pid-selection) == "all" } {
+    set Viewer($dap,pid-selection) partial
+  }
+  if { $Viewer($dap,$pid,selected) } {
+    set Viewer($dap,$pid,selected) 0
+    set idx [lsearch $Viewer($dap,pids) $pid]
+    set Viewer($dap,pids) [lreplace $Viewer($dap,pids) $idx $idx]
+  } else {
+    set Viewer($dap,$pid,selected) 1
+    lappend Viewer($dap,pids) $pid
+  }
+  pl-update-process $dap $pid
+#  set Viewer($dap,pids) [$Viewer($dap,wprocs) subwidget hlist selection get]
+
+  if { $Viewer($dap,pids) == {} } {
+    if { [lsearch $Dap($dap,info) exec-control] != -1 } {
+      foreach elem $Dap($dap,info,exec-control) {
+        $Viewer($dap,button,$elem) configure -state disabled
+      }
+    }
+  } else {
+    if { [lsearch $Dap($dap,info) exec-control] != -1 } {
+      foreach elem $Dap($dap,info,exec-control) {
+        $Viewer($dap,button,$elem) configure -state normal
+      }
+    }
+  }
+  tide-call process-selected $dap $pid
+}
+@
+
+%}}}
+%{{{ proc pl-do-exec-control-button { dap class elem }
+
+The user pressed one of the exec control buttons.
+
+<<pl-do-exec-control-button>>=
+proc pl-do-exec-control-button { dap class elem } {
+  global Viewer Dap
+
+  tide-exec-control $dap $Viewer($dap,pids) $elem
+}
+@
+
+%}}}
+
+%}}}
+
+
+

@@ -29,7 +29,7 @@ YACCLIB         = @YACCLIB@
 CLEAN           = @CLEAN@
 @SET_MAKE@
 
-TIDE		= @TIDE@
+NOWEB		= @NOWEB@
 TIDEDEF		= @TIDEDEF@
 
 prefix          = @prefix@
@@ -38,119 +38,154 @@ bindir          = $(exec_prefix)/bin
 libdir          = $(exec_prefix)/lib
 includedir      = $(prefix)/include
 
+TOOLBUS		= @top_srcdir@/src/toolbus
+CTIF		= @top_srcdir@/src/ctif
+
 COMPILE = $(CC) -c $< $(DEFS) $(INCLUDE) $(CPPFLAGS) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS) $(LIB) -o $@
 
-.SUFFIXES:
-.SUFFIXES: .c .o .y .l
-.c.o:
-	$(COMPILE) $<
-
 INCLUDE	= -I$(top_srcdir)/src -I$(srcdir)
-LIB	= -L$(top_srcdir)/src
+LIB	= -L$(top_srcdir)/src -L$(top_srcdir)/tide
 
-PRGS	= buscontrol
-SCRIPTS	= tide query
-SRC	= browser.py.nw buscontrol.c.nw evq.c.nw extui.py.nw fset.py.nw \
-	stub.tb tbview.py.nw tide-main.tcl.nw tide.tb.nw
-GENSRC	= tide.tb tbview.py browser.py fset.py extui.py evq.c buscontrol.c \
-	tide-main.tcl
-PRGDOC	= tide.tb.tex tbview.py.tex browser.py.tex fset.py.tex extui.py.tex \
-	tide-main.tcl.tex buscontrol.c.tex
+PROGS	= buscontrol synthesizer
+LIBFILES= tide.tb libtide.a
+INCFILES= tide.h dap-util.h admin.h admin-daps.h
+NWSRC	= buscontrol.c.nw synthesizer.c.nw dap-util.c.nw admin.c.nw \
+	source-browser.tcl.nw process-viewer.tcl.nw master-control.tcl.nw \
+	opoint-viewer.tcl.nw tide-modules.tcl.nw tide.tb.nw \
+	watchpoint-viewer.tcl.nw
+TIDEMODS= dap-util.o admin.o admin-daps.o
+TCLMODS	= tide-modules.tcl tide-daps.tcl tide-processes.tcl \
+	tide-observation-points.tcl tide-cpe.tcl \
+	tide-exec-state.tcl tide-exec-control.tcl tide-current-port.tcl
+GENCSRC	= buscontrol.c synthesizer.c dap-util.c
+GENCHDR	= viewer.tif.c synthesizer.tif.c debug-adapter.tif.c dap-util.h
+GENTCL	= source-browser.tcl process-viewer.tcl master-control.tcl \
+	opoint-viewer.tcl watchpoint-viewer.tcl $(TCLMODS)
+GENTEX	= buscontrol.c.tex synthesizer.c.tex \
+	source-browser.tcl.tex process-viewer.tcl.tex master-control.tcl.tex \
+	tide.tb.tex opoint-viewer.tcl.tex tide-modules.tcl.tex \
+	watchpoint-viewer.tcl.tex
 DIRS	= bitmaps test help
 
-DISTFILES = $(SCRIPTS) $(SRC) $(GENSRC) $(PRGDOC) tide.tex $(DIRS) \
-	Makefile.in
+DISTFILES = $(NWSRC) $(GENCSRC) $(GENCHDR) $(GENTCL) $(GENTEX) \
+	$(DIRS) slave-example.tb tide.tb tide.h Makefile.in
 
-all:  $(PRGS) $(GENSRC) testevq
+.SUFFIXES:
+.SUFFIXES: .c.nw .c .h .o .tcl.nw .tcl .tex .tb .tifs
 
-tide.tb tide.tb.tex: tide.tb.nw
-	noweb tide.tb.nw
+all:  $(LIBFILES) $(PROGS) $(GENSRC) $(TCLMODS) $(GENTCL)
+
+# Implicit dependencies
+.tcl.nw.tcl:
+	$(NOWEB) $<
+	touch $*.tcl $*.tcl.tex
+
+.c.nw.c:
+	$(NOWEB) $<
+	touch $*.h $@ $@.tex
+
+.c.nw.h:
+	$(NOWEB) $<
+	touch $*.h $@ $@.tex
+
+.c.o:
+	$(COMPILE)
+
+# Explicit dependencies
+tide.tb: tide.tb.nw
+	$(NOWEB) tide.tb.nw
 	touch tide.tb tide.tb.tex
 
-tide-main.tcl tide-main.tcl.tex: tide-main.tcl.nw
-	noweb tide-main.tcl.nw
-	touch tide-main.tcl tide-main.tcl.tex
+.tb.tifs:
+	$(TOOLBUS) -gentifs $<
 
-buscontrol.c buscontrol.c.tex: buscontrol.c.nw
-	noweb buscontrol.c.nw
-	touch buscontrol.c buscontrol.c.tex
+debug-adapter.tif.c: tide.tifs
+	$(CTIF) -newstyle -tool debug-adapter -tifs tide.tifs
 
-tbview.py tbview.py.tex: tbview.py.nw
-	noweb tbview.py.nw
-	touch tbview.py tbview.py.tex
+viewer.tif.c: slave-example.tifs
+	$(CTIF) -newstyle -tool viewer -tifs slave-example.tifs
 
-browser.py browser.py.tex: browser.py.nw
-	noweb browser.py.nw
-	touch browser.py browser.py.tex
+synthesizer.tif.c: tide.tifs
+	$(CTIF) -newstyle -tool synthesizer -tifs tide.tifs
 
-fset.py fset.py.tex: fset.py.nw
-	noweb fset.py.nw
-	touch fset.py fset.py.tex
+buscontrol: buscontrol.o
+	$(LINK) buscontrol.o -ltb $(LIBS)
 
-extui.py extui.py.tex: extui.py.nw
-	noweb extui.py.nw
-	touch extui.py extui.py.tex
+synthesizer: synthesizer.o
+	$(LINK) synthesizer.o -ltb $(LIBS)
 
-evq.c evq.h evq.c.tex: evq.c.nw
-	noweb evq.c.nw
-	touch evq.c evq.h evq.c.tex
+libtide.a: $(TIDEMODS)
+	ar cr libtide.a $(TIDEMODS)
 
-stub.tifs: stub.tb
-	toolbus -gentifs stub.tb
+# Calculate C dependencies
+depend: $(GENCSRC)
+	$(CC) -MM $(DEFS) $(INCLUDE) $(CPPFLAGS) $(CFLAGS) $(GENCSRC) > .depend
 
+# Keep track of some size statistics
+stats:
+	date >> .noweb-stats
+	wc -l $(NWSRC) >> .noweb-stats
+	date >> .source-stats
+	wc -l Makefile tide.tb $(tcl) $(GENCSRC) >> .source-stats
+	date >> .code-stats
+	ls -al buscontrol >> .code-stats
+
+# tifs dependencies
 tide.tifs: tide.tb
-	toolbus -gentifs tide.tb
+slave-example.tifs: slave-example.tb
 
-viewer.tif.c: stub.tifs
-	ctif -newstyle -tool viewer -tifs stub.tifs
+# Noweb dependencies
+source-browser.tcl: source-browser.tcl.nw
+opoint-viewer.tcl: opoint-viewer.tcl.nw
+watchpoint-viewer.tcl: watchpoint-viewer.tcl.nw
+process-viewer.tcl: process-viewer.tcl.nw
+master-control.tcl: master-control.tcl.nw
+buscontrol.c: buscontrol.c.nw
+synthesizer.c: synthesizer.c.nw
+dap-util.c: dap-util.c.nw
+dap-util.h: dap-util.c.nw
+admin.c: admin.c.nw
+admin.h: admin.c.nw
+admin-daps.c: admin.c.nw
+admin-daps.h: admin.c.nw
 
-debug-nub.tif.c: tide.tifs
-	ctif -newstyle -tool debug-nub -tifs tide.tifs
+# Tcl modules
+tide-support.tcl: tide-modules.tcl.nw
+tide-daps.tcl: tide-modules.tcl.nw
+tide-processes.tcl: tide-modules.tcl.nw
+tide-observation-points.tcl: tide-modules.tcl.nw
+tide-cpe.tcl: tide-modules.tcl.nw
+tide-exec-state.tcl: tide-modules.tcl.nw
+tide-exec-control.tcl: tide-modules.tcl.nw
+tide-current-port.tcl: tide-modules.tcl.nw
 
-buscontrol.o: buscontrol.c viewer.tif.c debug-nub.tif.c evq.h
-	$(COMPILE)
+# C dependencies
+buscontrol.o: buscontrol.c viewer.tif.c debug-adapter.tif.c
+dap-util.o: dap-util.c dap-util.h
+admin.o: admin.h admin.c
+admin-daps.o: admin-daps.c admin-daps.h admin.h
 
-buscontrol: buscontrol.o evq.o
-	$(LINK) buscontrol.o evq.o -ltb $(LIBS)
-
-evq.o: evq.c evq.h
-	$(COMPILE)
-
-testevq.tifs: testevq.tb
-	toolbus -gentifs testevq.tb
-
-testevq.tif.c: testevq.tifs
-	ctif -newstyle -tool testevq -tifs testevq.tifs
-
-testevq.o: testevq.c evq.h testevq.tif.c
-	$(COMPILE)
-
-testevq: testevq.o evq.o
-	$(LINK) testevq.o evq.o -ltb $(LIBS)
-
-tide.dvi: tide.tex $(PRGDOC)
-
-tide.ps: tide.dvi
-	dvips tide.dvi
-
+# clean
 clean:
-	${CLEAN}
-	rm -f *.pyc *.tifs *.tif.c $(PRGS)
-	rm -f *.c.tex *.py.tex *.tb.tex
+	${CLEAN} $(PROGS) $(TIDEMODS) *~
 
 distclean: clean
 	rm -f Makefile
 
+# dist
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  ln $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/tide 2> /dev/null \
 	  || cp -r $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/tide; \
 	done
 
-stats:
-	date >> .stats
-	wc *.nw >> .stats
-	date >> .stats.code
-	wc *.py *.tcl *.c *.tb >> .stats.code
-
+# install
+install: $(LIBFILES)
+	for file in $(LIBFILES); do \
+	  $(INSTALL) $$file $(libdir); \
+	done  
+	for file in $(INCFILES); do \
+	  $(INSTALL) $$file $(includedir); \
+	done
+ 

@@ -1,0 +1,37 @@
+
+%{{{ process-viewer.tcl
+
+This tcl script controls the process-viewer tool.
+
+<<process-viewer.tcl>>=
+<<rec-ack-event>>
+<<rec-terminate>>
+
+wm withdraw .
+@
+
+%}}}
+
+%{{{ proc rec-ack-event { event }
+
+Handle event acknowledgements.
+
+<<rec-ack-event>>=
+proc rec-ack-event { event } {
+  puts stderr "process-viewer: rec-ack-event $event"
+}
+@
+
+%}}}
+%{{{ proc rec-terminate { arg }
+
+A termination request has been received by the process-viewer.
+Just exit the application.
+
+<<rec-terminate>>=
+proc rec-terminate { arg } {
+  exit
+}
+@
+
+%}}}

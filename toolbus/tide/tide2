@@ -1,0 +1,2 @@
+#!/bin/sh
+toolbus $@ -TB_PORT 9700 tide.tb &

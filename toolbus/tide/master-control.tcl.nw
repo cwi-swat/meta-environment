@@ -1,0 +1,320 @@
+
+%{{{ master-control.tcl
+
+The tool {\tt master0control} controls the overal behaviour of tide.
+It keeps track of the debugging adatpers connected to the system,
+and lets the user activate tool windows for these instances.
+
+{\tt master-control} can also be used to shutdown the debugger.
+
+Later, I want to extent this tool to include project controls.
+
+<<master-control.tcl>>=
+<<create-window>>
+<<select-dap>>
+<<get-selected-dap>>
+
+<<update-dap-list>>
+<<update-tool-status>>
+<<new-tool>>
+<<do-activate>>
+<<do-shutdown>>
+
+<<tide-dap-connected-master>>
+<<tide-dap-disconnected-master>>
+
+<<utility functions>>
+
+set Tools {}
+source "tide-modules.tcl"
+tide-init "Watchpoint viewer" {
+	daps
+}
+create-window
+@
+
+%}}}
+
+%{{{ proc create-window {}
+
+<<create-window>>=
+proc create-window { } {
+  wm positionfrom . program
+  wm sizefrom . program
+  wm maxsize . 1152 900
+  wm title . "T.I.D.E."
+  wm geometry . 329x220
+
+  <<create menu>>
+
+  frame .middle
+
+  <<create dap list>>
+  <<create tool list>>
+  
+  pack append .middle \
+	.middle.daps {left frame center expand fill} \
+	.middle.tools {left frame center filly}
+
+  pack append . \
+	.menu {top frame center fillx} \
+	.middle { top frame center expand fill }
+}
+@
+
+%{{{ create menu
+
+<<create menu>>=
+  frame .menu -borderwidth 2 -relief flat
+  menubutton .menu.tide -menu .menu.tide.m -text "Tide"
+  menu .menu.tide.m
+  .menu.tide.m add command -label "Shutdown" -command "do-shutdown"
+  pack append .menu \
+	.menu.tide {left frame center}  
+@
+
+%}}}
+%{{{ create dap list
+
+<<create dap list>>=
+  frame .middle.daps -borderwidth 2 -relief groove
+  label .middle.daps.label -text "Debug adapters:"
+  frame .middle.daps.list -borderwidth 0
+  listbox .middle.daps.list.box -borderwidth 2 -relief sunken \
+	  -width 1 \
+	  -height 1 \
+	  -yscrollcommand ".middle.daps.list.vert set" \
+	  -xscrollcommand ".middle.daps.hor.bar set" \
+	  -selectmode single \
+	  -exportselection 0
+  bind .middle.daps.list.box <ButtonPress-1> "select-dap %x %y"
+
+  scrollbar .middle.daps.list.vert -command ".middle.daps.list.box yview" -orient vert
+
+  pack append .middle.daps.list \
+	.middle.daps.list.box {left frame center expand fill} \
+	.middle.daps.list.vert {left frame center filly}
+
+  frame .middle.daps.hor -borderwidth 0
+  scrollbar .middle.daps.hor.bar -command ".middle.daps.list.box xview" -orient hor
+  frame .middle.daps.hor.dummy -width 22 -height 20
+ 
+  pack append .middle.daps.hor \
+ 	.middle.daps.hor.bar {left frame center expand fill} \
+	.middle.daps.hor.dummy {left frame center}
+  
+  pack append .middle.daps \
+	.middle.daps.label {top frame center fillx} \
+	.middle.daps.list {top frame center expand fill} \
+	.middle.daps.hor {top frame center fillx}
+@
+
+%}}}
+%{{{ create tool list
+
+<<create tool list>>=
+  frame .middle.tools -borderwidth 2 -relief groove
+  label .middle.tools.label -text "Tools:"
+
+  pack append .middle.tools \
+	.middle.tools.label {top frame center fillx}
+@
+
+%}}}
+
+%}}}
+%{{{ proc select-dap { x y }
+
+<<select-dap>>=
+proc select-dap { x y } {
+  set w .middle.daps.list.box
+
+  set idx [$w nearest $y]
+  $w selection clear 0 end
+  $w selection set $idx
+  update-tool-status  
+}
+@
+
+%}}}
+%{{{ proc update-dap-list {}
+
+Update the debug-adapter list to reflect the current list of debug
+adapters present in the system.
+
+<<update-dap-list>>=
+proc update-dap-list {daps} {
+  global Dap
+
+  set w .middle.daps.list.box
+
+  puts stderr "update-dap-list: $daps"
+  set el ""
+  set sel [$w curselection]
+  if { $sel != "" } {
+    set el [$w get [$w curselection]]
+  }
+
+  $w delete 0 end
+  set i 0
+  set idx ""
+  foreach dap $daps {
+    $w insert end $dap
+    if { $dap == $el } {
+      set idx $i
+    }
+    incr i
+  }
+  if { $idx != "" } {
+    $w selection set $idx
+  } else {
+    if { [llength $daps] != 0 } {
+      $w selection set 0
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc update-tool-status {}
+
+<<update-tool-status>>=
+proc update-tool-status { } {
+  global Tools Tool
+
+  set dap [get-selected-dap]
+  foreach tool $Tools {
+    if { $dap == "" } {
+      $Tool($tool,button) configure -state disabled
+    } else {
+      $Tool($tool,button) configure -state normal
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc get-selected-dap {}
+
+<<get-selected-dap>>=
+proc get-selected-dap { } {
+  global Daps
+
+  set w .middle.daps.list.box
+
+  set sel [$w curselection]
+  if { $sel != "" } {
+    return [lindex $Daps $sel]
+  }
+  return ""  
+}
+@
+
+%}}}
+
+%{{{ proc new-tool { name event }
+
+A new tool has announced its arrival.
+
+<<new-tool>>=
+proc new-tool { Name event } {
+  global Tools Tool
+
+  set name [TCLstring $Name]
+  set w .middle.tools
+
+  set Tool($name,event) $event
+  foreach tool $Tools {
+    destroy $Tool($tool,button)
+  }
+
+  lappend Tools $name
+
+  set Tools [lsort $Tools]
+  set i 0
+  foreach tool $Tools {
+    button $w.button$i -text $tool -command "do-activate $Tool($tool,event)"
+    pack $w.button$i -fill x
+    set Tool($name,button) $w.button$i
+    incr i
+  }
+  update-tool-status
+}
+@
+
+%}}}
+%{{{ proc do-activate { event }
+
+The user double-clicked on a tool button.
+
+<<do-activate>>=
+proc do-activate { event } {
+  set dap [get-selected-dap]
+  if { $dap != "" } {
+    TBpost "activate($event,$dap)"
+  }
+}
+@
+
+%}}}
+%{{{ proc do-shutdown {}
+
+The user wants to quit.
+
+<<do-shutdown>>=
+proc do-shutdown {} {
+  TBsend "snd-event(tide-shutdown)"
+}
+@
+
+%}}}
+
+%{{{ proc tide-dap-connected-master { dap info }
+
+<<tide-dap-connected-master>>=
+proc tide-dap-connected-master { dap info } {
+  global Daps
+
+  update-dap-list $Daps
+  update-tool-status
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-master { dap }
+
+A debugger adapter is disconnected.
+
+<<tide-dap-disconnected-master>>=
+proc tide-dap-disconnected-master { dap } {
+  global Daps
+
+  set index [lsearch $Daps $dap]
+  set daps [lreplace $Daps $index $index]
+  update-dap-list $daps
+  update-tool-status
+}
+@
+
+%}}}
+
+%{{{ utility functions
+
+<<utility functions>>=
+# procedure: BindSSL, adjust binding for single selection listbox
+proc BindSSL { Box } {
+  global tk_version
+
+ bind $Box <1> {updateButtons}
+ if { $tk_version == "3.6" } {
+    bind $Box <B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-B1-Motion> {%W select from [%W nearest %y]; updateButtons}
+    bind $Box <Shift-Button-1> {%W select from [%W nearest %y]; updateButtons}
+  } else {
+    $Box configure -selectmode single
+  }
+}
+@
+
+%}}}
+

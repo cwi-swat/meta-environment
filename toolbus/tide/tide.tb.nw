@@ -2,780 +2,230 @@
 %{{{ tide.tb
 
 <<tide.tb*>>=
-%% This file is generated automatically from tide.tb.nw.
-%% Please don't edit it by hand!
+<<process DAP-CONNECT>>
+<<process TOOL-CONNECT>>
+<<process EVENT-RULES>>
+<<process TOOL>>
+<<process BROADCAST>>
+<<process MEMO>>
+<<process MASTER-CONTROL>>
 
-<<process MAIN>>
-<<process VIEWER>>
-<<process BROWSER>>
-<<process NUB-CONNECT>>
-<<nub protocols>>
-<<process NUB-CONTROL>>
-<<process TB-CONTROL>>
-<<process PYTHON-CONTROL>>
+<<tool definitions>>
 
-toolbus(MAIN, 
-	VIEWER, VIEWER-BUTTONS, 
-	BROWSER, BROWSER-BUTTONS, 
-	NUB-CONNECT)
+toolbus(DAP-CONNECT, TOOL-CONNECT, MASTER-CONTROL, MEMO, BROADCAST)
 @
 
 %}}}
 
-%{{{ process MAIN
+%{{{ tool definitions
 
-<<process MAIN>>=
-tool tide-main is { command = "wish-adapter -wish wish4.1 -script tide-main.tcl" }
+\subsection{Tool definitions}
 
-process MAIN is
+In this section, we define the tools used in this ToolBus script.
+
+<<tool definitions>>=
+tool debug-adapter is { }
+tool synthesizer is { command = "./synthesizer" }
+tool master-control is { command =
+	"tcltk-adapter -script master-control.tcl" }
+%%tool viewer is { command = "./buscontrol" }
+@
+
+%}}}
+
+%{{{ process DAP-CONNECT
+
+<<process DAP-CONNECT>>=
+process DAP-CONNECT is
 let
-  Main : tide-main,
-  TBID : term,
+  D    : debug-adapter,
+  Pid  : int,
   Info : list
 in
-  subscribe(toolbus-connected(<term>, <list>)) .
-  subscribe(toolbus-disconnected(<term>)) .
-  execute(tide-main, Main?) .
-  ( rec-note(toolbus-connected(TBID?, Info?)) .
-    snd-do(Main, toolbus-connected(TBID, Info))
+  ( rec-connect(D?) .
+    snd-msg(get-info(D)) .
+    rec-msg(get-info(D, Info?)) .
+    printf("%t info: %t\n", D, Info) .
+    snd-note(dap-connected(D, Info)) .
+    create(EVENT-RULES(D), Pid?)
     +
-    rec-note(toolbus-disconnected(TBID?)) .
-    snd-do(Main, toolbus-disconnected(TBID))
+    rec-disconnect(D?) .
+    snd-note(dap-disconnected(D))
+  ) * delta
+endlet
+@
+
+%}}}
+%{{{ process EVENT-RULES
+\subsection{The event rule ToolBus process}
+
+Figure \ref{event-rules} shows the event processing inside a debug
+adapter. First the event port is used to determine which event
+rules are activated. Then the event condition is used to filter
+these activated event rules. Finally, triggering the event rule results in
+the execution of actions that either change the
+(execution) state of the process that generated the original
+primitive event, or actions that generate watchpoint events
+for the \master\ bus.
+
+\begin{figure}[htb]
+  \centerline{\epsfig{file=events.ps,scale=0.7}}
+  \caption{\label{adapter-figure}Event processing inside a debug adapter}
+\end{figure}
+
+Because the interaction between a debug adapter and the \master\ 
+is completely based on event rules, the 
+interface between them can be described using the {\tt EVENT-RULE} 
+\TB\ process given below.
+
+By unifying all primitive debugging events using event rules,
+the interaction between the debug adapters and the
+\master\ can be described in one simple \TB\ process.
+This process can:
+\begin{itemize}
+\item Create a new event rule. After creating the event rule,
+      a message is broadcasted to inform all \master\ components
+      that a new event rule exists.
+\item Destroy an existing event rule. A message is broadcasted to
+      inform everyone the event rule no longer exists.
+\item Receive and broadcast watchpoint events. When a watchpoint is
+      triggered, a message is broadcasted so all tools that depend on this
+      watchpoint can update their view. 
+\end{itemize}
+
+<<process EVENT-RULES>>=
+process EVENT-RULES(D:debug-adapter) is
+let
+  P     : term,   %% list of process-id's, or `all' indicating all
+                  %% processes controlled by the debug adapter.
+  Port  : term,   %% event port and modifier
+  Cond  : term,   %% event condition
+  Life  : term,   %% lifetime of an event rule
+  Acts  : list,   %% event actions
+  Rid   : int,    %% event rule identifier
+  Expr  : term,   %% Watchpoint expression
+  Value : term,   %% Value of an evaluated watchpoint expression
+  Result: term    %% ok or error(<str>)
+in
+  ( rec-msg(proc(D,P?), create-rule(Port?,Cond?,Acts?,Life?)) .
+    snd-eval(D, create-rule(P, Port,Cond,Acts,Life)) .
+    rec-value(D, create-rule(P, Port,Cond,Acts,Life,Rid?)) .
+    snd-note(event(proc(D,P), rule-created(Port,Cond,Acts,Life,Rid)))
     +
-    rec-event(Main, view-toolbus(TBID?)) .
-    snd-msg(tbview, view-toolbus(TBID)) .
-    snd-ack-event(Main, view-toolbus(TBID))
-  ) * 
-  rec-event(Main, tide-shutdown) .
-  snd-ack-event(Main, tide-shutdown) .
+    rec-msg(proc(D,P?), destroy-rule(Rid?)) .
+    snd-do(D, destroy-rule(P,Rid)) .
+    snd-note(event(proc(D,P), rule-destroyed(Rid)))
+    +
+    rec-event(D, watchpoint(P?,Port?,Rid?,Expr?,Value?)) .
+    snd-note(event(proc(D,P), watchpoint(Port,Rid,Expr,Value))) .
+    snd-ack-event(D, watchpoint(P,Port,Rid,Expr,Value))
+    +
+    rec-event(D, rule-destroyed(Rid?)) .
+    snd-note(event(proc(D,P), rule-destroyed(Rid))) .
+    snd-ack-event(D, rule-destroyed(Rid))
+   ) * delta
+endlet
+@
+
+%}}}
+%{{{ process SYNTHESIZER
+
+<<process SYNTHESIZER>>=
+process SYNTHESIZER is
+let
+  S     : synthesizer,
+  Src   : term,
+  Event : term,
+  Port  : term,
+  Cond  : term,
+  Acts  : term,
+  Life  : term
+in
+  execute(synthesizer, S?) .
+  subscribe(event(<term>, <term>)) .
+  ( rec-note(event(Src?, Event?)) .
+    snd-do(S, event(Src, Event))
+    +
+    rec-event(S, event(Src?, Event?)) .
+    snd-note(event(Src, Event)) .
+    snd-ack-event(S, event(Src, Event))
+    +
+    rec-msg(synthesize-on(Event?)) .
+    snd-eval(S, synthesize-on(Event)) .
+    rec-value(S, synthesize-on(Event, Id?)) .
+    snd-msg(synthesize-on(Event, Id))
+    +
+    rec-msg(synthesize-off(Id?)) .
+    snd-do(synthesize-off(Id))
+    +
+    rec-event(S, create-rule(Src?, Port?, Cond?, Acts?, Life?)) .
+    snd-msg(Src, create-rule(Port, Cond, Acts, Life)) .
+    snd-ack-event(S, create-rule(Src, Port, Cond, Acts, Life))
+  ) * delta
+endlet
+@
+
+%}}}
+
+%{{{ process MASTER-CONTROL
+
+The master control window gives the user an overview of all
+debuggable systems currently running, and enables the user to 
+activate the other debugger components.
+
+<<process MASTER-CONTROL>>=
+process MASTER-CONTROL is
+let
+  M     : master-control,
+  D     : debug-adapter,
+  Name  : str,
+  Info  : list,
+  Event : term
+in
+  subscribe(tool-connected(<str>,<list>)) .
+  execute(master-control, M?) .
+  subscribe(dap-connected(<debug-adapter>,<list>)) .
+  subscribe(dap-disconnected(<debug-adapter>)) .
+  ( rec-note(new-tool(Name?, Event?)) .
+    snd-do(M, new-tool(Name, Event))
+    +
+    rec-note(dap-connected(D?, Info?)) .
+    snd-do(M, dap-connected(D, Info))
+    +
+    rec-note(dap-disconnected(D?)) .
+    snd-do(M, dap-disconnected(D))
+    +
+    rec-event(M, button(Event?)) .
+    snd-msg(Event) .
+    snd-ack-event(M, button(Event))
+  ) * rec-event(M, tide-shutdown) .
+  snd-ack-event(M, tide-shutdown) .
   shutdown("Thank you for using tide!\n")
 endlet
 @
 
 %}}}
-%{{{ process VIEWER
 
-A {\tt VIEWER} process visualizes slave ToolBusses and enables
-the user to control and view the communication behaviour of its tools
-and processes.
+%{{{ process BROADCAST
 
-<<process VIEWER>>=
-tool tbviewer is { command = "python-adapter -script tbview.py" }
+This process just waits for event messages, and broadcasts them as
+notes. When a process has an event to share it just sends it as a message.
+Now the process can receive the note also.
 
-process VIEWER is
+<<process BROADCAST>>=
+process BROADCAST is
 let
-  View   : tbviewer,
-  TB     : term,
-  Tid    : int,
-  Pid    : int,  Pid2  : int,
-  Name   : str,
-  Info   : list,
-  From   : int,
-  To     : int,
-  Type   : term,
-  Action : term,
-  Atom   : term,
-  Args   : term
+  From : term,
+  Ev   : term
 in
-  <<VIEWER subscriptions>> .
-  execute(tbviewer, View?) .
-  ( <<VIEWER toolbus notes>>
-    +
-    <<VIEWER nub notes>>
-    +
-    <<VIEWER tool notes>>
-    +
-    <<VIEWER process notes>>
-    +
-    <<VIEWER communication notes>>
-    +
-    <<VIEWER button handling>>
-    +
-    rec-msg(tbview, view-toolbus(TB?)) .
-    snd-do(View, view-toolbus(TB))
-  ) * delta
-endlet
-
-<<process VIEWER-BUTTONS>>
-@
-
-%{{{ VIEWER subscriptions.
-
-The {\tt tbviewer} tool needs a lot of information about
-ToolBussses, tools, processes, debug-nubs, and connections
-in the slave ToolBus. Therefore, the {\tt VIEWER} process
- subscribes to \emph{a lot} of notes!
-
-<<VIEWER subscriptions>>=
-subscribe(toolbus-connected(<term>, <list>)) .
-subscribe(toolbus-disconnected(<term>)) .
-subscribe(tool-connected(<term>, <int>, <str>, <list>)) .
-subscribe(tool-disconnected(<term>, <int>)) .
-subscribe(tool-changed(<term>, <int>, <list>)) .
-subscribe(nub-connected(<term>, <int>, <str>, <list>)) .
-subscribe(nub-disconnected(<term>, <int>)) .
-subscribe(nub-changed(<term>, <int>, <list>)) .
-subscribe(process-created(<term>, <int>, <str>)) .
-subscribe(process-destroyed(<term>, <int>)) .
-subscribe(process-changed(<term>, <int>, <list>)) .
-subscribe(communication(<term>, <term>, <int>, <int>, <term>, <list>)) .
-subscribe(atom-executed(<term>, <int>, <term>, <term>, <int>))
-@
-
-%}}}
-%{{{ VIEWER toolbus notes
-
-<<VIEWER toolbus notes>>=
-rec-note(toolbus-connected(TB?, Info?)) .
-snd-do(View, toolbus-connected(TB, Info))
-+
-rec-note(toolbus-disconnected(TB?)) .
-snd-do(View, toolbus-disconnected(TB))
-+
-rec-note(toolbus-changed(TB?, Info?)) .
-snd-do(View, toolbus-changed(TB, Info))
-@
-
-%}}}
-%{{{ VIEWER nub notes
-
-<<VIEWER nub notes>>=
-rec-note(nub-connected(TB?, Tid?, Name?, Info?)) .
-snd-do(View, nub-connected(TB, Tid, Name, Info))
-+
-rec-note(nub-disconnected(TB?, Tid?)) .
-snd-do(View, nub-disconnected(TB, Tid))
-+
-rec-note(nub-changed(TB?, Tid?, Info?)) .
-snd-do(View, nub-changed(TB, Tid, Info))
-@
-
-%}}}
-%{{{ VIEWER tool notes
-
-<<VIEWER tool notes>>=
-rec-note(tool-connected(TB?, Tid?, Name?, Info?)) .
-snd-do(View, tool-connected(TB, Tid, Name, Info))
-+
-rec-note(tool-disconnected(TB?, Tid?)) .
-snd-do(View, tool-disconnected(TB, Tid))
-+
-rec-note(tool-changed(TB?, Tid?)) .
-snd-do(View, tool-changed(TB, Tid))
-@
-
-%}}}
-%{{{ VIEWER process notes
-
-<<VIEWER process notes>>=
-rec-note(process-created(TB?, Pid?, Name?)) .
-snd-do(View, process-created(TB, Pid, Name))
-+
-rec-note(process-destroyed(TB?, Pid?)) .
-snd-do(View, process-destroyed(TB, Pid))
-+
-rec-note(process-changed(TB?, Pid?, Info?)) .
-snd-do(View, process-changed(TB, Pid, Info))
-+
-rec-note(atom-executed(TB?, Pid?, Atom?, Args?, Pid2?)) .
-%% We 'forget' the Args here, because python tools cannot handle vars. yet!
-snd-do(View, atom-executed(TB, Pid, Atom, Pid2))
-@
-
-%}}}
-%{{{ VIEWER communication notes
-
-<<VIEWER communication notes>>=
-rec-note(communication(TB?, Type?, From?, To?, Atom?, Args?)) .
-snd-do(View, communication(TB, Type, From, To, Atom))
-@
-
-%}}}
-%{{{ VIEWER button handling
-
-Any ToolBus process can add buttons to the viewer. It just has
-to register the button by sending a {\tt add-button} message.
-
-<<VIEWER button handling>>=
-let
-  Group : str,
-  Text  : str,
-  File  : str,
-  Event : term,
-  Features : list,
-  Tools : list,
-  Procs : list
-in
-  rec-msg(add-button(tbview, TB?, Group?, Text?, Event?, Features?)) .
-  snd-do(View, add-button(TB, Group, Text, Event, Features))
-  +
-  rec-msg(add-toolbar-button(tbview, TB?, Group?, File?, Event?, Features?)) .
-  snd-do(View, add-toolbar-button(TB, Group, File, Event, Features))
-  +
-  rec-event(View, button(TB?, Event?, Tools?, Procs?)) .
-  printf("button %t pushed: %t,%t\n", Event, Tools, Procs) .
-  snd-msg(button(TB, Event, Tools, Procs)) .
-  snd-ack-event(View, button(TB, Event, Tools, Procs))
-endlet
-@
-
-%}}}
-%{{{ process VIEWER-BUTTONS
-
-A number of default buttons is handled here.
-<<process VIEWER-BUTTONS>>=
-process VIEWER-BUTTONS is
-let
-  TB    : term,
-  Info  : list,
-  Tid   : term,
-  Tool  : int,
-  Tools : list,
-  Procs : list
-in
-  subscribe(toolbus-connected(<term>, <list>)) .
-@
-Now it is time to add some buttons to the viewer.
-<<process VIEWER-BUTTONS>>=
-  ( rec-note(toolbus-connected(TB?, Info?)) .
-    snd-msg(add-toolbar-button(tbview, TB, "ToolBus", "tb-step.xbm", 
-					toolbus-step, [])) delay(sec(1)) .
-    snd-msg(add-toolbar-button(tbview, TB, "ToolBus", "tb-run.xbm",  
-					toolbus-run, [])) .
-    snd-msg(add-toolbar-button(tbview, TB, "ToolBus", "tb-stop.xbm", 
-					toolbus-stop, [])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Processes", "proc-step.xbm", 
-					process-step, ["proc"])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Processes", "proc-run.xbm",  
-					process-run, ["proc"])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Processes", "proc-stop.xbm", 
-					process-stop, ["proc"])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Tools", "tool-step.xbm", 
-					tool-step, ["tool"])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Tools", "tool-run.xbm",  
-					tool-run, ["tool"])) .
-    snd-msg(add-toolbar-button(tbview, TB, "Tools", "tool-stop.xbm", 
-					tool-stop, ["tool"])) .
-
-    snd-msg(add-button(tbview,TB,"Viewers","T-script",view-tscript,[])) .
-    snd-msg(add-button(tbview,TB,"Viewers","Python",view-python,["tool"]))
-    +
-@
-When a button is pressed, the apropriate tool has to be notified to
-take action.
-<<process VIEWER-BUTTONS>>=
-    rec-msg(button(TB?, toolbus-step, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, start(tb, step))
-    +
-    rec-msg(button(TB?, toolbus-run, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, start(tb, run))
-    +
-    rec-msg(button(TB?, toolbus-stop, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, stop(tb, now))
-    +
-    rec-msg(button(TB?, process-step, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, start(processes(Procs), step))
-    +
-    rec-msg(button(TB?, process-run, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, start(processes(Procs), run))
-    +
-    rec-msg(button(TB?, process-stop, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(TB, Tid, stop(processes(Procs), now))
-    +
-    rec-msg(button(TB?, tool-step, Tools?, Procs?)) .
-    printf("received button(%t, tool-step, %t, %t)\n", TB, Tools, Procs) .
-    ( if not-equal(Tools, []) then
-         Tool := first(Tools) .
-	 Tools := next(Tools) .
-	 snd-msg(TB, Tool, start(all, step))
-      fi
-    ) * 
-    if equal(Tools, []) then
-      tau
-    fi
-    +
-    rec-msg(button(TB?, tool-run, Tools?, Procs?)) .
-    ( if not-equal(Tools, []) then
-         Tool := first(Tools) .
-	 Tools := next(Tools) .
-	 snd-msg(TB, Tool, start(all, run))
-      fi
-    ) * 
-    if equal(Tools, []) then
-      tau
-    fi
-    +
-    rec-msg(button(TB?, tool-stop, Tools?, Procs?)) .
-    ( if not-equal(Tools, []) then
-         Tool := first(Tools) .
-	 Tools := next(Tools) .
-	 snd-msg(TB, Tool, stop(all, now))
-      fi
-    ) * 
-    if equal(Tools, []) then
-      tau
-    fi
-    +
-    rec-msg(button(TB?, view-tscript, Tools?, Procs?)) .
-    snd-msg(TB, controlled-by(Tid?)) .
-    snd-msg(browse(TB, Tid))
-    +
-    rec-msg(button(TB?, view-python, Tools?, Procs?)) .
-    Tid := first(Tools) .
-    printf("browsing tool %t\n", Tid) .
-    snd-msg(browse(TB, Tid))
-  ) * rec-note(toolbus-disconnected(TB))
-endlet
-@
-
-%}}}
-
-%}}}
-%{{{ process BROWSER
-
-<<process BROWSER>>=
-tool browser is { command = "python-adapter -script browser.py" }
-
-process BROWSER is
-let
-  B     : browser,
-  TB    : term,
-  Tid   : term,
-  Style : term,
-  Areas : list,
-  Info  : list
-in
-  subscribe(nub-disconnected(<term>, <int>)) .
-  subscribe(cpe(<term>, <int>, <list>)) .
-  execute(browser, B?) .
-  snd-do(B, register-highlight("cpe", "blue", "", "")) .
-  snd-do(B, register-highlight("break", "", "red", "")) .
-  ( rec-msg(browse(TB?, Tid?)) .
-    printf("start to browse %t (%t)\n", Tid, TB) .
-    snd-msg(get-info(TB, Tid)) .
-    rec-msg(info(TB, Tid, Info?)) .
-    snd-note(browsing(TB, Tid, Info)) .
-    snd-do(B, browse(TB, Tid))
-    +
-    rec-note(cpe(TB?, Tid?, Areas?)) .
-    printf("note cpe(%t, %t, %t) received\n", TB, Tid, Areas) .
-    snd-do(B, highlight(TB, Tid, "cpe", Areas))
-    +
-    rec-note(nub-disconnected(TB?, Tid?)) .
-    snd-do(B, close(TB, Tid))
-    +
-    <<BROWSER button handling>>
-  ) * delta
-endlet
-
-<<process BROWSER-BUTTONS>>
-@
-
-%{{{ BROWSER button handling
-
-Any ToolBus process can add buttons to the viewer. It just has
-to register the button by sending a {\tt add-button} message.
-
-<<BROWSER button handling>>=
-let
-  Group : str,
-  Text  : str,
-  File  : str,
-  Event : term,
-  Features : list
-in
-  rec-msg(add-button(browser, TB?, Tid?, Group?, Text?, Event?, Features?)) .
-  snd-do(B, add-button(TB, Tid, Group, Text, Event, Features))
-  +
-  rec-msg(add-toolbar-button(browser, TB?, Tid?, Group?, File?, Event?, Features?)) .
-  snd-do(B, add-toolbar-button(TB, Tid, Group, File, Event, Features))
-  +
-  rec-msg(add-menu-item(browser, TB?, Tid?, Group?, Text?, Event?, Features?)) .
-  snd-do(B, add-menu-item(TB, Tid, Group, Text, Event, Features))
-  +
-  rec-event(B, button(TB?, Tid?, Event?)) .
-  snd-msg(browser-button(TB, Tid, Event)) .
-  snd-ack-event(B, button(TB, Tid, Event))
-endlet
-@
-
-%}}}
-%{{{ process BROWSER-BUTTONS
-
-A number of default buttons is handled here.
-<<process BROWSER-BUTTONS>>=
-process BROWSER-BUTTONS is
-let
-  TB    : term,
-  Tid   : term,
-  Info  : list,
-  Lang  : term
-in
-  subscribe(browsing(<term>, <int>, <list>)) .
-@
-Now it is time to add some buttons to the browser.
-<<process BROWSER-BUTTONS>>=
-  ( rec-note(browsing(TB?, Tid?, Info?)) .
-    Lang := get(Info, "language") .
-    if equal(Lang, "T-script") then
-    	snd-msg(add-toolbar-button(browser, TB, Tid, "ToolBus", "tb-step.xbm",
-						toolbus-step, [])) .
-    	snd-msg(add-toolbar-button(browser, TB, Tid, "ToolBus", "tb-run.xbm", 
-						toolbus-run, [])) .
-    	snd-msg(add-toolbar-button(browser, TB, Tid, "ToolBus", "tb-stop.xbm",
-						toolbus-stop, []))
-    else
-	tau
-    fi
-    +
-    rec-msg(browser-button(TB?, Tid?, toolbus-step)) .
-    snd-msg(TB, Tid, start(tb, step))
-    +
-    rec-msg(browser-button(TB?, Tid?, toolbus-run)) .
-    snd-msg(TB, Tid, run(tb, run))
-    +
-    rec-msg(browser-button(TB?, Tid?, toolbus-stop)) .
-    snd-msg(TB, Tid, stop(tb, now))
+  ( rec-msg(event(From?, Ev?)) .
+    snd-note(event(From, Ev))
   ) * delta
 endlet
 @
 
 %}}}
 
-%}}}
-%{{{ process NUB-CONNECT
-
-<<process NUB-CONNECT>>=
-tool debug-nub is { }
-
-process NUB-CONNECT is
-let
-  Nub  : debug-nub,
-  Tid  : int,
-  Name : str,
-  Pid  : int,
-  TB   : term,
-  Info : list
-in
-  ( rec-connect(Nub?) .
-    snd-eval(Nub, get-info) .
-    rec-value(Nub, info(Info?)) .
-    printf("Nub: %t\n", Info) .
-    Tid  := get(Info, "tid") .
-    Name := get(Info, "name") .
-    TB   := get(Info, "toolbus") .
-    snd-note(nub-connected(TB, Tid, Name, Info)) .
-    if and(equal(get(Info, "type"), "viewer"),
-	   equal(get(Info, "language"), "T-script")) then
-      create(TB-CONTROL(TB, Nub, Tid), Pid?) .
-      snd-note(toolbus-connected(TB, Info))
-    else if equal(get(Info, "language"), "Python") then
-        create(PYTHON-CONTROL(TB, Nub, Tid), Pid?)
-      else
-        create(NUB-CONTROL(TB, Nub, Tid), Pid?)
-      fi
-    fi
-  ) * delta
-endlet
-@
-
-%}}}
-%{{{ process NUB-CONTROL
-
-The {\tt NUB-CONTROL} process specifies the behaviour of
-the most basic nub-controller. It only adds {\tt rec-disconnect}
-handling to the {\tt NUB-BASICS} process.
-<<process NUB-CONTROL>>=
-process NUB-CONTROL(TB : term, Nub : debug-nub, Tool : term) is
-  NUB-BASICS(TB, Nub, Tool) * 
-  rec-disconnect(Nub) . 
-  snd-note(nub-disconnected(TB, Tool))
-@
-
-%}}}
-%{{{ nub protocols
-
-In this section, a number of simple processes are defined.
-These processes can be used as basic building blocks to
-build different nub controller processes. Every one of these
-modular processes controls one of the nubs capabilities.
-When a nub implements a certain capability, it has to adhere
-to the protocol defined for that capability. These protocols
-are defined in these processes:
-
-<<nub protocols>>=
-<<process NUB-BASICS>>
-<<process NUB-CPE>>
-<<process NUB-EXEC>>
-<<process NUB-VARS>>
-<<process NUB-SCOPES>>
-@
-
-%{{{ process NUB-BASICS
-
-The process {\tt NUB-BASICS} specifies the protocol that must
-be implemented by every nub. This protocol enables other
-ToolBus processes to retrieve basic information about the
-capabilities of this nub.
-
-<<process NUB-BASICS>>=
-process NUB-BASICS(TB : term, Nub : debug-nub, Tid : term) is
-let
-  Info : list
-in
-  rec-msg(get-info(TB, Tid)) .
-  snd-eval(Nub, get-info) .
-  rec-value(Nub, info(Info?)) .
-  printf("retreiving info %t from tool %t (nub %t)\n", Info, Tid, Nub) .
-  snd-msg(info(TB, Tid, Info))
-endlet
-@
-
-The {\tt NUB-CPE} process implements the protocol related to
-the inspection of the \emph{Current Point(s) of Execution}.
-
-%}}}
-%{{{ process NUB-CPE
-
-<<process NUB-CPE>>=
-process NUB-CPE(TB : term, Nub : debug-nub, Tid : int) is
-let
-  Pos	 : list
-in
-  rec-event(Nub, cpe(Pos?)) .
-  printf("cpe event %t received from nub %t\n", Nub, cpe(Pos)) .
-  snd-note(cpe(TB, Tid, Pos)) .
-  snd-ack-event(Nub, cpe(Pos))
-  +
-  rec-msg(TB, Tid, get-cpe) .
-  snd-eval(Nub, get-cpe) .
-  rec-value(Nub, cpe(Pos?)) .
-  snd-msg(TB, Tid, cpe(Pos))
-endlet
-@
-
-%}}}
-%{{{ process NUB-EXEC
-
-The execution of some nubs can be controlled by the master ToolBus.
-The process {\tt NUB-EXEC} specifies the protocol used to do this.
-This process can start and stop the nub on request, and keeps track
-of the execution status of the nub.
 
 
-<<process NUB-EXEC>>=
-process NUB-EXEC(TB : term, Nub : debug-nub, Tid : term) is
-let
-  Stat : term,
-  Who  : term,
-  Mode : term,
-  When : term
-in
-  rec-event(Nub, exec-status(Stat?)) .
-  printf("exec-status event %t received from nub %t\n", Stat, Nub) .
-  snd-note(exec-status(TB, Tid, Stat)) .
-  snd-ack-event(Nub, exec-status(Stat))
-  +
-  rec-msg(TB, Tid, start(Who?, Mode?)) .
-  printf("starting %t (%t,%t)\n", Tid, Who, Mode) .
-  snd-do(Nub, start(Who, Mode))
-  +
-  rec-msg(TB, Tid, stop(Who?, When?)) .
-  printf("stopping %t (%t,%t)\n", Tid, Who, When) .
-  snd-do(Nub, stop(Who, When))
-endlet
-@
-
-%}}}
-%{{{ process NUB-VARS
-
-Some nubs can provide information about the variables of the
-program they control. The process {\tt NUB-VARS} describes the
-variable related communication.
-Note that this process is often useless without the {\tt NUB-SCOPES}
-process.
-
-<<process NUB-VARS>>=
-process NUB-VARS(TB : term, Nub : debug-nub, Tid : term) is
-let
-  Vars    : list,
-  Name    : str,
-  Names   : list,
-  Scopes  : list,
-  ScopeId : term,
-  Val     : term,
-  Msg     : str
-in
-  rec-event(Nub, vars-changed(Vars?)) .
-  snd-note(vars-changed(TB, Tid, Vars)) .
-  snd-ack-event(Nub, vars-changed(Vars))
-  +
-  rec-msg(TB, Tid, get-var-list(Scopes?)) .
-  snd-eval(Nub, get-var-list(Scopes)) .
-  ( rec-value(Nub, var-list(Vars?)) .
-    snd-msg(TB, Tid, var-list(Vars))
-    +
-    rec-value(Nub, no-var-list(Scopes?, Msg?)) .
-    snd-msg(TB, Tid, no-var-list(Scopes, Msg))
-  )
-  +
-  rec-msg(TB, Tid, watch-vars(Scopes?, Names?)) .
-  snd-eval(Nub, watch-vars(Scopes, Names)) .
-  ( rec-value(Nub, vars-watched(Scopes?, Names?)) .
-    snd-msg(TB, Tid, vars-watched(Scopes, Names))
-    +
-    rec-value(Nub, cannot-watch(Scopes?, Names?, Msg?)) .
-    snd-msg(TB, Tid, cannot-watch(Scopes, Names, Msg))
-  )
-  +
-  rec-msg(TB, Tid, change-var(Scopes?, Name?, Val?)) .
-  snd-eval(Nub, change-var(Scopes, Name, Val)) .
-  ( rec-value(Nub, var-changed(Scopes?, Name?, Val?)) .
-    snd-msg(TB, Tid, var-changed(Scopes, Name, Val))
-    +
-    rec-value(Nub, cannot-change(Scopes?, Name?, Val?, Msg?)) .
-    snd-msg(TB, Tid, cannot-change(Scopes, Name, Val, Msg))
-  )
-endlet
-@
-
-%}}}
-%{{{ process NUB-SCOPES
-
-<<process NUB-SCOPES>>=
-process NUB-SCOPES(TB : term, Nub : debug-nub, Tid : term) is
-let
-  Constraints : term,
-  Scopes : list
-in
-  rec-event(Nub, current-scopes(Scopes?)) .
-  snd-note(current-scopes(TB, Tid, Scopes)) .
-  snd-ack-event(Nub, current-scopes(Scopes))
-  +
-  rec-msg(TB, Tid, get-scopes(Constraints?)) .
-  snd-eval(Nub, get-scopes(Constraints)) .
-  rec-value(Nub, scopes(Constraints?, Scopes?)) .
-  snd-msg(TB, Tid, scopes(Constraints, Scopes))
-endlet
-
-@
-
-%}}}
-
-%}}}
-%{{{ process TB-CONTROL
-
-The process {\tt TB-CONTROL} controls {\tt viewer} tools.
-Viewer tools are a {\tt debug-nub} with a twist: they
-control the whole ToolBus being debugged instead of one of
-its tools (like other {\tt debug-nub} types do).
-
-<<process TB-CONTROL>>=
-process TB-CONTROL(TB:term, Nub:debug-nub, Tid:int) is
-let
-  Info : list,
-  Pid  : int,  Pid2 : int,
-  Atom : term,
-  Args : list,
-  Name : str,
-  Type : term,
-  From : int,
-  To   : int
-in
-  ( rec-msg(TB, controlled-by(Tid))
-    +
-    <<atom-executed>>
-    +
-    <<process handling>>
-    +
-    <<communication>>
-    +
-    NUB-BASICS(TB, Nub, Tid)
-    +
-    NUB-CPE(TB, Nub, Tid)
-    +
-    NUB-EXEC(TB, Nub, Tid)
-  ) * rec-disconnect(Nub) .
-  snd-note(toolbus-disconnected(TB)) .
-  snd-note(nub-disconnected(TB, Tid))
-endlet
-@
-
-%{{{ atom-executed
-
-After an atom has been executed, the ToolBus debug-nub generates
-an {\tt atom-executed} event. This event is translated into a note
-that is broadcasted.
-
-<<atom-executed>>=
-rec-event(Nub, atom-executed(Pid?, Atom?, Args?, Pid2?)) .
-snd-note(atom-executed(TB, Pid, Atom, Args, Pid2)) .
-snd-ack-event(Nub, atom-executed(Pid, Atom, Args, Pid2))
-@
-
-%}}}
-%{{{ process handling
-
-Process creation/destruction is translated into notes and
-broadcasted, to enable other tools (like the {\tt tbviewer}),
-to act on these events.
-
-<<process handling>>=
-rec-event(Nub, process-created(Pid?, Name?)) .
-printf("process-created: %d, %t\n", Pid, Name) .
-snd-note(process-created(TB, Pid, Name)) .
-snd-ack-event(Nub, process-created(Pid, Name)) .
-printf("end of process-created\n")
-+
-rec-event(Nub, process-destroyed(Pid?)) .
-printf("process-destroyed: %t, %d\n", TB, Pid) .
-snd-note(process-destroyed(TB, Pid)) .
-snd-ack-event(Nub, process-destroyed(Pid)) .
-printf("end of process-destroyed\n")
-
-@
-
-%}}}
-%{{{ communication
-
-When the slave ToolBus executes some communication action,
-a special event is generated to signal this.
-
-<<communication>>=
-rec-event(Nub, communication(Type?, From?, To?, Atom?, Args?)) .
-snd-note(communication(TB, Type, From, To, Atom, Args)) .
-snd-ack-event(Nub, communication(Type, From, To, Atom, Args))
-@
-
-%}}}
-
-%}}}
-%{{{ process PYTHON-CONTROL
-
-The process {\tt PYTHON-CONTROL} controls python nubs.
-
-<<process PYTHON-CONTROL>>=
-process PYTHON-CONTROL(TB:term, Nub:debug-nub, Tid:int) is
-let
-  A : int
-in
-  ( NUB-BASICS(TB, Nub, Tid)
-    +
-    NUB-CPE(TB, Nub, Tid)
-    +
-    NUB-EXEC(TB, Nub, Tid)
-  ) * rec-disconnect(Nub) .
-  snd-note(toolbus-disconnected(TB)) .
-  snd-note(nub-disconnected(TB, Tid))
-endlet
-
-@
-
-%}}}
 

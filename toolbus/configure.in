@@ -2,11 +2,13 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 
 PRODUCT=ToolBus
-VERSION=0.9.20
-DEMOS="auction battleships calc cons edit game go-moku hello ttt wave hearts"
+VERSION=0.10.0
+DEMOS="auction calc cons edit game hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
 GEL_DEMOS="spec"
+EPIC_DEMOS=""
+SUBDIRS="src test adapters demos doc www"
 
 AC_SUBST(PRODUCT)
 AC_SUBST(VERSION)
@@ -95,14 +97,37 @@ fi,
 GELOBJECTS=)
 AC_SUBST(GELDIR)
 
+AC_ARG_WITH(epic,
+[  --with-epic		enable EPic support],
+if test ${withval} = "yes"
+then
+  EPDIR="$(top_srcdir)/../EP"
+  ADAPTERS="${ADAPTERS} arm-adapter"
+  DEMOS="${DEMOS} ${EPIC_DEMOS}"
+else
+  if test ${withval} = "no"
+  then
+    EPDIR=""
+  else
+    EPDIR=${withval};
+    ADAPTERS="${ADAPTERS} arm-adapter"
+    DEMOS="${DEMOS} ${EPIC_DEMOS}"
+  fi
+fi,
+)
+AC_SUBST(EPDIR)
+
 dnl Use tide?
 AC_ARG_WITH(tide,
-[  --with-tide		compile T.I.D.E. support (debugger prototype)],
+[  --with-tide		compile TIDE support (debugger prototype)],
 TIDE='$(top_srcdir)/tide'
-TIDEDEF=-DUSE_TIDE,
+TIDEDEF=-DUSE_TIDE
+SUBDIRS="${SUBDIRS} tide",
+DISTDIRS="${DISTDIRS} tide"
 )
 AC_SUBST(TIDEDEF)
 AC_SUBST(TIDE)
+AC_SUBST(DISTDIRS)
 
 dnl Which adapters?
 
@@ -136,7 +161,7 @@ AC_ARG_WITH(python,
 [  --with-python	   include python support (python-adapter)],
 if test ${withval} = "yes"
 then
-"${ADAPTERS} python-adapter"
+ADAPTERS="${ADAPTERS} python-adapter"
 fi,
 ADAPTERS="${ADAPTERS} python-adapter"
 )
@@ -156,6 +181,7 @@ fi,
 )
 AC_SUBST(TBSWIPL)
 
+AC_SUBST(SUBDIRS)
 AC_SUBST(ADAPTERS)
 AC_SUBST(DEMOS)
 AC_SUBST(TCLTKTOP)
@@ -219,16 +245,13 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile doc/Makefile \
 	demos/Makefile \
         demos/auction/Makefile \
 	demos/calc/Makefile demos/edit/Makefile \
-	demos/cons/Makefile demos/game/Makefile \
+	demos/game/Makefile \
 	demos/hello/Makefile \
 	demos/perl/Makefile \
 	demos/spec/Makefile \
 	demos/wave/Makefile \
-	demos/battleships/Makefile \
-	demos/go-moku/Makefile \
 	demos/ttt/Makefile \
 	demos/swipl-ttt/Makefile \
-	demos/hearts/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \
 	adapters/tcltk-adapter/Makefile \
@@ -237,5 +260,6 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile doc/Makefile \
 	adapters/swipl-adapter/Makefile \
 	adapters/asf+sdf-adapter/Makefile \
 	adapters/gen-adapter/Makefile \
+	adapters/arm-adapter/Makefile adapters/arm-adapter/arm-resident \
 	www/Makefile \
 	) 
