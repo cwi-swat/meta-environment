@@ -20,6 +20,10 @@
 #
 # $Id$
 
+2000/7/31 (jurgenv@cwi.nl)
+   * added -l option to standalone evaluator to 
+     toggle rewriting with layout.
+
 2000/7/28 ({jong,olivierp}@cwi.nl)
    * Fixed evaluator stack depth checking
    * Added support for interrupting evaluator using signal USR1
