@@ -75,11 +75,11 @@ AFun afun_item = 0;
 AFun afun_prod = 0;
 AFun afun_range = 0;
 AFun afun_shift = 0;
-extern AFun afun_non_assoc_prio;
-extern AFun afun_gtr_prio;
-extern AFun afun_left_prio;
-extern AFun afun_right_prio;
-extern AFun afun_assoc_prio;
+AFun afun_non_assoc_prio = 0;
+AFun afun_gtr_prio = 0;
+AFun afun_left_prio = 0;
+AFun afun_right_prio = 0;
+AFun afun_assoc_prio = 0;
 AFun afun_actions = 0;
 AFun afun_state_rec = 0;
 AFun afun_label = 0;
@@ -151,14 +151,12 @@ void init_table_gen()
   ATprotectAFun(afun_range);
   afun_shift = ATmakeAFun("shift", 1, ATfalse);
   ATprotectAFun(afun_shift);
-/*
   afun_left_prio = ATmakeAFun("left-prio", 2, ATfalse);
   ATprotectAFun(afun_left_prio);
   afun_right_prio = ATmakeAFun("right-prio", 2, ATfalse);
   ATprotectAFun(afun_right_prio);
   afun_assoc_prio = ATmakeAFun("assoc-prio", 2, ATfalse);
   ATprotectAFun(afun_assoc_prio);
-*/
   afun_non_assoc_prio = ATmakeAFun("non-assoc-prio", 2, ATfalse);
   ATprotectAFun(afun_non_assoc_prio);
   afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);

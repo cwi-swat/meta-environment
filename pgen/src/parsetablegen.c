@@ -19,6 +19,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+#include <PT-utils.h>
+#include <SDF-utils.h>
+#include <ASF-utils.h>
+#include <asc-apply.h>
+#include <asc-support.h>
 #include "ksdf2table.h"
 
 /*{{{  global variables */
@@ -59,8 +65,6 @@ extern void init_all();
  
 void init_patterns();
 void c_rehash(int newsize);  
-ATerm innermost(ATerm t);
-ATerm toasfix(ATerm t, ATerm f, ATerm n);        
 ATerm generate_parse_table(ATerm g);
 void init_table_gen();
 void destroy_table_gen();
@@ -81,7 +85,6 @@ void rec_terminate(int cid, ATerm t) {
 }
 
 /*}}}  */
-/*{{{  ATerm add_name_norm_function(char *name, ATerm term) */
 
 ATerm make_name_term(ATerm name)
 {
@@ -100,123 +103,71 @@ ATerm make_name_term(ATerm name)
   return result;
 } 
 
-ATerm add_name_norm_function(char *str, ATerm term)
+static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
-  ATerm t[8], result, appl, nameterm, name;
-  ATerm t_name;
-  ATerm abbrevs;
-  ATerm term_open, term_comma, term_close, term_ws;
+  SDF_ModuleName sdfModuleName = SDF_makeModuleNameUnparameterized(
+                               SDF_makeModuleIdWord(str));
+  PT_Tree ptModuleName = PT_makeTreeFromTerm(
+                           SDF_makeTermFromModuleName(sdfModuleName));
+  PT_Tree newTree = NULL;
 
-  name = ATmake("<str>",str);
-  if (ATmatchTerm(term, pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) {
+  if (PT_isValidParseTree(parseTree)) {
+    PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    t_name = ATparse("l(\"normalize\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    term_comma = ATparse("l(\",\")");
-    term_close = ATparse("l(\")\")");
-    term_ws = ATparse("w(\"\")");     
-    nameterm = make_name_term(name);
-
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Normalization\"),w(\"\"),[ql(\"normalize\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
-                        term_ws,
-                        ATmakeList(11,t_name, term_ws,
-                                      term_open, term_ws,
-                                      nameterm, term_ws,
-                                      term_comma, term_ws,
-                                      appl, term_ws,
-                                      term_close));
-    return ATmakeTerm(pattern_asfix_term,
-                      ATparse("l(\"term\")"), term_ws,  
-                      ATparse("l(\"X\")"), term_ws,  
-                      ATparse("id(\"X\")"), term_ws,  
-                      result, term_ws,  abbrevs);
+    newTree = ASC_applyFunction("normalize",
+                                "Sdf2-Normalization",
+                                "Grammar",
+                                2,
+                                ptModuleName,
+                                ptSyntax);
   }
   else {
-    ATerror("not a legal term: %t\n", term);
-    return NULL;
+    ATerror("addNormalizeFunction: not a proper parse tree: %t\n",
+              (ATerm) parseTree);
+
+    return (PT_Tree) NULL;
   }
-}                                                       
 
-/*}}}  */
-/*{{{  ATerm add_norm_function(ATerm term) */
+  return newTree;
 
-ATerm add_norm_function(ATerm term)
-{
-  ATerm t_name, q_t_name;
-  ATerm t_mod_name;
-  ATerm prod, appl;
-  ATerm abbrevs;
-  ATerm term_open, q_term_open, term_close, q_term_close, term_ws;
-  ATerm lit[2],w[4],id,arg;
-
-  if(ATmatchTerm(term,pattern_asfix_term,
-                 &lit[0],&w[0],&lit[1],&w[1],&id,&w[2],&arg,&w[3],NULL)) {
-    t_mod_name = ATparse("id(\"Sdf2-Normalization\")");
-    t_name = ATparse("l(\"normalize\")");
-    q_t_name = ATparse("ql(\"normalize\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    q_term_open = ATparse("ql(\"(\")");
-    term_close = ATparse("l(\")\")");
-    q_term_close = ATparse("ql(\")\")");
-    term_ws = ATparse("w(\"\")");     
-
-    prod = AFmakeProd(t_mod_name,
-                      ATmakeList(7,q_t_name,term_ws,q_term_open,term_ws,
-                                 ATparse("sort(\"SDF\")"),
-                                 term_ws,q_term_close),
-                      ATparse("sort(\"Grammar\")"),
-                      ATparse("no-attrs"));
-    appl = AFmakeAppl(prod,
-                      ATmakeList(7,t_name,term_ws,term_open,term_ws,
-                                 arg,
-                                 term_ws,term_close));
-    return ATmakeTerm(pattern_asfix_term,
-                   ATparse("l(\"term\")"),
-                   term_ws,lit[1],term_ws,id,term_ws,
-                   appl,term_ws,abbrevs);
-  }
-  else {
-    ATerror("Illegal term %t\n", term);
-    return NULL; /* Silence the compiler */
-  }                             
 }
-/*}}}  */
-/*{{{  ATerm normalize_and_generate_table(ATerm sdf2) */
 
-ATerm normalize_and_generate_table(ATerm sdf2term)
+static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
 {
-  ATerm pt = NULL, filename, modname, term, reduct, ksdf;
+  PT_Tree tree = addNormalizeFunction(topModule, parseTree);
 
-  if (ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
-                 &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
+  ATerm reduct = innermost(tree);
+  return toasfix(reduct);
+}
 
-    IF_STATISTICS(PT_Timer()); 
+ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
+{
+  ATerm pt = NULL;
+  PT_ParseTree ksdf;
 
-    reduct = innermost(term);
-    ksdf = toasfix(reduct, filename, modname); 
+  IF_STATISTICS(PT_Timer()); 
 
-    IF_STATISTICS(fprintf(PT_log(), "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
+  ksdf = normalize(name, sdf2term); 
 
-    init_table_gen();
-    nr_of_states = 0;
-    nr_of_actions = 0;
-    max_nr_actions = 0;
-    nr_of_gotos = 0;
-    max_nr_gotos = 0;
-    nr_of_items = 0;
-    max_nr_items = 0;
+  IF_STATISTICS(fprintf(PT_log(), 
+                "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
 
-    if (ksdf)  {
-      pt = generate_parse_table(ksdf);
-    }
-    destroy_table_gen();       
-    IF_STATISTICS(fprintf(PT_log(), "Parse table generation took %.6fs\n", PT_Timer())); 
+  init_table_gen();
+  nr_of_states = 0;
+  nr_of_actions = 0;
+  max_nr_actions = 0;
+  nr_of_gotos = 0;
+  max_nr_gotos = 0;
+  nr_of_items = 0;
+  max_nr_items = 0;
+
+  if (ksdf)  {
+    pt = generate_parse_table(PT_makeTermFromParseTree(ksdf));
   }
+  destroy_table_gen();       
+
+  IF_STATISTICS(fprintf(PT_log(), 
+                "Parse table generation took %.6fs\n", PT_Timer())); 
  
   return pt;
 }
@@ -226,15 +177,9 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
-  ATerm pt, expsdf, normsdf, packed;
+  ATerm pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
+  ATerm packed = ATBpack(pt);
 
-  expsdf = AFexpandTerm(sdf);  
-
-  normsdf = add_name_norm_function(name, expsdf);   
-
-  pt = normalize_and_generate_table(normsdf);
- 
-  packed = ATBpack(pt);
   packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
   return ATmake("snd-value(generation-finished(<term>))", packed);
 }
@@ -279,7 +224,8 @@ int main(int argc, char *argv[])
   FILE *iofile;
 
   int cid;
-  ATerm bottomOfStack, term, pt, expterm, normterm;
+  ATerm bottomOfStack, pt;
+  PT_ParseTree term;
   char *input = "-";
   char *output = "-";
   char *moduleName = "-";
@@ -296,9 +242,11 @@ int main(int argc, char *argv[])
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
 
   AFinit(argc, argv, &bottomOfStack);
-  init_patterns();
+
   AFinitAsFixPatterns();
-  c_rehash(INITIAL_TABLE_SIZE);
+
+  ASC_initRunTime(INITIAL_TABLE_SIZE);
+  SDF_initSDFApi(); 
 
   register_all();
   resolve_all();
@@ -345,8 +293,7 @@ int main(int argc, char *argv[])
       else if (!(iofile = fopen(input, "r")))
         ATerror("%s: cannot open %s\n", myname, input);
 
-      term = ATreadFromFile(iofile);
-      expterm = AFexpandTerm(term);  
+      term = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
   
       if (run_verbose) {
         ATwarning("Parse table generation in fast mode\n");
@@ -360,12 +307,11 @@ int main(int argc, char *argv[])
       );
 
       if (!strcmp(moduleName, "-")) {
-        normterm = add_norm_function(expterm);   
+        pt = normalize_and_generate_table("Main", term);
       }
       else {
-        normterm = add_name_norm_function(moduleName, expterm);
+        pt = normalize_and_generate_table(moduleName, term);
       }
-      pt = normalize_and_generate_table(normterm);
 
       if (!strcmp(output, "") || !strcmp(output, "-"))
         iofile = stdout;
