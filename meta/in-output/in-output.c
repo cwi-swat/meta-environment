@@ -507,13 +507,13 @@ ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
 
 ATerm save_text_file(int cid, char *filename, char *text)
 {
-    FILE *fd;
+    FILE *file;
 
-    if(!(fd = fopen(filename, "w"))) {
+    if(!(file = fopen(filename, "w"))) {
 	ATwarning("%s: cannot create\n", filename);
     } else {
-	fprintf(fd, text);
-	fclose(fd);
+	fputs(text, file);
+	fclose(file);
     }
     return ATmake("snd-value(save-done(<str>))", filename);
 }

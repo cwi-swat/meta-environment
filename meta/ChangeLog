@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2000/7/31 ({jong,olivierp}@cwi.nl)
+   * Fixed bug in in-output that caused characters after % signs to dissappear
+
 2000/7/31 (jurgenv@cwi.nl)
    * added -l option to standalone evaluator to 
      toggle rewriting with layout.
