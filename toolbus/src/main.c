@@ -31,7 +31,7 @@ void bus_shutdown(term *arg)
   term *e = mk_appl1(a_rec_terminate, arg);
 
   if(arg)
-    TBprintf(stderr, "%t\n", arg);
+    TBprintf(stderr, "%t", arg);
 
   for(til = Tools; til; til = next(til)){
     ti = first(til);
