@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Asf+Sdf Meta-Environment Pages</title>
+    <link rev=MADE href="mailto:markvdb@cwi.nl">
+  </head>
+
+  <body>
+
+    <h1 ALIGN="CENTER">The Asf+Sdf Meta-Environment</h1>
+
+    This page describes the second generation Asf+Sdf Meta-Environment
+    developed at <a href="http://www.cwi.nl">CWI</a> and 
+    <a href="http://www.wins.uva.nl">UvA</a>. 
+
+    <p>The purpose of the Asf+Sdf Meta-Environment is to support the
+       development of language definitions in Asf+Sdf. Asf+Sdf is an
+       algebraic specification formalism baised towards describing
+       the syntax and semantics of (programming) language. The main
+       application areas of Asf+Sdf are language prototyping, and
+       reengineering.
+            
+    <h2>Development team</h2>
+    <p> The Asf+Sdf Meta-Environment is developed and maintained by:
+       <ul>
+          <li><a href="http://www.cwi.nl/~markvdb">Mark van den Brand</a>:
+                general design, compiler, parser generator,
+                interpreter, and module database.
+          <li><a href="http://www.cwi.nl/~mdejonge">Merijn de Jonge</a>
+		unparser, ToLaTeX, and unparser generator.
+          <li><a href="http://www.cwi.nl/~kuipers">Tobias Kuipers</a>:
+		general design, text- and structure editor.
+          <li><a href="http://www.cwi.nl/~leon">Leon Moonen</a>
+		user interface.
+          <li><a href="http://adam.wins.uva.nl/~olivierp">Pieter Olivier</a>
+		general design, interpreter, and debugger.
+          <li><a href="http://www.cwi.nl/~js">Jeroen Scheerder</a>
+		general design, and parser.
+       </ul>
+
+        If you have specific questions concerning the functionality of
+        one of the listed components please address the responsible
+        developer directly.
+
+    <h2>Components</h2>
+    <p> The Asf+Sdf Meta-Environment consists of the following main
+        components:
+        <ul>
+           <li> Parser Generator.
+           <li> Parser.
+           <li> (Unparser Generator).
+           <li> (Unparser).
+           <li> Compiler.
+           <li> Interpreter.
+           <li> (Debugger).
+           <li> Text editor: xemacs.
+           <li> Structure editor.
+           <li> User-interface.
+           <li> ToolBus as software coordination architecture.
+           <li> ATerms as interchange format.
+       </ul>
+
+    <h2>How to use the Asf+Sdf Meta-Environment</h2>
+
+    <p>The Asf+Sdf Meta-Environment is still in a pre-release state.
+       Both at CWI and at the UvA a pre-release version of the new
+       Asf+Sdf Meta-Environment is installed: 
+       <ul>
+         <li> At the UvA: /home/gipe/petr/bin (meta: 1 Dec 1999, 09:57)
+         <li> At CWI: 
+           <ul>    
+             <li> /ufs/gipe/petr/linux/i686/bin (meta: 24 Sep 1999, 16:47)
+             <li> /ufs/gipe/petr/irix/mips/bin (meta: 13 Oct 1999, 17:29)
+             <li> /ufs/gipe/petr/sunos/sparc/bin (meta: 5 Nov 1999, 09:08)
+           </ul>
+       </ul>
+       <p> The date and time between the brackets are the installation time
+           of the executables. 
+
+       <p> By adding the appropriate to our `paths' the new 
+           Asf+Sdf Meta-Environment can be activated via the
+           command `meta'.
+
+       <p> It is possible to create a file `meta.conf' which contains
+           all search paths that have to be inspected in order to obtain all
+           modules. If all modules are in the same directory
+           please create this file as well, but with only `.' as content.
+           If you are planning to use the compiler then make sure that
+           the variable `COMPILER_OUTPUT' is initialized if you want
+           the generated C files and Makefiles in a separate directory, e.g.,
+           <ul>
+             <li> setenv COMPILER_OUTPUT /home/user/c-source
+           </ul>
+           This mechanism may changed in the near future.
+
+    <h2>Known bugs and other shortcomings</h2>
+
+    <p>The current implementation of the new Asf+Sdf Meta-Environment is
+       still in a pre-release phase. One of the major changes is the redesign
+       of the ToolBus script. The following list is far from complete but
+       if you run into a problem which is not on the list please contact
+       us.
+       <ul>
+         <li> The current implementation of the structure editor is extremely
+              slow.
+         <li> If more than one module can not be found one of the pop up menu 
+              of the user interface gets into trouble.
+         <li> The manipulation of `empty' modules is not full proof.
+         <li> The parsing of the text of the focus if the focus is not
+              the entire `program' is not yet possible.
+         <li> The propagation of modifications in the syntax section of
+              a module to the rest of the specification is not yet fully 
+              tested.
+       </ul>
+
+     <h2>Version numbers of components</h2>
+
+     <p> Each main component has its own version number, the most up-to-date
+         version numbers are:
+        <ul> 
+          <li> ToolBus: ToolBus-0.11.6 
+          <li> ATerm library: version 0.19
+          <li> sglr: v2.21 
+          <li> ...
+       </ul>
+
+ <hr>
+    <address>
+    <a href="mailto:Mark.van.den.Brand@cwi.nl">M.G.J. van den Brand</a>
+      Last modified: $Date$
+    </address>
+  </body>
+</html>
