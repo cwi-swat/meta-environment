@@ -16,6 +16,7 @@
 #include <MEPT.h>
 #include <PTMEPT.h>
 #include <ASFME.h>
+#include <ErrorAPI.h>
 
 #include "asfe.tif.h"
 #include "evaluator.h"
@@ -173,7 +174,7 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
 
   result = (ATerm) runTests(eqsList, testList);
 
-  if (RWgetErrors() == NULL && !ERR_isFeedbackListEmpty(RWgetErrors())) {
+  if (RWgetErrors() == NULL || !ERR_isFeedbackListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
   }
   else {
@@ -219,6 +220,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  ERR_initErrorAPIApi();
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
 
@@ -300,7 +302,7 @@ int main(int argc, char *argv[])
     returncode = (RWgetErrors() == NULL || 
 		  !ERR_isFeedbackListEmpty(RWgetErrors())) ? 0 : 1;
 
-    if (RWgetErrors() != NULL ||
+    if (RWgetErrors() != NULL &&
 	!ERR_isFeedbackListEmpty(RWgetErrors())) {
       printErrors();
     }
