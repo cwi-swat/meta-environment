@@ -1,0 +1,19 @@
+#! /bin/sh
+
+set -e
+prefix=__PREFIX__
+TABLE=${prefix}/Rstore.trm.tbl
+RSTORE=${prefix}/Rstore
+RESULT=result.rstore
+
+echo -n "creating empty ${RESULT} .."
+echo "rstore()" | sglr -p ${TABLE} -o ${RESULT}
+echo " done."
+
+for f in $*; do
+  echo -n "merging $f into ${RESULT} .."
+  $RSTORE -f merge-rstores -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
+  echo " done."
+done
+
+ls -l ${RESULT}
