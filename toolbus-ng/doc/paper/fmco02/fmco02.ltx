@@ -306,7 +306,7 @@ we describe how a sample application could be implemented using
 the ToolBus. For this example, we consider the construction of an
 \emph{Address Book Service}.
 
-Entries in our \emph{AddressBookEntry} contain the following elements:
+Entries in our Address Book contain the following elements:
 
 \begin{description}
   \item[id] a unique \emph{id} (used for internal reference);
@@ -318,7 +318,7 @@ Entries in our \emph{AddressBookEntry} contain the following elements:
 \verbatiminput{AddressBookService.java}
 \end{footnotesize}
 
-Our \emph{address book service} will deal with the following use cases:
+Our Address Book Service will deal with the following use cases:
 
 \begin{description}
   \item[create] a new entry in the addressbook database;
@@ -329,7 +329,7 @@ Our \emph{address book service} will deal with the following use cases:
 
 Each of these use cases can be described as a ToolBus process which,
 together with a process that explains how these use cases interact,
-form the ToolBus script describing our \emph{Address Book Service}.
+form the ToolBus script describing our Address Book Service.
 
 \subsection{The \texttt{MAIN} process}
 
@@ -360,14 +360,13 @@ a separate section (one for each tool if multiple tools are involved):
 \begin{footnotesize}
 \begin{verbatim}
   tool address-book is {
-    command = "java-adapter -class TBAddressBookService"
+    command = "java-adapter -class AddressBookService"
   }
 \end{verbatim}
 \end{footnotesize}
 
-In this case, the we tell the ToolBus that our tool is written
-in Java, and that the main class to be started is called
-\texttt{TBAddressBookService}.
+In this case, the ToolBus is told that our tool is written in Java, and
+that the main class to be started is called \texttt{AddressBookService}.
 
 \subsection{The \texttt{CREATE} process}
 The \emph{creation} of a new addressbook entry can be described as
