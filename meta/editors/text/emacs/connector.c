@@ -28,6 +28,7 @@
 
 #define META_MENU_PREFIX "meta"
 
+#define ILLEGAL_MENU_CHARS " ()"
 #define ESCAPE_CHAR '\\'
 #define QUOTE '"'
 
@@ -51,10 +52,7 @@ static char *escapeQuotes(const char *input)
   p = input;
   s = buf;
   while (p && *p) {
-    if (*p == ESCAPE_CHAR) {
-      *s++ = ESCAPE_CHAR;
-    }
-    else if (*p == QUOTE) {
+    if (strchr("\\\"", *p)) {
       *s++ = ESCAPE_CHAR;
     }
     *s++ = *p++;
@@ -65,10 +63,9 @@ static char *escapeQuotes(const char *input)
 }
 
 /*}}}  */
+/*{{{  static char *stripIllegalMenuChars(const char *input) */
 
-/*{{{  static char *stripSpaces(const char *input) */
-
-static char *stripSpaces(const char *input)
+static char *stripIllegalMenuChars(const char *input)
 {
   static char buf[BUFSIZ];
   const char *p;
@@ -80,7 +77,10 @@ static char *stripSpaces(const char *input)
   s = buf;
 
   while (p && *p) {
-    if (*p != ' ') {
+    if (strchr(ILLEGAL_MENU_CHARS, *p)) {
+      *s++ = '_';  /* we could decide to remove them altogether */
+    }
+    else {
       *s++ = *p;
     }
     p++;
@@ -91,6 +91,7 @@ static char *stripSpaces(const char *input)
 }
 
 /*}}}  */
+
 /*{{{  static char *menuToString(TE_Menu menu) */
 
 static char *menuToString(TE_Menu menu)
@@ -135,7 +136,7 @@ static void addTopMenu(int write_to_editor_fd, const char *menu)
     char strippedMenu[BUFSIZ];
     char buf[BUFSIZ];
 
-    strcpy(strippedMenu, stripSpaces(menu));
+    strcpy(strippedMenu, stripIllegalMenuChars(menu));
     strcpy(mostRecentMenu, menu);
     sprintf(buf,
 	  "(define-key-after"
@@ -162,8 +163,8 @@ static void addSubMenu(int write_to_editor_fd, char *menu, char *item)
   char menuString[BUFSIZ];
   char escapedMenu[BUFSIZ];
 
-  strcpy(strippedMenu, stripSpaces(menu));
-  strcpy(strippedItem, stripSpaces(item));
+  strcpy(strippedMenu, stripIllegalMenuChars(menu));
+  strcpy(strippedItem, stripIllegalMenuChars(item));
   strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
   strcpy(escapedMenu, escapeQuotes(menuString));
 

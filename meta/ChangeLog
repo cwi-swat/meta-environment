@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Oct  8 13:27:47 CEST 2003 <jong@cwi.nl>
+ * editors/text/emacs/connector.c:
+   - eliminate ' ', '(', and ')' from emacs menu entry names. Closes: #60
+
 Tue Oct  7 15:16:48 CEST 2003 <jong@cwi.nl>
  * editors/text/common/*dict.[ch]:
    - re-generated after fix in aterm/dicttoc tool to fix gcc-3.3.1 warnings
