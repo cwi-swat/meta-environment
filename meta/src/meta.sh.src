@@ -14,7 +14,7 @@ xemacs=__XEMACS__
 graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
 metastudio_def=__METASTUDIO_DEF__
-
+asf_library_path=__ASF_LIBRARY__/share/asf-library
 wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
@@ -99,7 +99,7 @@ do
                 configfile=$1
                 ;;    
         -d)
-		xargs="$xargs -viewer" ;;
+		xargs="${xargs} -viewer" ;;
 	-e)
 		editor="emacs-editor" ;;
 	-g)
@@ -109,9 +109,9 @@ do
         -t)
 		;;
         -T)
-		shift; xargs="$xargs -TB_PORT $1" ;;
+		shift; xargs="${xargs} -TB_PORT $1" ;;
         -v)
-		xargs="$xargs -logger"
+		xargs="${xargs} -logger"
 		verbose=1 ;;
 	-V)
 		Version ; exit 0 ;;
@@ -128,7 +128,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\""
 
 if [ $verbose -gt 0 ] ; then
    set -x
