@@ -1,108 +1,6 @@
- definition module basic/Whitespace
 
-exports
-  lexical syntax
-    [\ \t\n\r]	-> LAYOUT
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n\r] module basic/Comments
-
-imports
-  basic/Whitespace
-
-exports
-  lexical syntax
-    "%%" ~[\n]* "\n"	-> LAYOUT
-    "%" ~[\%\n]+ "%"	-> LAYOUT
-  context-free restrictions
-    LAYOUT? -/- [\%] module basic/NatCon
-
-exports
-
-sorts NatCon
-
-lexical syntax
-  
- [0-9]+ -> NatCon {cons("default")}
-
-lexical restrictions
-
- NatCon -/- [0-9] module basic/StrCon
-
-exports
-
-sorts StrCon Normal Escaped
-
-
-lexical syntax
-    ~[\0-\31\"\\\n] -> Normal {cons("default")}
-
-    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
-    "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
-
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")} module languages/box/syntax/Basic
-%% This module describes the most elementary box
-%% operators and their options. The box language
-%% can be extended in a very simple way. We will
-%% give several extensions.
-%%\smallskip
-
-imports basic/Comments
-imports basic/StrCon
-imports basic/NatCon
-
-        
-exports
-  sorts SpaceSymbol SpaceOption
-
-%%\smallskip\noindent
-%% Space options are used to adapt the amount
-%% of layout between the boxes. The horizontal,
-%% vertical, and indentation offset between boxes
-%% can be adapted. Not every combination of
-%% space option and box operator makes sense.
-%% E.g.\ the modification of the vertical offset
-%% in combination of the {\sf H} operator does
-%% not make any sense.
-%%\smallskip
-
-  context-free syntax
-    "hs"                    -> SpaceSymbol {cons("horizontal")}
-    "vs"                    -> SpaceSymbol {cons("vertical")}
-    "is"                    -> SpaceSymbol {cons("indentation")}
-    SpaceSymbol "=" NatCon  -> SpaceOption     
-
-%% We distinguish 6 basic operators in the box
-%% language: {\sf H} (horizontal composition),
-%% {\sf V} (vertical composition), {\sf HV}
-%% (horizontal and/or vertical composition),
-%% {\sf HOV} (horizontal or vertical composition),
-%% {\sf I} (indentation), and {\sf WD}
-%% (invisible box with the same width as some
-%% visible box). The most elementary box is a
-%% plain string, enclosed by double quotes.
-%% A box term consists of a box operator, zero
-%% or more space options, and followed by zero or
-%% more boxes. The kernel box language is simple
-%% but can be easily extended. A specification
-%% writer can easily define a new module which
-%% imports this kernel box language. For each
-%% extension the text formatter and the
-%% tex formatter have to be adapted, but because
-%% of the strong modularity of ASF+SDF this can
-%% be done in a clean manner.
-%%\smallskip
-
-exports
-  sorts Box
-
-  context-free syntax
-    StrCon                                       -> Box {cons("string")}
-    "H" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("h")}
-    "V" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("v")}
-    "HV" options:SpaceOption* "[" list:Box* "]"  -> Box {cons("hv")}
-    "HOV" options:SpaceOption* "[" list:Box* "]" -> Box {cons("hov")}
-    "I" options:SpaceOption* "[" Box "]"         -> Box {cons("i")}
-    "WD" "[" Box "]"                             -> Box {cons("wd")} module languages/box/syntax/Fonts
+definition
+module languages/box/syntax/Fonts
 
 imports languages/box/syntax/Basic
 imports basic/Comments
@@ -134,7 +32,114 @@ exports
     "MATH"    -> FontOperator {cons("math")}
     "ESC"     -> FontOperator {cons("escape")}
     "COMM"    -> FontOperator {cons("comment")}
-    "STRING"  -> FontOperator {cons("string")} module languages/box/syntax/Box
+    "STRING"  -> FontOperator {cons("string")}
+module languages/box/syntax/Comments
 
+%% The comments occurring in the orginal text must be
+%% restored in the resulting text. 
+
+imports languages/box/syntax/Basic
+exports
+  context-free syntax
+    "COMM" "[" list: Box* "]" -> Box
+
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("digits")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+module basic/StrCon
+
+exports
+
+sorts StrCon StrChar
+
+lexical syntax
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> StrChar {cons("decimal")}
+    ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
+
+    [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested")}
+  context-free restrictions
+    LAYOUT? -/- [\%]
+module languages/box/syntax/Basic
+
+imports basic/Comments
+imports basic/StrCon
+imports basic/NatCon
+        
+exports
+  sorts SpaceSymbol SpaceOption
+
+  context-free syntax
+    "hs"                    -> SpaceSymbol {cons("horizontal")}
+    "vs"                    -> SpaceSymbol {cons("vertical")}
+    "is"                    -> SpaceSymbol {cons("indentation")}
+    "ts"                    -> SpaceSymbol {cons("tabstop")}
+    SpaceSymbol "=" NatCon  -> SpaceOption     
+
+exports
+  sorts Box
+
+  context-free syntax
+    StrCon                                       -> Box {cons("string")}
+    "H" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("h")}
+    "V" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("v")}
+    "HV" options:SpaceOption* "[" list:Box* "]"  -> Box {cons("hv")}
+    "HOV" options:SpaceOption* "[" list:Box* "]" -> Box {cons("hov")}
+    "I" options:SpaceOption* "[" Box "]"         -> Box {cons("i")}
+    "WD" "[" Box "]"                             -> Box {cons("wd")}
+module languages/box/syntax/Alignments
+
+imports languages/box/syntax/Basic
+
+exports
+  sorts AlignmentOption AlignmentOptions
+  context-free syntax
+    "A" alignments:AlignmentOptions options:SpaceOption* "[" list:Box* "]" 
+      -> Box {cons("alignment")}
+    "R" "[" list:Box* "]" -> Box {cons("row")}
+
+    "l" options:SpaceOption* -> AlignmentOption {cons("left")}
+    "c" options:SpaceOption* -> AlignmentOption {cons("centre")}
+    "r" options:SpaceOption* -> AlignmentOption {cons("right")}
+
+    "(" {AlignmentOption ","}* ")" -> AlignmentOptions
+
+module languages/box/syntax/Box
+
+imports languages/box/syntax/Alignments
+imports languages/box/syntax/Comments
 imports languages/box/syntax/Fonts
- 
+
+hiddens
+  context-free start-symbols
+    Box
