@@ -34,6 +34,12 @@ AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
 
 dnl }}}
+dnl {{{  Is ranlib needed on this system?
+
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+dnl }}}
 dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
