@@ -20,7 +20,7 @@
 bin_PROGRAMS         = toolbus ctif
 bin_SCRIPTS          = idef2tif
 
-data_DATA            = logger.tcl viewer.tcl
+pkgdata_DATA            = logger.tcl viewer.tcl
 
 EXTRA_DIST           = txt_dbg.c logger.tcl.src viewer.tcl.src \
                        script.l script.y idef2tif.src
@@ -43,8 +43,8 @@ YFLAGS               = -d
 #DEBUG_DEFS	     = -DDBG_PROC_COMM
 
 TOOLBUS_DEFS         = -DCPP='"$(CPP) $(CPPFLAGS)"' \
-                       -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
-                       -DLOGGER_TCL=\"$(datadir)/logger.tcl\" \
+                       -DVIEWER_TCL=\"$(pkgdatadir)/viewer.tcl\" \
+                       -DLOGGER_TCL=\"$(pkgdatadir)/logger.tcl\" \
 		       ${DEBUG_DEFS}
 
 INCLUDES            = -I$(TOOLBUSLIB)/include -I$(srcdir) -I. $(TOOLBUS_DEFS)
