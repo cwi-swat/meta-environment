@@ -17,7 +17,11 @@
 #include <asfix.h>
 #include <term-list.h>
 #include <abbrevs.h>
+#include <sys/times.h>
+#include <limits.h>
 #include "compiler.tif.c"
+
+#define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
 aterm *expand_to_asfix(arena *ar,aterm *mod,char *name);
 int print_source(FILE *f, aterm *term);
@@ -468,10 +472,13 @@ aterm *compile_modules(int cid,aterm_list *mods)
   FILE *output;
   int len;
   arena local;
+  struct tms start, compiling;
+  clock_t user, system;
 
   TinitArena(t_world(mods), &local);
 
   Tprintf(stderr,"Compiling ... %t\n",mods);
+  times(&start);
   newmods = reshuffle_modules(&local,mods);
   modlist = newmods;
   Tprotect(modlist);
@@ -511,6 +518,12 @@ aterm *compile_modules(int cid,aterm_list *mods)
   Tunprotect(modlist);
   TdestroyArena(&local);
   /*print_source(stderr,expmod);*/
+  times(&compiling);
+
+  user = compiling.tms_utime - start.tms_utime;
+  system = compiling.tms_stime - start.tms_stime;
+  fprintf(stderr, "compilation: %f user, %f system\n", 
+	 TICK2SEC(user), TICK2SEC(system));
   return result;
 }
 
