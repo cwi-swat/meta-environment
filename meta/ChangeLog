@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Sep 30 10:18:45 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * ./reconf: first remove generated ./libtool, so it will not be found
+   as "the" libtool when subsequently trying to find the system libtool
+
 2003/09/29 <markvdb@cwi.nl>
  * Fixed a problem with deleting a module.
 
