@@ -20,7 +20,8 @@ abstract public class SwingTool
 	try {
 	  handleTerm(t);
 	} catch (IOException e) {
-	  throw new RuntimeException(e);
+	  e.printStackTrace();
+	  throw new RuntimeException(e.getMessage());
 	}
       }
     };
