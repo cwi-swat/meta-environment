@@ -66,7 +66,8 @@ LIBFILES	= meta.tb editor.tb clear-all.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb compiler.tb pgen.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
-	          evaluator.tb revert-module.tb help.tb
+	          evaluator.tb revert-module.tb help.tb \
+	          anno.tb se.tb
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
