@@ -106,7 +106,8 @@ let
   Tree          : term,
   EditorId      : term,
   Term          : term,
-  Pid           : int
+  Pid           : int,
+  LibraryPath   : str
 in
   execute(configmanager, CMNG?) .
   snd-msg(get-config-file(CONFIG_FILE)) .
@@ -118,7 +119,9 @@ in
     snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
   ) .
   rec-value(CMNG, search-paths(Paths?)) .
-  Paths := join(Paths, ASF_LIBRARY_PATH) .
+  snd-msg(library-location-hook).
+  rec-msg(library-location-hook-result(LibraryPath?)).
+  Paths := join(Paths, LibraryPath) .
   snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
   rec-msg(search-paths-processed(CONFIG_FILE)) .
   ProcessButtons(CMNG) .
