@@ -354,17 +354,15 @@ hiddens
   sorts Literal
 exports
   lexical syntax
-    "\\" ~ []			-> AlphaNumericalEscChar {cons("default")}
-    "\\" [01] [0-9] [0-9]	-> DecimalEscChar	 {cons("dec0_199")}
-    "\\" "2" [0-4] [0-9]	-> DecimalEscChar	 {cons("dec200_249")}
-    "\\" "2" "5" [0-5]		-> DecimalEscChar	 {cons("dec250_255")}
-    alpha:AlphaNumericalEscChar	-> EscChar		 {cons("alpha-numeric")}
-    decimal:DecimalEscChar	-> EscChar		 {cons("decimal")}
-    ~ [\0-\31\"\\] \/ [\t\n]	-> L-Char		 {cons("normal")}
-    EscChar			-> L-Char		 {cons("escaped")}
-    "\"" chars:L-Char* "\""	-> Literal		 {cons("quoted")}
-  lexical restrictions
-    AlphaNumericalEscChar -/- [0-9]      
+    "\\" ~[012]			 -> AlphaNumericalEscChar {cons("default")}
+    "\\" [01] [0-9] [0-9]	 -> DecimalEscChar	 {cons("dec0_199")}
+    "\\" "2" [0-4] [0-9]	 -> DecimalEscChar	 {cons("dec200_249")}
+    "\\" "2" "5" [0-5]		 -> DecimalEscChar	 {cons("dec250_255")}
+    alpha:AlphaNumericalEscChar	 -> EscChar		 {cons("alpha-numeric")}
+    decimal:DecimalEscChar	 -> EscChar		 {cons("decimal")}
+    ~ [\0-\31\"\\] \/ [\t\n\013] -> L-Char		 {cons("normal")}
+    EscChar			 -> L-Char		 {cons("escaped")}
+    "\"" chars:L-Char* "\""	 -> Literal		 {cons("quoted")}
 
 module ATerms
 imports Literals IntCon RealCon
@@ -399,9 +397,9 @@ hiddens
   sorts Character NumChar ShortChar
 exports
   lexical syntax
-    [\\] [0-9]+                    -> NumChar   {cons("digits")}
-    [a-zA-Z0-9]                    -> ShortChar {cons("regular")}
-    [\\] ~[\0-\31A-Za-mo-su-z0-9]  -> ShortChar {cons("escaped")}
+    [\\] [0-9]+                     -> NumChar   {cons("digits")}
+    [a-zA-Z0-9]                     -> ShortChar {cons("regular")}
+    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
   context-free syntax
     NumChar   -> Character {cons("numeric")}
     ShortChar -> Character {cons("short")}
