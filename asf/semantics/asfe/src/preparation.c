@@ -666,7 +666,6 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = prepareTerm(PT_getTreeBracketTree(tree), data);
   }
   else if (mark_new_layout && in_equations && PT_isTreeLayout(tree)) {
-    ATwarning("layout\n");
     result = PT_makeTreeLayoutFromString(PRETTY_PRINT_MARKER);
   }
   else if (PT_isTreeAppl(tree)) {
