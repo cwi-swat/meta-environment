@@ -1,0 +1,48 @@
+module LabelChecker
+
+imports Booleans Messages ModuleOperations
+
+exports
+  context-free syntax
+    check-labels(Definition) -> Messages
+
+hiddens
+  sorts LabelsSet Labels-Msgs-Tuple
+
+  context-free syntax
+    labels(Literal*)               -> LabelsSet
+    "[" LabelsSet "," Messages "]" -> Labels-Msgs-Tuple
+
+  context-free syntax
+    contains(Literal, LabelsSet) -> Bool
+    Literal "++" LabelsSet       -> LabelsSet
+
+  context-free syntax
+    check-labels(Definition, Messages)            -> Messages {traversal(accu, top-down)}
+    check-labels(Module, Messages)                -> Messages {traversal(accu, top-down)}
+    check-labels(Module, Messages, ModuleId)      -> Messages {traversal(accu, top-down)}
+    check-labels(Production, Messages, ModuleId)  -> Messages {traversal(accu, top-down)}
+    check-labels(Symbol*, Labels-Msgs-Tuple, 
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)}
+    check-labels({Symbol ","}*, Labels-Msgs-Tuple, 
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)}
+    check-labels(Symbol, Labels-Msgs-Tuple, 
+                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, top-down)}
+
+hiddens
+  variables
+    "Prod"[0-9]*       -> Production
+    "Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*  -> ModuleId
+    "Definition"[0-9]* -> Definition
+    "Msgs"[0-9]*       -> Messages
+    "$Symbol"[0-9]*    -> Symbol
+    "$Literal"[0-9]*   -> Literal
+    "$Literal*"[0-9]*  -> Literal*
+    "Symbol*"[0-9]*    -> Symbol*
+    "Symbol,*"[0-9]*   -> {Symbol ","}*
+    "Attrs"[0-9]*      -> Attributes
+
+    "LabelsSet"[0-9]*  -> LabelsSet
+
+

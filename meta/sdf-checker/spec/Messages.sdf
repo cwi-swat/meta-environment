@@ -16,6 +16,7 @@ exports
     used-in-priorities-but-undefined(ModuleId, ProductionsSet)   -> Message
     kernel-syntax-construction(ModuleId, Literal)                -> Message
     inconsistent-rhs-in-priorities(ModuleId, Symbol, Production) -> Message
+    double-used-label(ModuleId, Literal, Production)             -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages
