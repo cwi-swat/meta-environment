@@ -78,12 +78,16 @@ AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
 AC_SUBST(ASC_SUPPORT)
 
 dnl Handle --enable-metastudio argument to configure
-AC_ARG_ENABLE(metastudio,
-   [  --enable-metastudio     Use Swing GUI instead of Tk GUI],
-   METASTUDIO_DEF=-DMETASTUDIO
-   UI_PACKAGE=meta-studio,
-   UI_PACKAGE=graph-browser
-)
+dnlAC_ARG_ENABLE(metastudio,
+dnl   [  --enable-metastudio     Use Swing GUI instead of Tk GUI],
+dnl   METASTUDIO_DEF=-DMETASTUDIO
+dnl   UI_PACKAGE=meta-studio,
+dnl   UI_PACKAGE=graph-browser
+dnl)
+
+METASTUDIO_DEF=-DMETASTUDIO
+UI_PACKAGE=meta-studio
+
 AC_SUBST(METASTUDIO_DEF)
 AC_SUBST(UI_PACKAGE)
 
