@@ -19,7 +19,8 @@
 \newcommand{\asf}{{\sc Asf}}
 \newcommand{\sdf}{{\sc Sdf}}
 \newcommand{\Tscript}{{\sc Tscript}}
-
+\newcommand{\aterm}{\mbox{ATerm}}
+\newcommand{\aterms}{\mbox{ATerms}}
 \newcommand{\spec}[1]{\texttt{#1}}
 
 %%\newcommand{\note}[1]{{\bf Note}: {\it #1 }}
@@ -29,7 +30,7 @@
 \pagestyle{plain}
 
 \title{ToolBus: The Next Generation}
-\author{Hayco de Jong\inst{1} and Paul Klint\inst{1,2}}
+\author{Hayco de Jong\inst{1} \and Paul Klint\inst{1,2}}
 
 \institute{Centrum voor Wiskunde en Informatica, The Netherlands
 \and
@@ -39,11 +40,12 @@ Informatics Institute, University of Amsterdam, The Netherlands}
 \maketitle
  
 \begin{abstract}
+
 The \TB\ is a software coordination architecture for the integration
 of components written in different languages running on different
 computers. It has been used since 1994 in a variety of projects, most
-notably in the complete renovation of the \asdf\ Meta-Environment.  In
-this paper we summarize the experience that has been gained in these
+notably in the complete renovation of the \asdf\ Meta-Environment.
+In this paper we summarize the experience that has been gained in these
 projects and sketch preliminary ideas how the \TB\ can be further
 improved. Topics to be discussed include the structuring of message
 exchanges, crash recovery in distributed applications, and call-by-value
@@ -84,15 +86,16 @@ new and has to be designed from scratch.
 \begin{figure}[tb]
 \epsfig{figure=figs/generator.eps,width=\textwidth,height=12cm}
 \vspace*{-7.5cm}
-\caption{\label{Fig:generator}From language definition to generated programming environment}
+\caption{\label{Fig:generator}From language definition to generated
+programming environment}
 \end{figure}
 
 \subsection{One realization: the \asdf\ Meta-Environment}
 
-The \asdf\ Meta-Environment~\cite{Klint93,BDHJJKKMOSVVV01} is an incarnation of the
-approach just described and covers both the interactive development of
-language definitions and the generation of tools based on these
-language definitions.
+The \asdf\ Meta-Environment~\cite{Klint93,BDHJJKKMOSVVV01} is an
+incarnation of the approach just described and covers both the interactive
+development of language definitions and the generation of tools based
+on these language definitions.
 
 In this paper we are primarily interested in the \emph{software
 engineering aspects} of building such a system. Starting point is the
@@ -131,22 +134,22 @@ drawbacks:
 \item The specification lacked generality. It would, for instance, have
 been a major change to add the description of a new component.
 
-\item The effort to write the PSF specification was significant and there was no
-way to derive an actual implementation from it.
+\item The effort to write the PSF specification was significant and
+there was no way to derive an actual implementation from it.
 
 \end{itemize}
 
 In 1994, the first version of the \TB\ was
 completed~\cite{BergstraKlint94,TB-COORD96}.  The key idea was to
-organize a system along the lines of a software bus and to make this
-bus programmable by way of a scripting language (\Tscript) that was
-based on ACP (Algebra of Communicating Processes, \cite{BergstraKlop86}).
-Another idea was to use a uniform data format (called \TB\ terms) to
-exchange data between \TB\ and tools.  At the implementation level,
-\Tscript{}s were executed by an interpreter and communication between
-tools and \TB\ took place using TCP/IP sockets. In this way,
-multi-language, distributed, applications could be built with
-significantly less effort than using plain C and sockets.
+organize a system along the lines of a software bus and to make this bus
+programmable by way of a scripting language (\Tscript) that was based on
+ACP (Algebra of Communicating Processes, \cite{BergstraKlop86}).  Another
+idea was to use a uniform data format (called \TB\ terms) to exchange
+data between \TB\ and tools.  At the implementation level, \Tscript{}s
+were executed by an interpreter and communication between tools and \TB\
+took place using TCP/IP sockets. In this way, multi-language, distributed,
+applications could be built with significantly less effort than using
+plain C and sockets.
 
 Based on various
 experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},
@@ -159,9 +162,9 @@ used for the restructuring of the \asdf\ Meta-Environment~\cite{BHK97}. A
 first version was released in 2001~\cite{BDHJJKKMOSVVV01}.
 
 In the meantime, the exchange format has also evolved from the toolbus
-terms mentioned above to ATerms~\cite{BJKO00}: a term format that
+terms mentioned above to \aterms~\cite{BJKO00}: a term format that
 supports maximal subterm sharing and a very concise, sharing preserving,
-binary exchange format. ATerms decrease memory usage thanks to sharing
+binary exchange format. \aterms\ decrease memory usage thanks to sharing
 and they permit a very fast equality test since structural equality can
 be replaced by pointer equality thanks to the maximal subterm sharing.
 
@@ -174,7 +177,20 @@ the implications for the \TB\ design and implementation?
 
 \subsection{Plan of this Paper}
 
-\section{Coordination, Representation and Computation}
+In \S\ref{Sec:toolbus-architecture} we discuss component coordination,
+representation and computation and introduce the \TB: our component
+coordination architecture. Following, in \S\ref{Sec:example},
+we demonstrate some of the \TB-features by means of an example. In
+\S\ref{Sec:application} we show how we used the \TB\ in the \asdf\ Meta
+Environment to migrate from a monolithic to a distributed architecture.
+Then, in \S\ref{Sec:issues-NG} we elaborate on the various issues that
+we would like to tackle in a next generation of the \TB. We conclude the
+paper with an overview of the current status of our current implementation
+of this next generation \TB\ (\S\ref{Sec:status}) and some concluding
+remarks (\S\ref{Sec:conclusion}).
+
+
+\section{The \TB\ Architecture}\label{Sec:toolbus-architecture}
 
 \begin{figure}[tb]
 \begin{center}
@@ -191,11 +207,12 @@ architecture of a software system can be improved by separating
 \emph{representation} and use the following definitions:
 
 \begin{itemize}
+
 \item Coordination: the way in which program and system parts interact
-  (using procedure calls, remote method invocation, middleware, and others).
+(using procedure calls, remote method invocation, middleware, and others).
 
 \item Representation: language and machine neutral data exchanged
-  between components.
+between components.
 
 \item Computation: program code that carries out a specialized task.
 
@@ -205,20 +222,20 @@ Our assumption is now that \emph{a rigorous separation of coordination
 from computation leads to flexible and reusable systems.} The approach
 is illustrated in Figure~\ref{Fig:component-architecture}.
 
-In the case of the \asdf\ Meta-Environment, empirical evidence shows
-that
-\begin{itemize}
-\item The \TB-based version of the \asdf\ Meta-Environment is more
-flexible as illustrated by the fact that clones of the
-Meta-Environment start to appear for other languages than
-\asdf. Examples are Action Semantics~\cite{Mosses02} and Elan~\cite{XXX}.
+In the case of the \asdf\ Meta-Environment, empirical evidence shows that
 
-\item Various components of the \asdf\ Meta-Environment are being
-reused in other projects~\cite{XXX}.
+\begin{itemize}
+
+\item The \TB-based version of the \asdf\ Meta-Environment is more
+flexible as illustrated by the fact that clones of the Meta-Environment
+start to appear for other languages than \asdf. Examples are Action
+Semantics~\cite{Mosses02} and Elan~\cite{BR01}.
+
+\item Various components of the \asdf\ Meta-Environment are being reused
+in other projects~\cite{DamsGroote95,mucrl-toolset}.
 
 \end{itemize}
 
-\section{The \TB\ Architecture}
 
 \begin{figure}[tb]
 \begin{center}
@@ -290,7 +307,7 @@ software bus as illustrated in Figure~\ref{Fig:toolbus-architecture}. The
 is described by a \Tscript\ that runs inside the \TB. The result is a
 set of concurrent processes inside the \TB\ that can communicate with
 each other and with the tools. Tools can be written in any language and
-can run on different machines. They exchange data by way of ATerms.
+can run on different machines. They exchange data by way of \aterms.
 
 A typical cooperation scenario is illustrated in
 Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
@@ -311,7 +328,7 @@ even know about each others existence.
 The primitives that can be used in \Tscript{}s are listed in
 Table~\ref{Tab:Tscript-features}. 
 
-\section{An example: the Address Book Service}
+\section{An example: the Address Book Service}\label{Sec:example}
 
 To make the scenario from Figure~\ref{Fig:toolbus-scenario} more concrete,
 we describe the construction of an address book holding (name, address)
@@ -384,15 +401,15 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-The request to create a new address book entry is received and
-delegated to the tool, so it can update its state. In this case, our
-tool yields a unique id for reference to the new entry, which is
-returned as the result of the creation message. Note that
-communication between processes involves the matching of the arguments
-of \texttt{snd-msg} and \texttt{rec-msg}. The same holds for the
-communication between a process and a tool using \texttt{snd-eval} and
-\texttt{rec-value}. In all these cases, a \emph{result variable} of the form
-\texttt{V?} gets a value assigned as the result of a successful match.
+The request to create a new address book entry is received and delegated
+to the tool, so it can update its state. In this case, our tool yields
+a unique id for reference to the new entry, which is returned as
+the result of the creation message. Note that communication between
+processes involves the matching of the arguments of \texttt{snd-msg}
+and \texttt{rec-msg}. The same holds for the communication between a
+process and a tool using \texttt{snd-eval} and \texttt{rec-value}. In
+all these cases, a \emph{result variable} of the form \texttt{V?} gets
+a value assigned as the result of a successful match.
 
 \paragraph{The \texttt{DELETE} process} differs only from the CREATE
 process in that it does not need a return value:
@@ -507,7 +524,7 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-\section{Application to the \asdf\ Meta-Environment}
+\section{Application to the \asdf\ Meta-Environment}\label{Sec:application}
 
 \begin{figure}[tb]
 \begin{center}
@@ -586,15 +603,16 @@ are \Tscript{}s. This is compatible with the expectation that \Tscript{}s
 are relatively small and form high-level ``glue'' to connect much larger
 components.
 
-%% \textbf{Part of the C code is generated by ApiGen; it might be
-%%   interesting to measure ApiGen in put and its output.}
+Part of the generated C code is currently done by ApiGen\cite{apigen}:
+an API generator which takes an \sdf\ grammar as input and generates
+a C library which gives type-safe access to the underlying \aterm\
+representation of the parse trees over this grammar.
 
 Another conclusion from these facts is that low-level information for
 building the software (makefiles and configuration scripts) are of the
 same size as the high level \Tscript{}s. This points into the direction
-that the level of these build scripts should be raised. This
-conclusion will, however, not be further explored in this paper.
-
+that the level of these build scripts should be raised. This conclusion
+will, however, not be further explored in this paper.
 
 Another view is given in Table~\ref{Tab:Tscript-stats} where the frequency
 of occurrence of \Tscript\ primitives is shown.  Clearly, sequential
@@ -602,13 +620,13 @@ composition (\spec{.}) is the dominant operator and sending/receiving
 (\spec{snd-msg}, \spec{rec-msg}) messages is the dominant communication
 mechanism, followed by communication with tools (\spec{snd-do},
 \spec{snd-eval}).  It may be surprising that parallel composition
-(\spec{||}) is used so infrequently. However, one should be aware that at
-the top level all \TB\ processes run concurrently and that \spec{||}
+(\spec{||}) is used so infrequently. However, one should be aware that
+at the top level all \TB\ processes run concurrently and that \spec{||}
 is only used for explicit concurrency inside a process. The level of
 concurrence is therefore approximately 100 ($104$ process definitions
 and $3$ explicit \spec{||} operators).
 
-\section{Issues in a Next-Generation \TB} \label{Sec:issues-NG} 
+\section{Issues in a Next-Generation \TB}\label{Sec:issues-NG} 
 
 The \TB\ has been used in various applications of which the
 Meta-Environment is by far the largest. Some of the questions
@@ -660,13 +678,13 @@ call the caller suspends execution and the callee executes until it
 has computed a reply. At that point in time, the caller continues its
 execution.
 
-Compare this simple situation with general message communication as
-shown in Figure~\ref{Fig:message}: the caller continues execution
-after sending a message \emph{msg1} to \emph{Callee1} and may even send a message
-\emph{msg2} to \emph{Callee2}.  At a certain point in time \emph{Callee2} may send message
-\emph{msg3} back to \emph{Caller}. In this case, the three parties involved
-continue their execution while messages are being exchanged and
-there is no obvious pairing of calls and replies.
+Compare this simple situation with general message communication as shown
+in Figure~\ref{Fig:message}: the caller continues execution after sending
+a message \emph{msg1} to \emph{Callee1} and may even send a message
+\emph{msg2} to \emph{Callee2}.  At a certain point in time \emph{Callee2}
+may send message \emph{msg3} back to \emph{Caller}. In this case, the
+three parties involved continue their execution while messages are being
+exchanged and there is no obvious pairing of calls and replies.
 
 In the \TB\ case, a \spec{snd-msg} and a \spec{rec-msg} can interact
 with each other if their arguments match. A typical sequence is:
@@ -850,13 +868,12 @@ It is the prevalent mechanism in, for instance, CORBA~\cite{corba}.
 However, uncontrolled modifications by different parties can lead to
 disaster.
 
-Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values
-and any sharing between calls is lost.\footnote{This is of particular
-interest to us, as we want to preserve sharing in huge parse trees.}
-In the case of Java RMI~\cite{java-rmi}, value transmission is achieved
-via serialization and works only for communication with other Java
-components. Using IIOP~\cite{iiop} communication with non-Java components
-is possible.
+Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values and
+any sharing between calls is lost. To us, this is of particular interest,
+because we need to preserve sharing in huge parse trees.  In the case of
+Java RMI~\cite{java-rmi}, value transmission is achieved via serialization
+and works only for communication with other Java components. Using
+IIOP~\cite{iiop} communication with non-Java components is possible.
 
 
 \paragraph{Current \TB\ approach}
@@ -866,13 +883,13 @@ is possible.
 \epsfig{figure=figs/toolbus-values.eps,height=12cm}
 \end{center}
 \vspace*{-8cm}
-\caption{\label{Fig:toolbus-values}Value-based (a) versus channel-based (b) transmission in
-  the \TB}
+\caption{\label{Fig:toolbus-values}Value-based (a) versus channel-based
+(b) transmission in the \TB}
 \end{figure}
 
 Currently, the \TB\ provides a transport mechanism based on
 call-by-value as shown in Figure~\ref{Fig:toolbus-values}(a). It is
-transparent since the transmitted values are ATerms (see
+transparent since the transmitted values are \aterms\ (see
 \S\ref{SEC:ME-history}) that can be exchanged with components written
 in any language. Since pure values are exchanged, there is no need for
 distributed garbage collection.
@@ -998,12 +1015,12 @@ Java interface, just as in plain RMI.
 
 \paragraph{Java IDL}
 
-Apart from Java RMI, which is optimized for connecting components
-that are all written in Java, there is also a connection from Java to
-CORBA\cite{corba} using the Java Interface Definition Language (IDL). This
-alternative to Java RMI is for Java programmers who want to program in
-the Java programming language, based on interfaces defined in the CORBA
-Interface Definition Language.
+Apart from Java RMI, which is optimized for connecting components that
+are all written in Java, there is also a connection from Java to CORBA
+using the Java Interface Definition Language (IDL). This alternative
+to Java RMI is for Java programmers who want to program in the Java
+programming language, based on interfaces defined in the CORBA Interface
+Definition Language.
 
 Using this bridge, it becomes possible to let Java components communicate
 with CORBA objects written in any language that has Interface Definition
@@ -1056,7 +1073,7 @@ is written. In the \TB\ setting, these signatures are generated from
 the \TB\ script which describes much more of the component's behavior
 in terms of method call interaction, rather than just method signatures.
 
-\item The \TB\ takes care of garbage collection of the ATerms that
+\item The \TB\ takes care of garbage collection of the \aterms\ that
 are used to represent data as it is sent from one component to another.
 RMI allows programmers access to Java's Distributed Garbage Collection
 API. In RMI-IIOP and Java IDL however, this is not possible, because
@@ -1071,18 +1088,24 @@ the components abide by IDL prescribed interfaces which have ``in''
 and ``out'' parameters.  There are no return values, but parameters are
 marked as incoming, outgoing, or both (``in/out'' parameters).
 
-\item The \TB\ allows components in any language for which a
-\TB\ adapter exist. Programming languages such as C and Java are
-supported, but adapters also exist for a wide range of applications,
-including e.g. Prolog, MySQL, \asdf. In RMI, only Java components
-can be connected; in RMI-IIOP the service is implemented in Java, its
+\item The \TB\ allows components in any language for which a \TB\
+adapter exist. Programming languages such as C and Java are supported,
+but adapters also exist for a wide range of applications, including
+e.g. Prolog, MySQL, and \asdf. In RMI, only Java components can
+be connected; in RMI-IIOP the service is implemented in Java, its
 functionality (client-side) is available to CORBA clients. The Java IDL
 framework is fully CORBA compliant.
 
 \item Only the \TB\ has coordination support for component interaction.
-In the three other cases any undesired sequence of incoming and outgoing
-method calls will have to be prohibited by adding code to the component's
-internals.
+In the three other cases any undesired sequence of incoming and
+outgoing method calls will have to be prohibited by adding code to the
+component's internals. Whereas RMI, RMI-IIOP and Java IDL just perform
+the \emph{wiring} that connects the components, the \TB\ also provides
+\emph{workflow} support. In relation to this workflow support, it would
+be interesting to compare the \TB\ to related workflow description
+languages such as the Business Process Modeling language~\cite{bpml}
+and the Web Services Description Language~\cite{wsdl}.
+
 
 \end{itemize}
 
@@ -1104,7 +1127,7 @@ to more than one receiving tool and the sender does not known when all
 receivers have retrieved their copy.  Adding expiration times to values
 or reference counting at the \TB\ level may solve this problem.
 
-\section{Current Status} \label{Sec:status}
+\section{Current Status}\label{Sec:status}
 
 The current \TB\ was first specified in \asdf\ and has then been
 implemented manually in C. Its primary target was the renovation of the
@@ -1145,7 +1168,20 @@ that has a SOAP interface.
 \noindent A prototype implementation is under development that allows
 experimentation with the features mentioned in this paper.
 
-\section{Concluding Remarks}
+\section{Concluding Remarks}\label{Sec:conclusion}
+
+In this paper we have reflected on our experiences of the past years
+with the use of the \TB\ as a means to refactor a previously monolithic
+system: the \asdf\ Meta Environment. This first real test case of the
+\TB\ has taught us some of its shortcomings: its data bottleneck in case
+very large data items are sent using pass-by-value, and has given rise
+to questions such as how best to deal with crashing tools.
+
+We have studied related ideas and solutions and are now in a situation
+where we have a new prototype of the \TB\ in Java, with a very open
+structure which allows for all sorts of experiments and case studies
+based on the experience we have with the existing \TB\ and the ideas
+presented in this paper.
 
 \section*{Acknowledgments}
 
