@@ -103,11 +103,13 @@ AC_ARG_WITH(tide,
 [  --with-tide		  TIDE is in DIR],
 TIDE=${withval}
 TIDEDEF=-DUSE_TIDE
+TIDEINC=-I${TIDE}
 USE_TIDE=1,
 USE_TIDE=0
 )
 AC_SUBST(TIDE)
 AC_SUBST(TIDEDEF)
+AC_SUBST(TIDEINC)
 AC_SUBST(USE_TIDE)
 
 dnl Handle --with-graphviz=... argument to configure
