@@ -1,3 +1,6 @@
+2003/01/13 (jurgenv@cwi.nl)
+ * added dependency on error-support
+ 
 2003/11/09 (jurgenv@cwi.nl)
  * An ASF file is now an ASF-Module which consists of a list of ASF-Sections.
    An ASF-Section is either an equations sections or a tests sections for now.
