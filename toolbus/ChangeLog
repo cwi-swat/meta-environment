@@ -1,5 +1,8 @@
 $Id$
 
+2002/10/28 (vinju@cwi.nl)
+ * Added output file commandline options to 'toolbus -gentifs' and idef2tif
+
 2002/10/10 (vinju@cwi.nl)
  * On ctrl+\ only the pending snd-msgs are printed, such that you can see
    immediately which messages are not received.
