@@ -1,5 +1,8 @@
 # $Id$
 
+pkgdata_DATA=ErrorAPI-${VERSION}.jar
+EXTRA_DIST=ErrorAPI-${VERSION}.jar
+
 lib_LIBRARIES=libErrorAPI.a
 
 include_HEADERS=\
@@ -32,7 +35,7 @@ MetaErrors.impl.def: Makefile
 	@(echo "definition"; \
 	  cat ${ABSOLUTE_SOURCE_MODULES}) > $@
 
-api: parsed-api imploded-api 
+api: parsed-api imploded-api java-api
 
 parsed-api: MetaErrors.def Makefile  
 	sdf2-to-c --input $< --prefix PERR_ --output ParsedErrorAPI
@@ -42,5 +45,13 @@ imploded-api: MetaErrors.impl.def Makefile
 	sdf2-to-c --imploded --input $< --prefix ERR_ --output ErrorAPI
 	indent ErrorAPI.h
 
+java-api: MetaErrors.impl.def Makefile
+	sdf2-to-java \
+		--imploded \
+		--input $< \
+		--name ErrorAPI \
+		--output . \
+		--version ${VERSION}
+
 api-clean:
-	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict
+	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict 
