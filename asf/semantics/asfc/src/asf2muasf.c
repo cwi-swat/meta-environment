@@ -59,10 +59,9 @@ static MA_Term attrToTerm(PT_Attr attr);
 static MA_TermTerms attrsToTermList(PT_Attrs attrs);
 static MA_TermArgs atArgsToTermArgs(ATermList args);
 static MA_Term atermToTerm(ATerm aterm);
-static MA_Annotations attributesToAnnotations(PT_Attributes attributes);
 static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList);
 static MA_SigArgElems makeSigArgElems(int arity);
-static MA_FuncDef prodToFuncDef(PT_Production prod);
+static MA_FuncDef prodToFuncDef(PT_Production prod, MA_Term type);
 static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs);
 static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, 
 			  LayoutOption layout);
@@ -332,19 +331,6 @@ static MA_TermTerms attrsToTermList(PT_Attrs attrs)
 }
 
 /*}}}  */
-/*{{{  static MA_Annotations attributesToAnnotations(PT_Attributes attributes) */
-
-static MA_Annotations attributesToAnnotations(PT_Attributes attributes)
-{
-  if (PT_isAttributesNoAttrs(attributes)) {
-    return (MA_Annotations) NULL;
-  }
-
-  return MA_makeAnnotationsDefault(em,
-	   attrsToTermList(PT_getAttributesAttrs(attributes)),em);
-}
-
-/*}}}  */
 /*{{{  static MA_FunId prodToFunId(PT_Production prod) */
 
 static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList)
@@ -478,7 +464,7 @@ static MA_Term treeToType(PT_Tree tree)
 /*}}}  */
 /*{{{  static MA_FuncDef prodToFuncDef(PT_Production ptProd)  */
 
-static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
+static MA_FuncDef prodToFuncDef(PT_Production ptProd, MA_Term type) 
 {
   MA_FunId maFunId = prodToFunId(ptProd, prodReturnsList(ptProd));
   PT_Attributes ptAttributes;
@@ -490,28 +476,26 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
 
   if (PT_isProductionDefault(ptProd)) {
     ptAttributes = PT_getProductionAttributes(ptProd);
+    MA_TermTerms maAnnos = NULL;
+    MA_Annotations wrappedAnnos;
 
     if (PT_isAttributesAttrs(ptAttributes)) {
-      MA_Annotations maAnnos = attributesToAnnotations(ptAttributes);
-   
-      if (arity > 0) {
-	maSigArgElems = makeSigArgElems(arity);
-	maFuncdef = MA_makeFuncDefFuncWithAnnos(maFunId,em,em,
-						maSigArgElems,em,em,maAnnos);
-      }
-      else {
-	maFuncdef = MA_makeFuncDefConstantWithAnnos(maFunId,em,maAnnos);
-      }
+      maAnnos = attrsToTermList(PT_getAttributesAttrs(ptAttributes));
     }
-    else { /* no attributes */
-      if (arity > 0) {
-	maSigArgElems = makeSigArgElems(arity);
-	maFuncdef = MA_makeFuncDefFuncNoAnnos(maFunId,em,em,
-						maSigArgElems,em);
-      }
-      else {
-	maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
-      }
+
+    maAnnos = maAnnos ? 
+      MA_makeTermTermsMany(type, em, ",", em, maAnnos) : 
+      MA_makeTermTermsSingle(type);
+
+    wrappedAnnos = MA_makeAnnotationsDefault(em, maAnnos, em);
+    
+    if (arity > 0) {
+      maSigArgElems = makeSigArgElems(arity);
+      maFuncdef = MA_makeFuncDefFuncWithAnnos(maFunId,em,em,
+					      maSigArgElems,em,em,wrappedAnnos);
+    }
+    else {
+      maFuncdef = MA_makeFuncDefConstantWithAnnos(maFunId,em,wrappedAnnos);
     }
   }
   else { /* list production */
@@ -611,7 +595,10 @@ static MA_Term applTreeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
 {
   MA_Term result = NULL;
   PT_Production prod = PT_getTreeProd(tree);
-  MA_FuncDef funcdef = prodToFuncDef(prod);
+  MA_Term type = MA_makeTermFunc(stringToFunId("type"),em,em,
+				MA_makeTermArgsSingle(treeToType(tree)),
+			       em);	
+  MA_FuncDef funcdef = prodToFuncDef(prod, type);
   PT_Args args = PT_getTreeArgs(tree);
   MA_FunId funid = prodToFunId(prod, returnsList);
   MA_TermArgs terms = argsToTermArgs(args, funcdefs);
