@@ -25,10 +25,12 @@ let
   Name      : str,
   OldName   : str,
   NewName   : str,
+  NewPath   : str,
   Modules   : list,
   DependingModules : list,
   ModuleNames : list,
   FileName : str,
+  RealFileName : str,
   Pairs    : list,
   ErrorMsg : str,
   Extension : str
@@ -70,30 +72,55 @@ in
       snd-msg(not-exists-in-module-db(Name))
     )
   +
+    /* TODO: factorize this part into reusable processes */
     rec-msg(add-module-to-db(Name?, Path?, sdf, SyntaxText?, SyntaxTree?)) .
     if not-equal(SyntaxTree, no-tree) then
       snd-msg(sm-get-module-id(SyntaxTree)) .
       rec-msg(sm-module-id(ModuleId?)) .
       snd-msg(sm-get-module-path(Path, ModuleId)) .
-      rec-msg(sm-module-path(Path?)) .
-      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
-      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
-      snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
-      snd-msg(sm-get-imported-module-names(SyntaxTree)) .
-      SyntaxTree := no-tree .
-      rec-msg(sm-imported-module-names(Modules?)) 
+      rec-msg(sm-module-path(NewPath?)) .
+      snd-msg(io-get-filename(Path, Name, "")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(io-get-filename(NewPath, ModuleId, "")) .
+      rec-msg(io-filename(RealFileName?)) .
+      if equal(FileName, RealFileName) then
+        snd-msg(ts-put-str-value("module-paths", ModuleId, NewPath)) .
+        MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
+        snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
+        snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+        rec-msg(sm-imported-module-names(Modules?)) .
+        snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
+        snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+        snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+        SyntaxText := "" .
+        snd-msg(ts-filter-keys("active-modules", Modules)) .
+        rec-msg(ts-keys(Modules?)) .
+        snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
+      else
+        ModuleId := Name .
+        snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+        Modules := [] .
+        snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
+        snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+        snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+        SyntaxText := "" .
+        snd-msg(ts-filter-keys("active-modules", Modules)) .
+        rec-msg(ts-keys(Modules?)) .
+        snd-msg(error-opening(Name, name-inconsistent))
+      fi .
+      SyntaxTree := no-tree 
     else 
       ModuleId := Name .
       snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
-      Modules := []
-    fi .
-    snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-    snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
-    snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
-    SyntaxText := "" .
-    snd-msg(ts-filter-keys("active-modules", Modules)) .
-    rec-msg(ts-keys(Modules?)) .
-    snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
+      Modules := [] .
+      snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
+      snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
+      snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+      SyntaxText := "" .
+      snd-msg(ts-filter-keys("active-modules", Modules)) .
+      rec-msg(ts-keys(Modules?)) .
+      snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
+    fi 
   +
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))

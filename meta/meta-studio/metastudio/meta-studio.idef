@@ -2,45 +2,16 @@ tool user-interface is {
   command = "meta-studio"
 }
 
-process Status-display(UI: user-interface)  is
-let
-  Lst : list,
-  Str : str,
-  Id  : term
-in
-  subscribe(ui-status(<term>)) .
-  ( rec-note(ui-status(stat(Id?, Str?))) .
-    snd-do(UI, add-status(Id, Str))
-    +
-    rec-note(ui-status(statf(Id?, Str?, Lst?))) .
-    snd-do(UI, add-statusf(Id, Str, Lst))
-    +
-    rec-note(ui-status(endstat(Id?))) .
-    snd-do(UI, end-status(Id))
-    +
-    rec-note(ui-status(error(Str?))) .
-    snd-do(UI, error(Str))
-    +
-    rec-note(ui-status(errorf(Str?, Lst?))) .
-    snd-do(UI, errorf(Str, Lst))
-  ) *
-  delta
-endlet
-
 process Ui is
 let
-  SD      : int,
   UI      : user-interface,
   Id      : term,
-  Name    : term,
-  Str     : term,
-  Mod     : term,
+  Str     : str,
   Pairs   : list,
   Mods    : list,
   FileName : str,
   Path    : str,
   Extension : str,
-  ErrMsg  : str,
   On      : term,
   Graph   : term,
   Info	  : list,
@@ -54,116 +25,118 @@ let
   ButtonList : list,
   Title : str,
   Answer : term,
-  Type : term
+  Type : term,
+  Arguments : list
 in
   subscribe(display-import-graph(<list>)) .
+  subscribe(ui-status(<term>)) .
   Id := process-id.
   execute(user-interface,UI?).
-  create(Status-display(UI),SD?).
-
   snd-msg(environment-name-hook).
   rec-msg(environment-name-hook-result(EnvironmentName?)).
-
   snd-do(UI, initialize-ui(EnvironmentName)) .
-  Mods := [] .
-  Pairs := [] .
-  ( 
-    rec-msg(display-graph(GraphId?, Graph?)) .
-    snd-do(UI, display-graph(GraphId, Graph))
-  +
-    rec-msg(ui-delete-modules(Mods?)).
-    snd-do(UI, delete-modules(Mods))
-  +
-    rec-event(UI, get-module-info(ModuleName?)).
-    snd-msg(get-module-info(ModuleName)) .           
-    rec-msg(module-info(ModuleName, Info?)) .
-    snd-do(UI, module-info(ModuleName,Info)) .
-    snd-ack-event(UI, get-module-info(ModuleName))
-  +
-    rec-event(UI, clear-all).
-    snd-msg(clear-all).
-    rec-msg(cleared-all).
-    snd-ack-event(UI, clear-all)
-  +
-   ( rec-event(UI, debugging(On?)) .
-     snd-msg(debugging(On)) .
-     snd-ack-event(UI, debugging(On))
-   ) +
-   ( rec-note(display-import-graph(Pairs?)).
-     snd-do(UI, new-graph(Pairs)) .
-     Pairs := []
-   )
-   +
-   ( rec-event(UI, layout-graph(GraphId?, Graph?)) .
-     snd-msg(layout-graph(Graph)) .
-     rec-msg(graph-layouted(LayoutedGraph?)) .
-     snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
-     snd-ack-event(UI, layout-graph(GraphId, Graph))
-   )
-   + /* Get buttons for UI items */
-   ( rec-event(UI, get-buttons(Type?, ModuleName?)) .
-     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
-     rec-msg(button-list(ModuleName, ButtonList?)).
-     snd-do(UI, buttons-found(Type, ModuleName, ButtonList)) .
-     snd-ack-event(UI, get-buttons(Type, ModuleName))
-   )
-   +
-   ( rec-event(UI, button-selected(Type?, ModuleName?, ActionEvent?)) .
-     snd-msg(extra-button-action(ActionEvent, [str(ModuleName)], Type, 
-                                 ModuleName, ui-id)) .
-     snd-ack-event(UI, button-selected(Type, ModuleName, ActionEvent))
-   )
-   +
-   ( rec-event(UI, button-selected(Type?, ActionEvent?)) .
-     snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
-     snd-ack-event(UI, button-selected(Type, ActionEvent))
-   )
-   +
-   ( rec-msg(ask-for-file(Title?, Path?, Extension?)) .
-     snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
-     rec-value(UI, file-name(FileName?)) . 
-     snd-msg(ask-for-file-result(FileName)) 
-   )
-   +
-   ( rec-msg(ask-question(Title?)) .
-     snd-eval(UI, show-question-dialog(Title)) .
-     rec-value(UI, answer(Answer?)) . 
-     snd-msg(ask-question-result(Answer)) 
-   )
-   +
-   ( rec-msg(decons-file-name(FileName?, Extension?)) .
-     snd-eval(UI, decons-filename(FileName, Extension)) .
-     rec-value(UI, file-name(Path?, FileName?, Extension?)) . 
-     snd-msg(decons-file-name-result(Path, FileName, Extension)) 
-   )
-   +
-   ( rec-msg(clear-history) .
-     snd-do(UI, clear-history) 
-   )
-   + /*  Message list */
-   (
-     rec-event(UI, element-selected(ModuleName?, Tree?)).
-     snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
-                                 message-list, "*", message-id)).
-     snd-ack-event(UI, element-selected(ModuleName, Tree)) 
-   )
-   + 
-   (
-     rec-event(UI, node-info(ModuleName?, Tree?)).
-     snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
-                                 tree-panel, "*", message-id)).
-     snd-ack-event(UI, node-info(ModuleName, Tree)) 
-   )
-   +
-   (  
-     rec-msg(update-list-view(ModuleName?, ButtonNames?)).
-     snd-do(UI, update-list(ModuleName, ButtonNames))
-   ) 
-  ) *
   (
-    rec-event(UI, quit)
-  + 
-    rec-disconnect(UI)
-  ) .
-  shutdown("MetaStudio exiting\n")
+    ( 
+      rec-note(ui-status(stat(Id?, Str?))) .
+      snd-do(UI, add-status(Id, Str))
+    +
+      rec-note(ui-status(statf(Id?, Str?, Arguments?))) .
+      snd-do(UI, add-statusf(Id, Str, Arguments))
+    +
+      rec-note(ui-status(endstat(Id?))) .
+      snd-do(UI, end-status(Id))
+    +
+      rec-note(ui-status(error(Str?))) .
+      snd-do(UI, error(Str))
+    +
+      rec-note(ui-status(errorf(Str?, Arguments?))) .
+      snd-do(UI, errorf(Str, Arguments))
+    ) * delta 
+  ||
+    ( 
+      rec-msg(display-graph(GraphId?, Graph?)) .
+      snd-do(UI, display-graph(GraphId, Graph))
+    +
+      rec-msg(ui-delete-modules(Mods?)).
+      snd-do(UI, delete-modules(Mods))
+    +
+      rec-event(UI, get-module-info(ModuleName?)).
+      snd-msg(get-module-info(ModuleName)) .           
+      rec-msg(module-info(ModuleName, Info?)) .
+      snd-do(UI, module-info(ModuleName,Info)) .
+      snd-ack-event(UI, get-module-info(ModuleName))
+    +
+      rec-event(UI, clear-all).
+      snd-msg(clear-all).
+      rec-msg(cleared-all).
+      snd-ack-event(UI, clear-all)
+    +
+      rec-event(UI, debugging(On?)) .
+      snd-msg(debugging(On)) .
+      snd-ack-event(UI, debugging(On))
+    +
+      rec-note(display-import-graph(Pairs?)).
+      snd-do(UI, new-graph(Pairs)) .
+      Pairs := []
+    +
+      rec-event(UI, layout-graph(GraphId?, Graph?)) .
+      snd-msg(layout-graph(Graph)) .
+      rec-msg(graph-layouted(LayoutedGraph?)) .
+      snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
+      snd-ack-event(UI, layout-graph(GraphId, Graph))
+    + 
+      rec-event(UI, get-buttons(Type?, ModuleName?)) .
+      snd-msg(get-auxilary-buttons(Type, ModuleName)) .
+      rec-msg(button-list(ModuleName, ButtonList?)).
+      snd-do(UI, buttons-found(Type, ModuleName, ButtonList)) .
+      snd-ack-event(UI, get-buttons(Type, ModuleName))
+    +
+      rec-event(UI, button-selected(Type?, ModuleName?, ActionEvent?)) .
+      snd-msg(extra-button-action(ActionEvent, [str(ModuleName)], Type, 
+                                  ModuleName, ui-id)) .
+      snd-ack-event(UI, button-selected(Type, ModuleName, ActionEvent))
+    +
+      rec-event(UI, button-selected(Type?, ActionEvent?)) .
+      snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
+      snd-ack-event(UI, button-selected(Type, ActionEvent))
+    +
+      rec-msg(ask-for-file(Title?, Path?, Extension?)) .
+      snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
+      rec-value(UI, file-name(FileName?)) . 
+      snd-msg(ask-for-file-result(FileName)) 
+    +
+      rec-msg(ask-question(Title?)) .
+      snd-eval(UI, show-question-dialog(Title)) .
+      rec-value(UI, answer(Answer?)) . 
+      snd-msg(ask-question-result(Answer)) 
+    +
+      rec-msg(decons-file-name(FileName?, Extension?)) .
+      snd-eval(UI, decons-filename(FileName, Extension)) .
+      rec-value(UI, file-name(Path?, FileName?, Extension?)) . 
+      snd-msg(decons-file-name-result(Path, FileName, Extension)) 
+    +
+      rec-msg(clear-history) .
+      snd-do(UI, clear-history) 
+    + 
+      rec-event(UI, element-selected(ModuleName?, Tree?)).
+      snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
+                                  message-list, "*", message-id)).
+      snd-ack-event(UI, element-selected(ModuleName, Tree)) 
+    + 
+      rec-event(UI, node-info(ModuleName?, Tree?)).
+      snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
+                                 tree-panel, "*", message-id)).
+      snd-ack-event(UI, node-info(ModuleName, Tree)) 
+    +
+      rec-msg(update-list-view(ModuleName?, ButtonNames?)).
+      snd-do(UI, update-list(ModuleName, ButtonNames))
+    
+    ) * 
+    (
+      rec-event(UI, quit)
+    + 
+      rec-disconnect(UI)
+    ) .
+    shutdown("MetaStudio exiting\n")
+  )
 endlet

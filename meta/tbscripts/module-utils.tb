@@ -150,12 +150,12 @@ in
     rec-msg(search-paths(Directories?)) .
     snd-msg(file-extension-hook(sdf)) .
     rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-find-file(Directories, ModuleName, Extension)) . 
-    (
-      rec-msg(io-file-found([Path?])) .
+    snd-msg(get-path-from-db(ModuleName)) .
+    ( 
+      rec-msg(path(Path?)) .
       RemoveModuleFromDisk(Path, ModuleName)
     +
-      rec-msg(io-file-not-found) 
+      rec-msg(no-path)
     ) .
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .

@@ -80,11 +80,12 @@ in
     rec-msg(io-filename(FileName?)) .
     snd-msg(io-compare-files(FileName, Chosen)) .
     (
-      rec-msg(io-files-equal) .
-      snd-note(ui-status(errorf("Multiple occurrences of %s:\n%s and %s",
-                                [Name,Chosen,FileName])))
+      rec-msg(io-files-equal) 
     +
-      rec-msg(io-files-differ)
+      rec-msg(io-files-differ) .
+      snd-note(ui-status(errorf(
+      "Multiple occurrences of %s:\n%s and %s\nContinuing with %s",
+                                [Name,Chosen,FileName, Chosen]))) 
     )
   fi
   *
@@ -193,7 +194,7 @@ let
   FileName : str,
   Extension : str
 in
-  snd-msg(sm-is-valid-modulename-in-path(Path, Module)) .
+  snd-msg(sm-is-valid-modulename(Module)) .
   ( 
     rec-msg(sm-modulename-is-valid) .
     snd-msg(file-extension-hook(Type)) .

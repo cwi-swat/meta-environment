@@ -19,7 +19,7 @@
 /*{{{  defines */
 
 #define PATH_LEN (_POSIX_PATH_MAX)
-#define SEP "/"
+#define SEP '/'
 
 /*}}}  */
 /*{{{  variables */
@@ -241,7 +241,7 @@ void remove_file(int cid, char *directory, char *name, char *extension)
 {
   char fileName[PATH_LEN];
 
-  sprintf(fileName, "%s%s%s%s", directory, SEP, name, extension);
+  sprintf(fileName, "%s%c%s%s", directory, SEP, name, extension);
 
   remove(fileName);
 }
@@ -287,16 +287,22 @@ ATerm read_term_file(int cid, char *fileName)
 
 /*}}}  */
 
+/*{{{  ATerm pack_term(int cid, ATerm term) */
+
 ATerm pack_term(int cid, ATerm term)
 {
   return ATmake("snd-value(term(<term>))", ATBpack(term));
 }
+
+/*}}}  */
+/*{{{  ATerm unpack_term(int cid, ATerm term) */
 
 ATerm unpack_term(int cid, ATerm term)
 {
   return ATmake("snd-value(term(<term>))", ATBunpack(term));
 }
 
+/*}}}  */
 
 /*{{{  ATerm read_packed_term_file(int cid, char *fileName) */
  
@@ -448,7 +454,7 @@ ATerm find_file(int cid, ATerm paths, char *name, char *extension)
   for (; !ATisEmpty(searchPaths); searchPaths = ATgetNext(searchPaths)) {
     ATerm path = ATgetFirst(searchPaths);
     char *pathString = ATgetString(path);
-    sprintf(filename, "%s%s%s%s", pathString, SEP, name, extension);
+    sprintf(filename, "%s%c%s%s", pathString, SEP, name, extension);
 
     if (fileExists(filename)) {
       directories = ATinsert(directories, path);
@@ -482,8 +488,13 @@ ATerm compare_files(int cid, char *f1, char *f2)
 ATerm get_filename(int cid, char *directory, char *name, char *extension)
 {
   char fileName[PATH_LEN];
+  int directoryLen = strlen(directory);
 
-  sprintf(fileName, "%s%s%s%s", directory, SEP, name, extension);
+  if (directoryLen > 0 && directory[directoryLen-1] == SEP) {
+    directory[directoryLen-1] = '\0';
+  }
+
+  sprintf(fileName, "%s%c%s%s", directory, SEP, name, extension);
 
   return ATmake("snd-value(filename(<str>))", fileName);
 }

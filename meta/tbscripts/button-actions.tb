@@ -584,7 +584,9 @@ in
       +
 	rec-msg(create-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(create-new-module(".", ModuleName, sdf)) .           
+	snd-msg(io-relative-to-absolute(["."])) .
+	rec-msg(io-absolute-directories([Path?])) .
+        snd-msg(create-new-module(Path, ModuleName, sdf)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
@@ -841,8 +843,8 @@ in
         snd-note(clear-focus(EditorId))
       +
         rec-msg(updating-succeeded(DependingModules?)).
+        snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
 	(
-          snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
           rec-msg(updating-succeeded(NewModules?)).
 	  snd-msg(notify-about-changed-modules(DependingModules, Type)) .
 	  rec-msg(notify-about-changed-modules-done) .
