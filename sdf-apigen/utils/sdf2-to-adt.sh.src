@@ -3,7 +3,7 @@
 # {{{ variables
 
      prefix=__PREFIX__
-     bindir=${prefix}/bin
+     bindir=__BINDIR__
     SGLRBIN=__SGLR__/bin
      ASFBIN=__ASF__/bin
    ATERMBIN=__ATERM__/bin
