@@ -1,7 +1,11 @@
 $Id$
 
+2002/02/07 (jurgenv@cwi.nl)
+ * Release 3.6
+
 2001/12/21 (jurgenv@cwi.nl)
- * Improved ambiguity reporting of sglr's -v switch.
+ * Improved ambiguity reporting of sglr's -v switch a bit.
+   Still not optimal ;-(
 
 2001/12/17 (vandenbr@loria.fr)
  * SGLR ignored the non-assoc attribute when processing the
