@@ -1,0 +1,9 @@
+module asf/Placeholders[X]
+
+exports
+
+lexical syntax
+
+"<" `X` ">" -> X
+
+
