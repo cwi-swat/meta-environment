@@ -985,19 +985,21 @@ differences in ToolBus, RMI, RMI-IIOP and Java IDL.
 \begin{figure}[tb]
 \begin{center}
 \begin{tabular}{|l||l|l|l|l|}\hline
-          & ToolBus & RMI & RMI-IIOP & Java IDL \\ \hline\hline
-Interface & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
-GC        & yes & yes & yes & no \\ \hline
-params and    & by-value & local: by-value & local: by-value & "in" and "out" \\
-return values & & remote: by-ref & remote: by-ref & params \\ \hline
-language & any via    & only Java & CORBA objects if &  any via \\
-         & TB adapter &           & interface in Java & IDL compiler \\ \hline
-inter-component & yes & no & no & no \\
-behavior coordination & & & & \\ \hline
+              & ToolBus & RMI & RMI-IIOP & Java IDL \\ \hline\hline
+Architecture  & Component    & Client & Client & Client \\
+              & coordination  & Server & Client & Server \\ \hline
+Interface     & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
+GC            & yes & yes & yes & no \\ \hline
+parameters /  & by-value & local: by-value & local: by-value & "in" and "out" \\
+return values &          & remote: by-ref & remote: by-ref & params \\ \hline
+language      & any via    & only Java & CORBA objects if &  any via \\
+              & TB adapter &         & interface in Java & IDL compiler \\ \hline
+component     & yes & no & no & no \\
+coordination  &     &    &    &    \\ \hline
 
 \end{tabular}
-\caption{\label{Fig:feature-overview}Feature overview of related
-architectures.}
+\caption{\label{Fig:feature-overview}Related architectures: a feature
+overview.}
 \end{center}
 \end{figure}
 
@@ -1015,11 +1017,28 @@ is written. In the ToolBus setting, these signatures are generated from
 the ToolBus script which describes much more of the component's behavior
 in terms of method call interaction, rather than just method signatures.
 
-\item RMI uses both pass-by-value and pass-by-referece, depending on
-whether the relevant data is serializable (it is a primitive type, or it
-implements \texttt{Serializable}) or is a remote object. The ToolBus
-setting only uses pass-by-value (although pass-by-reference can be
-mimicked by sending unique ids by value that refer to a remote object).
+\item The ToolBus takes care of garbage collection of the ATerms that
+are used to represent data as it is sent from one component to another.
+RMI allows programmers access to Java's Distributed Garbage Collection
+API. In RMI-IIOP and Java IDL however, this is not possible, because
+the underlying CORBA architecture is used, which does not support
+(distributed) GC, but places this burden entirely on the programmers
+
+\item In the ToolBus, all data is sent by-value. RMI and RMI-IIOP
+use both pass-by-value and pass-by-referece, depending on whether
+the relevant data is serializable (it is a primitive type, or it
+implements \texttt{Serializable}) or is a remote object. In Java IDL
+the components abide by IDL prescribed interfaces which have ``in''
+and ``out'' parameters.  There are no return values, but parameters are
+marked as incoming, outgoing, or both (``in/out'' parameters).
+
+\item The ToolBus allows components in any language for which a
+ToolBus adapter exist. Programming languages such as C and Java are
+supported, but adapters also exist for a wide range of applications,
+including e.g. Prolog, MySQL, Asf+Sdf. In RMI, only Java components
+can be connected; in RMI-IIOP the service is implemented in Java, its
+functionality (client-side) is available to CORBA clients. The Java IDL
+framework is fully CORBA compliant.
 
 \item Only the ToolBus has coordination support for component interaction.
 In the three other cases any undesired sequence of incoming and outgoing
