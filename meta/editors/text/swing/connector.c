@@ -18,6 +18,18 @@
 #include <TextEditor.h>
 
 /*}}}  */
+/*{{{  defines */
+#define COMMANDLINE \
+  "swing-editor" \
+  " -TB_HOST localhost" \
+  " -TB_TOOL_NAME swing-editor" \
+  " -TB_TOOL_ID 6874" \
+  " -TB_PORT %d" \
+  " --filename %s"
+
+/*68 74 = h t */
+
+/*}}}  */
 
 /*{{{  static int create_inet_socket(int port) */
 
@@ -57,9 +69,9 @@ static int create_inet_socket(int port)
 }
 
 /*}}}  */
-/*{{{  static int allocate_inet_socket() */
+/*{{{  static int allocate_inet_socket(int *port) */
 
-static int allocate_inet_socket()
+static int allocate_inet_socket(int *port)
 {
   int try_port;
   int sock;
@@ -67,6 +79,9 @@ static int allocate_inet_socket()
   for (try_port = 10000; try_port < 15000; try_port++) {
     sock = create_inet_socket(try_port);
     if (sock >= 0) {
+      if (port != NULL) {
+	*port = try_port;
+      }
       return sock;
     }
   }
@@ -202,6 +217,22 @@ static int handleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
 
 /*}}}  */
 
+/*{{{  static int handshake(int socket) */
+
+static int handshake(int socket)
+{
+  char buf[512];
+  int nr_read;
+  
+  nr_read = read(socket, buf, 512);
+  strcpy(buf, "swing-editor 6874");
+  write(socket, buf, 512);
+  ATBwriteTerm(socket, ATparse("rec-do(signature([],[]))"));
+  return 0;
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -213,7 +244,9 @@ int main(int argc, char *argv[])
   int retval;
   int read_from_hive_fd = -1;
   int write_to_hive_fd = -1;
-  const char *filename;
+  int port;
+  const char *filename = NULL;
+  char command[BUFSIZ];
   TextEditor swingEditor;
   TE_Pipe hiveToEditor;
   TE_Pipe editorToHive;
@@ -236,8 +269,9 @@ int main(int argc, char *argv[])
 
   assert(read_from_hive_fd >= 0);
   assert(write_to_hive_fd >= 0);
+  assert(filename != NULL);
 
-  server_socket = allocate_inet_socket();
+  server_socket = allocate_inet_socket(&port);
   if (server_socket == -1) {
     ATerror("unable to allocate inet socket, giving up.\n");
     exit(1);
@@ -246,6 +280,15 @@ int main(int argc, char *argv[])
   retval = listen(server_socket, 1);
   if (retval == -1) {
     perror("listen");
+    exit(1);
+  }
+
+  sprintf(command, COMMANDLINE, port, filename);
+
+  ATwarning("command: [%s]\n", command);
+  retval = 0; /*system(command);*/
+  if (retval == -1) {
+    perror("system");
     exit(1);
   }
 
@@ -258,6 +301,12 @@ int main(int argc, char *argv[])
   retval = close(server_socket);
   if (retval == -1) {
     perror("close:server_socket");
+    exit(1);
+  }
+
+  retval = handshake(editor_socket);
+  if (retval == -1) {
+    fprintf(stderr, "%s: handshake failed.\n", __FILE__);
     exit(1);
   }
 

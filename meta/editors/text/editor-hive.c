@@ -503,6 +503,11 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
   int fd;
   int result;
+  int i;
+
+  for (i=0; i<argc; i++) {
+    fprintf(stderr, "argv[%d] = [%s]\n", i, argv[i]);
+  }
 
   ATBinit(argc, argv, &bottomOfStack);
   TE_initTextEditorApi();
