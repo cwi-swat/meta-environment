@@ -31,7 +31,8 @@ EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c
 
 CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
-asfc_SOURCES = asfc.c sdf2pt.c chars.c c-code.c asfsdf2muasf.c sdf.c
+asfc_SOURCES = asfc.c sdf2pt.c chars.c c-code.c asfsdf2muasf.c sdf.c \
+               lex-cons.c
 
 asfc_LDADD   = asfc.tif.o \
                    -L$(top_builddir)/asfc/c-source  -lAsFix2C \

@@ -17,19 +17,17 @@
 #include <MEPT-utils.h>
 #include <MuASF.h>
 
-#include <asc-support2-me.h> 
-#include <asc-apply-me.h>
-
 #include <aterm2.h>
 
 #include "asfc.tif.h"
 #include "sdf.h"
 #include "asfsdf2muasf.h"
 
+
 ATbool run_verbose;
 
 char myname[] = "asfc";
-char myversion[] = "1.3";
+char myversion[] = "2.0";
 
 static char *outputDirName = NULL;
 

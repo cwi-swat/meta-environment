@@ -1,3 +1,5 @@
+#include <MuASF.h>
+
 #include "muasf2c.h"
 #include "asc-apply-me.h"
 #include "asc-support2-me.h"
