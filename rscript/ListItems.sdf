@@ -1,0 +1,10 @@
+module ListItems
+
+imports basic/Strings
+
+ exports
+     sorts List ListItem
+  context-free syntax
+
+    "list" "(" "[" { ListItem "," }* "]" ")"               -> List
+    "listitem" "(" String "," "[" String "]" "," Area ")"  -> ListItem

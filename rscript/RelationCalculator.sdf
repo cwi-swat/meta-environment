@@ -4,30 +4,50 @@ imports RScripts[Elem]
 imports Relations[Elem]
 
 exports
-   sorts VALUE RSTORE GEN GENS OP
+   sorts VALUE RSTORE
 
    context-free syntax
 
-        "*empty*"                    -> VALUE
-        Boolean                      -> VALUE
-        Elem                         -> VALUE
-        Bag[[Elem]]                  -> VALUE
-        Rel[[Elem]]                  -> VALUE
-        Elem # Elem                  -> VALUE
+%% The values that a variable in the RSTORE may have
+
+        "*empty*"                     -> VALUE
+        Boolean                       -> VALUE
+        Elem                          -> VALUE
+        Bag[[Elem]]                   -> VALUE
+        Rel[[Elem]]                   -> VALUE
+        Elem # Elem                   -> VALUE
         VAR # REXP                    -> VALUE
         VAR # VAR # REXP              -> VALUE
         VAR # VAR # VAR # REXP        -> VALUE
+
+        "if" Boolean "then" VALUE "else" VALUE "fi"       
+                                      -> VALUE
+
+%% The RSTORE itself, maps VARs to VALUEs
         
-        "[" { VAR # VALUE ","}* "]"   -> RSTORE
-        assign(VAR, VALUE, RSTORE)    -> RSTORE
-        value(VAR, RSTORE)            -> VALUE
-        rel-value(VAR, RSTORE)        -> Rel[[Elem]]
+        "[" { VAR # VALUE ","}* "]"          -> RSTORE
+        assign(VAR, VALUE, RSTORE)           -> RSTORE
+        value(VAR, RSTORE)                   -> VALUE
 
-        add(VAR, Elem, RSTORE)        -> RSTORE
+	elm-value(VAR, RSTORE)	             -> Elem
+	bag-value(VAR, RSTORE)               -> Bag[[Elem]]
+        rel-value(VAR, RSTORE)               -> Rel[[Elem]]
 
-	add(VAR, Elem # Elem, RSTORE) -> RSTORE
+	add-tuple(VAR, Elem # Elem, RSTORE)  -> RSTORE
 
-	add(VAR, Rel[[Elem]], RSTORE) -> RSTORE
+	extend-rel(VAR, Rel[[Elem]], RSTORE) -> RSTORE
+
+%% Main evaluation functions for Rscripts
+
+        eval-rscript(SCRIPT)                 -> RSTORE
+        eval-rscript(STAT, RSTORE)           -> RSTORE
+        eval-rscript(STAT*, RSTORE)          -> RSTORE
+
+%% should be hidden
+
+   sorts GEN GENS OP
+
+   context-free syntax
  
         evalp(REXP, RSTORE)            -> Boolean
         evale(REXP, RSTORE)            -> Elem
@@ -35,27 +55,23 @@ exports
         evalr(REXP, RSTORE)            -> Rel[[Elem]]
 
         evalx(REXP, RSTORE)            -> VALUE
-        apply "(" VALUE OP VALUE ")"  -> VALUE
+        apply "(" VALUE OP VALUE ")"   -> VALUE
 
-        "dominators"                  -> VAR {prefer}
+        "dominators"                   -> VAR {prefer}
 
-        "=="                         -> OP
-        "<="                         -> OP
-        "<"                          -> OP
-        ">="                         -> OP
-        ">"                          -> OP
-        "union"                      -> OP
-        "inter"                      -> OP
-        "\\"                         -> OP
-        "o"                          -> OP
-        "x"                          -> OP
-        "."                          -> OP
+        "=="                           -> OP
+        "<="                           -> OP
+        "<"                            -> OP
+        ">="                           -> OP
+        ">"                            -> OP
+        "union"                        -> OP
+        "inter"                        -> OP
+        "\\"                           -> OP
+        "o"                            -> OP
+        "x"                            -> OP
+        "."                            -> OP
 
-        eval-rscript(SCRIPT)         -> RSTORE
-        eval-rscript(STAT, RSTORE)   -> RSTORE
-        eval-rscript(STAT*, RSTORE)  -> RSTORE
-
-        equal(Elem, Elem)            -> Boolean
+        equal(Elem, Elem)              -> Boolean
 
         gen(VAR, Bag[[Elem]], Bag[[Elem]], Boolean)       -> GEN
         gen(VAR, VAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
@@ -66,8 +82,7 @@ exports
         "get_next" "(" GENS ")"                           -> GENS
         "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
 
-        valformer(GENS, VALUE, REXP, RSTORE, REXP)          -> VALUE
-        "if" Boolean "then" VALUE "else" VALUE "fi"       -> VALUE
+        valformer(GENS, VALUE, REXP, RSTORE, REXP)        -> VALUE
 
 hiddens
   imports asf/syntax/Comments
