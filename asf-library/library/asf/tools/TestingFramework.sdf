@@ -1,5 +1,7 @@
 module asf/tools/TestingFramework[X]
+
 imports
+  basic/Integers
   basic/Strings
 
 exports
@@ -18,7 +20,6 @@ hiddens
   sorts X
   imports
     containers/List[TestResult]
-    basic/Integers
     asf/syntax/Comments
   context-free syntax
     summarize( TestResult* )	-> TestSummary
