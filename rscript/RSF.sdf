@@ -1,0 +1,18 @@
+module RSF
+
+exports
+
+   sorts RSFNAME RSFTUPLE RSFFILE
+
+   lexical syntax
+	[a-zA-Z][a-zA-Z0-9\_]*		-> RSFNAME
+ 	"#" ~[\n]* [\n]        	        -> LAYOUT
+	[\ \t\n]		        -> LAYOUT
+
+   context-free syntax
+	RSFNAME RSFNAME RSFNAME ";"	-> RSFTUPLE
+	RSFTUPLE*			-> RSFFILE
+	
+   context-free restrictions
+        LAYOUT? -/- [\ \t]
+%%	EOL -/- ~[\n]
