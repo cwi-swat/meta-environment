@@ -94,7 +94,7 @@ AC_SUBST(TOOLBUSLIB)
 dnl Which additional adapters to build?
 
 AC_ARG_WITH(java,
-   [  --with-java             include java support for adapters],
+   [  --with-java             include java support  (java-adapter)],
    JAVA_ADAPTER=java-adapter)
 AC_SUBST(JAVA_ADAPTER)
 
