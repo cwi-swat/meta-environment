@@ -369,7 +369,7 @@ static void producerTest(){
             new RecMsg(aterms.make("msg1reply")))
            );
         
-           T.setVerbose(true);
+           ToolBus.setVerbose(true);
            T.addProcessDefinition(P1);
            T.addProcess("P1");
            T.addProcessDefinition(P2);
@@ -438,7 +438,7 @@ static void producerTest(){
       
       T.addProcess(new ProcessCall("P1", aterms.makeList()), "toolbus.tool.Example");
       T.addProcess("P2");
-      T.setVerbose(true);
+      ToolBus.setVerbose(true);
       T.execute();
     }
     catch (Exception e) {System.out.println(e.getMessage());  e.printStackTrace(); }
