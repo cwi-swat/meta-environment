@@ -38,8 +38,8 @@ AC_SUBST(ATERMINC)
 AC_SUBST(ATERMLIB)
 
 dnl Again for AsFix (which is a part of THIS package now)
-ASFIXINC=$(top_srcdir)/tree/libasfix-old/libasfix
-ASFIXLIB=$(top_srcdir)/tree/libasfix-old/libasfix
+ASFIXINC=${top_srcdir}/tree/libasfix-old/libasfix
+ASFIXLIB=${top_srcdir}/tree/libasfix-old/libasfix
 AC_SUBST(ASFIXINC)
 AC_SUBST(ASFIXLIB)
 
@@ -58,8 +58,8 @@ AC_ARG_WITH(asc-support,
 AC_SUBST(ASC_SUPPORT)
 
 dnl Again for Asc (which is a part of THIS package now)
-ASCINC=$(ASC_SUPPORT)/include
-ASCLIB=$(ASC_SUPPORT)/lib
+ASCINC=${ASC_SUPPORT}/include
+ASCLIB=${ASC_SUPPORT}/lib
 AC_SUBST(ASCINC)
 AC_SUBST(ASCLIB)
 
