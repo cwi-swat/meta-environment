@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "ksdf2table.h"
 
 extern ATermTable state_nr_pairs;
@@ -12,9 +14,9 @@ extern ATermList ATunion(ATermList l1, ATermList l2);
 ATerm update_states(ATermList vertex)
 {
   ATerm nr;
-	ATermList orig;
+  ATermList orig;
 
-	orig = ATsosInsert(state_sos, vertex);
+  orig = ATsosInsert(state_sos, vertex);
 	
   nr = ATtableGet(state_nr_pairs, (ATerm)orig);
   if(!nr) {
@@ -22,6 +24,7 @@ ATerm update_states(ATermList vertex)
     ATtablePut(state_nr_pairs,(ATerm)orig,nr);
     ATtablePut(nr_state_pairs,nr,(ATerm)orig);
     nr_of_states++;
+    assert(nr_of_states < MAX_STATES);
   }
   return nr;
 }

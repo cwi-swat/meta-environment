@@ -214,7 +214,6 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottomOfStack); 
-  ATsetChecking(ATtrue);
   CC_init();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);

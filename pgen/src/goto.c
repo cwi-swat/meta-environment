@@ -5,6 +5,8 @@
 #include "statistics.h"
 #include "goto.h"
 
+#define MAX_GOTOS     32000
+
 int nr_of_items;
 int max_nr_items;
 
@@ -27,34 +29,14 @@ extern ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2);
 extern ATermList ATaddElement(ATermList l, ATerm elem);
 extern ATermList ATunion(ATermList l1, ATermList l2);
 extern ATermList closure(ATermList items);
-extern ATermList reductions(ATermList vertex, ATermList actionset);
+extern void reductions(ATermList vertex);
 
+static ATerm goto_states[MAX_STATES] = { NULL };
+static ATerm goto_classes[MAX_STATES] = { NULL };
 
-#if 0
-/*{{{  void insert_goto(ATermTable gotos, ATerm goto) */
-
-void insert_goto(ATermTable gotos, ATerm goto1)
-{
-  ATerm goto2, newgoto;
-  ATermInt nr1;
-  CC_Class cc1, cc2, newCc;
-
-  nr1   = GET_INT_ARG(goto1, 1);
-  goto2 = ATtableGet(gotos, (ATerm)nr1);
-  if (goto2) {
-    cc1   = (CC_Class)GET_ARG(goto1, 0);
-    cc2   = (CC_Class)GET_ARG(goto2, 0);
-    newCc = CC_union(cc1, cc2);
-    newgoto = (ATerm)ATmakeAppl2(afun_goto, (ATerm)newCc, (ATerm)nr1);
-  }
-  else {
-    newgoto = goto1;
-  }
-  ATtablePut(gotos, (ATerm)nr1, newgoto);
-}
-
-/*}}}  */
-#endif
+static CC_Class  *action_classes[MAX_STATES] = { NULL };
+static ATermList  action_actions[MAX_STATES] = { NULL };
+static int nr_actions = 0;
 
 /*{{{  ATermList insert_item(ATermList items, ATerm item) */
 
@@ -101,45 +83,42 @@ ATermList insert_item(ATermList items, ATerm item1)
 }
 
 /*}}}  */
-/*{{{  ATermList action_insert(ATermList actions, CC_Class cc1, ATermList elems1) */
+/*{{{  void action_insert(CC_Class *cc, ATermList actions)  */
 
-ATermList action_insert(ATermList actions, ATerm cc2, ATermList elems2) 
+void action_insert(CC_Class *origcc, ATermList actions) 
 {
-  ATerm action, newaction;
-  ATerm cc1;
-  ATermList newactions = ATempty, elems1;
-  ATbool matched;
+  CC_Class intersection, cc;
+  static CC_Class *diff = NULL;
+  int i;
 
-  if (ATisEmpty(actions)) {
-    return ATmakeList1((ATerm)ATmakeAppl2(afun_action, cc2, (ATerm)elems2));
+  /*ATwarning("action_insert: %t, %t\n", CC_ClassToTerm(cc), actions);*/
+
+  CC_copy(origcc, &cc);
+
+  if (diff == NULL) {
+    diff = CC_alloc();
   }
-  else {
-    matched = ATfalse;
-    while(!ATisEmpty(actions)) {
-      action = ATgetFirst(actions);
-      actions = ATgetNext(actions);
-      assert(IS_ACTION(action));
 
-      cc1 = GET_ARG(action, 0);
-      elems1 = GET_LIST_ARG(action,1);
-
-      if (ATisEqual(cc1, cc2)) {
-	newaction = (ATerm)ATmakeAppl2(afun_action, cc1, 
-				       (ATerm)ATunion(elems1, elems2));
-	newactions = ATinsert(newactions, newaction);
-	matched = ATtrue;
-      } else {
-	newactions = ATinsert(newactions, action);
+  for (i=nr_actions-1; i>=0; i--) {
+    if (CC_intersection(action_classes[i], &cc, &intersection)) {
+      if (CC_difference(action_classes[i], &cc, diff)) {
+	action_actions[nr_actions] = action_actions[i];
+	action_classes[nr_actions] = diff;
+	diff = CC_alloc();
+	nr_actions++;
+      }
+      action_actions[i] = ATunion(action_actions[i], actions);
+      CC_copy(&intersection, action_classes[i]);
+      if (!CC_difference(&cc, action_classes[i], &cc)) {
+	return;
       }
     }
-
-    if (!matched) {
-      newaction = (ATerm)ATmakeAppl2(afun_action, cc2, (ATerm)elems2);
-      newactions = ATinsert(newactions, newaction);
-    }
-
-    return newactions;
   }
+
+  action_classes[nr_actions] = CC_alloc();
+  CC_copy(&cc, action_classes[nr_actions]);
+  action_actions[nr_actions] = actions;
+  nr_actions++;
 }
 
 /*}}}  */
@@ -174,6 +153,9 @@ ATermList initialize_items(ATerm symbol)
 
 ATermList init() 
 {
+  ATprotectArray(goto_states, MAX_STATES);
+  ATprotectArray(goto_classes, MAX_STATES);
+  ATprotectArray((ATerm *)action_actions, MAX_STATES);
   return initialize_items(ATparse("sort(\"<Start>\")"));
 }
 
@@ -236,9 +218,9 @@ ATwarning("Newvertex = %t\n", newvertex);
 }
 
 /*}}}  */
-/*{{{  ATermList shift_character(ATerm *items, ATerm *symbols, int c) */
+/*{{{  ATermList shift_charclass(ATerm *items, ATerm *symbols, CC_Class *cc) */
 
-ATermList shift_character(ATerm *items, ATerm *symbols, int c)
+ATermList shift_charclass(ATerm *items, ATerm *symbols, CC_Class *cc)
 {
   int len, iptr;
   ATerm item;
@@ -247,7 +229,7 @@ ATermList shift_character(ATerm *items, ATerm *symbols, int c)
   ATerm symbol2;
   ATerm *cur;
   ATermList symbols1, newvertex = ATempty;
-  CC_Class symbol2_class;
+  CC_Class *symbol2_class;
 
   cur = symbols;
   while(1) {
@@ -258,7 +240,7 @@ ATermList shift_character(ATerm *items, ATerm *symbols, int c)
 
     symbol2_class = CC_ClassFromTerm(symbol2);
 
-    if (CC_containsChar(symbol2_class, c)) {
+    if (CC_isSubset(cc, symbol2_class)) {
       int index = cur-symbols;
       item = items[index];
       prod1   = GET_ARG(item, 0);
@@ -286,9 +268,9 @@ ATermList shift_character(ATerm *items, ATerm *symbols, int c)
 }
 
 /*}}}  */
-/*{{{  void gotos(ATermList vertex, ATermList labelset) */
+/*{{{  ATermList gotos(ATermList vertex, ATermList prods, CC_Set *chars) */
 
-ATermList gotos(ATermList vertex, ATermList prods, CC_Class chars)
+ATermList gotos(ATermList vertex, ATermList prods, CC_Set *chars)
 {
   ATerm label, newstate, gotoelem, item; 
   ATermList newvertex, l, gotoElems;
@@ -298,7 +280,7 @@ ATermList gotos(ATermList vertex, ATermList prods, CC_Class chars)
   static ATerm *items = NULL;
   static ATerm *symbols = NULL;
   static int max_items = 0;
-  int i, c, nr_items;
+  int i, idx, nr_items;
 
   gotoElems = ATempty;
   nr_items = ATgetLength(vertex)+1;
@@ -343,55 +325,45 @@ ATermList gotos(ATermList vertex, ATermList prods, CC_Class chars)
     newvertex = shift_prod(items, symbols, label);
     newstate = update_states(newvertex);
 
-    gotoelem = (ATerm)ATmakeAppl2(afun_goto, label, newstate);
+    gotoelem = (ATerm)ATmakeAppl2(afun_goto, (ATerm)ATmakeList1(label), newstate);
 
     gotoElems = ATinsert(gotoElems, gotoelem);
   }
 
   /*ATwarning("traversing set: %t\n", CC_ClassToTerm(chars));*/
-  for (c=0; c<CC_BITS; c++) {
-    if (CC_containsChar(chars, c)) {
-      /*ATwarning("%d in set.\n", c);*/
-      newvertex = shift_character(items, symbols, c);
-      newstate = update_states(newvertex);
-      gotoelem = (ATerm)ATmakeAppl2(afun_goto, (ATerm)ATmakeInt(c), newstate);
-      gotoElems = ATinsert(gotoElems, gotoelem);
-    }
+  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
+    CC_Class *cc = CC_getFromSet(chars, idx);
+    newvertex = shift_charclass(items, symbols, cc);
+    newstate = update_states(newvertex);
+    goto_states[idx] = newstate;
+    goto_classes[idx] = CC_ClassToTerm(cc);
   }
 
   return gotoElems;
 }
 
 /*}}}  */
-/*{{{  static ATermList shifts(ATermList gotos) */
+/*{{{  static ATermList shifts(CC_Set *chars)  */
 
-static ATermList shifts(ATermList gotos) 
+static ATermList shifts(CC_Set *chars) 
 {
-  ATerm gotoelem, state, shift;
+  ATerm shift;
   ATermList accept, shiftlist;
   ATermList actionset = ATempty;
-  ATerm prodnr;
-  int prodid;
+  int idx;
 
 /*ATwarning("Number of gotos is %d: %t\n", ATgetLength(gotos), gotos);*/
 
-  while(!ATisEmpty(gotos)) {
-    gotoelem = ATgetFirst(gotos);
-    gotos = ATgetNext(gotos);
+  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
+    CC_Class *cc = CC_getFromSet(chars, idx);
 
-    assert(IS_GOTO(gotoelem));
-    state = GET_ARG(gotoelem,1);
-    prodnr = GET_ARG(gotoelem, 0);
-    assert(ATgetType(prodnr) == AT_INT);
-    prodid = ATgetInt((ATermInt)prodnr);
-
-    if (prodid == CC_EOF) {
+    if (CC_isEOF(cc)) {
       accept = ATmakeList1(ATparse("accept"));
-      actionset = action_insert(actionset, prodnr, accept);  
-    } else if (prodid < CC_EOF) {
-      shift = (ATerm)ATmakeAppl1(afun_shift, (ATerm)state);
+      action_insert(cc, accept);  
+    } else {
+      shift = (ATerm)ATmakeAppl1(afun_shift, (ATerm)goto_states[idx]);
       shiftlist = ATmakeList1(shift);
-      actionset = action_insert(actionset, prodnr, shiftlist);  
+      action_insert(cc, shiftlist);  
     }
   }
 
@@ -400,21 +372,36 @@ static ATermList shifts(ATermList gotos)
 
 /*}}}  */
 
-/*{{{  void actions(ATermList kernel, ATermList vertex, ATermList gotos) */
+/*{{{  void actions(ATermList kernel, ATermList vertex, CC_Set *chars, ATermList gotos)  */
 
-void actions(ATermList kernel, ATermList vertex, ATermList gotos) 
+void actions(ATermList kernel, ATermList vertex, CC_Set *chars, ATermList gotos) 
 {
   ATermList actionset = ATempty;
+  int idx;
 
-  actionset = shifts(gotos);
+  nr_actions = 0;
+
+  actionset = shifts(chars);
 /*
 ATwarning("Action set is %t\n", actionset);
 */
-  actionset = reductions(vertex,actionset);
+  reductions(vertex);
 
 /*
 ATwarning("Action set after reductions is %t\n", actionset);
 */
+
+  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
+    gotos = ATinsert(gotos, (ATerm)ATmakeAppl2(afun_goto,
+					       goto_classes[idx], goto_states[idx]));
+  }
+
+  for (idx=0; idx<nr_actions; idx++) {
+    actionset = ATinsert(actionset,
+			 (ATerm)ATmakeAppl2(afun_action,
+					    CC_ClassToTerm(action_classes[idx]),
+					    (ATerm)action_actions[idx]));
+  }
 
   ATtablePut(state_gotos_pairs, (ATerm)kernel, (ATerm)gotos);
   ATtablePut(state_actions_pairs, (ATerm)kernel, (ATerm)actionset);
@@ -428,21 +415,26 @@ void vertex(int statenr)
 {
   ATermList vertex, newvertex, gotoset;
   ATermList prods;
-  CC_Class chars;
+  CC_Set chars;
 
   vertex = (ATermList)ATtableGet(nr_state_pairs,(ATerm)ATmakeInt(statenr));
   if (vertex) {
     newvertex = closure(vertex);
 
-    chars = CC_makeClassEmpty();
-    outgoing(newvertex, &prods, chars);
+    CC_initSet(&chars);
+    outgoing(newvertex, &prods, &chars);
+    /*
+    fprintf(stderr, "\nchars = ");
+    CC_writeSetToFile(stderr, &chars);
+    */
+    CC_partitionSet(&chars);
 
-    gotoset = gotos(newvertex, prods, chars);
-    if (ATgetLength(gotoset) > max_gotos) {
-      max_gotos = ATgetLength(gotoset);
+    gotoset = gotos(newvertex, prods, &chars);
+    if (ATgetLength(gotoset) + CC_getSetSize(&chars)> max_gotos) {
+      max_gotos = ATgetLength(gotoset) + CC_getSetSize(&chars);
     }
 
-    actions(vertex, newvertex, gotoset);
+    actions(vertex, newvertex, &chars, gotoset);
   }
 }
 

@@ -20,6 +20,7 @@
 
 #define SDF_EOF  256
 #define MIN_PROD (SDF_EOF+1)
+#define MAX_STATES  65000
 
 /*{{{  external functions */
 

@@ -596,6 +596,12 @@ static ATerm intset_to_term(IS_IntSet set)
   assert(afun_range >= 0);
 
   for (i=MAX_PROD; i>=0; i--) {
+    while (i % 32 == 31 && set[i/32] == 0) {
+      i -= 32;
+      if (i == -1) {
+	return (ATerm)range_set;
+      }
+    }
     if (IS_contains(set, i)) {
       end   = i;
       start = end-1;
@@ -622,6 +628,7 @@ static ATerm intset_to_term(IS_IntSet set)
 }
 
 /*}}}  */
+
 /*{{{  static ATermList compress_gotos(ATermList goto_list) */
 
 static ATermList compress_gotos(ATermList goto_list)
@@ -631,7 +638,8 @@ static ATermList compress_gotos(ATermList goto_list)
   static int prev_nr_of_states = -1;
   int nr_occupied_sets = 0, prod, state, idx;
   ATermAppl gt;
-  ATermList result;
+  ATermList result, list;
+  ATerm elem;
   IS_IntSet set;
 
   if (prev_nr_of_states != nr_of_states) {
@@ -650,23 +658,30 @@ static ATermList compress_gotos(ATermList goto_list)
     memset(occupied_sets, 0, size);
   }
 
+  result = ATempty;
   while (!ATisEmpty(goto_list)) {
     gt    = (ATermAppl)ATgetFirst(goto_list);
-    prod  = ATgetInt((ATermInt)ATgetArgument(gt, 0));
-    state = ATgetInt((ATermInt)ATgetArgument(gt, 1));
+    list  = (ATermList)ATgetArgument(gt, 0);
+    assert(ATgetLength(list) > 0);
+    elem = ATgetFirst(list);
+    if (ATgetLength(list) == 1 && ATgetType(elem) == AT_INT) {
+      prod  = ATgetInt((ATermInt)elem);
+      state = ATgetInt((ATermInt)ATgetArgument(gt, 1));
 
-    set = prodsets[state];
-    if (set == NULL) {
-      set = IS_create(MAX_PROD);
-      prodsets[state] = set;
-      occupied_sets[nr_occupied_sets++] = state;
+      set = prodsets[state];
+      if (set == NULL) {
+	set = IS_create(MAX_PROD);
+	prodsets[state] = set;
+	occupied_sets[nr_occupied_sets++] = state;
+      }
+      IS_add(set, prod);
+    } else {
+      result = ATinsert(result, (ATerm)gt);
     }
-    IS_add(set, prod);
 
     goto_list = ATgetNext(goto_list);
   }
 
-  result = ATempty;
   for (idx=0; idx<nr_occupied_sets; idx++) {
     state = occupied_sets[idx];
     set   = prodsets[state];
@@ -678,55 +693,6 @@ static ATermList compress_gotos(ATermList goto_list)
   }
 
   return result;
-}
-
-/*}}}  */
-/*{{{  static ATermList compress_actions(ATermList action_list) */
-
-static ATermList compress_actions(ATermList action_list)
-{
-  static unsigned long classes[CC_BITS*CC_LONGS];
-  static ATermIndexedSet actions = NULL;
-  long action_index, index, max_index;
-
-  if (actions == NULL) {
-    actions = ATindexedSetCreate(CC_BITS*2, 60);
-  } else {
-    ATindexedSetReset(actions);
-  }
-  memset(classes, 0, CC_BITS*CC_LONGS*sizeof(unsigned long));
-
-  index = -1;
-  max_index = -1;
-  while (!ATisEmpty(action_list)) {
-    ATermAppl action = (ATermAppl)ATgetFirst(action_list);
-    CC_Class cc = CC_ClassFromInt((ATermInt)ATgetArgument(action, 0));
-    index = ATindexedSetPut(actions, ATgetArgument(action, 1), NULL);
-    if (index > max_index) {
-      assert(index < CC_BITS);
-      max_index = index;
-    }
-    CC_union(&classes[index*CC_LONGS], cc);
-    /*
-    ATwarning("cc at %d after adding %t: %t\n", index,
-	      CC_ClassToTerm(cc), CC_ClassToTerm(&classes[index*CC_LONGS]));
-	      */
-    CC_free(cc);
-
-    action_list = ATgetNext(action_list);
-  }
-
-  assert(ATisEmpty(action_list));
-
-  for (action_index=0; action_index<=max_index; action_index++) {
-    ATerm acts = ATindexedSetGetElem(actions, action_index);
-    ATerm char_class = CC_ClassToTerm(&classes[action_index*CC_LONGS]);
-    ATerm action = (ATerm)ATmakeAppl2(afun_action, char_class, acts);
-    /*ATwarning("action = %t\n", action);*/
-    action_list = ATinsert(action_list, action);
-  }
-
-  return action_list;
 }
 
 /*}}}  */
@@ -785,7 +751,6 @@ ATerm generate_parse_table(PT_ParseTree g)
 
       /*ATwarning("actions before compression (vnr=%t) = %t\n", vnr, actions);*/
       gotos   = compress_gotos(gotos);
-      actions = compress_actions(actions);
 
       state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, (ATerm)actions);
 

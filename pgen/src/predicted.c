@@ -86,9 +86,9 @@ ATermList closure(ATermList items)
 }
 
 /*}}}  */
-/*{{{  void outgoing(ATermList itemset, ATermList *predprods, CC_Class predchars) */
+/*{{{  void outgoing(ATermList itemset, ATermList *predprods, CC_Set *predchars) */
 
-void outgoing(ATermList itemset, ATermList *predprods, CC_Class predchars)
+void outgoing(ATermList itemset, ATermList *predprods, CC_Set *predchars)
 {
   int iptr, len;
   ATermList symbols;
@@ -122,7 +122,7 @@ void outgoing(ATermList itemset, ATermList *predprods, CC_Class predchars)
           symbol2 = GET_ARG(item, 3);
           if (IS_CHARCLASS(symbol2)) {
 	    /*ATwarning("char-class: %t\n", symbol2);*/
-	    CC_addATermClass(predchars, symbol2);
+	    CC_addATermClass(CC_addToSet(predchars), symbol2);
           }
         }
       }

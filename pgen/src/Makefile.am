@@ -20,8 +20,9 @@ SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		Sdf2-Normalization.c intset.c
 
 HDRS         = atsets.h ksdf2table.h statistics.h flatten.h predicted.h goto.h \
-		follow.h intset.h
+		follow.h intset.h characters.h
 
+#CFLAGS = -pg
 
 test_chars_SOURCES	= test-chars.c characters.c
 test_chars_LDADD	= \

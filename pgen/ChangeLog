@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/24 ({markvdb,jong,olivierp}@cwi.nl)
+ * Improved pgen efficiency and regenerated parsetables
+
 2001/07/20 ({markvdb,jong,olivierp}@cwi.nl)
  * Switched to new parsetable format
  * Introduced character classes instead of aterm lists in order

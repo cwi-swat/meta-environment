@@ -9,7 +9,7 @@ extern int MAX_PROD;
 
 static ATermList *local_follow_table = NULL;
 
-CC_Class  *follow_table = NULL;
+CC_Class  **follow_table = NULL;
 static ATermList *dependencies = NULL;
 static ATermList *depend_closure = NULL;
 static ATermList *initial_follow_sets = NULL;
@@ -28,24 +28,29 @@ ATbool changed;
 /*{{{  ATermList charclassExtraction(ATermList followset) */
 
 /* This calculation should be performed once and not each time */
-CC_Class charclassExtraction(ATermList followset)
+CC_Class *charclassExtraction(ATermList followset)
 {
   ATerm felem;
-  CC_Class newClass = CC_makeClassEmpty();
+  CC_Class *newClass = CC_makeClassEmpty();
 
   while (!ATisEmpty(followset)) {
-    CC_Class fcc;
+    CC_Class *fcc;
     felem = ATgetFirst(followset);
     followset = ATgetNext(followset);
 
     fcc = CC_ClassFromTerm(felem);
 
     if (IS_CHARCLASS(felem)) {
-      CC_union(newClass, fcc);
+      CC_union(newClass, fcc, newClass);
     }
 
     CC_free(fcc);
   }
+  if (CC_isEmpty(newClass)) {
+    CC_free(newClass);
+    return NULL;
+  }
+
   return newClass;
 }
 
@@ -466,7 +471,7 @@ static void union_follow_sets()
   ATermList result, follows, deps;
   int prodid;
 
-  follow_table = (CC_Class *)malloc(MAX_PROD*sizeof(CC_Class));
+  follow_table = (CC_Class **)malloc(MAX_PROD*sizeof(CC_Class *));
   if (!follow_table) {
     ATerror("out of memory!\n");
   }
