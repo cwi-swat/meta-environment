@@ -908,7 +908,7 @@ ATerm slice(ATerm l1, ATerm l2)
   }
 
   ll = slice_length(l1, l2);
-  len = (MAX_STORE > ll ? ll : MAX_STORE);
+  len = (MAX_STORE > ll ? MAX_STORE : ll );
   for(i=0; i<len; i++) {
     term_store[i] = ATgetFirst((ATermList)l1);
     l1 = (ATerm)ATgetNext((ATermList)l1);
