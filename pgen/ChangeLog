@@ -1,5 +1,9 @@
 $Id$
 
+2002/03/04 (vandenbr@loria.fr)
+ * Introduced parameterized sorts.
+ * Bumped into version 1.4beta.
+
 2002/02/07 (jurgenv@cwi.nl)
  * Release 1.3
 

@@ -6,6 +6,25 @@ equations
 %% Renaming sorts.
 
   [0] [_S] 'r = _S
+  [rn-1] rename-symbol(_S1, 'r) = _S2,
+         rename(_A+1, 'r) = _A+2
+         =======================
+         [_S1[[_A+1]]] 'r = _S2[[_A+2]]
   [0] (sorts 'a) 'r = sorts ('a)*'r
+
+%% hidden functions
+
+  [rens-1'1] proj__S1('r) = _A2
+             ==================
+             rename-symbol(_S1, 'r) = _A2
+
+  [default-rens-1'2] rename-symbol(_A, 'r) = [_A] 'r
+
+  [ren-1'1] rename(_A, 'r) = rename-symbol(_A, 'r)
+
+  [ren-1'2] rename-symbol(_A1, 'r) = _A2,
+            rename(_A+1, 'r) = _A+2
+            =======================
+            rename(_A1, _A+1, 'r) = _A2, _A+2
 
 %%%

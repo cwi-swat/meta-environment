@@ -2,7 +2,14 @@ module Sorts-Sdf-Renaming
 imports Sorts-Sdf-Syntax Kernel-Sdf-Renaming
 
 hiddens
+  context-free syntax
+    rename-symbol(Symbol, Renamings) -> Symbol
+    rename({Symbol ","}+, Renamings) -> {Symbol ","}+
+
+hiddens
   variables
     "_S"[0-9\']*     -> Sort
+    "_"[A][0-9\']*   -> Symbol
+    "_A+"[0-9\']*    -> {Symbol ","}+
     "'"[abc][0-9\']* -> Symbol*
     "'r"[0-9\']*     -> Renamings  

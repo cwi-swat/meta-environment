@@ -211,8 +211,9 @@ exports
     [A-Z]                          -> Sort
     [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort
   context-free syntax
-    Sort             -> Symbol
-    "sorts" Symbols  -> Grammar
+    Sort                         -> Symbol
+    Sort "[[" {Symbol ","}+ "]]" -> Symbol
+    "sorts" Symbols              -> Grammar
 
 module Literals-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals
