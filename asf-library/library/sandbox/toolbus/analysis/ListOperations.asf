@@ -1,12 +1,14 @@
 equations
 
-  [cvt-1] convert($String1, <$Area, $String2>) = 
-            listitem($String1 || $String2, $Area)
+[cvt-1]
+  convert($String1, <$Area, $String2>)
+  = listitem($String1 || $String2, $Area)
 
-  [cvtl-1] convertl({$Tuple*}) = [$ListItem*]
-           ===>
-           convertl({<$String1,<$Area, $String2>>, $Tuple*}) = 
-             [convert($String1, <$Area, $String2>),
-$ListItem*]
+[cvtl-1]
+  convertl({$Elem*}) = [$ListItem*]
+  ===>
+  convertl({<$String1,<$Area, $String2>>, $Elem*})
+  = [convert($String1, <$Area, $String2>), $ListItem*]
 
-  [cvtl-2] convertl({}) = []
+[cvtl-2]
+  convertl({}) = []

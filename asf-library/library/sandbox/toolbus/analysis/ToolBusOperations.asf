@@ -19,6 +19,10 @@ equations
       || terms2str($TermPlus) 
       || strcon(""" ")" """)
 
+  [term2string]
+    term2str(*undefined*)
+    = strcon(""" "*" "u" "n" "d" "e" "f" "i" "n" "e" "d" "*" """)
+
   [term2string-chars]
     term2str($String) = strcon(""" "s" "t" "r" """)
 
@@ -32,11 +36,12 @@ equations
     term2str($Bool) = strcon(""" "b" "o" "o" "l" """)
 
   [term2string-ph]
-    term2str(<$Term>) = strcon(""" "<" """) || terms2str($Term) || strcon(""" ">" """)
+    term2str(<$Term>)
+    = strcon(""" "<" """) || terms2str($Term) || strcon(""" ">" """)
 
   [term2string-list]
     term2str([$Terms])
-	= strcon(""" "[" """) || terms2str($Terms) || strcon(""" "]" """)
+    = strcon(""" "[" """) || terms2str($Terms) || strcon(""" "]" """)
 
   [terms2string-empty]
    terms2str() = strcon(""" """)
@@ -97,6 +102,9 @@ equations
     getType($Var?,  
             $FormalParams,  
             $VarDecls1, $Var : $Term, $VarDecls2) = $Term
+
+  [default-getType]
+    getType($GenVar, $FormalParams, $VarDecls) = *undefined*
 
   [getType-id]
     getType($Id, $FormalParams, $VarDecls) = term

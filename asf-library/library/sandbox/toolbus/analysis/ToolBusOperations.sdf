@@ -41,6 +41,7 @@ hiddens
     "$Terms"[0-9]*		-> {Term ","}*
     "$TermPlus"[0-9]*		-> {Term ","}+
     "$Var"[0-9]*		-> Var
+    "$GenVar"[0-9]*		-> GenVar
     "$FormalParam"[0-9]*	-> FormalParam
     "$FormalParams"[0-9]*	-> {FormalParam ","}*
     "$VarDecl"[0-9]*		-> VarDecl

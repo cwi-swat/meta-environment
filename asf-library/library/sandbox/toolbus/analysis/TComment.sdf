@@ -4,13 +4,27 @@ imports basic/Whitespace
 
 exports
   lexical syntax
-    "/*" ( ~[\*] | Asterisk )* "*/" -> Comment
     Comment                         -> LAYOUT
-    [\*]                            -> Asterisk
+    "/*" ( ~[\*] | Asterisk )* "*/" -> Comment
     "//" ~[\n]* [\n]                -> Comment
+    [\*]                            -> Asterisk
 
   lexical restrictions
     Asterisk -/- [\/]
 
+exports
+  lexical syntax
+    "#include" [\ \t]* "<" FileName ">" -> LAYOUT
+    "#include" [\ \t]* "\"" FileName "\"" -> LAYOUT
+    [a-zA-Z0-9\.\-]* -> FileName
+
+exports
+  lexical syntax
+    "#ifdef" [\ \t]* Vname -> LAYOUT
+    "#ifndef" [\ \t]* Vname -> LAYOUT
+    "#else" -> LAYOUT
+    "#define" [\ \t]* Vname ~[\n]* [\n] -> LAYOUT
+    "#endif" -> LAYOUT
+
 hiddens
-  sorts Asterisk Comment
+  sorts Asterisk Comment FileName

@@ -9,6 +9,7 @@ exports
 hiddens
   variables
     "$VPair*" [0-9\']*    -> { RVAR # RVALUE ","}*
+    "$Tuple*" [0-9]*      -> { Elem "," }*
     "$Var" [0-9\']*       -> RVAR
     "$Store" [0-9\']*     -> RSTORE
     "$Val" [0-9\']*       -> RVALUE
