@@ -1,5 +1,12 @@
 /* this file deals with errorapi terms, they are apified, but of course
  * not in ToolBus... where should this decomposition be done??? 
+ *
+ * Some changes in the editor interface might make it possible to get
+ * rid of most of this file
+ *
+ * Known problems: the errorapi does not know the language of the file
+ * that the error occurred in. That means that an editor is opened over
+ * the "unknown language" with obvious disadvantages
  */
 
 process ShowFeedbackLocation(Feedback : term) is
@@ -39,7 +46,8 @@ process ShowArea(Filename : str, Area : term) is
 let
   EditorId : term,
   Start : int,
-  End : int
+  End : int, 
+  Length : int
 in
   printf("opening file over unknown language: %s\n", Filename) .
   snd-msg(edit-general("unknown language", Filename)) .
@@ -47,8 +55,9 @@ in
   if not(equal(Area, no-area)) then
      Start := first(next(next(next(next(args(Area)))))) .
      End := first(next(next(next(next(next(args(Area))))))) .
-     printf("setting focus from %d to %d\n", Start, End) .
-     snd-note(set-focus(EditorId, focus(root, "unavailable", area(Start, sub(End, Start), 1))))
+     Length := sub(End, Start) .
+     snd-msg(set-focus(EditorId, 
+                       focus(root, "unavailable", area(Start, Length, 0))))
   else 
      tau
   fi
