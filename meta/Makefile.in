@@ -48,7 +48,7 @@ uninstall:
 	done
 
 install:
-	mkinstalldirs $(bindir) $(libdir) $(includedir) $(classdir)
+	$(top_srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) $(classdir)
 	$(INSTALL_PROG) $(INSTALL) $(bindir) meta
 	@for DIR in $(SUBDIRS);	\
 	do \
