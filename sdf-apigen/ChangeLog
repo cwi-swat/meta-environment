@@ -3,7 +3,7 @@
  * Added generation of patterns based on start symbols. For every start
    symbol the pattern parsetree(appl(prod( ... ),..) etc. is generated in
    order to hide the details of AsFix completely when using an API.
-
+ * Bumped to 1.4beta
 
 2002/09/31 (vinju@loria.fr)
  * Started new package sdf-apigen that contains the mapping from
