@@ -28,7 +28,7 @@ bin_PROGRAMS	  = apply-function remove-annotation
 
 bin_SCRIPTS	  = genmakefile genamakefile
 
-EXTRA_DIST	  = genmakefile.proto
+EXTRA_DIST	  = genmakefile.proto genamakefile.sh.src
 
 apply_function_SOURCES	= apply-function.c
 apply_function_LDADD	= -L$(PT_SUPPORT)/lib -lAsFix \
