@@ -1,5 +1,10 @@
 $Id$
 
+2001/11/16 (jong@cwi.nl)
+ * version 0.22beta started
+ * sleep 1 second between issuing shutdown of emacs and exiting adapter
+   to fix mysterious 'hangup'.
+
 2001/11/12 (jong@cwi.nl)
  * Released version 0.21
  * Documented jurgen's change: removed demos/game which uses obsolete
