@@ -194,9 +194,10 @@ endlet
 
 process ReplaceRoot(EditorId: term, Tree: term) is
 let
-  TotalTree   : term,
-  Text        : str,
-  Focus       : term
+  TotalTree : term,
+  Text      : str,
+  Focus     : term,
+  FileName  : str
 in
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(set-focus(EditorId, Focus?)) .
@@ -206,7 +207,14 @@ in
   rec-msg(tree(TotalTree?)) .
   snd-msg(unparse(TotalTree)) .
   rec-msg(unparsed-text(Text?)) .
+  snd-msg(get-editor-name(EditorId)) .
+  rec-msg(editor-name(FileName?)) .
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(replace-file(EditorId, FileName)) .
+  /*
   snd-msg(replace-text(EditorId, Text)) .
+  */
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(set-focus(EditorId, Focus))
@@ -224,9 +232,10 @@ process GetFocus(EditorId: term, Tree: term?) is
 
 process ReplaceFocus(EditorId: term, Tree: term) is
 let
-  TotalTree   : term,
-  Text        : str,
-  Focus       : term
+  TotalTree : term,
+  Text      : str,
+  Focus     : term,
+  FileName  : str
 in
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
@@ -234,9 +243,16 @@ in
   rec-msg(tree(TotalTree?)) .
   snd-msg(unparse(TotalTree)) .
   rec-msg(unparsed-text(Text?)) .
+  snd-msg(get-editor-name(EditorId)) .
+  rec-msg(editor-name(FileName?)) .
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(replace-file(EditorId, FileName)) .
+  /*
   snd-msg(replace-text(EditorId, Text)) .
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(set-focus(EditorId, Focus?)) .
+  */
   snd-msg(set-focus(EditorId, Focus))
 endlet
 
