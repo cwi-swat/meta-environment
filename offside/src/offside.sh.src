@@ -24,7 +24,7 @@ Version() {
   echo "$name v$version" >&2
 }
 
-input=""
+input="-"
 output="-"
 
 myarguments="i:o:Vh"
@@ -57,7 +57,7 @@ done
 
 set -e;
 
-${ADDPOSINFO} -p ${input} -i ${input} -t | \
+${ADDPOSINFO} -p "offside" -i ${input} -t | \
 ${SGLR}       -p ${TABLE} | \
 ${OFFSIDE} | \
 ${ASOURCE} -o ${output}
