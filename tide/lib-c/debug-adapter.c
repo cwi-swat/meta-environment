@@ -7,7 +7,7 @@
 ATerm ta_create_rule(int conn, int pid, ATerm port, ATerm cond,
 		     ATerm act, ATerm tag, ATerm enabled)
 {
-  TA_Port the_port = TA_makePortFromTerm(port);
+  TA_Port the_port = TA_PortFromTerm(port);
   TA_Expr the_cond = cond;
   TA_Expr the_act  = act;
   
@@ -41,7 +41,7 @@ ATerm ta_disable_rule(int conn, int pid, int rid)
 ATerm ta_modify_rule(int conn, int pid, int rid, ATerm port, ATerm cond,
 		     ATerm act, ATerm enabled)
 {
-  TA_Port the_port = TA_makePortFromTerm(port);
+  TA_Port the_port = TA_PortFromTerm(port);
   TA_Expr the_cond = cond;
   TA_Expr the_act  = act;
 

@@ -115,7 +115,7 @@ int TA_getPortType(TA_Port port)
     return PORT_STARTED;
   }
 
-  ATerror("unknown port: %t\n", TA_makeTermFromPort(port));
+  ATerror("unknown port: %t\n", TA_PortToTerm(port));
   return -1;
 }
 
@@ -151,7 +151,7 @@ TA_Expr eval_cpe(int pid, AFun fun, TA_ExprList args)
 TA_Expr eval_location(int pid, AFun fun, TA_ExprList args)
 {
   TA_Expr arg = ATgetFirst(args);
-  TA_Location location = TA_makeLocationFromTerm(arg);
+  TA_Location location = TA_LocationFromTerm(arg);
   TA_Location cpe = processes[pid].cpe;
 
   if (cpe == NULL) {
