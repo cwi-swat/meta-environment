@@ -1,5 +1,10 @@
 $Id$
 
+2001/08/08 ({jong,olivierp}@cwi.nl)
+ * Fixed some serious memory leaks
+ * Fixed int hnr problems (should be unsigned)
+ * Added support for compiling and linking against dmalloc
+
 2001/08/07 ({jong,olivierp}@cwi.nl)
  * Added rudimentary support for multiple input files to support memory
    profiling

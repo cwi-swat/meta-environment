@@ -32,7 +32,7 @@ test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
 #CFLAGS += -pg
-#CFLAGS += -DDEBUG_ALLOC
+#CFLAGS += -DDMALLOC -DDEBUG_ALLOC -I/ufs/olivierp/include
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
@@ -41,6 +41,7 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(TOOLBUS)/lib -lATB \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
+# -L/ufs/olivierp/lib -ldmalloc \
 
 CLEANFILES	= parsetablegen.tifs \
                   sdf2table sdf2table.1 \

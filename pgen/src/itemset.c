@@ -16,7 +16,7 @@
 #define INITIAL_TABLE_SIZE 16
 #define MAGIC_K		   17
 #define MAGIC_JUMP	   5
-#define HASH(item)	   (((int)item)*MAGIC_K)
+#define HASH(item)	   ((unsigned)(((unsigned int)item)*MAGIC_K))
 #define THRESHOLD_PCT	   70
 
 
@@ -155,7 +155,7 @@ static void resize_table(ItemSet set)
 
 void ITS_add(ItemSet set, Item item)
 {
-  int hnr;
+  unsigned int hnr;
   ATerm dotsym;
   ItemBucket *bucket;
  
@@ -212,7 +212,7 @@ void ITS_add(ItemSet set, Item item)
 
 ATbool  ITS_contains(ItemSet set, Item item)
 {
-  int hnr;
+  unsigned int hnr;
  
   assert(item != NO_ITEM);
 
@@ -246,7 +246,7 @@ void ITS_iterator(ItemSet set, ItemSetIterator *iterator)
 
 void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator)
 {
-  int hnr;
+  unsigned int hnr;
   static Item empty[1] = { NO_ITEM };
 
   hnr = HASH(dotsym) % set->size;

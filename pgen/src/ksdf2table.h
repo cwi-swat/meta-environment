@@ -18,6 +18,10 @@
      #include "parsetablegen.tif.h"
 #endif
 
+#ifdef DMALLOC
+#include <dmalloc.h>
+#endif
+
 #define SDF_EOF  256
 #define MIN_PROD (SDF_EOF+1)
 #define MAX_STATES  65000
