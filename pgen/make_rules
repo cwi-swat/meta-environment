@@ -1,0 +1,37 @@
+#
+# $Id$
+#
+
+POD2MAN=pod2man
+POD2TXT=pod2text
+POD2HTML=pod2html
+
+%.tif.c %.tif.h: %.tifs
+	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
+
+%.tifs: %.idef
+	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
+	@if [ "a${VPATH}" != "a" ]; then \
+	   mv ${srcdir}/$@ $@ ;\
+	fi
+
+%.tifs: %.tb
+	PATH=$(TOOLBUS)/bin:$${PATH} toolbus -gentifs $<
+	@if [ "a${VPATH}" != "a" ]; then \
+	   mv ${srcdir}/$@ $@ ;\
+	fi
+
+CENTER="Meta-Environment Documentation"
+
+%.7:    %.pod
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=7 $< > $@
+%.1:    %.pod
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
+
+%.txt: %.pod
+	-$(POD2TEXT) $< > $@
+
+%.html: %.pod
+	-$(POD2HTML) $< > $@
+	-rm -f pod2html-*
+

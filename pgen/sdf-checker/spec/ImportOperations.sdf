@@ -1,0 +1,51 @@
+module ImportOperations
+
+imports ModuleOperations
+
+exports
+  sorts ImportRelation ImportRelations ImportsSet
+
+  context-free syntax
+    "[" ModuleId ":" ImportsSet "]" -> ImportRelation
+    "{" { ImportRelation ","}* "}"  -> ImportRelations
+
+    "imports" "(" Import* ")"       -> ImportsSet
+
+hiddens
+  context-free syntax
+    get-exported-imports(Module, ImportsSet)     -> ImportsSet {traversal(accu, top-down)}
+    get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu, top-down)}
+    get-exported-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu, top-down)}
+                
+hiddens
+  context-free syntax
+    get-hidden-imports(Module, ImportsSet)  -> ImportsSet {traversal(accu)}
+    get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traversal(accu)}
+    get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traversal(accu)}
+
+hiddens
+  context-free syntax
+    get-imports(Grammar, ImportsSet)       -> ImportsSet {traversal(accu, top-down)} 
+    get-imports(ModuleId, ImportRelations) -> ImportsSet
+
+exports
+  context-free syntax
+    get-all-imports(Module) -> ImportsSet
+
+hiddens
+  variables
+    "$Definition"[0-9]*	     -> Definition
+    "$ModuleName"[0-9]*      -> ModuleName
+    "$ModuleId"[0-9]*        -> ModuleId
+    "$Module"[0-9]*          -> Module
+
+    "$ImportRelation"[0-9]*  -> ImportRelation
+    "$ImportRelation*"[0-9]* -> {ImportRelation ","}*
+    "$ImportRelations"[0-9]* -> ImportRelations
+
+    "$Import"[0-9]*          -> Import
+    "$Import*"[0-9]*         -> Import*
+    "$ImportsSet"[0-9]*      -> ImportsSet
+
+    "$Grammar"[0-9]*         -> Grammar
+    

@@ -1,0 +1,30 @@
+module Sdf-Messages
+
+imports SymbolSetOperations ProductionSetOperations
+
+exports 
+  sorts Message Messages
+
+  context-free syntax
+    "none"					                     -> Message
+    undeclared-symbols(ModuleId, SymbolsSet)                         -> Message
+    sorts-without-production-definitions(ModuleId, SymbolsSet)       -> Message
+    double-declared-symbol(ModuleId, Symbol)                         -> Message
+    illegal-attribute(ModuleId, Production)                          -> Message
+    used-in-priorities-but-undefined(ModuleId, ProductionsSet)       -> Message
+    inconsistent-rhs-in-priorities(ModuleId, Symbol, Production)     -> Message
+    double-used-label(ModuleId, Literal, Production)                 -> Message
+    constructor-has-already-been-used(ModuleId, Literal, Production) -> Message
+
+  context-free syntax
+    "{" Message* "}"       -> Messages
+    Messages "+" Message   -> Messages
+    Messages "++" Messages -> Messages {left}
+
+hiddens
+  variables
+    "$ModuleId"[0-9]* -> ModuleId
+
+    "$Msg"[0-9]*        -> Message
+    "$Msg*"[0-9]*       -> Message*
+    "$Msgs"[0-9]*       -> Messages

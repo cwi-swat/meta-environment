@@ -1,0 +1,54 @@
+equations
+	
+  [cmc-1'1] get-module-name(Module) = $ModuleId,
+       
+            get-all-imports(Module) = ImportsSet,
+            get-constructors(ImportsSet, 
+                             get-module-info(InfoMsgTuple1)) = 
+              constructors(SymbolCons*1),
+
+            get-constructor-symbol-pairs(Module, 
+                                         [constructors(SymbolCons*1),{}], 
+                                         $ModuleId) = 
+              [constructors(SymbolCons*2), Msgs1],
+
+            Msgs2 = get-messages(InfoMsgTuple1), 
+
+            InfoMsgTuple2 = put-messages(Msgs1 ++ Msgs2, InfoMsgTuple1),
+
+            get-module-info(InfoMsgTuple2) = ModuleInfoTable1,
+            put-constructor-info($ModuleId, 
+                                 constructors(SymbolCons*2), 
+                                 ModuleInfoTable1) = ModuleInfoTable2,
+            put-module-info(ModuleInfoTable2, InfoMsgTuple2) =  InfoMsgTuple3
+            =================================================================
+            check-module-constructors(Module, InfoMsgTuple1) = InfoMsgTuple3
+
+  [gcsp-1'1] get-constructor-symbol-pairs(Symbol* -> Symbol Attrs,
+                                          ConsMsgTuple,
+                                          $ModuleId) =
+               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
+                                            $ModuleId, Symbol,
+                                            Symbol* -> Symbol Attrs)
+
+  [gcsp-1'1] get-constructor-symbol-pairs($Literal(Symbol,*) -> Symbol Attrs,
+                                          ConsMsgTuple,
+                                          $ModuleId) =
+               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
+                                            $ModuleId, Symbol,
+                                            $Literal(Symbol,*) -> Symbol Attrs)
+
+  [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = true
+             =================================================
+             get-constructor-symbol-pairs(cons( $Literal ), 
+                                          [ConstructorSet, Msgs], 
+                                          $ModuleId, Symbol, Prod) =
+               [ConstructorSet, 
+Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
+
+  [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = false
+             ==================================================
+             get-constructor-symbol-pairs(cons( $Literal ), 
+                                          [ConstructorSet, Msgs], 
+                                          $ModuleId, Symbol, Prod) =
+               [add(Symbol, $Literal, ConstructorSet), Msgs]

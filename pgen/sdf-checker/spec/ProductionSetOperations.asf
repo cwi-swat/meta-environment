@@ -1,0 +1,9 @@
+equations
+
+  [diff1] diff(productions(Prod*1 Prod Prod*2), 
+               productions(Prod*3 Prod Prod*4)) =
+            diff(productions(Prod*1 Prod*2), 
+                 productions(Prod*3  Prod Prod*4))
+
+  [default-diff] diff(productions(Prod*1), productions(Prod*2)) = 
+                   productions(Prod*1)

@@ -163,8 +163,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
   ATerm pt, packed;
-
-/* 
+/*
   FILE *f;
     
   f = fopen("definition.baf", "wb");
@@ -172,7 +171,6 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
   ATwriteToBinaryFile(sdf, f);
   fclose(f);
 */
-  
 
   pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
   packed = ATBpack(pt);

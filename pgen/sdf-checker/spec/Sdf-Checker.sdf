@@ -1,0 +1,35 @@
+module  Sdf-Checker
+
+imports Sdf-AttributeChecker LabelChecker SortChecker 
+        ProductionChecker ConstructorChecker
+        RemoveLabels
+
+exports
+  context-free syntax
+    check-sdf(SDF) -> Messages
+
+hiddens
+  context-free syntax
+    check-sorts-and-prods(Definition)                     -> Messages
+    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  variables
+    "Definition"[0-9]* -> Definition
+
+    "Msg"[0-9]*        -> Message
+    "Msg*"[0-9]*       -> Message*
+    "Msgs"[0-9]*       -> Messages
+
+    "Module"[0-9]*       -> Module
+    "Module*"[0-9]*      -> Module*
+    "$ModuleId"[0-9]*    -> ModuleId
+    "$ModuleName"[0-9]*  -> ModuleName
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
+
+    "Import*"[0-9]*         -> Import*
+    "ImportsSet"[0-9]*      -> ImportsSet

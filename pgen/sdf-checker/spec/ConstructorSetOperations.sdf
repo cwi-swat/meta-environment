@@ -1,0 +1,21 @@
+module ConstructorSetOperations
+
+imports Booleans Sdf2
+
+exports
+  sorts ConstructorSet SymbolConsPair
+
+  context-free syntax
+    "[" Symbol "," Literal "]"    -> SymbolConsPair
+    constructors(SymbolConsPair*) -> ConstructorSet
+
+  context-free syntax
+    contains(Symbol, Literal, ConstructorSet) -> Bool
+    add(Symbol, Literal, ConstructorSet)      -> ConstructorSet
+
+hiddens
+  variables
+    "ConstructorSet"[0-9]* -> ConstructorSet
+    "SymbolCons*"[0-9]*    -> SymbolConsPair*
+    "Symbol"[0-9]*         -> Symbol
+    "$Literal"[0-9]*       -> Literal

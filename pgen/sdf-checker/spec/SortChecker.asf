@@ -1,0 +1,84 @@
+equations
+
+%% Type checking rules for an (expanded) SDF module
+
+  [tc1] get-exported-declared-symbols(exports $Grammar, SymbolsMsgs, $ModuleId, SymbolsSet) =
+       	  get-declared-symbols($Grammar, SymbolsMsgs, $ModuleId, SymbolsSet)
+
+  [tc2] get-hidden-declared-symbols(hiddens $Grammar, SymbolsMsgs, $ModuleId, SymbolsSet) =
+       	  get-declared-symbols($Grammar, SymbolsMsgs, $ModuleId, SymbolsSet)
+
+  [tc3] get-declared-symbols(sorts $Symbol*1, SymbolsMsgs, $ModuleId, SymbolsSet) =
+       	  get-declared-symbol($Symbol*1, SymbolsMsgs, $ModuleId, SymbolsSet)
+
+  [tc4] get-declared-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolsSet) =
+          add-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolsSet)
+
+  [as-1'1] contains($Symbol, SymbolsSet2) = true
+           =====================================
+           add-symbol($Symbol,
+                      [SymbolsSet1, $Msgs], $ModuleId, SymbolsSet2) =
+             [SymbolsSet1,
+              $Msgs + double-declared-symbol($ModuleId, $Symbol)]
+
+  [as-1'2] contains($Symbol, SymbolsSet2) = false,
+           contains($Symbol, SymbolsSet1) = true
+           =====================================
+           add-symbol($Symbol,
+                      [SymbolsSet1, $Msgs], $ModuleId, SymbolsSet2) =
+             [SymbolsSet1,
+              $Msgs + double-declared-symbol($ModuleId, $Symbol)]
+
+  [as-1'2] contains($Symbol, SymbolsSet2) = false,
+           contains($Symbol, symbols($Symbol*)) = false
+           ============================================
+           add-symbol($Symbol, [symbols($Symbol*), $Msgs], $ModuleId, SymbolsSet2) =
+                     [symbols($Symbol $Symbol*), $Msgs]
+  
+  [tc2] get-used-symbols(CHAR, SymbolsSet) = SymbolsSet
+  
+  [tc2] $Sort != CHAR
+        =============
+        get-used-symbols($Sort, symbols($Symbol*)) = symbols($Sort $Symbol*)
+
+  [tc3] get-defined-symbols(variables Prod*, SymbolsSet) = SymbolsSet
+
+  [tc4] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+                            symbols($Symbol*)) =
+	  symbols($Symbol $Symbol*)
+
+  [tc5] get-defined-symbols($Literal ( $Symbol,* ) -> $Symbol $Attributes, 
+                            symbols($Symbol*)) =
+	  symbols($Symbol $Symbol*)
+
+%% Check one module
+	
+  [cm1] get-module-name($Module) = $ModuleId,
+       
+        get-all-imports($Module) = ImportsSet,
+        get-declared-symbols(ImportsSet, 
+                             get-module-info(InfoMsgTuple1)) = 
+          symbols($Symbol*5),
+
+        get-exported-declared-symbols($Module, [symbols(),{}], $ModuleId, symbols($Symbol*5)) = 
+          [symbols($Symbol*1), $Msgs1],
+        get-hidden-declared-symbols($Module, [symbols(), {}], $ModuleId, symbols($Symbol*1 $Symbol*5)) = 
+          [symbols($Symbol*2), $Msgs2],
+        get-used-symbols($Module, symbols()) = symbols($Symbol*3),
+        get-defined-symbols($Module, symbols()) = symbols($Symbol*4),
+
+        $Msgs3 = get-messages(InfoMsgTuple1),
+        $Msgs4 = $Msgs3 + 
+undeclared-symbols($ModuleId, diff(symbols($Symbol*3), 
+                             symbols($Symbol*1 $Symbol*2 $Symbol*5))) +
+sorts-without-production-definitions($ModuleId,  diff(symbols($Symbol*1 $Symbol*2), 
+                                        symbols($Symbol*4))),
+        InfoMsgTuple3 = put-messages($Msgs1 ++ $Msgs2 ++ $Msgs4, InfoMsgTuple1),
+
+        get-module-info(InfoMsgTuple3) = ModuleInfoTable1,
+        put-symbol-info($ModuleId, 
+                        symbols($Symbol*1 $Symbol*5), 
+                        ModuleInfoTable1) = ModuleInfoTable2,
+        put-module-info(ModuleInfoTable2, InfoMsgTuple3) =  InfoMsgTuple4
+        =================================================================
+        check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4

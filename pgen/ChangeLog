@@ -1,5 +1,8 @@
 $Id$
 
+2002/03/22 (vandenbr@cwi.nl)
+ * Moved the Sdf part of the sdf-checker from meta to pgen.
+
 2002/03/13 (jurgenv@cwi.nl)
  * Fixed another bug in the normalizer. When user-defined lexical
    syntax produces a character class a cyclic injection was introduced.
