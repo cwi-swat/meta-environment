@@ -97,13 +97,9 @@ exports
     "Aint*"[0-9]*      -> {IntCon ","}*
     "Aint+"[0-9]*      -> {IntCon ","}+
     "Int"[0-9]*        -> Int
-    "Aset"[0-9]*       -> A-set
     "Aexp"[0-9]*       -> Expression
     "Expr"[0-9]*       -> Expression
     "Expression"[0-9]* -> Expression
-    "Eipair"[0-9]*     -> EI-pair
-    "Eipair*"[0-9]*    -> {EI-pair ","}*
-    "Eipair+"[0-9]*    -> {EI-pair ","}+
     "Cint"[0-9]*       -> Integer-constant
 hiddens
   variables

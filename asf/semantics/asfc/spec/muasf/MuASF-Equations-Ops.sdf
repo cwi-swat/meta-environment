@@ -3,9 +3,10 @@ module  MuASF-Equations-Ops
 imports MuASF-Signature-Ops VarEnv
 
 exports
-  sorts FuncTermPair FuncRuleTuple FuncRulePair FuncRuleStruct
-        MsFuncTermPair MsFuncRulePair MsFuncRuleTuple MsFuncCondPair
-        RuleListPair FuncTermTableTuple FuncRuleTableTuple FuncCondTableTuple
+  sorts FuncRuleTuple FuncRulePair
+        RuleListPair FuncTermTableTuple 
+        FuncRuleTableTuple FuncCondTableTuple
+        TraversalType TraversalStrategy
   context-free syntax
     "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"    -> FuncRuleTuple
     "(" {FuncDef ";"}* "," {Rule ";"}* ")"               -> FuncRulePair

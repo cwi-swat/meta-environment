@@ -2,6 +2,8 @@ module MuLiterals
 
 imports Layout
 
+hiddens
+  sorts EscChar QChar
 exports
   sorts FunId ModId VarId PropId
   lexical syntax

@@ -20,7 +20,7 @@ context-free syntax
 
 hiddens
 
-sorts Embedding EmbeddingAt FunIdHasEmbeddingAt Rules 
+sorts Embedding EmbeddingAt FunIdHasEmbeddingAt RemoveOption
 
 context-free syntax
 

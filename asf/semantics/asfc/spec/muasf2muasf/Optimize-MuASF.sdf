@@ -3,22 +3,18 @@ module Optimize-MuASF
 imports Optimize-Recursive-List-Functions
 
 exports
-
-context-free syntax
-
-optimize-muasf(Module, NameTable) -> Module # NameTable
+  context-free syntax
+    optimize-muasf(Module, NameTable) -> Module # NameTable
 
 hiddens
+  sorts RFN
+  context-free syntax
+    optimize-per-function(RuleList,FuncDefList, NameTable) -> RFN
+    optimize-function(RuleList,FuncDefList, NameTable)     -> RFN
 
-context-free syntax
+  aliases
 
-optimize-per-function(RuleList,FuncDefList, NameTable) -> RFN
-optimize-function(RuleList,FuncDefList, NameTable)     -> RFN
+    RuleList # FuncDefList # NameTable -> RFN
 
-aliases
-
-RuleList # FuncDefList # NameTable -> RFN
-
-variables
-
-"RFN" -> RFN
+  variables
+    "RFN" -> RFN

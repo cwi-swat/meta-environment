@@ -61,9 +61,6 @@ hiddens
     "Char*"[0-9]*    -> CHAR*
     "Char+"[0-9]*    -> CHAR+
     "Aexp"[0-9]*     -> Expression
-    "Eipair"[0-9]*   -> EI-pair
-    "Eipair*"[0-9]*  -> {EI-pair ","}*
-    "Eipair+"[0-9]*  -> {EI-pair ","}+
     "Cint"[0-9]*     -> Integer-constant
     "Expression+"[0-9]* -> { Expression ","}+
     "Expression"[0-9]* -> Expression

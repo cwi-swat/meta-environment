@@ -26,7 +26,6 @@ exports
     Declaration Declaration-list Declaration-list-opt
     Argument-expression-list Cast-expression
     Statement Statement-list Statement-list-opt
-    Struct-declaration-list
 
   context-free syntax
     Expression ";"                                  -> Statement
