@@ -1,7 +1,7 @@
 /* $Id$ */
 
 tool in-output is {
-  command = "in-output"
+  command = "in-output -TB_COLLECT_LOOP 1"
 }
 
 process IO is
