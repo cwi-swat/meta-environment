@@ -1,6 +1,6 @@
 /* $Id$ */
 tool sglr is {
-  command = "sglr"
+  command = "sglr -d"
 }
 
 process Parser is
