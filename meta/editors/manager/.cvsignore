@@ -1,2 +1,9 @@
-Makefile.in
+.*.swp
+.deps
+EditorManager.adt
+EditorManager.def
+EditorManager.dict
 Makefile
+Makefile.in
+.libs
+editor-manager

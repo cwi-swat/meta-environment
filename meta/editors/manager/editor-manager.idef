@@ -1,0 +1,77 @@
+/* $Id$ */
+
+tool editor-manager is {
+  command = "editor-manager"
+}
+
+process EditorManager is
+let
+  EditorType: term,
+  EM : editor-manager,
+  FileName : str,
+  ModuleName: str,
+  Sid : term,
+  Sids: list
+in
+  execute(editor-manager, EM?)
+  .
+  (
+    rec-msg(em-get-session(FileName?, ModuleName?))
+    . snd-eval(EM, get-session(FileName,  ModuleName))
+    . rec-value(EM, session(Sid?))
+    . snd-msg(em-session(FileName, ModuleName, Sid))
+  +
+    rec-msg(em-get-filename(Sid?))
+    . snd-eval(EM, get-filename(Sid))
+    .
+    (
+      rec-value(EM, filename(FileName?))
+      . snd-msg(em-filename(Sid, FileName))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-get-modulename(Sid?))
+    . snd-eval(EM, get-modulename(Sid))
+    .
+    (
+      rec-value(EM, modulename(ModuleName?))
+      . snd-msg(em-modulename(Sid, ModuleName))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-register-editor(Sid?, EditorType?))
+    . snd-do(EM, register-editor(Sid, EditorType))
+  +
+    rec-msg(em-is-editor-registered(Sid?, EditorType?))
+    . snd-eval(EM, is-editor-registered(Sid, EditorType))
+    .
+    (
+      rec-value(EM, editor-registered)
+      . snd-msg(em-editor-registered(Sid, EditorType))
+    +
+      rec-value(EM, editor-not-registered)
+      . snd-msg(em-editor-not-registered(Sid, EditorType))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-unregister-editor(Sid?, EditorType?))
+    . snd-do(EM, unregister-editor(Sid, EditorType))
+  +
+    rec-msg(em-get-session-ids(ModuleName?))
+    . snd-eval(EM, get-session-ids(ModuleName))
+    . rec-value(EM, session-ids(Sids?))
+    . snd-msg(em-session-ids(ModuleName, Sids))
+  +
+    rec-msg(em-delete-session(Sid?))
+    . snd-do(EM, delete-session(Sid))
+  )
+  * delta
+endlet
+
+toolbus(EditorManager)
