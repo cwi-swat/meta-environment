@@ -1,6 +1,11 @@
 # $Id$
 
 2003/12/15 (jurgenv@cwi.nl)
+  * renamed ws-after-first to ws-after-head
+  * removed char *sep field when the separator is fixed
+  * Not String, but StrCon leads to a <str> in an imploded ADT
+
+2003/12/15 (jurgenv@cwi.nl)
  * CHARLIST sort is not used anymore in generated APIs! Instead, 
    for each lexical and the OptLayout sort, field are made of type <chars>.
    This leads to an interface that uses directly 'char*' or String in C
