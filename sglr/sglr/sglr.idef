@@ -96,11 +96,9 @@ process Parser is
       snd-eval(P, close-language(L)) .
       (
 	rec-value(P, language-closed(L?)) .
-	printf("Parser: sending language-unavailable\n") .
 	snd-note(language-unavailable(L))
       +
-	rec-value(P, language-not-open(L?)) .
-        printf("Parser: language not open!!!!\n")
+	rec-value(P, language-not-open(L?))
       )
     )
     * rec-disconnect(P)
