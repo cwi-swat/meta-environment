@@ -11,5 +11,6 @@ void MT_destroyModuleTable(ModuleTable table);
 void MT_putModule(ModuleTable table, SDF_ModuleId moduleName,
 		  SDF_Module module);
 SDF_Module MT_getModule(ModuleTable table, SDF_ModuleId moduleName);
+ATermList MT_allModules();
 
 #endif

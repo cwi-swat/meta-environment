@@ -43,3 +43,12 @@ SDF_Module MT_getModule(ModuleTable table, SDF_ModuleId id)
 }
 
 /*}}}  */
+
+/*{{{  ATermList MT_allModules(ModuleTable table) */
+
+ATermList MT_allModules(ModuleTable table)
+{
+  return ATtableKeys((ATermTable) table);
+}
+
+/*}}}  */

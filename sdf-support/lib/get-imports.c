@@ -1,6 +1,7 @@
 #include "SDFME-utils.h"
 #include "module-table.h"
 #include <assert.h>
+#include <aterm2.h>
 
 static ModuleTable moduleTable = NULL;
 
@@ -78,7 +79,7 @@ ATermList SDF_getImports(SDF_Module module)
 
 /*}}}  */
 
-/*{{{  static SDF_ImportList get_transitive_imports(SDF_ImportList todo) */
+/*{{{  static ATermList get_transitive_imports(ATermList todo) */
 
 static ATermList get_transitive_imports(ATermList todo)
 {
@@ -130,17 +131,10 @@ static ATermList get_transitive_imports(ATermList todo)
 
 /*}}}  */
 
-/*{{{  SDF_ImportList SDF_getTransitiveImports(SDF_Definition definition,  */
+/*{{{  static void initModuleTable(ATermList modules) */
 
-ATermList SDF_getTransitiveImports(ATermList modules, 
-	  			   SDF_ModuleId moduleId)
+static void initModuleTable(ATermList modules)
 {
-  SDF_Import import = SDF_makeImportModule(
-		      SDF_makeModuleNameUnparameterized(moduleId)); 
-  ATermList result;
-
-  moduleTable = MT_createModuleTable();
-
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(modules));
@@ -148,8 +142,96 @@ ATermList SDF_getTransitiveImports(ATermList modules,
 	     	        SDF_getModuleModuleName(module));
     MT_putModule(moduleTable, id, module);
   }
+}
 
-  result = get_transitive_imports(ATmakeList1(SDF_ImportToTerm(import)));
+/*}}}  */
+
+/*{{{  static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) { */
+
+static ATermList do_get_transitive_imports(SDF_ModuleId moduleId) 
+{
+  SDF_Import import = SDF_makeImportModule(
+		      SDF_makeModuleNameUnparameterized(moduleId)); 
+
+  assert(moduleTable != NULL);
+
+  return get_transitive_imports(ATmakeList1(SDF_ImportToTerm(import)));
+}
+
+/*}}}  */
+
+/*{{{  ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId) */
+
+ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
+{
+  ATermList result;
+
+  moduleTable = MT_createModuleTable();
+  initModuleTable(modules);
+ 
+  result = do_get_transitive_imports(moduleId);
+
+  MT_destroyModuleTable(moduleTable);
+  moduleTable = NULL;
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id) */
+
+static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id)
+{
+  for(; !ATisEmpty(imports); imports = ATgetNext(imports)) {
+    SDF_Import import = SDF_ImportFromTerm(ATgetFirst(imports));
+    SDF_ModuleId importId = SDF_getModuleNameModuleId(
+                               SDF_getImportModuleName(import));
+
+    if (SDF_isEqualModuleId(id, importId)) {
+      return ATtrue;
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  static ATermList get_depending_module_ids(SDF_ModuleId moduleId) */
+
+static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
+{
+  ATermList modules;
+  assert(moduleTable != NULL);
+
+  modules = MT_allModules(moduleTable);
+  
+  for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
+    SDF_ModuleId module = SDF_ModuleIdFromTerm(ATgetFirst(modules));
+    ATermList imports = do_get_transitive_imports(module);
+
+    if (imports_contains_id(imports, moduleId)) {
+      ATerm mid = ATmake("<str>", 
+			 SDF_getCHARLISTString(SDF_getModuleIdChars(module)));
+      modules = ATinsert(modules, mid);
+    }
+  }
+
+  return modules;
+}
+
+/*}}}  */
+
+/*{{{  ATermList SDF_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId) */
+
+ATermList SDF_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
+{
+  ATermList result;
+
+  moduleTable = MT_createModuleTable();
+  initModuleTable(modules);
+ 
+  result = get_depending_module_ids(moduleId);
 
   MT_destroyModuleTable(moduleTable);
   moduleTable = NULL;
