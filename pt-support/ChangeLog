@@ -1,17 +1,22 @@
+2001/11/13 (jong@cwi.nl)
+ * cleaned up ChangeLog entries
+ * released version 0.7
+
 2001/11/13 (markvdb@cwi.nl)
-  * removed unused argument from applyFunctionToTree.
+ * removed unused argument from applyFunctionToTree.
 
 2001/11/12 (jurgenv@cwi.nl)
-  * Added apply-function functionality to MEPT-utils.
-  * Added apply-function tool to utils
+ * Added apply-function functionality to MEPT-utils.
+ * Added apply-function tool to utils
 
 2001/10/25 (markvdb@cwi.nl)
-- Improved the functionality of implodePT. 
-  * alternatives and sequences have still to be done.
+ * Improved the functionality of implodePT. 
+ * alternatives and sequences have still to be done.
 
 2001/10/23 (markvdb@cwi.nl)
  * Added #ifndef WITHOUT_TOOLBUS in order to rule out ToolBus code, in
    unparsePT-main.c
+
 2001/09/27 (jurgenv@cwi.nl)
  * Made some important changes to the AsFix format. These changes are
    necessary to support some changes in the SDF syntax, and to fix some
