@@ -1,4 +1,5 @@
 #include "module-db.h"
+#include "renaming-symbols.h"
 
 static
 PT_Tree renameProdInTree(PT_Tree tree,

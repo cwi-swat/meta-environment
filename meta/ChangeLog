@@ -1,4 +1,8 @@
 # $Id$
+2001/11/09 (markvdb@cwi.nl)
+ * Activate and improved the module name renaming in graph-browser.
+ * Apified module-db code.
+
 2001/11/07 (markvdb@cwi.nl)
  * -o options added to pt-dump and eqs-dump.
 

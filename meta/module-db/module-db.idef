@@ -113,9 +113,10 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(rename-module-in-db(OldName?, NewName?)) .
   snd-eval(Mdb, rename-module(OldName, NewName)) .
-  rec-value(Mdb, import-graph(ActualMods?, Pairs?)) .
+  rec-value(Mdb, imports(changed-modules(Modules?),
+                         import-graph(ActualMods?, Pairs?))) .
   snd-note(import-graph(ActualMods, Pairs)) .
-  snd-msg(renaming-done(OldName))
+  snd-msg(renaming-done(OldName, Modules))
 +
   /* Get the list of modules for which the equations are not yet
      available in the database */
@@ -190,14 +191,12 @@ snd-do(Mdb, create-module-db).
     snd-msg(no-table)
   )
 +
-/* Return a list of all modules imported by this one*/
-/*
-  rec-msg(get-all-imported-modules(Name?)).
-  snd-eval(Mdb, get-all-imported-modules(Name)).
-  rec-value(Mdb, all-imports(Modules?)).
-  snd-msg(all-imported-modules(Modules))
+/* Return a list of all modules which import this one*/
+  rec-msg(get-all-depending-modules(Name?)).
+  snd-eval(Mdb, get-all-depending-modules(Name)).
+  rec-value(Mdb, all-depending-modules(Modules?)).
+  snd-msg(all-depending-modules(Modules))
 +
-*/
 /* Return a list of all modules */
   rec-msg(get-all-modules).
   snd-eval(Mdb, get-all-modules).
@@ -232,7 +231,7 @@ snd-do(Mdb, create-module-db).
   )
 +
   rec-msg(get-sdf2-asfix(Name?)).
-  snd-eval(Mdb, get-asfix(Name, sdf2)).
+  snd-eval(Mdb, get-sdf-tree(Name)).
   (
     rec-value(Mdb, asfix(syntax(Syntax?))).
     snd-msg(syntax(Syntax))
@@ -245,7 +244,7 @@ snd-do(Mdb, create-module-db).
   )
 +
   rec-msg(get-eqs-tree(Name?)).
-  snd-eval(Mdb, get-asfix(Name, eqs)).
+  snd-eval(Mdb, get-asf-tree(Name)).
   rec-value(Mdb, asfix(EqsTree?)).
   snd-msg(EqsTree)
 +
