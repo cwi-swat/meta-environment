@@ -9,8 +9,8 @@ static Symbol lf_79_recursivesym ;
 static ATerm lf_79_recursive ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
 static Symbol lf_73_recursivesym ;
 static ATerm lf_73_recursive ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
-static Symbol lf_54_recursivesym ;
-static ATerm lf_54_recursive ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_55_recursivesym ;
+static ATerm lf_55_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_42_recursivesym ;
 static ATerm lf_42_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_20_recursivesym ;
@@ -122,9 +122,9 @@ static ATerm lf_52 ( ATerm arg1 ) ;
 static Symbol lf_53sym ;
 static ATerm lf_53 ( ATerm arg1 ) ;
 static Symbol lf_54sym ;
-static ATerm lf_54 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_54 ( ATerm arg1 ) ;
 static Symbol lf_55sym ;
-static ATerm lf_55 ( ATerm arg1 ) ;
+static ATerm lf_55 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_56sym ;
 static ATerm lf_56 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_57sym ;
@@ -227,8 +227,8 @@ lf_79_recursivesym = ATmakeSymbol ( "prod([lit(\"make-setters\"),cf(opt(layout))
 ATprotectSymbol ( lf_79_recursivesym ) ;
 lf_73_recursivesym = ATmakeSymbol ( "prod([lit(\"make-getters\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Symbol\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"INT\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ATerm\")),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 4 , ATtrue ) ;
 ATprotectSymbol ( lf_73_recursivesym ) ;
-lf_54_recursivesym = ATmakeSymbol ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_54_recursivesym ) ;
+lf_55_recursivesym = ATmakeSymbol ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_55_recursivesym ) ;
 lf_42_recursivesym = ATmakeSymbol ( "prod([lit(\"asyms\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Symbol\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star-sep(sort(\"ATerm\"),lit(\",\"))),attrs([id(\"Sdf2PT\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_42_recursivesym ) ;
 lf_20_recursivesym = ATmakeSymbol ( "prod([lit(\"aattrs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"Attribute\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),attrs([id(\"Sdf2PT\")]))" , 1 , ATtrue ) ;
@@ -339,9 +339,9 @@ lf_52sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"Production\")))],cf(sort(\"
 ATprotectSymbol ( lf_52sym ) ;
 lf_53sym = ATmakeSymbol ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_53sym ) ;
-lf_54sym = ATmakeSymbol ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 2 , ATtrue ) ;
+lf_54sym = ATmakeSymbol ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_54sym ) ;
-lf_55sym = ATmakeSymbol ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_55sym = ATmakeSymbol ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_55sym ) ;
 lf_56sym = ATmakeSymbol ( "prod([lit(\"aap\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_56sym ) ;
@@ -490,9 +490,9 @@ register_prod ( ATparse ( "prod([lit(\"aa\"),cf(opt(layout)),lit(\"(\"),cf(opt(l
 register_prod ( ATparse ( "list(cf(iter-star(sort(\"Production\"))))" ) , lf_list_51 , lf_list_51sym ) ;
 register_prod ( ATparse ( "prod([cf(iter-star(sort(\"Production\")))],cf(sort(\"Productions\")),no-attrs)" ) , lf_52 , lf_52sym ) ;
 register_prod ( ATparse ( "prod([lit(\"lexical\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_53 , lf_53sym ) ;
-register_prod ( ATparse ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_54 , lf_54sym ) ;
-register_prod ( ATparse ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_54_recursive , lf_54_recursivesym ) ;
-register_prod ( ATparse ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_55 , lf_55sym ) ;
+register_prod ( ATparse ( "prod([lit(\"context-free\"),cf(opt(layout)),lit(\"syntax\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_54 , lf_54sym ) ;
+register_prod ( ATparse ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_55 , lf_55sym ) ;
+register_prod ( ATparse ( "prod([lit(\"aaps\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Production\"))),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_55_recursive , lf_55_recursivesym ) ;
 register_prod ( ATparse ( "prod([lit(\"aap\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_56 , lf_56sym ) ;
 register_prod ( ATparse ( "prod([lit(\"constructor\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_57 , lf_57sym ) ;
 register_prod ( ATparse ( "prod([lit(\"predicate\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(alt(lit(\"lex\"),lit(\"cf\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"Production\"))),attrs([id(\"Add-API-Syntax\")]))" ) , lf_58 , lf_58sym ) ;
@@ -2970,42 +2970,42 @@ FUNC_EXIT ( lf_list_51 ( cons ( make_list ( arg0 ) , cons ( make_list ( tmp [ 1 
 FUNC_EXIT ( make_nf2 ( lf_56sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_54 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_55 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_54sym , ATmakeAppl ( lf_54sym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_55sym , ATmakeAppl ( lf_55sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_list_51sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_51 ( cons ( remove_list ( lf_56 ( tmp [ 0 ] , arg1 ) ) , remove_list ( lf_54_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_51 ( cons ( remove_list ( lf_56 ( tmp [ 0 ] , arg1 ) ) , remove_list ( lf_55_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT_CONST ( constant33 , lf_list_51 ( make_list ( null ( ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_54sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_55sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf_54_recursive ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_55_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_54_recursivesym , ATmakeAppl ( lf_54_recursivesym , arg0 , arg1 ) ) ;
+FUNC_ENTRY ( lf_55_recursivesym , ATmakeAppl ( lf_55_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
-FUNC_EXIT ( lf_list_51 ( cons ( remove_list ( lf_56 ( tmp [ 0 ] , arg1 ) ) , remove_list ( lf_54_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_51 ( cons ( remove_list ( lf_56 ( tmp [ 0 ] , arg1 ) ) , remove_list ( lf_55_recursive ( make_list ( tmp [ 1 ] ) , arg1 ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT_CONST ( constant33 , lf_list_51 ( make_list ( null ( ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_54_recursivesym , lf_list_51 ( arg0 ) , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_55_recursivesym , lf_list_51 ( arg0 ) , arg1 ) ) ;
 }
 }
 ATerm lf_trafo_td_50 ( ATerm arg0 ) {
@@ -3019,14 +3019,14 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_list_51sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( make_nf1 ( lf_53sym , make_nf1 ( lf_52sym , lf_54 ( make_nf1 ( lf_list_51sym , make_list ( atmp0000 ) ) , make_nf0 ( lf_43sym ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_53sym , make_nf1 ( lf_52sym , make_nf1 ( lf_list_51sym , make_list ( atmp0000 ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-if ( check_sym ( arg0 , lf_55sym ) ) {
+if ( check_sym ( arg0 , lf_54sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_52sym ) ) {
@@ -3035,7 +3035,7 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_list_51sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( make_nf1 ( lf_55sym , make_nf1 ( lf_52sym , lf_54 ( make_nf1 ( lf_list_51sym , make_list ( atmp0000 ) ) , make_nf0 ( lf_41sym ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_54sym , make_nf1 ( lf_52sym , lf_55 ( make_nf1 ( lf_list_51sym , make_list ( atmp0000 ) ) , make_nf0 ( lf_41sym ) ) ) ) ) ;
 }
 }
 }
@@ -3579,9 +3579,9 @@ ATerm lf_list_67 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_list_67sym , ATmakeAppl ( lf_list_67sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_list_67sym , arg0 ) ) ;
 }
-ATerm lf_55 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_55sym , ATmakeAppl ( lf_55sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_55sym , arg0 ) ) ;
+ATerm lf_54 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_54sym , ATmakeAppl ( lf_54sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_54sym , arg0 ) ) ;
 }
 ATerm lf_53 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_53sym , ATmakeAppl ( lf_53sym , arg0 ) ) ;
