@@ -28,6 +28,9 @@ typedef struct bucket
   asymbol *sym;
 } bucket;
 
+#define MAX_STORE 1024
+static aterm *term_store[MAX_STORE];
+
 static int nr_entries = 0;
 static int table_size = 0;
 static bucket **prod_table = NULL;
@@ -758,17 +761,34 @@ aterm *list_last(aterm_list *l)
 
 aterm_list *list_prefix(aterm_list *l)
 {
-  aterm_list *result, *old;
+  aterm_list *result, *old, *oldl;
+  int len, entries;
   int i;
 
+  oldl = l;
   result = t_empty(w);
   t_protect(result);
+
+  len = TlistSize(l)-1;
+  entries = MIN(len, MAX_STORE);
+  for(i=0; i<entries; i++) {
+    term_store[i] = t_list_first(l);
+    l = t_list_next(l);
+  }
+
   for(i=TlistSize(l)-2; i>=0; i--) {
     old = result;
     result = TbuildList(w, TlistIndex(l, i), result);
     t_unprotect(old);
   }
-  t_unprotect(l);
+
+  for(i=entries-1; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, term_store[i], result);
+    t_unprotect(old);
+  }
+
+  t_unprotect(oldl);
   return result;
 }
 
