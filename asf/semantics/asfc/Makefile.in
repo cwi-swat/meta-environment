@@ -95,7 +95,7 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= ${GENCSRC} ${GENCHDR} *.o *~ ${BINFILES}
+CLEANFILES	= $(GENCSRC) $(GENCHDR) *.o *~ $(BINFILES)
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= Makefile compiler.tif.c compiler.tif.h
 
@@ -195,8 +195,8 @@ distclean realclean spotless: clean
 compiler.o:	compiler.tif.c
 
 # Updating of included dependencies
-depend: $(CSRC)
-	-@$(MAKEDEPEND) $(INCLUDES) $(CSRC) > depend
+depend: compiler.c
+	-@$(MAKEDEPEND) $(INCLUDES) compiler.c > depend
 
 # Included dependencies
 -include depend

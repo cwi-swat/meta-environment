@@ -130,13 +130,13 @@ STD-LIB		:= lib${TARGET}.a
 DEBUG-LIB	:= lib${DEBUG_TARGET}.a
 PROFILE-LIB	:= lib${PROFILE_TARGET}.a
 
-BINFILES	:= ${TARGET}
+BINFILES	:=
 LIBFILES	:=
 INCLUDEFILES	:=
 
 # Make rules
 
-all:	${BINFILES}
+all:	${STD-LIB}
 
 libs:	${LIBFILES}
 
