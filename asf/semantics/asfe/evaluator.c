@@ -188,8 +188,15 @@ void rec_terminate(int cid, ATerm t)
 void rewrite_error(const char *message, ATerm subject)
 {
 	ATerm error = ATmake("[<str>,<term>,<term>])", message, tagCurrentRule, subject);
+	ATermList temp;
 
-	rewrite_errors = ATinsert(rewrite_errors, error);
+	/* add the error if it is new */
+	for(temp = rewrite_errors;!ATisEmpty(temp) && !ATisEqual(error, ATgetFirst(temp));
+			temp = ATgetNext(temp));
+
+	if(ATisEmpty(temp)) {
+		rewrite_errors = ATinsert(rewrite_errors, error);
+	}
 	 
 	return;
 }
