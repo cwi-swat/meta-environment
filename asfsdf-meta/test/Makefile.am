@@ -13,7 +13,6 @@ PTDUMP=${GENMETA} ${TIMEOUT} -S ${META}/share/meta/start-meta-pt-dumper.tb
 %.dump.sh: meta.conf Makefile
 	@(echo '#! /bin/sh';\
 	echo 'set -e' ;\
-	echo 'exit 1' ;\
 	echo 'rm -f $*.eqs $*.trm.tbl' ;\
 	echo '${EQSDUMP} -m $* -o $*.eqs' ;\
 	echo '${PTDUMP} -m $* -o $*.trm.tbl' ;\

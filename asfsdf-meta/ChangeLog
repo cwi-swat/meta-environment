@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Tue Nov 30 14:41:57 CET 2004 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - Reenabled generated tests by removing exit 1 in shellscript generator 
+
 Mon Nov 29 13:58:32 CET 2004 <{jong,kooiker}@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:
    - fixed debug-reduce reducing twice 
