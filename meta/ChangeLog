@@ -1,5 +1,8 @@
 # $Id$
 
+2003/10/27 <markvdb@cwi.nl>
+ * Fixed bug #107, added a StackIsEmpty check.
+
 Wed Oct 15 19:00:11 CEST 2003 <jurgenv@cwi.nl>
  * Adapted process-eqs.tb to accomodate some reuse for making the test
    runner working
