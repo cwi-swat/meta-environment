@@ -25,7 +25,7 @@ CLEANFILES		= logger.tif.[ch] tblog_dict.[ch] tblog-interface.tifs
 
 tblog.o: tblog_dict.h logger.tif.h
 
-logger.tif.c logger.tif.h: ${top_srcdir}/aterm/tblog-interface.tifs
+logger.tif.c logger.tif.h: tblog-interface.tifs
 	$(TIFSTOC) -tool logger $<
 
 %_dict.c %_dict.h: %.dict
@@ -33,3 +33,4 @@ logger.tif.c logger.tif.h: ${top_srcdir}/aterm/tblog-interface.tifs
 
 tblog-interface.tifs: tblog-interface.tb
 	$(TOOLBUS) -gentifs $<
+	cp $@ ${top_srcdir}/aterm
