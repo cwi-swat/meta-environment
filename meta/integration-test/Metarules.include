@@ -2,12 +2,14 @@
 
 # General variables for the Integration tests
 
-NEWMETA = ../..
-DEMO	= $(NEWMETA)/demo
-PICO	= $(DEMO)/pico/Pico-syntax
+NEWMETA 	= ../..
+DEMO		= $(NEWMETA)/demo
+PICO		= $(DEMO)/pico/Pico-syntax
+#PICO 		= /ufs/jurgenv/gipe/gb/grammars/pico/Pico
+PICOTRMS	= $(DEMO)/pico/big $(DEMO)/pico/fac $(DEMO)/pico/bool1
 
 # General makerules for the MetaEnvironment
 
 %.tbl: %.sdf
-	sdf2table $< 
+	sdf2table -i $< -o $@
 

@@ -2,7 +2,7 @@
 
 DEMO	= $(NEWMETA)/demo/
 PICO	= $(DEMO)/pico/Pico-syntax
-SUBDIRS = GenerateParseTable
+SUBDIRS = GenerateParseTable ParsePicoTerm
 
 include Metarules.include
 
