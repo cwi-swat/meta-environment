@@ -20,7 +20,7 @@ OffSide.c: $(top_srcdir)/spec/OffSide.eqs
 	$(ASF)/bin/asfc -i $< -o $@ -n $* -v
 
 % : %.sh.src Makefile
-	sed 's@__DATADIR__@$(datadir)@g;\
+	sed 's@__DATADIR__@$(pkgdatadir)@g;\
              s@__LIBEXECDIR__@$(libexecdir)@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g' < $< > $@ && chmod +x $@	
