@@ -20,6 +20,10 @@
 #
 # $Id$
 
+2001/05/11 (markvdb@cwi.nl)
+  * Fixed a bug with respect initializing structure editors with
+    start symbols when tree is already parsed.
+
 2001/05/04 (markvdb@cwi.nl)
   * Enabled the compilation of specifications.
   * Various bug fixes in structure editor.
