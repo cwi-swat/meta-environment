@@ -71,6 +71,8 @@ in
     snd-msg(add-parse-table-to-db(ModuleId, Table, TimeStamp)).
     rec-msg(parse-table-added).
 
+    snd-msg(get-table-from-db(ModuleId)) .
+    rec-msg(table(Table?)).
     ReopenLanguage(ModuleId, Table)
     +
     rec-msg(no-syntax).
