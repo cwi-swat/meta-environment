@@ -40,7 +40,7 @@ CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
 
 YFLAGS               = -d
 
-TOOLBUS_DEFS         = -DCPP='"$(CPP)"' \
+TOOLBUS_DEFS         = -DCPP='"$(CPP) $(CPPFLAGS)"' \
                        -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
                        -DLOGGER_TCL=\"$(datadir)/logger.tcl\"
 
