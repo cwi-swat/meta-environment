@@ -1,0 +1,168 @@
+<HTML>
+<HEAD>
+<TITLE>Scenario Observations</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF">
+
+<H1>Scenario Observations</H1>
+
+The <A HREF="scenarios.html">scenarios</A> provide an interesting
+view on some of the problems that must be solved in the design.
+In this section, we will discuss some of the observations that
+can be made from the scenarios.
+In particular, we will discuss:
+<UL>
+<LI> What is the <A HREF="#MinimumToolSet>minimum set of tools</A>
+     that is needed to implement the scenarios discussed earlier.
+<LI> How should <A HREF="#SyntaxChanges">changes in the syntax</A>
+      be propagated.
+</UL>
+
+<A NAME="MinimumToolSet>
+<H2>A Minimum Set of Tools</H2>
+</A>
+
+From the scenarios, we can derive the following minimum set of
+tools needed to get the Meta-Environment running:
+<UL>
+     <LI> The <EM>control tool</EM>, 
+	  offering the basic user interface functionality
+          to control the rest of the system.
+     <LI> The <EM>hybrid editor</EM>, consisting of two subcomponents,
+          the <EM>structured editor</EM> and the <EM>text editor</EM>.
+	  An editor instance of the hybrid editor can be used to edit the
+	  syntax of a module, the equations of a module, or a term over
+          a specific module.
+     <LI> The <EM>parser</EM>, which can parse terms given a parse table
+          an an input string.
+     <LI> The <EM>parser generator</EM>, which can generate parse tables
+          giving the complete syntax of a module and its submodules.
+     <LI> The <EM>evaluator</EM>, which can evaluate a term given an
+          input term and a list of equations.
+     <LI> A <EM>module database</EM>, which keeps track of all modules
+          and relations between modules in the system.
+     <LI> A <EM>term database</EM>, which keeps track of all terms
+          in the system.
+     </UL>
+</UL>
+An important design decision is to separate the term database from the
+module database. Three issues play a role here:
+<UL>
+<LI> In standalone environments, the module database is not needed.
+     The cleanest way to implement this is by providing both tools
+     in the Meta-Environment, and providing just the term database
+     in a standalone environment.
+<LI> Although the functionality offered by these tools will
+     overlap significantly (both must have extensive knowledge of
+     the AsFix format), this can easily be covered by reusing code
+     between these tools.
+<LI> Although they both tools are used to store and retrieve AsFix
+     terms, they are conceptually different entities because changes
+     in modules have a much wider impact on the system than changes
+     in terms.
+</UL>
+
+<H2>Syntax Changes</H2>
+A number of important design decision revolve around when and how far
+to propagate changes in the syntax of a module. When the syntax of
+a module changes, terms and equations over modules higher in the
+module hierarchy need to be reparsed, and it is more than likely that
+some of these parses will fail. This means for instance that
+equations of some module that (indirectly) imports the changed
+module might not be valid anymore, so evaluations over that module
+must be disabled until all equations are reparsed.
+
+<P>
+There are two major stages in the propagation of changes in the
+syntax of an editor.
+The first stage is from the editor to the module database.
+The second stage is from the module database to the rest of the
+system.
+
+
+<H3>The First Stage in Propagating Syntax Changes</H3>
+There are four points at which the first stage of syntax change
+propagation can occur:
+<OL>
+<LI> When the user performs a <EM>text editing operation</EM> on
+     the syntax of a module. An advantage could be that changes
+     changes are propagated as early as possible, giving all
+     user interface components the possibility to keep the user
+     informed of the exact state of information they provide.
+     A disadvantage is that if the user decides to 'undo' changes
+     later on, the system has already adapted to the invalidation
+     of the syntax being edited.
+<LI> When the user changes the underlying tree, either by performing
+     a structure editing operation, or reparsing after a number of
+     text editing operation. Again, 'undo' facilities might 
+     interfere with the efficient operation of the system.
+<LI> When the user explicitly updates the 'official' version of
+     the term, for instance by pressing a 'save' button.
+     An advantage of this approach
+     lies in the fact that the user will be forced to save his/her
+     work often. This in turn provides excellent minor synchronization
+     points for version management (see Section 
+     <A HREF="versions.html">Version Management</A>).
+     A disadvantage is that the user must remember to save before
+     changes take effect, but some form of visual feedback would
+     make a huge difference in this area.
+<LI> When some tool needs the most up-to-date version of any tree
+     that depends on syntax currently being edited, or instance
+     when the evaluator wants to evaluate a term, all editors in
+     the system are queried to see where the newest version is
+     available.
+</OL>
+
+<!--
+In the scenarios, we choose for option three but more discussion is
+needed on this issue.
+- inconsequente versies (sommige wel geupdate, sommige niet)
+- in repository alleen boom of text, niet een mengvorm in 1 boom.
+- in structure editor wel boom met subtexten.
+- herschrijven: evaluator vraagt aan module editor of alle benodigde
+  bomen er zijn.
+- voorlopig just-in-time, later soms vooruit proberen te werken.
+-->
+
+
+<H3>The Second Stage</H3>
+There are basically two styles of propagating the changes in the
+syntax of a module to other components, <EM>lazy</EM> 
+propagation and <EM>eager</EM> propagation. In lazy propagation,
+the changes are only propagated when a component requests the most
+up-to-date version of the syntax over a certain module. In eager
+propagation, changes are directly propagated when they occur.
+
+<P> The eager propagation has the advantage that the system will
+always perform any tasks needed after a syntax change as soon as possible.
+For instance, the generation of a new parser is done as soon as the
+syntax of a module changes.
+But this eagerness also has the big disadvantage that a lot of unnecessary
+work will be performed. For instance if the user first edits the syntax
+of module A, and then starts to edit the syntax of module B which happens
+to be a submodule of A, a parser is generated for module A that is
+absolete before it is even completed!
+
+<P> The lazy propagation has the advantage that only necessary work
+will be done. The disadvantage of this approach is that this work 
+will be done as late as possible, causing unnecessary delays for
+the user. 
+
+<P>Ideally, we want the best of both worlds. No unnecessary
+work, but no unnecessary delays either. If we consider an eager
+approach, this can be done by interrupting tasks as soon as it is
+detected that the result of the tasks will be obsolete. The processing
+power already spent is wasted, but at least the user will not have
+to wait on results have to be discarded anyway. In the lazy approach,
+we can imagine a 'supervisor' that detects when some of the components
+of the system are idle (especially when those components run on a
+machine that is lightly loaded), and starts preparations of tasks that
+the user might want to perform next.
+
+For the time being, we are inclined to choose the lazy approach,
+because we feel that this enables a simpler design to which we can
+easily add some eager features at a later stage using heuristics 
+that are based on observed behaviour of users.
+
+</BODY>
+</HTML>
