@@ -147,6 +147,13 @@ in
                                  message-list, "*", message-id)).
      snd-ack-event(UI, element-selected(ActionEvent, ModuleName, Tree)) 
    )
+   + 
+   (
+     rec-event(UI, node-info(ModuleName?, Tree?)).
+     snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
+                                 tree-panel, "*", message-id)).
+     snd-ack-event(UI, node-info(ModuleName, Tree)) 
+   )
    +
    (  
      rec-msg(update-list-view(ModuleName?, ButtonNames?)).
