@@ -307,21 +307,21 @@ exports
 module Character-Class-Syntax
 imports Character-Syntax
 exports
-  sorts CharRange CharRanges OptCharRanges CharClass
+  %% sorts CharRange CharRanges OptCharRanges CharClass
   context-free syntax
     Character                 -> CharRange
-    Character "-" Character   -> CharRange           %% range
+    Character "-" Character   -> CharRange           
 
     CharRange                 -> CharRanges
     CharRanges CharRanges     -> CharRanges {right,memo}
     "(" CharRanges ")"        -> CharRanges {bracket}
                               -> OptCharRanges
     CharRanges                -> OptCharRanges
-    "[" OptCharRanges "]"     -> CharClass          %% list of ranges
-    "~" CharClass             -> CharClass          %% complement with respect to \000 - $top
-    CharClass "/" CharClass   -> CharClass {left,memo}   %% set difference
-    CharClass "/\\" CharClass -> CharClass {left,memo}   %% intersection
-    CharClass "\\/" CharClass -> CharClass {left}   %% union
+    "[" OptCharRanges "]"     -> CharClass          
+    "~" CharClass             -> CharClass          
+    CharClass "/" CharClass   -> CharClass {left,memo}   
+    CharClass "/\\" CharClass -> CharClass {left,memo}   
+    CharClass "\\/" CharClass -> CharClass {left}   
    "(" CharClass ")"          -> CharClass {bracket}
   context-free priorities
     "~" CharClass             -> CharClass >
@@ -334,11 +334,17 @@ imports Layout
 exports
   sorts Literal
   lexical syntax
-    "\\" ~ []                  -> EscChar
-    "\\" [01] [0-7] [0-7]      -> EscChar
+    "\\" ~ []                  -> AlphaNumericalEscChar
+    "\\" [01] [0-9] [0-9]      -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]       -> DecimalEscChar
+    "\\" "2" "5" [0-5]         -> DecimalEscChar
+    AlphaNumericalEscChar      -> EscChar
+    DecimalEscChar             -> EscChar
     ~ [\0-\31\"\\] \/ [\t\n]   -> L-Char
     EscChar                    -> L-Char
     "\"" L-Char* "\""          -> Literal
+  lexical restrictions
+    AlphaNumericalEscChar     -/- [0-9]
 
 module ATerms
 imports Literals IntCon RealCon
@@ -377,9 +383,9 @@ imports Layout
 exports
   sorts Character NumChar ShortChar
   lexical syntax
-    [\\] [0-9]+                      -> NumChar
-    [a-zA-Z0-9]                      -> ShortChar
-    [\\] ~[\0-\31A-Za-mo-su-z0-9]    -> ShortChar
+    [\\] [0-9]+                    -> NumChar
+    [a-zA-Z0-9]                    -> ShortChar
+    [\\] ~[\0-\31A-Za-mo-su-z0-9]  -> ShortChar
   context-free syntax
     NumChar   -> Character
     ShortChar -> Character
