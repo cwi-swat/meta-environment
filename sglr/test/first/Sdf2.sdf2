@@ -254,7 +254,7 @@ exports
     "restrictions" Restrictions  -> Grammar
     "reject"                     -> Attribute
     "prefer"                     -> Attribute
-    "uneager"                    -> Attribute
+    "avoid"                      -> Attribute
   context-free priorities
     CharClass "." Lookaheads     -> Lookahead
   >  Lookaheads "|" Lookaheads   -> Lookaheads
