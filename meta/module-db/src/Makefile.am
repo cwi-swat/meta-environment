@@ -1,5 +1,7 @@
 # $Id$
 
+CFLAGS += -Werror
+
 include $(top_srcdir)/make_rules
 
 SUBDIRS = tables sdf-operations
