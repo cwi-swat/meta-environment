@@ -1,0 +1,20 @@
+equations
+
+[extract-process-creations-0]
+  $ProcessCreation = create ( $ProcessName, $GenVar ),
+  addProcessCreation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessCreations($ProcessCreation, $Rstore1) = $Rstore2
+
+[extract-process-creations-1]
+  $ProcessCreation = create ( $ProcessName ( $Terms ), $GenVar ),
+  addProcessCreation($Rstore1, $ProcessName) = $Rstore2
+  ===>
+  extractProcessCreations($ProcessCreation, $Rstore1) = $Rstore2
+
+[add-process-creation-0]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple1 = <$ProcessNameId, processname2str($ProcessName)>,
+  add-tuple(PROCESS_CREATION, $Tuple1, $Rstore1) = $Rstore2
+  ===>
+  addProcessCreation($Rstore1, $ProcessName) = $Rstore2

@@ -25,8 +25,8 @@ equations
   extractProcessInvocations($ProcessInvocation, $Rstore1) = $Rstore2
 
 [add-process-invocation-0]
-  $TscriptDefId = get-area($ProcessName),
-  $Tuple1 = <$TscriptDefId, processname2str($ProcessName)>,
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple1 = <$ProcessNameId, processname2str($ProcessName)>,
   add-tuple(PROCESS_INVOCATION, $Tuple1, $Rstore1) = $Rstore2
   ===>
   addProcessInvocation($Rstore1, $ProcessName) = $Rstore2
