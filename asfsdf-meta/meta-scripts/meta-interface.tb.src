@@ -89,7 +89,7 @@ in
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) .
+    snd-msg(display-sdf-errors(Msgs)) . 
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
@@ -98,7 +98,7 @@ in
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) .
+    snd-msg(display-sdf-errors(Msgs)) . 
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .

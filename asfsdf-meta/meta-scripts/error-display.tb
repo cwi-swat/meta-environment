@@ -37,7 +37,8 @@ in
     fi
   +
     rec-msg(display-asf-errors(Errors?)).
-    snd-note(display-feedback-summary(feedback(Errors)))
+    snd-note(remove-feedback-summary("asf-checker","all")) .
+    snd-note(display-feedback-summary(feedback("asf-checker","all",Errors)))
   +
     rec-msg(display-sdf-errors(Errors?)).
     if not-equal(Errors,[]) then
