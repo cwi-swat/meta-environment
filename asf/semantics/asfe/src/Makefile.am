@@ -39,12 +39,13 @@ libeval_a_LIBADD  = evaluator.tif.o
 
 evaluator_SOURCES = main.c
 evaluator_LDADD   = libeval.a \
-                   -L$(top_srcdir)/asc-support -lasc-support \
-                   -L$(top_srcdir)/asfix/libasfix -lAsFix \
+                   -L$(ASCLIB) -lasc-support \
+                   -L$(ASFIXLIB) -lAsFix \
                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = ${TIDEINC} -I$(top_srcdir)/asc-support \
-                    -I$(top_srcdir)/asfix/libasfix -I$(ATERMINC) \
+INCLUDES          = ${TIDEINC} \
+                    -I$(ASCINC) \
+                    -I$(ASFIXINC) -I$(ATERMINC) \
                     ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 
 evaluator.o : evaluator.tif.h

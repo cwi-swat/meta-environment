@@ -21,3 +21,5 @@
 # $Id$
 
 SUBDIRS = src test
+
+EXTRA_DIST = reconf make_rules

@@ -64,9 +64,10 @@ whitespace_LDADD   = \
                  -L$(ASFIXLIB) -lAsFix \
                  -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES       = -I../src -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES       = -I$(srcdir)/../src -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
-	     s@__DATADIR__@$(datadir)@g;' < $< > $@ && \
+	     s@__DATADIR__@$(datadir)@g;\
+	     s@__SRCDIR__@$(srcdir)@g' < $< > $@ && \
 	chmod +x $@

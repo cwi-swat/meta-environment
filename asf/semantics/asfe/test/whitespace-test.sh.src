@@ -21,14 +21,15 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
+srcdir=__SRCDIR__
 
 # This test reduces for all specs in ./eqs the terms in ./terms once
 # with and once without layout. The results are compared for equality.
 
 set -e
 
-for e in eqs/*.eqs.asfix1; do
-  for t in terms/`basename $e .eqs.asfix1`*; do
+for e in ${srcdir}/eqs/*.eqs.asfix1; do
+  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
     ./whitespace $e $t
     printf "."
   done

@@ -21,6 +21,7 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
+srcdir=__SRCDIR__
 
 # HOW TO ADD A REGRESSION TEST:
 #
@@ -39,11 +40,11 @@ datadir=__DATADIR__
 # first we do all equations that should succeed, and check if the normal
 # forms are what we expected.
 
-for e in eqs/*.eqs.asfix1; do
-  for t in terms/`basename $e .eqs.asfix1`*; do
+for e in ${srcdir}/eqs/*.eqs.asfix1; do
+  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
-    ref=ref/`basename $t .trm.asfix1`.ref.asfix1
+    ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
     ../src/evaluator -w on -e $e -i $t -o $res
     ./equalModuloWhitespace $ref $res
     if [ $? -ne 0 ]; then
@@ -57,11 +58,11 @@ done
 
 # now we do all equations that should generate error messages from
 # the evaluator
-for e in fail/*.eqs.asfix1; do
-  for t in terms/`basename $e .eqs.asfix1`*; do
+for e in ${srcdir}/fail/*.eqs.asfix1; do
+  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
-    ref=ref/`basename $t .trm.asfix1`.ref.asfix1
+    ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
     ../src/evaluator -w on -e $e -i $t -o $res > /dev/null 2>&1
     if [ $? -eq 0 ]; then
        echo "term failed: $t"

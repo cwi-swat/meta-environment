@@ -21,6 +21,7 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
+srcdir=__SRCDIR__
 
 ./equalModuloWhitespace terms/Pico-syntax.1.trm.asfix1 terms/Pico-syntax.2.trm.asfix1
 printf "."

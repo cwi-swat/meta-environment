@@ -21,14 +21,15 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
+srcdir=__SRCDIR__
 
 tests=0
 failed=0
 
 call_toolbus () {
-  script=$1
+  script=${srcdir}/$1
   tests=`expr $tests + 1`
-  result=`${toolbus} -I../src -I${datadir} ${script} 2>&1`
+  result=`${toolbus} -I${srcdir}/../src -I${datadir} ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
