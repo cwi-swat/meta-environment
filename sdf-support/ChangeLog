@@ -1,5 +1,10 @@
 $Id$
 
+2003/05/19 (jurgenv@cwi.nl)
+ * Renamed the sdf-tool to sdf-modules.
+ * Moved SDF2 functionality from the old module-db in the meta package to
+   the new sdf-modules tool.
+
 2003/05/17 (jurgenv@cwi.nl)
  * Added dependency on toolbuslib
  * Added (still empty) sdf toolbus tool that will serve as a 

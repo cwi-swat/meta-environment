@@ -1,5 +1,5 @@
 
-SUBDIRS = sdf-tool
+SUBDIRS = sdf-modules
 
 EXTRA_DIST = sdf-support-config.src
 

@@ -63,6 +63,6 @@ AC_OUTPUT(
   Makefile
   lib/Makefile
   utils/Makefile
-  utils/sdf-tool/Makefile
+  utils/sdf-modules/Makefile
   test/Makefile
 )
