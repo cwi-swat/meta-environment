@@ -56,7 +56,6 @@ ATermList MDB_unavailableImportedModules(ATerm moduleName)
   ATermList imports = MDB_getImportIds(moduleName);
   ATermList unknowns = ATempty;
 
-ATwarning("imports = %t\n", imports); 
   while (!ATisEmpty(imports)) {
     ATerm import = ATgetFirst(imports);
 

@@ -92,6 +92,13 @@ void MS_putAsfText(ATerm moduleName, char *text, char *path, int timeStamp)
               makeTextValue(text,path,timeStamp)); 
 }
 
+char* MS_getAsfTextPath(ATerm moduleName)
+{
+  ATerm value = getTextValuePath(
+                  TS_getValue("asf-text", moduleName));
+  return getString(value);
+}
+
 void MS_putAsfParseTable(ATerm moduleName, ATerm table, 
                          int timeStamp)
 {

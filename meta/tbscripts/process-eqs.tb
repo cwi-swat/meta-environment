@@ -85,6 +85,8 @@ in
       (
         if not-equal(Imports, []) then
           Import  := first(Imports) .
+/*printf("Renamings is %t\n", Renamings).
+printf("Import is %t\n", Import).*/
           Imports := next(Imports) .
           snd-msg(get-equations-for-renamed-import(Import, Renamings)) .
           (

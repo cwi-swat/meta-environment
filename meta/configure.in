@@ -151,6 +151,9 @@ AC_OUTPUT(
    meta-studio/metastudio/graph/Makefile
    in-output/Makefile
    module-db/Makefile
+   module-db/src/Makefile
+   module-db/src/tables/Makefile
+   module-db/src/sdf-operations/Makefile
    editors/Makefile
    editors/manager/Makefile
    editors/manager/src/Makefile

@@ -6,6 +6,9 @@ Fri May  9 11:10:03 CEST 2003 <jong@cwi.nl>
  * Fix indentation level of this ChangeLog which managed to sneak to a
    deeper level again, and since everybody copies the previous one...
 
+2003/05/09 ({markvdb,jurgenv}@cwi.nl)
+  * First steps of the restructuring of the "module-db".
+
 2003/05/07 (markvdb@cs.vu.nl)
  * Fixed the annoying behaviour of closing and opening the
    term editor in the demos of Jorgen Iversen and Paul Klint.

@@ -96,11 +96,7 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
 
   unknowns = MDB_unavailableImportedModules(atModuleName);
 
-ATwarning("unknowns = %t\n", unknowns);
-
   importGraph = MDB_retrieveImportGraph();
-
-ATwarning("importGraph = %t\n", importGraph);
 
   return ATmake("snd-value(module(<term>,imports(need-modules([<list>]),<term>)))",
                 atModuleName, unknowns, importGraph);;
@@ -112,10 +108,17 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm newSdfTree)
   return NULL;
 }
 
-ATerm get_sdf_tree(int cid, char *modulename)
+ATerm get_sdf_tree(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atModuleName = makeString(moduleName);
+  if (MS_existsModule(atModuleName)) {
+    ATerm tree = MS_getSdfTree(atModuleName);
+    return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(tree)); 
+  }
+  else {
+    ATwarning("Module %t not in database!", moduleName);
+    return ATmake("snd-value(asfix(unavailable))");
+  }
 }
 
 void invalidate_sdf(int cid, char *moduleName)
@@ -145,7 +148,7 @@ void add_tree_eqs_section(int cid, char *moduleName, char* path,
 void add_text_eqs_section(int cid, char *moduleName, char* path, 
                           char *eqsText, int timestamp)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
+  MS_putAsfText(makeString(moduleName), eqsText, path, timestamp);
 }
 
 ATerm update_eqs_text(int cid, char *moduleName, char *eqsText)
@@ -222,10 +225,24 @@ ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
   }
 }
 
-ATerm get_path(int cid, char *modulename, ATerm type)
+ATerm get_path(int cid, char *moduleName, ATerm type)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  char *path;
+  ATerm atModuleName = makeString(moduleName);
+
+  if (MS_existsModule(atModuleName)) {
+    if (ATmatch(type, "eqs")) {
+      path = MS_getAsfTextPath(atModuleName);
+    }
+    else {
+      path = MS_getSdfTextPath(atModuleName);
+    }
+    return ATmake("snd-value(path(<str>))", path);
+  }
+  else {
+    ATwarning("Module %t not in database!\n", atModuleName);
+    return ATmake("snd-value(no-path)");
+  }
 }
 
 void invalidate_parse_tables(int cid, char *modulename)
