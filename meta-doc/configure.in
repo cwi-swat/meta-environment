@@ -1,0 +1,20 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(meta-doc, 0.1alfa)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+dnl }}}
+
+dnl {{{  Which files need updating?
+AC_OUTPUT(
+  Makefile
+  user-manual/Makefile
+)
+
+dnl }}}
