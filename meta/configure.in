@@ -27,14 +27,6 @@ AC_ARG_WITH(editor,
 )
 AC_SUBST(DEFAULT_EDITOR)
 
-dnl Setup LIBTOOL
-AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
-if test "x${LIBTOOL}" = "x"; then
-  AC_MSG_ERROR([Cannot find libtool, bailing out])
-fi
-AC_SUBST(LIBTOOL)
-
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
@@ -124,9 +116,10 @@ AC_ARG_WITH(tide,
 AC_SUBST(TIDEDEF)
 AC_SUBST(USE_TIDE)
 
+AM_PROG_LIBTOOL
 dnl Is ranlib needed on this system?
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
+dnl AC_PROG_RANLIB
+dnl AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 AC_PATH_PROG(JAVA, java)
 if test "x${JAVA}" = "x"; then

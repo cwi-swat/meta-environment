@@ -7,17 +7,17 @@
 # that package prior to "configure".
 
 # Tell aclocal where it can find libtool.m4
-if [ -f ./libtool ]; then
-  echo "removing generated ./libtool"
-  rm -f ./libtool
-fi
+#if [ -f ./libtool ]; then
+#  echo "removing generated ./libtool"
+#  rm -f ./libtool
+#fi
+#
+#LIBTOOL=`which libtool`
+#LIBTOOL=`dirname ${LIBTOOL}`
+#LIBTOOL=`dirname ${LIBTOOL}`
+##LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
 
-LIBTOOL=`which libtool`
-LIBTOOL=`dirname ${LIBTOOL}`
-LIBTOOL=`dirname ${LIBTOOL}`
-LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
-
-aclocal -I ${LIBTOOL_INCLUDE} -I ./config
+libtoolize --force --copy
+aclocal -I ./config
 autoconf
-autoheader
 automake -a
