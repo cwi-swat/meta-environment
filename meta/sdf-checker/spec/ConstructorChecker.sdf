@@ -1,0 +1,48 @@
+module ConstructorChecker
+
+imports Sdf-Type-Environment
+
+exports
+  context-free syntax
+    check-module-constructors(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  sorts Constructors-Msg-Tuple
+
+  context-free syntax
+    "[" ConstructorSet "," Messages "]" -> Constructors-Msg-Tuple
+  context-free syntax
+    get-constructor-symbol-pairs(Module,
+                                 Constructors-Msg-Tuple,
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    get-constructor-symbol-pairs(Production,
+                                 Constructors-Msg-Tuple,
+                                 ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    get-constructor-symbol-pairs(Attributes,
+                                 Constructors-Msg-Tuple,
+                                 ModuleId, Symbol) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+    get-constructor-symbol-pairs(Attribute,
+                                 Constructors-Msg-Tuple,
+                                 ModuleId, Symbol) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+
+hiddens
+  variables
+    "Attrs"[0-9]* -> Attributes
+    "Bool"[0-9]*            -> Bool
+    "Msgs"[0-9]*            -> Messages
+    "Module"[0-9]*          -> Module
+    "$ModuleId"[0-9]*       -> ModuleId
+
+    "ImportsSet"[0-9]*      -> ImportsSet
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
+    "ConstructorSet"[0-9]*  -> ConstructorSet
+    "SymbolCons*"[0-9]*     -> SymbolConsPair*
+
+    "Symbol*"[0-9]*    -> Symbol*
+    "Symbol,*"[0-9]*   -> {Symbol ","}*
+    "Symbol"[0-9]*     -> Symbol
+    "$Literal"[0-9]*    -> Literal
+
+    "ConsMsgTuple"[0-9]*    -> Constructors-Msg-Tuple
