@@ -1,0 +1,19 @@
+process FindSortDefinition is
+let
+  FSDT   : findSortDefinition,
+  Term   : term,
+  Tree   : term,
+  Module : term
+in
+  (
+    rec-msg(query("FindSortDefinition", Module?, Tree?)) .
+    execute(findSortDefinition, FSDT?) .
+    snd-eval(FSDT, query(Module, Tree)) .
+    rec-value(FSDT, result(Term?)) .
+    snd-terminate(FSDT,"done") .
+    snd-msg(result("FindSortDefinition", Term))
+  ) *
+  delta
+endlet
+
+tool findSortDefinition is { command = "findSortDefinition" }
