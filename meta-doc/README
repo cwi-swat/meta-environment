@@ -23,3 +23,13 @@ If you forget to specify the --with-build-manual switch and, during
 configuration, the user manual does not yet exist, the system is configured
 to automatically build the manual.
 
+Use gimp to make the screen dumps, when saving use the same width as given
+in the document. To make the gif pictures use:
+<path-to-hyperlatex>/ps2gif -notrans picture,ps
+mv picture.gif html
+
+Beware to 'setenv HYPERLATEX_DIR <path-to-hyperlatex>'
+
+
+
+
