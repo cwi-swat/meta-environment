@@ -27,7 +27,7 @@ emacs_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(TOOLBUSLIB)/lib -lATB \
         -L$(ERROR_SUPPORT)/lib -lLocationAPI \
-	-L$(top_srcdir)/configuration-manager/src -lMetaConfig \
+	-L$(top_builddir)/configuration-manager/src -lMetaConfig \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
