@@ -1,0 +1,381 @@
+#! /usr/bin/env perl5.00404
+#$Id$
+
+=pod
+
+=head1 NAME
+
+informer - lightweight, command line, HTML form handling
+
+=head1 DESCRIPTION
+
+This program allows you to fill out HTML forms from the UNIX command line. 
+It is basically ment to be embedded in your own scripts. 
+
+=head2 Why informer?
+
+Most commercial website designers do not want you to ignore their
+graphics, because that's where the money is. As a result, they come up
+with schemes to prevent you from accessing their data without looking
+at the pictures. The schemes I came accross so far are:
+
+=over 2
+
+=item browser name checking
+
+Basically not allowing you to see a page if your browser isn't MSIE or
+Mozilla. 
+
+=item Referer: header checking
+
+To prevent you from sending a precomposed HTML form to a URL, some
+sites check whether you have just visited their source page.
+
+=back
+
+Informer handles both cases. The first one by masquerading as a
+I<real> browser :-), the second one by actually visiting the source
+page first, and setting the Referer: header accordingly. 
+
+=head1 SYNOPSIS
+
+C<informer [-c | --cloaked] URL [URL-encoded-form-data]>
+
+C<informer [-v | --version]>
+
+=head1 USAGE
+
+C<informer> has two basic modes of operation:
+
+=over 2
+
+=item FORM lookup
+
+C<informer URL> will retrieve the names of the fields of the (first)
+FORM at URL and display them to stdout. It will also display the URL
+which this form is POSTed to.
+
+=item FORM POSTing
+
+C<informer URL URL-encoded-form-data> will retrieve the form from URL,
+merge it with the data from URL-encoded-form-data, and post it. If URL
+contains fieldnames that are not in URL-encoded-form-data, they will
+be left empty. If URL-encoded-form-data contains fieldnames that are
+not in URL, the program aborts.
+
+=back
+
+=head2 Switches
+
+=over 3
+
+=item C<-c>, C<--cloaked> Cloaking
+
+In normal operation, informer will identify itself as
+Informer. With the cloaking switch on, it will identify itself as
+Mozilla. 
+
+=item C<-f>, C<--formfile> Read form data from file
+
+Sometimes, the amount of data to be put in a form is too large to fit
+on a command line. Using this switch you can specify a file form which
+informer will read its URL encoded data. 
+
+=item C<-v>, C<--version> Version display
+
+=back
+
+=head2 Example
+
+Consider the following HTML document, with URL file:myfile.html:
+
+  <html><head> 
+  <title>AltaVista: Simple Query </title>
+  </head><body> 
+  ...
+  <FORM name=mfrm method=POST action="/cgi-bin/query">
+  <INPUT TYPE=hidden NAME=pg VALUE=q>
+  <B>Search <SELECT NAME=what><OPTION VALUE=web SELECTED>the Web
+  <OPTION VALUE=news >Usenet</SELECT>
+  for documents in <SELECT NAME=kl><OPTION VALUE=XX SELECTED>any language 
+  <OPTION VALUE=zh >Chinese
+  <OPTION VALUE=cz >Czech
+  ...
+  </SELECT></B>
+  <INPUT NAME=q size=65 maxlength=800 wrap=virtual VALUE="">
+  <INPUT type=image src="/av/gifs/search.gif" value="search.gif" 
+  name="search" alt="search">
+  </FORM>
+  </BODY></HTML>
+
+(A slightly abstracted version of the AltaVista Search Engine).
+
+Now running C<informer> would result in:
+
+  $ informer file:myfile.html
+  pg=q
+  what=web
+  kl=xx
+  q=
+
+And to retrieve the actual information you would do:
+
+  $ informer file:myfile.html q=informer
+  <html><head>
+  ...
+  </html>
+
+Note that only the query (q) field needs to be specified. We are not 
+interested in the other fields, so they will be copied from the original
+form.
+
+=head1 BUGS
+
+Currently, anything after the first form in a HTML document is ignored. 
+If a document contains more than one form there is no way to address 
+the second and further forms.
+
+=head1 AUTHOR
+
+Tobias Kuipers E<copy> 1998
+tobias@acm.org
+
+=cut
+
+use LWP::UserAgent;
+use URI::URL;
+
+package Informer;
+
+#variables for this package
+my $agent='Informer/0.2';
+
+# We make our own specialization of HTML::Parser, to handle forms
+{
+    package FormParser;
+    use HTML::Parser;
+    @ISA = qw(HTML::Parser);
+    #Create a hash that will hold all form input-names
+    my $inform = 0;
+    
+    sub new {
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
+	my $self  = $class->SUPER::new();
+# this line caused perl5.004 to complain, commenting it out seems to work
+#	%{$self->{FORM}}        = undef;
+#	$self->{URL}            = undef;
+	bless ($self, $class);          # reconsecrate
+	return $self;
+    }
+
+    sub start { 
+	#Only handle one form on a page. Need to find a way to address
+	#other forms...
+	if ($inform != 2) {
+	    my $self = shift;
+	    my ($tag, $attr, $attrseq, $origtext) = @_;
+	    #$tag is the tag found, $attr is a ref to a hash containing key/value pairs,
+	    #$attrseq is a ref to an array containing the keys, and $origtext is the 
+	    #original html code
+	    
+	    #Handle "form" tags, and, while in a form, handle elements of
+	    #the form
+	    if ($tag eq 'form') {
+		$inform = 1;
+		#get the URL, and maybe the method and encoding
+		#currently, assume POST action
+		$self->{URL} = "$$attr{'action'}";
+	    }
+	    #what are the other tags we're interested in?
+	    #currently only INPUTs and TEXTAREAs
+	    #If we find them, put the name in the $self->form
+	    if (((($tag eq "input") || ($tag eq 'textarea')) || ($tag eq 'select')) && $inform) {
+		if (!(exists $$attr{'type'}) || ($$attr{'type'} !~ /submit/i && $$attr{'type'} !~ /reset/i)) {
+		    if (exists $$attr{'value'}) {
+			$ {$self->{FORM}}{$$attr{'name'}} = "$$attr{'value'}";
+		    } elsif (exists $$attr{'name'}) {
+			$ {$self->{FORM}}{$$attr{'name'}} = '';
+		    }
+		}
+	    }
+	} 
+    }
+    sub form {
+	my $self = shift;
+	return %{$self->{FORM}};
+    }
+    sub postUrl {
+	my $self = shift;
+	return $self->{URL};
+    }
+    sub end {
+	my $self = shift;
+	my ($tag) = @_;
+	if ($tag eq "form") {
+	    $inform = 2;
+	}
+    }
+}
+
+sub postForm {
+    my ($postUrl, $prevUrl, $postform) = @_;
+    
+    $ua = new LWP::UserAgent;
+    $ua->agent($agent);
+#    print "Start cookbook bit\n";
+    #This bit is from the cookbook. Not really sure what it does :-)
+    use URI::URL;
+    my $curl = url("http:");
+    my $contentstring = urlencode($postform);
+    my $req = new HTTP::Request 'POST' => $postUrl;
+    $req->header('Accept' => 'text/html');
+    $req->header('Referer' => "$prevUrl");
+    $req->content_type('application/x-www-form-urlencoded');
+    $req->content($contentstring);
+    #Now, fingers crossed, post the thing
+    my $res = $ua->request($req);
+    if ($res->is_success) {
+	print $res->content;
+    } else {
+	print "Error while posting: ".$res->code." ".$res->message;
+	exit(1);
+    }
+#    exit(0);
+}
+
+sub get_form {
+    my ($formUrl) = @_;
+    my $ua = new LWP::UserAgent;
+    $ua->agent($agent);
+    my $req = new HTTP::Request 'GET' => $formUrl;
+    $req->header('Accept' => 'text/html');
+    #send request
+    my $res = $ua->request($req);
+    my $formparser = new FormParser;
+    if ($res->is_success) {
+	#treat the resulting content
+	$formparser->parse($res->content);
+    } else {
+	print "Error: " . $res->code . " ".$res->message;
+	exit(1);
+    }
+    #expand possible relative post URL
+    my $url = URI::URL::url($formparser->postUrl,$res->base)->abs;
+    return ($url,$formparser->form);
+}
+
+sub unify_form {
+    my ($commandlineform,$retrievedform) = @_;
+    @clformfields = split(/\&/,$commandlineform);
+    while (@clformfields) {
+	my $elem = shift(@clformfields);
+	my ($name,$value) = split(/=/,$elem);
+	if (exists $$retrievedform{$name}) {
+	    $$retrievedform{$name} = "$value";
+	} else {
+	    print $0.": ".$name." is an unknown field in this form.\nPlease run informer <url> to retrieve all form fields.\n";
+	    exit(1);
+	}
+    }
+    return %$retrievedform;
+}
+
+sub escape {
+    my ($string) = @_;
+    $string =~ s/\ /%20/g;
+    $string =~ s/\+/%2b/g;
+    #And all the other codes from RFC 1738 and more
+    #I can see some major improvements here, but don't feel like implementing them right now.
+    return $string;
+}
+
+sub urlencode {
+    my $returnstring = '';
+    my ($postform) = @_;
+    while (($key,$value) = each %$postform) {
+	$returnstring .= $key . '=' . $value . '&';
+    }
+    #Now remove trailing &
+    $returnstring =~ s/&$//;
+    #and return it
+    return $returnstring;
+}
+
+sub usage {
+  print "Usage: informer [-c | --cloaked] URL [URL-encoded-form-data]\n";
+  print "       informer [-c | --cloaked] -f,--formfile form-data-file URL\n";
+  print "       informer [-v | --version]\n";
+  exit 0;
+}
+
+sub main {
+ ARG: while ($_ = shift(@ARGV)) {
+     if ( /^-c/ || /^--cloaked/ ) {
+	 # Run in cloaked mode: pretend to be some innocent browser
+	 $agent='Mozilla/4.0 (Macintosh; I; PPC)'; # Only one I had available
+	 next ARG;
+     }
+     if ( /^-v/ || /^--version/ ) {
+       print $agent, "\n";
+       exit 0;
+     }
+     if ( /^-f/ || /^--formfile/ ) {
+       $formfile = shift(@ARGV);
+       if ($formfile eq "") {
+	 &usage;
+       }
+       next ARG;
+     }
+     if ( /^-/ ) { 
+# Help or unsupported option
+       &usage;
+     }
+     # get url where form is at
+     if (not defined $formUrl) {
+	 $formUrl = URI::URL::url($_);
+	 next ARG;
+     }
+     if (not defined $formContent) {
+	 $formContent = $_;
+	 next ARG;
+     }
+     &usage;
+ }
+if (not defined $formUrl) {
+    &usage;
+}
+
+# Retrieve the form from the web
+@formdata = &get_form($formUrl);
+
+# and process it
+($postUrl,%formnames) = @formdata;
+
+# If the formcontent is in a file, read it:
+if ($formfile ne "") {
+  $formContent = "";
+  open(FF,"$formfile");
+  while (<FF>){
+    $formContent .= $_;
+  }
+  close(FF);
+}
+
+if (not defined $formContent) {
+    #print out retrieved form stuff and exit
+    while (($key,$value) = each %formnames) {
+	print "$key=$value\n";
+    }
+    print "POST to $postUrl\n";
+    exit(0);
+}
+#else 
+#Unify the form data from the command line with the form names 
+#just retrieved.
+%postform = unify_form($formContent,\%formnames);
+#And post the form. Resulting page goes to stdout.
+postForm($postUrl,$formUrl,\%postform);  
+}
+
+&main;

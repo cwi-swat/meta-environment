@@ -1,0 +1,10 @@
+#!/usr/local/bin/perl
+
+use URI::Escape;
+
+undef $/;
+$_ = uri_escape(<STDIN>);
+# work around a uri_escape bug
+s/=/%3D/g;
+s/\+/%2B/g;
+print;

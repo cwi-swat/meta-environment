@@ -7,20 +7,25 @@ VERSION 	= @VERSION@
 SHELL		= /bin/sh
 
 @SET_MAKE@
+
 prefix 		= @prefix@
 exec_prefix 	= @exec_prefix@
 bindir 		= $(exec_prefix)/bin
+INSTALL         = @INSTALL@
+top_srcdir      = @top_srcdir@
 
-SUBDIRS         = sh spec
+PROGRAMS        = tbgraph informer uri-encode
 
-all clean distclean install uninstall:
-	@SUBDIRS="${SUBDIRS}";\
-	for SUBDIR in $$SUBDIRS; \
+all clean distclean dist:
+
+install:
+	for f in $(PROGRAMS); \
 	do \
-		echo Make $@ in $$SUBDIR; \
-		cd $${SUBDIR}; \
-		${MAKE} $@; \
-		cd ..; \
+		$(INSTALL) -m 755 $$f $(bindir); \
 	done
-dist:
 
+uninstall:
+	for f in $$PROGRAMS; \
+	do \
+		rm -f $(bindir)/$f ; \
+	done

@@ -1,0 +1,98 @@
+#! /bin/sh
+
+#$Id$
+
+#Files and stuff needed:
+TBVIZURL="http://www.cwi.nl/~kuipers/tbviz/tbviz.html"
+version="0.1"
+
+Notify()
+{
+    echo $*                 1>&2
+}
+
+Usage()
+{
+    echo "\
+usage: tbgraph {-v,--version}\n\
+       tbgraph output t-script\n\
+\n\
+output is one of:\n\
+  {-g,--gif}         : Returns a gif file\n\
+  {-ps,--postscript} : Returns a PostScript file\n\
+  {-d,--dot}         : Returns a Dot file\n\
+"
+exit 0
+}
+
+case $#
+in
+    1 | 2 | 3)
+	;;
+    *) 
+	Usage
+	exit 0 ;;
+esac
+
+#parse the arguments:
+
+while [ $# -gt 1 ]
+do
+    case $1
+    in
+	-old)
+	    NOVERSION=1
+	;;
+	-v | --version)
+	    Notify ${version}
+	    exit 0
+	;;
+	-g | --gif)
+	    OUTPUT=gif 
+	;;
+	-ps | --postscript)
+	    OUTPUT=postscript
+	;;
+	-d | --dot)
+	    OUTPUT=dot
+	;;
+	*)
+	    Usage
+	;;
+    esac
+    shift
+done
+
+if [ ${OUTPUT}x = x ]
+then
+    Usage
+fi
+
+# Now we have one argument left. It is either a filename or -v.
+case $1
+in
+    -v | --version)
+	Notify ${version}
+	exit 0
+    ;;
+    *)
+	# Test if it is a file
+	if [ -r $1 ]
+	then
+	    Notify "Preprocessing $1..."
+	    ppscript=`gcc -x c -E $1 | uri-encode`
+	    Notify "Connecting to CWI..."
+	    if [ ${NOVERSION}x = 1x ]
+	    then
+		informer ${TBVIZURL} fileformat=${OUTPUT}\&tscript=${ppscript} 
+	    else 
+		cat <<EOF > /tmp/tbviztmp.$$
+clversion=${version}\&fileformat=${OUTPUT}\&tscript=${ppscript}
+EOF
+		informer -f /tmp/tbviztmp.$$ ${TBVIZURL} 
+	    fi
+	else
+	    Notify "Can't open $1"
+	fi
+    ;;
+esac
