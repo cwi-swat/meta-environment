@@ -29,7 +29,7 @@ rel[int,int] Rel2     = {<1, 10>, <3, 30>}
 
 <str,int> P1 = swap(<0,"a">)
 
-rel[int,str] SRel1 = rel { swap(<V, N>) | <V,N> : Rel1  }
+rel[int,str] SRel1 = { swap(<V, N>) | <V,N> : Rel1  }
  
 rel[int,bag[int]] VERT = { <V, {10,20,30}> |  V : {1,2,3} }
 

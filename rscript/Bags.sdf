@@ -7,7 +7,7 @@ imports basic/Integers
   sorts Bag[[Elem]]
 
 context-free syntax
-   "[" {Elem ","}* "]"                   	-> Bag[[Elem]] {constructor}
+   "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
 
    add(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
    del(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]

@@ -8,12 +8,12 @@ imports MyPosInfo[RSTAT]
 imports MyPosInfo[REXP]
 imports MyPosInfo[FROM]
 imports MyPosInfo[Bag[[Elem]]]
-imports MyPosInfo[Rel[[Elem]]]
+%%imports MyPosInfo[Rel[[Elem]]]
 
 
 exports
     sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]]
-	ITERTYPE
+%%	ITERTYPE
 
     context-free syntax
 
@@ -34,7 +34,7 @@ exports
 	REXP cannot be typed 					-> ERROR
 	FROM cannot be typed					-> ERROR
 	Bag[[Elem]] cannot be typed 				-> ERROR
-	Rel[[Elem]] cannot be typed 				-> ERROR
+%%	Rel[[Elem]] cannot be typed 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
         "Incompatible" argument types REXPTYPE in REXP        	-> ERROR
@@ -71,9 +71,9 @@ exports
 	check(REXP, TENV) 					-> REXPTYPE # TENV
 
 	check-const(Elem, TENV) 					-> REXPTYPE # TENV
-	check-const-tuple(Tuple, TENV)				-> REXPTYPE # TENV
-	check-const-bag(Bag[[Elem]], TENV) 			-> REXPTYPE # TENV
-	check-const-rel(Rel[[Elem]], TENV) 			-> REXPTYPE # TENV
+	check-const-tuple(Elem, TENV)				-> REXPTYPE # TENV
+	check-const-bag-or-rel(Bag[[Elem]], TENV) 		-> REXPTYPE # TENV
+%%	check-const-rel(Bag[[Elem]], TENV) 			-> REXPTYPE # TENV
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -81,9 +81,9 @@ exports
         require-type(REXP, REXPTYPE, TENV) 			-> TENV
 	require-bag-type(REXP, RVAR, REXPTYPE, TENV) 		-> TENV
 	require-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
-	require-itertype(REXP, ITERTYPE, REXPTYPE, TENV)	-> TENV
-	"bag"							-> ITERTYPE
-	"rel"							-> ITERTYPE
+%%	require-itertype(REXP, ITERTYPE, REXPTYPE, TENV)	-> TENV
+%%	"bag"							-> ITERTYPE
+%%	"rel"							-> ITERTYPE
 
         container-type(REXPTYPE)				-> REXPTYPE
         
@@ -163,7 +163,7 @@ hiddens
 
 
      "$Bag" [0-9\']*        	-> Bag[[Elem]]
-     "$Rel" [0-9\']*        	-> Rel[[Elem]]
+     "$Rel" [0-9\']*        	-> Bag[[Elem]]
 
      "$Boolean" [0-9\']*    	-> Boolean
      "$Integer" [0-9\']*    	-> Integer
@@ -189,5 +189,5 @@ hiddens
 
       "$ListItem*" [0-9\']*	-> {ListItem ","}*
 
-      "$IterType"  [0-9\']*	-> ITERTYPE
+%%      "$IterType"  [0-9\']*	-> ITERTYPE
 	
