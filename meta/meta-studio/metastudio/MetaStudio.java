@@ -9,6 +9,7 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +55,7 @@ import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.JViewport;
+import javax.swing.KeyStroke;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -401,6 +404,30 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	checkModulePopup(e);
       }
     });
+
+    Action a = new AbstractAction("popupmenu mnemonic") {
+	    public void actionPerformed(ActionEvent e) {
+		if (moduleTree.getSelectionPath() != null) { 
+		    TreePath p = moduleTree.getSelectionPath();
+		    Rectangle r = moduleTree.getPathBounds(p);
+		    MouseEvent me = 
+			new MouseEvent(moduleTree, 0, 
+				       Calendar.getInstance().getTimeInMillis(), 
+				       0, 
+				       r.x+r.width/2, 
+				       r.y+r.height, 
+				       1, 
+				       true, 
+				       MouseEvent.BUTTON3);
+		    checkModulePopup(me);
+		}
+	    }
+	};
+    String key = new String("popupmenu mnemonic");
+    KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
+    moduleTree.
+       getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks, key);
+    moduleTree.getActionMap().put(key, a);
 
     JScrollPane listPane = new JScrollPane(moduleTree);
 
