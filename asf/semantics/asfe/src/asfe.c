@@ -130,13 +130,15 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   /*ATfprintf(stderr, "equations: %t\n", eqs);*/
   eqs = ATBunpack(eqs);
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
-  parseTree = PT_makeParseTreeFromTerm(ATBunpack(trm));
 
-  result = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse,
-		     ATtrue);
+  trm = ATBunpack(trm);
+  parseTree = PT_makeParseTreeFromTerm(trm);
+
+  result
+    = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse, ATtrue);
 
   if (RWgetError() == NULL) {
-    return ATmake("snd-value(rewrite-result(<term>))", result);
+    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
   else {
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
