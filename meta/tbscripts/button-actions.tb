@@ -695,6 +695,8 @@ in
         StackPopString(Stack,Stack?,FileName?) .
 	StackIsEmpty(Stack, Empty?) .
 	if equal(Empty, true) then
+	  snd-msg(edit-general(FileName)) .
+	  rec-msg(editor-opened(ModuleName?, EditorId2?)) .
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,ModuleName?) .
