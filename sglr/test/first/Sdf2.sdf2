@@ -71,7 +71,7 @@ exports
     <NatCon -CF>        -/- [0-9]
     <LAYOUT?-CF>        -/- [\ \t\n\%]
     <NumChar -CF>       -/- [0-9]
-    <ModuleName -CF>    -/- [A-Za-z0-9\95\-]
+    <ModuleName -CF>    -/- [A-Za-z0-9\_\-]
 
 module Sdf2-Syntax
 imports Kernel-Sdf-Syntax
@@ -131,7 +131,7 @@ exports
   sorts ModuleId ModuleName Import Imports
         Section Sections Module Definition ImpSection
   lexical syntax
-    [A-Za-z0-9\95\-]+       -> ModuleWord
+    [A-Za-z0-9\_\-]+        -> ModuleWord
     ModuleWord              -> ModuleId
     "/" ModuleId            -> ModuleId
     ModuleWord "/" ModuleId -> ModuleId
@@ -322,8 +322,7 @@ exports
   lexical syntax
     "\\" ~ []                  -> EscChar
     "\\" [01] [0-7] [0-7]      -> EscChar
-    ~ [\0-\31\"\\]             -> L-Char
-    [\ \9\n]                   -> L-Char
+    ~ [\0-\31\"\\] \/ [\t\n]   -> L-Char
     EscChar                    -> L-Char
     "\"" L-Char* "\""          -> Literal
 
@@ -352,7 +351,7 @@ exports
 module Layout
 exports
   lexical syntax
-    [\ \9\n]           -> LAYOUT
+    [\ \t\n]           -> LAYOUT
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
     "default-"         -> TagId
@@ -366,7 +365,7 @@ exports
   lexical syntax
     [\\] [0-9]+                      -> NumChar
     [a-zA-Z0-9]                      -> ShortChar
-    [\\] ~[\0-\31A-Za-\109\111-\115\117-z0-9] -> ShortChar
+    [\\] ~[\0-\31A-Za-mo-su-z0-9]    -> ShortChar
   context-free syntax
     NumChar   -> Character
     ShortChar -> Character

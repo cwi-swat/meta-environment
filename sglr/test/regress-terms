@@ -24,7 +24,7 @@ Notify () {
 
 for ext in $extensions
 do
-	files=`ls $terms/*.$ext`
+	files=`ls $terms/*.$ext 2>/dev/null`
 	lang=`egrep "^$ext" $languages | cut -f2`
 	ptbl=$tables/$lang.tbl
         for file in $files

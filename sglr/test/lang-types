@@ -1,6 +1,9 @@
 # Extensions mapping
 # Ext	Lang
 casl	Casl
+c	C
+h	C
+java	Java
 pico	Pico
 rmo	Risla
 simcob	SimpleCobol
