@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Apr  9 16:38:54 2002
+ * Generated at Fri Jun 28 09:19:21 2002
  */
 
 #ifndef __ptable_dict_H
@@ -20,18 +20,28 @@ extern AFun PTA_afun9;
 extern AFun PTA_afun10;
 extern AFun PTA_afun11;
 extern AFun PTA_afun12;
+extern AFun PTA_afun13;
+extern AFun PTA_afun14;
+extern AFun PTA_afun15;
+extern AFun PTA_afun16;
 
 extern ATerm PTA_patternPriorityGreater;
+extern ATerm PTA_patternPriorityNonAssoc;
 extern ATerm PTA_patternPriorityRight;
 extern ATerm PTA_patternPriorityLeft;
 extern ATerm PTA_patternPrioritiesList;
 extern ATerm PTA_patternPrioritiesEmpty;
+extern ATerm PTA_patternLookAheadsElement;
+extern ATerm PTA_patternLookAheadsEmpty;
+extern ATerm PTA_patternCharClassDefault;
+extern ATerm PTA_patternLookAheadDefault;
 extern ATerm PTA_patternSpecialAttrAvoid;
 extern ATerm PTA_patternSpecialAttrPrefer;
 extern ATerm PTA_patternSpecialAttrReject;
 extern ATerm PTA_patternSpecialAttrNone;
 extern ATerm PTA_patternChoiceAccept;
 extern ATerm PTA_patternChoiceShift;
+extern ATerm PTA_patternChoiceLookaheadReduce;
 extern ATerm PTA_patternChoiceReduce;
 extern ATerm PTA_patternChoicesList;
 extern ATerm PTA_patternChoicesEmpty;

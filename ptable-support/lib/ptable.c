@@ -19,6 +19,9 @@ typedef struct ATerm _PTA_Action;
 typedef struct ATerm _PTA_Choices;
 typedef struct ATerm _PTA_Choice;
 typedef struct ATerm _PTA_SpecialAttr;
+typedef struct ATerm _PTA_LookAhead;
+typedef struct ATerm _PTA_CharClass;
+typedef struct ATerm _PTA_LookAheads;
 typedef struct ATerm _PTA_Priorities;
 typedef struct ATerm _PTA_Priority;
 
@@ -243,6 +246,54 @@ ATerm PTA_SpecialAttrToTerm(PTA_SpecialAttr arg)
 }
 
 /*}}}  */
+/*{{{  PTA_LookAhead PTA_LookAheadFromTerm(ATerm t) */
+
+PTA_LookAhead PTA_LookAheadFromTerm(ATerm t)
+{
+  return (PTA_LookAhead)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PTA_LookAheadToTerm(PTA_LookAhead arg) */
+
+ATerm PTA_LookAheadToTerm(PTA_LookAhead arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  PTA_CharClass PTA_CharClassFromTerm(ATerm t) */
+
+PTA_CharClass PTA_CharClassFromTerm(ATerm t)
+{
+  return (PTA_CharClass)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PTA_CharClassToTerm(PTA_CharClass arg) */
+
+ATerm PTA_CharClassToTerm(PTA_CharClass arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_LookAheadsFromTerm(ATerm t) */
+
+PTA_LookAheads PTA_LookAheadsFromTerm(ATerm t)
+{
+  return (PTA_LookAheads)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PTA_LookAheadsToTerm(PTA_LookAheads arg) */
+
+ATerm PTA_LookAheadsToTerm(PTA_LookAheads arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  PTA_Priorities PTA_PrioritiesFromTerm(ATerm t) */
 
 PTA_Priorities PTA_PrioritiesFromTerm(ATerm t)
@@ -415,11 +466,19 @@ PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAt
 }
 
 /*}}}  */
+/*{{{  PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAhead lookahead) */
+
+PTA_Choice PTA_makeChoiceLookaheadReduce(int length, int label, PTA_SpecialAttr specialAttr, PTA_LookAhead lookahead)
+{
+  return (PTA_Choice)(ATerm)ATmakeAppl4(PTA_afun8, (ATerm)ATmakeInt(length), (ATerm)ATmakeInt(label), (ATerm)specialAttr, (ATerm)lookahead);
+}
+
+/*}}}  */
 /*{{{  PTA_Choice PTA_makeChoiceShift(int stateNumner) */
 
 PTA_Choice PTA_makeChoiceShift(int stateNumner)
 {
-  return (PTA_Choice)(ATerm)ATmakeAppl1(PTA_afun8, (ATerm)ATmakeInt(stateNumner));
+  return (PTA_Choice)(ATerm)ATmakeAppl1(PTA_afun9, (ATerm)ATmakeInt(stateNumner));
 }
 
 /*}}}  */
@@ -427,7 +486,7 @@ PTA_Choice PTA_makeChoiceShift(int stateNumner)
 
 PTA_Choice PTA_makeChoiceAccept()
 {
-  return (PTA_Choice)(ATerm)ATmakeAppl0(PTA_afun9);
+  return (PTA_Choice)(ATerm)ATmakeAppl0(PTA_afun10);
 }
 
 /*}}}  */
@@ -463,6 +522,38 @@ PTA_SpecialAttr PTA_makeSpecialAttrAvoid()
 }
 
 /*}}}  */
+/*{{{  PTA_LookAhead PTA_makeLookAheadDefault(PTA_CharClass charClass, PTA_LookAheads lookaheads) */
+
+PTA_LookAhead PTA_makeLookAheadDefault(PTA_CharClass charClass, PTA_LookAheads lookaheads)
+{
+  return (PTA_LookAhead)(ATerm)ATmakeAppl2(PTA_afun11, (ATerm)charClass, (ATerm)lookaheads);
+}
+
+/*}}}  */
+/*{{{  PTA_CharClass PTA_makeCharClassDefault(PTA_CharRanges ranges) */
+
+PTA_CharClass PTA_makeCharClassDefault(PTA_CharRanges ranges)
+{
+  return (PTA_CharClass)(ATerm)ATmakeAppl1(PTA_afun12, (ATerm)ranges);
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_makeLookAheadsEmpty() */
+
+PTA_LookAheads PTA_makeLookAheadsEmpty()
+{
+  return (PTA_LookAheads)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_makeLookAheadsElement(PTA_LookAhead lookahead) */
+
+PTA_LookAheads PTA_makeLookAheadsElement(PTA_LookAhead lookahead)
+{
+  return (PTA_LookAheads)(ATerm)ATmakeList1((ATerm)lookahead);
+}
+
+/*}}}  */
 /*{{{  PTA_Priorities PTA_makePrioritiesEmpty() */
 
 PTA_Priorities PTA_makePrioritiesEmpty()
@@ -483,7 +574,7 @@ PTA_Priorities PTA_makePrioritiesList(PTA_Priority head, PTA_Priorities tail)
 
 PTA_Priority PTA_makePriorityLeft(int label1, int label2)
 {
-  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun10, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
+  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun13, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
 }
 
 /*}}}  */
@@ -491,7 +582,15 @@ PTA_Priority PTA_makePriorityLeft(int label1, int label2)
 
 PTA_Priority PTA_makePriorityRight(int label1, int label2)
 {
-  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun11, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
+  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun14, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
+}
+
+/*}}}  */
+/*{{{  PTA_Priority PTA_makePriorityNonAssoc(int label1, int label2) */
+
+PTA_Priority PTA_makePriorityNonAssoc(int label1, int label2)
+{
+  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun15, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
 }
 
 /*}}}  */
@@ -499,7 +598,7 @@ PTA_Priority PTA_makePriorityRight(int label1, int label2)
 
 PTA_Priority PTA_makePriorityGreater(int label1, int label2)
 {
-  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun12, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
+  return (PTA_Priority)(ATerm)ATmakeAppl2(PTA_afun16, (ATerm)ATmakeInt(label1), (ATerm)ATmakeInt(label2));
 }
 
 /*}}}  */
@@ -568,6 +667,21 @@ ATbool PTA_isEqualChoice(PTA_Choice arg0, PTA_Choice arg1)
 }
 
 ATbool PTA_isEqualSpecialAttr(PTA_SpecialAttr arg0, PTA_SpecialAttr arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTA_isEqualLookAhead(PTA_LookAhead arg0, PTA_LookAhead arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTA_isEqualCharClass(PTA_CharClass arg0, PTA_CharClass arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTA_isEqualLookAheads(PTA_LookAheads arg0, PTA_LookAheads arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1786,6 +1900,9 @@ ATbool PTA_isValidChoice(PTA_Choice arg)
   if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
+    return ATtrue;
+  }
   else if (PTA_isChoiceShift(arg)) {
     return ATtrue;
   }
@@ -1806,6 +1923,21 @@ inline ATbool PTA_isChoiceReduce(PTA_Choice arg)
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, PTA_patternChoiceReduce, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isChoiceLookaheadReduce(PTA_Choice arg) */
+
+inline ATbool PTA_isChoiceLookaheadReduce(PTA_Choice arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternChoiceLookaheadReduce)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoiceLookaheadReduce, NULL, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -1848,6 +1980,9 @@ ATbool PTA_hasChoiceLength(PTA_Choice arg)
   if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1856,7 +1991,10 @@ ATbool PTA_hasChoiceLength(PTA_Choice arg)
 
 int PTA_getChoiceLength(PTA_Choice arg)
 {
-  
+  if (PTA_isChoiceReduce(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
+  }
+  else 
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
 
@@ -1866,6 +2004,9 @@ int PTA_getChoiceLength(PTA_Choice arg)
 PTA_Choice PTA_setChoiceLength(PTA_Choice arg, int length)
 {
   if (PTA_isChoiceReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(length), 0);
+  }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
     return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(length), 0);
   }
 
@@ -1881,6 +2022,9 @@ ATbool PTA_hasChoiceLabel(PTA_Choice arg)
   if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1889,7 +2033,10 @@ ATbool PTA_hasChoiceLabel(PTA_Choice arg)
 
 int PTA_getChoiceLabel(PTA_Choice arg)
 {
-  
+  if (PTA_isChoiceReduce(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else 
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
 }
 
@@ -1899,6 +2046,9 @@ int PTA_getChoiceLabel(PTA_Choice arg)
 PTA_Choice PTA_setChoiceLabel(PTA_Choice arg, int label)
 {
   if (PTA_isChoiceReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label), 1);
+  }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
     return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label), 1);
   }
 
@@ -1914,6 +2064,9 @@ ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg)
   if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1922,7 +2075,10 @@ ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg)
 
 PTA_SpecialAttr PTA_getChoiceSpecialAttr(PTA_Choice arg)
 {
-  
+  if (PTA_isChoiceReduce(arg)) {
+    return (PTA_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
+  }
+  else 
     return (PTA_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
 }
 
@@ -1934,8 +2090,44 @@ PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr)
   if (PTA_isChoiceReduce(arg)) {
     return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)specialAttr, 2);
   }
+  else if (PTA_isChoiceLookaheadReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)specialAttr, 2);
+  }
 
   ATabort("Choice has no SpecialAttr: %t\n", arg);
+  return (PTA_Choice)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasChoiceLookahead(PTA_Choice arg) */
+
+ATbool PTA_hasChoiceLookahead(PTA_Choice arg)
+{
+  if (PTA_isChoiceLookaheadReduce(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAhead PTA_getChoiceLookahead(PTA_Choice arg) */
+
+PTA_LookAhead PTA_getChoiceLookahead(PTA_Choice arg)
+{
+  
+    return (PTA_LookAhead)ATgetArgument((ATermAppl)arg, 3);
+}
+
+/*}}}  */
+/*{{{  PTA_Choice PTA_setChoiceLookahead(PTA_Choice arg, PTA_LookAhead lookahead) */
+
+PTA_Choice PTA_setChoiceLookahead(PTA_Choice arg, PTA_LookAhead lookahead)
+{
+  if (PTA_isChoiceLookaheadReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)lookahead, 3);
+  }
+
+  ATabort("Choice has no Lookahead: %t\n", arg);
   return (PTA_Choice)NULL;
 }
 
@@ -2087,6 +2279,240 @@ inline ATbool PTA_isSpecialAttrAvoid(PTA_SpecialAttr arg)
 /*}}}  */
 
 /*}}}  */
+/*{{{  PTA_LookAhead accessors */
+
+/*{{{  ATbool PTA_isValidLookAhead(PTA_LookAhead arg) */
+
+ATbool PTA_isValidLookAhead(PTA_LookAhead arg)
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isLookAheadDefault(PTA_LookAhead arg) */
+
+inline ATbool PTA_isLookAheadDefault(PTA_LookAhead arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternLookAheadDefault, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasLookAheadCharClass(PTA_LookAhead arg) */
+
+ATbool PTA_hasLookAheadCharClass(PTA_LookAhead arg)
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_CharClass PTA_getLookAheadCharClass(PTA_LookAhead arg) */
+
+PTA_CharClass PTA_getLookAheadCharClass(PTA_LookAhead arg)
+{
+  
+    return (PTA_CharClass)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  PTA_LookAhead PTA_setLookAheadCharClass(PTA_LookAhead arg, PTA_CharClass charClass) */
+
+PTA_LookAhead PTA_setLookAheadCharClass(PTA_LookAhead arg, PTA_CharClass charClass)
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return (PTA_LookAhead)ATsetArgument((ATermAppl)arg, (ATerm)charClass, 0);
+  }
+
+  ATabort("LookAhead has no CharClass: %t\n", arg);
+  return (PTA_LookAhead)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasLookAheadLookaheads(PTA_LookAhead arg) */
+
+ATbool PTA_hasLookAheadLookaheads(PTA_LookAhead arg)
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_getLookAheadLookaheads(PTA_LookAhead arg) */
+
+PTA_LookAheads PTA_getLookAheadLookaheads(PTA_LookAhead arg)
+{
+  
+    return (PTA_LookAheads)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  PTA_LookAhead PTA_setLookAheadLookaheads(PTA_LookAhead arg, PTA_LookAheads lookaheads) */
+
+PTA_LookAhead PTA_setLookAheadLookaheads(PTA_LookAhead arg, PTA_LookAheads lookaheads)
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return (PTA_LookAhead)ATsetArgument((ATermAppl)arg, (ATerm)lookaheads, 1);
+  }
+
+  ATabort("LookAhead has no Lookaheads: %t\n", arg);
+  return (PTA_LookAhead)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  PTA_CharClass accessors */
+
+/*{{{  ATbool PTA_isValidCharClass(PTA_CharClass arg) */
+
+ATbool PTA_isValidCharClass(PTA_CharClass arg)
+{
+  if (PTA_isCharClassDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isCharClassDefault(PTA_CharClass arg) */
+
+inline ATbool PTA_isCharClassDefault(PTA_CharClass arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternCharClassDefault, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasCharClassRanges(PTA_CharClass arg) */
+
+ATbool PTA_hasCharClassRanges(PTA_CharClass arg)
+{
+  if (PTA_isCharClassDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_CharRanges PTA_getCharClassRanges(PTA_CharClass arg) */
+
+PTA_CharRanges PTA_getCharClassRanges(PTA_CharClass arg)
+{
+  
+    return (PTA_CharRanges)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  PTA_CharClass PTA_setCharClassRanges(PTA_CharClass arg, PTA_CharRanges ranges) */
+
+PTA_CharClass PTA_setCharClassRanges(PTA_CharClass arg, PTA_CharRanges ranges)
+{
+  if (PTA_isCharClassDefault(arg)) {
+    return (PTA_CharClass)ATsetArgument((ATermAppl)arg, (ATerm)ranges, 0);
+  }
+
+  ATabort("CharClass has no Ranges: %t\n", arg);
+  return (PTA_CharClass)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  PTA_LookAheads accessors */
+
+/*{{{  ATbool PTA_isValidLookAheads(PTA_LookAheads arg) */
+
+ATbool PTA_isValidLookAheads(PTA_LookAheads arg)
+{
+  if (PTA_isLookAheadsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (PTA_isLookAheadsElement(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isLookAheadsEmpty(PTA_LookAheads arg) */
+
+inline ATbool PTA_isLookAheadsEmpty(PTA_LookAheads arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternLookAheadsEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isLookAheadsElement(PTA_LookAheads arg) */
+
+inline ATbool PTA_isLookAheadsElement(PTA_LookAheads arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternLookAheadsElement, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasLookAheadsLookahead(PTA_LookAheads arg) */
+
+ATbool PTA_hasLookAheadsLookahead(PTA_LookAheads arg)
+{
+  if (PTA_isLookAheadsElement(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAhead PTA_getLookAheadsLookahead(PTA_LookAheads arg) */
+
+PTA_LookAhead PTA_getLookAheadsLookahead(PTA_LookAheads arg)
+{
+  
+    return (PTA_LookAhead)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_setLookAheadsLookahead(PTA_LookAheads arg, PTA_LookAhead lookahead) */
+
+PTA_LookAheads PTA_setLookAheadsLookahead(PTA_LookAheads arg, PTA_LookAhead lookahead)
+{
+  if (PTA_isLookAheadsElement(arg)) {
+    return (PTA_LookAheads)ATreplace((ATermList)arg, (ATerm)lookahead, 0);
+  }
+
+  ATabort("LookAheads has no Lookahead: %t\n", arg);
+  return (PTA_LookAheads)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  PTA_Priorities accessors */
 
 /*{{{  ATbool PTA_isValidPriorities(PTA_Priorities arg) */
@@ -2213,6 +2639,9 @@ ATbool PTA_isValidPriority(PTA_Priority arg)
   else if (PTA_isPriorityRight(arg)) {
     return ATtrue;
   }
+  else if (PTA_isPriorityNonAssoc(arg)) {
+    return ATtrue;
+  }
   else if (PTA_isPriorityGreater(arg)) {
     return ATtrue;
   }
@@ -2250,6 +2679,21 @@ inline ATbool PTA_isPriorityRight(PTA_Priority arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool PTA_isPriorityNonAssoc(PTA_Priority arg) */
+
+inline ATbool PTA_isPriorityNonAssoc(PTA_Priority arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternPriorityNonAssoc)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternPriorityNonAssoc, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
 /*{{{  inline ATbool PTA_isPriorityGreater(PTA_Priority arg) */
 
 inline ATbool PTA_isPriorityGreater(PTA_Priority arg)
@@ -2275,6 +2719,9 @@ ATbool PTA_hasPriorityLabel1(PTA_Priority arg)
   else if (PTA_isPriorityRight(arg)) {
     return ATtrue;
   }
+  else if (PTA_isPriorityNonAssoc(arg)) {
+    return ATtrue;
+  }
   else if (PTA_isPriorityGreater(arg)) {
     return ATtrue;
   }
@@ -2292,6 +2739,9 @@ int PTA_getPriorityLabel1(PTA_Priority arg)
   else if (PTA_isPriorityRight(arg)) {
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
   }
+  else if (PTA_isPriorityNonAssoc(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
+  }
   else 
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
@@ -2305,6 +2755,9 @@ PTA_Priority PTA_setPriorityLabel1(PTA_Priority arg, int label1)
     return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label1), 0);
   }
   else if (PTA_isPriorityRight(arg)) {
+    return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label1), 0);
+  }
+  else if (PTA_isPriorityNonAssoc(arg)) {
     return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label1), 0);
   }
   else if (PTA_isPriorityGreater(arg)) {
@@ -2326,6 +2779,9 @@ ATbool PTA_hasPriorityLabel2(PTA_Priority arg)
   else if (PTA_isPriorityRight(arg)) {
     return ATtrue;
   }
+  else if (PTA_isPriorityNonAssoc(arg)) {
+    return ATtrue;
+  }
   else if (PTA_isPriorityGreater(arg)) {
     return ATtrue;
   }
@@ -2343,6 +2799,9 @@ int PTA_getPriorityLabel2(PTA_Priority arg)
   else if (PTA_isPriorityRight(arg)) {
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
   }
+  else if (PTA_isPriorityNonAssoc(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+  }
   else 
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
 }
@@ -2356,6 +2815,9 @@ PTA_Priority PTA_setPriorityLabel2(PTA_Priority arg, int label2)
     return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label2), 1);
   }
   else if (PTA_isPriorityRight(arg)) {
+    return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label2), 1);
+  }
+  else if (PTA_isPriorityNonAssoc(arg)) {
     return (PTA_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label2), 1);
   }
   else if (PTA_isPriorityGreater(arg)) {
@@ -2542,15 +3004,22 @@ PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choic
 }
 
 /*}}}  */
-/*{{{  PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int)) */
+/*{{{  PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAhead (*acceptLookahead)(PTA_LookAhead), int (*acceptStateNumner)(int)) */
 
-PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int))
+PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), PTA_LookAhead (*acceptLookahead)(PTA_LookAhead), int (*acceptStateNumner)(int))
 {
   if (PTA_isChoiceReduce(arg)) {
     return PTA_makeChoiceReduce(
         acceptLength ? acceptLength(PTA_getChoiceLength(arg)) : PTA_getChoiceLength(arg),
         acceptLabel ? acceptLabel(PTA_getChoiceLabel(arg)) : PTA_getChoiceLabel(arg),
         acceptSpecialAttr ? acceptSpecialAttr(PTA_getChoiceSpecialAttr(arg)) : PTA_getChoiceSpecialAttr(arg));
+  }
+  if (PTA_isChoiceLookaheadReduce(arg)) {
+    return PTA_makeChoiceLookaheadReduce(
+        acceptLength ? acceptLength(PTA_getChoiceLength(arg)) : PTA_getChoiceLength(arg),
+        acceptLabel ? acceptLabel(PTA_getChoiceLabel(arg)) : PTA_getChoiceLabel(arg),
+        acceptSpecialAttr ? acceptSpecialAttr(PTA_getChoiceSpecialAttr(arg)) : PTA_getChoiceSpecialAttr(arg),
+        acceptLookahead ? acceptLookahead(PTA_getChoiceLookahead(arg)) : PTA_getChoiceLookahead(arg));
   }
   if (PTA_isChoiceShift(arg)) {
     return PTA_makeChoiceShift(
@@ -2585,6 +3054,49 @@ PTA_SpecialAttr PTA_visitSpecialAttr(PTA_SpecialAttr arg)
 }
 
 /*}}}  */
+/*{{{  PTA_LookAhead PTA_visitLookAhead(PTA_LookAhead arg, PTA_CharClass (*acceptCharClass)(PTA_CharClass), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads)) */
+
+PTA_LookAhead PTA_visitLookAhead(PTA_LookAhead arg, PTA_CharClass (*acceptCharClass)(PTA_CharClass), PTA_LookAheads (*acceptLookaheads)(PTA_LookAheads))
+{
+  if (PTA_isLookAheadDefault(arg)) {
+    return PTA_makeLookAheadDefault(
+        acceptCharClass ? acceptCharClass(PTA_getLookAheadCharClass(arg)) : PTA_getLookAheadCharClass(arg),
+        acceptLookaheads ? acceptLookaheads(PTA_getLookAheadLookaheads(arg)) : PTA_getLookAheadLookaheads(arg));
+  }
+  ATabort("not a LookAhead: %t\n", arg);
+  return (PTA_LookAhead)NULL;
+}
+
+/*}}}  */
+/*{{{  PTA_CharClass PTA_visitCharClass(PTA_CharClass arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges)) */
+
+PTA_CharClass PTA_visitCharClass(PTA_CharClass arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges))
+{
+  if (PTA_isCharClassDefault(arg)) {
+    return PTA_makeCharClassDefault(
+        acceptRanges ? acceptRanges(PTA_getCharClassRanges(arg)) : PTA_getCharClassRanges(arg));
+  }
+  ATabort("not a CharClass: %t\n", arg);
+  return (PTA_CharClass)NULL;
+}
+
+/*}}}  */
+/*{{{  PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptLookahead)(PTA_LookAhead)) */
+
+PTA_LookAheads PTA_visitLookAheads(PTA_LookAheads arg, PTA_LookAhead (*acceptLookahead)(PTA_LookAhead))
+{
+  if (PTA_isLookAheadsEmpty(arg)) {
+    return PTA_makeLookAheadsEmpty();
+  }
+  if (PTA_isLookAheadsElement(arg)) {
+    return PTA_makeLookAheadsElement(
+        acceptLookahead ? acceptLookahead(PTA_getLookAheadsLookahead(arg)) : PTA_getLookAheadsLookahead(arg));
+  }
+  ATabort("not a LookAheads: %t\n", arg);
+  return (PTA_LookAheads)NULL;
+}
+
+/*}}}  */
 /*{{{  PTA_Priorities PTA_visitPriorities(PTA_Priorities arg, PTA_Priority (*acceptHead)(PTA_Priority)) */
 
 PTA_Priorities PTA_visitPriorities(PTA_Priorities arg, PTA_Priority (*acceptHead)(PTA_Priority))
@@ -2613,6 +3125,11 @@ PTA_Priority PTA_visitPriority(PTA_Priority arg, int (*acceptLabel1)(int), int (
   }
   if (PTA_isPriorityRight(arg)) {
     return PTA_makePriorityRight(
+        acceptLabel1 ? acceptLabel1(PTA_getPriorityLabel1(arg)) : PTA_getPriorityLabel1(arg),
+        acceptLabel2 ? acceptLabel2(PTA_getPriorityLabel2(arg)) : PTA_getPriorityLabel2(arg));
+  }
+  if (PTA_isPriorityNonAssoc(arg)) {
+    return PTA_makePriorityNonAssoc(
         acceptLabel1 ? acceptLabel1(PTA_getPriorityLabel1(arg)) : PTA_getPriorityLabel1(arg),
         acceptLabel2 ? acceptLabel2(PTA_getPriorityLabel2(arg)) : PTA_getPriorityLabel2(arg));
   }

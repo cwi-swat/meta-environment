@@ -31,22 +31,32 @@
   [Choices, empty, []],
   [Choices, list,  [<head(Choice)>,<[tail(Choices)]>]],
   
-  [Choice, reduce, reduce(<length(int)>,<label(int)>,
-                               <special-attr(SpecialAttr)>)],
-
+  [Choice, reduce, reduce(<length(int)>,
+                          <label(int)>,
+                          <special-attr(SpecialAttr)>)],
+  [Choice, lookahead-reduce, lookahead-reduce(<length(int)>,
+                                              <label(int)>,
+                                              <special-attr(SpecialAttr)>,
+					      <lookahead(LookAhead)>)],
   [Choice, shift, shift(<state-numner(int)>)],
   [Choice, accept, accept],
-   
+
   [SpecialAttr, none  , 0],
   [SpecialAttr, reject, 1],
   [SpecialAttr, prefer, 2],
   [SpecialAttr, avoid , 4],
 
+  [LookAhead, default, look(<char-class(CharClass)>,<lookaheads(LookAheads)>)],
+
+  [CharClass, default,  char-class(<ranges(CharRanges)>)],
+  [LookAheads, empty, []],
+  [LookAheads, element,  [<lookahead(LookAhead)>]],
   
   [Priorities, empty, []],
   [Priorities, list,  [<head(Priority)>,<[tail(Priorities)]>]],
 
   [Priority, left, left-prio(<label1(int)>,<label2(int)>)],
   [Priority, right, right-prio(<label1(int)>,<label2(int)>)],
+  [Priority, non-assoc, non-assoc(<label1(int)>,<label2(int)>)],
   [Priority, greater, gtr-prio(<label1(int)>,<label2(int)>)]
 ]
