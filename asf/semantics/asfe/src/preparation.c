@@ -631,10 +631,6 @@ static PT_Tree APICallToNormalCall(PT_Tree tree, PT_TreeVisitorData data)
   PT_Tree result;
 
   if (AA_isCallConstructor(call)) {
-    if (ATgetLength((ATermList) calls) != 1) {
-      ATerror("APICallToNormalCall: ambiguous constructor\n");
-      return tree;
-    }
     result = interpretConstructorCall(tree, calls);
     return prepareTerm(result, data); 
   }

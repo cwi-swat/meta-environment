@@ -128,7 +128,7 @@ PT_Tree interpretConstructorCall(PT_Tree in, AA_Calls calls)
   PT_Args args, newargs;
   PT_Symbols lhs;
 
-  assert((ATgetLength((ATermList) calls) == 1) && "ambiguous constructor");
+/*  assert((ATgetLength((ATermList) calls) == 1) && "ambiguous constructor");*/
   
   call = AA_getCallsHead(calls);
 
@@ -291,6 +291,26 @@ PT_Tree interpretSetterCall(PT_Tree in, AA_Calls calls)
 
 /*}}}  */
 
+/*{{{  PT_Tree interpretPredicateCall(PT_Tree in, AA_Call call) */
+
+PT_Tree interpretBuiltinCall(PT_Tree in, AA_Calls calls)
+{
+  char *funcname;
+  AA_Call call;
+
+  assert((ATgetLength((ATermList) calls) == 1) && "ambiguous builtin");
+
+  call = AA_getCallsHead(calls);
+  funcname = AA_getCallFunction(call);
+
+  ATwarning("Builtin function %s called! (no effect implemented yet)\n", 
+	    funcname);
+
+  return in;
+}
+
+/*}}}  */
+
 /*{{{  PT_Tree interpretAPICall(PT_Tree in) */
 
 PT_Tree interpretAPICall(PT_Tree in)
@@ -311,6 +331,9 @@ PT_Tree interpretAPICall(PT_Tree in)
   }
   else if (AA_isCallSetter(AA_getCallsHead(calls))) {
     result = interpretSetterCall(in, calls);
+  }
+  else if (AA_isCallBuiltin(AA_getCallsHead(calls))) {
+    result = interpretBuiltinCall(in, calls);
   }
   else {
     ATerror("interpretAPICall: unknown ASF api call %t\n", calls);

@@ -107,6 +107,14 @@ AA_Call AA_makeCallSetter(ATerm production, int argNr)
 }
 
 /*}}}  */
+/*{{{  AA_Call AA_makeCallBuiltin(char * function) */
+
+AA_Call AA_makeCallBuiltin(char * function)
+{
+  return (AA_Call)(ATerm)ATmakeAppl1(AA_afun4, (ATerm)ATmakeAppl0(ATmakeAFun(function, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  AA_Calls AA_makeCallsEmpty() */
 
 AA_Calls AA_makeCallsEmpty()
@@ -127,7 +135,7 @@ AA_Calls AA_makeCallsList(AA_Call head, AA_Calls tail)
 
 AA_Result AA_makeResultTrue()
 {
-  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun4, (ATerm)ATmakeAppl3(AA_afun5, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun7))), (ATerm)ATmakeAppl1(AA_afun8, (ATerm)ATmakeAppl2(AA_afun9, (ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun7)), (ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun10)))), (ATerm)ATmakeAppl0(AA_afun11)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun7))));
+  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun5, (ATerm)ATmakeAppl3(AA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8))), (ATerm)ATmakeAppl1(AA_afun9, (ATerm)ATmakeAppl2(AA_afun10, (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8)), (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11)))), (ATerm)ATmakeAppl0(AA_afun12)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8))));
 }
 
 /*}}}  */
@@ -135,7 +143,7 @@ AA_Result AA_makeResultTrue()
 
 AA_Result AA_makeResultFalse()
 {
-  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun4, (ATerm)ATmakeAppl3(AA_afun5, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun7))), (ATerm)ATmakeAppl1(AA_afun8, (ATerm)ATmakeAppl2(AA_afun9, (ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun7)), (ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun10)))), (ATerm)ATmakeAppl0(AA_afun11)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun6, (ATerm)ATmakeAppl0(AA_afun10))));
+  return (AA_Result)(ATerm)ATmakeAppl2(AA_afun5, (ATerm)ATmakeAppl3(AA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8))), (ATerm)ATmakeAppl1(AA_afun9, (ATerm)ATmakeAppl2(AA_afun10, (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun8)), (ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11)))), (ATerm)ATmakeAppl0(AA_afun12)), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(AA_afun7, (ATerm)ATmakeAppl0(AA_afun11))));
 }
 
 /*}}}  */
@@ -175,6 +183,9 @@ ATbool AA_isValidCall(AA_Call arg)
     return ATtrue;
   }
   else if (AA_isCallSetter(arg)) {
+    return ATtrue;
+  }
+  else if (AA_isCallBuiltin(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -236,6 +247,21 @@ inline ATbool AA_isCallSetter(AA_Call arg)
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, AA_patternCallSetter, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool AA_isCallBuiltin(AA_Call arg) */
+
+inline ATbool AA_isCallBuiltin(AA_Call arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(AA_patternCallBuiltin)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, AA_patternCallBuiltin, NULL));
 #endif
   return ATtrue;
 }
@@ -339,6 +365,39 @@ AA_Call AA_setCallArgNr(AA_Call arg, int argNr)
   }
 
   ATabort("Call has no ArgNr: %t\n", arg);
+  return (AA_Call)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool AA_hasCallFunction(AA_Call arg) */
+
+ATbool AA_hasCallFunction(AA_Call arg)
+{
+  if (AA_isCallBuiltin(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char * AA_getCallFunction(AA_Call arg) */
+
+char * AA_getCallFunction(AA_Call arg)
+{
+  
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  AA_Call AA_setCallFunction(AA_Call arg, char * function) */
+
+AA_Call AA_setCallFunction(AA_Call arg, char * function)
+{
+  if (AA_isCallBuiltin(arg)) {
+    return (AA_Call)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(function, 0, ATtrue)), 0);
+  }
+
+  ATabort("Call has no Function: %t\n", arg);
   return (AA_Call)NULL;
 }
 
@@ -523,9 +582,9 @@ inline ATbool AA_isResultFalse(AA_Result arg)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int)) */
+/*{{{  AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), char * (*acceptFunction)(char *)) */
 
-AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int))
+AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), char * (*acceptFunction)(char *))
 {
   if (AA_isCallConstructor(arg)) {
     return AA_makeCallConstructor(
@@ -544,6 +603,10 @@ AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*accept
     return AA_makeCallSetter(
         acceptProduction ? acceptProduction(AA_getCallProduction(arg)) : AA_getCallProduction(arg),
         acceptArgNr ? acceptArgNr(AA_getCallArgNr(arg)) : AA_getCallArgNr(arg));
+  }
+  if (AA_isCallBuiltin(arg)) {
+    return AA_makeCallBuiltin(
+        acceptFunction ? acceptFunction(AA_getCallFunction(arg)) : AA_getCallFunction(arg));
   }
   ATabort("not a Call: %t\n", arg);
   return (AA_Call)NULL;

@@ -40,6 +40,7 @@ AA_Call AA_makeCallConstructor(ATerm production);
 AA_Call AA_makeCallPredicate(ATerm production);
 AA_Call AA_makeCallGetter(ATerm production, int argNr);
 AA_Call AA_makeCallSetter(ATerm production, int argNr);
+AA_Call AA_makeCallBuiltin(char * function);
 AA_Calls AA_makeCallsEmpty();
 AA_Calls AA_makeCallsList(AA_Call head, AA_Calls tail);
 AA_Result AA_makeResultTrue();
@@ -60,12 +61,16 @@ inline ATbool AA_isCallConstructor(AA_Call arg);
 inline ATbool AA_isCallPredicate(AA_Call arg);
 inline ATbool AA_isCallGetter(AA_Call arg);
 inline ATbool AA_isCallSetter(AA_Call arg);
+inline ATbool AA_isCallBuiltin(AA_Call arg);
 ATbool AA_hasCallProduction(AA_Call arg);
 ATerm AA_getCallProduction(AA_Call arg);
 AA_Call AA_setCallProduction(AA_Call arg, ATerm production);
 ATbool AA_hasCallArgNr(AA_Call arg);
 int AA_getCallArgNr(AA_Call arg);
 AA_Call AA_setCallArgNr(AA_Call arg, int argNr);
+ATbool AA_hasCallFunction(AA_Call arg);
+char * AA_getCallFunction(AA_Call arg);
+AA_Call AA_setCallFunction(AA_Call arg, char * function);
 
 /*}}}  */
 /*{{{  AA_Calls accessors */
@@ -90,7 +95,7 @@ inline ATbool AA_isResultFalse(AA_Result arg);
 /*}}}  */
 /*{{{  sort visitors */
 
-AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int));
+AA_Call AA_visitCall(AA_Call arg, ATerm (*acceptProduction)(ATerm), int (*acceptArgNr)(int), char * (*acceptFunction)(char *));
 AA_Calls AA_visitCalls(AA_Calls arg, AA_Call (*acceptHead)(AA_Call));
 AA_Result AA_visitResult(AA_Result arg);
 

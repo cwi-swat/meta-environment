@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Dec 19 17:37:31 2001
+ * Generated at Tue Jan 15 16:04:24 2002
  */
 
 #ifndef __ASFAPI_dict_H
@@ -19,11 +19,13 @@ extern AFun AA_afun8;
 extern AFun AA_afun9;
 extern AFun AA_afun10;
 extern AFun AA_afun11;
+extern AFun AA_afun12;
 
 extern ATerm AA_patternResultFalse;
 extern ATerm AA_patternResultTrue;
 extern ATerm AA_patternCallsList;
 extern ATerm AA_patternCallsEmpty;
+extern ATerm AA_patternCallBuiltin;
 extern ATerm AA_patternCallSetter;
 extern ATerm AA_patternCallGetter;
 extern ATerm AA_patternCallPredicate;
