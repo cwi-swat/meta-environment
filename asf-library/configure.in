@@ -1,14 +1,14 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(asf-library, 1.0)
 
 ACLOCAL="${ACLOCAL} -I ."
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
-AC_OUTPUT(
-   Makefile
+AC_CONFIG_FILES([Makefile
    utils/Makefile
    library/Makefile
    library/basic/Makefile
@@ -37,4 +37,5 @@ AC_OUTPUT(
    library/languages/casl/Makefile
    library/languages/casl/syntax/Makefile
    library/languages/casl/tocasfix/Makefile
-)
+])
+AC_OUTPUT
