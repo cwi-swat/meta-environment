@@ -1,10 +1,10 @@
 <HTML>
 <HEAD>
-<TITLE>Features offered by the new Asf+Sdf Meta-environment</TITLE>
+<TITLE>Features offered by the new Asf+Sdf Meta-Environment</TITLE>
 </HEAD>
 <BODY TEXT="#000000" BGCOLOR="#FFFFFF">
 
-<H1>Features offered by the new Asf+Sdf Meta-environment</H1>
+<H1>Features offered by the new Asf+Sdf Meta-Environment</H1>
 An Asf+Sdf specification consists of a set of modules.
 Each modules consists of a syntax definition part (Sdf) and
 an equation part (Asf).
@@ -12,7 +12,7 @@ The syntax defined in Sdf is used to parse the equations in the Asf part.
 Modules can import each other. This implies that syntax defined in
 imported modules can be used in the equations of the importing module.
 
-<P> The user interface of the Meta-environment is based on two components:
+<P> The user interface of the Meta-Environment is based on two components:
 <UL>
 <LI> A syntax directed editor that can be used to edit both modules
 and terms over the specified language(s).
@@ -42,10 +42,10 @@ The control tool must provide the following functionality:
 <LI> Save changes in a specific module.
 <LI> Save all elements that have been changed since the last 
      save operations, be it modules or terms.
-<LI> Remove a module from the Meta-environment, even if some
+<LI> Remove a module from the Meta-Environment, even if some
      other module still depends on this module. Modules that are now
      no longer in working order, should be 'greyed out' somehow.
-<LI> Inspect and change the list of search-paths in which the Meta-environment
+<LI> Inspect and change the list of search-paths in which the Meta-Environment
      searches for new modules.
 <LI> Set and/or change the directory in which the compiler writes the
      generated C programs.
@@ -53,7 +53,7 @@ The control tool must provide the following functionality:
 <LI> Show a list of currently active module editors and term editors,
      and enable the user to activate (bring them to the front) and
      remove them.
-<LI> Quit the Meta-environment.
+<LI> Quit the Meta-Environment.
 </UL>
 
 <H3>Extensibility</H3>
@@ -108,197 +108,3 @@ to the user interface when they become available.
 It should provide facilities to combine results of the evaluation
 of different terms.
 
-<A NAME="parser-generator">
-<H2>Parser Generator</H2>
-
-Given the syntax definition of a language (as defined in the Sdf parts of the
-modules in a specification),
-a parse table must be generated for parsing the equations in the modules
-and terms.
-A parse table interpreter (or simply stated: a parser) uses this table to parse
-terms and equations.
-The parser generator should be able to generate this parse table given a list
-of Sdf modules.
-
-<H3>Extensibility</H3>
-The parse table should contain information indicating which transitions
-in the table are valid for a specific module. So, for an entire
-specification only one parse table is needed, the modular structure of
-the specification is thus coded in the parse table.
-
-<A NAME="parser">
-<H2>Parser</H2>
-
-The parser must provide the following basic functionality:
-<UL>
-<LI> Parsing of a text given a parse table and a module name.
-This module name can be:
-<UL>
-<LI> Sdf(2) if the Sdf part of a module must be parsed. 
-<LI> a user defined module name extended with syntax rules for
-equations if the Asf part of a module must be parsed.
-<LI> a user defined module name if the text of an ordinary term must be
-parsed.
-</UL>
-<LI> Construction of a parse tree in AsFix format if the parse was successful.
-<LI> Generation of error messages if the text contains some syntax error.
-<LI> A mechanism to store parse tables, so that a parse table need not
-be regenerated for every text that must be parsed.
-<LI> A mechanism to select only these entries of a parse table which are
-valid for a specific Sdf modules.
-</UL>
-
-<A NAME="evaluator">
-<H2>Evaluator</H2>
-
-We consider both the interpreter, and generated C executables
-as instances of the evaluator.
-The basic functionality of the interpreter is rewriting terms given a set
-of equations.
-The generated C executables take a term and rewrites it by the C program.
-
-<P> The minimal functionality of the interpreter is:
-<UL>
-<LI> Rewriting a term given some module name.
-<LI> Construction of a normal form.
-<LI> A mechanism to store sets of equations, so that these need not be
-retrieved fore every term that must be rewritten.
-</UL>
-
-<P> The minimal functionality of the generated C executables is:
-<UL>
-<LI> Rewriting a term given some module name.
-<LI> Construction of a normal form.
-</UL>
-
-<H3>Extensions</H3>
-Enabling the interpreter to use compiled modules when rewriting terms.
-Provide origin tracking information during rewriting in the interpreter
-and the generated C executables.
-Storing intermediate rewrite results for functions annotated by
-the user with the memo-attribute.
-Provide facilities to incorporate incremental rewriting techniques.
-
-<A NAME="compiler">
-<H2>Compiler</H2>
-
-Given a module name the compiler generates C programs, these C programs
-consist of functions corresponding to the context-free functions in the
-specification.
-Furthermore functions are generated to register local function definitions,
-to resolve external function calls and to transform AsFix terms into
-the internal term representation used by the C functions.
-The registering and resolving of function definitions and calls is
-necessary to enable the separate compilation of Asf+Sdf modules.
-
-<H3>Extensions</H3>
-
-The generated C code should be extended with so-called "active" predicates
-to enable to possibility to rewrite over other modules than the top
-module. This is needed when the generated C executables are to replace
-the interpreter, because if a term is to be rewritten over a lower
-level module  not all equations may be active.
-Generate C code which takes care of origin tracking.
-Incorporate functionality to store intermediate rewrite results to enable
-memo functions.
-Provide a mechanism to implement heavily used modules such as the integers
-directly in C.
-
-<P> The interpreter and the generated C executables should
-<EM>all</EM> be based on the same Asf semantics.
-
-<A NAME="debugger">
-<H2>Debugger</H2>
-
-The debugger is able to debug specications that are reduced using
-the evaluator. When a term is to be reduced in debug mode, the
-evaluator connects to the debugger, and generates events related
-to the reduction process. The debugger processes these events
-by highlighting the appropriate lines in the source code of the
-specification, and showing the values of variables. The user can
-influence the execution by setting breakpoints and stepping through
-the specification one equation at a time, or even one condition at
-a time.
-
-<H3>Extensibility</H3>
-
-In the future, origin tracking could be used to generate debugging
-support in the generated environments.
-
-<A NAME="module-database">
-<H2>Module Database</H2>
-
-The basic functionality of both the module database is to
-store trees representing modules. The reason for separating
-module and term database is that in a standalone environment the
-Meta-Environment specific functionality of the module database is not
-needed, this will be explained more elaborately below.
-
-The module database should provide the following functionality:
-<UL>
-<LI>Storage, retrieval, replacement, and deletion of modules with (based on)
-version numbers.
-<LI>Calculation of the import relations of modules.
-<LI>Keeping track of missing modules in the database
-with respect to the import relations.
-<LI>Keeping track of modifications in the syntax part and the consequences
-for tools depending on this information such as
-the equation parts (interpreter),
-terms (term database), parse tables (parser), TeX and HTML code (unparser),
-and generated C executables.
-<LI>Retrieval of the syntax part of modules given a list of modules names
-and version numbers.
-<LI>Retrieval of the equation part of modules given a list of modules names
-and version numbers.
-<LI>Reshuffling of equations given a list of modules names
-and version numbers and construction of new modules.
-</UL>
-
-The term database contains only terms constructed by the user or derived
-by the evaluator. These terms correspond to syntax modules available in
-the module database, if any. In a standalone environment there will
-be terms of the so-called top module, e.g., Pico or COBOL, and reduction
-results, e.g., booleans values in case of type check results, transformed
-programs, or value environments. 
-The term database should provide the following functionality:
-<UL>
-<LI>Storage, retrieval, replacement, and deletion of term with (based on)
-version numbers and module names.
-</UL>
-
-<H3>Extensibility</H3>
-Both the module and term database could provide functionality to pose queries
-on the contents of the database. These queries can be used to implement 
-search facilities, global search and replace facilities, derivation of
-relations between various trees in the database, etc.
-
-<A NAME="unparser">
-<H2>Unparser</H2>
-
-The unparser must deal with the pretty printing of normalized terms to be shown
-to the user after rewriting, and the typesetting of modules in LaTeX or
-on the web via HTML.
-The formatting of terms and modules is expressed in language and 
-back-end independent box-oriented formatting language.
-
-<P>The unparser or pretty printer should provide the following functionality:
-<UL>
-<LI>Unparsing of a term (in AsFix format) given a list consisting of pairs
-of context-free syntax rules and box expressions and resulting in a
-modified term (spaces and newlines will be added to the AsFix representation).
-<LI>Calculation of the box expression given the AsFix representation of a
-module, and transformation of the box expression into TeX or HTML code.
-<LI>A mechanism to store the list consisting of pairs of
-context-free syntax rules and box expressions.
-</UL>
-
-<H2>Unparser Generator</H2>
-<A NAME="unparser-generator">
-
-The unparser generator should generate a list consisting of pairs
-of context-free syntax rules and initial box expressions.
-Users should be able to modify the initial box expressions in order
-to fine tune the pretty printing.
-
-</BODY>
-</HTML>
