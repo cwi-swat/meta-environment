@@ -5,9 +5,11 @@ imports PicoExtraction
 exports
   context-free syntax
 	undefinedVars(PROGRAM)   -> List
-        undefined-query(RSTORE)  -> RSTORE
+	unusedVars(PROGRAM)  	 -> List
+        queries(RSTORE)          -> RSTORE
 
 hiddens
   variables
-	      "Rstore" [0-9\']*  -> RSTORE
+	"$Rstore" [0-9\']*  -> RSTORE
+	"$Program" [0-9\']* -> PROGRAM
 

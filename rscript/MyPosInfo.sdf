@@ -2,12 +2,9 @@ module MyPosInfo[X]
 
 
 imports basic/Integers basic/Strings
+imports MyArea
 
 exports
-  sorts Area
-
-  aliases Area -> ATerm
-
   context-free syntax
 
     get-area(X)			                 -> Area
@@ -17,6 +14,7 @@ exports
    context-free syntax
 
    convert(Literal)	-> StrCon
+   mkId(IntCon, IntCon, IntCon, IntCon) -> StrCon
 
   
   variables

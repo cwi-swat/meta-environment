@@ -1,45 +1,45 @@
-module RScripts[Elem ElemType]
+module RScripts
 
-imports Relations[Elem]
-
-imports basic/Booleans basic/Integers
+imports basic/Booleans basic/Integers basic/Strings
+imports MyArea
 
 exports
-  sorts SCRIPT STAT VAR DCLVAR FROM TEXP REXP REXPTYPE
+  sorts Elem ElemType SCRIPT STAT VAR DCLVAR FROM REXP REXPTYPE
+
+  imports Relations[Elem]
 
   lexical syntax
-     [\$]?[A-Za-z][A-Za-z0-9\_]*             -> VAR {avoid}
+     [A-Za-z][A-Za-z0-9\_\-]*             -> VAR {avoid}
 
   context-free restrictions
-     VAR -/- [A-Za-z0-9\_]
+     VAR -/- [A-Za-z0-9\_\-]
 
   context-free syntax
 
 %% Elementary values
      Boolean                                -> Elem
-     Integer                                 -> Elem
+     Integer                                -> Elem
+     String				    -> Elem
+     Area				    -> Elem
 
-%%     Elem                                  -> REXP
-     Boolean                                 -> REXP
-     Integer				     -> REXP
-     "'" Elem                                -> REXP
-     "'" Bag[[Elem]]                         -> REXP
-     "'" Rel[[Elem]]                         -> REXP
+%% Extend Elem to allow nested bags and relations
+
+     Bag[[Elem]]                   	    -> Elem
+     Rel[[Elem]]                            -> Elem
+     Elem # Elem                            -> Elem
+
+     Elem                                    -> REXP {prefer}
      VAR                                     -> REXP
+     REXP # REXP			     -> REXP
      "{" {REXP ","}* "}"                     -> REXP
-     "<" REXP "," REXP ">"                   -> TEXP
-     "{" {TEXP ","}* "}"                     -> REXP
-     TEXP                                    -> REXP
-%%     "true"                                  -> REXP {prefer}
-%%     "false"                                 -> REXP {prefer}
 
 %% Operators
      REXP "and" REXP                         -> REXP {left}
      REXP "or" REXP                          -> REXP {left}
      "not" REXP                              -> REXP
-     REXP "elem" REXP			     -> REXP
+     REXP "elem" REXP			     -> REXP {non-assoc}
 
-     REXP "==" REXP                          -> REXP {left}
+     REXP "==" REXP                          -> REXP {non-assoc}
      REXP "<=" REXP                          -> REXP {non-assoc}
      REXP "<" REXP                           -> REXP {non-assoc}
      REXP ">=" REXP                          -> REXP {non-assoc}
@@ -54,15 +54,16 @@ exports
      REXP "+"                                -> REXP
      REXP "*"                                -> REXP
 
+     "#" REXP			    	     -> REXP
+
 %% Types
 
-     "bool" 				     -> ElemType
-     "int"		     		     -> ElemType
-
+     "bool" | "int" | "str" | "node"	     -> ElemType
      ElemType                                -> REXPTYPE
      "<" REXPTYPE "," REXPTYPE ">"           -> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     -> REXPTYPE
      "rel" "[" REXPTYPE "," REXPTYPE "]"     -> REXPTYPE
+     "@" VAR				     -> REXPTYPE
 
 %% value formers
 
@@ -91,13 +92,18 @@ exports
 
   context-free priorities
 
+    { REXP "+" -> REXP
+       REXP "*" -> REXP} >
+
      REXP "o" REXP -> REXP>
      REXP "x" REXP -> REXP >
      REXP "." REXP -> REXP >
      REXP "inter" REXP -> REXP >
      REXP "union" REXP -> REXP >
-     { REXP "+" -> REXP
-       REXP "*" -> REXP} >
+     REXP "elem" REXP -> REXP >    
+     REXP "\\" REXP -> REXP >
+     "#" REXP -> REXP >
+    
 
      { REXP "<=" REXP -> REXP 
        REXP "<" REXP -> REXP

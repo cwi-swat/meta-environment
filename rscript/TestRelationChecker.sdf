@@ -1,0 +1,12 @@
+module TestRelationChecker
+
+imports Pico-syntax
+
+exports
+
+sorts ETYPE
+
+context-free syntax
+    "id"              -> ETYPE
+      
+imports RelationChecker[PICO-ID ETYPE]

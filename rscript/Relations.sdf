@@ -12,6 +12,7 @@ imports Bags[Elem]
          Bag[[Elem # Elem]]	-> Rel[[Elem]]
 
   context-free syntax
+%%	Elem # Elem	      	                -> Elem
 
      "EmptyRel"                                	-> Rel[[Elem]]
 
