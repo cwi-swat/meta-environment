@@ -1,9 +1,3 @@
-# 1 "/export/scratch1/jong/meta/install/share/meta/meta.c"
-# 1 "<built-in>"
-# 1 "<command line>"
-# 1 "/export/scratch1/jong/meta/install/share/meta/meta.c"
-# 10 "/export/scratch1/jong/meta/install/share/meta/meta.c"
-# 1 "/export/scratch1/jong/meta/install/share/meta/abort.tb" 1
 process AbortMetaEnvironment is
 let
   TimeOut : int
@@ -15,8 +9,6 @@ in
 
   shutdown("Meta-Environment ran out of time!") delay(TimeOut)
 endlet
-# 11 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/parse-utils.tb" 1
 
 
 
@@ -225,8 +217,6 @@ in
     tau
   fi
 endlet
-# 12 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/editors.tb" 1
 
 
 process Editors is
@@ -477,8 +467,6 @@ in
                 "Could not create empty equations: %s", [ErrMsg])))
   )
 endlet
-# 13 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/restore-term-brackets.tb" 1
 
 process RestoreTermBrackets is
 let
@@ -501,8 +489,6 @@ in
     snd-msg(restore-term-brackets-result(ModuleName, Tree))
   ) * delta
 endlet
-# 14 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/open-modules.tb" 1
 
 
 process Open-initial-module is
@@ -730,8 +716,6 @@ in
     rec-msg(error-opening(Module))
   )
 endlet
-# 15 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/file-creator.tb" 1
 
 
 
@@ -803,8 +787,6 @@ in
     )
   ) * delta
 endlet
-# 16 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/module-utils.tb" 1
 
 
 process Module-Utilities is
@@ -1207,8 +1189,6 @@ process HandleCopyModuleErrors(Old : str, New : str, Status : term) is
   else
     tau
   fi
-# 17 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/print-module.tb" 1
 
 
 
@@ -1245,13 +1225,10 @@ in
   ) *
   delta
 endlet
-# 18 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/ui.tb" 1
 
 
 
 
-# 1 "/export/scratch1/jong/meta/install/share/meta/meta-studio.idef" 1
 tool user-interface is {
   command = "meta-studio"
 }
@@ -1522,9 +1499,6 @@ in
   + rec-disconnect(UI)) .
   shutdown("MetaStudio exiting\n")
 endlet
-# 6 "/export/scratch1/jong/meta/install/share/meta/ui.tb" 2
-# 19 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/clear-all.tb" 1
 
 
 
@@ -1555,8 +1529,6 @@ in
   ) *
   delta
 endlet
-# 20 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/process-eqs.tb" 1
 
 
 
@@ -1722,8 +1694,6 @@ in
     )
   )*delta
 endlet
-# 21 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/compile-module.tb" 1
 
 
 
@@ -1758,8 +1728,6 @@ in
     ) *
     delta
 endlet
-# 22 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/save-module.tb" 1
 
 
 
@@ -1903,8 +1871,6 @@ in
   )*
   delta
 endlet
-# 23 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/help.tb" 1
 
 
 
@@ -1963,8 +1929,6 @@ in
   )*
   delta
 endlet
-# 24 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/gen.tb" 1
 
 
 
@@ -2032,8 +1996,6 @@ in
   )*
   delta
 endlet
-# 25 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/se.idef" 1
 
 
 tool se is {
@@ -2170,8 +2132,6 @@ in
   ) *
   delta
 endlet
-# 26 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/get-parsetable.tb" 1
 
 
 
@@ -2234,8 +2194,6 @@ Id := process-id.
 ) *
 delta
 endlet
-# 27 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/set-parsetable.tb" 1
 
 
 
@@ -2277,8 +2235,6 @@ process ReopenLanguage(ModuleId : term, Table : term) is
     rec-msg(language-not-opened(ModuleId)).
     snd-msg(parsetable-not-set(ModuleId))
   )
-# 28 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/dump-parsetable.tb" 1
 
 
 
@@ -2320,8 +2276,6 @@ in
   ) * delta
 
 endlet
-# 29 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/sdf2-language.tb" 1
 
 
 
@@ -2339,8 +2293,6 @@ process Open-Sdf2-Language is
     )
   ) *
     delta
-# 30 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/parse-focusses.tb" 1
 
 
 
@@ -2404,9 +2356,6 @@ process UpdateTextInModuleDb(Type : str, ModuleName : str, Text : str) is
   else
     tau
   fi
-# 31 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/button-actions.tb" 1
-# 13 "/export/scratch1/jong/meta/install/share/meta/button-actions.tb"
 process ButtonActionReceiver is
 let
   ButtonName : list,
@@ -3195,8 +3144,6 @@ in
   snd-msg(edit-term-file(ModuleName, FileName)) .
   rec-msg(editor-opened(ModuleName, EditorId?))
 endlet
-# 32 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/notification.tb" 1
 
 
 
@@ -3232,8 +3179,6 @@ in
     fi
   )* delta
 endlet
-# 33 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/dump-equations.tb" 1
 
 
 
@@ -3279,8 +3224,6 @@ in
   ) * delta
 
 endlet
-# 34 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/query.tb" 1
 process Query is
 let
   EditorId : term,
@@ -3385,12 +3328,9 @@ in
     )
   ) * delta
 endlet
-# 35 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 1
 
 
 
-# 1 "/export/scratch1/jong/meta/install/share/asf/asfc.idef" 1
 
 
 process Asfc is
@@ -3418,8 +3358,6 @@ in
 endlet
 
 tool asfc is { command = "asfc -print-gc-info -termtable 20" }
-# 5 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/asfoperations.idef" 1
 
 
 
@@ -3445,8 +3383,6 @@ in
 endlet
 
 tool asfoperations is {command = "asfoperations"}
-# 6 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/asfchecker.idef" 1
 
 
 
@@ -3468,8 +3404,6 @@ in
 endlet
 
 tool asfchecker is {command = "asfchecker"}
-# 7 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/asfsdfchecker.idef" 1
 
 
 
@@ -3491,8 +3425,6 @@ in
 endlet
 
 tool asfsdfchecker is {command = "asfsdfchecker"}
-# 8 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/asfe.idef" 1
 
 
 process Asfe is
@@ -3551,8 +3483,6 @@ in
 endlet
 
 tool asfe is { command = "asfe" }
-# 9 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/addeqssyntax.idef" 1
 
 
 
@@ -3577,8 +3507,6 @@ in
 endlet
 
 tool addeqssyntax is {command = "addeqssyntax"}
-# 10 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/addapisyntax.idef" 1
 
 
 
@@ -3603,8 +3531,6 @@ in
 endlet
 
 tool addapisyntax is {command = "addapisyntax"}
-# 11 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asf/removevarsyntax.idef" 1
 
 
 
@@ -3629,8 +3555,6 @@ in
 endlet
 
 tool removevarsyntax is {command = "removevarsyntax"}
-# 12 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
-# 1 "/export/scratch1/jong/meta/install/share/asfsdf-meta/error-display.tb" 1
 
 
 
@@ -3705,7 +3629,6 @@ in
   ) *
   delta
 endlet
-# 13 "/export/scratch1/jong/meta/install/share/asfsdf-meta/meta-interface.tb" 2
 
 process Create-Asf-Processes is
 let Pid : int
@@ -3873,10 +3796,8 @@ in
     snd-msg(semantics-top-sort-hook-result(sort("Equations")))
   ) * delta
 endlet
-# 36 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
 
 
-# 1 "/export/scratch1/jong/meta/install/share/sglr/sglr.idef" 1
 
 
 process Parser is
@@ -3970,8 +3891,6 @@ process Parser is
   endlet
 
 tool sglr is {command="sglr"}
-# 39 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/graph-support/layoutgraph.idef" 1
 
 process LAYOUT-GRAPH is
 let
@@ -3989,8 +3908,6 @@ in
 endlet
 
 tool layoutgraph is { command = "layoutgraph" }
-# 40 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/pt-support/unparsePT.idef" 1
 
 
 
@@ -4013,8 +3930,6 @@ in
 endlet
 
 tool unparsePT is { command = "unparsePT" }
-# 41 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/pt-support/addPosInfo.idef" 1
 
 
 
@@ -4036,8 +3951,6 @@ in
 endlet
 
 tool addPosInfo is { command = "addPosInfo" }
-# 42 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/in-output.idef" 1
 
 
 
@@ -4267,8 +4180,6 @@ in
 endlet
 
 tool in-output is { command = "in-output" }
-# 43 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/module-db.idef" 1
 
 
 
@@ -4622,8 +4533,6 @@ endlet
 
 
 tool module-db is { command = "module-db" }
-# 44 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/sglr/restorebrackets.idef" 1
 
 
 tool restorebrackets is
@@ -4649,8 +4558,6 @@ in
     )
   ) * delta
 endlet
-# 45 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/pgen/parsetablegen.idef" 1
 
 
 
@@ -4691,12 +4598,10 @@ in
   )*
   delta
 endlet
-# 46 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/text-editor.idef" 1
 
 
 tool text-editor is {
-  command = gvim-editor
+  command = "gvim-editor"
 }
 
 process TextEditor(EditorId: term, FileName : str, ButtonList : list) is
@@ -4802,8 +4707,6 @@ in
     snd-msg(text-editor-killed(EditorId))
   )
 endlet
-# 47 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/graph-support/tree2graph.idef" 1
 
 
 
@@ -4826,9 +4729,6 @@ in
 endlet
 
 tool tree2graph is { command = "tree2graph" }
-# 48 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/configmanager.idef" 1
-# 15 "/export/scratch1/jong/meta/install/share/meta/configmanager.idef"
 process ProcessButtons(CMNG : configmanager) is
 let
   Term : term
@@ -4896,8 +4796,6 @@ in
 endlet
 
 tool configmanager is { command = "configmanager" }
-# 49 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/meta/editor-manager.idef" 1
 
 
 
@@ -4953,8 +4851,6 @@ endlet
 tool editor-manager is {
   command = "editor-manager"
 }
-# 50 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
-# 1 "/export/scratch1/jong/meta/install/share/pt-support/apply-function.idef" 1
 
 
 
@@ -4997,7 +4893,6 @@ in
 endlet
 
 tool apply-function is { command = "apply-function" }
-# 51 "/export/scratch1/jong/meta/install/share/meta/meta.c" 2
 
 
 process META is
