@@ -1,0 +1,13 @@
+To ensure maximal reusability of ASF+SDF modules, it is useful to
+abide by a number of guidelines.
+
+* hidden import of Layout
+    The layout to be used in the equations should be imported in hidden
+    fashion. This prevents conflicts with the layout of the user of
+    the library.
+
+* hidden variables
+
+* module name prefixes
+    Module names in the library should be prefixed with "ASFLib_". This
+    prevents name clashes with module names of the user of the library.
