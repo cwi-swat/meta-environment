@@ -21,11 +21,11 @@ requires
    toolbuslib	0.5.1
    sglr		3.10.2
    ptpretty	1.0
-   pgen		1.7.1
-   pt-support   0.12.1
+   pgen		2.0
+   pt-support   1.0
    graph-support   0.1.1
-   sdf-support  1.1.2
-   asc-support   1.7.1
-   asf-support   1.1.1
+   sdf-support  1.2
+   asc-support   1.2
+   asf-support   1.2
 
 configuration
