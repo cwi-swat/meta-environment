@@ -3,7 +3,7 @@ $Id$
 Tue Mar 23 09:37:57 CET 2004 <{jong,kooiker}@cwi.nl>
  * libmept:
    - remove flat-layout from MEPT.adt, regenerated
-   - add PT_findLocationAtOffset
+   - add PT_findTreeAtOffset
  * libptmept: remove list reverse functions that are now generated
 
 Mon Mar 22 13:12:24 CET 2004 <{jong,kooiker}@cwi.nl>

@@ -337,9 +337,9 @@ static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle)
 }
 
 /*}}}  */
-/*{{{  LOC_Location PT_cursorAtOffset(PT_tree tree, int offset) */
+/*{{{  PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset) */
 
-LOC_Location PT_findLocationAtOffset(PT_Tree tree, int offset)
+PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
 {
   LOC_Area area;
   LOC_Location location;
@@ -358,19 +358,19 @@ LOC_Location PT_findLocationAtOffset(PT_Tree tree, int offset)
   }
 
   if (!PT_hasTreeArgs(tree)) {
-    return location;
+    return tree;
   }
 
   args = PT_getTreeArgs(tree);
   while (!PT_isArgsEmpty(args)) {
-    LOC_Location child = PT_findLocationAtOffset(PT_getArgsHead(args), offset);
-    if (child != NULL) {
+    PT_Tree child = PT_getArgsHead(args);
+    if (PT_findTreeAtOffset(child, offset) != NULL) {
       return child;
     }
     args = PT_getArgsTail(args);
   }
 
-  return location;
+  return tree;
 }
 
 /*}}}  */

@@ -179,6 +179,6 @@ PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree,
 				  PT_Symbol formalParam,
 				  PT_Symbol actualParam);
 
-LOC_Location PT_findLocationAtOffset(PT_Tree tree, int offset);
+PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset);
 
 #endif /* _ME_PT_H */
