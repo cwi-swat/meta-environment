@@ -9,12 +9,14 @@ include ${top_srcdir}/make_rules
 SGLR			= ${SGLRBIN}/sglr
 SDF2TABLE		= ${PGENBIN}/sdf2table
 ADT_TO_C		= ${APIGEN}/bin/adt-to-c
+ADTJAVA                 = ${APIGEN}/bin/adt-to-java
 SDF2_TO_ADT		= ${top_builddir}/utils/sdf2-to-adt
+SDF2JAVA                = ${top_builddir}/utils/sdf2-to-java
 GENERATOR		= ${top_builddir}/spec/Sdf2-to-ADT
 PARSETABLE		= ${top_srcdir}/spec/Sdf2-to-ADT.trm.tbl 
 LABEL_EQS		= ${top_srcdir}/spec/add-labels/AddLabels.eqs 
 
-TESTS			= booltest 
+TESTS			= booltest peanotest
 noinst_PROGRAMS		= ${TESTS}
 noinst_LIBRARIES	= libBooleans.a
 
@@ -24,10 +26,17 @@ booltest_LDADD		= -L. -lBooleans -L$(PT_SUPPORT)/lib -lmept \
 			-L$(ATERM)/lib -lATerm
 booltest_DEPENDENCIES	= booltest.pt libBooleans.a
 
+javadir = ${top_builddir}/test/classfiles
+JAVAROOT = ${top_builddir}
+CLASSPATH_ENV = CLASSPATH=${top_builddir}:${SHARED_OBJECTS}:${JAVA_ATERM}:${srcdir}/$(JAVAROOT)::$$CLASSPATH
+
+java_JAVA = PeanoTest.java
+
 CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
-			booltest.pt
+			booltest.pt PeanoFactory.* PeanoConstructor.* \
+			Nat* CHARLIST* OptLayout*
 
 EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm
 
@@ -51,3 +60,16 @@ booltest.pt: Booleans.trm.tbl booltest.trm
 
 %.trm.tbl: %.sdf
 	${SDF2TABLE} -m `basename $< .sdf` -i $< -o $@
+
+peanotest: PeanoTest.java Peano.adt Makefile
+	${ADTJAVA} --input ${top_srcdir}/test/Peano.adt \
+                   --output ${top_builddir}/test \
+                   --package test \
+                   --name peano
+	${SDF2JAVA} -b --package test --input ${top_srcdir}/test/Peano.adt
+	@(echo "#! /bin/sh";\
+          echo "CLASSPATH=${top_builddir}:${JAVA_ATERM}:${SHARED_OBJECTS}";\
+          echo "export CLASSPATH";\
+          echo "java test.PeanoTest") > $@ && chmod +x $@
+
+

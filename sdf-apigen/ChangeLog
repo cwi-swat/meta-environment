@@ -3,6 +3,8 @@
  * CHARLIST implementation brought up-to-date with latest changes in
    adt-to-java
  * Tests brought up-to-date with new CHARLIST implementation
+ * Added dependencies on aterm-java and shared-objects in order to be able
+   to make tests for generated java API's
 
 2002/11/13 (vinju@loria.fr)
  * CHARLIST implementation is put in output directory instead of

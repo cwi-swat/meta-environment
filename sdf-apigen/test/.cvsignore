@@ -19,3 +19,13 @@ list.[ch]
 list.dict
 list_dict.[ch]
 listtest
+Peano.adt
+Nat*
+OptLayout*
+PeanoConstructor.*
+PeanoFactory.*
+Start*
+CHARLIST*
+*.class
+classjava.stamp
+peanotest

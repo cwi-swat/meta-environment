@@ -1,7 +1,7 @@
-package peano;
+package __PACKAGE__;
 
-public class CHARLIST_String
-extends CHARLIST_StringImpl
+public class CHARLIST_StringImpl
+extends CHARLIST
 {
   static private aterm.ATerm pattern = null;
   static private aterm.ATerm listpattern = null;
