@@ -2668,15 +2668,11 @@ exports
 One frequently asked question is when to use lexical restrictions
 and when to use context-free restrictions. 
 The lexical restrictions on {\tt let} and {\tt in} in
-Figure \ref{CODE:functional}can not be defined context-free 
+Figure \ref{CODE:functional} can not be defined context-free 
 because these keywords do not "live" at the lexical level.
 Is it possible to put a lexical restriction on {\tt Var}?
 Yes, but it will have no effect, because internally the
 lexical {\tt Var} is injected in the context-free {\tt Var}.
-In this example it may have been better to define a context-free
-restriction on the sort {\tt Term} because {\tt Var} is injected
-in {\tt Term}. The restrictions are {\em not} inherited via
-injections.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2705,39 +2701,6 @@ exports
 Figure \ref{CODE:restrictedexpressions} shows an erroneous use of
 context-free expressions, because it prevents the recognition of
 {\tt (abc)def}.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Water
-
-imports Layout
-
-exports
-  sorts Program
-
-  lexical syntax
-    ~[\ \n]+ -> Water {avoid}
-    context-free syntax
-      Water -> Word
-      Word* -> Program 
-    lexical restrictions
-      Water -/- ~[\ \n]
-    context-free restrictions
-      Water -/- ~[\ \n]
-    context-free restrictions
-      Word -/- ~[\ \n] 
-\end{boxedverbatim}
-\end{IncCode}
-\caption{The use of restrictions in the definition of island grammars}\label{CODE:islandgrammars}
-\end{figure}   
-
-Figure \ref{CODE:islandgrammars} shows the definition of three restrictions,
-all three restrictions are needed to ensure that neither {\tt Water}
-nor {\tt Word} are directly followed by no layout characters.
-This is again due to the injection from {\tt Water} in {\tt Word}.
-This has to do with the way the follow sets are calculated in
-the generated LR parse table, see \cite{ASU??, Vis96} for more details.
 
 \subsubsection{Preferring, avoiding or rejecting parses} 
 \label{PreferAvoidReject}
