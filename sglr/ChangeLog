@@ -1,5 +1,10 @@
 $Id$
 
+2001/07/09 (markvdb@cwi.nl)
+  * Fixed a bug in yielding the parse tree, it is possible, that
+    due to filtering the parse tree becomes empty and thus a
+    parse bug is discovered.
+
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
   * Removed AsFix1 stuff and AsFix2ME is now the default output
     of SGLR.
