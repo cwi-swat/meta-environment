@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/26 (markvdb@cwi.nl)
+ * Respecified the Sdf-Checker towards the new error api.
+
 2004/01/07 (jurgenv@cwi.nl)
  * Added dependency on error-support because asc-support needs it.
 
