@@ -532,26 +532,22 @@ ATerm decons_filename(int conn, char *filename, char *extension)
 		path, filename, extension);
 }
 
-#if 0
-  public ATerm deconsFilename(String filename, String extension) {
-    if (filename.endsWith(extension)) {
-      filename = filename.substring(0, filename.length() - extension.length());
-    } else {
-      extension = "";
-    }
+/*}}}  */
+/*{{{  ATerm get_extension(int conn, char *filename) */
 
-    String path = filename;
-    int lastIndex = path.lastIndexOf('/');
+ATerm get_extension(int conn, char *filename)
+{
+  char *extension = NULL;
 
-    if (lastIndex >= 0) {
-      path = path.substring(0, lastIndex + 1);
-      filename = filename.substring(lastIndex + 1, filename.length());
-    }
+  extension = strrchr(filename, '.'); // TODO: extract constant
 
-    return factory.make("snd-value(file-name(<str>,<str>,<str>))", path, filename, extension);
+  if (extension == NULL) {
+    return ATmake("snd-value(extension(\"\"))");
   }
-
-#endif
+  else {
+    return ATmake("snd-value(extension(<str>))", extension);
+  }
+}
 
 /*}}}  */
 /*{{{  void rec_terminate(int cid, ATerm arg) */

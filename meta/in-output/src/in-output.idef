@@ -140,10 +140,15 @@ in
     rec-value(IO, filename(FileName?)) .
     snd-msg(io-filename(FileName))
   +
-    rec-msg(decons-file-name(FileName?, Extension?)) .
+    rec-msg(io-decons-file-name(FileName?, Extension?)) .
     snd-eval(IO, decons-filename(FileName, Extension)) .
     rec-value(IO, file-name(Path?, FileName?, Extension?)) . 
-    snd-msg(decons-file-name-result(Path, FileName, Extension)) 
+    snd-msg(io-decons-file-name-result(Path, FileName, Extension)) 
+  +
+    rec-msg(io-get-extension(FileName)) .
+    snd-eval(IO, get-extension(FileName)) .
+    rec-value(IO, extension(Extension?)) .
+    snd-msg(io-get-extension(FileName, Extension))
   ) *
   delta
 endlet
