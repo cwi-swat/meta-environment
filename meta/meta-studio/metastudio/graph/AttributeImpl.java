@@ -56,6 +56,10 @@ abstract public class AttributeImpl extends MetaGraphConstructor
       return tmp;
     }
 
+    if ((tmp = Attribute_Direction.fromTerm(trm)) != null) {
+      return tmp;
+    }
+
 
     throw new RuntimeException("This is not a Attribute: " + trm);
   }
@@ -84,6 +88,11 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
 
   public boolean isCurvePoints()
+  {
+    return false;
+  }
+
+  public boolean isDirection()
   {
     return false;
   }
@@ -119,6 +128,11 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
 
   public boolean hasPoints()
+  {
+    return false;
+  }
+
+  public boolean hasDirection()
   {
     return false;
   }
@@ -194,6 +208,16 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   public Attribute setPoints(Polygon _points)
   {
      throw new RuntimeException("This Attribute has no Points");
+  }
+
+  public Direction getDirection()
+  {
+     throw new RuntimeException("This Attribute has no Direction");
+  }
+
+  public Attribute setDirection(Direction _direction)
+  {
+     throw new RuntimeException("This Attribute has no Direction");
   }
 
   //}}}

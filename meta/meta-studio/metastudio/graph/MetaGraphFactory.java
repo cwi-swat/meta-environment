@@ -32,6 +32,8 @@ public class MetaGraphFactory extends PureFactory
   private Attribute protoAttribute_Size;
   private aterm.AFun funAttribute_CurvePoints;
   private Attribute protoAttribute_CurvePoints;
+  private aterm.AFun funAttribute_Direction;
+  private Attribute protoAttribute_Direction;
   private aterm.AFun funShape_Plaintext;
   private Shape protoShape_Plaintext;
   private aterm.AFun funShape_Ellipse;
@@ -56,6 +58,14 @@ public class MetaGraphFactory extends PureFactory
   private Shape protoShape_Hexagon;
   private aterm.AFun funShape_Octagon;
   private Shape protoShape_Octagon;
+  private aterm.AFun funDirection_Forward;
+  private Direction protoDirection_Forward;
+  private aterm.AFun funDirection_Back;
+  private Direction protoDirection_Back;
+  private aterm.AFun funDirection_Both;
+  private Direction protoDirection_Both;
+  private aterm.AFun funDirection_None;
+  private Direction protoDirection_None;
   private aterm.AFun funEdgeList_Empty;
   private EdgeList protoEdgeList_Empty;
   private aterm.AFun funEdgeList_Multi;
@@ -143,6 +153,10 @@ public class MetaGraphFactory extends PureFactory
     funAttribute_CurvePoints = makeAFun("Attribute_CurvePoints", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints();
 
+    Attribute_Direction.initializePattern();
+    funAttribute_Direction = makeAFun("Attribute_Direction", 1, false);
+    protoAttribute_Direction = new Attribute_Direction();
+
     Shape.initialize(this);
 
     Shape_Plaintext.initializePattern();
@@ -193,6 +207,24 @@ public class MetaGraphFactory extends PureFactory
     funShape_Octagon = makeAFun("Shape_Octagon", 0, false);
     protoShape_Octagon = new Shape_Octagon();
 
+    Direction.initialize(this);
+
+    Direction_Forward.initializePattern();
+    funDirection_Forward = makeAFun("Direction_Forward", 0, false);
+    protoDirection_Forward = new Direction_Forward();
+
+    Direction_Back.initializePattern();
+    funDirection_Back = makeAFun("Direction_Back", 0, false);
+    protoDirection_Back = new Direction_Back();
+
+    Direction_Both.initializePattern();
+    funDirection_Both = makeAFun("Direction_Both", 0, false);
+    protoDirection_Both = new Direction_Both();
+
+    Direction_None.initializePattern();
+    funDirection_None = makeAFun("Direction_None", 0, false);
+    protoDirection_None = new Direction_None();
+
     EdgeList.initialize(this);
 
     EdgeList_Empty.initializePattern();
@@ -229,420 +261,490 @@ public class MetaGraphFactory extends PureFactory
 
   //{{{ make Graph_Default
 
-  protected Graph makeGraph_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Graph_Default makeGraph_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoGraph_Default) {
       protoGraph_Default.initHashCode(annos,fun,args);
-      return (Graph) build(protoGraph_Default);
+      return (Graph_Default) build(protoGraph_Default);
     }
   }
 
-  public Graph makeGraph_Default(NodeList _nodes, EdgeList _edges) {
+  public Graph_Default makeGraph_Default(NodeList _nodes, EdgeList _edges) {
     aterm.ATerm[] args = new aterm.ATerm[] {_nodes, _edges};
     return makeGraph_Default( funGraph_Default, args, empty);
   }
 
   //{{{ make NodeList_Empty
 
-  protected NodeList makeNodeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected NodeList_Empty makeNodeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Empty) {
       protoNodeList_Empty.initHashCode(annos,fun,args);
-      return (NodeList) build(protoNodeList_Empty);
+      return (NodeList_Empty) build(protoNodeList_Empty);
     }
   }
 
-  public NodeList makeNodeList_Empty() {
+  public NodeList_Empty makeNodeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeNodeList_Empty( funNodeList_Empty, args, empty);
   }
 
   //{{{ make NodeList_Multi
 
-  protected NodeList makeNodeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected NodeList_Multi makeNodeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Multi) {
       protoNodeList_Multi.initHashCode(annos,fun,args);
-      return (NodeList) build(protoNodeList_Multi);
+      return (NodeList_Multi) build(protoNodeList_Multi);
     }
   }
 
-  public NodeList makeNodeList_Multi(Node _head, NodeList _tail) {
+  public NodeList_Multi makeNodeList_Multi(Node _head, NodeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
     return makeNodeList_Multi( funNodeList_Multi, args, empty);
   }
 
   //{{{ make Node_Default
 
-  protected Node makeNode_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Node_Default makeNode_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNode_Default) {
       protoNode_Default.initHashCode(annos,fun,args);
-      return (Node) build(protoNode_Default);
+      return (Node_Default) build(protoNode_Default);
     }
   }
 
-  public Node makeNode_Default(NodeId _id, AttributeList _attributes) {
+  public Node_Default makeNode_Default(NodeId _id, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_id, _attributes};
     return makeNode_Default( funNode_Default, args, empty);
   }
 
   //{{{ make NodeId_Default
 
-  protected NodeId makeNodeId_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected NodeId_Default makeNodeId_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeId_Default) {
       protoNodeId_Default.initHashCode(annos,fun,args);
-      return (NodeId) build(protoNodeId_Default);
+      return (NodeId_Default) build(protoNodeId_Default);
     }
   }
 
-  public NodeId makeNodeId_Default(String _id) {
+  public NodeId_Default makeNodeId_Default(String _id) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_id, 0, true))};
     return makeNodeId_Default( funNodeId_Default, args, empty);
   }
 
   //{{{ make AttributeList_Empty
 
-  protected AttributeList makeAttributeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected AttributeList_Empty makeAttributeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Empty) {
       protoAttributeList_Empty.initHashCode(annos,fun,args);
-      return (AttributeList) build(protoAttributeList_Empty);
+      return (AttributeList_Empty) build(protoAttributeList_Empty);
     }
   }
 
-  public AttributeList makeAttributeList_Empty() {
+  public AttributeList_Empty makeAttributeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeAttributeList_Empty( funAttributeList_Empty, args, empty);
   }
 
   //{{{ make AttributeList_Multi
 
-  protected AttributeList makeAttributeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected AttributeList_Multi makeAttributeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Multi) {
       protoAttributeList_Multi.initHashCode(annos,fun,args);
-      return (AttributeList) build(protoAttributeList_Multi);
+      return (AttributeList_Multi) build(protoAttributeList_Multi);
     }
   }
 
-  public AttributeList makeAttributeList_Multi(Attribute _head, AttributeList _tail) {
+  public AttributeList_Multi makeAttributeList_Multi(Attribute _head, AttributeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
     return makeAttributeList_Multi( funAttributeList_Multi, args, empty);
   }
 
   //{{{ make Attribute_Label
 
-  protected Attribute makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Label) {
       protoAttribute_Label.initHashCode(annos,fun,args);
-      return (Attribute) build(protoAttribute_Label);
+      return (Attribute_Label) build(protoAttribute_Label);
     }
   }
 
-  public Attribute makeAttribute_Label(String _label) {
+  public Attribute_Label makeAttribute_Label(String _label) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_label, 0, true))};
     return makeAttribute_Label( funAttribute_Label, args, empty);
   }
 
   //{{{ make Attribute_Shape
 
-  protected Attribute makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Shape) {
       protoAttribute_Shape.initHashCode(annos,fun,args);
-      return (Attribute) build(protoAttribute_Shape);
+      return (Attribute_Shape) build(protoAttribute_Shape);
     }
   }
 
-  public Attribute makeAttribute_Shape(Shape _shape) {
+  public Attribute_Shape makeAttribute_Shape(Shape _shape) {
     aterm.ATerm[] args = new aterm.ATerm[] {_shape};
     return makeAttribute_Shape( funAttribute_Shape, args, empty);
   }
 
   //{{{ make Attribute_Location
 
-  protected Attribute makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Location) {
       protoAttribute_Location.initHashCode(annos,fun,args);
-      return (Attribute) build(protoAttribute_Location);
+      return (Attribute_Location) build(protoAttribute_Location);
     }
   }
 
-  public Attribute makeAttribute_Location(Integer _x, Integer _y) {
+  public Attribute_Location makeAttribute_Location(Integer _x, Integer _y) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x.intValue()), makeInt(_y.intValue())};
     return makeAttribute_Location( funAttribute_Location, args, empty);
   }
 
   //{{{ make Attribute_Size
 
-  protected Attribute makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Size) {
       protoAttribute_Size.initHashCode(annos,fun,args);
-      return (Attribute) build(protoAttribute_Size);
+      return (Attribute_Size) build(protoAttribute_Size);
     }
   }
 
-  public Attribute makeAttribute_Size(Integer _width, Integer _height) {
+  public Attribute_Size makeAttribute_Size(Integer _width, Integer _height) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_width.intValue()), makeInt(_height.intValue())};
     return makeAttribute_Size( funAttribute_Size, args, empty);
   }
 
   //{{{ make Attribute_CurvePoints
 
-  protected Attribute makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Attribute_CurvePoints makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_CurvePoints) {
       protoAttribute_CurvePoints.initHashCode(annos,fun,args);
-      return (Attribute) build(protoAttribute_CurvePoints);
+      return (Attribute_CurvePoints) build(protoAttribute_CurvePoints);
     }
   }
 
-  public Attribute makeAttribute_CurvePoints(Polygon _points) {
+  public Attribute_CurvePoints makeAttribute_CurvePoints(Polygon _points) {
     aterm.ATerm[] args = new aterm.ATerm[] {_points};
     return makeAttribute_CurvePoints( funAttribute_CurvePoints, args, empty);
   }
 
-  //{{{ make Shape_Plaintext
+  //{{{ make Attribute_Direction
 
-  protected Shape makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Plaintext) {
-      protoShape_Plaintext.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Plaintext);
+  protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Direction) {
+      protoAttribute_Direction.initHashCode(annos,fun,args);
+      return (Attribute_Direction) build(protoAttribute_Direction);
     }
   }
 
-  public Shape makeShape_Plaintext() {
+  public Attribute_Direction makeAttribute_Direction(Direction _direction) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_direction};
+    return makeAttribute_Direction( funAttribute_Direction, args, empty);
+  }
+
+  //{{{ make Shape_Plaintext
+
+  protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Plaintext) {
+      protoShape_Plaintext.initHashCode(annos,fun,args);
+      return (Shape_Plaintext) build(protoShape_Plaintext);
+    }
+  }
+
+  public Shape_Plaintext makeShape_Plaintext() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Plaintext( funShape_Plaintext, args, empty);
   }
 
   //{{{ make Shape_Ellipse
 
-  protected Shape makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Ellipse makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Ellipse) {
       protoShape_Ellipse.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Ellipse);
+      return (Shape_Ellipse) build(protoShape_Ellipse);
     }
   }
 
-  public Shape makeShape_Ellipse() {
+  public Shape_Ellipse makeShape_Ellipse() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Ellipse( funShape_Ellipse, args, empty);
   }
 
   //{{{ make Shape_Circle
 
-  protected Shape makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Circle makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Circle) {
       protoShape_Circle.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Circle);
+      return (Shape_Circle) build(protoShape_Circle);
     }
   }
 
-  public Shape makeShape_Circle() {
+  public Shape_Circle makeShape_Circle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Circle( funShape_Circle, args, empty);
   }
 
   //{{{ make Shape_Egg
 
-  protected Shape makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Egg makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Egg) {
       protoShape_Egg.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Egg);
+      return (Shape_Egg) build(protoShape_Egg);
     }
   }
 
-  public Shape makeShape_Egg() {
+  public Shape_Egg makeShape_Egg() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Egg( funShape_Egg, args, empty);
   }
 
   //{{{ make Shape_Triangle
 
-  protected Shape makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Triangle makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Triangle) {
       protoShape_Triangle.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Triangle);
+      return (Shape_Triangle) build(protoShape_Triangle);
     }
   }
 
-  public Shape makeShape_Triangle() {
+  public Shape_Triangle makeShape_Triangle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Triangle( funShape_Triangle, args, empty);
   }
 
   //{{{ make Shape_Box
 
-  protected Shape makeShape_Box(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Box makeShape_Box(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Box) {
       protoShape_Box.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Box);
+      return (Shape_Box) build(protoShape_Box);
     }
   }
 
-  public Shape makeShape_Box() {
+  public Shape_Box makeShape_Box() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Box( funShape_Box, args, empty);
   }
 
   //{{{ make Shape_Diamond
 
-  protected Shape makeShape_Diamond(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Diamond makeShape_Diamond(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Diamond) {
       protoShape_Diamond.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Diamond);
+      return (Shape_Diamond) build(protoShape_Diamond);
     }
   }
 
-  public Shape makeShape_Diamond() {
+  public Shape_Diamond makeShape_Diamond() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Diamond( funShape_Diamond, args, empty);
   }
 
   //{{{ make Shape_Trapezium
 
-  protected Shape makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Trapezium makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Trapezium) {
       protoShape_Trapezium.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Trapezium);
+      return (Shape_Trapezium) build(protoShape_Trapezium);
     }
   }
 
-  public Shape makeShape_Trapezium() {
+  public Shape_Trapezium makeShape_Trapezium() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Trapezium( funShape_Trapezium, args, empty);
   }
 
   //{{{ make Shape_Parallelogram
 
-  protected Shape makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Parallelogram makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Parallelogram) {
       protoShape_Parallelogram.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Parallelogram);
+      return (Shape_Parallelogram) build(protoShape_Parallelogram);
     }
   }
 
-  public Shape makeShape_Parallelogram() {
+  public Shape_Parallelogram makeShape_Parallelogram() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Parallelogram( funShape_Parallelogram, args, empty);
   }
 
   //{{{ make Shape_House
 
-  protected Shape makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_House makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_House) {
       protoShape_House.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_House);
+      return (Shape_House) build(protoShape_House);
     }
   }
 
-  public Shape makeShape_House() {
+  public Shape_House makeShape_House() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_House( funShape_House, args, empty);
   }
 
   //{{{ make Shape_Hexagon
 
-  protected Shape makeShape_Hexagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Hexagon makeShape_Hexagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Hexagon) {
       protoShape_Hexagon.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Hexagon);
+      return (Shape_Hexagon) build(protoShape_Hexagon);
     }
   }
 
-  public Shape makeShape_Hexagon() {
+  public Shape_Hexagon makeShape_Hexagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Hexagon( funShape_Hexagon, args, empty);
   }
 
   //{{{ make Shape_Octagon
 
-  protected Shape makeShape_Octagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Shape_Octagon makeShape_Octagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Octagon) {
       protoShape_Octagon.initHashCode(annos,fun,args);
-      return (Shape) build(protoShape_Octagon);
+      return (Shape_Octagon) build(protoShape_Octagon);
     }
   }
 
-  public Shape makeShape_Octagon() {
+  public Shape_Octagon makeShape_Octagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Octagon( funShape_Octagon, args, empty);
   }
 
-  //{{{ make EdgeList_Empty
+  //{{{ make Direction_Forward
 
-  protected EdgeList makeEdgeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoEdgeList_Empty) {
-      protoEdgeList_Empty.initHashCode(annos,fun,args);
-      return (EdgeList) build(protoEdgeList_Empty);
+  protected Direction_Forward makeDirection_Forward(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoDirection_Forward) {
+      protoDirection_Forward.initHashCode(annos,fun,args);
+      return (Direction_Forward) build(protoDirection_Forward);
     }
   }
 
-  public EdgeList makeEdgeList_Empty() {
+  public Direction_Forward makeDirection_Forward() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeDirection_Forward( funDirection_Forward, args, empty);
+  }
+
+  //{{{ make Direction_Back
+
+  protected Direction_Back makeDirection_Back(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoDirection_Back) {
+      protoDirection_Back.initHashCode(annos,fun,args);
+      return (Direction_Back) build(protoDirection_Back);
+    }
+  }
+
+  public Direction_Back makeDirection_Back() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeDirection_Back( funDirection_Back, args, empty);
+  }
+
+  //{{{ make Direction_Both
+
+  protected Direction_Both makeDirection_Both(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoDirection_Both) {
+      protoDirection_Both.initHashCode(annos,fun,args);
+      return (Direction_Both) build(protoDirection_Both);
+    }
+  }
+
+  public Direction_Both makeDirection_Both() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeDirection_Both( funDirection_Both, args, empty);
+  }
+
+  //{{{ make Direction_None
+
+  protected Direction_None makeDirection_None(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoDirection_None) {
+      protoDirection_None.initHashCode(annos,fun,args);
+      return (Direction_None) build(protoDirection_None);
+    }
+  }
+
+  public Direction_None makeDirection_None() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeDirection_None( funDirection_None, args, empty);
+  }
+
+  //{{{ make EdgeList_Empty
+
+  protected EdgeList_Empty makeEdgeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoEdgeList_Empty) {
+      protoEdgeList_Empty.initHashCode(annos,fun,args);
+      return (EdgeList_Empty) build(protoEdgeList_Empty);
+    }
+  }
+
+  public EdgeList_Empty makeEdgeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeEdgeList_Empty( funEdgeList_Empty, args, empty);
   }
 
   //{{{ make EdgeList_Multi
 
-  protected EdgeList makeEdgeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected EdgeList_Multi makeEdgeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdgeList_Multi) {
       protoEdgeList_Multi.initHashCode(annos,fun,args);
-      return (EdgeList) build(protoEdgeList_Multi);
+      return (EdgeList_Multi) build(protoEdgeList_Multi);
     }
   }
 
-  public EdgeList makeEdgeList_Multi(Edge _head, EdgeList _tail) {
+  public EdgeList_Multi makeEdgeList_Multi(Edge _head, EdgeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
     return makeEdgeList_Multi( funEdgeList_Multi, args, empty);
   }
 
   //{{{ make Edge_Default
 
-  protected Edge makeEdge_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Edge_Default makeEdge_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdge_Default) {
       protoEdge_Default.initHashCode(annos,fun,args);
-      return (Edge) build(protoEdge_Default);
+      return (Edge_Default) build(protoEdge_Default);
     }
   }
 
-  public Edge makeEdge_Default(NodeId _from, NodeId _to, AttributeList _attributes) {
+  public Edge_Default makeEdge_Default(NodeId _from, NodeId _to, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_from, _to, _attributes};
     return makeEdge_Default( funEdge_Default, args, empty);
   }
 
   //{{{ make Polygon_Empty
 
-  protected Polygon makePolygon_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Polygon_Empty makePolygon_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Empty) {
       protoPolygon_Empty.initHashCode(annos,fun,args);
-      return (Polygon) build(protoPolygon_Empty);
+      return (Polygon_Empty) build(protoPolygon_Empty);
     }
   }
 
-  public Polygon makePolygon_Empty() {
+  public Polygon_Empty makePolygon_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makePolygon_Empty( funPolygon_Empty, args, empty);
   }
 
   //{{{ make Polygon_Multi
 
-  protected Polygon makePolygon_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Polygon_Multi makePolygon_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Multi) {
       protoPolygon_Multi.initHashCode(annos,fun,args);
-      return (Polygon) build(protoPolygon_Multi);
+      return (Polygon_Multi) build(protoPolygon_Multi);
     }
   }
 
-  public Polygon makePolygon_Multi(Point _head, Polygon _tail) {
+  public Polygon_Multi makePolygon_Multi(Point _head, Polygon _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
     return makePolygon_Multi( funPolygon_Multi, args, empty);
   }
 
   //{{{ make Point_Default
 
-  protected Point makePoint_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+  protected Point_Default makePoint_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPoint_Default) {
       protoPoint_Default.initHashCode(annos,fun,args);
-      return (Point) build(protoPoint_Default);
+      return (Point_Default) build(protoPoint_Default);
     }
   }
 
-  public Point makePoint_Default(Integer _x, Integer _y) {
+  public Point_Default makePoint_Default(Integer _x, Integer _y) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x.intValue()), makeInt(_y.intValue())};
     return makePoint_Default( funPoint_Default, args, empty);
   }

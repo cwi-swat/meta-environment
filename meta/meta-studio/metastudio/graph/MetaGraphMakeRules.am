@@ -19,6 +19,7 @@ Attribute_ShapeImpl.java Attribute_Shape.java\
 Attribute_LocationImpl.java Attribute_Location.java\
 Attribute_SizeImpl.java Attribute_Size.java\
 Attribute_CurvePointsImpl.java Attribute_CurvePoints.java\
+Attribute_DirectionImpl.java Attribute_Direction.java\
 Shape.java ShapeImpl.java \
 Shape_PlaintextImpl.java Shape_Plaintext.java\
 Shape_EllipseImpl.java Shape_Ellipse.java\
@@ -32,6 +33,11 @@ Shape_ParallelogramImpl.java Shape_Parallelogram.java\
 Shape_HouseImpl.java Shape_House.java\
 Shape_HexagonImpl.java Shape_Hexagon.java\
 Shape_OctagonImpl.java Shape_Octagon.java\
+Direction.java DirectionImpl.java \
+Direction_ForwardImpl.java Direction_Forward.java\
+Direction_BackImpl.java Direction_Back.java\
+Direction_BothImpl.java Direction_Both.java\
+Direction_NoneImpl.java Direction_None.java\
 EdgeList.java EdgeListImpl.java \
 EdgeList_EmptyImpl.java EdgeList_Empty.java\
 EdgeList_MultiImpl.java EdgeList_Multi.java\
