@@ -2,4 +2,6 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=$exec_prefix/lib
-wish-adapter -wish wish4.2 -script $libdir/graph-browser.tcl $@
+TCLLIBPATH=@TCLDOT@; export TCLLIBPATH
+WISH=@WISH@
+wish-adapter -wish $WISH -script $libdir/graph-browser.tcl $@
