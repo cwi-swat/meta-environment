@@ -6,7 +6,7 @@ VERSION     = 0.02
 
 srcdir      = .
 top_srcdir  = ../..
-prefix      = /home/markvdb/NEW-META/
+prefix      = ../..
 exec_prefix = ${prefix}
 bindir      = $(exec_prefix)/bin
 libdir      = $(exec_prefix)/lib
