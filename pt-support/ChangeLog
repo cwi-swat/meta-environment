@@ -1,3 +1,7 @@
+2001/03/02 (jurgenv@cwi.nl)
+ * implemented PT_addParseTreePosInfo in libasfix1
+ * added add-posinfo tool to libasfix1
+
 2001/02/22 (markvdb@cwi.nl)
  * Fixed bug in translation from AsFix2ME to AsFix1 with list
    variables as single element in a list.
