@@ -1,3 +1,6 @@
+2002-07-08 (vandenbr@loria.fr)
+ * SGLR is now fully based on this library.
+
 2002-06-28 (vandenbr@loria.fr)
  * non-assoc added.
  * lookahead-reduce added.
