@@ -7,12 +7,12 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
 
-TESTCASES	= module-test eqs-test parser-test
+TESTCASES	= toolbus-test module-test parser-test
 
 # CLEANFILES are removed by 'make clean'
 CLEANFILES	= ${TESTCASES}
 
-test: ${TESTCASES}
+test: ${TESTCASES} ambi-test.tb
 	@for testcase in ${TESTCASES}; do \
 		echo -n "Running $${testcase}"; \
 		./$${testcase}; \
@@ -22,5 +22,5 @@ clean:
 	@rm -f *.o *~ $(CLEANFILES)
 
 %: %.in
-	@sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
-	@chmod +x $@
+	sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
+	chmod +x $@
