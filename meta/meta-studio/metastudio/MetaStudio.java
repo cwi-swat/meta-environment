@@ -234,12 +234,31 @@ public class MetaStudio
 
     modulePopup = new JPopupMenu("Module Menu");
 
+    modulePopup.addPopupMenuListener(new PopupMenuListener()
+      {
+	public void popupMenuCanceled(PopupMenuEvent event)
+	{
+	}
+
+	public void popupMenuWillBecomeVisible(PopupMenuEvent event)
+	{
+	  graphPanel.setDragEnabled(false);
+	}
+
+	public void popupMenuWillBecomeInvisible(PopupMenuEvent event)
+	{
+	  graphPanel.setDragEnabled(true);
+	}
+      });
 
     modulePopup.add(new AbstractAction("Edit Syntax")
       {
 	public void actionPerformed(ActionEvent event)
 	{
-	  bridge.postEvent(factory.make("edit-module(<str>)", currentModule));
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("edit-module(<str>)", (String)values[i]));
+	  }
 	}
       });
 
@@ -247,7 +266,10 @@ public class MetaStudio
       {
 	public void actionPerformed(ActionEvent event)
 	{
-	  bridge.postEvent(factory.make("edit-eqs-module(<str>)", currentModule));
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("edit-eqs-module(<str>)", (String)values[i]));
+	  }
 	}
       });
 
@@ -256,7 +278,10 @@ public class MetaStudio
       {
 	public void actionPerformed(ActionEvent event)
 	{
-	  doEditTerm(currentModule);
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    doEditTerm((String)values[i]);
+	  }
 	}
       });
 
@@ -266,7 +291,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("save-module(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("save-module(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -274,7 +302,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("revert-module(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("revert-module(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -282,7 +313,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("delete-module(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("delete-module(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -292,7 +326,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("compile-module(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("compile-module(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -300,7 +337,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("dump-equations(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("dump-equations(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -308,7 +348,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("dump-parse-table(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("dump-parse-table(<str>)", (String)values[i]));
+	  }
         }
       });
 
@@ -318,7 +361,10 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          doRenameModule(currentModule);
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    doRenameModule((String)values[i]);
+	  }
         }
       });
 
@@ -326,17 +372,12 @@ public class MetaStudio
       {
         public void actionPerformed(ActionEvent event)
         {
-          bridge.postEvent(factory.make("print-module(<str>)", currentModule)); 
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    bridge.postEvent(factory.make("print-module(<str>)", (String)values[i]));
+	  }
         }
       });
-
-    /*
-    Iterator iter = moduleActions.iterator();
-    while (iter.hasNext()) {
-      Action moduleAction = (Action)iter.next();
-      modulePopup.add(moduleAction).setIcon(null);
-    }
-    */
 
     //}}}
     //{{{ Create menubar
@@ -936,8 +977,11 @@ public class MetaStudio
 	int y = e.getY();
 	Node node = graphPanel.getNodeAt(x, y);
 	if (node != null) {
-	  currentModule = node.getName();
-	  modulePopup.show(graphPanel, x, y);
+	  Module module = moduleManager.getModule(node.getName());
+	  moduleManager.selectModule(module);
+	  if (module != null) {
+	    modulePopup.show(graphPanel, x, y);
+	  }
 	}
       }
     }
@@ -1005,6 +1049,7 @@ public class MetaStudio
     bridge.sendEvent(factory.parse("clear-all"));
     resetGraph();
     graphPanel.setGraph(graph);
+    moduleManager.clearModules();
   }
 
   //}}}

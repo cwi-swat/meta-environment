@@ -33,6 +33,7 @@ public class GraphPanel
 
   private int max_x;
   private int max_y;
+  private boolean dragEnabled = true;
 
   private FontMetrics metrics;
   private AffineTransform transform;
@@ -83,40 +84,42 @@ public class GraphPanel
 	  repaint();
 	}
 	public void mouseDragged(MouseEvent e) {
-	  Component parent = getParent();
-	  while (parent != null && !(parent instanceof JViewport)) {
-	    parent = parent.getParent();
+	  if (dragEnabled) {
+	    Component parent = getParent();
+	    while (parent != null && !(parent instanceof JViewport)) {
+	      parent = parent.getParent();
+	    }
+	    JViewport port = (JViewport)parent;
+	    java.awt.Point pos = port.getViewPosition();
+	    int absX = e.getX()-(int)pos.getX();
+	    int absY = e.getY()-(int)pos.getY();
+	    if (!dragging) {
+	      dragging = true;
+	    } else {
+	      int x = (int)pos.getX() + (lastX-absX);
+	      int y = (int)pos.getY() + (lastY-absY);
+	      Dimension portSize = port.getSize();
+	      Dimension size = getSize();
+	      if (x + portSize.width > size.width) {
+		x = size.width-portSize.width;
+	      }
+	      if (y + portSize.height > size.height) {
+		y = size.height-portSize.height;
+	      }
+	      if (x < 0) {
+		x = 0;
+	      }
+	      if (y < 0) {
+		y = 0;
+	      }
+	      /* Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
+		 ((JComponent)e.getSource()).scrollRectToVisible(r);
+		 */
+	      port.setViewPosition(new java.awt.Point(x, y));
+	    }
+	    lastX = absX;
+	    lastY = absY;
 	  }
-	  JViewport port = (JViewport)parent;
-	  java.awt.Point pos = port.getViewPosition();
-	  int absX = e.getX()-(int)pos.getX();
-	  int absY = e.getY()-(int)pos.getY();
-	  if (!dragging) {
-	    dragging = true;
-	  } else {
-	    int x = (int)pos.getX() + (lastX-absX);
-	    int y = (int)pos.getY() + (lastY-absY);
-	    if (x < 0) {
-	      x = 0;
-	    }
-	    if (y < 0) {
-	      y = 0;
-	    }
-	    Dimension portSize = port.getSize();
-	    Dimension size = getSize();
-	    if (x + portSize.width > size.width) {
-	      x = size.width-portSize.width;
-	    }
-	    if (y + portSize.height > size.height) {
-	      y = size.height-portSize.height;
-	    }
-	    /* Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
-	       ((JComponent)e.getSource()).scrollRectToVisible(r);
-	     */
-	    port.setViewPosition(new java.awt.Point(x, y));
-	  }
-	  lastX = absX;
-	  lastY = absY;
 	}
       };
     addMouseMotionListener(mouseMotionListener);
@@ -135,6 +138,14 @@ public class GraphPanel
 
   //}}}
 
+  //{{{ public void setDragEnabled(boolean on)
+
+  public void setDragEnabled(boolean on)
+  {
+    dragEnabled = on;
+  }
+
+  //}}}
   //{{{ private void updateGeometry()
 
   private void updateGeometry()
