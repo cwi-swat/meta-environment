@@ -78,7 +78,7 @@ ATerm new_editor_given_text(int cid, ATerm editorId, char *text)
 ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
 {
   SE_Editor editor;
-  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(t);
+  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
 
   assert(PT_isValidParseTree(parse_tree));
 
