@@ -250,6 +250,10 @@ static ATerm implodeOpt(PT_Tree tree)
 {
   PT_Args args = PT_getTreeArgs(tree);
 
+  if (!remove_layout && PT_isTreeLayout(tree)) {
+    return implodeLayout(tree);
+  }
+
   if (PT_isArgsEmpty(args)) {
     return ATparse("None");
   }
