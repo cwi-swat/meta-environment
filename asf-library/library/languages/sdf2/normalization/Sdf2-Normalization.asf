@@ -40,14 +40,7 @@ equations
 %% definition a production is added that defines that a text can be a string of
 %% that sort which starts and ends with layout.
 
-  [0]
-        _G' := syntax _A [\EOF] -> <Start> ++ topsorts(_A, S(_G))
-        ========================================================
-        topsorts[[ _G ]](_A) = _G' _G
-
-  [0] topsorts(_A, 'a+ 'b+) = topsorts(_A, 'a+) ++ topsorts(_A, 'b+)
-  [0] topsorts(_A, )        =
-  [0] topsorts(_A, _B)      = <LAYOUT?-CF> <_B-CF> <LAYOUT?-CF> -> _A
+  [0] topsorts[[ _G ]](_A) = syntax _A [\EOF] -> <Start> S(_A,_G)
 
 %% \subsection{Interaction}
 %%

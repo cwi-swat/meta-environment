@@ -9,6 +9,7 @@ imports
         languages/sdf2/normalization/Lifting
         languages/sdf2/normalization/Literals
         languages/sdf2/normalization/Sorts
+        languages/sdf2/normalization/Start-Symbols
         languages/sdf2/normalization/Restrictions
         languages/sdf2/normalization/Aliases
 
@@ -24,7 +25,6 @@ hiddens
   context-free syntax
     "normalize" "[[" SDF "]]" "(" ModuleName "," Symbol ")" -> Grammar
     "topsorts" "[[" Grammar "]]" "(" Symbol ")"             -> Grammar
-    topsorts(Symbol, Symbols)                             -> Productions
     adapt-arguments({NatCon ","}+) -> {NatCon ","}+
 
 %% \def\InterferenceSYN{

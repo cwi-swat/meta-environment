@@ -1,0 +1,34 @@
+equations
+
+  [s0] S(_A, _G1 _G2) = S(_A, _G1) S(_A, _G2) 
+
+  [s1]  p* := kernel-startsymbols(_A, 'a)
+        ====>
+        S(_A, start-symbols 'a) = syntax p*
+
+  [s2]  p* := lex-startsymbols(_A, 'a)
+        ====>
+        S(_A, lexical start-symbols 'a) = syntax p*
+
+  [s3]  p* := cf-startsymbols(_A, 'a)
+        ====>
+        S(_A, context-free start-symbols 'a) = syntax p*
+
+  [s5] S(_A, sorts 'a) = (/)
+
+  [default-s4] S(_A, _G) = _G
+
+  [kss-1] kernel-startsymbols(_A, 'a+ 'b+) = 
+            kernel-startsymbols(_A, 'a+) ++ kernel-startsymbols(_A, 'b+)
+  [kss-2] kernel-startsymbols(_A, )        =
+  [kss-3] kernel-startsymbols(_A, _B)      = _B -> _A
+
+  [lss-1] lex-startsymbols(_A, 'a+ 'b+) = 
+            lex-startsymbols(_A, 'a+) ++ lex-startsymbols(_A, 'b+)
+  [lss-2] lex-startsymbols(_A, )        =
+  [lss-3] lex-startsymbols(_A, _B)      = <_B-LEX> -> _A
+
+  [cfss-1] cf-startsymbols(_A, 'a+ 'b+) = 
+             cf-startsymbols(_A, 'a+) ++ cf-startsymbols(_A, 'b+)
+  [cfss-2] cf-startsymbols(_A, )        =
+  [cfss-3] cf-startsymbols(_A, _B)      = <LAYOUT?-CF> <_B-CF> <LAYOUT?-CF> -> _A

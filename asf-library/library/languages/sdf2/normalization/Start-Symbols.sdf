@@ -1,0 +1,22 @@
+module languages/sdf2/normalization/Start-Symbols
+
+imports languages/sdf2/syntax/Start-Symbols
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/syntax/Basic
+        languages/sdf2/syntax/Regular
+        languages/sdf2/normalization/Kernel
+
+exports
+  context-free syntax
+    "S" "(" Symbol "," Grammar ")"       -> Grammar
+    kernel-startsymbols(Symbol, Symbols) -> Productions
+    lex-startsymbols(Symbol, Symbols)    -> Productions
+    cf-startsymbols(Symbol, Symbols)     -> Productions
+
+hiddens
+  variables
+    "_G"[0-9\']*        -> Grammar 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    [p]"*"[0-9\']*      -> Production*
