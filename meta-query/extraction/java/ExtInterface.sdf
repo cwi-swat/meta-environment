@@ -2,7 +2,8 @@ module ExtInterface
 
 imports Rstore
 imports JavaOperations
-imports MyPosInfo[CompilationUnit] 
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[InterfaceDeclaration]
 
 exports
   context-free syntax
