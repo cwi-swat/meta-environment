@@ -18,9 +18,14 @@
 
 $Id$
 
+version 3.2.2
+   Fixed bug in prefer/avoid filtering. Trees with equal avoids and prefers
+   can not be disambiguated.  
+   Added Set, Perm, Numbered iterator, Function, and Pair symbol.
+   
 version 3.2.1
    This release fixes a bug in the configuration of sglr which caused the
-   build process ogf the sglr distribution to fail.
+   build process of the sglr distribution to fail.
 
 
 version 2.28

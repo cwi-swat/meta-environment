@@ -1,5 +1,8 @@
 $Id$
 
+2001/05/23 (markvdb@cwi.nl)
+  * Released version 3.2.2, and bumped into 3.2.3.
+
 2001/05/21 ({jurgenv,markvdb,jong}@cwi.nl)
   * Fixed bug in prefer/avoid filtering. Trees with equal avoids and prefers
     can not be disambiguated.
