@@ -6,7 +6,7 @@ bin_SCRIPTS = dot2term.pl term2dot2term
 bin_PROGRAMS = term2dot
 data_DATA = dot-adapter.idef
 
-EXTRA_DIST = dot2term.pl.src term2dot2term.src
+EXTRA_DIST = dot2term.pl.src term2dot2term.src dot-adapter.idef
 
 CLEANFILES = dot2term.pl term2dot2term
 
