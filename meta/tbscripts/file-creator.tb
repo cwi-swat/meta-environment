@@ -11,40 +11,52 @@ let
   Path       : str,
   Text       : str,
   Type	     : term,
-  Extension  : str
+  Extension  : str,
+  SearchPaths: list
 in
   (
     %% Handle request to create a new module.
     rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
-    snd-msg(is-module-in-db(ModuleName)) .
+    snd-msg(get-search-paths) .
+    rec-msg(search-paths(SearchPaths?)) .
+    snd-msg(sm-get-new-module-name(SearchPaths, Path, ModuleName)) .
     (
-      rec-msg(exists-in-module-db(ModuleName)) .
-      snd-note(ui-status(errorf("Module %s already exists", 
-                                [ModuleName])))
-    +
-      rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(file-extension-hook(Type)) . 
-      rec-msg(file-extension-hook-result(Extension?)) .
-      snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(io-exists-file(FileName)) .
+      rec-msg(sm-new-module-name(Path?, ModuleName?)) .
+      snd-msg(is-module-in-db(ModuleName)) .
       (
-        rec-msg(io-file-exists) .
-        snd-note(ui-status(
-	errorf("Module %s already exists on disk", [ModuleName])))
+        rec-msg(exists-in-module-db(ModuleName)) .
+        snd-note(ui-status(errorf("Module %s already exists", 
+                                  [ModuleName])))
       +
-        rec-msg(io-file-not-exists) .
-        snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
+        rec-msg(not-exists-in-module-db(ModuleName)) .
+        snd-msg(file-extension-hook(Type)) . 
+        rec-msg(file-extension-hook-result(Extension?)) .
+        snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+        rec-msg(io-filename(FileName?)) .
+        snd-msg(io-exists-file(FileName)) .
         (
-          rec-msg(io-file-written) .
-	  snd-msg(open-initial-module(Path, ModuleName, Extension))
+          rec-msg(io-file-exists) .
+          snd-note(ui-status(
+  	errorf("Module %s already exists on disk", [ModuleName])))
         +
-          rec-msg(io-file-not-written(ErrMsg?)) .
-	  snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
+          rec-msg(io-file-not-exists) .
+          snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
+          (
+            rec-msg(io-file-written) .
+  	  snd-msg(open-initial-module(Path, ModuleName, Extension))
+          +
+            rec-msg(io-file-not-written(ErrMsg?)) .
+  	  snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
+          )
         )
       )
+    + 
+      rec-msg(sm-new-module-name-inconsistent) .
+      snd-note(ui-status(errorf(
+        "Module %s in %s is inconsistent with search paths",
+        [ModuleName,Path])))
     )
-  +
+    +
     %% Handle request to create a new rules section.
     rec-msg(create-new-equations(ModuleName?)) .
     snd-msg(is-module-in-db(ModuleName)) .

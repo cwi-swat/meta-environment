@@ -116,7 +116,7 @@ in
     fi
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
-    MDB-RenameModule(OldName, NewName, Modules?) .
+    MDB-RenameModule(OldName, NewName, Path, Modules?) .
     MDB-DisplayGraph .
     snd-msg(renaming-module-done(OldName, Modules))
   +
@@ -128,8 +128,8 @@ in
     MDB-RemoveImportFromModules(NewName, [OldName]) .
     snd-msg(remove-import-done)
   +
-    rec-msg(copy-module-in-db(OldName?, NewName?)) .
-    MDB-CopyModule(OldName, NewName) .
+    rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
+    MDB-CopyModule(OldName, NewName, Path) .
     MDB-DisplayGraph .
     snd-msg(copy-module-done(OldName))
   +
@@ -429,7 +429,8 @@ in
   MDB-DisplayGraph
 endlet
 
-process MDB-RenameModule(OldName : str, NewName : str, Changed : list?) is
+process MDB-RenameModule(OldName : str, NewName : str, NewPath : str,
+                         Changed : list?) is
 let
   Status : term,
   Modules : list,
@@ -466,11 +467,11 @@ in
   if equal(Modules,[]) then
     tau
   fi .
-  MDB-CopyModule(OldName, NewName) .
+  MDB-CopyModule(OldName, NewName, NewPath) .
   snd-msg(ts-remove-value-from-all-tables(OldName))
 endlet
 
-process MDB-CopyModule(OldName : str, NewName : str) is
+process MDB-CopyModule(OldName : str, NewName : str, NewPath : str) is
 let
   Path : str,
   Text : str,
@@ -483,10 +484,8 @@ in
   rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
   MDB-StoreModuleTree(NewName, Syntax) .
   Syntax := no-tree .
-  snd-msg(ts-get-str-value("module-paths", OldName)) .
-  rec-msg(ts-value(Path?)) .
-  snd-msg(ts-put-str-value("module-paths", NewName, Path)) .
-  snd-msg(ts-put-str-value("active-modules", NewName, Path)) .
+  snd-msg(ts-put-str-value("module-paths", NewName, NewPath)) .
+  snd-msg(ts-put-str-value("active-modules", NewName, NewPath)) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
     rec-msg(ts-value(Tree?)) .

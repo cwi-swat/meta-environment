@@ -164,19 +164,23 @@ process DoRenameModule(Old : str, New : str, Path : str) is
 let
   Status : term,
   Changed : list,
-  RealNew : str
+  RealNew : str,
+  RealPath : str,
+  OldPath : str
 in
   Status := success.
-  GetRealModuleName(New, Path, Status?, RealNew?).
+  GetRealModuleName(New, Path, Status?, RealNew?, RealPath?).
+  snd-msg(get-path-from-db(Old)) .
+  rec-msg(path(OldPath?)) .
   if equal(Status, success) then
-    CheckExistence(New, RealNew, Status?).
+    CheckExistence(RealNew, RealPath, Status?).
     if equal(Status, success) then
       DeleteEditors(Old). 
       if equal(Status, success) then
-        RenameModuleInDB(Old, New, Path, Changed?) .
+        RenameModuleInDB(Old, RealNew, RealPath, Changed?) .
         SaveSdfModules(Changed).
-        SaveAsfSdfModule(New). 
-        RemoveModuleFromDisk(Path, Old)
+        SaveAsfSdfModule(RealNew). 
+        RemoveModuleFromDisk(OldPath, Old)
       else tau fi
     else tau fi
   else tau fi.
@@ -187,15 +191,16 @@ process DoCopyModule(Old : str, New : str, Path : str)  is
 let
   Status : term,
   Changed : list,
-  RealNew : str
+  RealNew : str,
+  RealPath : str
 in
   Status := success.
-  GetRealModuleName(New, Path, Status?, RealNew?).
+  GetRealModuleName(New, Path, Status?, RealNew?, RealPath?).
   if equal(Status, success) then
-    CheckExistence(New, RealNew, Status?).
+    CheckExistence(RealNew, RealPath, Status?).
     if equal (Status, success) then
-      CopyModuleInDB(Old, New).
-      SaveAsfSdfModule(New)
+      CopyModuleInDB(Old, RealNew, RealPath).
+      SaveAsfSdfModule(RealNew)
     else tau fi
   else tau fi.
   HandleCopyModuleErrors(Old, RealNew, Status) . tau
@@ -240,14 +245,24 @@ in
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
-                          RealName : str?)
+                          RealName : str?, RealPath : str?)
 is
 let
-  ErrMsg : str
+  ErrMsg : str,
+  Paths : list
 in
   Status := success .
-  snd-msg(io-get-filename(Path, Name, ".sdf")) .
-  rec-msg(io-filename(RealName?)) 
+  snd-msg(get-search-paths) .
+  rec-msg(search-paths(Paths?)) .
+  snd-msg(sm-get-new-module-name(Paths, Path, Name)) .
+  (
+    rec-msg(sm-new-module-name(RealPath?, RealName?)) 
+  +
+    rec-msg(sm-new-module-name-inconsistent) .
+    Status := module-name-inconsistent .
+    RealName := "" .
+    RealPath := ""
+  )
 endlet
 
 process SaveSdfModules(Modules : list) is
@@ -315,9 +330,9 @@ is
   snd-msg(rename-module-in-db(Old, New, Path)) .
   rec-msg(renaming-module-done(Old, Changed?)) 
 
-process CopyModuleInDB(Old : str, New : str)
+process CopyModuleInDB(Old : str, New : str, Path : str)
 is
-  snd-msg(copy-module-in-db(Old, New)) .
+  snd-msg(copy-module-in-db(Old, New, Path)) .
   rec-msg(copy-module-done(Old))
 
 process AddImportInDB(Mod : str, Import : str)
@@ -330,7 +345,10 @@ is
   snd-msg(remove-import-in-db(Mod, Import, Path)) .
   rec-msg(remove-import-done)
 
-process CheckExistence(Name : str, FileName : str, Status : term?) is
+process CheckExistence(Name : str, Path : str, Status : term?) is
+let
+  FileName : str
+in
     snd-msg(is-module-in-db(Name)) .
     (
       rec-msg(exists-in-module-db(Name)).
@@ -338,6 +356,8 @@ process CheckExistence(Name : str, FileName : str, Status : term?) is
     +
       rec-msg(not-exists-in-module-db(Name))
     ).
+    snd-msg(io-get-filename(Name, Path, ".sdf")) .
+    rec-msg(io-filename(FileName?)) .
     snd-msg(io-exists-file(FileName)) .
     (
       rec-msg(io-file-exists) .
@@ -345,6 +365,7 @@ process CheckExistence(Name : str, FileName : str, Status : term?) is
       +
       rec-msg(io-file-not-exists)
     )
+endlet
 
 process DeleteEditors(Module : str) is
 let

@@ -110,7 +110,7 @@ in
         rec-msg(unparsed-text(Text?)) .
         snd-msg(io-write-text-file(FileName, [Text])) .
         (
-          rec-msg(io-file-written)
+          rec-msg(io-file-written) 
         +
           rec-msg(io-file-not-written(ErrorMessage?)) .
 	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
@@ -123,7 +123,7 @@ in
         rec-msg(io-filename(FileName?)) .
         snd-msg(io-write-text-file(FileName, [Text])) .
         (
-          rec-msg(io-file-written)
+          rec-msg(io-file-written) 
         +
           rec-msg(io-file-not-written(ErrorMessage?)) .
           snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
