@@ -62,7 +62,7 @@ in
       rec-msg(editor-filename(FileName?)) .
       ParseString(ModuleName, FileName, Type, Nonterminal, Text, Tree?, Errors?) .
       PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
-      ProcessTree(ModuleName, EditorId, Focus, Tree) .
+      ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
       Tree := no-tree
     else
       snd-msg(parse-ok(ModuleName))
