@@ -42,13 +42,13 @@
 
 #include "asfix_utils.h"
 
-/* the KEEP_WHITESPACE macro is supposed to be set at the commandline
+/* the KEEP_LAYOUT macro is supposed to be set at the commandline
  * of the compiler.
  */
-#ifdef KEEP_WHITESPACE
-ATbool keep_whitespace = ATtrue;
+#ifdef KEEP_LAYOUT
+ATbool keep_layout = ATtrue;
 #else
-ATbool keep_whitespace = ATfalse;
+ATbool keep_layout = ATfalse;
 #endif
 
 extern ATerm tagCurrentRule;
@@ -145,7 +145,7 @@ ATerm asource(ATerm asfix)
 	ATerm term; 
 
 	if(!temp) {
-		ATerror("MRF in text");
+		ATerror("MRF in asource");
 	}
 	AFsource(asfix,temp);
 

@@ -35,6 +35,8 @@
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
 
+extern ATbool run_verbose;
+
 /*{{{  equation_table *create_equation_table(int size) */
 
 /*
@@ -234,10 +236,14 @@ void enter_equation(equation_table *table, ATerm equation)
 
 /*{{{  equation_entry *find_equation(equation_entry *prev, ATerm top_ofs, ATerm first) */
 
+
 equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
                               ATerm first_ofs)
 {
-	/*ATfprintf(stderr, "looking for equation with ofs: %t\n", top_ofs);*/
+	if(run_verbose) {
+		ATwarning("looking for equation with ofs: %t\n", asource(top_ofs)); 
+	}
+
   if(equations->size == 0)
     return NULL;
   if(from) {
@@ -253,6 +259,7 @@ equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
 		 !ATisEqual(from->first_ofs,first_ofs))) {
     from = from->hnext;
   }
+
 /*	if(from) {
 		equation_entry *result;
     ATfprintf(stderr, "found: %t\n", from->tag);
@@ -400,7 +407,7 @@ ATermList prepare_list(ATermList l, ATbool lexcons)
     do {
       el = ATgetFirst(l);
       l = ATgetNext(l);
-		} while((asfix_is_whitespace(el) || asfix_is_list_sep(el)) && !keep_whitespace); 
+		} while((asfix_is_whitespace(el) || asfix_is_list_sep(el)) && !keep_layout); 
 
     result = ATappend(result, prepare_term(el, lexcons)); 
   }
@@ -591,7 +598,7 @@ ATerm lexical_to_list(ATerm lextrm)
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
   newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",
 										qnewname, newiter);
-	if(keep_whitespace) {
+	if(keep_layout) {
 		newargs  = ATmake("[<term>,w(\"\"),l(\"(\"),w(\"\"),<term>,w(\"\"),l(\")\")]", 
 											newname, newlex);
 	} else {
@@ -769,7 +776,7 @@ ATermList restore_list(ATerm sym, ATermList l)
       el = ATgetFirst(l);
       newl  = ATappend(newl, RWrestoreTerm(el));
       l = ATgetNext(l);
-      if(!ATisEmpty(l) && !keep_whitespace) {
+      if(!ATisEmpty(l) && !keep_layout) {
 				newl = ATconcat(newl, ATmakeList3(ws[0], newsep, ws[1]));
 			}
 		}
@@ -778,7 +785,7 @@ ATermList restore_list(ATerm sym, ATermList l)
       el = ATgetFirst(l);
       newl  = ATappend(newl, RWrestoreTerm(el));
       l = ATgetNext(l);
-      if(!ATisEmpty(l) && !keep_whitespace)
+      if(!ATisEmpty(l) && !keep_layout)
         newl = ATappend(newl, ws[0]);
     }
   }
@@ -804,7 +811,7 @@ ATermList restore_args(ATermList l)
 		arg = ATgetFirst(l);
 		newl = ATappend(newl, RWrestoreTerm(arg));
 		l = ATgetNext(l);
-		if(!ATisEmpty(l) && !keep_whitespace)
+		if(!ATisEmpty(l) && !keep_layout)
 			newl = ATappend(newl, ws);
 	}
 	return newl;
@@ -834,7 +841,7 @@ ATerm list_to_lexical(ATerm lexappl)
 							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
 							&lit, &w[2], &sort, &w[3]))
 		ATerror("not a prod: %t\n", prod);
-  lexlist = ATelementAt(lexargs, keep_whitespace ? 4 : 2);
+  lexlist = ATelementAt(lexargs, keep_layout ? 4 : 2);
   if(!ATmatch(lexlist,"list(<term>,<term>,<term>)",&sym,&w[0],&listargs))
 		ATerror("not a list: %t\n", lexlist);
   len = ATgetLength(listargs);

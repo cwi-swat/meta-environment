@@ -101,6 +101,11 @@
 #include "preparation.h"
 #include "evaluator.tif.h"
 #include "asfix_utils.h"
+#include "evaluator.h"
+
+#ifdef TRAVERSALS
+#include "traversals.h"
+#endif
 
 #ifdef USE_TIDE
 #include "eval-tide.h"
@@ -137,7 +142,6 @@
 #define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
 #define make_cenv(t,e)		(ATmakeList(2, t, e))
 
-
 /*}}}  */
 /*{{{  globals */
 
@@ -166,21 +170,7 @@ AFun list_var, plain_var;
 ATerm equations_db = NULL;
 
 /*}}}  */
-/*{{{  function declarations */
 
-ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs);
-ATerm rewrite(ATerm trm, ATerm env, int depth);
-ATerm list_matching(ATerm sym, ATerm env,
-										ATermList elems1,ATermList elems2,
-                        ATermList conds,
-		    ATermList args1,ATermList args2,
-		    ATerm lhs_posinfo, int depth);
-ATerm args_matching(ATerm env,ATermList conds,
-		    ATermList args1,ATermList args2, ATerm lhs_posinfo, int depth);
-ATerm conds_satisfied(ATermList conds,ATerm env, int depth);
-static void rewrite_error(const char *message, ATerm subject);
-
-/*}}}  */
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
 void rec_terminate(int cid, ATerm t)
@@ -334,7 +324,7 @@ ATermList prepend(ATermList first, ATermList last, ATermList list)
 	elem = ATgetFirst(first);
 	temp = prepend(ATgetNext(first),last,list);
 	
-	if(keep_whitespace && ATisEmpty(temp) && 
+	if(keep_layout && ATisEmpty(temp) && 
 		 (asfix_is_list_sep(elem) || asfix_is_whitespace(elem))) {
 		return temp;
 	}
@@ -467,13 +457,15 @@ ATerm interpret(int cid, char *modname, ATerm trm)
 	tagCurrentRule = NULL;
 
   select_equations(modname);
-
+	
   if(run_verbose) {
     ATwarning("rewriting...\n");
   }
 
   times(&start);
+
   newtrm = rewrite(realtrm,(ATerm) ATempty, 0);
+
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
@@ -572,9 +564,9 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATerm newenv = env;
 
 	if(run_verbose)
-		ATwarning("%t:matching arguments: %t with %t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
+		ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
 		
-	if(!keep_whitespace && isAsFixEqual(arg1,arg2)) {
+	if(!keep_layout && isAsFixEqual(arg1,arg2)) {
 		/* we don't test for equality with whitespace, because we might need some
 		 * skipping in case of lists. */
     return args_matching(newenv,conds,orgargs1,orgargs2,lhs_posinfo,depth);
@@ -582,10 +574,11 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
     prod1 = asfix_get_appl_prod(arg1);
     prod2 = asfix_get_appl_prod(arg2);
     if(ATisEqual(prod1,prod2)) {
-      args1 = (ATermList) asfix_get_appl_args(arg1);
+			args1 = (ATermList) asfix_get_appl_args(arg1);
       args2 = (ATermList) asfix_get_appl_args(arg2);
       args1 = ATconcat(args1,orgargs1);
       args2 = ATconcat(args2,orgargs2);
+
       newenv = (ATerm) args_matching(newenv, conds, args1, args2,
 				     lhs_posinfo, depth);
     }
@@ -630,7 +623,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 			     lhs_posinfo, depth);
     }
   } else { /* terms are not any of the above, and not equal */
-		if(keep_whitespace) {
+		if(keep_layout) {
 			/* we didn't test for equality if rewriting with ws, so do it now */
 			 if(isEqualModuloWhitespace(arg1,arg2)) {
 	return args_matching(newenv, conds, orgargs1, orgargs2,
@@ -652,7 +645,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
    to be matched this is performed if both argument lists are empty
    the conditions are inspected. */
 ATerm args_matching(ATerm env, ATermList conds,
-                    ATermList args1, ATermList args2, ATerm lhs_posinfo, int depth)
+                    ATermList args1, ATermList args2, 
+										ATerm lhs_posinfo, int depth)
 {
   ATerm arg1, arg2;
   ATerm newenv = env;
@@ -666,19 +660,21 @@ ATerm args_matching(ATerm env, ATermList conds,
       newenv = arg_matching(newenv,arg1,arg2,conds,args1,args2,
 			    lhs_posinfo, depth);
     }
-    else
+    else {
       newenv = fail_env;
+		}
   }
   else {
-    if(!ATisEmpty(args2))
+    if(!ATisEmpty(args2)) {
       newenv = fail_env;
-    else {
+		} else {
       if(lhs_posinfo) {
-	TIDE_STEP(lhs_posinfo, newenv, depth);
+				TIDE_STEP(lhs_posinfo, newenv, depth);
       }
       newenv = conds_satisfied(conds, newenv, depth);
     }
-  };
+  }
+
   return newenv;
 }
 
@@ -726,7 +722,7 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
 	first = v_get_first(tuple);
 	last  = v_get_last(tuple);
 
-	if(keep_whitespace) {
+	if(keep_layout) {
 		first = skipWhitespace(first);
 		elems2 = skipWhitespace(elems2);
 	}
@@ -737,7 +733,7 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
       elem2 = ATgetFirst(elems2);
       match = isAsFixEqual(elem1,elem2);
 
-			if(keep_whitespace) {
+			if(keep_layout) {
 				elems2 = skipWhitespace(ATgetNext(elems2));
 			} else {
 				elems2 = ATgetNext(elems2);
@@ -747,7 +743,7 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
       match = ATfalse;
 		}
 
-		if(keep_whitespace) {
+		if(keep_layout) {
 			first = skipWhitespace(ATgetNext(first));
 		} else {
 			first = ATgetNext(first);
@@ -786,7 +782,7 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
     subenv = fail_env;
 	}
 
-	if(keep_whitespace) {
+	if(keep_layout) {
 		elems2 = skipWhitespace(elems2);
 	}
 
@@ -816,7 +812,7 @@ ATerm list_matching(ATerm sym,
   ATerm newarg1, newarg2;
   ATermList newargs1, newargs2;
 	
-	if(keep_whitespace) {
+	if(keep_layout) {
 		elems1 = skipWhitespace(elems1);
 	}
 	
@@ -840,7 +836,7 @@ ATerm list_matching(ATerm sym,
             if(AT_getAnnotations(elem1) != NULL)
               elem1 = AT_removeAnnotations(elem1);
 
-						if(keep_whitespace) {
+						if(keep_layout) {
 							elems2 = skipWhitespace(elems2);						
 						}
 						
@@ -879,13 +875,13 @@ ATerm list_matching(ATerm sym,
                                      conds, args1, args2, lhs_posinfo, depth);
 				}
       } else { /*is_list_var(elem1) == Tfalse */
-				if(keep_whitespace) {
+				if(keep_layout) {
 					elems2 = skipWhitespace(elems2);
 				}
         if(!ATisEmpty(elems2)) {
           elem2 = ATgetFirst(elems2);
           
-					if(keep_whitespace) {
+					if(keep_layout) {
 						elems2 = skipWhitespace(ATgetNext(elems2));
 					} else {
 						elems2 = ATgetNext(elems2);
@@ -928,42 +924,41 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
   ATerm lhs, rhs, lhstrm, rhstrm;
   ATerm newenv = env;
 
-
   if(!ATisEmpty(conds)) {
 		cond = ATgetFirst(conds);
-
+		
     conds = ATgetNext(conds);
 		lhs = AFTgetCondLHS(cond);
 		rhs = AFTgetCondRHS(cond);
     if(AFTisEqualityCond(cond)) {
 			/* <PO:opt> couldn't we determine this statically? */
       if(no_new_vars(lhs,newenv)) {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
         lhstrm = rewrite(lhs, newenv, depth+1);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(rhs, newenv, depth+1);
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
-	  if(isAsFixEqual(lhstrm,rhstrm)) {
-            newenv = conds_satisfied(conds, newenv, depth);
-          } else {
+					TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+					if(isAsFixEqual(lhstrm,rhstrm)) {
+						newenv = conds_satisfied(conds, newenv, depth);
+					} else {
             newenv = fail_env;
-        }
+					}
         }
         else {
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+					TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
           newenv = arg_matching(newenv,rhs,lhstrm,conds,ATempty,ATempty,
-				NULL, depth);
+																NULL, depth);
         }
       }
       else {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(rhs, newenv, depth+1);
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+					TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
           newenv = arg_matching(newenv,lhs,rhstrm,conds,ATempty,ATempty,
-				NULL, depth);
+																NULL, depth);
         }
         else {
 					rewrite_error("Both sides of condition introduce new variables.", cond);
@@ -977,19 +972,20 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
         newenv = fail_env;
       }
       else {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
         lhstrm = rewrite(lhs, newenv, depth+1);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
         rhstrm = rewrite(rhs, newenv, depth+1);
-	TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+				TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
         if(isAsFixEqual(lhstrm,rhstrm)) {
           newenv = fail_env;
         } else {
           newenv = conds_satisfied(conds, newenv, depth);
-	}
+				}
       }
     }
   }
+
   return newenv;
 }
 
@@ -1029,7 +1025,7 @@ ATerm apply_rule(ATerm trm, int depth)
     while((entry = find_equation(entry, top_ofs, first_ofs))) {
 
 			if(run_verbose)
-				ATwarning("Trying equation: %t.\n",entry->tag);
+				ATwarning("Trying equation: %t.\n",asource(entry->tag));
 			
 			tagCurrentRule = entry->tag;
 
@@ -1039,16 +1035,15 @@ ATerm apply_rule(ATerm trm, int depth)
       env = args_matching((ATerm) ATempty, conds, equargs, termargs,
 			  ATgetAnnotation(entry->lhs, posinfo), depth);
       if(!is_fail_env(env)) {
-	TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
-	if(run_verbose) {
-					ATwarning("Equation %t was successful.\n",entry->tag);
-	}
-
+				TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+				if(run_verbose) {
+					ATwarning("Equation %t was successful.\n",asource(entry->tag));
+				}
 
         rewrite_steps++;
         return (ATerm) make_cenv(entry->rhs, env);
       } else if(run_verbose) {
-				ATwarning("Equation %t failed.\n",entry->tag);
+				ATwarning("Equation %t failed.\n",asource(entry->tag));
       }
 			
     }
@@ -1057,7 +1052,7 @@ ATerm apply_rule(ATerm trm, int depth)
   while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) {
 
 		if(run_verbose)
-			ATwarning("Trying equation: %t.\n",entry->tag);
+			ATwarning("Trying equation: %t.\n",asource(entry->tag));
 
 		tagCurrentRule = entry->tag;
 
@@ -1069,13 +1064,13 @@ ATerm apply_rule(ATerm trm, int depth)
     if(!is_fail_env(env)) {
       TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
       if(run_verbose) {
-	ATwarning("Equation: %t was successful.\n",entry->tag);
+				ATwarning("Equation: %t was successful.\n",asource(entry->tag));
       }
 
       rewrite_steps++;
       return (ATerm) make_cenv(entry->rhs, env);
     } else if(run_verbose) {
-		  ATwarning("Equation %t failed.\n",entry->tag);
+		  ATwarning("Equation %t failed.\n",asource(entry->tag));
     }
   }
 	
@@ -1101,6 +1096,7 @@ ATerm select_and_rewrite(ATerm trm, int depth)
     newtrm = get_term((ATermList) complexenv);
     trm = rewrite(newtrm, env, depth+1);
   }
+
   return trm;
 }
 
@@ -1195,13 +1191,13 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
     for(--i; i>=0; i--) {
       newelem = newelem_table[i];
       if(ATgetAFun((ATermAppl)newelem) == list_var) {
-				if(keep_whitespace && v_is_empty_slice(newelem)) {
+				if(keep_layout && v_is_empty_slice(newelem)) {
 					newelems = skipWhitespace(newelems);
 				} else {
 					newelems = prepend_slice((ATermAppl)newelem, newelems);
 				}
 			} else {
-				if(!(keep_whitespace && ATisEmpty(newelems) &&
+				if(!(keep_layout && ATisEmpty(newelems) &&
 						 (asfix_is_list_sep(newelem) || asfix_is_whitespace(newelem)))) {												newelems = ATinsert(newelems, newelem);
 				}
 			}
@@ -1235,25 +1231,42 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
     if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(ATgetNext(newargs));
       rewtrm = newtrm;
-    }
-    else {
-      newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
-      rewtrm = select_and_rewrite(newtrm, depth);
-    }
-  } else if(asfix_is_var(trm)) {
-      rewtrm = v_lookup_plain(env, trm);
-      if(!rewtrm)
-	rewtrm = trm;
-  } else if(asfix_is_list(trm)) {
-    elems = (ATermList) asfix_get_list_elems(trm);
-    sym = asfix_get_list_sym(trm);
-    newelems = rewrite_elems(sym, elems, env, depth);
-    rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
-  }
+
+#ifdef TRAVERSALS
+    } else if(is_traversal_prod(asfix_get_appl_prod(trm))) {
+			ATerm traversal;
+		
+			if(run_verbose) 
+				ATwarning("Traversal...\n");
+			
+			newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
+			traversal = create_traversal_pattern(newtrm); 
+			newtrm    = select_traversed_arg(newargs);
+			rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
+			rewtrm    = choose_normalform(rewtrm, traversal);
+#endif
+		} else {
+			newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
+			rewtrm = select_and_rewrite(newtrm,depth);
+		}
+
+	} else if(asfix_is_var(trm)) {
+		rewtrm = v_lookup_plain(env, trm);
+		if(!rewtrm)
+			rewtrm = trm;
+	} else if(asfix_is_list(trm)) {
+		elems = (ATermList) asfix_get_list_elems(trm);
+		sym = asfix_get_list_sym(trm);
+		newelems = rewrite_elems(sym, elems, env, depth);
+		rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
+	}
+
   else {
     rewtrm = trm;
   }
   return rewtrm;
 }
 
+
 /*}}}  */
+

@@ -31,8 +31,10 @@ EXTRA_DIST        = evaluator.idef
 
 CLEANFILES        = evaluator.tif.c evaluator.tif.h evaluator.tifs
 
-libeval_a_SOURCES = evaluator.c asfix_utils.c asfix_utils.h \
-                    preparation.c preparation.h eval-tide.c eval-tide.h
+libeval_a_SOURCES = evaluator.c evaluator.h asfix_utils.c asfix_utils.h \
+                    preparation.c preparation.h eval-tide.c eval-tide.h \
+                    traversals.c traversals.h
+ 
 libeval_a_LIBADD  = evaluator.tif.o
 
 evaluator_SOURCES = main.c
@@ -41,6 +43,6 @@ evaluator_LDADD   = libeval.a \
                    -L$(ASFIXLIB) -lAsFix \
                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) -I${TIDE} @TIDEDEF@
+INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) @TIDEDEF@ @TRAVERSALSDEF@ @LAYOUTDEF@
 
 evaluator.o : evaluator.tif.h

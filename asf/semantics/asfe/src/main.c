@@ -35,6 +35,7 @@
 
 #include "preparation.h"
 #include "evaluator.tif.h"
+#include "traversals.h"
 
 extern ATbool run_verbose;
 extern ATerm equations_db;
@@ -107,6 +108,7 @@ int main(int argc, char *argv[])
   ATerm eqs, term, aterm, realterm, newterm, newaterm, result;
   ATermList neweqs;
 
+
   /*  Check whether we're a ToolBus process  */
   for (c=1; !toolbus_mode && c < argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
@@ -114,6 +116,8 @@ int main(int argc, char *argv[])
 
 
   AFinit(argc, argv, &bottomOfStack);
+
+	
 
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
