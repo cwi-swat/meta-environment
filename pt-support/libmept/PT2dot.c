@@ -244,13 +244,11 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
   }
   else if (PT_isTreeAppl(tree)) {
     /*{{{  handle appl */
-
     PT_Args args = PT_getTreeArgs(tree);
     PT_Production prod = PT_getTreeProd(tree);
     PT_Symbol rhs = PT_getProductionRhs(prod);
     ATbool layout = PT_isTreeLayout(tree);
     ATbool literal = PT_isSymbolLit(rhs); /* for asfix2 compliance */
-
 
     if (!layout && (literals_on || !literal)) {
       dot = printNode(dot,parent,key,productions_on ?

@@ -1165,18 +1165,28 @@ PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
 /*{{{  PT_ParseTree PT_makeParseTree(PT_Tree tree) */
 PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 {
-  PT_Production prod = PT_getTreeProd(tree);
-  PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Symbols lhs = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-		                      PT_makeSymbolsList(
-                                        rhs,
-                                        PT_makeSymbolsList(
-                                          PT_makeOptLayoutSymbol(),
-                                          PT_makeSymbolsEmpty())));
- 
+  PT_Tree origTree = tree;
+  PT_Production prod;
+  PT_Symbol rhs;
+  PT_Symbols lhs;
+
+  if (PT_isTreeAmb(tree)) {
+    PT_Args ambs = PT_getTreeArgs(tree);
+    tree = PT_getArgsHead(ambs);
+  }
+
+  prod = PT_getTreeProd(tree);
+  rhs = PT_getProductionRhs(prod);
+  lhs = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
+		  PT_makeSymbolsList(
+			  rhs,
+			  PT_makeSymbolsList(
+				  PT_makeOptLayoutSymbol(),
+				  PT_makeSymbolsEmpty())));
+
   return PT_makeParseTreeTree(lhs,
                               PT_makeTreeLayoutEmpty(),
-                              tree,
+                              origTree,
                               PT_makeTreeLayoutEmpty(), 0);
 }
 

@@ -156,6 +156,7 @@ lengthOfSymbol(PT_Symbol symbol)
   }
 
   ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
+  
   return 0;
 }
 
