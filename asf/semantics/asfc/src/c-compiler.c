@@ -3,7 +3,7 @@
 #include <aterm1.h>
 
 #define COMPILER "gcc"
-#define OPTIMIZE_FLAGS "-O4"
+#define OPTIMIZE_FLAGS "-g -O2"
 
 extern ATbool run_verbose;
 
