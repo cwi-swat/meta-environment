@@ -33,12 +33,9 @@ SUBDIRS		= toolbus editor evaluator graph-browser \
 # .SILENT:
 
 all doc clean test:	configure
-	@for DIR in $(SUBDIRS);	\
+	@set -e; for DIR in $(SUBDIRS);	\
 	do \
-		echo Make $@ in $$DIR; \
-		cd $$DIR; \
-		$(MAKE) -${MAKEFLAGS} $@; \
-		cd ..; \
+		$(MAKE) -${MAKEFLAGS} -C $$DIR $@; \
 	done
 
 configure:	configure.in
