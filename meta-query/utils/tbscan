@@ -1,7 +1,6 @@
 #! /bin/sh
 
 set -e
-#set -x
 
 DEFS="-DEDITOR=\"gvim-editor\" -DSAVING=\"false\" -DINFILENAME=\"\" -DOUTFILENAME=\"\" -DMODULENAME=\"\" -DCONFIG_FILE=\"meta.conf\""
 
