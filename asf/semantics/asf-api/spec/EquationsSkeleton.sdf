@@ -5,6 +5,8 @@ imports basic/Whitespace
 
 exports
 
+sorts Skeleton Tag Equation
+
 context-free syntax
 
 "equations" Equation* -> Skeleton

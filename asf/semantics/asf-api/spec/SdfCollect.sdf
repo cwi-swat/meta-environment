@@ -1,5 +1,6 @@
 module SdfCollect
 imports languages/sdf2/syntax/Sdf2-Syntax
+imports basic/Booleans
 
 exports
 
@@ -16,6 +17,12 @@ collect-productions(Grammar, Production*) -> Production*
 
 context-free syntax
 
+collect-symbols(Section, Symbol*) -> Symbol*
+{traversal(accu, top-down, break)}
+
+collect-symbols(Grammar, Symbol*) -> Symbol*
+{traversal(accu, top-down, break)}
+
 collect-symbols(Sections, Symbol*) -> Symbol* 
 {traversal(accu, top-down, break)}
 
@@ -28,14 +35,20 @@ collect-labelled-symbols(Production, Symbol*) -> Symbol*
 collect-labelled-symbols(Symbol, Symbol*) -> Symbol* 
 {traversal(accu, top-down, break)}
 
+context-free syntax
+
+  is-prefix(Production) -> Boolean
+
 hiddens
 
 variables
 
 "Symbol"[0-9]* -> Symbol
 "Symbol*"[0-9]* -> Symbol*
+"Symbol,*"[0-9]* -> {Symbol ","}*
 "Production"[0-9]* -> Production
 "Production*"[0-9]* -> Production*
 "Sections"[0-9]* -> Sections
 "Literal"[0-9]* -> Literal
 "Grammar"[0-9]* -> Grammar
+"Attributes"[0-9]* -> Attributes

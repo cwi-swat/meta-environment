@@ -1,0 +1,17 @@
+module RemoveDoubles
+
+imports EquationsSkeleton
+imports languages/sdf2/syntax/Sdf2-Syntax
+
+hiddens
+
+context-free syntax
+  -> Equation*
+  -> Production*
+
+variables
+
+"Production*"[0-9]* -> Production*
+"Production"[0-9]* -> Production
+"Equation"[0-9]* -> Equation
+"Equation*"[0-9]* -> Equation*

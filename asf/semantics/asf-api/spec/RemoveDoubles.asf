@@ -1,0 +1,9 @@
+equations
+
+[double-productions]
+Production*1 Production Production*2 Production Production*3 =
+Production*1 Production Production*2 Production*3
+
+[double-equations]
+Equation*1 Equation Equation*2 Equation Equation*3 =
+Equation*1 Equation Equation*2 Equation*3

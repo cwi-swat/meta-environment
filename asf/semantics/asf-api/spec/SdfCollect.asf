@@ -1,10 +1,10 @@
 equations
 
 [ignore-lexical-syntax]
-collect-productions(lexical syntax Production*, Production*2) = Production*
+collect-productions(lexical syntax Production*, Production*2) = Production*2
 
 [ignore-variable-syntax]
-collect-productions(variables Production*, Production*2) = Production*
+collect-productions(variables Production*, Production*2) = Production*2
 
 [ignore-hiddens]
 collect-productions(hiddens Grammar, Production*) = Production*
@@ -12,9 +12,33 @@ collect-productions(hiddens Grammar, Production*) = Production*
 [productions]
 collect-productions(Production, Production*) = Production Production*
 
+[ignore-lexical-syntax]
+collect-symbols(lexical syntax Production*, Symbol*) = Symbol*
+
+[ignore-variable-syntax]
+collect-symbols(variables Production*, Symbol*) = Symbol*
+
+[ignore-hiddens]
+collect-symbols(hiddens Grammar, Symbol*) = Symbol*
+
 [symbols]
-collect-symbols(Symbol, Symbol*) = Symbol Symbol*
+collect-symbols(Symbol, Symbol*) = Symbol* Symbol
 
 [labeled]
 collect-labelled-symbols(Literal : Symbol, Symbol*) =
-Literal : Symbol Symbol*
+Symbol* Literal : Symbol
+
+
+equations
+
+[] is-prefix(Literal -> Symbol Attributes) = true
+[] is-prefix(Literal ( Symbol,* ) -> Symbol Attributes) = true
+[] is-prefix(Literal "(" Symbol1 ")" -> Symbol2 Attributes) = true
+[] is-prefix(Literal "(" Symbol*1 "," Symbol*2 ")" -> Symbol Attributes) = true
+[default] is-prefix(Production) = false
+
+tests
+
+[] is-prefix("no-area" -> Area {cons("no-area")}) == true
+[] is-prefix("not" "(" Boolean ")" -> Boolean {cons("not")}) == true
+

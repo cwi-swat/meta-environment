@@ -1,14 +1,17 @@
 equations
 
+[string-main]
+generate-syntax(Module, strcon("""c*""")) =
+generate-syntax(Module, moduleid(c*))
+
 [main]
-NewModuleName := make-modulename(ModuleName),
+NewModuleName := make-modulename(ModuleName, ModuleId),
 NewSections := make-sections(Sections)
 ===>
-generate-syntax(module ModuleName ImpSection* Sections) =
+generate-syntax(module ModuleName ImpSection* Sections, ModuleId) =
 module NewModuleName 
 imports basic/Booleans 
 imports ModuleName
-ImpSection* 
 NewSections
 hiddens imports basic/Whitespace
 
@@ -16,11 +19,11 @@ hiddens imports basic/Whitespace
 equations
 
 [modid]
-make-modulename(moduleid(c*)) = moduleid(c* "-" "A" "P" "I")
+make-modulename(ModuleId1, ModuleId2) = ModuleId2
 
 
 tests
-[complex-name] make-modulename(Aap [X Y]) = Aap-API [ X Y ]
+[complex-name] make-modulename(Aap [X Y]) == Aap-API [ X Y ]
 
 equations
 
@@ -48,12 +51,12 @@ generate-variables() =
 
 [quoted-labelled]
 generate-variables(qliteral(c*) : Symbol Symbol*) = 
-"$" qliteral(c*)[0-9\']* -> Symbol
+"$" qliteral(c*)[0-9\']* -> Symbol 
 generate-variables(Symbol*)
 
 [unquoted-labelled]
 generate-variables(uqliteral(c*) : Symbol Symbol*) = 
-"$" qliteral("""c*""")[0-9\']* -> Symbol
+"$" qliteral("""c*""")[0-9\']* -> Symbol 
 generate-variables(Symbol*)
 
 [non-labelled]
@@ -62,7 +65,7 @@ Literal !:= Symbol,
 strcon("""c*""") := symbol2string(Symbol)
 ===>
 generate-variables(Symbol Symbol*) =
-"$" qliteral(""" c* """)[0-9\']* -> Symbol
+"$" qliteral(""" c* """)[0-9\']* -> Symbol 
 generate-variables(Symbol*)
 
 [default-ignore-symbol]
@@ -83,12 +86,14 @@ equations
 
 [main]
 
-Field* := collect-labelled-symbols(Symbol* -> Symbol, )
+Field* := collect-labelled-symbols(Symbol* -> Symbol, ),
+Symbol,* := Symbol
 ===>
 generate-functions-prod(
 Symbol* -> Symbol {Attribute*1, cons(qliteral("""c*""")), Attribute*2}
 ) = 
-qliteral(""" "i" "s" "-" c* """) "(" Symbol ")" -> Boolean
+qliteral(""" "i" "s" "-" c* """) ( Symbol,* ) -> Boolean 
+generate-make(qliteral("""c*"""), Symbol*, Symbol)
 generate-get-and-set(Field*, Symbol)
 
 [default]
@@ -101,9 +106,11 @@ generate-get-and-set(uqliteral(c*) : Symbol, Result) =
 generate-get-and-set(qliteral("""c*""") : Symbol, Result)
 
 [generate]
+Symbol,* := Result
+===>
 generate-get-and-set(qliteral("""c*""") : Symbol, Result) =
-qliteral(""" "g" "e" "t" "-" c* """) "(" Result ")" -> Symbol
-qliteral(""" "s" "e" "t" "-" c* """) "(" Result "," Symbol ")" -> Result
+qliteral(""" "g" "e" "t" "-" c* """) ( Symbol,* ) -> Symbol 
+qliteral(""" "s" "e" "t" "-" c* """) ( Result, Symbol ) -> Result 
 
 [loop]
 generate-get-and-set(Symbol Symbol2 Symbol*, Result) =
@@ -115,3 +122,40 @@ generate-get-and-set( , Result) =
 
 [default]
 generate-get-and-set(Symbol, Result) = 
+
+equations
+
+[top]
+is-prefix(Field* -> Result) == false,
+Symbol,* := generate-make-fields(Field*)
+===>
+generate-make(qliteral("""c*"""), Field*, Result) =
+qliteral(""""m""a""k""e""-"c*""") ( Symbol,* ) -> Result
+
+[default-top]
+generate-make(Name, Field*, Result) =
+
+[first-remove-literals]
+generate-make-fields(Symbol*1 Literal Symbol*2) =
+generate-make-fields(Symbol*1 Symbol*2)
+
+[default-many]
+generate-make-fields(Field Field+) =
+Field , generate-make-fields(Field+)
+
+[default-single]
+generate-make-fields(Field) = Field
+
+[empty]
+generate-make-fields() =
+
+
+
+tests
+
+[1] generate-make-fields(",") ==
+[2] generate-make-fields(Bool "&" Bool) == Bool "," Bool
+[3] generate-make-fields(Bool) == Bool
+[4] generate-make-fields(Bool Bool) == Bool "," Bool
+[5] generate-make-fields(Bool Bool Bool) == Bool "," Bool "," Bool
+

@@ -1,4 +1,5 @@
 module ASFSDFApigen
+imports RemoveDoubles
 imports SDFApigen
 imports ASFApigen
 imports utilities/IO[Module]
@@ -8,7 +9,8 @@ exports
 
 context-free syntax
 
-generate-api-and-write(Module) -> WriteResult
+generate-api-and-write(Module, newname:ModuleId) -> WriteResult
+generate-api-and-write(Module, newname:StrCon) -> WriteResult
 
 context-free start-symbols
   WriteResult
@@ -18,12 +20,11 @@ hiddens
 
 context-free syntax
 
-generate-api(Module) -> <Module,Skeleton>
-modid(ModuleId, ModuleId) -> ModuleId {traversal(accu, top-down, break)}
-modid(Module, ModuleId) -> ModuleId {traversal(accu, top-down, break)}
+generate-api(Module, newname:ModuleId) -> <Module,Skeleton>
 
 variables
 
+"String"[0-9]* -> String
 "Skeleton"[0-9]* -> Skeleton
 "Module"[0-9]* -> Module
 "ModuleId"[0-9]* -> ModuleId

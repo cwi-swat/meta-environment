@@ -1,17 +1,20 @@
 equations
 
+[str]
+generate-api-and-write(Module, strcon("""c*""")) =
+generate-api-and-write(Module, moduleid(c*))
+
 []
-generate-api-and-write(Module) = written
-  when <Module2, Skeleton> := generate-api(Module)
+generate-api-and-write(Module, ModuleId) = written
+  when <Module2, Skeleton> := generate-api(Module, ModuleId)
 
 [main]
-Module2 := generate-syntax(Module),
+Module2 := generate-syntax(Module, ModuleId),
+moduleid(c*) := ModuleId,
+String := strcon("""c*"""),
 Skeleton := generate-equations(Module),
-moduleid(c*) := modid(Module2, Default),
-unparse-to-file(strcon("""c* """) || ".sdf", Module2) == written,
-unparse-to-file(strcon("""c* """) || ".asf", Skeleton) == written
+unparse-to-file(String || ".sdf", Module2) == written,
+unparse-to-file(String || ".asf", Skeleton) == written
 ===>
-generate-api(Module) = <Module2,Skeleton>
+generate-api(Module, ModuleId) = <Module2,Skeleton>
 
-[id-a]
-modid(ModuleId, Default) = ModuleId

@@ -1,4 +1,5 @@
 module ASFApigen
+imports basic/Integers
 imports SymbolToString
 imports EquationsSkeleton
 imports SdfCollect
@@ -19,11 +20,16 @@ context-free start-symbols
 context-free syntax
 
   generate-for-production(Production) -> Equation*
-  generate-pattern(Production) -> String
-  generate-field(Symbol) -> String
+  generate-pattern(Production, Integer) -> String
+  generate-field(Symbol, Integer) -> String
   
-  generate-get-and-set(Symbol*, String) -> Equation*
-  generate-get-and-set-field(Symbol, String) -> Equation*
+  generate-get-and-set(Symbol*, String, Integer) -> Equation*
+  generate-get-and-set-field(Symbol, String, Integer) -> Equation*
+
+  generate-make(String, Symbol*, Symbol) -> Equation*
+  generate-make-match(String, Symbol*) -> String
+  generate-make-args(Symbol*, Integer) -> String
+  generate-make-arg(Symbol, Integer) -> String
 
 variables
 
@@ -34,6 +40,7 @@ variables
 "Module"[0-9]* -> Module
 "Symbol"[0-9]* -> Symbol
 "Symbol*"[0-9]* -> Symbol*
+"Symbol+"[0-9]* -> Symbol+
 "Field*"[0-9]* -> Symbol*
 "c*"[0-9]* -> CHAR*
 "Production"[0-9]* -> Production
@@ -53,3 +60,5 @@ variables
 "Postfix"[0-9]* -> String
 "Equation*"[0-9]* -> Equation*
 "Type" -> String
+"ArgNr"[0-9]* -> Integer
+"Name" -> String

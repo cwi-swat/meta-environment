@@ -9,14 +9,19 @@ exports
 
 context-free syntax
 
-generate-syntax(Module) -> Module
+generate-syntax(Module, StrCon) -> Module
+generate-syntax(Module, ModuleId) -> Module
 
 hiddens
 
 context-free syntax
 
-make-modulename(ModuleName) -> ModuleName {traversal(trafo,top-down,break)}
-make-modulename(ModuleId) -> ModuleId {traversal(trafo,top-down,break)}
+make-modulename(ModuleName, ModuleId) -> ModuleName 
+{traversal(trafo,top-down,break)}
+make-modulename(ModuleId, ModuleId) -> ModuleId 
+{traversal(trafo,top-down,break)}
+
+context-free syntax
 make-sections(Section*) -> Section*
 
 context-free syntax
@@ -25,14 +30,20 @@ context-free syntax
   generate-functions(Production*) -> Production*
   generate-functions-prod(Production) -> Production*
   generate-get-and-set(Symbol*, Symbol) -> Production*
+  generate-make(Literal, Symbol*, Symbol) -> Production*
+  generate-make-fields(Symbol*) -> {Symbol ","}*
 
 variables
 
+"Name"[0-9]* -> Literal
 "Result" -> Symbol
 "Module"[0-9]* -> Module
 "Symbol"[0-9]* -> Symbol
 "Symbol*"[0-9]* -> Symbol*
+"Symbol,*"[0-9]* -> {Symbol ","}*
 "Field*"[0-9]* -> Symbol*
+"Field+"[0-9]* -> Symbol+
+"Field"[0-9]* -> Symbol
 "c*" -> CHAR*
 "Production"[0-9]* -> Production
 "Production*"[0-9]* -> Production*
