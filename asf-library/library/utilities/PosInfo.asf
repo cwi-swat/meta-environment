@@ -6,7 +6,7 @@ equations
 [] get-posinfo(X) = area-in-file(strcon(Char*), area(BeginLine, BeginColumn,
                               EndLine, EndColumn,
                               Offset, Length)) 
-     when location(qliteral(Char*), area(BeginLine, BeginColumn,
+     when area-in-file(qliteral(Char*), area(BeginLine, BeginColumn,
                               EndLine, EndColumn,
                               Offset, Length)) := get-term-anno(X, "pos-info")
 
