@@ -118,49 +118,6 @@ in
       snd-msg(not-exists-in-module-db(Name))
     )
   +
-
-
-#if 0
-    /* TODO: factorize this part into reusable processes */
-    rec-msg(add-sdf-module-to-db(ModuleId?, Directory?, SyntaxText?, SyntaxTree?)) .
-    snd-msg(io-get-filename(Directory, ModuleId, "")) .
-    rec-msg(io-filename(Filename?)) .
-    printf("asmtd: Directory: [%s], ModuleId: [%s] Filename: [%s]\n\n", Directory, ModuleId, Filename).
-    SetModulePath(ModuleId, Directory) .
-    MDB-RegisterPath(Filename, ModuleId) .
-    if and(not-equal(SyntaxTree, error-tree), not-equal(SyntaxTree, no-tree))
-    then
-
-      snd-msg(sm-get-module-id(SyntaxTree)) .
-      rec-msg(sm-module-id(IdInTree?)) .
-      snd-msg(sm-get-module-path(Directory, IdInTree)) .
-      rec-msg(sm-module-path(NewPath?)) .
-      snd-msg(io-get-filename(NewPath, IdInTree, "")) .
-      rec-msg(io-filename(RealFilename?)) .
-      printf("asmtd: NewPath: [%s], ModuleId: [%s] RealFilename: [%s]\n\n", NewPath, ModuleId, RealFilename).
-
-      if equal(Filename, RealFilename) then
-        MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
-	SetModuleSyntaxTree(ModuleId, SyntaxTree) .
-        snd-msg(sm-get-imported-module-names(SyntaxTree)) .
-        rec-msg(sm-imported-module-names(Modules?)) .
-	SetModuleImports(ModuleId, Modules) .
-	SetModuleSyntaxText(ModuleId, SyntaxText)
-        snd-msg(adding-succeeded(ModuleId, NewPath, ModuleId))
-      else
-        SetModuleImports(ModuleId, []) .
-        snd-msg(error-opening(ModuleId, name-inconsistent))
-      fi .
-      SyntaxTree := no-tree 
-    else 
-      SetModuleImports(ModuleId, []) .
-      SetModuleSyntaxText(ModuleId, SyntaxText)
-      snd-msg(adding-succeeded(ModuleId, Directory, ModuleId))
-    fi 
-  +
-#endif
-
-
     rec-msg(invalidate-sdf-in-db(Name?)) .
     MDB-InvalidateEntry(Name, "", DependingModules?)
   +
