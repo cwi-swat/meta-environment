@@ -10,11 +10,11 @@ exports
 
 %% The values that a variable in the RSTORE may have
 
-        Elem                          -> RVALUE
-        "*empty*"                     -> RVALUE
-        RVAR # REXP                    -> RVALUE
-        RVAR # RVAR # REXP              -> RVALUE
-        RVAR # RVAR # RVAR # REXP        -> RVALUE
+        Elem                          		-> RVALUE
+        "*empty*"                     		-> RVALUE
+        RVAR # REXP                    		-> RVALUE
+        RVAR # RVAR # REXP              	-> RVALUE
+        RVAR # RVAR # RVAR # REXP		-> RVALUE
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"       
                                       -> RVALUE

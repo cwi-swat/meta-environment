@@ -346,8 +346,8 @@
 [AP6]  	append({$Elem*1}, {$Elem*2}) 	= {$Elem*1, $Elem*2}
 
 [AP7]  	append($Tuple1, $Tuple2) 	= {$Tuple1, $Tuple2}
-[AP8]  	append(*empty*, $Tuple) 	= $Tuple
-[AP9]  	append($Tuple, *empty*) 	= $Tuple
+[AP8]  	append(*empty*, $Tuple) 	= {$Tuple}
+[AP9]  	append($Tuple, *empty*) 	= {$Tuple}
 [AP10] 	append({$Tuple*}, $Tuple) 	= {$Tuple*, $Tuple}
 [AP11]  append($Tuple, {$Tuple*}) 	= {$Tuple*, $Tuple}
 [AP12]  append({$Tuple*1}, {$Tuple*2}) 	= {$Tuple*1, $Tuple*2}
