@@ -137,6 +137,6 @@ exports
     "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
     "A"[0-9]?		   -> Action
-    "FNR"[0-9]?		   -> FunResult
+    "FNR"[0-9]?		   -> ActionType
     "LCS"[0-9]?"*"	   -> {(Literal ":" AS-Argument) ","}*
     "ASA"[0-9]?		   -> AS-Argument

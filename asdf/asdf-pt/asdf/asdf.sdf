@@ -18,7 +18,7 @@ exports
     AS-Variable AS-Syntax-Production AS-Requires-Production 
     AS-Syntax-Rhs AS-Requires-Rhs AS-Function AS-FunctionSig
     AS-FunctionDef AS-Constant AS-Eqs-Tag AS-Eqs-Lhs
-    Constructor Token Symbol FunResult SingleFunResult Type VarLexPrefix
+    Constructor Token Symbol Type VarLexPrefix
 
   context-free syntax
 
@@ -72,23 +72,11 @@ exports
     AS-Requires-Rhs "|" AS-Requires-Rhs	
 		    -> AS-Requires-Rhs {right,prefer, cons("req-rhs-union")}
 
-    Sort | FunResult		       -> AS-Argument
+    Sort | ActionType		       -> AS-Argument
 
   context-free syntax
 
     Literal ":" Sort			-> AS-Constant {cons("constant")}
 
-    Literal ":" Sort "->" FunResult	-> AS-FunctionSig {cons("funsig")}
+    Literal ":" Sort "->" ActionType	-> AS-FunctionSig {cons("funsig")}
     
-  context-free syntax
-
-    "Action"		-> SingleFunResult
-    "using" Type	-> SingleFunResult
-    "giving" Type	-> SingleFunResult
-    "raising" Type	-> SingleFunResult
-    "infallible" | "terminates" | "closed" | 
-    "stable" | "ineffective" | "uncreative" 	-> SingleFunResult
-    
-
-    { SingleFunResult "&" }+	-> FunResult
-

@@ -126,8 +126,8 @@ context-free syntax
   "the" Sort		-> PrefixDataOp
 
   "give" Yielder	-> Action
-  "given" Yielder	-> Action
   "check" Yielder	-> Action
+  "given" Yielder	-> Action
   "bind"		-> Action
   "furthermore"		-> PrefixAction
   "before"		-> InfixAction

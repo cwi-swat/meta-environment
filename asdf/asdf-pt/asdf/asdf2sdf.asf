@@ -141,7 +141,7 @@ ASFequation*2)
 
   [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Sort1 -> FNR := AS-Semantics
 
-  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = A)
+  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = (A))
 
 
   [default-tp-2] $transform-production(Sort ::= AS-Requires-Rhs) = 

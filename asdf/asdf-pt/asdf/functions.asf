@@ -76,12 +76,7 @@ equations
    =================================================================
    sort-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
 
-[sort-to-type-1] 
-
-   $TY := action[using get-using($FR) 
-		      giving get-giving($FR) raising get-raising($FR)]
-   =======================================================================
-   sort-to-type($FR) = $TY
+[sort-to-type-1] sort-to-type($AT) = $AT
 
 [join-sigs-1] 
 
@@ -99,15 +94,27 @@ equations
 
 [get-fun-2] get-fun-defs($FD, defs($FD*)) = defs($FD, $FD*)
 
-[get-using-1] get-using($SFR1* & using $TY & $SFR2*) = $TY
+[get-using-1] get-using($AT) = get-using($AT,data)
 
-[default-get-using-1] get-using($FR) = empty
+[get-using-2] get-using(using $TY1, $TY2) = $TY1
 
-[get-giving-1] get-giving($SFR1* & giving $TY & $SFR2*) = $TY
+[get-using-3] get-using(giving $TY1, $TY2) = $TY2
 
-[default-get-giving-1] get-giving($FR) = empty
+[get-using-4] get-using(raising $TY1, $TY2) = $TY2
 
-[get-raising-1] get-raising($SFR1* & raising $TY & $SFR2*) = $TY
+[get-giving-1] get-giving($AT) = get-giving($AT, empty)
 
-[default-get-raising-1] get-raising($FR) = empty
+[get-giving-2] get-giving(giving $TY1, $TY2) = $TY1
+
+[get-giving-3] get-giving(using $TY1, $TY2) = $TY2
+
+[get-giving-4] get-giving(raising $TY1, $TY2) = $TY2
+
+[get-raising-1] get-raising($AT) = get-raising($AT, empty)
+
+[get-raising-2] get-raising(raising $TY1, $TY2) = $TY1
+
+[get-raising-3] get-raising(giving $TY1, $TY2) = $TY2
+
+[get-raising-4] get-raising(using $TY1, $TY2) = $TY2
 

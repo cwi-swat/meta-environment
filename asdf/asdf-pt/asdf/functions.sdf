@@ -6,7 +6,7 @@ imports
   asdf/asdf-sem-sec
   asdf/lower-case
   asdf/an-supplement
-  containers/List[<DataOp, FunResult>]
+  containers/List[<DataOp, ActionType>]
   containers/List[<Data, Type>]
 
 
@@ -23,7 +23,7 @@ context-free syntax
 
   <Signatures, SubTypes, DataOpSigs, DataConstants>	-> TypeInfo
 
-  List[[<DataOp,FunResult>]]		-> DataOpSigs
+  List[[<DataOp, ActionType>]]		-> DataOpSigs
 
   List[[<Data, Type>]]			-> DataConstants
 
@@ -52,7 +52,7 @@ context-free syntax
   get-dataop-sigs(AtomicType, AS-Requires-Rhs, DataOpSigs)	 -> DataOpSigs 
 
   get-selectors(AtomicType, {(Literal ":" AS-Argument) ","}*)	
-					  -> List[[<DataOp, FunResult>]]
+					  -> List[[<DataOp, ActionType>]]
 
   get-dataop-type({(Literal ":" AS-Argument) ","}*)	-> Type
 
@@ -77,9 +77,9 @@ context-free syntax
 
   {AS-FunctionDef ","}* 	-> SortWithPosition
 
-  get-using(FunResult)		-> Type
-  get-giving(FunResult)		-> Type
-  get-raising(FunResult)	-> Type
+%%  get-using(ActionType)		-> Type
+%%  get-giving(ActionType)		-> Type
+%%  get-raising(ActionType)	-> Type
 
 hiddens variables
 
@@ -92,16 +92,14 @@ hiddens variables
   "$FD*"		-> {AS-FunctionDef ","}*
   "$FD"			-> AS-FunctionDef
   "$LT"[0-9]?		-> Literal
-  "$FR"[0-9]?		-> FunResult
+  "$AT"[0-9]?		-> ActionType
   "$SO"[0-9]?		-> Sort
-  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
-  "$FR"[0-9]?		-> FunResult
   "$TY"[0-9]?		-> Type
   "$ATY"[0-9]?		-> AtomicType    
   "$TY"[0-9]?"*"	-> { Type ","}*
 
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
-  "$DOS"[0-9]?		-> List[[<DataOp, FunResult>]]
+  "$DOS"[0-9]?		-> List[[<DataOp, ActionType>]]
   "$DCS"[0-9]?		-> List[[<Data, Type>]]
 
   "$ARR"[0-9]?		-> AS-Requires-Rhs
