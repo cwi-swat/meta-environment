@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
   {
     ATinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
+    ERR_initErrorApi();
 
     if (argc == 1) {
       /* no arguments */
