@@ -1,5 +1,8 @@
 $Id$
 
+2002/04/03 (jurgenv@cwi.nl)
+ * Fixed CLASSPATH in tifstojava to locate aterm classes correctly.
+
 2002/03/27 (jurgenv@cwi.nl)
  * Made toolbus take CPPFLAGS into account when calling the C preprocessor.
    This should partly fix some portability issue for MacOS X.
