@@ -208,4 +208,6 @@ AC_OUTPUT(
 dnl Handle subpackages...
 AC_CONFIG_PKG(asc-support)
 AC_CONFIG_PKG(sglr)
-AC_CONFIG_PKG(pgen, --with-asc='\${top_builddir}/asc-support')
+AC_CONFIG_PKG(pgen, --with-asc-inc='\${top_builddir}/../asc-support'
+                    --with-asc-lib='\${top_builddir}/../asc-support')
+
