@@ -1,14 +1,14 @@
 \section{\upcase{\ui}}
 \label{userin}
 
-The \ui{} of the new \metaenv\ is built around the visual
-representation of the import graph of the \asdf\ specification which
-is loaded. The major advantage of having a visual representation of
-the import graph as \ui{} is the increased insight in the structure of
-the specification.  Furthermore, effective visualisation of this graph
-can reveal interesting characteristics of the specification (e.g.
-repeating patterns and unintended transitive import relations) while
-avoiding distractions and irrelevancy.
+The \ui{} of the new \metaenv\ is built around a visual representation
+of the import graph of the \asdf\ specification which is loaded. The
+major advantage of having such a visual representation as \ui{} is the
+increased insight in the structure of the specification.  Furthermore,
+effective visualisation of this graph can reveal interesting
+characteristics of the specification (e.g.\ repeating patterns and
+unintended transitive import relations).
+%% while avoiding distractions and irrelevancy.
 
 \begin{figure}[tb]
 \centerline{\psfig{figure=newmeta.ps,width=\textwidth}}
@@ -16,19 +16,19 @@ avoiding distractions and irrelevancy.
 \end{figure}
 
 The user can select one or more modules in this graph and perform
-actions on them. Currently the following actions are supported:
+actions on them. Currently, the following actions are supported:
 \begin{itemize}
 \item open the module editor for this module,
 \item open a term editor over this module,
 \item delete the module from the repositories,
-\item request additional information on the module, and
+\item request additional information about the module, and
 \item revert the module in the repositories to the last version saved
   to disk.
 \end{itemize}
-These actions can be selected in of a menu which pops up when the user
-presses the right mouse button over a module in the graph or using the
-module list and buttons on the right side of the screen. In addition
-to the actions described above, the user can:
+These actions can be selected in a menu which pops up when the user
+clicks on a module in the graph, or using the module list and buttons
+on the right side of the screen. In addition to the actions described
+above, the user can:
 \begin{itemize}
 \item add a module to the specification loaded in the repositories,
 \item clear all repositories,
@@ -45,55 +45,56 @@ and the buttons to perform actions on modules.
 
 The user interface is implemented in \tcltk~\cite{Tcl/Tk} and \tcldot:
 an extension for \tcl\ that incorporates the directed graph facilities
-of \dot~\cite{Gansner:1993:TDD,Koutsofios:1993:DGT} into \tcl{} and
-provides a set of commands to control those facilities. Basically,
-\tcldot\ contains commands to: define a graph, add nodes and edges to
-this graph, and compute the placement of nodes and edges of this
-graph. The layout is computed in a way which tries to expose the
-logical structure of the graph, avoid crossings of edges, keep the
-edges short and emphasize symmetry and balance.  \tcldot\ is part of
-the \emph{graphviz} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a
-set of graph drawing tools for Unix or MS-Windows by AT\&T/Lucent
-Technologies.
+of \dot~\cite{Koutsofios:1993:DGT} into \tcl{} and provides a set of
+commands to control those facilities. Basically, \tcldot\ contains
+commands to define a graph, add nodes and edges to this graph, and
+compute the placement of nodes and edges of this graph. The layout is
+computed in a way that tries to expose the logical structure of the
+graph, avoid crossings of edges, keep the edges short and emphasize
+symmetry and balance~\cite{Gansner:1993:TDD}.  \tcldot\ is part of the
+  \emph{graphviz} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a set
+  of graph drawing tools for Unix or MS-Windows from AT\&T/Lucent
+  Technologies.
 
 As seen from a \TB\ perspective, the \ui\ primarily consists of two
 methods that accept a message: one to denote addition of a module to
 the repository and one to denote the import relation between modules.
 These methods use \tcldot\ to define the graph and compute its layout.
 Other methods exist to set the status message and to display
-additional information on modules.
+additional information about modules.
 
 The \ui\ sends events to the \TB\ to add, delete, revert, or edit a
-module, to edit a term over a module, to display extra information on
-a module or to quit the \metaenv. These events are handled by the
-\T-script which may distribute them to other tools.
+module, to edit a term over a module, to display extra information
+about a module, or to quit the \metaenv. These events are handled by
+the \TB-script which may distribute them to other tools for further
+processing.
 
 \subsection{Discussion}
 
-Future work on the user interface includes a search mechanism on
-modules (in cooperation with the tree repository and the editor).
-Using this mechanism it should be possible for example to
+Future work on the user interface includes a mechanism for searching
+in modules (in cooperation with the tree repository and the editor).
+Using this mechanism it should for example be possible to
 highlight/select all modules that use a given function or sort.
 
 Furthermore, the current version of \tcldot{} only supports static
 graphs.  This means that the layout of a graph is computed from
 scratch every time an update is performed (i.e.\ adding or removing a
 node or edge).  The result of this computation can be completely
-different from the original graph. This is not desirable for \ui{}s
+different from the original graph. This is not desirable for a \ui{}
 since it can be confusing and the user needs to familiarise himself
 with a new structure. A new version of \tcldot{}, called \tcldg{},
 supports so called \emph{dynamic
   graphs}~\cite{North:1996:ILD,Ellson:1996:TTE}.  The layout of these
-graphs changes incrementally when updates are performed resulting in
-more gradual changes in the structure of the graph. As soon as the
-\tcldg{} package is released (scheduled for summer 1997), it should be
-incorporated in the \ui.
+graphs changes incrementally when updates are performed. This results
+in more gradual changes in the structure of the graph. As soon as the
+\tcldg{} package is released, it should be incorporated in the \ui.
 
 Finally, it might be convenient if the user can edit the layout of the
 import graph to improve its logical structure. These edit operations
 should cooperate in some way with the layout mechanism so that changes
-of the user aren't undone by layouting the graph. An example of a more
-rigorous editing operation is the ability to define subgraphs in the
-import graph which can be collapsed into a single node. Such a feature
-could be useful to improve the readability of big import graphs.
+of the user are not undone by layouting the graph. An example of a
+more rigorous editing operation is the ability to define subgraphs in
+the import graph which can be collapsed into a single node. Such a
+feature could be useful to improve the readability of big import
+graphs.
 
