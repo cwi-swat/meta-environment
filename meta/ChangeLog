@@ -23,6 +23,8 @@
 2001/02/01 (jurgenv@cwi.nl)
    * moved Booleans from spec-lib to addeqs/spec.
    * removed spec-lib
+   * moved asf-syntax/configmanager to configuration-manager
+   * renamed asf-syntax to asf
 
 2001/01/31 (mdejonge@cwi.nl)
    * Added --with-wish and --with-xemacs configuration switches
