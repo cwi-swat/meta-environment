@@ -372,13 +372,18 @@ term *parse_term(void)
 term *TBmake(char * fmt, ...)
 {
   term * res;
+  int n;
 
   va_start(mk_term_args, fmt);
-  if(strlen(fmt) >= buf_size)
-    err_fatal("format size exceeds buffer size");
 
-  buf_ptr = fmt;
+  n = strlen(fmt);
 
+  if(n >= buf_size)
+    extend_buffer(0, n);
+  /* err_fatal("format size exceeds buffer size"); */
+  /* buf_ptr = fmt; */
+  memcpy(buffer, fmt, n);
+  buf_ptr = buffer;
 
   /*fprintf(stderr, "TBmake %s\n", fmt);*/
   parse_error_msg = NULL;
@@ -412,6 +417,29 @@ term *TBread(int fd)
 }
 
 /*--- read from a channel and parse as term ----*/
+
+term *TBreadTerm(FILE *f)
+{
+  register int c;
+  register char *ptr;
+  term *trm;
+
+  ptr = &buffer[LENSPEC];
+  while ((c = fgetc(f)) != EOF){
+    if(ptr + 1 > &buffer[buf_size]){
+      int fill = ptr - buffer;
+      extend_buffer(fill, fill + TB_BUF_INCR);
+      ptr = &buffer[fill];
+    }
+    *ptr++ = c;
+  }
+  if(ptr - &buffer[LENSPEC] > 0){
+    trm = parse_buffer();
+    if(trm)
+      return trm;
+  }
+  return NULL;
+}
 
 int read_from_stdin()
 {

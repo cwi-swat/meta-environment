@@ -51,6 +51,7 @@ TBbool TBmatch(term *, char *, ...);
 term   *TBmake(char *, ...);
 void   TBwrite(int, term *);
 term   *TBread(int);   /* should become FILE * */
+term   *TBreadTerm(FILE *);
 
 void TBexit(int val);
 int  TBatexit(void (*f)(void));

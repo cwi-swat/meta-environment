@@ -7,7 +7,7 @@
 #include <netdb.h>
 #include "sockets.h"
 
-extern int mkports(TBbool, char *, int *, int *, int *);
+extern int mkports(TBbool, char *, char *, int *, int *, int *);
 
 int this_tool_id = -1;      /* tool_id assigned to this tool */
 
@@ -90,6 +90,7 @@ Generic tool options are:\n\
 -TB_LOCAL_PORTS       use only local port names\n\
 -TB_TOOL_NAME Name    the name of this tool is Name\n\
 -TB_TOOL_ID N         the allocated tool id for this tool is N\n\
+-TB_SINGLE            stand-alone execution, do connect with ToolBus\n\
 \n\n";
 
   fprintf(stderr, str);
@@ -157,12 +158,12 @@ int TBinit(char *tname, int argc, char *argv[],
     local_ports = TBtrue;
 
 
-  if(stand_alone){
-    TBaddTermPort(0, fun);
+  if(stand_alone || !fun){ /* execute stand alone */
+    /* TBaddTermPort(0, fun); */
     return TB_OK;
   }
 
-  if(mkports(local_ports, host_toolbus, &this_tool_id, &fromToolBus,
+  if(mkports(local_ports, tool_name, host_toolbus, &this_tool_id, &fromToolBus,
              &toToolBus) == TB_ERROR)
     err_fatal("TBinit -- can't connect to ToolBus");
 
