@@ -134,7 +134,7 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     rec-value(Mdb, imports(changed-modules(Modules?),
                            import-graph(ActualMods?, Pairs?))) .
     snd-note(import-graph(ActualMods, Pairs)) .
-    snd-msg(add-import-done(OldName, Modules)).
+    snd-msg(add-import-done(OldName, Modules))
   +
     rec-value(Mdb, illegal-module-name(NewName?)) .
     snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .

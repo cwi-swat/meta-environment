@@ -1030,7 +1030,6 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName,
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
 
-  strip_syntax_ext(newModuleName);
   newName = ATmake("<str>", newModuleName);
 
   if (!checkModuleName(newModuleName)) {
@@ -1097,7 +1096,6 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
 
-  strip_syntax_ext(newModuleName);
   newName = ATmake("<str>", newModuleName);
 
   if (!checkModuleName(newModuleName)) {
