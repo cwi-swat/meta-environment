@@ -82,13 +82,6 @@ AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
 AC_SUBST(ASF_SUPPORT)
 
 dnl }}}
-dnl {{{  Require asf-library package
-
-AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
-   [  --with-asf-library=DIR  asf-library is in DIR])
-AC_SUBST(ASF_LIBRARY)
-
-dnl }}}
 dnl {{{  Require asc-support package
 
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
@@ -102,15 +95,6 @@ AC_SUBST(ASCLIB)
 
 dnl }}}
 
-AC_PACKAGE_REQUIRE(meta, generic-meta,
-   [  --with-meta=DIR  meta is in DIR])
-AC_SUBST(META)
-
-dnl {{{  Where is perl5?
-
-AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
-
-dnl }}}
 dnl {{{  Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
@@ -179,6 +163,23 @@ AC_OUTPUT(
    semantics/test/input/Makefile
    semantics/test/output/Makefile
    semantics/test/c-code/Makefile
+   library/Makefile
+   library/asf/Makefile
+   library/asf/syntax/Makefile
+   library/asf/tools/Makefile
+   library/basic/Makefile
+   library/containers/Makefile
+   library/disambiguation/Makefile
+   library/functions/Makefile
+   library/strategies/Makefile
+   library/aterm/Makefile
+   library/system/Makefile
+   library/sdf2/Makefile
+   library/sdf2/syntax/Makefile
+   library/sdf2/normalization/Makefile
+   library/sdf2/projection/Makefile
+   library/sdf2/renaming/Makefile
+
 )
 
 dnl }}}
