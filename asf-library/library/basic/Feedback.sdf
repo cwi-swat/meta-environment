@@ -33,5 +33,4 @@ context-free syntax
                   description:String "," 
                   "[" {Subject ","}* "]" ")" -> Feedback {cons("fatal-error")}
 
-"subject""("id:String "," Location ")" -> Subject {cons("locatable")}
-"subject""("id:String ")"              -> Subject {cons("unlocatable")}
+"subject""("id:String "," Location ")" -> Subject {cons("subject")}
