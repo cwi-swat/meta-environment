@@ -617,16 +617,13 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
   switch (traversal.type) {
   case TRANSFORMER:
     /* we just return the term */
-    ATwarning("selecting trafo nf\n");
     break;
   case ACCUMULATOR:
     /* we only return the accumulated value */
     term = selectAccumulatedArg(traversal.args);
-    ATwarning("selecting accu nf\n");
     break;
   case COMBINATION:
     term = makeTuple(term, selectAccumulatedArg(traversal.args));
-    ATwarning("selecting trafo,accu nf\n");
     break;
   case UNDEFINED_TYPE:
   default:
@@ -634,7 +631,6 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
     break;
   }
 
-  ATwarning("nf = %s\n", PT_yieldTree(term));
   return term;
 }
 
