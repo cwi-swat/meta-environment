@@ -228,7 +228,17 @@ int TBconnect(char *tname, char *host, int inport, int outport,
 
 
   return to_tb;
-}      
+}
+
+int TBgetTid()
+{
+  return this_tool_id;
+}
+
+char *TBgetToolName()
+{
+  return tool_name;
+}
 
 static int read_from_any_channel(inport **inp)
 {

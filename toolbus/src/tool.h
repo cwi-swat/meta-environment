@@ -6,6 +6,8 @@
 
 int  TBinit(char *, int, char **, TBcallbackTerm, term *(*sigchk)(term *));
 int  TBconnect(char *, char *, int in, int out, TBcallbackTerm, term *(*sigchk)(term *), int *);
+int  TBgetTid();
+char *TBgetToolName();
 int  TBaddTermPort(int, TBcallbackTerm);
 int  TBaddCharPort(int, TBcallbackChar);
 int  TBfreePort(int port);
