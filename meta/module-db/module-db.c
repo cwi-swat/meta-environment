@@ -691,30 +691,43 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
 ATerm get_parse_table(int cid, ATerm moduleId)
 {
   ATermList entry;
-  ATerm     table, modname;
-  ATerm     contents;
+  ATerm     place, table, modname;
+  ATerm     contents, result;
   char      *moduleName;
-  int tableLoc;
+  char      *path, pathExt[9], *newpath;
+  int tableLoc, sdfLoc, strLen;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     tableLoc = EQS_TABLE_LOC;
+    strcpy(pathExt, ".eqs.tbl");
   } 
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
     tableLoc = TRM_TABLE_LOC;
+    strcpy(pathExt, ".trm.tbl");
   }
   else {
     ATwarning("Illegal moduleId: %t\n", moduleId);
     return ATmake("snd-value(no-table)");
   }
     
+  sdfLoc = PATH_SYN_LOC;
   modname = ATmake("<str>", moduleName);
   if ((entry = (ATermList) GetValue(new_modules_db, modname))) {
     table = ATelementAt((ATermList)entry, tableLoc);
+    place = ATelementAt((ATermList)entry, sdfLoc);
+    if (ATmatch(place, "<str>", &path)) {
+      strLen = strlen(path);
+      newpath = malloc(strLen+5);
+      strncpy(newpath, path, strLen-4);
+      strcpy(newpath+strLen-4, pathExt);
+    }
     if (ATmatch(table,"table(<term>)", &contents)) {
       ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
       contents = (ATerm)ATgetArgument((ATermAppl)contents, 0);
       contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
-      return ATmake("snd-value(table(<term>))", contents);
+      result = ATmake("snd-value(table(<term>,<str>))", contents, newpath);
+      free(newpath);
+      return result;
     }
   }
   return ATmake("snd-value(no-table)");
@@ -1373,12 +1386,12 @@ ATerm get_syntax(ATerm name, ATermList modules)
 /*}}}  */
 /*{{{  ATerm get_all_sdf2_definitions(int cid, char *modulename) */
 
-ATerm get_all_sdf2_definitions(int cid, char *modulename)
+ATerm get_all_sdf2_definitions(int cid, char *moduleName)
 {
   ATerm result, name;
   ATermList imports;
 
-  name = ATmake("<str>",modulename);
+  name = ATmake("<str>",moduleName);
   if(complete_sdf2_specification(ATempty,name)) {
     imports = get_imported_modules(name);
     result = get_syntax(name,imports);
