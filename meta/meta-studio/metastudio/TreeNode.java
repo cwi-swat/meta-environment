@@ -25,9 +25,8 @@ public class TreeNode
 
     public String getFullName() { return prefix+getName(); }
 
-    public TreeNode addChild(String p, String n)
+    public TreeNode addChild(String p, StringTokenizer tokens)
     {
-	StringTokenizer tokens = new StringTokenizer(n, "/");
 	if (tokens.hasMoreTokens()) {
 	    String childName = tokens.nextToken();
 	    TreeNode childNode = null;
@@ -50,8 +49,7 @@ public class TreeNode
 					     !tokens.hasMoreTokens());
 		    children.add(i, childNode);
 		}
-		return childNode.addChild(p+childName+"/", 
-					  n.substring(childName.length()+1));
+		return childNode.addChild(p+childName+"/", tokens);
 	    }
 	    else {
 		if (childNode == null) {
@@ -67,9 +65,8 @@ public class TreeNode
 	return null;
     }
 
-    public void removeChild(String n) 
+    public void removeChild(StringTokenizer tokens) 
     {
-	StringTokenizer tokens = new StringTokenizer(n, "/");
 	if (tokens.hasMoreTokens()) {
 	    String childName = tokens.nextToken();
 	    int childIndex = getChild(childName);
@@ -77,7 +74,7 @@ public class TreeNode
 	    
 	    if (childNode != null) {
 		if (tokens.hasMoreTokens()) {
-		    childNode.removeChild(n.substring(childName.length()+1));
+		    childNode.removeChild(tokens);
 		}
 		if (childNode.getChildCount() == 0) {
 		    children.remove(childIndex);
@@ -126,13 +123,11 @@ public class TreeNode
 	return -1;
     }
 
-    public List makePath(String n, List result) {
+    public List makePath(StringTokenizer tokens, List result) {
 	result.add(this);
 	if (isLeaf()) {
 	    return result;
 	}
-
-	StringTokenizer tokens = new StringTokenizer(n, "/");
 
 	if (tokens.hasMoreTokens()) {
 	    String childName = tokens.nextToken();
@@ -141,7 +136,7 @@ public class TreeNode
 		
 	    if (childNode != null) {
 		if (tokens.hasMoreTokens()) {
-		    return childNode.makePath(n.substring(childName.length()+1), result);
+		    return childNode.makePath(tokens, result);
 		}
 		else {
 		    result.add(childNode);

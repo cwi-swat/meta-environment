@@ -90,7 +90,7 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 	String name = module.getName();
 
 	if (moduleTable.put(name, module) == null) {
-	    root.addChild("", name);
+	    root.addChild("", new StringTokenizer(name, "/"));
 	    repaintTree();
 	}
     }
@@ -101,7 +101,7 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
     public void removeModule(String name)
     {
 	moduleTable.remove(name);
-	root.removeChild(name);
+	root.removeChild(new StringTokenizer(name, "/"));
 	repaintTree();
     }
 
@@ -119,7 +119,8 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 
     public TreePath makeTreePath(String name)
     {
-	List l = root.makePath(name, new ArrayList());
+	List l = root.makePath(new StringTokenizer(name, "/"), 
+			       new ArrayList());
 
 	return new TreePath(l.toArray());
     }
