@@ -12,6 +12,6 @@ identification
 configuration interface
 
 requires
-  aterm PARSE_ERROR_IN_PACKAGE_DEF
+  aterm 2.4
 
 toolbuslib 0.6
