@@ -22,7 +22,7 @@ tree2graph_SOURCES      = PT2graph.c tree2graph.tif.c tree2graph-main.c
 tree2graph_LDADD        = -L${top_builddir}/libmept -lmept \
 			-L${top_builddir}/utils/tree2graph -lGraph \
 			-L${TOOLBUSLIB}/lib -lATB \
-                        -L${ATERM}/lib -lATerm
+                        -L${ATERM}/lib -lATerm \
 			${SOCKLIBS}
 
 libGraph_a_SOURCES = Graph.c Graph_dict.c
