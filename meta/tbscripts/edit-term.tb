@@ -26,19 +26,19 @@ process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term
 in
-  snd-msg(set-parsetable(ModuleName, trm)) .
+  snd-msg(set-parsetable(trm(ModuleName))) .
   (
-    rec-msg(parsetable-not-set(ModuleName)) .
+    rec-msg(parsetable-not-set(trm(ModuleName))) .
     snd-note(ui-status(errorf(
       "Unable to open parse table for %s", [ModuleName])))
   +
-    rec-msg(parsetable-set(ModuleName)) .
-    snd-msg(parse-focusses(EditorId, ModuleName, "")) .
+    rec-msg(parsetable-set(trm(ModuleName))) .
+    snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
     (
-      rec-msg(parse-ok(ModuleName)) .
+      rec-msg(parse-ok(trm(ModuleName))) .
       snd-msg(clear-focus(EditorId))
     +
-      rec-msg(parse-failed(ModuleName, ErrorFoci?)) .
+      rec-msg(parse-failed(trm(ModuleName), ErrorFoci?)) .
       snd-msg(set-focus(EditorId, ErrorFoci))
     )
   )  

@@ -32,7 +32,6 @@ let
   ErrorFoci    : list,
   Text         : str,
   EditorId     : term,
-  ModuleName   : str,
   StartSymbols : term,
   Pos          : int,
   Nonterminal  : str,
@@ -40,16 +39,23 @@ let
   ErrList      : list,
   Ambs         : list,
   Cycle        : term,
-  Amount       : int
+  Amount       : int,
+  ModuleId     : term
 in                     
   Id := process-id . 
   (
-    rec-msg(parse-focusses(EditorId?, ModuleName?, Nonterminal?)) .
-    snd-msg(get-top-symbols(ModuleName)) .
+    rec-msg(parse-focusses(EditorId?, ModuleId?)) .
+    Text := fun(ModuleId) .
+    if equal(Text, "eqs") then
+      Nonterminal := "Equations"
+    else
+      Nonterminal := ""
+    fi . 
+    snd-msg(get-top-symbols(ModuleId)) .
     (
-      rec-msg(startsymbols(ModuleName, StartSymbols?))
+      rec-msg(startsymbols(ModuleId, StartSymbols?))
     +
-      rec-msg(language-not-open(ModuleName)).
+      rec-msg(language-not-open(ModuleId)).
       StartSymbols := []
     ) .
     snd-msg(register-startsymbols(EditorId, StartSymbols)) .
@@ -65,7 +71,7 @@ in
         rec-msg(focus-text(EditorId, Text?)).
         snd-msg(get-focus-sort(Nonterminal, Focus)) .
         rec-msg(focus-sort(Nonterminal?)) .
-        snd-msg(Id, parse-string-as-asfix1(ModuleName, Nonterminal, Text)).
+        snd-msg(Id, parse-string-as-asfix1(ModuleId, Nonterminal, Text)).
         (
           rec-msg(parse-result-asfix1(Id, parse-tree(Tree?))) .
           snd-msg(replace-focus(EditorId, Focus, Tree))
@@ -97,9 +103,9 @@ in
     ) *
     if equal(DirtyFoci, []) then
       if equal(ErrorFoci, []) then
-        snd-msg(parse-ok(ModuleName))
+        snd-msg(parse-ok(ModuleId))
       else
-        snd-msg(parse-failed(ModuleName, ErrorFoci))
+        snd-msg(parse-failed(ModuleId, ErrorFoci))
       fi
     fi
   )

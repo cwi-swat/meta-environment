@@ -27,22 +27,23 @@
 /* get the table from the database or create a new table */
 process Set-parsetable is
 let
+  ModuleId   : term, 
   ModuleName : str, 
   TableType  : term,
-  Table      : str,
+  Table      : term,
   Id         : int
 in
 Id := process-id.
 ( 
-  rec-msg(set-parsetable(ModuleName?, TableType?)) .
-  snd-msg(get-table-from-db(ModuleName, TableType)) .
+  rec-msg(set-parsetable(ModuleId?)) .
+  snd-msg(get-table-from-db(ModuleId)) .
   (
     rec-msg(table(Table?)).
-    ReopenLanguage(ModuleName, Table)
+    ReopenLanguage(ModuleId, Table)
   +
     rec-msg(no-table) .
     snd-note(ui-status(stat(Id, "Generating parsetable..."))).
-    MakeTable(ModuleName, TableType).
+    MakeTable(ModuleId).
     snd-note(ui-status(endstat(Id)))
   )
 ) *
@@ -50,48 +51,41 @@ delta
 endlet
 
 /* add asf syntax and generate a parse table */
-process MakeTable(ModuleName : str, TableType : term) is
+process MakeTable(ModuleId : term) is
 let
   Syntax    : term,
-  Table     : str,
-  Extension : str,
+  Table     : term,
   TimeStamp : term
 in
-  snd-msg(get-all-sdf2-definitions(ModuleName)).
+  snd-msg(get-all-sdf2-definitions(ModuleId)).
   (
     rec-msg(syntax(Syntax?)).
 
-    snd-msg(make-asf-syntax(ModuleName, Syntax, TableType)).
+    snd-msg(make-asf-syntax(ModuleId, Syntax)).
     rec-msg(asf-syntax(Syntax?)).
 
-    if equal(TableType, eqs) then
-       Extension := "eqs.tbl"
-    else
-       Extension := "trm.tbl"
-    fi.
-    
-    snd-msg(generate-parsetable(Syntax, ModuleName, Extension)).
+    snd-msg(generate-parsetable(Syntax, ModuleId)).
     rec-msg(parsetable(Table?)).
 
-    snd-msg(get-table-timestamp(ModuleName)).
+    snd-msg(get-table-timestamp(ModuleId)).
     rec-msg(table-timestamp(TimeStamp?)).
-    snd-msg(add-parse-table-to-db(ModuleName, Table, TableType, TimeStamp)).
+    snd-msg(add-parse-table-to-db(ModuleId, Table, TimeStamp)).
     rec-msg(parse-table-added).
 
-    ReopenLanguage(ModuleName, Table)
+    ReopenLanguage(ModuleId, Table)
     +
     rec-msg(no-syntax).
-    snd-msg(parsetable-not-set(ModuleName))
+    snd-msg(parsetable-not-set(ModuleId))
   )
 endlet
 
 /* Ask the parser to reopen the language */
-process ReopenLanguage(ModuleName : str, Table : str) is
-  snd-msg(reopen-language(ModuleName, Table)).
+process ReopenLanguage(ModuleId : term, Table : term) is
+  snd-msg(open-language-from-term(ModuleId, Table)).
   (
-    rec-msg(language-opened(ModuleName)).
-    snd-msg(parsetable-set(ModuleName))
+    rec-msg(language-opened(ModuleId)).
+    snd-msg(parsetable-set(ModuleId))
     +
-    rec-msg(language-not-opened(ModuleName)).
-    snd-msg(parsetable-not-set(ModuleName))
+    rec-msg(language-not-opened(ModuleId)).
+    snd-msg(parsetable-not-set(ModuleId))
   )

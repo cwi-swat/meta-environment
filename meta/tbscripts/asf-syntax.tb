@@ -31,21 +31,26 @@ let
   ModuleName : str /* for which module */
 in
   (
-    rec-msg(make-asf-syntax(ModuleName?, Syntax?, Type?)).
+    rec-msg(make-asf-syntax(eqs(ModuleName?), Syntax?)) .
 
 #ifdef TRAVERSALS
-    snd-msg(generate-traversals(ModuleName, Syntax)).
-    rec-msg(changed-syntax(Syntax?)).
+    snd-msg(generate-traversals(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) .
 #endif
 
-    if equal(Type, eqs) then
-      snd-msg(add-eqs-syntax(ModuleName, Syntax)).
-      rec-msg(extended-syntax(Syntax?))
-    else
-      snd-msg(remove-var-syntax(ModuleName, Syntax)).
-      rec-msg(changed-syntax(Syntax?))
-    fi.
+    snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
+    rec-msg(extended-syntax(Syntax?)) .
     snd-msg(asf-syntax(Syntax))  
- 
-  )*delta
+  +
+    rec-msg(make-asf-syntax(trm(ModuleName?), Syntax?)) .
+
+#ifdef TRAVERSALS
+    snd-msg(generate-traversals(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) .
+#endif
+
+   snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+   rec-msg(changed-syntax(Syntax?)) .
+   snd-msg(asf-syntax(Syntax))  
+  ) * delta
 endlet
