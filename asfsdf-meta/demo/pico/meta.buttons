@@ -1,6 +1,6 @@
 buttons([
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","FastEvaluate"],
           [push-active-module,
 	   get-root,
@@ -24,7 +24,7 @@ buttons([
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","FastTypeCheck"],
           [push-active-module,
 	   get-root,
@@ -40,7 +40,7 @@ buttons([
            activate-editor]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","Evaluate"],
           [push-active-module,
 	   get-root,
@@ -64,7 +64,7 @@ buttons([
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","TypeCheck"],
           [push-active-module,
 	   get-root,
@@ -80,12 +80,12 @@ buttons([
            activate-editor]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","SimplifyExpression"],
           [get-focus,
            check-sort("EXP"),
            apply("simplify", "EXP", 1),
-           push-modulename("SimplifyExpression"),
+           push-modulename("SimplifyExpr"),
            reduce,
            set-focus])
   ])

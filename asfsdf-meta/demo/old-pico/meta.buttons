@@ -1,6 +1,6 @@
 buttons([
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","FastEvaluate"],
           [get-root,
            check-sort("PROGRAM"),
@@ -22,7 +22,7 @@ buttons([
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","FastTypeCheck"],
           [get-root,
            check-sort("PROGRAM"),
@@ -37,7 +37,7 @@ buttons([
            activate-editor]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","Evaluate"],
           [get-root,
            check-sort("PROGRAM"),
@@ -52,7 +52,7 @@ buttons([
            activate-editor]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","TypeCheck"],
           [get-root,
            check-sort("PROGRAM"),
@@ -67,7 +67,7 @@ buttons([
            activate-editor]),
 
    button("Pico-syntax",
-          "term",
+          ["term"],
           ["Pico","SimplifyExpression"],
           [get-focus,
            check-sort("EXP"),
@@ -77,7 +77,7 @@ buttons([
            set-focus]),
 
    button("Pico-Booleans",
-          "term",
+          ["term"],
           ["Pico-Booleans","ReduceFocus"],
           [get-focus,
            push-string("Pico-Booleans"),
@@ -85,7 +85,7 @@ buttons([
            set-focus]),
 
    button("Booleans",
-          "term",
+          ["term"],
           ["Booleans","ApplyTrans"],
           [get-focus,
            check-sort("BOOL"),
