@@ -940,7 +940,7 @@ rename_modulename_in_modules(ATermList mods,
 /*}}}  */
 /*{{{  static char *changeSdfPath(char *path, char *oldModuleName, char *newModuleName) */
 
-static char *
+char *
 changeSdfPath(char *path, char *oldModuleName, char *newModuleName)
 {
   static char newPath[BUFSIZ];  
@@ -1003,10 +1003,10 @@ static ATbool checkModuleName(const char *moduleName)
 /*}}}  */
 /*{{{  ATerm rename_module(int cid, char *oldModuleName, char *newModuleName) */
 
-ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
+ATerm rename_module(int cid, char *oldModuleName, char *newModuleName, 
+		    char *newPath)
 {
-  char *path; 
-  char *newPath;
+  char path[BUFSIZ]; 
   ATerm oldSdfTree, newSdfTree, import_graph;
   ATerm oldName = ATmake("<str>", oldModuleName);
   ATerm newName = ATmake("<str>", newModuleName);
@@ -1040,9 +1040,10 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
 
-    path    = MDB_getEntryPath(entry); 
-    newPath = changeSdfPath(path, oldModuleName, newModuleName);
-    entry   = MDB_setEntryPath(entry, newPath);
+    strcpy(path, newPath);
+    strcpy(path+strlen(path), syntax_ext);
+
+    entry   = MDB_setEntryPath(entry, path);
 
     entry = MDB_setEntryAsfTable(entry, MDB_NONE);
     entry = MDB_setEntryTrmTable(entry, MDB_NONE);
@@ -1051,6 +1052,63 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName)
 
     RemoveKey(modules_db, oldName);
     RemoveKey(import_db, oldName);
+
+    imports = SDF_getImports(newSdfModule);
+    fullImports = SDF_getModuleImportsList(newSdfModule);
+    unknowns = add_imports(newName, imports, fullImports);
+
+    reset_trans_db();
+  }
+  import_graph = calc_import_graph();
+  return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
+                changedMods, import_graph);
+}
+
+/*}}}  */
+/*{{{  ATerm copy_module(int cid, char *oldModuleName, char *newModuleName) */
+
+ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
+		  char *newPath)
+{
+  char path[BUFSIZ]; 
+  ATerm oldSdfTree, newSdfTree, import_graph;
+  ATerm oldName = ATmake("<str>", oldModuleName);
+  ATerm newName = ATmake("<str>", newModuleName);
+  ATermList changedMods;
+  MDB_Entry entry;
+  PT_ParseTree oldParseTree, newParseTree;
+  PT_Tree oldTree, newTree;
+  SDF_Module oldSdfModule, newSdfModule;
+  ATermList unknowns, imports;
+  SDF_ImportList fullImports;
+
+  if (!checkModuleName(newModuleName)) {
+    return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
+  }
+
+  changedMods = modules_depend_on(newName,ATempty);
+
+  entry = MDB_EntryFromTerm(GetValue(modules_db, oldName));
+  if (entry) {
+    oldSdfTree   = MDB_getEntrySdfTree(entry);
+    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
+    oldTree      = PT_getParseTreeTree(oldParseTree);
+    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    newSdfModule = SDFsetModuleName(oldSdfModule, newModuleName);
+    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
+    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
+    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+
+    entry = MDB_setEntrySdfTree(entry, newSdfTree);
+
+    strcpy(path, newPath);
+    strcpy(path+strlen(path), syntax_ext);
+    entry   = MDB_setEntryPath(entry, path);
+
+    entry = MDB_setEntryAsfTable(entry, MDB_NONE);
+    entry = MDB_setEntryTrmTable(entry, MDB_NONE);
+    entry = MDB_setEntryAsfTree(entry, MDB_NONE);
+    PutValue(modules_db, newName, MDB_EntryToTerm(entry));
 
     imports = SDF_getImports(newSdfModule);
     fullImports = SDF_getModuleImportsList(newSdfModule);

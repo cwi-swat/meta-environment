@@ -115,8 +115,8 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     snd-msg(extra-modules([]))
   fi
 +
-  rec-msg(rename-module-in-db(OldName?, NewName?)) .
-  snd-eval(Mdb, rename-module(OldName, NewName)) .
+  rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, rename-module(OldName, NewName, Path)) .
   (
     rec-value(Mdb, imports(changed-modules(Modules?),
                            import-graph(ActualMods?, Pairs?))) .
@@ -126,6 +126,19 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     rec-value(Mdb, illegal-module-name(NewName)) .
     snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
     snd-msg(renaming-not-done(OldName))
+  )
++
+  rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, copy-module(OldName, NewName, Path)) .
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(copy-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(copy-not-done(OldName))
   )
 +
   /* Get the list of modules for which the equations are not yet
