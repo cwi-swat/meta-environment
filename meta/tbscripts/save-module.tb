@@ -19,21 +19,15 @@ in
     snd-msg(get-sdf2-path-from-db(Module)).
     rec-msg(path(Path?)).
     snd-msg(get-sdf2-asfix(Module)).
-    (
-      rec-msg(syntax(Syntax?)).
-      snd-msg(save-asfix(Module,Path,Syntax)).
-      rec-msg(save-done)
-    +
-      rec-msg(syntax-unchanged(Syntax?))
-    ).
+    rec-msg(syntax(Syntax?)).
+    snd-msg(save-asfix(Module,Path,Syntax)).
+    rec-msg(save-done) .
     snd-msg(get-eqs-tree(Module)).
     ( rec-msg(tree(Eqs?)).
       snd-msg(get-eqs-path-from-db(Module)).
       rec-msg(path(Path?)).
       snd-msg(save-asfix(Module,Path,Eqs)).
       rec-msg(save-done)
-    +
-      rec-msg(eqs-unchanged(Eqs?))
     +
       rec-msg(no-eqs)
     +
@@ -64,11 +58,7 @@ in
     rec-msg(path(Path?)).
     snd-msg(get-sdf2-asfix(Module)).
     (
-      ( 
-        rec-msg(syntax(Syntax?))
-      +
-        rec-msg(syntax-unchanged(Syntax?))
-      ) .
+      rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
       snd-msg(save-text-file(Path, Text)) .
@@ -83,11 +73,7 @@ in
     rec-msg(path(Path?)).
     snd-msg(get-sdf2-asfix(Module)).
     (
-      (
-        rec-msg(syntax(Syntax?))
-      +
-        rec-msg(syntax-unchanged(Syntax?))
-      ) .
+      rec-msg(syntax(Syntax?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
       snd-msg(save-text-file(Path, Text)) .
@@ -116,21 +102,15 @@ in
        snd-msg(get-sdf2-path-from-db(Module)).
        rec-msg(path(Path?)).
        snd-msg(get-sdf2-asfix(Module)).
-       (
-         rec-msg(syntax(Syntax?)).
-         snd-msg(save-asfix(Module,Path,Syntax)).
-         rec-msg(save-done)
-       +
-         rec-msg(syntax-unchanged(Syntax?))
-       ).
+       rec-msg(syntax(Syntax?)).
+       snd-msg(save-asfix(Module,Path,Syntax)).
+       rec-msg(save-done) .
        snd-msg(get-eqs-tree(Module)).
        ( rec-msg(tree(Eqs?)).
          snd-msg(get-eqs-path-from-db(Module)).
          rec-msg(path(Path?)).
          snd-msg(save-asfix(Module,Path,Eqs)).
          rec-msg(save-done)
-       +
-         rec-msg(eqs-unchanged(Eqs?))
        +
          rec-msg(no-eqs)
        +

@@ -52,8 +52,7 @@ in
           rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(open-sdf-file(Name)). ( 
               rec-msg(opened-file(Name2?,tree(T?), SdfPath?,Time?)).
-              snd-msg(add-sdf2-module-to-db(Name, SdfPath, T, Time,
-			  "unchanged")).
+              snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
               rec-msg(need-modules(M1s?)).
               Ms := join(Ms,M1s).
               snd-msg(open-parse-table(Name, SdfPath, asf)).
@@ -107,8 +106,7 @@ in
               rec-msg(sdf2-language-opened).
               snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",FT)).
               ( rec-msg(parse-result-asfix2me(Id?,parse-tree(T?))).
-                snd-msg(add-sdf2-module-to-db(Name, SdfPath, T, Time,
-				"changed")).
+                snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
                 rec-msg(need-modules(M1s?)).
                 Ms := join(Ms,M1s) .
                 snd-msg(open-asf-file(Name, SdfPath)).
@@ -133,10 +131,10 @@ in
                   [Name2]))).
                 snd-msg(edit-syntax(Name2))
              )
-             +
+            +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(error-opening(Str?)).
-              snd-msg(cannot-open-module(Str)).
+              snd-msg(cannot-open-module(Str)) .
               snd-msg(add-empty-module-to-db(Str)).
               rec-msg(empty-module-added)
             )

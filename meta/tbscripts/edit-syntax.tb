@@ -23,10 +23,6 @@ in
     snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
     rec-msg(initial-focus(Focus?))
   +
-    rec-msg(syntax-unchanged(Tree?)).
-    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
-    rec-msg(initial-focus(Focus?))
-  +
     rec-msg(unavailable).
     snd-msg(open-sdf-file(ModuleName)) .
     (
