@@ -50,9 +50,7 @@ equations
 [21] asym(())                  = empty
 [22] asym(Symbol Natcon +)     = iter-n(asym(Symbol),Natcon)
 [23] asym({Symbol1 Symbol2} Natcon +) = iter-sep-n(asym(Symbol1),asym(Symbol2),Natcon)
-[24] asym(Set [ Symbol ])      = set(asym(Symbol))
 [25] asym((Symbol* => Symbol)) = func([asyms(Symbol*,cf)],asym(Symbol))
-[26] asym(<<Symbol*>>)         = perm([asyms(Symbol*,cf)])
 [27] asym(sort(c*)[[Symbol,+]]) = parameterized-sort(sort(literal(""" c* """)),[asymsep(Symbol,+)])
 
 [ass-1] asymsep(Symbol) = asym(Symbol)
