@@ -24,7 +24,6 @@ exports
 
      is-bag(Elem)				-> Boolean
 
-     elem-compare(Elem, Elem)			-> Measure
      elem-less(Elem, Elem)			-> Boolean
      elem-less-equal(Elem, Elem)		-> Boolean
 
