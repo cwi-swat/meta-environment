@@ -1,0 +1,8 @@
+compiler.o: compiler.c compiler.tif.c
+asfix2rnx.o: asfix2rnx.c
+expander.o: expander.c
+asfixprinter.o: asfixprinter.c
+aprinter.o: aprinter.c
+to-epic.o: to-epic.c to-epic.tif.c
+rnx2asfix.o: rnx2asfix.c
+asfix-trans.o: asfix-trans.c

@@ -788,6 +788,8 @@ Tprintf(stderr,"ToC_code finished.\n");
   else {
     TdestroyArena(&local);
     TBsend(cid,Tmake(TBgetArena(cid),"snd-event(done)"));
+    TpruneDeathRow();
+    TprintAllTerms(stdout);
   }
 }
 
