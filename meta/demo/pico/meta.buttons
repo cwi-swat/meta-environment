@@ -79,5 +79,14 @@ buttons([
            activate-gen("tree2dot -i /tmp/Mark.tree.baf -o /tmp/Mark.dot"),
            activate-gen("rm -f /tmp/Mark.tree.baf"),
            activate-gen("showdot -i /tmp/Mark.dot &"),
+           activate-gen("rm -f /tmp/Mark.dot")]),
+
+   button("Booleans",
+          "term",
+          "ShowTree", 
+          [save-tree-action("Booleans", "/tmp/Mark.tree"),
+           activate-gen("tree2dot -i /tmp/Mark.tree.baf -o /tmp/Mark.dot"),
+           activate-gen("rm -f /tmp/Mark.tree.baf"),
+           activate-gen("showdot -i /tmp/Mark.dot &"),
            activate-gen("rm -f /tmp/Mark.dot")])
   ])

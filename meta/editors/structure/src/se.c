@@ -96,7 +96,6 @@ void remove_tree(int cid, ATerm editorId)
 }
 
 /*}}}  */
-
 /*{{{  ATerm insert_chars(int cid, ATerm editorId, int location, char *text) */
 
 ATerm insert_chars(int cid, ATerm editorId, int location, char *text)
@@ -285,6 +284,16 @@ ATerm get_parse_tree(int cid, ATerm editorId)
 
   return ATmake("snd-value(parse-tree(<term>))",
 		PT_makeTermFromParseTree(parse_tree));
+}
+
+/*}}}  */
+/*{{{  ATerm get_focussed_tree(int cid, ATerm editorId) */
+
+ATerm get_focussed_tree(int cid, ATerm editorId)
+{
+  SE_Editor editor = getEditor(editorId);
+  PT_Tree tree = getFocussedTree(editor);
+  return ATmake("snd-value(tree(<term>))", PT_makeTermFromTree(tree));
 }
 
 /*}}}  */

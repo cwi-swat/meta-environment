@@ -438,4 +438,14 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus,
 }
 
 /*}}}  */
+/*{{{  static PT_Tree getFocussedTree(SE_Editor editor) */
 
+PT_Tree getFocussedTree(SE_Editor editor)
+{
+  SE_Focus focus = SE_getEditorFocus(editor);
+  SE_Path path = SE_getFocusPath(focus);
+  PT_ParseTree parse_tree = SE_getEditorParseTree(editor);
+  return getParseTreeTreeAt(parse_tree, path);
+}
+
+/*}}}  */

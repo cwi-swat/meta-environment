@@ -125,11 +125,11 @@ in
                 )
               + 
                 rec-msg(parse-result-asfix2me(Id?, parse-error(ErrList?, AnonymousError?))).
-                snd-msg(add-empty-module-to-db(Name2)).
+                snd-msg(add-empty-module-to-db(Name)).
                 rec-msg(empty-module-added).
                 snd-note(ui-status(errorf("Please fix syntax error in module %s.",
-                  [Name2]))).
-                snd-msg(edit-syntax(Name2))
+                  [Name]))).
+                snd-msg(edit-syntax(Name))
              )
             +
              /* File would not open (unreadable, not exist, wrong path...) */

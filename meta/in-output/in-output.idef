@@ -164,7 +164,7 @@ in
       snd-msg(stack(Stack))
     + 
       rec-value(IO,error-opening(Path?)).
-      snd-msg(stack(Stack))
+      snd-msg(error-stack)
     )
   +
     rec-msg(save-tree(Name?, Path?, Tree?)) .

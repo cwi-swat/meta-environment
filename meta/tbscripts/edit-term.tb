@@ -140,6 +140,24 @@ in
   )  
 endlet
 
+process GetTree(EditorId: term, Tree: term?) is
+let
+  Id          : int
+in
+  Id := process-id .
+  snd-msg(get-tree(EditorId)) . 
+  rec-msg(tree(Tree?))
+endlet
+
+process GetFocus(EditorId: term, Tree: term?) is
+let
+  Id          : int
+in
+  Id := process-id .
+  snd-msg(get-focussed-tree(EditorId)) .
+  rec-msg(tree(Tree?))
+endlet
+
 process PlainReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
   Id          : int,
@@ -163,12 +181,14 @@ in
       rec-msg(rewrite-result(NormalForm?))
     +
       rec-msg(rewrite-errors(ErrList?)) .
+      NormalForm := error-tree .
       snd-msg(display-rewrite-errors(ErrList))
     ) .
     snd-note(ui-status(endstat(Id)))
   +
     rec-msg(equations-incomplete) .
-    snd-note(ui-status(endstat(Id))).
+    NormalForm := error-tree .
+    snd-note(ui-status(endstat(Id))) .
     snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
   )
 endlet
@@ -219,71 +239,101 @@ in
   (
     (
       (
-       rec-note(syntax-changed(ModuleName)) .
-       snd-msg(invalidate-tree(EditorId))
-       +
-       rec-msg(parse-focus(EditorId)) .
-       ParseTerm(EditorId, ModuleName) 
-       +
-       rec-msg(parse-buffer(EditorId)) .
-       snd-msg(invalidate-tree(EditorId)) .
-       ParseTerm(EditorId, ModuleName)
-       +
-       rec-msg(reduce(EditorId)) .
-       snd-msg(get-dirty-focuses(EditorId)) .
-       rec-msg(dirty-focuses(DirtyFoci?)) .
-       if equal(DirtyFoci, []) then
-         ReduceTerm(EditorId, ModuleName)
-       else
-         snd-msg(invalidate-tree(EditorId)) .
-         ParseTerm(EditorId, ModuleName) .
-	 snd-msg(get-dirty-focuses(EditorId)) .
-	 rec-msg(dirty-focuses(DirtyFoci?)) . 
-	 if equal(DirtyFoci, []) then
-           ReduceTerm(EditorId, ModuleName)
-         else 
-          tau
-         fi
-       fi
-       +
-       rec-msg(extra-button-action(EditorId, ButtonName?)) .
-       snd-msg(get-dirty-focuses(EditorId)) .
-       rec-msg(dirty-focuses(DirtyFoci?)) .
-       if equal(DirtyFoci, []) then
-         snd-msg(get-tree(EditorId)) . 
-         rec-msg(tree(ActionTree?)) .
-         snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
-       else
-         snd-msg(invalidate-tree(EditorId)) .
-         ParseTerm(EditorId, ModuleName) .
-	 snd-msg(get-dirty-focuses(EditorId)) .
-	 rec-msg(dirty-focuses(DirtyFoci?)) . 
-	 if equal(DirtyFoci, []) then
-           snd-msg(get-tree(EditorId)) . 
-           rec-msg(tree(ActionTree?)) .
-           snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
-         else 
-           tau
-         fi
-       fi
-       +
-       rec-msg(reduce-action(NewModName?), Stack?) .
-       STree := first(Stack) .
-       Stack := next(Stack) .
-       PlainReduceTerm(STree, NewModName, RTree?) .
-       Stack := join(RTree, Stack) .
-       snd-msg(stack(Stack))
-       +
-       rec-msg(activate-editor(NewModName?, EditorName?), Stack?) .
-       STree := first(Stack) .
-       Stack := next(Stack) .
-       ActivateEditor(STree, NewModName, EditorName) .
-       snd-msg(stack(Stack))
-       +
-       rec-msg(parse-file(FilePath?, NewModName?), Stack?) .
-       ParseFile(FilePath, NewModName, RTree?) .
-       Stack := join(RTree, Stack) .
-       snd-msg(stack(Stack))
+        rec-note(syntax-changed(ModuleName)) .
+        snd-msg(invalidate-tree(EditorId))
+      +
+        rec-msg(parse-focus(EditorId)) .
+        ParseTerm(EditorId, ModuleName) 
+      +
+        rec-msg(parse-buffer(EditorId)) .
+        snd-msg(invalidate-tree(EditorId)) .
+        ParseTerm(EditorId, ModuleName)
+      +
+        rec-msg(reduce(EditorId)) .
+        snd-msg(get-dirty-focuses(EditorId)) .
+        rec-msg(dirty-focuses(DirtyFoci?)) .
+        if equal(DirtyFoci, []) then
+          ReduceTerm(EditorId, ModuleName)
+        else
+          snd-msg(invalidate-tree(EditorId)) .
+          ParseTerm(EditorId, ModuleName) .
+	  snd-msg(get-dirty-focuses(EditorId)) .
+	  rec-msg(dirty-focuses(DirtyFoci?)) . 
+	  if equal(DirtyFoci, []) then
+            ReduceTerm(EditorId, ModuleName)
+          else 
+            tau
+          fi
+        fi
+      +
+        rec-msg(extra-button-action(EditorId, ButtonName?)) .
+        snd-msg(get-dirty-focuses(EditorId)) .
+        rec-msg(dirty-focuses(DirtyFoci?)) .
+        if equal(DirtyFoci, []) then
+          snd-msg(get-tree(EditorId)) . 
+          rec-msg(tree(ActionTree?)) .
+          snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+        else
+          snd-msg(invalidate-tree(EditorId)) .
+          ParseTerm(EditorId, ModuleName) .
+	  snd-msg(get-dirty-focuses(EditorId)) .
+	  rec-msg(dirty-focuses(DirtyFoci?)) . 
+	  if equal(DirtyFoci, []) then
+            snd-msg(get-tree(EditorId)) . 
+            rec-msg(tree(ActionTree?)) .
+            snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+          else 
+            tau
+          fi
+        fi
+      +
+        rec-msg(get-tree-action(NewModName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        GetTree(STree, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
+      +
+        rec-msg(get-focus-action(NewModName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        GetFocus(STree, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
+      +
+        rec-msg(reduce-action(NewModName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        PlainReduceTerm(STree, NewModName, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
+      +
+        rec-msg(activate-editor(NewModName?, EditorName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        ActivateEditor(STree, NewModName, EditorName) .
+        snd-msg(stack(Stack))
+      +
+        rec-msg(parse-file(FilePath?, NewModName?), Stack?) .
+        ParseFile(FilePath, NewModName, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
       ) *
       if equal(Killed, true) then
         tau

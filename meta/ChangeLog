@@ -1,5 +1,10 @@
 # $Id$
 
+2002/05/06 (vandenbr@loria.fr)
+ * Improved the button manipulation.
+ * Fixed the bug that caused empty editors when there was a syntax
+   error in the Sdf spec.
+
 2002/04/26 (markvdb@cs.vu.nl)
  * Experimental version with buttons.
  * See meta.buttons in meta/demo/pico for an example of its use.

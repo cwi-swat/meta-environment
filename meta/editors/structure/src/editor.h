@@ -23,4 +23,6 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, char *sort, ATbool dirty);
 SE_Editor newEditorGivenText(char *text);
 SE_Editor newEditorGivenLength(int length);
 
+PT_Tree getFocussedTree(SE_Editor editor);
+
 #endif /* EDITOR_H */

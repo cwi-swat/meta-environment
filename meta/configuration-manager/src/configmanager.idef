@@ -62,8 +62,12 @@ in
         ButtonAction := first(ButtonActions) .
         ButtonActions := next(ButtonActions) .
         snd-msg(ButtonAction, Stack) .
-        rec-msg(stack(Stack?))
-
+        (
+          rec-msg(stack(Stack?))
+        +
+          rec-msg(error-stack) .
+          ButtonActions := []
+        )
       fi
     )*
     if equal(ButtonActions, []) then
