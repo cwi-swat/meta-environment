@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-SUBDIRS      = auction calc game hello wave
+SUBDIRS      = auction calc hello wave
 
-DIST_SUBDIRS = auction calc game hello wave
+DIST_SUBDIRS = auction calc hello wave
 
