@@ -1,0 +1,36 @@
+module traversal/TypeUnifying[S X A]
+
+exports
+
+context-free syntax
+
+bottomup -> (S (X A => A) A => A)
+topdown  -> (S (X A => A) A => A)
+oncetd   -> (S (X A => A) A => A)
+
+hiddens
+
+sorts A
+
+context-free syntax
+
+bu(S,A,(X A=>A)) -> A {traversal(accu,bottom-up)}
+bu(X,A,(X A=>A)) -> A {traversal(accu,bottom-up)}
+
+td(S,A,(X A=>A), X) -> A {traversal(accu,top-down)}
+td(X,A,(X A=>A), X) -> A {traversal(accu,top-down)}
+
+otd(S,A,(X A=>A)) -> A {traversal(accu,top-down)}
+otd(X,A,(X A=>A)) -> A {traversal(accu,top-down)}
+
+"_" -> X
+
+imports basic/Whitespace
+
+variables
+
+"f" -> (X A=>A)
+"S" -> S
+"A" -> A
+"X" -> X
+"Y" -> X

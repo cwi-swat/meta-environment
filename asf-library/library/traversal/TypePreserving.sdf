@@ -1,0 +1,33 @@
+module traversal/TypePreserving[S X]
+
+exports
+
+context-free syntax
+
+topdown  -> (S (X => X) => S)
+bottomup -> (S (X => X) => S)
+oncetd   -> (S (X => X) => S)
+
+hiddens
+
+imports basic/Whitespace
+
+context-free syntax
+
+td(S,(X=>X),X) -> S {traversal(trafo, top-down)}
+td(X,(X=>X),X) -> X {traversal(trafo, top-down)}
+bu(S,(X=>X)) -> S {traversal(trafo, bottom-up)}
+bu(X,(X=>X)) -> X {traversal(trafo, bottom-up)}
+otd(S,(X=>X)) -> S {traversal(trafo, top-down)}
+otd(X,(X=>X)) -> X {traversal(trafo, top-down)}
+
+"_" -> X
+
+variables
+
+"f" -> (X=>X)
+"X" -> X
+"Y" -> X
+"S" -> S
+
+

@@ -1,0 +1,14 @@
+equations
+
+[] bottomup(S f) = bu(S,f)
+
+[] bu(X,f) = f(X)
+
+[] topdown(S f) = td(S,f,_)
+
+[] td(X,f,Y) = td(f(X), f, X)
+    when X != Y
+
+[] oncetd(S f) = otd(S,f)
+
+[] otd(X,f) = f(X)
