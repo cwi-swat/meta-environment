@@ -1,33 +1,104 @@
+%% Example from Aho, Sethi, Ullman, p619
 
+%%	1: i := m-2				i := m-2
+%%        |
+%%      2: j := n				j := n
+%%        |
+%%      3: a := u1				a := u1
+%%	  |					do
+%%	  V
+%%	4: i :=i+1  <--------------			i := i+1
+%%        |                        |
+%%      5: j :=j-1                 |			j := j-1
+%% 	 /          \              |			if e1 then
+%%	/            \             |			   a := u2
+%%     V              V            |			else
+%%   6: a := u2 ---> 7: i := u3 ---			   i := u3
+%%						while e2
 
+int ROOT = 1
 
-node ROOT
+rel[int,int] PRED	= { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
 
-rel[node,node] PRED
+rel[str,int] DEF 	= { <"i",1>, <"j",2>, <"a",3>, <"i",4>, < "j",5>, <"a",6>, <"i",7>}
 
-rel[str,str] PRED-OF = inv(PRED)
+rel[str,int] USE 	= {<"m",1>, <"n",2>, <"u1",3>, <"i",4>, <"j",5>, <"u2",6>, <"u3",7>}
 
-rel[node,str] USES
+%% Here ends the program specific information.
+%%
+%% Given values for ROOT, PRED, DEF and USE, w can compute the following general information.
+%% This works towards the definitions given in 
+%%	Jackson & Rollins: A new model of program dependences for reverse engineering.
 
-rel[node,str] DEFS
+%% The inverse of PRED and the carrier of PRED for later use:
 
-bag[node] STATEMENTS = carrier(PRED)
+rel[int,int] PRED-OF 	= inv(PRED)
+bag[int] STATEMENT 	= carrier(PRED)
 
-rel[str,node] UNDEF =
-        { <N,V> : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
+%% Find all unitialized variables
+
+rel[str,int] UNDEF =
+        { <V,N> : <V, N> in USE | <ROOT, N> in reachX({ROOT}, DEF[V], PRED)
         }
 
-rel[str,str] IN = {}
-rel[str,str] OUT = {}
+%% Compute the reaching definitions for each statement.
+%% First introduce the GEN and KILL relations.
+
+rel[int,<str,int>] GEN  = {<S,<V,S>> : <V,S> in DEF}
+rel[int,<str,int>] KILL = {<S1, <V2,S2>> : <V1,S1> in DEF, <V2,S2> in DEF | V1 == V2 and S1 != S2}
+
+%% The goals is to compute RDIN and RDOUT: the sets of variable definitions going in and
+%% out of each statement.
+
+rel[int,<str,int>] RDIN = {}
+rel[int,<str,int>] RDOUT = GEN
+
+%% Here is the set of mutually recursive equations that has to be solved:
 
 solve {
-        IN =  {S x USES[S] union (OUT[S] \ DEFS[S]) : S in STATEMENTS},
-        OUT = {S x IN[P] : S in STATEMENTS, P in PRED[S] }
-} 
+        RDIN =  {S x RDOUT[P] : S in STATEMENT, P in PRED-OF[S]},
+        RDOUT = {S x (GEN[S] union (RDIN[S] \ KILL[S])) : S in STATEMENT }
+}
 
-rel[<node,str>,<node,str>] USE-DEF =
-	{
+%% Compute the relation between each use and corresponding definitions: ud
+
+rel[<str,int>,<str,int>] ud = 
+  {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] |  V == fst(Pair) and S != sec(Pair)}
+
+%% Note, it would be more readable (but currently not possible) to write the above expressions as:
+%%	rel[<str,int>,<str,int>] ud = 
+%%	  {<<V1,S1>,<V2,S2>  : <V1,S1> in USE, <V2,S2> in RDIN[S] | S1 != S2 and V1 == V2}
+
+%% Direct use in definition: du
+rel[<str,int>,<str,int>] du  = 
+     {<<V1,S1>,<V2,S2>> : <V1, S1> in DEF, <V2, S2> in USE | S1 == S2 }
+     union
+     {<<V,S>,<"eps",S>> : <V, S> in DEF}
+
+%% Find all the statements that are dominated by each statement
+
+rel[int,int] DOMINATES =
+  { S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) :  S in STATEMENT }
+
+%% Find the statements that are directly dominated by each statement
+
+rel[int, int] DOMINATES-DIRECTLY = 
+   { <S1, S2> : <S1, S2> in DOMINATES | 
+     not exists(S3 in STATEMENT | <S1, S3> in DOMINATES and <S3, S2> in DOMINATES) 
+   }
+
+%% Control dependence: cd
+
+rel[<str,int>,<str,int>] cd  =
+   { <<"eps",S2>,<"tau",S1>> : <S1, S2> in DOMINATES-DIRECTLY}
+
+%% Control and data dependence: ucd
+
+rel[<str,int>,<str,int>] ucd = ud union cd
+
+rel[<str,int>,<str,int>] UU = (ucd o du)*
+rel[<str,int>,<str,int>] DD = (du o ucd)*
+rel[<str,int>,<str,int>] UD = ucd o (du o ucd)*
+rel[<str,int>,<str,int>] DU = du o (ucd o du)*
 
 
-
-	

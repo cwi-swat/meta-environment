@@ -1,3 +1,29 @@
+%% Example from T. Lengauer and R.E. Tarjan, A Fast Algorithm for Finding Dominators
+%% in a Flowgraph, TOPLAS, Vol. 1, N0. 1, July 1979, 121-141.
+
+%%    +------------------- R ----------+
+%%    |         +----- / /             |
+%%    |         |       /              |
+%%    |         |       v              v
+%%    |         |    +--B       +----- C -----+
+%%    |         |    |  |       |             | 
+%%    |         v    |  |       |             |       
+%%    |         A <--+  |       |             |
+%%    |         |       |       |             |
+%%    |         v       v       v             v       
+%%    |         D    +--E       F      +----- G
+%%    |         |    |  ^       |      |      |
+%%    |         v    |  |       |      |      |
+%%    |         L    |  |       |      |      |
+%%    |         |    v  |       |      v      v
+%%    |         +->  H -+       +----> I <--- J
+%%    |              +--------+      ^ |
+%%    |                       |     /  |
+%%    |                       v   /    |
+%%    +---------------------> K / <----+
+
+
+str ROOT = "R"
 
 rel[str,str] PRED ={
 <"R", "A">,<"R", "B">, <"R", "C">,
@@ -10,9 +36,34 @@ rel[str,str] PRED ={
 <"G", "I">, <"G", "J">,
 <"H", "K">, <"H", "E">,
 <"I", "K">, 
-<"K", "I">, <"K", "R">}
+<"K", "I">, <"K", "R">,
+<"L", "H">
+}
 
 bag[str] VERTICES = carrier(PRED)
 
 rel[str,bag[str]] DOMINATES =
- { <V,  VERTICES \ {V} \ range(reachX({"R"}, {V}, PRED))> :  V in VERTICES }
+   { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> :  V in VERTICES}
+
+bag[str] Empty = {}	%% define as constant to avoid ambiguities when using
+			%% {} in an expression
+
+bool Assert = DOMINATES ==
+ 	{
+	<"R", {"A", "B", "C", "D", "E", "F", "G", "L", "H", "I", "J", "K"}>, 
+	<"A", Empty>, 
+	<"B", Empty>, 
+	<"C", {"F", "G", "J"}>, 
+	<"D", {"L"}>, 
+	<"E", Empty>, 
+	<"F", Empty>, 
+	<"G", {"J"}>, 
+	<"L", Empty>, 
+	<"H", Empty>, 
+	<"I", Empty>, 
+	<"J", Empty>, 
+	<"K", Empty>
+	}
+
+
+

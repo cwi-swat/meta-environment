@@ -1,4 +1,4 @@
-module RscriptCalculator
+>]module RscriptCalculator
 
 imports Rscript
 %% imports Relations[Elem]
@@ -95,7 +95,8 @@ exports
 	"+"					-> POSTFIXOP
 	"*"					-> POSTFIXOP
 
-
+	"EmptyElemBag"							-> Bag[[Elem]]
+	"EmptyElemRel"							-> Rel[[Elem]]
         equal-elem(Elem, Elem)              				-> Boolean
 	equal-rval(RVALUE, RVALUE)					-> Boolean
 	is-tuple(RVALUE)						-> Boolean
