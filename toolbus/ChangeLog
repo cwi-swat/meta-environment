@@ -19,6 +19,12 @@
 
 ------------------------------------------------------------------------------
 
+2001/08/21 (jong@cwi.nl)
+ * switched to new ChangeLog format (more compatible with meta-env)
+ * version 0.21beta
+ * fixed bug in libtb/utils.c in parsing of TBreals.
+   (Closes bugreport by Tommy de Roos)
+
 Date:   Mon Jul 30 10:35:41 MEST 2001 (Merijn)
 - Bumped version to 0.20 because version 0.19 was released on Jul 18 (not 0.18)
 - Added EXTRA_DIST variable to Makefile.am to also distribute
