@@ -39,7 +39,6 @@
 int
 main(int argc, char *argv[])
 {
-  ATbool usage = ATfalse;
   ATerm bottomOfStack;
   ATerm in, out;
   PT_Tree term, prepared, restored;
