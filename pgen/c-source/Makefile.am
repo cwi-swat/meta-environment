@@ -81,8 +81,8 @@ SPEC_SRCS2=\
    AUX-Modular-Sdf-Section2.c AUX-Modular-Sdf-Section1.c\
    AUX-Grammar-Syntax2.c AUX-Grammar-Syntax1.c AUX-Booleans6.c\
    AUX-Booleans5.c AUX-Booleans4.c AUX-Booleans3.c AUX-Booleans2.c\
-   AUX-Booleans1.c AUX-IntCon1.c AUX-Literals1.c AUX-Kernel-Sdf-Syntax3.c\
-   AUX-Kernel-Sdf-Syntax2.c AUX-Kernel-Sdf-Syntax1.c\
+   AUX-Booleans1.c AUX-IntCon2.c AUX-IntCon1.c AUX-Literals1.c\
+   AUX-Kernel-Sdf-Syntax3.c AUX-Kernel-Sdf-Syntax2.c AUX-Kernel-Sdf-Syntax1.c\
    AUX-CC-Sdf-Syntax1.c AUX-Character-Class-Normalization16.c\
    AUX-Character-Class-Normalization15.c\
    AUX-Character-Class-Normalization14.c\

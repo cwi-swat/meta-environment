@@ -48,27 +48,32 @@ void init_AUX_Basic_Sdf_Syntax2 ( ) {
 }
 ATerm lf_AUX_Basic_Sdf_Syntax2_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_Basic_Sdf_Syntax2_1sym , ATmakeAppl ( lf_AUX_Basic_Sdf_Syntax2_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_AUX_Basic_Sdf_Syntax2_1 : ltmp [ 0 ] = arg0 ;
+if ( check_sym ( ltmp [ 0 ] , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( arg0 ) ;
+FUNC_EXIT ( ltmp [ 0 ] ) ;
 }
 }
-if ( check_sym ( arg0 , ef2sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( arg0 ) ;
+FUNC_EXIT ( ltmp [ 0 ] ) ;
 }
 }
-if ( check_sym ( arg0 , ef3sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-FUNC_EXIT ( ( * ef3 ) ( atmp00 , lf_AUX_Basic_Sdf_Syntax2_1 ( atmp01 ) ) ) ;
+( arg0 = atmp01 ) ;
+goto lbl_lf_AUX_Basic_Sdf_Syntax2_1 ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_AUX_Basic_Sdf_Syntax2_1sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_AUX_Basic_Sdf_Syntax2_1sym , ltmp [ 0 ] ) ) ;
+}
 }
 

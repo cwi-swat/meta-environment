@@ -82,10 +82,6 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( ! not_empty_list ( atmp00 ) ) {
 FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( make_list ( tmp [ 0 ] ) ) ) ) ;
-}
 }
 }
 if ( check_sym ( arg0 , lf_AUX_Literals_Sdf_Normalization5_1sym ) ) {
@@ -106,6 +102,15 @@ FUNC_EXIT ( ( * ef2 ) ( ( * ef2 ) ( lf_AUX_Literals_Sdf_Normalization5_2_recursi
 }
 }
 }
+if ( check_sym ( arg0 , lf_AUX_Literals_Sdf_Normalization5_1sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+}
+}
+}
 FUNC_EXIT ( make_nf1 ( lf_AUX_Literals_Sdf_Normalization5_2sym , arg0 ) ) ;
 }
 }
@@ -117,10 +122,6 @@ FUNC_ENTRY ( lf_AUX_Literals_Sdf_Normalization5_2_recursivesym , ATmakeAppl ( lf
 ATerm atmp00 = arg0 ;
 if ( ! not_empty_list ( atmp00 ) ) {
 FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
-}
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }
 ( tmp [ 0 ] = arg0 ) ;
@@ -137,6 +138,13 @@ FUNC_EXIT ( ( * ef2 ) ( ( * ef2 ) ( lf_AUX_Literals_Sdf_Normalization5_2_recursi
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
 ( tmp [ 0 ] = atmp000 [ 1 ] ) ;
 }
+}
+}
+{
+ATerm atmp00 = arg0 ;
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_Literals_Sdf_Normalization5_2_recursivesym , lf_AUX_Literals_Sdf_Normalization5_1 ( arg0 ) ) ) ;
