@@ -223,7 +223,16 @@ ATbool PT_isTreeApplList(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return  PT_isProductionList(prod);
+    if (PT_isProductionList(prod)) {
+      PT_Args args = PT_getTreeArgs(tree);
+      if (PT_hasArgsHead(args)) {
+        PT_Tree arg = PT_getArgsHead(args);
+        args = PT_getArgsTail(args);
+        if (PT_isTreeList(arg) && PT_isArgsEmpty(args)) {
+          return ATtrue;
+        }
+      }
+    }
   }
   return ATfalse;
 }
@@ -264,6 +273,13 @@ PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
   return PT_makeArgsFromTerm((ATerm)ATconcat(
                                       (ATermList)PT_makeTermFromArgs(args1),
                                       (ATermList)PT_makeTermFromArgs(args2)));
+}
+
+PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
+{
+  return PT_makeSymbolsFromTerm(
+           (ATerm)ATconcat((ATermList)PT_makeTermFromSymbols(symbols1),
+                           (ATermList)PT_makeTermFromSymbols(symbols2)));
 }
 
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)

@@ -225,11 +225,11 @@ PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeList(PT_Args args) */
+/*{{{  PT_Tree PT_makeTreeList(PT_Symbol symbol, PT_Args args) */
 
-PT_Tree PT_makeTreeList(PT_Args args)
+PT_Tree PT_makeTreeList(PT_Symbol symbol, PT_Args args)
 {
-  return (PT_Tree)ATmakeTerm(PT_patternTreeList, args);
+  return (PT_Tree)ATmakeTerm(PT_patternTreeList, symbol, args);
 }
 
 /*}}}  */
@@ -824,7 +824,7 @@ ATbool PT_isTreeAppl(PT_Tree arg)
 
 ATbool PT_isTreeList(PT_Tree arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternTreeList, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternTreeList, NULL, NULL);
 }
 
 /*}}}  */
@@ -930,7 +930,7 @@ PT_Args PT_getTreeArgs(PT_Tree arg)
     return (PT_Args)ATgetArgument((ATermAppl)arg, 1);
   }
   else if (PT_isTreeList(arg)) {
-    return (PT_Args)ATgetTail((ATermList)arg, 0);
+    return (PT_Args)ATgetArgument((ATermAppl)arg, 1);
   }
   else if (PT_isTreeAmb(arg)) {
     return (PT_Args)ATgetArgument((ATermAppl)arg, 0);
@@ -949,13 +949,50 @@ PT_Tree PT_setTreeArgs(PT_Tree arg, PT_Args args)
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 1);
   }
   else if (PT_isTreeList(arg)) {
-    return (PT_Tree)ATreplaceTail((ATermList)arg, (ATermList)args, 0);
+    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 1);
   }
   else if (PT_isTreeAmb(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 0);
   }
 
   ATabort("Tree has no Args: %t\n", arg);
+  return (PT_Tree)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasTreeSymbol(PT_Tree arg) */
+
+ATbool PT_hasTreeSymbol(PT_Tree arg)
+{
+  if (PT_isTreeList(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Symbol PT_getTreeSymbol(PT_Tree arg) */
+
+PT_Symbol PT_getTreeSymbol(PT_Tree arg)
+{
+  if (PT_isTreeList(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
+  }
+
+  ATabort("Tree has no Symbol: %t\n", arg);
+  return (PT_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol) */
+
+PT_Tree PT_setTreeSymbol(PT_Tree arg, PT_Symbol symbol)
+{
+  if (PT_isTreeList(arg)) {
+    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
+  }
+
+  ATabort("Tree has no Symbol: %t\n", arg);
   return (PT_Tree)NULL;
 }
 
@@ -2415,9 +2452,9 @@ PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symb
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *)) */
+/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptSymbol)(PT_Symbol), int (*acceptCharacter)(int), char * (*acceptString)(char *)) */
 
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *))
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptSymbol)(PT_Symbol), int (*acceptCharacter)(int), char * (*acceptString)(char *))
 {
   if (PT_isTreeAppl(arg)) {
     return PT_makeTreeAppl(
@@ -2426,6 +2463,7 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
   }
   if (PT_isTreeList(arg)) {
     return PT_makeTreeList(
+        acceptSymbol ? acceptSymbol(PT_getTreeSymbol(arg)) : PT_getTreeSymbol(arg),
         acceptArgs ? acceptArgs(PT_getTreeArgs(arg)) : PT_getTreeArgs(arg));
   }
   if (PT_isTreeChar(arg)) {

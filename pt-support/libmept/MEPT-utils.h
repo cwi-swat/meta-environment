@@ -105,4 +105,6 @@ ATbool PT_hasProductionBracketAttr(PT_Production prod);
 ATbool PT_hasProductionMemoAttr(PT_Production prod);
 ATbool PT_hasProductionTraverseAttr(PT_Production prod); 
 
+PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
+
 #endif /* _ME_PT_H */ 

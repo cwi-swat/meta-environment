@@ -8,11 +8,10 @@
                               <amb-cnt(int)>)],
 
   [Tree, appl, appl(<prod(Production)>,
-                    <args(Args)>
-                   )
-  ],
+                    <args(Args)>)],
 
-  [Tree, list, [<[args(Args)]>]],
+  [Tree, list, list(<symbol(Symbol)>,
+                    <args(Args)>)],
 
   [Tree, char, <character(int)>],
 
