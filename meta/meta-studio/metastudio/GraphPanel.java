@@ -12,6 +12,9 @@ import metastudio.graph.Node;
 import metastudio.graph.NodeList;
 import metastudio.graph.Point;
 import metastudio.graph.Polygon;
+import metastudio.graph.AttributeList;
+import metastudio.graph.Attribute;
+import metastudio.graph.Shape;
 
 public class GraphPanel
   extends JComponent
@@ -321,6 +324,8 @@ public class GraphPanel
     g.fillRect(x, y, w, h);
 
     g.setColor(node_border);
+
+    System.err.println(getNodeShape(node));
     g.drawRect(x, y, w, h);
 
     String name = node.getLabel();
@@ -399,6 +404,21 @@ public class GraphPanel
   }
 
   //}}}
+  private Shape getNodeShape(Node n) {
+    AttributeList list = n.getAttributes();
+
+    while (!list.isEmpty()) {
+      Attribute head = list.getHead();
+     
+      if (head.isShape()) {
+        return head.getShape();
+      }
+
+      list = list.getTail();
+    }
+  
+    return null;
+  }
 
   //{{{ public Node getNodeAt(int x, int y)
 
