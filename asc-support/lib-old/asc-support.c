@@ -283,7 +283,7 @@ funcptr lookup_func_given_sym(Symbol sym)
       return b->func;
     b = b->next_sym;
   }
-  ATerror("unknown symbol: %s\n", ATgetName(sym));
+  ATabort("unknown symbol: %s\n", ATgetName(sym));
   return NULL; /* silence the compiler, we never get here. */
 }
 /*}}}  */
@@ -341,7 +341,7 @@ Symbol lookup_sym(ATerm prod)
       return b->sym;
     b = b->next_prod;
   }
-  ATerror("Unknown function: %t\n", prod);
+  ATabort("Unknown function: %t\n", prod);
   return 0; /* silence the compiler, we never get here. */
 }
 
@@ -362,7 +362,7 @@ ATerm lookup_prod(Symbol sym)
       return b->prod;
     b = b->next_sym;
   }
-  ATerror("unknown symbol: %s\n", ATgetName(sym));
+  ATabort("unknown symbol: %s\n", ATgetName(sym));
   return (ATerm) NULL; /* silence the compiler, we never get here. */
 }
 /*}}}  */
