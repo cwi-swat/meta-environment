@@ -1,6 +1,6 @@
 module LabelChecker
 
-imports Booleans Messages ModuleOperations
+imports Booleans Sdf-Messages ModuleOperations
 
 exports
   context-free syntax

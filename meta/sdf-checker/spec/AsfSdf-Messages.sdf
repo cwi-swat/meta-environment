@@ -1,0 +1,10 @@
+module AsfSdf-Messages
+
+imports Sdf-Messages
+
+exports 
+  context-free syntax
+    kernel-syntax-construction(ModuleId, Literal)                    -> Message
+    not-supported-symbol(ModuleId, Symbol)                           -> Message
+    illegal-traversal-attribute(ModuleId, Attribute)                 -> Message
+

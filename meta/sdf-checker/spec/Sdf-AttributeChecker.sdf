@@ -1,10 +1,10 @@
-module AttributeChecker
+module Sdf-AttributeChecker
 
-imports Messages Booleans ModuleOperations
+imports Sdf-Messages Booleans ModuleOperations
 
 exports
   context-free syntax
-    check-attributes(Definition) -> Messages
+    check-sdf-attributes(Definition) -> Messages
 
 hiddens
   context-free syntax
@@ -14,15 +14,8 @@ hiddens
     check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
 
   context-free syntax
-    contains-accu({ATerm ","}*)  -> Bool
-    contains-trafo({ATerm ","}*) -> Bool
-
-  context-free syntax
     is-binary-definition(Production)       -> Bool
     is-bracket-definition(Production)      -> Bool
-    is-accu-definition(Production)         -> Bool
-    is-trafo-definition(Production)        -> Bool
-    is-accu-trafo-definition(Production)   -> Bool
 
 hiddens
   variables

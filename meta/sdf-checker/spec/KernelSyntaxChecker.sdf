@@ -1,6 +1,6 @@
 module KernelSyntaxChecker
 
-imports Messages ModuleOperations
+imports AsfSdf-Messages ModuleOperations
 
 exports
   context-free syntax

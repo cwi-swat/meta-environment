@@ -1,6 +1,6 @@
 module Sdf-Type-Environment
 
-imports Messages Booleans ImportOperations ConstructorSetOperations
+imports Sdf-Messages Booleans ImportOperations ConstructorSetOperations
 
 exports
   sorts Info-Msg-Tuple Module-Info-Entry Module-Info-Table

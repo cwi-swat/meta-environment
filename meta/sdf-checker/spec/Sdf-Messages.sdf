@@ -1,4 +1,4 @@
-module Messages
+module Sdf-Messages
 
 imports SymbolSetOperations ProductionSetOperations
 
@@ -11,10 +11,7 @@ exports
     sorts-without-production-definitions(ModuleId, SymbolsSet)       -> Message
     double-declared-symbol(ModuleId, Symbol)                         -> Message
     illegal-attribute(ModuleId, Production)                          -> Message
-    illegal-traversal-attribute(ModuleId, Attribute)                 -> Message
-    not-supported-symbol(ModuleId, Symbol)                           -> Message
     used-in-priorities-but-undefined(ModuleId, ProductionsSet)       -> Message
-    kernel-syntax-construction(ModuleId, Literal)                    -> Message
     inconsistent-rhs-in-priorities(ModuleId, Symbol, Production)     -> Message
     double-used-label(ModuleId, Literal, Production)                 -> Message
     constructor-has-already-been-used(ModuleId, Literal, Production) -> Message

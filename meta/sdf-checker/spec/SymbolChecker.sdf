@@ -1,6 +1,6 @@
 module SymbolChecker
 
-imports Booleans Messages ModuleOperations
+imports Booleans AsfSdf-Messages ModuleOperations
 
 exports
   context-free syntax
