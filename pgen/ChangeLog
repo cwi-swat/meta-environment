@@ -1,5 +1,10 @@
 $Id$
 
+2003/10/09 (markvdb@cwi.nl)
+ * Fixed the depricated error message.
+ * Regenerated due to change in literals.
+ * Added the strategy symbol again.
+
 2003/10/08 (markvdb@cwi.nl)
  * Adapted package dependencies.
  * Bumped into version 2.0.
