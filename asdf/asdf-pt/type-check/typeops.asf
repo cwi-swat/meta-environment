@@ -22,10 +22,6 @@ equations
    ===================================
    glb($TY1, $TY2, $SU, $EN1) = <$TY2, $EN1>
 
-[glb-3] glb($TY, notpresent, $SU, $EN1) = <$TY, $EN1>
-
-[glb-4] glb(notpresent, $TY, $SU, $EN1) = <$TY, $EN1>
-
 [default-glb-1] 
 
    <$TV, $EN2> := new-type-var($EN1),
@@ -49,10 +45,6 @@ equations
    ===================================
    lub($TY1, $TY2, $SU, $EN1) = <$TY1, $EN1>
 
-[lub-3] lub($TY, notpresent, $SU, $EN1) = <$TY, $EN1>
-
-[lub-4] lub(notpresent, $TY, $SU, $EN1) = <$TY, $EN1>
-
 [default-lub-1] 
 
    <$TV, $EN2> := new-type-var($EN1),
@@ -60,118 +52,122 @@ equations
    ===========================================================
    lub($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
 
-[concat-1] 
+[default-concat-1] 
 
    <$TV, $EN2> := new-type-var($EN1),
    $EN3 := add-constraint(concat-con($TY1, $TY2, $TV, $SU), $EN2)
    ==============================================================
    concat($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
 
+[concat-1] 
+
+   has-variable($TY1, no) == no,
+   has-variable($TY2, no) == no
+   ==============================================================
+   concat($TY1, $TY2, $SU, $EN1) = <$TY1+$TY2, $EN1>
+
 [bracket-1] ($TY) = $TY
 
 [st-1] st($TY, $TY, $SU, $EN) = empty-map
 
-[st-2] $STS := get-subtypes($EN),
+[default-st-1] st($TY1, $TY2, $SU, $EN) = st-def($TY1, $TY2, $SU, $EN)
+
+[st-def-2] 
+
+       $STS := get-subtypes($EN),
        [$AA1*, <$ATY2, $ATY1>, $AA2*] := $STS
        =======================================
-       st($ATY1, $ATY2, $SU, $EN) = empty-map
+       st-def($ATY1, $ATY2, $SU, $EN) = empty-map
 
-[st-3] $STS := get-subtypes($EN),
+[st-def-3] 
+
+       $STS := get-subtypes($EN),
        [$AA1*, <$ATY3, $ATY1>, $AA2*] := $STS,
        st($ATY3, $ATY2, $SU, $EN) == empty-map
        =======================================
-       st($ATY1, $ATY2, $SU, $EN) = empty-map
+       st-def($ATY1, $ATY2, $SU, $EN) = empty-map
 
-[st-4] st(empty, $TY, $SU, $EN) = empty-map
+[st-def-4] st-def(empty, $TY, $SU, $EN) = empty-map
 
-[st-5a] st(($AT1), ($AT2), $SU, $EN) = at-st($AT1, $AT2, $SU, $EN)
+[st-def-5a] st-def(($AT1), ($AT2), $SU, $EN) = at-st($AT1, $AT2, $SU, $EN)
 
-[st-5b] st((using $TY1), (using notpresent), $SU, $EN) = empty-map
+[st-def-5c] st-def((using $TY1), (using $TY2), $SU, $EN) = 
+                                               st($TY2, $TY1, $SU, $EN)
 
-[st-5c] st((using $TY1), (using $TY2), $SU, $EN) = st($TY2, $TY1, $SU, $EN)
+[st-def-5e] st-def((giving $TY1), (giving $TY2), $SU, $EN) = 
+					       st($TY1, $TY2, $SU, $EN)
 
-[st-5d] st((giving $TY1), (giving notpresent), $SU, $EN) = empty-map
+[st-def-5g] st-def((raising $TY1), (raising $TY2), $SU, $EN) = 
+					       st($TY1, $TY2, $SU, $EN)
 
-[st-5e] st((giving $TY1), (giving $TY2), $SU, $EN) = st($TY1, $TY2, $SU, $EN)
+[st-def-6] 
 
-[st-5f] st((raising $TY1), (raising notpresent), $SU, $EN) = empty-map
-
-[st-5g] st((raising $TY1), (raising $TY2), $SU, $EN) = st($TY1, $TY2, $SU, $EN)
-
-[st-6] $TV2 !:= $TY
+       $TV2 !:= $TY
        =============================================
-       st($TV1, $TY, $SU, $EN) = single($TV1, $TY, $SU)
+       st-def($TV1, $TY, $SU, $EN) = single($TV1, $TY, $SU)
 
-[st-7] $TV2 !:= $TY
+[st-def-7] 
+
+       $TV2 !:= $TY
        ============================================
-       st($TY, $TV1, $SU, $EN) = single($TY, $TV1, $SU)
+       st-def($TY, $TV1, $SU, $EN) = single($TY, $TV1, $SU)
 
-[st-8] $TV2 != $TV1,
+[st-def-8] 
+
+       $TV2 != $TV1,
        $M := single($TV1, $TV2, $SU)
        =================================================================
-       st($TV1, $TV2, $SU, $EN) = $M
+       st-def($TV1, $TV2, $SU, $EN) = $M
 
-[st-9] $M1 := st($TY1, $TY2, $SU, $EN), 
+[st-def-9] 
+
+       $M1 := st($TY1, $TY2, $SU, $EN), 
        $M2 := st(($TY1*), ($TY2*), $SU, $EN),
        $M3 := insert($M1, $M2)
        ====================================================
-       st(($TY1, $TY1*), ($TY2, $TY2*), $SU, $EN) = $M3
+       st-def(($TY1, $TY1*), ($TY2, $TY2*), $SU, $EN) = $M3
 
-[st-10a] $TV2 !:= $TY1,
+[st-def-10a] 
+
+         $TV2 !:= $TY1,
 	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
 	 $M := insert(st($TY1, $TY3, $SU, $EN), single($TV1, $TY4, $SU))
 	 ====================================================
-	 st($TY1+$TV1, ($TY2, $TY2*), $SU, $EN) = $M
+	 st-def($TY1+$TV1, ($TY2, $TY2*), $SU, $EN) = $M
 
-[st-10b] $TV2 !:= $TY1,
+[st-def-10b] 
+
+         $TV2 !:= $TY1,
 	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
 	 $M := insert(st($TY1, $TY4, $SU, $EN), single($TV1, $TY3, $SU))
 	 ====================================================
-	 st($TV1+$TY1, ($TY2, $TY2*), $SU, $EN) = $M
+	 st-def($TV1+$TY1, ($TY2, $TY2*), $SU, $EN) = $M
 
-[st-10c] $TV2 !:= $TY1,
+[st-def-10c] 
+
+         $TV2 !:= $TY1,
 	 <$TY3, $TY4> := split-left-tuple(($TY2, $TY2*), $TY1),
 	 $M := insert(st($TY3, $TY1, $SU, $EN), single($TY4, $TV1, $SU))
 	 ====================================================
-	 st(($TY2, $TY2*), $TY1+$TV1, $SU, $EN) = $M
+	 st-def(($TY2, $TY2*), $TY1+$TV1, $SU, $EN) = $M
 
-[st-10d] $TV2 !:= $TY1,
+[st-def-10d] 
+
+         $TV2 !:= $TY1,
 	 <$TY3, $TY4> := split-right-tuple(($TY2, $TY2*), $TY1),
 	 $M := insert(st($TY4, $TY1, $SU, $EN), single($TY3, $TV1, $SU))
 	 ====================================================
-	 st(($TY2, $TY2*), $TV1+$TY1, $SU, $EN) = $M
+	 st-def(($TY2, $TY2*), $TV1+$TY1, $SU, $EN) = $M
 
-[st-12] $TY != data
+[st-def-12] 
+
+        $TY != data
 	=================================
-	st($TY, datum, $SU, $EN) = empty-map
+	st-def($TY, datum, $SU, $EN) = empty-map
 
-[st-13] st($TY, data, $SU, $EN) = empty-map
+[st-def-13] st-def($TY, data, $SU, $EN) = empty-map
 
-[default-st-1] st($TY1, $TY2, $SU, $EN) = error($TY1, $TY2, $SU)
-
-[lowest-map-1] 
-
-   vmap($VT*) := st($TY1, $TY2, $SU, $EN)
-   =====================================================
-   lowest-type-map($TY1, $TY2, $SU, $EN) = <$TY1, vmap($VT*)>
-
-[lowest-map-2] 
-
-   vmap($VT*) := st($TY2, $TY1, $SU, $EN)
-   =====================================================
-   lowest-type-map($TY1, $TY2, $SU, $EN) = <$TY2, vmap($VT*)>
-
-[highest-map-1] 
-
-   vmap($VT*) := st($TY1, $TY2, $SU, $EN)
-   =====================================================
-   highest-type-map($TY1, $TY2, $SU, $EN) = <$TY2, vmap($VT*)>
-
-[highest-map-2] 
-
-   vmap($VT*) := st($TY2, $TY1, $SU, $EN)
-   =====================================================
-   highest-type-map($TY1, $TY2, $SU, $EN) = <$TY1, vmap($VT*)>
+[default-st-def-1] st-def($TY1, $TY2, $SU, $EN) = error($TY1, $TY2, $SU)
 
 
 [plus-1] ($TY1*) + ($TY2*) = ($TY1*, $TY2*)

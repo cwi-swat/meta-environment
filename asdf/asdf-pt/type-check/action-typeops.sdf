@@ -47,13 +47,19 @@ context-free syntax
 
   at-st-def(ActionType, ActionType, Subject, Environment)	-> VariableMap
 
+  transform-action-type(ActionType)	  -> ActionType
+
+  transform-type(Type)			  -> Type
+
+  transform-has(ActionType, SingleActionType)	-> Type
+
 hiddens variables
 
   "$ATY"[0-9]?		-> AtomicType
-  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]*		-> Type
   "$TY"[0-9]?"*"	-> { Type "," }*
   "$TV"[0-9]?		-> TypeVariable
-  "$AT"[0-9]?		-> ActionType
+  "$AT"[0-9]*		-> ActionType
   "$SAT"[0-9]?		-> SingleActionType
   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
   "$ATV"[0-9]?		-> ActionTypeVariable
@@ -63,3 +69,4 @@ hiddens variables
   "$M"[0-9]?		-> VariableMap
   "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
   "$SU"[0-9]?		-> Subject
+  "$AN"[0-9]?		-> Answer

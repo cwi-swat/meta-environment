@@ -7,10 +7,6 @@ imports
 
 exports
 
-context-free start-symbols
-
-  <VariableMap, Integer> 
-
 sorts
 
   VariableMap Constraint Type TypedAction Variable
@@ -23,9 +19,9 @@ context-free syntax
 				-> <VariableMap, List[[Constraint]]>
   solve-constraint(Constraint, Environment)    -> VariableMap {memo}
 
-  transitive(VariableMap)      -> VariableMap
+  transitive(VariableMap)      -> <VariableMap, Boolean>
 
-  subtype(VariableMap, Environment)      -> VariableMap
+  subtype(VariableMap, Environment)      -> <VariableMap, Boolean>
 
   handle-error(VariableMap, VariableMap, Constraint, 
 	       List[[Constraint]])
@@ -51,3 +47,5 @@ hiddens variables
   "$TV"[0-9]?		-> TypeVariable
   "$VR"[0-9]?		-> (TypeVariable | "(" ActionTypeVariable ")")
   "$SU"[0-9]?		-> Subject
+  "$AN"[0-9]?		-> Answer
+  "$B"[0-9]?		-> Boolean

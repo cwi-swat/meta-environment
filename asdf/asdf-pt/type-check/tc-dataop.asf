@@ -50,7 +50,7 @@ equations
 
 [tcd-11] [$DT1*, <$DO, $TY>, $DT2*] := get-data-constants($EN)
 	 ==============================================================
-	 typecheck-dataop($DO, $EN) = <giving $TY & raising empty & 
+	 typecheck-dataop($DO, $EN) = <using data & giving $TY & raising empty & 
 					      std-at, $EN>
 
 [tcdo-1] [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN)
@@ -122,7 +122,7 @@ equations
       prefixdataop($CH+) := $DO,
       $SC := "Bad argument for " || strcon(""" $CH+ """)
       ===============================================================
-      typecheck-dataop($DO, $EN) = <error("Type error", 
+      typecheck-dataop($DO, $EN) = <error("Type check report", 
 				    [localized($SC, get-location($DO))]), $EN>
 
 [default-tcdo] 
@@ -130,5 +130,5 @@ equations
       infixdataop($CH+) := $DO,
       $SC := "Bad argument for " || strcon(""" $CH+ """)
       ===============================================================
-      typecheck-dataop($DO, $EN) = <error("Type error", 
+      typecheck-dataop($DO, $EN) = <error("Type check report", 
                                  [localized($SC, get-location($DO))]), $EN>

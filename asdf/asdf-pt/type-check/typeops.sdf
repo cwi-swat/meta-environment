@@ -25,11 +25,7 @@ context-free syntax
 
   st(Type, Type, Subject, Environment)		-> VariableMap
 
-  highest-type(Type, Type, Environment)	-> Type
-  lowest-type(Type, Type, Environment)	-> Type
-
-  highest-type-map(Type, Type, Subject, Environment)	-> <Type, VariableMap>
-  lowest-type-map(Type, Type, Subject, Environment)	-> <Type, VariableMap>
+  st-def(Type, Type, Subject, Environment)		-> VariableMap
 
   Type "+" Type				-> Type
 

@@ -41,10 +41,6 @@ context-free syntax
   rm-raising(ActionType)	-> ActionType 
   rm-ugr(ActionType)		-> ActionType 
 
-lexical syntax
-
-  "notpresent"   -> Type
-
 context-free restrictions
 
   AtomicType -/- [a-z\-]  

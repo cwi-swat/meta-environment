@@ -1,2 +1,10 @@
+equations
 
+[get-using-2] 
+    get-using(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)) = $TY1
 
+[get-giving-2] 
+   get-giving(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)) = $TY2
+
+[get-raising-2] 
+  get-raising(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)) = $TY3

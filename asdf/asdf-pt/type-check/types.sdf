@@ -1,9 +1,10 @@
 module type-check/types
 
-imports type-check/pos-annotate
-imports basic/Whitespace
 imports 
 
+  type-check/pos-annotate
+  type-check/types/asdf-types
+  basic/Whitespace
   basic/Errors
   basic/Integers
 
@@ -22,6 +23,8 @@ context-free syntax
   "std-at"	     -> {SingleActionType "&"}*
 
   ActionType "\\" SingleActionType	-> ActionType
+
+  act(Type, Type, Type, Type, Type, Type, Type, Type, Type)  -> ActionType
 
 %% Type variables
 

@@ -1,15 +1,15 @@
 equations
 
 [solve-1]
-	  $M2 := transitive($M1),
-	  vmap($VT1*) := subtype($M2, $EN),
-	  length($M1) < length(vmap($VT1*)) == true 
+	  <$M2, $B1> := transitive($M1),
+	  <vmap($VT1*), $B2> := subtype($M2, $EN),
+	  $B1 | $B2 == true
 	  =========================================
 	  solve($M1, $EN) = solve(vmap($VT1*), $EN)
 
-[solve-1]
-	  $M2 := transitive($M1),
-	  $EM := subtype($M2, $EN)
+[solve-2]
+	  <$M2, $B> := transitive($M1),
+	  <$EM, false> := subtype($M2, $EN)
 	  =========================================
 	  solve($M1, $EN) = $EM
 
@@ -68,6 +68,14 @@ equations
 	============================================================
 	solve-constraint(infallible-con($AT1, infallible, $SU), $EN) = 
 								vmap($VT*) 
+[infallible-con-2]         
+
+	$SAT != infallible,
+	has-variable(($AT), no) == no,
+	has-variable(($SAT), no) == no,
+	at-contains(infallible, $AT) == no
+	============================================================
+	solve-constraint(infallible-con($AT, $SAT, $SU), $EN) = empty-map
 
 [default-infallible-con-1]         
 
@@ -90,6 +98,15 @@ equations
 	vmap($VT*) := at-has-property($AT1, closed, $SU)
 	============================================================
 	solve-constraint(closed-con($AT1, closed, $SU), $EN) = vmap($VT*)
+
+[closed-con-2]         
+
+	$SAT != closed,
+	has-variable(($AT), no) == no,
+	has-variable(($SAT), no) == no,
+	at-contains(closed, $AT) == no
+	============================================================
+	solve-constraint(closed-con($AT, $SAT, $SU), $EN) = empty-map
 
 [default-closed-con-1]         
 
@@ -170,57 +187,84 @@ equations
 
 [transitive-1] 
 
-	vmap($VT1*, <$TY1, $TV, $SU1>, $VT2*, <$TV, $TY2, $SU2>, $VT3*) := $M,
+	vmap($VT1*, <$TY1, $TV, $SU1>, $VT2*, <$TV, $TY2, $SU2>, $VT3*) := $M1,
 	$TY1 != $TY2,
-	no == contains(<$TY1, $TY2>, $M)
+	no == contains(<$TY1, $TY2>, $M1),
+	<$M2, $B> := transitive(insert(single($TY1, $TY2, $SU1), $M1))
 	==========================================================
-        transitive($M) = transitive(insert(single($TY1, $TY2, $SU1), $M))
+        transitive($M1) = <$M2, true>
 
 [transitive-2] 
 
-	vmap($VT1*, <$TV, $TY2, $SU1>, $VT2*, <$TY1, $TV, $SU2>, $VT3*) := $M,
+	vmap($VT1*, <$TV, $TY2, $SU1>, $VT2*, <$TY1, $TV, $SU2>, $VT3*) := $M1,
 	$TY1 != $TY2,
-	no == contains(<$TY1, $TY2>, $M)
+	no == contains(<$TY1, $TY2>, $M1),
+	<$M2, $B> := transitive(insert(single($TY1, $TY2, $SU1), $M1))
 	==========================================================
-        transitive($M) = transitive(insert(single($TY1, $TY2, $SU1), $M))
+        transitive($M1) = <$M2, true>
 
 [transitive-3] 
 
 	vmap($VT1*, <$TY1, ($ATV), $SU1>, $VT2*, 
-		    <($ATV), $TY2, $SU2>, $VT3*) := $M,
+		    <($ATV), $TY2, $SU2>, $VT3*) := $M1,
 	$TY1 != $TY2,
-	no == contains(<$TY1, $TY2>, $M)
+	no == contains(<$TY1, $TY2>, $M1),
+	<$M2, $B> := transitive(insert(single($TY1, $TY2, $SU1), $M1))
 	==========================================================
-        transitive($M) = transitive(insert(single($TY1, $TY2, $SU1), $M))
+        transitive($M1) = <$M2, true> 
 
 [transitive-4] 
 
 	vmap($VT1*, <($ATV), $TY2, $SU1>, $VT2*, 
-		    <$TY1, ($ATV), $SU2>, $VT3*) := $M,
+		    <$TY1, ($ATV), $SU2>, $VT3*) := $M1,
 	$TY1 != $TY2,
-	no == contains(<$TY1, $TY2>, $M)
+	no == contains(<$TY1, $TY2>, $M1),
+	<$M2, $B> := transitive(insert(single($TY1, $TY2, $SU1), $M1))
 	==========================================================
-        transitive($M) = transitive(insert(single($TY1, $TY2, $SU1), $M))
+        transitive($M1) = <$M2, $B>
 
-[default-transitive-1] transitive($M) = $M
+[default-transitive-1] transitive($M) = <$M, false>
 	
 [subtype-1] 
 
 	vmap(<$TY1, $TY2, $SU>, $VT1*) := $M,
 	$EM := st($TY1, $TY2, $SU, $EN)
 	================================
-	subtype($M, $EN) = $EM
+	subtype($M, $EN) = <$EM, false>
 
 [subtype-2] 
 
 	vmap(<$TY1, $TY2, $SU>, $VT1*) := $M1,
-	$M2 := subtype(vmap($VT1*), $EN),
-	$M3 := st($TY1, $TY2, $SU, $EN),
+	$M2 := st($TY1, $TY2, $SU, $EN),
+	single($TY1, $TY2, $SU) != $M2,
+	$M2 != empty-map,
+	<$M3, $B> := subtype(vmap($VT1*), $EN),
+	$M4 := insert($M2, $M3)
+	=================================================================
+	subtype($M1, $EN) = <$M4, true>
+
+[subtype-3] 
+
+	vmap(<$TY1, $TY2, $SU>, $VT1*) := $M1,
+	$M2 := st($TY1, $TY2, $SU, $EN),
+	single($TY1, $TY2, $SU) == $M2,
+	$M2 != empty-map,
+	<$M3, $B> := subtype(vmap($VT1*), $EN),
+	$M4 := insert($M2, $M3)
+	=================================================================
+	subtype($M1, $EN) = <$M4, $B>
+
+[subtype-4] 
+
+	vmap(<$TY1, $TY2, $SU>, $VT1*) := $M1,
+	$M2 := st($TY1, $TY2, $SU, $EN),
+	$M2 == empty-map,
+	<$M3, $B> := subtype(vmap($VT1*), $EN),
 	$M4 := insert(single($TY1, $TY2, $SU), insert($M2, $M3))
 	=================================================================
-	subtype($M1, $EN) = $M4
+	subtype($M1, $EN) = <$M4, $B>
 
-[subtype-3] subtype(vmap(), $EN) = vmap()
+[subtype-5] subtype(vmap(), $EN) = <vmap(), false>
 
 [check-last-constraints-1] 
 

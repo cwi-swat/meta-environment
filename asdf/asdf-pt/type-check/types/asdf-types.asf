@@ -2,15 +2,15 @@ equations
 
 [get-using-1] get-using($SAT1* & using $TY & $SAT2*) = $TY
 
-[default-get-using-1] get-using($AT) = notpresent 
+[default-get-using-1] get-using($AT) = empty 
 
 [get-giving-1] get-giving($SAT1* & giving $TY & $SAT2*) = $TY
 
-[default-get-giving-1] get-giving($AT) = notpresent
+[default-get-giving-1] get-giving($AT) = data
 
 [get-raising-1] get-raising($SAT1* & raising $TY & $SAT2*) = $TY
 
-[default-get-raising-1] get-raising($AT) = notpresent 
+[default-get-raising-1] get-raising($AT) = data 
 
 [rm-using-1] rm-using($SAT1* & using $TY & $SAT2*) = $SAT1* & $SAT2*
 

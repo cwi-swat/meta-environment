@@ -9,8 +9,8 @@ equations
 
    <$TV, $EN2> := new-type-var($EN1)
    ======================================================================
-   typecheck-action(copy, $EN1) = <using $TV & giving $TV & 
-				   raising empty & std-at, $EN2>
+   typecheck-action(copy, $EN1) = <transform-action-type(using $TV & 
+				   giving $TV & raising empty & std-at), $EN2>
 
 [tca-then] 
 
@@ -20,15 +20,13 @@ equations
    $TY1 := get-giving($AT1),
    $EN4 := not-equal($TY1, empty, $SU, $EN3),
    $TY2 := get-using($AT2),
-   $EN5 := subtype-of((giving $TY1), (giving $TY2), $SU, $EN4),
+   $EN5 := subtype-of($TY1, $TY2, $SU, $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $SU, $EN5),
-   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6)
+   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6),
+   $AT4 := set-using(set-giving(set-raising($AT3, $TY3), 
+				get-giving($AT2)), get-using($AT1))
    ===================================================================
-   typecheck-action($A1 then $A2, $EN1) = <using get-using($AT1) &
-				           giving get-giving($AT2) &
-				           raising $TY3 & 
-				           $AT3,
-				           $EN7>
+   typecheck-action($A1 then $A2, $EN1) = <$AT4, $EN7>
 
 [tca-and-then] 
 
@@ -54,13 +52,13 @@ equations
 
    <$AT1, $EN2> := typecheck-data($D, $EN1)
    =========================================================
-   typecheck-action(result $D, $EN1) = <$AT1 & raising empty & std-at, $EN2> 
+   typecheck-action(result $D, $EN1) = <using data & $AT1 & raising empty & std-at, $EN2> 
 
 [default-result] 
 
    result $D := $A
    =====================================================
-   typecheck-action($A, $EN) = <error("Type error", 
+   typecheck-action($A, $EN) = <error("Type check report", 
 		   [localized("Type error at result", get-location($A))]), $EN>
 
 [tca-give] 
@@ -74,6 +72,30 @@ equations
 [tca-indivisibly] 
  
    typecheck-action(indivisibly $A, $EN) = typecheck-action($A, $EN) 
+
+[tca-choose-nat]
+
+   typecheck-action(choose-nat, $EN) = <using data & giving integer & std-at, $EN>
+
+[tca-unfolding] 
+
+   <$TV1, $EN2> := new-type-var($EN1),
+   <$TV2, $EN3> := new-type-var($EN2),
+   <$TV3, $EN4> := new-type-var($EN3),
+   <$ATV, $EN5> := new-action-type-var($EN4),
+   $AT2 := using $TV1 & giving $TV2 & raising $TV3 & $ATV,
+   $EN6 := set-unfold-type($EN5, $AT2)
+   =================================================================
+   typecheck-action(unfolding $A, $EN1) = typecheck-action($A, $EN6)
+
+[tca-unfold] 
+
+   $A == unfold,
+   $SU := localized("Problem at unfold", get-location($A)),
+   $AT := get-unfold-type($EN1),
+   $EN2 := not-in(terminates, $AT, $SU, $EN1)
+   =============================================================
+   typecheck-action($A, $EN1) = <$AT, $EN2>
 
 [tca-throw] 
 
@@ -90,7 +112,7 @@ equations
    $TY1 := get-raising($AT1),
    $EN4 := not-equal($TY1, empty, $SU, $EN3),
    $TY2 := get-using($AT2),
-   $EN5 := subtype-of((giving $TY1), (giving $TY2), $SU, $EN4),
+   $EN5 := subtype-of($TY1, $TY2, $SU, $EN4),
    <$TY3, $EN6> := lub(get-giving($AT1), get-giving($AT2), $SU, $EN5),
    <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6)
    ===================================================================
@@ -100,7 +122,8 @@ equations
 				            $AT3, 
 				            $EN7>
 
-[tca-fail] typecheck-action(fail, $EN) = <std-at \ infallible, $EN>
+[tca-fail] typecheck-action(fail, $EN) = 
+	<using data & giving empty & raising empty & std-at \ infallible, $EN>
 
 [tca-else] 
 
@@ -120,25 +143,6 @@ equations
 				           $AT3, 
 				           $EN9>
 
-[tca-choose-nat]
-
-   typecheck-action(choose-nat, $EN) = <giving integer & std-at, $EN>
-
-[tca-unfolding] 
-
-   <$TV1, $EN2> := new-type-var($EN1),
-   <$TV2, $EN3> := new-type-var($EN2),
-   <$TV3, $EN4> := new-type-var($EN3),
-   <$ATV, $EN5> := new-action-type-var($EN4),
-   $AT2 := using $TV1 & giving $TV2 & raising $TV3 & $ATV,
-   $EN6 := set-unfold-type($EN5, $AT2)
-   =================================================================
-   typecheck-action(unfolding $A, $EN1) = typecheck-action($A, $EN6)
-
-[tca-unfold] 
-
-   typecheck-action(unfold, $EN) = <get-unfold-type($EN), $EN>
-
 [tca-recursively] 
 
    $SU := localized("Problem at recursively", get-location($A)),
@@ -150,7 +154,7 @@ equations
 [tca-copy-bindings] 
 
    typecheck-action(copy-bindings, $EN) = 
-				   <giving bindings & std-at \ closed, $EN>
+  		     <using data & giving bindings & std-at \ closed, $EN>
 
 [tca-scope-1] 
 
@@ -168,27 +172,6 @@ equations
 					       raising $TY2 & 
 					       $AT3, 
 					       $EN8>
-
-[tca-enact] 	  
-
-     enact == $A,
-     $SU := localized("Problem at enact", get-location($A)),
-     <$ATV1, $EN2> := new-action-type-var($EN1),
-     <$ATV2, $EN3> := new-action-type-var($EN2),
-     <$TV1, $EN4> := new-type-var($EN3),
-     <$TV2, $EN5> := new-type-var($EN4),
-     $EN6 := subtype-of(($ATV1 \ terminates), ($ATV2), $SU, $EN5)
-     ========================================================================
-     typecheck-action($A, $EN1) = 
-	<using (using () & giving $TV1 & raising $TV2 & $ATV1) & 
-	 giving $TV1 & raising $TV2& $ATV2, $EN6>
-
-[default-enact] 
-
-    $A == enact
-    ====================================================================
-    typecheck-action($A, $EN) = <error("Type error", 
-   [localized("Enact expects an action", get-location($A))]), $EN>
 
 [tca-apply] 	  
 
@@ -210,7 +193,7 @@ equations
 
     $A == apply
     =================================================================
-    typecheck-action($A, $EN) = <error("Type error", 
+    typecheck-action($A, $EN) = <error("Type check report", 
        [localized("Apply expects an action and data", get-location($A))]), $EN>
 
 [tca-close]
@@ -218,13 +201,13 @@ equations
     <$ATV, $EN2> := new-action-type-var($EN1)
     ===================================================================
     typecheck-action(close, $EN1) = 
-		   <using ($ATV) & giving ($ATV & closed) & std-at, $EN2>
+		   <using ($ATV) & giving ($ATV & closed) & raising empty & std-at, $EN2>
 
 [default-tca-close]
 	
     $A == close
     ===================================================================
-    typecheck-action($A, $EN) = <error("Type error", 
+    typecheck-action($A, $EN) = <error("Type check report", 
        [localized("Close expects an action", get-location($A))]), $EN>
 
 
@@ -237,7 +220,7 @@ equations
 
     $A == create
     ====================================================================
-    typecheck-action($A, $EN) = <error("Type error", 
+    typecheck-action($A, $EN) = <error("Type check report", 
         [localized("Create expects a storable", get-location($A))]), $EN>
 
 [tca-update] 
@@ -249,7 +232,7 @@ equations
 
     $A == update
     ============================================================
-    typecheck-action($A, $EN) = <error("Type error", 
+    typecheck-action($A, $EN) = <error("Type check report", 
    [localized("Update expects a cell and a storable", get-location($A))]), $EN>
 
 [tca-inspect] 
@@ -261,7 +244,7 @@ equations
 
     $A == inspect
     ===========================================================
-    typecheck-action($A, $EN) = <error("Type error", 
+    typecheck-action($A, $EN) = <error("Type check report", 
         [localized("Inspect expects a cell", get-location($A))]), $EN>
 
 
@@ -271,6 +254,6 @@ equations
     infixaction($CH+) := $IA,
     $SC := "Type error at " || strcon(""" $CH+ """)
     ============================================================
-    typecheck-action($A1 $IA $A2, $EN) = <error("Type error", 
+    typecheck-action($A1 $IA $A2, $EN) = <error("Type check report", 
         [localized($SC, get-location($IA))]), $EN>
 

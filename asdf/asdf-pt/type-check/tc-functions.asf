@@ -45,7 +45,7 @@ equations
       $M2 := solve($M1, $EN2),
       error($TY1, $TY2, $SU2) := $M2
       ===================================================
-      typecheck-definitions(defs($FD), $EN) = error("Type error", [$SU2])
+      typecheck-definitions(defs($FD), $EN) = error("Type check report", [$SU2])
 
 [tcd-4] 	
 
@@ -61,7 +61,7 @@ equations
       [] != $LC3
       ===================================================
       typecheck-definitions(defs($FD), $EN) = 
-		error("Type error", [get-subjects($LC3,)])
+		error("Type check report", [get-subjects($LC3,)])
 
 [tcd-5] 	
 
@@ -77,7 +77,7 @@ equations
       $LC3 := check-last-constraints($LC2, vmap($VT*)),
       [] == $LC3
       ===================================================
-      typecheck-definitions(defs($FD), $EN) = error("Type error", 
+      typecheck-definitions(defs($FD), $EN) = error("Type check report", 
 	     [subject("Type check OK")])
 
 
