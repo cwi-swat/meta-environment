@@ -143,7 +143,7 @@ if ( check_sym ( atmp01 , ef9sym ) ) {
 if ( check_sym ( tmp [ 1 ] , lf5sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-( tmp [ 3 ] = ( * ef3 ) ( ( * ef4 ) ( ) , ( * ef10 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) , arg1 ) ) ;
+( tmp [ 3 ] = ( * ef3 ) ( ( * ef4 ) ( ) , ( * ef10 ) ( make_nf1 ( ef8sym , lf4 ( make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef2sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;

@@ -106,7 +106,7 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
-( tmp [ 0 ] = ( * ef6 ) ( ( * ef5 ) ( lf3 ( make_list ( atmp0000 ) ) ) , ( * ef2 ) ( lf2 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
+( tmp [ 0 ] = ( * ef6 ) ( make_nf1 ( ef5sym , lf3 ( make_list ( atmp0000 ) ) ) , ( * ef2 ) ( lf2 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
@@ -120,7 +120,7 @@ if ( check_sym ( tmp [ 5 ] , ef5sym ) ) {
 if ( check_sym ( tmp [ 6 ] , lf3sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-FUNC_EXIT ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) , ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( tmp [ 7 ] ) ) ) ) , tmp [ 3 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) , ( * ef4 ) ( make_nf1 ( ef5sym , lf3 ( make_list ( tmp [ 7 ] ) ) ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }

@@ -85,7 +85,7 @@ ATerm lf_AUX_AsFix2muASF11_1 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 20 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2muASF11_1sym , ATmakeAppl ( lf_AUX_AsFix2muASF11_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , ( * ef3 ) ( lf3 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
 }
 if ( ! term_equal ( arg0 , ( * ef1 ) ( ) ) ) {
 ( tmp [ 0 ] = ( * ef4 ) ( arg0 ) ) ;
@@ -112,13 +112,13 @@ if ( check_sym ( tmp [ 11 ] , ef3sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( check_sym ( tmp [ 14 ] , lf3sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-( tmp [ 16 ] = ( * ef7 ) ( ( * ef8 ) ( lf2 ( make_list ( tmp [ 6 ] ) ) ) , ( * ef8 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) ) ) ;
+( tmp [ 16 ] = ( * ef7 ) ( make_nf1 ( ef8sym , lf2 ( make_list ( tmp [ 6 ] ) ) ) , make_nf1 ( ef8sym , lf2 ( make_list ( tmp [ 13 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 16 ] , ef8sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
 if ( check_sym ( tmp [ 17 ] , lf2sym ) ) {
 ( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
 ( tmp [ 19 ] = ( * ef9 ) ( lf3 ( make_list ( tmp [ 8 ] ) ) , lf3 ( make_list ( tmp [ 15 ] ) ) ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 18 ] ) ) , ( * ef3 ) ( lf3 ( make_list ( tmp [ 19 ] ) ) ) , tmp [ 12 ] ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 18 ] ) ) , make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 19 ] ) ) ) , tmp [ 12 ] ) ) ;
 }
 }
 }

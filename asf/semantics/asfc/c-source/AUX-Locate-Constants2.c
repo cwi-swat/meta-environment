@@ -137,7 +137,7 @@ ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_Locate_Constants2_1sym , ATmakeAppl ( lf_AUX_Locate_Constants2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 ( tmp [ 0 ] = ( * ef11 ) ( arg0 ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , ( * ef8 ) ( lf4 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( arg1 , ( * ef10 ) ( ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( ( * ef4 ) ( make_nf1 ( ef5sym , lf3 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , make_nf1 ( ef8sym , lf4 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( arg1 , ( * ef10 ) ( ) ) ) ) ) ) ) ) ;
 }
 if ( check_sym ( arg1 , ef2sym ) ) {
 {
@@ -150,7 +150,7 @@ if ( check_sym ( atmp100 , lf2sym ) ) {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( not_empty_list ( atmp1000 ) ) {
 ( tmp [ 0 ] = ( * ef11 ) ( arg0 ) ) ;
-( tmp [ 1 ] = ( * ef13 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp1000 ) ) ) , ( * ef14 ) ( lf5 ( make_list ( null ( ) ) ) , ( * ef15 ) ( ( * ef16 ) ( lf6 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+( tmp [ 1 ] = ( * ef13 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( atmp1000 ) ) ) , ( * ef14 ) ( lf5 ( make_list ( null ( ) ) ) , ( * ef15 ) ( ( * ef16 ) ( lf6 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef17sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
@@ -170,7 +170,7 @@ if ( check_sym ( tmp [ 9 ] , ef3sym ) ) {
 if ( check_sym ( tmp [ 10 ] , lf2sym ) ) {
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-FUNC_EXIT ( ( * ef12 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 11 ] ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef12 ) ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 11 ] ) ) ) ) , ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ;
 }
 }
 }

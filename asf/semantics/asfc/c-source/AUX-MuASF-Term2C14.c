@@ -115,7 +115,7 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 103 ) ) ) {
 ( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( ( * ef7 ) ( arg1 , lf_AUX_MuASF_Term2C14_1 ( make_list ( atmp20 ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( ( ATerm ) ATmakeList ( 7 , char_table [ 117 ] , char_table [ 110 ] , char_table [ 113 ] , char_table [ 117 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 101 ] ) ) ) ) , ( * ef6 ) ( lf4 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef5 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( ( ATerm ) ATmakeList ( 7 , char_table [ 117 ] , char_table [ 110 ] , char_table [ 113 ] , char_table [ 117 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 101 ] ) ) ) ) , make_nf1 ( ef6sym , lf4 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

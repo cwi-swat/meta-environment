@@ -84,8 +84,8 @@ ef8 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
-ef10 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"prefix-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
-ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"prefix-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef10 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"prefix-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))" ) ) ;
+ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"prefix-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -111,7 +111,7 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
-if ( term_equal ( ( * ef6 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 101 ] , char_table [ 116 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef6 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 115 ] , char_table [ 101 ] , char_table [ 116 ] , char_table [ 34 ] ) ) ) ) ) , ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( atmp0000 ) ) ) , atmp01 , atmp02 ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef8 ) ( ) ) ) ) ) {
 if ( check_sym ( atmp01 , ef9sym ) ) {
 ( tmp [ 0 ] = arg_0 ( atmp01 ) ) ;
 ( tmp [ 1 ] = arg_1 ( atmp01 ) ) ;

@@ -29,12 +29,12 @@ static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_MuASF_Equations_Ops19 ( ) {
-lf_AUX_MuASF_Equations_Ops19_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"remove-trans-from-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
+lf_AUX_MuASF_Equations_Ops19_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"remove-trans-from-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Equations_Ops19_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"remove-trans-from-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Equations_Ops19_1 , lf_AUX_MuASF_Equations_Ops19_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"remove-trans-from-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))" ) , lf_AUX_MuASF_Equations_Ops19_1 , lf_AUX_MuASF_Equations_Ops19_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_MuASF_Equations_Ops19 ( ) {
@@ -69,33 +69,24 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 ( tmp [ 5 ] = list_last ( tmp [ 3 ] ) ) ;
 if ( term_equal ( tmp [ 5 ] , make_char ( 34 ) ) ) {
 ( tmp [ 6 ] = list_prefix ( tmp [ 4 ] ) ) ;
-if ( not_empty_list ( tmp [ 6 ] ) ) {
+{
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 125 ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 6 ] ) , ( ATerm ) ATmakeList ( 2 , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-if ( term_equal ( tmp [ 5 ] , make_char ( 115 ) ) ) {
-( tmp [ 6 ] = list_prefix ( tmp [ 4 ] ) ) ;
-if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 115 ) ) ) {
 ( tmp [ 7 ] = list_prefix ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 6 ] ) , make_char ( 97 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 6 ] ) , make_char ( 110 ) ) ) {
 ( tmp [ 8 ] = list_prefix ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 7 ] ) , make_char ( 114 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 7 ] ) , make_char ( 97 ) ) ) {
 ( tmp [ 9 ] = list_prefix ( tmp [ 8 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 8 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 8 ] ) , make_char ( 114 ) ) ) {
 ( tmp [ 10 ] = list_prefix ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 9 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 9 ] ) , make_char ( 45 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 9 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 11 ] = list_prefix ( tmp [ 10 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 10 ] ) , make_char ( 34 ) ) ) {
+if ( term_equal ( list_last ( tmp [ 10 ] ) , make_char ( 45 ) ) ) {
 ( tmp [ 12 ] = list_prefix ( tmp [ 11 ] ) ) ;
 if ( not_empty_list ( tmp [ 12 ] ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
@@ -112,6 +103,14 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_ch
 }
 }
 }
+}
+}
+}
+}
+if ( not_empty_list ( tmp [ 6 ] ) ) {
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 125 ) ) ) {
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 6 ] ) , ( ATerm ) ATmakeList ( 2 , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }

@@ -76,7 +76,7 @@ if ( check_sym ( atmp100 , lf2sym ) ) {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp1000 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( cons ( make_list ( atmp0000 ) , make_list ( atmp1000 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( cons ( make_list ( atmp0000 ) , make_list ( atmp1000 ) ) ) ) ) ) ;
 }
 }
 }

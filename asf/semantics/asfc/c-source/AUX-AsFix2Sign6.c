@@ -96,7 +96,7 @@ ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2Sign6_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign6_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 ( tmp [ 0 ] = ( * ef3 ) ( arg1 ) ) ;
 if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) , arg2 , arg3 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) , arg2 , arg3 ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 ( tmp [ 1 ] = ( * ef7 ) ( arg1 , lf3 ( make_list ( ( * ef8 ) ( ) ) ) ) ) ;

@@ -88,7 +88,7 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( check_sym ( tmp [ 2 ] , ef4sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 ( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
-( tmp [ 5 ] = lf_AUX_Improve_C_code4_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , arg1 , arg2 ) ) ;
+( tmp [ 5 ] = lf_AUX_Improve_C_code4_1 ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , arg1 , arg2 ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef4sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ) ;
@@ -99,7 +99,7 @@ if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 3 ] , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 4 ] , tmp [ 7 ] ) ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 3 ] , ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( tmp [ 10 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 4 ] , tmp [ 7 ] ) ) ) ;
 }
 }
 }

@@ -69,7 +69,7 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_Make_Left_Linear3_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_Make_Left_Linear3_1sym , ATmakeAppl ( lf_AUX_Make_Left_Linear3_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
@@ -84,7 +84,7 @@ if ( not_empty_list ( atmp0000 ) ) {
 FUNC_EXIT ( ( * ef4 ) ( lf2 ( make_list ( atmp0000 ) ) , ( * ef5 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

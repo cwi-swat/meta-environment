@@ -118,7 +118,7 @@ if ( check_sym ( tmp [ 9 ] , lf5sym ) ) {
 if ( ! not_empty_list ( tmp [ 4 ] ) ) {
 if ( not_empty_list ( tmp [ 7 ] ) ) {
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , ( * ef4 ) ( ( * ef5 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) , ( * ef6 ) ( ( * ef7 ) ( lf5 ( make_list ( tmp [ 10 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , ( * ef4 ) ( make_nf1 ( ef5sym , lf4 ( make_list ( tmp [ 7 ] ) ) ) ) , ( * ef6 ) ( make_nf1 ( ef7sym , lf5 ( make_list ( tmp [ 10 ] ) ) ) ) ) ) ;
 }
 }
 }

@@ -88,7 +88,7 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef3sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

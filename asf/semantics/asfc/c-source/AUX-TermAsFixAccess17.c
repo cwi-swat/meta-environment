@@ -55,12 +55,12 @@ static funcptr ef12 ;
 static Symbol ef11sym ;
 static funcptr ef11 ;
 void register_AUX_TermAsFixAccess17 ( ) {
-lf_AUX_TermAsFixAccess17_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"get-rhs-equ\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"
+lf_AUX_TermAsFixAccess17_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"get-lhs-equ\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_TermAsFixAccess17_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"get-rhs-equ\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess17_1 , lf_AUX_TermAsFixAccess17_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"get-lhs-equ\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess17_1 , lf_AUX_TermAsFixAccess17_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_TermAsFixAccess17 ( ) {
@@ -143,7 +143,7 @@ if ( check_sym ( tmp [ 7 ] , ef4sym ) ) {
 if ( check_sym ( tmp [ 8 ] , ef5sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 if ( term_equal ( ( * ef12 ) ( tmp [ 4 ] ) , ( constant1 ? constant1 : ( constant1 = ( * ef11 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -169,7 +169,7 @@ if ( check_sym ( tmp [ 7 ] , ef4sym ) ) {
 if ( check_sym ( tmp [ 8 ] , ef5sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 if ( term_equal ( ( * ef12 ) ( tmp [ 4 ] ) , ( constant1 ? constant1 : ( constant1 = ( * ef11 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -195,7 +195,7 @@ if ( check_sym ( tmp [ 7 ] , ef4sym ) ) {
 if ( check_sym ( tmp [ 8 ] , ef5sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 if ( term_equal ( ( * ef12 ) ( tmp [ 4 ] ) , ( constant1 ? constant1 : ( constant1 = ( * ef11 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( tmp [ 9 ] , ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
 }
 }

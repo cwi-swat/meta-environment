@@ -168,7 +168,7 @@ if ( check_sym ( tmp [ 8 ] , ef19sym ) ) {
 if ( check_sym ( tmp [ 11 ] , ef19sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
 ( tmp [ 13 ] = arg_1 ( tmp [ 11 ] ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( lf4 ( ( ATerm ) ATmakeList ( 18 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 115 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 67 ] , char_table [ 72 ] , char_table [ 65 ] , char_table [ 82 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) , lf5 ( make_list ( ( * ef9 ) ( ) ) ) ) ) , make_list ( ( * ef7 ) ( tmp [ 12 ] , lf5 ( make_list ( ( * ef9 ) ( ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf3 ( cons ( make_list ( atmp100 ) , make_list ( tmp [ 0 ] ) ) ) ) , tmp [ 13 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef8 ) ( lf4 ( ( ATerm ) ATmakeList ( 18 , char_table [ 34 ] , char_table [ 123 ] , char_table [ 115 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 67 ] , char_table [ 72 ] , char_table [ 65 ] , char_table [ 82 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 125 ] , char_table [ 34 ] ) ) ) , lf5 ( make_list ( ( * ef9 ) ( ) ) ) ) ) , make_list ( ( * ef7 ) ( tmp [ 12 ] , lf5 ( make_list ( ( * ef9 ) ( ) ) ) ) ) ) ) ) , ( * ef6 ) ( lf3 ( cons ( make_list ( atmp100 ) , make_list ( tmp [ 0 ] ) ) ) ) , tmp [ 13 ] ) ) ;
 }
 }
 }
@@ -183,7 +183,7 @@ FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef8
 }
 ( tmp [ 0 ] = ( * ef3 ) ( arg0 ) ) ;
 if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) , ( constant2 ? constant2 : ( constant2 = ( * ef5 ) ( ) ) ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) , arg1 , arg2 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) , arg1 , arg2 ) ) ;
 }
 FUNC_EXIT ( make_nf3 ( lf_AUX_TermAsFix2Sign2_1sym , arg0 , arg1 , arg2 ) ) ;
 }

@@ -170,12 +170,12 @@ if ( check_sym ( tmp [ 14 ] , lf5sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 14 ] ) ) ;
 if ( check_sym ( tmp [ 15 ] , lf6sym ) ) {
 ( tmp [ 18 ] = arg_0 ( tmp [ 15 ] ) ) ;
-( tmp [ 19 ] = ( * ef16 ) ( ( * ef11 ) ( lf5 ( make_list ( tmp [ 7 ] ) ) ) , ( * ef11 ) ( lf5 ( make_list ( tmp [ 17 ] ) ) ) ) ) ;
+( tmp [ 19 ] = ( * ef16 ) ( make_nf1 ( ef11sym , lf5 ( make_list ( tmp [ 7 ] ) ) ) , make_nf1 ( ef11sym , lf5 ( make_list ( tmp [ 17 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 19 ] , ef11sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
 if ( check_sym ( tmp [ 20 ] , lf5sym ) ) {
 ( tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ) ;
-( tmp [ 22 ] = ( * ef17 ) ( tmp [ 1 ] , ( * ef18 ) ( ( * ef11 ) ( lf5 ( make_list ( tmp [ 21 ] ) ) ) ) , ( * ef19 ) ( ( * ef20 ) ( lf6 ( make_list ( tmp [ 18 ] ) ) ) ) ) ) ;
+( tmp [ 22 ] = ( * ef17 ) ( tmp [ 1 ] , ( * ef18 ) ( make_nf1 ( ef11sym , lf5 ( make_list ( tmp [ 21 ] ) ) ) ) , ( * ef19 ) ( make_nf1 ( ef20sym , lf6 ( make_list ( tmp [ 18 ] ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( tmp [ 22 ] , tmp [ 16 ] ) ) ;
 }
 }

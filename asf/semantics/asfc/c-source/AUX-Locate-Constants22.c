@@ -345,7 +345,7 @@ if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf3sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( atmp0000 , ( * ef6 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( atmp0000 , make_nf1 ( ef6sym , lf3 ( make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 }
 }

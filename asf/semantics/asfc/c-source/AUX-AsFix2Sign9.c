@@ -72,7 +72,7 @@ ATerm lf_AUX_AsFix2Sign9_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2Sign9_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign9_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) , arg2 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( null ( ) ) ) ) , arg2 ) ) ;
 }
 if ( ! term_equal ( arg1 , ( * ef1 ) ( ) ) ) {
 ( tmp [ 0 ] = ( * ef4 ) ( arg1 ) ) ;
@@ -92,12 +92,12 @@ if ( check_sym ( tmp [ 7 ] , ef3sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
-( tmp [ 11 ] = ( * ef7 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef3 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) ) ) ) ;
+( tmp [ 11 ] = ( * ef7 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 10 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 11 ] , ef3sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( check_sym ( tmp [ 12 ] , lf2sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 8 ] ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }
 }

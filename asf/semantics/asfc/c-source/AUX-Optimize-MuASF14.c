@@ -82,7 +82,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp010 ) ) {
 if ( term_equal ( atmp00 , atmp10 ) ) {
-( tmp [ 0 ] = ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( atmp010 ) ) ) , atmp11 ) ) ;
+( tmp [ 0 ] = ( * ef3 ) ( make_nf1 ( ef4sym , lf2 ( make_list ( atmp010 ) ) ) , atmp11 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
@@ -95,7 +95,7 @@ FUNC_EXIT ( ( * ef1 ) ( tmp [ 3 ] , lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ;
 }
 }
 else {
-( tmp [ 0 ] = ( * ef6 ) ( ( * ef4 ) ( lf2 ( make_list ( atmp010 ) ) ) , arg1 ) ) ;
+( tmp [ 0 ] = ( * ef6 ) ( make_nf1 ( ef4sym , lf2 ( make_list ( atmp010 ) ) ) , arg1 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {

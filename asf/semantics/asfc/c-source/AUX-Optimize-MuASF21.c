@@ -153,7 +153,7 @@ ATerm atmp0110 = arg_0 ( atmp011 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
-FUNC_EXIT ( ( * ef7 ) ( ( * ef3 ) ( atmp010 , atmp02 ) , ( * ef8 ) ( atmp010 , ( * ef6 ) ( lf3 ( make_list ( atmp0000 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ( * ef3 ) ( atmp010 , atmp02 ) , ( * ef8 ) ( atmp010 , make_nf1 ( ef6sym , lf3 ( make_list ( atmp0000 ) ) ) ) ) ) ;
 }
 }
 }
@@ -192,7 +192,7 @@ ATerm atmp0110 = arg_0 ( atmp011 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
-FUNC_EXIT ( ( * ef7 ) ( ( * ef3 ) ( atmp010 , atmp02 ) , ( * ef8 ) ( atmp010 , ( * ef6 ) ( lf3 ( make_list ( atmp0000 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ( * ef3 ) ( atmp010 , atmp02 ) , ( * ef8 ) ( atmp010 , make_nf1 ( ef6sym , lf3 ( make_list ( atmp0000 ) ) ) ) ) ) ;
 }
 }
 }

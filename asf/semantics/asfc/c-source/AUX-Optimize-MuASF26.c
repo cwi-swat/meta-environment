@@ -113,7 +113,7 @@ ATerm atmp0010 = arg_0 ( atmp001 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( not_empty_list ( atmp0010 ) ) {
-FUNC_EXIT ( ( * ef3 ) ( atmp000 , ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0010 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( atmp000 , ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0010 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -137,7 +137,7 @@ ATerm atmp0010 = arg_0 ( atmp001 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( not_empty_list ( atmp0010 ) ) {
-FUNC_EXIT ( ( * ef3 ) ( atmp000 , ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0010 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( atmp000 , ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0010 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -170,7 +170,7 @@ ATerm atmp0110 = arg_0 ( atmp011 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
-FUNC_EXIT ( ( * ef3 ) ( atmp010 , ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0110 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( atmp010 , ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0110 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -209,7 +209,7 @@ ATerm atmp0110 = arg_0 ( atmp011 ) ;
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
-FUNC_EXIT ( ( * ef3 ) ( atmp010 , ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0110 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( atmp010 , ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0110 ) ) ) , arg1 , ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

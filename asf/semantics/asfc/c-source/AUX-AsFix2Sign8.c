@@ -116,13 +116,13 @@ if ( check_sym ( tmp [ 4 ] , ef8sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( check_sym ( tmp [ 6 ] , lf3sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( tmp [ 7 ] ) ) ) , arg2 , tmp [ 5 ] ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( make_nf1 ( ef8sym , lf3 ( make_list ( tmp [ 7 ] ) ) ) , arg2 , tmp [ 5 ] ) ) ;
 }
 }
 }
 }
 }
-FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( null ( ) ) ) ) , arg2 , arg3 ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( make_nf1 ( ef8sym , lf3 ( make_list ( null ( ) ) ) ) , arg2 , arg3 ) ) ;
 FUNC_EXIT ( make_nf4 ( lf_AUX_AsFix2Sign8_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 }

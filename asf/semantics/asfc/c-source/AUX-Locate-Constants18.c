@@ -127,7 +127,7 @@ if ( check_sym ( tmp [ 1 ] , ef13sym ) ) {
 if ( check_sym ( tmp [ 2 ] , lf6sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( ! not_empty_list ( tmp [ 5 ] ) ) {
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 3 ] , ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf4 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , ( * ef8 ) ( lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 4 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 3 ] , ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( ( * ef4 ) ( make_nf1 ( ef5sym , lf4 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , make_nf1 ( ef8sym , lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 4 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }

@@ -78,9 +78,9 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( not_empty_list ( atmp000 ) ) {
-if ( term_equal ( ( * ef3 ) ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
-( tmp [ 0 ] = ( * ef5 ) ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , arg1 ) ) ;
-if ( term_equal ( ( * ef6 ) ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef3 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+( tmp [ 0 ] = ( * ef5 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , arg1 ) ) ;
+if ( term_equal ( ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
 FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }

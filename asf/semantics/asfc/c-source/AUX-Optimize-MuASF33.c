@@ -108,7 +108,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp0010 ) ) {
 if ( term_equal ( atmp000 , atmp10 ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0010 ) ) ) , atmp11 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0010 ) ) ) , atmp11 ) ) ;
 }
 }
 }
@@ -142,7 +142,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp0010 ) ) {
 if ( term_equal ( atmp000 , atmp10 ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0010 ) ) ) , atmp11 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0010 ) ) ) , atmp11 ) ) ;
 }
 }
 }
@@ -185,7 +185,7 @@ ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
 if ( term_equal ( atmp010 , atmp10 ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0110 ) ) ) , atmp11 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0110 ) ) ) , atmp11 ) ) ;
 }
 }
 }
@@ -234,7 +234,7 @@ ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp0110 ) ) {
 if ( term_equal ( atmp010 , atmp10 ) ) {
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( atmp0110 ) ) ) , atmp11 ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef5sym , lf2 ( make_list ( atmp0110 ) ) ) , atmp11 ) ) ;
 }
 }
 }

@@ -52,7 +52,7 @@ if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( not_empty_list ( atmp100 ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( arg0 ) , make_list ( atmp100 ) ) ) ) ) ;
 }
 }
 }

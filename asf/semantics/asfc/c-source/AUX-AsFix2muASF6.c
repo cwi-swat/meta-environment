@@ -176,7 +176,7 @@ if ( check_sym ( tmp [ 15 ] , lf5sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( is_single_element ( tmp [ 16 ] ) ) {
 ( tmp [ 17 ] = list_head ( tmp [ 16 ] ) ) ;
-( tmp [ 18 ] = ( * ef10 ) ( ( * ef11 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) ) ;
+( tmp [ 18 ] = ( * ef10 ) ( make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 18 ] , ef11sym ) ) {
 ( tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ) ;
 if ( check_sym ( tmp [ 19 ] , lf2sym ) ) {
@@ -238,7 +238,7 @@ if ( check_sym ( tmp [ 21 ] , lf2sym ) ) {
 if ( check_sym ( tmp [ 22 ] , lf6sym ) ) {
 ( tmp [ 25 ] = arg_0 ( tmp [ 22 ] ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-( tmp [ 26 ] = ( * ef10 ) ( ( * ef10 ) ( ( * ef11 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , ( * ef11 ) ( lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
+( tmp [ 26 ] = ( * ef10 ) ( ( * ef10 ) ( make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 26 ] , ef11sym ) ) {
 ( tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ) ;
 if ( check_sym ( tmp [ 27 ] , lf2sym ) ) {
@@ -305,7 +305,7 @@ if ( check_sym ( tmp [ 21 ] , lf2sym ) ) {
 if ( check_sym ( tmp [ 22 ] , lf6sym ) ) {
 ( tmp [ 25 ] = arg_0 ( tmp [ 22 ] ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-( tmp [ 26 ] = ( * ef10 ) ( ( * ef10 ) ( ( * ef11 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , ( * ef11 ) ( lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
+( tmp [ 26 ] = ( * ef10 ) ( ( * ef10 ) ( make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , make_nf1 ( ef11sym , lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 26 ] , ef11sym ) ) {
 ( tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ) ;
 if ( check_sym ( tmp [ 27 ] , lf2sym ) ) {

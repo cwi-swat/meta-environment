@@ -70,7 +70,7 @@ ATerm lf_AUX_AsFix2Sign15_1 ( ATerm arg0 ) {
 ATerm tmp [ 5 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2Sign15_1sym , ATmakeAppl ( lf_AUX_AsFix2Sign15_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( ! term_equal ( arg0 , ( * ef1 ) ( ) ) ) {
 ( tmp [ 0 ] = ( * ef4 ) ( arg0 ) ) ;

@@ -61,12 +61,12 @@ static funcptr ef16 ;
 static Symbol ef17sym ;
 static funcptr ef17 ;
 void register_AUX_TermAsFixAccess50 ( ) {
-lf_AUX_TermAsFixAccess50_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-iter-star-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_TermAsFixAccess50_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-iter-plus-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_TermAsFixAccess50_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-iter-star-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess50_1 , lf_AUX_TermAsFixAccess50_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-iter-plus-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess50_1 , lf_AUX_TermAsFixAccess50_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_TermAsFixAccess50 ( ) {
@@ -493,7 +493,7 @@ if ( not_empty_list ( atmp0111000110100000 ) ) {
 if ( term_equal ( list_head ( atmp0111000110100000 ) , make_char ( 34 ) ) ) {
 ( tmp [ 28 ] = list_tail ( atmp0111000110100000 ) ) ;
 if ( not_empty_list ( tmp [ 28 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 28 ] ) , make_char ( 42 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 28 ] ) , make_char ( 43 ) ) ) {
 ( tmp [ 29 ] = list_tail ( tmp [ 28 ] ) ) ;
 if ( is_single_element ( tmp [ 29 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 29 ] ) , make_char ( 34 ) ) ) {

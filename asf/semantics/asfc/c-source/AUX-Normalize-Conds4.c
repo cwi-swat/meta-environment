@@ -80,13 +80,13 @@ if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ) ;
 }
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 }
 }

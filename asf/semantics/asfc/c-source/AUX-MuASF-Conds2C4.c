@@ -219,7 +219,7 @@ if ( is_single_element ( tmp [ 21 ] ) ) {
 if ( check_sym ( tmp [ 23 ] , ef3sym ) ) {
 ( tmp [ 24 ] = arg_0 ( tmp [ 23 ] ) ) ;
 ( tmp [ 25 ] = arg_1 ( tmp [ 23 ] ) ) ;
-( tmp [ 26 ] = ( * ef17 ) ( tmp [ 18 ] , ( * ef18 ) ( ( * ef19 ) ( lf7 ( make_list ( ( * ef20 ) ( ( * ef21 ) ( tmp [ 15 ] , tmp [ 22 ] ) ) ) ) ) ) ) ) ;
+( tmp [ 26 ] = ( * ef17 ) ( tmp [ 18 ] , ( * ef18 ) ( make_nf1 ( ef19sym , lf7 ( make_list ( ( * ef20 ) ( ( * ef21 ) ( tmp [ 15 ] , tmp [ 22 ] ) ) ) ) ) ) ) ) ;
 ( tmp [ 27 ] = ( * ef17 ) ( tmp [ 26 ] , tmp [ 24 ] ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 27 ] , tmp [ 25 ] ) ) ;
 }

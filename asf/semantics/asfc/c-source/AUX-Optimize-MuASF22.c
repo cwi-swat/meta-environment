@@ -78,7 +78,7 @@ if ( term_equal ( arg0 , atmp10 ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 else {
-FUNC_EXIT ( ( * ef3 ) ( arg0 , ( * ef4 ) ( lf2 ( make_list ( atmp110 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( arg0 , make_nf1 ( ef4sym , lf2 ( make_list ( atmp110 ) ) ) ) ) ;
 }
 }
 }

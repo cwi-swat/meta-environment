@@ -155,7 +155,7 @@ if ( check_sym ( tmp [ 0 ] , ef8sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef9 ) ( ( * ef10 ) ( lf3 ( make_list ( ( * ef11 ) ( ( * ef12 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ) , arg0 ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef9 ) ( make_nf1 ( ef10sym , lf3 ( make_list ( ( * ef11 ) ( ( * ef12 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ) , arg0 ) ) ) ) ) ) ) ;
 }
 }
 }

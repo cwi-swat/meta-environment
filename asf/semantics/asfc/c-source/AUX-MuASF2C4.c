@@ -144,7 +144,7 @@ if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 5 ] = ( * ef11 ) ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , lf6 ( make_list ( null ( ) ) ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , ( * ef8 ) ( lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 5 ] ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef4sym , lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , make_nf1 ( ef8sym , lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 5 ] ) ) ) ;
 }
 }
 }
@@ -160,7 +160,7 @@ if ( check_sym ( tmp [ 2 ] , lf6sym ) ) {
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 6 ] = ( * ef14 ) ( lf6 ( make_list ( tmp [ 5 ] ) ) , ( * ef15 ) ( ( * ef16 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 ( tmp [ 7 ] = ( * ef11 ) ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , lf6 ( make_list ( tmp [ 5 ] ) ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , tmp [ 6 ] ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 7 ] ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef4sym , lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , tmp [ 6 ] ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 7 ] ) ) ) ;
 }
 }
 }
@@ -179,7 +179,7 @@ if ( check_sym ( tmp [ 2 ] , lf6sym ) ) {
 if ( not_empty_list ( tmp [ 6 ] ) ) {
 ( tmp [ 7 ] = ( * ef14 ) ( lf6 ( make_list ( tmp [ 6 ] ) ) , ( * ef15 ) ( ( * ef16 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 ( tmp [ 8 ] = ( * ef11 ) ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , lf6 ( make_list ( tmp [ 6 ] ) ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 7 ] ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 8 ] ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef4sym , lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 7 ] ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 8 ] ) ) ) ;
 }
 }
 }
@@ -192,7 +192,7 @@ if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
 if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 ( tmp [ 4 ] = ( * ef11 ) ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 3 ] ) ) ) , lf6 ( make_list ( null ( ) ) ) ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 3 ] ) ) ) , ( * ef8 ) ( lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 4 ] ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef4sym , lf4 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 3 ] ) ) ) , make_nf1 ( ef8sym , lf5 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ) , tmp [ 4 ] ) ) ) ;
 }
 }
 }

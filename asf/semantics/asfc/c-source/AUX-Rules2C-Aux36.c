@@ -53,7 +53,7 @@ static funcptr ef11 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_Rules2C_Aux36 ( ) {
-lf_AUX_Rules2C_Aux36_1sym = ATmakeSymbol ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"make-ltmp-array\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)"
+lf_AUX_Rules2C_Aux36_1sym = ATmakeSymbol ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"make-tmp-array\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Rules2C_Aux36_1sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"Declaration\"))" , 1 , ATtrue ) ;
@@ -62,7 +62,7 @@ lf4sym = ATmakeSymbol ( "listtype(sort(\"Type-specifier\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"make-ltmp-array\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) , lf_AUX_Rules2C_Aux36_1 , lf_AUX_Rules2C_Aux36_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"make-tmp-array\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) , lf_AUX_Rules2C_Aux36_1 , lf_AUX_Rules2C_Aux36_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Declaration\"))" ) , lf3 , lf3sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Type-specifier\"))" ) , lf4 , lf4sym ) ;
@@ -126,7 +126,7 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf2sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef10 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 108 ] , char_table [ 116 ] , char_table [ 109 ] , char_table [ 112 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( atmp0000 ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( make_nf1 ( ef5sym , lf3 ( make_list ( ( * ef6 ) ( make_nf1 ( ef7sym , lf4 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 101 ] , char_table [ 114 ] , char_table [ 109 ] ) ) ) ) ) ) ) , ( * ef10 ) ( ( * ef9 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 116 ] , char_table [ 109 ] , char_table [ 112 ] ) ) ) , ( * ef11 ) ( lf2 ( make_list ( atmp0000 ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

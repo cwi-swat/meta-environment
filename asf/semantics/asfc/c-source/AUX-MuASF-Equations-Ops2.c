@@ -59,7 +59,7 @@ if ( check_sym ( arg0 , lf_AUX_MuASF_Equations_Ops2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Equations_Ops2_1 ( make_list ( atmp00 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops2_1 ( make_list ( atmp00 ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;

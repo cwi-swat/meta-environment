@@ -162,7 +162,7 @@ FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , lf3 ( make_list ( null
 }
 }
 }
-if ( term_equal ( ( * ef4 ) ( atmp00 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( atmp00 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef5sym , lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( null ( ) ) ) , atmp01 , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , tmp [ 0 ] ) ) ;
 }
 }
@@ -204,7 +204,7 @@ FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , lf3 ( make_list ( atmp
 }
 }
 }
-if ( term_equal ( ( * ef4 ) ( atmp01 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( atmp01 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef5sym , lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( atmp0000 ) ) , atmp02 , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , tmp [ 0 ] ) ) ;
 }
 }
@@ -243,7 +243,7 @@ FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , lf3 ( make_list ( null
 }
 }
 }
-if ( term_equal ( ( * ef4 ) ( atmp00 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( atmp00 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef5sym , lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( null ( ) ) ) , atmp01 , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , tmp [ 0 ] ) ) ;
 }
 }
@@ -285,7 +285,7 @@ FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , lf3 ( make_list ( atmp
 }
 }
 }
-if ( term_equal ( ( * ef4 ) ( atmp01 ) , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( atmp01 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef5sym , lf4 ( make_list ( null ( ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) , lf3 ( make_list ( atmp0000 ) ) , atmp02 , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , ( * ef12 ) ( lf7 ( make_list ( null ( ) ) ) ) , tmp [ 0 ] ) ) ;
 }
 }

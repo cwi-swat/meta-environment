@@ -123,7 +123,7 @@ if ( not_empty_list ( atmp2000 ) ) {
 ( tmp [ 1 ] = list_tail ( atmp2000 ) ) ;
 if ( is_single_element ( atmp30000 ) ) {
 if ( term_equal ( list_head ( atmp30000 ) , make_char ( 48 ) ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( arg1 , tmp [ 0 ] ) ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( cons ( make_list ( ( * ef7 ) ( arg1 , tmp [ 0 ] ) ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -148,7 +148,7 @@ if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
 if ( not_empty_list ( tmp [ 4 ] ) ) {
 ( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
 ( tmp [ 6 ] = list_tail ( tmp [ 4 ] ) ) ;
-( tmp [ 7 ] = ( * ef11 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp2000 ) ) ) ) ) ) ;
+( tmp [ 7 ] = ( * ef11 ) ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( atmp2000 ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 7 ] , ef2sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
@@ -156,7 +156,7 @@ if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
 if ( check_sym ( tmp [ 9 ] , lf2sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( ( * ef8 ) ( tmp [ 0 ] , ( * ef2 ) ( ( * ef3 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( arg1 , tmp [ 5 ] ) ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( ( * ef8 ) ( tmp [ 0 ] , ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( cons ( make_list ( ( * ef7 ) ( arg1 , tmp [ 5 ] ) ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -191,7 +191,7 @@ if ( check_sym ( arg3 , ef4sym ) ) {
 {
 ATerm atmp30 = arg_0 ( arg3 ) ;
 if ( not_empty_list ( atmp2000 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp2000 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( atmp2000 ) ) ) ) ) ;
 }
 }
 }

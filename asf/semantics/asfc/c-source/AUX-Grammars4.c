@@ -74,7 +74,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( atmp010 , lf2sym ) ) {
 {
 ATerm atmp0100 = arg_0 ( atmp010 ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) , ( * ef4 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0100 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( atmp0000 ) ) ) , ( * ef4 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( atmp0100 ) ) ) ) ) ) ;
 }
 }
 }

@@ -167,7 +167,7 @@ if ( check_sym ( tmp [ 15 ] , lf4sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( is_single_element ( tmp [ 16 ] ) ) {
 ( tmp [ 17 ] = list_head ( tmp [ 16 ] ) ) ;
-( tmp [ 18 ] = ( * ef9 ) ( ( * ef10 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef10 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) ) ;
+( tmp [ 18 ] = ( * ef9 ) ( make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 18 ] , ef10sym ) ) {
 ( tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ) ;
 if ( check_sym ( tmp [ 19 ] , lf2sym ) ) {
@@ -229,7 +229,7 @@ if ( check_sym ( tmp [ 21 ] , lf2sym ) ) {
 if ( check_sym ( tmp [ 22 ] , lf5sym ) ) {
 ( tmp [ 25 ] = arg_0 ( tmp [ 22 ] ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-( tmp [ 26 ] = ( * ef9 ) ( ( * ef9 ) ( ( * ef10 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef10 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , ( * ef10 ) ( lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
+( tmp [ 26 ] = ( * ef9 ) ( ( * ef9 ) ( make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 26 ] , ef10sym ) ) {
 ( tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ) ;
 if ( check_sym ( tmp [ 27 ] , lf2sym ) ) {
@@ -296,7 +296,7 @@ if ( check_sym ( tmp [ 21 ] , lf2sym ) ) {
 if ( check_sym ( tmp [ 22 ] , lf5sym ) ) {
 ( tmp [ 25 ] = arg_0 ( tmp [ 22 ] ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-( tmp [ 26 ] = ( * ef9 ) ( ( * ef9 ) ( ( * ef10 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef10 ) ( lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , ( * ef10 ) ( lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
+( tmp [ 26 ] = ( * ef9 ) ( ( * ef9 ) ( make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) , make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 14 ] ) ) ) ) , make_nf1 ( ef10sym , lf2 ( make_list ( tmp [ 24 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 26 ] , ef10sym ) ) {
 ( tmp [ 27 ] = arg_0 ( tmp [ 26 ] ) ) ;
 if ( check_sym ( tmp [ 27 ] , lf2sym ) ) {

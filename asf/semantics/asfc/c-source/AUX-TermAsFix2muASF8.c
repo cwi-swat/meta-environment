@@ -139,7 +139,7 @@ if ( check_sym ( tmp [ 16 ] , lf4sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
 if ( is_single_element ( tmp [ 17 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 17 ] ) ) ;
-( tmp [ 19 ] = ( * ef11 ) ( ( * ef12 ) ( lf2 ( make_list ( tmp [ 6 ] ) ) ) , ( * ef12 ) ( lf2 ( make_list ( tmp [ 15 ] ) ) ) ) ) ;
+( tmp [ 19 ] = ( * ef11 ) ( make_nf1 ( ef12sym , lf2 ( make_list ( tmp [ 6 ] ) ) ) , make_nf1 ( ef12sym , lf2 ( make_list ( tmp [ 15 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 19 ] , ef12sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
 if ( check_sym ( tmp [ 20 ] , lf2sym ) ) {
@@ -187,7 +187,7 @@ if ( check_sym ( tmp [ 16 ] , lf4sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
 if ( is_single_element ( tmp [ 17 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 17 ] ) ) ;
-( tmp [ 19 ] = ( * ef11 ) ( ( * ef12 ) ( lf2 ( make_list ( tmp [ 6 ] ) ) ) , ( * ef12 ) ( lf2 ( make_list ( tmp [ 15 ] ) ) ) ) ) ;
+( tmp [ 19 ] = ( * ef11 ) ( make_nf1 ( ef12sym , lf2 ( make_list ( tmp [ 6 ] ) ) ) , make_nf1 ( ef12sym , lf2 ( make_list ( tmp [ 15 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 19 ] , ef12sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
 if ( check_sym ( tmp [ 20 ] , lf2sym ) ) {

@@ -24,8 +24,6 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Optimize_MuASF3_1sym ;
 static ATerm lf_AUX_Optimize_MuASF3_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
 static Symbol ef8sym ;
@@ -52,6 +50,8 @@ static Symbol ef6sym ;
 static funcptr ef6 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 void register_AUX_Optimize_MuASF3 ( ) {
 lf_AUX_Optimize_MuASF3_1sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"optimize-recursive-list-functions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MN-struct\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -112,21 +112,21 @@ if ( check_sym ( tmp [ 6 ] , ef6sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf3sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = ( * ef7 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 8 ] ) ) ) , arg1 ) ) ;
+( tmp [ 9 ] = ( * ef7 ) ( make_nf1 ( ef6sym , lf3 ( make_list ( tmp [ 8 ] ) ) ) , arg1 ) ) ;
 if ( ! term_equal ( tmp [ 9 ] , ( * ef8 ) ( ) ) ) {
-( tmp [ 10 ] = ( * ef9 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 8 ] ) ) ) , tmp [ 9 ] ) ) ;
+( tmp [ 10 ] = ( * ef9 ) ( make_nf1 ( ef6sym , lf3 ( make_list ( tmp [ 8 ] ) ) ) , tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , ef6sym ) ) {
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , lf3sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-( tmp [ 13 ] = ( * ef10 ) ( ( * ef6 ) ( lf3 ( make_list ( tmp [ 8 ] ) ) ) , tmp [ 9 ] ) ) ;
+( tmp [ 13 ] = ( * ef10 ) ( make_nf1 ( ef6sym , lf3 ( make_list ( tmp [ 8 ] ) ) ) , tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 13 ] , ef6sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( check_sym ( tmp [ 14 ] , lf3sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-( tmp [ 16 ] = ( * ef11 ) ( tmp [ 9 ] , ( * ef4 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ;
+( tmp [ 16 ] = ( * ef11 ) ( tmp [ 9 ] , make_nf1 ( ef4sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ;
 ( tmp [ 17 ] = ( * ef12 ) ( tmp [ 9 ] , arg1 ) ) ;
-( tmp [ 18 ] = ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( ( * ef4 ) ( lf2 ( cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( lf3 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 15 ] ) ) ) ) ) ) ) ;
+( tmp [ 18 ] = ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( make_nf1 ( ef4sym , lf2 ( cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) , ( * ef5 ) ( make_nf1 ( ef6sym , lf3 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 15 ] ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( tmp [ 18 ] , tmp [ 17 ] ) ) ;
 }
 }
@@ -140,6 +140,7 @@ FUNC_EXIT ( ( * ef1 ) ( tmp [ 18 ] , tmp [ 17 ] ) ) ;
 }
 }
 }
+FUNC_EXIT ( ( * ef1 ) ( arg0 , arg1 ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF3_1sym , arg0 , arg1 ) ) ;
 }
 }

@@ -94,7 +94,7 @@ if ( check_sym ( arg1 , ef4sym ) ) {
 if ( check_sym ( tmp [ 0 ] , lf3sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = ( * ef4 ) ( lf3 ( cons ( make_list_char ( 108 ) , cons ( make_list_char ( 98 ) , cons ( make_list_char ( 108 ) , cons ( make_list_char ( 95 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
-( tmp [ 3 ] = ( * ef5 ) ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( atmp0000 ) ) ) ) , arg1 , tmp [ 2 ] ) ) ;
+( tmp [ 3 ] = ( * ef5 ) ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( atmp0000 ) ) ) ) , arg1 , tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef6sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
@@ -105,7 +105,7 @@ if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
 if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-( tmp [ 9 ] = ( * ef7 ) ( tmp [ 5 ] , tmp [ 2 ] , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) ) ) , arg2 ) ) ;
+( tmp [ 9 ] = ( * ef7 ) ( tmp [ 5 ] , tmp [ 2 ] , ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( tmp [ 8 ] ) ) ) ) , arg2 ) ) ;
 if ( check_sym ( tmp [ 9 ] , ef1sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , ef2sym ) ) {
@@ -113,7 +113,7 @@ if ( check_sym ( tmp [ 10 ] , ef2sym ) ) {
 if ( check_sym ( tmp [ 11 ] , lf2sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( not_empty_list ( tmp [ 12 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 12 ] ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef2sym , lf2 ( make_list ( tmp [ 12 ] ) ) ) ) ;
 }
 }
 }

@@ -60,7 +60,7 @@ if ( check_sym ( arg1 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT ( arg0 ) ;
@@ -82,7 +82,7 @@ if ( check_sym ( arg1 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( ! not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
 }
 else {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
@@ -90,10 +90,10 @@ FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 else {
 if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Equations_Ops3_1 ( cons ( make_list ( atmp0000 ) , make_list ( atmp10 ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( cons ( make_list ( atmp0000 ) , make_list ( atmp10 ) ) ) ) ) ) ;
 }
 else {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp0000 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp0000 ) ) ) ) ) ;
 }
 }
 }

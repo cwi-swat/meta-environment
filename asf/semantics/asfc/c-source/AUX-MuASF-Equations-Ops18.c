@@ -29,12 +29,12 @@ static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_MuASF_Equations_Ops18 ( ) {
-lf_AUX_MuASF_Equations_Ops18_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"make-trans-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
+lf_AUX_MuASF_Equations_Ops18_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"make-trans-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Equations_Ops18_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"make-trans-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Equations_Ops18_1 , lf_AUX_MuASF_Equations_Ops18_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"make-trans-list-id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"prefer\")],w(\"\"),l(\"}\")))" ) , lf_AUX_MuASF_Equations_Ops18_1 , lf_AUX_MuASF_Equations_Ops18_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_MuASF_Equations_Ops18 ( ) {
@@ -66,7 +66,7 @@ if ( term_equal ( list_last ( tmp [ 1 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_last ( tmp [ 2 ] ) , make_char ( 125 ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 3 ] ) , ( ATerm ) ATmakeList ( 8 , char_table [ 125 ] , char_table [ 34 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 97 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 3 ] ) , ( ATerm ) ATmakeList ( 8 , char_table [ 125 ] , char_table [ 45 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 97 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }

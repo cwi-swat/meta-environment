@@ -360,7 +360,7 @@ if ( check_sym ( tmp [ 59 ] , ef33sym ) ) {
 if ( check_sym ( tmp [ 60 ] , lf_AUX_MuASF_Term2C7_1sym ) ) {
 ( tmp [ 61 ] = arg_0 ( tmp [ 60 ] ) ) ;
 if ( not_empty_list ( tmp [ 61 ] ) ) {
-FUNC_EXIT ( ( * ef11 ) ( ( * ef12 ) ( tmp [ 50 ] , ( * ef13 ) ( ( * ef14 ) ( lf8 ( make_list ( ( * ef15 ) ( ( * ef16 ) ( tmp [ 47 ] , tmp [ 54 ] ) ) ) ) ) ) ) , ( * ef17 ) ( ) , lf_AUX_MuASF_Term2C7_1 ( cons ( make_list ( tmp [ 61 ] ) , make_list ( tmp [ 46 ] ) ) ) , tmp [ 51 ] ) ) ;
+FUNC_EXIT ( ( * ef11 ) ( ( * ef12 ) ( tmp [ 50 ] , ( * ef13 ) ( make_nf1 ( ef14sym , lf8 ( make_list ( ( * ef15 ) ( ( * ef16 ) ( tmp [ 47 ] , tmp [ 54 ] ) ) ) ) ) ) ) , ( * ef17 ) ( ) , lf_AUX_MuASF_Term2C7_1 ( cons ( make_list ( tmp [ 61 ] ) , make_list ( tmp [ 46 ] ) ) ) , tmp [ 51 ] ) ) ;
 }
 }
 }

@@ -156,7 +156,7 @@ if ( check_sym ( atmp01110 , ef5sym ) ) {
 ATerm atmp011100 = arg_0 ( atmp01110 ) ;
 if ( check_sym ( atmp011100 , ef6sym ) ) {
 if ( term_equal ( ( * ef8 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef9 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef7 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , make_nf1 ( ef7sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 {
@@ -287,7 +287,7 @@ if ( check_sym ( tmp [ 21 ] , ef7sym ) ) {
 ( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( check_sym ( tmp [ 22 ] , lf2sym ) ) {
 ( tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ) ;
-FUNC_EXIT ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 23 ] ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef7sym , lf2 ( make_list ( tmp [ 23 ] ) ) ) ) ;
 }
 }
 }

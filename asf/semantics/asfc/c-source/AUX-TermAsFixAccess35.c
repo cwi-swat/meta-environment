@@ -61,12 +61,12 @@ static funcptr ef16 ;
 static Symbol ef17sym ;
 static funcptr ef17 ;
 void register_AUX_TermAsFixAccess35 ( ) {
-lf_AUX_TermAsFixAccess35_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-bracket-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_TermAsFixAccess35_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-avoid-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_TermAsFixAccess35_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-bracket-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess35_1 , lf_AUX_TermAsFixAccess35_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-avoid-attr-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess35_1 , lf_AUX_TermAsFixAccess35_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_TermAsFixAccess35 ( ) {
@@ -113,7 +113,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_TermAsFixAccess35_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 45 ] ;
+ATerm tmp [ 47 ] ;
 FUNC_ENTRY ( lf_AUX_TermAsFixAccess35_1sym , ATmakeAppl ( lf_AUX_TermAsFixAccess35_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -349,16 +349,16 @@ if ( not_empty_list ( atmp010100000 ) ) {
 if ( term_equal ( list_head ( atmp010100000 ) , make_char ( 34 ) ) ) {
 ( tmp [ 0 ] = list_tail ( atmp010100000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 80 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 82 ) ) ) {
 ( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 114 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 101 ) ) ) {
 ( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 105 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 115 ) ) ) {
 ( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 111 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 114 ) ) ) {
@@ -367,22 +367,22 @@ if ( not_empty_list ( tmp [ 5 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 105 ) ) ) {
 ( tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 99 ) ) ) {
 ( tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 121 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 45 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 105 ) ) ) {
 ( tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ) ;
 if ( not_empty_list ( tmp [ 9 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 83 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 111 ) ) ) {
 ( tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 100 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 110 ) ) ) {
 ( tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 102 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 115 ) ) ) {
 ( tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ) ;
 if ( not_empty_list ( tmp [ 12 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 45 ) ) ) {
@@ -391,112 +391,122 @@ if ( not_empty_list ( tmp [ 13 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 83 ) ) ) {
 ( tmp [ 14 ] = list_tail ( tmp [ 13 ] ) ) ;
 if ( not_empty_list ( tmp [ 14 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 121 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 100 ) ) ) {
 ( tmp [ 15 ] = list_tail ( tmp [ 14 ] ) ) ;
 if ( not_empty_list ( tmp [ 15 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 15 ] ) , make_char ( 110 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 15 ] ) , make_char ( 102 ) ) ) {
 ( tmp [ 16 ] = list_tail ( tmp [ 15 ] ) ) ;
 if ( not_empty_list ( tmp [ 16 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 16 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 16 ] ) , make_char ( 45 ) ) ) {
 ( tmp [ 17 ] = list_tail ( tmp [ 16 ] ) ) ;
 if ( not_empty_list ( tmp [ 17 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 17 ] ) , make_char ( 97 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 17 ] ) , make_char ( 83 ) ) ) {
 ( tmp [ 18 ] = list_tail ( tmp [ 17 ] ) ) ;
 if ( not_empty_list ( tmp [ 18 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 120 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 121 ) ) ) {
 ( tmp [ 19 ] = list_tail ( tmp [ 18 ] ) ) ;
-if ( is_single_element ( tmp [ 19 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 19 ] ) , make_char ( 34 ) ) ) {
-if ( not_empty_list ( atmp0110100000 ) ) {
-if ( term_equal ( list_head ( atmp0110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 20 ] = list_tail ( atmp0110100000 ) ) ;
-if ( is_single_element ( tmp [ 20 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 20 ] ) , make_char ( 34 ) ) ) {
-if ( not_empty_list ( atmp01110000100000 ) ) {
-if ( term_equal ( list_head ( atmp01110000100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 21 ] = list_tail ( atmp01110000100000 ) ) ;
+if ( not_empty_list ( tmp [ 19 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 19 ] ) , make_char ( 110 ) ) ) {
+( tmp [ 20 ] = list_tail ( tmp [ 19 ] ) ) ;
+if ( not_empty_list ( tmp [ 20 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 20 ] ) , make_char ( 116 ) ) ) {
+( tmp [ 21 ] = list_tail ( tmp [ 20 ] ) ) ;
 if ( not_empty_list ( tmp [ 21 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 98 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 97 ) ) ) {
 ( tmp [ 22 ] = list_tail ( tmp [ 21 ] ) ) ;
 if ( not_empty_list ( tmp [ 22 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 114 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 120 ) ) ) {
 ( tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ) ;
-if ( not_empty_list ( tmp [ 23 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 23 ] ) , make_char ( 97 ) ) ) {
-( tmp [ 24 ] = list_tail ( tmp [ 23 ] ) ) ;
-if ( not_empty_list ( tmp [ 24 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 24 ] ) , make_char ( 99 ) ) ) {
-( tmp [ 25 ] = list_tail ( tmp [ 24 ] ) ) ;
+if ( is_single_element ( tmp [ 23 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 23 ] ) , make_char ( 34 ) ) ) {
+if ( not_empty_list ( atmp0110100000 ) ) {
+if ( term_equal ( list_head ( atmp0110100000 ) , make_char ( 34 ) ) ) {
+( tmp [ 24 ] = list_tail ( atmp0110100000 ) ) ;
+if ( is_single_element ( tmp [ 24 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 24 ] ) , make_char ( 34 ) ) ) {
+if ( not_empty_list ( atmp01110000100000 ) ) {
+if ( term_equal ( list_head ( atmp01110000100000 ) , make_char ( 34 ) ) ) {
+( tmp [ 25 ] = list_tail ( atmp01110000100000 ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 25 ] ) , make_char ( 107 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 25 ] ) , make_char ( 97 ) ) ) {
 ( tmp [ 26 ] = list_tail ( tmp [ 25 ] ) ) ;
 if ( not_empty_list ( tmp [ 26 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 26 ] ) , make_char ( 101 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 26 ] ) , make_char ( 118 ) ) ) {
 ( tmp [ 27 ] = list_tail ( tmp [ 26 ] ) ) ;
 if ( not_empty_list ( tmp [ 27 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 27 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 27 ] ) , make_char ( 111 ) ) ) {
 ( tmp [ 28 ] = list_tail ( tmp [ 27 ] ) ) ;
-if ( is_single_element ( tmp [ 28 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 28 ] ) , make_char ( 34 ) ) ) {
+if ( not_empty_list ( tmp [ 28 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 28 ] ) , make_char ( 105 ) ) ) {
+( tmp [ 29 ] = list_tail ( tmp [ 28 ] ) ) ;
+if ( not_empty_list ( tmp [ 29 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 29 ] ) , make_char ( 100 ) ) ) {
+( tmp [ 30 ] = list_tail ( tmp [ 29 ] ) ) ;
+if ( is_single_element ( tmp [ 30 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 30 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp011110100000 ) ) {
 if ( term_equal ( list_head ( atmp011110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 29 ] = list_tail ( atmp011110100000 ) ) ;
-if ( is_single_element ( tmp [ 29 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 29 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 31 ] = list_tail ( atmp011110100000 ) ) ;
+if ( is_single_element ( tmp [ 31 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 31 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp0111110100000 ) ) {
 if ( term_equal ( list_head ( atmp0111110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 30 ] = list_tail ( atmp0111110100000 ) ) ;
-if ( not_empty_list ( tmp [ 30 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 30 ] ) , make_char ( 45 ) ) ) {
-( tmp [ 31 ] = list_tail ( tmp [ 30 ] ) ) ;
-if ( not_empty_list ( tmp [ 31 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 31 ] ) , make_char ( 62 ) ) ) {
-( tmp [ 32 ] = list_tail ( tmp [ 31 ] ) ) ;
-if ( is_single_element ( tmp [ 32 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 32 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 32 ] = list_tail ( atmp0111110100000 ) ) ;
+if ( not_empty_list ( tmp [ 32 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 32 ] ) , make_char ( 45 ) ) ) {
+( tmp [ 33 ] = list_tail ( tmp [ 32 ] ) ) ;
+if ( not_empty_list ( tmp [ 33 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 33 ] ) , make_char ( 62 ) ) ) {
+( tmp [ 34 ] = list_tail ( tmp [ 33 ] ) ) ;
+if ( is_single_element ( tmp [ 34 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 34 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp01111110100000 ) ) {
 if ( term_equal ( list_head ( atmp01111110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 33 ] = list_tail ( atmp01111110100000 ) ) ;
-if ( is_single_element ( tmp [ 33 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 33 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 35 ] = list_tail ( atmp01111110100000 ) ) ;
+if ( is_single_element ( tmp [ 35 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 35 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp011111110100000 ) ) {
 if ( term_equal ( list_head ( atmp011111110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 34 ] = list_tail ( atmp011111110100000 ) ) ;
-if ( not_empty_list ( tmp [ 34 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 34 ] ) , make_char ( 65 ) ) ) {
-( tmp [ 35 ] = list_tail ( tmp [ 34 ] ) ) ;
-if ( not_empty_list ( tmp [ 35 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 35 ] ) , make_char ( 116 ) ) ) {
-( tmp [ 36 ] = list_tail ( tmp [ 35 ] ) ) ;
+( tmp [ 36 ] = list_tail ( atmp011111110100000 ) ) ;
 if ( not_empty_list ( tmp [ 36 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 36 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 36 ] ) , make_char ( 65 ) ) ) {
 ( tmp [ 37 ] = list_tail ( tmp [ 36 ] ) ) ;
 if ( not_empty_list ( tmp [ 37 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 37 ] ) , make_char ( 114 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 37 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 38 ] = list_tail ( tmp [ 37 ] ) ) ;
 if ( not_empty_list ( tmp [ 38 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 38 ] ) , make_char ( 105 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 38 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 39 ] = list_tail ( tmp [ 38 ] ) ) ;
 if ( not_empty_list ( tmp [ 39 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 39 ] ) , make_char ( 98 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 39 ] ) , make_char ( 114 ) ) ) {
 ( tmp [ 40 ] = list_tail ( tmp [ 39 ] ) ) ;
 if ( not_empty_list ( tmp [ 40 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 40 ] ) , make_char ( 117 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 40 ] ) , make_char ( 105 ) ) ) {
 ( tmp [ 41 ] = list_tail ( tmp [ 40 ] ) ) ;
 if ( not_empty_list ( tmp [ 41 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 41 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 41 ] ) , make_char ( 98 ) ) ) {
 ( tmp [ 42 ] = list_tail ( tmp [ 41 ] ) ) ;
 if ( not_empty_list ( tmp [ 42 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 42 ] ) , make_char ( 101 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 42 ] ) , make_char ( 117 ) ) ) {
 ( tmp [ 43 ] = list_tail ( tmp [ 42 ] ) ) ;
-if ( is_single_element ( tmp [ 43 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 43 ] ) , make_char ( 34 ) ) ) {
+if ( not_empty_list ( tmp [ 43 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 43 ] ) , make_char ( 116 ) ) ) {
+( tmp [ 44 ] = list_tail ( tmp [ 43 ] ) ) ;
+if ( not_empty_list ( tmp [ 44 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 44 ] ) , make_char ( 101 ) ) ) {
+( tmp [ 45 ] = list_tail ( tmp [ 44 ] ) ) ;
+if ( is_single_element ( tmp [ 45 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 45 ] ) , make_char ( 34 ) ) ) {
 if ( not_empty_list ( atmp0111111110100000 ) ) {
 if ( term_equal ( list_head ( atmp0111111110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 44 ] = list_tail ( atmp0111111110100000 ) ) ;
-if ( is_single_element ( tmp [ 44 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 44 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 46 ] = list_tail ( atmp0111111110100000 ) ) ;
+if ( is_single_element ( tmp [ 46 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 46 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef16 ) ( ) ) ;
+}
+}
+}
+}
 }
 }
 }

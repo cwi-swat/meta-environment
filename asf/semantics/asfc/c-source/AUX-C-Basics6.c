@@ -97,7 +97,7 @@ if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
 }
@@ -144,7 +144,7 @@ if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( atmp0000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( make_nf1 ( ef6sym , lf3 ( make_list ( atmp0000 ) ) ) ) , ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -176,7 +176,7 @@ if ( check_sym ( atmp100 , lf2sym ) ) {
 {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( not_empty_list ( atmp1000 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp1000 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( atmp1000 ) ) ) ) ) ;
 }
 }
 }
@@ -205,7 +205,7 @@ if ( check_sym ( atmp100 , lf2sym ) ) {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 if ( not_empty_list ( atmp1000 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( atmp0000 ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp1000 ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( make_nf1 ( ef6sym , lf3 ( make_list ( atmp0000 ) ) ) ) , ( * ef2 ) ( make_nf1 ( ef3sym , lf2 ( make_list ( atmp1000 ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

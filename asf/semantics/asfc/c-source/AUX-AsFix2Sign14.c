@@ -153,7 +153,7 @@ if ( check_sym ( tmp [ 0 ] , ef8sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef9sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( null ( ) ) ) , ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 2 ] ) ) ) ) ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( null ( ) ) ) , make_nf1 ( ef7sym , lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 2 ] ) ) ) ) ) , arg1 ) ) ;
 }
 }
 }
@@ -178,8 +178,8 @@ if ( check_sym ( tmp [ 2 ] , ef9sym ) ) {
 if ( check_sym ( tmp [ 5 ] , ef17sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ) ;
-( tmp [ 8 ] = ( * ef18 ) ( tmp [ 4 ] , ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) ) ) ;
-FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) , tmp [ 7 ] ) ) ;
+( tmp [ 8 ] = ( * ef18 ) ( tmp [ 4 ] , make_nf1 ( ef7sym , lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , make_nf1 ( ef7sym , lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) , tmp [ 7 ] ) ) ;
 }
 }
 }
@@ -195,13 +195,13 @@ if ( check_sym ( tmp [ 2 ] , ef9sym ) ) {
 if ( check_sym ( tmp [ 5 ] , ef17sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ) ;
-( tmp [ 8 ] = ( * ef18 ) ( tmp [ 4 ] , ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) ) ) ;
-FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , ( * ef7 ) ( lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) , tmp [ 7 ] ) ) ;
+( tmp [ 8 ] = ( * ef18 ) ( tmp [ 4 ] , make_nf1 ( ef7sym , lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( tmp [ 8 ] ) ) , make_nf1 ( ef7sym , lf3 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( tmp [ 3 ] ) ) ) ) ) , tmp [ 7 ] ) ) ;
 }
 }
 }
 }
-FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( null ( ) ) ) , ( * ef7 ) ( lf3 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
+FUNC_EXIT ( ( * ef6 ) ( lf2 ( make_list ( null ( ) ) ) , make_nf1 ( ef7sym , lf3 ( make_list ( null ( ) ) ) ) , arg1 ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_AsFix2Sign14_1sym , arg0 , arg1 ) ) ;
 }
 }

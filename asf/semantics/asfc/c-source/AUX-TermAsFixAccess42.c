@@ -61,12 +61,12 @@ static funcptr ef16 ;
 static Symbol ef17sym ;
 static funcptr ef17 ;
 void register_AUX_TermAsFixAccess42 ( ) {
-lf_AUX_TermAsFixAccess42_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-assoc-assoc-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_TermAsFixAccess42_1sym = ATmakeSymbol ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-right-assoc-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_TermAsFixAccess42_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-assoc-assoc-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess42_1 , lf_AUX_TermAsFixAccess42_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-right-assoc-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_TermAsFixAccess42_1 , lf_AUX_TermAsFixAccess42_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_TermAsFixAccess42 ( ) {
@@ -416,19 +416,19 @@ if ( not_empty_list ( atmp01110000100000 ) ) {
 if ( term_equal ( list_head ( atmp01110000100000 ) , make_char ( 34 ) ) ) {
 ( tmp [ 21 ] = list_tail ( atmp01110000100000 ) ) ;
 if ( not_empty_list ( tmp [ 21 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 97 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 114 ) ) ) {
 ( tmp [ 22 ] = list_tail ( tmp [ 21 ] ) ) ;
 if ( not_empty_list ( tmp [ 22 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 115 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 105 ) ) ) {
 ( tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ) ;
 if ( not_empty_list ( tmp [ 23 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 23 ] ) , make_char ( 115 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 23 ] ) , make_char ( 103 ) ) ) {
 ( tmp [ 24 ] = list_tail ( tmp [ 23 ] ) ) ;
 if ( not_empty_list ( tmp [ 24 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 24 ] ) , make_char ( 111 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 24 ] ) , make_char ( 104 ) ) ) {
 ( tmp [ 25 ] = list_tail ( tmp [ 24 ] ) ) ;
 if ( not_empty_list ( tmp [ 25 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 25 ] ) , make_char ( 99 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 25 ] ) , make_char ( 116 ) ) ) {
 ( tmp [ 26 ] = list_tail ( tmp [ 25 ] ) ) ;
 if ( is_single_element ( tmp [ 26 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 26 ] ) , make_char ( 34 ) ) ) {

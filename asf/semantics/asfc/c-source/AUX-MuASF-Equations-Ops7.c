@@ -58,7 +58,7 @@ FUNC_ENTRY ( lf_AUX_MuASF_Equations_Ops7_1sym , ATmakeAppl ( lf_AUX_MuASF_Equati
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef2sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
@@ -70,7 +70,7 @@ if ( check_sym ( atmp01 , lf2sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( not_empty_list ( atmp010 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( atmp010 ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef2sym , lf2 ( make_list ( atmp010 ) ) ) ) ;
 }
 }
 }

@@ -140,7 +140,7 @@ if ( not_empty_list ( atmp010 ) ) {
 if ( term_equal ( ( * ef9 ) ( atmp000 ) , ( constant0 ? constant0 : ( constant0 = ( * ef10 ) ( ) ) ) ) ) {
 ( tmp [ 0 ] = ( * ef3 ) ( ( * ef4 ) ( ( * ef6 ) ( ( * ef11 ) ( lf3 ( make_list ( atmp010 ) ) ) ) ) ) ) ;
 ( tmp [ 1 ] = ( * ef12 ) ( atmp000 ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( ( ATerm ) ATmakeList ( 7 , char_table [ 105 ] , char_table [ 115 ] , char_table [ 95 ] , char_table [ 99 ] , char_table [ 104 ] , char_table [ 97 ] , char_table [ 114 ] ) ) ) ) , ( * ef8 ) ( lf5 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( ( ATerm ) ATmakeList ( 7 , char_table [ 105 ] , char_table [ 115 ] , char_table [ 95 ] , char_table [ 99 ] , char_table [ 104 ] , char_table [ 97 ] , char_table [ 114 ] ) ) ) ) , make_nf1 ( ef8sym , lf5 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 ( tmp [ 0 ] = ( * ef11 ) ( lf3 ( make_list ( atmp010 ) ) ) ) ;
 if ( term_equal ( ( * ef9 ) ( atmp000 ) , ( constant1 ? constant1 : ( constant1 = ( * ef13 ) ( ) ) ) ) ) {
@@ -149,7 +149,7 @@ if ( check_sym ( tmp [ 1 ] , ef15sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf4sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 99 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 99 ] , char_table [ 107 ] , char_table [ 95 ] , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) , ( * ef8 ) ( lf5 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 0 ] ) ) ) ) , make_list ( ( * ef3 ) ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 3 ] ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( ( ATerm ) ATmakeList ( 9 , char_table [ 99 ] , char_table [ 104 ] , char_table [ 101 ] , char_table [ 99 ] , char_table [ 107 ] , char_table [ 95 ] , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) , make_nf1 ( ef8sym , lf5 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 0 ] ) ) ) ) , make_list ( ( * ef3 ) ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 3 ] ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

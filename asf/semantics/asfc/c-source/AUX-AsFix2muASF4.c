@@ -102,7 +102,7 @@ if ( check_sym ( tmp [ 10 ] , lf2sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , lf3sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 11 ] ) ) ;
-( tmp [ 15 ] = ( * ef6 ) ( ( * ef7 ) ( lf2 ( make_list ( tmp [ 6 ] ) ) ) , ( * ef7 ) ( lf2 ( make_list ( tmp [ 13 ] ) ) ) ) ) ;
+( tmp [ 15 ] = ( * ef6 ) ( make_nf1 ( ef7sym , lf2 ( make_list ( tmp [ 6 ] ) ) ) , make_nf1 ( ef7sym , lf2 ( make_list ( tmp [ 13 ] ) ) ) ) ) ;
 if ( check_sym ( tmp [ 15 ] , ef7sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( check_sym ( tmp [ 16 ] , lf2sym ) ) {

@@ -66,7 +66,7 @@ FUNC_ENTRY ( lf_AUX_TermAsFix2Sign8_1sym , ATmakeAppl ( lf_AUX_TermAsFix2Sign8_1
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( ( * ef3 ) ( atmp00 ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef2sym , lf2 ( make_list ( ( * ef3 ) ( atmp00 ) ) ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
