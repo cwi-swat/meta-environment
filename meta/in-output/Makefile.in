@@ -14,7 +14,7 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= @includedir
+includedir	= @includedir@
 datadir		= @datadir@
 docdir		= $(top_srcdir)/docs
 
