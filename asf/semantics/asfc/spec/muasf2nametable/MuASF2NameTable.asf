@@ -121,8 +121,12 @@ rename-termlist(Term+,Nametable) = Term+2
 ===>
 rename-term(Funid(Term+),Nametable) = Funid2(Term+2)
 
+[rn-21]
+rename-term(Term1 : Term2, Nametable) = rename-term(Term1,Nametable) : Term2
+
 [default-rn-19]
 rename-term(Term,Nametable) = Term
+
 
 [rn-21]
 rename-termlist(Term,Nametable) = rename-term(Term,Nametable)
