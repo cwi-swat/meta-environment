@@ -26,5 +26,5 @@ context-free syntax
 sorts WriteResult
 context-free syntax
 
-  "written" -> WriteResult     {cons("success")}
-  "write-error" -> WriteResult {cons("failure")}
+  "written" -> WriteResult {cons("success")}
+  "write-error" "(" Feedback ")" -> WriteResult {cons("failure")}
