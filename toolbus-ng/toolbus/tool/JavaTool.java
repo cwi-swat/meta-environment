@@ -1,18 +1,29 @@
 package toolbus.tool;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Hashtable;
+import java.util.LinkedList;
 
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.MatchResult;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermInt;
+import aterm.ATermList;
+import aterm.ATermPlaceholder;
 
 class ToolShield extends Thread implements ToolBridge
 {
 	
 	private Object toolinstance;
 	private JavaTool javatool;
-	private LinkedList evalRequests;
+	private LinkedList requests;
 	
 	public ToolShield (Constructor cons, JavaTool javatool)
 	{
@@ -23,48 +34,54 @@ class ToolShield extends Thread implements ToolBridge
 			System.out.println("ToolShield: " + e);
 		}
 		this.javatool = javatool;
-		evalRequests = new LinkedList();
+		requests = new LinkedList();
 	}
 	
-	public synchronized void addEvalRequest(Method m, Object[] actuals){
-		evalRequests.addLast(m);
-		evalRequests.addLast(actuals);
+	public synchronized void addRequest(Integer operation, Method m, Object[] actuals){
+		requests.addLast(operation);
+		requests.addLast(m);
+		requests.addLast(actuals);
 	}
 	
 	private void handleRequest()
 	{
-		Method m = (Method) evalRequests.getFirst(); 
-		evalRequests.removeFirst();
+		Integer operation = (Integer) requests.getFirst(); 
+		requests.removeFirst();
+		
+		Method m = (Method) requests.getFirst(); 
+		requests.removeFirst();
 	
-		Object[] actuals = (Object[])evalRequests.getFirst();
-		evalRequests.removeFirst();
+		Object[] actuals = (Object[])requests.getFirst();
+		requests.removeFirst();
 	
 		Object res = null;
   		try {
   			res = m.invoke(toolinstance, actuals);
   		}
   		catch (Exception e){
-  				System.out.println("ToolShield.HandleRequest: " + e);
+  				System.out.println("ToolShield.handleRequest: " + e);
   		}
-  		javatool.addValue(res);
+  		if(operation == JavaTool.EVAL){
+  			javatool.addValue(res);
+  		}
 	}
 	
 	public ATermFactory getFactory(){
 		return TBTerm.factory;
 	}
 	
-	public void sndValue(ATerm trm){
+	public void sndValueToToolBus(ATerm trm){
 		javatool.addValue(trm);
 	}
 	
-	public void sndEvent(ATerm trm){
+	public void sndEventToToolBus(ATerm trm){
 		javatool.addEvent(trm);
 	}
 	
 	public void run(){
 		System.out.println("run of ToolShield called");
 		while(true){
-			while(!evalRequests.isEmpty())
+			while(!requests.isEmpty())
 				handleRequest();
 			Thread.yield();
 		}
@@ -88,6 +105,9 @@ public class JavaTool implements ToolInstance {
 	private LinkedList valuesFromTool;
 	private LinkedList eventsFromTool;
 	private ToolShield toolshield;
+	
+	protected static final Integer EVAL = new Integer(1);
+	protected static final Integer DO =  new Integer(2);
 
 	public JavaTool(String className, ATerm toolId, ATermList sigs) throws ToolBusException {
 		this.className = className;
@@ -199,7 +219,7 @@ public class JavaTool implements ToolInstance {
 		}
 	}
 	
-  	synchronized public void sndEvalToTool(ATermAppl call){
+  	private void sndRequestToTool(Integer operation, ATermAppl call){
   		String name = call.getName();
   		ATerm[] args = call.getArgumentArray();
   		Object actuals[]= new Object[args.length];
@@ -216,8 +236,16 @@ public class JavaTool implements ToolInstance {
   			else
   				actuals[i] = args[i];
   		}
-  		toolshield.addEvalRequest(m, actuals);		
+  		toolshield.addRequest(operation, m, actuals);		
   	}
+  	
+  	synchronized public void sndEvalToTool(ATermAppl call){
+  		sndRequestToTool(EVAL, call);
+  	}
+    
+    synchronized public void sndDoToTool(ATermAppl call){
+  		sndRequestToTool(DO, call);
+  	}	
   	
   	synchronized void addValue(Object obj){
   		valuesFromTool.addLast(obj);
@@ -250,11 +278,11 @@ public class JavaTool implements ToolInstance {
 		return new MatchResult(false, null, null);
   	}
   	
-  	synchronized public MatchResult getValue(ATerm trm, Environment env){
+  	synchronized public MatchResult getValueFromTool(ATerm trm, Environment env){
   		return getFromTool(trm, env, valuesFromTool);
   	}
   	
-  	synchronized public MatchResult getEvent(ATerm trm, Environment env){
+  	synchronized public MatchResult getEventFromTool(ATerm trm, Environment env){
   		return getFromTool(trm, env, eventsFromTool);
   	}
   	

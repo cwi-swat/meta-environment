@@ -1,9 +1,11 @@
 package toolbus.tool;
-import aterm.*;
-import java.io.*;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.awt.*;
-import java.awt.event.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 30, 2002
@@ -44,7 +46,7 @@ public class Example extends Frame implements ActionListener {
 		if (event.getSource() == button) {
 			System.out.println("actionPerformed(" + event + ")");
 			// When the user presses the button, we send an event to the ToolBus
-			bridge.sndEvent(factory.make("button(<str>)", button.getLabel()));
+			bridge.sndEventToToolBus(factory.make("button(<str>)", button.getLabel()));
 		}
 	}
 

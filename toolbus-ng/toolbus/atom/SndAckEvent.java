@@ -1,9 +1,10 @@
 package toolbus.atom;
 
-import aterm.*;
-import toolbus.process.*;
-import toolbus.tool.*;
-import toolbus.*;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolInstance;
+
+import aterm.ATerm;
 /**
  * @author paulk, Jul 31, 2002
  */
@@ -26,8 +27,8 @@ public class SndAckEvent extends ToolAtom {
 		if (!isEnabled())
 			return false;
 		ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
-		ti.sndEvalToTool((ATermAppl) getToolarg()); // add a substitute!
 
+		ti.sndEvalToTool(getSubstitutedArg());
 		return true;
 	}
 

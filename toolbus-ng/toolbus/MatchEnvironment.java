@@ -5,7 +5,7 @@
 package toolbus;
 import java.util.Vector;
 
-import aterm.*;
+import aterm.ATerm;
 
 
 public class MatchEnvironment {

@@ -6,9 +6,16 @@ package toolbus.atom;
 
 import java.util.Random;
 
-import aterm.*;
-import toolbus.*;
-import toolbus.process.*;
+import toolbus.Environment;
+import toolbus.MatchResult;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
+import toolbus.ToolBusInternalError;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
+
+import aterm.ATerm;
+import aterm.ATermList;
 
 public class Atom implements ProcessExpression {
   private ATermList args; // arguments of this atom (modified by compile)

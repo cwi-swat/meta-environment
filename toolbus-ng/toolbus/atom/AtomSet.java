@@ -4,13 +4,13 @@
 
 package toolbus.atom;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
-import java.util.Random;
-import aterm.*;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessInstance;
 
-import toolbus.process.*;
-import toolbus.*;
+import aterm.ATerm;
 
 public class AtomSet {
 	private Vector atoms;

@@ -4,9 +4,11 @@
  */
 
 package toolbus.process;
-import aterm.*;
-import toolbus.*;
-import toolbus.atom.*;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.atom.AtomSet;
+
+import aterm.ATermList;
 
 public class ProcessCall implements ProcessExpression {
 	private String name;

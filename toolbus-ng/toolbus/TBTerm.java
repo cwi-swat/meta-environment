@@ -5,7 +5,12 @@
 package toolbus;
 import java.util.Hashtable;
 
-import aterm.*;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermInt;
+import aterm.ATermList;
 
 class FunctionDescriptor {
 	private String name;
@@ -320,7 +325,7 @@ public class TBTerm {
 		switch (t.getType()) {
 			case ATerm.BLOB :			// ??
 			case ATerm.INT :			return IntPlaceholder;
-			case ATerm.PLACEHOLDER :	// ??
+			case ATerm.PLACEHOLDER :	return t;
 			case ATerm.REAL :			return RealPlaceholder;
 			
 			case ATerm.APPL :
@@ -391,6 +396,42 @@ public class TBTerm {
 				return lst;
 		}
 		throw new ToolBusInternalError("illegal ATerm in eval: " + t);
+	}
+	
+	public static ATerm substitute(ATerm t, Environment env)
+	throws ToolBusException
+	 {
+		switch (t.getType()) {
+			case ATerm.BLOB :
+			case ATerm.INT :
+			case ATerm.PLACEHOLDER :
+			case ATerm.REAL :
+				return t;
+
+			case ATerm.APPL :
+				if (TBTerm.isVar(t))
+					return env.getVar(t);
+				if(TBTerm.isBoolean(t))
+				   return t;
+				AFun afun = ((ATermAppl) t).getAFun();
+				ATerm args[] = ((ATermAppl) t).getArgumentArray();
+				if(args.length == 0)
+					return t;
+				ATerm vargs[] = new ATerm[args.length];
+				for (int i = 0; i < args.length; i++) {
+					vargs[i] = substitute(args[i], env);
+				}
+				return factory.makeAppl(afun, vargs);
+				
+
+			case ATerm.LIST :
+				ATermList lst = factory.makeList();
+				for (int i = ((ATermList) t).getLength() - 1; i >= 0 ; i--) {
+					lst = factory.makeList(substitute(((ATermList) t).elementAt(i), env), lst);
+				}
+				return lst;
+		}
+		throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
 	}
 
 	

@@ -3,12 +3,36 @@
  */
 
 package toolbus;
-import aterm.*;
-import aterm.pure.*;
+import toolbus.atom.Assign;
+import toolbus.atom.Atom;
+import toolbus.atom.AtomSet;
+import toolbus.atom.Create;
+import toolbus.atom.Delta;
+import toolbus.atom.Execute;
+import toolbus.atom.Print;
+import toolbus.atom.RecEvent;
+import toolbus.atom.RecMsg;
+import toolbus.atom.RecVal;
+import toolbus.atom.ShutDown;
+import toolbus.atom.SndAckEvent;
+import toolbus.atom.SndEval;
+import toolbus.atom.SndMsg;
+import toolbus.atom.Tau;
+import toolbus.process.Alternative;
+import toolbus.process.IfElse;
+import toolbus.process.IfThen;
+import toolbus.process.Iteration;
+import toolbus.process.LetDefinition;
+import toolbus.process.Merge;
+import toolbus.process.ProcessCall;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
+import toolbus.process.Sequence;
+import toolbus.tool.ToolDefinition;
 
-import toolbus.atom.*;
-import toolbus.process.*;
-import toolbus.tool.*;
+import aterm.ATerm;
+import aterm.ATermList;
+import aterm.pure.PureFactory;
 
 public class Main {
 	private static PureFactory aterms = new PureFactory();
@@ -23,9 +47,10 @@ public class Main {
 		//IfTest(); 
 		//CreateTest();
 		//NestedIterTest();
+		MergeTest();
 		//SieveTest();
 		//producerTest();
-		ToolTest();
+		//ToolTest();
 	}
 	
 	static void atomTest(){
@@ -255,6 +280,30 @@ public class Main {
 			T.execute();	
 		
 		} catch (ToolBusException e) { System.out.println(e.getMessage()); }
+	}
+	
+	static void MergeTest()
+	{
+		
+		ProcessExpression Pa = new Print((ATermList) aterms.make("[a]"));
+		ProcessExpression Pb = new Print((ATermList) aterms.make("[b]"));
+		ProcessExpression Pc = new Print((ATermList) aterms.make("[c]"));
+		ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
+		
+		ProcessDefinition MERGE =
+			new ProcessDefinition("MERGE", (ATermList) aterms.make("[]"),
+				new Merge(
+					new Sequence(Pa,Pb),
+					new Sequence(Pc,Pd)
+				)
+			);
+				
+		try { 
+			ToolBus T = new ToolBus();
+			T.addProcessDefinition(MERGE);
+			T.addProcess(new ProcessCall("MERGE", (ATermList) aterms.make("[]")));
+			T.execute();
+		} catch (ToolBusException e) { System.out.println(e.getMessage()); }			
 	}
 
 	static void SieveTest(){

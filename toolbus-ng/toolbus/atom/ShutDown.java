@@ -2,7 +2,8 @@ package toolbus.atom;
 
 import toolbus.ToolBusDeathException;
 import toolbus.ToolBusException;
-import aterm.*;
+
+import aterm.ATerm;
 
 /**
  * @author paulk, Jul 26, 2002

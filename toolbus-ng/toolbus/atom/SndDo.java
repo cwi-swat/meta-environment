@@ -1,27 +1,28 @@
 package toolbus.atom;
+
 import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
 import aterm.ATerm;
-/**
- * @author paulk, Jul 31, 2002
- */
-public class SndEval extends ToolAtom {
 
-	
-	public SndEval(ATerm toolvar, ATerm trm){
-		super(toolvar, trm);
+/**
+ * @author paulk, Aug 7, 2002
+ */
+public class SndDo extends ToolAtom {
+
+	public SndDo(ATerm toolvar, ATerm toolarg) {
+		super(toolvar, toolarg);
 	}
 	
-	public SndEval(){
+	public SndDo() {
 		super();
 	}
-	
+
 	public void compile(ProcessInstance P, AtomSet follow)
 	throws ToolBusException
 	{
-		super.compile(P, follow, "snd-eval", "rec-eval");
+		super.compile(P, follow, "snd-do", "rec-do");
 	}
 	
 	public boolean execute() throws ToolBusException
@@ -29,7 +30,7 @@ public class SndEval extends ToolAtom {
 		if(!isEnabled())
 			return false;
 		ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
-		ti.sndEvalToTool(getSubstitutedArg());
+		ti.sndDoToTool(getSubstitutedArg());
 		return true;
 	}
 

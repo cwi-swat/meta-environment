@@ -1,9 +1,11 @@
 package toolbus.atom;
 
-import aterm.*;
-import toolbus.*;
-import toolbus.process.*;
-import toolbus.tool.*;
+import toolbus.MatchResult;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolInstance;
+
+import aterm.ATerm;
 
 /**
  * @author paulk, Aug 7, 2002
@@ -28,7 +30,7 @@ public class RecEvent extends ToolAtom {
 		if (!isEnabled())
 			return false;
 		ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
-		MatchResult mr = ti.getEvent(getToolarg(), getEnv());
+		MatchResult mr = ti.getEventFromTool(getToolarg(), getEnv());
 		if (mr.matches()) {
 			mr.getLeft().update(getEnv());
 			return true;

@@ -2,7 +2,9 @@
  * @author paulk
  */
 package toolbus.atom;
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
 
 import aterm.ATermList;
 

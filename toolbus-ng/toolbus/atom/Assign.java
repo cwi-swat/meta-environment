@@ -3,9 +3,12 @@
  */
 package toolbus.atom;
 
-import toolbus.*;
-import toolbus.process.*;
-import aterm.*;
+import toolbus.Environment;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessInstance;
+
+import aterm.ATerm;
 
 public class Assign extends Atom {
 

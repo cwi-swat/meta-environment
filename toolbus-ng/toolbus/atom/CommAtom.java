@@ -5,7 +5,8 @@
 package toolbus.atom;
 import java.util.Vector;
 
-import toolbus.*;
+import toolbus.MatchResult;
+import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
 
 import aterm.ATermList;

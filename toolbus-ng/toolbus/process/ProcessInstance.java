@@ -1,9 +1,13 @@
 package toolbus.process;
 
+import java.util.Iterator;
 import java.util.Vector;
 
-import toolbus.*;
-import toolbus.atom.*;
+import toolbus.Environment;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import toolbus.atom.AtomSet;
 
 /**
  * @author paulk, Jul 23, 2002
@@ -31,13 +35,13 @@ public class ProcessInstance {
 		prefix = PE.getFirst();
 		env.setExecuting();
 
-		//		System.out.println(processId + ": " + PE);
-		//		System.out.println(processId + ": atoms: =" + atoms );
-		//		System.out.println(processId + ": prefix = " + prefix);
-		//		for (Iterator it = atoms.getAtoms().iterator(); it.hasNext();) {
-		//			Atom a = (Atom) it.next();
-		//			System.out.println(processId + ": " + a + " --> " + a.getFollow());
-		//		}
+				System.out.println(processId + ": " + PE);
+				System.out.println(processId + ": atoms: =" + atoms );
+				System.out.println(processId + ": prefix = " + prefix);
+				for (Iterator it = atoms.getAtoms().iterator(); it.hasNext();) {
+					Atom a = (Atom) it.next();
+					System.out.println(processId + ": " + a + " --> " + a.getFollow());
+				}
 	}
 
 	public Environment getEnv() {

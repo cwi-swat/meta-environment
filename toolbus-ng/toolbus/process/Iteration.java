@@ -3,8 +3,8 @@ package toolbus.process;
  * @author paulk
  */
 
-import toolbus.atom.*;
-import toolbus.*;
+import toolbus.ToolBusException;
+import toolbus.atom.AtomSet;
 
 public class Iteration implements ProcessExpression {
 	private ProcessExpression left, right;
