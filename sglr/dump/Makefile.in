@@ -59,7 +59,6 @@ OBJ		= ${addsuffix .o,${PROG}}
 SRC		= dump-parse-table.c
 
 all:	${PROG}
-	@true
 
 .SILENT:	depend
 
@@ -90,9 +89,9 @@ distclean realclean spotless:	clean
 clean:
 	rm -f	core ${PROG} ${OBJ}
 
-# Generic rules
 
-%:	${SRC}
+dump-actions dump-gotos	\
+dump-priorities dump-productions:	${SRC}
 	${CC} -DPTPART=${subst dump-,,${basename $@}} ${CFLAGS} ${INCLUDES} $< ${LIBS} -o $@
 
 

@@ -33,7 +33,7 @@ MAKE		= gmake
 
 DEFS		= @DEFS@
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
-LIBSALL		= -L${PARSERDIR} -L${libdir} @LIBS@ ${SOCKLIBS}
+LIBSALL		= -L. -L${PARSERDIR} -L{A2TOA1DIR} -L${libdir} @LIBS@ ${SOCKLIBS}
 LIBS		= ${LIBSALL} ${XLIBS}
 LIBSPROF	= ${LIBSALL} ${XLIBSPROF}
 SOCKLIBS	= @SOCKLIBS@
@@ -46,6 +46,7 @@ UNINSTALL	= @UNINSTALL@
 ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
+A2TOA1DIR	= ${top_srcdir}/sglr/a2toa1
 PARSERDIR	= ${top_srcdir}/sglr/parser
 
 # The eXtra parts of some variables
@@ -53,12 +54,13 @@ XCFLAGS		= ${DEFS}
 
 XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
 ATLIBS 		= -lATerm -lAsFix -lATB
-XLIBS		= ${addsuffix -${CC},${ATLIBS}}
+XLIBS		= -ltree2dot -lsglr -la2toa1 ${addsuffix -${CC},${ATLIBS}}
 
 LIBSRC          = tree-to-dot.c
 LIBOBJ		= ${patsubst %.c,%.o,${LIBSRC}}
 OBJ		= ${patsubst %.c,%.o,${MAIN}}
 
+MAIN		= ${PROG}-main.c
 PROG            = tree2dot
 LIB		= libtree2dot.a
 
@@ -90,7 +92,7 @@ distclean realclean spotless:	clean
 	rm -f	Makefile
 
 clean:
-	rm -f	core depend ${PROG} ${OBJ} ${LIB}
+	rm -f	core depend ${PROG} ${OBJ} ${LIBOBJ} ${LIB}
 
 # Generic rules
 
@@ -104,21 +106,11 @@ libtree2dot.a:  ${LIBOBJ}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
 
 tree2dot:	${LIB} ${OBJ}
-
+	${CC} ${LDFLAGS} ${OBJ} ${LIBS} -o $@
 
 # ObTribute to Larry Wall
 love:
 	@echo "not war"
-
-
-# The GNU getopt sources ${GETOPTC} might not compile silently
-# when using a high warning level in a really pedantic compiler
-
-getopt.o: getopt.c
-	${CC} -O3 -c $<
-
-getopt1.o: getopt1.c
-	${CC} -O3 -c $<
 
 # Handle dependencies
 depend: ${LIBSRC} ${MAIN}

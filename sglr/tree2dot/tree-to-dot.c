@@ -229,11 +229,15 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
 
 void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 {
-  FILE *dot;
+  FILE *dot = NULL;
 
   if (!file || !strcmp(file, ""))
     file = "parse.dot";
-  if (!(dot = fopen(file, "w"))) {
+  if(!strcmp(file, "-"))
+    dot = stdout;
+  else
+    dot = fopen(file, "w");
+  if (!dot) {
     ATfprintf(stderr, "%s: cannot create dotfile %s\n", prg, file);
     exit(1);
   }
@@ -245,6 +249,8 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
                  "\tedge[dir=none];\n\n");
   SG_TreeToDot(dot, t, 0, NULL, suppress);
   ATfprintf(dot, "}\n");
+  if(dot != stdout)
+    fclose(dot);
 }
 
 void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
