@@ -143,9 +143,10 @@ do
                 af1name=${TMPDIR:-/var/tmp}/stdin.$$.asfix1
 		tblname=${output:-"-"}
 	else
-		base=`dirname $f`/`basename $f .sdf2`
+		base=`basename $f`.sdf2
+		dir=`dirname $f`
                 af1name=${TMPDIR:-/var/tmp}/$base.asfix1
-		tblname=${output:-$base.tbl}
+		tblname=${output:-$dir/$base.tbl}
 	fi
 	Notify "Parsing $f..."
 	if $PARSER $VERBOSE -i $f -o $af1name
