@@ -23,5 +23,5 @@ requires
   pgen		1.7
   asf		1.7
   aterm         2.0.2
-  toolbus       0.3
+  toolbus       1.0
   toolbuslib    0.5
