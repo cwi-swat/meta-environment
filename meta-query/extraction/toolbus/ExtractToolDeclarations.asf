@@ -13,8 +13,8 @@ equations
   extractToolDeclarations($ToolDef, $Rstore1) = $Rstore2
 
 [add-tool-declaration]
-  $ToolNameId := get-area($ToolName),
-  $Tuple1 := <$ToolNameId, toolname2str($ToolName)>,
+  $ToolNameId := get-location($ToolName),
+  $Tuple1 := <$ToolNameId, unparse-to-string($ToolName)>,
   $Rstore2 := add-tuple(TOOL_DECLARATION, $Tuple1, $Rstore1)
   ===>
   addToolDeclaration($Rstore1, $ToolName) = $Rstore2

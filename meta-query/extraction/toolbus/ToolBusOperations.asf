@@ -1,21 +1,5 @@
 equations
 
-[toString-atom]
-  toString($Atom) = bytes-to-string(unparse-to-bytes($Atom))
-
-[toString-atomargs]
-  toString($AtomArgs) = bytes-to-string(unparse-to-bytes($AtomArgs))
-
-[toString-processname]
-  toString($ProcessName) = bytes-to-string(unparse-to-bytes($ProcessName))
-
-[toString-toolname]
-  toString($ToolName) = bytes-to-string(unparse-to-bytes($ToolName))
-
-[toString-var]
-  toString($Var) = bytes-to-string(unparse-to-bytes($Var))
-
-
 [get-formal-parameters-1]
   get-formal-parameters($ProcessName) =
 

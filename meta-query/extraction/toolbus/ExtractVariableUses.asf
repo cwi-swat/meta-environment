@@ -3,7 +3,7 @@ equations
 [extract-variable-uses-0]
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName := $ProcessSignature,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractVariableUsesInScope($ProcessBody, $Rstore1, $ProcessNameId)
   ===>
   extractVariableUses($ProcessDef, $Rstore1) = $Rstore2
@@ -11,7 +11,7 @@ equations
 [extract-variable-uses-1]
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName ( $FormalParams ) := $ProcessSignature,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractVariableUsesInScope($ProcessBody, $Rstore1, $ProcessNameId)
   ===>
   extractVariableUses($ProcessDef, $Rstore1) = $Rstore2
@@ -27,8 +27,8 @@ equations
 
 
 [add-variable-use-0]
-  $VarId := get-area($Var),
-  $Tuple1 := <$VarId, toString($Var)>,
+  $VarId := get-location($Var),
+  $Tuple1 := <$VarId, unparse-to-string($Var)>,
   $Rstore2 := add-tuple(VAR_USE, $Tuple1, $Rstore1),
   $Tuple2 := <$VarId, $ProcessNameId>,
   $Rstore3 := add-tuple(VAR_USE, $Tuple2, $Rstore2)

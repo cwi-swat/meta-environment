@@ -13,8 +13,8 @@ equations
   extractProcessCreations($ProcessCreation, $Rstore1) = $Rstore2
 
 [add-process-creation-0]
-  $ProcessNameId := get-area($ProcessName),
-  $Tuple1 := <$ProcessNameId, processname2str($ProcessName)>,
+  $ProcessNameId := get-location($ProcessName),
+  $Tuple1 := <$ProcessNameId, unparse-to-string($ProcessName)>,
   $Rstore2 := add-tuple(PROCESS_CREATION, $Tuple1, $Rstore1)
   ===>
   addProcessCreation($Rstore1, $ProcessName) = $Rstore2

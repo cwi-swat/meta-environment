@@ -4,7 +4,7 @@ equations
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName := $ProcessSignature,
   let $VarDecls in $ProcessExpr endlet := $ProcessBody,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractVariableDeclarationsInScope($VarDecls, $Rstore1, $ProcessNameId)
   ===>
   extractVariableDeclarations($ProcessDef, $Rstore1) = $Rstore2
@@ -12,7 +12,7 @@ equations
 [extract-variable-declarations-1]
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName ( $FormalParams ) := $ProcessSignature,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractVariableDeclarationsInScope($FormalParams, $Rstore1, $ProcessNameId),
   let $VarDecls in $ProcessExpr endlet := $ProcessBody,
   $Rstore3 := extractVariableDeclarationsInScope($VarDecls, $Rstore2, $ProcessNameId)
@@ -44,10 +44,10 @@ equations
 
 
 [add-variable-declaration-0]
-  $VarId := get-area($Var),
-  $Tuple1 := <$VarId, toString($Var)>,
+  $VarId := get-location($Var),
+  $Tuple1 := <$VarId, unparse-to-string($Var)>,
   $Rstore2 := add-tuple(VAR_DECL_NAME, $Tuple1, $Rstore1),
-  $Tuple2 := <$VarId, term2str($Term)>,
+  $Tuple2 := <$VarId, unparse-to-string($Term)>,
   $Rstore3 := add-tuple(VAR_DECL_TYPE, $Tuple2, $Rstore2),
   $Tuple3 := <$VarId, $ProcessNameId>,
   $Rstore4 := add-tuple(VAR_DECL_SCOPE, $Tuple3, $Rstore3)

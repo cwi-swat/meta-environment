@@ -3,7 +3,7 @@ equations
 [extract-events-0]
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName := $ProcessSignature,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractProcessEvents($ProcessBody, $Rstore1, $ProcessNameId)
   ===>
   extractEvents($ProcessDef, $Rstore1) = $Rstore2
@@ -11,7 +11,7 @@ equations
 [extract-events-1]
   process $ProcessSignature is $ProcessBody := $ProcessDef,
   $ProcessName ( $FormalParams ) := $ProcessSignature,
-  $ProcessNameId := get-area($ProcessName),
+  $ProcessNameId := get-location($ProcessName),
   $Rstore2 := extractProcessEvents($ProcessBody, $Rstore1, $ProcessNameId)
   ===>
   extractEvents($ProcessDef, $Rstore1) = $Rstore2
@@ -23,8 +23,8 @@ equations
   extractProcessEvents($Atom, $Rstore1, $ProcessNameId) = $Rstore2
 
 [add-process-event-0]
-  $EventId := get-area($Event),
-  $Tuple1 := <$EventId, toString($Event)>,
+  $EventId := get-location($Event),
+  $Tuple1 := <$EventId, unparse-to-string($Event)>,
   $Rstore2 := add-tuple(EVENT, $Tuple1, $Rstore1),
   $Tuple2 := <$EventId, $ProcessNameId>,
   $Rstore3 := add-tuple(EVENT_OCCURS, $Tuple2, $Rstore2)

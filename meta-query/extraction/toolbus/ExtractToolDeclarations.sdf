@@ -3,7 +3,8 @@ module ExtractToolDeclarations
 imports Rstore
 imports Tscript
 imports ToolBusOperations
-imports MyPosInfo[ToolName]
+imports utilities/Parsing[ToolName]
+imports utilities/PosInfo[ToolName]
 
 exports
   context-free syntax
@@ -22,6 +23,6 @@ hiddens
     "$ToolAttribs" -> ToolAttrib*
     "$ToolDef" -> ToolDef
     "$ToolName" -> ToolName
-    "$ToolNameId" -> Area
-    "$Tuple"[0-9]* -> <Elem, Elem>
+    "$ToolNameId" -> Location
+    "$Tuple"[0-9]* -> Tuple
     "$VarDecls" -> VarDecls

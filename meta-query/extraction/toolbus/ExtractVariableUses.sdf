@@ -3,8 +3,9 @@ module ExtractVariableUses
 imports Rstore
 imports Tscript
 imports ToolBusOperations
-imports MyPosInfo[ProcessName]
-imports MyPosInfo[Var]
+imports utilities/PosInfo[ProcessName]
+imports utilities/Parsing[Var]
+imports utilities/PosInfo[Var]
 
 exports
   context-free syntax
@@ -16,15 +17,15 @@ exports
 
 hiddens
   context-free syntax
-    extractVariableUsesInScope(ProcessBody, RSTORE, Area) ->
+    extractVariableUsesInScope(ProcessBody, RSTORE, Location) ->
       RSTORE {traversal(accu, top-down, break)}
 
-    extractVariableUsesInScope(GenVar, RSTORE, Area) ->
+    extractVariableUsesInScope(GenVar, RSTORE, Location) ->
       RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    addVariableUse(Var, Area, RSTORE) -> RSTORE
+    addVariableUse(Var, Location, RSTORE) -> RSTORE
 
 hiddens
   variables
@@ -33,9 +34,9 @@ hiddens
     "$ProcessBody" -> ProcessBody
     "$ProcessDef" -> ProcessDef
     "$ProcessName" -> ProcessName
-    "$ProcessNameId" -> Area
+    "$ProcessNameId" -> Location
     "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
-    "$Tuple"[0-9]* -> <Elem, Elem>
+    "$Tuple"[0-9]* -> Tuple
     "$Var" -> Var
-    "$VarId" -> Area
+    "$VarId" -> Location

@@ -13,8 +13,8 @@ equations
   extractProcessDeclarations($ProcessSignature, $Rstore1) = $Rstore2
 
 [add-process-declaration-0]
-  $ProcessNameId := get-area($ProcessName),
-  $Tuple1 := <$ProcessNameId, processname2str($ProcessName)>,
+  $ProcessNameId := get-location($ProcessName),
+  $Tuple1 := <$ProcessNameId, unparse-to-string($ProcessName)>,
   $Rstore2 := add-tuple(PROCESS_DECLARATION, $Tuple1, $Rstore1)
   ===>
   addProcessDeclaration($Rstore1, $ProcessName) = $Rstore2

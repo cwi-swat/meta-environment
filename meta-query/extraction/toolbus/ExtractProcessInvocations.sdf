@@ -3,7 +3,8 @@ module ExtractProcessInvocations
 imports Rstore
 imports Tscript
 imports ToolBusOperations
-imports MyPosInfo[ProcessName]
+imports utilities/PosInfo[ProcessName]
+imports utilities/Parsing[ProcessName]
 
 exports
   context-free syntax
@@ -25,8 +26,8 @@ hiddens
   variables
     "$ProcessInvocation" -> ProcessInvocation
     "$ProcessName" -> ProcessName
-    "$ProcessNameId" -> Area
+    "$ProcessNameId" -> Location
     "$Rstore"[0-9]* -> RSTORE
     "$Terms" -> {Term ","}*
     "$TscriptDef" -> TscriptDef
-    "$Tuple"[0-9]* -> <Elem, Elem>
+    "$Tuple"[0-9]* -> Tuple

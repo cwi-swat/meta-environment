@@ -3,40 +3,13 @@ module ToolBusOperations
 imports basic/Strings
 imports Tscript
 
-imports utilities/IO[Atom]
-exports context-free syntax
-    toString(Atom) -> String
-
-imports utilities/IO[AtomArgs]
-exports context-free syntax
-    toString(AtomArgs) -> String
-
-imports utilities/IO[ProcessName]
-exports context-free syntax
-    toString(ProcessName) -> String
-
-imports utilities/IO[ToolName]
-exports context-free syntax
-    toString(ToolName) -> String
-
-imports utilities/IO[Var]
-exports context-free syntax
-    toString(Var) -> String
-
 exports
   context-free syntax    
-    get-formal-parameters(ProcessSignature) -> {FormalParam ","}*
-    get-local-variables(ProcessBody) -> {VarDecl ","}*
-    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term
-    getType(Term, {FormalParam ","}*, {VarDecl ","}*) -> Term
-
-hiddens
+    get-formal-parameters(ProcessSignature) -> {FormalParam ","}* get-local-variables(ProcessBody) -> {VarDecl ","}* make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term getType(Term, {FormalParam ","}*, {VarDecl ","}*) -> Term hiddens
   context-free syntax
-    make-simple-signature({Term ","}+) ->
-      {Term ","}+ {traversal(trafo,top-down,break)}
+    make-simple-signature({Term ","}+) -> {Term ","}+ {traversal(trafo,top-down,break)}
 
-    make-simple-signature(Term) ->
-      Term {traversal(trafo,top-down,break)}
+    make-simple-signature(Term) -> Term {traversal(trafo,top-down,break)}
 
 hiddens
   variables
