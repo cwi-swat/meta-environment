@@ -183,7 +183,7 @@ equations
    atomargs2box(Term+) = termlist2box(Term+)
 
 [tscript2box-0]
-  TscriptDef* = box2tscript(tscriptdefs2box(TscriptDef*)) 
+  Preprocessor* TscriptDef* = box2tscript(V vs=2 [preprocessors2box(Preprocessor*) tscriptdefs2box(TscriptDef*)]) 
 
 [tscriptdefs2box-0]
   tscriptdefs2box() = V vs=2 []

@@ -6,22 +6,21 @@ exports
   context-free start-symbols Tscript
   sorts Tscript
   context-free syntax
-
-    TscriptDef
-
-* -> Tscript {cons("tscript")}
-%%    IncludeFile* TscriptDef* -> Tscript {cons("tscript")}
+    %%TscriptDef* -> Tscript {cons("tscript")}
+    Preprocessor* TscriptDef* -> Tscript {cons("tscript")}
 
 exports
+  sorts Preprocessor
   sorts IncludeFile
   sorts LocalInclude
   sorts SystemInclude
 
   context-free syntax
+    IncludeFile -> Preprocessor
     LocalInclude -> IncludeFile
     SystemInclude -> IncludeFile
-  %% Hack
-    IncludeFile -> LAYOUT
+    %%Hack
+    %%IncludeFile -> LAYOUT
 
   lexical syntax
     "#include" [\ \t]* "<" FileName ">" -> SystemInclude
@@ -35,8 +34,8 @@ hiddens
 
 exports
   lexical syntax
-    "#ifdef" [\ \t]* Vname -> LAYOUT
-    "#ifndef" [\ \t]* Vname -> LAYOUT
-    "#else" -> LAYOUT
-    "#define" [\ \t]* Vname ~[\n]* [\n] -> LAYOUT
-    "#endif" -> LAYOUT
+    "#ifdef" [\ \t]* Vname -> Preprocessor
+    "#ifndef" [\ \t]* Vname -> Preprocessor
+    "#else" -> Preprocessor
+    "#define" [\ \t]* Vname ~[\n]* [\n] -> Preprocessor
+    "#endif" -> Preprocessor

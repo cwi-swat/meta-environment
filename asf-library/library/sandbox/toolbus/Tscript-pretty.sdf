@@ -10,6 +10,7 @@ exports
     formalparams2box({FormalParam ","}*) -> Box {to-box}
     genvar2box(GenVar) -> Box {to-box}
     id2box(Id) -> Box {to-box}
+    preprocessors2box(Preprocessor*) -> Box {to-box}
     processbody2box(ProcessBody) -> Box {to-box}
     processexpr2box(ProcessExpr) -> Box {to-box}
     processinvocation2box(ProcessInvocation) -> Box {to-box}
@@ -49,6 +50,7 @@ hiddens
     "FormalParam+" -> {FormalParam ","}+
     "GenVar" -> GenVar
     "Id" -> Id
+    "Preprocessor*" -> Preprocessor*
     "ProcessBody" -> ProcessBody
     "ProcessDef" -> ProcessDef
     "ProcessExpr"[0-9]* -> ProcessExpr
