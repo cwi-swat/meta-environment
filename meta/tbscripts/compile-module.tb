@@ -13,14 +13,14 @@ let
 in
     Id := process-id.
     (
-      rec-msg(compile-module(ModuleName?, OutputFile?)) .
+      rec-msg(compile-module(ModuleName?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
       snd-msg(process-eqs(ModuleName)) .
       rec-msg(eqs-processed(ModuleName)) .
       snd-msg(get-all-equations(ModuleName)) .
       (
         rec-msg(all-equations(Equations?)) .
-        snd-msg(compile-module(ModuleName, Equations, OutputFile)) .
+        snd-msg(compile-module(ModuleName, Equations)) .
         rec-msg(compilation-done(ModuleName))
       +
         rec-msg(equations-incomplete) .
