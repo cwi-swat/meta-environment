@@ -496,8 +496,6 @@ The main window consists of the following parts:
 \subsection{The File menu}
 \label{FileMenu}
 
-
-
 The \link{{\tt File} menu}[]{FIG:file-menu} 
 is used for creating, opening, saving and printing
 specifications as well as for quitting the \ASmetaenv.  
@@ -1873,7 +1871,7 @@ An example of the use of comments is given
 
 
 \begin{figure}
-\label{CODE:sdfcomment}
+\begin{Label}{CODE:sdfcomment}
 \begin{IncCode}
 \begin{verbatim}
 module Layout
@@ -1888,6 +1886,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\sdf\ comment}
+\end{Label}
 \end{figure}  
 
 This definition also defines the comment convention in \sdf\ itself.
@@ -2220,7 +2219,7 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
-\label{CODE:simplelex}
+\begin{Label}{CODE:simplelex}
 \begin{IncCode}
 \begin{verbatim}
 module LeesPlank
@@ -2237,6 +2236,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple lexical functions}
+\end{Label}
 \end{figure}   
       
 
@@ -2277,7 +2277,7 @@ digits ({\tt Digit}) are shown in
 \W in the first example \link{below}[]{CODE:LettersDigits1}. 
 
 \begin{figure}
-\label{CODE:LettersDigits1}
+\begin{Label}{CODE:LettersDigits1}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits1
@@ -2294,6 +2294,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}
+\end{Label}
 \end{figure}   
 
 \T Figure~\ref{CODE:LettersDigits2}
@@ -2303,7 +2304,7 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
 \begin{figure}
-\label{CODE:LettersDigits2}
+\begin{Label}{CODE:LettersDigits2}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
@@ -2318,6 +2319,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit}
+\end{Label}
 \end{figure}   
 
 \paragraph{Escape Conventions}
@@ -2376,7 +2378,7 @@ This definition is equivalent to the one given
 \link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
 
 \begin{figure}
-\label{CODE:LettersDigits3}
+\begin{Label}{CODE:LettersDigits3}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits3
@@ -2387,6 +2389,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit using the alternative operator}
+\end{Label}
 \end{figure}
 
 
@@ -2398,7 +2401,7 @@ all possible characters, either by means of the ordinary representation
 or via their decimal representation.
 
 \begin{figure}
-\label{CODE:charclasses}
+\begin{Label}{CODE:charclasses}
 \begin{IncCode}
 \begin{verbatim}
 module Characters
@@ -2422,6 +2425,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of character classes}
+\end{Label}
 \end{figure}  
 
 
@@ -2441,7 +2445,7 @@ operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
 
 \begin{figure}
-\label{CODE:repetition}
+\begin{Label}{CODE:repetition}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-repetition
@@ -2458,6 +2462,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining identifiers using the repetition operator {\tt *}}
+\end{Label}
 \end{figure}   
 
 \subsubsection{Option}
@@ -2477,7 +2482,7 @@ digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\t
   z789}.
 
 \begin{figure}
-\label{CODE:option}
+\begin{Label}{CODE:option}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-optional
@@ -2493,7 +2498,9 @@ exports
     Letter Digit? -> Id
 \end{verbatim}
 \end{IncCode}
-\caption{Defining a letter followed by an optional number using the option operator {\tt ?} }
+\caption{Defining a letter followed by an optional number using the option
+  operator {\tt ?} }
+\end{Label}
 \end{figure}   
 
 \subsubsection{Alternative}
@@ -2529,7 +2536,7 @@ followed by one of the following:
   B49a} and {\tt 007} are not.
 
 \begin{figure}
-\label{CODE:alternative1}
+\begin{Label}{CODE:alternative1}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-alternative1
@@ -2547,6 +2554,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }
+\end{Label}
 \end{figure}   
 
 
@@ -2578,7 +2586,7 @@ In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
 \begin{figure}
-\label{CODE:alternative2}
+\begin{Label}{CODE:alternative2}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-alternative2
@@ -2596,6 +2604,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }
+\end{Label}
 \end{figure}   
 
 \subsubsection{Miscellaneous Operators}
@@ -2622,7 +2631,7 @@ of the option operator in the definitions of {\tt SignedReal} and {\tt
 UnsignedReal}.
 
 \begin{figure}[t]
-\label{CODE:numbers}
+\begin{Label}{CODE:numbers}
 \begin{IncCode}
 \begin{verbatim}
 module Numbers
@@ -2644,6 +2653,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of Numbers}
+\end{Label}
 \end{figure}   
 
 \paragraph{Defining Strings}
@@ -2663,7 +2673,7 @@ arbitrary characters except double quote or newline, or
 double quotes.
 
 \begin{figure}
-\label{CODE:string}
+\begin{Label}{CODE:string}
 \begin{IncCode}
 \begin{verbatim}
 module Strings
@@ -2680,6 +2690,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Lexical definition of String}
+\end{Label}
 \end{figure}   
 
 \subsection{Context-free Syntax}
@@ -2711,7 +2722,7 @@ language of coordinates and drawing commands presented
 \W \link{below}[]{CODE:simple-cf}.
 
 \begin{figure}
-\label{CODE:simple-cf}
+\begin{Label}{CODE:simple-cf}
 \begin{IncCode}
 \begin{verbatim}
 module DrawingCommands
@@ -2731,6 +2742,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple context-free syntax definition}
+\end{Label}
 \end{figure}   
 
 
@@ -2740,7 +2752,7 @@ of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
 \W \link{as follows}[]{CODE:simple-bnf}.
 
 \begin{figure}
-\label{CODE:simple-bnf}
+\begin{Label}{CODE:simple-bnf}
 \begin{IncCode}
 \begin{verbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
@@ -2748,6 +2760,7 @@ of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
 \end{verbatim}
 \end{IncCode}
 \caption{BNF definition of simple grammar}
+\end{Label}
 \end{figure}   
 
 When a literal in a context-free function consists only of lower-case letters
@@ -2775,7 +2788,7 @@ the syntax of a list of identifiers (occurring in a declaration
 in a Pascal-like language).
 
 \begin{figure}
-\label{CODE:pascal-ids}
+\begin{Label}{CODE:pascal-ids}
 \begin{IncCode}
 \begin{verbatim}
 module Decls
@@ -2795,6 +2808,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of a list of identifiers}
+\end{Label}
 \end{figure}
 
 \subsubsection{Chain Functions}
@@ -2829,7 +2843,7 @@ sort {\tt SORT-B} is required.
 the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
 
 \begin{figure}
-\label{CODE:inj-exp}
+\begin{Label}{CODE:inj-exp}
 \begin{IncCode}
 \begin{verbatim}
 module Exp
@@ -2850,6 +2864,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of expressions that uses injections}
+\end{Label}
 \end{figure}
 
 \subsubsection{Miscellaneous Operators}
@@ -2873,7 +2888,7 @@ by commas whereas {\tt LIST2} represents a list of naturals terminated
 by commas.
 
 \begin{figure}[t]
-\label{CODE:lists-usage}
+\begin{Label}{CODE:lists-usage}
 \begin{IncCode}
 \begin{verbatim}
 module Lists
@@ -2892,6 +2907,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of two list variants}
+\end{Label}
 \end{figure}
 
 \paragraph{Alternative alternatives}
@@ -2911,7 +2927,7 @@ than {\tt "|"}, see
 for more details on priority definitions.
 
 \begin{figure}
-\label{CODE:alternative-alternatives}
+\begin{Label}{CODE:alternative-alternatives}
 \begin{IncCode}
 \begin{verbatim}
 module Bool
@@ -2932,6 +2948,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Two ways of defining {\tt |} and {\tt \&}}
+\end{Label}
 \end{figure}
 
 \subsubsection{Lists in combination with optionals or empty producing
@@ -2945,7 +2962,7 @@ See
 for an example of such a specification.
 
 \begin{figure}
-\label{CODE:listcycle}
+\begin{Label}{CODE:listcycle}
 \begin{IncCode}
 \begin{verbatim}   
 module Cycle
@@ -2962,6 +2979,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Dangerous combination of lists and optionals}
+\end{Label}
 \end{figure}                                                                              
 
 \subsection{Attributes of Lexical and Context-free Functions}
@@ -3085,7 +3103,7 @@ is given
 \W \link{below}[]{CODE:bracket-expr}.
 
 \begin{figure}
-\label{CODE:bracket-expr}
+\begin{Label}{CODE:bracket-expr}
 \begin{IncCode}
 \begin{verbatim}
 module BracketExpr
@@ -3103,6 +3121,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition with a bracket function}
+\end{Label}
 \end{figure}
 
 Since brackets are necessary for overruling the priority and associativity of
@@ -3176,7 +3195,7 @@ simple arithmetic expressions with the usual priorities and
 associativities.
 
 \begin{figure}
-\label{CODE:simple-prio}
+\begin{Label}{CODE:simple-prio}
 \begin{IncCode}
 \begin{verbatim}
 module SimpleExpr
@@ -3200,6 +3219,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Simple context-free priority definition}
+\end{Label}
 \end{figure}   
 
 \subsubsection{Groups of Associative Functions}
@@ -3225,7 +3245,7 @@ declaration with one of the following attributes:
 an example of the use of grouped associativity.
 
 \begin{figure}
-\label{CODE:complex-prio}
+\begin{Label}{CODE:complex-prio}
 \begin{IncCode}
 \begin{verbatim}
 module ComplexExpr
@@ -3255,6 +3275,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{More complex associativity and priority definitions}
+\end{Label}
 \end{figure}   
 
 \subsubsection{Restrictions}
@@ -3321,7 +3342,7 @@ followed by a letter. It does not forbid layout characters between
 the letters, e.g. {\tt a b} is a legal recognizable string.
 
 \begin{figure}
-\label{CODE:functional}
+\begin{Label}{CODE:functional}
 \begin{IncCode}
 \begin{verbatim}
 module Functional
@@ -3345,6 +3366,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using restrictions in the definition of a simple functional language}
+\end{Label}
 \end{figure}   
 
 {\tt <Lookaheads>} are slightly more complex.  The most compact way is to
@@ -3376,7 +3398,7 @@ This problem is avoided by the definition
 it simply forbids that optional layout is followed by layout characters.
 
 \begin{figure}
-\label{CODE:safe-layout}
+\begin{Label}{CODE:safe-layout}
 \begin{IncCode}
 \begin{verbatim}
 module Layout
@@ -3390,6 +3412,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Safe way of defining {\tt LAYOUT}}
+\end{Label}
 \end{figure}
 
 The example
@@ -3404,7 +3427,7 @@ The repetition of this first restriction is
 redundant and could be eliminated.
 
 \begin{figure}
-\label{CODE:c-comment}
+\begin{Label}{CODE:c-comment}
 \begin{IncCode}
 \begin{verbatim}
 module Comment
@@ -3426,6 +3449,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of C comments}
+\end{Label}
 \end{figure}
 
 A frequently asked question is when to use \emph{lexical} restrictions
@@ -3541,7 +3565,7 @@ The specification \link*{below}[ in Figure \Ref]{CODE:restrict-id}
 shows how to enforce the longest match for the sort {\tt Id}.
 
 \begin{figure}
-\label{CODE:restrict-id}
+\begin{Label}{CODE:restrict-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-restrict
@@ -3557,7 +3581,9 @@ exports
     Id -/- [a-zA-Z0-9]  
 \end{verbatim}
 \end{IncCode}
-\caption{Using context-free restrictions to define a longest match for identifiers}
+\caption{Using context-free restrictions to define a longest match for
+    identifiers}
+\end{Label}
 \end{figure}   
 
 \paragraph{Prefer Literals} 
@@ -3587,7 +3613,7 @@ that the addition of a literal in any context-free rule also requires
 the addition of a new reject rule for that literal.
 
 \begin{figure}
-\label{CODE:reject-id}
+\begin{Label}{CODE:reject-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-reject
@@ -3606,6 +3632,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using {\tt reject} to implement Prefer Literals}
+\end{Label}
 \end{figure}   
 
 The second approach is more attractive. The lexical definition of the general
@@ -3621,7 +3648,7 @@ Although the first approach is more tedious, it allows more flexibility
 than the second one.
 
 \begin{figure}
-\label{CODE:avoid-id}
+\begin{Label}{CODE:avoid-id}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-avoid
@@ -3637,6 +3664,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Using {\tt avoid} to implement Prefer Literals}
+\end{Label}
 \end{figure}   
 
 \paragraph{Prefer Non-Layout} If there are interpretations of the text as
@@ -3746,7 +3774,7 @@ combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
   E}'.
 
 \begin{figure}
-\label{CODE:eqn-exprs}
+\begin{Label}{CODE:eqn-exprs}
 \begin{IncCode}
 \begin{verbatim}
 module Eqn
@@ -3765,6 +3793,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of EQN expressions}
+\end{Label}
 \end{figure}
 
 In the \link{second example}[ (Figure~\Ref)]{CODE:dangling-else}
@@ -3784,7 +3813,7 @@ has the prefer attribute this derivation is selected and the other
 tree is removed from the ambiguity node.
 
 \begin{figure}
-\label{CODE:dangling-else}
+\begin{Label}{CODE:dangling-else}
 \begin{IncCode}
 \begin{verbatim}
 module DanglingElse
@@ -3802,6 +3831,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition of conditionals}
+\end{Label}
 \end{figure}
 
 \subsection{Parameterization and Renaming}
@@ -3836,7 +3866,7 @@ in order to increase readability and to avoid name clashes between
 different instances of the same module.
 
 \begin{figure}
-\label{CODE:generic-pairs}
+\begin{Label}{CODE:generic-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module Pair[X Y]
@@ -3858,6 +3888,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
+\end{Label}
 \end{figure}
 
 When importing a parameterized module the formal parameters have
@@ -3868,7 +3899,7 @@ The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
 actual parameters of the module {\tt Pair[X Y]} in the last import.
 
 \begin{figure}
-\label{CODE:importing-pairs}
+\begin{Label}{CODE:importing-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module TestPair
@@ -3879,6 +3910,7 @@ imports Booleans Pair[Bool Bool]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
+\end{Label}
 \end{figure}
 
 \subsubsection{Symbol Renaming}
@@ -3896,7 +3928,7 @@ by explicitly renaming {\tt X} and {\tt Y} to the desired
 names when {\tt Pair} is imported.
 
 \begin{figure}
-\label{CODE:pairs}
+\begin{Label}{CODE:pairs}
 \begin{IncCode}
 \begin{verbatim}
 module Pair
@@ -3918,6 +3950,7 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
+\end{Label}
 \end{figure}
 
 During import such module symbols can be renamed via symbol renaming.
@@ -3927,7 +3960,7 @@ using renamings. Renaming {\tt X} to {\tt Bool} is, for instance,
 written as {\tt X => Bool}.
 
 \begin{figure}
-\label{CODE:renaming-pairs}
+\begin{Label}{CODE:renaming-pairs}
 \begin{IncCode}
 \begin{verbatim}
 module TestPair
@@ -3938,6 +3971,7 @@ imports Booleans Pair[X => Bool Y => Bool]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
+\end{Label}
 \end{figure}
 
 \subsection{Variables}
@@ -3963,7 +3997,7 @@ Strings that occur in the left-hand side of variable declarations
 should {\em always} be quoted.
 
 \begin{figure}
-\label{CODE:variables}
+\begin{Label}{CODE:variables}
 \begin{IncCode}
 \begin{verbatim}
 module VarDecls
@@ -3990,6 +4024,7 @@ hiddens
 \end{verbatim}
 \end{IncCode}
 \caption{Variable declarations using naming schemes}
+\end{Label}
 \end{figure}         
 
 Declared variables can only be used when defining equations. It is not
@@ -4008,7 +4043,7 @@ a set an auxilary variable has to be defined
 as shown \link*{below}[in Figure~\Ref]{CODE:set-variable}.
 
 \begin{figure}
-\label{CODE:set-variable}
+\begin{Label}{CODE:set-variable}
 \begin{IncCode}
 \begin{verbatim}
 module Set
@@ -4032,6 +4067,7 @@ hiddens
 \end{verbatim}
 \end{IncCode}
 \caption{Variable declarations for Set}
+\end{Label}
 \end{figure}         
 
 \subsection{Equations}
@@ -4046,15 +4082,18 @@ terms possibly containing variables.
 
 In the context of \asfsdf, an open term is any string that can be parsed
 according to one of the sorts in the specification (possibly including
-variables).  Recalling \link{the {\tt Bool-example} specification}[ in
-Section~\ref{Bool-example}]{Bool-example}, 
-examples of open terms are `{\tt true}', 
+variables).  Recalling the {\tt Bool-example} specification
+given \link*{earlier}[ in Section~\Ref]{Bool-example}, 
+examples of (open) terms are `{\tt true}', 
 `{\tt not(false)}' and `{\tt true | Bool}'.
+
+\W We will discuss the following aspects of equations:
+\W \htmlmenu{1}
 
 \subsubsection{Unconditional Equations}
 
 \index{unconditional equations@unconditional equations}
-An equality then consists of two open $L$ (lefthand side) and $R$ (righthand
+An equality then consists of two (possibly open) terms $L$ (lefthand side) and $R$ (righthand
 side) such that:
 
 \begin{itemize}
@@ -4091,7 +4130,7 @@ equality is sometimes called the \emph{conclusion} of the conditional
 equation.
 
 In \asfsdf\ a conditional equation can be written in three (syntactically
-different) ways:
+different, but semantically equivalent) ways:
 
 \begin{tabbing}
 (a) \= {\tt [$TagId$]} \= {\tt $L$ = $R$ when $C_1$, $C_2$, ...} \\\\
@@ -4102,7 +4141,7 @@ different) ways:
 \end{tabbing}
 
 
-\noindent where $C_1$, $C_2$, ...  are conditions which may be 
+\noindent where ${\tt C}_1$, ${\tt C}_2$, ...  are conditions which may be 
 either positive (and have  the form `{\tt $S$ = $T$}'), 
 or negative (and have the form `{\tt $S$ != $T$}').
 
@@ -4115,13 +4154,13 @@ distinguish the following cases:
   
 \item The condition contains only variables in $V$. Reduce both sides of the
   condition to normal form and the condition succeeds if both normal forms are
-  identical.
+  identical. Technically, this is called a \emph{join} condition.
   
 \item One of the sides of the condition contains new variables not in $V$.
   Reduce the side that does not contain new variables to normal form and the
   condition succeeds if this normal form and the other (unnormalized) side of
   the condition match. The new variables resulting from this match are added
-  to $V$.
+  to $V$. This kind of condition is called a \emph{match} condition.
 
 \end{itemize}
   
@@ -4141,8 +4180,118 @@ sides of a positive condition, in a negative condition,
 or in the right-hand side of the conclusion.
 
 
+
+
+\subsubsection{Executing Equations}
+\label{ExecutingEquations}
+
+\index{leftmost-innermost@leftmost-innermost}
+\index{rewrite rules@rewrite rules}
+\index{default equations@default equations}
+In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
+above equation is thus executed as the rewrite rule $L \rightarrow R$. This
+can be used to reduce some initial closed term (i.e., not containing
+variables) to a \emph{normal form} (i.e., a term that is not reducible any
+further) by repeatedly applying rules from the specification.
+
+A term is always reduced in the context of a certain module, say $M$. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in $M$ itself and in the modules that are (directly or indirectly)
+imported by $M$.
+
+The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the \emph{leftmost-innermost} reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+
+Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+\emph{specificity}: more specific rules come before more general rules and
+\link{default equations}[ (see Section~\Ref)]{DefaultEquations} come last.  
+If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a \emph{redex} has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper \emph{substitutions}. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+
+\subsubsection{List Matching}
+
+\index{list matching@list matching}
+\index{associative matching@associative matching}
+List matching, also known as \emph{associative matching}, is a powerful
+mechanism to describe complex functionality in a compact way.  
+
+The example \link*{below}[in Figure \Ref]{CODE:sets}
+shows a compact specification to remove double elements from a set.
+
+Unlike the matching of ordinary (non-list) variables, the matching of a list
+variable may have more than one solution since the variable can match lists of
+arbitrary length.
+
+As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
+expression containing the two list variables {\tt X} and {\tt Y} indicating
+the division of a list into two sublists) with the list {\tt ab} (a list
+containing two elements) the following three alternatives have to be
+considered:
+
+\begin{quote}
+{\tt X = (empty), Y = ab, \\
+X = a, Y = b, \\
+X = ab, Y = (empty)}.
+\end{quote}
+
+In the unconditional case, backtracking occurs only during matching. When
+conditions are present, the failure of a condition following the match of a
+list variable leads to the trial of the next possible match of the list
+variable and the repeated evaluation of following conditions.
+
+\begin{figure}[tb]
+\begin{Label}{CODE:sets}
+\begin{IncCode}
+\begin{verbatim}
+module Sets
+
+imports Layout
+
+exports
+  sorts Elem Set
+
+  lexical syntax
+    [a-z]+ -> Elem
+
+  context-free syntax
+    Set[Elem] -> Set
+
+hiddens
+  variables
+    "Elem"[0-9]*  -> Elem
+    "Elem*"[0-9]* -> {Elem ","}*
+
+equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
+\end{verbatim}
+\end{IncCode}
+\caption{Set specification}
+\end{Label}
+\end{figure}   
+
+Another example of list matching in combination with the evaluation
+of conditions is shown \link*{below}[ in Figure \Ref]{CODE:split}.
+A list of elements is split into two parts of equal length, if the list
+has an even number of elements. In case of a list of uneven length
+the middle element is ignored. The first part of the list is returned
+as result.
+
 \begin{figure}[t]
-\label{CODE:split}
+\begin{Label}{CODE:split}
 \begin{IncCode}
 \begin{verbatim}
 module Split
@@ -4179,124 +4328,35 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Split-in-two specification}
+\end{Label}
 \end{figure}  
 
-\subsubsection{Executing Equations}
-\label{ExecutingEquations}
 
-\index{leftmost-innermost@leftmost-innermost}
-\index{rewrite rules@rewrite rules}
-\index{default equations@default equations}
-In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
-above equation is thus executed as the rewrite rule $L \rightarrow R$. This
-can be used to reduce some initial closed term (i.e., not containing
-variables) to a \emph{normal form} (i.e., a term that is not reducible any
-further) by repeatedly applying rules from the specification.
 
-A term is always reduced in the context of a certain module, say $M$. The
-rewrite rules that may be used for the reduction of the term are the rules
-declared in $M$ itself and in the modules that are (directly or indirectly)
-imported by $M$.
+\subsubsection{Lexical Constructor Functions}
 
-The search for an applicable rule is determined by the reduction strategy,
-that is, the procedure used to select a subterm for possible reduction. In our
-case the \emph{leftmost-innermost} reduction strategy is used. This means that a
-left-to-right, depth-first traversal of the term is performed and that for
-each subterm encountered an attempt is made to reduce it.
+The only way to access the actual characters of a lexical token is
+by means of the so-called {\em lexical constructor functions}.
+For each lexical sort $LEX$ a lexical constructor function is automatically
+derived, the corresponding syntax definition is:
+$lex${\tt ( CHAR* ) -> }$LEX$.
+The sort {\tt CHAR} is a predefined sort to access the characters.
 
-Next, the rules are traversed one after the other.  The textual order of the
-rules is irrelevant.  Instead they are ordered according to their
-\emph{specificity}: more specific rules come before more general rules and
-\link{default rules}[ (see
-Section~\ref{DefaultEquations})]{DefaultEquations} come last.  
-If the selected subterm and the left-hand side of a
-rule (more precisely: of the left-hand side of its conclusion) match, we say
-that a \emph{redex} has been found and the following happens. The conditions
-of the rule are evaluated and if the evaluation of a condition fails, other
-rules (if any) with matching left-hand sides are tried.  If the evaluation of
-all conditions succeeds, the selected subterm is replaced by the right-hand
-side of the rule (more precisely: the right-hand side of the conclusion of the
-rule) after performing proper \emph{substitutions}. Substitutions come into
-existence by the initial matching of the rule and by the evaluation of its
-conditions.  For the resulting term the above process is repeated until no
-further reductions are possible and a normal form is reached (if any).
+Characters can be directly addressed by the representation or via
+variables which may be of the sorts {\tt CHAR}, {\tt CHAR*}, or
+{\tt CHAR+}.
+The latter two represent lists of characters.
+In the example \link*{below}[in Figure \Ref]{CODE:lcfs} 
+the lexical constructor function {\tt nat-con} is used to remove the leading
+zeros from a number.
 
-\subsubsection{List Matching}
+\noindent {\bf Warning}: the argument of a lexical constructor may be an
+arbitrary list of characters and there is \emph{no check that they match
+the lexical definition of the corresponding sort}.
 
-\index{list matching@list matching}
-\index{associative matching@associative matching}
-List matching, also known as associative matching, is a powerful
-mechanism to describe complex functionality in a compact way.  
-\begin{iftex}
-See Figure \ref{CODE:sets} for
-\end{iftex}
-\begin{ifhtml}
-The example below gives
-\end{ifhtml}
-a compact specification to remove double elements from a set.
 
 \begin{figure}[tb]
-\label{CODE:sets}
-\begin{IncCode}
-\begin{verbatim}
-module Sets
-
-imports Layout
-
-exports
-  sorts Elem Set
-
-  lexical syntax
-    [a-z]+ -> Elem
-
-  context-free syntax
-    Set[Elem] -> Set
-
-hiddens
-  variables
-    "Elem"[0-9]*  -> Elem
-    "Elem*"[0-9]* -> {Elem ","}*
-
-equations
-  
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
-\end{verbatim}
-\end{IncCode}
-\caption{Set specification}
-\end{figure}   
-
-Unlike the matching of ordinary (non-list) variables, the matching of a list
-variable may have more than one solution since the variable can match lists of
-arbitrary length.
-
-As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
-expression containing the two list variables {\tt X} and {\tt Y} indicating
-the division of a list into two sublists) with the list {\tt ab} (a list
-containing two elements) the following three alternatives have to be
-considered:
-
-\begin{quote}
-{\tt X = (empty), Y = ab, \\
-X = a, Y = b, \\
-X = ab, Y = (empty)}.
-\end{quote}
-
-In the unconditional case, backtracking occurs only during matching. When
-conditions are present, the failure of a condition following the match of a
-list variable leads to the trial of the next possible match of the list
-variable and the repeated evaluation of following conditions.
-
-This is exemplified by the 
-\link{Set specification}[ presented in Figure \ref{CODE:sets}]{CODE:sets}.
-Yet another example of list matching in combination with the evaluation
-of conditions is \link{shown}[ in Figure \ref{CODE:split}]{CODE:split}.
-A list of elements is split into two parts of equal length, if the list
-has an even number of elements. In case of a list of uneven length
-the middle element is ignored. The first part of the list is returned
-as result.
-
-\begin{figure}[tb]
-\label{CODE:lcfs}
+\begin{Label}{CODE:lcfs}
 \begin{IncCode}
 \begin{verbatim}
 module Nats
@@ -4318,25 +4378,8 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Use of lexical constructor functions}
+\end{Label}
 \end{figure}    
-
-\subsubsection{Lexical Constructor Functions}
-
-The only way to access the actual characters of a lexical token is
-by means of the so-called {\em lexical constructor functions}.
-For each lexical sort $LEX$ a lexical constructor function is automatically
-derived, the corresponding syntax definition is:
-{\tt "lex" "(" CHAR* ")" -> LEX}.
-The sort {\tt CHAR} is a predefined sort to access the characters.
-
-Characters can be directly addressed by the representation or via
-variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
-{\tt CHAR+}, where the latter two represent lists of characters.
-A \link{lexical constructor function}[, in Figure
-\ref{CODE:lcfs},]{CODE:lcfs} is used to remove the leading zeros for a number.
-
-\noindent Note: there is no check on the use of characters within the
-lexical constructor function.
 
 \subsubsection{Default Equations}
 \label{DefaultEquations}
@@ -4352,16 +4395,11 @@ if all other rules fail}''.  A kind of default behaviour is needed. \asf\
 offers functionality in order to obtain this behaviour. If the $TagId$
 of an equation starts with {\tt default-} this equation is considered to
 be a special equation which will only be applied if no other rule matches.
-\begin{iftex} 
-Figure \ref{CODE:types} shows
-\end{iftex}
-\begin{ifhtml}
-The specification below gives
-\end{ifhtml}
+The specification \link*{below}[in Figure \Ref]{CODE:types} shows
 an example of the use of a default equation.
 
 \begin{figure}
-\label{CODE:types}
+\begin{Label}{CODE:types}
 \begin{IncCode}
 \begin{verbatim}
 module Types
@@ -4390,52 +4428,38 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Using a default equation}
+\end{Label}
 \end{figure}   
 
 \subsubsection{Memo Functions}
 \label{MemoFunctions}
 
-\index{memo functions@memo functions}
-Rewriting as execution model is not very efficient. Memo functions
-improve the efficiency of \asfsdf\ specifications.  Given a set of
-argument values for some function the normal form can be obtained via
-rewriting. It is possible that some function is called with the same set
-of arguments over and over again. Each time the function is rewritten to
-obtain the same normal again. By means of adding the {\tt memo} attribute,
-this behaviour is improved by storing the set of argument values and the
-derived normal form in a memo-table.  For each set of argument values it
-is checked whether there exists a normal form in the memo-table. If so,
-this normal form is returned.  If not, the function given this set of
-argument values is normalized and stored in the memo-table.
+\index{memo functions@memo functions} 
 
+Computations may contain unnecessary repetitions.  This is the case when a
+function with the same argument values is computed more than once.  Memo
+functions exploit this behaviour and can improve the efficiency of \asfsdf\ 
+specifications.
+
+Given a set of argument values for some function the normal form can be
+obtained via rewriting. It is possible that some function is called with the
+same set of arguments over and over again. Each time the function is rewritten
+to obtain the same normal again. By means of adding the {\tt memo} attribute,
+this behaviour is improved by storing the set of argument values and the
+derived normal form in a memo-table.  For each set of argument values it is
+checked whether there exists a normal form in the memo-table. If so, this
+normal form is returned.  If not, the function given this set of argument
+values is normalized and stored in the memo-table.
 There is some overhead involved in accessing the memo-table.  Therefore,
 it is not wise to add the memo attribute to each function.  With respect
 to the operational behaviour adding a memo attribute does not have any
-effect.  
-The \link{Fibonacci function}[, in Figure~\ref{CODE:fib},]{CODE:fib}
-is decorated with
-the memo attribute, improving its efficiency.
-For 
-\link{some figures}[, see Table~\ref{TABLE:fibn},]{TABLE:fibn}
-on the performance improvement.
+effect.
 
-\begin{table}
-\label{TABLE:fibn}
-\begin{center}
-\begin{tabular}{|l|c|c|} \hline
-fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
-fib(16)          & \ 2.0 & 0.7  \\ \hline
-fib(17)          & \ 3.5 & 1.1  \\ \hline
-fib(18)          & \ 5.9 & 1.8  \\ \hline
-fib(19)          &  10.4 & 3.3  \\ \hline
-\end{tabular}
-\caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
-\end{center}
-\end{table}
-
+The Fibonacci function shown \link*{below}[in Figure~\Ref]{CODE:fib}
+is decorated with the memo attribute to improve its efficiency.
 
 \begin{figure}
-\label{CODE:fib}
+\begin{Label}{CODE:fib}
 \begin{IncCode}
 \begin{verbatim}
 module Fib
@@ -4469,7 +4493,28 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Using the memo attribute when defining Fibonacci}
+\end{Label}
 \end{figure}   
+
+The resulting improvement in performance is shown
+\T in Table~\ref{TABLE:fibn}.
+\W as follows:
+
+\begin{table}
+\label{TABLE:fibn}
+\begin{center}
+\begin{tabular}{|l|c|c|} \hline
+fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
+fib(16)          & \ 2.0 & 0.7  \\ \hline
+fib(17)          & \ 3.5 & 1.1  \\ \hline
+fib(18)          & \ 5.9 & 1.8  \\ \hline
+fib(19)          &  10.4 & 3.3  \\ \hline
+\end{tabular}
+\caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
+\end{center}
+\end{table}
+
+
 
 %%\subsubsection{Delaying} \label{Delay}
 %%
@@ -4539,8 +4584,7 @@ more dramatic if we realize that the traversal function will only do
 some real work (apart from traversing) for very few node categories.
 
 Traversal functions in \asfsdf~\cite{BKV01} solve this 
-problem\footnote{Traversal functions are currently only supported 
-by the evaluator and not by the compiler.}.
+problem.
 We distinguish three kinds of traversal functions, defined as follows.
 
 \begin{description}
@@ -4606,22 +4650,12 @@ type of traversal:
 
 We give two simple examples of traversal functions that are both
 based on the \link{tree language}[ defined in
-Figure~\ref{FIG:tree-language}]{FIG:tree-language}.
-\link{Our first example}[ (Figure~\ref{FIG:inc})]{FIG:inc} 
-transforms a given tree into a new tree in which
-all numbers have been incremented.  
-\link{Our second example}[ (Figure~\ref{FIG:sum})]{FIG:sum}
-computes the sum of all numbers in a tree.
-For many more examples and a detailed description of traversal functions
-see~\cite{BKV01}.
-
-Implicitly, each traversal function corresponds to a set of functions,
-one for each sort that can be reached during a traversal.
-They are explicitly defined by the specification writer
-(this is the default).
+Figure~\ref{FIG:tree-language}]{FIG:tree-language}
+that describes binary prefix expressions with natural numbers as leaves.
+Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 
 \begin{figure}
-\label{FIG:tree-language}
+\begin{Label}{FIG:tree-language}
 \begin{IncCode}
 \begin{verbatim}
 module Tree-syntax
@@ -4636,10 +4670,16 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{A simple tree language}
+\end{Label}
 \end{figure}     
 
+
+Our \link{first example}[ (Figure~\ref{FIG:inc})]{FIG:inc} 
+transforms a given tree into a new tree in which
+all numbers have been incremented. 
+
 \begin{figure}
-\label{FIG:inc}
+\begin{Label}{FIG:inc}
 \begin{IncCode}
 \begin{verbatim}
 module Tree-inc
@@ -4652,10 +4692,16 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{The transformer {\tt inc} increments all numbers in a tree}
-\end{figure}  
+\end{Label}
+\end{figure}   
+
+Our \link{second example}[ (Figure~\ref{FIG:sum})]{FIG:sum}
+computes the sum of all numbers in a tree.
+For many more examples and a detailed description of traversal functions
+see~\cite{BKV01}.
 
 \begin{figure}
-\label{FIG:sum} 
+\begin{Label}{FIG:sum} 
 \begin{IncCode}
 \begin{verbatim}
 module Tree-sum
@@ -4668,12 +4714,26 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{The accumulator {\tt sum} that sums all numbers in a tree.}
+\end{Label}
 \end{figure}   
 
+Implicitly, each traversal function corresponds to a set of functions,
+one for each sort that can be reached during a traversal.
+They are explicitly defined by the specification writer
+(this is the default).
 
+
+\subsubsection{Which Specifications are Executable?}
+
+Which \asfsdf\ specifications can be executed? 
+The \link{specification of sets}[ in
+Figure~\ref{CODE:itemsets}]{CODE:itemsets} 
+illustrates a non-executable specification,
+since equation {\tt [2]}, which expresses that two elements in a set may
+be exchanged, will lead to an infinite rewriting loop.
 
 \begin{figure}
-\label{CODE:itemsets}
+\begin{Label}{CODE:itemsets}
 \begin{IncCode}
 \begin{verbatim}
 module ItemSet
@@ -4701,16 +4761,8 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{Non-executable specification for sets}
+\end{Label}
 \end{figure}   
-
-\subsubsection{Which Specifications are Executable?}
-
-Which \asfsdf\ specifications can be executed? 
-The \link{specification of sets}[ in
-Figure~\ref{CODE:itemsets}]{CODE:itemsets} 
-illustrates a non-executable specification,
-since equation {\tt [2]}, which expresses that two elements in a set may
-be exchanged, will lead to an infinite rewriting loop.
 
 \subsubsection{Common Errors when Executing Specifications}
 
@@ -4722,7 +4774,6 @@ no new variables may be introduced in either side of the inequality.
 \item If the normal form of a term still contains function symbols
 that should have been removed during rewriting, you probably have
 forgotten one or more equations that define the function.
-
 A typical situation is that you have given an \emph{incomplete} set of equations
 defining the function.
 
@@ -4734,11 +4785,10 @@ uninstantiated variables.
 
 \end{itemize}
 
+
+
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
-
-
-
 
 Here are some examples of \asfsdf\ specifications, which are selected to
 illustrate specific features of the formalism. Larger examples can be found in
@@ -4746,17 +4796,18 @@ the online specifications.
 
 \subsection{Symbolic Differentiation}
 
-
 Computing the derivative of an expression with respect to some variable is a
-classical problem we discuss in this example. 
+classical problem. 
 Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
 \begin{quote}
 {\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
 \end{quote}
 
-\noindent Differentiation is defined in three stages. First, the sorts {\tt NAT}
+\noindent Differentiation is defined in three stages in the specification
+\link*{below}[in Figure~\Ref]{CODE:diff}.
+First, the sorts {\tt NAT}
 (natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
-introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
+introduced. Next, a differentiation operator of the form {\tt d $E$ / d $V$} is
 defined. Then, the differentiation rules are defined (equations [1]-[5]).
 Finally, some rules for simplifying expressions are given. As the above
 example shows, further simplification rules could have been added to collect
@@ -4764,7 +4815,7 @@ multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to
 compute constant expressions.
 
 \begin{figure}
-\label{CODE:diff}
+\begin{Label}{CODE:diff}
 \begin{IncCode}
 \begin{verbatim}
 module Diff 
@@ -4806,31 +4857,28 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for differentiation}
+\end{Label}
 \end{figure}   
 
 
 \subsection{Sorting}
 
-
-
 The use of list structures is illustrated by the specification of
-the \link{"Dutch National Flag" problem}[ presented in Figure
-\ref{CODE:flag}]{CODE:flag}: 
+the \emph{Dutch National Flag} problem presented \link*{below}[ in Figure~\Ref]{CODE:flag}: 
 given an arbitrary list of the colours red,
 white and blue, sort them in the order as they appear in the Dutch National
 Flag. We want:
 
-{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
- white blue blue\}}
+{\tt \{white blue red blue red white red\} $\Rightarrow$\\
+\{red red red white white blue blue\}}
 
-In the \link{specification}[ of Figure~\ref{CODE:flag}]{CODE:flag}, 
-the list variables {\tt Cs1} and {\tt Cs2}
-permit a succinct formulation of the search for adjacent colours that are in
-the wrong order.
+In this specification, the list variables {\tt Cs1} and {\tt Cs2} permit a
+succinct formulation of the search for adjacent colours that are in the wrong
+order.
 
 
 \begin{figure}
-\label{CODE:flag}
+\begin{Label}{CODE:flag}
 \begin{IncCode}
 \begin{verbatim}
 module Flag
@@ -4861,6 +4909,7 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for sorting}
+\end{Label}
 \end{figure} 
 
 \subsection{Code Generation}
@@ -4869,30 +4918,30 @@ Consider a simple statement language (with assignment, if-statement and
 while-statement) and suppose we want to compile this language to the following
 stack machine code:
 
-\begin{description}
-\item{\tt push $N$} Push the number $N$. 
-\item{\tt rvalue $I$} Push the contents of data location $I$.
-\item{\tt lvalue $I$} Push the address of data location $I$. 
-\item{\tt pop} Remove the top of the stack. 
-\item{\tt copy} Push a copy of the top value on the stack. 
-\item{\tt assign} The r-value on top of the stack is stored in the l-value
-  below it and both are popped.
-\item{\tt add, sub, mul}
-Replace the two values on top of the stack by their sum (difference,
-product). 
-\item{\tt label $L$} Place a label (target of jumps). 
-\item{\tt goto $L$} Next instruction is taken from statement following label
-  $L$. 
-\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
-\item{\tt  gofalse $L$}
-Pop the top value; jump if it is zero.
-\end{description}
+\begin{tabular}{ll}
+{\tt push $N$}      & Push the number $N$\\
+{\tt rvalue $I$}    & Push the contents of data location $I$\\
+{\tt lvalue $I$}    & Push the address of data location $I$\\
+{\tt pop}           & Remove the top of the stack\\
+{\tt copy}          & Push a copy of the top value on the stack\\
+{\tt assign}        & The r-value on top of the stack is stored in the l-value
+  below it and both are popped\\
+{\tt add, sub, mul} & Replace the two values on top of the stack by their sum (difference,
+product)\\
+{\tt label $L$}     & Place a label (target of jumps)\\ 
+{\tt goto $L$}      & Next instruction is taken from statement following label
+  $L$\\
+{\tt gotrue $L$}    & Pop the top value; jump if it is nonzero\\
+{\tt  gofalse $L$}  & Pop the top value; jump if it is zero\\
+\end{tabular}
 
 \noindent The statement:
 \begin{quote}
 {\tt while a do a := a - 1; b := a * c od }
 \end{quote}
-will now be translated to the following instruction sequence:
+
+\noindent will now be translated to the following instruction sequence:
+
 \begin{verbatim}
 label xx ; 
 rvalue a ; 
@@ -4911,18 +4960,15 @@ goto xx ;
 label xxx
 \end{verbatim}
 
+%%\W Defining a code generator now proceeds in the following steps:
+\W \htmlmenu{1}
 
-\noindent 
-The \link{specification}[, in Figure
-\ref{CODE:basicnotions},]{CODE:basicnotions} defines the 
+\paragraph{Basic notions}
+The specification \link*{below}[in Figure \Ref]{CODE:basicnotions} defines the 
 sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
-Given these basic notions the \link{expressions}[, see Figure
-\ref{CODE:expressions}]{CODE:expressions}, and 
-\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
-of our little source language are defined.
 
 \begin{figure}
-\label{CODE:basicnotions}
+\begin{Label}{CODE:basicnotions}
 \begin{IncCode}
 \begin{verbatim}
 module BasicNotions 
@@ -4934,10 +4980,17 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for BasicNotions}
+\end{Label}
 \end{figure}
 
+\paragraph{Expressions and Statements}
+Given these basic notions the \link{expressions}[, see Figure
+\ref{CODE:expressions}]{CODE:expressions}, and 
+\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
+of our little source language are defined.
+
 \begin{figure}
-\label{CODE:expressions}
+\begin{Label}{CODE:expressions}
 \begin{IncCode}
 \begin{verbatim}
 module Expressions 
@@ -4959,10 +5012,11 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Expressions}
+\end{Label}
 \end{figure}
 
 \begin{figure}[tb]
-\label{CODE:statements}
+\begin{Label}{CODE:statements}
 \begin{IncCode}
 \begin{verbatim}
 module Statements 
@@ -4979,20 +5033,16 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for Statements}
+\end{Label}
 \end{figure}
 
 
-The instructions of the \link{stack machine are defined}[ in 
-Figure \ref{CODE:assemblylanguage}]{CODE:assemblylanguage}.
-Next, we define a function to construct a next label given the
-previous one. It is defined on the lexical notion of labels ({\tt Label}). 
-The \link{scheme}[, see Figure \ref{CODE:nextlabel} for the actual
-definition,]{CODE:nextlabel} of appending the 
-character `{\tt x}' to the previous label is, of
-course, naive and will in real life be replaced by a more sophisticated one.
+\paragraph{Assembly language}
+The instructions of the assembly language for the stack machine are defined
+\link*{below}[ in Figure~\Ref]{CODE:assemblylanguage}.
 
 \begin{figure}
-\label{CODE:assemblylanguage}
+\begin{Label}{CODE:assemblylanguage}
 \begin{IncCode}
 \begin{verbatim}
 module AssemblyLanguage
@@ -5018,10 +5068,19 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for AssemblyLanguage}
+\end{Label}
 \end{figure}
 
+\paragraph{Label generation}
+
+Next, we define a function to construct a next label given the previous one
+\link*{as follows}[in Figure~\Ref]{CODE:nextlabel}.  It is defined on the
+lexical notion of labels ({\tt Label}).  The scheme of appending the character
+`{\tt x}' to the previous label is, of course, naive and will in real life be
+replaced by a more sophisticated one.
+
 \begin{figure}
-\label{CODE:nextlabel}
+\begin{Label}{CODE:nextlabel}
 \begin{IncCode}
 \begin{verbatim}
 module NextLabel
@@ -5042,8 +5101,10 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{\asfsdf\ specification for NextLabel}
+\end{Label}
 \end{figure}
 
+\paragraph{Codegenerator}
 It remains to define a function `{\tt tr}' that translates statements into
 instructions. During code generation we should generate new label names for
 the translation of if- and while-statements. This is an instance of a
@@ -5051,20 +5112,15 @@ frequently occurring problem: how do we maintain global information (in this
 case: the last label name generated)? A standard solution is to introduce an
 auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
 sequence and the last label name generated so far.
-\begin{iftex}
-The Figures \ref{CODE:codegenerator.sdf} and \ref{CODE:codegenerator.asf} 
-show the module containing this actual translation function.
-\end{iftex}
-\begin{ifhtml}
-The \link{\sdf\ part}[]{CODE:codegenerator.sdf} and
-\link{\asf\ part}[]{CODE:codegenerator.asf} define
+The \link{\sdf\ part}[ (Figure~\Ref)]{CODE:codegenerator.sdf} and the
+\link{\asf\ part}[ (Figure~\Ref)]{CODE:codegenerator.asf} 
+of module {\tt CodeGenerator} define
 the actual translation function.
-\end{ifhtml}
 
-This completes the specification of our code generator.
+
 
 \begin{figure}
-\label{CODE:codegenerator.sdf}
+\begin{Label}{CODE:codegenerator.sdf}
 \begin{IncCode}
 \begin{verbatim}
 module CodeGenerator
@@ -5094,13 +5150,13 @@ hiddens
     "Stat+"[0-9\']*      -> {Stat ";"}+
 \end{verbatim}
 \end{IncCode}
-\caption{\asfsdf\ specification for
-CodeGenerator}
+\caption{\asfsdf\ specification for CodeGenerator}
+\end{Label}
 \end{figure}
 
     
 \begin{figure}
-\label{CODE:codegenerator.asf}
+\begin{Label}{CODE:codegenerator.asf}
 \begin{IncCode}
 \begin{verbatim}
 equations 
@@ -5149,8 +5205,10 @@ equations
 \end{IncCode}
 \caption{\asfsdf\ specification for
 CodeGenerator}
+\end{Label}
 \end{figure}
 
+This completes the specification of our code generator.
 
 \subsection{Large \asfsdf\ Specifications}
 
@@ -5161,6 +5219,8 @@ There are a quite a few very large \asfsdf\ specifications around:
 \item The \asfsdf2C compiler.
 
 \item A part of the parse table generator for \sdf.
+
+\item The \sdf\ checker.
 
 \item The syntax and type checking of a domain specific language for
 describing financial products.
@@ -5173,25 +5233,25 @@ describing financial products.
 
 \item Tooling for Action Semantics.
 
-\item Tooling for Casl.
+\item Tooling for CASL.
+
+\item Toolin for ELAN.
 
 \end{itemize}
 
 \section{Compiling Specifications}
 \label{compiling-specs}
 
-By means of the button {\tt Compile ...} in the 
-\link{pop up menu for module operations}[ (Figure
-\ref{FIG:module-menu})]{FIG:module-menu} or the button pane the \asfsdf2C
+By means of the {\tt Compile ...} button in the
+\link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu} of the import pane
+or in the button pane the \asfsdf2C
 compiler can be activated. C code is generated for the selected module
 (exactly {\em one} module can be selected for compilation) including
 the imported modules. The C code is immediately compiled into an
 executable.
 
-\begin{itemize}
-\item The specification should be complete, i.e., no missing modules are
+{\bf Warning}: The specification should be complete, i.e., no missing modules are
 allowed, and the equations sections should be error free.
-\end{itemize}
 
 If this requirement is satisfied, C code can be generated.
 This process of C code generation is described in detail in \cite{BKO99}.
@@ -5235,15 +5295,14 @@ variants of it, then the following information is for you.
 
 \paragraph{ToolBus}
 
-A hallmark of legacy systems in general and the old \ASmetaenv\ in particular is the 
-entangling of control flow and actual computation.  To separate coordination from 
-computation we use the
-ToolBus coordination architecture~\cite{BK98}, a programmable software bus based
-on process algebra.  Coordination is expressed by a formal description of the
-cooperation protocol between components while computation is expressed in
-components that may be written in any language. We thus obtain 
-interoperability of heterogeneous components in a (possibly) distributed
-system.
+In many large systems control flow and actual computation are complete
+entangled. This leads to poor extensibility and maintenance problems.  To
+separate coordination from computation we use the ToolBus coordination
+architecture~\cite{BK98}, a programmable software bus based on process
+algebra.  Coordination is expressed by a formal description of the cooperation
+protocol between components while computation is expressed in components that
+may be written in any language. We thus obtain interoperability of
+heterogeneous components in a (possibly) distributed system.
 
 \paragraph{ATerms}
 
@@ -5279,12 +5338,14 @@ use of memory during normalization of terms.
 \subsection{Architecture}
 
 \begin{figure}
+\begin{Label}{FIG:architecture}
 \begin{center}
 \begin{iftex}
 \psfig{file=newarch.eps,width=12cm}
 \end{iftex}
 \end{center}
-\caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
+\caption{Architecture of the \ASmetaenv}
+\end{Label}
 \end{figure}
 
 The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
@@ -5333,13 +5394,12 @@ are currently three ways to achieve this:
 \begin{itemize}
 
 \item Interactively using the \ASmetaenv\
-
-via {\tt Dump Parse Table...} for module {\tt M}.
+by selecting module {\tt M} and pushing the {\tt Dump Parse Table...} button in 
+the \link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu}.
 
 \item From the command line using the command {\tt pt-dump}.
 In the background the same actions are performed as in the interactive
 setting, only no user interface is activated.
-
 For further information use {\tt pt-dump -h}.
 
 \item From the command line using the command {\tt sdf2table}.  You should
@@ -5348,8 +5408,9 @@ of {\tt M}. This means in particular that all imports of {\tt M} should
 be expanded before {\tt sdf2table} can be used. Command line tools are
 available to do this, but we will not describe them here.
 
-\end{itemize}
+For further information see the manual page for {\tt sdf2table}.
 
+\end{itemize}
 
 \subsection{Parsing}
 \label{SEC:parsingofterms}
@@ -5394,11 +5455,10 @@ two inputs are required:
 this. The result is {\tt term.tree}.
 
 \item The equations to be used for rewriting.  Select the desired
-module and 
-\link{use {\tt Dump Equations...}}[ (see
-Section~\ref{ButtonPane})]{ButtonPane}
+module and push the  {\tt Dump Equations...} button in the 
+\link{pop-up menu}[ (see Section~\Ref)]{FIG:module-menu}
 to dump the equations of the selected module and all its imports.
-The results is a file named {\tt M.eqs}.
+The result is a file named {\tt M.eqs}.
 
 \end{itemize}
 
@@ -5406,24 +5466,13 @@ The results is a file named {\tt M.eqs}.
    asfe -e M.eqs < term.tree > reduct.tree 
 \end{verbatim}  
 
-\begin{iftex}
-Section~\ref{SEC:unparsing} 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Unparsing}[]{SEC:unparsing}
-\end{ifhtml}
+\link*{Unparsing}[Section~\Ref]{SEC:unparsing}
 explains how {\tt reduct.tree} can be converted to a textual representation.
 
 \subsection{Rewriting a Term using a Compiled Specification}
 \label{SEC:reducingofterms}
 
-In 
-\begin{iftex}
-Section~\ref{compiling-specs} 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Compiling Specifications}[]{compiling-specs}
-\end{ifhtml}
+In \link*{Compiling Specifications}[Section~\Ref]{compiling-specs}
 we explained how a given module {\tt M}
 can be compiled into C code. Here we describe how to compile and
 use this generated C code. The steps are as follows:
@@ -5461,12 +5510,7 @@ be reduced via the compiled code as follows:
 COMPILER_OUTPUT/ModuleName < term.tree > reduct.tree
 \end{verbatim}
 
-\begin{iftex}
-Section~\ref{SEC:unparsing} 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Unparsing}[]{SEC:unparsing}
-\end{ifhtml}
+\link*{Unparsing}[Section~\Ref]{SEC:unparsing} 
 explains how {\tt reduct.tree} can be
 converted to a textual representation.
 \end{itemize}
@@ -5497,9 +5541,9 @@ The construction of this new term is achieved by the following command:
 
 A term is constructed consisting of an application of function {\tt <name>}
 with result sort {\tt <sort>} defined in module {\tt <modulename>} to a term
-{\tt <in>}.  The resulting term is written to {\tt <out> }.
+{\tt <in>}.  The resulting term is written to {\tt <out>}.
 In order to actually \emph{apply} {\tt <name>}, the term {\tt out} has to
-be reduced by {\tt asfe}.
+be reduced by \link{{\tt asfe}}[ (Section~\Ref)]{SEC:interpretationgofterms}.
 
 \section{Examples of Stand-alone Tools}
 
