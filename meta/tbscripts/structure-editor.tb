@@ -2,13 +2,6 @@
   $Id$
  */
 
-tool se is {
-  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -arg -mx64M"
-}
-
-tool anno is { 
-  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.AnnoTool"
-}
 
 
 process Structure-editor(TE: text-edit, Fid: str, Text: str, 
@@ -17,20 +10,19 @@ let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
   Char: term, G: str, ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list, Fid2: str, Anno: anno, Modules: list
+  Fun: str, Args: list, Anno: anno, Modules: list
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
 /* We're not selective about start symbols yet */
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
-  execute(se, SE?).
-  execute(anno, Anno?).
-/*printf("newEditor is being started\n").*/
+  snd-msg(get-se-id).
+  rec-msg(se-id(SE?)).
+  snd-msg(get-anno-id).
+  rec-msg(anno-id(Anno?)).
   snd-eval(SE, newEditor(Fid, Text)).
-/*printf("newEditor waiting\n").*/
   rec-value(SE,Fl?).
-/*printf("newEditor is started\n").*/
   Foc := first(Fl).
   snd-msg(TE,set-focus(Fid,Foc)).
   snd-note(ui-status(endstat(Id))). ( ( 
@@ -47,7 +39,7 @@ in
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid, Foc))
     +
-    rec-event(TE,menu-event("Meta-Environment","Parse",Fid2?)).
+    rec-event(TE,menu-event("Meta-Environment","Parse",Fid)).
     snd-note(ui-status(stat(Id,"Parsing..."))).
     FF := []. (
       if not-equal(Fl,[]) then
@@ -55,8 +47,8 @@ in
         snd-eval(Anno,get-anno("focusstatus",Foc)).
 	rec-value(Anno,annotation(T?)).
         if equal(dirty,T) then
-          snd-msg(TE,get-focus-text(Foc)).
-          rec-msg(TE,focus-text(Str?)).
+          snd-msg(TE,get-focus-text(Fid, Foc)).
+          rec-msg(TE,focus-text(Fid, Str?)).
           snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
             rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
             snd-eval(SE,replaceFocus(Fid, T)).
@@ -95,9 +87,9 @@ in
           rec-msg(extra-modules(Modules?)).
           snd-msg(open-modules(Modules)).
           rec-msg(finished-opening-modules).
-          snd-msg(TE,clear-focus)
+          snd-msg(TE,clear-focus(Fid))
         else
-          snd-msg(TE,clear-focus)
+          snd-msg(TE,clear-focus(Fid))
         fi
       else
         /* Some parses were ambiguous */
@@ -109,7 +101,7 @@ in
     snd-note(ui-status(endstat(Id))).
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
-    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid2?)).
+    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
     if equal(FF,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
@@ -131,7 +123,7 @@ in
     rec-value(SE,Fl?).
     snd-ack-event(TE,get-focus(Fid,I))
     +
-    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid2?)).
+    rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
     printf("Tree display not yet implemented\n").
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
     +
