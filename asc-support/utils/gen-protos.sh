@@ -18,8 +18,9 @@ formals() {
   arity=$1
   type=$2
 
-  for (( 0 ; ${arity} > 1 ; arity=`expr ${arity} - 1` )); do 
+  while [ ${arity} > 1 ]; do
     printf "${type} arg${arity}, "
+    arity=`expr ${arity} - 1`
   done
 
   if [ $arity = 1 ]; then
