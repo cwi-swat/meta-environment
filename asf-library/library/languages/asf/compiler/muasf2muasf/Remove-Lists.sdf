@@ -13,7 +13,6 @@ module languages/asf/compiler/muasf2muasf/Remove-Lists
 imports languages/asf/compiler/muasf/RenameVars
 imports languages/asf/compiler/muasf2muasf/Normalize-Conds
 imports languages/asf/compiler/muasf2muasf/Trans-Set-Pats
- 
 
 exports
   context-free syntax
@@ -40,7 +39,7 @@ hiddens
     remove-simple-lists(Rule)                  -> Rule
 
   context-free syntax
-    rem-lists-from-lhs-term(Term,IntVarEnv)             -> Term-CList-VarEnv
+    rem-lists-from-lhs-term(Term,IntVarEnv) -> Term-CList-VarEnv
     rem-lists-from-lhs-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv
     rem-lists-from-rhs-term(Term,IntVarEnv)             -> Term-CList-VarEnv
     rem-lists-from-rhs-terms({Term ","}+,IntVarEnv)     -> Term-CList-VarEnv

@@ -1,11 +1,14 @@
 module languages/asf/compiler/muasf2c/MuASF-Rules2C
 
 imports languages/asf/compiler/muasf2c/Add-Traversal-Code
-imports languages/asf/compiler/muasf/RenameVars
+
 imports languages/asf/compiler/muasf2c/Locate-Constants
 imports languages/asf/compiler/muasf2c/Improve-C-code
-imports languages/asf/compiler/muasf2c/Transform-Constructors
 
+%% TODO: these two modules operator solely on muASF, they should be
+%% made part of the muasf2muasf phase:
+imports languages/asf/compiler/muasf2c/Transform-Constructors
+imports languages/asf/compiler/muasf/RenameVars
 
 exports
   context-free syntax

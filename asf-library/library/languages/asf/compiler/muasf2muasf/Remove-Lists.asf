@@ -52,7 +52,7 @@ equations
   [rlr-1'2] rule-contains-lists(Rule) == true,
             is-default-rule(Rule) == true
             ============================
-            rem-lists-from-rule(Rule,Aint) =
+           rem-lists-from-rule(Rule,Aint) =
               rem-lists-from-default-rule(Rule,Aint)
 
   [rlr-1'3] rule-contains-lists(Rule) == true,
@@ -103,8 +103,11 @@ equations
 %% contains a lookup or set pattern. It is assumed that
 %% the rule is not a default rule.
 
+%% NOTE: This is a fixed point computation
+
   [rlsr-1'1] contains-zero-or-one-list-vars-in-rule(Rule1) == true,
              Rule2 := remove-simple-lists(Rule1),
+             Rule1 != Rule2,
              (Funcdef*,Rule*,Aint2) := rem-listvars-from-rule(Rule2,Aint1)
              ============================================================
              rem-lists-from-simple-rule(Bool,Rule1,Aint1) = 
@@ -112,13 +115,14 @@ equations
 
   [rlsr-1'2] is-special-rule(Rule) == true,
              (Funcdef*1,Rule*1,Aint2) := transform-special-rule(Rule,1),
+	     Rule != Rule*1,
              Rule*2 := rename-in-rules(Rule*1),
              (Funcdef*2,Rule*3,Aint3) := rem-lists-from-rules(Rule*2,Aint1)
              =============================================================
              rem-lists-from-simple-rule(false,Rule,Aint1) =
                (Funcdef*1;Funcdef*2,Rule*3,Aint3)
 
-%% Fixed point computation
+
   [rlsr-1'3] is-special-rule(Rule1) == false,
              Rule2 := normalize-list-in-rule(Rule1),
              Rule1 != Rule2,
@@ -161,19 +165,33 @@ equations
 %% All list variables are stored in a variable environment, to make
 %% sure that a list is only ``transformed'' once. After the
 %% transformation of the entire rule, a new rule is constructed.
-  [rlr-1'1] (Term3,Cond*1,Ivarenv1) := rem-lists-from-lhs-term(Term1,[1,]),
+  [rlr-1'1] (Term+3,Cond*1,Ivarenv1) := rem-lists-from-lhs-terms(Term+,[1,]),
             (Term4,Cond*2,Ivarenv2) := rem-lists-from-rhs-term(Term2,Ivarenv1),
-            Rule := make-conditional-rule(Cond*1 & Cond*2,Term3 = Term4)
+            Rule := make-conditional-rule(Cond*1 & Cond*2,Funid(Term+3) = Term4)
             ===========================================================
-            remove-simple-lists(Term1 = Term2) = Rule
+            remove-simple-lists(Funid(Term+) = Term2) = Rule
 
-  [rlr-1'2] (Term3,Cond*1,Ivarenv1) := rem-lists-from-lhs-term(Term1,[1,]),
+  [rlr-1'2] (Term+3,Cond*1,Ivarenv1) := rem-lists-from-lhs-terms(Term+,[1,]),
             (Cond*2,Ivarenv2) := rem-lists-from-conds(Cond+,Ivarenv1),
             (Term4,Cond*3,Ivarenv3) := rem-lists-from-rhs-term(Term2,Ivarenv2),
-            Rule := make-conditional-rule(Cond*1 & Cond*2 & Cond*3,Term3 = Term4)
+            Rule := make-conditional-rule(Cond*1 & Cond*2 & Cond*3,Funid(Term+3) = Term4)
             ====================================================================
             remove-simple-lists(Cond+ ==>
-                                Term1 = Term2) = Rule
+                                Funid(Term+) = Term2) = Rule
+
+ [rlr-1'1] 
+            (Term4,Cond*2,Ivarenv2) := rem-lists-from-rhs-term(Term2,[1,]),
+            Rule := make-conditional-rule(Cond*2,Funid = Term4)
+            ===========================================================
+            remove-simple-lists(Funid = Term2) = Rule
+
+  [rlr-1'2] 
+            (Cond*2,Ivarenv2) := rem-lists-from-conds(Cond+,[1,]),
+            (Term4,Cond*3,Ivarenv3) := rem-lists-from-rhs-term(Term2,Ivarenv2),
+            Rule := make-conditional-rule(Cond*2 & Cond*3,Funid = Term4)
+            ====================================================================
+            remove-simple-lists(Cond+ ==>
+                                Funid = Term2) = Rule
 
 equations
 
@@ -195,23 +213,42 @@ equations
               rem-lists-from-lhs-term(Term2,Ivarenv2)
             =========================
             rem-lists-from-cond(Term1 =: Term2,Ivarenv1) =
-              (Term3 =: Term4 & Cond*1 & Cond*2,Ivarenv3)
+              (Term3 =:Term4 & Cond*1 & Cond*2,Ivarenv3)
 
 equations
 
 %% If a term is a function which does not represent list matching,
 %% it arguments are transformed.
-  [rllt-1'1] is-list-funid(Funid) == false,
+  [rllt-1'1] 
+	     is-list-funid(Funid) == false,
+             term-contains-var(Funid(Term+1)) == true,
              (Term+2,Cond*,Ivarenv2) :=
                rem-lists-from-lhs-terms(Term+1,Ivarenv1)
              =========================
              rem-lists-from-lhs-term(Funid(Term+1),Ivarenv1) =
                (Funid(Term+2),Cond*,Ivarenv2)
 
+%% If the term does not contain any variables, we might as
+%% well create an equality condition. Constant detection profits from this.
+%% It does not matter for Funid to be a list or not.
+
+  [rllt-1'2] 
+             term-contains-var(Funid(Term+1)) == false,
+             Funid(Term+1) != cons(Term+1),
+	     Natcon := get-int(Ivarenv1),
+             $Varid := newlistvar(Natcon),
+             Ivarenv2 := put-int((1+Natcon),Ivarenv1)
+             =========================
+             rem-lists-from-lhs-term(Funid(Term+1),Ivarenv1) =
+               ($Varid,term-equal($Varid, Funid(Term+1)) =: t,Ivarenv2)
+
 %% If a term is a list matching function it is checked how many
 %% list variables occur in its argument list. Only the
-%% cases in which at most one list variables occur can be transformed.
-  [rllt-1'2] is-list-funid(Funid) == true,
+%% cases in which at precisely one or zero list variables occurs can be 
+%% transformed. 
+
+  [rllt-1'3] is-list-funid(Funid) == true,
+             term-contains-var(Term) == true,
              contains-zero-or-one-list-vars-in-list(Term) == true,
              (Term+2,Cond*,Ivarenv2) :=
                transform-lhs-list-terms(Term,Ivarenv1),
@@ -219,6 +256,8 @@ equations
              ==================================
              rem-lists-from-lhs-term(Funid(Term),Ivarenv1) =
                (Funid2(Term+2),Cond*,Ivarenv2)
+
+
 
 %% The ``default'' case the original term is returned.
   [default-rllt-1'4] rem-lists-from-lhs-term(Term,Ivarenv) =

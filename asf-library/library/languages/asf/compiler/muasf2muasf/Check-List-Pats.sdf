@@ -50,3 +50,4 @@ variables
 	"Cond*"[0-9]* -> {Cond "&"}*
 	"Bool"[0-9]* -> Boolean
 	"Funid"[0-9]* -> FunId
+	"Varid"[0-9]* -> FunId

@@ -21,10 +21,10 @@ equations
 
   [tclv-1'2] term-contains-list-vars($+ Varid) = true
 
-  [tclv-1'3] term-contains-list-vars(cons(Term1,Term2)) = true
+%%  [tclv-1'3] term-contains-list-vars(cons(Term1,Term2)) = true
 
-  [tclv-1'3] is-list-cons(Funid(Term+)) == false
-             ==================================
+  [tclv-1'3] %% is-list-cons(Funid(Term+)) == false
+%%             ==================================
              term-contains-list-vars(Funid(Term+)) =
                terms-contains-list-vars(Term+)
 
