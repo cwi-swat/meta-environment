@@ -91,11 +91,6 @@ AC_PACKAGE_REQUIRE(sdf, sglr,
    [  --with-sdf=DIR         sdf is in DIR])
 AC_SUBST(SDF)
 
-dnl Require evaluator package
-AC_PACKAGE_REQUIRE(evaluator, evaluator, 
-   [  --with-evaluator=DIR    evaluator is in DIR])
-AC_SUBST(EVALUATOR)
-
 dnl Require asf package
 AC_PACKAGE_REQUIRE(asf, addeqssyntax,
    [  --with-asf=DIR          asf is in DIR])
