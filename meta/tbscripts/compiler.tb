@@ -13,23 +13,29 @@ let
   Mods : list
 in
 /* The compiler gets its first compile request*/
-rec-msg(compile-module(Name?)).
+  rec-msg(compile-module(Name?)).
+  snd-msg(process-eqs(Name)).
+  rec-msg(eqs-processed(Mod?)).
+
 /* Before proceeding, it starts the actual compiler */
-execute(compiler,COM?).
+  execute(compiler,COM?).
+
 /* then it handles the compile request */
-( snd-msg(reshuffle-module(Name)).
-  ( rec-msg(generate-code(Name?,Mod?)).
-    snd-eval(COM,generate-code(Name,Mod)).
-    rec-value(COM,c-code-ready)
-  )*
+  ( snd-msg(reshuffle-module(Name)).
+    ( rec-msg(generate-code(Name?,Mod?)).
+      snd-eval(COM,generate-code(Name,Mod)).
+      rec-value(COM,c-code-ready)
+    )*
+
 /* When the reshuffling is done, compiling is done */
-  rec-msg(reshuffle-done).
-  snd-msg(compile-done).
+    rec-msg(reshuffle-done).
+    snd-msg(compile-done).
+
 /* And it waits for a new compile request. (This is the same state as at
    the beginning of the process, only now the compiler is running
 */
-  rec-msg(compile-module(Name?))
-)*
-delta
+    rec-msg(compile-module(Name?))
+  )*
+  delta
 endlet
 

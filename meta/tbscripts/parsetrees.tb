@@ -12,8 +12,6 @@ tool compiler is {
   command = "compiler -print-gc-info -termtable 20"
 }
 
-
-
 tool add-eqs-syntax is { 
   command = "Add-Eqs-Syntax"
 }

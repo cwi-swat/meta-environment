@@ -12,7 +12,7 @@ let
 in
   Id := process-id. 
   ( 
-    rec-msg(rewrite(Mod?,Term?)).
+    rec-msg(rewrite(Mod?,Term?)). 
     snd-msg(retrieve-eqs(Mod)).
     rec-msg(finished-retrieval). 
     snd-eval(Eval, interpret(Mod,Term)).

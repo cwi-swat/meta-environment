@@ -25,7 +25,7 @@ in
     ).
     snd-msg(get-eqs-asfix(Module)).
     ( rec-msg(eqs(Eqs?)).
-      snd-msg(get-eqs2-path-from-db(Module)).
+      snd-msg(get-eqs-path-from-db(Module)).
       rec-msg(path(Path?)).
       snd-msg(save-eqs-asfix(Module,Path,Eqs)).
       rec-msg(save-done)
@@ -54,7 +54,7 @@ in
        ).
        snd-msg(get-eqs-asfix(Module)).
        ( rec-msg(eqs(Eqs?)).
-         snd-msg(get-eqs2-path-from-db(Module)).
+         snd-msg(get-eqs-path-from-db(Module)).
          rec-msg(path(Path?)).
          snd-msg(save-eqs-asfix(Module,Path,Eqs)).
          rec-msg(save-done)

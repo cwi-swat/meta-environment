@@ -55,7 +55,6 @@ in
 */
           Fun := fun(T).
           if equal(Fun,"parse-error") then
-/*          rec-msg(parse-result-asfix1(Id,parse-tree(parse-error(ErrList?,plain)))).  */
             Args := args(T).
             ErrList := index(Args,1).
             snd-msg(set-error-focus(Fid,Foc,ErrList)). 
@@ -97,7 +96,7 @@ in
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
-    if equal(Fl,[]) then
+    if equal(FF,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
       rec-value(SE,T1?).
@@ -105,7 +104,7 @@ in
       rec-msg(result(T2?)).
       snd-msg(pp(T2)).
       rec-msg(source(Src?)).
-      printf("\nNormal form is:\n%s", Src).
+      printf("\nNormal form is:\n%s\n", Src).
       snd-note(ui-status(endstat(Id)))
     fi.
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
