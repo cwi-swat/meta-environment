@@ -4,18 +4,18 @@ imports Sdf-Messages
 
 exports 
   context-free syntax
-    kernel-syntax-construction(ModuleId, Literal)                    -> Message
-    not-supported-symbol(ModuleId, Symbol)                           -> Message
-    illegal-traversal-attribute(ModuleId, Attribute)                 -> Message
-    missing-bottom-up-or-top-down-attribute(ModuleId,Attribute)      -> Message
-    missing-break-or-continue-attribute(ModuleId,Attribute)          -> Message
-    missing-trafo-and-or-accu-attribute(ModuleId,Attribute)          -> Message
+    kernel-syntax-construction(ModuleId, Literal)                           -> Message
+    not-supported-symbol(ModuleId, Symbol)                                  -> Message
+    illegal-traversal-attribute(ModuleId, Production)                       -> Message
+    traversal-attributes-in-non-prefix-function(ModuleId, Production)       -> Message
+    missing-bottom-up-or-top-down-attribute(ModuleId, Production)           -> Message
+    missing-break-or-continue-attribute(ModuleId, Production)               -> Message
+    missing-trafo-and-or-accu-attribute(ModuleId, Production)               -> Message
     ambiguous-traversal-attribute-break-or-continue(ModuleId,Attribute)     -> Message
     ambiguous-traversal-attribute-top-down-or-bottom-up(ModuleId,Attribute) -> Message
     trafo-should-return-traversed-type(ModuleId, Production)                -> Message
     accu-should-return-accumulated-type(ModuleId, Production)               -> Message
     accutrafo-should-return-tuple-of-correct-types(ModuleId, Production)    -> Message
-    typo-in-traversal-attribute(ModuleId, Production)                        -> Message
-    charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol) -> Message
-    production-renamings-not-supported(ModuleId, Renaming)           -> Message
+    charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol)        -> Message
+    production-renamings-not-supported(ModuleId, Renaming)                  -> Message
 

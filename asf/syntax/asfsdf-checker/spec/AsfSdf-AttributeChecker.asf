@@ -8,91 +8,133 @@ equations
            check-attributes(Module, Msgs) = 
              check-attributes(Module, Msgs, $ModuleId)
 
-  [ca-2'1] contains-accu(Aterm+) = true,
+  [ca-2'1] check-attributes($Symbol* -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+traversal-attributes-in-non-prefix-function($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'2] contains-accu(Aterm+) |
+             contains-trafo(Aterm+) = true,
+           contains-break(Aterm+) |
+             contains-continue(Aterm+) = true,
+           contains-top-down(Aterm+) |
+             contains-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = false
+           ==================================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+illegal-traversal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'3] contains-accu(Aterm+) |
+             contains-trafo(Aterm+) = false,
+           contains-break(Aterm+) |
+             contains-continue(Aterm+) = true,
+           contains-top-down(Aterm+) |
+             contains-bottom-up(Aterm+) = true
+           ===================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+missing-trafo-and-or-accu-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'4] contains-accu(Aterm+) |
+             contains-trafo(Aterm+) = true,
+           contains-break(Aterm+) |
+             contains-continue(Aterm+) = false,
+           contains-top-down(Aterm+) |
+             contains-bottom-up(Aterm+) = true
+           ===================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+missing-break-or-continue-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'5] contains-accu(Aterm+) |
+             contains-trafo(Aterm+) = true,
+           contains-break(Aterm+) |
+             contains-continue(Aterm+) = true,
+           contains-top-down(Aterm+) |
+             contains-bottom-up(Aterm+) = false
+           ====================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+missing-bottom-up-or-top-down-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'6] contains-accu(Aterm+) = true,
+           contains-trafo(Aterm+) = false,
+           is-accu-definition($Literal ( $Symbol,* ) -> $Symbol) = false
+           =============================================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+accu-should-return-accumulated-type($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'6] contains-trafo(Aterm+) = true,
+           contains-accu(Aterm+) = false,
+           is-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
+           ==============================================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+trafo-should-return-traversed-type($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'7] contains-trafo(Aterm+) = true,
+           contains-accu(Aterm+) = true,
+           is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
+           ===================================================================
+           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+                            {Attr*1, traversal(Aterm+), Attr*2},
+                            Msgs, $ModuleId) = Msgs +
+accutrafo-should-return-tuple-of-correct-types($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+
+  [ca-2'5] contains-accu(Aterm+) = true,
            contains-trafo(Aterm+) = false,
            is-accu-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
            contains-break(Aterm+) |
              contains-continue(Aterm+) = true,
            contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
+             contains-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = true
+           =================================================
            check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                             {Attr*1, traversal(Aterm+), Attr*2},
                             Msgs, $ModuleId) = Msgs
 
-  [ca-2'2] contains-accu(Aterm+) = true,
-           contains-trafo(Aterm+) = false,
-           is-accu-definition($Symbol* -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           =============================================
-           check-attributes($Symbol* -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
-
-  [ca-2'3] contains-trafo(Aterm+) = true,
+  [ca-2'6] contains-trafo(Aterm+) = true,
            contains-accu(Aterm+) = false,
            is-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
            contains-break(Aterm+) |
              contains-continue(Aterm+) = true,
            contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
+             contains-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = true
+           =================================================
            check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                             {Attr*1, traversal(Aterm+), Attr*2},
                             Msgs, $ModuleId) = Msgs
 
-  [ca-2'4] contains-trafo(Aterm+) = true,
-           contains-accu(Aterm+) = false,
-           is-trafo-definition($Symbol* -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
-           check-attributes($Symbol* -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
-
-  [ca-2'5] contains-accu(Aterm+) = true,
+  [ca-2'7] contains-accu(Aterm+) = true,
            contains-trafo(Aterm+) = true,
            is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
            contains-break(Aterm+) |
              contains-continue(Aterm+) = true,
            contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
+             contains-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = true
+           =================================================
            check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                             {Attr*1, traversal(Aterm+), Attr*2},
                             Msgs, $ModuleId) = Msgs
 
-  [ca-2'6] contains-accu(Aterm+) = true,
-           contains-trafo(Aterm+) = true,
-           is-accu-trafo-definition($Symbol* -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
-           check-attributes($Symbol* -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
-
-  [default-ca-2'10] check-attributes($Literal ( $Symbol,* ) -> $Symbol 
+  [default-ca-2'8] check-attributes($Literal ( $Symbol,* ) -> $Symbol 
                                      {Attr*1, traversal(Aterm+), Attr*2},
                              Msgs, $ModuleId) = 
               Msgs + 
-illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+illegal-traversal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
 
-  [default-ca-2'11] check-attributes($Symbol* -> $Symbol 
-                                     {Attr*1, traversal(Aterm+), Attr*2},
-                                     Msgs, $ModuleId) = 
-              Msgs + 
-illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
-
-  [ca-2'22] $Literal2 != traversal,
+  [ca-2'9]  $Literal2 != traversal,
             contains-accu(Aterm+) | 
               contains-trafo(Aterm+) |
               contains-break(Aterm+) |
@@ -106,7 +148,7 @@ illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm+), Att
               Msgs + 
 illegal-attribute($ModuleId, $Literal1 ( $Symbol,* ) -> $Symbol {Attr*1, $Literal2(Aterm+), Attr*2})
 
-  [ca-2'23] $Literal2 != traversal,
+  [ca-2'10] $Literal2 != traversal,
             contains-accu(Aterm+) | 
               contains-trafo(Aterm+) |
               contains-break(Aterm+) |
@@ -122,21 +164,15 @@ illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, $Literal2(Aterm+), Att
 
   [iad-1'1] is-accu-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2) = true
 
-  [iad-1'2] is-accu-definition($Literal1 "(" $Symbol1 "," $Symbol2 $Symbol* ")" -> $Symbol2) = true
-
-  [default-iad-1'3] is-accu-definition(Production) = false
+  [default-iad-1'2] is-accu-definition(Production) = false
 
   [itd-1'1] is-trafo-definition($Literal1 ( $Symbol, $Symbol,*) -> $Symbol) = true
 
-  [itd-1'2] is-trafo-definition($Literal1 "(" $Symbol $Symbol* ")" -> $Symbol) = true
-
-  [default-itd-1'3] is-trafo-definition(Production) = false
+  [default-itd-1'2] is-trafo-definition(Production) = false
 
   [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol1 # $Symbol2) = true
 
-  [iatd-1'2] is-accu-trafo-definition($Literal1 "(" $Symbol1 "," $Symbol2 $Symbol* ")" -> $Symbol1 # $Symbol2) = true
-
-  [default-iatd-1'3] is-accu-trafo-definition(Production) = false
+  [default-iatd-1'2] is-accu-trafo-definition(Production) = false
 
   [ca-3'1] contains-accu(Aterm*1, accu, Aterm*2) = true
 
@@ -161,3 +197,25 @@ illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, $Literal2(Aterm+), Att
   [cbu-1'1] contains-bottom-up(Aterm*1, bottom-up, Aterm*2) = true
 
   [default-cbu-1'2] contains-bottom-up(Aterm*) = false
+
+  [cota-1'1] contains-only-traversal-attributes() = true
+
+  [cota-1'2] contains-only-traversal-attributes(Aterm*1, accu, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [cota-1'3] contains-only-traversal-attributes(Aterm*1, trafo, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [cota-1'4] contains-only-traversal-attributes(Aterm*1, break, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [cota-1'5] contains-only-traversal-attributes(Aterm*1, continue, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [cota-1'6] contains-only-traversal-attributes(Aterm*1, top-down, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [cota-1'7] contains-only-traversal-attributes(Aterm*1, bottom-up, Aterm*2) =
+               contains-only-traversal-attributes(Aterm*1, Aterm*2)
+
+  [default-cota-1'8] contains-only-traversal-attributes(Aterm+) = false
