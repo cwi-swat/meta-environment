@@ -18,7 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 bin_PROGRAMS         = wish-adapter
-data_DATA            = tb.tcl
+pkgdata_DATA            = tb.tcl
 
 EXTRA_DIST           = wish-adapter.guide.tex tb.tcl
 
@@ -27,8 +27,8 @@ wish_adapter_LDADD   = -L$(TOOLBUSLIB)/lib -ltb
 
 
 WISH_DEFS            = -DWISH=\"$(WISH)\" \
-                       -DTBTCL=\"$(datadir)/tb.tcl\" \
-                       -DLIBDIR=\"$(datadir)\"
+                       -DTBTCL=\"$(pkgdatadir)/tb.tcl\" \
+                       -DLIBDIR=\"$(pkgdatadir)\"
 
 INCLUDES             = -I $(TOOLBUSLIB)/include $(WISH_DEFS)
 

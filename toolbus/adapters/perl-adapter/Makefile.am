@@ -18,14 +18,14 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 bin_PROGRAMS         = perl-adapter
-data_DATA            = tb.perl
+pkgdata_DATA            = tb.perl
 
 EXTRA_DIST           = perl-adapter.guide.tex tb.perl
 
 perl_adapter_SOURCES = perl-adapter.c
 perl_adapter_LDADD   = -L$(TOOLBUSLIB)/lib -ltb
 
-PERL_DEFS            = -DTBPERL=\"$(datadir)/tb.perl\"
+PERL_DEFS            = -DTBPERL=\"$(pkgdatadir)/tb.perl\"
 
 INCLUDES             = -I $(TOOLBUSLIB)/include $(PERL_DEFS)
 

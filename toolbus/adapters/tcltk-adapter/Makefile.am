@@ -18,7 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 bin_PROGRAMS = tcltk-adapter
-data_DATA    = tcltk.tcl tide.tcl
+pkgdata_DATA    = tcltk.tcl tide.tcl
 noinst_DATA  = adapters.ps
 
 
@@ -33,7 +33,7 @@ tcltk_adapter_LDADD   = -L$(TCLTK)/lib -ltk8.0 -ltcl8.0 \
                         -L$(ATERM)/lib -lATerm
 
 CLEANFILES   = adapters.ps
-TCLTK_DEFS   = -DLIBDIR=\"$(datadir)\"
+TCLTK_DEFS   = -DLIBDIR=\"$(pkgdatadir)\"
 
 INCLUDES     = -I$(TCLTK)/include -I$(ATERM)/include $(TCLTK_DEFS) \
                $(TIDEINC) $(TIDEDEF)
