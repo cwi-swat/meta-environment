@@ -221,6 +221,7 @@ void delete_session(int cid, ATerm sid)
     int referenceCount = EM_getSessionReferenceCount(session);
     if (referenceCount == 0) {
       ATtableRemove(sessions, sid);
+      ATtableRemove(bindings, sid);
     }
     else {
       putSession(EM_setSessionStatus(session, EM_makeSessionStatusZombie()));

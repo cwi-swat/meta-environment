@@ -317,6 +317,7 @@ in
     .
     if and(HasText, not(HasStructure)) then
       OpenSyntax(Path, sdf)
+      . DrawImportGraph() /* FIXME */
     else
       tau
     fi

@@ -692,6 +692,7 @@ in
     else
       StackPopString(Stack, Stack?, Modulename?)
       . LocateFile(Modulename, sdf, Path?)
+      . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
       . create(EditSyntax(Path), Pid?)
       . rec-msg(syntax-editor-started(Path, Sid?))
       . ReturnSuccess(EditorId, Stack)
@@ -1306,8 +1307,7 @@ in
   .
   (
     rec-msg(list-choice(ModuleId, Import?))
-    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
-                               [Import, ModuleId])))
+    . snd-note(ui-status(statf(Id, "Adding import %s to %s", [Import, ModuleId])))
     . AddImport(ModuleId, Import)
     . snd-note(ui-status(endstat(Id)))
   +
