@@ -497,9 +497,9 @@ ATerm prepare_term(ATerm t, ATbool lexcons)
 	annos = AT_getAnnotations(t);
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
-    if(asfix_is_lex_constructor(t))
+    if(AFTisLexConstructor(t)) {
       newargs = prepare_list(args, ATtrue);
-    else
+    } else
       newargs = prepare_list(args, ATfalse); 
     result = asfix_put_appl_args(t, newargs); 
   } else if(asfix_is_list(t)) {
@@ -684,7 +684,7 @@ ATerm RWrestoreTerm(ATerm t)
   ATerm sym, result;
 	
   if(asfix_is_appl(t)) {
-    if(asfix_is_lex_constructor(t))
+    if(AFTisLexConstructor(t))
       return list_to_lexical(t);
     args = asfix_get_appl_args(t);
     result = asfix_put_appl_args(t, restore_args(args));    

@@ -424,7 +424,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList elems1, elems2;
   ATerm newenv = env;
 
-	ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);
+	/*ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);*/
 
   if(ATisEqual(arg1,arg2))
     return args_matching(newenv,conds,orgargs1,orgargs2);
