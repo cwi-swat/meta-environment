@@ -2,8 +2,9 @@
 prefix=@prefix@
 libdir=@prefix@/lib
 classdir=@prefix@/classes
+toolbus=@TOOLBUS@/bin/toolbus
 
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
 
 echo ${CLASSPATH}
-@TOOLBUS@/bin/toolbus $@ -I${libdir} ${libdir}/meta.tb
+$toolbus $@ -I${libdir} ${libdir}/meta.tb
