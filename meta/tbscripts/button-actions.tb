@@ -17,35 +17,27 @@ let
   ModuleName : str,
   Actions    : list,
   EditorId   : term,
-  Argument   : term
+  Arguments  : list
 in
   (
-    (
-    rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)) .
-    Argument := none
-    +
-    rec-msg(extra-button-action(ButtonName?, Argument?, EditorType?, ModuleName?,
-                                EditorId?))
-    ) .
-    snd-msg(get-button-actions(ButtonName,EditorType,ModuleName)).
-    rec-msg(button-actions(ButtonName,EditorType,ModuleName,Actions?)).
-    PerformButtonActions(EditorId, Argument, Actions) 
+    rec-msg(extra-button-action(ButtonName?, Arguments?, 
+                                EditorType?, ModuleName?,
+                                EditorId?)) .
+    snd-msg(get-button-actions(ButtonName, EditorType, ModuleName)).
+    rec-msg(button-actions(ButtonName, EditorType, ModuleName, Actions?)).
+    PerformButtonActions(EditorId, Arguments, Actions) 
   )* delta
 endlet
 
-process PerformButtonActions(EditorId : term, StackTop : term, Actions : list) is
+process PerformButtonActions(EditorId : term, StackArgs : list, Actions : list) is
 let
   ButtonActions : list,
   ButtonAction  : term,
   FunName       : str,
   Stack         : list
 in
-  if equal(StackTop,none) then
-    Stack := [] 
-  else
-    Stack := [StackTop]
-  fi .
   ButtonActions := quote(Actions) .
+  Stack := quote(StackArgs) .
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .

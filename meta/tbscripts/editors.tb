@@ -176,7 +176,7 @@ in
   subscribe(syntax-changed(ModuleName)) .
   (
     rec-msg(extra-button-action(EditorId, ButtonName?)) .
-    snd-msg(extra-button-action(ButtonName, Type, ModuleName, EditorId)) 
+    snd-msg(extra-button-action(ButtonName, [], Type, ModuleName, EditorId)) 
   +
     rec-msg(text-editor-disconnected(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
