@@ -8940,21 +8940,21 @@ FUNC_EXIT ( make_nf4 ( lf_331sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
 ATerm lf_194 ( ATerm arg0 ) {
 {
-ATerm tmp [ 2 ] ;
+ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_194sym , ATmakeAppl ( lf_194sym , arg0 ) ) ;
+if ( term_equal ( lf_56 ( arg0 ) , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_9sym ) ) ) ) ) {
+if ( term_equal ( lf_170 ( arg0 ) , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_9sym ) ) ) ) ) {
 if ( check_sym ( arg0 , lf_2sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_list_1sym ) ) {
-{
-ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( not_empty_list ( atmp000 ) ) {
-if ( term_equal ( list_head ( atmp000 ) , make_char ( 34 ) ) ) {
-( tmp [ 0 ] = list_tail ( atmp000 ) ) ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-( tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ) ;
+( tmp [ 0 ] = arg_0 ( arg0 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_list_1sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 2 ] ) ) {
+( tmp [ 3 ] = list_prefix ( tmp [ 2 ] ) ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+if ( term_equal ( list_last ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
 FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_10sym ) ) ;
 }
 }
@@ -39541,8 +39541,12 @@ FUNC_EXIT ( make_nf1 ( lf_7sym , make_nf1 ( lf_6sym , make_nf2 ( lf_49sym , arg0
 }
 }
 else {
+if ( term_equal ( lf_56 ( arg1 ) , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_9sym ) ) ) ) ) {
+if ( term_equal ( lf_170 ( arg1 ) , ( constant2 ? constant2 : ( constant2 = make_nf0 ( lf_9sym ) ) ) ) ) {
 if ( term_equal ( lf_194 ( arg1 ) , ( constant0 ? constant0 : ( constant0 = make_nf0 ( lf_10sym ) ) ) ) ) {
 FUNC_EXIT ( make_nf1 ( lf_7sym , make_nf1 ( lf_6sym , arg0 ) ) ) ;
+}
+}
 }
 }
 if ( is_single_element ( atmp30 ) ) {

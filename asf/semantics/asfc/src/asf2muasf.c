@@ -60,7 +60,7 @@ static MA_TermTerms attrsToTermList(PT_Attrs attrs);
 static MA_TermArgs atArgsToTermArgs(ATermList args);
 static MA_Term atermToTerm(ATerm aterm);
 static MA_Annotations attributesToAnnotations(PT_Attributes attributes);
-static MA_FunId prodToFunId(PT_Production prod);
+static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList);
 static MA_SigArgElems makeSigArgElems(int arity);
 static MA_FuncDef prodToFuncDef(PT_Production prod);
 static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs);
@@ -77,6 +77,32 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 					       ATermIndexedSet funcdefs);
 static MA_ModId makeModId(const char *str);
 static ATbool checkListProductionCompatibility(PT_Production ptProd);
+
+/*}}}  */
+
+/*{{{  static ATbool returnsList(PT_Production prod) */
+
+static ATbool prodReturnsList(PT_Production prod)
+{
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbol rhs;
+
+    rhs = PT_getProductionRhs(prod);
+
+    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+    }
+
+    if (PT_isSymbolIterPlus(rhs) ||
+	PT_isSymbolIterStar(rhs) ||
+	PT_isSymbolIterPlusSep(rhs) ||
+	PT_isSymbolIterStarSep(rhs)) {
+       return ATtrue;
+    }
+  }
+
+  return ATfalse;
+}
 
 /*}}}  */
 
@@ -310,32 +336,12 @@ static MA_Annotations attributesToAnnotations(PT_Attributes attributes)
 /*}}}  */
 /*{{{  static MA_FunId prodToFunId(PT_Production prod) */
 
-static MA_FunId prodToFunId(PT_Production prod)
+static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList)
 {
   char *strProd;
   char *str;
   char *escaped;
-
   MA_FunId result;
-  ATbool returnsList = ATfalse;
-
-  /* find out if this production produces a list */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs;
-
-    rhs = PT_getProductionRhs(prod);
-
-    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
-      rhs = PT_getSymbolSymbol(rhs);
-    }
-
-    if (PT_isSymbolIterPlus(rhs) ||
-	PT_isSymbolIterStar(rhs) ||
-	PT_isSymbolIterPlusSep(rhs) ||
-	PT_isSymbolIterStarSep(rhs)) {
-       returnsList = ATtrue;
-    }
-  }
 
   strProd = strdup(ATwriteToString((ATerm) prod));
 
@@ -454,7 +460,7 @@ static MA_Term treeToType(PT_Tree tree)
 
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
 {
-  MA_FunId maFunId = prodToFunId(ptProd);
+  MA_FunId maFunId = prodToFunId(ptProd, prodReturnsList(ptProd));
   PT_Attributes ptAttributes;
   int arity ;
   MA_SigArgElems maSigArgElems;
@@ -581,13 +587,13 @@ static MA_Term variableToTerm(PT_Tree var)
 /*{{{  static MA_Term applTreeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, */
 
 static MA_Term applTreeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
-			      LayoutOption layout)
+			      LayoutOption layout, ATbool returnsList)
 {
   MA_Term result = NULL;
   PT_Production prod = PT_getTreeProd(tree);
   MA_FuncDef funcdef = prodToFuncDef(prod);
   PT_Args args = PT_getTreeArgs(tree);
-  MA_FunId funid = prodToFunId(prod);
+  MA_FunId funid = prodToFunId(prod, returnsList);
   MA_TermArgs terms = argsToTermArgs(args, funcdefs);
   ATindexedSetPut(funcdefs, (ATerm) funcdef, NULL);
 
@@ -617,8 +623,9 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
   }
   else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
     PT_Tree converted;
+    ATbool returnsList = prodReturnsList(PT_getTreeProd(tree));
     converted = transformTraversalFunction(tree);
-    result = applTreeToTerm(converted, funcdefs, layout);
+    result = applTreeToTerm(converted, funcdefs, layout, returnsList);
   }
   else if (PT_isTreeVar(tree)) {
     result = variableToTerm(tree);
@@ -627,7 +634,8 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
     result = treeToTerm(PT_getTreeBracketTree(tree), funcdefs, layout);
   } 
   else if (PT_isTreeAppl(tree)) {
-    result = applTreeToTerm(tree, funcdefs, layout);
+    ATbool returnsList = prodReturnsList(PT_getTreeProd(tree));
+    result = applTreeToTerm(tree, funcdefs, layout, returnsList);
   }
   else if (PT_isTreeChar(tree)) {
     int ch = PT_getTreeCharacter(tree);
