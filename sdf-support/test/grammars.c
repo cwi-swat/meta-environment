@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <SDFME-utils.h>
+#include <MEPT.h>
 
 #define TEST_GRAMMAR_FILE SRC_DIR "/Layout.pt"
 
@@ -14,7 +15,9 @@ testGrammars(void)
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
 
-  module = SDF_makeModuleFromTerm(contents);
+  module = SDF_ModuleFromTerm(
+             PT_TreeToTerm(
+	       PT_getParseTreeTree(PT_ParseTreeFromTerm(contents))));
 
   lexProds = SDF_getModuleLexicalProductions(module);
 

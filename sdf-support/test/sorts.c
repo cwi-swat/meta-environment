@@ -22,7 +22,9 @@ int testSorts(void)
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
 
-  module = SDF_makeModuleFromTerm(contents);
+  module = SDF_ModuleFromTerm(
+             PT_TreeToTerm(
+               PT_getParseTreeTree(PT_ParseTreeFromTerm(contents))));
 
   sorts = SDF_getModuleSorts(module);
 
