@@ -70,10 +70,10 @@ arm-adapter.c arm-adapter.h: arm-adapter.c.nw
 	touch arm-adapter.c arm-adapter.h
 
 arm.tif.c: arm.tifs
-	${top_srcdir}/ctif -backdoor -multi -tool arm -tifs arm.tifs 
+	${top_srcdir}/src/ctif -backdoor -multi -tool arm -tifs arm.tifs 
 
 arm.tifs: arm.tb
-	${top_srcdir}/toolbus -gentifs arm.tb
+	${top_srcdir}/src/toolbus -gentifs arm.tb
 
 armcmd: armcmd.o
 	$(CC) -o armcmd armcmd.o $(LIBS)
@@ -82,7 +82,7 @@ armcmd.o: armcmd.c armcmd.tif.c
 	$(COMPILE) -c armcmd.c
 
 armcmd.tif.c: arm.tifs
-	${top_srcdir}/ctif -multi -tool armcmd -tifs arm.tifs
+	${top_srcdir}/src/ctif -multi -tool armcmd -tifs arm.tifs
 
 armcmd.c armcmd.c.tex: armcmd.c.nw
 	$(NOWEB) armcmd.c.nw
@@ -104,7 +104,7 @@ dist: $(DISTFILES)
 	done
 
 install: $(PROGRAMS) arm-cmd arm-resident $(LIBFILES)
-	for file in $(PROGRAMS); do\
+	for file in $(PROGRAMS) arm-cmd arm-resident; do\
 	  $(INSTALL) $$file $(bindir); \
 	done
 	for file in $(LIBFILES); do\
@@ -120,7 +120,7 @@ doc: $(SRCDOC) $(DOC)
 	done
 
 uninstall:
-	for file in $(PROGRAMS); do\
+	for file in $(PROGRAMS) arm-cmd arm-resident; do\
 	  rm -f $(bindir)/$$file; \
 	done
 	for file in $(SRCDOC); do\
