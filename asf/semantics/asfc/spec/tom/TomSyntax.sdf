@@ -1,1 +1,22 @@
 module tom/TomSyntax
+
+imports muasf/MuASF
+
+exports
+
+sorts TomRuleSection TomRule TomSpecification
+
+context-free start-symbols
+  TomSpecification
+
+context-free syntax
+
+TomRuleSection* -> TomSpecification
+"%rule" "{" TomRule* "}" -> TomRuleSection
+
+Term "->" Term -> TomRule
+
+context-free syntax
+
+FunId "(" ")" -> Term {cons("func-no-arguments")}
+"_"           -> Term {cons("anonymous-variable")}
