@@ -127,9 +127,8 @@ buttons([
           reduce,
 
           apply("display-query", "List", 4),
-          exists("DisplayQuery"),
-          execute-action("DisplayQuery -t"),
-          execute-action("unparsePT"),
-          show-list
+          rewrite("DisplayQuery"),
+	  execute-action("unparsePT"),
+	  show-list
         ])
 ])
