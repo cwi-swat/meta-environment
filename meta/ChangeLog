@@ -1,5 +1,9 @@
 # $Id$
 
+2003/05/30 (jurgenv@cwi.nl)
+ * removed module-db subtree from configure.in, but still left it in the
+   source tree.
+
 2003/05/28 (markvdb@cs.vu.nl)
  * Added a number of "empty" assignments.
  * Replace the calculation of the import-graph by 
