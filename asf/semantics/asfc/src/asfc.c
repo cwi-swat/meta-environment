@@ -13,6 +13,7 @@
 
 #include <tb-tool.h>
 #include <string.h>
+#include <ctype.h>
 #include <asfix.h>
 #include <term-list.h>
 #include <abbrevs.h>
@@ -26,13 +27,16 @@ extern aterm *pattern_asfix_sort;
 extern aterm *pattern_asfix_prod;
 extern aterm *pattern_asfix_l;
 extern aterm *pattern_asfix_ql;
+extern aterm *pattern_asfix_nlws;
 extern aterm *pattern_asfix_noattrs;
 extern aterm *pattern_asfix_attrs;
 extern aterm *pattern_asfix_contextfreesyntax;
+extern aterm *pattern_asfix_lexicalsyntax;
 extern aterm *pattern_asfix_exports;
 extern aterm *pattern_asfix_hiddens;
 extern aterm *pattern_asfix_id;
 extern aterm *pattern_asfix_module;
+extern aterm *pattern_asfix_lexcaller;
 
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
@@ -43,6 +47,7 @@ aterm *asfix2rnx(arena *ar,aterm *asfix);
 aterm *asfix_trans(arena *ar,aterm *mod);
 void init_expansion_terms();
 void init_asfix_patterns();
+aterm_list *get_equations_for_func(arena *ar,aterm *func,aterm_list *mods);
 
 aterm_list *modules_db;
 
@@ -159,6 +164,113 @@ int equal_prod(aterm *prod1,aterm *prod2)
   return Tfalse;
 }
 
+aterm *make_caller_prod(arena *ar,aterm *sort)
+{
+  aterm *prod;
+  char *text;
+  int i;
+
+  assertp(TmatchTerm(sort, pattern_asfix_sort, &text));
+  text = strdup(text);
+  if(!text) {
+    fprintf(stderr,"Not enough memory\n");
+    exit(1);
+  }
+  for(i=0; text[i]; i++)
+    text[i] = tolower(text[i]);
+  prod = TmakeTerm(ar, pattern_asfix_lexcaller, text, sort);
+  free(text);
+  return prod;
+}
+
+aterm *remove_func_from_module(arena *ar,aterm *func, aterm *amod);
+/* The function {\tt get_lex_funcs_for_sort} traverse a list
+   of modules and looks for all lexical functions
+   with the given sorts as result sort. */
+aterm_list *get_lex_funcs_for_sort(arena *ar,aterm *sort, 
+                                   aterm_list *mods)
+{
+  aterm *lmod,*amod,*oldamod,*lexfunc,*rsort;
+  aterm_list *lexfuncs, *orgmods;
+  aterm_list *functions = t_empty(NULL);
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
+  orgmods = mods;
+  while(!t_is_empty(mods)) {
+    lmod = t_list_first(mods);
+    amod = TdictGet(modules_db,lmod);
+    lexfuncs = AFgetModuleLexfuncs(&local,amod);
+    lexfuncs = asfix_filter_layout(&local,lexfuncs);
+    while(!t_is_empty(lexfuncs)) {
+      lexfunc = t_list_first(lexfuncs);
+      rsort = AFgetProdSort(lexfunc);
+      if(equal_term(sort,rsort)) {
+        oldamod = TdictGet(modules_db,lmod);
+        amod = remove_func_from_module(&local,lexfunc,oldamod);
+        change_modules_db(TdictPut(&local,modules_db,lmod,amod));
+        if(!t_is_empty(functions))
+          functions = TlistAppend(&local,
+                                  functions,
+                                  TmakeSimple(&local, "w(\"\\n\")"));
+        functions = TlistAppend(&local, functions, lexfunc);
+      }
+      lexfuncs = t_list_next(lexfuncs);
+    }
+    mods = t_list_next(mods);
+  }
+  Tadd2Arena(ar,functions);
+  TdestroyArena(&local);
+  return functions;
+}
+
+aterm_list *get_cf_funcs_for_sort(arena *ar,aterm *sort,
+                                   aterm_list *mods)
+{
+  aterm *lmod,*amod,*oldamod,*cffunc,*rsort;
+  aterm_list *cffuncs, *orgmods, *neweqs, *eqs;
+  aterm_list *functions = t_empty(NULL);
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
+  orgmods = mods;
+  while(!t_is_empty(mods)) {
+    lmod = t_list_first(mods);
+    amod = TdictGet(modules_db,lmod);
+    cffuncs = AFgetModuleCFfuncs(&local,amod);
+    cffuncs = asfix_filter_layout(&local,cffuncs);
+    while(!t_is_empty(cffuncs)) {
+      cffunc = t_list_first(cffuncs);
+      rsort = AFgetProdSort(cffunc);
+      if(equal_term(sort,rsort)) {
+        oldamod = TdictGet(modules_db,lmod);
+        amod = remove_func_from_module(&local,cffunc,oldamod);
+        change_modules_db(TdictPut(&local,modules_db,lmod,amod));
+        if(!t_is_empty(functions))
+          functions = TlistAppend(&local,
+                                  functions,
+                                  TmakeSimple(&local, "w(\"\\n\")"));
+        functions = TlistAppend(&local, functions, cffunc);
+        neweqs = get_equations_for_func(&local,cffunc,mods);
+        if(!t_is_empty(neweqs)) {
+          oldamod = TdictGet(modules_db,lmod);
+          eqs = AFgetModuleEqs(oldamod);
+          eqs = TlistConcat(&local,
+                            TlistAppend(&local,eqs,pattern_asfix_nlws),
+                            neweqs);
+          amod = AFputModuleEqs(&local,amod,eqs);
+          change_modules_db(TdictPut(&local,modules_db,lmod,amod));
+        }
+      }
+      cffuncs = t_list_next(cffuncs);
+    }
+    mods = t_list_next(mods);
+  }
+  Tadd2Arena(ar,functions);
+  TdestroyArena(&local);
+  return functions;
+}
+
 aterm_list *remove_equation(arena *ar,aterm *eq,aterm_list *eqs)
 {
   aterm *eq2;
@@ -198,11 +310,11 @@ aterm_list *remove_equation(arena *ar,aterm *eq,aterm_list *eqs)
   return neweqs;
 }
   
-/* The function {\tt get_equations_for_cffunc} traverse a list
+/* The function {\tt get_equations_for_func} traverse a list
    of modules and looks for all equations with the given
    context-free function as outermost function symbol in the
    left-hand side. */
-aterm_list *get_equations_for_cffunc(arena *ar,aterm *cffunc, aterm_list *mods)
+aterm_list *get_equations_for_func(arena *ar,aterm *func,aterm_list *mods)
 {
   aterm *mod,*amod, *eq, *lhs, *ofs;
   aterm_list *eqs, *neweqs;
@@ -219,7 +331,7 @@ aterm_list *get_equations_for_cffunc(arena *ar,aterm *cffunc, aterm_list *mods)
       eq = t_list_first(eqs);
       lhs = asfix_get_equ_lhs(eq);
       ofs = asfix_get_appl_prod(lhs);
-      if(equal_prod(cffunc,ofs)) {
+      if(equal_prod(func,ofs)) {
 /* This equation should also be removed from the list of equations
    of the given module. */
         neweqs = asfix_get_module_eqs(amod);
@@ -239,47 +351,48 @@ aterm_list *get_equations_for_cffunc(arena *ar,aterm *cffunc, aterm_list *mods)
   return equations;
 }
 
-aterm *remove_cffunc_from_cffuncs(arena *ar,aterm *cffunc, aterm *cffuncs)
+aterm *remove_func_from_funcs(arena *ar,aterm *func, aterm *funcs)
 {
   Tbool found;
-  aterm *cffunc2;
+  aterm *func2;
   arena local;
-  aterm_list *newcffuncs = t_empty(NULL);
+  aterm_list *newfuncs = t_empty(NULL);
 
   TinitArena(t_world(*ar), &local);
   
   found = Tfalse;
-  while(!found && !t_is_empty(cffuncs)) {
-    cffunc2 = t_list_first(cffuncs);
-    if(AFnotLayout(cffunc2)) {
-      if(equal_prod(cffunc,cffunc2)) {
+  while(!found && !t_is_empty(funcs)) {
+    func2 = t_list_first(funcs);
+    if(AFnotLayout(func2)) {
+      if(equal_prod(func,func2)) {
         found = Ttrue;
-        cffuncs = t_list_next(cffuncs);
-        if(!t_is_empty(cffuncs)) {
-          cffuncs = t_list_next(cffuncs); /* Skip the next layout */
-          newcffuncs = TlistConcat(&local,newcffuncs,cffuncs);
+        funcs = t_list_next(funcs);
+        if(!t_is_empty(funcs)) {
+          funcs = t_list_next(funcs); /* Skip the next layout */
+          newfuncs = TlistConcat(&local,newfuncs,funcs);
         }
         else { /* The last element of the list was removed */
-          if(!t_is_empty(newcffuncs))
-            newcffuncs = TlistInit(&local,newcffuncs);
+          if(!t_is_empty(newfuncs))
+            newfuncs = TlistInit(&local,newfuncs);
         }
-        Tadd2Arena(ar,newcffuncs);
+        Tadd2Arena(ar,newfuncs);
         TdestroyArena(&local);
-        return newcffuncs;
+        return newfuncs;
       }
     }
-    newcffuncs = TlistAppend(&local,newcffuncs,cffunc2);
-    cffuncs = t_list_next(cffuncs);
+    newfuncs = TlistAppend(&local,newfuncs,func2);
+    funcs = t_list_next(funcs);
   }
-  Tadd2Arena(ar,newcffuncs);
+  Tadd2Arena(ar,newfuncs);
   TdestroyArena(&local);
-  return newcffuncs;
+  return newfuncs;
 }
 
-aterm *remove_cffunc_from_subsections(arena *ar,aterm *cffunc, aterm *subsections)
+aterm *remove_func_from_subsections(arena *ar,aterm *func, aterm *subsections)
 {
   aterm *subsection,*newsubsection;
   aterm_list *cffuncs, *newcffuncs;
+  aterm_list *lexfuncs, *newlexfuncs;
   aterm *t[2];
   arena local;
   aterm_list *newsubsections = t_empty(NULL);
@@ -290,7 +403,7 @@ aterm *remove_cffunc_from_subsections(arena *ar,aterm *cffunc, aterm *subsection
     subsection = t_list_first(subsections);
     if(TmatchTerm(subsection, pattern_asfix_contextfreesyntax,
                   &t[0], &t[1], &cffuncs)) {
-      newcffuncs = remove_cffunc_from_cffuncs(&local,cffunc,cffuncs);
+      newcffuncs = remove_func_from_funcs(&local,func,cffuncs);
       if(!t_is_empty(newcffuncs)) {
         newsubsection = TmakeTerm(&local, pattern_asfix_contextfreesyntax,
                                   t[0], t[1], newcffuncs);
@@ -308,6 +421,26 @@ aterm *remove_cffunc_from_subsections(arena *ar,aterm *cffunc, aterm *subsection
         }
       }
     }
+    else if(TmatchTerm(subsection, pattern_asfix_lexicalsyntax,
+                  &t[0], &t[1], &lexfuncs)) {
+      newlexfuncs = remove_func_from_funcs(&local,func,lexfuncs);
+      if(!t_is_empty(newlexfuncs)) {
+        newsubsection = TmakeTerm(&local, pattern_asfix_lexicalsyntax,
+                                  t[0], t[1], newlexfuncs);
+        newsubsections = TlistAppend(&local,newsubsections,newsubsection);
+      }
+      else {
+        subsections = t_list_next(subsections);
+        if(!t_is_empty(subsections)) {
+          subsection = t_list_first(subsections);
+        }
+        else {
+          if(!t_is_empty(newsubsections)) {
+            newsubsections = TlistInit(&local,newsubsections);
+          }
+        }
+      }
+    }
     else 
       newsubsections = TlistAppend(&local,newsubsections,subsection);
     if(!t_is_empty(subsections)) 
@@ -318,7 +451,7 @@ aterm *remove_cffunc_from_subsections(arena *ar,aterm *cffunc, aterm *subsection
   return newsubsections;
 }
 
-aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
+aterm *remove_func_from_sections(arena *ar,aterm *func, aterm *sections)
 {
   aterm *section,*newsection;
   aterm_list *subsections, *newsubsections;
@@ -333,8 +466,8 @@ aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
     if(TmatchTerm(section, pattern_asfix_exports,
               &t[0], &t[1], &subsections)) {
       newsubsections =
-         remove_cffunc_from_subsections(&local,cffunc,subsections);
-/*Tprintf(stderr,"remove_cffunc_from_sections: %t\n",cffunc);*/
+         remove_func_from_subsections(&local,func,subsections);
+/*Tprintf(stderr,"remove_func_from_sections: %t\n",func);*/
       if(!t_is_empty(newsubsections)) {
         newsection = TmakeTerm(&local, pattern_asfix_exports,
                            t[0], t[1], newsubsections);
@@ -355,7 +488,7 @@ aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
     else if(TmatchTerm(section, pattern_asfix_hiddens,
                        &t[0], &t[1], &subsections)) {
       newsubsections = 
-        remove_cffunc_from_subsections(&local,cffunc,subsections);
+        remove_func_from_subsections(&local,func,subsections);
       if(!t_is_empty(newsubsections)) {
         newsection = TmakeTerm(&local, pattern_asfix_hiddens,
                                t[0], t[1], newsubsections);
@@ -383,7 +516,7 @@ aterm *remove_cffunc_from_sections(arena *ar,aterm *cffunc, aterm *sections)
   return newsections;
 }
 
-aterm *remove_cffunc_from_module(arena *ar,aterm *cffunc, aterm *amod)
+aterm *remove_func_from_module(arena *ar,aterm *func, aterm *amod)
 {
   aterm *result;
   aterm_list *sections, *newsections;
@@ -392,7 +525,7 @@ aterm *remove_cffunc_from_module(arena *ar,aterm *cffunc, aterm *amod)
   TinitArena(t_world(*ar), &local);
   
   sections = AFgetModuleSections(amod);
-  newsections = remove_cffunc_from_sections(&local,cffunc,sections);
+  newsections = remove_func_from_sections(&local,func,sections);
   result = AFputModuleSections(&local,amod,newsections);
   Tadd2Arena(ar,result);
   TdestroyArena(&local);
@@ -406,23 +539,86 @@ aterm *unique_new_name(arena *ar,aterm *name)
   int n = 1;
 
   assertp(TmatchTerm(name,pattern_asfix_id,&text));
-  newtext = malloc(strlen(text)+6);
-  sprintf(newtext,"%s%d",text,n);
+  newtext = malloc(strlen(text)+16);
+  sprintf(newtext,"AUX-%s%d",text,n);
   newname = TmakeTerm(ar,pattern_asfix_id,newtext);
   while(TdictGet(modules_db,newname)) {
     n++;
-    sprintf(newtext,"%s%d",text,n);
+    sprintf(newtext,"AUX-%s%d",text,n);
     newname = TmakeTerm(ar,pattern_asfix_id,newtext);
   }
   free(newtext);
   return newname;
 }
 
+void reshuffle_per_sort(arena *ar,aterm *mod,aterm_list *orgmods)
+{
+  arena local;
+
+  aterm *prod, *amod, *oldamod, *sort, *newsection, *newsubsection;
+  aterm_list *sorts, *mods, *funcs, *sections, *eqs, *neweqs;
+
+  TinitArena(t_world(*ar), &local);
+
+Tprintf(stderr,"Reshuffling module per sort: %t\n",mod);
+  amod = TdictGet(modules_db,mod);
+  sorts = AFgetModuleSorts(&local, amod);
+  sorts = asfix_filter_layout(&local,sorts);
+  while(!t_is_empty(sorts)) {
+    sort = t_list_first(sorts);
+Tprintf(stderr,"Reshuffling sort: %t\n",sort);
+    mods = TlistDeleteAll(&local,orgmods,mod);
+    funcs = get_lex_funcs_for_sort(&local,sort,mods);
+    if(!t_is_empty(funcs)) {
+      newsubsection = AFinitLexicalSyntaxSection(&local);
+      newsubsection = AFputSectionArgs(&local,newsubsection,funcs);
+      newsection = AFinitExportSection(&local);
+      newsection = AFputSectionArgs(&local,newsection,
+                                    TmkList_n(&local,1,newsubsection));
+      oldamod = TdictGet(modules_db,mod);
+      sections = AFgetModuleSections(oldamod);
+      sections = TlistConcat(&local,sections,
+                             TmkList_n(&local,2,
+                                       pattern_asfix_nlws,
+                                       newsection));
+      amod = AFputModuleSections(&local,amod,sections);
+      change_modules_db(TdictPut(&local,modules_db,mod,amod));
+      prod = make_caller_prod(&local,sort);
+      neweqs = get_equations_for_func(&local,prod,mods);
+      if(!t_is_empty(neweqs)) {
+        oldamod = TdictGet(modules_db,mod);
+        eqs = AFgetModuleEqs(oldamod);
+        eqs = TlistConcat(&local,
+                          TlistAppend(&local,eqs,pattern_asfix_nlws),
+                          neweqs);
+        amod = AFputModuleEqs(&local,amod,eqs);
+        change_modules_db(TdictPut(&local,modules_db,mod,amod));
+      }
+    }
+    funcs = get_cf_funcs_for_sort(&local,sort,mods);
+    if(!t_is_empty(funcs)) {
+      newsubsection = AFinitContextFreeSyntaxSection(&local);
+      newsubsection = AFputSectionArgs(&local,newsubsection,funcs);
+      newsection = AFinitExportSection(&local);
+      newsection = AFputSectionArgs(&local,newsection,
+                                    TmkList_n(&local,1,newsubsection));
+      oldamod = TdictGet(modules_db,mod);
+      sections = AFgetModuleSections(oldamod);
+      if(!t_is_empty(sections))
+        sections = TlistAppend(&local,sections,pattern_asfix_nlws);
+      sections = TlistAppend(&local,sections,newsection);
+      amod = AFputModuleSections(&local,amod,sections);
+      change_modules_db(TdictPut(&local,modules_db,mod,amod));
+    }
+    sorts = t_list_next(sorts);
+  }
+}
+
 aterm_list *reshuffle_modules(arena *ar,aterm_list *mods)
 {
   arena local;
 
-  aterm *mod, *newmod, *oldamod, *amod, *newamod, *cffunc;
+  aterm *mod, *newmod, *oldamod, *newamod, *cffunc;
   aterm_list *orgmods, *cffuncs, *eqs;
   aterm *newsubsection,*newsection;
   aterm *result;
@@ -433,17 +629,17 @@ aterm_list *reshuffle_modules(arena *ar,aterm_list *mods)
   orgmods = mods;
   while(!t_is_empty(mods)) {
     mod = t_list_first(mods);
-Tprintf(stderr,"Reshuffling module: %t\n",mod);
+    reshuffle_per_sort(&local,mod,orgmods);
     oldamod = TdictGet(modules_db,mod);
     cffuncs = AFgetModuleCFfuncs(&local, oldamod);
     cffuncs = asfix_filter_layout(&local,cffuncs);
     while(!t_is_empty(cffuncs)) {
       cffunc = t_list_first(cffuncs);
-      eqs = get_equations_for_cffunc(&local,cffunc,orgmods);
-      if(!t_is_empty(eqs)) {
-        oldamod = TdictGet(modules_db,mod);
-        amod = remove_cffunc_from_module(&local,cffunc,oldamod);
-        change_modules_db(TdictPut(&local,modules_db,mod,amod));
+      eqs = get_equations_for_func(&local,cffunc,orgmods);
+      /*if(!t_is_empty(eqs)) {*/
+        /*oldamod = TdictGet(modules_db,mod);
+        amod = remove_func_from_module(&local,cffunc,oldamod);
+        change_modules_db(TdictPut(&local,modules_db,mod,amod));*/
         newamod = AFinitModule(&local);
         newmod = unique_new_name(&local,mod);
 Tprintf(stderr,"Creating new module: %t\n",newmod);
@@ -459,7 +655,7 @@ Tprintf(stderr,"Creating new module: %t\n",newmod);
                                       TmkList_n(&local,1,newsection));
         change_modules_db(TdictPut(&local,modules_db,newmod,newamod));
         newmods = TlistAppend(&local,newmods,newmod);
-      }
+      /*}*/
       cffuncs = t_list_next(cffuncs);
     }
     mods = t_list_next(mods);

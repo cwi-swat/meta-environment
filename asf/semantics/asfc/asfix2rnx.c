@@ -62,6 +62,7 @@ aterm *pattern_asfix_noequations;
 aterm *pattern_asfix_equations;
 aterm *pattern_asfix_condition;
 aterm *pattern_asfix_module;
+aterm *pattern_asfix_lexcaller;
 
 void init_asfix_patterns()
 {
@@ -171,6 +172,12 @@ void init_asfix_patterns()
                                      "module(<term>,<term>,<term>," \
                                      "<term>,<term>,<term>," \
                                      "<term>,<term>,<term>)");
+  pattern_asfix_lexcaller =
+    TmakeSimple(&local,"prod(id(\"caller\"),w(\"\")," \
+                             "[<term>,w(\"\"),ql(\"(\"),w(\"\")," \
+                              "iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))," \
+                              "w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\")," \
+                             "<term>,w(\"\"),no-attrs)");
 
   Tprotect(pattern_asfix_cbo_symbol);
   Tprotect(pattern_asfix_cbc_symbol);
@@ -229,6 +236,7 @@ void init_asfix_patterns()
   Tprotect(pattern_asfix_noequations);
   Tprotect(pattern_asfix_equations);
   Tprotect(pattern_asfix_module);
+  Tprotect(pattern_asfix_lexcaller);
   TdestroyArena(&local);
 }
 
