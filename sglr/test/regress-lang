@@ -177,7 +177,7 @@ error=0
 for dir in $dirs
 do
 	cd $dir
-        for stx in *.sdf2 ; do
+        for stx in `ls *.sdf2` ; do
 	        RegressGenTable $stx
         done
 	${RM} -f *.asfix[12]
