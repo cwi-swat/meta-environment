@@ -1,17 +1,20 @@
 equations
 
   [cs-1'1] check-for-asf-sorts(Definition) = 
-             check-for-asf-sorts(Definition, {})
+             check-for-asf-sorts(Definition, )
 
   [cs-1'2] $ModuleId := get-module-name(Module)
            ====================================
            check-for-asf-sorts(Module, Msgs) = 
              check-asf-sorts(Module, Msgs, $ModuleId)
 
-  [cs-2'2] is-asf-sort($Sort) == true
+  [cs-2'2] is-asf-sort($Sort) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "asf-equation-sort-must-not-be-used in " || $String1,
+           $String3 := symbol2str($Sort)
            =========================
            check-asf-sorts($Sort, Msgs, $ModuleId) =
-              Msgs + asf-equation-sort-must-not-be-used($ModuleId, $Sort)
+              Msgs, make-warning($String2, $String3)
 
   [ias-1'1] is-asf-sort(ASF-Tag) = true
 

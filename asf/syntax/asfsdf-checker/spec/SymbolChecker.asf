@@ -1,6 +1,6 @@
 equations
 
-  [cs-1'1] check-symbols(Definition) = check-symbols(Definition, {})
+  [cs-1'1] check-symbols(Definition) = check-symbols(Definition, )
 
   [cs-1'2] $ModuleId := get-module-name(Module)
            ====================================
@@ -13,70 +13,117 @@ equations
            check-symbols2(context-free syntax Prod*, Msgs1, $ModuleId) =
              Msgs3
 
-  [cs-2'1] is-literal-symbol($Symbol2) == false
-           ===================================
+  [cs-2'1] is-literal-symbol($Symbol2) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}+)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'2] is-literal-symbol($Symbol2) == false
-           ===================================
+  [cs-2'2] is-literal-symbol($Symbol2) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}*)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}*)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'3] is-literal-symbol($Symbol2) == false
-           ===================================
+  [cs-2'2] is-literal-symbol($Symbol2) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}*)
+           ====>
+           check-symbols2({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
+              Msgs, make-warning($String2, $String3)
+
+  [cs-2'3] is-literal-symbol($Symbol2) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}NatCon+)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}NatCon+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'4] is-list-symbol($Symbol) == true
-           ==============================
+  [cs-2'4] is-list-symbol($Symbol) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str($Symbol+)
+           ====>
            check-symbols2($Symbol+, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, $Symbol+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'5] is-list-symbol($Symbol) == true
-           ==============================
+  [cs-2'5] is-list-symbol($Symbol) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str($Symbol*)
+           ====>
            check-symbols2($Symbol*, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, $Symbol*)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'6] is-list-symbol($Symbol1) == true
-           ===============================
+  [cs-2'6] is-list-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}+)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'7] is-list-symbol($Symbol1) == true
-           ===============================
+  [cs-2'7] is-list-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}*)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}*)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-2'8] is-list-symbol($Symbol1) == true
-           ===============================
+  [cs-2'8] is-list-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not-supported-symbol in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}NatCon+)
+           ====>
            check-symbols2({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
-              Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}NatCon+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-4'1] is-charclass-symbol($Symbol) == true
-           ===================================
+  [cs-4'1] is-charclass-symbol($Symbol) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "charclasses-not-allowed-in-context-free-syntax in " || $String1,
+           $String3 := symbol2str($Symbol+)
+           ====>
            check-charclass-list-symbols($Symbol+, Msgs, $ModuleId) =
-              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-4'2] is-charclass-symbol($Symbol) == true
-           ===================================
+  [cs-4'2] is-charclass-symbol($Symbol) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "charclasses-not-allowed-in-context-free-syntax in " || $String1,
+           $String3 := symbol2str($Symbol*)
+           ====>
            check-charclass-list-symbols($Symbol*, Msgs, $ModuleId) =
-              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol*)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-4'3] is-charclass-symbol($Symbol1) == true
-           ====================================
+  [cs-4'3] is-charclass-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "charclasses-not-allowed-in-context-free-syntax in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}+)
+           ====>
            check-charclass-list-symbols({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
-              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}+)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-4'4] is-charclass-symbol($Symbol1) == true
-           ====================================
+  [cs-4'4] is-charclass-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "charclasses-not-allowed-in-context-free-syntax in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}*)
+           ====>
            check-charclass-list-symbols({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
-              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}*)
+              Msgs, make-warning($String2, $String3)
 
-  [cs-4'5] is-charclass-symbol($Symbol1) == true
+  [cs-4'5] is-charclass-symbol($Symbol1) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "charclasses-not-allowed-in-context-free-syntax in " || $String1,
+           $String3 := symbol2str({$Symbol1 $Symbol2}NatCon+)
            ===============================
            check-charclass-list-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
-              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}NatCon+)
+              Msgs, make-warning($String2, $String3)
 
   [ils-1'1] is-literal-symbol($Literal) = true
 

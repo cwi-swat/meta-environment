@@ -1,6 +1,6 @@
 equations
 
-  [ca-1'1] check-asf-attributes(Definition) = check-attributes(Definition, {})
+  [ca-1'1] check-asf-attributes(Definition) = check-attributes(Definition, )
 
   [ca-1'2] $ModuleId := get-module-name(Module),
            <Msgs2, Production*> := 
@@ -15,12 +15,14 @@ equations
 
 
   [ca-2'2] has-traversal-attribute(Production) == true,
-           is-prefix-function(Production) == false
-           ======================================
+           is-prefix-function(Production) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "traversal-attributes-in-non-prefix-function in " || $String1
+           =====>
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = 
-<Msgs +
-traversal-attributes-in-non-prefix-function($ModuleId, Production), Production*>
+<Msgs, make-warning($String3, $String2), Production*>
 
   [ca-2'3] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
@@ -46,70 +48,86 @@ traversal-attributes-in-non-prefix-function($ModuleId, Production), Production*>
            Msg != not-found 
            ================
            check-attributes-in-module(Production,
-                                      <Msgs, Production*>, $ModuleId) = <Msgs + Msg, Production*>
+                                      <Msgs, Production*>, $ModuleId) = 
+<Msgs, Msg, Production*>
 
   [ca-3'1] Aterm+ := get-traversal-arguments(Production),
-           contains-only-traversal-attributes(Aterm+) == false
-           ==================================================
+           contains-only-traversal-attributes(Aterm+) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "illegal-traversal-attribute in " || $String1
+           ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-Msgs +
-illegal-traversal-attribute($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [ca-3'2] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == false,
            contains-break-or-continue(Aterm+) == true,
-           contains-top-down-or-bottom-up(Aterm+) == true
-           =============================================
+           contains-top-down-or-bottom-up(Aterm+) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "missing-trafo-and-or-accu-attribute in " || $String1
+           ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-Msgs +
-missing-trafo-and-or-accu-attribute($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [ca-3'3] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
            contains-break-or-continue(Aterm+) == false,
-           contains-top-down-or-bottom-up(Aterm+) == true
-           =============================================
+           contains-top-down-or-bottom-up(Aterm+) == true,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "missing-break-or-continue-attribute in " || $String1
+           ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-Msgs +
-missing-break-or-continue-attribute($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [ca-3'4] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
            contains-break-or-continue(Aterm+) == true,
-           contains-top-down-or-bottom-up(Aterm+) == false
-           ==============================================
+           contains-top-down-or-bottom-up(Aterm+) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "missing-bottom-up-or-top-down-attribute in " || $String1
+           ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-Msgs +
-missing-bottom-up-or-top-down-attribute($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [default-ca-2'5] check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
   [cf-1'1] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) == true,
            contains-trafo(Aterm+) == false,
-           is-accu-definition(Production) == false
-           ======================================
+           is-accu-definition(Production) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "accu-should-return-accumulated-type in " || $String1
+           ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-Msgs +
-accu-should-return-accumulated-type($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [cf-1'2] Aterm+ := get-traversal-arguments(Production),
            contains-trafo(Aterm+) == true,
            contains-accu(Aterm+) == false,
-           is-trafo-definition(Production) == false
-           =======================================
+           is-trafo-definition(Production) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "trafo-should-return-traversed-type in " || $String1
+           ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-Msgs +
-trafo-should-return-traversed-type($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
+
 
   [cf-1'3] Aterm+ := get-traversal-arguments(Production),
            contains-trafo(Aterm+) == true,
            contains-accu(Aterm+) == true,
-           is-accu-trafo-definition(Production) == false
-           ============================================
+           is-accu-trafo-definition(Production) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Production),
+           $String3 := "accutrafo-should-return-tuple-of-correct-types in " || $String1
+           ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-Msgs +
-accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
+             Msgs, make-warning($String3, $String2)
 
   [default-cf-1'4] check-form-production(Production, Msgs, $ModuleId) = Msgs
 
@@ -188,23 +206,29 @@ accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
                               Production*, 
                               $ModuleId) = consistent
 
-  [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) == false
-           ==============================================
+  [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1),
+           $String3 := production2str($Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
+           $String4 := "inconsistent-arguments-of-traversal-productions in " || $String1,
+           $String5 := $String2 || " vs. " || $String3
+           ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) = 
-inconsistent-arguments-of-traversal-productions($ModuleId, $Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
-                                                           $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2)
+                              $ModuleId) = make-warning($String4, $String5)
 
-  [cd-1'3] Attributes1 != Attributes2
-           ==========================
+  [cd-1'3] Attributes1 != Attributes2,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1),
+           $String3 := production2str($Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
+           $String4 := "inconsistent-traversal-attributes in " || $String1,
+           $String5 := $String2 || " vs. " || $String3
+           ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) = 
-inconsistent-traversal-attributes($ModuleId, $Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
-                                             $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2)
+                              $ModuleId) =  make-warning($String4, $String5)
 
   [default-cd-1'4] consistent-defined(Production1, Production2 Production*, $ModuleId) =
                       consistent-defined(Production1, Production*, $ModuleId)

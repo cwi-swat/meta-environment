@@ -1,6 +1,6 @@
 equations
 
-  [cd1] Msgs1 := check-sdf(definition Definition1),
+  [cd1] Msgs1 := check-sdf(Definition1),
         Definition2 := remove-labels(Definition1),
         Msgs2 := check-asf-attributes(Definition2),
         Msgs3 := check-symbols(Definition2),
@@ -8,4 +8,5 @@ equations
         Msgs5 := check-for-kernel-syntax(Definition2)
         ============================================
         check-asfsdf(definition Definition1) =
-          Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4 ++ Msgs5
+          feedback("AsfSdfChecker", "Unknown", 
+                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5])

@@ -1,30 +1,33 @@
 module KernelSyntaxChecker
 
-imports AsfSdf-Messages ModuleOperations
+imports SdfCheckerFeedback 
+imports ModuleOperations
 
 exports
   context-free syntax
-    check-for-kernel-syntax(Definition) -> Messages
+    check-for-kernel-syntax(Definition) -> {Feedback ","}*
 
 hiddens
   context-free syntax
-    check-syntax(Definition, Messages)        -> Messages {traversal(accu, break, top-down)}
-    check-syntax(Module, Messages)            -> Messages {traversal(accu, break, top-down)}
-    check-syntax2(Module, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
-    check-syntax2(Grammar, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-syntax(Definition, {Feedback ","}*)        -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-syntax(Module, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-syntax2(Module, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-syntax2(Grammar, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-renamings(Definition, Messages)         -> Messages {traversal(accu, break, top-down)}
-    check-renamings(Module, Messages)             -> Messages {traversal(accu, break, top-down)}
-    check-renamings2(Module, Messages, ModuleId)   -> Messages {traversal(accu, break, top-down)}
-    check-renamings2(Renaming, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-renamings(Definition, {Feedback ","}*)         -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-renamings(Module, {Feedback ","}*)             -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-renamings2(Module, {Feedback ","}*, ModuleId)   -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-renamings2(Renaming, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
-    "Msgs"[0-9]*       -> Messages
+    "Msgs"[0-9]*       -> {Feedback ","}*
     "Prod"[0-9]*       -> Production
     "Prod*"[0-9]*      -> Production*
     "Prios"[0-9]*      -> Priorities
+
+    "$String"[0-9]* -> StrCon

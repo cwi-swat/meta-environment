@@ -4,13 +4,13 @@ imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker
         SymbolChecker RemoveLabels AsfSortChecker
 
 exports
-  context-free start-symbols Messages
+  context-free start-symbols Summary
 
   context-free syntax
-    check-asfsdf(SDF) -> Messages
+    check-asfsdf(SDF) -> Summary
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
 
-    "Msgs"[0-9]*       -> Messages
+    "Msgs"[0-9]*       -> {Feedback ","}*

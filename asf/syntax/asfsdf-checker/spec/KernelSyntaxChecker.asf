@@ -1,6 +1,6 @@
 equations
 
-  [cks-1'1] Msgs1 := check-syntax(Definition, {}),
+  [cks-1'1] Msgs1 := check-syntax(Definition, ),
            Msgs2 := check-renamings(Definition, Msgs1)
            ==========================================
            check-for-kernel-syntax(Definition) = Msgs2
@@ -10,17 +10,28 @@ equations
            check-syntax(Module, Msgs) = 
              check-syntax2(Module, Msgs, $ModuleId)
 
-  [cs-1'2] check-syntax2(syntax Prod*, Msgs, $ModuleId) =
-             Msgs + kernel-syntax-construction($ModuleId, "syntax")
+  [cs-1'2] $String1 := moduleid2str($ModuleId),
+           $String2 := "kernel-syntax-construction in " || $String1
+           ====>
+           check-syntax2(syntax Prod*, Msgs, $ModuleId) =
+             Msgs, make-warning($String2, "syntax")
 
-  [cs-1'3] check-syntax2(priorities Prios, Msgs, $ModuleId) =
-             Msgs + kernel-syntax-construction($ModuleId, "priorities")
+  [cs-1'3] $String1 := moduleid2str($ModuleId),
+           $String2 := "kernel-syntax-construction in " || $String1
+           ====>
+           check-syntax2(priorities Prios, Msgs, $ModuleId) =
+             Msgs, make-warning($String2, "priorities")
 
   [cr-1'1] $ModuleId := get-module-name(Module)
            ===================================
            check-renamings(Module, Msgs) = 
              check-renamings2(Module, Msgs, $ModuleId)
 
-  [cr-1'2] check-renamings2(Prod1 => Prod2, Msgs, $ModuleId) =
-             Msgs + 
-production-renamings-not-supported($ModuleId, Prod1 => Prod2)
+  [cr-1'2] $String1 := moduleid2str($ModuleId),
+           $String2 := "productoin-renamings-not-support in " || $String1,
+           $String3 := production2str(Prod1),
+           $String4 := production2str(Prod2),
+           $String5 := $String3 || " => " || $String4
+           ====>
+           check-renamings2(Prod1 => Prod2, Msgs, $ModuleId) =
+             Msgs, make-warning($String2, $String5)
