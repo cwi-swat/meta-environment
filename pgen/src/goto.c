@@ -41,6 +41,35 @@ static CC_Class  *action_classes[MAX_STATES] = { NULL };
 static ATermList  action_actions[MAX_STATES] = { NULL };
 static int nr_actions = 0;
 
+static CC_Class **char_classes     = NULL;
+static int        nr_char_classes  = 0;
+static int        max_char_classes = 0;
+static ATermIndexedSet symbol_set  = NULL;
+
+/*{{{  static CC_Class *get_charclass(ATerm symbol) */
+
+static CC_Class *get_charclass(ATerm symbol)
+{
+  ATbool isnew;
+  long index;
+
+  index = ATindexedSetPut(symbol_set, symbol, &isnew);
+  if (isnew) {
+    nr_char_classes = index;
+    if (index >= max_char_classes) {
+      max_char_classes *= 2;
+      char_classes = (CC_Class **)realloc(char_classes,
+					  max_char_classes*sizeof(CC_Class *));
+      if (!char_classes) {
+	ATerror("out of memory in get_charclass %d\n", max_char_classes);
+      }
+    }
+    char_classes[index] = CC_ClassFromTerm(symbol);
+  }
+  return char_classes[index];
+}
+
+/*}}}  */
 /*{{{  static void restrict(CC_Class *cc, restrictions, len, ATermInt prodnr) */
 
 static void restrict(CC_Class *cc, ATermList restrictions,
@@ -191,13 +220,50 @@ ATermList initialize_items(ATerm symbol)
 }
 
 /*}}}  */
-/*{{{  ATermList init() */
+/*{{{  static void init_goto() */
 
-ATermList init() 
+static void init_goto()
 {
   ATprotectArray(goto_states, MAX_STATES);
   ATprotectArray(goto_classes, MAX_STATES);
   ATprotectArray((ATerm *)action_actions, MAX_STATES);
+  symbol_set = ATindexedSetCreate(512, 75);
+  max_char_classes = 512;
+  char_classes = (CC_Class **)malloc(max_char_classes*sizeof(CC_Class *));
+  if (!char_classes) {
+    ATerror("out of memory in init_goto %d\n", max_char_classes);
+  }
+}
+
+/*}}}  */
+
+/*{{{  static void free_goto() */
+
+static void free_goto()
+{
+  int i;
+
+  ATindexedSetDestroy(symbol_set);
+  symbol_set = NULL;
+
+  for (i=0; i<nr_char_classes; i++) {
+    CC_free(char_classes[i]);
+  }
+  free(char_classes);
+  char_classes = NULL;
+  nr_char_classes = 0;
+
+  ATunprotectArray((ATerm *)action_actions);
+  ATunprotectArray(goto_classes);
+  ATunprotectArray(goto_states);
+}
+
+/*}}}  */
+
+/*{{{  static ATermList init()  */
+
+static ATermList init() 
+{
   return initialize_items(ATparse("sort(\"<Start>\")"));
 }
 
@@ -239,18 +305,18 @@ static ATermList shift_charclass(ItemSet items, CC_Class *cc)
 
   ITS_iterator(items, &iter);
 
-  while (ITS_hasNext(&iter)) {
-    item = ITS_next(&iter);
+  while ((item = ITS_next(&iter)) != NO_ITEM) {
     symbol = IT_getDotSymbol(item);
-    symbol_class = CC_ClassFromTerm(symbol);
+    if (IS_CHARCLASS(symbol)) {
+      symbol_class = get_charclass(symbol);
 
-    if (CC_isSubset(cc, symbol_class)) {
-      newitem = IT_shiftDot(item);
-      if (newitem != NO_ITEM) {
-	newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
+      if (CC_isSubset(cc, symbol_class)) {
+	newitem = IT_shiftDot(item);
+	if (newitem != NO_ITEM) {
+	  newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
+	}
       }
     }
-    CC_free(symbol_class);
   }
   return newvertex;
 }
@@ -401,8 +467,12 @@ void goto_graph(int statenr)
 
 void calc_goto_graph()
 {
+  init_goto();
+
   initial_state = update_states(init());
   goto_graph(ATgetInt((ATermInt)initial_state));
+  
+  free_goto();
 }
 
 /*}}}  */

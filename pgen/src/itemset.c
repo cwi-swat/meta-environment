@@ -116,7 +116,6 @@ static void resize_table(ItemSet set)
 {
   struct _ItemSet newset;
   ItemSetIterator iter;
-  int i;
 
   ITS_init(&newset, set->size*2);
 
