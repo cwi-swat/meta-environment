@@ -39,8 +39,7 @@ static ATermList checkAsf(ATerm term)
     PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
     int ambs = PT_getParseTreeAmbCnt(parseTree);
     if (ambs == 0) {
-      PT_Tree ptRules        = PT_getParseTreeTree(parseTree);
-      ASF_ASFModule module = ASF_getStartTopASFModule((ASF_Start) ptRules);
+      ASF_ASFModule module = ASF_getStartTopASFModule((ASF_Start) parseTree);
       ASF_ASFConditionalEquationList rules = ASF_getASFModuleEquationList(module);
       ASF_ASFTestEquationTestList tests = ASF_getASFModuleTestList(module);
 
