@@ -13,14 +13,14 @@ let
 in
   Id := process-id.
   (
-    rec-msg(compile-module(ModuleName?)) .
+    rec-msg(compile-module(ModuleName?, OutputFile?)) .
     snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
     create(GetSpecification(ModuleName), Pid?)
     .
     (
       rec-msg(specification(Specification?)) .
       GetSpecificationEquations(Specification, Equations?) .
-      snd-msg(compile-semantics-hook(ModuleName, Equations)).
+      snd-msg(compile-semantics-hook(ModuleName, OutputFile, Equations)).
       rec-msg(compile-semantics-hook-done(ModuleName))
     +
       rec-msg(specification-incomplete(Error?)) .

@@ -835,9 +835,10 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,Modulename?) .
-	  snd-msg(compile-module(Modulename)) .
-	  rec-msg(compilation-ready(Modulename)) .
+          StackPopString(Stack,Stack?,Path?) .
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(compile-module(ModuleName, Path)) .
+	  rec-msg(compilation-ready(ModuleName)) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +

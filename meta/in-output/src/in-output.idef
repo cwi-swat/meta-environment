@@ -43,7 +43,7 @@ in
       rec-value(IO, success) .
       snd-msg(io-file-removed(Path, Filename, Extension))
     +
-      rec-value(IO, failure(ErrorMessage)) .
+      rec-value(IO, failure(ErrorMessage?)) .
       snd-msg(io-file-not-removed(Path, Filename, Extension, ErrorMessage))
     )
   +
