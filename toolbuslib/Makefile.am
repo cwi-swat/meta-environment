@@ -6,7 +6,7 @@ EXTRA_DIST = program-check.m4 reconf \
 
 bin_SCRIPTS = toolbuslib-config
 
-CLEANFILES = toolbuslib-config
+CLEANFILES = toolbuslib-config ${PACKAGE}-${VERSION}.pkg
 
 % : %.sh.src
 	sed 's@__PREFIX__@$(prefix)@g' < $< > $@ && \

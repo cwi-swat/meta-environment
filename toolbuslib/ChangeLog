@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb  2 14:27:13 CET 2004 <jong@cwi.nl>
+ * configure.in: version bump 0.6
+ * Makefile.am: add generated package file to CLEANFILES
+
 2003/08/01 (jurgenv@cwi.nl)
  * Set to version 0.5.1
 
@@ -28,30 +32,30 @@ Tue Jul  1 13:20:05 CEST 2003 <jong@cwi.nl>
  * Bumped to 0.5beta
 
 2003/01/22 (jurgenv@cwi.nl)
-* Release 0.4
-* LGPL license
+ * Release 0.4
+ * LGPL license
 
 2002/10/10 (jurgenv@cwi.nl)
-* Added functionality to print only pending snd-msgs when ctrl+\ is pressed.
+ * Added functionality to print only pending snd-msgs when ctrl+\ is pressed.
 
 2002/10/01 (vandenbr@loria.fr)
-* Bumped into 0.4beta.
-* Increased the number of sockets that can be open.
+ * Bumped into 0.4beta.
+ * Increased the number of sockets that can be open.
 
 2002/07/24 (jurgenv@cwi.nl)
-* Released 0.3
-* Some debugging utilities were added to the source code
+ * Released 0.3
+ * Some debugging utilities were added to the source code
 
 2002/04/19 (jurgenv@cwi.nl)
-* Released 0.2
+ * Released 0.2
 
 2002/03/05 (jong@cwi.nl)
-* Increased magical LENSPEC from 8 bytes to 12 bytes
-* Improved atb-tool support wrt to use of LENSPEC define
-* Bumped to 0.2beta
+ * Increased magical LENSPEC from 8 bytes to 12 bytes
+ * Improved atb-tool support wrt to use of LENSPEC define
+ * Bumped to 0.2beta
 
 2001/11/25 (mdejonge@cwi.nl)
-* Released version 0.1
-* Added toolbuslib-config utility
-* Created toolbuslib package from the subdirs aterm and libtb of the toolbus
-  source tree
+ * Released version 0.1
+ * Added toolbuslib-config utility
+ * Created toolbuslib package from the subdirs aterm and libtb of the toolbus
+   source tree
