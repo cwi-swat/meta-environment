@@ -1,5 +1,5 @@
 2001/11/21 (jurgen@cwi.nl)
- * Bumped to 1.3beta
+ * Bumped to 1.2.1
  * Fixed a (part of a) serious bug in the list matching code of asfe concerning 
    list separators.
  * Bumped version of asfe to 0.4
