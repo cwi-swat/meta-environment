@@ -1,172 +1,188 @@
-/*
-   $Id$
- */
+/* $Id$ */
 
-process Open-modules is
+process Open-initial-module is
 let
-  Id      : term,
-  Name    : str,
-  Name2   : str,
-  Str     : str,
-  Path    : str,
-  SdfPath : str,
-  AsfPath : str,
-  Table   : term,
-  FT      : str,
-  T        : term,
-  EqsTree  : term,
-  EqsText  : str,
-  Contents : term,
-  M1s     : list,
-  M2s     : list,
-  Ms      : list,
-  Pairs   : list,
-  I       : int,
-  T1      : term,
-  Time    : term,
-  Ch      : int,
-  Li      : int,
-  Co      : int,
-  Char    : term,
-  ErrList : list,
-  Ambs    : list,
-  Cycle   : list,
-  AnonymousError : term,
-  RealName : str
+  Path : str,
+  Module : str,
+  Imports : list,
+  Status : term
 in
-  Id := process-id. 
   (
-    rec-msg(open-modules(Ms?)).
-    M2s := Ms.
-    snd-note(ui-status(stat(Id,"Opening Modules"))). (
-      if not-equal(Ms, []) then
-        Name := first(Ms).
-        snd-note(ui-status(statf(Id,"Opening %s",[Name]))).
-        Ms   := next(Ms).
-       /* First we should check here whether this module has already been 
-        * opened..
-        */
-        snd-msg(is-module-in-db(Name)). ( 
-          rec-msg(exists-in-module-db(Name))
-          +
-          /* If it is not open, open it. */
-          rec-msg(not-exists-in-module-db(Name?)). ( 
-            snd-msg(open-syntax-file(Name)). ( 
-              rec-msg(opened-file(Name2?,tree(T?), SdfPath?,Time?)).
-              snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
-              rec-msg(real-module-name(Name, RealName?)).
-              Name := RealName.
-              rec-msg(need-modules(M1s?)).
-              Ms := join(Ms,M1s).
-              snd-msg(open-parse-table(Name, SdfPath, asf)).
-              ( 
-                rec-msg(table-on-disk(Table?, Time?)).
-                snd-msg(add-parse-table-to-db(eqs(Name), Table, Time)).
-                rec-msg(parse-table-added).
-                snd-msg(open-rules-file(Name, SdfPath)).
-                (
-                  rec-msg(opened-file(Name?, text(EqsText?) , AsfPath?, Time?)).
-                  snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)) .
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(opened-file(Name?, tree(EqsTree?) , AsfPath?, Time?)).
-                  snd-msg(unparse(EqsTree)) .
-                  rec-msg(unparsed-text(EqsText?)) .
-                  snd-msg(add-eqs-to-db(Name, AsfPath, tree(EqsTree), 
-                                        text(EqsText), Time)) .
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(error-opening(Name?))
-                )
-              +
-                rec-msg(no-table-on-disk) .
-                snd-msg(open-rules-file(Name, SdfPath)).
-                (
-                  rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
-                  snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(opened-file(Name?, tree(EqsTree?), AsfPath?, Time?)).
-                  snd-msg(unparse(EqsTree)) .
-                  rec-msg(unparsed-text(EqsText?)) .
-                  snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)) .
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(error-opening(Name?))
-                )
-              ) .
-              snd-msg(open-parse-table(Name, SdfPath, trm)).
-              ( 
-                rec-msg(table-on-disk(Table?, Time?)).
-                snd-msg(add-parse-table-to-db(trm(Name), Table, Time)).
-                rec-msg(parse-table-added)
-              +
-                rec-msg(no-table-on-disk)
-              ) 
-              +
-              rec-msg(opened-file(Name2?,text(FT?), SdfPath?, Time?)). 
-              snd-msg(open-sdf2-language).
-              rec-msg(sdf2-language-opened).
-              snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",FT)).
-              ( rec-msg(parse-result-asfix2me(Id?,parse-tree(T?))).
-                snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
-                rec-msg(real-module-name(Name,RealName?)).
-                Name := RealName.
-                rec-msg(need-modules(M1s?)).
-                Ms := join(Ms,M1s) .
-                snd-msg(open-rules-file(Name, SdfPath)).
-                (
-                  rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
-                  snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(opened-file(Name?, tree(EqsTree?), AsfPath?, Time?)).
-                  snd-msg(unparse(EqsTree)) .
-                  rec-msg(unparsed-text(EqsText?)) .
-                  snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)) .
-                  rec-msg(eqs-added)
-                +
-                  rec-msg(error-opening(Name?))
-                )
-              + 
-                rec-msg(parse-result-asfix2me(Id?, parse-error(ErrList?, AnonymousError?))).
-                snd-msg(add-empty-module-to-db(Name)).
-                rec-msg(empty-module-added).
-                snd-note(ui-status(errorf("Please fix syntax error in module %s.",
-                  [Name]))).
-                snd-msg(edit-syntax(Name))
-             )
-            +
-             /* File would not open (unreadable, not exist, wrong path...) */
-              rec-msg(error-opening(Str?)).
-              snd-msg(cannot-open-module(Str))
-            )
-          )
-        ).
-        snd-note(ui-status(endstat(Id)))
-      fi
-    ) *
-    if equal(Ms,[]) then
+    rec-msg(open-initial-module(Path?, Module?)).
+    snd-msg(is-module-in-db(Module)).
+    (
+      rec-msg(not-exists-in-module-db(Module)) .
+      Status := success.
+      Open-Module(Module, Path, Status?, Imports?).
+      snd-msg(open-modules(Imports)).
+      rec-msg(finished-opening-modules)
+    +
+      rec-msg(exists-in-module-db(Module))
+    ).
+    snd-msg(finished-opening-initial-module)
+  )*
+  delta
+endlet
+
+process Open-modules is 
+let
+  Id : int,
+  Modules : list,
+  Module : str,
+  Imports : list,
+  Status : term
+in
+  Id := process-id.
+  (
+    rec-msg(open-modules(Modules?)).
+    snd-note(ui-status(stat(Id,"Opening Modules"))). 
+    if not-equal(Modules, []) then
+      Module := first(Modules).
+      Modules := next(Modules).
+      snd-msg(is-module-in-db(Module)).
       (
-        if not-equal(M2s, []) then
-          Name := first(M2s).
-          M2s   := next(M2s).
-          snd-msg(is-module-in-db(Name)).
-          (
-            rec-msg(exists-in-module-db(Name2?)).
-            snd-msg(invalidate-parse-tables(Name))
-          +
-            rec-msg(not-exists-in-module-db(Name2?))
-          )
-        fi
-      ) *
-      if equal(M2s, []) then
-        tau
-      fi
+        rec-msg(exists-in-module-db(Module))
+      +
+        rec-msg(not-exists-in-module-db(Module)).
+        Status := success.
+        Open-Module(Module, "", Status?, Imports?).
+        Modules := join(Imports, Modules) 
+      )
+    fi *
+    if equal(Modules, []) then
+      snd-msg(finished-opening-modules)
     fi.
-/* We are finished. Inform UI */
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(finished-opening-modules)
+    snd-note(ui-status(endstat(Id)))
   ) *
   delta
+endlet
+
+process Open-Module (Module : str, Path : str, Status : term?, Imports : list?) 
+is
+let
+  Id : int,
+  RealModule : str,
+  RealPath : str
+in
+  Id := process-id.
+  snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
+  Imports := [].
+  (
+    Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
+    if equal(Status, success) then
+      Open-ParseTables(RealModule, RealPath).
+      tau. /* needed to activate the next process (bug in ToolBus) */
+      Open-Equations(RealModule, Path)
+    else
+      tau
+    fi
+  ).
+  snd-note(ui-status(endstat(Id)))
+endlet
+
+process Open-Syntax (Module : str, Path : str, Status : term?, 
+                     RealModule : str?, RealPath : str?, Imports : list?) 
+is
+let
+  Tree : term,
+  Text : str,
+  Time : term,
+  Dummy : str
+in
+  Tree := no-tree.
+  /* Either the path is specified by the user, or we used the search-path */
+  if equal(Path, "") then
+    snd-msg(open-syntax-file(Module)) 
+  else
+    snd-msg(open-file(Path))
+  fi.
+  (
+    rec-msg(opened-file(Module,tree(Tree?), RealPath?, Time?))
+  +
+    (
+      rec-msg(opened-file(Module,text(Text?), RealPath?, Time?))
+    +
+      rec-msg(opened-file(Path,text(Text?), RealPath?,Time?))
+    ).
+    Parse-Syntax(Module,Text, Status?, Tree?)
+  +
+    rec-msg(error-opening(Module)).
+    Status := no-such-file
+  ).
+  if equal(Status,success) then
+    Imports := [].
+    snd-msg(add-sdf-module-to-db(Module, RealPath, Tree, Time)).
+    (
+      rec-msg(real-module-name(Module, RealModule?)).
+      rec-msg(need-modules(Imports?))
+    +
+      rec-msg(error-opening(Module))
+    )
+  else
+    tau
+  fi
+endlet
+
+process Parse-Syntax (Module : str, Text : str, Status : term?, Tree : term?) is
+let
+  Id : int,
+  Errors : list,
+  Error : term
+in
+  Id := process-id.
+  snd-msg(open-sdf2-language).
+  rec-msg(sdf2-language-opened).
+  snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",Text)).
+  ( 
+    rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
+  +
+    rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))).
+    Status := parse-error
+  )
+endlet
+
+process Open-ParseTables (Module : str, Path : str) is
+let
+  Table : term,
+  Time : term
+in
+  snd-msg(open-parse-table(Module, Path, asf)).
+  (
+    rec-msg(table-on-disk(Table?, Time?)).
+    snd-msg(add-parse-table-to-db(eqs(Module), Table, Time)).
+    rec-msg(parse-table-added)
+  +
+    rec-msg(no-table-on-disk)
+  ).
+  snd-msg(open-parse-table(Module, Path, trm)).
+  (
+    rec-msg(table-on-disk(Table?, Time?)).
+    snd-msg(add-parse-table-to-db(trm(Module), Table, Time)).
+    rec-msg(parse-table-added)
+  +
+    rec-msg(no-table-on-disk)
+  )
+endlet
+
+process Open-Equations (Module : str, Path : str)  is
+let
+  Time : term,
+  Tree : term,
+  Text : str,
+  RealPath : str
+in
+  snd-msg(open-rules-file(Module, Path)).
+  (
+    rec-msg(opened-file(Module, text(Text?) , RealPath?, Time?)).
+    snd-msg(add-eqs-to-db(Module, RealPath, text(Text), Time)) .
+    rec-msg(eqs-added)
+  +
+    rec-msg(opened-file(Module, tree(Tree?) , RealPath?, Time?)).
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(Text?)) .
+    snd-msg(add-eqs-to-db(Module, RealPath, tree(Tree), text(Text), Time)) .
+    rec-msg(eqs-added)
+  +
+    rec-msg(error-opening(Module))
+  )
 endlet

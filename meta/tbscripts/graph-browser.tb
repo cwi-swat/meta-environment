@@ -53,7 +53,6 @@ let
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
-  subscribe(finished-opening-initial-module) .
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
   ( 
@@ -69,9 +68,6 @@ in
 	snd-msg(open-modules([Str])). 
 	( rec-note(import-graph(Mods?,Pairs?)).
           snd-do(UI,new-graph(Mods,Pairs))
-        +
-          rec-msg(cannot-open-module(ModName?)).
-	  snd-note(ui-status(errorf("cannot open module %s",[ModName])))
         )*
         rec-msg(finished-opening-modules).
 	snd-do(UI,finished-opening-modules(Str))
@@ -85,17 +81,12 @@ in
       snd-msg(open-initial-module(Path, Str)). 
       ( rec-note(import-graph(Mods?,Pairs?)).
         snd-do(UI,new-graph(Mods,Pairs))
-      +
-        rec-msg(cannot-open-module(ModName?)).
-	snd-note(ui-status(errorf("cannot open module %s",[ModName])))
       )*
-      rec-note(finished-opening-initial-module).
+      rec-msg(finished-opening-initial-module).
       snd-do(UI,finished-opening-modules(Str)).
       snd-ack-event(UI, open-module(Path, Str))
-    ) +
-    ( rec-msg(cannot-open-module(ModName?)).
-      snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-    ) +
+    ) 
+    +
     ( rec-event(UI, delete-module(ModName?)) .
       snd-msg(close-module(ModName)) .
       rec-msg(module-closed(ModName)) .

@@ -20,7 +20,6 @@
 #include "unparsePT.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
-#include "open-initial-module.tb"
 #include "file-creator.tb"
 #include "close-module.tb"
 #include "revert-module.tb"
