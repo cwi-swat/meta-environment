@@ -64,7 +64,7 @@
 toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
-	Notify-about-changed-modules, Rewrite-Errors, Traversals,
+	Notify-about-changed-modules, Rewrite-Errors,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         Compile-module) 
