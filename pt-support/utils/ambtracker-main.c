@@ -14,6 +14,7 @@
 
 #include <aterm2.h>
 #include <MEPT-utils.h>
+#include <ErrorAPI-utils.h>
 
 
 /*}}}  */
@@ -77,46 +78,43 @@ static char* deslash(ATerm atstr)
 
 static void prettyPrint(ATerm t, FILE *fp)
 {
-  ATermList ambs;
   int count;
   int i;
+  ERR_Feedback feedback = ERR_FeedbackFromTerm(t);
 
-  if (ATmatch(t, "ambiguities(<int>,[<list>])",&count,&ambs)) {
-    if (count == 0) {
+  if (ERR_isFeedbackError(feedback)) {
+    ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+    if (ERR_isSubjectListEmpty(subjects)) {
       ATfprintf(fp,"No ambiguities\n");
     }
     else {
+      count = ERR_getSubjectListLength(subjects);
       ATfprintf(fp, "%d ambiguity cluster%s:\n\n",count,count > 1 ? "s" : "");
       
-      for(i = 1;!ATisEmpty(ambs); ambs = ATgetNext(ambs), i++) {
-	ATerm amb = ATgetFirst(ambs);
+      for (i = 1;!ERR_isSubjectListEmpty(subjects); subjects = ERR_getSubjectListTail(subjects), i++) {
+	ERR_Subject subject = ERR_getSubjectListHead(subjects);
+        ERR_Location location = ERR_getSubjectLocation(subject);
+        ERR_Area area = ERR_getLocationArea(location);
+        int line = ERR_getAreaBeginLine(area);
+        int col = ERR_getAreaBeginColumn(area);
+/*
 	ATermList productions;
-	ATerm line, col, offset;
+*/
 
-	if(ATmatch(amb,"ambiguity("
-		       "  position(character(0),"
-		       "           line(<term>),"
-		       "           col(<term>),"
-		       "           char(<term>)),"
-		       "  productions([<list>]))",
-		   &line, 
-		   &col, 
-		   &offset, 
-		   &productions)) {
-	  ATfprintf(fp,"[%d/%d] at (%t:%t):\n", i, count, line, col);
+	ATfprintf(fp,"[%d/%d] at (%d:%d):\n", i, count, line, col);
+/*
 	  for(;!ATisEmpty(productions); productions = ATgetNext(productions)) {
 	    char *str = deslash(ATgetFirst(productions));
 	    ATfprintf(fp,"  %s\n", str);
 	    free(str);
 	  }
+*/
 
-	  ATfprintf(fp,"\n");
-	} else {
-	  ATerror("%s: Unexpected term: %t\n",myname,t);
-	}
+        ATfprintf(fp,"\n");
       }
     }
-  } else {
+  }
+  else {
     ATerror("%s: Unexpected term: %t\n", myname,t);
     return;
   }
@@ -148,6 +146,7 @@ int main (int argc, char **argv)
   }
 
   ATinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+  ERR_initErrorApi();
   PT_initMEPTApi();
 
   parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
@@ -157,7 +156,7 @@ int main (int argc, char **argv)
 	    myname, input_file_name);
   }
 
-  ambiguities = PT_reportParseTreeAmbiguities(parsetree);
+  ambiguities = PT_reportParseTreeAmbiguities("Unknown", parsetree);
 
   if(!atermformat) {
     FILE *fp = NULL;

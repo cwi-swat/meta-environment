@@ -97,6 +97,7 @@ ambtracker_SOURCES = ambtracker-main.c
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
+	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${ATERM}/lib -lATerm
 
 IDEF = idef2tif

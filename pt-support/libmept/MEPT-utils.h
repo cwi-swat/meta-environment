@@ -78,8 +78,8 @@ char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
 char *PT_yieldSymbolVisualVariables(PT_Symbol symbol);
 
-ATerm PT_reportTreeAmbiguities(PT_Tree tree);
-ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree);
+ATerm PT_reportTreeAmbiguities(char *path, PT_Tree tree);
+ATerm PT_reportParseTreeAmbiguities(char *path, PT_ParseTree parsetree);
 
 void PT_initAsFix2Api();
 PT_ParseTree flattenPT(PT_ParseTree tree);

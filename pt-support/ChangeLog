@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/20 (jurgenv@cwi.nl)
+ * Introduced the error api in the ambiguity tracker.
+
 2004/01/13 (jurgenv@cwi.nl)
  * Set version to 1.1 
 

@@ -2,6 +2,7 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
+#include <ErrorAPI-utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -20,9 +21,11 @@ typedef struct PT_Amb_Position_Tag {
 
 /*{{{  static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current) */
 
-static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current)
+static ERR_SubjectList getAmbiguities(char *path,
+                                      PT_Tree tree, 
+                                      PT_Amb_Position *current)
 {
-  ATermList result = ATempty;
+  ERR_SubjectList ambSubjects = ERR_makeSubjectListEmpty();
   
   if (PT_isTreeChar(tree)) {
   /*{{{  handle single char */
@@ -65,7 +68,10 @@ static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current)
     PT_Args args = PT_getTreeArgs(tree);
 
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
-      result = ATconcat(getAmbiguities(PT_getArgsHead(args),current), result);
+      ambSubjects = ERR_concatSubjectList(getAmbiguities(path,
+                                                         PT_getArgsHead(args),
+							 current), 
+					  ambSubjects);
     }
 
   /*}}}  */
@@ -74,18 +80,27 @@ static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current)
   /*{{{  handle ambiguity cluster */
 
     PT_Args args = PT_getTreeArgs(tree); 
+    /*
     PT_Args ambs = args;
     ATermList prods;
     ATerm ambWithPos;
     char *str;
+    */
     PT_Amb_Position here = *current;
+    ERR_Area ambArea;
+    ERR_Location ambLocation;
+    ERR_Subject ambSubject;
 
     /* first collect nested ambiguities */
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       *current = here;
-      result = ATconcat(getAmbiguities(PT_getArgsHead(args),current), result);
+      ambSubjects = ERR_concatSubjectList(getAmbiguities(path,
+                                                         PT_getArgsHead(args),
+							 current), 
+			                  ambSubjects);
     }
 
+    /*
     for(prods = ATempty;PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
       PT_Tree amb = PT_getArgsHead(ambs);
       PT_Production prod;
@@ -97,46 +112,43 @@ static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current)
  
       prods = ATinsert(prods, ATmake("<str>",str));
     }
+    */
 
-    ambWithPos = ATmake("ambiguity("
-                        "  position(character(0),"
-                        "           line(<int>),"
-		        "	    col(<int>),"
-		        "	    char(<int>)),"
-                        "  productions([<list>]))",
-                        here.line,
-                        here.col,
-                        here.offset,
-                        prods); 
-   
-    result = ATinsert(result, ambWithPos); 
+    ambArea = ERR_makeAreaArea(here.line, here.col,
+			       current->line, current->col,
+                               here.offset, (current->offset - here.offset));
+    ambLocation = ERR_makeLocationLocation(path, ambArea);
+    ambSubject = ERR_makeSubjectSubject("ambiguity", ambLocation);
+
+    ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
   /*}}}  */
   } 
   else {
     ATerror("getAmbiguities: unable to handle tree: %t\n", tree);
   }
 
-  return result;
+  return ambSubjects;
 }
 
 /*}}}  */
 
 /*{{{  ATerm PT_reportTreeAmbiguities(PT_Tree tree) */
 
-ATerm PT_reportTreeAmbiguities(PT_Tree tree)
+ATerm PT_reportTreeAmbiguities(char *path, PT_Tree tree)
 {
   PT_Amb_Position pos = {1,0,0}; 
-  ATermList ambs = getAmbiguities(tree,&pos);
+  ERR_SubjectList ambs = getAmbiguities(path, tree,&pos);
+  ERR_Feedback ambFeedback = ERR_makeFeedbackError("ambiguity", ambs);
 
-  return ATmake("ambiguities(<int>,[<list>])", ATgetLength(ambs), ambs);
+  return ERR_FeedbackToTerm(ambFeedback);
 }
 
 /*}}}  */
 /*{{{  ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree) */
 
-ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree)
+ATerm PT_reportParseTreeAmbiguities(char *path, PT_ParseTree parsetree)
 {
-  return PT_reportTreeAmbiguities(PT_getParseTreeTop(parsetree));
+  return PT_reportTreeAmbiguities(path, PT_getParseTreeTop(parsetree));
 }
 
 /*}}}  */
