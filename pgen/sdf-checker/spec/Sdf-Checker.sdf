@@ -5,18 +5,22 @@ imports Sdf-AttributeChecker LabelChecker SortChecker
         RemoveLabels DeprecatedSymbols
 
 exports
+  context-free start-symbols Messages
+
   context-free syntax
     check-sdf(SDF) -> Messages
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                         -> Messages
-    pre-check-module(Module, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
-    pre-check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
-    pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
-    check-module(Module, Definition, Info-Msg-Tuple)	      -> Info-Msg-Tuple
-    check-modules(Definition, Definition, Info-Msg-Tuple)     -> Info-Msg-Tuple
-    check-imports(ImportsSet, Definition, Info-Msg-Tuple)     -> Info-Msg-Tuple
+    check-sorts-and-prods(Definition)                          -> Messages
+    pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
+    pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
+    pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
+    check-module(Module, Definition, Info-Msg-Tuple)	       -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
+    post-check-modules(Definition, ImportsSet, Info-Msg-Tuple) -> Info-Msg-Tuple
+    post-check-modules(ImportsSet, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
 hiddens
   variables
@@ -37,3 +41,11 @@ hiddens
     "Import"[0-9]*          -> Import
     "Import*"[0-9]*         -> Import*
     "ImportsSet"[0-9]*      -> ImportsSet
+
+    "$Symbol*"[0-9]*            -> Symbol*
+
+    "DeclaredSymbolPair*"[0-9]* -> SymbolPair*
+    "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
+    "UsedSymbolPair*"[0-9]*     -> SymbolPair*
+
+    "$Msgs"[0-9]*           -> Messages

@@ -74,10 +74,10 @@ module-not-available($ModuleId),
             ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
             ModuleInfoTable2 := mark-modules-as-unchecked(ModuleInfoTable1),
             InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
-            InfoMsgTuple3 := check-modules(Definition, Definition, 
-                          InfoMsgTuple2)
-            ============================================
-            check-sorts-and-prods(Definition) = get-messages(InfoMsgTuple3)
+            InfoMsgTuple3 := check-modules(Definition, Definition, InfoMsgTuple2),
+            InfoMsgTuple4 := post-check-modules(Definition, imports(), InfoMsgTuple3)
+            ====>
+            check-sorts-and-prods(Definition) = get-messages(InfoMsgTuple4)
 	
   [pcm-1'1] $ModuleId := get-module-name(Module),
             ModuleInfoTable := get-module-info(InfoMsgTuple),
@@ -119,3 +119,26 @@ module-not-available($ModuleId),
            InfoMsgTuple7 := check-module-constructors(Module, InfoMsgTuple6)
            ================================================================
            check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple7
+
+ [pcm-1'1] post-check-modules(,ImportsSet, InfoMsgTuple) = 
+             post-check-modules(ImportsSet, InfoMsgTuple)
+
+ [pcm-1'1] $ModuleId := get-module-name(Module)
+           ====================================
+           post-check-modules(Module Module*, imports(Import*), InfoMsgTuple) = 
+              post-check-modules(Module*, imports($ModuleId Import*), InfoMsgTuple)
+
+ [pcm-2'1] symbolpairs(DeclaredSymbolPair*) := 
+             get-declared-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           symbolpairs(AliasedSymbolPair*) := 
+             get-aliased-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           symbols($Symbol*1) := 
+             get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           symbols($Symbol*2) := de-modularize(symbolpairs(DeclaredSymbolPair*)), 
+           symbols($Symbol*3) := de-modularize(symbolpairs(AliasedSymbolPair*)),
+           $Msgs1 := get-messages(InfoMsgTuple1),
+           $Msgs2 := $Msgs1 +
+unused-sort-definitions(diff(symbols($Symbol*2 $Symbol*3),symbols($Symbol*1))),
+           InfoMsgTuple2 := put-messages($Msgs2, InfoMsgTuple1)
+           ====>
+           post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2

@@ -8,9 +8,9 @@ exports
   context-free syntax
     "none"					                     -> Message
     module-not-available(ModuleId)                                   -> Message
-    undeclared-symbols(ModuleId, SymbolsSet)                         -> Message
-    sorts-without-production-definitions(ModuleId, SymbolsSet)       -> Message
-    double-declared-symbol(ModuleId, Symbol)                         -> Message
+    undeclared-sorts(ModuleId, SymbolsSet)                           -> Message
+    unused-sort-definitions(SymbolsSet)                              -> Message
+    double-declared-sort(ModuleId, Symbol)                           -> Message
     aliased-symbol-already-declared(ModuleId, Symbol)                -> Message
     illegal-attribute(ModuleId, Production)                          -> Message
     used-in-priorities-but-undefined(ModuleId, ProductionsSet)       -> Message
@@ -19,7 +19,7 @@ exports
     constructor-has-already-been-used(ModuleId, Literal, Production) -> Message
     unknown-constructor-used-in-priorities(ModuleId, Production)     -> Message
     literal-in-right-hand-side-not-allowed(ModuleId, Production)     -> Message
-    only-sort-allowed-in-right-hand-side-of-lexical-function(ModuleId, Production)     -> Message
+    only-sort-allowed-in-right-hand-side-of-lexical-function(ModuleId, Production) -> Message
 
     deprecated-unquoted-symbol-notation(ModuleId, Symbol)  -> Message
     deprecated-tuple-notation(ModuleId, Symbol)            -> Message

@@ -19,8 +19,11 @@ exports
     put-messages(Messages, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
-    "[" SymbolPairsSet "," SymbolPairsSet "," 
-        ProductionsSet "," ConstructorSet "]" -> Module-Info
+    "[" SymbolPairsSet "," 
+        SymbolPairsSet "," 
+        SymbolsSet "," 
+        ProductionsSet "," 
+        ConstructorSet "]" -> Module-Info
 
   context-free syntax
     "[" ModuleId "," Boolean "," Module-Info "]" -> Module-Info-Entry
@@ -38,6 +41,14 @@ exports
                               Module-Info-Table)        -> Module-Info-Table
     get-declared-symbols(Import*, Module-Info-Table) -> SymbolPair*
     get-declared-symbols(Import*, Module-Info-Table) -> SymbolPairsSet
+
+  context-free syntax
+    get-used-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    put-used-symbols-info(ModuleId,
+                          SymbolsSet, 
+                          Module-Info-Table)        -> Module-Info-Table
+    get-used-symbols(Import*, Module-Info-Table) -> Symbol*
+    get-used-symbols(Import*, Module-Info-Table) -> SymbolsSet
 
   context-free syntax
     get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolPairsSet
@@ -74,6 +85,7 @@ hiddens
     "SymbolPair*"[0-9]*      -> SymbolPair*
     "SymbolPairsSet"[0-9]*   -> SymbolPairsSet
     "SymbolsSet"[0-9]*       -> SymbolsSet
+    "Symbol*"[0-9]*          -> Symbol*
     "Import"[0-9]*           -> Import
     "Import*"[0-9]*          -> Import*
     "Production*"[0-9]*      -> Production*
