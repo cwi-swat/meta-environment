@@ -22,7 +22,7 @@ TEST_MODULES=Bracket \
              SetAndElem \
              Specificity \
              Traversal-Typecheck \
-             Tuple \
+             Tuple
 
 TEST_MODULES_ASFE_ONLY=BoolAPI BoolPos Tree
 
