@@ -3,6 +3,9 @@
 2001/05/16 (jong@cwi.nl)
  * version 0.3.2
  * in-output-tool now ignores duplicate entries in search-path.
+ * in-output-tool also requires inodes to be different before complaining
+   about duplicate entries. This reduces overzealous complaints involving
+   entries duplicated by a soft- or hardlink.
 
 2001/05/15 ({jong,jurgenv}@cwi.nl)
  * Fixed a bug. Closing unparsed equations resulted in module-db inconsistency.
