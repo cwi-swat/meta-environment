@@ -14,7 +14,7 @@ INCLUDES		= -I${top_srcdir}/libmept \
 			-I${ATERM}/include \
 			-I${TOOLBUSLIB}/include
 
-data_DATA		= unparsePT.idef addPosInfo.idef apply-function.idef
+pkgdata_DATA		= unparsePT.idef addPosInfo.idef apply-function.idef
 
 CLEANFILES		= unparsePT.tifs unparsePT.tif.[ch] \
                           apply-function.tifs apply-function.tif.[ch]
