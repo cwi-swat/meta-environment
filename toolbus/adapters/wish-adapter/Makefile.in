@@ -45,7 +45,7 @@ SRCDOC          = wish-adapter.c.tex
 GENSRC          = wish-adapter.c
 
 EXTRA_INCLUDES	=
-EXTRA_DEFS	= -DTBTCL=\"$(libdir)/tb.tcl\"
+EXTRA_DEFS	= -DTBTCL=\"$(libdir)/tb.tcl\" -DLIBDIR=\"$(libdir)\"
 EXTRA_LIBS	=
 
 # Here you can add the rules that actually build your adapter:

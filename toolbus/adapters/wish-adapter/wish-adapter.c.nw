@@ -998,6 +998,7 @@ static void wish_start()
    }
    wprintf("}\n");
    wprintf("set argc %d\n", script_nr_args);
+   wprintf("set TB_LIBDIR %s\n", LIBDIR);
    wprintf("source %s\n", script);
    check_in_sign();
 }
