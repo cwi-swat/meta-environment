@@ -3,4 +3,4 @@
 __META__/bin/generic-meta -I __ASF__/share/asf \
                           -I __PREFIX__/share/asfsdf-meta \
 			  -p __ASF__/bin \
-			  -P $*
+			  -S __PREFIX__/share/meta/pt-dumper.tb $* 

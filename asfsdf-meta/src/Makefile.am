@@ -1,8 +1,9 @@
 # $Id$
 
-EXTRA_DIST    = meta.sh.src pt-dump.sh.src eqs-dump.sh.src
+EXTRA_DIST    = meta.sh.src pt-dump.sh.src eqs-dump.sh.src new-editor.sh.src \
+		sdf-editor.sh.src asf-editor.sh.src
 
-bin_SCRIPTS = meta pt-dump eqs-dump
+bin_SCRIPTS = meta pt-dump eqs-dump sdf-editor asf-editor
 
 % : %.sh.src Makefile
 	sed 's@__ASF__@${ASF}@g;\
