@@ -6,9 +6,13 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <atb-tool.h>
 
-#include <unistd.h>
+#ifndef WIN32
+  #include <unistd.h>
+#else  /*  For broken platform with limited functionality  */
+  #include <getopt.h>
+  #include <atb-tool.h>
+#endif /*  MS-DOS  */
 
 #include <aterm1.h>
 #include <AsFix.h>

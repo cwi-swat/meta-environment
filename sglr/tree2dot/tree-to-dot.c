@@ -9,10 +9,12 @@
 */
 
 #include <ctype.h>
+#include <string.h>
 
 #include <aterm2.h>
 
-#include <forest.h>
+#include  <forest.h>
+
 #include  "tree-to-dot.h"
 #include  "mem-alloc.h"
 
