@@ -1,6 +1,53 @@
+# $Id$
+# Directory: compiler/c-source
+
+# Configure variable substitutions
+PRODUCT     = @PRODUCT@
+VERSION     = @VERSION@
+
+@SET_MAKE@
+
+srcdir      = @srcdir@
+VPATH       = @srcdir@
+top_srcdir  = @top_srcdir@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+bindir      = $(exec_prefix)/bin
+libdir      = $(exec_prefix)/lib
+includedir  = $(prefix)/include
+docdir      = $(top_srcdir)/docs
+
+SHELL       = @SHELL@
+CC          = @CC@
+MAKE        = gmake
+CFLAGS      = @CFLAGS@ ${XCFLAGS}
+CPP         = @CPP@
+CPPFLAGS    = @CPP@ ${XCPPFLAGS}
+DEFS        = @DEFS@ ${XDEFS}
+INCLUDES    = @INCLUDES@ ${XINCLUDES}
+LIBS        = @LIBS@ ${XLIBS}
+SOCKLIBS    = @SOCKLIBS@
+GELLIBS     = @GELLIBS@
+
+INSTALL     = @INSTALL@
+INSTALL_DATA= @INSTALL_DATA@
+INSTALL_PROG= @INSTALL_PROG@
+UNINSTALL   = @UNINSTALL@
+
+AR          = @AR@
+
+GEL         = @GEL@
+EPIC        = @EPIC@
+ATERM       = @ATERM@
+TOOLBUS     = @TOOLBUS@
+
+NOWEB       = @NOWEB@
+NOWEAVE     = @NOWEAVE@
+NOTANGLE    = @NOTANGLE@
+
 include Make.modules
 
-ATERM	= /home/markvdb/NEW-META/new-meta/..
+#ATERM	= /home/markvdb/NEW-META/new-meta/..
 #CC	= gcc
 CC	= cc
 INCLUDE = -I$(ATERM)/include -I../support
