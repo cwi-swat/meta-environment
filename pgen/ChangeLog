@@ -1,6 +1,9 @@
 $Id$
 
 2003/10/09 (markvdb@cwi.nl)
+ * Added linking of PTMEPT library to parsetablegen
+
+2003/10/09 (markvdb@cwi.nl)
  * Fixed the depricated error message.
  * Regenerated due to change in literals.
  * Added the strategy symbol again.
