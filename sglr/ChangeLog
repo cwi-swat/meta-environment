@@ -7,6 +7,8 @@ $Id$
    out of sync during filtering.
  * Bumped in to version 3.10.2.
  * Regenerated one of the Casl tests.
+ * The assert on rejected productions is only activated when
+   SG_FILTER && SG_FILTER_REJECT are active.
 
 2003/08/01 (markvdb@cwi.nl)
  * Fine-tuned the way user-defined injections are treated.
