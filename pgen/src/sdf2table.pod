@@ -4,7 +4,7 @@ SDF2TABLE - generate parse tables from SDF2 language definitions
 
 =head1 SYNOPSIS
 
-B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<o> I<file>] [-B<tvVx>] file0 ...
+B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<l>][-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -32,15 +32,15 @@ Displays concise usage information.
 Read input from F<file>; by default, input is either read from stdin,
 or from the named files supplied as arguments.
 
+=item -B<l>
+
+Displays statistic information.
+
 =item -B<o> I<file>
 
 Write output to F<file>.  By default, output is written to file with a
 name derived from the name of the input file for named files, and to
 standard output on input from standard input.
-
-=item B<-s>
-
-Use the generated -- `slow' -- normalizer.
 
 =item B<-t>
 
@@ -84,4 +84,4 @@ for the empty grammar.
 
 =head1 AUTHOR
 
-Jeroen Scheerder <S<js@cwi.nl>>
+Mark van den Brand <S<Mark.van.den.Brand@cwi.nl>>

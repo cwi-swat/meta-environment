@@ -21,15 +21,23 @@
 */
 #include <unistd.h>
 #include "ksdf2table.h"
+#include "statistics.h"
 
 /*{{{  global variables */
 
 int MAX_PROD;
 int nr_of_states;
+int nr_of_actions;
+int max_nr_actions;
+int nr_of_gotos;
+int max_nr_gotos;
+extern int nr_of_items;
+extern int max_nr_items;
 ATerm empty_set;
 ATerm eof_token;
 ATerm all_chars;  
 extern ATbool run_verbose;
+extern ATbool statisticsMode;
 
 /*}}}  */
 /*{{{  external functions */
@@ -264,8 +272,8 @@ ATerm process_productions(ATermList prods)
       cnt++;
     }
   }
+  IF_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", cnt - MIN_PROD));
 
-  if(run_verbose) ATwarning("Process %d productions\n", cnt-MIN_PROD);
   return ATmake("[<list>]",labelentries);
 }
 
@@ -381,7 +389,8 @@ ATerm process_priorities(ATermList prios)
     }
   }
 
-  if(run_verbose) ATwarning("Processed %d priorities\n", cnt);
+  IF_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
+
   return ATmake("[<list>]",prioentries);
 }
 
@@ -460,7 +469,7 @@ void process_restrictions(ATermList restricts)
 
 ATerm generate_parse_table(ATerm g)
 {
-  int i;
+  int i, nr_actions, nr_gotos;
   ATerm trm, labelsection, priosection, vnr, vertex, state, newaction;
   ATermList prods, prios, statelist = ATempty, gotos, actions, restricts;
 
@@ -476,25 +485,45 @@ ATerm generate_parse_table(ATerm g)
     calc_follow_table();
     calc_goto_graph();
 
-    if(run_verbose) ATwarning("Nr of states is %d\n",nr_of_states);
+    IF_STATISTICS(fprintf(PT_log (), "Number of states is %d\n", nr_of_states));
+    IF_STATISTICS(fprintf(PT_log (), "Maximum number of items per state is %d\n", max_nr_items));
+    IF_STATISTICS(fprintf(PT_log (), "Average number of items per state is %d\n", (nr_of_items/nr_of_states)));
 
-    for(i=nr_of_states-1; i >= 0; i--) {
+    for (i=nr_of_states-1; i >= 0; i--) {
       vnr = (ATerm)ATmakeInt(i);
       vertex = ATtableGet(nr_state_pairs,vnr);
 
       gotos = (ATermList)ATtableGet(state_gotos_pairs,vertex);
-      if(!gotos)
+      if (!gotos) {
         gotos = ATempty;
+      } 
+      else {
+        IF_STATISTICS(nr_gotos = ATgetLength(gotos));
+        IF_STATISTICS(nr_of_gotos += nr_gotos);
+        IF_STATISTICS(if (nr_gotos > max_nr_gotos) { max_nr_gotos = nr_gotos;});
+      }
 
       actions = (ATermList)ATtableGet(state_actions_pairs,vertex);
-      if(!actions)
+      if (!actions) {
         actions = ATempty;
+      }
+      else {
+        IF_STATISTICS(nr_actions = ATgetLength(actions));
+        IF_STATISTICS(nr_of_actions += nr_actions);
+        IF_STATISTICS(if (nr_actions > max_nr_actions) { max_nr_actions = nr_actions;});
+      }
 
       newaction = (ATerm)ATmakeAppl1(afun_actions, (ATerm)actions);
       state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, newaction);
 
       statelist = ATinsert(statelist,state);
     }
+
+    IF_STATISTICS(fprintf(PT_log (), "Maximum number of gotos per state is %d\n", max_nr_gotos));
+    IF_STATISTICS(fprintf(PT_log (), "Average number of gotos per state is %d\n", (nr_of_gotos/nr_of_states)));
+    IF_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));
+    IF_STATISTICS(fprintf(PT_log (), "Average number of actions per state is %d\n", (nr_of_actions/nr_of_states)));
+
     return ATmake("parse-table(<term>,<term>,states([<list>]),priorities(<term>))",
                   initial_state,labelsection,statelist,priosection);
   }

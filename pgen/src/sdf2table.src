@@ -44,7 +44,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bfhi:o:stvV"
+myarguments="bhi:lo:tvV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -52,11 +52,10 @@ cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
     -b              write output in Binary AsFix (BAF) format
-    -f              use handcrafted normalizer ('fast')
     -h              display help information (usage)
     -i _file_       input from _file_ (default: all file arguments)
+    -l              display statistic information
     -o _file_       output to _file_ (default: _inputfile_.tbl)
-    -s              use generated normalizer ('slow')
     -t              write output in plain text format
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
@@ -83,16 +82,14 @@ do
     in
 	-b)
             PGOPTS="$PGOPTS $1" ;;
-        -f)
-            PGOPTS="$PGOPTS $1" ;;
         -h)
             Usage ; exit 0 ;;
         -i)
             shift ; Files="$1 $Files" ;;
+        -l)
+            PGOPTS="$PGOPTS $1" ;;
         -o)
             shift ; output=$1 ;;
-        -s)
-            PGOPTS="$PGOPTS $1" ;;
 	-t)
             PGOPTS="$PGOPTS $1" ;;
         -v)

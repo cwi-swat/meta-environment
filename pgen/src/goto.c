@@ -20,7 +20,11 @@
 
 */
 #include "ksdf2table.h"
+#include "statistics.h"
 #include <assert.h>
+
+int nr_of_items;
+int max_nr_items;
 
 extern int nr_of_states;
 
@@ -365,7 +369,11 @@ ATermList gotos(ATermList vertex, ATermList labelset)
   static int max_items = 0;
   int i, nr_items;
 
-	nr_items = ATgetLength(vertex)+1;
+  nr_items = ATgetLength(vertex)+1;
+
+  IF_STATISTICS(nr_of_items += nr_items);
+  IF_STATISTICS(if (nr_items > max_nr_items) {max_nr_items = nr_items;});
+
 	if(nr_items > max_items) {
 		items = (ATerm *)realloc(items, sizeof(ATerm)*nr_items);
 		symbols = (ATerm *)realloc(symbols, sizeof(ATerm)*nr_items);

@@ -27,13 +27,20 @@
 
 extern ATerm pattern_asfix_term;
 extern int nr_of_states;
+extern int nr_of_actions;
+extern int max_nr_actions;
+extern int nr_of_gotos;
+extern int max_nr_gotos;
+extern int nr_of_items;
+extern int max_nr_items;
 
 static char *name;
 
 ATbool run_verbose;
+ATbool statisticsMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "2.1";
+static char myversion[] = "2.2";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -41,7 +48,7 @@ static char myversion[] = "2.1";
     explanation.
  */
 
-static char myarguments[] = "bchi:o:tvV";
+static char myarguments[] = "bchi:lo:tvV";
 
 /*}}}  */
 /*{{{  external functions */
@@ -187,20 +194,28 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 
   if (ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
                  &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
-    reduct = innermost(term);
 
+    IF_STATISTICS(PT_Timer()); 
+
+    reduct = innermost(term);
     ksdf = toasfix(reduct, filename, modname); 
 
-    if(run_verbose) 
-      ATwarning("Normalization finished\n");
+    IF_STATISTICS(fprintf(PT_log(), "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
 
     init_table_gen();
     nr_of_states = 0;
+    nr_of_actions = 0;
+    max_nr_actions = 0;
+    nr_of_gotos = 0;
+    max_nr_gotos = 0;
+    nr_of_items = 0;
+    max_nr_items = 0;
 
     if (ksdf)  {
       pt = generate_parse_table(ksdf);
     }
     destroy_table_gen();       
+    IF_STATISTICS(fprintf(PT_log(), "Parse table generation took %.6fs\n", PT_Timer())); 
   }
  
   return pt;
@@ -265,7 +280,7 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack, term, pt, expterm, normterm;
   char *input = "-";
   char *output = "-";
-  int bafmode = 1;
+  int bafMode = 1;
   int proceed = 1;
   
   extern char *optarg;
@@ -303,11 +318,12 @@ int main(int argc, char *argv[])
 #endif
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-        case 'b':  bafmode = 1;                            break;
-        case 't':  bafmode = 0;                            break;
-        case 'v':  run_verbose = ATtrue;                   break;
+        case 'b':  bafMode = 1;                            break;
         case 'i':  input=optarg;                           break;
+        case 'l':  statisticsMode = ATtrue;                break;
         case 'o':  output=optarg;                          break;
+        case 't':  bafMode = 0;                            break;
+        case 'v':  run_verbose = ATtrue;                   break;
         case 'V':  version(); proceed = 0;                 break;
 	case 'c':  ATsetChecking(ATtrue);		   break;
 
@@ -331,6 +347,13 @@ int main(int argc, char *argv[])
         ATwarning("Parse table generation in fast mode\n");
       }
 
+      IF_STATISTICS(
+        if(!PT_log()) {
+          ATwarning("Warning: implicitly opening logfile\n");
+          PT_OpenLog(myname, "pgen-stats.txt");
+        }
+      );
+
       normterm = add_norm_function(expterm);   
       pt = normalize_and_generate_table(normterm);
 
@@ -339,10 +362,12 @@ int main(int argc, char *argv[])
       else if (!(iofile = fopen(output, "w")))
         ATerror("%s: cannot open %s\n", myname, output);
 
-      if(bafmode)
+      if (bafMode) {
         ATwriteToBinaryFile(pt, iofile);
-      else
+      }
+      else {
         ATwriteToTextFile(pt, iofile);
+      }
     }
   }
   return 0;

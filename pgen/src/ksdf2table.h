@@ -29,6 +29,7 @@
 #include <AsFix-init-patterns.h> 
 #include <deprecated.h>
 #include "atsets.h"
+#include "statistics.h"
 
 #ifdef WIN32
      #include <string.h>
@@ -95,5 +96,3 @@ extern ATerm all_chars;
 extern ATermSOS *state_sos;
 
 /*}}}  */
-
-
