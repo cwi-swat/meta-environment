@@ -363,6 +363,13 @@ ATbool SG_MultiSetGtr(parse_table *pt, ATermTable msM, ATermTable msN)
   ATermList M, N, RestrictedM = ATempty;
   ATbool    foundone;
 
+  /*  multi-prio is irreflexive  */
+/*
+  // Tested in SG_MultiSetPriority, let's assume it's not called elsewhere 
+  if(ATtableIsEqual(multiset1, multiset2))
+    return NULL;
+ */
+
   /*
      Construct restriction:
       { x in M | Exists y in N: M(x) > N(x) /\ x gtr-prio y}
@@ -405,6 +412,44 @@ ATbool SG_MultiSetGtr(parse_table *pt, ATermTable msM, ATermTable msN)
   return ATtrue;
 }
 
+
+ATbool ATsubTable(ATermTable t1, ATermTable t2)
+{
+  ATerm     key;
+  ATermList keys;
+
+  if(t2 == NULL)
+    return ATfalse;
+  if(t1 == NULL)
+    return ATtrue;
+
+  for(keys = ATtableKeys(t1); keys && !ATisEmpty(keys);
+            keys=ATgetNext(keys)) {
+    key = ATgetFirst(keys);
+    if(ATtableGet(t1, key) != ATtableGet(t2, key))
+      return ATfalse;
+  }
+  return ATtrue;
+}
+
+ATbool ATtableIsEqual(ATermTable t1, ATermTable t2)
+{
+  if(t1 == t2)
+    return ATtrue;
+  if(t1 == NULL || t2 == NULL)
+    return ATfalse;
+
+  /*  First check if all the keys in t1 exist in t2, with equal values  */
+  if(!ATsubTable(t1, t2))
+    return ATfalse;
+
+  /*  Now check if all the keys in t2 exist in t1, with equal values  */
+  if(!ATsubTable(t2, t1))
+    return ATfalse;
+  /*  Both directions checked  */
+  return ATtrue;
+}
+
 ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
 {
   ATermTable multiset1, multiset2;
@@ -415,6 +460,9 @@ ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
 
   multiset1 = ATtableCreate(256, 75);
   multiset2 = ATtableCreate(256, 75);
+
+  if(ATtableIsEqual(multiset1, multiset2))
+    return NULL;	/*  multi-prio is irreflexive  */
 
   SG_MakeMultiSet((ATerm) tree1, multiset1);
   SG_MakeMultiSet((ATerm) tree2, multiset2);
