@@ -1,4 +1,6 @@
 # $Id$
+2003/06/23 (iversen@cwi.nl)
+ * Changed module list panel in MetaStudio to a module tree panel.
 
 2003/06/20 (markvdb@cwi.nl)
  * Added save and read-tree.
