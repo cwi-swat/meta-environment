@@ -78,8 +78,8 @@ void put_value(int conn, char *table, ATerm key, ATerm value)
 ATerm contains_key(int conn, char *table, ATerm key)
 {
   return TS_containsKey(table,key) ?
-    ATparse("yes") :
-    ATparse("no");
+    RESULT_TERM(ATmake("yes")) :
+    RESULT_TERM(ATmake("no"));
 }
 
 /*}}}  */

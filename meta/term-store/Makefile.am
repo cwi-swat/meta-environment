@@ -10,7 +10,8 @@ bin_PROGRAMS = term-store
 term_store_SOURCES = main.c term-store.tif.c
 term_store_LDADD = -L$(ATERM)/lib -lATerm \
                    -L$(TOOLBUSLIB)/lib -lATB \
-                   -L. -ltables
+                   -L. -ltables \
+		   $(SOCKLIBS)
 
 noinst_LIBRARIES	= libtables.a
 

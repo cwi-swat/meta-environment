@@ -6,7 +6,7 @@ let
  TS : term-store,
  TableName : str,
  Key : term,
- Value : list,
+ Value : term,
  ContainsKey : bool,
  Keys : list,
  Values : list
