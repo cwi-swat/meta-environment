@@ -1,9 +1,8 @@
 equations
 
 [m2n]
-Signopt2 = remove-duplicates(Signopt),
-create-name-table(Signopt2,(,funid("l""f""_" Char*),1,1)) = Nametable,
-rename-signatureopt(Signopt2, Nametable) = Signopt3,
+create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)) = Nametable,
+rename-signatureopt(Signopt, Nametable) = Signopt3,
 rename-rulesopt(Rulesopt, Nametable) = Rulesopt2,
 Module2 = module modid(Char*) Signopt3 Rulesopt2
 ===>
@@ -127,18 +126,6 @@ rename-termlist(Term+,Nametable) = Term+2
 ===>
 rename-termlist(Term, Term+,Nametable) = Term2, Term+2
 
-[rd-0]
-remove-duplicates(signature Funcdef*) = signature rmdups(Funcdef*)
-
-[rd-1]
-remove-duplicates() =
-
-[rd-0]
-rmdups(Funcdef*1; Funcdef; Funcdef*2; Funcdef; Funcdef*3) = 
-rmdups(Funcdef*1; Funcdef; Funcdef*2; Funcdef*3)
-
-[default-rd]
-rmdups(Funcdef*) = Funcdef*
 
 [cnt-1'1] 
 create-name-table(,Nametable) = Nametable

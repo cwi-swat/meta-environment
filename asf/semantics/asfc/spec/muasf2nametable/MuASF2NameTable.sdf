@@ -29,9 +29,6 @@ context-free syntax
 
 context-free syntax
 
-  remove-duplicates(SignatureOpt) -> SignatureOpt
-  rmdups(FuncDefList) -> FuncDefList
-
   create-name-table(SignatureOpt,NameTable) -> NameTable
 
 hiddens
