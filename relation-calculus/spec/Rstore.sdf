@@ -33,7 +33,8 @@ exports
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
 
-	RSTORE "[" RSTAT* "]"				-> RSTORE
+	RSTORE "[|" RSTAT* "|]"				-> RSTORE
+        "[|" REXP "|]"                                  -> RVALUE
 
 %% Import a Rigi RSF file
 	import(RSFFILE)					-> RSTORE
@@ -81,7 +82,8 @@ hiddens
 
          "$Vdata*" [0-9\']*	       -> VDATA*
 	
-        "$Stat*" [0-9\']*              -> RSTAT*	
+        "$Stat*" [0-9\']*              -> RSTAT*
+	"$Exp" [0-9\']*		       -> REXP	
 
         "$Var" [0-9\']*                -> RVAR
         "$Var*" [0-9\']*               -> {RVAR ","}*
