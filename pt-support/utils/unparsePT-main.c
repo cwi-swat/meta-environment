@@ -16,7 +16,7 @@
 /*{{{  variables */
 
 static char myname[] = "unparsePT";
-static char myversion[] = "1.1";
+static char myversion[] = "1.2";
 
 static char myarguments[] = "ahi:o:vV";
 
