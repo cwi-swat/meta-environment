@@ -3,6 +3,8 @@
 Tue Nov 30 14:41:57 CET 2004 <kooiker@cwi.nl>
  * test/Makefile.am:
    - Reenabled generated tests by removing exit 1 in shellscript generator 
+ * meta-scripts/meta-interface.tb.src:
+   - get-asf-equations-text-hook returns empty string on ts-no-value
 
 Mon Nov 29 13:58:32 CET 2004 <{jong,kooiker}@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:

@@ -342,11 +342,17 @@ in
     rec-msg(get-asf-equations-text-hook(Module?))
     /* BuildEquationsFilename */
     . snd-msg(ts-get-str-value("module-path", Module))
-    . rec-msg(ts-value(Directory?))
-    . snd-msg(io-get-filename(Directory, Module, ".asf"))
-    . rec-msg(io-filename(Filename?))
-    . ReadFile(Filename, Text?)
-    . snd-msg(get-asf-equations-text-hook-result(Text))
+    .
+    (
+      rec-msg(ts-value(Directory?))
+      . snd-msg(io-get-filename(Directory, Module, ".asf"))
+      . rec-msg(io-filename(Filename?))
+      . ReadFile(Filename, Text?)
+      . snd-msg(get-asf-equations-text-hook-result(Text))
+    +
+      rec-msg(ts-no-value)
+      . snd-msg(get-asf-equations-text-hook-result(""))
+    )
   +
     rec-msg(post-initialization-hook)
     . snd-msg(post-initialization-hook-finished) 
