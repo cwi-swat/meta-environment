@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/20 ({jong,markvdb,olivierp}@cwi.nl)
+ * Adapted for new parsetable format (marginally more compact)
+ * Regenerated parsetables accordingly
+ 
 2001/07/17 (jong@cwi.nl)
  * version 3.3 released, bumped to 3.3.1
 

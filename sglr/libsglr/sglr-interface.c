@@ -382,6 +382,7 @@ ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
   }
 
   if(!SGopenLanguage(prg, L, ptblfil)) {
+    ATwarning("could not open language!\n");
     return NULL;
   }
   return SGtermToFile(prg, SGparseFile(prg, L, sort, infil), outfil);

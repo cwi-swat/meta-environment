@@ -454,7 +454,10 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
   for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
     act = ATgetFirst(acts);
     if(ATgetAFun(act) == SG_Action_AFun) {
-      ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);
+      /*<PO: removed char-class
+      *  ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);*/
+      /*ATermList classes = (ATermList) ATmakeList1(ATgetArgument(act, 0)); */
+      ATermList classes = (ATermList) ATgetArgument(act, 0);
       actions   t       = (actions) ATgetArgument(act, 1);
 
       SG_AddClassesToActionTable(pt, s, classes, (actions) t);
@@ -482,10 +485,11 @@ size_t SG_CountPTActions(register ATermList acts)
   for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
     act = ATgetFirst(acts);
     if(ATgetAFun(act) == SG_Action_AFun) {
-      numactions += SG_CountClassesInActionTable((ATermList)
-                                                 ATgetArgument(ATgetArgument(act, 0), 0));
+      /*ATermList classes = (ATermList)ATmakeList1(ATgetArgument(act, 0)); */
+      ATermList classes = (ATermList)ATgetArgument(act, 0);
+      numactions += SG_CountClassesInActionTable(classes);
     } else {
-      ATerror("SG_CountPTActions: bad action %t\n", act);
+      ATabort("SG_CountPTActions: bad action %t\n", act);
     }
   }
   return numactions;
@@ -587,8 +591,9 @@ size_t SG_CountPTGotos(register ATermList goto_lst)
 
   for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
     if (ATgetAFun(firstTerm = ATgetFirst(goto_lst)) == SG_Goto_AFun) {
-      numgotos += SG_CountClassesInGotoTable((ATermList)
-                                             ATgetArgument(ATgetArgument(firstTerm, 0), 0));
+      /* <PO> removed stripping of char-class */
+      ATermList classes = (ATermList)ATgetArgument(firstTerm, 0);
+      numgotos += SG_CountClassesInGotoTable(classes);
     }
   }
   return numgotos;
@@ -606,7 +611,9 @@ void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods)
       ATermList classes;
       state     s2;
 
-      classes = (ATermList) ATgetArgument(ATgetArgument(firstTerm, 0), 0);
+      /* <PO: removed char-class function symbol
+       * classes = (ATermList) ATgetArgument(ATgetArgument(firstTerm, 0), 0);*/
+      classes = (ATermList) ATgetArgument(firstTerm, 0);
       s2 = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
       SG_AddClassesToGotoTable(pt, s, classes, s2);
@@ -646,7 +653,9 @@ void SG_AddPTStates(parse_table *pt, ATermList states)
     if(ATgetAFun(curstate = ATgetFirst(states)) == SG_StateRec_AFun) {
       state s         = ATgetInt((ATermInt) ATgetArgument(curstate, 0));
       ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
-      ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
+      /* <PO: removed actions function symbol
+       * ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);*/
+      ATermList acts  = (ATermList) ATgetArgument(curstate,2);
 
       IF_STATISTICS(numgotos+=ATgetLength(gotos); numactions+=ATgetLength(acts))
         SG_AddPTGotos(pt, s, gotos, SG_PT_NUMPRODS(pt));
@@ -1047,7 +1056,9 @@ parse_table *SG_BuildParseTable(ATermAppl t)
     ATerm     curstate = ATgetFirst(sts);
     if(ATgetAFun(curstate) == SG_StateRec_AFun) {
       ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
-      ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
+      /*<PO: action list is no longer surrounded by the 'action' symbol
+       * ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);*/
+      ATermList acts  = (ATermList) ATgetArgument(curstate,2);
 
       goto_entries += SG_CountPTGotos(gotos);
       action_entries += SG_CountPTActions(acts);
