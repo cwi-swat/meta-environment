@@ -9,7 +9,6 @@
 
 #include "MEPT-utils.h"
 
-static ATbool visualVariables;
 #define VARIABLE "*variable*"
 
 static int lengthOfInteger(int ch)
@@ -83,12 +82,7 @@ lengthOfSymbol(PT_Symbol symbol)
   }
   if (PT_isSymbolVarSym(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    if (visualVariables) {
-      return lengthOfSymbol(newSymbol) + strlen(VARIABLE " ");
-    }
-    else {
-      return lengthOfSymbol(newSymbol);
-    }
+    return lengthOfSymbol(newSymbol);
   }
   if (PT_isSymbolCf(symbol) 
       ||
@@ -360,10 +354,6 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
   }
   if (PT_isSymbolVarSym(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    if (visualVariables) {
-      strcpy(buf+idx,VARIABLE " ");
-      idx += strlen(VARIABLE " ");
-    }
     idx = yieldSymbol(newSymbol, idx, buf, bufSize);
 
     return idx;
@@ -649,26 +639,43 @@ char *PT_yieldProduction(PT_Production prod)
 
 char *PT_yieldSymbol(PT_Symbol symbol) 
 {
-  return PT_yieldSymbolVisualVariables(symbol, ATfalse);
-}
-
-char *PT_yieldSymbolVisualVariables(PT_Symbol symbol, ATbool showVars)
-{
   static char *buffer = NULL;
   static int   bufferSize = 0;
   int          idx = 0;
   int          len;
 
-  visualVariables = showVars;
-
-  len = lengthOfSymbol(symbol)+1;
+  len = lengthOfSymbol(symbol) + 1;
 
   if (len > bufferSize) {
     buffer = (char *)realloc(buffer, len*sizeof(char));
     bufferSize = len;
   }
 
-  idx = yieldSymbol(symbol, 0, buffer, len);
+  idx = yieldSymbol(symbol, idx, buffer, len);
+
+  assert(idx <= len); 
+  buffer[idx++] = '\0';
+
+  return buffer;
+}
+
+char *PT_yieldSymbolVisualVariables(PT_Symbol symbol)
+{
+  static char *buffer = NULL;
+  static int   bufferSize = 0;
+  int          idx = 0;
+  int          len;
+
+  len = strlen(VARIABLE " ") + lengthOfSymbol(symbol) + 1;
+
+  if (len > bufferSize) {
+    buffer = (char *)realloc(buffer, len*sizeof(char));
+    bufferSize = len;
+  }
+
+  strcpy(buffer, VARIABLE " ");
+  idx = strlen(VARIABLE " ");
+  idx = yieldSymbol(symbol, idx, buffer, len);
 
   assert(idx <= len); 
   buffer[idx++] = '\0';

@@ -1,3 +1,7 @@
+2002/04/18 (vandenbr@loria.fr)
+ * Variables are visualized with "*variable*" again, this bug
+   was the result of the bug fix on 2002/03/26.
+   
 2002/03/26 (vandenbr@loria.fr)
  * Fixed a "bug" with respect to the flattening of variable names.
 
