@@ -18,7 +18,7 @@ public class RemoteClient {
       
       ab = (AddressBook) PortableRemoteObject.narrow(ref, AddressBook.class);
       
-      System.out.println("addres: " + ab.getAddress("hayco"));
+      System.out.println("address: " + ab.getAddress("hayco"));
     } catch (Exception e) {
       System.out.println("Exception: " + e);
     }
