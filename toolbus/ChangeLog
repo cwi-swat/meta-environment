@@ -1,7 +1,7 @@
 $Id$
 
 2001/11/16 (jong@cwi.nl)
- * version 0.22beta started
+ * patchlevel 0.21.1
  * sleep 1 second between issuing shutdown of emacs and exiting adapter
    to fix mysterious 'hangup'.
 
