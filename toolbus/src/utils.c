@@ -1418,6 +1418,63 @@ TBbool TBmatch1(term *t)
   return TBfalse;
 }
 
+int TBsize(term *t)
+{
+  int size = sizeof(*t);
+  /*int size = 1;*/
+
+  if(!t)
+    return 0;
+
+  switch(tkind(t)) {
+    case t_bool:
+    case t_int:
+    case t_real:
+      break;
+
+    case t_str:
+      size += strlen(str_val(t))+1;
+      break;
+
+    case t_bstr:
+      size += bstr_len(t);
+      break;
+
+    case t_appl:
+      /* <PO> symbol size */
+      size += TBsize(fun_args(t));
+      break;
+
+    case t_list:
+      size += TBsize(first(t));
+      size += TBsize(next(t));
+      break;
+
+    case t_var:
+      /* <PO>: symbol size? */
+      size += TBsize(var_type(t));
+      break;
+
+    case t_placeholder:
+      size += TBsize(placeholder_type(t));
+      break;
+
+    case t_anno:
+      size += TBsize(anno_val(t));
+      size += TBsize(anno_term(t));
+      break;
+
+    case t_env:
+      /* <PO>: symbol size? */
+      size += TBsize(env_var(t));
+      size += TBsize(env_val(t));
+      size += TBsize(env_next(t));
+      break;
+      
+  }
+  return size;
+}
+
 #ifndef HAVE_STRERROR
 
 char *strerror(int n)

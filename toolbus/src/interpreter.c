@@ -1636,6 +1636,7 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
     tool_def *td = find_tool_def(ti_name(ti));
 
     assert(td);
+
     if(occurs_in_out_sign_of_tool(Inp, td_out_sign(td))){
       if(fun_sym(Inp) == a_snd_disconnect){
 	extern tool_inst_list *Tools;

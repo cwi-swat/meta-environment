@@ -7,9 +7,14 @@
 
 /*--- substitution -----------------------------*/
 
+TBbool is_closed(term *t);
+
 term *substitute(term *t, env *loc_env)
 {
   term *t2;
+
+  if(is_closed(t))
+    return t;
 
   switch(tkind(t)){
   case t_bool: case t_int: case t_real: case t_str: case t_bstr:     
@@ -45,6 +50,30 @@ term *substitute_list(term *tl, env *loc_env)
     return NULL;
 }
 
+TBbool is_closed(term *t)
+{
+  if(!t)
+    return TBtrue;
+
+  switch(tkind(t)) {
+    case t_bool: case t_int: case t_real: case t_str: case t_bstr:
+      return TBtrue;
+    case t_var:
+      return var_result(t);
+      break;
+    case t_placeholder:
+      return TBtrue;
+    case t_appl:
+      return is_closed(fun_args(t));
+    case t_anno:
+      return is_closed(anno_term(t));
+    case t_list:
+      return is_closed(first(t)) && is_closed(next(t));
+    default: err_fatal("is_closed");
+  }
+  return TBfalse; /* silence the compiler */
+}
+
 env *Bindings1;          /* PROTECTED: bindings for t1 in match */
 env *Bindings2;          /* PROTECTED: bindings for t2 in match */
 
@@ -59,6 +88,7 @@ TBbool match(term *t1,                 /* pattern */
   Bindings2 = NULL;
   
   MATCHDB(TBmsg("match(%t,%t, %t,%t) ... \n", t1, t2, l1, l2));
+
   b = match1(substitute(t1, l1), substitute(t2, l2));
 
   MATCHDB(TBmsg(" ... %s\n", (b) ? "true" : "false"));

@@ -53,6 +53,8 @@ void   TBwrite(int, term *);
 term   *TBread(int);   /* should become FILE * */
 term   *TBreadTerm(FILE *);
 
+int  TBsize(term *t);
+
 void TBexit(int val);
 int  TBatexit(void (*f)(void));
 

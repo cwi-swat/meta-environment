@@ -50,7 +50,7 @@ static TBbool add_segment(void)
   term *t;
   int nelem = segment_size(nsegment);
 
-  /* fprintf(stderr, "ADDING SEGMENT %d\n", nsegment); */
+  /* fprintf(stderr, "ADDING SEGMENT %d\n", nsegment);*/
 
   if((nsegment == NSEGMENT) || !can_extend)
     return TBfalse;
@@ -128,6 +128,7 @@ void TBunprotect(term **pt)
 			if(!add_segment())\
 			   err_fatal("new_term: cannot add a segment");\
 		     }\
+                     TBprintf(stderr, "*");\
                      t = free_list;\
                      free_list = next(free_list);\
                      nfree--;
