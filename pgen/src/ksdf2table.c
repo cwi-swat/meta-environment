@@ -421,18 +421,69 @@ ATerm process_priorities(SDF_PriorityList prios)
   ATermList prioentries = ATempty;
   int cnt = 0;
   ATbool isnew;
+  int idx, localIdx1, localIdx2, max_idx; 
+  SDF_PriorityList localPrios = prios;
 
+/* Store the chain priorities */
+  max_idx = -1;
+  while (SDF_hasPriorityListHead(localPrios)) {
+    SDF_Priority prio = SDF_getPriorityListHead(localPrios);
+    
+    if (SDF_isPriorityChain(prio)) {
+      prioentry = processChainPriority(prio);
+    }
+
+    if (prioentry) {
+      idx = ATindexedSetPut(priority_table, prioentry, &isnew);
+      if (isnew) {
+        if (idx > max_idx) {
+          max_idx = idx;
+        } 
+	prioentries = ATinsert(prioentries, prioentry);
+	cnt++;
+      }
+    }
+  
+    if (SDF_isPriorityListSingle(localPrios)) {
+      break;
+    }
+    localPrios = SDF_getPriorityListTail(localPrios);
+  }
+
+/* Calculate the transitive closure of the chain priorities */
+  for (localIdx1=0; localIdx1<=max_idx; localIdx1++) {    
+    ATermAppl prioentry1 = 
+      (ATermAppl)ATindexedSetGetElem(priority_table, localIdx1);
+    ATerm rightnr1 = ATgetArgument(prioentry1, 1);
+
+    for (localIdx2=0; localIdx2<=max_idx; localIdx2++) {    
+      ATermAppl prioentry2 = 
+                  (ATermAppl)ATindexedSetGetElem(priority_table, localIdx2);
+      ATerm leftnr2 = ATgetArgument(prioentry2, 0);
+
+      if (ATisEqual(rightnr1, leftnr2)) {
+        ATerm leftnr1 = ATgetArgument(prioentry1, 0);
+        ATerm rightnr2 = ATgetArgument(prioentry2, 1);
+        prioentry = (ATerm)ATmakeAppl2(afun_gtr_prio, 
+                                       leftnr1, rightnr2);
+        idx = ATindexedSetPut(priority_table, prioentry, &isnew);
+        if (isnew) {
+          if (idx > max_idx) {
+            max_idx = idx;
+          } 
+	  prioentries = ATinsert(prioentries, prioentry);
+	  cnt++;
+        }
+      }
+    }
+  }
+
+/* Store the associativity priorities */
   while (SDF_hasPriorityListHead(prios)) {
     SDF_Priority prio = SDF_getPriorityListHead(prios);
     
     if (SDF_isPriorityAssoc(prio)) {
       prioentry = processAssocPriority(prio);
-    }
-    else if (SDF_isPriorityChain(prio)) {
-      prioentry = processChainPriority(prio);
-    }
-    else {
-      ATerror("expected priority rule, got %t\n", prio);
     }
 
     if (prioentry) {
@@ -451,7 +502,7 @@ ATerm process_priorities(SDF_PriorityList prios)
 
   IF_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
 
-  return ATmake("[<list>]",prioentries);
+  return ATmake("[<list>]", prioentries);
 }
 
 /*}}} */

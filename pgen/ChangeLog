@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/12 (markvdb@cwi.nl)
+   * Added the transitive closure calculation on chain prios.
+   * Generated new reference table for the regression tests.
+
 2001/07/11 ({markvdb,olivierp}@cwi.nl)
   * Moved priority uniqueness calculation from spec to c phase
   * Removed reachability analysis from spec
