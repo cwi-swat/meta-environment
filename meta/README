@@ -126,8 +126,11 @@ Installation instructions:
       $ make install
       $ cd ../new-meta
       $ autoconf
-      $ ./configure --prefix=/path/to/meta --with-toolbus=/path/to/meta \
+      $ ./configure --prefix=/path/to/meta \
+                    --with-toolbus=/path/to/meta \
+                    --with-aterm=/path/to/meta \
                     --libdir=/path/to/meta/lib \
+                    --datadir=/path/to/meta/share \
                     --with-tcldot=/path/to/Tcldot            # see above
       $ make install
 
