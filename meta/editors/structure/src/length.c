@@ -53,7 +53,7 @@ PT_ParseTree updateParseTreeLengthInfo(PT_ParseTree parse_tree, SE_Path path,
   SE_Steps steps;
   PT_Tree tree;
 
-  if (SE_isPathTerm(path)) {
+  if (SE_isPathTree(path)) {
     steps = SE_getPathSteps(path);
     tree = PT_getParseTreeTree(parse_tree);
     tree = updateTreeLengthInfo(tree, steps, delta_length);

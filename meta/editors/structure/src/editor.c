@@ -102,9 +102,9 @@ static SE_Editor moveFocusDown(SE_Editor editor)
     return editor;
   }
 
-  if (!SE_isPathTerm(path)) {
+  if (!SE_isPathTree(path)) {
     /* Select the top-level term */
-    path = SE_makePathTerm(SE_makeStepsEmpty());
+    path = SE_makePathTree(SE_makeStepsEmpty());
     focus = createEditorFocus(editor, parse_tree, path);
     editor = SE_setEditorFocus(editor, focus);
     return editor;
@@ -250,7 +250,7 @@ static SE_Editor moveFocusToStartSymbol(SE_Editor editor, int location, int leng
     path = getPathInParseTree(parse_tree, location, 0);
   }
 
-  if (!SE_isPathTerm(path)) {
+  if (!SE_isPathTree(path)) {
     path = SE_makePathRoot();
   }
 
@@ -393,7 +393,7 @@ SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location)
   SE_Focus focus;
   SE_Path path = getPathInParseTree(parse_tree, location, 0);
 
-  if (SE_isPathTerm(path)) {
+  if (SE_isPathTree(path)) {
     PT_Tree tree;
     SE_Steps steps;
     PT_Tree sub_tree;
@@ -408,7 +408,7 @@ SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location)
         steps = stepUp(steps);
       }
 
-      path = SE_makePathTerm(steps);
+      path = SE_makePathTree(steps);
     }
   }
 
@@ -427,7 +427,7 @@ SE_Focus getFocusAtPosInfo(SE_Editor editor,
   SE_Focus focus;
   SE_Path path = getPathInParseTreeAtPosInfo(parse_tree, posInfo);
 
-  if (SE_isPathTerm(path)) {
+  if (SE_isPathTree(path)) {
     PT_Tree tree = PT_getParseTreeTree(parse_tree);
 
     if (SE_hasPathSteps(path)) {
@@ -439,7 +439,7 @@ SE_Focus getFocusAtPosInfo(SE_Editor editor,
       if (isBasicLeafNode(sub_tree)) {
         steps = stepUp(steps);
       }
-      path = SE_makePathTerm(steps);
+      path = SE_makePathTree(steps);
     }
   }
 

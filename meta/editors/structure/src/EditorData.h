@@ -66,6 +66,10 @@ SE_Move SE_MoveFromTerm(ATerm t);
 ATerm SE_MoveToTerm(SE_Move arg);
 
 /*}}}  */
+/*{{{  list functions */
+
+
+/*}}}  */
 /*{{{  constructors */
 
 SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols);
@@ -78,7 +82,7 @@ SE_SymbolList SE_makeSymbolListEmpty();
 SE_SymbolList SE_makeSymbolListMulti(char* head, SE_SymbolList tail);
 SE_Path SE_makePathRoot();
 SE_Path SE_makePathLeftLayout();
-SE_Path SE_makePathTerm(SE_Steps steps);
+SE_Path SE_makePathTree(SE_Steps steps);
 SE_Path SE_makePathRightLayout();
 SE_Steps SE_makeStepsEmpty();
 SE_Steps SE_makeStepsMulti(int head, SE_Steps tail);
@@ -183,7 +187,7 @@ SE_SymbolList SE_setSymbolListTail(SE_SymbolList arg, SE_SymbolList tail);
 ATbool SE_isValidPath(SE_Path arg);
 inline ATbool SE_isPathRoot(SE_Path arg);
 inline ATbool SE_isPathLeftLayout(SE_Path arg);
-inline ATbool SE_isPathTerm(SE_Path arg);
+inline ATbool SE_isPathTree(SE_Path arg);
 inline ATbool SE_isPathRightLayout(SE_Path arg);
 ATbool SE_hasPathSteps(SE_Path arg);
 SE_Steps SE_getPathSteps(SE_Path arg);

@@ -19,7 +19,7 @@
 
 [Path, root, root],
 [Path, left-layout, left-layout],
-[Path, term, term(<steps(Steps)>)],
+[Path, tree, term(<steps(Steps)>)],
 [Path, right-layout, right-layout],
 
 [Steps, empty, []],

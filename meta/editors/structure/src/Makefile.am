@@ -48,8 +48,9 @@ libStructure_a_SOURCES = \
 
 # Only useful for maintainers having 'apigen'
 api: EditorData.adt
+	upgrade-adt -i $< -o $<.1
 	adt-to-c \
 	--compat-term \
 	--prefix SE_  \
 	--prologue EditorData.pro  \
-	--input $<
+	--input $<.1

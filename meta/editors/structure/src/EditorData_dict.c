@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jul 28 14:53:23 2003
+ * Generated at Wed Aug 20 14:46:50 2003
  */
 
 #include "EditorData_dict.h"
@@ -24,7 +24,7 @@ ATerm SE_patternMoveLeft = NULL;
 ATerm SE_patternStepsMulti = NULL;
 ATerm SE_patternStepsEmpty = NULL;
 ATerm SE_patternPathRightLayout = NULL;
-ATerm SE_patternPathTerm = NULL;
+ATerm SE_patternPathTree = NULL;
 ATerm SE_patternPathLeftLayout = NULL;
 ATerm SE_patternPathRoot = NULL;
 ATerm SE_patternSymbolListMulti = NULL;
@@ -57,7 +57,7 @@ ATerm SE_patternEditorDefault = NULL;
  * SE_patternStepsMulti = [<int>,<list>]
  * SE_patternStepsEmpty = []
  * SE_patternPathRightLayout = right-layout
- * SE_patternPathTerm = term(<term>)
+ * SE_patternPathTree = term(<term>)
  * SE_patternPathLeftLayout = left-layout
  * SE_patternPathRoot = root
  * SE_patternSymbolListMulti = [<str>,<list>]
@@ -149,7 +149,7 @@ void init_EditorData_dict()
   terms = ATgetNext(terms);
   SE_patternPathRightLayout = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SE_patternPathTerm = ATgetFirst(terms);
+  SE_patternPathTree = ATgetFirst(terms);
   terms = ATgetNext(terms);
   SE_patternPathLeftLayout = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Aug 20 14:53:08 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * editors/structure/src/EditorData.adt:
+   change alternative Path/term -> Path/tree
+
 2003/08/19 ({jurgenv,jong}@cwi.nl)
  * regenerated graph API because apigen now supports builtin int and doubles
  * Makefile.am of graph API was corrected too.

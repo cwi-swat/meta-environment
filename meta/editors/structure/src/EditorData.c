@@ -158,6 +158,10 @@ ATerm SE_MoveToTerm(SE_Move arg)
 /*}}}  */
 
 /*}}}  */
+/*{{{  list functions */
+
+
+/*}}}  */
 /*{{{  constructors */
 
 /*{{{  SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols) */
@@ -240,9 +244,9 @@ SE_Path SE_makePathLeftLayout()
 }
 
 /*}}}  */
-/*{{{  SE_Path SE_makePathTerm(SE_Steps steps) */
+/*{{{  SE_Path SE_makePathTree(SE_Steps steps) */
 
-SE_Path SE_makePathTerm(SE_Steps steps)
+SE_Path SE_makePathTree(SE_Steps steps)
 {
   return (SE_Path)(ATerm)ATmakeAppl1(SE_afun6, (ATerm)steps);
 }
@@ -1068,7 +1072,7 @@ ATbool SE_isValidPath(SE_Path arg)
   else if (SE_isPathLeftLayout(arg)) {
     return ATtrue;
   }
-  else if (SE_isPathTerm(arg)) {
+  else if (SE_isPathTree(arg)) {
     return ATtrue;
   }
   else if (SE_isPathRightLayout(arg)) {
@@ -1122,9 +1126,9 @@ inline ATbool SE_isPathLeftLayout(SE_Path arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool SE_isPathTerm(SE_Path arg) */
+/*{{{  inline ATbool SE_isPathTree(SE_Path arg) */
 
-inline ATbool SE_isPathTerm(SE_Path arg)
+inline ATbool SE_isPathTree(SE_Path arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1135,7 +1139,7 @@ inline ATbool SE_isPathTerm(SE_Path arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternPathTerm, NULL);
+      last_result = ATmatchTerm((ATerm)arg, SE_patternPathTree, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1170,7 +1174,7 @@ inline ATbool SE_isPathRightLayout(SE_Path arg)
 
 ATbool SE_hasPathSteps(SE_Path arg)
 {
-  if (SE_isPathTerm(arg)) {
+  if (SE_isPathTree(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1190,7 +1194,7 @@ SE_Steps SE_getPathSteps(SE_Path arg)
 
 SE_Path SE_setPathSteps(SE_Path arg, SE_Steps steps)
 {
-  if (SE_isPathTerm(arg)) {
+  if (SE_isPathTree(arg)) {
     return (SE_Path)ATsetArgument((ATermAppl)arg, (ATerm)steps, 0);
   }
 
@@ -1523,8 +1527,8 @@ SE_Path SE_visitPath(SE_Path arg, SE_Steps (*acceptSteps)(SE_Steps))
   if (SE_isPathLeftLayout(arg)) {
     return SE_makePathLeftLayout();
   }
-  if (SE_isPathTerm(arg)) {
-    return SE_makePathTerm(
+  if (SE_isPathTree(arg)) {
+    return SE_makePathTree(
         acceptSteps ? acceptSteps(SE_getPathSteps(arg)) : SE_getPathSteps(arg));
   }
   if (SE_isPathRightLayout(arg)) {

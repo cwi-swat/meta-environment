@@ -81,7 +81,7 @@ SE_Path pathUp(SE_Path path)
   if (SE_hasPathSteps(path)) {
     SE_Steps steps = SE_getPathSteps(path);
     if (SE_isStepsMulti(steps)) {
-      return SE_makePathTerm(stepUp(steps));
+      return SE_makePathTree(stepUp(steps));
     }
   }
 
@@ -97,7 +97,7 @@ SE_Path pathDown(SE_Path path)
 
   steps = appendStep(steps, 0);
 
-  return SE_makePathTerm(steps);
+  return SE_makePathTree(steps);
 }
 
 /*}}}  */
@@ -113,7 +113,7 @@ SE_Path pathLeft(SE_Path path)
   }
 
   if (SE_isPathRightLayout(path)) {
-    return SE_makePathTerm(SE_makeStepsEmpty());
+    return SE_makePathTree(SE_makeStepsEmpty());
   }
 
   steps = SE_getPathSteps(path);
@@ -130,7 +130,7 @@ SE_Path pathLeft(SE_Path path)
 
   steps = replaceLastStep(steps, last_step-1);
   
-  return SE_makePathTerm(steps);
+  return SE_makePathTree(steps);
 }
 
 /*}}}  */
@@ -139,13 +139,13 @@ SE_Path pathLeft(SE_Path path)
 SE_Path pathRight(SE_Path path)
 {
   if (SE_isPathLeftLayout(path)) {
-    return SE_makePathTerm(SE_makeStepsEmpty());
+    return SE_makePathTree(SE_makeStepsEmpty());
   }
-  else if (SE_isPathTerm(path)) {
+  else if (SE_isPathTree(path)) {
     SE_Steps steps = SE_getPathSteps(path);
 
     if (!SE_isStepsEmpty(steps)) {
-      return SE_makePathTerm(stepRight(steps));
+      return SE_makePathTree(stepRight(steps));
     }
   }
 
@@ -248,7 +248,7 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
     }
     else {
       SE_Steps steps = getStepsInTree(tree, location, length);
-      path = SE_makePathTerm(steps);
+      path = SE_makePathTree(steps);
     }
   }
 
@@ -269,7 +269,7 @@ SE_Path getPathInParseTreeAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo)
   steps = getStepsInTreeAtPosInfo(tree, posInfo);
 
   if (steps != NULL) {
-    return SE_makePathTerm(steps);
+    return SE_makePathTree(steps);
   }
   else {
     return SE_makePathRoot();

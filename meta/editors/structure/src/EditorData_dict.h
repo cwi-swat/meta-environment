@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jul 28 14:53:23 2003
+ * Generated at Wed Aug 20 14:46:50 2003
  */
 
 #ifndef __EditorData_dict_H
@@ -27,7 +27,7 @@ extern ATerm SE_patternMoveLeft;
 extern ATerm SE_patternStepsMulti;
 extern ATerm SE_patternStepsEmpty;
 extern ATerm SE_patternPathRightLayout;
-extern ATerm SE_patternPathTerm;
+extern ATerm SE_patternPathTree;
 extern ATerm SE_patternPathLeftLayout;
 extern ATerm SE_patternPathRoot;
 extern ATerm SE_patternSymbolListMulti;

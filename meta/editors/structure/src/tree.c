@@ -258,7 +258,7 @@ PT_ParseTree updateParseTree(PT_ParseTree parse_tree, SE_Path path,
     return parse_tree;
   }
   
-  assert(SE_isPathTerm(path));
+  assert(SE_isPathTree(path));
 
   steps = SE_getPathSteps(path);
 

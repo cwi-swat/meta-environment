@@ -110,13 +110,13 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
   if (SE_isStepsEmpty(steps)) {
     PT_Tree sub_tree = getTreeAt(tree, steps); 
     if (PT_isTreeFlatLayout(sub_tree)) {
-      return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
+      return createFocus(parse_tree, SE_makePathTree(steps), focus_status);
     }
   }
   while (!SE_isStepsEmpty(steps)) {
     PT_Tree sub_tree = getTreeAt(tree, steps); 
     if (PT_isTreeFlatLayout(sub_tree)) {
-      return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
+      return createFocus(parse_tree, SE_makePathTree(steps), focus_status);
     }
     steps = stepUp(steps);
   }
