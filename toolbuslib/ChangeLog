@@ -1,5 +1,10 @@
 $Id$
 
+2003/05/28 ({jong,jurgenv}@cwi.nl)
+ * Added TERM_SIZE_WARNING_THRESHOLD: when terms bigger than this threshold
+   are sent to the ToolBus, a warning is printed. If threshold is set to 0,
+   the warning code is disabled.
+
 2003/05/19 ({jong,markvdb}@cwi.nl)
  * Added explicit ATBpack and ATBunpack.
  * Bumped to 0.5beta

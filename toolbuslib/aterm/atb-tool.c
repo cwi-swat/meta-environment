@@ -335,6 +335,15 @@ static void handle_ack_event(int fd, AFun afun)
 
 /*}}}  */
 
+/*{{{  const char *connect_get_name(int fd) */
+
+const char *connect_get_name(int fd)
+{
+  return connections[fd]->toolname;
+}
+
+/*}}}  */
+
 /*{{{  int ATBeventloop(void) */
 
 /**
@@ -360,17 +369,31 @@ int ATBeventloop(void)
 /**
  * Send a term to the ToolBus.
  */
+#define WARNING_SIZE 64
+#define KB 1024
 
 int ATBwriteTerm(int fd, ATerm term)
 {
   int len, wirelen;
 
   len = ATcalcTextSize(term)+LENSPEC;
+
   wirelen = MAX(len, MIN_MSG_SIZE);
   resize_buffer(wirelen+1);               /* Add '\0' character */
   sprintf(buffer, "%-.*d:", LENSPEC-1, len);
   buffer[LENSPEC] = '\0';
+
   AT_writeToStringBuffer(term, buffer+LENSPEC);
+
+#if TERM_SIZE_WARNING_THRESHOLD
+  if (len > TERM_SIZE_WARNING_THRESHOLD * KB) {
+    char warning[WARNING_SIZE];
+    strncpy(warning, buffer, WARNING_SIZE-2);
+    warning[WARNING_SIZE-1] = '\0';
+    fprintf(stderr, "%s: big term: [%s]\n", connect_get_name(fd), warning);
+  }
+#endif
+
   if(mwrite(fd, buffer, wirelen) < 0) {
     return -1;
   }
@@ -603,7 +626,6 @@ ATerm ATBcheckSignature(ATerm signature, char *sigs[], int nrsigs)
 }
 
 /*}}}  */
-
 
 /*{{{  static int connect_unix_socket(int port) */
 
