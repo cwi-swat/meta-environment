@@ -20,12 +20,16 @@
 #
 # $Id$
 
+2001/04/23 (markvdb@cwi.nl)
+  * Modified module-db in order to support AsFix2ME.
+  * Bumped version number of module-db to 2.0 in order to indicate
+    a new era.
+  * Modified structure editor in order to support AsFix2ME.
+
 2001/02/26 (jurgenv@cwi.nl)
   * relaxed the version checking of wish. If the script is unable to
     check the version of wish, it generates a warning banner. After that
     it assumes the right version is available in the environment.
-
-2001/02/26 (jurgenv@cwi.nl)
   * changed the .eqs extension to .asf. The following extensions change:
       .eqs     -> .asf
       .asf.baf -> .eqs
