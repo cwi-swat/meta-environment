@@ -537,9 +537,9 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
 PT_ParseTree flattenPT(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
-    PT_Tree newTree = PT_getParseTreeTree(tree);
+    PT_Tree newTree = PT_getParseTreeTop(tree);
 
-    return PT_setParseTreeTree(tree, flattenTerm(newTree, ATfalse));
+    return PT_setParseTreeTop(tree, flattenTerm(newTree, ATfalse));
   }
 
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);
