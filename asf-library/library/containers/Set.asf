@@ -29,3 +29,6 @@ equations
          difference({X*1, X*2}, {X*3, X*4}
   
   [default-df-1] difference(Set1, Set2) = Set1 
+ 
+  [eq-0] equal(Set,Set) = true
+  [default-eq] equal(Set1,Set2) = false
