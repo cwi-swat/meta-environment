@@ -119,3 +119,14 @@ equations
 [default-merge-rstores]
   merge-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))
     = merge-rstores(rstore($VPair*), rstore(<$Var, $Val>, $VPair*1))
+
+[merge4-0]
+  merge4($Rstore1, $Rstore2, $Rstore3, $Rstore4)
+  = merge-rstores(merge-rstores($Rstore1, $Rstore2),
+                  merge-rstores($Rstore3, $Rstore4))
+
+[merge8-0]
+  merge8($Rstore1, $Rstore2, $Rstore3, $Rstore4,
+         $Rstore5, $Rstore6, $Rstore7, $Rstore8)
+  = merge-rstores(merge4($Rstore1, $Rstore2, $Rstore3, $Rstore4),
+                  merge4($Rstore5, $Rstore6, $Rstore7, $Rstore8))

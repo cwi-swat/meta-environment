@@ -39,6 +39,8 @@ exports
 exports
   context-free syntax
     merge-rstores(RSTORE, RSTORE) -> RSTORE
+    merge4(RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge8(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
 
 hiddens
 
@@ -67,4 +69,3 @@ hiddens
 
 	"$RsfTuple" [0-9\']*		-> RSFTUPLE
 	"$RsfTuple*" [0-9\']*		-> RSFTUPLE*
-	
