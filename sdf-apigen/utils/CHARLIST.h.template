@@ -1,0 +1,9 @@
+typedef struct ___NAME__CHARLIST *__NAME__CHARLIST;
+
+ATbool __NAME__isValidCHARLIST(__NAME__CHARLIST arg);
+ATbool __NAME__isCHARLISTString(__NAME__CHARLIST arg);
+char*  __NAME__getCHARLISTString(__NAME__CHARLIST arg);
+__NAME__CHARLIST  __NAME__setCHARLISTString(__NAME__CHARLIST arg, char *str);
+ATerm  __NAME__CHARLISTToTerm(__NAME__CHARLIST arg);
+__NAME__CHARLIST __NAME__CHARLISTFromTerm(ATerm trm);
+__NAME__CHARLIST __NAME__makeCHARLISTString(char *str);

@@ -68,6 +68,7 @@ require() {
 INPUT=""
 OUTPUT=""
 VERBOSE=0
+VERBOSEOPT=""
 IMPLODEDOPT=""
 CONSOPT='-e'
 PREFIX=""
@@ -116,7 +117,8 @@ do
       GENBOTTOMSORT=0 ;;
 
     -v | --verbose)
-      VERBOSE=1 ;;
+      VERBOSE=1
+      VERBOSEOPT='-v' ;;
 
     -h | --help)
       usage; exit 0 ;;
@@ -153,11 +155,14 @@ info " generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${OUTPUT}.adt || err
 
-info " generating ${OUTPUT}.pro"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info " generating API for bottom sorts"
-  sed "s@__NAME__@${PREFIX}@g" < ${PKGDATA}/CHARLIST.c.template > \
+  info " generating ${OUTPUT}.pro"
+  sed "s@__NAME__@${PREFIX}@g" < ${PKGDATA}/CHARLIST.h.template > \
     ${OUTPUT}.pro
+  info " generating ${OUTPUT}_bottom.c"
+  sed "s@__NAME__@${PREFIX}@g;\
+       s@__STEM__@${OUTPUT}@g" < ${PKGDATA}/CHARLIST.c.template > \
+    ${OUTPUT}_bottom.c
 fi
 
 info " generating C from ADT "

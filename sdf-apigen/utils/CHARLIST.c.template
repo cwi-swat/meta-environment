@@ -1,11 +1,10 @@
-#ifndef __NAME__CHARLIST_IMPL
-#define __NAME__CHARLIST_IMPL
 #include <string.h>
+#include <aterm2.h>
+#include "__STEM__.h"
 
-typedef struct ___NAME__CHARLIST *__NAME__CHARLIST;
 typedef struct ATerm ___NAME__CHARLIST;
 
-ATermList __NAME__convertStringToChars(char *str)
+static ATermList __NAME__convertStringToChars(char *str)
 {
   int i;
   ATermList list = ATempty;
@@ -17,7 +16,7 @@ ATermList __NAME__convertStringToChars(char *str)
   return list;
 }
 
-char * __NAME__convertCharsToString(ATermList list)
+static char * __NAME__convertCharsToString(ATermList list)
 {
   int i;
   char *tmp = (char*) malloc((1 + ATgetLength(list)) * sizeof(char));
@@ -63,6 +62,3 @@ __NAME__CHARLIST __NAME__makeCHARLISTString(char *str)
 {
   return (__NAME__CHARLIST) __NAME__convertStringToChars(str);
 }
-
-
-#endif
