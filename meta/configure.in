@@ -196,7 +196,7 @@ if  test "${XEMACS}" != "no"; then
 fi
 
 dnl Handle --with-xemacs=... argument to configure
-AC_ARG_WITH( wish,
+AC_ARG_WITH( xemacs,
    [  --with-xemacs=DIR       Xemacs is in DIR],
    XEMACS=${withval})
 
