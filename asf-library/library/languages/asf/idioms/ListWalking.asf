@@ -1,0 +1,64 @@
+%% Different styles of walking lists are:
+%%	* one-by-one
+%%	* using list matching
+%%	* without function application
+%%
+%% The following examples are not optimized for brevity, but to show
+%% the different styles of list walking. They all change all a's in 
+%% a list to b's.
+
+equations
+
+[one-by-one-empty]
+	a2b() =
+
+[one-by-one]
+	a2b(a L*) = b a2b(L*)
+
+[default-one-by-one]
+	a2b(L L*) = L a2b(L*)
+
+
+equations
+
+[with-list-matching]
+	a2b(L*1 a L*2) = a2b(L*1 b L*2)
+
+[default-with-list-matching]
+	a2b(L*) = L*
+
+equations
+
+[without-function-application]
+	L*1 a L*2 = L*1 b L*2
+
+%% The same difference holds for wrapped lists,
+%% but we need some more code here for dealing with the wrappers:
+
+equations
+
+[one-by-one-empty]
+	a2b([]) = []
+
+[one-by-one]
+	[L*2] := a2b([L*])
+	===>
+	a2b([a, L*]) = [b, L*2]
+
+[default-one-by-one]
+	[L*2] := a2b([L*])
+	===>
+	a2b([L, L*]) = [L, L*2]
+
+equations
+
+[with-list-matching]
+	a2b([L*1, a, L*2]) = a2b([L*1, b, L*2])
+
+[default-with-list-matching]
+	a2b([L*]) = [L*]
+
+equations
+
+[without-function-application]
+	[L*1, a, L*2] = [L*1, b, L*2]
