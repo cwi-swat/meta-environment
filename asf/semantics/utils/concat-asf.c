@@ -66,7 +66,7 @@ main (int argc, char **argv)
     case 'o':  
       output = strdup(optarg);    
       break;
-    case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+    case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
       exit(0);
     default:
       usage();
