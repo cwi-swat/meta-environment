@@ -57,4 +57,6 @@ lex.yy.c : script.l y.tab.h
 
 idef2tif : idef2tif.src Makefile
 	sed 's#__PERL__#$(PERL)#g;s#__TOOLBUSBIN__#$(bindir)#g;' \
-	   < $< > $@
+	   < $< > $@ && \
+	chmod +x $@
+
