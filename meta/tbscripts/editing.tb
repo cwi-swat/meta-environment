@@ -122,11 +122,19 @@ let
   Modulename: str
 in
   rec-msg(te-menu-event(Sid, Action?))
-  . Args := []
-  . GetModulename(Sid, Modulename?)
-  . printf("Action: %t, EditorType: %t, Modulename: %s, Sid: %t\n",
-  Action, EditorType, Modulename, Sid)
-  . snd-msg(extra-button-action(Action, Args, EditorType, Modulename, Sid))
+  . snd-msg(em-request-transaction(Sid))
+  .
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . Args := []
+    . GetModulename(Sid, Modulename?)
+    . printf("Action: %t, EditorType: %t, Modulename: %s, Sid: %t\n",
+    Action, EditorType, Modulename, Sid)
+    . snd-msg(extra-button-action(Action, Args, EditorType, Modulename, Sid))
+    . snd-msg(em-end-transaction(Sid))
+  )
 endlet
 
 /*}}}  */
@@ -137,22 +145,31 @@ let
   Focus: term,
   Offset: int,
   Registered: bool,
-  Sortname: str
+  Sortname: str,
+  Tid: term
 in
   rec-msg(te-mouse-click-at-offset(Sid, Offset?))
-  . IsStructureEditorRegistered(Sid, Registered?)
+  . snd-msg(em-request-transaction(Sid))
   .
-  if equal(Registered, true)
-  then
-    snd-msg(se-set-cursor-at-offset(Sid, Offset))
-    . snd-msg(se-get-focus-at-cursor(Sid))
-    . rec-msg(se-focus-at-cursor(Sid, Focus?))
-    . snd-msg(se-get-sort-at-cursor(Sid))
-    . rec-msg(se-sort-at-cursor(Sid, Sortname?))
-    . snd-msg(te-set-focus(Sid, Focus, Sortname))
-  else
-    tau
-  fi
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true)
+    then
+      snd-msg(se-set-cursor-at-offset(Sid, Offset))
+      . snd-msg(se-get-focus-at-cursor(Sid))
+      . rec-msg(se-focus-at-cursor(Sid, Focus?))
+      . snd-msg(se-get-sort-at-cursor(Sid))
+      . rec-msg(se-sort-at-cursor(Sid, Sortname?))
+      . snd-msg(te-set-focus(Sid, Focus, Sortname))
+    else
+      tau
+    fi
+    . snd-msg(em-end-transaction(Sid))
+  )
 endlet
 
 /*}}}  */
@@ -163,17 +180,25 @@ let
   Registered: bool
 in
   rec-msg(te-contents-changed(Sid))
-  . IsStructureEditorRegistered(Sid, Registered?)
+  . snd-msg(em-request-transaction(Sid))
   .
-  if equal(Registered, true)
-  then
-    DeleteStructureEditor(Sid)
-    . snd-msg(te-clear-focus(Sid))
-    . snd-msg(te-display-message(Sid,
-      "Editor contents have changed, focus is unavailable until next parse."))
-  else
-    tau
-  fi
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true)
+    then
+      DeleteStructureEditor(Sid)
+      . snd-msg(te-clear-focus(Sid))
+      . snd-msg(te-display-message(Sid,
+	"Editor contents have changed, focus is unavailable until next parse."))
+    else
+      tau
+    fi
+    . snd-msg(em-end-transaction(Sid))
+  )
 endlet
 
 /*}}}  */
@@ -193,7 +218,6 @@ process EditorDisconnected(Sid: term) is
 
 process DeleteTextEditor(Sid: term) is
   snd-msg(te-kill-text-editor(Sid))
-  . printf("Deleting text editor: %t\n", Sid)
   . snd-msg(em-unregister-editor(Sid, text))
 
 /*}}}  */
@@ -201,7 +225,6 @@ process DeleteTextEditor(Sid: term) is
 
 process DeleteStructureEditor(Sid: term) is
   snd-msg(se-delete(Sid))
-  . printf("Deleting structure editor: %t\n", Sid)
   . snd-msg(em-unregister-editor(Sid, structure))
 
 /*}}}  */
@@ -325,9 +348,6 @@ in
     MouseClicked(Sid)
   +
     TextChanged(Sid)
-  +
-    rec-msg(replace-focus(Sid, Tree?))
-    . EditStructure(Sid, Tree)
   )
   *
   EditorDisconnected(Sid)
@@ -381,9 +401,6 @@ in
     MouseClicked(Sid)
   +
     TextChanged(Sid)
-  +
-    rec-msg(replace-focus(Sid, Tree?))
-    . EditStructure(Sid, Tree)
   )
   *
   EditorDisconnected(Sid)
@@ -459,9 +476,6 @@ in
       MouseClicked(Sid)
     +
       TextChanged(Sid)
-    +
-      rec-msg(replace-focus(Sid, Tree?))
-      . EditStructure(Sid, Tree)
     )
     *
     EditorDisconnected(Sid)

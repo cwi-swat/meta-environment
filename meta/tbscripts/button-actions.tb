@@ -628,7 +628,7 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
+          StackPopString(Stack, Stack?, ModuleName?) .
 	  snd-msg(edit-equations(ModuleName)) .
 	  ReturnSuccess(EditorId, Stack)
 	fi   
@@ -967,14 +967,27 @@ process UnParseTerm(Tree : term, Text : str?) is
   snd-msg(unparse(Tree)) .
   rec-msg(unparsed-text(Text?))
 
-process ParseTerm(EditorId: term, ModuleName: str) is
-  snd-msg(parse-focusses(EditorId, ModuleName, trm)) .
+process ParseTerm(Sid: term, ModuleName: str) is
+let
+  Id: int,
+  Nonterminal: term,
+  Table: term
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing term %s", [ModuleName])))
+  . GetParseTable(ModuleName, trm, false, Table?)
+  . snd-msg(other-top-sort-hook(trm))
+  . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+  . snd-msg(parse-editor(Sid, Table, Nonterminal))
+  .
   (
-    rec-msg(parse-ok(ModuleName)) .
-    snd-msg(te-clear-focus(EditorId))
+    rec-msg(parse-ok(Sid)) .
+    snd-msg(te-clear-focus(Sid))
   +
-    rec-msg(parse-failed(ModuleName))
+    rec-msg(parse-failed(Sid))
   )
+  . snd-note(ui-status(endstat(Id)))
+endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
 let
@@ -1000,29 +1013,38 @@ in
   Id := process-id . 
   snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
-  ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)
+  printf("ParseText: fixme\n")
+  /*ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)*/
 endlet
  
 process ParseSyntax(Sid: term, Type: term) is
 let
-  Tree : term,
-  Text : str,
+  Id: int,
+  Nonterminal: term,
+  Table: term,
+  Tree: term,
+  Text: str,
   Modulename: str, /* name of module whose syntax is to be parsed */
-  NewModules : list,
-  DependingModules : list,
-  ModuleId : str /* module to be parsed over */
+  NewModules: list,
+  DependingModules: list,
+  ModuleId: str /* module to be parsed over */
 in
-  printf("ParseSyntax(%t, %t)\n", Sid, Type) .
-  snd-msg(em-get-modulename(Sid))
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
+  . printf("ParseSyntax(%t, %t)\n", Sid, Type)
+  . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
+  . snd-msg(notify-about-changed-modules([Modulename], Type))
+  . rec-msg(notify-about-changed-modules-done)
+  . snd-msg(get-module-id-hook(Type))
+  . rec-msg(get-module-id-hook-result(ModuleId?))
+  . GetParseTable(ModuleId, sdf, true, Table?)
+  . snd-msg(syntax-top-sort-hook(sdf))
+  . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+  . snd-msg(parse-editor(Sid, Table, Nonterminal))
   .
-  snd-msg(notify-about-changed-modules([Modulename], Type)) .
-  rec-msg(notify-about-changed-modules-done) .
-  snd-msg(get-module-id-hook(Type)) .
-  rec-msg(get-module-id-hook-result(ModuleId?)) .
-  snd-msg(parse-focusses(Sid, ModuleId, Type)) .
   (
-    rec-msg(parse-ok(ModuleId)) .
+    rec-msg(parse-ok(Sid)) .
     snd-msg(se-get-parse-tree(Sid)) .
     rec-msg(se-parse-tree(Sid, Tree?)) .
     snd-msg(unparse(Tree)) .
@@ -1054,28 +1076,43 @@ in
 	errorf("Changing the name of %s is not permitted.",[Modulename])))
     )
   +
-    rec-msg(parse-failed(ModuleId)) .
+    rec-msg(parse-failed(Sid)) .
     snd-msg(invalidate-sdf-in-db(Modulename))
-  ) 
+  )
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
-process ParseEquations(Sid: term, ModuleName : str) is
+process ParseEquations(Sid: term, ModuleName: str) is
 let
-  Tree : term
+  Id: int,
+  Nonterminal: term,
+  Table: term,
+  Text: str,
+  Tree: term
 in
-  snd-msg(parse-focusses(Sid, ModuleName, eqs)) .
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing equations of %s", [ModuleName])))
+  . GetText(Sid, Text?)
+  . snd-msg(update-eqs-text-in-db(ModuleName, Text))
+  . rec-msg(eqs-text-updated(ModuleName))
+  . GetParseTable(ModuleName, eqs, true, Table?)
+  . snd-msg(get-rules-top-sort)
+  . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
+  . snd-msg(parse-editor(Sid, Table, Nonterminal))
+  .
   (
-    rec-msg(parse-ok(ModuleName)) .
-    snd-msg(se-get-parse-tree(Sid)) .
-    rec-msg(se-parse-tree(Sid, Tree?)) .
-    snd-msg(postprocess-semantics-hook(ModuleName, Tree)).
-    rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?)).
-    snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
-    rec-msg(eqs-updated) .
-    snd-msg(te-clear-focus(Sid))
+    rec-msg(parse-ok(Sid))
+    . snd-msg(se-get-parse-tree(Sid))
+    . rec-msg(se-parse-tree(Sid, Tree?))
+    . snd-msg(postprocess-semantics-hook(ModuleName, Tree))
+    . rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?))
+    . snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree)))
+    . rec-msg(eqs-updated)
+    . snd-msg(te-clear-focus(Sid))
   +
-    rec-msg(parse-failed(ModuleName))
+    rec-msg(parse-failed(Sid))
   )
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
 /*{{{  process ParseTermIfNecessary(Sid: term, Modulename: str) */

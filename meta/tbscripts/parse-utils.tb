@@ -1,71 +1,38 @@
 /* $Id$ */       
 
-process ObtainParseTable(ModuleName : str, Type : term, Checking : term, 
-                         Table : term?) is
+process ParseString(ModuleName: str, Type: term, 
+                    Checking: term, Nonterminal: str, Text: str,
+		    ParseResult: term?, Errors: list?) is
 let
-  TermType : term
-in
-  if equal(Type, sdf) then
-    snd-msg(open-language(sdf)) .
-    (
-      rec-msg(parse-table(TermType?, Table?))
-    +
-      rec-msg(no-parse-table) .
-      Table := no-table
-    )
-  else
-    snd-msg(obtain-parse-table-hook(Type, ModuleName, Checking)) .
-    rec-msg(obtain-parse-table-hook-result(Table?)) 
-  fi
-endlet
-
-process ParseString(ModuleName : str, Path : str, Type : term, 
-                    Checking : term, Nonterminal : str, Text : str,
-		    Tree : term?, ParseError : term?) is
-let
-  Id         : term,
-  ModuleId   : term,
-  Table      : term
+  Error: term,
+  Id: term,
+  ModuleId: term,
+  Table: term
 in
   Id := process-id .     
-  ObtainParseTable(ModuleName, Type, Checking, Table?) .
+  GetParseTable(ModuleName, Type, Checking, Table?) .
   if equal(Type, eqs) then
     ModuleId := quote(eqs(ModuleName))
   else
     ModuleId := quote(trm(ModuleName))
   fi .
   if equal(Table, no-table) then 
-    Tree := error-tree .
-    ParseError := no-parse-table
+    ParseResult := to-be-removed
+    . Errors := no-parse-table
+    . printf("ParseString: no-parse-table unhandled\n")
   else
-    snd-note(ui-status(statf(Id,"Parsing %s", [ModuleId]))).
-    snd-msg(Id, parse-string-given-table(ModuleId, Table, Nonterminal, Text, Path)).
-    rec-msg(parse-result-asfix2me(Id, Tree?, ParseError?)) .
-    snd-note(ui-status(endstat(Id)))
-  fi
-endlet
-
-process ProcessTree(ModuleName : str, EditorId : term, 
-		    Tree : term, ParseError : term) is
-let
-  FileName: str,
-  FunSym: str,
-  AnnotatedTree: term
-in
-  if not-equal(Tree, error-tree) then
-    snd-msg(em-get-filename(EditorId)) .
-    rec-msg(em-filename(EditorId, FileName?)) .
-    snd-msg(add-posinfo-packed(FileName, Tree)) .
-    rec-msg(tree-with-pos-info(AnnotatedTree?)) .
-    snd-msg(replace-focus(EditorId, AnnotatedTree)) .
-    FunSym := fun(ParseError) .
-    if equal(FunSym, "no-errors") then
-      snd-msg(parse-ok(ModuleName))
-    else
-      tau
-    fi
-  else
-    tau
+    snd-note(ui-status(statf(Id,"Parsing %s", [ModuleId])))
+    . Errors := []
+    . snd-msg(sglr-parse(Text, Table, Nonterminal))
+    .
+    (
+      rec-msg(sglr-parse-tree(ParseResult?))
+    +
+      rec-msg(sglr-parse-forest(ParseResult?, Errors?))
+    +
+      rec-msg(sglr-parse-error(Errors?))
+    )
+    . snd-note(ui-status(endstat(Id)))
   fi
 endlet
 
@@ -77,9 +44,22 @@ process ProcessParseError(ParseError: term) is
     snd-note(show-feedback-summary(ParseError)) 
   fi
 
-process HandleParseErrors(ModuleName: str, EditorId: term,
-			  ErrorSummary: term) is
-  if equal(fun(ErrorSummary), "no-errors") then
+process HandleParseError(Sid: term, Error: term) is
+let
+  Filename: str,
+  Result: term
+in
+  GetFilename(Sid, Filename?)
+  . snd-msg(es-add-filename-in-error(Filename, Error))
+  . rec-msg(es-filename-in-error(Filename, Result?))
+  . printf("HandleParseError:\n\tbefore: %t\n\tafter: %t\n", Error, Result)
+  . ShowError(Result)
+  . ProcessParseError(Result)
+endlet
+
+#if 0
+  printf("HandleParseError(%t, %t) to be handled\n", EditorId, Error)
+  if equal(Errors, []) then
     tau
   else
     /* For now, set the error message right here. Change when
@@ -89,8 +69,8 @@ process HandleParseErrors(ModuleName: str, EditorId: term,
     if equal(fun(ErrorSummary), "no-parse-table") then
       snd-msg(te-display-message(EditorId, "No parse table available"))
     else
-      printf("HandleParseErrors: ErrorSummary = %t\n\n", ErrorSummary) .
+      printf("HandleParseError: ErrorSummary = %t\n\n", ErrorSummary) .
       ShowSummary(ErrorSummary)
-    fi .
-    snd-msg(parse-failed(ModuleName))
+    fi
   fi
+#endif

@@ -50,11 +50,14 @@ in
       rec-msg(file-extension-hook-result(Extension?)) .
       snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
+      printf("ParseAllEquations: fixme\n")
+      /*
       ParseString(Module, FileName, eqs, false, Nonterminal, EqsText, 
                   ParseTree?, Error?) .
       ProcessParseError(Error) .
       ProcessEqsTree(Module, ParseTree) .
       ParseTree := no-tree
+      */
     +
       rec-msg(no-eqs-text(Module)) 
     )

@@ -222,23 +222,11 @@ in
     EqsTree := no-tree .
     snd-msg(eqs-updated)
   +
-    rec-msg(update-eqs-text-in-db(Name?, text(EqsText?))).
-    snd-msg(ts-get-str-value("asf-text", Name)) .
-    (
-      rec-msg(ts-value(LocalText?)) .
-      if not-equal(EqsText, LocalText) then
-        snd-msg(ts-remove-value("asf-tree", Name)) .
-        snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
-        snd-msg(eqs-text-updated(Name))
-      else 
-        snd-msg(no-updating-needed)
-      fi 
-    +
-      rec-msg(ts-no-value) .
-      snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
-      snd-msg(eqs-text-added(Name))
-    ) .
-    EqsText := ""
+    rec-msg(update-eqs-text-in-db(Name?, EqsText?))
+    . snd-msg(ts-remove-value("asf-tree", Name))
+    . snd-msg(ts-put-str-value("asf-text", Name, EqsText))
+    . snd-msg(eqs-text-updated(Name))
+    . EqsText := ""
   +
     rec-msg(add-parse-table-to-db(Name?, eqs, Table?)) .
     snd-msg(ts-put-term-value("asf-parse-table", Name, Table)) .

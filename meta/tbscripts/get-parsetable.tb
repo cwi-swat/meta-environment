@@ -1,58 +1,68 @@
-/*
-   $Id$
-   Get a parsetable for language X
-*/
+/* $Id$ */
 
-
-/* get the table from the database or create a new table */
-process GetParseTable is
-let
-  ModuleName : str, 
-  Type       : term, 
-  TableType  : term,
-  Checking   : term,
-  Table      : term,
-  Syntax     : term,
-  ErrorMsg   : str,
-  Id         : int
-in
-Id := process-id.
-( 
-  rec-msg(get-parsetable(ModuleName?, Type?, Checking?)) .
-  snd-msg(get-table-from-db(ModuleName, Type)) .
-  (
-    rec-msg(table(Table?)).
-    snd-msg(parse-table(Table))
-  +
-    rec-msg(no-table) .
-    snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleName]))).
-    snd-msg(get-all-syntax-definitions(ModuleName, Type)).
+process GetParseTable(ModuleName: str, Type: term, Checking: term, 
+                         Table: term?) is
+  if equal(Type, sdf) then
+    snd-msg(get-parse-table(sdf)) .
     (
-      rec-msg(syntax(Syntax?)).
-      snd-msg(preprocess-syntax-hook(ModuleName, Type, Checking, Syntax)).
-      rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?)).
-      snd-msg(generate-parsetable(Syntax, ModuleName)).
-      Syntax := no-tree .
+      rec-msg(parse-table(sdf, Table?))
+    +
+      rec-msg(no-parse-table) .
+      Table := no-table
+    )
+  else
+    snd-msg(obtain-parse-table-hook(Type, ModuleName, Checking)) .
+    rec-msg(obtain-parse-table-hook-result(Table?)) 
+  fi
+
+process BuildParseTable is
+let
+  ModuleName: str, 
+  Type: term, 
+  TableType: term,
+  Checking: term,
+  Table: term,
+  Syntax: term,
+  ErrorMsg: str,
+  Id: int
+in
+  Id := process-id.
+  ( 
+    rec-msg(get-parsetable(ModuleName?, Type?, Checking?)) .
+    snd-msg(get-table-from-db(ModuleName, Type)) .
+    (
+      rec-msg(table(Table?)).
+      snd-msg(parse-table(Table))
+    +
+      rec-msg(no-table) .
+      snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleName]))).
+      snd-msg(get-all-syntax-definitions(ModuleName, Type)).
       (
-        rec-msg(parsetable(Table?)).
-        snd-msg(add-parse-table-to-db(ModuleName, Type, Table)) .
-        rec-msg(parse-table-added).
-        snd-note(ui-status(endstat(Id))) .
-        snd-msg(parse-table(Table)) .
-        Table := no-table 
+	rec-msg(syntax(Syntax?)).
+	snd-msg(preprocess-syntax-hook(ModuleName, Type, Checking, Syntax)).
+	rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?)).
+	snd-msg(generate-parsetable(Syntax, ModuleName)).
+	Syntax := no-tree .
+	(
+	  rec-msg(parsetable(Table?)).
+	  snd-msg(add-parse-table-to-db(ModuleName, Type, Table)) .
+	  rec-msg(parse-table-added).
+	  snd-note(ui-status(endstat(Id))) .
+	  snd-msg(parse-table(Table)) .
+	  Table := no-table 
+	+
+	  rec-msg(no-parsetable).
+	  snd-note(ui-status(endstat(Id))) .
+	  snd-note(ui-status(error("Unexpected error in definition"))).
+	  snd-msg(no-parse-table(ModuleName))
+	)
       +
-        rec-msg(no-parsetable).
-        snd-note(ui-status(endstat(Id))) .
-        snd-note(ui-status(error("Unexpected error in definition"))).
+	rec-msg(no-syntax(ErrorMsg?)) .
+	snd-note(ui-status(endstat(Id))) .
+	snd-note(ui-status(errorf("%s",[ErrorMsg]))).
 	snd-msg(no-parse-table(ModuleName))
       )
-    +
-      rec-msg(no-syntax(ErrorMsg?)) .
-      snd-note(ui-status(endstat(Id))) .
-      snd-note(ui-status(errorf("%s",[ErrorMsg]))).
-      snd-msg(no-parse-table(ModuleName))
     )
   )
-) *
-delta
+  * delta
 endlet

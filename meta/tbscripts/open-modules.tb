@@ -162,7 +162,7 @@ in
         tau
       fi
     else
-      Handle-Open-Module-Errors(Module, Error)
+      HandleOpenModuleErrors(Module, Error)
     fi
   ).
   snd-note(ui-status(endstat(Id)))
@@ -171,11 +171,12 @@ endlet
 process Error(Message : str, MessageArgs : list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
   
-process Handle-Open-Module-Errors(Module : str, Error : term) is
+process HandleOpenModuleErrors(Module: str, Error: term) is
 let
-  FunSym       : str
+  FunSym: str
 in
   FunSym := fun(Error) .
+  printf("HandleOpenModuleErrors: %t\n", Error) .
   if not-equal(Error, no-errors) then
     if not-equal(FunSym, "summary") then
       if equal(Error, name-inconsistent) then
@@ -191,14 +192,14 @@ in
   fi
 endlet
 
-process Open-Syntax(Path : str, Module : str, Type : term, Error : term?,
-                    RealPath : str?, RealModule : str?, Imports : list?) is
+process Open-Syntax(Path: str, Module: str, Type: term, Error: term?,
+                    RealPath: str?, RealModule: str?, Imports: list?) is
 let
-  Tree : term,
-  Text : str,
-  Message : str,
-  FileName : str,
-  Extension : str
+  Tree: term,
+  Text: str,
+  Message: str,
+  FileName: str,
+  Extension: str
 in
   snd-msg(sm-is-valid-modulename(Module)) .
   ( 
@@ -210,7 +211,7 @@ in
     snd-msg(io-read-file(FileName)) .
     (
       rec-msg(io-file-contents(Text?)) .
-      Parse-Syntax(FileName, Text, Type, Tree?, Error?)
+      Parse-Syntax(Text, Type, Tree?, Error?)
     +
       rec-msg(io-error-reading(Message?)) .
       Error := no-such-file
@@ -220,6 +221,7 @@ in
       snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
       (
         rec-msg(adding-succeeded(Module, RealPath?, RealModule?, Imports?))
+	. Error := no-errors
       +
         rec-msg(error-opening(Module, Error?))
       )
@@ -232,25 +234,30 @@ in
   )
 endlet
 
-process Parse-Syntax(FileName : str, Text : str, Type : term, 
-                     Tree : term?, Error : term?) is
+process Parse-Syntax(Text: str, Type: term, ParseResult: term?, Error: term?) is
 let
-  Id : int,
-  TermType : term,
-  Sort : str,
-  Table : term
+  Sort: str,
+  ParseTable: term
 in
-  Id := process-id.
-  snd-msg(open-language(Type)) .
+  snd-msg(get-parse-table(Type))
+  .
   (
-    rec-msg(parse-table(TermType?, Table?)) .
-    snd-msg(syntax-top-sort-hook(Type)) .
-    rec-msg(syntax-top-sort-hook-result(sort(Sort?))) .
-    snd-msg(Id, parse-string-given-table(TermType, Table, Sort, Text, FileName)) .
-    rec-msg(parse-result-asfix2me(Id?, Tree?, Error?))
+    rec-msg(parse-table(Type, ParseTable?))
+    . snd-msg(syntax-top-sort-hook(Type))
+    . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
+    . snd-msg(sglr-parse(Text, ParseTable, Sort))
+    .
+    (
+      rec-msg(sglr-parse-tree(ParseResult?))
+    +
+      rec-msg(sglr-parse-ambiguous(ParseResult?, Error?))
+    +
+      rec-msg(sglr-parse-error(Error?))
+    )
   +
-    rec-msg(no-parse-table) .
-    Tree := no-tree
+    rec-msg(no-parse-table(Type, Error?))
+    . printf("Parse-Syntax: no parse table: %t\n", Error)
+    . ParseResult := no-tree
   )
 endlet
 

@@ -1,21 +1,24 @@
-/* 
-   $Id$
-*/
+/* $Id$ */
 
 process Open-Sdf2-Language is
 let 
-  Table : term,
-  Message : str
+  Error: str,
+  Table: term,
+  Type: term
 in
+  Type := sdf
+  .
   (
-    rec-msg(open-language(sdf)) .
-    snd-msg(io-read-term-file("__SDF2TABLE__")) .
+    rec-msg(get-parse-table(Type))
+    . snd-msg(io-read-term-file("__SDF2TABLE__"))
+    .
     (
-      rec-msg(io-file-contents(Table?)) .
-      snd-msg(parse-table(trm("Sdf2"), Table))
+      rec-msg(io-file-contents(Table?))
+      . snd-msg(parse-table(Type, Table))
     +
-      rec-msg(io-error-reading(Message?)) .
-      snd-msg(no-parse-table)
+      rec-msg(io-error-reading(Error?))
+      . snd-msg(no-parse-table(Type, Error))
     )
-  )*delta
+  )
+  * delta
 endlet
