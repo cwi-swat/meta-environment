@@ -66,14 +66,23 @@ public class BoxTree extends UserInterfacePanel {
         List children = Graph.getChildren(graph, node);
 
         if (children.size() == 0) {
-            return new NodeBox(getBridge(), node, true);
+        	if (Graph.getNodeShape(node).isEllipse()) {
+              return new NodeBox(getBridge(), node, true);
+        	}
+        	else {
+        		return null;
+        	}
         } else {
             NodeBox box = new NodeBox(getBridge(), node, false);
             Iterator iter = children.iterator();
 
             while (iter.hasNext()) {
                 Node child = (Node) iter.next();
-                box.add(buildHierarchy(graph, child));
+                JComponent tree = buildHierarchy(graph, child);
+                
+                if (tree != null) {
+                  box.add(tree);
+                }
             }
             return box;
         }
