@@ -60,7 +60,7 @@ OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= module-db genmakefile.sh
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	=
+LIBFILES	= module-db.idef
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	= module-db.h
 # Local includes
@@ -82,11 +82,11 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 %.tif.c: %.tifs
 	${prefix}/bin/tifstoc -tool $* $<
 
-%.tifs: %.tb
-	${prefix}/bin/toolbus -gentifs $<
+%.tifs: %.idef
+	${top_srcdir}/utils/idef2tif $<
 
-module-db: depend ${OBJ} ${LIBFILES}
-	$(CC) -o $@ $(OBJ) ${LIBFILES} $(LIBS)
+module-db: depend ${OBJ} 
+	$(CC) -o $@ $(OBJ) $(LIBS)
 
 %.o:    %.c     $(INCLUDEFILES)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
