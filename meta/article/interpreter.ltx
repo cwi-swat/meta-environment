@@ -1,0 +1,124 @@
+\section{Interpreter}
+\label{interpreter}
+
+The interpreter or evaluator takes care of rewriting terms given a set
+of equations.  The interpreter rewrite terms in \asfix\ format using
+equations in \asfix\ format. The interpreter was first specified in
+\asdf, and later this specification was used to make a C
+implementation.
+
+We will first discuss how the interpreter is activated and which steps
+are performed before a term is actually rewritten. Then we will
+discuss the implementation of the interpreter in more detail.
+Finally, we will discuss some related aspects, such as performance,
+improvements, etc.
+
+\subsection{Activating the Interpreter}
+
+The interpreter is activated in the same way as in the old \metaenv,
+each term editor is extended with a {\tt Reduce}-button.  When pushing
+this button it is first checked whether the interpreter has the
+appropriate set of rewrite rules available. If not, the equations are
+retrieved from the tree repository.  This is done by retrieving the
+transitive closure of the import graph from the import manager and
+sending this set of modules to the tree repository which then returns
+the set of equations.  Finally, the \asfix\ representation of the term
+is sent to the interpreter.
+
+When the interpreter receives a set of equations it performs some
+simple transformations to it, for instance, removal of unnecessary
+layout and lexicals are transformed into lists of characters.  The
+interpreter stores the ons in a hash table to have fast access to them
+during rewriting.
+
+The term to be rewritten is also slightly modified.  Unnecessary
+layout is removed as well as the transformation of the lexicals.
+After rewriting the result term is again modified, layout is inserted
+and the lists of characters are translated into lexicals.  This term
+is sent to the \TB\ to be display in an editor.
+
+The interpreter does not remove the equations after rewriting.  These
+equations are removed only when one of the modules in the
+specification is modified.
+
+\subsection{Implementation of the Interpreter}
+
+Before discussing the implementation of the interpreter we recall some
+of the characteristics of the \asdf-formalism, and more specific of
+\asf\ itself.  The \asf-formalism has the following characteristics:
+\begin{itemize}
+\item Many-sorted.
+\item Non left-linear.
+\item List matching.
+\item Positive and negative conditions.
+\item Default equations.
+\item Innermost rewriting.
+\end{itemize}
+So, the interpreter should support the innermost rewriting of
+many-sorted, non left-linear, conditional rewrite rules with both
+default rules and list matching.
+
+The main functionality of the interpreter consists of a rewriting
+machinery and a local repository to store equations.  This repository
+is organised as a table, the keys in this table are module names and
+the values are sets of equations corresponding to the transitive
+closure of the import graph of the corresponding module.  In the C
+implementation of the interpreter the set of equations are stored in a
+hash-table and the hash key is calculated using the outermost function
+symbol of the left hand side of an equation and the outermost function
+symbol (if any) of the first argument of the left hand side of the
+equation.  This improves the efficiency of the rewriting machine
+enormously, but it influences the semantics as well. In fact this
+implements a form of syntactic specificity, because when the
+interpreter is looking for an equation that matches with a aterm, it
+first looks for an equation that has the same outermost function
+symbol (ofs), {\em and} has the same ofs at the first argument
+position.  If no match can be found, the search is continued for an
+equation that has the same ofs as the term, but with a variable at the
+first argument position. This strategy means that equations with a
+variable at the first argument position are only applied when no other
+equation is applicable.  Finally, when this search also fails the
+interpreter looks for a default equation that matches with the term.
+
+The rewrite machine itself consists a collection of recursive
+functions which have as arguments a set of equations, the term to be
+rewritten, and an environment in which the instantiated variables are
+stored.
+
+Recursion is used to implement the backtracking behaviour of list
+matching in \asf.  The instantiation of list variables is done by
+assigning an ``arbitrary'' sublist to a list variable.  If this does
+not lead to a successful matching of all variables in the equation or
+one of the conditions can not be satisfied, another sublist should be
+tried.  This process is repeated until either a successful match is
+found, or all sublists are tried.
+
+\asdf\ allows the use of conditional equations.  The conditions maybe
+positive as well as negative.  This current implementation does not
+allow the introduction of new variables in a negative condition.
+Furthermore, it is not allowed to introduce new variables on both
+sides of a positive condition. If new variables are introduced on one
+side of a positive condition only the other side is rewritten which is
+then matched against the ``variable introducing side'' of the
+condition, leading to new variable bindings.
+
+\subsection{Discussion}
+
+There are a few open issues with respect to the interpreter.  First,
+the performance of the current version is reasonable.  If there is no
+list matching involved the interpreter performs 6000 rewrite steps per
+second, the interpreter in the old \metaenv\ performs 20.000 rewrite
+steps per second for the same specification and term. So, there is at
+least a factor 3 to be gained.
+
+Second, in the current version no or almost no preprocessing of the
+specification is performed.  A number of preprocessing steps could
+improve the performance considerably.  One obvious preprocessing step
+is the calculation of which side of a positive condition introduces
+new variables.  Another very effective preprocessing step is the
+transformation of some forms of list matching into non list matching,
+e.g., obtaining the head and tail of a list, etc.  This can be done
+because we know the internal data structure for lists in the
+interpreter.  The list transformations are also important when
+compiling \asdf\ specifications.
+

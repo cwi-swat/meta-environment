@@ -1,0 +1,106 @@
+\section{\upcase{\ui}}
+
+The \ui{} of the new \metaenv\ is built around the visual
+representation of the import graph of the \asdf\ specification which
+is loaded. The major advantage of having a visual representation of
+the import graph as \ui{} is the increased insight in the structure of
+the specification.  Furthermore, effective visualisation of this graph
+can reveal interesting characteristics of the specification (e.g.
+repeating patterns and unintended transitive import relations) while
+avoiding distractions and irrelevancy.
+
+\begin{figure}[htb]
+\centerline{\psfig{figure=newmeta.ps,width=\textwidth}}
+\caption{\label{nm} Browsing the import graph in the new \metaenv.}
+\end{figure}
+
+The user can select one or more modules in this graph and perform
+actions on them. Currently the following actions are supported:
+\begin{itemize}
+\item open the module editor for this module,
+\item open a term editor over this module,
+\item delete the module from the repositories,
+\item request additional information on the module, and
+\item revert the module in the repositories to the last version saved
+  to disk.
+\end{itemize}
+These actions can be selected in of a menu which pops up when the user
+presses the right mouse button over a module in the graph or using the
+module list and buttons on the right side of the screen. In addition
+to the actions described above, the user can:
+\begin{itemize}
+\item add a module to the specification loaded in the repositories,
+\item clear all repositories,
+\item revert all modules loaded in the repositories to the last
+  versions saved to disk, and
+\item save the import graph in various graphics formats.
+\end{itemize}
+Figure \ref{nm} contains a screendump of the user interface of the
+current prototype. From left to right one can clearly distinguish the
+visual representation of the import graph, the list of modules loaded
+and the buttons to perform actions on modules.
+ 
+\subsection{\tcldot}
+
+The user interface is implemented in \tcltk~\cite{Tcl/Tk}, extended
+with \tcldot~\cite{Ellson:1996:TR}. \tcldot{} is part of the
+\emph{graphvis} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a set
+of graph drawing tools for Unix or MS-Windows by AT\&T/Lucent
+Technologies.  It is a dynamically loaded extension for
+\texttt{tcl7.6} that incorporates the directed graph facilities of
+\dot~\cite{Gansner:1993:TDD,Koutsofios:1993:DGT} into \tcl{} and
+provides a set of commands to control those facilities.
+
+\tcldot{} initially adds two commands to \tcl{}, namely
+\texttt{dotnew} to create an empty \dot{} graph and \texttt{dotread}
+to read a \dot{} graph description from file.  These commands return a
+handle for the graph that has just been created and that handle can
+then be used as a command for further actions on the graph.
+
+All other "commands" are of the form: \mbox{\emph{handle} $<$method$>$
+  \emph{parameters}}. \linebreak Many of them return further handles
+of graphs, nodes of edges, which are themselves registered as
+commands.  To give an impression of the functionality provided by
+\tcldot{}, we list the methods that are available:
+\begin{description}
+\item[Graph methods:] addedge, addnode, addsubgraph, countedges,
+  countnodes, layout, listattributes, listedgeattributes,
+  listnodeattributes, listnodes, listsubgraphs, render, rendergd,
+  queryattributes, queryedgeattributes, querynodeattributes,
+  setattributes, setedgeattributes, setnodeattributes, showname,
+  write.
+\item[Node methods:] addedge, listattributes, listedges, listinedges,
+  listoutedges, queryattributes, setattributes, showname.
+\item[Edge methods:] delete, listattributes, listnodes,
+  queryattributes, setattributes, showname.
+\end{description}
+  
+\subsection{Future Work}
+
+Future work on the user interface includes a search mechanism on
+modules (in cooperation with the tree repository and the editor).
+Using this mechanism it should be possible for example to
+highlight/select all modules that use a given function or sort.
+
+Furthermore, the current version of \tcldot{} only supports static
+graphs.  This means that the layout of a graph is computed from
+scratch every time an update is performed (i.e.\ adding or removing a
+node or edge).  The result of this computation can be completely
+different from the original graph. This is not desirable for \ui{}s
+since it can be confusing and the user needs to familiarise himself
+with a new structure. A new version of \tcldot{}, called \tcldg{},
+supports so called \emph{dynamic
+  graphs}~\cite{North:1996:ILD,Ellson:1997:TTE}.  The layout of these
+graphs changes incrementally when updates are performed resulting in
+more gradual changes in the structure of the graph. As soon as the
+\tcldg{} package is released (scheduled for summer 1997), it should be
+incorporated in the \ui.
+
+Finally, it might be convenient if the user can edit the layout of the
+import graph to improve its logical structure. These edit operations
+should cooperate in some way with the layout mechanism so that changes
+of the user aren't undone by layouting the graph. An example of a more
+rigorous editing operation is the ability to define subgraphs in the
+import graph which can be collapsed into a single node. Such a feature
+could be useful to improve the readability of big import graphs.
+

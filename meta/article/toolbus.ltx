@@ -1,5 +1,43 @@
+\section{General Architecture}
 
-\subsection{The ToolBus}
+The architecture of the new \metaenv\ is depicted in
+Figure~\ref{picarch}.  In fact this figure does not depict the current
+state of the prototype or the future architecture of the system.
+There are a number of components enlisted which are not yet integrated
+in the prototype, see Table~\ref{components} for a more detailed list
+of integrated components.  It is not the future architecture because
+important components like unparsers and debuggers are missing.
+
+\input{newarch}
+\begin{figure}[tb]
+\centerline{\box\graph}
+\caption{\label{picarch} General architecture of new \metaenv.}
+\end{figure}
+
+Table~\ref{components} gives an overview of all currently available
+components in the prototype. For each component it is listed whether
+this components is specified and in which language it is implemented.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|l|} \hline
+Activity            & Specification & Implementation  \\
+                    & Language      & Language        \\ \hline \hline
+\aterms             & \asdf         & C, JAVA         \\
+\asfix              & \asdf         & C, JAVA         \\
+\TB                 & \asdf         & C               \\
+Structure editor    & \asdf         & JAVA            \\
+Text editor         &               & \tcltk{}        \\
+Interpreter         & \asdf         & C               \\
+Tree repository     & \asdf         & C               \\
+Import manager      & \asdf         & C               \\
+\upcase{\ui}        &               & \tcltk{}, \tcldot{}     \\ \hline
+\end{tabular}
+\end{center}
+\caption{\label{components} Components of the new \metaenv\ which are finished.}
+\end{table}
+
+\subsection{Implementation}
 \label{toolbus}
 
 %{{{ Intro
@@ -94,4 +132,18 @@ heterogeneous environments\cite{COORD97.tide}
 cover both dimension {\tt 1} and {\tt 2}. 
 More research is needed to also use this technology to cover dimension {\tt 3}.
 
+\subsection{Discussion}
+
+There is a huge bulk of future work to be done.  First of all, the
+parser and parser generator \cite{Vis97.SGLRP} has to be integrated in
+the new \metaenv.  Second, the unparser and unparser generator
+\cite{BV96} has to be integrated as well as the To\LaTeX\ facilities
+\cite{Vis95.tolatex}. This should be done on top of the {\sc Box}
+language.  Third, the \metaenv\ should provided facilities to compile
+specifications in order to generate stand-alone environments.  Fourth,
+a debugging facility for debugging specifications should be provided
+as well.  Finally, the new \metaenv\ should provide sophisticated help
+facilities and demonstration modes based on internet facilities.
+
+Origin tracking added.
 

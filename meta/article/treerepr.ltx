@@ -1,0 +1,37 @@
+\section{Tree Representation}
+
+In the current version of the \metaenv\ the abstract syntax trees are
+represented by means of VTP (Virtual Tree Processing formalism)
+offered by \centaur.  There are two problems connected to VTP: it is
+hard to learn programming in VTP and VTP does not offer enough
+facilities to prevent illegal access to constructed trees. This latter
+drawback causes a number of the maintenance problems in the \metaenv.
+
+These ``VTP-problems'' led to the development of an alternative
+formalism to represent syntax trees: \asfix.  This \asfix\ formalism
+is an instantiation of a generic {\em annotated term} format:
+\aterms~\cite{BKOV97}.  
+
+\aterms\ will be used to represent structured information to be
+exchanged between a heterogeneous collection of tools.  The AATerm
+format should be independent of any specific tool, but it should be
+capable of representing {\em all} data that is exchanged between
+tools.  Consider the following example \aterms:
+\begin{tabbing}
+annotation\ \ \ \ \= f(123)\{\=xxxx\kill
+constant\>abc\\
+numeral\>123\\
+literal\>"abc" "123"\\
+list\>[] [1, "abc", 3] [1, 2, [3,4], 5]\\
+functions\>f("abc")\\
+annotation\>f(123)\{color("red"),path([0,2,1])\}
+\end{tabbing}
+
+These \aterms\ are sufficient to encode parse trees (including
+optional annotations) for programs or specifications in any language.
+\asfix\ is an instance of \aterms\ used for representing the {\em
+  parse trees} of \asdf\ specifications.  Parse trees mean that all
+keywords, whitespace, comments, etc.\ are preserved in the tree
+representation.  A self descriptive representation is used, i.e., each
+application of a syntax rule contains a copy of that rule (in the
+implementation these are all shared).

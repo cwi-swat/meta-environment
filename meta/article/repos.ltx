@@ -1,0 +1,43 @@
+\section{Repositories}
+
+There are several repositories in the current prototype of the
+\metaenv.  The new \metaenv\ provides facilities to store (abstract)
+syntax trees in \asfix-format a repository.  The import relation is
+stored in a separate repository.  Finally, the interpreter has its own
+repository to store the equations which are used to rewrite terms.
+All repository were first specified in \asdf\ but for efficiency
+reasons implemented in C.
+
+The ``tree-repository'' contains the \asfix\ representation of all
+modules of a specification under construction and of all terms being
+edited or rewritten.  The tree-repository provides facilities to add a
+new module or term, to remove a module or term, and to clear its
+entire repository.  It is possible to check whether a module or term
+is already in the repository.  Furthermore, given the name of a module
+it is possible to retrieve a specific section of a module, its import
+section, its equations, etc.  The tree-repository is implemented as a
+table with the module name and term name as key and the \asfix\ 
+representation as value.
+
+The ``import-repository'' or ``import-manager'' provides all
+information concerning the import relations of an \asdf\ 
+specification.  It contains of all modules of a specification in the
+tree-repository the import sections.  The import-repository provides
+facilities to add the import section of a new module, to remove the
+import section of a given module, and to clear its entire repository.
+Of course it is possible to retrieve the imports for a given module
+name.  It is also possible to calculate given a list of module names
+which modules are not yet in ``store''.  Finally, a number of
+operations are provided to retrieve the transitive closure of the
+import relation for a given module.  The import-repository stores this
+calculated closure in a separate database.
+ 
+The ``equations-repository'' of the interpreter will be discussed in
+Section \ref{interpreter}. In fact, there are facilities to retrieve
+any information from this repository for other tools than the
+interpreter itself.
+
+\subsection{Discussion}
+
+The tree-repository should provided a sophisticated querying mechanism
+as described in \cite{BKV96b}.
