@@ -1,5 +1,9 @@
 $Id$
 
+2002/05/15 (vandenbr@loria.fr)
+ * Added an alternative to deal with input which are terms:
+   cmd(Cmd, input-term(Inp))
+
 2002/05/01 (jong@cwi.nl)
  * start 0.24beta
  * fix postpone init_monitoring() until WellKnownSocket has been established.
