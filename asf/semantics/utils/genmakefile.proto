@@ -166,7 +166,7 @@ debug:	${DEBUG_TARGET}
 
 profile prof: ${PROFILE_TARGET}
 
-init.c: $(SPEC_SRCS)
+init.c: $(SPEC_SRCS) $(srcdir)/${TARGET}.module-list
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\
 	SPEC_SRCS="$(SPEC_SRCS)" ;\
 	for file in $$SPEC_SRCS; do \
