@@ -14,6 +14,6 @@ configuration interface
   java 'include java support  (java-adapter)'
 
 requires
-   aterm	2.0.1
-   aterm-java   1.2beta
-   toolbuslib	0.4
+   aterm	2.0.2
+   aterm-java   1.3beta
+   toolbuslib	0.5beta
