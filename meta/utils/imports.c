@@ -106,7 +106,6 @@ static char* basename( const char* s )
 { 
    static char buffer[_POSIX_PATH_MAX];
    char* ptr;
-ATwarning("s: %s\n", s);
    
    /* short listing: remove directory and extension from file name */
    strcpy( buffer, s );
@@ -116,7 +115,6 @@ ATwarning("s: %s\n", s);
    ptr = strrchr( buffer, '.' );
    if( ptr != NULL )
       *ptr = '\0';
-ATwarning("bufs: %s\n", buffer);
    return buffer;
 }
 
@@ -185,7 +183,6 @@ int main( int argc, char* argv[] )
 
    /* Obtain list of imported modules */
    imports = getImports( argv[optind], argv[optind + 1], options );
-ATwarning("%l\n",imports);
    if( imports == NULL )
       return 1;
 
