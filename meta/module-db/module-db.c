@@ -824,7 +824,7 @@ ATerm get_parse_table(int cid, ATerm moduleId)
     
   modname = ATmake("<str>", moduleName);
   entry = MDB_EntryFromTerm(GetValue(modules_db, modname));
-  if (MDB_isValidEntry(entry)) {
+  if (entry && MDB_isValidEntry(entry)) {
     if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
       table = MDB_getEntryAsfTable(entry);
     }
