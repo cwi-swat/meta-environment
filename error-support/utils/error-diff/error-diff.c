@@ -44,10 +44,17 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2)
     ERR_Location location1 = ERR_getSubjectLocation(subject1);
     ERR_Location location2 = ERR_getSubjectLocation(subject2);
 
-    ERR_Area area1 = ERR_getLocationArea(location1);
-    ERR_Area area2 = ERR_getLocationArea(location2);
+    if (ERR_isLocationArea(location1) &&
+	ERR_isLocationArea(location2)) {
+      ERR_Area area1 = ERR_getLocationArea(location1);
+      ERR_Area area2 = ERR_getLocationArea(location2);
 
-    return ERR_isEqualArea(area1, area2);
+      return ERR_isEqualArea(area1, area2);
+    }
+    else if (ERR_isLocationFile(location1) &&
+	     ERR_isLocationFile(location2)) {
+      return ERR_isEqualLocation(location1, location2);
+    }
   }
   return ATfalse;
 }
