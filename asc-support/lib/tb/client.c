@@ -13,7 +13,7 @@ ATerm rewrite(int cid, ATerm trm)
     PT_Tree tree = PT_getParseTreeTree((PT_ParseTree) ATBunpack(trm));
     ATerm reduct = innermost(tree);
     PT_ParseTree asfix = toasfix(reduct);
-    return ATmake("snd-value(normalform(<term>))", (ATerm) asfix);
+    return ATmake("snd-value(normalform(<term>))", ATBpack((ATerm)asfix));
 }
 
 ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
@@ -24,7 +24,10 @@ ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
     ptargs = PT_makeArgsList(arg, ptargs);
   }
 
-  return rewrite(cid, PT_ParseTreeToTerm(
- PT_applyFunctionToArgsParseTree(function,sort, PT_reverseArgs(ptargs))));
+  return rewrite(cid, 
+		 PT_ParseTreeToTerm(
+                   PT_applyFunctionToArgsParseTree(function,
+						   sort, 
+						   PT_reverseArgs(ptargs))));
 }
 
