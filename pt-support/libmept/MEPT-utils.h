@@ -36,7 +36,9 @@ PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 PT_Args PT_sliceArgs(PT_Args args, int start, int end);
 
 char *PT_yieldParseTree(PT_ParseTree tree);
+char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs);
 char *PT_yieldTree(PT_Tree tree);
+char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs);                 
 char *PT_yieldArgs(PT_Args tree);
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);

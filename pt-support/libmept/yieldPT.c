@@ -28,37 +28,65 @@
 
 #include "MEPT-utils.h"
 
-static int lengthOfArgs(PT_Args args);
+#define AMB_CLUSTER_START "\n<<<<<<<<<<\n"
+#define AMB_CLUSTER_SEP   "\n==========\n"
+#define AMB_CLUSTER_END   "\n>>>>>>>>>>\n"
+
+/*{{{  local function declarations */
+
+static int lengthOfArgs(PT_Args args, ATbool visualAmbs);
+static int yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
+			      char *buf, int bufSize);
+static int yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
+			      char *buf, int bufSize);
+
+
+/*}}}  */
+
+/*{{{  lengthOfTree(PT_Tree tree, ATbool visualAmbs) */
 
 static int
-lengthOfTree(PT_Tree tree)
+lengthOfTree(PT_Tree tree, ATbool visualAmbs)
 {
+  int length = 0;
+
   if (PT_isTreeChar(tree)) {
-    return 1;
+    length = 1;
   }
-
-  if (PT_isTreeAppl(tree)) {
+  else if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
-    return lengthOfArgs(args);
+    length = lengthOfArgs(args, visualAmbs);
   }
-
-  if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
+  else if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
     char *str = PT_getTreeString(tree);
-    return strlen(str);
+    length = strlen(str);
+  }
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+
+    if (visualAmbs) {
+      length += strlen(AMB_CLUSTER_START);
+      length += ((PT_getArgsLength(args) - 1) * strlen(AMB_CLUSTER_SEP));
+      length += strlen(AMB_CLUSTER_END);
+      length += lengthOfArgs(args,visualAmbs);
+    }
+    else {
+      PT_Tree firstChild = PT_getArgsHead(args);
+      length = lengthOfTree(firstChild, visualAmbs);
+    }
+  }
+  else { 
+    ATerror("lengthOfTree: unknown term %t\n", tree);
   }
 
-  if (PT_isTreeAmb(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-    PT_Tree anyChild = PT_getArgsHead(args);
-    return lengthOfTree(anyChild);
-  }
-  
-  ATerror("lengthOfTree: unknown term %t\n", tree);
-  return 0;
+  return length;
 }
 
+/*}}}  */
+/*{{{  lengthOfArgs(PT_Args args, ATbool visualAmbs) */
+
 static int
-lengthOfArgs(PT_Args args)
+lengthOfArgs(PT_Args args, ATbool visualAmbs)
 {
   int length = 0;
 
@@ -70,16 +98,17 @@ lengthOfArgs(PT_Args args)
     PT_Tree tree = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
 
-    length = length + lengthOfTree(tree);
+    length = length + lengthOfTree(tree, visualAmbs);
   }
 
   return length;
 }
 
-static int yieldArgsRecursive(PT_Args args, int idx, char *buf, int bufSize);
+/*}}}  */
+/*{{{  yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufSize) */
 
 static int
-yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
+yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufSize)
 {
   assert(idx <= bufSize);
 
@@ -88,7 +117,7 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
-    idx = yieldArgsRecursive(args, idx, buf, bufSize);
+    idx = yieldArgsRecursive(args, visualAmbs, idx, buf, bufSize);
   }
   else if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
     int i, len;
@@ -101,8 +130,18 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
   }
   else if (PT_isTreeAmb(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
-    PT_Tree anyTree = PT_getArgsHead(args);
-    idx = yieldTreeRecursive(anyTree,idx,buf,bufSize);
+
+    if (visualAmbs) {
+      strcpy(buf+idx,AMB_CLUSTER_START);
+      idx += strlen(AMB_CLUSTER_START);
+      idx = yieldAmbsRecursive(args,visualAmbs,idx,buf,bufSize);
+      strcpy(buf+idx,AMB_CLUSTER_END);
+      idx += strlen(AMB_CLUSTER_END);
+    }
+    else {
+      PT_Tree firstTree = PT_getArgsHead(args);
+      idx = yieldTreeRecursive(firstTree, visualAmbs, idx,buf,bufSize);
+    }
   }
   else {
     ATerror("yieldTreeRecursive: unknown term %t\n", tree);
@@ -111,40 +150,47 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
   return idx;
 }
 
+/*}}}  */
+/*{{{  yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf,  */
+
 static int
-yieldArgsRecursive(PT_Args args, int idx, char *buf, int bufSize)
+yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf, 
+		   int bufSize)
 {
   while (PT_hasArgsHead(args)) {
     PT_Tree tree = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
    
-    idx = yieldTreeRecursive(tree, idx, buf, bufSize);
+    idx = yieldTreeRecursive(tree, visualAmbs, idx, buf, bufSize);
   }
 
   return idx;
 }
 
-char *PT_yieldTree(PT_Tree tree)
+/*}}}  */
+/*{{{  yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf,  */
+
+static int yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
+			      char *buf, int bufSize)
 {
-  static char *buffer = NULL;
-  static int   bufferSize = 0;
-  int          idx = 0;
-  int          len;
+  while (PT_hasArgsHead(args)) {
+    PT_Tree tree = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+   
+    idx = yieldTreeRecursive(tree, visualAmbs, idx, buf, bufSize);
 
-  len = lengthOfTree(tree)+1;
-
-  if (len > bufferSize) {
-    buffer = (char *)realloc(buffer, len*sizeof(char));
-    bufferSize = len;
+    if (PT_hasArgsHead(args)) {
+      strcpy(buf+idx,AMB_CLUSTER_SEP);
+      idx += strlen(AMB_CLUSTER_SEP);
+    }
   }
 
-  idx = yieldTreeRecursive(tree, 0, buffer, len);
-
-  buffer[idx++] = '\0';
-  assert(idx == len);
-
-  return buffer;
+  return idx;
 }
+
+/*}}}  */
+
+/*{{{  char *PT_yieldArgs(PT_Args args) */
 
 char *PT_yieldArgs(PT_Args args)
 {
@@ -154,12 +200,59 @@ char *PT_yieldArgs(PT_Args args)
                PT_makeSymbolSort("")), args));  
 }
 
+/*}}}  */
+/*{{{  char *PT_yieldTree(PT_Tree tree)  */
+
+char *PT_yieldTree(PT_Tree tree) 
+{
+  return PT_yieldTreeVisualAmbs(tree, ATfalse);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldParseTree(PT_ParseTree tree) */
+
 char *PT_yieldParseTree(PT_ParseTree tree)
 {
-  if (PT_isParseTreeTree(tree)) {
-    return PT_yieldTree(PT_getParseTreeTop(tree));
+  return PT_yieldParseTreeVisualAmbs(tree,ATfalse);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs) */
+
+char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs)
+{
+  static char *buffer = NULL;
+  static int   bufferSize = 0;
+  int          idx = 0;
+  int          len;
+
+  len = lengthOfTree(tree, visualAmbs)+1;
+
+  if (len > bufferSize) {
+    buffer = (char *)realloc(buffer, len*sizeof(char));
+    bufferSize = len;
   }
 
-  ATerror("PT_yieldParseTree: not a parsetree: %t\n", tree);
+  idx = yieldTreeRecursive(tree, visualAmbs, 0, buffer, len);
+
+  buffer[idx++] = '\0';
+  assert(idx == len);
+
+  return buffer;
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs) */
+
+char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs)
+{
+  if (PT_isParseTreeTree(tree)) {
+    return PT_yieldTreeVisualAmbs(PT_getParseTreeTop(tree), visualAmbs);
+  }
+
+  ATerror("PT_yieldParseTreeWithVisualAmbs: not a parsetree: %t\n", tree);
   return NULL;
 }
+
+/*}}}  */
+
