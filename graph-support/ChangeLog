@@ -1,5 +1,11 @@
 $Id$
 
+2003/04/02 (jurgenv@cwi.nl)
+ * Extended dot parser with the ability to deal with direction attributes
+   on edges
+ * This means also extending the parser to deal with 4 curve points instead
+   of 5 curve points and the corresponding dot way of encoding this information
+   in a string.
 
 2003/03/31 (jurgenv@cwi.nl)
  * Renamed dot-adapter to layoutgraph
