@@ -1,5 +1,8 @@
 $Id$
 
+2001/08/28 (jong@cwi.nl)
+ * unused static function outcommented to satisfy gcc-3.0.1
+
 2001/08/20 (markvdb@cwi.nl)
  * Added an option (-A) to treat an ambiguity as an error.
  * Removed option (-P) for adding position information.

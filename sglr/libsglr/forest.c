@@ -972,6 +972,9 @@ static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return max;
 }
 
+#if 0
+/*{{{  static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1) */
+
 static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 {
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
@@ -998,6 +1001,9 @@ static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 
   return NULL;
 }
+
+/*}}}  */
+#endif
 
 static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 {
