@@ -30,6 +30,7 @@ let
   TE        : text-editor,
   Path      : term,
   Sort      : term,
+  Dirty     : int,
   Fid       : str,
   Count     : int,
   Text      : str,
@@ -39,7 +40,8 @@ let
   Direction : str,
   StartPos  : int,
   Length    : int,
-  FocusText : str
+  FocusText : str,
+  Focus     : term
 in
 (
   execute(text-editor, TE?) .
@@ -64,14 +66,14 @@ in
   snd-do(TE, tb-add-menu-item("Move", "Down")) .
   (
     rec-msg(set-focus(EditorId,
-      focus(Path?, sort(SortName?), area(start(StartPos?), length(Length?))))) .
+      focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
     snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
   +
     rec-msg(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +
     rec-msg(get-focus-text(EditorId,
-      focus(Path?, Sort?, area(start(StartPos?),length(Length?))))) .
+      focus(Path?, Sort?, area(StartPos?,Length?),Dirty?))) .
     snd-eval(TE, tb-get-focus-text(Fid, StartPos, Length)) .
     rec-value(TE, focus-text(Fid, FocusText?)) .
     snd-msg(focus-text(EditorId, FocusText))
@@ -119,6 +121,18 @@ in
   +
     rec-msg(delete-text-editor(EditorId)) .
     snd-terminate(TE, "You have been killed!")
-  )
+  ) .
+  (
+    rec-msg(set-focus(EditorId, Focus?))
+  +
+    rec-msg(clear-focus(EditorId))
+  +
+    rec-msg(get-focus-text(EditorId, Focus?)) .
+    snd-msg(focus-text(EditorId, ""))
+  +
+    rec-msg(move-editor-to-front(EditorId))
+  +
+    rec-msg(display-error(EditorId, StartPos?))
+  ) * delta
 )
 endlet
