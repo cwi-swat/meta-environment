@@ -1,5 +1,7 @@
 SUBDIRS			= utils libME
 
+EXTRA_DIST=$(wildcard *.pkg)
+
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
