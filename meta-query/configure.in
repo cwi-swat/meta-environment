@@ -32,6 +32,17 @@ if test ${SOCKET_FOUND} = no; then
   fi
 fi
 
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
@@ -47,10 +58,39 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
-dnl Require sdf-support package
+dnl {{{  Require pt-support package
+
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+dnl }}}
+dnl {{{  Require sdf-support package
+
 AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
    [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
+
+dnl }}}
+dnl {{{  Require asf-support package
+
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
+AC_SUBST(ASF_SUPPORT)
+
+dnl }}}
+dnl {{{  Require asc-support package
+
+AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
+   [  --with-asc-support=DIR  asc-support is in DIR])
+AC_SUBST(ASC_SUPPORT)
+
+ASCINC=${ASC_SUPPORT}/include
+AC_SUBST(ASCINC)
+ASCLIB=${ASC_SUPPORT}/lib
+AC_SUBST(ASCLIB)
+
+dnl }}}
 
 dnl Require sglr package
 AC_PACKAGE_REQUIRE(sglr, sglr,
@@ -62,25 +102,17 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
    [  --with-pgen=DIR         pgen is in DIR])
 AC_SUBST(PGEN)
 
-dnl then gethostname
-GHN_FOUND=no
-AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
-if test ${GHN_FOUND} = no; then
-  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
-fi
-
-AC_SUBST(SOCKLIBS)
-
-LIBS=$NOSOCKLIBS
+dnl Require pgen package
+AC_PACKAGE_REQUIRE(asf, asfc,
+   [  --with-asf=DIR          Asf is in DIR])
+AC_SUBST(ASF)
 
 dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
 
 AC_OUTPUT(
   Makefile
-  src/Makefile
-  src/c/Makefile
-  src/c/terms/Makefile
-  src/spec/Makefile
+  relations/Makefile
+  relations/src/Makefile
   utils/Makefile
 )

@@ -1,1 +1,1 @@
-SUBDIRS = src utils
+SUBDIRS = relations utils

@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Jun 19 11:41:55 CEST 2003 <{jong,markvdb}@cwi.nl>
+ * add relations subdir: contains compiled DisplayQuery specification
+
 Fri May 23 09:33:28 CEST 2003 <jong@cwi.nl>
  * add utils directory: meta-query-config support
 

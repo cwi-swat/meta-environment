@@ -7,3 +7,4 @@ config
 config.log
 config.status
 meta-query*.tar.gz
+config.h.in
