@@ -204,6 +204,18 @@ void TBunprotect(term **);
 void add_free_list(term_list *);
 void TBcollect();
 
+#ifdef True
+#undef True
+#endif
+
+#ifdef False
+#undef False
+#endif
+
+#ifdef Bool
+#undef Bool
+#endif
+
 extern term *True;
 extern term *False;
 extern term *Bool;
