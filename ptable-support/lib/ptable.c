@@ -6,6 +6,7 @@
 
 /*{{{  typedefs */
 
+typedef struct ATerm _PTA_Version;
 typedef struct ATerm _PTA_ParseTable;
 typedef struct ATerm _PTA_Labels;
 typedef struct ATerm _PTA_Label;
@@ -34,6 +35,22 @@ void PTA_initPtableApi(void)
 
 /*{{{  term conversion functions */
 
+/*{{{  PTA_Version PTA_VersionFromTerm(ATerm t) */
+
+PTA_Version PTA_VersionFromTerm(ATerm t)
+{
+  return (PTA_Version)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PTA_VersionToTerm(PTA_Version arg) */
+
+ATerm PTA_VersionToTerm(PTA_Version arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  PTA_ParseTable PTA_ParseTableFromTerm(ATerm t) */
 
 PTA_ParseTable PTA_ParseTableFromTerm(ATerm t)
@@ -262,9 +279,17 @@ ATerm PTA_PriorityToTerm(PTA_Priority arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  PTA_ParseTable PTA_makeParseTableParseTable(ATerm version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities) */
+/*{{{  PTA_Version PTA_makeVersionDefault() */
 
-PTA_ParseTable PTA_makeParseTableParseTable(ATerm version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities)
+PTA_Version PTA_makeVersionDefault()
+{
+  return (PTA_Version)(ATerm)ATmakeInt(4);
+}
+
+/*}}}  */
+/*{{{  PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities) */
+
+PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities)
 {
   return (PTA_ParseTable)(ATerm)ATmakeAppl5(PTA_afun0, (ATerm)version, (ATerm)initialState, (ATerm)labels, (ATerm)ATmakeAppl1(PTA_afun1, (ATerm)states), (ATerm)ATmakeAppl1(PTA_afun2, (ATerm)priorities));
 }
@@ -482,6 +507,11 @@ PTA_Priority PTA_makePriorityGreater(int label1, int label2)
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool PTA_isEqualVersion(PTA_Version arg0, PTA_Version arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
 ATbool PTA_isEqualParseTable(PTA_ParseTable arg0, PTA_ParseTable arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
@@ -553,6 +583,33 @@ ATbool PTA_isEqualPriority(PTA_Priority arg0, PTA_Priority arg1)
 }
 
 /*}}}  */
+/*{{{  PTA_Version accessors */
+
+/*{{{  ATbool PTA_isValidVersion(PTA_Version arg) */
+
+ATbool PTA_isValidVersion(PTA_Version arg)
+{
+  if (PTA_isVersionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isVersionDefault(PTA_Version arg) */
+
+inline ATbool PTA_isVersionDefault(PTA_Version arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternVersionDefault));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  PTA_ParseTable accessors */
 
 /*{{{  ATbool PTA_isValidParseTable(PTA_ParseTable arg) */
@@ -589,18 +646,18 @@ ATbool PTA_hasParseTableVersion(PTA_ParseTable arg)
 }
 
 /*}}}  */
-/*{{{  ATerm PTA_getParseTableVersion(PTA_ParseTable arg) */
+/*{{{  PTA_Version PTA_getParseTableVersion(PTA_ParseTable arg) */
 
-ATerm PTA_getParseTableVersion(PTA_ParseTable arg)
+PTA_Version PTA_getParseTableVersion(PTA_ParseTable arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 0);
+    return (PTA_Version)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, ATerm version) */
+/*{{{  PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, PTA_Version version) */
 
-PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, ATerm version)
+PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, PTA_Version version)
 {
   if (PTA_isParseTableParseTable(arg)) {
     return (PTA_ParseTable)ATsetArgument((ATermAppl)arg, (ATerm)version, 0);
@@ -2314,9 +2371,21 @@ PTA_Priority PTA_setPriorityLabel2(PTA_Priority arg, int label2)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, ATerm (*acceptVersion)(ATerm), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities)) */
+/*{{{  PTA_Version PTA_visitVersion(PTA_Version arg) */
 
-PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, ATerm (*acceptVersion)(ATerm), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities))
+PTA_Version PTA_visitVersion(PTA_Version arg)
+{
+  if (PTA_isVersionDefault(arg)) {
+    return PTA_makeVersionDefault();
+  }
+  ATabort("not a Version: %t\n", arg);
+  return (PTA_Version)NULL;
+}
+
+/*}}}  */
+/*{{{  PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities)) */
+
+PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities))
 {
   if (PTA_isParseTableParseTable(arg)) {
     return PTA_makeParseTableParseTable(

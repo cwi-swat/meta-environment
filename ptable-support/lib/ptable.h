@@ -18,6 +18,7 @@ typedef PT_CharRanges PTA_CharRanges;
 /*}}}  */
 /*{{{  typedefs */
 
+typedef struct _PTA_Version *PTA_Version;
 typedef struct _PTA_ParseTable *PTA_ParseTable;
 typedef struct _PTA_Labels *PTA_Labels;
 typedef struct _PTA_Label *PTA_Label;
@@ -39,6 +40,10 @@ void PTA_initPtableApi(void);
 
 /*{{{  term conversion functions */
 
+#define PTA_makeVersionFromTerm(t) (PTA_VersionFromTerm(t))
+PTA_Version PTA_VersionFromTerm(ATerm t);
+#define PTA_makeTermFromVersion(t) (PTA_VersionToTerm(t))
+ATerm PTA_VersionToTerm(PTA_Version arg);
 #define PTA_makeParseTableFromTerm(t) (PTA_ParseTableFromTerm(t))
 PTA_ParseTable PTA_ParseTableFromTerm(ATerm t);
 #define PTA_makeTermFromParseTable(t) (PTA_ParseTableToTerm(t))
@@ -99,7 +104,8 @@ ATerm PTA_PriorityToTerm(PTA_Priority arg);
 /*}}}  */
 /*{{{  constructors */
 
-PTA_ParseTable PTA_makeParseTableParseTable(ATerm version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities);
+PTA_Version PTA_makeVersionDefault();
+PTA_ParseTable PTA_makeParseTableParseTable(PTA_Version version, ATerm initialState, PTA_Labels labels, PTA_States states, PTA_Priorities priorities);
 PTA_Labels PTA_makeLabelsEmpty();
 PTA_Labels PTA_makeLabelsList(PTA_Label head, PTA_Labels tail);
 PTA_Label PTA_makeLabelDefault(PTA_Production production, int number);
@@ -130,6 +136,7 @@ PTA_Priority PTA_makePriorityGreater(int label1, int label2);
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool PTA_isEqualVersion(PTA_Version arg0, PTA_Version arg1);
 ATbool PTA_isEqualParseTable(PTA_ParseTable arg0, PTA_ParseTable arg1);
 ATbool PTA_isEqualLabels(PTA_Labels arg0, PTA_Labels arg1);
 ATbool PTA_isEqualLabel(PTA_Label arg0, PTA_Label arg1);
@@ -146,13 +153,19 @@ ATbool PTA_isEqualPriorities(PTA_Priorities arg0, PTA_Priorities arg1);
 ATbool PTA_isEqualPriority(PTA_Priority arg0, PTA_Priority arg1);
 
 /*}}}  */
+/*{{{  PTA_Version accessors */
+
+ATbool PTA_isValidVersion(PTA_Version arg);
+inline ATbool PTA_isVersionDefault(PTA_Version arg);
+
+/*}}}  */
 /*{{{  PTA_ParseTable accessors */
 
 ATbool PTA_isValidParseTable(PTA_ParseTable arg);
 inline ATbool PTA_isParseTableParseTable(PTA_ParseTable arg);
 ATbool PTA_hasParseTableVersion(PTA_ParseTable arg);
-ATerm PTA_getParseTableVersion(PTA_ParseTable arg);
-PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, ATerm version);
+PTA_Version PTA_getParseTableVersion(PTA_ParseTable arg);
+PTA_ParseTable PTA_setParseTableVersion(PTA_ParseTable arg, PTA_Version version);
 ATbool PTA_hasParseTableInitialState(PTA_ParseTable arg);
 ATerm PTA_getParseTableInitialState(PTA_ParseTable arg);
 PTA_ParseTable PTA_setParseTableInitialState(PTA_ParseTable arg, ATerm initialState);
@@ -341,7 +354,8 @@ PTA_Priority PTA_setPriorityLabel2(PTA_Priority arg, int label2);
 /*}}}  */
 /*{{{  sort visitors */
 
-PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, ATerm (*acceptVersion)(ATerm), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities));
+PTA_Version PTA_visitVersion(PTA_Version arg);
+PTA_ParseTable PTA_visitParseTable(PTA_ParseTable arg, PTA_Version (*acceptVersion)(PTA_Version), ATerm (*acceptInitialState)(ATerm), PTA_Labels (*acceptLabels)(PTA_Labels), PTA_States (*acceptStates)(PTA_States), PTA_Priorities (*acceptPriorities)(PTA_Priorities));
 PTA_Labels PTA_visitLabels(PTA_Labels arg, PTA_Label (*acceptHead)(PTA_Label));
 PTA_Label PTA_visitLabel(PTA_Label arg, PTA_Production (*acceptProduction)(PTA_Production), int (*acceptNumber)(int));
 PTA_States PTA_visitStates(PTA_States arg, PTA_State (*acceptHead)(PTA_State));

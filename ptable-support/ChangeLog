@@ -1,5 +1,7 @@
 
+
 2002/04/09 (jurgenv@cwi.nl)
+ * Set version of package to 4.0 according to current version of parse tables.
  * Initial version of ptable support library. This library is to be used
    in sglr, parsetablegen, the dump tools and restorebrackets.
 

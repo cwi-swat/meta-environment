@@ -1,6 +1,8 @@
 [
+  [Version, Default, 4],
+
   [ParseTable, parse-table, 
-               parse-table(<version(term)>,
+               parse-table(<version(Version)>,
                            <initial-state(term)>,
                             <labels(Labels)>,
                             states(<states(States)>),

@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Apr  9 16:02:34 2002
+ * Generated at Tue Apr  9 16:38:54 2002
  */
 
 #ifndef __ptable_dict_H
@@ -48,6 +48,7 @@ extern ATerm PTA_patternLabelDefault;
 extern ATerm PTA_patternLabelsList;
 extern ATerm PTA_patternLabelsEmpty;
 extern ATerm PTA_patternParseTableParseTable;
+extern ATerm PTA_patternVersionDefault;
 
 extern void init_ptable_dict();
 
