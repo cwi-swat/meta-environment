@@ -2,6 +2,7 @@ module AsfSdf-AttributeChecker
 
 imports Sdf-AttributeChecker 
 imports SdfCheckerFeedback
+imports utilities/PosInfo[Production]
 
 exports
   context-free syntax
@@ -70,4 +71,5 @@ hiddens
     "Msgs"[0-9]*       -> {Error ","}*
     "$Literal"[0-9]*   -> Literal
 
+    "$Location"[0-9]*  -> Location
     "$String"[0-9]*    -> StrCon

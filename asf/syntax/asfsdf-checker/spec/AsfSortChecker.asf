@@ -9,12 +9,13 @@ equations
              check-asf-sorts(Module, Msgs, $ModuleId)
 
   [cs-2'2] is-asf-sort($Sort) == true,
+           $Location := get-location($Sort),
            $String1 := moduleid2str($ModuleId),
            $String2 := "asf equation sort must not be used in " || $String1,
            $String3 := symbol2str($Sort)
            =========================
            check-asf-sorts($Sort, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3)
+              Msgs, make-error($String2, $String3, $Location)
 
   [ias-1'1] is-asf-sort(ASF-Tag) = true
 

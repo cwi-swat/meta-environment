@@ -4,6 +4,7 @@ imports
    basic/Booleans 
    SdfCheckerFeedback
    ModuleOperations
+imports utilities/PosInfo[Sort]
 
 exports
   context-free syntax
@@ -27,3 +28,4 @@ hiddens
     "$Sort"[0-9]*    -> Sort
 
     "$String"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location

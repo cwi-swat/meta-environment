@@ -2,6 +2,7 @@ module ExportedVariablesChecker
 
 imports SdfCheckerFeedback
         ModuleOperations
+imports utilities/PosInfo[Grammar]
 
 exports
   context-free syntax
@@ -28,3 +29,4 @@ hiddens
     "Msgs"[0-9]*       -> {Error ","}*
 
     "$String"[0-9]*    -> StrCon
+    "$Location"[0-9]* -> Location

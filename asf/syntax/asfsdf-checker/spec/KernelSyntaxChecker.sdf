@@ -2,6 +2,8 @@ module KernelSyntaxChecker
 
 imports SdfCheckerFeedback 
 imports ModuleOperations
+imports utilities/PosInfo[Grammar]
+imports utilities/PosInfo[Renaming]
 
 exports
   context-free syntax
@@ -29,5 +31,8 @@ hiddens
     "Prod"[0-9]*       -> Production
     "Prod*"[0-9]*      -> Production*
     "Prios"[0-9]*      -> Priorities
+    "$Grammar"[0-9]*   -> Grammar
+    "$Renaming"[0-9]*  -> Renaming
 
     "$String"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location

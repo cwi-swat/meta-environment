@@ -13,9 +13,11 @@ equations
 
   [default-cfevs-2] check-for-exported-variables-section(Section, Msgs, $ModuleId) = Msgs
 
-  [cfevs-2] $String1 := moduleid2str($ModuleId),
+  [cfevs-2] variables Production* := Grammar,
+            $Location := get-location(Grammar),
+            $String1 := moduleid2str($ModuleId),
             $String2 := "exported variables section"
             ====>
-            check-for-exported-variables-section(variables Production*, Msgs, $ModuleId) =
+            check-for-exported-variables-section(Grammar, Msgs, $ModuleId) =
               Msgs, 
-make-warning($String2, $String1)
+make-warning($String2, $String1, $Location)

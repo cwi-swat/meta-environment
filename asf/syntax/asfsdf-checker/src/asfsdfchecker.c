@@ -62,10 +62,16 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
 
 static ATerm checkSdf(ATerm term, const char *name)
 {
-  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
-  PT_Tree ptApplied = addSdfCheckerFunction(parseTree, name);
-  ATerm reduct = innermost(ptApplied);
-  PT_ParseTree asfix = toasfix(reduct);
+  PT_ParseTree parseTree;
+  PT_Tree ptApplied;
+  ATerm reduct;
+  PT_ParseTree asfix;
+
+  setKeepAnnotations(ATtrue);
+  parseTree = PT_ParseTreeFromTerm(term);
+  ptApplied = addSdfCheckerFunction(parseTree, name);
+  reduct = innermost(ptApplied);
+  asfix = toasfix(reduct);
 
   return PT_ParseTreeToTerm(asfix);
 }
@@ -100,8 +106,9 @@ static ATermList processMessages(ATerm term)
 static void displayMessages(ATerm term)
 {
   char *errorStr;
+  ATermList errorList;
 
-  ATermList errorList = processMessages(term);
+  errorList = processMessages(term);
   while (!ATisEmpty(errorList)) {
     ATerm error = ATgetFirst(errorList);
     if (ATmatch(error, "<str>", &errorStr)) {
@@ -114,9 +121,6 @@ static void displayMessages(ATerm term)
 ATerm check_asfsdf(int cid, ATerm term, const char *name)
 {
   ATerm  output = checkSdf(ATBunpack(term), name);
-  /*
-  ATermList errorList = processMessages(output);
-  */
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
@@ -172,7 +176,7 @@ int main(int argc, char *argv[])
       cid = ATBconnect(NULL, NULL, -1, asfsdfchecker_handler);
       ATBeventloop();
     #else
-      ATwarning("removevarsyntax: Toolbus cannot be used in Windows.\n");
+      ATwarning("asfsdfchecker: Toolbus cannot be used in Windows.\n");
     #endif
   }
   else {

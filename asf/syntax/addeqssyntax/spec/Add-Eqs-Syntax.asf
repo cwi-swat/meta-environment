@@ -49,6 +49,7 @@ imports languages/asf/syntax/Constructors
 
 exports
   context-free start-symbols ASF-Module
+
   sorts ASF-Module ASF-Section
 
 context-free syntax

@@ -2,6 +2,7 @@ module SymbolChecker
 
 imports basic/Booleans 
 imports SdfCheckerFeedback ModuleOperations
+imports utilities/PosInfo[Symbol]
 
 exports
   context-free syntax
@@ -39,4 +40,5 @@ hiddens
     "CC"[0-9]*         -> CharClass
    
     "$String"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location
     
