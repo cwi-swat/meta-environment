@@ -61,6 +61,10 @@ in
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
     snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
   +
+    rec-msg(set-focus-unchanged(EditorId,
+      focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
+    snd-do(TE, tb-set-focus-unchanged(Fid, SortName, StartPos, Length))
+  +
     rec-msg(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +

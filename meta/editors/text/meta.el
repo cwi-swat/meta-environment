@@ -5,11 +5,11 @@
 
 ; we keep a list of the buffers for the structure editor
 (setq bufferlist ())
-(setq changed ())
+(setq sendmessage ())
 
 (defun tb-init (filename)
   "Load the file filename, and return a unique buffer name to the ToolBus"
-  (setq changed t)
+  (setq sendmessage t)
   (edit-file filename)
   ()
 )
@@ -99,12 +99,11 @@ characters long. "
   ()
 )
 
-(defun tb-set-focus (filename str start length)
+(defun tb-set-focus-unchanged (filename str start length)
   "Set the focus. FILENAME is the file where the focus should be set.
 STR is the sortname of the focus. START is the starting
 character, and LENGTH the length (in characters) of the focus."
 ; first we retrieve a handle to the buffer
-  (setq changed t)
   (let (buf (get-file-buffer filename))
 
     ; we find and select the window for this file ('t' means search in all frames)
@@ -122,6 +121,11 @@ character, and LENGTH the length (in characters) of the focus."
     )
   )
   () ; return nil
+)
+
+(defun tb-set-focus (filename str start length)
+  (setq sendmessage t)
+  (tb-set-focus-unchanged filename str start length)
 )
 
 (defun tb-get-focus (evt count)
@@ -155,11 +159,12 @@ point."
 
   ; if this is one of our buffers
   (if (is-element (buffer-name) bufferlist)
-    (if (eq changed ())
-      (setq changed t)
-      (TBevent (concat "changed(" (TBstring (buffer-name)) ")"))
-      (accept-process-output (get-process "adapter"))
-      (discard-input)
+    (if (eq sendmessage t)
+      (progn (setq sendmessage ())
+             (TBevent (concat "changed(" (TBstring (buffer-name)) ")"))
+             (accept-process-output (get-process "adapter"))
+             (discard-input)
+      )
     )
   )
 
