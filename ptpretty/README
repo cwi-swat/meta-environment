@@ -1,0 +1,50 @@
+This package contains the tool 'ptpretty'.
+
+Description
+-----------
+
+It is meant as a case-study. There is no guarantee that it is useful in any
+way. A better pretty-printer can be found in the GPP package.
+
+Ptpretty takes an AsFix parse tree and returns a formatted AsFix parse tree.
+It only affects the LAYOUT parts of the parse tree. The formatting is done
+according to the following scheme:
+
+  - the original SDF definition that was used to generate a parse-table
+    is used as input.
+  - the way each production in this definition is layouted is stored as
+    a pretty-print directive.
+  - a single traversal of the tree applies these directives to the parse tree
+
+For example:
+
+  Take an SDF production like this:
+
+context-free syntax
+"if" Exp "then" 
+  Stat 
+* 
+"fi" -> Statement
+
+ It will pretty print an if-then expression with a space after the "if"
+ and a space after the expression, a newline after the "then", after every
+ statement a newline an also after the last to start the "fi" on a new line.
+
+ The statements will be indented two spaces (indicated by the two spaces
+ before Stat.
+
+ Nested applications of productions automatically leeds to deeper indentation
+ levels.
+ 
+Usage
+-----
+ 
+The following commands are necessary to pretty-print a term:
+
+> parse-sdf2 -i mylanguage.def -o mylanguage.pt
+> sdf2table -i mylanguage.def -o mylanguage.tbl
+> sglr -p mylanguage.tbl -i myprogram.trm -o myprogram.pt
+> ptpretty -s mylanguage.pt -i myprogram.pt myprogram.pretty
+> unparsePT -i myprogram.pretty -o myprogram.trm
+
+  

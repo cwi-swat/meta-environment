@@ -3,6 +3,7 @@
   * Moved repository to GLT 
   * Bumped version number to 1.0
   * Added generation of package definition file
+  * Added a description of the package and possible usage in the README file
 
 2002-07-23	Jurgen Vinju	<jurgenv@cwi.nl>
   * Fixed configure.in bug

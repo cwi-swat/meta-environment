@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(ptpretty, 0.1alfa)
+AM_INIT_AUTOMAKE(ptpretty, 1.0)
 
 ACLOCAL="${ACLOCAL} -I ."
 

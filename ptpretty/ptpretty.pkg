@@ -1,0 +1,20 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   description='A very simple AsFix formatter. It formats AsFix LAYOUT
+                trees according to the layout of productions in an SDF2
+                definition. See the gpp package for a full featured pretty
+                printer'
+
+   keywords=meta-environment, asfix, pretty printing, formatting
+
+configuration interface
+
+requires
+  sdf-support	1.1.1
+  pt-support    0.12.1
+  aterm         2.0.2
+  toolbuslib    0.5.1
