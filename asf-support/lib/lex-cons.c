@@ -4,15 +4,23 @@
 #include <ASFME-utils.h>
 #include <MEPT-utils.h>
 
+/*{{{  static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch) */
+
 static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch)
 {
   PT_Args listChars;
   PT_Tree listChar;
 
   listChars = (PT_Args) ASF_getCHARChars(ch);
+
   listChar = PT_getArgsArgumentAt(listChars,1);
+
   return listChar;
 }
+
+/*}}}  */
+
+/*{{{  static PT_Tree constructorVarToLexicalVar(ASF_CHAR var) */
 
 static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
 {
@@ -56,21 +64,36 @@ static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
   return appl2;
 }
 
+/*}}}  */
+
+/*{{{  static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars) */
+
 static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars)
 {
   PT_Args list = PT_makeArgsEmpty();
 
-  for(;ASF_hasCHARListHead(chars); chars = ASF_getCHARListTail(chars)) {
+  for ( ;ASF_hasCHARListHead(chars); chars = ASF_getCHARListTail(chars)) {
     ASF_CHAR head = ASF_getCHARListHead(chars);
-    PT_Tree elem;
+    PT_Tree elem = NULL;
 
+    /* Runtime type-check: the children of lexical constructor functions
+     * may only be variables, or characters. It suffices to check for
+     * variables, or lexical injection productions since the parser will
+     * have checked if the types correspond. What we filter out here is
+     * the possibility of user-defined productions that return CHAR or CHAR*
+     */
     if (PT_isTreeVar((PT_Tree) head)) {
       elem = constructorVarToLexicalVar(head);
+      list = PT_makeArgsMany(elem, list);
     }
-    else {
-      elem = constructorCharToLexicalChar(head);
+    else if (PT_isTreeAppl((PT_Tree) head)) {
+      PT_Production prod = PT_getTreeProd((PT_Tree) head);
+
+      if (PT_isLexicalInjectionProd(prod)) {
+	elem = constructorCharToLexicalChar(head);
+	list = PT_makeArgsMany(elem, list);
+      }
     }
-    list = PT_makeArgsMany(elem, list);
 
     if (!ASF_hasCHARListTail(chars)) {
       break;
@@ -80,27 +103,30 @@ static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars)
   return PT_reverseArgs(list);
 }
 
+/*}}}  */
+
+/*{{{  ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree tree) */
+
 ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree tree)
 {
   PT_Symbol rhs;
   ASF_CHARList charlist;
   PT_Args lexicalArgs;
   PT_Tree lexicalTree;
-  PT_Tree result;
+  PT_Tree result = (PT_Tree) tree;
 
-  assert(ASF_isTreeLexicalConstructorFunction(tree));
+  if (ASF_isTreeLexicalConstructorFunction(tree)) {
+    rhs = PT_getSymbolSymbol((PT_Symbol) ASF_getTreeSymbol(tree));
+    charlist = ASF_getTreeList(tree);
+    lexicalArgs = constructorArgsToLexicalArgs(charlist);
 
-  rhs = PT_getSymbolSymbol((PT_Symbol) ASF_getTreeSymbol(tree));
-
-  charlist = ASF_getTreeList(tree);
-
-  lexicalArgs = constructorArgsToLexicalArgs(charlist);
-
-  lexicalTree = PT_makeTreeFlatLexical(lexicalArgs);
-
-  result = PT_makeTreeLexToCf(rhs, lexicalTree);
+    if (lexicalArgs != NULL) {
+      lexicalTree = PT_makeTreeFlatLexical(lexicalArgs);
+      result = PT_makeTreeLexToCf(rhs, lexicalTree);
+    }
+  }
 
   return (ASF_Tree) result;
 }
 
-
+/*}}}  */
