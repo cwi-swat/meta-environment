@@ -3,11 +3,21 @@
    */   
 
 #include "configmanager.h"
+#include "MetaButtons.h"
 #include <unistd.h> 
 
 static char myversion[] = "1.0";     
-static ATermList buttons = NULL;
-static ATermList standard_buttons = NULL;
+static MB_ButtonList buttons = NULL;
+static MB_ButtonList standard_buttons = NULL;
+
+/*{{{  static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2) */
+
+static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2)
+{
+  return (MB_ButtonList) ATconcat((ATermList) l1, (ATermList) l2);
+}
+
+/*}}}  */
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
@@ -66,14 +76,12 @@ ATerm process_config_file(int cid, char *filename, char *contents)
 
 ATerm process_button_file(int cid, char *filename, ATerm contents)
 {
-  ATermList buttonList = ATgetArguments((ATermAppl)contents);
+  buttons = MB_makeButtonListEmpty();
 
-  if (!ATisEmpty(buttonList)) {
-    buttons = (ATermList)ATgetFirst(buttonList);
+  if (MB_isValidButtons(MB_ButtonsFromTerm(contents))) {
+    buttons = MB_getButtonsList(MB_ButtonsFromTerm(contents));
   }
-  else {
-    buttons = buttonList;
-  }
+  
   return ATmake("snd-value(buttons-processed)");
 }
 
@@ -82,28 +90,24 @@ ATerm process_button_file(int cid, char *filename, ATerm contents)
 
 ATerm get_button_names(int cid, char *editortype, char *modulename)
 {
-  ATermList localButtons = ATconcat(buttons,standard_buttons);
+  MB_ButtonList localButtons = MB_concatButtonList(buttons,standard_buttons);
   ATermList buttonNames = ATempty;
-  ATerm editorType = ATmake("<str>",editortype);
-  ATerm allEditorTypes = ATmake("\"*\"");
-  ATerm moduleName = ATmake("<str>",modulename);
-  ATerm allModuleNames = ATmake("\"*\"");
+  MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
 
   while (!ATisEmpty(localButtons)) {
-    ATerm buttonDesc = ATgetFirst(localButtons);
-    ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
-    ATerm buttonDescModule = ATelementAt(buttonArgs,0);
-    ATerm buttonDescType = ATelementAt(buttonArgs,1);
-    ATerm buttonDescName = ATelementAt(buttonArgs,2);
+    MB_Button buttonDesc = MB_getButtonListHead(localButtons);
+    char* buttonDescModule = MB_getButtonModule(buttonDesc);
+    MB_EditorType buttonDescType = MB_getButtonType(buttonDesc);
+    ATerm buttonDescName = MB_getButtonName(buttonDesc);
 
-    if (ATisEqual(buttonDescModule, moduleName) ||
-	ATisEqual(buttonDescModule, allModuleNames)) {
+    if (!strcmp(buttonDescModule, modulename) ||
+	!strcmp(buttonDescModule, "*")) {
       if (ATisEqual(buttonDescType, editorType) ||
-	  ATisEqual(buttonDescType, allEditorTypes)) {
+	  MB_isEditorTypeAll(buttonDescType)) {
 	buttonNames = ATinsert(buttonNames,buttonDescName);
       }
     }
-    localButtons = ATgetNext(localButtons);
+    localButtons = MB_getButtonListTail(localButtons);
   }
 
   return ATmake("snd-value(button-names(<term>))", buttonNames);
@@ -115,32 +119,27 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
 ATerm get_button_actions(int cid, ATerm buttonName, char *editortype, 
 			 char *modulename)
 {
-  ATermList localButtons = ATconcat(buttons,standard_buttons);
-  ATerm editorType = ATmake("<str>",editortype);
-  ATerm allEditorTypes = ATmake("\"*\"");
-  ATerm moduleName = ATmake("<str>",modulename);
-  ATerm allModuleNames = ATmake("\"*\"");
-  ATermList buttonActions = (ATermList) 
-    ATparse("[message(\"undefined button\")]");
+  MB_ButtonList localButtons = MB_concatButtonList(buttons,standard_buttons);
+  MB_EditorType editorType = MB_EditorTypeFromTerm(ATmake("<str>",editortype));
+  ATermList buttonActions = (ATermList) ATparse("[message(\"undefined button\")]");
 
   while (!ATisEmpty(localButtons)) {
-    ATerm buttonDesc = ATgetFirst(localButtons);
-    ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
-    ATerm buttonDescModule = ATelementAt(buttonArgs,0);
-    ATerm buttonDescType = ATelementAt(buttonArgs,1);
-    ATerm buttonDescName = ATelementAt(buttonArgs,2);
-    ATerm buttonDescActions = ATelementAt(buttonArgs,3);
+    MB_Button buttonDesc = MB_getButtonListHead(localButtons);
+    char* buttonDescModule = MB_getButtonModule(buttonDesc);
+    ATerm buttonDescName = MB_getButtonName(buttonDesc);
+    MB_EditorType buttonDescType = MB_getButtonType(buttonDesc);
+    ATerm buttonDescActions = MB_getButtonActions(buttonDesc);
 
-    if (ATisEqual(buttonDescModule, moduleName) ||
-	ATisEqual(buttonDescModule, allModuleNames)) {
-      if (ATisEqual(buttonDescType, editorType) ||
-	  ATisEqual(buttonDescType, allEditorTypes)) {
+    if (!strcmp(buttonDescModule, modulename) ||
+	!strcmp(buttonDescModule, "*")) {
+      if (MB_isEqualEditorType(buttonDescType, editorType) ||
+	  MB_isEditorTypeAll(buttonDescType)) {
 	if (ATisEqual(buttonDescName, buttonName)) {
 	  buttonActions = (ATermList) buttonDescActions;
 	}
       }
     }
-    localButtons = ATgetNext(localButtons);
+    localButtons = MB_getButtonListTail(localButtons);
   }
 
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
@@ -186,11 +185,14 @@ int main(int argc, char *argv[])
   }
 
   ATBinit(argc, argv,&bottomOfStack);
+  MB_initMetaButtonsApi();
 
   standard = ATreadFromNamedFile(STANDARD_BUTTONS);
 
   if (standard != NULL) {
-    standard_buttons = (ATermList) ATgetArgument((ATermAppl)standard,0);
+    if (MB_isValidButtons(MB_ButtonsFromTerm(standard))) {
+      standard_buttons = MB_getButtonsList(MB_ButtonsFromTerm(standard));
+    }
   }
   else {
     ATwarning("Could not read in: " STANDARD_BUTTONS "\n");
