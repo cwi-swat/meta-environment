@@ -30,7 +30,7 @@ let
   NormalForm : term,
   ErrorList : list,
   Id : term,
-  Tide : aterm
+  Tide : term
 in
   Id := process-id .
   (

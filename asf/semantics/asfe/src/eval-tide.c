@@ -267,7 +267,7 @@ void Tide_step(ATerm position, ATerm newenv, int level)
     env = newenv;
 
 
-    TA_atCPE(pid, TA_makeLocationFromTerm(position), level);
+    TA_atCPE(pid, TA_LocationFromTerm(position), level);
     TA_activateRules(pid, TA_makePortStep());
 
     if (TA_getProcessState(pid) == STATE_STOPPED) {
