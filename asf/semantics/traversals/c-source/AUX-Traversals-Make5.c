@@ -39,7 +39,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Traversals_Make5_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 9 ] ;
+ATerm tmp [ 8 ] ;
 FUNC_ENTRY ( lf_AUX_Traversals_Make5_1sym , ATmakeAppl ( lf_AUX_Traversals_Make5_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
@@ -55,15 +55,12 @@ if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( is_single_element ( tmp [ 4 ] ) ) {
-( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
-( tmp [ 6 ] = lf_AUX_Traversals_Make5_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
-if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
+( tmp [ 5 ] = lf_AUX_Traversals_Make5_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+if ( check_sym ( tmp [ 5 ] , ef2sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( check_sym ( tmp [ 6 ] , lf3sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf3sym ) ) {
-( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ;
-}
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ;
 }
 }
 }
