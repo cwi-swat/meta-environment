@@ -52,7 +52,7 @@ static ATermList add_imports(ATerm name, ATermList mods);
 static ATermList replace_imports(ATerm name, ATermList mods);
 static ATermList modules_depend_on(ATerm name, ATermList mods);
 static ATbool is_valid_parse_table(ATermList visited, ATerm module, 
-                            int timeOfEqsTable, int timeOfTrmTable);
+				   int timeOfEqsTable, int timeOfTrmTable);
 ATermList AFTgetImports(ATerm mod);
 
 /*}}}  */
@@ -162,6 +162,17 @@ ATerm get_all_equations_for_compiler(int cid, char *moduleName)
 }
 
 /*}}}  */
+/*{{{  static void reset_trans_db(void) */
+
+static void reset_trans_db(void)
+{
+  if (trans_db != NULL) {
+    ATtableDestroy(trans_db);
+    trans_db = CreateValueStore(100,75);
+  }
+}
+
+/*}}}  */
 /*{{{  void create_module_db(int cid) */
 
 void create_module_db(int cid)
@@ -176,9 +187,17 @@ void create_module_db(int cid)
 
 void clear_module_db(int cid)
 {
-  modules_db = CreateValueStore(100,75);
-  import_db = CreateValueStore(100,75);
-  trans_db = CreateValueStore(100,75);
+  if (modules_db != NULL) {
+    ATtableDestroy(modules_db);
+    modules_db = CreateValueStore(100,75);
+  }
+
+  if (import_db != NULL) {
+    ATtableDestroy(import_db);
+    import_db = CreateValueStore(100,75);
+  }
+
+  reset_trans_db();
 }
 
 /*}}}  */
@@ -778,7 +797,7 @@ ATerm delete_module(int cid, char *moduleName)
   update_syntax_status_of_modules(changedMods); 
   RemoveKey(modules_db,name);
   RemoveKey(import_db,name);
-  trans_db = CreateValueStore(100,75);
+  reset_trans_db();
   return ATmake("snd-value(changed-modules([<term>,<list>]))",
                 name, changedMods);
 }
@@ -810,7 +829,7 @@ add_imports(ATerm name, ATermList mods)
 {
   ATermList unknowns = ATempty;
 
-  trans_db = CreateValueStore(100,75);
+  reset_trans_db();
   if(!GetValue(import_db,name)) {
     PutValue(import_db, name, (ATerm) mods);
     unknowns = select_unknowns(mods);
@@ -824,7 +843,7 @@ add_imports(ATerm name, ATermList mods)
 static ATermList 
 replace_imports(ATerm name, ATermList mods)
 {
-  trans_db = CreateValueStore(100,75);
+  reset_trans_db();
   ATtableRemove(import_db, name);
   PutValue(import_db, name, (ATerm) mods);
   return select_unknowns(mods);

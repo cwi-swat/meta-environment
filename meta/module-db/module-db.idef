@@ -175,13 +175,11 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb, parse-table-added) .
   snd-msg(parse-table-added)
 +
-/* Add parse table to the database for the given module name */
   rec-msg(get-sdf2-path-from-db(Name?)).
   snd-eval(Mdb,get-path(Name, sdf2)).
   rec-value(Mdb,path(Path?)).
   snd-msg(path(Path))
 +
-/* Add parse table to the database for the given module name */
   rec-msg(get-eqs-path-from-db(Name?)) .
   snd-eval(Mdb, get-path(Name, eqs)) .
   rec-value(Mdb, path(Path?)) .
