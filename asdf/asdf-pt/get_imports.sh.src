@@ -1,0 +1,4 @@
+ASBIN=__META__/bin
+ASSHARE=__META__/share/asdf/asdf-pt
+$ASBIN/apply-function -f getImportedModules -s ATermList | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT
+
