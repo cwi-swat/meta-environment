@@ -45,7 +45,8 @@ in
     rec-msg(extended-syntax(Syntax?)). 
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))  
+    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax)) .
+    Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
@@ -55,7 +56,8 @@ in
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).
-    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax)) .
+    Syntax := no-tree
   )*delta
 endlet
 
