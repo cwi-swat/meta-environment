@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/09 (markvdb@cwi.nl)
+ * By accident the strategy symbol was removed, added again.
+
 2003/10/09 ({jurgenv,markvdb}@cwi.nl)
  * Regenerated AsFix.def from library and synchronized.
 
