@@ -1,5 +1,14 @@
 $Id$
 
+Fri Mar 25 11:28:57 CET 2005 <jurgenv@cwi.nl>
+ * Cleaned up C grammar:
+    - Onely one expression sort left (by using priorities)
+    - Choice of three topmodules: CWithComments, CAfterPreprocessor,
+      or CWithPreprocessor
+    - Copied Comments.sdf and Layout.sdf from cpp grammar. It's a clone,
+      but I think these two grammars should be allowed to evolve 
+      independently.
+
 Thu Mar 10 13:40:29 CET 2005 <{jong,kooiker}@cwi.nl>
  * library/languages/c/syntax/Generic-Preprocessor.sdf:
    - Filename start and ends with either < and > or ", but you cannot mix them
