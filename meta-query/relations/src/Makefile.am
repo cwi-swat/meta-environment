@@ -2,6 +2,10 @@
 
 CFLAGS += -Wno-unused-variable -Werror
 
+ASFC = $(ASF)/bin/asfc
+IDEF2TIF = $(TOOLBUS)/bin/idef2tif
+TIFSTOC = $(TOOLBUS)/bin/tifstoc
+
 INCLUDES = \
 	-DASF_MAIN \
 	-DTOOLBUS \
@@ -30,19 +34,19 @@ DisplayQuery_LDADD = \
 	$(SOCKLIBS)
 
 MergeRstores: MergeRstores.eqs
-	asfc -c -i $<
+	$(ASF)/bin/asfc -c -i $<
 
 %.c: %.eqs
-	asfc -t -i $< -o $@
+	$(ASFC) -t -i $< -o $@
 
 %.idef: %.eqs
-	asfc -t -i $< -o `basename $@ .idef`.c
+	$(ASFC) -t -i $< -o `basename $@ .idef`.c
 
 %.tifs: %.idef
-	idef2tif $<
+	$(IDEF2TIF) $<
 
 toolDisplayQuery.tif.c toolDisplayQuery.tif.h: DisplayQuery.tifs
-	tifstoc -tool toolDisplayQuery DisplayQuery.tifs
+	$(TIFSTOC) -tool toolDisplayQuery DisplayQuery.tifs
 
 CLEANFILES = \
 	DisplayQuery.c \

@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Jul 14 11:00:22 CEST 2003 <jong@cwi.nl>
+ * use configured locations for asfc, idef2tif and tifstoc
+
 2003-07-10 <markvdb@cwi.nl>
  * Regenerated the DisplayQuery stuff.
 
