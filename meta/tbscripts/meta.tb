@@ -2,10 +2,13 @@
 /* This is a very simple T-script to build a minimal stand-alone 
    meta-environment */
 /* $Log$
- * Revision 1.2  1997/07/22 08:40:49  markvdb
- * First version of incomplete compiler based on ToolBus and new Meta-Environment
- * checked in. Ohne Gewahr!
+ * Revision 1.3  1997/08/04 11:08:43  markvdb
+ * Small modifications in ToolBus script.
  *
+# Revision 1.2  1997/07/22  08:40:49  markvdb
+# First version of incomplete compiler based on ToolBus and new Meta-Environment
+# checked in. Ohne Gewahr!
+#
 # Revision 1.1.1.1  1997/03/04  10:09:13  olivierp
 # This is the first (internal) release of the new Meta-environment
 # based on the aterm-lib shared term library. The repository name
@@ -138,6 +141,13 @@ tool user-interface is {
 tool in-output is {
        command = "in-output"
 }
+tool arm is {
+       command = "arm-adapter"
+}
+tool to-epic is {
+       command = "to-epic"
+}
+
 
 process Open-modules(Tmp: list) is
 let
@@ -173,7 +183,7 @@ Ms := Tmp.
           snd-msg(mdb,add-module(Name,T)).
           /* mdb returns the imports section of Name as M1s */
           rec-msg(open,imports(M1s?)).
-          snd-msg(com,add-module(Name,T)).
+          snd-msg(prep,add-module(Name,T)).
           rec-msg(open,done).
           /*snd-msg(ui,imports(Name,M1s)).*/
           /* Tell im to update import db with this information (Name imports 
@@ -239,7 +249,7 @@ in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Retrieving equations"))).
   snd-msg(im,get-all-imports(Mod)).
-  rec-msg(retr,all-imports(Mods?)).
+  rec-msg(im,all-imports(Mods?)).
   snd-msg(mdb,get-equations(Mods)).
   rec-msg(retr,equations(Eqs?)).
   snd-msg(eqdb,add-equations(Mod,Eqs)).
@@ -347,6 +357,8 @@ in
       snd-note(ui-status(stat(Id,"Deleting ..."))).
       snd-msg(mdb,delete(Str)).
       rec-msg(mdb,done).
+      snd-msg(prep,delete(Str)).
+      rec-msg(prep,done).
       snd-msg(im,delete(Str)).
       rec-msg(im,done).
       snd-msg(eqdb,delete(Str)).
@@ -376,7 +388,9 @@ in
       /*snd-note(ui-status(error("TB: not implemented: clear-all"))).*/
       snd-note(ui-status(stat(Id,"Clearing ..."))).
       snd-msg(mdb,clear-all).
-      rec-msg(ui,done).
+      rec-msg(mdb,done).
+      snd-msg(prep,clear-all).
+      rec-msg(prep,done).
       snd-msg(im,clear-all).
       rec-msg(ui,done).
       snd-msg(eqdb,clear-all).
@@ -387,14 +401,14 @@ in
    ( rec-event(UI,compile-all).
      snd-note(ui-status(stat(Id,"Compiling ..."))).
      snd-msg(com,compile-all).
-     rec-msg(ui,done).
+     rec-msg(com,done).
      snd-note(ui-status(endstat(Id))). 
      snd-ack-event(UI,compile-all)
    ) +
    ( rec-event(UI,compile-module(Str?)).
      snd-note(ui-status(stat(Id,"Compiling ..."))).
      snd-msg(com,compile-module(Str)).
-     rec-msg(ui,done).
+     rec-msg(com,done).
      snd-note(ui-status(endstat(Id))).
      snd-ack-event(UI,compile-module(Str))
    ) +
@@ -455,7 +469,7 @@ in
     +
     ( rec-msg(mdb,clear-all).
       snd-do(TDB,clear-module-db).
-      snd-msg(ui,done)
+      snd-msg(mdb,done)
     ) 
     +
 /* Retrieve a single module */
@@ -540,13 +554,13 @@ in
     ( rec-msg(im,get-all-imports(Name?)).
       snd-eval(IM,get-all-imported-modules(Name)).
       rec-value(IM,all-imports(M1s?)).
-      snd-msg(retr,all-imports(M1s))
+      snd-msg(im,all-imports(M1s))
     )
     +
     ( rec-msg(im,get-all-modules).
       snd-eval(IM,get-all-modules).
       rec-value(IM,all-modules(M1s?)).
-      snd-msg(com,all-modules(M1s))
+      snd-msg(im,all-modules(M1s))
     )
 /* Create an import graph that can be read by Leon's UI tool, with
  * top module Name
@@ -637,68 +651,167 @@ in
   delta 
 endlet
 
-process Comp is
+process Compiler is
+let
+Name : term,
+M    : term,
+Success : term,
+Mods : list,
+Rnxmod : term,
+Amod : term
+in
+  snd-msg(arm,load-arm-files(["AFuns.arm","ANumerals.arm","ATermLists.arm",
+                              "ATermPrint.arm","ATermTools.arm","ATerms.arm",
+                              "ATypes.arm","AVars.arm","AsFix-Basics.arm",
+                              "AsFix2EQs.arm","AsFix2Epic.arm","AsFix2Sign.arm",
+                              "AsFix2muASF.arm","AsFix2muASFnames.arm",
+                              "AsFixParseTrees.arm","AsFixPrint.arm",
+                              "Booleans.arm",
+                              "Check-List-Pats.arm","EPIC.arm",
+                              "Grammars.arm","Layout.arm","Literals.arm",
+                              "Many-to-Single.arm","Matching.arm",
+                              "MsLiterals.arm","MuASF-Basics.arm",
+                              "MuASF-ManySorted.arm","MuASF-Signs.arm",
+                              "MuASF-SingleSorted.arm","MuASF2EPIC.arm",
+                              "MuASFc-SingleSorted.arm",
+                              "MuASFdf-ManySorted.arm",
+                              "MuASFdf-SingleSorted.arm",
+                              "MuASFl-ManySorted.arm",
+                              "MuASFl-SingleSorted.arm",
+                              "MuASFmc-ManySorted.arm",
+                              "MuASFmc-SingleSorted.arm",
+                              "MuASFnpc-ManySorted.arm",
+                              "MuASFnpc-SingleSorted.arm",
+                              "MuLiterals.arm","Numerals.arm",
+                              "ParseTrees.arm","RemAsFixWspace.arm",
+                              "Remove-Conds.arm","Remove-Conds-Aux.arm",
+                              "Remove-Lists.arm","Substitution.arm",
+                              "Trans-Lookup-Pats.arm","Trans-Set-Pats.arm",
+                              "VarEnv.arm",
+                              "Equal.arm","Lists.arm","assocrt.arm"],
+                             ["/home/markvdb/AsFix2/asfix2/spec/",
+                              "/home/markvdb/AsFix2EP/muASF2/",
+                              "/home/markvdb/AsFix2EP/EP/lib/"])).
+  rec-msg(arm,Success?).
+  snd-msg(arm,link-arm).
+  (
+    ( rec-msg(com,compile-all).
+      snd-msg(im,get-all-modules).
+      rec-msg(im,all-modules(Mods?)).
+      snd-msg(prep,compile-modules(Mods)).
+      rec-msg(prep,ok).
+      snd-msg(com,done)
+    ) 
+    +
+    ( rec-msg(com,compile-module(Name?)).
+      snd-msg(im,get-all-imports(Name)).
+      rec-msg(im,all-imports(Mods?)).
+      snd-msg(prep,compile-modules(Mods)).
+      rec-msg(prep,ok).
+      snd-msg(com,done)
+    ) 
+    +
+    ( rec-msg(com,compile(Name?,Rnxmod?)).
+      snd-msg(arm,compile(Rnxmod)).
+      rec-msg(arm,toepic(Amod?)).
+      snd-msg(epic,convert(Name,Amod)).
+      rec-msg(epic,done).
+      snd-msg(com,done)
+    )
+  )* delta
+endlet
+
+process Toepic is
+let
+EPIC : to-epic,
+Amod : term,
+Name : term
+in
+  execute(to-epic,EPIC?).
+  ( 
+    rec-msg(epic, convert(Name?,Amod?)).
+    snd-eval(EPIC,rnx-to-epic(Name,Amod)) .
+    rec-value(EPIC,done) .
+    snd-msg(epic,done)
+  )* delta
+endlet
+
+process Prepare is
 let
 COM  : compiler,
-DB   : str,
 T    : term,
 T1   : term,
 Name : term,
 M    : term,
-I    : list,
-Sec  : term,
-Mods : list,
-Eqs  : list
+Rnxmod : term,
+Mods : list
 in
 /* Start up COM and initialize the database */
   execute(compiler,COM?).
   snd-do(COM,create-module-db).
   (
-    ( rec-msg(com,add-module(Name?,M?)).
+    ( rec-msg(prep,add-module(Name?,M?)).
       snd-eval(COM,add-module(M)).
-/* Module added. I is the import section of the 
- * module. add-module always returns the import-section of a module, because
- * it is the only way we can see what other modules need to be opened.
- */
       rec-value(COM,ok(Name?)).
       snd-msg(open,done)
     )
     +
-    ( rec-msg(com,delete(Name?)).
+    ( rec-msg(prep,delete(Name?)).
       snd-eval(COM,delete-module(Name)).
       rec-value(COM,deleted(Name?)).
-/* Module is deleted. */
-      snd-msg(open,done)
+      snd-msg(prep,done)
     )
 /* Clearing the module database. */
     +
-    ( rec-msg(com,clear-all).
+    ( rec-msg(prep,clear-all).
       snd-do(COM,clear-module-db).
-      snd-msg(ui,done)
+      snd-msg(prep,done)
     ) 
     +
-    ( rec-msg(com,compile-all).
-      snd-msg(im,get-all-modules).
-      rec-msg(com,all-modules(Mods?)).
-      snd-eval(COM,compile-modules(Mods)).
-      rec-value(COM,ok).
-      snd-msg(ui,done)
-    ) 
-    +
-    ( rec-msg(com,compile-module(Name?)).
-      snd-msg(im,get-all-imports(Name)).
-      rec-msg(retr,all-imports(Mods?)).
-      snd-eval(COM,compile-modules(Mods)).
-      rec-value(COM,ok).
-      snd-msg(ui,done)
-    ) 
+    ( rec-msg(prep,compile-modules(Mods?)).
+      snd-do(COM,compile-modules(Mods)).
+      snd-msg(prep,ok).
+      ( rec-event(COM,compile(Name?,Rnxmod?,Mods?)).
+        snd-ack-event(COM,compile(Name,Rnxmod,Mods)).
+        snd-msg(com,compile(Name,Rnxmod)).
+        rec-msg(com,done)
+      )*rec-event(COM,done).
+      snd-ack-event(COM,done)
+    )
   ) *
   delta
 endlet
 
-toolbus(Ui,Io,Im,Eqdb,Mdb,Comp,Text-edit,Source)
+process ARM is
+let
+  Files  : list,
+  Dirs : list,
+  Success : term,
+  Arm : arm,
+  Rnxmod : term,
+  Result : term
+in
+  execute(arm,Arm?).
+  ( (
+      rec-msg(arm, load-arm-files(Files?, Dirs?)) .
+      snd-eval(Arm, load-arm(Files, Dirs)) .
+      rec-value(Arm, load-arm(Files, Dirs, Success?)) .
+      snd-msg(arm, Success)
+    )
+    +
+    (
+      rec-msg(arm, link-arm) .
+      snd-do(Arm, link-arm)
+    )
+    +
+    ( 
+      rec-msg(arm, compile(Rnxmod?)).
+      snd-eval(Arm,reduce(term(Rnxmod))) .
+      rec-value(Arm,reduct(Result?)) .
+      snd-msg(arm,toepic(Result))
+    )
+  )* delta
+endlet
 
 
-
-
-
+toolbus(Ui,Io,Im,Eqdb,Mdb,Compiler,Prepare,Toepic,ARM,Text-edit,Source)
