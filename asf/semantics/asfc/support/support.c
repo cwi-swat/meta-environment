@@ -11,7 +11,7 @@
 #include <assert.h>
 #include <ctype.h>
 
-#include <atb-tool.h>
+/*#include <atb-tool.h>*/
 #include <AsFix.h>
 #include <AsFix2src.h>
 #include <aterm2.h>
@@ -19,6 +19,10 @@
 #include "support.h"
 #include "deprecated.h"
 #include "aterm-macs.h"
+
+#ifndef streq
+#  define streq(s,t)    (!(strcmp(s,t)))
+#endif
 
 /*}}}  */
 /*{{{  types */
@@ -35,9 +39,6 @@ typedef struct bucket
 /*}}}  */
 /*{{{  defines */
 
-/*
-#define MIN(a,b) ((a) > (b) ? (b) : (a))
-*/
 #define MAX_STORE 10240
 
 /*}}}  */
@@ -900,13 +901,14 @@ int slice_length(ATerm l1, ATerm l2)
 ATerm slice(ATerm l1, ATerm l2)
 {
   ATermList result;
-  int i, len;
+  int i, len, ll;
 
   if(ATisEmpty((ATermList)l2)) {
     return l1;
   }
 
-  len = MIN(MAX_STORE, slice_length(l1, l2));
+  ll = slice_length(l1, l2);
+  len = (MAX_STORE > ll ? ll : MAX_STORE);
   for(i=0; i<len; i++) {
     term_store[i] = ATgetFirst((ATermList)l1);
     l1 = (ATerm)ATgetNext((ATermList)l1);
