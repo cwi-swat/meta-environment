@@ -1,5 +1,5 @@
 include ${top_srcdir}/templates/make_rules
-libpackagedir = ${pkgdatadir}$(subst $(LIBROOT),,$(subdir))
+libpackagedir = ${pkgdatadir}$(subst lib,,$(subdir))
 
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
@@ -12,7 +12,11 @@ EXTRA_DIST = $(MODULES) $(PREPARED) $(BUILTIN_SRC)
 install-data-hook: make-dir install-modules install-prepared make-read-only
 
 make-dir:
-	chmod u+w $(DESTDIR)$(libpackagedir)
+	if test -d $(DESTDIR)$(libpackagedir); then \
+           chmod u+w $(DESTDIR)$(libpackagedir); \
+        else \
+          echo ""; \
+        fi
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
 
 install-modules:
