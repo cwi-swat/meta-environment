@@ -78,7 +78,7 @@ int main (int argc, char **argv)
       case 'i':  input_file_name  = optarg;    break;
       case 'l':  layout = ATtrue;              break;
       case 'm':  literals = ATfalse;           break;
-      case 'o':
+      case 'o':  output_file_name = optarg;    break;
       case 'x':  characters = ATtrue;          break;
       case 'p':  productions = ATtrue;         break;
       case 's':  sharing = ATtrue;         break;
