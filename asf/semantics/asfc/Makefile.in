@@ -85,8 +85,8 @@ compiler.tif.c: $(top_srcdir)/toolbus/meta.tifs
 
 compiler: compiler.o asfixprinter.o expander.o asfix-trans.o init-patterns.o \
 	support/support.o
-	cd support; make
-	cd c-source; gmake libasfix2c.a
+	cd support; $(MAKE)
+	cd c-source; $(MAKE) libasfix2c.a
 	$(CC) -o compiler compiler.o asfixprinter.o init-patterns.o \
 	 expander.o asfix-trans.o $(COMPMODS) $(LIBS)
 
