@@ -1,0 +1,49 @@
+#! /bin/sh
+
+# $Id$
+
+toolbus=__bindir__/toolbus
+datadir=__datadir__
+
+tests=0
+failed=0
+
+call_toolbus () {
+  script=$1
+  tests=`expr $tests + 1`
+  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  toolbus_exit=$?
+  if [ $toolbus_exit != 0 ]; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  elif echo $result | grep -iq failed; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  else
+    echo -n .
+  fi
+}
+
+# Test 1. Add an equations section as text to the db.
+echo "" > Test.eqs
+call_toolbus module-db-test-1.tb
+
+# Test 2. Add a non-empty equations section as text and try to retrieve
+# again.
+echo "equations" > Test.eqs
+call_toolbus module-db-test-2.tb
+
+# Test 3. Add a non-empty equations section as tree.
+call_toolbus module-db-test-3.tb
+
+# Test 4. Update equations section in module-db.
+call_toolbus module-db-test-4.tb
+
+echo ""
+
+if [ $failed != 0 ]; then
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi
