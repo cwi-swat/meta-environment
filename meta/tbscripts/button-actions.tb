@@ -450,15 +450,16 @@ endlet
 
 process ParseTerm(EditorId: term, ModuleName: str) is
 let
-  ErrorFoci  : term
+  Focus  : term
 in
   snd-msg(invalidate-tree(EditorId)) .
+  rec-msg(invalidation-done(EditorId)) .
   snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
     rec-msg(parse-ok(trm(ModuleName))) .
     snd-msg(clear-focus(EditorId))
   +
-    rec-msg(parse-failed(trm(ModuleName), ErrorFoci?))
+    rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
 endlet
 
@@ -495,10 +496,11 @@ endlet
 process ParseSyntax(EditorId : term, ModuleName : str) is
 let
   Tree : term,
-  ErrorFoci : list,
+  Focus : term,
   Modules : list
 in
-      snd-msg(invalidate-tree(EditorId)).
+      snd-msg(invalidate-tree(EditorId)). 
+      rec-msg(invalidation-done(EditorId)).
       snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
       (
         rec-msg(parse-ok(trm("Sdf2"))) .
@@ -514,11 +516,12 @@ in
           rec-msg(error-opening(ModuleName, name-inconsistent)).
           snd-msg(invalidate-sdf-in-db(ModuleName)).
           snd-msg(invalidate-tree(EditorId)).
+          rec-msg(invalidation-done(EditorId)).
           snd-note(ui-status(
             errorf("Changing the name of %s is not permitted.",[ModuleName])))
         )
       +
-        rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
+        rec-msg(parse-failed(trm("Sdf2"), Focus?)) .
         snd-msg(invalidate-sdf-in-db(ModuleName))
       ) 
 endlet
@@ -526,9 +529,10 @@ endlet
 process ParseEquations(EditorId : term, ModuleName : str) is
 let
   Tree : term,
-  ErrorFoci : list
+  Focus : term
 in
   snd-msg(invalidate-tree(EditorId)).
+  rec-msg(invalidation-done(EditorId)).
   snd-msg(parse-focusses(EditorId, eqs(ModuleName))) .
   (
     rec-msg(parse-ok(eqs(ModuleName))) .
@@ -540,7 +544,7 @@ in
     rec-msg(eqs-updated) .
     snd-msg(clear-focus(EditorId))
   +
-    rec-msg(parse-failed(eqs(ModuleName), ErrorFoci?))
+    rec-msg(parse-failed(eqs(ModuleName), Focus?))
   )
 endlet
 

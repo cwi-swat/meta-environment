@@ -17,7 +17,8 @@ in
   snd-msg(set-focus(EditorId, Focus)) .
   (
     rec-note(syntax-changed(ModuleName)) .
-    snd-msg(invalidate-tree(EditorId))
+    snd-msg(invalidate-tree(EditorId)).
+    rec-msg(invalidation-done(EditorId))
   +
     rec-msg(extra-button-action(EditorId, ButtonName?)) .
     snd-msg(extra-button-action(ButtonName, "Term", ModuleName, EditorId)) 
