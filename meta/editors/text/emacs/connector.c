@@ -281,7 +281,7 @@ static void displayMessage(int write_to_editor_fd, TE_Action edAction)
 
   sprintf(buf,
 	  "(display-message-or-buffer \"%s\")",
-	  TE_getActionMessage(edAction));
+	  escapeQuotes(TE_getActionMessage(edAction)));
 
   sendToEmacs(write_to_editor_fd, buf);
 }
