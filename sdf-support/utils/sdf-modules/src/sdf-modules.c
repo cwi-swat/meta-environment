@@ -94,6 +94,18 @@ ATerm get_all_depending_module_names(int cid, ATerm pairs, char* name)
 }
 
 /*}}}  */
+/*{{{  ATerm get_depending_modules(int cid, ATerm atModules, char* name) */
+
+ATerm get_depending_module_names(int cid, ATerm pairs, char* name)
+{
+  ATerm id = ATmake("<str>", name);
+  ATermList depending = PI_getDirectDependingModules((ATermList) pairs, id);
+
+  return ATmake("snd-value(depending-module-names(<term>))",
+		depending);
+}
+
+/*}}}  */
 
 /*{{{  ATerm get_module_id(int cid, ATerm atModule) */
 

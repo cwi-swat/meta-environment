@@ -112,3 +112,30 @@ ATermList PI_getDependingModules(ATermList idImportPairs, ATerm id)
   destroyImportsTable();
   return result;
 }
+
+static ATermList filterDirectDependingModules(ATermList dependingModules,  ATerm id)
+{
+  ATermList result = ATempty;
+
+  for( ;!ATisEmpty(dependingModules); dependingModules = ATgetNext(dependingModules)) {
+    ATerm module = ATgetFirst(dependingModules);
+    ATermList imports = (ATermList) ATtableGet(importsTable, module);
+
+    if (isElem(id, imports)) {
+       result = ATinsert(result, module);
+    }
+  }
+
+  return result;
+}
+
+ATermList PI_getDirectDependingModules(ATermList idImportPairs, ATerm id)
+{
+  ATermList result;
+
+  initImportsTable(idImportPairs);
+  result = filterDirectDependingModules(getDependingModules(id), id);
+  destroyImportsTable();
+
+  return result;
+}
