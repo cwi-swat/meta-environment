@@ -50,7 +50,7 @@ in
           +
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
-            snd-msg(open-sdf-file(Name)). ( 
+            snd-msg(open-syntax-file(Name)). ( 
               rec-msg(opened-file(Name2?,tree(T?), SdfPath?,Time?)).
               snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
               rec-msg(need-modules(M1s?)).
@@ -60,7 +60,7 @@ in
                 rec-msg(table-on-disk(Table?, Time?)).
                 snd-msg(add-parse-table-to-db(eqs(Name), Table, Time)).
                 rec-msg(parse-table-added).
-                snd-msg(open-asf-file(Name, SdfPath)).
+                snd-msg(open-rules-file(Name, SdfPath)).
                 (
                   rec-msg(opened-file(Name?, text(EqsText?) , AsfPath?, Time?)).
                   snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)) .
@@ -77,7 +77,7 @@ in
                 )
               +
                 rec-msg(no-table-on-disk) .
-                snd-msg(open-asf-file(Name, SdfPath)).
+                snd-msg(open-rules-file(Name, SdfPath)).
                 (
                   rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
                   snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).
@@ -109,7 +109,7 @@ in
                 snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)) .
                 rec-msg(need-modules(M1s?)).
                 Ms := join(Ms,M1s) .
-                snd-msg(open-asf-file(Name, SdfPath)).
+                snd-msg(open-rules-file(Name, SdfPath)).
                 (
                   rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
                   snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).

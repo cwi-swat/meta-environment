@@ -4,25 +4,24 @@
 
 process Io is
 let
-  IO        : in-output,
-  Asfix     : term,
-  Name      : str,
-  Path      : str,
-  SdfPath   : str,
-  T         : term,
-  Text      : str,
-  SdfText   : str,
-  AsfText   : str,
-  FileName  : str,
-  Contents  : term,
-  Time      : int,
-  TimeStamp : term,
-  TableType : term,
-  Table     : term,
-  Paths     : list,
-  SyntaxExt : str,
-  RulesExt  : str,
-  TermExt   : str
+  IO         : in-output,
+  Tree       : term,
+  Name       : str,
+  Path       : str,
+  SyntaxPath : str,
+  Text       : str,
+  SyntaxText : str,
+  RulesText  : str,
+  FileName   : str,
+  Contents   : term,
+  Time       : int,
+  TimeStamp  : term,
+  TableType  : term,
+  Table      : term,
+  Paths      : list,
+  SyntaxExt  : str,
+  RulesExt   : str,
+  TermExt    : str
 in
   execute(in-output,IO?).
   (
@@ -64,18 +63,18 @@ in
     )
   +
     %% Check if a syntax module exists.
-    rec-msg(exists-sdf-module(Name?)) .
+    rec-msg(exists-syntax-module(Name?)) .
     snd-eval(IO, exists-syntax-module(Name)) .
     (
       rec-value(IO, exists) .
-      snd-msg(sdf-module-exists(Name))
+      snd-msg(syntax-module-exists(Name))
     +
       rec-value(IO, not-exists) .
-      snd-msg(sdf-module-not-exists(Name))
+      snd-msg(syntax-module-not-exists(Name))
     )
   +
     %% Create a (new) empty syntax module
-    rec-msg(create-empty-sdf-module(Path?, Name?)) .
+    rec-msg(create-empty-syntax-module(Path?, Name?)) .
     snd-eval(IO, create-empty-syntax-module(Path, Name)) .
     (
       rec-value(IO, creation-succeeded) .
@@ -85,30 +84,30 @@ in
       snd-msg(module-creation-failed(Name, Text))
     )
   +
-    %% Check if an equations section exists.
-    rec-msg(exists-asf-section(Name?, Path?)) .
+    %% Check if a rules section exists.
+    rec-msg(exists-rules-section(Name?, Path?)) .
     snd-eval(IO, exists-rules-section(Name, Path)) .
     (
       rec-value(IO, exists) .
-      snd-msg(asf-section-exists(Name))
+      snd-msg(rules-section-exists(Name))
     +
       rec-value(IO, not-exists) .
-      snd-msg(asf-section-not-exists(Name))
+      snd-msg(rules-section-not-exists(Name))
     )
   +
-    %% Create a (new) equations section for a given module
-    rec-msg(create-empty-equations(Name?, Path?)) .
+    %% Create a (new) rules section for a given module
+    rec-msg(create-empty-rules-section(Name?, Path?)) .
     snd-eval(IO, create-empty-rules-section(Name, Path)) .
     (
       rec-value(IO, creation-succeeded(FileName?)) .
-      snd-msg(empty-equations-created(FileName))
+      snd-msg(empty-rules-section-created(FileName))
     +
       rec-value(IO, creation-failed(Text?)) .
-      snd-msg(empty-equations-not-created(Name, Text))
+      snd-msg(empty-rules-section-not-created(Name, Text))
     )
   +
     %% Name represents the module-name (without extension)
-    rec-msg(open-sdf-file(Name?)).
+    rec-msg(open-syntax-file(Name?)).
     snd-eval(IO,open-syntax-file(Name)).
     (
       rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
@@ -128,8 +127,8 @@ in
       snd-msg(error-opening(Path))
     )
   +
-    rec-msg(open-asf-file(Name?, SdfPath?)).
-    snd-eval(IO, open-rules-file(Name, SdfPath)).
+    rec-msg(open-rules-file(Name?, SyntaxPath?)).
+    snd-eval(IO, open-rules-file(Name, SyntaxPath)).
     (
       rec-value(IO, opened-file(Name, Contents?, Path?, TimeStamp?)) .
       snd-msg(opened-file(Name, Contents, Path, TimeStamp)) 
@@ -138,8 +137,8 @@ in
       snd-msg(error-opening(Name))
     )
   +
-    rec-msg(save-asfix(Name?, Path?, Asfix?)) .
-    snd-eval(IO, save-tree(Name, Path, Asfix)) .
+    rec-msg(save-tree(Name?, Path?, Tree?)) .
+    snd-eval(IO, save-tree(Name, Path, Tree)) .
     rec-value(IO, save-done(Name?)) .
     snd-msg(save-done)
   +
@@ -148,23 +147,23 @@ in
     rec-value(IO, save-done(Path)) .
     snd-msg(save-done(Path))
   +
-    rec-msg(print-module-text(Name?, Path?, SdfText?, AsfText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SdfText, AsfText)) .
+    rec-msg(print-module-text(Name?, Path?, SyntaxText?, RulesText?)) .
+    snd-eval(IO, print-module-text(Name, Path, SyntaxText, RulesText)) .
     rec-value(IO, module-text-printed(Name)) .
     snd-msg(module-text-printed(Name))
   +
-    rec-msg(print-module-text(Name?, Path?, SdfText?)) .
-    snd-eval(IO, print-module-text(Name, Path, SdfText, "")) .
+    rec-msg(print-module-text(Name?, Path?, SyntaxText?)) .
+    snd-eval(IO, print-module-text(Name, Path, SyntaxText, "")) .
     rec-value(IO, module-text-printed(Name)) .
     snd-msg(module-text-printed(Name))
   +
-    rec-msg(save-table(Name?, Path?, Asfix?)) .
-    snd-eval(IO, save-parsetable(Name, Path, Asfix)) .
+    rec-msg(save-table(Name?, Path?, Table?)) .
+    snd-eval(IO, save-parsetable(Name, Path, Table)) .
     rec-value(IO, save-done(Name)).
     snd-msg(save-done)
   +
-    rec-msg(create-equations-dump-file(Name?, Path?, Asfix?)) .
-    snd-eval(IO, create-equations-dump-file(Name, Path, Asfix)) .
+    rec-msg(create-equations-dump-file(Name?, Path?, Tree?)) .
+    snd-eval(IO, create-equations-dump-file(Name, Path, Tree)) .
     (
       rec-value(IO, create-equations-dump-file-done(Name)) .
       snd-msg(create-equations-dump-file-done(Name))

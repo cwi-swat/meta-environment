@@ -55,7 +55,7 @@ in
             rec-msg(table-on-disk(Table?, Time?)).
             snd-msg(add-parse-table-to-db(eqs(Name), Table, Time)).
             rec-msg(parse-table-added).
-            snd-msg(open-asf-file(Name, SdfPath)).
+            snd-msg(open-rules-file(Name, SdfPath)).
             (
               rec-msg(opened-file(Name?, text(EqsText?) , AsfPath?, Time?)).
               snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)) .
@@ -72,7 +72,7 @@ in
             )
           +
             rec-msg(no-table-on-disk) .
-            snd-msg(open-asf-file(Name, SdfPath)).
+            snd-msg(open-rules-file(Name, SdfPath)).
             (
               rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
               snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).
@@ -103,7 +103,7 @@ in
           ( rec-msg(parse-result-asfix2me(Id?,parse-tree(T?))).
             snd-msg(add-sdf-module-to-db(Name, SdfPath, T, Time)).
             rec-msg(need-modules(Ms?)).
-            snd-msg(open-asf-file(Name, SdfPath)).
+            snd-msg(open-rules-file(Name, SdfPath)).
             (
               rec-msg(opened-file(Name?, text(EqsText?), AsfPath?, Time?)).
               snd-msg(add-eqs-to-db(Name, AsfPath, text(EqsText), Time)).

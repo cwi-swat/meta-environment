@@ -857,9 +857,21 @@ ATerm process_search_paths(int cid, char *config_filename, ATerm paths)
 
 void set_file_extensions(int cid, char *syntaxExt, char *rulesExt, char *termExt)
 {
-  syntax_ext = syntaxExt; 
-  rules_ext = rulesExt; 
-  term_ext = termExt; 
+  syntax_ext = (char *) malloc(strlen(syntaxExt) + 1);
+  if (syntax_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(syntax_ext, syntaxExt); 
+  rules_ext = (char *) malloc(strlen(rulesExt) + 1);
+  if (rules_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(rules_ext, rulesExt); 
+  term_ext = (char *) malloc(strlen(termExt) + 1);
+  if (term_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(term_ext, termExt); 
 }
 
 /*}}}  */

@@ -25,13 +25,13 @@ in
                                 [NewModuleName])))
     +
       rec-msg(not-exists-in-module-db(NewModuleName)) .
-      snd-msg(exists-sdf-module(NewModuleName)) .
+      snd-msg(exists-syntax-module(NewModuleName)) .
       (
-        rec-msg(sdf-module-exists(NewModuleName)) .
+        rec-msg(syntax-module-exists(NewModuleName)) .
         snd-note(ui-status(errorf("Module %s exists on disk",
                                   [NewModuleName])))
       +
-        rec-msg(sdf-module-not-exists(NewModuleName)) .
+        rec-msg(syntax-module-not-exists(NewModuleName)) .
         snd-msg(delete-editors-for-module(OldModuleName)) .
         snd-msg(get-all-depending-modules(OldModuleName)) .
         rec-msg(all-depending-modules(Modules?)) .

@@ -24,7 +24,7 @@ in
     rec-msg(initial-focus(Focus?))
   +
     rec-msg(unavailable).
-    snd-msg(open-sdf-file(ModuleName)) .
+    snd-msg(open-syntax-file(ModuleName)) .
     (
       rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
     +
