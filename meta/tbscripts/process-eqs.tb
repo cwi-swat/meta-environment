@@ -109,6 +109,8 @@ in
       NewEquations   := [] .
       snd-msg(get-all-imported-module-names(ModuleName)) .
       rec-msg(all-imported-module-names(ModuleNames?)) .
+      snd-msg(add-initial-eqs-module-names-hook(ModuleNames)) .
+      rec-msg(initial-eqs-module-names-added(ModuleNames?)) .
       GetImportsForRenaming(ModuleName, ModuleNames, Imports?) .
       if not-equal(ModuleNames, []) then
         Module  := first(ModuleNames) .
