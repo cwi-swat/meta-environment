@@ -37,17 +37,14 @@ ATERMLIB=${ATERM}/lib
 AC_SUBST(ATERMINC)
 AC_SUBST(ATERMLIB)
 
-dnl Again for AsFix (which is a part of THIS package now)
-ASFIXINC=${top_srcdir}/tree/libasfix-old/libasfix
-ASFIXLIB=${top_srcdir}/tree/libasfix-old/libasfix
-AC_SUBST(ASFIXINC)
-AC_SUBST(ASFIXLIB)
-
-
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
+
+dnl Require PT package (for AsFix)
+AC_PACKAGE_REQUIRE(asfix, asource,
+   [  --with-asfix=DIR        ParseTree distribution is in DIR])
 
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
@@ -139,11 +136,5 @@ AC_OUTPUT(
    pgen/test/first/Makefile
    pgen/test/grammars/Makefile
    pgen/test/tables/Makefile 
-   tree/Makefile
-   tree/libasfix-old/Makefile
-   tree/libasfix-old/libasfix/Makefile
-   tree/libasfix-old/asfix-tools/Makefile
-   tree/libasfix-old/test/Makefile
-   tree/libasfix1/Makefile
   , chmod +x sglr/test/regress-terms pgen/test/regress-lang
 )
