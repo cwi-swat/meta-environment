@@ -190,14 +190,14 @@ static Point parsePoint(char *s)
 	return makePointDefault(x, y);
 }
 
-static Polygon parseCoordinateList(char *coords, ATbool appendFirstToEnd)
+static Polygon parseCoordinateList(char *coords, ATbool endToBegin)
 {
   char *token;
 	Polygon poly = makePolygonEmpty();
 	Point last = NULL;
 
 	token = strtok(coords, " ");
-	if (appendFirstToEnd) {
+	if (endToBegin) {
     last = parsePoint(token);
 		token = strtok(NULL, " ");
 		assert(token);
@@ -207,11 +207,16 @@ static Polygon parseCoordinateList(char *coords, ATbool appendFirstToEnd)
 		poly = makePolygonMulti(point, poly);
 	} while ((token = strtok(NULL, " ")));
   
-  if (appendFirstToEnd) {
+  if (endToBegin) {
 	  poly = makePolygonMulti(last, poly);
   }
 
-	return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
+  if (endToBegin) {
+		return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
+  }
+  else {
+    return poly;
+  }
 }
 
 static Attribute parseBoundaries(char *coords)
