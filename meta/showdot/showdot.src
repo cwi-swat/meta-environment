@@ -26,7 +26,14 @@ TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 FILE=stdin
 
 usage () {
-  echo "Reads dot files from stdin and displays them in a tk window"
+  echo "showdot: displays dot files in a tk window"
+  echo ""
+  echo "Options: -h -i <file> -v"
+  echo "  -h         Usage info"
+  echo "  -i <file>  Input from file (default stdin)"
+  echo "  -v         Print version"
+  echo ""
+
   exit 0
 }
 
