@@ -1,16 +1,18 @@
 # $Id$
 
-EXTRA_DIST = sdf-tool.idef
-pkgdata_DATA = sdf-tool.idef
+include ${top_srcdir}/make_rules
 
-bin_PROGRAMS = sdf-tool
+EXTRA_DIST = sdf-imports.idef
+pkgdata_DATA = sdf-imports.idef
 
-sdf_tool_SOURCES = sdf-tool.c sdf-tool.tif.c
-sdf_tool_LDADD = -L$(top_builddir)/lib -lSDFME \
+bin_PROGRAMS = sdf-imports
+
+sdf_imports_SOURCES = sdf-tool.c sdf-tool.tif.c
+sdf_imports_LDADD = -L$(top_builddir)/lib -lSDFME \
                  -L$(ATERM)/lib -lATerm \
                  -L$(TOOLBUSLIB)/lib -lATB 
 
-noinst_HEADERS		= sdf-tool.tif.h
+noinst_HEADERS		= sdf-imports.tif.h
 
 INCLUDES	        = -I$(ATERM)/include  \
                           -I$(TOOLBUSLIB)/include \
