@@ -1,5 +1,8 @@
 $Id$
 
+Tue May 25 16:10:55 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add generation of java graph API
+
 Fri Apr 16 11:45:51 CEST 2004 <jurgenv@cwi.nl>
  * Improved tree2graph on the character level
 

@@ -32,6 +32,14 @@ AC_SUBST(ATERM)
 
 
 dnl }}}
+dnl {{{  Require ATerm Java library
+AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
+   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
+dnl ATERM_JAVA is not allowed in Makefile.am's
+JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
+AC_SUBST(JAVA_ATERM)
+
+dnl }}}
 dnl {{{  error-support
 
 dnl Require error-support package
@@ -58,6 +66,13 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
 AC_SUBST(TOOLBUSLIB)
 
 dnl }}}
+dnl {{{  ToolBus package
+
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl }}}
 dnl {{{  GraphViz 
 
 AC_PACKAGE_REQUIRE(graphviz, dot,
@@ -65,6 +80,10 @@ AC_PACKAGE_REQUIRE(graphviz, dot,
 AC_SUBST(GRAPHVIZ)
 
 dnl }}}
+
+dnl This variable holds all external jarfiles
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes
+AC_SUBST(EXTERNAL_JARS)
 
 dnl Need lex and yacc support
 AM_PROG_LEX

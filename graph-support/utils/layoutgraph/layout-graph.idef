@@ -9,12 +9,12 @@ let
   Graph : term
 in
   (
-    rec-msg(layout-graph(Graph?))
+    rec-msg(gl-layout-graph(Graph?))
     . execute(layoutgraph, GL?)
     . snd-eval(GL, layout-graph(Graph))
     . rec-value(GL, graph-layouted(Graph?))
     . snd-terminate(GL, "done")
-    . snd-msg(graph-layouted(Graph))
+    . snd-msg(gl-graph(Graph))
   ) * delta
 endlet
 
