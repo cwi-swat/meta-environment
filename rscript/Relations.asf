@@ -105,56 +105,31 @@ equations
 [id-1]   id({E, E*}) = union({<E, E>}, id({E*}))
 [id-2]   id({}) ={}
 
-[cl-1] closure(Rel, Rel1, Rel1) = Rel1
+[cl-1] 	closure(Rel, Rel1, Rel1) = Rel1
 
-[cl-2] Rel1 != Rel2
-       =========================================
-       closure(Rel, Rel1, Rel2) = closure(Rel, Rel2, union(Rel2, compose(Rel2, Rel)))
+[cl-2] 	Rel1 != Rel2
+       	=========================================
+       	closure(Rel, Rel1, Rel2) = closure(Rel, Rel2, union(Rel2, compose(Rel2, Rel)))
 
 [tcl-1]  Rel + = closure(Rel, {}, Rel)
 
 [rtcl-1] Rel* = union(Rel+, id(carrier(Rel)))
 
-[bcl-1]  closure(Bag, Rel) = range(closure(Rel, {}, domR(Rel, Bag)))
-
-
-[dm1-1]  compose(Rel4, Rel3) = Rel', Rel' != {}, Rel'' = diff(Rel', Rel2)
-         ==========================================
-         dominators1(Rel1, Rel2, Rel3, Rel4) = dominators1(union(Rel1, Rel''), Rel2, Rel3, Rel'') 
-
-[dm1-2]  compose(Rel4, Rel3) = Rel', Rel' = {}
-         ==========================================
-         dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
-
-[dm-1]   dominators(Rel1, Rel2, Rel3) = dominators1(Rel1, Rel2, Rel3, Rel1)
-
-
 %% --- reachX
-
-[rX-1] reachX(Rel, Bag, Rel1, Rel1) = Rel1
-
-[rX-2] Rel1 != Rel2
-       =========================================
-       reachX(Rel, Bag, Rel1, Rel2) = reachX(Rel, Bag, Rel2, union(Rel2, compose(Rel2, Rel)))
 
 [rX-3] Rel' = carX(Rel, Bag2),
        Rel''= domR(Rel', Bag1)
        =========================================
-       reachX(Bag1, Bag2, Rel) = reachX(Rel', Bag2, {}, Rel'')
+       reachX(Bag1, Bag2, Rel) = closure(Rel', {}, Rel'')
 
 %% --- reachR
-
-
-[rR-1] reachR(Rel, Bag, Rel1, Rel1) = Rel1
-
-[rR-2] Rel1 != Rel2
-       =========================================
-       reachR(Rel, Bag, Rel1, Rel2) = reachR(Rel, Bag, Rel2, union(Rel2, compose(Rel2, Rel)))
 
 [rX-3] Rel' = carR(Rel, Bag2),
        Rel''= domR(Rel', Bag1)
        =========================================
-       reachR(Bag1, Bag2, Rel) = reachR(Rel', Bag2, {}, Rel'')
+       reachR(Bag1, Bag2, Rel) = closure(Rel', {}, Rel'')
+
+%% --- if on Rel
 
 [if-1]   if true then Rel1 else Rel2 fi  = Rel1
 [if-2]   if false then Rel1 else Rel2 fi = Rel2

@@ -1,7 +1,11 @@
 
 eval-rscript(
 
-int I = 0
+<T1,T2> swap(<T2,T1> P) = <sec(P), fst(P)>
+
+rel[str,int] Rel1     = {<"a", 1>}
+rel[int,str] SRel1 = {swap(<V,N>) |<V,N> in Rel1  }
+)
 
 
 

@@ -67,12 +67,7 @@ exports
 
 %% value formers
 
-%%     "{" FROM "|" REXP "}"                    -> REXP
-%%     "{" {FROM ","}+ "|" REXP "|" REXP "}"    -> REXP
-
-    "{" {FROM ","}+ ":" REXP "}"             	-> REXP
-    "{" {FROM ","}+ ":" "if" REXP "then" REXP "}"
-						-> REXP
+    "{" REXP "|" {FROM ","}+ ("," REXP)? "}"	-> REXP
 
      RVAR "in" REXP                           	-> FROM
      "<" RVAR "," RVAR ">" in REXP            	-> FROM
