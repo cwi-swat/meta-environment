@@ -104,9 +104,6 @@ dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
-dnl Where is perl5?
-AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
-
 AC_PATH_PROG(JAVA, java)
 if test "x${JAVA}" = "x"; then
   AC_MSG_ERROR("make sure java version 1.4 or better is in your PATH")

@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
+ * configure.in:
+   - banish PERL :-)
+
 Mon Sep  8 14:04:42 CEST 2003 <jong@cwi.nl>
  * editors/text/common/connector.c:
    - workaround to be robust against multiple incoming 'modified' messages.
