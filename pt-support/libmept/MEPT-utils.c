@@ -763,6 +763,10 @@ PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
   return PT_ArgsFromTerm((ATerm)arg_list);
 }
 
+/*}}}  */
+
+/*{{{  PT_Tree PT_makeTreeLayoutEmpty() */
+
 PT_Tree PT_makeTreeLayoutEmpty()
 {
   PT_Symbol layoutSymbol = PT_makeSymbolCf(
@@ -773,6 +777,9 @@ PT_Tree PT_makeTreeLayoutEmpty()
                                   PT_makeAttributesNoAttrs());
   return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
 }
+
+/*}}}  */
+/*{{{  PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args) */
 
 PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
 {
@@ -788,6 +795,9 @@ PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
   return PT_makeTreeAppl(optLayoutProd, args);
 }
 
+/*}}}  */
+/*{{{  PT_Tree PT_makeTreeLayoutFromString(const char *str) */
+
 PT_Tree PT_makeTreeLayoutFromString(const char *str)
 {
   PT_Args args = PT_makeArgsEmpty();
@@ -800,6 +810,8 @@ PT_Tree PT_makeTreeLayoutFromString(const char *str)
   return PT_makeTreeLayoutNonEmpty(args);
 }
 
+/*}}}  */
+/*{{{  PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree) */
 
 PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
 {
@@ -813,6 +825,9 @@ PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
   return PT_makeTreeAppl(prod, args);
 }
 
+/*}}}  */
+/*{{{  ATbool PT_isTreeLayout(PT_Tree tree) */
+
 ATbool PT_isTreeLayout(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
@@ -823,6 +838,9 @@ ATbool PT_isTreeLayout(PT_Tree tree)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_isTreeLexical(PT_Tree tree) */
+
 ATbool PT_isTreeLexical(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
@@ -831,7 +849,8 @@ ATbool PT_isTreeLexical(PT_Tree tree)
   }
   return ATfalse;
 }
-/*}}}  */ 
+
+/*}}}  */
 
 /* ATerm annotations */
 /*{{{  ATerm PT_getTreeAnnotations(PT_Tree tree) */
@@ -1212,7 +1231,6 @@ ATbool PT_hasProductionConstructorAttr(PT_Production prod)
 /*}}}  */       
 /*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
 
-PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 {
   return PT_makeAttrsFromTerm(
            (ATerm)ATreverse(
@@ -1220,7 +1238,6 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 }
 
 /*}}}  */
-
 
 /* Parse trees */
 /*{{{  PT_ParseTree PT_makeParseTree(PT_Tree tree) */
