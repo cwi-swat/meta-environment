@@ -157,8 +157,8 @@ in
     rec-value(IO, save-done(Name)).
     snd-msg(save-done)
   +
-    rec-msg(create-equations-dump-file(Name?, Asfix?)) .
-    snd-eval(IO, create-equations-dump-file(Name, Asfix)) .
+    rec-msg(create-equations-dump-file(Name?, Path?, Asfix?)) .
+    snd-eval(IO, create-equations-dump-file(Name, Path, Asfix)) .
     (
       rec-value(IO, create-equations-dump-file-done(Name)) .
       snd-msg(create-equations-dump-file-done(Name))

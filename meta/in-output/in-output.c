@@ -297,12 +297,18 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
 /*}}}  */
 /*{{{  ATerm create_equations_dump_file(int cid, char *module, ATerm equations) */
 
-ATerm create_equations_dump_file(int cid, char *module, ATerm equations)
+ATerm create_equations_dump_file(int cid, char *module, char *path,
+                                 ATerm equations)
 {
   FILE *f = NULL;
   char filename[PATH_LEN] = {'\0'};
 
-  sprintf(filename,"%s%s", module, EQSDUMP_BAF_EXT);
+  if (strlen(path) > 0) {
+    sprintf(filename,"%s", path);
+  }
+  else {
+    sprintf(filename,"%s%s", module, EQSDUMP_BAF_EXT);
+  }
 
   if(!(f = fopen(filename, "w"))) {
     char *errmsg = strerror(errno);
