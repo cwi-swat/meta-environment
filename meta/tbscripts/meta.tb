@@ -13,9 +13,10 @@
 #include "in-output.idef"
 #include "parsetrees.tb"
 #include "open-modules.tb"
-#include "retrieve-eqs.tb"
+#include "new-module.tb"
 #include "close-modules.tb"
 #include "revert-module.tb"
+#include "retrieve-eqs.tb"
 #include "ui.tb"
 #include "status-display.tb"
 #include "edit-module.tb"
@@ -32,4 +33,4 @@
 #include "se.tb"
 #include "set-parsetable.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,SE,Anno,Set-parsetable) 
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,New-module,SE,Anno,Set-parsetable) 

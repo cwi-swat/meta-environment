@@ -7,27 +7,29 @@ let
   ModuleName: str,
   ErrMsg: str
 in
-  rec-msg(create-new-module(ModuleName?)) .
-  snd-msg(is-module-in-db(ModuleName)) .
   (
-    rec-msg(exists-in-module-db(ModuleName)) .
-    snd-msg(module-not-created("Module already in database"))
-  +
-    rec-msg(not-exists-in-module-db(ModuleName)) .
-    snd-msg(exists-sdf2-module(ModuleName)) .
+    rec-msg(create-new-module(ModuleName?)) .
+    snd-msg(is-module-in-db(ModuleName)) .
     (
-      rec-msg(sdf2-module-exists(ModuleName)) .
-      snd-msg(module-not-created("Module already exists in text or baf"))
+      rec-msg(exists-in-module-db(ModuleName)) .
+      snd-msg(module-not-created("Module already in database"))
     +
-      rec-msg(sdf2-module-not-exists(ModuleName)) .
-      snd-msg(create-empty-sdf2-module(ModuleName)) .
+      rec-msg(not-exists-in-module-db(ModuleName)) .
+      snd-msg(exists-sdf2-module(ModuleName)) .
       (
-	rec-msg(module-created(ModuleName)) .
-	snd-msg(module-created)
+        rec-msg(sdf2-module-exists(ModuleName)) .
+        snd-msg(module-not-created("Module already exists in text or baf"))
       +
-        rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
-	snd-msg(module-not-created(ErrMsg))
+        rec-msg(sdf2-module-not-exists(ModuleName)) .
+        snd-msg(create-empty-sdf2-module(ModuleName)) .
+        (
+	  rec-msg(module-created(ModuleName)) .
+      	  snd-msg(module-created)
+        +
+          rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
+	  snd-msg(module-not-created(ErrMsg))
+        )
       )
     )
-  )
+  )* delta
 endlet

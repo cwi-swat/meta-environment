@@ -64,7 +64,7 @@ BINFILES	=
 LIBFILES	= 
 DATAFILES	= meta.tb editor.tb clear-all.tb \
                   close-modules.tb edit-module.tb edit-term.tb focus.tb \
-                  open-modules.tb parsetrees.tb prettyprinter.tb \
+                  new-module.tb open-modules.tb parsetrees.tb prettyprinter.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb compiler.tb pgen.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
