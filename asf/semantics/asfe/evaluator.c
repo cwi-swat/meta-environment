@@ -3,6 +3,7 @@
  */
 
 /*{{{   evaluator.c */
+
 /*
    A first version of an INTERPRETER in ToolBus C.
    This program is written by Mark van den Brand.
@@ -286,7 +287,7 @@ ATerm equations_available(int cid, char *name)
 
 
 /*}}}  */
-/*{{{  ATerm add_equations(int cid, char *name, ATermList equs) */
+/*{{{  ATerm add_equations(int cid, char *modname, ATermList equs) */
 
 /* The function ``add_equations'' takes care of adding a new list
    of equations that is added to the internal database. The arguments
@@ -302,7 +303,7 @@ ATerm equations_available(int cid, char *name)
       the original list of equations minus the equations which
       where stored. Therefore the function ``add_equations''
       contains a loop. */
-ATerm add_equations(int cid, char *name, ATerm equs)
+ATerm add_equations(int cid, char *modname, ATerm equs)
 {
   ATermList newequs;
   int l;
@@ -313,14 +314,26 @@ ATerm add_equations(int cid, char *name, ATerm equs)
   newequs = RWprepareEqs((ATermList) equs);
   l = ATgetLength(newequs);
 
-  enter_equations(name, newequs);
+  enter_equations(modname, newequs);
 
   if(run_verbose) {
-    ATwarning("Processing %d equations of module %s\n",l,name);
+    ATwarning("Processing %d equations of module %s\n",l,modname);
   }
-  return ATmake("snd-value(equ-added(<str>))",name);
+  return ATmake("snd-value(equ-added(<str>))",modname);
 }
 
+
+/*}}}  */
+/*{{{  void remove_equations(int cid, char *modname) */
+
+void remove_equations(int cid, char *modname)
+{
+  if(run_verbose) {
+    ATwarning("removing equations for module: %s\n", modname);
+  }
+
+  delete_equations(modname);
+}
 
 /*}}}  */
 /*{{{  ATerm interpret(int cid,ATerm modname, ATerm trm) */
@@ -1192,6 +1205,5 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
-
 
 /*}}}  */

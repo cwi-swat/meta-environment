@@ -38,5 +38,6 @@ equation_entry *find_equation(equation_entry *prev,
 void select_equations(char *module);
 void enter_equations(char *module, ATermList eqs);
 ATbool find_module(char *module);
+void delete_equations(char *module);
 
 #endif

@@ -1,5 +1,3 @@
-
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -30,6 +28,7 @@ equation_table *create_equation_table(int size)
     ATerror("out of memory in create_equation_table\n");
   table->next = NULL;
   table->module = NULL;
+  ATprotect(&table->module);
   table->size = size;
   table->table = (equation_entry **)malloc(sizeof(equation_entry *)*size);
   for(i=0; i<size; i++)
@@ -71,6 +70,7 @@ Free all memory associated with an equation table.
 void destroy_equation_table(equation_table *table)
 {
   flush_equations(table);
+  ATunprotect(&table->module);
   free(table->table);
   free(table);
 }
@@ -263,32 +263,67 @@ ATbool find_module(char *module)
     return ATfalse;
 }
 /*}}}  */
-/*{{{  void enter_equations(char *module, ATermList eqs) */
+/*{{{  equation_table *find_equation_table(char *modname) */
 
-void enter_equations(char *module, ATermList eqs)
+equation_table *find_equation_table(char *modname)
 {
   equation_table *cur = tables;
-  ATerm t_module = ATmake("<str>", module);
+  ATerm t_module = ATmake("<str>", modname);
  
-  while(cur && !ATisEqual(cur->module, t_module))
+  while(cur && !ATisEqual(cur->module, t_module)) {
     cur = cur->next;
+  }
+  
+  return cur;
+}
 
-  if(!cur) {
-    cur = create_equation_table(ATgetLength(eqs)*2);
-    cur->module = t_module;
-    ATprotect(&cur->module);
-    cur->next = tables;
-    tables = cur;
+/*}}}  */
+
+/*{{{  void enter_equations(char *modname, ATermList eqs) */
+
+void enter_equations(char *modname, ATermList eqs)
+{
+  equation_table *table;
+
+  table = find_equation_table(modname);
+
+  if(!table) {
+    table = create_equation_table(ATgetLength(eqs)*2);
+    table->module = ATmake("<str>", modname);
+    table->next = tables;
+    tables = table;
   }
 
-  equations = cur;
-  flush_equations(equations);
+  flush_equations(table);
 
   while(!ATisEmpty(eqs)) {
-    enter_equation(equations, ATgetFirst(eqs));
+    enter_equation(table, ATgetFirst(eqs));
     do {
       eqs = ATgetNext(eqs);
     } while(!ATisEmpty(eqs) && asfix_is_layout(ATgetFirst(eqs)));
+  }
+}
+
+/*}}}  */
+/*{{{  void delete_equations(char *modname)  */
+
+void delete_equations(char *modname)
+{
+  equation_table *cur = tables, *prev = NULL;
+  ATerm t_module = ATmake("<str>", modname);
+ 
+  while(cur && !ATisEqual(cur->module, t_module)) {
+    prev = cur;
+    cur = cur->next;
+  }
+  
+  if(cur) {
+    if(prev) {
+      prev->next = cur->next;
+    } else {
+      tables = cur->next;
+    }
+    destroy_equation_table(cur);
   }
 }
 
@@ -730,7 +765,6 @@ ATerm RWrestoreTerm(ATerm t)
 }
 
 /*}}}  */
-
 /*}}}  */
 /*{{{  lexicals*/
 

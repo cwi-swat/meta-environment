@@ -1,0 +1,21 @@
+#!/bin/sh
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+toolbus=@bindir@/toolbus
+datadir=@datadir@
+
+
+call_toolbus () {
+  script=$1
+  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  if echo $result | grep -iq failed; then
+    echo ${result}
+    exit 1
+  else
+    echo -n "."
+  fi
+}
+
+call_toolbus reduce-test.tb
+
+echo ""

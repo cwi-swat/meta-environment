@@ -1,0 +1,13 @@
+#include "evaluator.tb"
+
+process Test is 
+  snd-msg(eqs-available("NonExistingModule")) .
+  (  
+    rec-msg(eqs-not-available)
+  +
+    shutdown("reduce-test-1 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+
+toolbus(Evaluator, Test)

@@ -1,0 +1,23 @@
+# $Id$
+
+@SET_MAKE@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+datadir		= @datadir@
+
+TESTCASES	= reduce-test
+
+# CLEANFILES are removed by 'make clean'
+CLEANFILES	= ${TESTCASES}
+
+test: ${TESTCASES}
+	@for testcase in ${TESTCASES}; do \
+		echo -n "Running $${testcase}"; \
+		sh ./$${testcase}; \
+	done
+
+clean:
+	@rm -f *.o *~ $(CLEANFILES)
+

@@ -76,10 +76,14 @@ DISTCLEANFILES	=
 # all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+.PHONY: test
+
 # Unit test target
 test:	all
 	$(top_srcdir)/utils/test-help ./evaluator
 	$(top_srcdir)/utils/test-version ./evaluator
+	@cd test; make test
+
 	
 MODULES	= evaluator.o preparation.o
 
