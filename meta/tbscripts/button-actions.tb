@@ -297,7 +297,7 @@ in
           FilePath := first(args(STree)) .
           snd-msg(check-editor-id(FilePath, NewModName)) .
           (
-            rec-msg(existing-editor(FilePath?, EditorId2?)).
+            rec-msg(existing-editor(EditorId2?)).
             GetFocus(EditorId2, RTree?) .
             if not-equal(RTree, error-tree) then
               StackPushTerm(Stack,Stack?,RTree) .

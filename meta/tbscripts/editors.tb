@@ -159,7 +159,7 @@ let
 in
   snd-msg(check-editor-id(FileName, ModuleName)) .
   (
-    rec-msg(existing-editor(FileName, EditorId?)) .
+    rec-msg(existing-editor(EditorId?)) .
     snd-msg(kill-editor(EditorId))
   +
     rec-msg(non-existing-editor(FileName))
