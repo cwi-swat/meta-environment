@@ -52,29 +52,59 @@ process Edit(Filename: str, Modulename: str, Sid: term?) is
   . rec-msg(em-session(Filename, Modulename, Sid?))
 
 /*}}}  */
+
+/*{{{  process IsStructureEditorRegistered(Sid: term Registered: bool?) */
+
+process IsStructureEditorRegistered(Sid: term, Registered: bool?) is
+  snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, structure))
+    . Registered := true
+  +
+    rec-msg(em-editor-not-registered(Sid, structure))
+    . Registered := false
+  )
+
+/*}}}  */
+/*{{{  process IsTextEditorRegistered(Sid: term Registered: bool?) */
+
+process IsTextEditorRegistered(Sid: term, Registered: bool?) is
+  snd-msg(em-is-editor-registered(Sid, text))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, text))
+    . Registered := true
+  +
+    rec-msg(em-editor-not-registered(Sid, text))
+    . Registered := false
+  )
+
+/*}}}  */
+
 /*{{{  process EditText(Sid: term, Type: term) */
 
 process EditText(Sid: term, Type: term) is
 let
   Actions: list,
   Filename: str,
-  Modulename: str
+  Modulename: str,
+  Registered: bool
 in
-  snd-msg(em-is-editor-registered(Sid, text))
+  IsTextEditorRegistered(Sid, Registered?)
   .
-  (
-    rec-msg(em-editor-not-registered(Sid, text))
-    . snd-msg(em-register-editor(Sid, text))
+  if equal(Registered, true)
+  then
+    snd-msg(te-editor-to-front(Sid))
+  else
+    snd-msg(em-register-editor(Sid, text))
     . GetModulename(Sid, Modulename?)
     . snd-msg(get-auxiliary-buttons(Type, Modulename))
     . rec-msg(button-list(Modulename, Actions?))
     . GetFilename(Sid, Filename?)
     . snd-msg(te-edit-text(Sid, EDITOR, Filename, Actions))
     /*. snd-msg(te-set-actions(Sid, Actions))*/
-  +
-    rec-msg(em-editor-registered(Sid, text))
-    . snd-msg(te-editor-to-front(Sid))
-  )
+  fi
 endlet
 
 /*}}}  */
@@ -83,13 +113,14 @@ endlet
 process EditStructure(Sid: term) is
 let
   Modulename: str,
+  Registered: bool,
   Tree: term
 in
-  snd-msg(em-is-editor-registered(Sid, structure))
+  IsStructureEditorRegistered(Sid, Registered?)
   .
-  (
-    rec-msg(em-editor-not-registered(Sid, structure))
-    . GetModulename(Sid, Modulename?)
+  if equal(Registered, false)
+  then
+    GetModulename(Sid, Modulename?)
     . snd-msg(get-syntax-tree(Modulename))
     .
     (
@@ -100,10 +131,9 @@ in
       rec-msg(unavailable)
       . printf("EditStructure: no tree available for %s\n", Modulename)
     )
-  +
-    rec-msg(em-editor-registered(Sid, structure))
-    . printf("EditStructure: already editing\n")
-  )
+  else
+    tau
+  fi
 endlet
 
 /*}}}  */
@@ -131,44 +161,47 @@ process MouseClicked(Sid: term) is
 let
   Focus: term,
   Offset: int,
+  Registered: bool,
   Sortname: str
 in
-    rec-msg(te-mouse-click-at-offset(Sid, Offset?))
-    . snd-msg(em-is-editor-registered(Sid, structure))
-    .
-    (
-      rec-msg(em-editor-registered(Sid, structure))
-      . snd-msg(se-set-cursor-at-offset(Sid, Offset))
-      . snd-msg(se-get-focus-at-cursor(Sid))
-      . rec-msg(se-focus-at-cursor(Sid, Focus?))
-      . snd-msg(se-get-sort-at-cursor(Sid))
-      . rec-msg(se-sort-at-cursor(Sid, Sortname?))
-      . snd-msg(te-set-focus(Sid, Focus, Sortname))
-    +
-      rec-msg(em-editor-not-registered(Sid, structure))
-      . printf("mouse click ignored, no structure editor\n")
-    )
+  rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+  . IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true)
+  then
+    snd-msg(se-set-cursor-at-offset(Sid, Offset))
+    . snd-msg(se-get-focus-at-cursor(Sid))
+    . rec-msg(se-focus-at-cursor(Sid, Focus?))
+    . snd-msg(se-get-sort-at-cursor(Sid))
+    . rec-msg(se-sort-at-cursor(Sid, Sortname?))
+    . snd-msg(te-set-focus(Sid, Focus, Sortname))
+  else
+    tau
+  fi
 endlet
 
 /*}}}  */
 /*{{{  process TextChanged(Sid: term) */
 
 process TextChanged(Sid: term) is
+let
+  Registered: bool
+in
   rec-msg(te-contents-changed(Sid))
-  . snd-msg(em-is-editor-registered(Sid, structure))
+  . IsStructureEditorRegistered(Sid, Registered?)
   .
-  (
-    rec-msg(em-editor-registered(Sid, structure))
-    . snd-msg(em-unregister-editor(Sid, structure))
-    . snd-msg(se-delete(Sid))
+  if equal(Registered, true)
+  then
+    DeleteStructureEditor(Sid)
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid,
       "Editor contents have changed, focus is unavailable until next parse."))
-  +
-    rec-msg(em-editor-not-registered(Sid, structure))
-  )
+  else
+    tau
+  fi
+endlet
 
-  /*}}}  */
+/*}}}  */
 
 /*{{{  process EditorDisconnected(Sid: term) */
 
@@ -184,41 +217,45 @@ process EditorDisconnected(Sid: term) is
 /*{{{  process DeleteTextEditor(Sid: term) */
 
 process DeleteTextEditor(Sid: term) is
-  snd-msg(em-is-editor-registered(Sid, text))
-  . printf("DeleteTextEditor: %t\n", Sid)
-  .
-  (
-    rec-msg(em-editor-registered(Sid, text))
-  . printf("DeleteTextEditor: %t registered\n", Sid)
-    . snd-msg(te-kill-text-editor(Sid))
-    . snd-msg(em-unregister-editor(Sid, text))
-  +
-    rec-msg(em-editor-not-registered(Sid, text))
-  . printf("DeleteTextEditor: %t unregistered\n", Sid)
-  )
+  snd-msg(te-kill-text-editor(Sid))
+  . printf("Deleting text editor: %t\n", Sid)
+  . snd-msg(em-unregister-editor(Sid, text))
 
 /*}}}  */
 /*{{{  process DeleteStructureEditor(Sid: term) */
 
 process DeleteStructureEditor(Sid: term) is
-  snd-msg(em-is-editor-registered(Sid, structure))
-  .
-  (
-    rec-msg(em-editor-registered(Sid, structure))
-    . snd-msg(se-delete(Sid))
-    . snd-msg(em-unregister-editor(Sid, structure))
-  +
-    rec-msg(em-editor-not-registered(Sid, structure))
-  )
+  snd-msg(se-delete(Sid))
+  . printf("Deleting structure editor: %t\n", Sid)
+  . snd-msg(em-unregister-editor(Sid, structure))
 
 /*}}}  */
 /*{{{  process DeleteSession(Sid: term) */
 
 process DeleteSession(Sid: term) is
-  printf("DeleteSession: %t\n", Sid) .
-  DeleteTextEditor(Sid)
-  . DeleteStructureEditor(Sid)
+let
+  Registered: bool
+in
+  IsTextEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true)
+  then
+    DeleteTextEditor(Sid)
+  else
+    tau
+  fi
+
+  . IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true)
+  then
+    DeleteStructureEditor(Sid)
+  else
+    tau
+  fi
+
   . snd-msg(em-delete-session(Sid))
+endlet
 
 /*}}}  */
 /*{{{  process DeleteSessions(Modulename: str) */
@@ -249,26 +286,16 @@ endlet
 /*{{{  process GetPendingChanges(Sid: term, HasChanges: bool?) */
 
 process GetPendingChanges(Sid: term, HasChanges: bool?) is
-  snd-msg(em-is-editor-registered(Sid, structure))
-  .
-  (
-    rec-msg(em-editor-registered(Sid, structure))
-    . HasChanges := false
-  +
-    rec-msg(em-editor-not-registered(Sid, structure))
-    . snd-msg(em-is-editor-registered(Sid, text))
-    .
-    (
-      rec-msg(em-editor-registered(Sid, text))
-      . HasChanges := true
-    +
-      rec-msg(em-editor-not-registered(Sid, text))
-      . HasChanges := false
-    )
-  )
+let
+  HasText: bool,
+  HasStructure: bool
+in
+  IsTextEditorRegistered(Sid, HasText?)
+  . IsStructureEditorRegistered(Sid, HasStructure?)
+  . HasChanges := and(HasText, not(HasStructure))
+endlet
 
 /*}}}  */
-
 /*{{{  process CommitPendingChanges(Modulename: str, HasChanges: bool) */
 
 process CommitPendingChanges(Modulename: str, HasChanges: bool) is
