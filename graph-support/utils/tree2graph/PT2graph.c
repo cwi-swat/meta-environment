@@ -27,60 +27,6 @@ static size_t size;
 
 /*}}}  */
 
-/*{{{  static char* escape(const char* str) */
-
-static char* escape(const char* str)
-{
-  int i,j;
-  int len = strlen(str);
-  char *escaped = (char*) malloc(5 * len * sizeof(char) + 5);
-
-  if (escaped == NULL) {
-    ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
-    return NULL;
-  }
-
-  i = 0;
-  j = 0;
-
-  for (; i < len; i++, j++) {
-    switch(str[i]) {
-    case '\n':
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j] = 'n';
-      break;
-    case '\t':
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j] = 't';
-      break; 
-    case '\\':
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j++] = '\\';
-      escaped[j]   = '\\';
-      break;
-    case '\"':
-      escaped[j++] = '\\';
-      /* drop intended */
-    default: 
-      escaped[j] = str[i];
-      break;
-    }
-  }
-
-  escaped[j] = '\0';
-
-  return escaped;
-}
-
-/*}}}  */
-
 /*{{{  static long makeNodeId(PT_Tree tree) */
 
 static long makeNodeId(PT_Tree tree)
@@ -123,12 +69,6 @@ static Graph printNode(Graph graph,
   nameAttr = makeAttributeLabel(contents);
   attrList = makeAttributeListMulti(nameAttr, attrList);
   
-  if (productions_on) {
-    shape = makeShapeBox();
-  }
-  else {
-    shape = makeShapeEllipse();
-  }
   shapeAttr = makeAttributeShape(shape);
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
