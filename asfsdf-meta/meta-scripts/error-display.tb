@@ -17,11 +17,11 @@ in
   (
     rec-msg(display-rewrite-errors(ModuleName?, Errors?)).
     snd-note(remove-feedback-summary("asfe","all")) .
-    snd-note(show-feedback-summary(feedback("asfe","all",Errors)))
+    snd-note(show-feedback-summary(summary("asfe","all",Errors)))
   +
     rec-msg(display-asf-errors(ModuleName?, Errors?)).
     snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
-    snd-note(show-feedback-summary(feedback("asf-checker",ModuleName,Errors)))
+    snd-note(show-feedback-summary(summary("asf-checker",ModuleName,Errors)))
   +
     rec-msg(display-sdf-errors(Feedback?)) .
     snd-msg(convert-feedback(Feedback)) .
