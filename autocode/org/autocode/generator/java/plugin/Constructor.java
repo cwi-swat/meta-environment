@@ -53,6 +53,9 @@ public class Constructor
       }
     }
 
+    String typeName = generator.javaTypeName(typeContext.getName());
+    constructor.setDescription("creates a new " + typeName + ".");
+
     generator.getCompilationUnit().addMethod(constructor);
   }
 

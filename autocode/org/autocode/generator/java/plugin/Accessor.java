@@ -31,7 +31,7 @@ public class Accessor
     JavaAttribute attr =
       new JavaAttribute(attrName, attrType, access, isFinal, isStatic);
 
-    String desc = "the " + fieldContext.getString("description");
+    String desc = "the " + fieldContext.getString("description") + ".";
     attr.setDescription(desc);
 
     if (!unit.hasAttribute(attr)) {
@@ -60,7 +60,7 @@ public class Accessor
 
     JavaMethod method
       = createMethod(operationContext, methodName, attrType, body);
-    method.setDescription("get the " + fieldContext.getString("description"));
+    method.setDescription("gets the " + fieldContext.getString("description") + ".");
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
@@ -92,7 +92,7 @@ public class Accessor
     body.addLine(attrName + " = " + paramName + ";");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
-    method.setDescription("set the " + fieldContext.getString("description"));
+    method.setDescription("sets the " + fieldContext.getString("description") + ".");
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
@@ -131,6 +131,8 @@ public class Accessor
     body.addLine(attrName + " = new " + implementation + "();");
 
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    method.setDescription("initializes the "
+			  + fieldContext.getString("description") + ".");
     unit.addMethod(method);
   }
 

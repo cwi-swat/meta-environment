@@ -148,6 +148,7 @@ public class JavaGenerator
   }
 
   //}}}
+
   //{{{ protected void emitAttributes(JavaCompilationUnit unit)
 
   protected void emitAttributes(JavaCompilationUnit unit)
@@ -192,6 +193,7 @@ public class JavaGenerator
   }
 
   //}}}
+
   //{{{ protected void emitMethods(JavaCompilationUnit unit)
 
   protected void emitMethods(JavaCompilationUnit unit)
@@ -208,16 +210,21 @@ public class JavaGenerator
   {
     if (getGeneratorContext().getBoolean("javadoc")) {
       println("/**");
+
       String methodDescription = method.getDescription();
       if (methodDescription != null) {
 	println("* " + capitalize(method.getDescription()));
+      }
+
+      Iterator iter = method.fetchFormalParameterIterator();
+      if (iter.hasNext()) {
 	println("*");
       }
-      Iterator iter = method.fetchFormalParameterIterator();
       while (iter.hasNext()) {
 	FormalParameter param = (FormalParameter)iter.next();
 	println("* @param " + param.getName() + " " + param.getDescription());
       }
+
       println("*/");
     }
   }
