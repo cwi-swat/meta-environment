@@ -126,13 +126,12 @@ ATfprintf(stderr, "gives: %t\n", imports);
   return imports;
 }
 
-ATerm delete_module(int cid, ATerm name)
+void delete_module(int cid, ATerm name)
 {
 ATfprintf(stderr, "Deleting: %t\n", name);
   RemoveKey(modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
-  return ATmake("snd-value(deleted(<term>))",name);
 }
 
 ATermList select_unknowns(ATermList mods)
