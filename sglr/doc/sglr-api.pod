@@ -228,7 +228,7 @@ future versions.
 
     if(argc != 4) exit(1);
 
-    AFinit(0, NULL, &bottomOfStack);
+    ATinit(0, NULL, &bottomOfStack);
 
     SGinitParser(ATfalse);
 
