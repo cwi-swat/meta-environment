@@ -30,18 +30,8 @@ let
 in
   Id := process-id.
   subscribe(disconnected(<term>)) .
-  snd-msg(get-table-from-db(id(Mod))) .
-  (
-    rec-msg(table(Table?))
-  +
-    rec-msg(no-table) .
-    snd-msg(generate-parsetable(id(Mod))) .
-    rec-msg(parsetable(Table?)) .
-    snd-msg(Id,locate-parse-table-file(id(Mod))) .
-    rec-msg(Id,located-parse-table-file(id(Mod),Table?,Time?)) .
-    snd-msg(add-table-to-db(id(Mod),Table,Time)) .
-    rec-msg(done)
-  ) .
+  snd-msg(set-parsetable(Mod)).
+  rec-msg(parsetable-set(Mod)).
   printf("parsetable for %t: %t\n", Mod, Table) .
   snd-msg(Id,open-trm-file(Term)) .
   (
@@ -53,7 +43,6 @@ in
     snd-note(ui-status(stat(Id,"Creating new term..."))) .
     create(Editor(id(Str),"",Str,Mod,"term"), Tid?)
   ) .
-  snd-msg(reopen-language(Mod,Table)) .
   snd-note(ui-status(endstat(Id))) .
   rec-note(disconnected(TE))
 endlet

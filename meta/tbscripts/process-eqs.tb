@@ -32,19 +32,8 @@ in
        Modules := next(Modules).
        snd-msg(Id,open-eqs-text-file(Module)).
        ( rec-msg(Id, opened-file(raw,id(Mname?),FT?,Path?,Time1?)).
-         snd-msg(get-table-from-db(Module)).
-         ( rec-msg(table(Table?)).
-           snd-note(ui-status(endstat(Id)))
-         +
-           rec-msg(no-table).
-           snd-note(ui-status(endstat(Id))).
-           snd-msg(generate-parsetable(id(Mname))).
-           rec-msg(parsetable(Table?)).
-           snd-msg(Id,locate-parse-table-file(id(Mname))).
-           rec-msg(Id,located-parse-table-file(id(Mname),Table?,Time2?)).
-           snd-msg(add-table-to-db(id(Mname),Table,Time2)).
-           rec-msg(done)
-         ).
+         snd-msg(set-parsetable(Module)).
+         rec-msg(parsetable-set(Module)).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
          snd-msg(reopen-language(Mname,Table)).
          snd-msg(Id,parse-string-as-asfix1(Mname,"",FT)).
