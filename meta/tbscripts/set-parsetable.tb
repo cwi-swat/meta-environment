@@ -1,0 +1,26 @@
+/* $Id$
+   Get a parsetable for language X
+*/
+
+process Set-parsetable is
+let
+  Module: str, Table: str, Time: term
+in
+( rec-msg(set-parsetable(Module?)).
+  snd-msg(get-table-from-db(Module)) .
+  (
+    rec-msg(table(Table?))
+  +
+    rec-msg(no-table) .
+    snd-msg(generate-parsetable(Module)) .
+    rec-msg(parsetable(Table?)) .
+    snd-msg(get-table-timestamp(Module)).
+    rec-msg(table-timestamp(Time?)).
+    snd-msg(add-table-to-db(Module,Table,Time)) .
+    rec-msg(done)
+  ).
+  snd-msg(reopen-language(Module,Table)) .
+  snd-msg(parsetable-set(Module))
+) *
+delta
+endlet
