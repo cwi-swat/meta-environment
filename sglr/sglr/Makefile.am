@@ -44,4 +44,4 @@ sglr_INCLUDE            = $(INCLUDES)
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
 sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a \
-              $(top_builbuilddir)/libtree2dot/libtree2dot.a
+              $(top_builddir)/libtree2dot/libtree2dot.a
