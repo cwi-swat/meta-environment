@@ -20,6 +20,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
 	private static final double LEFTPANEL_DIVIDER_LOCATION = 0.65;
 	private static final double MAINPANEL_DIVIDER_LOCATION = 0.3;
+	private static final int NODE_BORDER_WIDTH = 5;
+	private static final int NODE_BORDER_HEIGHT = 5;
+
 	private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
 	private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
 	private static final String PREF_MSGPANE_STATUS = "messagepane.status";
@@ -27,13 +30,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
 	private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
 
-	private static final int NODE_BORDER_WIDTH = 5;
-	private static final int NODE_BORDER_HEIGHT = 5;
-
 	private static ATerm ACTION_MENUBAR;
 	private static ATerm ACTION_TOOLBAR;
 	private static ATerm ACTION_MODULE_POPUP;
-	private static ATerm ACTION_NEW_MODULE_POPUP; // TODO: to be removed
+	private static ATerm ACTION_NEW_MODULE_POPUP;
 
 	public static MetaGraphFactory factory;
 
@@ -60,15 +60,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private JLabel statusBar;
 	private JCheckBox statusLog;
 	private List statusMessages;
-
-	private Action actionOpenModule;
-	private Action actionOpenLibModule;
-	private Action actionNewModule;
-	private Action actionSaveAll;
-	private Action actionClearAll;
-	private Action actionRefreshButtons;
-	private Action actionClearHistory;
-	private Action actionQuit;
 
 	private JTabbedPane graphPane;
 
@@ -143,13 +134,12 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 		createToolBusBridge(args);
 		handleCloseRequests();
-        	
-		moduleManager.addModuleSelectionListener(this);
 
-    popupMenu = createPopupMenu();
+		moduleManager.addModuleSelectionListener(this);
+		popupMenu = createPopupMenu();
 		createContentPane();
-    createMessageList();
-        
+		createMessageList();
+
 		makeStudioVisible();
 	}
 
@@ -180,11 +170,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		int height = 600;
 		int x = (screenSize.width - width) / 2;
 		int y = (screenSize.height - height) / 2;
-		
+
 		setTitle("Meta-Environment");
 		setSize(width, height);
 		setLocation(x, y);
-		
+
 		setVisible(true);
 	}
 
@@ -198,31 +188,37 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	}
 
 	private JSplitPane createMainPanel() {
-    JScrollPane moduleTreePane = createModuleTreePane();
-    JPanel treePanel = new JPanel();
-    treePanel.setLayout(new BorderLayout());        
-		treePanel.add(moduleTreePane, BorderLayout.CENTER);
-        
-    createModuleStatusPanel(); 
-    
-		JSplitPane leftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePanel, 
-                                          moduleStatus);               
-		leftPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
-		leftPanel.setDividerLocation(LEFTPANEL_DIVIDER_LOCATION);
-
-    createMessageHistory();
-    createTabbedGraphPane();
-    JPanel historyPanel = createHistoryPanel();
-    
-		JSplitPane rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphPane, 
-                                           historyPanel);
-		rightPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
-		rightPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
-
+		JSplitPane leftPanel = createLeftPane();
+		JSplitPane rightPanel = createRightPane();
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		mainPanel.setDividerLocation(MAINPANEL_DIVIDER_LOCATION);
-        
+
 		return mainPanel;
+	}
+
+	private JSplitPane createRightPane() {
+		createMessageHistory();
+		createTabbedGraphPane();
+		JPanel historyPanel = createHistoryPanel();
+
+		JSplitPane rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphPane, historyPanel);
+		rightPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
+		rightPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
+		return rightPanel;
+	}
+
+	private JSplitPane createLeftPane() {
+		JScrollPane moduleTreePane = createModuleTreePane();
+		JPanel treePanel = new JPanel();
+		treePanel.setLayout(new BorderLayout());
+		treePanel.add(moduleTreePane, BorderLayout.CENTER);
+
+		createModuleStatusPanel();
+
+		JSplitPane leftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePanel, moduleStatus);
+		leftPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
+		leftPanel.setDividerLocation(LEFTPANEL_DIVIDER_LOCATION);
+		return leftPanel;
 	}
 
 	private void createTabbedGraphPane() {
@@ -241,11 +237,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
-    
-    toolBar = createToolBar();
+
+		toolBar = createToolBar();
 		content.add(toolBar, BorderLayout.NORTH);
-    
-    JSplitPane mainPanel = createMainPanel();    
+
+		JSplitPane mainPanel = createMainPanel();
 		content.add(mainPanel, BorderLayout.CENTER);
 	}
 
@@ -263,23 +259,23 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		Color bgColor = Preferences.getColor(PREF_MSGPANE_STATUS + ".background");
 		Color fgColor = Preferences.getColor(PREF_MSGPANE_STATUS + ".foreground");
 		Font font = Preferences.getFont(PREF_MSGPANE_STATUS + ".font");
-		
-    JPanel statusBarPanel = new JPanel();
-    statusBarPanel.setBackground(bgColor);
+
+		JPanel statusBarPanel = new JPanel();
+		statusBarPanel.setBackground(bgColor);
 		statusBarPanel.setForeground(fgColor);
-    statusBarPanel.setLayout(new BorderLayout());
-        
-    statusLog = new JCheckBox("Log Status");
-    statusLog.setSelected(Preferences.getBoolean(PREF_MSGPANE_STATUS + ".log"));
-    statusLog.setBackground(bgColor);
-    statusLog.setForeground(fgColor);
-    statusLog.setFont(font);
-    statusBarPanel.add(statusLog, BorderLayout.EAST);
-    
-    statusBar = new JLabel("idle");
+		statusBarPanel.setLayout(new BorderLayout());
+
+		statusLog = new JCheckBox("Log Status");
+		statusLog.setSelected(Preferences.getBoolean(PREF_MSGPANE_STATUS + ".log"));
+		statusLog.setBackground(bgColor);
+		statusLog.setForeground(fgColor);
+		statusLog.setFont(font);
+		statusBarPanel.add(statusLog, BorderLayout.EAST);
+
+		statusBar = new JLabel("idle");
 		statusBar.setFont(font);
-    statusBarPanel.add(statusBar, BorderLayout.CENTER);
-            
+		statusBarPanel.add(statusBar, BorderLayout.CENTER);
+
 		return statusBarPanel;
 	}
 

@@ -1,109 +1,99 @@
 package metastudio;
 
-import javax.swing.*;
-import java.awt.*;
-import aterm.*;
-import java.util.*;
-import javax.swing.event.*;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class MessageList extends JScrollPane 
-{
-  private String name;
-  private ATermList items;
-  private String[] items_strings;
-  private JList view = new JList();
+import aterm.ATerm;
+import aterm.ATermFactory;
+import aterm.ATermList;
+import aterm.ParseError;
 
-  class ListEventHandler implements ListSelectionListener 
-  {
-    UserInterfaceBridge bridge;
-    ATermFactory factory;
-    MessageList list;
+public class MessageList extends JScrollPane {
+	private String name;
+	private ATermList items;
+	private String[] items_strings;
+	private JList view = new JList();
 
-    ListEventHandler(UserInterfaceBridge bridge,
-		     ATermFactory factory,
-		     MessageList list)
-    {
-      this.bridge = bridge;
-      this.factory = factory;
-      this.list = list;
-    }
+	class ListEventHandler implements ListSelectionListener {
+		UserInterfaceBridge bridge;
+		ATermFactory factory;
+		MessageList list;
 
-    public void valueChanged(ListSelectionEvent e) 
-    {
-      if (!(e.getValueIsAdjusting())) {
-	int index = ((JList)(e.getSource())).getMinSelectionIndex();
+		ListEventHandler(UserInterfaceBridge bridge, ATermFactory factory, MessageList list) {
+			this.bridge = bridge;
+			this.factory = factory;
+			this.list = list;
+		}
 
-	if (index != -1) {
-	  ATerm sel = list.getItems().elementAt(index);
+		public void valueChanged(ListSelectionEvent e) {
+			if (!(e.getValueIsAdjusting())) {
+				int index = ((JList) (e.getSource())).getMinSelectionIndex();
 
-	  java.util.List matching;
+				if (index != -1) {
+					ATerm sel = list.getItems().elementAt(index);
 
-	  try {
-	    matching = sel.match("listitem(<str>,<term>)");
-	  }
-	  catch (ParseError exc) {
-	    errMessage("Selected element has bad structure");
-	    return;
-	  }
+					java.util.List matching;
 
-	  if (matching == null) {
-	    errMessage("This is not a valid listitem: " + sel);
-	  }
-	  else {
-	    bridge.postEvent(factory.make("element-selected(<str>,<term>)", 
-					  name,
-					  matching.get(1)));
-	  }
+					try {
+						matching = sel.match("listitem(<str>,<term>)");
+					} catch (ParseError exc) {
+						errMessage("Selected element has bad structure");
+						return;
+					}
+
+					if (matching == null) {
+						errMessage("This is not a valid listitem: " + sel);
+					} else {
+						bridge.postEvent(factory.make("element-selected(<str>,<term>)", name, matching.get(1)));
+					}
+				}
+			}
+		}
 	}
-      }
-    }
-  }
 
-  public MessageList(UserInterfaceBridge bridge, ATermFactory factory) 
-  {
-    view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    getViewport().setView(view);
-    view.addListSelectionListener(new ListEventHandler(bridge, factory, this));
-  }
+	public MessageList(UserInterfaceBridge bridge, ATermFactory factory) {
+		view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getViewport().setView(view);
+		view.addListSelectionListener(new ListEventHandler(bridge, factory, this));
+	}
 
-  protected ATermList getItems() {
-    return items;
-  } 
+	protected ATermList getItems() {
+		return items;
+	}
 
-  public void setContent(String moduleName, ATermList data)
-  {
-    name = moduleName;
-    items = data;
+	public void setContent(String moduleName, ATermList data) {
+		name = moduleName;
+		items = data;
 
-    int length = items.getLength();
-    items_strings = new String[length];
+		int length = items.getLength();
+		items_strings = new String[length];
 
-    for (int i = 0; i < length; i++) {
-      ATerm atrm = items.elementAt(i);
-      java.util.List matching;
+		for (int i = 0; i < length; i++) {
+			ATerm atrm = items.elementAt(i);
+			java.util.List matching;
 
-      try {
-	matching = atrm.match("listitem(<str>,<term>)");
-      }
-      catch (ParseError exc) {
-	errMessage("Can't show list containing non-listitems");
-	return;
-      }
+			try {
+				matching = atrm.match("listitem(<str>,<term>)");
+			} catch (ParseError exc) {
+				errMessage("Can't show list containing non-listitems");
+				return;
+			}
 
-      if (matching == null) {
-	System.out.println(atrm.toString());
-      }
-      else {
-	items_strings[i] = matching.get(0).toString();
-      }
-    }
+			if (matching == null) {
+				System.out.println(atrm.toString());
+			} else {
+				items_strings[i] = matching.get(0).toString();
+			}
+		}
 
-    view.setListData(items_strings);
-    view.repaint();
-  } 
+		view.setListData(items_strings);
+		view.repaint();
+	}
 
-  public void errMessage(String s) {
-    System.err.println(s);
-  }
+	public void errMessage(String s) {
+		System.err.println(s);
+	}
 }
-

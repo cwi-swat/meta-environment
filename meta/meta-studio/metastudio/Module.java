@@ -1,185 +1,93 @@
 package metastudio;
 
-//{{{ imports
-
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+import javax.swing.ListModel;
 
-import javax.swing.*;
+public class Module implements Comparable {
+	public static final int STATE_NORMAL = 0;
+	public static final int STATE_NEW = 1;
 
-//}}}
+	private String _name;
 
-public class Module
-  implements Comparable
-{
-  //{{{ Possible module states
+	private List _parent;
 
-  public static final int STATE_NORMAL = 0;
-  public static final int STATE_NEW = 1;
+	private List _child;
+	private ListListModel childListModel;
+	private ListListModel parentListModel;
 
-  //}}}
+	private int State = STATE_NORMAL;
 
-  //{{{ attributes
+	public Module(String name) {
+		setName(name);
+		initParentList();
 
-  private String _name;
+		childListModel = new ListListModel(_child);
+		parentListModel = new ListListModel(_parent);
+		initChildList();
+	}
 
-  private List _parent;
+	public int compareTo(Object o) {
+		return _name.compareTo(o);
+	}
 
-  private List _child;
-  private ListListModel childListModel;
-  private ListListModel parentListModel;
+	public String getName() {
+		return _name;
+	}
 
-  private int State = STATE_NORMAL;
+	private void setName(String name) {
+		_name = name;
+	}
 
-  //}}}
+	public void addParent(String parent) {
+		_parent.add(parent);
+		parentListModel.elementAdded();
+	}
 
-  //{{{ public Module(String name)
+	private void initParentList() {
+		_parent = new LinkedList();
+	}
 
-  public Module(String name)
-  {
-    setName(name);
-    initParentList();
+	public Iterator fetchParentIterator() {
+		return _parent.iterator();
+	}
 
-    childListModel = new ListListModel(_child);
-    parentListModel = new ListListModel(_parent);
-    initChildList();
-  }
+	public ListModel fetchParentListModel() {
+		return parentListModel;
+	}
 
-  //}}}
+	public void addChild(String child) {
+		_child.add(child);
+		childListModel.elementAdded();
+	}
 
-  //{{{ public int compareTo(Object o)
+	private void initChildList() {
+		_child = new LinkedList();
+		childListModel.setList(_child);
+	}
 
-  public int compareTo(Object o)
-  {
-    return _name.compareTo(o);
-  }
+	public Iterator fetchChildIterator() {
+		return _child.iterator();
+	}
 
-  //}}}
+	public ListModel fetchChildListModel() {
+		return childListModel;
+	}
 
-  //{{{ public String getName()
+	public Object[] fetchChildrenArray() {
+		return _child.toArray();
+	}
 
-  public String getName()
-  {
-    return _name;
-  }
+	public String toString() {
+		return _name;
+	}
 
-  //}}}
-  //{{{ private void setName(String name)
+	public int getState() {
+		return State;
+	}
 
-  private void setName(String name)
-  {
-    _name = name;
-  }
-
-  //}}}
-
-  //{{{ public void addParent(String parent)
-
-  public void addParent(String parent)
-  {
-    _parent.add(parent);
-    parentListModel.elementAdded();
-  }
-
-  //}}}
-  //{{{ private void initParentList()
-
-  private void initParentList()
-  {
-    _parent = new LinkedList();
-  }
-
-  //}}}
-  //{{{ public Iterator fetchParentIterator()
-
-  public Iterator fetchParentIterator()
-  {
-    return _parent.iterator();
-  }
-
-  //}}}
-  //{{{ public ListModel fetchParentListModel()
-
-  public ListModel fetchParentListModel()
-  {
-    return parentListModel;
-  }
-
-  //}}}
-
-  //{{{ public void addChild(String child)
-
-  public void addChild(String child)
-  {
-    _child.add(child);
-    childListModel.elementAdded();
-  }
-
-  //}}}
-  //{{{ private void initChildList()
-
-  private void initChildList()
-  {
-    _child = new LinkedList();
-    childListModel.setList(_child);
-  }
-
-  //}}}
-  //{{{ public Iterator fetchChildIterator()
-
-  public Iterator fetchChildIterator()
-  {
-    return _child.iterator();
-  }
-
-  //}}}
-  //{{{ public ListModel fetchChildListModel()
-
-  public ListModel fetchChildListModel()
-  {
-    return childListModel;
-  }
-
-  //}}}
-  //{{{ public Object[] fetchChildrenArray()
-
-  public Object[] fetchChildrenArray()
-  {
-    return _child.toArray();
-  }
-
-  //}}}
-
-  //{{{ public String toString()
-
-  public String toString()
-  {
-    return _name;
-  }
-
-  //}}}
-  //{{{  public int getState()
-
-
-  public int getState() {
-    return State;
-  }
-
-  //}}}
-  //{{{  public int setState()
-
-
-  public void setState(int State) {
-    this.State = State;
-  }
-
-  //}}}
+	public void setState(int State) {
+		this.State = State;
+	}
 }
-
-
-
-
-
-
-
