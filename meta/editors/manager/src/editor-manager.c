@@ -252,6 +252,7 @@ ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString)
 }
 
 /*}}}  */
+/*{{{  ATerm get_editor_name(int conn, ATerm editorId) */
 
 ATerm get_editor_name(int conn, ATerm editorId)
 {
@@ -260,11 +261,18 @@ ATerm get_editor_name(int conn, ATerm editorId)
   char *name;
 
   editor = getEditorById(editorId);
-  nameTerm = getEditorName(editor);
-  ATmatch(nameTerm,"name(<str>)", &name);  
 
-  return ATmake("snd-value(editor-name(<str>))", name);
+  if (editor != NULL) {
+    nameTerm = getEditorName(editor);
+    ATmatch(nameTerm,"name(<str>)", &name);  
+    return ATmake("snd-value(editor-name(<str>))", name);
+  }
+  else {
+    return ATmake("snd-value(editor-name(\"unknown-editor\"))");
+  }
 }
+
+/*}}}  */
 
 /*{{{  void delete_editor(int conn, ATerm editorId) */
 
