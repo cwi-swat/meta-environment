@@ -17,6 +17,7 @@ process HandleModuleEvent(Type: term, Event: term, Modulename: str) is
 let
   Actions: list
 in
+  printf("HandleModuleEvent\n+- Type: %t\n+-Event: %t\n+-ModuleName: %t\n\n", Type, Event, Modulename) .
   snd-msg(cm-get-module-actions(Type, Event, Modulename))
   . rec-msg(cm-module-actions(Actions?))
   . snd-msg(perform-actions(ui-id, Actions, [str(Modulename)]))

@@ -484,7 +484,7 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
   MC_initMetaConfigApi();
   initConfigurationManager();
-  ATsetChecking(ATtrue);
+  /*ATsetChecking(ATtrue);*/
 
   cid = ATBconnect(NULL, NULL, -1, configuration_manager_handler);
 

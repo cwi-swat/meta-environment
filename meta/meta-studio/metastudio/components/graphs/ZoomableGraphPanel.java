@@ -125,27 +125,31 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 	}
 
 	public void renderGraph(String id, ATerm graphTerm) {
-		Graph graph = factory.GraphFromTerm(graphTerm);
-		final FontMetrics metrics = graphPanel.getFontMetrics(Preferences
-				.getFont(GraphPanel.PREF_NODE_FONT));
-
-		NodeSizer sizer = new NodeSizer() {
-			public int getWidth(Node node) {
-				return metrics.stringWidth(node.getLabel())
-						+ Preferences.getInteger("graph.node.border.width") * 2;
-			}
-			public int getHeight(Node node) {
-				return metrics.getHeight()
-						+ Preferences.getInteger("graph.node.border.height")
-						* 2;
-			}
-		};
-
-		graph = orderNodes(graph);
-		graph = sizeNodes(graph, sizer);
-
-		postEvent(getFactory().make("rendered-graph(<str>,<term>)", getId(),
-				graph.toTerm()));
+	    if (id.equals(getId())) {
+	        Graph graph = factory.GraphFromTerm(graphTerm);
+	        final FontMetrics metrics = graphPanel.getFontMetrics(Preferences
+	                .getFont(GraphPanel.PREF_NODE_FONT));
+	        
+	        NodeSizer sizer = new NodeSizer() {
+	            public int getWidth(Node node) {
+	                return metrics.stringWidth(node.getLabel())
+	                + Preferences.getInteger("graph.node.border.width") * 2;
+	            }
+	            public int getHeight(Node node) {
+	                return metrics.getHeight()
+	                + Preferences.getInteger("graph.node.border.height")
+	                * 2;
+	            }
+	        };
+	        
+	        graph = orderNodes(graph);
+	        graph = sizeNodes(graph, sizer);
+	        
+	        System.out.println("+- JAVA: Graph rendered: " + getId());
+	        postEvent(getFactory().make("rendered-graph(<str>,<term>)", getId(),
+	                graph.toTerm()));
+	        
+	    }
 	}
 
 	protected Graph orderNodes(Graph graph) {

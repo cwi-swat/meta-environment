@@ -83,9 +83,11 @@ in
   ||
     (
       rec-msg(ui-display-graph(GraphId?, Graph?))
+      . printf("Display graph: %t, %t\n\n", GraphId, Graph)
       . snd-do(UI, display-graph(GraphId, Graph))
     +
       rec-msg(ui-display-treelist(Str?, List?))
+      . printf("Display treelist\n\n")
       . snd-do(UI, display-treelist(Str, List))
     +
       rec-event(UI,clear-all)
@@ -98,9 +100,11 @@ in
       . snd-ack-event(UI,debugging(On))
     +
       rec-msg(ui-render-graph(GraphId?, Graph?))
+      . printf("Render-graph: %t, %t\n\n", GraphId, Graph)
       . snd-do(UI, render-graph(GraphId, Graph))
     +
       rec-event(UI, rendered-graph(GraphId?, Graph?))
+      . printf("Rendered-graph: %t, %t\n\n", GraphId, Graph)
       . snd-msg(ui-rendered-graph(GraphId, Graph))
     +
       rec-event(UI, get-events(Type?))
