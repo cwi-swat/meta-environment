@@ -11,7 +11,10 @@ bin_PROGRAMS		= gvim-editor
 lib_LTLIBRARIES		= libmeta_gvim.la
 
 INCLUDES		= -I$(TOOLBUS)/include \
-			-DLIBDIR="\"$(libdir)\"" -DDATADIR="\"$(datadir)\""
+			  -I $(ATERM)/include \
+			  -DLIBDIR="\"$(libdir)\"" \
+			  -DDATADIR="\"$(datadir)\""
+
 gvim_editor_SOURCES	= gvim-editor.c text-editor.tif.c
 gvim_editor_LDADD	= -L$(TOOLBUS)/lib -ltb -lATB \
 			  -L$(ATERM)/lib -lATerm
