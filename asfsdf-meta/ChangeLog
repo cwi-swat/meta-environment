@@ -1,3 +1,7 @@
+2003/07/02 (markvdb@cs.vu.nl)
+ * Added a hook to obtain the parsetable extension.
+ * The type (trm/eqs) is now made explicit.
+ 
 2003/07/02 (jurgenv@cwi.nl)
  * Release 1.4
 

@@ -37,7 +37,7 @@ let
   Msgs       : list
 in
   (
-    rec-msg(preprocess-syntax-hook(eqs(ModuleName?), Syntax?)).
+    rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
     snd-msg(display-sdf-errors(Msgs)) .
@@ -45,10 +45,10 @@ in
     rec-msg(extended-syntax(Syntax?)). 
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax)) .
+    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   +
-    rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
+    rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
     snd-msg(display-sdf-errors(Msgs)) .
@@ -56,7 +56,7 @@ in
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).
-    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax)) .
+    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   )*delta
 endlet
@@ -173,6 +173,12 @@ in
   +
     rec-msg(file-extensions-hook).
     snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+  +
+    rec-msg(parsetable-extension-hook(trm)) .
+    snd-msg(parsetable-extension-hook-result(".trm.tbl"))
+  +
+    rec-msg(parsetable-extension-hook(eqs)) .
+    snd-msg(parsetable-extension-hook-result(".asf.tbl"))
   +
     rec-msg(get-module-id-hook(sdf)) .
     snd-msg(get-module-id-hook-result("Sdf2")) 
