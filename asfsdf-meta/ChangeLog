@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Feb 18 10:29:46 CET 2005 <jurgenv@cwi.nl>
+ * The ASF compiler is always given a parse table too, such that
+   the resulting binary can do full source-to-source rewriting.
+
 Wed Jan 26 13:34:34 CET 2005 <jurgenv@cwi.nl>
  * Reactivated Removevarsyntax
 
