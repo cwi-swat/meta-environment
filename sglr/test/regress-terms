@@ -64,7 +64,7 @@ do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
-		$SGLR -cp $ptbl -i $file -to $out	2>/dev/null
+		$SGLR -cp $ptbl -i $file -o $out	2>/dev/null
 	        if $COMPARE $out $out.org		> /dev/null 2>&1
 	        then
 			Notify "Regression test for error term $base succeeded"
