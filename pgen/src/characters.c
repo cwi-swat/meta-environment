@@ -9,7 +9,7 @@
 #include "characters.h"
 #include "first.h"
 #include "ksdf2table.h"
-#include "symbol.h"
+#include "pgen-symbol.h"
 
 /*}}}  */
 /*{{{  defines */

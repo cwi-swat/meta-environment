@@ -2,7 +2,7 @@
 
 #include "ksdf2table.h"
 #include "characters.h"
-#include "symbol.h"
+#include "pgen-symbol.h"
 #include "first.h"
 
 extern int MAX_PROD;

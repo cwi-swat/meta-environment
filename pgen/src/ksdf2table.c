@@ -11,7 +11,7 @@
 #include "characters.h"
 #include "intset.h"
 #include "first.h"
-#include "symbol.h"
+#include "pgen-symbol.h"
 
 /*}}}  */
 
