@@ -508,12 +508,18 @@ ATerm compute_module_name(int cid, char *path, char *moduleName)
   char *compoundName = NULL;
   ATerm result;
 
+  assert(path != NULL && moduleName != NULL && strlen(moduleName) > 0);
+
   /* Build syntax-text-filename from moduleName */
   compoundName = create_compound_module_name(path, moduleName);
 
-  result = ATmake("snd-value(computed-module-name(<str>))", compoundName);
-
-  free(compoundName);
+  if (compoundName != NULL) {
+    result = ATmake("snd-value(computed-module-name(<str>))", compoundName);
+    free(compoundName);
+  }
+  else {
+    result = ATmake("snd-value(module-name-not-computed(\"internal-error\"))");
+  }
 
   return result;
 }
