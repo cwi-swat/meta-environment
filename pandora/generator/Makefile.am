@@ -5,6 +5,7 @@ CFLAGS += -Werror
 INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
+	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
 EXTRA_DIST = \
@@ -18,7 +19,6 @@ noinst_HEADERS = pandora.h Box.h
 pandora_SOURCES = main.c pandora.c Box.c Box_dict.c
 pandora_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(ATERM)/lib -lATerm 
 
 api:
