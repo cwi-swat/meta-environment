@@ -21,9 +21,18 @@
 
 ----------------------------------------------------------------------
 
- Authors: Jurgen Vinju <Jurgen.Vinju@cwi.nl>
-          Joost Visser <Joost.Visser@cwi.nl>
+ Author: Jurgen Vinju <Jurgen.Vinju@cwi.nl>
 
+ The contents of this library was contributed by several people.
+ Some of them are listed here:
+    - Mark van den Brand
+    - Hayco de Jong
+    - Paul Klint
+    - Pieter Olivier
+    - Eelco Visser
+    - Joost Visser
+    - Jurgen Vinju
+    
 ----------------------------------------------------------------------
 
  A library of ASF+SDF modules with all kinds of functionality,
@@ -31,6 +40,11 @@
 
   * Basic (not built-in) integers, strings and booleans
   * Basic data-structures
+  * File i/o
+  * Functional programming library
+  * Strategic programming library
+
+ The built-ins are currently only supported by the ASF interpreter
 
 ----------------------------------------------------------------------
 
