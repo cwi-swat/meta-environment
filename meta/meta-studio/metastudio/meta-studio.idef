@@ -33,6 +33,7 @@ let
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
+  subscribe(display-feedback-summary(<term>)) .
   Id := process-id.
 #ifdef ECLIPSE
   rec-connect(UI?) . 
@@ -70,6 +71,9 @@ in
     +
       rec-note(ui-status(messagef(Str?, Arguments?))) .
       snd-do(UI, messagef(Str, Arguments))
+    +
+      rec-note(display-feedback-summary(FeedbackSummary?)) .
+      snd-do(UI, display-feedback-summary(FeedbackSummary))
     ) * delta 
   ||
     ( 
@@ -154,9 +158,6 @@ in
     +
       rec-msg(update-list-view(ModuleName?, ButtonNames?)) .
       snd-do(UI, update-list(ModuleName, ButtonNames))
-    +
-      rec-msg(display-feedback-summary(FeedbackSummary?)) .
-      snd-do(UI, display-feedback-summary(FeedbackSummary))
     +
       rec-event(UI, feedback-selected(Feedback?)) .
       snd-msg(extra-button-action(click, [Feedback],
