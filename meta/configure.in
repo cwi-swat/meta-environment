@@ -146,6 +146,7 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
+   src/Makefile
    config/Makefile
    graph-browser/Makefile
    graph-browser/graph-browser.tcl
