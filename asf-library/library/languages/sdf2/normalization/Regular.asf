@@ -188,3 +188,13 @@ equations
         =======================================
         r[[ ('a => _B) ]] = syntax p r[['a _B]]
 
+%% \paragraph{Strategies}
+%%
+%% The strategy symbols do not generate explicit syntax.
+
+
+%%  [0]
+%%        "(" ++ _A ++ "->" ++ _B ++ ")" -> (_A -> _B) = p
+%%        ================================================
+%%        r[[ (_A -> _B) ]] =  syntax p r[[ _A _B ]]
+

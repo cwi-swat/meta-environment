@@ -29,6 +29,7 @@ equations
    [0] sym2syntax(_A # _B) = ( sym2syntax(_A) "#" sym2syntax(_B) )
    [0] sym2syntax(<_A , 'a,+>) = 
          ( "<" sym2syntax(_A) "," symbols2syntax('a,+) ">" )
+   [0] sym2syntax((_A -> _B)) = ("(" sym2syntax(_A) "->" sym2syntax(_B) ")")
    [0] sym2syntax(qliteral("""c*""")) = qliteral(""" "\" """ c* "\" """ """)
    [0] sym2syntax(sort(c*)) = qliteral("""c*""")
 
