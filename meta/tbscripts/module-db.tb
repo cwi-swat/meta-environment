@@ -320,8 +320,8 @@ in
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
     snd-msg(pre-get-all-syntax-hook(ModuleNames, Type)) .
     (
-       rec-msg(pre-get-all-syntax-hook-result(success)) .
-       snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+       rec-msg(pre-get-all-syntax-hook-result(tablename(TableName?))) .
+       snd-msg(ts-get-values(TableName, ModuleNames)) .
        (
          rec-msg(ts-values(Modules?)) .
          snd-msg(sm-make-sdf-definition(Modules)) .
