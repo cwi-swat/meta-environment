@@ -64,20 +64,25 @@ E_O_USAGE
 
 Version() {
     echo "$myname v$myversion" >&2
-    unparsePT -V
+    asfchecker -V
+    asfsdfchecker -V
+    asfoperations -V
     baffle -v
+    configmanager -V
     graph-browser -V
     in-output -V
     module-db -V
     parsetablegen -V
-    sglr -V
     restorebrackets -V
+    se -V
+    sglr -V
     toolbus -version
-    xemacs -V
+    unparsePT -V
     echo 'puts "wish v$tk_version" ;\
           package require Tcldot;\
           puts "tcldot v[package versions Tcldot]";\
           exit;' | $wish
+    xemacs -V
 }
 
 # getopt handles command line...
