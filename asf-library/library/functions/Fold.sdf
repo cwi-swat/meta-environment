@@ -1,25 +1,25 @@
-module functions/Fold[From To]
+module functions/Fold[A B]
 
-imports containers/List[From]
+imports containers/List[A]
 
 exports
 
 context-free syntax
 
-fold -> ((From To => To) To List[[From]] => To)
-foldr -> ((From To => To) To List[[From]] => To)
-foldl -> ((To From => To) To List[[From]] => To)
+fold -> ((A B => B) B List[[A]] => B)
+foldr -> ((A B => B) B List[[A]] => B)
+foldl -> ((B A => B) B List[[A]] => B)
 
 hiddens
 
-sorts To From List[[From]]
+sorts B A List[[A]]
 
 imports basic/Whitespace
 
 variables
 
-"F"[0-9\']* -> From
-"T"[0-9\']* -> To
-"LF"[0-9\']* -> List[[From]]
-"f" -> (From To => To)
-"f'" -> (To From => To)
+"A"[0-9\']* -> A
+"B"[0-9\']* -> B
+"LA"[0-9\']* -> List[[A]]
+"f" -> (A B => B)
+"f'" -> (B A => B)

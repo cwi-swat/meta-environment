@@ -1,11 +1,11 @@
 equations
 
-[] fold(f T LF) = foldr(f T LF)
+[] fold(f B LA) = foldr(f B LA)
 
-[] foldr(f T []) = T
-[] foldr(f T LF) = f(head(LF) foldr(f T tail(LF)))
-     when LF != []
+[] foldr(f B []) = B
+[] foldr(f B LA) = f(head(LA) foldr(f B tail(LA)))
+     when LA != []
 
-[] foldl(f' T []) = T
-[] foldl(f' T LF) = foldl(f' f'(T head(LF))  tail(LF))
-     when LF != []
+[] foldl(f' B []) = B
+[] foldl(f' B LA) = foldl(f' f'(B head(LA))  tail(LA))
+     when LA != []

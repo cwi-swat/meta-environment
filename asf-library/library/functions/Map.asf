@@ -2,5 +2,5 @@ equations
 
 [default] map(f []) = []
 
-[] map(f LF) = cons(f(head(LF)),map(f tail(LF)))
-     when LF != []
+[] map(f LA) = cons(f(head(LA)),map(f tail(LA)))
+     when LA != []

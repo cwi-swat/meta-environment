@@ -1,26 +1,26 @@
-module functions/Map[From To]
+module functions/Map[A B]
 
-imports containers/List[From] 
-imports containers/List[To]
+imports containers/List[A] 
+imports containers/List[B]
 
 exports
 
 context-free syntax
 
-map -> ((From => To) List[[From]] => List[[To]])
+map -> ((A => B) List[[A]] => List[[B]])
 
 hiddens
 
 imports
   basic/Whitespace
 
-hiddens sorts From To List[[From]] List[[To]]
+hiddens sorts A B List[[A]] List[[B]]
 variables
 
-"f" -> (From => To)
-"F" -> From
-"T"   -> To
-"LF"   -> List[[From]]
-"LT"   -> List[[To]] 
+"f" -> (A => B)
+"A" -> A
+"B"   -> B
+"LA"   -> List[[A]]
+"LB"   -> List[[B]] 
 
 
