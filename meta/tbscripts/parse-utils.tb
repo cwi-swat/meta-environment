@@ -1,15 +1,15 @@
 /* $Id$ */       
 
-process SetParseTable(ModuleName : str, Type : term, Table : term?) is
+process ObtainParseTable(ModuleName : str, Type : term, Table : term?) is
 let
-  TermType   : term
+  TermType : term
 in
   if and(equal(Type, trm), equal(ModuleName, "Sdf2")) then
     snd-msg(open-language(sdf)) .
     (
-      rec-msg(table-for-language(TermType?, Table?))
+      rec-msg(parse-table(TermType?, Table?))
     +
-      rec-msg(open-language-failed) .
+      rec-msg(no-parse-table) .
       Table := no-table
     )
   else
@@ -33,7 +33,7 @@ let
   Table      : term
 in
   Id := process-id .     
-  SetParseTable(ModuleName, Type, Table?) .
+  ObtainParseTable(ModuleName, Type, Table?) .
   if equal(Type, eqs) then
     ModuleId := quote(eqs(ModuleName))
   else

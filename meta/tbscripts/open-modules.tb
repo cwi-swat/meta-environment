@@ -232,7 +232,7 @@ in
   Id := process-id.
   snd-msg(open-language(Type)) .
   (
-    rec-msg(table-for-language(TermType?, Table?)) .
+    rec-msg(parse-table(TermType?, Table?)) .
     snd-msg(syntax-top-sort-hook(Type)) .
     rec-msg(syntax-top-sort-hook-result(sort(Sort?))) .
     snd-msg(Id, parse-string-given-table(TermType, Table, Sort, Text)) .
@@ -253,7 +253,7 @@ in
       Status := no-parse-table
     )
   +
-    rec-msg(open-language-failed) .
+    rec-msg(no-parse-table) .
     Tree := no-tree .
     Status := no-parse-table
   )
