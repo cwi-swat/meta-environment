@@ -199,6 +199,38 @@ static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
 
 /*}}}  */
 
+/*{{{  static ATbool isSingleton(PT_Tree tree)  */
+
+static ATbool isSingleton(PT_Tree tree) 
+{
+  /* This function checks for trees that look like this:
+   *    S* -> S-List, list(S*), [S]   or this:
+   *    list(S*), [S]
+   *
+   *    So direct singletons, or singletons wrapped in a single injection.
+   */
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Args args = PT_getTreeArgs(tree);
+
+    if (PT_isProductionList(prod)) {
+      if (PT_getArgsLength(args) == 1) {
+	return ATtrue;
+      }
+    }
+    else {
+      if (PT_isProductionInjection(prod)) {
+	return isSingleton(PT_getArgsHead(args));
+      }
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
 /*{{{  static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
 static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
@@ -395,14 +427,22 @@ static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condit
 
 static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree) 
 {
-
   PT_Tree ptTree = PT_TreeFromTerm(ASF_TreeToTerm(asfTree));
   if (PT_isTreeAmb(ptTree)) {
     return makeAmbiguityMessage(ptTree);
   }
   else {
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
-      ERR_Feedback message = makeWarning("constructor not expected as outermost function symbol of left hand side", PT_TreeToTerm(ptTree));
+      ERR_Feedback message = 
+	makeWarning(
+    "constructor not expected as outermost function symbol of left hand side", 
+    PT_TreeToTerm(ptTree));
+      return ERR_makeFeedbackListSingle(message);
+    }
+    else if (isSingleton(ptTree)) {
+      ERR_Feedback message = 
+          makeWarning(
+          "Left hand side only matches singleton lists", PT_TreeToTerm(ptTree));
       return ERR_makeFeedbackListSingle(message);
     }
     else {
