@@ -161,8 +161,6 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
   char chosenId[PATH_LEN];
   int i;
  
-  ATwarning("computing: %t, %s %s\n", searchPaths, path, id);
-
   /* We will choose the first longest search path that matches the path of
    * the chosen module, then construct a compound module id to complete
    * the filename.
@@ -198,7 +196,6 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
     strcpy(chosenId,path+i);
     strcat(chosenId,id);
 
-    ATwarning("new: %s, %s\n", chosenPath, chosenId);
     return ATmake("snd-value(new-module-name(<str>,<str>))", chosenPath, 
 		  chosenId);
   }
