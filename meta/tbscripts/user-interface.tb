@@ -4,8 +4,8 @@ let
 in
   snd-msg(cm-get-actions(Type, Event))
   . rec-msg(cm-actions(Actions?))
-  . snd-msg(perform-actions(ui-id, Actions, []))
-  . rec-msg(actions-performed(ui-id, Actions))
+  . snd-msg(ai-perform-actions(ui-id, Actions, []))
+  . rec-msg(ai-actions-performed(ui-id, Actions))
 endlet
 
 process HandleModuleEvent(Type: term, Event: term, Modulename: str) is
@@ -14,8 +14,8 @@ let
 in
   snd-msg(cm-get-module-actions(Type, Event, Modulename))
   . rec-msg(cm-module-actions(Actions?))
-  . snd-msg(perform-actions(ui-id, Actions, [str(Modulename)]))
-  . rec-msg(actions-performed(ui-id, Actions))
+  . snd-msg(ai-perform-actions(ui-id, Actions, [str(Modulename)]))
+  . rec-msg(ai-actions-performed(ui-id, Actions))
 endlet
 
 process ErrorSelected(Error: term) is
@@ -24,8 +24,8 @@ let
 in
   snd-msg(cm-get-actions(feedback-list, click))
   . rec-msg(cm-actions(Actions?))
-  . snd-msg(perform-actions(feedback-list, Actions, [Error]))
-  . rec-msg(actions-performed(feedback-list, Actions))
+  . snd-msg(ai-perform-actions(feedback-list, Actions, [Error]))
+  . rec-msg(ai-actions-performed(feedback-list, Actions))
 endlet
 
 process MessageSelected(Modulename: str, Tree: term) is
@@ -34,8 +34,8 @@ let
 in
   snd-msg(get-actions(click, message-list, Modulename))
   . rec-msg(actions(click, message-list, Modulename, Actions?))
-  . snd-msg(perform-actions(message-list, Actions, [Tree, str(Modulename)]))
-  . rec-msg(actions-performed(message-list, Actions))
+  . snd-msg(ai-perform-actions(message-list, Actions, [Tree, str(Modulename)]))
+  . rec-msg(ai-actions-performed(message-list, Actions))
 endlet
 
 process NodeSelected(GraphId: str, Node: term) is
@@ -49,8 +49,8 @@ in
     rec-msg(gc-origin(Location?))
     . snd-msg(cm-get-actions(tree-panel, click))
     . rec-msg(cm-actions(Actions?))
-    . snd-msg(perform-actions(tree-panel, Actions, [Location]))
-    . rec-msg(actions-performed(tree-panel, Actions))
+    . snd-msg(ai-perform-actions(tree-panel, Actions, [Location]))
+    . rec-msg(ai-actions-performed(tree-panel, Actions))
   +
     rec-msg(gc-no-origin)
   )

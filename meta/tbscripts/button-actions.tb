@@ -1,62 +1,1005 @@
 process MetaActions is
 let
-  Actions: list,
-  Arguments: list,
-  Sid: term
+  Pid : int
+in
+  create(ActionAsfSdfApiGen, Pid?)
+  . create(ActionAddImport, Pid?)
+  . create(ActionAddPosInfo, Pid?)
+  . create(ActionRemoveImport, Pid?)
+  . create(ActionRenameModule, Pid?)
+  . create(ActionCopyModule, Pid?)
+  . create(ActionDeleteModule, Pid?)
+  . create(AskQuestion, Pid?)
+  . create(ActionCloseModule, Pid?)
+  . create(ActionEditTerm, Pid?)
+  . create(ActionEditSyntax, Pid?)
+  . create(ActionEditEquations, Pid?)
+  . create(ActivateEditor, Pid?)
+  . create(ActionGetFocus, Pid?)
+  . create(GetFocusOrigin, Pid?)
+  . create(ActionGetParseTree, Pid?)
+  . create(ActionNewModule, Pid?)
+  . create(ActionOpenModule, Pid?)
+  . create(ActionDumpEquations, Pid?)
+  . create(ActionDumpParseTable, Pid?)
+  . create(ActionDumpSdfDefinition, Pid?)
+  . create(ActionMoveCursor, Pid?)
+  . create(ActionPrettyPrint, Pid?)
+  . create(ActionPrintModule, Pid?)
+  . create(ActionDisplayMessage, Pid?)
+  . create(ActionShowArea, Pid?)
+  . create(ActionDebugReduce, Pid?)
+  . create(ActionShowFeedbackLocation, Pid?)
+  . create(ClearAll, Pid?)
+  . create(ClearHistory, Pid?)
+  . create(CompileModule, Pid?)
+  . create(Exit, Pid?)
+  . create(ExecuteAction, Pid?)
+  . create(GetRoot, Pid?)
+  . create(PackTree, Pid?)
+  . create(ActionCreateModule, Pid?)
+  . create(ActionCheckSort, Pid?)
+  . create(ReadTermStore, Pid?)
+  . create(RefreshActions, Pid?)
+  . create(RunAsfTests, Pid?)
+  . create(SaveTermStore, Pid?)
+  . create(SetRoot, Pid?)
+  . create(ParseAction, Pid?)
+  . create(ParseSyntaxAction, Pid?)
+  . create(ParseEquationsAction, Pid?)
+  . create(PromptForFile, Pid?)
+  . create(PushActiveModule, Pid?)
+  . create(Reduce, Pid?)
+  . create(ActionShowTree, Pid?)
+  . create(SplitFileName, Pid?)
+  . create(UnPackTree, Pid?)
+endlet
+
+process ActionCreateModule is
+let
+  EditorId : term,
+  Filename : str,
+  Directory : str,
+  Pid: int
 in
   (
-    (
-      rec-msg(perform-actions(Sid?, Actions?))
-      . Arguments := []
-    +
-      rec-msg(perform-actions(Sid?, Actions?, Arguments?))
-    )
-    . PerformActions(Sid, Actions, Arguments)
-    . snd-msg(actions-performed(Sid, Actions))
+    rec-msg(EditorId?, create-module(Filename?))
+    . snd-msg(io-relative-to-absolute(["."]))
+    . rec-msg(io-absolute-directories([Directory?]))
+    . create(NewModuleContentHandler(), Pid?)
+    . CreateModule(Pid, Directory, Filename, sdf)
+    . snd-msg(EditorId, done)
   )
   *
   delta
 endlet
 
-process PerformActions(EditorId: term, Actions: list, Arguments: list) is
+process ActionCheckSort is
 let
-  ButtonActions: list,
-  ButtonAction: term,
-  FunName: str,
-  Stack: list
+  EditorId : term,
+  SortName : str,
+  Tree : term,
+  ResultTree : term
 in
-  ButtonActions := quote(Actions)
-  . Stack := Arguments
-  .
   (
-    if not-equal(ButtonActions, []) then
-      ButtonAction := first(ButtonActions)
-      . ButtonActions := next(ButtonActions)
-      . FunName := fun(ButtonAction)
-      .
-      if equal(FunName, "if-equal") then
-        IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
-      else
-        snd-msg(ButtonAction, Stack, EditorId)
-        .
-        (
-          rec-msg(stack(Stack?), EditorId)
-        +
-          rec-msg(empty-stack, EditorId)
-          . ButtonActions := []
-        +
-          rec-msg(error-stack, EditorId)
-          . ButtonActions := []
-          . snd-note(ui-status(errorf("An error occurred while processing the action: %t",
-                                      [ButtonAction])))
-        )
-      fi
+    rec-msg(EditorId?, check-sort(SortName?, Tree?))
+    . CheckTreeSort(Tree, SortName, ResultTree?)
+    .
+    if not-equal(ResultTree, error-tree) then
+      snd-msg(EditorId, two-results(ResultTree, true))
+    else
+      snd-msg(EditorId, two-results(Tree, false))
     fi
   )
   *
-  if equal(ButtonActions, []) then
-    tau
-  fi
+  delta
+endlet
+
+process GetFocusOrigin is
+let
+  EditorId : term,
+  Cursor : term,
+  Origin: term
+in
+  (
+    rec-msg(EditorId?, get-focus-origin))
+    . snd-msg(se-get-cursor(EditorId))
+    .
+    (
+      rec-msg(se-cursor(EditorId, Cursor?))
+      . snd-msg(pa-get-origin(Cursor))
+      .
+      (
+        rec-msg(pa-origin(Origin?))
+      +
+        rec-msg(pa-no-origin)
+        . Origin := no-origin
+      )
+      . snd-msg(EditorId, result(Origin))
+  )
+  *
+  delta
+endlet
+
+    
+process ActionDebugReduce is
+let
+  EditorId : term,
+  Modulename : str,
+  Tree : term,
+  ResultTree : term,
+  Direction : term
+in
+  (
+  /* TODO: changed reduce action to take an extra argument,
+     that will break all currently existing scripts, so we
+     leave it at this for the moment. In 1.6 this can be changed?
+   */
+    rec-msg(EditorId?, debug-reduce(Modulename?, Tree?))
+    . snd-msg(debugging(on))
+    . ReduceTerm(Tree, Modulename, ResultTree?)
+    . if not-equal(ResultTree, error-tree) then
+        snd-msg(promote-posinfo-to-origin(ResultTree))
+        . rec-msg(promoted-posinfo-to-origin(ResultTree?))
+        . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
+        . snd-msg(put-term-tree("reduct.out", ResultTree))
+        . snd-msg(EditorId, result(ResultTree))
+      else
+        snd-msg(EditorId, failure)
+      fi 
+    . snd-msg(debugging(off)) 
+  )
+  *
+  delta
+endlet
+
+process RunAsfTests is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, run-asf-tests(Modulename?))
+    . snd-msg(run-asf-tests(Modulename))
+    . snd-msg(EditorId, done)
+  +
+    rec-msg(EditorId?, debug-run-asf-tests(Modulename?))
+    . snd-msg(debugging(on))
+    . snd-msg(run-asf-tests(Modulename))
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionMoveCursor is
+let
+  EditorId : term,
+  Direction : term
+in
+  (
+    rec-msg(EditorId?, move-cursor(Direction?))
+    . MoveCursor(EditorId, Direction)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ExecuteAction is
+let
+  EditorId : term,
+  Action : str,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, execute-action(Action?, Tree?))
+    . snd-msg(gen-adapter-term-evaluate(EditorId, Action, Tree))
+    . rec-msg(gen-adapter-term-result(EditorId, Tree?))
+    .
+    if not-equal(Tree, error-tree) then
+      snd-msg(EditorId, result(Tree))
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ActionCopyModule is
+let
+  EditorId : term,
+  Directory : str,
+  Filename : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, copy-module(Directory?, Filename?, Modulename?))
+    . CopySdfModule(Modulename, Directory, Filename)
+    . CopyAsfModule(Modulename, Directory, Filename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionDeleteModule is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, delete-module(Modulename?))
+    . DeleteModule(Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionAddImport is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, add-import(Modulename?))
+    . GUIAddImport(Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionAddPosInfo is
+let
+  EditorId : term,
+  Filename : str,
+  Tree : term,
+  ResultTree : term
+in
+  (
+    rec-msg(EditorId?, add-posinfo(Tree?))
+    . GetPath(EditorId, Filename?)
+    . AnnotateTree(Tree, Filename, ResultTree?)
+    . snd-msg(EditorId, result(ResultTree))
+  )
+  *
+  delta
+endlet
+
+process ActionRemoveImport is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, remove-import(Modulename?))
+    . GUIRemoveImport(Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionRenameModule is
+let
+  EditorId : term,
+  Directory : str,
+  Filename : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, rename-module(Directory?, Filename?, Modulename?))
+    . RenameModule(Modulename, Directory, Filename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionAsfSdfApiGen is
+let
+  EditorId : term,
+  Modulename : str,
+  Path : str
+in
+  (
+    rec-msg(EditorId?, asfsdfapigen(Path?, Modulename?))
+    . snd-msg(asfsdfapigen(Modulename, Path))
+    . rec-msg(asfsdfapigen-done)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process AskQuestion is
+let
+  EditorId : term,
+  String : str,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, ask-question(String?))
+    . snd-msg(ask-question(String))
+    . rec-msg(ask-question-result(Tree?))
+    . snd-msg(EditorId, result(Tree))
+  )
+  *
+  delta
+endlet
+
+process ActionCloseModule is
+let
+  EditorId : term,
+  Modulename : str,
+  Recursive : bool
+in
+  (
+    rec-msg(EditorId?, close-module(Recursive?, Modulename?))
+    . CloseModule(Modulename, Recursive)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ClearHistory is
+let
+  EditorId : term
+in
+  (
+    rec-msg(EditorId?, clear-history-list)
+    . snd-msg(clear-history)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ClearAll is
+let
+  EditorId : term
+in
+  (
+    rec-msg(EditorId?, clear-all)
+    . CloseAll
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process CompileModule is
+let
+  EditorId : term,
+  Modulename : str,
+  Path : str
+in
+  (
+    rec-msg(EditorId?, compile-module(Path?, Modulename?))
+    . snd-msg(compile-module(Modulename, Path))
+    . rec-msg(compilation-ready(Modulename))
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActivateEditor is
+let
+  EditorId : term,
+  Modulename : str,
+  Filename : str,
+  Tree : term,
+  FunSym : str,
+  String : str
+in
+  (
+    rec-msg(EditorId?, activate-editor(Modulename?, Filename?, Tree?))
+    . FunSym := fun(Tree)
+    .
+    if equal(FunSym, "str") then
+      String := first(args(Tree))
+      . ActivateEditorWithString(String, Modulename, Filename)
+    else
+      ActivateEditorWithTree(Tree, Modulename, Filename)
+    fi
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionGetFocus is
+let
+  EditorId : term,
+  Modulename : str,
+  Available : bool,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, get-focus)
+    . GetFocus(EditorId, Tree?, Available?)
+    .
+    if equal(Available, true) then
+      snd-msg(EditorId, result(Tree))
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ActionGetParseTree is
+let
+  EditorId : term,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, get-parsetree)
+    . GetParsetree(EditorId, Tree?)
+    . snd-msg(EditorId, result(Tree))
+  )
+  *
+  delta
+endlet
+
+process UnPackTree is
+let
+  EditorId : term,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, unpack-tree(Tree?))
+    . snd-msg(io-unpack-term(Tree))
+    . rec-msg(io-term(Tree?))
+    . snd-msg(EditorId, result(Tree))
+  )
+  *
+  delta
+endlet
+
+process PackTree is
+let
+  EditorId : term,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, pack-tree(Tree?))
+    . snd-msg(io-pack-term(Tree))
+    . rec-msg(io-term(Tree?))
+    . snd-msg(EditorId, result(Tree))
+  )
+  *
+  delta
+endlet
+
+process ActionEditSyntax is
+let
+  EditorId : term,
+  Modulename : str,
+  Path: str,
+  Pid: int,
+  Sid: term
+in
+  (
+    rec-msg(EditorId?, edit-syntax(Modulename?))
+    . LocateFile(Modulename, sdf, Path?)
+    . create(EditSyntax(Path), Pid?)
+    . rec-msg(syntax-editor-started(Path, Sid?))
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionEditEquations is
+let
+  EditorId : term,
+  Modulename : str,
+  Path: str,
+  SdfPath: str,
+  AsfExt: str,
+  Pid: int,
+  Sid: term
+in
+  (
+    rec-msg(EditorId?, edit-equations(Modulename?))
+    . LocateFile(Modulename, sdf, SdfPath?)
+    .
+    if equal(SdfPath, "") then
+      snd-msg(EditorId, failure)
+    else
+      snd-msg(file-extension-hook(asf))
+      . rec-msg(file-extension-hook-result(AsfExt?))
+      . ReplaceExtension(SdfPath, AsfExt, Path?)
+      . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
+      . create(EditEquations(Path), Pid?)
+      . rec-msg(equations-editor-started(Path, Sid?))
+      . snd-msg(EditorId, done)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ActionNewModule is
+let
+  EditorId : term,
+  Extension : str,
+  Directory : str,
+  Pid: int,
+  Filename : str
+in
+  (
+    rec-msg(EditorId?, new-module(Extension?, Directory?, Filename?))
+    . create(NewModuleContentHandler(), Pid?)
+    . CreateModule(Pid, Directory, Filename, sdf)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionOpenModule is
+let
+  EditorId : term,
+  Extension : str,
+  Directory : str,
+  Path : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, open-module(Extension?, Directory?, Modulename?))
+    . BuildPath(Directory, Modulename, Extension, Path?)
+    . OpenModule(Path, sdf, Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionDumpEquations is
+let
+  EditorId : term,
+  Path : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, dump-equations(Path?, Modulename?))
+    . snd-msg(dump-equations-given-file(Modulename, Path))
+    . rec-msg(equations-dumped)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionDumpParseTable is
+let
+  EditorId : term,
+  Path : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, dump-parse-table(Path?, Modulename?)) 
+    . snd-msg(dump-parse-table-given-file(Modulename, Path, trm))
+    . rec-msg(parse-table-dumped)
+    . snd-msg(EditorId, done)
+  +
+    rec-msg(EditorId?, dump-eqs-parse-table(Path?, Modulename?))
+    . snd-msg(dump-parse-table-given-file(Modulename, Path, eqs))
+    . rec-msg(parse-table-dumped)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionDumpSdfDefinition is
+let
+  EditorId : term,
+  Path : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, dump-sdf-definition(Path?, Modulename?))
+    . snd-msg(dump-sdf-definition(Modulename, Path))
+    . rec-msg(sdf-definition-dumped)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionPrettyPrint is
+let
+  EditorId : term,
+  Modulename : str,
+  Filename : str,
+  Tree : term,
+  RTree : term
+in
+  (
+    rec-msg(EditorId?, pretty-print(Modulename?, Tree?))
+    . PrettyPrintTerm(Modulename, Tree, RTree?)
+    .
+    if not-equal(RTree, error-tree) then
+      GetPath(EditorId, Filename?)
+      . AnnotateTree(RTree, Filename, RTree?)
+      . snd-msg(EditorId, result(RTree))
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ActionDisplayMessage is
+let
+  EditorId : term,
+  Message : str
+in
+  (
+    rec-msg(EditorId?, display-message(Message?))
+    . snd-msg(te-display-message(EditorId, Message))
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionShowArea is
+let
+  EditorId : term,
+  Message : str,
+  Pid: int,
+  Location : term
+in
+  (
+    rec-msg(EditorId?, show-area(Message?, Location?))
+    . create(ShowAreaHandler(Location, Message), Pid?)
+    . EditLocation(Pid, Location)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionShowFeedbackLocation is
+let
+  EditorId : term,
+  Message : str,
+  Pid: int,
+  Error : term,
+  Location : term,
+  Subject : term,
+  Subjects : list
+in
+  (
+    rec-msg(EditorId?, show-feedback-location(Error?))
+    . snd-msg(get-error-subjects(Error))
+    . rec-msg(error-subjects(Subjects?))
+    . Subject := first(Subjects)
+    . snd-msg(get-subject-location(Subject))
+    . rec-msg(subject-location(Location?))
+    . create(ShowErrorHandler(Error), Pid?)
+    . EditLocation(Pid, Location)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process Exit is
+let
+  EditorId : term
+in
+  (
+    rec-msg(EditorId?, exit)
+    . shutdown("MetaStudio exiting\n")
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process GetRoot is
+let
+  EditorId : term,
+  Modulename : str,
+  Available : bool,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, get-root(Modulename?))
+    . GetTree(EditorId, Modulename, Tree?, Available?)
+    .
+    if equal(Available, true) then
+      snd-msg(EditorId, result(Tree))
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ReadTermStore is
+let
+  EditorId : term,
+  Path : str
+in
+  (
+    rec-msg(EditorId?, read-termstore(Path?)) 
+    . CloseAll
+    . InitializeTermStore(Path)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process RefreshActions is
+let
+  EditorId : term
+in
+  (
+    rec-msg(EditorId?, refresh-actions)
+    . snd-msg(refresh-buttons)
+    . rec-msg(buttons-refreshed)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process SaveTermStore is
+let
+  EditorId : term,
+  Path : str,
+  Error: term
+in
+  (
+    rec-msg(EditorId?, save-termstore(Path?)) 
+    . snd-msg(register-termstore-name(Path))
+    . rec-msg(termstore-name-registered)
+    . snd-msg(save-termstore)
+    .
+    (
+      rec-msg(saved)
+      . snd-msg(EditorId, done)
+    +
+      rec-msg(not-saved(Error?))
+      . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
+      . snd-msg(EditorId, failure)
+    )
+  )
+  *
+  delta
+endlet
+
+process SetRoot is
+let
+  EditorId : term,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, set-root(Tree?))
+    . ReplaceFocus(EditorId, Tree)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+  
+process ParseAction is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, parse-action(Modulename?))
+    . ParseTerm(EditorId, Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ParseSyntaxAction is
+let
+  EditorId : term,
+  ParseSucceeded: bool,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, parse-syntax-action)
+    . ParseSyntax(EditorId, sdf, ParseSucceeded?)
+    .
+    if equal(ParseSucceeded, true) then
+      snd-msg(EditorId, done)
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ParseEquationsAction is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, parse-equations-action(Modulename?))
+    . ParseEquations(EditorId, Modulename)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process PushActiveModule is
+let
+  EditorId : term,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, push-active-module)
+    . snd-msg(em-get-modulename(EditorId))
+    . rec-msg(em-modulename(EditorId, Modulename?))
+    . snd-msg(EditorId, result(str(Modulename)))
+  )
+  *
+  delta
+endlet
+
+process ActionPrintModule is
+let
+  EditorId : term,
+  Path : str,
+  Modulename : str
+in
+  (
+    rec-msg(EditorId?, print-module(Path?, Modulename?))
+    . snd-msg(print-module(Modulename, Path))
+    . rec-msg(module-printed(Modulename))
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+ 
+process PromptForFile is
+let
+  EditorId : term,
+  String : str,
+  Path : str,
+  Modulename : str,
+  Extension : str,
+  Filename : str
+in
+  (
+    rec-msg(EditorId?, prompt-for-file(String?, Path?, Modulename?))
+    . snd-msg(get-modulename-extension(Modulename))
+    .
+    (
+      rec-msg(modulename-extension(Modulename, Extension?))
+    +
+      rec-msg(no-modulename-extension(Modulename))
+      . snd-msg(file-extension-hook(trm))
+      . rec-msg(file-extension-hook-result(Extension?))
+    )
+    . snd-msg(ask-for-file(String, Path, Extension))
+    . rec-msg(ask-for-file-result(Filename?))
+    . snd-msg(EditorId, result(str(Filename)))
+  +
+    rec-msg(EditorId?, prompt-for-file-with-extension(String?, Path?, Extension?))
+    . snd-msg(ask-for-file(String, Path, Extension))
+    . rec-msg(ask-for-file-result(Filename?))
+    . snd-msg(EditorId, result(str(Filename)))
+  )
+  *
+  delta
+endlet
+
+process Reduce is
+let
+  EditorId : term,
+  Modulename : str,
+  Tree : term,
+  RTree : term
+in
+  (
+    rec-msg(EditorId?, reduce(Modulename?, Tree?))
+    . snd-msg(debugging(off)) 
+    . ReduceTerm(Tree, Modulename, RTree?)
+    .
+    if not-equal(RTree, error-tree) then
+      snd-msg(promote-posinfo-to-origin(RTree))
+      . rec-msg(promoted-posinfo-to-origin(RTree?))
+      . AnnotateTree(RTree, "reduct.out", RTree?)
+      . snd-msg(put-term-tree("reduct.out", RTree))
+      . snd-msg(EditorId, result(RTree))
+    else
+      snd-msg(EditorId, failure)
+    fi
+  )
+  *
+  delta
+endlet
+
+process ActionShowTree is
+let
+  EditorId : term,
+  Modulename : str,
+  Tree : term
+in
+  (
+    rec-msg(EditorId?, show-tree(Tree?,Modulename?))
+    . ShowTree(Modulename, Tree, false)
+    . snd-msg(EditorId, done)
+  +
+    rec-msg(EditorId?, show-full-tree(Tree?, Modulename?))
+    . ShowTree(Modulename, Tree, true)
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process ActionEditTerm is
+let
+  EditorId : term,
+  Sid: term,
+  Pid: int,
+  Modulename : str,
+  ErrorMessage : str,
+  Filename : str
+in
+  (
+    rec-msg(EditorId?, edit-term(Filename?, Modulename?))
+    . create(EditTerm(Filename, Modulename), Pid?)
+    .
+    (
+      rec-msg(term-editor-started(Filename, Modulename, Sid?))
+    +
+      rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
+      . Error(ErrorMessage, [])
+    )
+    . snd-msg(EditorId, done)
+  )
+  *
+  delta
+endlet
+
+process SplitFileName is
+let
+  EditorId : term,
+  Path : str,
+  Filename : str,
+  Directory : str,
+  Extension : str
+in
+  (
+    rec-msg(EditorId?, split-file-name(Path?))
+    . snd-msg(io-get-path-filename(Path))
+    . rec-msg(io-filename(Path, Filename?))
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(io-get-path-extension(Path))
+    . rec-msg(io-extension(Path, Extension?))
+    . snd-msg(EditorId, three-results(str(Filename),str(Directory),str(Extension)))
+	  )
+  *
+  delta
 endlet
 
 process StackPopTerm(Stack: list, NewStack: list?, Top: term?) is
@@ -140,35 +1083,9 @@ let
   SortName: str,
   Stack: list,
   String: str,
-  Subject: term,
-  Subjects: list,
   Tree: term
 in
   (
-    rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?)
-    . ArgList := []
-    .
-    (
-      if greater(NrOfArgs, 0) then
-        StackPopTerm(Stack, Stack?, STree?)
-        . NrOfArgs := sub(NrOfArgs, 1)
-        . ArgList := join(ArgList, STree)
-      fi
-    )
-    *
-    if equal(NrOfArgs, 0) then
-      tau
-    fi
-    . snd-msg(apply-function(FuncName, SortName, ArgList))
-    . rec-msg(tree(RTree?))
-    .
-    if not-equal(RTree, error-tree) then
-      StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnFailed(EditorId, Stack)
-    fi
-  +
     rec-msg(rewrite(ExecName?), Stack?, EditorId?)
     . StackPopTerm(Stack, Stack?, STree?)
     . snd-msg(rewrite(ExecName, STree))
@@ -236,47 +1153,11 @@ in
     fi
     . ReturnSuccess(EditorId, Stack)
   +
-    rec-msg(execute-action(Action?), Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . snd-msg(gen-adapter-term-evaluate(EditorId, Action, STree))
-    . rec-msg(gen-adapter-term-result(EditorId, RTree?))
-    .
-    if not-equal(RTree, error-tree) then
-      StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnFailed(EditorId, Stack)
-    fi
-  +
-    rec-msg(move-cursor, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, Direction?)
-    . MoveCursor(EditorId, Direction)
-    . ReturnSuccess(EditorId, Stack)
-  +
     rec-msg(convert-feedback, Stack?, EditorId?)
     . StackPopTerm(Stack, Stack?, Feedback?)
     . snd-msg(convert-feedback(Feedback))
     . rec-msg(converted-feedback(Feedback?))
     . StackPushTerm(Stack, Stack?, Feedback)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(parse-action, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . ParseTerm(EditorId, Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(parse-syntax-action, Stack?, EditorId?)
-    . ParseSyntax(EditorId, sdf, ParseSucceeded?)
-    .
-    if equal(ParseSucceeded, true) then
-      ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
-  +
-    rec-msg(parse-equations-action, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . ParseEquations(EditorId, Modulename)
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(unparse, Stack?, EditorId?)
@@ -285,73 +1166,10 @@ in
     . StackPushString(Stack, Stack?, String)
     . ReturnSuccess(EditorId, Stack)
   +
-    rec-msg(get-focus, Stack?, EditorId?)
-    . GetFocus(EditorId, RTree?, Available?)
-    .
-    if equal(Available, true) then
-      StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
-  +
-    rec-msg(get-root, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . GetTree(EditorId, Modulename, RTree?, Available?)
-    .
-    if equal(Available, true) then
-      StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
-  +
-    rec-msg(get-parsetree, Stack?, EditorId?)
-    . GetParsetree(EditorId, RTree?)
-    . StackPushTerm(Stack, Stack?, RTree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(add-posinfo, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . GetPath(EditorId, Filename?)
-    . AnnotateTree(STree, Filename, RTree?)
-    . StackPushTerm(Stack, Stack?, RTree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(set-root, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . ReplaceFocus(EditorId, STree)
-    . ReturnSuccess(EditorId, Stack)
-  +
     rec-msg(get-focus-location, Stack?, EditorId?)
     . snd-msg(se-get-focus-location(EditorId))
     . rec-msg(se-focus-location(EditorId, PosInfo?))
     . StackPushTerm(Stack, Stack?, PosInfo)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(get-focus-origin, Stack?, EditorId?)
-    . snd-msg(se-get-cursor(EditorId))
-    .
-    (
-      rec-msg(se-cursor(EditorId, Cursor?))
-      . snd-msg(pa-get-origin(Cursor))
-      .
-      (
-        rec-msg(pa-origin(Origin?))
-        . StackPushTerm(Stack, Stack?, Origin)
-      +
-        rec-msg(pa-no-origin)
-        . StackPushTerm(Stack, Stack?, no-origin)
-      )
-      . ReturnSuccess(EditorId, Stack)
-    +
-      rec-msg(se-no-cursor(EditorId))
-      . ReturnAbort(EditorId, Stack)
-    )
-  +
-    rec-msg(display-message, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Message?)
-    . snd-msg(te-display-message(EditorId, Message))
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(set-focus, Stack?, EditorId?)
@@ -374,90 +1192,11 @@ in
       . ReturnSuccess(EditorId, Stack)
     fi
   +
-    rec-msg(reduce, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . snd-msg(debugging(off)) 
-    . ReduceTerm(STree, Modulename, RTree?)
-    .
-    if not-equal(RTree, error-tree) then
-      snd-msg(promote-posinfo-to-origin(RTree))
-      . rec-msg(promoted-posinfo-to-origin(RTree?))
-      . AnnotateTree(RTree, "reduct.out", RTree?)
-      . snd-msg(put-term-tree("reduct.out", RTree))
-      . StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
-  +
-  /* TODO: changed reduce action to take an extra argument,
-     that will break all currently existing scripts, so we
-     leave it at this for the moment. In 1.6 this can be changed?
-   */
-    rec-msg(debug-reduce, Stack?, EditorId?) .
-    StackPopString(Stack,Stack?,Modulename?) .
-    StackPopTerm(Stack,Stack?,STree?) .
-    snd-msg(debugging(on)) .
-    ReduceTerm(STree, Modulename, RTree?) .
-    if not-equal(RTree, error-tree) then
-      snd-msg(promote-posinfo-to-origin(RTree))
-      . rec-msg(promoted-posinfo-to-origin(RTree?))
-      . AnnotateTree(RTree, "reduct.out", RTree?)
-      . snd-msg(put-term-tree("reduct.out", RTree))
-      . StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId,Stack)
-    fi .
-    snd-msg(debugging(off)) 
-  +
-    rec-msg(run-asf-tests, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . snd-msg(run-asf-tests(Modulename))
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(debug-run-asf-tests, Stack?, EditorId?) .
-    StackPopString(Stack,Stack?,Modulename?) .
-    StackPopTerm(Stack,Stack?,STree?) .
-    snd-msg(debugging(on)) .
-    snd-msg(run-asf-tests(Modulename)) .
-    ReturnSuccess(EditorId,Stack)
-  +
-    rec-msg(pretty-print, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . PrettyPrintTerm(Modulename, STree, RTree?)
-    .
-    if not-equal(RTree, error-tree) then
-      GetPath(EditorId, Filename?)
-      . AnnotateTree(RTree, Filename, RTree?)
-      . StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    else
-      ReturnAbort(EditorId, Stack)
-    fi
-  +
     rec-msg(push-editor-name, Stack?, EditorId?)
     . snd-msg(get-editor-filename(EditorId))
     . rec-msg(editor-filename(Filename?))
     . StackPushString(Stack, Stack?, Filename)
     . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(activate-editor, Stack?, Sid?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . FunSym := fun(STree)
-    .
-    if equal(FunSym, "str") then
-      String := first(args(STree))
-      . ActivateEditorWithString(String, Modulename, Filename)
-    else
-      ActivateEditorWithTree(STree, Modulename, Filename)
-    fi
-    . ReturnSuccess(Sid, Stack)
   +
     rec-msg(close-editor, Stack?, Sid?)
     . DeleteSession(Sid)
@@ -541,21 +1280,7 @@ in
       . ReturnAbort(EditorId, Stack)
     )
   +
-    rec-msg(push-active-module, Stack?, EditorId?)
-    . snd-msg(em-get-modulename(EditorId))
-    . rec-msg(em-modulename(EditorId, Modulename?))
-    . StackPushString(Stack, Stack?, Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
     rec-msg(push-modulename(String?), Stack?, EditorId?)
-    . StackPushString(Stack, Stack?, String)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(push-filename(Filename?), Stack?, EditorId?)
-    . StackPushString(Stack, Stack?, Filename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(push-string(String?), Stack?, EditorId?)
     . StackPushString(Stack, Stack?, String)
     . ReturnSuccess(EditorId, Stack)
   +
@@ -563,56 +1288,8 @@ in
     . StackPushInt(Stack, Stack?, Integer)
     . ReturnSuccess(EditorId, Stack)
   +
-    rec-msg(push-term(Tree?), Stack?, EditorId?)
-    . StackPushTerm(Stack, Stack?, Tree)
-    . ReturnSuccess(EditorId, Stack)
-  +
     rec-msg(message(String?), Stack?, EditorId?)
     . snd-note(ui-status(messagef("%s", [String])))
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(unpack-tree, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . snd-msg(io-unpack-term(STree))
-    . rec-msg(io-term(RTree?))
-    . StackPushTerm(Stack, Stack?, RTree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(pack-tree, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . snd-msg(io-pack-term(STree))
-    . rec-msg(io-term(RTree?))
-    . StackPushTerm(Stack, Stack?, RTree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(show-tree, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . ShowTree(Modulename, STree, false)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(show-full-tree, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, STree?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . ShowTree(Modulename, STree, true)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(show-area, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Message?)
-    . StackPopTerm(Stack, Stack?, Location?)
-    . create(ShowAreaHandler(Location, Message), Pid?)
-    . EditLocation(Pid, Location)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(show-feedback-location, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, Error?)
-    . snd-msg(get-error-subjects(Error))
-    . rec-msg(error-subjects(Subjects?))
-    . Subject := first(Subjects)
-    . snd-msg(get-subject-location(Subject))
-    . rec-msg(subject-location(Location?))
-    . create(ShowErrorHandler(Error), Pid?)
-    . EditLocation(Pid, Location)
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(show-feedback, Stack?, EditorId?)
@@ -662,282 +1339,19 @@ in
       . ReturnAbort(EditorId, Stack)
     )
   +
-    rec-msg(edit-syntax, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . LocateFile(Modulename, sdf, Path?)
-    /*. snd-msg(ts-put-str-value("path-modulename", Path, Modulename))*/
-    . create(EditSyntax(Path), Pid?)
-    . rec-msg(syntax-editor-started(Path, Sid?))
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(edit-equations, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . LocateFile(Modulename, sdf, SdfPath?)
-    .
-    if equal(SdfPath, "") then
-      ReturnAbort(EditorId, Stack)
-    else
-      snd-msg(file-extension-hook(asf))
-      . rec-msg(file-extension-hook-result(AsfExt?))
-      . ReplaceExtension(SdfPath, AsfExt, Path?)
-      . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
-      . create(EditEquations(Path), Pid?)
-      . rec-msg(equations-editor-started(Path, Sid?))
-      . ReturnSuccess(EditorId, Stack)
-    fi
-  +
     rec-msg(dump-module, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . snd-msg(save-asfsdf-module(Modulename))
     . rec-msg(saved-asfsdf-module(Modulename))
     . ReturnSuccess(EditorId, Stack)
   +
-    rec-msg(close-module(Recursive?), Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . CloseModule(Modulename, Recursive)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(open-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Extension?)
-    . StackPopString(Stack, Stack?, Directory?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . BuildPath(Directory, Modulename, Extension, Path?)
-    . OpenModule(Path, sdf, Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(new-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Extension?)
-    . StackPopString(Stack, Stack?, Directory?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . create(NewModuleContentHandler(), Pid?)
-    . CreateModule(Pid, Directory, Filename, sdf)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(create-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . snd-msg(io-relative-to-absolute(["."]))
-    . rec-msg(io-absolute-directories([Directory?]))
-    . create(NewModuleContentHandler(), Pid?)
-    . CreateModule(Pid, Directory, Filename, sdf)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(prompt-for-file(String?, Path?, Extension?), Stack?, EditorId?)
-    . snd-msg(ask-for-file(String, Path, Extension))
-    . rec-msg(ask-for-file-result(Filename?))
-    . StackPushString(Stack, Stack?, Filename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(prompt-for-file(String?, Path?), Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(get-modulename-extension(Modulename))
-    .
-    (
-      rec-msg(modulename-extension(Modulename, Extension?))
-    +
-      rec-msg(no-modulename-extension(Modulename))
-      . snd-msg(file-extension-hook(trm))
-      . rec-msg(file-extension-hook-result(Extension?))
-    )
-    . snd-msg(ask-for-file(String, Path, Extension))
-    . rec-msg(ask-for-file-result(Filename?))
-    . StackPushString(Stack, Stack?, Filename)
-    . ReturnSuccess(EditorId, Stack)
-  +
     rec-msg(str-to-filename, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Filename?)
     . StackPushString(Stack, Stack?, Filename)
     . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(edit-term, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . create(EditTerm(Filename, Modulename), Pid?)
-    .
-    (
-      rec-msg(term-editor-started(Filename, Modulename, Sid?))
-    +
-      rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
-      . Error(ErrorMessage, [])
-    )
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(ask-question(String?), Stack?, EditorId?)
-    . snd-msg(ask-question(String))
-    . rec-msg(ask-question-result(Tree?))
-    . StackPushTerm(Stack, Stack?, Tree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(split-file-name, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . snd-msg(io-get-path-filename(Path))
-    . rec-msg(io-filename(Path, Filename?))
-    . StackPushString(Stack, Stack?, Filename)
-    . snd-msg(io-get-path-directory(Path))
-    . rec-msg(io-directory(Path, Directory?))
-    . StackPushString(Stack, Stack?, Directory)
-    . snd-msg(io-get-path-extension(Path))
-    . rec-msg(io-extension(Path, Extension?))
-    . StackPushString(Stack, Stack?, Extension)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(copy-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Extension?)
-    . StackPopString(Stack, Stack?, Directory?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . CopySdfModule(Modulename, Directory, Filename)
-    . CopyAsfModule(Modulename, Directory, Filename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(rename-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Extension?)
-    . StackPopString(Stack, Stack?, Directory?)
-    . StackPopString(Stack, Stack?, Filename?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . RenameModule(Modulename, Directory, Filename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(delete-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . DeleteModule(Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(add-import, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . GUIAddImport(Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(remove-import, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . GUIRemoveImport(Modulename)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(compile-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(compile-module(Modulename, Path))
-    . rec-msg(compilation-ready(Modulename))
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(dump-equations, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(dump-equations-given-file(Modulename, Path))
-    . rec-msg(equations-dumped)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(dump-sdf-definition, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(dump-sdf-definition(Modulename, Path))
-    . rec-msg(sdf-definition-dumped)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(dump-parse-table, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(dump-parse-table-given-file(Modulename, Path, trm))
-    . rec-msg(parse-table-dumped)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(dump-eqs-parse-table, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(dump-parse-table-given-file(Modulename, Path, eqs))
-    . rec-msg(parse-table-dumped)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(print-module, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(print-module(Modulename, Path))
-    . rec-msg(module-printed(Modulename))
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(clear-all, Stack?, EditorId?)
-    . CloseAll
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(read-termstore, Stack?, EditorId?)
-    . CloseAll
-    . StackPopString(Stack, Stack?, Path?)
-    . InitializeTermStore(Path)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(save-termstore, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . snd-msg(register-termstore-name(Path))
-    . rec-msg(termstore-name-registered)
-    . snd-msg(save-termstore)
-    .
-    (
-      rec-msg(saved)
-      . ReturnSuccess(EditorId, Stack)
-    +
-      rec-msg(not-saved(Error?))
-      . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
-      . ReturnFailed(EditorId, Stack)
-    )
-  +
-    rec-msg(clear-history-list, Stack?, EditorId?)
-    . snd-msg(clear-history)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(asfsdfapigen, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, Path?)
-    . StackPopString(Stack, Stack?, Modulename?)
-    . snd-msg(asfsdfapigen(Modulename, Path))
-    . rec-msg(asfsdfapigen-done)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(refresh-buttons, Stack?, EditorId?)
-    . snd-msg(refresh-buttons)
-    . rec-msg(buttons-refreshed)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(exit, Stack?, EditorId?)
-    . shutdown("MetaStudio exiting\n")
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(dup, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, Tree?)
-    . StackPushTerm(Stack, Stack?, Tree)
-    . StackPushTerm(Stack, Stack?, Tree)
-    . ReturnSuccess(EditorId, Stack)
-  +
-    rec-msg(pop, Stack?, EditorId?)
-    . StackPopTerm(Stack, Stack?, Tree?)
-    . ReturnSuccess(EditorId, Stack)
   )
   *
   delta
-endlet
-
-process IfEqual(ButtonAction: term, Stack: list, ButtonActions: list,
-                RStack: list?, RButtonActions: list?) is
-let
-  Tree1: term,
-  Tree2: term,
-  ThenActions: list,
-  ElseActions: list,
-  IStack: list
-in
-  Tree1 := first(Stack)
-  . IStack := next(Stack)
-  . Tree2 := first(IStack)
-  . IStack := next(IStack)
-  . snd-msg(equal-trees(Tree1, Tree2))
-  .
-  (
-    rec-msg(true)
-    . ThenActions := first(args(ButtonAction))
-    . RButtonActions := join(ThenActions, ButtonActions)
-  +
-    rec-msg(false)
-    . ElseActions := first(next(args(ButtonAction)))
-    . RButtonActions := join(ElseActions, ButtonActions)
-  )
-  . RStack := IStack
 endlet
 
 process UnParseTerm(Tree: term, Text: str?) is
@@ -1136,6 +1550,7 @@ process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
 let
   TreeSort: str
 in
+/*
   snd-msg(se-check-tree-sort(Sort, Tree))
   .
   (
@@ -1147,6 +1562,8 @@ in
     rec-msg(se-sort-ok)
     . RTree := Tree
   )
+*/
+  RTree := Tree
 endlet
 
 process ReduceTerm(Tree: term, Modulename: str, NormalForm: term?) is

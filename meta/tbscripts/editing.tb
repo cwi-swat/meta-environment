@@ -50,7 +50,7 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
+process EditText(Sid: term, Type: term, Name: str, AlreadyExists: bool?) is
 let
   Events: list,
   Path: str,
@@ -66,6 +66,9 @@ in
     . snd-msg(te-edit-text(Sid, EDITOR, Path))
     . snd-msg(cm-get-events(Type))
     . rec-msg(cm-events(Events?))
+    . snd-msg(te-add-actions(Sid, Events))
+    . snd-msg(cm-get-module-events(Type, Name))
+    . rec-msg(cm-module-events(Events?))
     . snd-msg(te-add-actions(Sid, Events))
     . snd-msg(get-text-categories)
     . rec-msg(text-categories(Categories?)) 
@@ -127,8 +130,8 @@ in
     . GetModuleId(Sid, ModuleId?)
     . snd-msg(cm-get-module-actions(EditorType, Event, ModuleId))
     . rec-msg(cm-module-actions(Actions?))
-    . snd-msg(perform-actions(Sid, Actions))
-    . rec-msg(actions-performed(Sid, Actions))
+    . snd-msg(ai-perform-actions(Sid, Actions))
+    . rec-msg(ai-actions-performed(Sid, Actions))
     . snd-msg(em-end-transaction(Sid))
   )
 endlet
@@ -269,7 +272,7 @@ let
 in
   EditorType := syntax-editor
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType, AlreadyExists?)
+  . EditText(Sid, EditorType, "", AlreadyExists?)
   . snd-msg(syntax-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
@@ -344,7 +347,7 @@ let
 in
   EditorType := equations-editor
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType, AlreadyExists?)
+  . EditText(Sid, EditorType, "", AlreadyExists?)
   . snd-msg(equations-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
@@ -424,7 +427,7 @@ in
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
-    . EditText(Sid, EditorType, AlreadyExists?)
+    . EditText(Sid, EditorType, ModuleId, AlreadyExists?)
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
     if equal(AlreadyExists, false) then
