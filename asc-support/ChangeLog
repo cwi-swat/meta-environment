@@ -1,5 +1,10 @@
 $Id$
 
+2001/03/08 (jurgenv@cwi.nl)
+ * Apified asc-support
+ * Added ASC_applyFunction function that can be used to
+   quickly contruct an application of a prefix function.
+
 2001/03/06 (jong@cwi.nl)
  * Added make_rules to toplevel EXTRA_DIST
  * Cleaned up .cvsignore files
