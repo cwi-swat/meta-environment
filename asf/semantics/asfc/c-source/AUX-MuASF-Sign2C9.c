@@ -3,8 +3,8 @@ static Symbol lf_AUX_MuASF_Sign2C9_1sym;
 static ATerm lf_AUX_MuASF_Sign2C9_1( ATerm arg1);
 static Symbol ef12sym;
 static funcptr ef12;
-static Symbol ef13sym;
-static funcptr ef13;
+static Symbol ef15sym;
+static funcptr ef15;
 static Symbol ef3sym;
 static funcptr ef3;
 static Symbol ef4sym;
@@ -25,14 +25,18 @@ static Symbol ef9sym;
 static funcptr ef9;
 static Symbol ef10sym;
 static funcptr ef10;
+static Symbol ef14sym;
+static funcptr ef14;
+static Symbol ef13sym;
+static funcptr ef13;
 static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef2sym;
 static funcptr ef2;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
-static Symbol ef14sym;
-static funcptr ef14;
+static Symbol ef16sym;
+static funcptr ef16;
 void register_AUX_MuASF_Sign2C9( ) {
 lf_AUX_MuASF_Sign2C9_1sym= ATmakeSymbol( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"namepair2rstats\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"NamePair\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
@@ -72,8 +76,12 @@ ef12= lookup_func( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-
 ef12sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-list-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 ef13= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 ef13sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef14= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
-ef14sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
+ef14= lookup_func( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-quoted-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef14sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-quoted-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef15= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef15sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef16= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
+ef16sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
@@ -90,6 +98,8 @@ static ATerm constant11= NULL;
 static ATerm constant12= NULL;
 static ATerm constant13= NULL;
 static ATerm constant14= NULL;
+static ATerm constant15= NULL;
+static ATerm constant16= NULL;
 void init_AUX_MuASF_Sign2C9( ) {
 ATprotect( & constant0);
 ATprotect( & constant1);
@@ -106,6 +116,8 @@ ATprotect( & constant11);
 ATprotect( & constant12);
 ATprotect( & constant13);
 ATprotect( & constant14);
+ATprotect( & constant15);
+ATprotect( & constant16);
 }
 ATerm lf_AUX_MuASF_Sign2C9_1( ATerm arg0) {
 {
@@ -157,19 +169,25 @@ return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? 
 {
 if( not_empty_list( atmp0100)) {
 tmp[ 0]= list_head( atmp0100);
+if( term_equal( tmp[ 0] , make_char( 95))) {
+tmp[ 1]= list_tail( atmp0100);
+tmp[ 2]= ( * ef14)( ( * ef2)( lf2( make_list( atmp0000))));
+if( term_equal( tmp[ 2] , ( constant13? constant13: ( constant13= ( * ef15)( ))))) {
+return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( atmp0000))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( tmp[ 1]))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))))))))))))));
+}
+if( term_equal( tmp[ 2] , ( constant14? constant14: ( constant14= ( * ef13)( ))))) {
+return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( atmp0000) , ( constant15? constant15: ( constant15= make_list( make_char( 34)))))))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( tmp[ 1]))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))))))))))))));
+}
+}
 if( term_equal( tmp[ 0] , make_char( 101))) {
 tmp[ 1]= list_tail( atmp0100);
-return ( constant13? constant13: ( constant13= ( * ef14)( )));
+return ( constant16? constant16: ( constant16= ( * ef16)( )));
 }
 if( term_equal( tmp[ 0] , make_char( 108))) {
 tmp[ 1]= list_tail( atmp0100);
 if( term_equal( ( * ef12)( ( * ef2)( lf2( make_list( atmp0000)))) , ( constant14? constant14: ( constant14= ( * ef13)( ))))) {
 return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( atmp0000))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( ( constant3? constant3: ( constant3= make_list_char( 108))) , make_list( tmp[ 1])))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( ( constant3? constant3: ( constant3= make_list_char( 108))) , cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109])))))))))))))))))))));
 }
-}
-if( term_equal( tmp[ 0] , make_char( 95))) {
-tmp[ 1]= list_tail( atmp0100);
-return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( constant0? constant0: ( constant0= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 13 , char_table[ 114] , char_table[ 101] , char_table[ 103] , char_table[ 105] , char_table[ 115] , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 95] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 100])))))) , ( * ef11)( lf3( cons( make_list( ( * ef6)( ( * ef7)( ( * ef8)( ( constant1? constant1: ( constant1= ( * ef9)( ( * ef10)( lf2( (ATerm) ATmakeList( 7 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 97] , char_table[ 114] , char_table[ 115] , char_table[ 101])))))) , ( * ef11)( lf3( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( atmp0000))))))))))))) , cons( make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( make_list( tmp[ 1]))))))) , make_list( ( * ef6)( ( * ef7)( ( * ef9)( ( * ef10)( lf2( cons( make_list( tmp[ 1]) , ( constant12? constant12: ( constant12= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))))))))))))));
 }
 }
 }

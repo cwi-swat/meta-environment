@@ -36,10 +36,8 @@ ef4= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[so
 ef4sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
 }
 static ATerm constant0= NULL;
-static ATerm constant1= NULL;
 void init_AUX_MuASF2C8( ) {
 ATprotect( & constant0);
-ATprotect( & constant1);
 }
 ATerm lf_AUX_MuASF2C8_1( ATerm arg0 , ATerm arg1) {
 {
@@ -60,7 +58,7 @@ if( check_sym( atmp01 , lf3sym)) {
 {
 ATerm atmp010= arg_0( atmp01);
 if( not_empty_list( atmp010)) {
-tmp[ 0]= ( * ef3)( ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list( make_char( 34)))) , cons( make_list( atmp0000) , ( constant0? constant0: ( constant0= make_list( make_char( 34)))))))) , ( * ef2)( lf2( cons( ( constant1? constant1: ( constant1= make_list( make_char( 95)))) , make_list( atmp0000)))) , arg1);
+tmp[ 0]= ( * ef3)( ( * ef2)( lf2( make_list( atmp0000))) , ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list( make_char( 95)))) , make_list( atmp0000)))) , arg1);
 return tmp[ 0];
 }
 }
@@ -81,7 +79,7 @@ ATerm atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , lf2sym)) {
 {
 ATerm atmp0000= arg_0( atmp000);
-tmp[ 0]= ( * ef3)( ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list( make_char( 34)))) , cons( make_list( atmp0000) , ( constant0? constant0: ( constant0= make_list( make_char( 34)))))))) , ( * ef2)( lf2( cons( ( constant1? constant1: ( constant1= make_list( make_char( 95)))) , make_list( atmp0000)))) , arg1);
+tmp[ 0]= ( * ef3)( ( * ef2)( lf2( make_list( atmp0000))) , ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list( make_char( 95)))) , make_list( atmp0000)))) , arg1);
 return tmp[ 0];
 }
 }

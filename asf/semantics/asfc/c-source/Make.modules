@@ -1,4 +1,4 @@
-ASFIX := \
+ASFIX :=\
 AUX-ANumerals1.asfix\
 AUX-ANumerals2.asfix\
 AUX-ANumerals3.asfix\
@@ -286,6 +286,7 @@ AUX-MuASF-Basics28.asfix\
 AUX-MuASF-Basics29.asfix\
 AUX-MuASF-Basics3.asfix\
 AUX-MuASF-Basics30.asfix\
+AUX-MuASF-Basics31.asfix\
 AUX-MuASF-Basics4.asfix\
 AUX-MuASF-Basics5.asfix\
 AUX-MuASF-Basics6.asfix\

@@ -27,11 +27,7 @@ ef1sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"funid\")
 ef2= lookup_func( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)"));
 ef2sym= lookup_sym( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)"));
 }
-static ATerm constant0= NULL;
-static ATerm constant1= NULL;
 void init_AUX_VarEnv18( ) {
-ATprotect( & constant0);
-ATprotect( & constant1);
 }
 ATerm lf_AUX_VarEnv18_2( ATerm arg0 , ATerm arg1) {
 {
@@ -47,7 +43,7 @@ if( check_sym( arg1 , lf_AUX_VarEnv18_1sym)) {
 {
 ATerm atmp10= arg_0( arg1);
 if( ! not_empty_list( atmp10)) {
-return ( * ef1)( lf3( cons( ( constant0? constant0: ( constant0= make_list_char( 34))) , cons( make_list( atmp000) , ( constant1? constant1: ( constant1= make_list( make_char( 34))))))));
+return ( * ef1)( lf3( make_list( atmp000)));
 }
 }
 }
