@@ -21,7 +21,7 @@ equations
 
   [aem-1'1] add-equation-module(Sdf) = add-equation-module(Main,Sdf)
 
-  [aem-1'2] create-eqs-and-conds(Module*1) = Prod*1,
+  [aem-1'2] create-eqs-and-conds(Module*1, [LAYOUT]) = Prod*1,
             add-lexical-constructor-function(Module*1) = Prod*2,
             add-tagid-rejects(Module*1) = Prod*3,
             %%add-var-lex-priorities(Module*1) = Prio*,

@@ -18,47 +18,90 @@
 %%
 equations
 
-    [ceac-1'1] create-eqs-and-conds() =
+  [ceac-1'1] create-eqs-and-conds(, SymbolsSet) =
 
-  [ceac-1'2] eqs-and-conds-for-mod(Module) = Prod*1,
-             create-eqs-and-conds(Module*) = Prod*2
-             ======================================
-             create-eqs-and-conds(Module Module*) = Prod*1 Prod*2
+  [ceac-1'2] eqs-and-conds-for-mod(Module, SymbolsSet1) = (SymbolsSet2,Prod*1),
+             create-eqs-and-conds(Module*, SymbolsSet1) = Prod*2
+             ===================================================
+             create-eqs-and-conds(Module Module*, SymbolsSet1) = Prod*1 Prod*2
 
-  [eacfm-1'1] eqs-and-conds-for-sections(Section*) = Prod*
-              ============================================
-              eqs-and-conds-for-mod(module ModName ImpSection* Section*) = Prod*
+  [eacfm-1'1] eqs-and-conds-for-mod(module ModName ImpSection* Section*, SymbolsSet) =
+                eqs-and-conds-for-sections(Section*, SymbolsSet)
 
-  [eacfs-1'1] eqs-and-conds-for-sections() =
+  [eacfs-1'1] eqs-and-conds-for-sections(, SymbolsSet) = (SymbolsSet,)
 
-  [eacfs-1'2] eqs-and-conds-for-section(Section) = Prod*1,
-              eqs-and-conds-for-sections(Section*) = Prod*2
-              =============================================
-              eqs-and-conds-for-sections(Section Section*) = Prod*1 Prod*2
+  [eacfs-1'2] eqs-and-conds-for-section(Section, SymbolsSet1) = (SymbolsSet2,Prod*1),
+              eqs-and-conds-for-sections(Section*, SymbolsSet2) = (SymbolsSet3,Prod*2)
+              ========================================================================
+              eqs-and-conds-for-sections(Section Section*, SymbolsSet1) = 
+                (SymbolsSet3,Prod*1 Prod*2)
 
-  [eacfs-2'1] eqs-and-conds-for-section(exports Grammar) =
-                eqs-and-conds-for-grammar(Grammar)
+  [eacfs-2'1] eqs-and-conds-for-section(exports Grammar, SymbolsSet1) =
+                eqs-and-conds-for-grammar(Grammar, SymbolsSet1)
 
-  [eacfs-2'2] eqs-and-conds-for-section(hiddens Grammar) =
-                eqs-and-conds-for-grammar(Grammar)
+  [eacfs-2'2] eqs-and-conds-for-section(hiddens Grammar, SymbolsSet1) =
+                eqs-and-conds-for-grammar(Grammar, SymbolsSet1)
 
-  [eacfg-1'1] eqs-and-conds-for-grammar(Grammar1) = Prod*1,
-              eqs-and-conds-for-grammar(Grammar2) = Prod*2
-              ============================================
-              eqs-and-conds-for-grammar(Grammar1 Grammar2) = Prod*1 Prod*2
+  [eacfg-1'1] eqs-and-conds-for-grammar(Grammar1, SymbolsSet1) = (SymbolsSet2,Prod*1),
+              eqs-and-conds-for-grammar(Grammar2, SymbolsSet2) = (SymbolsSet3,Prod*2)
+              =======================================================================
+              eqs-and-conds-for-grammar(Grammar1 Grammar2, SymbolsSet1) = 
+                (SymbolsSet3,Prod*1 Prod*2)
 
-  [eacfg-1'2] eqs-and-conds-for-symbols(Symbol*) = Prod*
-              ==========================================
-              eqs-and-conds-for-grammar(sorts Symbol*) = Prod*
+  [eacfg-1'2] eqs-and-conds-for-grammar(lexical syntax Prod*, SymbolsSet) =
+                eqs-and-conds-for-productions(Prod*, SymbolsSet)
 
-  [default-eacfg-1'3] eqs-and-conds-for-grammar(Grammar) =
+  [eacfg-1'3] eqs-and-conds-for-grammar(context-free syntax Prod*, SymbolsSet) =
+                eqs-and-conds-for-productions(Prod*, SymbolsSet)
 
-  [eacfg-1'1] eqs-and-conds-for-symbols() =
+  [default-eacfg-1'4] eqs-and-conds-for-grammar(Grammar, SymbolsSet) = (SymbolsSet,)
 
-  [eacfg-1'2] eqs-and-conds-for-symbols(Symbol*) = Prod*
-              ==========================================
-              eqs-and-conds-for-symbols(Sort Symbol*) =
-                Sort "=" Sort  -> Equation
-                Sort "=" Sort  -> Condition
-                Sort "!=" Sort -> Condition
-                Prod*
+  [eacfp-1'1] eqs-and-conds-for-productions(, SymbolsSet) = (SymbolsSet,)
+
+  [eacfp-1'2] eqs-and-conds-for-production(Prod, SymbolsSet1) = (SymbolsSet2, Prod*2),
+              eqs-and-conds-for-productions(Prod*1, SymbolsSet2) = (SymbolsSet3, Prod*3)
+              ==========================================================================
+              eqs-and-conds-for-productions(Prod Prod*1, SymbolsSet1) =
+                (SymbolsSet3, Prod*2 
+                              Prod*3)
+
+  [eacfp-2'1] includes(Symbol, SymbolsSet1) = false,
+              add(Symbol, SymbolsSet1) = SymbolsSet2
+              ======================================
+              eqs-and-conds-for-production(Symbol* -> Symbol Attrs, SymbolsSet1) =
+                (SymbolsSet2,
+                 Symbol "=" Symbol  -> Equation
+                 Symbol "=" Symbol  -> Condition
+                 Symbol "!=" Symbol -> Condition)
+
+  [eacfp-2'2] includes(Symbol, SymbolsSet1) = false,
+              add(Symbol, SymbolsSet1) = SymbolsSet2
+              ======================================
+              eqs-and-conds-for-production(Literal(SymbolSep*) -> Symbol Attrs, 
+                                           SymbolsSet1) =
+                (SymbolsSet2,
+                 Symbol "=" Symbol  -> Equation
+                 Symbol "=" Symbol  -> Condition
+                 Symbol "!=" Symbol -> Condition)
+
+  [eacfp-2'2] includes(Symbol, SymbolsSet) = true
+              ===================================
+              eqs-and-conds-for-production(Symbol* -> Symbol Attrs, SymbolsSet) =
+                (SymbolsSet,)
+
+  [eacfp-2'2] includes(Symbol, SymbolsSet) = true
+              ===================================
+              eqs-and-conds-for-production(Literal(SymbolSep*) -> Symbol Attrs,
+                                           SymbolsSet) =
+                (SymbolsSet,)
+
+  [in-1'1] includes(Symbol, []) = false
+
+  [in-1'2] includes(Symbol, [Symbol Symbol*]) = true
+
+  [in-1'3] Symbol1 != Symbol2
+           ==================
+           includes(Symbol1, [Symbol2 Symbol*]) = 
+             includes(Symbol1, [Symbol*])
+
+  [add-1'1] add(Symbol, [Symbol*]) = [Symbol Symbol*]
