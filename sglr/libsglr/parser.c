@@ -1203,6 +1203,10 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
     return;
   }
 
+  if (whole == 0) {
+    return;
+  }
+
   step = (len*part)/whole;
 
   if (last_step > step) {
