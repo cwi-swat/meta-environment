@@ -1,5 +1,10 @@
 $Id$
 
+2002/09/09 (vandenbr@loria.fr)
+ * Started 0.25beta.
+ * Added "#!/bin/sh" to generated scripts in order to make it
+   work for CYGWIN.
+
 2002/07/03 (jurgenv@cwi.nl)
  * Fixed bug in building the documentation.
  * Release 0.24
