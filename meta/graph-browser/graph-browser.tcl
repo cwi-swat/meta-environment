@@ -791,22 +791,64 @@ proc ViewAll {} {
 
 
 proc OpenModuleWidget {} {
-    set w .openModule
-    catch {destroy $w}
-    toplevel $w
-    wm title $w "Open module"
-    wm iconname $w "Open module"
-    label $w.message -text "Open module:"
-    entry $w.openModule
-    bind $w.openModule <Return> "OpenModuleHelper $w"
-    frame $w.buttons
-    button $w.buttons.confirm -text OK -command "OpenModuleHelper $w"
-    button $w.buttons.cancel -text Cancel -command "destroy $w"
-    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-    pack $w.message $w.openModule -side top -anchor w
-    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+#    set w .openModule
+#    catch {destroy $w}
+#    toplevel $w
+#    wm title $w "Open module"
+#    wm iconname $w "Open module"
+#    label $w.message -text "Open module:"
+#    entry $w.openModule
+#    bind $w.openModule <Return> "OpenModuleHelper $w"
+#    frame $w.buttons
+#    button $w.buttons.confirm -text OK -command "OpenModuleHelper $w"
+#    button $w.buttons.cancel -text Cancel -command "destroy $w"
+#    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
+#    pack $w.message $w.openModule -side top -anchor w
+#    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+
+  set types {
+      {{SDF2}   {.sdf2}        }
+      {{Any}    *              }
+  }
+  set mod [GetBasename [tk_getOpenFile -filetypes $types \
+                                       -title "Open SDF Module..."] \
+                        ".sdf2"]
+  if [ expr [ string length $mod ] > 0 ] {
+    OpenModule $mod
+  }
 }
 
+proc GetBasename {fnam ext} {
+  set start [string last "/" $fnam]
+  if [expr $start < 0]  {
+    set start 0
+  } else {
+    set start [expr $start + 1 ]
+  }
+  set end [string last ".sdf2" $fnam]
+  if [expr $end < 0]  {
+    set end [string length $fnam]
+  } else {
+    set end [expr $end - 1 ]
+  }
+  set fnam [string range  $fnam $start $end]
+
+  return $fnam
+}
+
+proc NewModuleWidget {} {
+
+  set types {
+      {{SDF2}   {.sdf2}        }
+      {{Any}    *              }
+  }
+  set mod [GetBasename [tk_getSaveFile -filetypes $types \
+                                       -title "New SDF Module..."] \
+                        ".sdf2"]
+  if [ expr [ string length $mod ] > 0 ] {
+    NewModule $mod
+  }
+}
 
 proc EditTermWidget {mod} {
     global g
@@ -930,8 +972,10 @@ proc fileDialog {w operation} {
 }
 
 proc saveFileAs {type} {
-    set file [fileDialog . save]
+  set file [fileDialog . save]
+  if [ expr [ string length $file ] > 0 ] {
     saveFileByName $file $type
+  }
 }
 
 proc saveFileByName {name type} {
@@ -995,11 +1039,17 @@ proc define-menu-bar {} {
     menubutton .menu.file -text "File" -underline 0 -menu .menu.file.menu
     set m .menu.file.menu
     menu $m
-    $m add command -label "Save As ..." -underline 5 -command {saveFileAs ig}
+    $m add command -label "New" -state disabled -underline 0 -command {NewModuleWidget}
+    $m add command -label "Open" -underline 0 -command {OpenModuleWidget}
+    $m add command -label "Save" -underline 0 -command {SaveAll}
+    $m add separator
+    $m add command -label "Clear" -underline 0 -command {ClearAll $c $g}
+    $m add command -label "Revert" -underline 0 -command {RevertAll}
     $m add separator
     $m add cascade -label "Export" -underline 1 -menu $m.export
 
-    menu $m.export
+    menu $m.export -tearoff 0
+    $m.export add command -label "Import-Graph ..." -underline 0 -command {saveFileAs ig}
     $m.export add command -label "GIF ..." -underline 0 -command {saveFileAs gif}
     $m.export add command -label "ISMAP ..." -underline 0 -command {saveFileAs ismap}
     $m.export add command -label "HPGL ..." -underline 0 -command {saveFileAs hpgl}
@@ -1010,29 +1060,23 @@ proc define-menu-bar {} {
     $m add command -label "Print Setup ..." -underline 0 -command {printSetup}
     $m add command -label "Print" -underline 0 -command {Print}
     $m add separator
-    $m add command -label "Preferences ..."   -underline 1 -command {}
-    $m add separator
-    $m add command -label "Exit" -underline 0 -command {GBevent button(quit)}
+    $m add command -label "Quit" -underline 0 -command {GBevent button(quit)}
 
     menubutton .menu.edit -text "Edit" -underline 0 -menu .menu.edit.menu
     set m .menu.edit.menu
     menu $m
-    $m add command -label "Undo"    -underline 0 -command {}
+    $m add command -label "Undo" -state disabled    -underline 0 -command {}
     $m add separator
-    $m add command -label "Cut"     -underline 2 -command {}
-    $m add command -label "Copy"    -underline 0 -command {}
-    $m add command -label "Paste"   -underline 0 -command {}
-
-    menubutton .menu.specification -text "Specification" -underline 0 \
-	-menu .menu.specification.menu
-    set m .menu.specification.menu
-    menu $m
-    $m add command -label "Open module" -underline 0 -command {OpenModuleWidget}
+    $m add command -label "Cut" -state disabled     -underline 2 -command {}
+    $m add command -label "Copy" -state disabled    -underline 0 -command {}
+    $m add command -label "Paste" -state disabled   -underline 0 -command {}
     $m add separator
-    $m add command -label "Save All" -underline 0 -command {SaveAll}
-    $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
-    $m add command -label "Revert All" -underline 0 -command {RevertAll}
+    $m add command -label "Preferences ..." -state disabled  -underline 1 -command {}
 
+#    menubutton .menu.specification -text "Specification" -underline 0 \
+#	-menu .menu.specification.menu
+#    set m .menu.specification.menu
+#    menu $m
 
 # Adapted by Mark
 #    $m add separator
@@ -1064,9 +1108,9 @@ proc define-menu-bar {} {
     menu $m
     $m add check -label "Diagnostic messages"  -variable DIAG
 
+#        .menu.specification {left} 
     pack append .menu .menu.file {left} .menu.edit {left} \
-        .menu.specification {left} .menu.window {left} \
-        .menu.debug {left} .menu.help {right}
+        .menu.window {left} .menu.debug {left} .menu.help {right}
 
     tk_menuBar .menu.file .menu.specification .menu.window .menu.help
 }
