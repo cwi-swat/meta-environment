@@ -1,5 +1,9 @@
 
 
+Tue Feb  1 17:51:04 CET 2005 <jurgenv@cwi.nl>
+ * Changed ASF-Normalizer to deal with annotated specifications
+ * Regenerated it, now the tide debugger can be used again
+
 Wed Jan 26 13:35:13 CET 2005 <jurgenv@cwi.nl>
  * Reimplemented and regenerated remove-var-syntax
  * Moved specification of removevarsyntax to asf-library
