@@ -1,0 +1,30 @@
+AC_INIT(mod_toolbus,0.1.4,epost@science.uva.nl)
+dnl AM_CONFIG_HEADER(configure.in)
+AM_INIT_AUTOMAKE(mod_toolbus, 0.1.4)
+
+AC_PROG_CC
+dnl AC_HEADER_STDC
+
+TOP=`pwd`
+AC_SUBST(TOP)
+
+APDIR=/home/epost/courses/po/3/apache2
+AC_SUBST(APDIR)
+
+APDEVELDIR=/home/epost/courses/po/3/httpd-2.0.47
+AC_SUBST(APDEVELDIR)
+
+TBDIR=/opt/toolbus
+AC_SUBST(TBDIR)
+
+
+AC_SET_MAKE
+
+AC_OUTPUT(
+	Makefile
+	src/Makefile
+	doc/Makefile
+	doc/figures/Makefile
+	webgui/Makefile
+)
+

@@ -1,0 +1,6 @@
+
+
+Mon Oct 13 09:18:52 CEST 2003	<jurgenv@cwi.nl>
+  * Received first implementation of modtoolbus from Erik Post
+  * Created a repository for modtoolbus at cvs-sop.inria.fr:/CVS/aircube
+  * Added automatic detection of dependencies on apache and toolbuslib

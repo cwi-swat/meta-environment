@@ -1,0 +1,49 @@
+mod_toolbus installation
+========================
+
+
+Prerequisites
+-------------
+	- Apache 2.0 + sources (compiled with mod_so)
+	- ToolBus
+
+
+Configuring Apache
+------------------
+
+1) Update Apache's httpd.conf to listen on port 21000 (and, if necessary, with the ServerName directive set to localhost).
+2) Extract the mod_toolbus tarball and cd to the directory.
+3) Update configure.in to reflect your ToolBus and Apache paths (yeah, i know...).
+4) run autoconf and, if necessary, automake -a
+5) run  ./configure
+6) run make
+
+
+Running
+-------
+
+(Stuff below is provided for your convenience in the src/Makefile. This is just FYI.)
+
+1) Start up the ToolBus running the relevant scripts
+
+	$ toolbus -I. system.tb
+
+2) Start the Apache webserver
+
+	$ /path/to/apache/bin/apachectl start
+
+Apache, if configured properly when compiling mod_toolbus with 'apxs', will automatically run mod_toolbus now.
+
+
+
+Usage examples
+--------------
+
+- send an HTTP request to the webserver
+
+
+Relevant files
+--------------
+	
+	- Apache's configuration file 'http.conf', typically located somewhere in ... or /etc/httpd/ (please check your Apache documentation)
+	- Apache's error log, where mod_toolbus writes lots (and lots) of debugging messages /var/log/httpd
