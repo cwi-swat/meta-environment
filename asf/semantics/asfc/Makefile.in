@@ -50,9 +50,9 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I${top_srcdir}/asc-support -I$(ATERMINC)
-XLIBS		= -L${top_srcdir}/asc-support -lasc-support-${CC} \
-		  -Lc-source -lAsFix2C-${CC} \
-		  -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
+XLIBS		= -L${top_srcdir}/asc-support -lasc-support \
+		  -Lc-source -lAsFix2C \
+		  -L$(ATERMLIB) -lATerm -lAsFix -lATB \
 		  $(SOCKLIBS)
 
 # Other variables
@@ -102,7 +102,7 @@ subdirs:
 compiler.tif.c compiler.tif.h: $(top_srcdir)/toolbus/meta.tifs
 	$(ATERMBIN)/tifstoc -tool compiler $(top_srcdir)/toolbus/meta.tifs
 
-compiler: compiler.o compiler.tif.o c-source/libAsFix2C-${CC}.a
+compiler: compiler.o compiler.tif.o c-source/libAsFix2C.a
 	$(CC) -o compiler compiler.o compiler.tif.o $(LIBS)
 
 #compile-one-module: compile-one-module.o
