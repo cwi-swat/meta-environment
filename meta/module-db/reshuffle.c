@@ -352,7 +352,8 @@ void gen_makefile(ATerm name)
     output = fopen(buf,"w");
     if(!output)
       ATfprintf(stderr,"Cannot open file %s\n",buf);
-    else {   
+    else {
+      fprintf( output, "# Generated automatically, please do not edit.\n" );
       while (!ATisEmpty(modules)) {
         module = ATgetFirst(modules);
         if(ATmatchTerm(module,pattern_asfix_id,&mtext)) {
