@@ -215,7 +215,6 @@ in
     Modules := []
   +
     rec-msg(get-imported-modules(Name?)).
-    printf("DEBUG: NYI, should this be transitive?") .
     MDB-GetImportedModules(Name, Modules?) .
     snd-msg(imported-modules(Modules))
   +
@@ -358,11 +357,8 @@ process MDB-GetImportedModules(Name : str, Imported : list?) is
 let
   Syntax : term
 in
-    snd-msg(ts-get-term-value("sdf-tree", Name)) .
-    rec-msg(ts-value(Syntax?)) .
-    snd-msg(sm-all-imports(Syntax)) .
-    Syntax := no-tree .
-    rec-msg(sm-all-imports(Imported?))
+    snd-msg(ts-get-term-value("import-relations", Name)) .
+    rec-msg(ts-value(Imported?))
 endlet
 
 process MDB-DisplayGraph is
