@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = manager slicing structure text 
+SUBDIRS = manager structure text 
