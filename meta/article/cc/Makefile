@@ -13,6 +13,6 @@ all: format.ps
 	fig2dev -Lps $< $@
 
 format.ps: format.dvi
-	dvips format.dvi
+	dvips -o format.ps format.dvi
 
 format.dvi: format.ltx ${EPS}
