@@ -182,10 +182,12 @@ public class GraphPanel extends JComponent implements Scrollable {
         int max_y = 0;
 
         Attribute bbox = graph.getBoundingBox();
-        Point max = bbox.getSecond();
 
-        max_x = max.getX();
-        max_y = max.getY();
+	Point from = bbox.getFirst();
+	Point to = bbox.getSecond();
+
+        max_x = Math.max(from.getX(), to.getX());
+        max_y = Math.max(from.getY(), to.getY());
 
         Point2D point =
             transform.transform(new Point2D.Float((float) max_x, (float) max_y), null);
