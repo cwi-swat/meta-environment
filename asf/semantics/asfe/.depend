@@ -1,2 +1,0 @@
-evaluator.o: evaluator.c preparation.h evaluator.tif.c
-preparation.o: preparation.c preparation.h

@@ -71,14 +71,14 @@ DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
 #CLEANFILES	= compiler compile-one-module compiler.tif.c compiler.tif.h
-CLEANFILES	= compiler compiler.tif.c compiler.tif.h
+CLEANFILES	=  *.o *~ ${BINFILES}
 # DISTCLEANFILES are removed by 'make distclean'
-DISTCLEANFILES	=
+DISTCLEANFILES	= Makefile compiler.tif.c compiler.tif.h
 
 SUBDIRS		= c-source support-muasf
 
 # The all target must be defined:
-all: subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 subdirs:
 	@for dir in $(SUBDIRS); \
@@ -138,7 +138,7 @@ doc: $(DOCFILES)
 
 # clean target (remove all easily build components and temporary files)
 clean:
-	rm -f *.o *~ $(CLEANFILES)
+	rm -f $(CLEANFILES)
 	@for DIR in $(SUBDIRS); \
 	do \
 	   echo Make $@ in $$DIR; \
@@ -149,13 +149,13 @@ clean:
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
-	rm Makefile $(DISTCLEANFILES)
+	rm -f $(DISTCLEANFILES)
 
 # distclean target
 
 
 # Updating of included dependencies (CC needs to be gcc!)
-depend: $(CSRC) $(CHDR)
+depend: $(CSRC)
 	@$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > depend
 
 # Included dependencies

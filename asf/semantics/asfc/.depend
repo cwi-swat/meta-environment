@@ -1,5 +1,0 @@
-compiler.o: compiler.c compiler.tif.h support/support.h
-expander.o: expander.c
-asfixprinter.o: asfixprinter.c
-asfix-trans.o: asfix-trans.c
-init-patterns.o: init-patterns.c
