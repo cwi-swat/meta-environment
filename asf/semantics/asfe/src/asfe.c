@@ -1373,15 +1373,11 @@ static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
       env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
 			 PT_getTreeAnnotation(entry->lhs, posinfo), depth);
     }
+
     tagCurrentRule = entry->tag;
     currentRule = entry;
 
     if (!is_fail_env(env)) {
-      /*
-      if (strcmp(PT_yieldTree(tagCurrentRule), "[l-1'3]") == 0) {
-	ATwarning("env = %t\n", env);
-      }
-      */
       TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
       if (runVerbose) {
 	ATwarning("Equation: %s was successful.\n", 
@@ -1415,6 +1411,7 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
   ATermList complexenv;
   ATerm env;
   equation_entry *equation;
+  ASF_Tag savedTag = tagCurrentRule;
 
   complexenv = apply_rule(trm, depth, &equation);
   env = get_env(complexenv);
@@ -1430,6 +1427,7 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
     TIDE_STEP(equation->posinfo_equals, env, depth);
   }
 
+  tagCurrentRule = savedTag;
   return trm;
 }
 
