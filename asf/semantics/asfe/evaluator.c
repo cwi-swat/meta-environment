@@ -1187,24 +1187,32 @@ int main(int argc, char *argv[])
       }
     }
 
+		/* Get the equations from file */
     if (!(iofile = fopen(eqsfile, "r")))
       ATerror("%s: cannot open %s\n", myname, eqsfile);
 
     eqs = ATreadFromFile(iofile);
+		fclose(iofile);
 
+		/* Prepare the equations and put them in the database */
     neweqs = RWprepareEqs((ATermList) eqs);
     enter_equations(name, neweqs);
 
+		/* Get the term from file */
     if (!strcmp(input, "") || !strcmp(input, "-"))
       iofile = stdin;
     else if (!(iofile = fopen(input, "r")))
       ATerror("%s: cannot open %s\n", myname, input);
  
     term = ATreadFromFile(iofile);
+		fclose(iofile);
 
+		/* Prepare the term for rewriting */
     term = ATremoveAllAnnotations(term);
     aterm = asfix_get_term(term);
     realterm = RWprepareTerm(aterm);
+
+		/* Rewrite the term */
 
     /*rewrite_steps = 0;*/
     select_equations(name);
@@ -1214,9 +1222,11 @@ int main(int argc, char *argv[])
     newterm = rewrite(realterm,(ATerm) ATempty);
     /*times(&rewriting);*/
 
+		/* Postprocessing of reduct */
     newaterm = RWrestoreTerm(newterm);
     result = asfix_put_term(term,newaterm);
 
+		/* Communicate the reduct out of here */
     if (!strcmp(output, "") || !strcmp(output, "-"))
       iofile = stdout;
     else if (!(iofile = fopen(output, "w")))
