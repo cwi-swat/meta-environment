@@ -19,7 +19,7 @@ Id := process-id.
 ( 
   rec-msg(get-parsetable(ModuleId?)) .
   Str := first(args(ModuleId)).
-  snd-msg(get-table-from-db(Str)) .
+  snd-msg(get-table-from-db(ModuleId)) .
   (
     rec-msg(table(Table?)).
     snd-msg(parse-table(Table))
