@@ -2,6 +2,7 @@
  * Added a tool addapisyntax that add syntax based on cons attributes
    and labels. A cons attribute generates a prefix constructor function
    and an predicate function. A label generates a getter and a setter.
+ * Added semantics for generated api syntax in the interpreter.
 
 2002/01/08 (vandenbr@loria.fr)
  * Adapted the edit-term script and moved functionality to the
