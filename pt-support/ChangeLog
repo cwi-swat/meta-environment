@@ -1,3 +1,11 @@
+2001/11/21 ({jong,jurgenv}@cwi.nl)
+  * Fixed some bugs in usage info and file opening in implodePT.
+
+2001/11/20 (jurgenv@cwi.nl)
+  * Added PT_yieldSymbolVisualVariables to MEPT-utils that pretty prints
+    a symbol and shows the difference between variable and normal symbols.
+  * The tool implodePT can conserve ATerm annotations during implosion.
+
 2001/11/14 (jong@cwi.nl)
  * Fixed several bugs in argumenthandling in apply-function
  * Removed obsolete "-m <module>" stuff from apply-function program
@@ -11,6 +19,7 @@
 2001/11/13 (markvdb@cwi.nl)
  * removed unused argument from applyFunctionToTree.
 
+>>>>>>> 1.42
 2001/11/12 (jurgenv@cwi.nl)
  * Added apply-function functionality to MEPT-utils.
  * Added apply-function tool to utils

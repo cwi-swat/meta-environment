@@ -55,6 +55,7 @@ char *PT_yieldArgsVisualAmbs(PT_Args tree, ATbool visualAmbs);
 
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
+char *PT_yieldSymbolVisualVariables(PT_Symbol symbol, ATbool showVars);
 
 ATerm PT_reportTreeAmbiguities(PT_Tree tree);
 ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree);
