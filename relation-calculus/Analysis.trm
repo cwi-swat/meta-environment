@@ -1,24 +1,14 @@
+label(
 
-%% begin declare x : natural, y : natural, natural z; 
-%%      [s1] x := 3; 
-%%      if [s2] 3 then 
-%%         [s3] z := y + x 
-%%      else
-%%         [s4] x := 4
-%%      fi
-%%      [s5] y := z
-%%
-%% end
+begin
+declare x : natural;
 
-uninitialized(
-  {<s1, x>, <s3, z>, <s4, x>, <s5, y>},                      %% defines
-  {<s3, y>, <s3, x>, <s5, z>},                               %% uses
-  {<s0,s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>} %% pred
-)
+x := 3;
+if y then y := 3; y := 4 else y := 5 fi;
+y := 6
+end
+,
 
-
-
-
-
+0)
 
 

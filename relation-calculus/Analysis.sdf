@@ -4,7 +4,7 @@ imports Pico-syntax
 imports basic/Integers
 
 exports
-  sorts LABEL Item STATEMENT # Integer
+  sorts LABEL Item STATEMENT # Integer PROGRAM # Integer
 
   context-free syntax
      PICO-ID | Integer   ->Item
@@ -20,8 +20,8 @@ exports
  
   context-free syntax
 
-      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
-      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
+      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, top-down, continue)} 
+      label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, top-down, continue)} 
 
       collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
       collect(STATEMENT, RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
