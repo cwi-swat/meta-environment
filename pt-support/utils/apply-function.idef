@@ -8,7 +8,9 @@ let
   FuncName : str,
   SortName : str,
   TreeList : list,
-  Tree     : term
+  ArgNr    : int,
+  Tree     : term,
+  ArgTree  : term
 in
   (
     rec-msg(apply-function(FuncName?, SortName?, TreeList?)).
@@ -17,6 +19,13 @@ in
     rec-value(AF, tree(Tree?)).
     snd-terminate(AF, "done") .
     snd-msg(tree(Tree))
+  +
+    rec-msg(get-argument-given-number(Tree?, ArgNr?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, get-argument-given-nr(Tree, ArgNr)).
+    rec-value(AF, tree(ArgTree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(ArgTree))
   ) *
   delta
 endlet

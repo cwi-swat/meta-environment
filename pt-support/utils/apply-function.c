@@ -46,6 +46,21 @@ void rec_terminate(int cid, ATerm t)
   exit(0);
 }
 
+ATerm get_argument_given_nr(int cid, ATerm tree, int argNr)
+{
+  PT_ParseTree parseTree, newParseTree;
+  PT_Args args;
+  PT_Tree argTree;
+
+  parseTree = PT_makeParseTreeFromTerm(tree);
+  args = PT_getTreeArgs(PT_getParseTreeTree(parseTree));
+  argTree = PT_getArgsArgumentAt(args, argNr);
+  newParseTree = PT_makeValidParseTreeFromTree(argTree);
+
+  return ATmake("snd-value(tree(<term>))", 
+                PT_makeTermFromParseTree(newParseTree));
+}
+
 ATerm apply_function_to_args(int cid, char *function, char *sort, ATerm args)
 {
   PT_ParseTree newParseTree;

@@ -1,3 +1,6 @@
+2002/05/13 (vandenbr@loria.fr)
+ * Added functionality to obtain the arguments of a tree.
+
 2002/05/07 (vandenbr@loria.fr)
  * Transformed apply-function into a TB tool.
 
