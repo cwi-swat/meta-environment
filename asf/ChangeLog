@@ -3,13 +3,21 @@
 Wed Jun  9 15:38:01 CEST 2004 <jong@cwi.nl>
  * semantics: regenerate APIs, fix resulting errors
 
+Tue Jun  8 11:13:30 CEST 2004 <jurgenv@cwi.nl>
+ * Refactored implementation of traversal functions in the compiler. It
+   is now a separate phase written as a transformation on the generated 
+   C code of a traversal function.
+ * Added implementation for the missing combinations of traversal attributes
+   to the compiler: bottom-up,break and top-down,continue.
+ * Added implementation for traversal functions that have no equations
+   to the compiler.
+ * Bootstrapped compiler three times
+
 Mon May 17 09:48:59 CEST 2004 <kooiker@cwi.nl>
  * semantics/asf-checker/src/Makefile.am: Added PT-Support to LD_ADD section 
 
-Mon May 10 10:57:20 CEST 2004 <jurgenv@cwi.nl>
- * added new warning: If lexical is exactly the same as the sort name
-   it is parsed over it was probably a variable!
- * Bumped version to 1.9
+Mon May 24 10:02:19 CEST 2004 <markvdb@cwi.nl>
+ * Promoted a number of asfsdf-checker warnings into errors.
 
 Wed May 12 14:09:17 CEST 2004
  * Fixed bug 297, message wrt to use of CHAR were not clickable.
