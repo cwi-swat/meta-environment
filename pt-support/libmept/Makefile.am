@@ -7,15 +7,6 @@ libmept_a_SOURCES 	= MEPT.c MEPT_dict.c MEPT-utils.c  \
                           posInfo.c reportAmbs.c apply.c \
                           symbol-renaming.c ordering.c
 
-TESTS=stress
-
-noinst_PROGRAMS=stress
-
-stress_SOURCES=stress.c
-stress_LDADD=\
-	-L$(ATERM)/lib -lATerm\
-	-L. -lmept                          
-
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
 

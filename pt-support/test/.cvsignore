@@ -1,5 +1,4 @@
+.deps
 Makefile
 Makefile.in
-.deps
-*.o
-libmept.a
+mept-test
