@@ -19,15 +19,13 @@ BUILTINS=$(shell grep "built-in" *.sdf | \
 # What gets installed, distributed, cleaned
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
-EXTRA_DIST = $(MODULES) $(PREPARED) $(PACKAGE_SRC)
+EXTRA_DIST = $(MODULES) $(PREPARED) 
 CLEANFILES+=link-test.c
-
 
 # Build a stub to test if every built-in has an implementation
 noinst_PROGRAMS=link-test
 link_test_SOURCES= $(PACKAGE_SRC) link-test.c
-link_test_LDADD=-L. -lasf-builtins \
-                -L${PT_SUPPORT}/lib -lmept \
+link_test_LDADD=-L${PT_SUPPORT}/lib -lmept \
                 -L${ATERM}/lib -lATerm
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
