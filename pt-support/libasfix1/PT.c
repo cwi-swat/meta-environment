@@ -397,6 +397,14 @@ PT_Args PT_makeArgsDefault(PT_Tree head, PT_Args tail)
 }
 
 /*}}}  */
+/*{{{  PT_Args PT_makeArgsEmpty() */
+
+PT_Args PT_makeArgsEmpty()
+{
+  return (PT_Args)ATmakeTerm(PT_patternArgsEmpty);
+}
+
+/*}}}  */
 
 /*{{{  equality functions */
 
@@ -1877,6 +1885,9 @@ ATbool PT_isValidArgs(PT_Args arg)
   if (PT_isArgsDefault(arg)) {
     return ATtrue;
   }
+  else if (PT_isArgsEmpty(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1886,6 +1897,14 @@ ATbool PT_isValidArgs(PT_Args arg)
 ATbool PT_isArgsDefault(PT_Args arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternArgsDefault, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isArgsEmpty(PT_Args arg) */
+
+ATbool PT_isArgsEmpty(PT_Args arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternArgsEmpty);
 }
 
 /*}}}  */

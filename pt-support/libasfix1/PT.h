@@ -81,6 +81,7 @@ PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol symbol);
 PT_Separator PT_makeSeparatorDefault(PT_String chars);
 PT_Layout PT_makeLayoutDefault(PT_String chars);
 PT_Args PT_makeArgsDefault(PT_Tree head, PT_Args tail);
+PT_Args PT_makeArgsEmpty();
 
 /*{{{  equality functions */
 
@@ -259,6 +260,7 @@ PT_Layout PT_setLayoutChars(PT_Layout arg, PT_String chars);
 
 ATbool PT_isValidArgs(PT_Args arg);
 ATbool PT_isArgsDefault(PT_Args arg);
+ATbool PT_isArgsEmpty(PT_Args arg);
 ATbool PT_hasArgsTail(PT_Args arg);
 PT_Args PT_getArgsTail(PT_Args arg);
 PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail);

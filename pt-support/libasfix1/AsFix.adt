@@ -80,5 +80,6 @@
  [Separator, default, sep(<chars(String)>)],
  [Layout, default, w(<chars(String)>)], 
 
- [Args, default, [<head(Tree)>,<[tail(Args)]>]]
+ [Args, default, [<head(Tree)>,<[tail(Args)]>]],
+ [Args, empty, [ ]]
 ]

@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Feb 13 15:11:15 2001
+ * Generated at Tue Feb 13 15:32:14 2001
  */
 
 #ifndef __PT_dict_H
@@ -8,6 +8,7 @@
 #include <aterm2.h>
 
 
+extern ATerm PT_patternArgsEmpty;
 extern ATerm PT_patternArgsDefault;
 extern ATerm PT_patternLayoutDefault;
 extern ATerm PT_patternSeparatorDefault;
