@@ -29,7 +29,16 @@ public class PropertyContext
   }
 
   //}}}
-  //{{{ public PropertyContext(PropertyContext context, key, value)
+  //{{{ public PropertyContext(PropertyContext context, String key)
+
+  public PropertyContext(PropertyContext context, String key)
+  {
+    this(context);
+    descend(key, getSingletonValue(key));
+  }
+
+  //}}}
+  //{{{ public PropertyContext(PropertyContext context, String key, String value)
 
   public PropertyContext(PropertyContext context, String key, String value)
   {
@@ -104,10 +113,14 @@ public class PropertyContext
   public String getSingletonValue(String key)
   {
     Set value = getValueSet(key);
-    if (value.size() != 1) {
+    int size = value.size();
+    if (size > 1) {
       throw new RuntimeException("not a singleton value: key=" + key
 				 + ", value=" + value);
+    } else if (size == 0) {
+      return null;
     }
+
     return (String)value.iterator().next();
   }
 
@@ -212,9 +225,7 @@ public class PropertyContext
 	String value = pair[1];
 
 	if (key.equals(lhs) && value.equals(tree.getValue())) {
-	  if (tree.getType() == PropertyTree.ADD) {
-	    getValue(leaf_key, pathLeft, tree.getProperties(), values);
-	  }
+	  getValue(leaf_key, pathLeft, tree.getProperties(), values);
 	}
       }
     }
@@ -239,17 +250,23 @@ public class PropertyContext
 
   private void addResult(PropertyTree tree, Set values)
   {
-    if (tree.getType() == PropertyTree.SET) {
-      values.clear();
+    switch (tree.getType()) {
+      case PropertyTree.OPT:
+	return;
+
+      case PropertyTree.SET:
+	values.clear();
+	break;
+
+      case PropertyTree.ADD:
+	break;
     }
 
     String value = tree.getValue();
-    if (value == null) {
-      found = true;
-    } else if (!value.equals("*")) { // Skip trees that only augment children
-      values.add(tree.getValue());
-      found = true;
+    if (value != null) { // 'key := { }' is represented by a dummy node with no values
+      values.add(value);
     }
+    found = true;
   }
 
   //}}}

@@ -123,6 +123,7 @@ TOKEN :
 | <PERIOD: ".">
 | <ADD: "+=">
 | <SET: ":=">
+| <OPT: "?">
 | <ARROW: "->">
 | <IMPORT: "@import">
 }   
@@ -248,6 +249,7 @@ PropertyForest PropertyTrees() :
   String key;
   Token file, field;
   PropertyTree fieldType;
+  int propType;
   List list;
   PropertyForest forest = new PropertyForest();
   PropertyForest children;
@@ -295,20 +297,39 @@ PropertyForest PropertyTrees() :
     LOOKAHEAD(2)
     value=PropertyValue() "{" children=PropertyForest() "}"
     {
-      forest.addTree(new PropertyTree(key, value, children));
+      PropertyTree tree = new PropertyTree(key, value, children);
+      if (value.equals("*")) {
+        tree.setType(PropertyTree.OPT);
+      }
+      forest.addTree(tree);
       return forest;
     }
   |
-    ( ":=" { forest.addTree(new PropertyTree(key, PropertyTree.SET)); }
-    | "+=" { forest.addTree(new PropertyTree(key, PropertyTree.ADD)); }
+    LOOKAHEAD(2)
+    value=PropertyValue() "?" "{" children=PropertyForest() "}"
+    {
+      PropertyTree tree = new PropertyTree(key, value, children);
+      tree.setType(PropertyTree.OPT);
+      forest.addTree(tree);
+      return forest;
+    }
+  |
+    ( ":=" { propType = PropertyTree.SET; }
+    | "+=" { propType = PropertyTree.ADD;  }
     )
     ( "{" list=PropertyValueList() "}"
       {
 	Iterator iter = list.iterator();
-	while (iter.hasNext()) {
-	  PropertyTree tree =
-	    new PropertyTree(key, (String)iter.next(), new PropertyForest());
-	  forest.addTree(tree);
+	if (iter.hasNext()) {
+	  while (iter.hasNext()) {
+	    PropertyTree tree =
+	      new PropertyTree(key, (String)iter.next(), new PropertyForest());
+	    tree.setType(propType); 
+	    propType = PropertyTree.ADD;
+	    forest.addTree(tree);
+	  }
+	} else {
+	  forest.addTree(new PropertyTree(key, propType));
 	}
 	return forest;
       }
@@ -316,6 +337,7 @@ PropertyForest PropertyTrees() :
       value=PropertyValue()
       {
 	PropertyTree tree = new PropertyTree(key, value, new PropertyForest());
+	tree.setType(propType);
 	forest.addTree(tree);
 	return forest;
       }

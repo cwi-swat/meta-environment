@@ -26,10 +26,12 @@ public class Main
     PropertyForest forest;
     String application = "";
     List files = new LinkedList();
+    StringBuffer extraProperties = new StringBuffer();
 
     for (int i=0; i<args.length; i++) {
-      if (args[i].equals("--define") || args[i].equals("-D")) {
-	i++;
+      if (args[i].equals("--property") || args[i].equals("-p")) {
+	extraProperties.append(args[++i]);
+	extraProperties.append('\n');
       } else if (args[i].equals("--application") || args[i].equals("-a")) {
 	application = args[++i];
       } else if (args[i].startsWith("-")) {
@@ -38,6 +40,8 @@ public class Main
 	files.add(args[i]);
       }
     }
+
+    System.out.println("extra properties: " + extraProperties);
 
     // Read Autocode defaults
     String defaults = "AutocodeGenerator.aco";
@@ -51,8 +55,7 @@ public class Main
     while (iter.hasNext()) {
       String fileName = (String)iter.next();
       reader = new FileReader(fileName);
-      parser.ReInit(reader);
-      //parser = new PropertyParser(reader);
+      parser = new PropertyParser(reader);
       forest.merge(parser.PropertyForest());
       reader.close();
     }
@@ -65,8 +68,14 @@ public class Main
 
     PropertyContext appContext = new PropertyContext(root, "application",
 						     application);
+    reader = new StringReader(extraProperties.toString());
+    parser = new PropertyParser(reader);
+    appContext.merge(parser.PropertyForest());
+    reader.close();
+
     Set generators = appContext.getValueSet("generator");
     System.out.println("generators: " + generators);
+    System.out.println("forest: " + forest);
 
     iter = generators.iterator();
     while (iter.hasNext()) {

@@ -102,7 +102,6 @@ public class JavaGenerator
     emitImports(unit);
     println(unit.getAccess().yield() + " class " + unit.getClassName());
     emitExtends(unit);
-    emitMethods(unit);
     println("{");
     indentLevel++;
     emitAttributes(unit);
@@ -193,6 +192,56 @@ public class JavaGenerator
 
   protected void emitMethod(JavaMethod method)
   {
+    StringBuffer buf = new StringBuffer();
+
+    buf.append(method.getAccess().yield());
+    buf.append(' ');
+
+    if (method.isAbstract()) {
+      buf.append("abstract ");
+    }
+
+    if (method.isStatic()) {
+      buf.append("static ");
+    }
+
+    if (method.isFinal()) {
+      buf.append("final ");
+    }
+
+    String resultType = method.getResultType();
+    if (resultType != null) {
+      buf.append(method.getResultType());
+      buf.append(' ');
+    }
+
+    buf.append(method.getName());
+    buf.append('(');
+    Iterator iter = method.fetchFormalParameterIterator();
+    boolean first = true;
+    while (iter.hasNext()) {
+      if (first) {
+	first = false;
+      }
+      else {
+	buf.append(", ");
+      }
+
+      FormalParameter param = (FormalParameter)iter.next();
+      buf.append(javaTypeName(param.getType()));
+      buf.append(' ');
+      buf.append(param.getName());
+    }
+    buf.append(')');
+
+    String decl = buf.toString();
+
+    foldOpen(decl);
+    println(decl);
+    println("{");
+    method.getBody().emit(indentLevel+1, writer);
+    println("}");
+    foldClose();
   }
 
   //}}}
@@ -249,11 +298,31 @@ public class JavaGenerator
 
   //}}}
 
-  //{{{ public String typeName(String typeName)
+  //{{{ public String typeName(PropertyContext fieldTypeContext)
 
-  public String typeName(String typeName)
+  public String typeName(PropertyContext fieldTypeContext)
   {
-    return AutocodeGenerator.javaTypeName(typeName);
+    String fieldTypeName = fieldTypeContext.getName();
+
+    String typeName = fieldTypeContext.getString("interface");
+    if (typeName != null) {
+      PropertyContext interfaceContext
+	= new PropertyContext(fieldTypeContext, "interface");
+      Set imports = interfaceContext.getValueSet("import");
+      getCompilationUnit().mergeImportedCollection(imports);
+      return typeName;
+    }
+
+    typeName = fieldTypeContext.getString("implementation");
+    if (typeName != null) {
+      PropertyContext implementationContext
+	= new PropertyContext(fieldTypeContext, "implementation");
+      Set imports = implementationContext.getValueSet("import");
+      getCompilationUnit().mergeImportedCollection(imports);
+      return typeName;
+    }
+
+    return AutocodeGenerator.javaTypeName(fieldTypeContext.getName());
   }
 
   //}}}

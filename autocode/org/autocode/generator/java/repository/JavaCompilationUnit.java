@@ -11,7 +11,7 @@ import java.util.*;
 public class JavaCompilationUnit
   extends CompilationUnit
 {
-  //{{{ accessSpecifiers 
+  //{{{ attributes
 
   private String packageName;
   private String className;
@@ -116,6 +116,14 @@ public class JavaCompilationUnit
   public void addImported(String imported)
   {
     importedSet.add(imported);
+  }
+
+  //}}}
+  //{{{ public void mergeImportedCollection(Collection c)
+
+  public void mergeImportedCollection(Collection c)
+  {
+    importedSet.addAll(c);
   }
 
   //}}}

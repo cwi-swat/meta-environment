@@ -4,13 +4,13 @@ import java.util.*;
 
 public class PropertyForest
 {
-  private List tree;
+  private Set tree;
 
   //{{{ public PropertyForest()
 
   public PropertyForest()
   {
-    tree = new LinkedList();
+    tree = new LinkedHashSet();
   }
 
   //}}}
@@ -18,9 +18,7 @@ public class PropertyForest
 
   public void addTree(PropertyTree tree)
   {
-    if (!this.tree.contains(tree)) {
-      this.tree.add(tree);
-    }
+    this.tree.add(tree);
   }
 
   //}}}

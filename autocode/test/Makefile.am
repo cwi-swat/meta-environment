@@ -31,9 +31,9 @@ CLEANFILES = $(foreach f, ${MODULES}, $f.sh $f.sh.log)
 	) > $@ && chmod +x $@
 
 mycheck:
-	#mkdir -p ${top_builddir}/test/company/clients
+	mkdir -p ${top_builddir}/test/org/autocode/test
 	${top_srcdir}/autocode-test \
 		--application client-app \
-		--define java.rootdir=${top_builddir}/test \
+		--property "java->rootdir:=\"${top_builddir}/test\"" \
 		client-app.add
 

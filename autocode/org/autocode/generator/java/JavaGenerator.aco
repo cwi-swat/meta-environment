@@ -21,6 +21,63 @@ type * {
     static := false	  // and are not static
     final := false	  // nor final
 
+    type * {
+      implementation := { }
+      implementation * {
+        import := { }
+      }
+      interface := { }
+      interface * {
+        import := { }
+      }
+    }
+
+    type boolean? {
+      implementation := "boolean"
+    }
+
+    type integer? {
+      implementation := "integer"
+    }
+
+    type string? {
+      implementation := "String"
+    }
+
+    type real? {
+      implementation := "float"
+    }
+
+    type list? {
+      interface "List" {
+        import := "java.util.List"
+      }
+
+      implementation "LinkedList" {
+        import := "java.util.LinkedList"
+      }
+    }
+
+    type map? {
+      interface "Map" {
+        import := "java.util.Map"
+      }
+
+      implementation "HashMap" {
+        import := "java.util.HashMap"
+      }
+    }
+
+    type set? {
+      interface "Set" {
+        import := "java.util.Set"
+      }
+
+      implementation "HashSet" {
+        import := "java.util.HashSet"
+      }
+    }
+
     operation * {
       access := public
       abstract := false

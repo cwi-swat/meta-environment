@@ -15,17 +15,19 @@ public class Accessor
 {
   //{{{ private void addAttribute(JavaCompilationUnit unit, PropertyContext fieldContext)
 
-  private void addAttribute(JavaCompilationUnit unit, PropertyContext fieldContext)
+  private void addAttribute(JavaGenerator generator, PropertyContext fieldContext,
+			    String attrName, String attrType)
   {
-    String fieldName = fieldContext.getName();
-    String fieldTypeName = fieldContext.getString("type");
-
     boolean isStatic = fieldContext.getBoolean("static");
     boolean isFinal = fieldContext.getBoolean("final");
+
     String access = fieldContext.getString("access");
     JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
-    JavaAttribute attr = new JavaAttribute(fieldName, fieldTypeName, accessSpecifier,
-					   isFinal, isStatic);
+
+    JavaAttribute attr =
+      new JavaAttribute(attrName, attrType, accessSpecifier, isFinal, isStatic);
+
+    JavaCompilationUnit unit = generator.getCompilationUnit();
     if (!unit.hasAttribute(attr)) {
       unit.addAttribute(attr);
     }
@@ -40,20 +42,23 @@ public class Accessor
 			  PropertyContext fieldContext,
 			  PropertyContext operationContext)
   {
-    String fieldName = fieldContext.getName();
-    String fieldTypeName = fieldContext.getString("type");
+    PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+    String attrType = generator.typeName(fieldTypeContext);
 
-    String attributeName = generator.attributeName(fieldName);
-    String attributeType = generator.typeName(fieldTypeName);
+    String fieldName = fieldContext.getName();
     String methodName = generator.methodName("get-" + fieldName);
 
+    String attrName = generator.attributeName(fieldName);
     MethodBody body = new MethodBody();
-    body.addLine("return " + fieldName + ";");
+    body.addLine("return " + attrName + ";");
+
+    JavaMethod method
+      = createMethod(operationContext, methodName, attrType, body);
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
-    unit.addMethod(createMethod(operationContext, methodName, fieldTypeName, body));
+    unit.addMethod(method);
 
-    addAttribute(unit, fieldContext);
+    addAttribute(generator, fieldContext, attrName, attrType);
 
     System.out.println("Generating get for: " + fieldName);
   }
@@ -66,25 +71,26 @@ public class Accessor
 			  PropertyContext fieldContext,
 			  PropertyContext operationContext)
   {
-    String fieldName = fieldContext.getName();
-    String fieldTypeName = fieldContext.getString("type");
+    PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+    String attrType = generator.typeName(fieldTypeContext);
 
-    String attributeName = generator.attributeName(fieldName);
-    String attributeType = generator.typeName(fieldTypeName);
+    String fieldName = fieldContext.getName();
     String methodName = generator.methodName("set-" + fieldName);
 
+    String attrName = generator.attributeName(fieldName);
+
     String paramName = generator.javaParameterName(fieldName);
-    FormalParameter arg = new FormalParameter(paramName, attributeType);
+    FormalParameter arg = new FormalParameter(paramName, attrType);
 
     MethodBody body = new MethodBody();
-    body.addLine(attributeName + " = " + paramName + ";");
+    body.addLine(attrName + " = " + paramName + ";");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(arg);
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
 
-    addAttribute(unit, fieldContext);
+    addAttribute(generator, fieldContext, attrName, attrType);
   }
 
   //}}}
@@ -135,7 +141,7 @@ public class Accessor
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
 
-    addAttribute(unit, fieldContext);
+    //addAttribute(unit, fieldContext);
   }
 
   //}}}

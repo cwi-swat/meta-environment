@@ -1,7 +1,6 @@
 application client-app {
   generator java {
     enabled := true
-    rootdir := "/tmp"
 
     @import "Client.add"
     @import "Order.add"
@@ -17,9 +16,22 @@ application client-app {
       interface := { Serializable, Runnable }
   
       field name {
+        type string {
+          implementation := "MyString"
+          implementation "MyString" {
+            import := "nl.cwi.aterm"
+          }
+        }
         operation += { init }
         access := public
         static := true
+      }
+
+      field order {
+        implementation list {
+          type := "ArrayList"
+          type "ArrayList" { import := "java.util.ArrayList" }
+        }
       }
       
       field * {

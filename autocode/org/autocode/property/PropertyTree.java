@@ -6,6 +6,7 @@ public class PropertyTree
 {
   public static final int ADD = 0;
   public static final int SET = 1;
+  public static final int OPT = 2;
 
   private int type = ADD;
   private String key;

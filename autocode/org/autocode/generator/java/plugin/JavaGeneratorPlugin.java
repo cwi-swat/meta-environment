@@ -22,8 +22,10 @@ public class JavaGeneratorPlugin
     boolean isAbstract = operationContext.getBoolean("abstract");
     boolean isStatic = operationContext.getBoolean("static");
     boolean isFinal = operationContext.getBoolean("final");
+ 
     String access = operationContext.getString("access");
     JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
+
     JavaMethod method = new JavaMethod(methodName, typeName, accessSpecifier,
 				       isAbstract, isFinal, isStatic, body);
 
