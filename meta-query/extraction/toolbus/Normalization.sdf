@@ -1,8 +1,9 @@
 module Normalization
 
-imports ToolBusExtraction
+imports Tscript
 imports utilities/PosInfo[ProcessExpr]
 
 hiddens
   variables
     "$ProcessExpr"[0-9]* -> ProcessExpr
+    "$Term" -> Term

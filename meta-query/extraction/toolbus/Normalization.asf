@@ -1,5 +1,15 @@
 equations
 
+%%[idem-0]
+%%  $ProcessExpr1 + $ProcessExpr1 = $ProcessExpr1
+
+%%[idem-1]
+%%  $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr2 = $ProcessExpr1 + $ProcessExpr2
+
+%%[idem-2]
+%%  $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr3 + $ProcessExpr2 =
+%%    $ProcessExpr1 + $ProcessExpr3 + $ProcessExpr2
+
 [choice-normalization-0]
   $ProcessExpr1 . ( $ProcessExpr2 + $ProcessExpr3 ) = 
     ( $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr1 . $ProcessExpr3 )
@@ -12,20 +22,12 @@ equations
   $ProcessExpr + $ProcessExpr = $ProcessExpr
 
 [comm-0]
-  ( $ProcessExpr1 + $ProcessExpr2 ) + $ProcessExpr3 =
-    $ProcessExpr1 + ( $ProcessExpr2 + $ProcessExpr3 )
+   $ProcessExpr1 + ($ProcessExpr2  + $ProcessExpr3) =
+    ($ProcessExpr1 +  $ProcessExpr2) + $ProcessExpr3 
 
 [comm-1]
-  ( $ProcessExpr1 . $ProcessExpr2 ) . $ProcessExpr3 =
-    $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 )
-
-[comm-2]
-  $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 ) =
-    $ProcessExpr1 . $ProcessExpr2 . $ProcessExpr3
-
-[comm-3]
-  $ProcessExpr1 + ( $ProcessExpr2 + $ProcessExpr3 ) =
-    $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr3
+   $ProcessExpr1 . ($ProcessExpr2  . $ProcessExpr3) =
+    ($ProcessExpr1 .  $ProcessExpr2) . $ProcessExpr3 
 
 [default-star-normalization]
   $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
@@ -33,3 +35,20 @@ equations
 [star-normalization-0]
   ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
     ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
+
+[if-then-0]
+  if $Term then $ProcessExpr1 fi . $ProcessExpr2 =
+    if $Term then $ProcessExpr1 . $ProcessExpr2 fi
+
+[if-then-1]
+  $ProcessExpr1 . if $Term then $ProcessExpr2 fi . $ProcessExpr3 =
+    $ProcessExpr1 . if $Term then $ProcessExpr2 . $ProcessExpr3 fi
+
+[if-then-else-0]
+  if $Term then $ProcessExpr1 else $ProcessExpr2 fi . $ProcessExpr3 =
+    if $Term then $ProcessExpr1 . $ProcessExpr3 else $ProcessExpr2 . $ProcessExpr3 fi
+
+[if-then-else-1]
+  $ProcessExpr1 . if $Term then $ProcessExpr2 else $ProcessExpr3 fi . $ProcessExpr4 =
+    $ProcessExpr1 . if $Term then $ProcessExpr2 . $ProcessExpr4 else $ProcessExpr3 . $ProcessExpr4 fi
+
