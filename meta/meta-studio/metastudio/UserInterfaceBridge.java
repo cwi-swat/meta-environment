@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Mar 15, 2004 3:37:10 PM
+// generation time: Apr 5, 2004 4:34:23 PM
 
 package metastudio;
 

@@ -1,5 +1,12 @@
 # $Id$
 
+Mon Apr  5 16:31:20 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * implemented parsing syntax scenario with parse errors
+ * removed 'decons-filename' kludge; replaced it with three getters:
+   io-get-path-directory, io-get-path-filename, and io-get-path-extension
+ * add tbscripts/user-interface.tb which implements scenarios for the GUI
+   instead of revealing MetaEnv's bowels to user-interface.idef
+
 Fri Apr  2 15:14:06 CEST 2004 <{jong,kooiker}@cwi.nl>
  * again more work done on the script-refactoring.
    at least "reduce term" is still broken.

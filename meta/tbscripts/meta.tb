@@ -10,6 +10,7 @@
 #include "sglr.idef"
 #include "structure-editor.idef"
 #include "unparser.idef"
+#include "user-interface.tb"
 
 /* sdf-meta */
 #include "parsetablegen.idef"
@@ -21,8 +22,8 @@
 /* to be resolved */
 #include "feedback.tb"
 #include "abort.tb"
-#include "parse-utils.tb"
 #include "editing.tb"
+#include "parse-utils.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"
 #include "file-creator.tb"
@@ -80,8 +81,8 @@ let
   Pid : int
 in
   create(META, Pid?)
+  . create(MetaActions, Pid?)
   . create(ButtonActionExecutor, Pid?)
-  . create(ButtonActionReceiver, Pid?)
   . create(TermStoreName, Pid?)
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)
@@ -105,6 +106,7 @@ in
   . create(RestoreBrackets, Pid?)
   . create(RestoreTermBrackets, Pid?)
   . create(Save-modules, Pid?)
+  . create(UserInterfaceHandler, Pid?)
 #ifdef QUERY
   . create(DisplayQuery, Pid?)
 #endif

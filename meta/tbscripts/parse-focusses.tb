@@ -53,20 +53,17 @@ in
     .
     (
       rec-msg(sglr-parse-tree(ParseResult?))
-      . printf("ParseEditor: ok\n")
       . AnnotateTree(Sid, ParseResult, AnnotatedTree?)
       . EditStructure(Sid, AnnotatedTree)
       . snd-msg(parse-ok(Sid))
     +
       rec-msg(sglr-parse-forest(ParseResult?, Error?))
-      . printf("ParseEditor: ambiguous: %t\n", Error)
       . AnnotateTree(Sid, ParseResult, AnnotatedTree?)
       . EditStructure(Sid, AnnotatedTree)
       . HandleParseError(Sid, Error)
       . snd-msg(parse-failed(Sid))
     +
       rec-msg(sglr-parse-error(Error?))
-      . printf("ParseEditor: error: %t\n", Error)
       . HandleParseError(Sid, Error)
       . snd-msg(parse-failed(Sid))
     )

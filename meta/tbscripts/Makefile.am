@@ -2,37 +2,38 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
-  module-db.tb \
   abort.tb \
+  button-actions.tb \
   close-all.tb \
   compile-module.tb \
+  dummy-display-graph.tb \
   dump-equations.tb \
   dump-parsetable.tb \
   dump-sdf-definition.tb \
   editing.tb \
+  feedback.tb \
   file-creator.tb \
   get-parsetable.tb \
   meta.tb \
+  module-db.tb \
   module-utils.tb \
   notification.tb \
   open-modules.tb \
   parse-focusses.tb \
   parse-utils.tb \
+  pretty-print.tb \
   print-module.tb \
   process-eqs.tb \
   restore-term-brackets.tb \
   save-module.tb \
-  start-meta-syntax-editor.tb \
-  start-meta-equations-editor.tb \
-  start-meta-term-editor.tb \
   start-meta-eqs-dumper.tb \
+  start-meta-equations-editor.tb \
   start-meta-pt-dumper.tb \
   start-meta-studio.tb \
-  dummy-display-graph.tb \
+  start-meta-syntax-editor.tb \
+  start-meta-term-editor.tb \
   status.tb \
-  button-actions.tb \
-  pretty-print.tb\
-  feedback.tb
+  user-interface.tb
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

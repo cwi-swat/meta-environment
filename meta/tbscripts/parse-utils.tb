@@ -47,30 +47,14 @@ process ProcessParseError(ParseError: term) is
 process HandleParseError(Sid: term, Error: term) is
 let
   Filename: str,
-  Result: term
+  Result: term,
+  Summary: term
 in
   GetFilename(Sid, Filename?)
   . snd-msg(es-add-filename-in-error(Filename, Error))
   . rec-msg(es-filename-in-error(Filename, Result?))
-  . printf("HandleParseError:\n\tbefore: %t\n\tafter: %t\n", Error, Result)
-  . ShowError(Result)
-  . ProcessParseError(Result)
+  . snd-msg(es-make-summary("sglr", Filename, [Result]))
+  . rec-msg(es-summary(Summary?))
+  . ShowSummary(Sid, Summary)
+  . ProcessParseError(Summary)
 endlet
-
-#if 0
-  printf("HandleParseError(%t, %t) to be handled\n", EditorId, Error)
-  if equal(Errors, []) then
-    tau
-  else
-    /* For now, set the error message right here. Change when
-     * parse table retrieval uses the error API at which time
-     * we don't have to construct an ad-hoc error message here.
-     */
-    if equal(fun(ErrorSummary), "no-parse-table") then
-      snd-msg(te-display-message(EditorId, "No parse table available"))
-    else
-      printf("HandleParseError: ErrorSummary = %t\n\n", ErrorSummary) .
-      ShowSummary(ErrorSummary)
-    fi
-  fi
-#endif

@@ -60,8 +60,6 @@ static void putSession(EM_Session session)
 
   assert(session != NULL);
 
-  /*ATwarning("  [%t] -> [%t]\n", sid, session);*/
-
   sid = EM_getSessionId(session);
   ATtablePut(sessions, EM_SidToTerm(sid), EM_SessionToTerm(session));
 }
@@ -181,12 +179,10 @@ void delete_session(int cid, ATerm sid)
   if (session != NULL) {
     int referenceCount = EM_getSessionReferenceCount(session);
     if (referenceCount == 0) {
-      ATwarning("delete session: %t\n", sid);
       ATtableRemove(sessions, sid);
     }
     else {
       putSession(EM_setSessionStatus(session, EM_makeSessionStatusZombie()));
-      ATwarning("making zombie: %t\n", sid);
     }
   }
   else {
@@ -310,8 +306,6 @@ ATerm request_transaction(int cid, ATerm sid)
 {
   EM_Session session = getSession(sid);
 
-  ATwarning("request_transaction: %t\n", sid);
-
   if (session != NULL) {
     EM_SessionStatus status = EM_getSessionStatus(session);
     if (EM_isSessionStatusRunning(status)) {
@@ -334,8 +328,6 @@ ATerm request_transaction(int cid, ATerm sid)
 void end_transaction(int cid, ATerm sid)
 {
   EM_Session session = getSession(sid);
-
-  ATwarning("end_transaction: %t\n", sid);
 
   if (session != NULL) {
     int referenceCount = EM_getSessionReferenceCount(session);

@@ -4,7 +4,6 @@ tool user-interface is {
 
 process Ui is
 let
-  ActionEvent : term,
   Answer : term,
   Arguments : list,
   ButtonList : list,
@@ -14,6 +13,7 @@ let
   EditorId : term,
   EnvironmentName : str,
   Error : term,
+  Event : term,
   Extension : str,
   FileName : str,
   Graph : term,
@@ -22,7 +22,7 @@ let
   LayoutedGraph : term,
   Mods : list,
   ModuleList : term,
-  ModuleName : str,
+  Modulename : str,
   On : term,
   Pairs : list,
   Path : str,
@@ -106,16 +106,11 @@ in
       snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
       snd-ack-event(UI, layout-graph(GraphId, Graph))
     + 
-      rec-event(UI, get-buttons(Type?, ModuleName?)) .
-      snd-msg(get-auxiliary-buttons(Type, ModuleName)) .
-      rec-msg(button-list(ModuleName, ButtonList?)).
-      snd-do(UI, buttons-found(Type, ModuleName, ButtonList)) .
-      snd-ack-event(UI, get-buttons(Type, ModuleName))
-    +
-      rec-event(UI, button-selected(Type?, ModuleName?, ActionEvent?)) .
-      snd-msg(extra-button-action(ActionEvent, [str(ModuleName)], Type, 
-                                  ModuleName, ui-id)) .
-      snd-ack-event(UI, button-selected(Type, ModuleName, ActionEvent))
+      rec-event(UI, get-buttons(Type?, Modulename?)) .
+      snd-msg(get-auxiliary-buttons(Type, Modulename)) .
+      rec-msg(button-list(Modulename, ButtonList?)).
+      snd-do(UI, buttons-found(Type, Modulename, ButtonList)) .
+      snd-ack-event(UI, get-buttons(Type, Modulename))
     +
 #ifdef ECLIPSE
       rec-event(UI, eclipse-open-modules(ModuleList?, Type?)) .
@@ -125,20 +120,25 @@ in
     +
       rec-event(UI, eclipse-open-initial-module(FileName?)) .
       snd-msg(decons-file-name(FileName, ".sdf")) .
-      rec-msg(decons-file-name-result(Path?, ModuleName?, Extension?)) .
-      snd-msg(open-modules([ModuleName], sdf)) .
+      rec-msg(decons-file-name-result(Path?, Modulename?, Extension?)) .
+      snd-msg(open-modules([Modulename], sdf)) .
       rec-msg(finished-opening-modules) .
       snd-ack-event(UI, eclipse-open-initial-module(FileName))
     +
-      rec-event(UI, eclipse-edit-term-file(ModuleName?, FileName?)) .
-      snd-msg(edit-term-file(ModuleName, FileName)) .
-      rec-msg(editor-opened(ModuleName?, EditorId?)) .
-      snd-ack-event(UI, eclipse-edit-term-file(ModuleName, FileName))
+      rec-event(UI, eclipse-edit-term-file(Modulename?, FileName?)) .
+      snd-msg(edit-term-file(Modulename, FileName)) .
+      rec-msg(editor-opened(Modulename?, EditorId?)) .
+      snd-ack-event(UI, eclipse-edit-term-file(Modulename, FileName))
     +
 #endif
-      rec-event(UI, button-selected(Type?, ActionEvent?)) .
-      snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
-      snd-ack-event(UI, button-selected(Type, ActionEvent))
+      rec-event(UI, button-selected(Type?, Event?))
+      . snd-msg(ui-button-selected(Type, Event, "*"))
+      . snd-ack-event(UI, button-selected(Type, Event))
+    +
+      rec-event(UI, button-selected(Type?, Modulename?, Event?))
+      . snd-msg(ui-button-selected(Type, Event, Modulename))
+      . snd-ack-event(UI, button-selected(Type, Modulename, Event))
+
     +
       rec-msg(ask-for-file(Title?, Path?, Extension?)) .
       snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
@@ -153,22 +153,19 @@ in
       rec-msg(clear-history) .
       snd-do(UI, clear-history) 
     + 
-      rec-event(UI, element-selected(ModuleName?, Tree?)) .
-      snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
-                                  message-list, "*", message-id)) .
-      snd-ack-event(UI, element-selected(ModuleName, Tree)) 
+      rec-event(UI, element-selected(Modulename?, Tree?))
+      . snd-msg(ui-message-selected(Modulename, Tree))
+      . snd-ack-event(UI, element-selected(Modulename, Tree)) 
     + 
-      rec-event(UI, node-info(ModuleName?, Tree?)).
-      snd-msg(extra-button-action(click, [Tree, str(ModuleName)], 
-                                 tree-panel, "*", message-id)) .
-      snd-ack-event(UI, node-info(ModuleName, Tree)) 
+      rec-event(UI, node-info(Modulename?, Tree?))
+      . snd-msg(ui-node-selected(Modulename, Tree))
+      . snd-ack-event(UI, node-info(Modulename, Tree)) 
     +
-      rec-msg(update-list-view(ModuleName?, ButtonNames?)) .
-      snd-do(UI, update-list(ModuleName, ButtonNames))
+      rec-msg(update-list-view(Modulename?, ButtonNames?)) .
+      snd-do(UI, update-list(Modulename, ButtonNames))
     +
       rec-event(UI, error-selected(Error?)) .
-      snd-msg(extra-button-action(click, [Error],
-                                  feedback-list, "*", feedback-list)) .
+      snd-msg(ui-error-selected(Error)) .
       snd-ack-event(UI, error-selected(Error))
     +
       rec-msg(show-list-choice(Title?, Question?, Choices?)) .

@@ -10,9 +10,9 @@ let
   Name : str,
   Path : str,
   Term : term,
-  FileName : str,
-  FileName1 : str,
-  FileName2 : str,
+  Filename : str,
+  Filename1 : str,
+  Filename2 : str,
   Contents : term,
   ContentList: list,
   Extension : str,
@@ -37,12 +37,12 @@ in
       snd-msg(io-file-not-found)
     )
   +
-    rec-msg(io-remove-file(Path?, FileName?, Extension?)) .
-    snd-do(IO, remove-file(Path, FileName, Extension)) .
+    rec-msg(io-remove-file(Path?, Filename?, Extension?)) .
+    snd-do(IO, remove-file(Path, Filename, Extension)) .
     snd-msg(io-file-removed)
   +
-    rec-msg(io-exists-file(FileName?)) .
-    snd-eval(IO, exists-file(FileName)) .
+    rec-msg(io-exists-file(Filename?)) .
+    snd-eval(IO, exists-file(Filename)) .
     (
       rec-value(IO, success) .
       snd-msg(io-file-exists)
@@ -51,8 +51,8 @@ in
       snd-msg(io-file-not-exists)
     )
   +
-    rec-msg(io-write-text-file(FileName?, ContentList?)) .
-    snd-eval(IO, write-text-file(FileName, ContentList)) .
+    rec-msg(io-write-text-file(Filename?, ContentList?)) .
+    snd-eval(IO, write-text-file(Filename, ContentList)) .
     (
       rec-value(IO, success) .
       snd-msg(io-file-written)
@@ -71,8 +71,8 @@ in
     rec-value(IO, term(Term?)) .
     snd-msg(io-term(Term))
   +
-    rec-msg(io-write-term-file(FileName?, Term?)) .
-    snd-eval(IO, write-term-file(FileName, Term)) .
+    rec-msg(io-write-term-file(Filename?, Term?)) .
+    snd-eval(IO, write-term-file(Filename, Term)) .
     ( 
       rec-value(IO, success) .
       snd-msg(io-file-written)
@@ -82,8 +82,8 @@ in
     ) .
     Term := empty
   +
-    rec-msg(io-write-packed-term-file(FileName?, Term?)) .
-    snd-eval(IO, write-packed-term-file(FileName, Term)) .
+    rec-msg(io-write-packed-term-file(Filename?, Term?)) .
+    snd-eval(IO, write-packed-term-file(Filename, Term)) .
     (
       rec-value(IO, success) .
       snd-msg(io-file-written)
@@ -93,8 +93,8 @@ in
     ) .
     Term := empty
   +
-    rec-msg(io-read-file(FileName?)) .
-    snd-eval(IO,read-text-file(FileName)) .
+    rec-msg(io-read-file(Filename?)) .
+    snd-eval(IO,read-text-file(Filename)) .
     (
       rec-value(IO,file-contents(Contents?)).
       snd-msg(io-file-contents(Contents))
@@ -103,8 +103,8 @@ in
       snd-msg(io-error-reading(ErrorMessage))
     )
   +
-    rec-msg(io-read-term-file(FileName?)) .
-    snd-eval(IO,read-term-file(FileName)) .
+    rec-msg(io-read-term-file(Filename?)) .
+    snd-eval(IO,read-term-file(Filename)) .
     (
       rec-value(IO,file-contents(Contents?)).
       snd-msg(io-file-contents(Contents)) .
@@ -114,8 +114,8 @@ in
       snd-msg(io-error-reading(ErrorMessage))
     )
   + 
-    rec-msg(io-read-packed-term-file(FileName?)) .
-    snd-eval(IO,read-packed-term-file(FileName)) .
+    rec-msg(io-read-packed-term-file(Filename?)) .
+    snd-eval(IO,read-packed-term-file(Filename)) .
     (
       rec-value(IO,file-contents(Contents?)).
       snd-msg(io-file-contents(Contents)) .
@@ -125,8 +125,8 @@ in
       snd-msg(io-error-reading(ErrorMessage))
     )
   +
-    rec-msg(io-compare-files(FileName1?, FileName2?)) .
-    snd-eval(IO, compare-files(FileName1, FileName2)) .
+    rec-msg(io-compare-files(Filename1?, Filename2?)) .
+    snd-eval(IO, compare-files(Filename1, Filename2)) .
     (
       rec-value(IO, equal) .
       snd-msg(io-files-equal)
@@ -137,20 +137,25 @@ in
   +
     rec-msg(io-get-filename(Directory?, Name?, Extension?)) .
     snd-eval(IO, get-filename(Directory, Name, Extension)) .
-    rec-value(IO, filename(FileName?)) .
-    snd-msg(io-filename(FileName))
+    rec-value(IO, filename(Filename?)) .
+    snd-msg(io-filename(Filename))
   +
-    rec-msg(io-decons-file-name(FileName?, Extension?)) .
-    snd-eval(IO, decons-filename(FileName, Extension)) .
-    rec-value(IO, file-name(Path?, FileName?, Extension?)) . 
-    snd-msg(io-decons-file-name-result(Path, FileName, Extension)) 
+    rec-msg(io-get-path-directory(Path?))
+    . snd-eval(IO, get-path-directory(Path))
+    . rec-value(IO, directory(Directory?))
+    . snd-msg(io-directory(Path, Directory))
   +
-    rec-msg(io-get-extension(FileName?)) .
-    snd-eval(IO, get-extension(FileName)) .
-    rec-value(IO, extension(Extension?)) .
-    snd-msg(io-extension(FileName, Extension))
-  ) *
-  delta
+    rec-msg(io-get-path-filename(Path?))
+    . snd-eval(IO, get-path-filename(Path))
+    . rec-value(IO, filename(Filename?))
+    . snd-msg(io-filename(Path, Filename))
+  +
+    rec-msg(io-get-path-extension(Path?))
+    . snd-eval(IO, get-path-extension(Path))
+    . rec-value(IO, extension(Extension?))
+    . snd-msg(io-extension(Path, Extension))
+  )
+  * delta
 endlet
 
 toolbus(IO)

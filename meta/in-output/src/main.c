@@ -18,8 +18,10 @@
 /*}}}  */
 /*{{{  defines */
 
+#define EOS '\0'
 #define PATH_LEN (_POSIX_PATH_MAX)
-#define SEP '/'
+#define PATH_SEPARATOR '/'
+#define EXTENSION_SEPARATOR '.'
 
 /*}}}  */
 /*{{{  variables */
@@ -240,7 +242,7 @@ void remove_file(int cid, const char *directory, const char *name, const char *e
 {
   char fileName[PATH_LEN];
 
-  sprintf(fileName, "%s%c%s%s", directory, SEP, name, extension);
+  sprintf(fileName, "%s%c%s%s", directory, PATH_SEPARATOR, name, extension);
 
   unlink(fileName);
 }
@@ -453,7 +455,7 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
   for (; !ATisEmpty(searchPaths); searchPaths = ATgetNext(searchPaths)) {
     ATerm path = ATgetFirst(searchPaths);
     const char *pathString = ATgetString(path);
-    sprintf(filename, "%s%c%s%s", pathString, SEP, name, extension);
+    sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
 
     if (fileExists(filename)) {
       directories = ATinsert(directories, path);
@@ -496,11 +498,11 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
 
   directoryLen = strlen(buf);
 
-  if (directoryLen > 0 && buf[directoryLen-1] == SEP) {
+  if (directoryLen > 0 && buf[directoryLen-1] == PATH_SEPARATOR) {
     buf[directoryLen-1] = '\0';
   }
 
-  sprintf(fileName, "%s%c%s%s", buf, SEP, name, extension);
+  sprintf(fileName, "%s%c%s%s", buf, PATH_SEPARATOR, name, extension);
 
   result = ATmake("snd-value(filename(<str>))", fileName);
 
@@ -553,13 +555,76 @@ ATerm decons_filename(int conn, const char *filename, const char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm get_extension(int conn, const char *filename) */
 
-ATerm get_extension(int conn, const char *filename)
+/*{{{  ATerm get_path_directory(int conn, const char *path) */
+
+ATerm get_path_directory(int conn, const char *path)
 {
-  const char *extension = NULL;
+  char *copy;
+  char *directory;
+  ATerm result;
 
-  extension = strrchr(filename, '.'); // TODO: extract constant
+  assert(path != NULL);
+
+  copy = strdup(path);
+  assert(copy != NULL);
+
+  directory = strrchr(copy, PATH_SEPARATOR);
+  if (directory != NULL) {
+    directory++; /* include trailing '/' */
+    *directory = EOS;
+    result = ATmake("directory(<str>)", copy);
+    free(copy);
+  }
+  else {
+    result = ATmake("directory(<str>)", "");
+  }
+
+  return ATmake("snd-value(<term>)", result);
+}
+
+/*}}}  */
+/*{{{  ATerm get_path_filename(int conn, const char *path) */
+
+ATerm get_path_filename(int conn, const char *path)
+{
+  char *filename;
+  ATerm result;
+
+  assert(path != NULL);
+
+  filename = strrchr(path, PATH_SEPARATOR);
+  if (filename != NULL) {
+    char *copy;
+    char *extension;
+
+    copy = strdup(filename + 1);
+    assert(copy != NULL);
+
+    extension = strrchr(copy, EXTENSION_SEPARATOR);
+    if (extension != NULL) {
+      *extension = EOS;
+    }
+    result = ATmake("filename(<str>)", copy);
+    free(copy);
+  }
+  else {
+    result = ATmake("filename(<str>)", "");
+  }
+
+  return ATmake("snd-value(<term>)", result);
+}
+
+/*}}}  */
+/*{{{  ATerm get_path_extension(int conn, const char *path) */
+
+ATerm get_path_extension(int conn, const char *path)
+{
+  const char *extension;
+
+  assert(path != NULL);
+
+  extension = strrchr(path, EXTENSION_SEPARATOR);
 
   if (extension == NULL) {
     return ATmake("snd-value(extension(\"\"))");
@@ -570,6 +635,7 @@ ATerm get_extension(int conn, const char *filename)
 }
 
 /*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm arg) */
 
 void rec_terminate(int cid, ATerm arg)

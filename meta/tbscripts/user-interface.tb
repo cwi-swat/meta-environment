@@ -1,0 +1,80 @@
+/*{{{ process ButtonSelected(Type: term, Event: term, Modulename: str) */
+
+process ButtonSelected(Type: term, Event: term, Modulename: str) is
+let
+  Actions: list
+in
+  snd-msg(get-actions(Event, Type, Modulename))
+  . rec-msg(actions(Event, Type, Modulename, Actions?))
+  . snd-msg(perform-actions(ui-id, Actions, [str(Modulename)]))
+  . rec-msg(actions-performed(ui-id, Actions))
+endlet
+
+/*}}}  */
+/*{{{ process ErrorSelected(Error: term) */
+
+process ErrorSelected(Error: term) is
+let
+  Actions: list
+in
+  snd-msg(get-actions(click, feedback-list, "*"))
+  . rec-msg(actions(click, feedback-list, "*", Actions?))
+  . snd-msg(perform-actions(feedback-list, Actions, [Error]))
+  . rec-msg(actions-performed(feedback-list, Actions))
+endlet
+
+/*}}}  */
+/*{{{ process MessageSelected(Modulename: str, Tree: term) */
+
+process MessageSelected(Modulename: str, Tree: term) is
+let
+  Actions: list
+in
+  snd-msg(get-actions(click, message-list, Modulename))
+  . rec-msg(actions(click, message-list, Modulename, Actions?))
+  . snd-msg(perform-actions(message-list, Actions,[Tree, str(Modulename)] ))
+  . rec-msg(actions-performed(message-list, Actions))
+endlet
+
+/*}}}  */
+/*{{{ process NodeSelected(Modulename: str, Tree: term) */
+
+process NodeSelected(Modulename: str, Tree: term) is
+let
+  Actions: list
+in
+  snd-msg(get-actions(click, tree-panel, Modulename))
+  . rec-msg(actions(click, tree-panel, Modulename, Actions?))
+  . snd-msg(perform-actions(tree-panel, Actions, [Tree, str(Modulename)]))
+  . rec-msg(actions-performed(tree-panel, Actions))
+endlet
+
+/*}}}  */
+/*{{{ process UserInterfaceHandler */
+
+process UserInterfaceHandler is
+let
+  Error: term,
+  Event: term,
+  Modulename: str,
+  Pid: int,
+  Tree: term,
+  Type: term
+in
+  (
+    rec-msg(ui-button-selected(Type?, Event?, Modulename?))
+    . create(ButtonSelected(Type, Event, Modulename), Pid?)
+  +
+    rec-msg(ui-error-selected(Error?))
+    . create(ErrorSelected(Error), Pid?)
+  +
+    rec-msg(ui-node-selected(Modulename?, Tree?))
+    . create(NodeSelected(Modulename, Tree), Pid?)
+  +
+    rec-msg(ui-message-selected(Modulename?, Tree?))
+    . create(MessageSelected(Modulename, Tree), Pid?)
+  )
+  * delta
+endlet
+
+/*}}}  */

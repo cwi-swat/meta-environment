@@ -39,8 +39,8 @@ let
 in
   snd-msg(file-extension-hook(sdf)) .
   rec-msg(file-extension-hook-result(AskedExtension?)) .
-  snd-msg(io-decons-file-name(FullFileName, AskedExtension)) .
-  rec-msg(io-decons-file-name-result(Path?, FileName?, Extension?)) .
+  snd-msg(io-get-extension(FullFileName)) .
+  rec-msg(io-extension(FullFileName, Extension?)) .
   if equal(Extension, AskedExtension) then
     MDB-GetModuleName(Path, FileName, ModuleName?) .
     SyntaxEditorCreator(ModuleName)

@@ -1,38 +1,34 @@
 /* $Id$ */
 
-process GoToEditorArea(EditorId: term, Area: term, Description: str) is
+process GoToEditorArea(Sid: term, Area: term, Description: str) is
 let
   Offset: int
 in
-  snd-msg(get-area-offset(Area)) .
-  rec-msg(area-offset(Offset?)) .
-  snd-msg(te-set-focus-at-area(EditorId, Area)) .
-  snd-msg(te-display-message(EditorId, Description))
+  snd-msg(get-area-offset(Area))
+  . rec-msg(area-offset(Offset?))
+  . snd-msg(te-set-focus-at-area(Sid, Area))
+  . snd-msg(te-display-message(Sid, Description))
 endlet
 
-process ShowLocation(Location: term, Description: str) is
+process ShowLocation(Sid: term, Location: term, Description: str) is
 let
   Area: term,
-  EditorId: term,
   ModuleName: str,
   FileName: str
 in
-  snd-msg(get-location-filename(Location)) .
-  rec-msg(location-filename(FileName?)) .
-  snd-msg(edit-general(FileName)) .
   snd-msg(has-location-area(Location)) .
   (
     rec-msg(location-has-area(Location)) .
     snd-msg(get-location-area(Location)) .
     rec-msg(location-area(Area?)) .
-    GoToEditorArea(EditorId, Area, Description)
+    GoToEditorArea(Sid, Area, Description)
   +
     rec-msg(location-has-no-area(Location)) .
     tau /* TODO: figure out what to do with location without area */
   )
 endlet
 
-process ShowSubject(Subject: term) is
+process ShowSubject(Sid: term, Subject: term) is
 let
   Location: term,
   Description: str
@@ -44,14 +40,14 @@ in
     rec-msg(subject-location(Location?)) .
     snd-msg(get-subject-description(Subject)) .
     rec-msg(subject-description(Description?)) .
-    ShowLocation(Location, Description)
+    ShowLocation(Sid, Location, Description)
   +
     rec-msg(subject-has-no-location(Subject)) .
     tau /* TODO: figure out what to do with subject without location */
   )
 endlet
 
-process ShowError(Error: term) is
+process ShowError(Sid: term, Error: term) is
 let
   Subject: term,
   Subjects: list
@@ -59,10 +55,10 @@ in
   snd-msg(get-error-subjects(Error)) .
   rec-msg(error-subjects(Subjects?)) .
   Subject := first(Subjects) .
-  ShowSubject(Subject)
+  ShowSubject(Sid, Subject)
 endlet
 
-process ShowSummary(Summary: term) is
+process ShowSummary(Sid: term, Summary: term) is
 let
   Error: term,
   Errors: list
@@ -70,5 +66,5 @@ in
   snd-msg(get-summary-errors(Summary)) .
   rec-msg(summary-errors(Errors?)) .
   Error := first(Errors) .
-  ShowError(Error)
+  ShowError(Sid, Error)
 endlet

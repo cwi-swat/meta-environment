@@ -30,6 +30,26 @@ process GetModulename(Sid: term, Modulename: str?) is
   . rec-msg(em-modulename(Sid, Modulename?))
 
 /*}}}  */
+/*{{{ process GetEditorType(Filename: str, EditorType: term?) */
+
+process GetEditorType(Path: str, EditorType: term?) is
+let
+  Extension: str
+in
+  snd-msg(io-get-path-extension(Path)) .
+  rec-msg(io-extension(Path, Extension?)) .
+  if equal(Extension, ".sdf") then
+    EditorType := syntax-editor
+  else
+    if equal(Extension, ".asf") then
+      EditorType := equations-editor
+    else
+      EditorType := term-editor
+    fi
+  fi
+endlet
+
+/*}}}  */
 
 /*{{{  process Edit(Filename: str, Modulename: str, Sid: term?) */
 
@@ -117,11 +137,12 @@ endlet
 
 process MenuSelected(Sid: term, EditorType: term) is
 let
-  Action: term,
+  Actions: list,
   Args: list,
+  Event: term,
   Modulename: str
 in
-  rec-msg(te-menu-event(Sid, Action?))
+  rec-msg(te-menu-event(Sid, Event?))
   . snd-msg(em-request-transaction(Sid))
   .
   (
@@ -130,9 +151,10 @@ in
     rec-msg(em-transaction-started(Sid))
     . Args := []
     . GetModulename(Sid, Modulename?)
-    . printf("Action: %t, EditorType: %t, Modulename: %s, Sid: %t\n",
-    Action, EditorType, Modulename, Sid)
-    . snd-msg(extra-button-action(Action, Args, EditorType, Modulename, Sid))
+    . snd-msg(get-actions(Event, EditorType, Modulename))
+    . rec-msg(actions(Event, EditorType, Modulename, Actions?))
+    . snd-msg(perform-actions(Sid, Actions))
+    . rec-msg(actions-performed(Sid, Actions))
     . snd-msg(em-end-transaction(Sid))
   )
 endlet
@@ -487,6 +509,73 @@ endlet
 
 /*}}}  */
 
+/*{{{  process GetModuleForPath(Path: str, Modulename: str?) */
+
+process GetModuleForPath(Path: str, Modulename: str?) is
+let
+  Directory: str,
+  Filename: str
+in
+  snd-msg(io-get-path-directory(Path))
+  . rec-msg(io-directory(Path, Directory?))
+  . snd-msg(io-get-path-filename(Path))
+  . rec-msg(io-filename(Path, Filename?))
+  . MDB-GetModulename(Directory, Filename, Modulename?)
+endlet
+
+/*}}}  */
+/*{{{  process GetModuleByExtension(Path: str, Modulename: str?) */
+
+process GetModuleByExtension(Path: str, Modulename: str?, Available: bool?) is
+let
+  Extension: str
+in
+  snd-msg(io-get-path-extension(Path))
+  . rec-msg(io-extension(Path, Extension?))
+  . snd-msg(get-extension-modulename(Extension))
+  .
+  (
+    rec-msg(extension-modulename(Extension, Modulename?))
+    . Available := true
+  +
+    rec-msg(no-extension-modulename(Extension))
+    . Available := false
+  )
+endlet
+
+/*}}}  */
+
+/*{{{ process StartEditor(Path: str, EditorType: term) */
+
+process StartEditor(Path: str, EditorType: term) is
+let
+  Available: bool,
+  Modulename: str
+in
+  if equal(EditorType, term-editor)
+  then
+    GetModuleByExtension(Path, Modulename?, Available?)
+    .
+    if equal(Available, true)
+    then
+      snd-msg(edit-term(Path, Modulename))
+    else
+      snd-note(ui-status(errorf("Unable to determine modulename for: %s",
+      [Path])))
+    fi
+  else
+    GetModuleForPath(Path, Modulename?)
+    .
+    if equal(EditorType, syntax-editor)
+    then
+      snd-msg(edit-syntax(Modulename))
+    else
+      snd-msg(edit-equations(Modulename))
+    fi
+  fi
+endlet
+
+/*}}}  */
 /*{{{  process EditorCreator */
 
 process EditorCreator is

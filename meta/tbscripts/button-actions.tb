@@ -10,34 +10,35 @@
  * occurred.
  */
 
-process ButtonActionReceiver is
+process MetaActions is
 let
-  ActionEvent : term,
-  EditorType : term,
-  ModuleName : str,
-  Actions    : list,
-  EditorId   : term,
-  Arguments  : list
+  Actions: list,
+  Arguments: list,
+  Sid: term
 in
   (
-    rec-msg(extra-button-action(ActionEvent?, Arguments?, 
-                                EditorType?, ModuleName?,
-                                EditorId?)) .
-    snd-msg(get-button-actions(ActionEvent, EditorType, ModuleName)).
-    rec-msg(button-actions(ActionEvent, EditorType, ModuleName, Actions?)).
-    PerformButtonActions(EditorId, Arguments, Actions) 
-  )* delta
+    (
+      rec-msg(perform-actions(Sid?, Actions?))
+      . Arguments := []
+    +
+      rec-msg(perform-actions(Sid?, Actions?, Arguments?))
+    )
+    . PerformActions(Sid, Actions, Arguments)
+    . snd-msg(actions-performed(Sid, Actions))
+  )
+  * delta
 endlet
 
-process PerformButtonActions(EditorId : term, StackArgs : list, Actions : list) is
+process PerformActions(EditorId: term, Actions: list, Arguments: list) is
 let
-  ButtonActions : list,
-  ButtonAction  : term,
-  FunName       : str,
-  Stack         : list
+  ButtonActions: list,
+  ButtonAction: term,
+  FunName: str,
+  Stack: list
 in
-  ButtonActions := quote(Actions) .
-  Stack := quote(StackArgs) .
+  ButtonActions := quote(Actions)
+  . Stack := Arguments
+  .
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .
@@ -46,22 +47,24 @@ in
       if equal(FunName, "if-equal") then
         IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
       else
-        snd-msg(ButtonAction, Stack, EditorId) .
+        snd-msg(ButtonAction, Stack, EditorId)
+	.
         (
           rec-msg(stack(Stack?), EditorId)
         +
-          rec-msg(empty-stack, EditorId) .
-          ButtonActions := []
+          rec-msg(empty-stack, EditorId)
+          . ButtonActions := []
         +
-          rec-msg(error-stack, EditorId) .
-          ButtonActions := [].
-          snd-note(ui-status(
+          rec-msg(error-stack, EditorId)
+          . ButtonActions := []
+          . snd-note(ui-status(
             errorf("An error occurred while processing the action: %t",
                    [ButtonAction])))
         )
       fi
     fi
-  )*
+  )
+  *
   if equal(ButtonActions, []) then
     tau
   fi
@@ -125,16 +128,18 @@ let
   Available: bool,
   ArgList : list,
   Direction: term,
+  Directory: str,
   EditorId : term,
   EditorId2 : term,
   EditorName : str,
+  EditorType : term,
   Empty : term,
   Error : term,
   ErrorMessage : str,
   ExecName : str,
-  Ext : str,
+  Extension : str,
   Feedback : term,
-  FileName : str,
+  Filename : str,
   FilePath : str,
   Focus : term,
   FunSym : str,
@@ -159,6 +164,8 @@ let
   SortName : str,
   Stack : list,
   String : str,
+  Subject: term,
+  Subjects: list,
   Text : str,
   TimeStamp : int,
   Tree : term,
@@ -404,20 +411,20 @@ in
       +
         rec-msg(push-editor-name, Stack?, EditorId?) .
         snd-msg(get-editor-filename(EditorId)) .
-        rec-msg(editor-filename(FileName?)) .
-        StackPushString(Stack,Stack?,FileName) .
+        rec-msg(editor-filename(Filename?)) .
+        StackPushString(Stack,Stack?,Filename) .
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(activate-editor, Stack?, Sid?) .
         StackPopString(Stack, Stack?, ModuleName?) .
-        StackPopString(Stack, Stack?, FileName?) .
+        StackPopString(Stack, Stack?, Filename?) .
         StackPopTerm(Stack, Stack?, STree?) .
         FunSym := fun(STree) .
         if equal(FunSym, "str") then
           String := first(args(STree)) .
-          ActivateEditorWithString(String, ModuleName, FileName)
+          ActivateEditorWithString(String, ModuleName, Filename)
         else
-          ActivateEditorWithTree(STree, ModuleName, FileName) 
+          ActivateEditorWithTree(STree, ModuleName, Filename) 
         fi .    
         ReturnSuccess(Sid, Stack)
       +
@@ -476,28 +483,28 @@ in
           ReturnFailed(EditorId,Stack)
         fi
       +
-        rec-msg(exists(FileName?), Stack?, EditorId?) .
-        snd-msg(io-exists-file(FileName)) .
+        rec-msg(exists(Filename?), Stack?, EditorId?) .
+        snd-msg(io-exists-file(Filename)) .
         (
           rec-msg(io-file-exists) .
           ReturnSuccess(EditorId,Stack)
         +
           rec-msg(io-file-not-exists) .
           snd-note(ui-status(errorf("%s does not exist", 
-                                    [FileName]))) .
+                                    [Filename]))) .
           ReturnAbort(EditorId,Stack)
         )
       +
-        rec-msg(locate(FileName?), Stack?, EditorId?) .
-        snd-msg(locate-file(FileName)) .
+        rec-msg(locate(Filename?), Stack?, EditorId?) .
+        snd-msg(locate-file(Filename)) .
         (
-          rec-msg(file-location(FileName, FilePath?)) .
+          rec-msg(file-location(Filename, FilePath?)) .
           StackPushPath(Stack,Stack?,FilePath) .
           ReturnSuccess(EditorId,Stack)
         +
-          rec-msg(file-not-exists(FileName)) .
+          rec-msg(file-not-exists(Filename)) .
           snd-note(ui-status(errorf("%s does not exist", 
-                                    [FileName]))) .
+                                    [Filename]))) .
           ReturnAbort(EditorId,Stack)
         )
       +
@@ -512,8 +519,8 @@ in
         StackPushString(Stack,Stack?,String) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(push-filename(FileName?), Stack?, EditorId?) .
-        StackPushFile(Stack,Stack?,FileName) .
+        rec-msg(push-filename(Filename?), Stack?, EditorId?) .
+        StackPushFile(Stack,Stack?,Filename) .
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-string(String?), Stack?, EditorId?) .
@@ -552,16 +559,45 @@ in
         ShowTree(ModuleName, STree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(show-area, Stack?, EditorId?) .
-        StackPopString(Stack, Stack?, Message?) .
-        StackPopTerm(Stack, Stack?, Location?) .
-	ShowLocation(Location, Message) .
-        ReturnSuccess(EditorId, Stack)
+        rec-msg(show-area, Stack?, EditorId?)
+        . StackPopString(Stack, Stack?, Message?)
+        . StackPopTerm(Stack, Stack?, Location?)
+	. snd-msg(get-location-filename(Location))
+	. rec-msg(location-filename(Filename?))
+	. GetEditorType(Filename, EditorType?)
+	. StartEditor(Filename, EditorType)
+	. snd-msg(em-get-session-by-filename(Filename))
+	.
+	(
+	  rec-msg(em-session(Filename, Sid?))
+	  . ShowLocation(Sid, Location, Message)
+	  . ReturnSuccess(EditorId, Stack)
+	+
+	  rec-msg(em-no-such-session(Filename))
+	  . ReturnAbort(EditorId, Stack)
+	)
       +
-        rec-msg(show-feedback-location, Stack?, EditorId?) .
-	StackPopTerm(Stack, Stack?, Error?) .
-	ShowError(Error) .
-	ReturnSuccess(EditorId, Stack)
+        rec-msg(show-feedback-location, Stack?, EditorId?)
+	. StackPopTerm(Stack, Stack?, Error?)
+	. snd-msg(get-error-subjects(Error))
+	. rec-msg(error-subjects(Subjects?))
+	. Subject := first(Subjects)
+	. snd-msg(get-subject-location(Subject))
+	. rec-msg(subject-location(Location?))
+	. snd-msg(get-location-filename(Location))
+	. rec-msg(location-filename(Filename?))
+	. GetEditorType(Filename, EditorType?)
+	. StartEditor(Filename, EditorType)
+	. snd-msg(em-get-session-by-filename(Filename))
+	.
+	(
+	  rec-msg(em-session(Filename, Sid?))
+	  . ShowError(Sid, Error)
+	  . ReturnSuccess(EditorId, Stack)
+	+
+	  rec-msg(em-no-such-session(Filename))
+	  . ReturnAbort(EditorId, Stack)
+	)
       +
         rec-msg(show-list, Stack?, EditorId?) .
         StackPopString(Stack, Stack?, ModuleName?) .
@@ -575,41 +611,41 @@ in
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(save-tree, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,FileName?) .
+        StackPopString(Stack,Stack?,Filename?) .
         StackPopTerm(Stack,Stack?,Tree?) .
-        snd-msg(io-write-term-file(FileName,Tree)) .
+        snd-msg(io-write-term-file(Filename,Tree)) .
 	(
           rec-msg(io-file-written) .
           ReturnSuccess(EditorId, Stack)
         +
           rec-msg(io-file-not-written(ErrorMessage?)) .
-          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+          snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage]))) .
 	  ReturnAbort(EditorId, Stack)
         )
       +
         rec-msg(save-text, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,FileName?) .
+        StackPopString(Stack,Stack?,Filename?) .
         StackPopString(Stack,Stack?,String?) .
-        snd-msg(io-write-text-file(FileName,[String])) .
+        snd-msg(io-write-text-file(Filename,[String])) .
 	(
           rec-msg(io-file-written) .
           ReturnSuccess(EditorId, Stack)
         +
           rec-msg(io-file-not-written(ErrorMessage?)) .
-          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+          snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage]))) .
 	  ReturnAbort(EditorId, Stack)
         )
       +
         rec-msg(read-tree, Stack?, EditorId?) . 
-        StackPopString(Stack,Stack?,FileName?) .
-        snd-msg(io-read-term-file(FileName)) .
+        StackPopString(Stack,Stack?,Filename?) .
+        snd-msg(io-read-term-file(Filename)) .
         (
           rec-msg(io-file-contents(Tree?)) .
           StackPushTerm(Stack,Stack?,Tree) .
           ReturnSuccess(EditorId, Stack)
         +
           rec-msg(io-error-reading(ErrorMessage?)) .
-          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+          snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage]))) .
 	  ReturnAbort(EditorId, Stack)
         )
       +
@@ -677,14 +713,14 @@ in
         fi
       + 
 	rec-msg(open-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(open-initial-module(Path, ModuleName, Ext)) .           
+        snd-msg(open-initial-module(Path, ModuleName, Extension)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(new-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
         snd-msg(create-new-module(Path, ModuleName, sdf)) .           
@@ -699,41 +735,41 @@ in
 	rec-msg(new-module-created(Path?, ModuleName?)) .
 	ReturnSuccess(EditorId, Stack)	
       +
-	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
-	snd-msg(ask-for-file(String, Path, Ext)) .
-	rec-msg(ask-for-file-result(FileName?)) .
-        StackPushString(Stack, Stack?, FileName) .
+	rec-msg(prompt-for-file(String?, Path?, Extension?), Stack?, EditorId?) .
+	snd-msg(ask-for-file(String, Path, Extension)) .
+	rec-msg(ask-for-file-result(Filename?)) .
+        StackPushString(Stack, Stack?, Filename) .
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(prompt-for-file(String?,Path?), Stack?, EditorId?) .
 	StackPopString(Stack, Stack?, ModuleName?) .
 	snd-msg(get-modulename-extension(ModuleName)) .
 	(
-	  rec-msg(modulename-extension(ModuleName, Ext?)) 
+	  rec-msg(modulename-extension(ModuleName, Extension?)) 
 	+
 	  rec-msg(no-modulename-extension(ModuleName)) .
 	  snd-msg(file-extension-hook(trm)) .
-	  rec-msg(file-extension-hook-result(Ext?))
+	  rec-msg(file-extension-hook-result(Extension?))
         ) .
-	snd-msg(ask-for-file(String, Path, Ext)) .
-	rec-msg(ask-for-file-result(FileName?)) .
-        StackPushString(Stack, Stack?, FileName) .
+	snd-msg(ask-for-file(String, Path, Extension)) .
+	rec-msg(ask-for-file-result(Filename?)) .
+        StackPushString(Stack, Stack?, Filename) .
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(str-to-filename, Stack?, EditorId?) .
-	StackPopString(Stack, Stack?, FileName?) .
-	StackPushFile(Stack, Stack?, FileName) .
+	StackPopString(Stack, Stack?, Filename?) .
+	StackPushFile(Stack, Stack?, Filename) .
 	ReturnSuccess(EditorId, Stack)
       +
 	rec-msg(edit-term, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,FileName?) .
+        StackPopString(Stack,Stack?,Filename?) .
 	StackIsEmpty(Stack, Empty?) .
 	if equal(Empty, true) then
-	  snd-msg(edit-general(FileName)) .
+	  snd-msg(edit-general(Filename)) .
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,ModuleName?) .
-          snd-msg(edit-term(FileName, ModuleName)) .
+          snd-msg(edit-term(Filename, ModuleName)) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -743,17 +779,21 @@ in
         StackPushTerm(Stack,Stack?,Tree) .
 	ReturnSuccess(EditorId, Stack)
       +
-        rec-msg(split-file-name(Ext?), Stack?, EditorId?) .   
-	StackPopString(Stack, Stack?, FileName?) .
-	snd-msg(io-decons-file-name(FileName, Ext)) .
-        rec-msg(io-decons-file-name-result(Path?, FileName?, Ext?)) .
-	StackPushString(Stack, Stack?, FileName) .	
-	StackPushString(Stack, Stack?, Path) .	
-	StackPushString(Stack, Stack?, Ext) .	
-	ReturnSuccess(EditorId, Stack)	
+        rec-msg(split-file-name, Stack?, EditorId?)
+	. StackPopString(Stack, Stack?, Path?)
+	. snd-msg(io-get-path-filename(Path))
+	. rec-msg(io-filename(Path, Filename?))
+	. StackPushString(Stack, Stack?, Filename)
+	. snd-msg(io-get-path-directory(Path))
+	. rec-msg(io-directory(Path, Directory?))
+	. StackPushString(Stack, Stack?, Directory)
+	. snd-msg(io-get-path-extension(Path))
+	. rec-msg(io-extension(Path, Extension?))
+	. StackPushString(Stack, Stack?, Extension)
+	. ReturnSuccess(EditorId, Stack)
       +
         rec-msg(copy-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
 	StackIsEmpty(Stack, Empty?) .
@@ -766,7 +806,7 @@ in
 	fi
       +
         rec-msg(rename-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
+       	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
 	StackIsEmpty(Stack, Empty?) .
@@ -989,11 +1029,11 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process GetTextFromFile(FileName: str, Text: str?) is
+process GetTextFromFile(Filename: str, Text: str?) is
 let
   ErrorMessage      : str
 in
-  snd-msg(io-read-file(FileName)).
+  snd-msg(io-read-file(Filename)).
   (
     rec-msg(io-file-contents(Text?)) 
   +
@@ -1031,7 +1071,6 @@ let
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
-  . printf("ParseSyntax(%t, %t)\n", Sid, Type)
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   . snd-msg(notify-about-changed-modules([Modulename], Type))
@@ -1172,7 +1211,7 @@ let
   TotalTree : term,
   Text : str,
   Focus : term,
-  FileName : str,
+  Filename : str,
   ErrorMessage : str
 in
   snd-msg(se-replace-focussed-tree(Sid, Tree)) .
@@ -1182,8 +1221,8 @@ in
   snd-msg(unparse(TotalTree)) .
   rec-msg(unparsed-text(Text?)) .
   snd-msg(get-editor-filename(Sid)) .
-  rec-msg(editor-filename(FileName?)) .
-  snd-msg(io-write-text-file(FileName,[Text])) .
+  rec-msg(editor-filename(Filename?)) .
+  snd-msg(io-write-text-file(Filename,[Text])) .
   (
     rec-msg(io-file-written) . 
     snd-msg(te-reread-contents(Sid)) .
@@ -1191,7 +1230,7 @@ in
     snd-msg(te-set-focus(Sid, Focus))
   +
     rec-msg(io-file-not-written(ErrorMessage?)) .
-    snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
   )
 endlet
 
@@ -1257,19 +1296,19 @@ in
   fi
 endlet
 
-process ActivateEditorWithString(Text: str, ModuleName: str, FileName: str) is
+process ActivateEditorWithString(Text: str, ModuleName: str, Filename: str) is
 let
   EditorId    : term,
   NewModuleName : str,
   ErrorMessage : str
 in
-  snd-msg(io-write-text-file(FileName, [Text])) .
+  snd-msg(io-write-text-file(Filename, [Text])) .
   (
     rec-msg(io-file-written) .
-    snd-msg(edit-term-file(ModuleName, FileName))
+    snd-msg(edit-term-file(ModuleName, Filename))
   +
     rec-msg(io-file-not-written(ErrorMessage?)) .
-    snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+    snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
   )
 
 endlet
