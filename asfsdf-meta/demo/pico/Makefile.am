@@ -2,7 +2,7 @@
 
 
 demodir   = $(pkgdatadir)/demo
-picodir   = $(demodir)/new-pico
+picodir   = $(demodir)/pico
 
 PICO_DEMO = $(wildcard *.sdf) $(wildcard *.asf) $(wildcard *.trm) \
             meta.conf meta.buttons
