@@ -1,5 +1,11 @@
 # $Id$
 
+2002/01/03 ({jong,jurgenv}@cwi.nl)
+ * Activated gvim support under --enable-gvim
+ * libtool is checked only if gvim is enabled.
+ * Bumped version to 0.9beta
+ * Removed dlopen check from configure
+ 
 2002/02/15 (jurgenv@cwi.nl)
  * Added showdot, a command-line tool that visualizes a dot graph using tcl/tk.
 
