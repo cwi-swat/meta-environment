@@ -1,11 +1,15 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <assert.h>
 #include "layoutgraph.h"
 #include "layoutgraph.h"
 #include "layoutgraph.tif.h"
 #include <Graph.h>
 
+static char myname[] = "layoutgraph";
 static char myversion[] = "1.0";
+static char myarguments[] = "hi:o:V";
+
 
 /*{{{  void rec_terminate(int conn, ATerm arg) */
 
@@ -33,22 +37,16 @@ ATerm layout_graph(int conn, ATerm g)
 
 /*{{{  static void usage(char *prg, ATbool is_err) */
 
-static void usage(char *prg, ATbool is_err)
+static void usage()
 {
   ATwarning("Computes a nice graph layout using dot from AT&T graphviz.\n"
-	    "This program can only be used as a ToolBus tool.\n\n"
-	    "input: a graph term,\n"
-	    "output: a graph term with positional information.\n");
-  exit(is_err ? 1 : 0);
-}
-
-/*}}}  */
-/*{{{  static void version(const char *msg) */
-
-static void version(const char *msg)
-{
-  ATwarning("%s v%s\n", msg, myversion);
-  exit(1);
+	    "Usage: %s [%s]\n"
+	    "Options:\n"
+	    "\t-h             prints this usage\n"
+	    "\t-i filename    input graph term (default stdin)\n"
+	    "\t-o filename    output graph term (default stdout)\n"
+	    "\t-V             reveal program version (i.e. %s)\n",
+	    myname, myarguments, myversion);
 }
 
 /*}}}  */
@@ -58,23 +56,62 @@ static void version(const char *msg)
 int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
+  ATbool use_toolbus = ATfalse;
+  ATbool binary = ATtrue;
+    
+  char   *input_file_name  = "-";
+  char   *output_file_name = "-";
+  ATerm term;
+  Graph graph;
   int i;
 
-  for (i=1; i<argc; i++) {
-    if (strcmp(argv[i], "-h") == 0) {
-      usage(argv[0], ATfalse);
-    } else if (strcmp(argv[i], "-V") == 0) {
-      version(argv[0]);
-    }
+  for (i=1; !use_toolbus && i < argc; i++) {
+    use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
 
-  ATBinit(argc, argv, &bottomOfStack);
-  initGraphApi();
+  if (use_toolbus) {
+    ATBinit(argc, argv, &bottomOfStack);
+    initGraphApi();
+    ATBconnect(NULL, NULL, -1, layoutgraph_handler);
+    ATBeventloop();
+  }
+  else {
+    int c;
+    while ((c = getopt(argc, argv, myarguments)) != EOF) {
+      switch (c) {
+	case 't':  binary = ATfalse;             break;
+	case 'h':  usage();                      exit(0);
+	case 'i':  input_file_name  = optarg;    break;
+	case 'o':  output_file_name = optarg;    break;
+	case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
+		   exit(0);
+	default :  usage();                      exit(1);
+      }
+    }
 
+    ATinit(argc, argv, &bottomOfStack);
+    initGraphApi();
 
-  ATBconnect(NULL, NULL, -1, layoutgraph_handler);
+    term = ATreadFromNamedFile(input_file_name);
+    if(term == NULL) {
+      ATerror("%s: could not read graph from input file %s\n",
+	      myname, input_file_name);
+    }
 
-  ATBeventloop();
+    graph = GraphFromTerm(term);
+ 
+    assert(isValidGraph(graph));
+    graph = layoutGraph(graph);
+
+    term = GraphToTerm(graph);
+
+     if (binary) {
+       ATwriteToNamedBinaryFile(term, output_file_name);
+     } 
+     else {
+       ATwriteToNamedTextFile(term, output_file_name);
+     } 
+  }
 
   return 0;
 }
