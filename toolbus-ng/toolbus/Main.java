@@ -25,10 +25,8 @@ public class Main {
     //NestedIterTest();
      //DisruptTest();
     //MergeTest();
-    //SieveTest();
-    //producerTest();
-    ParseTest();
-    //ToolTest();
+    //ParseTest();
+    ToolTest();
   }
  
   
@@ -571,8 +569,7 @@ static void producerTest(){
               new AckEvent(aterms.make("button(var(-1,qqq,Name))"))
             ) //seq
           ) //seq
-        ), //let
-        "toolbus.tool.Example"
+        ) //let
       );
       
     ATerm varN = aterms.make("var(-1,int,N)");
@@ -602,7 +599,7 @@ static void producerTest(){
       T.addProcessDefinition(P1);
       T.addProcessDefinition(P2);
       
-      T.addProcess("P1");
+      T.addProcess(new ProcessCall("P1", aterms.makeList()), "toolbus.tool.Example");
       T.addProcess("P2");
       T.execute();
     }

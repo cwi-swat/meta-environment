@@ -60,7 +60,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
 
   public void setTest(ATerm test) throws ToolBusException {
     ATerm rtst = TBTerm.resolveVars(test, env);
-    if(this.test == null){
+    if (this.test == null) {
       this.test = rtst;
     } else {
       this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
@@ -103,13 +103,16 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   }
 
   public ATerm toATerm() throws ToolBusException {
-    return null;
-    //    int nargs = args.getLength();
-    //
-    //    AFun afun = TBTerm.factory.makeAFun(this.getClass().getName(), nargs, false);
-    //    ATerm pat = TBTerm.makePattern(args, getEnv(), true);
-    //
-    //    return TBTerm.factory.makeAppl(afun, (ATermList) pat);
+    int nargs = atomArgs.length;
+
+    AFun afun = TBTerm.factory.makeAFun(shortName(), nargs, false);
+    ATermList pat = TBTerm.factory.makeList();
+
+    for (int i = 0; i < nargs; i++) {
+      pat = pat.append(TBTerm.makePattern(atomArgs[i].value, getEnv(), true));
+    }
+
+    return TBTerm.factory.makeAppl(afun, pat);
   }
 
   public void expand(ProcessInstance P, Stack calls) {
@@ -138,7 +141,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     }
   }
 
- // Implementation of the StateElement interface
+  // Implementation of the StateElement interface
 
   public boolean contains(StateElement b) {
     return this.equals(b);

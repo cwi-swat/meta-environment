@@ -268,19 +268,24 @@ public class TBTerm {
   public static ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
     switch (t.getType()) {
       case ATerm.BLOB : // ??
+      
       case ATerm.INT :
         return IntPlaceholder;
+        
       case ATerm.PLACEHOLDER :
         return t;
+        
       case ATerm.REAL :
         return RealPlaceholder;
+        
       case ATerm.APPL :
-        if (TBTerm.isVar(t)) {
+        if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
           ATerm type = TBTerm.getVarType(t);
           return factory.makePlaceholder(type);
         }
-        if (TBTerm.isBoolean(t))
+        if (TBTerm.isBoolean(t)) {
           return BoolPlaceholder;
+        }
         AFun fun = ((ATermAppl) t).getAFun();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
         if (args.length == 0) {
@@ -296,6 +301,7 @@ public class TBTerm {
           vargs[i] = makePattern(args[i], env, false);
         }
         return factory.makeAppl(fun, vargs);
+        
       case ATerm.LIST :
         ATermList lst = factory.makeList();
         for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
@@ -343,32 +349,32 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
   }
-  
+
   /**
    * Matching of two terms. Both terms use a different environment. There are two flavours of matching:
    * match      -- complete match with full treatment of variabeles
    * mightMatch -- a partial match that ignores variables.
    * 
    */
-  
+
   private static Environment enva;
   private static Environment envb;
   private static boolean fullMatch = true;
   private static MatchResult mr;
-  
+
   public static boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
     mr = new MatchResult(enva, envb);
-    
+
     TBTerm.enva = enva;
     TBTerm.envb = envb;
- 
+
     fullMatch = true;
     boolean res = performMatch(ta, tb);
-    if(res){
+    if (res) {
       mr.updateEnvs();
       return true;
     } else
-    return false;
+      return false;
   }
 
   public static boolean mightMatch(ATerm ta, ATerm tb) {
