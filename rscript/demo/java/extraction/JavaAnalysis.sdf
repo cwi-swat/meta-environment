@@ -1,8 +1,8 @@
 module JavaAnalysis
 
 imports ExtractCompilationUnit
-%%imports ExtractVariables
-%%imports ExtractMethodCalls
+imports ExtractVariables
+imports ExtractMethodCalls
 imports ExtractInheritance
 imports ExtractInterface
 imports ExtractMethod
