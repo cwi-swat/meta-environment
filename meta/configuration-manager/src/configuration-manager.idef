@@ -84,10 +84,10 @@ in
     rec-value(CMNG, button-names(ButtonNames?)) .
     snd-msg(button-list(ModuleName, ButtonNames))
   +
-    rec-msg(get-button-actions(ButtonName?, EditorType?, ModuleName?)) .
+    rec-msg(get-actions(ButtonName?, EditorType?, ModuleName?)) .
     snd-eval(CMNG, get-button-actions(ModuleName, EditorType, ButtonName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
-    snd-msg(button-actions(ButtonName, EditorType, ModuleName, ButtonActions))
+    snd-msg(actions(ButtonName, EditorType, ModuleName, ButtonActions))
   +
     rec-msg(get-extension-modulename(Extension?)) .
     snd-eval(CMNG, get-extension-modulename(Extension)) .
