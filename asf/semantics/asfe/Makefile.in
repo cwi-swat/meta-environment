@@ -78,6 +78,7 @@ all: $(BINFILES)
 MODULES	= evaluator.o preparation.o
 
 # Explicit rules
+evaluator.c: evaluator.c.nw
 preparation.c: preparation.c.nw
 preparation.h: preparation.h.nw
 

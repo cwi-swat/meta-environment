@@ -1,4 +1,91 @@
-#line 89 "evaluator.c.nw"
+
+%{{{  evaluator.c
+
+A first version of an INTERPRETER in ToolBus C.
+   This program is written by Mark van den Brand.
+
+   The interpreter has its own database in which per module the
+   equations are stored plus all equations of the transitive
+   closure of the imported modules. The equations are sorted on
+   the outermost function symbol (ofs) of the left-hand side
+   of the equation.
+
+   equations_db = [[M_1,[Ofs_11,[Eq_111,...,Eq_11i]],
+                        [Ofs_12,[Eq_121,...,Eq_12j]],
+                        ...,
+                        [Ofs_1k,[Eq_1k1,...,Eq_1kl]]],
+                   ...,
+                   [M_n,[Ofs_n1,[Eq_n11,...,Eq_n1q]],
+                        ...,
+                        [Ofs_np,[Eq_np1,...,Eq_npr]]]]
+   When adding a new set of equations in the database with the 
+   function ``add_equations'' some layout is removed (the layout
+   between the arguments of an ``appl'' and between the elements 
+   of a ``list''), the separators in the lists with separators 
+   is removed, and the lexicals are expanded to become lists of
+   single characters. This is performed via the function
+   ``remove_layout_from_equations''.
+   The equations are sorted on ofs and stored in the database.
+   
+   Before the rewriting of a term starts he layout is removed,
+   the separators in the lists with separators 
+   is removed, and the lexicals are expanded to become lists of
+   single characters as well. Based on the module over which the
+   term is to be reduced the appropriate set of rewrite rule is
+   selected and assigned to ``active_rules''. A global variable
+   which contains only the active rewrite rules.
+   The rewriting is performed by the function ``interpret''.
+
+   To be done or improved:
+   1. Preprocessing, so to detected whether conditions
+      introduce fresh variables, and modify the operator
+      of the condition: ``='', ``!='', and ``=:''.
+   2. Describe the semantics of the rewriter:
+      a. Innermost rewriting.
+      b. No new variables in ``!=''-condition.
+      c. No instantiated and uninstantiated variables on
+         the same side of a ``assignment-condition''.
+      d. All rules are applied in arbitrary order.
+      e. Defaults are always applied as last rules.
+      f. General list matching mechanism.
+   3. No hashing, sharing, or caching.
+
+<<evaluator.c*>>=
+<<includes>>
+<<globals>>
+<<function declarations>>
+
+<<rec_terminate>>
+<<exists>>
+<<create_equations_db>>
+<<change_equations_db>>
+<<change_active_rules>>
+<<clear_equations_db>>
+<<add_equations>>
+<<interpret>>
+<<sort_and_filter_on_ofs>>
+<<no_new_vars>>
+<<elems_matching>>
+<<arg_matching>>
+<<args_matching>>
+<<compare_sub_lists>>
+<<sub_list_matching>>
+<<list_matching>>
+<<conds_satisfied>>
+<<apply_rule>>
+<<select_and_rewrite>>
+<<rewrite_args>>
+<<rewrite_elems>>
+<<rewrite>>
+
+<<main>>
+@
+
+%}}} 
+
+%{{{ includes
+
+<<includes>>=
 #include <aterm.h>
 #include <asfix.h>
 #include <tb-tool.h>
@@ -7,10 +94,15 @@
 #include <limits.h>
 #include "preparation.h"
 #include "evaluator.tif.c"
-#line 103 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ globals
+
+<<globals>>=
 #ifdef PROFILING
-#define PROF_REWRITE            rewrite_steps++
-#define TICK2SEC(t)             (((double)(t))/CLK_TCK)
+#define PROF_REWRITE		rewrite_steps++
+#define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 #else
 #define PROF_REWRITE
 #endif
@@ -24,12 +116,17 @@ aterm_list *active_rules;
 aterm_list *fail_env;
 arena Ar;
 
-#define is_fail_env(env)        (t_equal(env,fail_env))
-#define v_lookup(var,env)       (TdictGet(env,var))
-#define get_term(cenv)          (t_list_first(cenv))
-#define get_env(cenv)           (t_list_first(t_list_next(cenv)))
-#define make_cenv(ar,t,e)       (TmkList_n(ar, 2, t, e))
-#line 130 "evaluator.c.nw"
+#define is_fail_env(env)	(t_equal(env,fail_env))
+#define v_lookup(var,env)	(TdictGet(env,var))
+#define get_term(cenv)		(t_list_first(cenv))
+#define get_env(cenv)		(t_list_first(t_list_next(cenv)))
+#define make_cenv(ar,t,e)	(TmkList_n(ar, 2, t, e))
+@
+
+%}}}
+%{{{ function declarations
+
+<<function declarations>>=
 aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs);
 aterm *rewrite(arena *ar, aterm *trm,aterm_list *env);
 aterm_list *list_matching(arena *ar, aterm *sym, aterm_list *env,
@@ -39,13 +136,30 @@ aterm_list *list_matching(arena *ar, aterm *sym, aterm_list *env,
 aterm_list *args_matching(arena *ar, aterm_list *env,aterm_list *conds,
                          aterm_list *args1,aterm_list *args2);
 aterm_list *conds_satisfied(arena *ar, aterm_list *conds,aterm_list *env);
+@
 
-#line 145 "evaluator.c.nw"
+%}}}
+%{{{ void rec_terminate(int cid, aterm *t)
+
+<<rec_terminate>>=
 void rec_terminate(int cid, aterm *t)
 {
   exit(0);
 }
-#line 163 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *exists(int cid, aterm *name)
+
+/* Functions to be called by the ToolBus:
+   - ``exists'' checks whether the equations for a certain module are
+     available.
+   - ``create_equations_db'' to initialize the database. 
+   - ``clear_equations_db'' to re-initialize the database. 
+   - ``add_equations'' to add a set of equations for a certain module.
+   - ``interpret'' to rewrite a given term over a given module.  */
+
+<<exists>>=
 aterm *exists(int cid, aterm *name)
 {
   aterm *result;
@@ -56,32 +170,71 @@ aterm *exists(int cid, aterm *name)
     result = Tmake(&Ar,"snd-value(result(notexists(<term>)))", name);
   return result;
 }
-#line 179 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ void create_equations_db(int cid)
+
+<<create_equations_db>>=
 void create_equations_db(int cid)
 {
   equations_db = t_empty(NULL);
   Tprotect(equations_db);
 }
-#line 190 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ void change_equations_db(aterm_list *db)
+
+<<change_equations_db>>=
 void change_equations_db(aterm_list *db)
 {
   Tunprotect(equations_db);
   equations_db = db;
   Tprotect(equations_db);
 }
-#line 202 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ void change_active_rules(aterm_list *ar)
+
+<<change_active_rules>>=
 void change_active_rules(aterm_list *ar)
 {
   Tunprotect(active_rules);
   active_rules = ar;
   Tprotect(active_rules);
 }
-#line 214 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ void clear_equations_db(int cid)
+
+<<clear_equations_db>>=
 void clear_equations_db(int cid)
 {
   change_equations_db(t_empty(NULL));
 }
-#line 238 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
+
+/* The function ``add_equations'' takes care of adding a new list
+   of equations is added to the internal database. The arguments
+   of this function is a module name and a list of equations.
+   Before this list of equations is added to the database some
+   preprocessing is needed.
+   1. Layout and list separators are removed, and the lexicals are
+      expanded to a list of lexical characters.
+   2. The equations are ``sorted'' on outermost function symbols.
+      This is performed by the function ``sort_and_filter_on_ofs''.
+      This function adds the equations with the same ofs in the
+      left hand side of an equation to the database, and returns
+      the original list of equations minus the equations which
+      where stored. Therefore the function ``add_equations''
+      contains a loop. */
+<<add_equations>>=
 aterm *add_equations(int cid,aterm *name,aterm_list *equs)
 {
   aterm_list *newequs;
@@ -100,7 +253,30 @@ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
 Tprintf(stderr,"Processing %d equations of module %t\n",l,name);
   return Tmake(&Ar,"snd-value(equ-added(<term>))",name);
 }
-#line 280 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *interpret(int cid,aterm *modname, aterm *trm)
+
+/* The function ``interpret'' recieves a module name and
+   the string (term) that has to be written within the
+   context of the given module.
+   1. The term is preprocessed. The abbreviations are expanded.
+      Next the layout and separators are
+      removed and lexicals are expanded to list of lexical
+      characters.
+   2. The appropriate set of equations is actived this is
+      done be retrieving from the equation database the
+      equations over the given module and assign the list
+      of equations to the global variable ``active_rules''.
+   3. The term is rewritten via ``rewrite'' with an empty
+      variable environment.
+   4. The result of rewriting is processed in order to 
+      be visualized: layout and list separators are added and
+      the list of lexical characters are mapped into lexicals
+      again. */
+
+<<interpret>>=
 aterm *interpret(int cid,aterm *modname, aterm *trm)
 {
   aterm *newtrm,*newatrm,*result;
@@ -135,8 +311,8 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
   user = rewriting.tms_utime - rule_selection.tms_utime;
   system = rewriting.tms_stime - rule_selection.tms_stime;
   fprintf(stdout, "rewriting: %f user, %f system (%f steps/sec)\n", 
-        TICK2SEC(user), TICK2SEC(system), 
-        ((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
+	TICK2SEC(user), TICK2SEC(system), 
+	((double)rewrite_steps)/(TICK2SEC(user)+TICK2SEC(system)));
   user = restoration.tms_utime - rewriting.tms_utime;
   system = restoration.tms_stime - rewriting.tms_stime;
   fprintf(stdout, "restoration: %f user, %f system.\n", TICK2SEC(user), TICK2SEC(system));
@@ -144,7 +320,21 @@ aterm *interpret(int cid,aterm *modname, aterm *trm)
 
   return Tmake(&Ar,"snd-value(result(<term>))",result);
 }
-#line 338 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
+
+/* The function ``filter_on_ofs'' selects the rewrite rules 
+   with the same outermost function symbol in their left hand side.
+   This function gets a module name, an outermost function symbol,
+   and a list of equations. Equations with the same ofs as the 
+   argument ofs are added to a new list and removed from the argument
+   list. If all equations in the argument list are inspected the
+   new constructed list is added to the equation database in the
+   entry of the module name. The function returns the argument list
+   without the filtered equations. */
+<<sort_and_filter_on_ofs>>=
 aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
 {
   aterm *eq,*lhs,*ofs,*pair;
@@ -177,7 +367,15 @@ aterm_list *sort_and_filter_on_ofs(aterm *name,aterm *firstofs,aterm_list *eqs)
   
   return neweqs;
 }
-#line 379 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ Tbool no_new_vars(aterm *trm,aterm_list *env)
+
+/* A predicate which checks whether a term introduces new
+   variables. This functions is used when dealing with the
+   conditions of equations. */
+<<no_new_vars>>=
 Tbool no_new_vars(aterm *trm,aterm_list *env)
 {
   aterm *arg;
@@ -213,7 +411,17 @@ Tbool no_new_vars(aterm *trm,aterm_list *env)
   else
     return Ttrue;
 }
-#line 425 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *elems_matching(ar,sym,env,elems1,elems2,conds,args1,args2)
+
+/* Functions which take care of the matching of arguments of
+   ``appls'' and ``lists''. 
+   The matching is a very recursive process. This is needed to
+   take care of the backtracking needed when dealing with
+   list matching. */
+<<elems_matching>>=
 aterm_list *elems_matching(arena *ar, aterm *sym, aterm_list *env,
                            aterm_list *elems1,aterm_list *elems2,
                            aterm_list *conds,
@@ -224,7 +432,29 @@ aterm_list *elems_matching(arena *ar, aterm *sym, aterm_list *env,
   else
     return list_matching(ar,sym,env,elems2,elems1,conds,args1,args2);
 }
-#line 458 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *arg_matching(arena *ar,env, arg1, arg2, conds, orgargs1, orgargs2)
+
+/* Function which tries to match two arguments. 
+   First it is checked whether one of the arguments is a variable
+   and the other is not. If one is a variable it is checked
+   whether it is a fresh one. If the variable is in the environment
+   its value is retrieved and compared with the other argument.
+   If they are equal the matching can proceed otherwise the matching
+   must be aborted.  If the variable is a fresh one it is
+   stored in the variable environment
+   with the term of the other argument.
+   
+   If both arguments are ``appls'' their arguments should match.
+
+   If both arguments are ``lists'' their elements shoudl match.
+
+   Otherwise the arguments should be equal. If the do not
+   match the matching should be aborted. */
+  
+<<arg_matching>>=
 aterm_list *arg_matching(arena *ar, aterm_list *env, aterm *arg1, aterm *arg2,
                         aterm_list *conds, 
                         aterm_list *orgargs1, aterm_list *orgargs2)
@@ -293,7 +523,15 @@ aterm_list *arg_matching(arena *ar, aterm_list *env, aterm *arg1, aterm *arg2,
   }
   return newenv;
 }
-#line 535 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *args_matching(arena *ar, env, conds, args1, args2)
+
+/* Two arguments lists are matched. As long as there are arguments
+   to be matched this is performed if both argument lists are empty
+   the conditions are inspected. */
+<<args_matching>>=
 aterm_list *args_matching(arena *ar, aterm_list *env,aterm_list *conds,
                          aterm_list *args1, aterm_list *args2)
 {
@@ -319,7 +557,12 @@ aterm_list *args_matching(arena *ar, aterm_list *env,aterm_list *conds,
   };
   return newenv;
 }
-#line 566 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *compare_sub_lists(aterm_list *elems1, aterm_list *elems2)
+
+<<compare_sub_lists>>=
 aterm_list *compare_sub_lists(aterm_list *elems1, aterm_list *elems2)
 {
   aterm *elem1,*elem2;
@@ -344,7 +587,12 @@ aterm_list *compare_sub_lists(aterm_list *elems1, aterm_list *elems2)
   else
     return fail_env;
 }
-#line 596 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *sub_list_matching(ar,sym,env,elem,elems1,elems2,conds,args1,args2)
+
+<<sub_list_matching>>=
 aterm_list *sub_list_matching(arena *ar, aterm *sym,aterm_list *env,aterm *elem,
                              aterm_list *elems1, aterm_list *elems2,
                              aterm_list *conds, 
@@ -374,7 +622,12 @@ aterm_list *sub_list_matching(arena *ar, aterm *sym,aterm_list *env,aterm *elem,
   };
   return subenv;
 }
-#line 631 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *list_matching(ar,sym,env,elems1,elems2,conds,args1,args2)
+
+<<list_matching>>=
 aterm_list *list_matching(arena *ar, aterm *sym,
                          aterm_list *env,aterm_list *elems1, aterm_list *elems2,
                          aterm_list *conds, aterm_list *args1, aterm_list *args2)
@@ -460,7 +713,16 @@ aterm_list *list_matching(arena *ar, aterm *sym,
     }
   return newenv;
 }
-#line 726 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
+
+/* Function ``conds_satisfied'' check whether the conditions
+   of an equation can be satisfied. 
+   Remark access functions needed to retrieve the operator,
+   lhs, and rhs. */
+<<conds_satisfied>>=
 aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
 {
   aterm *cond;
@@ -512,7 +774,18 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
   }
   return newenv;
 }
-#line 789 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *apply_rule(arena *ar, aterm_list *rules,aterm *trm)
+
+/* The function ``apply_rule'' tries to rewrite a term
+   given a list of equations. As long as there is no
+   success a new equation is tried. The arguments of
+   the term and the arguments of the left hand side of 
+   the equation are matched.
+*/
+<<apply_rule>>=
 aterm *apply_rule(arena *ar, aterm_list *rules,aterm *trm)
 {
   aterm *rule;
@@ -533,7 +806,16 @@ aterm *apply_rule(arena *ar, aterm_list *rules,aterm *trm)
   }; 
   return make_cenv(ar, trm, fail_env);
 }
-#line 819 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *select_and_rewrite(arena *ar, aterm *trm)
+
+/* The function ``select_and_rewrite'' selects the
+   the set of rewrite rules from the active rules and
+   tries to rewrite the term via the function ``apply_rule''.
+*/
+<<select_and_rewrite>>=
 aterm *select_and_rewrite(arena *ar, aterm *trm)
 {
   aterm *ofs,*newtrm, *complexenv;
@@ -552,7 +834,14 @@ aterm *select_and_rewrite(arena *ar, aterm *trm)
   }
   return trm;
 }
-#line 845 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
+
+/* The list of arguments is rewritten and a new argumentlist
+   is constructed. */
+<<rewrite_args>>=
 aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
 {
   aterm *arg,*newarg;
@@ -570,7 +859,14 @@ aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
   };
   return newargs;
 }
-#line 870 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *env)
+
+/* The list of elements is rewritten and a new elementlist
+   is constructed. */
+<<rewrite_elems>>=
 aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *env)
 {
   aterm *elem,*newelem;
@@ -587,7 +883,20 @@ aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *en
   };
   return newelems;
 }
-#line 900 "evaluator.c.nw"
+@
+
+%}}}
+%{{{ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
+
+/* The core function. It is checked whether the term
+   is an application, a variable, or a list. And the
+   appropriate actions are performed.
+   For non-constant functions the arguments should first
+   be rewritten, conform the innermost reduction strategy.
+   The resulting term can then be rewritten.
+   REMARK: comments should be improved.
+*/ 
+<<rewrite>>=
 aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
 {
   aterm *newtrm,*sym,*rewtrm;
@@ -633,8 +942,13 @@ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
   TdestroyArena(&local);
   return rewtrm;
 }
+@
 
-#line 952 "evaluator.c.nw"
+%}}}
+
+%{{{ int main(int argc, char **argv)
+
+<<main>>=
 int main(int argc, char **argv)
 {
   int cid;
@@ -651,3 +965,6 @@ int main(int argc, char **argv)
 
   return 0;
 }
+@
+
+%}}}
