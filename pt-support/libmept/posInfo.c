@@ -1,12 +1,12 @@
+/* $Id$ */
 
 /*{{{  includes */
 
-#include <MEPT-utils.h>
-#include <Error.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
+#include <MEPT-utils.h>
 /*}}}  */
 /*{{{  defines*/
 
@@ -36,11 +36,11 @@ typedef struct PT_Position_Tag {
 
 /*}}}  */
 
-/*{{{  ERR_Location PT_getTreeLocation(PT_Tree tree) */
+/*{{{  LOC_Location PT_getTreeLocation(PT_Tree tree) */
 
-ERR_Location PT_getTreeLocation(PT_Tree tree)
+LOC_Location PT_getTreeLocation(PT_Tree tree)
 {
-  return ERR_LocationFromTerm(
+  return LOC_LocationFromTerm(
            ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info")));
 }
 
@@ -51,19 +51,19 @@ ERR_Location PT_getTreeLocation(PT_Tree tree)
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col)
 {
-  ERR_Location location = PT_getTreeLocation(tree);
-  ERR_Area area;
+  LOC_Location location = PT_getTreeLocation(tree);
+  LOC_Area area;
 
   if (!location) {
     return ATfalse;
   }
 
-  area = ERR_getLocationArea(location);
-  *path = ERR_getLocationFilename(location);
-  *start_line= ERR_getAreaBeginLine(area);
-  *start_col= ERR_getAreaBeginColumn(area);
-  *end_line= ERR_getAreaEndLine(area);
-  *end_col= ERR_getAreaEndColumn(area);
+  area = LOC_getLocationArea(location);
+  *path = LOC_getLocationFilename(location);
+  *start_line= LOC_getAreaBeginLine(area);
+  *start_col= LOC_getAreaBeginColumn(area);
+  *end_line= LOC_getAreaEndLine(area);
+  *end_col= LOC_getAreaEndColumn(area);
 
   return ATtrue;
 }
@@ -75,8 +75,8 @@ static ATerm PT_makePosInfo(const char *path, int line1, int col1,
                                               int line2, int col2,
                                               int offset, int length)
 {
-  ERR_Area area = ERR_makeAreaArea(line1, col1, line2, col2, offset, length);
-  ERR_Location location = ERR_makeLocationAreaInFile(path, area);
+  LOC_Area area = LOC_makeAreaArea(line1, col1, line2, col2, offset, length);
+  LOC_Location location = LOC_makeLocationAreaInFile(path, area);
 
   return (ATerm) location;
 }
@@ -100,7 +100,7 @@ static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
 }
 
 /*}}}  */
-/*{{{  void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset) */
+/*{{{  static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset) */
 
 static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
 {
@@ -297,7 +297,7 @@ PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree,
 }
 
 /*}}}  */
-/*{{{  PT_ParseTree PT_addParseTreePosInfo(char* path, PT_ParseTree parsetree) */
+/*{{{  PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree) */
 
 PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree)
 {
@@ -322,6 +322,57 @@ PT_ParseTree PT_addParseTreePosInfoSome(const char *path, PT_ParseTree parsetree
   label_literals = ATfalse;
 
   return result;
+}
+
+/*}}}  */
+
+/*{{{  static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle) */
+
+static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle)
+{
+  int start = LOC_getAreaOffset(haystack);
+  int end = start + LOC_getAreaLength(haystack);
+
+  return (start < needle) && (needle < end);
+}
+
+/*}}}  */
+/*{{{  static ATbool PT_containsTreeOffset(PT_Tree tree, int offset) */
+
+static ATbool PT_containsTreeOffset(PT_Tree tree, int offset)
+{
+  LOC_Location location = PT_getTreeLocation(tree);
+  LOC_Area area = LOC_getLocationArea(location);
+
+  return PT_containsAreaOffset(area, offset);
+}
+
+/*}}}  */
+/*{{{  LOC_Location PT_cursorAtOffset(PT_tree tree, int offset) */
+
+LOC_Location PT_findLocationAtOffset(PT_Tree tree, int offset)
+{
+  PT_Args args;
+
+  if (!PT_containsTreeOffset(tree, offset)) {
+    return NULL;
+  }
+
+  if (!PT_hasTreeArgs(tree)) {
+    return PT_getTreeLocation(tree);
+  }
+
+  args = PT_getTreeArgs(tree);
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree child = PT_getArgsHead(args);
+    LOC_Location location = PT_findLocationAtOffset(child, offset);
+    if (location != NULL) {
+      return location;
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  return NULL;
 }
 
 /*}}}  */
