@@ -1,0 +1,77 @@
+#! /bin/env perl5.00404
+
+#$Id$
+
+# idef2tif takes an interface definition file (idef) and returns a 
+# toolbus interface file (tifs). 
+#
+# An idef file is a Tscript with exactly one process, and no toolbus(..) 
+# statement. The idea is that such a file exactly defines the interface
+# to a tool, and nothing more. In order to use it you need to #include it
+# in a larger Tscript which does include a toolbus(..) statement.
+
+# Author: Tobias Kuipers
+# Date:   1-feb-1999
+
+$idefsuf = '.idef';
+
+sub usage {
+  print "Usage: idef2tif file$idefsuf\n";
+  exit 1;
+}
+
+if ($#ARGV < 0) {
+  &usage;
+}
+
+# Get filename form commandline
+$fullname = $ARGV[0];
+# get basename
+@dirarray = split(/\//,$fullname);
+$basename = pop(@dirarray);
+$dir = join(/\//,@dirarray);
+if ($dir ne "") {
+  $dir .= "/";
+}
+#Check for right suffix
+if ($basename =~ /(.+)\Q$idefsuf\E$/) {
+  $stem = $1;
+} else {
+  print STDERR "$basename has unknown suffix\n";
+  &usage;
+}
+
+open(IDEF,"$fullname") || die("Can't open $fullname\n");
+open(TB,">/tmp/$stem.tmp.$$") || die("Can't open /tmp/$stem.tmp.$$\n");
+
+$pc = 0;
+while(<IDEF>) {
+  if (/process (\w+) is/) {
+    $process = $1;
+    $pc++;
+  }
+  if (/\s*toolbus\(/) {
+    print STDERR "toolbus(..) statements not allowed in idef file\n";
+    print STDERR "Abort.\n";
+    exit 3;
+  }
+  print TB $_;
+}
+
+close(IDEF);
+
+if ($pc != 1) {
+  print STDERR "Not exactly 1 process definition in $fullname\n";
+  print STDERR "Please make sure your idef file has exactly 1 process definition.\n";
+  print STDERR "Abort.";
+  exit 2;
+}
+
+print TB "toolbus(",$process,")\n";
+close(TB);
+
+system("toolbus -gentifs /tmp/$stem.tmp.$$ > /dev/null 2>&1 ");
+system("mv /tmp/$stem.tmp.$$.tifs $dir$stem.tifs");
+print STDOUT "Tool interfaces written to \`$dir$stem.tifs\'\n";
+
+unlink("/tmp/$stem.tmp.$$");

@@ -22,7 +22,7 @@ INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= gen-table parse-sdf2 sdf2table
+BINFILES	= gen-table parse-sdf2 sdf2table idef2tif
 LIBFILES	= Sdf2.baf
 INCLUDEFILES	=
 
