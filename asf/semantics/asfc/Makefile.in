@@ -60,7 +60,7 @@ XLIBS		=  -Lsupport -lsupport-cc -Lc-source -lasfix2c \
 CSRC		= compiler.c compile-one-module.c
 CHDR		= compiler.tif.c compiler.tif.h
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler compile-one-module genmakefile.sh
+BINFILES	= compiler compile-one-module 
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
