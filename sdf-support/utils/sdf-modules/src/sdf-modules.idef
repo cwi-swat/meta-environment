@@ -1,5 +1,5 @@
 
-tool sdf-modules is { command = "sdf-modules" }
+tool sdf-modules is { command = "sdf-modules -TB_COLLECT_LOOP 1" }
 
 toolbus(SdfModules)
 
