@@ -31,14 +31,14 @@ AC_SUBST(ATERM)
 dnl Require Shared-Object library
 AC_PACKAGE_REQUIRE(shared-objects, shared-objects-config,
    [  --with-shared-objects=DIR Shared-Objects-library is in DIR])
-SHARED_OBJECTS=`shared-objects-config`
+SHARED_OBJECTS=`${SHARED_OBJECTS}/bin/shared-objects-config`
 AC_SUBST(SHARED_OBJECTS)
 
 dnl Require ATerm Java library
 AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
    [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
 dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=`aterm-java-config`
+JAVA_ATERM=`${ATERM_JAVA}/bin/aterm-java-config`
 AC_SUBST(JAVA_ATERM)
 JJTRAVELER="${ATERM_JAVA}/share/jjtraveler-1.3.jar"
 AC_SUBST(JJTRAVELER)
