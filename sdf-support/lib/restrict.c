@@ -1,7 +1,8 @@
 #include "SDFME-utils.h"
 
-static void
-collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restricts)
+/*{{{  static void collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restricts) */
+
+static void collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restricts)
 {
   if (SDF_isGrammarRestrictions(grammar)) {
     SDF_Restrictions grammarPrios = SDF_getGrammarRestrictions(grammar);
@@ -12,6 +13,7 @@ collect_restricts(SDF_Grammar grammar, SDF_RestrictionList *restricts)
 }
 
 /*}}}  */
+
 /*{{{  SDF_getModuleRestrictions(SDF_Module module) */
 
 SDF_RestrictionList 
