@@ -1,6 +1,6 @@
-module asf/tools/Annotations[X]
+module asf/tools/ATermAnnotations[X]
 
-imports aterms/ATerms
+imports aterm/ATerms
 imports basic/Strings
 
 exports
