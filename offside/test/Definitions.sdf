@@ -28,15 +28,3 @@ context-free syntax
 
 Definition -> Exp 
 Id         -> Exp
-  
-  father
-    term ;
-  father term;
-
-  [father
-    term;]
-    [father term]
-
-  [father
-    term;
-    [father term]]
