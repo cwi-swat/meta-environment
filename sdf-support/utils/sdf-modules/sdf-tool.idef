@@ -1,0 +1,13 @@
+
+tool sdf-tool is { command = "sdf-tool" }
+
+process SdfTool is
+let
+ ST : sdf-tool
+in
+  execute(sdf-tool, ST?) .
+  (
+    rec-msg(sdft-some-message)
+  )
+  *delta
+endlet

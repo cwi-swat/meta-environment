@@ -1,4 +1,6 @@
 
+SUBDIRS = sdf-tool
+
 EXTRA_DIST = sdf-support-config.src
 
 bin_SCRIPTS = sdf-support-config
