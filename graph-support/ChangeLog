@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 19 08:39:10 CET 2004 <jong@cwi.nl>
+ * graph-support/utils/layoutgraph/dot.y:
+   #define YY_NO_UNPUT to suppress generation of static yyunput() function
+
 Wed Mar 10 09:16:28 CET 2004 <kooiker@cwi.nl>
  * Use new error-api 
 
