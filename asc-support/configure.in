@@ -99,4 +99,5 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
+  lib/Makefile
 )

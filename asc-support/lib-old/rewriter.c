@@ -42,8 +42,9 @@
 #include <AsFix.h>
 #include <AsFix-expand.h>
 #include <AsFix-init-patterns.h>
+
+#include <aterm2.h>
 #include <deprecated.h>
-/* #include <gc.h> */
 
 #include "asc-support.h"
 

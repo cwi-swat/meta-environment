@@ -35,10 +35,10 @@
 
 #include <AsFix.h>
 #include <AsFix2src.h>
+#include <aterm-macs.h>
 #include <aterm2.h>
 
 #include <deprecated.h>
-#include <aterm-macs.h>
 
 #include "asc-support.h"
 

@@ -18,13 +18,13 @@
 #
 # $Id$
 
-include make_rules
+include $(top_srcdir)/make_rules
 
 lib_LIBRARIES            = libasc-support.a
 
 include_HEADERS          = asc-support.h
 EXTRA_DIST               = rewriter.tb make_rules \
-                           rewriter.tif.c rewriter.tif.h # rewriter.tifs
+                           rewriter.tif.c rewriter.tif.h 
 
 SRCS = asc-support.c asc-support.h rewriter.c
 ALLSRCS = asc-support.c asc-support.h rewriter.c rewriter.tif.c
@@ -36,17 +36,3 @@ libasc_support_a_LIBADD  = rewriter.tif.o
 INCLUDES   = -I. -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
 rewriter.o: rewriter.tif.h
-
-# The output of toolbus is moved to $@ to make sure the generated
-# .tifs file exists in the current directory. The ToolBus idef2tif by
-# default uses the dirname of its file name argument to determine the
-# location the output. This does not work correct when using VPATH in
-# the Makefile.
-%.tifs: %.tb
-	PATH=$(TOOLBUS)/bin:$(PATH) toolbus -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
-
-%.tif.c %.tif.h: %.tifs
-	PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<

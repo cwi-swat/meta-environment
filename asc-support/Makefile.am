@@ -16,19 +16,6 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#
 # $Id$
 
-# The output of toolbus is moved to $@ to make sure the generated
-# .tifs file exists in the current directory. The ToolBus idef2tif by
-# default uses the dirname of its file name argument to determine the
-# location the output. This does not work correct when using VPATH in
-# the Makefile.
-%.tifs: %.tb
-	PATH=$(TOOLBUS)/bin:$(PATH) toolbus -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	  mv ${srcdir}/$@ $@ ;\
-	fi
-
-%.tif.c %.tif.h: %.tifs
-	PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
+SUBDIRS = lib

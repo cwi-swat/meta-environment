@@ -1,0 +1,12 @@
+aclocal.m4
+config.cache
+config.h.in
+config.log
+config.status
+configure
+.cvsignore
+.deps
+Makefile
+Makefile.in
+rewriter.tif.c
+rewriter.tif.h
