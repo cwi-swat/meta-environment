@@ -22,13 +22,15 @@ exports
 	type-of(Elem)                  				-> ElemType
 	element-type(REXPTYPE, TENV)				-> REXPTYPE
 
-        undefined                       			-> REXPTYPE
+        "undefined"                       			-> REXPTYPE
 	field(Integer)						-> REXPTYPE
 	"<" { DCLRVAR ","}* ">"					-> REXPTYPE
         "fun" {REXPTYPE ","}* to REXPTYPE			-> REXPTYPE
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
+	"empty-bag-type"					-> REXPTYPE
+	cover-empty(REXPTYPE)					-> REXPTYPE
 
-        is-var(REXPTYPE)                        		-> Boolean
+%%        is-var(REXPTYPE)                        		-> Boolean
 
 	first(REXPTYPE, TENV)					-> REXPTYPE
 	second(REXPTYPE, TENV)					-> REXPTYPE
