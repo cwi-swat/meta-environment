@@ -411,8 +411,8 @@ ATermList SG_CyclicTerm(parse_table *pt, forest t)
 
     for(; !ATisEmpty(Cycle); Cycle = ATgetNext(Cycle)) {
       cycleprods = ATinsert(cycleprods,
-                            SG_LookupProduction(pt,
-                              ATgetInt((ATermInt) ATgetFirst(Cycle))));
+                            (ATerm) SG_LookupProduction(pt,
+                              (label) ATgetInt((ATermInt) ATgetFirst(Cycle))));
     }
     return cycleprods;
   }
