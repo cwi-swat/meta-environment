@@ -72,8 +72,8 @@ newEditorInstanceGivenLength(ATerm atLength)
   ATerm area = newArea(st, atLength);
   ATerm focus = newFocus(path, sort, area);
 
-  focus = setDirty(focus);
-  focusList = newFocusList(focus);
+  focus = setDirty(focus); 
+  focusList = newFocusList(focus); 
 
   wsTree = putTreeLength(ATparse("w(\"\")"), 0);
   dummyTree = putTreeLength(ATparse("w(\"\")"), length);
@@ -222,8 +222,13 @@ ATerm
 newEditorInstanceGivenText(char *text)
 {
   ATerm length = newLength(strlen(text));
+	ATerm newEditor;
 
-  return newEditorInstanceGivenLength(length);
+  newEditor = newEditorInstanceGivenLength(length);
+	newEditor = moveFocusToTop(newEditor);
+  newEditor = setFocuses(newEditor, (ATerm) ATempty);
+
+	return newEditor;
 }
 
 /*}}}  */
