@@ -32,6 +32,9 @@ in
         +
           rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
           snd-msg(new-module-not-created(ErrMsg))
+        +
+	  rec-msg(module-not-created(ErrMsg?)).
+	  snd-msg(new-module-not-created(ErrMsg))
         )
       )
     )
