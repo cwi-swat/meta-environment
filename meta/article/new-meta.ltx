@@ -1,35 +1,37 @@
-\documentclass[twoside]{article}
+\documentclass{article}
 \usepackage{amsmath}
 \usepackage{latexsym}
 \usepackage{ASF+SDF,ASF+SDF-options}
 \usepackage{epsfig}
 \usepackage{cmbcsc,alltt}
 \usepackage{url}
+\usepackage{times}
+\usepackage{wic2e}
 \urlstyle{rm}
 
-%%\title{Design and Implementation of a New \metaenv}
-\title{Implementation of a Prototype for the New \metaenv}
+\wicconf{Theory and Practice of Algebraic Specifications ASF+SDF'97}
 
-\author{Mark van den Brand$^{^1}$, Tobias Kuipers$^{^2}$, \\
-        Leon Moonen$^{^1}$, Pieter Olivier$^{^1}$\\
-        {\small\sl $^1$University of Amsterdam,
-        Programming Research Group\vspace{-.2cm}}\\
-        {\small\sl Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands}
-        \vspace{.1cm}\\
-        {\small\sl $^2$CWI,
-        Department of Software Engineering\vspace{-.2cm}}\\
-        {\small\sl P.O. Box 94079, NL-1090 GB Amsterdam, The Netherlands}
-        \vspace{.1cm}\\
-        {\small \sl\tt markvdb@wins.uva.nl,Tobias.Kuipers@cwi.nl,\vspace{-.2cm}}\\
-        {\small \sl\tt leon@wins.uva.nl,olivierp@wins.uva.nl}
-}
+\title{\bf Implementation of a Prototype for the New \textsc{Asf+Sdf}\ Meta-En\-vir\-on\-ment}
+
+\author{\large Mark van den Brand\\
+\normalsize Programming Research Group, University of Amsterdam\\
+\normalsize Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands\and
+\large Tobias Kuipers\\
+\normalsize Department of Software Engineering, CWI\\
+\normalsize P.O. Box 94079, NL-1090 GB Amsterdam, The Netherlands\and
+\large Leon Moonen\\
+\normalsize Programming Research Group, University of Amsterdam\\
+\normalsize Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands\and
+\large Pieter Olivier\\
+\normalsize Programming Research Group, University of Amsterdam\\
+\normalsize Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands\date{}}
 
 \def\aterms{\mbox{ATerms}}
 \def\asfix{\mbox{\textsc AsFix}}
 \def\sdf{\textsc{Sdf}}
 \def\asf{\textsc{Asf}}
 \def\asdf{\textsc{Asf+Sdf}}
-\def\metaenv{\asdf\ Meta-En\-vir\-on\-ment}
+\def\metaenv{\textsc{Asf+Sdf}\ Meta-En\-vir\-on\-ment}
 
 \def\TB{\textsc{ToolBus}}
 \def\centaur{\textsc{centaur}}
@@ -48,43 +50,19 @@
 \def\java{Java}
 \newcommand{\gse}{\textsc{gse}}
 
-\makeatletter
-\def\up@case#1{\expandafter\uppercase{#1}}
-\def\upcase#1{\expandafter\up@case#1}
-\makeatother   
-
-\date{}
-
-\setlength{\textwidth}{140mm}
-\setlength{\textheight}{210mm}
-\setlength{\topmargin}{5mm}
-\setlength{\headsep}{7mm}
-\setlength{\marginparsep}{2mm}
-\setlength{\marginparwidth}{22mm}
-%
-\if@twoside
-\setlength{\oddsidemargin}{15mm}
-\setlength{\evensidemargin}{4.1mm}
-\else
-\setlength{\oddsidemargin}{10.5mm}
-\setlength{\evensidemargin}{10.5mm}
-\fi
-
-%% define separator macro for proofreading 
-%% (puts each part on separate page)
-\def\separator{}
-%%\def\separator{\cleardoublepage}
-
 \begin{document}
+
+\pagestyle{myheadings}
 
 \maketitle
 
-\begin{abstract}
+\begin{abstract}\ninesize
+\noindent 
 The \metaenv\ has become a legacy system over the last few years.
 This paper describes the first steps towards a new implementation
 of this system. This implementation is based on the latest techniques
 concerning the coupling of software components, construction
-of \ui s and modern programming languages. Special
+of user interfaces and modern programming languages. Special
 care has been taken to ensure the flexibility and extensibility of
 the system, both now and in the future.
 
@@ -177,25 +155,16 @@ the structure editor in Section \ref{edit}, and the
 interpreter in Section \ref{interpreter}.
 
 
-\separator
 \input{toolbus.ltx}
 
-%%\separator
-%%\input{treerepr.ltx}     %% moved to repos
-
-\separator
 \input{repos.ltx}
 
-\separator
 \input{ui.ltx}
 
-\separator
 \input{editors.ltx}
 
-\separator
 \input{interpreter.ltx}
 
-\separator
 \section{Conclusions}
 
 In this paper the first prototype of the new \metaenv\ is discussed.
@@ -215,9 +184,7 @@ provide facilities to compile specifications in order to generate
 stand-alone environments.  Finally, the new \metaenv\ should provide
 sophisticated help facilities and demonstration modes with WWW support.
 
-%%\begin{small}
-\bibliographystyle{alpha}
+\bibliographystyle{plain}
 \bibliography{metabib}
-%%\end{small}
 
 \end{document}
