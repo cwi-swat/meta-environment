@@ -9,10 +9,11 @@ myversion="1.0"
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bhi:co:tvV"
+myarguments="bhi:o:tvV"
 
 if [ $myarguments ] ; then
-    myargsexplained=" -`echo $myarguments|sed -e 's/\(.:\)/ -\1 /g' -e 's/ \([^-:]\)/ -\1/g' -e's/:/ file/g'`"
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
 fi
 
 # Usage: displays helpful usage information
@@ -41,7 +42,7 @@ verbose=0
 bafmode=1
 
 # getopt handles command line...
-args=`getopt $myarguments $*`
+args=`getopt $myarguments $* 2> /dev/null`
 if test $? != 0
 then
         Usage
@@ -62,6 +63,8 @@ do
             input=$2; shift 2;;
         -o)
             output=$2; shift 2;;
+        -t)
+            bafmode=0; shift;;
         -v)
             verbose=1; shift;;
         -V)
