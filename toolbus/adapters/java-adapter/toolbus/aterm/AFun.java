@@ -28,6 +28,8 @@ So far the following AFuns are defined:
       result = (ATermAppl) world.makeSimple("list(sym,w(\"\"),elems)");
       //    } else {
       //      throw new Exception("Undefined AFun being initialized: "+af);
+    } else if (af.equals("lex")) {
+	result = (ATermAppl) world.makeSimple("lex(name,sym)");
     } else {
 	System.err.println("AFun.init: Tried to init undefined afun");
 	System.exit(1);
