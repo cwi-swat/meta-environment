@@ -1385,7 +1385,7 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
     assert(ATgetType(prod) == AT_APPL);
     appl = (ATermAppl)prod;
     sym = ATgetSymbol(appl);
-    
+   
     /* Lexical constructors need not be restored in the resulting
      * AsFix representation of a term. This is the alternative
      * for "module-asfix" the next "elsif" is for "term-asfix".
@@ -1418,12 +1418,14 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
      * a special treatment.
      */
     else if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
-      if(streq(listsort, "CHAR"))
+      if(streq(listsort, "CHAR")) {
       	result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) t,0),
                                 sort);
-      else
+      }
+      else {
       	result = make_asfix_list((ATermList)ATgetArgument((ATermAppl) t,0),
                                  listsort);
+      }
     } 
     /* Conversion of list with separators to AsFix.
      */
