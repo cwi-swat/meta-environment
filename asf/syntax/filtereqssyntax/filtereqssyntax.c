@@ -1,0 +1,313 @@
+/* $Id$ */
+
+/*{{{  includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#include <MEPT-utils.h>
+#include <ASFME-utils.h>
+
+#include "filtereqssyntax.h"
+
+/*}}}  */
+
+/*{{{  globals */
+
+static ASF_Layout space;
+
+#define DEPTH_UNDEFINED -1
+/*}}}  */
+
+/* temporary !!!!!!!!!!!!!!!!! */
+#define PT_isProductionInjection(p) ATtrue
+#define ASF_getConditionListLength(c) 0
+
+/*{{{  static int countTreeInjections(PT_Tree tree) */
+
+static int countTreeInjections(PT_Tree tree)
+{
+  PT_Production prod;
+
+  if(PT_isTreeAppl(tree)) {
+    prod = PT_getTreeProd(tree);
+
+    if (PT_isProductionInjection(prod)) {
+      return 1 + countTreeInjections(PT_getArgsHead(PT_getTreeArgs(tree)));
+    }
+  } 
+
+  return 0;
+}
+
+/*}}}  */
+/*{{{  static int getInjectionDepth(PT_Tree eqOrCond) */
+
+static int getInjectionDepth(PT_Tree eqOrCond)
+{
+  PT_Tree lhs, rhs;
+  int lhs_injections, rhs_injections;
+
+  if (ASF_isValidEquation((ASF_Equation) eqOrCond)) { 
+    lhs = (PT_Tree) ASF_getEquationLhs((ASF_Equation) eqOrCond);
+    rhs = (PT_Tree) ASF_getEquationRhs((ASF_Equation) eqOrCond);
+  }
+  else if (ASF_isValidCondition((ASF_Condition) eqOrCond)) { 
+    lhs = (PT_Tree) ASF_getConditionLhs((ASF_Condition) eqOrCond);
+    rhs = (PT_Tree) ASF_getConditionRhs((ASF_Condition) eqOrCond);
+  }
+  else {
+    ATerror("getInjectionDepth: expected condition or equation, got: %t\n",
+	    eqOrCond);
+    return DEPTH_UNDEFINED;
+  }
+
+  lhs_injections = countTreeInjections(lhs);
+  rhs_injections = countTreeInjections(rhs);
+
+  if (lhs_injections == rhs_injections) {
+    return lhs_injections;
+  }
+
+  return DEPTH_UNDEFINED;
+}
+
+/*}}}  */
+
+/*{{{  static ASF_Equation filterEquationOrCondition(PT_Tree eqOrCond) */
+
+static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
+{
+
+  if (PT_isTreeAmb(eqOrCond)) {
+    PT_Args ambs = PT_getTreeArgs(eqOrCond);
+    int count = PT_getArgsLength(ambs);
+    PT_Tree *buffer = NULL;
+    int     *depth = NULL;
+    int i,j;
+
+    buffer = (PT_Tree*) calloc(count, sizeof(PT_Tree));
+    depth = (int*) calloc(count, sizeof(int));
+
+    if (buffer == NULL || depth == NULL) {
+      ATerror("filterEquation: not enough memory\n");
+      return NULL;
+    }
+  
+    ATprotectArray((ATerm*) buffer, count);
+
+    for(i = 0; PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs), i++) {
+      buffer[i] = PT_getArgsHead(ambs);
+      depth[i] = getInjectionDepth(buffer[i]);
+    }
+
+    /* Compare the depth of each tree to the depth of the others.
+     * Trees with smaller depths are replaced by NULL.
+     */
+
+    for (i = 0; i < count; i++) {
+      if (depth[i] != DEPTH_UNDEFINED) {
+	for (j = i + 1; j < count; j++) {
+	  if (buffer[j] != NULL && depth[j] != DEPTH_UNDEFINED) {
+	    if (depth[i] < depth[j]) {
+	      buffer[i] = NULL;
+	      break;
+	    } 
+	    else if (depth[i] > depth[j]) {
+	      buffer[j] = NULL;
+	    }
+	  }
+	}
+      }
+    }
+
+    ambs = PT_makeArgsEmpty();
+
+    /* remaining trees back in the cluster */
+    for(i = 0; i < count; i++) {
+      if (buffer[i] != NULL) {
+	ambs = PT_makeArgsList((PT_Tree) buffer[i], ambs);
+      }
+    }
+
+    assert(!PT_isArgsEmpty(ambs));
+
+    if (PT_getArgsLength(ambs) == 1) { /* ambiguity resolved */
+      eqOrCond = PT_getArgsHead(ambs);
+    }
+    else {
+      eqOrCond = PT_makeTreeAmb(ambs);
+    }
+    
+    ATunprotectArray((ATerm*) buffer);
+    free(buffer);
+    buffer = NULL;
+    free(depth);
+    depth = NULL;
+  }
+  
+  return eqOrCond;
+}
+
+/*}}}  */
+/*{{{  static ASF_Conditions filterConditions(ASF_Conditions conds) */
+
+static ASF_Conditions filterConditions(ASF_Conditions conds)
+{
+  ASF_ConditionList condlist = ASF_getConditionsList(conds);
+  int count = ASF_getConditionListLength(condeqslist);
+  ASF_Condition* buffer = NULL;
+  ASF_ConditionList new;
+  int i;
+
+  buffer = (ASF_Condition*) calloc(count, sizeof(ASF_Condition));
+
+  if (buffer == NULL) {
+    ATerror("filterConditions: not enough memory\n");
+    return NULL;
+  }
+
+  ATprotectArray((ATerm*) buffer, count);
+
+  for(i = 0;ASF_hasConditionListHead(condlist);
+      condlist = ASF_getConditionListTail(condlist)) {
+    ASF_Condition cond = ASF_getConditionListHead(condlist);
+    buffer[i++] = (ASF_Condition) filterEquationOrCondition((PT_Tree) cond); 
+
+    if (!ASF_hasConditionListTail(condlist)) {
+      break;
+    }
+  }
+
+  new = NULL;
+
+  while (--i >= 0) {
+    if (new == NULL) {
+      new = ASF_makeConditionListSingle(buffer[i]);
+      assert(new);
+    }
+    else {
+      new = ASF_makeConditionListMany(buffer[i],space,",",space,new);
+    }
+  }
+
+  ATunprotectArray((ATerm*) buffer);
+  free(buffer);
+  buffer = NULL;
+
+  return ASF_makeConditionsDefault(new);
+}
+
+/*}}}  */
+/*{{{  static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq) */
+
+static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
+{
+  ASF_Equation eq;
+
+  eq = ASF_getCondEquationEquation(condeq);
+  eq = (ASF_Equation) filterEquationOrCondition((PT_Tree) eq);
+  condeq = ASF_setCondEquationEquation(condeq, eq);
+
+  if (ASF_hasCondEquationConditions(condeq)) {
+    ASF_Conditions conds = ASF_getCondEquationConditions(condeq);
+    conds = filterConditions(conds);
+    condeq = ASF_setCondEquationConditions(condeq, conds);
+  }
+
+  return condeq; 
+}
+
+/*}}}  */
+/*{{{  static CondEquationsList filterCondEquationList(ASF_CondEquationList ... */
+
+static ASF_CondEquationList 
+filterCondEquationList(ASF_CondEquationList condeqslist)
+{
+  int count = ASF_getCondEquationListLength(condeqslist);
+  ASF_CondEquation* buffer = NULL;
+  ASF_CondEquationList new;
+  int i;
+
+  if (ASF_isCondEquationListEmpty(condeqslist)) {
+    return condeqslist;
+  }
+
+  buffer = (ASF_CondEquation*) calloc(count, sizeof(ASF_CondEquation));
+
+  if (buffer == NULL) {
+    ATerror("filterCondEquationList: not enough memory\n");
+    return NULL;
+  }
+
+  ATprotectArray((ATerm*) buffer, count);
+
+  for(i = 0;ASF_hasCondEquationListHead(condeqslist);
+      condeqslist = ASF_getCondEquationListTail(condeqslist)) {
+    ASF_CondEquation condeq = ASF_getCondEquationListHead(condeqslist);
+    buffer[i++] = filterCondEquation(condeq); 
+
+    if (!ASF_hasCondEquationListTail(condeqslist)) {
+      break;
+    }
+  }
+
+  new = NULL;
+
+  while (--i >= 0) {
+    if (new == NULL) {
+      new = ASF_makeCondEquationListSingle(buffer[i]);
+      assert(new);
+    }
+    else {
+      new = ASF_makeCondEquationListMany(buffer[i],space,new);
+    }
+  }
+
+  ATunprotectArray((ATerm*) buffer);
+  free(buffer);
+  buffer = NULL;
+
+  return new;
+}
+
+/*}}}  */
+/*{{{  static ASF_Equations filterEquations(ASF_Equations equations) */
+
+static ASF_Equations filterEquations(ASF_Equations equations)
+{
+  if (ASF_isEquationsPresent(equations)) {
+    ASF_CondEquationList condeqslist = ASF_getEquationsList(equations);
+
+    condeqslist = filterCondEquationList(condeqslist);
+
+    return ASF_setEquationsList(equations, condeqslist);
+  }
+  else {
+    return equations;
+  }
+}
+
+/*}}}  */
+
+/*{{{  ASF_Equations filterEquationSyntax(ASF_Equations equations) */
+
+ASF_Equations filterEquationSyntax(ASF_Equations equations)
+{
+  /* initialize some globals */
+  space = (ASF_Layout) PT_makeTreeLayoutFromString(" ");
+  ATprotect((ATerm*) &space);
+
+ATwarning("before: %t\n", PT_reportTreeAmbiguities((PT_Tree) equations));
+
+  equations = filterEquations(equations);
+
+  ATunprotect(&space);
+
+ATwarning("after: %t\n", PT_reportTreeAmbiguities((PT_Tree) equations));
+
+  return equations;
+}
+
+/*}}}  */
