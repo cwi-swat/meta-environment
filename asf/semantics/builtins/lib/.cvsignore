@@ -5,3 +5,8 @@ asf-builtins.h
 forward.c
 link-test.c
 .deps
+Library.adt
+Library.def
+Library.dict
+Library.pro
+
