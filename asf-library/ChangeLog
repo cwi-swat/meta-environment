@@ -1,5 +1,9 @@
 $Id$
 
+Thu Nov 11 09:37:18 CET 2004 <kooiker@cwi.nl>
+ * languages/box/syntax/Basic.sdf:
+   - Added tabstop spaceoption 
+
 Wed Sep  8 16:29:10 CEST 2004 <jurgenv@cwi.nl>
  * added quotrem, /, mod, odd and even to basic/Integers
 

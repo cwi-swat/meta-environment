@@ -1,55 +1,18 @@
 module languages/box/syntax/Basic
-%% This module describes the most elementary box
-%% operators and their options. The box language
-%% can be extended in a very simple way. We will
-%% give several extensions.
-%%\smallskip
 
 imports basic/Comments
 imports basic/StrCon
 imports basic/NatCon
-
         
 exports
   sorts SpaceSymbol SpaceOption
-
-%%\smallskip\noindent
-%% Space options are used to adapt the amount
-%% of layout between the boxes. The horizontal,
-%% vertical, and indentation offset between boxes
-%% can be adapted. Not every combination of
-%% space option and box operator makes sense.
-%% E.g.\ the modification of the vertical offset
-%% in combination of the {\sf H} operator does
-%% not make any sense.
-%%\smallskip
 
   context-free syntax
     "hs"                    -> SpaceSymbol {cons("horizontal")}
     "vs"                    -> SpaceSymbol {cons("vertical")}
     "is"                    -> SpaceSymbol {cons("indentation")}
+    "ts"                    -> SpaceSymbol {cons("tabstop")}
     SpaceSymbol "=" NatCon  -> SpaceOption     
-
-%% We distinguish 6 basic operators in the box
-%% language: {\sf H} (horizontal composition),
-%% {\sf V} (vertical composition), {\sf HV}
-%% (horizontal and/or vertical composition),
-%% {\sf HOV} (horizontal or vertical composition),
-%% {\sf I} (indentation), and {\sf WD}
-%% (invisible box with the same width as some
-%% visible box). The most elementary box is a
-%% plain string, enclosed by double quotes.
-%% A box term consists of a box operator, zero
-%% or more space options, and followed by zero or
-%% more boxes. The kernel box language is simple
-%% but can be easily extended. A specification
-%% writer can easily define a new module which
-%% imports this kernel box language. For each
-%% extension the text formatter and the
-%% tex formatter have to be adapted, but because
-%% of the strong modularity of ASF+SDF this can
-%% be done in a clean manner.
-%%\smallskip
 
 exports
   sorts Box
