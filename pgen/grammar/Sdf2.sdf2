@@ -74,7 +74,7 @@ exports
     "memo"              -> ModuleName {reject}
     "traverse"          -> ModuleName {reject}
 
-    UQLiteral "(" {Symbol ","}* ")" -> Symbols {reject}
+    Literal "(" {Symbol ","}* ")" -> Symbols {reject}
   restrictions
     <Sort -CF>
     <UQLiteral -CF>
@@ -250,7 +250,7 @@ exports
   context-free syntax
     UQLiteral                                            -> Literal
     Literal                                              -> Symbol
-    UQLiteral "(" {Symbol ","}* ")" "->" Symbol Attributes -> Production
+    Literal "(" {Symbol ","}* ")" "->" Symbol Attributes -> Production {avoid}
 
 module Label-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals-Sdf-Syntax ATerms

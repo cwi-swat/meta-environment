@@ -234,8 +234,18 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
   if(ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
                  &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
     reduct = innermost(term);
+
+/*
+    ATwarning("Reduction finished\n");
+*/
+
     ksdf = toasfix(reduct, filename, modname); 
+
     if(run_verbose) ATwarning("Normalization finished\n");
+
+/*
+    ATwarning("Normalization finished\n");
+*/
 
     init_table_gen();
     nr_of_states = 0;
