@@ -107,7 +107,6 @@ AC_OUTPUT(
    sdf-checker/src/Makefile
    sdf-upgrade/Makefile
    sdf-upgrade/spec/Makefile
-   sdf-upgrade/src/Makefile
    test/Makefile
    test/grammars/Makefile
    test/tables/Makefile 

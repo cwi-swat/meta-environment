@@ -1,5 +1,8 @@
 $Id$
 
+2003/15/11 (markvdb@cwi.nl)
+ * Added a first version of an Sdf upgrade tool.
+
 2003/12/11 (markvdb@cwi.nl)
  * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
  * Adapted the Sdf2-Normalization accordingly.
