@@ -16,8 +16,6 @@ public class Main {
     TBTerm.init();
     aterms = TBTerm.factory;
 
-    //SndRecTest1();
-    //SndRecTest2();
     //PETest();
     //LetTest();
     //CallTest();
@@ -99,7 +97,6 @@ public class Main {
       System.out.println(e.getMessage());
     }
   }
-  
   
 
   static void CallTest(){
