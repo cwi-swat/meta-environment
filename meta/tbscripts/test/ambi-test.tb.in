@@ -1,0 +1,21 @@
+#include "sglr.idef"
+
+process Test is
+let
+  Err: list,
+  NoOfAmbs: int
+in
+  snd-msg(open-language("Sdf2","__datadir__/Sdf2.baf")).
+  rec-msg(language-opened("Sdf2")).
+  snd-msg("aap", parse-string-as-asfix1("Sdf2","","imports")).
+ (
+  rec-msg(parse-result-asfix1("aap",parse-error(Err?,ambiguities(NoOfAmbs?))))
+ +
+ shutdown("ambi-test FAILED! (timeout)\n")  delay(sec(2))
+ ).
+ shutdown("") delay(sec(2))
+
+
+endlet
+
+toolbus(Test,Parser)
