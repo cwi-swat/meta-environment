@@ -244,42 +244,36 @@ static SDF_Import replaceParametersInImport(SDF_Import import,
 /*}}}  */
 /*{{{  SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList, */
 
-SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
+ATermList SDF_replaceParametersInImportList(ATermList importList,
                                              SDF_Symbols formalParams,
                                              SDF_Symbols actualParams)
 {
   SDF_Import head, newHead;
-  SDF_ImportList tail, newTail;
- 
-  if (SDF_hasImportListHead(importList)) {
-    head = SDF_getImportListHead(importList);
- 
+  ATermList result = ATempty;
+
+  for(;!ATisEmpty(importList); importList = ATgetNext(importList)) {
+    head = SDF_ImportFromTerm(ATgetFirst(importList));
     newHead = replaceParametersInImport(head, formalParams, actualParams);
-    importList = SDF_setImportListHead(importList, newHead);
- 
-    if (SDF_hasImportListTail(importList)) {
-      tail = SDF_getImportListTail(importList);
- 
-      newTail = SDF_replaceParametersInImportList(tail, formalParams, 
-						  actualParams);
-      importList = SDF_setImportListTail(importList, newTail);
-    }
+
+    result = ATinsert(result, SDF_ImportToTerm(newHead));
   }
-  return importList;
+
+  return ATreverse(result);
 }
 
 /*}}}  */
 /*{{{  SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName, */
 
-SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
+ATermList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
                                             SDF_Module sdfModule,
-                                            SDF_ImportList importList)
+                                            ATermList importList)
 {
   SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
   SDF_Symbols formalParams = SDF_getModuleNameParams(
                                SDF_getModuleModuleName(sdfModule));
  
-  return SDF_replaceParametersInImportList(importList, formalParams, actualParams);
+  return SDF_replaceParametersInImportList(importList, formalParams, 
+					   actualParams);
 }
 
 /*}}}  */

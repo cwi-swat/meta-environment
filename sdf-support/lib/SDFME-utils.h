@@ -23,7 +23,8 @@ void       SDFforeachGrammarInModule   (SDF_Module      module,
 
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName);
 ATerm SDF_getImportModuleNamePlain(SDF_Import import);
-ATermList      SDF_getImports(SDF_Module module);
+ATermList SDF_getImports(SDF_Module module);
+ATermList SDF_getTransitiveImports(ATermList definition, SDF_ModuleId moduleId);
 SDF_ImportList SDF_getModuleImportsList(SDF_Module module);
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1, SDF_ImportList l2);
 ATbool SDF_containsImportListImport(SDF_ImportList list, 
@@ -69,12 +70,12 @@ SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 					       SDF_ModuleName actual);
 SDF_Renamings SDF_renameRenamings(SDF_Renamings source, SDF_Renamings target);
-SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
+ATermList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
                                             SDF_Module sdfModule,
-                                            SDF_ImportList importList);
-SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
-                                             SDF_Symbols formalParams,
-                                             SDF_Symbols actualParams);
+                                            ATermList importList);
+ATermList SDF_replaceParametersInImportList(ATermList importList,
+                                            SDF_Symbols formalParams,
+                                            SDF_Symbols actualParams);
 
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
 
