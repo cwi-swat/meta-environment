@@ -1,7 +1,5 @@
 # $Id$
 
-CFLAGS += -Werror
-
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS = in-output
