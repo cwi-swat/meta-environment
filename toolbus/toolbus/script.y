@@ -88,7 +88,7 @@ TBbool parse_script(char *name, int argc, char **argv)
 
   /* Create a copy of it */
 
-  TBtmpname(namec, ".x");
+  TBtmpname(namec, ".c");
   TBtmpname(namei, ".i");
   
   if((fnamec = fopen(namec, "wb")) == NULL)
