@@ -4,15 +4,12 @@ imports languages/aterm/syntax/ATerms
 imports basic/Strings
 
 exports
-
-context-free syntax
-
-get-term-anno(X,String)  -> ATerm {built-in("get-term-anno")}
+  context-free syntax
+    set-term-anno(term:X,label:String,anno:ATerm) -> X {built-in("set-term-anno")}   
+    get-term-anno(term:X,label:String) -> ATerm {built-in("get-term-anno")}
 
 hiddens
-
-context-free start-symbols
-  ATerm
+  context-free start-symbols ATerm
 
 
 

@@ -1,5 +1,12 @@
 $Id$
 
+Fri Jul  2 10:12:32 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.1
+
+Thu Jul  1 15:26:09 CEST 2004 <markvdb@cwi.nl>
+ * Different translation of (kernel/lexical/context-free) start-symbols
+   into production rules of the form X -> <START>
+
 Thu Jun 10 13:57:59 CEST 2004 <jurgenv@cwi.nl>
  * Added directory languages/asf/pretty
  * Put basic ASF pretty printer in that directory
@@ -36,6 +43,14 @@ Mon May 10 09:37:44 CEST 2004 <kooiker@cwi.nl>
 Tue May  4 11:16:57 CEST 2004 <jurgenv@cwi.nl>
  * Refactored IO module into Parsing and Files, and IOResults into
    ParsetreeCon and ReadWriteCon.
+
+Wed May 26 11:48:42 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/sdf2/syntax/Modules.sdf:
+   - removed Definition from start-symbols to avoid ambiguities with sort Module
+
+Thu May  6 21:16:43 CEST 2004 <markvdb@cwi.nl>
+ * Fixed the typo reported by Niels: 
+   parametrized-sort ==> parameterized-sort.
 
 Mon May  3 13:11:18 CEST 2004 <jurgenv@cwi.nl>
  * Added hidden context-free start-symbols in all library modules

@@ -9,13 +9,13 @@ sorts Symbol Symbols CharRange CharRanges
 
 context-free syntax
 
-"empty"                                                  -> Symbol  {cons("empty")}
-lit(string:QLiteral)                                     -> Symbol  {cons("lit")}
+"empty"                                                  -> Symbol   {cons("empty")}
+lit(string:QLiteral)                                     -> Symbol   {cons("lit")}
 cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
 opt(symbol:Symbol)                                       -> Symbol   {cons("opt")}
 alt(lhs:Symbol,rhs:Symbol)                               -> Symbol   {cons("alt")}
-seq(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("seq")}
+seq(lhs:Symbol,rhs:Symbol)                               -> Symbol   {cons("seq")}
 tuple(head:Symbol,rest:Symbols)                          -> Symbol   {cons("tuple")}
 sort(string:QLiteral)                                    -> Symbol   {cons("sort")}
 iter(symbol:Symbol)                                      -> Symbol   {cons("iter")}
@@ -28,8 +28,8 @@ func(symbols:Symbols,symbol:Symbol)                      -> Symbol  {cons("func"
 varsym(symbol:Symbol)                                    -> Symbol  {cons("varsym")}
 "layout"                                                 -> Symbol  {cons("layout")}
 char-class(CharRanges)                                   -> Symbol  {cons("char-class")}
-strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol {cons("strategy")}
-parametrized-sort(sort:QLiteral,parameters:Symbols)       -> Symbol  {cons("parametrized-sort")}
+strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol  {cons("strategy")}
+parameterized-sort(sort:QLiteral,parameters:Symbols)     -> Symbol  {cons("parameterized-sort")}
 
 "[" {Symbol ","}* "]"          -> Symbols  {cons("list")}
 

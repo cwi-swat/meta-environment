@@ -8,6 +8,7 @@ exports
     "/*" ( ~[\*] | Asterisk )* "*/" -> Comment
     "//" ~[\n]* [\n]                -> Comment
     [\*]                            -> Asterisk
+    "%%" ~[\n]* [\n]                -> Comment
 
   lexical restrictions
     Asterisk -/- [\/]

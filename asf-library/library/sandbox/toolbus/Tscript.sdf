@@ -5,6 +5,7 @@ imports TscriptDef
 exports
   context-free start-symbols Tscript
   sorts Tscript
+
   context-free syntax
     %%TscriptDef* -> Tscript {cons("tscript")}
     Preprocessor* TscriptDef* -> Tscript {cons("tscript")}
@@ -12,9 +13,6 @@ exports
 exports
   sorts Preprocessor
   sorts IncludeFile
-  sorts LocalInclude
-  sorts SystemInclude
-
   context-free syntax
     IncludeFile -> Preprocessor
     LocalInclude -> IncludeFile
@@ -22,8 +20,12 @@ exports
     %%Hack
     %%IncludeFile -> LAYOUT
 
+  sorts LocalInclude
   lexical syntax
     "#include" [\ \t]* "<" FileName ">" -> SystemInclude
+
+  sorts SystemInclude
+  lexical syntax
     "#include" [\ \t]* "\"" FileName "\"" -> LocalInclude
 
   lexical syntax

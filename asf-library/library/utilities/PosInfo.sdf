@@ -9,6 +9,12 @@ imports basic/LocationOperations
 exports
 
 context-free syntax
+  set-location(X, Location) -> X
+
+context-free syntax
+  set-posinfo(X, Location) -> X
+
+context-free syntax
   get-location(X) -> Location
 
 context-free syntax
@@ -42,3 +48,4 @@ variables
   "Offset" -> NatCon
   "Path" -> StrCon
   "X" -> X
+  "Location" -> Location

@@ -23,7 +23,31 @@ equations
 
   [0] norm[[p > p']]  = p > p'
   [0] norm[[p <n>> p']]  = p <n>> p'
-  [0] norm[[p as p']] = p as p', p' as p
+%%  [0] norm[[p as p']] = p as p', p' as p 
+%%                        p <n>> p  when 'a -> _A {attr*1, left, attr*2} := p,
+%%                                           n := |'a| - 1
+  [0] 'a1 -> _A1 attrs1 := p,
+      n1 := |'a1| - 1,
+      'a2 -> _A2 attrs2 := p',
+      n2 := |'a2| - 1
+      ====>
+      norm[[p left p']] = p <n1>> p', p' <n2>> p
+
+  [0] 'a1 -> _A1 attrs1 := p,
+      n1 := |'a1| - 1,
+      'a2 -> _A2 attrs2 := p',
+      n2 := |'a2| - 1
+      ====>
+      norm[[p assoc p']] = p <n1>> p', p' <n2>> p
+
+  [0] norm[[p right p']] = p <0>> p', p' <0>> p
+
+  [0] 'a1 -> _A1 attrs1 := p,
+      n1 := |'a1| - 1,
+      'a2 -> _A2 attrs2 := p',
+      n2 := |'a2| - 1
+      ====>
+      norm[[p non-assoc p']] = p <0>> p', p <n1>> p', p' <0>> p, p' <n2>> p
 
 %% Each of the priority declarations in the list is normalized.
 
@@ -141,7 +165,6 @@ equations
                                            n := |'a| - 1
   [0] assoc[[p]]          = p <0>> p ++ p <n>> p  when 'a -> _A {attr*1, non-assoc, attr*2} := p,
                                            n := |'a| - 1
-%%  [0] assoc[[p]]          = p as p  when 'a -> _A {attr*1, as, attr*2} := p
   [default-0] assoc[[p]]  =
 
 %% The function \fun{syntax} derives from a priorities declaration the list of all

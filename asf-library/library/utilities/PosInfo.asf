@@ -1,5 +1,16 @@
 equations
 
+[set-location-0]
+  set-location(X, Location) = set-posinfo(X, Location)
+
+[] set-posinfo(X, area-in-file(strcon(Char*), area(BeginLine, BeginColumn,
+                                                   EndLine, EndColumn,
+                                                   Offset, Length))) = 
+     set-term-anno(X, "pos-info", 
+                   area-in-file(qliteral(Char*), area(BeginLine, BeginColumn,
+                                                      EndLine, EndColumn,
+                                                      Offset, Length)))
+
 [get-location-0]
   get-location(X) = get-posinfo(X)
 

@@ -1,0 +1,4 @@
+equations
+
+[] inherit-term-anno(Child, Father, Label) =
+	set-term-anno(Child, Label, get-term-anno(Father, Label))

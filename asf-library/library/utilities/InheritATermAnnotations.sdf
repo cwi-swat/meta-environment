@@ -1,0 +1,24 @@
+module utilities/InheritATermAnnotations[Child Father]
+
+imports utilities/ATermAnnotations[Father]
+imports utilities/ATermAnnotations[Child]
+
+
+exports
+
+context-free syntax
+
+inherit-term-anno(Child, Father, label:String) -> Child
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"Child" -> Child
+"Father" -> Father
+"Anno" -> ATerm
+"Label" -> String
+
+
