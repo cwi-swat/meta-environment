@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/24 <markvdb@cwi.nl>
+ * First version of a script to check action scripts.
+
 2003/09/22 <markvdb@cwi.nl>
  * in io_find_file the found files should be reported in order of
    the search paths as it used to be. Otherwise the library will get
