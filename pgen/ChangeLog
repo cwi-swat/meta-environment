@@ -6,6 +6,7 @@ $Id$
   * Adapted flatten code (for LookAheads) and flattenProd replaced by function
     from sdf-support library.
   * Normalization functionality moved to parsetablegen (activitated via "-n").
+  * Adapted scripts in order to deal with -n.
 
 2001/04/07 (markvdb@cwi.nl)
   * removed the function filter-attributes which was used
