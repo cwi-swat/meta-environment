@@ -21,7 +21,8 @@ def init():
         send_handshake(sock_out, "%s %s %d" %
                                 (TB.TOOL_NAME, TB.HOST, TB.TOOL_ID))
 
-        sock_in = connectsocket(TB.HOST, TB.OUTPORT)
+        sock_in = sock_out
+	# <PO> was: sock_in = connectsocket(TB.HOST, TB.OUTPORT)
         portin = getint(sock_in, TB.TOOL_NAME)
         toolid = getint(sock_in, TB.TOOL_NAME)
 
@@ -31,7 +32,7 @@ def init():
 
 	# The well-known sockets are no longer in use by this tool
         sock_in.close()
-        sock_out.close()
+        # <PO> was: sock_out.close()
 
 	# The input/output ports are always consecutive
         portout = portin+1
