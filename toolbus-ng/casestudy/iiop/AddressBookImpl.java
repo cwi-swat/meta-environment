@@ -1,16 +1,16 @@
 package casestudy.iiop;
 
 import java.rmi.RemoteException;
-import java.util.Hashtable;
+import java.util.*;
 
 import javax.rmi.PortableRemoteObject;
 
 public class AddressBookImpl extends PortableRemoteObject implements AddressBook {
-  private Hashtable addresses;
+  private Map addresses;
 
   public AddressBookImpl() throws RemoteException {
     super();
-    addresses = new Hashtable();
+    addresses = new HashMap();
     setAddress("hayco", "Balistraat 130II");
     setAddress("pieter", "Ergens anders 42");
   }
