@@ -2,6 +2,32 @@
   $Id$
 */
 
+process ApplyFunction(FuncName : str, SortName : str, ArgList : list, Tree: term?) is
+  snd-msg(apply-function(FuncName, SortName, ArgList)) .
+  rec-msg(tree(Tree?))
+
+process IfEqualTrees(Tree1 : term, Tree2 : term, Result : bool?) is
+  snd-msg(equal-trees(Tree1, Tree2)) .
+  (
+    rec-msg(true) .
+    Result := true
+  +
+    rec-msg(false) .
+    Result := false
+  )
+
+process Exists(FileName:str, Result: bool?) is
+  snd-msg(exists-file(FileName)) .
+  (
+    rec-msg(file-exists(FileName)) .
+    Result := true
+  +
+    rec-msg(file-not-exists(FileName)) .
+    snd-note(ui-status(errorf("%s does not exist", 
+                              [FileName]))) .
+    Result := false
+  )
+
 process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term

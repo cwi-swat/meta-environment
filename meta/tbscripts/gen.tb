@@ -22,6 +22,16 @@ process TERM-IN-OUT-ADAPTER(Id : termgenadapt, Cmd : str,
    snd-eval(Id, cmd(Cmd, input-term(Inp))).
    rec-value(Id, output(Outp?))
 
+process Execute(Cmd : str, Inp : term, Outp : term?) is
+let
+  TERMGENADAPT : termgenadapt
+in
+  execute(termgenadapt, TERMGENADAPT?) .
+  snd-eval(TERMGENADAPT, cmd(Cmd, input-term(Inp))) .
+  rec-value(TERMGENADAPT, output(Outp?)) .
+  snd-terminate(TERMGENADAPT, termgenadapt)
+endlet 
+
 process GenAdapt is
 let
   GENADAPT     : genadapt,

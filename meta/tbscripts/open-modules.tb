@@ -92,6 +92,7 @@ in
   Imports := [].
   (
     Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
+    tau .
     if equal(Status, success) then
       Open-ParseTables(RealModule, RealPath).
       tau.
