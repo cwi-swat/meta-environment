@@ -17,17 +17,17 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-TESTS           = TBmatch1 TermIO test-removesocket test-annos $(OK_TESTS) \
-                  $(ERROR_TESTS)
+TESTS           = TBmatch1 TermIO test-removesocket read test-annos $(OK_TESTS) $(ERROR_TESTS)
 
 noinst_PROGRAMS = TBmatch1 TermIO
 
 EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
                   expr-errors.tb.out scope.tb.out tc-errors.tb.out \
-                  test-removesocket.src test-annos.src
+                  test-removesocket.src test-annos.src read read.tb
 
-OK_TESTS        = if-ok msg-ok notes-ok bind-ok expr-ok types-ok garbage-ok
+OK_TESTS        = if-ok msg-ok notes-ok bind-ok expr-ok types-ok garbage-ok 
+
 ERROR_TESTS     = expr-errors-fail tc-errors-fail scope-fail
 
 CLEANFILES      = $(OK_TESTS) $(ERROR_TESTS) test-removesocket test-annos

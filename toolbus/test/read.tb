@@ -1,0 +1,15 @@
+
+process READTEST is
+let
+  T : term
+in
+  read("Give me a term:", T?) .
+  (
+    printf("term: %t\n", T)
+    +
+    shutdown("Test is hanging! abort\n") delay(15)
+  )
+endlet
+
+toolbus (READTEST)
+
