@@ -13,6 +13,7 @@ AM_CFLAGS = -g -Wall -Wno-unused -O2 -DASF_MAIN
 INCLUDES	= -I$(ASCINC) \
 		-I$(PT_SUPPORT)/include \
 		-I$(ERROR_SUPPORT)/include \
+		-I$(TOOLBUSLIB)/include \
 		-I$(ASF_SUPPORT)/include \
 		-I$(ATERM)/include
 

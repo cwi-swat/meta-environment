@@ -90,6 +90,14 @@ PTBIN=${PT_SUPPORT}/bin
 AC_SUBST(PTBIN)
  
 dnl }}}
+dnl {{{ Handle --with-toolbuslib
+ 
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-support,
+      [  --with-toolbuslib=DIR   Toolbuslib is in DIR])
+AC_SUBST(TOOLBUSLIB)
+ 
+ 
+dnl }}}
 dnl {{{ Handle --with-error-support
  
 AC_PACKAGE_REQUIRE(error-support, error-support-config,
