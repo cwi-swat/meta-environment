@@ -25,7 +25,8 @@ exports
     ModuleName                   -> Import
     ModuleName Renamings         -> Import
     ModuleName[[Renamings,Imports]]         -> Import
-    "(" Import ")"               -> Import {bracket}   
+    "(" Import ")"               -> Import {bracket} 
+    Symbols "->" Symbol Attributes -> Production  
 
     "id" "(" ModuleName ")"      -> Attribute 
     aap(ModuleName)     -> Attribute 

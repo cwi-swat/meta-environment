@@ -1,0 +1,17 @@
+module ParsetreeOperations
+
+imports basic/Strings
+imports asfix/syntax/Parsetree
+
+exports
+  context-free syntax
+    ptProduction2String(Production) -> String
+    ptSymbols2String(Symbols)       -> String
+    ptSymbol2String(Symbol)         -> String
+
+hiddens
+  variables
+    "$Char*"[0-9]* -> CHAR*
+    "$Attributes"[0-9]* -> Attributes 
+    "$Symbol"[0-9]* -> Symbol
+    "$Symbol*"[0-9]* -> {Symbol ","}*

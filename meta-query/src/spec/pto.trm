@@ -1,0 +1,1 @@
+ptProduction2String(prod([cf(sort("Symbols")),cf(opt(layout)),lit("->"),cf(opt(layout)),cf(sort("Symbol")),cf(opt(layout)),cf(sort("Attributes"))],cf(sort("Production")),no-attrs))
