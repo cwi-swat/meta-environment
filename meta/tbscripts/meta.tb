@@ -39,7 +39,7 @@
 #include "structure-editor.idef"
 #include "sglr.idef"
 #include "tree2graph.idef"
-#include "unparsePT.idef"
+#include "unparser.idef"
 
 #ifdef QUERY
 #include "DisplayQuery.idef" 
