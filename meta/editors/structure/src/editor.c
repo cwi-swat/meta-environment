@@ -147,7 +147,7 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
     SE_Path new_path = pathLeft(path);
     if (!SE_isEqualPath(path, new_path)) {
       tree = getParseTreeTreeAt(parse_tree, new_path);
-      if (tree && PT_isTreeAppl(tree)) {
+      if (tree && !PT_isTreeChar(tree)) {
         focus = createEditorFocus(editor, parse_tree, new_path);
         editor = SE_setEditorFocus(editor, focus);
   
