@@ -23,7 +23,7 @@
 #include <deprecated.h>
 /* #include <gc.h> */
 
-#include "support.h"
+#include "asc-support.h"
 
 /*{{{  globals */
 
