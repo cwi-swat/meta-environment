@@ -31,7 +31,6 @@ let
   Paths : list
 in
   execute(configmanager, CMNG?) .
-printf("Config file used %s\n", CONFIG_FILE) .
   snd-msg(get-config-file(CONFIG_FILE)) .
   (
     rec-msg(config-file(CONFIG_FILE, Text?)) .
