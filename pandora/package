@@ -1,7 +1,7 @@
 package 
 identification
    name=pandora
-   version= 1.1
+   version=1.1
    location=http://www.cwi.nl/projects/MetaEnv/pandora
    info=http://www.cwi.nl/projects/MetaEnv/pandora
    description='MetaEnvironment pretty printer based on Box language'
