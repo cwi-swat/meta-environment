@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jun 18 10:32:42 CEST 2004 <jurgenv@cwi.nl>
+ * Added dependency on aterm-java in .pkg file
+
 Mon Jun 14 09:32:01 CEST 2004 <{jong,kooiker}@cwi.nl>
  * prepend gc to graph-converter messages
  * implement "get-node-origin" in tree2graph for now.
