@@ -92,15 +92,21 @@ public class FeedbackList extends UserInterfacePanel {
                 getErrorFactory().makeSubjectList()));
     }
 
-    private Feedback makeAnonymousWarning(String msg) {
-        return getErrorFactory().makeFeedback_Warning(
+    private FeedbackItem makeAnonymousWarning(String msg) {
+        return new FeedbackItem(
+                ANONYMOUS_ORIGIN,
+                ANONYMOUS_ORIGIN,
+                getErrorFactory().makeFeedback_Warning(
             msg,
-            getErrorFactory().makeSubjectList());
+            getErrorFactory().makeSubjectList()));
     }
-    private Feedback makeAnonymousInfo(String msg) {
-        return getErrorFactory().makeFeedback_Info(
+    private FeedbackItem makeAnonymousInfo(String msg) {
+        return new FeedbackItem(
+                ANONYMOUS_ORIGIN,
+                ANONYMOUS_ORIGIN,
+                getErrorFactory().makeFeedback_Info(
             msg,
-            getErrorFactory().makeSubjectList());
+            getErrorFactory().makeSubjectList()));
     }
 
     public void errorf(String format, ATerm args) {
