@@ -1,7 +1,9 @@
 # $Id$
 
-2004-10-13  Paul Klint  <paulk@heelal.lan>
+Thu Oct 14 08:56:14 CEST 2004 <jurgenv@cwi.nl>
+ * Added spec/TopologicalSort.{asf,sdf}. 
 
+2004-10-13  Paul Klint  <paulk@heelal.lan>
  * Undone change to diff operator
  * Added a built-in "unique" that transforms a bag to a set
  * Redefined "top" and "bottom" using the unique function
