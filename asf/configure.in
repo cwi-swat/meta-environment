@@ -164,6 +164,8 @@ AC_OUTPUT(
    asfsdf-checker/Makefile
    asfsdf-checker/spec/Makefile
    asfsdf-checker/src/Makefile
+   asf-operations/Makefile
+   asf-operations/src/Makefile
    utils/Makefile
    test/Makefile
    test/eqs/Makefile

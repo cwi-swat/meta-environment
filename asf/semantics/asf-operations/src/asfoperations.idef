@@ -1,0 +1,35 @@
+/*
+  $Id$
+   */
+process AsfOperations is
+let
+  Equations  : term,
+  Renamings  : term,
+  ModuleName : term,
+  Parameters : term,
+  Equations1 : term,
+  Equations2 : term,
+  Equations3 : term, 
+  AO         : asfoperations
+in
+  execute(asfoperations, AO?) .
+  (
+    rec-msg(rename(Renamings?, Equations?)) .
+    snd-eval(AO, rename-in-equations(Renamings, Equations)) .
+    rec-value(AO, equations(Equations?)) .
+    snd-msg(equations(Equations))
+  +
+    rec-msg(substitute(ModuleName?, Parameters?, Equations?)) .
+    snd-eval(AO, substitute-in-equations(ModuleName, Parameters, Equations)) .
+    rec-value(AO, equations(Equations?)) .
+    snd-msg(equations(Equations))
+  +
+    rec-msg(union-equations(Equations1?, Equations2?)) .
+    snd-eval(AO, union-equations(Equations1, Equations2)) .
+    rec-value(AO, equations(Equations3?)) .
+    snd-msg(equations(Equations3))
+  )*
+  delta
+endlet
+
+tool asfoperations is {command = "asfoperations"}

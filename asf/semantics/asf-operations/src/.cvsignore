@@ -1,0 +1,7 @@
+Makefile.in
+Makefile
+.deps
+asfoperations.tif.h
+asfoperations.tif.c
+asfoperations
+.libs

@@ -1,3 +1,7 @@
+2002/09/26 (markvdb@cs.vu.nl)   
+ * Moved the renaming and parameterization functionality for equations
+   to the asf directory.
+
 2002/09/09 (vandenbr@loria.fr)
  * Added "#!/bin/sh" to generated test scripts in order to make
    them work on CYGWIN.
