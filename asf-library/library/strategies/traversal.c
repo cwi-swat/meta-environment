@@ -65,15 +65,7 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
-	PT_Tree newkid;
-
-	if (PT_isTreeApplList(kid)) { /* skip lists for now */
-	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
-	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
-	}
-	else {
-	  newkid = rewrite(kidappl);
-	}
+	PT_Tree newkid = rewrite(kidappl);
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
@@ -133,15 +125,7 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
-	PT_Tree newkid;
-
-	if (PT_isTreeApplList(kid)) { /* skip lists for now */
-	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
-	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
-	}
-	else {
-	  newkid = rewrite(kidappl);
-	}
+	PT_Tree newkid = rewrite(kidappl);
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
@@ -201,15 +185,7 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 	PT_Symbol kidtype = PT_getProductionRhs(kidprod);
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
-	PT_Tree newkid;
-
-	if (PT_isTreeApplList(kid)) { /* skip lists for now */
-	  PT_Args tmpArgs = PT_setArgsArgumentAt(args, kid, 8);
-	  newkid = strategy_all(builtin, PT_setTreeArgs(input, tmpArgs));
-	}
-	else {
-	  newkid = rewrite(kidappl);
-	}
+	PT_Tree newkid = rewrite(kidappl);
 
 	if (PT_isEqualTree(newkid, kidappl)) {
 	  ATwarning("Missing: imports strategies/Operators[%s]\n", 
