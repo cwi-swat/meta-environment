@@ -47,7 +47,7 @@ Options:
     -C file         specifies the configuration file to be processed
     -d              run in debug mode (with viewer)
     -e              use xemacs editor [default]
-    -g              use gvim editor
+    -g              use gvim editor   (experimental)
     -h              display help information (usage)
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)

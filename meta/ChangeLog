@@ -1,5 +1,8 @@
 # $Id$
 
+2001/11/20 (jurgenv@cwi.nl)
+ * disabled the gvim text-editor.
+
 2001/11/16 (jong@cwi.nl)
  * snd-terminate functionality in emacs editor reinstated
  * version tweaked down to patchlevel 0.7.1
