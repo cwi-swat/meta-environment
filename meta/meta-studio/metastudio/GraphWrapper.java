@@ -11,7 +11,6 @@ import metastudio.graph.MetaGraphFactory;
 import metastudio.graph.Node;
 import metastudio.graph.NodeId;
 import metastudio.graph.NodeList;
-import metastudio.graph.NodeSizer;
 import metastudio.graph.Shape;
 import aterm.*;
 
