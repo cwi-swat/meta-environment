@@ -183,7 +183,6 @@ static void addExtension(ATermList extensions, MC_Property property)
 
 static void addSystemProperty(MC_Property property)
 {
-  ATwarning("addSystemProperty: %t\n", property);
   if (MC_isPropertyExtension(property)) {
     addExtension(systemExtensions, property);
   }
