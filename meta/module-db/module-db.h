@@ -23,15 +23,10 @@
 #include <atb-tool.h>
 #include <string.h>
 
-#include <AsFix.h>
-#include "AsFix-access.h"
-#include "deprecated.h"
-
-
 #include <PT-utils.h>
 #include <SDF-utils.h>
 #include <ASF-utils.h>   
-#include "aterm2.h"
+#include <aterm2.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <time.h>
@@ -68,26 +63,3 @@ SDF_SDF getSyntax(ATermList modules);
 
 #define Mtrue (ATerm)ATmakeInt(1)
 #define Mfalse (ATerm)ATmakeInt(0)
-
-void AFinitAsFixPatterns();
-
-extern ATerm pattern_asfix_module;
-extern ATerm pattern_asfix_term;
-extern ATerm pattern_asfix_imports;
-extern ATerm pattern_asfix_ews;
-extern ATerm pattern_asfix_ws;
-extern ATerm pattern_asfix_nlws;
-extern ATerm pattern_asfix_sort;
-extern ATerm pattern_asfix_l;
-extern ATerm pattern_asfix_ql;
-extern ATerm pattern_asfix_sep;
-extern ATerm pattern_asfix_iter;
-extern ATerm pattern_asfix_itersep;
-extern ATerm pattern_asfix_noattrs;
-extern ATerm pattern_asfix_attrs;
-extern ATerm pattern_asfix_prod;
-extern ATerm pattern_asfix_appl;
-extern ATerm pattern_asfix_list;
-extern ATerm pattern_asfix_lex;
-extern ATerm pattern_asfix_id;
-

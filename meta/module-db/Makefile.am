@@ -31,7 +31,7 @@ EXTRA_DIST		= module-db.idef
 
 CLEANFILES		= module-db.tifs module-db.tif.c module-db.tif.h
 
-module_db_SOURCES	= module-db.c module-db.h aft-reshuffle.c
+module_db_SOURCES	= module-db.c module-db.h aft-reshuffle.c sdf2pt.c
 module_db_LDADD		= module-db.tif.o \
 			-L$(PT_SUPPORT)/lib -lAsFix -lPT \
 			-L$(SDF_SUPPORT)/lib -lSDF \
