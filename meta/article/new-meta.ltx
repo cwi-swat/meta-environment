@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{latexsym}
 \usepackage{ASF+SDF,ASF+SDF-options}
+\usepackage{epsfig}
+
 \title{Design and Implemention a New {\sc Asf+Sdf} Meta-Environment}
 
 \author{Mark van den Brand$^{^1}$, Tobias Kuipers$^{^2}$, \\
@@ -94,7 +96,7 @@ research ideas are hard to implement.                     \\ \hline \hline
 \end{table}
 
 Based on the Epoch-GSE-UI coupling it was decided to
-design and implement the new \metaenv from scratch.
+design and implement the new \metaenv\ from scratch.
 The problems concerning \lelisp\ makes a ``from scratch'' approach even
 more important.
 In this paper we discuss the first prototype of the new \metaenv\ based
@@ -149,7 +151,7 @@ These \aterms\ are sufficient to encode parse trees (including
 optional annotations) for programs or specifications in any
 language.
 \asfix\ is an instance of \aterms\ used for representing
-he {\em parse trees} of \asdf\ specifications.
+the {\em parse trees} of \asdf\ specifications.
 Parse trees means: all keywords, whitespace, comments, etc.\ are
 preserved in the tree representation.
 A self descriptive representation is used, i.e., each application
@@ -243,7 +245,7 @@ The various components will be discussed in the next sections.
 \caption{\label{nm} The new \metaenv.}
 \end{figure}
 
-\section{\TB}
+\input{toolbus.ltx}
 
 \section{User-interface}
 
@@ -254,6 +256,7 @@ The various components will be discussed in the next sections.
 \section{Interpreter}
 
 \section{Future Work}
+\input{future-debugging.ltx}
 
 \bibliographystyle{alpha}
 \bibliography{/home/gipe/lib/tex/bib,/home/gipe/lib/tex/LanguageProto,metabib}
