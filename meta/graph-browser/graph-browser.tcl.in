@@ -554,7 +554,7 @@ proc EditEquationsModules { modlist } {
 # 
 #--
 proc EditTerm {mod file} {
-    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId $file ]]
+    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId $file]]
 }
 
 
@@ -726,7 +726,7 @@ proc NewModule { file } {
 # Get the module name...
     set mod [GetBasename $file ".sdf"]
 # ... and open it.
-    GBevent [format "new-module(%s)" [ToId $mod]]
+    GBevent [format "new-module(%s,%s)" [ToId $file] [ToId $mod]]
 }
 
 
@@ -736,11 +736,11 @@ proc NewModule { file } {
 # generates the toolbus event to request addition of a module
 # and destroys the widget $w.
 #--
-proc OpenModule { mod } {
+proc OpenModule { file mod } {
     global opening
 
     set opening 1
-    GBevent [format "open-module(%s)" [ToId $mod]]
+    GBevent [format "open-module(%s,%s)" [ToId $file] [ToId $mod]]
 }
 
 
@@ -799,7 +799,6 @@ proc GetModuleInfo { modlist } {
 #--
 proc ToId { mod } {
     return [TBstring $mod]
-#    return [format "id(\"%s\")" $mod]
 }
 
 
@@ -840,15 +839,13 @@ proc OpenModuleWidget {} {
 
   set types {
       {{SDF}   {.sdf}        }
-      {{AsFix}  {.asfix}       }
       {{Any}    *              }
   }
-  set mod [tk_getOpenFile -filetypes $types \
+  set file [tk_getOpenFile -filetypes $types \
                                        -title "Open SDF Module..."]
-  set mod [GetBasename $mod ".sdf"]
-  set mod [GetBasename $mod ".asfix"]
+  set mod [GetBasename $file ".sdf"]
   if [ expr [ string length $mod ] > 0 ] {
-    OpenModule $mod
+    OpenModule $file $mod
   }
 }
 
