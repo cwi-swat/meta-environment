@@ -60,7 +60,7 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 libdir=@libdir@
 datadir=@datadir@
-PROTO=@datadir@/asf/genmakefile.proto
+PROTO=@datadir@/genmakefile.proto
 
 # By default we generate a Makefile and a Makefile.in. To generate
 # only a Makefile or Makefile.in on standard output use one of the command
