@@ -41,6 +41,6 @@ ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 char *PT_yieldParseTree(PT_ParseTree tree);
 char *PT_yieldTree(PT_Tree tree);
 
-PT_ParseTree PT_addPosInfoToParseTree(char *pathInfo, PT_ParseTree tree);
+PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
 
 #endif
