@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
    
     ATwarning("rewriting: %f user, %f system\n", TICK2SEC(user), TICK2SEC(system)); 
 #else
-    newterm = rewrite(realterm,(ATerm) ATempty);
+    newterm = (ATerm) rewrite(realterm, (ATerm) ATempty);
 #endif
 
 
