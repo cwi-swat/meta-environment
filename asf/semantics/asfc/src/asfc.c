@@ -21,6 +21,8 @@
 
 aterm *expand_to_asfix(arena *ar,aterm *mod,char *name);
 int print_source(FILE *f, aterm *term);
+void pp_rnx(FILE *f, aterm *t, int indent);
+aterm *asfix2rnx(arena *ar,aterm *asfix);
 
 aterm_list *modules_db;
 
@@ -48,6 +50,40 @@ void rec_terminate(int cid, aterm *t)
   exit(0);
 }
 
+int equal_term(aterm *term1,aterm *term2)
+{
+  char *text1, *text2;
+  aterm *t1[9], *t2[9];
+
+  if(Tmatch(term1,"sort(<str>)",&text1) &&
+     Tmatch(term2,"sort(<str>)",&text2))
+    return t_equal(term1,term2);
+  else if(Tmatch(term1,"l(<str>)",&text1) &&
+          Tmatch(term2,"l(<str>)",&text2))
+    return t_equal(term1,term2);
+  else if(Tmatch(term1,"ql(<str>)",&text1) &&
+          Tmatch(term2,"ql(<str>)",&text2))
+    return t_equal(term1,term2);
+  else if(Tmatch(term1,"iter(<term>,<term>,<term>)",
+                 &t1[0],&t1[1],&t1[2]) &&
+          Tmatch(term2,"iter(<term>,<term>,<term>)",
+                 &t2[0],&t2[1],&t2[2]))
+    return equal_term(t1[0],t2[0]) &&
+           equal_term(t1[2],t2[2]);
+  else if(Tmatch(term1,"iter-sep(<term>,<term>,<term>,<term>,<term>,<term>," \
+                                "<term>,<term>,<term>)",
+                 &t1[0],&t1[1],&t1[2],&t1[3],&t1[4],
+                 &t1[5],&t1[6],&t1[7],&t1[8]) &&
+          Tmatch(term2,"iter-sep(<term>,<term>,<term>,<term>,<term>,<term>," \
+                                "<term>,<term>,<term>)",
+                 &t2[0],&t2[1],&t2[2],&t2[3],&t2[4],
+                 &t2[5],&t2[6],&t2[7],&t2[8]))
+    return equal_term(t1[2],t2[2]) &&
+           equal_term(t1[4],t2[4]) &&
+           equal_term(t1[8],t2[8]);
+  else return Tfalse;
+}
+
 int equal_args(aterm_list *args1,aterm_list *args2)
 {
   aterm *arg1,*arg2;
@@ -58,7 +94,7 @@ int equal_args(aterm_list *args1,aterm_list *args2)
     arg1 = t_list_first(args1);
     arg2 = t_list_first(args2);
     if(!asfix_is_whitespace(arg1) && !asfix_is_whitespace(arg2)) {
-      equal = t_equal(arg1,arg2);
+      equal = equal_term(arg1,arg2);
     }
     args1 = t_list_next(args1);
     args2 = t_list_next(args2);
@@ -105,30 +141,6 @@ int equal_prod(aterm *prod1,aterm *prod2)
        &mname2,&w2[0],&args2,&w2[1],&lit2,&w2[2],&sort2,&w2[3],&attrs2)) {
       if(t_equal(mname1,mname2) && equal_args(args1,args2) &&
          t_equal(sort1,sort2) && equal_attrs(attrs1,attrs2)) 
-        return Ttrue;
-    }
-  }
-  return Tfalse;
-}
-
-int equal_appl(aterm *eq1,aterm *eq2)
-{
-  return Tfalse;
-}
-
-int equal_eq(aterm *eq1,aterm *eq2)
-{
-  aterm *mname1,*tag1,*lhs1,*rhs1,*w1[4];
-  aterm *mname2,*tag2,*lhs2,*rhs2,*w2[4];
-
-  if(Tmatch(eq1,
-     "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,l(\"=\"),<term>,<term>)",
-     &mname1,&w1[0],&tag1,&w1[1],&lhs1,&w1[2],&w1[3],&rhs1)) {
-    if(Tmatch(eq2,
-       "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,l(\"=\"),<term>,<term>)",
-       &mname2,&w2[0],&tag2,&w2[1],&lhs2,&w2[2],&w2[3],&rhs2)) {
-      if(t_equal(mname1,mname2) && t_equal(tag1,tag2) &&
-         equal_appl(lhs1,lhs2) && equal_appl(rhs1,rhs2))
         return Ttrue;
     }
   }
@@ -422,6 +434,7 @@ Tprintf(stderr,"Reshuffling module: %t\n",mod);
         change_modules_db(TdictPut(&local,modules_db,mod,amod));
         newamod = AFinitModule(&local);
         newmod = unique_new_name(&local,mod);
+Tprintf(stderr,"Creating new module: %t\n",newmod);
         newamod = AFputModuleName(&local,newamod,newmod);
         newamod = AFputModuleEqs(&local,newamod,eqs);
         newsubsection = AFinitContextFreeSyntaxSection(&local);
@@ -449,7 +462,7 @@ aterm *compile_modules(int cid,aterm_list *mods)
 {
   char *text;
   char *fname;
-  aterm *mod, *amod, *expmod, *result;
+  aterm *mod, *amod, *expmod, *result, *rnx;
   aterm_list *newmods, *modlist;
   FILE *output;
   int len;
@@ -466,24 +479,27 @@ aterm *compile_modules(int cid,aterm_list *mods)
     amod = TdictGet(modules_db,mod);
     assertp(Tmatch(mod,"id(<str>)",&text));
     len = strlen("/home/markvdb/NEW-META/new-meta/pico/") + 
-    /*len = strlen("/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/") +*/
-          strlen(text) + strlen(".asfix.asfix");
+    /* len = strlen("/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/") + */
+          strlen(text) + strlen(".rnx");
     fname = malloc(len + 1);
     if(!fname) {
       fprintf(stderr,"Not enough memory\n");
       exit(1);
     }
     fname = strcpy(fname,"/home/markvdb/NEW-META/new-meta/pico/");
-    /*fname = strcpy(fname,"/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/");*/
+    /* fname = strcpy(fname,"/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/"); */
     fname = strcat(fname,text);
-    fname = strcat(fname,".asfix.asfix");
+    fname = strcat(fname,".rnx");
     expmod = expand_to_asfix(&local,amod,fname);
+    rnx = asfix2rnx(&local,expmod);
     output = fopen(fname,"w");
     free(fname);
     if(!output) 
       Tprintf(stderr,"Cannot open file\n");
     else {
-      Tprintf(output,"%t\n",expmod);
+      pp_rnx(output,rnx,0);
+      Tprintf(output, "\n");
+      /*Tprintf(output,"%t\n",expmod);*/
       fclose(output);
     }
     print_source(stderr,amod);

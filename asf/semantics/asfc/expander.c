@@ -82,7 +82,7 @@ aterm *make_sep_appl(arena *ar)
 {
   aterm *prod;
 
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"AsFixParseTrees\")"),
+  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
                         TmkList_n(ar,1,TmakeSimple(ar, "ql(\"sep\")")),
                         TmakeSimple(ar, "sort(\"AFun\")"),
                         TmakeSimple(ar, "no-attrs"));
@@ -761,7 +761,9 @@ aterm *make_empty_abbreviations(arena *ar)
 {
   return make_afun_aterms_to_aterm_appl(ar,
            make_abbreviations_appl(ar),
-           make_empty_to_atermlist_appl(ar));
+           make_aterm_to_aterms_appl(ar,
+             make_atermlist_to_aterm_appl(ar,
+               make_empty_to_atermlist_appl(ar))));
 }
 
 aterm *expand_asfix_ws(arena *ar, aterm *ws)
@@ -948,7 +950,7 @@ aterm *expand_asfix_idlist(arena *ar, aterm *idlist)
 
   assertp(Tmatch(idlist,"<list>",&ids));
   if(t_is_empty(ids))
-    return make_empty_to_atermlist_appl(ar);
+    return  make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -974,7 +976,7 @@ aterm *expand_asfix_attrs(arena *ar, aterm_list *attrs)
                          expand_asfix_attrs(ar,attrs));
     }
     else
-      expattrs = expattr;
+      expattrs = make_aterm_to_aterms_appl(ar,expattr);
   }
   return expattrs;
 }
@@ -985,7 +987,7 @@ aterm *expand_asfix_attributes(arena *ar, aterm *attrlist)
   aterm *w[2],*l[2],*args;
 
   if(Tmatch(attrlist,"no-attrs")) {
-    return make_noattrs_appl(ar);
+    return make_afun_to_aterm_appl(ar,make_noattrs_appl(ar));
   }
   else {
     assertp(Tmatch(attrlist,"attrs(<term>,<term>,<list>,<term>,<term>)",
@@ -1001,7 +1003,7 @@ aterm *expand_asfix_attributes(arena *ar, aterm *attrlist)
                    make_aterm_aterms_to_aterms_appl(ar,
                    expand_asfix_ws(ar,w[1]),
                      make_aterm_to_aterms_appl(ar,
-                     expand_asfix_literal(ar,l[0]))))));
+                     expand_asfix_literal(ar,l[1]))))));
     return make_afun_aterms_to_aterm_appl(ar,
                                           make_attrs_appl(ar),
                                           args);
@@ -1158,7 +1160,7 @@ aterm *expand_asfix_argslist(arena *ar, aterm *arglist)
 
   assertp(Tmatch(arglist,"<list>",&args));
   if(t_is_empty(args))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1214,7 +1216,7 @@ aterm *expand_asfix_prodskellist(arena *ar, aterm *prodskellist)
 
   assertp(Tmatch(prodskellist,"<list>",&prodskels));
   if(t_is_empty(prodskels))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1312,7 +1314,7 @@ aterm *expand_asfix_chainlist(arena *ar, aterm *chainlist)
 
   assertp(Tmatch(chainlist,"<list>",&chains));
   if(t_is_empty(chains))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1368,7 +1370,7 @@ aterm *expand_asfix_prioslist(arena *ar, aterm *priolist)
 
   assertp(Tmatch(priolist,"<list>",&prios));
   if(t_is_empty(prios))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1417,7 +1419,7 @@ aterm *expand_asfix_sortlist(arena *ar, aterm *sortlist)
 
   assertp(Tmatch(sortlist,"<list>",&sorts));
   if(t_is_empty(sorts))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1493,7 +1495,7 @@ aterm *expand_asfix_prodlist(arena *ar, aterm *prodlist)
 
   assertp(Tmatch(prodlist,"<list>",&prods));
   if(t_is_empty(prods))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1598,7 +1600,7 @@ aterm *expand_asfix_subsectionlist(arena *ar, aterm *subsectionlist)
 
   assertp(Tmatch(subsectionlist,"<list>",&subsections));
   if(t_is_empty(subsections))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else 
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1679,7 +1681,7 @@ aterm *expand_asfix_sectionlist(arena *ar, aterm *sectionlist)
 
   assertp(Tmatch(sectionlist,"<list>",&sections));
   if(t_is_empty(sections))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else 
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1740,7 +1742,7 @@ aterm *expand_asfix_condslist(arena *ar, aterm *condslist)
 
   assertp(Tmatch(condslist,"<list>",&conds));
   if(t_is_empty(conds))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1887,7 +1889,7 @@ aterm *expand_asfix_equationlist(arena *ar, aterm *equationlist)
 
   assertp(Tmatch(equationlist,"<list>",&equations));
   if(t_is_empty(equations))
-    return make_empty_to_atermlist_appl(ar);
+    return make_atermlist_to_aterm_appl(ar,make_empty_to_atermlist_appl(ar));
   else
     return make_atermlist_to_aterm_appl(ar,
              make_aterms_to_atermlist_appl(ar,
@@ -1900,7 +1902,7 @@ aterm *expand_asfix_equationssection(arena *ar, aterm *equations)
   aterm *args;
 
   if(Tmatch(equations,"no-equations"))
-    return make_noequations_appl(ar);
+    return make_afun_to_aterm_appl(ar,make_noequations_appl(ar));
   else {
     assertp(Tmatch(equations,"equations(<term>,<term>,<term>)",
                    &l,&w,&eqs));

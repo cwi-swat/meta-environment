@@ -68,9 +68,9 @@ int print_asfix_term(FILE *f, aterm *arg)
     print_asfix_ws(f,w[0]);
     print_asfix_literal(f,l[0]);
   }
-  else if(Tmatch(arg,"itersep(<term>,<term>,<term>,<term>,<term>,<term>," \
-                              "<term>,<term>,<term>)",
-                 &l[0],&w[0],&t[0],&w[1],&t[0],&w[2],&l[1],&w[3],&l[2])) {
+  else if(Tmatch(arg,"iter-sep(<term>,<term>,<term>,<term>,<term>,<term>," \
+                               "<term>,<term>,<term>)",
+                 &l[0],&w[0],&t[0],&w[1],&t[1],&w[2],&l[1],&w[3],&l[2])) {
     print_asfix_literal(f,l[0]);
     print_asfix_ws(f,w[0]);
     print_asfix_term(f,t[0]);
@@ -496,28 +496,21 @@ int print_asfix_module(FILE *f, aterm *mod)
 
 int print_source(FILE *f, aterm *term)
 {
-/*  char *text;
-  aterm *arg;
-  aterm_list *args;
-
-  if(AFisLayout(term)) {
-    Tmatch(term,"w(<str>)",&text);
-    Tprintf(f,"%s",text);
-  }
-  else if(AFisLiteral(term)) {
-    Tmatch(term,"l(<str>)",&text);
-    Tprintf(f,"%s",text);
-  }
-  else {
-    args = t_appl_args(term);
-    while(!t_is_empty(args)) {
-      arg = t_list_first(args);
-      print_source(f,arg);
-      args = t_list_next(args);
-    }
-  }
-  */
   print_asfix_module(f,term);
   Tprintf(f,"\n");
   return 0;
 }
+
+int print_term_source(FILE *f, aterm *term)
+{
+  aterm *t;
+
+  assertp(Tmatch(term,
+                 "term(<term>,<term>,<term>,<term>,<term>," \
+                         "<term>,<term>,<term>,<term>)",
+                 NULL,NULL,NULL,NULL,NULL,NULL,&t,NULL,NULL));
+  print_asfix_term(f,t);
+  Tprintf(f,"\n");
+  return 0;
+}
+

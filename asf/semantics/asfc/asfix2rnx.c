@@ -112,9 +112,8 @@ aterm *term2rnx(arena *ar,aterm *t)
   }
   else if(Tmatch(t, "lex(<str>,<term>)", &lex, &sort)) {
     rnxid = AFsort2RNxSymbol(sort);
-    /*result = TmkAppl_s(ar,rnxid,Tmake(ar,"[<str>]",lex));*/
-    result = TmkAppl_s(ar,rnxid,TmkList_n(ar,1,
-                                          chars2rnx(ar,lex)));
+    result = TmkAppl_s(ar,rnxid,
+                       Tmake(ar,"[\"{CHAR}\"(<term>)]",chars2rnx(ar,lex)));
   }
   else 
     result = t_empty(NULL);
@@ -125,7 +124,6 @@ aterm *asfix2rnx(arena *ar,aterm *asfix)
 {
   aterm *t[8], *trm;
 
-Tprintf(stderr,"asfix2rnx entered!\n");
   if(Tmatch(asfix, 
      "term(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
      &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], &trm, &t[6], &t[7])) {
@@ -189,20 +187,36 @@ void pp_list(FILE *f, aterm_list *l, int indent)
 void pp_rnx(FILE *f, aterm *t, int indent)
 {
   aterm_list *args;
+  char *text;
+  int i;
 
   if(t_is_appl(t)) {
     args = t_appl_args(t);
+    text = t_sym_name(t_appl_sym(t));
+    if(t_sym_string(t_appl_sym(t))) {
+      fprintf(f,"\"");
+      for(i=0; text[i]; i++) {
+        switch(text[i]) {
+          case '"': 
+          case '\\': 
+            fprintf(f,"%c",'\\');
+          default:
+            fprintf(f,"%c",text[i]);
+        }
+      }
+      fprintf(f,"\"");
+    }
+    else 
+      Tprintf(f,"%s",text);
     if(!t_is_empty(args)) {
-      Tprintf(f,"%s(\n", t_sym_name(t_appl_sym(t)));
+      Tprintf(f,"(\n");
       pp_list(f, t_appl_args(t),indent++);
       Tprintf(f,")");
     } 
-    else
-      Tprintf(f,"%s", t_sym_name(t_appl_sym(t)));
   }
   else if(t_is_int(t)) {
     char *ch = rnx_char[t_int_val(t)];
     Tprintf(f,"%s",ch);
   }
-  else Tprintf(f,"Illegal term!");
+  else Tprintf(f,"Illegal term: %t\n",t);
 }
