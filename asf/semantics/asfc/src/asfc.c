@@ -4,7 +4,7 @@
 
    The following functions are available:
    void rec_terminate(ATerm t)
-   ATerm generate_code(ATerm modname, ATerm module)
+   ATerm generate_code(char *modname, ATerm module)
 */
 
 #include <assert.h>
