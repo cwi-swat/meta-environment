@@ -33,8 +33,8 @@ LIBS		= $(top_srcdir)/src/libtb.a @LIBS@
 NOWEB		= @NOWEB@
 
 ADAPTERS	= @ADAPTERS@
-SUBDIRS		= asf+sdf-adapter gen-adapter perl-adapter python-adapter \
-		swipl-adapter wish-adapter tcltk-adapter
+SUBDIRS		= gen-adapter perl-adapter wish-adapter tcltk-adapter\
+		  python-adapter asf+sdf-adapter swipl-adapter
 
 DISTFILES	= Makefile.in Makefile.in.template
 
@@ -44,6 +44,19 @@ all install uninstall clean distclean:
 	  distclean) ${CLEAN} Makefile ;; \
 	esac; \
 	for SUBDIR in $$SUBDIRS; \
+	do \
+		echo ${MAKE} $@ in $$SUBDIR; \
+		cd $${SUBDIR}; \
+		${MAKE} $@; \
+		cd ..; \
+	done
+
+doc:
+	rm -f ${docdir}/adapters.tex
+	for SUBDIR in ${SUBDIRS}; do \
+		echo \\input{adapters/$$SUBDIR.guide.tex} ;\
+	done >${docdir}/adapters.tex; \
+	for SUBDIR in ${SUBDIRS}; \
 	do \
 		echo ${MAKE} $@ in $$SUBDIR; \
 		cd $${SUBDIR}; \
