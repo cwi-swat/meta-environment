@@ -273,9 +273,13 @@ abstract public class AbstractTool implements Tool, Runnable {
 	public ATerm readTerm() throws IOException {
 		return readTerm(inputStream);
 	}
+	
+	private synchronized void setRunning(boolean state)  {
+		running = state;
+	}
 
 	public void run() {
-		running = true;
+		setRunning(true);
 		try {
 			while (running) {
 				handleIncomingTerm();
@@ -286,6 +290,10 @@ abstract public class AbstractTool implements Tool, Runnable {
 			throw new RuntimeException("IOException: " + e.getMessage());
 		}
 	}
+	
+	public void stopRunning() {
+		setRunning(false);
+	}
 
 	public void handleIncomingTerm() throws IOException {
 		ATerm t = readTerm();
@@ -293,7 +301,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 		info("tool " + toolname + " handling term from toolbus: " + t);
 
 		if (t.match("rec-terminate(<term>)") != null) {
-			running = false;
+			setRunning(false);
 			connected = false;
 		}
 

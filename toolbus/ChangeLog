@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 10 15:06:27 CEST 2004 <jurgenv@cwi.nl>
+ * Merged changed in java toolbus adapter (locking functionality)
+
 Wed Apr 21 10:45:32 CEST 2004 <jurgenv@cwi.nl>
  * Removed #include <sys/sockets.h> from toolbus/main.c because it somehow
    breaks the build on the newest Darwin release (7.3.0). This include was
