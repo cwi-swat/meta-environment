@@ -3,7 +3,6 @@
 # $Id$
 #
 
-ROOT=$1
 BUILTIN_NAMES=`find $1 -name "*.c" -printf "%f" | sed "s/\.c//g"`
 BUILTIN_FILES=`find $1 -name "*.c"`
 
