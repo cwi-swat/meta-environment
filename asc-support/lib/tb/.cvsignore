@@ -1,0 +1,4 @@
+Makefile
+Makefile.in
+tb-*.c
+.deps
