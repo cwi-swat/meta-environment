@@ -1,6 +1,6 @@
 module utilities/PosInfo[X]
 
-imports asf/tools/ATermAnnotations[X]
+imports utilities/ATermAnnotations[X]
 
 exports
 
