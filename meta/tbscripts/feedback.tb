@@ -1,0 +1,55 @@
+/* this file deals with errorapi terms, they are apified, but of course
+ * not in ToolBus... where should this decomposition be done??? 
+ */
+
+process ShowFeedbackLocation(Feedback : term) is
+let
+  Producer : str,
+  Description : str,
+  Subjects : list,
+  FirstSubject : term
+in
+  Producer := first(args(Feedback)) .
+  Description := first(next(args(Feedback))) .
+  Subjects := first(next(next(args(Feedback)))) .
+
+  FirstSubject := first(Subjects) .
+  ShowSubjectLocation(FirstSubject)
+endlet
+
+process ShowSubjectLocation(Subject : term) is
+let
+  Description : str,
+  Location : term,
+  Filename : str,
+  Area : term
+in
+  Description := first(args(Subject)) .
+  Location := first(next(args(Subject))) .
+  if not(equal(Location,no-location)) then
+    Filename := first(args(Location)) .
+    Area := first(next(args(Location))) .
+    ShowArea(Filename, Area)
+  else
+     snd-note(ui-status(messagef("Subject %s has no source location", [Description])))
+  fi
+endlet
+
+process ShowArea(Filename : str, Area : term) is
+let
+  EditorId : term,
+  Start : int,
+  End : int
+in
+  printf("opening file over unknown language: %s\n", Filename) .
+  snd-msg(edit-general("unknown language", Filename)) .
+  rec-msg(editor-opened("unknown language", EditorId?)) .
+  if not(equal(Area, no-area)) then
+     Start := first(next(next(next(next(args(Area)))))) .
+     End := first(next(next(next(next(next(args(Area))))))) .
+     printf("setting focus from %d to %d\n", Start, End) .
+     snd-note(set-focus(EditorId, focus(root, "unavailable", area(Start, sub(End, Start), 1))))
+  else 
+     tau
+  fi
+endlet  
