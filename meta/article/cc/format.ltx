@@ -868,7 +868,7 @@ Table \ref{sharingtable} gives an impression of the effect of maximal
 sharing on execution time and memory usage of compiled 
 \asdf\ specifications.  We show the results (with and without sharing) for
 the compilation of the \asdf{} to C compiler itself and for the
-expansion of a Risla specification.
+expansion of a non-trivial Risla specification.
 
 \begin{table}[tb]
 \begin{center}
@@ -876,8 +876,8 @@ expansion of a Risla specification.
 Application 				& Time (sec) 	& Memory (Mb) \\ \hline \hline
 \asdf{} compiler (with sharing)    	& 216		& 16	\\ \hline
 \asdf{} compiler (without sharing) 	& 661  		& 117 	\\ \hline 
-Risla expansion (with sharing)   	&   		&  	\\ \hline
-Risla expansion (without sharing)  	&  		& 	\\ \hline
+Risla expansion (with sharing)   	& 9  		& 8 	\\ \hline
+Risla expansion (without sharing)  	& 18 		& 13	\\ \hline
 \end{tabular}
 \vspace{\baselineskip}
 \caption{\label{sharingtable}Performance with and without maximal sharing.}
@@ -931,7 +931,6 @@ Reference~\cite{AppelGoncalves:93} was pointed out to us by one of the
 referees.
 
 \bibliographystyle{plain}
-\bibliography{/home/gipe/lib/tex/LanguageProto,metabib}
-%\bibliography{metabib}
+\bibliography{metabib}
 
 \end{document}
