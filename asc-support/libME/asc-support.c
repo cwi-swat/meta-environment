@@ -598,10 +598,14 @@ void ASC_initRunTime(int tableSize)
 
 PT_ParseTree toasfix(ATerm term)
 {
-  PT_Tree tree = termToTree(term);  
-  PT_Symbol symbol = PT_getProductionRhs(PT_getTreeProd(tree));
-  PT_Symbols symbols = PT_makeSymbolsList(symbol, PT_makeSymbolsEmpty());
-  
+  PT_Tree tree;
+  PT_Symbol symbol;
+  PT_Symbols symbols;
+
+  tree = termToTree(term);  
+  symbol = PT_getProductionRhs(PT_getTreeProd(tree));
+  symbols = PT_makeSymbolsList(symbol, PT_makeSymbolsEmpty());
+
   return PT_makeParseTreeTree(symbols, 
 			      PT_makeTreeLayoutEmpty(),
 			      tree,
