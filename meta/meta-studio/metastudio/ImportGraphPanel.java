@@ -14,10 +14,13 @@ public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelect
         super(factory, bridge, "import");
         
         panel = getGraphPanel();
-        System.err.println(((Object) panel));
        
         moduleManager.addModuleSelectionListener(this);
 
+        panel.addMouseListener(makeMouseListener(moduleManager));
+    }
+
+    private MouseListener makeMouseListener(final ModuleTreeModel moduleManager) {
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
@@ -32,7 +35,7 @@ public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelect
                 }
             }
         };
-        panel.addMouseListener(listener);
+        return listener;
     }
 
     public void moduleSelected(Module module) {

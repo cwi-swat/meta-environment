@@ -571,7 +571,6 @@ public class MetaStudio
         if (id.equals(importGraphPanel.getId())) {
             this.graph = graph;
         }
-        System.err.println("id: " + id);
         ZoomableGraphPanel graphPanel = getGraphPanel(id);
         graphPanel.setGraph(graph);
         graphPanel.repaint();
