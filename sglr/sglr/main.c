@@ -115,8 +115,8 @@ void batch (int argc, char **argv)
   term_to_file(parse_tree, output_file_name);
 
   if (TBmatch(parse_tree,
-               "parse-error([character(%d), line(%d), col(%d), char(%d)])",
-               &c, &line, &col, &length)) {
+              "parse-error([character(%d), line(%d), col(%d), char(%d)])",
+              &c, &line, &col, &length)) {
     if (c == 0)
       fprintf(stderr,
               "(%s) %s: error: end of file unexpected\n",
@@ -434,8 +434,7 @@ FILE *open_log(char *FN)
 
   if (FN == NULL || strcmp(FN, "") == 0)
     FN = ".parse-log";
-  if ((fp = fopen(FN, "w")) == NULL)
-  {
+  if ((fp = fopen(FN, "w")) == NULL) {
     fprintf(stderr, "%s: cannot create logfile %s\n", program_name, FN);
     exit(1);
   }

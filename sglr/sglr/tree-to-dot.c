@@ -52,7 +52,7 @@ void print_symbol(FILE *dot, term *t)
 {
   char *name;
   term *arg, *arg2, *args;
-  int c1, c2;
+  int  c1, c2;
 
   if (TBmatch(t, "layout", &name))
     fprintf(dot, "L");
@@ -202,7 +202,7 @@ bool is_lexical(term *fun)
 void tree_to_dot(FILE *dot, term *t, int child, term *parent, bool suppress_lexicals)
 {
   term *fun, *args, *arg;
-  int c;
+  int  c;
 
   PRINTED(t) = FALSE;
   if (TBmatch(t, "%d", &c)) {
@@ -248,13 +248,13 @@ void tree_to_dot(FILE *dot, term *t, int child, term *parent, bool suppress_lexi
 void tree_to_dotfile(char *file, term *t, bool suppress)
 {
   FILE *dot;
+
   if (strcmp(file, "") == 0)
     file = "parse.dot";
-  if ((dot = fopen(file, "w")) == NULL)
-    {
-      fprintf(stderr, "%s: cannot create dotfile %s\n", program_name, file);
-      exit(1);
-    }
+  if ((dot = fopen(file, "w")) == NULL) {
+    fprintf(stderr, "%s: cannot create dotfile %s\n", program_name, file);
+    exit(1);
+  }
 
   prev_char_parent = NULL;
 
@@ -265,13 +265,11 @@ void tree_to_dotfile(char *file, term *t, bool suppress)
 
 void link_to_dot(FILE *dot, stack *st, st_link *l)
 {
-  int c;
+  int  c;
   term *t;
 
-  fprintf(dot,
-    "N%d [label = \"%d\" shape=box height=0.2, width=0.2];\n",
-    (int) st, STATE(st));
-
+  fprintf(dot, "N%d [label = \"%d\" shape=box height=0.2, width=0.2];\n",
+          (int) st, STATE(st));
   fprintf(dot, "N%d -> N%d [label=\"", (int) STACK(l), (int) st);
   t = tree_type(TREE(l));
   if(TBmatch(t, "%d", &c))
@@ -288,39 +286,36 @@ void link_to_dot(FILE *dot, stack *st, st_link *l)
 
 void links_to_dot(FILE *dot, stack *st)
 {
-  st_link *l;
+  st_link  *l;
   st_links *ls;
 
   ls = LINKS(st);
-  while(pop(l, ls)) {
+  while(shift(l, ls))
     link_to_dot(dot, st, l);
-  }
 }
 
 void stack_to_dot(FILE *dot, stack *st)
 {
-  st_link *l;
+  st_link  *l;
   st_links *ls;
 
   if(st == NULL) return;
   fprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
-               (int) st, STATE(st));
+          (int) st, STATE(st));
   ls = LINKS(st);
   links_to_dot(dot, st);
-  while(pop(l, ls)) {
+  while(shift(l, ls))
     stack_to_dot(dot, STACK(l));
-  }
 }
 
-void stacks_to_dot(FILE *dot, stack *sts1)
+void stacks_to_dot(FILE *dot, stacks *sts1)
 {
-  stack *st;
+  stack  *st;
   stacks *sts2;
 
   sts2 = sts1;
-  while(pop(st, sts2)) {
+  while(shift(st, sts2))
     stack_to_dot(dot, st);
-  }
 }
 
 extern char *stack_dotoutput;
@@ -329,14 +324,14 @@ char stack_file[256];
 
 FILE *stack_dot;
 
-void stacks_to_dotfile(stack *t)
+void stacks_to_dotfile(stacks *sts)
 {
   sprintf(stack_file, "%s%d.dot", stack_dotoutput, text_length);
 
   if ((stack_dot = fopen(stack_file, "w")) == NULL) {
     fprintf(stderr, "%s: cannot create dotfile %s\n",
             program_name, stack_file);
-    exit(1);
+    return;
   }
 
   prev_char_parent = NULL;
@@ -345,7 +340,17 @@ void stacks_to_dotfile(stack *t)
           "rankdir = LR; \n"
           "edge [dir = back]; \n"
          );
-  stacks_to_dot(stack_dot, t);
+  stacks_to_dot(stack_dot, sts);
   fprintf(stack_dot, "}\n");
   fclose(stack_dot);
+}
+
+
+void stack_to_dotfile(stack *st)
+{
+  stacks *sts;
+
+  sts = new_stacks(st);
+  stacks_to_dotfile(sts);
+  free(sts);
 }

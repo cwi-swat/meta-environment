@@ -93,14 +93,30 @@ int next_token(int(*get_next_char)(void))
    indicate a shift from the stack to a new state.
 */
 
-typedef term shift_pair;
+typedef struct shift_pair {
+  state   state;
+  stack   *stack;
+  struct shift_pair *tail;
+} shift_pair;
 
-#define new_shift_pair(st, s, next)  TBmake("[shift(%d,%t),%l]", s, st, next)
-#define SP_STATE(x)                  int_val(elm1(fun_args(x)))
-#define SP_STACK(x)                  elm2(fun_args(x))
-#define SP_NEXT(x)                   next(x)
+shift_pair *new_shift_pair(stack *st, state s, shift_pair *sp0)
+{
+  shift_pair *sp1;
+
+  if((sp1 = malloc(sizeof(shift_pair))) != NULL) {
+    sp1->state = s;
+    sp1->stack = st;
+    sp1->tail  = sp0;
+  }
+  return sp1;
+}
+
+#define SP_STATE(x)                  (x)->state
+#define SP_STACK(x)                  (x)->stack
+#define SP_NEXT(x)                   (x)->tail
 
 #define add_shift_pair(st, a, next) next = new_shift_pair(st, a, next)
+
 
 /*
    \subsection{Paths}
@@ -112,18 +128,37 @@ typedef term shift_pair;
    Paths are used in reductions.
 
 */
-typedef term path;
-typedef term paths;
 
-#define new_path(st, sons, ps) TBmake("[path(%t,%t),%l]", st, sons, ps)
-#define P_STACK(p)             elm1(fun_args(p))
-#define P_ARGS(p)              elm2(fun_args(p))
-#define P_NEXT(ps)             next(ps)
+typedef struct path {
+  state             state;
+  stack             *stack;
+  term_list         *args;
+  struct path       *next;
+} path;
+
+//#define paths path;
+
+#define P_STACK(x)                  (x)->stack
+#define P_ARGS(x)                   (x)->args
+#define P_NEXT(x)                   (x)->next
+
+path *new_path(stack *st, term_list *sons, path *ps)
+{
+  path *p;
+
+  if((p = malloc(sizeof(path))) != NULL) {
+    p->stack = st;
+    p->args  = sons;
+    p->next  = ps;
+  }
+  return p;
+}
+
 
 /*
   The concatenation of two paths
 */
-path *conc_paths(paths *ps1, paths *ps2)
+path *conc_paths(path *ps1, path *ps2)
 {
   path *ps;
   if (ps1 == NULL) return ps2;
@@ -139,12 +174,12 @@ path *conc_paths(paths *ps1, paths *ps2)
    |i|, containing link |l| if |link_seen| is |TRUE|.
 
 */
-path *find_paths(stack *st, int i, st_link *l0, bool link_seen, term *sons)
+path *find_paths(stack *st, int i, st_link *l0, bool link_seen, term_list *sons)
 {
   st_links *ls = NULL;
   st_link  *l1 = NULL;
-  term *paths = NULL;
-  term *newsons = NULL;
+  path *paths = NULL;
+  term_list *newsons = NULL;
 
   if (debugflag)  fprintf(log, "find_paths(%d, %d, x, %d, %d)\n",
                           STATE(st), i, link_seen, (int) sons);
@@ -153,8 +188,8 @@ path *find_paths(stack *st, int i, st_link *l0, bool link_seen, term *sons)
   else if (i == 0 && link_seen)
     paths = new_path(st, sons, NULL);
   else if (i > 0)
-    for (ls = LINKS(st); ls != NULL; ls = next(ls)) {
-      l1 = first(ls);
+    for (ls = LINKS(st); ls != NULL; ls = tail(ls)) {
+      l1 = head(ls);
       newsons = cons(TREE(l1), sons);
       paths = conc_paths(find_paths(STACK(l1), i - 1, l0,
                                     link_seen || (l0 == l1),
@@ -171,7 +206,7 @@ path *find_paths(stack *st, int i, st_link *l0, bool link_seen, term *sons)
 
 */
 parse_table *table;
-int        current_token;
+int         current_token;
 stack       *accepting_stack;
 stacks      *active_stacks;
 stacks      *for_actor;
@@ -212,9 +247,7 @@ term *parse(parse_table *ptable, int(*get_next_char)(void))
   table = ptable;
 
   accepting_stack = NULL;
-  active_stacks = new_stacks(new_stack(INIT(table), NULL), NULL);
-  TBprotect(&active_stacks);
-  TBprotect(&accepting_stack);
+  active_stacks = new_stacks(new_stack(INIT(table), NULL));
 
   do {
     if(show_stack) stacks_to_dotfile(active_stacks);
@@ -224,10 +257,8 @@ term *parse(parse_table *ptable, int(*get_next_char)(void))
     if(gc) TBcollect();
   } while (current_token != eof && active_stacks != NULL);
 
-  if(show_stack) stacks_to_dotfile(mk_list(accepting_stack, NULL));
+  if(show_stack) stack_to_dotfile(accepting_stack);
 
-  TBunprotect(&active_stacks);
-  TBunprotect(&accepting_stack);
   return result();
 }
 
@@ -245,13 +276,13 @@ term *parse(parse_table *ptable, int(*get_next_char)(void))
 term *result(void)
 {
   if (accepting_stack != NULL) {
-     term *t;
+    term *t;
 
-   add_stack(accepting_stack, active_stacks);
-   active_stacks = NULL;
+//    active_stacks = add_stacks(accepting_stack, active_stacks);
+    active_stacks = NULL;
 
-       t = TREE(first(LINKS(accepting_stack)));
-      return TBmake("parsetree(%t,%d)", t, nr_ambiguities);
+    t = TREE(head(LINKS(accepting_stack)));
+    return TBmake("parsetree(%t,%d)", t, nr_ambiguities);
   } else
     return TBmake("parse-error([character(%d), line(%d),"
                   "col(%d), char(%d)])",
@@ -273,12 +304,11 @@ void parse_character(void)
   for_actor_delayed = NULL;
   for_shifter = NULL;
 
-  zero_stack_hist();
   while(for_actor != NULL  || for_actor_delayed != NULL) {
    if(for_actor != NULL)
-      pop(st, for_actor);
+      shift(st, for_actor);
     else
-      pop(st, for_actor_delayed);
+      shift(st, for_actor_delayed);
     actor(st);
     if(show_stack) links_to_dot(stack_dot, st);
   }
@@ -348,15 +378,15 @@ void actor(stack *st)
 */
 void do_reductions(stack *st, action *a)
 {
-  path  *p;
-  paths *ps;
+  path  *ps;
   label prod;
+
   prod = A_PROD(a);
 
-  ps = find_paths(st, A_NR_ARGS(a), NULL, TRUE, NULL);
-  while(pop(p, ps)) {
-    reducer(P_STACK(p), GOTO(table, STATE(P_STACK(p)), prod),
-            prod, P_ARGS(p), A_REJECT(a), st);
+  for(ps = find_paths(st, A_NR_ARGS(a), NULL, TRUE, NULL);
+      ps != NULL; ps = P_NEXT(ps)) {
+    reducer(P_STACK(ps), GOTO(table, STATE(P_STACK(ps)), prod),
+            prod, P_ARGS(ps), A_REJECT(a), st);
   }
 }
 
@@ -386,7 +416,8 @@ void do_reductions(stack *st, action *a)
   |st0| with |t| as parse tree.
 */
 
-void reducer(stack *st0, state s, label prod, term_list *kids, bool reject, stack *stpt)
+void reducer(stack *st0, state s, label prod, term_list *kids,
+             bool reject, stack *stpt)
 {
   term* t;
   st_link *nl;
@@ -406,13 +437,11 @@ void reducer(stack *st0, state s, label prod, term_list *kids, bool reject, stac
       if (!reject)      /* Don't bother to represent rejects prods -- J$ */
         amb(TREE(nl), t);
       else {
-        mark_link_rejected1(st1, nl);
-/*
-        TBprintf(stderr,"  Rejects: st0 (state %d): %d/%d, st1 (state %d): %d/%d\n",
-                        STATE(st0), some_rejected(st0), rejected(st0),
-                        STATE(st1), some_rejected(st1), rejected(st1));
-*/
         propagate_reject(st1);
+//        mark_link_rejected1(st1, nl);
+#ifdef DEBUG
+        show_stack_offspring(st1);
+#endif
       }
     } else {
       /* add new direct link from |st1| to |st0| and
@@ -421,13 +450,12 @@ void reducer(stack *st0, state s, label prod, term_list *kids, bool reject, stac
       stack  *st2 = NULL;
 
       /* First check if one of the children of |st1| was not rejected already */
-      add_link(st1, t, st0, nl);
+      nl = add_link(st1, st0, t);
       if (reject) {
-        if(debugflag)  TBprintf(log, "rejected [amb]\n");
         mark_link_rejected2(st1, nl);
       }
       sts = active_stacks;
-      while(pop(st2, sts)) {
+      while(shift(st2, sts)) {
         actions *as;
         action *a;
         if(!rejected(st2) && !in_stacks(st2, for_actor)
@@ -440,11 +468,12 @@ void reducer(stack *st0, state s, label prod, term_list *kids, bool reject, stac
       }
     }
   } else {  /* new stack */
-    st1 = new_stack(s, NULL);
-    add_link(st1, t, st0, nl);
+    st1 = new_stack(s, stpt);
+    nl = add_link(st1, st0, t);
     add_stack_hist(stpt, st1);
-    add_stack(st1, active_stacks);
-    add_stack(st1, for_actor_delayed);
+//    add_stack_hist(stpt, st1);
+    active_stacks = add_stacks(st1, active_stacks);
+    for_actor_delayed = add_stacks(st1, for_actor_delayed);
     if (reject) {
       if(debugflag)  TBprintf(log, "rejected [new]\n");
       mark_stack_rejected(st1, nl);
@@ -459,15 +488,15 @@ void reducer(stack *st0, state s, label prod, term_list *kids, bool reject, stac
 */
 void do_limited_reductions(stack *st, action *a, st_link *l)
 {
-  path  *p;
-  paths *ps;
+  path  *ps;
   label prod;
+
   prod = A_PROD(a);
 
-  ps = find_paths(st, A_NR_ARGS(a), l, FALSE, NULL);
-  while(pop(p, ps)) {
-    reducer(P_STACK(p), GOTO(table, STATE(P_STACK(p)), prod),
-            prod, P_ARGS(p), A_REJECT(a), st);
+  for(ps = find_paths(st, A_NR_ARGS(a), l, FALSE, NULL);
+      ps != NULL; ps = P_NEXT(ps)) {
+    reducer(P_STACK(ps), GOTO(table, STATE(P_STACK(ps)), prod),
+            prod, P_ARGS(ps), A_REJECT(a), st);
   }
 }
 
@@ -484,22 +513,24 @@ void shifter(void)
 {
   term *t;
   stack *st0, *st1;
-  term *shift_pair;
+  shift_pair *shift_pair;
   state s;
   st_link *l;
 
   active_stacks = NULL;
   t = PROD(table, current_token);
 
-  while(pop(shift_pair, for_shifter)) {
+//  if(for_shifter == NULL) return;
+  for(shift_pair = for_shifter; shift_pair != NULL;
+      shift_pair = SP_NEXT(shift_pair)) {
     s = SP_STATE(shift_pair);
     st0 = SP_STACK(shift_pair);
     if(!rejected(st0)) {
       if((st1 = find_stack(s, active_stacks)) == NULL) {
         st1 = new_stack(s, NULL);
-        add_stack(st1, active_stacks);
+        active_stacks = add_stacks(st1, active_stacks);
       }
-      add_link(st1, t, st0, l);
+      l = add_link(st1, st0, t);
       if(show_stack) links_to_dot(stack_dot, st1);
     }
 //  else TBprintf(stderr,"Shifter: rejected stack %d\n", STATE(st0));
@@ -522,74 +553,46 @@ void shifter(void)
  *   stacks and their descendants.
  */
 
-typedef struct stackpair {
-        stack   *parent;
-        stack   *kid;
-        struct stackpair *next;
-} stack_pair;
-
-stack_pair    *stack_hist = NULL;
-
-void zero_stack_hist()
-{
-  stack_pair *sp;
-
-  while(stack_hist != NULL) {
-    sp = stack_hist;
-    stack_hist = sp->next;
-    free(sp);
-  }
-}
-
 void add_stack_hist(stack *parent, stack *kid)
 {
-  stack_pair *sp;
-
-  if((sp = malloc(sizeof(stack_pair))) == 0) {
-    fprintf(stderr, "add_stack_hist: fatal error\n");
-    exit(1);
-  } else {
-    sp->parent = parent;
-    sp->kid    = kid;
-    sp->next   = stack_hist;
-    stack_hist = sp;
-  }
-}
-
-void show_stack_hist()
-{
-  stack_pair *sp = stack_hist;
-
-  while(sp != NULL) {
-    TBprintf(stderr, "%d%s induced %d%s\n",
-                     STATE(sp->parent), rejected(sp->parent)?"r":"",
-                     STATE(sp->kid), rejected(sp->kid)?"r":"");
-    sp = sp->next;
-  }
+  parent->kid = kid;
 }
 
 void propagate_reject(stack *st)
 {
-  stack_pair *sp = stack_hist;
-
-  while(sp != NULL) {
-    if(sp->parent == st) {
-      st_links *ls = LINKS(sp->kid);
-
-      if(accepting_stack == sp->kid) accepting_stack = NULL;
-      mark_stack_rejected(sp->kid, first(ls));
-      propagate_reject(sp->kid);
-    }
-    sp = sp->next;
+  while(st != NULL) {
+    if(st == accepting_stack) accepting_stack = NULL;
+    mark_link_rejected1(st, head(LINKS(st)));
+    st = st->kid;
   }
 }
 
 
 /*
- *  A few diagnostic routines
+ *  A few diagnostic routines (for debugging purposes)
  */
 
 #ifdef DEBUG
+
+void show_stack_offspring(stack *st)
+{
+  while(st != NULL && st->kid != NULL) {
+    TBprintf(stderr, "%d%s created %d%s\n",
+                     STATE(st), rejected(st)?"r":"",
+                     STATE(st->kid), rejected(st->kid)?"r":"");
+    st = st->kid;
+  }
+}
+
+void show_stack_ancestors(stack *st)
+{
+  while(st != NULL && st->parent != NULL) {
+    TBprintf(stderr, "%d%s induced %d%s\n",
+                     STATE(st->parent), rejected(st->parent)?"r":"",
+                     STATE(st), rejected(st)?"r":"");
+    st = st->parent;
+  }
+}
 
 void show_active_stack_states(signed int c)
 {

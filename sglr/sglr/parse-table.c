@@ -169,13 +169,13 @@ parse_table *new_parse_table(int states, int productions)
   pt->org_table    = NULL;
 
   for (i = 0; i <= states; i++) {
-      pt->action_table[i] = NULL;
-      pt->goto_table[i]   = NULL;
+    pt->action_table[i] = NULL;
+    pt->goto_table[i]   = NULL;
   }
 
   for (i = 0; i <= productions; i++) {
-      pt->productions[i].aterm = NULL;
-      pt->productions[i].cons = NULL;
+    pt->productions[i].aterm = NULL;
+    pt->productions[i].cons = NULL;
   }
   return pt;
 }
