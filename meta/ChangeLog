@@ -5,6 +5,8 @@
    the show-area does no longer be parameterized with a module name.
  * The "ShowSource" button is added to the standard buttons.
  * Renamed and removed some variables.
+ * Introduced a packed write and read function in in-output,
+   adapted the reading and writing of the term store.
 
 2003/07/02 (markvdb@cs.vu.nl)
  * The type (trm/eqs) is now made explicit.

@@ -94,7 +94,7 @@ in
     rec-msg(save-all) .
     snd-msg(ts-get-snapshot) .
     rec-msg(ts-snapshot(Snapshot?)) .
-    snd-msg(io-write-term-file("Meta.snapshot", Snapshot)) .
+    snd-msg(io-write-packed-term-file("Meta.snapshot", Snapshot)) .
     (
       rec-msg(io-file-written) 
     +

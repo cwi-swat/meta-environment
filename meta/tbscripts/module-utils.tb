@@ -529,7 +529,7 @@ in
   snd-msg(io-exists-file(Name)) .
   (
     rec-msg(io-file-exists) .
-    snd-msg(io-read-term-file(Name)) .
+    snd-msg(io-read-packed-term-file(Name)) .
     (
       rec-msg(io-file-contents(TermStoreContents?)) .
       snd-msg(ts-load-snapshot(TermStoreContents)) .

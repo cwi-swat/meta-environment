@@ -384,7 +384,7 @@ void loadTables(SS_Tables tables)
 
 void TS_loadSnapshot(ATerm s)
 {
-  SS_Snapshot snapshot = SS_SnapshotFromTerm(ATBunpack(s));
+  SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
   SS_Tables tables;
 
   if (!SS_isValidSnapshot(snapshot)) {

@@ -286,6 +286,24 @@ ATerm read_term_file(int cid, char *fileName)
 }
 
 /*}}}  */
+/*{{{  ATerm read_packed_term_file(int cid, char *fileName) */
+ 
+ATerm read_packed_term_file(int cid, char *fileName)
+{
+  ATerm result, contents;
+ 
+  contents = ATreadFromNamedFile(fileName);
+ 
+  if (contents == NULL) {
+    result = createErrorMessage(strerror(errno));
+  } else {
+    result = ATmake("snd-value(file-contents(<term>))", contents);
+  }
+ 
+  return result;
+}
+ 
+/*}}}  */
 /*{{{  ATerm write_text_file(int cid, char *fileName, ATerm content) */
 
 ATerm write_text_file(int cid, char *fileName, ATerm content)
@@ -334,6 +352,41 @@ ATerm write_term_file(int cid,  char *fileName, ATerm packedContent)
     }
     else {
       if (ATwriteToBinaryFile(content, file)) {
+        message = createSuccessMessage();
+      }
+      else {
+	if (ferror(file)) {
+	  message = createErrorMessage(strerror(errno));
+	}
+	else {
+	  message = createErrorMessage("Could not write ATerm to file");
+	}
+      }
+      fclose(file);
+    }
+  }
+  else{
+    message = createErrorMessage("out of memory");
+  }
+
+  return message;
+}
+
+/*}}}  */
+/*{{{  ATerm write_packed_term_file(int cid,  char *fileName, ATerm packedContent) */
+
+ATerm write_packed_term_file(int cid,  char *fileName, ATerm content)
+{
+  ATerm message;
+
+  if (fileName != NULL) {
+    FILE *file = NULL;
+
+    if (!(file = fopen(fileName, "w"))) {
+      message = createErrorMessage(strerror(errno));
+    }
+    else {
+      if (ATwriteToTextFile(content, file)) {
         message = createSuccessMessage();
       }
       else {
