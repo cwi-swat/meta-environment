@@ -7,14 +7,11 @@
  */
 process DisplayErrors is
 let
-  Error : list,
   Message : str,
-  Subject : term,
-  SubjectText : str,
   Errors : list,
-  ErrorsText : str,
-  Tag : term,
-  TagText : str,
+  Feedback : term,
+  Producer : str,
+  Identification : str,
   ModuleName : str
 in
   (
@@ -26,15 +23,15 @@ in
     snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
     snd-note(show-feedback-summary(feedback("asf-checker",ModuleName,Errors)))
   +
-    rec-msg(display-sdf-errors(Errors?)).
-    if not-equal(Errors,[]) then
-      Message := first(Errors).
-      Errors := next(Errors).
-      snd-note(ui-status(warningf("%s",[Message])))
-    fi *
-    if equal(Errors,[]) then
-      tau
-    fi
+    rec-msg(display-sdf-errors(Feedback?)) .
+    snd-msg(convert-feedback(Feedback)) .
+    rec-msg(converted-feedback(Feedback?)) .
+    snd-msg(get-feedback-producer(Feedback)) .
+    rec-msg(producer(Producer?)) .
+    snd-msg(get-feedback-identification(Feedback)) .
+    rec-msg(identification(Identification?)) .
+    snd-note(remove-feedback-summary(Producer, Identification)) .
+    snd-note(show-feedback-summary(Feedback))
   ) * 
   delta
 endlet

@@ -9,6 +9,7 @@
 #include "addeqssyntax.idef"
 #include "removevarsyntax.idef"
 #include "error-display.tb"
+#include "error-support.idef"
 
 process Create-Asf-Processes is
 let Pid : int 
@@ -21,6 +22,7 @@ in
   create(RemoveVars, Pid?).
   create(Asfc, Pid?).
   create(DisplayErrors, Pid?) .
+  create(ErrorSupport, Pid?) .
   create(Preprocess-syntax, Pid?) .
   create(Interpret-term, Pid?) .
   create(Postprocess-semantics, Pid?) .
@@ -77,23 +79,22 @@ process Preprocess-syntax is
 let
   Syntax     : term, 
   ModuleName : str,
-  Msgs       : list
+  Feedback   : term
 in
   (
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
-/*
     snd-msg(check-asfsdf(Syntax)) .
-    rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) .  */
+    rec-msg(messages(Feedback?)) .
+    snd-msg(display-sdf-errors(Feedback)) .
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
-/*    snd-msg(check-asfsdf(Syntax)) .
-    rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) .  */
+    snd-msg(check-asfsdf(Syntax)) .
+    rec-msg(feedback(Feedback?)) .
+    snd-msg(display-sdf-errors(Feedback)) .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
