@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar 10 10:52:39 CET 2005 <kooiker@cwi.nl>
+ * languages/basic/Bytes.asf: fixed byte-to-strchar to output space rather
+ than \032
+
 Tue Mar  1 13:43:41 CET 2005 <markvdb@cwi.nl>
  * languages/sdf2/syntax/Literals.sdf: introduced the sort
    FunctionName with subsorts IdCon and StrCon.

@@ -53,17 +53,42 @@ equations
 [quote]
 	byte-to-strchar(byte(\")) = strchar(\")
 
-[default-octal]
+[octal]
 	n := byte-to-decimal(byte),
-	n >= 40 & n <= 176 == false,
+	n < 10 == true,
+	natcon(digit) := n
+	===>
+	byte-to-strchar(byte) = strchar(\ 0 0 digit)
+
+[octal]
+	n := byte-to-decimal(byte),
+	n >= 10 & n < 32 == true,
+	natcon(digit1 digit2) := n
+	===>
+	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
+
+[octal]
+	n := byte-to-decimal(byte),
+	n >= 10 & n < 32 == true,
+	natcon(digit1 digit2) := n
+	===>
+	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
+
+[octal]
+	n := byte-to-decimal(byte),
+	n > 32 & n < 40 == true,
+	natcon(digit1 digit2) := n
+	===>
+	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
+
+[octal]
+	n := byte-to-decimal(byte),
+	n > 176 == true,
 	natcon(digit1 digit2 digit3) := n
 	===>
 	byte-to-strchar(byte) = strchar(\ digit1 digit2 digit3)
 
 [default-normal]
-	n := byte-to-decimal(byte(any)),
-	n >= 40 & n <= 176 == true
-	===>
 	byte-to-strchar(byte(any)) = strchar(any)
 
 equations
@@ -96,6 +121,7 @@ bytes(byte1 byte*2) < bytes(byte2 byte*2) = true
 
 equations
 
+[000]   decimal-to-byte(0) = byte(\0)
 [001]	decimal-to-byte(1) = byte(\1)
 [002]	decimal-to-byte(2) = byte(\2)
 [003]	decimal-to-byte(3) = byte(\3)
@@ -350,6 +376,8 @@ equations
 [252]	decimal-to-byte(252) = byte(\252)
 [253]	decimal-to-byte(253) = byte(\253)
 [254]	decimal-to-byte(254) = byte(\254)
+[255]   decimal-to-byte(255) = byte(\255)
+[000]   byte-to-decimal(byte(\0)) = 0
 [001]	byte-to-decimal(byte(\1)) = 1
 [002]	byte-to-decimal(byte(\2)) = 2
 [003]	byte-to-decimal(byte(\3)) = 3
@@ -604,6 +632,7 @@ equations
 [252]	byte-to-decimal(byte(\252)) = 252
 [253]	byte-to-decimal(byte(\253)) = 253
 [254]	byte-to-decimal(byte(\254)) = 254
+[255]   byte-to-decimal(byte(\255)) = 255
 
 tests
 
@@ -611,4 +640,3 @@ tests
 [len] length("aaa") + length("aaa") == length("aaaaaa")
 [bytes-test]  
 	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) == "a\n\t\\\"b\007"
-
