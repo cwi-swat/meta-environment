@@ -57,7 +57,7 @@ CHDR		=
 # All files in BINFILES are installed in $(bindir)
 BINFILES	=
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= meta.tb editor.tb asfix2toasfix1.tb clear-all.tb \
+LIBFILES	= meta.tb editor.tb clear-all.tb \
                   close-modules.tb edit-module.tb edit-term.tb focus.tb \
                   open-modules.tb parsetrees.tb prettyprinter.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \

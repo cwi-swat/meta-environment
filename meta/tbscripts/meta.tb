@@ -3,7 +3,6 @@
 #include "sglr.idef"
 #include "editor.tb"
 #include "structure-editor.tb"
-#include "asfix2toasfix1.tb"
 #include "focus.tb"
 #include "edit-term.tb"
 #include "prettyprinter.tb"
