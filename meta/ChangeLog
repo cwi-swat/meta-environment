@@ -3,6 +3,10 @@
 2002/10/11 (vinju@loria.fr)
  * Added functionality for non-existing modules in MetaStudio. If you click
    on them you can create them by choosing the option from the menu.
+ * Fixed renaming of modules, old module was not removed
+ * Fixed deleting of modules, module was not really deleted
+ * Module that import a deleted module are now updated to not have the 
+   import any more
 
 2002/10/10 (vinju@loria.fr)
  * Changed functionality concerning ambiguities in the editor. If you click 
