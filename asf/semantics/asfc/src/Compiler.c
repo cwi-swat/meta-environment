@@ -49784,7 +49784,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Compiler,                   
                           resolve_Compiler,                    
-                          init_Compiler
+                          init_Compiler, NULL, -1
 );}                                                        
 #endif                                                   
 
