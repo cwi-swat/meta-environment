@@ -1,6 +1,8 @@
-module Transform-Constructors
+module muasf2c/Transform-Constructors
 
-imports VarEnv MuASF-Equations-Ops
+imports utils/VarEnv
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

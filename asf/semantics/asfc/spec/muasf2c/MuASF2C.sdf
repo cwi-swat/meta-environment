@@ -1,6 +1,8 @@
-module MuASF2C
+module muasf2c/MuASF2C
 
-imports  MuASF-Sign2C MuASF-Rules2C
+imports muasf2c/MuASF-Sign2C
+imports muasf2c/MuASF-Rules2C
+
 
 exports
   context-free syntax

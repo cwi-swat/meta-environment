@@ -1,6 +1,8 @@
-module MuASF-Sign2C
+module muasf2c/MuASF-Sign2C
 
-imports C-Basics MuASF-Equations-Ops
+imports c/C-Basics
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   context-free syntax

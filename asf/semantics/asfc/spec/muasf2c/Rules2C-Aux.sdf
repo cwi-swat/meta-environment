@@ -1,6 +1,9 @@
-module Rules2C-Aux
+module muasf2c/Rules2C-Aux
 
-imports C-Basics MuASF-Equations-Ops Integers-Extended
+imports utils/Integers-Extended
+imports c/C-Basics
+imports muasf/MuASF-Equations-Ops
+
 
 exports
   sorts C-Rule C-RuleList C-RuleListPair FV-Path FV-PathList PathList-Cenv

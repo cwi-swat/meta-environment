@@ -1,6 +1,10 @@
-module MuASF-Rules2C
+module muasf2c/MuASF-Rules2C
 
-imports RenameVars Improve-C-code Transform-Constructors Locate-Constants
+imports muasf/RenameVars
+imports muasf2c/Locate-Constants
+imports muasf2c/Improve-C-code
+imports muasf2c/Transform-Constructors
+
 
 exports
   context-free syntax

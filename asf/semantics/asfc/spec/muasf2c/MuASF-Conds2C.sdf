@@ -1,6 +1,7 @@
-module MuASF-Conds2C
+module muasf2c/MuASF-Conds2C
 
-imports MuASF-Term2C
+imports muasf2c/MuASF-Term2C
+
 
 exports
   context-free syntax

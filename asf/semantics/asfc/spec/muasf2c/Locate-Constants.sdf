@@ -1,6 +1,7 @@
-module Locate-Constants
+module muasf2c/Locate-Constants
 
-imports MuASF-Conds2C
+imports muasf2c/MuASF-Conds2C
+
 
 exports
   context-free syntax
