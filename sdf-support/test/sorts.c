@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <SDF-utils.h>
 
-#define TEST_GRAMMAR_FILE SRC_DIR "Booleans.pt"
+#define TEST_GRAMMAR_FILE SRC_DIR "/Booleans.pt"
 
 int
 testSorts(void)
