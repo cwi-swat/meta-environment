@@ -125,7 +125,7 @@ endlet
 
 process DoRevertModule(ModuleName : str, Type : term) is
   if equal(Type, syntax-editor) then
-    HardCloseModuleInDB(ModuleName).
+    CloseModuleInDBandInvalidateDependingModules(ModuleName).
     snd-msg(open-modules([ModuleName], sdf)) .
     rec-msg(finished-opening-modules).
     snd-msg(module-reverted(ModuleName))
@@ -155,8 +155,10 @@ in
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
     SaveSdfModules(Changed).
+/*
     snd-msg(notify-about-changed-modules(Changed, sdf)) .
     rec-msg(notify-about-changed-modules-done) .
+*/
     MDB-DisplayGraph
 endlet
 
@@ -207,12 +209,12 @@ in
 endlet
 
 process DoImportModule(Mod : str, RealImport : str)  is
-  DeleteEditors(Mod). 
+  DeleteEditorAndInvalidateDependingModules(Mod). 
   AddImportInDB(Mod, RealImport).
   SaveAsfSdfModule(Mod) 
 
 process DoUnimportModule(Mod : str, RealImport : str) is
-  DeleteEditors(Mod). 
+  DeleteEditorAndInvalidateDependingModules(Mod). 
   RemoveImportInDB(Mod, RealImport) .
   SaveAsfSdfModule(Mod)
 
@@ -293,9 +295,19 @@ let
 in
   DeleteEditors(ModuleName).
   snd-msg(close-module-in-db(ModuleName)).
-  rec-msg(changed-modules(Changed?)).
+  rec-msg(changed-modules(Changed?)) /*.
   snd-msg(notify-about-changed-modules(Changed, sdf)) .
   rec-msg(notify-about-changed-modules-done)
+*/
+endlet
+
+process CloseModuleInDBandInvalidateDependingModules(ModuleName : str) is
+let
+  Changed : list
+in
+  DeleteEditorAndInvalidateDependingModules(ModuleName).
+  snd-msg(close-module-in-db(ModuleName)).
+  rec-msg(changed-modules(Changed?)) 
 endlet
 
   
@@ -324,24 +336,37 @@ let
   FileName : str,
   Extension : str
 in
-    snd-msg(is-module-in-db(Name)) .
-    (
-      rec-msg(exists-in-module-db(Name)).
-      Status := module-exists-in-db
-    +
-      rec-msg(not-exists-in-module-db(Name))
-    ).
-    snd-msg(file-extension-hook(sdf)) .
-    rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-get-filename(Name, Path, Extension)) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(io-exists-file(FileName)) .
-    (
-      rec-msg(io-file-exists) .
-      Status := module-exists-on-disk
-      +
-      rec-msg(io-file-not-exists)
-    )
+  snd-msg(is-module-in-db(Name)) .
+  (
+    rec-msg(exists-in-module-db(Name)).
+    Status := module-exists-in-db
+  +
+    rec-msg(not-exists-in-module-db(Name))
+  ).
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Name, Path, Extension)) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-exists-file(FileName)) .
+  (
+    rec-msg(io-file-exists) .
+    Status := module-exists-on-disk
+  +
+    rec-msg(io-file-not-exists)
+  )
+endlet
+
+process DeleteEditorAndInvalidateDependingModules(Module : str) is
+let
+  Depending : list,
+  Mod : str
+in
+  snd-msg(delete-editors-for-module(Module)) .
+  snd-msg(get-all-depending-modules(Module)) .
+  rec-msg(all-depending-modules(Depending?)) .
+  MDB-InvalidateModules(Depending, sdf) .
+  snd-msg(notify-about-changed-modules(Depending, sdf)) .
+  rec-msg(notify-about-changed-modules-done)
 endlet
 
 process DeleteEditors(Module : str) is
