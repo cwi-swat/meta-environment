@@ -427,14 +427,15 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
              fprintf(SG_log(), "\n");
              )
 
+    IF_VERBOSE(
+      SG_PrintStatusBar("sglr: shifting", sg_tokens_read, sg_total_tokens) 
+    )
+
     current_token = SG_NextToken(get_next_token);
 
 
     SG_ParseToken();
 
-    IF_VERBOSE(
-      SG_PrintStatusBar("sglr: shifting", sg_tokens_read, sg_total_tokens) 
-    )
 
     SG_Shifter();
 
@@ -1078,6 +1079,8 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
   static char daisy[] = "|/-\\";
   long double factor;
   long freq = whole / 30;
+ 
+  freq = (freq != 0) ? freq : 1; /* watching out for 0 divisions */
 
   if(!isatty(fileno(stderr))) {
     return;
