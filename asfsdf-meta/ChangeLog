@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Nov 19 17:46:06 CET 2004 <jurgenv@cwi.nl>
+ * Added debug menu to button definitions
+
 Wed Sep  1 14:29:35 CEST 2004 <fagidiot@daimi.au.dk>
  * meta-scripts/meta-interface.tb.src:
    - process Meta-Interface, added
