@@ -5,3 +5,5 @@
 Makefile
 Makefile.in
 swing-connector
+swing-editor
+swing-editor.jar
