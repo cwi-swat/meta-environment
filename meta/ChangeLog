@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Oct 25 13:15:47 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix loading images in swing editor
+
 Mon Oct 25 11:26:32 CEST 2004 <kooiker@cwi.nl>
  * configuration-manager/src/Makefile.am,
    editors/text/common/Makefile.am:

@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -43,11 +44,11 @@ import metaedit.style.Highlighter;
  */
 
 public class SwingEditor
-    extends JFrame
-    implements Observer {
+extends JFrame
+implements Observer {
 
   private final Clipboard clipboard = Toolkit.getDefaultToolkit().
-      getSystemClipboard();
+    getSystemClipboard();
 
   /* ---- GUI elements ---------*/
   private JToolBar editorToolBar;
@@ -81,7 +82,7 @@ public class SwingEditor
   protected JMenuItem undoMenuItem;
   protected JMenuItem findMenuItem;
   protected JMenuItem replaceMenuItem;
-  
+
 
   // Variables declaration for all Separators
   private JSeparator fileMenuSeparator;
@@ -89,22 +90,22 @@ public class SwingEditor
 
   // Variables declaration for all image icons that will be used by the buttons
   private ImageIcon undoImage,
-      redoImage,
-      copyImage,
-      pasteImage,
-      cutImage,
-      messagesImageUp,
-      messagesImageDown,
-      closeFileImage,
-      helpImage,
-      saveFileImage;
+	  redoImage,
+	  copyImage,
+	  pasteImage,
+	  cutImage,
+	  messagesImageUp,
+	  messagesImageDown,
+	  closeFileImage,
+	  helpImage,
+	  saveFileImage;
 
   // Variables declaration for the buttons
   protected JButton undoButton,
-      redoButton,
-      copyButton,
-      pasteButton,
-      cutButton, searchButton;
+	    redoButton,
+	    copyButton,
+	    pasteButton,
+	    cutButton, searchButton;
 
   public SwingEditor() {
     initialize();
@@ -114,62 +115,62 @@ public class SwingEditor
     EditorModel model = (EditorModel) o;
     if (arg.equals("writeContents")) {
       try {
-        FileWriter fileWriter=new FileWriter(model.getFileName());
-        swingEditorPane.write(fileWriter);
-        fileWriter.close();
-		System.out.println("SwingEditor: File is written......");
+	FileWriter fileWriter=new FileWriter(model.getFileName());
+	swingEditorPane.write(fileWriter);
+	fileWriter.close();
+	System.out.println("SwingEditor: File is written......");
       }
       catch (FileNotFoundException e) {
-        System.out.println("File not found");
+	System.out.println("File not found");
       }
       catch (IOException e) {
-        System.out.println("I/O error");
+	System.out.println("I/O error");
       }
 
     }
     else if (arg.equals("editFile")) {
       try {
-		  this.setTitle(model.getFileName());
-		  BufferedReader br = new BufferedReader(new FileReader(model.getFileName()));
-        String nextLine = "";
-        StringBuffer sb = new StringBuffer();
-        int x =0;
-        while ((nextLine = br.readLine()) != null) {
-          if(x==0){
-            sb.append(nextLine);
-          }else{
-            sb.append("\n"+nextLine);
-          }
-          x++;
-        }
-        swingEditorPane.setText(sb.toString());
-         
+	this.setTitle(model.getFileName());
+	BufferedReader br = new BufferedReader(new FileReader(model.getFileName()));
+	String nextLine = "";
+	StringBuffer sb = new StringBuffer();
+	int x =0;
+	while ((nextLine = br.readLine()) != null) {
+	  if(x==0){
+	    sb.append(nextLine);
+	  }else{
+	    sb.append("\n"+nextLine);
+	  }
+	  x++;
+	}
+	swingEditorPane.setText(sb.toString());
+
       }
       catch (FileNotFoundException e) {
-        System.out.println("File not found");
+	System.out.println("File not found");
       }
       catch (IOException e) {
-        System.out.println("I/O error");
+	System.out.println("I/O error");
       }
-      
+
     }
     else if (arg.equals("setFocus")) {
-	 model.getFocuser().clearFocus(document, model.getNormalStyle().getBgColor()); 
-	  offset = model.getBeginFocus();
+      model.getFocuser().clearFocus(document, model.getNormalStyle().getBgColor()); 
+      offset = model.getBeginFocus();
       length = model.getFocusLength();
-	  highlighters=model.getHighlighters();
-   	 for (int i=0; i< highlighters.size();i++){
-   	 	highlighter =(Highlighter) highlighters.get(i);	
-		highlighter.setHighlight(document);
- 	 }
-	 model.getFocuser().setFocus(document,  offset, length);
-	  }  else if (arg.equals("clearFocus")) {
-		model.getFocuser().clearFocus(document, model.getNormalStyle().getBgColor());
-		highlighters=model.getHighlighters();
-		   for (int i=0; i< highlighters.size();i++){
-			  highlighter =(Highlighter) highlighters.get(i);	
-			  highlighter.setHighlight(document);
-		   } 
+      highlighters=model.getHighlighters();
+      for (int i=0; i< highlighters.size();i++){
+	highlighter =(Highlighter) highlighters.get(i);	
+	highlighter.setHighlight(document);
+      }
+      model.getFocuser().setFocus(document,  offset, length);
+    }  else if (arg.equals("clearFocus")) {
+      model.getFocuser().clearFocus(document, model.getNormalStyle().getBgColor());
+      highlighters=model.getHighlighters();
+      for (int i=0; i< highlighters.size();i++){
+	highlighter =(Highlighter) highlighters.get(i);	
+	highlighter.setHighlight(document);
+      } 
     }else if (arg.equals("Message")) {
       statusBar.setText("...:: " + model.getMessage());
     }
@@ -184,19 +185,19 @@ public class SwingEditor
       setJMenuBar(bar);
       bar.updateUI();
     }
-	else if (arg.equals("setStyles")) {
-		model.getNormalStyle().setStyle(document, 0, contentModel.getLength());
-		highlighters=model.getHighlighters();
-		int i=0;
-		for (i=0; i< highlighters.size();i++){
-		   highlighter =(Highlighter) highlighters.get(i);	
-		   highlighter.setHighlight(document);
-		}
-	}
- }
+    else if (arg.equals("setStyles")) {
+      model.getNormalStyle().setStyle(document, 0, contentModel.getLength());
+      highlighters=model.getHighlighters();
+      int i=0;
+      for (i=0; i< highlighters.size();i++){
+	highlighter =(Highlighter) highlighters.get(i);	
+	highlighter.setHighlight(document);
+      }
+    }
+  }
 
 
-// This method is called from within the constructor to initialize the form.
+  // This method is called from within the constructor to initialize the form.
   private void initialize() {
     getContentPane().setLayout(new BorderLayout());
     searchButton = new JButton("");
@@ -207,14 +208,15 @@ public class SwingEditor
     cutButton = new JButton();
     statusBar.setText(" ");
     this.setSize(new Dimension(600, 600));
-    closeFileImage =new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/close.gif"));
-    helpImage =new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/help.png"));
-    saveFileImage =new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/save2.gif"));
-    undoImage =new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/undo.gif"));
-    redoImage = new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/redo.gif"));
-    copyImage = new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/copy.gif"));
-    pasteImage = new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/paste.gif"));
-    cutImage = new ImageIcon(SwingEditor.class.getResource("nl/cwi/editor/images/cut.gif"));
+
+    closeFileImage = new ImageIcon(getClass().getResource("/metaedit/images/close.gif"));
+    helpImage = new ImageIcon(getClass().getResource("/metaedit/images/help.png"));
+    saveFileImage = new ImageIcon(getClass().getResource("/metaedit/images/save2.gif"));
+    undoImage = new ImageIcon(getClass().getResource("/metaedit/images/undo.gif"));
+    redoImage = new ImageIcon(getClass().getResource("/metaedit/images/redo.gif"));
+    copyImage = new ImageIcon(getClass().getResource("/metaedit/images/copy.gif"));
+    pasteImage = new ImageIcon(getClass().getResource("/metaedit/images/paste.gif"));
+    cutImage = new ImageIcon(getClass().getResource("/metaedit/images/cut.gif"));
 
     undoButton.setIcon(undoImage);
     undoButton.setToolTipText("Undo");
@@ -224,7 +226,7 @@ public class SwingEditor
     redoButton.setToolTipText("Redo");
     redoButton.setBorderPainted(false);
 
-    
+
     copyButton.setToolTipText("Copy");
     copyButton.setBorderPainted(false);
     copyButton.setIcon(copyImage);
@@ -252,7 +254,7 @@ public class SwingEditor
     editorToolBar.addSeparator();
     editorToolBar.addSeparator();
     editorToolBar.add(searchButton);
-    
+
     fileMenuSeparator = new JSeparator();
     editMenuSeparator = new JSeparator();
 
@@ -272,18 +274,18 @@ public class SwingEditor
     aboutMenuItem = new JMenuItem();
     findMenuItem = new JMenuItem("find...");
     replaceMenuItem = new JMenuItem("replace...");
-   
+
     fileMenu.setText("File");
     fileMenu.add(saveMenuItem);
     fileMenu.add(fileMenuSeparator);
 
-    
+
     //Menu item save
     saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_S, java.awt.event.InputEvent.CTRL_MASK));
+						       VK_S, java.awt.event.InputEvent.CTRL_MASK));
     saveMenuItem.setText("Save File");
     saveMenuItem.setIcon(saveFileImage);
-   
+
 
     exitMenuItem.setText("Close");
     exitMenuItem.setIcon(closeFileImage);
@@ -292,13 +294,13 @@ public class SwingEditor
     menuBar.add(fileMenu);
     editMenu.setText("Edit");
     undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+						       VK_Z, java.awt.event.InputEvent.CTRL_MASK));
     undoMenuItem.setMnemonic('U');
     undoMenuItem.setText("Undo");
     editMenu.add(undoMenuItem);
 
     redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_R, java.awt.event.InputEvent.CTRL_MASK));
+						       VK_R, java.awt.event.InputEvent.CTRL_MASK));
     redoMenuItem.setMnemonic('R');
     redoMenuItem.setText("Redo");
     editMenu.add(redoMenuItem);
@@ -306,34 +308,34 @@ public class SwingEditor
     editMenu.add(editMenuSeparator);
 
     cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_X, java.awt.event.InputEvent.CTRL_MASK));
+						      VK_X, java.awt.event.InputEvent.CTRL_MASK));
     cutMenuItem.setText("Cut");
     editMenu.add(cutMenuItem);
 
     //Menu item Copy
     copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_C, java.awt.event.InputEvent.CTRL_MASK));
+						       VK_C, java.awt.event.InputEvent.CTRL_MASK));
     copyMenuItem.setText("Copy");
     editMenu.add(copyMenuItem);
 
     //Menu item Paste
     pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_V, java.awt.event.InputEvent.CTRL_MASK));
+							VK_V, java.awt.event.InputEvent.CTRL_MASK));
     pasteMenuItem.setText("Paste");
     editMenu.add(pasteMenuItem);
 
     //Menu item find
     findMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.
-        VK_F, java.awt.event.InputEvent.CTRL_MASK));
+						       VK_F, java.awt.event.InputEvent.CTRL_MASK));
     searchMenu.add(findMenuItem);
 
     //Menu item find
     replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.
-        KeyEvent.
-        VK_H, java.awt.event.InputEvent.CTRL_MASK));
+							  KeyEvent.
+							  VK_H, java.awt.event.InputEvent.CTRL_MASK));
     searchMenu.add(replaceMenuItem);
 
-      //Menu item Delete
+    //Menu item Delete
     menuBar.add(editMenu);
     menuBar.add(searchMenu);
     helpMenu.setText("Help");
@@ -366,7 +368,7 @@ public class SwingEditor
     for (int i = 0; i < MenuCount; i++) {
       menuItemsCount = bar.getMenu(i).getItemCount();
       for (int j = 0; j < menuItemsCount; j++) {
-        bar.getMenu(i).getItem(j).addActionListener(controller);
+	bar.getMenu(i).getItem(j).addActionListener(controller);
       }
     }
   }
@@ -385,18 +387,18 @@ public class SwingEditor
     redoMenuItem.addActionListener(controller);
     undoButton.addActionListener(controller);
     undoMenuItem.addActionListener(controller);
-	 cutMenuItem.addActionListener(controller);
+    cutMenuItem.addActionListener(controller);
     copyMenuItem.addActionListener(controller);
     pasteMenuItem.addActionListener(controller);
     cutButton.addActionListener(controller);
     copyButton.addActionListener(controller);
     pasteButton.addActionListener(controller);
-   
+
     //mouselistener
     swingEditorPane.addMouseListener(controller);
     contentModel.addUndoableEditListener(controller);
-    
-    
+
+
     this.addWindowListener(controller);
-    }
+  }
 }

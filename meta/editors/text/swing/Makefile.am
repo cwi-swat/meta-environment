@@ -43,7 +43,7 @@ TEXTEDITORAPI_JAR = $(shell ${top_builddir}/editors/text/common/texteditorapi-co
 METACONFIG_JAR = $(shell ${top_builddir}/configuration-manager/src/metaconfig-config)
 
 % : %.src Makefile
-	sed 's@__JARS@${EXTERNAL_JARS}:${TEXTEDITORAPI_JAR}:${METACONFIG_JAR}:${prefix}/share/swing-editor.jar@g' \
+	sed 's@__JARS__@${EXTERNAL_JARS}:${TEXTEDITORAPI_JAR}:${METACONFIG_JAR}:${prefix}/share/meta/swing-editor.jar@g' \
 	< $< > $@ && chmod +x $@
 
 JARCLASSES = `find . -name '*.class'`
@@ -55,8 +55,7 @@ JARFILES = \
 	${JARIMAGES} \
 	${JARCLASSES}
 
-swing-editor.jar: always
+.PHONY: swing-editor.jar
+swing-editor.jar:
 	FILES="${JARFILES}"; \
 	jar cf $@ $$FILES
-
-always:
