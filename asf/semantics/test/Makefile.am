@@ -1,3 +1,4 @@
+SUBDIRS=eqs input output c-code
 
 TEST_MODULES=Bracket \
              Collect \
