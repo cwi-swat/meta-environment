@@ -1,5 +1,6 @@
 module muasf2c/MuASF2C
 
+imports muasf2c/Remove-Unused-Variables
 imports muasf2c/MuASF-Sign2C
 imports muasf2c/MuASF-Rules2C
 

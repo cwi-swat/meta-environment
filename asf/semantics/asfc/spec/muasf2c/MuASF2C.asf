@@ -7,10 +7,12 @@ Modid := Modid2,
 Decl*3 := funcdefs2cfuncs(Funcdef*2)
 ===>
 muasf2c(module Modid2 Signopt Rulesopt, Nametable) =
+remove-unused-variables(
 #include "asc-support-me.h"
 Decl*1 ++ 
 Decl*2 ++ 
 Decl*3
+)
 
  
 [fds2cf-1'1] 
