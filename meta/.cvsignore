@@ -9,3 +9,7 @@ config.status
 configure
 meta
 meta.1
+bin
+.project
+.classpath
+missing
