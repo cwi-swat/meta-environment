@@ -222,7 +222,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Symbols sdfSymbols = SDF_makeSymbolsDefault(sdfTail);
     PT_Symbol ptHead = SDFSymbolToPtSymbol(sdfHead);
     PT_Symbols ptTail = SDFSymbolsToPtSymbols(sdfSymbols);
-    result = PT_makeSymbolSeq(PT_makeSymbolsList(ptHead, ptTail));
+    result = PT_makeSymbolSeq(PT_makeSymbolsMany(ptHead, ptTail));
   }
   else if (SDF_isSymbolOpt(sdfSymbol)) {
     SDF_Symbol sdfSym = SDF_getSymbolSymbol(sdfSymbol);
@@ -234,7 +234,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
     PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
     PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
-    result = PT_makeSymbolTuple(ptLeft, PT_makeSymbolsList(ptRight,PT_makeSymbolsEmpty()));
+    result = PT_makeSymbolTuple(ptLeft, PT_makeSymbolsSingle(ptRight));
   }
   else if (SDF_isSymbolTuple(sdfSymbol)) {
     SDF_Symbol sdfHead = SDF_getSymbolHead(sdfSymbol);
@@ -463,7 +463,7 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
   if (SDF_isCharRangesDefault(sdfCharRanges)) {
     SDF_CharRange sdfCharRange = SDF_getCharRangesCharRange(sdfCharRanges);
     PT_CharRange ptCharRange = SDFCharRangeToPtCharRange(sdfCharRange);
-    result = PT_makeCharRangesList(ptCharRange, result);
+    result = PT_makeCharRangesMany(ptCharRange, result);
   }
   else if (SDF_isCharRangesConc(sdfCharRanges)) {
     SDF_CharRanges sdfLeft = SDF_getCharRangesLeft(sdfCharRanges);
