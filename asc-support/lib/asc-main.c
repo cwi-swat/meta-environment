@@ -155,10 +155,6 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
   if (!streq(function,"")) {
     PT_Args args = PT_makeArgsEmpty();
     
-    if (streq(inputs[0],"-")) {
-      nInputs++;
-    }
-
     for (--nInputs; nInputs >= 0; nInputs--) {
       PT_ParseTree parseTree = PT_makeParseTreeFromTerm(
                                  ATreadFromNamedFile(inputs[nInputs]));
