@@ -15,7 +15,7 @@
 
 /*{{{  globals */
 
-static ASF_Layout space;
+static ASF_OptLayout space;
 
 #define DEPTH_UNDEFINED -1
 #define CHECK_AMB(tree)  if (PT_isTreeAmb((PT_Tree) (tree))) return (tree)
@@ -296,14 +296,14 @@ static ASF_Equations filterEquations(ASF_Equations equations)
 ASF_Equations filterEquationSyntax(ASF_Equations equations)
 {
   /* initialize some globals */
-  space = (ASF_Layout) PT_makeTreeLayoutFromString(" ");
+  space = ASF_makeOptLayoutPresent(ASF_makeCHARLISTString(" "));
   ATprotect((ATerm*) &space);
 
   if (ASF_isValidEquations(equations)) {
     equations = filterEquations(equations);
   }
 
-  ATunprotect(&space);
+  ATunprotect((ATerm*) &space);
 
   return equations;
 }

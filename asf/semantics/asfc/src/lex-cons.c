@@ -10,18 +10,10 @@ static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch)
 {
   PT_Args listChars;
   PT_Tree listChar;
-  PT_Tree charTree;
 
-  if (ASF_isCHARLexToCf(ch)) {
-    charTree = PT_makeTreeFromTerm(ASF_getCHARLex(ch));
-    listChars = PT_getTreeArgs(charTree);
-    listChar = PT_getArgsArgumentAt(listChars,1);
-    return listChar;
-  }
-
-  ATerror("constructorCharToLexicalChar: unable to process %s\n", 
-	  PT_yieldTree((PT_Tree) ch));
-  return NULL;
+  listChars = (PT_Args) ASF_getCHARChars(ch);
+  listChar = PT_getArgsArgumentAt(listChars,1);
+  return listChar;
 }
 
 static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
