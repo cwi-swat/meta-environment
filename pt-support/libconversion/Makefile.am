@@ -9,4 +9,6 @@ include_HEADERS         = conversion.h
 libconversion_a_SOURCES = flattenPT.c inflatePT.c a2metoa1.c
 
 CFLAGS                  = -g -Wall -O2
-INCLUDES                = -I${ATERM}/include
+INCLUDES                = -I${ATERM}/include \
+                          -I${top_srcdir}/libmept \
+                          -I${top_srcdir}/libasfix2
