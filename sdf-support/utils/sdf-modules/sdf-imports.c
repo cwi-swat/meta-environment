@@ -71,6 +71,16 @@ ATerm get_import_renamings(int cid, ATerm atImport)
 }
 
 /*}}}  */
+/*{{{  ATerm get_module_id(int cid, ATerm atModule) */
+
+ATerm get_module_id(int cid, ATerm atModule)
+{
+  SDF_Module module = SDF_ModuleFromTerm(atModule);
+
+  return ATmake("snd-result(module-id(<str>))", SDF_getModuleName(module));
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 

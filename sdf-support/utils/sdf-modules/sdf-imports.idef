@@ -8,10 +8,17 @@ let
  ModuleId : str,
  Imports : list,
  Import : term,
- Renamings : term
+ Renamings : term,
+ Module : term,
+ Id : str
 in
   execute(sdf-imports, SI?) .
   (
+    rec-msg(si-get-module-id(Module?)) .
+    snd-eval(SI, get-module-id(Module)) .
+    rec-value(SI, module-id(Id?)) .
+    snd-msg(module-id(Id))
+  +
     rec-msg(si-get-all-imports(Modules, ModuleId)) .
     snd-eval(SI, get-all-imports(Modules, ModuleId)) .
     rec-value(SI, all-imports(Imports?)) .
