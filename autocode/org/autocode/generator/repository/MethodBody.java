@@ -1,4 +1,4 @@
-package org.autocode.bootstrap.generator.repository;
+package org.autocode.generator.repository;
 
 import java.util.*;
 import java.io.*;

@@ -1,0 +1,8 @@
+
+plugin constructor {
+  class := "org.autocode.generator.java.ConstructorPlugin"
+  provides operations {
+    type := { constructor }
+  }
+}
+

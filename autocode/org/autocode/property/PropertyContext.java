@@ -9,6 +9,8 @@ public class PropertyContext
   private PropertyForest forest;
   private List path;
 
+  private boolean found;
+
   //{{{ public PropertyContext(PropertyForest forest)
 
   public PropertyContext(PropertyForest forest)
@@ -37,24 +39,11 @@ public class PropertyContext
 
   //}}}
 
-  //{{{ public PropertyForest getForest()
+  //{{{ public PropertyForest getRootForest()
 
-  public PropertyForest getForest()
+  public PropertyForest getRootForest()
   {
     return forest;
-  }
-
-  //}}}
-
-  //{{{ public Set getValueSet(String key)
-
-  public Set getValueSet(String key)
-  {
-    Set values = new HashSet();
-
-    getValue(key, path, forest, values);
-
-    return values;
   }
 
   //}}}
@@ -114,9 +103,28 @@ public class PropertyContext
 
   //}}}
 
+  //{{{ public Set getValueSet(String key)
+
+  public Set getValueSet(String key)
+  {
+    found = false;
+
+    Set values = new HashSet();
+
+    getValue(key, path, forest, values);
+
+    if (!found) {
+      throw new IllegalArgumentException("property '" + key + "' not found in context: " + this);
+    }
+
+    return values;
+  }
+
+  //}}}
   //{{{ private void getValue(leaf_key, path, forest, Set values)
 
-  private void getValue(String leaf_key, List path, PropertyForest forest, Set values)
+  private void getValue(String leaf_key, List path, PropertyForest forest,
+			Set values)
   {
     //System.out.println("getValue: " + leaf_key + ", " + forest);
     if (path.isEmpty()) {
@@ -134,7 +142,6 @@ public class PropertyContext
   }
 
   //}}}
-
   //{{{ private List skipComplexKey(String key, List path)
 
   private List skipComplexKey(String key, List path)
@@ -186,10 +193,7 @@ public class PropertyContext
 
       if (pathLeft.isEmpty()) {
 	if (leaf_key.equals(lhs)) {
-	  if (tree.getType() == PropertyTree.SET) {
-	    values.clear();
-	  }
-	  values.add(tree.getValue());
+	  addResult(tree, values);
 	}
       } else {
 	String[] pair = (String[])pathLeft.get(0);
@@ -215,14 +219,26 @@ public class PropertyContext
     while (iter.hasNext()) {
       PropertyTree tree = (PropertyTree)iter.next();
       if (leaf_key.equals(tree.getKey())) {
-	String value = tree.getValue();
-	if (!value.equals("*")) { // Skip trees that only augment children
-	  if (tree.getType() == PropertyTree.SET) {
-	    values.clear();
-	  }
-	  values.add(tree.getValue());
-	}
+	addResult(tree, values);
       }
+    }
+  }
+
+  //}}}
+  //{{{ private void addResult(PropertyTree tree)
+
+  private void addResult(PropertyTree tree, Set values)
+  {
+    if (tree.getType() == PropertyTree.SET) {
+      values.clear();
+    }
+
+    String value = tree.getValue();
+    if (value == null) {
+      found = true;
+    } else if (!value.equals("*")) { // Skip trees that only augment children
+      values.add(tree.getValue());
+      found = true;
     }
   }
 
@@ -266,6 +282,29 @@ public class PropertyContext
     } else {
       this.forest.addTree(merge(forest, path));
     }
+  }
+
+  //}}}
+
+  //{{{ public String toString()
+
+  public String toString()
+  {
+    StringBuffer buf = new StringBuffer();
+    buf.append('[');
+    Iterator iter = path.iterator();
+    while (iter.hasNext()) {
+      String[] pair = (String[])iter.next();
+      buf.append(pair[0]);
+      buf.append('=');
+      buf.append(pair[1]);
+      if (iter.hasNext()) {
+	buf.append(',');
+      }
+    }
+    buf.append(']');
+
+    return buf.toString();
   }
 
   //}}}

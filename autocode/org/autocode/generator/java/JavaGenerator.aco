@@ -1,16 +1,10 @@
 
+class := "org.autocode.generator.java.JavaGenerator"
+
 folding := true		// Enable folding support by default
 
-plugin constructor {
-  class := "org.autocode.generator.java.ConstructorPlugin"
-}
-
-plugin accessor {
-  class := "org.autocode.generator.java.AccessorPlugin"
-}
-
 type * {
-  operations * {
+  operation * {
     access := public
     abstract := false
     static := false
@@ -18,7 +12,7 @@ type * {
   }
 
   field * {
-    operations * {
+    operation * {
       access := public
       abstract := false
       static := false
@@ -30,4 +24,7 @@ type * {
     final := false	  // nor final
   }
 }
+
+@import "org/autocode/generator/java/plugin/Constructor.aco"
+@import "org/autocode/generator/java/plugin/Accessor.aco"
 

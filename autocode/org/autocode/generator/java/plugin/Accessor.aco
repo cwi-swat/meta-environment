@@ -1,0 +1,8 @@
+
+plugin accessor {
+  class := "org.autocode.generator.java.AccessorPlugin"
+  provides operations {
+    field := { get, set, init }
+  }
+}
+

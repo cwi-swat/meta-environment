@@ -1,4 +1,4 @@
-#SUBDIRS = java
+SUBDIRS = util repository . java
 
 javadir = ${prefix}/classes/org/autocode/generator
 

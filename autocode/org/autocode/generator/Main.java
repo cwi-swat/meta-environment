@@ -47,6 +47,8 @@ public class Main
     forest = parser.PropertyForest();
     reader.close();
 
+    System.out.println("properties: " + forest);
+
     Iterator iter = files.iterator();
     while (iter.hasNext()) {
       String fileName = (String)iter.next();
@@ -70,43 +72,31 @@ public class Main
 
     iter = generators.iterator();
     while (iter.hasNext()) {
-      String generator = (String)iter.next();
+      String generatorName = (String)iter.next();
       PropertyContext genContext =
-	new PropertyContext(appContext, "generator", generator);
+	new PropertyContext(appContext, "generator", generatorName);
 
       String className = genContext.getSingletonValue("class");
+
+      /*
       defaults = "/" + className.replace('.', '/') + ".aco";
       stream = getClass().getResourceAsStream(defaults);
       reader = new InputStreamReader(stream);
       parser.ReInit(reader);
       genContext.merge(parser.PropertyForest());
       reader.close();
+      */
 
-      System.out.println("checking if enabled: " + generator);
-      System.out.println("forest::: ");
-      System.out.println(genContext.getForest());
       if (genContext.getBoolean("enabled")) {
 	// Generator is active!
-	System.out.println("generator enabled: " + generator
-			   + ", " + className);
-      } else {
-	System.out.println("generator NOT enabled: " + generator);
+	System.out.println("Activating generator: " + generatorName
+			   + " (" + className + ")");
+	Class generatorClass = Class.forName(className);
+	AutocodeGenerator generator =
+	  (AutocodeGenerator)generatorClass.newInstance();
+	generator.generate(genContext);
       }
     }
-
-
-    /*
-    Property plugins = def.getApplicationProperty("plugins", application);
-    System.out.println("plugins = " + plugins);
-
-    Class generatorClass = Class.forName(className);
-    AutocodeGenerator generator = (AutocodeGenerator)generatorClass.newInstance();
-    generator.setDataDefinition(def);
-    generator.setApplication(application);
-
-    generator.generate();
-    generator.emit();
-    */
   }
 
   //}}}

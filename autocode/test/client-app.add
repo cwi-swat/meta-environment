@@ -1,7 +1,6 @@
 application client-app {
   generator java {
     enabled := true
-    folding := true
 
     @import "Client.add"
     @import "Order.add"
@@ -12,12 +11,17 @@ application client-app {
 
     type Client {
       access := public
-      operation := { constructors }
+      operation := { constructor }
       interface := { Serializable, Runnable }
   
       field name {
+        operation += { init }
         access := public
         static := true
+      }
+      
+      field * {
+        operation := { get, set }
       }
 
       operation constructor {

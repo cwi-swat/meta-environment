@@ -13,6 +13,15 @@ public class PropertyTree
 
   private PropertyForest properties;
 
+  //{{{ public PropertyTree(String key, int type)
+
+  public PropertyTree(String key, int type)
+  {
+    this(key, null, new PropertyForest());
+    this.type = type;
+  }
+
+  //}}}
   //{{{ public PropertyTree(String key, String value, PropertyForest properties)
 
   public PropertyTree(String key, String value, PropertyForest properties)
@@ -20,6 +29,7 @@ public class PropertyTree
     this.key = key;
     this.value = value;
     this.properties = properties;
+    this.type = ADD;
   }
 
   //}}}
@@ -66,6 +76,8 @@ public class PropertyTree
 
   //}}}
 
+  //{{{ public String toString(int indent)
+
   public String toString(int indent)
   {
     StringBuffer buf = new StringBuffer();
@@ -80,14 +92,23 @@ public class PropertyTree
 
     if (type == SET) {
       buf.append(":= ");
-      buf.append(value);
+      if (value == null) {
+	buf.append("{ }");
+      } else {
+	buf.append(value);
+      }
       if (!properties.isEmpty()) {
 	throw new RuntimeException("SET tree must be empty: " +
 				   properties.toString());
       }
-    } else if (properties.isEmpty()) {
+    } else if (properties.isEmpty()
+	       && (value == null || !value.equals("*"))) {
       buf.append("+= ");
-      buf.append(value);
+      if (value == null) {
+	buf.append("{ }");
+      } else {
+	buf.append(value);
+      }
     } else {
       buf.append(value);
       buf.append(" {");
@@ -101,6 +122,7 @@ public class PropertyTree
     return buf.toString();
   }
 
+  //}}}
   //{{{ public String toString()
 
   public String toString()

@@ -1,4 +1,4 @@
-package org.autocode.bootstrap.generator.java;
+package org.autocode.generator.repository.java;
 
 public interface JavaAccessSpecifiers
 {

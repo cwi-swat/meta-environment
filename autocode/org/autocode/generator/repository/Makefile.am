@@ -1,4 +1,4 @@
-javadir = ${prefix}/classes/org/autocode/bootstrap/generator/repository
+javadir = ${prefix}/classes/org/autocode/generator/repository
 
 JAVAROOT = ${top_builddir}
 

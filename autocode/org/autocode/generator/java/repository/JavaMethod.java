@@ -1,9 +1,8 @@
-package org.autocode.bootstrap.generator.java;
+package org.autocode.generator.repository.java;
 
 //{{{ imports
 
-import org.autocode.bootstrap.generator.repository.*;
-import org.autocode.support.*;
+import org.autocode.generator.repository.*;
 import java.util.*;
 
 //}}}

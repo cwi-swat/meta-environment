@@ -1,6 +1,23 @@
 application * {
-  generator java {
-    class := "org.autocode.generator.java.JavaGenerator"
+  generator * {
     enabled := false
+
+    plugin * {
+      provides operations {
+	type := { }
+	field := { }
+      }
+    }
+
+    type * {
+      operation += { }
+      field * {
+        operation += { }
+      }
+    }
+  }
+
+  generator java {
+    @import "org/autocode/generator/java/JavaGenerator.aco"
   }
 }

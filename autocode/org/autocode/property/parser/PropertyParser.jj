@@ -248,7 +248,6 @@ PropertyForest PropertyTrees() :
   String key;
   Token file, field;
   PropertyTree fieldType;
-  int treeType;
   List list;
   PropertyForest forest = new PropertyForest();
   PropertyForest children;
@@ -257,15 +256,27 @@ PropertyForest PropertyTrees() :
 {
   "@import" file=<STRING_LITERAL>
   {
-    String fileName = unquote(file.image);
+    String fileName = "/" + unquote(file.image);
     try {
-      FileReader reader = new FileReader(fileName);
+      //FileReader reader = new FileReader(fileName);
+      InputStream stream = getClass().getResourceAsStream(fileName);
+      if (stream == null) {
+	throw new ParseException("imported file not found: " + fileName);
+      }
+
+      Reader reader = new InputStreamReader(stream);
+
       PropertyParser parser = new PropertyParser(reader);
-      forest = parser.PropertyForest();
+      try {
+	forest = parser.PropertyFile();
+      } catch (Throwable e) {
+	System.err.println("Parse error in included file: " + fileName
+			   + " " + e.getMessage());
+	System.exit(1);
+      }
       reader.close();
       return forest;
     } catch (IOException e) {
-      e.printStackTrace();
       throw new ParseException("imported file not found: " + fileName);
     }
   }
@@ -288,17 +299,15 @@ PropertyForest PropertyTrees() :
       return forest;
     }
   |
-    ( "+=" {treeType=PropertyTree.ADD;}
-    | ":=" {treeType=PropertyTree.SET;}
+    ( ":=" { forest.addTree(new PropertyTree(key, PropertyTree.SET)); }
+    | "+=" { forest.addTree(new PropertyTree(key, PropertyTree.ADD)); }
     )
-    (
-      "{" list=PropertyValueList() "}"
+    ( "{" list=PropertyValueList() "}"
       {
 	Iterator iter = list.iterator();
 	while (iter.hasNext()) {
 	  PropertyTree tree =
 	    new PropertyTree(key, (String)iter.next(), new PropertyForest());
-	  tree.setType(treeType);
 	  forest.addTree(tree);
 	}
 	return forest;
@@ -307,7 +316,6 @@ PropertyForest PropertyTrees() :
       value=PropertyValue()
       {
 	PropertyTree tree = new PropertyTree(key, value, new PropertyForest());
-	tree.setType(treeType);
 	forest.addTree(tree);
 	return forest;
       }
