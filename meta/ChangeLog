@@ -1,5 +1,11 @@
 # $Id$
 
+2002/05/16 (vandenbr@loria.fr)
+ * Added a message action to buttons.
+ * Added the sort name to parse action.
+ * Added a "conditional" construct to button actions.
+ * New pico version based on asf-library.
+
 2002/05/15 (vandenbr@loria.fr)
  * Adapted the gen-adapter script in order to deal with trees as input.
  * Renamed the button operations.

@@ -205,6 +205,7 @@ AC_OUTPUT(
    utils/Makefile
    demo/Makefile
    demo/pico/Makefile
+   demo/new-pico/Makefile
    demo/user-manual-examples/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
