@@ -1,6 +1,6 @@
 #
 #    SGLR - the Scannerless Generalized LR parser.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ data_DATA         = sglr.idef
 
 EXTRA_DIST        = sglr.idef sglr.tif.c sglr.tif.h
 
-SRCS              = sglr-main.c  getopt.c getopt1.c 
+SRCS              = sglr-main.c  getopt.c getopt1.c
 HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)

@@ -115,7 +115,7 @@ imports COMMENT
 
 exports
 
-  sorts %%Left Right   
+  sorts %%Left Right
         Lex-Id Id Id-p
 
   lexical syntax

@@ -11,7 +11,7 @@ exports
     Arch-Spec-Defn -> Specs-Defn
     Unit-Spec-Defn -> Specs-Defn
     Spec-Defn      -> Specs-Defn
-    
+
 module ZCasl-Arch
 
 imports ZCasl-Struct
@@ -239,14 +239,14 @@ exports
 %% Basic-Items section
     "{" "}"     -> Basic-Spec
     Basic-Item+ -> Basic-Spec
- 
+
     Sig-Items                                            -> Basic-Item
     "free" Datatype-S { Datatype-Decl ";" }+ Opt-Semi    -> Basic-Item
-    "generated" Datatype-S {Datatype-Decl ";"}+ Opt-Semi -> Basic-Item 
-    "generated" "{" Sig-Items+ Opt-Semi "}" Opt-Semi     -> Basic-Item 
+    "generated" Datatype-S {Datatype-Decl ";"}+ Opt-Semi -> Basic-Item
+    "generated" "{" Sig-Items+ Opt-Semi "}" Opt-Semi     -> Basic-Item
     Var-S {Var-Decl ";"}+ Opt-Semi                       -> Basic-Item
     Var-S {Var-Decl ";"}+ "." {Formula "."}+ Opt-Semi    -> Basic-Item
-    Axiom-S {Formula ";"}+ Opt-Semi                      -> Basic-Item 
+    Axiom-S {Formula ";"}+ Opt-Semi                      -> Basic-Item
 
 %% Sig-Items
     Sort-S {Sort-Item ";"}+ Opt-Semi         -> Sig-Items
@@ -260,9 +260,9 @@ exports
     Sort "=" "{" Var ":" Sort "." Formula "}" -> Sort-Item
     Sort "=" { Sort "=" }+                    -> Sort-Item %% minimal form S1= S2
 
-%% Op-Item 
+%% Op-Item
     {Op-Name ","}+ ":" Op-Type                    -> Op-Item
-    {Op-Name ","}+ ":" Op-Type "," {Op-Attr ","}+ -> Op-Item 
+    {Op-Name ","}+ ":" Op-Type "," {Op-Attr ","}+ -> Op-Item
     Op-Name Op-Head "=" Term                      -> Op-Item
 
 %% Op-Type
@@ -326,12 +326,12 @@ exports
 
     Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2
     Formula-3 "/\\" Formula-2-and          -> Formula-2
-    Formula-3 "\\/" Formula-2-or           -> Formula-2 
-    Formula-3                              -> Formula-2-and  
+    Formula-3 "\\/" Formula-2-or           -> Formula-2
+    Formula-3                              -> Formula-2-and
     Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2-and
-    Formula-3 "/\\" Formula-2-and          -> Formula-2-and 
-    Formula-3                              -> Formula-2-or  
-    Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2-or 
+    Formula-3 "/\\" Formula-2-and          -> Formula-2-and
+    Formula-3                              -> Formula-2-or
+    Quantifier {Var-Decl ";"}+ "." Formula -> Formula-2-or
     Formula-3 "\\/" Formula-2-or           -> Formula-2-or
 
     Formula-3 "=>" Formula-2  -> Formula-1
@@ -341,10 +341,10 @@ exports
     "not" Formula-3 -> Formula-3
     "true"          -> Atom
     "false"         -> Atom
- 
+
     Pred-Symb                              -> Atom
     Pred-Symb "(" Term ")"                 -> Atom
-    Pred-Symb "(" Term "," {Term ","}+ ")" -> Atom 
+    Pred-Symb "(" Term "," {Term ","}+ ")" -> Atom
     Simple-Term Simple-Term+               -> Atom
 
     "def" Term      -> Atom
@@ -360,7 +360,7 @@ exports
 
 %% Pred-Symb
     Pred-Name                              -> Pred-Symb
-    "(" "pred" Pred-Name ":" Pred-Type ")" -> Pred-Symb 
+    "(" "pred" Pred-Name ":" Pred-Type ")" -> Pred-Symb
 
 %% Term
     Simple-Term+     -> Term
@@ -378,8 +378,8 @@ exports
 
     Simple-Term ":" Sort                          -> Simple-Term
     Simple-Term "as" Sort                         -> Simple-Term
-    "(" Term ")"                                  -> Simple-Term 
-    Simple-Term "when" Formula "else" Simple-Term -> Simple-Term {right} 
+    "(" Term ")"                                  -> Simple-Term
+    Simple-Term "when" Formula "else" Simple-Term -> Simple-Term {right}
 
 %%  Op-Symb
     Op-Name                   -> Op-Symb
@@ -401,7 +401,7 @@ exports
 
   context-free priorities
     Pred-Symb "(" Term ")" -> Atom >
-    "(" Term ")"           -> Simple-Term  
+    "(" Term ")"           -> Simple-Term
 
 module ZCasl-Keywords
 
@@ -450,7 +450,7 @@ module ZCasl-Lexical
 exports
   sorts
     Sort Id Word
-    Words-Id Mixfix-Id Simple-Id Token-Place Token-and-Place 
+    Words-Id Mixfix-Id Simple-Id Token-Place Token-and-Place
     Token-or-Place Var Token Signs Words Opt-Semi Token-Id
 
 
@@ -479,18 +479,18 @@ exports
 
     Token                     -> Token-Place
     Token-and-Place           -> Token-Place
- 
-    "__"                      -> Token-and-Place 
+
+    "__"                      -> Token-and-Place
     "__" Token-or-Place       -> Token-and-Place
     Token Token-and-Place     -> Token-and-Place
 
-    Token                     -> Token-or-Place 
-    "__"                      -> Token-or-Place 
+    Token                     -> Token-or-Place
+    "__"                      -> Token-or-Place
     "__" Token-or-Place       -> Token-or-Place
     Token Token-or-Place      -> Token-or-Place
 
                         -> Opt-Semi
-    ";"                 -> Opt-Semi 
+    ";"                 -> Opt-Semi
 
 
 module ZCasl-BasicItems-disamb
@@ -503,17 +503,17 @@ exports
     ":?"        -> Signs {reject}
     "::="       -> Signs {reject}
     "="         -> Signs {reject}
-    "=>"        -> Signs {reject} 
-    "<=>"       -> Signs {reject}  
+    "=>"        -> Signs {reject}
+    "<=>"       -> Signs {reject}
     "."         -> Signs {reject}
-    "|"         -> Signs {reject} 
+    "|"         -> Signs {reject}
     "|->"       -> Signs {reject}
     "/\\"       -> Signs {reject}
-    "\\/"       -> Signs {reject} 
+    "\\/"       -> Signs {reject}
     "{"         -> Signs {reject}
     "}"         -> Signs {reject}
     "["         -> Signs {reject}
-    "]"         -> Signs {reject} 
+    "]"         -> Signs {reject}
     "_"         -> Signs {reject}
     "__"        -> Signs {reject}
     "=e="       -> Signs {reject}
@@ -521,11 +521,11 @@ exports
     "->"        -> Signs {reject}
 %%    "("         -> Signs {reject}
 %%    ")"         -> Signs {reject}
-%%    ","         -> Signs {reject} 
-%%    "!"         -> Signs {reject} 
-%%    "?"         -> Signs {reject} 
-%%    "*"         -> Signs {reject} 
-%%    "<"         -> Signs {reject} 
+%%    ","         -> Signs {reject}
+%%    "!"         -> Signs {reject}
+%%    "?"         -> Signs {reject}
+%%    "*"         -> Signs {reject}
+%%    "<"         -> Signs {reject}
 
   restrictions
     <Word -CF>
@@ -554,11 +554,11 @@ exports
     "ops"
     "as"
     "when"
-    "else" 
+    "else"
     "sort"
-    "sorts" 
+    "sorts"
     "type"
-    "types" 
+    "types"
     "import"
     "imports" -/- [A-Za-z0-9\']
 
