@@ -1,5 +1,5 @@
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#    Copyright (C) 2001  Stichting Mathematisch Centrum,
 #                        Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -17,10 +17,11 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES		= -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES		= -I$(ASC_SUPPORT)/include                           -I$(PT_SUPPORT)/include                           -I$(ATERM)/include                           -I$(ASF_SUPPORT)/include
 
-LDFLAGS			= -L${ASCLIB} -L${ASFIXLIB} -L${ATERMLIB}
-LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
+LDFLAGS			= -L${ASC_SUPPORT}/lib                           -L${PT_SUPPORT}/lib                           -L${ASF_SUPPORT}/lib                           -L${ATERM}/lib
+
+LDLIBS          	= -lasc-support -lPT -lASF -lATB -lATerm
 
 noinst_LIBRARIES	= libSdf2-Normalization.a
 
