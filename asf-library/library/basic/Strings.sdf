@@ -5,6 +5,7 @@ module basic/Strings
 
 
 imports basic/Integers
+	basic/Bytes
 
 hiddens 
   sorts Escaped Normal
@@ -20,6 +21,7 @@ exports
 
     (Normal | Escaped)* -> Contents
 
+exports
   context-free syntax
     StrCon             -> String {constructor}
     String "||" String -> String {left}
@@ -31,7 +33,7 @@ exports
 hiddens
   imports
     basic/Whitespace
-    basic/Bytes
+
   variables
     "Chars" [0-9]* -> CHAR*
 
