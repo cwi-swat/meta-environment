@@ -14,7 +14,6 @@
 /*{{{  meta includes */
 
 #include <aterm1.h>
-#include <MEPT-utils.h>
 #include "graph2dot.h"
 
 /*}}}  */
