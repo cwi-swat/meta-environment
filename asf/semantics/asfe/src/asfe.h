@@ -66,6 +66,7 @@ void  RWclearError();
 
 /* Variables */
 extern ATbool run_verbose;
+extern ATbool keep_layout;
 extern ATerm equations_db;
 extern ATerm fail_env;
 extern ATerm posinfo;

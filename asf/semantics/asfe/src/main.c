@@ -43,7 +43,7 @@
 
 /*{{{  variables */
 
-static char myarguments[] = "be:hi:o:tvV";
+static char myarguments[] = "be:hi:o:tvVl";
 static char myname[] = "evaluator";
 static char myversion[] = "0.1";
 
@@ -64,9 +64,10 @@ void usage(char *prg, ATbool is_err)
 	    "\t-e file         use the equations |file|\n"
 	    "\t-i filename     input from file (default stdin)\n"
 	    "\t-o filename     output to file (default stdout)\n"
+            "\t-l              toggle keep layout (default %s)\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
-	    prg, myversion);
+	    prg, keep_layout ? "true" : "false", myversion);
   exit(is_err ? 1 : 0);
 }
 
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
       case 'e':  eqsfile=optarg;                         break;
       case 'i':  input=optarg;                           break;
       case 'o':  output=optarg;                          break;
+      case 'l':  keep_layout = !keep_layout;             break;
       case 'V':  version(argv[0]);                       break;
 
       case 'h':  usage(argv[0], ATfalse);                break;
