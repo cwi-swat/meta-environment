@@ -410,6 +410,15 @@ static ATbool checkListProductionCompatibility(PT_Production ptProd)
 
   if (PT_isSymbolIterPlus(rhs)
       || PT_isSymbolIterStar(rhs)) {
+    PT_Symbol nested = PT_getSymbolSymbol(rhs);
+
+    if (PT_isSymbolIterStar(nested) ||
+	PT_isSymbolIterPlus(nested) ||
+	PT_isSymbolIterStarSep(nested) ||
+	PT_isSymbolIterStarSep(nested)) {
+      result = ATfalse;
+    }
+    
     result = ATtrue;
   }
   else if (PT_isSymbolIterPlusSep(rhs)
@@ -624,9 +633,12 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
   }
   else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
     PT_Tree converted;
+    MA_Term type = treeToType(tree);
     ATbool returnsList = prodReturnsList(PT_getTreeProd(tree));
     converted = ASC_transformTraversalFunction(tree);
-    result = applTreeToTerm(converted, funcdefs, layout, returnsList);
+    result = MA_makeTermTyped(applTreeToTerm(converted, funcdefs, layout, 
+					     returnsList),
+			      em,em,type);
   }
   else if (PT_isTreeVar(tree)) {
     result = variableToTerm(tree);
