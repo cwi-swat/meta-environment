@@ -1037,15 +1037,21 @@ int list_length(term *tl)
 TBbool term_equal(register term *t1, register term *t2)
 {
   /* TBmsg("term_equal(%t,%t)\n", t1, t2); */
-  if(t1 == t2)
+  if(t1 == t2) {
     return TBtrue;
-  if(tkind(t1) != tkind(t2))
-    if(tkind(t1) == t_anno)
+  }
+
+  if(tkind(t1) != tkind(t2)) {
+    if(tkind(t1) == t_anno) {
       return term_equal(anno_term(t1), t2);
-    else if(tkind(t2) == t_anno)
+    }
+    else if(tkind(t2) == t_anno) {
       return term_equal(t1, anno_term(t2));
-    else
+    }
+    else {
       return TBfalse;
+    }
+  }
 
   switch(tkind(t1)){
   case t_bool:

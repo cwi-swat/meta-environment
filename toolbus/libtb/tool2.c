@@ -23,6 +23,7 @@
 #include "terms.h"
 #include "tools.h"
 #include "tool2.h"
+#include "tool.h"
 #include "procs.h"
 #include "sockets.h"
 #include <sys/types.h>
@@ -196,7 +197,6 @@ int TB_peek_next()
 TBbool TB_peek(int cid)
 {
   fd_set set;
-  static int rr = 0;
   int count = 0;
   struct timeval t;
 
@@ -227,14 +227,19 @@ int TB_handle_one(int cid)
   if(!trm) {
     err_fatal("contact with ToolBus lost.\n");
   }
-  if(streq(get_txt(fun_sym(trm)), "rec-do"))
+  if(streq(get_txt(fun_sym(trm)), "rec-do")) {
     sndvoid = TBtrue;
+  }
   result = connections[cid]->handler(cid, trm);
-  if(result)
+  if(result) {
     return TB_send(cid, result);
-  else
-    if(sndvoid)
-	  return TB_send(cid, TBmake("snd-void()"));
+  }
+  else if(sndvoid) {
+    return TB_send(cid, TBmake("snd-void()"));
+  }
+
+  err_fatal("Unhandled case in TB_handle_one!\n");
+  return -1;
 }
 
 /*}}}  */
@@ -283,6 +288,10 @@ int TB_setFds(fd_set *set)
 
 /*}}}  */
 /*{{{  int TB_match(char *fmt, term *trm, ...) */
+
+/* forward decl. of two recursive functions */
+int list_match(term_list *l1, term_list *l2, va_list *args);
+int term_match(term *trm, term *template, va_list *args);
 
 /*{{{  int list_match(term_list *l1, term_list *l2, va_list *args) */
 
@@ -409,8 +418,6 @@ int term_match(term *trm, term *template, va_list *args)
     }
     return 0;
   } else if(is_appl(template)) {
-    term_list *templ_args, *trm_args;
-
     if(!is_appl(trm) || fun_sym(template) != fun_sym(trm))
       return 0;
     return list_match(fun_args(trm), fun_args(template), args);
@@ -680,7 +687,7 @@ TBcallback TB_getHandler(int cid)
 /*}}}  */
 /*{{{  int TB_setSigChecker(int cid, TBsigcheck sigcheck) */
 
-int TB_setSigChecker(int cid, TBsigcheck sigcheck)
+void TB_setSigChecker(int cid, TBsigcheck sigcheck)
 {
   assert_valid_cid(cid);
   connections[cid]->sigchecker = sigcheck;
@@ -698,7 +705,7 @@ TBsigcheck TB_getSigChecker(int cid)
 /*}}}  */
 /*{{{  int TB_setVerbose(int cid, TBbool on) */
 
-int TB_setVerbose(int cid, TBbool on)
+void TB_setVerbose(int cid, TBbool on)
 {
   assert_valid_cid(cid);
   connections[cid]->verbose = on;

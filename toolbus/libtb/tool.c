@@ -94,7 +94,7 @@ int TBaddCharPort(int in, TBcallbackChar fun)
   return TB_OK;
 }
 
-int TBfreePort(int in)
+void TBfreePort(int in)
 {
   int i;
 
@@ -215,7 +215,7 @@ int TBconnect(char *tname, char *host, int port,
   int to_tb, from_tb;
   int old_port;
 
-  term *tool_in_sign, *too_out_sign, *trm;
+  term *tool_in_sign, *trm;
 
   /* Fool mkports into assuming a different WellKnown port */
   old_port = WellKnownSocketPort;

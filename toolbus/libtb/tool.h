@@ -31,7 +31,7 @@ int  TBgetTid();
 char *TBgetToolName();
 int  TBaddTermPort(int, TBcallbackTerm);
 int  TBaddCharPort(int, TBcallbackChar);
-int  TBfreePort(int port);
+void TBfreePort(int port);
 void TBsend(term *);
 void TBreceive(void);
 int  TBpeek(void);

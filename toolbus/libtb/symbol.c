@@ -26,14 +26,6 @@
 #include "tools.h"
 #include "utils.h"
 
-/* The ToolBus can be compiled with a number of modules linked in.
-   These modules must be registered before using.
-*/
-
-#define MAX_MODULES	256
-static char *module[MAX_MODULES];
-static int nr_modules = 0;
-
 /* We use a hash-table to map names to id's. Every symbol also has
    a module number, to make it easy to find the module in which a
    function is implemented, and optionally a function that implements
