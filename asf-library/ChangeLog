@@ -1,3 +1,6 @@
+2001/07/31 (jurgenv@cwi.nl)
+  * Set version to 0.1alfa
+
 2001/07/25 (joost.visser@cwi.nl)
   * Started to create an ASF library.
   * Started a test framework for ASF specifications.
