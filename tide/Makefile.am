@@ -1,5 +1,5 @@
 
-SUBDIRS		= toolbus lib-c tide META-INF images scripts .
+SUBDIRS		= toolbus tide META-INF images scripts .
 
 ACLOCAL_FLAGS = -I .
 

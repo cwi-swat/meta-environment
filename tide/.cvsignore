@@ -1,3 +1,4 @@
+*-*.pkg
 Makefile
 configure
 aclocal.m4
@@ -10,3 +11,6 @@ tide.tifs
 tide.sh
 doc
 tide.jar
+autom4te.cache
+.classpath
+.project

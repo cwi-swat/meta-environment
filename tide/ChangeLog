@@ -1,5 +1,13 @@
 
 
+Fri Nov 19 15:43:44 CET 2004 <jurgenv@cwi.nl>
+ * Another merge
+
+Fri Nov 19 13:47:00 CET 2004 <jurgenv@cwi.nl>
+ * Moved lib-c directory to separate package (tide-support)
+ * configure.in: removed macros for C compilation (this is a pure
+   Java package now)
+
 Mon Oct 18 19:31:42 CEST 2004 <jurgenv@cwi.nl>
  * Merged 1.5 developments into trunk
 
