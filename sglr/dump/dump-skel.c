@@ -68,8 +68,6 @@ int main (int argc, char **argv)
     }
   }
 
-  ATwarning("%d %s %d\n", unparsed, pt_name, requested);
-
   ATinit(argc, argv, &bottomOfStack);     /* Initialize Aterm library */
   PT_initMEPTApi();
 
