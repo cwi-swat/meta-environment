@@ -158,9 +158,8 @@ static PT_Tree parse_result(char *builtin, char *file, ATerm result)
       }
     }
     {
-      CO_Feedback error = (CO_Feedback) ERR_makeFeedbackError(builtin,
-		    "result is not a context-free parse tree",
-		     ERR_makeSubjectListEmpty());
+      CO_Feedback error = makeGeneralError(builtin,
+					   "result is not a valid parse tree");
       return (PT_Tree) CO_makeParseResultFailure(l,l, error,l);
     }
   }
