@@ -54,8 +54,6 @@ typedef struct equation_table
   equation_entry **table;
 } equation_table;
 
-#define ASFtoPT(tree) (PT_makeTreeFromTerm(ASF_makeTermFromTree(tree)))
-#define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
 
 PT_Tree RWprepareTerm(PT_Tree t, ATbool allow_ambs);
 ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList,

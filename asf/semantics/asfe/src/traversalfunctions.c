@@ -6,9 +6,9 @@
 #include <aterm2.h>
 #include <assert.h>
 #include <deprecated.h>
-#include "asfix_utils.h"
-#include "asfe.h"
-#include "traversals.h"
+#include "evaluator.h"
+#include "traversalfunctions.h"
+#include "errors.h"
 
 #include <MEPT-utils.h>
 /*}}}  */

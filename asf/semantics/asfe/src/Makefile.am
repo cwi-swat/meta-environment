@@ -5,26 +5,21 @@ SUBDIRS=api
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = asfe
-noinst_LIBRARIES  = libeval.a
 
 data_DATA         = asfe.idef
-
 EXTRA_DIST        = asfe.idef
-
 CLEANFILES        = asfe.tif.c asfe.tif.h asfe.tifs
 
-noinst_HEADERS = asf-api.h
+noinst_HEADERS = asf-api.h matching.h reduction.h environment.h values.h \
+                 errors.h debug.h traversalfunctions.h equations.h \
+                 pre-post.h memotable.h  evaluator.h
 
-libeval_a_SOURCES = asfe.c asfe.h asfix_utils.c asfix_utils.h \
-                    preparation.c preparation.h eval-tide.c eval-tide.h \
-                    traversals.c traversals.h memotable.h memotable.c \
-                    asf-api.c
+asfe_SOURCES = asfe.c evaluator.c equations.c debug.c traversalfunctions.c \
+               memotable.c asf-api.c matching.c reduction.c environment.c \
+               values.c errors.c pre-post.c
 
-libeval_a_LIBADD  = asfe.tif.o
-
-asfe_SOURCES		= main.c
-asfe_LDADD		= libeval.a \
-			-L$(PT_SUPPORT)/lib -lmept \
+asfe_LDADD		= asfe.tif.o \
+                        -L$(PT_SUPPORT)/lib -lmept \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(ASF_LIBRARY)/lib -lasf-builtins \
 			-L$(TOOLBUSLIB)/lib -lATB \
@@ -41,5 +36,3 @@ INCLUDES		= ${TIDEINC} \
 			-I$(ASF_LIBRARY)/include \
                         -I$(srcdir)/api \
 			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
-
-asfe.o : asfe.tif.h

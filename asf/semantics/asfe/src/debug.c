@@ -22,9 +22,10 @@
 #include <aterm2.h>
 #include <atb-tool.h>
 
-#include "asfe.h"
-#include "eval-tide.h"
-#include "preparation.h"
+#include "evaluator.h"
+#include "debug.h"
+#include "equations.h"
+#include "environment.h"
 
 #ifdef USE_TIDE
 #include <tide-adapter.h>
@@ -195,12 +196,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 
   equ_tree =
     PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
-  pos_anno = PT_getTreeAnnotation(equ_tree, posinfo);
-
-  /*
-  ATfprintf(stderr, "finding variable at line %d, col %d in %s (%t)\n",
-	    req_line, req_col, PT_yieldTree(equ_tree), pos_anno);
-   */
+  pos_anno = PT_getTreeAnnotation(equ_tree, ATmake("posinfo"));
 
   if (!pos_anno) {
     return TA_makeExprError("no position information on equation", NULL);

@@ -1,45 +1,13 @@
-/*
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum,
-                        Amsterdam, The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or (at
-    your option) any later version.
-
-    This program is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-    USA
-
-*/
-/*
- * asfix_utils.c
- *
- * Extra utility functions on asfix that the evaluator uses.
- * This utility module is ment only to be used in asfe.c
- *
- *
- * $Id$
- */
-
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <aterm2.h>
-#include <string.h>
-#include <deprecated.h>
 #include <assert.h>
+#include <stdlib.h>
 
-#include "asfix_utils.h"
-#include "asfe.h"
-#include "preparation.h"
+#include <MEPT-utils.h>
+#include "values.h"
+
+/* The values for the asf rewriter are parse trees. The AsFix formalism is
+ * extended with Slices here to tailor for efficient access to sublists
+ * of AsFix lists
+ */
 
 /*{{{  ATbool isListSeparator(PT_Tree elem, PT_Production listProd) */
 
@@ -60,7 +28,6 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
       return PT_isEqualSymbol(separator, symbol);
     }
     else {
-      pedantic_assert(PT_isTreeLit(elem));
       str = PT_getTreeString(elem);
       if (PT_isSymbolLit(separator)) {
 	return strcmp(str, PT_getSymbolString(separator)) == 0;
@@ -71,6 +38,175 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
 }
 
 /*}}}  */
+
+/*{{{   PT_Args getSliceFirst(Slice slice) */
+
+ PT_Args getSliceFirst(Slice slice)
+{
+  return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 1));
+}
+
+/*}}}  */
+/*{{{   PT_Args getSliceLast(Slice slice) */
+
+ PT_Args getSliceLast(Slice slice)
+{
+  return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 2));
+}
+
+/*}}}  */
+/*{{{   PT_Args prepend(PT_Args first, PT_Args last, PT_Args list) */
+
+/*
+ * Prepend a slice to the front of a list
+ */
+
+ PT_Args prepend(PT_Args first, PT_Args last, PT_Args list)
+{
+  PT_Args temp;
+  PT_Tree elem;
+
+  if (PT_isEqualArgs(first, last)) {
+    return list;
+  }
+
+  elem = PT_getArgsHead(first);
+  temp = prepend(PT_getArgsTail(first), last, list);
+
+  if (PT_isArgsEmpty(temp) && PT_isTreeLayout(elem)) {
+    return PT_makeArgsEmpty();
+  }
+
+  return PT_makeArgsList(elem, temp);
+}
+
+/*}}}  */
+/*{{{   PT_Args prependSlice(Slice slice, PT_Args list) */
+
+PT_Args prependSlice(Slice slice, PT_Args list)
+{
+  PT_Args first = getSliceFirst(slice);
+  PT_Args last = getSliceLast(slice);
+
+  return prepend(first, last, list);
+}
+
+/*}}}  */
+/*{{{  PT_Args appendSlice(PT_Args list, Slice slice) */
+
+/*
+ * Append a slice to a list
+ */
+
+PT_Args appendSlice(PT_Args list, Slice slice)
+{
+  return PT_concatArgs(list, prependSlice(slice, PT_makeArgsEmpty()));
+}
+
+/*}}}  */
+/*{{{   PT_Args concatElems(listProd, PT_Args elems, PT_Args newElems) */
+
+/* The list of elements is rewritten and a new elementlist
+   is constructed. */
+
+
+PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
+{
+  PT_Args newList;
+  PT_Symbol sym = PT_getProductionRhs(listProd);
+  int seplen = 0;
+
+  if (PT_isSymbolLex(sym)) {
+    if (PT_isIterSepSymbol(sym)) {
+      seplen = 1;
+    }
+    else {
+      seplen = 0;
+    }
+  }
+  else if (PT_isSymbolCf(sym)) {
+    if (PT_isIterSepSymbol(sym)) {
+      seplen = 3;
+    }
+    else {
+      seplen = 1;
+    }
+  }
+
+  if (PT_isArgsEmpty(elems)) {
+    newList = newElems;
+  }
+  else {
+    if (!PT_isArgsEmpty(newElems)) {
+      newList = PT_concatArgs(elems, newElems);
+    }
+    else {
+      int length = PT_getArgsLength(elems);
+      if (length > seplen) {
+	newList = PT_sliceArgs(elems, 0, length-seplen);
+      }
+      else {
+	newList = PT_makeArgsEmpty();
+      }
+    }
+  }
+
+  return newList;
+}
+
+/*}}}  */
+/*{{{   PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) */
+
+PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
+{
+  if (PT_isArgsEmpty(elems)) {
+    if (PT_isTreeLayout(elem)) {
+      return elems;
+    }
+    else if (isListSeparator(elem, listProd)) {
+      return elems; 
+    }
+  }
+  return PT_appendArgs(elems, elem);
+}
+
+/*}}}  */
+/*{{{   PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args)  */
+
+PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args) 
+{
+  PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
+  return PT_makeArgsList(listArg, args);
+}
+
+/*}}}  */
+/*{{{   ATerm getFirstArgument(PT_Tree trm) */
+
+PT_Tree getFirstArgument(PT_Tree trm)
+{
+  PT_Args args;
+
+  if (!PT_hasTreeArgs(trm)) {
+    return NULL;
+  }
+
+  args = PT_getTreeArgs(trm);
+
+  while (PT_hasArgsHead(args) &&
+	 (PT_isTreeLit(PT_getArgsHead(args)) ||
+	  PT_isTreeLayout(PT_getArgsHead(args)))) {
+    args = PT_getArgsTail(args);
+  }
+
+  if (PT_hasArgsHead(args)) {
+    return PT_getArgsHead(args);
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
 
 /*{{{  ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2) */
 
@@ -130,44 +266,6 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 
 /*}}}  */
 
-/*{{{  ATerm yieldTree(PT_Tree asfix) */
-
-ATerm yieldTree(PT_Tree asfix)
-{
-  char *temp = strdup(PT_yieldTree(asfix));
-  ATerm term;
-
-  if (!temp) {
-    ATerror("MRF in asource");
-  }
-
-  term = ATmake("<str>", temp);
-  free(temp);
-
-  return term;
-}
-
-/*}}}  */
-
-/*{{{  ATerm yieldArgs(PT_Args asfix) */
-
-ATerm yieldArgs(PT_Args asfix)
-{
-  char *temp = strdup(PT_yieldArgs(asfix));
-  ATerm term;
-
-  if (!temp) {
-    ATerror("MRF in asource");
-  }
-
-  term = ATmake("<str>", temp);
-  free(temp);
-
-  return term;
-}
-
-/*}}}  */
-
 /*{{{  PT_Args skipWhitespace(PT_Args list) */
 
 PT_Args skipWhitespace(PT_Args list)
@@ -181,13 +279,10 @@ PT_Args skipWhitespace(PT_Args list)
     }
   }
 
-  pedantic_assert(PT_isArgsEmpty(list) || !PT_isTreeLayout(PT_getArgsHead(list)));
-
   return list;
 }
 
 /*}}}  */
-
 /*{{{  PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd) */
 
 PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
@@ -203,7 +298,6 @@ PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
 }
 
 /*}}}  */
-
 /*{{{  PT_Args skipToEndOfWhitespace(PT_Args list) */
 
 PT_Args skipToEndOfWhitespace(PT_Args list)
@@ -211,20 +305,17 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
   PT_Tree elem;
   PT_Args prev = list;
 
-  pedantic_assert(PT_isTreeLayout(PT_getArgsHead(list)));
-
   if (!PT_isArgsEmpty(list)) {
     for (elem = PT_getArgsHead(list); 
          PT_hasArgsHead(list) && PT_isTreeLayout(elem);
 	 prev = list, list = PT_getArgsTail(list), elem = PT_getArgsHead(list));
   }
 
-  pedantic_assert(PT_isArgsEmpty(list) || PT_isTreeLayout(PT_getArgsHead(prev)));
-
   return prev;
 }
 
 /*}}}  */
+
 
 /* isValidList checks:
  *    - if no consecutive whitespaces nodes occur
