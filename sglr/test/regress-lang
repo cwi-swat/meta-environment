@@ -29,7 +29,7 @@ verbose=0
 
 cd `dirname $0`;
 mydir=`pwd`
-echo $mydir
+#echo $mydir
 MV=mv
 RM=rm
 COMPARE="$mydir/trmdiff"
