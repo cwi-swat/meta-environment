@@ -38,21 +38,21 @@ top_srcdir      = @top_srcdir@
 CC=@CC@
 
 # DEBUG-LIBS:     libraries containing debugging information
-DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-LIBS     = -L$(ATERM)/lib -L$(NEW_META)/lib $(LOCALLIBS:=-dbg) $(LIBS)
 DEBUG-CC-FLAGS = ${DEBUG_CC_FLAGS}
 DEBUG-LD-FLAGS = ${DEBUG_LD_FLAGS}
 
 # PROFILE-LIBS:     libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-PROFILE-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-LIBS     = -L$(ATERM)/lib -L$(NEW-META)/lib $(LOCALLIBS:=-prof) $(LIBS)
 PROFILE-CC-FLAGS = ${PROFILE_CC_FLAGS}
 PROFILE-LD-FLAGS = ${PROFILE_LD_FLAGS}
 
 # STD-LIBS:     normal libraries
 # STD-CC-FLAGS: normal compiler flags
 # STD-LD-FLAGS: optional flags
-STD-LIBS      = -L$(ATERM)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-LIBS      = -L$(ATERM)/lib -L$(NEW-META)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
 STD-CC-FLAGS  = ${STD_CC_FLAGS}
 STD-LD-FLAGS  = ${STD_LD_FLAGS}
 
@@ -74,8 +74,9 @@ LIBS            = @LIBS@ $(XLIBS)
 SOCKLIBS        = @SOCKLIBS@
 
 ATERM           = @ATERM@
+NEW-META        = @NEW-META@
 
-XINCLUDES       = -I$(ATERM)/include -I$(includedir)
+XINCLUDES       = -I$(ATERM)/include -I$(NEW-META)/include -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
 
 SPEC_SRCS=$(shell grep -v '^\#' @TARGET@.module-list)
