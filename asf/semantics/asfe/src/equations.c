@@ -10,7 +10,6 @@
 #include "equations.h"
 #include "values.h"
 #include "evaluator.h"
-#include "asf-api.h"
 #include "errors.h"
 
 #include <MEPT.h>

@@ -6,7 +6,6 @@
 #include "pre-post.h"
 #include "values.h"
 #include "evaluator.h"
-#include "asf-api.h"
 #include "errors.h"
 
 /* New layout is marked by a layout tree that exists, but is empty.
