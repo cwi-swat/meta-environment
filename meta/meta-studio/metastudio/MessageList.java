@@ -8,10 +8,10 @@ import javax.swing.event.*;
 
 public class MessageList extends JScrollPane 
 {
-  String name;
-  public ATermList items;
-  String[] items_strings;
-  JList view = new JList();
+  private String name;
+  private ATermList items;
+  private String[] items_strings;
+  private JList view = new JList();
 
   class ListEventHandler implements ListSelectionListener 
   {
@@ -19,25 +19,24 @@ public class MessageList extends JScrollPane
     ATermFactory factory;
     MessageList list;
 
-    ListEventHandler(UserInterfaceBridge lvb, ATermFactory fac, MessageList gl)
+    ListEventHandler(UserInterfaceBridge bridge,
+		     ATermFactory factory,
+		     MessageList list)
     {
-      bridge = lvb;
-      factory = fac;
-      list = gl;
+      this.bridge = bridge;
+      this.factory = factory;
+      this.list = list;
     }
 
     public void valueChanged(ListSelectionEvent e) 
     {
       if (!(e.getValueIsAdjusting())) {
+	int index = ((JList)(e.getSource())).getMinSelectionIndex();
 
-	try {
-	  int index = ((JList)(e.getSource())).getMinSelectionIndex();
-
-	  ATerm sel = list.items.elementAt(index);
+	if (index != -1) {
+	  ATerm sel = list.getItems().elementAt(index);
 
 	  java.util.List matching;
-
-	  //System.out.println(sel.toString());
 
 	  try {
 	    matching = sel.match("listitem(<str>,<term>)");
@@ -48,29 +47,28 @@ public class MessageList extends JScrollPane
 	  }
 
 	  if (matching == null) {
-	    System.err.println("This is not a valid listitem: " + sel);
+	    errMessage("This is not a valid listitem: " + sel);
 	  }
 	  else {
-	    //System.out.println(matching);
 	    bridge.postEvent(factory.make("element-selected(<str>,<term>)", 
 					  name,
 					  matching.get(1)));
 	  }
 	}
-	catch (IllegalArgumentException iae) {
-	  System.out.println("List update event");
-	}
       }
     }
   }
 
-  public MessageList(UserInterfaceBridge lvt, ATermFactory fac) 
+  public MessageList(UserInterfaceBridge bridge, ATermFactory factory) 
   {
     view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     getViewport().setView(view);
-    view.addListSelectionListener(new ListEventHandler(lvt, fac, this));
-
+    view.addListSelectionListener(new ListEventHandler(bridge, factory, this));
   }
+
+  protected ATermList getItems() {
+    return items;
+  } 
 
   public void setContent(String moduleName, ATermList data)
   {
@@ -104,8 +102,8 @@ public class MessageList extends JScrollPane
     view.repaint();
   } 
 
-  public void errMessage(String s){
-    System.out.println(s);
+  public void errMessage(String s) {
+    System.err.println(s);
   }
 }
 
