@@ -9,7 +9,7 @@
 #include <MEPT-utils.h>
 
 #ifndef WITHOUT_TOOLBUS
-#include "unparsePT.tif.h"
+#include "unparser.tif.h"
 #endif
 
 /*}}}  */
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    cid = ATBconnect(NULL, NULL, -1, unparsePT_handler);
+    cid = ATBconnect(NULL, NULL, -1, unparser_handler);
     ATBeventloop();
   }
   else

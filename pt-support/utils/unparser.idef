@@ -1,0 +1,24 @@
+/* $Id$ */
+
+tool unparser is {
+  command = "unparsePT"
+}
+
+process Unparser is
+let
+  UNP : unparser,
+  Tree : term,
+  Text : term
+in
+  (
+    rec-msg(unparse(Tree?)).
+    execute(unparser, UNP?).
+    snd-eval(UNP, unparse-asfix(Tree)).
+    rec-value(UNP, unparsed-text(Text?)).
+    snd-terminate(UNP, "done") .
+    snd-msg(unparsed-text(Text))
+  ) *
+  delta
+endlet
+
+toolbus(Unparser)

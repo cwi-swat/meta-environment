@@ -1,5 +1,8 @@
 $Id$
 
+Thu Sep 11 13:00:15 CEST 2003 <jong@cwi.nl>
+ * unparsePT.idef -> unparser.idef
+
 2003/08/01 (jurgenv@cwi.nl)
  * Set to version 0.12.1
 

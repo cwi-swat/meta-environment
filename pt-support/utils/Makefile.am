@@ -2,65 +2,97 @@
 
 SUBDIRS = implodePT 
 
-EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
-                          apply-function.idef
+EXTRA_DIST = \
+	unparser.idef \
+	addPosInfo.idef \
+	apply-function.idef
 
-bin_PROGRAMS		= flattenPT unparsePT unparseProd \
-                          addPosInfo ambtracker apply-function \
-                          parsePT
+bin_PROGRAMS = \
+	flattenPT \
+	unparsePT \
+	unparseProd \
+	addPosInfo \
+	ambtracker \
+	apply-function \
+	parsePT
 
-INCLUDES		= -I${top_srcdir}/libmept \
-                        -I${top_srcdir}/libasfix2 \
-                        -I${top_srcdir}/libconversion \
-                        -I${top_srcdir}/libptmept \
-			-I${ATERM}/include \
-			-I${TOOLBUSLIB}/include
+INCLUDES = \
+	-I${top_srcdir}/libmept \
+	-I${top_srcdir}/libasfix2 \
+	-I${top_srcdir}/libconversion \
+	-I${top_srcdir}/libptmept \
+	-I${ATERM}/include \
+	-I${TOOLBUSLIB}/include
 
-pkgdata_DATA		= unparsePT.idef addPosInfo.idef \
-                          apply-function.idef
+pkgdata_DATA = \
+	unparser.idef \
+	addPosInfo.idef \
+	apply-function.idef
 
-noinst_HEADERS		= unparsePT.tif.h apply-function.tif.h \
-                          addPosInfo.tif.h 
+noinst_HEADERS = \
+	unparser.tif.h \
+	apply-function.tif.h \
+	addPosInfo.tif.h 
 
-apply_function_SOURCES  = apply-function.tif.c apply-function.c
-apply_function_LDADD    = -L../libmept -lmept \
-			-L${TOOLBUSLIB}/lib -lATB \
-			-L${ATERM}/lib -lATerm \
-			${SOCKLIBS}
+apply_function_SOURCES = \
+	apply-function.tif.c \
+	apply-function.c
 
-addPosInfo_SOURCES      = addPosInfo.tif.c addPosInfo.c
-addPosInfo_LDADD        = -L../libmept -lmept \
-			-L${TOOLBUSLIB}/lib -lATB \
-                        -L${ATERM}/lib -lATerm \
-                        ${SOCKLIBS}
+apply_function_LDADD = \
+	-L../libmept -lmept \
+	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ATERM}/lib -lATerm \
+	${SOCKLIBS}
 
-flattenPT_SOURCES	= flattenPT-main.c
-flattenPT_LDADD		= -L../libconversion -lconversion \
-                        -L../libmept -lmept \
-                        -L../libasfix2 -lasfix2 \
-			-L${ATERM}/lib -lATerm
+addPosInfo_SOURCES = \
+	addPosInfo.tif.c \
+	addPosInfo.c
+
+addPosInfo_LDADD = \
+	-L../libmept -lmept \
+	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ATERM}/lib -lATerm \
+	${SOCKLIBS}
+
+flattenPT_SOURCES = flattenPT-main.c
+
+flattenPT_LDADD	= \
+	-L../libconversion -lconversion \
+	-L../libmept -lmept \
+	-L../libasfix2 -lasfix2 \
+	-L${ATERM}/lib -lATerm
 
 parsePT_SOURCES	= parsePT-main.c
-parsePT_LDADD		= -L../libmept -lmept \
-                        -L../libptmept -lPTMEPT \
-			-L${ATERM}/lib -lATerm
 
-unparsePT_SOURCES	= unparsePT.tif.c unparsePT-main.c
-unparsePT_LDADD		= -L../libmept -lmept \
-			-L${TOOLBUSLIB}/lib -lATB \
-			-L${ATERM}/lib -lATerm \
-			${SOCKLIBS}
+parsePT_LDADD = \
+	-L../libmept -lmept \
+	-L../libptmept -lPTMEPT \
+	-L${ATERM}/lib -lATerm
 
-unparseProd_SOURCES	= unparseProd-main.c
-unparseProd_LDADD	= -L../libmept -lmept \
-			-L${ATERM}/lib -lATerm
+unparsePT_SOURCES = \
+	unparser.tif.c \
+	unparsePT-main.c
 
-ambtracker_SOURCES      = ambtracker-main.c
-ambtracker_LDADD        = -L../libmept -lmept \
-                        -L${ATERM}/lib -lATerm
+unparsePT_LDADD = \
+	-L../libmept -lmept \
+	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ATERM}/lib -lATerm \
+	${SOCKLIBS}
 
-IDEF=idef2tif
-TIFS=tifstoc
+unparseProd_SOURCES = unparseProd-main.c
+
+unparseProd_LDADD = \
+	-L../libmept -lmept \
+	-L${ATERM}/lib -lATerm
+
+ambtracker_SOURCES = ambtracker-main.c
+
+ambtracker_LDADD = \
+	-L../libmept -lmept \
+	-L${ATERM}/lib -lATerm
+
+IDEF = idef2tif
+TIFS = tifstoc
 
 tif:
 	for i in `ls *.idef`; do \
