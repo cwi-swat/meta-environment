@@ -61,7 +61,7 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2)
     }
     else if (ERR_isLocationFile(location1) &&
 	     ERR_isLocationFile(location2)) {
-      return ERR_isEqualLocation(location1, location2);
+      return ATtrue;
     }
   }
   return ATfalse;
