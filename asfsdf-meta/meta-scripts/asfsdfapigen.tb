@@ -1,5 +1,7 @@
 #include <ASFSDFApigen.idef>
 
+/* TODO: split up this process into smaller pieces if possible */
+
 process ASFSDFApigenAction is
 let
   ModuleName : str,
