@@ -3,6 +3,9 @@ $Id$
 
 2003/03/31 (jurgenv@cwi.nl)
  * Renamed dot-adapter to layoutgraph
+ * Removed tree2dot because it is obsolete
+ * Refactored layoutgraph to split into graph2dot and the rest
+ * Added edge direction as an attribute to the graph format
 
 2003/03/30 (jurgenv@cwi.nl)
  * Fixed SOCKLIBS configuration for SunOs.

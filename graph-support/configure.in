@@ -104,6 +104,5 @@ AC_OUTPUT(
   lib/Makefile
   utils/Makefile
   utils/tree2graph/Makefile
-  utils/tree2dot/Makefile
   utils/layoutgraph/Makefile
 )
