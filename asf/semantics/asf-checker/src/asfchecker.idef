@@ -18,4 +18,4 @@ in
   delta
 endlet
 
-tool asfchecker is {command = "asfchecker"}
+tool asfchecker is {command = "asfchecker -TB_COLLECT_LOOP 1"}
