@@ -17,6 +17,7 @@ includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
+MAKEDEPEND	= @MAKEDEPEND@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
@@ -123,6 +124,6 @@ distclean: clean
 
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
-	@makedepend $(INCLUDES) $(CSRC) -f - > $@
+	@${MAKEDEPEND} $(INCLUDES) $(CSRC) > $@
 
 -include depend
