@@ -90,7 +90,7 @@ PERR_Location ERR_liftLocation(ERR_Location location)
   pFilename = ERR_liftStrCon(filename);
   pArea = ERR_liftArea(area);
   e = PERR_makeOptLayoutAbsent();
-ATwarning("lifting location: %t\n", location);
+
   return PERR_makeLocationLocation(e,e,
 				  pFilename,
 				  e,e,
