@@ -16,7 +16,19 @@ rel[int,int] PRED = {
 <10,7>
 }
 
-bag[int] VERTICES = carrier(PRED)
+bag[int] VERTICES = unique(carrier(PRED))
+
+bag[int] R1 =  range(reachX({ROOT}, {1}, PRED))
+bag[int] R2 =  range(reachX({ROOT}, {2}, PRED))
+bag[int] R3 =  range(reachX({ROOT}, {3}, PRED))
+bag[int] R4 =  range(reachX({ROOT}, {4}, PRED))
+bag[int] R5 =  range(reachX({ROOT}, {5}, PRED))
+bag[int] R6 =  range(reachX({ROOT}, {6}, PRED))
+bag[int] R7 =  range(reachX({ROOT}, {7}, PRED))
+bag[int] R8 =  range(reachX({ROOT}, {8}, PRED))
+bag[int] R9 =  range(reachX({ROOT}, {9}, PRED))
+bag[int] R10 =  range(reachX({ROOT}, {10}, PRED))
+
 
 rel[int,bag[int]] DOMINATES =
  { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  int V : VERTICES }

@@ -15,11 +15,11 @@ bag[str] HorsePower = {lowPower, mediumPower, highPower}
 
 bag[str] PullsTrailerOpt = {pullsTrailer, pullsNoTrailer}
 
-bag[bag[str]] Car = { {{T} union E union {H} union {PT}} | 
-			T : Transmission, 
-			E : Engine, 
-			H : HorsePower, 
-			PT : PullsTrailerOpt
+bag[bag[str]] Car = { {T} union E union {H} union {PT} | 
+			str T : Transmission, 
+			bag[str] E : Engine, 
+			str H : HorsePower, 
+			str PT : PullsTrailerOpt
 			, 
 			PT == pullsTrailer, 
 			(PT == pullsTrailer) implies (H == highPower)
