@@ -1,5 +1,5 @@
 #
-#    AsFix -- The AsFix (ASF+SDF Prefix) library
+#    ATerm -- The ATerm (Annotated Term) library
 #    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
 #                             The  Netherlands.
 #
@@ -17,11 +17,26 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#   $Id$
+# $Id$
+#
+# vim:ts=8:sw=8
+include ../make_rules
 
-SUBDIRS=libasfix asfix-tools test
+TESTS	          	= asfixtest
 
-EXTRA_DIST=make_rules
+EXTRA_DIST = Test.asfix
 
+CLEANFILES = 
 
+INCLUDES   = -I../libasfix -I$(ATERMINC) 
 
+LDLIBS 		= -L../libasfix -lAsFix \
+		  -L$(ATERMLIB) -lATB -lATerm 
+
+noinst_PROGRAMS		= asfixtest
+
+asfixtest_SOURCES       = asfixtest.c
+asfixtest_LDADD         = $(LDLIBS) 
+
+test: asfixtest
+	./asfixtest

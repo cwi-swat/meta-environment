@@ -198,5 +198,6 @@ AC_OUTPUT(
 	Makefile
 	libasfix/Makefile
         asfix-tools/Makefile
+	test/Makefile
 )
 
