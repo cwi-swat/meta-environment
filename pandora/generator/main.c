@@ -77,7 +77,7 @@ static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
   {
     PT_Tree ptBox = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("box2text", "BText", 1, ptBox);
+    newTree = PT_applyFunctionToTree("box2text", "Text", 1, ptBox);
   }
   else 
   {
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
     if (at_tree != NULL) {
       tree = PT_ParseTreeFromTerm(at_tree);
       box = pandora(tree);
-      ATwriteToNamedBinaryFile(BOX_StartToTerm(box), "box.pt");
+      
       ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
 
       if (textmode) {

@@ -12,7 +12,7 @@
 static BOX_Box treeToBox(PT_Tree tree);
 /*}}}  */
 
-/*{{{  BOX_LexStrCon makeLexStrCon(const char *str) */
+/*{{{  BOX_LexStrCon BOX_makeLexStrCon(const char *str) */
 
 BOX_LexStrCon BOX_makeLexStrCon(const char *str)
 {
@@ -21,6 +21,23 @@ BOX_LexStrCon BOX_makeLexStrCon(const char *str)
 }
 
 /*}}}  */
+/*{{{  BOX_StrCon BOX_makeStrCon(const char *str) */
+
+BOX_StrCon BOX_makeStrCon(const char *str)
+{
+  return BOX_makeStrConLexToCf(BOX_makeLexStrCon(str));
+}
+
+/*}}}  */
+/*{{{  BOX_NatCon BOX_makeNatCon(int val) */
+
+BOX_NatCon BOX_makeNatCon(int val)
+{
+  return (BOX_NatCon) PTPT_liftNatCon(val);
+}
+
+/*}}}  */
+
 
 /*{{{  static ATbool isLayout(const char *input) */
 
@@ -183,10 +200,8 @@ static ATbool isNonTerminal(PT_Tree tree)
 
 static BOX_Box terminalToBox(PT_Tree tree)
 {
-  char *yield = PT_yieldTreeToString(tree, ATfalse);
-  char *escaped = escapeQuotes(yield);
-  char *quoted = quoteString(escaped);
-  BOX_StrCon strcon = BOX_makeStrConDefault(quoted);
+  const char *yield = PT_yieldTreeToString(tree, ATfalse);
+  BOX_StrCon strcon = BOX_makeStrCon(yield);
   return BOX_makeBoxString(strcon);
 }
 
@@ -196,13 +211,11 @@ static BOX_Box terminalToBox(PT_Tree tree)
 static BOX_Box layoutToBox(PT_Tree tree)
 {
   BOX_BoxList boxList = BOX_makeBoxListEmpty();
-  char *yield = PT_yieldTreeToString(tree, ATfalse);
+  const char *yield = PT_yieldTreeToString(tree, ATfalse);
 
   if (!isLayout(yield)) {
-    char *comment = stripLayout(yield);
-    char *escaped = escapeQuotes(comment);
-    char *quoted = quoteString(escaped);
-    BOX_StrCon strcon = BOX_makeStrConDefault(quoted);
+    const char *comment = stripLayout(yield);
+    BOX_StrCon strcon = BOX_makeStrCon(comment);
     return BOX_makeBoxString(strcon);
   }
 
@@ -218,7 +231,7 @@ static BOX_Box sepListToBox(PT_Args args)
   BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
   BOX_BoxList boxList = BOX_makeBoxListEmpty();
   BOX_SpaceSymbol spaceSymbol = BOX_makeSpaceSymbolHorizontal();
-  BOX_NatCon spaceValue = BOX_makeNatConDefault("0");
+  BOX_NatCon spaceValue = BOX_makeNatCon(0);
   BOX_SpaceOption spaceOption = BOX_makeSpaceOptionDefault(spaceSymbol,
 							   optLayout,
 							   optLayout,
