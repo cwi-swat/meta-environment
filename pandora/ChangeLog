@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Feb 12 11:15:37 CET 2004 <jong@cwi.nl>
+ * pandora.pkg: list explicit version dependencies
+ * configure.in: add configure options for required packages
+ * generator/Makefile.am: add -I and -L options for required headers/libs
+
 Wed Feb 11 16:18:46 CET 2004 <kooiker@cwi.nl>
  * generator/pandora.c:
    - empty lists result in empty H box 

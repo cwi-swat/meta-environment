@@ -3,7 +3,7 @@
 #AM_CFLAGS = -Werror
 
 INCLUDES = \
-	-I${ASC_SUPPORT}/include \
+	-I$(ASC_SUPPORT)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
@@ -24,6 +24,7 @@ pandora_LDADD = \
 	-L$(ASF_SUPPORT)/lib -lASFME \
 	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
+	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm-dbg \
 	-lefence
 
