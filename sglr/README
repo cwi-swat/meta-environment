@@ -130,6 +130,8 @@ Installation instructions:
     installed.  Once you have added the path to the directory
     /some/path/bin to your PATH (see above), you are all set up.
 
+    If you use gcc, sglr is built with "gcc -Wall -g -O2". If you prefer
+    different options use --with-cflags="<options>" when you run configure.
 
     The SGLR developers wish you wads of parsing joy; and may all your
     trees amply bear fruit.
