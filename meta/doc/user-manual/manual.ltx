@@ -760,166 +760,307 @@ The {\tt priorities} definitions in the SDF definition state that the `{\tt
 
 \subsubsection{Modifying {\tt Bool-example}}
 
-The ASF+SDF Meta-environment is an incremental environment generator. After each edit operation on a module, its implementation (i.e., scanner, parser and term rewriting system) is updated immediately.
+The ASF+SDF Meta-Environment is an incremental environment generator. After
+each edit operation on a module, its implementation (i.e., scanner, parser and
+term rewriting system) is updated immediately.
 
-The editing of both the equations and the syntax part of a module is syntax-directed like the editing of terms in a term editor.
+The editing of both the equations and the syntax part of a module is
+syntax-directed like the editing of terms in a term editor.
 
 \paragraph{Modifying the Equations}
 
-The equation section of a module appears in the bottom part of the module and begins with the keyword equations.
+The equation section of a module appears in the bottom part of the module and
+begins with the keyword equations.
 
-ffl Click in the equation section to investigate the focus behavior. ffl Change the equations, for instance replace in equation [B1] the last part ` = true' by ` =
+\begin{itemize}
 
-false'. Study the effect on the reduction of terms in the term-editor.
+\item  Click in the equation section to investigate the focus behavior.
+  
+\item Change the equations, for instance replace in equation {\tt [B1]} the
+  last part `{\tt = true}' by `{\tt = false}'. Study the effect on the
+  reduction of terms in the term-editor.
+
+\end{itemize}
 
 \paragraph{Modifying the Syntax}
 
-Modifying the syntax causes the generated scanner and parser to be adapted. After each edit operation in the SDF section that is followed by a parse of the SDF section, the focus in both the equations section and the term editor is extended to completely contain the text in these editors.
+Modifying the syntax causes the generated scanner and parser to be adapted.
+After each edit operation in the SDF section that is followed by a parse of
+the SDF section, the focus in both the equations section and the term editor
+is extended to completely contain the text in these editors.
 
 
-Modifying the context-free syntax:
+Modifying the context-free syntax:
 
-16 The ASF+SDF Meta-environment
+\begin{itemize}
+  
+\item Change the syntax of the defined functions. E.g, replace `{\tt not}' by
+  `{\tt negation}'.
 
-ffl Change the syntax of the defined functions. E.g, replace `not' by `negation'. ffl Try to re-parse the equations. ffl Investigate the expand menu in the term-editor. (type `!BOOL?' and select expand.)
+\item Try to re-parse the equations. 
+  
+\item Investigate the expand menu in the term-editor. (type `{\tt <BOOL>}' and
+  select {\tt expand}.)
 
-Modifying the priorities: ffl Remove the priority declaration. ffl Type the term `true \& false -- true' in the term-editor (or anything similar according to your
+\end{itemize}
 
-current syntax). Try to parse this term.
+Modifying the priorities: 
 
-ffl Add the priority declarations again.
+\begin{itemize}
 
-Modifying layout in the lexical section: ffl Remove the lexical syntax with the LAYOUT definitions. ffl Try parsing equations of Bool-example.
+\item Remove the priority declaration. 
+  
+\item Type the term `{\tt true \& false | true}' in the term-editor (or
+  anything similar according to your current syntax). Try to parse this term.
 
-Note: Not defining LAYOUT is one of the errors most commonly made when writing a new specification; always make sure your syntax definitions define at least spaces and newlines to be LAYOUT.
+\item Add the priority declarations again.
 
-ffl Close the term-editor and module-editor. By clicking the little button in the left corner of the
+\end{itemize}
 
-menu bar. You may or may not save the changes to module Bool-example.
+Modifying layout in the lexical section: 
 
-If you save the changes the files `Bool-example.syn' and `Bool-example.eqs' will be modified. ffl Delete the module Bool-example from the specification. Select the delete button.
+\begin{itemize}
+
+\item Remove the lexical syntax with the {\tt LAYOUT} definitions. 
+
+\item Try parsing equations of {\tt Bool-example}.
+
+\end{itemize}
+
+\paragraph{Note:} Not defining {\tt LAYOUT} is one of the errors most commonly
+made when writing a new specification; always make sure your syntax
+definitions define at least spaces and newlines to be {\tt LAYOUT}.
+
+
+\begin{itemize}
+  
+\item Close the term-editor and module-editor. By clicking the little button
+  in the left corner of the menu bar. You may or may not save the changes to
+  module Bool-example.
+
+\end{itemize}
+
+If you save the changes the files `{\tt Bool-example.syn}' and `{\tt
+  Bool-example.eqs}' will be modified.
+
+
+\begin{itemize}
+
+ \item Delete the module Bool-example from the specification. Select the
+   delete button.
+
+\end{itemize}
 
 \subsection{The Pico Specification}
 
-More features of the ASF+SDF Meta-environment can be studied by looking at the Picospecification.
+More features of the ASF+SDF Meta-environment can be studied by looking at the
+Pico specification.
 
-ffl If necessary, start the ASF+SDF Meta-environment. (Go to directory pico, type `ctasdf',
+\begin{itemize}
+  
+\item If necessary, start the ASF+SDF Meta-environment. (Go to directory {\tt
+    pico}, and type `{\tt meta}').
+  
+\item Add the module {\tt Pico-syntax} by selecting the Specification menu,
+  and choosing the add button. The system will ask you for a directory(path)
+  and a module name. Answer with `.' for directory. Answer with Pico-syntax
+  for module name.
 
-select ASF+SDF in the centaur menu)
+\item Check the Edit-Module menu. Not only {\tt Pico-syntax} has been added, also all modules that
+are directly or transitively imported by {\tt Pico-syntax}.
 
-Chapter 3: Guided Tour 17
-
-ffl Add the module Pico-syntax by selecting the Specification menu, and choosing the add
-
-button. The system will ask you for a directory(path) and a module name. Answer with `.' for directory. Answer with Pico-syntax for module name.
-
-ffl Check the Edit-Module menu. Not only Pico-syntax has been added, also all modules that
-
-are directly or transitively imported by Pico-syntax.
+\end{itemize}
 
 Possible Error: `sort ``BOOL'' double declared'. Both the modules Booleans and Boolexample declare the sort BOOL. Delete module Bool-example.
 
 \subsubsection{The Module Editor for Pico-syntax}
 
-ffl Open the module-editor for Pico-syntax
+\begin{itemize}
 
-A Pico program consist of the word `begin', a declaration section, a series of zero or more statements, and the word `end'. The declaration section consists of the word `declare', a list of zero or more tuples `identifier : type' and a semi-colon `;'. Types are `string' and `natural'. There are three kinds of statements: assignments, if-then-else statements and while-loops. And there are expressions.
+\item Open the module-editor for {\tt Pico-syntax}.
+  
+  A Pico program consist of the word `{\tt begin}', a declaration section, a
+  series of zero or more statements, and the word `{\tt end}'. The declaration
+  section consists of the word `{\tt declare}', a list of zero or more tuples
+  `{\tt $identifier$ : $type$}' and a semi-colon `{\tt ;}'. Types are `{\tt
+    string}' and `{\tt natural}'.  There are three kinds of statements:
+  assignments, if-then-else statements and while-loops. And there are
+  expressions.
 
-Note: XX  A module Layout is imported, in which LAYOUT has been
-  specified. XX  The use of list constructs in the context-free section: `-ID-TYPE ","""*' and `-STATEMENT
+\end{itemize}
 
-","""*'. In fact, the sort SERIES could have been left out entirely and be replaced by `-STATEMENT ","""*' all through the specification. SERIES is only used for abbreviation in the syntax rules. Also, variables over list constructs are being declared.
+\paragraph{Notes:}
 
-XX  When a literal in a context-free function consists only of lower case letters and digits, and it
+\begin{itemize}
+  
+\item A module{\tt Layout} is imported, in which {\tt LAYOUT} has been
+  specified.
+  
+\item The use of list constructs in the context-free section: `{\tt {-ID-TYPE
+      ","}*}' and `{\tt {STATEMENT ","}*}'. In fact, the sort {\tt SERIES}
+  could have been left out entirely and be replaced by `{\tt {STATEMENT
+      ","}*}' all through the specification. {\tt SERIES} is only used for
+  abbreviation in the syntax rules. Also, variables over list constructs are
+  being declared.
+  
+\item When a literal in a context-free function consists only of lower case
+  letters and digits, and it is not a SDF-keyword, it need not be quoted.
 
-is not a SDF-keyword, it need not be quoted.
+\item  The Pico-syntax module naturally contains no equations.
 
-XX  The Pico-syntax module naturally contains no equations.
+\end{itemize}
 
 \subsubsection{A Term Editor for Pico-syntax}
 
-ffl Open a term-editor for Pico-syntax, containing the program `small.pico'
+\begin{itemize}
+  
+\item Open a term-editor for Pico-syntax, containing the program `{\tt
+    small.pico}' This term-editor not only has a reduce button but also the
+  buttons {\tt typecheck} and {\tt evaluate}. These latter buttons have been
+  defined in the configuration file `ctasdf.conf').
 
-18 The ASF+SDF Meta-environment
+\item Press the reduce button.
 
-This term-editor not only has a reduce button but also the buttons typecheck and evaluate. These latter buttons have been defined in the configuration file `ctasdf.conf' (see Chapter 10 [Customization], page 69).
+\end{itemize}
 
-ffl Press the reduce button.
+This has the following effects:
 
-This has the following effects: XX  The term in the editor is parsed. XX  All the equations that are valid for this editor are parsed and compiled into a rewrite system.
+\begin{itemize}
 
-In this case that means the equations of the imported modules Booleans, Integers, Strings and Types. This takes some time.
+\item  The term in the editor is parsed. 
+  
+\item All the equations that are valid for this editor are parsed and compiled
+  into a rewrite system.  In this case that means the equations of the
+  imported modules {\tt Booleans}, {\tt Integers}, {\tt Strings} and {\tt
+    Types}. This takes some time.
+  
+\item The term in the editor is reduced. As no equation can be applied to
+  reduce this term, the term itself is returned in the shell window from which
+  the Meta-Environment has been started.
+\end{itemize}
 
-XX  The term in the editor is reduced. As no equation can be applied to reduce this term, the term
+  
+Reducing a term for the second time is notably faster: the equations have been
+compiled already.
 
-itself is returned in the Lelisp-interaction window.
+\begin{itemize}
 
-Reducing a term for the second time is notably faster: the equations have been compiled already. ffl Press the typecheck (evaluate) button.
+\item Press the typecheck (evaluate) button.
 
-This has the following effects: (See Appendix C [Pico Configuration File], page 87 for a listing of the configuration file for Pico.)
+\end{itemize}
 
-XX  The module Pico-typecheck (Pico-eval) is added to the specification. XX  The term `tc[Program-in-editor]' (`eval[Program-in-editor]') is constructed. XX  All equations of Pico-typecheck (Pico-eval) and its imported modules are being compiled. XX  The term `tc[Program-in-editor]' (`eval[Program-in-editor]') is reduced using the equations
+This has the following effects:
 
-of Pico-typecheck (Pico-eval).
+\begin{itemize}
 
-Typechecking (evaluating) a term for the second time is notably faster, the modules have been added already and the equations have been compiled.
+\item  The module {\tt Pico-typecheck} ({\tt Pico-eval}) is added to the specification. 
 
-ffl Make some modifications to `small.pico' in the term-editor. Typecheck and evaluate the
+\item  The term `{\tt tc[Program-in-editor]}' (`{\tt
+    eval[Program-in-editor]}') is constructed. 
+  
+\item All equations of {\tt Pico-typecheck} ({\tt Pico-eval}) and its imported
+  modules are being compiled.
+  
+\item The term `{\tt tc[Program-in-editor]}' (`{\tt eval[Program-in-editor]}')
+  is reduced using the equations of {\tt Pico-typecheck} ({\tt Pico-eval}).
 
-modified program.
+\end{itemize}
+  
+Typechecking (evaluating) a term for the second time is notably faster, the
+modules have been added already and the equations have been compiled.
 
-ffl Open term-editors with other pico programs (`fac.pico', `bin.pico') or create your own
+\begin{itemize}
+  
+\item Make some modifications to `{\tt small.pico}' in the term-editor.
+  Typecheck and evaluate the modified program.
+  
+\item Open term-editors with other pico programs (`{\tt fac.pico}', `{\tt
+    bin.pico}') or create your own program. Typecheck and evaluate these
+  programs.
 
-program. Typecheck and evaluate these programs.
+\end{itemize}
 
 \subsubsection{More Exercises to Study the Pico Specification}
 
-Chapter 3: Guided Tour 19
+\begin{itemize}
 
-ffl Study other modules in the specification. The modules Pico-typecheck and Pico-eval are
+\item Study other modules in the specification. The modules {\tt
+    Pico-typecheck} and{\tt  Pico-eval} are explained in ***
+  
+\item Add a repeat statement `{\tt repeat SERIES until EXP}' to {\tt
+    Pico-syntax}, add typecheck equations to {\tt Pico-typecheck}, and
+  eval-equations to {\tt Pico-eval}, for this new statement.
 
-explained in the Section 3.4.4 [Pico-typecheck], page 19 and Section 3.4.5 [Pico-eval], page 20.
+\item Add your own module to the specification. 
 
-ffl Add a repeat statement `repeat SERIES until EXP' to Pico-syntax, add typecheck equations
+\item Make your own specification. Create a new directory for each
+  specification.
 
-to Pico-typecheck, and eval-equations to Pico-eval, for this new statement.
-
-ffl Add your own module to the specification. ffl Make your own specification. Create a new directory for each specification.
+\end{itemize}
 
 \subsubsection{Module Pico-typecheck}
 
-ffl Open the module editor for Pico-typecheck.
+\begin{itemize}
 
-Functions `tcp' are defined for typechecking Pico-programs. The typechecking of the declarations yields a type-environment: a table of identifiers and their types. This type-environment, and the `look-up' function is specified in the module Type-environments. The typechecking of statements uses a type-environment and yields a Boolean value.
+\item Open the module editor for Pico-typecheck.
 
-In the equations is defined how a Pico-program is typechecked. Equation [Tc1a] says that the typechecking of a program is `true' if the typechecking of the Series in the type-environments, `tc[Decls]', is `true'.
+\end{itemize}
 
-Equation [Tc1b] says that the typechecking of a program is `false' if the typechecking of the Series in the type-environments, `tc[Decls]', is not `true'.
+Functions `{\tt tcp}' are defined for typechecking Pico-programs. The
+typechecking of the declarations yields a type-environment: a table of
+identifiers and their types. This type-environment, and the `{\tt look-up}'
+function is specified in the module {\tt Type-environments}. The typechecking
+of statements uses a type-environment and yields a Boolean value.
 
-Equations [Tc2] and [Tc3] specify how a type-environment is constructed, when the declarations are typechecked.
+In the equations is defined how a Pico-program is typechecked. Equation {\tt
+  [Tc1a]} says that the typechecking of a program is `{\tt true}' if the
+typechecking of the Series in the type-environments, `{\tt tc[Decls]}', is
+`{\tt true}'.
 
-Equations [Tc4] and [Tc5] specify the typechecking of a, possibly empty, list of statements. Equations [Tc6], [Tc7], and [Tc8] specify how the three kinds of Statements are typechecked using the information from the type-environment.
+Equation {\tt [Tc1b]} says that the typechecking of a program is `{\tt false}'
+if the typechecking of the Series in the type-environments, `{\tt tc[Decls]}',
+is \emph{not} `{\tt true}'.
+
+Equations {\tt [Tc2]} and {\tt [Tc3]} specify how a type-environment is
+constructed, when the declarations are typechecked.
+
+Equations {\tt [Tc4]} and {\tt [Tc5]} specify the typechecking of a, possibly
+empty, list of statements. Equations [Tc6], [Tc7], and [Tc8] specify how the
+three kinds of Statements are typechecked using the information from the
+type-environment.
 
 The rest of the equations deal with the typechecking of the expressions.
 
 \subsubsection{Module Pico-eval}
 
-20 The ASF+SDF Meta-environment
+\begin{itemize}
 
-ffl Open the module editor for Pico-eval.
+\item Open the module editor for Pico-eval.
 
-Functions `eval' are defined for describing the dynamic semantics of Pico. The result of evaluation is a value-environment: a table of identifiers and values with the final values of the declared identifiers. (Note that Pico does not have an output-statement.)
+\end{itemize}
 
-In the equations is defined how a program is evaluated. Equation [Ev1] says that the evaluation of a program is the evaluation of the Series in the value-environments, `eval [Decls]'.
+Functions `{\tt eval}' are defined for describing the dynamic semantics of
+Pico. The result of evaluation is a value-environment: a table of identifiers
+and values with the final values of the declared identifiers. (Note that Pico
+does not have an output-statement.)
 
-Equations [Ev2a], [Ev2b], and [Ev3] specify how a value-environment is constructed, when the declarations are evaluated. Identifiers of type `natural' get value `0', Identifiers of type `string' get value `""' (empty-string)
+In the equations is defined how a program is evaluated. Equation {\tt [Ev1]}
+says that the evaluation of a program is the evaluation of the Series in the
+value-environments, `{\tt eval [Decls]}'.
 
-Equations [Ev4] and [Ev5] specify the evaluation of a, possibly empty, list of statements. Equations [Ev6], [Ev7a], [Ev7b], [Ev8a], and [Ev8b] specify how the three kinds of statements are evaluated using the information from the type-environment. Evaluating statements means updating the value-environment
+Equations {\tt [Ev2a]}, {\tt [Ev2b]}, and {\tt [Ev3]} specify how a
+value-environment is constructed, when the declarations are evaluated.
+Identifiers of type `{\tt natural}' get value `{\tt 0}', Identifiers of type
+`{\tt string}' get value `{\tt ""}' (empty-string)
 
-The rest of the equations deal with the evaluation of expressions. Evaluating expressions results in a value.
+Equations {\tt [Ev4]} and {\tt [Ev5]} specify the evaluation of a, possibly
+empty, list of statements. Equations {\tt [Ev6]}, {\tt [Ev7a]}, {\tt [Ev7b]},
+{\tt [Ev8a]}, and {\tt [Ev8b]} specify how the three kinds of statements are
+evaluated using the information from the type-environment. Evaluating
+statements means updating the value-environment.
 
-
-
+The rest of the equations deal with the evaluation of expressions. Evaluating
+expressions results in a value.
 
 \section{The ASF+SDF specification formalism}
 
