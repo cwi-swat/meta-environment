@@ -48,7 +48,7 @@ equations
                  Symbol "=" Symbol  -> Equation
                  Symbol "=" Symbol  -> Condition
                  Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}+ ")" -> Symbol
+                 "amb" "(" {Symbol ","}* ")" -> Symbol
                  Prod*)
 
   [eacfg-1'6] includes(Symbol, SymbolsSet) = true,
@@ -77,7 +77,7 @@ equations
                  Symbol "=" Symbol  -> Equation
                  Symbol "=" Symbol  -> Condition
                  Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}+ ")" -> Symbol)
+                 "amb" "(" {Symbol ","}* ")" -> Symbol)
 
   [eacfp-2'2] includes(Symbol, SymbolsSet1) = false,
               add(Symbol, SymbolsSet1) = SymbolsSet2
@@ -88,7 +88,7 @@ equations
                  Symbol "=" Symbol  -> Equation
                  Symbol "=" Symbol  -> Condition
                  Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}+ ")" -> Symbol)
+                 "amb" "(" {Symbol ","}* ")" -> Symbol)
 
   [eacfp-2'2] includes(Symbol, SymbolsSet) = true
               ===================================
