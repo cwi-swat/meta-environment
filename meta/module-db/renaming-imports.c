@@ -48,6 +48,31 @@ static SDF_ImpSection rename_modulename_in_impsection(
   return SDF_setImpSectionList(impSection, newImports);
 }
 
+static SDF_Grammar rename_modulename_in_grammar(
+                                       SDF_Grammar orgGrammar,
+                                       SDF_ModuleId oldModuleName,
+                                       SDF_ModuleId newModuleName)
+{
+  if (SDF_isGrammarImpSection(orgGrammar)) {
+    SDF_ImpSection impSection = SDF_getGrammarImpSection(orgGrammar);
+    SDF_ImpSection newImpSection =
+      rename_modulename_in_impsection(impSection,
+                                      oldModuleName, newModuleName);
+    orgGrammar = SDF_setGrammarImpSection(orgGrammar, newImpSection);
+  }
+  if (SDF_isGrammarConcGrammars(orgGrammar)) {
+    SDF_Grammar leftGrammar = SDF_getGrammarLeft(orgGrammar);
+    SDF_Grammar rightGrammar = SDF_getGrammarRight(orgGrammar);
+    SDF_Grammar newLeftGrammar = 
+      rename_modulename_in_grammar(leftGrammar, oldModuleName, newModuleName);
+    SDF_Grammar newRightGrammar = 
+      rename_modulename_in_grammar(rightGrammar, oldModuleName, newModuleName);
+    orgGrammar = SDF_setGrammarLeft(orgGrammar, newLeftGrammar);
+    orgGrammar = SDF_setGrammarRight(orgGrammar, newRightGrammar);
+  }
+  return orgGrammar;
+}
+
 static SDF_Section rename_modulename_in_section(
                                        SDF_Section orgSection,
                                        SDF_ModuleId oldModuleName,
@@ -56,15 +81,9 @@ static SDF_Section rename_modulename_in_section(
   if (SDF_hasSectionGrammar(orgSection)) {
     SDF_Grammar grammar  = SDF_getSectionGrammar(orgSection);
 
-    if (SDF_isGrammarImpSection(grammar)) {
-      SDF_ImpSection impSection = SDF_getGrammarImpSection(grammar);
-      SDF_ImpSection newImpSection = 
-        rename_modulename_in_impsection(impSection, 
-                                        oldModuleName, newModuleName);
-      SDF_Grammar newGrammar = 
-        SDF_setGrammarImpSection(grammar, newImpSection);
-      orgSection = SDF_setSectionGrammar(orgSection, newGrammar);   
-    }
+    SDF_Grammar newGrammar = 
+      rename_modulename_in_grammar(grammar, oldModuleName, newModuleName);
+    orgSection = SDF_setSectionGrammar(orgSection, newGrammar);   
   }
   return orgSection;
 }

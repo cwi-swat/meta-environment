@@ -1,5 +1,8 @@
 # $Id$
 
+2002/05/14 (vandenbr@loria.fr)
+ * Fixed a bug in the renaming of hiddens ImportSections.
+
 2002/05/13 (vandenbr@loria.fr)
  * Improved the button functionality:
    - obtain information from another active editor.
