@@ -19,8 +19,9 @@
 
 $Id$
 
-2000/11/08 (markvdb@cwi.nl, jurgenv@cwi.nl)
+2000/11/08 (markvdb@cwi.nl)
    * Bumped version to 0.6
+   * Changed implicit priorities of lists slightly.
 
 2000/10/26 (mdejonge@cwi.nl)
    * sdf2table now tries to create unique file names in /var/tmp to prevent
