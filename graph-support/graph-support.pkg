@@ -15,6 +15,6 @@ configuration interface
 requires
   aterm		2.0.2
   error-support 0.1
-  pt-support    1.0
+  pt-support    1.1
   toolbuslib	0.5.1
   graphviz      1.5
