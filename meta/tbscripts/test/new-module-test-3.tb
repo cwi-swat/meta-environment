@@ -37,7 +37,7 @@ in
   ) .
 
   %% Update the module-db.
-  snd-msg(add-sdf2-module-to-db(Path, SdfTree, Time, "unchanged")) .
+  snd-msg(add-sdf2-module-to-db("Empty", Path, SdfTree, Time, "unchanged")) .
   (
     rec-msg(need-modules([]))
   +

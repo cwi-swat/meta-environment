@@ -34,7 +34,8 @@ in
   rec-msg(not-exists-in-module-db("Pico-Booleans")).
   snd-msg(open-file("Pico-Booleans")).
   rec-msg(opened-file("Pico-Booleans", tree(SdfTree?), Path?, timestamp(I?))).
-  snd-msg(add-sdf2-module-to-db(Path, SdfTree, timestamp(I), "changed")).
+  snd-msg(add-sdf2-module-to-db("Pico-Booleans", Path, SdfTree, 
+                                timestamp(I), "changed")).
   rec-msg(need-modules(Modules?)).
   /* Finished setup. */
 

@@ -76,7 +76,7 @@ in
               Ms := join(Ms,M1s)
               +
               rec-msg(opened-file(Name2?,tree(T?),Path?,Time?)).
-              snd-msg(add-sdf2-module-to-db(Path,T,Time,"unchanged")).
+              snd-msg(add-sdf2-module-to-db(Name, Path, T, Time, "unchanged")).
               rec-msg(need-modules(M1s?)).
               Ms := join(Ms,M1s).
               snd-msg(read-parse-table(Name)).
@@ -108,7 +108,7 @@ in
               rec-msg(sdf2-language-opened).
               snd-msg(Id,parse-string-as-asfix1("Sdf2","Module",FT)).
               ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
-                snd-msg(add-sdf2-module-to-db(Path,T,Time,"changed")).
+                snd-msg(add-sdf2-module-to-db(Name, Path, T, Time, "changed")).
                 rec-msg(need-modules(M1s?)).
                 Ms := join(Ms,M1s) .
                 snd-msg(open-eqs-file(Name)).
