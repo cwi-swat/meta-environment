@@ -1,3 +1,6 @@
+2003/06/13 ({iversen, markvdb}@cwi.nl
+ * Introduced fine-grain file extension hooks.
+
 2003/05/30 (jurgenv@cwi.nl)
  * Enabled the dump tests again
  
