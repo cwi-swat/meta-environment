@@ -1,5 +1,9 @@
+2003/07/16 (jurgenv@cwi.nl)
+ * Fixed a bug in asfc, it could not deal with ATermLists in terms stored
+   in attributes of productions.
+
 2003/07/02 (jurgenv@cwi.nl)
- * Release 1.7
+ * Version 1.7
 
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
