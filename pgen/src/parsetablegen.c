@@ -20,7 +20,7 @@ ATbool run_verbose;
 ATbool statisticsMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "2.3";
+static char myversion[] = "2.4";
 
 /*
     The argument vector: list of option letters, colons denote option
