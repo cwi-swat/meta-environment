@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Jun 10 09:41:41 CEST 2004 <{jong,jurgenv}@cwi.nl>
+ * ./lib/lex-cons.c: explicit cast to (int) in PT_makeTreeChar
+
 Wed Jun  9 11:53:18 CEST 2004 <{jong,jurgenv}@cwi.nl>
  * configure.in: bumped to version 1.3
  * lib: regenerated API using APIGen 2.1 and fix resulting errors

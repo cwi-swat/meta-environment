@@ -9,7 +9,7 @@
 static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch)
 {
   const char *str = ASF_getCHARString(ch);
-  return PT_makeTreeChar(str[1]);
+  return PT_makeTreeChar((int) str[1]);
 }
 
 /*}}}  */
