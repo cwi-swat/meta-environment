@@ -16,7 +16,7 @@ void DumpAllProductions(FILE *out, parse_table *pt)
 {
   int l;
 
-  for(l=SG_CHAR_CLASS_MAX; l<(SG_CHAR_CLASS_MAX+pt->numprods); l++)
+  for(l=SG_PROD_START; l < (SG_PROD_START + pt->numprods); l++)
     DumpOneProduction(out, pt, l);
 }
 

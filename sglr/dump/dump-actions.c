@@ -9,7 +9,7 @@ void DumpOneAction(FILE *out, parse_table *pt, int s)
   actions  val;
   int      c, nxt = 0;
 
-  for(c = 0; c<SG_CHAR_CLASS_MAX; c++)
+  for(c = 0; c <= SG_CHAR_CLASS_EOF; c++)
     if((val = SG_LookupAction(pt, SG_SETSTATE(s), c)) && !ATisEmpty(val)) {
       if(!nxt++)
         ATfprintf(out,"%d", s);

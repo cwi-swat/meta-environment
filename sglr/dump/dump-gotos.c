@@ -9,7 +9,7 @@ void DumpOneGoto(FILE *out, parse_table *pt, int s)
   state  target;
   int    l, nxt = 0;
 
-  for(l = 0; l<(pt->numprods+SG_CHAR_CLASS_MAX); l++)
+  for(l = 0; l < (pt->numprods+SG_PROD_START); l++)
     if((target = SG_LookupGoto(pt, SG_SETSTATE(s), SG_SETLABEL(l))) >= 0) {
       if(!nxt++)
         ATfprintf(out,"%d", s);
