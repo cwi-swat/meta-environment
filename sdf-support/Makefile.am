@@ -1,6 +1,8 @@
 # $Id$
 
-SUBDIRS		= lib utils test
+SUBDIRS = lib utils test
+
+ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST = make_rules $(wildcard *.pkg)
 
