@@ -206,7 +206,7 @@ static ATerm sndValue(ATerm result)
 
 /*{{{  ATerm get_editor_id(int conn, char *pathAsString,  */
 
-ATerm get_editor_id(int conn, char *filename, char *modulename)
+ATerm get_editor_id(int conn, const char *filename, const char *modulename)
 {
   ATerm editor;
   ATerm editorId;
@@ -234,7 +234,7 @@ ATerm get_editor_id(int conn, char *filename, char *modulename)
 /*}}}  */
 /*{{{  ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString) */
 
-ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString)
+ATerm check_editor_id(int conn, const char *nameAsString, const char *moduleAsString)
 {
   ATerm editor;
   ATerm editorId;
@@ -317,7 +317,7 @@ void delete_editor(int conn, ATerm editorId)
 /*}}}  */
 /*{{{  ATerm get_editors_by_module(int conn, char *moduleAsString) */
 
-ATerm get_editors_by_module(int conn, char *moduleAsString)
+ATerm get_editors_by_module(int conn, const char *moduleAsString)
 {
   ATerm moduleAsTerm;
   ATermList editorsByModule;
