@@ -11,15 +11,15 @@ public class PropertyTree
   private String key;
   private String value;
 
-  private PropertyForest property;
+  private PropertyForest properties;
 
-  //{{{ public PropertyTree(String key, String value, PropertyForest property)
+  //{{{ public PropertyTree(String key, String value, PropertyForest properties)
 
-  public PropertyTree(String key, String value, PropertyForest property)
+  public PropertyTree(String key, String value, PropertyForest properties)
   {
     this.key = key;
     this.value = value;
-    this.property = property;
+    this.properties = properties;
   }
 
   //}}}
@@ -41,11 +41,36 @@ public class PropertyTree
 
   //}}}
 
+  //{{{ public String getKey()
+
+  public String getKey()
+  {
+    return key;
+  }
+
+  //}}}
+  //{{{ public String getValue()
+
+  public String getValue()
+  {
+    return value;
+  }
+
+  //}}}
+  //{{{ public PropertyForest getProperties()
+
+  public PropertyForest getProperties()
+  {
+    return properties;
+  }
+
+  //}}}
+
   //{{{ public String toString()
 
   public String toString()
   {
-    return key + " " + value + " {" + property.toString() + "}";
+    return key + " " + value + " {" + properties.toString() + "}";
   }
 
   //}}}

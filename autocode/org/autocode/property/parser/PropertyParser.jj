@@ -13,7 +13,10 @@ public class PropertyParser
   {
     PropertyParser parser = new PropertyParser(System.in);
     PropertyForest forest = parser.PropertyFile();
-    System.out.println("forest: " + forest);
+    //System.out.println("forest: " + forest);
+    System.out.println("Type.name.color: " + forest.getValue("Type.name.color"));
+    System.out.println("Type.name.type: " + forest.getValue("Type.name.type"));
+    System.out.println("type: " + forest.getValue("type"));
   }
 
   //}}}
@@ -22,6 +25,60 @@ public class PropertyParser
   private static String unquote(String string)
   {
     return string.substring(1, string.length()-1);
+  }
+
+  //}}}
+
+  //{{{ private static PropertyTree buildType(String type, List params)
+
+  private static PropertyTree buildType(String type, List params)
+  {
+    PropertyTree tree;
+
+    if (type.equals("string") || type.equals("integer") || type.equals("real")
+	|| type.equals("Date")) {
+      if (params.size() != 0) {
+	throw new IllegalArgumentException("builtin type " + type
+					   + " cannot have params");
+      }
+      tree = new PropertyTree("type", type, new PropertyForest());
+      tree.setType(PropertyTree.SET);
+    } else if (type.equals("list") || type.equals("set")) {
+      if (params.size() != 1) {
+	throw new IllegalArgumentException("type " + type
+					   + " requires exactly one paramter");
+      }
+      PropertyForest children = new PropertyForest();
+      PropertyTree elementType =
+	new PropertyTree("element-type", (String)params.get(0), new PropertyForest());
+      elementType.setType(PropertyTree.SET);
+      children.addTree(elementType);
+      tree = new PropertyTree("type", type, children);
+    } else if (type.equals("map")) {
+      if (params.size() != 1) {
+	throw new IllegalArgumentException("type " + type
+					   + " requires exactly two paramters");
+      }
+      PropertyForest children = new PropertyForest();
+      PropertyTree keyType =
+	new PropertyTree("key-type", (String)params.get(0), new PropertyForest());
+      keyType.setType(PropertyTree.SET);
+      children.addTree(keyType);
+      PropertyTree valueType =
+	new PropertyTree("value-type", (String)params.get(1), new PropertyForest());
+      valueType.setType(PropertyTree.SET);
+      children.addTree(valueType);
+      tree = new PropertyTree("type", type, children);
+    } else {
+      if (params.size() != 0) {
+	throw new IllegalArgumentException("user-defined type " + type
+					   + " cannot have params");
+      }
+      tree = new PropertyTree("type", type, new PropertyForest());
+      tree.setType(PropertyTree.SET);
+    }
+
+    return tree;
   }
 
   //}}}
@@ -156,6 +213,25 @@ TOKEN :
 
 //}}}
 
+//{{{ Name
+
+String Name() :
+{
+  StringBuffer nameBuf;
+  Token first, next;
+}
+{
+  first=<IDENTIFIER>
+    { nameBuf = new StringBuffer(first.image); }
+  ( "." next=<IDENTIFIER>
+    { nameBuf.append("."); nameBuf.append(next.image); }
+  )*
+  { return nameBuf.toString(); }
+}
+
+
+//}}}
+
 //{{{ PropertyFile
 
 PropertyForest PropertyFile() :
@@ -173,44 +249,21 @@ PropertyForest PropertyFile() :
 
 PropertyForest PropertyForest() :
 {
-  PropertyForest forest = new PropertyForest();
+  PropertyForest trees, forest = new PropertyForest();
   PropertyTree tree;
-  Token key;
+  String key;
   int type;
   List list;
   String value;
 }
 {
   (
-    LOOKAHEAD(3)
-    key=<IDENTIFIER>
-    ( "+=" {type=PropertyTree.ADD;}
-    | ":=" {type=PropertyTree.SET;}
-    )
-    "{" list=PropertyValueList() "}"
-    {
-      Iterator iter = list.iterator();
+    trees=PropertyTrees() {
+      Iterator iter = trees.fetchTreeIterator();
       while (iter.hasNext()) {
-        tree = new PropertyTree(key.image, (String)iter.next(),
-				new PropertyForest());
-	tree.setType(PropertyTree.ADD);
-	forest.addTree(tree);
+	forest.addTree((PropertyTree)iter.next());
       }
     }
-  |
-    LOOKAHEAD(2)
-    key=<IDENTIFIER>
-    ( "+=" {type=PropertyTree.ADD;}
-    | ":=" {type=PropertyTree.SET;}
-    )
-    value=PropertyValue()
-    {
-      tree = new PropertyTree(key.image, value, new PropertyForest());
-      tree.setType(PropertyTree.ADD);
-      forest.addTree(tree);
-    }
-  |
-    tree=PropertyTree() { forest.addTree(tree); }
   ) *
   { return forest; }
 }
@@ -218,28 +271,91 @@ PropertyForest PropertyForest() :
 //}}}
 //{{{ PropertyTree
 
-PropertyTree PropertyTree() :
+PropertyForest PropertyTrees() :
 {
-  Token key;
-  Token field, type;
+  String key;
+  Token field;
+  PropertyTree fieldType;
+  int treeType;
   List list;
-  PropertyForest forest;
+  PropertyForest forest = new PropertyForest();
+  PropertyForest children;
   String value;
 }
 {
   LOOKAHEAD(2)
-  field=<IDENTIFIER> ":" type=<IDENTIFIER>
+  field=<IDENTIFIER> ":" fieldType=FieldType()
   {
-   forest = new PropertyForest();
-   forest.addTree(new PropertyTree("type", type.image,
-				   new PropertyForest()));
-   return new PropertyTree("field", field.image, forest);
+   children = new PropertyForest();
+   children.addTree(fieldType);
+   forest.addTree(new PropertyTree("field", field.image, children));
+   return forest;
   }
 |
-  key=<IDENTIFIER> value=PropertyValue() "{" forest=PropertyForest() "}"
-  {
-    return new PropertyTree(key.image, value, forest);
-  }
+  key=Name()
+  (
+    LOOKAHEAD(2)
+    value=PropertyValue() "{" children=PropertyForest() "}"
+    {
+      forest.addTree(new PropertyTree(key, value, children));
+      return forest;
+    }
+  |
+    ( "+=" {treeType=PropertyTree.ADD;}
+    | ":=" {treeType=PropertyTree.SET;}
+    )
+    (
+      "{" list=PropertyValueList() "}"
+      {
+	Iterator iter = list.iterator();
+	while (iter.hasNext()) {
+	  PropertyTree tree =
+	    new PropertyTree(key, (String)iter.next(), new PropertyForest());
+	  tree.setType(treeType);
+	  forest.addTree(tree);
+	}
+	return forest;
+      }
+    |
+      value=PropertyValue()
+      {
+	PropertyTree tree = new PropertyTree(key, value, new PropertyForest());
+	tree.setType(treeType);
+	forest.addTree(tree);
+	return forest;
+      }
+    )
+  )
+}
+
+//}}}
+
+//{{{ FieldType
+
+PropertyTree FieldType() :
+{
+  Token type;
+  List params = new LinkedList();
+}
+{
+  type=<IDENTIFIER> ( "<" params=FieldParams() ">" )?
+  { return buildType(type.image, params); }
+}
+
+//}}}
+
+//{{{ FieldParams
+
+List FieldParams() :
+{
+  List params = new LinkedList();
+  Token param;
+}
+{
+  param=<IDENTIFIER> { params.add(param.image); }
+  ( "," param=<IDENTIFIER> { params.add(param.image); }
+  )*
+  { return params; }
 }
 
 //}}}
