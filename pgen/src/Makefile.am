@@ -23,6 +23,7 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS = parsetablegen
 bin_SCRIPTS  = sdf2table 
+noinst_SCRIPTS = sdf2table.test
 data_DATA    = parsetablegen.idef
 man_MANS     = sdf2table.1
 
@@ -49,11 +50,21 @@ parsetablegen_LDADD   = parsetablegen.tif.o \
                         $(SOCKLIBS)
 
 # remove built files during "make clean"
-CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1
+CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1 sdf2table.test
 
 parsetablegen.o : parsetablegen.tif.h
 sdf-help.o : parsetablegen.tif.h
 
+# we create one sdf2table that uses source tree binaries and data 
+# this is needed for testing
+%.test: %.src Makefile
+	sed 's@__BINDIR__@$(top_srcdir)/src@g;\
+             s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
+        chmod +x $@
+
+# and one sdf2table for installed binaries and data
 % : %.src Makefile
-	sed 's@__BINDIR__@$(bindir)@g;s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ &&\
+	sed 's@__BINDIR__@$(bindir)@g;\
+             s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
+
