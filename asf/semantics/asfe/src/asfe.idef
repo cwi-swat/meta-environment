@@ -19,7 +19,8 @@ in
     execute(asfe, Eval?) .
     snd-eval(Eval, interpret(ModuleName, Equations, Term, Tide)) .
     (
-      rec-value(Eval, rewrite-result(NormalForm?)) 
+      rec-value(Eval, rewrite-result(NormalForm?)) .
+      snd-msg(rewrite-result(NormalForm))
     +
       rec-value(Eval, rewrite-errors(ErrorList?)) .
       snd-msg(rewrite-errors(ErrorList))
