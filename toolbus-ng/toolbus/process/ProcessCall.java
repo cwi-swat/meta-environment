@@ -28,6 +28,10 @@ public class ProcessCall implements ProcessExpression, StateElement {
     startState.add(this);
     //System.out.println("ProcessCall(\"" + name + "\", " + actuals + ")");
   }
+   public ProcessCall(ATerm name, ATermList actuals) {
+    this(((ATermAppl) name).getName(), actuals);
+   }
+  
 
   public ProcessExpression copy() {
     //System.out.println("ProcessCall.copy: " + name);

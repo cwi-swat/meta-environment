@@ -16,7 +16,6 @@ public class ProcessDefinition {
   private static int ninstances = 0;
   private String name;
   private ATermList formals;
-//  private ATermList nonResultFormals;
   private ProcessExpression PE;
   private String toolname;
 
@@ -25,15 +24,6 @@ public class ProcessDefinition {
     this.formals = formals;
     this.PE = PE;
     this.toolname = toolname;
-
-//    nonResultFormals = formals.getFactory().makeList();
-//    int nargs = formals.getLength();
-//    for (int i = 0; i < nargs; i++) {
-//      ATerm formal = formals.elementAt(i);
-//      if (!TBTerm.isResVar(formal)) {
-//        nonResultFormals = nonResultFormals.append(formal);
-//      }
-//    }
 
     //System.out.println("procdef " + name + " " + formals + " " + PE);
   }

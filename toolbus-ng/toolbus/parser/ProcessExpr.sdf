@@ -9,16 +9,16 @@ exports
     ProcessName -/- [a-zA-Z\-0-9]
 
   lexical syntax
-    [A-Z] [a-zA-Z\-0-9]* -> ProcessName
+    [A-Z] [a-zA-Z\-0-9]* 			-> ProcessName	{cons("id")}
 
   context-free syntax
     Atom 					-> ProcessExpr
 %%    Atom TimeExpr 				-> ProcessExpr
-    "create" "(" ProcessName ("(" {TBTerm ","}* ")")?  "," GenVar ")" 
+    "create" "(" ProcessName  "," GenVar ")" 	-> ProcessExpr {cons("Create0")}
+   "create" "(" ProcessName "(" {TBTerm ","}* ")"  "," GenVar ")" 
 						-> ProcessExpr {cons("Create")}
-
-    ProcessName					-> ProcessCall  {cons("ProcCall")}
-    ProcessName ("(" {TBTerm ","}* ")") 	-> ProcessCall  {cons("ProcCall")}
+    ProcessName					-> ProcessCall  {cons("ProcessCall")}
+    ProcessName ("(" {TBTerm ","}* ")") 	-> ProcessCall  {cons("ProcessCall")}
     ProcessCall					-> ProcessExpr
 
     ProcessExpr "." ProcessExpr 		-> ProcessExpr {left, cons("Sequence")}
