@@ -301,7 +301,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	pt = parsetreeFromFile("-", parseInput);
       }
       else if (nInputs == 1) {
-	pt = parsetreeFromFile((const char*) inputs[0], parseInput);
+	pt = inputs[0];
       }
       else if (nInputs != 1) {
 	ATerror("Can only process one argument if no -f and -r option "
