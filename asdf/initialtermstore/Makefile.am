@@ -1,4 +1,6 @@
 # $Id$
 
-all: ${prefix}/bin/dump-termstore -s 
+EXTRA_DIST=initialtermstore
+
+initialtermstore: ${prefix}/bin/dump-termstore -s 
 
