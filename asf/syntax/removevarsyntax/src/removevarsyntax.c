@@ -177,12 +177,9 @@ int main(int argc, char *argv[])
   }
  
   ATinit(argc, argv, &bottomOfStack);
-  PT_initPTApi();
   SDF_initSDFApi();
-  ASF_initASFApi();
 
-  init_patterns();
-  c_rehash(INITIAL_TABLE_SIZE);
+  ASC_initRunTime(INITIAL_TABLE_SIZE);
 
   register_all();
   resolve_all();
