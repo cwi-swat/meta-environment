@@ -1,3 +1,6 @@
+# Let's find those warnings before this gets shipped
+CFLAGS += -Werror
+
 BUILTIN_NAMES=\
               set-anno get-anno\
               get-term-anno \
