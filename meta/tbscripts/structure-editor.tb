@@ -108,8 +108,8 @@ in
 	FF := []. (
 	  if not-equal(Fl,[]) then
 	    Foc:= first(Fl).
-	    snd-msg(get-anno("focusstatus",focus(Foc))).
-	    rec-msg(annotation(T?)).
+	    snd-msg(get-anno("focusstatus", Foc)) .
+	    rec-msg(annotation(T?)) .
 	    if equal(dirty,T) then
 	      snd-msg(TE,get-focus-text(Fid, Foc)).
 	      rec-msg(TE,focus-text(Fid, Str?)).
