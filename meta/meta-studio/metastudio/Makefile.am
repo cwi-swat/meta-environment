@@ -42,4 +42,5 @@ java_JAVA = \
 	Preferences.java \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
-	UserInterfaceTool.java
+	UserInterfaceTool.java \
+        GUIList.java

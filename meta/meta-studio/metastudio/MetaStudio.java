@@ -83,6 +83,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private String currentModule;
   private ModuleManager moduleManager;
 
+  private GUIList messageList;  // Message list
+  private JFrame messageWindow;
+
   //{{{ public static final void main(String[] args)
 
   public static final void main(String[] args) throws IOException
@@ -663,6 +666,24 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     leftPanel.setDividerLocation(0.65);
     rightPanel.setDividerLocation(0.8);
 
+    // Message list
+
+    messageList = new GUIList(bridge, factory);
+	
+    JScrollPane messagePane = new JScrollPane(messageList);
+    JPanel messageMainPanel = new JPanel();
+    messageWindow = new JFrame("Message list");
+    Container messageContent = messageWindow.getContentPane();
+
+    messageMainPanel.setLayout(new BorderLayout());
+    messageMainPanel.setBorder(BorderFactory.createTitledBorder("Messages"));
+    messageMainPanel.add(messagePane, BorderLayout.CENTER);
+    messageContent.setLayout(new BorderLayout());
+    messageContent.add(messageMainPanel, BorderLayout.CENTER);
+
+    messageWindow.setSize(300,400);
+    //messageWindow.setVisible(true);
+
     //}}}
   }
 
@@ -1056,7 +1077,22 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
+  //{{{ public void updateList(ATerm data) 
 
+  public void updateList(ATerm data) {
+
+      messageWindow.setVisible(true);
+
+      if (data instanceof ATermList) {
+	  messageList.setContent((ATermList)data);
+      }
+      else {
+	  System.out.println(data.toString());	    
+	  messageList.errMessage("Can't show something in list view which is not a ATermList");
+      }
+  }
+
+  //}}}
   //{{{ public void recAckEvent(ATerm event)
 
   public void recAckEvent(ATerm event) {

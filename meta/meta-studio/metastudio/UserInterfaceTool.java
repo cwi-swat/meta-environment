@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 3, 2003 2:39:29 PM
+// generation time: Apr 28, 2003 4:22:03 PM
 
 package metastudio;
 
@@ -28,6 +28,7 @@ abstract public class UserInterfaceTool
   private ATerm Perror0;
   private ATerm PdisplayGraph0;
   private ATerm PnewGraph0;
+  private ATerm PupdateList0;
   private ATerm PendStatus0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -64,6 +65,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
 
@@ -84,6 +86,7 @@ abstract public class UserInterfaceTool
     Perror0 = factory.parse("rec-do(error(<str>))");
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PnewGraph0 = factory.parse("rec-do(new-graph(<term>,<term>))");
+    PupdateList0 = factory.parse("rec-do(update-list(<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -151,6 +154,11 @@ abstract public class UserInterfaceTool
     result = term.match(PnewGraph0);
     if (result != null) {
       newGraph((ATerm)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PupdateList0);
+    if (result != null) {
+      updateList((ATerm)result.get(0));
       return null;
     }
     result = term.match(PendStatus0);

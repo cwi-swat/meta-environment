@@ -62,7 +62,10 @@ let
   EnvironmentName : str,
   Recursive : term,
   EditorId : term,
-  GraphId : str
+  GraphId : str,
+  ButtonName : list,
+  Tree : term,
+  Lst : list
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -140,17 +143,17 @@ in
     ) +
     ( rec-event(UI, edit-module(ModName?)) .
       snd-msg(edit-syntax(ModName)) .
-      rec-msg(editor-opened(ModName)) .
+      rec-msg(editor-opened(ModName,EditorId?)) .
       snd-ack-event(UI, edit-module(ModName))
     ) +
     ( rec-event(UI, edit-eqs-module(ModName?)).
       snd-msg(edit-equations(ModName)) .
-      rec-msg(editor-opened(ModName)) .
+      rec-msg(editor-opened(ModName,EditorId?)) .
       snd-ack-event(UI, edit-eqs-module(ModName))
     ) +
    ( rec-event(UI, edit-term(ModName?, FileName?)).
      snd-msg(edit-term-file(ModName, FileName)) .
-     rec-msg(editor-opened(ModName)) .
+     rec-msg(editor-opened(ModName,EditorId?)) .
      snd-ack-event(UI, edit-term(ModName, FileName))
    ) +
     ( rec-event(UI, revert-module(ModName?)) .
@@ -249,6 +252,17 @@ in
      snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
      snd-ack-event(UI, layout-graph(GraphId, Graph))
    )
+   + /*  Message list */
+   (
+     rec-event(UI, element-selected(ButtonName?, Tree?)).
+     snd-msg(extra-button-action(ButtonName, Tree, "message-list", "*", message-id)).
+     snd-ack-event(UI, element-selected(ButtonName, Tree)) 
+   )
+   +
+   (  
+     rec-msg(update-list-view(Lst?)).
+     snd-do(UI, update-list(Lst))
+   ) 
   ) *
   ( rec-event(UI,quit)
   + rec-disconnect(UI)) .
