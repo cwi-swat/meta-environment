@@ -530,7 +530,7 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals,
   int i;
   TBbool in_quote = TBfalse, escape = TBfalse;
 
-  while(*src && isspace(*src))
+  while(*src && isspace((int)*src))
     src++;
 
   if(!*src)
@@ -538,8 +538,8 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals,
 
 loop:
 
-  while(!isupper(*src)){
-    if(!*src || (stop_at_space && !in_quote && isspace(*src))){
+  while(!isupper((int)*src)){
+    if(!*src || (stop_at_space && !in_quote && isspace((int)*src))){
       *buf++ = '\0';
       *pbuf = buf;
       *psrc = src;      
@@ -571,7 +571,7 @@ too_long:
     }
   }
 
-  for(i = 0; isupper(*src); i++, src++){
+  for(i = 0; isupper((int)*src); i++, src++){
     base_par_name[i] = par_name[i] = *src;
   }
   base_par_name[i] = '\0';
