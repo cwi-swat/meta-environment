@@ -39,6 +39,9 @@ extern aterm *pattern_asfix_id;
 extern aterm *pattern_asfix_module;
 extern aterm *pattern_asfix_lexcaller;
 extern aterm *pattern_asfix_term;
+extern asymbol *oksym;
+extern asymbol *tuplesym;
+extern asymbol *nullsym;
 
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
@@ -600,9 +603,12 @@ Tprintf(stderr,"Reshuffling sort: %t\n",sort);
     if(!t_is_empty(neweqs)) {
       oldamod = TdictGet(modules_db,mod);
       eqs = AFgetModuleEqs(oldamod);
-      eqs = TlistConcat(&local,
-                        TlistAppend(&local,eqs,pattern_asfix_nlws),
-                        neweqs);
+      if(!t_is_empty(eqs))
+        eqs = TlistConcat(&local,
+                          TlistAppend(&local,eqs,pattern_asfix_nlws),
+                          neweqs);
+      else
+        eqs = neweqs;
       amod = AFputModuleEqs(&local,amod,eqs);
       change_modules_db(TdictPut(&local,modules_db,mod,amod));
     }
@@ -687,10 +693,12 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
 
 /*
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";
-  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles3/";
-  char *path = "/home/markvdb/NEW-META/new-meta/pgen/cfiles/";
+  char *path = "/home/markvdb/AsFix2C/muASF-list/asfixfiles/";
+  char *path = "/home/markvdb/AsFix2C/muASF/TESTING/sets/";
+  char *path = "/home/markvdb/NEW-META/new-meta/compiler/ctest/";
 */
-  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles5/";
+
+  char *path = "/home/markvdb/NEW-META/new-meta/pgen/cfiles/";
 
   TinitArena(NULL, &local);
 
@@ -717,6 +725,7 @@ Tprintf(stderr,"compile_module entered\n");
       if(input) {
         TreadTermFile(input,&local,&oldmod);
         write = !t_equal(oldmod,amod);
+        fclose(input);
       }
       else 
         write = Ttrue;
@@ -908,6 +917,10 @@ int main(int argc, char **argv)
   c_rehash(INITIAL_TABLE_SIZE);
   register_all();
   resolve_all();
+
+  oksym = TmkSymbol("ok", 0);
+  tuplesym = TmkSymbol("tuple", 0);
+  nullsym = TmkSymbol("null", 0);
 
   TBeventloop();
 
