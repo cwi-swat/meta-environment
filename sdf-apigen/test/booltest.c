@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
   ATerm term;
-  PT_Tree tree;
+  SDFBoolList tree;
 
   ATinit(argc, argv, &bottomOfStack);
   SDFinitBooleansApi();
@@ -73,8 +73,9 @@ int main(int argc, char *argv[])
   assert(term);
   ATprotect(&term);
 
-  tree = PT_getParseTreeTree(PT_ParseTreeFromTerm(term));
-  testBooleans(SDFBoolListFromTerm(PT_TreeToTerm(tree)));
+  tree = SDFgetStartBoolList(SDFStartFromTerm(term));
+
+  testBooleans(tree);
 
   return 0;
 }

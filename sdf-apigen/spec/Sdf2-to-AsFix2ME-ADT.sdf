@@ -11,6 +11,22 @@ exports
     sdf-to-asfix2me-adt ( Module, ConsOption )        -> ATerm
     sdf-module-to-asfix2me-adt ( Module, ConsOption ) -> ATerm
 
+context-free syntax
+
+start-sorts-to-asfix2me-adt(Module) -> ATerm
+
+hiddens
+
+context-free syntax
+
+  collect-start-sorts(Module) -> Symbol*
+  collect-start-sorts(Module, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
+  collect-start-sorts(Grammar, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
+
+  start-sorts-to-adt(Symbol*) -> ATerm
+  start-sorts-to-adt(Symbol*, ATerm) -> ATerm 
+  start-sort-to-adt(Symbol, ATerm)    -> ATerm
+
 hiddens
   context-free syntax
     section-to-adt ( ModuleName, Section, ConsOption )		-> ATerms
@@ -68,9 +84,10 @@ hiddens
     "$Sep"		-> Literal
     "$Sort"		-> Sort
     "$Symbol"		-> Symbol
-    "$Symbol*"		-> Symbol*
+    "$Symbol*"[0-9]*    -> Symbol*
     "$Symbol+"		-> Symbol+
     "$TypeId"		-> AFun
     "$UQLit"		-> UQLiteral
     "$QLit"		-> Literal
+  
 

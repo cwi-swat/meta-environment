@@ -1,4 +1,8 @@
 
+2002/10/03 (vinju@loria.fr)
+ * Added generation of parse tree patterns from all start symbols in an
+   SDF grammar.
+
 2002/09/31 (vinju@loria.fr)
  * Started new package sdf-apigen that contains the mapping from
    SDF to ADT.

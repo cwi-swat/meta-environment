@@ -15,9 +15,11 @@ equations
   sdf-module-to-asfix2me-adt($Module, $ConsOption) = $ADT1,
   merge-adts([], $ADT1) = $ADT2,
   sdf-to-asfix2me-adt(definition $Module*, $ConsOption) = $ADT3,
-  merge-adts($ADT2, $ADT3) = $ADT4
+  merge-adts($ADT2, $ADT3) = $ADT4,
+  start-sorts-to-asfix2me-adt($Module) = $ADT5,
+  merge-adts($ADT4, $ADT5) = $ADT6
   ===>
-  sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT4
+  sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT6
 
 [equ-sdf-to-adt-module]
   sdf-to-asfix2me-adt($Module, $ConsOption) = 
@@ -199,3 +201,34 @@ equations
 
 [default-equ-build-list-entries]
   build-list-entries($Symbol) =
+
+[css-1] collect-start-sorts($Module) = collect-start-sorts($Module, )
+[css-2] collect-start-sorts(sorts $Symbol*1,$Symbol*2) = $Symbol*1 $Symbol*2
+
+[0] $Symbol* = collect-start-sorts($Module),
+   $ADT = start-sorts-to-adt($Symbol*)
+   ===>
+   start-sorts-to-asfix2me-adt($Module) = $ADT
+
+[0] start-sorts-to-adt($Symbol*) = start-sorts-to-adt($Symbol*, [])
+
+[0] start-sorts-to-adt(,$ADT) = $ADT
+[0] start-sort-to-adt($Symbol, $ADT) = $ADT2,
+   start-sorts-to-adt($Symbol*, $ADT2) = $ADT3
+   ===>
+   start-sorts-to-adt($Symbol $Symbol*, $ADT) = $ADT3
+
+[0] $FieldType = sort-to-afun($Sort),
+   $Sort = sort($Char* ),
+   $AltId = afun($Char*)
+   ===>
+   start-sort-to-adt($Sort, [ $Entries ]) = 
+    [ [Start, $AltId,
+      parsetree(appl(prod(
+                     [cf(opt(layout)),cf(sort($FieldType)),cf(opt(layout))],
+                       sort("<START>"), no-attrs),
+                [<ws-before(Layout)>,<$AltId($FieldType)>,<ws-after(Layout)>]),
+                              <amb-cnt(int)>)], $Entries]
+
+
+%% [default] start-sort-to-adt($Symbol, $ADT) = $ADT
