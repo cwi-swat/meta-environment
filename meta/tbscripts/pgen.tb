@@ -1,0 +1,25 @@
+process PGen(PGEN: pgen) is
+let 
+Id     : term,
+T      : term,
+T1     : term,
+Name   : term,
+M      : term,
+Syntax : term,
+NewSyntax : term,
+Str    : str,
+Table    : str,
+Mods   : list
+in
+( rec-msg(generate-parsetable(id(Str?))).
+  snd-msg(add-eqs-syntax(id(Str))).
+  rec-msg(updated-syntax(Syntax?)).
+  snd-msg(add-pgen-func(Syntax)).
+  rec-msg(decorated-syntax(NewSyntax?)).
+  snd-eval(PGEN,reduce-and-asource(NewSyntax,Str,"tbl")). 
+  rec-value(PGEN,reduction-finished(Table?)).
+  snd-msg(parsetable(Table))
+)*
+delta
+endlet
+
