@@ -61,6 +61,12 @@ public class DelegateConnection implements DelegateTif {
 		if (result != null) {
 			return;
 		}
+		
+		fun = factory.parse("rec-terminate(<term>)");
+		result = term.match(fun);
+		if (result != null) {
+			System.exit(1);
+		}
 
 		throw new RuntimeException("term not in input signature: " + term);
 	}
