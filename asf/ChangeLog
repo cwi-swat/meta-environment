@@ -1,6 +1,9 @@
 # $Id$
 
-2003/07/01 (jurgenv@cwi.nl)
+2003/01/29 (markvdb@cwi.nl)
+ * Introduced the error support in the AsfSdfChecker.
+
+2003/01/07 (jurgenv@cwi.nl)
  * Set version to 1.8
  * Link all compiled specifications against -lErrorAPI because asc-support
    needs that
