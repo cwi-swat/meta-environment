@@ -24,8 +24,6 @@ ATerm make_function_term(ATerm term)
 
   if(ATmatchTerm(term,pattern_asfix_term,
                  &lit[0],&w[0],&lit[1],&w[1],&id,&w[2],&arg,&w[3],NULL)) {
-    /*    a_name = ATparse("l(Risla)");
-     */
     t_mod_name = ATparse("id(\"Sdf2-Parse-Table\")");
     t_name = ATparse("l(\"parse-table\")");
     abbrevs = ATparse("abbreviations([])");
