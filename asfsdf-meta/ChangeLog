@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Tue Mar 22 10:37:53 CET 2005 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/Makefile.am
+ * meta-scripts/meta-interface.tb.src
+   - use the version in the "environment name" so meta environment
+   shows the actual version in the title
+
 Fri Feb 18 10:29:46 CET 2005 <jurgenv@cwi.nl>
  * The ASF compiler is always given a parse table too, such that
    the resulting binary can do full source-to-source rewriting.
