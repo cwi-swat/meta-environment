@@ -31,7 +31,6 @@
 #include "edit-term.tb"
 #include "asource.idef"
 #include "in-output.idef"
-#include "parsetrees.tb"
 #include "open-modules.tb"
 #include "file-creator.tb"
 #include "close-modules.tb"
@@ -43,9 +42,6 @@
 #include "clear-all.tb"
 #include "compiler.idef"
 #include "edit-master.tb"
-#include "parsetablegen.idef"
-#include "addeqsyn.tb"
-#include "removevarsyn.tb"
 #include "module-db.idef"
 #include "process-eqs.tb"
 #include "save-module.tb" 
@@ -56,9 +52,15 @@
 #include "sdf2-language.tb"
 #include "notification.tb"
 #include "rewrite-errors.tb"
+#include "parsetablegen.idef"
+#include "asf-syntax.tb"
 #include "traversals.idef"
+#include "addeqssyntax.idef"
+#include "removevarsyntax.idef"
 
-toolbus(Parser, Parsetrees, Unparser, Io, Ui, Edit-master, ModuleDB, 
+toolbus(Parser, Unparser, Io, Ui, Edit-master, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
-        Notify-about-changed-modules, Rewrite-Errors, Traversals) 
+  Notify-about-changed-modules, Rewrite-Errors, Traversals,
+  Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
+  Help, Clear-all, Close-modules) 

@@ -23,49 +23,71 @@
    Get a parsetable for language X
 */
 
+
+/* get the table from the database or create a new table */
 process Set-parsetable is
 let
-  Module    : str, 
-  Table     : str, 
-  Time      : term,
-  Id        : term,
-  NoTable   : term,
-  TableType : term
+  ModuleName : str, 
+  TableType  : term,
+  Table      : str
 in
-Id := process-id.
-
 ( 
-  rec-msg(set-parsetable(Module?, TableType?)) .
-  NoTable := false.
-  snd-msg(get-table-from-db(Module, TableType)) .
+  rec-msg(set-parsetable(ModuleName?, TableType?)) .
+  snd-msg(get-table-from-db(ModuleName, TableType)) .
   (
-    rec-msg(table(Table?))
+    rec-msg(table(Table?)).
+    ReopenLanguage(ModuleName, Table)
   +
     rec-msg(no-table) .
-    snd-msg(generate-parsetable(Module, TableType)) .
-    (
-	rec-msg(parsetable(Table?)) .
-    	snd-msg(get-table-timestamp(Module)) .
-    	rec-msg(table-timestamp(Time?)) .
-    	snd-msg(add-parse-table-to-db(Module, Table, TableType, Time)) .
-    	rec-msg(parse-table-added)
-     +
-	rec-msg(no-parsetable(Module)).
-        NoTable := true
-    )
-  ).
-  if equal(NoTable, true) then
-    	snd-msg(parsetable-not-set(Module))
-  else
-  	snd-msg(reopen-language(Module, Table)) .
-  	(
-    	    rec-msg(language-opened(Module)) .
-	    snd-msg(parsetable-set(Module))
-	  +
-	    rec-msg(language-not-opened(Module)) .
-	    snd-msg(parsetable-not-set(Module))
-  	)
-  fi
+    MakeTable(ModuleName, TableType)
+  )
 ) *
 delta
 endlet
+
+/* add asf syntax and generate a parse table */
+process MakeTable(ModuleName : str, TableType : term) is
+let
+  Syntax    : term,
+  Table     : str,
+  Extension : str,
+  TimeStamp : term
+in
+  snd-msg(get-all-sdf2-definitions(ModuleName)).
+  (
+    rec-msg(syntax(Syntax?)).
+
+    snd-msg(make-asf-syntax(ModuleName, Syntax, TableType)).
+    rec-msg(asf-syntax(Syntax?)).
+
+		if equal(TableType, eqs) then
+       Extension := "eqs.tbl"
+    else
+       Extension := "trm.tbl"
+    fi.
+    
+		snd-msg(generate-parsetable(Syntax, ModuleName, Extension)).
+    rec-msg(parsetable(Table?)).
+
+    snd-msg(get-table-timestamp(ModuleName)).
+    rec-msg(table-timestamp(TimeStamp?)).
+    snd-msg(add-parse-table-to-db(ModuleName, Table, TableType, TimeStamp)).
+    rec-msg(parse-table-added).
+
+    ReopenLanguage(ModuleName, Table)
+    +
+	  rec-msg(no-syntax).
+		snd-msg(parsetable-not-set(ModuleName))
+  )
+endlet
+
+/* Ask the module database to open the language */
+process ReopenLanguage(ModuleName : str, Table : str) is
+  snd-msg(reopen-language(ModuleName, Table)).
+  (
+    rec-msg(language-opened(ModuleName)).
+    snd-msg(parsetable-set(ModuleName))
+    +
+    rec-msg(language-not-opened(ModuleName)).
+    snd-msg(parsetable-not-set(ModuleName))
+  )
