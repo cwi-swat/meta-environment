@@ -10,7 +10,6 @@ static ModuleTable moduleTable = NULL;
 
 static void initModuleTable(ATermList modules)
 {
-  ATwarning("Initializing module cache with %d modules\n", ATgetLength(modules));
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     ATerm atModule = ATBunpack(ATgetFirst(modules));
