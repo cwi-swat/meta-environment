@@ -7,6 +7,7 @@ imports languages/aterm/syntax/Literals
 
 exports
   context-free syntax
-    Literal                                              -> Symbol      {cons("lit")}
+    Literal  -> Symbol  {cons("lit")}
+
     function-symbol: Literal "(" arguments:{Symbol ","}* ")"
-      "->" result:Symbol Attributes                      -> Production  {avoid, cons("prod-fun")}
+      "->" result:Symbol Attributes -> Production  {avoid, cons("prod-fun")}

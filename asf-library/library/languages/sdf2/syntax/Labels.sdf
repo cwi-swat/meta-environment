@@ -4,8 +4,8 @@ module languages/sdf2/syntax/Labels
 
 imports languages/sdf2/syntax/Kernel 
         languages/sdf2/syntax/Literals 
-         languages/aterm/syntax/ATerms
+        languages/aterm/syntax/ATerms
 
 exports
   context-free syntax
-    label:Literal ":" Symbol   -> Symbol        {cons("label")}
+    label:Literal ":" Symbol -> Symbol  {cons("label")}

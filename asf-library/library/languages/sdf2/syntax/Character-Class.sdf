@@ -15,14 +15,16 @@ exports
     CharRange                                   -> CharRanges
     "left":CharRanges "right":CharRanges        -> CharRanges   {cons("conc"),right,memo}
     "(" CharRanges ")"                          -> CharRanges   {bracket}
-                              -> OptCharRanges                  {cons("absent")}
-    CharRanges                -> OptCharRanges                  {cons("present")}
-    "[" OptCharRanges "]"     -> CharClass                      {cons("simple-charclass")}
-    "~" CharClass             -> CharClass                      {cons("comp")}
-    "left":CharClass "/" "right":CharClass   -> CharClass       {cons("diff"),left,memo}
-    "left":CharClass "/\\" "right":CharClass -> CharClass       {cons("isect"),left,memo}
-    "left":CharClass "\\/" "right":CharClass -> CharClass       {cons("union"),left}
-    "(" CharClass ")"          -> CharClass {bracket, avoid}
+
+                              -> OptCharRanges  {cons("absent")}
+    CharRanges                -> OptCharRanges  {cons("present")}
+
+    "[" OptCharRanges "]"                    -> CharClass  {cons("simple-charclass")}
+    "~" CharClass                            -> CharClass  {cons("comp")}
+    "left":CharClass "/" "right":CharClass   -> CharClass  {cons("diff"),left,memo}
+    "left":CharClass "/\\" "right":CharClass -> CharClass  {cons("isect"),left,memo}
+    "left":CharClass "\\/" "right":CharClass -> CharClass  {cons("union"),left}
+    "(" CharClass ")"                        -> CharClass  {bracket, avoid}
 
   context-free priorities
     "~" CharClass             -> CharClass >

@@ -3,6 +3,7 @@
 module languages/sdf2/syntax/Sdf2
 
 imports languages/sdf2/syntax/Sdf2-Syntax
+
 exports
   lexical syntax
     "LAYOUT"            -> Sort    {reject}
@@ -49,6 +50,7 @@ exports
     "restrictions"      -> ModuleName {reject}
 
     Literal "(" {Symbol ","}* ")" -> Symbols {reject}
+
   restrictions
     <Sort -CF>
     <UQLiteral -CF>

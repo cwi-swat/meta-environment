@@ -7,7 +7,7 @@ imports basic/Comments
 exports
   sorts Grammar
   context-free syntax    
-    "(/)"                 -> Grammar                            {cons("empty-grammar")}
-    "left":Grammar "right":Grammar  -> Grammar                  {assoc,cons("conc-grammars")}
-    "(" Grammar ")"       -> Grammar {bracket}
+    "(/)"                          -> Grammar  {cons("empty-grammar")}
+    "left":Grammar "right":Grammar -> Grammar  {assoc,cons("conc-grammars")}
+    "(" Grammar ")"                -> Grammar  {bracket}
 

@@ -3,7 +3,5 @@ module languages/sdf2/syntax/Lifting
 imports languages/sdf2/syntax/Kernel
 
 exports
-
-context-free syntax
-
-left-quote:"`" Symbol right-quote:"`" -> Symbol {cons("lifting")}
+  context-free syntax
+    left-quote:"`" Symbol right-quote:"`" -> Symbol  {cons("lifting")}
