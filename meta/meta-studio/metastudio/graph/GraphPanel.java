@@ -189,7 +189,7 @@ public class GraphPanel
   public void paint(Graphics g)
   {
     g.setColor(getBackground());
-    System.out.println("size = " + getSize());
+    //System.out.println("size = " + getSize());
     if (graph != null) {
       Graphics2D g2d = (Graphics2D)g;
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
