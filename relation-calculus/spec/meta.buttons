@@ -19,6 +19,23 @@ configuration([
 		]
          )
         ]),
+ button("Rscript",
+        [description(term-editor, menu(["Rscript", "Check compiled"]))],
+        [push-active-module,
+         get-root,
+	 push-string("RSCRIPT"),
+	 check-sort,
+	 push-term(true),
+	 if-equal([
+         	apply("check-rscript", "Summary", 1),
+		unpack-tree,
+		execute-action("./RscriptChecker -t"),
+   		convert-feedback, 
+ 		show-feedback],
+		[ message("Not an Rscript")
+		]
+         )
+        ]),
 
 button("Rscript",
           [description(term-editor, menu(["Rscript","Run"]))],
