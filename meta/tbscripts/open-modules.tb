@@ -226,15 +226,16 @@ let
   Errors : list,
   Error : term,
   TermType : term,
-  Sort : str
+  Sort : str,
+  Table : term
 in
   Id := process-id.
   snd-msg(open-language(Type)) .
-  ( 
-    rec-msg(open-language-succeeded(TermType?)) .
+  (
+    rec-msg(table-for-language(TermType?, Table?)) .
     snd-msg(syntax-top-sort-hook(Type)) .
     rec-msg(syntax-top-sort-hook-result(sort(Sort?))) .
-    snd-msg(Id, parse-string-as-asfix2me(TermType, Sort, Text)) .
+    snd-msg(Id, parse-string-given-table(TermType, Table, Sort, Text)) .
     ( 
       rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
     +
@@ -246,11 +247,15 @@ in
       rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))) .
       Tree := no-tree .
       Status := parse-error 
+    +
+      rec-msg(parse-result-asfix2me(Id?, open-language-failed)) .
+      Tree := no-tree .
+      Status := no-parse-table
     )
   +
     rec-msg(open-language-failed) .
     Tree := no-tree .
-    Status := no-parse-table 
+    Status := no-parse-table
   )
 endlet
 

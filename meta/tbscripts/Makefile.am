@@ -22,7 +22,6 @@ TBSCRIPTS = \
   process-eqs.tb \
   restore-term-brackets.tb \
   save-module.tb \
-  set-parsetable.tb \
   start-meta-syntax-editor.tb \
   start-meta-equations-editor.tb \
   start-meta-term-editor.tb \

@@ -3,14 +3,19 @@
 */
 
 process Open-Sdf2-Language is
+let 
+  Table : term,
+  Message : str
+in
   (
     rec-msg(open-language(sdf)) .
-    snd-msg(open-language(trm("Sdf2"), "__SDF2TABLE__")) .
+    snd-msg(io-read-term-file("__SDF2TABLE__")) .
     (
-      rec-msg(language-opened(trm("Sdf2"))) .
-      snd-msg(open-language-succeeded(trm("Sdf2")))
+      rec-msg(io-file-contents(Table?)) .
+      snd-msg(table-for-language(trm("Sdf2"), Table))
     +
-      rec-msg(language-not-opened(trm("Sdf2"))) .
+      rec-msg(io-error-reading(Message?)) .
       snd-msg(open-language-failed)
     )
   )*delta
+endlet

@@ -34,7 +34,6 @@
 #include "compile-module.tb"
 #include "save-module.tb" 
 #include "get-parsetable.tb"
-#include "set-parsetable.tb"
 #include "dump-parsetable.tb"
 #include "sdf2-language.tb"
 #include "parse-focusses.tb"
@@ -106,7 +105,6 @@ in
   . create(RestoreBrackets, Pid?)
   . create(RestoreTermBrackets, Pid?)
   . create(Save-modules, Pid?)
-  . create(Set-parsetable, Pid?)
 #ifdef QUERY
   . create(DisplayQuery, Pid?)
 #endif

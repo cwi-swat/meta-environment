@@ -1,30 +1,24 @@
 /* $Id$ */       
 
-process SetParseTable(ModuleName : str, Type : term, Continue : term?) is
+process SetParseTable(ModuleName : str, Type : term, Table : term?) is
 let
   TermType   : term
 in
   if and(equal(Type, trm), equal(ModuleName, "Sdf2")) then
     snd-msg(open-language(sdf)) .
     (
-      rec-msg(open-language-failed) .
-      snd-note(ui-status(errorf(
-        "Unable to open parse table for %s", [ModuleName]))) .
-      Continue := false
+      rec-msg(table-for-language(TermType?, Table?))
     +
-      rec-msg(open-language-succeeded(TermType?)) .
-      Continue := true
+      rec-msg(open-language-failed) .
+      Table := no-table
     )
   else
-    snd-msg(set-parsetable(ModuleName, Type)) .
+    snd-msg(get-parsetable(ModuleName, Type)) .
     (
-      rec-msg(parsetable-not-set(ModuleName)) .
-      snd-note(ui-status(errorf(
-        "Unable to open parse table for %s", [ModuleName]))) .
-      Continue := false
+      rec-msg(parse-table(Table?))
     +
-      rec-msg(parsetable-set(ModuleName)) .
-      Continue := true
+      rec-msg(no-parse-table(ModuleName)) .
+      Table := no-table
     )
   fi
 endlet
@@ -36,18 +30,18 @@ let
   ModuleId   : term,
   ErrList    : list,
   ErrContent : term,
-  Continue   : term
+  Table      : term
 in
   Id := process-id .     
-  SetParseTable(ModuleName, Type, Continue?) .
+  SetParseTable(ModuleName, Type, Table?) .
   if equal(Type, eqs) then
     ModuleId := quote(eqs(ModuleName))
   else
     ModuleId := quote(trm(ModuleName))
   fi .
-  if equal(Continue, true) then 
+  if not-equal(Table, no-table) then 
     snd-note(ui-status(statf(Id,"Parsing %s", [ModuleId]))).
-    snd-msg(Id, parse-string-as-asfix2me(ModuleId, Nonterminal, Text)).
+    snd-msg(Id, parse-string-given-table(ModuleId, Table, Nonterminal, Text)).
     (
       rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
       ParseError := no-errors
@@ -60,6 +54,10 @@ in
       rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, ErrContent?))) .
       Tree := error-tree .
       ParseError := quote(parse-error(ErrList, ErrContent))
+    +
+      rec-msg(parse-result-asfix2me(Id?, open-language-failed)) .
+      Tree := error-tree .
+      ParseError := no-parse-table
     ) .
     snd-note(ui-status(endstat(Id)))
   else
