@@ -6,6 +6,7 @@ exports
 
 context-free syntax
 
+get-posinfo(X)      -> ATerm
 get-start-column(X) -> IntCon
 get-end-column(X)   -> IntCon
 get-path(X)         -> Literal
@@ -13,10 +14,6 @@ get-start-line(X)   -> IntCon
 get-end-line(X)     -> IntCon
 
 hiddens
-
-context-free syntax
-
-get-posinfo(X)      -> ATerm
 
 variables
 
