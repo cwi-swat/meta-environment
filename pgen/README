@@ -65,6 +65,9 @@ Installation Instructions
   location and you don't need to specify it explicitly (as we did in the
   example above).
 
+  If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
+  different options use --with-cflags="<options>" when you run configure.
+
 3) Building the parser generator
 
    Assuming that GNU make is called "gmake" on your system then the
