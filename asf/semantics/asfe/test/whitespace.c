@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 {
   ATbool usage = ATfalse;
   FILE *eqsfile, *termfile;
-  ATerm eqs, term, result[2];
+  ATerm eqs = NULL, term = NULL, result[2] = {NULL};
   ATerm bottomOfStack;
 
   AFinit(argc, argv, &bottomOfStack);
@@ -58,6 +58,10 @@ int main(int argc, char *argv[])
 
   plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
   ATprotectAFun(plain_var);
+ 
+  ATprotectArray(result, 2);
+  ATprotect(&eqs);
+  ATprotect(&term);
 
   if(argc != 3) {
     ATerror("Usage: whitespace equationsfile termfile\n");
