@@ -1,0 +1,33 @@
+
+
+
+node ROOT
+
+rel[node,node] PRED
+
+rel[str,str] PRED-OF = inv(PRED)
+
+rel[node,str] USES
+
+rel[node,str] DEFS
+
+bag[node] STATEMENTS = carrier(PRED)
+
+rel[str,node] UNDEF =
+        { <N,V> : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
+        }
+
+rel[str,str] IN = {}
+rel[str,str] OUT = {}
+
+solve {
+        IN =  {S x USES[S] union (OUT[S] \ DEFS[S]) : S in STATEMENTS},
+        OUT = {S x IN[P] : S in STATEMENTS, P in PRED[S] }
+} 
+
+rel[<node,str>,<node,str>] USE-DEF =
+	{
+
+
+
+	

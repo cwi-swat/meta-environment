@@ -1,0 +1,18 @@
+
+rel[str,str] PRED ={
+<"R", "A">,<"R", "B">, <"R", "C">,
+<"A", "D">,
+<"B", "A">, <"B", "D">, <"B", "E">,
+<"C", "F">, <"C", "G">,
+<"D", "L">,
+<"E", "H">,
+<"F", "I">,
+<"G", "I">, <"G", "J">,
+<"H", "K">, <"H", "E">,
+<"I", "K">, 
+<"K", "I">, <"K", "R">}
+
+bag[str] VERTICES = carrier(PRED)
+
+rel[str,bag[str]] DOMINATES =
+ { <V,  VERTICES \ {V} \ range(reachX({"R"}, {V}, PRED))> :  V in VERTICES }
