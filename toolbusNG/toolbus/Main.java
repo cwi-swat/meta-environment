@@ -5,7 +5,6 @@
 package toolbus;
 import toolbus.atom.*;
 import toolbus.process.*;
-import toolbus.tool.DeletedToolDefinition;
 
 import aterm.*;
 import aterm.pure.PureFactory;
