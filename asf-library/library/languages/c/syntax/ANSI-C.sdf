@@ -25,6 +25,11 @@ module languages/c/syntax/ANSI-C
 %% - renamed PostfixExpression to PrimaryExpression and removed the 
 %%   trivial injection
 %% - folded empty and non-empty use of ArgumentList in PrimaryExpression
+%% - Introduced separate lexical non-terminals for each type of constant:
+%%   IntegerConstant, HexadecimalConstant, CharacterConstant and 
+%%   FloatingPointConstant
+%% - Removed production [0] D+ IS? -> IntegerConstant because D includes [0]
+%%   and the production D+ IS? -> IntegerConstant exists too 
 %%
 %% The grammar is intentionally left ambiguous and it should stay that way!
 %%
@@ -157,14 +162,13 @@ lexical restrictions
  D+ -/- [0-9]
  
 lexical syntax
-[0] [xX] H+ IS*		-> Constant
-[0] D+ IS*		-> Constant
-D+ IS*		        -> Constant
-[L]? [\'] ( ([\\]~[]) | ~[\\\'] )+ [\']	-> Constant
+[0] [xX] H+ IS*		-> HexadecimalConstant
+D+ IS*		        -> IntegerConstant
+[L]? [\'] ( ([\\]~[]) | ~[\\\'] )+ [\']	-> CharacterConstant
 
-D+ E FS?		-> Constant
-D* [\.] D+ E? FS?	-> Constant
-D+ [\.] D* E? FS?	-> Constant
+D+ E FS?		-> FloatingPointConstant
+D* [\.] D+ E? FS?	-> FloatingPointConstant
+D+ [\.] D* E? FS?	-> FloatingPointConstant
 
 [L]? [\"] ( ([\\]~[]) | ~[\\\"] )* [\"]	-> StringLiteral
 
@@ -186,7 +190,10 @@ context-free syntax
 context-free syntax
 
 Identifier -> PrimaryExpression
-Constant -> PrimaryExpression
+HexadecimalConstant -> PrimaryExpression
+IntegerConstant -> PrimaryExpression
+CharacterConstant -> PrimaryExpression
+FloatingPointConstant -> PrimaryExpression
 StringLiteral -> PrimaryExpression
 "(" Expression ")" -> PrimaryExpression
 PrimaryExpression ("["|"<:")	Expression ("]"|":>")	 -> PrimaryExpression
