@@ -1,5 +1,9 @@
 $Id$
 
+2003/04/10 (markvdb@cwi.nl)
+ * Refined the recognition of the list separated production rules
+   in the AsFix2 format.
+
 2003/03/28 (jurgenv@cwi.nl)
  * Moved tree2dot and tree2graph and libGraph to graph-support package
 

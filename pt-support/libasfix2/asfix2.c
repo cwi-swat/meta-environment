@@ -295,6 +295,7 @@ ATbool isListProd(PT_Production prod)
 
 ATbool isSepListProd(PT_Production prod)
 {
+  ATerm sep1, sep2;
   ATerm sort1, sort2;
   ATermList sortSep1, sortSep2, sortSep3;
 
@@ -311,17 +312,20 @@ ATbool isSepListProd(PT_Production prod)
   }
 
   if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_plus_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
+                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_star_sep_to_star_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
+                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_plus_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
+                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep,
-                  &sortSep1, NULL, &sortSep2, &sortSep3, NULL)) {
-    return ATisEqual(sortSep1, sortSep2) && ATisEqual(sortSep1, sortSep3);
+                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)) {
+    sep2 = ATgetArgument(sortSep1, 1);
+    return ATisEqual(sortSep1, sortSep2) && 
+           ATisEqual(sortSep1, sortSep3) &&
+           ATisEqual(sep1, sep2);
   }
 
   return ATfalse;
