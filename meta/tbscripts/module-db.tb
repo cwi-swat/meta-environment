@@ -27,7 +27,8 @@ let
   DependingModules : list,
   ModuleNames : list,
   FileName : str,
-  Pairs    : list
+  Pairs    : list,
+  ErrorMsg : str
 in
   MDB-InitializeModuleDb() .
   MDB-InitializeFileExtensions() .
@@ -50,8 +51,8 @@ in
   +
     rec-msg(close-module-in-db(Name?)) .
     MDB-GetAllDependingModules(Name, DependingModules?) .
-    MDB-InvalidateModule(Name) .
-    MDB-InvalidateModules(DependingModules) .
+    MDB-InvalidateModule(Name, sdf) .
+    MDB-InvalidateModules(DependingModules, sdf) .
     snd-msg(ts-remove-value-from-all-tables(Name)) .
     snd-msg(changed-modules(DependingModules))
   +
@@ -108,8 +109,8 @@ in
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       MDB-GetAllDependingModules(Name, DependingModules?) .
-      MDB-InvalidateModule(Name) .
-      MDB-InvalidateModules(DependingModules) .
+      MDB-InvalidateModule(Name, sdf) .
+      MDB-InvalidateModules(DependingModules, sdf) .
       snd-msg(updating-succeeded(DependingModules, Modules))
     else
       snd-msg(error-opening(Name, name-inconsistent))
@@ -236,13 +237,20 @@ in
   +
     rec-msg(get-all-sdf2-definitions(Name?)) .
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
-    snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
-    rec-msg(ts-values(Modules?)) .
-    snd-msg(sm-make-sdf-definition(Modules)) .
-    Modules := [] .
-    rec-msg(sm-sdf-definition(Syntax?)) .
-    snd-msg(syntax(Syntax)) .
-    Syntax := no-tree
+    snd-msg(pre-get-all-sdf2-hook(ModuleNames)) .
+    (
+       rec-msg(pre-get-all-sdf2-hook-result(success)) .
+       snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+       rec-msg(ts-values(Modules?)) .
+       snd-msg(sm-make-sdf-definition(Modules)) .
+       Modules := [] .
+       rec-msg(sm-sdf-definition(Syntax?)) .
+       snd-msg(syntax(Syntax)) .
+       Syntax := no-tree
+     +
+       rec-msg(pre-get-all-sdf2-hook-result(failure(ErrorMsg?))) .
+       snd-msg(no-syntax(ErrorMsg)) 
+    )
   +
     rec-msg(get-sdf2-asfix(Name?)) .
     snd-msg(ts-get-term-value("sdf-tree", Name)) .
@@ -279,8 +287,8 @@ in
   +
     rec-msg(invalidate-parse-tables(Name?)).
     MDB-GetAllDependingModules(Name, DependingModules?) .
-    MDB-InvalidateModule(Name) .
-    MDB-InvalidateModules(DependingModules)
+    MDB-InvalidateModule(Name, sdf) .
+    MDB-InvalidateModules(DependingModules, sdf)
   +
     rec-msg(get-module-info(Name?)) .
     snd-msg(ts-get-str-value("module-paths", Name)) .
@@ -305,7 +313,7 @@ process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("asf-text", "str")) .
   snd-msg(ts-add-table("asf-parse-table", "term")) .
   snd-msg(ts-add-table("term-parse-table", "term")) .
-  snd-msg(ts-add-table("import-relations", "term"))
+  snd-msg(ts-add-table("import-relations", "term")) 
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions")) .
@@ -387,8 +395,8 @@ in
   rec-msg(sm-imported-module-names(Modules?)) .
   snd-msg(ts-put-term-value("import-relations", Name, Modules)) .
   MDB-GetAllDependingModules(Name, Modules?) .
-  MDB-InvalidateModule(Name) .
-  MDB-InvalidateModules(Modules)
+  MDB-InvalidateModule(Name, sdf) .
+  MDB-InvalidateModules(Modules, sdf)
 endlet
 
 process MDB-RemoveImportFromModules(Name : str, ActualModules : list) is
@@ -574,7 +582,7 @@ in
   fi
 endlet
 
-process MDB-InvalidateModules(Modules : list) is
+process MDB-InvalidateModules(Modules : list, Type : term) is
 let
   Module : str,
   Runner : list
@@ -583,7 +591,7 @@ in
   if not-equal(Runner, []) then
     Module := first(Runner) .
     Runner := next(Runner) .
-    MDB-InvalidateModule(Module)
+    MDB-InvalidateModule(Module, Type)
   fi
   *
   if equal(Runner, []) then
@@ -591,10 +599,12 @@ in
   fi
 endlet
 
-process MDB-InvalidateModule(Module : str) is
+process MDB-InvalidateModule(Module : str, Type : term) is
   snd-msg(ts-remove-value("asf-tree", Module)) .
   snd-msg(ts-remove-value("asf-parse-table", Module)) .
-  snd-msg(ts-remove-value("term-parse-table", Module))
+  snd-msg(ts-remove-value("term-parse-table", Module)) .
+  snd-msg(invalidate-other-tables-hook(Module, Type)) .
+  rec-msg(other-tables-invalidated-hook)
 
 process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
 let
