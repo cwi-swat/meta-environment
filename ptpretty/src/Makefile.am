@@ -1,5 +1,7 @@
 # $Id$
 
+SUBDIRS=examples
+
 INCLUDES = \
 	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \

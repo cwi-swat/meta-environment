@@ -85,14 +85,20 @@ int main(int argc, char *argv[])
   at_sdf = ATreadFromNamedFile(syntax);
   at_tree   = ATreadFromNamedFile(input);
 
-  tree = PT_ParseTreeFromTerm(at_tree);
-  sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(PT_ParseTreeFromTerm(at_sdf)));
+  if (at_tree != NULL) {
+    tree = PT_ParseTreeFromTerm(at_tree);
+    sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(
+				      PT_ParseTreeFromTerm(at_sdf)));
 
-  tree = pretty(sdf, tree);
+    tree = pretty(sdf, tree);
 
-  ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
-  
-  return 0;
+    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
+
+    return 0;
+  }
+
+  ATwarning("No such file: %s\n", input); 
+  return 1; 
 }
 
 /*}}}  */
