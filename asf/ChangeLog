@@ -1,5 +1,9 @@
 # $Id$
 
+2003/09/22 (jurgenv@cwi.nl)
+ * Added lifting to PT_Trees and ATerms to builtin library
+ * Added generic unparser to Bytes to builtin library
+
 2003/09/20 (jurgenv@cwi.nl)
  * The asf-builtins library now contains a generated API from a selected
    number of modules in the asf-library package. Currently, only
