@@ -20,7 +20,7 @@ in
     rec-msg(done)
   ).
   snd-msg(reopen-language(Module,Table)) .
-  snd-msg(parsetable-set(Module))
+  snd-msg(parsetable-set(Module,Table))
 ) *
 delta
 endlet

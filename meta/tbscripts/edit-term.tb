@@ -31,7 +31,7 @@ in
   Id := process-id.
   subscribe(disconnected(<term>)) .
   snd-msg(set-parsetable(Mod)).
-  rec-msg(parsetable-set(Mod)).
+  rec-msg(parsetable-set(Mod,Table?)).
   printf("parsetable for %t: %t\n", Mod, Table) .
   snd-msg(Id,open-trm-file(Term)) .
   (
