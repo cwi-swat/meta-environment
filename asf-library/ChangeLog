@@ -1,5 +1,8 @@
 $Id$
 
+Wed Sep  8 16:29:10 CEST 2004 <jurgenv@cwi.nl>
+ * added quotrem, /, mod, odd and even to basic/Integers
+
 Fri Aug 27 15:26:34 CEST 2004 <kooiker@cwi.nl>
  * library/languages/box/syntax/Alignments.sdf
    - Added box alignments 
