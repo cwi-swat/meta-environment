@@ -149,9 +149,20 @@ PT_Tree renameProdInTree(PT_Tree tree,
     PT_Production prod = PT_getTreeProd(tree);
     PT_Args       args = PT_getTreeArgs(tree);
   
-    PT_Args       newArgs = renameProdInArgs(args, formalParam, actualParam);
-    if (PT_isEqualProduction(prod, formalParam)) {
-      return PT_setTreeArgs(PT_setTreeProd(tree, actualParam), newArgs);
+    PT_Args    newArgs = renameProdInArgs(args, formalParam, actualParam);
+    PT_Symbols lhsProd = PT_getProductionLhs(prod);
+    PT_Symbol  rhsProd = PT_getProductionRhs(prod);
+    PT_Symbols lhsFPar = PT_getProductionLhs(formalParam);
+    PT_Symbol  rhsFPar = PT_getProductionRhs(formalParam);
+ATwarning("lhsProd =%t\nlhsParam = %t\n", lhsProd, lhsFPar);
+ATwarning("rhsProd =%t\nrhsParam = %t\n", rhsProd, rhsFPar);
+    if (PT_isEqualSymbols(lhsProd, lhsFPar) &&
+        PT_isEqualSymbol(rhsProd, rhsFPar)) {
+      PT_Symbols lhsAPar = PT_getProductionLhs(actualParam);
+      PT_Symbol rhsAPar = PT_getProductionRhs(actualParam);
+      PT_Production newProd = PT_setProductionLhs(PT_setProductionRhs(prod, rhsAPar), lhsAPar);
+ATwarning("prod =%t\nformalParam = %t\n", prod, formalParam);
+      return PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
     }
     return PT_setTreeArgs(tree, newArgs);
   }
@@ -307,12 +318,13 @@ ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,
 ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree, 
                                               SDF_Renamings renamings)
 {
-  SDF_RenamingList prodRenamingList = SDF_getRenamingsList(renamings);
+  /*SDF_RenamingList prodRenamingList = SDF_getRenamingsList(renamings);*/
   SDF_RenamingList symbolRenamingList = SDF_getRenamingsList(renamings);
   SDF_Renaming renaming;
   SDF_Symbol fromSymbol, toSymbol;
-  SDF_Production fromProd, toProd;
+  /*SDF_Production fromProd, toProd;*/
 
+/*
   while (SDF_hasRenamingListHead(prodRenamingList)) {
     renaming = SDF_getRenamingListHead(prodRenamingList);
     if (SDF_isRenamingProduction(renaming)) {
@@ -331,6 +343,7 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
       break;
     }
   }
+*/
   while (SDF_hasRenamingListHead(symbolRenamingList)) {
     renaming = SDF_getRenamingListHead(symbolRenamingList);
     if (SDF_isRenamingSymbol(renaming)) {
