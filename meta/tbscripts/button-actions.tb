@@ -686,10 +686,18 @@ in
     . snd-msg(get-error-subjects(Error))
     . rec-msg(error-subjects(Subjects?))
     . Subject := first(Subjects)
-    . snd-msg(get-subject-location(Subject))
-    . rec-msg(subject-location(Location?))
-    . create(ShowErrorHandler(Error), Pid?)
-    . EditLocation(Pid, Location)
+    . snd-msg(has-subject-location(Subject))
+    .
+    (
+      rec-msg(subject-has-location(Subject))
+      . snd-msg(get-subject-location(Subject))
+      . rec-msg(subject-location(Location?))
+      . create(ShowErrorHandler(Error), Pid?)
+      . EditLocation(Pid, Location)
+    +
+      rec-msg(subject-has-no-location(Subject))
+      . tau
+    )
     . snd-msg(EditorId, done)
   )
   *

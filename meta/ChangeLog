@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Mar 23 14:01:41 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - Guarded get-subject-location with has-subject-location in
+   ActionShowFeedbackLocation
+
 Wed Mar 23 10:54:30 CET 2005 <jong@cwi.nl>
  * configuration-manager/src/meta-kernel.properties
    - fix rgb value out of range in text category "Comment"
