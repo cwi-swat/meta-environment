@@ -82,7 +82,7 @@ where
 
 	%% Control dependence: control-dependence
 
-	rel[stat, stat] CONTROL-DOMINATOR = domainR(dominators(PRED), CONTROL-STATEMENT
+	rel[stat, stat] CONTROL-DOMINATOR = domainR(dominators(PRED), CONTROL-STATEMENT)
 
 	rel[def,use] control-dependence  =
 	   { <<S2, "EXEC">,<S1,"TEST">> | <stat S1, stat S2> : CONTROL-DOMINATOR}

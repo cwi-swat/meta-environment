@@ -19,14 +19,14 @@ equations
 
 [alt]	less($Area1, $Area2) =  less-equal($Area1, $Area2) & not(equal($Area1, $Area2))
 
-[llt]	get-filename($Loc1) = get-filename($Loc2)
+[llt]	get-filename($Loc1) == get-filename($Loc2)
 	============================================================
 	less($Loc1, $Loc2) = less(get-area($Loc1), get-area($Loc2))
 
 [default-llt]
 	less($Loc1, $Loc2) = false
 
-[lleq]	get-filename($Loc1) = get-filename($Loc2)
+[lleq]	get-filename($Loc1) == get-filename($Loc2)
 	============================================================
 	less-equal($Loc1, $Loc2) = less-equal(get-area($Loc1), get-area($Loc2))
 

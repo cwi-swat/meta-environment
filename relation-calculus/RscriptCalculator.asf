@@ -246,12 +246,12 @@
 [LE1]	eval-le($Bag1, $Bag2)			= subset($Bag1, $Bag2)
 [LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
 [LE3]	eval-le($String1, $String2)		= less-equal($String1, $String2)
-[LE4]	eval-le($Area1, $Area2)			= less-equal($Area1, $Area2)
+[LE4]	eval-le($Loc1, $Loc2)			= less-equal($Loc1, $Loc2)
 
 [LT1]	eval-lt($Bag1, $Bag2) 			= strict-subset($Bag1,  $Bag2)
 [LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
 [LT3]	eval-lt($String1, $String2)		= less($String1, $String2)
-[LT4]	eval-lt($Area1, $Area2)			= less($Area1, $Area2)
+[LT4]	eval-lt($Loc1, $Loc2)			= less($Loc1, $Loc2)
 
 [LE1]	$BoolCon := eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 	====================================================

@@ -3,7 +3,8 @@ module RscriptChecker
 imports Rscript
 imports containers/Table[RVAR REXPTYPE]
 
-imports ListItems
+imports basic/Feedback
+
 imports utilities/PosInfo[RSTAT]
 imports utilities/PosInfo[REXP]
 imports utilities/PosInfo[GENERATOR]
@@ -61,9 +62,9 @@ exports
 
 	t2s(REXPTYPE)						-> String
 	tl2sl({REXPTYPE ","}*)					-> String
-	e2i(ERROR)						-> ListItem
-	 convert-errors(ERRORS)                    		-> List
-	 convert-errors1(ERRORS)                    		-> List
+	e2i(ERROR)						-> Feedback
+	 convert-errors(ERRORS)                    		-> Summary
+	 convert-errors1(ERRORS)                    		-> Summary
          rvar2str(RVAR)		 	        		-> String
  
 	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
@@ -83,8 +84,8 @@ exports
 
 	"built-ins"						-> Table[[RVAR,REXPTYPE]]
 
-	check-rscript(RSCRIPT)					-> List
-	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> List
+	check-rscript(RSCRIPT)					-> Summary
+	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> Summary
         check-rscript(RSTAT*, TENV)				-> TENV
 	check-rstore(RSTAT*, RSTORE, TENV)			-> TENV
 	check(REXP, TENV) 					-> <REXPTYPE, TENV>
