@@ -1,3 +1,8 @@
+2001/05/22 (jurgenv@cwi.nl)
+  * Worked out built-in definition and compilation further. Built-in
+    implementations are next to sdf files again where they are defined.
+  * Added map function from List[[From]] to List[[To]]
+
 2001/05/21 ({jurgenv,markvdb}@cwi.nl)
   * Made built-in compilation more sophisticated. 
     - Every subdirectory can declare a PACKAGE_SRC variable that tells in which 
