@@ -55,15 +55,15 @@
 #define SDF2_BAF_EXT	".sdf.baf"
 
 /* Macro's for equation extensions */
-#define EQS_TXT_EXT	".eqs"
-#define EQS_BAF_EXT	".eqs.baf"
+#define EQS_TXT_EXT	".asf"
+#define EQS_BAF_EXT	".asf.baf"
 
 /* Macro for parse table extension */
-#define EQS_TBL_EXT	".eqs.tbl"
+#define EQS_TBL_EXT	".asf.tbl"
 #define TRM_TBL_EXT	".trm.tbl"
 
 /* Macro for extension of dump of all equations for a module */
-#define EQSDUMP_BAF_EXT ".asf.baf"
+#define EQSDUMP_BAF_EXT ".eqs"
 
 /*}}}  */
 /*{{{  variables */

@@ -20,6 +20,15 @@
 #
 # $Id$
 
+2001/02/26 (jurgenv@cwi.nl)
+  * changed the .eqs extension to .asf. The following extensions change:
+      .eqs     -> .asf
+      .asf.baf -> .eqs
+      .eqs.baf -> .asf.baf
+      .eqs.tbl -> .asf.tbl
+  * added change-eqs-ext tool that does the above renamings for all files
+    in a directory.
+
 2001/02/20 (markvdb@cwi.nl)
   * Removed from IO-tool unused constants.
 

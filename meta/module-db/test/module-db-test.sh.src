@@ -46,17 +46,17 @@ call_toolbus () {
 }
 
 # Test 1. Add an equations section as text to the db.
-echo "" > Test.eqs
+echo "" > Test.asf
 rm -f Test.sdf2
 call_toolbus module-db-test-1.tb
 
 # Test 2. Add a non-empty equations section as text and try to retrieve
 # again.
-echo "equations" > Test.eqs
+echo "equations" > Test.asf
 call_toolbus module-db-test-2.tb
 
 # Test 3. Add a non-empty equations section as tree.
-rm -f Pico-Booleans.eqs
+rm -f Pico-Booleans.asf
 call_toolbus module-db-test-3.tb
 
 # Test 4. Update equations section in module-db.

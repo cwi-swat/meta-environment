@@ -34,7 +34,7 @@ in
   (
     rec-msg(opened-file("Empty", tree(SdfTree?), Path?, Time?))
   +
-    shutdown("new-eqs-test FAILED! (timeout in read)\n") delay(sec(5))
+    shutdown("new-eqs-test FAILED! (timeout in read)\n") delay(sec(5)) 
   ) .
 
   %% Update the module-db.
@@ -47,7 +47,7 @@ in
 
   snd-msg(create-new-equations("Empty")) .
   (
-    rec-msg(new-equations-created("Empty", "Empty.eqs"))
+    rec-msg(new-equations-created("Empty", "Empty.asf"))
   +
     rec-msg(new-equations-not-created(ErrMsg?)) .
     printf("new-eqs-test FAILED! (%s)\n", ErrMsg)

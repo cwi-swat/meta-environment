@@ -59,14 +59,14 @@ call_toolbus in-output-test-4.tb
 rm -f EmptySdf2Module.sdf
 
 # Test 5. Attempt to create an empty equations section.
-rm -f EmptyEqsSection.eqs
+rm -f EmptyEqsSection.asf
 call_toolbus in-output-test-5.tb
-rm -f EmptyEqsSection.eqs
+rm -f EmptyEqsSection.asf
 
 # Test 6. Attempt to open an existing equations section.
-echo "" > TestEqs.eqs
+echo "" > TestEqs.asf
 call_toolbus in-output-test-6.tb
-rm -f TestEqs.eqs
+rm -f TestEqs.asf
 
 # Test 7. Attempt to open a non-existing equations section.
 call_toolbus in-output-test-7.tb

@@ -48,19 +48,19 @@ call_toolbus () {
 }
 
 # Test 1. Try to open eqs file that doesn't exist
-rm -f Aap.eqs
+rm -f Aap.asf
 call_toolbus open-eqs-test.tb
-rm -f Aap.eqs
+rm -f Aap.asf
 
 # Test 2. Try to open a eqs file that _does_ exist
-echo "equations" > Aap.eqs
+echo "equations" > Aap.asf
 call_toolbus open-eqs-test.tb
-rm -f Aap.eqs
+rm -f Aap.asf
 
 # Test 3. Try to create a new equations section.
-rm -f Empty.eqs
+rm -f Empty.asf
 call_toolbus new-eqs-test.tb
-rm -f Empty.eqs
+rm -f Empty.asf
 
 ## Test whether ambiguities for asfix1 are corrected
 call_toolbus ambi-test.tb

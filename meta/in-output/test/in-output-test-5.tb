@@ -27,7 +27,7 @@ let
 in
   snd-msg(create-empty-equations("EmptyEqsSection")) .
   (
-    rec-msg(empty-equations-created("EmptyEqsSection.eqs"))
+    rec-msg(empty-equations-created("EmptyEqsSection.asf"))
   +
     rec-msg(empty-equations-not-created("EmptyEqsSection", Msg?)) .
     printf("in-output-test-5 FAILED! (%s)\n", Msg)

@@ -40,6 +40,8 @@
 
 ATbool complete_asf_sdf2_specification(ATerm module);
 ATermList get_imported_modules(ATerm name); 
+ASF_CondEquationList getEquations(ATermList mods);
+SDF_SDF getSyntax(ATermList modules);
 
 #define GetValue(db,k) (ATtableGet(db,k))
 #define PutValue(db,k,v) (ATtablePut(db,k,v))
