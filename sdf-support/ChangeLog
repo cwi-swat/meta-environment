@@ -1,4 +1,8 @@
 
+2001/06/21 (jurgenv@cwi.nl)
+ * added SDF_getModuleProductions which retrieves all productions from
+  a module
+
 2001/05/23 (markvdb@cwi.nl)
  * * Released version 0.2, and bumped into 0.3.
  * Bumped into version 0.2 in order to make distribution.
