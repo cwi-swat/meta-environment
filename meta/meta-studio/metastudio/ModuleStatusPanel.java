@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -19,6 +21,9 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
     private TitledBorder border;
     private JComboBox importsBox;
     private JComboBox importedByBox;
+    
+    private JMenuBar importsMenu;
+    private JMenuBar importedByMenu;
 
     private List imports;
     private List importedBy;
@@ -62,6 +67,14 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         });
         add(importedByBox);
 
+//        importsMenu = new JMenuBar();
+//        importsMenu.setName("imports");
+//        add(importsMenu);
+//        
+//        importedByMenu = new JMenuBar();
+//        importedByMenu.setName("imported by");
+//        add(importedByMenu);
+        
         moduleManager.addModuleSelectionListener(this);
     }
 
@@ -78,6 +91,8 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
 
         imports.clear();
         importedBy.clear();
+        
+        repaint();
     }
 
     private void updateInfo(Module module) {
@@ -96,5 +111,7 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
             importedBy.addAll(parents);
         }
         importedByBox.setSelectedItem(null);
+        
+        repaint();
     }
 }
