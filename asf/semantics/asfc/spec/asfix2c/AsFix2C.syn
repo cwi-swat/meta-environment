@@ -7,9 +7,8 @@
 %% the derivation
 %% of the C code.
 
-imports AsFix2muASF-C Remove-Lists-C MuASF2C
-        Make-Left-Linear Make-Assign-Conds-C
-        %%%WfAsFix
+imports AsFix2muASF-C MuASF2C MuASF2MuASF
+
 exports
   context-free syntax
     asfix2c(ATerm) -> CProgram

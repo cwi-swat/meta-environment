@@ -1,12 +1,13 @@
 equations
 
-  [ma2c-1'1] create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)) = Nametable,
-             make-left-linear(module modid(Char*) Signopt Rulesopt) = Module
-             ===============================================================
-             muASF2C(module modid(Char*)
-                     Signopt
-                     Rulesopt) =
-                muASF2C-internal(Module,Nametable)
+%%% Do not remove, this is needed to make a standalone MuASF compiler!
+%%%  [ma2c-1'1] create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)) = Nametable,
+%%%             make-left-linear(module modid(Char*) Signopt Rulesopt) = Module
+%%%             ===============================================================
+%%%             muASF2C(module modid(Char*)
+%%%                     Signopt
+%%%                     Rulesopt) =
+%%%                muASF2C-internal(Module,Nametable)
 
 %% The function definitions returned by the function {\tt rulesopt2cfuncs}
 %% are constructor functions. For these functions a C function must be

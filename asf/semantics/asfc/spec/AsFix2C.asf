@@ -1,10 +1,6 @@
 equations
 
-  [a2c-1'1] %%%expand-module(Amodule) = Amodule2,
-            asfix2muasf(Amodule) = (Module1,Nametable),
-            make-matching-conds(Module1) = Module2,
-            make-left-linear(Module2) = Module3,
-            remove-list-matching(Module3) = Module4,
-            normalize-conditions(Module4) = Module5
-            =======================================
-            asfix2c(Amodule) =  muASF2C-internal(Module5,Nametable)
+  [a2c-1'1] asfix2muasf(Amodule) = (Module1,Nametable),
+            muasf2muasf(Module1) = Module2
+            ==============================
+            asfix2c(Amodule) =  muASF2C-internal(Module2,Nametable)
