@@ -6,7 +6,6 @@ equations
 
 [xxx]	fun [] to $Etype = $Etype
 
-%% ---- Simplify tuple of 1 element to element itself
 %% ---- Type of element
 
 [to1]	type-of($Integer) = int 
@@ -71,25 +70,35 @@ equations
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt2a]	bag[$Etype1'] = norm($Etype1, $Tenv),
+[eqt2]	bag[$Etype1'] = norm($Etype1, $Tenv),
+	bag[$Etype2'] = norm($Etype2, $Tenv)
+	=====================================================
+	equal-type($Etype1, $Etype2, $Tenv) = equal-type($Etype1', $Etype2', $Tenv)
+
+[eqt3] empty-bag-type = norm($Etype1, $Tenv),
+ 	bag[$Etype2']= norm($Etype2, $Tenv)
+	=====================================================
+	equal-type($Etype1, $Etype2, $Tenv) = true
+
+[eqt4]	bag[$Etype1'] = norm($Etype1, $Tenv),
 	empty-bag-type = norm($Etype2, $Tenv)
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt2b]	bag[$Etype1'] = norm($Etype1, $Tenv),
-	bag[empty-bag-type] = norm($Etype2, $Tenv)
-	=====================================================
-	equal-type($Etype1, $Etype2, $Tenv) = equal-type($Etype1', empty-bag-type, $Tenv)
-
-[eqt3a] empty-bag-type = norm($Etype1, $Tenv),
- 	bag[$Etype2']= norm($Etype2, $Tenv)
+[eqt5]	<$Etype1', $Etype1'', $Etype+1> = norm($Etype1, $Tenv),
+	<$Etype2', $Etype2'', $Etype+2> = norm($Etype2, $Tenv),
+	equal-type($Etype1', $Etype2', $Tenv) = true,
+	equal-type(<$Etype1'', $Etype+1>, <$Etype2'', $Etype+2>, $Tenv) = true
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt3b] bag[empty-bag-type] = norm($Etype1, $Tenv),
- 	bag[$Etype2']= norm($Etype2, $Tenv)
+[eqt6]	<$Etype1', $Etype1''> = norm($Etype1, $Tenv),
+	<$Etype2', $Etype2''> = norm($Etype2, $Tenv),
+	equal-type($Etype1', $Etype2', $Tenv) = true,
+	equal-type($Etype1'', $Etype2'', $Tenv) = true
 	=====================================================
-	equal-type($Etype1, $Etype2, $Tenv) = equal-type(empty-bag-type, $Etype2', $Tenv)
+	equal-type($Etype1, $Etype2, $Tenv) = true
+	
 
 [default-eqt]
 	equal-type($Etype1, $Etype2, $Tenv) = false

@@ -12,7 +12,7 @@ imports MyPosInfo[Bag[[Elem]]]
 imports Rstore
 
 exports
-    sorts ERROR ERRORS TENV DCLRVARS  
+    sorts ERROR ERRORS TENV DCLRVARS  <REXPTYPE, TENV>
 
     context-free syntax
 
