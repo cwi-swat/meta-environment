@@ -47,8 +47,8 @@ char *Tmatch   = "TBmatch";	/* How to match terms */
 char *TmatchSimple = "TBmatch"; /* How to match terms without patterns */
 char *is_empty = NULL;	        /* What is the `is_empty' predicate? */
 char *Tprintf = "TBprintf";	/* How to print terms */
-char *first   = "list_first";	/* How to get the first element of a list */
-char *next    = "list_next";	/* How to get the tail of a list */
+char *firstel  = "list_first";	/* How to get the first element of a list */
+char *nextel   = "list_next";	/* How to get the tail of a list */
 char *header_file = "TB.h";	/* Header file */
 
 void reset_arg_counters(void)
@@ -486,19 +486,19 @@ void gen_test_in_sign(char *the_tool_name, char *tmp)
 
   /* generate the for loop */
   if(!is_empty)
-     fprintf(handler, "\n\tfor( ; reqs; reqs=%s(reqs)) {\n", next);
+     fprintf(handler, "\n\tfor( ; reqs; reqs=%s(reqs)) {\n", nextel);
   else
-     fprintf(handler, "\n\tfor( ; %s(reqs); reqs=%s(reqs)) {\n", is_empty, next);
+     fprintf(handler, "\n\tfor( ; %s(reqs); reqs=%s(reqs)) {\n", is_empty, nextel);
   fprintf(handler, "\t  for(i=0; i<%d; i++) {\n", n_in_sign_test);
-  fprintf(handler, "\t    if(%s(%s(reqs), in_sign[i])) goto found;\n", TmatchSimple, first);
+  fprintf(handler, "\t    if(%s(%s(reqs), in_sign[i])) goto found;\n", TmatchSimple, firstel);
   fprintf(handler, "\t  }\n");
-  fprintf(handler, "\t  return %s(reqs);\n", first);
+  fprintf(handler, "\t  return %s(reqs);\n", firstel);
   fprintf(handler, "\t  found:;\n");
   if(backdoor)
     if(multitools)
-      fprintf(handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", first);
+      fprintf(handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", the_tool_name, firstel);
     else
-      fprintf(handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", first);
+      fprintf(handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", the_tool_name, firstel);
   fprintf(handler, "\t}\n");
   fprintf(handler, "\treturn NULL;\n");
   fprintf(handler, "}\n");
@@ -564,9 +564,9 @@ void main(int argc, char **argv)
       Tmatch   = "Tmatch";
       TmatchSimple = "TmatchSimple";
       Tprintf = "Tprintf";
-      first   = "t_list_first";
-      next    = "t_list_next";
-      header_file  = "termlib.h";
+      firstel   = "t_list_first";
+      nextel    = "t_list_next";
+      header_file  = "aterms.h";
       placeholders = TBtrue;
       is_empty = "t_is_empty";
       multitools = TBtrue;
