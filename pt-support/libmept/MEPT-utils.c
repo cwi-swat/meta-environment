@@ -29,6 +29,8 @@
 
 #define ANNO_LENGTH "length"  
 
+/*{{{  ATbool PT_prodHasLitAsRhs(PT_Production prod) */
+
 ATbool PT_prodHasLitAsRhs(PT_Production prod)
 {
   /* This implements: "prod([<list>],lit(<str>),no-attrs)" */
@@ -40,6 +42,9 @@ ATbool PT_prodHasLitAsRhs(PT_Production prod)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_isLexicalProd(PT_Production prod) */
 
 ATbool PT_isLexicalProd(PT_Production prod)
 {
@@ -57,6 +62,9 @@ ATbool PT_isLexicalProd(PT_Production prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod) */
+
 ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
 {
   /* This implements: "prod([<list>],lex(layout),<term>)" */
@@ -72,6 +80,9 @@ ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod) */
 
 ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod)
 {
@@ -89,6 +100,9 @@ ATbool PT_prodHasCfLayoutAsRhs(PT_Production prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_isOptLayoutProd(PT_Production  prod) */
+
 ATbool PT_isOptLayoutProd(PT_Production  prod)
 {
   /* This implements: "prod([<list>],cf(opt(layout)),<term>)" */
@@ -100,6 +114,9 @@ ATbool PT_isOptLayoutProd(PT_Production  prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_prodHasVarSymAsRhs(PT_Production prod) */
+
 ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 {
   /* This implements: "prod([<list>],varsym(<str>),no-attrs)" */
@@ -110,6 +127,9 @@ ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_isVarDefault(PT_Production prod) */
 
 ATbool PT_isVarDefault(PT_Production prod)
 {
@@ -128,6 +148,9 @@ ATbool PT_isVarDefault(PT_Production prod)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_isLexicalInjectionProd(PT_Production prod) */
 
 ATbool PT_isLexicalInjectionProd(PT_Production prod)
 {
@@ -151,6 +174,9 @@ ATbool PT_isLexicalInjectionProd(PT_Production prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_isIterSepSymbol(PT_Symbol symbol) */
+
 ATbool PT_isIterSepSymbol(PT_Symbol symbol)
 {
   /* This implements: 
@@ -165,11 +191,17 @@ ATbool PT_isIterSepSymbol(PT_Symbol symbol)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol) */
+
 PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol)
 {
   PT_Symbol listSymbol = PT_getSymbolSymbol(symbol);
   return PT_getSymbolSeparator(listSymbol);
 }
+
+/*}}}  */
+/*{{{  ATbool PT_isIterSymbol(PT_Symbol symbol) */
 
 ATbool PT_isIterSymbol(PT_Symbol symbol)
 {
@@ -185,6 +217,9 @@ ATbool PT_isIterSymbol(PT_Symbol symbol)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_prodHasIterSepAsRhs(PT_Production prod) */
+
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
 {
   /* This implements: 
@@ -198,6 +233,9 @@ ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_prodHasIterAsRhs(PT_Production prod) */
 
 ATbool PT_prodHasIterAsRhs(PT_Production prod)
 {
@@ -213,33 +251,8 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
   return ATfalse;
 }
 
-/*
-ATbool PT_isProductionList(PT_Production prod)
-{                                       
-  return PT_prodHasIterAsRhs(prod) ||
-         PT_prodHasIterSepAsRhs(prod);
-}
-*/
-
-/*
-ATbool PT_isTreeApplList(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isProductionList(prod)) {
-      PT_Args args = PT_getTreeArgs(tree);
-      if (PT_hasArgsHead(args)) {
-        PT_Tree arg = PT_getArgsHead(args);
-        args = PT_getArgsTail(args);
-        if (PT_isTreeList(arg) && PT_isArgsEmpty(args)) {
-          return ATtrue;
-        }
-      }
-    }
-  }
-  return ATfalse;
-}
-*/
+/*}}}  */
+/*{{{  ATbool PT_isTreeApplList(PT_Tree tree) */
 
 ATbool PT_isTreeApplList(PT_Tree tree)
 {
@@ -249,6 +262,9 @@ ATbool PT_isTreeApplList(PT_Tree tree)
   }
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_prodHasSTARTAsRhs(PT_Production prod) */
 
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
 {
@@ -266,6 +282,9 @@ ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool PT_isOptLayoutSymbol(PT_Symbol symbol) */
+
 ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
 {
   /* This implements: "cf(opt(layout))" */
@@ -280,12 +299,18 @@ ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  PT_Args PT_concatArgs(PT_Args args1, PT_Args args2) */
+
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
 {
   return PT_makeArgsFromTerm((ATerm)ATconcat(
                                       (ATermList)PT_makeTermFromArgs(args1),
                                       (ATermList)PT_makeTermFromArgs(args2)));
 }
+
+/*}}}  */
+/*{{{  PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2) */
 
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
 {
@@ -294,12 +319,18 @@ PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
                            (ATermList)PT_makeTermFromSymbols(symbols2)));
 }
 
+/*}}}  */
+/*{{{  PT_Args PT_sliceArgs(PT_Args args, int start, int end) */
+
 PT_Args PT_sliceArgs(PT_Args args, int start, int end)
 {
   return PT_makeArgsFromTerm(
            (ATerm)ATgetSlice((ATermList)PT_makeTermFromArgs(args),
                               start, end));
 }
+
+/*}}}  */
+/*{{{  PT_Args PT_appendArgs(PT_Args args, PT_Tree arg) */
 
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
 {
@@ -308,12 +339,17 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
                                       (ATerm)PT_makeTermFromTree(arg)));
 }
 
+/*}}}  */
+/*{{{  PT_Args PT_reverseArgs(PT_Args args) */
+
 PT_Args PT_reverseArgs(PT_Args args)
 {
   return PT_makeArgsFromTerm(
            (ATerm)ATreverse(
                     (ATermList)PT_makeTermFromArgs(args)));
 }
+
+/*}}}  */
 
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
 
@@ -602,6 +638,7 @@ ATbool PT_isTreeLayout(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     return PT_isOptLayoutProd(prod);
   }
+
   return ATfalse;
 }
 
@@ -817,7 +854,7 @@ PT_Symbol makeSymbolAllChars()
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 {
   return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
-                         charList);
+			 charList);
 }
 
 /*}}}  */

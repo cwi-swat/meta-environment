@@ -133,7 +133,7 @@ ATbool PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1);
 /*{{{  PT_ParseTree accessors */
 
 ATbool PT_isValidParseTree(PT_ParseTree arg);
-ATbool PT_isParseTreeTree(PT_ParseTree arg);
+inline ATbool PT_isParseTreeTree(PT_ParseTree arg);
 ATbool PT_hasParseTreeLhs(PT_ParseTree arg);
 PT_Symbols PT_getParseTreeLhs(PT_ParseTree arg);
 PT_ParseTree PT_setParseTreeLhs(PT_ParseTree arg, PT_Symbols lhs);
@@ -154,11 +154,11 @@ PT_ParseTree PT_setParseTreeAmbCnt(PT_ParseTree arg, int ambCnt);
 /*{{{  PT_Tree accessors */
 
 ATbool PT_isValidTree(PT_Tree arg);
-ATbool PT_isTreeAppl(PT_Tree arg);
-ATbool PT_isTreeChar(PT_Tree arg);
-ATbool PT_isTreeLit(PT_Tree arg);
-ATbool PT_isTreeFlatLayout(PT_Tree arg);
-ATbool PT_isTreeAmb(PT_Tree arg);
+inline ATbool PT_isTreeAppl(PT_Tree arg);
+inline ATbool PT_isTreeChar(PT_Tree arg);
+inline ATbool PT_isTreeLit(PT_Tree arg);
+inline ATbool PT_isTreeFlatLayout(PT_Tree arg);
+inline ATbool PT_isTreeAmb(PT_Tree arg);
 ATbool PT_hasTreeProd(PT_Tree arg);
 PT_Production PT_getTreeProd(PT_Tree arg);
 PT_Tree PT_setTreeProd(PT_Tree arg, PT_Production prod);
@@ -176,8 +176,8 @@ PT_Tree PT_setTreeString(PT_Tree arg, char * string);
 /*{{{  PT_Production accessors */
 
 ATbool PT_isValidProduction(PT_Production arg);
-ATbool PT_isProductionDefault(PT_Production arg);
-ATbool PT_isProductionList(PT_Production arg);
+inline ATbool PT_isProductionDefault(PT_Production arg);
+inline ATbool PT_isProductionList(PT_Production arg);
 ATbool PT_hasProductionLhs(PT_Production arg);
 PT_Symbols PT_getProductionLhs(PT_Production arg);
 PT_Production PT_setProductionLhs(PT_Production arg, PT_Symbols lhs);
@@ -192,8 +192,8 @@ PT_Production PT_setProductionAttributes(PT_Production arg, PT_Attributes attrib
 /*{{{  PT_Attributes accessors */
 
 ATbool PT_isValidAttributes(PT_Attributes arg);
-ATbool PT_isAttributesNoAttrs(PT_Attributes arg);
-ATbool PT_isAttributesAttrs(PT_Attributes arg);
+inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg);
+inline ATbool PT_isAttributesAttrs(PT_Attributes arg);
 ATbool PT_hasAttributesAttrs(PT_Attributes arg);
 PT_Attrs PT_getAttributesAttrs(PT_Attributes arg);
 PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs);
@@ -202,8 +202,8 @@ PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs);
 /*{{{  PT_Attrs accessors */
 
 ATbool PT_isValidAttrs(PT_Attrs arg);
-ATbool PT_isAttrsMany(PT_Attrs arg);
-ATbool PT_isAttrsSingle(PT_Attrs arg);
+inline ATbool PT_isAttrsMany(PT_Attrs arg);
+inline ATbool PT_isAttrsSingle(PT_Attrs arg);
 ATbool PT_hasAttrsHead(PT_Attrs arg);
 PT_Attr PT_getAttrsHead(PT_Attrs arg);
 PT_Attrs PT_setAttrsHead(PT_Attrs arg, PT_Attr head);
@@ -215,9 +215,9 @@ PT_Attrs PT_setAttrsTail(PT_Attrs arg, PT_Attrs tail);
 /*{{{  PT_Attr accessors */
 
 ATbool PT_isValidAttr(PT_Attr arg);
-ATbool PT_isAttrCons(PT_Attr arg);
-ATbool PT_isAttrId(PT_Attr arg);
-ATbool PT_isAttrAterm(PT_Attr arg);
+inline ATbool PT_isAttrCons(PT_Attr arg);
+inline ATbool PT_isAttrId(PT_Attr arg);
+inline ATbool PT_isAttrAterm(PT_Attr arg);
 ATbool PT_hasAttrString(PT_Attr arg);
 char * PT_getAttrString(PT_Attr arg);
 PT_Attr PT_setAttrString(PT_Attr arg, char * string);
@@ -232,24 +232,24 @@ PT_Attr PT_setAttrTerm(PT_Attr arg, PT_ATerm term);
 /*{{{  PT_ATerm accessors */
 
 ATbool PT_isValidATerm(PT_ATerm arg);
-ATbool PT_isATermBracket(PT_ATerm arg);
-ATbool PT_isATermLeft(PT_ATerm arg);
-ATbool PT_isATermRight(PT_ATerm arg);
-ATbool PT_isATermAssoc(PT_ATerm arg);
-ATbool PT_isATermNonAssoc(PT_ATerm arg);
-ATbool PT_isATermMemo(PT_ATerm arg);
-ATbool PT_isATermReject(PT_ATerm arg);
-ATbool PT_isATermPrefer(PT_ATerm arg);
-ATbool PT_isATermAvoid(PT_ATerm arg);
-ATbool PT_isATermConstructor(PT_ATerm arg);
-ATbool PT_isATermTraverse(PT_ATerm arg);
+inline ATbool PT_isATermBracket(PT_ATerm arg);
+inline ATbool PT_isATermLeft(PT_ATerm arg);
+inline ATbool PT_isATermRight(PT_ATerm arg);
+inline ATbool PT_isATermAssoc(PT_ATerm arg);
+inline ATbool PT_isATermNonAssoc(PT_ATerm arg);
+inline ATbool PT_isATermMemo(PT_ATerm arg);
+inline ATbool PT_isATermReject(PT_ATerm arg);
+inline ATbool PT_isATermPrefer(PT_ATerm arg);
+inline ATbool PT_isATermAvoid(PT_ATerm arg);
+inline ATbool PT_isATermConstructor(PT_ATerm arg);
+inline ATbool PT_isATermTraverse(PT_ATerm arg);
 
 /*}}}  */
 /*{{{  PT_Args accessors */
 
 ATbool PT_isValidArgs(PT_Args arg);
-ATbool PT_isArgsList(PT_Args arg);
-ATbool PT_isArgsEmpty(PT_Args arg);
+inline ATbool PT_isArgsList(PT_Args arg);
+inline ATbool PT_isArgsEmpty(PT_Args arg);
 ATbool PT_hasArgsHead(PT_Args arg);
 PT_Tree PT_getArgsHead(PT_Args arg);
 PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head);
@@ -261,27 +261,27 @@ PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail);
 /*{{{  PT_Symbol accessors */
 
 ATbool PT_isValidSymbol(PT_Symbol arg);
-ATbool PT_isSymbolLit(PT_Symbol arg);
-ATbool PT_isSymbolCf(PT_Symbol arg);
-ATbool PT_isSymbolLex(PT_Symbol arg);
-ATbool PT_isSymbolEmpty(PT_Symbol arg);
-ATbool PT_isSymbolSeq(PT_Symbol arg);
-ATbool PT_isSymbolOpt(PT_Symbol arg);
-ATbool PT_isSymbolAlt(PT_Symbol arg);
-ATbool PT_isSymbolPair(PT_Symbol arg);
-ATbool PT_isSymbolSort(PT_Symbol arg);
-ATbool PT_isSymbolIterPlus(PT_Symbol arg);
-ATbool PT_isSymbolIterStar(PT_Symbol arg);
-ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
-ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
-ATbool PT_isSymbolIterN(PT_Symbol arg);
-ATbool PT_isSymbolIterSepN(PT_Symbol arg);
-ATbool PT_isSymbolPerm(PT_Symbol arg);
-ATbool PT_isSymbolSet(PT_Symbol arg);
-ATbool PT_isSymbolFunc(PT_Symbol arg);
-ATbool PT_isSymbolVarSym(PT_Symbol arg);
-ATbool PT_isSymbolLayout(PT_Symbol arg);
-ATbool PT_isSymbolCharClass(PT_Symbol arg);
+inline ATbool PT_isSymbolLit(PT_Symbol arg);
+inline ATbool PT_isSymbolCf(PT_Symbol arg);
+inline ATbool PT_isSymbolLex(PT_Symbol arg);
+inline ATbool PT_isSymbolEmpty(PT_Symbol arg);
+inline ATbool PT_isSymbolSeq(PT_Symbol arg);
+inline ATbool PT_isSymbolOpt(PT_Symbol arg);
+inline ATbool PT_isSymbolAlt(PT_Symbol arg);
+inline ATbool PT_isSymbolPair(PT_Symbol arg);
+inline ATbool PT_isSymbolSort(PT_Symbol arg);
+inline ATbool PT_isSymbolIterPlus(PT_Symbol arg);
+inline ATbool PT_isSymbolIterStar(PT_Symbol arg);
+inline ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
+inline ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
+inline ATbool PT_isSymbolIterN(PT_Symbol arg);
+inline ATbool PT_isSymbolIterSepN(PT_Symbol arg);
+inline ATbool PT_isSymbolPerm(PT_Symbol arg);
+inline ATbool PT_isSymbolSet(PT_Symbol arg);
+inline ATbool PT_isSymbolFunc(PT_Symbol arg);
+inline ATbool PT_isSymbolVarSym(PT_Symbol arg);
+inline ATbool PT_isSymbolLayout(PT_Symbol arg);
+inline ATbool PT_isSymbolCharClass(PT_Symbol arg);
 ATbool PT_hasSymbolString(PT_Symbol arg);
 char * PT_getSymbolString(PT_Symbol arg);
 PT_Symbol PT_setSymbolString(PT_Symbol arg, char * string);
@@ -311,8 +311,8 @@ PT_Symbol PT_setSymbolRanges(PT_Symbol arg, PT_CharRanges ranges);
 /*{{{  PT_Symbols accessors */
 
 ATbool PT_isValidSymbols(PT_Symbols arg);
-ATbool PT_isSymbolsList(PT_Symbols arg);
-ATbool PT_isSymbolsEmpty(PT_Symbols arg);
+inline ATbool PT_isSymbolsList(PT_Symbols arg);
+inline ATbool PT_isSymbolsEmpty(PT_Symbols arg);
 ATbool PT_hasSymbolsHead(PT_Symbols arg);
 PT_Symbol PT_getSymbolsHead(PT_Symbols arg);
 PT_Symbols PT_setSymbolsHead(PT_Symbols arg, PT_Symbol head);
@@ -324,8 +324,8 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 /*{{{  PT_CharRange accessors */
 
 ATbool PT_isValidCharRange(PT_CharRange arg);
-ATbool PT_isCharRangeCharacter(PT_CharRange arg);
-ATbool PT_isCharRangeRange(PT_CharRange arg);
+inline ATbool PT_isCharRangeCharacter(PT_CharRange arg);
+inline ATbool PT_isCharRangeRange(PT_CharRange arg);
 ATbool PT_hasCharRangeInteger(PT_CharRange arg);
 int PT_getCharRangeInteger(PT_CharRange arg);
 PT_CharRange PT_setCharRangeInteger(PT_CharRange arg, int integer);
@@ -340,8 +340,8 @@ PT_CharRange PT_setCharRangeEnd(PT_CharRange arg, int end);
 /*{{{  PT_CharRanges accessors */
 
 ATbool PT_isValidCharRanges(PT_CharRanges arg);
-ATbool PT_isCharRangesList(PT_CharRanges arg);
-ATbool PT_isCharRangesEmpty(PT_CharRanges arg);
+inline ATbool PT_isCharRangesList(PT_CharRanges arg);
+inline ATbool PT_isCharRangesEmpty(PT_CharRanges arg);
 ATbool PT_hasCharRangesHead(PT_CharRanges arg);
 PT_CharRange PT_getCharRangesHead(PT_CharRanges arg);
 PT_CharRanges PT_setCharRangesHead(PT_CharRanges arg, PT_CharRange head);
