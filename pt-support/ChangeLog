@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep  8 16:50:12 CEST 2004 <jurgenv@cwi.nl>
+ * Redefined Attrs in MEPT.adt using the list() construction instead
+   of the manual single and many patterns.
+
 Fri Aug 27 13:58:33 CEST 2004 <{jong,kooiker}@cwi.nl>
  * configure.in:
    - version 1.3
