@@ -150,8 +150,8 @@ main(int argc, char *argv[])
     ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"Condition\")),no-attrs)"));
 
   addSubstitution(
-    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"),
-    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(<amb(Symbol)>,lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(<symbol(Symbol)>),attrs([term(cons(\"ambiguity-constructor\"))])),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-star-sep(<list-symbol(Symbol)>,lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"));
+    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs),[lit(\"amb\"),<\"ws-after-amb\"(OptLayout)>,lit(\"(\"),<\"ws-after-(\"(OptLayout)>,appl(list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(OptLayout)>,lit(\")\")])"),
+    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(<amb(Symbol)>,lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(<symbol(Symbol)>),attrs([term(cons(\"ambiguity-constructor\"))])),[lit(\"amb\"),<\"ws-after-amb\"(OptLayout)>,lit(\"(\"),<\"ws-after-(\"(OptLayout)>,appl(list(cf(iter-star-sep(<list-symbol(Symbol)>,lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(OptLayout)>,lit(\")\")])"));
 
   addSubstitution(
     ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)"),

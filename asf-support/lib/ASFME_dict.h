@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Oct  7 09:53:04 2002
+ * Generated at Mon Nov  4 18:14:28 2002
  */
 
 #ifndef __ASFME_dict_H
@@ -47,9 +47,13 @@ extern AFun ASF_afun36;
 extern AFun ASF_afun37;
 extern AFun ASF_afun38;
 extern AFun ASF_afun39;
+extern AFun ASF_afun40;
+extern AFun ASF_afun41;
 
 extern ATerm ASF_patternStartEquations;
-extern ATerm ASF_patternCHARLexToCf;
+extern ATerm ASF_patternOptLayoutPresent;
+extern ATerm ASF_patternOptLayoutAbsent;
+extern ATerm ASF_patternCHARDefault;
 extern ATerm ASF_patternTreeAmbsMany;
 extern ATerm ASF_patternTreeAmbsSingle;
 extern ATerm ASF_patternTreeAmbsEmpty;
@@ -74,8 +78,9 @@ extern ATerm ASF_patternEquationsAbsent;
 extern ATerm ASF_patternConditionListMany;
 extern ATerm ASF_patternConditionListSingle;
 extern ATerm ASF_patternConditionsDefault;
-extern ATerm ASF_patternTagIdLexToCf;
-extern ATerm ASF_patternImpliesLexToCf;
+extern ATerm ASF_patternTagIdManyChars;
+extern ATerm ASF_patternTagIdOneChar;
+extern ATerm ASF_patternImpliesDefault;
 extern ATerm ASF_patternProductionLexicalConstructor;
 
 extern void init_ASFME_dict();

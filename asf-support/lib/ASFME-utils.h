@@ -20,7 +20,7 @@ ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l);
 int ASF_getConditionListLength(ASF_ConditionList list);
 int ASF_getCHARListLength(ASF_CHARList list);
 
-ASF_Layout ASF_makeLayoutEmpty();
+ASF_OptLayout ASF_makeLayoutEmpty();
 
 ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree constructor);
 
