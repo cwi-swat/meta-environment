@@ -30,7 +30,7 @@ let
   Name2   : str,
   Str     : str,
   Path    : str,
-  Table   : str,
+  Table   : term,
   FT      : str,
   T        : term,
   EqsTree  : term,
