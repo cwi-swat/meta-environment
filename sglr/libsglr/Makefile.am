@@ -1,8 +1,7 @@
 # $Id$
 
 include $(top_srcdir)/make_rules
-INCLUDES		= -I${top_srcdir}/libtree2dot \
-			-I$(ATERM)/include \
+INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUS)/include \
 			-I$(PT_SUPPORT)/include
 

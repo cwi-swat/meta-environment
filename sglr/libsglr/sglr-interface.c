@@ -16,7 +16,6 @@
 #include "parser.h"
 #include "forest.h"
 #include "rsrc-usage.h"
-#include "tree-to-dot.h"
 
 
 ATerm  SG_TermToToolbus(ATerm t);
