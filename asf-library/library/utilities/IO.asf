@@ -1,0 +1,16 @@
+equations
+
+[] parse-file(String) = parse-file(string-to-bytes(String))
+[] unparse-to-file(String,Sort) = unparse-to-file(string-to-bytes(String),Sort)
+
+[] read-term(String) = read-term(string-to-bytes(String))
+[] write-term(String,Sort) = write-term(string-to-bytes(String),Sort)
+
+[] read-bytes(String) = read-bytes(string-to-bytes(String))
+[] write-bytes(String,Bytes) = write-bytes(string-to-bytes(String),Bytes)
+
+[] parse-string(String) = parse-bytes(string-to-bytes(String))
+[] unparse-to-string(Sort) = bytes-to-string(unparse-to-bytes(Sort))
+
+[] read-string(String) = bytes-to-string(read-bytes(String))
+[] write-string(String1,String2) = write-bytes(String1,string-to-bytes(String2))

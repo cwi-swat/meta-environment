@@ -12,10 +12,5 @@ context-free syntax
                    amb-cnt:NatCon
                ")"                   -> ParseResult {cons("tree")}
 
-  "parse-error" "(" line:NatCon        c1:"," 
-                    column:NatCon      c2:"," 
-                    offset:NatCon 
-                ")"                  -> ParseResult {cons("error")}
+ 
 
-  "parse-table-unavailable"          -> ParseResult {cons("no-parsetable")}
-  "parse-result-invalid"             -> ParseResult {cons("no-valid-result")}

@@ -2,25 +2,47 @@ module utilities/IO[Sort]
 
 imports basic/Bytes
 imports utilities/ParseResults[Sort]
+imports basic/Results[Sort]
 
 exports
 
 context-free syntax
 
-  parse-file(file:Bytes)           -> ParseResult {built-in("parse-file")}
-  unparse-to-file(file:Bytes,Sort) -> Sort        {built-in("unparse-to-file")}
+  parse-file(file:String)           -> ParseResult 
+  unparse-to-file(file:String,Sort) -> Error        
 
-context-free syntax
+  read-term(file:String)       -> ParseResult 
+  write-term(file:String,Sort) -> Error       
 
-  read-term(file:Bytes)       -> ParseResult {built-in("read-term-from-file")}
-  write-term(file:Bytes,Sort) -> Sort        {built-in("write-term-to-file")}
+  read-bytes(file:String)        -> Bytes 
+  write-bytes(file:String,Bytes) -> Error 
 
-context-free syntax
+  parse-string(String)    -> ParseResult
+  unparse-to-string(Sort) -> String
 
   parse-bytes(Bytes)      -> ParseResult {built-in("parse-bytes")}
   unparse-to-bytes(Sort)  -> Bytes       {built-in("unparse-to-bytes")}
 
+  read-string(file:String)          -> String
+  write-string(file:String, String) -> Error
+
+hiddens
+
+imports basic/Whitespace
+
 context-free syntax
 
+  parse-file(file:Bytes)           -> ParseResult {built-in("parse-file")}
+  unparse-to-file(file:Bytes,Sort) -> Error       {built-in("unparse-to-file")}
+
+  read-term(file:Bytes)       -> ParseResult {built-in("read-term-from-file")}
+  write-term(file:Bytes,Sort) -> Error       {built-in("write-term-to-file")}
+
   read-bytes(file:Bytes)        -> Bytes {built-in("read-bytes-from-file")}
-  write-bytes(file:Bytes,Bytes) -> Bytes {built-in("write-bytes-from-file")}
+  write-bytes(file:Bytes,Bytes) -> Error {built-in("write-bytes-from-file")}
+
+variables
+
+ "Bytes"[0-9]* -> Bytes
+ "String"[0-9]* -> String
+ "Sort"[0-9]* -> Sort
