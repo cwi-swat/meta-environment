@@ -636,6 +636,9 @@ int typecheck(char *script, TBbool gen_tifs)
       tool_def *def = find_tool_def(TBlookup("viewer"));
       if(def)
 	TBwrite(tifs, TBmake("rec-monitor(<viewer>,<term>)"));
+      def = find_tool_def(TBlookup("logger"));
+      if(def)
+        TBwrite(tifs, TBmake("rec-monitor(<logger>,<term>)"));
     }
   }
 
