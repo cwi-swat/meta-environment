@@ -21,7 +21,6 @@ ATerm getTreeBuiltin(PT_Tree tree)
 	  ATerm term = PT_getAttrTerm(head);
 	  ATerm name;
 
-	  ATwarning("attr: %t\n", head); 
 	  if (ATmatchTerm(term, pattern, &name)) {
 	    return name;
 	  }
