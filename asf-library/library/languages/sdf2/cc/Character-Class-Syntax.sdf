@@ -1,0 +1,28 @@
+%%% $Id$
+           
+module Character-Class-Syntax
+imports Character-Syntax
+hiddens
+  sorts CharRange CharRanges OptCharRanges 
+exports
+  sorts CharClass
+  context-free syntax
+    Character                 -> CharRange
+    Character "-" Character   -> CharRange
+
+    CharRange                 -> CharRanges
+    CharRanges CharRanges     -> CharRanges {right,memo}
+    "(" CharRanges ")"        -> CharRanges {bracket}
+                              -> OptCharRanges
+    CharRanges                -> OptCharRanges
+    "[" OptCharRanges "]"     -> CharClass
+    "~" CharClass             -> CharClass
+    CharClass "/" CharClass   -> CharClass {left,memo}
+    CharClass "/\\" CharClass -> CharClass {left,memo}
+    CharClass "\\/" CharClass -> CharClass {left}
+   "(" CharClass ")"          -> CharClass {bracket}  
+  context-free priorities
+    "~" CharClass             -> CharClass >
+    CharClass "/" CharClass   -> CharClass >
+    CharClass "/\\" CharClass -> CharClass >
+    CharClass "\\/" CharClass -> CharClass           

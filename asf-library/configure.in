@@ -37,5 +37,22 @@ AC_OUTPUT(
 	lib/containers/Makefile 
 	lib/aterm/Makefile 
         lib/system/Makefile
+	lib/sdf2/Makefile 
+	lib/sdf2/aliases/Makefile 
+	lib/sdf2/aterms/Makefile 
+	lib/sdf2/basic/Makefile 
+	lib/sdf2/cc/Makefile 
+	lib/sdf2/grammars/Makefile 
+	lib/sdf2/kernel/Makefile 
+	lib/sdf2/label/Makefile 
+	lib/sdf2/literals/Makefile 
+	lib/sdf2/mod/Makefile 
+	lib/sdf2/priorities/Makefile 
+	lib/sdf2/regular/Makefile 
+	lib/sdf2/renaming/Makefile 
+	lib/sdf2/restrictions/Makefile 
+	lib/sdf2/sdf2/Makefile 
+	lib/sdf2/sorts/Makefile 
+	lib/sdf2/symbols/Makefile 
         src/Makefile
 )
