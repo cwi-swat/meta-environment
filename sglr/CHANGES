@@ -1,5 +1,9 @@
 $Id$
 
+* Mon Aug 30 11:31:00 BST 1999
+
+  - New metric: number of rejects encountered.
+
 * Sun Aug 15 23:56:17 BST 1999 (EV)
 
   - Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
