@@ -79,7 +79,11 @@ public class ModuleTree extends UserInterfacePanel {
 
     private void postButtonRequest() {
         Module current = getCurrentModule();
-        ModuleBrowser.postModuleMenuRequest(getFactory(), getBridge(), current);
+	if (current != null) {
+	  ModuleBrowser.postModuleMenuRequest(getFactory(),
+					      getBridge(),
+					      current);
+    	}
     }
     
     private Module getCurrentModule() {
