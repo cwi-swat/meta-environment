@@ -13,6 +13,8 @@ EXTRA_DIST		= Sdf.label.def
 INCLUDES		= -I${ATERM}/include \
                           -I${PT_SUPPORT}/include
 
+CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
+
 # Developers only:
 api: Sdf.label.def
 	sdf2-to-c -i $< -r --compat-term -P SDF_ -o SDFME
