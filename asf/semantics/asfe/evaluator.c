@@ -73,7 +73,7 @@ aterm *add_equations(int cid,aterm *name,aterm_list *equs)
   Tprintf(stderr, "preparing equations...\n");
   newequs = RWprepareEqs(&Ar, equs);
   enter_equations(name, newequs);
-  l = TlistSize(equs);
+  l = TlistSize(newequs);
   Tprintf(stderr,"Processing %d equations of module %t\n",l,name);
   return Tmake(&Ar,"snd-value(equ-added(<term>))",name);
 }
