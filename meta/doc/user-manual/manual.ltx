@@ -245,13 +245,12 @@ immediately. It consists of a parser, a pretty
 printer, and a term rewriting system which are all derived from the
 module automatically.
 
-A module can be tested by invoking a \emph{term editor} to create and
-evaluate terms defined by the module. Term editors use the syntax of
-the module for parsing the textual representation of terms and for
-converting them to internal format (abstract syntax trees). The
-equations of the module are then used to reduce the terms into normal
-form. This result is, in its turn, converted back to textual form by
-pretty printing it.
+A module can be tested by invoking a \emph{term editor} to create and evaluate
+terms defined by the module. Term editors use the syntax of the module for
+parsing the textual representation of terms and for converting them to
+internal format (syntax trees). The equations of the module are then used to
+reduce the terms into normal form. This result is, in its turn, converted back
+to textual form by pretty printing it.
 
 %%The reduction of a term can be monitored by using EDB (Equation
 %%Debugger), a debugging system that allows you to reduce a term
@@ -405,13 +404,14 @@ instance, in the {\tt pico} directory (see Section~\ref{GuidedTour})
 you will find an example {\tt meta.conf} file which only contains the
 path `{\tt .}', i.e., only the current directory will be searched.
 
-\begin{figure}[tb]
+\begin{figure}[t]
 
   \centerline{\epsfig{file=meta-start.ps,width=12cm}}
   \caption{\label{FIG:meta-start} Main window of \ASmetaenv}
 
 \end{figure}
-\begin{figure}[tb]
+
+\begin{figure}[t]
 
   \centerline{\epsfig{file=viewer.ps,width=14cm}}
   \caption{\label{FIG:viewer} ToolBus viewer}
@@ -475,7 +475,7 @@ The main window consists of the following parts:
 
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=meta-pico.ps,width=12cm}}
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
@@ -485,9 +485,14 @@ The main window consists of the following parts:
  
 \subsection{The File menu} \label{FileMenu}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=file-menu.ps,width=3cm}}
   \caption{\label{FIG:file-menu} {\tt File} menu (main window)}
+\end{figure}
+
+\begin{figure}
+  \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
+  \caption{\label{FIG:printer-setup} Dialog for printer setup}
 \end{figure}
 
 The {\tt File} menu is used for creating, opening, saving and printing
@@ -513,23 +518,21 @@ pane.
 
 {\tt Quit} ends the execution of the \ASmetaenv.
 
-\begin{figure}[t]
-  \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
-  \caption{\label{FIG:printer-setup} Dialog for printer setup}
-\end{figure}
-
-
-
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=open-file.ps,width=8cm}}
   \caption{\label{FIG:open-file} Dialog for opening a module ({\tt File} menu)}
 \end{figure}
 
 \subsection{The Edit menu} \label{EditMenu}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=edit-menu.ps,width=3cm}}
   \caption{\label{FIG:edit-menu} {\tt Edit} menu (main window)}
+\end{figure}
+
+\begin{figure}
+  \centerline{\epsfig{file=graph-menu.ps,width=4cm}}
+  \caption{\label{FIG:graph-menu} {\tt Graph} menu (main window)}
 \end{figure}
 
 The {\tt Edit} menu is used for setting the preferences of a user.
@@ -538,10 +541,7 @@ this menu is disabled.
 
 \subsection{The Graph Menu} \label{GraphMenu}
 
-\begin{figure}[t]
-  \centerline{\epsfig{file=graph-menu.ps,width=4cm}}
-  \caption{\label{FIG:graph-menu} {\tt Graph} menu (main window)}
-\end{figure}
+
 
 The {\tt Graph} menu is used for setting options for the display of the graph
 in the import pane.  It is shown in Figure \ref{FIG:graph-menu}.
@@ -565,7 +565,7 @@ will only be shown when the loading of the specification is complete.
 
 \subsection{The Debug Menu} \label{DebugMenu}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=debug-menu.ps,width=4cm}}
   \caption{\label{FIG:debug-menu}{\tt Debug}  menu (main window)}
 \end{figure}
@@ -576,7 +576,7 @@ messages will be displayed.  Otherwise the systems runs silently.
 
 \subsection{The Help Menu} \label{HelpMenu}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=help-menu.ps,width=5cm}}
   \caption{\label{FIG:help-menu}{\tt Help}  menu (main window)}
 \end{figure}
@@ -624,6 +624,16 @@ modules. Modules with a special status (e.g., imported by some other
 module but never defined, or containing syntax errors) are represented
 by a circle.
 
+\begin{figure}
+  \centerline{\epsfig{file=module-menu.ps,width=3cm}}
+  \caption{\label{FIG:module-menu}Pop up menu for module operations (import pane)}
+\end{figure}
+
+\begin{figure}
+  \centerline{\epsfig{file=new-open.ps,width=2cm}}
+  \caption{\label{FIG:new-open}Pop up menu for adding a module (import pane)}
+\end{figure}
+
 The import pane has the following interaction facilities:
 
 \begin{itemize}
@@ -647,15 +657,7 @@ menu (see Section~\ref{FileMenu}).
 
 \end{itemize}
 
-\begin{figure}[t]
-  \centerline{\epsfig{file=module-menu.ps,width=3cm}}
-  \caption{\label{FIG:module-menu}Pop up menu for module operations (import pane)}
-\end{figure}
 
-\begin{figure}[t]
-  \centerline{\epsfig{file=new-open.ps,width=2cm}}
-  \caption{\label{FIG:new-open}Pop up menu for adding a module (import pane)}
-\end{figure}
 
 \subsection{The Module Pane} \label{ModulePane}
 
@@ -721,12 +723,12 @@ module and all its imports. This feature is needed in order to run
 the evaluator in a stand-alone way, see Section \ref{SEC:interpretationgofterms}.
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
   \caption{\label{FIG:compiler-warning}Warning ({\tt Compile module...})}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=compiler-dir.ps,width=4cm}}
   \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
 \end{figure}
@@ -755,7 +757,7 @@ Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=move-menu.ps,width=1.2cm}}
   \caption{\label{FIG:move-menu}{\tt Move} menu (editor)}
 \end{figure}
@@ -782,12 +784,12 @@ in the \xemacs\ window displays the message
 Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=meta-env-menu1.ps,width=1.2cm}}
   \caption{\label{FIG:meta-env-menu1} {\tt Meta-Environment} menu (editor)}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=meta-env-menu2.ps,width=1.6cm}}
   \caption{\label{FIG:meta-env-menu2} {\tt Meta-Environment} menu (term editor)}
 \end{figure}
@@ -844,7 +846,7 @@ The rewriting process is further described in Section~\ref{Equations}.
 \newpage
 \section{Guided Tour} \label{GuidedTour}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=meta-booleans.ps,width=12cm}}
   \caption{\label{FIG:meta-booleans}Main window after opening {\tt Pico-Booleans}}
 \end{figure}
@@ -907,7 +909,7 @@ shown in Figure~\ref{FIG:meta-Bool-example}.
 
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=meta-Bool-example.ps,width=12cm}}
   \caption{\label{FIG:meta-Bool-example}Main window after opening {\tt Bool-example}}
 \end{figure}
@@ -961,12 +963,12 @@ module Bool-example
 For an explanation of the \asfsdf\ features used in this specification we
 refer to Section~\ref{ASF+SDF}.
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
   \caption{\label{FIG:Bool-example.sdf}Editor for the syntax of {\tt Bool-example}}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=Bool-example.asf.ps,width=12cm}}
   \caption{\label{FIG:Bool-example.asf}Editor for the equations of {\tt Bool-example}}
 \end{figure}
@@ -998,22 +1000,22 @@ The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 \end{itemize}
 
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=Bool-example.trm.ps,width=12cm}}
   \caption{\label{FIG:Bool-example.trm}Term editor for {\tt Bool-example} after entering `{\tt true \& false}'}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=Bool-example.trm2.ps,width=12cm}}
   \caption{\label{FIG:Bool-example.trm2} Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parse}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=Bool-example.trm3.ps,width=12cm}}
   \caption{\label{FIG:Bool-example.trm3}Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
   \centerline{\epsfig{file=reduct.out.ps,width=12cm}}
   \caption{\label{FIG:reduct.out}New term editor with normal form of `{\tt true \& false}'}
 \end{figure}
@@ -1234,7 +1236,7 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure}
 
   \centerline{\epsfig{file=meta-Pico-syntax.ps,width=12cm}}
   \caption{\label{FIG:Pico-syntax} Main window after opening {\tt Pico-syntax}}
@@ -1255,7 +1257,7 @@ Pico specification.
 \end{figure}
 
 
-\begin{figure}[t]
+\begin{figure}
 
   \centerline{\epsfig{file=Pico-Booleans.asf.ps,width=12cm}}
   \caption{\label{FIG:Pico-Booleans-eqs}Editor for equations of {\tt Pico-Booleans}}
@@ -1876,7 +1878,7 @@ Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
 education) recognizes the single string {\tt aapnootmies}.
 
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module LeesPlank
@@ -1932,7 +1934,7 @@ Figure~\ref{CODE:LettersDigits2} gives
 a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module LettersDigits1
@@ -1951,7 +1953,7 @@ exports
 \caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
 \end{figure}   
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module LettersDigits2
@@ -2017,7 +2019,7 @@ The following operators are available for character classes
 \noindent The first operator is a unary operator, whereas the other three are
 left-associative binary operators.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module LettersDigits3
@@ -2039,7 +2041,7 @@ This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via their decimal representation.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Characters
@@ -2065,7 +2067,7 @@ exports
 \caption{Example of character classes}\label{CODE:charclasses}
 \end{figure}  
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-repetition
@@ -2104,7 +2106,7 @@ which defines identifiers consisting of one letter followed by one, optional,
 digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
   z789}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-optional
@@ -2166,7 +2168,7 @@ with an uppercase letter followed by zero or more lower-case letters,
 uppercase letters or digits. According to this definition {\tt MiES}, {\tt
   B49a} and {\tt 007} would, for instance, be acceptable.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-alternative1
@@ -2191,7 +2193,7 @@ in Figure~\ref{CODE:alternative1} is shown in Figure~\ref{CODE:alternative2}.  I
 any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-alternative2
@@ -2231,7 +2233,7 @@ definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
 of the option operator in the definitions of {\tt SignedReal} and {\tt
 UnsignedReal}.
 
-\begin{figure}[tb]
+\begin{figure}[t]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Numbers
@@ -2269,7 +2271,7 @@ arbitrary characters except double quote or newline, or
 \noindent A string consists of zero or more {\tt StringChar}s surrounded by
 double quotes.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Strings
@@ -2314,7 +2316,7 @@ function declaration are implicitly added to the lexical syntax. Consider the
 language of coordinates and drawing commands presented in 
 Figure \ref{CODE:simple-cf}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module DrawingCommands
@@ -2341,7 +2343,7 @@ An equivalent conventional BNF grammar (and not considering lexical syntax)
 of the grammar of Figure~\ref{CODE:simple-cf} is presented in Figure
 \ref{CODE:simple-bnf}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
@@ -2372,7 +2374,7 @@ Figure \ref{CODE:pascal-ids} shows how lists can be used to define
 the syntax of a list of identifiers (occurring in a declaration
 in a Pascal-like language).
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Decls
@@ -2391,7 +2393,7 @@ exports
     "real"                    -> TYPE
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Syntax definition of a list of identifiers}\label{CODE:pascal-ids}
+\caption{Definition of a list of identifiers}\label{CODE:pascal-ids}
 \end{figure}
 
 \subsubsection{Chain Functions}
@@ -2424,7 +2426,7 @@ sort {\tt SORT-B} is required.
 In Figure~\ref{CODE:inj-exp} the symbols {\tt NAT} and {\tt VAR}
 are injected in {\tt EXP}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Exp
@@ -2444,7 +2446,7 @@ exports
     EXP "+" EXP         -> EXP
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Syntax definition in which injections are used}\label{CODE:inj-exp}
+\caption{Definition of expressions that uses injections}\label{CODE:inj-exp}
 \end{figure}
 
 \subsubsection{Miscellaneous Operators}
@@ -2461,7 +2463,7 @@ lists are defined, {\tt LIST1} represents a list of naturals separated
 by commas whereas {\tt LIST2} represents a list of naturals terminated
 by commas.
 
-\begin{figure}[tb]
+\begin{figure}[t]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Lists
@@ -2479,13 +2481,13 @@ exports
     (LIST ",")+  -> LIST2
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Syntax definition in which two variants of lists are
-defined}\label{CODE:lists-usage}
+\caption{Definition of two list variants}\label{CODE:lists-usage}
 \end{figure}
 
 \paragraph{Alternative alternatives}
-The alternatives of symbols can be defined in two different ways, 
-see Figure~\ref{CODE:alternative-alternatives} for an example.
+The choice between two symbols can be defined in two different ways: by two
+separate syntax rules or by a single syntax rule using an alternative
+operator. See Figure~\ref{CODE:alternative-alternatives} for an example.
 
 The definition of the binary operators {\tt "|"} and {\tt "\&"} can
 be made more concise as shown by {\tt Bool2}, however, it is now
@@ -2493,7 +2495,7 @@ impossible to express that {\tt "\&"} has a higher priority
 than {\tt "|"}, see Section~\ref{Priorities} for more details on
 priority definitions.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Bool
@@ -2513,8 +2515,7 @@ exports
     Bool2 ("|" | "&") Bool2 -> Bool2 {left}
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Syntax definition in which two ways of alternatives are 
-shown}\label{CODE:alternative-alternatives}
+\caption{Two ways of defining {\tt |} and {\tt \&}}\label{CODE:alternative-alternatives}
 \end{figure}
 
 \subsection{Attributes of Lexical and Context-free Functions} \label{Attributes}
@@ -2613,7 +2614,7 @@ functions are declared for the argument and result sorts of
 
 \end{itemize}
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module BracketExpr
@@ -2684,7 +2685,7 @@ Figure \ref{CODE:simple-prio} gives an example of a definition of
 simple arithmetic expressions with the usual priorities and
 associativities.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module SimpleExpr
@@ -2729,7 +2730,7 @@ declaration with one of the following attributes:
 See Figure \ref{CODE:complex-prio} for an example of the use of grouped
 associativity.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module ComplexExpr
@@ -2827,7 +2828,7 @@ as the keyword {\tt let} followed by the variable  {\tt ter}.
 The context-free restriction forbids that a variable is directly
 followed by a letter. 
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Functional
@@ -2863,7 +2864,7 @@ lexical ambiguity, (Section \ref{lex-ambiguity}). This problem is avoided by
 the definition in Figure \ref{CODE:safe-layout}: it simply forbids that
 optional layout is followed by layout characters.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Layout
@@ -2886,7 +2887,7 @@ first one is already imported from module {\tt Layout}
 (Figure~\ref{CODE:safe-layout}).  The repetition of this first restriction is
 redundant and could be eliminated.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Comment
@@ -2919,7 +2920,7 @@ Is it possible to put a lexical restriction on {\tt Var}?
 Yes, but it will have no effect, because internally the
 lexical {\tt Var} is injected in the context-free {\tt Var}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module RestrictedExpressions
@@ -3004,7 +3005,7 @@ section (see Section \ref{Restrictions}).
 Figure \ref{CODE:restrict-id} shows how to enforce the longest match
 for the sort {\tt Id}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-restrict
@@ -3078,7 +3079,7 @@ with {\tt avoid}.
 Although the first approach is more tedious, it allows more flexibility
 than the second one.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-avoid
@@ -3259,7 +3260,7 @@ are examples of variables declared by the naming schemes in the {\tt
 Strings that occur in the left-hand side of variable declarations
 should {\em always} be quoted.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module VarDecls
@@ -3301,7 +3302,7 @@ representing sets. However, to obtain access to the elements of such
 a set an auxilary variable has to be defined, see
 Figure~\ref{CODE:set-variable} for an example.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Set
@@ -3428,7 +3429,7 @@ sides of a positive condition, in a negative condition,
 or in the right-hand side of the conclusion.
 
 
-\begin{figure}
+\begin{figure}[t]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Split
@@ -3509,7 +3510,7 @@ mechanism to describe complex functionality in a compact way.  See Figure
 \ref{CODE:sets} for a compact specification to remove double elements
 from a set.
 
-\begin{figure}
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Sets
@@ -3568,7 +3569,7 @@ has an even number of elements. In case of a list of uneven length
 the middle element is ignored. The first part of the list is returned
 as result.
 
-\begin{figure}
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Nats
@@ -3652,7 +3653,7 @@ equations
   [default-Type] compatible(Type1,Type2) = false
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Use of a default equation}\label{CODE:types}
+\caption{Using a default equation}\label{CODE:types}
 \end{figure}   
 
 \subsubsection{Memo Functions} \label{MemoFunctions}
@@ -3676,7 +3677,7 @@ effect.  In Figure~\ref{CODE:fib} the Fibonacci function is decorated with
 the memo attribute, improving its efficiency. See Table~\ref{TABLE:fibn}
 for some figures on the performance improvement.
 
-\begin{table}[tb]
+\begin{table}
 \begin{center}
 \begin{tabular}{|l|c|c|} \hline
 fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
@@ -3686,7 +3687,7 @@ fib(18)          & \ 5.9 & 1.8  \\ \hline
 fib(19)          &  10.4 & 3.3  \\ \hline
 \end{tabular}
 \vspace{\baselineskip}
-\caption{The execution times for the evaluation of $\mbox{\em fib}(n)$}
+\caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
 \label{TABLE:fibn}
 \end{center}
 \end{table}
@@ -3725,8 +3726,7 @@ equations
 
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Use of the memo attribute when defining Fibonacci
-functionality}\label{CODE:fib}
+\caption{Using the memo attribute when defining Fibonacci}\label{CODE:fib}
 \end{figure}   
 
 %%\subsubsection{Delaying} \label{Delay}
@@ -3993,7 +3993,7 @@ uninstantiated variables.
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Diff 
@@ -4126,7 +4126,7 @@ exports
 \caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Expressions 
@@ -4197,7 +4197,7 @@ exports
 \caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module NextLabel
@@ -4437,14 +4437,14 @@ The name of this directory can be communicated via
 \item The dialog box presented in Figure \ref{FIG:compiler-dir}.
 \end{itemize}
 
-\item The specification should be complete, i.e. no missing modules are
+\item The specification should be complete, i.e., no missing modules are
 allowed, and the equations sections should be error free.
 
 \item Not all \sdf\ syntax features are yet supported by the compiler.
 This poses several extra restrictions:
 
 \begin{itemize}
-\item the result symbols in the lexical syntax rules are restricted to
+\item Result symbols in lexical syntax rules are restricted to
       plain basic sorts.
 \item In the context-free syntax rules only literals, basic sorts, and
       lists (without the minimal repetition) are allowed. Furthermore
@@ -4474,7 +4474,7 @@ rule together with the equations is `stored' in an intermediate module
 contained the definition of the syntax rule and the corresponding
 equations, see Figure~\ref{CODE:reshuffled-module}.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module AUX-Booleans2
@@ -4498,7 +4498,7 @@ code, there are some extra functions generated which take care of
 the administration of used functions in the code and how such a 
 generated function can be used by other functions.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 ATerm lf_AUX_Booleans2_1 ( ATerm arg0 , ATerm arg1 ) {
@@ -4583,7 +4583,7 @@ use of memory during normalization of terms.
 
 \subsection{Architecture}
 
-\begin{figure}[tb]
+\begin{figure}
 \centerline{\psfig{file=ETAPS01/newarch.eps,width=8cm}}
 \caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
 \vspace{-1.0\baselineskip}                  
