@@ -23,6 +23,9 @@
  *         - Renamed -newstyle to -multi
  *	   - Added -newstyle option
  *         - Added -header option
+ * Merijn: - Added -split option to split output in .h (declarations) 
+ *                  and .c (code) file. (mar 1998)
+ *
  */
 
 #include "TB.h"
@@ -30,10 +33,11 @@
 #include <limits.h>
 #include "terms.h"
  
-FILE *handler;             /* Output file for handler code */
+FILE *c_handler;           /* Output file for handler c code */
+FILE *h_handler;           /* Output file for handler declarations of c code */
 FILE *tmp1;                /* Temp file for TBmatch code */
 FILE *tmp2;                /* Temp file for signature testing code */
-FILE *fout;                /* Output destination (handler or tmp) */
+FILE *fout;                /* Output destination (c_handler or tmp) */
 
 int tot[N_TERM_KINDS];     /* max number of vars per type */
 
@@ -42,6 +46,8 @@ int cur[N_TERM_KINDS];    /* number of vars per type in current call */
 TBbool multitools = TBfalse;	/* old style handlers */
 TBbool backdoor = TBfalse;	/* Leave the back door open */
 TBbool placeholders = TBfalse;	/* Use placeholder matching style */
+TBbool split_output = TBfalse;  /* Create only a C-file (i.e., not a 
+                                   corresponding .h file by default */
 char *termptr = "term *";	/* Wat does a term pointer look like? */
 char *Tmatch   = "TBmatch";	/* How to match terms */
 char *TmatchSimple = "TBmatch"; /* How to match terms without patterns */
@@ -204,7 +210,10 @@ void C_proto(char *rtype, term *t)
   char *fname;
   term_list *fargs;
 
-  fout = handler;
+  if( split_output == TBtrue )
+    fout = h_handler;
+  else
+    fout = c_handler;
 
   if(TBmatch(t, "%f(%l)", &fname, &fargs)){
     fprintf(fout, "%s ", rtype);
@@ -352,18 +361,37 @@ void copy_file(char *name, FILE *tofile)
   if(!f)
     err_sys_fatal("Cannot copy: %s", name);
   while((c = fgetc(f)) > 0)
-    fputc(c, handler);
+    fputc(c, c_handler);
   fclose(f);
 }
 
 void gen_header(char *the_tool_name)
 { 
-  fprintf(handler, "/* GENERATED AUTOMATICALLY, DO NOT MODIFY */\n" \
+   FILE* handler;
+   if( split_output == TBtrue )
+     handler = h_handler;
+   else
+     handler = c_handler;
+     
+  /* Only generate a .h file when the -split option was specified */
+  if( split_output == TBtrue )
+  {
+    fprintf(h_handler, "/* GENERATED AUTOMATICALLY, DO NOT MODIFY */\n" \
+  	    	   "/* Tool Interface include File for tool: %s */\n\n",the_tool_name);
+
+    fprintf(h_handler, "#ifndef _%s_tif_h_\n", the_tool_name );
+    fprintf(h_handler, "#define _%s_tif_h_\n", the_tool_name );
+  }
+  fprintf(c_handler, "/* GENERATED AUTOMATICALLY, DO NOT MODIFY */\n" \
 	    	   "/* Tool Interface File for tool: %s */\n\n",the_tool_name);
 
   if(header_file)
     fprintf(handler, "#include \"%s\"\n\n", header_file);
 
+  if( split_output == TBtrue )
+  {
+    fprintf(c_handler, "#include \"%s.tif.h\"\n", the_tool_name );
+  }
   fprintf(handler, "/* Prototypes for functions used in event handler */\n");
 
   if(backdoor) {
@@ -448,16 +476,32 @@ void read_tifs(int tifs, char *the_tool_name)
 
 void gen_handler(char *the_tool_name, char *tmp)
 {
-  fprintf(handler, "\n/* Event handler for tool: %s */\n\n", the_tool_name);
-  fprintf(handler, termptr);
-  C_fun_name(the_tool_name, handler);
-  if(!multitools)
-    fprintf(handler, "_handler(%se){\n", termptr);
-  else
-    fprintf(handler, "_handler(int cid, %se){\n", termptr);
-  gen_var_decls(handler);
+  fprintf(c_handler, "\n/* Event handler for tool: %s */\n\n", the_tool_name);
+  fprintf(c_handler, termptr);
+  C_fun_name(the_tool_name, c_handler);
 
-  copy_file(tmp, handler);
+  if( split_output == TBtrue )
+  {
+    fprintf(h_handler, "\n/* Event handler for tool: %s */\n\n", the_tool_name);
+    fprintf(h_handler, termptr);
+    C_fun_name(the_tool_name, h_handler);
+  }
+
+  if(!multitools)
+  {
+    fprintf(c_handler, "_handler(%se){\n", termptr);
+    if( split_output == TBtrue )
+       fprintf(h_handler, "_handler(%se);\n", termptr);
+  }
+  else
+  {
+    fprintf(c_handler, "_handler(int cid, %se){\n", termptr);
+    if( split_output == TBtrue )
+       fprintf(h_handler, "_handler(int cid, %se);\n", termptr);
+  }
+  gen_var_decls(c_handler);
+
+  copy_file(tmp, c_handler);
   unlink(tmp); 
 }
 
@@ -471,37 +515,54 @@ void gen_test_in_sign(char *the_tool_name, char *tmp)
  *          does NOT appear in the actual terms that will be sent to the tool.\n\
  */\n\n";
 
-  fprintf(handler, header, the_tool_name, the_tool_name);
+  fprintf(c_handler, header, the_tool_name, the_tool_name);
 
   /* generate the function header */
-  fprintf(handler, termptr);
-  C_fun_name(the_tool_name, handler);
+  fprintf(c_handler, termptr);
+  C_fun_name(the_tool_name, c_handler);
+
+  /* Idem. but now for optional .h file */
+  if( split_output == TBtrue )
+  {
+    fprintf(h_handler, header, the_tool_name, the_tool_name);
+    fprintf(h_handler, termptr );
+    C_fun_name(the_tool_name, h_handler);
+  }
+  
   if(!multitools)
-    fprintf(handler, "_check_in_sign(%sreqs){\n", termptr);
+  {
+    fprintf(c_handler, "_check_in_sign(%sreqs){\n", termptr);
+    if( split_output == TBtrue )
+       fprintf(h_handler, "_check_in_sign(%sreqs);\n", termptr);
+  }
   else
-    fprintf(handler, "_check_in_sign(int cid, %sreqs){\n", termptr);
-  fprintf(handler, "\tchar *in_sign[%d];\n\tint i;\n\n", n_in_sign_test);
-  copy_file(tmp, handler);
+  {
+    fprintf(c_handler, "_check_in_sign(int cid, %sreqs){\n", termptr);
+    if( split_output == TBtrue )
+       fprintf(h_handler, "_check_in_sign(int cid, %sreqs);\n", termptr);
+  }
+  fprintf(c_handler, "\tchar *in_sign[%d];\n\tint i;\n\n", n_in_sign_test);
+  copy_file(tmp, c_handler);
   unlink(tmp);
 
   /* generate the for loop */
   if(!is_empty)
-     fprintf(handler, "\n\tfor( ; reqs; reqs=%s(reqs)) {\n", nextel);
+     fprintf(c_handler, "\n\tfor( ; reqs; reqs=%s(reqs)) {\n", nextel);
   else
-     fprintf(handler, "\n\tfor( ; %s(reqs); reqs=%s(reqs)) {\n", is_empty, nextel);
-  fprintf(handler, "\t  for(i=0; i<%d; i++) {\n", n_in_sign_test);
-  fprintf(handler, "\t    if(%s(%s(reqs), in_sign[i])) goto found;\n", TmatchSimple, firstel);
-  fprintf(handler, "\t  }\n");
-  fprintf(handler, "\t  return %s(reqs);\n", firstel);
-  fprintf(handler, "\t  found:;\n");
+     fprintf(c_handler, "\n\tfor( ; %s(reqs); reqs=%s(reqs)) {\n", is_empty, nextel);
+  fprintf(c_handler, "\t  for(i=0; i<%d; i++) {\n", n_in_sign_test);
+  fprintf(c_handler, "\t    if(%s(%s(reqs), in_sign[i])) goto found;\n", TmatchSimple, firstel);
+  fprintf(c_handler, "\t  }\n");
+  fprintf(c_handler, "\t  return %s(reqs);\n", firstel);
+  fprintf(c_handler, "\t  found:;\n");
   if(backdoor)
     if(multitools)
-      fprintf(handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", the_tool_name, firstel);
+      fprintf(c_handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", the_tool_name, firstel);
     else
-      fprintf(handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", the_tool_name, firstel);
-  fprintf(handler, "\t}\n");
-  fprintf(handler, "\treturn NULL;\n");
-  fprintf(handler, "}\n");
+      fprintf(c_handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", the_tool_name, firstel);
+  fprintf(c_handler, "\t}\n");
+  fprintf(c_handler, "\treturn NULL;\n");
+  fprintf(c_handler, "}\n");
 }
 
 /* ------------- usage and help functions --------------------------------*/
@@ -525,9 +586,13 @@ Options are:\n\
 -newstyle             generate new style handlers, i.e. aterm * and Tmatch\n\
 -backdoor             generate a backdoor in situations where not all\n\
                       functions are known\n\
+-split                write function declarations to .h and function \n\
+                      definitions to .c file\n\
 \n\
 The generated tool interface is always written to a file named ToolName.tif.c\n\
-For example ``calc.tif.c'' when the tool name is ``calc''\n";
+For example ``calc.tif.c'' when the tool name is ``calc''. When the -split\n\
+command line option is specified function declarations and functions definitions\n\
+are separated in ToolName.tif.h and ToolName.tif.c\n";
 
  fprintf(stderr, str);
 }
@@ -577,6 +642,8 @@ void main(int argc, char **argv)
     } else if(streq(argv[i], "-help")){
       help();
       exit(0);
+    } else if(streq(argv[i], "-split")){
+      split_output = TBtrue;
     } else
       err_fatal("Usage: %s", Usage);
   }
@@ -591,10 +658,18 @@ void main(int argc, char **argv)
     err_sys_fatal("Can't open `%s'", tifs_name);
  
   sprintf(handler_name, "%s.tif.c", search_tool_name);
-  handler = fopen(handler_name, "w");
-  if(!handler)
+  c_handler = fopen(handler_name, "w");
+  if(!c_handler)
     err_sys_fatal("Can't create `%s'", handler_name);
 
+  if( split_output == TBtrue )
+  {
+    sprintf(handler_name, "%s.tif.h", search_tool_name);
+    h_handler = fopen(handler_name, "w");
+    if(!h_handler)
+      err_sys_fatal("Can't create `%s'", handler_name);
+  }
+  
   tmp1 = fopen(tmp_name1, "w");
   if(!tmp1)
     err_sys_fatal("Can't create tmp file `%s'", tmp_name1);
@@ -611,7 +686,13 @@ void main(int argc, char **argv)
 
   gen_test_in_sign(search_tool_name, tmp_name2);
 
-  fclose(handler);
+  fclose(c_handler);
   close(tifs);
+
+  if( split_output == TBtrue )
+  {
+    fprintf( h_handler, "#endif\n" );
+    fclose(h_handler);
+  }
   exit(0);
 } 
