@@ -4,8 +4,6 @@ lib_LIBRARIES           = libptable.a
 include_HEADERS         = ptable.h ptable-utils.h ptable_dict.h
 libptable_a_SOURCES 	= ptable.c ptable-utils.c ptable_dict.c
 
-noinst_HEADERS = ptable_dict.h
-
 CFLAGS += -DDISABLE_DYNAMIC_CHECKING                          
 INCLUDES = -I${ATERM}/include -I${PT_SUPPORT}/include
 
