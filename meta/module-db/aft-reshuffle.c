@@ -168,7 +168,7 @@ void AFTwriteAsfixFile(int cid,ATerm modname)
      * because of a modified AsFix file. */
     input = fopen(fname,"r");
     if(input) {
-      oldmod = ATreadFromTextFile(input);
+      oldmod = ATreadFromFile(input);
       if(!write)
         write = !ATisEqual(oldmod,amod);
       fclose(input);
