@@ -71,7 +71,10 @@
   "Return the substring of the file FILENAME which starts at START and is LENGTH
 characters long. "
 
-  (let ((buftext (buffer-substring start (+ start length) filename)))
+  ;(let ((buftext (buffer-substring start (+ start length) filename)))
+  (let ((buftext (buffer-substring 1 
+                                   (+ (buffer-size (get-file-buffer filename)) 1)
+                                   filename)))
     (TBvalue (concat "focus-text(" 
                      (TBstring filename) "," 
                      (TBstring buftext) ")" 
@@ -108,18 +111,22 @@ characters long. "
   "Set the focus. FILENAME is the file where the focus should be set.
 STR is the sortname of the focus. START is the starting
 character, and LENGTH the length (in characters) of the focus."
-	; first we retrieve a handle to the buffer
+; first we retrieve a handle to the buffer
   (let (buf (get-file-buffer filename))
 
     ; we find and select the window for this file ('t' means search in all frames)
     (select-window (get-buffer-window filename t))
 
-		(display-message 'focus (concat "Focus symbol: " str))
+    (display-message 'focus (concat "Focus symbol: " str))
 		    
-    ; first clear ALL colorings ;-(( (including the previous focus)
+    ; first clear ALL colorings (including the previous focus)
     (remove-text-properties 1 (point-max buf) '(face nil) buf)
     ; then set the new focus
-    (put-text-property start (+ start length) 'face 'secondary-selection buf)
+    (if (> (+ start length) (+ (buffer-size buf) 1))
+      (put-text-property 1 (+ (buffer-size buf) 1) 'face 'secondary-selection buf)
+    ;else
+      (put-text-property start (+ start length) 'face 'secondary-selection buf)
+    )
   )
   () ; return nil
 )
@@ -154,32 +161,32 @@ point."
   "Generates either a insert or a delete event to the ToolBus"
 
   ; if this is one of our buffers
-  (if (is-element (buffer-name) bufferlist)
-     (if (= oldlength 0)
+;  (if (is-element (buffer-name) bufferlist)
+;     (if (= oldlength 0)
  		    ; this is for text-insertion,
 		    ; return insert(Bufname,Loc,Str)
-				(TBevent (concat "insert(" 
-                         (TBstring (buffer-name)) "," 
-                         (number-to-string start) "," 
-                         (TBstring (buffer-substring start end)) ")"
-                 )
-        )
+;			(TBevent (concat "insert(" 
+;                         (TBstring (buffer-name)) "," 
+;                         (number-to-string start) "," 
+;                         (TBstring (buffer-substring start end)) ")"
+;                 )
+;        )
 		
         ; else this is for text-deletion,
 		    ; return delete(Bufname,Loc,Count)
-				(TBevent (concat "delete(" 
-                         (TBstring (buffer-name)) "," 
-                         (number-to-string (+ start oldlength)) "," 
-                         (number-to-string oldlength) ")" 
-                 )
-        )
+;				(TBevent (concat "delete(" 
+;                         (TBstring (buffer-name)) "," 
+;                         (number-to-string (+ start oldlength)) "," 
+;                         (number-to-string oldlength) ")" 
+;                 )
+;        )
 
         ; Suspend xemacs until toolbus adapter has processed this event
 				; ***Hack Alert***
-        (accept-process-output (get-process "adapter"))
-				(discard-input)
-		)
-	)
+;        (accept-process-output (get-process "adapter"))
+;				(discard-input)
+;		)
+;	)
 )
 
 ; declaring event handlers

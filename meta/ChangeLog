@@ -2,6 +2,8 @@
 
 2001/11/15 (markvdb@cwi.nl)
  * Version 0.8beta started
+ * switched of ToolBus interaction while inserting and
+   deleting characters in Xemacs.
  * fixed a bug when reading in stored Sdf files (in baf).
 
 2001/11/14 (jong@cwi.nl)
