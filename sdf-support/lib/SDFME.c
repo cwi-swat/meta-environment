@@ -3981,7 +3981,7 @@ ATbool SDF_hasSymbolTail(SDF_Symbol arg)
 SDF_SymbolTail SDF_getSymbolTail(SDF_Symbol arg)
 {
   if (SDF_isSymbolSeq(arg)) {
-    return (SDF_SymbolTail)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (SDF_SymbolTail)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), 1);
   }
 
   ATabort("Symbol has no Tail: %t\n", arg);
@@ -3994,7 +3994,7 @@ SDF_SymbolTail SDF_getSymbolTail(SDF_Symbol arg)
 SDF_Symbol SDF_setSymbolTail(SDF_Symbol arg, SDF_SymbolTail tail)
 {
   if (SDF_isSymbolSeq(arg)) {
-    return (SDF_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)tail, 4), 1);
+    return (SDF_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), (ATerm)tail, 1), 4), 1);
   }
 
   ATabort("Symbol has no Tail: %t\n", arg);
@@ -6458,7 +6458,7 @@ ATbool SDF_hasAttributesList(SDF_Attributes arg)
 SDF_AttributeList SDF_getAttributesList(SDF_Attributes arg)
 {
   if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_AttributeList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
+    return (SDF_AttributeList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
   }
 
   ATabort("Attributes has no List: %t\n", arg);
@@ -6471,7 +6471,7 @@ SDF_AttributeList SDF_getAttributesList(SDF_Attributes arg)
 SDF_Attributes SDF_setAttributesList(SDF_Attributes arg, SDF_AttributeList list)
 {
   if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 2), 1);
+    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
   }
 
   ATabort("Attributes has no List: %t\n", arg);
@@ -7174,7 +7174,7 @@ ATbool SDF_hasProductionArguments(SDF_Production arg)
 SDF_SymbolArguments SDF_getProductionArguments(SDF_Production arg)
 {
   if (SDF_isProductionProdFun(arg)) {
-    return (SDF_SymbolArguments)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (SDF_SymbolArguments)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), 1);
   }
 
   ATabort("Production has no Arguments: %t\n", arg);
@@ -7187,7 +7187,7 @@ SDF_SymbolArguments SDF_getProductionArguments(SDF_Production arg)
 SDF_Production SDF_setProductionArguments(SDF_Production arg, SDF_SymbolArguments arguments)
 {
   if (SDF_isProductionProdFun(arg)) {
-    return (SDF_Production)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)arguments, 4), 1);
+    return (SDF_Production)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), (ATerm)arguments, 1), 4), 1);
   }
 
   ATabort("Production has no Arguments: %t\n", arg);
@@ -7308,7 +7308,7 @@ ATbool SDF_hasProductionsList(SDF_Productions arg)
 SDF_ProductionList SDF_getProductionsList(SDF_Productions arg)
 {
   if (SDF_isProductionsDefault(arg)) {
-    return (SDF_ProductionList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_ProductionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Productions has no List: %t\n", arg);
@@ -7321,7 +7321,7 @@ SDF_ProductionList SDF_getProductionsList(SDF_Productions arg)
 SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList list)
 {
   if (SDF_isProductionsDefault(arg)) {
-    return (SDF_Productions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Productions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Productions has no List: %t\n", arg);
@@ -7653,7 +7653,7 @@ ATbool SDF_hasDefinitionList(SDF_Definition arg)
 SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg)
 {
   if (SDF_isDefinitionDefault(arg)) {
-    return (SDF_ModuleList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_ModuleList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Definition has no List: %t\n", arg);
@@ -7666,7 +7666,7 @@ SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg)
 SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list)
 {
   if (SDF_isDefinitionDefault(arg)) {
-    return (SDF_Definition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Definition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Definition has no List: %t\n", arg);
@@ -7989,7 +7989,7 @@ ATbool SDF_hasModuleList(SDF_Module arg)
 SDF_ImpSectionList SDF_getModuleList(SDF_Module arg)
 {
   if (SDF_isModuleModule(arg)) {
-    return (SDF_ImpSectionList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (SDF_ImpSectionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), 1);
   }
 
   ATabort("Module has no List: %t\n", arg);
@@ -8002,7 +8002,7 @@ SDF_ImpSectionList SDF_getModuleList(SDF_Module arg)
 SDF_Module SDF_setModuleList(SDF_Module arg, SDF_ImpSectionList list)
 {
   if (SDF_isModuleModule(arg)) {
-    return (SDF_Module)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 4), 1);
+    return (SDF_Module)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4), (ATerm)list, 1), 4), 1);
   }
 
   ATabort("Module has no List: %t\n", arg);
@@ -8442,7 +8442,7 @@ ATbool SDF_hasSectionsList(SDF_Sections arg)
 SDF_SectionList SDF_getSectionsList(SDF_Sections arg)
 {
   if (SDF_isSectionsDefault(arg)) {
-    return (SDF_SectionList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_SectionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Sections has no List: %t\n", arg);
@@ -8455,7 +8455,7 @@ SDF_SectionList SDF_getSectionsList(SDF_Sections arg)
 SDF_Sections SDF_setSectionsList(SDF_Sections arg, SDF_SectionList list)
 {
   if (SDF_isSectionsDefault(arg)) {
-    return (SDF_Sections)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Sections)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Sections has no List: %t\n", arg);
@@ -9419,7 +9419,7 @@ ATbool SDF_hasImportsList(SDF_Imports arg)
 SDF_ImportList SDF_getImportsList(SDF_Imports arg)
 {
   if (SDF_isImportsDefault(arg)) {
-    return (SDF_ImportList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_ImportList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Imports has no List: %t\n", arg);
@@ -9432,7 +9432,7 @@ SDF_ImportList SDF_getImportsList(SDF_Imports arg)
 SDF_Imports SDF_setImportsList(SDF_Imports arg, SDF_ImportList list)
 {
   if (SDF_isImportsDefault(arg)) {
-    return (SDF_Imports)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Imports)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Imports has no List: %t\n", arg);
@@ -10472,7 +10472,7 @@ ATbool SDF_hasPriorityList(SDF_Priority arg)
 SDF_GroupList SDF_getPriorityList(SDF_Priority arg)
 {
   if (SDF_isPriorityChain(arg)) {
-    return (SDF_GroupList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_GroupList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Priority has no List: %t\n", arg);
@@ -10485,7 +10485,7 @@ SDF_GroupList SDF_getPriorityList(SDF_Priority arg)
 SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list)
 {
   if (SDF_isPriorityChain(arg)) {
-    return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Priority has no List: %t\n", arg);
@@ -10945,7 +10945,7 @@ ATbool SDF_hasPrioritiesList(SDF_Priorities arg)
 SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg)
 {
   if (SDF_isPrioritiesDefault(arg)) {
-    return (SDF_PriorityList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_PriorityList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Priorities has no List: %t\n", arg);
@@ -10958,7 +10958,7 @@ SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg)
 SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list)
 {
   if (SDF_isPrioritiesDefault(arg)) {
-    return (SDF_Priorities)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Priorities)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Priorities has no List: %t\n", arg);
@@ -12296,7 +12296,7 @@ ATbool SDF_hasLookaheadsList(SDF_Lookaheads arg)
 SDF_LookaheadList SDF_getLookaheadsList(SDF_Lookaheads arg)
 {
   if (SDF_isLookaheadsList(arg)) {
-    return (SDF_LookaheadList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
+    return (SDF_LookaheadList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
   }
 
   ATabort("Lookaheads has no List: %t\n", arg);
@@ -12309,7 +12309,7 @@ SDF_LookaheadList SDF_getLookaheadsList(SDF_Lookaheads arg)
 SDF_Lookaheads SDF_setLookaheadsList(SDF_Lookaheads arg, SDF_LookaheadList list)
 {
   if (SDF_isLookaheadsList(arg)) {
-    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 2), 1);
+    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
   }
 
   ATabort("Lookaheads has no List: %t\n", arg);
@@ -12803,7 +12803,7 @@ ATbool SDF_hasRestrictionsList(SDF_Restrictions arg)
 SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg)
 {
   if (SDF_isRestrictionsDefault(arg)) {
-    return (SDF_RestrictionList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_RestrictionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Restrictions has no List: %t\n", arg);
@@ -12816,7 +12816,7 @@ SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg)
 SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionList list)
 {
   if (SDF_isRestrictionsDefault(arg)) {
-    return (SDF_Restrictions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Restrictions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Restrictions has no List: %t\n", arg);
@@ -13199,7 +13199,7 @@ ATbool SDF_hasAliasesList(SDF_Aliases arg)
 SDF_AliasList SDF_getAliasesList(SDF_Aliases arg)
 {
   if (SDF_isAliasesDefault(arg)) {
-    return (SDF_AliasList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_AliasList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Aliases has no List: %t\n", arg);
@@ -13212,7 +13212,7 @@ SDF_AliasList SDF_getAliasesList(SDF_Aliases arg)
 SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list)
 {
   if (SDF_isAliasesDefault(arg)) {
-    return (SDF_Aliases)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Aliases)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Aliases has no List: %t\n", arg);
@@ -13424,7 +13424,7 @@ ATbool SDF_hasSymbolsList(SDF_Symbols arg)
 SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg)
 {
   if (SDF_isSymbolsDefault(arg)) {
-    return (SDF_SymbolList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0);
+    return (SDF_SymbolList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), 1);
   }
 
   ATabort("Symbols has no List: %t\n", arg);
@@ -13437,7 +13437,7 @@ SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg)
 SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list)
 {
   if (SDF_isSymbolsDefault(arg)) {
-    return (SDF_Symbols)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 0), 1);
+    return (SDF_Symbols)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 0), (ATerm)list, 1), 0), 1);
   }
 
   ATabort("Symbols has no List: %t\n", arg);
@@ -13686,7 +13686,7 @@ ATbool SDF_hasRenamingsList(SDF_Renamings arg)
 SDF_RenamingList SDF_getRenamingsList(SDF_Renamings arg)
 {
   if (SDF_isRenamingsRenamings(arg)) {
-    return (SDF_RenamingList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
+    return (SDF_RenamingList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), 1);
   }
 
   ATabort("Renamings has no List: %t\n", arg);
@@ -13699,7 +13699,7 @@ SDF_RenamingList SDF_getRenamingsList(SDF_Renamings arg)
 SDF_Renamings SDF_setRenamingsList(SDF_Renamings arg, SDF_RenamingList list)
 {
   if (SDF_isRenamingsRenamings(arg)) {
-    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)list, 2), 1);
+    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2), (ATerm)list, 1), 2), 1);
   }
 
   ATabort("Renamings has no List: %t\n", arg);
