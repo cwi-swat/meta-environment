@@ -518,7 +518,7 @@ static int SG_ProdType_Tree(tree t)
 
   TreeType = SG_ProdType_AFun(ATgetAFun(t));
   if(TreeType < 0) {
-    ATerror("TreeType exception for %t\n", t);
+    ATabort("TreeType exception for %t\n", t);
   }
   return TreeType;
 }
@@ -946,6 +946,11 @@ static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
   tree max;
 
+  if (ATgetAFun(t0) == SG_Amb_AFun
+      ||
+      ATgetAFun(t1) == SG_Amb_AFun) {
+    return NULL;
+  }
   if (!ATisEqual(l0,l1)) {
     return SG_Direct_Eagerness_Filter(pt, t0, t1);
   }
@@ -1119,6 +1124,7 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
  
   /* only try these filters if the parsetable contains such info */
     /*  Next, inspect direct eager/avoid status  */
+  
   /*
   if (SG_PT_HAS_PREFERENCES(pt)) {
     
@@ -1130,6 +1136,7 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
     }
   }
   */
+  
 
   /* An experiment to see whether the ambiguity node can
    * be pushed down the tree. This will only be done
