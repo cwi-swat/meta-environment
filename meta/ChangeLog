@@ -1,5 +1,8 @@
 # $Id$
 
+2003/01/15 (jong@cwi.nl)
+ * Fixed bug in se.c: incorrect handling of amb() as parse tree.
+
 2003/01/10 (markvdb@cwi.nl)
  * Fixed a bug with renamings. If an imported module has
    a parameter which is also a parameter of the surrounding

@@ -158,7 +158,7 @@ ATerm delete_chars(int cid, ATerm editorId, int location, int count)
 
 void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
 {
-  PT_Args left_layout, right_layout;
+  PT_Tree left_layout, right_layout;
   SE_Editor editor;
   SE_Focus focus;
   PT_Tree tree;
@@ -170,14 +170,21 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
   focus = SE_makeFocusFromTerm(f);
   assert(SE_isValidFocus(focus));
 
-  tree         = PT_getParseTreeTree(parse_tree);
-  left_layout  = PT_getTreeArgs(PT_getParseTreeLayoutBeforeTree(parse_tree));
-  right_layout = PT_getTreeArgs(PT_getParseTreeLayoutAfterTree(parse_tree));
+  tree = PT_getParseTreeTree(parse_tree);
+  if (PT_isTreeAmb(tree)) {
+    left_layout = PT_makeTreeLayoutEmpty();
+    right_layout = PT_makeTreeLayoutEmpty();
+  }
+  else {
+    left_layout = PT_getParseTreeLayoutBeforeTree(parse_tree);
+    right_layout = PT_getParseTreeLayoutAfterTree(parse_tree);
+  }
 
   editor = getEditor(editorId);
   if (editor) {
     editor = replaceEditorTreeAtFocus(editor, focus, tree, 
-                                      left_layout, right_layout);
+                                      PT_getTreeArgs(left_layout),
+				      PT_getTreeArgs(right_layout));
     putEditor(editorId, editor);
   }
 }
