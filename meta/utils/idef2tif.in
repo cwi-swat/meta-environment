@@ -81,7 +81,8 @@ print TB "toolbus(",$process,")\n";
 close(TB);
 
 system("toolbus -gentifs $stmp 2> $serr > /dev/null");
-$err=-s $serr;
+#$err=-s $serr;
+$err=$?;
 if($err) {
   open(ERR,"<$serr") || die "error opening $serr ($!)";
   print STDERR while(<ERR>);
