@@ -111,6 +111,8 @@ Tprintf(stderr,"use_toolbus is %d\n",use_toolbus);
 
   oksym = TmkSymbol("ok", 0);
   tuplesym = TmkSymbol("tuple", 0);
+  tuple2sym = TmkSymbol("tuple2", 0);
+  tuple3sym = TmkSymbol("tuple3", 0);
   nullsym = TmkSymbol("null", 0);
 
 Tprintf(stderr,"Registering and resolving finished\n");

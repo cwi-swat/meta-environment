@@ -10,12 +10,12 @@
 #define PROF(var)
 
 #define is_char(t,c) (t_is_int(t) && t_int_val(t) == (c))
-#define make_char(c) (t_protect(char_table[c]), char_table[c])
+#define make_char(c) (t_sharing(char_table[c])++, char_table[c])
 #define singleton(t) (TbuildList(w, (t), t_empty(w)))
 #define check_sym(t,s) (t_appl_sym(t) == (s))
 
 #define m_term_equal(t1,t2) t_equal(t1,t2)
-#define m_not_empty_list(l) (~t_is_empty(l))
+#define m_not_empty_list(l) (!t_is_empty(l))
 #define m_is_single_element(l) (t_is_list(l) && (!t_is_empty(l) && \
                                                  t_is_empty(t_list_next(l))))
 
@@ -57,6 +57,8 @@ extern aterm *char_table[];
 
 extern asymbol *oksym;
 extern asymbol *tuplesym;
+extern asymbol *tuple2sym;
+extern asymbol *tuple3sym;
 extern asymbol *nullsym;
 
 extern void c_rehash(int size);
@@ -74,12 +76,17 @@ extern aterm *list_last(aterm_list *l1);
 extern aterm_list *cons(aterm_list *l1, aterm_list *l2);
 extern aterm *c_false;
 extern aterm *c_true;
+extern aterm *t();
+extern aterm *f();
+extern aterm *or(aterm *t0, aterm *t1);
 extern Tbool term_equal(aterm *t1, aterm *t2);
 extern Tbool not_empty_list(aterm *l);
 extern Tbool is_single_element(aterm_list *l);
 extern aterm_list *make_list(aterm *t);
 extern aterm *ok(aterm *t);
 extern aterm *tuple(aterm *t0, aterm *t1);
+extern aterm *tuple2(aterm *t0, aterm *t1);
+extern aterm *tuple3(aterm *t0, aterm *t1, aterm *t2);
 extern aterm_list *slice(aterm_list *l1, aterm_list *l2);
 
 extern aterm *make_nf0(asymbol *s);

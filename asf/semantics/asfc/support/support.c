@@ -43,6 +43,8 @@ aterm *char_table[256];
 
 asymbol *oksym;
 asymbol *tuplesym;
+asymbol *tuple2sym;
+asymbol *tuple3sym;
 asymbol *nullsym;
 
 aterm *pattern_asfix_term = NULL;
@@ -739,6 +741,32 @@ void init_patterns(arena *ar)
 
 /*}}}  */
 
+/*{{{  internal boolean functions */
+aterm *t()
+{
+  t_protect(c_true);
+  return c_true;
+}
+
+aterm *f()
+{
+  t_protect(c_false);
+  return c_false;
+}
+
+aterm *or(aterm *t0,aterm *t1)
+{
+  t_protect(c_true);
+  if(term_equal(t0,c_true)) {
+    t_unprotect(t1);
+    t_protect(c_true);
+    return c_true;
+  }
+  else {
+    return t1;
+  }
+}
+/*}}}  */
 /*{{{  list access functions */
 
 aterm *null()
@@ -1299,6 +1327,35 @@ aterm *tuple(aterm *t0,aterm *t1)
   t_unprotect(args2);
   return result;
 }
+
+aterm *tuple2(aterm *t0,aterm *t1)
+{
+  aterm *result, *args2;
+  aterm_list *args = TbuildList(w, t1, t_empty(w));
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, tuple2sym, args2);
+  t_unprotect(args2);
+  return result;
+}
+
+aterm *tuple3(aterm *t0,aterm *t1,aterm *t2)
+{
+  aterm *result, *args2, *args3;
+  aterm_list *args = TbuildList(w, t2, t_empty(w));
+  t_unprotect(t2);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
+  t_unprotect(t1);
+  args3 = TbuildList(w, t0, args2);
+  t_unprotect(args2);
+  t_unprotect(t0);
+  result = TbuildAppl(w, tuple3sym, args3);
+  t_unprotect(args3);
+  return result;
+}
 /*}}}  */
 
 /*{{{  Make normal forms */
@@ -1605,7 +1662,7 @@ aterm *make_nf11(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
   t_unprotect(args2);
   t_unprotect(t8);
   args2 = TbuildList(w, t7, args);
-  t_unprotect(args2);
+  t_unprotect(args);
   t_unprotect(t7);
   args = TbuildList(w, t6, args2);
   t_unprotect(args2);
