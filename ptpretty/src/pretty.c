@@ -93,13 +93,13 @@ static void createMappingToPT(SDF_ProductionList productions)
       if (ptprod) {
 	ATtablePut(mapping, (ATerm) normalizeProduction(ptprod), (ATerm) prod);
       }
+    }
 
-      if (!SDF_hasProductionListTail(productions)) {
-	break;
-      }
-      else {
-	productions = SDF_getProductionListTail(productions);
-      }
+    if (!SDF_hasProductionListTail(productions)) {
+      break;
+    }
+    else {
+      productions = SDF_getProductionListTail(productions);
     }
   }
 }
