@@ -91,6 +91,41 @@ public class Graph
   }
 
   //}}}
+  //{{{ public void deleteNode(String name)
+
+  public void deleteNode(String name)
+  {
+    ATermFactory factory = term.getFactory();
+
+    NodeList nodes = getNodes();
+    ATermList resultNodes = factory.makeList();
+    while (!nodes.isEmpty()) {
+      Node node = nodes.getHead();
+      nodes = nodes.getTail();
+
+      if (!node.getName().equals(name)) {
+	resultNodes = resultNodes.insert(node.toTerm());
+      }
+    }
+    resultNodes = resultNodes.reverse();
+
+    EdgeList edges = getEdges();
+    ATermList resultEdges = factory.makeList();
+    while (!edges.isEmpty()) {
+      Edge edge = edges.getHead();
+      edges = edges.getTail();
+
+      if (!edge.getFrom().equals(name) && !edge.getTo().equals(name)) {
+	resultEdges = resultEdges.insert(edge.toTerm());
+      }
+    }
+    resultEdges = resultEdges.reverse();
+
+    AFun fun = factory.makeAFun("graph", 2, false);
+    term = factory.makeAppl(fun, resultNodes, resultEdges);
+  }
+
+  //}}}
   
   //{{{ public NodeList getNodes()
 
