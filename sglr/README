@@ -48,6 +48,8 @@ Installation Instructions
    ./configure --prefix=<sglr> --with-aterm=<aterm> \
                --with-pt-support=<pt-support> 
 
+   Note. Default behaviour of configure is that it will look for libraries               in <prefix>/lib and for executables in your search paths. So,                   you do not need to specify the locations of all these packages                  explicitly (as we did in the example above). 
+
    If you use gcc, sglr is built with "gcc -Wall -g -O2". If you prefer
    different options use --with-cflags="<options>" when you run configure.
 
