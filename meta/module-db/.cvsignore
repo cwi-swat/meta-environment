@@ -1,6 +1,2 @@
-.deps
-.libs
 Makefile
 Makefile.in
-module-db
-module-db.tifs
