@@ -10,6 +10,7 @@
 
 #include "Graph.h"
 #include "dot.h"
+#include "layoutgraph.h"
 
 static ATermList buildDotAttributes(NodeId key, NodeId value, ATermList attrs);
 static AttributeList buildAttributeList(ATermList dotAttributes);

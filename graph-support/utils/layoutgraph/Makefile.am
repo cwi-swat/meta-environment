@@ -14,9 +14,9 @@ INCLUDES = \
         -I${top_srcdir}/lib \
 	-I${TOOLBUSLIB}/include
 
-noinst_HEADERS = dot.h graph2dot.h
+noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
 layoutgraph_SOURCES = layoutgraph.c layoutgraph.tif.c layoutgraph.tif.h \
-                      graph2dot.c
+                      graph2dot.c layoutgraph-main.c
 
 layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \

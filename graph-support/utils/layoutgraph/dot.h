@@ -24,10 +24,6 @@ int yylex(void);
 
 int yyparse();
 
-void protectTerm(ATerm term);
-AFun getAttributeType(Attribute attr);
-void mergeNodeAttributes(NodeId nodeId, AttributeList attrs);
-void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs);
 
 #endif
 
