@@ -50,5 +50,6 @@ asfc_LDADD   = -L$(top_builddir)/asfc/c-source  -lCompiler \
 INCLUDES  = -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
             -I$(ATERM)/include \
-            -I$(srcdir)/muasf
+            -I$(srcdir)/muasf \
+            -DOUTPUT_MUASF
 

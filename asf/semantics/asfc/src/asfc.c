@@ -80,7 +80,11 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
 {
   MA_Module muasf = asfToMuASF(name, equations);
 
+#ifndef OUTPUT_MUASF
   return muasfToC(muasf); 
+#else
+  return (PT_ParseTree) muasf;
+#endif
 }
 
 /*}}}  */
@@ -106,15 +110,15 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
 
   result = compile(moduleName, eqsList);
 
-/*  ATwriteToNamedTextFile( 
+#ifdef OUTPUT_MUASF
+  ATwriteToNamedBinaryFile( 
     (ATerm) PT_makeParseTreeTree(
       PT_makeSymbolsList(PT_makeSymbolSort("CProgram"), PT_makeSymbolsEmpty()), 
       PT_makeTreeLayoutEmpty(),
       (PT_Tree) result,
       PT_makeTreeLayoutEmpty(),
       0), output); 
-*/
-
+#else
   if (!strcmp(output, "-")) {
     fp = stdout;
   }
@@ -126,6 +130,7 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
   }
 
   ToC_code(result, fp , myversion);
+#endif
 
   return ATmake("snd-value(compilation-done)");
 }                              

@@ -413,7 +413,8 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
   }
   else { /* list production */
     if (checkListProductionCompatibility(ptProd)) {
-      maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
+      maSigArgElems = makeSigArgElems(1);
+      maFuncdef = MA_makeFuncDefFuncNoAnnos(maFunId,em,em,maSigArgElems,em);
     }
     else {
       ATerror("This list type is not supported yet: %t\n", ptProd);
