@@ -278,16 +278,22 @@ system.  Topics that will be addressed include:
 \item How to unparse parsed and/or normalized terms.
 \end{itemize}
 
-\noindent We do \emph{not} explain:
+\noindent We do \emph{not} explain in detail:
 
 \begin{itemize}
-\item The formalism \asfsdf. We do, however, provide a quick introduction
-to \asfsdf\ in Section~\ref{ASF+SDF}.
+\item The formalism \asfsdf. See, however, Section~\ref{ASF+SDF} for a quick
+  introduction to \asfsdf.
+
 \item The architectural and implementational aspects of the system.
-\item The stand alone usage of various parts of the system.
+You can find a brief sketch in Section~\ref{SEC:TechnologyandArchitecture}.
+
+\item The stand-alone usage of various parts of the system.
+Section~\ref{SEC:Components} briefly describes the most important components.
 \end{itemize}
 
 \subsection{Further Reading}
+
+(** to be written **)
 
 %%\cite{DHK96}
 
@@ -4026,7 +4032,7 @@ differs from the stored one. If so, new C code is generated, but
 if they are equal {\em no} new C code will be generated.
 
 \newpage
-\section{Technology and Architecture of the \ASmetaenv}
+\section{Technology and Architecture of the \ASmetaenv}\label{SEC:TechnologyandArchitecture}
 
 So far, we have explained the functionality of the \ASmetaenv\ as an
 interactive development environment for \asfsdf\ specifications.
@@ -4124,7 +4130,7 @@ modules, parse tables, user-defined terms, etc.
 \end{itemize}
 
 \newpage
-\section{Selected Components of the \ASmetaenv}
+\section{Selected Components of the \ASmetaenv}\label{SEC:Components}
 
 Now we will describe a selection of components that are usefull for
 building stand-alone tools. \emph{Be aware that the information in the
@@ -4206,8 +4212,8 @@ this. The result is {\tt term.tree}.
 
 \item The equations to be used for rewriting.  Select the desired
 module and use {\tt Dump Equations...} (see Section~\ref{ButtonPane})
-to dump the equations of the selected module and all its imports.  (**
-file name: M.eqs **).
+to dump the equations of the selected module and all its imports.
+The results is a file named {\tt M.eqs}.
 
 \end{itemize}
 
@@ -4248,7 +4254,7 @@ or when compiled specifications have to be combined with with hand-written C cod
 
 \item
 
-After parsing the term that has to be reduced (a sexplianed in
+After parsing the term that has to be reduced (as explained in
 Section \ref{SEC:parsingofterms}), this term can
 be reduced via the compiled code as follows:
 
@@ -4263,10 +4269,113 @@ converted to a textual representation.
 \subsection{Unparsing a (parsed/normalized) term} \label{SEC:unparsing}
 
 The unparsing of parsed/normalized terms is currently quite primitive.
+It is achieved as follows:
 
 \begin{verbatim}
    asource < reduct.tree > reduct.txt
 \end{verbatim}
+
+\subsection{Applying a Function to a Term}
+
+In many applications it is desirable to apply a function to a given term
+before reducing it. A typical example is the type checking of a program: given
+a parse tree {\tt T} for a program we first want to apply the typecheck
+function {\tt tc} to it
+before reduction. In the context of term rewriting this means first
+constructing the term {\tt tc(T)} and then reducing it.
+
+The construction of this new term is achieved by the following command:
+\begin{verbatim}
+   apply-function -f <name> -s <sort> -m <modulename> -i <ifile> -o <ofile> 
+\end{verbatim}
+
+A term is constructed consisting of an application of function {\tt <name>}
+with result sort {\tt <sort>} defined in module {\tt <modulename>} to a term
+{\tt <ifile>}.  The resulting term is written to {\tt <ofile> }.
+In order to actually \emph{apply} {\tt <name>}, the term {\tt ofile} has to
+be reduced.
+
+\newpage 
+\section{Examples of Stand-alone Tools}
+
+\subsection{A Stand-alone Boolean tool}
+
+A stand-alone tool for parsing and reducing Boolean terms can be created in
+the following steps:
+\begin{itemize}
+
+\item Goto the directory {\tt demo/pico}.
+
+\item Start the \ASmetaenv.
+
+\item Create a parse table for {\tt Pico-Booleans}:
+  \begin{itemize}
+  \item Right click on {\tt Pico-Booleans} and select {\tt New Term}.
+    
+  \item Enter the text {\tt true | false}.
+  \item Save this text as {\tt term.txt}.
+    
+  \item Push the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+    editor.
+  \item Push the {\tt Save} button of the {\tt File} menu of the \ASmetaenv.
+  \end{itemize}
+  The parse table {\tt Pico-Booleans.trm.tbl} has now been created.
+
+\item Dump the equations for {\tt Pico-Booleans}:
+  \begin{itemize}
+  \item Right click on  {\tt Pico-Booleans} and select {\tt Dump Equations}.
+  \end{itemize}
+   The equations file {\tt Pico-Booleans.eqs} has now been created.
+
+\item Parse {\tt term.txt}:
+\begin{verbatim}
+  sglr -p Pico-Booleans.trm.tbl -i term.txt -o term.tree
+\end{verbatim}
+The result is the parse tree {\tt term.tree}
+
+\item Reduce {\tt term.tree}:
+\begin{verbatim}
+  asfe  asfe -e Pico-Booleans.eqs  <term.tree >reduct.tree   
+\end{verbatim}
+(** Geeft foutmelding {\tt not a sort: layout} **).
+
+\item Unparse {\tt reduct.tree}:
+\begin{verbatim}
+  asource <reduct.tree >reduct.txt
+\end{verbatim}
+
+The result (in textual form) of reducing {\tt term.txt} is now {\tt reduct.txt}
+\end{itemize}
+
+Of course, the last steps can be written more concisely in a pipeline:
+\begin{verbatim}
+  sglr -p Pico-Booleans.trm.tbl -i term.txt | \
+  asfe  asfe -e Pico-Booleans.eqs | asource > reduct.txt
+\end{verbatim}
+
+\subsection{A stand-alone Pico typechecker}
+
+Now we show how to create a stand-alone typechecker for the Pico language.  We
+follow the same steps as in the previous example, but there is one additional
+step required: given a parsed Pico program, we have to wrap the function
+symbol {\tt tcp( )} around the Pico program, before we reduce the term.  The
+steps are as follows:
+
+\begin{itemize}
+\item As before, generate a parse table for {\tt Pico-syntax} (result: {\tt
+    Pico-syntax.trm.tbl}) and equations for {\tt Pico-typecheck} (result: {\tt
+    Pico-typecheck.eqs}).
+\item Parse the input term {\tt term.txt} (result: {\tt term.tree}).
+\item Wrap  {\tt tcp(  )} around {\tt term.tree}:
+\begin{verbatim}
+  apply-function -f tcp                       \
+                 -s PICO-BOOL                 \
+                 -m Pico-typecheck            \
+                 -i term.tree -o tcterm.tree
+\end{verbatim}
+\item Reduce {\tt tcterm.tree} and unparse the result as before.
+
+\end{itemize}
 
 \bibliographystyle{plain}
 \bibliography{manual} 
