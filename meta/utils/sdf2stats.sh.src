@@ -35,15 +35,112 @@ EVALUATOR="evaluator -e $EQS"
 ASOURCE="asource"
 RM="rm"
 
-if $PARSE -i $1 -o $1.af1
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="i:hV"
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+        -h       : display usage information
+        -i file  : input from |file|                    [-]
+        -V       : reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
 then
-	$APPLYFUNC -i $1.af1 -o $1.af1.fnc
-	$RM $1.af1
-	$EVALUATOR -i $1.af1.fnc -o $1.af1.red
-	$RM $1.af1.fnc
-	$ASOURCE -i $1.af1.red -o sdf2-stats.txt
-	$RM $1.af1.red
-else
-	echo "Parse error!"             >&2
+        Usage
+        exit 2
+fi
+set -- $args 
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in                 
+        -i)
+            Files="$2 $Files"; shift ;;         
+        -h)
+            Usage ; exit 0 ;;
+        -V)
+            Version ; exit 0 ;; 
+        --)
+            ;;
+        *)
+            Files="$Files $1" ;;
+    esac
+    shift
+done  
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+        echo $*                                         >&2
+}
+
+Error () {
+        Warn $*
+        error=1
+}
+
+Abort () {
+        Error $*
+        exit 2
+}        
+
+Notify () {
+        if [ $verbose -gt 0 ] ; then
+                Warn $*
+        fi
+}
+
+
+#
+## Main bit...
+#
+
+if [ -z "$Files" ] ; then
+        Files="-"
+fi   
+
+for f in $Files
+do                      
+if [ "$f" = "-" ] ; then
+	echo "Please give input file!"             >&2
 	exit 1
-fi 
+else
+	if $PARSE -i $f -o $f.af1
+	then
+		$APPLYFUNC -i $f.af1 -o $f.af1.fnc
+		$RM $f.af1
+		$EVALUATOR -i $f.af1.fnc -o $f.af1.red
+		$RM $f.af1.fnc
+		$ASOURCE -i $f.af1.red -o sdf2-stats.txt
+		$RM $f.af1.red
+	else
+		echo "Parse error!"             >&2
+		exit 1
+	fi 
+fi
+done
