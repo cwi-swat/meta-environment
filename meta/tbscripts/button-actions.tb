@@ -1177,7 +1177,7 @@ in
     (
       rec-msg(io-file-written) . 
       snd-msg(te-reread-contents(EditorId)) .
-      snd-msg(te-set-cursor-at-focus(EditorId, Focus)) .
+      printf("snd-msg(te-set-cursor-at-focus(EditorId, Focus))\n") .
       snd-msg(te-set-focus(EditorId, Focus))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .

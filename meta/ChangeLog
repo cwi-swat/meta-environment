@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Mar  3 11:37:44 CET 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - To be solved: te-set-cursor-at-focus call changed to printf of call
+
 Wed Feb 18 12:50:28 CET 2004 <jurgenv@cwi.nl>
  * added new action; convert-feedback to fo from an error produced
    by an ASF+SDF specification to an error that can be handled by
