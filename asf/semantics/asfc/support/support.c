@@ -58,6 +58,7 @@ unsigned int rewrite_steps = 0;
 
 #ifdef MEMO_PROFILING
 ATermTable prof_table = NULL;
+Symbol record_sym = -1;
 #endif
 
 ATerm c_true = NULL;
@@ -869,7 +870,10 @@ void write_memo_profile()
 	while(!ATisEmpty(keys)) {
 		ATerm key = ATgetFirst(keys);
 		ATermAppl record = (ATermAppl)ATtableGet(prof_table, key);
-		ATfprintf(f, "%t: %t\n", key, record);
+		ATfprintf(f, "[");
+		AFsourceToFile(key, f);
+		ATfprintf(f, ",%t]\n", record);
+		keys = ATgetNext(keys);
 	}
 
 	fclose(f);
@@ -965,6 +969,8 @@ void init_patterns()
 
 #ifdef MEMO_PROFILING
 	prof_table = ATtableCreate(2048, 80);
+	record_sym = ATmakeSymbol("record", 2, ATfalse);
+	ATprotectSymbol(record_sym);
 
 	atexit(write_memo_profile);
 #endif

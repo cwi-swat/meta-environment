@@ -12,32 +12,38 @@
 #ifdef MEMO_PROFILING
 
 extern ATermTable prof_table;
+extern Symbol record_sym;
+
+#define CONS_ENTRY(sym,appl) ++rewrite_steps
+#define CONS_EXIT(rhs)		 return rhs
 
 #define FUNC_ENTRY(sym,appl) \
   unsigned int steps, count, start = ++rewrite_steps; \
   ATerm result, record, term_steps; \
-  ATermAppl term = appl;
+  ATermAppl term = appl
 
 #define FUNC_EXIT(rhs) \
   result = rhs;                          \
   steps = rewrite_steps - start;         \
                                          \
-  record = get_result(prof_table, term); \
+  record = get_result(prof_table, (ATerm)term); \
   if(record) {                           \
-		count = ATgetInt((ATermInt)ATgetArgument(term, 1))+1; \
-		term_steps = ATgetArgument(term, 2); \
+		count = ATgetInt((ATermInt)ATgetArgument(record, 0))+1; \
+		term_steps = ATgetArgument(record, 1); \
   } else {                               \
 		count = 1;                           \
-		term_steps = ATmakeInt(steps);       \
+		term_steps = (ATerm)ATmakeInt(steps);\
 	} \
-  record = ATmakeAppl3(record_sym, (ATermInt)ATmakeInt(count), term_steps); \
-  put_result(prof_table, term, record); \
-  return result;
+  record = (ATerm)ATmakeAppl2(record_sym, (ATerm)ATmakeInt(count), term_steps); \
+  put_result(prof_table, (ATerm)term, record); \
+  return result
 
 #else
 
+#define CONS_ENTRY(sym,appl)
+#define CONS_EXIT(rhs) return rhs
 #define FUNC_ENTRY(sym,appl)
-#define FUNC_EXIT(rhs) return rhs;
+#define FUNC_EXIT(rhs) return rhs
 
 #endif
 /*
