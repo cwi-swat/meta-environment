@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/01 (markvdb@cwi.nl)
+ * Regenerated the normalizer for the Sdf definition with constructors
+   and labels.
+
 2003/09/26 (markvdb@cwi.nl)
  * Regenerated Sdf2-Normalization.c given the new library and
    layout convention.
