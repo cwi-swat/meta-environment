@@ -30,24 +30,15 @@ Installation instructions:
 
    To compile this distribution you will need the following items:
 
-    -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
+    -- gmake (GNU make, from <http://www.gnu.org/software/make/>)
     -- jdk (The Java Development Kit, from
          <http://www.javasoft.com/products/jdk/>). Make sure you get version
          1.1 or higher.
     -- wish (A user-interface system, part of Tcl/Tk, from
-         <http://www.tclconsortium.org/software/index.vet>). Make sure you
+         <http://dev.scriptics.com/software/>). Make sure you
          get version 8.0.1 or higher.
-    -- tcldot (A graph visualization library from AT&T. Part of their graphviz
-         package, from <http://www.research.att.com/sw/tools/graphviz/>)
-         Move the directory lib/Tcldot to some convenient place. This is
-         the only directory from the distribution that is used. Remember
-         the location, you'll need it later.
-         (At UvA, it will be under ~gipe/petr/lib/Tcldot. At the CWI choose
-          the tcldot library for your combination of hardware/os:
-	      * sparc/sunos: ~gipe/pkgs/graphviz1.4/sunos/sparc/lib/Tcldot/
-	      * sgi/irix: ~gipe/pkgs/graphviz1.4/irix/mips/lib/Tcldot
-              * i386/linux: ~gipe/pkgs/graphviz1.4/linux/i386/lib/Tcldot
-	      * etc.)
+    -- graphviz (A graph visualization library from AT&T), from
+         <http://www.research.att.com/sw/tools/graphviz/>)
     -- xemacs (A text editor for X-windows systems, available from
          <http://www.xemacs.org/>). Make sure you get version 20.4 or newer.
          The Meta-Environment is untested with other versions of xemacs, but
@@ -98,11 +89,17 @@ Installation instructions:
     distributions. Please consult the web-site for installation
     instructions.
 
+    To ease the compilation and installation process of the
+    Meta-Environment, we also offer a complete distribution (Meta Completa),
+    which bundles all required CWI software packages and contains a strongly
+    simplified installation. See the web-site
+    http://www.cwi.nl/projects/MetaEnv/ for more information.
+
 
   * Configuring and compiling: final installation
 
     Let's assume the `aterm' and `toolbus' directories are located in the
-    directory `/some/prefix', that tcldot is installed in `/path/to/tcldot',
+    directory `/some/prefix', that graphviz is installed in `/path/to/graphviz',
     and that you want to install the ASF+SDF Meta-Enironment in
     `/some/prefix'. Further we assume that the Meta-Environment sources are
     unpacked in `/meta/source/` and that the `make' command is in fact GNU
@@ -132,7 +129,7 @@ Installation instructions:
       $ ./configure --prefix=/some/prefix \
                     --with-toolbus=/some/prefix \
                     --with-aterm=/some/prefix \
-                    --with-tcldot=/path/to/tcldot
+                    --with-graphviz=/path/to/graphviz
       $ make 
       $ make install
 
