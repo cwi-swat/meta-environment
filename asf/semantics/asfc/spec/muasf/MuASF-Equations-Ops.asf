@@ -351,3 +351,16 @@ remove-returns-list(Funid) = Funid
             ===========================================
             select-on-defaults(default:Cond+ ==> Term1 = Term2; Rule*) =
               (default:Cond+ ==> Term1 = Term2;Rule*1,Rule*2)
+
+%% Make a new argument list based on the arity of a function
+
+[mal-0]
+make-arg-list(Sigarg, natcon(Char*)) = varid("V" "_" Char*) 
+
+[mal-1]
+Natcon2 = Natcon + 1,
+Natcon3 = Natcon2 + 1,
+make-arg-list(Sigarg, Natcon2) = Term+1,
+make-arg-list(Sigarg, Natcon3) = Term+2
+===>
+make-arg-list(Sigarg, Sigarg+, Natcon) = Term+1, Term+2 

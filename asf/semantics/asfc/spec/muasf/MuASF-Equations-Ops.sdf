@@ -8,7 +8,7 @@ exports
   sorts FuncRuleTuple FuncRulePair
         RuleListPair FuncTermTableTuple 
         FuncRuleTableTuple FuncCondTableTuple
-        TraversalType TraversalStrategy
+        TraversalType TraversalStrategy TermList
   context-free syntax
     "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"    -> FuncRuleTuple
     "(" {FuncDef ";"}* "," {Rule ";"}* ")"               -> FuncRulePair
@@ -59,6 +59,7 @@ exports
     is-quoted-funid(FunId)            -> Bool
     is-plus-var(Term)                 -> Bool
     is-star-var(Term)                 -> Bool
+    make-arg-list(SigArgList, NatCon) -> TermList
 
   context-free syntax
     make-list-args({Term ","}*)  -> Term
@@ -87,3 +88,4 @@ exports
 variables
     "Strategy"[0-9]* -> TraversalStrategy
     "Type"[0-9]*     -> TraversalType
+    "Natcon"[0-9]*   -> NatCon

@@ -49,7 +49,7 @@ exports
 
     "{" {Term ","}+ "}" -> Annotations
 
-    {SigArg ","}+  -> SigArgList
+      {SigArg ","}+  -> SigArgList
     {FuncDef";"
 }* -> FuncDefList
 

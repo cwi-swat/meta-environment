@@ -1,5 +1,6 @@
 module  muasf2muasf/MuASF2MuASF
 
+imports muasf2muasf/Add-Builtin-Equations
 imports muasf2muasf/Optimize-MuASF
 imports muasf2muasf/Make-Left-Linear
 imports muasf2muasf/Make-Assign-Conds

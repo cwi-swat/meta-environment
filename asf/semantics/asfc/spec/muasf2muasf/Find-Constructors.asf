@@ -18,6 +18,7 @@ fc-funcdeflist(Funcdef; Funcdef*,Rule*,Nametable) =
 
 [fc-2]
 has-rule(Funcdef,Rule*)               = false,
+is-builtin(Funcdef)                   = false,
 add-attr(Funcdef,constructor)         = Funcdef2,
 get-funcdef-funid(Funcdef) = Funid,
 add-attr(Funid,Nametable,constructor) = Nametable2
@@ -69,3 +70,11 @@ add-attr(Funid1,Nametable,Term) =
 [default-aca-nt]
 add-attr(Funid,Nametable) = Nametable
 
+[ib-0]
+is-builtin(Funid { Term*1, built-in(Term), Term*2 }) = true
+
+[ib-1]
+is-builtin(Funid (Sigarg+) { Term*1, built-in(Term), Term*2 }) = true
+
+[default-ib]
+is-builtin(Funcdef) = false

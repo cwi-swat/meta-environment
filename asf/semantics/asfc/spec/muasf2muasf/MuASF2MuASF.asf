@@ -2,7 +2,8 @@ equations
 
 [m2m-1'1]
 Module1 = module Modid signature Funcdef+ rules Rule+,
-fix-tupled-traversals(Module1) = Module11,
+add-builtin-equations(Module1) = Module111,
+fix-tupled-traversals(Module111) = Module11,
 find-constructors(Module11,Nametable) = (Module2, Nametable2),
 add-list-cons(Module2) = Module3,
 add-type-checks(Module3,Nametable) = Module31,

@@ -2,8 +2,8 @@ module Builtins
 
 imports languages/pico/syntax/Pico-Syntax
 imports utilities/Unparsing[PROGRAM]
-imports utilities/Annotations
-imports utilities/Lifting
+imports utilities/Lifting[PROGRAM]
+imports utilities/TermCompare[PROGRAM]
 imports basic/Whitespace
 
 exports
@@ -12,9 +12,11 @@ sorts String Bytes
 context-free syntax
 
 test-unparsing(PROGRAM) -> String
-test-annotations(PROGRAM) -> ATerm
-test-lifting(PROGRAM) -> Tree
+test-lifting-to-term(PROGRAM) -> ATerm
+test-lifting-to-tree(PROGRAM) -> Tree
+test-term-compare(PROGRAM,PROGRAM) -> Measure
+
 
 variables
 
-"PROGRAM" -> PROGRAM 
+"PROGRAM"[123] -> PROGRAM 

@@ -6,6 +6,17 @@
 2003/10/03 (markvdb@cwi.nl)
  * Removed the set and perm symbol in the library.
 
+2003/10/06 (jurgenv@cwi.nl)
+ * Extended asfc compiler to support calls to builtin functions. For each
+   builtin function that is used in the equations an equation is generated
+   that calls ASC_<builtin-name> function with the proper arguments.
+ * Regenerated the compiler with the new code
+ * Added implementations of all builtins for compiled specifications.
+   Note that pos-info does not work because annotations are lost during the
+   conversion from AsFix to muASF terms.
+ * Removed toolbus communication builtins and support for these builtins
+   from asfe.idef
+
 2003/10/03 (jurgenv@cwi.nl)
  * Fixed some tests by retrieving the original specification and regenerating
    the .eqs files and sometimes the input and output term files. The reasons
