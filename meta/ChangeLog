@@ -1,7 +1,20 @@
 # $Id$
 
+Thu Jul 31 12:55:42 CEST 2003 <jong@cwi.nl>
+ * version bumped into 1.1
+ * configmanager.idef:
+   - renamed ProcessButtons into AddUserDefinedActions
+   - renamed ProcessStandardButtons into AddPreDefinedActions
+   - renamed "process-button-file" into "set-actions", making it
+     a procedure (snd-do) iso a function (snd-eval) since it never
+     returned anything useful anyway.
+   - added "remove-actions" to configuration manager, instead of
+     feeding it a fake, empty actions file to remove actions.
+ * configmanager.c: 
+   - implemented the above interface definition changes.
+
 2003/07/31 ({markvdb,jurgenv}@cwi.nl)
- * Set version to 1.0
+ * Released version 1.0
 
 2003/07/30 (markvdb@cs.vu.nl)
  * Removed a hard-coded path in the in-output tool.

@@ -9,7 +9,7 @@
 #define BUTTON_FILE "meta.buttons"
 #endif
 
-process ProcessButtons(CMNG : configmanager) is
+process AddUserDefinedActions(CMNG: configmanager) is
 let
   Contents : str,
   ErrorMessage : str
@@ -17,15 +17,14 @@ in
   snd-msg(io-read-file(BUTTON_FILE)) .
   (
     rec-msg(io-file-contents(Contents?)) .
-    snd-eval(CMNG, process-button-file(Contents))
+    snd-do(CMNG, set-actions(Contents))
   +
     rec-msg(io-error-reading(ErrorMessage?)) .
-    snd-eval(CMNG, process-button-file("buttons([])"))
-  ) .
-  rec-value(CMNG, buttons-processed)
+    snd-do(CMNG, remove-actions)
+  )
 endlet
 
-process ProcessStandardActions(CMNG : configmanager) is
+process AddPredefinedActions(CMNG: configmanager) is
 let
   Contents : str
 in
@@ -37,21 +36,21 @@ endlet
   
 process ConfigManager is
 let
-  CMNG          : configmanager,
-  Text          : str,
-  Fid           : str,
-  SearchPaths : list,
-  ButtonName    : term,
-  ButtonNames   : list,
+  CMNG : configmanager,
   ButtonActions : list,
-  ModuleName    : str,
-  EditorType    : term,
-  Tree          : term,
-  Term          : term,
-  Pid           : int,
-  LibraryPath   : str,
+  ButtonName : term,
+  ButtonNames : list,
   Directories : list,
-  ErrorMessage  : str
+  EditorType : term,
+  ErrorMessage : str,
+  Fid : str,
+  LibraryPath : str,
+  ModuleName : str,
+  Pid : int,
+  SearchPaths : list,
+  Term : term,
+  Text : str,
+  Tree : term
 in
   execute(configmanager, CMNG?) .
   snd-msg(io-read-file(CONFIG_FILE)) .
@@ -70,11 +69,11 @@ in
   snd-msg(library-location-hook).
   rec-msg(library-location-hook-result(LibraryPath?)).
   snd-do(CMNG, register-library(LibraryPath)) .
-  ProcessButtons(CMNG) .
-  ProcessStandardActions(CMNG) .
+  AddUserDefinedActions(CMNG) .
+  AddPredefinedActions(CMNG) .
   (
     rec-msg(refresh-buttons) .
-    ProcessButtons(CMNG) .
+    AddUserDefinedActions(CMNG) .
     snd-msg(buttons-refreshed)
   +
     rec-msg(get-auxilary-buttons(EditorType?, ModuleName?)) .

@@ -101,9 +101,9 @@ void register_library(int cid, char *path)
 }
 
 /*}}}  */
-/*{{{  ATerm process_button_file(int cid, ATerm contents) */
+/*{{{  void set_actions(int cid, char *contents) */
 
-ATerm process_button_file(int cid, char *contents)
+void set_actions(int cid, char *contents)
 {
   ATerm atButtons = ATreadFromString(contents);
   buttons = MB_makeButtonListEmpty();
@@ -111,8 +111,14 @@ ATerm process_button_file(int cid, char *contents)
   if (MB_isValidButtons(MB_ButtonsFromTerm(atButtons))) {
     buttons = MB_getButtonsList(MB_ButtonsFromTerm(atButtons));
   }
-  
-  return ATmake("snd-value(buttons-processed)");
+}
+
+/*}}}  */
+/*{{{  void remove_actions(int cid) */
+
+void remove_actions(int cid)
+{
+  buttons = MB_makeButtonListEmpty();
 }
 
 /*}}}  */
