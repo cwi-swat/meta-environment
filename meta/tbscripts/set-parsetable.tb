@@ -64,13 +64,13 @@ in
     snd-msg(make-asf-syntax(ModuleName, Syntax, TableType)).
     rec-msg(asf-syntax(Syntax?)).
 
-		if equal(TableType, eqs) then
+    if equal(TableType, eqs) then
        Extension := "eqs.tbl"
     else
        Extension := "trm.tbl"
     fi.
     
-		snd-msg(generate-parsetable(Syntax, ModuleName, Extension)).
+    snd-msg(generate-parsetable(Syntax, ModuleName, Extension)).
     rec-msg(parsetable(Table?)).
 
     snd-msg(get-table-timestamp(ModuleName)).
@@ -80,12 +80,12 @@ in
 
     ReopenLanguage(ModuleName, Table)
     +
-	  rec-msg(no-syntax).
-		snd-msg(parsetable-not-set(ModuleName))
+    rec-msg(no-syntax).
+    snd-msg(parsetable-not-set(ModuleName))
   )
 endlet
 
-/* Ask the module database to open the language */
+/* Ask the parser to reopen the language */
 process ReopenLanguage(ModuleName : str, Table : str) is
   snd-msg(reopen-language(ModuleName, Table)).
   (
