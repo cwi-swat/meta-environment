@@ -1,0 +1,20 @@
+/*
+  $Id $
+ */
+
+process Unparser is
+let
+  UPT  : unparsePT,
+  Tree : term,
+  Text : term
+in
+  execute(unparsePT, UPT?).
+  ( rec-msg(unparse(Tree?)).
+    snd-eval(UPT, unparse-asfix(Tree)).
+    rec-value(UPT, unparsed-text(Text?)).
+    snd-msg(unparsed-text(Text))
+  ) *
+  delta
+endlet
+
+tool unparsePT is { command = "unparsePT" }  
