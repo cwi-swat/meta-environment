@@ -32,7 +32,7 @@ ATerm readTime(int conn)
    time(&tloc);  
    s = ctime(&tloc);
    s[strlen(s)-1] = '\0'; /* remove trailing newline */
-   return ATmake("snd-value(<str>)", s);
+   return ATmake("snd-value(time(<str>))", s);
 }
 
 void rec_terminate(int conn, ATerm msg)

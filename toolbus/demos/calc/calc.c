@@ -47,7 +47,7 @@ ATerm expr(int conn, char *s)
   if(!trm)
     return ATmake("snd-value(calc-error(<str>))", s);
   else
-    return ATmake("snd-value(<int>)", calculate(trm));
+    return ATmake("snd-value(val(<int>))", calculate(trm));
 }
 
 void rec_terminate(int conn, ATerm t)

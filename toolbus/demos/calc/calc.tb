@@ -1,31 +1,9 @@
-tool logger is { command = "xyz" }
-/*
-
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
 process CALC is
   let Tid : calc, E : str, V : term
   in
      execute(calc, Tid?) .
      ( rec-msg(compute, E?) . snd-eval(Tid, expr(E)) .
-       rec-value(Tid, V?) .
+       rec-value(Tid, val(V?)) .
        snd-msg(compute, E, V) . snd-note(compute(E, V))
      ) * delta
   endlet
@@ -189,7 +167,7 @@ process LOG is
      execute(log, Tid?) .
      ( rec-note(compute(E?, V?)) . snd-do(Tid, writeLog(E, V))
      + rec-msg(showLog) . snd-eval(Tid, readLog) .
-       rec-value(Tid, L?) . snd-msg(showLog, L)
+       rec-value(Tid, history(L?)) . snd-msg(showLog, history(L))
      ) * delta
   endlet
 
@@ -223,7 +201,7 @@ process CLOCK is
      execute(clock, Tid?) .
      ( rec-msg(showTime) .
        snd-eval(Tid, readTime) .
-       rec-value(Tid, T?) .
+       rec-value(Tid, time(T?)) .
        snd-msg(showTime, T)
      ) * delta
   endlet
