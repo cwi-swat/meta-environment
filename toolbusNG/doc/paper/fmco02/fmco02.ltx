@@ -960,6 +960,15 @@ generated from the ToolBus script which describes much more of the
 component's behavior in terms of method call interaction, rather than
 just the methods' signatures.
 
+\item RMI uses both pass-by-value and pass-by-referece, depending on
+whether the relevant data is serializable (it is a primitive type, or it
+implements \texttt{Serializable}) or is a remote reference. The ToolBus
+setting only uses pass-by-value (although pass-by-reference can be
+mimicked by sending unique ids by value that refer to a remote object).
+
+\item Although we do not discuss security issues in this paper, it should
+be noted that there are no security features (yet) in the ToolBus, whereas
+RMI offers security-related support using \texttt{SecurityManagers}.
 
 \end{itemize}
 
