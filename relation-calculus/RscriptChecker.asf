@@ -52,18 +52,19 @@ $Error]>
 [cve-2] convert-errors1([]) = list([])
 
 [e2i-1] e2i($Exp cannot be typed)	= listitem("Expression cannot be typed", [ "ShowRscriptSource" ], get-area($Exp))
-[e2i-2] e2i($From cannot be typed) 	= listitem("From cannot be typed", [ "ShowRscriptSource" ], get-area($From))
-[e2i-3] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", [ "ShowRscriptSource" ], get-area($Bag))
-[e2i-4] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", [ "ShowRscriptSource" ], get-area($Rel))
-[e2i-5] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
-[e2i-6] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
-[e2i-7] e2i(Incompatible argument types $Etype in $Exp) = 
+[e2i-2] e2i($Stat cannot be typed)	= listitem("Statement cannot be typed", [ "ShowRscriptSource" ], get-area($Stat))
+[e2i-3] e2i($From cannot be typed) 	= listitem("From cannot be typed", [ "ShowRscriptSource" ], get-area($From))
+[e2i-4] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", [ "ShowRscriptSource" ], get-area($Bag))
+[e2i-5] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", [ "ShowRscriptSource" ], get-area($Rel))
+[e2i-6] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
+[e2i-7] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
+[e2i-8] e2i(Incompatible argument types $Etype in $Exp) = 
 		listitem("Incompatible arguments of type " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Exp))
-[e2i-8] e2i($Exp should have type $Etype)= 
+[e2i-9] e2i($Exp should have type $Etype)= 
 	listitem("Expression should have type " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Exp))
-[e2i-9] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", [ "ShowRscriptSource" ], get-area($Exp))
-[e2i-10] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", [ "ShowRscriptSource" ], get-area($Exp))
-[e2i-11] e2i(No definition for $Var with argument $Etype) = 
+[e2i-10] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", [ "ShowRscriptSource" ], get-area($Exp))
+[e2i-11] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", [ "ShowRscriptSource" ], get-area($Exp))
+[e2i-12] e2i(No definition for $Var with argument $Etype) = 
         listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Var))
 
 [t2s-1]	t2s(int) 			= "int"
@@ -578,8 +579,11 @@ $Error]>
 
 [check-vardef1]
       check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
-
-[check-vardef2] 
+[check-vardef2]
+      check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
+[check-vardef3]
+      check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
+[check-vardef4] 
       check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
 
 [check-fundef] 
@@ -612,6 +616,9 @@ $Error]>
 	require-type($Exp2, $Etype2, $Tenv3) = $Tenv4
 	==========================================
 	check-stat(solve { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv) = $Tenv4
+
+[default-check-stat]
+	 check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
 
 %% -- Default cases for check and compat
 
@@ -724,7 +731,7 @@ $Error]>
 [default-sb]
        substitute($Etype, $Table, $Tenv) = <$Etype, $Tenv>
 
-%% -- The built-in functions
+%% -- The types of the built-in functions
 
 [bi-1]  built-ins = [
 		<id,      fun bag[T] to rel[T,T]>,

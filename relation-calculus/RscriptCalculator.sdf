@@ -12,7 +12,7 @@ exports
 
 
         Elem                          		-> RVALUE
-%%        "*empty*"                     		-> RVALUE
+        "*empty*"                     		-> RVALUE
         RVAR # REXP                    		-> RVALUE
         RVAR # RVAR # REXP              	-> RVALUE
         RVAR # RVAR # RVAR # REXP		-> RVALUE
@@ -63,7 +63,7 @@ exports
         apply "(" PREFIXOP RVALUE ")"         	-> RVALUE
         apply "(" RVALUE POSTFIXOP ")"         	-> RVALUE
 
-%% Binary operatorsn
+%% Binary operators
 
 	"and"					-> INFIXOP
 	"or"					-> INFIXOP
@@ -96,16 +96,16 @@ exports
 	"*"					-> POSTFIXOP
 
 
-        equal(Elem, Elem)              -> Boolean
-	equal-rval(RVALUE, RVALUE)		-> Boolean
+        equal-elem(Elem, Elem)              				-> Boolean
+	equal-rval(RVALUE, RVALUE)					-> Boolean
+	is-tuple(RVALUE)						-> Boolean
 
-        eval-iter(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, RSTORE)		-> RVALUE
-        eval-citer(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, REXP, RSTORE)	-> RVALUE
+        eval-iter(RVAR, Bag[[Elem]], RVALUE, REXP, RSTORE)		-> RVALUE
+        eval-citer(RVAR, Bag[[Elem]], RVALUE, REXP, REXP, RSTORE)	-> RVALUE
 
-        eval-iter2(RVAR, RVAR, Rel[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> RVALUE
-        eval-citer2(RVAR, RVAR, Rel[[Elem]], Bag[[Elem]], REXP, REXP, RSTORE)-> RVALUE
-	append(Bag[[Elem]], RVALUE)					-> Bag[[Elem]]
-	r2b(Rel[[Elem]])						-> Bag[[Elem]]
+        eval-iter2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, RSTORE)	-> RVALUE
+        eval-citer2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, REXP, RSTORE)-> RVALUE
+	append(RVALUE, RVALUE)						-> RVALUE
 	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
 	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
 	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
