@@ -1,5 +1,5 @@
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(toolbus, 0.25)
+AM_INIT_AUTOMAKE(toolbus, 0.26beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 

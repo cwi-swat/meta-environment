@@ -1,6 +1,7 @@
 $Id$
 
 Thu Feb 13 11:39:43 CET 2003 <{jong,olivierp}@cwi.nl>
+ * version 0.26beta
  * java-adapter/SwingTool.java: downgraded to work with JDK1.3
  * fix parsing of dot-files: accept \
    in attribute values
