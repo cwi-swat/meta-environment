@@ -38,10 +38,15 @@ ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
   if (!ASF_isCondEquationListEmpty(l2)) {
     if (ASF_hasCondEquationListHead(l1)) {
       ASF_CondEquation head = ASF_getCondEquationListHead(l1);
-      ASF_CondEquationList tail = ASF_getCondEquationListTail(l1);
+      if (ASF_hasCondEquationListTail(l1)) {
+        ASF_CondEquationList tail = ASF_getCondEquationListTail(l1);
       
-      return ASF_makeCondEquationListMany(head, " ",
-               ASF_concatCondEquationList(tail, l2));
+        return ASF_makeCondEquationListMany(head, "",
+                 ASF_concatCondEquationList(tail, l2));
+      }
+      else {
+        return ASF_makeCondEquationListMany(head, "", l2);
+      }
     }
     else {
       return l2;
