@@ -1,0 +1,35 @@
+$Id$
+
+ASF+SDF Meta-Environment
+
+This package uses the meta package and the asf package to construct
+an ASF+SDF Meta-Environment. 
+
+Installation Instructions
+=========================
+
+1) Configuring
+
+   Type ./configure --help to find out which packages are needed.
+   Use the --with-<package>=/location/of/package switches to specify
+   where they are located.
+
+   If you do not provide the switches and the packages are in your PATH, 
+   ./configure will automatically locate them.
+
+   The typical configure command:
+   > ./configure --prefix=/usr/local
+
+3) Building the package
+
+   > gmake
+   > gmake install
+
+4) Testing the package
+
+   > gmake check
+
+5) Bug reporting and support.
+
+   mailto:meta-support@cwi.nl
+   http://www.cwi.nl/projects/MetaEnv
