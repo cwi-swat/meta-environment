@@ -118,10 +118,22 @@ static BOX_Box treeToBox(PT_Tree tree)
     return BOX_makeBoxString(strcon); 
   }
   else if (PT_isTreeLayout(tree)) {
+/*
     char *yield = PT_yieldTree(tree);
     char *quoted = quoteString(yield);
     BOX_StrCon strcon = BOX_makeStrConDefault(quoted);
     return BOX_makeBoxString(strcon);
+*/
+    BOX_BoxList boxlist = BOX_makeBoxListEmpty();
+    BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
+    BOX_SpaceOptionOptions soptions = BOX_makeSpaceOptionOptionsEmpty(); 
+
+    return BOX_makeBoxH(optLayout,
+			soptions,
+			optLayout,
+			optLayout,
+			boxlist,
+			optLayout);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
