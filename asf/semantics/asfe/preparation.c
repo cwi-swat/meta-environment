@@ -190,8 +190,8 @@ void enter_equation(equation_table *table, ATerm equation)
 
 /*{{{  equation_entry *find_equation(equation_entry *prev, ATerm top_ofs, ATerm first) */
 
-equation_entry *find_equation(equation_entry *from, ATerm top_ofs, 
-															ATerm first_ofs)
+equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
+                              ATerm first_ofs)
 {
   if(!equations)
     return NULL;
