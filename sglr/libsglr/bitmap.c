@@ -27,18 +27,26 @@
 
 Bitmap BitmapCreate(int size)
 {
-  Bitmap b = calloc(size, sizeof(int));
+  Bitmap b;
+  if (size <= 0) {
+    b = NULL;
+  }
+  else {
+    b = calloc(size, sizeof(int));
 
-  if(b == NULL) {
-    ATerror("out of memory in BitmapCreate\n");
-  }    
+    if (b == NULL) {
+      ATerror("out of memory in BitmapCreate\n");
+    }    
+  }
  
   return b;
 }
 
 void BitmapDestroy(Bitmap b)
 {
-   free(b);
+  if (b) {
+    free(b);
+  }
 }
 
 Bitmap BitmapSet(Bitmap b, int index)

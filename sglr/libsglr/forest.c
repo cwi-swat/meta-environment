@@ -1563,7 +1563,8 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
 
 tree SG_FilterTree(parse_table *pt, tree t)
 {
-   MultiSetTable mst;
+   MultiSetTable mst = NULL;
+   int nrAmbs;
 
    /* We only cache multisets for ambiguity clusters
     * so we create a table with at most 
@@ -1571,11 +1572,17 @@ tree SG_FilterTree(parse_table *pt, tree t)
     */
 
    resolvedtable = ATtableCreate(2048, 75);
-   mst = MultiSetTableCreate(SGnrAmb(SG_NR_ASK));
+   nrAmbs = SGnrAmb(SG_NR_ASK);
+ 
+   if (nrAmbs > 0) {
+     mst = MultiSetTableCreate(nrAmbs);
+   }
 
    t = SG_FilterTreeRecursive(pt, mst, t, ATfalse);
 
-   MultiSetTableDestroy(mst);
+   if (mst) {
+     MultiSetTableDestroy(mst);
+   }
    ATtableDestroy(resolvedtable);
    return t; 
 }

@@ -270,11 +270,16 @@ ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
 
   t = SGparseString(L, G, S);
 
-  if(!SGisParseError(t)) {
-    tree = ATgetArgument( t, 0 );
-    amb  = ATgetArgument( t, 1 ); 
-    t = (ATerm) ATmakeAppl2( SG_ParseTree_AFun, ATBpack(tree), amb );
+  if (!SGisParseError(t)) {
+    tree = ATgetArgument(t, 0);
+    amb  = ATgetArgument(t, 1); 
 
+    if (SG_TOOLBUS) {
+      t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, ATBpack(tree), amb);
+    }
+    else {
+      t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, tree, amb);
+    }
   }
 
   return SG_TermToToolbus(t);
@@ -288,8 +293,13 @@ ATerm SGparseStringAsAsFix1(language L, char *G, char *S)
 
   t = SGparseString(L, G, S);
 
-  if(!SGisParseError(t)) {
-    t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, ATBpack(t));
+  if (!SGisParseError(t)) {
+    if (SG_TOOLBUS) {
+      t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, ATBpack(t));
+    }
+    else {
+      t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, t);
+    }
   }
 
   return SG_TermToToolbus(t);
