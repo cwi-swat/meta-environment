@@ -117,7 +117,8 @@ static SE_Editor moveFocusDown(SE_Editor editor)
   if (PT_isTreeAppl(tree)) {
     SE_Path new_path = pathDown(path);
     tree = getParseTreeTreeAt(parse_tree, new_path);
-    if (tree) {
+
+    if (tree && !PT_isTreeChar(tree)) {
       focus = createEditorFocus(editor, parse_tree, new_path);
       editor = SE_setEditorFocus(editor, focus);
     
@@ -146,17 +147,19 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
     SE_Path new_path = pathLeft(path);
     if (!SE_isEqualPath(path, new_path)) {
       tree = getParseTreeTreeAt(parse_tree, new_path);
-      focus = createEditorFocus(editor, parse_tree, new_path);
-      editor = SE_setEditorFocus(editor, focus);
-
+      if (tree && PT_isTreeAppl(tree)) {
+        focus = createEditorFocus(editor, parse_tree, new_path);
+        editor = SE_setEditorFocus(editor, focus);
+  
        
-     /* jump over keywords and layout */
-     if ((PT_isTreeLayout(tree) || PT_isTreeLit(tree)) && 
-         !isFocusInUnparsedFoci(editor, focus)) {
-       return moveFocusLeft(editor);
-     }
+        /* jump over keywords and layout */
+        if ((PT_isTreeLayout(tree) || PT_isTreeLit(tree)) && 
+            !isFocusInUnparsedFoci(editor, focus)) {
+          return moveFocusLeft(editor);
+        }
 
-     return editor;
+        return editor;
+      }
     }
   }
 
