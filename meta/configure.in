@@ -100,7 +100,7 @@ AC_SUBST(TOOLBUSINC)
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
-[  --with-tide		TIDE is in DIR],
+[  --with-tide		  TIDE is in DIR],
 TIDE=${withval}
 TIDEDEF=-DUSE_TIDE
 USE_TIDE=1,
@@ -118,14 +118,14 @@ AC_SUBST(GRAPHVIZ)
 
 dnl Handle --with-layout 
 AC_ARG_WITH(layout,
-   [ --with-layout       evaluator keeps layout while rewriting],
+   [  --with-layout           evaluator keeps layout while rewriting],
    LAYOUTDEF=-DKEEP_LAYOUT
 )
 AC_SUBST(LAYOUTDEF)
 
 dnl Handle --with-traversals
 AC_ARG_WITH(traversals,
-   [ --with-traversals   evaluator implements traveral functions],
+   [  --with-traversals       evaluator implements traveral functions],
    TRAVERSALSDEF=-DTRAVERSALS
 )
 AC_SUBST(TRAVERSALSDEF)
