@@ -30,7 +30,7 @@ ATbool useTide = ATfalse;
 MemoTable memo_table = NULL;
 unsigned rewrite_steps = 0;
 
-/*{{{  ATerm evaluator(char *name, ATerm term) */
+/*{{{  ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs, */
 
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs,
                 ATbool debug, ATbool remove_layout, ATbool mark_new_layout,

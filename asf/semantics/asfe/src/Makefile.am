@@ -9,15 +9,37 @@ bin_PROGRAMS      = asfe
 pkgdata_DATA      = asfe.idef
 EXTRA_DIST        = asfe.idef
 
-noinst_HEADERS = asfe.tif.h asf-api.h matching.h reduction.h environment.h\
-		 values.h \
-                 errors.h debug.h traversalfunctions.h equations.h \
-                 pre-post.h memotable.h  evaluator.h
+noinst_HEADERS = \
+	asfe.tif.h \
+	asf-api.h \
+	matching.h \
+	reduction.h \
+	environment.h\
+	values.h \
+	errors.h\
+	debug.h\
+	traversalfunctions.h\
+	equations.h \
+	pre-post.h\
+	memotable.h\
+	evaluator.h
 
-asfe_SOURCES = asfe.tif.c asfe.c evaluator.c equations.c debug.c \
-	       traversalfunctions.c \
-               memotable.c asf-api.c matching.c reduction.c environment.c \
-               values.c errors.c pre-post.c
+asfe_SOURCES =\
+	asfe.tif.c\
+	asfe.c\
+	evaluator.c\
+	equations.c\
+	debug.c\
+	traversalfunctions.c\
+	memotable.c\
+	asf-api.c\
+	matching.c\
+	reduction.c\
+	environment.c\
+	values.c\
+	errors.c\
+	pre-post.c\
+	test-runner.c
 
 asfe_LDADD		= \
 			-L$(ASF_SUPPORT)/lib -lASFME \
