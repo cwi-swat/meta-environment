@@ -1,6 +1,8 @@
 2002/10/03 (jurgenv@cwi.nl)
- * Bumped to 0.9beta
+ * Bumped to 1.0beta
  * Added ASF_makeCondEquationListFromParseTrees
+ * Made all non start sorts in Asf.label.def hidden
+ * Regenerated ASFME to get new start constructors
 
 2002/07/24 (jurgenv@cwi.nl)
  * Release 0.8
