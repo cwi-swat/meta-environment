@@ -806,6 +806,10 @@ aterm *rewrite(aterm *trm,aterm_list *env)
     else {
       newtrm = asfix_put_appl_args(&Ar,trm,newargs);
       rewtrm = select_and_rewrite(newtrm);
+      Tprotect(rewtrm);
+      TflushArena(&Ar);
+      Tadd2Arena(&Ar, rewtrm);
+      Tunprotect(rewtrm);
       return rewtrm;
     }
   }
