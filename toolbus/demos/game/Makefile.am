@@ -31,7 +31,7 @@ CLEANFILES      = board.tif.c game.tifs
 $(srcdir)/%.c : %.tif.c
 
 %.tif.c : game.tifs
-	$(top_builddir)/toolbus/ctif -tool $@ -tifs $<
+	$(top_builddir)/toolbus/ctif -tool $* -tifs $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
