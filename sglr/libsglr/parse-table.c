@@ -413,8 +413,12 @@ gotobucket   *sg_goto_pool_free = NULL;
 
 void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
 {
-  /*action_term_table[action_term_index++] = (ATerm)acts;*/
-  pt->actiontable[ACTION_INDEX(s,c)] = acts;
+  if (pt->actiontable[ACTION_INDEX(s,c)]) {
+    pt->actiontable[ACTION_INDEX(s,c)] = (actions)ATconcat(pt->actiontable[ACTION_INDEX(s,c)], (ATermList)acts);
+  }
+  else {
+    pt->actiontable[ACTION_INDEX(s,c)] = acts;
+  }
 }
 
 /*}}}  */
@@ -496,9 +500,6 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
   for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
     act = ATgetFirst(acts);
     if(ATgetAFun(act) == SG_Action_AFun) {
-      /*<PO: removed char-class
-      *  ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);*/
-      /*ATermList classes = (ATermList) ATmakeList1(ATgetArgument(act, 0)); */
       ATermList classes = (ATermList) ATgetArgument(act, 0);
       actions   t       = (actions) ATgetArgument(act, 1);
 

@@ -209,7 +209,7 @@ static shift_tuple *SG_AddShiftTuple(stack *st, action a)
 {
   shift_tuple *tuple;
 
-  /*ATwarning("SG_AddShiftTuple: token = %t\n", SG_A_TOKEN(a));*/
+  ATwarning("SG_AddShiftTuple: token = %t\n", SG_A_TOKEN(a));
   
   tuple = alloc_shift_tuple();
   tuple->next = sg_shift_tuples;
@@ -996,7 +996,7 @@ void SG_Shifter(void)
 
     next_tuple = cur_tuple->next;
 
-    /*ATwarning("entering shifter with %t and %d\n", token, index);  */
+    ATwarning("entering shifter with %t and %d\n", token, index);
 
     if (index == length) { 
       if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) { 
