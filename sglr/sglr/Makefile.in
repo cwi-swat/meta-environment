@@ -88,7 +88,7 @@ GETOPTC         = getopt.c getopt1.c
 GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
 CSRC            = sglr-main.c
 OBJ             = ${patsubst %.c,%.o,${CSRC}}
-OBJ             = ${patsubst %.c,%-prof.o,${CSRC}}
+OBJPROF         = ${patsubst %.c,%-prof.o,${CSRC}}
 OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
 all:	${PROG}
