@@ -12,10 +12,13 @@ process Edit-master is
 let
 TE:text-edit 
 in
-  rec-msg(get-editor-tool-id).
+( rec-msg(get-editor-tool-id).
   execute(text-edit, TE?) . 
   snd-msg(editor-tool-id(TE)). (
     rec-msg(get-editor-tool-id).
     snd-msg(editor-tool-id(TE))
-  ) * delta
+  ) * 
+  rec-disconnect(TE).
+  snd-note(disconnected(TE))
+) * delta
 endlet
