@@ -66,6 +66,8 @@ ATerm c_true = NULL;
 ATerm c_false = NULL;
 ATerm char_table[256] = {NULL};
 
+ATermTable priority_table;
+
 /*
 Symbol oksym;
 */
@@ -104,6 +106,12 @@ static ATerm spws = NULL;
 static Symbol symbol_asfix_list;
 */
 static Symbol symbol_asfix_lex;
+
+AFun afun_non_assoc_prio = 0;
+AFun afun_gtr_prio = 0;
+AFun afun_left_prio = 0;
+AFun afun_right_prio = 0;
+AFun afun_assoc_prio = 0;
 
 /*}}}  */
 
@@ -819,6 +827,107 @@ ATerm toasfix(ATerm t, ATerm f, ATerm n)
   return newterm;
 }
 /*}}}  */
+/*{{{  ATbool cnf(ATerm prod1, int iptr, int len, ATerm prod2) */
+
+ATbool cnf(ATerm prod1, int iptr, int len, ATerm prod2)
+{
+  ATerm priorel, entry;
+
+  if(iptr == 0) {
+    if(len > 1) {
+      priorel = (ATerm)ATmakeAppl2(afun_right_prio, prod1, prod2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        return ATtrue;
+      else {
+        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
+        entry = ATtableGet(priority_table,priorel);
+        if(entry)
+          return ATtrue;
+        else {
+          priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prod1, prod2);
+          entry = ATtableGet(priority_table,priorel);
+          if(entry)
+            return ATtrue;
+          else
+            return ATfalse;
+        }
+      }
+    }
+    else {
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        return ATtrue;
+      else
+        return ATfalse;
+    }
+  }
+  else {
+    if(len > 1) {
+      priorel = (ATerm)ATmakeAppl2(afun_left_prio, prod1, prod2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        return ATtrue;
+      else {
+        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
+        entry = ATtableGet(priority_table,priorel);
+        if(entry)
+          return ATtrue;
+        else {
+          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prod1, prod2);
+          entry = ATtableGet(priority_table,priorel);
+          if(entry)
+            return ATtrue;
+          else {
+            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prod1, prod2);
+            entry = ATtableGet(priority_table,priorel);
+            if(entry)
+              return ATtrue;
+            else
+              return ATfalse;
+          }
+        }
+      }
+    }
+    else {
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        return ATtrue;
+      else
+        return ATfalse;
+    }
+  }
+}
+
+/*}}}  */
+/*{{{  static ATermList conflict_on_args(ATerm prod, ATermList args) */
+
+ATerm add_brackets(ATerm appl);
+
+ATermList conflict_on_args(ATerm prod, ATermList args)
+{
+  ATerm prod2, ws;
+  ATermList args2, result = ATempty;
+  int i, len = ATgetLength(args);
+
+  for(i=len-1; i>=0; i--) {
+    ATerm tmp = ATelementAt(args,i);
+    if(ATmatchTerm(tmp, pattern_asfix_appl, &prod2, &ws, &args2)) {
+      if(cnf(prod, i, len, prod2))
+        tmp = add_brackets(tmp);
+      result = ATinsert(result, tmp);
+    }
+    else {
+      result = ATinsert(result, tmp);
+    }
+  }
+
+  return result;
+}
+
+/*}}}  */
 /*{{{  static ATerm term_to_asfix( ATerm t) */
 
 static ATerm term_to_asfix(ATerm t, ATerm sort)
@@ -1072,6 +1181,19 @@ void init_patterns()
   ATprotectSymbol(concsym);
   conssym = ATmakeSymbol("cons", 2, ATfalse);
   ATprotectSymbol(conssym);
+
+  afun_left_prio = ATmakeAFun("left-prio", 2, ATfalse);
+  ATprotectAFun(afun_left_prio);
+  afun_right_prio = ATmakeAFun("right-prio", 2, ATfalse);
+  ATprotectAFun(afun_right_prio);
+  afun_assoc_prio = ATmakeAFun("assoc-prio", 2, ATfalse);
+  ATprotectAFun(afun_assoc_prio);
+  afun_non_assoc_prio = ATmakeAFun("non-assoc-prio", 2, ATfalse);
+  ATprotectAFun(afun_non_assoc_prio);
+  afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
+  ATprotectAFun(afun_gtr_prio);
+
+  priority_table = ATtableCreate(100,75);
 
 #ifdef MEMO_PROFILING
 	prof_table = ATtableCreate(2048, 80);
