@@ -58,7 +58,7 @@ static Graph printNode(Graph graph,
   Edge edge;
   EdgeList edges;
   Attribute shapeAttr;
-  Attribute posAttr;
+  Attribute messageAttr;
   NodeId nodeId;
   NodeId parentId;
 
@@ -75,8 +75,10 @@ static Graph printNode(Graph graph,
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
   if (posInfo) {
-    posAttr = makeAttributeInfo("pos-info", posInfo);
-    attrList = makeAttributeListMulti(posAttr, attrList);
+    ATerm messageInfo = ATmake("element-selected([<str>],<term>)", 
+                               "ShowSource", posInfo);
+    messageAttr = makeAttributeInfo("message", messageInfo);
+    attrList = makeAttributeListMulti(messageAttr, attrList);
   }
   node = makeNodeDefault(nodeId, attrList);
 
