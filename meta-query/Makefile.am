@@ -1,6 +1,10 @@
-SUBDIRS = utils
+SUBDIRS = utils relations
 
-EXTRA_DIST=$(wildcard *.pkg)
+ACLOCAL_FLAGS = -I .
+
+CLEANFILES = ${PACKAGE}-*.pkg
+
+EXTRA_DIST=$(wildcard *.pkg) $(wildcard *.m4)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

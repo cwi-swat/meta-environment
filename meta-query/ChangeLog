@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Apr 23 10:45:43 CEST 2004 <jurgenv@cwi.nl>
+ * Upgraded configure.in and Makefile.am
+
 Thu Dec  4 16:11:38 CET 2003 <jong@cwi.nl>
  * extraction/{java,toolbus}:
    - upgrade to new tuple (*.sdf) and condition (*.asf) syntax
