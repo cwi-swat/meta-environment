@@ -1,8 +1,0 @@
-module asf/tools/Annotations[X Key Value]
-
-exports
-
-context-free syntax
-
-set-anno(X,Key,Value) -> X     {built-in("set-anno")}
-get-anno(X,Key)       -> Value {built-in("get-anno")}

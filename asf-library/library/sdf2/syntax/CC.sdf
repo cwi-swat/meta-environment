@@ -1,7 +1,0 @@
-%%% $Id$
-                  
-module sdf2/syntax/CC
-imports sdf2/syntax/Character-Class sdf2/syntax/Kernel
-exports
-  context-free syntax
-    CharClass -> Symbol     

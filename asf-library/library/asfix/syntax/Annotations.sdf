@@ -1,9 +1,0 @@
-module asfix/syntax/Annotations
-imports asfix/syntax/Tree
-imports aterm/ATerms
-
-exports
-
-context-free syntax
-
-Tree Ann -> Tree 

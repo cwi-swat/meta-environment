@@ -1,9 +1,0 @@
-%%% $Id$
-                     
-module sdf2/syntax/Symbols
-imports aterm/Layout
-exports
-  sorts Symbol Symbols
-  context-free syntax
-    "(" Symbol ")"       -> Symbol {bracket}
-    Symbol*              -> Symbols 

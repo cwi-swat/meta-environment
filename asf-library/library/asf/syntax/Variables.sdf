@@ -1,9 +1,0 @@
-module asf/syntax/Variables[X]
-
-exports
-
-variables
-
-`X`[A-Za-z0-9\']* -> X
-
-
