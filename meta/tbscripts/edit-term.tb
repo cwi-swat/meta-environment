@@ -103,10 +103,8 @@ in
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) .
     if equal(DirtyFoci, []) then
-      printf("Reducing without parsing...\n").
       ReduceTerm(EditorId, ModuleName)
     else
-      printf("First parsing, then reducing...\n").
       ParseTerm(EditorId, ModuleName) .
       snd-msg(get-dirty-focuses(EditorId)) .
       rec-msg(dirty-focuses(DirtyFoci?)) . 
