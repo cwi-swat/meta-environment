@@ -24,6 +24,21 @@ int WellKnownLocalSocket = TB_ERROR;
 int WellKnownGlobalSocket = TB_ERROR;
 int WellKnownSocketPort;
 
+#define TB_SOCKET_CONNECT_DELAY 200
+
+void tb_sleep(int sec, int usec) 
+{
+  struct timeval tv;
+
+  tv.tv_sec = sec;
+  tv.tv_usec = usec;
+
+  /* we use select to simulate a portable delay */
+  select(0,NULL,NULL,NULL,&tv);
+
+  return;
+}
+
 /*{{{  int getInt(int port, const char *tname) */
 
 int getInt(int port, const char *tname)
@@ -110,8 +125,11 @@ static int connect_unix_socket(int port)
       TBmsg("connecting to address %s\n", name);
     result = connect(sock, (struct sockaddr *) &usin,sizeof(usin));
     if(result < 0) {
-      fprintf(stderr, "connect failed: %d\n", result);
       close(sock);
+      /* We want to delay a while, before we try again, there used
+       * to be a warning message ('connect failed') that did this.
+       */
+      tb_sleep(0, TB_SOCKET_CONNECT_DELAY);
       if(attempts > 1000)
         err_sys_fatal("cannot connect, giving up"); 
       attempts++;
