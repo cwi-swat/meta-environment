@@ -1,6 +1,7 @@
 $Id$
 
 Fri Mar 19 15:12:13 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * lib/Makefile.am: add concatenation of sdf files to Sdf.label.def
  * regenerated SDFME API and resolved resulting compiler issues
 
 Tue Feb 10 17:50:37 CET 2004 <jurgenv@cwi.nl>

@@ -34,9 +34,15 @@ UTILSRCS = \
 	import-operations.c \
 	sort.c 
 
+LIBRARY = ../../asf-library/library/languages
+ATERM_SDF = $(shell ls ${LIBRARY}/aterm/syntax/*.sdf)
+SDF2_SDF = $(shell ls ${LIBRARY}/sdf2/syntax/*.sdf)
+
 # Developers only:
-api: Sdf.label.def
-	sdf2-to-c --input $< --prefix SDF_ --output SDFME
+api:
+	(echo definition; cat $(ATERM_SDF) $(SDF2_SDF)) \
+	> Sdf.label.def
+	sdf2-to-c --input Sdf.label.def --prefix SDF_ --output SDFME
 
 api-clean:
-	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt
+	rm -f Sdf.label.def SDFME.[ch] SDFME_dict.* SDFME.adt
