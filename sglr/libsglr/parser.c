@@ -1148,28 +1148,33 @@ tree SG_ParseResult(char *sort)
       SGnrAmb(SG_NR_ZERO);
       IF_STATISTICS(SG_Timer());
 
-      t = SG_YieldTree(table, t);
-      IF_STATISTICS(fprintf(SG_log(),
-                            "Aprod expansion took %.6fs\n", SG_Timer()));
+      if (t) {
+        t = SG_YieldTree(table, t);
+        IF_STATISTICS(fprintf(SG_log(),
+                              "Aprod expansion took %.6fs\n", SG_Timer()));
 
-      SGsort(SG_SET, t);     
+        SGsort(SG_SET, t);     
 
-      if(SG_TOOLBUS) {
-        ATerm ambtrak = SG_AmbTracker(t);
+        if(SG_TOOLBUS) {
+          ATerm ambtrak = SG_AmbTracker(t);
 
-        if(ambtrak) {
-          return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+          if(ambtrak) {
+            return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+          }
         }
+
+        if (SG_ASFIX2ME) {
+          t = SG_ConvertA2ToA2ME(t);
+        }
+
+        t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
+                               (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
+
+        return t;
       }
-
-      if (SG_ASFIX2ME) {
-        t = SG_ConvertA2ToA2ME(t);
+      else {
+        return SG_ParseError(ATempty, 0, NULL);
       }
-
-      t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
-                             (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
-
-      return t;
     }
     else {
       ATwarning("Successful parse yielded no parse tree\n");
