@@ -1,0 +1,46 @@
+module Languages/SML/Environment
+
+imports
+	containers/Table[ValueId InfixVal]
+	Languages/SML/Identifiers
+	basic/Integers
+
+exports
+
+sorts
+
+	InfixEnv InfixKey Boolean NatCon InfixVal
+
+aliases
+
+   Table[[ValueId, InfixVal]]		-> InfixEnv
+
+context-free syntax
+
+   RightLeft # NatCon			-> InfixVal
+   ValueId				-> InfixKey
+
+context-free syntax
+
+   "$add" "(" InfixEnv "," ValueId+ "," InfixVal ")" 	-> InfixEnv
+   "$del" "(" ValueId+ "," InfixEnv ")" 	-> InfixEnv
+   "$lookup"(InfixEnv, ValueId) 	-> InfixVal
+
+   "EmptyEnv"				-> InfixEnv
+   "NotFound"				-> InfixVal
+
+   "$right" | "$left"			-> RightLeft
+
+
+   "$less"(NatCon, NatCon)	-> Boolean
+
+
+
+hiddens variables
+
+	"$Key"[1-9]?		-> ValueId
+	"$Key"[1-9]?"+"		-> ValueId+
+	"$Val"[1-9]?		-> InfixVal
+	"$Env"[1-9]?		-> InfixEnv
+	"$NC"[1-9]?		-> NatCon
+	"$I"[1-9]?		-> Integer

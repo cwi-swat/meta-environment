@@ -1,0 +1,18 @@
+module Languages/SML/Layout
+
+exports lexical syntax
+
+  [\ \t\n] -> LAYOUT
+  "(*" ( ~[\*] | Asterisk )* "*)"   ->   Comment  
+  Comment -> LAYOUT  
+  [\*] -> Asterisk  
+
+lexical restrictions
+   Asterisk-/- [\)]
+
+context-free restrictions
+  LAYOUT? -/- [\ \t\n]
+  LAYOUT? -/- [\(].[\*]
+
+hiddens sorts
+  Asterisk Comment

@@ -1,0 +1,52 @@
+module Languages/SML/Constants
+
+imports
+
+	Languages/SML/Identifiers
+
+hiddens sorts
+
+	HexDigit PosDecInt PosHexInt NegDecInt NegHexInt 
+	DecInt HexInt DecWord HexWord Real Printable Escape Gap StringChar 
+	String Char Formatting 	Constant Digit
+
+
+exports
+
+lexical syntax
+
+  Digit | Numeric | DecInt | HexInt | 
+  DecWord | HexWord | Real | String | Char	-> Constant
+  
+  [0-9]		-> Digit
+  [0-9a-fA-F] 	-> HexDigit
+
+  Digit+ 		-> PosDecInt
+  "0x"HexDigit+		-> PosHexInt
+  "~"PosDecInt 		-> NegDecInt
+  "~"PosHexInt	 	-> NegHexInt
+  PosDecInt | NegDecInt -> DecInt
+  PosHexInt | NegHexInt	-> HexInt
+  "0w"Digit+		-> DecWord
+  "0wx"HexDigit+	-> HexWord
+
+  (DecInt"."Digit+ (("E" | "e")DecInt)?) | (DecInt ("E" | "e") DecInt) -> Real
+
+  ~[\0-\32\"\127\\] 	-> Printable
+
+  "\\a" | "\\b" | "\\t" | "\\n" | "\\v" | "\\f" | "\\r" |
+  ("\\^"[\@-\_])  | ("\\" Digit Digit Digit) | 
+  ("\\u" HexDigit HexDigit HexDigit HexDigit) | "\\\"" | "\\\\" -> Escape
+
+  "\\" Formatting "\\"		-> Gap
+  Printable | " " | Escape 	-> StringChar 
+  "\"" ( StringChar | Gap )* "\"" 	-> String
+  "#\"" Gap* StringChar Gap* "\""	-> Char
+
+  [\ \t\n\011\012\013]+		-> Formatting
+
+lexical restrictions
+	PosHexInt -/- [0-9a-fA-F]
+	PosDecInt -/- [0-9]
+	DecWord -/- [0-9]
+	HexWord -/- [0-9a-fA-F]
