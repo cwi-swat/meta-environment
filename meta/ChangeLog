@@ -1,5 +1,8 @@
 # $Id$
 
+2002/09/25 (markvdb@cs.vu.nl)
+ * Fixed a bug in the parameter handling.
+
 2002/09/24 (markvdb@cs.vu.nl)
  * Introduced the -S option to eqs-dumper and pt-dumper
    in order to be enable the saving of intermediate files.
