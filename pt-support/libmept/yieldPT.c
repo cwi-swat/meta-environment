@@ -50,7 +50,9 @@ lengthOfTree(PT_Tree tree, ATbool visualAmbs)
 	  case ' ':
 	  case '`':
 	    i++;
+	    break;
 	  default:
+	    break;
 	}
       }
       length++;
