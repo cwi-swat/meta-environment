@@ -186,7 +186,7 @@ in
     rec-msg(semantics-top-sort-hook).
     snd-msg(semantics-top-sort-hook-result(sort("Equations")))
   + 
-    rec-msg(invalidate-other-tables-hook(Module, sdf)) .
+    rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
   +
     rec-msg(pre-get-all-sdf2-hook(ModuleNames?)) .
