@@ -381,7 +381,7 @@ equations
 %% The innermost embedding should be a list.
 
 [rea-1]  is-list-funid(FunId) = true,
-         make-ignored-fuid(FunId) = FunId2
+         make-ignored-funid(FunId) = FunId2
          ====
          remove-emb-arg(FunId(Term), [ FunId ], ignore) = FunId2(Term)
 

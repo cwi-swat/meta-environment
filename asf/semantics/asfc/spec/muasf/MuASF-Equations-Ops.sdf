@@ -58,6 +58,7 @@ exports
     remove-trans-from-list-id(FunId)  -> FunId {prefer}
     make-ignored-funid(FunId)         -> FunId {prefer}
     is-ignored-funid(FunId)           -> Bool  {prefer}
+    remove-ignored-from-funid(FunId)  -> FunId {prefer}
     make-func(FunId,{Term ","}*)      -> Term
     make-list-func(FunId,{Term ","}*) -> Term
     prefix-id(FunId,FunId,IntCon)     -> FunId {prefer}

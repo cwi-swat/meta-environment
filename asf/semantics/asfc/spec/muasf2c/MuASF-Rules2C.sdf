@@ -25,9 +25,15 @@ exports
   context-free syntax
     rulesopt2cfuncs(ModId,{FuncDef ";"}*,RulesOpt,NameTable)  -> FT-tuple
     sigargs2cstats(FunId,{SigArg ","}*)                 -> Statement-list-opt
-    funargs2cstats(FunId,Argument-expression-list,IntCon) -> SlI-tuple
+    funargs2cstats(FunId,Argument-expression-list,TermList,{NamePair ","}*, IntCon) -> 
+        SlI-tuple
 
 hiddens
+  context-free syntax
+    restore-ignored-funids-in-nf(Argument-expression-list, TermList, {NamePair ","}*) -> 
+                                                              Argument-expression-list
+    restore-ignored-funids-in-arg(Expression, Term, {NamePair ","}*) -> Expression
+
   context-free syntax
     asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
                     {NamePair ","}*)                   -> FT-tuple
@@ -58,6 +64,7 @@ hiddens
                        Expression,{NamePair ","}*,
                        IntCon)                              -> ADSI-tuple
 
+    
 hiddens
   variables
     "Char"[0-9]*     -> CHAR
@@ -68,3 +75,5 @@ hiddens
     "Eipair*"[0-9]*  -> {EI-pair ","}*
     "Eipair+"[0-9]*  -> {EI-pair ","}+
     "Cint"[0-9]*     -> Integer-constant
+    "Expression+"[0-9]* -> { Expression ","}+
+    "Expression"[0-9]* -> Expression

@@ -65,7 +65,8 @@ equations
               %% Default rules:
               asfrules2cstats(Rule*2,Namepair*) = (Stat*2,Aint2),
               %% Normal form construction
-              funargs2cstats(funid(Char*),ActualArgs,Aint0) = (Stat*3,Aint3),
+              funargs2cstats(funid(Char*),ActualArgs,Term+,Namepair*,Aint0) = 
+                 (Stat*3,Aint3),
               gtr(Aint1,Aint2) = Aint4,
               gtr(Aint3,Aint4) = Aint5,
               make-tmp-array(Aint5) = Decl*,
@@ -92,7 +93,8 @@ equations
               %% Default rules:
               asfrules2cstats(Rule*2,Namepair*) = (Stat*2,Aint2),
               %% Normal form construction
-              funargs2cstats(funid(Char*),ActualArgs,Aint0) = (Stat*3,Aint3),
+              funargs2cstats(funid(Char*),ActualArgs,Term+,Namepair*,Aint0) = 
+                (Stat*3,Aint3),
               gtr(Aint1,Aint2) = Aint4,
               gtr(Aint3,Aint4) = Aint5,
               make-tmp-array(Aint5) = Decl*,
@@ -120,7 +122,7 @@ equations
               get-funargs(Rule) = ,
               asfrules2cstats(Rule;Rule*,Namepair*) = (Stat*1,Aint1),
               %% Normal form construction
-              funargs2cstats(funid(Char*),,0) = (Stat*2,Aint2),
+              funargs2cstats(funid(Char*),,,Namepair*,0) = (Stat*2,Aint2),
               gtr(Aint1,Aint2) = Aint3,
               make-tmp-array(Aint3) = Decl*,
               Stat*1 ++r Stat*2 = Stat*3,
@@ -273,13 +275,42 @@ equations
               asfrules2cstats2(C-rule1;C-rule*1,Namepair*,Aint) =
                 asfrules2cstats(C-rule*3,C-rule*4,Namepair*,Aint)
 
-  [fa2cs-1'1] funargs2cstats(funid(Char*1),,0) =
+  [fa2cs-1'1] funargs2cstats(funid(Char*1),,,Namepair*,0) =
                 (FUNC_EXIT(make_nf0(identifier(Char*1 "s""y""m")));,0)
 
-  [fa2cs-1'2] identifier(Char*1 "s""y""m") ++ ActualArgs = ActualArgs',
-              FUNC_EXIT(identifier("m""a""k""e""_""n""f"Char*2)(ActualArgs')); = Stat*2
+  [fa2cs-1'2] restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*) = ActualArgs',
+              identifier(Char*1 "s""y""m") ++ ActualArgs' = ActualArgs'',
+              FUNC_EXIT(identifier("m""a""k""e""_""n""f"Char*2)(ActualArgs'')); = Stat*2
               =========================================================================
-              funargs2cstats(funid(Char*1),ActualArgs,natcon(Char*2)) = (Stat*2,0)
+              funargs2cstats(funid(Char*1),ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
+                (Stat*2,0)
+
+%% Here we put previously ignored symbols around the normal form.  This is part
+%% of the optimization improves efficiency of recursive functions over lists.
+
+  [rifin-1] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2,
+            restore-ignored-funids-in-nf(Expression+, Term+, Namepair*) = Expression+2
+            =====
+            restore-ignored-funids-in-nf(Expression, Expression+, Term, Term+, 
+              Namepair*) =
+                Expression2, Expression+2
+
+  [rifin-2] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2
+            =====
+            restore-ignored-funids-in-nf(Expression, Term, Namepair*) = Expression2
+
+  [rifin-3] restore-ignored-funids-in-nf(,,Namepair*) = 
+
+  [rifia-1] is-ignored-funid(Funid) = true,
+            remove-ignored-from-funid(Funid) = Funid2,
+            pn-lookup(Funid2, Namepair*) = funid(Char+),
+            restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2
+            =====
+            restore-ignored-funids-in-arg(Expression, Funid(Term), Namepair*) =
+              identifier(Char+)(Expression2) 
+
+  [default-rifia] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = 
+                    Expression
 
   [sa2cs-1'1] sigargs2cbuild(Sigarg+,0) =
                 (ActualArgs,Stat*1,natcon(Char*2)),
