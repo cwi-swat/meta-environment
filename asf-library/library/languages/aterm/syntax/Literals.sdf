@@ -34,3 +34,6 @@ exports
   context-free syntax
     QLiteral  -> Literal {cons("qlit")}
     UQLiteral -> Literal {cons("uqlit")}
+
+  lexical restrictions
+    UQLiteral -/- [A-Za-z0-9]
