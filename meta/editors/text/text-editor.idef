@@ -21,50 +21,41 @@ let
   QueryList : list,
   QueryName : str,
   ActionName : str,
-  ButtonName : term,
+  ButtonName : list,
+  ButtonItem : str,
+  ButtonMenu : str,
   ButtonWalker : list,
   FileName2  : str
 in
   execute(text-editor, TE?) .
   snd-eval(TE, edit-file(FileName)) .
   rec-value(TE, file-id(Fid?)) .
+  /* The following code should be internal to the meta.el script, but my
+   * Lisp is so bad that I did not succeed in doing this.
+   */
   ButtonWalker := ButtonList .
   (
     if not-equal(ButtonWalker, []) then
       ButtonName := first(ButtonWalker) .
-      snd-do(TE, tb-add-menu-item("Actions", ButtonName)) .
+      ButtonItem := index(ButtonName,size(ButtonName)).
+      ButtonMenu := first(diff(ButtonName,[ButtonItem])).
+      snd-do(TE, tb-add-menu-item(ButtonMenu, ButtonItem)) .
       ButtonWalker := next(ButtonWalker)
     fi
   )*
   if equal(ButtonWalker, []) then
     tau
   fi .
-  snd-msg(get-query-actions) .
-  rec-msg(action-list(QueryList?)) .
-  (
-    if not-equal(QueryList, []) then
-      QueryName := first(QueryList) .
-      snd-do(TE, tb-add-menu-item("Queries", QueryName)) .
-      QueryList := next(QueryList)
-    fi
-  )*
-  if equal(QueryList, []) then
-    tau
-  fi .
-  snd-do(TE, tb-add-menu-item("Move", "Left")) .
-  snd-do(TE, tb-add-menu-item("Move", "Right")) .
-  snd-do(TE, tb-add-menu-item("Move", "Up")) .
-  snd-do(TE, tb-add-menu-item("Move", "Down")) .
   /* We receive only 'notes' never messages because this tool can
    * dissappear during anything due to user interaction.
    */
-  subscribe(set-focus(EditorId,<term>)).
-  subscribe(clear-focus(EditorId)).
-  subscribe(get-focus-text(EditorId,<term>)).
-  subscribe(display-error(EditorId,<int>)) .
-  subscribe(move-editor-to-front(EditorId)) .
-  subscribe(reload-file(EditorId)) .
-  subscribe(kill-text-editor(EditorId)) .
+  subscribe(set-focus(<term>,<term>)).
+  subscribe(clear-focus(<term>)).
+  subscribe(get-focus-text(<term>,<term>)).
+  subscribe(display-error(<term>,<int>)) .
+  subscribe(move-editor-to-front(<term>)) .
+  subscribe(reload-file(<term>)) .
+  subscribe(kill-text-editor(<term>)) .
   (
     rec-note(set-focus(EditorId,
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
@@ -102,17 +93,9 @@ in
     snd-msg(set-modified(EditorId)) .
     snd-ack-event(TE, modified(Fid))
   +
-    rec-event(TE, menu-event("Move", Direction?, Fid)) .
-    snd-msg(move-focus(EditorId, Direction)) .
-    snd-ack-event(TE, menu-event("Move", Direction, Fid))
-  +
-    rec-event(TE, menu-event("Queries", ActionName?, Fid)) .
-    snd-msg(execute-query(EditorId, ActionName)) .
-    snd-ack-event(TE, menu-event("Queries", ActionName, Fid))
-  +
-    rec-event(TE, menu-event("Actions", ButtonName?, Fid)) .
-    snd-msg(extra-button-action(EditorId, ButtonName)) .
-    snd-ack-event(TE, menu-event("Actions", ButtonName, Fid))
+    rec-event(TE, menu-event(ButtonMenu?, ButtonItem?, Fid)) .
+    snd-msg(extra-button-action(EditorId, [ButtonMenu,ButtonItem])) .
+    snd-ack-event(TE, menu-event(ButtonMenu, ButtonItem, Fid))
   ) *
   (
     rec-disconnect(TE).
