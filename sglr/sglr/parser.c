@@ -222,7 +222,7 @@ void  SG_DoReductions(stack*, action);
 void  SG_Reducer(stack *, state, label, ATermList, ATbool, stack *);
 void  SG_DoLimitedReductions(stack*, action, st_link*);
 void  SG_Shifter(void);
-ATerm SG_Result(void);
+ATerm  SG_Result(void);
 
 void  SG_ParserPreparation(void)
 {
@@ -233,7 +233,8 @@ void  SG_ParserPreparation(void)
 
 void  SG_ParserCleanup(void)
 {
-  SG_PurgeOldStacks(SG_AddStack(accepting_stack, active_stacks), NULL, NULL);
+  if(SG_GC)
+    SG_PurgeOldStacks(SG_AddStack(accepting_stack, active_stacks), NULL, NULL);
   active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
@@ -282,8 +283,9 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), text_length);
 
   result = SG_Result();
-
+  ATprotect(&result);
   SG_ParserCleanup();
+  ATunprotect(&result);
 
   return result;
 }
@@ -563,9 +565,10 @@ void SG_Shifter(void)
     }
   }
 
-  active_stacks = SG_PurgeOldStacks(active_stacks,
-                                    new_active_stacks,
-                                    accepting_stack);
+  if(SG_GC)
+    SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
+
+  active_stacks = new_active_stacks;
 } /* shifter */
 
 

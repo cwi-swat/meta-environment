@@ -57,7 +57,7 @@ extern int  SG_Mode;
 enum SGmodeFlags {
   SG_VERBOSEFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG, SG_OUTPUTFLAG,
   SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG, SG_NOLEXFLAG,
-  SG_SHOWSTACKFLAG
+  SG_SHOWSTACKFLAG, SG_GCFLAG
 };
 
 #define SG_VERBOSE         (SG_Mode  &   (1 << SG_VERBOSEFLAG))
@@ -87,5 +87,9 @@ enum SGmodeFlags {
 #define SG_NOLEX_ON()      (SG_Mode |=   (1 << SG_NOLEXFLAG))
 #define SG_NOLEX_OFF()     (SG_Mode &=  ~(1 << SG_NOLEXFLAG))
 #define SG_SHOWSTACK       (SG_Mode  &   (1 << SG_SHOWSTACKFLAG))
-#define SG_SHOWSTACK_ON()  (SG_Mode |=   (1 << SG_SHOWSTACKFLAG)
+#define SG_SHOWSTACK_ON()  (SG_Mode |=   (1 << SG_SHOWSTACKFLAG))
 #define SG_SHOWSTACK_OFF() (SG_Mode &=  ~(1 << SG_SHOWSTACKFLAG))
+
+#define SG_GC              (SG_Mode  &   (1 << SG_GCFLAG))
+#define SG_GC_ON()         (SG_Mode |=   (1 << SG_GCFLAG))
+#define SG_GC_OFF()        (SG_Mode &=  ~(1 << SG_GCFLAG))

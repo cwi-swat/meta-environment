@@ -152,7 +152,7 @@ void SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept)
 void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *sts)
 {
     if(st->protected                    /*  Done if already unprotected */
-    && !SG_InStacks(st, sts, ATtrue)) { /*  as are the living stacks    */
+    && !SG_InStacks(st, sts, ATtrue)) { /*  or in a living stack        */
       st_links *lks = SG_ST_LINKS(st);
 
         st->protected = ATfalse;
