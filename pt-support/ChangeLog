@@ -1,3 +1,9 @@
+2001/07/24 (jurgenv@cwi.nl)
+ * reportAmbs added to the library. This used to be functionality in sglr.
+ * also moved ambtracker tool from sglr to pt-support. Simplified its 
+   output and commandline paramaters. 
+ * The new version of ambtracker is 2.0.
+
 2001/07/20 (jurgenv@cwi.nl)
  * added yielding of ambiguity clusters to yieldPT (=unparsePT tool). The
    first alternative of a cluster is yielded, the rest is ignored.
