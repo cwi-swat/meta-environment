@@ -1,4 +1,4 @@
-SUBDIRS = src test example doc
+SUBDIRS = atermpp test example doc
 
 ACLOCAL_FLAGS = -I .
 

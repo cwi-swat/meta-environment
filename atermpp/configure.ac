@@ -36,7 +36,7 @@ AC_SUBST(ATERM_LIB)
 
 AC_CONFIG_FILES([
   Makefile
-  src/Makefile
+  atermpp/Makefile
   example/Makefile
   test/Makefile
   doc/Makefile
