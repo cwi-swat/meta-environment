@@ -96,7 +96,6 @@ in
     snd-eval(ES, get-subject-location(Subject)) .
     rec-value(ES, location(Location?)) .
     snd-msg(subject-location(Location))
-
   +
     rec-msg(get-error-description(Error?)) .
     snd-eval(ES, get-error-description(Error)) .
