@@ -1074,7 +1074,7 @@ ATerm make_name_term(ATerm name)
   ATerm result = NULL;
   char *text;
 
-  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
+  if(ATmatch(name,"<str>",&text)) {
     result = ATmakeTerm(pattern_asfix_lex,
                         text,
                         ATparse("sort(\"ModuleId\")"));
