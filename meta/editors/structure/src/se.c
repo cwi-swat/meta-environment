@@ -83,6 +83,11 @@ ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
   assert(PT_isValidParseTree(parse_tree));
 
   editor = newEditorGivenTree(parse_tree, SORT_TERM, FOCUS_PARSED);
+
+  if (editor == NULL) {
+    return ATmake("snd-value(no-such-editor)");
+  }
+
   putEditor(editorId, editor);
 
   return ATmake("snd-value(initial-focus(<term>))",
@@ -106,7 +111,11 @@ ATerm insert_chars(int cid, ATerm editorId, int location, char *text)
   SE_Editor editor;
 
   editor = getEditor(editorId);
-  assert(editor);
+  
+  if (editor == NULL) {
+    return ATmake("snd-value(no-such-editor)");
+  }
+
   editor = insertChars(editor, location, strlen(text));
 
   putEditor(editorId, editor);
@@ -124,7 +133,10 @@ ATerm delete_chars(int cid, ATerm editorId, int location, int count)
   SE_Focus focus;
   SE_Editor editor = getEditor(editorId);
 
-  assert(editor);
+  if (editor == NULL) {
+    return ATmake("snd-value(no-such-editor)");
+  }
+
   editor = deleteChars(editor, location, count);
   putEditor(editorId, editor);
 
@@ -162,7 +174,7 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
   }
 
   editor = getEditor(editorId);
-  if (editor) {
+  if (editor != NULL) {
     editor = replaceEditorTreeAtFocus(editor, focus, tree, 
                                       PT_getTreeArgs(left_layout),
 				      PT_getTreeArgs(right_layout));
@@ -177,15 +189,13 @@ ATerm move_focus_to_root(int cid, ATerm editorId)
 {
   SE_Editor editor = getEditor(editorId);
   SE_Editor new_editor;
-  SE_Focus focus;
+  SE_Focus focus = SE_makeFocusEmpty();
 
-  assert(editor);
-
-  new_editor = moveFocusToTop(editor);
-
-  putEditor(editorId, new_editor);
-
-  focus = SE_getEditorFocus(new_editor);
+  if (editor != NULL) {
+    new_editor = moveFocusToTop(editor);
+    putEditor(editorId, new_editor);
+    focus = SE_getEditorFocus(new_editor);
+  }
 
   return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
@@ -200,7 +210,9 @@ ATerm move_focus(int cid, ATerm editorId, ATerm direction)
   SE_Focus focus;
   SE_Move move;
 
-  assert(editor);
+  if (editor == NULL) {
+    return ATmake("snd-value(no-such-editor)");
+  }
 
   move = SE_makeMoveFromTerm(direction);
   assert(SE_isValidMove(move));
@@ -219,22 +231,16 @@ ATerm move_focus(int cid, ATerm editorId, ATerm direction)
 
 ATerm set_focus(int cid, ATerm editorId, int location)
 {
-  SE_Focus focus;
+  SE_Focus focus = SE_makeFocusEmpty();
   SE_Editor editor = getEditor(editorId);
   PT_ParseTree parse_tree;
   
-  if(editor == NULL) {
-    ATwarning("Internal error: no such editor: %t\n", editorId);
-    return ATmake("snd-value(focus(<term>))", SE_makeFocusEmpty());
+  if(editor != NULL) {
+    parse_tree = SE_getEditorParseTree(editor);
+    focus = getFocusAt(editor, parse_tree, location);
+    editor = SE_setEditorFocus(editor, focus);
+    putEditor(editorId, editor);
   }
-
-  parse_tree = SE_getEditorParseTree(editor);
-
-  focus = getFocusAt(editor, parse_tree, location);
-
-  editor = SE_setEditorFocus(editor, focus);
-
-  putEditor(editorId, editor);
 
   return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
@@ -244,19 +250,16 @@ ATerm set_focus(int cid, ATerm editorId, int location)
 
 ATerm get_focus_at_posinfo(int cid, ATerm editorId, ATerm posInfo)
 {
-  SE_Focus focus;
+  SE_Focus focus = SE_makeFocusEmpty();
   SE_Editor editor = getEditor(editorId);
   PT_ParseTree parse_tree;
   
-  assert(editor);
-
-  parse_tree = SE_getEditorParseTree(editor);
-
-  focus = getFocusAtPosInfo(editor, parse_tree, posInfo);
-
-  editor = SE_setEditorFocus(editor, focus);
-
-  putEditor(editorId, editor);
+  if (editor != NULL) {
+    parse_tree = SE_getEditorParseTree(editor);
+    focus = getFocusAtPosInfo(editor, parse_tree, posInfo);
+    editor = SE_setEditorFocus(editor, focus);
+    putEditor(editorId, editor);
+  }
 
   return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
@@ -268,6 +271,7 @@ ATerm get_focus_at_posinfo(int cid, ATerm editorId, ATerm posInfo)
 ATerm invalidate_tree(int cid, ATerm editorId)
 {
   SE_Editor editor;
+  SE_Focus  focus = SE_makeFocusEmpty();
   int length;
 
   editor = getEditor(editorId);
@@ -276,12 +280,11 @@ ATerm invalidate_tree(int cid, ATerm editorId)
     length = PT_getParseTreeLengthAnno(SE_getEditorParseTree(editor));
     editor = newEditorGivenLength(length);
     putEditor(editorId, editor);
+    focus = SE_getEditorFocus(editor);
 
-    return ATmake("snd-value(focus(<term>))",
-		  SE_makeTermFromFocus(SE_getEditorFocus(editor)));
-  } else {
-    return ATmake("snd-value(no-such-editor(<term>))", editorId);
-  }
+  } 
+
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
 
 /*}}}  */
@@ -298,11 +301,11 @@ ATerm get_dirty_focuses(int cid, ATerm editorId)
     putEditor(editorId, editor);
 
     foci = SE_getEditorUnparsedFoci(editor);
-
-    return ATmake("snd-value(foci(<term>))", SE_makeTermFromFocusList(foci));
   } else {
-    return ATmake("snd-value(no-such-editor(<term>))", editorId);
+    foci = SE_makeFocusListEmpty();
   }
+
+  return ATmake("snd-value(foci(<term>))", SE_makeTermFromFocusList(foci));
 }
 
 /*}}}  */
@@ -313,7 +316,9 @@ ATerm get_parse_tree(int cid, ATerm editorId)
   SE_Editor editor = getEditor(editorId);
   PT_ParseTree parse_tree;
 
-  assert(editor);
+  if (editor == NULL) {
+    return ATmake("snd-value(no-such-editor)");
+  }
   
   parse_tree = SE_getEditorParseTree(editor);
 
@@ -327,12 +332,18 @@ ATerm get_parse_tree(int cid, ATerm editorId)
 ATerm get_focussed_tree(int cid, ATerm editorId)
 {
   SE_Editor editor = getEditor(editorId);
-  SE_Focus focus = SE_getEditorFocus(editor); 
+  SE_Focus focus;
+
+  if (editor == NULL) {
+    return ATmake("snd-value(no-parse-tree)");
+  }
+
+  focus = SE_getEditorFocus(editor); 
+
   if (SE_isFocusNotEmpty(focus)) {
     if (strcmp(SE_getFocusSort(focus), SORT_UNPARSED) != 0) {
       PT_Tree tree;
       PT_ParseTree parse_tree;
-     ATwarning("focus: %t\n", focus); 
 
       if (!SE_isFocusRoot(focus)) {
 	tree = getFocussedTree(editor, focus);
@@ -346,6 +357,7 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
                     PT_makeTermFromParseTree(parse_tree));
     }
   }
+
   return ATmake("snd-value(no-parse-tree)");
 }
 
@@ -355,10 +367,18 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
 ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm t)
 {
   SE_Editor editor = getEditor(editorId);
-  SE_Focus focus = SE_getEditorFocus(editor);
-  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(t);
-  PT_Tree tree =  PT_getParseTreeTree(parse_tree);
+  SE_Focus focus;
+  PT_ParseTree parse_tree;
+  PT_Tree tree;
   PT_Args left_layout, right_layout;
+
+  if (editor == NULL) {
+    return ATmake("snd-value(focus(<term>))", SE_makeFocusEmpty());
+  }
+
+  focus = SE_getEditorFocus(editor);
+  parse_tree = PT_makeParseTreeFromTerm(t);
+  tree =  PT_getParseTreeTree(parse_tree);
 
   if (SE_isFocusNotEmpty(focus)) {
     if (strcmp(SE_getFocusSort(focus), SORT_UNPARSED) != 0) {
@@ -384,12 +404,17 @@ ATerm get_focus_sort(int cid, ATerm editorId)
 {
   char *sort;
   SE_Editor editor = getEditor(editorId);
-  SE_Focus focus = SE_getEditorFocus(editor); 
+  SE_Focus focus;
 
-  if (SE_isFocusNotEmpty(focus)) {
-    sort = SE_getFocusSort(focus);
-    if (strcmp(sort, SORT_UNPARSED) != 0) {
-      return ATmake("snd-value(focus-sort(<str>))", sort);
+
+  if (editor != NULL) {
+    focus = SE_getEditorFocus(editor); 
+
+    if (SE_isFocusNotEmpty(focus)) {
+      sort = SE_getFocusSort(focus);
+      if (strcmp(sort, SORT_UNPARSED) != 0) {
+	return ATmake("snd-value(focus-sort(<str>))", sort);
+      }
     }
   }
 
@@ -442,17 +467,13 @@ ATerm calc_error_location(int cid, ATerm f, ATerm error)
 ATerm get_modification_status(int cid, ATerm editorId)
 {
   SE_Editor editor = getEditor(editorId);
-  char *status;
+  ATerm status = ATparse("modified");
   
   if (editor) {
-    status = SE_getEditorModified(editor) ? "modified" : "unmodified";
+    status = SE_getEditorModified(editor) ? status : ATparse("unmodified");
+  }
   
-    return ATmake("snd-value(modification-status(<term>))", ATparse(status));
-  }
-  else {
-    return ATmake("snd-value(modification-status(<term>))", 
-                  ATparse("modified"));
-  }
+  return ATmake("snd-value(modification-status(<term>))",status);
 }
 
 /*}}}  */
