@@ -7,6 +7,8 @@
 \usepackage{xspace}
 \usepackage{alltt}
 \usepackage{supertabular}
+\usepackage{epsfig}
+
 
 \newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
 \newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
@@ -704,9 +706,38 @@ bag {\tt Excl} are used.
 \item {\tt endcol(area("pico1.trm",5,2,6,8))} yields {\tt 8}.
 }
 
-\section{Examples}
+\function{Summation of a bag of integers: {\tt sum}}
+{\tt int sum(bag[int] B) = primitive}
+{Yields the sum of the integers in bag {\tt B}.}
+{
+\item {\tt sum(\{1, 2, 3\})} yields {\tt 6}.
+}
+
+\function{Maximum of a bag of integers: {\tt max}}
+{\tt int max(bag[int] B) = primitive}
+{Yields the largest integer in bag {\tt B}.}
+{
+\item {\tt max(\{1, 2, 3\})} yields {\tt 3}.
+}
+
+\function{Minimum of a bag of integers: {\tt max}}
+{\tt int min(bag[int] B) = primitive}
+{Yields the smalles integer in bag {\tt B}.}
+{
+\item {\tt min(\{1, 2, 3\})} yields {\tt 1}.
+}
+
+\section{Larger Examples}
 
 \subsection{Analyzing the call structure of an application}
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/calls.eps,width=15cm}
+\vspace*{-14cm}
+\end{center}
+\caption{\label{FIG:calls} Graphical representation of the {\tt calls} relation}
+\end{figure}
 
 Now we will explore the call structure of an application.
 Suppose that the following facts have been extracted from the source
@@ -767,9 +798,9 @@ Finally, we can determine which procedures are called from both entry points:
 \end{quote}
 which yields {\tt \{"e"\}}.
 
-
-
-
+These findings can be verified by inspecting a graph view
+of the calls relation as shown in Figure~\ref{FIG:calls}.
+Observe that such a visual inspection does not scale to large graphs.
 
 
 \section{Running a \rscript}
@@ -840,6 +871,8 @@ bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
 bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
 bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
 \end{verbatim}
+
+
 
 
 \section{Differences with previous versions}

@@ -140,3 +140,22 @@ assert "area-2":     beginline(area("pico1.trm",5,2,6,8)) == 5
 assert "area-3":     begincol(area("pico1.trm",5,2,6,8)) == 2
 assert "area-4":     endline(area("pico1.trm",5,2,6,8)) == 6
 assert "area-5":     endcol(area("pico1.trm",5,2,6,8)) == 8
+
+assert "sum-1":		sum(EMPTYBAG)		== 0
+assert "sum-2":		sum({1})		== 1
+assert "sum-3":		sum({1, 2})		== 3
+assert "sum-4":		sum({1, 2, 3})		== 6
+
+assert "max-1":		max(EMPTYBAG)		== 0
+assert "max-2":		max({1})		== 1
+assert "max-3":		max({1, 2, 3})		== 3
+assert "max-4":		max({3, 2, 1})		== 3
+assert "max-5":		max({1, 2, 1, 2})	== 2
+
+assert "min-1":		min(EMPTYBAG)		== 0
+assert "min-2":		min({1})		== 1
+assert "min-3":		min({1, 2, 3})		== 1
+assert "min-4":		min({3, 2, 1})		== 1
+assert "min-5":		min({1, 2, 1, 2})	== 1
+
+

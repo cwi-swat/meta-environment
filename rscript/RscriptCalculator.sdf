@@ -58,6 +58,13 @@ exports
 	"get-endline"						-> RVAR {reject}
 	"get-endcol"						-> RVAR {reject}
 
+	sumx(Bag[[Elem]], Integer)				-> Integer
+	max1(Bag[[Elem]])					-> Integer
+	max2(Bag[[Elem]], Integer)				-> Integer
+
+	min1(Bag[[Elem]])					-> Integer
+	min2(Bag[[Elem]], Integer)				-> Integer
+
 
 hiddens
 %%  imports asf/syntax/Comments
