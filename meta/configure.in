@@ -26,6 +26,14 @@ AM_INIT_AUTOMAKE(meta, 0.2.2)
 dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ./config"
 
+dnl Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS      standard options of c compiler],
+   CFLAGS=${withval},
+   CFLAGS="-Wall -g -O2"
+)
+AC_SUBST(CFLAGS)
+
 dnl Check for required packages and perform version checks when needed.
 
 dnl Check for wish program
@@ -130,15 +138,6 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDEINC)
 AC_SUBST(USE_TIDE)
 
-
-dnl Handle --with-debug-c-code to activate c debug info 
-dnl and shut off optimizations
-CFLAGS="-Wall -O4 -DNDEBUG"
-AC_ARG_WITH(debug-c-code,
-   [  --with-debug-c-code     C flags set to -Wall -g],
-   CFLAGS="-Wall -g -O2"
-)
-AC_SUBST(CFLAGS)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
