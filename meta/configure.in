@@ -23,8 +23,7 @@ dnl Check for required packages and perform version checks when needed.
 
 dnl Check for wish program
 AC_PACKAGE_REQUIRE(tk, 
-dnl                   wish8.3 wish 8.2 wish8.1 wish8.0 wish,
-                   meuk,
+                   wish8.3 wish 8.2 wish8.1 wish8.0 wish,
                    [  --with-tk=DIR           Tk package is in DIR],)
 META_WISH_VERSION_CHECK($TK)
 AC_SUBST(WISH)
