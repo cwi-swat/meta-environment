@@ -283,11 +283,10 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
          ATerror("no path available for %t\n", asfix);
          return NULL; /* Silence the compiler */
       }
-    } 
-    else {
+    } else {
       import_graph = calc_import_graph();
-      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
-                    ATempty,import_graph);
+      return ATmake("snd-value(imports(changed-modules([<list>]),need-modules([<list>]),<term>))",
+                    ATempty, ATempty, import_graph);
       }
   }
   else {
