@@ -195,7 +195,7 @@ ATerm add_eqs_module(int cid, ATerm modname, char* path,
      !ATisEqual(eqs,ATparse("no-equations"))) {
     char *basename;
     if(!ATmatch(modname, "id(<str>)", &basename))
-	ATerror("not an id(<str>): %t\n", modname);
+      ATerror("not an id(<str>): %t\n", modname);
 
     eqs = AFaddPosInfoToModule(path, basename, eqs);
 
@@ -246,7 +246,7 @@ ATerm get_sdf2_path(int cid, ATerm modname)
 }
 
 
-ATerm get_eqs2_path(int cid, ATerm modname)
+ATerm get_eqs_path(int cid, ATerm modname)
 {
   ATerm entry, place;
   char *path, *mod;
@@ -277,6 +277,11 @@ ATerm get_sdf2_asfix(int cid, ATerm modname)
   status = ATelementAt((ATermList)entry, syn_updated_loc);
   if(ATisEqual(status,Mtrue)) {
     asfix = ATelementAt((ATermList)entry, syn_loc);
+    status = Mfalse;
+    entry = (ATerm)ATreplace((ATermList)entry,
+                             status,
+                             syn_updated_loc);
+    PutValue(new_modules_db, modname, entry);
     return ATmake("snd-value(syntax(<term>))", asfix);
   }
   else
@@ -299,8 +304,14 @@ ATerm get_eqs_asfix(int cid, ATerm modname)
       return ATmake("snd-value(no-eqs)");
     else if(ATisEqual(asfix,ATparse("no-equations")))
       return ATmake("snd-value(no-eqs)");
-    else
+    else {
+      status = Mfalse;
+      entry = (ATerm)ATreplace((ATermList)entry,
+                               status,
+                               eqs_updated_loc);
+      PutValue(new_modules_db, modname, entry);
       return ATmake("snd-value(eqs(<term>))", asfix);
+    }
   }
   else
     return ATmake("snd-value(eqs-unchanged)");
@@ -435,6 +446,44 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
+ATbool complete_asf_specification(ATermList visited, ATerm module)
+{
+  ATerm first, entry, asfix;
+  ATbool result;
+  ATermList imports;
+
+  if(ATindexOf(visited, module, 0) < 0) { 
+    result = ATtrue;
+    imports = (ATermList) GetValue(import_db,module);
+
+    visited = ATinsert(visited,module); 
+    
+    while(!ATisEmpty(imports) && result) {
+      first = ATgetFirst(imports);
+      entry = GetValue(new_modules_db, first);
+      asfix = ATelementAt((ATermList)entry, eqs_loc);
+      if(ATisEqual(asfix,ATparse("unavailable")) ||
+         ATisEqual(asfix,ATparse("error")))
+        result = ATfalse;
+      else {
+        result = complete_asf_specification(visited,first);
+        imports = ATgetNext(imports);
+      }
+    }
+    return result;
+  }
+  else
+    return ATtrue;
+}
+
+ATbool complete_asf_sdf2_specification(ATerm module)
+{
+  if(complete_sdf2_specification(ATempty,module))
+    return complete_asf_specification(ATempty, module);
+  else
+    return ATfalse;
+}
+
 ATermList calc_trans(ATermList todo)
 {
   ATerm name;
@@ -471,18 +520,21 @@ ATerm update_eqs_for_modules(int cid, ATerm name)
 {
   ATerm module, entry, eqs;
   ATermList result = ATempty;
-  ATermList modules = get_imported_modules(name);
+  ATermList modules;
+  if(GetValue(new_modules_db, name)) {
 ATfprintf(stderr,"update_eqs_for_modules entered with %t\n",name);
+    modules = get_imported_modules(name);
 
-  while (!ATisEmpty(modules)) {
-    module = ATgetFirst(modules);
-    entry = GetValue(new_modules_db, module);
-    eqs = ATelementAt((ATermList)entry, eqs_loc);
-    if(ATisEqual(eqs,ATparse("unavailable")))
-      result = ATinsert(result,module);
-    modules = ATgetNext(modules);
-  }
+    while (!ATisEmpty(modules)) {
+      module = ATgetFirst(modules);
+      entry = GetValue(new_modules_db, module);
+      eqs = ATelementAt((ATermList)entry, eqs_loc);
+      if(ATisEqual(eqs,ATparse("unavailable")))
+        result = ATinsert(result,module);
+      modules = ATgetNext(modules);
+    }
 ATfprintf(stderr,"update_eqs_for_modules left with %t\n",result);
+  }
   return ATmake("snd-value(modules([<list>]))",result);
 }
 
@@ -957,7 +1009,7 @@ void compile_module(int cid, ATerm mod)
 
   if(GetValue(new_modules_db, mod)) {
     /* We are working with the term asfix representation. */
-    if(complete_sdf2_specification(ATempty,mod)) {
+    if(complete_asf_sdf2_specification(mod)) {
       ATfprintf(stderr,"Reshuffling ... \n");
       initialize_output_path(mod);
       modules_to_process = ATempty;
