@@ -1,23 +1,3 @@
-#    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
-#                        Amsterdam, The Netherlands.
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or (at
-#    your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#    General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-#    USA    
-#
-#
 # $Id$
 
 include $(top_srcdir)/make_rules
@@ -36,7 +16,8 @@ asfc_SOURCES = asfc.c \
                lex-cons.c \
                asfc.tif.c \
                muasf2c.c \
-               c-compiler.c
+               c-compiler.c \
+               Compiler.c
 
 noinst_HEADERS = chars.h \
                  c-code.h \
@@ -46,8 +27,7 @@ noinst_HEADERS = chars.h \
                  muasf2c.h \
                  c-compiler.h
 
-asfc_LDADD   = -L$(top_builddir)/asfc/c-source -lCompiler \
-               -L$(ASC_SUPPORT)/lib -lasc-support-me \
+asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept  \
                -L$(SDF_SUPPORT)/lib -lSDFME \
                -L$(ASF_SUPPORT)/lib -lASFME \
