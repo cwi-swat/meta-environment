@@ -1,6 +1,4 @@
 Makefile
 Makefile.in
-lift-error
+error-diff
 .deps
-*.tree
-*.sh

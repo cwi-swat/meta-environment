@@ -52,8 +52,7 @@ int main (int argc, char **argv)
   while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
       case 'h':  usage();                      exit(0);
-      case 'i':  input_file_name  = optarg;    
-                  ATwarning("c = %s\n", optarg); break;
+      case 'i':  input_file_name  = optarg;    break;
       case 'o':  output_file_name = optarg;    break;
       case 't':  textual = ATtrue; break;
       case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
