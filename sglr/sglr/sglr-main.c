@@ -83,32 +83,37 @@ char   *stackoutput       = NULL;
 
 ATerm parse_file(int conn, char *L, char *G, char *FN)
 {
-  return SGparseFile(program_name, conn, L, G?(*G?G:0):NULL, FN);
+  return SGparseFile(program_name, L, G?(*G?G:0):NULL, FN);
 }
 
 ATerm parse_string(int conn, char *L, char *G, char *S)
 {
-  return SGparseStringAsAsFix2(conn, L, G, S);
+  return SGparseStringAsAsFix2(L, G, S);
 }
 
 ATerm parse_string_as_asfix1(int conn, char *L, char *G, char *S)
 {
-  return SGparseStringAsAsFix1(conn, L, G, S);
+  return SGparseStringAsAsFix1(L, G, S);
+}
+
+ATerm open_language_from_term(int conn, char *L, ATerm tbl)
+{
+  return SGopenLanguageFromTerm(program_name, L, tbl);
 }
 
 ATerm open_language(int conn, char *L, char *FN)
 {
-  return SGopenLanguage(program_name, conn, L, FN);
+  return SGopenLanguage(program_name, L, FN);
 }
 
 ATerm close_language(int conn, char *L)
 {
-  return SGcloseLanguage(program_name, conn, L);
+  return SGcloseLanguage(program_name, L);
 }
 
 ATerm reopen_language(int conn, char *L, char *FN)
 {
-  return SGreOpenLanguage(program_name, conn, L, FN);
+  return SGreOpenLanguage(program_name, L, FN);
 }
 
 void term_to_file(ATerm t, char *FN)

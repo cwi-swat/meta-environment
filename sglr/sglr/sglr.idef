@@ -28,6 +28,7 @@ process Parser is
     S   : str,
     Id  : term,
     FN  : str,
+    Tbl : term,
     T   : term,
     Err : list,
     Amb : int
@@ -77,6 +78,9 @@ process Parser is
       )
     +
       (
+        rec-msg(open-language-from-term(L?, Tbl?)) .
+        snd-eval(P, open-language-from-term(L, Tbl))
+      +
         rec-msg(open-language(L?, FN?)) .
         snd-eval(P, open-language(L, FN))
       +
