@@ -9,15 +9,15 @@ process Structure-editor(TE: text-edit, Fid: str, Text: str,
 let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
-  Char: term, G: str, ErrList: list, Cycle: list, Src:str,
+  Char: term, 
+  Nonterminal: str, 
+  ErrList: list, Cycle: list, Src:str,
   Fun: str, Args: list, Anno: anno, Modules: list,
   LangOK: term
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
   subscribe(language-changed(Language)).
-/* We're not selective about start symbols yet */
-  G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   snd-msg(get-se-id).
   rec-msg(se-id(SE?)).
@@ -52,6 +52,7 @@ in
       snd-msg(open-sdf2-language).
       (
         rec-msg(sdf2-language-opened).
+        Nonterminal := "Module" .
 	LangOK := true
       +
         rec-msg(sdf2-language-not-opened).
@@ -61,6 +62,11 @@ in
       snd-msg(set-parsetable(Language)).
       (
         rec-msg(parsetable-set(Language)).
+        if equal(IsTerm,"eqs") then
+          Nonterminal := "Equations"
+        else
+          Nonterminal := ""
+        fi. 
 	LangOK := true
       +
         rec-msg(parsetable-not-set(Language)).
@@ -77,7 +83,7 @@ in
 	    if equal(dirty,T) then
 	      snd-msg(TE,get-focus-text(Fid, Foc)).
 	      rec-msg(TE,focus-text(Fid, Str?)).
-	      snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
+	      snd-msg(Id,parse-string-as-asfix1(Language, Nonterminal, Str)).(
 		rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
 		snd-eval(SE,replaceFocus(Fid, T)).
 		rec-value(SE,Fl?)
