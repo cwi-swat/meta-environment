@@ -26,6 +26,11 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
 dnl Require PT package (for AsFix)
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   ParseTree distribution is in DIR])

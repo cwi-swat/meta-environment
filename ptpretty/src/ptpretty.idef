@@ -1,0 +1,27 @@
+
+
+process PtPretty is
+let
+  PPT      : ptpretty,
+  Syntax : tree,
+  Tree     : term,
+  Result   : term,
+  ErrMsg : str
+in
+  (
+    rec-msg(ptpretty(Syntax?, Tree?)) .
+    execute(ptpretty, PPT?).
+    snd-eval(PPT, format(Syntax,Tree)) .
+    (
+      rec-value(PPT, formatted(Result?)) .
+      snd-msg(ptpretty-result(Result))
+    + 
+      rec-value(PPT, error(ErrMsg?)) .
+      snd-msg(ptpretty-error(ErrMsg))
+    )
+  ) * delta
+endlet
+
+tool ptpretty is { command = "ptpretty" }  
+
+toolbus(PtPretty)

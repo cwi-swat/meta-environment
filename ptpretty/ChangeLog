@@ -1,4 +1,7 @@
 
+2003-09-18	Jurgen Vinju	<jurgenv@cwi.nl>
+  * ToolBus enabled ptpretty
+
 2003-09-17	Jurgen Vinju	<jurgenv@cwi.nl>
   * Moved repository to GLT 
   * Bumped version number to 1.0

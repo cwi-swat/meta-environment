@@ -10,9 +10,23 @@ INCLUDES = \
 
 bin_PROGRAMS = ptpretty 
 
-noinst_HEADERS = pretty.h
-ptpretty_SOURCES = main.c pretty.c
+noinst_HEADERS = pretty.h ptpretty.tif.h
+
+pkgdata_DATA = ptpretty.idef
+
+ptpretty_SOURCES = main.c pretty.c ptpretty.tif.c
 ptpretty_LDADD = \
 	-L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
 	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm 
+
+tif:
+	for i in `ls *.idef`; do \
+          idef2tif $$i; \
+          tifstoc -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
+        done
+
+tif-clean:
+	rm -f *.tifs *.tif.[ch]
+

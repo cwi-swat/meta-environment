@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <atb-tool.h>
 
+#include "ptpretty.tif.h"
 #include "pretty.h"
 
 static char* myname = "ptpretty";
@@ -42,6 +44,32 @@ static void version(void)
 }
 
 /*}}}  */
+
+/*{{{  ATerm format(int cid, ATerm syntax, ATerm tree) */
+
+ATerm format(int cid, ATerm syntax, ATerm tree)
+{
+  ATerm result = PT_ParseTreeToTerm(pretty(SDF_SDFFromTerm(syntax),
+					   PT_ParseTreeFromTerm(tree)));
+
+  if (result != NULL) {
+    return ATmake("snd-result(formatted(<term>))", result);
+  }
+  else {
+    return ATmake("snd-result(error(\"Unknown error during formatting\"))");
+  }
+}
+
+/*}}}  */
+/*{{{  void rec_terminate(int cid, ATerm msg)  */
+
+void rec_terminate(int cid, ATerm msg) 
+{
+  exit(0);
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[]) 
@@ -50,6 +78,7 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *syntax = "";
+  ATbool useToolbus = ATfalse;
   int c;
 
   ATerm at_sdf;
@@ -61,44 +90,60 @@ int main(int argc, char *argv[])
   PT_initMEPTApi(); 
   SDF_initSDFMEApi(); 
 
-  while ((c = getopt(argc, argv, myarguments)) != -1) {
-    switch (c) {
-      case 'i':  input=optarg; break;
-      case 's':  syntax=optarg; break;
-      case 'o':  output=optarg; break;
-      case 'v':  run_verbose = ATtrue; break;
-      case 'V':  version(); exit(0);
-      case 'h':  usage(); exit(0);
-      default:   usage(); exit(1); 
+  int i;
+
+  for (i=1; !useToolbus && i < argc; i++) {
+    useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
+  }
+
+  if (useToolbus) {
+    int cid;
+    ATBinit(argc, argv, &bottomOfStack);
+    cid = ATBconnect(NULL, NULL, -1, ptpretty_handler);
+    ATBeventloop();
+  }
+  else {
+    while ((c = getopt(argc, argv, myarguments)) != -1) {
+      switch (c) {
+	case 'i':  input=optarg; break;
+	case 's':  syntax=optarg; break;
+	case 'o':  output=optarg; break;
+	case 'v':  run_verbose = ATtrue; break;
+	case 'V':  version(); exit(0);
+	case 'h':  usage(); exit(0);
+	default:   usage(); exit(1); 
+      }
     }
+
+    if (!strcmp(syntax,"")) {
+      ATwarning("%s: You forgot to specify a syntax definition.\n", myname);
+      usage();
+      exit(1);
+    }
+
+
+    ATsetChecking(ATtrue);
+
+    at_sdf = ATreadFromNamedFile(syntax);
+    at_tree   = ATreadFromNamedFile(input);
+
+    if (at_tree != NULL) {
+      tree = PT_ParseTreeFromTerm(at_tree);
+      sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(
+				PT_ParseTreeFromTerm(at_sdf)));
+
+      tree = pretty(sdf, tree);
+
+      ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
+
+      return 0;
+    }
+
+    ATwarning("No such file: %s\n", input); 
+    return 1; 
   }
 
-  if (!strcmp(syntax,"")) {
-    ATwarning("%s: You forgot to specify a syntax definition.\n", myname);
-    usage();
-    exit(1);
-  }
-
-
-  ATsetChecking(ATtrue);
-
-  at_sdf = ATreadFromNamedFile(syntax);
-  at_tree   = ATreadFromNamedFile(input);
-
-  if (at_tree != NULL) {
-    tree = PT_ParseTreeFromTerm(at_tree);
-    sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(
-				      PT_ParseTreeFromTerm(at_sdf)));
-
-    tree = pretty(sdf, tree);
-
-    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(tree), output);
-
-    return 0;
-  }
-
-  ATwarning("No such file: %s\n", input); 
-  return 1; 
+  return 0;
 }
 
 /*}}}  */
