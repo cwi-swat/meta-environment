@@ -39,15 +39,15 @@ equations
        =========================================================
         cflow($Stat) = < {$Loc}, {}, {$Loc} >
 
-%% ---- Variable definitions: <statement-location, name>
+%% ---- Variable definitions: <expression-location, var-name>
 
-[df1]  $Id := $Exp := $Stat
+[vd1]  $Id := $Exp := $Stat
        ========================================================== 
        defs($Stat, $Rel) = $Rel union {<get-location($Stat), id2str($Id)>}
 
-%% ---- Variable occurrences <var-location, name>
+%% ---- Variable uses <var-location, var-name>
 
-[us1]  $Id := $Exp
+[vu1]  $Id := $Exp
        ========================================================== 
        uses($Exp, $Rel) = $Rel union  {<get-location($Id), id2str($Id)>}
 

@@ -20,7 +20,7 @@ hiddens
 
      convert2summary(String, RVALUE)	        -> Summary
      convert2errorlist(String, Elem)		-> {Error ","}*
-     convert2error(String, <String, Location>)	-> Error
+     convert2error(String, <Location, String>)	-> Error
 
  hiddens
   variables
