@@ -5,6 +5,5 @@ Makefile
 y.tab.[ch]
 y.output
 lex.yy.c
-dot-adapter.tif.[ch]
 dot-adapter
 
