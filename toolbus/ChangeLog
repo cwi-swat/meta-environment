@@ -18,6 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 ------------------------------------------------------------------------------
+Date:   Tue Apr 11 20:03:33 MET DST 2000
+Version 0.14
+-annoying bug in emacs-adapter solved which occurs when path-names contain
+double slashes
+
 Date:	Mon Apr  3 16:59:03 MET DST 2000
 Version: 0.13
 Author:  Merijn de Jonge

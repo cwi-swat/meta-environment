@@ -19,7 +19,7 @@ dnl    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 dnl
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(Makefile.in)
-AM_INIT_AUTOMAKE(toolbus, 0.13)
+AM_INIT_AUTOMAKE(toolbus, 0.14)
 
 AC_PROG_RANLIB
 AR=ar
