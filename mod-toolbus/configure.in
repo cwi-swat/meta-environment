@@ -1,22 +1,56 @@
-AC_INIT(mod_toolbus,0.1.4,epost@science.uva.nl)
-dnl AM_CONFIG_HEADER(configure.in)
+AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(mod_toolbus, 0.1.4)
 
+ACLOCAL="${ACLOCAL} -I ."
+
 AC_PROG_CC
-dnl AC_HEADER_STDC
+
+dnl {{{  Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
 
 TOP=`pwd`
 AC_SUBST(TOP)
 
-APDIR=/home/epost/courses/po/3/apache2
-AC_SUBST(APDIR)
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
 
-APDEVELDIR=/home/epost/courses/po/3/httpd-2.0.47
-AC_SUBST(APDEVELDIR)
+AC_PACKAGE_REQUIRE(apache, apr-config,
+   [  --with-apache=DIR       Apache is in DIR])
+AC_SUBST(APACHE)
 
-TBDIR=/opt/toolbus
-AC_SUBST(TBDIR)
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
 
+dnl {{{  Require socket/gethostname
+NOSOCKLIBS=$LIBS
+dnl {{{  check for socket in -lsun and -lsocket
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+dnl }}}
+
+dnl {{{  check for gethostname in -lsun and -lsocket
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+dnl }}}
+AC_SUBST(SOCKLIBS)
+LIBS=$NOSOCKLIBS
 
 AC_SET_MAKE
 
