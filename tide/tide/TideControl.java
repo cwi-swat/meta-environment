@@ -45,6 +45,9 @@ public class TideControl
 
 	private ToolManager manager;
 
+	protected Thread debugToolThread;
+	protected Thread tideControlThread;
+
 	public TideControl(ATermFactory factory, String[] args)
 		throws IOException {
 		
@@ -73,13 +76,13 @@ public class TideControl
 		connectTideControl(args);
 		connectDebugTool(args);
 
-		Thread thread = new Thread(tool);
-		thread.setName("DebugTool");
-		thread.start();
+		debugToolThread = new Thread(tool);
+		debugToolThread.setName("DebugTool");
+		debugToolThread.start();
 
-		thread = new Thread(bridge);
-		thread.setName("TideControlBridge");
-		thread.start();
+		tideControlThread = new Thread(bridge);
+		tideControlThread.setName("TideControlBridge");
+		tideControlThread.start();
 	}
 
 	private void createProcessList() {
@@ -122,6 +125,9 @@ public class TideControl
 	}
 
 	public void recTerminate(ATerm arg) {
+		// use deprecated methods, because new methods not widely available yet
+		debugToolThread.stop();
+		tideControlThread.stop();
 		System.exit(0);
 	}
 
