@@ -176,18 +176,18 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     } 
 
     while(--i >= 0) {
-      args = PT_makeArgsList(TERM_STORE[i], args);
+      args = PT_makeArgsMany(TERM_STORE[i], args);
 
       if (i != 0) {
         if (sepTree) {
 	  if (contextfree) {
-	    args = PT_makeArgsList(layout, args);
+	    args = PT_makeArgsMany(layout, args);
 	  }
-	  args = PT_makeArgsList(sepTree, args);
+	  args = PT_makeArgsMany(sepTree, args);
         }
 
         if (contextfree) {
-	  args = PT_makeArgsList(layout, args);
+	  args = PT_makeArgsMany(layout, args);
         }
       }
     }
@@ -230,7 +230,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
       assert(tree != NULL);
     }
 
-    result = PT_makeArgsList(tree ,result);
+    result = PT_makeArgsMany(tree ,result);
   }
 
   return result;

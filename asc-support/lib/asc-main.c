@@ -166,7 +166,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 
       for (--nInputs; nInputs >= 0; nInputs--) {
 	PT_ParseTree parseTree = PT_ParseTreeFromTerm(inputs[nInputs]);
-	args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
+	args = PT_makeArgsMany(PT_getParseTreeTree(parseTree), args);
       }
 
       pt = PT_applyFunctionToArgsParseTree(function, result, args);

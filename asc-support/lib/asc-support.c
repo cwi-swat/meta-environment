@@ -925,16 +925,15 @@ ATerm correct_tuple(ATerm arg, ATerm rhs)
   left = PT_getSymbolLhs(rhsSymbol);
   right = PT_getSymbolsHead(PT_getSymbolRest(rhsSymbol));
 
-  lhs = PT_makeSymbolsList(PT_makeSymbolLit("<"),
-        PT_makeSymbolsList(l,
-        PT_makeSymbolsList(PT_makeSymbolCf(left),
-        PT_makeSymbolsList(l,
-        PT_makeSymbolsList(PT_makeSymbolLit(","),
-        PT_makeSymbolsList(l,
-        PT_makeSymbolsList(PT_makeSymbolCf(right),
-        PT_makeSymbolsList(l,
-        PT_makeSymbolsList(PT_makeSymbolLit(">"),
-			   PT_makeSymbolsEmpty())))))))));
+  lhs = PT_makeSymbolsMany(PT_makeSymbolLit("<"),
+        PT_makeSymbolsMany(l,
+        PT_makeSymbolsMany(PT_makeSymbolCf(left),
+        PT_makeSymbolsMany(l,
+        PT_makeSymbolsMany(PT_makeSymbolLit(","),
+        PT_makeSymbolsMany(l,
+        PT_makeSymbolsMany(PT_makeSymbolCf(right),
+        PT_makeSymbolsMany(l,
+        PT_makeSymbolsSingle(PT_makeSymbolLit(">"))))))))));
 
   prod = PT_makeProductionDefault(lhs,PT_makeSymbolCf(rhsSymbol),
 				  PT_makeAttributesNoAttrs());

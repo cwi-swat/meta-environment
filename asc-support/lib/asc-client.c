@@ -31,7 +31,7 @@ ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
       arg = PT_getParseTreeTree((PT_ParseTree) head);
     }
 
-    ptargs = PT_makeArgsList(arg, ptargs);
+    ptargs = PT_makeArgsMany(arg, ptargs);
   }
 
   return rewrite(cid, 
