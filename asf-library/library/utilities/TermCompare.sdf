@@ -1,7 +1,7 @@
 module utilities/TermCompare[Sort]
 
 imports basic/Booleans
-imports utilities/Measure
+
 
 exports
 
@@ -11,15 +11,17 @@ context-free syntax
   %%
   %% The ordering is arbitrary, but complete and stable.
 
-  compare(Sort,Sort)       -> Measure {built-in("term-compare")}
-
-  less(Sort,Sort)          -> Boolean 
+  less(Sort,Sort)          -> Boolean {built-in("term-less")}
   less-equal(Sort,Sort)    -> Boolean 
   greater(Sort,Sort)       -> Boolean 
   greater-equal(Sort,Sort) -> Boolean 
   equal(Sort,Sort)         -> Boolean 
 
-
+  Sort "<" Sort -> Boolean
+  Sort "<=" Sort -> Boolean
+  Sort ">=" Sort -> Boolean
+  Sort ">" Sort -> Boolean
+  
 hiddens
 
   imports basic/Whitespace
