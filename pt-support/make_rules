@@ -1,6 +1,7 @@
 #
-#    SGLR - the Scannerless Generalized LR parser.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    AsFix -- The AsFix (ASF+SDF Prefix) library
+#    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+#                             The  Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -16,21 +17,55 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
+#
 # $Id$
 #
-
-SGLR=$(top_srcdir)/sglr
-PGEN=$(top_srcdir)/pgen
-TREE=$(top_srcdir)/tree
-
-INCLUDES = -I$(ATERM)/include -I$(TREE)/libasfix-old/libasfix
+# Common make rules for compiling the ATerm and related static/dynamic
+# libraries.
+#
 
 POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
 
+# Common defines for all libraries
+STDDEFS = $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS)
+
+## Library specific compiler flags
+GCC_COMPILE    = $(CC_GCC)    $(CFLAGS_GCC)    $(DEFS_GCC)    $(STDDEFS)
+CC_COMPILE     = $(CC_CC)     $(CFLAGS_CC)     $(DEFS_CC)     $(STDDEFS)
+DBG_COMPILE    = $(CC_DBG)    $(CFLAGS_DBG)    $(DEFS_DBG)    $(STDDEFS)
+PROF_COMPILE   = $(CC_PROF)   $(CFLAGS_PROF)   $(DEFS_PROF)   $(STDDEFS)
+CC64_COMPILE   = $(CC_CC64)   $(CFLAGS_CC64)   $(DEFS_CC64)   $(STDDEFS)
+SHARED_COMPILE = $(CC_SHARED) $(CFLAGS_SHARED) $(DEFS_SHARED) $(STDDEFS)
+COMPILE        = $(CC)        $(CFLAGS)        $(DEFS)        $(STDDEFS)
+
+INCLUDES = -I$(ATERM)/include -I$(top_srcdir)/libasfix-old/libasfix
+
+## Rules for compiling C files to include in static libraries
+%.o   : %.c $(ALLINCLUDES)
+	CFLAGS= $(COMPILE) -c $< -o $@
+
+%-cc.o   : %.c $(ALLINCLUDES)
+	CFLAGS= $(CC_COMPILE) -c $< -o $@
+
+%-cc64.o : %.c $(ALLINCLUDES)
+	$(CC64_COMPILE) -c $< -o $@
+
+%-gcc.o  : %.c $(ALLINCLUDES)
+	$(GCC_COMPILE) -c $< -o $@
+
+%-dbg.o  : %.c $(ALLINCLUDES)
+	$(DBG_COMPILE) -c $< -o $@
+
+%-prof.o : %.c $(ALLINCLUDES)
+	$(PROF_COMPILE) -c $< -o $@
+
+%-ns.o   : %.c $(ALLINCLUDES)
+	$(NS_COMPILE) -c $< -o $@
+
 %.tif.c %.tif.h: %.tifs
-	@PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
+	@PATH=$(ATERMBIN):$(PATH) tifstoc -tool $* $<
 
 # The output of idef2tif and toolbus is moved to $@ to make sure the
 # generated .tifs file exists in the current directory. The ToolBus and
@@ -38,28 +73,23 @@ POD2HTML=pod2html
 # the location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.idef
-	@PATH=$(TOOLBUS)/bin:${PATH} idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
+	@PATH=$(TOOLBUSBIN):${PATH} idef2tif $< ;\
+	if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
 %.tifs: %.tb
-	@PATH=${TOOLBUS}/bin:${PATH} toolbus -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
+	@PATH=${TOOLBUSBIN}:${PATH} toolbus -gentifs $< ;\
+	if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
 # Generic rules for the generation of documentation from POD files
-# Generic rules for the generation of documentation from POD files
 
-CENTER="Meta-Environment Documentation"
+CENTER="AsFix Documentation"
 
 %.1:    %.pod
 	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
-%.3:    %.pod
-	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=3 $< > $@
-%.7:    %.pod
-	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=7 $< > $@
 
 %.txt: %.pod
 	-$(POD2TEXT) $< > $@
@@ -67,4 +97,3 @@ CENTER="Meta-Environment Documentation"
 %.html: %.pod
 	-$(POD2HTML) $< > $@
 	-rm -f pod2html-*
-
