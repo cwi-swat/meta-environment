@@ -55,7 +55,7 @@ exports
 exports
   sorts Box BoxList
   context-free syntax
-    Box*    -> BoxList
+    boxes:Box*    -> BoxList
 
   context-free syntax
     StrCon  -> Box {cons("string")}
