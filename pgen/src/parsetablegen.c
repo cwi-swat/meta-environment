@@ -4,6 +4,7 @@
 #include <asc-support2-me.h>
 #include "ksdf2table.h"
 #include "characters.h"
+#include "item.h"
 
 /*{{{  global variables */
 
@@ -21,6 +22,7 @@ static char *name;
 
 ATbool run_verbose;
 ATbool statisticsMode = ATfalse;
+ATbool generationMode = ATfalse;
 ATbool normalizationMode = ATfalse;
 
 static char myname[] = "parsetablegen";
@@ -32,7 +34,7 @@ static char myversion[] = "3.0";
     explanation.
  */
 
-static char myarguments[] = "bchi:lm:no:tvV";
+static char myarguments[] = "bcghi:lm:no:tvV";
 
 /*}}}  */
 /*{{{  external functions */
@@ -57,6 +59,8 @@ void rec_terminate(int cid, ATerm t) {
 }
 
 /*}}}  */
+
+/*{{{  static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree) */
 
 static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
@@ -86,6 +90,10 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 
 }
 
+/*}}}  */
+
+/*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
+
 static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
 {
   PT_Tree tree = addNormalizeFunction(topModule, parseTree);
@@ -94,6 +102,10 @@ static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
   return toasfix(reduct);
 }
 
+/*}}}  */
+
+/*{{{  static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term) */
+
 static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 {
   ATerm pt = NULL;
@@ -101,7 +113,11 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 
   IF_STATISTICS(PT_Timer()); 
 
-  ksdf = normalize(name, sdf2term); 
+  if (generationMode) {
+    ksdf = sdf2term;
+  } else {
+    ksdf = normalize(name, sdf2term); 
+  }
 
   IF_STATISTICS(fprintf(PT_log(), 
                 "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
@@ -131,6 +147,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 }
 
 /*}}}  */
+
 /*{{{  ATerm generate_table(int cid, ATerm sdf, char *name, char *ext) */
 
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
@@ -166,6 +183,8 @@ static void usage(void)
         "Usage: %s [options]\n"
         "Options:\n"
         "\t-b              output terms in BAF format (default)\n"
+	"\t-c              activate ATerm debugging mode (expensive!)\n"
+        "\t-g              take kernel sdf as input and generate table\n"
         "\t-h              display help information (usage)\n"
         "\t-i filename     input from file (default stdin)\n"
         "\t-l              display statistic information\n"
@@ -215,6 +234,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack); 
   CC_init();
+  IT_init();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   SDF_initSDFMEApi(); 
@@ -246,6 +266,8 @@ int main(int argc, char *argv[])
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
         case 'b':  bafMode = 1;                            break;
+	case 'c':  ATsetChecking(ATtrue);		   break;
+	case 'g':  generationMode = ATtrue;                break;
         case 'i':  input=optarg;                           break;
         case 'l':  statisticsMode = ATtrue;                break;
         case 'm':  moduleName=optarg;                      break;
@@ -254,7 +276,6 @@ int main(int argc, char *argv[])
         case 't':  bafMode = 0;                            break;
         case 'v':  run_verbose = ATtrue;                   break;
         case 'V':  version(); proceed = 0;                 break;
-	case 'c':  ATsetChecking(ATtrue);		   break;
 
         case 'h':
         default:   usage(); proceed = 0;                   break;
@@ -309,5 +330,4 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
-
 

@@ -31,7 +31,6 @@ extern char *unquote_str(char *s);
 
 extern AFun afun_range;
 extern AFun afun_char_class;
-extern AFun afun_item;
 extern AFun afun_action;
 extern AFun afun_prod;
 extern AFun afun_goto;
@@ -53,7 +52,6 @@ extern ATerm all_chars;
 #define IS_ACTION(t)      (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_action)
 #define IS_CHARCLASS(t)   (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_char_class)
 #define IS_GOTO(t)        (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_goto)
-#define IS_ITEM(t)        (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_item)
 #define IS_PROD(t)        (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_prod)
 #define IS_RANGE(t)       (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_range)
 #define IS_SHIFT(t)       (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_shift)
@@ -63,6 +61,8 @@ extern ATerm all_chars;
 
 extern ATermSOS *state_sos;
 extern ATermIndexedSet priority_table;
+extern ATermTable rhs_prods_pairs;
+extern ATerm *nr_prod_table;
 
 /*}}}  */
 ATerm generate_parse_table(PT_ParseTree g);

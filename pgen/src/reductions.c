@@ -60,40 +60,36 @@ static void restrict(CC_Class *cc, ATermList restrictions,
 
 void reductions(ATermList vertex)
 {
-  int len, iptr;
-  ATerm item, prod, symbol;
-  ATermInt prodnr, ptr;
+  int len, iptr, prodnr;
+  ATerm prod, symbol;
   ATermList symbols, las;
   CC_Class *charClass;
   CC_Set set;
 
   CC_initSet(&set);
   while(!ATisEmpty(vertex)) {
-    item = ATgetFirst(vertex);
+    Item item = IT_ItemFromTerm(ATgetFirst(vertex));
     vertex = ATgetNext(vertex);
 
-    assert(IS_ITEM(item));
+    assert(IT_isValidItem(item));
 
-    if(IS_ITEM(item)) {
-      prod = GET_ARG(item, 0);
-      prodnr = GET_INT_ARG(item, 1);
-      ptr = GET_INT_ARG(item, 2);
-      if(IS_PROD(prod)) {
-        symbols = GET_LIST_ARG(prod, 0);
-        symbol = GET_ARG(prod, 1);
-        len = ATgetLength(symbols);
-        iptr = ATgetInt(ptr);
-        if(iptr == len) {
-          las = (ATermList)ATtableGet(symbol_lookaheads_table, symbol);
-          if(!las) {
-            las = ATempty;
-          }
+    prod = IT_getProd(item);
+    prodnr = IT_getProdNr(item);
+    iptr = IT_getDotPosition(item);
 
-          charClass = follow_table[ATgetInt(prodnr)];
-	  if (charClass) {
-            restrict(charClass, las, ATmakeInt(len), prodnr);
-          }
-        }
+    symbols = GET_LIST_ARG(prod, 0);
+    symbol = GET_ARG(prod, 1);
+    len = ATgetLength(symbols);
+
+    if(iptr == len) {
+      las = (ATermList)ATtableGet(symbol_lookaheads_table, symbol);
+      if(!las) {
+	las = ATempty;
+      }
+
+      charClass = follow_table[prodnr];
+      if (charClass) {
+	restrict(charClass, las, ATmakeInt(len), ATmakeInt(prodnr));
       }
     }
   }

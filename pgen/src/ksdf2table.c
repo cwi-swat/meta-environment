@@ -41,11 +41,6 @@ extern ATbool run_verbose;
 extern ATbool statisticsMode;
 
 /*}}}  */
-/*{{{  external functions */
-
-extern ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2);
- 
-/*}}}  */
 /*{{{  function declarations */
 
 void init_first(ATerm prod);
@@ -59,7 +54,6 @@ void calc_goto_graph();
 AFun afun_action = 0;
 AFun afun_char_class = 0;
 AFun afun_goto = 0;
-AFun afun_item = 0;
 AFun afun_prod = 0;
 AFun afun_range = 0;
 AFun afun_shift = 0;
@@ -131,8 +125,6 @@ void init_table_gen()
   ATprotectAFun(afun_char_class);
   afun_goto = ATmakeAFun("goto", 2, ATfalse);
   ATprotectAFun(afun_goto);
-  afun_item = ATmakeAFun("item", 4, ATfalse);
-  ATprotectAFun(afun_item);
   afun_prod = ATmakeAFun("prod", 3, ATfalse);
   ATprotectAFun(afun_prod);
   afun_range = ATmakeAFun("range", 2, ATfalse);

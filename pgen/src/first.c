@@ -7,9 +7,10 @@ extern int MAX_PROD;
 extern ATermTable first_table;
 extern ATerm *nr_prod_table;
 
-/*{{{ ATbool contains_epsilon(ATermList set) */
 
-ATbool contains_epsilon(ATermList set) 
+/*{{{  ATbool contains_epsilon(ATermList set)  */
+
+ATbool contains_epsilon(ATermList set)
 {
   if(ATindexOf(set,empty_set,0) >= 0)
     return ATtrue;
@@ -17,15 +18,18 @@ ATbool contains_epsilon(ATermList set)
     return ATfalse;
 }
 
-/*}}} */
-/*{{{ ATermList remove_epsilon(ATermList set) */
+/*}}}  */
+/*{{{  ATermList remove_epsilon(ATermList set)  */
 
-ATermList remove_epsilon(ATermList set) 
+ATermList remove_epsilon(ATermList set)
 {
-  return ATremoveElement(set,empty_set);
+  return ATremoveElement(set, empty_set);
 }
 
-/*{{{ ATermList first(ATermList symbols, ATermList firstset) */
+/*}}}  */
+
+
+/*{{{  ATermList first(ATermList symbols, ATermList firstset) */
 
 ATermList first(ATermList symbols, ATermList firstset)
 {
@@ -41,10 +45,6 @@ ATermList first(ATermList symbols, ATermList firstset)
       symbols = ATgetNext(symbols);
 
       set = (ATermList)ATtableGet(first_table,symbol);
-/*
-if(ATisEqual(symbol,ATparse("cf(sort(\"StringLiteralList\"))"))) 
-  ATwarning("Set is %t\n", set);
-*/
       if(contains_epsilon(set))
         newset = ATunion(newset,remove_epsilon(set));
       else
@@ -54,8 +54,8 @@ if(ATisEqual(symbol,ATparse("cf(sort(\"StringLiteralList\"))")))
   }
 }
 
-/*}}} */
-/*{{{ void calc_first_table() */
+/*}}}  */
+/*{{{  void calc_first_table() */
 
 /**
   * Calculation of the first set of the grammar
@@ -78,22 +78,9 @@ void calc_first_table()
         symbols = GET_LIST_ARG(prod,0);
         symbol  = GET_ARG(prod,1);
         tmpset = (ATermList)ATtableGet(first_table,symbol);
-/*
-if(ATisEqual(symbol,ATparse("cf(iter(sort(\"STRINGliteral\")))")) ||
-   ATisEqual(symbol,ATparse("cf(sort(\"StringliteralList\"))"))) {
-  ATwarning("Prod is %t\n", prod);
-  ATwarning("Set is %t\n", tmpset);
-}
-*/
         if(tmpset) {
           firstset = first(symbols,ATmakeList1(empty_set));
           firstset = ATunion(tmpset,firstset);
-/*
-if(ATisEqual(symbol,ATparse("cf(iter(sort(\"STRINGliteral\")))")) ||
-   ATisEqual(symbol,ATparse("cf(sort(\"StringliteralList\"))"))) {
-  ATwarning("New set is %t\n", firstset);
-}
-*/
           if (!ATsetEqual(tmpset,firstset)) {
             ATtablePut(first_table,symbol,(ATerm)firstset);
             changed = ATtrue;
@@ -107,22 +94,10 @@ if(ATisEqual(symbol,ATparse("cf(iter(sort(\"STRINGliteral\")))")) ||
       }
     }
   }
-
-/*
-  for(ip=MIN_PROD;ip<MAX_PROD;ip++) {
-    prod = nr_prod_table[ip];
-    if(IS_PROD(prod)) {
-      symbol  = GET_ARG(prod,1);
-      firstset = (ATermList)ATtableGet(first_table,symbol);
-      ATwarning("First set for %t is %t\n", symbol, firstset);
-    }
-  }
-*/
-
 }
 
-/*}}} */
-/*{{{ void init_first(ATerm prod) */
+/*}}}  */
+/*{{{  void init_first(ATerm prod) */
 
 /**
  * Initialize the symbol table in order to be
@@ -142,13 +117,11 @@ void init_first(ATerm prod)
 
       entry = ATtableGet(first_table,symbol);
       if(!entry) {
-/*
-ATwarning("Entry created for %t\n", symbol);
-*/
          entry = (ATerm)ATmakeList1(symbol);
         ATtablePut(first_table,symbol,entry);
       }
     }
   }
 }
-/*}}} */
+
+/*}}}  */

@@ -1,31 +1,33 @@
+#include <aterm2.h>
+
+#include "priorities.h"
 #include "ksdf2table.h"
 
-#define PRIORITY_EXISTS(prio) \
-  (ATindexedSetGetIndex(priority_table,(prio)) >= 0)
+#define PRIORITY_EXISTS(prio) (ATindexedSetGetIndex(priority_table,(prio)) >= 0)
 
-/*{{{ ATbool pgen_cnf(ATerm prodnr1, int iptr, int len, ATerm prodnr2) */
+/*{{{  ATbool conflicts(Item item, ATerm label) */
 
-ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
+ATbool conflicts(Item item, ATerm label)
 {
   ATerm priorel;
   ATbool result;
+  ATerm prodnr = (ATerm)ATmakeInt(IT_getProdNr(item));
+  int iptr = IT_getDotPosition(item);
+  int len = ATgetLength((ATermList)ATgetArgument((ATermAppl)IT_getProd(item), 0));
 
   if(iptr == 0) {
     if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_right_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      priorel = (ATerm)ATmakeAppl2(afun_right_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
       else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                     (ATerm)prodnr1, (ATerm)prodnr2);
+        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
 	if (PRIORITY_EXISTS(priorel)) {
           result = ATtrue;
         }
         else {
-          priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio,
-                                       (ATerm)prodnr1, (ATerm)prodnr2);
+          priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
 	  if (PRIORITY_EXISTS(priorel)) {
             result = ATtrue;
           }
@@ -36,8 +38,7 @@ ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
       }
     }
     else {
-      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
@@ -48,26 +49,22 @@ ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
   }
   else {
     if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_left_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      priorel = (ATerm)ATmakeAppl2(afun_left_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
       else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                     (ATerm)prodnr1, (ATerm)prodnr2);
+        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
 	if (PRIORITY_EXISTS(priorel)) {
           result = ATtrue;
 	}
         else {
-          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio,
-                                       (ATerm)prodnr1, (ATerm)prodnr2);
+          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prodnr, label);
 	  if (PRIORITY_EXISTS(priorel)) {
             result = ATtrue;
 	  }
           else {
-            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio,
-                                         (ATerm)prodnr1, (ATerm)prodnr2);
+            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
 	    if (PRIORITY_EXISTS(priorel)) {
               result = ATtrue;
 	    }
@@ -79,8 +76,7 @@ ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
       }
     }
     else {
-      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
@@ -93,4 +89,5 @@ ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
   return result;
 }
 
-/*}}} */
+/*}}}  */
+

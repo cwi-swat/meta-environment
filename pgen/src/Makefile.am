@@ -17,10 +17,10 @@ EXTRA_DIST	= parsetablegen.idef sdf2table.src sdf2table.pod
 SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		flatten.c characters.c first.c follow.c goto.c parse-table.c \
 		predicted.c priorities.c reductions.c statistics.c \
-		Sdf2-Normalization.c intset.c
+		Sdf2-Normalization.c intset.c item.c \
 
 HDRS         = atsets.h ksdf2table.h statistics.h flatten.h predicted.h goto.h \
-		follow.h intset.h characters.h
+		follow.h intset.h characters.h item.h first.h priorities.h
 
 #CFLAGS = -pg
 

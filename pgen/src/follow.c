@@ -3,6 +3,8 @@
 #include "ksdf2table.h"
 #include "characters.h"
 #include "follow.h"
+#include "priorities.h"
+#include "first.h"
 
 extern ATerm empty_set;
 extern int MAX_PROD;
@@ -15,15 +17,7 @@ static ATermList *depend_closure = NULL;
 static ATermList *initial_follow_sets = NULL;
 
 extern ATermTable first_table;
-extern ATerm *nr_prod_table;
 extern ATermTable priority_table;
-extern ATermTable rhs_prods_pairs;
-
-extern ATbool contains_epsilon(ATermList set);
-extern ATermList remove_epsilon(ATermList set);
-extern ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2);
-
-ATbool changed;
 
 /*{{{  ATermList charclassExtraction(ATermList followset) */
 
@@ -56,7 +50,7 @@ CC_Class *charclassExtraction(ATermList followset)
 
 /*}}}  */
 
-/*{{{  void sons1(ATerm prod, ATerm item, ATermList labelset) */
+/*{{{  ATermList followset_filtering(ATermList followset) */
 
 ATermList followset_filtering(ATermList followset)
 {
@@ -73,60 +67,8 @@ ATermList followset_filtering(ATermList followset)
   return newfollowset;
 }
 
-void sons1(ATerm prod1, ATermInt prodnr1, ATerm item, ATermList labelset)
-{
-  ATerm prod2, symbol1, symbol2;
-  ATermInt ptr, prodnr2;
-  ATermList symbols1, symbols2, orgset, newset;
-  int iptr;
-
-  if (IS_PROD(prod1)) {
-    symbols1 = GET_LIST_ARG(prod1, 0);
-    symbol1 = GET_ARG(prod1, 1);
-    if (IS_ITEM(item)) {
-      prod2 = GET_ARG(item, 0);
-      prodnr2 = GET_INT_ARG(item, 1);  
-      ptr = GET_INT_ARG(item, 2); 
-
-      if (IS_PROD(prod2)) {
-	symbols2 = GET_LIST_ARG(prod2, 0);
-	symbol2 = GET_ARG(prod2, 1);
-	iptr = ATgetInt(ptr);
-	if (!pgen_cnf(prodnr2, iptr, ATgetLength(symbols2), prodnr1)) {
-	  orgset = local_follow_table[ATgetInt(prodnr1)];
-
-	  if (orgset) {
-	    newset = ATunion(orgset,labelset);
-	    if (!ATsetEqual(orgset,newset))
-	      changed = ATtrue;
-	    local_follow_table[ATgetInt(prodnr1)] = newset;
-	  }
-	  else {
-	    changed = ATtrue;
-	    local_follow_table[ATgetInt(prodnr1)] = labelset;
-	  }
-	}
-      }
-    }
-  }
-}
-
 /*}}}  */
-/*{{{  void sons(ATerm item, ATermList labelset, ATermList prods) */
 
-void sons(ATerm item, ATermList labelset, ATermList prods)
-{
-  ATerm prod, prodnr;
-
-  while (!ATisEmpty(prods)) {
-    prodnr = ATgetFirst(prods);
-    prods = ATgetNext(prods);
-    prod = nr_prod_table[ATgetInt((ATermInt)prodnr)];
-    sons1(prod, (ATermInt)prodnr, item, labelset);
-  }
-}
-
-/*}}}  */
 /*{{{  ATermList calc_first(ATermList symbols, int prodnr) */
 
 ATermList calc_first(ATermList symbols, int prodnr)
@@ -155,39 +97,6 @@ ATermList calc_first(ATermList symbols, int prodnr)
       }
     }
     return ATunion(newset,followset);
-  }
-}
-
-/*}}}  */
-/*{{{  ATermList follow(ATerm prod, ATermInt prodnr, int iptr) */
-
-void follow(ATerm prod, ATermInt prodnr, int iptr)
-{
-  ATermList symbols, restsymbols, firstset, prods;
-  ATerm symbol1, symbol2, newitem;
-  int i, len;
-
-  if (IS_PROD(prod)) {
-    symbols = GET_LIST_ARG(prod, 0);
-    symbol1 = GET_ARG(prod, 1);
-    len = ATgetLength(symbols);
-
-    for(i = iptr; i < ATgetLength(symbols); i++) {
-      restsymbols = ATgetSlice(symbols,i+1,len);
-      firstset = calc_first(restsymbols,ATgetInt(prodnr));
-      symbol2 = ATelementAt(symbols,i);
-      if (!symbol2)
-	symbol2 = empty_set;
-      newitem = (ATerm)ATmakeAppl4(afun_item,
-				   (ATerm)prod,
-				   (ATerm)prodnr,
-				   (ATerm)ATmakeInt(i),
-				   (ATerm)symbol2);
-      prods = (ATermList)ATtableGet(rhs_prods_pairs,symbol2);
-      if (prods) {
-	sons(newitem,firstset,prods);
-      }
-    }
   }
 }
 
@@ -240,8 +149,9 @@ static ATermList init_dependency(int prodid)
     while (!ATisEmpty(orgdep)) {
       dep = ATgetFirst(orgdep);
       orgdep = ATgetNext(orgdep);
-      if (!pgen_cnf((ATermInt)prodnr, idx, nr_elems, (ATermInt)dep))
+      if (!conflicts(IT_createItemDot(prodid, idx), dep)) {
 	depends = ATaddElement(depends, dep);
+      }
     }
 
     if (!contains_epsilon((ATermList)ATtableGet(first_table, elem)))
@@ -250,8 +160,6 @@ static ATermList init_dependency(int prodid)
 
   /* Remove yourself if present */
   depends = ATremoveElement(depends, prodnr);
-
-  /*ATwarning("dependencies for %d = %t\n", prodid, depends);*/
 
   return depends;
 }
@@ -389,11 +297,10 @@ ATermList calculate_first(ATermList symbols)
 
 static void init_follow_set(int prodid)
 {
-  ATerm prodnr, prod, symbol;
+  ATerm prod, symbol;
   ATermList sets, symbols, follow, prods;
   int iptr, len;
 
-  prodnr = (ATerm)ATmakeInt(prodid);
   prod = nr_prod_table[prodid];
   assert(prod);
   symbols = GET_LIST_ARG(prod, 0);
@@ -409,13 +316,13 @@ static void init_follow_set(int prodid)
 	if (prods) {
 	  follow = calculate_first(symbols);
 	  while (!ATisEmpty(prods)) {
-	    prod = ATgetFirst(prods);
+	    ATerm lhs_prodnr = ATgetFirst(prods);
 	    prods = ATgetNext(prods);
-	    if (!pgen_cnf((ATermInt)prodnr, iptr, len, (ATermInt)prod)) {
-	      prodid = ATgetInt((ATermInt)prod);
-	      sets = initial_follow_sets[prodid];
+	    if (!conflicts(IT_createItemDot(prodid, iptr), lhs_prodnr)) {
+	      int lhs_prodid = ATgetInt((ATermInt)lhs_prodnr);
+	      sets = initial_follow_sets[lhs_prodid];
 	      sets = ATinsert(sets, (ATerm)follow);
-	      initial_follow_sets[prodid] = sets;
+	      initial_follow_sets[lhs_prodid] = sets;
 	    }
 	  }
 	}
@@ -502,26 +409,9 @@ void calc_follow_table()
 
   init_dependencies();	
 
-  /*
-     for(i=MIN_PROD; i<MAX_PROD; i++) {
-     ATwarning("initial depends %d = %t\n", i, dependencies[i]);
-     }
-     */
-
   closure_dependencies();
 
-  /*
-     for(i=MIN_PROD; i<MAX_PROD; i++) {
-     ATwarning("depend closure %d = %t\n", i, depend_closure[i]);
-     }
-     */
-
   init_follow_sets();
-
-  /*
-     for(i=MIN_PROD; i<MAX_PROD; i++)
-     ATwarning("initial follow set %d = %t\n", i, initial_follow_sets[i]);
-     */
 
   union_follow_sets();
 
