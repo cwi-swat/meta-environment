@@ -57,10 +57,11 @@ in
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
       (
         rec-msg(test-results(Errors?)) .
-        snd-msg(display-rewrite-errors(Errors))
+        snd-note(remove-feedback-summary("asf-tests",ModuleName)) .
+        snd-note(display-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
       +
         rec-msg(rewrite-errors(Errors?)).
-        snd-msg(display-rewrite-errors(Errors))
+        snd-msg(display-rewrite-errors(ModuleName, Errors))
       ) .
       snd-note(ui-status(endstat(Id))) 
     +  
@@ -123,7 +124,7 @@ in
       NormalForm := quote(str(Text))
     +
       rec-msg(rewrite-errors(Errors?)).
-      snd-msg(display-rewrite-errors(Errors)).
+      snd-msg(display-rewrite-errors(ModuleName, Errors)).
       NormalForm := error-tree
     ).
     snd-note(ui-status(endstat(Id))).
@@ -134,14 +135,15 @@ endlet
 process Postprocess-semantics is
 let
   Semantics : term,
-  Msgs      : list
+  Msgs      : list,
+  Name : str
 in
   (
-    rec-msg(postprocess-semantics-hook(Semantics?)).
+    rec-msg(postprocess-semantics-hook(Name?, Semantics?)).
     snd-msg(check-asf(Semantics)).
     rec-msg(messages(Msgs?)).
-    snd-msg(display-asf-errors(Msgs)).
-    snd-msg(postprocess-semantics-hook-result(Semantics))
+    snd-msg(display-asf-errors(Name, Msgs)).
+    snd-msg(postprocess-semantics-hook-result(Name, Semantics))
   )*delta
 endlet
 

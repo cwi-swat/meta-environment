@@ -14,16 +14,17 @@ let
   Errors : list,
   ErrorsText : str,
   Tag : term,
-  TagText : str
+  TagText : str,
+  ModuleName : str
 in
   (
-    rec-msg(display-rewrite-errors(Errors?)).
-    snd-note(remove-feedback-summary("asfe","all")) .
-    snd-note(display-feedback-summary(feedback("asfe","all",Errors)))
+    rec-msg(display-rewrite-errors(ModuleName?, Errors?)).
+    snd-note(remove-feedback-summary("asfe",ModuleName)) .
+    snd-note(display-feedback-summary(feedback("asfe",ModuleName,Errors)))
   +
-    rec-msg(display-asf-errors(Errors?)).
-    snd-note(remove-feedback-summary("asf-checker","all")) .
-    snd-note(display-feedback-summary(feedback("asf-checker","all",Errors)))
+    rec-msg(display-asf-errors(ModuleName?, Errors?)).
+    snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
+    snd-note(display-feedback-summary(feedback("asf-checker",ModuleName,Errors)))
   +
     rec-msg(display-sdf-errors(Errors?)).
     if not-equal(Errors,[]) then
