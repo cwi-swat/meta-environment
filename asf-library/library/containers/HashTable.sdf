@@ -1,0 +1,18 @@
+module containers/HashTable[Key Value]
+
+exports
+
+lexical syntax
+
+[a-z]+ -> HashTable[[Key, Value]]
+
+context-free syntax
+
+lookup(HashTable[[Key,Value]], Key)       -> Value {built-in("hashtable-lookup")}
+store(HashTable[[Key,Value]], Key, Value) -> HashTable[[Key,Value]] {built-in("hashtable-store")}
+delete(HashTable[[Key,Value]], Key)       -> HashTable[[Key,Value]] {built-in("hashtable-delete")}
+
+hiddens 
+imports basic/Whitespace
+
+
