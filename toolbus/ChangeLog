@@ -2,7 +2,9 @@ $Id$
 
 2001/11/12 (jong@cwi.nl)
  * Released version 0.21
- * Document jurgen's change: added 'b' to all fopen calls that open a
+ * Documented jurgen's change: removed demos/game which uses obsolete
+   ToolBus/ATerm interface
+ * Documented jurgen's change: added 'b' to all fopen calls that open a
    file in binary mode.
 
 2001/08/30 (jong@cwi.nl)

@@ -217,7 +217,6 @@ AC_OUTPUT(
   demos/Makefile 
   demos/auction/Makefile 
   demos/calc/Makefile
-  demos/game/Makefile
   demos/hello/Makefile
   demos/wave/Makefile
   test/Makefile,
