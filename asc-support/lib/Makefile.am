@@ -9,11 +9,12 @@ BUILTIN_NAMES_ARITY=\
 	read-term-from-file_1 \
 	write-term-to-file_2\
 	shell_1 \
-	term-compare_2\
+	term-compare_2 \
 	lift-to-tree_1 \
+	lower-from-tree_1 \
 	lift-to-term_1 \
 	unparse_1 \
-	implode_1
+	implode_1 
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
