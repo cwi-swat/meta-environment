@@ -1,0 +1,9 @@
+%%
+%%
+%%      Layout
+%%
+%%
+
+   exports
+      lexical syntax
+         [ \t\n] -> LAYOUT

@@ -1,0 +1,32 @@
+imports Dint
+
+exports
+  sorts EREAL
+  context-free syntax
+    "<" INT "e" INT ">"         -> EREAL
+    EREAL "+" EREAL             -> EREAL
+    EREAL "-" EREAL             -> EREAL
+    EREAL "*" EREAL             -> EREAL
+    EREAL "/" EREAL             -> EREAL
+    "(" EREAL ")"               -> EREAL   {bracket}
+    precision                   -> INT
+ priorities
+   {left: EREAL "+" EREAL -> EREAL, EREAL "-" EREAL -> EREAL}
+   <
+   {left: EREAL "*" EREAL -> EREAL, EREAL "/" EREAL -> EREAL }
+
+
+hiddens
+  sorts UNI-REAL
+  context-free syntax
+    "<" INT "," INT "," INT ">" -> UNI-REAL
+    un( EREAL, EREAL )          -> UNI-REAL
+    exp( EREAL )                -> INT
+    mant( EREAL )               -> INT
+    sim ( EREAL )               -> EREAL
+    upgrade( EREAL, INT )       -> EREAL
+
+  variables
+    Exp[0-9']*          -> INT
+    Mant[0-9']*         -> INT
+    r[0-9']*            -> EREAL

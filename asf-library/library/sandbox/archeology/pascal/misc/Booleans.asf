@@ -1,0 +1,5 @@
+equations
+  [1]	TRUE | b  = TRUE   				[2]   FALSE | b = b
+  [3]   b | TRUE = TRUE					[4]   b | FALSE = FALSE
+  [5]   TRUE & b  = b					[6]   FALSE & b = FALSE
+  [7]   b & TRUE = b					[8]   b & FALSE = FALSE

@@ -1,0 +1,17 @@
+tr[
+begin 
+  int x,y,z;
+  bool b;
+    input x;
+    y := 1;               
+    z :=  1;
+    if (x != 0)
+      then
+        while (z != x) do
+             z := z + 1;
+             y := y * z
+        end
+    fi;
+    output y
+end ]
+

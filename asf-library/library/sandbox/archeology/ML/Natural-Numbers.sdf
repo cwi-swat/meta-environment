@@ -1,0 +1,22 @@
+%%
+%%
+%%      Natural-Numbers
+%%
+%%
+
+   imports Layout
+
+   exports
+      sorts LEX-NAT NAT
+      lexical syntax
+         [0-9]        -> LEX-NAT
+         [1-9] [0-9]+ -> LEX-NAT
+      context-free syntax
+         LEX-NAT          -> NAT
+         succ "(" NAT ")" -> NAT
+
+   hiddens
+      variables
+	 m      -> CHAR*
+	 k [12] -> CHAR+
+

@@ -1,0 +1,10 @@
+ imports Asple-extended-syntax Asple-tc
+ exports
+  context-free syntax
+   tr "[" PROGRAM "]"                 -> PROGRAM
+   tr "[" STMS "]" in MENV            -> STMS
+   tr "[" EXP "]" in MENV "to" MODE   -> EXP
+   dereference ID from MODE "to" MODE -> VAR
+
+   proper-exp "(" EXP ")"    -> BOOL
+   proper-var "(" VAR ")"    -> BOOL

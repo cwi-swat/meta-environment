@@ -1,0 +1,27 @@
+imports Pico-Abstract-Syntax Pico-Semantic-Entities Layout 
+  exports                                                  
+  context-free                                             
+  syntax                                                   
+    "evaluate" Expression -> Action                        
+      "the" "operation-result" "of" Operator -> Yielder    
+      "execute" Statements -> Action                       
+      "elaborate" Declarations -> Action                   
+      "the" "initial-value" "of" Type -> Data              
+      "run" Program -> Action                              
+  hiddens                                                  
+  variables                                                
+  "N_" -> Numeral                                          
+    "C_" -> Character-String                               
+    "S_1" -> Statement                                     
+    "S_2" -> Statements                                    
+    "I_" -> Identifier                                     
+    "E_" -> Expression                                     
+    "S_1" -> Statements                                    
+    "S_" -> Statements                                     
+    "D_1" -> Declaration                                   
+    "D_2" -> Declarations                                  
+    "T_" -> Type                                           
+    "E_1" -> Expression                                    
+    "O_" -> Operator                                       
+    "E_2" -> Expression                                    
+    "D_" -> Declarations

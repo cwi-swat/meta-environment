@@ -1,0 +1,28 @@
+%%  Errors
+
+imports
+    Booleans States
+
+exports
+    sorts
+        ERRORS ERROR-HEAD ERROR-TAIL ERROR-TAILS
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+empty-errors                            -> ERRORS
+ERRORS "+" ERRORS                       -> ERRORS  {left}
+"(" ERRORS ")"                          -> ERRORS  {bracket}
+BOOL                                    -> ERRORS
+
+make-error-head "(" STATE INT ")"               -> ERROR-HEAD
+ERROR-TAIL*                                     -> ERROR-TAILS
+single-error "(" ERRORS ")"                     -> BOOL
+ERROR-HEAD ERRORS                               -> ERRORS
+connect-errors "(" STATE INT ERRORS* ")"        -> ERRORS
+"Error" in item ":" Name pair nr ":" INT        -> ERROR-HEAD
+
+variables
+"_Errors"[']+      -> ERRORS
+"_Error-head"[']+  -> ERROR-HEAD
+"_Error-tail"[']+  -> ERROR-TAIL
+"_Error-tails"[']+ -> ERROR-TAIL*

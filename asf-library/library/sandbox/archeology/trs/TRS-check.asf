@@ -1,0 +1,165 @@
+
+equations
+
+%% ------------------------------------------------------------------------- %%
+%% chk : check a TRS                                                         %%
+%%       [1] signature should be OK                                          %%
+%%       [2] rewrite rules should be OK                                      %%
+%%       [3] term should be OK                                               %%
+%%                                                                           %%
+%%  Note: hybrid functions are used to print messages as *side-effects*      %%
+
+  [Ch1]  duplicates(_SigS) = true,
+         _Dummy = emit(duplicates in signature)
+         =======================================
+         chk[ trs _SigS _RRS term _Term] = false
+
+  [Ch2]  duplicates(_SigS) != true,
+         _Dummy = emit(signature OK)
+         =================================
+         chk[ trs _SigS _RRS term _Term] =
+           chk-rrs[ _RRS; _SigS ] and chk-ts[ term _Term; _SigS ]
+
+%% ------------------------------------------------------------------------- %%
+%% duplicates : test for duplicates in the signature
+%%              use hybrid function to emit error messages
+
+  [Ch3]  duplicates( signature _SigEl*, _SigEl, _SigEl*', _SigEl, _SigEl*'' ) =
+           true
+
+%% ------------------------------------------------------------------------- %%
+%% chk-rrs : check the rewrite rule section                                  %%
+
+  [Ch4]  chk-rrs[rewrite-rules; _SigS] = true
+  [Ch5]  chk-rrs[rewrite-rules _Rule; _SigS] = chk-rule[_Rule; _SigS]
+  [Ch6]  chk-rrs[rewrite-rules _Rule,_Rule*; _SigS] =
+           chk-rule[_Rule; _SigS] and chk-rrs[rewrite-rules _Rule*; _SigS]
+
+%% ------------------------------------------------------------------------- %%
+%% chk-rule : check a single rewrite rule                                    %%
+%%            [1] all function symbols occur in the signature                %%
+%%            [2] left-hand side not a single variable                       %%
+%%            [3] all variables in right-hand side occur in left-hand side   %%
+%%                                                                           %%
+%%            emit message for each error encountered                        %%
+
+  [Ch7]  chk-sig[ _Lhs; _SigS ] = true,
+         chk-sig[ _Rhs; _SigS ] = true,
+         not is-single-var(_Lhs) = true,
+         var-list(_Rhs) in var-list(_Lhs) = true,
+         _Dummy = emit(rule _Tag is OK)
+         ===========================================
+         chk-rule[[_Tag] _Lhs -> _Rhs; _SigS] = true
+
+  [Ch8]  chk-sig[ _Lhs; _SigS ] = false,
+         _Dummy = emit(error in rule _Tag : bad left-hand side _Lhs)
+         ============================================
+         chk-rule[[_Tag] _Lhs -> _Rhs; _SigS] = false
+
+  [Ch9]  chk-sig[ _Rhs; _SigS ] = false,
+         _Dummy = emit(error in rule _Tag : bad right-hand side _Rhs)
+         ============================================
+         chk-rule[[_Tag] _Lhs -> _Rhs; _SigS] = false
+
+  [Ch10] is-single-var(_Lhs) = true,
+         _Dummy = emit(error in rule _Tag : left-hand side is single var)
+         ============================================
+         chk-rule[[_Tag] _Lhs -> _Rhs; _SigS] = false
+
+  [Ch11] var-list(_Rhs) in var-list(_Lhs) = false,
+         _Dummy = emit(error in rule _Tag : new vars in right-hand-side)
+         ============================================
+         chk-rule[[_Tag] _Lhs -> _Rhs; _SigS] = false
+
+%% ------------------------------------------------------------------------- %%
+%% is-single-var : is a term a single variable ?                             %%
+
+  [Ch12] is-single-var(var("$" _Char+)) = true
+  [Ch13] is-single-var(id(_Char+)) = false
+  [Ch14] is-single-var(_Id(_Term+)) = false
+
+%% ------------------------------------------------------------------------- %%
+%% var-list : create list of all variables which occur in a term             %%
+
+  [Ch15] var-list(_Var) = (_Var)
+  [Ch16] var-list(_Id) = ()
+  [Ch17] var-list(_Id(_Term)) = var-list(_Term)
+  [Ch18] var-list(_Id(_Term,_Term+)) =
+           var-list(_Term) ++ var-list(_Id(_Term+))
+
+%% ------------------------------------------------------------------------- %%
+%% ++ : concatenation of VAR-LIST's                                          %%
+
+  [Ch19] (_Var*) ++ (_Var*') = (_Var* _Var*')
+
+%% ------------------------------------------------------------------------- %%
+%% VAR-LIST1 in VAR-LIST2 : is VAR-LIST1 a subset of VAR-LIST2 ?             %%
+
+  [Ch20] (_Var) in () = false
+  [Ch21] () in (_Var*) = true
+  [Ch22] (_Var _Var*') in (_Var _Var*) = (_Var*') in (_Var _Var*)
+  [Ch23] _Annots = ,
+         _Annots _Var != _Annots _Var'
+         ================================================
+         (_Var _Var*') in (_Var' _Var*) =
+           (_Var) in (_Var*) and (_Var*') in (_Var'_Var*)
+
+%% ------------------------------------------------------------------------- %%
+%% chk-ts : check term section                                               %%
+%%            [1] term must not contain variables                            %%
+%%            [2] term must not contain undeclared function symbols          %%
+
+  [Ch24] var-list(_Term) = (),
+         chk-sig[ _Term; _SigS ] = true
+         ================================
+         chk-ts[term _Term; _SigS] = true
+
+  [Ch25] var-list(_Term) != (),
+         _Dummy = emit(error in term: term contains variables)
+         ===============
+         chk-ts[term _Term; _SigS] = false
+  [Ch26] chk-sig[ _Term; _SigS ] = false,
+         _Dummy = emit(error in term: undeclared functions)
+         ================
+         chk-ts[term _Term; _SigS] = false
+
+%% ------------------------------------------------------------------------- %%
+%% chk-sig : check if term contains undeclared function symbols              %%
+%%           emit message for each undeclared function symbol                %%
+
+  [Ch27] lookup _Id/0 in _SigEl* = true
+         ==============================================
+         chk-sig[_Annots _Id; signature _SigEl*] = true
+
+  [Ch28] lookup _Id/0 in _SigEl* = false,
+          _Dummy = emit(undeclared function : _Id/0)
+         ===============================================
+         chk-sig[_Annots _Id; signature _SigEl*] = false
+
+  [Ch29] chk-sig[_Annots _Var; signature _SigEl*] = true
+
+  [Ch30] lookup _Id/length(_Term+) in _SigEl* = true
+         ==================================================
+         chk-sig[_Annots _Id(_Term+); signature _SigEl* ] =
+           chk-sig[_Term+; signature _SigEl*]
+
+  [Ch31] _SigEl = _Id/length(_Term+),
+         lookup _SigEl in _SigEl* = false,
+         _Dummy = emit(undeclared function : _SigEl)
+         ========================================================
+         chk-sig[_Annots _Id(_Term+); signature _SigEl* ] = false
+
+  [Ch32] chk-sig[_Term, _Term+; _SigS] =
+           chk-sig[_Term; _SigS] and chk-sig[_Term+; _SigS]
+
+%% ------------------------------------------------------------------------- %%
+%% lookup : lookup function symbol in signature                              %%
+
+
+  [Ch33] lookup _SigEl in _SigEl, _SigEl* = true
+
+  [Ch34] _SigEl != _SigEl'
+         ============================================================
+         lookup _SigEl in _SigEl', _SigEl* = lookup _SigEl in _SigEl*
+
+  [Ch35] lookup _SigEl in = false

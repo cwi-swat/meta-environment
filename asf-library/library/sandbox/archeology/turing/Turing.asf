@@ -1,0 +1,43 @@
+  equations   
+
+  [ 1]  execute( TM, Tape ) = execute( Tape; TM, [Tape] )
+
+  [ 2]  Instrs = I1; on (OldState,Symbol) do (halt, NewState); I2,
+        OldTape = [Head| scanned-symbol:Symbol |Tail]
+        =====================================================
+        execute( OldTape; present-state:OldState; Instrs, [Tapes] ) = [Tapes]
+
+  [ 3]  Instrs = I1; on (OldState,Symbol) do (move-left, NewState); I2,
+        OldTape = [scanned-symbol: Symbol |Tail],
+        NewTape = [scanned-symbol: blank  Symbol |Tail]
+        ========================================================
+        execute( OldTape; present-state: OldState; Instrs, [Tapes] ) =
+          execute( NewTape; present-state: NewState; Instrs, [Tapes NewTape])
+
+  [ 4]  Instrs = I1; on (OldState,Symbol) do (move-left, NewState); I2,
+        OldTape = [Head| LeftSym  scanned-symbol: Symbol |Tail],
+        NewTape = [Head| scanned-symbol: LeftSym  Symbol |Tail]
+        ========================================================
+        execute( OldTape; present-state: OldState; Instrs, [Tapes] ) =
+          execute( NewTape; present-state: NewState; Instrs, [Tapes NewTape])
+
+  [ 5]  Instrs = I1; on (OldState,Symbol) do (move-right, NewState); I2,
+        OldTape = [Head| scanned-symbol: Symbol],
+        NewTape = [Head| Symbol  scanned-symbol: blank]
+        ========================================================
+        execute( OldTape; present-state: OldState; Instrs, [Tapes] ) =
+          execute( NewTape; present-state: NewState; Instrs, [Tapes NewTape])
+
+  [ 6]  Instrs = I1; on (OldState,Symbol) do (move-right, NewState); I2,
+        OldTape = [Head| scanned-symbol: Symbol  RightSym |Tail],
+        NewTape = [Head| Symbol  scanned-symbol: RightSym |Tail]
+        ========================================================
+        execute( OldTape; present-state: OldState; Instrs, [Tapes] ) =
+          execute( NewTape; present-state: NewState; Instrs, [Tapes NewTape])
+
+  [ 7]  Instrs = I1; on (OldState,Symbol) do (write(NewSymbol), NewState); I2,
+        OldTape = [Head| scanned-symbol: Symbol |Tail],
+        NewTape = [Head| scanned-symbol: NewSymbol |Tail]
+        ========================================================
+        execute( OldTape; present-state: OldState; Instrs, [Tapes] ) =
+          execute( NewTape; present-state: NewState; Instrs, [Tapes NewTape])

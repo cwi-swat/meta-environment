@@ -1,0 +1,38 @@
+%% Specify Operator Tables
+imports Booleans
+
+exports
+  sorts OP-TYPE BAR OPERATOR  TABLE-HEADER TABLE-ENTRY LOOK-FOR-OUT
+    OPERATOR-TABLE
+
+  lexical syntax
+    [\-]+ "+" [\-]+ "+" [\-]+ "+" [\-]+       		-> BAR
+
+  context-free syntax
+    "not"   -> OPERATOR	  "+"     -> OPERATOR   "-"     -> OPERATOR  
+    "*"     -> OPERATOR    "/"    -> OPERATOR   "div"   -> OPERATOR
+    "mod"   -> OPERATOR   "and"   -> OPERATOR   "or"    -> OPERATOR 
+    "="     -> OPERATOR   "<>"    -> OPERATOR   "<"     -> OPERATOR
+    ">"     -> OPERATOR   "<="    -> OPERATOR   ">="    -> OPERATOR 
+    "in"    -> OPERATOR
+    int     -> OP-TYPE    real    -> OP-TYPE    boolean -> OP-TYPE  
+    undef   -> OP-TYPE    set     -> OP-TYPE    ordinal -> OP-TYPE
+    string  -> OP-TYPE    simple  -> OP-TYPE    pointer -> OP-TYPE
+
+    "Operator" "|" "Operand1" "|" "Operand2" "|" "Result" 
+                      BAR                               -> TABLE-HEADER
+    OPERATOR "|" OP-TYPE  "|" OP-TYPE  "|"  OP-TYPE     -> TABLE-ENTRY
+    TABLE-HEADER TABLE-ENTRY*  ";"                      -> OPERATOR-TABLE
+
+    look-for "(" OPERATOR ","
+       OP-TYPE "," OP-TYPE "," OPERATOR-TABLE ")"       -> LOOK-FOR-OUT
+    "<" BOOLEAN "," OP-TYPE ">"                         -> LOOK-FOR-OUT
+  
+hiddens
+  context-free syntax
+    entry-matches "?" "(" OPERATOR "," OP-TYPE "," OP-TYPE  ","
+      OPERATOR "," OP-TYPE "," OP-TYPE ")"              -> BOOLEAN
+  variables
+    [_]Optor[12]*	-> OPERATOR     [_]Op[123]*  	-> OP-TYPE
+    [_]Res              -> OP-TYPE      [_]Header       -> TABLE-HEADER
+    [_]OpEntries        -> TABLE-ENTRY*

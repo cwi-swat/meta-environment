@@ -1,0 +1,149 @@
+\documentstyle[12pt,verbatimfiles]{article}
+
+\raggedbottom
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+
+\newcommand{\asdf}{\mbox{ASF{\tt +}SDF}}
+
+
+\newcommand{\asdfmod}[2]{
+  \subsubsection{#2}
+  \verbatimfile{#1/#2.syn}
+  \verbatimfile{#1/#2.eqs}
+}
+
+
+\newcommand{\asdfmodsyn}[2]{
+  \subsubsection{#2}
+  \verbatimfile{#1/#2.syn}
+}
+
+
+\title{Executing Action Semantic Descriptions\\
+	using ASF+SDF:\\
+       Technical Documentation}
+\author{
+  Arie van Deursen\\
+  {\footnotesize \sl
+     CWI -- P.O. Box 4079, 1009 AB Amsterdam, The Netherlands
+  }\\
+  {\footnotesize \sl {\rm Email:} arie@cwi.nl} \\
+  \\
+  Peter D. Mosses\\
+  {\footnotesize \sl
+    Computer Science Department, Aarhus University
+  }
+  {\footnotesize \sl
+    DK-8000 Aarhus C, Denmark}\\
+  {\footnotesize \sl
+    {\rm Email:} pdmosses@daimi.aau.dk}\\
+}
+\date{Version 1.03;Draft!}
+
+
+
+
+
+\begin{document}
+  \bibliographystyle{alpha}
+
+\maketitle
+
+\begin{abstract}
+
+  This document contains the \asdf\ modules defining
+  a translation from action notation to \asdf\ modules.
+
+\end{abstract}
+
+
+
+\newpage
+\tableofcontents
+
+
+
+\newpage
+\section{Introduction}
+
+bla bla
+
+
+\section{The \asdf\ Modules}
+
+
+\subsection{Preliminaries}
+
+  \asdfmod{../common}{Layout}
+  \asdfmod{../common}{Booleans}
+  \asdfmodsyn{../common}{Basic-Notions}
+
+
+\subsection{Syntax of the MetaNotation}
+
+  \asdfmod{../unified-algebras}{Allowed-Symbols}
+  \asdfmod{../unified-algebras}{Allowed-Terms}
+  \asdfmod{../unified-algebras}{Allowed-GrammarTerms}
+  \asdfmod{../unified-algebras}{MetaNotation}
+
+
+\subsection{Syntax of \asdf}
+
+  \asdfmod{../asdf-syntax}{SDF-Syntax}
+  \asdfmod{../asdf-syntax}{ASF-Syntax}
+
+
+
+\subsection{Translation Preliminaries}
+  \asdfmod{../asdf-syntax}{SDF-Syntax-Operations}
+  \asdfmod{../common}{Character-Operations}
+  \asdfmod{../grammar2sdf}{Lisp}
+
+
+\subsection{Generating SDF}
+  
+  \asdfmod{../functionality2sdf}{Introduces-to-SDF}
+  \asdfmod{../functionality2sdf}{Functionality-to-SDF}
+  \asdfmod{../grammar2sdf}{Literals}
+  \asdfmod{../grammar2sdf}{Grammar-to-SDF}
+
+\subsection{Generating ASF}
+
+  \asdfmod{../equations2asf}{Variables-in-Terms}
+
+  
+
+\subsection{Processing Modules}
+
+  \asdfmod{../grammar2sdf}{Module-to-SDF}
+  \asdfmod{../grammar2sdf}{Name-of-Module}
+
+
+\subsection{Standard Modules}
+
+  \asdfmodsyn{../grammar2sdf}{StandardLexical}
+  \asdfmodsyn{../grammar2sdf}{StandardLiteral}
+
+
+
+\section{Button Machinery}
+
+  \subsection{Ctasdf.conf}
+
+  \verbatimfile{../ctasdf.conf}
+
+  \subsection{Lisp code}
+
+  \verbatimfile{../dump-grammar.ll}
+
+
+
+
+\end{document}
+
+
+
+

@@ -1,0 +1,13 @@
+imports SyntaxHeaders SyntaxStats
+
+exports
+  sorts PROGRAM   %% BLOCK in SyntaxHeaders
+  context-free syntax
+
+    DECLARE DECL-LIST BEGIN STAT-SEQ END  -> BLOCK
+    BEGIN STAT-SEQ END                    -> BLOCK
+
+    "PROGRAM" ID ";" BLOCK "."            -> PROGRAM
+
+  variables
+    [_]Program[0-9']*   -> PROGRAM

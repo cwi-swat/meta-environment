@@ -1,0 +1,7 @@
+imports Booleans  Lambda-syntax Varsets
+
+exports
+  context-free syntax
+    L-EXP "[" L-EXP "/" VAR "]"                  -> L-EXP
+    free-vars "(" L-EXP ")"                      -> VAR-LIST
+    get-fresh "(" VAR "," L-EXP ")"              -> VAR

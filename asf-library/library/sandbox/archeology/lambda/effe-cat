@@ -1,0 +1,47 @@
+echo "Module Booleans"
+cat Booleans.syn
+cat Booleans.eqs
+
+echo
+echo "Module Layout"
+cat Layout.syn
+cat Layout.eqs
+
+echo
+echo "Module Variables"
+cat Variables.syn
+cat Variables.eqs
+
+echo
+echo "Module Varsets"
+cat Varsets.syn
+cat Varsets.eqs
+
+echo
+echo "Module Lambda-syntax"
+cat Lambda-syntax.syn
+cat Lambda-syntax.eqs
+
+echo
+echo "Module Substitute"
+cat Substitute.syn
+cat Substitute.eqs
+
+echo
+echo "Module Convert"
+cat Convert.syn
+cat Convert.eqs
+
+echo
+echo "Module Reduce"
+cat Reduce.syn
+cat Reduce.eqs
+
+echo
+echo "Module Let"
+cat Let.syn
+cat Let.eqs
+
+echo
+echo "Module Lambda"
+cat Lambda.syn

@@ -1,0 +1,61 @@
+%%  DataStacks
+
+imports
+    Arithmetic
+exports
+    sorts
+        VALUE PATH D-ELEM D-ELEMS D-RECORD D-STACK
+    context-free syntax
+        EXPR                                            -> VALUE
+        "[" INT-CONST "," INT-CONST "," VALUE+ "]"      -> VALUE
+        ref ( ID , PATH )                               -> VALUE
+        INT-CONST*                                      -> PATH
+        ID ":" VALUE                                    -> D-ELEM       %% identifier
+        ID ":" PATH ":" PROC-DECL                       -> D-ELEM       %% proc. def.
+        ID ":" STAT-SEQ                                 -> D-ELEM       %% label
+        D-ELEM*                                         -> D-ELEMS
+        "[" ID "," PATH "," D-ELEM* "]"                 -> D-RECORD
+        D-RECORD*                                       -> D-STACK
+
+        type ( ID , PATH , D-STACK )                    -> TYPE
+        lookup ( ID , PATH , D-STACK )                  -> VALUE
+        update ( ID , PATH , D-STACK , VALUE )          -> D-STACK
+        lookup-proc ( ID , D-STACK )                    -> D-ELEM
+        lookup-seq ( ID, D-STACK )                      -> STAT-SEQ
+        get-name ( PROC-DECL )                          -> ID
+    variables
+        [_]Id[']*                                       -> ID
+        [_]Int[']*                                      -> INT-CONST
+        [_]Real[']*                                     -> REAL-CONST
+        [_]Bool[']*                                     -> BOOL-CONST
+        "_Low"[']*                                      -> INT-CONST
+        "_High"[']*                                     -> INT-CONST
+        [_]Int[*][']*                                   -> INT-CONST*
+        [_]Int[+][']*                                   -> INT-CONST+
+        [_]Exp[']*                                      -> EXPR
+        [_]Exp[*][']*                                   -> { EXPR "," }*
+        [_]Seq[']*                                      -> { STAT ";" }*
+        [_]ProcDecl                                     -> PROC-DECL
+        [_]Formal[+][']*                                -> { FORMAL ";" }+
+        [_]Block                                        -> BLOCK
+
+        [_]Value[']*                                    -> VALUE
+        [_]Value[*][']*                                 -> VALUE*
+        [_]Value[+][']*                                 -> VALUE+
+        [_]Path[']*                                     -> PATH
+        [_]DElem[']*                                    -> D-ELEM
+        [_]DElem[*][']*                                 -> D-ELEM*
+        [_]DRec[']*                                     -> D-RECORD
+        [_]DRec[*][']*                                  -> D-RECORD*
+        [_]DRec[+][']*                                  -> D-RECORD+
+        [_]DStack[']*                                   -> D-STACK
+
+  hiddens
+    context-free syntax
+        lookup-list ( PATH , VALUE )                    -> VALUE
+        update-list ( PATH , VALUE , VALUE )            -> VALUE
+        next-scope ( D-STACK , PATH )                   -> D-STACK
+        get-id ( D-ELEM )                               -> ID
+        get-value ( D-ELEM )                            -> VALUE
+        get-seq ( D-ELEM )                              -> STAT-SEQ
+        is-ref ( VALUE )                                -> BOOL-CONST

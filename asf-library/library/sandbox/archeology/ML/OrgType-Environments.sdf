@@ -1,0 +1,34 @@
+%%
+%%
+%%      Type-Environments
+%%
+%%
+
+   imports Booleans Type-Substitutions
+      Tables
+	 Keys bound by
+	    sorts KEY => ID
+	 to Mini-ML-Expressions
+         Entries bound by
+	    sorts ENTRY => GEN-TYPE
+	    context-free syntax
+	       error-entry => error-gt -> GEN-TYPE
+	 to Types
+	 renamed by
+	    sorts
+	       PAIR       => ENV-PAIR
+	       TABLE      => TYPE-ENV
+	       LOOKUP-OUT => TYPE-ENV-LOOKUP-OUT
+
+   exports
+      context-free syntax
+         apply "(" TYPE-SUBS "," TYPE-ENV ")" -> TYPE-ENV
+         VAR elm TYPE-ENV                     -> BOOL
+
+   hiddens
+      variables
+         Id    -> ID
+         var   -> VAR
+         gt    -> GEN-TYPE
+         subs  -> TYPE-SUBS
+         pairs -> {ENV-PAIR ","}*

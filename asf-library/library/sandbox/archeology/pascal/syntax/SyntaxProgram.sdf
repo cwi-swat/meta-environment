@@ -1,0 +1,22 @@
+%% Define programs and blocks, according to ISO section 6.2.1 and 6.10
+imports SyntaxHeaders SyntaxStats
+
+exports
+  sorts PROC-OR-FUN PROCS-OR-FUNS  DEFS DECLS BLOCK PROGRAM PROGRAM-HEADER 
+    PROGRAM-PARAMS
+  context-free syntax
+    HEADING ";" forward			                 -> PROC-OR-FUN
+    HEADING ";" BLOCK			                 -> PROC-OR-FUN
+    FUNCTION-IDENTIFICATION ";" BLOCK	                 -> PROC-OR-FUN
+
+                                                         -> PROCS-OR-FUNS
+    { PROC-OR-FUN ";" }+  ";"                            -> PROCS-OR-FUNS
+
+    DEFS DECLS COMP-STAT                                 -> BLOCK
+    LABELS CONSTS TYPES                                  -> DEFS
+    VARS PROCS-OR-FUNS                                   -> DECLS
+    
+                                                         -> PROGRAM-PARAMS
+    "(" { IDENT "," }+ ")"			         -> PROGRAM-PARAMS
+    program IDENT PROGRAM-PARAMS		         -> PROGRAM-HEADER
+    PROGRAM-HEADER ";" BLOCK "."                        -> PROGRAM

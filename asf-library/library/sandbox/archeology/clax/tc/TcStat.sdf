@@ -1,0 +1,68 @@
+%%  TcStat
+
+imports TcExpr
+
+exports
+  sorts ASGN IF THEN ELSE END WHILE
+        DO GOTO READ WRITE STATLEX
+  context-free syntax
+    ":="    -> ASGN
+    "IF"    -> IF
+    "THEN"  -> THEN
+    "ELSE"  -> ELSE
+    "END"   -> END
+    "WHILE" -> WHILE
+    "DO"    -> DO
+    "GOTO"  -> GOTO
+    "READ"  -> READ
+    "WRITE" -> WRITE
+     ASGN    -> STATLEX
+     IF      -> STATLEX
+     THEN    -> STATLEX
+     ELSE    -> STATLEX
+     END     -> STATLEX
+     WHILE   -> STATLEX
+     DO      -> STATLEX
+     GOTO    -> STATLEX
+     READ    -> STATLEX
+     WRITE   -> STATLEX
+
+   VAR ASGN EXPR                              -> ASSIGN-STAT
+   IF EXPR THEN STAT-SEQ ELSE STAT-SEQ END    -> COND-STAT
+   IF EXPR THEN STAT-SEQ END                  -> COND-STAT
+   WHILE EXPR DO STAT-SEQ END                 -> LOOP-STAT
+   READ  "(" VAR ")"                          -> IN-OUT-STAT
+   WRITE "(" EXPR ")"                         -> IN-OUT-STAT
+   WRITE "(" STRING ")"                       -> IN-OUT-STAT
+   GOTO LABEL                                 -> GOTO-STAT
+
+  variables
+    [_]Asgn  -> ASGN
+    [_]If    -> IF
+    [_]Then  -> THEN
+    [_]Else  -> ELSE
+    [_]End   -> END
+    [_]While -> WHILE
+    [_]Do    -> DO
+    [_]Goto  -> GOTO
+    [_]Read  -> READ
+    [_]Write -> WRITE
+  priorities
+    {VAR ":=" EXPR -> ASSIGN-STAT,
+     "IF" EXPR "THEN" STAT-SEQ "ELSE" STAT-SEQ "END" -> COND-STAT,
+     "IF" EXPR "THEN" STAT-SEQ "END"                 -> COND-STAT,
+     "WHILE" EXPR "DO" STAT-SEQ "END"                -> LOOP-STAT,
+     "READ" "(" VAR ")"                              -> IN-OUT-STAT,
+     "WRITE" "(" EXPR ")"                            -> IN-OUT-STAT,
+     "WRITE" "(" STRING ")"                          -> IN-OUT-STAT,
+     "GOTO" LABEL                                    -> GOTO-STAT}
+     >
+    {VAR ASGN EXPR                           -> ASSIGN-STAT,
+     IF EXPR THEN STAT-SEQ ELSE STAT-SEQ END -> COND-STAT,
+     IF EXPR THEN STAT-SEQ END               -> COND-STAT,
+     WHILE EXPR DO STAT-SEQ END              -> LOOP-STAT,
+     READ  "(" VAR ")"                       -> IN-OUT-STAT,
+     WRITE "(" EXPR ")"                      -> IN-OUT-STAT,
+     WRITE "(" STRING ")"                    -> IN-OUT-STAT,
+     GOTO LABEL                              -> GOTO-STAT
+ }

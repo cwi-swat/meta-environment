@@ -1,0 +1,29 @@
+
+equations
+  [T1]    add Mpair to mtable (Mpairs)  = mtable (Mpair # Mpairs)
+
+  [T2]    lookup Id in mtable (Mpairs1 # (Id : Mode) # Mpairs) = Mode
+
+ %% [T3]                          Id != Id1
+ %%          ======================================================>
+ %%          lookup Id in mtable ((Id1: Mode) # Mpairs) =
+ %%                                    lookup Id in mtable (Mpairs)
+
+ [T3a]   Id is in mtable() = false
+
+ [T3b]   Id is in mtable((Id: Mode) # Mpairs) = true
+
+ [T3c]    Id != Id1
+          ==========>
+          Id is in mtable((Id1: Mode) # Mpairs) = Id is in mtable(Mpairs)
+
+  [T4]     modify (Id : Mode) in mtable ((Id : Mode1) # Mpairs) =
+                                         mtable ((Id : Mode) # Mpairs)
+
+  [T5]                          Id != Id1,
+            modify (Id : Mode) in mtable (Mpairs) = mtable (Mpairs1)
+            ======================================================>
+            modify (Id : Mode) in mtable ((Id1 : Mode1) # Mpairs) =
+                                        mtable ((Id1 : Mode1) # Mpairs1)
+
+  [T6]     modify (Id : Mode) in mtable () =  mtable (Id : Mode)

@@ -1,0 +1,6 @@
+imports Asple-stat Asple-states  Naturals
+  exports
+  context-free syntax
+   ev "[" PROGRAM "]" with INPUT   -> OUTPUT
+   ev "[" {STM ";"}+ "]" in STATE  -> STATE
+   ev "[" EXP "]" in STATE         -> VAL

@@ -1,0 +1,51 @@
+equations
+
+[500]   lookup-state([_Sym-tab', _Errors', _Names'], _Name' ) = lookup-state(_Sym-tab' , _Name')
+
+[501a]  name(_State') = _Name'
+        ===================
+        lookup-state([_State'], _Name') = _State'
+
+[501b]  name(_State') = _Name'
+        ===================
+        lookup-state(_State', _Name') = _State'
+
+[502]   name(_State') = _Name'
+        ===================
+        lookup-state([_State'; _States'], _Name') = _State'
+
+[503]   name(_State') != _Name'
+        ===================
+        lookup-state([_State'; _States'], _Name') = lookup-state([_States'], _Name')
+
+[1a]    sym-tab ( [_Sym-tab', _Errors', _Names'] ) = _Sym-tab'
+
+[1b]    sym-tab ( empty-se ) = empty-sym-tab
+
+[2a]    errors ( [_Sym-tab', _Errors', _Names'] ) = _Errors'
+
+[2b]    errors ( empty-se ) = empty-errors
+
+[3a]    name-list ([_Sym-tab', _Errors', _Names'] ) = _Names'
+
+[3b]    name-list ( empty-se ) = empty-names
+
+[50a]   _Se' + empty-state = _Se'
+
+[50b]   empty-state + _Se' = _Se'
+
+[60a]   empty-se + _State' = _State' + empty-se
+
+[60b]   _State' + empty-se = [add-symtab(_State', empty-sym-tab), empty-errors, name(_State')]
+
+[70a]   _State' + [_Sym-tab', _Errors', _Names'] =
+                [add-symtab(_State', _Sym-tab'), _Errors', name(_State') _Names']
+
+[70b]   [_Sym-tab', _Errors', _Names'] + _State' = _State' + [_Sym-tab', _Errors', _Names']
+
+[71a]   [[_States'], _Errors', _Names'] + [[_States''], _Errors'', _Names''] =
+                [[_States'; _States''], _Errors' + _Errors'', _Names' _Names'']
+
+[80a]   add-symtab(_State' , [_States' ]) = [_State' ; _States' ]
+
+[80b]   add-symtab(_State' , empty-sym-tab) = [_State' ]

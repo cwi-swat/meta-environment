@@ -1,0 +1,20 @@
+%% Typecheck Pascal programs, according to ISO section 6.2.1. and 6.10.
+imports TC-block
+
+exports
+  context-free syntax
+    tc "(" PROGRAM ")"                                        -> ERRORS
+
+hiddens
+  context-free syntax
+    params-tc-before-block "(" PROGRAM-HEADER "," ENV ")"     -> ENV
+    params-tc-after-block  "(" PROGRAM-HEADER "," ENV ")"     -> ENV
+    params-tc-before-block "(" { IDENT ","}* "," ENV ")"      -> ENV
+    params-tc-after-block  "(" { IDENT ","}* "," ENV ")"      -> ENV
+    "check-input/output" "(" { IDENT ","}* "," ENV ")"        -> ENV
+    "is-input/output-parameter" "?" "(" IDENT ")"             -> BOOLEAN
+
+  variables
+    Program       -> PROGRAM                   [_]header      -> PROGRAM-HEADER
+    Prog-params   -> PROGRAM-PARAMS            Block          -> BLOCK
+    [_]pars       -> { IDENT ","}*             [_]par         -> IDENT

@@ -1,0 +1,5 @@
+CONFIG mappings for language "Lambda" :
+   filename extension : "lambda"
+   look for modules in : "/ufs/arie/specs/lambda"
+   look for configuration files in : "/ufs/arie/specs/lambda"
+   tools in modules : "Reduce" "Convert"

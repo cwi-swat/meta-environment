@@ -1,0 +1,8 @@
+imports Booleans Mode-con
+exports
+  context-free syntax
+        basic MODE                    -> MODE
+        MODE "<=" MODE                -> BOOL
+        is-bool MODE                  -> BOOL
+        result-type "(" MODE "," MODE ")"  -> MODE
+        proper-mode   MODE           -> BOOL

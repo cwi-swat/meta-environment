@@ -1,0 +1,72 @@
+equations
+
+(* -------------------------------------------------------------------------- *)
+(* hybrid integer arithmetic                                                  *)
+
+    [hi1]  hybrid-int-add(_Int, _Int') =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (add (convert-lexical-to-lisp << _Int >>)
+                             (convert-lexical-to-lisp << _Int' >>)) )
+
+    [hi2]  hybrid-int-sub(_Int, _Int') =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (sub (convert-lexical-to-lisp << _Int >>)
+                             (convert-lexical-to-lisp << _Int' >>)) )
+
+    [hi3]  hybrid-int-mul(_Int, _Int') =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (mul (convert-lexical-to-lisp << _Int >>)
+                             (convert-lexical-to-lisp << _Int' >>)) )
+
+    [hi4]  hybrid-int-div(_Int, _Int') =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (div (convert-lexical-to-lisp << _Int >>)
+                             (convert-lexical-to-lisp << _Int' >>)) )
+
+    [hi5]  hybrid-int-abs(_Int) =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (abs (convert-lexical-to-lisp << _Int >>)) )
+
+   [Incr]  incr(_Int) =
+            INT-CONST (convert-to-lexical
+                        << 1 >>
+                        (add 1 (convert-lexical-to-lisp << _Int >>)))
+
+
+(* -------------------------------------------------------------------------- *)
+(* hybrid real arithmetic                                                     *)
+
+    [hr1]  hybrid-real-add(_Real, _Real') =
+            REAL-CONST (convert-to-lexical
+                        << 1.0 >>
+                        (fadd  (convert-lexical-to-lisp << _Real >>)
+                               (convert-lexical-to-lisp << _Real' >>)) )
+
+    [hr2]  hybrid-real-sub(_Real, _Real') =
+            REAL-CONST (convert-to-lexical
+                        << 1.0 >>
+                        (fsub (convert-lexical-to-lisp << _Real >>)
+                              (convert-lexical-to-lisp << _Real' >>)) )
+
+    [hr3]   hybrid-real-mul(_Real, _Real') =
+              REAL-CONST (convert-to-lexical
+                        << 1.0 >>
+                        (fmul (convert-lexical-to-lisp << _Real >>)
+                              (convert-lexical-to-lisp << _Real' >>)) )
+
+    [hr4]  hybrid-real-div(_Real, _Real') =
+            REAL-CONST (convert-to-lexical
+                        << 1.0 >>
+                        (fdiv (convert-lexical-to-lisp << _Real >>)
+                              (convert-lexical-to-lisp << _Real' >>)) )
+
+
+    [hr5]  hybrid-real-abs(_Real) =
+            REAL-CONST (convert-to-lexical
+                        << 1.0 >>
+                        (abs (convert-lexical-to-lisp << _Real >>)) )

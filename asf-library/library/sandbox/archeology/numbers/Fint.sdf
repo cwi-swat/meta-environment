@@ -1,0 +1,8 @@
+imports Int-op Dig-ops
+
+hiddens
+  variables
+    x[0-9']*       -> INT
+    n[0-9']*       -> POS
+    z[0-9']*       -> NEG
+    p[0-9']*       -> NAT

@@ -1,0 +1,177 @@
+equations
+
+  [b1]  block-tc( Labels Consts _Types Vars Procs-or-funs Comp-stat , E ) =
+          stat-tc( Comp-stat,
+            procs-or-funs-tc( Procs-or-funs,
+              vars-tc( Vars,
+                types-tc( _Types,
+                  consts-tc( Consts,
+                    labels-tc( Labels, E ))))))
+
+  [b2]  labels-tc(, E) = E
+  [b3]  labels-tc(label _label*;, E) = label-decls-tc(_label*, E)
+  [b3]  consts-tc(, E) = E
+  [b4]  consts-tc( const Const-defs;, E) = const-defs-tc(Const-defs, E)
+  [b5]  types-tc(, E) = E
+  [b6]  types-tc( type Type-defs;, E) = type-defs-tc(Type-defs, E)
+  [b7]  vars-tc(, E) = E
+  [b8]  vars-tc( var Var-decls;, E) = var-decls-tc(Var-decls, E)
+  [b9]  procs-or-funs-tc(, E) = E
+  [b10] procs-or-funs-tc(Profuns;, E) = profuns-tc(Profuns,E)
+
+
+  { Type check procedure and function declarations }
+  [pf1] profuns-tc(Profuns, [], E1) = <Forw-list, E2>,
+        forward list Forw-list should be empty in E2 = E3
+        ===========================================
+        profuns-tc(Profuns, E1) = E3
+
+  [pf2] profuns-tc(Profun-decl, Forw-list1, E1) = <Forw-list2, E2>,
+        profuns-tc(Profuns, Forw-list2, E2) = <Forw-list3, E3>
+        ====================================================
+        profuns-tc(Profun-decl; Profuns, Forw-list1, E1) = <Forw-list3, E3>
+
+  [pf3] profuns-tc(,F,E) = <F,E>
+
+  { A normally defined procedure or function: }
+  [pf5] block-heading-tc( Heading, Forw-list1, E1 ) = <Forw-list2, E2>,
+        block-tc( Block, E2 ) = E3,
+        leave inner block of E3 = E4
+        ===============================
+        profuns-tc(Heading; Block, Forw-list1, E1) = <Forw-list2, E4>
+
+  { A declaration with a forward directive; add heading to Forw-list and to
+     environment. }
+  [pf4] forw-heading-tc( Heading, E1 ) = E2
+        ==============================
+        profuns-tc( Heading; forward, [Forwards], E1 ) =
+          < [Forwards, Heading], E2 + Heading>
+
+  { A function already declared forward, whose body is given now. }
+  [pf5] forwarded-profun-tc(function _id, Forw-list1, E1) = <Forw-list2, E2>,
+        block-tc( Block, E2 ) = E3,
+        leave inner block of E3 = E4
+        =====================================
+        profuns-tc(function _id; Block, Forw-list1, E1) = <Forw-list2, E4>
+
+  { Type check a heading of a forwarded function or procedure.
+    Just check the correctness of the parameters and their types. }
+  [fh1] _id1 should not be declared in inner block of E1 = E2,
+        E2 + block-mark = E3,
+        param-list-tc(_form-par-list, E3) = E4,
+        _id2 should be a type in E4 = E5,
+        leave inner block of E5 = E6
+        =========================================
+        forw-heading-tc(function _id1 _form-par-list: _id2, E1) = E6
+
+  [fh2] _id1 should not be declared in inner block of E1 = E2,
+        E2 + block-mark = E3,
+        param-list-tc(_form-par-list, E3) = E4,
+        leave inner block of E4 = E5
+        =========================================
+        forw-heading-tc(procedure _id1 _form-par-list, E1) = E5
+
+  { Type check a heading of a function or procedure with a block.
+    The normal case is a new procedure or function, possibly with parameters.
+    In the "procedure _id; block" case, the _id may either refer to an
+    already forwarded procedure, or to a new procedure without parameters. }
+  [bh1] _id1 should not be declared in inner block of E1 = E2,
+        E2 + function _id1 _form-par-list : _id2 + block-mark = E3,
+        param-list-tc(_form-par-list, E3) = E4,
+        _id2 should be a type in E4 = E5
+        ===========================================
+        block-heading-tc(function _id1 _form-par-list: _id2, Forw-list, E1) =
+          <Forw-list, E5>
+
+  [bh2] _id is a forwarded procedure in Forw-list? != TRUE,
+        _id should not be declared in inner block of E1 = E2,
+        E2 + procedure _id _form-par-list + block-mark = E3,
+        param-list-tc(_form-par-list, E3) = E4
+        ===========================================
+        block-heading-tc(procedure _id _form-par-list, Forw-list, E1) =
+          <Forw-list, E4>
+
+  [bh3] _id is a forwarded procedure in Forw-list? = TRUE
+        ================================================
+        block-heading-tc(procedure _id, Forw-list, E) =
+          forwarded-profun-tc(procedure _id, Forw-list, E)
+
+
+  { Check a function or procedure identification: i.e. a function or
+    procedure already forwarded, and whose body is given by now. }
+  [fw1] remove _id from Forw-list1 = Forw-list2,
+        _id should be a function in inner block of E1 = E2,
+        Fun-heading = E2.result.entry,
+        _form-par-list = E2.result.formal-parameters,
+        E2 + block-mark + Fun-heading = E3,
+        param-list-tc(_form-par-list, E3) = E4
+        =====================================
+        forwarded-profun-tc(function _id, Forw-list1, E1) = <Forw-list2, E4>
+
+  [fw1] remove _id from Forw-list1 = Forw-list2,
+        _id should be a procedure in inner block of E1 = E2,
+        Proc-heading = E2.result.entry,
+        _form-par-list = E2.result.formal-parameters,
+        E2 + block-mark + Proc-heading = E3,
+        param-list-tc(_form-par-list, E3) = E4
+        =====================================
+        forwarded-profun-tc(function _id, Forw-list1, E1) = <Forw-list2, E4>
+
+  { Check a formal parameter list.
+    Add the parameters as variables to the block: guarantees the uniqueness
+    of the names. Check whether the types are OK. }
+  [pr1] (_form-par1*; _id1, _id+: _id3; _form-par2*) =
+          (_form-par1*; _id1: _id3; _id+: _id3; _form-par2*)
+  [pr2] (_form-par1*; var _id1, _id+: _id3; _form-par2*) =
+          (_form-par1*; var _id1: _id3; var _id+: _id3; _form-par2*)
+
+
+  [pl1] param-list-tc(,E) = E
+  [pl2] param-list-tc((_form-par; _form-par+), E) =
+          param-list-tc((_form-par+), param-list-tc((_form-par), E))
+
+  [pl3] _id1 should not be declared in inner block of E1 = E2,
+        _id2 should be a type in E2 = E3,
+        E3.result should be allowed as file-component in E3 = E4
+        ===============================================
+        param-list-tc((_id1: _id2), E1) = E3
+
+  [pl4] _id1 should not be declared in inner block of E1 = E2,
+        _id2 should be a type in E2 = E3
+        =================================
+        param-list-tc((var _id1: _id2), E1) = E3
+
+  [pl5] param-list-tc((Fun-heading), E) = forw-heading-tc(Fun-heading, E)
+  [pl6] param-list-tc((Proc-heading), E) = forw-heading-tc(Proc-heading, E)
+
+
+  { Operations on lists of forwarded headings: }
+  [fl1] _id is a forwarded procedure in
+         [Headings1, procedure _id _form-par-list, Headings2]? = TRUE
+  [fl2] remove _id from [Headings1, procedure _id _form-par-list, Headings2] =
+         [Headings1, Headings2]
+  [fl3] remove _id1 from [Headings1,function _id1 _form-par-list:_id2,Headings2] =
+         [Headings1, Headings2]
+
+  [fl4] is-forward-list-empty?([]) = TRUE
+
+  [fl5] is-forward-list-empty?(Forw-list) = TRUE
+        ==============================================
+        forward list Forw-list should be empty in E = E
+
+  [fl6] is-forward-list-empty?(Forw-list) != TRUE,
+        Id-list = get-id-list(Forw-list)
+        ==============================================
+        forward list Forw-list should be empty in E =
+          add-error [No body given for forwarded identifiers: Id-list.] to E
+
+
+  [fl7] get-id-list([procedure _id _form-par-list]) = [_id]
+  [fl8] get-id-list([function _id _form-par-list :_id2]) = [_id]
+
+  [fl9] get-id-list([Heading]) = [_id],
+        get-id-list([Heading-plus])= [_id+]
+        ======================================
+        get-id-list([Heading, Heading-plus]) = [_id, _id+]
+
+  [f20] get-id-list([]) = []

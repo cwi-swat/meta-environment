@@ -1,0 +1,14 @@
+%% module for Sets of variables
+
+imports Variables Booleans
+
+exports
+  sorts VAR-LIST
+  context-free syntax
+    "[" {VAR ","}* "]"                          -> VAR-LIST
+    VAR-LIST "\-" VAR                           -> VAR-LIST
+    VAR-LIST "+" VAR-LIST                       -> VAR-LIST {left}
+    member-of "?" "(" VAR "," VAR-LIST ")"      -> BOOL
+  variables
+    V-list[0-9']*                               -> VAR-LIST
+    V[0-9']*"*"                                 -> {VAR ","}*

@@ -1,0 +1,210 @@
+equations
+
+  [1]  func2sdf( Form ) = form2sdf( Form )
+
+  [2]  func2sdf( Form+ => Clause+ ) = nil
+
+  [3]  func2sdf( 'Symbols :: Functionalities ) =
+         syms-funcs( 'Symbols, Functionalities )
+
+  [4]  syms-funcs( 'Symbol, 'Symbol+, Functionalities ) =
+         sym-funcs( 'Symbol, Functionalities ) ||
+         syms-funcs( 'Symbol+, Functionalities )
+
+  [5]  syms-funcs( 'Symbol, Functionalities ) =
+         sym-funcs( 'Symbol, Functionalities )
+
+  [6]  Functionalities = Func ; Func+
+       ==============================
+       sym-funcs( 'Symbol, Functionalities ) =
+         sym-func( 'Symbol, Func ) ||
+         sym-funcs( 'Symbol, Func+ )
+
+  [7]  sym-funcs( 'Symbol, Func ) = sym-func( 'Symbol, Func )
+
+  [8]  Func = 'Terms -> 'Term AttributeList
+       ====================================
+       sym-func( 'Symbol, Func ) = do-func( 'Symbol, 'Terms, 'Term )
+
+  [7]  merge( sym2cfe( 'Symbol ), terms2cfe('Terms)) = 'CF-Elem-star,
+       term2output( 'Term ) = 'Upper-Alpha
+       =============================================================
+       do-func( 'Symbol, 'Terms, 'Term ) =
+       exports
+         context-free syntax
+          'CF-Elem-star -> 'Upper-Alpha
+
+  [default-do-func]
+        do-func( 'Symbol, 'Terms, 'Term ) = nil
+
+ %% nothing need be done for Term!, since any alpha
+ %% produces sort Alpha, and cfg rule alpha -> Alpha .
+ [o1]  form2sdf( 'Term ! ) = nil
+ [o2]  form2sdf( Relation Disjoiner ) = form2sdf( Relation )
+ [o3]  form2sdf( 'Term1, 'Term-plus = 'Term2 ) =
+          form2sdf('Term1 = 'Term2) || form2sdf('Term-plus = 'Term2)
+ [o4]  form2sdf( 'Term1 = 'Term-og2 | 'Term-og3 ) =
+          form2sdf('Term1 = 'Term-og2) || form2sdf('Term1 = 'Term-og3)
+ [o4'] form2sdf( 'Term1 = 'Term-og2 | 'Term-og3 'Term-ogp-star 'Term-og4  ) =
+          form2sdf('Term1 = 'Term-og2 ) ||
+          form2sdf('Term1 = 'Term-og3 'Term-ogp-star 'Term-og4)
+ [o5]  form2sdf( 'Alpha1 = 'Alpha2 ) =
+          exports context-free syntax 2upper('Alpha2) -> 2upper('Alpha1)
+[o5']  form2sdf( 'Alpha1 = 'Alpha2 * ) =
+          exports context-free syntax 2upper('Alpha2)* -> 2upper('Alpha1)
+[o5''] form2sdf( 'Alpha1 = 'Alpha2 + ) =
+          exports context-free syntax 2upper('Alpha2)+ -> 2upper('Alpha1)
+ [o6]  form2sdf( 'Term1, 'Term-plus =< 'Term2 ) =
+          form2sdf('Term1 =< 'Term2) || form2sdf('Term-plus =< 'Term2)
+ [o7]  form2sdf( 'Alpha1 =< 'Alpha2 ) =
+          exports context-free syntax 2upper('Alpha1) -> 2upper('Alpha2)
+ [o8]  form2sdf( 'Term1, 'Term-plus >= 'Term2 ) =
+          form2sdf('Term1 >= 'Term2) || form2sdf('Term-plus >= 'Term2)
+ [o9]  form2sdf( 'Term1 >= 'Term2 ) = form2sdf( 'Term2 =< 'Term1 )
+[o10]  form2sdf( 'Term1, 'Term-plus : 'Term2 ) =
+          form2sdf('Term1 : 'Term2) || form2sdf('Term-plus : 'Term2)
+[o11]  form2sdf( 'Term1, 'Term-plus :- 'Term2 ) =
+          form2sdf('Term1 :- 'Term2) || form2sdf('Term-plus :- 'Term2)
+[o12]  form2sdf( 'Term1 :- 'Term2 ) = form2sdf( 'Term2 : 'Term1 )
+
+[o13]  constant2cfe( 'Term1 )  = 'CF-Elem-star,
+       term2output( 'Term2 ) = 'Upper-Alpha
+       ====================================
+       form2sdf( 'Term1 : 'Term2 ) =
+         exports context-free syntax 'CF-Elem-star -> 'Upper-Alpha
+
+ [default-form2sdf] form2sdf(Relation) = nil
+
+ %% Translate a symbol to a list of CF-ELEM.
+ %% N.B. The symbol typically comes from a   * sym :: Functionality
+ %% declaration.
+ %%
+ %% INFIX
+ [s1]  sym2cfe( 'Place1 'OGP-star 'Place ) =
+         \Box || ogpl2cfe('OGP-star) || \Box
+
+ %% OUTER-GROUP
+ [s2]  sym2cfe( 'SymCon ) = 2string('SymCon)
+ [s3]  sym2cfe( ('IGP-star) ) = "(" || igpl2cfe('IGP-star) || ")"
+ [s4]  sym2cfe( <'IGP-star> ) = "<" || igpl2cfe('IGP-star) || ">"
+ [s5]  sym2cfe( {'IGP-star} ) = "{" || igpl2cfe('IGP-star) || "}"
+ [s6]  sym2cfe( ['IGP-star] ) = "[" || igpl2cfe('IGP-star) || "]"
+
+ %% OUTFIX
+ [s7]  sym2cfe( 'OG1 'OGP-star 'OG2 ) =
+         sym2cfe( 'OG1 ) || ogpl2cfe( 'OGP-star ) || sym2cfe( 'OG2 )
+
+ %% POSTFIX
+ [s8]  sym2cfe( 'Place 'OGP-star 'OG ) =
+          \Box || ogpl2cfe( 'OGP-star ) || sym2cfe( 'OG )
+
+ %% PREFIX
+ [s9]  sym2cfe( 'OG 'OGP-star 'Place ) =
+          sym2cfe( 'OG ) || ogpl2cfe('OGP-star) || \Box
+
+ %% OUTER-GROUP-PLACE*
+[s11]  ogpl2cfe( ) =
+[s12]  ogpl2cfe( 'OGP 'OGP-star ) = ogp2cfe('OGP) || ogpl2cfe( 'OGP-star)
+[s12]  ogp2cfe( 'Place ) = \Box
+[s13]  ogp2cfe( 'OG ) = sym2cfe('OG)
+
+%% INNER-GROUP-PLACE*
+[s14]  igpl2cfe( ) =
+[s15]  igpl2cfe( 'IGP 'IGP-star ) = igp2cfe( 'IGP ) || igpl2cfe( 'IGP-star)
+[s16]  igp2cfe( 'OGP ) = ogp2cfe( 'OGP )
+[s18]  igp2cfe( , ) = ","
+[s19]  igp2cfe( . ) = "."
+
+
+ %% Translate a term to a list of CF-Elems.
+ %% N.B. This term represents the argument sorts of a symbol.
+ %% Thus, the a typical term to be translated is "natural" (which should become Natural),
+ %% or
+ [t1]   terms2cfe( 'Term ) = [ term2cfe( 'Term ) ]
+ [t2]   terms2cfe( 'Term-plus1, 'Term-plus2 ) =
+          terms2cfe('Term-plus1) ++ terms2cfe( 'Term-plus2 )
+
+ [t3]   term2cfe( 'Alpha ) = 2upper('Alpha)
+ [t4]   term2cfe( 'Alpha * ) = 2upper('Alpha)*
+ [t5]   term2cfe( 'Alpha + ) = 2upper('Alpha)+
+
+%% cases Alpha Rest or Rest Alpha
+[t5']   term2cfe( 'Alpha 'TOGP-star 'TOG ) = 2upper('Alpha)
+[t5'']  term2cfe( 'Alpha 'TOGP-star 'T-Place) = 2upper('Alpha)
+[t5'''] term2cfe( 'TOG 'TOGP-star 'Alpha ) = 2upper('Alpha)
+[t5'''']  term2cfe( 'T-Place 'TOGP-star 'Alpha) = 2upper('Alpha)
+
+ [t6]   term2cfe( ( 'TIGP-star ) ) = "(" || tigpl2cfe('TIGP-star) || ")"
+ [t6]   term2cfe( < 'TIGP-star > ) = "<" || tigpl2cfe('TIGP-star) || ">"
+ [t6]   term2cfe( [ 'TIGP-star ] ) = "[" || tigpl2cfe('TIGP-star) || "]"
+ [t6]   term2cfe( { 'TIGP-star } ) = "{" || tigpl2cfe('TIGP-star) || "}"
+ [t7]   tigpl2cfe( ) =
+ [t8]   tigpl2cfe( 'TIGP 'TIGP-star ) = tigp2cfe( 'TIGP ) || tigpl2cfe( 'TIGP-star )
+ [t9]   tigp2cfe( 'T-Place ) = *error*
+ [t10]  tigp2cfe( 'TOG ) = term2cfe( 'TOG )
+ [t11]  tigp2cfe( , ) = ","
+ [t12]  tigp2cfe( . ) = "."
+
+ [default-term] term2cfe( 'Term ) = *error*
+
+
+ %% transform a term into an ASF+SDF output sort.
+ %% N.B. in ASF+SDF, as output sorts only UpperAlpha is allowed.
+ %% This contrasts with input sorts, which can be, e.g. UpperAlpha+ .
+ %%
+ [to1]  term2output( 'Alpha ) = 2upper('Alpha)
+ [to2]  term2output( 'Alpha 'TOGP-star 'TOG) = 2upper('Alpha)
+ [to3]  term2output( 'Alpha 'TOGP-star 'T-Place) = 2upper('Alpha)
+ [to4]  term2output( 'TOG 'TOGP-star 'Alpha ) = 2upper('Alpha)
+ [to5]  term2output( 'T-Place 'TOGP-star 'Alpha) = 2upper('Alpha)
+ [default-term-output] term2output('Term) = *error*
+
+
+ %% merge cfelem representation of a symbol definition containing place holders
+ %% with a cfelem-lists for each of the argument positions.
+ %%
+ %% Okay cases:
+ [m1]  merge('CF-Elem 'CF-Elem-star, ['CF-List-star]) =
+         'CF-Elem || merge('CF-Elem-star, ['CF-List-star])
+         when 'CF-Elem != \Box
+
+ [m2]  merge(\Box 'CF-Elem-star, ['CF-List, 'CF-List-star]) =
+         'CF-List || merge('CF-Elem-star, ['CF-List-star])
+
+ [m3]  merge( , []) =
+
+ %% Error Cases:
+ [m4]  merge(\Box 'CF-Elem-star, []) = *error*
+ [m5]  merge(, ['CF-List-plus] ) = *error*
+
+ [m6]  ['CF-List-star1] ++ ['CF-List-star2]  = ['CF-List-star1, 'CF-List-star2]
+
+
+ %%
+ %% Transform a term occurring in * Term : Sort .
+ %% to a cf-elem definition.
+ %% T-Places should not occur in these Terms.
+
+ [c1]   constant2cfe( 'T-Place1 'TOGP-star 'T-Place2 ) = *error*
+ [c2]   constant2cfe( 'TOG ) = con-og2cfe( 'TOG )
+ [c3]   constant2cfe( 'TOG1 'TOGP-star 'TOG2 ) =
+          con-og2cfe('TOG1) || con-ogpl2cfe( 'TOGP-star ) || con-og2cfe( 'TOG2 )
+ [c4]   constant2cfe( 'T-Place 'TOGP-star 'TOG ) = *error*
+ [c5]   constant2cfe( 'TOG 'TOGP-star 'T-Place ) = *error*
+ [c6]   constant2cfe( 'T-Place ) = *error*
+ [c7]   con-ogpl2cfe( ) =
+ [c8]   con-ogpl2cfe( 'TOGP 'TOGP-star ) =
+          con-ogp2cfe( 'TOGP ) || con-ogpl2cfe( 'TOGP-star )
+ [c9]   con-ogp2cfe( 'TOG ) = con-og2cfe( 'TOG )
+[c10]   con-ogp2cfe( 'T-Place ) = *error*
+[c11]   con-og2cfe( 'SymCon ) = 2string( 'SymCon )
+[c12]   con-og2cfe( ( 'TIGP-star ) ) = "(" || con-igpl2cfe( 'TIGP-star ) || ")"
+[c13]   con-og2cfe( ( 'TIGP-star ) ) = "<" || con-igpl2cfe( 'TIGP-star ) || ">"
+[c14]   con-og2cfe( ( 'TIGP-star ) ) = "[" || con-igpl2cfe( 'TIGP-star ) || "]"
+[c15]   con-og2cfe( ( 'TIGP-star ) ) = "{" || con-igpl2cfe( 'TIGP-star ) || "}"
+[c16]   con-igpl2cfe( ) =
+[c17]   con-igpl2cfe( 'TIGP 'TIGP-star ) =
+          con-igp2cfe( 'TIGP ) || con-igpl2cfe( 'TIGP-star )
+[c18]   con-igp2cfe( . ) = "."
+[c19]   con-igp2cfe( , ) = ","
+[c20]   con-igp2cfe( 'TOGP ) = con-ogp2cfe( 'TOGP )

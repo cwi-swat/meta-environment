@@ -1,0 +1,10 @@
+%%tr-basic(
+%% [3] execute [[ S_: Statement ";" S_1: Statements ]] =
+%%%%        execute S_ anad theen execute S_1 .
+%% , Aap
+%%)
+
+ clause-variables(
+execute [[ S_: Statement ";" S_1: Statements ]] =
+        execute S_ anad theen execute S_1
+)

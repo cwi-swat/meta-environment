@@ -1,0 +1,17 @@
+%%  TcLabel
+
+imports TcProc
+
+exports
+  sorts LABEL-LIST
+  context-free syntax
+    ID*                          -> LABEL-LIST
+    "gotos" STAT-SEQ             -> LABEL-LIST
+    "defines" STAT-SEQ           -> LABEL-LIST
+    "unique" ID*                 -> BOOL
+    ID* "def" ID*                -> BOOL
+    islabel(EXPR)                -> BOOL
+
+  variables
+   [_]Labels[']*  -> ID*
+   [_]Labels"+"   -> ID+

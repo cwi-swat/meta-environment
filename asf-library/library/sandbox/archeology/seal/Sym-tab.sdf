@@ -1,0 +1,28 @@
+%%  Sym-tab
+
+imports
+    States Errors
+
+exports
+    sorts
+        SE SYMTAB
+
+    context-free syntax
+"[" SYMTAB "," ERRORS "," NAMES "]"     -> SE
+empty-se                                -> SE
+name-list "(" SE ")"                    -> NAMES
+empty-names                             -> NAMES
+sym-tab "(" SE ")"                      -> SYMTAB
+empty-sym-tab                           -> SYMTAB
+errors "(" SE ")"                       -> ERRORS
+STATE                                   -> SE
+SE "+" SE                               -> SE
+add-symtab "(" STATE "," SYMTAB ")"     -> SYMTAB
+"[" { STATE ";" }+ "]"                  -> SYMTAB
+
+lookup-state "(" SE "," Name ")"        -> STATE
+lookup-state "(" SYMTAB "," Name ")"    -> STATE
+
+variables
+"_Sym-tab"[']+     -> SYMTAB
+"_Se"[']+          -> SE

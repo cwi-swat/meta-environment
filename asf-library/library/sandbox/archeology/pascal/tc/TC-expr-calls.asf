@@ -1,0 +1,121 @@
+equations
+
+  [p1]  find _id in E1.context = Definition,
+        Definition defines _id as a predefined procedure? = TRUE,
+        spec-proc-tc(_id _act-par-list, E1) = E2
+        ========================================
+        proc-call-tc(_id _act-par-list, E1) = E2
+
+  [p2]  find _id in E1.context = Definition,
+        Definition defines _id as a normal procedure? = TRUE,
+        call-tc( Definition.formal-parameters, _act-par-list, E1) = E2
+        ========================================
+        proc-call-tc(_id _act-par-list, E1) = E2
+
+  [f1]  find _id in E1.context = Definition,
+        Definition defines _id as a predefined function? = TRUE,
+        spec-fun-tc(_id, E1) = E2
+        ========================================
+        fun-call-tc(_id, E1) = E2
+
+  [f2]  find _id in E1.context = Definition,
+        Definition defines _id as a predefined function? = TRUE,
+        spec-fun-tc(_id _NE-act-par-list, E1) = E2
+        ========================================
+        fun-call-tc(_id _NE-act-par-list, E1) = E2
+
+  [f3]  find _id in E1.context = Definition,
+        Definition defines _id as a normal function? = TRUE,
+        call-tc( Definition.formal-parameters, _NE-act-par-list, E1) = E2
+        ========================================
+        fun-call-tc(_id _NE-act-par-list, E1) =
+          set-result of E2 to Definition.type.canonical
+
+  [f4]  find _id in E1.context = Definition,
+        Definition defines _id as a normal function? = TRUE,
+        call-tc( Definition.formal-parameters, , E1) = E2
+        =====================================================
+        fun-call-tc(_id, E1) = set-result of E2 to Definition.type.canonical
+
+
+  [c0]  call-tc( , , E ) = E
+
+  [c1]  call-tc( (_form-par+), , E) = add-error
+          [Too few actual parameters.] to E
+
+  [c2]  call-tc(  , (_act-par+), E) = add-error
+          [Too many actual parameters.] to E
+
+  [c3]  call-tc( (_form-par; _form-par+), (_act-par, _act-par+), E) =
+          call-tc( (_form-par+), (_act-par+),
+            call-tc( (_form-par), (_act-par), E ))
+
+
+  [c4]  act-par-tc(value _act-par, E1) = E2,
+        type-tc(_id2, E2) = E3,
+        E2.result should be assignment-compatible with E3.result in E3 = E4
+        ==================================================================
+        call-tc( (_id1: _id2), (_act-par), E1 ) = E4
+
+  [c5]  act-par-tc(var _act-par, E1) = E2,
+        _act-par should not be a packed component in E2 = E3,
+        take care of possibly threatening variable _act-par in E3 = E4,
+        { _expr should not be a variant selector field in E4 = E5}
+        type-tc(_id2, E4) = E5,
+        E2.result and E5.result should be the same type in E5 = E6
+        ==================================================================
+        call-tc( (var _id1: _id2), (_act-par), E1 ) = E6
+
+  [c6]  act-par-tc(procedure _act-par, E1) = E2,
+        E2.result.formal-parameters and _form-par-list
+          should be congruous in E2 = E3
+        ===================================================================
+        call-tc( (procedure _id1 _form-par-list), (_act-par), E1 )  = E3
+
+  [c7]  act-par-tc(function _act-par, E1) = E2,
+        E2.result.formal-parameters and _form-par-list
+          should be congruous in E2 = E3
+        ===================================================================
+        call-tc( (function _id1 _form-par-list: _id2), (_act-par), E1 ) = E3
+
+
+  { Two parameter lists are congruous if they have the same number of
+    arguments, and if each parameter pair refers to the same type. }
+
+  [co1] congruous?(,,E) = TRUE
+  [co2] congruous?((_form-par1; _form-par1+), (_form-par2; _form-par2+), E) =
+          congruous?((_form-par1), (_form-par2), E)   &
+          congruous?((_form-par1+), (_form-par2+), E)
+
+  [co3] type-tc(_id1, E1) = E2,
+        type-tc(_id2, E2) = E3,
+        E2.result is the same as E3.result? = TRUE
+        ==========================================
+        congruous?((_id11: _id1), (_id22: _id2),E1) = TRUE
+
+  [co4] type-tc(_id1, E1) = E2,
+        type-tc(_id2, E2) = E3,
+        E2.result is the same as E3.result? = TRUE
+        ==========================================
+        congruous?((var _id11: _id1), (var _id22: _id2), E1) = TRUE
+
+  [co5] congruous?((procedure _id1 _form-par-list1),
+          (procedure _id2 _form-par-list2), E) =
+            congruous?(_form-par-list1, _form-par-list2, E)
+
+  [co6] type-tc(_id1, E1) = E2,
+        type-tc(_id2, E2) = E3,
+        E2.result is the same as E3.result? = TRUE
+        ==========================================
+        congruous?((function _id11 _form-par-list1 : _id1),
+          (function _id22 _form-par-list2 : _id2), E1) =
+            congruous?(_form-par-list1, _form-par-list2, E1)
+
+  [co7] congruous?( _form-par-list1, _form-par-list2, E ) = TRUE
+        ======================================================
+        _form-par-list1 and _form-par-list2 should be congruous in E = E
+
+  [co8] congruous?( _form-par-list1, _form-par-list2, E ) != TRUE
+        ======================================================
+        _form-par-list1 and _form-par-list2 should be congruous in E =
+          add-error [Parameter lists are not congruous.] to E

@@ -1,0 +1,31 @@
+imports Dot-real-con Dig-ops
+
+exports
+  sorts MANT-REAL-CON MANT-REAL EXPON
+  lexical syntax
+    Z-DIGIT                             -> EXPON
+    NZ-DIGIT DIGIT*                     -> EXPON
+    DOT-REAL-CON "e" [+\-] EXPON        -> MANT-REAL-CON
+  context-free syntax
+    MANT-REAL-CON                       -> MANT-REAL
+    MANT-REAL                           -> REAL-CON
+
+    normalize(REAL)                     -> REAL
+
+    mantissa( REAL )                    -> DOT-REAL
+    exponent( REAL )                    -> INT
+    mant-exp( DOT-REAL, INT )           -> REAL
+    mvr(MANT-REAL)                      -> MANT-REAL
+    mvl(MANT-REAL)                      -> MANT-REAL
+    dot2mant( REAL )                    -> MANT-REAL
+    mant2dot( REAL )                    -> DOT-REAL
+
+hiddens
+  variables
+    s[0-9']*            -> DOT-REAL-CON
+    q[0-9']*            -> MANT-REAL-CON
+    c[0-9']*"*"         -> CHAR*
+    c[0-9']*"+"         -> CHAR+
+    c[0-9']*            -> CHAR
+    n[0-9']*            -> POS
+    z[0-9']*            -> NEG

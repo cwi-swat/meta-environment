@@ -1,0 +1,110 @@
+%%  Grammar-to-SDF
+%%
+%%  Grammar sections are translated directly to an SDF section.
+%%  Operators "?" and "|" and "< ... >" are not directly known in
+%%  SDF. Therefore, for several sorts, auxiliary SDF sorts need to be
+%%  introduced.
+%%  Therefore, the result of the translation function are represented
+%%  by complete SECTIONS, which can contain (several) sort declaration parts,
+%%  lexical syntax, and context-free syntax parts.
+%%
+%%  When introducing new sorts, these are prefixed with a unique label.
+%%  The part after the label is attempted to be as meaningful as possible
+%%  (see function derive-aux-sort-name, and module Literals), in order
+%%  to make syntax-directed editing over the generated module feasable.
+%%
+%%  For a MetaNotation grammar rule, a {\em lexical syntax} SDF rule is made
+%%  if all components are lexical. The predefined sorts that are built-in lexicals
+%%  in the MetaNotation are defined by function "is-lexical". It is assumed that
+%%  the SDF module ``StandardLexical'' always is loaded in that case.
+%%
+%%  In MetaNotation semantic equations, the grammar terms are to appear between
+%%  [[  ]] brackets, where string or character constants are enclosed by " " or ' '
+%%  brackets.
+%%  However when typing in, e.g., Pascal programs, one does not want to be forced
+%%  to put [[  ]]  around every constructor.
+%%  Therefore these [[ ]], " ", ' ' delimiters are regarded as SDF {brackets};
+%%  one is free to write them (e.g., in the semantic equations), but they do not\
+%%  occur in the abstract syntax tree. See ASF+SDF User Manual section 5.4.4,
+%%  p. 37 (feb 93), or SDF Reference manual, section 5.4.
+%%
+%%  SDF has built in lists which are used to represent MetaNotation's * and +.
+%%  For one cases, special action is taken:
+%%  *   ResultSort = < Sort < String Sort >* >
+%%       which is translated to
+%%       context-free syntax
+%%         Sort                   -> ResultSort
+%%         Sort String ResultSort -> ResultSort
+%%  This is conform the usage of, e.g. Statement and Statements variables in
+%%  the Ad Semantic Equations.
+%%  N.B. Trying to use SDF's  { Sort String }+ -> ResultSort
+%%  (which indeed probably is the intened behavior) implies that in equations over this
+%%  list the SDF list variables need to be used, which is not consistent with action
+%%  notation. The solution given here does not require the equations to be changed
+%%  (but always assumes a traversal starting at the left)
+%%
+%%
+%%  Author: Arie van Deursen, CWI, Amsterdam.
+%%  Date: May 1993.
+
+
+
+imports
+  Character-Operations
+  SDF-Syntax
+  SDF-Syntax-Operations
+  Allowed-GrammarTerms
+  Booleans
+  Literals
+
+exports
+  context-free syntax
+    grammar2sdf( GRAM-BASICS )                          -> SECTION {incremental}
+
+hiddens
+  context-free syntax
+    grammar2sdf( GRAM-BASICS, UPPER-ALPHA )                     -> SECTION  {incremental}
+    gram2sdf( GRAM-BASIC, UPPER-ALPHA )                         -> SECTION  {incremental}
+    "2sdf" "(" UPPER-ALPHA "=" CFG-TERM "," UPPER-ALPHA ")"     -> SECTION
+    do-string-elem( UPPER-ALPHA, STRING )                       -> SECTION
+    declare-sort( UPPER-ALPHA )                                 -> SECTION
+    tuple-brackets( UPPER-ALPHA )                               -> SECTION
+    constructor-brackets( UPPER-ALPHA )                         -> SECTION
+    declare-sort-bracketed( UPPER-ALPHA )                       -> SECTION
+    declare-sort-tuplified( UPPER-ALPHA )                       -> SECTION
+    lex-cons2sdf "(" UPPER-ALPHA "=" CFG-TERM* "," UPPER-ALPHA ")"   -> SECTION
+    cfg-cons2sdf "(" UPPER-ALPHA "=" CFG-TERM* "," UPPER-ALPHA ")"   -> SECTION
+    main-lex-def( SECTION, UPPER-ALPHA )                        -> LEXIC-ELEM-LIST
+    main-cfg-def( SECTION, UPPER-ALPHA )                        -> CF-ELEM-LIST
+    aux-sections( SECTION, UPPER-ALPHA )                        -> SECTION
+    nr-of-defining-rules( SECTION, UPPER-ALPHA )                -> NUMBER
+    easy-SDF-list( CFG-TERM )                                   -> BOOL
+    is-lexical( CFG-TERM+ )                                     -> BOOL
+    is-chain-rule( CFG-TERM )                                   -> BOOL
+    derive-aux-sort-name( CFG-TERM+ )                           -> UPPER-ALPHA
+    get-sort( CFG-TERM+, UPPER-ALPHA )                          -> UPPER-ALPHA
+
+hiddens
+  variables
+    "#" Sort [0-9']*            -> UPPER-ALPHA
+    "#" Sort-plus [0-9']*       -> UPPER-ALPHA+
+    "#" G-term [0-9']*          -> CFG-TERM
+    "#" G-terms-plus [0-9']*    -> CFG-TERM+
+    "#" G-terms-star [0-9']*    -> CFG-TERM*
+    "#" String [0-9']*          -> STRING
+    "#" Character               -> CHARACTER
+    "#" ResultSort [0-9']*      -> UPPER-ALPHA
+    "#" Cfg-elems-plus[0-9']*   -> CF-ELEM+
+    "#" Cfg-elems-star[0-9']*   -> CF-ELEM*
+    "#" U                       -> UPPER-ALPHA
+    "#" Cf-rules-plus['0-9]*    -> CF-FUN+
+    "#" Cf-rules-star['0-9]*    -> CF-FUN*
+    G-Basic                     -> GRAM-BASIC
+    G-Basic "+"                 -> GRAM-BASIC+
+    G-Basics                    -> GRAM-BASICS
+    "#" Lex-rules-plus [0-9']*  -> LEXIC-FUN+
+    "#" Lex-elems-plus [0-9']*  -> LEXIC-ELEM+
+    "#" Lex-rules-star [0-9']*  -> LEXIC-FUN*
+    "#" Lex-elems-star [0-9']*  -> LEXIC-ELEM*
+    Section [0-9']*             -> SECTION
+    SDF-Section [0-9']* "*"     -> SDF-SECTION*

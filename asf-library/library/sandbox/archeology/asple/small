@@ -1,0 +1,5 @@
+cp[
+ begin bool b ;
+  b := false;
+  if b then output 4 fi
+ end]

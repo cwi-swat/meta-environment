@@ -1,0 +1,380 @@
+
+This file contains practical information describing how to use SEAL.
+(created Wed May 27 16:05:21 MET DST 1992)
+
+For all problems/questions/suggestions/bugs in SEAL, please contact:
+	Wilco Koorn
+	Programming Research Group
+	University of Amsterdam
+	Room F 228
+	Kruislaan 403
+	1098 SJ Amsterdam
+	The Netherlands
+	Tel. +31 20 525.7584
+	email: koorn@fwi.uva.nl
+
+
+Sections in this file:
+^^^^^^^^^^^^^^^^^^^^^^
+-1- Necessary hardware / software configuration
+-2- Editing and Compiling SEAL specifications
+-3- Debugging SEAL specifications and common problems (includes error messages)
+-4- Using compiled SEAL specifications
+-5- Creating a "Lisp button" under control of SEAL
+
+
+-1- Hardware / software configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The SEAL typechecker and compiler are written in ASF+SDF+SEAL. The ASF+SDF
+part is rather large, which implies that you are strongly advised to use
+a hardware / software configuration as described below. If you do not
+use the advised hardware, performance drops with a factor of about 20 due to 
+swapping. If you do not the advised software, LeLisp will simply crash.
+
+-1.1- Hardware
+^^^^^^^^^^^^^^
+SEAL requires a large core (see below) which does NOT run smoothly on
+SGI / SUN machines with 16 Megabyte main memory or less.
+You are advised to use a machine with 28 Megabyte main memory or more.
+At UvA, use one of the following machines:
+	adam, betty, zoe or drum
+Preferably the fileserver "adam" (largest, fastest), the other machines are 
+desktops and you will disturb other people seriously.
+At CWI, use poseidon. As far as I know, this is the only SGI with enough
+memory.
+
+-1.2- Software
+^^^^^^^^^^^^^^
+We describe the recommended core size and how to set up an editing environment
+for creating SEAL specifications.
+
+-1.2.1- Core size
+^^^^^^^^^^^^^^^^^
+SEAL requires a large core. At UvA, one can use "ctbig" instead of ctasdf.
+Start ctbig with 150 as argument to get enough space for LeLisp's lists.
+Users at CWI are advised to create a "ctbig" like core with the following
+settings in ~gipe/src/ct/centaur/ctbig.conf:
+
+STACK=60
+LLSIZE=-stack $(STACK) -code $(CODE) -heap 4000 -number 0 -float 1 -vector 100 \
+        -string 40 -symbol 30 -cons 25
+
+# The cons size when restoring the core
+CONS=80
+
+All other lines in "ctbig.conf" should be equal to those in "ctasdf.conf".
+
+-1.2.2- Setting up an editing environment for creating SEAL specifications.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SEAL uses filename extensions to start up an ASF+SDF meta-environment
+automatically. To be able to use this (handy, but not necessary) feature,
+take the following steps:
+- Copy the file ~gipe/spec/SEAL/SEAL-DOT-SEAL-ENTRY to a ".seal" file in
+  your home directory. 
+  (or add it to you .seal when you've already got this file)
+- Customize the top-level menu of ctbig. There are several ways to achieve
+  this, I'll only describe the technique I use myself (with Thanks to Casper):
+	Add this to to your .lelisp file (in your home directory:
+(when (typefn '#:centaur/resources/gfxobj/look:initialize)
+  (synonymq :gfxobj-look #:centaur/resources/gfxobj/look:initialize)
+  (remfn '#:centaur/resources/gfxobj/look:initialize))
+
+
+	Add this to your .centaur file (in your home directory:
+(unless (boundp '#:interface:top-menu) (defvar #:interface:top-menu))
+
+(de #:interface:top-menu-create ()
+  (setq #:interface:top-menu
+    ({menu}:create #:interface:top-menu-x #:interface:top-menu-y 'column
+                ({butobj}:create 0 0 ({title}:create (font 1 "ASF+SDF"))
+                    '((asf+sdf))
+                )
+                ({butobj}:create 0 0 ({title}:create (font 1 "GSE"))
+                    '((new-gse))
+                )
+                ({butobj}:create 0 0 ({title}:create (font 1 "End"))
+                    '((#:interface:end))
+                )
+    )
+  )
+  (send 'title (send 'window #:interface:top-menu) (catenate #:centaur:core-name
+))
+  ({gfxwindow}:permanent (send 'window #:interface:top-menu))
+  (add-application #:interface:top-menu)
+  (send 'show #:interface:top-menu)
+)
+
+(when (typefn ':gfxobj-look)
+  (synonymq #:centaur/resources/gfxobj/look:initialize :gfxobj-look)
+  (remfn ' :gfxobj-look)
+  (#:centaur/resources/gfxobj/look:initialize))
+
+  This will create a top-level menu with three items:
+	- ASF+SDF	%% Normal use of ASF+SDF
+	- GSE		%% To be used when starting SEAL
+	- End		%% Quit and leave ctbig
+
+
+-2- Editing and Compiling SEAL specifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+There are two ways to edit and compile SEAL specifications:
+- Using the automatic start-up feature described in -1.2.2-
+- Not using the feature described in -1.2.2-
+We will describe both ways.
+
+-2.1- Using the automatic start-up feature
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This requires that you first take the steps as described in -1.2.2-. 
+We explain how to create a SEAL specification for language L.
+- Change your current directory to the directory where "L.syn" can be found.
+  (this is for ease of use, strictly spoken, not necessary)
+- Start ctbig with 150 as argument.
+- Press the GSE button and enter "L.seal" in the popped-up dialog box.
+
+The ASF+SDF meta-environment is now created and all modules for SEAL are read.
+Furthermore, a "term-editor" is created with name "L.seal". This editor uses
+the SEAL syntax and has two buttons: "Typecheck" and "Compile".
+Enter the text "<SEAL-spec>" (top-sort) by typing or by expanding.
+Parse and expand to:
+	Configuration for language <Module> is <SEAL-spec-part+>
+Change "<Module>" to "L" (that is, without double quotes).
+Each "<SEAL-spec-part>" is a button, a start-stop button, a menu-entry or
+an active tool.
+Use expands to build your SEAL specification.
+Typecheck and compile it.
+Kill the GSE instance "L.seal.ll" (created by the Compile command) and save
+the changes.
+You have now created a "L.seal.ll" in the directory where "L.syn" can be found.
+
+-2.2- Not using the automatic start-up feature
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You seem to have a conservative mind, since you do not use the feature.
+But alright, we describe how to create a SEAL specification for language L.
+- Change your current directory to the directory where "L.syn" can be found.
+  (this is for ease of use, strictly spoken, not necessary)
+- Start ctbig with 150 as argument.
+- Press the ASF+SDF button in the top-level menu, enter "...../gipe/spec/SEAL"
+  as directory and "SEAL-Compiler" as module name.
+The ASF+SDF meta-environment is now created and all modules for SEAL are read.
+
+- Enter a term over the module called "SEAL", enter "L.seal" as filename
+  (so nothing or <current-directory> as directory name).
+A "term-editor" is created with name "L.seal". This editor uses the SEAL syntax 
+and has two buttons: "Typecheck" and "Compile".
+Enter the text "<SEAL-spec>" (top-sort) by typing or by expanding.
+Parse and expand to:
+        Configuration for language <Module> is <SEAL-spec-part+>
+Change "<Module>" to "L" (that is, without double quotes).
+Each "<SEAL-spec-part>" is a button, a start-stop button, a menu-entry or
+an active tool.
+Use expands to build your SEAL specification.
+Typecheck and compile it.
+Kill the GSE instance "L.seal.ll" (created by the Compile command) and save
+the changes.
+You have now created a "L.seal.ll" in the directory where "L.syn" can be found.
+
+
+-3- Debugging SEAL specifications and common problems
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We descibe how to debug SEAL specifications and list common problems (includes
+a list of typechecker error messages).
+
+-3.1- Debugging SEAL specifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Debugging SEAL specifications is hard. This is mainly due to the fact that
+SEAL checks on errors INSIDE almost all generated code. Upon encountering
+an error, SEAL stops executing actions. So, you do not know in which action
+executing stopped. Furthermore, you can only debug AFTER you have generated
+code and USE this code.
+There is only one way to debug using SEAL itself (but still, you'll need to 
+generate code), that is to interleave all actions with actions that 
+have a VISUAL result (such as creating a new GSE instance or changing the tree 
+in an already existing GSE instance).
+
+Debugging SEAL specifications outside SEAL requires hacking in the generated
+LeLisp code and reloading it by hand. To inspect the "value" of SEAL variables, 
+you may use:
+	(#:SEAL:var:print (#:SEAL:lookup-var-by-name ui-item <variable-name>))
+The <variable-name> should be double quoted.
+
+-3.2- Common problems
+^^^^^^^^^^^^^^^^^^^^^
+While creating a SEAL specification, you may encounter some difficulties due
+to your lack of knowledge of SEAL's syntax / static semantics. We list most
+of them:
+
+-3.2.1- Syntax problems
+^^^^^^^^^^^^^^^^^^^^^^^
+- Unix-filenames should be double quoted, for example,
+	create(./Output, <variable>)
+  is an error, this should be:
+	create("./Output", <variable>)
+
+- Strings (as in a Pattern or in a Docu) should be double quoted, for example,
+	doc : not yet used
+  is an error, this should be:
+        doc : "not yet used"
+
+-3.2.1- Static semantics problems (typechecker error messages)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- instance : <Unix-filename> should be used in a select action
+  EXPLANATION:
+  You have used an action like:
+	create(<Unix-filename>, <Module>, <Text>, <Sort>)
+  SEAL requires that the created instance is used in a "select" action.
+
+- instance : source of <Variable-name> should be used in a select action
+  EXPLANATION:
+  You have used an action like:
+        create(<Variable-name>, <Module>, <Text>, <Sort>)
+  SEAL requires that the created instance is used in a "select" action.
+  NOTE:
+  Due to SEAL's internal processing of errors, the error message is not as
+  clear as it should have been. Sorry about that.
+
+- focus assignment is not allowed for input instance : <Unix-filename>
+  EXPLANATION:
+  You have used an "assign-focus" action like:
+        <Unix-filename>.focus := <functioncall>
+  However, "assign-focus" actions are not allowed for instances created with:
+	create(<Unix-filename>, <Module>, <Text>, <Sort>)
+
+- focus assignment is not allowed for input instance : source of <Variable-name>
+  EXPLANATION:
+  You have used an "assign-focus" action like:
+        <Variable-name>.focus := <functioncall>
+  However, "assign-focus" actions are not allowed for instances created with:
+        create(<Variable-name>, <Module>, <Text>, <Sort>)
+  NOTE:
+  Due to SEAL's internal processing of errors, the error message is not as
+  clear as it should have been. Sorry about that.
+
+- focus of input instance : <Unix-filename> may not be moved
+  EXPLANATION:
+  You have used an "move" action like:
+        <Unix-filename>. focus up
+  However, "move" actions are not allowed for instances created with:
+        create(<Unix-filename>, <Module>, <Text>, <Sort>)
+
+- focus of input instance : source of <Variable-name> may not be moved
+  EXPLANATION:
+  You have used an "move" action like:
+        <Variable-name>. focus up
+  However, "move" actions are not allowed for instances created with:
+        create(<Variable-name>, <Module>, <Text>, <Sort>)
+  NOTE:
+  Due to SEAL's internal processing of errors, the error message is not as
+  clear as it should have been. Sorry about that.
+
+- focus of <Unix-filename> is restored but should be saved first
+  EXPLANATION:
+  You have used an "move" action like:
+        <Unix-filename>. focus restore
+  However, there should be an earlier action like:
+	<Unix-filename>. focus restore
+  Note that saves/restores come in pairs, nested occurrences are allowed
+  (on stacked basis), so the number of "restores" should be larger or equal to
+  the number of "saves".
+
+- focus of source of <Variable-name> is restored but should be saved first
+  EXPLANATION:
+  You have used an "move" action like:
+        <Variable-name>. focus restore
+  However, there should be an earlier action like:
+        <Variable-name>. focus restore
+  Note that saves/restores come in pairs, nested occurrences are allowed
+  (on stacked basis), so the number of "restores" should be larger or equal to
+  the number of "saves".
+  NOTE:
+  Due to SEAL's internal processing of errors, the error message is not as
+  clear as it should have been. Sorry about that.
+
+- variable : <Variable-name> is undefined in action nr : <INT>
+  EXPLANATION:
+  You use the value of a Variable, but it is undefined. 
+  OR
+  You might have forgotten to double quote a Unix-filename (cf -3.2.1-)
+
+
+-4- Using compiled SEAL specifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When you have used the automatic start-up feature (cf. -2.1-), you 
+already might have guessed what to do: 
+- create an entry in your .seal file
+- invent an (unique) filename extension
+- use the GSE button in the top-level menu
+
+If you do not want to use the automatic start-up feature, skip to -4.1-. If you
+do, continue reading and skip section -4.1- when you encouter it.
+
+For an example of an entry in the .seal file see the file "SEAL-DOT-SEAL-ENTRY"
+in this directory.
+
+Our running example, the language "L" the entry could be:
+  SEAL mappings for language "L" :
+    filename extension : "l"
+    look for modules in : "<put-your-L.syn-directory here>"
+    look for configuration files in : "<put-your-L.syn-directory here>"
+    tools in modules : "L-Compiler"
+
+The text after "look for modules in :"  and the text after "look for 
+configuration files in :" may contain more than one directory, allowing you
+to, for instance, use ASF+SDF modules from other directories.
+Be carefull, the system will pick modules from the first directory where
+it can find it.
+
+The text after "tools in modules :" contains a (possibly empty) list of
+module names (in double quotes!). These modules are read into the ASF+SDF
+system when a "term-editor" using the syntax defined by "L" is created.
+
+A typical user session is:
+- Change directory to where your programs are located (not necessary, but
+  recommended).
+- Start ctasdf (use of ctbig is not required now!)
+- Press the GSE button, enter a filename like "program.l"
+All modules are read, the generated SEAL code is loaded and a "term-editor"
+with name "program.l" is created that uses "L" as syntax.
+
+
+-4.1- Using generated SEAL code without the automatic start-up feature.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You have a conservative mind. Alright, here is what to do:
+- Change directory to where your generated SEAL code is stored (mandatory)
+- Start ctasdf (use of ctbig is not required now!)
+- Read in your ASF+SDF specification
+- Load the generated SEAL code by hand
+- Start a term-editor over module "L"
+
+Note:
+This way of using SEAL will probably become impossible in future.
+
+
+-5- Creating a "Lisp button" under control of SEAL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This requires hacking in LeLisp. The easiest way to achieve this, is to
+generate dummy code, and then change it by hand. The dummy code makes sure
+that SEAL gets all necessary information. Do not forget to add an entry in
+your .seal file.
+
+EXAMPLE:
+You have generated code for:
+Configuration for language L is
+button Aap
+when focus is STAT
+enable
+  focus := Dummy : dummy()
+doc : "not used"
+
+In the generated code, you'll find the following two function definitions:
+- #:SEAL:L:AapCondFunc1
+- #:SEAL:L:AapActFunc1
+
+These are the "condition" and the "action" function used by the "Aap" button.
+Change their bodies, NOT their names, if you like. Do not affect the function 
+named:
+- #:SEAL:configure-L
+
+This function is used by SEAL when it starts up the system.
+
+
+Have fun extending User Interfaces!

@@ -1,0 +1,86 @@
+equations
+
+[C2]  tr[begin Decls; Stms end] = begin Decls1; Stms1 end
+      =========================================
+      cp[begin Decls ; Stms end] = cp[Stms1]
+
+[C6]  cp[Stm]  = Coms,
+      cp[Stms] = Coms1
+      ===================================
+      cp[Stm; Stms] = Coms; Coms1
+
+[C7]  cp[Exp] = Coms
+      ===================================
+      cp[Id := Exp]  = Coms; sro Id
+
+[C8]  cp[Var] = Coms
+      ========================================
+      cp[tinput Var : Mode] = Coms; s-read
+
+[C9]  cp[Exp] = Coms
+      ===================================
+      cp[output Exp] = Coms; s-write
+
+[C10] cp[Exp] = Coms,
+      cp[Stms1] = Coms1
+      ===================================
+      cp[if Exp then Stms1 fi] =
+      block (Coms; fjp 1; Coms1; lbl 1)
+
+[C11] cp[Exp] = Coms,
+      cp[Stms1] = Coms1,
+      cp[Stms2] = Coms2
+      =====================================
+      cp[if Exp then Stms1 else Stms2 fi] =
+      block (Coms; fjp 1; Coms1; ujp 2; lbl 1; Coms2; lbl 2)
+
+[C12] cp[Exp] = Coms,
+      cp[Stms1] = Coms1
+      ===================================
+      cp[while Exp do Stms1 end] =
+      block (lbl 1; Coms; fjp 2; Coms1; ujp 1; lbl 2)
+
+
+[C13]  cp[Bool-con] = ldci Bool-con
+
+[C14]  cp[Nat-con] = ldci Nat-con
+
+[C15]  cp[Id]    = lao Id
+
+[C15a] cp[var Id] = lao Id
+
+[C16]  cp[deref var Id] = ldo Id
+
+[C17] cp[deref Var] = Coms
+      ============================================
+      cp[deref deref Var]  = Coms; ind
+
+[C18] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[Exp1 + Exp2] = Coms1; Coms2; +
+
+[C19] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[Exp1 * Exp2] = Coms1; Coms2; *
+
+[C20] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[Exp1 & Exp2] = Coms1; Coms2; &
+
+[C21] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[Exp1 | Exp2] = Coms1; Coms2; |
+
+[C22] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[(Exp1 = Exp2)] = Coms1; Coms2; =
+
+[C23] cp[Exp1] = Coms1,
+      cp[Exp2] = Coms2
+      ==================================
+      cp[(Exp1 != Exp2)] = Coms1; Coms2; !=

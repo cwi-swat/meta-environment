@@ -1,0 +1,10 @@
+      equations
+
+      [01]   true or Bool  = true
+      [02]   false or Bool = Bool
+
+      [03]   false and Bool = false
+      [04]   true and Bool = Bool
+
+      [05]   not true = false
+      [06]   not false = true

@@ -1,0 +1,26 @@
+%%  TRS-rewrite
+
+imports
+    Layout Booleans TRS-instantiate Output
+exports
+    context-free syntax
+      rewrite "(" TRS ")"                                                       -> TERM
+hiddens
+    sorts
+        DIRECTION TABLE-ELEM TABLE
+    context-free syntax
+      up                                                                        -> DIRECTION
+      down                                                                      -> DIRECTION
+
+      traverse "(" TERM ";" { TERM "," }* ";" PATH ";" TABLE ";" DIRECTION ")"  -> TERM
+      try "(" TERM ";" { TERM "," }* ";" PATH ";" TABLE ";" RULES ")"           -> TERM
+      STRING TERM                                                               -> OUTPUT
+      STRING TAG STRING PATH                                                    -> OUTPUT
+      "<" SIG-ELEM RULES ">"                                                    -> TABLE-ELEM
+      { TABLE-ELEM "," }*                                                       -> TABLE
+      "make-table" "(" SIG-ELEMS ")"                                            -> TABLE
+      "add-rules" "(" RULES ";" TABLE ")"                                       -> TABLE
+    variables
+      [_]TabEl[']*                                                              -> TABLE-ELEM
+      [_]TabEl[*][']*                                                           -> { TABLE-ELEM "," }*
+      [_]Table[']*                                                              -> TABLE

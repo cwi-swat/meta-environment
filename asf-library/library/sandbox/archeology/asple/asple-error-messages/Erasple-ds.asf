@@ -1,0 +1,145 @@
+equations
+[Ev0]  tr[begin Decls ; Stms end] = errors : [Errs]
+       ===================================>
+       ev [begin Decls ; Stms end] with Inp =
+       errors : [Errs, program cannot be evaluated]
+
+[Ev1]  tr[begin Decls ; Stms end] = begin Decls' ; Stms' end,
+       ev[Stms'] in <valenv(),Inp,output ()> =
+                 <Valenv',Inp',Outp> -  Errlist
+       ===================================================================>
+       ev[ begin Decls ; Stms end] with Inp =
+       if (Errlist , Outp)
+
+[Ev2] if (evaluation: [] , Outp) = Outp
+
+[Ev3] if (evaluation: [Err , Errs] , Outp) =
+         evaluation : [Err , Errs]
+
+[Ev5]  ev[Stm] in Stat = Stat1 - evaluation : [Err]
+        =========================================>
+       ev[Stm; Stms] in Stat = Stat1 - evaluation : [ Err]
+
+[Ev5a] ev[Stm] in Stat = Stat1 - evaluation : []
+        ============================>
+       ev[Stm; Stms] in Stat = ev[Stms] in Stat1
+
+
+[Ev6]  ev[Exp] in <Valenv, Inp, Outp> = Val
+       =========================================>
+      ev[Id := Exp] in <Valenv, Inp, Outp> =
+     <modify (Id:Val) in Valenv, Inp, Outp> -
+     evaluation : []
+
+
+[Ev7] Stat = <Valenv,input (Nat-con,IO-vals),Outp>,
+       ev[Var] in Stat = Id
+       ===================================================================>
+       ev[tinput Var : int] in Stat =
+       <modify (Id:Nat-con) in Valenv,input (IO-vals),Outp>
+       - evaluation : []
+
+[Ev8] Stat = <Valenv,input (Bool-con,IO-vals),Outp>,
+       ev[Var] in Stat = Id
+       ===================================================================>
+      ev[tinput Var : bool] in Stat =
+      <modify (Id:Bool-con) in Valenv,input (IO-vals),Outp>
+       - evaluation : []
+
+[Ev8] Stat = <Valenv,input (),Outp>,
+       ev[Var] in Stat = Id
+       ===================================================================>
+      ev[tinput Var : bool] in Stat =
+      Stat - evaluation : [input-needed]
+
+ [Ev8] Stat = <Valenv,input (),Outp>,
+       ev[Var] in Stat = Id
+       ===================================================================>
+      ev[tinput Var : int] in Stat =
+      Stat - evaluation : [input-needed]
+
+[Ev9] ev[Exp] in <Valenv,Inp,output (IO-vals)> = IO-val
+       =====================================================================>
+       ev[output Exp] in <Valenv,Inp,output (IO-vals)> =
+       <Valenv,Inp,output (IO-val,IO-vals)>
+        - evaluation : []
+
+[Ev10]  ev[Exp] in Stat = true
+       ====================================================>
+        ev[if Exp then Stms1 else Stms2 fi] in Stat =
+       ev [Stms1] in Stat
+
+[Ev11] ev[Exp] in Stat = false
+       ====================================================>
+       ev[if Exp then Stms1 else Stms2 fi] in Stat =
+       ev[Stms2] in Stat
+
+[Ev12]  ev[Exp] in Stat = true
+       ====================================================>
+        ev[if Exp then Stms1 fi] in Stat =
+        ev[Stms1] in Stat
+
+[Ev13] ev[Exp] in Stat = false
+       ====================================================>
+       ev[if Exp then Stms1 fi] in Stat =
+       Stat - evaluation : []
+
+[Ev14] ev[Exp] in Stat = true,
+       ev[Stms] in Stat = Stat1 - evaluation : []
+       ==============================================>
+       ev[while Exp do Stms end] in Stat =
+       ev[while Exp do Stms end] in Stat1
+
+[Ev14a] ev[Exp] in Stat = true,
+       ev[Stms] in Stat = Stat1 - evaluation : [Errs]
+       ==============================================>
+       ev[while Exp do Stms end] in Stat =
+       Stat - evaluation : [Errs]
+
+
+[Ev15] ev[Exp] in Stat = false
+       ============================>
+       ev[while Exp do Stms end] in Stat =
+       Stat - evaluation : []
+
+
+[Ev16] ev[Nat-con] in Stat = Nat-con
+
+[Ev17] ev[Bool-con] in Stat = Bool-con
+
+[Ev18] ev[var Id] in Stat = Id
+
+
+
+[Ev19] ev[Var] in <Valenv,Inp,Outp> = Id,
+       lookup Id in Valenv= Val
+       =====================================================================>
+       ev[deref Var] in <Valenv,Inp,Outp> = Val
+
+[Ev20] ev[Exp1] in Stat = Nat-con1, ev[Exp2] in Stat = Nat-con2
+       =================================================>
+       ev[Exp1 + Exp2] in Stat = Nat-con1 + Nat-con2
+
+[Ev21] ev[Exp1] in Stat = Bool-con1, ev[Exp2] in Stat = Bool-con2
+       ===================================================>
+       ev[Exp1 | Exp2] in Stat = Bool-con1 | Bool-con2
+
+[Ev22] ev[Exp1] in Stat = Nat-con1, ev[Exp2] in Stat = Nat-con2
+       =================================================>
+       ev[Exp1 * Exp2] in Stat = Nat-con1 * Nat-con2
+
+[Ev23] ev[Exp1] in Stat = Bool-con1, ev[Exp2] in Stat = Bool-con2
+       ===================================================>
+       ev[Exp1 & Exp2] in Stat = Bool-con1 & Bool-con2
+
+[Ev24] ev[Exp1] in Stat = Val1, ev[Exp2] in Stat = Val2, Val1 = Val2
+       ====================================================>
+             ev[(Exp1 = Exp2)] in Stat = true
+
+[Ev25] ev[Exp1] in Stat = Val1, ev[Exp2] in Stat = Val2, Val1 != Val2
+       ============================================================>
+             ev[(Exp1 = Exp2)] in Stat = false
+
+[Ev26] ev[(Exp1 = Exp2)] in Stat = Bool
+       ========================================>
+       ev[(Exp1 != Exp2)] in Stat = not Bool

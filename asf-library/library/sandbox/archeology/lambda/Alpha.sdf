@@ -1,0 +1,7 @@
+imports Convert
+
+exports
+  context-free syntax
+    alpha-norm "(" L-EXP ")"            -> L-EXP
+    alpha-norm "(" L-EXP "," VAR ")"    -> L-EXP
+    

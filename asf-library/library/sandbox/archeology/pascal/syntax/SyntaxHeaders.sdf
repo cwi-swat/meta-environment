@@ -1,0 +1,38 @@
+%% Define Syntax formal parameters, ISO section 6.6.3.
+%% (i.e. level 0).
+imports SyntaxTypes
+
+exports
+  sorts FORMAL-PAR-LIST FORMAL-PAR-SECTION HEADING PROCEDURE-HEADING
+    FUNCTION-HEADING FUNCTION-IDENTIFICATION LABELS CONST-DEF CONSTS
+    TYPE-DEF TYPES VAR-DECL VARS
+
+  context-free syntax
+    PROCEDURE-HEADING                                   -> HEADING
+    FUNCTION-HEADING                                    -> HEADING
+    procedure IDENT FORMAL-PAR-LIST                     -> PROCEDURE-HEADING
+    function  IDENT FORMAL-PAR-LIST ":" IDENT           -> FUNCTION-HEADING
+    function  IDENT                                     -> FUNCTION-IDENTIFICATION
+                                                        -> FORMAL-PAR-LIST
+    "(" {FORMAL-PAR-SECTION  ";"}+ ")"                  -> FORMAL-PAR-LIST
+    { IDENT "," }+ ":" IDENT                            -> FORMAL-PAR-SECTION
+    var { IDENT "," }+ ":" IDENT                        -> FORMAL-PAR-SECTION
+    PROCEDURE-HEADING                                   -> FORMAL-PAR-SECTION
+    FUNCTION-HEADING                                    -> FORMAL-PAR-SECTION
+                                                        -> LABELS
+    label { LABEL "," }+ ";"                            -> LABELS
+                                                        -> CONSTS
+    const {CONST-DEF ";"}+ ";"                          -> CONSTS
+    IDENT "=" CONST                                     -> CONST-DEF
+                                                        -> TYPES
+    type { TYPE-DEF ";" }+ ";"                          -> TYPES
+    IDENT "=" TYPE-DENOTER                              -> TYPE-DEF
+                                                        -> VARS
+    var { VAR-DECL ";" }+ ";"                           -> VARS
+    { IDENT "," }+ ":" TYPE-DENOTER                     -> VAR-DECL
+
+  variables
+    "_form-par-list"[0-9]*                              -> FORMAL-PAR-LIST
+    "_form-par"[0-9]*                                   -> FORMAL-PAR-SECTION
+    "_form-par"[0-9]*"+"                                -> {FORMAL-PAR-SECTION ";"}+
+    "_form-par"[0-9]*"*"                                -> {FORMAL-PAR-SECTION ";"}*

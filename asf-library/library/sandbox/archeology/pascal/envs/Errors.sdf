@@ -1,0 +1,72 @@
+%% Module Errors
+imports SyntaxProgram OperatorTables
+
+exports
+ sorts ERROR ERRORS CONSTRUCT  CONSTR-ERROR IDENT-LIST
+
+ context-free syntax
+    TYPE-DEF                                            -> CONSTRUCT
+    CONST-DEF                                           -> CONSTRUCT
+    VAR-DECL                                            -> CONSTRUCT
+    HEADING                                             -> CONSTRUCT
+    STATEMENT                                           -> CONSTRUCT
+    program IDENT PROGRAM-PARAMS                        -> CONSTRUCT
+
+    CONSTRUCT ":" ERROR                                 -> CONSTR-ERROR
+    CONSTR-ERROR*                                       -> ERRORS
+    "[" { IDENT ","}* "]"                               -> IDENT-LIST
+
+    "Identifier" SYMBOL not "declared."                 -> ERROR
+    "Identifier" IDENT multiple "declared."             -> ERROR
+    "Identifier" IDENT is not a "constant."             -> ERROR
+    "Identifier" IDENT is not a type "."                -> ERROR
+    "Identifier" IDENT is not a "variable."             -> ERROR
+    "Identifier" IDENT is not a "function."             -> ERROR
+    "Identifier" IDENT is not a "procedure."            -> ERROR
+    "Identifier" IDENT is not a "constant," "variable," or "function." -> ERROR
+    "Empty string not allowed."                         -> ERROR
+    "Operator" "^" only allowed on pointer or file "variables."        -> ERROR
+    "Non-number" types not "allowed."                   -> ERROR
+    "Types" are not the "same."                         -> ERROR
+    "Types" are not "assignment-compatible."            -> ERROR
+    "Type must be ordinal."                             -> ERROR
+    "Type must be an array-type."                       -> ERROR
+    "Type must be a packed array."                      -> ERROR
+    "Type must be an unpacked array."                   -> ERROR
+    "Type must be a pointer."                           -> ERROR
+    "Type must be a file-type."                         -> ERROR
+    "Type must" "be Boolean."                           -> ERROR
+    "Type must be a record."                            -> ERROR
+    "Type must be a variant record."                    -> ERROR
+    "Variants must be given for all possible values."   -> ERROR
+    "Variant selector cannot be passed as var-parameter." -> ERROR
+    "Constants in case statement or record variant should be unique."  -> ERROR
+    "Real expected."                                    -> ERROR
+    "Integer expected."                                 -> ERROR
+    "Empty" range not "allowed."                        -> ERROR
+    "No" body given for forwarded identifiers ":" IDENT-LIST "."       -> ERROR
+    "Case" constants should be "unique."                -> ERROR
+    "Illegal" use of control variable IDENT "."         -> ERROR
+    "Too" many actual "parameters."                     -> ERROR
+    "Too" few actual "parameters."                      -> ERROR
+    "Reference" "to" packed component in VARIABLE-ACCESS not "allowed."-> ERROR
+    "Illegal use of formatted write parameter."         -> ERROR
+    "Parameter" lists are not "congruous."              -> ERROR
+     ACTUAL-PAR is not a file "variable."               -> ERROR
+    "Number-type or character-type expected."           -> ERROR
+    "Number, character, boolean or string type expected."              -> ERROR
+    "Illegal" pointer type "definition."                -> ERROR
+    "Illegal" file "component."                         -> ERROR
+    "Illegal" operand types for operator OPERATOR "."   -> ERROR
+    "Type" incompatibility in "set-component."          -> ERROR
+    "Incompatible set-types."                           -> ERROR
+    ACTUAL-PAR "is not a text file."                    -> ERROR
+    ACTUAL-PAR "is not a file variable."                -> ERROR
+    ACTUAL-PAR ":" must be a variable "access."         -> ERROR
+    ACTUAL-PAR ": Function" identifier "expected."      -> ERROR
+    ACTUAL-PAR ": Procedure" identifier "expected."     -> ERROR
+    "Types" of OPERATOR are not "compatible," "numbers," or of the
+        same set-of-T type "."                          -> ERROR
+
+  variables
+    Err[0-9]*      -> CONSTR-ERROR      Err[0-9]*"*"    -> CONSTR-ERROR*

@@ -1,0 +1,575 @@
+equations
+
+[600]   select-insts (_Act' ; _ActsSemi') =
+                append-filenames(select-insts(_Act'), select-insts(_ActsSemi'))
+
+[601a]  select-insts (_Focus' := select(_Ufn', _Sort')) = _Ufn'
+
+[601a]  select-insts (_Focus' := select(_Vn', _Sort')) = source of _Vn'
+
+[602a1] select-insts (_Vn' := select(_Ufn', _Sort')) = _Ufn'
+
+[602a2] select-insts (_Vn' := select(_Vn'', _Sort')) = source of _Vn''
+
+[602b]  is-assign-selection-to-var(_Act') != true,
+        is-assign-selection-to-focus(_Act') != true,
+        is-while(_Act') != true
+        ===================================
+        select-insts (_Act') =
+
+[602c]  select-insts (while _WC' do _ActsSemi' od) = select-insts(_ActsSemi')
+
+[603]   red-insts (_Act' ; _ActsSemi') =
+                append-filenames (red-insts(_Act'), red-insts(_ActsSemi'))
+
+[604]   red-insts(_Focus' := _Mod' : _Func' (_Vnscomma')) = argument-insts(_Vnscomma')
+
+[605]   red-insts(_Vn' := _Mod' : _Func' (_Vnscomma')) = argument-insts(_Vnscomma')
+
+[606a]  red-insts(_Mod' : _Func' (_Vnscomma')) = argument-insts(_Vnscomma')
+
+[606b]  is-action-reduction(_Act') != true,
+        is-assign-reduction-to-var(_Act') != true,
+        is-assign-reduction-to-focus(_Act') != true,
+        is-while(_Act') != true
+        ==================================
+        red-insts(_Act') =
+
+[606c]  red-insts(while _WC' do _ActsSemi' od) = append-filenames (red-wc-insts(_WC'), red-insts(_ActsSemi'))
+
+[606d]  red-wc-insts(_FC-expr' is _Sort') =
+
+[606e]  red-wc-insts(_FC-expr' matches _Pattern') =
+
+[606f]  red-wc-insts(_FC-expr' is-meta-var) =
+
+[606g]  red-wc-insts(_Mod' : _Func' (_Vnscomma')) = argument-insts(_Vnscomma')
+
+[606h]  red-wc-insts(not _WC') = red-wc-insts(_WC')
+
+[606i]  red-wc-insts(_WC' and _WC'') = append-filenames (red-wc-insts(_WC'), red-wc-insts(_WC''))
+
+[606i]  red-wc-insts(_WC' or _WC'') = append-filenames (red-wc-insts(_WC'), red-wc-insts(_WC''))
+
+[606j]  red-wc-insts(focus _Moves') =
+
+[606k]  red-wc-insts(_Ufn' . focus _Moves') =
+
+[606l]  red-wc-insts(_Vn' . focus _Moves') =
+
+[607]   argument-insts(_Vnscomma') = %%empty, should be possible %
+
+[608a]  asgn-insts (_Act' ; _ActsSemi') = append-filenames(asgn-insts(_Act'), asgn-insts(_ActsSemi'))
+
+[608b]  asgn-insts (while _WC' do _ActsSemi' od) = asgn-insts(_ActsSemi')
+
+[609a]  asgn-insts (_Ufn'.focus := _Vn'') = _Ufn'
+
+[609b]  asgn-insts (focus := _Vn') = "ConnectedInstanceName"
+
+[610a1] asgn-insts (_Ufn'.focus := select(_Ufn'', _Sort')) = _Ufn'
+
+[610a2] asgn-insts (_Ufn'.focus := select(_Vn', _Sort')) = _Ufn'
+
+[610b1] asgn-insts (focus := select(_Ufn', _Sort')) = "ConnectedInstanceName"
+
+[610b1] asgn-insts (focus := select(_Vn', _Sort')) = "ConnectedInstanceName"
+
+[611a]  asgn-insts (_Ufn'.focus := _Mod' : _Func'(_Vnscomma')) = _Ufn'
+
+[611b]  asgn-insts (focus := _Mod' : _Func'(_Vnscomma')) = "ConnectedInstanceName"
+
+[612]   is-assign-reduction-to-focus(_Act') != true,
+        is-assign-selection-to-focus(_Act') != true,
+        is-assign-var-to-focus(_Act') != true,
+        is-while(_Act') != true
+        ===================================
+        asgn-insts (_Act') =
+
+[500]   _Vars' = config-variables(_Act' _Int'),
+        _Int'' = count-lines(_Act'),
+        _Vars'' = config-variables(_ActsSemi' _Int' + _Int''),
+        _Vars''' = _Vars' _Vars''
+        =======================
+        config-variables(_Act'; _ActsSemi' _Int') = _Vars'''
+
+[500a]  is-while(_Act') != true
+        ==============
+        count-lines(_Act') = 1
+
+[500b]  count-lines(while _WC' do _ActsSemi' od) = 1 + count-lines(_ActsSemi')
+
+[500c]  count-lines(_Act'; _ActsSemi') = 1 + count-lines(_ActsSemi')
+
+[501a]  config-variables(create(_Ufn',_Mod',_Text',_Sort') _Int') =
+
+[501b]  config-variables(create(_Vn',_Mod',_Text',_Sort') _Int') =
+                _Vn' of type : term used in actionnr : _Int'
+
+[502a]  config-variables(create(_Ufn'', _Vn''') _Int') =
+                 _Vn''' of type : term used in actionnr : _Int'
+
+[502b]  _Vars' = _Vn'' of type : term used in actionnr : _Int'
+                _Vn''' of type : term used in actionnr : _Int'
+        ==========================================
+        config-variables(create(_Vn'', _Vn''') _Int') = _Vars'
+
+[504a]  config-variables(_Vn' := focus _Moves' _Int') =
+                _Vn' of type : term defined in actionnr : _Int'
+
+[504b]  config-variables(_Vn' := _Ufn' . focus _Moves' _Int') =
+                _Vn' of type : term defined in actionnr : _Int'
+
+[504c]  _Vars' = _Vn' of type : term defined in actionnr : _Int'
+                _Vn'' of type : term used in actionnr : _Int'
+        ======================================================
+        config-variables(_Vn' := _Vn'' . focus _Moves' _Int') = _Vars'
+
+[504d]  config-variables(_Vn' := focus _Int') =
+                _Vn' of type : term defined in actionnr : _Int'
+
+[504e]  config-variables(_Vn' := _Ufn' . focus _Int') =
+                _Vn' of type : term defined in actionnr : _Int'
+
+[504f]  _Vars' = _Vn' of type : term defined in actionnr : _Int'
+                _Vn'' of type : term used in actionnr : _Int'
+        ======================================================
+        config-variables(_Vn' := _Vn'' . focus _Int') = _Vars'
+
+[505]   config-variables(_Focus' := _Vn' _Int') =
+                _Vn' of type : term used in actionnr : _Int'
+
+[506a]  config-variables(_Focus' := select(_Ufn', _Sort') _Int') =
+
+[506b]  config-variables(_Focus' := select(_Vn', _Sort') _Int') =
+                _Vn' of type : term used in actionnr : _Int'
+
+[507]   config-variables(_Focus' := _Mod' : _Func' (_Vnscomma') _Int') =
+                argument-vars(_Vnscomma' _Int')
+
+[508]   _Vars' = _Vn' of type : to-be-derived defined in actionnr : _Int'
+                _Vn'' of type : to-be-derived defined in actionnr : _Int'
+        ==================================
+        config-variables(_Vn' := _Vn'' _Int') = _Vars'
+
+[509a]  config-variables(_Vn' := select(_Ufn'', _Sort') _Int') =
+                _Vn' of type : term defined in actionnr : _Int'
+
+[509b]  _Vars' = _Vn' of type : term defined in actionnr : _Int'
+                 _Vn'' of type : term used in actionnr : _Int'
+        =======================================================
+        config-variables(_Vn' := select(_Vn'', _Sort') _Int') = _Vars'
+
+[510]   _Vars' = argument-vars(_Vnscomma' _Int'),
+        _Vars'' = _Vn' of type : term defined in actionnr : _Int',
+        _Vars''' = _Vars' _Vars''
+        ==================================
+        config-variables(_Vn' := _Mod' : _Func' (_Vnscomma') _Int') = _Vars'''
+
+[511a]  is-focus-expr(_Act') = true,
+        is-var-focus-expr(_Act') != true
+        ==========================
+        config-variables(_Act' _Int') =
+
+[511b]  is-focus-expr(_Act') = true,
+        is-var-focus-expr(_Act') = true,
+        _Act' = _Vn'.focus
+        ==========================
+        config-variables(_Act' _Int') = _Vn' of type : term used in actionnr : _Int'
+
+[511c]  is-focus-expr(_Act') = true,
+        is-var-focus-expr(_Act') = true,
+        _Act' = _Vn'.focus _Moves'
+        ==========================
+        config-variables(_Act' _Int') = _Vn' of type : term used in actionnr : _Int'
+
+[512]   config-variables(_Mod' : _Func' (_Vnscomma') _Int') = argument-vars(_Vnscomma' _Int')
+
+[513a]  _Vars' = config-wc-variables(_WC' _Int'),
+        _Vars'' = config-wacts-variables(_ActsSemi' _Int' + 1),
+        _Vars''' = _Vars' _Vars''
+        ===============================
+        config-variables(while _WC' do _ActsSemi' od _Int') = _Vars'''
+
+[513b]  config-wc-variables(_FC-expr' is _Sort' _Int') =
+
+[513c]  config-wc-variables(_FC-expr' matches _Pattern' _Int') =
+
+[513d]  config-wc-variables(_FC-expr' is-meta-var _Int') =
+
+[513e]  config-wc-variables(_Mod' : _Func' (_Vnscomma') _Int') = argument-vars(_Vnscomma' _Int')
+
+[513f]  config-wc-variables(focus _Moves' _Int') =
+
+[513g]  config-wc-variables(_Ufn' . focus _Moves' _Int') =
+
+[513h]  config-wc-variables(_Vn' . focus _Moves' _Int') = _Vn' of type : term used in actionnr : _Int'
+
+[513i]  config-wc-variables(not _WC' _Int') = config-wc-variables( _WC' _Int')
+
+[513j]  config-wc-variables(_WC'  _Int') = _Vars',
+        config-wc-variables(_WC'' _Int') = _Vars''
+        =================================
+        config-wc-variables(_WC' and _WC'' _Int') = _Vars' _Vars''
+
+[513k]  config-wc-variables(_WC'  _Int') = _Vars',
+        config-wc-variables(_WC'' _Int') = _Vars''
+        =================================
+        config-wc-variables(_WC' or _WC'' _Int') = _Vars' _Vars''
+
+[514a]  config-wacts-variables(_ActsSemi' _Int') = config-variables(_ActsSemi' _Int')
+
+[520]   _Vars' = _Vn' of type : term used in actionnr : _Int',
+        _Vars'' = argument-vars(_Vnscomma' _Int'),
+        _Vars''' = _Vars' _Vars''
+        =======================
+        argument-vars(_Vn' ,_Vnscomma' _Int') = _Vars'''
+
+[521]   is-name(_Vn') != true
+        =======================
+        argument-vars( _Vn' , _Vnscomma' _Int') = argument-vars(_Vnscomma' _Int')
+
+[522]   argument-vars(_Int') =
+
+[530]   _Term' = _Vn'
+        ==========
+        is-name(_Term') = true
+
+[1a]    is-assign-input-to-var(create(_Ufn',_Mod',_Text',_Sort')) = true
+
+[1b]    is-assign-input-to-var(create(_Vn',_Mod',_Text',_Sort')) = true
+
+[2a]    is-assign-output-to-var(create(_Ufn', _Vn') ) = true
+
+[2b]    is-assign-output-to-var(create(_Vn'', _Vn') ) = true
+
+[3a1]   is-assign-focus-to-var(_Vn' := _Focus' _Moves') = true
+
+[3a2]   is-assign-focus-to-var(_Vn' := _Focus') = true
+
+[3b]    is-assign-var-to-focus( _Focus' := _Vn' ) = true
+
+[4a]    is-assign-selection-to-focus(_Focus' := select(_Ufn', _Sort') ) = true
+
+[4b]    is-assign-selection-to-focus(_Focus' := select(_Vn', _Sort') ) = true
+
+[5]     is-assign-reduction-to-focus(_Focus' := _Mod' : _Func'(_Vnscomma') ) = true
+
+[6]     is-assign-var-to-var(_Vn' := _Vn'' ) = true
+
+[7a]    is-assign-selection-to-var(_Vn' := select(_Ufn', _Sort') ) = true
+
+[7b]    is-assign-selection-to-var(_Vn' := select(_Vn'', _Sort') ) = true
+
+[8]     is-assign-reduction-to-var(_Vn' := _Mod' : _Func'(_Vnscomma') ) = true
+
+[9]     is-focus-expr(_Focus-expr' ) = true
+
+[9b]    is-var-focus-expr(_Vn'.focus) = true
+
+[9c]    is-var-focus-expr(_Vn'.focus _Moves') = true
+
+[10]    is-action-reduction(_Mod' : _Func'(_Vnscomma')) = true
+
+[10b]   is-while(while _WC' do _ActsSemi' od) = true
+
+[11a]   used-focusses (_Act'; _ActsSemi' ) =
+                append-filenames(used-focusses(_Act'), used-focusses(_ActsSemi'))
+
+[11b]   used-focusses (while _WC' do _ActsSemi' od) =
+                append-filenames(used-wc-focusses(_WC'), used-focusses(_ActsSemi'))
+
+[12a]   used-focusses(create(_Ufn',_Mod',_Text',_Sort')) =
+
+[12b]   used-focusses(create(_Vn',_Mod',_Text',_Sort')) =
+
+[13a]   used-focusses(create(_Ufn', _Vn')) =
+
+[13b]   used-focusses(create(_Vn'', _Vn')) =
+
+[13c1]  used-focusses(_Vn' := _Vn''.focus) = source of _Vn''
+
+[13c2]  used-focusses(_Vn' := _Vn''.focus _Moves') = source of _Vn''
+
+[13d]   used-focusses(_Vn' := focus) = "ConnectedInstanceName"
+
+[13d2]  used-focusses(_Vn' := focus _Moves') = "ConnectedInstanceName"
+
+[13e]   used-focusses(_Vn' := _Ufn'.focus _Moves') = _Ufn'
+
+[13f]   used-focusses(_Vn' := _Ufn'.focus) = _Ufn'
+
+[14a]   used-focusses(_Vn''.focus := _Term') = source of _Vn''
+
+[14b]   used-focusses(focus := _Vn') = "ConnectedInstanceName"
+
+[14c]   used-focusses(_Ufn' . focus := _Vn') = _Ufn'
+
+[15a1]  used-focusses(_Vn'.focus := select(_Ufn', _Sort')) = source of _Vn'
+
+[15a2]  used-focusses(_Vn'.focus := select(_Vn'', _Sort')) =
+                append-filenames(source of _Vn' , source of _Vn'')
+
+[15b1]  used-focusses(_Ufn'.focus := select(_Ufn'', _Sort')) = _Ufn'
+
+[15b1]  used-focusses(_Ufn'.focus := select(_Vn'', _Sort')) = _Ufn'
+
+[15c1]  used-focusses(focus := select(_Ufn', _Sort')) = "ConnectedInstanceName"
+
+[15c2]  used-focusses(focus := select(_Vn', _Sort')) = "ConnectedInstanceName"
+
+[16a]   used-focusses(_Vn'.focus := _Mod' : _Func'(_Vnscomma')) = source of _Vn'
+
+[16b]   used-focusses(_Ufn'.focus := _Mod' : _Func'(_Vnscomma')) = _Ufn'
+
+[16c]   used-focusses(focus := _Mod' : _Func'(_Vnscomma')) = "ConnectedInstanceName"
+
+[16d]   used-focusses(_Mod' : _Func'(_Vnscomma')) = argument-insts(_Vnscomma')
+
+[17]    used-focusses(_Vn' := _Vn'') = %%empty%%
+
+[18a]   used-focusses(_Vn' := select(_Ufn', _Sort')) = %%empty%%
+
+[18b]   used-focusses(_Vn' := select(_Vn'', _Sort')) = %%empty%%
+
+[18c]   used-focusses(_Vn' := _Mod' : _Func'(_Vnscomma')) = %%empty%%
+
+[19a1]  used-focusses(_Vn'.focus _Moves') = source of _Vn'
+
+[19a2]  used-focusses(_Vn'.focus) = source of _Vn'
+
+[19b1]  used-focusses(focus _Moves') = "ConnectedInstanceName"
+
+[19b2]  used-focusses(focus) = "ConnectedInstanceName"
+
+[19c]   used-focusses(_Moves') = "ConnectedInstanceName"
+
+[19d]   used-focusses(_Ufn'.focus  _Moves') = _Ufn'
+
+[19e]   used-focusses(_Ufn'.focus) = _Ufn'
+
+[19f1]  used-wc-focusses(focus is _Sort') = "ConnectedInstanceName"
+
+[19f2]  used-wc-focusses(focus _Moves' is _Sort') = "ConnectedInstanceName"
+
+[19f3]  used-wc-focusses(_Ufn'.focus is _Sort') = _Ufn'
+
+[19f4]  used-wc-focusses(_Ufn'.focus _Moves' is _Sort') = _Ufn'
+
+[19g1]  used-wc-focusses(focus matches _Pattern') = "ConnectedInstanceName"
+
+[19g2]  used-wc-focusses(focus _Moves' matches _Pattern') = "ConnectedInstanceName"
+
+[19g3]  used-wc-focusses(_Ufn'.focus matches _Pattern') = _Ufn'
+
+[19g4]  used-wc-focusses(_Ufn'.focus _Moves' matches _Pattern') = _Ufn'
+
+[19h1]  used-wc-focusses(focus is-meta-var) = "ConnectedInstanceName"
+
+[19h2]  used-wc-focusses(focus _Moves' is-meta-var) = "ConnectedInstanceName"
+
+[19h3]  used-wc-focusses(_Ufn'.focus is-meta-var) = _Ufn'
+
+[19h4]  used-wc-focusses(_Ufn'.focus _Moves' is-meta-var) = _Ufn'
+
+[19i]   used-wc-focusses(_Mod' : _Func'(_Vnscomma')) = %%empty%%
+
+[19j]   used-wc-focusses(not _WC') = used-wc-focusses(_WC')
+
+[19k]   used-wc-focusses(_WC' and _WC'') = append-filenames(used-wc-focusses(_WC'), used-wc-focusses(_WC''))
+
+[19l]   used-wc-focusses(_WC' or _WC'') = append-filenames(used-wc-focusses(_WC'), used-wc-focusses(_WC''))
+
+[19m]   used-wc-focusses(focus _Moves') = "ConnectedInstanceName"
+
+[19n]   used-wc-focusses(_Vn' . focus _Moves') = %%empty%%
+
+[19o]   used-wc-focusses(_Ufn' . focus _Moves') = _Ufn'
+
+[20a]   used-modules(_Act'; _ActsSemi' ) =
+                append-module-names(used-modules(_Act'), used-modules(_ActsSemi'))
+
+[20b]   used-modules(while _WC' do _ActsSemi' od) =
+                append-module-names(used-wc-modules(_WC'), used-modules(_ActsSemi'))
+
+[21a]   used-modules(create(_Ufn',_Mod',_Text',_Sort')) = _Mod'
+
+[21b]   used-modules(create(_Vn',_Mod',_Text',_Sort')) = _Mod'
+
+[22a]   used-modules(create(_Ufn', _Vn')) = %% empty %%
+
+[22b]   used-modules(create(_Vn''', _Vn')) = %% empty %%
+
+[23a]   used-modules(_Vn' := _Focus' _Moves') = %% empty %%
+
+[23b]   used-modules(_Vn' := _Focus') = %% empty %%
+
+[24]    used-modules(_Focus' := _Vn') = %% empty %%
+
+[25a]   used-modules(_Focus' := select(_Ufn', _Sort')) = %% empty %%
+
+[25b]   used-modules(_Focus' := select(_Vn', _Sort')) = %% empty %%
+
+[26a]   used-modules(_Vn'.focus := _Mod' : _Func'(_Vnscomma')) =
+                used-modules (_Mod' : _Func'(_Vnscomma'))
+
+[26b]   used-modules(focus := _Mod' : _Func'(_Vnscomma')) =
+                used-modules (_Mod' : _Func'(_Vnscomma'))
+
+[27]    used-modules(_Vn' := _Vn'') = %% empty %%
+
+[28a]   used-modules(_Vn' := select(_Ufn', _Sort')) = %% empty %%
+
+[28b]   used-modules(_Vn' := select(_Vn'', _Sort')) = %% empty %%
+
+[29]    used-modules(_Vn' := _Mod' : _Func'(_Vnscomma')) =
+                used-modules(_Mod' : _Func'(_Vnscomma'))
+
+[30]    used-modules(_Focus-expr') = %% empty %%
+
+[31]    used-modules(_Mod' : _Func' (_Vnscomma')) = _Mod'
+
+[32a]   used-wc-modules(_FC-expr' is _Sort') = %% empty %%
+
+[32b]   used-wc-modules(_FC-expr' matches _Pattern') = %% empty %%
+
+[32c]   used-wc-modules(_FC-expr' is-meta-var) = %% empty %%
+
+[32d]   used-wc-modules(_Mod' : _Func' (_Vnscomma')) = _Mod'
+
+[32e]   used-wc-modules(not _WC') = used-wc-modules(_WC')
+
+[32f]   used-wc-modules(_WC' and _WC'') = append-module-names(used-wc-modules(_WC') , used-wc-modules(_WC''))
+
+[32g]   used-wc-modules(_WC' or _WC'') = append-module-names(used-wc-modules(_WC') , used-wc-modules(_WC''))
+
+[32h]   used-wc-modules(focus _Moves') = %% empty %%
+
+[32i]   used-wc-modules(_Ufn' . focus _Moves') = %% empty %%
+
+[32j]   used-wc-modules(_Vn' . focus _Moves') = %% empty %%
+
+[40a]   inputs(create(_Ufn',_Mod',_Text',_Sort'); _ActsSemi') =
+                append-filenames(_Ufn', inputs(_ActsSemi'))
+
+[40a]   inputs(create(_Vn',_Mod',_Text',_Sort'); _ActsSemi') =
+                append-filenames(source of _Vn', inputs(_ActsSemi'))
+
+[41a]   is-assign-input-to-var(_Act') != true,
+        is-while(_Act') != true
+        ==============================
+        inputs( _Act'; _ActsSemi') = inputs(_ActsSemi')
+
+[41b]   is-assign-input-to-var(_Act') != true,
+        is-while(_Act') = true
+        ==============================
+        inputs( _Act'; _ActsSemi') = append-filenames(inputs(_Act'), inputs(_ActsSemi'))
+
+[42]    inputs(create(_Ufn',_Mod',_Text',_Sort')) = _Ufn'
+
+[43]    is-assign-input-to-var(_Act') != true,
+        is-while(_Act') != true
+        ==============================
+        inputs(_Act') = %%empty%%
+
+[44]    inputs(while _WC' do _ActsSemi' od) = inputs(_ActsSemi')
+
+[50a]   outputs(create(_Ufn',_Vn'); _ActsSemi') =
+                append-filenames(_Ufn', outputs(_ActsSemi'))
+
+[50b]   outputs(create(_Vn'',_Vn'); _ActsSemi') = outputs(_ActsSemi')
+
+[51a]   is-assign-output-to-var(_Act') != true,
+        is-while(_Act') != true
+        ==============================
+        outputs(_Act'; _ActsSemi') = outputs(_ActsSemi')
+
+[51b]   is-assign-output-to-var(_Act') != true,
+        is-while(_Act') = true
+        ==============================
+        outputs(_Act'; _ActsSemi') = append-filenames(outputs(_Act'), outputs(_ActsSemi'))
+
+[52a]   outputs(create(_Ufn',_Vn')) = _Ufn'
+
+[52b]   outputs(create(_Vn',_Vn'')) = %%empty%%
+
+[53]    is-assign-output-to-var(_Act') != true,
+        is-while(_Act') != true
+        ==============================
+        outputs(_Act') = %%empty%%
+
+[54]    outputs(while _WC' do _ActsSemi' od) = outputs(_ActsSemi')
+
+[200a]  append-filenames( , _Ufns') = _Ufns'
+
+[200b]  append-filenames (_Ufns' _Ufn', _Ufns'') = append-filenames(_Ufns', _Ufn' _Ufns'')
+
+[201a]  append-module-names( , _Mods') = _Mods'
+
+[201b]  append-module-names (_Mods' _Mod', _Mods'') = append-module-names(_Mods', _Mod' _Mods'')
+
+[300]   is-focus-expr(_Act') = true,
+        _Act'' = add-name-to-move(_Act'),
+        _ActsSemi'' = get-moves(_ActsSemi'),
+        _ActsSemi''' = _Act''; _ActsSemi''
+        =============================
+        get-moves(_Act'; _ActsSemi') = _ActsSemi'''
+
+[301]   is-focus-expr(_Act') != true
+        ===============================
+        get-moves(_Act'; _ActsSemi') = get-moves(_ActsSemi')
+
+[302a]  is-focus-expr(_Act') = true,
+        _Act'' = add-name-to-move(_Act'),
+        _ActsSemi' = _Act'' ; empty-act-moves
+        ==============================
+        get-moves(_Act') = _ActsSemi'
+
+[302b]  is-focus-expr(_Act') != true
+        ==============================
+        get-moves(_Act') = empty-act-moves
+
+[303]   _Ufn' = "ConnectedInstanceName"
+        ============================
+        add-name-to-move(focus _Moves') = _Ufn'.focus _Moves'
+
+[304]   _Ufn' = "ConnectedInstanceName"
+        ============================
+        add-name-to-move(_Moves') = _Ufn'.focus _Moves'
+
+[305]   add-name-to-move(_Ufn'.focus _Moves') = _Ufn'.focus _Moves'
+
+[305b]  add-name-to-move(_Vn'.focus _Moves') = source of _Vn'.focus _Moves'
+
+[306]   _ActsSemi'; empty-act-moves = _ActsSemi'
+
+[307]   is-focus-expr (_Act') != true
+        ==============================
+        get-moves(_Act') = empty-act-moves
+
+[350]   no-semi-colons(_Act') = _Act'
+
+[351]   _ActsNone'' = no-semi-colons(_ActsSemi''),
+        _ActsNone''' = _Act' _ActsNone''
+        ==========================================
+        no-semi-colons(_Act' ; _ActsSemi'') = _ActsNone'''
+
+[400a]  sort-by-name(_ActsSemi') = sort-moves-by-name(no-semi-colons(_ActsSemi'))
+
+[401]   _Act' = _Ufn'.focus _Moves',
+        _Act'' = _Ufn''.focus _Moves'',
+        1 = _Ufn'' < _Ufn'
+        ==================================================
+        sort-moves-by-name(_ActsNone'' _Act' _Act'' _ActsNone''') =
+                sort-moves-by-name(_ActsNone'' _Act'' _Act' _ActsNone''')
+
+[405]   _Act' = _Ufn'.focus _Moves',
+        _Act'' = _Ufn''.focus _Moves'',
+        0 = _Ufn'' < _Ufn'
+        ==========================================
+        sort-moves-by-name(_ActsNone' _Act' _Act'' _ActsNone'') = _ActsNone' _Act' _Act'' _ActsNone''
+
+
+[404]   _ActsNone' = _Act'
+        =================
+        sort-moves-by-name(_ActsNone') = _ActsNone'

@@ -1,0 +1,21 @@
+%%  Output
+
+imports
+    Layout Lisp
+exports
+    sorts
+        OUTPUT STRING
+    lexical syntax
+        "\"" ~[\"\n]* "\""                      -> STRING
+    context-free syntax
+        "emit" "(" OUTPUT ")"                   -> OUTPUT
+        "write" "(" OUTPUT ")" "to" STRING      -> OUTPUT
+        "LISP" LISP                             -> OUTPUT
+        "OUTPUT" LISP                           -> OUTPUT
+        "<<" OUTPUT ">>"                        -> LISP
+        "STRING" LISP                           -> STRING
+       "<<" STRING ">>"                         -> LISP
+
+variables
+        [_]Dummy[']*            -> OUTPUT
+        [_]Str[']*              -> STRING

@@ -1,0 +1,29 @@
+%%
+%%
+%%      Type-Instant-Generalize
+%%
+%%
+
+   imports Type-Environments Tables3
+
+   exports
+      sorts INSTANT-OUT
+      context-free syntax
+         "<" TYPE "," VAR ">"                 -> INSTANT-OUT
+         instant "(" GEN-TYPE "," VAR ")"     -> INSTANT-OUT
+         generalize "(" TYPE "," TYPE-ENV ")" -> GEN-TYPE
+
+   hiddens
+      sorts INS-OUT
+      context-free syntax
+         "<" TYPE "," VAR "," VAR-SUBS ">"              -> INS-OUT
+         ins-subs "(" GEN-TYPE "," VAR "," VAR-SUBS ")" -> INS-OUT
+      variables
+         n          -> CHAR+
+         var [12]*  -> VAR
+         gv         -> GEN-VAR
+         type [12]* -> TYPE
+         gt [12]*   -> GEN-TYPE
+         subs [12]* -> VAR-SUBS
+         env        -> TYPE-ENV
+

@@ -1,0 +1,37 @@
+%% Specify statements of Pascal, ISO section 6.8.
+%% module SyntaxStats
+imports SyntaxExpr
+
+exports
+  sorts UNL-STAT SIMPLE-STAT STRUCT-STAT STATEMENT
+    CASE-LIST-ELT COMP-STAT DOWN-TO
+  context-free syntax
+    LABEL ":" UNL-STAT                                  -> STATEMENT
+    UNL-STAT                                            -> STATEMENT
+    SIMPLE-STAT                                         -> UNL-STAT
+    STRUCT-STAT                                         -> UNL-STAT
+
+    VARIABLE-ACCESS ":=" EXPR                           -> SIMPLE-STAT
+    IDENT ACTUAL-PAR-LIST                               -> SIMPLE-STAT
+    goto LABEL                                          -> SIMPLE-STAT
+                                                        -> SIMPLE-STAT
+
+    COMP-STAT                                           -> STRUCT-STAT
+    begin { STATEMENT ";" }+ end                        -> COMP-STAT
+    if EXPR then STATEMENT                              -> STRUCT-STAT
+    if EXPR then STATEMENT else STATEMENT               -> STRUCT-STAT
+
+    case EXPR of { CASE-LIST-ELT ";" }+ OPT-SEMI-COLON end -> STRUCT-STAT
+    { CONST ","}+ ":" STATEMENT                         -> CASE-LIST-ELT
+
+    repeat { STATEMENT ";"}+ until EXPR                 -> STRUCT-STAT
+    while EXPR do STATEMENT                             -> STRUCT-STAT
+    "to"                                                -> DOWN-TO
+    downto                                              -> DOWN-TO
+    for IDENT ":=" EXPR DOWN-TO EXPR do STATEMENT       -> STRUCT-STAT
+    with { VARIABLE-ACCESS "," }+ do STATEMENT          -> STRUCT-STAT
+
+priorities
+    if EXPR then STATEMENT else STATEMENT -> STRUCT-STAT
+    >
+    if EXPR then STATEMENT -> STRUCT-STAT

@@ -1,0 +1,31 @@
+equations
+
+[2c]    _Errors' + empty-errors = _Errors'
+
+[2d]    empty-errors + _Errors' = _Errors'
+
+[2e]    _Errors'' != empty-errors
+        =======================
+        true + _Errors'' = _Errors''
+
+[2f]    _Errors'' != empty-errors
+        =======================
+        _Errors'' + true = _Errors''
+
+[2f]    _Errors'' != empty-errors
+        =======================
+        false + _Errors'' = false
+
+[600]   single-error(_Errors' + _Errors'' ) = false
+
+[500]   connect-errors(_State' _Int' empty-errors) = empty-errors
+
+[501]   connect-errors(_State' _Int' _Errors'' + _Errors''') =
+                (make-error-head(_State' _Int') _Errors'') + connect-errors(_State' _Int' _Errors''' )
+
+[502]   single-error(_Errors') != false,
+        _Errors' != empty-errors
+        =================================
+        connect-errors(_State' _Int' _Errors') = make-error-head(_State' _Int') _Errors'
+
+[503]   make-error-head(_State' _Int') = Error in item : name(_State') pair nr: _Int'

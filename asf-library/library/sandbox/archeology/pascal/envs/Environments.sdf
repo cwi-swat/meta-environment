@@ -1,0 +1,31 @@
+imports Context-search Errors 
+
+exports
+  sorts ENV FIELD
+							
+  context-free syntax
+    "(" context "," CONTEXT ")"                         -> FIELD
+    "(" errors "," ERRORS ")"                           -> FIELD
+    "(" result "," CONTEXT ")"                          -> FIELD
+    "(" construct "," CONSTRUCT ")"                     -> FIELD
+    "[" { FIELD "," }* "]"                              -> ENV
+    "(" ENV ")"                                         -> ENV bracket
+    new-env                                             -> ENV
+    ENV "." result                                      -> CONTEXT
+    ENV "." context                                     -> CONTEXT
+    ENV "." construct                                   -> CONSTRUCT
+    ENV "." errors                                      -> ERRORS
+    ENV "+" ENTRY                                       -> ENV
+    leave inner block of ENV                            -> ENV
+    add-error "[" ERROR "]" "to" ENV                    -> ENV
+    set-result of ENV "to" CONTEXT                      -> ENV
+    set-construct of ENV "to" "\"" CONSTRUCT "\""       -> ENV
+    set-context of ENV "to" CONTEXT                     -> ENV
+
+  variables
+    Env[0-9]*      -> ENV                  E[0-9]*      -> ENV
+
+hiddens
+  variables
+    Field               -> FIELD            Fields[12]* -> {FIELD ","}*
+    [_]c[onstr]*[12]*   -> CONSTRUCT        Error       -> ERROR

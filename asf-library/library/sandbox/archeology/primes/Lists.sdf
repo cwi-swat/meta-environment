@@ -1,0 +1,15 @@
+%%  Lists
+
+imports
+    Naturals
+
+exports
+    sorts LIST
+    context-free syntax
+        empty                           -> LIST
+        cons "(" NAT "," LIST ")"       -> LIST
+
+        sort "(" LIST ")"               -> LIST
+        insert "(" NAT "," LIST ")"     -> LIST
+    variables
+        L  -> LIST

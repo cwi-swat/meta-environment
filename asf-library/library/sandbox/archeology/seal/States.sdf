@@ -1,0 +1,127 @@
+%%  States
+
+imports
+    Actions Conditions
+
+exports
+    sorts
+        STATE TYPE VAR VARS VARS-LIST
+        COND-insts ACTS-insts INST INSTS INST-LIST
+        COND-mods ACTS-mods MOD MODS MOD-LIST NAME-LIST
+        ACT-moves MOVE MOVES MOVES-LIST ACT-movesS Focus-actionS
+        INPUT-insts OUTPUT-insts SEL-insts RED-insts ASGN-insts
+
+    context-free syntax
+"[" TYPE "," Name "," Name "," VARS-LIST "," INST-LIST "," MOD-LIST "," MOVES-LIST "]" -> STATE
+name "(" STATE ")"                                              -> Name
+menu-name "(" STATE ")"                                         -> Name
+type "(" STATE ")"                                              -> TYPE
+vars "(" STATE ")"                                              -> VARS-LIST
+insts "(" STATE ")"                                             -> INST-LIST
+mods "(" STATE ")"                                              -> MOD-LIST
+moves "(" STATE ")"                                             -> MOVES-LIST
+STATE "+" STATE                                                 -> STATE
+empty-state                                                     -> STATE
+make-button-state "(" Button ")"                                -> STATE
+make-st-button-state "(" Button ")"                             -> STATE
+make-menu-entry-state "(" Menu-entry ")"                        -> STATE
+make-tool-state "(" Active-tool ")"                             -> STATE
+"[" config-variables in pairnr ":" INT ":" VARIABLES "]"        -> VAR
+make-vars-list "(" Tool-CA-pair* INT ")"                        -> VARS-LIST
+make-vars-list "(" Condition-action-pair* INT ")"               -> VARS-LIST
+empty-CA-pairs "(" Condition-action-pair* ")"                   -> BOOL
+empty-TCA-pairs "(" Tool-CA-pair* ")"                           -> BOOL
+make-inst-list "(" Tool-CA-pair* INT ")"                        -> INST-LIST
+make-inst-list "(" Condition-action-pair* INT ")"               -> INST-LIST
+make-mods-list "(" Tool-CA-pair* INT ")"                        -> MOD-LIST
+make-mods-list "(" Condition-action-pair* INT ")"               -> MOD-LIST
+make-moves-list "(" Tool-CA-pair* INT ")"                       -> MOVES-LIST
+make-moves-list "(" Condition-action-pair* INT ")"              -> MOVES-LIST
+instances in condition ":" FILENAMES                            -> COND-insts
+instances in actions ":" FILENAMES                              -> ACTS-insts
+input instances ":" FILENAMES                                   -> INPUT-insts
+output instances ":" FILENAMES                                  -> OUTPUT-insts
+select instances ":" FILENAMES                                  -> SEL-insts
+instances used in reductions ":" FILENAMES                      -> RED-insts
+focus assign instances ":" FILENAMES                            -> ASGN-insts
+modules in condition ":" Module*                                -> COND-mods
+modules in actions ":" Module*                                  -> ACTS-mods
+"Instance" ":" Unix-filename moves ":" {Focus-action ","}*      -> ACT-moves
+"[" pairnr ":" INT moves per instance ":" ACT-moves* "]"        -> MOVE
+"[" pairnr ":" INT uses
+                 COND-insts ACTS-insts INPUT-insts OUTPUT-insts
+                SEL-insts RED-insts ASGN-insts "]"              -> INST
+"[" INSTS* "]"                                                  -> INST-LIST
+"[" INST* "]"                                                   -> INSTS
+insts "(" Condition-action-pair INT ")"                         -> INSTS
+insts "(" Tool-CA-pair INT ")"                                  -> INSTS
+add-insts "(" INSTS INST-LIST ")"                               -> INST-LIST
+add-insts "(" INST-LIST ")"                                     -> INST-LIST
+"[" MOVES* "]"                                                  -> MOVES-LIST
+"[" MOVE* "]"                                                   -> MOVES
+moves "(" Condition-action-pair INT ")"                         -> MOVES
+moves "(" Tool-CA-pair INT ")"                                  -> MOVES
+add-moves "(" MOVES MOVES-LIST ")"                              -> MOVES-LIST
+add-moves "(" MOVES-LIST ")"                                    -> MOVES-LIST
+make-named-moves "(" {SEAL-action ";" }+ ")"                  -> ACT-movesS
+"[" pairnr ":" INT uses COND-mods ACTS-mods "]"                 -> MOD
+"[" MODS* "]"                                                   -> MOD-LIST
+"[" MOD* "]"                                                    -> MODS
+mods "(" Condition-action-pair INT ")"                          -> MODS
+mods "(" Tool-CA-pair INT ")"                                   -> MODS
+add-mods "(" MODS MOD-LIST ")"                                  -> MOD-LIST
+add-mods "(" MOD-LIST ")"                                       -> MOD-LIST
+vars "(" Condition-action-pair INT ")"                          -> VARS
+vars "(" Tool-CA-pair INT ")"                                   -> VARS
+add-vars "(" VARS VARS-LIST ")"                                 -> VARS-LIST
+add-vars "(" VARS-LIST ")"                                      -> VARS-LIST
+"[" VARS* "]"                                                   -> VARS-LIST
+"[" VAR* "]"                                                    -> VARS
+vars-in-actions "(" {SEAL-action ";"}+ INT INT ")"            -> VARS
+vars-in-action "(" SEAL-action INT INT ")"                    -> VARS
+vars-in-reduction "(" Module ":" Function-name "(" {Variable-name ","}* ")" INT INT ")" -> VARS
+no-commas "(" {Name ","}* INT INT ")"                           -> VARS
+make-entry-name "(" Name Name ")"                               -> Name
+button-type                                                     -> TYPE
+st-button-type                                                  -> TYPE
+tool-type                                                       -> TYPE
+menu-entry-type                                                 -> TYPE
+"[" Unix-filename* "]"                                          -> NAME-LIST
+get-names-from-act-moves "(" NAME-LIST from SEAL-action* ")"  -> NAME-LIST
+not-in "(" Unix-filename Unix-filename* ")"                     -> BOOL
+get-moves-per-instance "(" Unix-filename* SEAL-action* ")"    -> ACT-movesS
+all-moves "(" Unix-filename SEAL-action* ")"                  -> ACT-moves
+ACT-moves*                                                      -> ACT-movesS
+append-focus-actions "(" {Focus-action ","}* "," {Focus-action ","}* ")" -> Focus-actionS
+{Focus-action ","}*                                             -> Focus-actionS
+"(" Focus-actionS ")"                                           -> Focus-actionS {bracket}
+variables
+"_State"[']+       -> STATE
+"_States"[']+      -> {STATE ";"}+
+"_Type"[']+        -> TYPE
+"_Inst"[']+        -> INST
+"_Insts"[']+       -> INST*
+"_INSTS"[']+       -> INSTS*
+"_Acts-insts"[']+  -> ACTS-insts
+"_Cond-insts"[']+  -> COND-insts
+"_Inp-insts"[']+   -> INPUT-insts
+"_Outp-insts"[']+  -> OUTPUT-insts
+"_Sel-insts"[']+   -> SEL-insts
+"_Red-insts"[']+   -> RED-insts
+"_Asgn-insts"[']+  -> ASGN-insts
+"_Acts-mods"[']+   -> ACTS-mods
+"_Cond-mods"[']+   -> COND-mods
+"_MODS"[']+        -> MOD*
+"_MOD"[']+         -> MOD
+"_MODSs"[']+       -> MODS*
+"_MOVES"[']+       -> MOVE*
+"_MOVESs"[']+       -> MOVES*
+"_Inst-list"[']+   -> INST-LIST
+"_Vars-list"[']+   -> VARS-LIST
+"_Mods-list"[']+   -> MOD-LIST
+"_Moves-list"[']+  -> MOVES-LIST
+"_VARS"[']+        -> VAR*
+"_VARSs"[']+       -> VARS*
+"_Named-move"[']+   -> ACT-moves
+"_Named-moves"[']+   -> ACT-moves*
+"_Config-variables"[']+ -> VARIABLE*

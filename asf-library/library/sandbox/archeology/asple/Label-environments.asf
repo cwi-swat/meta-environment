@@ -1,0 +1,46 @@
+  equations
+  [L1]  cons-env () = lenv ()
+
+  [L2]  cons-env (Coms)  = Le1
+        ===============================================>
+        cons-env (lbl Nat-con; Coms) = modify (Nat-con : Coms) in Le1
+
+  [L3]  is-label (Com) != true,
+        cons-env (Coms)  = Le1
+        ===============================================>
+        cons-env (Com;Coms) = Le1
+
+  [L4]   is-label (lbl Nat-con) = true
+
+
+  [T1]    add Lpair to lenv (Lpairs)  = lenv (Lpair # Lpairs)
+
+  [T2]    lookup Nat-con in lenv ((Nat-con : Sml-prog) # Lpairs) = Sml-prog
+
+  [T3]                          Nat-con != Nat-con1
+           ======================================================>
+           lookup Nat-con in lenv ((Nat-con1: Sml-prog) # Lpairs) =
+                                         lookup Nat-con in lenv (Lpairs)
+
+ [T3a]   Nat-con not in lenv() = true
+
+ [T3b]   Nat-con not in lenv((Nat-con: Sml-prog) # Lpairs) = false
+
+ [T3c]    Nat-con != Nat-con1
+          ===========>
+          Nat-con not in lenv((Nat-con1: Sml-prog) # Lpairs) =
+                Nat-con not in lenv(Lpairs)
+
+  [T4]     modify (Nat-con : Sml-prog) in
+                lenv ((Nat-con : Sml-prog1) # Lpairs) =
+                     lenv ((Nat-con : Sml-prog) # Lpairs)
+
+  [T5]                          Nat-con != Nat-con1,
+            modify (Nat-con : Sml-prog) in lenv (Lpairs) = lenv (Lpairs1)
+            ======================================================>
+            modify (Nat-con : Sml-prog) in
+                        lenv ((Nat-con1 : Sml-prog1) # Lpairs) =
+                           lenv ((Nat-con1 : Sml-prog1) # Lpairs1)
+
+  [T6]     modify (Nat-con : Sml-prog) in lenv () =
+                                        lenv (Nat-con : Sml-prog)

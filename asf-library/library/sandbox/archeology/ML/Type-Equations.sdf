@@ -1,0 +1,29 @@
+%%
+%%
+%%      Type-Equations
+%%
+%%
+
+   imports Booleans Type-Substitutions
+
+   exports
+      sorts TYPE-EQ TYPE-EQS UNIFY-OUT
+      context-free syntax
+         TYPE is TYPE               -> TYPE-EQ
+         "{" {TYPE-EQ ","}* "}"     -> TYPE-EQS
+         "<" BOOL "," TYPE-SUBS ">" -> UNIFY-OUT
+         unify "(" TYPE-EQ ")"      -> UNIFY-OUT
+         unify "(" TYPE-EQS ")"     -> UNIFY-OUT
+
+   hiddens
+      context-free syntax
+         TYPE-EQ "+" TYPE-EQS                 -> TYPE-EQS
+         apply "(" TYPE-SUBS "," TYPE-EQ ")"  -> TYPE-EQ
+         apply "(" TYPE-SUBS "," TYPE-EQS ")" -> TYPE-EQS
+      variables
+         b [12]     -> BOOL
+         var [12]*  -> VAR
+         type [1-4] -> TYPE
+         subs [12]* -> TYPE-SUBS
+         teq        -> TYPE-EQ
+         pairs      -> {TYPE-EQ ","}*

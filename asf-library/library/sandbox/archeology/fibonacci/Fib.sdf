@@ -1,0 +1,22 @@
+%%  Fib
+%%  Little experiment by Arie
+
+exports
+  sorts
+    NAT PAIR
+ lexical syntax
+    [ \t\n]                     -> LAYOUT
+    "%%" ~[\n]* "\n"            -> LAYOUT
+
+  context-free syntax
+    "0"                         -> NAT
+    "S" "(" NAT ")"             -> NAT
+    "add" "(" NAT "," NAT ")"   -> NAT
+
+    "<" NAT "," NAT ">"         -> PAIR
+    "fib" "(" NAT ")"           -> PAIR
+
+
+hiddens
+  variables
+     [xyz][']*                  -> NAT

@@ -1,0 +1,16 @@
+%%  CodeStacks
+
+imports
+    SyntaxProgram
+
+exports
+    sorts
+        C-RECORD C-STACK
+    context-free syntax
+        "[" ID ","  { STAT ";" }* "]"                   -> C-RECORD
+        C-RECORD*                                       -> C-STACK
+    variables
+        [_]CRec[']*                                     -> C-RECORD
+        [_]CRec[*][']*                                  -> C-RECORD*
+        [_]CRec[+][']*                                  -> C-RECORD+
+        [_]CStack[']*                                   -> C-STACK

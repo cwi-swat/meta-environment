@@ -1,0 +1,6 @@
+imports MetaNotation-X
+
+exports
+  context-free syntax
+    "[[" TERM* "]]" -> TERM
+    "<" TERM* ">" -> TERM

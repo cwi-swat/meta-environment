@@ -1,0 +1,103 @@
+imports ActionNotation-Y DataNotation Layout            
+  exports                                               
+  sorts                                                 
+  Action                                                
+    Complete                                            
+    Fail                                                
+    Unfold                                              
+    Yielder                                             
+    It                                                  
+    Datum                                               
+    Data                                                
+    Token                                               
+    Bindable                                            
+    Cell                                                
+    Storable                                            
+    context-free                                        
+    syntax                                              
+      "complete" -> Action                              
+        "fail" -> Action                                
+        "unfold" -> Action                              
+        "unfolding" Action -> Action                    
+        Action "or" Action -> Action {left}             
+        Action "and" Action -> Action {left}            
+        Action "and" "then" Action -> Action {left}     
+        "give" Yielder -> Action                        
+        "check" Yielder -> Action                       
+        Action "then" Action -> Action {left}           
+        "bind" Yielder "to" Yielder -> Action           
+        Action "moreover" Action -> Action {left}       
+        Action "hence" Action -> Action {left}          
+        "allocate" Yielder -> Action                    
+        "store" Yielder "in" Yielder -> Action          
+        Complete "|" Complete -> Complete {left}        
+        Complete "&" Complete -> Complete {left}        
+        "(" { Complete "," } + ")" -> Complete          
+        "nothing" -> Complete                           
+        Yielder "|" Yielder -> Yielder {left}           
+        Yielder "&" Yielder -> Yielder {left}           
+        "(" { Yielder "," } + ")" -> Yielder            
+        "nothing" -> Yielder                            
+        yielder -> Yielder                              
+        complete -> Complete                            
+        It "|" It -> It {left}                          
+        It "&" It -> It {left}                          
+        "(" { It "," } + ")" -> It                      
+        "nothing" -> It                                 
+        it -> It                                        
+        "the" Data "yielded" "by" Yielder -> Yielder    
+        "given" Data -> Yielder                         
+        "given" Datum "#" Natural -> Yielder            
+        "it" -> Yielder                                 
+        "the" Yielder "bound" "to" Yielder -> Yielder   
+        "the" Yielder "stored" "in" Yielder -> Yielder  
+        action -> Action                                
+        Datum "|" Datum -> Datum {left}                 
+        Datum "&" Datum -> Datum {left}                 
+        "(" { Datum "," } + ")" -> Datum                
+        "nothing" -> Datum                              
+        datum -> Datum                                  
+        Fail "|" Fail -> Fail {left}                    
+        Fail "&" Fail -> Fail {left}                    
+        "(" { Fail "," } + ")" -> Fail                  
+        "nothing" -> Fail                               
+        Data "|" Data -> Data {left}                    
+        Data "&" Data -> Data {left}                    
+        "(" { Data "," } + ")" -> Data                  
+        "nothing" -> Data                               
+        data -> Data                                    
+        fail -> Fail                                    
+        Token "|" Token -> Token {left}                 
+        Token "&" Token -> Token {left}                 
+        "(" { Token "," } + ")" -> Token                
+        "nothing" -> Token                              
+        token -> Token                                  
+        Action "|" Action -> Action {left}              
+        Action "&" Action -> Action {left}              
+        "(" { Action "," } + ")" -> Action              
+        "nothing" -> Action                             
+        Bindable "|" Bindable -> Bindable {left}        
+        Bindable "&" Bindable -> Bindable {left}        
+        "(" { Bindable "," } + ")" -> Bindable          
+        "nothing" -> Bindable                           
+        bindable -> Bindable                            
+        Unfold "|" Unfold -> Unfold {left}              
+        Unfold "&" Unfold -> Unfold {left}              
+        "(" { Unfold "," } + ")" -> Unfold              
+        "nothing" -> Unfold                             
+        Cell "|" Cell -> Cell {left}                    
+        Cell "&" Cell -> Cell {left}                    
+        "(" { Cell "," } + ")" -> Cell                  
+        "nothing" -> Cell                               
+        cell -> Cell                                    
+        unfold -> Unfold                                
+        Storable "|" Storable -> Storable {left}        
+        Storable "&" Storable -> Storable {left}        
+        "(" { Storable "," } + ")" -> Storable          
+        "nothing" -> Storable                           
+        storable -> Storable                            
+        Datum * -> Data                                 
+        "a" Yielder -> Yielder                          
+        "an" Yielder -> Yielder                         
+        "the" Yielder -> Yielder                        
+        "of" Yielder -> Yielder

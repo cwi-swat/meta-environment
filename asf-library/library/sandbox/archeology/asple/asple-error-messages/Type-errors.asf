@@ -1,0 +1,4 @@
+   equations
+
+[Te1]   errors :  [Errs1]  + errors : [Errs2] =
+        errors : [Errs1 , Errs2]

@@ -1,0 +1,28 @@
+
+equations
+
+
+  [1]   prime(N) = sift(integers(SS0,N))
+
+  [2]   N1 < N2 = true
+        ===============
+        integers(N1,N2) = cons(N1, integers(S(N1),N2))
+
+  [3]   N2 < N1 = true
+        ======================
+        integers(N1,N2) = empty
+
+  [3']  integers(N,N) = cons(N, empty)
+
+  [4]   sift(cons(N,L)) = cons(N, sift( filter(N,L) ) )
+  [5]   sift( empty ) = empty
+
+  [6]   filter(N, empty) = empty
+
+  [7]   mod(N2,N1) = 0
+        ===================
+        filter(N1, cons(N2, L)) = filter(N1,L)
+
+  [8]   mod(N2,N1) != 0
+        ================
+        filter(N1,cons(N2, L)) = cons(N2, filter(N1,L))

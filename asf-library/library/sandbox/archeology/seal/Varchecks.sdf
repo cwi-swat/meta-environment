@@ -1,0 +1,29 @@
+%%  Varchecks
+
+imports
+    Sym-tab Errors
+
+exports
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+
+check-vars "(" STATE INT INT ")"                -> ERRORS
+
+should-be-derived "(" VARIABLE ")"              -> BOOL
+
+check-vars-in-pairnr "(" VARIABLES ")"          -> ERRORS
+check-var-types "(" VARIABLES ")"               -> ERRORS
+check-non-derived-types "(" VARIABLES ")"       -> ERRORS
+incompatible types of variable ":" Variable-name actions ":" INT and INT -> ERRORS
+type-of "(" Variable-name INT should be Var-type "," VARIABLES ")" -> ERRORS
+check-use-before-def "(" VARIABLES ")"          -> ERRORS
+variable ":" Variable-name is undefined in action nr ":" INT -> ERRORS
+derive-type "(" VARIABLE from VARIABLES ")"     -> VARIABLE
+derive-types "(" VARIABLES "," VARIABLES ")"    -> VARIABLES
+derive-types-until-no-change "(" VARIABLES ")"  -> VARIABLES
+unable "to" type variable ":" Variable-name in action nr ":" INT -> ERRORS
+remove-uses-or-redefs "(" Variable-name VARIABLES ")"    -> VARIABLES
+uses-in-action "(" INT "," VARIABLES ")"        -> VARIABLES
+get-vars-in-pairnr "(" STATE INT ")"            -> VARIABLES
+lookup-vars "(" VARS-LIST INT ")"               -> VARIABLES

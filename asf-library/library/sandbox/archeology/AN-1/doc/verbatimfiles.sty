@@ -1,0 +1,14 @@
+% --- \verbatimfile{<filename>}    for verbatim inclusion of a file
+% --- Note that the precise layout of line breaks in this file is important!
+%
+% The 9.5 pt determines the space between two lines (arie)
+\def\myfootnotesize{\@setsize\footnotesize{9.5pt}\viiipt\@viiipt
+\abovedisplayskip 6pt plus 2pt minus 4pt%
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip \z@ plus 1pt%
+\belowdisplayshortskip 3pt plus 1pt minus 2pt}
+
+\def\verbatimfile#1{\begingroup
+                    \myfootnotesize \@verbatim \frenchspacing \@vobeyspaces
+                    \input#1 \vspace{2ex} \endgroup
+}

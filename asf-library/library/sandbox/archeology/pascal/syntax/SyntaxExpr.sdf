@@ -1,0 +1,71 @@
+%% Specify Pascal Expressions, ISO section 6.7.
+%% A sligtly more general specification is given, allowing expressions like
+%% 1 * -1 (instead of " 1 * (-1) " in ISO) as well.
+imports SyntaxConsts
+
+exports
+  sorts VARIABLE-ACCESS MEMBER-DESIGNATOR SET-CONSTRUCTOR
+ ACTUAL-PAR-LIST NON-EMPTY-ACT-PAR-LIST ACTUAL-PAR EXPR FORMAT
+
+  context-free syntax
+    IDENT                                               -> VARIABLE-ACCESS
+    VARIABLE-ACCESS "[" { EXPR "," }+ "]"               -> VARIABLE-ACCESS
+    VARIABLE-ACCESS "." IDENT                           -> VARIABLE-ACCESS
+    VARIABLE-ACCESS "^"                                 -> VARIABLE-ACCESS
+
+    EXPR                                                -> MEMBER-DESIGNATOR
+    EXPR ".." EXPR                                      -> MEMBER-DESIGNATOR
+    "[" {MEMBER-DESIGNATOR ","}* "]"                    -> SET-CONSTRUCTOR
+
+                                                        -> FORMAT
+    ":" EXPR                                            -> FORMAT
+    ":" EXPR ":" EXPR                                   -> FORMAT
+    EXPR FORMAT                                         -> ACTUAL-PAR
+    "(" { ACTUAL-PAR "," }+ ")"                         -> NON-EMPTY-ACT-PAR-LIST
+    NON-EMPTY-ACT-PAR-LIST                              -> ACTUAL-PAR-LIST
+                                                        -> ACTUAL-PAR-LIST
+
+    VARIABLE-ACCESS                                     -> EXPR
+    UNS-NUMBER                                          -> EXPR
+    STRING                                              -> EXPR
+    nil                                                 -> EXPR
+    IDENT NON-EMPTY-ACT-PAR-LIST                        -> EXPR
+    SET-CONSTRUCTOR                                     -> EXPR
+    "(" EXPR ")"                                        -> EXPR bracket
+
+    not EXPR                                            -> EXPR
+    "+" EXPR                                            -> EXPR
+    "-" EXPR                                            -> EXPR
+
+    EXPR "*" EXPR                                       -> EXPR left
+    EXPR "/" EXPR                                       -> EXPR left
+    EXPR div EXPR                                       -> EXPR left
+    EXPR mod EXPR                                       -> EXPR left
+    EXPR and EXPR                                       -> EXPR left
+    EXPR "+" EXPR                                       -> EXPR left
+    EXPR "-" EXPR                                       -> EXPR left
+    EXPR or EXPR                                        -> EXPR left
+
+    EXPR "=" EXPR                                       -> EXPR non-assoc
+    EXPR "<>" EXPR                                      -> EXPR non-assoc
+    EXPR "<" EXPR                                       -> EXPR non-assoc
+    EXPR ">" EXPR                                       -> EXPR non-assoc
+    EXPR "<=" EXPR                                      -> EXPR non-assoc
+    EXPR ">=" EXPR                                      -> EXPR non-assoc
+    EXPR in EXPR                                        -> EXPR non-assoc
+
+  variables
+  "_expr"[0-9]*    -> EXPR                "_expr"[0-9]*"+"     -> {EXPR ","}+
+  "_var-acc"[0-9]* -> VARIABLE-ACCESS     "_var-acc"[0-9]*"+"  -> {VARIABLE-ACCESS ","}+ 
+  "_format"[0-9]*  -> FORMAT              "_act-par"[0-9]*     -> ACTUAL-PAR
+  "_member"[0-9]*  -> MEMBER-DESIGNATOR   "_act-par"[0-9]*"+"  -> {ACTUAL-PAR ","}+
+  "_act-par"[0-9]*"*"                     -> {ACTUAL-PAR ","}*
+  "_act-par-list"[0-9]*                   -> ACTUAL-PAR-LIST
+  "_NE-act-par-list"[0-9]*                -> NON-EMPTY-ACT-PAR-LIST
+  "_member"[0-9]*"*"                      -> { MEMBER-DESIGNATOR ","}*
+
+priorities
+  { not, "+" EXPR -> EXPR , "-" EXPR -> EXPR }  >
+  { left: "*", "/", div, mod, and}  >
+  { left: EXPR "+" EXPR -> EXPR, EXPR "-" EXPR -> EXPR, or } >
+  { non-assoc: "=", "<>", "<", ">", "<=", ">=", in }

@@ -1,0 +1,48 @@
+equations
+
+{ var-access-tc returns an environment. The result of the environment is
+  set to a variable definition of the appropriate type.
+  Type checking an expression consisting of only that variable-access will
+  transform that variable definition into a type definition. }
+
+  [v1]  var-access-tc( _id, E ) =  _id should be a variable in E
+
+  [a1]  var-access-tc( _var-acc[ _expr, _expr+ ], E ) =
+          var-access-tc( _var-acc[ _expr ] [ _expr+ ], E)
+
+  [v2]  var-access-tc( _var-acc, E1 ) = E2,
+        expr-tc( _expr, E2 )  = E3,
+        E2.result.type should be an array in E3 = E4,
+        E3.result should be assignment-compatible with
+          E2.result.type.index-type in E4 = E5
+        ==============================================
+        var-access-tc( _var-acc [ _expr ], E1 ) =
+          set-result of E5 to type-to-var(E2.result.type.comp-type)
+
+  [v3]  var-access-tc( _var-acc, E1 ) = E2,
+        is-file-type?( E2.result.type ) = TRUE
+        ======================================
+        var-arrow-tc( _var-acc^, E1 ) =
+          set-result of E2 to type-to-var(E2.result.type.comp-type)
+
+  [v3]  var-access-tc( _var-acc, E1 ) = E2,
+        is-pointer-type?( E2.result.type ) = TRUE
+        ======================================
+        var-arrow-tc( _var-acc^, E1 ) =
+          set-result of E2 to type-to-var(
+            pointer-component of E2.result.type in E1.context)
+
+  [v4]  var-access-tc( _var-acc, E1 ) = E2,
+        E2.result.type should be a pointer or a file in E2 = E3,
+        var-arrow-tc( _var-acc^, E3 ) = E4
+        ================================
+        var-access-tc( _var-acc^, E1 ) = E4
+
+  [v5]  var-access-tc( _var-acc, E1 ) = E2,
+        E2.result.type should be a record in E2 = E3,
+        new-block-with-fields(E2.result.type, E3) = E4,
+          _id should be declared in inner block of E4 = E5,
+        leave inner block of E5 = E6
+        ===================================================
+        var-access-tc( _var-acc._id, E1 ) =
+                set-result of E6 to E5.result.type

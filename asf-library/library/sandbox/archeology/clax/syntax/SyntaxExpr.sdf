@@ -1,0 +1,59 @@
+imports SyntaxConsts
+
+exports
+  sorts UAOP AOP1 AOP2 UBOP BOP1 BOP2 COP VARIABLE EXPR
+
+  context-free syntax
+      "-"    -> UAOP
+      "NOT"  -> UBOP
+
+      "*"    -> AOP1
+      "/"    -> AOP1
+      "%"    -> AOP1
+      "&"    -> BOP1
+
+      "+"    -> AOP2
+      "-"    -> AOP2
+      "|"    -> BOP2
+
+      "<"    -> COP
+      "<="   -> COP
+      "="    -> COP
+      ">="   -> COP
+      ">"    -> COP
+      "#"    -> COP
+
+    "(" EXPR ")"                       -> EXPR {bracket}
+
+    ID                                      -> VARIABLE
+    VARIABLE LSQ EXPR RSQ                   -> VARIABLE
+
+    VARIABLE                           -> EXPR
+    BOOL-CONST                         -> EXPR
+    INT-CONST                          -> EXPR
+    REAL-CONST                         -> EXPR
+
+    EXPR AOP1 EXPR    -> EXPR  {left}
+    EXPR AOP2 EXPR    -> EXPR  {left}
+    EXPR BOP1 EXPR    -> EXPR  {left}
+    EXPR BOP2 EXPR    -> EXPR  {left}
+    EXPR COP  EXPR    -> EXPR  {left}
+
+    UAOP EXPR         -> EXPR
+    UBOP EXPR         -> EXPR
+
+variables
+    [_]Aop1[']*    -> AOP1
+    [_]Aop2[']*    -> AOP2
+    [_]Bop1[']*    -> BOP1
+    [_]Bop2[']*    -> BOP2
+    [_]Cop[']*     -> COP
+    [_]Uaop[']*    -> UAOP
+    [_]Ubop[']*    -> UBOP
+    [_]Var[0-9']*  -> VARIABLE
+    [_]Expr[0-9']* -> EXPR
+priorities
+      {EXPR COP EXPR -> EXPR}
+    < {left: EXPR AOP2 EXPR -> EXPR, EXPR BOP2 EXPR -> EXPR}
+    < {left: EXPR AOP1 EXPR -> EXPR, EXPR BOP1 EXPR -> EXPR}
+    < {UAOP EXPR -> EXPR, UBOP EXPR -> EXPR }

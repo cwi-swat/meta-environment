@@ -1,0 +1,222 @@
+equations
+
+  { Classification  of new types }
+  [nt1] is-subrange-type?([Prefix, type _id = _const1 .. _const2]) = TRUE
+  [nt2] is-enumeration-type?([Prefix, type _id = (_id*)]) = TRUE
+  [nt3] is-array-type?(
+          [Prefix, type _id = _PS array[_type-den1] of _type-den2]) = TRUE
+   [nt4] is-non-empty-set-type?([Prefix, type _id = _PS set of _type-den])= TRUE
+  [nt5] is-empty-set-type?([Prefix, empty-set]) = TRUE
+  [nt5] is-set-type?(T) = is-non-empty-set-type?(T) | is-empty-set-type?(T)
+  [nt6] is-file-type?([Prefix, type _id = _PS file of _type-den]) = TRUE
+  [nt7] is-nonnil-pointer-type?([Prefix, type _id = ^_id]) = TRUE
+  [nt8] is-nil-pointer-type?([Prefix, nil-pointer]) = TRUE
+  [nt9] is-pointer-type?(T) =
+          is-nil-pointer-type?(T) | is-nonnil-pointer-type?(T)
+  [ip1] is-packed?([Prefix, type _id = packed Struct-type]) = TRUE
+
+  { Accessing components of types: }
+  [ac1] [Prefix, type _id = _PS array[ Index-type ] of Comp-type].index-type =
+          get-type of Index-type in [Prefix]
+  [ac2] [Prefix, type _id = _PS array[ Index-type ] of Comp-type].comp-type =
+          get-type of Comp-type in [Prefix]
+  [ac3] [Prefix, type _id = _PS set of Comp-type].comp-type =
+          get-type of Comp-type in [Prefix]
+  [ac4] [Prefix, type _id = _PS file of Comp-type].comp-type =
+          get-type of Comp-type in [Prefix]
+  [ac5] [Prefix, type _id = _const1 .. _const2].host-type =
+          const-type of _const1 in [Prefix]
+  [ac6] pointer-component of [Prefix, type _id1 = ^_id2] in Context =
+          get-type of _id2 in Context
+  [ce]  [Prefix, Entry].entry = Entry
+
+  [ct1] T.canonical = T.host-type when is-subrange-type?(T) = TRUE
+  [ct2] T.canonical = T when is-subrange-type?(T) != TRUE
+
+  [no1] T.nr-of-elements =  2 *  const-val of maxint in init-block
+          when T = integer-type
+
+  [no2] [Prefix, type _id = _const1 .. _const2] . nr-of-elements =
+          const-val of _const2 in [Prefix]  -
+          const-val of _const1 in [Prefix]  +  1
+
+  [no3] [Prefix, type _id1 = (_id2)] . nr-of-elements = 1
+  [no4] [Prefix, type _id1 = (_id2, _id*)] . nr-of-elements =
+          1 + [Prefix, type _id1 = (_id*)] . nr-of-elements
+
+  [no5] T.nr-of-elements = ascii-val('~') - ascii-val(' ') + 1
+          when T = char-type
+
+
+  { Grouping types }
+  [st1] is-simple-type?(T)  = TRUE when T = real-type
+  [st2] is-simple-type?(T)  = TRUE when is-ordinal-type?(T) = TRUE
+  [ot1] is-ordinal-type?(T) = TRUE when T = integer-type
+  [ot2] is-ordinal-type?(T) = TRUE when T = char-type
+  [ot3] is-ordinal-type?(T) = TRUE when T = boolean-type
+  [ot4] is-ordinal-type?(T) = TRUE when is-subrange-type?(T) = TRUE
+  [ot5] is-ordinal-type?(T) = TRUE when is-enumeration-type?(T) = TRUE
+  [nt1] is-number-type?(T) = TRUE when T = real-type
+  [nt2] is-number-type?(T) = TRUE when T = integer-type
+  [sr1] is-string-type?(T) = TRUE when
+          is-array-type?(T) = TRUE,     is-packed?(T) = TRUE,
+          T.host-type = char-type
+  [re1] has-variant-part?([Prefix,type _id= record _var-part opt; end]) = TRUE
+  [re2] has-variant-part?([Prefix,type _id= record _fixed ; _var-part opt; end])
+          = TRUE
+  [re3] selector-field?(T1, _id1) = TRUE
+          when T1.variant = case _id1 : _id2 of _variant+
+  [re4] [Prefix, Entry] . record-of-variant-part =
+          [Prefix, type Generated = record _var-part end]
+            when [Prefix, Entry].variant = _var-part
+  [re5] T1.selector-type = find _id2 in T1 
+          when T1.variant = case _id1: _id2 of _variant+
+  [re6] T1.selector-type = find _id in T1
+          when T1.variant = case _id of _variant+
+
+  { Get the type definition of a type-denoter in a context. }
+   [gt1] get-type of _new-type in [Prefix] = [Prefix, type Generated = _new-type]
+
+  [gt2] find _id in Context = [Prefix, type _id = _new-type]
+        ===================================================
+        get-type of _id in Context = [Prefix, type _id = _new-type]
+
+  [gt3] find _id1 in Context = [Prefix, type _id1 = _id2],
+        _id1 != _id2
+        ===================================================
+        get-type of _id1 in Context = get-type of _id2 in [Prefix]
+
+  [gt4] find _id1 in Context = [Prefix, type _id1 = _id1]
+        ===================================================
+        get-type of _id1 in Context = [Prefix, type _id1 = _id1]
+
+
+  { Operations on constants }
+  [ct1] const-type of _new-const in Context = new-const-type of _new-const
+
+  [ct2] const-type of _sign _id in Context = const-type of _id in Context
+
+  [ct3] find _id in Context = [Prefix, const _id = _const]
+        ==========================================================
+        const-type of _id in Context = const-type of _const in [Prefix]
+
+  [ct4] find _id in Context = [Prefix, Entry],
+         [Prefix, Entry] defines _id as an enum const = <TRUE, type _id2 = (_id*)>
+        ==============================================================
+        const-type of _id in Context = [Prefix, type _id2 = (_id*)]
+
+
+  [cv1] const-val of _new-const in Context = new-const-val of _new-const
+  [cv2] const-val of - _id in Context = -1 * const-val of _id in Context
+  [cv3] const-val of + _id in Context = const-val of -id in Context
+
+  [cv4] find _id in Context = [Prefix, const _id = _const]
+        ==================================================
+        const-val of _id in Context = const-val of _const in [Prefix]
+
+  [cv5] find _id in Context = [Prefix, Entry],
+          [Prefix, Entry] defines _id as an enum const = <TRUE, type _id2= (_id*)>
+        ================================================================
+        const-val of _id in Context = id-number of _id in (_id*)
+
+
+  [ct5] [Prefix, const _id = _const].type = const-type of _const in [Prefix]
+  [ct6] [Prefix, type _id = (_id*)].type = [Prefix, type _id = (_id*)]
+  [cv7] [Prefix, const _id = _const].value = const-val of _const in [Prefix]
+
+
+  { Operations on variables }
+  [ov1] [Prefix, var _id: _type-den VS].type =
+          get-type of _type-den in [Prefix]
+  [ov2] type-to-var([Prefix, type _id = _type-den]) =
+          [Prefix, var Generated: _type-den]
+  [ov3] is-control-variable?(
+          [Prefix, var _id: _type-den control-variable]) = TRUE
+  [ov4] is-possibly-threatening?(
+          [Prefix, var _id: _type-den possibly-threatening]) = TRUE
+  [ov5] set var-status of _id in Context to VS1 =
+          [Prefix, var _id: _type-den VS1, Postfix]
+            when  complete find _id in Context =
+              <[Prefix], var _id: _type-den VS1, [Postfix]>
+
+
+  { Operations on functions and procedures }
+  [ft1] [Prefix, function _id _form-par-list: _id2] . formal-parameters =
+          _form-par-list
+  [pt1] [Prefix, procedure _id _form-par-list] . formal-parameters =
+          _form-par-list
+
+  [ft2] [Prefix, function _id _form-par-list: _id2] . type =
+          get-type of _id2 in [Prefix]
+
+  [fi1] find block-mark in Context = [Prefix, Entry, block-mark],
+        [Prefix, Entry] defines _id as a function? = TRUE
+        ============================================
+        _id is the name of the inner function-block in Context? = TRUE
+
+
+  [pf1] not-permissable-as-file-comp?(T) = TRUE
+          when is-file-type?(T) = TRUE
+
+  [pf2] not-permissable-as-file-comp?(T) = TRUE
+          when is-array-type?(T) = TRUE,
+            is-file-type?(T.comp-type) = TRUE
+
+
+  [cs1] is-empty-set-type?(T2) = TRUE
+        =============================
+        T1 is the set-component of T2? = TRUE
+
+  [cs1] is-empty-set-type?(T2) = TRUE,
+        T2.comp-type is the same as T1? = TRUE
+        =====================================
+        T1 is the set-component of T2? = TRUE
+
+
+  { Both types should be set-of-T. Empty set matches all other sets. }
+  [sT1] is-empty-set-type?(T1) = TRUE,
+        is-set-type?(T2) = TRUE
+        ========================
+        same-set-of-T?(T1, T2) = TRUE
+
+  [sT2] is-empty-set-type?(T2) = TRUE,
+        is-set-type?(T1) = TRUE
+        ========================
+        same-set-of-T?(T1, T2) = TRUE
+
+  [sT3] is-non-empty-set-type?(T1) = TRUE,
+        is-non-empty-set-type?(T2) = TRUE,
+        T1.comp-type.canonical is the same as T2.comp-type.canonical? = TRUE
+        ===================================================================
+        same-set-of-T?(T1, T2) = TRUE
+
+
+  { Types are the same if they are constructed by the same NEW-TYPE operator.
+    Two types are constructed by the same NEW-TYPE operator, if this NEW-TYPE
+    is defined in the same place in both contexts of the type.
+    Context equivalence can be checked by checking whether the CONTEXT-term
+    is the same.
+    In addition, the empty-set is the same as any other set, and the
+    nil-pointer is the same as any other pointer.  }
+
+  [sa1] T1 is the same as T1? = TRUE
+
+  [sa2] is-empty-set-type?(T1) = TRUE,
+        is-set-type?(T2) = TRUE
+        =============================
+        T1 is the same as T2? = TRUE
+
+  [sa3] is-empty-set-type?(T2) = TRUE,
+        is-set-type?(T1) = TRUE
+        =============================
+        T1 is the same as T2? = TRUE
+
+  [sa4] is-nil-pointer-type?(T1) = TRUE,
+        is-pointer-type?(T2) = TRUE
+        ==============================
+        T1 is the same as T2? = TRUE
+
+  [sa5] is-nil-pointer-type?(T2) = TRUE,
+        is-pointer-type?(T1) = TRUE
+        ==============================
+        T1 is the same as T2? = TRUE

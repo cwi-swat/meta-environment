@@ -1,0 +1,24 @@
+module Tiger-Literals
+exports
+  %% sorts IntConst StrConst
+  lexical syntax
+    [0-9]+ 			-> IntConst
+    "\"" StrChar* "\"" 		-> StrConst
+    ~[\\\"\n] 			-> StrChar
+    [\\] [n] 			-> StrChar
+    [\\] [t] 			-> StrChar
+    [\\] [\^] [A-Z]		-> StrChar
+    [\\] [0-9][0-9][0-9]	-> StrChar
+    [\\] [\"] 			-> StrChar
+    [\\] [\\] 			-> StrChar
+    [\\] [\"] 			-> StrChar
+    [\\] [\ \t\n]+ [\\] 	-> StrChar
+
+    IntConst "." IntConst	-> RealConst {cons("RealConstNoExp")}
+    IntConst "." IntConst 
+      "e" Sign IntConst         -> RealConst {cons("RealConst")}
+
+    "+" 			-> Sign
+    "-" 			-> Sign
+
+

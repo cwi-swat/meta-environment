@@ -1,0 +1,16 @@
+%%
+%%  CompCond
+%%
+
+imports
+    Conf2LLbasics
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+comp-cond "(" Condition-part ")"                -> S_EXPR
+comp-moves "(" {Focus-action ","}* ")"          -> S_EXPR
+comp-focus-exprs "(" {Focus-cond-expr ","}* ")" -> S_EXPR

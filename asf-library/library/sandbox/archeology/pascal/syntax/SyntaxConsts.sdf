@@ -1,0 +1,33 @@
+%% Define constants and  values, ISO section 6.1.3, 6.1.5 6.1.7 and 6.3.
+%% Empty strings are not allowed in ISO, but are tolerated in this definition.
+imports SyntaxLayOut SyntaxNumbers
+
+exports
+  sorts IDENT STRING STRING-PART CONST NEW-CONST SIGN LABEL
+
+  lexical syntax
+    [a-zA-Z] [_A-Za-z0-9]*                              -> IDENT
+    "'" ~['\n]* "'"                                     -> STRING-PART
+    STRING-PART+                                        -> STRING
+    DIGIT                                               -> LABEL
+    DIGIT DIGIT                                         -> LABEL
+    DIGIT DIGIT DIGIT                                   -> LABEL
+    DIGIT DIGIT DIGIT DIGIT                             -> LABEL
+
+  context-free syntax
+    "+"                                                 -> SIGN
+    "-"                                                 -> SIGN
+    STRING                                              -> NEW-CONST
+    UNS-NUMBER                                          -> NEW-CONST
+    SIGN UNS-NUMBER                                     -> NEW-CONST
+    SIGN IDENT                                          -> CONST
+    IDENT                                               -> CONST
+    NEW-CONST                                           -> CONST
+
+  variables
+    "_const"[0-9]*     -> CONST      "_const"[0-9]*"*"  -> {CONST ","}*
+    "_id"[0-9]*        -> IDENT      "_id"[0-9]*"+"     -> {IDENT ","}+
+    "_sign"[0-9]*      -> SIGN       "_id"[0-9]*"*"     -> {IDENT ","}*
+    "_new-const"[0-9]* -> NEW-CONST  "_string"[0-9]*    -> STRING
+    "_label"[0-9]*     -> LABEL      "_label"[0-9]*"*"  -> {LABEL ","}*
+    "_const"[0-9]*"+"  -> {CONST ","}+

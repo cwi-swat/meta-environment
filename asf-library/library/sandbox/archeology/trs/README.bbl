@@ -1,0 +1,19 @@
+\begin{thebibliography}{ASD92}
+
+\bibitem[ASD92]{ASDFman92}
+{\em The ASF+SDF Meta-environment User's Guide}, 1992.
+\newblock Draft.
+
+\bibitem[Klo91]{Klo91}
+J.W. Klop.
+\newblock Term rewriting systems.
+\newblock In S.~Abramsky, D.~Gabby, and T.~Maibaum, editors, {\em Handbook of
+  Logic in Computer Science, {V}ol {I}.} Oxford University Press, 1991.
+\newblock To appear. Also published as CWI report CS-R9073, Amsterdam, 1990.
+
+\bibitem[Wal91]{Wal91}
+H.R. Walters.
+\newblock {\em {O}n {E}qual {T}erms, Implementing Algebraic Specifications}.
+\newblock PhD thesis, University of Amsterdam, 1991.
+
+\end{thebibliography}

@@ -1,0 +1,24 @@
+%%  TcTenv
+
+imports TcSyntaxExt TcBooleans
+
+exports
+  sorts TENV
+  context-free syntax
+    TYPE                         -> EXPR
+    LABEL-LEX                    -> TYPE
+    "[" {VAR-DECL ";"}* "]"      -> TENV
+    TENV "." EXPR                -> TYPE
+    tenv(TENV*)                  -> TENV
+
+ variables
+    [_]C"*"                      -> TENV*
+    [_]D"*"[']*                  -> {VAR-DECL ";"}*
+    [_]D[']*                     -> VAR-DECL
+    [_]D"+"[']*                  -> {VAR-DECL ";"}+
+    [_]Tenv[']*                  -> TENV
+
+hiddens
+  context-free syntax
+    merge ( TENV , TENV )         -> TENV
+    occurs ( ID , TENV )          -> BOOL

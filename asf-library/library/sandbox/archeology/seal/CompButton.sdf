@@ -1,0 +1,60 @@
+%%  CompButton
+
+imports
+    CompAct SEAL-tc
+
+exports
+    sorts
+        SYMBOLS
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+comp-button "(" Module "," Button "," SE ")"            -> S_EXPR_LIST
+make-button "(" Module "," Button "," SE "," INT ")"    -> S_EXPR_LIST
+comp-entry "(" Module "," Menu-entry "," SE ")"         -> S_EXPR_LIST
+make-entry "(" Module "," Menu-entry "," SE "," INT ")" -> S_EXPR_LIST
+comp-tool "(" Module "," Active-tool "," SE ")"         -> S_EXPR_LIST
+make-tool "(" Module "," Active-tool "," SE "," INT ")" -> S_EXPR_LIST
+make-create-ui-item "(" Module "," Button "," SE "," INT ")" -> S_EXPR_LIST
+make-create-ui-item "(" Module "," Menu-entry "," SE "," INT ")" -> S_EXPR_LIST
+make-create-ui-item "(" Module "," Active-tool "," SE "," INT ")" -> S_EXPR_LIST
+make-cond-func "(" Module "," Name "," Condition-part "," INT "," SE ")"  -> S_EXPR
+make-cond-func "(" Module "," Name "," INT "," SE ")"   -> S_EXPR
+make-cond-func-name "(" Name "," Module "," INT ")"     -> S_EXPR
+make-cond-func-name-list "(" Name "," Module "," INT ")" -> S_EXPR
+make-var-name-list "(" Button "," SE "," INT ")"        -> S_EXPR
+make-var-name-list "(" Menu-entry "," SE "," INT ")"    -> S_EXPR
+make-var-name-list "(" Active-tool "," SE "," INT ")"   -> S_EXPR
+make-act-func-name-list "(" Name "," Module "," INT ")" -> S_EXPR
+make-cond-func-let                                      -> S_EXPR_LIST
+make-act-func "(" Module "," Name "," {SEAL-action ";"}+ "," INT "," SE ")" -> S_EXPR
+vars-to-symbols "(" NAMES ")"                           -> S_EXPR_LIST
+comp-actions "(" {SEAL-action ";"}+ "," TYPE ")"      -> S_EXPR_LIST
+comp-rt-act-check "(" Name "," INT "," SE ")"           -> S_EXPR_LIST
+comp-rt-cond-check "(" Name "," INT "," SE ")"          -> S_EXPR_LIST
+modules-exist "(" Name "," INT "," SE "," act ")"       -> S_EXPR
+modules-exist "(" Name "," INT "," SE "," cond ")"      -> S_EXPR
+insts-exist "(" Name "," INT "," SE "," act ")"         -> S_EXPR
+insts-exist "(" Name "," INT "," SE "," cond ")"        -> S_EXPR
+get-module-names-in-pairnr "(" Name "," INT "," SE "," cond ")" -> S_EXPR_LIST
+get-module-names-in-pairnr "(" Name "," INT "," SE "," act ")" -> S_EXPR_LIST
+get-inst-names-in-pairnr "(" Name "," INT "," SE "," cond ")" -> S_EXPR_LIST
+get-inst-names-in-pairnr "(" Name "," INT "," SE "," act ")" -> S_EXPR_LIST
+make-act-func-name "(" Name "," Module "," INT ")"      -> S_EXPR
+make-pair "(" Condition-action-pair "," INT ")"         -> S_EXPR_LIST
+flatten "(" S_EXPR+ ")"                                 -> S_EXPR_LIST
+flattenable "(" S_EXPR+ ")"                             -> BOOL
+symbol-in "(" S_EXPR "," S_EXPR+ ")"                    -> BOOL
+rm-double-s-exprs "(" S_EXPR ")"                        -> S_EXPR
+is-move-s-expr "(" S_EXPR ")"                           -> BOOL
+
+get-var-names-in-pairnr "(" SE "," Name "," INT ")"     -> NAMES
+filenames-to-strings "(" FILENAMES ")"                  -> S_EXPR_LIST
+variables-to-names "(" VARIABLES ")"                    -> NAMES
+variable-to-name "(" VARIABLE ")"                       -> Name
+append-varnames "(" Name NAMES ")"                      -> NAMES
+get-act-mods-in-pairnr "(" STATE "," INT ")"            -> MOD-NAMES
+get-cond-mods-in-pairnr "(" STATE "," INT ")"           -> MOD-NAMES
+lookup-act-mods "(" MOD-LIST INT ")"                    -> MOD-NAMES
+lookup-cond-mods "(" MOD-LIST INT ")"                   -> MOD-NAMES
+mod-names-to-strings "(" MOD-NAMES ")"                  -> S_EXPR_LIST

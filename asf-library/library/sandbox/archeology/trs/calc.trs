@@ -1,0 +1,14 @@
+trs
+  signature
+    add/2, mul/2, double/1, succ/1, zero/0
+  rewrite-rules
+    [S1] add(zero,$Y)           -> $Y,
+    [S2] add(succ($X),$Y)       -> add($X,succ($Y)),
+    [S3] mul(zero,$Y)           -> zero,
+    [S4] mul(succ($X),$Y)       -> add(mul($X,$Y),$Y),
+    [S5] double(zero)           -> zero,
+    [S6] double(succ($X))       -> succ(succ(double($X)))
+  term
+    add(
+      double(succ(succ(zero))),
+      mul(succ(zero), succ(zero)) )

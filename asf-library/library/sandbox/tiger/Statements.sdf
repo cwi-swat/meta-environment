@@ -1,0 +1,38 @@
+module Tiger-Statements
+imports Tiger-Expressions 
+exports
+  context-free syntax
+    LValue ":=" Exp            	         -> Exp {cons("Assign")}
+    "(" {Exp ";"}* ")" 			 -> Exp {cons("Seq")}
+    "if" Exp "then" Exp "else" Exp 	 -> Exp {cons("If")}
+    "if" Exp "then" Exp 		 -> Exp {cons("IfThen")}
+    "while" Exp "do" Exp      	  	 -> Exp {cons("While")}
+    "for" Var ":=" Exp "to" Exp "do" Exp -> Exp {cons("For")}
+    "break" 			         -> Exp {cons("Break")}
+
+    "for" Var ":=" Exp "to" Exp 
+		       "in" Exp "do" Exp -> Exp {cons("ForStride")}
+
+    "[" {LValue ","}* "]" 
+                 ":=" "[" {Exp ","}* "]" -> Exp {cons("ParAssign")}
+
+    "label" Id		 	 	 -> Exp {cons("Label")}
+    "goto" Id				 -> Exp {cons("Goto")}
+    "if" Exp "goto" Id			 -> Exp {cons("IfGoto")}
+
+%%    "(" {Exp "||"}2+ ")"		 -> Exp {cons("Par")}
+
+  context-free priorities
+     Exp "|" Exp 			  -> Exp {left,cons("Or")}
+  >  LValue ":=" Exp            	  -> Exp {cons("Assign")}
+  > {right:
+     "if" Exp "then" Exp "else" Exp 	  -> Exp {cons("If")}
+     "if" Exp "then" Exp 		  -> Exp {cons("If")}
+     "while" Exp "do" Exp      	  	  -> Exp {cons("While")}
+     "for" Var ":=" Exp "to" Exp "do" Exp -> Exp {cons("For")}
+    }
+  > {Exp ";"}+ ";" {Exp ";"}+ -> {Exp ";"}+
+
+
+
+

@@ -1,0 +1,58 @@
+equations
+
+%% ------------------------------------------------------------------------- %%
+%% match : match a list of closed terms against a list of open terms.        %%
+%%         results in a list of BINDING, or in the special value `fail'      %%
+%%         - ignore annotations of terms                                     %%
+
+  [Ma1]  match(_Term; _Term',_Term+';_Bins) = fail
+
+  [Ma2]  match(_Term, _Term+ ; _Term'; _Bins) = fail
+
+  [Ma3]  match(_Terms; _Terms'; fail) = fail
+
+  [Ma4]  match(_Term,_Term+; _Term',_Term+'; _Bins) =
+           match(_Term+; _Term+'; match(_Term;_Term';_Bins))
+
+  [Ma5]  match(_Annots _Id; _Annots' _Id; _Bins) = _Bins
+
+  [Ma6]  _Annots'' =,                      %% avoid ambiguity
+         _Annots'' _Id != _Annots'' _Id'
+         ===============================================
+         match(_Annots _Id; _Annots' _Id'; _Bins) = fail
+
+  [Ma7]  match(_Annots _Id; _Annots' _Id'(_Terms); _Bins) = fail
+
+  [Ma8]  match(_Annots _Id(_Terms); _Annots' _Id'; _Bins) = fail
+
+  [Ma9]  _Var unbound in (_Bin*) = true
+         ========================================================
+         match(_Term; _Annots _Var;(_Bin*)) = (_Var:_Term _Bin*)
+
+  [Ma10] equal(_Term; _Term') = true
+         ========================================================
+         match(_Term; _Annots _Var; (_Bin* _Var:_Term' _Bin*')) =
+           (_Bin* _Var: _Term' _Bin*')
+
+  [Ma11] equal(_Term;_Term') = false
+         =============================================================
+         match(_Term; _Annots _Var; (_Bin* _Var:_Term' _Bin*')) = fail
+
+  [Ma12] match(_Annots _Id(_Terms); _Annots' _Id(_Terms'); _Bins) =
+           match(_Terms; _Terms'; _Bins)
+
+  [Ma13] equal(_Annots _Id; _Annots' _Id') = false
+         ================================================================
+         match(_Annots _Id(_Terms); _Annots' _Id'(_Terms'); _Bins) = fail
+
+%% ------------------------------------------------------------------------- %%
+%% unbound : has a binding been established for a given variable ?           %%
+
+  [Unb1] _Var unbound in () = true
+
+  [Unb2] _Var unbound in (_Var:_Term _Bin*) = false
+
+  [Unb3] _Annots =,                     %% avoid ambiguity
+         _Annots _Var != _Annots _Var'
+         =============================================================
+         _Var unbound in (_Var':_Term _Bin*) = _Var unbound in (_Bin*)

@@ -1,0 +1,31 @@
+imports Integers
+
+exports
+sorts
+    LETTER Variable-name Name NAMES Unix-filename Dir Dirs
+lexical syntax
+    "\"" Dirs [a-zA-Z0-9_\-.]+ "\""                     -> Unix-filename
+    "\"" [a-zA-Z0-9_\-.]+ "\""                          -> Unix-filename
+    "/" Dir*                                            -> Dirs
+    "./" Dir*                                           -> Dirs
+    Dir+                                                -> Dirs
+    [a-zA-Z0-9_\-]+ "/"                                 -> Dir
+    "../"                                               -> Dir
+    [a-zA-Z] [a-zA-Z0-9]*                               -> Variable-name
+    [a-zA-Z] [a-zA-Z0-9]*                               -> Name
+    [a-zA-Z0-9]                                         -> LETTER
+context-free syntax
+    Name*                                               -> NAMES
+    rm-double-names "(" Name* ")"                       -> NAMES
+    contains-doubles "(" Name* ")"                      -> BOOL
+    val "(" LETTER ")"                                  -> INT
+    Unix-filename "<" Unix-filename                     -> INT
+variables
+C[']+           -> CHAR
+Cs[']+          -> CHAR*
+Let[']+         -> LETTER
+"_Ufn"[']+      -> Unix-filename
+"_Ufns"[']+     -> Unix-filename*
+"_Name"[']+     -> Name
+"_Names"[']+    -> Name*
+"_Names-comma"[']+ -> {Name ","}*

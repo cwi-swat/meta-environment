@@ -1,0 +1,13 @@
+%% Analyze elementary constants.
+imports Context-search ASCII
+
+exports
+  context-free syntax
+    new-const-type of NEW-CONST                        	-> CONTEXT
+    new-const-val of NEW-CONST                          -> INT
+    id-number of IDENT in "(" { IDENT ","}+ ")"         -> INT
+    is-string-const "?" "(" CONST ")"			-> BOOLEAN
+
+hiddens
+  context-free syntax
+    id-number "(" "(" { IDENT ","}* ")" "," IDENT "," INT ")"  -> INT

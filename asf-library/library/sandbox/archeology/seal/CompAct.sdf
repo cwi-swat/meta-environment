@@ -1,0 +1,26 @@
+%%  CompAct
+
+imports
+    Conf2LLbasics CompCond States
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+<LexicalFunction>
+    context-free syntax
+comp-act "(" SEAL-action "," TYPE ")"         -> S_EXPR_LIST
+comp-wc "(" While-condition ")"                 -> S_EXPR
+comp-wacts "(" {SEAL-action ";"}+ "," TYPE ")" -> S_EXPR_LIST
+comp-var-of-type-term "(" Variable-name ")"     -> S_EXPR
+comp-move "(" Unix-filename Focus-action ")"    -> S_EXPR
+comp-move "(" Variable-name Focus-action ")"    -> S_EXPR
+
+make-move-list "(" {Focus-action ","}+ ")"      -> S_EXPR
+make-text-list "(" Text ")"                     -> S_EXPR_LIST
+make-var-check-list "(" {Variable-name ","}* ")" -> S_EXPR_LIST
+make-var-checks "(" {Variable-name ","}* ")"    -> S_EXPR_LIST
+make-var-check "(" Variable-name ")"            -> S_EXPR
+make-action-reduction "(" Module ":" Function-name "(" {Variable-name ","}* ")" ")"  -> S_EXPR_LIST
+make-argument-list "(" {Variable-name ","}* ")" -> S_EXPR_LIST
+sum-up-var-names "(" {Variable-name ","}* ")"   -> S_EXPR_LIST

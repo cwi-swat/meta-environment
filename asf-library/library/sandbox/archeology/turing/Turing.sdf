@@ -1,0 +1,50 @@
+%%
+%% Module Turing
+%%
+%% Specify a turing maching, including its execution.
+%% Little experiment by Arie.
+
+  exports 
+    sorts
+      SYMBOL ACTION STATE TAPE INSTR TURING-MACHINE
+      ELEMENT TAPES INSTR INSTRS
+
+    lexical syntax
+      [ \t\n]                                           -> LAYOUT
+      [st]*[0-9]*                                       -> SYMBOL
+      [pq][0-9]*                                        -> STATE
+
+    context-free syntax
+      blank                                             -> SYMBOL
+      halt                                              -> ACTION
+      move-left                                         -> ACTION
+      move-right                                        -> ACTION
+      write "(" SYMBOL ")"                              -> ACTION
+
+      SYMBOL                                            -> ELEMENT
+      scanned-symbol ":" SYMBOL                         -> ELEMENT
+      "[" ELEMENT+ "]"                                  -> TAPE
+
+      "on" "(" STATE "," SYMBOL ")" "do"  
+           "(" ACTION "," STATE ")"                    -> INSTR
+      { INSTR ";" }*                                    -> INSTRS
+      present-state ":" STATE ";" INSTRS                -> TURING-MACHINE
+
+      "[" TAPE* "]"                                     -> TAPES
+      execute "(" TURING-MACHINE "," TAPE ")"           -> TAPES
+
+
+  hiddens
+    context-free syntax
+      execute "(" TAPE ";" TURING-MACHINE "," TAPES ")" -> TAPES
+
+    variables
+      TM                        -> TURING-MACHINE
+      [Old]*[New]*Tape          -> TAPE
+      Tapes                     -> TAPE*
+      Instrs                    -> INSTRS
+      I[12]                     -> { INSTR ";" }*
+      [Left]*[Right]*[New]*Sym[bol]*  -> SYMBOL
+      Head[|]                   -> ELEMENT*
+      [|]Tail                   -> ELEMENT*
+      [Old]*[New]*State         -> STATE

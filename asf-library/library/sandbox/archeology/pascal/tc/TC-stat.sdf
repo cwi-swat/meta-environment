@@ -1,0 +1,20 @@
+%% Type check statements; Goto statements are not dealt with.
+imports TC-expr
+
+exports
+  context-free syntax
+    stat-tc "(" {STATEMENT ";"}+ "," ENV ")"            -> ENV
+
+
+hiddens
+  sorts CASE-OUT
+  context-free syntax
+    lhs-tc "(" VARIABLE-ACCESS "," ENV ")"              -> ENV
+    case-lists-tc "(" {CASE-LIST-ELT";"}+ ","
+      CONTEXT "," VAL-LIST "," ENV ")"                  -> VAL-OUT
+
+  variables
+    [_]stat[123]*   -> STATEMENT       [_]"stat*"       -> { STATEMENT ";"}*
+    [_]unl-stat     -> UNL-STAT        FunDef           -> CONTEXT
+    VarDef          -> CONTEXT         "Cl-elts+"       -> {CASE-LIST-ELT ";"}+
+    Cl-elt          -> CASE-LIST-ELT   "(Down)To"        -> DOWN-TO

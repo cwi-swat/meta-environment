@@ -1,0 +1,23 @@
+%% Specify the syntax of real and integer numbers
+exports 
+  sorts UNS-NUMBER UNS-INT UNS-REAL DIGIT
+
+  lexical syntax
+    [ \t\n]                                             -> LAYOUT
+    [0-9]                                               -> DIGIT
+    DIGIT+                                              -> UNS-INT
+
+    UNS-INT "." UNS-INT                                 -> UNS-REAL
+    UNS-INT "." UNS-INT [eE] UNS-INT                    -> UNS-REAL
+    UNS-INT "." UNS-INT [eE] [+\-] UNS-INT              -> UNS-REAL
+    UNS-INT [eE] UNS-INT                                -> UNS-REAL
+    UNS-INT [eE] [+\-] UNS-INT                          -> UNS-REAL
+
+  context-free syntax
+    UNS-INT                                             -> UNS-NUMBER
+    UNS-REAL                                            -> UNS-NUMBER
+
+  variables
+    "_uns-int"[0-9]*                                    -> UNS-INT
+    "_uns-real"[0-9]*                                   -> UNS-REAL
+    "_uns-number"[0-9]*                                 -> UNS-NUMBER

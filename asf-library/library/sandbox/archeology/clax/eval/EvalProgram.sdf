@@ -1,0 +1,30 @@
+%%  EvalProgram
+
+imports
+    CodeStacks Input Output Initializations
+
+exports
+    context-free syntax
+      eval-program ( PROGRAM )                  -> D-ELEMS
+      eval-predicate( EXPR, D-STACK )           -> BOOL-CONST
+hiddens
+    sorts
+        STATUS
+    context-free syntax
+        "<" C-STACK "," D-STACK ">"             -> STATUS
+        eval ( STATUS )                         -> D-ELEMS
+        get-seq ( BLOCK )                       -> STAT-SEQ
+        VALUE                                   -> OUTPUT
+        STRING                                  -> OUTPUT
+        convert ( TYPE , VALUE )                -> VALUE
+        external-representation ( BOOL-CONST )  -> STRING
+        values ( D-ELEMS )                      -> D-ELEMS
+    variables
+        [_]Var                                  -> VARIABLE
+        [_]Stat                                 -> STAT
+        [_]StatAux                              -> STAT-AUX
+        [_]Stat[*][']*                          -> { STAT ";" }*
+        [_]Label[']*                            -> LABEL
+        [_]Block                                -> BLOCK
+        [_]String                               -> STRING
+        [_]Char[+][']*                          -> CHAR+

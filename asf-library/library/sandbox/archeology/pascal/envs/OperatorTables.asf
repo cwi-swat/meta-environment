@@ -1,0 +1,14 @@
+equations
+
+  [lf1] look-for(_Optor, _Op1, _Op2, _Header;) = <FALSE, undef>
+
+  [lf2] look-for(_Optor, _Op1, _Op2,   
+          _Header _OpEntries _Optor|_Op1|_Op2|_Res ;)   =  <TRUE, _Res>
+
+  [lf3] entry-matches?(_Optor1, _Op11, _Op12, _Optor2, _Op21, _Op22) != TRUE
+        ===================================================================
+        look-for(_Optor1, _Op11, _Op12, 
+          _Header _OpEntries _Optor2|_Op21|_Op22|_Res;) =
+            look-for(_Optor1, _Op11, _Op12, _Header _OpEntries;)
+
+  [ma1] entry-matches?(_Optor1, _Op1, _Op2, _Optor1, _Op1, _Op2) = TRUE

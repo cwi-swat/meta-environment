@@ -1,0 +1,16 @@
+
+   equations
+
+      [1]   next(lex-gen-var("b" m "0"))  = lex-gen-var("b" m "1")            
+      [2]   next(lex-gen-var("b" m "1"))  = lex-gen-var("b" m "2")            
+      [3]   next(lex-gen-var("b" m "2"))  = lex-gen-var("b" m "3")            
+      [4]   next(lex-gen-var("b" m "3"))  = lex-gen-var("b" m "4")            
+      [5]   next(lex-gen-var("b" m "4"))  = lex-gen-var("b" m "5")            
+      [6]   next(lex-gen-var("b" m "5"))  = lex-gen-var("b" m "6")            
+      [7]   next(lex-gen-var("b" m "6"))  = lex-gen-var("b" m "7")            
+      [8]   next(lex-gen-var("b" m "7"))  = lex-gen-var("b" m "8")            
+      [9]   next(lex-gen-var("b" m "8"))  = lex-gen-var("b" m "9")            
+      [10]  next(b9)                  = b10            
+      [11]  next(lex-gen-var("b" k1 "9")) = lex-gen-var("b" k2 "0")
+               when next(lex-gen-var("b" k1)) = lex-gen-var("b" k2)
+

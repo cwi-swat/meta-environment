@@ -1,0 +1,254 @@
+equations
+
+  [md1] _id exists in inner block of Env.context? != TRUE
+        ===================================================
+        _id should not be declared in inner block of Env = Env
+
+  [md2] _id exists in inner block of Env.context? = TRUE
+        ==================================================
+        _id should not be declared in inner block of Env =
+          add-error [Identifier _id multiple declared.] to Env
+
+
+  [md3] _id exists in inner block of Env.context? = TRUE
+        ===================================================
+        _id should be declared in inner block of Env = Env
+
+  [md4] _id exists in inner block of Env.context? != TRUE
+        ==================================================
+        _id should be declared in inner block of Env =
+          add-error [Identifier _id not declared.] to Env
+
+
+   { If _id is not yet defined, raise error "Identifier not declared",
+     Otherwise set result to corresponding entry. }
+  [f1]  find _symbol in Env.context = [Prefix, Entry],
+        Entry != error-entry
+        ===================================================
+        _symbol should be declared in Env =
+          set-result of Env to [Prefix, Entry]
+
+  [f2]  find _symbol in Env.context = [error-entry]
+        ==============================================================
+        _symbol should be declared in Env =
+          add-error [Identifier _symbol not declared.] to Env
+
+
+  [co1] _id should be declared in E1 = E2,
+        E2.result defines _id as a constant? = TRUE
+        ===========================================
+        _id should be a constant in E1 = E2
+
+  [co2] _id should be declared in E1 = E2,
+        E2.result defines _id as a constant? != TRUE
+        ===========================================
+        _id should be a constant in E1 =
+          add-error [Identifier IDENT is not a constant.] to E2
+
+
+  [ty1] _id should be declared in E1 = E2,
+        E2.result defines _id as a type? = TRUE
+        ===========================================
+        _id should be a type in E1 = E2
+
+  [ty2] _id should be declared in E1 = E2,
+        E2.result defines _id as a type? != TRUE
+        ===========================================
+        _id should be a type in E1 =
+          add-error [Identifier IDENT is not a type.] to E2
+
+  [ty3] _id should be a type in inner block of E =
+          _id should be a type in (_id should be declared in inner block of E)
+
+  [va1] _id should be declared in E1 = E2,
+        E2.result defines _id as a variable? = TRUE
+        ===========================================
+        _id should be a variable in E1 = E2
+
+  [va2] _id should be declared in E1 = E2,
+        E2.result defines _id as a variable? != TRUE
+        ===========================================
+        _id should be a variable in E1 =
+          add-error [Identifier IDENT is not a variable.] to E2
+
+  [va3] _id should be a variable in inner block of E =
+          _id should be a variable in (_id should be declared in inner block of E)
+
+  [fu1] _id should be declared in E1 = E2,
+        E2.result defines _id as a function? = TRUE
+        ===========================================
+        _id should be a function in E1 = E2
+
+  [fu2] _id should be declared in E1 = E2,
+        E2.result defines _id as a function? != TRUE
+        ===========================================
+        _id should be a function in E1 =
+          add-error [Identifier IDENT is not a function.] to E2
+
+  [fu3] _id should be a function in inner block of E =
+          _id should be a function in (_id should be declared in inner block of E)
+
+  [pr1] _id should be declared in E1 = E2,
+        E2.result defines _id as a procedure? = TRUE
+        ===========================================
+        _id should be a procedure in E1 = E2
+
+  [pr2] _id should be declared in E1 = E2,
+        E2.result defines _id as a procedure? != TRUE
+        ===========================================
+        _id should be a procedure in E1 =
+          add-error [Identifier IDENT is not a procedure.] to E2
+
+  [pr3] _id should be a procedure in inner block of E =
+          _id should be a procedure in (_id should be declared in inner block of E)
+
+  [ft1] not-permissable-as-file-comp?(T) != TRUE
+        ========================================
+        T should be allowed as file-component in E = E
+
+  [ft2] not-permissable-as-file-comp?(T) = TRUE
+        ======================================
+        T should be allowed as file-component in E =
+           add-error [Illegal file component.] to E
+
+  [cn1] T should be a number in E = E when is-number-type?(T) = TRUE
+  [cn2] T should be a number in E =
+          add-error [Non-number types not allowed.] to E
+            when is-number-type?(T) != TRUE
+
+  [bt1] T should be Boolean in E = E when T = boolean-type
+  [bt2] T should be Boolean in E = add-error [Type must be Boolean.] to E
+          when T != boolean-type
+
+  [in1] T should be integer in E = E when T = integer-type
+  [in2] T should be integer in E = add-error [Integer expected.] to E
+          when T != integer-type
+
+  [ra1] T should be real in E = E when T = real-type
+  [ra2] T should be real in E = add-error [Real expected.] to E
+          when T != real-type
+
+  [dn1] E1 + block-mark = E2,
+        check-double-names of (_id*) in E2 = E3,
+        leave inner block of E3 = E4
+        ===================================
+        (_id*) should not have double names in E1 = E4
+
+  [dn2] check-double-names of () in E =  E
+  [dn3] check-double-names of (_id, _id*) in E1 =
+          check-double-names of (_id*) in
+            ((_id should not be declared in inner block of E1) + var _id: dummy)
+
+  [ts1] T1 and T2 should be the same type in E = E
+          when T1 is the same as T2? = TRUE
+  [ts2] T1 and T2 should be the same type in E =
+          add-error [Types are not the same.] to E
+            when T1 is the same as T2? != TRUE
+
+  [ac1] T1 should be assignment-compatible with T2 in E = E when
+          T1 is assignment-compatible with T2? = TRUE
+  [ac1] T1 should be assignment-compatible with T2 in E =
+          add-error [Types are not assignment-compatible.] to E
+            when T1 is assignment-compatible with T2? != TRUE
+
+  [or1] T should be ordinal in E = E when is-ordinal-type?(T) = TRUE
+  [or2] T should be ordinal in E = add-error [Type must be ordinal.] to E
+          when is-ordinal-type?(T) != TRUE
+
+  [ar1] T should be an array in E = E when is-array-type?(T) = TRUE
+  [ar2] T should be an array in E = add-error [Type must be an array-type.] to E
+          when is-array-type?(T) != TRUE
+
+  [ar3] T should be a packed array in E = E
+          when is-array-type?(T) & is-packed?(T) = TRUE
+  [ar4] T should be a packed array in E =
+          add-error [Type must be a packed array.] to E
+            when is-array-type?(T) & is-packed?(T) = TRUE
+
+  [ar5] T should be an unpacked array in E = E
+          when is-array-type?(T)  = TRUE, is-packed?(T) != TRUE
+  [ar6] T should be an unpacked array in E =
+          add-error [Type must be an unpacked array.] to E
+            when is-array-type?(T) = TRUE, is-packed?(T) != TRUE
+
+  [re1] T should be a record in E = E when is-record?(T) = TRUE
+  [re2] T should be a record in E = add-error [Type must be a record.] to E
+           when is-record?(T) != TRUE
+  [re3] T should be a variant record in E = E when has-variant-part?(T) = TRUE
+  [re4] T should be a variant record in E =
+          add-error [Type must be a variant record.] to E
+            when has-variant-part?(T) != TRUE
+
+  [fi1] T should be a file in E = E when is-file-type?(T) = TRUE
+  [fi2] T should be a file in E = add-error [Type must be a file-type.] to E
+          when is-file-type?(T) != TRUE
+
+  [fi1] T should be a pointer in E = E when is-pointer-type?(T) = TRUE
+  [fi2] T should be a pointer in E = add-error [Type must be a pointer.] to E
+          when is-pointer-type?(T) != TRUE
+
+  [lt1] V1 should be less than V2 in E = E when V1 <= V2 = TRUE
+  [lt2] V1 should be less than V2 in E =
+          add-error [Empty range not allowed.] to E
+            when V1 <= V2 != TRUE
+
+  [ct1] T1 should be the set-component of T2 in E = E
+          when T1 is the set-component of T2? = TRUE
+  [ct2] T1 should be the set-component of T2 in E =
+          add-error [Type incompatibility in set-component.] to E
+            when T1 is the set-component of T2? != TRUE
+
+  [sT1] T1 and T2 should be the same set-of-T type in E = E
+          when same-set-of-T?(T1, T2) = TRUE
+  [sT1] T1 and T2 should be the same set-of-T type in E =
+          add-error [Incompatible set-types.] to E
+            when same-set-of-T?(T1, T2) != TRUE
+
+  [cn1] T1 and T2 are compatible? |
+          ( is-number-type?(T1) & is-number-type?(T2) )  |
+             same-set-of-T?(T1, T2)  = TRUE
+        ===================================================================
+        T1 Optor T2 should be compatible, numbers, or of the same set in E = E
+
+  [cn2] T1 and T2 are compatible? |
+          ( is-number-type?(T1) & is-number-type?(T2) )  |
+             same-set-of-T?(T1, T2)  != TRUE
+        ===================================================================
+        T1 Optor T2 should be compatible, numbers, or of the same set in E =
+          add-error [Types of Optor are not compatible, numbers, or of the
+            same set-of-T type.] to E
+
+  [sb1] is-pointer-type?(T1) | is-file-type?(T1) = TRUE
+        =================================================
+        T1 should be a pointer or a file in E = E
+
+  [sb2] is-pointer-type?(T1) | is-file-type?(T1) != TRUE
+        =================================================
+        T1 should be a pointer or a file in E =
+          add-error [Operator ^ only allowed on pointer or file variables.] to E
+
+  [es1] length(_string) != 0
+        =======================================
+        _string should not be an empty string in E = E
+
+  [es2] length(_string) = 0
+        =======================================
+        _string should not be an empty string in E =
+          add-error [Empty string not allowed.] to E
+
+  [va1] Value is member of [Value1*, Value, Value2*]? = TRUE
+  [va2] length([]) = 0
+  [va3] length([Value, Value*]) = length([Value*]) + 1
+
+  [va4] Value should not be a member of Val-list in E = E
+          when Value is member of Val-list? != TRUE
+
+  [va5] Value should not be a member of Val-list in E =  add-error
+          [Constants in case statement or record variant should be unique.] to E
+
+  [va6] all elements of T1 should occur in Val-list in E = E
+          when length(Val-list) = T1.nr-of-elements
+
+  [va7] all elements of T1 should occur in Val-list in E = add-error
+          [Variants must be given for all possible values.] to E
+            when length(Val-list) != T1.nr-of-elements

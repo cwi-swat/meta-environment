@@ -1,0 +1,30 @@
+imports Booleans SyntaxNumbers
+
+exports
+  sorts NAT INT
+
+  context-free syntax
+    UNS-INT        -> NAT  		NAT       	-> INT
+    "+" NAT        -> INT       	"-" NAT   	-> INT
+    INT "+" INT    -> INT {left}        INT "-" INT     -> INT {left}
+    INT "*" INT    -> INT {left}        INT ">" INT     -> BOOLEAN
+    INT "<=" INT   -> BOOLEAN           "(" NAT ")"     -> NAT {bracket}
+    "(" INT ")"    -> INT {bracket}
+
+hiddens
+  sorts UNS-INT-LIST
+  context-free syntax
+    "{" { UNS-INT "," } * "}"   			-> UNS-INT-LIST
+    UNS-INT-LIST "right" DIGIT  			-> UNS-INT-LIST
+    UNS-INT-LIST "left" DIGIT   			-> UNS-INT-LIST
+    pred "(" DIGIT ")"          			-> DIGIT
+    non-zero "(" NAT ")"        			-> BOOLEAN
+
+  variables
+    n [0-9]*       -> UNS-INT		uns-ints [0-9]* -> {UNS-INT ","} *
+    c [0-9]*       -> CHAR              d [0-9]*        -> DIGIT
+    x [0-9]*       -> CHAR *            y [0-9]*        -> CHAR +
+    Nat [0-9']*    -> NAT               Int [0-9']*     -> INT
+
+priorities
+  {left: INT "+" INT -> INT, INT "-" INT -> INT }  <  "*"

@@ -1,0 +1,11 @@
+module Tiger-Lexicals
+exports
+  %% sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9\_]* -> Id
+  lexical restrictions
+    Id -/- [a-zA-Z0-9\_]
+
+  lexical syntax
+    "nil" -> Id {reject}
+

@@ -1,0 +1,24 @@
+(let
+   %%  Booleans
+   (true         : lambda x . lambda y . x)
+   (false        : lambda x . lambda y . y)
+   (not          : lambda t . t false true)
+   (if-then-else : lambda e e1 e2 . (e e1 e2))
+   (and          : lambda x y . if-then-else x y false  )
+
+   %% Pairs
+   (fst          : lambda p. p true)
+   (snd          : lambda p. p false)
+   (pair         : lambda e1 e2 . (lambda f . f e1 e2))
+
+   %% Fix Points
+   (f-Y          : lambda f . (lambda x . f(x x)) (lambda x . f(x x)))
+   (curry        : lambda f x1 x2 . f(x1 x2))
+   (uncurry      : lambda f p . f (fst p) (snd p))
+
+   %% Church's Numerals, N = lambda f  x . f^N x
+   (zero         : lambda f x . x)
+   (succ         : lambda n f x  . n f  ( f x ))
+   (add          : lambda m n f x . m f (n f x))
+   (iszero       : lambda n . n (lambda x . false) true)
+)

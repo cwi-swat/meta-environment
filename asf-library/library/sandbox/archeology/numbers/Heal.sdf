@@ -1,0 +1,8 @@
+imports Real-op Lisp
+
+hiddens
+  context-free syntax
+    "REAL-CON" LISP              -> REAL-CON
+    "<<" REAL-CON ">>"           -> LISP
+  variables
+    r[0-9']*    -> REAL-CON

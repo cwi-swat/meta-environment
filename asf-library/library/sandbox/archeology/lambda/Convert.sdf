@@ -1,0 +1,11 @@
+imports Substitute
+
+exports
+  context-free syntax
+    is-betha-redex "?" "(" L-EXP ")"     -> BOOL
+    is-etha-redex "?" "(" L-EXP ")"      -> BOOL
+
+    alpha "(" L-EXP "," VAR ")"          -> L-EXP
+    betha "(" L-EXP ")"                  -> L-EXP
+    etha  "(" L-EXP ")"                  -> L-EXP
+

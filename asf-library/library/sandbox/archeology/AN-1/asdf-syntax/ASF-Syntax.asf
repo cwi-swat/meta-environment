@@ -1,0 +1,15 @@
+equations
+
+  [1]  equations Eq+ || equations Eq'+ = equations Eq+ Eq'+
+
+  [2]   Eqs || nil = Eqs
+
+  [3]   nil || Eqs = Eqs
+
+  [4]   || Eqs = Eqs
+
+  [5]   Eqs || = Eqs
+
+  [4]   make-tag( number( Ch+ ) ) = asf-tag( "[" Ch+ "]" )
+
+  [5]  nil =

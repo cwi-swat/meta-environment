@@ -1,0 +1,48 @@
+%%
+%% The module LISP
+%%
+%% The EQM knows about this module.
+%% DON'T EDIT, except when you want to add LispIds
+%% to the lexical (not context-free!) syntax.
+%%
+%%
+%% Not yet supported:
+%% ` and ,
+
+exports
+    sorts
+         LISP
+
+   sorts
+         LispAtom StringPart PackagePart QuotedLispAtom
+         LispId LispString
+
+
+lexical syntax
+        %% All non control or meta characters that have characterclass pname.
+
+        [a-z][$&*/\-0-9=?\\a-z~]*       -> LispAtom
+
+        ":" LispAtom                    -> PackagePart
+        "#" PackagePart+                -> LispId
+        "#%"[01]+                       -> LispId
+        "#$"[0-9a-fA-F]+                -> LispId
+        "#^"[a-zA-Z@]                   -> LispId
+
+
+        LispAtom                        -> LispId
+
+        "\"" ~["]* "\""                 -> StringPart
+        StringPart+                     -> LispString
+
+context-free syntax
+
+        LispId       -> LISP
+        LispString   -> LISP
+        div          -> LispId
+        max          -> LispId
+
+        "(" LISP * ")" -> LISP
+%% And when you prefer them, they aren't prefered.
+        "<<" Condition ">>" -> LISP
+         "'" LISP -> LISP

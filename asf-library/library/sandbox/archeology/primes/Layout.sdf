@@ -1,0 +1,6 @@
+%%    Layout
+
+exports
+  lexical syntax
+    [ \t\n]          -> LAYOUT
+    "%%" ~[\n]* "\n" -> LAYOUT

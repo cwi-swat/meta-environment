@@ -1,0 +1,83 @@
+%%  Actions
+
+imports
+    SEAL Booleans
+
+exports
+    sorts
+        FILENAMES MOD-NAMES SEAL-actions-semi SEAL-actions-none
+        VARIABLE VARIABLES Use-or-def Var-type VARNAMES
+    lexical syntax
+       <LexicalFunction>
+
+    context-free syntax
+"used"                                                  -> Use-or-def
+"defined"                                               -> Use-or-def
+"instance"                                              -> Var-type
+"term"                                                  -> Var-type
+"to-be-derived"                                         -> Var-type
+
+is-assign-input-to-var "(" SEAL-action ")"            -> BOOL
+is-assign-output-to-var "(" SEAL-action ")"           -> BOOL
+is-assign-focus-to-var "(" SEAL-action ")"            -> BOOL
+is-assign-var-to-focus "(" SEAL-action ")"            -> BOOL
+is-assign-selection-to-focus "(" SEAL-action ")"      -> BOOL
+is-assign-reduction-to-focus "(" SEAL-action ")"      -> BOOL
+is-assign-var-to-var "(" SEAL-action ")"              -> BOOL
+is-assign-selection-to-var "(" SEAL-action ")"        -> BOOL
+is-assign-reduction-to-var "(" SEAL-action ")"        -> BOOL
+is-focus-expr "(" SEAL-action ")"                     -> BOOL
+is-var-focus-expr "(" SEAL-action ")"                 -> BOOL
+is-action-reduction "(" SEAL-action ")"               -> BOOL
+is-while "(" SEAL-action ")"                          -> BOOL
+
+is-name "(" Term ")"                                    -> BOOL
+
+count-lines "(" {SEAL-action ";"}+ ")"                -> INT
+
+Module*                                                 -> MOD-NAMES
+Unix-filename*                                          -> FILENAMES
+Variable-name*                                          -> VARNAMES
+
+append-filenames "(" FILENAMES "," FILENAMES ")"        -> FILENAMES
+append-module-names "(" MOD-NAMES "," MOD-NAMES ")"     -> MOD-NAMES
+
+used-focusses "(" {SEAL-action ";"}+ ")"              -> FILENAMES
+used-wc-focusses "(" While-condition ")"                -> FILENAMES
+used-modules "(" {SEAL-action ";"}+ ")"               -> MOD-NAMES
+used-wc-modules "(" While-condition ")"                 -> MOD-NAMES
+
+inputs "(" {SEAL-action ";"}+ ")"                     -> FILENAMES
+outputs "(" {SEAL-action ";"}+ ")"                    -> FILENAMES
+select-insts "(" {SEAL-action ";"}+ ")"               -> FILENAMES
+red-insts "(" {SEAL-action ";"}+ ")"                  -> FILENAMES
+red-wc-insts "(" While-condition ")"                    -> FILENAMES
+asgn-insts "(" {SEAL-action ";"}+ ")"                 -> FILENAMES
+
+argument-insts "(" { Variable-name ","}* ")"            -> FILENAMES
+
+{SEAL-action ";"}+                                    -> SEAL-actions-semi
+get-moves "(" {SEAL-action ";"}+ ")"                  -> SEAL-actions-semi
+SEAL-action*                                          -> SEAL-actions-none
+no-semi-colons "(" {SEAL-action ";"}+ ")"             -> SEAL-actions-none
+sort-moves-by-name "(" SEAL-actions-none ")"          -> SEAL-actions-none
+sort-by-name "(" {SEAL-action ";"}+ ")"               -> SEAL-actions-none
+empty-act-moves                                         -> SEAL-action
+
+add-name-to-move "(" SEAL-action ")"                  -> SEAL-action
+
+config-variables "(" {SEAL-action ";"}+  INT ")"      -> VARIABLES
+config-wc-variables "(" While-condition INT ")"         -> VARIABLES
+config-wacts-variables "(" {SEAL-action ";"}+ INT ")" -> VARIABLES
+argument-vars "(" { Variable-name ","}* INT ")"         -> VARIABLES
+VARIABLE*                                               -> VARIABLES
+Variable-name of type ":" Var-type Use-or-def in actionnr ":" INT -> VARIABLE
+Variable-name of type ":" Var-type Use-or-def in actionnr ":" INT source ":" Unix-filename -> VARIABLE
+source of Variable-name                                 -> Unix-filename
+
+variables
+"_Var"[']+      -> VARIABLE
+"_Vars"[']+     -> VARIABLE*
+"_Variables"[']+   -> VARIABLES
+"_Var-type"[']+    -> Var-type
+"_Use-or-def"[']+  -> Use-or-def

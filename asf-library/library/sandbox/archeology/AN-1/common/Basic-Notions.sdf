@@ -1,0 +1,83 @@
+%% module Basic-Notions
+%%
+%% Define some lexical entities. Some of these are shared by the syntax for
+%% the MetaNotation and SDF (viz STRING, UPPER-ALPHA, ALPHA).
+%%
+%% The definition of NON-ALPHA is a bit weird; it consists of any
+%% non-alpha-numeric character, but is not allowed to contain characters
+%% that can occur in LAYOUT, or that are only allowed to occur in well-balanced
+%% mode. Moreover, in order to avoid confusion between AAP* and AAP *,
+%% the NON-ALPHA characters are not allowed to end with * ? or +.
+%%
+%%
+%% Authors: Arie van Deursen, CWI, Amsterdam,
+%%          Peter D. Mosses, Aarhus, Denmark.
+%% Date: April 1993.
+
+
+imports Layout
+
+exports
+  sorts
+    UPPER-ALPHA LOWER-ALPHA ALPHA NON-ALPHA
+    STRING CHARACTER NUMBER
+    SYMBOL-CON VARIABLE
+    %% N.B.: sort STRING-CHAR should not be declared,
+    %% see page 35, section 5.3.7.4, ``Defining Comments''
+    %% in ASF+SDF UserManual (feb 92).
+  lexical syntax
+    "\"" STRING-CHAR* "\""                              -> STRING
+    ~["\n\\]                                            -> STRING-CHAR
+    "\\\""                                              -> STRING-CHAR
+    "\\\\"                                              -> STRING-CHAR
+    "'" ~[] "'"                                         -> CHARACTER
+    [0-9]+                                              -> NUMBER
+
+    [A-Z][a-zA-Z0-9\-]* [a-zA-Z0-9]                     -> UPPER-ALPHA
+    [A-Z]                                               -> UPPER-ALPHA
+
+    [a-z][a-zA-Z0-9\-]* [a-zA-Z0-9]                     -> LOWER-ALPHA
+    [a-z]                                               -> LOWER-ALPHA
+
+
+    %% Any symbol with at least one ~[A-Za-z0-9\-] in it, not ending in ? * +
+    ~[_()<>{}\[\]'`"\ \t\n,.:;]*
+        ~[_()<>{}\[\]'`"\ \t\nA-Za-z0-9\-,.:;]
+        ~[_()<>{}\[\]'`"\ \t\n,.:;]*
+        ~[_()<>{}\[\]'`"\ \t\n,.:;?*+]                  -> NON-ALPHA
+
+    ~[_()<>{}\[\]'`"\ \t\n,.:;]*
+        ~[_()<>{}\[\]'`"\ \t\nA-Za-z0-9\-,.:;?*+]       -> NON-ALPHA
+
+    [?*+]                                               -> NON-ALPHA
+
+    %% Any symbol consisting of [A-Za-z0-9\-], not starting
+    %% with a [0-9\-], or ending in a [\-].
+    [0-9\-][A-Za-z0-9\-]*                               -> NON-ALPHA
+    [a-zA-Z] [A-Za-z0-9\-]* "-"                         -> NON-ALPHA
+
+    [A-Za-z][a-z0-9A-Z\-']* "_" [a-zA-Z0-9\-']*         -> VARIABLE
+
+
+  context-free syntax
+    UPPER-ALPHA                                         -> ALPHA
+    LOWER-ALPHA                                         -> ALPHA
+    NON-ALPHA                                           -> SYMBOL-CON
+    ALPHA                                               -> SYMBOL-CON
+
+
+
+    %% N.B., some lexical notions in NON-ALPHA are keywords already --
+    %% This causes them to be forbidden as NON-ALPHA (prefer lexical).
+    %% For those that are to be recognized also as NON-ALPHA, add
+    %% them especially as context-free rule:
+
+    %% Also used in Grammar-Terms:
+    "|"                                                 -> NON-ALPHA
+    "*"                                                 -> NON-ALPHA
+    "?"                                                 -> NON-ALPHA
+    "+"                                                 -> NON-ALPHA
+    "!"                                                 -> NON-ALPHA
+
+    %% Also used in "unit is TERM ":
+    "is"                                                -> LOWER-ALPHA

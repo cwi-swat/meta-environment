@@ -1,0 +1,40 @@
+module Tiger-Expressions
+imports Tiger-Lexicals Tiger-Literals
+exports
+  %% sorts LValue InitField
+  sorts Exp Var
+  context-free syntax
+    Id				-> Var {cons("Var")}
+
+    Var              		-> LValue 
+    LValue "." Id 		-> LValue {cons("FieldVar")}
+
+    %%LValue "[" Exp "]" 	-> LValue {cons("Subscript")}
+
+    LValue "[" {Sub ","}+ "]" 	-> LValue {cons("Subscript")}
+
+    Exp				-> Sub {cons("Scalar")}
+    Exp ":" Exp			-> Sub {cons("Range")}
+
+    IntConst 			-> Exp {cons("Int")}
+    RealConst 			-> Exp {cons("Real")}
+    StrConst 			-> Exp {cons("String")}
+    "nil" 			-> Exp {cons("NilExp")}
+
+    LValue 			-> Exp
+
+    Var "(" {Exp ","}* ")" 	-> Exp {cons("Call")}
+
+    TypeId 
+      "{" {InitField ","}* "}"  -> Exp {cons("Record")}
+
+    Id "=" Exp 			-> InitField {cons("InitField")}
+ 
+    %%TypeId "[" {Exp ","}+ "]" "of" Exp -> Exp {cons("Array")}
+
+    TypeId "[" {Exp ","}+ "]" "of" Exp  -> Exp {cons("Array")}
+
+    "sum" {SumIndex ";"}+ "(" Exp ")"   -> Exp {cons("Sum")}
+
+    Id "=" Exp "to" Exp		        -> SumIndex {cons("SumIndex")}
+

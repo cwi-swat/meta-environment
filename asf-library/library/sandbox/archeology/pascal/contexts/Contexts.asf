@@ -1,0 +1,34 @@
+equations
+
+  [i0]  init-block = []
+
+  [i1]  predefined-block =
+         [block-mark,
+	
+          predefined-procedure rewrite,     predefined-procedure put,
+          predefined-procedure reset,       predefined-procedure get,
+          predefined-procedure read,        predefined-procedure write,
+          predefined-procedure readln,      predefined-procedure writeln,
+          predefined-procedure page,        predefined-procedure new,
+          predefined-procedure dispose,     predefined-procedure pack,
+          predefined-procedure unpack,
+
+          predefined-function abs,          predefined-function sqr,
+          predefined-function trunc,        predefined-function round,
+          predefined-function ord,          predefined-function succ,
+          predefined-function pred,         predefined-function eof,
+          predefined-function eoln,
+
+          type integer = integer,           type real = real,
+          type char = char,                 type Boolean = (false, true),
+          type text = file of char,
+
+          function sin (x: real): real,     function cos (x: real): real,
+          function exp (x: real): real,     function ln (x: real): real,
+          function sqrt (x: real): real,    function arctan (x: real): real,
+           function chr (x: integer): char,  function odd (x: integer): Boolean,
+
+          const maxint = 32768,
+
+          block-mark
+         ]

@@ -1,0 +1,23 @@
+%%  Naturals
+
+imports
+    Booleans
+
+exports
+    sorts  NAT
+    context-free syntax
+        "0"                     -> NAT
+        "S" NAT                 -> NAT
+        "(" NAT ")"             -> NAT {bracket}
+
+        NAT "<" NAT             -> BOOL
+        NAT "-" NAT             -> NAT
+        div "(" NAT "," NAT ")" -> NAT
+        mod "(" NAT "," NAT ")" -> NAT
+
+priorities
+  "-" < "S"
+
+exports
+   variables
+        [Nxyqr][0-9]*    -> NAT

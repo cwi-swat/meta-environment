@@ -1,0 +1,41 @@
+%%  TcErrors
+
+imports Tc
+
+exports
+  sorts MESSAGE MSG-LIST %% ARG-ERRS
+  context-free syntax
+    errors(PROGRAM)                 -> MSG-LIST
+    errors(BOOL)                    -> MSG-LIST
+    { MESSAGE " ;" }+               -> MSG-LIST
+    err(TYPE-LIST)                  -> MSG-LIST
+
+    no-errors                       -> MESSAGE
+    err(EXPR)                       -> MESSAGE
+    incomp(MESSAGE)                 -> MESSAGE
+
+    undeclared-identifier ID                    -> MESSAGE
+    incompatible-operands(EXPR)                 -> MESSAGE
+    incompatible-array-access(EXPR)             -> MESSAGE
+    used-as-operand EXPR                        -> MESSAGE
+    assignment-incompatible BOOL                -> MESSAGE
+    cannot-assign-to EXPR "in" ASGN             -> MESSAGE
+    "Boolean-expected" IF MESSAGE THEN          -> MESSAGE
+    "Boolean-expected" WHILE MESSAGE DO         -> MESSAGE
+    undeclared-procedure-called ID              -> MESSAGE
+    procedure-call LPAR RPAR expected-arg VTYPE found-arg MESSAGE       -> MESSAGE
+    procedure-call LPAR RPAR expected-no-more-args-but-found TYPE-LIST  -> MESSAGE
+    procedure-call LPAR RPAR expected-variable-arg VTYPE found-arg EXPR -> MESSAGE
+    only-simple-type-variable-allowed-in READ "(" MESSAGE ")"           -> MESSAGE
+    only-simple-type-variable-allowed-in WRITE "(" MESSAGE ")"          -> MESSAGE
+    array-decl-must-have-positive-size "(" INT-CONST ".." INT-CONST ")" -> MESSAGE
+    expected-label-found MESSAGE                -> MESSAGE
+    multiply-defined-label  ID                  -> MESSAGE
+    not-defined-label  ID                       -> MESSAGE
+    not-declared-label  ID                      -> MESSAGE
+    multiple-declaration-in-same-scope ID       -> MESSAGE
+    unary-operator UOP not-allowed-on-operand-of-type TYPE -> MESSAGE   %% added 09/12/92 FT
+    TYPE                                        -> MESSAGE
+  variables
+    [_]Msg[']*      -> MESSAGE
+    [_]MsgList[']*  -> {MESSAGE " ;"}*

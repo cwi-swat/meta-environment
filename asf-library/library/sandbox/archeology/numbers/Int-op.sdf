@@ -1,0 +1,52 @@
+%% All operations allowed on Integers.
+
+%% imports SuccPred
+imports Dig-ops
+
+exports
+  context-free syntax
+     INT "+" INT                -> INT {left}
+     INT "-" INT                -> INT {left}
+     INT "-/" INT               -> INT {left}
+     INT "*" INT                -> INT {left}
+     INT "^" INT                -> INT {right}
+     INT "div" INT              -> INT {left}
+     INT "mod" INT              -> INT {left}
+     "+" INT                    -> INT
+     "|" INT "|"                -> INT
+     INT "!!"                   -> INT     %% fac
+     "max" "(" INT "," INT ")"  -> INT
+     "min" "(" INT "," INT ")"  -> INT
+     "gcd" "(" INT "," INT ")"  -> INT
+     INT "<" INT                -> BOOL
+     INT ">" INT                -> BOOL
+     INT "\\geq" INT            -> BOOL
+     INT "\\leq" INT            -> BOOL
+     eq "(" INT "," INT ")"     -> BOOL
+     "is-pos?"( INT )           -> BOOL
+     "is-neg?"( INT )           -> BOOL
+     "is-zero?"( INT )          -> BOOL
+     int2nat( INT )             -> NAT
+     if BOOL then INT else INT fi -> INT
+  sorts
+    DIVID
+  context-free syntax
+    "<" INT "," INT ">"         -> DIVID
+    INT "/" INT "\\"            -> DIVID
+
+
+priorities
+   {left: INT "+" INT -> INT, INT "-" INT -> INT, INT "-/" INT -> INT }
+   <
+   {left: INT "*" INT -> INT, "div", "mod"}
+   <
+   { INT "^" INT -> INT, INT "!!" -> INT, "+" INT -> INT }
+   <
+   { "-" INT -> INT }
+
+hiddens
+  variables
+     n[0-9']*        -> POS
+     z[0-9']*        -> NEG
+     [xy][0-9']*     -> INT
+     p[0-9']*        -> NAT

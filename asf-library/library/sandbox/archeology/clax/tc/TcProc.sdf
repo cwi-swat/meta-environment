@@ -1,0 +1,23 @@
+%%  TcProc
+
+imports TcExpr
+
+exports
+  sorts PROC-TYPE VTYPE TYPE-LIST
+  context-free syntax
+    "PROC""(" {VTYPE ";"}* ")"             -> PROC-TYPE
+    PROC-TYPE                              -> TYPE
+    {TYPE ";"}*                            -> TYPE-LIST
+    TENV ".((" {EXPR ","}* "))"            -> TYPE-LIST
+    formals   PROC-HEAD                    -> TENV
+    signature PROC-HEAD                    -> VAR-DECL
+    TYPE                                   -> VTYPE
+    VAR-LEX TYPE                           -> VTYPE
+    vtype(FORMAL)                          -> VTYPE
+    isproc"(" EXPR LPAR TYPE-LIST RPAR ")"   -> BOOL
+    vararg"(" EXPR LPAR {EXPR ","}* RPAR ")" -> BOOL
+  variables
+    [_]TypeList[']*              -> {TYPE ";"}*
+    [_]ProcType[']*              -> PROC-TYPE
+    [_]Vtype[']*                 -> VTYPE
+    [_]VtypeList[']*             -> {VTYPE ";"}*

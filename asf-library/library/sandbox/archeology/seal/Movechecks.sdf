@@ -1,0 +1,30 @@
+%%  Movechecks
+
+imports
+    Errors Sym-tab
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+check-moves "(" STATE INT INT ")"               -> ERRORS
+check-moves-in-pairnr "(" ACT-movesS FILENAMES ")" -> ERRORS
+get-moves-in-pairnr "(" STATE INT ")"           -> ACT-movesS
+lookup-moves "(" MOVES-LIST INT ")"             -> ACT-movesS
+get-inputs-in-pairnr "(" STATE INT ")"          -> INST
+lookup-insts "(" INST-LIST INT ")"              -> INST
+input-names "(" INST ")"                        -> FILENAMES
+
+no-input "(" Unix-filename instances ":" Unix-filename* ")" -> ERRORS
+focus of input instance ":" Unix-filename may not be moved -> ERRORS
+
+check-restore-before-save "(" ACT-movesS ")"    -> ERRORS
+check-input-moves "(" ACT-movesS Unix-filename* ")" -> ERRORS
+check-on-input "(" ACT-moves Unix-filename* ")" -> ERRORS
+check-moves-in-inst "(" ACT-moves ")"           -> ERRORS
+focus of Unix-filename is restored but should be saved first -> ERRORS
+
+no-save "(" Focus-action ")"                    -> BOOL
+no-restore "(" Focus-action ")"                 -> BOOL

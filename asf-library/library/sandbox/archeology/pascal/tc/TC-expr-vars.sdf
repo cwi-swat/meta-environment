@@ -1,0 +1,6 @@
+%% Typecheck a variable access.
+imports Expr-misc
+
+hiddens
+  context-free syntax
+    var-arrow-tc "(" VARIABLE-ACCESS "," ENV ")"        -> ENV

@@ -1,0 +1,56 @@
+%%  Allowed-Symbols
+%%
+%%  Appendix F.3, [Mosses 92] does not contain an exact definition of
+%%  the Symbols that are allowed. Almost arbitrary symbols, containing
+%%  spaces, bracketing, strange characters, are allowed.
+%%
+%%  In practice, however, not all strange symbols are desirable.
+%%  The following definition of SYMBOL defines symbols with
+%%  place holders and well-balanced bracketing only.
+%%
+%%  Some examples of accepted symbols:
+%%   _ [ _ ]
+%%   map [ token to bindable | unknown ]
+%%   given _ # _
+%%
+%%
+%%  Author: Peter D. Mosses, Aarhus, Denmark.
+%%  Date:   April 1993.
+
+
+
+imports Basic-Notions
+
+exports
+  sorts SYMBOL SYMBOLS
+    INFIX OUTFIX POSTFIX PREFIX
+    OUTER-GROUP OUTER-GROUP-PLACE
+    INNER-GROUP-PLACE PLACE
+  context-free syntax
+    "_"                                         -> PLACE
+
+    { SYMBOL "," }+                             -> SYMBOLS
+
+    INFIX                                       -> SYMBOL
+    OUTFIX                                      -> SYMBOL
+    POSTFIX                                     -> SYMBOL
+    PREFIX                                      -> SYMBOL
+
+    PLACE OUTER-GROUP-PLACE* PLACE              -> INFIX
+    OUTER-GROUP                                 -> OUTFIX
+    OUTER-GROUP OUTER-GROUP-PLACE* OUTER-GROUP  -> OUTFIX
+    PLACE OUTER-GROUP-PLACE* OUTER-GROUP        -> POSTFIX
+    OUTER-GROUP OUTER-GROUP-PLACE* PLACE        -> PREFIX
+
+    OUTER-GROUP                                 -> OUTER-GROUP-PLACE
+    PLACE                                       -> OUTER-GROUP-PLACE
+
+    SYMBOL-CON                                  -> OUTER-GROUP
+    "(" INNER-GROUP-PLACE* ")"                  -> OUTER-GROUP
+    "<" INNER-GROUP-PLACE* ">"                  -> OUTER-GROUP
+    "{" INNER-GROUP-PLACE* "}"                  -> OUTER-GROUP
+    "[" INNER-GROUP-PLACE* "]"                  -> OUTER-GROUP
+
+    OUTER-GROUP-PLACE                           -> INNER-GROUP-PLACE
+    ","                                         -> INNER-GROUP-PLACE
+    "."                                         -> INNER-GROUP-PLACE

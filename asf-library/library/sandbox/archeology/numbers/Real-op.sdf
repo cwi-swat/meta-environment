@@ -1,0 +1,46 @@
+%%  Real-op
+
+imports Booleans Dig-ops Mant-real-con
+
+exports
+  context-free syntax
+    REAL "+" REAL               -> REAL  {left}
+    REAL "-" REAL               -> REAL  {left}
+    REAL "*" REAL               -> REAL  {left}
+    REAL "/" REAL               -> REAL  {left}
+    "-" REAL                    -> REAL
+    "+" REAL                    -> REAL
+    "max" "(" REAL "," REAL ")" -> REAL
+    "min" "(" REAL "," REAL ")" -> REAL
+    "|" REAL "|"                -> REAL
+    "\\pi"                      -> REAL
+    "e"                         -> REAL
+
+    "is-pos?" (REAL)            -> BOOL
+    "is-neg?" (REAL)            -> BOOL
+    "is-zero?" (REAL)           -> BOOL
+    "eq" "(" REAL "," REAL ")"  -> BOOL
+    REAL "<" REAL               -> BOOL
+    REAL ">" REAL               -> BOOL
+    REAL "\\leq" REAL           -> BOOL
+    REAL "\\geq" REAL           -> BOOL
+
+    "(" REAL ")"                -> REAL {bracket}
+
+    real2int(REAL)              -> INT
+    int2real(INT)               -> REAL
+
+priorities
+  {left: REAL "+" REAL -> REAL, REAL "-" REAL -> REAL }
+  <
+  {left: REAL "*" REAL -> REAL, REAL "/" REAL -> REAL }
+  <
+  { "-" REAL -> REAL, "+" REAL -> REAL }
+
+
+hiddens
+  variables
+    r[0-9']*            -> REAL
+    q[0-9']*            -> MANT-REAL-CON
+    s[0-9']*            -> DOT-REAL-CON
+    x[0-9']*            -> INT

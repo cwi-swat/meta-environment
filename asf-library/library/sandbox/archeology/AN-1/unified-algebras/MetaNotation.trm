@@ -1,0 +1,27 @@
+<module> Pico/Naturals
+
+<body>
+
+  needs: DataNotation/Characters/ASCII (Digit) .
+
+  <grammar>
+    * Nat-con    = [[ Digit+ ]] .
+  </grammar>
+
+   introduces: natural, the sum of _, the difference of _,
+               succ _, zero.
+
+   * natural >=  Nat-con  .
+   * the sum of _ :: (natural, natural) -> natural .
+   * the difference of _ :: ( natural, natural ) -> natural .
+   * succ _ :: natural -> natural .
+   * zero : natural .
+
+  [1]  the sum of (zero, N_2: natural) = N_2.
+  [2]  the sum of (succ N_1:natural, N_2:natural) =
+         succ ( the sum of (N_1, N_2) ) .
+
+  [3]  succ 1 = 1.
+
+
+</module>

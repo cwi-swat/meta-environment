@@ -1,0 +1,29 @@
+equations
+
+  [s1]  sim-expr-tc( _uns-number, E ) = set-result of E to new-const-type of _uns-number
+
+  [s2]  sim-expr-tc( _string, E ) =  set-result of E to new-const-type of  _string
+
+  [s3]  _id should be a constant in E1 = E2
+        ===================================
+        sim-expr-tc( _id, E1 ) =  set-result of E2 to const-type of _id in E1.context
+
+  [s4]  sim-expr-tc( nil, E ) = set-result of E to [nil-pointer]
+
+  [s5]  sim-expr-tc( [], E ) = set-result of E to [empty-set]
+
+  [s6]  member-tc(_member, E1) = E2,
+        sim-expr-tc([_member*], E2) = E3,
+        E2.result and E3.result should be the same type in E3 = E4
+        =============================================================
+        sim-expr-tc([_member, _member*], E1) =
+                set-result of E4 to E2.result
+
+  [s7]  member-tc( _expr, E ) = expr-tc( _expr, E )
+
+  [s8]  expr-tc( _expr1, E1 ) = E2,
+        expr-tc( _expr2, E2 ) = E3,
+        E2.result and E3.result should be the same type in E3 = E4,
+        E2.result should be ordinal in E4 = E5
+        =========================================
+        member-tc( _expr1 .. _expr2 , E1 ) = E5

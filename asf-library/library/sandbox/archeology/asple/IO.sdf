@@ -1,0 +1,9 @@
+imports Values
+exports
+ sorts  INPUT OUTPUT
+  context-free syntax
+    input "(" {IO-VAL ","}* ")"    -> INPUT
+    output "(" {IO-VAL ","}* ")"   -> OUTPUT
+  variables
+     Inp[1-9']*     -> INPUT
+     Outp[1-9']*    -> OUTPUT

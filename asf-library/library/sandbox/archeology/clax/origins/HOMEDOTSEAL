@@ -1,0 +1,33 @@
+SEAL mappings for language "SEAL" :
+   filename extension : "seal"
+   look for modules in : "/ufs/gipe/spec/SEAL"
+   look for configuration files in : "/ufs/gipe/spec/SEAL"
+   tools in modules : "SEAL-Compiler"
+
+SEAL mappings for language "Pico-syntax" :
+   filename extension : "pico"
+   look for modules in : "/ufs/tip/spec/pico-slice"
+   look for configuration files in : "/ufs/tip/spec/pico-slice"
+   tools in modules : "Interface" "Pico-label"
+
+SEAL mappings for language "SyntaxProgram" :
+   filename extension : "clax"
+   look for modules in : "/ufs/gipe/spec/clax/syntax"
+                         "/ufs/gipe/spec/clax/eval"
+                         "/ufs/gipe/spec/clax/tc"
+   look for configuration files in : "/ufs/tip/tmp/SEAL"
+   tools in modules : "Tc" "EvalProgram" "TcErrors"
+
+SEAL mappings for language "Tc" :
+  filename extension : "tc"
+  look for modules in : "/ufs/gipe/spec/clax/syntax"
+                        "/ufs/gipe/spec/clax/tc"
+  look for configuration files in : "/ufs/tip/tmp/SEAL"
+  tools in modules : "Tc"
+
+SEAL mappings for language "TcErrors" :
+  filename extension : "err"
+  look for modules in : "/ufs/gipe/spec/clax/syntax"
+                        "/ufs/gipe/spec/clax/tc"
+  look for configuration files in : "/ufs/tip/tmp/SEAL"
+  tools in modules : "TcErrors" "Tc"

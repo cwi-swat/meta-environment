@@ -1,0 +1,49 @@
+PROGRAM matrix;
+DECLARE
+  a : ARRAY [1..3] OF ARRAY [1..3] OF REAL;
+  b : ARRAY [1..3] OF ARRAY [1..3] OF REAL;
+
+  PROCEDURE mult33(a: ARRAY [1..3] OF ARRAY [1..3] OF REAL;
+                   b: ARRAY [1..3] OF ARRAY [1..3] OF REAL;
+                   VAR c: ARRAY [1..3] OF ARRAY [1..3] OF REAL);
+  DECLARE
+    i : INTEGER;
+    j : INTEGER;
+    r : REAL;
+
+    PROCEDURE scalarproduct(i : INTEGER; j : INTEGER; VAR x : REAL);
+    DECLARE
+      k : INTEGER;
+    BEGIN { scalarproduct }
+      k := 1;
+      x := 0.0;
+      WHILE k <= 3 DO
+        x := x + a[i][k] * b[k][j];
+        k := k + 1
+      END
+    END;  { scalarproduct }
+
+  BEGIN { mult33 }
+    i := 1;
+    WHILE i <= 3 DO
+      j := 1;
+      WHILE j <= 3 DO
+        scalarproduct(i, j, c[i][j]);
+        j := j + 1
+      END;
+      i := i + 1
+    END
+  END;  { mult33 }
+
+BEGIN  { matrix }
+  a[1][1] := 1;
+  a[1][2] := 2;
+  a[1][3] := 3;
+  a[2][1] := 4;
+  a[2][2] := 5;
+  a[2][3] := 6;
+  a[3][1] := 7;
+  a[3][2] := 8;
+  a[3][3] := 9;
+  mult33(a,a,b);
+END.   { matrix }

@@ -1,0 +1,9 @@
+imports Integers SyntaxConsts
+
+exports
+  context-free syntax
+    length "(" STRING ")"				-> INT
+
+hiddens
+  variables
+    a-char	-> CHAR              		chars	-> CHAR*

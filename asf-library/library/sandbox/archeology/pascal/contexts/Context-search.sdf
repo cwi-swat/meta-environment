@@ -1,0 +1,17 @@
+%% Define search functions on contexts.
+imports Context-defs
+
+exports
+  sorts COMPLETE-CONTEXT
+  context-free syntax
+    "<" CONTEXT "," ENTRY "," CONTEXT ">"             	-> COMPLETE-CONTEXT
+    complete find SYMBOL in COMPLETE-CONTEXT          	-> COMPLETE-CONTEXT
+    complete find SYMBOL in CONTEXT                   	-> COMPLETE-CONTEXT
+
+    add ENTRY "to" CONTEXT                            	-> CONTEXT
+    delete inner block of CONTEXT                     	-> CONTEXT
+    find SYMBOL in CONTEXT                            	-> CONTEXT
+    find SYMBOL in inner block of CONTEXT             	-> CONTEXT
+
+    SYMBOL exists in CONTEXT "?"                     	-> BOOLEAN
+    SYMBOL exists in inner block of CONTEXT "?"       	-> BOOLEAN

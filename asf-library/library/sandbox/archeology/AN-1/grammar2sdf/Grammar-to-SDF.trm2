@@ -1,0 +1,4 @@
+%% cfg-rules(Statement,< Identifier ":=" Expression >,X)
+%% cfg-elems( Identifier ":=" Expression, X )
+%% cfg-elems( ":=" Expression , append1(X, Y) )
+main-cfg-elems(

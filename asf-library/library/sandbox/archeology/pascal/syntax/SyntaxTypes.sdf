@@ -1,0 +1,47 @@
+%% The definitions in this module are according to the syntax as
+%% specified in section 6.4.1, 6.4.2 and 6.4.3 in the ISO standard.
+imports SyntaxConsts
+
+exports
+  sorts NEW-TYPE TYPE-DENOTER STRUCTURED-TYPE PACKED-STATUS FIELD-LIST
+    FIXED-PART VAR-PART VARIANT RECORD-SECTION OPT-SEMI-COLON SELECTOR
+    FIELDS-DESCRIPTION
+  context-free syntax
+                                                        -> PACKED-STATUS
+    packed                                              -> PACKED-STATUS
+    IDENT                                               -> TYPE-DENOTER
+    NEW-TYPE                                            -> TYPE-DENOTER
+    CONST ".." CONST                                    -> NEW-TYPE
+    "(" { IDENT "," }+ ")"                              -> NEW-TYPE
+    "^" IDENT                                           -> NEW-TYPE
+    PACKED-STATUS STRUCTURED-TYPE                       -> NEW-TYPE
+    array "[" { TYPE-DENOTER "," }+ "]" of TYPE-DENOTER -> STRUCTURED-TYPE
+    record FIELD-LIST end                               -> STRUCTURED-TYPE
+    set of TYPE-DENOTER                                 -> STRUCTURED-TYPE
+    file of TYPE-DENOTER                                -> STRUCTURED-TYPE
+
+                                                        -> FIELD-LIST
+    FIELDS-DESCRIPTION OPT-SEMI-COLON                   -> FIELD-LIST
+                                                        -> OPT-SEMI-COLON
+    ";"                                                 -> OPT-SEMI-COLON
+    FIXED-PART                                          -> FIELDS-DESCRIPTION
+    VAR-PART                                            -> FIELDS-DESCRIPTION
+    FIXED-PART ";" VAR-PART                             -> FIELDS-DESCRIPTION
+    { RECORD-SECTION ";" }+                             -> FIXED-PART
+    { IDENT "," }+ ":" TYPE-DENOTER                     -> RECORD-SECTION
+    case SELECTOR of { VARIANT ";" }+                   -> VAR-PART
+    IDENT                                               -> SELECTOR
+    IDENT ":" IDENT                                     -> SELECTOR
+    { CONST ","}+ ":" "(" FIELD-LIST ")"                -> VARIANT
+
+  variables
+    "_type-den"[0-9]*                                   -> TYPE-DENOTER
+    "_type-den"[0-9]*"*"                                -> {TYPE-DENOTER ","}*
+    "_type-den"[0-9]*"+"                                -> {TYPE-DENOTER ","}+
+    "_fields-descr"[0-9]*                               -> FIELDS-DESCRIPTION
+    "_new-type"[0-9]*   -> NEW-TYPE     "_PS"           -> PACKED-STATUS
+    "_fixed"[0-9]*      -> FIXED-PART   "_var-part"     -> VAR-PART
+    "_variant"[0-9]*    -> VARIANT      "_variant+"     -> {VARIANT ";"}+
+    "_selector"         -> SELECTOR     "_rec-section"  -> RECORD-SECTION
+    "_field-list"       -> FIELD-LIST   "_rec-section+" -> {RECORD-SECTION ";"}+
+                                        "opt;"          -> OPT-SEMI-COLON

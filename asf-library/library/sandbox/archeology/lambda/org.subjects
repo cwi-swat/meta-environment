@@ -1,0 +1,15 @@
+; org.subjects contains an assoclist ( <pattern-name> . <path-list> )
+; <path-list> is a list of paths to subjects. 
+; 
+; Note:
+;
+; - paths are relative to the root of the redex.
+; - paths are reversed formal definition paths.
+; - dots should be surrounded by at least one space character. 
+
+( 
+  ; (pbetha . (  (2 1) (1 1 1) (2 1 1) ))	
+  (pbetha . (  (2 1)  ))	
+  ; pbetha = betha( (lambda V . E1) E2  )
+  (psub   . ( (2) ))			; psub =  <L-EXP> [<L-EXP>/<VAR>]
+)

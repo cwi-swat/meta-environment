@@ -1,0 +1,4 @@
+merge(
+  sym2cfe( [[ aap _ # _ ]]  ),
+  terms2cfe( noot, piet )
+)

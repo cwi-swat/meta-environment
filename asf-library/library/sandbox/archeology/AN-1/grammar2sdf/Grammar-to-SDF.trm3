@@ -1,0 +1,26 @@
+grammar2sdf(
+
+  * Identifier        =   < Letter  <Letter | Digit>*  >  .
+  * Literal           = Numeric-Literal | Character-Literal | String-Literal .
+  * Numeric-Literal   = [[ Digit+ ]] | [[ Digit+ '.' Digit+ ]] .
+  * Character-Literal = [[ ''' ( Graphic-Character | ''' | '"' ) ''' ]] .
+  * String-Literal    = [[ '"' ( Graphic-Character | ''') * '"' ]] .
+
+  * Nominator         = Identifier | [[ Nominator "." Identifier ]] .
+  * Name              = Identifier | [[ Name "." Identifier ]] |
+                        [[ Name "." "all" ]] | [[ Name "(" Actuals ")" ]] .
+  * Expression        = Literal | "null" | Name | [[ "new" Nominator ]] |
+                        [[ "(" Expressions ")" ]] | [[ "(" Associations ")" ]] |
+                        [[ Unary-Operator Expression ]]  |
+                        [[ Expression Binary-Operator Expression ]] |
+                        [[ Expression Control-Operator Expression ]] .
+  * Expressions       = < Expression < "," Expression >* > .
+  * Association       = [[ Identifier "=>" Expression ]] .
+  * Associations      = < Association < "," Association > * > .
+  * Actuals           = Expressions | Associations | <Expressions "," Associations> .
+  * Unary-Operator    = "+" | "-" | "abs" | "not" .
+  * Binary-Operator   = "+" | "-" | "&" | "*" | "/" | "mod" | "rem" |
+                        "=" | "/=" | "<" | "<=" | ">" | ">=" |
+                        "and" | "or" | "xor" .
+  * Control-Operator  = < "and" "then" > | < "or" "else" > .
+)

@@ -1,0 +1,16 @@
+imports Fint Znat Tables-add Tables-min Tables-times
+
+hiddens
+  context-free syntax
+    diff-div(INT,INT)           -> DIVID
+
+  variables
+    x[0-9']*       -> INT
+    n[0-9']*       -> POS
+    p[0-9']*       -> NAT
+    D[0-9']*       -> DIGIT
+    D[0-9']*"+"    -> DIGIT+
+    D[0-9']*"*"    -> DIGIT*
+    Div[0-9']*     -> ZNAT
+    Rem[0-9']*     -> ZNAT
+    z[0-9']*       -> ZNAT

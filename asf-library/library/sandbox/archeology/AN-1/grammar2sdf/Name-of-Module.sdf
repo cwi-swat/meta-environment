@@ -1,0 +1,24 @@
+%%  Name-of-Module
+%%
+%%  When dumping generated modules on file, the name of the module needs
+%%  to be known. Function "name" simply retrieves the name of the module.
+%%  Since this name is used as name of an SDF module, it is transformed
+%%  to conform the syntax of SDF modules. Thus, UPPER-ALPHA's only.
+%%  The MetaNotation also allows "/" to occur in names; these are translated
+%%  to dashes "-".
+
+imports MetaNotation
+        SDF-Syntax-Operations
+        Character-Operations
+
+exports
+  context-free syntax
+    name(MODULE)                        -> UPPER-ALPHA   {incremental}
+    flatten(PATH)                       -> UPPER-ALPHA
+
+hiddens
+  variables
+    Path                         -> PATH
+    Spec                         -> SPECIFICATION
+    Item                         -> UPPER-ALPHA
+    Item "+"                     ->  { UPPER-ALPHA "/" }+

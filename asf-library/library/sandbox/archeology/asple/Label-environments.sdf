@@ -1,0 +1,18 @@
+imports  Booleans Nat-con SML-syntax
+  exports
+    sorts LPAIR LENV
+    context-free syntax
+      cons-env "("{COM ";"}* ")"      -> LENV
+      is-label "(" COM ")"            -> BOOL
+
+      NAT-CON ":" SML-PROGRAM     -> LPAIR
+      lenv "(" {LPAIR "#"}* ")"   -> LENV
+      lookup NAT-CON in LENV      -> SML-PROGRAM
+     NAT-CON not in LENV         -> BOOL
+     add LPAIR "to" LENV         -> LENV
+     modify LPAIR in LENV        -> LENV
+        "(" LPAIR ")"               -> LPAIR  {bracket}
+  variables
+        Le[1-9']*       -> LENV
+        Lpair[1-9']*    -> LPAIR
+        Lpairs[1-9']*   -> {LPAIR "#"}*

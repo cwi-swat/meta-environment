@@ -1,0 +1,37 @@
+%%  ASF-Syntax
+%%
+%%  Define the syntax of the equations as occurring in ASF+SDF.
+%%  This syntax is very simple, and mainly depends on the syntax
+%%  chosen for the terms, as defined in module Allowed-Terms.
+%%
+%%  Besides the pure syntax, several useful operations for combining
+%%  several equation sections into one are given.
+%%
+%%
+%%  Author: Arie van Deursen, CWI, Amsterdam.
+%%  Date: May 1993.
+
+imports Allowed-Terms
+
+exports
+  lexical syntax
+    "[" NUMBER "]"      -> ASF-TAG
+  sorts ASF-TAG EQUATIONS EQUATION
+  context-free syntax
+     ASF-TAG TERM "=" TERM -> EQUATION
+    "equations" EQUATION+        -> EQUATIONS
+                                 -> EQUATIONS
+
+
+%%  ASF-Syntax-Operations
+exports
+  context-free syntax
+    EQUATIONS "||" EQUATIONS            -> EQUATIONS
+    nil                                 -> EQUATIONS
+    make-tag( NUMBER )                  -> ASF-TAG
+
+hiddens
+  variables
+    Eq [0-9']* "+"              -> EQUATION+
+    Eqs                         -> EQUATIONS
+    Ch"+"                       -> CHAR+

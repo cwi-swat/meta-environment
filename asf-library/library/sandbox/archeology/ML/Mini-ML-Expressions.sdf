@@ -1,0 +1,24 @@
+%%
+%%
+%%      Mini-ML-Expressions
+%%
+%%
+
+   imports Natural-Numbers
+
+   exports
+      sorts ID EXP
+      lexical syntax
+         [a-z] [a-z0-9]* -> ID
+      context-free syntax
+         true                        -> EXP
+         false                       -> EXP
+         LEX-NAT                     -> EXP
+         ID                          -> EXP
+         "(" EXP EXP ")"             -> EXP
+         lambda ID "." EXP           -> EXP
+         let ID "=" EXP in EXP       -> EXP
+         letrec ID "=" EXP in EXP    -> EXP
+         if EXP then EXP else EXP fi -> EXP
+         "(" EXP "," EXP ")"         -> EXP
+

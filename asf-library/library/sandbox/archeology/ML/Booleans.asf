@@ -1,0 +1,11 @@
+   equations
+
+      [1]   true | b  = true
+      [2]   false | b = b
+
+      [3]   true & b  = b
+      [4]   false & b = false
+
+      [5]   ! true  = false
+      [6]   ! false = true
+

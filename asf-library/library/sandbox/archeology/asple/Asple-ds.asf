@@ -1,0 +1,110 @@
+equations
+
+[Ev1]  tr[begin Decls; Stms end] = begin Decls1; Stms1 end,
+       ev[Stms1] in <valenv(),Inp,output ()> =
+                             <Valenv1,Inp1,Outp>
+       ===========================================
+       ev[ begin Decls ; Stms end] with Inp = Outp
+
+[Ev2] ev[Stm; Stms] in Stat =
+          ev[Stms] in ev[Stm] in Stat
+
+[Ev3] ev[Exp] in <Valenv, Inp, Outp> = Val
+      =======================================
+      ev[Id := Exp] in <Valenv, Inp, Outp> =
+        <modify (Id:Val) in Valenv, Inp, Outp>
+
+[Ev7]  ev[Var] in
+        <Valenv, input (Nat-con,IO-vals),Outp> = Id
+       ====================================================
+       ev[tinput Var : int] in
+         <Valenv, input (Nat-con,IO-vals),Outp> =
+       <modify (Id:Nat-con) in Valenv,
+                          input (IO-vals),Outp>
+
+[Ev8] ev[Var] in
+        <Valenv, input(Bool-con,IO-vals), Outp> = Id
+      =====================================================
+      ev[tinput Var : bool] in
+         <Valenv, input(Bool-con,IO-vals), Outp>=
+      <modify (Id:Bool-con) in Valenv,
+                           input (IO-vals),Outp>
+
+
+[Ev9] ev[Exp] in <Valenv, Inp,output (IO-vals)> = IO-val
+      ====================================================
+      ev[output Exp] in
+                  <Valenv, Inp,output (IO-vals)> =
+      <Valenv, Inp,
+          output (IO-val,IO-vals)>
+
+[Ev10] ev[Exp] in Stat = true
+       ==================================================
+       ev[if Exp then Stms1 else Stms2 fi] in Stat =
+          ev [Stms1] in Stat
+
+[Ev11] ev[Exp] in Stat = false
+       ==================================================
+       ev[if Exp then Stms1 else Stms2 fi] in Stat =
+          ev[Stms2] in Stat
+
+[Ev12] ev[Exp] in Stat = true
+       ==================================================
+       ev[if Exp then Stms1 fi] in Stat =
+          ev[Stms1] in Stat
+
+[Ev13] ev[Exp] in Stat = false
+       ==================================================
+       ev[if Exp then Stms1 fi] in Stat = Stat
+
+[Ev14] ev[Exp] in Stat = true
+       ============================================
+       ev[while Exp do Stms end] in Stat =
+          ev[while Exp do Stms end] in ev[Stms] in Stat
+
+[Ev15] ev[Exp] in Stat = false
+       ==========================
+       ev[while Exp do Stms end] in Stat = Stat
+
+[Ev16] ev[Nat-con] in Stat = Nat-con
+
+[Ev17] ev[Bool-con] in Stat = Bool-con
+
+[Ev18] ev[var Id] in Stat = Id
+
+[Ev19] ev[Var] in <Valenv, Inp,Outp> = Id
+       =================================
+       ev[deref Var] in <Valenv, Inp,Outp> =
+         lookup Id in Valenv
+
+[Ev20] ev[Exp1] in Stat = Nat-con1,
+       ev[Exp2] in Stat = Nat-con2
+       ===============================================
+       ev[Exp1 + Exp2] in Stat = Nat-con1 + Nat-con2
+
+[Ev21] ev[Exp1] in Stat = Bool-con1,
+       ev[Exp2] in Stat = Bool-con2
+       =================================================
+       ev[Exp1 | Exp2] in Stat = Bool-con1 | Bool-con2
+
+[Ev22] ev[Exp1] in Stat = Nat-con1,
+       ev[Exp2] in Stat = Nat-con2
+       ===============================================
+       ev[Exp1 * Exp2] in Stat = Nat-con1 * Nat-con2
+
+[Ev23] ev[Exp1] in Stat = Bool-con1,
+       ev[Exp2] in Stat = Bool-con2
+       =================================================
+       ev[Exp1 & Exp2] in Stat = Bool-con1 & Bool-con2
+
+[Ev24] ev[Exp1] in Stat = ev[Exp2] in Stat
+       ===================================
+       ev[(Exp1 = Exp2)] in Stat = true
+
+[Ev25] ev[Exp1] in Stat != ev[Exp2] in Stat
+       =====================================
+       ev[(Exp1 = Exp2)] in Stat = false
+
+[Ev26] ev[(Exp1 = Exp2)] in Stat = Bool
+       ==================================
+       ev[(Exp1 != Exp2)] in Stat = not Bool

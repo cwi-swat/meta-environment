@@ -1,0 +1,41 @@
+This is TeX, C Version 3.0 (format=lplain 93.2.19)  3 AUG 1993 15:54
+**&latex startup
+(startup.tex
+LaTeX Version 2.09 <7 Dec 1989>
+(/usr/local/lib/tex/macros/article.sty
+Document Style `article' <16 Mar 88>.
+(/usr/local/lib/tex/macros/art12.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+) (verbatimfiles.sty) (startup.aux)
+Overfull \hbox (5.07907pt too wide) in paragraph at lines 41--43
+[]\twlrm You'll need ex-pe-ri-ence with ASF+SDF. Get the ASF+SDF user man-ual (
+ftp ``ftp.cwi.nl:
+
+\hbox(9.0+3.0)x455.24408, glue set - 1.0
+.\hbox(0.0+0.0)x17.62482
+.\twlrm Y
+.\kern-0.97916
+.\twlrm o
+.\twlrm u
+.etc.
+
+[1
+
+] [2] (startup.aux) ) 
+Here is how much of TeX's memory you used:
+ 155 strings out of 4458
+ 1509 string characters out of 63205
+ 30582 words of memory out of 262141
+ 2106 multiletter control sequences out of 9500
+ 18996 words of font info for 72 fonts, out of 72000 for 255
+ 14 hyphenation exceptions out of 607
+ 12i,4n,15p,169b,129s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on startup.dvi (2 pages, 3140 bytes).

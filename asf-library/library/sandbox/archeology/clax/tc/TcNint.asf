@@ -1,0 +1,58 @@
+equations
+
+  [S0]  S-1=0  [S1] S0=1   [S2] S1=2   [S3] S2=3   [S4] S3=4
+  [S5]  S4=5   [S6] S5=6   [S7] S6=7   [S8] S7=8   [S9] S8=9
+
+  [P0]  P0=-1  [P1] P1=0   [P2] P2=1   [P3] P3=2   [P4] P4=3
+  [P5]  P5=4   [P6] P6=5   [P7] P7=6   [P8] P8=7   [P9] P9 = 8
+
+  [11]  Sn  =  hd(n)   ; S tl(n)        when tl(n) != 9, bigpos?(n) = true
+  [12]  Sn  =  S hd(n) ; 0              when tl(n)  = 9
+  [13]  S(-n)  = - n'                   when n' = Pn
+  [14]  Pn  =  hd(n)   ; P tl(n)        when tl(n) != 0, bigpos?(n) = true
+  [15]  Pn  =  P hd(n) ; 9              when tl(n)  = 0, bigpos?(n) = true
+  [16]  P(-n)  = - n'                   when n' = Sn
+
+  [l1]  0 < 0     =  false
+  [l2]  0 < n     =  true
+  [l3]  0 < z     =  false
+  [l4]  n < x     =  Pn < Px
+  [l5]  z < x     =  Sz < Sx
+
+  [h1]  hd( pos(c+ c) ) = pos(c+)
+  [h2]  hd( pos( c )  ) = 0
+
+  [t1]   tl(pos(c+  "0")) = 0
+  [t2]  tl(pos(c* c)) = pos(c)  when pos(c* c) != pos(c* "0")
+
+  [o1]  bigpos?(pos(c+ c)) = true
+
+(* Changed 03/12 FT
+
+  [default-o3]  bigpos?(x) = false
+
+*)
+
+  [o2] bigpos?(pos(c)) = false
+
+  [o2]  pos(c+) ; pos(c'+) = pos(c+ c'+)
+  [o3]  pos(c+) ; 0 = pos(c+ "0")
+  [o4]  0 ; x = x
+
+  [e1] - (n) = - n
+  [e2] - - n = n
+  [e3] - 0 = 0
+
+
+
+  [T0] toint int-const("+" c+) = toint int-const(c+)
+  [T1] toint int-const("-" c+) = - toint int-const(c+)
+  [T2] toint int-const("0" c+) = toint int-const(c+)
+  [T3] toint int-const(c) = pos(c)
+  [T4] toint int-const(c c+) = pos(c c+)
+       when  aux(c) != aux("0"),
+             aux(c) != aux("+"),
+             aux(c) != aux("-")
+
+  [L0] _IntConst islessthan _IntConst' = true
+       when toint _IntConst < toint _IntConst' = true

@@ -1,0 +1,75 @@
+PROGRAM sort;
+DECLARE
+      print : LABEL;
+      a : ARRAY [1..10] OF REAL;
+
+
+(* read : fill an array with REALs *)
+
+      PROCEDURE read(VAR a: ARRAY [1..10] OF REAL);
+      DECLARE
+        i : INTEGER;
+      BEGIN { read }
+        i := 1;
+        WHILE i <= 10 DO
+          READ(a[i]);
+          i := i + 1
+        END
+      END;  { read }
+
+(* show : show contents of an ARRAY *)
+
+      PROCEDURE show(a: ARRAY [1..10] OF REAL);
+      DECLARE
+        i : INTEGER;
+      BEGIN { show }
+        i := 1;
+print:  WRITE("a[");
+        WRITE(i);
+        WRITE("] = ");
+        WRITE(a[i]);
+        WRITE("\n");
+        i := i + 1;
+        IF i <= 10 THEN
+          GOTO print
+        END
+      END;  { show }
+
+(* sort : sort an ARRAY *)
+
+      PROCEDURE sort(VAR a: ARRAY [1..10] OF REAL);
+      DECLARE
+        i : INTEGER;
+        j : INTEGER;
+
+(* swap : exchange the values of two variables *)
+
+        PROCEDURE swap(VAR x: REAL; VAR y: REAL);
+        DECLARE
+          aux : REAL;
+        BEGIN { swap }
+          aux := y;
+          y := x;
+          x := aux
+        END;  { swap }
+
+      BEGIN { sort }
+        i := 1;
+        WHILE i <= 10 DO
+          j := i;
+          WHILE j <= 10 DO
+            IF a[i] > a[j] THEN
+              swap(a[i], a[j])
+            END;
+            j := j + 1
+          END;
+          i := i + 1
+        END
+      END;  { sort }
+
+
+BEGIN { sort }
+        read(a);
+        sort(a);
+        show(a)
+END.  { sort }

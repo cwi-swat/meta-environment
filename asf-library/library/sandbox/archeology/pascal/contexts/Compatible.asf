@@ -1,0 +1,73 @@
+equations
+
+  [c1]  T1 is the same as T2? = TRUE
+        =======================================
+        T1 and T2 are compatible? = TRUE
+
+  [c2]  is-subrange-type?(T1) = TRUE,
+        T1.host-type is the same as T2? = TRUE
+        ======================================
+        T1 and T2 are compatible? = TRUE
+
+  [c3]  is-subrange-type?(T2) = TRUE,
+        T2.host-type is the same as T1? = TRUE
+        ======================================
+        T1 and T2 are compatible? = TRUE
+
+  [c4]  is-subrange-type?(T1) = TRUE,
+        is-subrange-type?(T2) = TRUE,
+        T1.host-type is the same as T2.host-type? = TRUE
+        ================================================
+        T1 and T2 are compatible? = TRUE
+
+  [c5]  is-non-empty-set-type?(T1) = TRUE,
+        is-non-empty-set-type?(T2) = TRUE,
+        is-packed?(T1) = is-packed?(T2),
+        T1.comp-type and T2.comp-type are compatible? = TRUE
+        ====================================================
+        T1 and T2 are compatible? = TRUE
+
+  [c6]  is-empty-set-type?(T1) = TRUE,
+        is-set-type?(T2) = TRUE
+        =============================
+        T1 and T2 are compatible? = TRUE
+
+  [c7]  is-empty-set-type?(T2) = TRUE,
+        is-set-type?(T1) = TRUE
+        =============================
+        T1 and T2 are compatible? = TRUE
+
+  [c8]  is-string-type?(T1) = TRUE,
+        is-string-type?(T2) = TRUE,
+        T1.index-type.nr-of-elements = T2.index-type.nr-of-elements
+        ======================================
+        T1 and T2 are compatible? = TRUE
+
+
+  [ac1] T1 is the same as T2? = TRUE,
+        not-permissable-as-file-comp?(T1) != TRUE
+        =====================================
+        T2 is assignment-compatible with T1? = TRUE
+
+  [ac2] T1 = real-type,
+        T2 = integer-type
+        =================
+        T1 is assignment-compatible with T2? = TRUE
+
+  [ac3] is-ordinal-type?(T1) = TRUE,
+        is-ordinal-type?(T2) = TRUE,
+        T1 and T2 are compatible? = TRUE
+        ================================
+        T2 is assignment-compatible with T2? = TRUE
+
+  [ac4] is-set-type?(T1) = TRUE,
+        is-set-type?(T2) = TRUE,
+        T1 and T2 are compatible? = TRUE
+        ================================
+        T2 is assignment-compatible with T2? = TRUE
+
+  [ac5] is-string-type?(T1) = TRUE,
+        is-string-type?(T2) = TRUE,
+        T1 and T2 are compatible? = TRUE
+        ================================
+        T2 is assignment-compatible with T2? = TRUE

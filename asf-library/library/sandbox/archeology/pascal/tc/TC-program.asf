@@ -1,0 +1,44 @@
+equations
+
+  [pr1] params-tc-before-block( _header, new-env ) = E1,
+        block-tc( Block, E1 ) = E2,
+        params-tc-after-block(  _header, E2 ) = E3
+        ===============================================
+        tc( _header; Block. ) = E3.errors
+
+
+  { Check the parameter list of the program header. }
+  [pb1] set-construct of E1 to "program _id (_pars)" = E2,
+        (_pars) should not have double names in E2 = E3,
+        check-input/output( _pars, E3 ) = E4
+        ======================================
+        params-tc-before-block( program _id (_pars), E1 ) = E4
+
+  [pb2] params-tc-before-block( program _id, E) = E
+
+
+  { If input or output are given as program parameters, they are supposed
+    to be implicitly defined as variables of type char. Make this explicit
+    by adding them to the environment. }
+  [io1] check-input/output(_par, _pars, E) =
+          check-input/output(_pars, check-input/output(_par, E))
+  [io2] check-input/output(input, E) = E + var input: text
+  [io3] check-input/output(output, E) = E + var output: text
+  [io4] check-input/output( _par, E ) = E
+          when is-input/output-parameter?(_par) != TRUE
+  [io5] check-input/output(, E ) = E
+  [io6] is-input/output-parameter?(input) = TRUE
+  [io7] is-input/output-parameter?(output) = TRUE
+
+
+  { All program parameters should be defined as variables in the
+    program block. This is checked after the program block has been checked. }
+  [pa0] set-construct of E1 to "program _id (_pars)" = E2,
+        params-tc-after-block(_pars, E2) = E3
+        ===========================================
+        params-tc-after-block(program _id (_pars), E1) = E3
+
+  [pa1] params-tc-after-block(_par, _pars, E) =
+          params-tc-after-block(_pars, params-tc-after-block(_par, E))
+  [pa2] params-tc-after-block(_par, E) =  _par should be a variable in E
+  [pa3] params-tc-after-block(,E) = E

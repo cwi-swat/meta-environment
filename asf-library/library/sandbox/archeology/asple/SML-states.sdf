@@ -1,0 +1,9 @@
+imports Value-environments Evaluation-stack
+        IO  Label-environments
+exports
+ sorts SML-STATE
+ context-free syntax
+    "<"VALENV "," EVSTACK ","
+       INPUT "," OUTPUT "," LENV ">"  -> SML-STATE
+ variables
+        SML-State[1-9]* -> SML-STATE

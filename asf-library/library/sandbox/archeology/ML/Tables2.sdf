@@ -1,0 +1,25 @@
+%%
+%%
+%%      Tables
+%%
+%%
+
+   imports Booleans Mini-ML-Expressions Types
+
+   exports
+      sorts ENV-PAIR TYPE-ENV TYPE-ENV-LOOKUP-OUT
+      context-free syntax
+         "(" ID "," GEN-TYPE ")"   -> ENV-PAIR
+         "[" {ENV-PAIR ","}* "]"   -> TYPE-ENV
+         ENV-PAIR "+" TYPE-ENV     -> TYPE-ENV
+	 "(" TYPE-ENV ")"          -> TYPE-ENV bracket
+         "<" BOOL "," GEN-TYPE ">" -> TYPE-ENV-LOOKUP-OUT
+         lookup ID in TYPE-ENV     -> TYPE-ENV-LOOKUP-OUT
+
+   hiddens
+      variables
+         Key [12]* -> ID
+         entry     -> GEN-TYPE
+         pair      -> ENV-PAIR
+         pairs     -> {ENV-PAIR ","}*
+

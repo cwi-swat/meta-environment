@@ -1,0 +1,7 @@
+module Tiger-BinOps
+imports Tiger-Expressions Operators
+exports
+  context-free syntax
+    BinOp "(" Exp "," Exp ")" -> Exp {cons("BinOp")}
+    RelOp "(" Exp "," Exp ")" -> Exp {cons("RelOp")}
+

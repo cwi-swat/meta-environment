@@ -1,0 +1,7 @@
+
+equations
+
+[C1] cp[begin Decls; Stms end] = Coms
+     =========================================
+     exe[begin Decls ; Stms end] with Inp =
+     es[Coms] with Inp

@@ -1,0 +1,36 @@
+%%  TRS-check
+
+imports
+    TRS-syntax Booleans Output
+
+exports
+    context-free syntax
+        chk "[" TRS "]"                                         -> BOOL
+hiddens
+    sorts
+        VAR-LIST MESSAGE
+    context-free syntax
+        "signature OK"                                          -> MESSAGE
+        "duplicates in signature"                               -> MESSAGE
+        "rule" TAG "is OK"                                      -> MESSAGE
+        "error in rule" TAG ": bad left-hand side" TERM         -> MESSAGE
+        "error in rule" TAG ": bad right-hand side" TERM        -> MESSAGE
+        "error in rule" TAG ": left-hand side is single var"    -> MESSAGE
+        "undeclared function :" SIG-ELEM                        -> MESSAGE
+        "error in rule" TAG ": new vars in right-hand-side"     -> MESSAGE
+        "error in term: term contains variables"                -> MESSAGE
+        "error in term: undeclared functions"                   -> MESSAGE
+         MESSAGE                                                -> OUTPUT
+
+        "(" VAR* ")"                                            -> VAR-LIST
+        chk-rrs "[" RR-SECTION ";" SIG-SECTION"]"               -> BOOL
+        chk-ts "[" TERM-SECTION ";" SIG-SECTION "]"             -> BOOL
+        chk-rule "["RULE ";" SIG-SECTION "]"                    -> BOOL
+        is-closed "(" TERM ")"                                  -> BOOL
+        is-single-var "(" TERM ")"                              -> BOOL
+        var-list "(" TERM ")"                                   -> VAR-LIST
+        VAR-LIST in VAR-LIST                                    -> BOOL
+        VAR-LIST "++" VAR-LIST                                  -> VAR-LIST
+        chk-sig "[" TERMS ";" SIG-SECTION "]"                   -> BOOL
+        lookup SIG-ELEM in { SIG-ELEM "," }*                    -> BOOL
+        duplicates "(" SIG-SECTION ")"                          -> BOOL

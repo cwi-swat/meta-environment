@@ -1,0 +1,31 @@
+equations
+
+  [v1] new-const-val of   _uns-int = _uns-int
+  [v2] new-const-val of + _uns-int = _uns-int
+  [v3] new-const-val of - _uns-int = -1 *_uns-int
+  [v4] new-const-val of   _uns-real = -1
+  [v5] new-const-val of + _uns-real = -1
+  [v6] new-const-val of - _uns-real = -1
+  [v7] new-const-val of _string = ascii-val(_string)
+
+  [t1] new-const-type of       _uns-int  = integer-type
+  [t2] new-const-type of _sign _uns-int  = integer-type
+  [t3] new-const-type of       _uns-real = real-type
+  [t4] new-const-type of _sign _uns-real = real-type
+  [t5] new-const-type of       _string   = char-type when length(_string) = 1
+
+  [t6] length(_string) = _uns-int,
+       _uns-int != 1
+       ===========================
+       new-const-type of _string = add 
+         type Generated = packed array [ 1 .. _uns-int ] of char
+        to init-block
+
+  [i1] id-number of _id in (_id1, _id*) = id-number((_id1, _id*), _id, 0)
+  [i2] id-number((), _id, _uns-int) = -1
+  [i3] id-number((_id, _id*), _id, _uns-int) = _uns-int
+  [i4] id-number((_id1, _id*), _id, _uns-int) = 
+                id-number((_id*), _id, _uns-int + 1 )
+            when _id != _id1
+
+  [i5] is-string-const?(_string) = TRUE

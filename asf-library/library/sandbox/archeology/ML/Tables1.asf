@@ -1,0 +1,10 @@
+
+   equations
+
+      [1]   pair + [pairs] = [pair, pairs]
+
+      [2]   lookup key in [] = <false, error-type>
+      [3]   lookup key in [(key, entry), pairs] = <true, entry>
+      [4]      key1 != key2
+            ==============================================================
+            lookup key1 in [(key2, entry), pairs] = lookup key1 in [pairs]

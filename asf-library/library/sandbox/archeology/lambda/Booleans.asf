@@ -1,0 +1,13 @@
+      equations
+
+      [1]   true | Bool  = true
+      [02]   false | Bool = Bool
+
+
+
+      [03]   false & Bool = false
+      [04]   true & Bool = Bool
+
+
+      [05]   ! true = false
+      [06]   ! false = true

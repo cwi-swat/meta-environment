@@ -1,0 +1,63 @@
+equations
+
+[666a]   typecheck(Configuration for language _Mod' is _Spec-parts') =
+                errors(tc[Configuration for language _Mod' is _Spec-parts'])
+
+[10]    _Se'' = tc-one [_Mod' , _Spec-part' ] +
+                tc [Configuration for language _Mod' is _Spec-parts' ]
+        ============================
+        tc [Configuration for language _Mod' is _Spec-part' _Spec-parts'] =
+                [sym-tab(_Se''),
+                check-item-names [name-list(_Se'')] + errors(_Se''),
+                name-list (_Se'')]
+
+[11]    tc-one [_Mod' , _Spec-part' ] = _Se'
+        ============================
+        tc [Configuration for language _Mod' is _Spec-part' ] =
+                [sym-tab(_Se'),
+                errors (_Se') + check-item-names[name-list(_Se')],
+                name-list(_Se')]
+
+[12a]   tc-one [_Mod', button _Name' _C-A-pairs' _Doc' ] =
+                check-state(make-button-state( button _Name' _C-A-pairs' _Doc'))
+
+[12b]   tc-one [_Mod', start-stop button _Name' _C-A-pairs' _Doc' ] =
+                check-state(make-st-button-state(start-stop button _Name' _C-A-pairs' _Doc'))
+
+[12c]   tc-one [_Mod', menu entry _Name' in _Name'' _C-A-pairs' _Doc' ] =
+                check-state(make-menu-entry-state( menu entry _Name' in _Name'' _C-A-pairs' _Doc'))
+
+[12d]   tc-one [_Mod', active tool _Name' _Tool-CA-pairs' _ToolDoc' ] =
+                check-state(make-tool-state( active tool _Name' _Tool-CA-pairs' _ToolDoc'))
+
+[14]    tc-one [_Mod', menu _Name' : _Entries' ] =
+                tc[menu-to-entries(_Mod', menu _Name' : _Entries')]
+
+[15]    _Spec-parts'' = menu-to-entry-parts(menu _Name' : _Entries')
+        ====================================
+        menu-to-entries(_Mod', menu _Name' : _Entries') =
+                Configuration for language _Mod' is _Spec-parts''
+
+[16a]   _Spec-parts' = menu entry _Name'' in _Name' _C-A-pairs' _Doc',
+        _Spec-parts'' = menu-to-entry-parts(menu _Name' : _Entries'),
+        _Spec-parts''' = _Spec-parts' _Spec-parts''
+        ====================================
+        menu-to-entry-parts(menu _Name' : _Name'', _C-A-pairs' _Doc' _Entries') = _Spec-parts'''
+
+[16b]   menu-to-entry-parts(menu _Name' : _Name'', _C-A-pairs' _Doc') = menu entry _Name'' in _Name' _C-A-pairs' _Doc'
+
+[30a]   check-item-names [_Name' _Names' ] = not(name-in (_Name' _Names' ))
+
+[30b]   name-in (_Name' _Name'' _Names' ) = false
+        ==============================
+        check-item-names [_Name' _Name'' _Names' ] = check-item-names [_Name'' _Names' ]
+
+[30c]   check-item-names [_Name' ] = true
+
+[40a]   name-in (_Name' _Name' _Names' ) = true
+
+[40b]   _Name' != _Name''
+        ========
+        name-in (_Name' _Name'' _Names' ) = name-in (_Name' _Names' )
+
+[40c]   name-in (_Name' ) = false

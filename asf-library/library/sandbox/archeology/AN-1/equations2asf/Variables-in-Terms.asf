@@ -1,0 +1,240 @@
+equations
+
+  %% Walk over simple formulae and clauses.
+
+  [1]   clause-variables( Form+ => Clause+, Tag) = empty-var-res
+
+  [2]   clause-variables( 'Symbols :: Func+, Tag ) = empty-var-res
+
+  [3]   clause-variables( 'Term !, Tag ) = empty-var-res
+
+  [4]   clause-variables( Relation Disjoiner, Tag ) =
+          clause-variables( Relation, Tag )
+
+  [5]   clause-variables( 'Terms  =< 'Term, Tag ) = empty-var-res
+
+  [6]   clause-variables( 'Terms  >= 'Term, Tag ) = empty-var-res
+
+  [7]   clause-variables( 'Terms :- 'Term, Tag ) = empty-var-res
+
+  [8]   clause-variables( 'Terms : 'Term, Tag ) = empty-var-res
+
+
+  %% Take care of one equation t1,...tN = t
+
+  [9]   clause-variables( 'Terms = 'Term, Tag ) =
+          eq-terms-var( 'Terms,  term-var( 'Term ), Tag )
+
+ [10]   eq-terms-var( 'Term, 'Terms-plus, Result, Tag ) =
+          eq-term-var( 'Term, Result, Tag ) ||
+          eq-terms-var( 'Terms-plus, Result, Tag )
+
+ [11]   eq-terms-var( 'Term, Result, Tag ) = eq-term-var( 'Term, Result, Tag)
+
+ [12]   term-var( 'Term ) = Result1
+        ===================================
+        eq-term-var( 'Term, Result2, Tag )  =
+          ( Result1 || Result2 )
+            . equations :=
+                equations make-tag(get-num(Tag)) Result1.term = Result2.term
+
+
+
+ %% ``Dive'' into one term. Build (1) an SDF variable section for the variables
+ %% occurring in that term, and (2) the same term but without the sort declarations
+ %% for the variables.
+ %% Thus, for `` succ N_1 : natural ''  the following is constructed:
+ %%  -o-  ``hiddens variables "N_1" -> Natural''
+ %%  -o-  ``succ N_1''
+
+ [12]   '#place-var( 'T-Place1 ) = Result1,
+        '#ogpl-var( 'T-OGP-star2 ) = Result2,
+        '#place-var( 'T-Place3 ) = Result3,
+        Result1 . qterm = " 'T-Place11 ",
+        Result2 . qterm = "ogpl: 'T-OGP-star22 ",
+        Result3 . qterm = " 'T-Place33 "
+        ==============================================
+        term-var( 'T-Place1 'T-OGP-star2  'T-Place3 ) =
+          ( Result1 || Result2 || Result3 ) . term :=
+                " 'T-Place11  'T-OGP-star22 'T-Place33 "
+
+ [13]   term-var( 'T-OG ) = '#og-var( 'T-OG )
+
+ [14]   '#og-var( 'T-OG1 ) = Result1,
+        '#ogpl-var( 'T-OGP-star2 ) = Result2,
+        '#og-var( 'T-OG3 ) = Result3,
+        Result1 . qterm = " 'T-OG11 ",
+        Result2 . qterm = "ogpl: 'T-OGP-star22 ",
+        Result3 . qterm = " 'T-OG33 "
+        ==================================
+        term-var( 'T-OG1 'T-OGP-star2 'T-OG3 )  =
+          ( Result1 || Result2 || Result3 )
+          . term := " 'T-OG11 'T-OGP-star22 'T-OG33 "
+
+ [15]   '#place-var( 'T-Place1 ) = Result1,
+        '#ogpl-var( 'T-OGP-star2 ) = Result2,
+        '#og-var( 'T-OG3 ) = Result3,
+        Result1 . qterm = " 'T-Place11 ",
+        Result2 . qterm = "ogpl: 'T-OGP-star22 ",
+        Result3 . qterm = " 'T-OG33 "
+        =======================================
+        term-var( 'T-Place1 'T-OGP-star2 'T-OG3 ) =
+          ( Result1 || Result2 || Result3 )
+          . term := " 'T-Place11 'T-OGP-star22 'T-OG33 "
+
+ [16]   '#place-var( 'T-Place3 ) = Result3,
+        '#ogpl-var( 'T-OGP-star2 ) = Result2,
+        '#og-var( 'T-OG1 ) = Result1,
+        Result1 . qterm = " 'T-OG11 ",
+        Result2 . qterm = "ogpl: 'T-OGP-star22 ",
+        Result3 . qterm = " 'T-Place33 "
+        =======================================
+        term-var( 'T-OG1 'T-OGP-star2 'T-Place3 ) =
+          ( Result1 || Result2 || Result3 )
+          . term := " 'T-OG11 'T-OGP-star22 'T-Place33 "
+
+  [17]  term-var( 'T-Place ) = '#place-var( 'T-Place )
+
+  [18]  '#ogpl-var( ) = empty-var-res . term := "ogpl: "
+
+
+  [19]  '#ogp-var( 'T-OGP1 ) = Result1,
+        '#ogpl-var( 'T-OGP-star2 ) = Result2,
+        Result1 . qterm = "ogpl: 'T-OGP11",
+        Result2 . qterm = "ogpl: 'T-OGP-star22"
+        ========================================
+        '#ogpl-var( 'T-OGP1 'T-OGP-star2 ) =
+          ( Result1 || Result2 ) . term := "ogpl: 'T-OGP11 'T-OGP-star22 "
+
+  [20]  '#og-var( 'T-OG1 ) = Result,
+        Result . qterm = " 'T-OG11 "
+        =============================
+        '#ogp-var( 'T-OG1 ) =
+          Result . term := "ogpl: 'T-OG11 "
+
+  [21]  '#place-var( 'T-Place1 ) = Result,
+        Result . qterm = " 'T-Place11 "
+        ===============================
+        '#ogp-var( 'T-Place1 ) =
+          Result . term := "ogpl: 'T-Place11 "
+
+  [22]  '#og-var( 'SymCon ) = empty-var-res . term := " 'SymCon "
+
+  [23]  '#igpl-var( 'T-IGP-star1 ) =  Result1,
+        Result1 . qterm =  "igpl: 'T-IGP-star11 "
+        =========================================
+        '#og-var( ( 'T-IGP-star1 ) ) =
+          Result1 . term := "( 'T-IGP-star11 )"
+
+  [24]  '#igpl-var( 'T-IGP-star1 ) =  Result1,
+        Result1 . qterm =  "igpl: 'T-IGP-star11 "
+        =========================================
+        '#og-var( < 'T-IGP-star1 > ) =
+          Result1 . term := "< 'T-IGP-star11 >"
+
+  [25]  '#igpl-var( 'T-IGP-star1 ) =  Result1,
+        Result1 . qterm =  "igpl: 'T-IGP-star11 "
+        =========================================
+        '#og-var( { 'T-IGP-star1 } ) =
+          Result1 . term := "{ 'T-IGP-star11 }"
+
+  [26]  '#igpl-var( 'T-IGP-star1 ) =  Result1,
+        Result1 . qterm =  "igpl: 'T-IGP-star11 "
+        =========================================
+        '#og-var( [ 'T-IGP-star1 ] ) =
+          Result1 . term := "[ 'T-IGP-star11 ]"
+
+
+  [27]  '#igpl-var( ) = empty-var-res . term := "igpl: "
+
+  [28]  '#igp-var( 'T-IGP1 ) = Result1,
+        '#igpl-var( 'T-IGP-star2 ) = Result2,
+        Result1 . qterm = "igpl: 'T-IGP11 ",
+        Result2 . qterm = "igpl: 'T-IGP-star22 "
+        ==========================================
+        '#igpl-var( 'T-IGP1 'T-IGP-star2 ) =
+           (Result1 || Result2 ) . term := "igpl: 'T-IGP11 'T-IGP-star22 "
+
+  [29]  '#igp-var( , ) = empty-var-res . term := "igpl: , "
+
+  [30]  '#igp-var( . ) = empty-var-res . term := "igpl: . "
+
+  [31]  '#ogp-var( 'T-OGP1 ) = Result1,
+        Result1 . qterm = "ogpl: 'T-OGP11 "
+        ===================================
+        '#igp-var( 'T-OGP1 ) = Result1 . term := "igpl: 'T-OGP11"
+
+
+  [32]  '#place-var( 'Variable ) = empty-var-res . term := " 'Variable "
+
+  [33]  '#place-var( 'String ) = empty-var-res . term := " 'String "
+
+  [34]  '#place-var( 'Character ) = empty-var-res . term := " 'Character "
+
+  %% Sorts in the MetaNotation can be denoted by arbitrary terms.
+  %% Only for a limited number of terms it is possiblte to translate
+  %% these to an SDF variable output sort.
+  %% Can deal with:
+  %%  -o-   Var : Alpha
+  %%  -o-   Var : Alpha*
+  %%  -o-   Var : Alpha+
+  %%  -o-   Var : < Alpha String >*
+  %%  -o-   Var : < Alpha STring >+
+  %%
+  %% If for other cases also meaningful SDF variables can be introduced,
+  %% it is easy to add equations for this.
+  %%
+  %% All remaining equations are covered by one default rule.
+
+
+  [35]  '#place-var( 'Variable : 'Alpha ) =
+          empty-var-res . term := " 'Variable "
+                        . var-decls := hiddens variables 2string('Variable) -> 2upper('Alpha)
+
+  [36]  '#place-var( 'Variable : 'Alpha * ) =
+          empty-var-res . term := " 'Variable "
+                        . var-decls := hiddens variables 2string('Variable) -> 2upper('Alpha)*
+
+  [37]  '#place-var( 'Variable : 'Alpha + ) =
+          empty-var-res . term := " 'Variable "
+                        . var-decls := hiddens variables 2string('Variable) -> 2upper('Alpha)+
+
+  [38]  '#place-var( 'Variable : <'Alpha 'String>* ) =
+          empty-var-res . term := " 'Variable "
+                        . var-decls := hiddens variables
+                                         2string('Variable) -> {2upper('Alpha) 'String}*
+
+  [39]  '#place-var( 'Variable : <'Alpha 'String>+ ) =
+          empty-var-res . term := " 'Variable "
+                        . var-decls := hiddens variables
+                                           2string('Variable) -> {2upper('Alpha) 'String}+
+
+  [40]  '#place-var( 'Variable ) =
+           empty-var-res . term := " 'Variable "
+
+  [default-var-res]  '#place-var( 'Variable : 'Var-Type ) =
+                empty-var-res . term := " 'Variable "
+
+
+  %% Functions processing variable results:
+  [v0]  empty-var-res = <var-decls: nil, equations: nil,  term: "nix">
+
+  [v1]  < var-decls: Section, equations: Eqs, term: Qterm > . var-decls = Section
+  [v2]  < var-decls: Section, equations: Eqs, term: Qterm > . equations = Eqs
+  [v3]  < var-decls: Section, equations: Eqs, term: Qterm > . qterm = Qterm
+  [v4]  < var-decls: Section, equations: Eqs, term: " 'Term  " > . term = 'Term
+
+  [v5]  < var-decls: Section, equations: Eqs, term: Qterm > . var-decls := Section1 =
+        < var-decls: Section1, equations: Eqs, term: Qterm >
+  [v6]  < var-decls: Section, equations: Eqs, term: Qterm > . equations := Eqs1 =
+        < var-decls: Section, equations: Eqs1, term: Qterm >
+  [v7]  < var-decls: Section, equations: Eqs, term: Qterm > . term := Qterm1 =
+        < var-decls: Section, equations: Eqs, term: Qterm1 >
+
+  [v8]  < var-decls: Section1, equations: Eqs1, term: Qterm1 > ||
+        < var-decls: Section2, equations: Eqs2, term: Qterm2 > =
+        < var-decls: Section1 || Section2,
+          equations: Eqs1 || Eqs2,
+          term: " nix " >
+
+  [g1]  get-num( [Num] ) = Num

@@ -1,0 +1,7 @@
+PATH=/ufs/arie/bin:$PATH
+SPECDIR=/ufs/gipe/spec/pascal/syntax
+
+cat-mods -d $SPECDIR\
+	SyntaxLayOut SyntaxNumbers SyntaxConsts\
+	SyntaxTypes SyntaxHeaders SyntaxExpr SyntaxStats\
+	SyntaxProgram

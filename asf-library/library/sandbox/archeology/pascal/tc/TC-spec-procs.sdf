@@ -1,0 +1,14 @@
+%% Check the predefined procedures: input/output, dynamic allocation, (un)pack
+imports Expr-misc
+
+hiddens
+  context-free syntax
+    stc "(" IDENT ACTUAL-PAR-LIST "," ENV ")"           -> ENV
+    tcf "(" IDENT ACTUAL-PAR-LIST "," ENV ")"           -> ENV
+    "write-par-tc" "(" ACTUAL-PAR "," ENV ")"           -> ENV
+    tag-constants-tc "(" {ACTUAL-PAR ","}+ "," CONTEXT "," ENV ")" -> ENV
+
+  variables
+    [_]par[0-9]*       -> ACTUAL-PAR    [_]file         -> ACTUAL-PAR
+    [_][paiz][0-9]*    -> ACTUAL-PAR    [_]par[0-9]*"*"  -> { ACTUAL-PAR "," }*
+    [_]p[ar]*[+][0-9]* -> {ACTUAL-PAR ","}+

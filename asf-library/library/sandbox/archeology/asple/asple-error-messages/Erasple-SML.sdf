@@ -1,0 +1,12 @@
+imports Erasple-stat SML-syntax
+
+exports
+ sorts SML-PROGRAM-OR-ERRORLIST
+ context-free syntax
+  cp "[" PROGRAM "]"            -> SML-PROGRAM-OR-ERRORLIST
+  cp "[" {STM ";"}* "]"         -> SML-PROGRAM
+  cp "[" EXP "]"                -> SML-PROGRAM
+  cp "[" MODE "]"               -> SML-PROGRAM
+
+  ERRORLIST                     -> SML-PROGRAM-OR-ERRORLIST
+  SML-PROGRAM                   -> SML-PROGRAM-OR-ERRORLIST

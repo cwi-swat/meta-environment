@@ -1,0 +1,67 @@
+equations
+
+  [sf1] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result and real-type should be the same type in E3 = E4
+        =====================================================
+        spec-fun-tc( trunc(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to real-type
+
+  [sf2] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result and real-type should be the same type in E3 = E4
+        =====================================================
+        spec-fun-tc( round(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to real-type
+
+  [sf3] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be a number in E3 = E4
+        =====================================================
+        spec-fun-tc( abs(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to E2.result
+
+  [sf4] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be a number in E3 = E4
+        =====================================================
+        spec-fun-tc( sqr(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to E2.result
+
+  [sf5] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be ordinal in E3 = E4
+        =====================================================
+        spec-fun-tc( ord(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to integer-type
+
+  [sf6] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be ordinal in E3 = E4
+        =====================================================
+        spec-fun-tc( succ(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to E2.result
+
+  [sf7] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be ordinal in E3 = E4
+        =====================================================
+        spec-fun-tc( pred(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to E2.result
+
+  [sf8] act-par-tc( var  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be a file in E3 = E4
+        =====================================================
+        spec-fun-tc( eoln(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to boolean-type
+
+  [sf9] act-par-tc( value  _act-par, E1 ) = E2,
+        no _act-par* should be given in E2 = E3,
+        E2.result should be a file in E3 = E4
+        =====================================================
+        spec-fun-tc( eof(_act-par, _act-par*), E1 ) = 
+          set-result of E4 to boolean-type
+
+  [eo1] spec-fun-tc( eof, E) = spec-fun-tc( eof(input), E)
+  [eo2] spec-fun-tc( eoln,E) = spec-fun-tc(eoln(input), E)

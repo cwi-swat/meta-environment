@@ -1,0 +1,12 @@
+module Tiger-Comment
+exports
+  %% sorts CommChar
+  lexical syntax
+    "/*" CommChar* "*/" -> LAYOUT
+    "//" ~[\n]* [\n]    -> LAYOUT
+    ~[\*] 		-> CommChar 
+    Asterisk 		-> CommChar
+    [\*]		-> Asterisk
+  lexical restrictions
+    Asterisk -/- [\/]
+

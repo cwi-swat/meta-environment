@@ -1,0 +1,26 @@
+%%  Compiler
+
+imports
+    CompButton
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+compile "(" SEAL-spec ")"                             -> S_EXPR_LIST
+comp-all-items "(" Module "," SEAL-spec-part+ "," SE ")" -> S_EXPR_LIST
+make-configuration "(" Module "," S_EXPR_LIST ")"       -> S_EXPR_LIST
+make-configure-function "(" Module "," S_EXPR_LIST ")"  -> S_EXPR_LIST
+make-func-head "(" Module ")"                           -> SYMBOL
+all-functions "(" S_EXPR_LIST ")"                       -> S_EXPR_LIST
+all-create-ui-items "(" Module "," S_EXPR_LIST ")"      -> S_EXPR_LIST
+
+is-ui-item "(" S_EXPR ")"                               -> BOOL
+is-function "(" S_EXPR ")"                              -> BOOL
+empty-s-expr                                            -> S_EXPR
+convert-ui-item "(" Module "," S_EXPR ")"               -> S_EXPR
+language "(" S_EXPR ")"                                 -> S_EXPR
+delete-language "(" S_EXPR ")"                          -> S_EXPR
+output-filename "(" SEAL-spec ")"                     -> String

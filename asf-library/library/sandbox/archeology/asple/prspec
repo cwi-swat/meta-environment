@@ -1,0 +1,15 @@
+for M in Layout Identifiers Bool-con Booleans Nat-con Naturals Mode-con \
+Modes Asple \
+Mode-environments Asple-tc Asple-extended-syntax Asple-stat \
+Values Value-environments IO Asple-states Asple-ds \
+SML-syntax Label-environments Evaluation-stack SML-states \
+SML-ds Asple-SML Asple-execute
+do
+	echo module $M
+   	cat $M.syn
+	cat $M.eqs
+	echo end $M
+	echo ""
+	echo ""
+done | enscript -2r -G -Pagfa
+

@@ -1,0 +1,44 @@
+%%  Allowed-GrammarTerms
+%%
+%%  The MetaNotation has special notation for describing "grammar:"s.
+%%  This notation has its own syntax, which simply is a language
+%%  for defining context-free grammars. This module contains the
+%%  syntax-definition for that language.
+%%
+%%  In the MetaNotation description of [appendix F.3, Mosses '92],
+%%  grammar sections are expressed using the general terms, but
+%%  in practice only limited use is allowed. This modlue reflects
+%%  this more limited view on grammar definitions. All grammar sections
+%%  in [Mosses 92] can be parsed according to this syntax.
+%%
+%%
+%%  Authors:  Arie van Deursen, CWI, Amsterdam
+%%            Peter D. Mosses, Aarhus, Denmark
+%%  Date: May 1993
+
+
+imports Basic-Notions
+
+exports
+  sorts CFG-RULE CFG-TERM GRAM-BASIC GRAM-BASICS
+  context-free syntax
+    GRAM-BASIC+                                         -> GRAM-BASICS
+    "*"  UPPER-ALPHA "=" CFG-TERM "."                   -> GRAM-BASIC
+
+    UPPER-ALPHA                                         -> CFG-TERM
+    STRING                                              -> CFG-TERM
+    CHARACTER                                           -> CFG-TERM
+    CFG-TERM "|" CFG-TERM                               -> CFG-TERM {left}
+    "[[" CFG-TERM* "]]"                                 -> CFG-TERM
+    "<" CFG-TERM* ">"                                   -> CFG-TERM
+    CFG-TERM "?"                                        -> CFG-TERM
+    CFG-TERM "*"                                        -> CFG-TERM
+    CFG-TERM "+"                                        -> CFG-TERM
+    "(" CFG-TERM ")"                                    -> CFG-TERM {bracket}
+
+
+  priorities
+     {left: CFG-TERM "|" CFG-TERM -> CFG-TERM } <
+     {  CFG-TERM "?" -> CFG-TERM,
+        CFG-TERM "*" -> CFG-TERM,
+        CFG-TERM "+" -> CFG-TERM }

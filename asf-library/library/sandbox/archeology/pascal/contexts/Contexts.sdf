@@ -1,0 +1,39 @@
+%% Specify the context containing all declarations found so far.
+imports  SyntaxHeaders
+
+exports
+  sorts CONTEXT ENTRY SYMBOL VAR-STATUS
+
+  context-free syntax
+    possibly-threatening  				-> VAR-STATUS
+    control-variable                                  	-> VAR-STATUS
+                                                        -> VAR-STATUS
+
+    label LABEL                                         -> ENTRY
+    const CONST-DEF                                     -> ENTRY
+    type TYPE-DEF                                       -> ENTRY
+    var VAR-DECL VAR-STATUS                             -> ENTRY
+    HEADING                                             -> ENTRY
+    predefined-function IDENT                           -> ENTRY
+    predefined-procedure IDENT                          -> ENTRY
+    empty-set                                           -> ENTRY
+    nil-pointer                                         -> ENTRY
+    block-mark                                          -> ENTRY
+    error-entry                                         -> ENTRY
+
+    IDENT                                               -> SYMBOL
+    LABEL                                               -> SYMBOL
+    block-mark                                          -> SYMBOL
+
+    "[" { ENTRY "," }* "]"                              -> CONTEXT
+    "(" CONTEXT ")"                                     -> CONTEXT bracket
+    predefined-block    -> CONTEXT	init-block     	-> CONTEXT    	
+    integer-type        -> CONTEXT      boolean-type    -> CONTEXT
+    char-type           -> CONTEXT      text-type       -> CONTEXT
+    real-type           -> CONTEXT
+
+  variables
+    Context[0-9]*	-> CONTEXT      Entry[0-9]*     -> ENTRY 
+    [TC][0-9]*          -> CONTEXT      Entry[0-9]*"*"  -> { ENTRY ","}*
+    "_symbol"[0-9]*     -> SYMBOL       Prefix[0-9]*    -> { ENTRY ","}*
+    Postfix[0-9]*       -> {ENTRY ","}*

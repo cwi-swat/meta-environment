@@ -1,0 +1,21 @@
+equations
+
+[0]     make-symbol(string(""" Cs' """)) = symbol(Cs')
+
+[2a]    comp-filename() = make-symbol("instance")
+
+[2c]    add-double-quotes(variable-name(Cs')) = string(""" Cs' """)
+
+[2d]    add-double-quotes(sort(Cs')) = string(""" Cs' """)
+
+[2d]    add-double-quotes(module(Cs')) = string(""" Cs' """)
+
+[2e]    add-double-quotes(function-name(Cs')) = string(""" Cs' """)
+
+[3c]    add-moves(_Move') = '_Move'
+
+[3d]    _S_expr_list' = add-moves(_Move'),
+        _S_expr_list'' = add-moves(_Moves'),
+        _S_expr_list''' = _S_expr_list' _S_expr_list''
+        ============================
+        add-moves(_Move', _Moves') = _S_expr_list'''

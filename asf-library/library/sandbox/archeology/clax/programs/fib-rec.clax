@@ -1,0 +1,24 @@
+PROGRAM fib;
+DECLARE
+  in : INTEGER;
+  out : INTEGER;
+
+  PROCEDURE rec(in : INTEGER; VAR out: INTEGER);
+  DECLARE
+    aux1 : INTEGER;
+    aux2 : INTEGER;
+  BEGIN { rec }
+    IF in <= 2 THEN
+      out := 1
+    ELSE
+      rec(in - 1, aux1);
+      rec(in - 2, aux2);
+      out := aux1 + aux2
+    END
+  END;  { rec }
+
+
+BEGIN { fib }
+  in := 6;
+  rec(in, out)
+END.  { fib }

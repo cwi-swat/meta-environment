@@ -1,0 +1,105 @@
+equations                                                                   
+[11] evaluate  N_ = give  N_                                                
+  [12] evaluate  C_ = give  C_                                              
+  [13] evaluate  I_ = give the value stored in the cell bound to I_         
+  [14] evaluate  [ [ "(" E_ ")" ] ] = evaluate  E_                          
+  [15]                                                                      
+    evaluate  [ [ E_1 O_ E_2 ] ]                                            
+    =                                                                       
+    ( evaluate E_1 and evaluate E_2 ) then give the operation-result of O_  
+  [16]                                                                      
+    the operation-result of "+"                                             
+    =                                                                       
+    the                                                                     
+      natural yielded by the sum of                                         
+      ( the given natural #1 , the given natural #2 )                       
+  [17]                                                                      
+    the operation-result of "-"                                             
+    =                                                                       
+    the                                                                     
+      natural yielded by the difference of                                  
+      ( the given natural #1 , the given natural #2 )                       
+  [18]                                                                      
+    the operation-result of "||"                                            
+    =                                                                       
+    the                                                                     
+      string yielded by                                                     
+      ( ( the given string #1 ) ^ ( the given string #2 ) )                 
+  [20] execute  < S_1 ";" S_2 > = execute S_1 and then execute S_2          
+  [21]                                                                      
+    execute  [ [ I_ ":=" E_ ] ]                                             
+    =                                                                       
+    evaluate E_ then store the given value in the cell bound to I_          
+  [22]                                                                      
+    execute  [ [ "if" E_ "then" S_1 "fi" ] ]                                
+    =                                                                       
+    evaluate                                                                
+      E_ then give not ( it is 0 ) then                                     
+      (                                                                     
+        ( check the given truth-value and then execute S_1 )                
+          or                                                                
+          ( check not the given truth-value and then complete )             
+        )                                                                   
+  [23]                                                                      
+    execute  [ [ "if" E_ "then" S_1 "else" S_2 "fi" ] ]                     
+    =                                                                       
+    evaluate                                                                
+      E_ then give not ( it is 0 ) then                                     
+      (                                                                     
+        ( check the given truth-value and then execute S_1 )                
+          or                                                                
+          ( check not the given truth-value and then execute S_2 )          
+        )                                                                   
+  [24]                                                                      
+    execute  [ [ "while" E_ "do" S_ "od" ] ]                                
+    =                                                                       
+    unfolding                                                               
+      (                                                                     
+        evaluate                                                            
+          E_                                                                
+          then                                                              
+          give                                                              
+          not                                                               
+          ( it is 0 )                                                       
+          then                                                              
+          (                                                                 
+            ( check ( it is true ) and then execute S_ and then unfold )    
+              or                                                            
+              ( check ( it is false ) )                                     
+            )                                                               
+        )                                                                   
+  [25]                                                                      
+    execute  [ [ "repeat" S_ "until" E_ ] ]                                 
+    =                                                                       
+    unfolding                                                               
+      (                                                                     
+        execute                                                             
+          S_                                                                
+          then                                                              
+          evaluate                                                          
+          E_                                                                
+          then                                                              
+          give                                                              
+          not                                                               
+          ( it is 0 )                                                       
+          then                                                              
+          (                                                                 
+            ( check ( it is true ) )                                        
+              or                                                            
+              ( check ( it is false ) and then unfold )                     
+            )                                                               
+        )                                                                   
+  [31] elaborate  < D_1 "," D_2 > = elaborate D_1 moreover elaborate D_2    
+  [32]                                                                      
+    elaborate  [ [ I_ ":" T_ ] ]                                            
+    =                                                                       
+    allocate                                                                
+      a cell then                                                           
+      ( bind I_ to the given cell and store the initial-value of T_ in it ) 
+  [33] the initial-value of "natural" = 0                                   
+  [34] the initial-value of "string" = "#"                                  
+  [40]                                                                      
+    run  [ [ "begin" "declare" D_ ";" S_ "end" ] ]                          
+    =                                                                       
+    elaborate D_ hence execute S_                                           
+  [41] run  [ [ "begin" "declare" ";" S_ "end" ] ] = execute  S_

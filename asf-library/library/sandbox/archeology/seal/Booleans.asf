@@ -1,0 +1,11 @@
+       equations
+      [1]  true | _Bool'     = true
+      [2]  _Bool' | true     = true
+      [3]  _Bool' != true ==>  false | _Bool' = false
+      [4]  _Bool' != true ==> _Bool' | false = false
+
+      [5]  true & _Bool'      = _Bool'
+      [6]  false & _Bool'    = false
+
+      [7]  not  true = false
+      [8]  not false = true

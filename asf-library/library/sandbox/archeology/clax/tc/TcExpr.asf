@@ -1,0 +1,30 @@
+equations
+
+ [t0] _Expr _Cop _Expr'  = _Expr _Op _Expr'  when _Op = _Cop
+ [t1] _Expr _Aop1 _Expr' = _Expr _Op _Expr'  when _Op = _Aop1
+ [t2] _Expr _Aop2 _Expr' = _Expr _Op _Expr'  when _Op = _Aop2
+ [t3] _Expr _Bop1 _Expr' = _Expr _Op _Expr'  when _Op = _Bop1
+ [t4] _Expr _Bop2 _Expr' = _Expr _Op _Expr'  when _Op = _Bop2
+ [t5] _Ubop _Expr = _Uop _Expr when _Uop = _Ubop
+ [t6] _Uaop _Expr = _Uop _Expr when _Uop = _Uaop
+
+    [1] _Uop BOOLEAN = BOOLEAN  when _Uop = NOT
+
+{ Conditions when _Uop != NOT added by FT 09/12/92 --- otherwise i := NOT 3 is allowed }
+
+    [2] _Uop INTEGER   = INTEGER when _Uop != NOT
+
+    [3] _Uop REAL      = REAL  when _Uop != NOT
+
+
+    [4] INTEGER _Op INTEGER = INTEGER  when _Op = _Aop
+
+    [5] REAL    _Op REAL    = REAL     when _Op = _Aop, _Op != %
+    [6] BOOLEAN _Op BOOLEAN  = BOOLEAN  when _Op = _Bop
+
+    [7] _SimpleType _Op _SimpleType = BOOLEAN when _Op = _Cop
+(*    [7] _Expr _Op _Expr = BOOLEAN when _Op = _Cop   *)
+
+   [V0] _Tenv._Uop _Expr = _Uop (_Tenv._Expr)
+
+   [V1] _Tenv.(_Expr _Op _Expr') = (_Tenv._Expr) _Op (_Tenv._Expr')

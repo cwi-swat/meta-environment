@@ -1,0 +1,35 @@
+equations
+
+  %% Valid Substitutions
+
+  [s1]  V  [E/V] = E
+
+  [s2]  V != V'
+        ======
+        V' [E/V] = V'
+
+  [s3]  (E1 E2) [E/V] =  (E1[E/V]) (E2[E/V])
+
+  [s4]  (lambda V . E1) [E/V] = lambda V . E1
+
+  [s5]  V != V',
+        member-of?(V', free-vars(E)) = false
+        ====================================
+        (lambda V' . E1) [E/V] = lambda V' . (E1[E/V])
+
+  [s6]  V != V',
+        member-of?(V', free-vars(E)) = true,
+        get-fresh(V', (E E1)) = V''
+        =================================================
+        (lambda V' . E1) [E/V] =
+          lambda V'' . (( E1 [V''/V'] ) [E/V] )
+
+  [g1]  free-vars(V) = [V]
+  [g2]  free-vars(E1 E2) = free-vars(E1) + free-vars(E2)
+  [g3]  free-vars(lambda V . E) = free-vars(E) - V
+
+  [g6]  member-of?(V, free-vars(E)) = true
+        ============================
+        get-fresh(V, E) = get-fresh(prime(V), E)
+
+  [default-g6] get-fresh(V, E) = V

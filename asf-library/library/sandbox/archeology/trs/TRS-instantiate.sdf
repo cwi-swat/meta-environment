@@ -1,0 +1,8 @@
+%%  TRS-instantiate
+
+imports
+    Booleans TRS-match
+
+exports
+    context-free syntax
+        inst "(" TERMS ";" BINDINGS ")"                 -> TERMS

@@ -1,0 +1,17 @@
+equations
+
+  [a1]  x + 0       =  x
+  [a2]  x + n       =  Sx + Pn
+  [a3]  x + z       =  Px + Sz
+  [t1]  x * 0       =  0
+  [t2]  x * n       =  x * P(n)  + x
+  [t3]  x * z       =  x * S(z) - x
+  [d1]  n  div n'   =  S((n-n') div n')   when  n \geq n' = true
+  [d6]  x mod x'    =  |x| -  | x' * ( x div x' ) |
+  [d7]  x / x' \    = < x' div x, x' mod x >
+  [g1]  gcd(n,n')   = gcd(n-n',n')      when n > n' = true
+  [g2]  gcd(n,n')   = gcd(n,n'-n)       when n < n' = true
+  [g3]  gcd(n,n)    = n
+  [p1]  x ^ 0       = 1
+  [p2]  x ^ n       = x * x ^ Pn
+  [m0]  max(n,n')   = S max(Pn, Pn')

@@ -1,0 +1,15 @@
+execute(
+  present-state: q1;
+  on (q1, blank) do (halt, q1);
+  on (q1, 1) do (write(blank), q2);
+  on (q2, 1) do (move-right, q2);
+  on (q2, blank) do (move-right, q3);
+  on (q3, 1) do (move-right, q3);
+  on (q3, blank) do (write(1), q4);
+  on (q4, 1) do (move-left, q4);
+  on (q4, blank) do (move-left, q5);
+  on (q5, 1) do (move-right, q5);
+  on (q5, blank) do (move-left, q1),
+
+  [scanned-symbol: 1 1 blank 1 1 1]
+)

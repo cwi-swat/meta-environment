@@ -1,0 +1,95 @@
+equations
+
+[10]    check-moves-in-pairnr( _Named-moves' _Ufns') =
+                check-restore-before-save( _Named-moves' ) +
+                check-input-moves( _Named-moves' _Ufns')
+
+[200a]  check-input-moves(_Named-move' _Named-moves' _Ufns') =
+                check-on-input(_Named-move' _Ufns') + check-input-moves(_Named-moves' _Ufns' )
+
+[200b]  check-input-moves(_Ufns' ) = empty-errors
+
+[201]   check-on-input( Instance : _Ufn' moves : _Moves' _Ufns') =
+                no-input(_Ufn' instances: _Ufns')
+
+[202]   no-input(_Ufn' instances: _Ufn' _Ufns') =
+                focus of input instance : _Ufn' may not be moved
+
+[203]   _Ufn' != _Ufn''
+        ==============
+        no-input(_Ufn' instances: _Ufn'' _Ufns') = no-input(_Ufn' instances: _Ufns')
+
+[204]   no-input(_Ufn' instances: ) = empty-errors
+
+[11]    check-restore-before-save(_Named-move' _Named-moves') =
+                check-moves-in-inst(_Named-move') + check-restore-before-save(_Named-moves')
+
+[12]    check-restore-before-save( ) = empty-errors
+
+[100]   no-restore(restore) = false
+
+[101]   no-save(save) = false
+
+[13a]   check-moves-in-inst(Instance : _Ufn' moves : save, _Moves') = empty-errors
+
+[13b]   no-restore(_Move') != false
+        ===========================================
+        check-moves-in-inst(Instance : _Ufn' moves : _Move') = empty-errors
+
+[13c]   check-moves-in-inst(Instance : _Ufn' moves : restore) =
+                focus of _Ufn' is restored but should be saved first
+
+[13d]   no-save(_Move') = false
+        ==========================================
+        check-moves-in-inst(Instance : _Ufn' moves : _Move' , _Moves') = empty-errors
+
+[13e]   check-moves-in-inst( Instance : _Ufn' moves : restore , _Moves' ) =
+                 focus of _Ufn' is restored but should be saved first
+
+[13f]   no-save(_Move') != false,
+        no-restore(_Move') != false
+        ==========================================
+        check-moves-in-inst(Instance : _Ufn' moves : _Move' , _Moves') =
+                check-moves-in-inst(Instance : _Ufn' moves : _Moves')
+
+[1a]    _Errors' = check-moves-in-pairnr (
+                        get-moves-in-pairnr(_State' _Int')
+                        input-names(get-inputs-in-pairnr(_State' _Int')))
+        ================================================
+        check-moves (_State' _Int' _Int') = connect-errors(_State' _Int' _Errors')
+
+[1b]    _Errors' = check-moves-in-pairnr (
+                        get-moves-in-pairnr(_State' _Int')
+                        input-names(get-inputs-in-pairnr(_State' _Int'))),
+        _Int' != _Int''
+        ================================================
+        check-moves (_State' _Int'' _Int') =
+                connect-errors(_State' _Int' _Errors') +
+                check-moves (_State' _Int'' _Int' + 1)
+
+[700]   get-inputs-in-pairnr(_State' _Int') = lookup-insts(insts(_State') _Int')
+
+[701a]  _Inst' = [ pairnr : _Int' uses _Cond-insts' _Acts-insts' _Inp-insts'
+                  _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts' ]
+        ==============
+        lookup-insts([ [_Inst'] _INSTS' ] _Int') = _Inst'
+
+[701b]  _Inst' = [ pairnr : _Int'' uses _Cond-insts' _Acts-insts' _Inp-insts'
+                  _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts' ],
+        _Int' != _Int''
+        ==============
+        lookup-insts([ [_Inst'] _INSTS' ] _Int') = lookup-insts([_INSTS'] _Int')
+
+[702]   input-names([pairnr: _Int' uses
+                _Cond-insts' _Acts-insts'
+                input instances : _Ufns'
+                _Outp-insts' _Sel-insts' _Red-insts' _Asgn-insts']) = _Ufns'
+
+[2]     get-moves-in-pairnr(_State' _Int') = lookup-moves(moves(_State') _Int')
+
+[3a]    lookup-moves([[[pairnr : _Int' moves per instance : _Named-moves']] _MOVESs'] _Int') = _Named-moves'
+
+[3b]    _Int' != _Int''
+        ===============
+        lookup-moves([[[pairnr : _Int'' moves per instance : _Named-moves']] _MOVESs'] _Int') =
+                lookup-moves([_MOVESs'] _Int')

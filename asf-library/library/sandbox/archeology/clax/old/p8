@@ -1,0 +1,3 @@
+eval ( < [<ID>, <STAT;*>, ]
+         <C-RECORD+>,
+         <D-STACK> > )

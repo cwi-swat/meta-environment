@@ -1,0 +1,13 @@
+%%  TcBooleans
+
+exports
+   sorts BOOL BOOL-CON
+   context-free syntax
+      true           -> BOOL-CON
+      false          -> BOOL-CON
+      BOOL-CON       -> BOOL
+      BOOL "&" BOOL  -> BOOL {assoc}
+      "(" BOOL ")"   -> BOOL {bracket}
+   variables
+      Bool[1-9']*    -> BOOL
+      Bool-con[1-9']*-> BOOL-CON

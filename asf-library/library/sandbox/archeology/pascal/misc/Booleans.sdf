@@ -1,0 +1,15 @@
+imports LayOut      
+
+exports
+  sorts BOOLEAN        
+  context-free syntax
+    "TRUE"              				-> BOOLEAN
+    "FALSE"             				-> BOOLEAN  
+    BOOLEAN "|" BOOLEAN 				-> BOOLEAN assoc
+    BOOLEAN "&" BOOLEAN 				-> BOOLEAN assoc
+    "(" BOOLEAN ")"     				-> BOOLEAN bracket
+
+priorities  "|" < "&" 
+
+hiddens
+  variables  b -> BOOLEAN

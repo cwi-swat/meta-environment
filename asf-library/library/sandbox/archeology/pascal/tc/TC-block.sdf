@@ -1,0 +1,53 @@
+%% Type check a block of a Pascal Program (ISO section 6.2.1.)
+%% Most of the work is done in the checks for procedure and function
+%% declarations:
+%% The heading must be correct (all parameter names different, all type
+%% identifiers legal), and the block must be correct.
+%% _All_ forwarded headings should be followed by an identification
+%% associating a body with that heading.
+
+imports TC-stat
+
+exports
+  context-free syntax
+    block-tc "(" BLOCK "," ENV ")"                            -> ENV
+
+hiddens
+  sorts FORW-DECLS PROFUN-OUT
+  context-free syntax
+    labels-tc "(" LABELS "," ENV ")"                          -> ENV
+    consts-tc "(" CONSTS "," ENV ")"                          -> ENV
+    types-tc "(" TYPES "," ENV ")"                            -> ENV
+    vars-tc "(" VARS "," ENV ")"                              -> ENV
+    procs-or-funs-tc "(" PROCS-OR-FUNS "," ENV ")"            -> ENV
+
+    profuns-tc"("{PROC-OR-FUN";"}* "," ENV ")"                -> ENV
+    profuns-tc"("{PROC-OR-FUN";"}* "," FORW-DECLS "," ENV ")" -> PROFUN-OUT
+    block-heading-tc "(" HEADING "," FORW-DECLS "," ENV ")"   -> PROFUN-OUT
+    forwarded-profun-tc "(" PROCEDURE-HEADING ","
+      FORW-DECLS "," ENV ")"                                  -> PROFUN-OUT
+    forwarded-profun-tc "(" FUNCTION-IDENTIFICATION ","
+      FORW-DECLS "," ENV ")"                                  -> PROFUN-OUT
+    forw-heading-tc "(" HEADING "," ENV ")"                   -> ENV
+    param-list-tc "(" FORMAL-PAR-LIST "," ENV ")"             -> ENV
+
+    "[" { HEADING ","}* "]"                                   -> FORW-DECLS
+    "<" FORW-DECLS "," ENV ">"                                -> PROFUN-OUT
+
+    remove IDENT from FORW-DECLS                              -> FORW-DECLS
+    get-id-list "(" FORW-DECLS ")"                            -> IDENT-LIST
+    is-forward-list-empty "?" "(" FORW-DECLS ")"              -> BOOLEAN
+    IDENT is a forwarded procedure in FORW-DECLS "?"          -> BOOLEAN
+    forward list FORW-DECLS should be empty in ENV            -> ENV
+
+  variables
+    Id-list       -> IDENT-LIST            Block              -> BLOCK
+    Labels        -> LABELS                Consts             -> CONSTS
+    Const-defs    -> {CONST-DEF ";"}*      [_]Types           -> TYPES
+    Type-defs     -> {TYPE-DEF ";"}*       Vars               -> VARS
+    Var-decls     -> {VAR-DECL ";"}*       Procs-or-funs      -> PROCS-OR-FUNS
+    Profuns       -> { PROC-OR-FUN ";"}*   Profun-decl        -> PROC-OR-FUN
+    Comp-stat     -> COMP-STAT             F[orw\-list]*[0-9]* -> FORW-DECLS
+    Forwards      -> { HEADING ","}*       Heading            -> HEADING
+    Headings[0-9]* -> { HEADING ","}*      Heading-plus       -> {HEADING ","}+
+    Fun-heading   -> FUNCTION-HEADING      Proc-heading       -> PROCEDURE-HEADING

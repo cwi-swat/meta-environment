@@ -1,0 +1,36 @@
+imports Contexts Booleans
+
+exports
+  sorts ENUM-OUT FIXED-OUT VAR-OUT
+  context-free syntax
+    CONTEXT is definition-point for SYMBOL "?"          -> BOOLEAN
+    CONTEXT defines SYMBOL as a label "?"               -> BOOLEAN
+    CONTEXT defines SYMBOL as a constant "?"            -> BOOLEAN
+    CONTEXT defines SYMBOL as a type "?"                -> BOOLEAN
+    CONTEXT defines SYMBOL as a variable "?"            -> BOOLEAN
+    CONTEXT defines SYMBOL as a function "?"            -> BOOLEAN
+    CONTEXT defines SYMBOL as a procedure "?"           -> BOOLEAN
+
+    CONTEXT defines SYMBOL as a normal constant "?"     -> BOOLEAN
+    CONTEXT defines SYMBOL as an enumeration constant "?" -> BOOLEAN
+    CONTEXT defines SYMBOL as a normal function "?"     -> BOOLEAN
+    CONTEXT defines SYMBOL as a predefined function "?" -> BOOLEAN
+    CONTEXT defines SYMBOL as a normal procedure "?"    -> BOOLEAN
+    CONTEXT defines SYMBOL as a predefined procedure "?"  -> BOOLEAN
+    CONTEXT defines SYMBOL as a block-mark "?"          -> BOOLEAN
+
+    "<" BOOLEAN "," ENTRY ">"                           -> ENUM-OUT
+    CONTEXT defines SYMBOL as an enum const             -> ENUM-OUT
+    VAR-OUT defines SYMBOL as an enum const in CONTEXT -> ENUM-OUT
+    FIXED-OUT defines SYMBOL as an enum const in CONTEXT -> ENUM-OUT
+    ENUM-OUT "|" ENUM-OUT                               -> ENUM-OUT {left}
+
+    is-record "?" "(" CONTEXT ")"                       -> BOOLEAN
+    CONTEXT "." fixed                                   -> FIXED-OUT
+    CONTEXT "." variant                                 -> VAR-OUT
+    FIXED-PART                                          -> FIXED-OUT
+    VAR-PART                                            -> VAR-OUT
+
+hiddens
+  variables
+    Enum[?]       -> BOOLEAN            E-out           -> ENUM-OUT

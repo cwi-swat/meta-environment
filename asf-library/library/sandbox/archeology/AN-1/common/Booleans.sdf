@@ -1,0 +1,15 @@
+%%  Booleans
+
+imports Layout
+
+exports
+  sorts BOOL
+  context-free syntax
+    true                        -> BOOL
+    false                       -> BOOL
+    BOOL "and" BOOL             -> BOOL  {left}
+    BOOL "or" BOOL              -> BOOL  {left}
+    "(" BOOL ")"                -> BOOL {bracket}
+hiddens
+  variables
+    p[0-9']*            -> BOOL

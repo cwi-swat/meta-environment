@@ -1,0 +1,25 @@
+%%
+%%
+%%      Tables
+%%
+%%
+
+   imports Booleans Types
+
+   exports
+      sorts VAR-PAIR VAR-SUBS VAR-SUBS-LOOKUP-OUT
+      context-free syntax
+         "(" GEN-VAR "," VAR ")"    -> VAR-PAIR
+         "[" {VAR-PAIR ","}* "]"    -> VAR-SUBS
+         VAR-PAIR "+" VAR-SUBS      -> VAR-SUBS
+	 "(" VAR-SUBS ")"           -> VAR-SUBS bracket
+         "<" BOOL "," VAR ">"       -> VAR-SUBS-LOOKUP-OUT
+         lookup GEN-VAR in VAR-SUBS -> VAR-SUBS-LOOKUP-OUT
+
+   hiddens
+      variables
+         key [12]* -> GEN-VAR
+         entry     -> VAR
+         pair      -> VAR-PAIR
+         pairs     -> {VAR-PAIR ","}*
+

@@ -1,0 +1,24 @@
+imports TC-expr-vars TC-expr-simple TC-expr-calls TC-spec-funs TC-spec-procs
+
+hiddens
+  context-free syntax
+    arithm-op-table                                     -> OPERATOR-TABLE
+    relational-op-table                                 -> OPERATOR-TABLE
+
+    unop-tc "(" OPERATOR "," EXPR "," ENV ")"           -> ENV
+    binop-tc "(" OPERATOR "," EXPR "," EXPR "," ENV ")" -> ENV
+    relop-tc "(" OPERATOR "," EXPR "," EXPR "," ENV ")" -> ENV
+    match-ops "(" OPERATOR-TABLE ","
+      OPERATOR "," OP-TYPE "," OP-TYPE "," ENV ")"      -> ENV
+    check-sets "(" CONTEXT "," CONTEXT ")" in ENV       -> ENV
+    get-result "(" CONTEXT "," CONTEXT ")"              -> CONTEXT
+
+    map "(" CONTEXT ")"                                 -> OP-TYPE
+    map "(" OP-TYPE ")"                                 -> CONTEXT
+    rmap "(" CONTEXT ")"                                -> OP-TYPE
+    omap "(" CONTEXT ")"                                -> OP-TYPE
+    is-just-an-identifier "?" "(" EXPR ")"              -> BOOLEAN
+
+  variables
+    [_]*Op[era]*tor -> OPERATOR        Op[0-9]*         -> OP-TYPE
+    Result-type     -> OP-TYPE         OpTable          -> OPERATOR-TABLE

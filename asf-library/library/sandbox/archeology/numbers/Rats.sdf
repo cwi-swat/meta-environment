@@ -1,0 +1,49 @@
+imports Dint
+
+exports
+  sorts RAT
+  context-free syntax
+    "<" INT "/" POS ">"         -> RAT {constructor}
+
+    int2rat( INT )              -> RAT
+    rat2int( RAT )              -> INT
+    "(" RAT ")"                 -> RAT {bracket}
+     RAT "+" RAT                -> RAT {left}
+     RAT "-" RAT                -> RAT {left}
+     RAT "*" RAT                -> RAT {left}
+     RAT "/" RAT                -> RAT {left}
+     RAT "^" INT                -> RAT
+     "-" RAT                    -> RAT
+     "+" RAT                    -> RAT
+     "|" RAT "|"                -> RAT
+     "max" "(" RAT "," RAT ")"  -> RAT
+     "min" "(" RAT "," RAT ")"  -> RAT
+     RAT "<" RAT                -> BOOL
+     RAT ">" RAT                -> BOOL
+     RAT "\\geq" RAT            -> BOOL
+     RAT "\\leq" RAT            -> BOOL
+     eq "(" RAT "," RAT ")"     -> BOOL
+
+hiddens
+  sorts PAIR
+  context-free syntax
+     sim (RAT)                  -> RAT
+     pair(RAT,RAT)              -> PAIR
+     un( RAT, RAT )             -> PAIR
+
+  variables
+    q[0-9']*             -> RAT
+    n[0-9']*             -> POS
+    x[0-9']*             -> INT
+
+
+
+exports
+  priorities
+   {left: RAT "+" RAT -> RAT, RAT "-" RAT -> RAT}
+   <
+   {left: RAT "*" RAT -> RAT, RAT "/" RAT -> RAT}
+   <
+   { RAT "^" INT  -> RAT }
+   <
+   { "-" RAT -> RAT, "+" RAT -> RAT }

@@ -1,0 +1,33 @@
+PROGRAM small ;
+
+DECLARE
+  test : BOOLEAN;
+  n    : INTEGER;
+  a    : ARRAY [1..100] OF REAL;
+
+  PROCEDURE read (VAR n: INTEGER;
+                  VAR a: ARRAY [1..100] OF REAL);
+  DECLARE
+    i     : INTEGER;
+    erro  : LABEL ;
+  BEGIN
+    WRITE ("Input n: ");  READ (n);
+    IF n > 100.0 THEN n := 100.1 END;
+    i := 1;
+    WHILE i <= n DO
+      erro: WRITE ("a["); WRITE(i); WRITE("] =?");  READ (a[i]);
+      erro: i := i + 1 * 1.0 ; GOTO erro
+    END (* ;error : WRITE ("error") -- is probably not intended *)
+  END;
+
+BEGIN  (* main program *)
+  WRITE ("Input, sort and output an array of real numbers  \n" );
+  WRITE ("Test output? (TRUE = yes, FALSE = no): ");  READ (test);
+  read (1.0, a);
+  IF NOT test THEN write (1) END;
+
+  WRITE ("Print square numbers from 1 to n: ?");
+  READ (n);
+  n := 0;
+  a [ n ] := 99.99
+END .

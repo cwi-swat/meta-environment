@@ -1,0 +1,70 @@
+equations
+
+  [c1]  x -/ x'     =  max(0, x - x')
+
+  [s1]  x - x'      = x + - x'
+
+  [a1]  |0|         = 0
+  [a2]  |n|         = n
+  [a3]  |z|         = - z
+
+  [d6]  x mod x'    =  |x| -  | x' * ( x div x' ) |
+
+  [f1]  0 !!        = 1
+  [f2]  n!!         = P(n)!! * n
+  [f3]  z!!         = (-z)!!
+
+
+  [m1]  max(0,0)    = 0
+  [m2]  max(0,n)    = n
+  [m3]  max(n,0)    = n
+  [m4]  max(0,z)    = 0
+  [m5]  max(z,0)    = 0
+  [m6]  max(z,z')   = - min(-z,-z')
+  [m7]  max(z,n')   = n'
+  [m8]  max(n,z)    = n
+
+  [m9]  min(x,y)     = x         when  max(x,y) = y
+ [m10]  min(x,y)     = y         when  max(x,y) = x
+
+  [g4]  gcd(z,x)     = gcd(-z,x)
+  [g5]  gcd(x,z)     = gcd(x,-z)
+
+  [d2]  n  div n'   = 0                  when  n <  n' = true
+  [d3]  0  div x    = 0
+  [d4]  z  div  x   =  -( -z div x)
+  [d5]  x  div  z   =  -( x div -z )
+
+
+  [l1]  x < y        = true      when max(x,y) != x
+  [l2]  x < y        = false     when max(x,y) = x
+  [r1]  x > y        = y < x
+  [r2]  x \leq y     = not x > y
+  [r3]  x \geq y     = not x < y
+
+  [e1]  eq(0,0)      = true
+  [e2]  eq(0,n)      = false
+  [e3]  eq(0,z)      = false
+  [e4]  eq(n,0)      = false
+  [e5]  eq(n,z)      = false
+  [e6]  eq(n,n')     = eq(Pn,Pn')
+  [e7]  eq(z,0)      = false
+  [e8]  eq(z,n)      = false
+  [e9]  eq(z,z')     = eq(Sz,Sz')
+
+  [a1]  | x | = p
+        ==============
+        int2nat( x ) = p
+
+  [i1]  is-pos?(n)  = true
+  [i2]  is-pos?(z)  = false
+  [i3]  is-pos?(0)  = false
+  [i4]  is-neg?(n)  = false
+  [i5]  is-neg?(z)  = false
+  [i6]  is-neg?(0)  = false
+  [i7]  is-zero?(n) = false
+  [i8]  is-zero?(z) = false
+  [i9]  is-zero?(0) = true
+
+ [i10]  if true then x else y fi = x
+ [i11]  if false then x else y fi = y

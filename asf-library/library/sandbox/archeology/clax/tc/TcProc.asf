@@ -1,0 +1,35 @@
+
+equations
+
+ [AE0] _Tenv.(( )) =
+
+ [AE1] _Type = _Tenv._Expr, _Tenv.((_ExprList)) = _TypeList
+       =========================================
+       _Tenv.((_Expr, _ExprList)) = _Type; _TypeList
+
+ [F0] formals PROCEDURE _Id = []
+ [F1] formals PROCEDURE _Id (_D) = [_D]
+ [F2] formals PROCEDURE _Id (VAR _D) = [_D]
+ [F3] formals PROCEDURE _Id (_Formal) = [_D],
+      formals PROCEDURE _Id (_Formal+) = [_D+]
+      ========================================
+      formals PROCEDURE _Id (_Formal;_Formal+) = [_D;_D+]
+
+ [S0] signature PROCEDURE _Id = _Id : PROC ()
+ [S1] signature PROCEDURE _Id (_Formal) = _Id : PROC (vtype(_Formal))
+ [S2] signature PROCEDURE Id (_Formal+) = Id : PROC(_VtypeList)  (* Id is a const :-*)
+      ===========================================================
+      signature PROCEDURE _Id (_Formal; _Formal+) = _Id : PROC(vtype(_Formal); _VtypeList)
+
+ [P0] isproc((PROC()) ()) = true
+ [P1] isproc((PROC(_Type; _VtypeList)) (_Type; _TypeList)) =
+      isproc((PROC(_VtypeList)) (_TypeList))
+ [P2] isproc((PROC(VAR _Type; _VtypeList)) (_Type; _TypeList)) =
+      isproc((PROC(_VtypeList)) (_TypeList))
+
+ [VA0] vararg((PROC()) ()) = true
+ [VA1] vararg((PROC(_Type; _VtypeList)) (_Expr, _ExprList )) = vararg((PROC(_VtypeList)) (_ExprList ))
+ [VA2] vararg((PROC(VAR _Type; _VtypeList)) (_Var, _ExprList )) = vararg((PROC(_VtypeList)) (_ExprList ))
+
+ [VT0] vtype(VAR _Id : _Type) = VAR _Type
+ [VT1] vtype(_Id : _Type) = _Type

@@ -1,0 +1,15 @@
+%%  Conditions
+
+imports
+    Actions
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+used-focusses "(" Condition-part ")"                    -> FILENAMES
+focusses-in-args "(" {Focus-cond-expr ","}* ")"         -> FILENAMES
+instance-of-arg "(" Focus-cond-expr ")"                 -> Unix-filename
+used-modules "(" Condition-part ")"                     -> MOD-NAMES

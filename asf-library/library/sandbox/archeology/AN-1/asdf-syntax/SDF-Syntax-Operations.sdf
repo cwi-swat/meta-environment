@@ -1,0 +1,106 @@
+%% Module SDF-Syntax-Operations.
+%%
+%% Define some operations on the SDF syntax, e.g. to concatenate to SDF definitions,
+%% to generate new sorts, etc.
+%% The simplify functions put the order of the various SDF parts in a standard
+%% one, which in turn eases analysis of the generated SDF.
+%%
+%%
+%% Author: Arie van Deursen, CWI, Amsterdam
+%% Date: May 1993.
+
+imports SDF-Syntax  Booleans Lisp
+
+exports
+  sorts SORT-LIST
+  context-free syntax
+    SECTION "||" SECTION                            -> SECTION {left}
+    nil                                             -> SECTION
+    "(" SECTION ")"                                 -> SECTION {bracket}
+    SDF-SECTIONS "||" SDF-SECTIONS                  -> SDF-SECTIONS {left}
+    nil                                             -> SDF-SECTIONS
+   "(" SDF-SECTIONS ")"                             -> SDF-SECTIONS {bracket}
+
+    SDF-DEFINITION "+" SDF-DEFINITION               -> SDF-DEFINITION {left}
+    SDF-SECTIONS "+" SDF-SECTIONS                   -> SDF-SECTIONS {left}
+    SDF-DEFINITION "." context-free-syntax          -> SDF-SECTION
+
+    make-sections( SDF-SECTION* )                   -> SECTION
+    make-sections-from-cfg(  CF-FUN* )              -> SECTION
+    make-sections-from-lex( LEXIC-FUN* )            -> SECTION
+    if BOOL then SDF-SECTIONS else SDF-SECTIONS fi  -> SDF-SECTIONS
+    simplify( SDF-DEFINITION )                      -> SDF-DEFINITION
+    sec-join( SDF-DEFINITION )                      -> SDF-DEFINITION
+    sects-sim( SDF-DEFINITION )                     -> SDF-DEFINITION
+    sect-sim( SECTION )                             -> SECTION
+    sdf-join( SDF-SECTIONS )                        -> SDF-SECTIONS
+    sdf-sect-sim( SDF-SECTIONS )                    -> SDF-SECTIONS
+
+    no-brackets( SDF-DEFINITION )                   -> SDF-DEFINITION
+    no-brackets( SDF-SECTIONS )                     -> SDF-SECTIONS
+    only-brackets( SDF-DEFINITION )                 -> SDF-DEFINITION
+    only-brackets( SDF-SECTIONS )                   -> SDF-SECTIONS
+
+    s(UPPER-ALPHA, NUMBER)                          -> UPPER-ALPHA
+
+    char2string( CHARACTER )                        -> STRING
+
+    CF-ELEM-LIST "||" CF-ELEM-LIST                  -> CF-ELEM-LIST {left}
+    "(" CF-ELEM-LIST ")"                            -> CF-ELEM-LIST {bracket}
+    "*error*"                                       -> CF-ELEM-LIST
+    CF-FUN "." cf-elem-list                         -> CF-ELEM-LIST
+
+    "{" { UPPER-ALPHA "," }* "}"                    -> SORT-LIST
+    SORT-LIST "\\cap" SORT-LIST                     -> SORT-LIST {left}
+    SORT-LIST "\\cup" SORT-LIST                     -> SORT-LIST {left}
+    "(" SORT-LIST ")"                               -> SORT-LIST {bracket}
+    UPPER-ALPHA "\\in" SORT-LIST                    -> BOOL
+    output-sorts( CF-FUN+ )                         -> SORT-LIST
+    output-sort( CF-FUN )                           -> UPPER-ALPHA
+    input-sorts( CF-ELEM-LIST )                     -> SORT-LIST
+    input-sort ( CF-ELEM )                          -> SORT-LIST
+    "get-imports" (SDF-DEFINITION)                  -> SORT-LIST
+    is-injection( CF-FUN )                          -> BOOL
+
+hiddens
+  context-free syntax
+    "LOWER-ALPHA" LISP          -> LOWER-ALPHA
+    "<<" LOWER-ALPHA ">>"       -> LISP
+    next-sym                    -> LOWER-ALPHA
+  variables
+    SDF-Section [']* "+"        -> SDF-SECTION+
+    SDF-Section [']* "*"        -> SDF-SECTION*
+    SDF-Section  [12]*          -> SDF-SECTION
+    SDF-Sections                -> SDF-SECTIONS
+    Section [0-9']*             -> SECTION
+    Section [0-9']* "*"         -> SECTION*
+    Section [0-9']* "+"         -> SECTION+
+    SDF-Definition [']*         -> SDF-DEFINITION
+    Lex-Fun [']* "+"            -> LEXIC-FUN+
+    Lex-Fun [']* "*"            -> LEXIC-FUN*
+    Lex-Fun [']*                -> LEXIC-FUN
+    CF-Fun [']* "+"             -> CF-FUN+
+    CF-Fun [']* "*"             -> CF-FUN*
+    CF-Fun [']*                 -> CF-FUN
+    "#" CF-Elem [']*            -> CF-ELEM
+    "#" CF-Elem-plus [']*       -> CF-ELEM+
+    "#" CF-Elem-star [']*       -> CF-ELEM*
+    "#" Sort [0-9']*            -> UPPER-ALPHA
+    "#" Sort [0-9']* "+"        -> UPPER-ALPHA+
+    "#" Sort [0-9']* "*"        -> UPPER-ALPHA*
+    "#" Module [0-9']* "+"      -> UPPER-ALPHA+
+    "#" Module [0-9']* "*"      -> UPPER-ALPHA*
+    "#" Module [0-9']*          -> UPPER-ALPHA
+    Var-Decl [']*               -> VAR-DECL
+    Var-Decl [']* "+"           -> VAR-DECL+
+    Var-Decl [']* "*"           -> VAR-DECL*
+    Char                        -> CHAR
+    Char[']*"+"                 -> CHAR+
+    N                           -> NUMBER
+    "#"S [0-9']*                -> UPPER-ALPHA
+    "#"S [0-9']* "+"            -> { UPPER-ALPHA "," }+
+    "#"S [0-9']* "*"            -> { UPPER-ALPHA "," }*
+    Attribute                   -> SDF-ATTRIBUTE
+    CF-Fun-Decl                 -> CF-FUN-DECL
+     "#" Lex-Elem [0-9']*       -> LEX-ELEM
+    "#" String [0-9']*          -> STRING

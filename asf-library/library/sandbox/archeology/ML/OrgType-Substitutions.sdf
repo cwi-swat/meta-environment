@@ -1,0 +1,36 @@
+%%
+%%
+%%      Type-Substitutions
+%%
+%%
+
+   imports
+      Tables
+	 Keys bound by
+	    sorts KEY => VAR
+	 to Types
+         Entries bound by
+	    sorts ENTRY => TYPE
+	    context-free syntax
+	       error-entry => error-type -> TYPE
+	 to Types
+	 renamed by
+	    sorts
+	       PAIR       => SUBS-PAIR
+	       TABLE      => TYPE-SUBS
+	       LOOKUP-OUT => TYPE-SUBS-LOOKUP-OUT
+
+   exports
+      context-free syntax
+         apply-type "(" TYPE-SUBS "," TYPE ")"   -> TYPE
+         apply-gt "(" TYPE-SUBS "," GEN-TYPE ")" -> GEN-TYPE
+         TYPE-SUBS o TYPE-SUBS                   -> TYPE-SUBS right
+
+   hiddens
+      variables
+         var        -> VAR
+         gv         -> GEN-VAR
+         type [12]* -> TYPE
+         gt [12]*   -> GEN-TYPE
+         pairs      -> {SUBS-PAIR ","}*
+         subs       -> TYPE-SUBS

@@ -1,0 +1,5 @@
+equations
+
+(* [t0] _Var [ _Expr ] = _Expr' [ _Expr ]  when _Expr' = _Var *)
+[t1] _Var := _Expr  = _Expr' := _Expr   when _Expr' = _Var
+[t2] READ ( _Var )  = READ ( _Expr )    when _Expr = _Var

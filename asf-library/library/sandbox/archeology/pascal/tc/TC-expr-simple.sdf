@@ -1,0 +1,6 @@
+%% Type check simple expressions: Numbers, Strings, Nil, Set-constructor
+imports Expr-misc
+
+hiddens
+  context-free syntax
+    member-tc "(" MEMBER-DESIGNATOR "," ENV ")"         -> ENV

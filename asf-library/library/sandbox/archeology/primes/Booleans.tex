@@ -1,0 +1,30 @@
+\MODULEBEGIN{Booleans}
+\IMPORTS{Layout }
+\EXPORTSBEGIN{}
+\SORTS{\ULEX{BOOL}}
+ \CFGBEGIN{}
+\CFGFUN{\LEX{true}}{\ULEX{BOOL}}{}
+ \CFGFUN{\LEX{false}}{\ULEX{BOOL}}{}
+ \CFGFUN{\ULEX{BOOL} \QLEX{$|$} \ULEX{BOOL}}{\ULEX{BOOL}}{\KW{assoc}}
+ \CFGFUN{\ULEX{BOOL} \QLEX{\&} \ULEX{BOOL}}{\ULEX{BOOL}}{\KW{assoc}}
+ \CFGFUN{\QLEX{$($} \ULEX{BOOL} \QLEX{$)$}}{\ULEX{BOOL}}{\KW{bracket}}
+ \CFGFUN{\QLEX{$!$} \ULEX{BOOL}}{\ULEX{BOOL}}{}
+\CFGEND{}
+ \VARIABLESBEGIN{}
+\VARDECL{\LEX{Bool} \LEX{$[$0$-$9$~']$}\LEX{$*$}}{\ULEX{BOOL}}
+\VARIABLESEND{}
+\EXPORTSEND{}
+\PRIORITIESBEGIN{}
+\PRIOFUNb{\QLEX{$|$}}
+ $<$ \PRIOFUNb{\QLEX{\&}}
+ $<$ \PRIOFUNb{\QLEX{$!$}}
+\PRIORITIESEND{}
+\EQUATIONSBEGIN{}
+\EQU{$[$\LEX{1}$]$}{\CON{true} $|$ \VAR{Bool}}{\CON{true}}
+\EQU{$[$\LEX{02}$]$}{\CON{false} $|$ \VAR{Bool}}{\VAR{Bool}}
+\EQU{$[$\LEX{03}$]$}{\CON{false} \& \VAR{Bool}}{\CON{false}}
+\EQU{$[$\LEX{04}$]$}{\CON{true} \& \VAR{Bool}}{\VAR{Bool}}
+\EQU{$[$\LEX{05}$]$}{$!$ \CON{true}}{\CON{false}}
+\EQU{$[$\LEX{06}$]$}{$!$ \CON{false}}{\CON{true}}
+\EQUATIONSEND{}
+\MODULEEND{}

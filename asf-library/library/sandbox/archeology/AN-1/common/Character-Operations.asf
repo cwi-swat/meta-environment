@@ -1,0 +1,211 @@
+equations
+
+  [1]   Lower = lower-alpha(Ch Ch*),
+        convert-string-uppercase( string( """ Ch """ ) ) = string( """ Ch' """ )
+        ==========================================
+        2upper( Lower ) = upper-alpha(Ch' Ch*)
+
+  [2]   2upper( upper ) = upper
+
+
+  [s1]  _SymCon = upper-alpha( Ch+ )
+        ============================
+        2string(_SymCon) = string( """ Ch+ """ )
+
+  [s2]  _SymCon = lower-alpha( Ch+ )
+        ============================
+        2string(_SymCon) = string( """ Ch+ """ )
+
+  [s3]  _SymCon = non-alpha( Ch+ )
+        ============================
+        2string(_SymCon) = string( """ Ch+ """ )
+
+  [s4]  _Variable = variable( Ch+ )
+        ==========================
+        2string(_Variable) = string( """ Ch+ """ )
+
+  [s4]  2string(is) = "is"
+  [s5]  2string(|) = "|"
+  [s6]  2string(*) = "*"
+  [s7]  2string(?) = "?"
+  [s8]  2string(+) = "+"
+  [s9]  2string(!) = "!"
+
+ [t1]   is-uppercase(_String) = true,
+        _String = string( """ Ch+ """ )
+        ==============================
+        2upper(_String) = upper-alpha( Ch+ )
+
+ [t2]   _String = string( """ Ch Ch* """),
+        is-lowercase(_String) = true,
+        convert-string-uppercase(string(""" Ch """)) = string( """ Ch' """)
+        ===================================================================
+        2upper(_String) = upper-alpha( Ch' Ch* )
+
+
+ [default-string2upper]  2upper(string(""" Ch """)) = S
+ [default-string2upper-long] 2upper(string(""" Ch Ch+""")) =
+        append1( 2upper(string(""" Ch """)), 2upper(string(""" Ch+ """)) )
+
+ [t4]   _String = string( """ Ch Ch+ """ )
+        ====================================
+        is-uppercase(_String) = is-uppercase(string(""" Ch """)) and is-uppercase(string( """ Ch+ """ ) )
+
+ [t5]   _String = string( """ Ch Ch+ """ )
+        ====================================
+        is-lowercase(_String) = is-lowercase(string(""" Ch """)) and is-lowercase(string( """ Ch+ """ ) )
+
+
+
+ [t8]   _String = string( """ Ch Ch+ """ ),
+        convert-string-uppercase( string( """ Ch """ )) = string( """ Ch' """),
+        convert-string-uppercase( string( """ Ch+ """ )) = string( """ Ch'+ """)
+        =======================================================================
+        convert-string-uppercase( _String ) = string( """ Ch' Ch'+ """ )
+
+ [t9]   _String = string( """ Ch Ch+ """ ),
+        convert-string-lowercase( string( """ Ch """ )) = string( """ Ch' """),
+        convert-string-lowercase( string( """ Ch+ """ )) = string( """ Ch'+ """)
+        =======================================================================
+        convert-string-lowercase( _String ) = string( """ Ch' Ch'+ """ )
+
+
+%% Generated equations:
+%%(de #:AG:upper-and-lower ()
+%%  (for (i (cascii 'A)  1 (cascii 'Z))
+%%    (let ((up  (ascii (uppercase i)))
+%%          (low (ascii (lowercase i)))
+%%         )
+%%      (print "  [" up  "1] "
+%%             "convert-string-uppercase(""" low """) = """ up """"
+%%      )
+%%      (print "  [" up  "2] "
+%%             "convert-string-lowercase("""  up """) = """ low """"
+%%      )
+%%      (print "  [" up  "3] " "is-uppercase(""" up """) = true")
+%%      (print "  [" up  "4] " "is-lowercase(""" low """) = true")
+%%    )
+%%  )
+%%)
+
+
+
+ [default-lower-case1] convert-string-uppercase( _String ) = _String
+ [default-lower-case2] convert-string-lowercase( _String ) = _String
+ [default-upper-case1] is-lowercase( _String ) = false
+ [default-upper-case2] is-uppercase( _String ) = false
+
+
+
+  [A1] convert-string-uppercase("a") = "A"
+  [A2] convert-string-lowercase("A") = "a"
+  [A3] is-uppercase("A") = true
+  [A4] is-lowercase("a") = true
+  [B1] convert-string-uppercase("b") = "B"
+  [B2] convert-string-lowercase("B") = "b"
+  [B3] is-uppercase("B") = true
+  [B4] is-lowercase("b") = true
+  [C1] convert-string-uppercase("c") = "C"
+  [C2] convert-string-lowercase("C") = "c"
+  [C3] is-uppercase("C") = true
+  [C4] is-lowercase("c") = true
+  [D1] convert-string-uppercase("d") = "D"
+  [D2] convert-string-lowercase("D") = "d"
+  [D3] is-uppercase("D") = true
+  [D4] is-lowercase("d") = true
+  [E1] convert-string-uppercase("e") = "E"
+  [E2] convert-string-lowercase("E") = "e"
+  [E3] is-uppercase("E") = true
+  [E4] is-lowercase("e") = true
+  [F1] convert-string-uppercase("f") = "F"
+  [F2] convert-string-lowercase("F") = "f"
+  [F3] is-uppercase("F") = true
+  [F4] is-lowercase("f") = true
+  [G1] convert-string-uppercase("g") = "G"
+  [G2] convert-string-lowercase("G") = "g"
+  [G3] is-uppercase("G") = true
+  [G4] is-lowercase("g") = true
+  [H1] convert-string-uppercase("h") = "H"
+  [H2] convert-string-lowercase("H") = "h"
+  [H3] is-uppercase("H") = true
+  [H4] is-lowercase("h") = true
+  [I1] convert-string-uppercase("i") = "I"
+  [I2] convert-string-lowercase("I") = "i"
+  [I3] is-uppercase("I") = true
+  [I4] is-lowercase("i") = true
+  [J1] convert-string-uppercase("j") = "J"
+  [J2] convert-string-lowercase("J") = "j"
+  [J3] is-uppercase("J") = true
+  [J4] is-lowercase("j") = true
+  [K1] convert-string-uppercase("k") = "K"
+  [K2] convert-string-lowercase("K") = "k"
+  [K3] is-uppercase("K") = true
+  [K4] is-lowercase("k") = true
+  [L1] convert-string-uppercase("l") = "L"
+  [L2] convert-string-lowercase("L") = "l"
+  [L3] is-uppercase("L") = true
+  [L4] is-lowercase("l") = true
+  [M1] convert-string-uppercase("m") = "M"
+  [M2] convert-string-lowercase("M") = "m"
+  [M3] is-uppercase("M") = true
+  [M4] is-lowercase("m") = true
+  [N1] convert-string-uppercase("n") = "N"
+  [N2] convert-string-lowercase("N") = "n"
+  [N3] is-uppercase("N") = true
+  [N4] is-lowercase("n") = true
+  [O1] convert-string-uppercase("o") = "O"
+  [O2] convert-string-lowercase("O") = "o"
+  [O3] is-uppercase("O") = true
+  [O4] is-lowercase("o") = true
+  [P1] convert-string-uppercase("p") = "P"
+  [P2] convert-string-lowercase("P") = "p"
+  [P3] is-uppercase("P") = true
+  [P4] is-lowercase("p") = true
+  [Q1] convert-string-uppercase("q") = "Q"
+  [Q2] convert-string-lowercase("Q") = "q"
+  [Q3] is-uppercase("Q") = true
+  [Q4] is-lowercase("q") = true
+  [R1] convert-string-uppercase("r") = "R"
+  [R2] convert-string-lowercase("R") = "r"
+  [R3] is-uppercase("R") = true
+  [R4] is-lowercase("r") = true
+  [S1] convert-string-uppercase("s") = "S"
+  [S2] convert-string-lowercase("S") = "s"
+  [S3] is-uppercase("S") = true
+  [S4] is-lowercase("s") = true
+  [T1] convert-string-uppercase("t") = "T"
+  [T2] convert-string-lowercase("T") = "t"
+  [T3] is-uppercase("T") = true
+  [T4] is-lowercase("t") = true
+  [U1] convert-string-uppercase("u") = "U"
+  [U2] convert-string-lowercase("U") = "u"
+  [U3] is-uppercase("U") = true
+  [U4] is-lowercase("u") = true
+  [V1] convert-string-uppercase("v") = "V"
+  [V2] convert-string-lowercase("V") = "v"
+  [V3] is-uppercase("V") = true
+  [V4] is-lowercase("v") = true
+  [W1] convert-string-uppercase("w") = "W"
+  [W2] convert-string-lowercase("W") = "w"
+  [W3] is-uppercase("W") = true
+  [W4] is-lowercase("w") = true
+  [X1] convert-string-uppercase("x") = "X"
+  [X2] convert-string-lowercase("X") = "x"
+  [X3] is-uppercase("X") = true
+  [X4] is-lowercase("x") = true
+  [Y1] convert-string-uppercase("y") = "Y"
+  [Y2] convert-string-lowercase("Y") = "y"
+  [Y3] is-uppercase("Y") = true
+  [Y4] is-lowercase("y") = true
+  [Z1] convert-string-uppercase("z") = "Z"
+  [Z2] convert-string-lowercase("Z") = "z"
+  [Z3] is-uppercase("Z") = true
+  [Z4] is-lowercase("z") = true
+
+
+
+ [a1]  append1( upper-alpha(Ch+), upper-alpha(Ch'+) ) =
+         upper-alpha( Ch+ Ch'+ )
+
+ [a2]  append2( upper-alpha(Ch+), upper-alpha(Ch'+) ) =
+         upper-alpha( Ch+ "-" Ch'+ )

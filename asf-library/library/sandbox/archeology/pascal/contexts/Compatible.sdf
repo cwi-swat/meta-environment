@@ -1,0 +1,7 @@
+%% Define compatible types.
+imports Context-sen-funs
+
+exports
+  context-free syntax
+    CONTEXT and CONTEXT are compatible "?"         	-> BOOLEAN
+    CONTEXT is assignment-compatible with CONTEXT "?"   -> BOOLEAN

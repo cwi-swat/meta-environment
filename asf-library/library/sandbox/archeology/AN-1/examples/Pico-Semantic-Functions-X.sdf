@@ -1,0 +1,32 @@
+imports
+MetaNotation-X Pico-Abstract-Syntax-X Pico-Semantic-Entities-X Layout
+  exports
+  context-free
+  syntax
+      "evaluate" TERM -> TERM
+      "the" "operation-result" "of" TERM -> TERM
+      "execute" TERM -> TERM
+      "elaborate" TERM -> TERM
+      "the" "initial-value" "of" TERM -> TERM
+      "run" TERM -> TERM
+
+      "evaluate" PLACE -> SYMBOL
+      "the" "operation-result" "of" PLACE  -> SYMBOL
+      "execute" PLACE -> SYMBOL
+      "elaborate" PLACE -> SYMBOL
+      "the" "initial-value" "of" PLACE -> SYMBOL
+      "run" PLACE -> SYMBOL
+
+
+priorities
+    TERM "INFIX" TERM -> TERM
+    <
+    "PREFIX" TERM -> TERM
+    < { "evaluate" TERM -> TERM,
+        "the" "operation-result" "of" TERM -> TERM,
+        "execute" TERM -> TERM,
+        "elaborate" TERM -> TERM,
+        "the" "initial-value" "of" TERM -> TERM,
+        "run" TERM -> TERM}
+    <
+    TERM "POSTFIX" -> TERM

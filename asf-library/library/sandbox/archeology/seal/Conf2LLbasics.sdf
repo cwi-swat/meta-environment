@@ -1,0 +1,22 @@
+%%  Conf2LLbasics
+
+imports
+    LL SEAL
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+comp-filename "(" ")"                           -> S_EXPR
+Unix-filename                                   -> S_EXPR
+add-double-quotes "(" Variable-name ")"         -> S_EXPR
+add-double-quotes "(" Sort ")"                  -> S_EXPR
+add-double-quotes "(" Module ")"                -> S_EXPR
+add-double-quotes "(" Function-name ")"         -> S_EXPR
+add-moves "(" {Focus-action ","}+ ")"           -> S_EXPR_LIST
+
+make-symbol "(" String ")"                      -> SYMBOL
+String                                          -> S_EXPR
+"'" Focus-action                                -> SYMBOL

@@ -1,0 +1,221 @@
+equations
+
+(* -------------------------------------------------------------------------- *)
+(* next frame - find first occurrence of procedure at _Path (static scope)     *)
+
+  [sn1]  next-scope([_Id, _Path, _DElem*] _DRec*, _Path) =
+           [_Id, _Path, _DElem*] _DRec*
+
+  [sn2]  _Path != _Path'
+         ==================================================
+         next-scope([_Id, _Path', _DElem*] _DRec*, _Path) =
+           next-scope(_DRec*, _Path)
+
+(* -------------------------------------------------------------------------- *)
+(* lookup : retrieve the current value of a variable from the stack           *)
+
+(* next frame - static scope                                                  *)
+
+  [lo1]  _DRec*' = next-scope(_DRec*, _Int*)
+         =================================================
+         lookup(_Id, _Path, [_Id', _Int* _Int, ] _DRec*) =
+           lookup(_Id, _Path, _DRec*')
+
+(* next identifier in same frame                                              *)
+
+  [lo2]  _Id != get-id(_DElem)
+         ===========================================================
+         lookup(_Id, _Path, [_Id', _Path', _DElem _DElem*] _DRec*) =
+           lookup(_Id, _Path, [_Id', _Path', _DElem*] _DRec*)
+
+(* lookup non-array identifier                                                *)
+
+  [lo3]  is-ref(_Value) = FALSE
+         ================================================================
+         lookup(_Id, , [_Id', _Path, _Id:_Value _DElem*] _DRec*) = _Value
+
+(* lookup array identifier                                                    *)
+
+  [lo4]  is-ref(_Value) = FALSE
+         ==============================================================
+         lookup(_Id, _Int+, [_Id', _Path, _Id:_Value _DElem*] _DRec*) =
+           lookup-list(_Int+, _Value)
+
+(* lookup non-array reference parameter                                       *)
+
+  [lo5]  lookup(_Id, , [_Id', _Path, _Id:ref(_Id'',_Path') _DElem*] _DRec*) =
+           lookup(_Id'', _Path', _DRec*)
+
+(* lookup array reference parameter                                           *)
+
+  [lo6]  lookup(_Id, _Int+, [_Id', _Path, _Id:ref(_Id'',) _DElem*] _DRec*) =
+           lookup(_Id'', _Int+, _DRec*)
+
+(* -------------------------------------------------------------------------- *)
+(* lookup-list : find a value in an array struct                              *)
+
+  [ll1]  lookup-list(_Int, [_Int, _High, _Value _Value*]) = _Value
+
+  [ll2]  lookup-list(_Int _Int+, [_Low, _High, _Value*]) =
+           lookup-list(_Int+, lookup-list(_Int, [_Low, _High, _Value*]))
+
+  [ll3]  _Int != _Low
+         ==================================================
+         lookup-list(_Int, [_Low, _High, _Value _Value*]) =
+           lookup-list(_Int, [incr(_Low), _High, _Value*])
+
+(* -------------------------------------------------------------------------- *)
+(* update : update the value of a variable on the stack                       *)
+
+(* next frame - static scope                                                  *)
+
+  [up1] _DRec*''  = next-scope(_DRec*, _Int*),
+        _DRec*    = _DRec*' _DRec*''',
+        _DRec*''' = _DRec*'',
+        _DRec*'''' = update(_Id, _Path, _DRec*'', _Value)
+        =========================================================
+        update(_Id, _Path, [_Id', _Int* _Int, ] _DRec*, _Value) =
+          [_Id', _Int* _Int, ] _DRec*' _DRec*''''
+
+(* next identifier in same frame                                              *)
+
+  [up2]  _Id != get-id(_DElem),
+         update(_Id, _Path, [_Id', _Path', _DElem*] _DRec*, _Value) =
+             [_Id'', _Path'', _DElem*'] _DRec*',
+         _Id'' = _Id',
+         _Path'' = _Path'
+         ===================================================================
+         update(_Id, _Path, [_Id', _Path', _DElem _DElem*] _DRec*, _Value) =
+           [_Id', _Path', _DElem _DElem*'] _DRec*'
+
+(* update non-array identifier                                                *)
+
+  [up3]  is-ref(_Value) = FALSE
+         ==================================================================
+         update(_Id, , [_Id', _Path, _Id:_Value _DElem*] _DRec*, _Value') =
+           [_Id', _Path, _Id:_Value' _DElem*] _DRec*
+
+(* update array identifier                                                    *)
+
+  [up4]  is-ref(_Value) = FALSE,
+         _Value'' = update-list(_Int+, _Value, _Value')
+         =======================================================================
+         update(_Id, _Int+, [_Id', _Path, _Id:_Value _DElem*] _DRec*, _Value') =
+           [_Id', _Path, _Id:_Value'' _DElem*] _DRec*
+
+(* update non-array reference parameter                                       *)
+
+  [up5]  update(_Id'', _Path', _DRec*, _Value) = _DRec*'
+         ============================================================================
+         update(_Id, , [_Id', _Path, _Id:ref(_Id'',_Path') _DElem*] _DRec*, _Value) =
+           [_Id', _Path, _Id:ref(_Id'',_Path') _DElem*] _DRec*'
+
+(* update array reference parameter                                           *)
+
+  [up6]  update(_Id'', _Int+, _DRec*, _Value) = _DRec*'
+         ===========================================================================
+         update(_Id, _Int+, [_Id', _Path, _Id:ref(_Id'',) _DElem*] _DRec*, _Value) =
+           [_Id', _Path, _Id:ref(_Id'', ) _DElem*] _DRec*'
+
+
+(* -------------------------------------------------------------------------- *)
+(* update-list : update an array element, compute the modified stack          *)
+
+  [ul1]  update-list(_Low, [_Low, _High, _Value _Value*], _Value') =
+           [_Low, _High, _Value' _Value*]
+
+  [ul2]  _Int != _Low,
+         _Low' = incr(_Low),
+         update-list(_Int, [_Low', _High, _Value*], _Value') = [_Low'', _High', _Value*']
+         ===========================================================
+         update-list(_Int, [_Low, _High, _Value _Value*], _Value') =
+           [_Low, _High', _Value _Value*']
+
+  [ul3]  update-list(_Low _Int+, [_Low, _High, _Value _Value*], _Value') =
+           [_Low, _High, update-list(_Int+, _Value, _Value') _Value*]
+
+  [ul4]  _Int != _Low,
+         _Low' = incr(_Low),
+         update-list(_Int _Int+, [_Low', _High, _Value*], _Value') = [_Low'', _High', _Value*']
+         =================================================================
+         update-list(_Int _Int+, [_Low, _High, _Value _Value*], _Value') =
+           [_Low, _High', _Value _Value*']
+
+(* -------------------------------------------------------------------------- *)
+(* lookup-proc : lookup procedure definition *)
+
+(* next frame -- static scope                                                 *)
+
+  [lp1]  _DRec*' = next-scope(_DRec*, _Int*)
+         =========================================================================
+         lookup-proc(_Id, [_Id', _Int* _Int, ] _DRec*) = lookup-proc(_Id, _DRec*')
+
+(* next identifier in same frame                                              *)
+
+  [lp2]  _Id != get-id(_DElem)
+         ========================================================
+         lookup-proc(_Id, [_Id', _Path, _DElem _DElem*] _DRec*) =
+           lookup-proc(_Id, [_Id', _Path, _DElem*] _DRec*)
+
+(* find procedure definition                                                  *)
+
+  [lp3]  lookup-proc(_Id, [_Id', _Path, _Id:_Path':_ProcDecl _DElem*] _DRec*) =
+           _Id:_Path':_ProcDecl
+
+(* -------------------------------------------------------------------------- *)
+(* lookup the type of a variable - not specified for non-simple types         *)
+
+  [ty1]  lookup(_Id, _Path, _DStack) = _Int
+         ===================================
+         type(_Id, _Path, _DStack) = INTEGER
+
+  [ty2]  lookup(_Id, _Path, _DStack) = _Real
+         ================================
+         type(_Id, _Path, _DStack) = REAL
+
+  [ty3]  lookup(_Id, _Path, _DStack) = _Bool
+         ===================================
+         type(_Id, _Path, _DStack) = BOOLEAN
+
+(* -------------------------------------------------------------------------- *)
+(* lookup statement sequence for label                                        *)
+(* note: only look in the first record, because ClaX only allows local GOTOs  *)
+
+
+(* next element of the same record                                            *)
+
+  [ls1]  _Id != get-id(_DElem)
+         ========================================================
+         lookup-seq(_Id, [_Id', _Path, _DElem _DElem*] _DRec*) =
+           lookup-seq(_Id, [_Id', _Path, _DElem*] _DRec*)
+
+(* find entry for label                                                       *)
+
+  [lp3]  lookup-seq(_Id, [_Id', _Path, _Id:_Seq _DElem*] _DRec*) = _Seq
+
+
+(* -------------------------------------------------------------------------- *)
+(* is-ref : indicates if a value should be dereferenced                       *)
+
+  [ir1]  is-ref(ref(_Id,_Path)) = TRUE
+
+  [ir2]  is-ref(_Expr) = FALSE
+
+  [ir3]  is-ref([_Low, _High, _Value+]) = FALSE
+
+(* -------------------------------------------------------------------------- *)
+(* get-name : retrieve procedure's name from Procedure Declaration            *)
+
+  [gn1]  get-name(PROCEDURE _Id; _Block) = _Id
+  [gn2]  get-name(PROCEDURE _Id(_Formal+); _Block) = _Id
+
+(* -------------------------------------------------------------------------- *)
+(* access functions for IDs and VALUE's                                       *)
+
+  [gi1]  get-id(_Id:_Value) = _Id
+  [gi2]  get-id(_Id:_Path:_ProcDecl) = _Id
+  [gi3]  get-id(_Id:_Seq) = _Id
+
+  [gv1]  get-value(_Id:_Value) = _Value
+
+  [gs1]  get-seq(_Id:_Seq) = _Seq

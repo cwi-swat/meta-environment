@@ -1,0 +1,18 @@
+%% Naturals
+
+imports
+    Layout
+exports
+    sorts
+        NAT
+    lexical syntax
+        [0-9]+                  -> NAT
+    context-free syntax
+        "_succ" "(" NAT ")"     -> NAT
+        "_pred" "(" NAT ")"     -> NAT
+    variables
+        [_]Char[+][']*          -> CHAR+
+        [_]Char[']*             -> CHAR
+        [_]Nat[']*              -> NAT
+        [_]Nat[*][']*           -> NAT*
+        [_]Nat[+][']*           -> NAT+

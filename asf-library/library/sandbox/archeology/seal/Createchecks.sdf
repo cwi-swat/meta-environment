@@ -1,0 +1,33 @@
+%%  Createchecks
+
+imports
+    Sym-tab Errors
+
+exports
+    sorts
+        <Id>
+    lexical syntax
+        <LexicalFunction>
+    context-free syntax
+check-creates "(" STATE INT INT ")"             -> ERRORS
+check-creates-in-pairnr "(" FILENAMES ";" FILENAMES ";" FILENAMES ")" -> ERRORS
+
+get-inputs "(" STATE INT ")"                    -> FILENAMES
+get-assigns "(" STATE INT ")"                   -> FILENAMES
+get-selects "(" STATE INT ")"                   -> FILENAMES
+get-cond-insts "(" STATE INT ")"                -> FILENAMES
+get-act-insts "(" STATE INT ")"                 -> FILENAMES
+lookup-cond-insts "(" INST-LIST INT ")"         -> FILENAMES
+lookup-act-insts "(" INST-LIST INT ")"          -> FILENAMES
+lookup-inputs "(" INST-LIST INT ")"             -> FILENAMES
+lookup-assigns "(" INST-LIST INT ")"            -> FILENAMES
+lookup-selects "(" INST-LIST INT ")"            -> FILENAMES
+
+check-select-use "(" FILENAMES ";" FILENAMES ")" -> ERRORS
+check-no-assign "(" FILENAMES ";" FILENAMES ")" -> ERRORS
+
+instance ":" Unix-filename should be used in a select action -> ERRORS
+focus assignment is not allowed for input instance ":" Unix-filename -> ERRORS
+
+name-in "(" Unix-filename ";" FILENAMES ")"     -> BOOL
+remove-filenames "(" FILENAMES "," FILENAMES ")" -> FILENAMES

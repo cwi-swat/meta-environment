@@ -1,0 +1,19 @@
+  %%
+%% Booleans
+%%
+
+   imports Layout
+
+   exports
+     sorts BOOL
+     context-free syntax
+         true           -> BOOL
+         false          -> BOOL
+         BOOL "|" BOOL  -> BOOL { left }
+         BOOL "&" BOOL  -> BOOL { left }
+         not BOOL       -> BOOL
+         "(" BOOL ")"   -> BOOL { bracket }
+      variables
+         "_Bool" [0-9']+   -> BOOL
+   priorities
+      "|" < "&"

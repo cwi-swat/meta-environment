@@ -1,0 +1,198 @@
+equations
+
+  { Dealing with control variables. }
+  [tr0] take care of possibly threatening variable _act-par in E = E
+          when is-just-an-identifier?( _act-par ) != TRUE
+
+  [tr1] is-potential-control-variable?(_id, E1.context) != TRUE
+        =======================================================
+        take care of possibly threatening variable _id in E1 = E1
+
+  [tr2] is-potential-control-variable?(_id, E1.context) = TRUE,
+        _id should not be a control variable in E1 = E2,
+        mark-variable(_id, possibly-threatening, E2) = E3
+        =============================================
+        take care of possibly threatening variable _id in E1 = E3
+
+
+  [pc1] _id exists in inner block of Context? != TRUE,
+        find _id in Context = Definition,
+        Definition defines _id as a variable? = TRUE,
+        is-ordinal-type?(Definition.type) = TRUE
+        ===================================
+        is-potential-control-variable?(_id, Context) = TRUE
+
+
+  [ic1] find _id in E.context = Definition,
+        is-control-variable?(Definition) = TRUE
+        =======================================
+        _id should not be a control variable in E =
+          add-error [Illegal use of control variable _id.]  to E
+
+  [ic2] find _id in E.context = Definition,
+        is-control-variable?(Definition) != TRUE
+        =======================================
+        _id should not be a control variable in E = E
+
+
+  [ic5] find _id in E.context = Definition,
+        is-possibly-threatening?(Definition) = TRUE
+        =======================================
+        _id should not be a possibly threatening variable in E =
+          add-error [Illegal use of control variable _id.] to E
+
+  [ic6] find _id in E.context = Definition,
+        is-possibly-threatening?(Definition) = TRUE
+        =======================================
+        _id should not be a possibly threatening variable in E = E
+
+
+  [mt1] mark-variable(_id, Status, E) =
+          set-context of E to (set var-status of _id in E.context to Status)
+
+
+  { Actual parameters }
+  [ap1] non-formatted-par-tc( Designator _expr, E1 ) = E2,
+        _format1 should be an empty format in E2 = E3
+        ==============================================
+        act-par-tc( Designator _expr _format1 , E1 ) = E3
+
+  [ap2] non-formatted-par-tc( value _expr, E1 ) = expr-tc( _expr, E1 )
+
+  [ap3] var-access-tc( _expr, E1 ) = E2
+        ===============================
+        non-formatted-par-tc( var _expr, E1 ) = set-result of E2 to E2.result.type
+
+  [ap5] non-formatted-par-tc( procedure _expr, E ) =
+                _expr should be a procedure identifier in E
+
+  [ap6] non-formatted-par-tc( function _expr, E ) =
+                _expr should be a function identifier in E
+
+  [ap7] should be an empty format in E = E
+  [ap8] _format should be an empty format in E =
+          add-error [Illegal use of formatted write parameter.] to E
+            when _format !=
+
+
+  { classification of expressions }
+  [ce0] is-just-an-identifier?( _id ) = TRUE
+
+  [ce1] is-simple-expr?( _uns-number, Context ) = TRUE
+  [ce2] is-simple-expr?( _string, Context ) = TRUE
+  [ce3] is-simple-expr?( nil, Context ) = TRUE
+  [ce4] is-simple-expr?( [ _member* ], Context ) = TRUE
+  [ce5] is-simple-expr?( _id, Context ) = TRUE
+          when (find _id in Context) defines _id as a constant? = TRUE
+
+  [ce6] is-var-access?( _id, Context ) =  TRUE
+          when (find _id in Context) defines _id as a variable? = TRUE
+  [ce7] is-var-access?( _var-acc, Context ) = TRUE
+          when is-just-an-identifier?( _var-acc ) != TRUE
+
+  [ce8] _expr should be a variable-access in E = E
+          when is-var-access?( _expr, E.context ) = TRUE
+  [ce9] _expr should be a variable-access in E =
+          add-error [_expr: must be a variable access.] to E
+            when is-var-access?( _expr, E.context ) != TRUE
+
+  [ce0] is-function-call?(_id, Context) = TRUE
+          when (find _id in Context) defines _id as a function? = TRUE
+  [ce1] is-function-call?( _id _NE-act-par-list, Context ) = TRUE
+
+  [ce2] is-a-procedure-identifier?(_id, Context) = TRUE
+          when (find _id in Context) defines _id as a procedure? = TRUE
+  [ce3] is-a-function-identifier?(_id, Context) = TRUE
+          when (find _id in Context) defines _id as a function? = TRUE
+
+  [ce4] _id should be a procedure identifier in E =
+          set-result of E to (find _id in E.context)
+            when is-a-procedure-identifier?(_id, E.context) = TRUE
+  [ce5] _expr should be a procedure identifier in E =
+          add-error [_expr: Procedure identifier expected.] to E
+            when is-a-procedure-identifier?(_expr, E.context) != TRUE
+
+  [ce6] _id should be a function identifier in E =
+          set-result of E to (find _id in E.context)
+            when is-a-procedure-identifier?(_id, E.context) = TRUE
+  [ce7] _expr should be a function identifier in E =
+          add-error [_expr: Function identifier expected.] to E
+            when is-a-procedure-identifier?(_expr, E.context) != TRUE
+
+
+  [ip1] is-packed?(_id, Context) = is-packed?(find _id in Context)
+  [ip2] is-packed?( _var-acc [ _expr ] , Context ) =
+                is-packed?( _var-acc , Context )
+  [ip3] is-packed?( _var-acc . _id, Context ) =
+                is-packed?( _var-acc , Context )
+
+  [ip4] component-of-packed?( _var-acc [ _expr ], Context ) =
+                is-packed?( _var-acc, Context )
+  [ip5] component-of-packed?( _var-acc . _id, Context ) =
+                is-packed?( _var-acc, Context )
+
+  [ip6] component-of-packed?( _act-par, E.context ) != TRUE
+        ===================================================
+        _act-par should not be a packed component in E = E
+
+  [ip7] component-of-packed?( _var-acc, E.context ) = TRUE
+        ===================================================
+        _var-acc should not be a packed component in E =
+          add-error [Reference to packed component in _var-acc not allowed.]
+            to E
+
+
+  [np1] no should be given in E = E
+  [np2] no _act-par+ should be given in E =
+          add-error [Too many actual parameters.] to E
+
+
+  [fv1] act-par-tc(var _act-par, E1) = E2,
+        E2.result should be a file in E2 = E3
+        ======================================
+        _act-par should be a file variable in E1 = E3
+
+
+  [if1] is-file-variable?(_act-par, E) =
+          is-var-access?(_act-par, E.context) &
+            is-file-type?(act-par-tc(var _act-par, E).result)
+
+  [cn1] is-char-or-number?(T) = TRUE when T = char-type
+  [cn2] is-char-or-number?(T) = TRUE when is-number-type?(T) = TRUE
+  [cn3] T should be a character or a number in E = E
+          when is-char-or-number?(T) = TRUE
+  [cn4] T should be a character or a number in E =
+          add-error [Number-type or character-type expected.] to E
+            when is-char-or-number?(T) != TRUE
+
+  [cn5] is-bool-or-string?(T) = TRUE when T = boolean-type
+  [cn6] is-bool-or-string?(T) = TRUE when is-string-type?(T) = TRUE
+  [cn7] T should be a number, character, bool, or string in E = E
+          when is-bool-or-string?(T) | is-char-or-number?(T) = TRUE
+  [cn8] T should be a number, character, bool, or string in E =
+          add-error [Number, character, boolean or string type expected.] to E
+            when is-bool-or-string?(T) | is-char-or-number?(T) = TRUE
+
+  [tf1] is-text-file?(_act-par, E) =  TRUE when
+                is-var-access?(_act-par, E.context) = TRUE,
+                act-par-tc(var _act-par, E).result = text-type
+
+  [tf2] _act-par should be a text file variable in E = E
+          when is-text-file?(_act-par, E) = TRUE
+  [tf3] _act-par should be a text file variable in E =
+          add-error [_act-par is not a text file.] to E
+            when is-text-file?(_act-par, E) != TRUE
+
+
+  [s2]  var-access-tc( _var-acc, E1 ) = E2,
+        selector-field?(E2.result, _id1) = TRUE
+        =======================================
+        act-par-is-selector?(_var-acc : _id1, E1) = TRUE
+
+  [s3]  _act-par should not be a variant selector field in Env = Env
+          when act-par-is-selector?(_act-par, Env) != TRUE
+
+  [s4]  _act-par should not be a variant selector field in Env =
+          add-error [Variant selector cannot be passed as var-parameter.]
+            to Env
+              when act-par-is-selector?( _act-par, Env ) = TRUE

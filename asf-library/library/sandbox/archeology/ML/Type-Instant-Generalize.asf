@@ -1,0 +1,38 @@
+
+   equations
+
+      [1]   instant(gt, var) = <type, var1>
+	       when ins-subs(gt, var, []) = <type, var1, subs>
+
+      [2]      var elm env = true
+            ==========================
+            generalize(var, env) = var
+      [3]      lex-var("s" n) elm env = false
+            ====================================================
+            generalize(lex-var("s" n), env) = lex-gen-var("b" n)
+      [4]   generalize(bool, env) = bool
+      [5]   generalize(nat, env)  = nat
+      [6]   generalize(type1 -> type2, env)
+               = generalize(type1, env) -> generalize(type2, env)
+      [7]   generalize(type1 # type2, env)
+               = generalize(type1, env) # generalize(type2, env)
+
+      [8]   ins-subs(type, var, subs) = <type, var, subs>
+      [9]      lookup gv in subs = <false, var1>,
+               var2 = next(var)
+            =========================================================
+            ins-subs(gv, var, subs) = <var2, var2, (gv, var2) + subs>
+      [10]     lookup gv in subs = <true, var1>
+            ===========================================
+            ins-subs(gv, var, subs) = <var1, var, subs>
+      [11]     ins-subs(gt1, var, subs) = <type1, var1, subs1>,
+               ins-subs(gt2, var1, subs1) = <type2, var2, subs2>
+            ====================================================
+            ins-subs(gt1 -> gt2, var, subs) 
+               = <type1 -> type2, var2, subs2>
+      [12]     ins-subs(gt1, var, subs) = <type1, var1, subs1>,
+               ins-subs(gt2, var1, subs1) = <type2, var2, subs2>
+            ====================================================
+            ins-subs(gt1 # gt2, var, subs)
+               = <type1 # type2, var2, subs2>
+

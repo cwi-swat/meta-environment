@@ -1,0 +1,42 @@
+%% Type check the definitions and declarations of a Pascal Program.
+imports ShouldBe
+
+exports
+  sorts VAL-OUT
+  context-free syntax
+    label-decls-tc "(" {LABEL ","}* "," ENV ")"         -> ENV
+    const-defs-tc "(" {CONST-DEF ";"}* "," ENV ")"      -> ENV
+    const-tc "(" CONST "," ENV ")"                      -> ENV
+    type-defs-tc "(" {TYPE-DEF ";"}* "," ENV ")"        -> ENV
+    type-tc "(" TYPE-DENOTER "," ENV ")"                -> ENV
+    var-decls-tc "(" { VAR-DECL ";"}* "," ENV ")"       -> ENV
+    new-block-with-fields "(" CONTEXT "," ENV ")"       -> ENV
+    const-val-list-tc "(" {CONST ","}+ ","
+      CONTEXT "," VAL-LIST "," ENV ")"                  -> VAL-OUT
+    "<" VAL-LIST "," ENV ">"                            -> VAL-OUT
+
+hiddens
+  sorts PTR-OUT ID-LIST PTR-VAL-OUT
+  context-free syntax
+    "[" { IDENT ","}* "]"                               -> ID-LIST
+    "<" ID-LIST "," ENV ">"                             -> PTR-OUT
+    type-ptrs-tc "(" { TYPE-DEF ";"}* "," ENV ")"       -> PTR-OUT
+    type-denot-tc "(" TYPE-DENOTER "," ENV ")"          -> PTR-OUT
+    fields-tc "(" FIELD-LIST "," ENV ")"                -> PTR-OUT
+    fixed-tc "(" FIXED-PART "," ENV ")"                 -> PTR-OUT
+    variant-tc "(" VAR-PART "," ENV ")"                 -> PTR-OUT
+    "<" ID-LIST "," VAL-LIST "," ENV ">"                -> PTR-VAL-OUT
+    variant-tc "(" {VARIANT ";"}+ "," CONTEXT "," VAL-LIST "," ENV ")"
+                                                        -> PTR-VAL-OUT
+    selector-tc "(" SELECTOR "," ENV ")"                -> ENV
+    check-pointer-identifiers "(" ID-LIST "," ENV ")"   -> ENV
+    ID-LIST should be empty in ENV                      -> ENV
+
+  variables
+    V[123]*       -> INT            Component-type       -> TYPE-DENOTER
+    Ptr-list[0-9]* -> ID-LIST      Index-type[123]*     -> TYPE-DENOTER
+    Ptr-ids[0-9]*  -> {IDENT ","}* Index-types[+][123]* -> {TYPE-DENOTER "," }+
+    Const-def      -> CONST-DEF    Const-defs           -> {CONST-DEF ";"}*
+    Type-def       -> TYPE-DEF     Type-defs            -> {TYPE-DEF ";"}*
+    Var-decl       -> VAR-DECL     Var-decls            -> {VAR-DECL ";"}*
+    Ptr-ids[0-9]*  -> {IDENT ","}*

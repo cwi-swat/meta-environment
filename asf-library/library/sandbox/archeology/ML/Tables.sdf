@@ -1,0 +1,33 @@
+%%
+%%
+%%      Tables
+%%
+%%
+
+   imports Booleans
+
+   parameter Keys
+      sorts KEY
+
+   parameter Entries
+      sorts ENTRY
+      context-free syntax
+         error-entry -> ENTRY
+
+   exports
+      sorts PAIR TABLE LOOKUP-OUT
+      context-free syntax
+         "(" KEY "," ENTRY ")"  -> PAIR
+         "[" {PAIR ","}* "]"    -> TABLE
+         PAIR "+" TABLE         -> TABLE
+	 "(" TABLE ")"          -> TABLE bracket
+         "<" BOOL "," ENTRY ">" -> LOOKUP-OUT
+         lookup KEY in TABLE    -> LOOKUP-OUT
+
+   hiddens
+      variables
+         key [12]* -> KEY
+         entry     -> ENTRY
+         pair      -> PAIR
+         pairs     -> {PAIR ","}*
+

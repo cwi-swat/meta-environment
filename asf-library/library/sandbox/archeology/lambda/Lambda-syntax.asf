@@ -1,0 +1,3 @@
+equations
+
+  [1]  lambda V+ V . E = lambda V+ . lambda V . E

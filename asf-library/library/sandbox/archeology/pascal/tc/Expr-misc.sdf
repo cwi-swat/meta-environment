@@ -1,0 +1,57 @@
+%% Several general functions needed for typechecking expressions.
+imports TC-defs
+
+exports
+  context-free syntax
+    expr-tc "(" EXPR "," ENV ")"                               -> ENV
+    sim-expr-tc "(" EXPR "," ENV ")"                           -> ENV
+    var-access-tc "(" EXPR "," ENV ")"                         -> ENV
+    proc-call-tc "(" STATEMENT "," ENV ")"                     -> ENV
+    fun-call-tc "(" EXPR "," ENV ")"                           -> ENV
+    spec-fun-tc "(" IDENT ACTUAL-PAR-LIST "," ENV ")"          -> ENV
+    spec-proc-tc "(" IDENT ACTUAL-PAR-LIST "," ENV ")"         -> ENV
+
+exports
+  sorts DESIGNATOR
+  context-free syntax
+    value                                                      -> DESIGNATOR
+    var                                                        -> DESIGNATOR
+    procedure                                                  -> DESIGNATOR
+    function                                                   -> DESIGNATOR
+    FORMAT should be an empty format in ENV                    -> ENV
+    act-par-tc "(" DESIGNATOR ACTUAL-PAR "," ENV ")"           -> ENV
+
+    take care of possibly threatening variable ACTUAL-PAR in ENV    -> ENV
+    IDENT should not be a control variable in ENV              -> ENV
+    IDENT should not be a possibly threatening variable in ENV -> ENV
+    mark-variable "(" IDENT "," VAR-STATUS "," ENV ")"         -> ENV
+     is-simple-expr "?" "(" EXPR "," CONTEXT ")"               -> BOOLEAN
+    is-var-access "?" "(" ACTUAL-PAR "," CONTEXT ")"           -> BOOLEAN
+    is-function-call "?" "(" EXPR "," CONTEXT ")"              -> BOOLEAN
+    is-a-procedure-identifier "?" "(" EXPR "," CONTEXT ")"     -> BOOLEAN
+    is-a-function-identifier "?" "(" EXPR "," CONTEXT ")"      -> BOOLEAN
+     ACTUAL-PAR should be a variable-access in ENV             -> ENV
+    is-just-an-identifier "?" "(" ACTUAL-PAR ")"               -> BOOLEAN
+    is-packed "?" "(" ACTUAL-PAR "," CONTEXT ")"               -> BOOLEAN
+    component-of-packed "?" "(" ACTUAL-PAR "," CONTEXT ")"     -> BOOLEAN
+    is-file-variable "?" "(" ACTUAL-PAR "," ENV ")"            -> BOOLEAN
+    is-text-file "?" "(" ACTUAL-PAR "," ENV ")"                -> BOOLEAN
+    is-char-or-number "?" "(" CONTEXT ")"                      -> BOOLEAN
+    is-bool-or-string "?" "(" CONTEXT ")"                      -> BOOLEAN
+    act-par-is-selector "?" "(" ACTUAL-PAR "," ENV ")"         -> BOOLEAN
+    CONTEXT should be a character or a number in ENV           -> ENV
+    CONTEXT should be a "number," "character," "bool," or string in ENV -> ENV
+    EXPR should be a procedure identifier in ENV               -> ENV
+    EXPR should be a function identifier in ENV                -> ENV
+    ACTUAL-PAR "should be a text file variable in" ENV         -> ENV
+    ACTUAL-PAR should not be a packed component in ENV         -> ENV
+    ACTUAL-PAR should be a file variable in ENV                -> ENV
+    ACTUAL-PAR "should not be a variant selector field in" ENV -> ENV
+    no { ACTUAL-PAR ","}* should be given in ENV               -> ENV
+
+hiddens
+  context-free syntax
+    is-potential-control-variable "?" "(" IDENT "," CONTEXT ")"-> BOOLEAN
+    non-formatted-par-tc "(" DESIGNATOR EXPR "," ENV ")"       -> ENV
+  variables
+    Definition -> CONTEXT    Status -> VAR-STATUS   Designator -> DESIGNATOR

@@ -1,0 +1,19 @@
+%%  SyntaxExt (Syntax Extentions)
+
+imports SyntaxProgram
+
+exports
+  context-free syntax
+   EXPR ASGN EXPR               -> ASSIGN-STAT
+   EXPR LSQ EXPR RSQ            -> EXPR
+ %%  DECLARE BEGIN STAT-SEQ END   -> BLOCK
+   READ  "(" EXPR ")"           -> IN-OUT-STAT
+
+priorities
+  {VARIABLE ASGN EXPR           -> ASSIGN-STAT,
+   VARIABLE LSQ EXPR RSQ        -> VARIABLE,
+   READ  "(" VARIABLE ")"       -> IN-OUT-STAT}
+  >
+  {EXPR ASGN EXPR               -> ASSIGN-STAT,
+   EXPR LSQ EXPR RSQ            -> EXPR,
+   READ  "(" EXPR ")"           -> IN-OUT-STAT}

@@ -1,0 +1,59 @@
+%%  TRS-syntax
+
+imports
+  Layout Booleans Identifiers Naturals Annotations
+
+exports
+  sorts
+    VAR TERM TERMS RULE RULES RR-SECTION
+    TERM-SECTION TRS TAG SIG-ELEM SIG-ELEMS SIG-SECTION
+  lexical syntax
+    [\$][A-Z0-9]+                                   -> VAR
+    [a-zA-Z0-9]+                                    -> TAG
+  context-free syntax
+    "annotate-top" "(" TERM ";" ANNOTATIONS ")"     -> TERM
+    "combine" "(" ANNOTATIONS ";" ANNOTATIONS ")"   -> ANNOTATIONS
+
+    ANNOTATIONS VAR                                 -> TERM
+    ANNOTATIONS ID                                  -> TERM
+    ANNOTATIONS ID "(" TERMS ")"                    -> TERM
+    { TERM "," }+                                   -> TERMS
+    "[" TAG "]" TERM "->" TERM                      -> RULE
+    { RULE "," }*                                   -> RULES
+    "rewrite-rules" RULES                           -> RR-SECTION
+    "term" TERM                                     -> TERM-SECTION
+    "trs" SIG-SECTION RR-SECTION TERM-SECTION       -> TRS
+
+    ID "/" NAT                                      -> SIG-ELEM
+    { SIG-ELEM "," }+                               -> SIG-ELEMS
+    "signature" SIG-ELEMS                           -> SIG-SECTION
+
+    nr-arguments "(" TERM ")"                       -> NAT
+    sig "(" TERM ")"                                -> SIG-ELEM
+    equal "(" TERMS ";" TERMS ")"                   -> BOOL
+    "length" "(" { TERM "," }* ")"                  -> NAT
+    navigate "(" TERM ";" PATH ")"                  -> TERM
+    insert "(" TERM ";" PATH ";" TERM ")"           -> TERM
+    "build-stack" "(" TERM ";" PATH ")"             -> TERMS
+
+  variables
+    [_]Var[']*                              -> VAR
+    [_]Var[*][']*                               -> VAR*
+    [_]Term[']*                             -> TERM
+    [_][LR]hs                               -> TERM
+    [_]SubTerm[']*                          -> TERM
+    [_]Result[']*                           -> TERM
+    [_]Term[+][']*                          -> { TERM "," }+
+    [_]Terms[']*                            -> TERMS
+    [_]Rule[']*                             -> RULE
+    [_]Rule[*][']*                          -> { RULE "," }*
+    [_]Tag[']*                              -> TAG
+    [_]Tag[*][']+                             -> TAG*
+    [_]RRS                                  -> RR-SECTION
+    [_]TS                                   -> TERM-SECTION
+    [_]Annot[']*                            -> ANNOTATION
+    [_]SigEl[*][']*                         -> { SIG-ELEM "," }*
+    [_]SigEl[+][']*                         -> { SIG-ELEM "," }+
+    [_]Term[*][']*                          -> { TERM "," }*
+    [_]SigEl[']*                            -> SIG-ELEM
+    [_]SigS                                 -> SIG-SECTION

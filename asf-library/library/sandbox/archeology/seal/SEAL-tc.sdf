@@ -1,0 +1,18 @@
+%%  SEAL-tc
+
+imports
+    Checks
+
+exports
+    sorts
+        SPEC-Parts
+    context-free syntax
+tc "[" SEAL-spec "]"                          -> SE
+typecheck "(" SEAL-spec ")"                   -> ERRORS
+tc-one "[" Module "," SEAL-spec-part "]"      -> SE
+
+check-item-names "[" NAMES "]"                  -> ERRORS
+name-in "(" NAMES ")"                           -> BOOL
+menu-to-entries "(" Module "," SEAL-spec-part ")" -> SEAL-spec
+SEAL-spec-part+                               -> SPEC-Parts
+menu-to-entry-parts "(" SEAL-spec-part ")"    -> SPEC-Parts

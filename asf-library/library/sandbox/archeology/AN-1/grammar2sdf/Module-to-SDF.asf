@@ -1,0 +1,121 @@
+equations
+
+  [1]   tr-spec( Spec ) = Result
+        =========================================
+        tr( <module> #Path <body> Spec </module> ) =
+          Result .signature :=
+            simplify( Result.signature + imports Layout )
+
+  [2]   Spec = Basic+
+        =============================
+        tr-spec(Spec) = tr-spec-basic( Spec )
+
+  [3]  tr-spec( Basic* Module+ ) =
+         tr-basics( Basic* ) + tr-mods(Module+  )
+
+  [4]  tr-spec-basic(Basic Basic+) = tr-basic(Basic) + tr-spec-basic(Basic+)
+  [5]  tr-spec-basic(Basic ) = tr-basic(Basic)
+
+  [6]  tr-mods( Module Module+ ) =
+          tr-mod(Module) + tr-mods(Module+)
+  [7]  tr-mods( Module ) = tr-mod(Module)
+
+  [8]  tr-mod( <module> #Path <body> Spec </module> ) =
+          tr-spec( Spec  )
+
+  [9]  tr-basics( ) = empty-result
+
+ [10]  tr-basics( Basic Basic* ) =
+         tr-basic(Basic) + tr-basics(Basic*)
+
+ [11]  tr-basic( needs : #References .) = tr-needed-refs( #References )
+
+ [12]  tr-needed-refs( #Reference, #Reference+) =
+         tr-needed-ref( #Reference ) + tr-needed-refs( #Reference+ )
+
+ [13]  tr-needed-refs( #Reference ) = tr-needed-ref( #Reference )
+
+ [14]  tr-needed-ref( #Path #Translations ) =
+          empty-result . signature := imports flatten(#Path)
+
+ [15]  tr-basic( includes: #References . ) = tr-needed-refs( #References )
+
+ [16]  tr-basic( closed . ) = empty-result
+
+ [17]  tr-basic( open . ) = empty-result
+
+ [18]  tr-basic( closed except #References . ) = empty-result
+
+ [19]  tr-basic( introduces: #Symbols .  ) =
+         empty-result . signature := intro2sdf( #Symbols )
+
+ [20]  tr-basic( privately introduces: #Symbols. ) =
+         empty-result . signature := intro2sdf( #Symbols )
+
+ [21]  tr-basic( Tagged-clause . ) = tr-tag-clause( Tagged-clause )
+
+ [22]  Tag = *
+       =================================
+       tr-tag-clause( Tag Clause  ) =
+         empty-result . signature := func2sdf( Clause )
+
+ [23]  Tag = (Num)
+       =====================
+       tr-tag-clause( Tag Clause  ) = empty-result
+
+ [24]  Tag = [Num],
+       clause-variables( Clause, Tag ) = VarResult
+       ============================================
+       tr-tag-clause( Tag Clause  ) =
+         empty-result . signature := VarResult.var-decls
+                      . equations := VarResult.equations
+
+
+
+ %% Translate a grammar: section.
+ %% Put the pure context-free grammar rules in the "grammar:" part of the result;
+ %% These rules are to be used for syntax-directed editing.
+ %% Put the additional bracketing,  [[ ]] and " ", in the signature part.
+
+ [25]   grammar2sdf( Gram-Basics ) = SDF-Def
+        ====================================
+        tr-basic( <grammar> Gram-Basics </grammar> ) =
+          empty-result
+          .  signature :=
+                only-brackets( SDF-Def )
+          .  grammar :=
+               simplify(
+                 imports StandardLiteral  +
+                 no-brackets( SDF-Def ))
+
+
+
+ [r1]   empty-result = < grammar: , signature: , equations: >
+
+ [r2]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs > +
+        < grammar: SDF-Def1', signature: SDF-Def2', equations: Eqs' > =
+        < grammar: SDF-Def1 + SDF-Def1',
+          signature: SDF-Def2 + SDF-Def2',
+          equations: Eqs || Eqs' >
+
+ [r3]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . grammar = SDF-Def1
+ [r4]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . signature = SDF-Def2
+ [r5]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . equations = Eqs
+
+ [r6]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . grammar := SDF-Def1' =
+        < grammar: SDF-Def1', signature: SDF-Def2, equations: Eqs >
+ [r7]   < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . signature := SDF-Def2' =
+        < grammar: SDF-Def1, signature: SDF-Def2', equations: Eqs >
+ [r8]  < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs >
+        . equations := Eqs' =
+        < grammar: SDF-Def1, signature: SDF-Def2, equations: Eqs' >
+
+
+ [i1]  imports( Result ) = get-imports(Result . signature )
+
+ [r0]  Result . sdf = Result . grammar + Result . signature

@@ -1,0 +1,18 @@
+imports GrammarNotation-X MetaNotation-X
+  exports
+
+  context-free syntax
+
+    "Numeral" -> TERM
+    "Character-String" ->  TERM
+    "Literal" ->  TERM
+    "Identifier" ->  TERM
+    "Expression" ->  TERM
+    "Operator" ->  TERM
+    "Statement" ->  TERM
+    "Statements" ->  TERM
+    "Declaration" ->  TERM
+    "Declarations" ->  TERM
+    "Type" ->  TERM
+    "Decls" ->  TERM
+    "Program" ->  TERM

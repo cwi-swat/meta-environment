@@ -1,0 +1,23 @@
+%%  GCD; Euclides' Algorithm for Greatest Common Divisor
+%%  (See also Klo91, Example 11.1)
+%%
+%%  -- Arie
+
+
+exports
+  sorts
+    NAT
+  lexical syntax
+    [ \t\n]                     -> LAYOUT
+  context-free syntax
+    "0"                         -> NAT
+    "S" NAT                     -> NAT
+    NAT "<" NAT                 -> NAT
+    NAT "-" NAT                 -> NAT {left}
+    gcd "(" NAT "," NAT ")"     -> NAT
+
+  variables
+    [xy]    -> NAT
+
+priorities
+  "<" < "-" < "S"

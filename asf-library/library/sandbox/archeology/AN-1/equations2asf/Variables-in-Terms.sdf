@@ -1,0 +1,91 @@
+%%  Variables-in-Terms
+%%
+%%  Variable declarations in the MetaNotation are inside terms.
+%%  Variable declarations in ASF+SDF are "part of the signature".
+%%  Thus, when translating from MetaNotation to ASF+SDF, translation
+%%  of terms should produce (1) an SDF variable section, and (2)
+%%  the same term but without the sort information of the variables.
+%%
+%%
+%%  Author: Arie van Deursen, CWI, Amsterdam
+%%          Peter D. Mosses, Aarhus, Denmark
+%%  Date: May 1993.
+
+
+
+imports ASF-Syntax
+        MetaNotation
+        SDF-Syntax-Operations
+        Character-Operations
+
+exports
+  sorts VAR-RES
+  context-free syntax
+    "<" var-decls ":"  SECTION ","
+        equations ":"  EQUATIONS  ","
+        term ":" QTERM
+     ">"                                        -> VAR-RES
+     VAR-RES "." var-decls                      -> SECTION
+     VAR-RES "." equations                      -> EQUATIONS
+     VAR-RES "." term                           -> TERM
+     VAR-RES "." qterm                          -> QTERM
+     VAR-RES "." term ":=" QTERM                -> VAR-RES
+     VAR-RES "." var-decls ":=" SECTION         -> VAR-RES
+     VAR-RES "." equations ":=" EQUATIONS       -> VAR-RES
+     empty-var-res                              -> VAR-RES
+     VAR-RES "||" VAR-RES                       -> VAR-RES {left}
+     "(" VAR-RES ")"                            -> VAR-RES {bracket}
+
+exports
+  sorts QTERM
+  context-free syntax
+    "\"" TERM "\""                              -> QTERM
+    "\"" "ogpl:" T-OUTER-GROUP-PLACE* "\""      -> QTERM
+    "\"" "igpl:" T-INNER-GROUP-PLACE* "\""      -> QTERM
+    clause-variables( CLAUSE, TAG )             -> VAR-RES  {incremental}
+
+hiddens
+  context-free syntax
+    eq-terms-var( TERMS, VAR-RES, TAG )         -> VAR-RES  {incremental}
+    eq-term-var( TERM, VAR-RES, TAG )           -> VAR-RES  {incremental}
+    term-var( TERM )                            -> VAR-RES  {incremental}
+
+    "'#place-var"( T-PLACE )                    -> VAR-RES
+    "'#ogpl-var"( T-OUTER-GROUP-PLACE* )        -> VAR-RES  {incremental}
+    "'#ogp-var"( T-OUTER-GROUP-PLACE )          -> VAR-RES  {incremental}
+    "'#og-var"( T-OUTER-GROUP )                 -> VAR-RES  {incremental}
+    "'#igpl-var"( T-INNER-GROUP-PLACE* )        -> VAR-RES  {incremental}
+    "'#igp-var"( T-INNER-GROUP-PLACE )          -> VAR-RES  {incremental}
+
+    get-num( TAG )                              -> NUMBER
+
+  variables
+    Result [0-9]*               -> VAR-RES
+    Tag                         -> TAG
+    Form "+"                    -> { FORMULA ";" }+
+    Clause "+"                  -> { TAGGED-CLAUSE ";" }+
+    "'" Symbols                 -> SYMBOLS
+    Func "+"                    -> { FUNCTIONALITY ";" }+
+    "'" Term [0-9]*             -> TERM
+    "'" Terms [0-9]*            -> TERMS
+    "'" Terms-plus [0-9]*       -> { TERM "," }+
+    Disjoiner                   -> DISJOINER
+    Relation                    -> RELATION
+    Num                         -> NUMBER
+    "'" Variable                -> VARIABLE
+    "'" Var-Type                -> VAR-TYPE
+    "'" T-OGP-star [0-9]*       -> T-OUTER-GROUP-PLACE*
+    "'" T-OGP-plus [0-9]*       -> T-OUTER-GROUP-PLACE+
+    "'" T-OGP [0-9]*            -> T-OUTER-GROUP-PLACE
+    "'" T-Place [0-9]*          -> T-PLACE
+    "'" T-OG [0-9]*             -> T-OUTER-GROUP
+    "'" SymCon                  -> SYMBOL-CON
+    "'" T-IGP-star [0-9]*       -> T-INNER-GROUP-PLACE*
+    "'" T-IGP-plus [0-9]*       -> T-INNER-GROUP-PLACE+
+    "'" T-IGP [0-9]*            -> T-INNER-GROUP-PLACE
+    "'" String                  -> STRING
+    "'" Character               -> CHARACTER
+    "'" Alpha [0-9]*            -> ALPHA
+    Section [0-9]*              -> SECTION
+    Eqs [0-9]*                  -> EQUATIONS
+    Qterm [0-9]*                -> QTERM

@@ -1,0 +1,8 @@
+%% Specify leftmost (hence normalizing) reductions.
+
+imports Convert
+
+exports
+  context-free syntax
+    lm-step "(" L-EXP ")"               -> L-EXP
+    lm-red "(" L-EXP ")"                -> L-EXP

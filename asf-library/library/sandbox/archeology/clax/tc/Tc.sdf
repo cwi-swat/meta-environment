@@ -1,0 +1,15 @@
+%%  Tc
+
+imports TcLabel TcNint
+
+exports
+  context-free syntax
+    tc(PROGRAM)                -> BOOL
+    TENV* "^" BLOCK            -> BOOL
+    STAT                       -> BOOL
+    isbool(EXPR)               -> BOOL
+    unique-decls(TENV)         -> BOOL
+    nonemptyarray(TENV)        -> BOOL
+hiddens
+  context-free syntax
+    flat STAT-SEQ              -> STAT-SEQ

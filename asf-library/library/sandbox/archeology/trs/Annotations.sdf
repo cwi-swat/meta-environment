@@ -1,0 +1,20 @@
+%%  Annotations
+
+imports
+    Naturals
+
+exports
+  sorts
+    ANNOTATION ANNOTATIONS PATH
+  context-free syntax
+    "(" NAT* ")"                            -> PATH
+    "nf"                                    -> ANNOTATION
+    ANNOTATION*                             -> ANNOTATIONS
+
+  variables
+    [_]Path[']*                             -> PATH
+    [_]Path[*][']*                          -> { PATH "," }*
+    [_]Path[+][']*                          -> { PATH "," }+
+    [_]Annot[']*                            -> ANNOTATION
+    [_]Annots[']*                           -> ANNOTATIONS
+    [_]Annot[*][']*                         -> ANNOTATION*

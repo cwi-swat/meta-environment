@@ -1,0 +1,58 @@
+%% Specify contexts sensitive definitions
+imports Context-search ConstantAnalysis
+
+exports
+  sorts FORMAL-PAR-LIST-OUT
+  context-free syntax
+    is-enumeration-type "?" "(" CONTEXT ")"             -> BOOLEAN
+    is-subrange-type "?" "(" CONTEXT ")"                -> BOOLEAN
+    is-array-type "?" "(" CONTEXT ")"                   -> BOOLEAN
+    is-string-type "?" "(" CONTEXT ")"                  -> BOOLEAN
+    is-set-type "?" "(" CONTEXT ")"                     -> BOOLEAN
+    is-empty-set-type "?" "(" CONTEXT ")"               -> BOOLEAN
+    is-non-empty-set-type "?" "(" CONTEXT ")"           -> BOOLEAN
+    is-file-type "?" "(" CONTEXT ")"                    -> BOOLEAN
+    is-record-type "?" "(" CONTEXT ")"                  -> BOOLEAN
+    is-pointer-type "?" "(" CONTEXT ")"                 -> BOOLEAN
+    is-nil-pointer-type "?" "(" CONTEXT ")"             -> BOOLEAN
+    is-nonnil-pointer-type "?" "(" CONTEXT ")"          -> BOOLEAN
+    is-packed "?" "(" CONTEXT ")"                       -> BOOLEAN
+    is-simple-type "?" "(" CONTEXT ")"                  -> BOOLEAN
+    is-ordinal-type "?" "(" CONTEXT ")"                 -> BOOLEAN
+    is-number-type "?" "(" CONTEXT ")"                  -> BOOLEAN
+    is-possibly-threatening "?" "(" CONTEXT ")"         -> BOOLEAN
+    is-control-variable "?" "(" CONTEXT ")"             -> BOOLEAN
+    not-permissable-as-file-comp "?" "(" CONTEXT ")"    -> BOOLEAN
+    has-variant-part "?" "(" CONTEXT ")"                -> BOOLEAN
+    selector-field "?" "(" CONTEXT "," IDENT ")"        -> BOOLEAN
+
+    CONTEXT "." record-of-variant-part                  -> CONTEXT
+    CONTEXT "." selector-type                           -> CONTEXT
+    CONTEXT "." entry                                   -> ENTRY
+    FORMAL-PAR-LIST                                     -> FORMAL-PAR-LIST-OUT
+    CONTEXT "." formal-parameters                       -> FORMAL-PAR-LIST-OUT
+    CONTEXT "." index-type                              -> CONTEXT
+    CONTEXT "." comp-type                               -> CONTEXT
+    CONTEXT "." host-type                               -> CONTEXT
+    CONTEXT "." type                                    -> CONTEXT
+    CONTEXT "." canonical                               -> CONTEXT
+    CONTEXT "." value                                   -> INT
+    CONTEXT "." nr-of-elements                          -> INT
+    pointer-component of CONTEXT in CONTEXT             -> CONTEXT
+    CONTEXT is the set-component of CONTEXT "?"         -> BOOLEAN
+
+    get-type of TYPE-DENOTER in CONTEXT                 -> CONTEXT
+    const-type of CONST in CONTEXT                      -> CONTEXT
+    const-val of CONST in CONTEXT                       -> INT
+
+    type-to-var "(" CONTEXT ")"                         -> CONTEXT
+    set var-status of IDENT in CONTEXT "to" VAR-STATUS  -> CONTEXT
+    IDENT is the name of the inner function-block in CONTEXT "?" -> BOOLEAN
+
+    CONTEXT is the same as CONTEXT "?"                  -> BOOLEAN
+    same-set-of-T "?" "(" CONTEXT "," CONTEXT ")"       -> BOOLEAN
+
+hiddens
+  variables
+    Index-type  -> TYPE-DENOTER         Comp-type       -> TYPE-DENOTER
+    Struct-type -> STRUCTURED-TYPE      VS[0-9]*        -> VAR-STATUS

@@ -1,0 +1,64 @@
+
+equations
+
+    [rv1]  read-value(INTEGER) =
+             INT-CONST (let
+                         ( vtp
+                           (meta (send 'meta (send 'module #:EQM:sel))) )
+                         (#:SEAL:create-input
+                           "/tmp/input"
+                           "Input"
+                           (list "Please enter an INTEGER: <INT-CONST>")
+                           "INPUT"
+                           (send 'config-table meta) )
+                         (setq vtp (#:SEAL:select
+                                     "/tmp/input"
+                                     "INT-CONST"
+                                     (send 'config-table meta)))
+                         (#:SEAL:kill-inputs (send 'config-table meta))
+                         (bitmap-flush)
+                         (#:EQM:tree:vtp2 vtp)
+                       )
+
+    [rv2]  read-value(REAL) =
+             REAL-CONST (let
+                          ( vtp
+                            (meta (send 'meta (send 'module #:EQM:sel))) )
+                          (#:SEAL:create-input
+                            "/tmp/input"
+                            "Input"
+                            (list "Please enter a REAL: <REAL-CONST>")
+                            "INPUT"
+                            (send 'config-table meta) )
+                          (setq vtp (#:SEAL:select
+                                      "/tmp/input"
+                                      "REAL-CONST"
+                                      (send 'config-table meta)))
+                          (#:SEAL:kill-inputs (send 'config-table meta))
+                          (bitmap-flush)
+                          (#:EQM:tree:vtp2 vtp)
+                        )
+
+    [rv3]  read-value(BOOLEAN) =
+             tf2bool( TF (let
+                           ( vtp
+                             (meta (send 'meta (send 'module #:EQM:sel))) )
+                             (#:SEAL:create-input
+                               "/tmp/input"
+                               "Input"
+                               (list "Please enter T or F: <TF>")
+                               "INPUT"
+                               (send 'config-table meta) )
+                             (setq vtp (#:SEAL:select
+                                        "/tmp/input"
+                                        "TF"
+                                        (send 'config-table meta)))
+                             (#:SEAL:kill-inputs (send 'config-table meta))
+                             (bitmap-flush)
+                             (#:EQM:tree:vtp2 vtp)
+                           ) )
+
+(* CLAX external representation of Booleans is T or F *)
+
+  [tf1]  tf2bool(T) = TRUE
+  [tf2]  tf2bool(F) = FALSE

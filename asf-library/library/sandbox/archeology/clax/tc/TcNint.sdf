@@ -1,0 +1,52 @@
+imports TcBooleans SyntaxConsts
+
+exports
+  context-free syntax
+    INT-CONST islessthan INT-CONST  -> BOOL
+hiddens
+  sorts INT INT-CON POS NEG NAT AUX
+
+  lexical syntax
+    [1-9][0-9]*                 -> POS  %% constr
+    [+\-0]                      -> AUX
+
+  context-free syntax
+    toint INT-CONST             -> INT
+    "-" POS                     -> NEG  %% constr
+    "0"                         -> NAT  %% constr
+    POS                         -> NAT
+    NAT                         -> INT-CON
+    NEG                         -> INT-CON
+    INT-CON                     -> INT
+
+    "P" INT                     -> INT
+    "S" INT                     -> INT
+
+     "(" INT ")"                -> INT {bracket}
+     INT "<" INT                -> BOOL
+     "-" INT                    -> INT
+  variables
+     Int[0-9']*            -> INT
+
+hiddens
+  context-free syntax
+    INT ";" INT                 -> INT  {left}  %% concatenation
+    hd "(" INT ")"              -> INT
+    tl "(" INT ")"              -> INT
+    "bigpos?" "(" INT ")"       -> BOOL
+
+  variables
+     Int[0-9']*          -> INT
+     [xy][0-9']*        -> INT
+     [z][0-9']*         ->  NEG
+     [n][0-9']*         -> POS
+     c[0-9']*           -> CHAR
+     c[0-9']*"+"        -> CHAR+
+     c[0-9']*"*"        -> CHAR*
+
+ priorities
+  ";"
+   <
+   { "S" INT -> INT, "P" INT -> INT, "-" INT -> INT}
+   <
+   { "-" POS -> NEG  }

@@ -1,0 +1,31 @@
+%%  Arithmetic
+
+imports SyntaxProgram Lisp
+
+exports
+  context-free syntax
+    hybrid-int-add ( INT-CONST , INT-CONST )     -> INT-CONST
+    hybrid-int-sub ( INT-CONST , INT-CONST )     -> INT-CONST
+    hybrid-int-mul ( INT-CONST , INT-CONST )     -> INT-CONST
+    hybrid-int-div ( INT-CONST , INT-CONST )     -> INT-CONST
+    hybrid-int-abs ( INT-CONST )                 -> INT-CONST
+
+    incr ( INT-CONST )                           -> INT-CONST
+
+    hybrid-real-add ( REAL-CONST , REAL-CONST )  -> REAL-CONST
+    hybrid-real-sub ( REAL-CONST , REAL-CONST )  -> REAL-CONST
+    hybrid-real-mul ( REAL-CONST , REAL-CONST )  -> REAL-CONST
+    hybrid-real-div ( REAL-CONST , REAL-CONST )  -> REAL-CONST
+    hybrid-real-abs ( REAL-CONST )               -> REAL-CONST
+
+    "LISP" LISP                                  -> INT-CONST
+    "INT-CONST" LISP                             -> INT-CONST
+    "<<" INT-CONST ">>"                          -> LISP
+    "LISP" LISP                                  -> REAL-CONST
+    "REAL-CONST" LISP                            -> REAL-CONST
+    "<<" REAL-CONST ">>"                         -> LISP
+hiddens
+  variables
+    [_]Bool[']*                                  -> BOOL-CONST
+    [_]Int[']*                                   -> INT-CONST
+    [_]Real[']*                                  -> REAL-CONST

@@ -1,0 +1,19 @@
+%%  StandardLexical
+
+imports Layout
+
+exports
+  sorts Digit Letter LowercaseLetter
+        UppercaseLetter Graphic-Character
+  lexical syntax
+    [0-9]               -> Digit
+    [a-z]               -> LowercaseLetter
+    [A-Z]               -> UppercaseLetter
+    LowercaseLetter     -> Letter
+    UppercaseLetter     -> Letter
+
+    %% N.B.: no " or ' in Graphic-Character!
+    [!#$%&()*+,\-./:;<=>?@\[\\\]^_`{|}~] -> Graphic-Character
+    UppercaseLetter     -> Graphic-Character
+    LowercaseLetter     -> Graphic-Character
+    Digit               -> Graphic-Character

@@ -1,0 +1,16 @@
+ imports Identifiers Modes
+ exports
+   sorts MPAIR MENV
+  context-free syntax
+        ID ":" MODE                  -> MPAIR
+        mtable "(" {MPAIR "#"}* ")"  -> MENV
+        lookup ID in MENV            -> MODE
+        ID is in MENV                -> BOOL
+        add MPAIR "to" MENV          -> MENV
+        modify MPAIR in MENV         -> MENV
+        "(" MPAIR ")"                -> MPAIR         {bracket}
+  variables
+
+                Menv[1-9]*       -> MENV
+                Mpair[1-9]*    -> MPAIR
+                Mpairs[1-9]*    -> {MPAIR "#"}*

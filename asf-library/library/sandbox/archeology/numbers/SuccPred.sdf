@@ -1,0 +1,32 @@
+imports Booleans
+
+exports
+  sorts POS NEG INT NAT INT-CON
+  context-free syntax
+    "1"      -> POS
+    "s" POS  -> POS
+    "-1"     -> NEG
+    "p" NEG  -> NEG
+    "0"      -> NAT
+    POS      -> NAT
+    NAT      -> INT-CON
+    NEG      -> INT-CON
+    INT-CON  -> INT
+
+    "(" INT ")"  -> INT {bracket}
+
+    "S" INT                     -> INT
+    "P" INT                     -> INT
+    "-" INT                     -> INT
+
+  priorities
+    { "-" INT -> INT }
+    <
+    { "P" INT -> INT, "S" INT -> INT }
+    <
+    { "-1" -> NEG }
+
+hiddens
+  variables
+    n[0-9']*    -> POS
+    z[0-9']*    -> NEG

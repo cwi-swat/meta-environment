@@ -1,0 +1,13 @@
+%% Type check procedure and function calls.
+imports Expr-misc
+
+hiddens
+  context-free syntax
+    call-tc "(" FORMAL-PAR-LIST-OUT "," ACTUAL-PAR-LIST "," ENV ")" -> ENV
+    FORMAL-PAR-LIST-OUT and FORMAL-PAR-LIST-OUT
+      should be congruous in ENV                                    -> ENV
+    congruous "?" "(" FORMAL-PAR-LIST-OUT
+      "," FORMAL-PAR-LIST-OUT "," ENV ")"                           -> BOOLEAN
+
+  variables
+    Definition                                                      -> CONTEXT

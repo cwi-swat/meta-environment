@@ -1,0 +1,10 @@
+imports ActionNotation Layout               
+  exports                                   
+  context-free                              
+  syntax                                    
+    Yielder "is" Yielder -> Yielder {left}  
+      "not" Yielder -> Yielder              
+      "sum" Yielder -> Yielder              
+      "difference" Yielder -> Yielder       
+      "string" "of" Yielder -> Yielder      
+      Yielder "^" Yielder -> Yielder {left}

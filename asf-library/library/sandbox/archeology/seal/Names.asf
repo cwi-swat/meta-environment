@@ -1,0 +1,91 @@
+equations
+
+[500]   rm-double-names() =
+
+[501]   _Names' = _Names'' _Name' _Names''' _Name' _Names''''
+        ===============================================
+        contains-doubles(_Names') = true
+
+[502]   contains-doubles(_Names') != true
+        ===============================
+        rm-double-names(_Names') = _Names'
+
+[503]   contains-doubles(_Names') = true,
+        _Names' = _Names'' _Name' _Names''' _Name' _Names''''
+        ===============================================
+        rm-double-names(_Names') = rm-double-names(_Names'' _Name' _Names''' _Names'''')
+
+  [ 48] val(0)= 0  [ 49] val(1)= 1  [ 50] val(2)= 2
+  [ 51] val(3)= 3  [ 52] val(4)= 4  [ 53] val(5)= 5
+  [ 54] val(6)= 6  [ 55] val(7)= 7  [ 56] val(8)= 8
+  [ 57] val(9)= 9
+  [ 65] val(A)= 65  [ 66] val(B)= 66  [ 67] val(C)= 67
+  [ 68] val(D)= 68  [ 69] val(E)= 69  [ 70] val(F)= 70
+  [ 71] val(G)= 71  [ 72] val(H)= 72  [ 73] val(I)= 73
+  [ 74] val(J)= 74  [ 75] val(K)= 75  [ 76] val(L)= 76
+  [ 77] val(M)= 77  [ 78] val(N)= 78  [ 79] val(O)= 79
+  [ 80] val(P)= 80  [ 81] val(Q)= 81  [ 82] val(R)= 82
+  [ 83] val(S)= 83  [ 84] val(T)= 84  [ 85] val(U)= 85
+  [ 86] val(V)= 86  [ 87] val(W)= 87  [ 88] val(X)= 88
+  [ 89] val(Y)= 89  [ 90] val(Z)= 90
+  [ 97] val(a)= 97  [ 98] val(b)= 98  [ 99] val(c)= 99
+  [100] val(d)=100  [101] val(e)=101  [102] val(f)=102
+  [103] val(g)=103  [104] val(h)=104  [105] val(i)=105
+  [106] val(j)=106  [107] val(k)=107  [108] val(l)=108
+  [109] val(m)=109  [110] val(n)=110  [111] val(o)=111
+  [112] val(p)=112  [113] val(q)=113  [114] val(r)=114
+  [115] val(s)=115  [116] val(t)=116  [117] val(u)=117
+  [118] val(v)=118  [119] val(w)=119  [120] val(x)=120
+  [121] val(y)=121  [122] val(z)=122
+
+[200]   _Ufn' = _Ufn''
+        ============
+        _Ufn' < _Ufn'' = 0
+
+[201]   _Ufn' != _Ufn'',
+        unix-filename(C' Cs') = _Ufn',
+        unix-filename(C'' Cs'') = _Ufn'',
+        Let' = letter(C'),
+        Let'' = letter(C''),
+        val(Let') < val(Let'') = true
+        =========
+        _Ufn' < _Ufn'' = 1
+
+[202]   _Ufn' != _Ufn'',
+        unix-filename(C' Cs') = _Ufn',
+        unix-filename(C'' Cs'') = _Ufn'',
+        Let' = letter(C'),
+        Let'' = letter(C''),
+        val(Let') < val(Let'') = false,
+        val(Let') != val(Let'')
+        =========
+        _Ufn' < _Ufn'' = 0
+
+[203]   _Ufn' != _Ufn'',
+        unix-filename(C' Cs') = _Ufn',
+        unix-filename(C'' Cs'') = _Ufn'',
+        Let' = letter(C'),
+        Let'' = letter(C''),
+        val(Let') = val(Let''),
+        unix-filename(Cs') = _Ufn''',
+        unix-filename(Cs'') = _Ufn''''
+        =========
+        _Ufn' < _Ufn'' = _Ufn''' < _Ufn''''
+
+[204]   _Ufn' != _Ufn'',
+        unix-filename(C') = _Ufn',
+        unix-filename(C'' Cs'') = _Ufn'',
+        Let' = letter(C'),
+        Let'' = letter(C''),
+        val(Let') = val(Let'')
+        ================
+        _Ufn' < _Ufn'' = 1
+
+[204]   _Ufn' != _Ufn'',
+        unix-filename(C' Cs') = _Ufn',
+        unix-filename(C'') = _Ufn'',
+        Let' = letter(C'),
+        Let'' = letter(C''),
+        val(Let') = val(Let'')
+        ================
+        _Ufn' < _Ufn'' = 0

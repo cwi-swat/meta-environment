@@ -1,0 +1,21 @@
+%%
+%% Define the syntax of Lambda expressions
+%%
+
+imports Layout Variables
+
+exports
+  sorts
+    L-EXP L-EXPS
+  context-free syntax
+    VAR                                 -> L-EXP
+    "lambda" VAR+ "." L-EXP             -> L-EXP
+    L-EXP L-EXP                         -> L-EXP  { left }
+    "(" L-EXP ")"                       -> L-EXP  { bracket }
+
+  variables
+    E[0-9']*                            -> L-EXP
+    V[0-9']*"+"                         -> VAR+
+
+priorities
+  { "lambda" VAR+ "." L-EXP  -> L-EXP }  <  { L-EXP L-EXP -> L-EXP }

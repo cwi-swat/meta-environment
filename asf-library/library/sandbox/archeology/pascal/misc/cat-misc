@@ -1,0 +1,5 @@
+PATH=$PATH:/ufs/arie/bin
+SPECDIR=/ufs/gipe/spec/pascal/misc
+
+cat-mods -d $SPECDIR \
+     LayOut Booleans Integers StringFunctions ASCII

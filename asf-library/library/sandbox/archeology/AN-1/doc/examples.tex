@@ -1,0 +1,83 @@
+\documentstyle[12pt,verbatimfiles]{article}
+
+\raggedbottom
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+
+\newcommand{\asdf}{\mbox{ASF{\tt +}SDF}}
+
+\newcommand{\actmodY}[2]{
+  \subsection{#2}
+    \subsubsection{MetaNotation Module}
+      \verbatimfile{#1/#2.asd}
+    \subsubsection{Parsing according to #2-X}
+      \verbatimfile{#1/#2-X.syn}
+    \subsubsection{Data extended to Yielders in #2-Y}
+      \verbatimfile{#1/#2-Y.asd}
+    \subsubsection{Executable using ASF+SDF syn/eqs}
+      \paragraph{Module #2.syn}
+      \verbatimfile{#1/#2.syn}
+      \paragraph{Module #2-Y.syn}
+      \verbatimfile{#1/#2-Y.syn}
+}
+
+\newcommand{\actmodX}[2]{
+   \subsection{#2}
+    \subsubsection{MetaNotation Module}
+      \verbatimfile{#1/#2.asd}
+    \subsubsection{Parsing according to #2-X}
+      \verbatimfile{#1/#2-X.syn} 
+    \subsubsection{Executable using ASF+SDF syn/eqs}
+      \paragraph{Module #2.syn}
+      \verbatimfile{#1/#2.syn}
+}
+
+\newcommand{\asdfmod}[2]{
+  \subsection{#2}
+  \verbatimfile{#1/#2.syn}
+  \verbatimfile{#1/#2.eqs}
+}
+
+\newcommand{\asdfmodsyn}[2]{
+  \subsubsection{#2}
+  \verbatimfile{#1/#2.syn}
+}
+
+\begin{document}
+  \bibliographystyle{alpha}
+
+
+\section*{Examples of action semantic descriptions\\
+with their generated ASF+SDF}
+\subsection*{Arie van Deursen and Peter D. Mosses}
+\subsubsection*{Based on version 1.03; Draft!}
+\bigskip
+
+\section{ActionNotation}
+
+\actmodY{../examples}{DataNotation}
+\actmodY{../examples}{ActionNotation}
+
+
+\section{Pico}
+
+\actmodX{../examples}{Pico-Abstract-Syntax}
+\actmodY{../examples}{Pico-Semantic-Entities}
+\actmodX{../examples}{Pico-Semantic-Functions}
+
+\section{Auxiliary Modules}
+  \asdfmodsyn{../examples}{GrammarNotation-X}
+  \asdfmodsyn{../examples}{MetaNotation-X}
+  \asdfmodsyn{../common}{Basic-Notions}
+
+
+\newpage
+\tableofcontents
+
+\end{document}
+
+
+
+

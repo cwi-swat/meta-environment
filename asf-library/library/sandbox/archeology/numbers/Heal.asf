@@ -1,0 +1,21 @@
+equations
+
+    [f1]  r + r' =  REAL-CON (convert-to-lexical
+                     << 1.0 >>
+                     (fadd (convert-lexical-to-lisp << r >> )
+                           (convert-lexical-to-lisp << r' >> ) ) )
+
+    [f1]  r - r' =  REAL-CON (convert-to-lexical
+                     << 1.0 >>
+                     (fsub (convert-lexical-to-lisp << r >> )
+                           (convert-lexical-to-lisp << r' >> ) ) )
+
+    [f1]  r * r' =  REAL-CON (convert-to-lexical
+                     << 1.0 >>
+                     (fmul (convert-lexical-to-lisp << r >> )
+                           (convert-lexical-to-lisp << r' >> ) ) )
+
+    [f1]  r / r' =  REAL-CON (convert-to-lexical
+                     << 1.0 >>
+                     (fdiv (convert-lexical-to-lisp << r >> )
+                           (convert-lexical-to-lisp << r' >> ) ) )

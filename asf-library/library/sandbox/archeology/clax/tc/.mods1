@@ -1,0 +1,58 @@
+module Tc
+%%  Tc
+
+imports Booleans  SyntaxProgram
+
+exports
+  sorts TENV CONTEXT DECL_T
+  context-free syntax
+    "[" {DECL_T ";"}* "]"        -> TENV
+    VAR-DECL                     -> DECL_T
+    LABEL-DECL                   -> DECL_T
+    PROC-HEAD                    -> DECL_T
+
+    %%TENV*                        -> CONTEXT
+    %%CONTEXT "^" BLOCK            -> BOOLEAN
+
+    TENV* "^" BLOCK              -> BOOLEAN
+    "tc" PROGRAM                 -> BOOLEAN
+
+    "[[" STAT "]]" TENV*         -> BOOLEAN
+
+    noundefined gotos STAT-SEQ   -> BOOLEAN
+
+   %%Extend block
+   "DECLARE" "BEGIN" STAT-SEQ "END" -> BLOCK
+
+  variables
+    [_]D"*"[']*                  -> {DECL_T ";"}*
+    [_]Tenv[']*                  -> TENV
+    [_]C"*"[']*                  -> TENV*
+equations
+
+ [P0] tc PROGRAM Id ; _Block . =  [] ^ _Block
+
+ [T0] _C* [_D*] ^ DECLARE _LabelDecl ; _Decls ; BEGIN StatSeq END =
+      _C* [_D* ; _LabelDecl] ^ DECLARE _Decls ; BEGIN StatSeq END
+
+ [T1] _C* [_D*] ^ DECLARE _VarDecl ; _Decls ; BEGIN StatSeq END =
+      _C* [_D* ; _VarDecl] ^ DECLARE _Decls ; BEGIN StatSeq END
+
+ [T2] TRUE = _C* [_D* ; _ProcHead] [] ^ _Block
+      =======================================================
+      _C* [_D*] ^ DECLARE _ProcHead ; _Block ; _Decls ; BEGIN StatSeq END =
+      _C* [_D* ; _ProcHead] ^ DECLARE _Decls ; BEGIN StatSeq END
+
+ [T3] _C* [_D*] ^ BEGIN END = TRUE
+
+ [T4] [[Stat]] _C* = TRUE
+      ========================================================
+      _C* ^ BEGIN Stat ; StatSeq END = _C* ^ BEGIN StatSeq END
+
+ [T5] TRUE = noundefined gotos _StatSeq
+      =====================================================================
+      _C* [_D*] ^ DECLARE BEGIN _StatSeq END = _C* [_D*] ^ BEGIN _StatSeq END
+
+ %%[S0] [[
+
+

@@ -1,0 +1,16 @@
+imports
+  Lambda-syntax Substitute
+
+exports
+  sorts DEF LET
+  context-free syntax
+    "(" VAR ":" L-EXP ")"               -> DEF
+    "(" "let" DEF+ ")"                  -> LET
+					-> LET
+    "expand" "(" L-EXP "," LET ")"	-> L-EXP
+
+  variables
+    D[0-9']*"+"         -> DEF+
+    D[0-9']*"*"         -> DEF*
+    D[0-9']*            -> DEF
+    Let			-> LET

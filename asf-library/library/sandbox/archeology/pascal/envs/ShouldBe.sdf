@@ -1,0 +1,63 @@
+%% Define several basic should-be functions
+%% These functions operate on an Environment. With each should-be function
+%% a boolean condition is associated.
+%% If the boolean condition is met, an unchanged environment is returned.
+%% Otherwise, the environment wiht an error message added to it is returned.
+imports Environments Compatible
+
+exports
+  sorts VAL-LIST
+
+  context-free syntax
+    IDENT "should not be declared in inner block of" ENV              -> ENV
+    IDENT "should be declared in inner block of" ENV                  -> ENV
+    SYMBOL "should be declared in" ENV                                -> ENV
+    IDENT "should be a constant in" ENV                               -> ENV
+    IDENT "should be a type in" ENV                                   -> ENV
+    IDENT "should be a type in inner block of" ENV                    -> ENV
+    IDENT "should be a variable in" ENV                               -> ENV
+    IDENT "should be a variable in inner block of" ENV                -> ENV
+    IDENT "should be a function in" ENV                               -> ENV
+    IDENT "should be a function in inner block of" ENV                -> ENV
+    IDENT "should be a procedure in" ENV                              -> ENV
+    IDENT "should be a procedure in inner block of" ENV               -> ENV
+    STRING "should not be an empty string in" ENV                     -> ENV
+    CONTEXT "should be allowed as file-component in" ENV              -> ENV
+    CONTEXT "should be a number in" ENV                               -> ENV
+    CONTEXT "should be integer in" ENV                                -> ENV
+    CONTEXT "should be real in" ENV                                   -> ENV
+    CONTEXT "should be Boolean in" ENV                                -> ENV
+    "(" { IDENT ","}* ")" "should not have double names in" ENV       -> ENV
+    CONTEXT and CONTEXT "should be the same type in" ENV              -> ENV
+    CONTEXT "should be assignment-compatible with" CONTEXT in ENV     -> ENV
+    CONTEXT "should be ordinal in" ENV                                -> ENV
+    CONTEXT "should be an array in" ENV                               -> ENV
+    CONTEXT "should be a packed array in" ENV                         -> ENV
+    CONTEXT "should be an unpacked array in" ENV                      -> ENV
+    CONTEXT "should be a pointer in" ENV                              -> ENV
+    CONTEXT "should be a file in" ENV                                 -> ENV
+    INT "should be less than" INT in ENV                              -> ENV
+    CONTEXT "should be the set-component of" CONTEXT in ENV           -> ENV
+    CONTEXT and CONTEXT "should be the same set-of-T type in" ENV     -> ENV
+    CONTEXT OPERATOR CONTEXT "should be compatible," "numbers,"
+      "or of the same set in" ENV                                     -> ENV
+    CONTEXT should be a pointer or a file in ENV                      -> ENV
+    CONTEXT "should be a record in" ENV                               -> ENV
+    CONTEXT "should be a variant record in" ENV                       -> ENV
+    all elements of CONTEXT should occur in VAL-LIST in ENV           -> ENV
+    INT should not be a member of VAL-LIST in ENV                     -> ENV
+    "[" { INT "," }* "]"         -> VAL-LIST
+
+  variables
+    Value[0-9]*     -> INT          Value[0-9]*"*"      -> { INT "," }*
+    Val-list[0-9]*  -> VAL-LIST
+
+
+hiddens
+  context-free syntax
+    check-double-names of "(" {IDENT "," }* ")" in ENV              -> ENV
+    length "(" VAL-LIST ")"                                         -> INT
+    INT is member of VAL-LIST "?"                                   -> BOOLEAN
+
+  variables
+    Optor  -> OPERATOR           V[0-9]*  -> INT

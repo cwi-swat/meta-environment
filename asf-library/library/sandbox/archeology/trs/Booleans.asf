@@ -1,0 +1,8 @@
+   equations
+
+        [Bool1] true and B  = B
+        [Bool2] false and B = false
+        [Bool3] true or B   = true
+        [Bool4] false or B  = B
+        [Bool5] not true    = false
+        [Bool6] not false   = true

@@ -1,0 +1,43 @@
+imports Booleans Int-con
+
+exports
+  sorts REAL REAL-CON UNS-REAL-CON  DOT-REAL-CON DOT-REAL
+  lexical syntax
+    "." DIGIT+                     -> UNS-REAL-CON
+    DIGIT+ "."                     -> UNS-REAL-CON
+    DIGIT+ "." DIGIT+              -> UNS-REAL-CON
+    Z-DIGIT                        -> UNS-REAL-CON
+    UNS-REAL-CON                   -> DOT-REAL-CON
+    "-" UNS-REAL-CON               -> DOT-REAL-CON
+
+  context-free syntax
+    DOT-REAL-CON                   -> DOT-REAL
+    DOT-REAL                       -> REAL-CON
+    REAL-CON                       -> REAL
+
+    bfd(DOT-REAL)                  -> DOT-REAL
+    afd(DOT-REAL)                  -> DOT-REAL
+    hsg(DOT-REAL)                  -> BOOL
+    unique(DOT-REAL)               -> DOT-REAL
+    mvr(DOT-REAL)                  -> DOT-REAL
+    mvl(DOT-REAL)                  -> DOT-REAL
+    fsta(DOT-REAL)                 -> DIGIT
+    neg(DOT-REAL)                  -> DOT-REAL
+    afterdot(DOT-REAL)             -> INT
+    intafterdot(INT)               -> DOT-REAL
+    dotreal2int(DOT-REAL)          -> INT
+    int2dotreal(INT)               -> DOT-REAL
+
+hiddens
+  context-free syntax
+    app(DOT-REAL, DOT-REAL)        -> DOT-REAL
+    elz(DOT-REAL)                  -> DOT-REAL
+    erz(DOT-REAL)                  -> DOT-REAL
+    abs(DOT-REAL)                  -> DOT-REAL
+    ssg(DOT-REAL, DOT-REAL)        -> DOT-REAL
+
+  variables
+    s[0-9']*            -> DOT-REAL-CON
+    c[0-9']*"*"         -> CHAR*
+    c[0-9']*"+"         -> CHAR+
+    c[0-9']*            -> CHAR

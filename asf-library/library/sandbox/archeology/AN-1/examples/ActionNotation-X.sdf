@@ -1,0 +1,102 @@
+imports MetaNotation-X DataNotation-X Layout
+  exports
+    context-free
+    syntax
+        "unfolding" TERM -> TERM
+        TERM "or" TERM -> TERM  {left}
+        TERM "and" TERM -> TERM {left}
+        TERM "and" "then" TERM -> TERM {left}
+        "give" TERM -> TERM
+        "check" TERM -> TERM
+        TERM "then" TERM -> TERM {left}
+        "bind" TERM "to" TERM -> TERM
+        TERM "moreover" TERM -> TERM {left}
+        TERM "hence" TERM -> TERM {left}
+        "allocate" TERM -> TERM
+        "store" TERM "in" TERM -> TERM
+        yielder -> TERM
+        complete -> TERM
+        it -> TERM
+        "the" TERM "yielded" "by" TERM -> TERM
+        "given" TERM -> TERM
+        "given" TERM "#" TERM -> TERM
+        "the" TERM "bound" "to" TERM -> TERM
+        "the" TERM "stored" "in" TERM -> TERM
+        action -> TERM
+        datum -> TERM
+        data -> TERM
+        fail -> TERM
+        token -> TERM
+        bindable -> TERM
+        cell -> TERM
+        unfold -> TERM
+        storable -> TERM
+%%        TERM * -> TERM
+        "a" TERM -> TERM
+        "an" TERM -> TERM
+        "the" TERM -> TERM
+        "of" TERM -> TERM
+
+        "unfolding" PLACE -> SYMBOL
+        PLACE "or" PLACE -> SYMBOL
+        PLACE "and" PLACE -> SYMBOL
+        PLACE "and" "then" PLACE -> SYMBOL
+        "give" PLACE -> SYMBOL
+        "check" PLACE -> SYMBOL
+        PLACE "then" PLACE -> SYMBOL
+        "bind" PLACE "to" PLACE -> SYMBOL
+        PLACE "moreover" PLACE -> SYMBOL
+        PLACE "hence" PLACE -> SYMBOL
+        "allocate" PLACE -> SYMBOL
+        "store" PLACE "in" PLACE -> SYMBOL
+        yielder -> SYMBOL
+        complete -> SYMBOL
+        it -> SYMBOL
+        "the" PLACE "yielded" "by" PLACE -> SYMBOL
+        "given" PLACE -> SYMBOL
+        "given" PLACE "#" PLACE -> SYMBOL
+        "the" PLACE "bound" "to" PLACE -> SYMBOL
+        "the" PLACE "stored" "in" PLACE -> SYMBOL
+        action -> SYMBOL
+        datum -> SYMBOL
+        data -> SYMBOL
+        fail -> SYMBOL
+        token -> SYMBOL
+        bindable -> SYMBOL
+        cell -> SYMBOL
+        unfold -> SYMBOL
+        storable -> SYMBOL
+%%        PLACE * -> SYMBOL
+        "a" PLACE -> SYMBOL
+        "an" PLACE -> SYMBOL
+        "the" PLACE -> SYMBOL
+        "of" PLACE -> SYMBOL
+
+priorities
+    TERM "INFIX" TERM -> TERM
+    < {non-assoc:
+        TERM "or" TERM -> TERM,
+        TERM "and" TERM -> TERM,
+        TERM "and" "then" TERM -> TERM,
+        TERM "then" TERM -> TERM,
+        TERM "moreover" TERM -> TERM,
+        TERM "hence" TERM -> TERM}
+    <
+    "PREFIX" TERM -> TERM
+    < { "unfolding" TERM -> TERM,
+        "give" TERM -> TERM,
+        "check" TERM -> TERM,
+        "bind" TERM "to" TERM -> TERM,
+        "allocate" TERM -> TERM,
+        "store" TERM "in" TERM -> TERM,
+        "the" TERM "yielded" "by" TERM -> TERM,
+        "given" TERM -> TERM,
+        "given" TERM "#" TERM -> TERM,
+        "the" TERM "bound" "to" TERM -> TERM,
+        "the" TERM "stored" "in" TERM -> TERM,
+        "a" TERM -> TERM,
+        "an" TERM -> TERM,
+        "the" TERM -> TERM,
+        "of" TERM -> TERM}
+    <
+    TERM "POSTFIX" -> TERM

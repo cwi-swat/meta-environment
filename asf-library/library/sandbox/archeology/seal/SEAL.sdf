@@ -1,0 +1,163 @@
+%%  SEAL
+
+imports Names
+exports
+    sorts
+        %% NB DO NOT DECLARE THE SORTS EscChar AND L-Char
+        %% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        SEAL-spec SEAL-spec-part Condition-action-pair
+        Tool-CA-pair
+        String Focus Focus-expr Focus-action
+        Pattern Function-name While-condition
+        Docu ToolDocu Focus-cond-expr
+        Condition-part Button Menu-entry Active-tool
+        Menu Entry SEAL-action SEAL-function Term
+        Module Text Sort Conditional Id
+    lexical syntax
+        [ \n\t]                                         -> LAYOUT
+        "%%" L-Char* "%%"                               -> LAYOUT  %%comment
+        [A-Z]                                           -> Id
+        [A-Z] [A-Za-z0-9\-_]* [A-Za-z0-9]               -> Id
+        Id                                              -> Module
+        Id                                              -> Sort
+        [a-zA-Z] [A-Za-z0-9\-_]* [A-Za-z0-9]            -> Function-name
+
+         "\\" ~ []                                      -> EscChar
+         "\\" [01] [0-7] [0-7]                          -> EscChar
+          ~ [\000-\037"\\]                              -> L-Char
+         EscChar                                        -> L-Char
+         "\"" L-Char* "\""                              -> String
+
+    context-free syntax
+"Configuration" for language Module is SEAL-spec-part+ -> SEAL-spec
+Button                                                  -> SEAL-spec-part
+Menu-entry                                              -> SEAL-spec-part
+Menu                                                    -> SEAL-spec-part
+Active-tool                                             -> SEAL-spec-part
+
+button Name Condition-action-pair+ Docu                 -> Button
+start-stop button Name Condition-action-pair+ Docu      -> Button
+menu entry Name in Name Condition-action-pair+ Docu     -> Menu-entry
+menu Name ":" Entry+                                    -> Menu
+Name "," Condition-action-pair+ Docu                    -> Entry
+active tool Name Tool-CA-pair+ ToolDocu                 -> Active-tool
+
+when Condition-part enable {SEAL-action ";"}+         -> Condition-action-pair
+enable {SEAL-action ";"}+                             -> Condition-action-pair
+when Condition-part do {SEAL-action ";"}+             -> Tool-CA-pair
+do {SEAL-action ";"}+                                 -> Tool-CA-pair
+
+Focus-cond-expr is Sort                                 -> Condition-part
+Focus-cond-expr matches Pattern                         -> Condition-part
+String                                                  -> Pattern
+Focus-cond-expr "is-meta-var"                           -> Condition-part
+Module ":" Function-name "(" {Focus-cond-expr ","}* ")" -> Condition-part
+not Condition-part                                      -> Condition-part
+"(" Condition-part ")"                                  -> Condition-part {bracket}
+Condition-part and Condition-part                       -> Condition-part {left}
+Condition-part or  Condition-part                       -> Condition-part {left}
+
+focus {Focus-action ","}*                               -> Focus-cond-expr
+Unix-filename "." focus {Focus-action ","}*             -> Focus-cond-expr
+
+Focus-cond-expr is Sort                                 -> While-condition
+Focus-cond-expr matches Pattern                         -> While-condition
+Focus-cond-expr "is-meta-var"                           -> While-condition
+Module ":" Function-name "(" {Variable-name ","}* ")"   -> While-condition
+focus {Focus-action ","}+                               -> While-condition
+Unix-filename "." focus {Focus-action ","}+             -> While-condition
+Variable-name "." focus {Focus-action ","}+             -> While-condition
+not While-condition                                     -> While-condition
+"(" While-condition ")"                                 -> While-condition {bracket}
+While-condition and While-condition                     -> While-condition {left}
+While-condition or  While-condition                     -> While-condition {left}
+
+Focus ":=" Term                                         -> SEAL-action
+Variable-name ":=" Term                                 -> SEAL-action
+Variable-name ":=" Focus {Focus-action ","}*            -> SEAL-action
+Focus-expr                                              -> SEAL-action
+while While-condition do {SEAL-action ";"}+ od        -> SEAL-action
+Module ":" Function-name "(" {Variable-name ","}* ")"   -> SEAL-action
+create "(" Unix-filename  "," Module "," Text "," Sort ")" -> SEAL-action  %%text input
+create "(" Variable-name  "," Module "," Text "," Sort ")" -> SEAL-action  %%text input
+create "(" Unix-filename "," Variable-name ")"          -> SEAL-action     %%term output
+create "(" Variable-name "," Variable-name ")"          -> SEAL-action     %%term output
+
+Focus {Focus-action ","}*                               -> Focus-expr
+{Focus-action ","}+                                     -> Focus-expr
+
+focus                                                   -> Focus
+Unix-filename "." focus                                 -> Focus
+Variable-name "." focus                                 -> Focus
+
+up                                                      -> Focus-action
+down                                                    -> Focus-action
+previous                                                -> Focus-action
+next                                                    -> Focus-action
+root                                                    -> Focus-action
+save                                                    -> Focus-action
+restore                                                 -> Focus-action
+
+Variable-name                                           -> Term
+select "(" Unix-filename "," Sort ")"                   -> Term
+select "(" Variable-name "," Sort ")"                   -> Term
+Module ":" Function-name "(" {Variable-name ","}* ")"   -> Term
+
+String+                                                 -> Text
+readfile "(" Unix-filename ")"                          -> Text
+
+doc ":" String manual entry ":" Name                    -> Docu
+doc ":" String                                          -> Docu
+manual entry ":" Name                                   -> ToolDocu
+
+variables
+"_Spec-part"[']+ -> SEAL-spec-part
+"_Spec-parts"[']+ -> SEAL-spec-part+
+"_But"[']+      -> Button
+"_Menu"[']+     -> Menu
+"_Mentry"[']+   -> Menu-entry
+"_Tool"[']+     -> Active-tool
+"_Entry"[']+    -> Entry
+"_Entries"[']+  -> Entry+
+"_Cpart"[']+    -> Condition-part
+"_WC"[']+       -> While-condition
+"_Str"[']+      -> String
+"_Strs"[']+     -> String+
+"_Pattern"[']+  -> Pattern
+"_Vn"[']+       -> Variable-name
+"_Vns"[']+      -> Variable-name*
+"_Vnscomma"[']+ -> {Variable-name ","}*
+"_Sort"[']+     -> Sort
+"_Term"[']+     -> Term
+"_Text"[']+     -> Text
+"_Mod"[']+      -> Module
+"_Mods"[']+     -> Module*
+"_Func"[']+     -> Function-name
+"_Move"[']+     -> Focus-action
+"_Moves"[']+    -> {Focus-action ","}+
+"_Focus"[']+    -> Focus
+"_Focus-expr"[']+  -> Focus-expr
+"_FC-expr"[']+  -> Focus-cond-expr
+"_FC-exprs"[']+ -> {Focus-cond-expr ","}+
+"_Act"[']+      -> SEAL-action
+"_ActsSemi"[']+ -> {SEAL-action ";"}+
+"_ActsNone"[']+ -> SEAL-action*
+"_Function"[']+ -> SEAL-function
+"_Doc"[']+      -> Docu
+"_ToolDoc"[']+  -> ToolDocu
+"_C-A-pair"[']+ -> Condition-action-pair
+"_C-A-pairs"[']+ -> Condition-action-pair*
+"_Tool-CA-pair"[']+ -> Tool-CA-pair
+"_Tool-CA-pairs"[']+ -> Tool-CA-pair*
+
+priorities
+        Unix-filename "." focus -> Focus > Variable-name "." focus -> Focus
+
+priorities not Condition-part -> Condition-part >
+           Condition-part and Condition-part -> Condition-part >
+           Condition-part or Condition-part -> Condition-part
+
+priorities not While-condition -> While-condition >
+           While-condition and While-condition -> While-condition >
+           While-condition or While-condition -> While-condition

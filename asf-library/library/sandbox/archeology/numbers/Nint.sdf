@@ -1,0 +1,9 @@
+%% Equational definition of integers.
+
+imports Int-op
+
+hiddens
+  variables
+     [xy][0-9']*        -> INT
+     [z][0-9']*         -> NEG
+     [n][0-9']*         -> POS

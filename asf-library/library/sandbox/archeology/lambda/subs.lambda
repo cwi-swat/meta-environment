@@ -1,0 +1,2 @@
+(lambda y . y x)[ y/x ]
+%% should be equal to lambda z . z y

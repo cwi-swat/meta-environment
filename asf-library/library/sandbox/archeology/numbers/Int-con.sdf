@@ -1,0 +1,20 @@
+%% The way constants of type integers are constructed.
+
+exports
+  sorts DIGIT Z-DIGIT NZ-DIGIT INT INT-CON POS NEG NAT-CON NAT
+
+  lexical syntax
+    [1-9]                       -> NZ-DIGIT
+    "0"                         -> Z-DIGIT
+    NZ-DIGIT                    -> DIGIT
+    Z-DIGIT                     -> DIGIT
+    NZ-DIGIT DIGIT*             -> POS          %% constr
+
+  context-free syntax
+    "-" POS                     -> NEG          %% constr
+    Z-DIGIT                     -> NAT-CON      %% constr
+    POS                         -> NAT-CON
+    NAT-CON                     -> NAT
+    NAT                         -> INT-CON
+    NEG                         -> INT-CON
+    INT-CON                     -> INT

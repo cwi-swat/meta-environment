@@ -1,0 +1,28 @@
+imports Int-op Dig-ops
+
+exports
+  sorts ZNAT ZDIVID
+  context-free syntax
+    "[" DIGIT+ "]"              -> ZNAT  {constructor}
+    int2znat( INT )             -> ZNAT
+    znat2int( ZNAT )            -> INT
+    length(ZNAT)                -> INT
+    ZNAT "<" ZNAT               -> BOOL
+%%    ZNAT "\\geq" ZNAT           -> BOOL
+    eq(ZNAT, ZNAT)              -> BOOL
+    ZNAT "-" ZNAT               -> ZNAT  {left}
+    "(" ZNAT ")"                -> ZNAT  {bracket}
+    "S" ZNAT                    -> ZNAT
+    ZNAT ";" ZNAT               -> ZNAT  {left}
+
+    "<" ZNAT "," ZNAT ">"       -> ZDIVID
+    ZNAT "/" ZNAT "\\" ZNAT     -> ZDIVID
+
+hiddens
+  variables
+    c[0-9']*       -> CHAR
+    c[0-9']*"+"    -> CHAR+
+    D[0-9']*       -> DIGIT
+    D[0-9']*"+"    -> DIGIT+
+    D[0-9']*"*"    -> DIGIT*
+    z[0-9']*       -> ZNAT

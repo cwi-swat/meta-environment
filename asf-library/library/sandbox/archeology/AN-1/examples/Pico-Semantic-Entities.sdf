@@ -1,0 +1,21 @@
+imports ActionNotation Pico-Abstract-Syntax Pico-Semantic-Entities-Y Layout 
+  exports                                                                   
+  sorts Value                                                               
+    context-free                                                            
+    syntax                                                                  
+      Value "|" Value -> Value                                              
+        Value "&" Value -> Value                                            
+        "(" { Value "," } + ")" -> Value                                    
+        "nothing" -> Value                                                  
+        value -> Value                                                      
+        Numeral -> Natural                                                  
+        Character-String -> String                                          
+        Identifier -> Token                                                 
+        Natural -> Value                                                    
+        String -> Value                                                     
+        Token -> Value                                                      
+        Cell -> Value                                                       
+        Truth-value -> Datum                                                
+        Value -> Datum                                                      
+        Cell -> Bindable                                                    
+        Value -> Storable

@@ -1,0 +1,136 @@
+equations
+
+  [s2]  stat-tc(, E) = E
+  [s3]  stat-tc(_stat; _stat*, E) =
+          stat-tc(_stat*, stat-tc(_stat, E))
+
+  { Procedure call }
+  [s5]  set-construct of E0 to "_id _act-par-list" = E1,
+        proc-call-tc( _id _act-par-list, E1 ) = E2
+        =====================================================
+        stat-tc( _id _act-par-list, E0 ) = E2
+
+  { Compound statement }
+  [s6]  stat-tc(begin _stat* end, E) = stat-tc( _stat*, E)
+
+  { Assignment statement }
+  [as1] set-construct of E0 to "_var-acc := _expr" = E1,
+        lhs-tc(_var-acc, E1) = E2,
+        expr-tc(_expr, E2) = E3,
+        E2.result should be assignment-compatible with E3.result in E3 = E4
+        ===============================================================
+        stat-tc(_var-acc := _expr , E0) = E4
+
+  [as2] _id is the name of the inner function-block in E.context? = TRUE,
+        find _id in E.context = FunDef
+        ==================================================
+        lhs-tc(_id, E) = set-result of E to FunDef.type.canonical
+
+  [as3] _id is the name of the inner function-block in E1.context? != TRUE,
+        expr-tc(_id, E1) = E2,
+        E2.result defines _id as a variable? = TRUE,
+        take care of possibly threatening variable _id in E2 = E3
+        ==================================================================
+        lhs-tc(_id, E1) = set-result of E3 to E2.result.type.canonical
+
+  [as4] is-just-an-identifier?(_var-acc) != TRUE
+        =======================================
+        lhs-tc(_var-acc, E1) = var-access-tc(_var-acc, E1)
+
+  { If statement }
+  [is1] set-construct of E0 to "if _expr then <STATEMENT>" = E1,
+        expr-tc(_expr, E1) = E2,
+        stat-tc(_stat, E2) = E3,
+        E2.result should be Boolean in E3 = E4
+        ======================================
+        stat-tc(if _expr then _stat, E0) = E4
+
+  [is2] set-construct of E0 to
+                "if _expr then <STATEMENT> else <STATEMENT>" = E1,
+        expr-tc(_expr, E1) = E2,
+        stat-tc(_stat1, E2) = E3,
+        stat-tc(_stat2, E3) = E4,
+        E2.result should be Boolean in E4 = E5
+        ======================================
+        stat-tc(if _expr then _stat1 else _stat2, E0) = E5
+
+  { With statement }
+  [ws1] stat-tc(with _var-acc, _var-acc+ do _stat, E) =
+          stat-tc(with _var-acc do with _var-acc+ do _stat, E)
+
+  [ws2] set-construct of E0 to "with _var-acc do <STATEMENT>" = E1,
+        var-access-tc(_var-acc, E1) = E2,
+        E2.result.type should be a record in E2 = E3,
+        new-block-with-fields(E2.result.type, E3) = E4,
+          stat-tc(_stat, E4) = E5,
+        leave inner block of E5 = E6
+        ====================================================
+        stat-tc( with _var-acc do _stat, E0 ) = E6
+
+  { Case statement }
+  [cs1] stat-tc(case _expr of Cl-elts+; end, E) =
+          stat-tc(case _expr of Cl-elts+ end, E)
+
+  [cs2] set-construct of E0 to "case _expr of <CASE-LIST-ELT> end" = E1,
+        expr-tc(_expr1, E1) = E2,
+        E2.result should be ordinal in E2 = E3,
+        case-lists-tc( Cl-elts+, E2.result, [], E3) = <Val-list, E4>
+        ==================================================
+        stat-tc(case _expr1 of Cl-elts+ end, E0) = E4
+
+  { All constants in the case statement should be of the same type, and
+    should have different Values.}
+  [cs3] case-lists-tc( Cl-elt, T1, Val-list1, E1) = <Val-list2, E2>
+        ==========================================================
+        case-lists-tc( Cl-elt; Cl-elts+, T1, Val-list1, E1) =
+          case-lists-tc( Cl-elts+, T1, Val-list2, E2)
+
+  [cs5] const-val-list-tc( _const+, T1, Val-list1, E1) = <Val-list2, E2>,
+        stat-tc( _stat, E2 ) = E3
+        =================================
+        case-lists-tc( _const+: _stat, T1, Val-list1, E1 ) = <Val-list2, E3>
+
+  { Repetive statements }
+  [rs1] set-construct of E0 to "repeat <STATEMENT> until _expr" = E1,
+        expr-tc( _expr, E1 ) = E2,
+        stat-tc( _stat*, E2 ) = E3,
+        E2.result should be Boolean in E3 = E4
+        ======================================
+        stat-tc( repeat _stat* until _expr, E0 ) = E4
+
+  [ws1] set-construct of E0 to "while _expr do <STATEMENT>" = E1,
+        expr-tc( _expr, E1 ) = E2,
+        stat-tc( _stat, E2 ) = E3,
+        E2.result should be Boolean in E3 = E4
+        ======================================
+        stat-tc( while _expr do _stat, E0 ) = E4
+
+
+  [fs2] set-construct of E0 to
+                "for _id := _expr1 (Down)To _expr2 do <STATEMENT>" = E1,
+
+        _id should be a variable in inner block of E1 = E2,
+        _id should not be a control variable in E2 = E3,
+        _id should not be a possibly threatening variable in E3 = E4,
+
+        var-access-tc(_id, E4) = E5,
+        mark-variable(_id, control-variable, E5) = E6,
+        expr-tc(_expr1, E6) = E7,
+        expr-tc(_expr2, E7) = E8,
+        stat-tc(_stat, E8) = E9,
+        mark-variable(_id, , E9) = E10,
+
+        E5.result should be ordinal in E10 = E11,
+        E7.result should be assignment-compatible with E5.result in E11 = E12,
+        E8.result should be assignment-compatible with E5.result in E12 = E13
+        =====================================================================
+        stat-tc( for _id := _expr1 (Down)To _expr2 do _stat, E0) = E13
+
+
+  { It is only checked whether labels are declared indeed. }
+  [ls1] _label should be declared in E1 = E2,
+        stat-tc(_unl-stat, E2) = E3
+        ===================================
+        stat-tc(_label: _unl-stat, E1) = E3
+
+  [ls2] stat-tc(goto _label, E) = _label should be declared in E
