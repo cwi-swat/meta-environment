@@ -1,0 +1,13 @@
+package
+identification
+  name=atermpp
+  version=0.2
+  location=http://www.cwi.nl/projects/MetaEnv/atermpp
+  info=http://www.cwi.nl/projects/MetaEnv/aterm
+  description='C++ wrapper headers for the C ATerm library.'
+  keywords=library, aterm, term, tree, sharing
+
+configuration interface
+
+requires
+  aterm 2.3.1

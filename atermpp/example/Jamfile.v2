@@ -1,0 +1,22 @@
+# ATerm++ Library example Jamfile
+# (C) Copyright Wieger Wesselink 2004.
+
+project atermpp/test
+   : requirements
+       <include>../../boost_1_32_0
+       <include>..
+       <source>/aterm//libaterm
+   ;
+
+exe make_term  : make_term.cpp : ;
+exe aterm_list : aterm_list.cpp : ;
+
+stage dist
+   :
+     make_term
+     aterm_list
+   : 
+     <traverse-dependencies>on <include-type>EXE
+     <include-type>LIB
+     <location>.
+   ;
