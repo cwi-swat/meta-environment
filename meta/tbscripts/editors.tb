@@ -1,121 +1,55 @@
-/*
- * This file contains editor processes. There are three types of editors
- * now, so there are three main process definitions. The idea is that
- * these three will collaps to one GENERIC editor process in the near
- * future!
- */
+/* This file contains everything related to xemacs editors */
 
-/* First the process that creates one of the three processes */
+process Editors is
+let
+  Pid : int
+in
+  create(EditorManager,Pid?) .
+  create(EditorCreator,Pid?) .
+  create(SE, Pid?) /* Structure Editor */
+endlet
 
 process EditorCreator is
 let
-  Id         : int,
-  Pid1       : int,
-  Pid2       : int,
-  Path       : term,
-  Time       : term,
-  Tree       : term,
   EditorId   : term,
-  Text       : str,
   ModuleName : str,
-  FileName   : str
+  FileName   : str,
+  Tree       : term
 in
-  create(EditorManager, Id?) .
   (
-    %% Edit a Syntax file
     rec-msg(edit-syntax(ModuleName?)) .
-    snd-msg(get-sdf2-path-from-db(ModuleName)) .
-    rec-msg(path(FileName?)) .
-    snd-msg(get-editor-id(FileName, ModuleName)) .
-    (
-      rec-msg(new-editor(FileName, EditorId?)) .
-      create(TextEditor("syntax", EditorId, ModuleName), Pid1?) .
-      snd-msg(set-filename(EditorId, FileName)) .
-      create(EditSyntax(EditorId, ModuleName), Pid2?) .
-      rec-msg(initialization-done(EditorId))
-    +
-      rec-msg(existing-editor(FileName, EditorId?)) .
-      snd-msg(move-editor-to-front(EditorId))
-    ) .
-    snd-msg(edit-syntax(ModuleName, EditorId))
+    SyntaxEditorCreator(ModuleName)
   +
-    %% Edit an Equations file
     rec-msg(edit-equations(ModuleName?)) .
-    snd-msg(get-eqs-path-from-db(ModuleName)) .
-    rec-msg(path(FileName?)) .
-    snd-msg(get-editor-id(FileName, ModuleName)) .
-    (
-      rec-msg(new-editor(FileName, EditorId?)) .
-      create(TextEditor("equations", EditorId, ModuleName), Pid1?) .
-      snd-msg(set-filename(EditorId, FileName)) .
-      create(EditEquations(EditorId, ModuleName), Pid2?) .
-      rec-msg(initialization-done(EditorId))
-    +
-      rec-msg(existing-editor(FileName, EditorId?)) .
-      snd-msg(move-editor-to-front(EditorId))
-    ) .
-    snd-msg(edit-equations(ModuleName, EditorId))
+    EquationsEditorCreator(ModuleName)
   +
-    %% Edit a Term from file
-    (
-      rec-msg(edit-term-file(ModuleName?, FileName?)).
-      Tree := none
-    +
-      rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) 
-    ).
-    snd-msg(get-editor-id(FileName, ModuleName)) .
-    (
-      rec-msg(new-editor(FileName, EditorId?))
-    +
-      rec-msg(existing-editor(FileName, EditorId?)) .
-      DeleteAndKillEditor(EditorId) .
-      snd-msg(get-editor-id(FileName, ModuleName)) .
-      rec-msg(new-editor(FileName, EditorId?)) 
-    ) .
-    create(TextEditor("term", EditorId, ModuleName), Pid1?) .
-    snd-msg(open-trm-file(FileName)) .
-    (
-      rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) .
-      snd-msg(set-filename(EditorId, Path)) .
-      create(EditTerm(EditorId, ModuleName, Text, Tree), Pid2?)
-      +
-      rec-msg(error-opening(FileName)) .
-      snd-msg(set-filename(EditorId, FileName)) .
-      create(EditTerm(EditorId, ModuleName, "", Tree), Pid2?)
-    ) .
-    snd-msg(edit-term-file(ModuleName, EditorId))
+    rec-msg(edit-term-file(ModuleName?, FileName?)).
+    TermEditorCreator(ModuleName,FileName,none)
   +
-    rec-msg(text-editor-disconnected(EditorId?)) .
-    DeleteAndKillEditor(EditorId) 
+    rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) .
+    TermEditorCreator(ModuleName,FileName,Tree)
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
-    DeleteEditorsForModule(ModuleName)
+    KillEditorsForModule(ModuleName)
   )
   * delta
 endlet
-/* Below are the three editor processes */
-process EditSyntax(EditorId: term, ModuleName: str) is
+
+process SyntaxEditorCreator (ModuleName : str) is
 let
-  Path      : str,
-  Focus     : term,
-  Tree      : term, 
-  RTree          : term,
-  STree          : term,
-  Time      : term,
-  Modules   : term,
-  ErrorFoci : term,
-  Text      : str,
-  DirtyFoci : list,
-  ModifiedStatus : term,
-  Killed    : term,
-  ButtonName     : str
+  Tree : term,
+  Text : str,
+  FileName : str,
+  Path : str,
+  Time : int
 in
-  Text := "" .
+  Tree := none.
+  Text := "".
+  snd-msg(get-sdf2-path-from-db(ModuleName)) .
+  rec-msg(path(FileName?)) .
   snd-msg(get-sdf2-asfix(ModuleName)).
   (
-    rec-msg(syntax(Tree?)) .
-    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
-    rec-msg(initial-focus(Focus?))
+    rec-msg(syntax(Tree?))
   +
     rec-msg(unavailable).
     snd-msg(open-syntax-file(ModuleName)) .
@@ -123,27 +57,127 @@ in
       rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
     +
       rec-msg(error-opening(ModuleName))
-    ) .
-    snd-msg(initialize-structure-editor(EditorId, Text)) .
-    rec-msg(initial-focus(Focus?))
+    )
   ) .
-  snd-msg(initialization-done(EditorId)) .
-  Killed := false .
+  CreateEditor(ModuleName,"syntax",FileName,Text,Tree)
+endlet
+
+process EquationsEditorCreator (ModuleName : str) is
+let
+  Tree : term,
+  Text : str,
+  FileName : str,
+  Path : str,
+  Time : int
+in
+  Tree := none .
+  Text := "" .
+  snd-msg(get-eqs-path-from-db(ModuleName)) .
+  rec-msg(path(FileName?)) .
+  snd-msg(get-eqs-tree(ModuleName)) .
   (
-    (   
-      rec-msg(extra-button-action(EditorId, ButtonName?)) .
-      snd-msg(extra-button-action(ButtonName, "Syntax", ModuleName, EditorId))
-    ) *
-    if equal(Killed, true) then
-      tau
-    fi
-  ) 
-  ||
-  rec-msg(kill-editor(EditorId)).
-  Killed := true .
+    rec-msg(tree(Tree?)) 
+  +
+    rec-msg(unavailable) .
+    snd-msg(get-eqs-text(ModuleName)) .
+    (
+      rec-msg(eqs-text(ModuleName, Text?))
+    +
+      rec-msg(no-eqs-text(ModuleName)) .
+      CreateNewEquations(ModuleName)
+    )
+  ) .
+  CreateEditor(ModuleName, "equations", FileName, Text, Tree)
+endlet
+
+process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
+let
+  Text : str,
+  Path : str,
+  Time : int
+in
+  Text := "".
+  snd-msg(open-trm-file(FileName)) .
+  (
+    rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) 
+    +
+    rec-msg(error-opening(FileName)) 
+  ).
+  CreateEditor(ModuleName,"term",FileName,Text,Tree)
+endlet
+
+process CreateEditor(ModuleName : str, Type : str,
+                   FileName : str, Text : str, Tree : term) is
+let
+  EditorId   : term,
+  ButtonList : list,
+  Pid        : int,
+  Focus      : term
+in
+    snd-msg(get-auxilary-buttons(Type, ModuleName)) .
+    rec-msg(button-list(ModuleName,ButtonList?)).
+    snd-msg(get-editor-id(FileName, ModuleName)) .
+    (
+      rec-msg(new-editor(FileName, EditorId?)) .
+      snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
+      rec-msg(initial-focus(Focus?)) .
+      create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
+      create(TextEditor(EditorId, FileName, ButtonList), Pid?) .
+      snd-msg(editor-opened(ModuleName))
+    +
+      rec-msg(existing-editor(FileName, EditorId?)) .
+      EditorExists(EditorId,ModuleName,Type,FileName,Text,Tree)
+    )
+endlet
+
+process EditorExists(EditorId : term, ModuleName : str, Type : str,
+                     FileName : str, Text : str, Tree : term) is
+  if equal(Type,"term") then
+    snd-msg(kill-editor(EditorId)).
+    rec-msg(kill-editor-done(EditorId)).
+    /* We start all over again */
+    snd-msg(edit-term-file-with-tree(ModuleName,FileName,Tree))
+  else 
+    snd-msg(move-editor-to-front(EditorId)) .
+    snd-msg(editor-opened(ModuleName))
+  fi
+
+process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
+let
+  ButtonName : str,
+  Pid : int
+in
+  (
+    rec-msg(extra-button-action(EditorId, ButtonName?)) .
+    snd-msg(extra-button-action(ButtonName, Type, ModuleName, EditorId))
+  +
+    rec-msg(text-editor-disconnected(EditorId)) .
+    create(KillEditor(EditorId, Type, ModuleName), Pid?)
+  +
+    rec-msg(kill-editor(EditorId)) .
+    snd-msg(kill-text-editor(EditorId)) .
+    rec-msg(text-editor-killed(EditorId)) .
+    create(KillEditor(EditorId, Type, ModuleName), Pid?)
+  ) *
+  rec-msg(end-editor-action-loop(EditorId)) 
+endlet
+
+process KillEditor(EditorId : term, Type : str, ModuleName : str) is
+  snd-msg(end-editor-action-loop(EditorId)) .
+  snd-note(delete-editor(EditorId)) .
+  if not(equal(type, "term")) then
+    KillModuleEditor(EditorId, ModuleName)
+  else
+    tau
+  fi.
+  snd-msg(delete-structure-editor(EditorId)) 
+
+process KillModuleEditor(EditorId : term, ModuleName : str) is
+let
+  ModifiedStatus : term
+in
   snd-msg(get-modified-status(EditorId)) .
   rec-msg(modified-status(EditorId, ModifiedStatus?)) .
-  snd-msg(kill-editor-done(EditorId)).
   if equal(ModifiedStatus, modified) then
     snd-msg(revert-module(ModuleName)).
     rec-msg(module-reverted(ModuleName)).
@@ -152,117 +186,9 @@ in
   else
     tau
   fi
-  
 endlet
 
-process EditEquations(EditorId: term, ModuleName: str) is
-let
-  Path           : str,
-  Focus          : term,
-  Tree           : term,
-  RTree          : term,
-  STree          : term,
-  ErrMsg         : str,
-  ErrorFoci      : term,
-  Text           : str,
-  DirtyFoci      : list,
-  ModifiedStatus : term,
-  Killed         : term,
-  Msgs           : list,
-  ButtonName     : str
-in
-  Text := "" .
-  subscribe(syntax-changed(ModuleName)) . 
-  snd-msg(get-eqs-tree(ModuleName)) .
-  (
-    rec-msg(tree(Tree?)) .
-    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree))
-  +
-    rec-msg(unavailable) .
-    snd-msg(get-eqs-text(ModuleName)) .
-    (
-      rec-msg(eqs-text(ModuleName, Text?))
-    +
-      %% If there are no equations in the module-db, assume we
-      %% want to create a new equations section.
-      rec-msg(no-eqs-text(ModuleName)) .
-      snd-msg(create-new-equations(ModuleName)) .
-      (
-        rec-msg(new-equations-created(ModuleName, Path?))
-      +
-        rec-msg(new-equations-not-created(ErrMsg?)) .
-        snd-note(ui-status(errorf(
-          "Could not create empty equations: %s", [ErrMsg])))
-      )
-    ) .
-    snd-msg(initialize-structure-editor(EditorId, Text))
-  ) .
-  rec-msg(initial-focus(Focus?)) .
-  snd-msg(initialization-done(EditorId)) .
-  Killed := false .
-  (
-    (
-        rec-note(syntax-changed(ModuleName)) .
-	snd-msg(invalidate-tree(EditorId)).
-	rec-msg(invalidation-done(EditorId))
-      + 
-        rec-msg(extra-button-action(EditorId, ButtonName?)) .
-        snd-msg(extra-button-action(ButtonName, "Equations", ModuleName, EditorId))
-    ) *
-    if equal(Killed, true) then
-      tau
-    fi
-  )
-  ||
-  rec-msg(kill-editor(EditorId)).
-  Killed := true .
-  snd-msg(get-modified-status(EditorId)) .
-  rec-msg(modified-status(EditorId, ModifiedStatus?)) .
-  snd-msg(kill-editor-done(EditorId)) .
-  if equal(ModifiedStatus, modified) then
-    snd-msg(revert-module([ModuleName])).
-    rec-msg(module-reverted([ModuleName])).
-    snd-note(ui-status(errorf("Module %s is reread from disk",[ModuleName])))
-  else
-    tau
-  fi
-endlet
-
-process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
-let
-  Focus      : term,
-  ButtonName : str
-in
-  subscribe(syntax-changed(ModuleName)) . 
-  if equal(quote(Tree), none) then 
-    snd-msg(initialize-structure-editor(EditorId, Text)) 
-  else 
-    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) 
-  fi  . 
-  rec-msg(initial-focus(Focus?)) .
-  snd-msg(set-focus(EditorId, Focus)) .
-  (
-    rec-note(syntax-changed(ModuleName)) .
-    snd-msg(invalidate-tree(EditorId)).
-    rec-msg(invalidation-done(EditorId))
-  +
-    rec-msg(extra-button-action(EditorId, ButtonName?)) .
-    snd-msg(extra-button-action(ButtonName, "Term", ModuleName, EditorId)) 
-  ) *
-  rec-msg(kill-editor(EditorId)).
-  snd-msg(kill-editor-done(EditorId))
-endlet
-
-/* Some general editor utilities */
-
-process DeleteAndKillEditor(EditorId : term) is
-  snd-msg(kill-editor(EditorId)) .
-  rec-msg(kill-editor-done(EditorId)) .
-  snd-msg(delete-text-editor(EditorId)) .
-  snd-msg(delete-structure-editor(EditorId)) .
-  snd-note(delete-editor(EditorId))
-
-process DeleteEditorsForModule(ModuleName: str) is
+process KillEditorsForModule(ModuleName: str) is
 let
   EditorId   : term,
   EditorList : list
@@ -272,11 +198,26 @@ in
   (
     if not-equal(EditorList, []) then
       EditorId := first(EditorList) .
-      DeleteAndKillEditor(EditorId) .
+      snd-msg(kill-editor(EditorId)) .
       EditorList := next(EditorList)
     fi
   ) *
   if equal(EditorList, []) then
     tau
   fi
+endlet
+
+process CreateNewEquations(ModuleName : str) is
+let
+  ErrMsg : str,
+  Path   : str
+in
+  snd-msg(create-new-equations(ModuleName)) .
+  (
+  	rec-msg(new-equations-created(ModuleName, Path?))
+  +
+  	rec-msg(new-equations-not-created(ErrMsg?)) .
+  	snd-note(ui-status(errorf(
+  		"Could not create empty equations: %s", [ErrMsg])))
+  )
 endlet
