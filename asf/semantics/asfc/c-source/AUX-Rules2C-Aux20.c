@@ -14,13 +14,13 @@ static aterm * lf_AUX_Rules2C_Aux20_1( aterm * arg1);
 void register_AUX_Rules2C_Aux20( ) {
 arena local;
 TinitArena( NULL , & local);
-lf_AUX_Rules2C_Aux20_2sym= TmkSymbol( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-first-cond\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleList\"),w(\"\"),no-attrs)"
+lf_AUX_Rules2C_Aux20_2sym= TmkSymbol( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-first-arg\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleList\"),w(\"\"),no-attrs)"
  , SYM_STRING);
 lf3sym= TmkSymbol( "listtype(sort(\"FV-Path\"),ql(\",\"))" , SYM_STRING);
 lf4sym= TmkSymbol( "listtype(sort(\"Cond\"),ql(\"&\"))" , SYM_STRING);
 lf_AUX_Rules2C_Aux20_1sym= TmkSymbol( "listtype(sort(\"C-Rule\"),ql(\";\"))" , SYM_STRING);
 register_prod( TmakeSimple( & local , "listtype(sort(\"C-Rule\"),ql(\";\"))") , lf_AUX_Rules2C_Aux20_1 , lf_AUX_Rules2C_Aux20_1sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-first-cond\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleList\"),w(\"\"),no-attrs)") , lf_AUX_Rules2C_Aux20_2 , lf_AUX_Rules2C_Aux20_2sym);
+register_prod( TmakeSimple( & local , "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"remove-first-arg\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleList\"),w(\"\"),no-attrs)") , lf_AUX_Rules2C_Aux20_2 , lf_AUX_Rules2C_Aux20_2sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"FV-Path\"),ql(\",\"))") , lf3 , lf3sym);
 register_prod( TmakeSimple( & local , "listtype(sort(\"Cond\"),ql(\"&\"))") , lf4 , lf4sym);
 }
@@ -52,16 +52,16 @@ if( check_sym( tmp[ 2] , lf3sym)) {
 tmp[ 7]= arg_0( tmp[ 2]);
 if( check_sym( tmp[ 3] , lf4sym)) {
 tmp[ 8]= arg_0( tmp[ 3]);
-if( m_not_empty_list( tmp[ 8])) {
-tmp[ 9]= m_list_head( tmp[ 8]);
-tmp[ 10]= m_list_tail( tmp[ 8]);
+if( m_not_empty_list( tmp[ 7])) {
+tmp[ 9]= m_list_head( tmp[ 7]);
+tmp[ 10]= m_list_tail( tmp[ 7]);
 t_protect( tmp[ 1]);
 tmp[ 11]= lf_AUX_Rules2C_Aux20_2( lf_AUX_Rules2C_Aux20_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 11] , ef1sym)) {
 tmp[ 12]= arg_0( tmp[ 11]);
 if( check_sym( tmp[ 12] , lf_AUX_Rules2C_Aux20_1sym)) {
 tmp[ 13]= arg_0( tmp[ 12]);
-t_protect( tmp[ 7]);
+t_protect( tmp[ 8]);
 t_protect( tmp[ 4]);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 6]);
@@ -71,7 +71,7 @@ t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 9]);
 t_unprotect( tmp[ 11]);
-return ( * ef1)( lf_AUX_Rules2C_Aux20_1( cons( make_list( ( * ef2)( lf3( make_list( tmp[ 7])) , lf4( make_list( tmp[ 10])) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 13]))));
+return ( * ef1)( lf_AUX_Rules2C_Aux20_1( cons( make_list( ( * ef2)( lf3( make_list( tmp[ 10])) , lf4( make_list( tmp[ 8])) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 13]))));
 }
 }
 t_unprotect( tmp[ 11]);

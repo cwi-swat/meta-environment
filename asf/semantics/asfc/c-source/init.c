@@ -878,6 +878,8 @@ extern void register_AUX_Rules2C_Aux43();
 extern void resolve_AUX_Rules2C_Aux43();
 extern void register_AUX_Rules2C_Aux44();
 extern void resolve_AUX_Rules2C_Aux44();
+extern void register_AUX_Rules2C_Aux45();
+extern void resolve_AUX_Rules2C_Aux45();
 extern void register_AUX_Rules2C_Aux5();
 extern void resolve_AUX_Rules2C_Aux5();
 extern void register_AUX_Rules2C_Aux6();
@@ -1405,6 +1407,7 @@ void register_all() {
    register_AUX_Rules2C_Aux42();
    register_AUX_Rules2C_Aux43();
    register_AUX_Rules2C_Aux44();
+   register_AUX_Rules2C_Aux45();
    register_AUX_Rules2C_Aux5();
    register_AUX_Rules2C_Aux6();
    register_AUX_Rules2C_Aux7();
@@ -1890,6 +1893,7 @@ void resolve_all() {
    resolve_AUX_Rules2C_Aux42();
    resolve_AUX_Rules2C_Aux43();
    resolve_AUX_Rules2C_Aux44();
+   resolve_AUX_Rules2C_Aux45();
    resolve_AUX_Rules2C_Aux5();
    resolve_AUX_Rules2C_Aux6();
    resolve_AUX_Rules2C_Aux7();

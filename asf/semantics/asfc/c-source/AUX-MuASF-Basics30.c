@@ -44,7 +44,9 @@ tmp[ 0]= arg_0( atmp00);
 {
 aterm * atmp0000[2];
 atmp0000[ 0]= tmp[ 0];
+t_protect( atmp0000[ 0]);
 atmp0000[ 1]= tmp[ 0];
+t_protect( atmp0000[ 1]);
 while( m_not_empty_list( tmp[ 0])) {
 tmp[ 1]= m_list_head( tmp[ 0]);
 tmp[ 0]= m_list_tail( tmp[ 0]);
@@ -60,7 +62,7 @@ return ( * ef2)( );
 }
 }
 }
-atmp0000[ 1]= t_list_next( atmp0000[ 1]);
+atmp0000[ 1]= list_tail( atmp0000[ 1]);
 tmp[ 0]= atmp0000[ 1];
 }
 }
