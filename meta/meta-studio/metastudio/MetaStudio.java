@@ -338,6 +338,15 @@ public class MetaStudio
 			}
 		});
 
+		modulePopup.add(new AbstractAction("UnImport Module") {
+			public void actionPerformed(ActionEvent event) {
+				Object[] values = moduleList.getSelectedValues();
+				for (int i = 0; i < values.length; i++) {
+					doUnimportModule((String) values[i]);
+				}
+			}
+		});
+
 		modulePopup.addSeparator();
 
 		modulePopup.add(new AbstractAction("Compile Module") {
@@ -1250,6 +1259,31 @@ public class MetaStudio
 			ATerm event =
 				factory.make(
 					"import-module(<str>,<str>,<str>)",
+					oldModule,
+					module,
+					path);
+			bridge.postEvent(event);
+		}
+	}
+
+	//}}}
+	//{{{ void doImportModule(String oldModule)
+
+	void doUnimportModule(String oldModule) {
+		File oldFile = new File(oldModule);
+		File file =
+			showFileBrowser(
+				Preferences.getString("text.import-module"),
+				System.getProperty("user.dir"));
+
+		if (file != null) {
+			String extension = Preferences.getString("module.extension");
+			String module = getFileModule(file, extension);
+			String path = getFilePath(file, extension);
+
+			ATerm event =
+				factory.make(
+					"unimport-module(<str>,<str>,<str>)",
 					oldModule,
 					module,
 					path);
