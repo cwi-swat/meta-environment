@@ -576,6 +576,7 @@ static ATbool SG_HasRejectProd(tree t)
   return ATfalse;
 }
 
+#if 0
 static ATbool SG_ContainsReject(tree t)
 {
   AFun     fun;
@@ -625,6 +626,7 @@ static ATbool SG_ContainsReject(tree t)
   }
   return result;
 }
+#endif
 
 static ATbool SG_ProdIsAvoid(int prodtype)
 {
@@ -636,40 +638,96 @@ static ATbool SG_ProdIsPrefer(int prodtype)
   return prodtype == SG_PT_EAGER;
 } 
 
-static size_t SG_CountAvoidsInTree(tree t)
+static ATbool SG_TreeOccursInTree(tree t0, tree t1)
+{
+  ATermList ambs;
+  AFun fun;
+  tree amb, elem;
+
+  if (ATisEqual(t0, t1)) {
+    return ATtrue;
+  } 
+  else {
+    switch (ATgetType(t1)) {
+    case AT_APPL:
+      fun = ATgetAFun((ATerm) t1);
+  
+      if (fun == SG_Amb_AFun) {
+        ambs = (ATermList) ATgetArgument((ATermAppl) t1, 0);
+
+        for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+          amb = (tree) ATgetFirst(ambs);
+
+          if (SG_TreeOccursInTree(t0, amb)) {
+            return ATtrue;
+          }
+        }
+      }
+      else {
+        return SG_TreeOccursInTree(t0, 
+                                   (tree)ATgetArgument((ATermAppl) t1, 1));
+      }
+      break;
+    case AT_LIST:
+      for (; 
+           !ATisEmpty((ATermList) t1); 
+           t1 = (tree) ATgetNext((ATermList) t1)) {
+        elem = (tree) ATgetFirst((ATermList) t1);
+        if (SG_TreeOccursInTree(t0, elem)) {
+          return ATtrue;
+        }
+      }
+      break;
+    case AT_INT:
+    case AT_REAL:
+    case AT_PLACEHOLDER:
+    case AT_BLOB:
+    default:
+      break;
+    }
+    return ATfalse;
+  }
+}
+
+static size_t SG_CountAvoidsInTree(tree t0, tree t1)
 {
   ATermList ambs;
   size_t avoids = 0;
   AFun fun;
 
-  switch (ATgetType(t)) {
+  switch (ATgetType(t0)) {
   case AT_APPL:
-    fun = ATgetAFun((ATerm) t);
+    fun = ATgetAFun((ATerm) t0);
 
     if(fun == SG_Amb_AFun) {
-      ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
+      ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
       if (ATgetLength(ambs) > 1) { 
         return 0;
       }
       else {
-        return SG_CountAvoidsInTree((tree) ATgetFirst(ambs));
+        return SG_CountAvoidsInTree((tree) ATgetFirst(ambs), t1);
       }
     }
     else {
-      if (SG_ProdIsAvoid(SG_ProdType_Tree(t))) {
-        return 1;
+      if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
+        if (SG_TreeOccursInTree(t0, t1)) {
+          return 0;
+        }
+        else {
+          return 1;
+        }
       }
-      else if (SG_ProdIsPrefer(SG_ProdType_Tree(t))) {
+      else if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {
         return 0;
       }
 
-      return SG_CountAvoidsInTree((tree)ATgetArgument((ATermAppl) t, 1));
+      return SG_CountAvoidsInTree((tree)ATgetArgument((ATermAppl) t0, 1), t1);
     }
     break;
   case AT_LIST:
-    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-      ATerm elem = ATgetFirst((ATermList) t);
-      avoids += SG_CountAvoidsInTree((tree) elem);
+    for (; !ATisEmpty((ATermList) t0); t0 = (tree) ATgetNext((ATermList) t0)) {
+      ATerm elem = ATgetFirst((ATermList) t0);
+      avoids += SG_CountAvoidsInTree((tree) elem, t1);
     }
     break;
   case AT_INT:
@@ -683,40 +741,45 @@ static size_t SG_CountAvoidsInTree(tree t)
   return avoids;
 }     
 
-static size_t SG_CountPrefersInTree(tree t)
+static size_t SG_CountPrefersInTree(tree t0, tree t1)
 {
   ATermList ambs;
   size_t prefers = 0;
   AFun fun;
 
-  switch (ATgetType(t)) {
+  switch (ATgetType(t0)) {
   case AT_APPL:
-    fun = ATgetAFun((ATerm) t);
+    fun = ATgetAFun((ATerm) t0);
 
     if(fun == SG_Amb_AFun) {
-      ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
+      ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
       if (ATgetLength(ambs) > 1) { 
         return 0;
       }
       else {
-        return SG_CountPrefersInTree((tree) ATgetFirst(ambs));
+        return SG_CountPrefersInTree((tree) ATgetFirst(ambs), t1);
       }
     }
     else {
-      if (SG_ProdIsPrefer(SG_ProdType_Tree(t))) {
-        return 1;
+      if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {
+        if (SG_TreeOccursInTree(t0, t1)) {
+          return 0;
+        }
+        else {
+          return 1;
+        }
       }
-      else if (SG_ProdIsAvoid(SG_ProdType_Tree(t))) {
+      else if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
         return 0;
       }
 
-      return SG_CountPrefersInTree((tree)ATgetArgument((ATermAppl) t, 1));
+      return SG_CountPrefersInTree((tree)ATgetArgument((ATermAppl) t0, 1), t1);
     }
     break;
   case AT_LIST:
-    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-      ATerm elem = ATgetFirst((ATermList) t);
-      prefers += SG_CountPrefersInTree((tree) elem);
+    for (; !ATisEmpty((ATermList) t0); t0 = (tree) ATgetNext((ATermList) t0)) {
+      ATerm elem = ATgetFirst((ATermList) t0);
+      prefers += SG_CountPrefersInTree((tree) elem, t1);
     }
     break;
   case AT_INT:
@@ -939,10 +1002,10 @@ static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   IF_STATISTICS(SG_CountEagernessGtrCalls(SG_NR_INC));
 
   if (SG_PT_HAS_PREFERS(pt) || SG_PT_HAS_AVOIDS(pt)) {
-    pT0 = SG_CountPrefersInTree(t0);
-    pT1 = SG_CountPrefersInTree(t1);
-    aT0 = SG_CountAvoidsInTree(t0);
-    aT1 = SG_CountAvoidsInTree(t1);
+    pT0 = SG_CountPrefersInTree(t0, t1);
+    pT1 = SG_CountPrefersInTree(t1, t0);
+    aT0 = SG_CountAvoidsInTree(t0, t1);
+    aT1 = SG_CountAvoidsInTree(t1, t0);
     
     if (((pT0 > pT1) && (aT0 <= aT1)) ||
         ((pT0 == pT1) && (aT0 < aT1))) { 
