@@ -1,7 +1,8 @@
 module basic/Bytes
 
 imports basic/Strings
-	basic/Integers	
+imports	basic/Integers	
+imports basic/BytesCon
 
 exports sorts Bytes
 
@@ -22,15 +23,6 @@ exports
 
 hiddens
   imports basic/Comments
-
-  sorts Byte
-
-  lexical syntax
-    %% ~[] -> Byte is changed to "dummy" -> Byte
-    %% This production is only used to construct Bytes, not parse them.
-    "dummy" -> Byte
-
-    Byte* -> Bytes
 
   context-free syntax
     chars-to-bytes(String) -> Bytes 

@@ -34,6 +34,6 @@ context-free syntax
 
 sorts Summary
 context-free syntax
-  "summary" "(" producer:StrCon "," id:StrCon "," "[" {Error ","}* "]" ")"
-    -> Summary {cons("summary")}
+  "summary" "(" producer:StrCon "," id:StrCon "," 
+   "[" {Error ","}* "]" ")"  -> Summary {cons("summary")}
 

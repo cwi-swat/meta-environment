@@ -1,0 +1,27 @@
+module utilities/Parsing[X]
+
+imports basic/ParsetreeCon[X]
+imports basic/Bytes
+imports basic/ReadWriteCon
+
+exports
+
+context-free syntax
+  parse-bytes(Bytes)      -> ParseResult[[X]] {built-in("parse-bytes")}
+  parse-file(file:String) -> ParseResult[[X]] {built-in("parse-file")}
+
+context-free syntax
+  unparse(X)                     -> Bytes
+  unparse-to-string(X)           -> String
+
+  unparse-to-bytes(X)            -> Read
+    {built-in("unparse-to-bytes")}
+  unparse-to-file(file:String,X) -> Write
+    {built-in("unparse-to-file")}
+
+hiddens
+imports basic/Whitespace
+
+variables
+  "Bytes" -> Bytes
+  "Sort" -> X

@@ -1,0 +1,19 @@
+module basic/BytesCon
+
+%% This module defines a lexical sort Bytes without defining any
+%% particular syntax for it. The Bytes sort is used to store any
+%% characters using lexical constructor functions.
+
+exports 
+  sorts Bytes Byte
+
+%% It is essential to hide this the following syntax,
+%% since ~[] is ambiguous with all languages
+
+hiddens 
+  lexical syntax
+    ~[]   -> Byte  {cons("byte")}
+    Byte* -> Bytes {cons("bytes")}
+
+context-free start-symbols
+  Bytes

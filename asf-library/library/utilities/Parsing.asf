@@ -5,6 +5,6 @@ equations
 
 
 [unparse-sort]
-  bytes(Bytes) := unparse-to-bytes(Sort)
+  read(Bytes) := unparse-to-bytes(Sort)
   ===>
   unparse(Sort) = Bytes
