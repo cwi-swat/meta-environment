@@ -10,7 +10,7 @@ EXTRA_DIST = Graph.adt
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 
 INCLUDES = -I${ATERM}/include 
-JARFILE = graph-${VERSION}.jar
+JARFILE = ${top_srcdir}/lib/graph-${VERSION}.jar
 
 c-api: Graph.adt
 	upgrade-adt -i $< -o $<.upgraded

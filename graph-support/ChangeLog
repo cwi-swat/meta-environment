@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 10 10:12:28 CEST 2004 <jong@cwi.nl>
+ * lib/Makefile.am: explicitly refer to graph*jar in top_srcdir/lib
+
 Tue May 25 16:10:55 CEST 2004 <{jong,kooiker}@cwi.nl>
  * add generation of java graph API
 
