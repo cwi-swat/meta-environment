@@ -13,7 +13,14 @@ let
 in
   (
     rec-msg(get-query-actions) .
-    snd-msg(action-list(["findProduction", "findProdUse"])) 
+    snd-msg(get-application-status) .
+    (
+      rec-msg(status(interactive)) .
+      snd-msg(action-list(["findProduction", "findProdUse"])) 
+    +
+      rec-msg(status(standalone)) .
+      snd-msg(action-list([])) 
+    )
     +
     rec-msg(execute-query(EditorId?, "findProdUse")) .
     snd-msg(get-focussed-tree(EditorId)) .

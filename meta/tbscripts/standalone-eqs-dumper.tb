@@ -17,7 +17,7 @@ in
     snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
   )*
   rec-msg(finished-opening-modules) .
-  snd-msg(dump-equations(MODULENAME, FILENAME)) .
+  snd-msg(dump-equations(MODULENAME, OUTFILENAME)) .
   rec-msg(equations-dumped) .
   if equal(SAVING,"true") then
     snd-msg(save-all) .

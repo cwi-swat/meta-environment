@@ -40,6 +40,9 @@ in
     snd-msg(semantics-top-sort-hook).
     rec-msg(semantics-top-sort-hook-result(Sort?)).
     snd-msg(set-rules-top-sort(Sort))
+  +
+    rec-msg(get-application-status) .
+    snd-msg(status(standalone))
   )*delta
 endlet
 

@@ -2,10 +2,11 @@
   $Id$
  */
 
-process StandalonePtDumper is
+process StandAloneEquationsEditor is
 let
   Id         : term,
-  ModuleName : str
+  ModuleName : str,
+  EditorId   : term
 in
   Id := process-id.
   subscribe(search-paths-processed) .
@@ -17,14 +18,9 @@ in
     snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
   )*
   rec-msg(finished-opening-modules) .
-  snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME)) .
-  rec-msg(parse-table-dumped) .
-  if equal(SAVING,"true") then
-      snd-msg(save-all) .
-    rec-msg(saved)
-  else
-    tau
-  fi .
+  snd-msg(edit-equations(MODULENAME)) .
+  rec-msg(edit-equations(ModuleName?, EditorId?)) .
+  rec-msg(delete-editor(EditorId?)) .
   shutdown("")
 
 endlet   

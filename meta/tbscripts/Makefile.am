@@ -18,6 +18,9 @@ TBSCRIPTS = \
   meta.tb \
   module-utils.tb \
   notification.tb \
+  syntax-editor.tb \
+  equations-editor.tb \
+  term-editor.tb \
   open-modules.tb \
   parse-focusses.tb \
   parse-utils.tb \
@@ -28,6 +31,9 @@ TBSCRIPTS = \
   restore-term-brackets.tb \
   save-module.tb \
   set-parsetable.tb \
+  standalone-syntax-editor.tb \
+  standalone-equations-editor.tb \
+  standalone-term-editor.tb \
   standalone-eqs-dumper.tb \
   standalone-pt-dumper.tb \
   standalone-status-display.tb \

@@ -3,25 +3,39 @@
  */
 
 #include "abort.tb"
-#include "parse-utils.tb"
 #include "sglr.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
 #include "module-db.idef"
 #include "unparsePT.idef"
+#include "se.idef"
+#include "gen.tb"
 #include "get-parsetable.tb"
 #include "set-parsetable.tb"
-#include "dump-equations.tb"
+#include "dump-parsetable.tb"
 #include "sdf2-language.tb"
 #include "notification.tb"
 #include "parsetablegen.idef"
-#include "process-eqs.tb"
+#include "meta-interface.tb"
 #include "configmanager.idef"
-#include "standalone-eqs-dumper.tb"
+#include "standalone-term-editor.tb"
 #include "standalone-status-display.tb"
 #include "save-module.tb"
-#include "meta-interface.tb"
+#include "text-editor.idef"
+#include "editor-creator.tb"
+#include "editor-manager.idef"
+#include "edit-syntax.tb"
+#include "edit-equations.tb"
+#include "edit-term.tb"
+#include "parse-focusses.tb"
+#include "parse-utils.tb"
+#include "query.tb"
+#include "query-tool.idef"
+#include "apply-function.idef"
+#include "process-eqs.tb"
+#include "restorebrackets.idef"
+#include "restore-term-brackets.tb"
 
 process META is
 let
@@ -48,13 +62,14 @@ in
   )*delta
 endlet
 
-toolbus(META, Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
-        ModuleDB, File-creator, Notify-about-changed-modules,
-	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
-	Meta-Interface,  Open-modules, PGen, 
-	DumpEquations, ProcessEqs, GetEquations, Status-display, Save-modules
+toolbus(META, Parser, Unparser, Io, ConfigManager, StandAloneAsfEditor,
+        ParseFocusses, EditorCreator, ModuleDB, ProcessEqs, GetEquations,
+	File-creator, Meta-Interface,
+	SE, Set-parsetable, GetParseTable, Open-Sdf2-Language, 
+	Open-modules, PGen, Notify-about-changed-modules, ApplyFunc,
+	GenAdapt, Status-display, Save-modules, Query, QueryTool,
+	RestoreTermBrackets, RestoreBrackets
 #ifdef TIMEOUT
         , AbortMetaEnvironment
 #endif
-	) 
-
+)
