@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/25 <markvdb@cwi.nl>
+ * Refactoring the manipulation of the name of the termstore.
+
 2003/09/24 <markvdb@cwi.nl>
  * First version of a script to check action scripts.
 
