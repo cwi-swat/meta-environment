@@ -4,3 +4,4 @@ Makefile.in
 genmakefile
 genamakefile
 concat-asf
+lift-asf
