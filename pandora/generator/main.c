@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
   ATerm at_tree;
   PT_ParseTree tree;
 
-  BOX_Box box;
+  BOX_Start box;
 
   ATinit(argc, argv, &bottomOfStack); 
   PT_initMEPTApi(); 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     box = pandora(tree);
     printf("Box of Pandora opened!!!\n");
 
-    ATwriteToNamedBinaryFile(BOX_BoxToTerm(box), output);
+    ATwriteToNamedBinaryFile(BOX_StartToTerm(box), output);
 
     return 0;
   }

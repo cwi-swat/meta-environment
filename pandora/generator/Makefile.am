@@ -1,6 +1,6 @@
 # $Id$
 
-CFLAGS += -Werror
+AM_CFLAGS = -Werror
 
 INCLUDES = \
 	-I$(PT_SUPPORT)/include \
