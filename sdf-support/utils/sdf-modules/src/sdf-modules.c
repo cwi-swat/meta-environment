@@ -172,10 +172,12 @@ ATerm get_module_path(int cid, const char *path, const char *id)
     pathBuf[p] = '\0';
   }
 
-  result = ATmake("snd-value(module-path(<str>))", path);
+  result = ATmake("snd-value(module-path(<str>))", pathBuf);
 
   free(pathBuf);
   free(idBuf);
+
+
   return result;
 }
 
@@ -283,7 +285,7 @@ ATerm is_valid_modulename(int cid, const char *moduleName)
   int namelen = strlen(moduleName);
   ATerm no = ATmake("snd-value(result(no))");
   ATerm yes = ATmake("snd-value(result(yes))");
- 
+  
   for(j=namelen - 1; j >= 0; j--) {
     if (!isalnum((int)moduleName[j])
         && moduleName[j] != '-'
