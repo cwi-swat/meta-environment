@@ -1,7 +1,0 @@
-Makefile
-Makefile.in
-.deps
-*.o
-libPT.a
-get-parsetree
-add-posinfo
