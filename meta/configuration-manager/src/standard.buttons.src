@@ -1,9 +1,7 @@
 buttons([
   button("*",
-         [description(tree-panel, click)],
-         [show-area]),
-  button("*",
-         [description(message-list, menu(["Show Source"]))],
+         [description(tree-panel, click),
+          description(message-list, click)],
          [show-area]),
   button("*",
          [description(syntax-editor, menu(["Actions", "Parse"]))],

@@ -40,7 +40,7 @@ public class MessageList extends JScrollPane
 	  //System.out.println(sel.toString());
 
 	  try {
-	    matching = sel.match("listitem(<str>,[<list>],<term>)");
+	    matching = sel.match("listitem(<str>,<term>)");
 	  }
 	  catch (ParseError exc) {
 	    errMessage("Selected element has bad structure");
@@ -52,10 +52,9 @@ public class MessageList extends JScrollPane
 	  }
 	  else {
 	    //System.out.println(matching);
-	    bridge.postEvent(factory.make("element-selected(menu(<list>),<str>,<term>)", 
-					  matching.get(1), 
+	    bridge.postEvent(factory.make("element-selected(<str>,<term>)", 
 					  name,
-					  matching.get(2)));
+					  matching.get(1)));
 	  }
 	}
 	catch (IllegalArgumentException iae) {
@@ -86,7 +85,7 @@ public class MessageList extends JScrollPane
       java.util.List matching;
 
       try {
-	matching = atrm.match("listitem(<str>,[<list>],<term>)");
+	matching = atrm.match("listitem(<str>,<term>)");
       }
       catch (ParseError exc) {
 	errMessage("Can't show list containing non-listitems");

@@ -1,6 +1,8 @@
 # $Id$
 
 2003/07/10 (markvdb@cwi.nl)
+ * Simplified the listitems of the Iversen lists.
+ * Introduced the notion of clicks in the button scripts.
  * Removed the explicit Show Source information.
 
 Thu Jul 10 15:45:49 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
