@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Oct 19 00:07:36 CEST 2004 <jurgenv@cwi.nl>
+ * Merged in dependency on tide
+
 Thu Oct 8 09:05:27 CEST 2004 <fagidiot@daimi.au.dk>
  * tbscripts/button-actions.tb:
    - process GetAsfModule, removed locale variable filename, which was

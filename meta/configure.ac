@@ -69,8 +69,13 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
+dnl Require Tide package
+AC_PACKAGE_REQUIRE(tide, tide,
+   [  --with-tide=DIR      Tide distribution is in DIR])
+AC_SUBST(TIDE)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:${TIDE}/share/tide/tide.jar
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
