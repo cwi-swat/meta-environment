@@ -42,14 +42,9 @@ AC_SUBST(CFLAGS)
 dnl Check for required packages and perform version check when needed.
 
 dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, tifstoc,
+AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
-
-dnl Require toolbus package
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
-AC_SUBST(TOOLBUS)
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
