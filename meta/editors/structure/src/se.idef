@@ -36,13 +36,10 @@ in
     rec-msg(replace-focus(EditorId?, Focus?, Tree?)) .
     snd-do(SE, replace-focus(EditorId, Focus, Tree))
   +
-    rec-msg(set-focus(EditorId?, Focuses?)) .
-    snd-do(SE, set-multiple-focus(EditorId, Focuses))
-  +
     rec-msg(move-focus-to-root(EditorId?)) .
     snd-eval(SE, move-focus-to-root(EditorId)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(set-focus(EditorId, Focus))
+    snd-msg(focus-moved(EditorId, Focus))
   +
     rec-msg(move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .

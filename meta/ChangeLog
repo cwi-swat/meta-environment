@@ -1,5 +1,10 @@
 # $Id$
 
+2003/04/15 (markvdb@cs.vu.nl)
+ * Repaired a very annoying bug wrt setting of foci. The message
+   move-focus-to-root responded with "set-focus" which causes
+   quite some interference.
+
 2003/03/30 (jurgenv@cwi.nl)
  * Used backquotes to delay calling *-config scripts to after
    configure phase. Otherwise autobundle can't configure all packages

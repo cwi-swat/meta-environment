@@ -86,7 +86,7 @@ let
   FileName  : str
 in
   snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(set-focus(EditorId, Focus?)) .
+  rec-msg(focus-moved(EditorId, Focus?)) .
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
   snd-msg(get-tree(EditorId)) .
@@ -99,7 +99,7 @@ in
   rec-msg(save-done(FileName)) .
   snd-msg(reload-file(EditorId, FileName)) .
   snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(set-focus(EditorId, Focus?)) .
+  rec-msg(focus-moved(EditorId, Focus?)) .
   snd-msg(set-focus(EditorId, Focus))
 endlet
 
