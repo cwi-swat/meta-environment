@@ -1,5 +1,9 @@
 # $Id$
 
+2002/09/16 (vandenbr@loria.fr)
+ * Introduced the notion of "status-changed" in the editors
+   to know that a term has become dirty.
+
 2002/09/13 (jurgenv@cwi.nl, vandenbr@loria.fr)
  * Added a function to transform "windows-like" paths into "unix-like"
    paths.
