@@ -142,5 +142,18 @@ buttons([
            push-string(""),
            if-equal([],
            [split-file-name(".sdf"),
-            open-module])])
+            open-module])]),
+  buttons([
+   button("*",
+          [description(equations-editor, menu(["Upgrade","Upgrade conditions"]))],
+          [push-active-module,
+           get-root,
+           unpack-tree,
+           message("Upgrading equations..."),
+           execute-action("__ASF__/bin/asfupgrader"),
+           message("Upgrading equations done"),
+           set-root
+          ])
+])
+
 ])

@@ -16,4 +16,5 @@ LIBRARY_LOCATION =${ASF_LIBRARY}/share/asf-library/library
 	     s@__META__@${META}@g' < $< > $@
 
 standard.asfsdf.buttons:  standard.asfsdf.buttons.src Makefile
-	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g' < $< > $@
+	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g;\
+	     s@__ASF__@${ASF}@g;' < $< > $@
