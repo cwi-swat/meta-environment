@@ -1029,7 +1029,7 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
   ERR_Subject subject;
   ERR_Feedback error;
   ERR_Location posinfo;
-  char description[1024];
+  static char description[1024];
 
   SG_ERROR_ON();
 
@@ -1162,7 +1162,7 @@ tree SG_ParseResult(char *path, char *sort)
 	    ATerm ambtrak = NULL;
 	  
             ambtrak = PT_reportTreeAmbiguities(path, (PT_Tree) t);
-            if (ambtrak && !ATmatch(ambtrak, "error(\"ambiguity\",[])")) {
+            if (ambtrak) {
               if (SG_AMBIGUITY_ERROR) {  
                 return SG_ParseError(path, ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
               }
