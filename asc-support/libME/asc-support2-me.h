@@ -4,7 +4,6 @@
 #include "asc-support-me.h"
 #include "asc-apply-me.h"
 #include <MEPT-utils.h>
-#include <ASFME-utils.h>    
 
 extern ATerm innermost(PT_Tree tree);
 extern PT_ParseTree toasfix(ATerm tree);
