@@ -9,7 +9,7 @@ NewModuleName := make-modulename(ModuleName, ModuleId),
 NewSections := make-sections(Sections)
 ===>
 generate-syntax(module ModuleName ImpSection* Sections, ModuleId) =
-module NewModuleName 
+module ModuleId
 imports basic/Booleans 
 imports ModuleName
 NewSections
@@ -23,7 +23,7 @@ make-modulename(ModuleId1, ModuleId2) = ModuleId2
 
 
 tests
-[complex-name] make-modulename(Aap [X Y]) == Aap-API [ X Y ]
+[complex-name] make-modulename(Aap [X Y], Sjaak) == Sjaak [ X Y ]
 
 equations
 
@@ -154,8 +154,8 @@ generate-make-fields() =
 tests
 
 [1] generate-make-fields(",") ==
-[2] generate-make-fields(Bool "&" Bool) == Bool "," Bool
+[2] generate-make-fields(Bool "&" Bool) == Bool, Bool
 [3] generate-make-fields(Bool) == Bool
-[4] generate-make-fields(Bool Bool) == Bool "," Bool
-[5] generate-make-fields(Bool Bool Bool) == Bool "," Bool "," Bool
+[4] generate-make-fields(Bool Bool) == Bool, Bool
+[5] generate-make-fields(Bool Bool Bool) == Bool, Bool, Bool
 

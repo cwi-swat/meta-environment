@@ -2,25 +2,14 @@ module ASFSDFApigen
 imports RemoveDoubles
 imports SDFApigen
 imports ASFApigen
-imports utilities/IO[Module]
-imports utilities/IO[Skeleton]
 
 exports
 
 context-free syntax
 
-generate-api-and-write(Module, newname:ModuleId) -> WriteResult
-generate-api-and-write(Module, newname:StrCon) -> WriteResult
-
-context-free start-symbols
-  WriteResult
-  <Module,Skeleton>
+generate-api(Module, newname:ModuleId) -> <Module,Skeleton>
 
 hiddens
-
-context-free syntax
-
-generate-api(Module, newname:ModuleId) -> <Module,Skeleton>
 
 variables
 

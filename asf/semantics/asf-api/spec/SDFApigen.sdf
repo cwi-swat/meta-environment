@@ -33,6 +33,9 @@ context-free syntax
   generate-make(Literal, Symbol*, Symbol) -> Production*
   generate-make-fields(Symbol*) -> {Symbol ","}*
 
+context-free start-symbols
+  {Symbol ","}*
+
 variables
 
 "Name"[0-9]* -> Literal
