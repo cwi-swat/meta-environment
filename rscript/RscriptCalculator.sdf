@@ -16,6 +16,10 @@ exports
         RVAR # REXP                    		-> RVALUE
         RVAR # RVAR # REXP              	-> RVALUE
         RVAR # RVAR # RVAR # REXP		-> RVALUE
+        RVAR # RVAR # RVAR # RVAR # REXP	-> RVALUE
+        RVAR # RVAR # RVAR # RVAR # RVAR # REXP	-> RVALUE
+        RVAR # RVAR # RVAR # RVAR # RVAR # RVAR # REXP	-> RVALUE
+        RVAR # RVAR # RVAR # RVAR # RVAR # RVAR # RVAR # REXP	-> RVALUE
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"       
                                       -> RVALUE
@@ -113,6 +117,7 @@ exports
         equal-elem(Elem, Elem)              				-> Boolean
 	equal-rval(RVALUE, RVALUE)					-> Boolean
 	is-tuple(RVALUE)						-> Boolean
+	is-bag-or-rel(RVALUE)						-> Boolean
 
         eval-iter(RVAR, Bag[[Elem]], RVALUE, REXP, RSTORE)		-> RVALUE
         eval-citer(RVAR, Bag[[Elem]], RVALUE, REXP, REXP, RSTORE)	-> RVALUE
@@ -160,6 +165,7 @@ hiddens
 
         "$Stat" [0-9\']*               -> RSTAT
         "$Stat*" [0-9\']*              -> RSTAT*
+        "$Stat+" [0-9\']*              -> RSTAT+
 
         "$Bool" [0-9\']*               -> Boolean
         "$Integer" [0-9\']*            -> Integer

@@ -12,6 +12,7 @@ exports
 
   lexical syntax
      [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
+      "comment" ~[]* "endcomment"		-> LAYOUT
 
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
@@ -91,6 +92,11 @@ exports
 
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
      "(" REXP ")"                             	-> REXP {bracket}
+
+
+%% let expressions
+
+     REXP "where" RSTAT+ "endwhere"		-> REXP
 
 %% Highly experimental sets of equations
      RVAR "=" REXP				-> EQU

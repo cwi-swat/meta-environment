@@ -175,6 +175,7 @@ hiddens
 
      "$Stat" [0-9\']*            -> RSTAT
      "$Stat*" [0-9\']*           -> RSTAT*
+     "$Stat+" [0-9\']*           -> RSTAT+
 
      "$From" [0-9\']*   	-> FROM
      "$From*" [0-9\']*   	-> {FROM ","}*
