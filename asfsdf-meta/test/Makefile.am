@@ -13,8 +13,11 @@ PTDUMP=${GENMETA} ${TIMEOUT} -P
 %.dump.sh: Makefile meta.conf
 	@(echo '#! /bin/sh';\
 	echo 'set -e' ;\
+	echo 'rm -f $*.eqs $*.trm.tbl' ;\
 	echo '${EQSDUMP} -m $* -o $*.eqs' ;\
-	echo '${PTDUMP} -m $* -o $*.trm.tbl') > $@ && chmod +x $@
+	echo '${PTDUMP} -m $* -o $*.trm.tbl' ;\
+	echo 'test -f $*.eqs';\
+	echo 'test -f $*.trm.tbl') > $@ && chmod +x $@
 
 meta.conf: meta.conf.src Makefile
 	sed 's@__SRCDIR__@${srcdir}@g' < $< > $@
