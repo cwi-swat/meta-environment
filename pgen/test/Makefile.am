@@ -21,7 +21,7 @@
 
 SUBDIRS    = first grammars tables
 
-EXTRA_DIST = lang-types regress-lang 
+EXTRA_DIST = lang-types regress-lang.sh.src 
 
 TESTS      = regress-lang
 
