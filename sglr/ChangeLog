@@ -1,5 +1,10 @@
 $Id$
 
+2001/06/27 (markvdb@cwi.nl)
+  * Repaired a bug detected by Peter Mosses with respect to priorities,
+    implemented what is described in Section 4.5.1 (Priority Conflicts) in
+    Eelco's PhD thesis.
+
 2001/06/13 (markvdb@cwi.nl)
   * Removed PosInfo related code.
   * Removed BOEHM related "if-def"s.

@@ -1037,7 +1037,7 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
     } else {
       kids = ATgetArgument((ATermAppl) t, 1);
 
-      if(SG_ProdIsInjection(pt, l)) {
+      if (SG_ProdIsInjection(pt, l)) {
         injections++;
       }
       
@@ -1340,6 +1340,14 @@ static tree SG_Left_Associativity_Filter(tree t, label prodl)
       return NULL;
     }
   }
+  else if (ATgetType(lastson) == AT_APPL) {
+    if (prodl == SG_GetApplProdLabel(lastson)) {
+      IF_DEBUG(ATfprintf(SG_log(),
+                         "Left associative node %d removed.\n",
+                         prodl));
+      return NULL;
+    }
+  }
   return t;
 }
 
@@ -1379,7 +1387,50 @@ static tree SG_Right_Associativity_Filter(tree t, label prodl)
       return NULL;
     }
   }
+  else if (ATgetType(firstson) == AT_APPL) {
+    if (prodl == SG_GetApplProdLabel(firstson)) {
+      IF_DEBUG(ATfprintf(SG_log(),
+                         "Right associative node %d removed.\n",
+                         prodl));
+      return NULL;
+    }
+  }
   return t;
+}
+
+static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
+{
+  if (ATgetType(t) == AT_APPL &&
+      ATgetAFun(t) != SG_Amb_AFun) {
+    label prod = SG_GetApplProdLabel(t);
+      
+    while (SG_ProdIsInjection(pt, prod)) {
+      ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
+      t = (tree)ATgetFirst(injSons);
+
+      if (ATgetType(t) == AT_APPL &&
+          ATgetAFun(t) != SG_Amb_AFun) {
+        prod = SG_GetApplProdLabel(t);
+      }
+      else {
+        return t;
+      }
+    }
+  }
+  return t;
+}
+
+static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree)
+{
+  if (ATisEqual(t, injT)) {
+    return newTree;
+  }
+  else {
+    ATermList sons = (ATermList)ATgetArgument((ATerm) t, 1);
+    tree newSon = SG_Replace_Under_Injections((tree)ATgetFirst(sons), 
+                                              injT, newTree);
+    return ATsetArgument((ATermAppl)t, (ATerm)ATmakeList1((ATerm)newSon), 1);
+  }
 }
 
 static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
@@ -1388,18 +1439,24 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
   ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
   ATermList newSons = ATempty;
   ATermInt l0       = SG_GetATint(prodl, 0);
+  ATermInt l1;
+  label proda;
 
   for (;!ATisEmpty(sons); sons = ATgetNext(sons)) {
     tree son = (tree)ATgetFirst(sons);
-    if (ATgetType(son) == AT_APPL &&
-        ATgetAFun(son) == SG_Amb_AFun) {
-      ATermList ambs = (ATermList)ATgetArgument((ATerm)son, 0);
+    tree injSon = SG_Jump_Over_Injections(pt, son);
+
+    if (ATgetType(injSon) == AT_APPL &&
+        ATgetAFun(injSon) == SG_Amb_AFun) {
+      ATermList ambs = (ATermList)ATgetArgument((ATerm)injSon, 0);
 
       newambs = ATempty;
       for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
         tree amb = (tree) ATgetFirst(ambs);
-        label proda = SG_GetApplProdLabel(amb);
-        ATermInt l1 = SG_GetATint(proda, 0);
+        tree injAmb = SG_Jump_Over_Injections(pt, amb);
+
+        proda = SG_GetApplProdLabel(injAmb);
+        l1 = SG_GetATint(proda, 0);
 
         if (!SG_GtrPriority(pt, l0, l1)) {
           newambs = ATinsert(newambs, (ATerm) amb);
@@ -1411,14 +1468,25 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
         }
       }
       if (!ATisEmpty(newambs)) {
+        tree orgInjSon = injSon;
+
         if (ATgetLength(newambs) > 1) {
-          son = ATsetArgument((ATermAppl)son, (ATerm)newambs, 0);
+          injSon = ATsetArgument((ATermAppl)injSon, (ATerm)newambs, 0);
         }
         else {
-          son = (tree)ATgetFirst(newambs);
+          injSon = (tree)ATgetFirst(newambs);
         }
+        son = SG_Replace_Under_Injections(son, orgInjSon, injSon);
       }
       else {
+        return NULL;
+      }
+    }
+    else if (ATgetType(injSon) == AT_APPL) {
+      proda = SG_GetApplProdLabel(injSon);
+      l1 = SG_GetATint(proda, 0);
+      
+      if (SG_GtrPriority(pt, l0, l1)) {
         return NULL;
       }
     }
