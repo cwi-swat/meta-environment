@@ -1,12 +1,5 @@
 module Test
-imports asf/syntax/Comments
-  imports basic/Strings
+imports basic/Whitespace
 
-exports
-	sorts TYPE
-       context-free syntax
-	int | str 	-> TYPE
-	t2s(TYPE)	-> String 
-
-variables
-	"$Type" -> Type
+imports Bags[Integer]
+imports Relations[Integer]

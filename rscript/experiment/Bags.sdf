@@ -1,0 +1,24 @@
+module Bags[Elem]
+
+exports
+imports basic/Booleans
+imports basic/Integers
+imports EmptyBag
+
+  sorts Bag[[Elem]]
+
+context-free syntax
+    EmptyBag				-> Bag[[Elem]]
+   "{" {Elem ","}* "}"	        	-> Bag[[Elem]] {constructor}
+
+    add(Elem, Bag[[Elem]])              -> Bag[[Elem]]
+    union(Bag[[Elem]], Bag[[Elem]])     -> Bag[[Elem]]
+
+hiddens
+  imports asf/syntax/Comments
+
+  variables
+    "Bag" [0-9\']*           -> Bag[[Elem]]
+    "E" [0-9\']*             -> Elem
+    "E*" [0-9\']*            -> { Elem ","}*
+    "E+" [0-9\']*            -> { Elem ","}+

@@ -22,7 +22,7 @@ equations
 
         rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
 
-        rel[str,node] UNDEF = { <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
+        rel[str,node] UNDEF = { occurrences(<N,V>): <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
                            occurrences(<N,V>)}
 
 ,

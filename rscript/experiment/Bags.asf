@@ -1,0 +1,23 @@
+equations
+
+%% --- EmptyBag
+
+[e1] EmptyBag = {}
+
+%% --- add(E, Bag)
+
+[a1] add(E, {E*}) = {E, E*}
+
+%% --- union(Bag1, Bag2)
+
+[un-1] union({}, {E*}) = {E*}
+[un-2] union({E*}, {}) = {E*}
+
+[un-3] {E*4} = union({E*1}, {E*2, E*3})
+       ==============================
+       union({E, E*1}, {E*2, E, E*3}) = {E, E*4}
+
+[default-un]
+       {E*3} = union({E*1}, {E*2})
+       ==============================
+       union({E, E*1}, {E*2}) = {E, E*3}

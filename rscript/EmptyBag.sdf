@@ -1,0 +1,5 @@
+module EmptyBag
+exports
+   sorts EmptyBag
+   context-free syntax
+        "EmptyBag"              -> EmptyBag

@@ -1,25 +1,25 @@
 module Relations[Elem]
 
 exports
+imports EmptyRel
 
-imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]]  ]
-
+imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]] 
+                           ]
+ 
 imports Bags[Elem]
 
-%%  sorts Rel[[Elem]]
-
   context-free syntax
-     "EmptyRel"                                		-> Rel[[Elem]]
+     EmptyRel                                		-> Rel[[Elem]]
 
-     equal(Rel[[Elem]], Rel[[Elem]])           		-> Boolean
-     subset(Rel[[Elem]], Rel[[Elem]])          		-> Boolean
-     strict-subset(Rel[[Elem]], Rel[[Elem]])   		-> Boolean
-     superset(Rel[[Elem]], Rel[[Elem]])        		-> Boolean
-     strict-superset(Rel[[Elem]], Rel[[Elem]]) 		-> Boolean
+%%     equal(Rel[[Elem]], Rel[[Elem]])           		-> Boolean
+%%     subset(Rel[[Elem]], Rel[[Elem]])          		-> Boolean
+%%     strict-subset(Rel[[Elem]], Rel[[Elem]])   		-> Boolean
+%%     superset(Rel[[Elem]], Rel[[Elem]])        		-> Boolean
+%%     strict-superset(Rel[[Elem]], Rel[[Elem]]) 		-> Boolean
 
-     union(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
-     inter(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
-     diff(Rel[[Elem]], Rel[[Elem]])            		-> Rel[[Elem]]
+%%     union(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
+%%     inter(Rel[[Elem]], Rel[[Elem]])           		-> Rel[[Elem]]
+%%     diff(Rel[[Elem]], Rel[[Elem]])            		-> Rel[[Elem]]
      compose(Rel[[Elem]], Rel[[Elem]])       		-> Rel[[Elem]]
     
      product(Elem, Bag[[Elem]])                		-> Rel[[Elem]]
@@ -60,8 +60,8 @@ imports Bags[Elem]
 
      "(" Rel[[Elem]] ")"              			-> Rel[[Elem]] {bracket}
 
-     "if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
-							-> Rel[[Elem]]
+%%     "if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
+%%							-> Rel[[Elem]]
 
 hiddens
   imports asf/syntax/Comments

@@ -1,0 +1,21 @@
+module Test
+
+imports basic/Integers
+imports Relations[Elem] [ EmptyBag => EmptyRel ]
+
+imports basic/Whitespace
+
+exports
+	sorts Elem
+
+	context-free syntax
+	     Integer	   -> Elem
+	     Bag[[Elem]]   -> Elem
+	     Bag[[Elem#Elem]] -> Elem
+%%	     Rel[[Elem]]   -> Elem
+	     Elem # Elem   -> Elem
+
+ 	     f(Elem)	   -> Integer
+
+variables
+	"E" -> Elem

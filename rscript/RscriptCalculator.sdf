@@ -10,8 +10,9 @@ exports
 
 %% The values that a variable in the RSTORE may have
 
+
         Elem                          		-> RVALUE
-        "*empty*"                     		-> RVALUE
+%%        "*empty*"                     		-> RVALUE
         RVAR # REXP                    		-> RVALUE
         RVAR # RVAR # REXP              	-> RVALUE
         RVAR # RVAR # RVAR # REXP		-> RVALUE
@@ -98,12 +99,13 @@ exports
         equal(Elem, Elem)              -> Boolean
 	equal(RVALUE, RVALUE)		-> Boolean
 
-        eval-iter(RVAR, Bag[[Elem]], RVALUE, REXP, RSTORE)		-> RVALUE
-        eval-citer(RVAR, Bag[[Elem]], RVALUE, REXP, REXP, RSTORE)	-> RVALUE
+        eval-iter(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, RSTORE)		-> RVALUE
+        eval-citer(RVAR, Bag[[Elem]], Bag[[Elem]], REXP, REXP, RSTORE)	-> RVALUE
 
-        eval-iter2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, RSTORE)	-> RVALUE
-        eval-citer2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, REXP, RSTORE)-> RVALUE
-	append(RVALUE, RVALUE)						-> RVALUE
+        eval-iter2(RVAR, RVAR, Rel[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> RVALUE
+        eval-citer2(RVAR, RVAR, Rel[[Elem]], Bag[[Elem]], REXP, REXP, RSTORE)-> RVALUE
+	append(Bag[[Elem]], RVALUE)					-> Bag[[Elem]]
+	r2b(Rel[[Elem]])						-> Bag[[Elem]]
 	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
 	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
 	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
