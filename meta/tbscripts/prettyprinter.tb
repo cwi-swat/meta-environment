@@ -1,12 +1,12 @@
 /* $Id$ */
 
-tool pp is {
-  command = "ts-asource"
+tool asource is {
+  command = "asource"
 }
 
 process Prettyprinter is
 let
-  PP: pp,
+  PP: asource,
   T: term,
   Str: str,
   Src: term,
@@ -14,10 +14,10 @@ let
   Flst: list,
   Tslst: list
 in
-  execute(pp,PP?).
+  execute(asource,PP?).
   (  rec-msg(pp-module(T?)).
     snd-eval(PP,conssource(T)).
-    rec-value(PP,display(Src?)).
+    rec-value(PP,source(Src?)).
     snd-msg(module-source(Src))
   ) *
   delta

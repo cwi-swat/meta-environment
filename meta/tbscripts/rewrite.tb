@@ -9,7 +9,8 @@ NF  : term,
 Mod: term,
 Term: term,
 TE: text-edit,
-Clst: list, Flst: list, Tslst: list
+Clst: list, Flst: list, Tslst: list,
+Src: str
 in
   Id := process-id.
   (
@@ -22,10 +23,9 @@ in
     rec-msg(Id,editortool(TE?)).
 /* This is identical to the bit in edit-module.tb. So it should probably be a different process. To be done. */
     snd-msg(pp-module(NF)).
-    rec-msg(module-source([colours(Clst?),fonts(Flst?),src(Tslst?)])).
-    snd-do(TE,reg-local-cols(Clst)).
-    snd-do(TE,reg-local-fnts(Flst)).
-    snd-do(TE,display-ts(Tslst))
+    rec-msg(module-source(Src?)).
+    snd-do(TE,inserttext(Src)
+)
   ) * 
   delta
 endlet

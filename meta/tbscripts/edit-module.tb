@@ -5,7 +5,7 @@ T     : term,
 Tid   : int,
 Fn:  str,
 TE    : text-edit,
-Clst: list, Flst: list, Tslst: list
+Src: str
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening module editor"))).
@@ -13,11 +13,9 @@ in
   rec-msg(Id, opened-file(asfix,Mod,T?,Fn?)).
   create(Editor(Mod,"\"\"",Fn,Id), Tid?).
   snd-msg(pp-module(T)).
-  rec-msg(module-source([colours(Clst?),fonts(Flst?),src(Tslst?)])).
+  rec-msg(module-source(Src?)).
   rec-msg(Id, editortool(TE?)).
 /* send module specific stuff to text-editor */
-  snd-do(TE,reg-local-cols(Clst)).
-  snd-do(TE,reg-local-fnts(Flst)).
-  snd-do(TE,display-ts(Tslst)).
+  snd-do(TE,inserttext(Src)).
   snd-note(ui-status(endstat(Id)))
 endlet

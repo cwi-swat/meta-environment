@@ -9,7 +9,8 @@ T     : term,
 Text:   str,
 Fn    : str,
 TE: text-edit,
-Clst: list, Flst: list, Tslst: list
+Clst: list, Flst: list, Tslst: list,
+Src: str
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening term editor"))).
@@ -24,10 +25,9 @@ in
     create(Editor(Term,"\"\"",Fn,Id),Tid?).
     rec-msg(Id, editortool(TE?)).
     snd-msg(pp-module(T)).
-    rec-msg(module-source([colours(Clst?),fonts(Flst?),src(Tslst?)])).
-    snd-do(TE,reg-local-cols(Clst)).
-    snd-do(TE,reg-local-fnts(Flst)).
-    snd-do(TE,display-ts(Tslst)).
+    rec-msg(module-source(Src?)).
+printf("%s\n",Src).
+    snd-do(TE,inserttext(Src)).
     snd-note(ui-status(endstat(Id)))
     + (
       rec-msg(opened-file(ascii,Name?,Text?)).
