@@ -240,7 +240,6 @@ void AFTreshuffleModules(int cid, ATermList mods)
     mod = ATgetFirst(mods);
     newmod = AFTcreateNewModule(mod);
     AFTreshuffleLexicalConstructorFunctions(cid,mod,newmod,orgmods);
-ATfprintf(stderr,"reshuffling lexicals finished for %t\n", mod);
     entry = GetValue(new_modules_db,mod);
     oldamod = ATelementAt((ATermList)entry, syn_loc);
     cffuncs = AFTgetCFFunctions(oldamod);
