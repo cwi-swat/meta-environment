@@ -12,6 +12,7 @@
 #include "asfsdf2muasf.h"
 #include "sdf2pt.h"
 #include "chars.h"
+#include "lex-cons.h"
 
 typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
@@ -32,6 +33,8 @@ static char* prodToEscapedString(PT_Production prod);
 static int getProdArity(PT_Production prod, LayoutOption layout);
 static MA_Term attrToTerm(PT_Attr attr);
 static MA_TermTerms attrsToTermList(PT_Attrs attrs);
+static MA_TermArgs atArgsToTermArgs(ATermList args);
+static MA_Term atermToTerm(ATerm aterm);
 static MA_Annotations attributesToAnnotations(PT_Attributes attributes);
 static MA_FunId prodToFunId(PT_Production prod);
 static MA_SigArgElems makeSigArgElems(int arity);
@@ -118,32 +121,70 @@ static int getProdArity(PT_Production prod, LayoutOption layout)
   return arity;  
 }
 
+static MA_TermArgs atArgsToTermArgs(ATermList args)
+{
+  MA_TermArgs list = NULL;
+
+  for(;!ATisEmpty(args); args = ATgetNext(args)) {
+    if (list == NULL) {
+      list = MA_makeTermArgsSingle(atermToTerm(ATgetFirst(args)));
+    }
+    else {
+      list = MA_makeTermArgsMany(atermToTerm(ATgetFirst(args)),em,",",sp,list);
+    }
+  }
+
+  return (MA_TermArgs) ATreverse((ATermList) list);
+}
+
+static MA_Term atermToTerm(ATerm aterm)
+{
+  char *str = NULL;
+  ATermList args;
+  MA_Term result;
+  MA_TermArgs list;
+
+  if (ATgetType(aterm) == AT_APPL) {
+    str = ATgetName(ATgetAFun((ATermAppl) aterm));
+    args = ATgetArguments((ATermAppl) aterm);
+    if (!ATisEmpty(args)) { 
+      list = atArgsToTermArgs(args);
+      result = MA_makeTermFunc(stringToFunId(str),em,em,list,em);
+    } 
+    else {
+      result = MA_makeTermConstant(stringToFunId(str));
+    }
+  }
+  else {
+    ATerror("atermToTerm: ATerm type %s is not supported.\n", ATgetType(aterm));
+    result = NULL;
+  }
+
+  return result;
+}
+
 static MA_Term attrToTerm(PT_Attr attr)
 {
-  char *str;
+  char *str = NULL;
   MA_Term arg;
-  MA_Term result;
+  MA_Term result = NULL;
 
   if (PT_isAttrCons(attr)) {
     str = PT_getAttrString(attr);
     arg = MA_makeTermConstant(stringToFunId(str));
-    return MA_makeTermFunc(stringToFunId("cons"),em,em, 
+    result =  MA_makeTermFunc(stringToFunId("cons"),em,em, 
                            MA_makeTermArgsSingle(arg), em);
   }
   else if (PT_isAttrId(attr)) {
     str = PT_getAttrString(attr);
     arg = MA_makeTermConstant(stringToFunId(str));
-    return MA_makeTermFunc(stringToFunId("id"),em,em, 
+    result =  MA_makeTermFunc(stringToFunId("id"),em,em, 
 			   MA_makeTermArgsSingle(arg), em);
   }
   else if (PT_isAttrAterm(attr)) {
-    ATwarning("ATerm attributes not supported by compiler yet: %t\n",
-	      attr);
+    ATerm term = (ATerm) PT_getAttrTerm(attr);
+    result =  atermToTerm(term);
   }
-
-  str = strdup(ATwriteToString((ATerm) attr));
-
-  result =  MA_makeTermConstant(stringToFunId(str));
 
   free(str);
 
@@ -319,6 +360,9 @@ static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout)
 
   if (layout == WITHOUT_LAYOUT && PT_isTreeLayout(tree)) {
     result = NULL; /* ignore layout */
+  }
+  else if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) {
+    return treeToTerm(constructorTreeToLexicalTree(tree), layout);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);

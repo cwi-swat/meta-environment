@@ -24,26 +24,32 @@ include $(top_srcdir)/make_rules
 
 SUBDIRS = muasf
 
-bin_PROGRAMS     = asfc 
+bin_PROGRAMS     = asfc
 data_DATA        = asfc.idef
 
 EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c 
 
 CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
-asfc_SOURCES = asfc.c sdf2pt.c chars.c c-code.c asfsdf2muasf.c sdf.c \
-               lex-cons.c
+asfc_SOURCES = asfc.c \
+               sdf2pt.c \
+               chars.c \
+               c-code.c \
+               asfsdf2muasf.c \
+               sdf.c \
+               lex-cons.c \
+               asfc.tif.c 
 
-asfc_LDADD   = asfc.tif.o \
-                   -L$(top_builddir)/asfc/c-source  -lAsFix2C \
-                   -L$(ASC_SUPPORT)/lib -lasc-support-me \
-                   -L$(PT_SUPPORT)/lib -lmept  \
-                   -L$(SDF_SUPPORT)/lib -lSDFME \
-                   -L$(ASF_SUPPORT)/lib -lASFME \
-                   -L./muasf -lMuASF \
-                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+asfc_LDADD   = -L$(top_builddir)/asfc/c-source  -lAsFix2C \
+               -L$(ASC_SUPPORT)/lib -lasc-support-me \
+               -L$(PT_SUPPORT)/lib -lmept  \
+               -L$(SDF_SUPPORT)/lib -lSDFME \
+               -L$(ASF_SUPPORT)/lib -lASFME \
+               -L./muasf -lMuASF \
+               -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES  = -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
             -I$(ATERM)/include \
             -I$(srcdir)/muasf
+

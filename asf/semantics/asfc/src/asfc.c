@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
   int c, toolbus_mode = 0;
   char *syntax = "-";
   char *equations = "-";
-  char *dir = "-";
+  char *output = "-";
   char *name = "";
 
   ATerm eqs;
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
       case 'e':  equations=optarg;      break;
       case 'i':  syntax=optarg;         break;
       case 'n':  name=optarg;           break;
-      case 'o':  dir=optarg;         break;
+      case 'o':  output=optarg;         break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
       default:   usage();               break;
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    compile_module(0,name,syn,eqs,dir);
+    compile_module(0,name,syn,eqs,output);
   }
 
   return 0;
