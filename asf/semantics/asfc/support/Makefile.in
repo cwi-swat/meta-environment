@@ -17,6 +17,7 @@ includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
+MAKEDEPEND	= @MAKEDEPEND@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
@@ -119,7 +120,7 @@ libsupport-prof.a: $(OBJ_PROF)
 	$(AR) cr $@ $(OBJ_PROF)
 
 depend: ${CSRC}
-	makedepend $(INCLUDES) $(CSRC) -f -	> .gendep
+	${MAKEDEPEND} $(INCLUDES) $(CSRC)	> .gendep
 	cat .gendep | sed "s/.o:/-cc.o:/"	>  .depend
 	cat .gendep | sed "s/.o:/-gcc.o:/"	>> .depend
 	cat .gendep | sed "s/.o:/-dbg.o:/"	>> .depend
