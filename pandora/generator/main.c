@@ -88,7 +88,7 @@ static PT_ParseTree toText(PT_ParseTree parseTree)
   PT_Tree tree = addBoxToTextFunction(parseTree);
 
   ATerm reduct = innermost(tree);
-  return toasfix(reduct);
+  return toasfixNoLayout(reduct);
 }
 
 /*}}}  */
