@@ -234,6 +234,7 @@ equations
    start-sorts-to-adt($Symbol $Symbol*, $ADT) = $ADT3
 
 [0] $FieldType = sort-to-afun($Sort),
+   $AFSort = sort-to-lit($Sort),   
    $Sort = sort($Char* ),
    $AltId = afun($Char*),
    $FieldId = afun("t" "o" "p" "-" $Char*)
@@ -241,7 +242,7 @@ equations
    start-sort-to-adt($Sort, [ $Entries ]) = 
     [ [Start, $AltId,
       parsetree(appl(prod(
-                     [cf(opt(layout)),cf(sort($FieldType)),cf(opt(layout))],
+                     [cf(opt(layout)),cf(sort($AFSort)),cf(opt(layout))],
                        sort("<START>"), no-attrs),
              [<ws-before(OptLayout)>,<$FieldId($FieldType)>,<ws-after(OptLayout)>]),
                               <amb-cnt(int)>)], $Entries]
