@@ -39,8 +39,6 @@ int main (int argc, char **argv)
   ATerm bottomOfStack;
   ATerm t;
   char  *ATlibArgv[] = { "", "-silent"};
-  FILE  *in;
-
 
   while ((c = getopt(argc, argv, "hi:o:D:x")) != EOF)
     switch (c) {
@@ -53,18 +51,15 @@ int main (int argc, char **argv)
   }
   ATinit(2, ATlibArgv, &bottomOfStack);    /* Initialize Aterm library */
 
-  if(!strcmp(input_file_name, "-"))
-    in = stdin;
+  if(strcmp(input_file_name, "-"))
+    t = ATreadFromNamedFile(input_file_name);
   else
-    in = fopen(input_file_name, "r");
-  if(!in) {
-    ATfprintf(stderr, "%s: could not open input file %s",
+    t = ATreadFromFile(stdin);
+  if(!t) {
+    ATfprintf(stderr, "%s: could not read term from input file %s",
               program_name, input_file_name);
     return 1;
   }
-  t = ATreadFromFile(in);
-  if(in != stdin)
-    fclose(in);
 
   SGtreeToDotFile(program_name, output_file_name, t, suppress_lex);
 
