@@ -52,14 +52,14 @@ exports
 
 	 "{" {FROM ","}+ "::" REXP ("," REXP)? "}"	-> REXP
  
-        evalp(REXP, RSTORE)            -> Boolean
-        evale(REXP, RSTORE)            -> Elem
-        evalb(REXP, RSTORE)            -> Bag[[Elem]]
-        evalr(REXP, RSTORE)            -> Rel[[Elem]]
+        evalp(REXP, RSTORE)            		-> Boolean
+        evale(REXP, RSTORE)            		-> Elem
+        evalb(REXP, RSTORE)            		-> Bag[[Elem]]
+        evalr(REXP, RSTORE)            		-> Rel[[Elem]]
 
-        evalx(REXP, RSTORE)            -> RVALUE
-        apply "(" RVALUE OP RVALUE ")"   -> RVALUE
-        apply "(" OP RVALUE ")"         -> RVALUE
+        evalx(REXP, RSTORE)            		-> RVALUE
+        apply "(" RVALUE OP RVALUE ")"   	-> RVALUE
+        apply "(" OP RVALUE ")"         	-> RVALUE
 
         "in"			       -> OP
         "notin"			       -> OP
@@ -78,6 +78,7 @@ exports
         "#"                            -> OP
 
         equal(Elem, Elem)              -> Boolean
+	equal(RVALUE, RVALUE)		-> Boolean
 
         eval-iter(RVAR, Bag[[Elem]], RVALUE, REXP, RSTORE)		-> RVALUE
         eval-citer(RVAR, Bag[[Elem]], RVALUE, REXP, REXP, RSTORE)	-> RVALUE
@@ -85,10 +86,13 @@ exports
         eval-iter2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, RSTORE)	-> RVALUE
         eval-citer2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, REXP, RSTORE)-> RVALUE
 	append(RVALUE, RVALUE)						-> RVALUE
-	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)				-> Boolean
-	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)				-> Boolean
-	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)				-> Boolean
-	forallr(RVAR, Rel[[Elem]], REXP, RSTORE)				-> Boolean
+	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
+	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
+	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
+	forallr(RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
+
+	solve1(Integer, RVAR, REXP, RSTORE)				-> RSTORE
+	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)			-> RSTORE
 
 hiddens
 %%  imports asf/syntax/Comments
