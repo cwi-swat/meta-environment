@@ -115,9 +115,8 @@ ATerm SGopenLanguage(language L, const char *FN, const char *inFile)
     if (FN)
       ATwarning("opening parse table %s\n", SG_SAFE_STRING(FN))
   );
-  if (!(pt = SG_LookupParseTable(L, inFile))) {
-    pt = SG_AddParseTable(L, FN, inFile);
-  }
+
+  pt = SG_AddParseTable(L, FN, inFile);
 
   return (ATerm) (pt ? ATempty : NULL);
 }
@@ -179,10 +178,10 @@ ATerm SGparseStringAsAsFix(const char *input, SGLR_ParseTable parseTable,
  If either no filename or `-' is specified, standard input is used.
  */
 
-ATerm SGparseFile(const char *prgname, 
-		  language L, 
-		  const char *G, 
-		  const char *FN)
+static ATerm SGparseFile(const char *prgname, 
+		         language L, 
+		         const char *G, 
+		         const char *FN)
 {
   forest ret;
   size_t ntok = 0;
@@ -272,6 +271,7 @@ ATerm SGparseFileUsingTable(const char *prg,
   }
   
   SG_InitParseTableErrorList();
+
   if (!SGopenLanguage(L, ptblfil, infil)) {
     return SGtermToFile(prg,
 			ERR_SummaryToTerm(SG_makeParseTableErrorSummary(infil)),

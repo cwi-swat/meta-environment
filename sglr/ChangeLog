@@ -1,5 +1,8 @@
 $Id$
 
+Fri Aug 20 10:39:07 CEST 2004 <markvdb@cwi.nl>
+ * Fixed a small bug wrt reading in parsetables.
+
 Tue Aug  3 10:05:01 CEST 2004 <{kooiker,jurgenv}@cwi.nl>
  * libsglr/parse-table.c: added protect of global list of errors,
    and more calls to initialization function for this list of errors.
