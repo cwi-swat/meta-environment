@@ -1,3 +1,7 @@
+2001/01/08 (vandenbr@loria.fr)
+ * Adapted the edit-term script and moved functionality to the
+    rewriter.
+    
 2001/12/17 (vandenbr@loria.fr)
  * Add a bracket restoration tool.
 
