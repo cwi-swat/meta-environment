@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Apr  9 15:46:07 2002
+ * Generated at Tue Apr  9 16:02:34 2002
  */
 
 #include "ptable_dict.h"
@@ -27,11 +27,11 @@ ATerm PTA_patternSpecialAttrAvoid = NULL;
 ATerm PTA_patternSpecialAttrPrefer = NULL;
 ATerm PTA_patternSpecialAttrReject = NULL;
 ATerm PTA_patternSpecialAttrNone = NULL;
-ATerm PTA_patternAlternativeAccept = NULL;
-ATerm PTA_patternAlternativeShift = NULL;
-ATerm PTA_patternAlternativeReduce = NULL;
-ATerm PTA_patternAlternativesList = NULL;
-ATerm PTA_patternAlternativesEmpty = NULL;
+ATerm PTA_patternChoiceAccept = NULL;
+ATerm PTA_patternChoiceShift = NULL;
+ATerm PTA_patternChoiceReduce = NULL;
+ATerm PTA_patternChoicesList = NULL;
+ATerm PTA_patternChoicesEmpty = NULL;
 ATerm PTA_patternActionDefault = NULL;
 ATerm PTA_patternActionsList = NULL;
 ATerm PTA_patternActionsEmpty = NULL;
@@ -70,11 +70,11 @@ ATerm PTA_patternParseTableParseTable = NULL;
  * PTA_patternSpecialAttrPrefer = 2
  * PTA_patternSpecialAttrReject = 1
  * PTA_patternSpecialAttrNone = 0
- * PTA_patternAlternativeAccept = accept
- * PTA_patternAlternativeShift = shift(<int>)
- * PTA_patternAlternativeReduce = reduce(<int>,<int>,<term>)
- * PTA_patternAlternativesList = [<term>,<list>]
- * PTA_patternAlternativesEmpty = []
+ * PTA_patternChoiceAccept = accept
+ * PTA_patternChoiceShift = shift(<int>)
+ * PTA_patternChoiceReduce = reduce(<int>,<int>,<term>)
+ * PTA_patternChoicesList = [<term>,<list>]
+ * PTA_patternChoicesEmpty = []
  * PTA_patternActionDefault = action(<term>,<term>)
  * PTA_patternActionsList = [<term>,<list>]
  * PTA_patternActionsEmpty = []
@@ -183,15 +183,15 @@ void init_ptable_dict()
   terms = ATgetNext(terms);
   PTA_patternSpecialAttrNone = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PTA_patternAlternativeAccept = ATgetFirst(terms);
+  PTA_patternChoiceAccept = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PTA_patternAlternativeShift = ATgetFirst(terms);
+  PTA_patternChoiceShift = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PTA_patternAlternativeReduce = ATgetFirst(terms);
+  PTA_patternChoiceReduce = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PTA_patternAlternativesList = ATgetFirst(terms);
+  PTA_patternChoicesList = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PTA_patternAlternativesEmpty = ATgetFirst(terms);
+  PTA_patternChoicesEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
   PTA_patternActionDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);

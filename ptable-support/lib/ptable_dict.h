@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Apr  9 15:46:07 2002
+ * Generated at Tue Apr  9 16:02:34 2002
  */
 
 #ifndef __ptable_dict_H
@@ -30,11 +30,11 @@ extern ATerm PTA_patternSpecialAttrAvoid;
 extern ATerm PTA_patternSpecialAttrPrefer;
 extern ATerm PTA_patternSpecialAttrReject;
 extern ATerm PTA_patternSpecialAttrNone;
-extern ATerm PTA_patternAlternativeAccept;
-extern ATerm PTA_patternAlternativeShift;
-extern ATerm PTA_patternAlternativeReduce;
-extern ATerm PTA_patternAlternativesList;
-extern ATerm PTA_patternAlternativesEmpty;
+extern ATerm PTA_patternChoiceAccept;
+extern ATerm PTA_patternChoiceShift;
+extern ATerm PTA_patternChoiceReduce;
+extern ATerm PTA_patternChoicesList;
+extern ATerm PTA_patternChoicesEmpty;
 extern ATerm PTA_patternActionDefault;
 extern ATerm PTA_patternActionsList;
 extern ATerm PTA_patternActionsEmpty;

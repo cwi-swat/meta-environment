@@ -15,8 +15,8 @@ typedef struct ATerm _PTA_Gotos;
 typedef struct ATerm _PTA_Goto;
 typedef struct ATerm _PTA_Actions;
 typedef struct ATerm _PTA_Action;
-typedef struct ATerm _PTA_Alternatives;
-typedef struct ATerm _PTA_Alternative;
+typedef struct ATerm _PTA_Choices;
+typedef struct ATerm _PTA_Choice;
 typedef struct ATerm _PTA_SpecialAttr;
 typedef struct ATerm _PTA_Priorities;
 typedef struct ATerm _PTA_Priority;
@@ -178,33 +178,33 @@ ATerm PTA_ActionToTerm(PTA_Action arg)
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_AlternativesFromTerm(ATerm t) */
+/*{{{  PTA_Choices PTA_ChoicesFromTerm(ATerm t) */
 
-PTA_Alternatives PTA_AlternativesFromTerm(ATerm t)
+PTA_Choices PTA_ChoicesFromTerm(ATerm t)
 {
-  return (PTA_Alternatives)t;
+  return (PTA_Choices)t;
 }
 
 /*}}}  */
-/*{{{  ATerm PTA_AlternativesToTerm(PTA_Alternatives arg) */
+/*{{{  ATerm PTA_ChoicesToTerm(PTA_Choices arg) */
 
-ATerm PTA_AlternativesToTerm(PTA_Alternatives arg)
+ATerm PTA_ChoicesToTerm(PTA_Choices arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_AlternativeFromTerm(ATerm t) */
+/*{{{  PTA_Choice PTA_ChoiceFromTerm(ATerm t) */
 
-PTA_Alternative PTA_AlternativeFromTerm(ATerm t)
+PTA_Choice PTA_ChoiceFromTerm(ATerm t)
 {
-  return (PTA_Alternative)t;
+  return (PTA_Choice)t;
 }
 
 /*}}}  */
-/*{{{  ATerm PTA_AlternativeToTerm(PTA_Alternative arg) */
+/*{{{  ATerm PTA_ChoiceToTerm(PTA_Choice arg) */
 
-ATerm PTA_AlternativeToTerm(PTA_Alternative arg)
+ATerm PTA_ChoiceToTerm(PTA_Choice arg)
 {
   return (ATerm)arg;
 }
@@ -358,51 +358,51 @@ PTA_Actions PTA_makeActionsList(PTA_Action head, PTA_Actions tail)
 }
 
 /*}}}  */
-/*{{{  PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Alternatives alternatives) */
+/*{{{  PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Choices choices) */
 
-PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Alternatives alternatives)
+PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Choices choices)
 {
-  return (PTA_Action)(ATerm)ATmakeAppl2(PTA_afun6, (ATerm)ranges, (ATerm)alternatives);
+  return (PTA_Action)(ATerm)ATmakeAppl2(PTA_afun6, (ATerm)ranges, (ATerm)choices);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_makeAlternativesEmpty() */
+/*{{{  PTA_Choices PTA_makeChoicesEmpty() */
 
-PTA_Alternatives PTA_makeAlternativesEmpty()
+PTA_Choices PTA_makeChoicesEmpty()
 {
-  return (PTA_Alternatives)(ATerm)ATempty;
+  return (PTA_Choices)(ATerm)ATempty;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_makeAlternativesList(PTA_Alternative head, PTA_Alternatives tail) */
+/*{{{  PTA_Choices PTA_makeChoicesList(PTA_Choice head, PTA_Choices tail) */
 
-PTA_Alternatives PTA_makeAlternativesList(PTA_Alternative head, PTA_Alternatives tail)
+PTA_Choices PTA_makeChoicesList(PTA_Choice head, PTA_Choices tail)
 {
-  return (PTA_Alternatives)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
+  return (PTA_Choices)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_makeAlternativeReduce(int length, int label, PTA_SpecialAttr specialAttr) */
+/*{{{  PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAttr) */
 
-PTA_Alternative PTA_makeAlternativeReduce(int length, int label, PTA_SpecialAttr specialAttr)
+PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAttr)
 {
-  return (PTA_Alternative)(ATerm)ATmakeAppl3(PTA_afun7, (ATerm)ATmakeInt(length), (ATerm)ATmakeInt(label), (ATerm)specialAttr);
+  return (PTA_Choice)(ATerm)ATmakeAppl3(PTA_afun7, (ATerm)ATmakeInt(length), (ATerm)ATmakeInt(label), (ATerm)specialAttr);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_makeAlternativeShift(int stateNumner) */
+/*{{{  PTA_Choice PTA_makeChoiceShift(int stateNumner) */
 
-PTA_Alternative PTA_makeAlternativeShift(int stateNumner)
+PTA_Choice PTA_makeChoiceShift(int stateNumner)
 {
-  return (PTA_Alternative)(ATerm)ATmakeAppl1(PTA_afun8, (ATerm)ATmakeInt(stateNumner));
+  return (PTA_Choice)(ATerm)ATmakeAppl1(PTA_afun8, (ATerm)ATmakeInt(stateNumner));
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_makeAlternativeAccept() */
+/*{{{  PTA_Choice PTA_makeChoiceAccept() */
 
-PTA_Alternative PTA_makeAlternativeAccept()
+PTA_Choice PTA_makeChoiceAccept()
 {
-  return (PTA_Alternative)(ATerm)ATmakeAppl0(PTA_afun9);
+  return (PTA_Choice)(ATerm)ATmakeAppl0(PTA_afun9);
 }
 
 /*}}}  */
@@ -527,12 +527,12 @@ ATbool PTA_isEqualAction(PTA_Action arg0, PTA_Action arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTA_isEqualAlternatives(PTA_Alternatives arg0, PTA_Alternatives arg1)
+ATbool PTA_isEqualChoices(PTA_Choices arg0, PTA_Choices arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTA_isEqualAlternative(PTA_Alternative arg0, PTA_Alternative arg1)
+ATbool PTA_isEqualChoice(PTA_Choice arg0, PTA_Choice arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1571,9 +1571,9 @@ PTA_Action PTA_setActionRanges(PTA_Action arg, PTA_CharRanges ranges)
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasActionAlternatives(PTA_Action arg) */
+/*{{{  ATbool PTA_hasActionChoices(PTA_Action arg) */
 
-ATbool PTA_hasActionAlternatives(PTA_Action arg)
+ATbool PTA_hasActionChoices(PTA_Action arg)
 {
   if (PTA_isActionDefault(arg)) {
     return ATtrue;
@@ -1582,337 +1582,337 @@ ATbool PTA_hasActionAlternatives(PTA_Action arg)
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_getActionAlternatives(PTA_Action arg) */
+/*{{{  PTA_Choices PTA_getActionChoices(PTA_Action arg) */
 
-PTA_Alternatives PTA_getActionAlternatives(PTA_Action arg)
+PTA_Choices PTA_getActionChoices(PTA_Action arg)
 {
   
-    return (PTA_Alternatives)ATgetArgument((ATermAppl)arg, 1);
+    return (PTA_Choices)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
-/*{{{  PTA_Action PTA_setActionAlternatives(PTA_Action arg, PTA_Alternatives alternatives) */
+/*{{{  PTA_Action PTA_setActionChoices(PTA_Action arg, PTA_Choices choices) */
 
-PTA_Action PTA_setActionAlternatives(PTA_Action arg, PTA_Alternatives alternatives)
+PTA_Action PTA_setActionChoices(PTA_Action arg, PTA_Choices choices)
 {
   if (PTA_isActionDefault(arg)) {
-    return (PTA_Action)ATsetArgument((ATermAppl)arg, (ATerm)alternatives, 1);
+    return (PTA_Action)ATsetArgument((ATermAppl)arg, (ATerm)choices, 1);
   }
 
-  ATabort("Action has no Alternatives: %t\n", arg);
+  ATabort("Action has no Choices: %t\n", arg);
   return (PTA_Action)NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  PTA_Alternatives accessors */
+/*{{{  PTA_Choices accessors */
 
-/*{{{  ATbool PTA_isValidAlternatives(PTA_Alternatives arg) */
+/*{{{  ATbool PTA_isValidChoices(PTA_Choices arg) */
 
-ATbool PTA_isValidAlternatives(PTA_Alternatives arg)
+ATbool PTA_isValidChoices(PTA_Choices arg)
 {
-  if (PTA_isAlternativesEmpty(arg)) {
+  if (PTA_isChoicesEmpty(arg)) {
     return ATtrue;
   }
-  else if (PTA_isAlternativesList(arg)) {
+  else if (PTA_isChoicesList(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool PTA_isAlternativesEmpty(PTA_Alternatives arg) */
+/*{{{  inline ATbool PTA_isChoicesEmpty(PTA_Choices arg) */
 
-inline ATbool PTA_isAlternativesEmpty(PTA_Alternatives arg)
+inline ATbool PTA_isChoicesEmpty(PTA_Choices arg)
 {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternAlternativesEmpty));
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoicesEmpty));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  inline ATbool PTA_isAlternativesList(PTA_Alternatives arg) */
+/*{{{  inline ATbool PTA_isChoicesList(PTA_Choices arg) */
 
-inline ATbool PTA_isAlternativesList(PTA_Alternatives arg)
+inline ATbool PTA_isChoicesList(PTA_Choices arg)
 {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternAlternativesList, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoicesList, NULL, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasAlternativesHead(PTA_Alternatives arg) */
+/*{{{  ATbool PTA_hasChoicesHead(PTA_Choices arg) */
 
-ATbool PTA_hasAlternativesHead(PTA_Alternatives arg)
+ATbool PTA_hasChoicesHead(PTA_Choices arg)
 {
-  if (PTA_isAlternativesList(arg)) {
+  if (PTA_isChoicesList(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_getAlternativesHead(PTA_Alternatives arg) */
+/*{{{  PTA_Choice PTA_getChoicesHead(PTA_Choices arg) */
 
-PTA_Alternative PTA_getAlternativesHead(PTA_Alternatives arg)
+PTA_Choice PTA_getChoicesHead(PTA_Choices arg)
 {
   
-    return (PTA_Alternative)ATgetFirst((ATermList)arg);
+    return (PTA_Choice)ATgetFirst((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_setAlternativesHead(PTA_Alternatives arg, PTA_Alternative head) */
+/*{{{  PTA_Choices PTA_setChoicesHead(PTA_Choices arg, PTA_Choice head) */
 
-PTA_Alternatives PTA_setAlternativesHead(PTA_Alternatives arg, PTA_Alternative head)
+PTA_Choices PTA_setChoicesHead(PTA_Choices arg, PTA_Choice head)
 {
-  if (PTA_isAlternativesList(arg)) {
-    return (PTA_Alternatives)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (PTA_isChoicesList(arg)) {
+    return (PTA_Choices)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("Alternatives has no Head: %t\n", arg);
-  return (PTA_Alternatives)NULL;
+  ATabort("Choices has no Head: %t\n", arg);
+  return (PTA_Choices)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasAlternativesTail(PTA_Alternatives arg) */
+/*{{{  ATbool PTA_hasChoicesTail(PTA_Choices arg) */
 
-ATbool PTA_hasAlternativesTail(PTA_Alternatives arg)
+ATbool PTA_hasChoicesTail(PTA_Choices arg)
 {
-  if (PTA_isAlternativesList(arg)) {
+  if (PTA_isChoicesList(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_getAlternativesTail(PTA_Alternatives arg) */
+/*{{{  PTA_Choices PTA_getChoicesTail(PTA_Choices arg) */
 
-PTA_Alternatives PTA_getAlternativesTail(PTA_Alternatives arg)
+PTA_Choices PTA_getChoicesTail(PTA_Choices arg)
 {
   
-    return (PTA_Alternatives)ATgetNext((ATermList)arg);
+    return (PTA_Choices)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_setAlternativesTail(PTA_Alternatives arg, PTA_Alternatives tail) */
+/*{{{  PTA_Choices PTA_setChoicesTail(PTA_Choices arg, PTA_Choices tail) */
 
-PTA_Alternatives PTA_setAlternativesTail(PTA_Alternatives arg, PTA_Alternatives tail)
+PTA_Choices PTA_setChoicesTail(PTA_Choices arg, PTA_Choices tail)
 {
-  if (PTA_isAlternativesList(arg)) {
-    return (PTA_Alternatives)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
+  if (PTA_isChoicesList(arg)) {
+    return (PTA_Choices)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
   }
 
-  ATabort("Alternatives has no Tail: %t\n", arg);
-  return (PTA_Alternatives)NULL;
+  ATabort("Choices has no Tail: %t\n", arg);
+  return (PTA_Choices)NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  PTA_Alternative accessors */
+/*{{{  PTA_Choice accessors */
 
-/*{{{  ATbool PTA_isValidAlternative(PTA_Alternative arg) */
+/*{{{  ATbool PTA_isValidChoice(PTA_Choice arg) */
 
-ATbool PTA_isValidAlternative(PTA_Alternative arg)
+ATbool PTA_isValidChoice(PTA_Choice arg)
 {
-  if (PTA_isAlternativeReduce(arg)) {
+  if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
-  else if (PTA_isAlternativeShift(arg)) {
+  else if (PTA_isChoiceShift(arg)) {
     return ATtrue;
   }
-  else if (PTA_isAlternativeAccept(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PTA_isAlternativeReduce(PTA_Alternative arg) */
-
-inline ATbool PTA_isAlternativeReduce(PTA_Alternative arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternAlternativeReduce)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternAlternativeReduce, NULL, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PTA_isAlternativeShift(PTA_Alternative arg) */
-
-inline ATbool PTA_isAlternativeShift(PTA_Alternative arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternAlternativeShift)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternAlternativeShift, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PTA_isAlternativeAccept(PTA_Alternative arg) */
-
-inline ATbool PTA_isAlternativeAccept(PTA_Alternative arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternAlternativeAccept)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTA_patternAlternativeAccept));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  ATbool PTA_hasAlternativeLength(PTA_Alternative arg) */
-
-ATbool PTA_hasAlternativeLength(PTA_Alternative arg)
-{
-  if (PTA_isAlternativeReduce(arg)) {
+  else if (PTA_isChoiceAccept(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  int PTA_getAlternativeLength(PTA_Alternative arg) */
+/*{{{  inline ATbool PTA_isChoiceReduce(PTA_Choice arg) */
 
-int PTA_getAlternativeLength(PTA_Alternative arg)
+inline ATbool PTA_isChoiceReduce(PTA_Choice arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternChoiceReduce)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoiceReduce, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isChoiceShift(PTA_Choice arg) */
+
+inline ATbool PTA_isChoiceShift(PTA_Choice arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternChoiceShift)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoiceShift, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PTA_isChoiceAccept(PTA_Choice arg) */
+
+inline ATbool PTA_isChoiceAccept(PTA_Choice arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PTA_patternChoiceAccept)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTA_patternChoiceAccept));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool PTA_hasChoiceLength(PTA_Choice arg) */
+
+ATbool PTA_hasChoiceLength(PTA_Choice arg)
+{
+  if (PTA_isChoiceReduce(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  int PTA_getChoiceLength(PTA_Choice arg) */
+
+int PTA_getChoiceLength(PTA_Choice arg)
 {
   
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_setAlternativeLength(PTA_Alternative arg, int length) */
+/*{{{  PTA_Choice PTA_setChoiceLength(PTA_Choice arg, int length) */
 
-PTA_Alternative PTA_setAlternativeLength(PTA_Alternative arg, int length)
+PTA_Choice PTA_setChoiceLength(PTA_Choice arg, int length)
 {
-  if (PTA_isAlternativeReduce(arg)) {
-    return (PTA_Alternative)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(length), 0);
+  if (PTA_isChoiceReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(length), 0);
   }
 
-  ATabort("Alternative has no Length: %t\n", arg);
-  return (PTA_Alternative)NULL;
+  ATabort("Choice has no Length: %t\n", arg);
+  return (PTA_Choice)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasAlternativeLabel(PTA_Alternative arg) */
+/*{{{  ATbool PTA_hasChoiceLabel(PTA_Choice arg) */
 
-ATbool PTA_hasAlternativeLabel(PTA_Alternative arg)
+ATbool PTA_hasChoiceLabel(PTA_Choice arg)
 {
-  if (PTA_isAlternativeReduce(arg)) {
+  if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  int PTA_getAlternativeLabel(PTA_Alternative arg) */
+/*{{{  int PTA_getChoiceLabel(PTA_Choice arg) */
 
-int PTA_getAlternativeLabel(PTA_Alternative arg)
+int PTA_getChoiceLabel(PTA_Choice arg)
 {
   
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_setAlternativeLabel(PTA_Alternative arg, int label) */
+/*{{{  PTA_Choice PTA_setChoiceLabel(PTA_Choice arg, int label) */
 
-PTA_Alternative PTA_setAlternativeLabel(PTA_Alternative arg, int label)
+PTA_Choice PTA_setChoiceLabel(PTA_Choice arg, int label)
 {
-  if (PTA_isAlternativeReduce(arg)) {
-    return (PTA_Alternative)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label), 1);
+  if (PTA_isChoiceReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(label), 1);
   }
 
-  ATabort("Alternative has no Label: %t\n", arg);
-  return (PTA_Alternative)NULL;
+  ATabort("Choice has no Label: %t\n", arg);
+  return (PTA_Choice)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasAlternativeSpecialAttr(PTA_Alternative arg) */
+/*{{{  ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg) */
 
-ATbool PTA_hasAlternativeSpecialAttr(PTA_Alternative arg)
+ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg)
 {
-  if (PTA_isAlternativeReduce(arg)) {
+  if (PTA_isChoiceReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PTA_SpecialAttr PTA_getAlternativeSpecialAttr(PTA_Alternative arg) */
+/*{{{  PTA_SpecialAttr PTA_getChoiceSpecialAttr(PTA_Choice arg) */
 
-PTA_SpecialAttr PTA_getAlternativeSpecialAttr(PTA_Alternative arg)
+PTA_SpecialAttr PTA_getChoiceSpecialAttr(PTA_Choice arg)
 {
   
     return (PTA_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_setAlternativeSpecialAttr(PTA_Alternative arg, PTA_SpecialAttr specialAttr) */
+/*{{{  PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr) */
 
-PTA_Alternative PTA_setAlternativeSpecialAttr(PTA_Alternative arg, PTA_SpecialAttr specialAttr)
+PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr)
 {
-  if (PTA_isAlternativeReduce(arg)) {
-    return (PTA_Alternative)ATsetArgument((ATermAppl)arg, (ATerm)specialAttr, 2);
+  if (PTA_isChoiceReduce(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)specialAttr, 2);
   }
 
-  ATabort("Alternative has no SpecialAttr: %t\n", arg);
-  return (PTA_Alternative)NULL;
+  ATabort("Choice has no SpecialAttr: %t\n", arg);
+  return (PTA_Choice)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PTA_hasAlternativeStateNumner(PTA_Alternative arg) */
+/*{{{  ATbool PTA_hasChoiceStateNumner(PTA_Choice arg) */
 
-ATbool PTA_hasAlternativeStateNumner(PTA_Alternative arg)
+ATbool PTA_hasChoiceStateNumner(PTA_Choice arg)
 {
-  if (PTA_isAlternativeShift(arg)) {
+  if (PTA_isChoiceShift(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  int PTA_getAlternativeStateNumner(PTA_Alternative arg) */
+/*{{{  int PTA_getChoiceStateNumner(PTA_Choice arg) */
 
-int PTA_getAlternativeStateNumner(PTA_Alternative arg)
+int PTA_getChoiceStateNumner(PTA_Choice arg)
 {
   
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_setAlternativeStateNumner(PTA_Alternative arg, int stateNumner) */
+/*{{{  PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner) */
 
-PTA_Alternative PTA_setAlternativeStateNumner(PTA_Alternative arg, int stateNumner)
+PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner)
 {
-  if (PTA_isAlternativeShift(arg)) {
-    return (PTA_Alternative)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(stateNumner), 0);
+  if (PTA_isChoiceShift(arg)) {
+    return (PTA_Choice)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(stateNumner), 0);
   }
 
-  ATabort("Alternative has no StateNumner: %t\n", arg);
-  return (PTA_Alternative)NULL;
+  ATabort("Choice has no StateNumner: %t\n", arg);
+  return (PTA_Choice)NULL;
 }
 
 /*}}}  */
@@ -2442,56 +2442,56 @@ PTA_Actions PTA_visitActions(PTA_Actions arg, PTA_Action (*acceptHead)(PTA_Actio
 }
 
 /*}}}  */
-/*{{{  PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Alternatives (*acceptAlternatives)(PTA_Alternatives)) */
+/*{{{  PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Choices (*acceptChoices)(PTA_Choices)) */
 
-PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Alternatives (*acceptAlternatives)(PTA_Alternatives))
+PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Choices (*acceptChoices)(PTA_Choices))
 {
   if (PTA_isActionDefault(arg)) {
     return PTA_makeActionDefault(
         acceptRanges ? acceptRanges(PTA_getActionRanges(arg)) : PTA_getActionRanges(arg),
-        acceptAlternatives ? acceptAlternatives(PTA_getActionAlternatives(arg)) : PTA_getActionAlternatives(arg));
+        acceptChoices ? acceptChoices(PTA_getActionChoices(arg)) : PTA_getActionChoices(arg));
   }
   ATabort("not a Action: %t\n", arg);
   return (PTA_Action)NULL;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternatives PTA_visitAlternatives(PTA_Alternatives arg, PTA_Alternative (*acceptHead)(PTA_Alternative)) */
+/*{{{  PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choice)) */
 
-PTA_Alternatives PTA_visitAlternatives(PTA_Alternatives arg, PTA_Alternative (*acceptHead)(PTA_Alternative))
+PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choice))
 {
-  if (PTA_isAlternativesEmpty(arg)) {
-    return PTA_makeAlternativesEmpty();
+  if (PTA_isChoicesEmpty(arg)) {
+    return PTA_makeChoicesEmpty();
   }
-  if (PTA_isAlternativesList(arg)) {
-    return PTA_makeAlternativesList(
-        acceptHead ? acceptHead(PTA_getAlternativesHead(arg)) : PTA_getAlternativesHead(arg),
-        PTA_visitAlternatives(PTA_getAlternativesTail(arg), acceptHead));
+  if (PTA_isChoicesList(arg)) {
+    return PTA_makeChoicesList(
+        acceptHead ? acceptHead(PTA_getChoicesHead(arg)) : PTA_getChoicesHead(arg),
+        PTA_visitChoices(PTA_getChoicesTail(arg), acceptHead));
   }
-  ATabort("not a Alternatives: %t\n", arg);
-  return (PTA_Alternatives)NULL;
+  ATabort("not a Choices: %t\n", arg);
+  return (PTA_Choices)NULL;
 }
 
 /*}}}  */
-/*{{{  PTA_Alternative PTA_visitAlternative(PTA_Alternative arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int)) */
+/*{{{  PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int)) */
 
-PTA_Alternative PTA_visitAlternative(PTA_Alternative arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int))
+PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int))
 {
-  if (PTA_isAlternativeReduce(arg)) {
-    return PTA_makeAlternativeReduce(
-        acceptLength ? acceptLength(PTA_getAlternativeLength(arg)) : PTA_getAlternativeLength(arg),
-        acceptLabel ? acceptLabel(PTA_getAlternativeLabel(arg)) : PTA_getAlternativeLabel(arg),
-        acceptSpecialAttr ? acceptSpecialAttr(PTA_getAlternativeSpecialAttr(arg)) : PTA_getAlternativeSpecialAttr(arg));
+  if (PTA_isChoiceReduce(arg)) {
+    return PTA_makeChoiceReduce(
+        acceptLength ? acceptLength(PTA_getChoiceLength(arg)) : PTA_getChoiceLength(arg),
+        acceptLabel ? acceptLabel(PTA_getChoiceLabel(arg)) : PTA_getChoiceLabel(arg),
+        acceptSpecialAttr ? acceptSpecialAttr(PTA_getChoiceSpecialAttr(arg)) : PTA_getChoiceSpecialAttr(arg));
   }
-  if (PTA_isAlternativeShift(arg)) {
-    return PTA_makeAlternativeShift(
-        acceptStateNumner ? acceptStateNumner(PTA_getAlternativeStateNumner(arg)) : PTA_getAlternativeStateNumner(arg));
+  if (PTA_isChoiceShift(arg)) {
+    return PTA_makeChoiceShift(
+        acceptStateNumner ? acceptStateNumner(PTA_getChoiceStateNumner(arg)) : PTA_getChoiceStateNumner(arg));
   }
-  if (PTA_isAlternativeAccept(arg)) {
-    return PTA_makeAlternativeAccept();
+  if (PTA_isChoiceAccept(arg)) {
+    return PTA_makeChoiceAccept();
   }
-  ATabort("not a Alternative: %t\n", arg);
-  return (PTA_Alternative)NULL;
+  ATabort("not a Choice: %t\n", arg);
+  return (PTA_Choice)NULL;
 }
 
 /*}}}  */

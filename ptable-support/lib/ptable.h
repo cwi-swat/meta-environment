@@ -27,8 +27,8 @@ typedef struct _PTA_Gotos *PTA_Gotos;
 typedef struct _PTA_Goto *PTA_Goto;
 typedef struct _PTA_Actions *PTA_Actions;
 typedef struct _PTA_Action *PTA_Action;
-typedef struct _PTA_Alternatives *PTA_Alternatives;
-typedef struct _PTA_Alternative *PTA_Alternative;
+typedef struct _PTA_Choices *PTA_Choices;
+typedef struct _PTA_Choice *PTA_Choice;
 typedef struct _PTA_SpecialAttr *PTA_SpecialAttr;
 typedef struct _PTA_Priorities *PTA_Priorities;
 typedef struct _PTA_Priority *PTA_Priority;
@@ -75,14 +75,14 @@ ATerm PTA_ActionsToTerm(PTA_Actions arg);
 PTA_Action PTA_ActionFromTerm(ATerm t);
 #define PTA_makeTermFromAction(t) (PTA_ActionToTerm(t))
 ATerm PTA_ActionToTerm(PTA_Action arg);
-#define PTA_makeAlternativesFromTerm(t) (PTA_AlternativesFromTerm(t))
-PTA_Alternatives PTA_AlternativesFromTerm(ATerm t);
-#define PTA_makeTermFromAlternatives(t) (PTA_AlternativesToTerm(t))
-ATerm PTA_AlternativesToTerm(PTA_Alternatives arg);
-#define PTA_makeAlternativeFromTerm(t) (PTA_AlternativeFromTerm(t))
-PTA_Alternative PTA_AlternativeFromTerm(ATerm t);
-#define PTA_makeTermFromAlternative(t) (PTA_AlternativeToTerm(t))
-ATerm PTA_AlternativeToTerm(PTA_Alternative arg);
+#define PTA_makeChoicesFromTerm(t) (PTA_ChoicesFromTerm(t))
+PTA_Choices PTA_ChoicesFromTerm(ATerm t);
+#define PTA_makeTermFromChoices(t) (PTA_ChoicesToTerm(t))
+ATerm PTA_ChoicesToTerm(PTA_Choices arg);
+#define PTA_makeChoiceFromTerm(t) (PTA_ChoiceFromTerm(t))
+PTA_Choice PTA_ChoiceFromTerm(ATerm t);
+#define PTA_makeTermFromChoice(t) (PTA_ChoiceToTerm(t))
+ATerm PTA_ChoiceToTerm(PTA_Choice arg);
 #define PTA_makeSpecialAttrFromTerm(t) (PTA_SpecialAttrFromTerm(t))
 PTA_SpecialAttr PTA_SpecialAttrFromTerm(ATerm t);
 #define PTA_makeTermFromSpecialAttr(t) (PTA_SpecialAttrToTerm(t))
@@ -111,12 +111,12 @@ PTA_Gotos PTA_makeGotosList(PTA_Goto head, PTA_Gotos tail);
 PTA_Goto PTA_makeGotoDefault(PTA_CharRanges ranges, int stateNumber);
 PTA_Actions PTA_makeActionsEmpty();
 PTA_Actions PTA_makeActionsList(PTA_Action head, PTA_Actions tail);
-PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Alternatives alternatives);
-PTA_Alternatives PTA_makeAlternativesEmpty();
-PTA_Alternatives PTA_makeAlternativesList(PTA_Alternative head, PTA_Alternatives tail);
-PTA_Alternative PTA_makeAlternativeReduce(int length, int label, PTA_SpecialAttr specialAttr);
-PTA_Alternative PTA_makeAlternativeShift(int stateNumner);
-PTA_Alternative PTA_makeAlternativeAccept();
+PTA_Action PTA_makeActionDefault(PTA_CharRanges ranges, PTA_Choices choices);
+PTA_Choices PTA_makeChoicesEmpty();
+PTA_Choices PTA_makeChoicesList(PTA_Choice head, PTA_Choices tail);
+PTA_Choice PTA_makeChoiceReduce(int length, int label, PTA_SpecialAttr specialAttr);
+PTA_Choice PTA_makeChoiceShift(int stateNumner);
+PTA_Choice PTA_makeChoiceAccept();
 PTA_SpecialAttr PTA_makeSpecialAttrNone();
 PTA_SpecialAttr PTA_makeSpecialAttrReject();
 PTA_SpecialAttr PTA_makeSpecialAttrPrefer();
@@ -139,8 +139,8 @@ ATbool PTA_isEqualGotos(PTA_Gotos arg0, PTA_Gotos arg1);
 ATbool PTA_isEqualGoto(PTA_Goto arg0, PTA_Goto arg1);
 ATbool PTA_isEqualActions(PTA_Actions arg0, PTA_Actions arg1);
 ATbool PTA_isEqualAction(PTA_Action arg0, PTA_Action arg1);
-ATbool PTA_isEqualAlternatives(PTA_Alternatives arg0, PTA_Alternatives arg1);
-ATbool PTA_isEqualAlternative(PTA_Alternative arg0, PTA_Alternative arg1);
+ATbool PTA_isEqualChoices(PTA_Choices arg0, PTA_Choices arg1);
+ATbool PTA_isEqualChoice(PTA_Choice arg0, PTA_Choice arg1);
 ATbool PTA_isEqualSpecialAttr(PTA_SpecialAttr arg0, PTA_SpecialAttr arg1);
 ATbool PTA_isEqualPriorities(PTA_Priorities arg0, PTA_Priorities arg1);
 ATbool PTA_isEqualPriority(PTA_Priority arg0, PTA_Priority arg1);
@@ -265,42 +265,42 @@ inline ATbool PTA_isActionDefault(PTA_Action arg);
 ATbool PTA_hasActionRanges(PTA_Action arg);
 PTA_CharRanges PTA_getActionRanges(PTA_Action arg);
 PTA_Action PTA_setActionRanges(PTA_Action arg, PTA_CharRanges ranges);
-ATbool PTA_hasActionAlternatives(PTA_Action arg);
-PTA_Alternatives PTA_getActionAlternatives(PTA_Action arg);
-PTA_Action PTA_setActionAlternatives(PTA_Action arg, PTA_Alternatives alternatives);
+ATbool PTA_hasActionChoices(PTA_Action arg);
+PTA_Choices PTA_getActionChoices(PTA_Action arg);
+PTA_Action PTA_setActionChoices(PTA_Action arg, PTA_Choices choices);
 
 /*}}}  */
-/*{{{  PTA_Alternatives accessors */
+/*{{{  PTA_Choices accessors */
 
-ATbool PTA_isValidAlternatives(PTA_Alternatives arg);
-inline ATbool PTA_isAlternativesEmpty(PTA_Alternatives arg);
-inline ATbool PTA_isAlternativesList(PTA_Alternatives arg);
-ATbool PTA_hasAlternativesHead(PTA_Alternatives arg);
-PTA_Alternative PTA_getAlternativesHead(PTA_Alternatives arg);
-PTA_Alternatives PTA_setAlternativesHead(PTA_Alternatives arg, PTA_Alternative head);
-ATbool PTA_hasAlternativesTail(PTA_Alternatives arg);
-PTA_Alternatives PTA_getAlternativesTail(PTA_Alternatives arg);
-PTA_Alternatives PTA_setAlternativesTail(PTA_Alternatives arg, PTA_Alternatives tail);
+ATbool PTA_isValidChoices(PTA_Choices arg);
+inline ATbool PTA_isChoicesEmpty(PTA_Choices arg);
+inline ATbool PTA_isChoicesList(PTA_Choices arg);
+ATbool PTA_hasChoicesHead(PTA_Choices arg);
+PTA_Choice PTA_getChoicesHead(PTA_Choices arg);
+PTA_Choices PTA_setChoicesHead(PTA_Choices arg, PTA_Choice head);
+ATbool PTA_hasChoicesTail(PTA_Choices arg);
+PTA_Choices PTA_getChoicesTail(PTA_Choices arg);
+PTA_Choices PTA_setChoicesTail(PTA_Choices arg, PTA_Choices tail);
 
 /*}}}  */
-/*{{{  PTA_Alternative accessors */
+/*{{{  PTA_Choice accessors */
 
-ATbool PTA_isValidAlternative(PTA_Alternative arg);
-inline ATbool PTA_isAlternativeReduce(PTA_Alternative arg);
-inline ATbool PTA_isAlternativeShift(PTA_Alternative arg);
-inline ATbool PTA_isAlternativeAccept(PTA_Alternative arg);
-ATbool PTA_hasAlternativeLength(PTA_Alternative arg);
-int PTA_getAlternativeLength(PTA_Alternative arg);
-PTA_Alternative PTA_setAlternativeLength(PTA_Alternative arg, int length);
-ATbool PTA_hasAlternativeLabel(PTA_Alternative arg);
-int PTA_getAlternativeLabel(PTA_Alternative arg);
-PTA_Alternative PTA_setAlternativeLabel(PTA_Alternative arg, int label);
-ATbool PTA_hasAlternativeSpecialAttr(PTA_Alternative arg);
-PTA_SpecialAttr PTA_getAlternativeSpecialAttr(PTA_Alternative arg);
-PTA_Alternative PTA_setAlternativeSpecialAttr(PTA_Alternative arg, PTA_SpecialAttr specialAttr);
-ATbool PTA_hasAlternativeStateNumner(PTA_Alternative arg);
-int PTA_getAlternativeStateNumner(PTA_Alternative arg);
-PTA_Alternative PTA_setAlternativeStateNumner(PTA_Alternative arg, int stateNumner);
+ATbool PTA_isValidChoice(PTA_Choice arg);
+inline ATbool PTA_isChoiceReduce(PTA_Choice arg);
+inline ATbool PTA_isChoiceShift(PTA_Choice arg);
+inline ATbool PTA_isChoiceAccept(PTA_Choice arg);
+ATbool PTA_hasChoiceLength(PTA_Choice arg);
+int PTA_getChoiceLength(PTA_Choice arg);
+PTA_Choice PTA_setChoiceLength(PTA_Choice arg, int length);
+ATbool PTA_hasChoiceLabel(PTA_Choice arg);
+int PTA_getChoiceLabel(PTA_Choice arg);
+PTA_Choice PTA_setChoiceLabel(PTA_Choice arg, int label);
+ATbool PTA_hasChoiceSpecialAttr(PTA_Choice arg);
+PTA_SpecialAttr PTA_getChoiceSpecialAttr(PTA_Choice arg);
+PTA_Choice PTA_setChoiceSpecialAttr(PTA_Choice arg, PTA_SpecialAttr specialAttr);
+ATbool PTA_hasChoiceStateNumner(PTA_Choice arg);
+int PTA_getChoiceStateNumner(PTA_Choice arg);
+PTA_Choice PTA_setChoiceStateNumner(PTA_Choice arg, int stateNumner);
 
 /*}}}  */
 /*{{{  PTA_SpecialAttr accessors */
@@ -349,9 +349,9 @@ PTA_State PTA_visitState(PTA_State arg, int (*acceptNumber)(int), PTA_Gotos (*ac
 PTA_Gotos PTA_visitGotos(PTA_Gotos arg, PTA_Goto (*acceptHead)(PTA_Goto));
 PTA_Goto PTA_visitGoto(PTA_Goto arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), int (*acceptStateNumber)(int));
 PTA_Actions PTA_visitActions(PTA_Actions arg, PTA_Action (*acceptHead)(PTA_Action));
-PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Alternatives (*acceptAlternatives)(PTA_Alternatives));
-PTA_Alternatives PTA_visitAlternatives(PTA_Alternatives arg, PTA_Alternative (*acceptHead)(PTA_Alternative));
-PTA_Alternative PTA_visitAlternative(PTA_Alternative arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int));
+PTA_Action PTA_visitAction(PTA_Action arg, PTA_CharRanges (*acceptRanges)(PTA_CharRanges), PTA_Choices (*acceptChoices)(PTA_Choices));
+PTA_Choices PTA_visitChoices(PTA_Choices arg, PTA_Choice (*acceptHead)(PTA_Choice));
+PTA_Choice PTA_visitChoice(PTA_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTA_SpecialAttr (*acceptSpecialAttr)(PTA_SpecialAttr), int (*acceptStateNumner)(int));
 PTA_SpecialAttr PTA_visitSpecialAttr(PTA_SpecialAttr arg);
 PTA_Priorities PTA_visitPriorities(PTA_Priorities arg, PTA_Priority (*acceptHead)(PTA_Priority));
 PTA_Priority PTA_visitPriority(PTA_Priority arg, int (*acceptLabel1)(int), int (*acceptLabel2)(int));

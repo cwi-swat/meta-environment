@@ -24,16 +24,16 @@
   [Actions, empty, []],
   [Actions, list,  [<head(Action)>,<[tail(Actions)]>]],
 
-  [Action, Default, action(<ranges(CharRanges)>,<alternatives(Alternatives)>)],
+  [Action, Default, action(<ranges(CharRanges)>,<choices(Choices)>)],
 
-  [Alternatives, empty, []],
-  [Alternatives, list,  [<head(Alternative)>,<[tail(Alternatives)]>]],
+  [Choices, empty, []],
+  [Choices, list,  [<head(Choice)>,<[tail(Choices)]>]],
   
-  [Alternative, reduce, reduce(<length(int)>,<label(int)>,
+  [Choice, reduce, reduce(<length(int)>,<label(int)>,
                                <special-attr(SpecialAttr)>)],
 
-  [Alternative, shift, shift(<state-numner(int)>)],
-  [Alternative, accept, accept],
+  [Choice, shift, shift(<state-numner(int)>)],
+  [Choice, accept, accept],
    
   [SpecialAttr, none  , 0],
   [SpecialAttr, reject, 1],
