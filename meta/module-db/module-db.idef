@@ -5,11 +5,12 @@ T1        : term,
 Path      : str,
 Table     : str,
 T2        : term,
-Module    : term,
+/*Module    : str,*/
+AsFixModule: term,
 Syntax    : term,
 NewSyntax : term,
 Eqs       : term,
-Name      : term,
+Name      : str,
 Time      : int,
 Mdb       : module-db,
 Modules   : list,
@@ -21,7 +22,6 @@ in
 
 /* First, execute the module db */
 execute(module-db, Mdb?).
-
 /* And initialize it */
 snd-do(Mdb, create-module-db).
 (
@@ -29,14 +29,14 @@ snd-do(Mdb, create-module-db).
    module is generated for each context-free function in the spec
 */
   rec-msg(reshuffle-module(Name?)).
-  snd-do(Mdb, compile-module(Name)).
+  snd-do(Mdb, reshuffle-modules-from(Name)).
 /* Everytime a new module is finished it is returned, so that it can
    already be compiled. This way, we don't have to wait for the whole
    reshuffleing to finish.
 */
-  ( rec-event(Mdb, generate-code(Name?,Module?)).
-    snd-msg(generate-code(Name,Module)).
-    snd-ack-event(Mdb, generate-code(Name, Module))
+  ( rec-event(Mdb, generate-code(Name?,AsFixModule?)).
+    snd-msg(generate-code(Name,AsFixModule)).
+    snd-ack-event(Mdb, generate-code(Name, AsFixModule))
   ) *
 /* When we're done, we're done */
   rec-event(Mdb,done).
@@ -70,8 +70,8 @@ snd-do(Mdb, create-module-db).
   )
 +
 /* Add a module to the database */
-  rec-msg(add-module-to-db(Module?,timestamp(Time?))).
-  snd-eval(Mdb,add-module(Module)).
+  rec-msg(add-module-to-db(AsFixModule?,timestamp(Time?))).
+  snd-eval(Mdb,add-module(AsFixModule)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
   snd-msg(need-modules(Modules)).
 /* If a new module is added, we tell the world the new import relations */
@@ -79,15 +79,15 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb,irels(Pairs?)).
   snd-note(import-relations(irels(Pairs)))
 +
-  rec-msg(add-empty-module-to-db(Module?)).
-  snd-eval(Mdb,add-empty-module(Module)).
+  rec-msg(add-empty-module-to-db(Name?)).
+  snd-eval(Mdb,add-empty-module(Name)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf2-module-to-db(Path?,Module?,timestamp(Time?),Status?)).
-  snd-eval(Mdb,add-sdf2-module(Path,Module,Time,Status)).
+  rec-msg(add-sdf2-module-to-db(Path?,AsFixModule?,timestamp(Time?),Status?)).
+  snd-eval(Mdb,add-sdf2-module(Path,AsFixModule,Time,Status)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
   snd-msg(need-modules(Modules)).
 /* If a new module is added, we tell the world the new import relations */
@@ -97,9 +97,9 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(Module?,Language?)).
+  rec-msg(update-module-in-db(AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(Module)).
+    snd-eval(Mdb,update-sdf2-module(AsFixModule)).
     rec-value(Mdb,imports(Name?,need-modules(Modules?))).
 /* If a new module is added, we tell the world the new import relations */
     snd-eval(Mdb,calc-import-rels(Name)).
@@ -112,38 +112,38 @@ snd-do(Mdb, create-module-db).
 +
 /* Get the list of modules for which the equations are not yet
    available in the database */
-  rec-msg(update-eqs-for-modules(Module?)).
-  snd-eval(Mdb,update-eqs-for-modules(Module)).
+  rec-msg(update-eqs-for-modules(Name?)).
+  snd-eval(Mdb,update-eqs-for-modules(Name)).
   rec-value(Mdb,modules(Modules?)).
   snd-msg(eqs-for-modules(Modules))
 +
 /* Add the equations to the database for the given module name */
-  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?,timestamp(Time?),Status?)).
-  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs,Time,Status)).
+  rec-msg(add-eqs-to-db(Name?,Path?,Eqs?,timestamp(Time?),Status?)).
+  snd-eval(Mdb,add-eqs-module(Name,Path,Eqs,Time,Status)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(add-table-to-db(Module?,Table?,timestamp(Time?))).
-  snd-eval(Mdb,add-parse-table(Module,Table,Time)).
+  rec-msg(add-table-to-db(Name?,Table?,timestamp(Time?))).
+  snd-eval(Mdb,add-parse-table(Name,Table,Time)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-sdf2-path-from-db(Module?)).
-  snd-eval(Mdb,get-sdf2-path(Module)).
+  rec-msg(get-sdf2-path-from-db(Name?)).
+  snd-eval(Mdb,get-path(Name, sdf2)).
   rec-value(Mdb,path(Path?)).
   snd-msg(path(Path))
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-eqs-path-from-db(Module?)).
-  snd-eval(Mdb,get-eqs-path(Module)).
+  rec-msg(get-eqs-path-from-db(Name?)).
+  snd-eval(Mdb,get-path(Name, eqs)).
   rec-value(Mdb,path(Path?)).
   snd-msg(path(Path))
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(get-table-from-db(Module?)).
-  snd-eval(Mdb,get-parse-table(Module)).
+  rec-msg(get-table-from-db(Name?)).
+  snd-eval(Mdb,get-parse-table(Name)).
   ( rec-value(Mdb,table(Table?)).
     snd-msg(table(Table))
   +
@@ -152,8 +152,8 @@ snd-do(Mdb, create-module-db).
   )
 +
 /* Return a list of all modules imported by this one*/
-  rec-msg(get-all-imported-modules(Module?)).
-  snd-eval(Mdb, get-all-imported-modules(Module)).
+  rec-msg(get-all-imported-modules(Name?)).
+  snd-eval(Mdb, get-all-imported-modules(Name)).
   rec-value(Mdb, all-imports(Modules?)).
   snd-msg(all-imported-modules(Modules))
 +
@@ -171,13 +171,13 @@ snd-do(Mdb, create-module-db).
   snd-msg(all-equations(Equations))
 +
 /* Get the syntax for a list of modules */
-  rec-msg(retrieve-syntax(Module?)).
-  snd-eval(Mdb, retrieve-syntax(Module)).
+  rec-msg(retrieve-syntax(Name?)).
+  snd-eval(Mdb, retrieve-syntax(Name)).
   rec-value(Mdb, syntax(Syntax?)).
   snd-msg(total-syntax(Syntax))
 +
-  rec-msg(get-sdf2-asfix(Module?)).
-  snd-eval(Mdb, get-sdf2-asfix(Module)).
+  rec-msg(get-sdf2-asfix(Name?)).
+  snd-eval(Mdb, get-asfix(Name, sdf2)).
   (
     rec-value(Mdb, syntax(Syntax?)).
     snd-msg(syntax(Syntax))
@@ -189,8 +189,8 @@ snd-do(Mdb, create-module-db).
     snd-msg(unavailable)
   )
 +
-  rec-msg(get-eqs-asfix(Module?)).
-  snd-eval(Mdb, get-eqs-asfix(Module)).
+  rec-msg(get-eqs-asfix(Name?)).
+  snd-eval(Mdb, get-asfix(Name, eqs)).
   ( rec-value(Mdb, eqs(Eqs?)).
     snd-msg(eqs(Eqs))
   +
@@ -204,14 +204,14 @@ snd-do(Mdb, create-module-db).
     snd-msg(unavailable)
   )
 +
-  rec-msg(add-pgen-func(Module?,Syntax?)).
-  snd-eval(Mdb, add-pgen-func(Module,Syntax)).
+  rec-msg(add-pgen-func(Name?,Syntax?)).
+  snd-eval(Mdb, add-pgen-func(Name,Syntax)).
   rec-value(Mdb, decorated-syntax(NewSyntax?)).
   snd-msg(decorated-syntax(NewSyntax))
 +
 /* Validate the parse table */
-  rec-msg(validate-parse-tables(Module?)).
-  snd-eval(Mdb, validate-parse-tables(Module)).
+  rec-msg(validate-parse-tables(Name?)).
+  snd-eval(Mdb, validate-parse-tables(Name)).
   rec-value(Mdb, validation-done).
   snd-msg(validation-done)
 ) *
