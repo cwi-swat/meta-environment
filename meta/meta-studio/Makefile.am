@@ -9,7 +9,7 @@ pkgdata_DATA	= meta-studio.jar
 
 CLEANFILES	= meta-studio.jar
 
-JARCLASSES	= `find ${JARCLASSDIRS} -name '*.class'`
+JARCLASSES	= `find . -name '*.class'`
 JARIMAGES	= $(wildcard ${srcdir}/images/*.gif)
 
 JARFILES = \
