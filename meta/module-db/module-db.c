@@ -912,6 +912,14 @@ ATermList get_import_section_sdf2(ATerm module)
   return filter_import_list(AFTgetImports(module));
 }
 
+void usage(char *prg)
+{
+  fprintf(stderr, "usage: %s [aterm-options] [toolbus-options]\n", prg);
+  fprintf(stderr, "use '%s -at-help' to get more options.\n", prg);
+  fprintf(stderr, "This program can only be used as a ToolBus tool!\n");
+  exit(1);
+}
+
 ATerm make_main_module(ATerm mainname)
 {
   ATerm result = NULL,result1,result2,result3;
@@ -1223,6 +1231,10 @@ int main(int argc, char **argv)
 {
   int cid;
   ATerm bottomOfStack;
+
+  if(strcmp(argv[1], "-h") == 0) {
+    usage(argv[0]);
+  }
 
   ATBinit(argc, argv,&bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
