@@ -67,7 +67,7 @@ do
     shift
 done
 
-cat << E_O_SCRIPT > ${output}
+cat << E_O_SCRIPT > ${output} && chmod +x ${output}
 #! /bin/sh
 
 name=${output}
