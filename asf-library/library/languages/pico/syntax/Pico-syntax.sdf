@@ -2,7 +2,8 @@ module languages/pico/syntax/Pico-syntax
 
 imports languages/pico/syntax/Pico-Identifiers 
 imports languages/pico/syntax/Pico-Types
-imports basic/Integers basic/Strings 
+imports basic/Integers 
+imports basic/Strings 
 
 exports
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
