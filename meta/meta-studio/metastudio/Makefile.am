@@ -2,20 +2,16 @@ include ${top_srcdir}/make_rules
 
 SUBDIRS = graph
 
-ACSOURCES	= Module.java
-GENSOURCES	= UserInterfaceTif.java UserInterfaceTool.java \
-		UserInterfaceBridge.java
+pkgdata_DATA = meta-studio.idef
+EXTRA_DIST = meta-studio.idef
 
-pkgdata_DATA	= meta-studio.idef
-EXTRA_DIST	= meta-studio.idef
-
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${SHARED_OBJECTS}:${JAVA_ATERM}:${TOOLBUS}/classes
+CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${SHARED_OBJECTS}:${JAVA_ATERM}:${TOOLBUS}/classes
 
 
-JAVAROOT	= ${top_builddir}/meta-studio
-javadir		= ${prefix}/classes/metastudio
+JAVAROOT = ${top_builddir}/meta-studio
+javadir = ${prefix}/classes/metastudio
 
-TYPES		= Module.ace
+TYPES = Module.ace
 
 api: metastudio.ace ${TYPES}
 	autocode \
@@ -27,6 +23,13 @@ jtif:
 	${IDEF} meta-studio.idef
 	${TOOLBUS}/bin/tifstojava -tool user-interface -tifs meta-studio.tifs \
 		-package metastudio -swing
+
+ACSOURCES = Module.java
+
+GENSOURCES = \
+	UserInterfaceTif.java \
+	UserInterfaceTool.java \
+	UserInterfaceBridge.java
 
 java_JAVA = \
 	${ACSOURCES} \
@@ -41,6 +44,7 @@ java_JAVA = \
 	ModuleManager.java \
 	ModuleSelectionListener.java \
 	ModuleStatusPanel.java \
+	NodeSizer.java \
 	ParseTreePanel.java \
 	Preferences.java \
 	UserInterfaceBridge.java \
