@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb 13 10:34:32 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - lists (with elements) can be pretty printed 
+
 Thu Feb 12 11:15:37 CET 2004 <jong@cwi.nl>
  * pandora.pkg: list explicit version dependencies
  * configure.in: add configure options for required packages

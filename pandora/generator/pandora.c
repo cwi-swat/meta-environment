@@ -202,7 +202,7 @@ static BOX_Box argsSingleToBox(PT_Args arg)
 
 static BOX_Box argsManyToBox(PT_Tree tree)
 {
-  BOX_BoxList boxlist = BOX_makeBoxListEmpty();
+  BOX_BoxList boxList = BOX_makeBoxListEmpty();
   BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
   BOX_SpaceOptionOptions spaceOptions = BOX_makeSpaceOptionOptionsEmpty(); 
   
@@ -223,9 +223,9 @@ static BOX_Box argsManyToBox(PT_Tree tree)
 				prettyHead, 
 				optLayout);
     } 
-    boxlist = BOX_makeBoxListMany(prettyHead, optLayout, boxlist); 
+    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
   }
-  boxlist = BOX_reverseBoxList(boxlist);
+  boxList = BOX_reverseBoxList(boxList);
 
   if (isIndentedType(PT_getTreeProd(tree))) 
   {
@@ -233,7 +233,7 @@ static BOX_Box argsManyToBox(PT_Tree tree)
 			spaceOptions,
 			optLayout,
 			optLayout,
-			boxlist,
+			boxList,
 			optLayout);
   } 
   else 
@@ -242,7 +242,7 @@ static BOX_Box argsManyToBox(PT_Tree tree)
 			 spaceOptions,
 			 optLayout, 
 			 optLayout, 
-			 boxlist, 
+			 boxList, 
 			 optLayout);
   }  
 }
@@ -292,33 +292,71 @@ static BOX_Box layoutToBox(PT_Tree tree)
 static BOX_Box listToBox(PT_Tree tree)
 {
   PT_Production production = PT_getTreeProd(tree);
+  PT_Args args = PT_getTreeArgs(tree);
   PT_Symbol symbol = PT_getProductionRhs(production);
 
-  if (PT_isArgsEmpty(PT_getTreeArgs(tree)))
+  BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
+  BOX_SpaceOptionOptions spaceOptions = BOX_makeSpaceOptionOptionsEmpty(); 
+  BOX_BoxList boxList = BOX_makeBoxListEmpty();
+  
+  if (PT_isArgsEmpty(args))
   {
-    BOX_BoxList boxlist = BOX_makeBoxListEmpty();
-    BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
-    BOX_SpaceOptionOptions soptions = BOX_makeSpaceOptionOptionsEmpty(); 
 
     return BOX_makeBoxH(optLayout,
-			soptions,
+			spaceOptions,
 			optLayout,
 			optLayout,
-			boxlist,
+			boxList,
 			optLayout);
   }
 
   symbol = PT_getSymbolSymbol(symbol);
   if (PT_isSymbolIterStarSep(symbol) || PT_isSymbolIterPlusSep(symbol))
   {
-    
-    
-    return applToBox(tree);
+    while (!PT_isArgsEmpty(args)) 
+    {
+      PT_Tree head = PT_getArgsHead(args);
+
+      if (!PT_isTreeLayout(head)) 
+      {
+	boxList = BOX_makeBoxListMany(treeToBox(head), optLayout, boxList);
+      }
+
+      args = PT_getArgsTail(args);
+    }
+    boxList = BOX_reverseBoxList(boxList);
+      
+    return BOX_makeBoxV(optLayout,
+			spaceOptions,
+			optLayout,
+			optLayout,
+			boxList,
+			optLayout);
   }
-  else
+  else if (PT_isSymbolIterStar(symbol))
   {
-    return applToBox(tree);
+    while (!PT_isArgsEmpty(args)) 
+    {
+      PT_Tree head = PT_getArgsHead(args);
+
+      if (!PT_isTreeLayout(head)) 
+      {
+	boxList = BOX_makeBoxListMany(treeToBox(head), optLayout, boxList);
+      }
+
+      args = PT_getArgsTail(args);
+    }
+    boxList = BOX_reverseBoxList(boxList);
+      
+    return BOX_makeBoxV(optLayout,
+			spaceOptions,
+			optLayout,
+			optLayout,
+			boxList,
+			optLayout);
   }
+
+  return applToBox(tree);
 }
 
 /*}}}  */
