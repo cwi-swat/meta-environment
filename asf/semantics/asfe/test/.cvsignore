@@ -8,3 +8,4 @@ reduce-test
 prepare-restore-test
 equalModuloWhitespace-test
 whitespace-test
+regress-test
