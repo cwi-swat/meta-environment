@@ -17,15 +17,20 @@
 
 ----------------------------------------------------------------------
 
- << Package name >>
+ asf-library
 
 ----------------------------------------------------------------------
 
- Authors: << Names and email adresses >>
+ Authors: Jurgen Vinju <Jurgen.Vinju@cwi.nl>
+          Joost Visser <Joost.Visser@cwi.nl>
 
 ----------------------------------------------------------------------
 
- << Short description >>
+ A library of ASF+SDF modules with all kinds of functionality,
+ including:
+
+  * Basic (not built-in) integers, strings and booleans
+  * Basic data-structures
 
 ----------------------------------------------------------------------
 
@@ -33,7 +38,7 @@
 
  Documentation can be found at the following site:
 
-   http://some.domain/anonymous/documentation
+   http://www.cwi.nl/projects/MetaEnv
 
 ----------------------------------------------------------------------
 

@@ -11,18 +11,13 @@ Modular structure
 
 * hidden variables
 
-* module name prefixes
-    Module names in the library should be prefixed with "ASFLib_". This
-    prevents name clashes with module names of the user of the library.
-
-
 Formatting
 ----------
 
 * sort names
      Sort names with all capitals are discouraged.
 
-Miscelanous
+Miscelaneous
 -----------
 
 * constructor annotations

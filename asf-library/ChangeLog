@@ -1,3 +1,7 @@
+2001/05/13 (jurgenv@cwi.nl)
+  * Removed generation of configure script
+  * Restarted asf library initiative using compound module names
+
 2001/12/21 (jurgenv@cwi.nl)
   * Added --with-pt-support, --with-sglr and --with-asf configure options.
   * Fixed make_rules.asf to be able to handle distcheck target.
