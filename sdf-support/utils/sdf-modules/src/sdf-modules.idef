@@ -14,7 +14,9 @@ let
  Definition : term,
  Nodes : list,
  Edges : list,
- Path : str
+ Path : str,
+ From : str,
+ To   : str
 in
   execute(sdf-modules, SM?) .
   (
@@ -64,7 +66,7 @@ in
   +
     rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
     printf("not yet implemented") .
-    snd-msg(sm-import-removed-from-module(Module)
+    snd-msg(sm-import-removed-from-module(Module))
   +
     rec-msg(sm-rename-module(Module?, ModuleId?)) .
     printf("not yet implemented") .
