@@ -19,6 +19,10 @@
 
 $Id$
 
+2000/10/26 (mdejonge@cwi.nl)
+   * sdf2table now tries to create unique file names in /var/tmp to prevent
+     write permission errors.
+
 2000/10/02 (markvdb@cwi.nl)
    * A small correction with respect to priorities of lists.
 

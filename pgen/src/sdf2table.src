@@ -162,7 +162,7 @@ do
 	else
 		base=`GetBaseName $f .sdf .sdf2 .SDF .SDF2 .Sdf .Sdf2`
 		dir=`dirname $f`
-                af1name=${TMPDIR:-/var/tmp}/$base.asfix1
+                af1name=${TMPDIR:-/var/tmp}/$base.$$.asfix1
 		tblname=${output:-$dir/$base.tbl}
 	fi
 	Notify "Parsing $f..."
