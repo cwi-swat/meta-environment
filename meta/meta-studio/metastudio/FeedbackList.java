@@ -10,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 import errorapi.Factory;
@@ -19,7 +20,7 @@ import errorapi.types.Summary;
 public class FeedbackList extends JPanelTool implements MouseListener {
     private JList list;
     private List data;
-    
+
     public FeedbackList(aterm.ATermFactory factory, UserInterfaceBridge bridge) {
         super(factory, bridge);
 
@@ -29,43 +30,48 @@ public class FeedbackList extends JPanelTool implements MouseListener {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addMouseListener(this);
 
-        
         list.setModel(new ListModel(data));
         list.setCellRenderer(new FeedbackListCellRenderer());
-                
+
         setLayout(new BorderLayout());
         add(new JScrollPane(list), BorderLayout.CENTER);
-        
+
         // just testing
-        setFeedbackList(new Factory((PureFactory) factory).SummaryFromString(
-"feedback(" +
-  "[info(" +
-         "\"1\"," +
-         "\"1\"," +
-         "\"asf-checker\"," +
-         "\"an example info message\"," +
-         "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])," +
-   "warning(" +
-         "\"2\"," +
-         "\"1\"," +
-         "\"sdf-checker\"," +
-         "\"an example warning\"," +
-         "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])," +
-   "error(" +
-         "\"3\"," +
-         "\"1\"," +
-         "\"toolbus\"," +
-         "\"an example error\"," +
-         "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])," +
-   "fatal-error(" +
-         "\"8\"," +
-         "\"-1\"," +
-         "\"system\"," +
-         "\"an example fatal error\"," +
-         "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])])"));
+        setFeedbackList(
+            new Factory((PureFactory) factory).SummaryFromString(
+                "feedback("
+                    + "[info("
+                    + "\"1\","
+                    + "\"1\","
+                    + "\"asf-checker\","
+                    + "\"an example info message\","
+                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
+                    + "warning("
+                    + "\"2\","
+                    + "\"1\","
+                    + "\"sdf-checker\","
+                    + "\"an example warning\","
+                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
+                    + "error("
+                    + "\"3\","
+                    + "\"1\","
+                    + "\"toolbus\","
+                    + "\"an example error\","
+                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
+                    + "fatal-error("
+                    + "\"8\","
+                    + "\"-1\","
+                    + "\"system\","
+                    + "\"an example fatal error\","
+                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])])"));
     }
 
-    public void setFeedbackList(Summary summary) {
+    public void displayFeedbackSummary(ATerm t0) {
+        Summary summary = new Factory((PureFactory) getFactory()).SummaryFromTerm(t0);
+        setFeedbackList(summary);
+    }
+
+    private void setFeedbackList(Summary summary) {
         data.clear();
 
         errorapi.types.FeedbackList messages = summary.getList();
@@ -78,7 +84,7 @@ public class FeedbackList extends JPanelTool implements MouseListener {
 
     public void mouseClicked(MouseEvent e) {
         Feedback feedback = (Feedback) list.getSelectedValue();
-        postEvent(getFactory().make("feedback-selected(<term>)",feedback.toTerm()));
+        postEvent(getFactory().make("feedback-selected(<term>)", feedback.toTerm()));
     }
 
     public void mousePressed(MouseEvent e) {

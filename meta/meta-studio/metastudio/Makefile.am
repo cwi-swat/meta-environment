@@ -51,4 +51,5 @@ java_JAVA = \
 	TreeNode.java \
 	ModuleSelectionModel.java\
 	JPanelTool.java\
-	StatusBar.java
+	StatusBar.java\
+	HistoryPanel.java

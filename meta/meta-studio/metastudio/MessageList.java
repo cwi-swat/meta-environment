@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.ParseError;
 import aterm.pure.PureFactory;
@@ -86,4 +87,20 @@ public class MessageList extends JPanelTool implements ListSelectionListener {
 			}
 		}
 	}
+    
+    public void updateList(String moduleName, String actions) {
+        ATerm data = getFactory().parse(actions);
+
+        if (data instanceof ATermAppl) {
+            ATermAppl applData = (ATermAppl) data;
+            data = (ATerm) applData.getArguments().getFirst();
+            error("Deprecated use of list with function symbol " + applData.getAFun());
+        }
+
+        if (data instanceof ATermList) {
+            setContent(moduleName, (ATermList) data);
+        } else {
+            error("Can't show something in list view which is not a ATermList: " + data);
+        }
+    }
 }

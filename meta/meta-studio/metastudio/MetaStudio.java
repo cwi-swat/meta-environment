@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Rectangle;
@@ -50,20 +49,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
-import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import javax.swing.tree.TreePath;
 
 import metastudio.graph.AttributeList;
@@ -76,8 +68,6 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
-import errorapi.Factory;
-import errorapi.types.Summary;
 
 public class MetaStudio
     extends JFrame
@@ -107,15 +97,9 @@ public class MetaStudio
     private int mouseX;
     private int mouseY;
 
-    private JScrollPane historyPane;
-
-    private StyleContext historyStyles;
-    private DefaultStyledDocument historyDoc;
-    private JTextPane history;
+   
     
-    public Style styleError;
-    public Style styleWarning;
-    public Style styleMessage;
+  
 
     private JTabbedPane graphTabs;
 
@@ -135,9 +119,8 @@ public class MetaStudio
     private String currentModule;
     private ModuleTreeModel moduleManager;
 
-    private MessageList messageWindow;
-    
     private LinkedList panels;
+    private HistoryPanel historyPanel;
 
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
@@ -260,7 +243,7 @@ public class MetaStudio
         container.setLayout(new BorderLayout());
         container.add(createMessageTabs(), BorderLayout.CENTER);
         
-        StatusBar bar = new StatusBar(factory, bridge, this);
+        StatusBar bar = new StatusBar(factory, bridge, historyPanel);
         panels.add(bar);
         container.add(bar, BorderLayout.SOUTH);
         
@@ -324,10 +307,11 @@ public class MetaStudio
         JTabbedPane messageTabs = new JTabbedPane();
         MessageList messageList;
         feedbackList = new FeedbackList(factory, bridge);
+        historyPanel = new HistoryPanel(factory, bridge);
         
         try {
             messageList = createMessageWindow();
-            messageTabs.insertTab("history",null,createHistoryPanel(),"Execution history and error messages",0);
+            messageTabs.insertTab("history",null,historyPanel,"Execution history and error messages",0);
             messageTabs.insertTab("messages",null,messageList,"Message list",1);
             messageTabs.insertTab("errors",null,feedbackList,"Clickable error messages",2);
         } catch (IOException e) {
@@ -342,14 +326,7 @@ public class MetaStudio
         bridge.sendEvent(factory.parse("quit"));
     }
 
-    private JPanel createHistoryPanel() {
-        createHistoryDocument();
-        JPanel historyPanel = new JPanel();
-        historyPanel.setLayout(new BorderLayout());
-        historyPane = new JScrollPane(history);
-        historyPanel.add(historyPane);
-        return historyPanel;
-    }
+   
 
     
 
@@ -360,21 +337,7 @@ public class MetaStudio
         moduleStatus.setBackground(color);
     }
 
-    private void createHistoryDocument() {
-        Color color;
-
-        historyStyles = new StyleContext();
-        styleMessage = initStyle("messagepane.message");
-        styleWarning = initStyle("messagepane.warning");
-        styleError = initStyle("messagepane.error");
-
-        historyDoc = new DefaultStyledDocument(historyStyles);
-        history = new JTextPane(historyDoc);
-        history.setEditable(false);
-
-        color = Preferences.getColor(Preferences.PREF_MSGPANE_BACKGROUND);
-        history.setBackground(color);
-    }
+    
 
     private void createModuleGraph() {
         Color color;
@@ -534,23 +497,7 @@ public class MetaStudio
         return (GraphPanel) graphPanels.get(id);
     }
 
-    private Style initStyle(String prop) {
-        Style style = historyStyles.addStyle(null, null);
-
-        Font font = Preferences.getFont(prop + ".font");
-
-        StyleConstants.setFontFamily(style, font.getFamily());
-        StyleConstants.setFontSize(style, font.getSize());
-        StyleConstants.setItalic(style, font.isItalic());
-        StyleConstants.setBold(style, font.isBold());
-
-        Color background = Preferences.getColor(prop + ".background");
-        StyleConstants.setBackground(style, background);
-        Color foreground = Preferences.getColor(prop + ".foreground");
-        StyleConstants.setForeground(style, foreground);
-
-        return style;
-    }
+   
 
     public void run() {
         layoutGraph(importGraphPanel, graph);
@@ -585,83 +532,13 @@ public class MetaStudio
         moduleStatus.setModuleInfo(module, entries);
     }
 
-    void addMessage(Style style, String id, String message) {
-        Object lock = history.getTreeLock();
-        synchronized (lock) {
-            try {
-                historyDoc.insertString(historyDoc.getLength(), message + "\n", style);
-                int start = historyDoc.getLength();
-                Rectangle rect = history.modelToView(start);
-                if (rect != null) {
-                    JViewport viewport = historyPane.getViewport();
-
-                    // Make rectangle relative to viewport
-                    rect.x -= viewport.getViewPosition().x;
-                    rect.y -= viewport.getViewPosition().y;
-                    viewport.scrollRectToVisible(rect);
-                }
-            } catch (BadLocationException e) {
-                System.err.println("bad location: " + e.getMessage());
-            }
-        }
-    }
+    
 
     
 
-    public void addStatus(ATerm id, String message) {
-        Iterator iter = panels.iterator();
-        
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatus(id, message);
-        }
-    }
+    
 
-    public void addStatusf(ATerm id, String format, ATerm args) {
-        Iterator iter = panels.iterator();
-        
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatusf(id, format, args);
-        }
-    }
-
-    public void endStatus(ATerm id) {
-        Iterator iter = panels.iterator();
-        
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.endStatus(id);
-        }
-    }
-
-    public void errorf(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addMessage(styleError, null, message);
-    }
-
-    public void error(String message) {
-        addMessage(styleError, null, message);
-    }
-
-    public void messagef(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addMessage(styleMessage, null, message);
-    }
-
-    public void message(String message) {
-        addMessage(styleMessage, null, message);
-    }
-
-    public void warningf(String format, ATerm args) {
-        String message = StringFormatter.format(format, (ATermList) args);
-        addMessage(styleWarning, null, message);
-    }
-
-    public void warning(String message) {
-        addMessage(styleWarning, null, message);
-    }
-
+    
     public void initializeUi(String name) {
         setTitle(name);
         Preferences.setString("metastudio.name", name);
@@ -788,21 +665,7 @@ public class MetaStudio
         }
     }
 
-    public void updateList(String moduleName, String actions) {
-        ATerm data = factory.parse(actions);
-
-        if (data instanceof ATermAppl) {
-            ATermAppl applData = (ATermAppl) data;
-            data = (ATerm) applData.getArguments().getFirst();
-            error("Deprecated use of list with function symbol " + applData.getAFun());
-        }
-
-        if (data instanceof ATermList) {
-            messageWindow.setContent(moduleName, (ATermList) data);
-        } else {
-            error("Can't show something in list view which is not a ATermList: " + data);
-        }
-    }
+    
 
     public void recAckEvent(ATerm event) {
     }
@@ -893,9 +756,6 @@ public class MetaStudio
         toolBar.add(createScaleBox());
     }
 
-    //{{{ public void buttonsFound(ATerm buttonType, String moduleName, ATerm
-	// buttons)
-
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
         if (buttonType.equals(ACTION_MENUBAR)) {
             addMenu(buttonType, moduleName, (ATermList) buttons);
@@ -912,8 +772,6 @@ public class MetaStudio
             popupMenu.show(component, mouseX, mouseY);
         }
     }
-
-    //}}}
 
     private JMenu getMenu(String name) {
         JMenu menu;
@@ -1197,14 +1055,7 @@ public class MetaStudio
         return factory.make("snd-value(answer(cancel))");
     }
 
-    public void clearHistory() {
-        try {
-            historyDoc.remove(0, historyDoc.getLength());
-        } catch (BadLocationException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
+    
     void toggleTide() {
         bridge.postEvent(
             factory.make("debugging(<id>)", tideBox.isSelected() ? "on" : "off"));
@@ -1222,8 +1073,111 @@ public class MetaStudio
         return null;
     }
 
+    public void addStatus(ATerm id, String message) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.addStatus(id, message);
+        }
+    }
+
+    public void addStatusf(ATerm id, String format, ATerm args) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.addStatusf(id, format, args);
+        }
+    }
+
+    public void endStatus(ATerm id) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.endStatus(id);
+        }
+    }
+    
     public void displayFeedbackSummary(ATerm t0) {
-        Summary summary = new Factory(factory).SummaryFromTerm(t0);
-        feedbackList.setFeedbackList(summary);
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.displayFeedbackSummary(t0);
+        }
+    }
+    
+    public void updateList(String moduleName, String actions) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.updateList(moduleName, actions);
+        }
+    }
+    
+    public void errorf(String format, ATerm args) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.errorf(format, args);
+        }
+    }
+
+    public void error(String message) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.error(message);
+        }
+    }
+
+    public void messagef(String format, ATerm args) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.messagef(format, args);
+        }
+    }
+
+    public void message(String message) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.message(message);
+        }
+    }
+
+    public void warningf(String format, ATerm args) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.warningf(format, args);
+        }
+    }
+
+    public void warning(String message) {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.warning(message);
+        }
+    }
+    
+    public void clearHistory() {
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.clearHistory();
+        }
     }
 }

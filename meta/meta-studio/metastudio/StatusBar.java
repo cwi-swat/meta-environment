@@ -18,15 +18,15 @@ public class StatusBar extends JPanelTool {
     private JLabel statusBar;
     private JCheckBox statusLog;
     private List statusMessages;
-    private MetaStudio studio;
+    private HistoryPanel history;
 
     public StatusBar(
         ATermFactory factory,
         UserInterfaceBridge bridge,
-        MetaStudio studio) {
+        HistoryPanel history) {
         super(factory, bridge);
 
-        this.studio = studio;
+        this.history = history;
         statusMessages = new LinkedList();
 
         Color bgColor =
@@ -73,13 +73,12 @@ public class StatusBar extends JPanelTool {
     }
 
     public void addStatus(ATerm id, String message) {
-        String ids = id.toString();
         if (statusLog.isSelected()) {
-            studio.addMessage(studio.   styleMessage, ids, message);
+            history.message(message);
         }
 
         statusBar.setText(message);
-        String[] pair = { ids, message };
+        String[] pair = { id.toString(), message };
         statusMessages.add(pair);
     }
 
