@@ -9,6 +9,7 @@ PERL_DEMOS="perl"
 GEL_DEMOS="spec"
 EPIC_DEMOS=""
 SUBDIRS="src test adapters demos doc www"
+XTRADIRS=""
 
 AC_SUBST(PRODUCT)
 AC_SUBST(VERSION)
@@ -122,7 +123,7 @@ AC_ARG_WITH(tide,
 [  --with-tide		compile TIDE support (debugger prototype)],
 TIDE='$(top_srcdir)/tide'
 TIDEDEF=-DUSE_TIDE
-SUBDIRS="${SUBDIRS} tide",
+XTRADIRS="${XTRADIRS} tide",
 DISTDIRS="${DISTDIRS} tide"
 )
 AC_SUBST(TIDEDEF)
@@ -182,6 +183,7 @@ fi,
 AC_SUBST(TBSWIPL)
 
 AC_SUBST(SUBDIRS)
+AC_SUBST(XTRADIRS)
 AC_SUBST(ADAPTERS)
 AC_SUBST(DEMOS)
 AC_SUBST(TCLTKTOP)

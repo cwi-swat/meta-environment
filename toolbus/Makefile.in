@@ -18,17 +18,18 @@ CLEAN		= @CLEAN@
 
 MODULES		= 
 SUBDIRS		= @SUBDIRS@
+XTRADIRS	= @XTRADIRS@
 DISTDIRS	= @DISTDIRS@
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
 all clean distclean install uninstall:
-	@SUBDIRS="${SUBDIRS}";\
+	@SUBDIRS="${SUBDIRS} ${XTRADIRS}";\
 	case $@ in \
 	  clean) ${CLEAN} ;;\
 	  distclean) ${CLEAN};rm -f Makefile config.status config.log config.cache; rm -f lib/* include/* bin/* ;;\
-	  install) SUBDIRS="src tide test adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
-	  all) SUBDIRS="src tide test adapters";;\
+	  install) SUBDIRS="src test adapters ${XTRADIRS}";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
+	  all) SUBDIRS="src test adapters ${XTRADIRS}";;\
 	esac; \
 	for SUBDIR in $$SUBDIRS; \
 	do \
@@ -66,7 +67,4 @@ dist: $(DISTFILES)
 	@ cd ..;tar chof $(PRODUCT)-$(VERSION).tar $(PRODUCT)-$(VERSION)
 	@ gzip ../$(PRODUCT)-$(VERSION).tar
 	# rm -rf ../$(PRODUCT)-$(VERSION)
-
-
-
 
