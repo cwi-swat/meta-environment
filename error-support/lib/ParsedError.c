@@ -680,11 +680,11 @@ PERR_Location PERR_makeLocationFile(PERR_OptLayout wsAfterFile, PERR_OptLayout w
 }
 
 /*}}}  */
-/*{{{  PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterArea, PERR_OptLayout wsAfterParenOpen, PERR_Area Area, PERR_OptLayout wsAfterArea) */
+/*{{{  PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterA, PERR_OptLayout wsAfterParenOpen, PERR_Area Area, PERR_OptLayout wsAfterArea) */
 
-PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterArea, PERR_OptLayout wsAfterParenOpen, PERR_Area Area, PERR_OptLayout wsAfterArea)
+PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterA, PERR_OptLayout wsAfterParenOpen, PERR_Area Area, PERR_OptLayout wsAfterArea)
 {
-  return (PERR_Location)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun15))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun3, (ATerm)ATmakeAppl0(PERR_afun38)))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun18))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun39))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun3, (ATerm)ATmakeAppl0(PERR_afun24))), (ATerm)ATmakeAppl1(PERR_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun22, (ATerm)ATmakeAppl1(PERR_afun23, (ATerm)ATmakeAppl0(PERR_afun39)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun15))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun18))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun39))));
+  return (PERR_Location)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun15))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun3, (ATerm)ATmakeAppl0(PERR_afun38)))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun18))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17)))), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun39))), (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun3, (ATerm)ATmakeAppl0(PERR_afun24))), (ATerm)ATmakeAppl1(PERR_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun22, (ATerm)ATmakeAppl1(PERR_afun23, (ATerm)ATmakeAppl0(PERR_afun39)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun15))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun18))), (ATerm) wsAfterA), (ATerm)ATmakeAppl1(PERR_afun14, (ATerm)ATmakeAppl0(PERR_afun39))));
 }
 
 /*}}}  */
@@ -3353,9 +3353,9 @@ PERR_Location PERR_setLocationWsAfterFilename(PERR_Location arg, PERR_OptLayout 
 }
 
 /*}}}  */
-/*{{{  ATbool PERR_hasLocationWsAfterArea(PERR_Location arg) */
+/*{{{  ATbool PERR_hasLocationWsAfterA(PERR_Location arg) */
 
-ATbool PERR_hasLocationWsAfterArea(PERR_Location arg)
+ATbool PERR_hasLocationWsAfterA(PERR_Location arg)
 {
   if (PERR_isLocationArea(arg)) {
     return ATtrue;
@@ -3364,24 +3364,24 @@ ATbool PERR_hasLocationWsAfterArea(PERR_Location arg)
 }
 
 /*}}}  */
-/*{{{  PERR_OptLayout PERR_getLocationWsAfterArea(PERR_Location arg) */
+/*{{{  PERR_OptLayout PERR_getLocationWsAfterA(PERR_Location arg) */
 
-PERR_OptLayout PERR_getLocationWsAfterArea(PERR_Location arg)
+PERR_OptLayout PERR_getLocationWsAfterA(PERR_Location arg)
 {
   
     return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
 /*}}}  */
-/*{{{  PERR_Location PERR_setLocationWsAfterArea(PERR_Location arg, PERR_OptLayout wsAfterArea) */
+/*{{{  PERR_Location PERR_setLocationWsAfterA(PERR_Location arg, PERR_OptLayout wsAfterA) */
 
-PERR_Location PERR_setLocationWsAfterArea(PERR_Location arg, PERR_OptLayout wsAfterArea)
+PERR_Location PERR_setLocationWsAfterA(PERR_Location arg, PERR_OptLayout wsAfterA)
 {
   if (PERR_isLocationArea(arg)) {
-    return (PERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterArea), 1), 1);
+    return (PERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterA), 1), 1);
   }
 
-  ATabort("Location has no WsAfterArea: %t\n", arg);
+  ATabort("Location has no WsAfterA: %t\n", arg);
   return (PERR_Location)NULL;
 }
 
@@ -5347,9 +5347,9 @@ PERR_ErrorList PERR_visitErrorList(PERR_ErrorList arg, PERR_Error (*acceptHead)(
 }
 
 /*}}}  */
-/*{{{  PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterAreaInFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout)) */
+/*{{{  PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterA)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterAreaInFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout)) */
 
-PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterAreaInFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout))
+PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterA)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterAreaInFile)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout))
 {
   if (PERR_isLocationFile(arg)) {
     return PERR_makeLocationFile(
@@ -5360,7 +5360,7 @@ PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAft
   }
   if (PERR_isLocationArea(arg)) {
     return PERR_makeLocationArea(
-        acceptWsAfterArea ? acceptWsAfterArea(PERR_getLocationWsAfterArea(arg)) : PERR_getLocationWsAfterArea(arg),
+        acceptWsAfterA ? acceptWsAfterA(PERR_getLocationWsAfterA(arg)) : PERR_getLocationWsAfterA(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PERR_getLocationWsAfterParenOpen(arg)) : PERR_getLocationWsAfterParenOpen(arg),
         acceptArea ? acceptArea(PERR_getLocationArea(arg)) : PERR_getLocationArea(arg),
         acceptWsAfterArea ? acceptWsAfterArea(PERR_getLocationWsAfterArea(arg)) : PERR_getLocationWsAfterArea(arg));

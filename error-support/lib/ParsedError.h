@@ -237,7 +237,7 @@ PERR_Location PERR_makeLocationFile(PERR_OptLayout wsAfterFile,
 				    PERR_OptLayout wsAfterParenOpen,
 				    PERR_StrCon filename,
 				    PERR_OptLayout wsAfterFilename);
-PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterArea,
+PERR_Location PERR_makeLocationArea(PERR_OptLayout wsAfterA,
 				    PERR_OptLayout wsAfterParenOpen,
 				    PERR_Area Area,
 				    PERR_OptLayout wsAfterArea);
@@ -565,10 +565,10 @@ ATbool PERR_hasLocationWsAfterFilename(PERR_Location arg);
 PERR_OptLayout PERR_getLocationWsAfterFilename(PERR_Location arg);
 PERR_Location PERR_setLocationWsAfterFilename(PERR_Location arg,
 					      PERR_OptLayout wsAfterFilename);
-ATbool PERR_hasLocationWsAfterArea(PERR_Location arg);
-PERR_OptLayout PERR_getLocationWsAfterArea(PERR_Location arg);
-PERR_Location PERR_setLocationWsAfterArea(PERR_Location arg,
-					  PERR_OptLayout wsAfterArea);
+ATbool PERR_hasLocationWsAfterA(PERR_Location arg);
+PERR_OptLayout PERR_getLocationWsAfterA(PERR_Location arg);
+PERR_Location PERR_setLocationWsAfterA(PERR_Location arg,
+				       PERR_OptLayout wsAfterA);
 ATbool PERR_hasLocationArea(PERR_Location arg);
 PERR_Area PERR_getLocationArea(PERR_Location arg);
 PERR_Location PERR_setLocationArea(PERR_Location arg, PERR_Area Area);
@@ -812,7 +812,7 @@ PERR_Location PERR_visitLocation(PERR_Location arg,
 				 PERR_StrCon(*acceptFilename) (PERR_StrCon),
 				 PERR_OptLayout(*acceptWsAfterFilename)
 				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterArea)
+				 PERR_OptLayout(*acceptWsAfterA)
 				 (PERR_OptLayout),
 				 PERR_Area(*acceptArea) (PERR_Area),
 				 PERR_OptLayout(*acceptWsAfterArea)

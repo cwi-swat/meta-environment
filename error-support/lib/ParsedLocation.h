@@ -72,7 +72,7 @@ PLOC_Location PLOC_makeLocationFile(PLOC_OptLayout wsAfterFile,
 				    PLOC_OptLayout wsAfterParenOpen,
 				    PLOC_StrCon filename,
 				    PLOC_OptLayout wsAfterFilename);
-PLOC_Location PLOC_makeLocationArea(PLOC_OptLayout wsAfterArea,
+PLOC_Location PLOC_makeLocationArea(PLOC_OptLayout wsAfterA,
 				    PLOC_OptLayout wsAfterParenOpen,
 				    PLOC_Area Area,
 				    PLOC_OptLayout wsAfterArea);
@@ -192,10 +192,10 @@ ATbool PLOC_hasLocationWsAfterFilename(PLOC_Location arg);
 PLOC_OptLayout PLOC_getLocationWsAfterFilename(PLOC_Location arg);
 PLOC_Location PLOC_setLocationWsAfterFilename(PLOC_Location arg,
 					      PLOC_OptLayout wsAfterFilename);
-ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg);
-PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg);
-PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg,
-					  PLOC_OptLayout wsAfterArea);
+ATbool PLOC_hasLocationWsAfterA(PLOC_Location arg);
+PLOC_OptLayout PLOC_getLocationWsAfterA(PLOC_Location arg);
+PLOC_Location PLOC_setLocationWsAfterA(PLOC_Location arg,
+				       PLOC_OptLayout wsAfterA);
 ATbool PLOC_hasLocationArea(PLOC_Location arg);
 PLOC_Area PLOC_getLocationArea(PLOC_Location arg);
 PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area);
@@ -354,7 +354,7 @@ PLOC_Location PLOC_visitLocation(PLOC_Location arg,
 				 PLOC_StrCon(*acceptFilename) (PLOC_StrCon),
 				 PLOC_OptLayout(*acceptWsAfterFilename)
 				 (PLOC_OptLayout),
-				 PLOC_OptLayout(*acceptWsAfterArea)
+				 PLOC_OptLayout(*acceptWsAfterA)
 				 (PLOC_OptLayout),
 				 PLOC_Area(*acceptArea) (PLOC_Area),
 				 PLOC_OptLayout(*acceptWsAfterArea)
