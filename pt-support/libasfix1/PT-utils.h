@@ -38,8 +38,4 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 
-char      *PT_getStringChars(PT_String ptStr);
-PT_String PT_setStringChars(const char* str);
-
-
 #endif

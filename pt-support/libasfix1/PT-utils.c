@@ -65,7 +65,7 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
   /* apply func to each element */
   for (store = ATempty;
       PT_hasArgsHead(args);
-      newArgs = PT_getArgsTail(args)) {
+      args = PT_getArgsTail(args)) {
     store = ATinsert(store,
                      PT_makeTermFromTree(
                      visitor(PT_getArgsHead(args),data)));
@@ -88,12 +88,17 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
   PT_Symbols newSymbols = PT_makeSymbolsEmpty();
 
   /* apply func to each element */
-  for (store = ATempty;
-      PT_hasSymbolsHead(symbols);
-      newSymbols = PT_getSymbolsTail(symbols)) {
+  store = ATempty;
+  while (PT_hasSymbolsHead(symbols)) {
     store = ATinsert(store,
                      PT_makeTermFromSymbol(
                      visitor(PT_getSymbolsHead(symbols), data)));
+    if (PT_hasSymbolsTail(symbols)) {
+      symbols = PT_getSymbolsTail(symbols);
+    }
+    else {
+      break;
+    }
   }
 
   /* create new list */
@@ -112,12 +117,17 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
   PT_Attrs newAttrs;
 
   /* apply func to each element */
-  for (store = ATempty;
-      PT_hasAttrsHead(attrs);
-      newAttrs = PT_getAttrsTail(attrs)) {
+  store = ATempty;
+  while (PT_hasAttrsHead(attrs)) {
     store = ATinsert(store,
                      PT_makeTermFromAttr(
                      visitor(PT_getAttrsHead(attrs), data)));
+    if (PT_hasAttrsTail(attrs)) { 
+      attrs = PT_getAttrsTail(attrs);
+    } 
+    else {
+      break;
+    }
   }
 
   if (ATisEmpty(store)) {
@@ -154,8 +164,14 @@ static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data)
 ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
 {
   PT_Attributes attributes = PT_getProductionAttributes(prod);
-  PT_Attrs attrs= PT_getAttributesAttrs(attributes); 
+  PT_Attrs attrs;
   PT_BoolAttrTuple data;
+
+  if (PT_isAttributesNoAttrs(attributes)) {
+    return ATfalse;
+  } 
+
+  attrs = PT_getAttributesAttrs(attributes); 
 
   data.bool = ATfalse;
   data.attr = attr;
@@ -201,22 +217,5 @@ ATerm PT_getTreeAnnotation(PT_Tree arg, ATerm label)
 int PT_getArgsLength(PT_Args args)
 {
    return ATgetLength((ATermList)PT_makeTermFromArgs(args));
-}
-
-char *PT_getStringChars(PT_String ptStr)
-{
-  char *str;
-
-  if (ATmatch(ptStr, "<str>", &str)) {
-    return str;
-  }
-
-  ATerror("PT_getStringChars: not a string: %t\n", ptStr);
-  return NULL;
-}
-
-PT_String PT_setStringChars(const char *str)
-{
-  return ATmake("<str>", str);
 }
 
