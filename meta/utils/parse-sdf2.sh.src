@@ -24,11 +24,12 @@ Revision='$Revision$'
 
 bindir=__BINDIR__
 datadir=__DATADIR__
+pgen=__PGEN__
 
 PATH="$bindir:$PATH"
 
 A2TOA1="a2toa1"
-TABLE="${datadir}/Sdf2.baf"
+TABLE="${pgen}/share/pgen/Sdf2.baf"
 PARSE="sglr -p $TABLE"
 
 XOPTS=""

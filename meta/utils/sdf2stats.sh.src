@@ -24,10 +24,11 @@ Revision='$Revision$'
 
 bindir=__BINDIR__
 datadir=__DATADIR__
+pgen=__PGEN__
 
 PATH="$bindir:$PATH"
 
-TABLE="${datadir}/Sdf2.baf"
+TABLE="${pgen}/share/pgen/Sdf2.baf"
 EQS="${datadir}/CountProds.asf.baf"
 PARSE="sglr -p $TABLE -s SDF -1"
 APPLYFUNC="apply-function -f count-prods -s IntPair -m CountProds"

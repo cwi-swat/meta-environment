@@ -69,6 +69,7 @@ INCLUDES           = -I$(ASFIX)/include -I$(ATERM)/include
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
+	     s@__PGEN__@$(PGEN)@;\
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \

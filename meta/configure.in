@@ -108,6 +108,8 @@ AC_ARG_WITH(evaluator,
 
 AC_SUBST(EVALUATOR)
 
+ASC_SUPPORT='${prefix}'
+
 dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,
    [  --with-asc-support=DIR        asc-support is in DIR],
