@@ -1,7 +1,16 @@
 # $Id$
 
+2002/07/04 (jurgenv@cwi.nl)
+ * Fixed a bug in module parameterization for ASF. If a module parameter
+   was bound to a list symbol, variables of the parametrized symbol were not
+   properly converted to list variables.
+
 2002/06/24 (vandenbr@loria.fr)
  * asf-checker activated.
+
+2002/06/07 ({jurgenv,jong}@cwi.nl)
+ * Refactored replace-file using revert-buffer functionality in xemacs.
+ * Renamed replace-file to reload-file.
 
 2002/06/06 (vandenbr@loria.fr)
  * Replaced replace-text by replace-file.
