@@ -11,7 +11,10 @@ let
   FunSym : str
 in
   (
-    rec-msg(find-focus-source(EditorId?)) .
+    rec-msg(get-query-actions) .
+    snd-msg(action-list(["findProduction"])) 
+    +
+    rec-msg(execute-query(EditorId?, "findProduction")) .
     snd-msg(get-focussed-tree(EditorId)) .
     (
       rec-msg(tree(Focus?)) .
