@@ -70,7 +70,7 @@ Returns the current version number.
 
 =head1 SEE ALSO
 
-L<sglr>, L<a2toa1>, L<ParseTable-Generator>
+L<sglr>, L<ParseTable-Generator>
 
 =head1 KNOWN BUGS
 
