@@ -31,6 +31,7 @@ UTILSRCS = \
 	prio.c \
 	prod.c \
 	restrict.c \
+	import-operations.c \
 	sort.c 
 
 # Developers only:
