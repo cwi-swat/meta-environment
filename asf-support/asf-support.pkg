@@ -2,8 +2,8 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
-   info=http://www.cwi.nl/projects/MetaEnv/asf-support
+   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
    description='This package contains the largely generated library for
                 handling parsetrees over ASF syntax. The syntax of terms in
                 ASF is user-defined, so this library only contains the fixed
