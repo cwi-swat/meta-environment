@@ -1,0 +1,19 @@
+
+module Layout
+hiddens
+  sorts Comment Asterisk
+
+exports
+  %% Copied from C.sdf
+  %%
+  lexical syntax
+    [\ \t\n]			  -> LAYOUT
+    "/*" (~[\*] | Asterisk)* "*/" -> Comment
+    Comment 			  -> LAYOUT
+    [\*] 			  -> Asterisk 
+    "//" ~[\n]* [\n]              -> Comment
+  lexical restrictions
+    Asterisk -/- [\/]
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+

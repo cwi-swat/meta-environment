@@ -1,0 +1,44 @@
+%% 19.8.3 Productions from paragraph 8.4: Method Declarations
+%%
+module MethodDecl
+
+imports FieldDecl Statements
+
+exports
+
+ sorts FormalParameter FormalParameters
+       MethodDeclaration MethodHeader
+       MethodBody MethodRes Throws ThrowsOpt
+       MethodDeclarator
+
+ context-free syntax
+
+  MethodHeader MethodBody -> MethodDeclaration
+
+  Modifier* MethodRes MethodDeclarator ThrowsOpt -> MethodHeader
+
+  Type   -> MethodRes
+  "void" -> MethodRes
+
+  Identifier "(" FormalParameters ")" -> MethodDeclarator
+  MethodDeclarator "[" "]"            -> MethodDeclarator
+
+  Type VariableDeclaratorId -> FormalParameter
+  {FormalParameter ","}*    -> FormalParameters
+
+  "throws" {ClassType ","}+ -> Throws
+  Throws                    -> ThrowsOpt
+                            -> ThrowsOpt
+
+  Block -> MethodBody
+  ";"   -> MethodBody
+
+
+ variables
+  "#FP*"       [0-9\']+ -> FormalParameters
+  "#FP+"       [0-9\']+ -> {FormalParameter ","}+
+  "#MethDecl"  [0-9\']+ -> MethodDeclaration
+  "#MethBody"  [0-9\']+ -> MethodBody
+  "#MethRes"   [0-9\']+ -> MethodRes
+  "#ThrowsOpt" [0-9\']+ -> ThrowsOpt
+

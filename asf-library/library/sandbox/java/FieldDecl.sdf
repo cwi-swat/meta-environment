@@ -1,0 +1,26 @@
+%% 19.8.2 Productions from paragraph 8.3: Field Declarations
+%%
+module FieldDecl
+imports Modifiers Expressions Layout
+exports
+  sorts FieldDeclaration VariableDeclaratorId VariableDeclarator CommaOpt
+        ArrayInitializer VariableInitializer
+
+  context-free syntax
+
+    Modifier* Type {VariableDeclarator ","}+ ";" -> FieldDeclaration
+
+    VariableDeclaratorId                         -> VariableDeclarator
+    VariableDeclaratorId "=" VariableInitializer -> VariableDeclarator
+
+    Identifier                          -> VariableDeclaratorId
+    VariableDeclaratorId "[" "]"        -> VariableDeclaratorId
+
+    Expression                          -> VariableInitializer
+    ArrayInitializer                    -> VariableInitializer
+
+%% 19.10 Productions from chapter 10: Arrays
+%%
+    "{" {VariableInitializer ","}* CommaOpt "}"    -> ArrayInitializer
+    "," -> CommaOpt
+        -> CommaOpt

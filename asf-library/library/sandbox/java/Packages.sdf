@@ -1,0 +1,32 @@
+%% 19.6 Productions from chapter 7: Packages
+%% Contains the top level of the grammar: CompilationUnit
+%%
+module Packages
+imports ClassDecl Interfaces
+exports
+  sorts CompilationUnit PackageDeclarationOpt TypeDeclaration
+        TypeImportOnDemandDeclaration SingleTypeImportDeclaration 
+        ImportDeclaration PackageDeclaration
+
+  context-free syntax
+
+    PackageDeclarationOpt ImportDeclaration* TypeDeclaration*
+    -> CompilationUnit
+
+    "package" Name ";"                  -> PackageDeclaration
+    PackageDeclaration                  -> PackageDeclarationOpt
+                                        -> PackageDeclarationOpt
+
+    SingleTypeImportDeclaration         -> ImportDeclaration
+    TypeImportOnDemandDeclaration       -> ImportDeclaration
+
+    "import" Name ";"                   -> SingleTypeImportDeclaration
+
+    "import" Name "." "*" ";"           -> TypeImportOnDemandDeclaration
+
+    ClassDeclaration                    -> TypeDeclaration
+    InterfaceDeclaration                -> TypeDeclaration
+    ";"                                 -> TypeDeclaration
+
+  variables
+    "#CU"[0-9]*  -> CompilationUnit

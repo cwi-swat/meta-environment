@@ -1,0 +1,140 @@
+%% 19.11 Productions from paragraph 14: Blocks and Statements
+%%
+module Statements
+
+imports MethodDecl
+exports
+  sorts Block BlockStatement Statement Finally CatchClause
+        IdentifierOpt TryStatement SynchronizedStatement
+        ThrowStatement ReturnStatement ContinueStatement 
+        BreakStatement IfThenElseStatement IfThenStatement 
+        ExpressionStatement LabeledStatement EmptyStatement
+        WhileStatement SwitchStatement LocalVariableDeclaration
+        ExpressionOpt StatementExpressions StatementExpression 
+        ForUpdateOpt ForUpdate ForInitOpt ForInit
+        ForStatementNoShortIf StatementNoShortIf ForStatement 
+        DoStatement WhileStatementNoShortIf SwitchLabel
+        SwitchBlockStatementGroup SwitchBlock 
+        IfThenElseStatementNoShortIf LabeledStatementNoShortIf
+        StatementWithoutTrailingSubstatement 
+        LocalVariableDeclarationStatement
+  context-free syntax
+
+    "{" BlockStatement* "}"             -> Block
+
+    LocalVariableDeclarationStatement   -> BlockStatement
+    Statement                           -> BlockStatement
+
+    LocalVariableDeclaration ";"        -> LocalVariableDeclarationStatement
+
+    Type {VariableDeclarator ","}+      -> LocalVariableDeclaration
+
+    StatementWithoutTrailingSubstatement -> Statement
+    LabeledStatement                    -> Statement
+    IfThenStatement                     -> Statement
+    IfThenElseStatement                 -> Statement
+    WhileStatement                      -> Statement
+    ForStatement                        -> Statement
+
+    StatementWithoutTrailingSubstatement -> StatementNoShortIf
+    LabeledStatementNoShortIf           -> StatementNoShortIf
+    IfThenElseStatementNoShortIf        -> StatementNoShortIf
+    WhileStatementNoShortIf             -> StatementNoShortIf
+    ForStatementNoShortIf               -> StatementNoShortIf
+
+    Block                               -> StatementWithoutTrailingSubstatement
+    EmptyStatement                      -> StatementWithoutTrailingSubstatement
+    ExpressionStatement                 -> StatementWithoutTrailingSubstatement
+    SwitchStatement                     -> StatementWithoutTrailingSubstatement
+    DoStatement                         -> StatementWithoutTrailingSubstatement
+    BreakStatement                      -> StatementWithoutTrailingSubstatement
+    ContinueStatement                   -> StatementWithoutTrailingSubstatement
+    ReturnStatement                     -> StatementWithoutTrailingSubstatement
+    SynchronizedStatement               -> StatementWithoutTrailingSubstatement
+    ThrowStatement                      -> StatementWithoutTrailingSubstatement
+    TryStatement                        -> StatementWithoutTrailingSubstatement
+
+    ";"                                 -> EmptyStatement
+
+    Identifier ":" Statement            -> LabeledStatement
+
+    Identifier ":" StatementNoShortIf   -> LabeledStatementNoShortIf
+
+    StatementExpression ";"             -> ExpressionStatement
+
+    Assignment                          -> StatementExpression
+    PreIncrementExpression              -> StatementExpression
+    PreDecrementExpression              -> StatementExpression
+    PostIncrementExpression             -> StatementExpression
+    PostDecrementExpression             -> StatementExpression
+    MethodInvocation                    -> StatementExpression
+    ClassInstanceCreationExpression     -> StatementExpression
+
+    "if" "(" Expression ")" Statement   -> IfThenStatement
+
+    "if" "(" Expression ")" StatementNoShortIf "else" Statement -> IfThenElseStatement
+
+    "if" "(" Expression ")" StatementNoShortIf "else" StatementNoShortIf -> IfThenElseStatementNoShortIf
+
+    "switch" "(" Expression ")" SwitchBlock -> SwitchStatement
+
+    "{" SwitchBlockStatementGroup* SwitchLabel* "}" -> SwitchBlock
+
+    SwitchLabel+ BlockStatement+        -> SwitchBlockStatementGroup
+
+    "case" ConstantExpression ":"       -> SwitchLabel
+    "default" ":"                       -> SwitchLabel
+
+    "while" "(" Expression ")" Statement -> WhileStatement
+
+    "while" "(" Expression ")" StatementNoShortIf -> WhileStatementNoShortIf
+
+    "do" Statement "while" "(" Expression ")" ";" -> DoStatement
+
+    Expression -> ExpressionOpt
+               -> ExpressionOpt
+
+    Identifier -> IdentifierOpt
+               -> IdentifierOpt
+
+    "for" "(" ForInitOpt ";" ExpressionOpt ";" ForUpdateOpt ")"
+    Statement -> ForStatement
+
+    "for" "(" ForInitOpt ";" ExpressionOpt ";" ForUpdateOpt ")"
+    StatementNoShortIf -> ForStatementNoShortIf
+
+    StatementExpressions                -> ForInit
+    LocalVariableDeclaration            -> ForInit
+    ForInit                             -> ForInitOpt
+                                        -> ForInitOpt
+
+    StatementExpressions                -> ForUpdate
+    ForUpdate                           -> ForUpdateOpt
+                                        -> ForUpdateOpt
+
+    {StatementExpression ","}+          -> StatementExpressions
+
+    "break" IdentifierOpt ";"           -> BreakStatement
+
+    "continue" IdentifierOpt ";"        -> ContinueStatement
+
+    "return" ExpressionOpt ";"          -> ReturnStatement
+
+    "throw" Expression ";"              -> ThrowStatement
+
+    "synchronized" "(" Expression ")" Block -> SynchronizedStatement
+
+    "try" Block CatchClause+            -> TryStatement
+    "try" Block CatchClause* Finally    -> TryStatement
+
+    "catch" "(" FormalParameter ")" Block -> CatchClause
+
+    "finally" Block                     -> Finally
+
+ variables
+
+  "#Stat"  [0-9\']+  -> Statement
+  "#BStat" [0-9\']+  -> BlockStatement
+  "#BStat+" [0-9\']+ -> BlockStatement+
+  "#BStat*" [0-9\']+ -> BlockStatement*
+

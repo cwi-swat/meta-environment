@@ -1,0 +1,26 @@
+%% 19.8.5 Productions from paragraph 8.6: Constructor Declarations
+%%
+module ConstructorDecl
+
+imports Statements Expressions MethodDecl Modifiers Names
+
+exports
+
+  sorts ConstructorDeclaration ExplicitConstructorInvocation 
+        ExplicitConstructorInvocationOpt ConstructorBody
+        ConstructorDeclarator 
+
+  context-free syntax
+
+    Modifier* ConstructorDeclarator ThrowsOpt ConstructorBody
+    -> ConstructorDeclaration
+ 
+    SimpleName "(" FormalParameters ")" -> ConstructorDeclarator
+
+    "{" ExplicitConstructorInvocationOpt BlockStatement* "}" -> ConstructorBody
+
+    "this" "(" Expressions ")" ";"  -> ExplicitConstructorInvocation
+    "super" "(" Expressions ")" ";" -> ExplicitConstructorInvocation
+    ExplicitConstructorInvocation -> ExplicitConstructorInvocationOpt
+                                  -> ExplicitConstructorInvocationOpt
+

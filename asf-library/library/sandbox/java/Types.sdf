@@ -1,0 +1,48 @@
+%% 19.4 Productions from paragraph 4: Types, Values, and Variables
+%%
+module Types
+
+imports Names
+
+exports
+
+  sorts ClassType InterfaceType ClassOrInterfaceType
+        PrimitiveType ReferenceType Type ArrayType
+        FloatingPointType IntegralType NumericType
+
+  context-free syntax
+
+    PrimitiveType                       -> Type
+    ReferenceType                       -> Type
+
+    NumericType                         -> PrimitiveType
+    "boolean"                           -> PrimitiveType
+
+    IntegralType                        -> NumericType
+    FloatingPointType                   -> NumericType
+
+    "byte"                              -> IntegralType
+    "short"                             -> IntegralType
+    "int"                               -> IntegralType
+    "long"                              -> IntegralType
+    "char"                              -> IntegralType
+
+    "float"                             -> FloatingPointType
+    "double"                            -> FloatingPointType
+
+    ClassOrInterfaceType                -> ReferenceType
+    ArrayType                           -> ReferenceType
+
+    Name                                -> ClassOrInterfaceType
+
+    ClassOrInterfaceType                -> ClassType
+
+    ClassOrInterfaceType                -> InterfaceType
+
+    PrimitiveType "[" "]"               -> ArrayType
+    Name "[" "]"                        -> ArrayType
+    ArrayType "[" "]"                   -> ArrayType
+
+ variables
+
+  "#Type" [0-9\']+ -> Type

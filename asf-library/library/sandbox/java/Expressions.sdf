@@ -1,0 +1,160 @@
+%% 19.12 Productions from paragraph 15: Expressions
+%%
+%% TODO: Convert old style expression grammar to priority based one.
+%%
+module Expressions
+
+imports Types ClassDecl MethodDecl
+
+exports
+  sorts Expression Expressions MethodInvocation 
+        PostDecrementExpression PostIncrementExpression 
+        PreDecrementExpression PreIncrementExpression 
+        Assignment ClassInstanceCreationExpression 
+        ConstantExpression AssignmentExpression
+        AssignmentOperator ConditionalExpression 
+        ConditionalOrExpression ConditionalAndExpression 
+        InclusiveOrExpression ExclusiveOrExpression 
+        AndExpression EqualityExpression 
+        RelationalExpression ShiftExpression 
+        AdditiveExpression MultiplicativeExpression 
+        UnaryExpression CastExpression LeftHandSide 
+        ArrayAccess FieldAccess ArrayCreationExpression
+        Dim DimExpr Primary PrimaryNoNewArray
+        UnaryExpressionNotPlusMinus PostfixExpression
+
+  context-free syntax
+
+    {Expression ","}* -> Expressions
+
+    PrimaryNoNewArray                   -> Primary
+    ArrayCreationExpression             -> Primary
+
+    Literal                             -> PrimaryNoNewArray
+    "this"                              -> PrimaryNoNewArray
+    "(" Expression ")"                  -> PrimaryNoNewArray
+    ClassInstanceCreationExpression     -> PrimaryNoNewArray
+    FieldAccess                         -> PrimaryNoNewArray
+    MethodInvocation                    -> PrimaryNoNewArray
+    ArrayAccess                         -> PrimaryNoNewArray
+
+    "new" ClassType "(" Expressions ")" -> ClassInstanceCreationExpression
+    %% Extension for JDK 1.1
+    "new" ClassType "(" Expressions ")" ClassBody -> ClassInstanceCreationExpression
+
+    "new" PrimitiveType DimExpr+ Dim*         -> ArrayCreationExpression
+    "new" ClassOrInterfaceType DimExpr+ Dim*  -> ArrayCreationExpression
+
+    "[" Expression "]"                  -> DimExpr
+    "[" "]"                             -> Dim
+
+    Primary "." Identifier              -> FieldAccess
+    "super" "." Identifier              -> FieldAccess
+
+    Name "(" Expressions ")"      -> MethodInvocation
+    Primary "." Identifier "(" Expressions ")" -> MethodInvocation
+    "super" "." Identifier "(" Expressions ")" -> MethodInvocation
+
+    Name "[" Expression "]"              -> ArrayAccess
+    PrimaryNoNewArray "[" Expression "]" -> ArrayAccess
+
+    Primary                             -> PostfixExpression
+    Name                                -> PostfixExpression
+    PostIncrementExpression             -> PostfixExpression
+    PostDecrementExpression             -> PostfixExpression
+
+    PostfixExpression "++"              -> PostIncrementExpression
+
+    PostfixExpression "--"              -> PostDecrementExpression
+
+    PreIncrementExpression              -> UnaryExpression
+    PreDecrementExpression              -> UnaryExpression
+    "+" UnaryExpression                 -> UnaryExpression
+    "-" UnaryExpression                 -> UnaryExpression
+    UnaryExpressionNotPlusMinus         -> UnaryExpression
+
+    "++" UnaryExpression                -> PreIncrementExpression
+
+    "--" UnaryExpression                -> PreDecrementExpression
+
+    PostfixExpression                   -> UnaryExpressionNotPlusMinus
+    "~" UnaryExpression                 -> UnaryExpressionNotPlusMinus
+    "!" UnaryExpression                 -> UnaryExpressionNotPlusMinus
+    CastExpression                      -> UnaryExpressionNotPlusMinus
+
+    "(" PrimitiveType Dim* ")" UnaryExpression  -> CastExpression
+    "(" Expression ")" UnaryExpressionNotPlusMinus -> CastExpression
+    "(" Name Dim+ ")" UnaryExpressionNotPlusMinus  -> CastExpression
+
+    UnaryExpression                              -> MultiplicativeExpression
+    MultiplicativeExpression "*" UnaryExpression -> MultiplicativeExpression
+    MultiplicativeExpression "/" UnaryExpression -> MultiplicativeExpression
+    MultiplicativeExpression "%" UnaryExpression -> MultiplicativeExpression
+
+    MultiplicativeExpression                        -> AdditiveExpression
+    AdditiveExpression "+" MultiplicativeExpression -> AdditiveExpression
+    AdditiveExpression "-" MultiplicativeExpression -> AdditiveExpression
+
+    AdditiveExpression                       -> ShiftExpression
+    ShiftExpression "<<" AdditiveExpression  -> ShiftExpression
+    ShiftExpression ">>" AdditiveExpression  -> ShiftExpression
+    ShiftExpression ">>>" AdditiveExpression -> ShiftExpression
+
+    ShiftExpression                                 -> RelationalExpression
+    RelationalExpression "<" ShiftExpression        -> RelationalExpression
+    RelationalExpression ">" ShiftExpression        -> RelationalExpression
+    RelationalExpression "<=" ShiftExpression       -> RelationalExpression
+    RelationalExpression ">=" ShiftExpression       -> RelationalExpression
+    RelationalExpression "instanceof" ReferenceType -> RelationalExpression
+
+    RelationalExpression                         -> EqualityExpression
+    EqualityExpression "==" RelationalExpression -> EqualityExpression
+    EqualityExpression "!=" RelationalExpression -> EqualityExpression
+
+    EqualityExpression                   -> AndExpression
+    AndExpression "&" EqualityExpression -> AndExpression
+
+    AndExpression                           -> ExclusiveOrExpression
+    ExclusiveOrExpression "^" AndExpression -> ExclusiveOrExpression
+
+    ExclusiveOrExpression                           -> InclusiveOrExpression
+    InclusiveOrExpression "|" ExclusiveOrExpression -> InclusiveOrExpression
+
+    InclusiveOrExpression                               -> ConditionalAndExpression
+    ConditionalAndExpression "&&" InclusiveOrExpression -> ConditionalAndExpression
+
+    ConditionalAndExpression                              -> ConditionalOrExpression
+    ConditionalOrExpression "||" ConditionalAndExpression -> ConditionalOrExpression
+
+    ConditionalOrExpression             -> ConditionalExpression
+    ConditionalOrExpression "?" Expression ":" ConditionalExpression -> ConditionalExpression
+
+    ConditionalExpression       -> AssignmentExpression
+    Assignment                  -> AssignmentExpression
+
+    LeftHandSide AssignmentOperator AssignmentExpression -> Assignment
+
+    Name                        -> LeftHandSide
+    FieldAccess                 -> LeftHandSide
+    ArrayAccess                 -> LeftHandSide
+
+    "="                         -> AssignmentOperator
+    "*="                        -> AssignmentOperator
+    "/="                        -> AssignmentOperator
+    "%="                        -> AssignmentOperator
+    "+="                        -> AssignmentOperator
+    "-="                        -> AssignmentOperator
+    "<<="                       -> AssignmentOperator
+    ">>="                       -> AssignmentOperator
+    ">>>="                      -> AssignmentOperator
+    "&="                        -> AssignmentOperator
+    "^="                        -> AssignmentOperator
+    "|="                        -> AssignmentOperator
+
+    AssignmentExpression        -> Expression
+
+    Expression                  -> ConstantExpression
+
+ variables
+  "#Exp*" [0-9\']+  -> Expressions
+  "#Exp+" [0-9\']+  -> {Expression ","}+

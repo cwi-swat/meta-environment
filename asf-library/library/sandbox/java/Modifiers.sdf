@@ -1,0 +1,17 @@
+module Modifiers
+exports
+  sorts Modifier
+  context-free syntax
+%% 19.7 Productions Used Only in the LALR(1) Grammar
+
+    "public"                            -> Modifier
+    "protected"                         -> Modifier
+    "private"                           -> Modifier
+    "static"                            -> Modifier
+    "abstract"                          -> Modifier
+    "final"                             -> Modifier
+    "native"                            -> Modifier
+    "synchronized"                      -> Modifier
+    "transient"                         -> Modifier
+    "volatile"                          -> Modifier
+

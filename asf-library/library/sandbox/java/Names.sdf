@@ -1,0 +1,18 @@
+%% 19.5 Productions from paragraph 6: Names
+%%
+module Names
+imports Lexical
+exports
+  sorts SimpleName Name
+  context-free syntax
+
+    {Identifier "."}+                   -> Name
+
+    %% Extension for JDK 1.1
+    %% Not sure if this is the right place to add it, the
+    %% Java language specification for the extensions is
+    %% not very good.
+    %%
+    {Identifier "."}+ "." "class"       -> Name
+
+    Identifier                          -> SimpleName

@@ -1,0 +1,32 @@
+%% 19.9 Productions from paragraph 9: Interfaces
+%%
+module Interfaces
+
+imports Statements
+
+exports
+  sorts InterfaceDeclaration ExtendsInterfacesOpt
+        AbstractMethodDeclaration ConstantDeclaration
+        InterfaceMemberDeclaration InterfaceBody 
+        ExtendsInterfaces
+
+  context-free syntax
+
+%% 19.9.1 Productions from paragraph 9.1: Interface Declarations
+
+    Modifier* "interface" Identifier ExtendsInterfacesOpt InterfaceBody
+    -> InterfaceDeclaration
+
+    "extends" {InterfaceType ","}+      -> ExtendsInterfaces
+    ExtendsInterfaces                   -> ExtendsInterfacesOpt
+                                        -> ExtendsInterfacesOpt
+
+    "{" InterfaceMemberDeclaration* "}" -> InterfaceBody
+
+    ConstantDeclaration                 -> InterfaceMemberDeclaration
+    AbstractMethodDeclaration           -> InterfaceMemberDeclaration
+
+    FieldDeclaration                    -> ConstantDeclaration
+
+    MethodHeader ";"                    -> AbstractMethodDeclaration
+
