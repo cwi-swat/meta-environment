@@ -83,7 +83,7 @@ CHDR            = meta-utils.h module-utils.h libutil.h
 # Ordering is important here: the toolbus dir. should come first
 BINFILES	= genmakefile.sh \
 		  parse-file parse-sdf2 ps-dot \
-                  meta-paths normalize-sdf imports \
+                  meta-paths imports \
                   insert-license insert-header
 LIBFILES	= 
 DATAFILES	= genmakefile.proto lang.types

@@ -203,7 +203,7 @@ AC_OUTPUT(
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/test/Makefile \
         utils/Makefile utils/genmakefile.sh \
-        utils/normalize-sdf utils/parse-sdf2 utils/parse-file \
+        utils/parse-sdf2 utils/parse-file \
         utils/ps-dot \
         grammars/Makefile \
 	grammars/sdf2/Makefile \
