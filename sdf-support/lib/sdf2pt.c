@@ -65,8 +65,9 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
     ptSymbols = SDFSymbolsToPtSymbols(sdfSymbols);
   }
   else {
-    ATerror("SDFProductionToPtProduction: unable to convert %s\n", 
-	    PT_yieldTree((PT_Tree) sdfProduction));
+/* This should be a warning instead of an error!!! */
+    ATwarning("SDFProductionToPtProduction: unable to convert %s\n", 
+	      PT_yieldTree((PT_Tree) sdfProduction));
     return NULL;
   }
 
