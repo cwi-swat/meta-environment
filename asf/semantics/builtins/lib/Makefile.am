@@ -31,7 +31,8 @@ noinst_PROGRAMS=link-test
 link_test_SOURCES=$(BUILTIN_SOURCES) link-test.c
 link_test_LDADD=-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
                 -L${TOOLBUSLIB}/lib -lATB  \
-		-L${ATERM}/lib -lATerm 
+		-L${ATERM}/lib -lATerm \
+                ${SOCKLIBS}
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include -I$(TOOLBUSLIB)/include
 
