@@ -3,7 +3,7 @@ equations
 [get-location-0]
   get-location(X) = get-posinfo(X)
 
-[] get-posinfo(X) = location(strcon(Char*), area(BeginLine, BeginColumn,
+[] get-posinfo(X) = area-in-file(strcon(Char*), area(BeginLine, BeginColumn,
                               EndLine, EndColumn,
                               Offset, Length)) 
      when location(qliteral(Char*), area(BeginLine, BeginColumn,

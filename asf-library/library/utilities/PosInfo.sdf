@@ -2,6 +2,8 @@ module utilities/PosInfo[X]
 
 imports basic/Locations
 imports utilities/ATermAnnotations[X]
+imports basic/AreaOperations
+imports basic/LocationOperations
 
 exports
 
