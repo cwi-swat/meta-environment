@@ -48,13 +48,12 @@ static CO_Feedback makeParseError(char *producer, char *file, ATerm error)
 {
   int line = getErrorInfo(error, LINE);
   int col = getErrorInfo(error, COLUMN);
-  int offset = getErrorInfo(error, OFFSET);
   ERR_Subject subject;
   ERR_Area area;
   ERR_Location location;
   ERR_Feedback feedback;
   
-  area = ERR_makeAreaArea(line, col, line, col, offset, offset);
+  area = ERR_makeAreaArea(line, col, line, col);
   location = ERR_makeLocationLocation(file, area);
   subject = ERR_makeSubjectSubject("cursor", location);
   feedback = ERR_makeFeedbackError(producer, "parse-error",
