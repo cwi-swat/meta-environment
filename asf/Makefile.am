@@ -2,6 +2,8 @@
 
 SUBDIRS = syntax semantics 
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST = reconf make_rules $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
