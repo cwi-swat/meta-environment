@@ -1025,6 +1025,12 @@ ATerm get_syntax(ATerm name, ATermList modules)
                       ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Module\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Definition\"),w(\"\"),no-attrs)"),
                       pattern_asfix_ews,
                       ATmakeList1(result));
+  result = ATmakeTerm(pattern_asfix_appl,
+                      ATparse("prod(id(\"Sdf2-Syntax\"),w(\"\"),[ql(\"definition\"),w(\"\"),sort(\"Definition\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
+                      pattern_asfix_ews,
+                      ATmakeList3(ATparse("l(\"definition\")"),
+                                  pattern_asfix_ws,
+                                  result));
   term = ATmakeTerm(pattern_asfix_term,
                     ATparse("l(\"term\")"),
                     pattern_asfix_ews,
