@@ -260,20 +260,21 @@ their octal values are written.
 \nwenddocs{}\nwbegincode{17}\sublabel{NWwisH-priC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priC-1}}}\moddef{print_string~{\nwtagstyle{}\subpageref{NWwisH-priC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
 static void print_string(char* s, int n, int depth)
 \{
-  print_backslashes(depth*2+1);
+  print_backslashes(depth*2-1);
   CHAR2WISH('"');
   while(n--)
   \{
     if(isprint(*s)) \{
       switch (*s) \{
         case '\\\\':
-        case '"':       print_backslashes(depth*2+3);
+        case '"':       print_backslashes(depth*2+1);
                         CHAR2WISH(*s);
                         break;
         case '\{':
         case '\}':
         case '[':
         case ']':
+        case ' ':
         case '$':       CHAR2WISH('\\\\');
         default:        CHAR2WISH(*s);
       \}
@@ -282,7 +283,7 @@ static void print_string(char* s, int n, int depth)
     \}
     s++;
   \}
-  print_backslashes(depth*2+1);
+  print_backslashes(depth*2-1);
   CHAR2WISH('"');
 \}
 \nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{18}\nwdocspar
@@ -377,13 +378,13 @@ static void print_term(term* t, int depth)
       case t_appl:
          PRINT2WISH1("%s", get_txt(fun_sym(t)));
          if(fun_args(t) != NULL)
-            print_list(fun_args(t), "(", ",", ")", depth);
+            print_list(fun_args(t), "(", ",", ")", depth+1);
          break;
       case t_list:
-         print_backslashes(depth*2+1);
+         print_backslashes(depth*2-1);
          CHAR2WISH('"');
          print_list(t, "", " ", "", depth+1);   
-         print_backslashes(depth*2+1);
+         print_backslashes(depth*2-1);
          CHAR2WISH('"');
          break;
       case t_env:
@@ -421,18 +422,13 @@ Print a list of arguments.
 \nwenddocs{}\nwbegincode{27}\sublabel{NWwisH-priA.3-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priA.3-1}}}\moddef{print_args~{\nwtagstyle{}\subpageref{NWwisH-priA.3-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
 static void print_args(term_list *args, int depth)
 \{
-  print_list(args, "\\"", " ", "\\"", depth);
-/*  while(args) \{
-    if(tkind(first(args)) != t_list)
-      PRINT2WISH0(" \\"");
-
-    print_term(first(args), depth);
-    if(tkind(first(args)) != t_list)
-      PRINT2WISH0("\\"");
-
+  while(args) \{
+/*    PRINT2WISH0(" \\"");*/
+    print_term(list_first(args), depth);
+    CHAR2WISH(' ');
+/*    PRINT2WISH0("\\"");*/
     args = list_next(args);
   \}
-*/
 \}
 \nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{28}\nwdocspar
 
@@ -789,9 +785,9 @@ static TBbool rec_ack_event(term* e, term** out)
    /* rec-ack-event */
    if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch \{rec-ack-event \\"");
+   PRINT2WISH0("if [catch \{rec-ack-event ");
    print_term(farg, 0);
-   PRINT2WISH0("\\" \} msg] \{TBerror $msg\}\\n" );
+   PRINT2WISH0("\} msg] \{TBerror $msg\}\\n" );
    fflush(to_wish);
    return TBtrue;
 \}
@@ -814,9 +810,9 @@ static TBbool rec_terminate( term* e, term** out )
    /* rec-terminate */
    if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch \{rec-terminate \\"");
+   PRINT2WISH0("if [catch \{rec-terminate ");
    print_term(farg, 0);
-   PRINT2WISH0("\\" \} msg] \{TBerror $msg\}; exit\\n" );
+   PRINT2WISH0("\} msg] \{TBerror $msg\}; exit\\n" );
    fflush(to_wish);
    connected = TBfalse;
    shutdown(0);
