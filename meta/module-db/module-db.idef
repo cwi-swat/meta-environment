@@ -31,6 +31,7 @@ let
   EqsTree   : term,
   EqsText   : str,
   Name      : str,
+  ErrorName : str,
   Time      : int,
   Mdb       : module-db,
   Modules   : list,
@@ -96,8 +97,9 @@ snd-do(Mdb, create-module-db).
 +
 /* Add a module-asfix module to the database */
   rec-msg(add-module-to-db(AsFixModule?,timestamp(Time?))).
-  snd-eval(Mdb,add-module(AsFixModule)).
-  rec-value(Mdb,imports(need-modules(Modules?),import-graph(ActualMods?, Pairs?))).
+  snd-eval(Mdb,add-module(AsFixModule)) .
+  rec-value(Mdb,imports(need-modules(Modules?),
+                import-graph(ActualMods?, Pairs?))).
 /* If a new module is added, we tell the world the current import relations */
   snd-note(import-graph(ActualMods, Pairs)).
   snd-msg(need-modules(Modules))
@@ -111,25 +113,44 @@ snd-do(Mdb, create-module-db).
 /* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf2-module-to-db(Path?,AsFixModule?,timestamp(Time?),Status?)).
-  snd-eval(Mdb,add-sdf2-module(Path,AsFixModule,Time,Status)).
-  rec-value(Mdb,imports(need-modules(Modules?),
-                import-graph(ActualMods?, Pairs?))).
+  rec-msg(add-sdf2-module-to-db(Name?, Path?, AsFixModule?,
+                                timestamp(Time?), Status?)) .
+  snd-eval(Mdb, add-sdf2-module(Name, Path, AsFixModule, Time, Status)) .
+  ( 
+    rec-value(Mdb,imports(need-modules(Modules?),
+                  import-graph(ActualMods?, Pairs?))).
 /* If a new module is added, we tell the world the current import relations */
-  snd-note(import-graph(ActualMods, Pairs)).
-  snd-msg(need-modules(Modules))
+    snd-note(import-graph(ActualMods, Pairs)).
+    snd-msg(need-modules(Modules))
+  +
+    rec-value(Mdb, name-consistency-error(ErrorName?)) .
+    snd-note(ui-status(errorf("Module name %s inconsistent with file name %s",
+                              [ErrorName, Name]))) .
+    snd-msg(need-modules([]))
+  +
+    rec-value(Mdb, illegal-module-error(ErrorName?)) .
+    snd-note(ui-status(errorf("Illegal module: %s", [ErrorName]))) .
+    snd-msg(need-modules([]))
+  )
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(update-module-in-db(AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(AsFixModule)).
-    rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
-                          import-graph(ActualMods?, Pairs?))).
-    snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
-    rec-msg(notify-about-changed-modules-done).
-    snd-note(import-graph(ActualMods, Pairs)).
-    snd-msg(extra-modules(Modules))
+    snd-eval(Mdb,update-sdf2-module(AsFixModule)) .
+    (
+      rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
+                            import-graph(ActualMods?, Pairs?))).
+      snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
+      rec-msg(notify-about-changed-modules-done).
+      snd-note(import-graph(ActualMods, Pairs)).
+      snd-msg(extra-modules(Modules))
+    +
+      rec-value(Mdb, name-consistency-error(ErrorName?)) .
+      snd-note(ui-status(errorf("Module name %s inconsistent with file name",
+                                [ErrorName]))) .
+      snd-msg(extra-modules([]))
+    )
   else
     snd-msg(extra-modules([]))
   fi

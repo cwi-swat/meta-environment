@@ -232,7 +232,7 @@ ATerm add_module(int cid, ATerm asfix)
 
 /* Creation of a new entry in the database of a new Sdf2 definition. 
  */
-ATerm add_sdf2_module(int cid, char* path, ATerm sdfTree, 
+ATerm add_sdf2_module(int cid, char* moduleName, char* path, ATerm sdfTree, 
                       int timestamp, char* changed)
 {
   ATerm t[8];
@@ -252,29 +252,33 @@ ATerm add_sdf2_module(int cid, char* path, ATerm sdfTree,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                  &appl, &t[6], &t[7])) {
     modname = get_module_name(appl);
-    modname_term = ATmake("<str>", modname);
-    entry = (ATerm)ATmakeList(LOC_CNT,
-                              ATmake("<str>", path),   /* Path Sdf */
-                              sdfTree,                
-                              ATmakeInt(timestamp),    /* Time Sdf */
-                              isChanged,               /* Sdf changed? */
-                              ATparse("unavailable"),  /* Path Eqs */
-                              ATparse("unavailable"),  /* Eqs Tree */
-                              ATparse("unavailable"),  /* Eqs Text */
-                              ATmakeInt(0),            /* Time Eqs */
-                              Mtrue,                   /* Eqs changed?: true */
-                              ATparse("unavailable"),  /* Path ParseTable */
-                              ATmakeInt(0)             /* Time of ParseTable */
-                             );
-    PutValue(new_modules_db, modname_term, entry);
-    imports = get_import_section_sdf2(sdfTree);
-    unknowns = add_imports(modname_term,imports);
-    import_graph = calc_import_graph();
-    return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
-                  unknowns, import_graph);
+    if(strcmp(moduleName, modname) == 0) {
+      modname_term = ATmake("<str>", modname);
+      entry = (ATerm)ATmakeList(LOC_CNT,
+                                ATmake("<str>", path),   /* Path Sdf */
+                                sdfTree,                
+                                ATmakeInt(timestamp),    /* Time Sdf */
+                                isChanged,               /* Sdf changed? */
+                                ATparse("unavailable"),  /* Path Eqs */
+                                ATparse("unavailable"),  /* Eqs Tree */
+                                ATparse("unavailable"),  /* Eqs Text */
+                                ATmakeInt(0),            /* Time Eqs */
+                                Mtrue,                   /* Eqs changed?: true */
+                                ATparse("unavailable"),  /* Path ParseTable */
+                                ATmakeInt(0)             /* Time of ParseTable */
+                               );
+      PutValue(new_modules_db, modname_term, entry);
+      imports = get_import_section_sdf2(sdfTree);
+      unknowns = add_imports(modname_term,imports);
+      import_graph = calc_import_graph();
+      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
+                    unknowns, import_graph);
+    }
+    else {
+      return ATmake("snd-value(name-consistency-error(<str>))", modname);
+    }
   } else {
-    ATerror("not an asfix module: %t\n", sdfTree);
-    return NULL;
+    return ATmake("snd-value(illegal-module-error(<str>))", moduleName);
   }
 }
 
@@ -316,33 +320,39 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
     moduleName = get_module_name(appl);
     atModuleName = ATmake("<str>",  moduleName);
     entry = GetValue(new_modules_db, atModuleName);
+  
+    if(entry) {
+      curSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
+      if(!ATisEqual(curSdfTree, newSdfTree)) {
+        entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
+                                 SYN_LOC);
+        entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
+                                 SYN_UPDATED_LOC);
+  
+        entry = (ATerm)ATreplace((ATermList)entry,
+                      ATparse("unavailable"),TABLE_LOC);
+        PutValue(new_modules_db, atModuleName, entry);
 
-    curSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
-    if(!ATisEqual(curSdfTree, newSdfTree)) {
-      entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
-                               SYN_LOC);
-      entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
-                               SYN_UPDATED_LOC);
+        chg_mods = modules_depend_on(atModuleName,ATempty);
+        update_syntax_status_of_modules(chg_mods); 
+        imports = get_import_section_sdf2(newSdfTree);
+        unknowns = replace_imports(atModuleName,imports);
+        import_graph = calc_import_graph();
 
-      entry = (ATerm)ATreplace((ATermList)entry,
-                    ATparse("unavailable"),TABLE_LOC);
-      PutValue(new_modules_db, atModuleName, entry);
-
-      chg_mods = modules_depend_on(atModuleName,ATempty);
-      update_syntax_status_of_modules(chg_mods); 
-      imports = get_import_section_sdf2(newSdfTree);
-      unknowns = replace_imports(atModuleName,imports);
-      import_graph = calc_import_graph();
-
-      return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
-		    "need-modules([<list>]),<term>))",
-		    atModuleName, chg_mods, unknowns, import_graph);
-    } else {
-      import_graph = calc_import_graph();
-
-      return ATmake("snd-value(imports(changed-modules([<list>]),"
-                    "need-modules([<list>]),<term>))",
-                    ATempty, ATempty, import_graph);
+        return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
+		      "need-modules([<list>]),<term>))",
+		      atModuleName, chg_mods, unknowns, import_graph);
+      } else {
+        import_graph = calc_import_graph();
+  
+        return ATmake("snd-value(imports(changed-modules([<list>]),"
+                      "need-modules([<list>]),<term>))",
+                      ATempty, ATempty, import_graph);
+      }
+    }
+    else {
+      return ATmake("snd-value(name-consistency-error(<str>))", 
+                    moduleName);
     }
   } else {
     ATerror("not an asfix module: %t\n", newSdfTree);

@@ -35,7 +35,7 @@ in
   snd-msg(open-file("Test")) .
   (
     rec-msg(opened-file("Test", tree(SdfTree?), Path?, Time?)) .
-    snd-msg(add-sdf2-module-to-db(Path, SdfTree, Time, "unchanged")) .
+    snd-msg(add-sdf2-module-to-db("Test", Path, SdfTree, Time, "unchanged")) .
     rec-msg(need-modules([]))
   +
     shutdown("module-db-test-2a FAILED! (timeout)\n") delay(sec(5))

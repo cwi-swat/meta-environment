@@ -34,7 +34,8 @@ in
   snd-msg(open-file("Pico-Booleans")) .
   (
     rec-msg(opened-file("Pico-Booleans", tree(SdfTree?), Path?, Time?)) .
-    snd-msg(add-sdf2-module-to-db(Path, SdfTree, Time, "unchanged")) .
+    snd-msg(add-sdf2-module-to-db("Pico-Booleans", Path, SdfTree, 
+                                  Time, "unchanged")) .
     rec-msg(need-modules([]))
   +
     shutdown("module-db-test-4a FAILED! (timeout)\n") delay(sec(50000))
