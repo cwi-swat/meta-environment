@@ -1,5 +1,8 @@
 # $Id$
 
+2001/11/29 (vandenbr@loria.fr)
+ * File extensions are now parameters of in-output.
+
 2001/11/25 (mdejonge@cwi.nl)
  * package now uses toolbuslib package
  * extended functionality of program-check.m4 macros
