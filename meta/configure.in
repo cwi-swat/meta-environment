@@ -177,18 +177,15 @@ AC_SUBST(GRAPHVIZ)
 
 dnl Try to find a suitable wish version
 AC_PATH_PROGS(WISH,wish8.0 wish8.1 wish, no)
-if  test "${WISH}" != "no"; then
-   WISH=`dirname \`dirname ${WISH}\``
-fi
 
 dnl Handle --with-wish=... argument to configure
 AC_ARG_WITH( wish,
-   [  --with-wish=DIR         Wish package is in DIR],
+   [  --with-wish=DIR         Wish program is in DIR],
    WISH=${withval})
 
 dnl Fail when wish was not specified and could not be found automatically.
 if test "${WISH}" = "no" ; then
-   AC_ERROR(Required \"wish\" package not found.)
+   AC_ERROR(Required \"wish\" program not found.)
 fi
 AC_SUBST(WISH)
 

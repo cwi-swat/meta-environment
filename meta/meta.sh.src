@@ -28,13 +28,13 @@ pgen=__PGEN__
 evaluator=__EVALUATOR__
 toolbus=__TOOLBUS__
 xemacs=__XEMACS__
-wish=__WISH__
 graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
 
+wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${asfix}/bin:${sglr}/bin:${pgen}/bin:\
-      ${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${wish}/bin:${PATH}"; 
+      ${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${PATH}"; 
 export PATH
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
