@@ -57,6 +57,41 @@ in
   snd-note(search-paths-processed)
 endlet
   
+process PerformButtonActions(EditorId : term, Actions : list) is
+let
+  ButtonActions : list,
+  ButtonAction  : term,
+  FunName       : str,
+  Stack         : list
+in
+  Stack := [] .
+  ButtonActions := quote(Actions) .
+  (
+    if not-equal(ButtonActions, []) then
+      ButtonAction := first(ButtonActions) .
+/*
+printf("%t\n", ButtonAction).
+*/
+      ButtonActions := next(ButtonActions) .
+      FunName := fun(ButtonAction) .
+      if equal(FunName, "if-equal") then
+        IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
+      else
+        snd-msg(ButtonAction, Stack, EditorId) .
+        (
+          rec-msg(stack(Stack?), EditorId)
+        +
+          rec-msg(error-stack, EditorId) .
+          ButtonActions := []
+        )
+      fi
+    fi
+  )*
+  if equal(ButtonActions, []) then
+    tau
+  fi
+endlet
+
 process ConfigManager is
 let
   CMNG          : configmanager,
@@ -65,15 +100,13 @@ let
   Paths         : list,
   ButtonName    : str,
   ButtonNames   : list,
-  Stack         : list,
   ButtonActions : list,
-  ButtonAction  : term,
   ModuleName    : str,
-  FunName       : str,
   EditorType    : str,
   Tree          : term,
   EditorId      : term,
-  Term          : term
+  Term          : term,
+  Pid           : int
 in
   execute(configmanager, CMNG?) .
   snd-msg(get-config-file(CONFIG_FILE)) .
@@ -103,29 +136,7 @@ in
     rec-msg(extra-button-action(ButtonName?, ModuleName?, EditorId?)) .
     snd-eval(CMNG, get-button-actions(ButtonName, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
-    Stack := [] .
-    (
-      if not-equal(ButtonActions, []) then
-        ButtonAction := first(ButtonActions) .
-printf("%t\n", ButtonAction).
-        ButtonActions := next(ButtonActions) .
-	FunName := fun(ButtonAction) .
-	if equal(FunName, "if-equal") then
-	  IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
-	else
-          snd-msg(ButtonAction, Stack, EditorId) .
-          (
-            rec-msg(stack(Stack?))
-          +
-            rec-msg(error-stack) .
-            ButtonActions := []
-          )
-	fi
-      fi
-    )*
-    if equal(ButtonActions, []) then
-      tau
-    fi
+    create(PerformButtonActions(EditorId, ButtonActions), Pid?)
   ) * delta
 endlet
 
