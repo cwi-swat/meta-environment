@@ -22,35 +22,14 @@ myversion=`echo $Revision| cut -d' ' -f2`
 verbose=0
 xargs=""
 
-# The argument vector: list of option letters, colons denote option
-# arguments.  See Usage function, immediately below, for option
-# explanation.
-myarguments="bc:dhi:o:tT:vV"
-
-if [ $myarguments ] ; then
-    myargsexplained=$myarguments
-    # Add ' -' before, and add ' ' after, all options that have an argument
-    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
-    # Add '-' where necessary
-    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
-    # Replace argument position indicator ':' by ' arg'
-    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
-
-    myargsexplained=" -$myargsexplained"
-fi
-
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
-Usage: $myname$myargsexplained . . .
+Usage: $myname [options]
 Options:
-    -b              [ignored]
     -c dir          specifies compiler output directory
     -d              run in debug mode (with viewer)
     -h              display help information (usage)
-    -i file         [ignored]
-    -o file         [ignored]
-    -t              [ignored]
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)
     -V              reveal program version (i.e. $myversion)
