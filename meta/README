@@ -21,7 +21,14 @@ To compile this distribution you will need the following tools:
       the only directory from the distribution that is used. Remember
       the location, you'll need it later.
       (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
-
+ -- xemacs (A text editor for X-windows systems, available from 
+      <http://www.xemacs.org/>). Make sure you get version 20.4 or newer,
+      and make sure your installation includes an executable named 
+      "gnuclient". Then add the line
+        (gnuserv-start)
+      to your ~/.emacs file.
+      The Meta-Environment is untested with other versions of xemacs, but
+      may very well work. (Or may not...)
 
 As well as a full set of UNIX development utilities.
 
