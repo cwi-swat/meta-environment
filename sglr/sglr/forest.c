@@ -230,7 +230,7 @@ void SG_TermIsCyclic(ATerm t)
           if(!ATisEqual(t, amb))
             SG_TermIsCyclic(amb);
         }
-            
+
       }
       break;
 
@@ -398,7 +398,7 @@ ATerm SG_AmbTable(int Mode, ATerm key, ATerm value)
       if((idx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, key, NULL)))
         ret = SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, idx, NULL);
       break;
-      
+
     case SG_AMBTBL_INIT:
       if(ambtbl)
         SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
@@ -411,7 +411,7 @@ ATerm SG_AmbTable(int Mode, ATerm key, ATerm value)
         ambtbl = NULL;
       }
       break;
-      
+
     case SG_AMBTBL_ADD_INDEX:
     case SG_AMBTBL_ADD_CLUSTER:
     case SG_AMBTBL_UPDATE_INDEX:
@@ -420,7 +420,7 @@ ATerm SG_AmbTable(int Mode, ATerm key, ATerm value)
         SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
       ATtablePut(ambtbl, key, value);
       break;
-   
+
     case SG_AMBTBL_REMOVE:
       if(!ambtbl)
         break;
@@ -531,7 +531,7 @@ ATbool SG_MultiSetGtr(parse_table *pt, ATermTable msM, ATermTable msN)
 
   /*  multi-prio is irreflexive  */
 /*
-  // Tested in SG_MultiSetPriority, let's assume it's not called elsewhere 
+  // Tested in SG_MultiSetPriority, let's assume it's not called elsewhere
   if(ATtableIsEqual(multiset1, multiset2))
     return NULL;
  */
@@ -638,7 +638,7 @@ ATbool SG_Injection(parse_table *pt, ATermInt label)
      &in, NULL, NULL)) {
     if(ATmatch(in, "lit(<str>)", NULL)) {
       return ATfalse;
-    } else { 
+    } else {
 /* ATfprintf(stderr, "CF INJECTION (%t): %t\n", in, prod); */
        return ATtrue;
     }
@@ -649,7 +649,7 @@ ATbool SG_Injection(parse_table *pt, ATermInt label)
      &in, NULL, NULL)) {
     if(ATmatch(in, "lit(<str>)", NULL)) {
       return ATfalse;
-    } else { 
+    } else {
 /* ATfprintf(stderr, "LEX INJECTION (%t): %t\n", in, prod); */
        return ATtrue;
     }

@@ -236,7 +236,7 @@ void  SG_ParserPreparation(void)
   accepting_stack = NULL;
   SG_MaxNrAmb(SG_NRAMB_ZERO);
   SGnrAmb(SG_NRAMB_ZERO);
-  active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL));
+  active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL, ATfalse));
 }
 
 void  SG_ParserCleanup(void)
@@ -340,7 +340,7 @@ char *SG_ApplSort(ATerm t)
   }
 
   if(ATisEqual(ATgetAFun((ATermAppl) t), SG_AmbAFun()))
-    return("[multiple sorts]"); 
+    return("[multiple sorts]");
 
   return "[unknown sort]";
 }
@@ -605,7 +605,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   /*  A stack with state s already exists?  */
   if(!(st1 = SG_FindStack(s, active_stacks))) {
     /*  No existing stack for state s: new stack  */
-    st1 = SG_NewStack(s, stpt);
+    st1 = SG_NewStack(s, stpt, ATfalse);
     nl  = SG_AddLink(st1, st0, t);
     SG_AddStackHist(stpt, st1);
     active_stacks = SG_AddStack(st1, active_stacks);
@@ -698,8 +698,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       }
 #endif
       if(!SG_DeeplyRejected(st2)) {
-        if(!SG_InStacks(st2, for_actor, ATfalse)
-         && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
+        if(!SG_InReduceStacks(st2, for_actor, ATfalse)
+         && !SG_InReduceStacks(st2, for_actor_delayed, ATfalse)) {
           as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
           for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
             a = ATgetFirst(as);
@@ -762,7 +762,7 @@ void SG_Shifter(void)
 
     if(!SG_Rejected(st0)) {
       if(!(st1 = SG_FindStack(s, new_active_stacks))) {
-        st1 = SG_NewStack(s, NULL);
+        st1 = SG_NewStack(s, NULL, ATtrue);
         new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
       l = SG_AddLink(st1, st0, t);

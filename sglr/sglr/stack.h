@@ -88,6 +88,7 @@ typedef struct stack {
   st_links       *links;
   ATbool         rejected;
   ATbool         protected;
+  ATbool         isshift;
 } stack;
 
 typedef struct stacks {
@@ -102,6 +103,7 @@ typedef struct stacks {
 #define SG_ST_KID(s)            ((s)->kid)       /* Kid stack of a stack * */
 #define SG_ST_REJECTED(s)       ((s)->rejected)
 #define SG_ST_PROTECTED(s)      ((s)->protected)
+#define SG_ST_ISSHIFT(s)        ((s)->isshift)
 
 #define SG_LK_TREE(l)           ((l)->tree)      /* Tree of a link * */
 #define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
@@ -113,7 +115,7 @@ typedef struct stacks {
  */
 
 
-stack    *SG_NewStack(state s, stack *st);
+stack    *SG_NewStack(state s, stack *st, ATbool isshift);
 #define   SG_NewStacks(s)	SG_AddStack(s, NULL)
 stacks   *SG_AddStack(stack *st, stacks *sts);
 st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
@@ -135,11 +137,8 @@ void     SG_MarkStackRejected(stack *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_DeeplyRejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
-
-#if !defined(DETECT_CYCLIC_STACKS)
-  ATbool   SG_SubStack(stack *, stack *);
-#else
-  ATbool   SG_SubStack(stack *, stack *, ATermList);
-#endif
+ATbool   SG_SubStack(stack *, stack *);
+ATbool   SG_InReduceStacks(stack *, stacks *, ATbool);
+ATbool   SG_ReduceSubStack(stack *, stack *);
 
 #endif  /* _STACK_H_ */

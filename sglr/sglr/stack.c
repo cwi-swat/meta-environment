@@ -40,7 +40,8 @@ long SG_AllocStats(int op)
   #define SG_AllocStats(i)
 #endif
 
-stack *SG_NewStack(state s, stack *ancestor) {
+stack *SG_NewStack(state s, stack *ancestor, ATbool isshift)
+{
   stack *res;
 
   if((res = SG_Malloc(sizeof(stack)))) {
@@ -52,8 +53,9 @@ stack *SG_NewStack(state s, stack *ancestor) {
     res->kids      = NULL;
     res->kidcount  = 0;
     res->links     = NULL;
-    res->rejected = ATfalse;
+    res->rejected  = ATfalse;
     res->protected = ATtrue;
+    res->isshift   = isshift;
   }
   return res;
 }
@@ -265,21 +267,16 @@ ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
     st0 = SG_HEAD(sts);
     sts = SG_TAIL(sts);
     if(st1 == st0) return ATtrue;
-#if !defined(DETECT_CYCLIC_STACKS)
     if(deep && SG_SubStack(st1, st0)) {
-#else
-    if(deep && SG_SubStack(st1, st0, ATempty)) {
-#endif
       return ATtrue;
     }
   }
   return ATfalse;
 }
 
-#if !defined(DETECT_CYCLIC_STACKS)
 ATbool SG_SubStack(stack *st1, stack *st0)
 {
-  st_link *l;
+  stack    *s;
   st_links *ls;
 
   if(st1 == st0)
@@ -289,44 +286,51 @@ ATbool SG_SubStack(stack *st1, stack *st0)
 
   ls = SG_ST_LINKS(st0);
   for (; ls; ls = SG_TAIL(ls)) {
-    l = SG_HEAD(ls);
-    if (SG_SubStack(st1, SG_LK_STACK(l))) {
+    s = SG_LK_STACK(SG_HEAD(ls));
+    if (SG_SubStack(st1, s)) {
       return ATtrue;
     }
   }
   return ATfalse;
 }
-#else  /*   Catching cyclic stacks...  */
-ATbool SG_SubStack(stack *st1, stack *st0, ATermList visited)
+
+ATbool SG_InReduceStacks(stack *st1, stacks *sts, ATbool deep)
 {
-  st_link *l;
-  st_links *ls;
-  ATerm    st0trm;
+  stack *st0;
 
-  if(!st0 || !st1)
-    return ATfalse;
-  if(st1 == st0)
-    return ATtrue;
-
-  st0trm = (ATerm) ATmakeInt((int) st0);
-  if(ATindexOf(visited, st0trm, 0) != -1) {
-/*
-    ATfprintf(stderr, "Cyclic stack!\n", st0trm, st0);
- */
-    return ATfalse;
-  }
-  visited = ATinsert(visited, st0trm);
-
-  ls = SG_ST_LINKS(st0);
-  for (; ls; ls = SG_TAIL(ls)) {
-    l = SG_HEAD(ls);
-    if (SG_SubStack(st1, SG_LK_STACK(l), visited)) {
+  while(sts) {
+    st0 = SG_HEAD(sts);
+    sts = SG_TAIL(sts);
+    if(st1 == st0) return ATtrue;
+    if(deep && SG_ReduceSubStack(st1, st0)) {
       return ATtrue;
     }
   }
   return ATfalse;
 }
-#endif
+
+ATbool SG_ReduceSubStack(stack *st1, stack *st0)
+{
+  stack    *s;
+  st_links *ls;
+
+  if(st1 == st0)
+    return ATtrue;
+  if(!st0 || !st1)
+    return ATfalse;
+
+  if(SG_ST_ISSHIFT(st0))
+    return ATfalse;
+
+  ls = SG_ST_LINKS(st0);
+  for (; ls; ls = SG_TAIL(ls)) {
+    s = SG_LK_STACK(SG_HEAD(ls));
+    if (SG_SubStack(st1, s)) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
+}
 
 /*
    Find a stack with a state |s| in a list of stacks.

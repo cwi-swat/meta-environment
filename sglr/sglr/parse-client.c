@@ -88,7 +88,7 @@ void rec_ack_event(int cid, ATerm t) {
   char *buf;
   size_t size;
 
-  if(ATmatch(t,"open-language(<str>,<str>)",NULL,NULL)) { 
+  if(ATmatch(t,"open-language(<str>,<str>)",NULL,NULL)) {
     if(!(buf = ReadFile(input_file_name,&size)))
       exit(1);
 
@@ -97,7 +97,7 @@ void rec_ack_event(int cid, ATerm t) {
                         parse_table_name,
 			start_symbol?start_symbol:"",
 			buf));
-    free(buf); 
+    free(buf);
   } else if(ATmatch(t,
                   "parsetext(<str>,<str>,<str>,parse-error(<term>))",
                   NULL,NULL,NULL,&message)) {
@@ -106,11 +106,11 @@ void rec_ack_event(int cid, ATerm t) {
     exit(1);
   } else if(ATmatch(t,
                   "parsetext(<str>,<str>,<str>,<term>)",
-                  NULL,NULL,NULL,&tree)) { 
+                  NULL,NULL,NULL,&tree)) {
     WriteFile(output_file_name,tree);
     ATBwriteTerm(cid, ATmake("snd-disconnect"));
     exit(0);
-  } 
+  }
 }
 
 void rec_terminate(int cid, ATerm t) {
@@ -138,7 +138,7 @@ void Usage(FILE *stream, ATbool long_message)
   const char usage[] =
     "Usage: %s -T toolname -i input-file -p parse-table [-o file]  \\\n"
     "       [-H hostname] [-P port] [-s sort]\n%s";
-  const char long_usage[] = 
+  const char long_usage[] =
     "\n"
     "\t-h|--help              : usage information\n"
     "\t-i|--input        file : input from |file|                   (*)\n"
