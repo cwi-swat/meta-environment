@@ -1,16 +1,16 @@
-// Java tool interface class MenuBarTool
+// Java tool interface class ToolBarTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 3:35:48 PM
+// generation time: Nov 25, 2004 3:35:53 PM
 
-package metastudio.components.menubar;
+package metastudio.components.toolbar;
 
 import aterm.*;
 import toolbus.*;
 import java.util.*;
 
-abstract public class MenuBarTool
+abstract public class ToolBarTool
   extends SwingTool
-  implements MenuBarTif
+  implements ToolBarTif
 {
   // This table will hold the complete input signature
   private Map sigTable = new HashMap();
@@ -23,10 +23,10 @@ abstract public class MenuBarTool
 
   //}}}
 
-  //{{{  protected MenuBarTool(ATermFactory factory)
+  //{{{  protected ToolBarTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
-  protected MenuBarTool(ATermFactory factory)
+  protected ToolBarTool(ATermFactory factory)
   {
     super(factory);
     initSigTable();
@@ -40,9 +40,9 @@ abstract public class MenuBarTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<menu-bar>,add-events(<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<menu-bar>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<menu-bar>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<tool-bar>,add-events(<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<tool-bar>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-terminate(<tool-bar>,<term>)"), new Boolean(true));
   }
 
   //}}}

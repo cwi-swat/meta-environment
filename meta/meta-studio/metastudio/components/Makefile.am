@@ -4,6 +4,7 @@ SUBDIRS = \
 	graphs \
 	statusbar \
 	menubar \
+	toolbar \
 	statushistory \
 	errorlist \
 	infolist \
@@ -26,5 +27,4 @@ java_JAVA = \
 	ModuleSelectionListener.java \
 	ModuleTree.java \
 	ParseTreeBrowser.java \
-	ToolBar.java \
 	TideControl.java 

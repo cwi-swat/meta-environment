@@ -1,6 +1,8 @@
 package metastudio.components.menubar;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +10,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
-import metastudio.*;
-import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -21,30 +22,40 @@ import aterm.ATermList;
 //        * what can be shared with ModulePopupMenu?
 //        * add nested menu's?
 
-public class MenuBar extends UserInterfacePanel {
+public class MenuBar extends JPanel implements MenuBarTif, Runnable {
     private static ATerm ACTION_MENUBAR;
     private JMenuBar bar;
     private Map map;
+    private MenuBarBridge bridge;
+    private ATermFactory factory;
 
-    public MenuBar(ATermFactory factory, MultiBridge bridge, JFrame parent) {
-        super(factory, bridge);
+    public MenuBar(ATermFactory factory, String[] args, JFrame parent) {
+    	this.factory = factory;
+    	
+    	setLayout(new BorderLayout());
+    	
         bar = new JMenuBar();
         parent.setJMenuBar(bar);
 
         
         ACTION_MENUBAR = factory.parse("studio-menubar");
 
-        postEvent(factory.make("get-events(<term>)", ACTION_MENUBAR));
+        try {
+        	bridge = new MenuBarBridge(factory, this);
+        	bridge.init(args);
+        	bridge.setLockObject(this);
+        	bridge.connect("menu-bar", null, -1);
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
     }
 
     public JMenuBar getJMenuBar() {
         return bar;
     }
 
-    public void addEvents(ATerm type, ATerm events) {
-        if (type.equals(ACTION_MENUBAR)) {
-            addMenu(type, (ATermList) events);            
-        }
+    public void addEvents(ATerm events) {
+            addMenu((ATermList) events);            
     }
 
     private JMenu getMenu(String name) {
@@ -105,7 +116,7 @@ public class MenuBar extends UserInterfacePanel {
         return cur;
     }
 
-    private void addMenu(final ATerm type, ATermList buttons) {
+    private void addMenu(ATermList buttons) {
         while (!buttons.isEmpty()) {
             final ATerm action = buttons.getFirst();
             ATermList menuItems = (ATermList) ((ATermAppl) action).getArgument(0);
@@ -116,10 +127,10 @@ public class MenuBar extends UserInterfacePanel {
             menu.add(new AbstractAction(label) {
                 public void actionPerformed(ActionEvent e) {
                     ATerm event =
-                        getFactory().make(
-                            "button-selected(<term>, <term>)", type, action);
+                        factory.make(
+                            "button-selected(<term>)", action);
 
-                    postEvent(event);
+                    bridge.postEvent(event);
                 }
             });
             buttons = buttons.getNext();
@@ -129,4 +140,16 @@ public class MenuBar extends UserInterfacePanel {
     private String getMenuLabel(ATermList list) {
         return ((ATermAppl) list.getFirst()).getName();
     }
+
+	public void recAckEvent(ATerm t0) {
+		
+	}
+
+	public void recTerminate(ATerm t0) {
+		
+	}
+
+	public void run() {
+		bridge.run();
+	}
 }

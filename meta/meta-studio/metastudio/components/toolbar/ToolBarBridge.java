@@ -1,19 +1,19 @@
-// Java tool bridge MenuBarBridge
+// Java tool bridge ToolBarBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 3:35:48 PM
+// generation time: Nov 25, 2004 3:35:53 PM
 
-package metastudio.components.menubar;
+package metastudio.components.toolbar;
 
 import aterm.*;
 
-public class MenuBarBridge
-  extends MenuBarTool
+public class ToolBarBridge
+  extends ToolBarTool
 {
-  private MenuBarTif tool;
+  private ToolBarTif tool;
 
-  //{{{  public MenuBarBridge(ATermFactory factory, MenuBarTif tool)
+  //{{{  public ToolBarBridge(ATermFactory factory, ToolBarTif tool)
 
-  public MenuBarBridge(ATermFactory factory, MenuBarTif tool)
+  public ToolBarBridge(ATermFactory factory, ToolBarTif tool)
   {
     super(factory);
     this.tool = tool;

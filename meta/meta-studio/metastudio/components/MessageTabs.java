@@ -18,23 +18,23 @@ public class MessageTabs extends UserInterfacePanel {
         add(messageTabs);
     }
     
+    private void spawn(Runnable component, String name) {
+    	Thread thread = new Thread(component);
+    	thread.setName(name);
+    	thread.start();
+    }
+    
     private void createMessageTabs(String[] args) {
         messageTabs = new JTabbedPane();
 
         StatusHistory historyPanel = new StatusHistory(getFactory(), args);
-        Thread historyThread = new Thread(historyPanel);
-        historyThread.setName("history-list");
-        historyThread.start();
+        spawn(historyPanel, "history-list");
         
         ErrorList errorList = new ErrorList(getFactory(), args);
-        Thread errorListThread = new Thread(errorList);
-        errorListThread.setName("error-list");
-        errorListThread.start();
+        spawn(errorList, "error-list");
         
         InfoList systemInfo = new InfoList(getFactory(), args);
-        Thread systemInfoThread = new Thread(systemInfo);
-        systemInfoThread.setName("info-list");
-        systemInfoThread.start();
+        spawn(systemInfo, "info-list");
         
         messageTabs.insertTab("Errors", null, errorList, "Errors and warnings", 0);
         messageTabs.insertTab("Info",null, systemInfo,"System information", 1);

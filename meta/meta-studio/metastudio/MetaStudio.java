@@ -20,10 +20,10 @@ import javax.swing.JSplitPane;
 import metastudio.components.MainTabs;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
-import metastudio.components.ToolBar;
 import metastudio.components.dialogtool.DialogTool;
 import metastudio.components.menubar.MenuBar;
 import metastudio.components.statusbar.StatusBar;
+import metastudio.components.toolbar.ToolBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
@@ -35,8 +35,11 @@ public class MetaStudio extends JFrame {
         new MetaStudio(args);
     }
 
-    private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar(factory, getBridge(), this);
+    private MenuBar createMenuBar(String []args) {
+        MenuBar menuBar = new MenuBar(factory, args, this);
+        Thread mThread = new Thread(menuBar);
+        mThread.setName("menu-bar");
+        mThread.start();
 
         return menuBar;
     }
@@ -72,24 +75,30 @@ public class MetaStudio extends JFrame {
         }
     }
     
+    private void spawn(Runnable component, String name) {
+    	Thread thread = new Thread(component);
+    	thread.setName(name);
+    	thread.start();
+    }
+    
     private void createPopupHandlers(String []args) {
-        DialogTool fileDialog = new DialogTool(this.getRootPane(), factory, args);
-        Thread fdThread = new Thread(fileDialog);
-        fdThread.setName("file-dialog");
-        fdThread.start();
+        DialogTool dialogTool = new DialogTool(this.getRootPane(), factory, args);
+        spawn(dialogTool, "dialogtool");
         
         new ModulePopupMenu(factory, getBridge());
     }
     
     private void createContentPane(String[] args) {
-        createMenuBar();
+        createMenuBar(args);
 
         Container content = getContentPane();
         content.setLayout(new BorderLayout());
 
-        UserInterfacePanel toolbar = new ToolBar(factory, getBridge());
-        content.add(toolbar, BorderLayout.NORTH);
+        ToolBar toolbar = new ToolBar(factory, args);
+        spawn(toolbar, "tool-bar");
 
+        content.add(toolbar, BorderLayout.NORTH);
+        
         content.add(createMainPane(args), BorderLayout.CENTER);
     }
 
@@ -114,9 +123,7 @@ public class MetaStudio extends JFrame {
         container.add(new MessageTabs(factory, getBridge(), args), BorderLayout.CENTER);
 
         StatusBar bar = new StatusBar(factory, args);
-        Thread barThread = new Thread(bar);
-        barThread.setName("status-bar");
-        barThread.start();
+        spawn(bar, "status-bar");
         
         container.add(bar, BorderLayout.SOUTH);
 

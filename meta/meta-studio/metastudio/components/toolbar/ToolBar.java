@@ -1,6 +1,8 @@
-package metastudio.components;
+package metastudio.components.toolbar;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.AbstractAction;
@@ -8,34 +10,40 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import metastudio.*;
-import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class ToolBar extends UserInterfacePanel {
+public class ToolBar extends JPanel implements ToolBarTif, Runnable {
     private JToolBar toolBar;
-    private static ATerm ACTION_TOOLBAR;
-
-    public ToolBar(ATermFactory factory, MultiBridge bridge) {
-        super(factory, bridge);
+    private ToolBarBridge bridge;
+    private ATermFactory factory;
+	
+    public ToolBar(ATermFactory factory, String [] args) {
+    	this.factory = factory;
+    	
+        setLayout(new BorderLayout());
         
-        ACTION_TOOLBAR = factory.parse("studio-toolbar");
-
         toolBar = new JToolBar();
         add(toolBar);
         
-        postEvent(factory.make("get-events(<term>)", ACTION_TOOLBAR));
+        try {
+        	bridge = new ToolBarBridge(factory, this);
+        	bridge.init(args);
+        	bridge.setLockObject(this);
+        	bridge.connect("tool-bar", null, -1);
+        } catch (IOException e) {
+        	remove(toolBar);
+        	e.printStackTrace();
+        }
     }
 
-    public void addEvents(ATerm type, ATerm events) {
-        if (type.equals(ACTION_TOOLBAR)) {
-            addToolBarActions((ATermList) events);
-        }
+    public void addEvents(ATerm events) {
+        addToolBarActions((ATermList) events);
     }
     
     public void addToolBarActions(ATermList buttons) {
@@ -57,15 +65,26 @@ public class ToolBar extends UserInterfacePanel {
             Action it = new AbstractAction(label, icon) {
                 public void actionPerformed(ActionEvent actionEvent) {
                     ATerm event =
-                        getFactory().make(
-                            "button-selected(<term>,<term>)",
-                            ACTION_TOOLBAR,
+                        factory.make(
+                            "button-selected(<term>)",
                             action);
-                    postEvent(event);
+                    bridge.postEvent(event);
                 }
             };
             JButton button = toolBar.add(it);
             button.setToolTipText(label);
         }
     }
+
+	public void recAckEvent(ATerm t0) {
+		
+	}
+
+	public void recTerminate(ATerm t0) {
+		
+	}
+
+	public void run() {
+		bridge.run();
+	}
 }
