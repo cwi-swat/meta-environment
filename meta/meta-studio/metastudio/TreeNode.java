@@ -38,13 +38,13 @@ public class TreeNode {
 		    }
 		    if (childNode == null) {
 			childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
-			children.add(i, childNode);
+			children.add(getInsertIndex(childName), childNode);
 		    }
 		    return childNode.addChild(p + childName + "/", tokens);
 		} else {
 		    //			if (childNode == null) {
 				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
-				children.add(i, childNode);
+				children.add(getInsertIndex(childName), childNode);
 
 				return childNode;
 				//			}
@@ -113,6 +113,18 @@ public class TreeNode {
 		}
 
 		return -1;
+	}
+
+	public int getInsertIndex(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			TreeNode curNode = (TreeNode) children.get(i);
+
+			if (curNode.getName().compareTo(n)>0) {
+				return i;
+			}
+		}
+
+		return children.size();
 	}
 
 	public int getChildCount() {
