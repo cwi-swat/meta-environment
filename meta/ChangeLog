@@ -1,5 +1,9 @@
 # $Id$
 
+2002/10/30 (vinju@loria.fr)
+ * Added dependency on shared-objects package
+ * MetaStudio uses jarfiles instead of installed .class files
+
 2002/10/29 (vinju@loria.fr)
  * Removed implicit generation of ToolBus interface. *.tif.[ch] files 
    have been added to the repository

@@ -7,4 +7,4 @@ java_JAVA	= Graph.java NodeList.java EdgeList.java Node.java Edge.java \
 JAVAROOT	= ${top_builddir}/meta-studio
 javadir		= ${prefix}/classes/metastudio/graph
 
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${JAVA_ATERM}/classes
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${JAVA_ATERM}:${SHARED_OBJECTS}
