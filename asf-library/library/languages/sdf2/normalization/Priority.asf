@@ -22,7 +22,7 @@ equations
 %% $\{\_\}$ groups.
 
   [0] norm[[p > p']]  = p > p'
-  [0] norm[[p [n+> p']]  = p [n+> p'
+  [0] norm[[p <n>> p']]  = p <n>> p'
   [0] norm[[p as p']] = p as p', p' as p
 
 %% Each of the priority declarations in the list is normalized.
@@ -49,9 +49,10 @@ equations
   [0] norm[[g > {p}]]            = norm[[g > p]]
   [0] norm[[{as: p*} > g]]       = norm[[{as: p*}, {p*} > g]]
   [0] norm[[g > {as: p*}]]       = norm[[{as: p*}, g > {p*}]]
-  [0] norm[[p [n+> {as: p*}]]    = norm[[{as: p*}, p [n+> {p*}]]
-  [0] norm[[p [n+> {p+1 p+2}]]   = norm[[p [n+> {p+1}, p [n+> {p+2}]]
-  [0] norm[[p1 [n+> {p2}]]       = norm[[p1 [n+> p2]]
+  [0] norm[[p <n+>> {as: p*}]]   = norm[[{as: p*}, p <n+>> {p*}]]
+  [0] norm[[p <n+>> {p+1 p+2}]]  = norm[[p <n+>> {p+1}, p <n+>> {p+2}]]
+  [0] norm[[p1 <n+>> {p2}]]      = norm[[p1 <n+>> p2]]
+  [0] norm[[p1 <n, n+>> p2]]     = norm[[p1 <n>> p2, p1 <n+>> p2]]
 
 %% Groups and associativity.
 
@@ -132,11 +133,11 @@ equations
 %% The function \fun{syntax} derives from a priorities declaration the list of all
 %% productions referred to in that declaration.
 
-  [0] syntax[[ ]]            = (/)
-  [0] syntax[[ pr+1, pr+2 ]] = syntax[[ pr+1 ]] syntax[[ pr+2 ]]
-  [0] syntax[[ p1 > p2 ]]    = syntax p1 p2
-  [0] syntax[[ p1 [n+> p2 ]] = syntax p1 p2
-  [0] syntax[[ p1 as p2 ]]   = syntax p1 p2
+  [0] syntax[[ ]]             = (/)
+  [0] syntax[[ pr+1, pr+2 ]]  = syntax[[ pr+1 ]] syntax[[ pr+2 ]]
+  [0] syntax[[ p1 > p2  ]]    = syntax p1 p2
+  [0] syntax[[ p1 <n+>> p2 ]] = syntax p1 p2
+  [0] syntax[[ p1 as p2 ]]    = syntax p1 p2
 
 %% Merging and ordering of grammars.
 

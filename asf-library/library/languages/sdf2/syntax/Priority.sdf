@@ -20,9 +20,9 @@ exports
     "{" Productions "}"                   -> Group  {cons("prods-group")}
     "{" Associativity ":" Productions "}" -> Group  {cons("assoc-group")}
 
-    list:{Group ">"}+                        -> Priority  {cons("chain")}
-    "left":Group Associativity "right":Group -> Priority  {cons("assoc")}
-    Production "[" arguments:{NatCon ","}+ ">" Group -> Priority  {cons("argument")}
+    list:{Group ">"}+                                    -> Priority  {cons("chain")}
+    "left":Group Associativity "right":Group             -> Priority  {cons("assoc")}
+    Production "<" arguments:{NatCon ","}+ ">" ">" Group -> Priority  {cons("argument")}
 
     list:{Priority  ","}* -> Priorities
 

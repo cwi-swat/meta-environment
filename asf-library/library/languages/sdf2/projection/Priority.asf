@@ -27,7 +27,7 @@ equations
    [pr-mbr2]
         p1 ~= p3 == true, p2 ~= p4 == true
         =====================================
-        p1 [n+> p2 (- pr*1, p3 [n+> p4, pr*2 = true
+        p1 <n+>> p2 (- pr*1, p3 <n+>> p4, pr*2 = true
 
    [pr-mbr3]
         p1 ~= p3 == true, p2 ~= p4 == true
