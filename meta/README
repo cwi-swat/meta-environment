@@ -31,9 +31,11 @@ To compile this distribution you will need the following tools:
       may very well work. (Or may not...)
  -- lthe Boehm Garbage Collector, available from
     <http://reality.sgi.com/employees/boehm_mti/gc.html>
-    Make as appropriate for your system; install the resulting `gc.a'
-    as gc.a in an appropriate place, typically the directory you choose
-    as library directory for the rest of this distribution.
+    Make as appropriate for your system; install the resulting
+    `gc.a' as libgc.a in an appropriate place, typically the
+    Meta-Environment's lib directory and install `gc.h' in an
+    appropriate include directory (e.g. the Meta-Environment's
+    include directory).
     If you insist, you can omit Boehm GC, in which case you need to
     disable it in sglr's Makefile.in.
 
