@@ -1,3 +1,6 @@
+2001/07/03 (markvdb@cwi.nl)
+  * Added a union function for CondEquationLists based on indexed sets.
+
 2001/06/21 (jurgenv@cwi.nl)
   * added a function that checks if a tree is a lexical constructor function:
     ASF_isTreeLexicalConstructorFunction. Do not use the generated function

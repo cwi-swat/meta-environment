@@ -77,6 +77,70 @@ ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
 }
 
 /*}}}  */
+/*{{{  ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList l1, l2) */
+
+ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList cel1,
+                                               ASF_CondEquationList cel2)
+{
+  if (!ASF_isCondEquationListEmpty(cel2)) {
+    if (!ASF_isCondEquationListEmpty(cel1)) {
+      int len1 = ASF_getCondEquationListLength(cel1);
+      int len2 = ASF_getCondEquationListLength(cel2);
+      ATermIndexedSet iSet = ATindexedSetCreate((len1+len2)*2, 75);
+      ASF_CondEquation ce;
+      ASF_CondEquationList newCel = ASF_makeCondEquationListEmpty();
+      int maxIndex = 0, index;
+      ATbool ignored;
+
+      while (ASF_hasCondEquationListHead(cel1)) {
+        ce = ASF_getCondEquationListHead(cel1);
+        index = ATindexedSetPut(iSet, 
+                                ASF_makeTermFromCondEquation(ce),
+                                &ignored);
+        if (index > maxIndex) {
+          maxIndex = index;
+        }
+                                   
+        if (ASF_hasCondEquationListTail(cel1)) {
+          cel1 = ASF_getCondEquationListTail(cel1);
+        }
+        else {
+          break;
+        }
+      }
+      while (ASF_hasCondEquationListHead(cel2)) {
+        ce = ASF_getCondEquationListHead(cel2);
+        index = ATindexedSetPut(iSet, 
+                                ASF_makeTermFromCondEquation(ce),
+                                &ignored);
+        if (index > maxIndex) {
+          maxIndex = index;
+        }
+                                   
+        if (ASF_hasCondEquationListTail(cel2)) {
+          cel2 = ASF_getCondEquationListTail(cel2);
+        }
+        else {
+          break;
+        }
+      }
+      
+      for (index=0; index <= maxIndex; index++) {
+        ce = ASF_makeCondEquationFromTerm(ATindexedSetGetElem(iSet, index));
+        newCel = ASF_makeCondEquationListMany(ce,
+                                              ASF_makeLayoutEmpty(), 
+                                              newCel);
+      }
+      ATindexedSetDestroy(iSet);
+      return newCel;
+    }
+    return cel2;
+  } 
+
+  return cel1;
+}
+
+/*}}}  */
 /*{{{  ASF_Layout ASF_makeLayoutEmpty() */
 
 ASF_Layout ASF_makeLayoutEmpty()
