@@ -1,0 +1,10 @@
+
+module Relations[Elem]
+
+exports
+
+%% imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]]  ]
+
+imports Bags[Elem # Elem]
+
+imports Bags[Elem]

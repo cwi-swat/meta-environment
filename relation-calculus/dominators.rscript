@@ -15,4 +15,4 @@ rel[str,str] PRED ={
 bag[str] VERTICES = carrier(PRED)
 
 rel[str,bag[str]] DOMINATES =
- { <V,  VERTICES \ {V} \ range(reachX({"R"}, {V}, PRED))> | V : VERTICES }
+ { <V,  VERTICES \ {V} \ range(reachX({"R"}, {V}, PRED))> :  V in VERTICES }

@@ -3,34 +3,36 @@ module Bags[Elem]
 exports 
 imports basic/Booleans
 imports basic/Integers
+imports EmptyBag
 
   sorts Bag[[Elem]]  
 
 context-free syntax
-   "{" {Elem ","}* "}"                       -> Bag[[Elem]] {constructor}
+   EmptyBag				     	-> Bag[[Elem]]
+   "{" {Elem ","}* "}"                       	-> Bag[[Elem]] {constructor}
 
  context-free syntax
 
-   "EmptyBag"                                -> Bag[[Elem]]
+%%   "EmptyBag"                                	-> Bag[[Elem]]
 
-   add(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
-   del(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+   add(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+   del(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
 
-   equal(Bag[[Elem]], Bag[[Elem]])           -> Boolean
-   subset(Bag[[Elem]], Bag[[Elem]])          -> Boolean
-   strict-subset(Bag[[Elem]], Bag[[Elem]])   -> Boolean
-   superset(Bag[[Elem]], Bag[[Elem]])        -> Boolean
-   strict-superset(Bag[[Elem]], Bag[[Elem]]) -> Boolean
+   equal(Bag[[Elem]], Bag[[Elem]])           	-> Boolean
+   subset(Bag[[Elem]], Bag[[Elem]])          	-> Boolean
+   strict-subset(Bag[[Elem]], Bag[[Elem]])   	-> Boolean
+   superset(Bag[[Elem]], Bag[[Elem]])        	-> Boolean
+   strict-superset(Bag[[Elem]], Bag[[Elem]])	-> Boolean
 
-   union(Bag[[Elem]], Bag[[Elem]])           -> Bag[[Elem]]
-   inter(Bag[[Elem]],  Bag[[Elem]])          -> Bag[[Elem]]
-   diff(Bag[[Elem]], Bag[[Elem]])            -> Bag[[Elem]]
+   union(Bag[[Elem]], Bag[[Elem]])           	-> Bag[[Elem]]
+   inter(Bag[[Elem]],  Bag[[Elem]])          	-> Bag[[Elem]]
+   diff(Bag[[Elem]], Bag[[Elem]])            	-> Bag[[Elem]]
 
-   size(Bag[[Elem]])                         -> Integer
-   in(Elem, Bag[[Elem]])                   -> Boolean
+   size(Bag[[Elem]])                         	-> Integer
+   in(Elem, Bag[[Elem]])                   	-> Boolean
 
    "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
-                                           -> Bag[[Elem]]
+                                           	-> Bag[[Elem]]
 
 hiddens
   imports asf/syntax/Comments

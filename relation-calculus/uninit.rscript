@@ -8,6 +8,6 @@
         rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
 
         rel[str,node] UNDEF = 
-        { occurrences(<N,V>) | <N, V> : USES, <ROOT, N> in reachX({ROOT}, DEFS. V, PRED)
+        { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
         }
                          

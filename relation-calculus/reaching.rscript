@@ -19,14 +19,20 @@ rel[str,str] KILL = {
 
 bag[str] BLOCKS = carrier(PRED)
 
-rel[str,str] IN = empty
-rel[str,str] OUT = empty
+rel[str,str] IN
+rel[str,str] OUT
 
-solve {
+solve (1) {
 %%	IN  = { B x { OUT[P] | P : PRED-OF[B] } | B : BLOCKS },
 %%	OUT = { B x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
 
 	IN =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]},
 	OUT = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
 }
+
+bag[str] BE
+
+rel[str,str] B1 = "B1" x BE
+
+rel[str,str] T = {B x BE : B in BLOCKS}
 

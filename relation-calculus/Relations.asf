@@ -1,6 +1,6 @@
 equations
 
-[empty]   EmptyRel = {}
+[empty]  EmptyRel = {}
 
 [comp-1] compose({<E, E'>, Tuple*1}, {Tuple*2}) = 
          union(product(E, E' . {Tuple*2}), compose({Tuple*1}, {Tuple*2}))
@@ -87,7 +87,7 @@ equations
 [default-lim-2]
          {Tuple*} . E' = {}
  
-[slim-1] Rel . {E, E*} = union(Rel . E, {E*} . Rel)
+[slim-1] Rel . {E, E*} = union(Rel . E, Rel . {E*})
 [slim-2] Rel . {} = {}
 
 [size-1] Rel = {Tuple*}

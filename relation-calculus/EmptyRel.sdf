@@ -1,0 +1,9 @@
+module EmptyRel
+
+imports EmptyBag
+
+exports
+   sorts EmptyRel
+   context-free syntax
+	"EmptyRel"	-> EmptyRel
+	EmptyRel	-> EmptyBag

@@ -1,27 +1,66 @@
 
-
 bag[int] BE
 
 bag[int] B1 = {1,2,3}
 bag[int] B2 = {3, 4, 5}
-
-bag[int] T1 = 7 union B1
-bag[int] T2 = B1 union 7
-bag[int] T3 = BE union B1
-bag[int] T4 = B1 union BE
-bag[int] T5 = BE union BE
-bag[int] T6 = B1 union B2
 
 rel[int,int] RE
 
 rel[int,int] R1 = {<1,10>, <2,20>, <3,30>}
 rel[int,int] R2 = {<3,30>, <4,40>, <5,50>}
 
-rel[int,int] T7 = <7,70> union R1
-rel[int,int] T8 = R1 union <7,70>
-rel[int,int] T9 = RE union R2
-rel[int,int] T10 = R1 union RE
-rel[int,int] T11 = RE union RE
+%% union
+
+bool T1 = 7 union B1 == {7,1,2,3}
+bool T2 = B1 union 7 == {1,2,3,7}
+bool T3 = BE union B1 == B1
+bool T4 = B1 union BE == B1
+bool T5 = BE union BE == BE
+bool T6 = B1 union B2 == {1,2,3,4,5}
+
+bool T7 = <7,70> union R1 == {<7,70>,<1,10>, <2,20>, <3,30>}
+bool T8 = R1 union <7,70> == {<1,10>, <2,20>, <3,30>,<7,70>}
+bool T9 = RE union R2 == R2
+bool T10 = R1 union RE == R1
+bool T11 = RE union RE == RE
+
+%% \
+
+bool T40 = B1 \ BE == B1
+bool T41 = BE \ B1 == BE
+bool T42 = B1 \ B2 == {1,2}
+bool T43 = B2 \ B1 == {4,5}
+
+bool T44 = R1 \ RE == R1
+bool T45 = RE \ R1 == RE
+bool T46 = R1 \ R2 == {<1,10>, <2,20>}
+bool T47 = R2 \ R1 == {<4,40>, <5,50>}
+
+
+%% x
+
+bool T20 = BE x B1 == RE
+bool T21 = B1 x BE == RE
+bool T22 = 9 x B1 == {<9, 1>, <9, 2>, <9, 3>}
+bool T23 = B1 x 9 == {<1, 9>, <2, 9>, <3, 9>}
+bool T24 = B1 x B2 == {<1, 3>, <1, 4>, <1, 5>, <2, 3>, <2, 4>, <2, 5>, <3, 3>, <3, 4>, <3, 5>}
+
+%% [ ]
+
+rel[int,int] R3 = {<1,10>, <2,20>, <1,11>, <3,30>, <2,21>}
+
+bool T30 = R3[1] == {10, 11}
+
+bool  T50 = BE . R3 == BE
+bool  T51 = R3 . BE == BE
+bool  T52 = 1 . R3 == {10, 11}
+bool  T53 = {1} . R3 == {10, 11}
+bool  T54 = {1, 2} . R3  == {10, 11, 20, 21}
+bool  T55 = R3 . 10 == {1}
+bool  T56 = R3 . {10} == {1}
+bool  T57 = R3 . {10, 20} == {1, 2}
+
+
 
 
 

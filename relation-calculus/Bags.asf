@@ -6,14 +6,14 @@ equations
 
 %% --- add(E, Bag)
 
-[a1] add(E, {E*}) = {E, E*}
+[a1]	add(E, {E*}) = {E, E*}
 
 
 %% --- del(E, Bag)
 
-[r1]         del(E, {E*1, E, E*2}) = {E*1, E*2}
+[r1]	del(E, {E*1, E, E*2}) = {E*1, E*2}
 [default-r2]
-             del(E, Bag) = Bag
+	del(E, Bag) = Bag
 
 %% --- equal(Bag1, Bag2)
 
