@@ -387,7 +387,6 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 
   tree      = PT_getParseTreeTree(parseTree);
   sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
-ATwarning("moduleName: %s sdf: %s\n", moduleName, SDFgetModuleName(sdfModule));
 
   /* Sanity check: modulename inside module must equal name passed as str */
 /*  if (strcmp(moduleName, SDFgetModuleName(sdfModule)) != 0) {
