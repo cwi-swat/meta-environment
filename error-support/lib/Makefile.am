@@ -12,8 +12,7 @@ libmerrors_a_SOURCES = \
 	Errors.c \
 	Errors_dict.c\
 	ParsedErrors.c \
-	ParsedErrors_dict.c \
-	ParsedErrors_bottom.c
+	ParsedErrors_dict.c 
 
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include

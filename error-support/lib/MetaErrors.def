@@ -15,9 +15,9 @@ Warning -> Feedback {cons("warning")}
 Error -> Feedback {cons("error")}
 FatalError -> Feedback {cons("fatal-error")}
 
-"information" "(" id:String         c1:"," 
-                  producer:Producer c2:"," 
-                  description:Description c3:","
+"information" "(" id:String         "," 
+                  producer:Producer "," 
+                  description:Description ","
                   subjects:Subjects
               ")"  -> Information {cons("information")}
 
