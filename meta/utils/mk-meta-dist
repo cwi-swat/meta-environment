@@ -1,0 +1,49 @@
+#! /bin/sh
+
+CVSROOT=/ufs/gipe/CVS; export CVSROOT
+RELEASE="cwi-meta"
+COMPONENTS="toolbus aterm new-meta"
+
+#
+########################################################################
+#
+
+PROG=`basename $0`
+THISDIR=`pwd`
+TMPDIR=${TMPDIR:-/var/tmp}
+
+case $# in
+	1)
+		TAG=$1
+		RELEASE="$RELEASE-$TAG" ;;
+	*)
+		echo "Usage: $PROG <release_tag_or_date>"
+		exit 1 ;;
+esac
+
+mkdir -p $TMPDIR/$RELEASE
+cd $TMPDIR/$RELEASE
+
+# Clean up afterwards...
+#
+trap 'echo "Caught a deadly signal!"; exit 1' 1 2 3 6
+trap 'echo "Removing intermediate files..."; rm -rf $TMPDIR/$RELEASE' 0
+
+# Get components...
+for component in $COMPONENTS
+do
+	echo "Obtaining $component component..."
+	if cvs export -D $TAG $component > /dev/null 2>&1 ; then
+		:
+	else
+		echo "An error occurred; bailing out..."
+		exit 1
+	fi
+done
+
+echo "Consult \`new-meta/README', please." > README
+ln README INSTALL
+
+cd $TMPDIR
+echo "Creating and compressing archive..."
+tar cf - $RELEASE | gzip -c9 > $THISDIR/$RELEASE.tar.gz
