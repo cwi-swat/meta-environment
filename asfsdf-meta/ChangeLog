@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Jun 30 10:25:20 CEST 2004 <M336@cwi.nl>
+ * test/Makefile.am: disable tests because they need this package to be
+   installed before they can test.
+
 Tue Jun 22 10:03:53 CEST 2004 <kooiker@cwi.nl>
  * test/Demo.sdf: change path to Pico-eval and Pico-typecheck
 
