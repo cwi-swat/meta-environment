@@ -1,6 +1,6 @@
 equations
 
-[1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
+][1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
 
 [2] label(if Exp then Stat*1 else Stat*2 fi, Int) =
     < if [Int] Exp then Stat*1 else Stat*2 fi, Int+1 >
