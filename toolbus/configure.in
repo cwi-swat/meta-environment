@@ -36,7 +36,7 @@ AC_SUBST(NOWEB)
 
 AC_SET_MAKE
 
-ALL_ADAPTERS="gen-adapter emacs-adapter perl-adapter \
+ALL_ADAPTERS="gen-adapter emacs-adapter perl-adapter java-adapter \
               python-adapter tcltk-adapter"
 AC_SUBST(ALL_ADAPTERS)
 
@@ -66,8 +66,10 @@ dnl Which additional adapters to build?
 
 AC_ARG_WITH(java,
    [  --with-java             include java support for adapters],
-   JAVA=java)
+   JAVA=java
+   JAVA_ADAPTER=java-adapter)
 AC_SUBST(JAVA)
+AC_SUBST(JAVA_ADAPTER)
 
 AC_ARG_WITH(tcltk,
    [  --with-tcltk            include Tcl/Tk support (tcltk-adapter)],
@@ -85,7 +87,7 @@ AC_SUBST(EMACS_ADAPTER)
 AC_ARG_WITH(perl,
    [  --without-perl          include Perl support (perl-adapter)],
    if test "a$withval" = "ano"; then
-      PERL__ADAPTER=
+      PERL_ADAPTER=
    fi)
 AC_SUBST(PERL_ADAPTER)
 
@@ -207,6 +209,7 @@ AC_OUTPUT(
   adapters/wish-adapter/Makefile
   adapters/tcltk-adapter/Makefile
   adapters/perl-adapter/Makefile
+  adapters/java-adapter/Makefile
   adapters/gen-adapter/Makefile
   adapters/toolbus-adapter/Makefile
   adapters/emacs-adapter/Makefile

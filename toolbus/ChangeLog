@@ -19,6 +19,9 @@
 
 ------------------------------------------------------------------------------
 
+2001/08/29 (jong@cwi.nl)
+ * Reinstated support for java-adapter which got wiped out mysteriously.
+
 2001/08/23 (jong@cwi.nl)
  * Implemented support for reals in aterm/tifstoc.c
    (Closes bugreport #2 by Tommy de Roos)
