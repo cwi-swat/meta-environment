@@ -1,0 +1,66 @@
+module languages/asf/normalization/Layout
+
+imports languages/asf/normalization/RenamedTree
+imports languages/asf/normalization/RenamedASF
+imports basic/Booleans
+
+%% This module deals with ``Rewriting with Layout''
+%% 
+%% It introduces variables where abstraction from layout is
+%% necessary, and lifts explicit matches and construction from 
+%% layout to the toplevel (removing the arbitrary layout that occurs
+%% in equations)
+
+exports
+
+context-free syntax
+
+normalize-layout(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+fix-layout(Module)     -> Module {traversal(trafo,top-down,break)}
+fix-layout(Equation) -> Equation {traversal(trafo,top-down,break)}
+fix-layout(Condition) -> Condition {traversal(trafo,top-down,break)}
+
+context-free syntax
+
+match-layout(P-Tree) -> P-Tree {traversal(trafo,top-down,break)}
+build-layout(P-Tree) -> P-Tree {traversal(trafo,top-down,break)}
+
+context-free syntax
+
+find-layout(P-Tree,P-Args) -> P-Args {traversal(accu,top-down,break)}
+is-lexical-constructor(P-Tree) -> Boolean
+is-layout(P-Tree) -> Boolean
+space() -> P-Tree
+layout(P-Args) -> P-Tree
+variable-layout() -> P-Tree
+
+variables
+
+"Symbols"[0-9]* -> P-Symbols	{strict}
+"Symbol"[0-9]*  -> P-Symbol	{strict}
+"Attr*"[0-9]* -> {P-Attr ","}*	{strict}
+"Args"[0-9]* -> P-Args		{strict}
+"Tree"[0-9]* -> P-Tree		{strict}
+"Tree*"[0-9]* -> {P-Tree ","}* 	{strict}
+"Tree+"[0-9]* -> {P-Tree ","}+ 	{strict}
+"Module"[0-9]* -> Module	{strict}
+"Equation"[0-9]* -> Equation	{strict}
+"Condition"[0-9]* -> Condition	{strict}
+"Cond+"[0-9]* -> {Condition ","}+	{strict}
+"Lhs"[0-9]* -> P-Tree 		{strict}
+"Rhs"[0-9]* -> P-Tree 		{strict}
+
+variables
+
+"_Symbols"[0-9]* -> P-Symbols	{wild}
+"_Symbol"[0-9]*  -> P-Symbol	{wild}
+"_Attr*"[0-9]* -> {P-Attr ","}*	{wild}
+"_Args"[0-9]* -> P-Args		{wild}
+"_Tree*"[0-9]* -> {P-Tree ","}* {wild}
+"_Attrs"[0-9]* -> P-Attributes 	{wild}
+"_Tree"[0-9]* -> P-Tree		{wild}
