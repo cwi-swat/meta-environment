@@ -67,6 +67,7 @@ typedef ATerm language;
  */
 
 void  SGinitParser(ATbool toolbus_mode);
+void  SG_InitPTGlobals();
 void  SGshowMode(void);
 
 ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
