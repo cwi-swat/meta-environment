@@ -26,6 +26,7 @@ public class MetaStudio
   private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
   private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
   private static final String PREF_GRAPHPANE_BACKGROUND = "graphpane.background";
+  private static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
   private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
 
   private static final String PREF_TOOLBAR_OPEN_MODULE = "toolbar.open-module";
@@ -400,12 +401,21 @@ public class MetaStudio
     }
     */
 
-    scaleBox = new JComboBox(SCALE) {
+    String scaleList = Preferences.getString(PREF_GRAPHPANE_SCALES);
+    Vector scales = new Vector();
+    StringTokenizer t = new StringTokenizer(scaleList, ",");
+    while (t.hasMoreTokens()) {
+      String scale = t.nextToken();
+      scales.add(scale);
+    }
+
+    scaleBox = new JComboBox(scales) {
       public Dimension getMaximumSize() {
 	return getPreferredSize();
       }
     };
-    scaleBox.setSelectedItem("100%");
+    scaleBox.setSelectedItem(Preferences.getString(PREF_GRAPHPANE_SCALES+".default"));
+
     //scaleBox.setEditable(true);
     ActionListener listener = new ActionListener() {
       public void actionPerformed(ActionEvent event)

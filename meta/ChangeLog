@@ -1,11 +1,14 @@
 # $Id$
 
+2002/16/04 <olivierp@cwi.nl>
+ * Introduced flexible scaling (graphpane.scales[.default] properties)
+
+2002/03/04 <olivierp@cwi.nl>
+ * Added new user interface (MetaStudio), add --with-metastudio to activate
+
 2002/22/03 (jurgenv@cwi.nl)
  * Removed superfluous tool 'parse-sdf2'; a simpler sglr wrapper with
    the same name is located in the sglr package.
-
-Wed Apr  3 15:35:50 CEST 2002 <olivierp@cwi.nl>
- * Added new user interface (MetaStudio), add --with-metastudio to activate
 
 2002/22/03 (vandenbr@loria.fr)
   * Restructured the Sdf-Checker and moved to pgen and asf.
