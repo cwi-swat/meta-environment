@@ -1,5 +1,10 @@
 $Id$
 
+Wed Apr 21 10:45:32 CEST 2004 <jurgenv@cwi.nl>
+ * Removed #include <sys/sockets.h> from toolbus/main.c because it somehow
+   breaks the build on the newest Darwin release (7.3.0). This include was
+   not needed apparently, because the code still compiles on Linux.
+
 Fri Mar 19 08:24:48 CET 2004 <jong@cwi.nl>
  * toolbus/{main.c,script.l}:
    - add missing (int) casts to isspace functions
