@@ -1,5 +1,5 @@
 
-tool sdf-renaming is { command = "sdf-renaming" }
+tool sdf-renaming is { command = "sdf-renaming -TB_COLLECT_LOOP 1" }
 
 toolbus(SdfRenaming)
 
