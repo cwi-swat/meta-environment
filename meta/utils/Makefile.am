@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports
+bin_PROGRAMS       = meta-paths
 bin_SCRIPTS        = ps-dot sdf2stats metascript
 
 data_DATA          = lang.types
@@ -16,12 +16,6 @@ CLEANFILES         = ps-dot sdf2stats
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
-                     -L$(ATERM)/lib -lATerm
-
-imports_SOURCES    = imports.c
-imports_LDADD      = libutils.a \
-                     -L$(SDF_SUPPORT)/lib -lSDFME \
-                     -L$(PT_SUPPORT)/lib -lmept \
                      -L$(ATERM)/lib -lATerm
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h

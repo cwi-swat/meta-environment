@@ -5,7 +5,6 @@ Makefile.in
 apply-function
 genamakefile
 genmakefile
-imports
 imports_mept
 insert-header
 insert-license
