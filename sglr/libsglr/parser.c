@@ -299,8 +299,8 @@ void SG_PostParse(void)
             sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset);
 
     fprintf(SG_log(), "Parse time: %.2fs\n", ptm);
-    fprintf(SG_log(), "Characters/second: %.0f\n", 
-       ptm < 1.0e-04 ? 0 : sg_tokens_read/ptm);
+    fprintf(SG_log(), "Characters/second: %.0f\n",
+            ptm < 1.0e-4 ? 0 : sg_tokens_read/ptm);
 
     fprintf(SG_log(), "Number of rejects: %ld\n", (long) sg_nr_rejects);
 
