@@ -5,7 +5,7 @@
 */
 
 tool text-editor is {
-  command = "editor"
+  command = EDITOR
 }
 
 process TextEditor(EditorType: term, EditorId: term) is
@@ -81,7 +81,7 @@ in
     rec-msg(ack-delete-chars(EditorId)).
     snd-ack-event(TE, delete(Fid, Location, Count))
   +
-    rec-event(TE, menu-event("Meta-Environment", "Parse", Fid)) .
+    rec-event(TE, menu-event("Meta-Environment", "Parse", Fid?)) .
     snd-msg(parse-buffer(EditorId)) .
     snd-ack-event(TE, menu-event("Meta-Environment", "Parse", Fid))
   +

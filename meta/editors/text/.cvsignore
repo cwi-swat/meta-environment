@@ -1,3 +1,9 @@
-Makefile.in
+.deps
+.libs
 Makefile
-editor
+Makefile.in
+emacs-editor
+gvim-editor
+libmeta_gvim.la
+meta.vim
+meta_gvim.lo

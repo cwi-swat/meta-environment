@@ -12,6 +12,6 @@ fi
 
 # Emacs ignores everything left to a double slash '//' in a path name.
 # Therefore we replace double occurences of '/' by a single slash.
-editor_el=`echo ${datadir}/editor.el | sed 's@//@/@g'`
+editor_el=`echo ${datadir}/meta.el | sed 's@//@/@g'`
 
 start-emacs $@ -initfile ${editor_el}

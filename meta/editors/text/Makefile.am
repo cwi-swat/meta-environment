@@ -1,32 +1,25 @@
-#    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
-#                        Amsterdam, The Netherlands.
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or (at
-#    your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#    General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-#    USA
-#
-#
 # $Id$
 
-EXTRA_DIST  = editor.el editor.sh.src text-editor.idef
+EXTRA_DIST		= meta.el text-editor.idef \
+			  meta.vim.src emacs-editor.src \
+			  text-editor.tif.c text-editor.tif.h
+CLEANFILES		= meta.vim emacs-editor
 
-bin_SCRIPTS = editor
-data_DATA   = editor.el text-editor.idef
+data_DATA		= text-editor.idef meta.el meta.vim
+bin_SCRIPTS		= emacs-editor
+bin_PROGRAMS		= gvim-editor
+lib_LTLIBRARIES		= libmeta_gvim.la
 
-CLEANFILES  = editor
+INCLUDES		= -I$(TOOLBUS)/include \
+			-DLIBDIR="\"$(libdir)\"" -DDATADIR="\"$(datadir)\""
+gvim_editor_SOURCES	= gvim-editor.c text-editor.tif.c
+gvim_editor_LDADD	= -L$(TOOLBUS)/lib -ltb -lATB \
+			  -L$(ATERM)/lib -lATerm
+libmeta_gvim_la_SOURCES	= meta_gvim.c
 
-% : %.sh.src Makefile
-	sed 's@__DATADIR__@$(datadir)@g' < $< > $@ &&\
-	chmod +x $@
+emacs-editor: emacs-editor.src
+	sed 's@__DATADIR__@$(datadir)@g' < $< > $@ \
+	&& chmod +x $@
+
+meta.vim: meta.vim.src
+	sed 's@__LIBDIR__@$(libdir)@g' < $< > $@
