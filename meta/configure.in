@@ -86,10 +86,22 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])
 AC_SUBST(GRAPH_SUPPORT)
 
-dnl Require sdf-support package
-AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
-   [  --with-sdf-support=DIR  sdf-support is in DIR])
-AC_SUBST(SDF_SUPPORT)
+dnl Require asf-support package
+
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
+AC_SUBST(ASF_SUPPORT)
+
+dnl Require asc-support package
+
+AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
+   [  --with-asc-support=DIR  asc-support is in DIR])
+AC_SUBST(ASC_SUPPORT)
+
+ASCINC=${ASC_SUPPORT}/include
+AC_SUBST(ASCINC)
+ASCLIB=${ASC_SUPPORT}/lib
+AC_SUBST(ASCLIB)
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
