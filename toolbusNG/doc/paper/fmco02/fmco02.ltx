@@ -1,14 +1,12 @@
-\documentclass{llncs}
+\documentclass[runningheads]{llncs}
  
 \usepackage[english]{babel}
 \usepackage{epsfig}
 \usepackage{url}
 \usepackage{alltt}
 \usepackage{xspace}
-%%\usepackage{fancyheadings}
 \usepackage{latexsym}
 \usepackage{graphics}
-%%\usepackage[dvips]{color}
 \usepackage{times}
 \usepackage{mathptm}
 \usepackage{verbatim}
@@ -25,19 +23,27 @@
 
 %%\newcommand{\note}[1]{{\bf Note}: {\it #1 }}
 
-\title{ToolBus: The Next Generation}
-\author{Hayco de Jong\inst{1} \and Paul Klint\inst{1,2}}
+\begin{document}
 
-\institute{
-  Centrum voor Wiskunde en Informatica, \\
-  \texttt{\{Hayco.de.Jong,Paul.Klint\}@cwi.nl}
+\pagestyle{headings}
+
+\mainmatter
+
+\title{ToolBus: the Next Generation}
+
+\titlerunning{ToolBus: the Next Generation}
+
+\author{Hayco de Jong\inst{1}
+\and Paul Klint\inst{1,2}}
+
+\institute{Centrum voor Wiskunde en Informatica,\\
+\email{\{Hayco.de.Jong,Paul.Klint\}@cwi.nl}
 \and
-  Informatics Institute,
-  University of Amsterdam,
-  The Netherlands
+Informatics Institute,
+University of Amsterdam,
+The Netherlands
 }
 
-\begin{document}
 \maketitle
  
 \begin{abstract}
@@ -91,7 +97,7 @@ new and has to be designed from scratch.
 programming environment}
 \end{figure}
 
-\subsection{One realization: the \asdf\ Meta-Environment}
+\subsection{One Realization: the \asdf\ Meta-Environment}
 
 The \asdf\ Meta-Environment~\cite{Klint93,BDHJJKKMOSVVV01} is an
 incarnation of the approach just described and covers both the interactive
@@ -106,7 +112,7 @@ maintain.  It had all the traits of a legacy system and was the
 primary motivation to enter the area of system and software
 renovation.
 
-\subsection{Towards a component-based architecture} \label{SEC:ME-history}
+\subsection{Towards a Component Based Architecture} \label{SEC:ME-history}
 
 We give a brief time line of the efforts to transform the old,
 monolithic, implementation of the Meta-Environment into a
@@ -326,7 +332,7 @@ Table~\ref{Tab:Tscript-features}.
 
 
 
-\section{An example: the Address Book Service}\label{Sec:example}
+\section{An Example: the Address Book Service}\label{Sec:example}
 
 To make the scenario from Figure~\ref{Fig:toolbus-scenario} more concrete,
 we describe the construction of an address book holding (name, address)
@@ -346,7 +352,7 @@ Each of these use cases can be described as a \TB\ process which,
 together with a process that explains how these use cases interact,
 form the \TB\ script describing our Address Book Service.
 
-\subsection{\TB\ processes for the Address Book Service}
+\subsection{\TB\ Processes for the Address Book Service}
 
 \paragraph{The \texttt{ADDRESSBOOK} process} tells the \TB\ that an
 instance of our \texttt{address-book} tool is to be executed, followed
@@ -483,7 +489,7 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-\subsection{\TB\ process for the User Interface}
+\subsection{\TB\ Process for the User Interface}
 
 Because users can connect at any time to the \TB\ to start a
 session with the Address Book Service, the \TB\ itself does not
@@ -839,7 +845,7 @@ how the recovery of \emph{tools} has to be organized. Most likely, we
 will add a limited undo request to the tool interface to recover from
 the last few operations carried out by a tool.
 
-\subsection{Call-by-value versus Call-by-reference}
+\subsection{Call-by-value Versus Call-by-reference}
 \label{Sec:value-ref}
 
 \paragraph{Background}
@@ -931,7 +937,7 @@ call-by-reference and then we come back to implications for the \TB\
 design. In particular, we will discuss channel-based transmission as
 already shown in Figure~\ref{Fig:toolbus-values}(b).
  
-\subsection{Related frameworks: Java RMI, RMI-IIOP and Java IDL}
+\subsection{Related Frameworks: Java RMI, RMI-IIOP and Java IDL}
 
 Given our needs and desires for a next generation \TB\, it is
 interesting to see what other solutions are applied in similar projects.
