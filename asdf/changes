@@ -65,16 +65,63 @@ still working although start would be set to zero!?!
 - Popup: Export Term parsetable
 - Popup: Export Eqs parsetable
 
-- ASDFEditor: TypeCheck
 
 - Evaluation of Action Semantic
+
+- Documentation
 
 - Description of concrete syntax in the Action env.
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
+- ASDFEditor: TypeCheck
+
 - modulo and division for integers is not supported by asf, maybe it
   should be implemented in the evaluator.
+
+> Følgende problemer har jeg fundet (det er slet ikke sikkert der kan
+> gøres noget ved dem alle sammen):
+>
+>
+> * Problemet med at hvis man parser men mangler en tom linie til sidst,
+>   så dør environmentet også.
+>
+> * Hvis man ændrer et modul sådan at det automatisk skal importere en
+>   fil der ikke findes så virker andet parse ikke (fair enough), og
+>   modulet mister alle sine imports i grafen. Modulet som ikke findes
+>   skulle gerne vises i grafen, så man har mulighed for at klikke på
+>   det og så oprette det (jvf. opførsel i Meta-Environment når man
+>   importerer ikke eksiterende modul).
+>
+> * Hvis et modul er importeret men ikke findes, så kan man ikke få en
+>   menu frem der giver mulighed for at skabe modulet.
+>
+> * Der skal stå Action Environment og ikke Meta-Environment i toppen af
+>   vinduet.
+>
+> * "Export equations" virker ikke.
+>
+> * Foretages der consistency check af termstore der loades af brugeren?
+>
+> * Grafen opdateres ikke når et modul lukkes.
+>
+> * Det virker som om at linien i bunden af vinduet ikke opdaters ofte
+>   nok. Fx. Står der stadigvæk "Parse succesful of Dec" selvom jeg har
+>   lukket editoren med Dec i.
+>
+> * Undersøg hvilken functionalitet fra ASF+SDF MetaEnv der kan
+>   genbruges (fx. delete module, add import etc.)
+>
+> * "Reduce and evaluate" virker ikke.
+
 --------------------- Changes: --------------------
+
+Mon, Oct 11
+Note:
+- asdf-modules.tb.src: Parse*, The second parse is now done before the
+  editor shows up. Not tested if reduce and evaluate works, put the
+  seems to do all right.
+
+
 
 Thu, Oct 07
 Note:
