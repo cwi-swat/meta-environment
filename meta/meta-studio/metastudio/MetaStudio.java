@@ -311,6 +311,33 @@ public class MetaStudio
 			  }
 		});
 
+    modulePopup.add(new AbstractAction("Close Module") {
+      public void actionPerformed(ActionEvent event) {
+        String option;
+        int choice = JOptionPane.showConfirmDialog(graphPane, 
+        "Do you want to recursively close the imported modules?");
+        
+        switch (choice) {
+          case 0: 
+            option = "recursive";
+            break;
+          case 1:
+            option = "top";
+            break;
+          default:
+            option = "???";
+        }
+        
+        if (choice != 2) {
+          Object[] values = moduleList.getSelectedValues();
+          for (int i = 0; i < values.length; i++) {
+            bridge.postEvent(
+              factory.make("close-module(<str>," + option + ")", (String) values[i]));
+           }
+          }
+        }
+    });
+    
 		modulePopup.add(new AbstractAction("Rename Module") {
 			public void actionPerformed(ActionEvent event) {
 				Object[] values = moduleList.getSelectedValues();

@@ -59,7 +59,8 @@ let
   SyntaxExt : str,
   SemanticsExt : str,
   TermExt : str,
-  EnvironmentName : str
+  EnvironmentName : str,
+  Recursive : term
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -121,6 +122,10 @@ in
     ) +
     ( rec-msg(ui-delete-module(ModName?)).
       snd-do(UI, delete-module(ModName))
+    ) +
+    ( rec-event(UI, close-module(ModName?,Recursive?)).
+      snd-msg(close-module(ModName, Recursive)).
+      snd-ack-event(UI, close-module(ModName, Recursive))
     ) +
     ( rec-event(UI,save-module(Str?)).
       snd-msg(save-module(Str)).
