@@ -1035,7 +1035,7 @@ MA_FunId MA_makeFunIdLexToCf(MA_Lexical lex)
 
 MA_VarId MA_makeVarIdLexToCf(MA_Lexical lex)
 {
-  return (MA_VarId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun21)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun21))), (ATerm)ATmakeAppl1(MA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun13, (ATerm)ATmakeAppl0(MA_afun63))))), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_VarId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun21)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun21))), (ATerm)ATmakeAppl0(MA_afun61)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1043,7 +1043,7 @@ MA_VarId MA_makeVarIdLexToCf(MA_Lexical lex)
 
 MA_ModId MA_makeModIdLexToCf(MA_Lexical lex)
 {
-  return (MA_ModId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56))), (ATerm)ATmakeAppl1(MA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun13, (ATerm)ATmakeAppl0(MA_afun63))))), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_ModId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun56))), (ATerm)ATmakeAppl0(MA_afun61)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */
@@ -1051,7 +1051,7 @@ MA_ModId MA_makeModIdLexToCf(MA_Lexical lex)
 
 MA_PropId MA_makePropIdLexToCf(MA_Lexical lex)
 {
-  return (MA_PropId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun64)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun64))), (ATerm)ATmakeAppl1(MA_afun6, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun13, (ATerm)ATmakeAppl0(MA_afun63))))), (ATerm)ATmakeList1((ATerm)lex));
+  return (MA_PropId)(ATerm)ATmakeAppl2(MA_afun0, (ATerm)ATmakeAppl3(MA_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(MA_afun59, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun63)))), (ATerm)ATmakeAppl1(MA_afun2, (ATerm)ATmakeAppl1(MA_afun3, (ATerm)ATmakeAppl0(MA_afun63))), (ATerm)ATmakeAppl0(MA_afun61)), (ATerm)ATmakeList1((ATerm)lex));
 }
 
 /*}}}  */

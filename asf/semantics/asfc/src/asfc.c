@@ -37,11 +37,12 @@
 /*{{{  global variables */
 
 ATbool run_verbose;
+ATbool output_muasf;
 
 char myname[] = "asfc";
 char myversion[] = "2.0";
 
-static char myarguments[] = "hi:n:o:vV";
+static char myarguments[] = "hi:mn:o:vV";
 
 
 /*}}}  */
@@ -53,13 +54,16 @@ static void usage(void)
   ATwarning(
             "Usage: %s [options]\n"
             "Options:\n"
-            "\t-h              display help information (usage)\n"
+            "\t-h              display this message\n"
             "\t-i filename     input equations from file (default stdin)\n"
+	    "\t-m              output muasf code         (default %s)\n"
             "\t-n name         name of the specification (obligatory)\n"
-            "\t-o filename     output to file (default stdout)\n"
+            "\t-o filename     output to file            (default stdout)\n"
             "\t-v              verbose mode\n"
             "\t-V              reveal program version (i.e. %s)\n",
-            myname, myversion);
+            myname, 
+	    output_muasf ? "on" : "off", 
+	    myversion);
   exit(0);
 }
 
@@ -80,11 +84,11 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
 {
   MA_Module muasf = asfToMuASF(name, equations);
 
-#ifndef OUTPUT_MUASF
+  if (output_muasf) {
+    return (PT_ParseTree) muasf;
+  }
+
   return muasfToC(muasf); 
-#else
-  return (PT_ParseTree) muasf;
-#endif
 }
 
 /*}}}  */
@@ -110,27 +114,28 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
 
   result = compile(moduleName, eqsList);
 
-#ifdef OUTPUT_MUASF
-  ATwriteToNamedBinaryFile( 
-    (ATerm) PT_makeParseTreeTree(
-      PT_makeSymbolsList(PT_makeSymbolSort("CProgram"), PT_makeSymbolsEmpty()), 
-      PT_makeTreeLayoutEmpty(),
-      (PT_Tree) result,
-      PT_makeTreeLayoutEmpty(),
-      0), output); 
-#else
-  if (!strcmp(output, "-")) {
-    fp = stdout;
+  if (output_muasf) {
+    ATwriteToNamedBinaryFile( 
+      (ATerm) PT_makeParseTreeTree(
+	PT_makeSymbolsList(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()), 
+	PT_makeTreeLayoutEmpty(),
+	(PT_Tree) result,
+	PT_makeTreeLayoutEmpty(),
+	0), output); 
   }
   else {
-    fp = fopen(output, "w");
-  }
-  if (fp == NULL) {
-    ATerror("Error: unable to open %s for writing\n", output);
-  }
+    if (!strcmp(output, "-")) {
+      fp = stdout;
+    }
+    else {
+      fp = fopen(output, "w");
+    }
+    if (fp == NULL) {
+      ATerror("Error: unable to open %s for writing\n", output);
+    }
 
-  ToC_code(result, fp , myversion);
-#endif
+    ToC_code(result, fp , myversion);
+  }
 
   return ATmake("snd-value(compilation-done)");
 }                              
@@ -150,6 +155,7 @@ int main(int argc, char *argv[])
   ATerm eqs;
 
   run_verbose = ATfalse;
+  output_muasf = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -176,7 +182,8 @@ int main(int argc, char *argv[])
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
       case 'v':  run_verbose = ATtrue;  break;
-      case 'i':  equations=optarg;         break;
+      case 'i':  equations=optarg;      break;
+      case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
       case 'V':  version();             break;

@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Jun 19 18:00:59 2001
+ * Generated at Wed Jul  4 14:43:02 2001
  */
 
 #ifndef __MuASF_dict_H
@@ -71,7 +71,6 @@ extern AFun MA_afun60;
 extern AFun MA_afun61;
 extern AFun MA_afun62;
 extern AFun MA_afun63;
-extern AFun MA_afun64;
 
 extern ATerm MA_patternPropIdLexToCf;
 extern ATerm MA_patternModIdLexToCf;
