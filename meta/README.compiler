@@ -1,0 +1,32 @@
+How to use the new ASF2C compiler.
+
+Add to your paths:
+/home/gipe/petr/bin 
+/home/gipe/petr/lib
+
+Create in the directory in which you start the new meta environment a
+file ".msm-paths". This file should contain paths to all directories
+containing the AsFix files of your specification.
+E.g.:
+/home/markvdb/AsFix2C/muASF-lists/
+/home/markvdb/AsFix2C/muASF-lists/trans/
+...
+
+Initialize the variable COMPILER_OUTPUT to the directory to which the
+C files must be written:
+setenv COMPILER_OUTPUT /home/markvdb/AsFix2C/muASF-lists/asfixfiles1
+
+Start the new Meta-Environment by "meta [-TB_PORT xxxx]"
+
+Read the specification by selecting "Add module" under "Specification".
+When the status is "idle" again, select the top module "Top" of the
+specification, click with the right mouse button and select in the
+pull down menu the entry "Compile module". After some time the status
+is idle again and a bunch of C files is generated in the directory
+"COMPILER_OUTPUT".
+
+By "gmake -f Makefile-Top" all C files of the specification are compiled
+and a executable "Top" is generated.
+
+If there are any problems contact Mark van den Brand
+(Mark.van.den.Brand@cwi.nl).
