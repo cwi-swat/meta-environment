@@ -44,6 +44,8 @@
 /* For cpu time calculation */
 #include <time.h>
 
+#include "reshuffle.h"
+
 #include <asc-support.h>
 #include <AsFix2src.h>
 
@@ -103,7 +105,8 @@ void set_output_dir(int cid, char *dirName)
 
   if (outputDirName == NULL) {
     ATerror("compiler: unable to allocate %d bytes\n", len);
-  } else {
+  }
+  else {
     strcpy(outputDirName, dirName);
   }
 }
@@ -113,9 +116,11 @@ get_output_dir(void)
 {
   if (outputDirName != NULL) {
     return outputDirName;
-  } else if (getenv("COMPILER_OUTPUT") != NULL) {
+  }
+  else if (getenv("COMPILER_OUTPUT") != NULL) {
     return getenv("COMPILER_OUTPUT");
-  } else {
+  }
+  else {
     return ".";
   }
 }
@@ -262,9 +267,9 @@ static ATerm expand_to_asfix(ATerm mod, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm generate_code(int cid, char *modname, ATerm module) */
+/*{{{  void generateCode(char *modname, ATerm module) */
 
-ATerm generate_code(int cid, char *modname, ATerm module)
+void generateCode(char *modname, ATerm module)
 {
   char *fname;
   ATerm expmod, reduct, cmod;
@@ -319,11 +324,31 @@ ATerm generate_code(int cid, char *modname, ATerm module)
   }
 
   free(fname);
-
-  return ATmake("snd-value(c-code-ready)");
 }
 
 /*}}}  */
+
+ATerm compile_module(int cid, char *moduleName, 
+                     ATerm syntax, ATerm equations)
+{
+  PT_ParseTree   pt;
+  SDF_SDF        sdf;
+  SDF_Definition definition;
+  SDF_ModuleList moduleList;
+  ASF_CondEquationList eqsList;
+
+  pt         = PT_makeParseTreeFromTerm(syntax);
+  sdf        = SDF_makeSDFFromTerm(
+                 PT_makeTermFromTree(PT_getParseTreeTree(pt)));
+  definition = SDF_getSDFDefinition(sdf);
+  moduleList = SDF_getDefinitionList(definition);
+  eqsList    = ASF_makeCondEquationListFromTerm(equations);
+
+  compileModules(moduleName, moduleList, eqsList);
+
+  return ATmake("snd-value(compilation-done)");
+}                              
+
 /*{{{  void usage(void) */
 
 /*
@@ -388,6 +413,9 @@ int main(int argc, char *argv[])
   AFinitExpansionTerms();
   AFinitAsFixPatterns();
   init_patterns();
+  PT_initPTApi();
+  SDF_initSDFApi();
+  ASF_initASFApi();
 
   c_rehash(INITIAL_TABLE_SIZE);
   register_all();

@@ -28,7 +28,9 @@ let
   COM           : asfc,
   OutputDir     : str,
   ModuleName    : str,
-  Tree          : term
+  Tree          : term,
+  Syntax        : term,
+  Equations     : term 
 in
   /* Start the compiler */
   execute(asfc, COM?) .
@@ -36,10 +38,10 @@ in
     rec-msg(compiler-output-dir(OutputDir?)).
     snd-do(COM, set-output-dir(OutputDir))
   +
-    rec-msg(generate-code(ModuleName?, Tree?)).
-    snd-eval(COM, generate-code(ModuleName, Tree)).
-    rec-value(COM, c-code-ready).
-    snd-msg(generate-code-done(ModuleName))
+    rec-msg(compile-module(ModuleName?, Syntax?, Equations?)) .
+    snd-eval(COM, compile-module(ModuleName, Syntax, Equations)) .
+    rec-value(COM, compilation-done) .
+    snd-msg(compilation-done(ModuleName))
   ) *
   delta
 endlet

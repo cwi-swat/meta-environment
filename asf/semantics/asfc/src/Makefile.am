@@ -25,15 +25,17 @@ include $(top_srcdir)/make_rules
 bin_PROGRAMS     = asfc
 data_DATA        = asfc.idef
 
-EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c
+EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c reshuffle.h
 
 CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
-asfc_SOURCES = asfc.c
+asfc_SOURCES = asfc.c reshuffle.c sdf2pt.c 
 asfc_LDADD   = asfc.tif.o \
                    -L../c-source  -lAsFix2C \
                    -L$(ASC_SUPPORT)/lib -lasc-support \
-                   -L$(PT_SUPPORT)/lib -lAsFix \
+                   -L$(PT_SUPPORT)/lib -lPT -lAsFix \
+                   -L$(SDF_SUPPORT)/lib -lSDF \
+                   -L$(ASF_SUPPORT)/lib -lASF \
                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES         = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include
