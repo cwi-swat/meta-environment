@@ -89,7 +89,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   {     
     MetaStudio studio = new MetaStudio(args);
     studio.bridge.run();
-    System.out.println("Thank you for using " + Preferences.getString("metastudio.name"));
   }
 
   //}}}

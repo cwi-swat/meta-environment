@@ -1,6 +1,12 @@
 package metastudio;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import metastudio.graph.Attribute;
 import metastudio.graph.AttributeList;
@@ -12,7 +18,8 @@ import metastudio.graph.Node;
 import metastudio.graph.NodeId;
 import metastudio.graph.NodeList;
 import metastudio.graph.Shape;
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermList;
 
 public class GraphWrapper
 {
