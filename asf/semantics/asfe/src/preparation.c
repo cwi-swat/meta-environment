@@ -520,6 +520,9 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   else if (PT_isTreeLexical(tree)) {
     result = lexicalToList(tree);
   }
+  else if (PT_isTreeBracket(tree)) {
+    result = prepareTerm(PT_getTreeBracketTree(tree), data);
+  }
   else if (PT_isTreeAppl(tree)) {
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
