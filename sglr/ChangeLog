@@ -1,5 +1,10 @@
 $Id$
 
+
+2002/10/29 (vinju@loria.fr)
+ * Removed implicit generation of ToolBus interfaces. *.tif.[ch] are
+   now in the repository and in the distributions
+
 2002/10/16 ({vandenbr,vinju}@loria.fr)
  * Fixed two bugs in restore-brackets tool.
 

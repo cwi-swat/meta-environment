@@ -158,11 +158,11 @@ static PT_Tree RestoreBracketsInTree(PT_Tree tree, parse_table *pt)
 
 static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, parse_table *pt)
 {
-  PT_Tree tree = PT_getParseTreeTree(pttree);
+  PT_Tree tree = PT_getParseTreeTop(pttree);
 
   PT_Tree newTree = RestoreBracketsInTree(tree, pt);
 
-  return PT_setParseTreeTree(pttree, newTree);
+  return PT_setParseTreeTop(pttree, newTree);
 }
 
 ATerm restore_brackets(int cid, ATerm term, ATerm tbl)

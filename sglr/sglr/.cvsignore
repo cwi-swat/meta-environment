@@ -1,6 +1,5 @@
 Makefile
 Makefile.in
 .deps
-*.o
-*.tif.[ch]
 sglr
+*.tifs

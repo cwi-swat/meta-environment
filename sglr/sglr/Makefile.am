@@ -3,7 +3,6 @@
 include ${top_srcdir}/make_rules
 
 EXTRA_DIST = sglr.idef
-CLEANFILES = sglr.tifs sglr.tif.[ch]
 
 INCLUDES = \
 	-I$(top_srcdir)/libsglr \
@@ -12,11 +11,11 @@ INCLUDES = \
 	-I$(ATERM)/include
 
 pkgdata_DATA = sglr.idef
-noinst_HEADERS = getopt.h
+noinst_HEADERS = getopt.h sglr.tif.h
 
 bin_PROGRAMS = sglr 
 
-sglr_SOURCES = sglr.tif.c sglr.tif.h sglr-main.c getopt.c getopt1.c
+sglr_SOURCES = sglr.tif.c sglr-main.c getopt.c getopt1.c
 sglr_LDADD = \
 	-L$(top_builddir)/libsglr -lsglr \
 	-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
