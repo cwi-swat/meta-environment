@@ -1171,7 +1171,7 @@ static ATerm lf_581(ATerm arg1, ATerm arg2);
 static Symbol lf_582sym;
 static ATerm lf_582(ATerm arg1);
 void
-register_CompilerB()
+register_Compiler()
 {
   lf_1sym =
     ATmakeSymbol
@@ -5741,7 +5741,7 @@ register_CompilerB()
 }
 
 void
-resolve_CompilerB()
+resolve_Compiler()
 {
 }
 static ATerm constant0 = NULL;
@@ -5802,7 +5802,7 @@ static ATerm constant54 = NULL;
 static ATerm constant55 = NULL;
 static ATerm constant56 = NULL;
 void
-init_CompilerB()
+init_Compiler()
 {
   ATprotect(&constant0);
   ATprotect(&constant1);
