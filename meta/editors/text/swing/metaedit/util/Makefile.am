@@ -6,4 +6,7 @@ JAVAROOT = ${top_builddir}/editors/text/swing
 javadir = ${prefix}/classes/metaedit/util
 
 java_JAVA = \
+	    FindReplaceDialog.java \
+	    FindReplaceEvent.java \
+	    FindReplaceListener.java \
 	    MenuBar.java

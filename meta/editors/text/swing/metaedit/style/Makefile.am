@@ -10,4 +10,5 @@ javadir = ${prefix}/classes/metaedit/style
 java_JAVA = \
 	    EditorStyle.java \
 	    Focuser.java \
+	    Highlighter.java \
 	    NormalStyle.java
