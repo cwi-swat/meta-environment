@@ -565,6 +565,11 @@ ATerm make_list(ATerm t)
 
 /*}}}  */
 
+/* The functions for applying traversal functions to children are 
+ * highly similar. Code cloning is done to prevent run-time checking
+ * of which type a traversal function has. This has a small but significant
+ * effect in run-time efficiency.
+ */
 /*{{{  static ATermList call_kids_trafo_list(funcptr trav, ATermList args) */
 
 static ATermList call_kids_trafo_list(funcptr trav, ATermList args, 
@@ -573,10 +578,10 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
   ATermList result = ATempty;
   ATerm el;
 
-  for(;!ATisEmpty(args);args = ATgetNext(args)) {
+  for (; !ATisEmpty(args); args = ATgetNext(args)) {
     el = call_using_list(trav,ATinsert(extra_args,ATgetFirst(args)));
     
-    if(el) {
+    if (el) {
       result = ATinsert(result, el);
     }
   }
@@ -787,6 +792,330 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
   }
 
   return (ATerm) ATmakeAppl2(tuplesym , arg0,arg1);
+}
+
+/*}}}  */
+
+/* Again, the same functions for traversal over children, but now with
+ * support for detecting a failure to rewrite anywhere. The code cloning
+ * is again justified by efficiency considerations.
+ */
+/*{{{  static ATermList call_kids_trafo_list(funcptr trav, ATermList args) */
+
+static ATermList call_kids_trafo_list_with_fail(funcptr trav, ATermList args, 
+						ATermList extra_args)
+{
+  ATermList result = ATempty;
+  ATerm el;
+  ATbool fail = ATtrue;
+
+  for (; !ATisEmpty(args); args = ATgetNext(args)) {
+    ATerm head = ATgetFirst(args);
+    el = call_using_list(trav,ATinsert(extra_args,head));
+    
+    if (el) {
+      fail = ATfalse;
+    }
+    else {
+      el = head;
+    }
+
+    result = ATinsert(result, el);
+  }
+
+  if (!fail) {
+    return ATreverse(result);
+  }
+  else {
+    return NULL;
+  }
+}
+/*}}}  */
+/*{{{  static ATermList call_kids_accu_list(funcptr trav, ATermList args,  */
+
+static ATerm call_kids_accu_list_with_fail(funcptr trav, ATermList args, 
+					   ATerm accu, ATermList extra_args)
+{
+  ATbool fail = ATtrue;
+
+  for(;!ATisEmpty(args); args = ATgetNext(args)) {
+    ATerm saved = accu;
+    accu = call_using_list(trav,ATinsert(ATinsert(extra_args, accu),
+					 ATgetFirst(args)));
+
+    if (accu != NULL) {
+      fail = ATfalse;
+    }
+    else {
+      accu = saved;
+    }
+  }
+
+  if (!fail) {
+    return accu;
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args,  */
+
+static ATerm call_kids_accutrafo_list_with_fail(funcptr trav, ATermList args, 
+						ATerm accu, 
+						ATermList extra_args)
+{
+  ATerm tuple;
+  ATermList result = ATempty;
+  ATerm el;
+  ATbool fail = ATtrue;
+
+  for(;!ATisEmpty(args); args = ATgetNext(args)) {
+    ATerm head = ATgetFirst(args);
+    tuple = call_using_list(trav,ATinsert(
+				  ATinsert(extra_args, accu), head));
+
+    if (tuple) {
+      fail = ATfalse;
+      el = ATgetArgument((ATermAppl) tuple, 0);
+      accu = ATgetArgument((ATermAppl) tuple, 1);
+    }
+    else {
+      el = head;
+    }
+
+    if (el) {
+      result = ATinsert(result, el);
+    }
+  }
+
+  result = ATreverse(result);
+
+  if (!fail) {
+    return (ATerm) ATmakeAppl2(tuplesym, (ATerm) result,accu);
+  }
+  return NULL;
+}
+
+/*}}}  */
+
+/*{{{  ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args) */
+
+ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
+{
+  int type = ATgetType(arg0);
+  ATerm annos = keep_annotations ? ATgetAnnotations(arg0) : NULL;
+  ATbool fail = ATtrue;
+
+  if (type == AT_APPL) {
+    Symbol sym;
+    funcptr func;
+    ATerm arg[33];
+    int idx;
+    ATermList args;
+    ATermList list;
+    ATerm save;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      arg[idx] = ATgetFirst(list);
+      save =arg[idx];
+
+      switch(ATgetType(arg[idx])) {
+	case AT_APPL:
+	  arg[idx] = call_using_list(trav, ATinsert(extra_args,arg[idx]));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  arg[idx] = (ATerm) call_kids_trafo_list_with_fail(trav, 
+							    (ATermList)arg[idx],
+							    extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_trafo\n");
+	  return NULL;
+      }
+
+      if (arg[idx] != NULL) {
+	fail = ATfalse;
+      }
+      else {
+	arg[idx] = save;
+      }
+    }
+   
+    if (!fail) { 
+      sym = get_sym(arg0);
+      func = lookup_func_given_sym(sym);
+
+      if (func) {
+	arg0 = call_using_array(func, arg, ATgetLength(args));
+      }
+      else {
+	arg0 = (ATerm) ATmakeApplArray(ATgetAFun((ATermAppl) arg0), arg); 
+      }
+    }
+  }
+  else if (type == AT_LIST) {
+    arg0 = (ATerm) call_kids_trafo_list_with_fail(trav, 
+						  (ATermList) arg0, extra_args);
+
+    if (arg0) {
+      fail = ATfalse;
+    }
+  }
+
+  if (arg0 != NULL && annos != NULL) {
+    arg0 = ATsetAnnotations(arg0, annos);
+  }
+
+  if (!fail) {
+    return arg0;
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args) */
+
+ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg0, ATerm arg1, 
+			       ATermList extra_args)
+{
+  int type = ATgetType(arg0);
+  ATbool fail = ATtrue;
+  ATerm save;
+
+  if (type == AT_APPL) {
+    int idx;
+    ATermList args;
+    ATermList list;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx=0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      ATerm head = ATgetFirst(list);
+      save = arg1;
+
+      switch(ATgetType(head)) {
+	case AT_APPL:
+	  arg1 = call_using_list(trav, 
+				 ATinsert(ATinsert(extra_args, arg1),head));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  arg1 = call_kids_accu_list_with_fail(trav, 
+					       (ATermList) head, 
+					       arg1, extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_accu\n");
+	  return NULL;
+      }
+
+      if (arg1) {
+	fail = ATfalse;
+      }
+      else {
+	arg1 = save;
+      }
+    }
+  }
+  else if (type == AT_LIST) {
+    arg1 = call_kids_accu_list(trav, (ATermList) arg0, arg1, extra_args);
+
+    if (arg1) {
+      fail = ATfalse;
+    }
+  }
+
+  if (!fail) {
+    return arg1;
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATerm call_kids_accutrafo(funcptr trav, Symbol tuple, ATerm arg0, ATerm arg1,  */
+
+ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1, 
+				    ATermList extra_args)
+{
+  int type = ATgetType(arg0);
+  ATerm annos = keep_annotations ? ATgetAnnotations(arg0) : NULL;
+  ATbool fail = ATtrue;
+
+  if (type == AT_APPL) {
+    int idx;
+    ATermList args;
+    Symbol sym;
+    funcptr func;
+    ATerm arg[33];
+    ATermList list;
+    ATerm tuple;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      arg[idx] = ATgetFirst(list);
+
+      switch(ATgetType(arg[idx])) {
+	case AT_APPL:
+	  tuple = call_using_list(trav, ATinsert(
+				 ATinsert(extra_args, arg1),arg[idx]));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  tuple = call_kids_accutrafo_list_with_fail(trav, 
+						     (ATermList) arg[idx], arg1,
+						     extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_accutrafo\n");
+	  return NULL;
+      }
+
+      if (tuple) {
+	fail = ATfalse;
+	arg[idx] = ATgetArgument((ATermAppl) tuple, 0);
+	arg1 = ATgetArgument((ATermAppl) tuple, 1);
+      }
+    }
+
+    if (!fail) {
+      sym = get_sym(arg0);
+      func = lookup_func_given_sym(sym);
+
+      if (func) {
+	arg0 = call_using_array(func, arg, ATgetLength(args));
+      }
+      else {
+	arg0 = (ATerm) ATmakeApplArray(ATgetAFun((ATermAppl) arg0), arg); 
+      }
+    }
+  }
+  else if (type == AT_LIST) {
+     arg0 = call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
+
+     if (arg0) {
+       fail = ATfalse;
+     }
+  }
+
+  if (arg0 != NULL && annos != NULL) {
+    arg0 = ATsetAnnotations(arg0, annos);
+  }
+
+  if (!fail) {
+    return (ATerm) ATmakeAppl2(tuplesym , arg0,arg1);
+  }
+
+  return NULL;
 }
 
 /*}}}  */

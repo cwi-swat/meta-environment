@@ -1,4 +1,13 @@
-$Id$
+
+Tue Jun  8 16:45:48 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 2.0
+ * Added new traversal run-time functions, copies of the originals that can
+   detect success and failure of rewriting. This functionality is used by the
+   compiled code for traversal functions that have bottom-up, break
+   functionality.
+
+Fri May  7 11:19:43 CEST 2004 <jurgenv@cwi.nl>
+ * 1.8 was released before, so bumped to 1.9 before release
 
 Mon May  3 19:36:50 CEST 2004 <jurgenv@cwi.nl>
  * Had to bring builtin-io.c up-to-date with all kinds of changes in 

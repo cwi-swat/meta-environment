@@ -2,7 +2,7 @@ dnl $Id$
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(asc-support, 1.8)
+AM_INIT_AUTOMAKE(asc-support, 2.0)
 AC_PREREQ(2.59)
 
 dnl Which compiler to use?

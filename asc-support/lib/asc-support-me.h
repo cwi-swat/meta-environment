@@ -286,6 +286,12 @@ extern ATerm call_kids_accu(funcptr trav, ATerm arg, ATerm accu,
 			    ATermList extra_args);
 extern ATerm call_kids_accutrafo(funcptr trav, ATerm arg, ATerm accu, 
 				 ATermList extra_args);
+extern ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg, 
+				       ATermList extra_args);
+extern ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg, ATerm accu, 
+				      ATermList extra_args);
+extern ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg, ATerm accu, 
+					   ATermList extra_args);
 
 extern ATerm correct_tuple(ATerm arg, ATerm rhs);
 
