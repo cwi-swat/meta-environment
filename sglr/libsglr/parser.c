@@ -546,10 +546,9 @@ ATbool SG_CheckLookAhead(lookahead las)
     ATerm la = ATgetFirst(las);
 
     if(ATmatch(la, "look(char-class(<term>),[<list>])", &cc, &morelooks)) {
-
-      IF_DEBUG(ATfprintf(SG_log(), "Lookahead: character %d in %t\n", c, cc));
       /*  is the current lookahead token in this char class?  */
       if(SG_CharInCharClass(c, cc)) {
+        IF_DEBUG(ATfprintf(SG_log(), "Lookahead: character %d in %t\n", c, cc));
         permitted = ATisEmpty(morelooks)
         ? ATfalse                       /*  we have a match!  */
         : SG_CheckLookAhead(morelooks); /*  more to check     */
