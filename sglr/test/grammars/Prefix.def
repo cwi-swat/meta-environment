@@ -8,4 +8,5 @@
 
     sorts A B
     context-free syntax
+      a         -> A
       "f" ( A ) -> B   

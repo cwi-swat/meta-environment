@@ -38,7 +38,7 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
       SG_Eager_AFun, SG_Uneager_AFun,
       SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
-      SG_Action_AFun, SG_Goto_AFun, SG_PT3_AFun, SG_PT4_AFun,
+      SG_Action_AFun, SG_Goto_AFun, SG_PT5_AFun,
       SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
       SG_ParseTreeAF1_AFun, SG_ParseError_AFun, SG_EOF_Error_AFun,
       SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Node_AFun,
@@ -83,8 +83,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_CharClass_AFun,   ATmakeAFun(SG_CHARCLASS_AFUN,   1, ATfalse));
   SG_AFUN_INIT(SG_Action_AFun,      ATmakeAFun(SG_ACTION_AFUN,      2, ATfalse));
   SG_AFUN_INIT(SG_Goto_AFun,        ATmakeAFun(SG_GOTO_AFUN,        2, ATfalse));
-  SG_AFUN_INIT(SG_PT3_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  3, ATfalse));
-  SG_AFUN_INIT(SG_PT4_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  4, ATfalse));
+  SG_AFUN_INIT(SG_PT5_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  5, ATfalse));
   SG_AFUN_INIT(SG_StateRec_AFun,    ATmakeAFun(SG_STATEREC_AFUN,    3, ATfalse));
   SG_AFUN_INIT(SG_Label_AFun,       ATmakeAFun(SG_LABEL_AFUN,       2, ATfalse));
 
@@ -1015,12 +1014,10 @@ void SG_RemoveParseTable(language L)
 
 parse_table *SG_BuildParseTable(ATermAppl t)
 {
-#define SG_OLDPTFORMAT  "<int>,[<list>],states([<list>])"
-#define SG_PTFORMAT     SG_OLDPTFORMAT",priorities([<list>])"
-
   ATermList   prods, states;
   register ATermList sts, prios = ATempty;
   state       initial_state;
+  int         version_nr;
   parse_table *pt = NULL;
   AFun        ptfun;
   size_t      goto_entries = 0, action_entries = 0;
@@ -1030,16 +1027,22 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
   ptfun = ATgetAFun(t);
 
-  if(ptfun != SG_PT3_AFun && ptfun != SG_PT4_AFun) {
+  if(ptfun != SG_PT5_AFun) {
     ATwarning("parse table format error\n");
     return NULL;
   }
 
-  initial_state = ATgetInt((ATermInt) ATgetArgument(t, 0));
-  prods = (ATermList) ATgetArgument(t, 1);
-  states = (ATermList) ATgetArgument(ATgetArgument(t, 2), 0);
-  if(ptfun == SG_PT4_AFun)
-    prios = (ATermList) ATgetArgument(ATgetArgument(t, 3), 0);
+  version_nr = ATgetInt((ATermInt) ATgetArgument(t, 0));
+
+  if (version_nr != 4) {
+    ATwarning("versions of SGLR and parse table generator do not match\n");
+    return NULL;
+  }
+
+  initial_state = ATgetInt((ATermInt) ATgetArgument(t, 1));
+  prods = (ATermList) ATgetArgument(t, 2);
+  states = (ATermList) ATgetArgument(ATgetArgument(t, 3), 0);
+  prios = (ATermList) ATgetArgument(ATgetArgument(t, 4), 0);
 
   for(sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
     ATerm     curstate = ATgetFirst(sts);
