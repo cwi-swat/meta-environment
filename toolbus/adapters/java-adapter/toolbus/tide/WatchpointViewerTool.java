@@ -70,7 +70,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 
 		try
 		{
-			patTriple = new ATermPattern("[<int>,<str>,<list>]");
+			patTriple = world.makePattern("[<int>,<str>,<list>]");
 		}
 		catch (ParseError e)
 		{
@@ -228,7 +228,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 		try
 		{
 			createWatchpoint(dap, procs,
-				ATermParser.makeSimple("[exec-state,at,stop]"));
+			        world.makeSimple("[exec-state,at,stop]"));
 		}
 		catch (ParseError e)
 		{
@@ -279,6 +279,7 @@ class WatchpointDialog extends Dialog implements ActionListener
 {
 	private	Label			text_label;
 	private	TextField		text_entry;
+	private World world;
 	private ATermPattern	patternSingleProcess;
 	private ATermPattern	patternWatchVar;
 	private	ATerm		termAlways;
@@ -289,15 +290,16 @@ class WatchpointDialog extends Dialog implements ActionListener
 	public WatchpointDialog(RemoteDebugAdapterInfo dapInfo, ATerm procs)
 	{
 		super(new Frame(), "Watchpoint Dialog");
+		world = procs.getWorld();
 
 		this.procs = procs;
 		this.dapInfo = dapInfo;
 
 		try
 		{
-			patternSingleProcess = new ATermPattern("[<int>]");
-			patternWatchVar = new ATermPattern("[watch(var(<str>))]");
-			termAlways = ATermParser.makeSimple("always");
+			patternSingleProcess = world.makePattern("[<int>]");
+			patternWatchVar = world.makePattern("[watch(var(<str>))]");
+			termAlways = world.makeSimple("always");
 		}
 		catch (ParseError e)
 		{

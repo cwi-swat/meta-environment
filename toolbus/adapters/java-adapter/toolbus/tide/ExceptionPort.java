@@ -49,7 +49,7 @@ public class ExceptionPort extends DebugPort
   private void init()
   {
     try {
-      patternPort = new ATermPattern("[exception,<term>,<str>]");
+      patternPort = ATerm.the_world.makePattern("[exception,<term>,<str>]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

@@ -10,15 +10,26 @@ public class ATermIntImpl extends ATermImpl
 {
   private int val;
 
-  public ATermIntImpl(int v, ATermImpl anno)	{ super(anno); val = v;	}
-  public ATermIntImpl(int v)		{ this(v, null);	}
-  public Object clone() {
+  public ATermIntImpl(World world, int v, ATermImpl anno)
+  { 
+    super(world, anno);
+    val = v;
+  }
+
+  public ATermIntImpl(World world, int v)
+  { 
+    this(world, v, null);
+  }
+
+  public Object clone() 
+  {
     ATermIntImpl i = (ATermIntImpl)super.clone();
     i.val = val;
     return i;
   }
 
-  public boolean equals(Object obj) {
+  public boolean equals(Object obj) 
+  {
     if(obj instanceof ATermIntImpl)
       return val == ((ATermIntImpl)obj).val && super.equals(obj);
     return false;
@@ -27,7 +38,6 @@ public class ATermIntImpl extends ATermImpl
   public int hashCode()			{ return val;	}
   public int getType()			{ return ATermImpl.INT; }
   public int getInt()			{ return val;	}
-  public void setInt(int v)		{ val = v;	}
 
   public void print(PrintWriter w) {
     w.print(val);

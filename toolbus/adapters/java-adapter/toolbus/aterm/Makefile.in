@@ -26,23 +26,21 @@ DISTFILES	= Makefile.in aterm-size $(SOURCE)
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/aterm
 
-SOURCE		= AFun.java AsFix.java ATermImpl.java ATermsImpl.java \
+SOURCE	= World.java AFun.java AsFix.java ATermImpl.java ATermsImpl.java \
 		ATermApplImpl.java ATermIntImpl.java ATermListImpl.java \
 		ATermPlaceholderImpl.java ATermRealImpl.java \
 		ATerm.java ATerms.java ATermAppl.java ATermInt.java \
 		ATermList.java ATermPlaceholder.java ATermReal.java \
-		ATermChannel.java ATermParser.java \
-		ATermPattern.java ParseError.java \
+		ATermChannel.java ATermPattern.java ParseError.java \
 		ATermSize.java ATest.java
-CLASSES		= AFun.class AsFix.class ATermImpl.class ATermsImpl.class \
+CLASSES	= World.class AFun.class AsFix.class ATermImpl.class ATermsImpl.class \
 		ATermApplImpl.class ATermIntImpl.class ATermListImpl.class \
 		ATermPlaceholderImpl.class ATermRealImpl.class \
 		ATerm.class ATerms.class ATermAppl.class ATermInt.class \
 		ATermList.class ATermPlaceholder.class ATermReal.class \
-		ATermChannel.class ATermParser.class \
-		ATermPattern.class ParseError.class \
+		ATermChannel.class ATermPattern.class ParseError.class \
 		ATermSize.class ATest.class InputChannel.class \
-		TestFailedException.class DummyEntry.class
+		TestFailedException.class
 PROGRAMS	= aterm-size
 
 all:	${CLASSES}

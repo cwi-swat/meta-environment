@@ -7,17 +7,51 @@ public class ATermAppl extends ATerm
 {
   ATermApplImpl appl = null;
 
-  //{ private void update(ATermApplImpl ap)
+
+  //{ protected ATermAppl(ATermApplImpl ap)
+
+  protected ATermAppl(ATermApplImpl ap)
+  {
+    super(ap.getWorld());
+    intern(ap);
+  }
+
+  //}
+  //{ protected ATermAppl(World world)
+
+  /**
+    * Create a new ATermAppl object that is initially empty.
+    */
+
+  protected ATermAppl(World world)
+  {
+    super(world);
+  }
+
+  //}
+  //{ public ATermAppl(World world, String fun)
+
+  /**
+   *
+   */ 
+
+  public ATermAppl(World world, String fun)
+  {
+    this(world, fun, new ATerms(world));
+  }
+  //}  
+
+  //{ protected void intern(ATermApplImpl ap)
 
   /**
     * Update this reference to point to a term equal to {\tt ap}.
     */
 
-  private void update(ATermApplImpl ap)
+  protected void intern(ATermApplImpl ap)
   {
     if(appl != null)
       appl.decreaseRef();
-    appl = (ATermApplImpl)ap.unique();
+    appl = (ATermApplImpl)world.intern(ap);
     appl.increaseRef();
   }
 
@@ -39,60 +73,37 @@ public class ATermAppl extends ATerm
 
   //}
 
-  //{ public ATermAppl(ATermApplImpl ap)
+  //{ public ATermAppl(World world, String fun, ATerms args)
 
-  public ATermAppl(ATermApplImpl ap)
+  public ATermAppl(World world, String fun, ATerms args)
   {
-    update(ap);
+    super(world);
+    intern(new ATermApplImpl(world, fun, args.getATermsImpl()));
   }
 
   //}
-  //{ public ATermAppl(String fun)
-
-  /**
-   *
-   */ 
-
-  public ATermAppl(String fun)
-  {
-    this(fun, new ATerms());
-  }
-  
-  //{ public ATermAppl(String fun, ATerms args)
-
-  public ATermAppl(String fun, ATerms args)
-  {
-    update(new ATermApplImpl(fun, args.getATermsImpl()));
-  }
-
-  //}
-  //{ public ATermAppl(String fun, ATerms args, boolean isquoted)
-
-  public ATermAppl(String fun, ATerms args, boolean isquoted)
-  {
-    update(new ATermApplImpl(fun, args.getATermsImpl(), isquoted));
-  }
-
-  //}
-  //{ public ATermAppl(String fun, ATerms args, ATerm anno)
+  //{ public ATermAppl(World world, String fun, ATerms args, ATerm anno)
 
   /**
     * Construct a new ATermAppl object which is annotated.
     */
 
-  public ATermAppl(String fun, ATerms args, ATerm anno)
+  public ATermAppl(World world, String fun, ATerms args, ATerm anno)
   {
-    update(new ATermApplImpl(fun, args.getATermsImpl(), 
+    super(world);
+    intern(new ATermApplImpl(world, fun, args.getATermsImpl(), 
 			anno == null ? null : anno.getATermImpl()));
   }
 
   //}
-  //{ public ATermAppl(String fun, ATerms args, boolean isquoted, ATerm anno)
+  //{ public ATermAppl(World world, String fun, ATerms args, ATerm anno, iq)
 
-  public ATermAppl(String fun, ATerms args, boolean isquoted, ATerm anno)
+  public ATermAppl(World world, String fun, ATerms args, ATerm anno, 
+		   boolean isquoted)
   {
-    update(new ATermApplImpl(fun, args.getATermsImpl(),
-			 isquoted, anno == null ? null : anno.getATermImpl()));
+    super(world);
+    intern(new ATermApplImpl(world, fun, args.getATermsImpl(),
+			 anno == null ? null : anno.getATermImpl(), isquoted));
   }
 
   //}
@@ -104,9 +115,8 @@ public class ATermAppl extends ATerm
 
   public void setAnno(ATerm a)
   {
-    ATermApplImpl val = (ATermApplImpl)appl.clone();
-    val.setAnno(a == null ? null : a.getATermImpl());
-    update(val);
+    intern(new ATermApplImpl(world, appl.getFun(), appl.getArgs(), 
+			     a == null ? null : a.getATermImpl()));
   }
 
   //}
@@ -140,7 +150,7 @@ public class ATermAppl extends ATerm
 
   public void setFun(String fun)
   {
-    update(new ATermApplImpl(fun, appl.getArgs()));
+    intern(new ATermApplImpl(world, fun, appl.getArgs()));
   }
 
   //}
@@ -148,7 +158,7 @@ public class ATermAppl extends ATerm
 
   public void setFun(String fun, boolean isquoted)
   {
-    update(new ATermApplImpl(fun, appl.getArgs(), isquoted));
+    intern(new ATermApplImpl(world, fun, appl.getArgs(), appl.getAnno(), isquoted));
   }
 
   //}
@@ -156,9 +166,9 @@ public class ATermAppl extends ATerm
 
   public void setArgs(ATerms args)
   {
-    update(new ATermApplImpl(appl.getFun(), args.getATermsImpl(), 
-		appl.isQuoted(), this.getAnno() == null ? null : 
-                              this.getAnno().getATermImpl()));
+    intern(new ATermApplImpl(world, appl.getFun(), args.getATermsImpl(), 
+			     this.getAnno() == null ? null : 
+			     this.getAnno().getATermImpl(), appl.isQuoted()));
   }
 
   //}

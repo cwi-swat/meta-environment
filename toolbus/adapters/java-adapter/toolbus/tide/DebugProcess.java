@@ -31,7 +31,7 @@ class DebugProcess
   int rule_id = -1;
   DebugPort port = null;
   private Hashtable aliases = new Hashtable(5);
-  
+
   //{ static public int execStateTerm2Int(ATerm es)
 
   /**
@@ -66,13 +66,14 @@ class DebugProcess
 
   static public ATerm execStateInt2Term(int es)
   {
+    World world = ATerm.the_world;
     switch(es) {
-      case ES_STOP:             return new ATermAppl("stop");
-      case ES_RUN:              return new ATermAppl("run");
-      case ES_SINGLE_STEP:      return new ATermAppl("single-step");
-      case ES_STEP_OVER:        return new ATermAppl("step-over");
-      case ES_RUN_UNTIL_PARENT: return new ATermAppl("run-until-parent");
-      case ES_ALL:              return new ATermAppl("all");
+      case ES_STOP:             return world.makeAppl("stop");
+      case ES_RUN:              return world.makeAppl("run");
+      case ES_SINGLE_STEP:      return world.makeAppl("single-step");
+      case ES_STEP_OVER:        return world.makeAppl("step-over");
+      case ES_RUN_UNTIL_PARENT: return world.makeAppl("run-until-parent");
+      case ES_ALL:              return world.makeAppl("all");
     }
     throw new IllegalArgumentException("illegal exec-state: " + es);
   }

@@ -7,49 +7,62 @@ public class ATerms extends ATerm
 {
   ATermsImpl t;
 
-  //{ public ATerms(ATermsImpl term)
+  //{ protected ATerms(ATermsImpl term)
 
-  public ATerms(ATermsImpl term)
+  protected ATerms(ATermsImpl term)
   {
+    super(term.getWorld());
     if(term == null)
       throw new NullPointerException();
-    update(term);
+    intern(term);
   }
 
   //}
-  //{ public ATerms()
+  //{ protected ATerms(World world, int dummy)
+
+  protected ATerms(World world, int dummy)
+  {
+    super(world);
+  }
+
+  //}
+  //{ public ATerms(World world)
 
   /*
    * Construct the empty list.
+   * @deprecated Use World.empty instead.
    */
 
-  public ATerms()
+  public ATerms(World world)
   {
-    update(new ATermsImpl());
+    super(world);
+    intern(new ATermsImpl(world));
   }
-  
-  //{ public ATerms(ATerm f, ATerms n)
+  //}  
+  //{ public ATerms(World world, ATerm f, ATerms n)
 
-  public ATerms(ATerm f, ATerms n)
+  public ATerms(World world, ATerm f, ATerms n)
   {
-    update(new ATermsImpl(f.getATermImpl(), (ATermsImpl)n.getATermImpl()));
-  }
-
-  //}
-  //{ public ATerms(ATerm f, ATerms n, ATerm anno)
-
-  public ATerms(ATerm first, ATerms next, ATerm anno)
-  {
-    update(new ATermsImpl(first.getATermImpl(),(ATermsImpl)next.getATermImpl(),
-		      anno == null ? null : anno.getATermImpl()));
+    super(world);
+    intern(new ATermsImpl(world, f.getATermImpl(), (ATermsImpl)n.getATermImpl()));
   }
 
   //}
-  //{ public ATerms(ATerm f)
+  //{ public ATerms(World world, ATerm f, ATerms n, ATerm anno)
 
-  public ATerms(ATerm f)
+  public ATerms(World world, ATerm first, ATerms next, ATerm anno)
   {
-    this(f, new ATerms());
+    intern(new ATermsImpl(world, first.getATermImpl(),
+			  (ATermsImpl)next.getATermImpl(),
+			  anno == null ? null : anno.getATermImpl()));
+  }
+
+  //}
+  //{ public ATerms(World world, ATerm f)
+
+  public ATerms(World world, ATerm f)
+  {
+    this(world, f, new ATerms(world));
   }
 
   //}
@@ -61,8 +74,8 @@ public class ATerms extends ATerm
 
   public void setAnno(ATerm a)
   {
-    update(new ATermsImpl(t.getFirst(), t.getNext(), 
-	a == null ? null : a.getATermImpl()));
+    intern(new ATermsImpl(world, t.getFirst(), t.getNext(), 
+			  a == null ? null : a.getATermImpl()));
   }
 
   //}
@@ -75,13 +88,13 @@ public class ATerms extends ATerm
 
   //}
 
-  //{ private void update(ATermsImpl val)
+  //{ protected void intern(ATermsImpl val)
 
-  private void update(ATermsImpl val)
+  protected void intern(ATermsImpl val)
   {
     if(t != null)
       t.decreaseRef();
-    t = (ATermsImpl)val.unique();
+    t = (ATermsImpl)world.intern(val);
     t.increaseRef();
   }
 
@@ -145,7 +158,7 @@ public class ATerms extends ATerm
 
   public void setFirst(ATerm first)
   {
-    update(new ATermsImpl(first.getATermImpl(), t.getNext()));
+    intern(new ATermsImpl(world, first.getATermImpl(), t.getNext()));
   }
 
   //}
@@ -153,7 +166,7 @@ public class ATerms extends ATerm
 
   public void setNext(ATerms next)
   {
-    update(new ATermsImpl(t.getFirst(), next.getATermsImpl()));
+    intern(new ATermsImpl(world, t.getFirst(), next.getATermsImpl()));
   }
 
   //}
@@ -161,7 +174,7 @@ public class ATerms extends ATerm
 
   public void makeEmpty()
   {
-    update(new ATermsImpl());
+    intern(new ATermsImpl(world));
   }
 
   //}
@@ -238,7 +251,7 @@ public class ATerms extends ATerm
 
   public ATerms append(ATerm el)
   {
-    return concat(new ATerms(el));  
+    return concat(new ATerms(world, el));  
   }
 
   //}

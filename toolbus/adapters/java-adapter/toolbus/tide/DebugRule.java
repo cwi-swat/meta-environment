@@ -47,8 +47,8 @@ public class DebugRule
   static public ATerm lifeInt2Term(int lifetime)
   {
     if(lifetime == ONE_SHOT)
-      return new ATermAppl("one-shot");
-    return new ATermAppl("persistent");
+      return ATerm.the_world.makeAppl("one-shot");
+    return ATerm.the_world.makeAppl("persistent");
   }
 
   //}
@@ -101,8 +101,8 @@ public class DebugRule
   {
     try {
       // Initialize a bunch of term patterns
-      patternBreak = new ATermPattern("break");
-      patternWatch = new ATermPattern("watch(<term>)");
+      patternBreak = ATerm.the_world.makePattern("break");
+      patternWatch = ATerm.the_world.makePattern("watch(<term>)");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

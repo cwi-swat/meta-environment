@@ -35,10 +35,10 @@ public class ATermPattern extends Vector
     * a placeholder term.
     */
 
-  public ATermPattern(String pat)
+  public ATermPattern(World world, String pat)
     throws ParseError
   {
-    pattern = ATermParser.makeSimple(pat);
+    pattern = world.makeSimple(pat);
   }
 
   //}
@@ -72,10 +72,10 @@ public class ATermPattern extends Vector
     * Change the pattern represented by this object.
     */
 
-  public void setPattern(String pat)
+  public void setPattern(World world, String pat)
     throws ParseError
   {
-    pattern = ATermParser.makeSimple(pat);
+    pattern = world.makeSimple(pat);
   }
 
   //}
@@ -257,12 +257,12 @@ public class ATermPattern extends Vector
 	case ATermImpl.REAL:	return new ATermReal(((ATermRealImpl)pattern));
 	case ATermImpl.ATERMS:	return makeTerms((ATermsImpl)pattern, e);
 	case ATermImpl.LIST:	
-	  return new ATermList((ATerms)makeTerm(((ATermListImpl)pattern).getATermsImpl(), e));
+	  return pattern.getWorld().makeList((ATerms)makeTerm(((ATermListImpl)pattern).getATermsImpl(), e));
 
 	case ATermImpl.APPL:
 	  String fun = ((ATermApplImpl)pattern).getFun();
 	  ATermsImpl args = ((ATermApplImpl)pattern).getArgs();
-	  return new ATermAppl(fun, makeTerms(args, e));
+	  return pattern.getWorld().makeAppl(fun, makeTerms(args, e));
 
 	default:	// Must be a placeholder
 	  return makePlaceholder(((ATermPlaceholderImpl)pattern).getPlaceholderType(), e);
@@ -276,6 +276,7 @@ public class ATermPattern extends Vector
   protected ATerms makeTerms(ATermsImpl terms, Enumeration e)
   {
     Vector result = new Vector();
+    World world = terms.getWorld();
     
     while(!terms.isEmpty()) {
       if(terms.getFirst().getType() == ATermImpl.PLACEHOLDER) {
@@ -323,10 +324,10 @@ public class ATermPattern extends Vector
       terms = terms.getNext();
     }
 
-    ATerms R = new ATerms();
+    ATerms R = world.empty;
     
     for(int i=result.size()-1; i>=0; i--)
-      R = new ATerms((ATerm)result.elementAt(i), R);
+      R = world.makeATerms((ATerm)result.elementAt(i), R);
     
     return R;
   }
@@ -336,6 +337,8 @@ public class ATermPattern extends Vector
 
   protected ATerm makePlaceholder(ATermImpl type, Enumeration e)
   {
+    World world = type.getWorld();
+
     if(type.getType() == ATermImpl.APPL) {
       ATermApplImpl appl = (ATermApplImpl)type;
       String fun = appl.getFun();
@@ -343,11 +346,11 @@ public class ATermPattern extends Vector
       
       if(fun.equals("int") && args.isEmpty()) {
 	Integer Int = (Integer)e.nextElement();
-	return new ATermInt(Int.intValue());
+	return world.makeInt(Int.intValue());
       }
       if(fun.equals("real") && args.isEmpty()) {
 	Double D = (Double)e.nextElement();
-	return new ATermReal(D.doubleValue());
+	return world.makeReal(D.doubleValue());
       }
       if(fun.equals("appl") && args.isEmpty())
 	return (ATermAppl)e.nextElement();
@@ -356,15 +359,15 @@ public class ATermPattern extends Vector
       if(fun.equals("list") && args.isEmpty())
 	return (ATermList)e.nextElement();
       if(fun.equals("str") && args.isEmpty())
-	return new ATermAppl((String)e.nextElement(), new ATerms(), true);
+	return world.makeAppl((String)e.nextElement(), world.empty, null, true);
       if(fun.equals("fun")) {
 	if(args == null)
-	  return new ATermAppl((String)e.nextElement(), new ATerms());
+	  return world.makeAppl((String)e.nextElement(), world.empty);
 	else
-	  return new ATermAppl((String)e.nextElement(), makeTerms(args, e));
+	  return world.makeAppl((String)e.nextElement(), makeTerms(args, e));
       }
       if(fun.equals("placeholder")) {
-	return new ATermPlaceholder((ATerm)e.nextElement());
+	return world.makePlaceholder((ATerm)e.nextElement());
       }
     }
     throw new IllegalArgumentException("illegal placeholder: " + type.toString());

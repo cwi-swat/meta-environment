@@ -215,10 +215,11 @@ abstract public class DebugPort
 
   ATerm getWhenTerm()
   {
+    World world = ATerm.the_world;
     switch(when) {
-      case WHEN_BEFORE: return new ATermAppl("before", new ATerms());
-      case WHEN_AFTER:  return new ATermAppl("after",  new ATerms());
-      case WHEN_AT:     return new ATermAppl("at",     new ATerms());
+      case WHEN_BEFORE: return world.makeAppl("before");
+      case WHEN_AFTER:  return world.makeAppl("after");
+      case WHEN_AT:     return world.makeAppl("at");
     }
     throw new IllegalArgumentException("illegal when type: " + when);
   }

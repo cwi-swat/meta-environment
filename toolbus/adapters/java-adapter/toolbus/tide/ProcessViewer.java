@@ -80,16 +80,17 @@ public class ProcessViewer extends Frame
 
     //{ Initialize term patterns 
 
+    World world = ATerm.the_world;
     try {
-      patternShutdown = new ATermPattern("snd-event(tide-shutdown)");
+      patternShutdown = world.makePattern("snd-event(tide-shutdown)");
       patternToolCmdNone = 
-	new ATermPattern("snd-event(tool-cmd(<term>,<str>,[]))");
+	world.makePattern("snd-event(tool-cmd(<term>,<str>,[]))");
       patternToolCmdProcess = 
-	new ATermPattern("snd-event(tool-cmd(<term>,<str>," +
-			 "[proc(debug-adapter(<int>),<int>)]))");
+	world.makePattern("snd-event(tool-cmd(<term>,<str>," +
+			  "[proc(debug-adapter(<int>),<int>)]))");
       patternToolCmdAdapter =
-	new ATermPattern("snd-event(tool-cmd(<term>,<str>," +
-			 "[debug-adapter(<int>)]))");
+	world.makePattern("snd-event(tool-cmd(<term>,<str>," +
+			  "[debug-adapter(<int>)]))");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -1377,10 +1378,12 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void start(String mode)
   {
-    ATerm procs = new ATermAppl("all");
-    ATerms actions = new ATerms(new ATermAppl(mode));
+    World world = ATerm.the_world;
 
-    sendExecuteActions(procs, new ATermList(actions));
+    ATerm procs = world.makeAppl("all");
+    ATerms actions = world.makeATerms(world.makeAppl(mode));
+
+    sendExecuteActions(procs, world.makeList(actions));
   }
 
   //}
@@ -1392,10 +1395,12 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void stop()
   {
-    ATerm procs = new ATermAppl("all");
-    ATerms actions = new ATerms(new ATermAppl("stop"));
+    World world = ATerm.the_world;
 
-    sendExecuteActions(procs, new ATermList(actions));
+    ATerm procs = world.makeAppl("all");
+    ATerms actions = world.makeATerms(world.makeAppl("stop"));
+
+    sendExecuteActions(procs, world.makeList(actions));
   }
 
   //}
@@ -1594,11 +1599,12 @@ class ProcessPicture extends DebugProcess
 
   public void start(String mode)
   {
-    ATerms procs = new ATerms(new ATermInt(getPid()));
-    ATerms actions = new ATerms(new ATermAppl(mode));
+    World world = ATerm.the_world;
 
-    adapter.sendExecuteActions(new ATermList(procs), 
-			       new ATermList(actions));
+    ATerms procs = world.makeATerms(world.makeInt(getPid()));
+    ATerms actions = world.makeATerms(world.makeAppl(mode));
+
+    adapter.sendExecuteActions(world.makeList(procs), world.makeList(actions));
   }
 
   //}
@@ -1610,11 +1616,12 @@ class ProcessPicture extends DebugProcess
 
   public void stop()
   {
-    ATerms procs = new ATerms(new ATermInt(getPid()));
-    ATerms actions = new ATerms(new ATermAppl("stop"));
+    World world = ATerm.the_world;
 
-    adapter.sendExecuteActions(new ATermList(procs),
-			       new ATermList(actions));
+    ATerms procs = world.makeATerms(world.makeInt(getPid()));
+    ATerms actions = world.makeATerms(world.makeAppl("stop"));
+
+    adapter.sendExecuteActions(world.makeList(procs), world.makeList(actions));
   }
 
   //}

@@ -1,6 +1,6 @@
 // Java tool interface class ProcessViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 12-Dec-97 2:05:24 PM
+// generation time: 12-Dec-97 8:50:13 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -93,14 +93,14 @@ abstract public class ProcessViewerTif extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Pconnected0 = new ATermPattern("rec-do(connected(<term>,))");
-      Pdisconnected0 = new ATermPattern("rec-do(disconnected(<term>,))");
-      PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>,))");
-      Pwatchpoint0 = new ATermPattern("rec-do(watchpoint(<debug-adapter>,<term>,<int>,<term>,))");
-      PnewTool0 = new ATermPattern("rec-do(new-tool(<str>,<term>,<list>,))");
-      PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
+      Pconnected0 = world.makePattern("rec-do(connected(<term>,))");
+      Pdisconnected0 = world.makePattern("rec-do(disconnected(<term>,))");
+      PdapDisconnected0 = world.makePattern("rec-do(dap-disconnected(<debug-adapter>,))");
+      Pwatchpoint0 = world.makePattern("rec-do(watchpoint(<debug-adapter>,<term>,<int>,<term>,))");
+      PnewTool0 = world.makePattern("rec-do(new-tool(<str>,<term>,<list>,))");
+      PdapConnected0 = world.makePattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 

@@ -17,6 +17,7 @@ public class DebugAdapterInfo
   DebugRule[] rules;
   Hashtable processes;
   Hashtable info;
+  World world;
 
   //{ static protected int debugAdapterId(ATerm dap)
 
@@ -29,7 +30,7 @@ public class DebugAdapterInfo
   {
     ATermPattern P = null;
     try {
-      P = new ATermPattern("debug-adapter(<int>)");
+      P = ATerm.the_world.makePattern("debug-adapter(<int>)");
     } catch (ParseError e) { }
     if(!P.match(dap))
       throw new IllegalArgumentException("no debug-adapter id: " + dap.toString());
@@ -46,10 +47,12 @@ public class DebugAdapterInfo
 
   public DebugAdapterInfo(int ident, ATerms inf)
   {
+    world = ATerm.the_world;
+
     // Enter the information in the info hashtable
     try {
       info = new Hashtable();
-      ATermPattern patPair = new ATermPattern("[<appl>,<term>]");
+      ATermPattern patPair = world.makePattern("[<appl>,<term>]");
       while(!inf.isEmpty()) {
 	if(!patPair.match(inf.getFirst()))
 	  throw new IllegalArgumentException("malformed information list: " 
@@ -119,7 +122,7 @@ public class DebugAdapterInfo
 	ATerms cur = ((ATermList)procs).getATerms();
 	result = new DebugProcess[cur.length()];
 	try {
-	  ATermPattern pat = new ATermPattern("<int>");
+	  ATermPattern pat = world.makePattern("<int>");
 	  for(int i=0; !cur.isEmpty(); i++) {
 	    pat.match(cur.getFirst());
 	    result[i] = (DebugProcess)processes.get(pat.elementAt(0));

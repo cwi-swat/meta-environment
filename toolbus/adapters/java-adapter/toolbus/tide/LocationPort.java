@@ -51,7 +51,7 @@ public class LocationPort extends DebugPort
   private void init()
   {
     try {
-      patternPort = new ATermPattern("[location,<term>,<str>,<int>,<int>,<int>,<int>]");
+      patternPort = ATerm.the_world.makePattern("[location,<term>,<str>,<int>,<int>,<int>,<int>]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

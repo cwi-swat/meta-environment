@@ -57,27 +57,27 @@ public class ProcessViewerTool extends ProcessViewerTif
     viewer = new ProcessViewer(this);
     try {
       // Patterns used to track the execution state of processes
-      patternWatchExecState = new ATermPattern("[watch(exec-state)]");
-      patternExecState = new ATermPattern("exec-state");
+      patternWatchExecState = world.makePattern("[watch(exec-state)]");
+      patternExecState = world.makePattern("exec-state");
 
       // Patterns used to track the creation/destruction of processes
       patternWatchProcessCreation = 
-	new ATermPattern("[watch(process-creation(process-name,aliases))]");
+	world.makePattern("[watch(process-creation(process-name,aliases))]");
       patternProcessCreation = 
-	new ATermPattern("process-creation(<str>,<list>)");
+	world.makePattern("process-creation(<str>,<list>)");
       patternWatchProcessDestruction = 
-	new ATermPattern("[watch(quote(process-destruction))]");
-      patternProcessDestruction = new ATermPattern("process-destruction");
+	world.makePattern("[watch(quote(process-destruction))]");
+      patternProcessDestruction = world.makePattern("process-destruction");
 
       // Patterns used to track the sending/receiving of messages
-      patternWatchSend = new ATermPattern("[watch(send(msg,peer))]");
-      patternSend = new ATermPattern("send(<term>,<term>)");
-      patternWatchReceive = new ATermPattern("[watch(receive(msg,peer))]");
-      patternReceive = new ATermPattern("receive(<term>,<term>)");
+      patternWatchSend = world.makePattern("[watch(send(msg,peer))]");
+      patternSend = world.makePattern("send(<term>,<term>)");
+      patternWatchReceive = world.makePattern("[watch(receive(msg,peer))]");
+      patternReceive = world.makePattern("receive(<term>,<term>)");
 
       // Miscellaneous patterns 
-      patternSingleProcess = new ATermPattern("[<int>]");
-      patternString = new ATermPattern("<str>");
+      patternSingleProcess = world.makePattern("[<int>]");
+      patternString = world.makePattern("<str>");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -106,7 +106,7 @@ public class ProcessViewerTool extends ProcessViewerTif
 
       // Then we add the new processes
       ATerms proclist = ((ATermList)procs).getATerms();
-      ATermPattern patTriple = new ATermPattern("[<int>,<str>,<list>]");
+      ATermPattern patTriple = world.makePattern("[<int>,<str>,<list>]");
       while(!proclist.isEmpty()) {
 	ATermList triple = (ATermList)proclist.getFirst();
 	proclist = proclist.getNext();
@@ -124,38 +124,38 @@ public class ProcessViewerTool extends ProcessViewerTif
       //{ From now on, we want to watch process creation/destruction 
 
       RemoteDebugAdapterInfo dp = viewer.getAdapter(dapid);
-      dp.sendCreateRule("process-creation", new ATermAppl("all"),
+      dp.sendCreateRule("process-creation", world.makeAppl("all"),
 			new ProcessCreationPort(),
-			new ATermAppl("always"),
+			world.makeAppl("always"),
 			patternWatchProcessCreation.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("process-destruction", new ATermAppl("all"),
+      dp.sendCreateRule("process-destruction", world.makeAppl("all"),
 			new ProcessDestructionPort(),
-			new ATermAppl("always"),
+			world.makeAppl("always"),
 			patternWatchProcessDestruction.make(),
 			DebugRule.PERSISTENT);
 
       //}
       //{ And the exec state of its processes 
 
-      dp.sendCreateRule("exec-state", new ATermAppl("all"),
+      dp.sendCreateRule("exec-state", world.makeAppl("all"),
 			new ExecStatePort(DebugProcess.ES_ALL, DebugPort.WHEN_AT),
-			new ATermAppl("always"), 
+			world.makeAppl("always"), 
 			patternWatchExecState.make(), DebugRule.PERSISTENT);
 
       //}
       //{ And the sending/receiving of messages 
 
-      dp.sendCreateRule("send", new ATermAppl("all"),
+      dp.sendCreateRule("send", world.makeAppl("all"),
 			new SendPort(DebugPort.WHEN_AT, "<term>"),
-			new ATermAppl("always"),
+			world.makeAppl("always"),
 			patternWatchSend.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("receive", new ATermAppl("all"),
+      dp.sendCreateRule("receive", world.makeAppl("all"),
 			new ReceivePort(DebugPort.WHEN_AT, "<term>"),
-			new ATermAppl("always"),
+		        world.makeAppl("always"),
 			patternWatchReceive.make(),
 			DebugRule.PERSISTENT);
 
@@ -319,7 +319,7 @@ public class ProcessViewerTool extends ProcessViewerTif
 
     ATermPattern pat = null;
     try {
-      pat = new ATermPattern("[<str>,<fun>]");
+      pat = ATerm.the_world.makePattern("[<str>,<fun>]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

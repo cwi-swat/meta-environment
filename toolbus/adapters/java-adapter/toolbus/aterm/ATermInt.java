@@ -7,27 +7,42 @@ public class ATermInt extends ATerm
 {
   ATermIntImpl value = null;
 
-  //{ public ATermInt(ATermIntImpl val)
+  //{ protected ATermInt(ATermIntImpl val)
 
-  public ATermInt(ATermIntImpl val)
+  protected ATermInt(ATermIntImpl val)
   {
-    update(val);
+    super(val.getWorld());
+    intern(val);
   }
 
   //}
-  //{ public ATermInt(int i, ATerm anno)
+  //{ protected ATermInt(World world)
 
-  public ATermInt(int i, ATerm anno)
+  /**
+    * Construct a new ATermInt object that is initially empty.
+    */
+
+  protected ATermInt(World world)
   {
-    update(new ATermIntImpl(i, anno == null ? null : anno.getATermImpl()));
+    super(world);
   }
 
   //}
-  //{ public ATermInt(int i)
+  //{ public ATermInt(World world, int i)
 
-  public ATermInt(int i)
+  public ATermInt(World world, int i)
   {
-    update(new ATermIntImpl(i));
+    super(world);
+    intern(new ATermIntImpl(world, i));
+  }
+
+  //}
+  //{ public ATermInt(World world, int i, ATerm anno)
+
+  public ATermInt(World world, int i, ATerm anno)
+  {
+    super(world);
+    intern(new ATermIntImpl(world, i, anno == null ? null : anno.getATermImpl()));
   }
 
   //}
@@ -39,9 +54,8 @@ public class ATermInt extends ATerm
 
   public void setAnno(ATerm a)
   {
-    ATermIntImpl val = new ATermIntImpl(value.getInt(), a == null ? 
-		null:a.getATermImpl());
-    update(val);
+    intern(new ATermIntImpl(world, value.getInt(), 
+			    a == null ? null:a.getATermImpl()));
   }
 
   //}
@@ -56,17 +70,17 @@ public class ATermInt extends ATerm
 
   //}
 
-  //{ private void update(ATermIntImpl val)
+  //{ protected void intern(ATermIntImpl val)
   
   /**
-    * Update this reference to point to an integer term equal to {\tt val}.
+    * Intern this reference to point to an integer term equal to {\tt val}.
     */
 
-  private void update(ATermIntImpl val)
+  protected void intern(ATermIntImpl val)
   {
     if(value != null)
       value.decreaseRef();
-    value = (ATermIntImpl)val.unique();
+    value = (ATermIntImpl)world.intern(val);
     value.increaseRef();
   }
 
@@ -100,7 +114,7 @@ public class ATermInt extends ATerm
 
   public void setInt(int i)
   {
-    update(new ATermIntImpl(i));
+    intern(new ATermIntImpl(world, i));
   }
 
   //}

@@ -18,6 +18,7 @@ class SourceViewerTool extends SourceViewerTif
   private Hashtable viewerTable;
   private Hashtable adapterTable;
 
+  private World world;
   private ATermPattern patternSingleProcess;
   private ATerm termCpePort;
   private ATerm termTrue;
@@ -54,14 +55,15 @@ class SourceViewerTool extends SourceViewerTif
        throws java.net.UnknownHostException
   {
     super(args);
+    world = ATerm.the_world;
     viewerTable = new Hashtable();
     adapterTable = new Hashtable();
     // Miscellaneous patterns and terms
     try {
-      patternSingleProcess = new ATermPattern("[<int>]");
-      termCpePort = ATermParser.makeSimple("[exec-state,at,stop]");
-      termTrue = ATermParser.makeSimple("always");
-      termWatchCpe = ATermParser.makeSimple("[watch(cpe)]");
+      patternSingleProcess = world.makePattern("[<int>]");
+      termCpePort          = world.makeSimple("[exec-state,at,stop]");
+      termTrue             = world.makeSimple("always");
+      termWatchCpe         = world.makeSimple("[watch(cpe)]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -73,17 +75,17 @@ class SourceViewerTool extends SourceViewerTif
   public void test0()
   {
     try {
-      ATermAppl dap = (ATermAppl)ATermParser.makeSimple("debug-adapter(1)");
-      ATermList info = (ATermList)ATermParser.makeSimple(
+      ATermAppl dap = (ATermAppl)world.makeSimple("debug-adapter(1)");
+      ATermList info = (ATermList)world.makeSimple(
          "[[name,\"test.tcl-0\"],[type,\"Tcl\"]," +
 	 "[search-paths,[[config,[\".\"]],[source,[\".\"]]]]," +
 	 "[ports,[[exec-state,at],[always,before],[always,after]," +
 	 "[location,before],[location,after],[exception,at]]]," +
 	 "[exec-control,[single-step,step-over,run,stop]]]");
-      ATerm procs = ATermParser.makeSimple("[[0,\"TEST\"," +
+      ATerm procs = world.makeSimple("[[0,\"TEST\"," +
                         "[alias(toolbus(8999),TEST(0))]]]");
       dapConnected(dap, info, procs);
-      ATerm proc = ATermParser.makeSimple("0");
+      ATerm proc = world.makeSimple("0");
       viewProcess(dap, proc);
       Vector viewers = (Vector)viewerTable.get(new Integer(1));
       SourceViewer viewer = (SourceViewer)viewers.elementAt(0);
@@ -180,7 +182,7 @@ class SourceViewerTool extends SourceViewerTif
     ATerms proclist = ((ATermList)procs).getATerms();
     ATermPattern patTriple = null;
     try {
-      patTriple = new ATermPattern("[<int>,<str>,<list>]");
+      patTriple = world.makePattern("[<int>,<str>,<list>]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
@@ -437,6 +439,9 @@ class SourceViewer extends Frame implements TextHandler
   private static final int WATCHVAR = 0;
   private static final int WATCHEXPR = 1;
 
+  // The world to use to build terms
+  World world;
+
   // The debug adapter associated with this viewer
   private RemoteDebugAdapterInfo dap;
 
@@ -508,6 +513,7 @@ class SourceViewer extends Frame implements TextHandler
 
   private void init()
   {
+    world = ATerm.the_world;
     GridBagLayout layout;
     GridBagConstraints c;
 
@@ -936,9 +942,9 @@ class SourceViewer extends Frame implements TextHandler
 
     if(evt.target == start) {
       int pid = curProcess.getPid();
-      ATerms procs = new ATerms(new ATermInt(pid));
-      ATerms actions = new ATerms(new ATermAppl(processMode.getSelectedItem()));
-      dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
+      ATerms procs = world.makeATerms(world.makeInt(pid));
+      ATerms actions = world.makeATerms(world.makeAppl(processMode.getSelectedItem()));
+      dap.sendExecuteActions(world.makeList(procs), world.makeList(actions));
       return true;
     }
 
@@ -947,9 +953,9 @@ class SourceViewer extends Frame implements TextHandler
 
     if(evt.target == stop) {
       int pid = curProcess.getPid();
-      ATerms procs = new ATerms(new ATermInt(pid));
-      ATerms actions = new ATerms(new ATermAppl("stop"));
-      dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
+      ATerms procs = world.makeATerms(world.makeInt(pid));
+      ATerms actions = world.makeATerms(world.makeAppl("stop"));
+      dap.sendExecuteActions(world.makeList(procs), world.makeList(actions));
       return true;
     }
 
@@ -964,9 +970,9 @@ class SourceViewer extends Frame implements TextHandler
 	LocationPort port = new LocationPort(selection, DebugPort.WHEN_AT);
 	int pid = curProcess.getPid();
 	try {
-	  dap.sendCreateRule("break", ATermParser.makeSimple("[" + pid + "]"), 
-			   port, ATermParser.makeSimple("true"),
-			   ATermParser.makeSimple("[break]"), DebugRule.PERSISTENT);
+	  dap.sendCreateRule("break", world.makeSimple("[" + pid + "]"), 
+			   port, world.makeSimple("true"),
+			   world.makeSimple("[break]"), DebugRule.PERSISTENT);
 	} catch (ParseError e) {
 	  throw new IllegalArgumentException("internal parse error");
 	}
@@ -986,7 +992,7 @@ class SourceViewer extends Frame implements TextHandler
 	LocationPort port = new LocationPort(selection, DebugPort.WHEN_AT);
 	try {
 	  int pid = curProcess.getPid();
-	  dap.askWatchpoint(ATermParser.makeSimple("[" + pid + "]"), port, true);
+	  dap.askWatchpoint(world.makeSimple("[" + pid + "]"), port, true);
 	} catch (ParseError e) {
 	  throw new IllegalArgumentException("internal parse error");
 	}
@@ -1006,7 +1012,7 @@ class SourceViewer extends Frame implements TextHandler
 	LocationPort port = new LocationPort(selection, DebugPort.WHEN_AT);
 	try {
 	  int pid = curProcess.getPid();
-	  dap.askWatchpoint(ATermParser.makeSimple("[" + pid + "]"), port, false);
+	  dap.askWatchpoint(world.makeSimple("[" + pid + "]"), port, false);
 	} catch (ParseError e) {
 	  throw new IllegalArgumentException("internal parse error");
 	}
@@ -1034,9 +1040,9 @@ class SourceViewer extends Frame implements TextHandler
 	LocationPort port = (LocationPort)evt.arg;
 	int pid = curProcess.getPid();
 	try {
-	  dap.sendCreateRule("watch", ATermParser.makeSimple("[" + pid + "]"), 
-			   port, ATermParser.makeSimple("true"),
-			   ATermParser.makeSimple(act), DebugRule.PERSISTENT);
+	  dap.sendCreateRule("watch", world.makeSimple("[" + pid + "]"), 
+			   port, world.makeSimple("true"),
+			   world.makeSimple(act), DebugRule.PERSISTENT);
 	} catch (ParseError e) {
 	  throw new IllegalArgumentException("internal parse error");
 	}	

@@ -22,7 +22,7 @@ public class SendPort extends DebugPort
   {
     super(SEND, when);
     try {      
-      port = ATermParser.makeSimple("[send,"+getWhenString()+","+pattern+"]");
+      port = ATerm.the_world.makeSimple("[send,"+getWhenString()+","+pattern+"]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("parse error in pattern");
     }
@@ -39,7 +39,7 @@ public class SendPort extends DebugPort
   {
     super(SEND, when);
     try {
-      ATermPattern pat = new ATermPattern("[send,"+getWhenString()+",<term>]");
+      ATermPattern pat = ATerm.the_world.makePattern("[send,"+getWhenString()+",<term>]");
       port = pat.make(pattern);
     } catch (ParseError e) {
       throw new IllegalArgumentException("parse error in pattern");

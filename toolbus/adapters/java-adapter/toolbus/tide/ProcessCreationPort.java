@@ -33,7 +33,7 @@ public class ProcessCreationPort extends DebugPort
   private void init()
   {
     try {
-      patternPort = new ATermPattern("[process-creation,at]");
+      patternPort = ATerm.the_world.makePattern("[process-creation,at]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

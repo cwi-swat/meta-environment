@@ -14,21 +14,21 @@ public class ATermPlaceholderImpl extends ATermImpl
 {
   private ATermImpl type;
 
-  //{ public ATermPlaceholderImpl(ATermImpl t, ATermImpl anno)
+  //{ public ATermPlaceholderImpl(World world, ATermImpl t, ATermImpl anno)
 
-  public ATermPlaceholderImpl(ATermImpl t, ATermImpl anno)
+  public ATermPlaceholderImpl(World world, ATermImpl t, ATermImpl anno)
   {
-    super(anno);
+    super(world, anno);
     type = t;
     type.increaseRef();
   }
 
   //}
-  //{ public ATermPlaceholderImpl(ATermImpl t)
+  //{ public ATermPlaceholderImpl(World world, ATermImpl t)
   
-  public ATermPlaceholderImpl(ATermImpl t)
+  public ATermPlaceholderImpl(World world, ATermImpl t)
   {
-    this(t, null);
+    this(world, t, null);
   }
 
   //}

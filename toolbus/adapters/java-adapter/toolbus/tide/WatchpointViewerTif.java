@@ -1,6 +1,6 @@
 // Java tool interface class WatchpointViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 12-Dec-97 2:06:30 PM
+// generation time: 15-Dec-97 2:37:29 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -95,16 +95,16 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>,))");
-      Pwatchpoint0 = new ATermPattern("rec-do(watchpoint(<debug-adapter>,<term>,<int>,<list>,))");
-      PruleCreated0 = new ATermPattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
-      PaskWatchpoint0 = new ATermPattern("rec-do(ask-watchpoint(<debug-adapter>,<term>,<term>,<term>,))");
-      PcreateWatchpoint0 = new ATermPattern("rec-do(create-watchpoint(<debug-adapter>,<term>,))");
-      PruleDestroyed0 = new ATermPattern("rec-do(rule-destroyed(<debug-adapter>,<term>,<int>,))");
-      PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
-      PruleModified0 = new ATermPattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
+      PdapDisconnected0 = world.makePattern("rec-do(dap-disconnected(<debug-adapter>,))");
+      Pwatchpoint0 = world.makePattern("rec-do(watchpoint(<debug-adapter>,<term>,<int>,<list>,))");
+      PruleCreated0 = world.makePattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PaskWatchpoint0 = world.makePattern("rec-do(ask-watchpoint(<debug-adapter>,<term>,<term>,<term>,))");
+      PcreateWatchpoint0 = world.makePattern("rec-do(create-watchpoint(<debug-adapter>,<term>,))");
+      PruleDestroyed0 = world.makePattern("rec-do(rule-destroyed(<debug-adapter>,<term>,<int>,))");
+      PdapConnected0 = world.makePattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
+      PruleModified0 = world.makePattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 

@@ -16,15 +16,15 @@ public class ATermsImpl extends ATermImpl
   private ATermsImpl next;
   private int hashcode;
 
-  //{ public ATermsImpl(ATermImpl f, ATermsImpl n, ATermImpl anno)
+  //{ public ATermsImpl(World world, ATermImpl f, ATermsImpl n, ATermImpl anno)
 
   /**
     * Construct a new list from a first element and a tail.
     */
 
-  public ATermsImpl(ATermImpl f, ATermsImpl n, ATermImpl an)
+  public ATermsImpl(World world, ATermImpl f, ATermsImpl n, ATermImpl an)
   {
-    super(an);
+    super(world, an);
     first = f;
     next = n;
     updateHashCode();
@@ -35,27 +35,39 @@ public class ATermsImpl extends ATermImpl
   }
 
   //}
-  //{ public ATermsImpl(ATermImpl f, ATermsImpl n)
+  //{ public ATermsImpl(World world, ATermImpl f, ATermsImpl n)
   
   /**
     * Construct a new list from a first element and a tail.
     */
 
-  public ATermsImpl(ATermImpl f, ATermsImpl n)
+  public ATermsImpl(World world, ATermImpl f, ATermsImpl n)
   {
-    this(f, n, null);
+    this(world, f, n, null);
   }
 
   //}
-  //{ public ATermsImpl()
+  //{ public ATermsImpl(World world, ATermImpl el)
+  
+  /**
+    * Construct a new list consisting of one element.
+    */
+
+  public ATermsImpl(World world, ATermImpl el)
+  {
+    this(world, el, world.emptyImpl, null);
+  }
+
+  //}
+  //{ public ATermsImpl(World world)
 
   /**
     * Construct the empty list.
     */
 
-  public ATermsImpl()
+  public ATermsImpl(World world)
   {
-    super(null);
+    super(world, null);
   }
 
   //}
@@ -171,38 +183,6 @@ public class ATermsImpl extends ATermImpl
   }
 
   //}
-  //{ public void setFirst(ATermImpl frst)
-
-  /**
-    * Change the first element of a list.
-    */
-
-  public void setFirst(ATermImpl frst)
-  {
-    first.decreaseRef();
-    first = frst;
-    first.increaseRef();
-    updateHashCode();
-  }
-
-  //}
-  //{ public void setNext(ATermsImpl nxt)
-
-  /**
-    * Change the tail of a list.
-    */
-
-  public void setNext(ATermsImpl nxt)
-  {
-    if(next != null)
-      next.decreaseRef();
-    next = nxt;
-    if(next != null)
-      next.increaseRef();
-    updateHashCode();
-  }
-
-  //}
   //{ public void write(OutputStream o) 
 
   /**
@@ -300,7 +280,8 @@ public class ATermsImpl extends ATermImpl
     if(first == null)
       return rhs;
 
-    return (ATermsImpl)(new ATermsImpl(first, next.concat(rhs))).unique();
+    return (ATermsImpl)world.intern(new ATermsImpl(world, first, 
+						   next.concat(rhs)));
   }
 
   //}

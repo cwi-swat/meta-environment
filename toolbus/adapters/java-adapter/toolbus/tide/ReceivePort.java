@@ -22,7 +22,7 @@ public class ReceivePort extends DebugPort
   {
     super(RECEIVE, when);
     try {
-      port = ATermParser.makeSimple("[receive,"+getWhenString()+","+pattern+"]");
+      port = ATerm.the_world.makeSimple("[receive,"+getWhenString()+","+pattern+"]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("parse error in pattern");
     }
@@ -39,7 +39,7 @@ public class ReceivePort extends DebugPort
   {
     super(RECEIVE, when);
     try {
-      ATermPattern pat = new ATermPattern("[receive,"+getWhenString()+",<term>]");
+      ATermPattern pat = ATerm.the_world.makePattern("[receive,"+getWhenString()+",<term>]");
       port = pat.make(pattern);
     } catch (ParseError e) {
       throw new IllegalArgumentException("parse error in pattern");

@@ -56,6 +56,7 @@ public class JavaTif
 class TifGenerator
 {
   private ATerms tifs = null;
+  private World world;
   private Hashtable doEvents = null;
   private Hashtable evalEvents = null;
   private Hashtable otherEvents = null;
@@ -67,6 +68,7 @@ class TifGenerator
     doEvents = new Hashtable();
     evalEvents = new Hashtable();
     otherEvents = new Hashtable();
+    world = ATerm.the_world;
   }
 
   //}
@@ -96,16 +98,15 @@ class TifGenerator
   public void readTifs(String tifsfile)
     throws IOException, ParseError
   {
-    tifs = new ATerms();
-
+    tifs = world.empty;
     ATermAppl appl = null;
 
     FileInputStream s = new FileInputStream(tifsfile);
     
     do {
       if(appl != null && appl.getFun().startsWith("rec-"))
-	tifs = new ATerms(appl, tifs);
-      appl = (ATermAppl)Tool.readTerm(s);
+	tifs = world.makeATerms(appl, tifs);
+      appl = (ATermAppl)Tool.readTerm(world, s);
     } while(!appl.getFun().equals("end-of-tifs"));
   }
 
@@ -116,7 +117,7 @@ class TifGenerator
     throws ParseError, IOException
   {
     ATerms list = tifs;
-    ATerm T = new ATermPlaceholder(new ATermAppl(tool, new ATerms()));
+    ATerm T = world.makePlaceholder(world.makeAppl(tool, world.empty));
 
     while(!list.isEmpty()) {
       ATermAppl appl = (ATermAppl)list.getFirst();
@@ -142,7 +143,7 @@ class TifGenerator
 	  v.insert(appl);
 	} else {
 	  // Dump first argument (<tool>)
-	  appl = new ATermAppl(appl.getFun(), appl.getArgs().getNext());
+	  appl = world.makeAppl(appl.getFun(), appl.getArgs().getNext());
 	  appl = normalize(appl);
 	  SpecOrderVector v = (SpecOrderVector)otherEvents.get(appl.getFun());
 	  if(v == null) {
@@ -445,13 +446,13 @@ class TifGenerator
 	    break;
 	}
 	if(newargs[i] == null)
-	  newargs[i] = new ATermPlaceholder(new ATermAppl(type, new ATerms()));
+	  newargs[i] = world.makePlaceholder(world.makeAppl(type, world.empty));
       }
-      args = new ATerms();
+      args = world.empty;
       for(int i = len-1; i >= 0; i--)
-	args = new ATerms(newargs[i], args);
+	args = world.makeATerms(newargs[i], args);
     }
-    return new ATermAppl(appl.getFun(), args);    
+    return world.makeAppl(appl.getFun(), args);    
   }
 
   //}
@@ -548,7 +549,7 @@ private boolean moreSpecific(ATerm a, ATerm b)
     throws IOException
   {
     for(int i=0; i<size(); i++) {
-      out.print("      P" + base + i + " = new ATermPattern(\"");
+      out.print("      P" + base + i + " = world.makePattern(\"");
       if(func != null)
 	out.print(func + "(");
       ((ATerm)elementAt(i)).print(out);

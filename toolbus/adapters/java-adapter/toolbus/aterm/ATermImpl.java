@@ -1,5 +1,5 @@
-
 package toolbus.aterm;
+
 import toolbus.util.Writer;
 import toolbus.util.PrintWriter;
 import toolbus.util.CharArrayWriter;
@@ -15,12 +15,9 @@ import java.io.*;
   * @version 0.2, 11-Dec-1997
   */
 
-abstract public class ATermImpl 
+abstract class ATermImpl 
   implements SimpleHashtableEntry, Cloneable
 {
-  private static SimpleHashtable table = new SimpleHashtable(43117);
-  private static SimpleHashtableEntry dummy = new DummyEntry();
-
   public static final int ATERMS	= 1;
   public static final int APPL		= 2;
   public static final int LIST		= 3;
@@ -28,38 +25,37 @@ abstract public class ATermImpl
   public static final int REAL		= 5;
   public static final int PLACEHOLDER	= 6;
   
+  protected World world;
   private ATermImpl anno;
-  private int refcount = 0;
-  private SimpleHashtableEntry hnext = dummy;
+  private int refcount;
+  private SimpleHashtableEntry hnext;
 
-  public void print(Writer w)	   { print(new PrintWriter(w)); }
-  public void print(PrintWriter w)
-  { 
-    if(anno != null) { 
-      w.print(':'); 
-      anno.print(w);
-    }
-  }
-  public void write(OutputStream o) throws java.io.IOException {
-    if(anno != null) {
-      o.write(':');
-      anno.write(o);
-    }
-  }
   abstract public int getType();
-  public boolean match(ATermImpl trm, Vector subterms) { return equals(trm); }
 
-  //{ ATermImpl(ATermImpl an)
+  //{ ATermImpl(World world, ATermImpl an)
 
   /**
     *Construct a term given an annotation.
     */
 
-  ATermImpl(ATermImpl an)
+  ATermImpl(World w, ATermImpl an)
   {
+    world = w;
     anno = an;
     if(anno != null)
       anno.increaseRef();
+  }
+
+  //}
+  //{ public World getWorld()
+
+  /**
+    * Retrieve this terms world.
+    */
+
+  public World getWorld()
+  {
+    return world;
   }
 
   //}
@@ -118,22 +114,6 @@ abstract public class ATermImpl
   }
 
   //}
-  //{ public void setAnno(ATermImpl a)
-
-  /**
-    * Change the annotation of this object.
-    */
-
-  public void setAnno(ATermImpl a)
-  { 
-    if(anno != null)
-      anno.decreaseRef();
-    anno = a;
-    if(anno != null)
-      anno.increaseRef();
-  }
-
-  //}
   //{ public int size()
 
   /**
@@ -155,22 +135,6 @@ abstract public class ATermImpl
     if(anno == null)
       return 0; 
     return anno.printSize()+2; // annotation + '{' and '}'
-  }
-
-  //}
-  //{ public static int tableSize()
-
-  static int tableSize()
-  {
-    return table.size();
-  }
-
-  //}
-  //{ public static Enumeration tableElements()
-
-  public static Enumeration tableElements()
-  {
-    return table.elements();
   }
 
   //}
@@ -198,8 +162,8 @@ abstract public class ATermImpl
   public synchronized void decreaseRef()
   { 
     refcount--; 
-    if(refcount == 0 && hnext != dummy && table != null)
-      table.remove(this);
+    if(refcount == 0)
+      world.remove(this);
   }
 
   //}
@@ -240,27 +204,44 @@ abstract public class ATermImpl
   
   //}
 
-  //{ public ATermImpl unique()
+  //{ public void print(Writer w)
 
-  /**
-    * Return the unique representation of this term,
-    * by looking it up in the hash table. If it is not
-    * present in the hash table, this term will become
-    * its own unique representation, and we add it to
-    * the hash table.
-    */
-
-  public ATermImpl unique()
-  {
-    ATermImpl trm = (ATermImpl)table.get(this);
-    if(trm == null) {
-      table.put(this);
-      return this;
-    }
-    return trm;
+  public void print(Writer w)
+  { 
+    print(new PrintWriter(w)); 
   }
 
   //}
+  //{ public void print(PrintWriter w)
+
+  public void print(PrintWriter w)
+  { 
+    if(anno != null) { 
+      w.print(':'); 
+      anno.print(w);
+    }
+  }
+
+  //}
+  //{ public void write(OutputStream o) throws java.io.IOException {
+
+  public void write(OutputStream o) throws java.io.IOException {
+    if(anno != null) {
+      o.write(':');
+      anno.write(o);
+    }
+  }
+
+  //}
+  //{ public boolean match(ATermImpl trm, Vector subterms) 
+
+  public boolean match(ATermImpl trm, Vector subterms) 
+  { 
+    return equals(trm); 
+  }
+
+  //}
+
   //{ public String toString()
 
   public String toString()
@@ -274,12 +255,3 @@ abstract public class ATermImpl
   //}
 }
 
-//{ class DummyEntry
-
-class DummyEntry implements SimpleHashtableEntry
-{
-  public SimpleHashtableEntry getNextHashEntry() { return null; }
-  public void setNextHashEntry(SimpleHashtableEntry e) { }
-}
-
-//}

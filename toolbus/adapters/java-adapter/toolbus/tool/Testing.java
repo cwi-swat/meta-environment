@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 11-Dec-97 9:15:22 PM
+// generation time: 12-Dec-97 7:59:26 PM
 
 package toolbus.tool;
 import toolbus.aterm.*;
@@ -48,12 +48,12 @@ abstract public class Testing extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Ptestit0 = new ATermPattern("rec-do(testit(<str>,))");
-      Ptestit1 = new ATermPattern("rec-do(testit(<str>,<int>,))");
-      Ptestit2 = new ATermPattern("rec-do(testit(<str>,<appl>,))");
-      Pquestion0 = new ATermPattern("rec-eval(question(<appl>,))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
+      Ptestit0 = world.makePattern("rec-do(testit(<str>,))");
+      Ptestit1 = world.makePattern("rec-do(testit(<str>,<int>,))");
+      Ptestit2 = world.makePattern("rec-do(testit(<str>,<appl>,))");
+      Pquestion0 = world.makePattern("rec-eval(question(<appl>,))");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 

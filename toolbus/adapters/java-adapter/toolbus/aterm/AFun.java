@@ -7,8 +7,8 @@ import toolbus.tool.*;
 @see AsFix
 */
 public class AFun extends ATermAppl {
-  public AFun(String af) {
-    super(af,null);
+  public AFun(World world, String af) {
+    super(world, af);
   }
   /** init defines AsFix terms. It initializes terms with a well-defined value. See specification for details.
 <p>
@@ -20,11 +20,11 @@ So far the following AFuns are defined:
   public ATermAppl init() throws Exception {
     String af = this.getFun();
     if (af.equals("prod")) {
-      return (ATermAppl) ATermParser.makeSimple("prod(module-name,w(\"\"),syms,w(\"\"),l(\"->\"),w(\"\"),sym,w(\"\"),attrs)");
+      return (ATermAppl) world.makeSimple("prod(module-name,w(\"\"),syms,w(\"\"),l(\"->\"),w(\"\"),sym,w(\"\"),attrs)");
     } else if (af.equals("appl")) {
-      return (ATermAppl) ATermParser.makeSimple("appl(prod,w(\"\"),args)");
+      return (ATermAppl) world.makeSimple("appl(prod,w(\"\"),args)");
     } else if (af.equals("list")) {
-      return (ATermAppl) ATermParser.makeSimple("list(sym,w(\"\"),elems)");
+      return (ATermAppl) world.makeSimple("list(sym,w(\"\"),elems)");
     } else {
       throw new Exception("Undefined AFun being initialized: "+af);
     }

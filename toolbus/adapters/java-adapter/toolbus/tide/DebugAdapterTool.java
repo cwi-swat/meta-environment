@@ -10,6 +10,7 @@ class DebugAdapterTool extends DebugAdapterTif
 {
   private JavaDebugger debugger = null;
   private String name;
+  private World world;
 
   //{ static public void main(String[] args)
 
@@ -79,6 +80,7 @@ class DebugAdapterTool extends DebugAdapterTif
     debugger = new JavaDebugger(host, passwd, this);
     host = (host == null ? "local" : host);
     name = host + ":" + passwd + " (Java)";
+    world = ATerm.the_world;
   }
 
   //}
@@ -97,6 +99,7 @@ class DebugAdapterTool extends DebugAdapterTif
   {
     super(args);
     debugger = new JavaDebugger(javaArgs, this);
+    world = ATerm.the_world;
   }
 
   //}
@@ -126,9 +129,9 @@ class DebugAdapterTool extends DebugAdapterTif
   {
     ATerm result;
     try {
-      ATerms info = new ATerms();
-      ATermPattern addPattern = new ATermPattern("[[<fun>,<term>],<terms>]");
-      ATermPattern returnPattern = new ATermPattern("snd-value(info([<terms>]))");
+      ATerms info = world.empty;
+      ATermPattern addPattern = world.makePattern("[[<fun>,<term>],<terms>]");
+      ATermPattern returnPattern = world.makePattern("snd-value(info([<terms>]))");
       Properties props = debugger.getProperties();
       props.put("name", "\"" + name + "\"");
       props.put("type", "\"Java\"");
@@ -156,18 +159,18 @@ class DebugAdapterTool extends DebugAdapterTif
 
   ATerm getProcesses()
   {
-    ATerm result = null;
+    ATerm result = world.empty;
 
     try {
-      ATerms procs = new ATerms();
-      ATermPattern add = new ATermPattern("[<term>,<terms>]");
-      ATermPattern pair = new ATermPattern("[<int>,<str>]");
+      ATerms procs = world.empty;
+      ATermPattern add = world.makePattern("[<term>,<terms>]");
+      ATermPattern pair = world.makePattern("[<int>,<str>]");
       Enumeration e = debugger.getProcesses();
       while(e.hasMoreElements()) {
 	DebugProcess process = (DebugProcess)e.nextElement();
-	procs = new ATerms(add.make(pair.make(new Integer(process.getPid())), process.getName()), procs);
+	procs = world.makeATerms(add.make(pair.make(new Integer(process.getPid())), process.getName()), procs);
       }
-      ATermPattern value = new ATermPattern("snd-value(processes(<term>))");
+      ATermPattern value = world.makePattern("snd-value(processes(<term>))");
       result = value.make(procs);
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
@@ -185,7 +188,7 @@ class DebugAdapterTool extends DebugAdapterTif
 
   ATerm execActions(ATerm procs, ATermList acts)
   {
-    return null;
+    return world.empty;
   }
 
   //}
@@ -199,10 +202,10 @@ class DebugAdapterTool extends DebugAdapterTif
 		      ATermList Acts, ATerm Life)
     throws ToolException
   {
-    ATerm result = null;
+    ATerm result = world.empty;
 
     try {
-      ATermPattern value = new ATermPattern("snd-value(" +
+      ATermPattern value = world.makePattern("snd-value(" +
 	         "create-rule(<term>,<term>,<term>,<term>,<term>,<int>))");
 
       DebugPort port = DebugPort.newPort(Port);

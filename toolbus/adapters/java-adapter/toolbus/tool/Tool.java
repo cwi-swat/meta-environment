@@ -46,6 +46,7 @@ abstract public class Tool implements Runnable
   private boolean running;
   private Hashtable queues;
 
+  protected World world;
   private ATerm termSndVoid;
   private ATermPattern patternRecDo;
   private ATermPattern patternRecTerminate;
@@ -105,12 +106,13 @@ abstract public class Tool implements Runnable
 
   private void init()
   {
+    world = ATerm.the_world;
     try {
-      termSndVoid = new ATermAppl("snd-void", new ATerms());
-      patternRecDo = new ATermPattern("rec-do(<term>)");
-      patternRecTerminate = new ATermPattern("rec-terminate(<term>)");
-      patternRecAckEvent = new ATermPattern("rec-ack-event(<term>)");
-      patternSndEvent = new ATermPattern("snd-event(<term>)");
+      termSndVoid = world.makeAppl("snd-void", world.empty);
+      patternRecDo = world.makePattern("rec-do(<term>)");
+      patternRecTerminate = world.makePattern("rec-terminate(<term>)");
+      patternRecAckEvent = world.makePattern("rec-ack-event(<term>)");
+      patternSndEvent = world.makePattern("snd-event(<term>)");
     } catch (ParseError e) {
       System.err.println("internal error in Tool.init()");
     }
@@ -161,7 +163,7 @@ abstract public class Tool implements Runnable
     //{ Complete the handshake by checking the input signature
 
     try {
-      ATermPattern sigpat = new ATermPattern("rec-do(signature(<list>,<list>))");
+      ATermPattern sigpat = world.makePattern("rec-do(signature(<list>,<list>))");
       ATerm term = readTerm();
       if(sigpat.match(term)) {
         if(verbose)
@@ -245,7 +247,7 @@ abstract public class Tool implements Runnable
   {
     channel.reset();
     channel.read();
-    ATerm t = ATermParser.parseATerm(channel);
+    ATerm t = world.parseATerm(channel);
     if(verbose) {
       System.err.print("tool " + name + " has read term: ");
       t.print(System.err);
@@ -255,15 +257,15 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ static public ATerm readTerm(InputStream s)
+  //{ static public ATerm readTerm(World world, InputStream s)
 
-  static public ATerm readTerm(InputStream s)
+  static public ATerm readTerm(World world, InputStream s)
     throws ParseError, IOException
   {
     ToolBusChannel channel = new ToolBusChannel(s);
     channel.reset();
     channel.read();
-    return ATermParser.parseATerm(channel);
+    return world.parseATerm(channel);
   }
 
   //}
@@ -314,7 +316,7 @@ abstract public class Tool implements Runnable
       while(running && istream != null) {
 	channel.reset();
 	channel.read();
-	ATerm t = ATermParser.parseATerm(channel);
+	ATerm t = world.parseATerm(channel);
 	if(verbose) {
 	  System.err.print("tool " + name + " has read term: ");
 	  t.print(System.err);

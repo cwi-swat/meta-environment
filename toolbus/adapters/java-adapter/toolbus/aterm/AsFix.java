@@ -20,9 +20,10 @@ public class AsFix {
   defined.  */
 
   public static ATerm acc(ATermAppl t, AFun af2) throws Exception {
-    AFun af1 = new AFun(t.getFun());
+    AFun af1 = new AFun(ATerm.the_world, t.getFun());
     ATermAppl at = af1.init();
-    return namedElem(af2,new ATermList(at.getArgs()),new ATermList(t.getArgs()));
+    return namedElem(af2,new ATermList(ATerm.the_world, at.getArgs()),
+		     new ATermList(ATerm.the_world, t.getArgs()));
   }
 
   /** repl is the AsFix replacement function. <p> <tt>t[sym :=
@@ -32,9 +33,11 @@ public class AsFix {
   named elements are defined.*/
 
   public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws Exception {
-    AFun af1 = new AFun(t1.getFun());
+    AFun af1 = new AFun(ATerm.the_world, t1.getFun());
     ATermAppl at = af1.init();
-    t1.setArgs(replace(new ATermList(t1.getArgs()), position(af,new ATermList(at.getArgs()), 0), t2).getATerms());
+    t1.setArgs(replace(new ATermList(ATerm.the_world, t1.getArgs()), 
+		       position(af,new ATermList(ATerm.the_world, at.getArgs()), 0), 
+		       t2).getATerms());
     return t1;
   }
   
@@ -44,16 +47,21 @@ public class AsFix {
     if (af.equals(l.getATerms().getFirst())) {
       return i;
     } else {
-      return position(af, new ATermList(l.getATerms().getNext()), i+1);
+      return position(af, new ATermList(ATerm.the_world, l.getATerms().getNext()), i+1);
     }
   }
   /** replace does the actual replacing. It replaces index <tt>i</tt>
    of list <tt>l</tt> with term <tt>t</tt>.  */
   private static ATermList replace(ATermList l, int i, ATerm t) {
     if (i == 0) {
-      return new ATermList(new ATerms(t,l.getATerms().getNext()));
+      return new ATermList(ATerm.the_world, 
+			   new ATerms(ATerm.the_world, t,
+				      l.getATerms().getNext()));
     } else {
-      return new ATermList(new ATerms(l.getATerms().getFirst(), replace(new ATermList(l.getATerms().getNext()), i-1, t).getATerms()));
+      return new ATermList(ATerm.the_world, 
+			   new ATerms(ATerm.the_world, l.getATerms().getFirst(), 
+				      replace(new ATermList(ATerm.the_world,
+			    l.getATerms().getNext()), i-1, t).getATerms()));
     }
   }
 
@@ -65,7 +73,8 @@ public class AsFix {
     if (af.equals(l1.getATerms().getFirst())) {
       return l2.getATerms().getFirst();
     } else {
-      return namedElem(af, new ATermList(l1.getATerms().getNext()),new ATermList(l2.getATerms().getNext()));
+      return namedElem(af, new ATermList(ATerm.the_world, l1.getATerms().getNext()),
+		       new ATermList(ATerm.the_world, l2.getATerms().getNext()));
     }
   }
 }

@@ -7,27 +7,38 @@ public class ATermReal extends ATerm
 {
   ATermRealImpl value = null;
 
-  //{ public ATermReal(ATermRealImpl val)
+  //{ protected ATermReal(ATermRealImpl val)
 
-  public ATermReal(ATermRealImpl val)
+  protected ATermReal(ATermRealImpl val)
   {
-    update(val);
+    super(val.getWorld());
+    intern(val);
   }
 
   //}
-  //{ public ATermReal(double r)
+  //{ protected ATermReal(World world)
 
-  public ATermReal(double r)
+  protected ATermReal(World world)
   {
-    update(new ATermRealImpl(r));
+    super(world);
   }
 
   //}
-  //{ public ATermReal(double r, ATerm anno)
+  //{ public ATermReal(World world, double r)
 
-  public ATermReal(double r, ATerm anno)
+  public ATermReal(World world, double r)
   {
-    update(new ATermRealImpl(r, anno == null ? null : anno.getATermImpl()));
+    super(world);
+    intern(new ATermRealImpl(world, r));
+  }
+
+  //}
+  //{ public ATermReal(World world, double r, ATerm anno)
+
+  public ATermReal(World world, double r, ATerm anno)
+  {
+    super(world);
+    intern(new ATermRealImpl(world, r, anno == null ? null : anno.getATermImpl()));
   }
 
   //}
@@ -39,7 +50,8 @@ public class ATermReal extends ATerm
 
   public void setAnno(ATerm a)
   {
-    update(new ATermRealImpl(value.getReal(), a == null ? null : a.getATermImpl()));
+    intern(new ATermRealImpl(world, value.getReal(), 
+			     a == null ? null : a.getATermImpl()));
   }
 
   //}
@@ -52,17 +64,17 @@ public class ATermReal extends ATerm
 
   //}
 
-  //{ private void update(ATermRealImpl r)
+  //{ protected void intern(ATermRealImpl r)
 
   /**
-    * Update this reference to point to an real term equal to {\tt val}.
+    * Intern this reference to point to an real term equal to {\tt val}.
     */
 
-  private void update(ATermRealImpl val)
+  protected void intern(ATermRealImpl val)
   {
     if(value != null)
       value.decreaseRef();
-    value = (ATermRealImpl)val.unique();
+    value = (ATermRealImpl)world.intern(val);
     value.increaseRef();
   }
 
@@ -96,7 +108,7 @@ public class ATermReal extends ATerm
 
   void setReal(double r)
   {
-    update(new ATermRealImpl(r));
+    intern(new ATermRealImpl(world, r));
   }
 
   //}

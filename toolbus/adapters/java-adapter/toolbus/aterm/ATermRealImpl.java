@@ -8,15 +8,26 @@ public class ATermRealImpl extends ATermImpl
 {
   private Double val;
 
-  public ATermRealImpl(double v, ATermImpl an) { super(an); val = new Double(v); }
-  public ATermRealImpl(double v)		{ this(v, null);		}
-  public Object clone() {
+  public ATermRealImpl(World world, double v, ATermImpl an) 
+  { 
+    super(world, an); 
+    val = new Double(v);
+  }
+
+  public ATermRealImpl(World world, double v)
+  {
+    this(world, v, null);
+  }
+
+  public Object clone() 
+  {
     ATermRealImpl r = (ATermRealImpl)super.clone();
     r.val = val;
     return r;
   }
 
-  public boolean equals(Object obj) {
+  public boolean equals(Object obj) 
+  {
     if(obj instanceof ATermRealImpl)
       return val.equals(((ATermRealImpl)obj).val) && super.equals(obj);
     return false;
@@ -25,7 +36,6 @@ public class ATermRealImpl extends ATermImpl
   public int hashCode()			{ return val.hashCode();	}
   public int getType()			{ return ATermImpl.REAL;	}
   public double getReal()		{ return val.doubleValue();	}
-  public void setReal(double v)		{ val = new Double(v);		}
 
   public void print(PrintWriter w) {
     w.print(val);

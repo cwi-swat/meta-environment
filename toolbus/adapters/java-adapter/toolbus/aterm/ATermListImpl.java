@@ -11,22 +11,22 @@ public class ATermListImpl extends ATermImpl
   private ATermsImpl aterms;
   private int hashcode;
 
-  //{ public ATermListImpl(ATermsImpl terms, ATermImpl anno)
+  //{ public ATermListImpl(World world, ATermsImpl terms, ATermImpl anno)
 
-  public ATermListImpl(ATermsImpl terms, ATermImpl anno)
+  public ATermListImpl(World world, ATermsImpl terms, ATermImpl anno)
   { 
-    super(anno);
+    super(world, anno);
     aterms = terms; 
     updateHashCode();
     aterms.increaseRef();
   }
 
   //}
-  //{ public ATermListImpl(ATermsImpl terms)
+  //{ public ATermListImpl(World world, ATermsImpl terms)
 
-  public ATermListImpl(ATermsImpl terms)
+  public ATermListImpl(World world, ATermsImpl terms)
   {
-    this(terms, null);
+    this(world, terms, null);
   }
 
   //}
@@ -91,17 +91,6 @@ public class ATermListImpl extends ATermImpl
   public ATermsImpl getATermsImpl()
   {
     return aterms;
-  }
-
-  //}
-  //{ public void setATermsImpl(ATermsImpl terms)
-
-  public void setATermsImpl(ATermsImpl terms)
-  {
-    aterms.decreaseRef();
-    aterms = terms; 
-    updateHashCode();
-    aterms.increaseRef();
   }
 
   //}

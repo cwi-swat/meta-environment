@@ -7,39 +7,54 @@ public class ATermList extends ATerm
 {
   ATermListImpl list = null;
 
-  //{ public ATermList(ATermListImpl l)
+  //{ protected ATermList(ATermListImpl l)
 
   /**
     * Create a list from an {\tt ATermListImpl} object.
     */
 
-  ATermList(ATermListImpl l)
+  protected ATermList(ATermListImpl l)
   {
-    update(l);
+    super(l.getWorld());
+    intern(l);
   }
 
   //}
-  //{ public ATermList(ATerms terms)
+  //{ protected ATermList(World world)
+
+  /**
+    * Create a new ATermList object.
+    */
+
+  protected ATermList(World world)
+  {
+    super(world);
+  }
+
+  //}
+  //{ public ATermList(World world, ATerms terms)
 
   /**
     * Create a list reference from an ATerms reference.
     */
 
-  public ATermList(ATerms terms)
+  public ATermList(World world, ATerms terms)
   {
-    update(new ATermListImpl(terms.getATermsImpl()));
+    super(world);
+    intern(new ATermListImpl(world, terms.getATermsImpl()));
   }
 
   //}
-  //{ public ATermList(ATerms terms, ATerm anno)
+  //{ public ATermList(World world, ATerms terms, ATerm anno)
 
   /**
     * Create a list reference from an ATerms reference.
     */
 
-  public ATermList(ATerms terms, ATerm anno)
+  public ATermList(World world, ATerms terms, ATerm anno)
   {
-    update(new ATermListImpl(terms.getATermsImpl(), 
+    super(world);
+    intern(new ATermListImpl(world, terms.getATermsImpl(), 
 			 anno == null ? null : anno.getATermImpl()));
   }
 
@@ -52,7 +67,8 @@ public class ATermList extends ATerm
 
   public void setAnno(ATerm a)
   {
-    update(new ATermListImpl(list.getATermsImpl(), a == null ? null : a.getATermImpl()));
+    intern(new ATermListImpl(world, list.getATermsImpl(),
+			     a == null ? null : a.getATermImpl()));
   }
 
   //}
@@ -65,17 +81,17 @@ public class ATermList extends ATerm
 
   //}
 
-  //{ private void update(ATermListImpl lst)
+  //{ protected void intern(ATermListImpl lst)
 
   /**
-    * Update this reference to point to a term equal to {\tt lst}.
+    * Intern this reference to point to a term equal to {\tt lst}.
     */
 
-  private void update(ATermListImpl lst)
+  protected void intern(ATermListImpl lst)
   {
     if(list != null)
       list.decreaseRef();
-    list = (ATermListImpl)lst.unique();
+    list = (ATermListImpl)world.intern(lst);
     list.increaseRef();
   }
 
@@ -109,7 +125,7 @@ public class ATermList extends ATerm
 
   public void setATerms(ATerms terms)
   {
-    update(new ATermListImpl(terms.getATermsImpl()));
+    intern(new ATermListImpl(world, terms.getATermsImpl()));
   }
 
   //}

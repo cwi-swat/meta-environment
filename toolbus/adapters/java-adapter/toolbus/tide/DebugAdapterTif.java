@@ -1,6 +1,6 @@
 // Java tool interface class DebugAdapterTif
 // This file is generated automatically, please do not edit!
-// generation time: 12-Dec-97 2:06:02 PM
+// generation time: 12-Dec-97 9:01:23 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -93,14 +93,14 @@ abstract public class DebugAdapterTif extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      PmodifyRule0 = new ATermPattern("rec-do(modify-rule(<int>,<term>,<term>,<term>,<list>,<term>,))");
-      PdestroyRule0 = new ATermPattern("rec-do(destroy-rule(<term>,<int>,))");
-      PgetInfo0 = new ATermPattern("rec-eval(get-info)");
-      PcreateRule0 = new ATermPattern("rec-eval(create-rule(<term>,<term>,<term>,<list>,<term>,))");
-      PexecActions0 = new ATermPattern("rec-eval(exec-actions(<term>,<list>,))");
-      PgetProcesses0 = new ATermPattern("rec-eval(get-processes)");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
+      PmodifyRule0 = world.makePattern("rec-do(modify-rule(<int>,<term>,<term>,<term>,<list>,<term>,))");
+      PdestroyRule0 = world.makePattern("rec-do(destroy-rule(<term>,<int>,))");
+      PgetInfo0 = world.makePattern("rec-eval(get-info)");
+      PcreateRule0 = world.makePattern("rec-eval(create-rule(<term>,<term>,<term>,<list>,<term>,))");
+      PexecActions0 = world.makePattern("rec-eval(exec-actions(<term>,<list>,))");
+      PgetProcesses0 = world.makePattern("rec-eval(get-processes)");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 

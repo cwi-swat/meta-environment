@@ -29,12 +29,13 @@ abstract public class DebugProcessGroup
 
   static public DebugProcessGroup newGroup(RemoteDebugAdapterInfo dap, ATerm procs)
   {
+    World world = ATerm.the_world;
     if(patternNone == null) {
       try {
-	patternNone = new ATermPattern("[]");
-	patternOne = new ATermPattern("[<int>]");
-	patternAll = new ATermPattern("all");
-	patternList = new ATermPattern("<list>");
+	patternNone = world.makePattern("[]");
+	patternOne = world.makePattern("[<int>]");
+	patternAll = world.makePattern("all");
+	patternList = world.makePattern("<list>");
       } catch (ParseError e) {
 	throw new IllegalArgumentException("internal parse error");
       }

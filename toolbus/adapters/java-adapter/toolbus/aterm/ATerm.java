@@ -16,7 +16,46 @@ abstract public class ATerm implements Cloneable
   public static final int INT           = ATermImpl.INT;
   public static final int REAL          = ATermImpl.REAL;
   public static final int PLACEHOLDER   = ATermImpl.PLACEHOLDER;
+  
+  static public World the_world = new World(131071);
+  protected World world;
  
+  //{ public ATerm()
+
+  /**
+    * Construct a new ATerm in the default world.
+    */
+
+  public ATerm()
+  {
+    this(the_world);
+  }
+
+  //}
+  //{ public ATerm(World world)
+
+  /**
+    * Create a new ATerm object.
+    */
+
+  public ATerm(World world)
+  {
+    this.world = world;
+  }
+
+  //}
+  //{ public World getWorld()
+
+  /**
+    * Retrieve the world this ATerm lives in.
+    */
+
+  public World getWorld()
+  {
+    return world;
+  }
+
+  //}
   //{ public synchronized Object clone()
 
   /**
@@ -28,9 +67,10 @@ abstract public class ATerm implements Cloneable
     ATerm copy = null;
     try {
       copy = (ATerm)super.clone();
+      copy.world = world;
       copy.getATermImpl().increaseRef();
     } catch (CloneNotSupportedException e) {
-      System.err.println("huh? internal error!");
+      throw new RuntimeException("internal error.");
     }
     return copy;
   }
@@ -45,6 +85,7 @@ abstract public class ATerm implements Cloneable
 
   public boolean equals(Object obj)
   {
+    // <PO> we need a check here if both terms exist in the same world.
     if(obj instanceof ATerm)
       return getATermImpl() == ((ATerm)obj).getATermImpl();
     return false;

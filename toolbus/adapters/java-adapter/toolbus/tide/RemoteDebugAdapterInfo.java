@@ -16,6 +16,8 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   // Process groups
   Vector groups;
 
+  World world;
+
   // Some useful patterns
   ATermPattern patternExecActions;
   ATermPattern patternCreateRule;
@@ -58,15 +60,16 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
 
   private void init()
   {
+    world = ATerm.the_world;
     try {
       patternExecActions = 
-	new ATermPattern("exec-actions(debug-adapter(<int>),<term>,<term>)");
-      patternCreateRule = new ATermPattern("create-rule(<str>," +
+	world.makePattern("exec-actions(debug-adapter(<int>),<term>,<term>)");
+      patternCreateRule = world.makePattern("create-rule(<str>," +
 		   "debug-adapter(<int>),<term>,<term>,<term>,<term>,<term>)");
       patternAskWatchpointVar = 
-	new ATermPattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,var)");
+	world.makePattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,var)");
       patternAskWatchpointExpr = 
-	new ATermPattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,expr)");
+	world.makePattern("ask-watchpoint(debug-adapter(<int>),<term>,<term>,expr)");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

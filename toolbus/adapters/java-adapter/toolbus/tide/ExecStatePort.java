@@ -49,7 +49,7 @@ public class ExecStatePort extends DebugPort
   private void init()
   {
     try {
-      patternPort = new ATermPattern("[exec-state,<term>,<term>]");
+      patternPort = ATerm.the_world.makePattern("[exec-state,<term>,<term>]");
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }

@@ -1,6 +1,6 @@
 // Java tool interface class SourceViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 12-Dec-97 2:06:13 PM
+// generation time: 15-Dec-97 2:36:56 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -98,19 +98,19 @@ abstract public class SourceViewerTif extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Pcpe0 = new ATermPattern("rec-do(cpe(<debug-adapter>,<term>,<term>,))");
-      PcurrentPort0 = new ATermPattern("rec-do(current-port(<debug-adapter>,<term>,<term>,))");
-      PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>,))");
-      PruleCreated0 = new ATermPattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
-      PruleDestroyed0 = new ATermPattern("rec-do(rule-destroyed(<debug-adapter>,<int>,))");
-      PexecState0 = new ATermPattern("rec-do(exec-state(<debug-adapter>,<term>,<term>,))");
-      PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
-      PruleModified0 = new ATermPattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
-      PprocessCreation0 = new ATermPattern("rec-do(process-creation(<debug-adapter>,<term>,<str>,<list>,))");
-      PviewProcess0 = new ATermPattern("rec-do(view-process(<debug-adapter>,<term>,))");
-      PprocessDestruction0 = new ATermPattern("rec-do(process-destruction(<debug-adapter>,<term>,))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
+      Pcpe0 = world.makePattern("rec-do(cpe(<debug-adapter>,<term>,<term>,))");
+      PcurrentPort0 = world.makePattern("rec-do(current-port(<debug-adapter>,<term>,<term>,))");
+      PdapDisconnected0 = world.makePattern("rec-do(dap-disconnected(<debug-adapter>,))");
+      PruleCreated0 = world.makePattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PruleDestroyed0 = world.makePattern("rec-do(rule-destroyed(<debug-adapter>,<int>,))");
+      PexecState0 = world.makePattern("rec-do(exec-state(<debug-adapter>,<term>,<term>,))");
+      PdapConnected0 = world.makePattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
+      PruleModified0 = world.makePattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PprocessCreation0 = world.makePattern("rec-do(process-creation(<debug-adapter>,<term>,<str>,<list>,))");
+      PviewProcess0 = world.makePattern("rec-do(view-process(<debug-adapter>,<term>,))");
+      PprocessDestruction0 = world.makePattern("rec-do(process-destruction(<debug-adapter>,<term>,))");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 

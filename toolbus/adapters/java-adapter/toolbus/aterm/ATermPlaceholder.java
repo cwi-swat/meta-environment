@@ -7,21 +7,57 @@ public class ATermPlaceholder extends ATerm
 {
   ATermPlaceholderImpl placeholder = null;
 
-  //{ private void update(ATermPlaceholderImpl ph)
+  //{ protected ATermPlaceholder(ATermPlaceholderImpl ph)
 
-  /**	
-    * Update this reference to point to a term equal to {\tt ph}.
-    */
-
-  private void update(ATermPlaceholderImpl ph)
+  protected ATermPlaceholder(ATermPlaceholderImpl ph)
   {
-    if(placeholder != null)
-      placeholder.decreaseRef();
-    placeholder = (ATermPlaceholderImpl)ph.unique();
-    placeholder.increaseRef();
+    super(ph.getWorld());
+    intern(ph);
   }
 
   //}
+  //{ protected ATermPlaceholder(World world)
+
+  /**
+    * Construct a new ATermPlaceholder object.
+    */
+
+  protected ATermPlaceholder(World world)
+  {
+    super(world);
+  }
+
+  //}
+  //{ public ATermPlaceholder(World world, ATerm type)
+
+  /**
+    * Construct a new placeholder type.
+    * @deprecated Use World.makePlaceholder(ATerm type) instead.
+    */
+
+  public ATermPlaceholder(World world, ATerm type)
+  {
+    super(world);
+    intern(new ATermPlaceholderImpl(world, type.getATermImpl(), null));
+  }
+
+  //}
+  //{ public ATermPlaceholder(World world, ATerm type, ATerm anno)
+
+  /**
+    * Create a new placeholder object.
+    * @deprecated Use World.makePlaceholder(ATerm type, ATerm anno) instead.
+    */
+
+  public ATermPlaceholder(World world, ATerm type, ATerm anno)
+  {
+    super(world);
+    intern(new ATermPlaceholderImpl(world, type.getATermImpl(), 
+				    anno == null ? null : anno.getATermImpl()));
+  }
+
+  //}
+
   //{ protected ATermImpl getATermImpl()
 
   protected ATermImpl getATermImpl()
@@ -39,27 +75,18 @@ public class ATermPlaceholder extends ATerm
 
   //}
 
-  //{ public ATermPlaceholder(ATermPlaceholderImpl ph)
+  //{ protected void intern(ATermPlaceholderImpl ph)
 
-  public ATermPlaceholder(ATermPlaceholderImpl ph)
+  /**	
+    * Intern this reference to point to a term equal to {\tt ph}.
+    */
+
+  protected void intern(ATermPlaceholderImpl ph)
   {
-    update(ph);
-  }
-
-  //}
-  //{ public ATermPlaceholder(ATerm type)
-
-  public ATermPlaceholder(ATerm type)
-  {
-    update(new ATermPlaceholderImpl(type.getATermImpl()));
-  }
-
-  //}
-  //{ public ATermPlaceholder(ATerm type, ATerm anno)
-
-  public ATermPlaceholder(ATerm type, ATerm anno)
-  {
-    update(new ATermPlaceholderImpl(type.getATermImpl(), anno == null ? null : anno.getATermImpl()));
+    if(placeholder != null)
+      placeholder.decreaseRef();
+    placeholder = (ATermPlaceholderImpl)world.intern(ph);
+    placeholder.increaseRef();
   }
 
   //}
@@ -71,9 +98,8 @@ public class ATermPlaceholder extends ATerm
 
   public void setAnno(ATerm a)
   {
-    ATermPlaceholderImpl val = (ATermPlaceholderImpl)placeholder.clone();
-    val.setAnno(a == null ? null : a.getATermImpl());
-    update(val);
+    intern(new ATermPlaceholderImpl(world, placeholder.getPlaceholderType(),
+				    a ==  null ? null : a.getATermImpl()));
   }
 
   //}
@@ -107,7 +133,7 @@ public class ATermPlaceholder extends ATerm
 
   public void setPlaceholderType(ATerm type)
   {
-    update(new ATermPlaceholderImpl(type.getATermImpl()));
+    intern(new ATermPlaceholderImpl(world, type.getATermImpl()));
   }
 
   //}
