@@ -75,6 +75,8 @@ DISTCLEANFILES	=
 
 COMPMODS = c-source/libasfix2c.a support/support.o
 
+SUBDIRS=support
+
 # The all target must be defined:
 all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
@@ -102,12 +104,27 @@ install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@for DIR in $(SUBDIRS); \
+	do \
+	   echo Make $@ in $$DIR; \
+	   cd $$DIR; \
+	   $(MAKE) $@; \
+	   cd ..; \
+	done
+
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
 	@$(UNINSTALL) $(libdir) $(LIBFILES)
 	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
+	@for DIR in $(SUBDIRS); \
+	do \
+	   echo Make $@ in $$DIR; \
+	   cd $$DIR; \
+	   $(MAKE) $@; \
+	   cd ..; \
+	done
 
 # doc target (copy generated documentation files to $(docdir))
 doc: $(DOCFILES)
