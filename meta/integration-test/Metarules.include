@@ -1,0 +1,13 @@
+#$Id$
+
+# General variables for the Integration tests
+
+NEWMETA = ../..
+DEMO	= $(NEWMETA)/demo
+PICO	= $(DEMO)/pico/Pico-syntax
+
+# General makerules for the MetaEnvironment
+
+%.tbl: %.sdf
+	sdf2table $< 
+
