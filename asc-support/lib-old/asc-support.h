@@ -185,21 +185,21 @@ extern Symbol record_sym;
                               (!ATisEmpty((ATermList)l) && \
                               ATisEmpty(ATgetNext((ATermList)l))))
 
+/*
 #define t()           (c_true)
 #define f()           (c_false)
 #define or(t0,t1)     (ATisEqual(t0, c_true) ? c_true : t1)
+*/
 
 typedef ATerm (*funcptr)();
 
 extern unsigned int rewrite_steps;
 
+/*
 extern ATerm c_false;
 extern ATerm c_true;
-extern ATerm char_table[];
-
-/*
-extern Symbol oksym;
 */
+extern ATerm char_table[];
 
 extern Symbol sym_quote0;
 extern Symbol sym_quote1;
