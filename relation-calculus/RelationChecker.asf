@@ -29,8 +29,6 @@ $Error]>
 [te3] store(<$Table, $Errors>, $Var, $Etype) = <store($Table, $Var, $Etype), $Errors>
 [te4] delete(<$Table, $Errors>, $Var)  = <delete($Table, $Var), $Errors>
 
-
-
 %% --- Check $Elementary values
 
 [check-bool] 
@@ -42,6 +40,9 @@ $Error]>
 [check-str]
       check($String, $Tenv) = <type-of($String), $Tenv>
 
+[check-node]
+      check($Area, $Tenv) = <type-of($Area), $Tenv>
+
 [check-var1] 
       lookup($Tenv, $Var) = $Etype
       ============================================
@@ -49,11 +50,28 @@ $Error]>
 
 %% --- Check tuples, bags or rels
 
+[check-tuple-elem] 
+      check($Elem1, $Tenv) = <$Etype1, $Tenv'>, 
+      check($Elem2, $Tenv') = <$Etype2, $Tenv''>
+      ============================================
+      check(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
+
 [check-tuple] 
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       check($Exp2, $Tenv') = <$Etype2, $Tenv''>
       ============================================
       check(<$Exp1, $Exp2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
+
+[check-bag-elem1] 
+       check($Elem, $Tenv) = <$Etype, $Tenv'>,
+       check({ $Elem+ }, $Tenv') = <bag[$Etype], $Tenv''>
+       ==========================================
+       check({ $Elem, $Elem+ }, $Tenv) = <bag[$Etype], $Tenv''>
+
+[check-bag-elem2] 
+       check($Elem, $Tenv) = <$Etype, $Tenv'>
+       ==========================================
+       check({ $Elem }, $Tenv) = <bag[$Etype], $Tenv'>
 
 [check-bag1] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
@@ -66,8 +84,16 @@ $Error]>
        ==========================================
        check({ $Exp }, $Tenv) = <bag[$Etype], $Tenv'>
 
-%%[checkbag3] 
-%%       check(EmptyBag, $Tenv) = <empty, $Tenv>
+[check-rel-elem1] 
+       check(<$Elem1,$Elem2>, $Tenv) = <<$Etype1,$Etype2>, $Tenv'>,
+       check({ $Elem+ }, $Tenv') = <rel[$Etype1,$Etype2], $Tenv''>
+       ==========================================
+       check({ <$Elem1, $Elem2>, $Elem+ }, $Tenv) = <rel[$Etype1,$Etype2], $Tenv''>
+
+[check-rel-elem2] 
+       check(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>
+       ==========================================
+       check({ <$Elem1, $Elem2>  }, $Tenv) = <rel[$Etype1,$Etype2], $Tenv'>
 
 [check-rel1] 
        check(<$Exp1,$Exp2>, $Tenv) = <<$Etype1,$Etype2>, $Tenv'>,
