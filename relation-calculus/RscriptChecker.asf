@@ -369,7 +369,9 @@ $Error]>
 	check-const-bag-or-rel({}, $Tenv) = <empty-bag-type, $Tenv>
 
 [default-check-const-br]
-	check-const-bag-or-rel({$Elem*}, $Tenv) = <undefined, $Tenv + {$Elem*} cannot be typed>
+	$Bag = {$Elem*}
+	=========================================
+	check-const-bag-or-rel($Bag, $Tenv) = <undefined, $Tenv + $Bag cannot be typed>
 
 %%-----------------------------------------------------------------------------------
 
