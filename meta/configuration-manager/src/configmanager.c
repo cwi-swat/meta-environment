@@ -5,6 +5,7 @@
 #include "configmanager.h"
 #include "MetaButtons.h"
 #include <unistd.h> 
+#include <assert.h>
 
 static char myversion[] = "1.0";     
 static MB_ButtonList buttons = NULL;
@@ -187,6 +188,10 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv,&bottomOfStack);
   MB_initMetaButtonsApi();
 
+  ATprotect((ATerm*) &buttons);
+  ATprotect((ATerm*) &standard_buttons);
+
+  buttons = MB_makeButtonListEmpty();
   standard = ATreadFromNamedFile(STANDARD_BUTTONS);
 
   if (standard != NULL) {

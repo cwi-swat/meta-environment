@@ -22,7 +22,7 @@ in
     snd-eval(CMNG, process-button-file(BUTTON_FILE, Term))
   +
     rec-msg(no-button-file(BUTTON_FILE)) .
-    snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
+    snd-eval(CMNG, process-button-file(BUTTON_FILE, buttons([])))
   ) .
   rec-value(CMNG, buttons-processed) .
   snd-note(search-paths-processed)
