@@ -210,8 +210,7 @@ AC_OUTPUT(
 	grammars/sdf2/Makefile \
   , chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
-    chmod +x utils/gen-table utils/normalize-sdf \
-             utils/parse-sdf2 utils/ps-dot \
+    chmod +x utils/parse-sdf2 utils/ps-dot \
              utils/genmakefile.sh utils/parse-file
 )
 
