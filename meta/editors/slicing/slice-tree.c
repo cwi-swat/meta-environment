@@ -26,8 +26,8 @@ static ATbool containsVisibles(PT_Tree tree)
     int ch;
 
     assert(PT_isTreeChar(head) && "expected list of chars");
-
-    ch = PT_getTreeCharacter(tree);
+ATwarning("tree: %t\n", head);
+    ch = PT_getTreeCharacter(head);
 
     if (!isspace(ch)) {
       return ATtrue;
@@ -69,17 +69,17 @@ static void storeTree(PT_Tree tree, const char *category)
   name = S_makeCategoryNameExtern(category);
   key = S_CategoryNameToTerm(name);
   slice = S_AreasFromTerm(ATtableGet(slices, key));
-  location = PT_getTreeLocation(tree);
 
   if (slice == NULL) {
     slice = S_makeAreasEmpty();
   }
 
+  location = PT_getTreeLocation(tree);
   if (location != NULL && LOC_hasLocationArea(location)) {
     LOC_Area area = LOC_getLocationArea(location);
 
     slice = S_makeAreasMany((S_Area) area, slice);
-
+ATwarning("storing: %t at %t\n", area, key);
     ATtablePut(slices, key, S_AreasToTerm(slice));
   }
 }
@@ -112,7 +112,7 @@ static void treeToSlices(PT_Tree tree)
   if (categoryAnno != NULL) { /* we have a user defined category */
     storeTree(tree, ATwriteToString(categoryAnno)); 
   }
-  else { 
+  else {
     if (PT_isTreeLit(tree)) {
       const char *str = PT_getTreeString(tree);
 
@@ -149,6 +149,8 @@ S_Slices TreeToSyntaxSlices(PT_Tree tree)
   treeToSlices(tree);
 
   keys = ATtableKeys(slices);
+
+  ATwarning("keys: %t\n", keys);
 
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);

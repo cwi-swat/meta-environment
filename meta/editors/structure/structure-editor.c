@@ -392,8 +392,17 @@ ATerm get_tree_slices(int cid, ATerm editorId)
 
   editor = getEditor(editorId);
   if (editor != NULL) {
-    SE_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
-    S_Slices slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
+    SE_ParseTree parseTree;
+    S_Slices slices;
+
+    parseTree = SE_getStructureEditorParseTree(editor);
+    
+    /* This computation is the only one that needs pos-info on layout
+     * and literals for now:
+     */
+    parseTree = PT_addParseTreePosInfoSome("dummy", parseTree, -1,
+					   ATtrue, ATtrue);
+    slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
 
     return ATmake("snd-value(tree-slices(<term>))", S_SlicesToTerm(slices));
   }
@@ -423,6 +432,7 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   LOC_initLocationApi();
   SE_initStructureEditorApi();
+  S_initSlicingApi();
 
   editors = ATtableCreate(100, 75);
 
