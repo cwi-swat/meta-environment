@@ -81,7 +81,9 @@ ATerm get_new_equations(int cid, ATerm mods)
     }
     mods = (ATerm) ATgetNext((ATermList) mods);
   };
+/*
 ATfprintf(stderr,"Retrieved equations are %t\n", eqs);
+*/
   return ATmake("snd-value(equations([<list>]))",equations);
 }
 
@@ -165,12 +167,10 @@ ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
   ATerm entry;
 
   entry = GetValue(new_modules_db, modname);
-/*
   if(!ATisEqual(eqs,ATparse("error")) &
      !ATisEqual(eqs,ATparse("no-equations"))) {
     eqs = AFaddPosInfoToModule(eqs);
   }
-*/
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
   return ATmake("snd-value(done)");
@@ -238,7 +238,7 @@ ATerm get_parse_table(int cid, ATerm modname)
   if(ATmatch(table,"table(<str>)",&place))
     return ATmake("snd-value(table(<str>))",place);
   else
-    return ATmake("no-table");
+    return ATmake("snd-value(no-table)");
 }
 
 ATermList get_import_section(ATermList sections)
@@ -772,9 +772,7 @@ int main(int argc, char **argv)
 
   ATBinit(argc, argv,&bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
-  cid = ATBconnect(NULL, NULL, -1, module_db_handler); 
-
-  AFinitAsFixPatterns();
+  cid = ATBconnect(NULL, NULL, -1, module_db_handler);  
 
   ATprotect(&modules_to_process);
 
