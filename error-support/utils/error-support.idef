@@ -6,15 +6,17 @@ tool error-support is {
 
 process ErrorSupport is
 let
-  ES : error-support,
-  Summary : term,
-  PosInfo : term,
-  Feedback : term,
-  NewFeedback : term,
-  Producer : str,
-  Identification : str,
   Description : str,
-  Subjects : list
+  ES : error-support,
+  Feedback : term,
+  FileName : str,
+  Identification : str,
+  Location : term,
+  NewFeedback : term,
+  Offset : int,
+  Producer : str,
+  Subjects : list,
+  Summary : term
 in
   execute(error-support, ES?) .
   (
@@ -38,10 +40,35 @@ in
     rec-value(ES, subjects(Subjects?)) .
     snd-msg(subjects(Subjects))
   +
-    rec-msg(get-error-location(Summary?)) .
-    snd-eval(ES, get-first-error-location(Summary)) .
-    rec-value(ES, error-location(PosInfo?)) .
-    snd-msg(error-location(PosInfo))
+    rec-msg(get-summary-first-feedback(Summary?)) .
+    snd-eval(ES, get-summary-first-feedback(Summary)) .
+    rec-value(ES, first-feedback(Feedback?)) .
+    snd-msg(summary-first-feedback(Feedback))
+  +
+    rec-msg(get-feedback-first-location(Summary?)) .
+    snd-eval(ES, get-feedback-first-location(Summary)) .
+    rec-value(ES, first-location(Location?)) .
+    snd-msg(feedback-first-location(Location))
+  +
+    rec-msg(get-location-filename(Location?)) .
+    snd-eval(ES, get-location-filename(Location)) .
+    (
+      rec-value(ES, location-filename(FileName?)) .
+      snd-msg(location-filename(FileName))
+    +
+      rec-value(ES, no-location-filename) .
+      snd-msg(no-location-filename)
+    )
+  +
+    rec-msg(get-location-offset(Location?)) .
+    snd-eval(ES, get-location-offset(Location)) .
+    (
+      rec-value(ES, location-offset(Offset?)) .
+      snd-msg(location-offset(Offset))
+    +
+      rec-value(ES, no-location-offset) .
+      snd-msg(no-location-offset)
+    )
   +
     rec-msg(get-error-description(Summary?)) .
     snd-eval(ES, get-first-error-description(Summary)) .

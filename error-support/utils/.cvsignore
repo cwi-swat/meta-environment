@@ -1,5 +1,6 @@
+.deps
 Makefile
 Makefile.in
-error-support-config
-.deps
 error-support
+error-support-config
+error-support.tifs

@@ -1,5 +1,7 @@
 SUBDIRS = lift-error lower-error
 
+#AM_CFLAGS = -Werror
+
 EXTRA_DIST = \
 	error-support.idef
 

@@ -9,9 +9,12 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
+ATerm get_summary_first_feedback(int conn, ATerm);
+ATerm get_feedback_first_location(int conn, ATerm);
 ATerm get_feedback_subjects(int conn, ATerm);
+ATerm get_location_filename(int conn, ATerm);
 ATerm get_feedback_identification(int conn, ATerm);
-ATerm get_first_error_location(int conn, ATerm);
+ATerm get_location_offset(int conn, ATerm);
 ATerm get_feedback_producer(int conn, ATerm);
 ATerm get_first_error_description(int conn, ATerm);
 ATerm convert_feedback(int conn, ATerm);

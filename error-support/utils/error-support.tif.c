@@ -5,14 +5,17 @@
 
 #include "error-support.tif.h"
 
-#define NR_SIG_ENTRIES	8
+#define NR_SIG_ENTRIES	11
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<error-support>,convert-feedback(<term>))",
   "rec-eval(<error-support>,get-feedback-producer(<term>))",
   "rec-eval(<error-support>,get-feedback-identification(<term>))",
   "rec-eval(<error-support>,get-feedback-subjects(<term>))",
-  "rec-eval(<error-support>,get-first-error-location(<term>))",
+  "rec-eval(<error-support>,get-summary-first-feedback(<term>))",
+  "rec-eval(<error-support>,get-feedback-first-location(<term>))",
+  "rec-eval(<error-support>,get-location-filename(<term>))",
+  "rec-eval(<error-support>,get-location-offset(<term>))",
   "rec-eval(<error-support>,get-first-error-description(<term>))",
   "rec-do(<error-support>,display-feedback(<term>))",
   "rec-terminate(<error-support>,<term>)",
@@ -25,14 +28,23 @@ ATerm error_support_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0;
 
+  if(ATmatch(term, "rec-eval(get-summary-first-feedback(<term>))", &t0)) {
+    return get_summary_first_feedback(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-feedback-first-location(<term>))", &t0)) {
+    return get_feedback_first_location(conn, t0);
+  }
   if(ATmatch(term, "rec-eval(get-feedback-subjects(<term>))", &t0)) {
     return get_feedback_subjects(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-location-filename(<term>))", &t0)) {
+    return get_location_filename(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-feedback-identification(<term>))", &t0)) {
     return get_feedback_identification(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-first-error-location(<term>))", &t0)) {
-    return get_first_error_location(conn, t0);
+  if(ATmatch(term, "rec-eval(get-location-offset(<term>))", &t0)) {
+    return get_location_offset(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-feedback-producer(<term>))", &t0)) {
     return get_feedback_producer(conn, t0);

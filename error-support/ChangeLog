@@ -1,5 +1,10 @@
 $Id$
 
+Mon Feb 16 16:37:02 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * utils/error-support.{c,idef}:
+   - add get-summary-first-feedback, get-feedback-first-location,
+     get-location-filename
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 

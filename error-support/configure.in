@@ -1,16 +1,14 @@
 dnl $Id$
 
-dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(error-support, 0.1)
 AC_PREREQ(2.59)
 
-dnl NOTA BENE: This package is not used in all meta-environment packages
-dnl            YET. But the plan is to use it as widely as possible.
-dnl            Do not add any dependencies on other packages here! 
-dnl            That would exclude such a package from using the ErrorAPI,
-dnl            because it would introduce a circular dependency.
+dnl Nota Bene:
+dnl Do not add any dependencies on other packages here! 
+dnl That would exclude such a package from using the ErrorAPI,
+dnl because it would introduce a circular dependency.
 
 
 dnl {{{  Which compiler to use?
