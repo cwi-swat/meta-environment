@@ -36,3 +36,4 @@ asource_LDADD    = asource.tif.o \
 
 INCLUDES         = -I../libasfix -I$(ATERMINC)
 
+asource.o : asource.tif.h

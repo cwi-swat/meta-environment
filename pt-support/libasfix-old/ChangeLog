@@ -20,6 +20,9 @@
 # $Id$
 #
 
+2000-04-05 <mdejonge@cwi.nl>
+   * liba2toa1 and libasfix are now combined in the single library libasfix
+
 2000-04-04 <mdejonge@cwi.nl>
 Version 0.1
    * Initiation of separate AsFix library

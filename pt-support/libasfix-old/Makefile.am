@@ -19,7 +19,7 @@
 #
 #   $Id$
 
-SUBDIRS=libasfix liba2toa1 asfix-tools
+SUBDIRS=libasfix asfix-tools
 
 EXTRA_DIST=make_rules
 

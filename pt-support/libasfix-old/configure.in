@@ -197,7 +197,6 @@ fi
 AC_OUTPUT(
 	Makefile
 	libasfix/Makefile
-        liba2toa1/Makefile
         asfix-tools/Makefile
 )
 
