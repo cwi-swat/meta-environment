@@ -1,0 +1,25 @@
+process Evaluator(Eval: evaluator) is
+let
+  Id   : term,
+  NF   : term,
+  Mod  : term,
+  Term : term
+in
+  Id := process-id.
+  (
+    rec-msg(interpret(Mod?,Term?)).
+    snd-eval(Eval,interpret(Mod,Term)).
+    rec-value(Eval,result(NF?))
+  +
+    rec-msg(eqs-available(Mod?)).
+    snd-eval(Eval,equations-available(Mod)).
+    (
+      rec-value(Eval,eqs-available(Mod?)).
+      snd-msg(eqs-available)
+    +
+      rec-value(Eval,eqs-not-available(Mod?)).
+      snd-msg(eqs-not-available)
+    )
+  ) * 
+  delta
+endlet
