@@ -112,7 +112,7 @@ stacks *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept)
 {
 #ifdef MEMSTATS
   if(SG_DEBUG) {
-    fprintf(SGlog(), "[Before GC] ");
+    fprintf(SG_log(), "[Before GC] ");
     SG_PrintCurAllocStats();
   }
 #endif
@@ -133,7 +133,7 @@ stacks *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept)
 
 #ifdef MEMSTATS
   if(SG_DEBUG) {
-    fprintf(SGlog(), "[After  GC] ");
+    fprintf(SG_log(), "[After  GC] ");
     SG_PrintCurAllocStats();
   }
 #endif

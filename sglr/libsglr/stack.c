@@ -60,26 +60,26 @@ void SG_PrintCurAllocStats(void)
   size_t total = 0, this;
 
   IF_STATISTICS(
-    fprintf(SGlog(), "Current memory items used:\n\t"
+    fprintf(SG_log(), "Current memory items used:\n\t"
             "datatype      number    sizeof()   subtotal\n");
 
     this = sg_num_stacks * sizeof(stacks); total += this;
-    fprintf(SGlog(), "\tstack lists  %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tstack lists  %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_num_stacks, (long) sizeof(stacks), (long) this);
 
     this = sg_num_stack * sizeof(stack); total += this;
-    fprintf(SGlog(), "\tstacks       %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tstacks       %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_num_stack, (long) sizeof(stack), (long) this);
 
     this = sg_num_links * sizeof(st_links); total += this;
-    fprintf(SGlog(), "\tlink lists   %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tlink lists   %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_num_links, (long) sizeof(st_links), (long) this);
 
     this = sg_num_link * sizeof(st_link); total += this;
-    fprintf(SGlog(), "\tlinks        %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tlinks        %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_num_link, (long) sizeof(st_link), (long) this);
 
-    fprintf(SGlog(), "\ttotal                              %8.8ld\n", (long) total);
+    fprintf(SG_log(), "\ttotal                              %8.8ld\n", (long) total);
   );
 }
 
@@ -88,27 +88,27 @@ void SG_PrintMaxAllocStats(void)
   size_t total = 0, this;
 
   IF_STATISTICS(
-    fprintf(SGlog(), "Maximum %smemory items used:\n\t"
+    fprintf(SG_log(), "Maximum %smemory items used:\n\t"
             "datatype      number    sizeof()   subtotal\n",
             SG_GC?"":"(and current; gc is disabled) ");
 
     this = sg_maxnum_stacks * sizeof(stacks); total += this;
-    fprintf(SGlog(), "\tstack lists  %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tstack lists  %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_maxnum_stacks, (long) sizeof(stacks), (long) this);
 
     this = sg_maxnum_stack * sizeof(stack); total += this;
-    fprintf(SGlog(), "\tstacks       %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tstacks       %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_maxnum_stack, (long) sizeof(stack), (long) this);
 
     this = sg_maxnum_links * sizeof(st_links); total += this;
-    fprintf(SGlog(), "\tlink lists   %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tlink lists   %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_maxnum_links, (long) sizeof(st_links), (long) this);
 
     this = sg_maxnum_link * sizeof(st_link); total += this;
-    fprintf(SGlog(), "\tlinks        %8.8ld * %6.6ld  == %8.8ld\n",
+    fprintf(SG_log(), "\tlinks        %8.8ld * %6.6ld  == %8.8ld\n",
             (long) sg_maxnum_link, (long) sizeof(st_link), (long) this);
 
-    fprintf(SGlog(), "\ttotal                              %8.8ld\n", (long) total);
+    fprintf(SG_log(), "\ttotal                              %8.8ld\n", (long) total);
   );
 }
 #endif /*  MEMSTATS  */

@@ -121,11 +121,6 @@ void term_to_file(ATerm t, char *FN)
   SGtermToFile(program_name, t, FN);
 }
 
-FILE *open_file(char *std_error, char *FN)
-{
-  return SGopenFile(program_name, std_error, FN);
-}
-
 
 /*
  The function |SG_Usage| writes a short summary of the usage of the program.
@@ -327,7 +322,7 @@ ATbool set_global_options(void)
     SG_SHOWSTAT_OFF();
   }
   if(SG_STATISTICS)
-    SGopenLog(program_name, SG_DEBUG?".sglr-log":"sglr-stats.txt");
+    SG_OpenLog(program_name, SG_DEBUG?".sglr-log":"sglr-stats.txt");
 
   /*  Return whether a possibly runnable instantiation has been obtained...  */
   if(parse_table_name) {
@@ -471,9 +466,9 @@ int main (int argc, char **argv)
     set_global_options();
     ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
     IF_STATISTICS(
-                  fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
+                  fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
                   if(maxrss) {
-                    fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
+                    fprintf(SG_log(), "[mem] ATerm init: %ld before, %ld after\n",
                             maxrss, SG_ResidentSetSize());
                   }
                   )
@@ -493,9 +488,9 @@ int main (int argc, char **argv)
     have_complete_config = set_global_options();
 
     IF_STATISTICS(
-      fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
+      fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
       if(maxrss) {
-        fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
+        fprintf(SG_log(), "[mem] ATerm init: %ld before, %ld after\n",
                 maxrss, SG_ResidentSetSize());
       }
     );
@@ -511,7 +506,7 @@ int main (int argc, char **argv)
   IF_STATISTICS(
     maxrss = SG_ResidentSetSize();
     if(maxrss)
-    fprintf(SGlog(), "[mem] exiting: %ld\n", maxrss)
+    fprintf(SG_log(), "[mem] exiting: %ld\n", maxrss)
   );
 
   return retval;

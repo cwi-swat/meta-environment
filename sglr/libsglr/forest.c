@@ -430,7 +430,7 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
 
   /*  A small sanity check  */
   if(fun == SG_Reject_AFun) {
-    IF_DEBUG(ATfprintf(SGlog(), "Reject seeped through:\n\t%t\n",
+    IF_DEBUG(ATfprintf(SG_log(), "Reject seeped through:\n\t%t\n",
                        SG_LookupProduction(pt,SG_GetRejectProdLabel((tree) t))))
     return NULL;
   }
@@ -498,7 +498,7 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
         trms = ATinsert(trms, (ATerm) res);
       } else IF_DEBUG(
                       RemovedSome = ATtrue;
-                      fprintf(SGlog(), "Removing term from ambiguity cluster\n");
+                      fprintf(SG_log(), "Removing term from ambiguity cluster\n");
                       );
     }
       if(ATisEmpty(trms))
@@ -508,7 +508,7 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
 
       if (ATgetLength(trms) == 1) {
         /*  Only one left: ambiguity resolved  */
-        IF_DEBUG(if(RemovedSome) fprintf(SGlog(), "Resolved entire ambiguity\n"))
+        IF_DEBUG(if(RemovedSome) fprintf(SG_log(), "Resolved entire ambiguity\n"))
         res = (forest) ATgetFirst(trms);
       } else {
         /*  Multiple terms left: this is truly an ambiguous node  */
@@ -1019,11 +1019,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
 
   if(SG_GtrPriority(pt, l0, l1)) {
-    IF_DEBUG(ATfprintf(SGlog(), "Direct Priority: %t > %t\n", l0, l1))
+    IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t > %t\n", l0, l1))
     return t0;
   }
   if(SG_GtrPriority(pt, l1, l0)) {
-    IF_DEBUG(ATfprintf(SGlog(), "Direct Priority: %t < %t\n", l0, l1))
+    IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t < %t\n", l0, l1))
     return t1;
   }
 
@@ -1032,11 +1032,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   /*  Don't even bother unless there are preferred actions  */
   if(SG_PT_HAS_PREFERENCES(pt)) {
     if(SG_EagerPriority_Tree(t0, t1)) {
-      IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
+      IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
       return t0;
     }
     if(SG_EagerPriority_Tree(t1, t0)) {
-      IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
+      IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
       return t1;
     }
   }
@@ -1070,10 +1070,10 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     has_prefs0 = SG_HasPreferredProds(t0);
     has_prefs1 = SG_HasPreferredProds(t1);
     if(has_prefs0 && !has_prefs1) {
-      IF_DEBUG(ATfprintf(SGlog(), "Implicit Preference Priority: %t > %t\n", l0, l1))
+      IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t > %t\n", l0, l1))
       return t0;
     } else if(has_prefs1 && !has_prefs0) {
-      IF_DEBUG(ATfprintf(SGlog(), "Implicit Preference Priority: %t < %t\n", l0, l1))
+      IF_DEBUG(ATfprintf(SG_log(), "Implicit Preference Priority: %t < %t\n", l0, l1))
       return t1;
     }
 #endif
@@ -1101,17 +1101,17 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     if(!ATisEqual(t0, t1) && !SG_MultiSetEqual(m0, m1, k0, k1)) {
       /*  multi-prio is irreflexive  */
       if(SG_MultiSetGtr(pt, m0, k0, m1, k1)) {
-        IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t > %t\n", l0, l1))
+        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
         max = t0;
       }
       if(SG_MultiSetGtr(pt, m1, k1, m0, k0)) {
         if(max) {                             /*  shouldn't happen, really  */
-          IF_DEBUG(fprintf(SGlog(),
+          IF_DEBUG(fprintf(SG_log(),
                            "Symmetric multiset priority relation ignored\n"))
           ATwarning("Ignoring symmetric multiset priority relation\n");
           max = NULL;
         } else {
-          IF_DEBUG(ATfprintf(SGlog(), "Multiset Priority: %t < %t\n", l0, l1))
+          IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
           max = t1;
         }
       }
@@ -1152,11 +1152,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
         SG_InjectionFilterSucceeded(SG_NR_INC)
     );
     if(in0 > in1) {
-      IF_DEBUG(ATfprintf(SGlog(), "Injection Priority: %t < %t (%d > %d)\n",
+      IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
                          l0, l1, in0, in1))
       max = t1;
     } else if(in0 < in1) {
-      IF_DEBUG(ATfprintf(SGlog(), "Injection Priority: %t > %t (%d < %d)\n",
+      IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t > %t (%d < %d)\n",
                          l0, l1, in0, in1))
       max = t0;
     }
@@ -1195,7 +1195,7 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
     if(!max || (term_filtered_out=ATisEqual(max, prev)))
       new = ATinsert(new, (ATerm) prev);
     if(max) {
-      IF_DEBUG(fprintf(SGlog(), "Priority: %d %c %d (old amb)\n",
+      IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
                        SG_GetApplProdLabel(prev),
                        ATisEqual(max, prev)?'>':'<',
                        SG_GetApplProdLabel(t))
@@ -1245,7 +1245,7 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
       /*  new and existing are in a priority relation, max is top  */
       newambs = ATmakeList1((ATerm) max);
       if(max) {
-        IF_DEBUG(fprintf(SGlog(), "Priority: %d %c %d (new amb)\n",
+        IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (new amb)\n",
                          SG_GetApplProdLabel(existing),
                          ATisEqual(max, existing)?'>':'<',
                          SG_GetApplProdLabel(new))

@@ -207,12 +207,12 @@ state SG_LookupGoto(parse_table *pt, state s, label l)
 
   for(b = pt->gotos.table[h]; b; b=b->next) {
     if((b->from==s) && (b->l==l)) {
-      IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == %d\n", s, l, b->to))
+      IF_DEBUG(fprintf(SG_log(), "Goto(%d,%d) == %d\n", s, l, b->to))
       return b->to;
     }
   }
 
-  IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == EOF\n", s, l))
+  IF_DEBUG(fprintf(SG_log(), "Goto(%d,%d) == EOF\n", s, l))
     return EOF;
 }
 
@@ -228,12 +228,12 @@ actions SG_LookupAction(parse_table *pt, state s, token c)
     if((a->s==s) && (a->c==c)) {
       IF_DEBUG(
         if(ATisEmpty((ATermList) a->a)) {
-          fprintf(SGlog(), "No action(%d,%d)\n", s, c);
+          fprintf(SG_log(), "No action(%d,%d)\n", s, c);
         } else if(ATgetLength(a->a) == 1) {
-          ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, c,
+          ATfprintf(SG_log(), "Action(%d,%d) = %t\n", s, c,
                     ATgetFirst((ATermList) a->a));
         } else {
-          ATfprintf(SGlog(), "Conflict(%d,%d) = %t\n", s, c, a->a);
+          ATfprintf(SG_log(), "Conflict(%d,%d) = %t\n", s, c, a->a);
         }
       );
       return a->a;
@@ -615,7 +615,7 @@ void SG_AddPTStates(parse_table *pt, ATermList states)
       ATerror("SG_AddPTStates: bad state-rec %t\n", curstate);
     }
   }
-  IF_STATISTICS(fprintf(SGlog(), "No. of gotos: %d\nNo. of actions: %d\n",
+  IF_STATISTICS(fprintf(SG_log(), "No. of gotos: %d\nNo. of actions: %d\n",
                         numgotos, numactions));
 }
 
@@ -745,7 +745,7 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   parse_table *pt;
   size_t      tableclass, tablesize;
 
-  IF_STATISTICS(fprintf(SGlog(), "No. of states: %ld\n"
+  IF_STATISTICS(fprintf(SG_log(), "No. of states: %ld\n"
                         "No. of productions: %ld\n"
                         "No. of action entries: %ld\n"
                         "No. of goto entries: %ld\n",
@@ -882,19 +882,19 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
   FILE        *input_file;
   parse_table *pt = NULL;
 
-  if(!(input_file = SGopenFile(prgname, "parse table not specified", FN))) {
+  if(!(input_file = SG_OpenFile(prgname, "parse table not specified", FN))) {
     return NULL;
   }
 
-  IF_STATISTICS(fprintf(SGlog(), "Language: %s\n", L); SG_Timer());
+  IF_STATISTICS(fprintf(SG_log(), "Language: %s\n", L); SG_Timer());
 
   pt = SG_BuildParseTable((ATermAppl) ATreadFromFile(input_file));
 
-  IF_STATISTICS(fprintf(SGlog(),
+  IF_STATISTICS(fprintf(SG_log(),
                         "Obtaining parse table for %s took %.4fs\n",
                         L, SG_Timer()));
 
-  SGcloseFile(input_file);
+  SG_CloseFile(input_file);
   if(pt)
     SG_SaveParseTable(L, pt);
 
@@ -961,10 +961,10 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   IF_STATISTICS(
     allocated = SG_Allocated();
     if(allocated > 0)
-    fprintf(SGlog(), "[mem] extra ATerm memory allocated for empty table: %ld\n",
+    fprintf(SG_log(), "[mem] extra ATerm memory allocated for empty table: %ld\n",
             allocated);
     if(maxrss)
-    fprintf(SGlog(), "[mem] PT build: %ld before, %ld after table creation\n",
+    fprintf(SG_log(), "[mem] PT build: %ld before, %ld after table creation\n",
             maxrss, SG_ResidentSetSize());
     maxrss = SG_ResidentSetSize();
   );
@@ -980,18 +980,18 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   }
 
   IF_STATISTICS(
-    fprintf(SGlog(), "%scludes priorities\n",
+    fprintf(SG_log(), "%scludes priorities\n",
       SG_PT_HAS_PRIORITIES(pt)?"In":"Ex");
-    fprintf(SGlog(), "%scludes prefer actions\n",
+    fprintf(SG_log(), "%scludes prefer actions\n",
       SG_PT_HAS_PREFERS(pt)   ?"In":"Ex");
-    fprintf(SGlog(), "%scludes avoid actions\n",
+    fprintf(SG_log(), "%scludes avoid actions\n",
       SG_PT_HAS_AVOIDS(pt)    ?"In":"Ex");
     allocated = SG_Allocated();
     if(allocated > 0)
-    fprintf(SGlog(), "[mem] extra ATerm memory allocated while filling table: %ld\n",
+    fprintf(SG_log(), "[mem] extra ATerm memory allocated while filling table: %ld\n",
             allocated);
     if(maxrss)
-    fprintf(SGlog(), "[mem] PT build: %ld before, %ld after filling table\n",
+    fprintf(SG_log(), "[mem] PT build: %ld before, %ld after filling table\n",
             maxrss, SG_ResidentSetSize());
   );
 
@@ -1033,7 +1033,7 @@ void SG_SaveParseTable(char *L, parse_table *pt)
   /*  Add L in the next free slot  */
   tables[last_table].name  = strdup(L);
   tables[last_table].table = pt;
-  IF_DEBUG(fprintf(SGlog(),
+  IF_DEBUG(fprintf(SG_log(),
                    "Table for %s added to parse table database with index %d\n",
                    L, last_table));
   last_table++;
@@ -1070,9 +1070,9 @@ void SG_ClearParseTable(char *L)
 
   IF_STATISTICS(
     if(maxrss)
-    fprintf(SGlog(), "[mem] PT cleared: %ld before, %ld after\n",
+    fprintf(SG_log(), "[mem] PT cleared: %ld before, %ld after\n",
             maxrss, SG_ResidentSetSize());
-    fprintf(SGlog(), "Table for %s removed from parse table database\n", L)
+    fprintf(SG_log(), "Table for %s removed from parse table database\n", L)
   );
 }
 
@@ -1080,7 +1080,7 @@ parse_table *SG_LookupParseTable(char *L)
 {
   int i = 0;
 
-  IF_DEBUG(fprintf(SGlog(), "Request for language %s\n", L?L:"(undefined)"));
+  IF_DEBUG(fprintf(SG_log(), "Request for language %s\n", L?L:"(undefined)"));
 
   if(!L) {
     IF_VERBOSE(ATwarning("can't lookup undefined language\n"));
@@ -1088,13 +1088,13 @@ parse_table *SG_LookupParseTable(char *L)
   }
   for (; L && i < last_table; i++)
     if (!strcmp(L, tables[i].name)) {
-      IF_DEBUG(fprintf(SGlog(),
+      IF_DEBUG(fprintf(SG_log(),
                        "Table for language %s available with index %d\n", L, i))
       return tables[i].table;
-    } else IF_DEBUG(fprintf(SGlog(), "Table for %s not at index %d (%s)\n",
+    } else IF_DEBUG(fprintf(SG_log(), "Table for %s not at index %d (%s)\n",
                             L, i, tables[i].name));
 
-  IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
+  IF_DEBUG(fprintf(SG_log(), "Table for %s not amongst the %d stored\n",
                    SG_SAFE_STRING(L), MAX_TABLES));
 
   return NULL;

@@ -291,45 +291,45 @@ void SG_PostParse(void)
     ptm = SG_Timer();
     SG_PageFlt(&sg_major, &sg_minor);
 
-    fprintf(SGlog(), "Number of lines: %ld\n", (long) line);
-    fprintf(SGlog(), "Maximum of %d parse branches reached at token ",
+    fprintf(SG_log(), "Number of lines: %ld\n", (long) line);
+    fprintf(SG_log(), "Maximum of %d parse branches reached at token ",
             sg_sp_maxidx);
-    SG_PrintToken(SGlog(), sg_sp_maxtoken);
-    fprintf(SGlog(), ", line %d, column %d (token #%d)\n",
+    SG_PrintToken(SG_log(), sg_sp_maxtoken);
+    fprintf(SG_log(), ", line %d, column %d (token #%d)\n",
             sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset);
 
-    fprintf(SGlog(), "Parse time: %.2fs\n", ptm);
-    fprintf(SGlog(), "Characters/second: %.0f\n", sg_tokens_read/ptm);
+    fprintf(SG_log(), "Parse time: %.2fs\n", ptm);
+    fprintf(SG_log(), "Characters/second: %.0f\n", sg_tokens_read/ptm);
 
-    fprintf(SGlog(), "Number of rejects: %ld\n", (long) sg_nr_rejects);
+    fprintf(SG_log(), "Number of rejects: %ld\n", (long) sg_nr_rejects);
 
-    fprintf(SGlog(), "Number of reductions: %ld\n", (long) num_reductions);
-    fprintf(SGlog(), "Number of reductions/sec: %.0f\n",
+    fprintf(SG_log(), "Number of reductions: %ld\n", (long) num_reductions);
+    fprintf(SG_log(), "Number of reductions/sec: %.0f\n",
             (double) num_reductions/ptm);
-    fprintf(SGlog(), "Number of reductions/token: %f\n",
+    fprintf(SG_log(), "Number of reductions/token: %f\n",
             (double) num_reductions/(double)sg_tokens_read);
-    fprintf(SGlog(), "Number of ambiguities: %d\n",
+    fprintf(SG_log(), "Number of ambiguities: %d\n",
             SG_MaxNrAmb(SG_NR_ASK));
-    fprintf(SGlog(), "Number of calls to Amb: %d\n",
+    fprintf(SG_log(), "Number of calls to Amb: %d\n",
             SG_AmbCalls(SG_NR_ASK));
     if(SG_FILTER) {
-      fprintf(SGlog(), "MultiSet Comparisons: total %d, successful %d\n",
+      fprintf(SG_log(), "MultiSet Comparisons: total %d, successful %d\n",
               SG_MultiSetGtrCalls(SG_NR_ASK),
               SG_MultiSetFilterSucceeded(SG_NR_ASK));
-      fprintf(SGlog(), "Number of Injection Counts: total %d, successful %d\n",
+      fprintf(SG_log(), "Number of Injection Counts: total %d, successful %d\n",
               SG_InjectionCountCalls(SG_NR_ASK),
               SG_InjectionFilterSucceeded(SG_NR_ASK));
     }
 
-    fprintf(SGlog(), "Minor page faults: %ld\n", sg_minor);
-    fprintf(SGlog(), "Major page faults: %ld\n", sg_major);
+    fprintf(SG_log(), "Minor page faults: %ld\n", sg_minor);
+    fprintf(SG_log(), "Major page faults: %ld\n", sg_major);
 
     if(sg_minor > 0)
-    fprintf(SGlog(), "Characters/minor fault: %ld\n", sg_tokens_read/sg_minor);
+    fprintf(SG_log(), "Characters/minor fault: %ld\n", sg_tokens_read/sg_minor);
 
     allocated = SG_Allocated();
     if(allocated > 0)
-    fprintf(SGlog(), "[mem] extra ATerm memory allocated while parsing: %ld\n",
+    fprintf(SG_log(), "[mem] extra ATerm memory allocated while parsing: %ld\n",
             allocated);
   );
 
@@ -359,7 +359,7 @@ void  SG_ParserCleanup(void)
     IF_STATISTICS(
       allocated = SG_Allocated();
       if(allocated > 0)
-        fprintf(SGlog(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
+        fprintf(SG_log(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
                 allocated);
     );
 #if 0
@@ -397,9 +397,9 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
     current_token = SG_NextToken(get_next_token);
 
     IF_DEBUG(
-             fprintf(SGlog(), "Current token (#%ld): ", (long) sg_tokens_read);
-             SG_PrintToken(SGlog(), current_token);
-             fprintf(SGlog(), "\n");
+             fprintf(SG_log(), "Current token (#%ld): ", (long) sg_tokens_read);
+             SG_PrintToken(SG_log(), current_token);
+             fprintf(SG_log(), "\n");
              )
       SG_ParseToken();
     SG_Shifter();
@@ -482,11 +482,11 @@ void SG_Actor(stack *st)
         if(SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))
           SG_DoReductions(st, a);
         else
-          IF_DEBUG(ATfprintf(SGlog(),"Lookahead restriction prohibited %t\n",a));
+          IF_DEBUG(ATfprintf(SG_log(),"Lookahead restriction prohibited %t\n",a));
         break;
       case ACCEPT:
         if(!SG_Rejected(st)) {
-          IF_DEBUG(fprintf(SGlog(), "Reached the accept state\n"));
+          IF_DEBUG(fprintf(SG_log(), "Reached the accept state\n"));
           accepting_stack = st;
         }
         break;
@@ -624,9 +624,9 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
                SG_POSINFO ? (ATerm) SG_CurrentPosInfo() : NULL);
 
   IF_DEBUG(
-    fprintf(SGlog(), "Reducing; state %d, token: ", SG_GETSTATE(s));
-    SG_PrintToken(SGlog(), current_token);
-    fprintf(SGlog(), ", production: %d\n", SG_GETLABEL(prodl));
+    fprintf(SG_log(), "Reducing; state %d, token: ", SG_GETSTATE(s));
+    SG_PrintToken(SG_log(), current_token);
+    fprintf(SG_log(), ", production: %d\n", SG_GETLABEL(prodl));
   );
 
   /*  A stack with state s already exists?  */
@@ -650,7 +650,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     }
     if (attribute == SG_PT_REJECT) {
       SG_MarkLinkRejected(nl);
-      IF_DEBUG(fprintf(SGlog(), "Reject [new]\n"))
+      IF_DEBUG(fprintf(SG_log(), "Reject [new]\n"))
     }
     return;
   }
@@ -658,7 +658,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   /*  A stack with state s already exists.  Ambiguity?  */
   if((nl = SG_FindDirectLink(st1, st0))) {
     IF_DEBUG(
-      fprintf(SGlog(), "Ambiguity(%s): direct link %d -> %d%s\n",
+      fprintf(SG_log(), "Ambiguity(%s): direct link %d -> %d%s\n",
               SG_ProdSort(SG_LookupProduction(table, prodl)),
               SG_GETSTATE(SG_ST_STATE(st0)),
               SG_GETSTATE(SG_ST_STATE(st1)),
@@ -683,7 +683,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     if (attribute == SG_PT_REJECT) {
       SG_MarkLinkRejected(nl);
       IF_DEBUG(
-        fprintf(SGlog(), "Warning: stack with state %d rejected in "
+        fprintf(SG_log(), "Warning: stack with state %d rejected in "
                 "presence of other links (linked to stack %d)\n",
                 SG_GETSTATE(SG_ST_STATE(st0)), SG_GETSTATE(SG_ST_STATE(st1)));
       );
@@ -753,10 +753,10 @@ void SG_Shifter(void)
   int          i;
 
   IF_DEBUG(
-    fprintf(SGlog(), "#%ld: shifting %d parser(s) -- token ",
+    fprintf(SG_log(), "#%ld: shifting %d parser(s) -- token ",
             (long) sg_tokens_read, sg_sp_idx);
-    SG_PrintToken(SGlog(), current_token);
-    fprintf(SGlog(), ", line %ld, column %ld\n", (long) line, (long) col);
+    SG_PrintToken(SG_log(), current_token);
+    fprintf(SG_log(), ", line %ld, column %ld\n", (long) line, (long) col);
   );
 
   t = SG_LookupProduction(table, current_token);
@@ -777,7 +777,7 @@ void SG_Shifter(void)
       l = SG_AddLink(st1, st0, (tree) t);
       if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
     } else IF_DEBUG(
-      fprintf(SGlog(), "Shifter: skipping rejected stack with state %d\n",
+      fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
               SG_GETSTATE(SG_ST_STATE(st0)))
     );
   }
@@ -963,7 +963,7 @@ forest SG_ParseResult(char *sort)
     if(sort) {
       IF_STATISTICS(SG_Timer());
       woods = SG_Prune(woods, sort);
-      IF_STATISTICS(fprintf(SGlog(), "Topsort selection took %.4fs\n",
+      IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.4fs\n",
                             SG_Timer()));
       if(!woods) {
         /*  Flag this error at start, not end, of file  */
@@ -976,7 +976,7 @@ forest SG_ParseResult(char *sort)
     if(SG_CYCLE && SG_NEED_OUTPUT) {
       IF_STATISTICS(SG_Timer());
       cycle = SG_CyclicTerm(woods);
-      IF_STATISTICS(fprintf(SGlog(), "Cycle detection took %.4fs\n", SG_Timer()));
+      IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
       if(!ATisEmpty(cycle))
         return SG_ParseError(cycle, 0);
     }
@@ -987,7 +987,7 @@ forest SG_ParseResult(char *sort)
     if(SG_NEED_OUTPUT) {
       IF_STATISTICS(SG_Timer());
       woods = SG_YieldPT(table, woods);
-      IF_STATISTICS(fprintf(SGlog(),
+      IF_STATISTICS(fprintf(SG_log(),
                             "Aprod expansion took %.4fs\n", SG_Timer()));
     }
 
@@ -1012,7 +1012,7 @@ forest SG_ParseResult(char *sort)
       IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
       IF_STATISTICS(SG_Timer());
       woods = (forest) a2toa1((ATerm) woods, ATfalse);
-      IF_STATISTICS(fprintf(SGlog(),
+      IF_STATISTICS(fprintf(SG_log(),
                             "AsFix1 conversion took %.4fs\n", SG_Timer()));
       return woods;
     }

@@ -88,8 +88,8 @@ ATerm SGopenLanguage(char *prgname, char *L, char *FN);
 ATerm SGcloseLanguage(char *prgname, char *L);
 ATerm SGreOpenLanguage(char *prgname, char *L, char *FN);
 
-FILE *SGopenFile(char *prgname, char *std_error, char *FN);
-void  SGcloseFile(FILE *fd);
+FILE *SG_OpenFile(char *prgname, char *std_error, char *FN);
+void  SG_CloseFile(FILE *fd);
 
 ATerm SGparseFile(char *prgname, char *L, char *G, char *FN);
 ATerm SGparseString(char *L, char *G, char *S);
@@ -108,8 +108,8 @@ char *SGsort(int Mode, forest t);
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
 
 void SG_PrintToken(FILE *out, token c);
-FILE *SGopenLog(char *program, char *fnam);
-FILE *SGlog(void);
+FILE *SG_OpenLog(char *program, char *fnam);
+FILE *SG_log(void);
 void  SGcloseLog(void);
 
 void SG_ReportErrLine(int line, int col);
