@@ -28,7 +28,6 @@
 process Set-parsetable is
 let
   ModuleId   : term, 
-  ModuleName : str, 
   TableType  : term,
   Table      : term,
   Id         : int
