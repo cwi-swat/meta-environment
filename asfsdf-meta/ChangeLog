@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Apr 16 13:45:18 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   call get-focus-origin
+
 Thu Apr 15 14:54:36 CEST 2004 <jong@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - use GetSpecification, GetSpecification{Equations,Test}
