@@ -32,7 +32,7 @@
 #include "edit-syntax.tb"
 #include "edit-equations.tb"
 #include "edit-term.tb"
-#include "evaluator.idef"
+#include "asfe.idef"
 #include "asource.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
@@ -63,7 +63,7 @@
 
 toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
-	Set-parsetable, Open-Sdf2-Language, Evaluator, 
+	Set-parsetable, Open-Sdf2-Language, Asfe, 
 	Notify-about-changed-modules, Rewrite-Errors,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Asfc, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
