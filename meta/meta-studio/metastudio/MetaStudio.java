@@ -163,11 +163,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     TreeSelectionListener moduleTreeListener = new TreeSelectionListener() {
       public void valueChanged(TreeSelectionEvent event) {
-        /*
-        int index = event.getLastIndex();
-        String selectedModule
-          = (String)moduleTree.getModel().getElementAt(index);
-          */
 	  moduleManager.selectModule(moduleManager.getModule(getCurrentModule()));
       }
     };
