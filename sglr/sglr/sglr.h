@@ -14,6 +14,7 @@ ATerm SGparseFileUsingTable(char *prg, char *tbl, char *in, char *out);
 
 ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN);
 FILE *SGopenFile(char *prgname, char *std_error, char *FN);
+void  SGcloseFile(FILE *fd);
 
 ATerm SGparseFile(char *prgname, int conn, char *L, char *FN);
 ATerm SGparseString(int conn, char *L, char *S);
