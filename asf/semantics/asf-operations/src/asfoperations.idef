@@ -17,7 +17,7 @@ in
     rec-msg(extract-tests(Equations?)) .
     snd-eval(AO, extract-tests(Equations)) .
     rec-value(AO, extract-tests-result(Tests?)) .
-    snd-msg(extract-tests-result(Tests))
+    snd-msg(extract-tests-result(Tests)) 
   )*
   delta
 endlet
