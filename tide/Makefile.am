@@ -23,6 +23,8 @@ tide.jar: ${JARFILES}
 %.sh: %.sh.src Makefile
 	sed 's@__JARDIR__@${datadir}@g;\
 	     s@__TBDIR__@${datadir}@g;\
+	     s@__ATERM__@${ATERM}@g;\
+	     s@__TOOLBUS__@${TOOLBUS}@g;\
 	' < $< > $@ && chmod +x $@
 
 

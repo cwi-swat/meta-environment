@@ -1,3 +1,12 @@
+2001/07/03 (olivierp@cwi.nl)
+ * Version is now 0.3
+ * Fixed problems with exceptions occuring when a debug-adapter disconnected
+ * Fixed problems with freeze-ups after JOptionPane usage
+ * Added support for adding/deleting source files in the source viewer
+ * Added ToDo list
+ * Removed some debug output
+ * Added @TOOLBUS@/classes and @ATERM@/classes to tide classpath
+
 2001/06/26 (olivierp@cwi.nl)
  * Version is now 0.2
  * Tool instance windows can now be reopened after closing

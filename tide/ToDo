@@ -1,0 +1,42 @@
+
+This file contains a list of bugs that need to be fixed and features
+that need to be added. Some items contain an indication of their 
+importance (priority) and/or an approximation of the effort needed to
+fix the bug or add the feature. Needless to say that items with a high
+priority that require a modest effort will be tackled first :-)
+
+Prio is a number between 1 and 10, where higher numbers indicate more
+urgent items.
+
+Effort is a rough estimate in terms of man hours (h), days (d), or
+weeks (w).
+
+For convenience, adapter specific problems/features are also listed
+in this file, even though they should probably be listed in the 
+the actual adapter implementation.
+
+
+								Prio	Effort
+1. General Bugs
+---------------
+1.1 CPE sometimes out of visual range				 4	 1h
+1.2 Breakpoint/Watchpoint menu at the wrong location		 7	 1h
+
+2. General Features
+-------------------
+2.1 Opaque moves (optional)					 4	 2h
+2.2 Saving of breakpoints/watchpoints
+2.3 Ask for confirmation when deleting windows with rules:	 5	 2h
+    -> Keep or Remove or Cancel
+2.4 Make an applet demo						 8	 2d
+2.5 View the result of watchpoints in a way that is similar	 7	 1d
+    to variables.
+2.6 View the result of expressions not just plain variables	 7	 1d
+    Note: this point is closely related to 2.5
+
+A. Asf+Sdf Adapter Features
+---------------------------
+A.1 Make it possible to view asource instead of			 8	 1h
+    pretty printed values of terms
+    Note: depends on 2.5/2.6
+

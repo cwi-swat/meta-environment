@@ -85,7 +85,7 @@ public abstract class TideTool
   }
 
   //}}}
-  //{{{ public void displayError(Expr error)
+  //{{{ public void displayError(String msg, Expr data)
 
   public void displayError(String msg, Expr data)
   {
@@ -94,11 +94,25 @@ public abstract class TideTool
       msg += ": " + string;
     }
 
+    manager.displayError(msg);
+    /* Removed due to a bug in JDK-1.[234]
+    JOptionPane.showInternalMessageDialog(this, msg, "Tide Error",
+					  JOptionPane.ERROR_MESSAGE);
+					  */
+    System.err.println(msg + ": " + data);
+  }
 
+  //}}}
 
-    JOptionPane.showMessageDialog(this, msg, "Tide Error",
-				  JOptionPane.ERROR_MESSAGE);
-    System.err.println("Tide Error: " + msg + ": " + data);
+  //{{{ public void destroy()
+
+  public void destroy()
+  {
+    Runnable runnable = new Runnable()
+    {
+      public void run() { dispose(); }
+    };
+    getToolkit().getSystemEventQueue().invokeLater(runnable);
   }
 
   //}}}

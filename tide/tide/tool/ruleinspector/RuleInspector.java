@@ -84,10 +84,7 @@ public class RuleInspector
   public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
   {
     if (proc == process) {
-      Object lock = getTreeLock();
-      synchronized (lock) {
-	dispose();
-      }
+      destroy();
     }
   }
 

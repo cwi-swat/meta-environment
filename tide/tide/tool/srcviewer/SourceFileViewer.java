@@ -84,8 +84,6 @@ class SourceFileViewer
   public SourceFileViewer(ToolManager manager, DebugProcess process,
 			  String file, int id, String tag_view_var)
   {
-    System.out.println("creating new SourceFileViewer: " + file);
-
     this.manager = manager;
     this.process = process;
     this.file = file;
@@ -152,11 +150,19 @@ class SourceFileViewer
     //}}}
 
     try {
-      System.out.println("reading text from file");
       text.read(new BufferedReader(new FileReader(file)), null);
     } catch (IOException e) {
       System.err.println("cannot find source file " + file);
     }
+  }
+
+  //}}}
+
+  //{{{ public String getFile()
+
+  public String getFile()
+  {
+    return file;
   }
 
   //}}}

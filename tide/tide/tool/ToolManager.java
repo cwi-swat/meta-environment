@@ -1,8 +1,11 @@
 package tide.tool;
 
 import java.util.*;
+import java.util.List;
 import java.io.*;
 import java.beans.*;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import tide.tool.support.*;
@@ -197,6 +200,24 @@ public class ToolManager
   }
 
   //}}}
+  //{{{ public void displayError(String msg)
+
+  public void displayError(String msg)
+  {
+    ErrorWindow error = new ErrorWindow(msg);
+    showDialog(error);
+  }
+
+  //}}}
+  //{{{ public void showDialog(TideDialog dialog)
+
+  public void showDialog(TideDialog dialog)
+  {
+    desktop.add(dialog, 0);
+    dialog.show();
+  }
+
+  //}}}
 
   //{{{ public ProcessTool launchProcessTool(String toolName, DebugProcess process)
 
@@ -271,6 +292,39 @@ public class ToolManager
       AdapterAction action = (AdapterAction)iter.next();
       action.setAdapter(adapter);
     }
+  }
+
+  //}}}
+}
+
+class ErrorWindow
+  extends TideDialog
+{
+  private JButton ok;
+  private JLabel label;
+
+  //{{{ public ErrorWindow(String msg)
+
+  public ErrorWindow(String msg)
+  {
+    super("Tide Error!", DIALOG_OK);
+    label = new JLabel(msg, JLabel.CENTER);
+    init();
+  }
+
+  //}}}
+
+  //{{{ public void addContent(JPanel panel)
+
+  public void addContent(JPanel panel)
+  {
+    panel.setLayout(new GridLayout(3, 1));
+
+    label.setForeground(Color.red);
+
+    panel.add(new JPanel());
+    panel.add(label);
+    panel.add(new JPanel());
   }
 
   //}}}

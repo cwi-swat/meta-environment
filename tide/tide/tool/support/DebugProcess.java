@@ -296,12 +296,8 @@ public class DebugProcess
 
   public void evaluationResult(Expr expr, Expr value, String tag)
   {
-    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ rule created: " + tag);
     if (tag.equals(tag_initial_cpe)) {
-      System.out.println("lastLocation = " + value);
       lastLocation = value;
-    } else {
-      System.out.println("not equal: " + tag + "," + tag_initial_cpe);
     }
     fireEvaluationResult(expr, value, tag);
   }

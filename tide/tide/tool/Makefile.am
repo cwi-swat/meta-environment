@@ -10,7 +10,8 @@ java_JAVA	= ${CONTROL_GEN} \
 		AdapterToolFactory.java AdapterTool.java \
 		ProcessToolFactory.java ProcessTool.java \
 		AdapterAction.java ProcessAction.java \
-		PreferenceSet.java PreferenceListener.java
+		PreferenceSet.java PreferenceListener.java \
+		TideDialog.java
 
 
 CONTROL_GEN	= TideControlTif.java TideControlTool.java \

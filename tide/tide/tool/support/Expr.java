@@ -24,7 +24,10 @@ public class Expr
     "var-unknown(<str>)";
   private static final String PAT_ERROR =
     "error(<str>,<term>)";
-
+  private static final String PAT_SOURCE_PATH =
+    "source-path(<str>)";
+  private static final String PAT_SOURCE_LIST =
+    "source-list([<list>])";
 
   public static ATermFactory factory;
 
@@ -98,6 +101,14 @@ public class Expr
   {
     return make(factory.make(PATTERN_LOC_LC, file, new Integer(line),
 			     new Integer(column)));
+  }
+
+  //}}}
+  //{{{ public static Expr makeListSources()
+
+  public static Expr makeListSources()
+  {
+    return make("list-sources");
   }
 
   //}}}
@@ -437,6 +448,52 @@ public class Expr
 
   //}}}
 
+  //{{{ public boolean isSourcePath()
+
+  public boolean isSourcePath()
+  {
+    List result = term.match(PAT_SOURCE_PATH);
+    return result != null;
+  }
+
+  //}}}
+  //{{{ public String getSourcePath()
+
+  public String getSourcePath()
+  {
+    List result = term.match(PAT_SOURCE_PATH);
+    if (result != null) {
+      return (String)result.get(0);
+    }
+
+    throw new RuntimeException("not a source path: " + term);
+  }
+
+  //}}}
+
+  //{{{ public boolean isSourceList()
+
+  public boolean isSourceList()
+  {
+    List result = term.match(PAT_SOURCE_LIST);
+    return result != null;
+  }
+
+  //}}}
+  //{{{ public Iterator sourceIterator()
+
+  public Iterator sourceIterator()
+  {
+    List result = term.match(PAT_SOURCE_LIST);
+    if (result != null) {
+      return new StringIterator((ATermList)result.get(0));
+    }
+
+    throw new RuntimeException("not a source-list: " + term);
+  }
+
+  //}}}
+
   //{{{ public Iterator iterator()
 
   public Iterator iterator()
@@ -519,3 +576,51 @@ class ExprIterator
   //}}}
 }
 
+class StringIterator
+  implements Iterator
+{
+  private ATermList list;
+
+  //{{{ public StringIterator(ATermList list)
+
+  public StringIterator(ATermList list)
+  {
+    this.list = list;
+  }
+
+  //}}}
+  //{{{ public boolean hasNext()
+
+  public boolean hasNext()
+  {
+    if (list.isEmpty()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  //}}}
+  //{{{ public Object next()
+
+  public Object next()
+  {
+    ATerm result;
+
+    result = list.getFirst();
+    list   = list.getNext();
+
+    return ((ATermAppl)result).getAFun().getName();
+  }
+
+  //}}}
+  //{{{ public void remove()
+
+  public void remove()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  //}}}
+}
+  

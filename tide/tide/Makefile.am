@@ -1,6 +1,8 @@
 
 SUBDIRS		= . tool
 
+CLASSPATH	:= ${ATERM}/classes:${TOOLBUS}/classes
+
 javadir		= ${prefix}/classes/tide
 JAVAROOT	= ${top_builddir}
 

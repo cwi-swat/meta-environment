@@ -12,6 +12,7 @@ public class DebugTool
 
   private Info info;
 
+
   //{{{ public DebugTool(ATermFactory factory)
 
   public DebugTool(ATermFactory factory)
@@ -42,6 +43,7 @@ public class DebugTool
   {
     info.info("adapterDisconnected: " + dap);
     DebugAdapter adapter = findAdapter(dap);
+
     adapter.removeAllProcesses();
     fireAdapterDisconnected(adapter);
     adapters.remove(dap);
@@ -94,8 +96,7 @@ public class DebugTool
   {
     List result;
 
-    info.info("recAckEvent: " + event
-	      + " in thread " + Thread.currentThread());
+    info.info("recAckEvent: " + event);
 
     result =
       event.match("evaluate(proc(<term>,<int>),<term>,<term>,<term>))");

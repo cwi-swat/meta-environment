@@ -30,6 +30,7 @@ public class SourceViewer
   private static final String TAG_STEP_INTO  = "sv-step-into";
   private static final String TAG_STEP_OVER  = "sv-step-over";
   private static final String TAG_VIEW_VAR   = "sv-view-var";
+  private static final String TAG_ADD_SOURCE = "sv-add-source";
 
   private static final String NO_SOURCE = "*no-source*";
 
@@ -44,11 +45,15 @@ public class SourceViewer
   private String tag_step_into;
   private String tag_step_over;
   private String tag_view_var;
+  private String tag_add_source;
 
   private Action stepInto;
   private Action stepOver;
   private Action run;
   private Action stop;
+
+  private Action addSourceFile;
+  private Action delSourceFile;
 
   private DebugProcess process;
   private Rule ruleStepInto;
@@ -77,6 +82,7 @@ public class SourceViewer
     tag_step_into  = TAG_STEP_INTO  + "-" + getId();
     tag_step_over  = TAG_STEP_OVER  + "-" + getId();
     tag_view_var   = TAG_VIEW_VAR   + "-" + getId();
+    tag_add_source = TAG_ADD_SOURCE + "-" + getId();
 
     //}}}
     //{{{ Build actions
@@ -126,6 +132,30 @@ public class SourceViewer
     run.setEnabled(stopped);
     stop.setEnabled(!stopped);
 
+    addSourceFile = new AbstractAction("Add File",
+				       loadIcon("add-source.gif"))
+    {
+      public void actionPerformed(ActionEvent event)
+      {
+	process.requestEvaluation(Expr.makeListSources(),
+				  tag_add_source);
+      }
+    };
+
+    delSourceFile = new AbstractAction("Remove File",
+				       loadIcon("del-source.gif"))
+    {
+      public void actionPerformed(ActionEvent event)
+      {
+	unhighlightCpe();
+	if (currentViewer != null) {
+	  residentViewers.remove(currentViewer.getFile());
+	  center.remove(currentViewer);
+	}
+      }
+    };
+
+
     //}}}
     //{{{ Build UI
 
@@ -133,10 +163,13 @@ public class SourceViewer
     content.setLayout(new BorderLayout());
 
     tools = new JToolBar();
-    tools.add(stepInto);
-    tools.add(stepOver);
-    tools.add(run);
-    tools.add(stop);
+    tools.add(stepInto).setToolTipText("Step Into");
+    tools.add(stepOver).setToolTipText("Step Over");
+    tools.add(run).setToolTipText("Run");
+    tools.add(stop).setToolTipText("Stop");
+    tools.addSeparator();
+    tools.add(addSourceFile).setToolTipText("Add Sourcefile");
+    tools.add(delSourceFile).setToolTipText("Remove Sourcefile");
 
     message = new JLabel("-");
     message.setBackground(tools.getBackground());
@@ -219,6 +252,15 @@ public class SourceViewer
 
   //}}}
 
+  //{{{ private void requestSourceFiles()
+
+  private void requestSourceFiles()
+  {
+    System.out.println("requesting source files");
+  }
+
+  //}}}
+
   //{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
 
   public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
@@ -227,11 +269,7 @@ public class SourceViewer
       // Rules do not need to be removed!
       ruleStepInto = null;
       ruleStepOver = null;
-      //getParent().remove(this);
-      Object lock = getTreeLock();
-      synchronized (lock) {
-	dispose();
-      }
+      destroy();
     }
   }
 
@@ -289,6 +327,7 @@ public class SourceViewer
   public void evaluationResult(DebugProcess process, Expr expr,
 			       Expr value, String tag)
   {
+    System.out.println("evaluationResult: " + tag);
     if (tag.equals(tag_view_var)) {
       if (value.isError()) {
 	displayError(value);
@@ -315,6 +354,20 @@ public class SourceViewer
 	currentViewer.highlightVariable(start, length, popup);
       } else {
 	displayError("Strange variable result: ", value);
+      }
+    } else if (tag.equals(tag_add_source)) {
+      System.out.println("tag_add_source: " + value);
+      if (value.isError()) {
+	displayError("Can't retrieve source files",
+		     value.getErrorData());
+      } else if (value.isSourcePath()) {
+	addSourceFromDisk(value.getSourcePath());
+      } else if (value.isSourceList()) {
+	//addSourceFromDisk(System.getProperty("user.dir"));
+	addSourceFromList(value.sourceIterator());
+      } else {
+	// Not reduced
+	addSourceFromDisk(System.getProperty("user.dir"));
       }
     }
   }
@@ -349,17 +402,18 @@ public class SourceViewer
 
   //}}}
 
-  //{{{ private void switchToFile(String file)
+  //{{{ void switchToFile(String file)
 
-  private void switchToFile(String file)
+  void switchToFile(String file)
   {
-    System.out.println("switching to file: " + file);
     unhighlightCpe();
 
     currentViewer = (SourceFileViewer)residentViewers.get(file);
     if (currentViewer == null) {
-      currentViewer = new SourceFileViewer(getManager(), process,
-					   file, getId(), tag_view_var);
+      ToolManager manager = getManager();
+      int id = getId();
+      currentViewer = new SourceFileViewer(manager, process,
+					   file, id, tag_view_var);
       residentViewers.put(file, currentViewer);
       synchronized (process) {
 	currentViewer.highlightRules(process.ruleIterator());
@@ -431,6 +485,192 @@ public class SourceViewer
     if (currentViewer != null) {
       currentViewer.unhighlightCpe();
     }
+  }
+
+  //}}}
+
+  //{{{ public void addSourceFromDisk(String path)
+
+  public void addSourceFromDisk(String path)
+  {
+    JFileChooser chooser = new JFileChooser(path);
+    int option = chooser.showOpenDialog(this);
+    if (option == JFileChooser.APPROVE_OPTION) {
+      switchToFile(chooser.getSelectedFile().getPath());
+    }
+  }
+
+  //}}}
+  //{{{ public void addSourceFromList(Iterator iter)
+
+  public void addSourceFromList(Iterator iter)
+  {
+    FileSelector selector = new FileSelector(this, iter);
+    getManager().showDialog(selector);
+  }
+
+  //}}}
+}
+
+class FileOption
+{
+  private File file;
+
+  //{{{ public FileOption(String path)
+
+  public FileOption(String path)
+  {
+    file = new File(path);
+  }
+
+  //}}}
+  //{{{ public String toString()
+
+  public String toString()
+  {
+    return file.getName();
+  }
+
+  //}}}
+  //{{{ public String getFilename()
+
+  public String getFilename()
+  {
+    return file.getPath();
+  }
+
+  //}}}
+  //{{{ public String getDirectory()
+
+  public String getDirectory()
+  {
+    return file.getParent();
+  }
+
+  //}}}
+}
+
+class FileSelector
+  extends TideDialog
+{
+  private SourceViewer viewer;
+
+  private Vector files;
+  private JList  list;
+  private JLabel path;
+
+  //{{{ public void TideDialog(Iterator iter)
+
+  public FileSelector(SourceViewer viewer, Iterator iter)
+  {
+    super("File Selector", DIALOG_OK_CANCEL);
+
+    this.viewer = viewer;
+
+    files = new Vector();
+    while (iter.hasNext()) {
+      String file = (String)iter.next();
+      files.addElement(new FileOption(file));
+    }
+
+    init();
+
+    setSize(250, 270);
+    invalidate();
+  }
+
+  //}}}
+  //{{{ public void addContent(JPanel panel)
+
+  public void addContent(JPanel panel)
+  {
+    panel.setLayout(new BorderLayout());
+    list = new JList(files);
+    MouseListener mouseListener = 
+      new MouseAdapter()
+      {
+	public void mouseClicked(MouseEvent e)
+	{
+	  if (e.getSource() == list && e.getClickCount() == 2) {
+	    okPressed();
+	  }
+	}
+      };
+    list.addMouseListener(mouseListener);
+
+    ListSelectionListener selectionListener =
+      new ListSelectionListener()
+      {
+	public void valueChanged(ListSelectionEvent e)
+	{
+	  if (e.getSource() == list) {
+	    FileOption selected = (FileOption)list.getSelectedValue();
+	    if (selected == null) {
+	      path.setText("");
+	    } else {
+	      path.setText(selected.getDirectory());
+	    }
+	  }
+	}
+      };
+    list.addListSelectionListener(selectionListener);
+
+    JScrollPane pane = new JScrollPane(list);
+    panel.add("North", new JLabel("Select a file to add",
+				  JLabel.CENTER));
+    panel.add("Center", pane);
+    panel.add("West", Box.createHorizontalStrut(20));
+    panel.add("East", Box.createHorizontalStrut(20));
+
+    path = new LongLabel();
+    JPanel pathPanel = new JPanel();
+    pathPanel.setLayout(new GridLayout(2,1));
+    pathPanel.add(new JLabel("Directory:"));
+    pathPanel.add(path);
+    panel.add("South", pathPanel);
+  }
+
+  //}}}
+  //{{{ public boolean verifyInput()
+
+  public boolean verifyInput()
+  {
+    FileOption option = (FileOption)list.getSelectedValue();
+    if (option == null) {
+      return false;
+    }
+
+    viewer.switchToFile(option.getFilename());
+
+    return true;
+  }
+
+  //}}}
+}
+
+class LongLabel
+  extends JLabel
+{
+  private FontMetrics metrics;
+
+  //{{{ public void paint(Graphics g)
+
+  public void paint(Graphics g)
+  {
+    if (metrics == null) {
+      metrics = getFontMetrics(getFont());
+    }
+
+    String txt = getText();
+    String str = txt;
+    int width = metrics.stringWidth(txt);
+    while (width >= getWidth()) {
+      str = str.substring(1);
+      txt = "..." + str;
+      width = metrics.stringWidth(txt);
+    }
+
+    g.drawString(txt, 0, metrics.getMaxAscent());
   }
 
   //}}}
