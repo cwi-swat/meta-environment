@@ -37,8 +37,7 @@ public class Execute extends Atom {
 	public boolean execute()
 	throws ToolBusException
 	{
-		if(!isEnabled())
-			return false;
+      if (super.execute()) {
 		String toolname = ((ATermAppl) toolcall).getName();
 		ATermList cargs = ((ATermAppl) toolcall).getArguments();
 		ATermList evargs = (ATermList) TBTerm.eval(cargs, this.getEnv());
@@ -56,6 +55,9 @@ public class Execute extends Atom {
 		System.out.println("end of Execute");
 		
 		return true;
+      } else {
+        return false;
+      }
 		
 	}
 
