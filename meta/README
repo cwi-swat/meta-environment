@@ -22,7 +22,12 @@ Installation instructions:
          Move the directory lib/Tcldot to some convenient place. This is
          the only directory from the distribution that is used. Remember
          the location, you'll need it later.
-         (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
+         (At UvA, it will be under ~gipe/petr/lib/Tcldot. At the CWI choose
+          the tcldot library for your combination of hardware/os:
+	      * sparc/sunos: ~gipe/pkgs/graphviz1.4/sunos/sparc/lib/Tcldot/
+	      * sgi/irix: ~gipe/pkgs/graphviz1.4/irix/mips/lib/Tcldot
+              * i386/linux: ~gipe/pkgs/graphviz1.4/linux/i386/lib/Tcldot
+	      * etc.)
     -- xemacs (A text editor for X-windows systems, available from
          <http://www.xemacs.org/>). Make sure you get version 20.4 or newer.
          The Meta-Environment is untested with other versions of xemacs, but
