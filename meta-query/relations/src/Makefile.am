@@ -48,6 +48,9 @@ MergeRstores: MergeRstores.eqs
 toolDisplayQuery.tif.c toolDisplayQuery.tif.h: DisplayQuery.tifs
 	$(TIFSTOC) -tool toolDisplayQuery DisplayQuery.tifs
 
+EXTRA_DIST = \
+	DisplayQuery.idef
+
 CLEANFILES = \
 	DisplayQuery.c \
 	DisplayQuery.idef \
