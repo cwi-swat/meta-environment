@@ -103,7 +103,7 @@ void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
 forest    SG_Prune(forest t, char *sort);
 ATermList SG_CurrentPosInfo(void);
-forest    SG_ParseError(ATermList cycle, int excess_ambiguities);
+forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
 forest    SG_ParseResult(char *sort);
 
 /*
@@ -710,7 +710,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
             as && !ATisEmpty(as); as = ATgetNext(as)) {
           action  a = ATgetFirst(as);
 
-        
+
           if(SG_ActionKind(a) == REDUCE
           || (  SG_ActionKind(a) == REDUCE_LA
              && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
@@ -941,7 +941,7 @@ ATermList SG_CurrentPosInfo(void)
 
 }
 
-forest SG_ParseError(ATermList cycle, int excess_ambs)
+forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
 {
   ATermAppl  errcode;
 
@@ -950,8 +950,7 @@ forest SG_ParseError(ATermList cycle, int excess_ambs)
   if(!ATisEmpty(cycle))
     errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
   else if(excess_ambs)
-    errcode = ATmakeAppl2(SG_Amb_Error_AFun, (ATerm) ATmakeInt(excess_ambs),
-                          (ATerm) SG_AmbiguityTracker(SG_AMBTRACKER_ASK, NULL));
+    errcode = (ATermAppl) ambtrak;
   else if(current_token == SG_GETTOKEN(SG_EOF_Token))
     errcode = ATmakeAppl0(SG_EOF_Error_AFun);
   else
@@ -965,20 +964,16 @@ forest SG_ParseResult(char *sort)
 {
 
   if(!accepting_stack)
-    return SG_ParseError(ATempty, 0);
+    return SG_ParseError(ATempty, 0, NULL);
 
   {
     ATermList cycle;
     forest    woods;
-    size_t    currpos = 0;
-
-    /*  Start with a clean slate  */
-    SG_AmbiguityTracker(SG_AMBTRACKER_RESET, NULL);
 
     /*  Expand at least the top node to get the top sort  */
-    woods = SG_ExpandApplNode(table,
+    woods = SG_YieldForest(table,
                               (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
-                              ATfalse, ATtrue, &currpos);
+                              ATfalse, ATtrue);
 
     /*  Select only the desired start symbols when so requested  */
     if(sort) {
@@ -989,7 +984,7 @@ forest SG_ParseResult(char *sort)
       if(!woods) {
         /*  Flag this error at start, not end, of file  */
         SG_ResetCoordinates();
-        return SG_ParseError(ATempty, 0);
+        return SG_ParseError(ATempty, 0, NULL);
       }
     }
 
@@ -999,7 +994,7 @@ forest SG_ParseResult(char *sort)
       cycle = SG_CyclicTerm(woods);
       IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
       if(!ATisEmpty(cycle))
-        return SG_ParseError(cycle, 0);
+        return SG_ParseError(cycle, 0, NULL);
     }
 
     SGsort(SG_SET, woods);
@@ -1007,15 +1002,14 @@ forest SG_ParseResult(char *sort)
     /*  A full yield provides the output term and an exact ambiguity count  */
     if(SG_NEED_OUTPUT) {
       IF_STATISTICS(SG_Timer());
-      currpos = 0;
-      woods = SG_YieldPT(table, woods, &currpos);
+      woods = SG_YieldForest(table, woods, ATtrue, ATtrue);
       IF_STATISTICS(fprintf(SG_log(),
                             "Aprod expansion took %.4fs\n", SG_Timer()));
     }
 
     if(!woods) {
       ATwarning("Successful parse yielded no parse tree\n");
-      return SG_ParseError(ATempty, 0);
+      return SG_ParseError(ATempty, 0, NULL);
     }
 
 #ifndef NO_A2TOA1
@@ -1029,7 +1023,7 @@ forest SG_ParseResult(char *sort)
                     " in AsFix1\n",
                     nr_ambs, nr_ambs>1?"ies":"y")
         );
-        return SG_ParseError(ATempty, nr_ambs);
+        return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(woods));
       }
       IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
       IF_STATISTICS(SG_Timer());
@@ -1038,6 +1032,21 @@ forest SG_ParseResult(char *sort)
                             "AsFix1 conversion took %.4fs\n", SG_Timer()));
       return woods;
     }
+#endif
+
+
+#ifdef WEWANTAMBIGUITYLISTSINSTEADOFAMBIGUOUSASFIX2WHENRUNNINGONTOOLBUS
+  /*
+      If you'd want return ambiguity tracks instead of ambiguous
+      AsFix2, that could be taken care of here...
+   */
+  if(SG_TOOLBUS) {
+    ATermList ambtrak = SG_AmbTracker(woods);
+
+    if(!ATisEmpty(ambtrak)) {
+      return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak));
+    }
+  }
 #endif
 
     woods = (forest) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) woods,

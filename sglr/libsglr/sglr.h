@@ -217,9 +217,10 @@ enum SGmodeFlags {
 /*  A few global AFuns, used by several routines  */
 
 extern AFun SG_EOF_Error_AFun, SG_Plain_Error_AFun, SG_Cycle_Error_AFun,
-SG_Amb_Error_AFun, SG_SndValue_AFun, SG_ParseTree_AFun,
-SG_Appl_AFun, SG_Term_AFun, SG_ParseTreeAF1_AFun,
-SG_ParseError_AFun, SG_Character_AFun, SG_Line_AFun,
-SG_Col_AFun, SG_Offset_AFun;
+       SG_Amb_Node_AFun, SG_Position_AFun, SG_Productions_AFun,
+       SG_Amb_Error_AFun, SG_SndValue_AFun, SG_ParseTree_AFun,
+       SG_Appl_AFun, SG_Term_AFun, SG_ParseTreeAF1_AFun,
+       SG_ParseError_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
+       SG_Offset_AFun;
 
 #endif  /* _SGLR_H_ */

@@ -19,7 +19,7 @@
 # $Id$
 
 SUBDIRS      = doc libtree2dot libsglr \
-               tree2dot sglr client dump sdf1tosdf2 regress-test
+               ambtrakker tree2dot sglr client dump sdf1tosdf2 regress-test
 
 EXTRA_DIST   = make_rules
 

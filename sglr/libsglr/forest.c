@@ -412,34 +412,42 @@ ATermList SG_CyclicTerm(forest t)
   return ATempty;
 }
 
-ATermList SG_AmbiguityTracker(int Mode, ATerm entry)
-{
-  static ATermList myambs;
 
-  switch(Mode) {
-    case SG_AMBTRACKER_ADD:
-      myambs = ATinsert(myambs, entry);
-      break;
-    case SG_AMBTRACKER_ASK:
-      break;
-    case SG_AMBTRACKER_RESET:
-      myambs = ATempty;
-      break;
-  }
-  return myambs;
-}
-
-forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
-                         ATbool doamb, size_t *currpos)
+forest     SG_YieldForest(parse_table *pt, forest t,
+                          ATbool recurse, ATbool doambs)
 {
-  forest    res;
-  ATermList ambs, trms, args, ambprods = ATempty;
+  forest    elt, res;
+  ATermList args, trms, ambs;
   AFun      fun;
-  ATerm     cc, pos_info;
-  size_t    old_currpos, new_currpos = 0;
+  ATerm     pos_info;
+  int       treetype;
 
-  if(ATisEmpty((ATermList) t))
-    return t;
+  if(!t)
+    return NULL;
+
+  treetype = ATgetType(t);
+
+  /*  AT_LIST  */
+
+  if(treetype == AT_LIST) {
+    for(trms = ATempty, args = (ATermList) t;
+        !ATisEmpty(args); args = ATgetNext(args)) {
+      elt = (forest) ATgetFirst(args);
+      if(!(res = SG_YieldForest(pt, elt, recurse, doambs))) {
+        return NULL;
+      }
+      trms = ATinsert(trms, (ATerm) res);
+    }
+    return (forest) ATreverse(trms);
+  }
+
+  /*  AT_INT, AT_REAL, AT_PLACEHOLDER, AT_BLOB, ...  */
+
+  if(treetype != AT_APPL) {
+      return t;
+  }
+
+  /*  AT_APPL  */
 
   fun      = ATgetAFun(t);
   args     = ATgetArguments((ATermAppl) t);
@@ -459,46 +467,15 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
   }
 
   /*
-     At top level, an amb may already have been expanded; but care should
-     be taken not to increment the current position counter for more
-     than a single subtree
-   */
-  if(ATisEqual(fun, SG_Amb_AFun)) {
-    ambs = (ATermList) ATgetFirst(ATgetArguments(t));
-
-    old_currpos = new_currpos = *currpos;
-    for(trms=ATempty, *currpos = old_currpos; !ATisEmpty(ambs);
-        ambs=ATgetNext(ambs)) {
-      if((res = SG_ExpandApplNode(pt, (forest) ATgetFirst(ambs),
-                                  recurse, ATfalse, currpos))) {
-        /*
-            After the first one added, the current position counter
-            must be reset for every consecutive subtree, or it will be
-            incremented in multiplicate for every amb node
-         */
-        if(ATisEmpty(trms)) {
-           new_currpos = *currpos;
-        }
-        trms = ATinsert(trms, (ATerm) res);
-      }
-    }
-    *currpos = new_currpos;
-
-    res = (forest) ATmakeAppl1(SG_Amb_AFun, (ATerm) ATreverse(trms));
-
-    return res;
-  }
-
-  /*
       Expand appl(prod())-argument list, and other possibly partially
-      expanded bits
+      expanded bits (including, possibly, a top-level amb() node)
    */
   if(fun != SG_Regular_AFun
 #ifndef NO_EAGERNESS
      && fun != SG_Eager_AFun &&  fun != SG_Uneager_AFun
 #endif
      ) {
-    if(!(res = SG_YieldPT(pt, (forest) args, currpos)))
+    if(!(res = SG_YieldForest(pt, (forest) args, recurse, doambs)))
       return NULL;
 
     t = (forest) ATmakeApplList(fun, (ATermList) res);
@@ -506,8 +483,8 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
   }
 
   /*  Expand {regular|eager|avoid}(prod())s, handling ambiguity resolution  */
-  /*  Are we encountering anambiguity cluster?  */
-  if(!doamb
+  /*  Are we encountering an ambiguity cluster?  */
+  if(!doambs
      /*
       Are we even interested?  If not, we were invoked to expand
       terms that are part of an ambiguity cluster, for which the
@@ -520,21 +497,13 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
     /*  No ambiguity, or we're doing one that's part of an ambiguity cluster */
     /*  First argument is an `aprod(X'), to be expanded  */
 
-    /*  If it's an end node, increment the current position counter  */
-    if(ATgetLength(args) == 2) {
-      cc = ATelementAt(args, 1);
-      if(ATgetType(cc) == AT_LIST && ATgetLength(cc) == 1
-      && ATgetType(ATgetFirst((ATermList) cc)) == AT_INT) {
-        (*currpos)++;
-      }
-    }
-
     t = (forest) ATgetFirst(args);
-    if(!(t = SG_ExpandApplNode(pt, t, ATfalse, ATtrue, currpos))) {
+    if(!(t = SG_YieldForest(pt, t, ATfalse, ATtrue))) {
       return NULL;
     }
     if(recurse) {
-      if(!(res = SG_YieldPT(pt, (forest) ATelementAt(args, 1), currpos))) {
+      if(!(res = SG_YieldForest(pt, (forest) ATelementAt(args, 1),
+                                recurse, doambs))) {
         return NULL;
       }
       res = (forest) ATmakeAppl2(SG_Appl_AFun, (ATerm) t, (ATerm) res);
@@ -552,37 +521,20 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
      terms (of course) are mapped onto the ambiguity cluster, making
      some extra caution to prevent an infinite recursion necessary
      */
-    old_currpos = new_currpos = *currpos;
-    for(trms=ATempty, *currpos = old_currpos; !ATisEmpty(ambs);
-        ambs=ATgetNext(ambs)) {
+    for(trms=ATempty; !ATisEmpty(ambs); ambs=ATgetNext(ambs)) {
       forest thisamb = (forest) ATgetFirst(ambs);
-      if((res = SG_ExpandApplNode(pt, thisamb, recurse, ATfalse, currpos))) {
+      if((res = SG_YieldForest(pt, thisamb, recurse, ATfalse))) {
         /*
             After the first one added, the current position counter
             must be reset for every consecutive subtree, or it will be
             incremented in multiplicate for every amb node
          */
-        if(ATisEmpty(trms)) {
-           new_currpos = *currpos;
-        }
         trms = ATinsert(trms, (ATerm) res);
-        /*
-            Store the productions sharing this ambiguity, along with
-            the current position counter
-         */
-        ambprods = ATinsert(ambprods,
-                     (ATerm) SG_ExpandApplNode(pt,
-                                               (forest) ATgetArgument(thisamb, 0),
-                                               ATtrue, ATtrue, currpos));
       } else IF_DEBUG(
                       RemovedSome = ATtrue;
                       fprintf(SG_log(), "Removing term from ambiguity cluster\n");
                       );
     }
-    SG_AmbiguityTracker(SG_AMBTRACKER_ADD,
-                        ATmake("ambiguity(position(<int>),productions(<list>))",
-                               old_currpos, ambprods));
-    *currpos = new_currpos;
 
     if(ATisEmpty(trms))
       return NULL;
@@ -593,7 +545,6 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
       res = (forest) ATgetFirst(trms);
     } else {
       /*  Multiple terms left: this is truly an ambiguous node  */
-      trms = ATreverse(trms);
       SGnrAmb(SG_NR_INC);
       res = (forest) ATmakeAppl1(SG_Amb_AFun, (ATerm) trms);
     }
@@ -605,38 +556,125 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
   return res;
 }
 
-forest SG_YieldPT(parse_table *pt, forest t, size_t *currpos)
+/* ============================================================== */
+
+ATermList  SG_AmbTrakker(forest t, size_t *currpos)
 {
-  forest    elt, res;
-  register ATermList args, l;
+  ATermList res, args, trms;
+  AFun      fun;
+  int       treetype;
 
   if(!t)
     return NULL;
 
-  switch(ATgetType(t)) {
-    case AT_APPL:
-      res = SG_ExpandApplNode(pt, t, ATtrue, ATtrue, currpos);
-      return res;
-    case AT_LIST:
-      if(ATisEmpty((ATermList) t))
-        return (forest) ATempty;
-      for(l = ATempty, args = (ATermList) t;
-          !ATisEmpty(args); args = ATgetNext(args)) {
-        elt = (forest) ATgetFirst(args);
-        if(!(res = SG_YieldPT(pt, elt, currpos))) {
-          return NULL;
-        }
-        l = ATinsert(l, (ATerm) res);
+  treetype = ATgetType(t);
+
+  /*  AT_LIST  */
+
+  if(treetype == AT_LIST) {
+    for(trms = ATempty, args = (ATermList) t;
+        !ATisEmpty(args); args = ATgetNext(args)) {
+      res = SG_AmbTrakker((forest) ATgetFirst(args), currpos);
+      if(res && !ATisEmpty((ATermList) res)) {
+        trms = ATconcat(trms, res);
       }
-        return (forest) ATreverse(l);
-    case AT_INT:
-    case AT_REAL:
-    case AT_PLACEHOLDER:
-    case AT_BLOB:
-    default:
-      return t;
+    }
+    return trms; // ATreverse(trms);
   }
+
+  /*  AT_INT, AT_REAL, AT_PLACEHOLDER, AT_BLOB, ...  */
+
+  if(treetype != AT_APPL) {
+    return ATempty;
+  }
+
+  /*  AT_APPL  */
+
+  fun  = ATgetAFun(t);
+  args = ATgetArguments((ATermAppl) t);
+
+  /*  aprod  */
+  if(ATisEqual(fun, SG_Aprod_AFun)) {
+    return ATempty;
+  }
+
+  if(ATisEqual(fun, SG_Amb_AFun)) {
+    ATermList ambs, thisamb = ATempty;
+    forest    thistree;
+    size_t    old_currpos, new_currpos;
+
+    ambs = (ATermList) ATgetFirst(ATgetArguments(t));
+
+    old_currpos = new_currpos = *currpos;
+    for(trms=ATempty; !ATisEmpty(ambs); ambs=ATgetNext(ambs)) {
+      *currpos = old_currpos;
+      thistree = (forest) ATgetFirst(ambs);
+      res = SG_AmbTrakker(thistree, currpos);
+        /*
+            After the first one added, the current position counter
+            must be reset for every consecutive subtree, or it will be
+            incremented in multiplicate for every amb node
+         */
+      if(ATisEmpty(thisamb)) {
+         new_currpos = *currpos;
+      }
+      /*  Add this node to current ambiguity  */
+      thisamb = ATinsert(thisamb, ATgetArgument(thistree, 0));
+
+      /*  Join existing ambiguities from subtrees  */
+      if(res && !ATisEmpty((ATermList) res)) {
+        trms = ATconcat(trms, res);
+      }
+    }
+    *currpos = new_currpos;
+    thisamb = (ATermList) ATmakeAppl2(SG_Amb_Node_AFun,
+                            (ATerm) ATmakeAppl1(SG_Position_AFun,
+                                                (ATerm) ATmakeInt(old_currpos)),
+                            (ATerm) ATmakeAppl1(SG_Productions_AFun,
+                                                (ATerm) ATreverse(thisamb)));
+
+    res = ATinsert(trms, (ATerm) thisamb);
+
+    return res;
+  }
+  /*
+      Handle appl(prod())-argument list, and other possibly partially
+      expanded bits (including, possibly, amb() nodes)
+   */
+
+  /*  If it's an end node, increment the current position counter  */
+  if(ATisEqual(fun, SG_Appl_AFun)) {
+    ATerm cc = ATelementAt(args, 1);
+    if(ATgetType(cc) == AT_LIST && ATgetLength(cc) == 1
+    && ATgetType(ATgetFirst((ATermList) cc)) == AT_INT) {
+      (*currpos)++;
+    }
+  }
+
+  res = SG_AmbTrakker((forest) args, currpos);
+  if(!res || ATisEmpty((ATermList) res)) {
+    return ATempty;
+  }
+
+  return res;
 }
+
+ATerm SG_AmbTracker(forest t)
+{
+  size_t    currpos = 0;
+  ATermList amblist = ATempty;
+
+  amblist = SG_AmbTrakker(t, &currpos);
+
+  if(ATisEmpty(amblist)) {
+    return NULL;
+  }
+
+  return (ATerm) ATmakeAppl2(SG_Amb_Error_AFun,
+                             (ATerm) ATmakeInt(ATgetLength(amblist)),
+                             (ATerm) amblist);
+}
+
 
 /*
  Ambiguity Tables provide a mapping from terms to sets of terms,

@@ -46,10 +46,10 @@ typedef   ATermTable      multiset;
 #define SG_UNMARK(t)        CLR_MARK(t->header)
 
 enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_GET,
-  SG_AMBTBL_ADD_INDEX, SG_AMBTBL_ADD_CLUSTER,
-  SG_AMBTBL_UPDATE_INDEX, SG_AMBTBL_UPDATE_CLUSTER,
-  SG_AMBTBL_LOOKUP_INDEX, SG_AMBTBL_LOOKUP_CLUSTER,
-  SG_AMBTBL_REMOVE, SG_AMBTBL_DUMP };
+                     SG_AMBTBL_ADD_INDEX, SG_AMBTBL_ADD_CLUSTER,
+                     SG_AMBTBL_UPDATE_INDEX, SG_AMBTBL_UPDATE_CLUSTER,
+                     SG_AMBTBL_LOOKUP_INDEX, SG_AMBTBL_LOOKUP_CLUSTER,
+                     SG_AMBTBL_REMOVE, SG_AMBTBL_DUMP };
 
 ATerm      SG_AmbTable(int Mode, ATerm key, ATerm value);
 
@@ -64,15 +64,12 @@ int        SG_MaxNrAmb(int Mode);
 void       SG_Amb(parse_table *, tree, tree);
 
 enum       SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET };
-enum       SG_AMBTRACKERMODE { SG_AMBTRACKER_ADD, SG_AMBTRACKER_ASK,
-                               SG_AMBTRACKER_RESET };
 ATbool     SG_CycleEncountered(int Mode);
 ATermList  SG_CyclicTerm(forest t);
-ATermList  SG_AmbiguityTracker(int Mode, ATerm entry);
 
-forest     SG_ExpandApplNode(parse_table * pt, forest t, ATbool recurse,
-                             ATbool doambs, size_t *currpos);
-forest     SG_YieldPT(parse_table *pt, forest t, size_t *currpos);
+forest     SG_YieldForest(parse_table *pt, forest t,
+                          ATbool recurse, ATbool doambs);
+ATerm      SG_AmbTracker(forest t);
 tree       SG_Apply(parse_table *, label, ATermList, int attr, ATerm pi);
 ATerm      SG_TreeType(ATerm);
 label      SG_GetProdLabel(tree aprod);

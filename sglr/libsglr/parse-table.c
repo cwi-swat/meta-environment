@@ -47,7 +47,8 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
       SG_Action_AFun, SG_Goto_AFun, SG_PT3_AFun, SG_PT4_AFun,
       SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
       SG_ParseTreeAF1_AFun, SG_ParseError_AFun, SG_EOF_Error_AFun,
-      SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Error_AFun,
+      SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Node_AFun,
+      SG_Position_AFun, SG_Productions_AFun, SG_Amb_Error_AFun,
       SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
       SG_Offset_AFun;
 
@@ -102,6 +103,9 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
   SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
   SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
+  SG_AFUN_INIT(SG_Amb_Node_AFun,    ATmakeAFun(SG_AMBIGUITY_AFUN,   2, ATfalse));
+  SG_AFUN_INIT(SG_Position_AFun,    ATmakeAFun(SG_POSITION_AFUN,    1, ATfalse));
+  SG_AFUN_INIT(SG_Productions_AFun, ATmakeAFun(SG_PRODUCTIONS_AFUN, 1, ATfalse));
   SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 2, ATfalse));
 
   SG_AFUN_INIT(SG_SndValue_AFun,    ATmakeAFun(SG_SNDVALUE_AFUN,    1, ATfalse));

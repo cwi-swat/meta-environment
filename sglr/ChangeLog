@@ -1,4 +1,4 @@
-
+r
     SGLR - the Scannerless Generalized LR parser.
     Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 
@@ -17,6 +17,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 $Id$
+
+2000/6/28 (js@cwi.nl)
+   * Bumped version to 2.36
+   * Refactored forest yielding/ambiguity tracking code: ambiguity
+     tracking is now cleanly separated
+   * Added `ambtrakker', a command-line tool that conveniently lists
+     ambiguities found in AsFix2; by adding a ToolBus interface to
+     this tool, a modular disambiguator (sort of) could be provided
+     in a Meta-Environmant that uses AsFix2 for exchange format
+   * Added version reporting to tree2dot
 
 2000/6/27 (js@cwi.nl)
    *  Bumped version to 2.35

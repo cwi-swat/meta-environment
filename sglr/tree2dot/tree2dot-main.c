@@ -111,7 +111,7 @@ int main (int argc, char **argv)
   char   *output_file_name = "-";
   ATbool suppress_lex = ATfalse;
 
-  while ((c = getopt(argc, argv, "hi:o:D:x")) != EOF)
+  while ((c = getopt(argc, argv, "hi:o:D:xV")) != EOF)
     switch (c) {
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
@@ -122,6 +122,8 @@ int main (int argc, char **argv)
       case 'b':
       case 't':
       case 'v':                                break;
+      case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+                                               exit(0);
       default :  usage();                      exit(1);
   }
   ATinit(2, ATlibArgv, &bottomOfStack);    /* Initialize Aterm library */
