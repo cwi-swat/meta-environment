@@ -451,6 +451,7 @@ extern ATerm pattern_asfix_lexcaller;
 extern ATerm pattern_asfix_appl;
 extern ATerm pattern_asfix_lex_cons;
 extern ATerm pattern_asfix_term;
+extern ATerm pattern_asfix_lex;
 
 extern ATerm af_prod_equ_section;
 extern ATerm af_prod_empty_equ_section;
