@@ -120,8 +120,8 @@ in
 	    NewModules := join(Equations, NewModules)
           +
             rec-msg(renaming-equations(Renamings?, Equations?)) .
-            snd-msg(rename(Renamings, Equations)) .
-            rec-msg(equations(Equations?)) .
+	    snd-msg(rename-semantics-hook(Renamings, Equations)).
+	    rec-msg(rename-semantics-hook-result(Equations?)).
 	    NewModules := join(Equations, NewModules)
           +
 	    rec-msg(no-equations)
@@ -129,8 +129,9 @@ in
         fi
       )*
       if equal(Modules,[]) then  
-	snd-msg(flatten-equations(NewModules)).
-	rec-msg(flatten-equations-result(AllEquations?)).
+	printf("hierop\n").
+        snd-msg(postprocess-collected-semantics-hook(NewModules)).
+	rec-msg(postprocess-collected-semantics-hook-result(AllEquations?)).
 	snd-msg(all-equations(AllEquations))
       fi 
     +

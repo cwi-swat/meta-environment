@@ -35,7 +35,9 @@ let
   NormalForm : term,
   Errors: list,
   Text : str,
-  Progress : str
+  Progress : str,
+  Renamings : term,
+  Modules : list
 in
   Id := process-id.
   subscribe(asfc-progress(<term>)).
@@ -93,6 +95,16 @@ in
     rec-msg(compilation-done(ModuleName)).
     snd-note(ui-status(endstat(Id))).
     snd-msg(compile-semantics-hook-done(ModuleName))
+  + 
+    rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
+    snd-msg(rename(Renamings, Semantics)).
+    rec-msg(equations(Semantics?)).
+    snd-msg(rename-semantics-hook(Semantics))
+  +
+    rec-msg(postprocess-collected-semantics-hook(Modules?)).
+    snd-msg(flatten-equations(Modules)).
+    rec-msg(flatten-equations-result(Semantics?)).
+    snd-msg(postprocess-collected-semantics-hook-result(Semantics))
 
   ) * delta
 endlet
