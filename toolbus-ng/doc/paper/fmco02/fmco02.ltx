@@ -600,6 +600,19 @@ The example is quite small, and as such it is not intended to be a real
 world production version of an address book. It does, however, highlight
 the differences between ToolBus and RMI.
 
+In this example, an \emph{AddressBookEntry} contains the following
+elements:
+
+\begin{description}
+%%\item[id] a unique \emph{id} (used for internal reference);
+  \item[name] a string representing the \emph{name} of the entry;
+  \item[address] a string representing the \emph{address} of the entry.
+\end{description}
+
+In Java, we implement the \emph{AddressBookEntry} as follows:
+\begin{footnotesize}
+\verbatiminput{AddressBookEntry.java}
+\end{footnotesize}
 
 \verbatiminput{address-book.tb}
 \verbatiminput{AddressBookService.java}

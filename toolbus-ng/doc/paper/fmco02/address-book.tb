@@ -20,8 +20,6 @@ in
     snd-do(AB, set-name(AID, Name))
   + rec-msg(set-address(AID, Address?)) .
     snd-do(AB, set-address(AID, Address))
-  + rec-msg(set-zip(AID, Zip?)) .
-    snd-do(AB, set-zip(AID, Zip))
   ) *
   rec-msg(update-address-done(AID))
 endlet
