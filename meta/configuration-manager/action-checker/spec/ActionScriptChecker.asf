@@ -9,8 +9,8 @@ equations
       [$Action*1, TREE, $Action*2]
 
   [check-sort-check] 
-    [$Action*1, TREE, check-sort($String), $Action*2] = 
-      [$Action*1, TREE, $Action*2]
+    [$Action*1, TREE, STRING, check-sort, $Action*2] = 
+      [$Action*1, TREE, TREE, $Action*2]
 
   [close-editor-check]
     [$Action*1, STRING, STRING, close-editor, $Action*2] = 
@@ -71,6 +71,10 @@ equations
   [push-string-check]
     [$Action*1, push-string($String), $Action*2] = 
       [$Action*1, STRING, $Action*2]
+
+  [push-string-check]
+    [$Action*1, push-term($Term), $Action*2] = 
+      [$Action*1, TREE, $Action*2]
 
   [set-focus-check]
     [$Action*1, TREE, set-focus, $Action*2] = 

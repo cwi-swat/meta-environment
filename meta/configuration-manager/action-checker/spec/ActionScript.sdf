@@ -68,7 +68,7 @@ ActionList")" -> ActionItem {constructor}
     "activate-given-tree" "(" String ")"          -> Action {constructor}
     "apply" "(" String "," String "," Integer ")" -> Action {constructor}
     "ask-question" "(" String ")"                 -> Action {constructor}
-    "check-sort" "(" String ")"                   -> Action {constructor}
+    "check-sort"                                  -> Action {constructor}
     "close-editor"                                -> Action {constructor}
     "dup"                                         -> Action {constructor}
     "execute-action" "(" String ")"               -> Action {constructor}
@@ -111,5 +111,7 @@ ActionList")" -> ActionItem {constructor}
 
   sorts Term
   context-free syntax
-    "yes" -> Term
-    "no"  -> Term
+    "yes"   -> Term
+    "no"    -> Term
+    "true"  -> Term
+    "false" -> Term

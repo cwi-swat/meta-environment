@@ -12,4 +12,5 @@ hiddens
   variables
     "$Action*"[0-9]* -> {Action ","}*
     "$Integer"[0-9]* -> Integer
-    "$String"[0-9]* -> String
+    "$String"[0-9]*  -> String
+    "$Term"[0-9]*    -> Term
