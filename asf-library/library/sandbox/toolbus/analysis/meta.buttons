@@ -22,7 +22,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unused Variables"],
-         [push-filename("complexunused.rscript"),
+         [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNUSED_VARS\""),
@@ -40,7 +40,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unused Processes"],
-         [push-filename("unusedprocesses.rscript"),
+         [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNUSED_PROCESSES\""),
@@ -58,7 +58,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unmatched Messages"],
-         [push-filename("mismatchmsg.rscript"),
+         [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNMATCHED_MESSAGES\""),

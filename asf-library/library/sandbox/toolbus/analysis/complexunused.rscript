@@ -1,9 +1,0 @@
-rel[<node,str>,node] DECL_OCCURS
-rel[<node,str>,node] USE_OCCURS
-rel[<node,str>,node] DEF_OCCURS
-rel[node,str] DECLS
-rel[node,str] USES
-rel[node,str] DEFS
-rel[node,str] USED_VARS = USES union DEFS
-rel[node,str] UNUSED_VARS_PER_PROCESS = {<N,V> | <N,V> : DECLS, V notin range(domR(USED_VARS,{N}))}
-rel[str,<node,str>] UNUSED_VARS = {<"Unused variable ",<N2,sec(N1)>> | <N1,N2> : DECL_OCCURS, N1 in UNUSED_VARS_PER_PROCESS}
