@@ -4,6 +4,11 @@
  * Adapted the gen-adapter script in order to deal with trees as input.
  * Renamed the button operations.
  * Removed all intermediate files in button definitions.
+ * Added check on existence of editor.
+ * Added an explicit way of locating a file.
+ * Added the functionality of set-root.
+ * Adapted the "fixed" reduce button script.
+ * Added a function to se interface to move focus to the root.
 
 2002/05/14 (jurgenv@cwi.nl)
  * Added package dependency on asf-library package
