@@ -1000,11 +1000,15 @@ public class MetaStudio
 		if (module == null) {
 			moduleList.clearSelection();
 		}
-		else {
-			moduleList.setSelectedValue(module.getName(), true);
-			bridge.postEvent(
-				factory.make("get-module-info(<str>)", module.getName()));
-		}
+    else {
+      moduleList.setSelectedValue(module.getName(), true);
+      
+		  if (module.getState() == Module.STATE_NORMAL) {  
+  	    bridge.postEvent(factory.make("get-module-info(<str>)", 
+        module.getName()));
+		  }
+    }
+
 		//System.out.println("MetaStudio: moduleSelected " + module.getName());
 	}
 
@@ -1051,9 +1055,9 @@ public class MetaStudio
 
 			if (currentModule != null && component != null) {
         module = moduleManager.getModule(currentModule);
-        int state = module.getState();
+        moduleManager.selectModule(module);
         
-        switch(state) {
+        switch(module.getState()) {
 				case Module.STATE_NORMAL:
 					modulePopup.show(component, x, y);
           break;
