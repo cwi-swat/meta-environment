@@ -209,16 +209,19 @@ endlet
 process DoImportModule(Mod : str, Import : str, Path : str)  is
 let
   Status : term,
-  Changed : list
+  Changed : list,
+  RealImport : str,
+  RealPath : str
 in
-  snd-msg(is-module-in-db(Import)) .
+  GetRealModuleName(Import, Path, Status?, RealImport?, RealPath?) .
+  snd-msg(is-module-in-db(RealImport)) .
   (
-    rec-msg(exists-in-module-db(Import)) .
+    rec-msg(exists-in-module-db(RealImport)) .
     DeleteEditors(Mod). 
-    AddImportInDB(Mod, Import).
+    AddImportInDB(Mod, RealImport).
     SaveAsfSdfModule(Mod) 
   +
-    rec-msg(not-exists-in-module-db(Import)) .
+    rec-msg(not-exists-in-module-db(RealImport)) .
     snd-note(ui-status(
       errorf("Error during adding import %s to %s: module not open", 
              [Import, Mod])))
@@ -228,16 +231,19 @@ endlet
 process DoUnimportModule(Mod : str, Import : str, Path : str) is
 let
   Status : term,
-  Changed : list
+  Changed : list,
+  RealImport : str,
+  RealPath : str
 in
-  snd-msg(is-module-in-db(Import)) .
+  GetRealModuleName(Import, Path, Status?, RealImport?, RealPath?) .
+  snd-msg(is-module-in-db(RealImport)) .
   (
-    rec-msg(exists-in-module-db(Import)) .
+    rec-msg(exists-in-module-db(RealImport)) .
     DeleteEditors(Mod). 
-    RemoveImportInDB(Mod, Import, Path) .
+    RemoveImportInDB(Mod, RealImport, RealPath) .
     SaveAsfSdfModule(Mod)
   +
-    rec-msg(not-exists-in-module-db(Import)) .
+    rec-msg(not-exists-in-module-db(RealImport)) .
     snd-note(ui-status(
       errorf("Error during removing import %s to %s: module not open", 
              [Import, Mod])))
