@@ -94,10 +94,12 @@ ATerm SG_RejectLabel(void)
 
 
 /* The next bit will have to do while waiting for this to be implemented */
+#if 0
 #define AFun                Symbol
 #define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f)
 #define ATprotectAFun(t)    ATprotectSymbol(t)
 #define ATgetAFun(t)        ATgetSymbol(t)
+#endif
 
 AFun  SG_ApplAFun(void)
 {
