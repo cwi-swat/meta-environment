@@ -13,7 +13,7 @@
 
 static char myname[]    = "apply-function";
 static char myversion[] = "1.2";
-static char myarguments[] = "f:s:m:hi:o:V";
+static char myarguments[] = "f:s:hi:o:V";
 
 #define MAX_ARGS 32
 /*
@@ -24,15 +24,13 @@ usage(void)
 {
     fprintf(stderr,
 	"\nApply-function encapsulates parsed terms with a quoted or unquoted prefix function.\n\n"
-        "Usage: apply-function -h -f <name> -s <sort> -m <modulename>\n"
-        "                      -i <file> -o <file> -V . . .\n"
-        "Options:\n"
-        "\t-h              display help information (usage)\n"
+        "Usage: apply-function [paramaters]\n"
+        "Parameters:\n"
 	"\t-f name         name of prefix function\n"
 	"\t-s sort         result sort of function\n"
-	"\t-m module       module where function is defined\n"
         "\t-i filename     input argument tree from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
+        "\t-h              display help information (usage)\n"
         "\t-V              reveal program version (i.e. %s)\n"
         "\n"
         "Supply a -i <file> option for each argument from left to right.\n",
