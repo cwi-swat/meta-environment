@@ -131,19 +131,23 @@ in
       snd-msg(editor-opened(ModuleName, EditorId))
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
-      create(EditorExists(EditorId,ModuleName,Type,FileName,Text,Tree), Pid?)
+      snd-note(move-editor-to-front(EditorId)) .
+      snd-msg(editor-opened(ModuleName, EditorId))
     )
 endlet
 
-process EditorExists(EditorId : term, ModuleName : str, Type : str,
-                     FileName : str, Text : str, Tree : term) is
-  if equal(Type,"term") then
-    snd-msg(kill-editor(EditorId)).
-    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) 
-  else 
-    snd-note(move-editor-to-front(EditorId)) .
-    snd-msg(editor-opened(ModuleName, EditorId))
-  fi
+process CloseEditor(ModuleName : str, FileName : str) is
+let
+  EditorId   : term
+in
+  snd-msg(check-editor-id(FileName, ModuleName)) .
+  (
+    rec-msg(existing-editor(FileName, EditorId?)) .
+    snd-msg(kill-editor(EditorId))
+  +
+    rec-msg(non-existing-editor(FileName))
+  )
+endlet
 
 process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
 let

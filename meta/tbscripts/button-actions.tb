@@ -330,6 +330,12 @@ in
           ActivateEditorWithTree(STree, NewModName, FileName) 
         fi .    
         ReturnSuccess(EditorId,Stack)
+      +
+	rec-msg(close-editor, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,NewModName?) .
+        StackPopString(Stack,Stack?,FileName?) .
+	CloseEditor(NewModName, FileName) .
+	ReturnSuccess(EditorId, Stack)
       + 
         rec-msg(send, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
