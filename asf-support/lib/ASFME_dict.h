@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Nov  4 18:14:28 2002
+ * Generated at Tue Nov  5 12:23:50 2002
  */
 
 #ifndef __ASFME_dict_H
@@ -48,7 +48,6 @@ extern AFun ASF_afun37;
 extern AFun ASF_afun38;
 extern AFun ASF_afun39;
 extern AFun ASF_afun40;
-extern AFun ASF_afun41;
 
 extern ATerm ASF_patternStartEquations;
 extern ATerm ASF_patternOptLayoutPresent;
