@@ -1,0 +1,40 @@
+module Bag[Elem]
+
+exports 
+imports basic/Booleans
+imports basic/Integers
+imports containers/List[Elem]
+
+  sorts Elem Bag[[Elem]]  
+
+context-free syntax
+   List[[Elem]]                     -> Bag[[Elem]]
+
+ context-free syntax
+   Bag[[Elem]] "==" Bag[[Elem]]     -> Boolean
+   Bag[[Elem]] "<=" Bag[[Elem]]     -> Boolean
+   Bag[[Elem]] "<" Bag[[Elem]]      -> Boolean
+   Bag[[Elem]] ">=" Bag[[Elem]]     -> Boolean
+   Bag[[Elem]] ">"  Bag[[Elem]]     -> Boolean
+
+   Bag[[Elem]] "union" Bag[[Elem]]  -> Bag[[Elem]]
+   Bag[[Elem]] "inter" Bag[[Elem]]  -> Bag[[Elem]]
+   Bag[[Elem]] "\\" Bag[[Elem]]     -> Bag[[Elem]]
+
+   Elem "add-unique" Bag[[Elem]]     -> Bag[[Elem]]
+
+   "(" Bag[[Elem]] ")"              -> Bag[[Elem]] {bracket}
+
+   "#" Bag[[Elem]]                  -> Integer
+
+ variables
+   "Bag[[Elem]]" [0-9\']*           -> Bag[[Elem]]
+
+hiddens
+  imports asf/Comments
+
+  variables
+    "Bag" [0-9\']*           -> Bag[[Elem]]
+    "E" [0-9\']*             -> Elem
+    "E*" [0-9\']*            -> { Elem ","}*
+    "E+" [0-9\']*            -> { Elem ","}+
