@@ -80,7 +80,11 @@ in
       rec-event(UI, new-module(Path?, ModuleName?)).
       snd-msg(create-new-module(Path, ModuleName)).
       (
-        rec-msg(new-module-not-created(ErrMsg?)).
+        (
+          rec-msg(new-module-not-created(ErrMsg?))
+	+
+	  rec-msg(module-not-created(ErrMsg?))
+	).
 	snd-note(ui-status(errorf("%s",[ErrMsg])))
       +
         rec-msg(new-module-created(PathWithExt?, RealModuleName?)).
@@ -115,7 +119,6 @@ in
     (
       rec-event(UI, close-module(ModName?,Recursive?)).
       snd-msg(close-module(ModName, Recursive)).
-      rec-msg(module-closed(ModName)).
       snd-ack-event(UI, close-module(ModName, Recursive))
     ) +
     ( rec-msg(ui-delete-module(ModName?)).
