@@ -221,7 +221,7 @@ ATermList TS_getAllKeys(char* name)
 }
 
 /*}}}  */
-/*{{{  ATermList TS_getAllKeys(char* name) */
+/*{{{  ATermList TS_getAllValues(char* name) */
 
 ATermList TS_getAllValues(char* name)
 {
