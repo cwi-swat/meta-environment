@@ -114,11 +114,7 @@ class SourceFileViewer
     textPanel.add("Center", text);
     textPanel.add("West", lineNumbers);
 
-    pane = new JLayeredPane();
-    pane.setLayout(new OverlayLayout(pane));
-    pane.add(textPanel, new Integer(1));
-    pane.add(glass, new Integer(2));
-
+    ScrollablePane pane = new ScrollablePane(textPanel, glass, text);
     setViewportView(pane);
 
     //{{{ Listen to MouseEvents
@@ -641,7 +637,9 @@ class SourceFileViewer
   public void preferencesChanged(PreferenceSet prefs)
   {
     String prefName = SourceViewerFactory.PREF_SOURCECODE_FONT;
-    text.setFont(prefs.getFontPreference(prefName));
+    Font font = prefs.getFontPreference(prefName);
+    text.setFont(font);
+    getVerticalScrollBar().setUnitIncrement(getFontMetrics(font).getHeight());
     prefName = SourceViewerFactory.PREF_LINENUMBER_FONT;
     lineNumbers.setFont(prefs.getFontPreference(prefName));
     repaint();
@@ -668,3 +666,78 @@ class SourceFileViewer
 
   //}}}
 }
+
+class ScrollablePane
+  extends JLayeredPane
+  implements Scrollable
+{
+  private SourceBrowser text;
+
+  //{{{ public ScrollablePane(JPanel textPanel, JPanel glass, text)
+
+  public ScrollablePane(JPanel textPanel, JPanel glass, SourceBrowser text)
+  {
+    this.text = text;
+
+    setLayout(new OverlayLayout(this));
+    add(textPanel, new Integer(1));
+    add(glass, new Integer(2));
+  }
+
+  //}}}
+  //{{{ public int getScrollableBlockIncrement(visibleRect, orientation, direction)
+
+  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation,
+					 int direction)
+  {
+    if (orientation == SwingConstants.HORIZONTAL) {
+      return visibleRect.width;
+    } else {
+      return visibleRect.height;
+    }
+  }
+
+  //}}}
+  //{{{ public int getScrollableUnitIncrement(visibleRect, orientation, direction)
+
+  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation,
+					int direction)
+  {
+    Font font = text.getFont();
+    FontMetrics metrics = text.getFontMetrics(font);
+
+    if (orientation == SwingConstants.HORIZONTAL) {
+      return metrics.getMaxAdvance();
+    } else {
+      return metrics.getHeight();
+    }
+  }
+
+  //}}}
+
+  //{{{ public Dimension getPreferredScrollableViewportSize()
+
+  public Dimension getPreferredScrollableViewportSize()
+  {
+    return text.getPreferredSize();
+  }
+
+  //}}}
+  //{{{ public boolean getScrollableTracksViewportHeight()
+
+  public boolean getScrollableTracksViewportHeight()
+  {
+    return false;
+  }
+
+  //}}}
+  //{{{ public boolean getScrollableTracksViewportWidth()
+
+  public boolean getScrollableTracksViewportWidth()
+  {
+    return false;
+  }
+
+  //}}}
+}
+
