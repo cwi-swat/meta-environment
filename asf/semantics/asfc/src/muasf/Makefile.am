@@ -6,10 +6,10 @@ libMuASF_a_SOURCES	= MuASF.c MuASF_dict.c MuASF_bottom.c
 
 EXTRA_DIST		= MuASF.label.def
 
-CFLAGS			= -g -Wall -O2
+AM_CFLAGS		= -g -Wall -O2
 #CFLAGS			= -DNO_SHARING -g -Wall -O2
 INCLUDES		= -I${ATERM}/include
-LDFLAGS			= -L${ATERM}/lib
+AM_LDFLAGS		= -L${ATERM}/lib
 LDADD			= -lATerm
 
 # Developers only:
