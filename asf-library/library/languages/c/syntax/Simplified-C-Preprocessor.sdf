@@ -1,0 +1,40 @@
+module languages/c/syntax/Simplified-C-Preprocessor
+
+imports languages/c/syntax/Simplified-C
+
+hiddens
+context-free start-symbols
+	TranslationUnit
+
+exports
+
+sorts Filename
+
+lexical syntax
+
+~[\"\']+ -> Filename
+
+context-free syntax
+
+"#" "include" "\"" Filename "\""  -> Preprocessor
+"#" "include" "<" Filename ">"    -> Preprocessor
+
+"#" "ifdef" Identifier	-> Preprocessor
+"#" "ifndef" Identifier	-> Preprocessor
+"#" "if" Expression	-> Preprocessor
+"#" "else"		-> Preprocessor
+"#" "elif" Expression	-> Preprocessor
+"#" "endif"		-> Preprocessor
+
+"#" "define" Identifier Expression 	-> Preprocessor
+"#" "define" Identifier "(" {Expression ","}+ ")" Expression 
+					-> Preprocessor {prefer}
+"#" "undef" Expression			-> Preprocessor
+"#" "line" Expression Filename? 	-> Preprocessor
+"#" "error" Expression?			-> Preprocessor
+"#" "pragma" Expression?		-> Preprocessor
+
+context-free syntax
+
+Preprocessor -> Declaration
+Preprocessor -> Statement
