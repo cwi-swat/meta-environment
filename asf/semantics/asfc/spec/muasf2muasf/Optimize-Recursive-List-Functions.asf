@@ -128,7 +128,7 @@ equations
 %% list, possibly nested in unary constructors.
 
 [flats-0] find-la-term(Term) = [ FunId* FunId ],
-				  is-list-funid(FunId) = true,
+%%				  is-list-funid(FunId) = true,
           are-constructors([FunId* FunId], Nametable) = true
           ==============================================
           find-la-terms(Term, Term*, Nametable, Int) = [FunId* FunId] at Int 
