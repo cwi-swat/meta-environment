@@ -10,5 +10,5 @@ identification
 configuration interface
 
 requires
-  aterm		2.0.1
+  aterm		2.0.2
   pt-support	0.12beta
