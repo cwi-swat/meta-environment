@@ -8,4 +8,6 @@ config.cache
 config.log
 config.status
 configure
-
+autom4te-2.53.cache
+ptpretty-*.pkg
+*.tar.gz

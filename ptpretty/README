@@ -35,7 +35,49 @@ context-free syntax
 
  Nested applications of productions automatically leeds to deeper indentation
  levels.
- 
+
+Implementation
+--------------
+
+Remember that the normalizer introduces a LAYOUT? non-terminal in
+between every non-terminal in the left-hand side of a production:
+
+A B C -> D
+becomes
+A LAYOUT? B LAYOUT? C -> D
+after normalization.
+
+So, a parse tree for d looks like:
+
+d(a,layout,b,layout,c) 
+
+In the definition for D, there is also layout in between every non-terminal:
+A B C -> D
+ ^ ^
+
+The pretty printer copies the layout above the ^ signs to the 'layout'
+positions in the parse tree for d. The algorithm is recursive over the
+structure of the parse tree.
+
+What about indentation?
+
+Every newline in the definition of a production will be printed, but it 
+will be followed by the current indentation prefix. The current indentation
+prefix is defined by the production also. For example:
+
+A
+  B
+C -> D
+
+The newline and the two spaces after the A and before the B mean:
+  - after an A a newline is printed
+  - the indentation level is augmented with two spaces
+  - after the B the indentation level will be reset to the level at
+    which the A was startedx.
+
+The indentation level is simply kept on the stack during the transformation
+of the the tree.
+    
 Usage
 -----
  
