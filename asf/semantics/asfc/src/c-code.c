@@ -20,9 +20,9 @@ static void make_header(FILE *file, const char* compiler_version)
 }
 
 /*}}}  */
-/*{{{  static void make_main(const char *name, FILE *file) */
+/*{{{  static void make_main(ATbool keep_annos, const char *name, ATbool parseTable, FILE *file) */
 
-static void make_main(const char *name, ATbool parseTable, FILE *file)
+static void make_main(ATbool keep_annos, const char *name, ATbool parseTable, FILE *file)
 {
 
   ATfprintf(file, "#ifdef ASF_MAIN\n");
@@ -37,10 +37,12 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
 	    "int main(int argc, char *argv[])                         \n"
 	    "{                                                        \n"
 	    "  ATerm bottom;\n"
+	    "  setKeepAnnotations(%s);\n"
 	    "  return asc_support_main(&bottom, argc, argv,           \n"
 	    "                          register_%s,                   \n"
             "                          resolve_%s,                    \n"
 	    "                          init_%s",
+	    keep_annos ? "ATtrue" : "ATfalse",
 	    name, name, name);
 
   if (parseTable) {
@@ -64,7 +66,7 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
 }
 
 /*}}}  */
-/*{{{  static void make_parsetable(const char *name, FILE *file, ATerm parsetable) */
+  /*{{{  static void make_parsetable(const char *name, FILE *file, ATerm parsetable) */
 
 static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 {
@@ -101,7 +103,8 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 
 /*{{{  void ToC_code(name, ptCcode, file, version) */
 
-void ToC_code(const char *name, PT_ParseTree ptCcode, ATerm parsetable,
+void ToC_code(ATbool keep_annos,
+	      const char *name, PT_ParseTree ptCcode, ATerm parsetable,
 	      FILE *file, const char* compiler_version)
 {
   int c, prev = ' ';
@@ -182,7 +185,7 @@ void ToC_code(const char *name, PT_ParseTree ptCcode, ATerm parsetable,
   } while(size3 != size);
 
   tableSize = make_parsetable(name, file, parsetable);
-  make_main(name, parsetable != NULL ? ATtrue : ATfalse, file);
+  make_main(keep_annos, name, parsetable != NULL ? ATtrue : ATfalse, file);
 }        
 
 /*}}}  */

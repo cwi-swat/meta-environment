@@ -7,7 +7,8 @@
 extern ATbool run_verbose;
 extern ATbool make_toolbus_tool;
 
-void call_c_compiler(const char* binary, const char* name, const char* source)
+void call_c_compiler(ATbool keep_annos,
+		     const char* binary, const char* name, const char* source)
 {
   char commandline[BUFFER_SIZE];
   char sourcefiles[BUFFER_SIZE];
@@ -39,10 +40,11 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
 	 "  -L" TOOLBUSLIB "/lib -lATB \\\n"
 	 "  " SOCKLIBS "\\\n"
-	 "  -DASF_MAIN\n",
+	 "  -DASF_MAIN %s\n",
 	 run_verbose ? "" : "-Wno-unused",
 	 binary, 
-	 sourcefiles
+	 sourcefiles,
+	 keep_annos ? "-DASF_WITH_ANNOS" : ""
 	 );
 
   if (run_verbose) {

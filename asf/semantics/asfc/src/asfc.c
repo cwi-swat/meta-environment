@@ -43,13 +43,14 @@ ATbool make_toolbus_tool;
 ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
+ATbool keep_annos;
 
 int toolbus_id;
 
 char myname[] = "asfc";
 char myversion[] = "2.5";
 
-static char myarguments[] = "chi:lmn:o:p:tvV";
+static char myarguments[] = "achi:lmn:o:p:tvV";
 
 
 /*}}}  */
@@ -75,6 +76,7 @@ static void usage(void)
   ATwarning(
 	    "Usage: %s [options]\n"
 	    "Options:\n"
+	    "\t-a              rewriting with annotations    (default: %s)\n"
 	    "\t-c              toggle compilation to a binary(default: %s)   \n"
 	    "\t-h              display this message                           \n"
 	    "\t-i filename     input equations from file     (default stdin) \n"
@@ -87,6 +89,7 @@ static void usage(void)
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
+	    keep_annos ? "on" : "off",
 	    use_c_compiler ? "on" : "off",
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
@@ -201,7 +204,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
     }
 
     VERBOSE("pretty printing C code");
-    ToC_code(saveName, c_code, parseTable, fp , myversion);
+    ToC_code(keep_annos, saveName, c_code, parseTable, fp , myversion);
     fclose(fp);
 
     if (make_toolbus_tool) {
@@ -219,7 +222,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
       
       VERBOSE("invoking C compiler");
 
-      call_c_compiler(prefix, saveName, output);
+      call_c_compiler(keep_annos, prefix, saveName, output);
     }
 
   }
@@ -278,6 +281,7 @@ int main(int argc, char *argv[])
   ATerm eqs;
   ATerm parseTable = NULL;
 
+  keep_annos = ATfalse;
   run_verbose = ATfalse;
   input_muasf = ATfalse;
   output_muasf = ATfalse;
@@ -310,6 +314,7 @@ int main(int argc, char *argv[])
     /* Check commandline */ 
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+      case 'a':  keep_annos = ATtrue; break;	
       case 'c':  use_c_compiler = !use_c_compiler; break;	
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
