@@ -581,7 +581,26 @@ target: gamesquare.nl
 multi-user game site, thousands of users.
 \end{verbatim}
 
-\section{Case study: ToolBus and Java RMI}
+\section{Case study: ToolBus vs. Java RMI}
+
+Using the ToolBus communication primitives we can exactly specify which
+pattern of messages (communications) are allowed and in what order. The
+behaviour of several tools working together is written \emph{outside}
+the tools themselves. This means that tool programmers in a ToolBus
+setting do not have to add complexity to the tool's internals to steer
+communication with other tools, or to prevent execution of one part
+of the tool before another. By separating the concerns of the tool's
+external \emph{behaviour} in relation to other tools from the tool's
+implementation, both aspects improve in terms of complexity, readability
+and maintenance.
+
+In this case study we show how a simple \emph{address book} service
+could be implemented in both the ToolBus and the Java RMI setting.
+The example is quite small, and as such it is not intended to be a real
+world production version of an address book. It does, however, highlight
+the differences between ToolBus and RMI.
+
+
 \verbatiminput{address-book.tb}
 \verbatiminput{AddressBookService.java}
 
