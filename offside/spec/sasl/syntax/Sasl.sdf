@@ -22,7 +22,7 @@ context-free syntax
 
 
 "WHERE"           -> Where
-Expr Where Defs   -> Expr
+Expr Where Defs   -> Expr {right}
 CondExp           -> Expr
 
 OpExp "->" CondExp ";" CondExp -> CondExp
