@@ -10,6 +10,7 @@
 # Defaults:
 ac_help=
 ac_default_prefix=/usr/local
+
 # Any additions from configure.in:
 ac_help="$ac_help
   --with-aterm=DIR        ATerm-library is in DIR"
