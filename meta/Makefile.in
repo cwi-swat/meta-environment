@@ -1,5 +1,5 @@
 # @configure_input@
-# Directory: aterm-lib
+# Directory: new-meta
 
 # Configure variable substitutions
 PRODUCT		= @PRODUCT@

@@ -523,7 +523,7 @@ fi
 
 
 PRODUCT=new-meta
-VERSION=0.01
+VERSION=0.02
 
 
 

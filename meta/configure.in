@@ -3,7 +3,7 @@ AC_INIT
 
 dnl Product name and version number
 PRODUCT=new-meta
-VERSION=0.01
+VERSION=0.02
 
 AC_SUBST(PRODUCT)
 AC_SUBST(VERSION)
