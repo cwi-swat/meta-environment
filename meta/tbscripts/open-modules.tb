@@ -18,7 +18,8 @@ process DealWithMultipleOccurrences(Chosen: str, Name: str, Extension: str,
 let
   Directories: list,
   Directory: str,
-  FileName: str
+  FileName: str,
+  PeerName: str
 in
   Directories := Peers
   .
@@ -26,14 +27,15 @@ in
     Directory := first(Directories)
     . Directories := next(Directories)
     . BuildPath(Directory, Name, Extension, FileName?)
-    . snd-msg(io-compare-files(FileName, Chosen))
+    . BuildPath(Chosen, Name, Extension, PeerName?)
+    . snd-msg(io-compare-files(PeerName, FileName))
     .
     (
       rec-msg(io-files-equal)
     +
       rec-msg(io-files-differ)
       . snd-note(ui-status(messagef("Multiple occurrences of %s. Continuing with %s",
-                                    [Name, Chosen])))
+                                    [Name, PeerName])))
     )
   fi
   *
@@ -157,8 +159,8 @@ in
       . Error("No parse table: %t\n", [Error])
     )
   +
-    rec-msg(io-error-reading(Message?))
-    . Error("io-error-reading: %s\n", [Message])
+    rec-msg(io-error-reading(Error?))
+    . Error("io-error-reading: %t\n", [Error])
   )
   . snd-note(ui-status(endstat(Id)))
 endlet

@@ -643,28 +643,28 @@ in
     rec-msg(save-tree, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Filename?)
     . StackPopTerm(Stack, Stack?, Tree?)
-    . snd-msg(io-write-term-file(Filename, Tree))
+    . snd-msg(io-unpack-and-write-term-in-baf(Filename, Tree))
     .
     (
       rec-msg(io-file-written)
       . ReturnSuccess(EditorId, Stack)
     +
-      rec-msg(io-file-not-written(ErrorMessage?))
-      . snd-note(ui-status(errorf("%s: %s", [Filename, ErrorMessage])))
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
       . ReturnAbort(EditorId, Stack)
     )
   +
     rec-msg(save-text, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Filename?)
     . StackPopString(Stack, Stack?, String?)
-    . snd-msg(io-write-text-file(Filename, [String]))
+    . snd-msg(io-write-text-list(Filename, [String]))
     .
     (
       rec-msg(io-file-written)
       . ReturnSuccess(EditorId, Stack)
     +
-      rec-msg(io-file-not-written(ErrorMessage?))
-      . snd-note(ui-status(errorf("%s: %s", [Filename, ErrorMessage])))
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
       . ReturnAbort(EditorId, Stack)
     )
   +
@@ -677,8 +677,8 @@ in
       . StackPushTerm(Stack, Stack?, Tree)
       . ReturnSuccess(EditorId, Stack)
     +
-      rec-msg(io-error-reading(ErrorMessage?))
-      . snd-note(ui-status(errorf("%s: %s", [Filename, ErrorMessage])))
+      rec-msg(io-error-reading(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
       . ReturnAbort(EditorId, Stack)
     )
   +
@@ -948,8 +948,8 @@ in
       rec-msg(saved)
       . ReturnSuccess(EditorId, Stack)
     +
-      rec-msg(not-saved(ErrorMessage?))
-      . snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+      rec-msg(not-saved(Error?))
+      . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
       . ReturnFailed(EditorId, Stack)
     )
   +
@@ -1188,7 +1188,7 @@ in
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
   . GetPath(Sid, Filename?)
-  . snd-msg(io-write-text-file(Filename, [Text]))
+  . snd-msg(io-write-text-list(Filename, [Text]))
   .
   (
     rec-msg(io-file-written)
@@ -1248,7 +1248,7 @@ endlet
 
 process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
 let
-  ErrorMessage: str,
+  Error: term,
   NewModulename: str,
   Pid: int,
   Sid: term,
@@ -1257,35 +1257,35 @@ in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree))
     . rec-msg(unparsed-text(Text?))
-    . snd-msg(io-write-text-file(Filename, [Text]))
+    . snd-msg(io-write-text-list(Filename, [Text]))
     .
     (
       rec-msg(io-file-written)
       . create(EditTerm(Filename, Modulename), Pid?)
       . rec-msg(term-editor-started(Filename, Modulename, Sid?))
     +
-      rec-msg(io-file-not-written(ErrorMessage?))
-      . snd-note(ui-status(errorf("%s: %s", [Filename, ErrorMessage])))
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
     )
   fi
 endlet
 
 process ActivateEditorWithString(Text: str, Modulename: str, Filename: str) is
 let
-  ErrorMessage: str,
+  Error: term,
   NewModulename: str,
   Pid: int,
   Sid: term
 in
-  snd-msg(io-write-text-file(Filename, [Text]))
+  snd-msg(io-write-text-list(Filename, [Text]))
   .
   (
     rec-msg(io-file-written)
     . create(EditTerm(Filename, Modulename), Pid?)
     . rec-msg(term-editor-started(Filename, Modulename, Sid?))
   +
-    rec-msg(io-file-not-written(ErrorMessage?))
-    . snd-note(ui-status(errorf("%s: %s", [Filename, ErrorMessage])))
+    rec-msg(io-file-not-written(Error?))
+    . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
   )
 endlet
 

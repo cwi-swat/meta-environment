@@ -3,7 +3,7 @@
 process File-creator is
 let
   Directory: str,
-  Error: str,
+  Error: term,
   Extension: str,
   Filename: str,
   ModuleId: str,
@@ -36,7 +36,7 @@ in
 	snd-msg(new-equations-created)
       +
 	rec-msg(io-file-not-exists) .
-	snd-msg(io-write-text-file(Filename, [])) .
+	snd-msg(io-write-text-list(Filename, [])) .
 	(
 	  rec-msg(io-file-written) .
 	  snd-msg(io-read-file(Filename)) .
@@ -47,12 +47,12 @@ in
 	    snd-msg(new-equations-created)
 	  +
 	    rec-msg(io-error-reading(Error?)) .
-	    snd-note(ui-status(errorf("%s: %s", [Filename,Error]))) .
+	    snd-note(ui-status(errorf("%s: %t", [Filename, Error]))) .
 	    snd-msg(new-equations-not-created)
 	  )
 	+
 	  rec-msg(io-file-not-written(Error?)) . 
-	  snd-note(ui-status(errorf("%s: %s", [Filename,Error]))) .
+	  snd-note(ui-status(errorf("%s: %t", [Filename, Error]))) .
 	  snd-msg(new-equations-not-created)
 	)
       )

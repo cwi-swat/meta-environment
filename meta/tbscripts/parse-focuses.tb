@@ -4,7 +4,7 @@
 
 process ReadFile(Path: str, Contents: str?) is
 let
-  Error: str
+  Error: term
 in
   snd-msg(io-read-file(Path))
   .

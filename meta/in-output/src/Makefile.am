@@ -13,9 +13,12 @@ INCLUDES = \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include
 
-in_output_SOURCES = in-output.tif.c main.c
+in_output_SOURCES = \
+	in-output.tif.c \
+	main.c
 
 in_output_LDADD = \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)

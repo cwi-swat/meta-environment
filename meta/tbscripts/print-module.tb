@@ -1,46 +1,50 @@
-/* $Id$ */
-
 process PrintModule is
-let 
-  Id         : term,
-  SdfTree    : term,
-  SdfText    : str,
-  AsfText    : str,
-  ModuleName : str,
-  Path       : str,
-  FileName : str,
-  ErrMsg : str
-in 
-  Id := process-id. 
+let
+  Id: term,
+  SdfTree: term,
+  SdfText: str,
+  AsfText: str,
+  ModuleName: str,
+  Path: str,
+  FileName: str,
+  ErrMsg: str
+in
+  Id := process-id
+  .
   (
-    rec-msg(print-module(ModuleName?, FileName?)) .
-    snd-note(ui-status(statf(Id,"Printing %s",[ModuleName]))) .
-    snd-msg(get-path-from-db(ModuleName)) .
-    rec-msg(path(Path?)) .
-    snd-msg(ts-get-str-value("sdf-text", ModuleName)) .
+    rec-msg(print-module(ModuleName?, FileName?))
+    . snd-note(ui-status(statf(Id, "Printing %s", [ModuleName])))
+    . snd-msg(get-path-from-db(ModuleName))
+    . rec-msg(path(Path?))
+    . snd-msg(ts-get-str-value("sdf-text", ModuleName))
+    .
     (
-      rec-msg(ts-value(SdfText?)) .
-      snd-msg(ts-get-str-value("asf-text", ModuleName)) .
+      rec-msg(ts-value(SdfText?))
+      . snd-msg(ts-get-str-value("asf-text", ModuleName))
+      .
       (
-        rec-msg(ts-value(AsfText?)) .
-        snd-msg(io-write-text-file(FileName,[SdfText,"\n",AsfText]))
+        rec-msg(ts-value(AsfText?))
+        . snd-msg(io-write-text-list(FileName, [SdfText, "\n", AsfText]))
       +
-        rec-msg(ts-no-value) .
-        snd-msg(io-write-text-file(FileName,[SdfText]))
-      ) . 
+        rec-msg(ts-no-value)
+        . printf("asftext nie te vinden nie\n")
+        . snd-msg(io-write-text-list(FileName, [SdfText]))
+      )
+      .
       (
         rec-msg(io-file-written)
       +
-        rec-msg(io-file-not-written(ErrMsg?)) .
-	snd-note(ui-status(errorf("Printing of %s failed: %s",
-	                   [ModuleName, ErrMsg])))
+        rec-msg(io-file-not-written(ErrMsg?))
+        . snd-note(ui-status(errorf("Printing of %s failed: %s",
+                                    [ModuleName, ErrMsg])))
       )
     +
-      rec-msg(ts-no-value) .
-      snd-note(ui-status(errorf("Printing of %s failed",[ModuleName])))
-    ) .
-    snd-note(ui-status(endstat(Id))) .  
-    snd-msg(module-printed(ModuleName))
-  ) *
+      rec-msg(ts-no-value)
+      . snd-note(ui-status(errorf("Printing of %s failed", [ModuleName])))
+    )
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(module-printed(ModuleName))
+  )
+  *
   delta
 endlet

@@ -8,6 +8,7 @@ let
   Path         : str,
   Text : str, 
   FileName : str,
+  Error: term,
   ErrorMessage : str
 in
   Id := process-id .
@@ -21,12 +22,12 @@ in
       rec-msg(path(Path?)) .
       snd-msg(unparse(Syntax)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-file(FileName, [Text])) .
+      snd-msg(io-write-text-list(FileName, [Text])) .
       (
         rec-msg(io-file-written)
       +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
+        rec-msg(io-file-not-written(Error?)) .
+	snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
       )
     +
       rec-msg(no-syntax(ErrorMessage?)) .

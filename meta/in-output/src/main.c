@@ -12,6 +12,7 @@
 
 #include <aterm2.h>
 #include <atb-tool.h>
+#include <Error.h>
 
 #include "in-output.tif.h"
 
@@ -22,6 +23,12 @@
 #define PATH_LEN (_POSIX_PATH_MAX)
 #define PATH_SEPARATOR '/'
 #define EXTENSION_SEPARATOR '.'
+#define TOOL_NAME "in-output"
+
+/*}}}  */
+/*{{{  typedefs */
+
+typedef ATbool (*Writer)(ATerm, FILE *);
 
 /*}}}  */
 /*{{{  variables */
@@ -142,40 +149,39 @@ static char *expandPath(const char *relative_path)
 }
 
 /*}}}  */
-/*{{{  static ATbool filesEqual(const char *f1, const char *f2) */
 
-static ATbool filesEqual(const char *f1, const char *f2)
+/*{{{  static ATerm makeResultMessage(ERR_Summary summary) */
+
+static ATerm makeResultMessage(ERR_Summary summary)
 {
-  struct stat st1;
-  struct stat st2;
+  ATerm result;
 
-  if (stat(f1, &st1) == 0 && stat(f2, &st2) == 0) {
-    return st1.st_ino == st2.st_ino;
+  if (summary == NULL) {
+    result = ATmake("snd-value(success)");
   }
   else {
-    perror("stat");
-    return ATfalse;
+    result = ATmake("snd-value(failure(<term>))", ERR_SummaryToTerm(summary));
   }
+
+  return result;
 }
 
 /*}}}  */
+/*{{{  static ERR_Summary createSummary(const char *msg, const char *path) */
 
-/*{{{  static ATerm createErrorMessage(char *message) */
-
-static ATerm createErrorMessage(char *message)
+static ERR_Summary createSummary(const char *msg, const char *path)
 {
-  return ATmake("snd-value(failure(<str>))", message);
+  ERR_Location location = ERR_makeLocationFile(path);
+  ERR_Subject subject = ERR_makeSubjectLocalized(strerror(errno), location);
+  ERR_SubjectList subjects = ERR_makeSubjectListSingle(subject);
+  ERR_Error error = ERR_makeErrorError(msg, subjects);
+  ERR_ErrorList errors = ERR_makeErrorListSingle(error);
+
+  return ERR_makeSummarySummary(TOOL_NAME, path, errors);
 }
 
 /*}}}  */
-/*{{{  static ATerm createSuccessMessage() */
 
-static ATerm createSuccessMessage()
-{
-  return ATmake("snd-value(success)");
-}
-
-/*}}}  */
 /*{{{  static ATerm createFileNotFoundMessage() */
 
 static ATerm createFileNotFoundMessage()
@@ -215,8 +221,9 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 {
   ATermList relativePaths = (ATermList) paths;
   ATermList result = ATempty;
+  ERR_Summary summary = NULL;
 
-  for (; !ATisEmpty(relativePaths); relativePaths = ATgetNext(relativePaths)) {
+  while (!ATisEmpty(relativePaths)) {
     const char *relativePath = ATgetString(ATgetFirst(relativePaths));
     char *absolutePath = expandPath(relativePath);
 
@@ -224,32 +231,37 @@ ATerm relative_to_absolute(int cid, ATerm paths)
       result = ATinsert(result, ATmake("<str>", absolutePath));
     }
     else {
-      ATwarning("Unable to expand %s, skipping...\n", relativePath);
+      summary = createSummary("Unable to expand", relativePath);
+      break;
     }
 
     free(absolutePath);
     absolutePath = NULL;
+
+    relativePaths = ATgetNext(relativePaths);
   }
 
-  // Found files should be reported in order of the searchPaths
-  return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
+  if (summary == NULL) {
+    /* Found files should be reported in order of the searchPaths */
+    return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
+  }
+  else {
+    return makeResultMessage(summary);
+  }
 }
 
 /*}}}  */
-/*{{{  void remove_file(int cid, const char *directory, const char *name, const char *extension) */
+/*{{{  ATerm remove_file(int cid, const char *path) */
 
-ATerm remove_file(int cid, const char *directory, const char *name, const char *extension)
+ATerm remove_file(int cid, const char *path)
 {
-  char fileName[PATH_LEN];
+  ERR_Summary summary = NULL;
 
-  sprintf(fileName, "%s%c%s%s", directory, PATH_SEPARATOR, name, extension);
+  if (unlink(path) != 0) {
+    summary = createSummary("Failed to remove file", path);
+  }
 
-  if (unlink(fileName) == 0) {
-    return createSuccessMessage();
-  }
-  else {
-    return createErrorMessage(strerror(errno));
-  }
+  return makeResultMessage(summary);
 }
 
 /*}}}  */
@@ -259,70 +271,28 @@ ATerm copy_file(int cid, const char *srcPath, const char *destPath)
 {
   int size;
   char *contents;
-  ATerm message;
+  ERR_Summary summary = NULL;
 
   contents = readFileContents(srcPath, &size);
   if (contents == NULL) {
-    message = createErrorMessage(strerror(errno));
+    summary = createSummary("Failed to read during copy", srcPath);
   }
   else {
     FILE *f = fopen(destPath, "w");
     if (f == NULL) {
-      message = createErrorMessage(strerror(errno));
+      summary = createSummary("Failed to open destination file during copy",
+			      destPath);
     }
     else {
       if (fputs(contents, f) == EOF) {
-	message = createErrorMessage(strerror(errno));
-      }
-      else {
-	message = createSuccessMessage();
+	summary = createSummary("Failed to write during copy", destPath);
       }
       fclose(f);
     }
     free(contents);
   }
 
-  return message;
-}
-
-/*}}}  */
-
-/*{{{  ATerm read_text_file(int cid, const char *fileName) */
-
-ATerm read_text_file(int cid, const char *fileName)
-{
-  ATerm t;
-  char *buf = NULL;
-  size_t size;
-
-  buf = readFileContents(fileName, &size);
-
-  if (buf == NULL) {
-    t = createErrorMessage(strerror(errno));
-  } else {
-    t = ATmake("snd-value(file-contents(<str>))", buf);
-    free(buf);
-  }
-
-  return t;
-}
-
-/*}}}  */
-/*{{{  ATerm read_term_file(int cid, const char *fileName) */
-
-ATerm read_term_file(int cid, const char *fileName)
-{
-  ATerm result, contents;
-
-  contents = ATreadFromNamedFile(fileName);
-
-  if (contents == NULL) {
-    result = createErrorMessage(strerror(errno));
-  } else {
-    result = ATmake("snd-value(file-contents(<term>))", ATBpack(contents));
-  }
-
-  return result;
+  return makeResultMessage(summary);
 }
 
 /*}}}  */
@@ -344,142 +314,143 @@ ATerm unpack_term(int cid, ATerm term)
 
 /*}}}  */
 
-/*{{{  ATerm read_packed_term_file(int cid, const char *fileName) */
+/*{{{  ATerm read_text_file(int cid, const char *path) */
 
-ATerm read_packed_term_file(int cid, const char *fileName)
+ATerm read_text_file(int cid, const char *path)
 {
-  ATerm result, contents;
- 
-  contents = ATreadFromNamedFile(fileName);
+  char *contents = NULL;
+  size_t size;
+
+  contents = readFileContents(path, &size);
+
+  if (contents == NULL) {
+    return makeResultMessage(createSummary("Failed to read text file", path));
+  } else {
+    ATerm result = ATmake("snd-value(file-contents(<str>))", contents);
+    free(contents);
+    return result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm read_and_pack_term(int cid, const char *path) */
+
+ATerm read_and_pack_term(int cid, const char *path)
+{
+  ATerm contents = ATreadFromNamedFile(path);
+
+  if (contents == NULL) {
+    return makeResultMessage(createSummary("Failed to read term file", path));
+  } else {
+    return ATmake("snd-value(packed-term(<term>))", ATBpack(contents));
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm read_term_file(int cid, const char *path) */
+
+ATerm read_term_file(int cid, const char *path)
+{
+  ATerm contents = ATreadFromNamedFile(path);
  
   if (contents == NULL) {
-    result = createErrorMessage(strerror(errno));
+    return makeResultMessage(createSummary("Failed to read packed term file",
+					    path));
   } else {
-    result = ATmake("snd-value(file-contents(<term>))", contents);
+    return ATmake("snd-value(term(<term>))", contents);
   }
- 
-  return result;
 }
 
 /*}}}  */
-/*{{{  ATerm write_text_file(int cid, const char *fileName, ATerm content) */
 
-ATerm write_text_file(int cid, const char *fileName, ATerm content)
+/*{{{  static ERR_Summary write_file(const char *path, ATerm content, Writer writer) */
+
+static ATerm write_file(const char *path, ATerm content, Writer writer)
+{
+  FILE *file;
+  ERR_Summary summary = NULL;
+
+  file = fopen(path, "w");
+  if (file == NULL) {
+    summary = createSummary("Failed to open file for writing", path);
+  }
+  else {
+    if (!writer(content, file)) {
+      summary = createSummary("Failed to write", path);
+    }
+
+    if (fclose(file) != 0) {
+      if (summary == NULL) {
+	summary = createSummary("Failed to close text file", path);
+      }
+    }
+  }
+
+  return makeResultMessage(summary);
+}
+
+/*}}}  */
+/*{{{  static ATbool text_list_writer(ATerm content, FILE *f) */
+
+static ATbool text_list_writer(ATerm content, FILE *f)
 {
   ATermList list = (ATermList) content;
-  FILE *file = NULL;
-  ATerm message;
-
-  if (!(file = fopen(fileName, "w"))) {
-    message = createErrorMessage(strerror(errno));
+  while (!ATisEmpty(list)) {
+    const char *str = ATgetString(ATgetFirst(list));
+    if (fputs(str, f) == EOF) {
+      return ATfalse;
+    }
+    list = ATgetNext(list);
   }
-  else {
-    for (; !ATisEmpty(list); list = ATgetNext(list)) {
-      ATerm atString = ATgetFirst(list);
-      const char *string = ATgetName(ATgetAFun((ATermAppl) atString));
-      fputs(string, file);
-    }
-
-    if (!ferror(file)) {
-      message = createSuccessMessage();
-    }
-    else {
-      message = createErrorMessage(strerror(errno));
-    }
-
-    fclose(file);
-  }
-
-  return message;
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATerm write_term_file(int cid, const char *fileName, ATerm packedContent) */
 
-ATerm write_term_file(int cid, const char *fileName, ATerm packedContent)
+/*{{{  ATerm write_text_list(int cid, const char *path, ATerm content) */
+
+ATerm write_text_list(int cid, const char *path, ATerm content)
 {
-  ATerm message;
-
-  ATerm content = ATBunpack(packedContent);
-
-  if (fileName != NULL) {
-    FILE *file = NULL;
-
-    if (!(file = fopen(fileName, "w"))) {
-      message = createErrorMessage(strerror(errno));
-    }
-    else {
-      if (ATwriteToBinaryFile(content, file)) {
-        message = createSuccessMessage();
-      }
-      else {
-	if (ferror(file)) {
-	  message = createErrorMessage(strerror(errno));
-	}
-	else {
-	  message = createErrorMessage("Could not write ATerm to file");
-	}
-      }
-      fclose(file);
-    }
-  }
-  else{
-    message = createErrorMessage("out of memory");
-  }
-
-  return message;
+  return write_file(path, ATBunpack(content), text_list_writer);
 }
 
 /*}}}  */
-/*{{{  ATerm write_packed_term_file(int cid, const char *fileName, ATerm content) */
+/*{{{  ATerm write_term_as_text(int cid, const char *path, ATerm content) */
 
-ATerm write_packed_term_file(int cid, const char *fileName, ATerm content)
+ATerm write_term_as_text(int cid, const char *path, ATerm content)
 {
-  ATerm message;
-
-  if (fileName != NULL) {
-    FILE *file = NULL;
-
-    if (!(file = fopen(fileName, "w"))) {
-      message = createErrorMessage(strerror(errno));
-    }
-    else {
-      if (ATwriteToTextFile(content, file)) {
-        message = createSuccessMessage();
-      }
-      else {
-	if (ferror(file)) {
-	  message = createErrorMessage(strerror(errno));
-	}
-	else {
-	  message = createErrorMessage("Could not write ATerm to file");
-	}
-      }
-      fclose(file);
-    }
-  }
-  else{
-    message = createErrorMessage("out of memory");
-  }
-
-  return message;
+  return write_file(path, ATBunpack(content), ATwriteToTextFile);
 }
 
 /*}}}  */
-/*{{{  ATerm exists_file(int cid, const char *fileName) */
+/*{{{  ATerm write_in_baf(int cid, const char *path, ATerm content) */
 
-ATerm exists_file(int cid, const char *fileName)
+ATerm write_in_baf(int cid, const char *path, ATerm content)
 {
-  ATerm result;
+  return write_file(path, content, ATwriteToBinaryFile);
+}
 
-  if (fileExists(fileName)) {
-    result = createSuccessMessage();
-  }
-  else {
-    result = createErrorMessage("file does not exist");
+/*}}}  */
+/*{{{  ATerm unpack_and_write_in_baf(int cid, const char *path, ATerm content) */
+
+ATerm unpack_and_write_in_baf(int cid, const char *path, ATerm content)
+{
+  return write_file(path, ATBunpack(content), ATwriteToBinaryFile);
+}
+
+/*}}}  */
+
+/*{{{  ATerm exists_file(int cid, const char *path) */
+
+ATerm exists_file(int cid, const char *path)
+{
+  ERR_Summary summary = NULL;
+
+  if (!fileExists(path)) {
+    summary = createSummary("No such file", path);
   }
   
-  return result;
+  return makeResultMessage(summary);
 }
 
 /*}}}  */
@@ -514,7 +485,18 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
 
 ATerm compare_files(int cid, const char *f1, const char *f2)
 {
-  if (filesEqual(f1, f2)) {
+  struct stat st1;
+  struct stat st2;
+
+  if (stat(f1, &st1) != 0) {
+    return makeResultMessage(createSummary("Cannot stat", f1));
+  }
+
+  if (stat(f2, &st2) != 0) {
+    return makeResultMessage(createSummary("Cannot stat", f2));
+  }
+
+  if (st1.st_ino == st2.st_ino) {
     return createFilesEqualMessage();
   }
   else {
@@ -529,7 +511,7 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
 {
   ATerm result;
   char *buf;
-  char fileName[PATH_LEN];
+  char path[PATH_LEN];
   int directoryLen;
 
   buf = strdup(directory);
@@ -541,9 +523,9 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
     buf[directoryLen-1] = '\0';
   }
 
-  sprintf(fileName, "%s%c%s%s", buf, PATH_SEPARATOR, name, extension);
+  sprintf(path, "%s%c%s%s", buf, PATH_SEPARATOR, name, extension);
 
-  result = ATmake("snd-value(filename(<str>))", fileName);
+  result = ATmake("snd-value(filename(<str>))", path);
 
   free(buf);
 
@@ -741,6 +723,7 @@ int main(int argc, char *argv[])
 
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottomOfStack);
+    ERR_initErrorApi();
     cid = ATBconnect(NULL, NULL, -1, in_output_handler);
     ATBeventloop();
   }

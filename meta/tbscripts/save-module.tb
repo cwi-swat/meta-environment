@@ -1,64 +1,69 @@
-/* $Id$ */
-
 process Save-modules is
 let
-  Id           : term,
-  Syntax       : term,
-  Eqs          : term,
-  Snapshot     : term,
-  Module       : term,
-  Path         : str,
-  Modules      : list,
-  Table        : term,
-  Text         : str,
-  ErrorMessage : str,
-  FileName     : str,
-  TermStoreName : str,
-  Extension    : str,
-  ModuleType   : term,
-  Status : term
+  Id: term,
+  Syntax: term,
+  Eqs: term,
+  Snapshot: term,
+  Module: term,
+  Path: str,
+  Modules: list,
+  Table: term,
+  Text: str,
+  Error: term,
+  FileName: str,
+  TermStoreName: str,
+  Extension: str,
+  ModuleType: term,
+  Status: term
 in
-  Id := process-id . 
+  Id := process-id
+  .
   (
-    rec-msg(save-module(Module?, ModuleType?)).
-    Status := success .
-    snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-path-from-db(Module)).
+    rec-msg(save-module(Module?, ModuleType?))
+    . Status := success
+    . snd-note(ui-status(statf(Id, "Saving %s", [Module])))
+    . snd-msg(get-path-from-db(Module))
+    .
     (
-      rec-msg(path(Path?)).
-      snd-msg(file-extension-hook(sdf)) .
-      rec-msg(file-extension-hook-result(Extension?)) .
-      snd-msg(io-get-filename(Path, Module, Extension)) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(get-syntax-tree(Module)).
+      rec-msg(path(Path?))
+      . snd-msg(file-extension-hook(sdf))
+      . rec-msg(file-extension-hook-result(Extension?))
+      . snd-msg(io-get-filename(Path, Module, Extension))
+      . rec-msg(io-filename(FileName?))
+      . snd-msg(get-syntax-tree(Module))
+      .
       (
-        rec-msg(syntax(Syntax?)) .
-        snd-msg(unparse(Syntax)) .
-        rec-msg(unparsed-text(Text?)) .
-        snd-msg(io-write-text-file(FileName, [Text])) .
+        rec-msg(syntax(Syntax?))
+        . snd-msg(unparse(Syntax))
+        . rec-msg(unparsed-text(Text?))
+        . snd-msg(io-write-text-list(FileName, [Text]))
+        .
         (
           rec-msg(io-file-written)
         +
-          rec-msg(io-file-not-written(ErrorMessage?)) .
-	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage]))) .
-	  Status := error
+          rec-msg(io-file-not-written(Error?))
+          . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
+          . Status := error
         )
-      ) .
+      )
+      .
       if equal(ModuleType, quote(asfsdf)) then
-        snd-msg(get-eqs-text(Module)).
+        snd-msg(get-eqs-text(Module))
+        .
         (
-          rec-msg(eqs-text(Module, Text?)) .
-          snd-msg(file-extension-hook(asf)) .
-          rec-msg(file-extension-hook-result(Extension?)) .
-          snd-msg(io-get-filename(Path, Module, Extension)) .
-          rec-msg(io-filename(FileName?)) .
-          snd-msg(io-write-text-file(FileName, [Text])) .
+          rec-msg(eqs-text(Module, Text?))
+          . snd-msg(file-extension-hook(asf))
+          . rec-msg(file-extension-hook-result(Extension?))
+          . snd-msg(io-get-filename(Path, Module, Extension))
+          . rec-msg(io-filename(FileName?))
+          . snd-msg(io-write-text-list(FileName, [Text]))
+          .
           (
-            rec-msg(io-file-written) 
+            rec-msg(io-file-written)
           +
-            rec-msg(io-file-not-written(ErrorMessage?)) .
-            snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage]))) .
-	    Status := error
+            rec-msg(io-file-not-written(Error?))
+            . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
+            . Status := error
           )
         +
           rec-msg(no-eqs-text(Module))
@@ -68,25 +73,27 @@ in
       fi
     +
       rec-msg(no-path)
-    ) .
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(saved-module(Module, Status))
+    )
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(saved-module(Module, Status))
   +
-    rec-msg(save-termstore) .
-    snd-note(ui-status(statf(Id,"Saving term-store",[]))) .
-    snd-msg(get-termstore-name) .
-    rec-msg(termstore-name(TermStoreName?)) .
-    snd-msg(ts-get-snapshot) .
-    rec-msg(ts-snapshot(Snapshot?)) .
-    snd-msg(io-write-packed-term-file(TermStoreName, Snapshot)) .
+    rec-msg(save-termstore)
+    . snd-note(ui-status(statf(Id, "Saving term-store", [])))
+    . snd-msg(get-termstore-name)
+    . rec-msg(termstore-name(TermStoreName?))
+    . snd-msg(ts-get-snapshot)
+    . rec-msg(ts-snapshot(Snapshot?))
+    . snd-msg(io-write-term-in-baf(TermStoreName, Snapshot))
+    .
     (
-      rec-msg(io-file-written) .
-      snd-msg(saved)
+      rec-msg(io-file-written)
+      . snd-msg(saved)
     +
-      rec-msg(io-file-not-written(ErrorMessage?)) .
-      snd-msg(not-saved(ErrorMessage))
-    ) .
-    snd-note(ui-status(endstat(Id)))
-  )*
+      rec-msg(io-file-not-written(Error?))
+      . snd-msg(not-saved(Error))
+    )
+    . snd-note(ui-status(endstat(Id)))
+  )
+  *
   delta
 endlet

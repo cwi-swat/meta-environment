@@ -2,7 +2,7 @@
 
 process Open-Sdf2-Language is
 let 
-  Error: str,
+  Error: term,
   Table: term,
   Type: term
 in
@@ -10,10 +10,10 @@ in
   .
   (
     rec-msg(get-parse-table(Type))
-    . snd-msg(io-read-term-file("__SDF2TABLE__"))
+    . snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
     .
     (
-      rec-msg(io-file-contents(Table?))
+      rec-msg(io-packed-term(Table?))
       . snd-msg(parse-table(Type, Table))
     +
       rec-msg(io-error-reading(Error?))

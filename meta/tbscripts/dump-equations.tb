@@ -4,7 +4,6 @@ process DumpEquations is
 let
   Equations: term,
   Error: term,
-  ErrorMessage: str,
   FileName: str,
   Id: int,
   ModuleName: str,
@@ -37,12 +36,12 @@ in
       else
         tau
       fi .
-      snd-msg(io-write-term-file(FileName, Equations)) .
+      snd-msg(io-unpack-and-write-term-in-baf(FileName, Equations)) .
       (
         rec-msg(io-file-written)
       +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
+        rec-msg(io-file-not-written(Error?)) .
+	snd-note(ui-status(errorf("%s: %t", [FileName, Error])))
       )
     +
       rec-msg(specification-incomplete(Error?)) .
