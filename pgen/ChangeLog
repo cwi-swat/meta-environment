@@ -1,5 +1,13 @@
 $Id$
 
+2002/03/13 (jurgenv@cwi.nl)
+ * Fixed another bug in the normalizer. When user-defined lexical
+   syntax produces a character class a cyclic injection was introduced.
+   For example: "foo" -> [a-z], introduced [a-z] -> [a-z] which is
+   a degenerated injection from lex to cf.
+ * Fixed a bug in the parsetable generator. User defined productions into
+   character classes were ignored at generation time.
+
 2002/03/05 (jurgenv@cwi.nl)
  * Fixed a bug in the normalizer. Two equations:
    [0] <cc -VAR> = cc

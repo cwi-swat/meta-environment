@@ -104,8 +104,6 @@ static ATermList init_dependency(int prodid)
   depends = ATempty;
   for(--idx; idx>=0; idx--) {
     ATerm elem = elems[idx];
-    if (IS_CHARCLASS(elem))
-      break;
 
     orgdep = (ATermList)ATtableGet(rhs_prods_pairs, elem);
     if (!orgdep)
@@ -286,8 +284,8 @@ static void init_follow_set(int prodid)
   while (!ATisEmpty(symbols)) {
     symbol = ATgetFirst(symbols);
     symbols = ATgetNext(symbols);
-    if (!IS_CHARCLASS(symbol)) {
-      if (!ATisEmpty(symbols)) {
+
+    if (!ATisEmpty(symbols)) {
 	prods = (ATermList)ATtableGet(rhs_prods_pairs, symbol);
 	if (prods) {
 	  follow = first_no_epsilon(symbols);
@@ -303,7 +301,7 @@ static void init_follow_set(int prodid)
 	  CC_free(follow);
 	}
       }
-    }
+
     iptr++;
   }
 }

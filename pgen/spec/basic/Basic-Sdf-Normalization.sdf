@@ -28,4 +28,5 @@ hiddens
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*
     "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "cc"                -> CharClass
     

@@ -99,9 +99,9 @@ equations
 [0] <L  -LEX> = L   [0] <L  -CF> = L   
 
 %% varsyms should not be removed, because that would ruin the injection from
-%% varsym into normal syms!
-%% [0]  <cc -VAR> = cc
-%% [0]  <L  -VAR> = L
+%% varsym into normal syms. 
+%%[0]  <cc -VAR> = cc
+%%[0]  <L  -VAR> = L
 
 
 %% \paragraph{Basic + Priorities}
