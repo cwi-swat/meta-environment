@@ -12,14 +12,21 @@ PROG=`basename $0`
 THISDIR=`pwd`
 TMPDIR=${TMPDIR:-/var/tmp}
 
-case $# in
-	1)
-		TAG=$1
-		RELEASE="$RELEASE-$TAG" ;;
-	*)
-		echo "Usage: $PROG <release_tag_or_date>"
-		exit 1 ;;
-esac
+usage () {
+	echo "Usage: $PROG <release_tag_or_date>";
+	exit 1
+}
+
+if [ $# != 1 ]; then 
+	usage
+fi
+
+if [ $1 = "-h" ]; then
+	usage
+fi
+
+TAG=$1
+RELEASE="$RELEASE-$TAG"
 
 mkdir -p $TMPDIR/$RELEASE
 cd $TMPDIR/$RELEASE
