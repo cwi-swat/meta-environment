@@ -98,7 +98,8 @@ hiddens
 	"$Etype*" [0-9\']*             -> {REXPTYPE ","}*
 	"$Etype+" [0-9\']*             -> {REXPTYPE ","}+
 
-	"$DclRvar+" [0-9\']*	-> { DCLRVAR ","}+
+	"$DclRvar+" [0-9\']*		-> { DCLRVAR ","}+
+	"$Area" [0-9\']* 		-> Area
 
 
      

@@ -470,6 +470,28 @@
 
 [pw2]	power({}) = {{}}
 
+[fn]	$Area = evalx($Exp, $Rstore),
+	$Area = area(String, Integer1, Integer2, Integer3, Integer4)
+	=====================================================
+	evalx(filename($Exp), $Rstore) = String
+
+[bl]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
+	=====================================================
+	evalx(beginline($Exp), $Rstore) = Integer1
+
+[bc]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
+	=====================================================
+	evalx(begincol($Exp), $Rstore) = Integer2
+
+[el]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
+	=====================================================
+	evalx(endline($Exp), $Rstore) = Integer3
+
+[ec]	area(String, Integer1, Integer2, Integer3, Integer4) = evalx($Exp, $Rstore)
+	=====================================================
+	evalx(endcol($Exp), $Rstore) = Integer4
+
+
 
 
 

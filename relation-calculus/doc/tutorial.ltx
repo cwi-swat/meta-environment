@@ -1,5 +1,6 @@
 
 \documentclass[10pt]{article}
+\usepackage{a4wide}
 \usepackage[english]{babel}
 \usepackage{url}
 \usepackage{times}
@@ -163,12 +164,11 @@ new variables $V_1 ,..., V_n$.
 \end{itemize}
 
 \paragraph{Test}
-A test is a boolean-valued expression. If the evaluation yields {\tt
-true} this indicates that the current combination of generated values is
-still as desired and execution continues with subsequent generators.
-If the evaluation yields {\tt false} this indicates that the current
-combination of values is undesired, and that another combination
-should be tried.
+A test is a boolean-valued expression. If the evaluation yields {\tt true}
+this indicates that the current combination of generated values upto this test
+is still as desired and execution continues with subsequent generators.  If
+the evaluation yields {\tt false} this indicates that the current combination
+of values is undesired, and that another combination should be tried.
 
 \paragraph{Assignment}
 Assignments assign a value to one or more variables and also come in two flavours:
@@ -185,22 +185,22 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 
 \subsection{Examples of Comprehensions}
 
-\paragraph{Example 1}
+\paragraph{Example}
 
 {\tt \{X | X : \{1, 2, 3, 4, 5\},  X >= 3\}} yields the bag {\tt \{3,4,5\}}.
 
-\paragraph{Example 2}
+\paragraph{Example}
 
 {\tt \{<X, Y> | X :\{1, 2, 3\}, Y :\{2, 3, 4\}, X >= Y\}} yields the relation
 {\tt \{<2, 2>, <3, 2>, <3, 3>\}}.
 
-\paragraph{Example 3}
+\paragraph{Example}
 {\tt \{<Y, X> | X, Y> :\{<1,10>, <2,20>\} \}} yields the inverse of
 the given relation: {\tt \{<10,1>, <20,2>\}}.
 
 \section{Declarations}
 
-\paragraph{Variable declarations}
+\subsection{Variable declarations}
 A variable declaration has the form 
 \begin{quote}
 {\tt $T$ $V$ = $E$}
@@ -218,15 +218,23 @@ permitted and have the form
 \end{quote}
 and only introduce the variable $V$.
 
-\paragraph{Example X} {\tt int max = 100} declares the integer variable
+\paragraph{Example} {\tt int max = 100} declares the integer variable
 {\tt max} with value {\tt 100}.
 
-\paragraph{Example X} {\tt rel[str,int] day = \{<"mon", 1>, <"tue", 2>, <"wed",
+\paragraph{Example} {\tt rel[str,int] day = \{<"mon", 1>, <"tue", 2>, <"wed",
     3>, <"thu", 4>, <"fri", 5>, <"sat",6>, <"sun",7>\}}
 declares the variable {\tt day}, a relation that maps strings to integers.
 
- 
-\paragraph{Function declarations}
+\subsection{Local variable declarations}
+Local variables can be introduced as follows:
+\begin{quote}
+{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ endwhere}
+\end{quote}
+First the local variables $V_i$ are bound to their respective values
+$E_i$, and then the value of expression $E$ is yielded.
+
+
+\subsection{Function declarations}
 A function declaration has the form
 \begin{quote}
 {\tt $T$ $F$($T_1 V_1$, ..., $T_n V_n$) = $E$}
@@ -236,15 +244,39 @@ type of the associated expression $E$.  Each $T_i$ $V_i$ represents a typed
 formal parameter of the function. The formal parameters may occur in $E$ and
 get their value when $F$ is invoked from another expression.
 
-\paragraph{Where}
-Local variables can be introduced as follows:
+\paragraph{Example} The function declaration
 \begin{quote}
-{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ endwhere}
+{\tt rel[int, int] invert(rel[int,int] R) = \{<Y, X> | X, Y> : R \}} 
 \end{quote}
-First the local variables $V_i$ are bound to their respective values
-$E_i$, and then the value of expression $E$ is yielded.
+yields the inverse of the argument relation {\tt R}. For instance,
+{\tt invert(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}}.
 
-\paragraph{Assert}
+\paragraph{Parameterized types in function declarations}
+The types that occur in function declarations may also contain
+\emph{type variables}. In this way functions can be defined for arbitrary
+types.
+
+\begin{sloppypar}
+\paragraph{Example} The declaration
+\begin{quote}
+{\tt rel[T2, T1] invert2(rel[T1,T2] R) = \{<Y, X> | X, Y> : R \}} 
+\end{quote}
+yields an inversion function that is applicable to any binary relation.
+For instance,
+{\tt invert2(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}},
+and {\tt invert2(\{<"mon", 1>, <"tue", 2>\}}
+yields {\tt \{<1, "mon">, <2, "tue">\}}.
+\end{sloppypar}
+
+\paragraph{Example} The function
+\begin{quote}
+{\tt <T2, T1> swap(T1 A, T2 B) = <B, A>}
+\end{quote}
+can be used to swap the elements of pairs of arbitrary types.  For instance,
+{\tt swap(<1, 2>)} yields {\tt <2,1>} and {\tt swap(<"wed", 3>)} yields {\tt
+<3, "wed">}.
+
+\subsection{Assertions}
 An assert statement may occur everywhere where a declaration is allowed.  It
 has the form 
 \begin{quote}
@@ -257,211 +289,230 @@ is executed as a \emph{testsuite} (see Section~\ref{running}) a summary of this
 information is shown to the user. When the script is executed in the standard
 fashion, the assert statement has no affect.
 
-\paragraph{Solvers}
+\paragraph{Example}
+\begin{quote}
+{\tt assert "Equality on Bags 1": \{1, 2, 3, 1\} == \{3, 2, 1, 1\}}
+\end{quote}
+
+\subsection{Solvers}
 It is also possible to define mutually recursive variables by
-\begin{verbatim}
-solve {
-  V1 = E1,
-  ...
-  Vn = En
-}
-\end{verbatim}
+\begin{quote}
+{\tt solve \{
+  $V_1$ = $E_1$,
+  ...,
+  $V_n$ = $E_n$
+\}}
+\end{quote}
 Here, the expressions {\tt E}$_i$ may refer to any of the variables {\tt
   V}$_i$ (and to any variables declared earlier).  This set of equations is
   solved by evaluating the expressions {\tt E}$_i$, assigning their value to
-  the corresponding variables {\tt V}$_i$, and repeated this as long as the
+  the corresponding variables {\tt V}$_i$, and repeating this as long as the
   value of one of the variables was changed. This is typically used for
   solving a set of dataflow equations. \footnote{Probably, the syntax of this
   construct should more emphasize that it is a set of equations.}
 
-\section{Built-in operators}
+\section{Built-in Operators and Functions}
 
+In the following two tables the built-in operators and functions are given.
+For readability, the argument types are indicated as follows:
+\begin{itemize}
+\item \emph{bool}: argument is of type {\tt bool}
+\item \emph{int}: argument is of type {\tt int}
+\item \emph{str}: argument is of type {\tt str}
+\item \emph{area}: argument is of type {\tt area}
+\item \emph{tuple}: argument is any tuple type.
+\item \emph{bag}: argument is of any bag type
+\item \emph{rel}: argument is of any relation type
+\end{itemize}
+
+\tablecaption{Built-in operators}
 \tablehead{\hline}
 \tabletail{\hline}
-\begin{supertabular}{|p{3cm}|p{8.5cm}|} \hline
+\begin{supertabular}{|p{3.3cm}|p{10.7cm}|} \hline
 
-bool \texttt{and} bool & yields true if both arguments have the value true and
-false otherwise\\ \hline
+\emph{bool}$_1$ \texttt{and} \emph{bool}$_2$ & yields {\tt true} if both arguments have the value true and
+{\tt false} otherwise\\ \hline
 
-bool \texttt{or} bool & yields true if either argument has the value true and
-                         false otherwise\\ \hline
+\emph{bool}$_1$ \texttt{or} \emph{bool}$_2$ & yields {\tt true} if either argument has
+                         the value {\tt true} and {\tt false} otherwise\\ \hline
 
-bool \texttt{implies} bool & yields false if the first argument has the value true and
-                             the second argument has value false, and
-                         true otherwise\\ \hline
+\emph{bool}$_1$ \texttt{implies} \emph{bool}$_2$ & yields {\tt false} if
+                             \emph{bool}$_1$ has the value {\tt true} and
+                               \emph{bool}$_2$ has value {\tt false}, and
+                         {\tt true} otherwise\\ \hline
 
-{\tt not} bool & yields true if its argument is false and true otherwise \\
+{\tt not} \emph{bool} & yields true if \emph{bool} is {\tt false} and {\tt true} otherwise \\
 \hline
 
-any {\tt in} bag & yields true if the left argument occurs as element in the
+\emph{any} {\tt in} \emph{bag} & yields true if \emph{any} occurs as element
+in \emph{bag} and false otherwise \\ \hline
+
+\emph{any} {\tt notin} \emph{bag} & yields {\tt false} if \emph{any} occurs as
+element in \emph{bag} and {\tt true} otherwise \\ \hline \hline
+
+\emph{\emph{tuple}} {\tt in} \emph{rel} & yields true if the left argument occurs as element in the
 right argument and false otherwise \\ \hline
 
-any {\tt notin} bag & yields false if the left argument occurs as element in the
+\emph{\emph{tuple}} {\tt notin} \emph{rel} & yields false if the left argument occurs as element in the
 right argument and true otherwise \\ \hline \hline
 
-
-tuple {\tt in} rel & yields true if the left argument occurs as element in the
-right argument and false otherwise \\ \hline
-
-tuple {\tt notin} rel & yields false if the left argument occurs as element in the
-right argument and true otherwise \\ \hline \hline
-
-bag {\tt ==} bag & yields true if both arguments are equal bags and false
+\emph{bag} {\tt ==} \emph{bag} & yields true if both arguments are equal bags and false
 otherwise\\ \hline
 
-bag {\tt !=} bag & yields true if both arguments are unequal bags and false
+\emph{bag} {\tt !=} \emph{bag} & yields true if both arguments are unequal bags and false
 otherwise\\ \hline
 
-bag {\tt <=} bag & yields true if the left argument is a subset of the right argument
+\emph{bag} {\tt <=} \emph{bag} & yields true if the left argument is a subset of the right argument
 and false otherwise\\ \hline
 
-bag {\tt <} bag & yields true if the left argument is a strict subset of the right argument
+\emph{bag} {\tt <} \emph{bag} & yields true if the left argument is a strict subset of the right argument
 and false otherwise\\ \hline
 
-bag {\tt >=} bag & yields true if the left argument is a superset of the right argument
+\emph{bag} {\tt >=} \emph{bag} & yields true if the left argument is a superset of the right argument
 and false otherwise\\ \hline
 
-bag {\tt >} bag & yields true if the left argument is a strict superset of the right argument
+\emph{bag} {\tt >} \emph{bag} & yields true if the left argument is a strict superset of the right argument
 and false otherwise\\ \hline \hline
 
-rel {\tt ==} rel & yields true if both arguments are equal relations and false
+\emph{rel} {\tt ==} \emph{rel} & yields true if both arguments are equal relations and false
 otherwise\\ \hline
 
-rel {\tt !=} rel & yields true if both arguments are unequal relations and false
+\emph{rel} {\tt !=} \emph{rel} & yields true if both arguments are unequal relations and false
 otherwise\\ \hline
 
-rel {\tt <=} rel & yields true if the left argument is a subset of the right argument
+\emph{rel} {\tt <=} \emph{rel} & yields true if the left argument is a subset of the right argument
 and false otherwise\\ \hline
 
-rel {\tt <} rel & yields true if the left argument is a strict subset of the right argument
+\emph{rel} {\tt <} \emph{rel} & yields true if the left argument is a strict subset of the right argument
 and false otherwise\\ \hline
 
-rel {\tt >=} rel & yields true if the left argument is a superset of the right argument
+\emph{rel} {\tt >=} \emph{rel} & yields true if the left argument is a superset of the right argument
 and false otherwise\\ \hline
 
-rel {\tt >} rel & yields true if the left argument is a strict superset of the right argument
+\emph{rel} {\tt >} \emph{rel} & yields true if the left argument is a strict superset of the right argument
 and false otherwise\\ \hline \hline
 
-int {\tt ==} int & yields true if both arguments are numerically equal and false
+\emph{int} {\tt ==} \emph{int} & yields true if both arguments are numerically equal and false
 otherwise\\ \hline
 
-int {\tt !=} int & yields true if both arguments are numerically unequal  and false
+\emph{int} {\tt !=} \emph{int} & yields true if both arguments are numerically unequal  and false
 otherwise\\ \hline
 
-int {\tt <=} int & yields true if the left argument is numerically less than
+\emph{int} {\tt <=} \emph{int} & yields true if the left argument is numerically less than
 or equal the right argument and false otherwise\\ \hline
 
-int {\tt <} int & yields true if the left argument is a numerically less than the right argument
+\emph{int} {\tt <} \emph{int} & yields true if the left argument is a numerically less than the right argument
 and false otherwise\\ \hline
 
-int {\tt >=} int & yields true if the left argument is numerically greater
+\emph{int} {\tt >=} \emph{int} & yields true if the left argument is numerically greater
 than or equal the right argument and false otherwise\\ \hline
 
-int {\tt >} int & yields true if the left argument is numerically greater than the right argument
+\emph{int} {\tt >} \emph{int} & yields true if the left argument is numerically greater than the right argument
 and false otherwise\\ \hline \hline
 
-bag {\tt union} bag & yields the bag resulting from the union of the two arguments
+\emph{bag} {\tt union} \emph{bag} & yields the bag resulting from the union of the two arguments
  \\ \hline
 
-bag {\tt inter} bag & yields the bag resulting from the intersection of the two arguments
+\emph{bag} {\tt inter} \emph{bag} & yields the bag resulting from the intersection of the two arguments
  \\ \hline
 
-bag \verb+\+ bag & yields the bag resulting from the difference of the two arguments
+\emph{bag} \verb+\+ \emph{bag} & yields the bag resulting from the difference of the two arguments
  \\ \hline \hline
 
-rel {\tt union} rel & yields the relation resulting from the union of the two arguments
+\emph{rel} {\tt union} \emph{rel} & yields the relation resulting from the union of the two arguments
  \\ \hline
 
-rel {\tt inter} rel & yields the relation resulting from the intersection of the two arguments
+\emph{rel} {\tt inter} \emph{rel} & yields the relation resulting from the intersection of the two arguments
  \\ \hline
 
-rel \verb+\+ rel & yields the relation resulting from the difference of the two arguments
+\emph{rel} \verb+\+ \emph{rel} & yields the relation resulting from the difference of the two arguments
  \\ \hline
 
-rel {\tt o} rel & yields the relation resulting from the composition of the two arguments
+\emph{rel} {\tt o} \emph{rel} & yields the relation resulting from the composition of the two arguments
  \\ \hline
 
 
-bag {\tt x} bag & yields the relation resulting from the carthesian product of the two arguments
+\emph{bag} {\tt x} \emph{bag} & yields the relation resulting from the carthesian product of the two arguments
  \\ \hline
 
-rel {\tt +} & yields the relation resulting from the transitive closure of
+\emph{rel} {\tt +} & yields the relation resulting from the transitive closure of
  the argument  \\ \hline
 
-rel {\tt *}  & yields the relation resulting from the reflexive transitive closure of
+\emph{rel} {\tt *}  & yields the relation resulting from the reflexive transitive closure of
  the argument  \\ \hline
 
 \end{supertabular}
 
 \section{Built-in functions}
 
+\tablecaption{Built-in functions}
 \tablehead{\hline}
 \tabletail{\hline}
 
-\begin{supertabular}{|p{4cm}|p{7.5cm}|} \hline
+\begin{supertabular}{|p{4cm}|p{10cm}|} \hline
 
-{\tt id(} bag {\tt )} & yields the relation that results from transforming
+{\tt id(} \emph{bag} {\tt )} & yields the relation that results from transforming
 each element in the argument into a pair with that element as first and
 second element \\ \hline
 
-{\tt domain(} rel {\tt )} & yields the bag that results from taking
+{\tt domain(} \emph{rel} {\tt )} & yields the bag that results from taking
 the first element of each tuple in the argument \\ \hline
 
-{\tt range(} rel {\tt )} & yields the bag that results from taking
+{\tt range(} \emph{rel} {\tt )} & yields the bag that results from taking
 the second element of each tuple in the argument \\ \hline
 
-{\tt carrier(} rel {\tt )} & yields the bag that results from taking
+{\tt carrier(} \emph{rel} {\tt )} & yields the bag that results from taking
 the first and  second element of each tuple in the argument \\ \hline
 
-{\tt top(} rel {\tt )} &  yields the bag of all roots when the argument is
+{\tt top(} \emph{rel} {\tt )} &  yields the bag of all roots when the argument is
 viewed as a graph\\ \hline
 
-{\tt bottom(} rel {\tt )} &  yields the bag of all leaves when the argument is
+{\tt bottom(} \emph{rel} {\tt )} &  yields the bag of all leaves when the argument is
 viewed as a graph\\ \hline
 
-{\tt inv(} rel {\tt )} &  yields the relation that is the inverse of the
+{\tt inv(} \emph{rel} {\tt )} &  yields the relation that is the inverse of the
 argument, i.e. the relation in which the elements of the tuples have been
 interchanged.\\ \hline
 
-{\tt compl(} rel {\tt )} &  yields the relation that is the complement of the
+{\tt compl(} \emph{rel} {\tt )} &  yields the relation that is the complement of the
 argument, using the carrier set of that argument oas universe \\ \hline
 
-{\tt domainR(} rel, bag {\tt )} & yields a relation identical to the first
+{\tt domainR(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
  argument but only containing tuples whose first element is in the second
  argument \\ \hline
 
-{\tt rangeR(} rel, bag {\tt )} & yields a relation identical to the first
+{\tt rangeR(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
  argument but only containing tuples whose second element is in the second
  argument \\ \hline
 
-{\tt carrierR(} rel, bag {\tt )} &  yields a relation identical to the first
+{\tt carrierR(} \emph{rel}, \emph{bag} {\tt )} &  yields a relation identical to the first
  argument but only containing tuples whose first and second element are in the second
  argument \\ \hline
 
-{\tt domainX(} rel, bag {\tt )} & yields a relation identical to the first
+{\tt domainX(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
  argument but with all tuples removed whose first element is in the second
  argument \\ \hline
 
-{\tt rangeX(} rel, bag {\tt )} & yields a relation identical to the first
+{\tt rangeX(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
  argument but with all tuples removed whose second element is in the second
  argument \\ \hline
 
 
-{\tt carrierX(} rel, bag {\tt )} &  yields a relation identical to the first
+{\tt carrierX(} \emph{rel}, \emph{bag} {\tt )} &  yields a relation identical to the first
  argument but with all tuples removed whose first or second element is in the second
  argument \\ \hline
 
-{\tt first(} tuple {\tt )} &  yields the first element of the argument\\ \hline
+{\tt first(} \emph{tuple} {\tt )} &  yields the first element of the argument\\ \hline
 
-{\tt second(} tuple {\tt )} &  yields the second element of the argument\\ \hline
+{\tt second(} \emph{tuple} {\tt )} &  yields the second element of the argument\\ \hline
 
-{\tt reachR(} bag1, bag2, rel {\tt )} & yields the relation that describes
-which nodes can be reached from bag1 using the relation rel, such that only nodes in
+{\tt reachR(} \emph{bag}1, \emph{bag}2, \emph{rel} {\tt )} & yields the relation that describes
+which nodes can be reached from \emph{bag}1 using the relation rel, such that only nodes in
 bag2 are used. \\ \hline
 
-{\tt power(} bag {\tt )} & yields the powerset of the value of its argument \\ \hline
+{\tt power(} \emph{bag} {\tt )} & yields the powerset of the value of its argument \\ \hline
 
-{\tt reachX(} bag, bag, rel {\tt )} &  yields the relation that describes
+{\tt reachX(} \emph{bag}, \emph{bag}, \emph{rel} {\tt )} &  yields the relation that describes
 which nodes can be reached from bag1 using the relation rel, such that no nodes in
 bag2 are used. \\ \hline
 
@@ -469,7 +520,7 @@ bag2 are used. \\ \hline
 
 \section{Running a \rscript}
 Currently, the definition of \rscript resides in {\tt /ufs/paulk/research/RPA}
-but that will change soon. You can also checkout your own copy by means of
+but that \emph{will change soon}. You can also checkout your own copy by means of
 {\tt cvs -d /ufs/paulk/cvsroot co RPA}.
 
 \paragraph{Running a script}
@@ -478,25 +529,29 @@ but that will change soon. You can also checkout your own copy by means of
 \item Start the ASF+SDF Meta-Environment by the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
 \item Open your own term, using the Rscript module.
+\item Observe that a new menu call {\tt Rscript} appears in the menu bar.
 \item Click the parse button in the {\tt Actions} menu of the editor:
 now we know whether there are syntax errors. If so, correct them.
 
-\item Click the {\tt Check Rscript} button in the {\tt Actions} menu: this will
+\item Click the {\tt Check} button in the {\tt Rscript} menu: this will
   perform a type check of your script. If there are type errors, correct them.
 
-\item Click the {\tt Exec Rscript} button to execute your script: a new
+\item Click the {\tt Execute} button in the {\tt Rscript} menu to execute your script: a new
 editor pops up which shows all the variables at the end of the execution.
 \end{itemize}
 
 \paragraph{Running a Test suite} \label{running}
-Same as above but use {\tt Exec Rscript Testsuite} button instead of the {\tt
-Exec Rscript} button.  The effect is that the script is executed and that a
-summary is printed of {\tt assert} statement that succeeded or failed.
+Same as above but use {\tt Testsuite} button instead of the {\tt Execute}
+button in the {\tt Rscript} menu.  The effect is that the script is executed
+and that a summary is printed of {\tt assert} statement that succeeded or
+failed.
 
 \paragraph{Miscellaneous}
 The subdirectory {\tt rscripts} contains several sample scripts.  See {\tt
 test1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
 operators and functions.
+
+The subdirectory {\tt demo} contains larger demos.
 
 \section{Pseudo definitions of some built-in operators and functions}
 
