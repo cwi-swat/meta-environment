@@ -35,6 +35,7 @@
 \newcommand{\asfsdf}{{\sc Asf}+{\sc Sdf}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
+\newcommand{\xemacs}{{\tt XEmacs}}
 
 %% notion of Symbol was changed to AFun, which matches specification.
 \newcommand{\Symbol}{AFun}
@@ -565,7 +566,7 @@ Note that only consecutive modules can be selected.
 
 After making the selection, an operation can be performed on all the
 selected modules by pushing a button from the button pane.  For
-instance, pushing the {\tt Edit Sdf2} button will create editors for
+instance, pushing the {\tt Edit Syntax} button will create editors for
 the syntax of all the selected modules.
 
 \subsection{The Button Pane of the Main Window} \label{ButtonPane}
@@ -592,15 +593,87 @@ a module, but this functionality is not yet implemented.
 
 \section{Editing Specifications}
 
+The editors used to create and modify specifications and terms are
+based on \xemacs, so some familiarity with this editor is assumed.
+See for instance {\tt http://www.xemacs.org/Documentation/index.html}
+for user manuals on \xemacs.
+
+There are two adaptations to standard \xemacs:
+\begin{itemize}
+\item {\tt Meta-Environment} pull-down menu.
+\item {\tt Move} pull-down menu.
+\end{itemize}
+
+Via the {\tt Meta-Environment} pull-down menu the parser and the evaluator
+can be activated. The {\tt Move} pull-down menu facilitates a structured
+way of traversing the tree, via entries of Figure \ref{FIG:move-menu} the
+user can select some desired subtree.
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=move-menu.ps,width=1.2cm}}
+  \caption{\label{FIG:move-menu}Pull down menu for {\tt Move}}
+\end{figure}
+
 \subsection{Editing the syntax part of a module}
+
+An editor for editing the syntax part of a module is activated via
+the button {\tt Edit Syntax}.
+A \xemacs\ editor is then activated, see Figure \ref{FIG:Bool-example.sdf2}
+for an example. 
+Initially the entire text is highlighted and the {\tt Focus sort} 
+is {\tt invalid}, this message is printed on the bottom line.
+Via the entry {\tt Parse} in the pull down menu {\tt Meta-Environment},
+see Figure \ref{FIG:meta-env-menu}, the parser can be activated. 
+The parser is finished when the status bar in the main window is idle
+again. 
+
+\paragraph{Note:} if the term to be parsed is a large one, it may take
+some time for the editor to be active again. If the parse was successful
+the bottom line in the \xemacs\ window contains the message {\tt Focus sort: Non}. Clicking on an arbitrary place sets the focus and changes the
+bottom line message.
+
+\begin{figure}[t]
+  \centerline{\epsfig{file=meta-env-menu.ps,width=2cm}}
+  \caption{\label{FIG:meta-env-menu}Pull down menu for {\tt Meta-Environment}}
+\end{figure}
+
+The entry {\tt Reduce} of Figure \ref{FIG:meta-env-menu} has no
+effect when editing a syntax definition. 
 
 \subsection{Editing the equations of a module}
 
+An editor for editing the equations section of a module is activated via
+the button {\tt Edit Equations}.
+A \xemacs\ editor is then activated, see Figure \ref{FIG:Bool-example.eqs}
+for an example. 
+The entry {\tt Parse} of Figure \ref{FIG:meta-env-menu} activates the
+parser for the equations. It is possible that in order to parse
+the equations, a parse table needs to be generated. This is visible
+through the Status message {\tt Generating Parse Table}.
+The entry {\tt Reduce} of Figure \ref{FIG:meta-env-menu} has no
+effect when editing an equations section. 
+
 \subsection{Editing terms}
+
+An editor for editing a term over a module is activated via
+the button {\tt Edit Term}.
+A \xemacs\ editor is then activated, see Figure \ref{FIG:Bool-example.trm}
+for an example. 
+The entry {\tt Parse} of Figure \ref{FIG:meta-env-menu} activates the
+parser for this term. It is possible that in order to parse
+the term, a parse table needs to be generated. This is visible
+through the Status message {\tt Generating Parse Table}.
+The entry {\tt Reduce} of Figure \ref{FIG:meta-env-menu} activates
+the evaluator (also called interpreter). The term is reduced
+given the specified equations (if any). In order to reduce the term
+it may be necessary to parse the equations of various modules and
+to initialize the evaluator with this set of equations. More
+details on evaluating terms will be presented in Section \ref{eval-term}.
 
 \section{Executing Specifications}
 
 \subsection{Evaluating terms}
+\label{eval-term}
 
 \subsection{Compiling a specification}
 
@@ -741,13 +814,13 @@ module Bool-example
   of module names that now only contains {\tt Bool-example}) by clicking on it
   once.
   
-\item Push the button {\tt Edit Sdf2} in the button pane at the right-hand
+\item Push the button {\tt Edit Syntax} in the button pane at the right-hand
   side of the main window.  An editor will appear containing the syntax part
-  of the {\tt Bool-example} specification: the SDF section.  This editor is a
+  of the {\tt Bool-example} specification: the \sdf\ section.  This editor is a
   version of the standard text editor Emacs extended with the menu {\tt
     Meta-Environment}. The result is shown in Figure~\ref{FIG:Bool-example.sdf2}.
   
-\item Push the button {\tt Edit Eqs}.  This will reuse the already created
+\item Push the button {\tt Edit Equations}.  This will reuse the already created
   instance of Emacs by adding a new buffer to it containing the semantic part
   of the {\tt Bool-example} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
