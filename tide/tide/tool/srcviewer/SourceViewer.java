@@ -383,7 +383,7 @@ public class SourceViewer
       String var = (String)args.next();
       Expr val   = Expr.make((ATerm)args.next());
 
-      if (val.toTerm().isEqual(TideControl.factory.parse("unknown"))) {
+      if (val.toTerm().isEqual(Expr.factory.parse("unknown"))) {
 	message.setText("Unknown variable: " + var);
 	return;
       }
@@ -668,10 +668,10 @@ public class SourceViewer
       }
 
       Expr expr =
-	Expr.make(TideControl.factory.make(PAT_SOURCE_VAR,
-					   new Integer(pos),
-					   new Integer(linenr),
-					   new Integer(col), line));
+	Expr.make(Expr.factory.make(PAT_SOURCE_VAR,
+				    new Integer(pos),
+				    new Integer(linenr),
+				    new Integer(col), line));
       process.requestEvaluation(expr, tag_view_var);
     } catch (BadLocationException e) {
       System.err.println(e.getMessage());

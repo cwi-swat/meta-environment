@@ -1,6 +1,6 @@
 
 javadir		= ${prefix}/classes/tide/tool/support
-JAVAROOT	= ${top_builddir}/..
+JAVAROOT	= ${top_builddir}
 
 TOOL_GEN	= DebugToolTif.java DebugToolTool.java DebugToolBridge.java
 
@@ -18,8 +18,9 @@ noinst_SCRIPTS = ${TOOL_GEN}
 
 java_JAVA	= ${TOOL_GEN} ${JAVA}
 
-${TOOL_GEN}: ../../tide.tifs
-	tifstojava -tifs ../../tide.tifs -tool debug-tool -package tide.tool.support
+${TOOL_GEN}: ${top_builddir}/tide.tifs
+	tifstojava -tifs ${top_builddir}/tide.tifs \
+		-tool debug-tool -package tide.tool.support
 
 #ADT	= ${top_srcdir}/lib-c/TA.adt
 #regen:

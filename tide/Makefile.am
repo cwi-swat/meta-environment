@@ -1,5 +1,5 @@
 
-SUBDIRS		= . tool lib-c
+SUBDIRS		= . tide lib-c
 
 data_DATA	= tide.tb tide.tifs
 

@@ -1,6 +1,6 @@
 
 javadir		= ${prefix}/classes/tide/tool/proclist
-JAVAROOT	= ${top_builddir}/..
+JAVAROOT	= ${top_builddir}
 
 java_JAVA	= ProcessList.java
 

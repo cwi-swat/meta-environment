@@ -60,11 +60,12 @@ AC_CHECK_FUNCS(lrand48 srand48)
 AC_OUTPUT( \
 	Makefile \
 	lib-c/Makefile \
-	tool/Makefile \
-	tool/support/Makefile \
-	tool/proclist/Makefile \
-	tool/ruleinspector/Makefile \
-	tool/srcviewer/Makefile \
+	tide/Makefile \
+	tide/tool/Makefile \
+	tide/tool/support/Makefile \
+	tide/tool/proclist/Makefile \
+	tide/tool/ruleinspector/Makefile \
+	tide/tool/srcviewer/Makefile \
         examples/Makefile \
 	examples/pico/Makefile \
 	, )

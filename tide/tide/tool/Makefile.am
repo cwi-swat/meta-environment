@@ -2,7 +2,7 @@
 SUBDIRS		= support proclist ruleinspector srcviewer .
 
 javadir		= ${prefix}/classes/tide/tool
-JAVAROOT	= ${top_builddir}/..
+JAVAROOT	= ${top_builddir}
 
 java_JAVA	= ${CONTROL_GEN} \
 		TideControl.java ToolManager.java TideTool.java \
@@ -27,8 +27,8 @@ noinst_SCRIPTS	= ${CONTROL_GEN}
 
 data_DATA	= tide.jar
 
-${noinst_SCRIPTS}: ../tide.tifs
-	tifstojava -tifs ../tide.tifs -tool tide-control -package tide.tool
+${noinst_SCRIPTS}: ../../tide.tifs
+	tifstojava -tifs ../../tide.tifs -tool tide-control -package tide.tool
 
 %.class: %.java
 	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<

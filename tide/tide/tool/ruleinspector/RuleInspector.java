@@ -607,7 +607,7 @@ class RuleEditor
       //{{{ Handle apply changes
 
       String portItem = (String)port.getSelectedItem();
-      Port port = TideControl.parsePort(portItem);
+      Port port = Port.parse(portItem);
       if (port == null) {
 	JOptionPane.showInternalMessageDialog(this, "Illegal port: " + portItem,
 					      "Illegal Port",
@@ -616,7 +616,7 @@ class RuleEditor
       }
 
       String condTxt = condition.getText();
-      Expr cond = TideControl.parseExpr(condTxt);
+      Expr cond = Expr.parse(condTxt);
       if (cond == null) {
 	JOptionPane.showInternalMessageDialog(this, "Not an expression: " + condTxt,
 					      "Illegal Condition",
@@ -625,7 +625,7 @@ class RuleEditor
       }
 
       String actTxt = action.getText();
-      Expr act = TideControl.parseExpr(actTxt);
+      Expr act = Expr.parse(actTxt);
       if (act == null) {
 	JOptionPane.showInternalMessageDialog(this, "Not an expression: " + actTxt,
 					      "Illegal Action",

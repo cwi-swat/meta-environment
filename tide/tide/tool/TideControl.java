@@ -120,31 +120,6 @@ public class TideControl
   }
 
   //}}}
-
-  //{{{ public static Port parsePort(String spec)
-
-  public static Port parsePort(String spec)
-  {
-    try {
-      return Port.fromTerm(TideControl.factory.parse(spec));
-    } catch (Exception e) {
-      return null;
-    } 
-  }
-
-  //}}}
-  //{{{ public static Expr parseExpr(String spec)
-
-  public static Expr parseExpr(String spec)
-  {
-    try {
-      return Expr.fromTerm(factory.parse(spec));
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
-  //}}}
 }
 
 
