@@ -57,7 +57,7 @@ include_HEADERS = \
 	asc-support2-me.h  \
 	asc-traversals.h \
 	asc-builtins.h \
-	asc-client.h \	
+	asc-client.h \
 	asc-muasf2pt.h \
 	builtin-common.h
 
