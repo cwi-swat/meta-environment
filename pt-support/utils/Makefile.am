@@ -59,10 +59,6 @@ ambtracker_SOURCES      = ambtracker-main.c
 ambtracker_LDADD        = -L../libmept -lmept \
                         -L${ATERM}/lib -lATerm
 
-tree2dot_SOURCES        = tree2dot-main.c
-tree2dot_LDADD          = -L../libmept -lmept \
-                          -L${ATERM}/lib -lATerm
-
 IDEF=idef2tif
 TIFS=tifstoc
 
