@@ -8,12 +8,12 @@ exports
     trp( PROGRAM ) -> Instrs
   
 hiddens
-  sorts {Instr ";"}+ # Label
+  sorts <{Instr ";"}+ , Label>
   context-free syntax
     trd(DECLS)                    -> {Instr ";"}+
     trits({ID-TYPE  ","}*)        -> {Instr ";"}+ 
-    trs({STATEMENT ";"}*, Label)  -> {Instr ";"}+ # Label 
-    trst(STATEMENT, Label)        -> {Instr ";"}+ # Label 
+    trs({STATEMENT ";"}*, Label)  -> <{Instr ";"}+ , Label>
+    trst(STATEMENT, Label)        -> <{Instr ";"}+ , Label >
     tre(EXP)                      -> {Instr ";"}+
 
 hiddens
