@@ -1,6 +1,9 @@
 # $Id$
 
 Tue Jan 27 16:17:47 CET 2004 <jong@cwi.nl>
+ * text/editor-hive.c:
+   invoke "write-contents" before all "get-focus-text" calls, so buffer
+   is automagically written just in time.
  * text/editor-hive.c, text/{common,emacs,gvim}/...
    add support for autosave: we can now ask gvim+emacs to "write-contents"
 

@@ -39,6 +39,7 @@ in
     . snd-do(Hive, set-focus(EditorId, Focus))
   +
     rec-msg(get-focus-text(EditorId?, Focus?))
+    . snd-do(Hive, write-contents(EditorId))
     . snd-do(Hive, get-contents(EditorId, Focus))
   + 
     rec-msg(clear-focus(EditorId))

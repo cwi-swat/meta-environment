@@ -1,84 +1,82 @@
 /* $Id$ */       
 
-process GetText (EditorId : term, Text : str?, Focus : term?, Status : term?) is
-let
-  DirtyFoci    : list
-in
-  snd-msg(get-dirty-focuses(EditorId)) .
-  rec-msg(dirty-focuses(DirtyFoci?)) . 
-  if not-equal(DirtyFoci, []) then
-    Focus := first(DirtyFoci).
-    DirtyFoci := next(DirtyFoci).
-    snd-msg(get-focus-text(EditorId, Focus)).
-    (
-      rec-msg(focus-text(EditorId, Text?)) .
-      Status := parse-needed 
-    +
-      /* If the editor suddenly dissappears were done */
-      rec-note(delete-editor(EditorId)) .
+process GetText(EditorId: term, Text: str?, Focus: term?, Status: term?) is
+  let
+    DirtyFoci: list
+  in 
+    snd-msg(get-dirty-focuses(EditorId)) .
+    rec-msg(dirty-focuses(DirtyFoci?)) .
+    if not-equal(DirtyFoci, []) then
+      Focus := first(DirtyFoci) .
+      DirtyFoci := next(DirtyFoci) .
+      snd-msg(get-focus-text(EditorId, Focus)) .
+      (
+        rec-msg(focus-text(EditorId, Text?)) .
+        Status := parse-needed
+        +
+        rec-note(delete-editor(EditorId)) .
+        Text := "" .
+        Status := no-parse-needed
+      )
+    else
       Text := "" .
       Status := no-parse-needed
-    )
-  else
-    Text := "" .
-    Status := no-parse-needed
-  fi
-endlet
+    fi
+  endlet
 
 process ParseFocusses is
-let
-  Id           : term,
-  Focus        : term,
-  Text         : str,
-  FunType      : str,
-  Type         : term,
-  ModuleName   : str,
-  EditorId     : term,
-  Nonterminal  : str,
-  Tree         : term,
-  Errors       : term,
-  Status       : term,
-  FileName     : str
-in                     
-  Id := process-id .     
-  (
-    rec-msg(parse-focusses(EditorId?, ModuleName?, Type?)) .
-    subscribe(delete-editor(EditorId)) .
-    if equal(Type, eqs) then
-      snd-msg(get-rules-top-sort) .
-      rec-msg(set-rules-top-sort(sort(Nonterminal?)))
-    else
-      if equal(Type, sdf) then
-	snd-msg(syntax-top-sort-hook(sdf)) .
-	rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?))) 
+  let
+    Id: term,
+    Focus: term,
+    Text: str,
+    FunType: str,
+    Type: term,
+    ModuleName: str,
+    EditorId: term,
+    Nonterminal: str,
+    Tree: term,
+    Errors: term,
+    Status: term,
+    FileName: str
+  in 
+    Id := process-id .
+    (
+      rec-msg(parse-focusses(EditorId?, ModuleName?, Type?)) .
+      subscribe(delete-editor(EditorId)) .
+      if equal(Type, eqs) then
+        snd-msg(get-rules-top-sort) .
+        rec-msg(set-rules-top-sort(sort(Nonterminal?)))
       else
-	Nonterminal := ""
-      fi
-    fi .
-    GetText(EditorId, Text?, Focus?, Status?) .
-    if equal(Status, parse-needed) then
-      UpdateTextInModuleDb(Type, ModuleName, Text).
-      snd-msg(get-editor-filename(EditorId)) .
-      rec-msg(editor-filename(FileName?)) .
-      ParseString(ModuleName, FileName, Type, Nonterminal, Text, Tree?, Errors?) .
-      PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
-      ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
-      Tree := no-tree
-    else
-      snd-msg(parse-ok(ModuleName))
-    fi .
-    unsubscribe(delete-editor(EditorId))
-  )
-  *
-  delta
-endlet
+        if equal(Type, sdf) then
+          snd-msg(syntax-top-sort-hook(sdf)) .
+          rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+        else
+          Nonterminal := ""
+        fi
+      fi .
+      GetText(EditorId, Text?, Focus?, Status?) .
+      if equal(Status, parse-needed) then
+        UpdateTextInModuleDb(Type, ModuleName, Text) .
+        snd-msg(get-editor-filename(EditorId)) .
+        rec-msg(editor-filename(FileName?)) .
+        ParseString(ModuleName, FileName, Type, Nonterminal, Text, Tree?, Errors?) .
+        PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
+        ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
+        Tree := no-tree
+      else
+        snd-msg(parse-ok(ModuleName))
+      fi .
+      unsubscribe(delete-editor(EditorId))
+    ) *
+    delta
+  endlet
 
-process UpdateTextInModuleDb(Type : term, ModuleName : str, Text : str) is
+process UpdateTextInModuleDb(Type: term, ModuleName: str, Text: str) is
   if equal(Type, eqs) then
     snd-msg(update-eqs-text-in-db(ModuleName, text(Text))) .
     (
-      rec-msg(eqs-text-updated(ModuleName)) 
-    +
+      rec-msg(eqs-text-updated(ModuleName))
+      +
       rec-msg(no-updating-needed)
     )
   else
