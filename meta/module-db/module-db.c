@@ -485,7 +485,7 @@ void mdb_validate_parse_tables(ATermList visited, ATerm modname)
       }
       visited = ATinsert(visited, modname);
       imports = (ATermList)GetValue(import_db, modname);
-      while(!ATisEmpty(imports)) {
+      while(imports && !ATisEmpty(imports)) {
         import = ATgetFirst(imports);
         mdb_validate_parse_tables(visited, import);
         imports = ATgetNext(imports);
@@ -645,7 +645,7 @@ ATbool valid_parse_tables(ATermList visited, ATerm module, int timetable)
   if(ATindexOf(visited, module, 0) < 0) {
     imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
-    while(!ATisEmpty(imports)) {
+    while(imports && !ATisEmpty(imports)) {
       first = ATgetFirst(imports);
       result = result && valid_parse_tables(visited, first, timetable);
       imports = ATgetNext(imports);
