@@ -30,7 +30,7 @@
 #include <assert.h>
 #include <ctype.h>
 
-#include "_asc-support.h"
+#include "asc-support2.h"
 
 static char *name; 
 
