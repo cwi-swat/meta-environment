@@ -7,7 +7,6 @@ let
   Extension : str,
   RealModule : str,
   Imports : list,
-  Status : term,
   Type : term
 in
   (
@@ -17,8 +16,7 @@ in
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
-      Status := success.
-      Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
+      Open-Module(Path, Module, Type, RealModule?, Imports?).
       snd-msg(open-modules(Imports, Type)).
       rec-msg(finished-opening-modules)
     +
@@ -99,7 +97,6 @@ let
   RealModules : list,
   RealModule : str,
   Imports : list,
-  Status : term,
   Path : str,
   FileName : str,
   Extension : str,
@@ -120,12 +117,11 @@ in
         rec-msg(exists-in-module-db(Module))
       +
         rec-msg(not-exists-in-module-db(Module)).
-        Status := success.
 	snd-msg(file-extension-hook(Type)) .
 	rec-msg(file-extension-hook-result(Extension?)) .
         LocateFile(Module, Extension, Path?) .
 	if not-equal(Path, "") then
-          Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
+          Open-Module(Path, Module, Type, RealModule?, Imports?).
           Modules := join(Imports, Modules).
           RealModules := join(RealModules, RealModule)
         else 
@@ -147,15 +143,17 @@ in
 endlet
 
 process Open-Module(Path : str, Module : str, Type : term,
-                    Status : term?, RealModule : str?, Imports : list?) 
+                    RealModule : str?, Imports : list?) 
 is
 let
   Id : int,
-  RealPath : str
+  RealPath : str,
+  Status : term
 in
   Id := process-id.
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
+  Status := success .
   (
     Open-Syntax(Path, Module, Type, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then

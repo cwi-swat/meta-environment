@@ -138,6 +138,16 @@ in
     MDB-AllEquationsAvailable(Name, ModuleNames?) .
     snd-msg(eqs-needed-for-modules(ModuleNames))
   +
+    rec-msg(get-sdf-text(Name?)).
+    snd-msg(ts-get-str-value("sdf-text", Name)) .
+    (
+      rec-msg(ts-value(EqsText?)) .
+      snd-msg(sdf-text(Name, EqsText))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-sdf-text(Name))
+    )
+  +
     rec-msg(get-eqs-text(Name?)).
     snd-msg(ts-get-str-value("asf-text", Name)) .
     (

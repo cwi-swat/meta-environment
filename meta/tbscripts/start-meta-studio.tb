@@ -1,10 +1,81 @@
 #include "meta.tb"
 #include "meta-studio.idef"
 
+process CheckModuleConsistency(ModuleName : str) is
+let
+  ErrorMessage : str,
+  FileName : str,
+  Path : str,
+  FileText : str,
+  RepositoryText : str,
+  Status : term,
+  Tree : term,
+  DependingModules : list,
+  Imports : list
+in
+  snd-msg(get-path-from-db(ModuleName)) .
+  rec-msg(path(Path?)) .
+  snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-exists-file(FileName)) . 
+  (
+    rec-msg(io-file-exists) .
+    snd-msg(io-read-file(FileName)) . 
+    rec-msg(io-file-contents(FileText?)) .
+    snd-msg(get-sdf-text(ModuleName)) .
+    rec-msg(sdf-text(ModuleName, RepositoryText?)) .
+    if equal(FileText, RepositoryText) then
+      snd-msg(get-eqs-text(ModuleName)) .
+      (
+        rec-msg(eqs-text(ModuleName, RepositoryText?)) .
+        snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+        rec-msg(io-filename(FileName?)) .
+        snd-msg(io-exists-file(FileName)) . 
+        (
+          rec-msg(io-file-exists) .
+          snd-msg(io-read-file(FileName)) . 
+          rec-msg(io-file-contents(FileText?)) .
+          if not-equal(FileText, RepositoryText) then
+            Error("Check consistency: module %s on disk changed", [ModuleName])
+          else 
+            tau
+          fi
+        +
+          rec-msg(io-file-not-exists) .
+          Error("Check consistency: file %s does not exist", [FileName])
+        )
+      +
+        rec-msg(no-eqs-text(ModuleName))
+      ) 
+    else
+      printf("ModuleName = %s differs\n", ModuleName) .
+      Status := success .
+      Parse-Syntax(FileText, sdf, Status?, Tree?) .
+      if equal(Status, success) then
+        snd-msg(update-module-in-db(ModuleName, FileText, Tree, sdf)) .
+        rec-msg(updating-succeeded(DependingModules?, Imports?)).
+        snd-msg(notify-about-changed-modules(DependingModules, sdf)) .
+        rec-msg(notify-about-changed-modules-done) .
+        snd-msg(open-modules(Imports, sdf)) .
+        rec-msg(finished-opening-modules)
+     else
+        snd-msg(update-module-in-db(ModuleName, FileText, no-tree, sdf)) .
+        Error("Check consistency: module %s contains a syntax error", [ModuleName])
+     fi .
+     Error("Check consistency: module %s on disk changed", [ModuleName])
+    fi
+  +
+    rec-msg(io-file-not-exists) .
+    Error("Check consistency: file %s does not exist", [FileName])
+  )
+endlet
+
 process TermStoreActivation(Name : str) is
 let
   TermStoreContents : term,
-  ErrorMessage : str
+  ErrorMessage : str,
+  ModuleNames : list,
+  ModuleName : str
 in
   snd-msg(io-exists-file(Name)) .
   (
@@ -15,6 +86,16 @@ in
       snd-msg(ts-load-snapshot(TermStoreContents)) .
       rec-msg(ts-snapshot-loaded) .
       printf("TermStore %s restored\n", Name) .
+      snd-msg(get-all-module-names) .
+      rec-msg(all-module-names(ModuleNames?)) .
+      if not-equal(ModuleNames, []) then
+        ModuleName := first(ModuleNames) .
+        ModuleNames := next(ModuleNames) .
+        CheckModuleConsistency(ModuleName)
+      fi *
+      if equal(ModuleNames, []) then
+        tau
+      fi .
       DrawImportGraph()
     +
       rec-msg(io-error-reading(ErrorMessage?))
