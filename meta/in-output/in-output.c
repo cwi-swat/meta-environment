@@ -121,7 +121,7 @@ ATerm open_error(char *n)
   return ATmake("snd-value(error-opening(<str>))", n);
 }
 
-ATerm read_term_from_named_file(char *fn, char *n)
+ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
 {
   ATerm t;
 
@@ -130,7 +130,8 @@ ATerm read_term_from_named_file(char *fn, char *n)
     return open_error(n);
   }
   ATfprintf(stderr, "read term from %s\n", fn);
-  return ATmake("snd-value(opened-file(<str>,<term>,<str>))", n, t, fn);
+  return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
+                oldstyle?"asfix":"baf", n, t, fn);
 }
 
 ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
@@ -158,7 +159,7 @@ ATerm read_raw_from_named_file(char *fn, char *n)
     t = open_error(n);
   } else {
     ATfprintf(stderr, "raw read from %s\n", fn);
-    t = ATmake("snd-value(opened-file(<str>,<str>,<str>))",
+    t = ATmake("snd-value(opened-file(\"raw\",<str>,<str>,<str>))",
                n, buf, fn);
     free(buf);
   }
@@ -180,7 +181,7 @@ ATerm open_old_asfix_file(int cid, char *name)
   if(!(fullname = find_newest_in_path(namext))) {
     t = open_error(name);
   } else {
-    t = read_term_from_named_file(fullname, name);
+    t = read_term_from_named_file(fullname, name, ATtrue);
     if(ATmatch(t, "snd-value(opened-file(<list>))", NULL))
       asfix_status = 1;
   }
@@ -215,7 +216,7 @@ ATerm open_sdf2_file(int cid, char *name)
     return open_error(name);
   }
   if(newest_is_binary) {
-    t = read_term_from_named_file(newestbaf, name);
+    t = read_term_from_named_file(newestbaf, name, ATfalse);
   } else {
     t = read_raw_from_named_file(newestraw, name);
   }
@@ -234,7 +235,7 @@ ATerm open_eqs2_asfix_file(int cid, char *name)
   ATfprintf(stderr, "pre-parsed file %s\n", fullname);
 
   if((full = find_newest_in_path(name))) {
-    t = read_term_from_named_file(full, name);
+    t = read_term_from_named_file(full, name, ATfalse);
   } else {
     t = open_error(name);
   }
