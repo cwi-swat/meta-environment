@@ -1,5 +1,8 @@
 $Id$
 
+2002/07/03 (jurgenv@cwi.nl)
+ * Release 0.24
+
 2002/07/03 ({jong,olivierp}@cwi.nl)
  * Fixed bug in handling 'endlet' atoms that could cause toolbus hangs
  * Added debug support (just hit ctrl-\ for a process alternative dump)
