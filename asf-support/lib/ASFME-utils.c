@@ -178,9 +178,9 @@ ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree)
 
 ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree)
 {
-  extern ATerm ASF_patternTreeAmbConstructor;
+  extern ATerm ASF_patternTreeAmbiguityConstructor;
 
-  if (ATmatchTerm(ASF_TreeToTerm(tree), ASF_patternTreeAmbConstructor,
+  if (ATmatchTerm(ASF_TreeToTerm(tree), ASF_patternTreeAmbiguityConstructor,
                   NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
     return ATtrue;
   }

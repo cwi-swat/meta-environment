@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Nov 29 15:05:40 2001
+ * Generated at Mon Jul  1 17:30:55 2002
  */
 
 #ifndef __ASFME_dict_H
@@ -39,6 +39,11 @@ extern AFun ASF_afun28;
 extern AFun ASF_afun29;
 extern AFun ASF_afun30;
 extern AFun ASF_afun31;
+extern AFun ASF_afun32;
+extern AFun ASF_afun33;
+extern AFun ASF_afun34;
+extern AFun ASF_afun35;
+extern AFun ASF_afun36;
 
 extern ATerm ASF_patternCHARLexToCf;
 extern ATerm ASF_patternTreeAmbsMany;
@@ -50,7 +55,7 @@ extern ATerm ASF_patternEquationDefault;
 extern ATerm ASF_patternCHARListMany;
 extern ATerm ASF_patternCHARListSingle;
 extern ATerm ASF_patternCHARListEmpty;
-extern ATerm ASF_patternTreeAmbConstructor;
+extern ATerm ASF_patternTreeAmbiguityConstructor;
 extern ATerm ASF_patternTreeLexicalConstructor;
 extern ATerm ASF_patternTagNotEmpty;
 extern ATerm ASF_patternTagEmpty;

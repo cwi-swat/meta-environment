@@ -121,7 +121,7 @@ ASF_CondEquation ASF_makeCondEquationWhen(ASF_Tag Tag, ASF_Layout wsAfterTag, AS
 ASF_Tag ASF_makeTagEmpty(ASF_Layout wsAfterBracketOpen);
 ASF_Tag ASF_makeTagNotEmpty(ASF_Layout wsAfterBracketOpen, ASF_TagId TagId, ASF_Layout wsAfterTagId);
 ASF_Tree ASF_makeTreeLexicalConstructor(char * formalName, ASF_Symbol symbol, ASF_Tree name, ASF_Layout wsAfterName, ASF_Layout wsAfterParenOpen, ASF_CHARList list, ASF_Layout wsAfterList);
-ASF_Tree ASF_makeTreeAmbConstructor(ASF_Symbol amb, ASF_Symbol symbol, ASF_Layout wsAfterAmb, ASF_Layout wsAfterParenOpen, ASF_Symbol listSymbol, ASF_TreeAmbs ambs, ASF_Layout wsAfterAmbs);
+ASF_Tree ASF_makeTreeAmbiguityConstructor(ASF_Symbol amb, ASF_Symbol symbol, ASF_Layout wsAfterAmb, ASF_Layout wsAfterParenOpen, ASF_Symbol listSymbol, ASF_TreeAmbs ambs, ASF_Layout wsAfterAmbs);
 ASF_CHARList ASF_makeCHARListEmpty();
 ASF_CHARList ASF_makeCHARListSingle(ASF_CHAR head);
 ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_Layout wsAfterFirst, ASF_CHARList tail);
@@ -299,7 +299,7 @@ ASF_Tag ASF_setTagWsAfterTagId(ASF_Tag arg, ASF_Layout wsAfterTagId);
 
 ATbool ASF_isValidTree(ASF_Tree arg);
 inline ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
-inline ATbool ASF_isTreeAmbConstructor(ASF_Tree arg);
+inline ATbool ASF_isTreeAmbiguityConstructor(ASF_Tree arg);
 ATbool ASF_hasTreeFormalName(ASF_Tree arg);
 char * ASF_getTreeFormalName(ASF_Tree arg);
 ASF_Tree ASF_setTreeFormalName(ASF_Tree arg, char * formalName);

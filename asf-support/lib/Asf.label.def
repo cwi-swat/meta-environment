@@ -67,7 +67,7 @@ exports
        lhs:Tree          "=" rhs:Tree -> Equation
        lhs:Tree          "=" rhs:Tree -> Condition {cons("positive")}
        lhs:Tree unequal:"!=" rhs:Tree -> Condition {cons("negative")}
-       "amb" "(" ambs:{Tree ","}* ")" -> Tree      {cons("amb-constructor")}
+       "amb" "(" ambs:{Tree ","}* ")" -> Tree      {cons("ambiguity-constructor")}
 %%   }
 %% NEXT Sort
    context-free syntax
