@@ -1,3 +1,6 @@
+2001/08/03 (jurgenv@cwi.nl)
+ * Bugfix: quotes around cons attributes should be removed.
+
 2001/07/17 (jong@cwi.nl)
  * version 0.4 released, bumped to 0.5
 

@@ -303,14 +303,14 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   else if (SDF_isAttributeId(sdfAttribute)) {
     SDF_ModuleName sdfModuleName = SDF_getAttributeModuleName(sdfAttribute);
     SDF_ModuleId  sdfModuleId = SDF_getModuleNameModuleId(sdfModuleName);
-    char *str = PT_yieldTree((PT_Tree) sdfModuleId);
+    char *str = unquote_str(PT_yieldTree((PT_Tree) sdfModuleId));
     ptAttr = PT_makeAttrId(str);         
   }
   else if (SDF_isAttributeCons(sdfAttribute)) {
     SDF_ATerm sdfATerm = SDF_getAttributeTerm(sdfAttribute);
     if (SDF_isATermFun(sdfATerm)) {
       SDF_AFun fun = SDF_getATermFun(sdfATerm);
-      char *str = PT_yieldTree((PT_Tree) SDF_getAFunLiteral(fun));
+      char *str = unquote_str(PT_yieldTree((PT_Tree) SDF_getAFunLiteral(fun)));
       ptAttr = PT_makeAttrCons(str);         
     }
     else {
