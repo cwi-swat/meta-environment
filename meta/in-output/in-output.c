@@ -784,6 +784,34 @@ ATerm save_parsetable(int cid, char *name, char *fn, ATerm table)
 
 /*}}}  */
 
+/*{{{  ATerm exists_file(int cid, char *fileName) */
+
+ATerm exists_file(int cid, char *fileName)
+{
+  if (fileexists(fileName)) {
+    return ATmake("snd-value(exists)");
+  }
+  else {
+    return ATmake("snd-value(not-exists)");
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm locate_file(int cid, char *fileName) */
+
+ATerm locate_file(int cid, char *fileName)
+{
+  char *path = find_in_path(fileName);
+
+  if (path != NULL) {
+    return ATmake("snd-value(location(<str>))", path);
+  }
+  else {
+    return ATmake("snd-value(not-exists)");
+  }
+}
+
+/*}}}  */
 /*{{{  ATerm save_tree(int cid, char *name, char *fn, ATerm tree) */
 
 ATerm save_tree(int cid, char *name, char *fn, ATerm tree)

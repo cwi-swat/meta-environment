@@ -10,6 +10,7 @@ let
   Path       : str,
   SyntaxPath : str,
   Text       : str,
+  FunSym     : str,
   Term       : term,
   SyntaxText : str,
   RulesText  : str,
@@ -161,11 +162,40 @@ in
       snd-msg(error-opening(Name))
     )
   +
+    %% Check if a file exists.
+    rec-msg(exists-file(Name?)) .
+    snd-eval(IO, exists-file(Name)) .
+    (
+      rec-value(IO, exists) .
+      snd-msg(file-exists(Name))
+    +
+      rec-value(IO, not-exists) .
+      snd-msg(file-not-exists(Name))
+    )
+  +
+    %% Check if a file exists.
+    rec-msg(locate-file(Name?)) .
+    snd-eval(IO, locate-file(Name)) .
+    (
+      rec-value(IO, location(Path?)) .
+      snd-msg(file-location(Name, Path))
+    +
+      rec-value(IO, not-exists) .
+      snd-msg(file-not-exists(Name))
+    )
+  +
     rec-msg(save-tree(Name?, Path?), Stack?, EditorId?) .
     Tree := first(Stack) .
     Stack := next(Stack) .
-    snd-eval(IO, save-tree(Name, Path, Tree)) .
-    rec-value(IO, save-done(Name?)) .
+    FunSym := fun(Tree) .
+    if not-equal(FunSym, "str") then
+      snd-eval(IO, save-tree(Name, Path, Tree)) .
+      rec-value(IO, save-done(Name?))
+    else
+      Text := first(args(Tree)) .
+      snd-eval(IO, save-text-file(Path, Text)) .
+      rec-value(IO, save-done(Path))
+    fi .
     snd-msg(stack(Stack))
   +
     rec-msg(read-tree(Path?), Stack?, EditorId?) .
