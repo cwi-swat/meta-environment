@@ -27,14 +27,12 @@
 #include "msm-utils.h"
 #include "module-utils.h"
 
-extern char* sys_errlist[];
-
 /* Macros for displaying error messages */
 #define FAIL(x) fprintf(stderr, "%s(%d): %s: %s\n", \
-   __FILE__, __LINE__, x, sys_errlist[errno] );
+   __FILE__, __LINE__, x, strerror( errno ) );
 
 #define FAIL1(x,y) fprintf(stderr, "%s(%d): %s(%s): %s\n", \
-        __FILE__, __LINE__, x, y, sys_errlist[errno]);
+        __FILE__, __LINE__, x, y, strerror( errno ) );
 
 
 /* for debugging purposes */
