@@ -352,20 +352,9 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
 
 static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
 {
-  PT_Tree apiresult = FAIL, result = FAIL;
+  PT_Tree result = FAIL;
 
-  apiresult = interpretAPICall(tree);
-
-  if (apiresult == FAIL) {
-    result = tree;
-  }
-  else {
-    result = rewriteInnermost(apiresult, env, depth, extra);
-
-    if (result == FAIL) {
-      result = apiresult;
-    }
-  }
+  result = interpretAPICall(tree);
 
   return result;
 }
