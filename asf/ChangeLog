@@ -1,4 +1,8 @@
 
+2000/02/22 (jurgenv@cwi.nl)
+  * all ATerm annotations are removed from both equations and term 
+    before asfe begins rewriting
+
 2000/02/20 (jurgenv@cwi.nl)
   * asfe now based on ASF and PT support libraries
   * asfe can now only rewrite WITH layout
