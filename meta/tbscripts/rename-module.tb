@@ -26,18 +26,18 @@ in
   if equal(Status, success) then
     CheckExistence(RealNew, Status?).
     if equal(Status, success) then
-      DeleteEditors(Old).
+      DeleteEditors(Old). tau.
       if equal(Status, success) then
-        RenameModuleInDB(Old, RealNew, Status?, Changed?).
+        RenameModuleInDB(Old, RealNew, Status?, Changed?). tau.
         if equal(Status, success) then 
-          SaveSdfModules(Changed).
-          SaveAsfSdfModule(RealNew).
-          RemoveModule(Old) 
+          SaveSdfModules(Changed). tau.
+          SaveAsfSdfModule(RealNew). tau.
+          RemoveModule(Old). tau
         fi
       fi
     fi
   fi.
-  HandleRenameModuleErrors(Old, RealNew, Status)
+  HandleRenameModuleErrors(Old, RealNew, Status) . tau
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -128,4 +128,6 @@ process HandleRenameModuleErrors(Old : str, New : str, Status : term) is
   if not-equal(Status, success) then
     snd-note(ui-status(errorf("Error during renaming of %s to %s: %t\n", 
                             [Old, New, Status])))
+  else
+    tau
   fi
