@@ -1365,7 +1365,14 @@ ATbool PT_isValidAttributes(PT_Attributes arg)
 
 inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttributesNoAttrs)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1373,7 +1380,14 @@ inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg)
 
 inline ATbool PT_isAttributesAttrs(PT_Attributes arg)
 {
-  return !(ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs));
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttributesAttrs)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternAttributesAttrs, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1432,15 +1446,20 @@ ATbool PT_isValidAttrs(PT_Attrs arg)
 
 inline ATbool PT_isAttrsMany(PT_Attrs arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1452,15 +1471,20 @@ inline ATbool PT_isAttrsMany(PT_Attrs arg)
 
 inline ATbool PT_isAttrsSingle(PT_Attrs arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1757,7 +1781,14 @@ ATbool PT_isValidATerm(PT_ATerm arg)
 
 inline ATbool PT_isATermBracket(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermBracket);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermBracket)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermBracket));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1765,7 +1796,14 @@ inline ATbool PT_isATermBracket(PT_ATerm arg)
 
 inline ATbool PT_isATermLeft(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermLeft);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermLeft)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermLeft));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1773,7 +1811,14 @@ inline ATbool PT_isATermLeft(PT_ATerm arg)
 
 inline ATbool PT_isATermRight(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermRight);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermRight)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermRight));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1781,7 +1826,14 @@ inline ATbool PT_isATermRight(PT_ATerm arg)
 
 inline ATbool PT_isATermAssoc(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermAssoc);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermAssoc)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermAssoc));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1789,7 +1841,14 @@ inline ATbool PT_isATermAssoc(PT_ATerm arg)
 
 inline ATbool PT_isATermNonAssoc(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermNonAssoc);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermNonAssoc)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermNonAssoc));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1797,7 +1856,14 @@ inline ATbool PT_isATermNonAssoc(PT_ATerm arg)
 
 inline ATbool PT_isATermMemo(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermMemo);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermMemo)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermMemo));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1805,7 +1871,14 @@ inline ATbool PT_isATermMemo(PT_ATerm arg)
 
 inline ATbool PT_isATermReject(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermReject);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermReject)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermReject));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1813,7 +1886,14 @@ inline ATbool PT_isATermReject(PT_ATerm arg)
 
 inline ATbool PT_isATermPrefer(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermPrefer);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermPrefer)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermPrefer));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1821,7 +1901,14 @@ inline ATbool PT_isATermPrefer(PT_ATerm arg)
 
 inline ATbool PT_isATermAvoid(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermAvoid);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermAvoid)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermAvoid));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1829,7 +1916,14 @@ inline ATbool PT_isATermAvoid(PT_ATerm arg)
 
 inline ATbool PT_isATermConstructor(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermConstructor);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermConstructor)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermConstructor));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1837,7 +1931,14 @@ inline ATbool PT_isATermConstructor(PT_ATerm arg)
 
 inline ATbool PT_isATermTraverse(PT_ATerm arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternATermTraverse);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternATermTraverse)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternATermTraverse));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1863,7 +1964,14 @@ ATbool PT_isValidArgs(PT_Args arg)
 
 inline ATbool PT_isArgsList(PT_Args arg)
 {
-  return !(ATmatchTerm((ATerm)arg, PT_patternArgsEmpty));
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternArgsList, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1871,7 +1979,14 @@ inline ATbool PT_isArgsList(PT_Args arg)
 
 inline ATbool PT_isArgsEmpty(PT_Args arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternArgsEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternArgsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2065,7 +2180,14 @@ inline ATbool PT_isSymbolLex(PT_Symbol arg)
 
 inline ATbool PT_isSymbolEmpty(PT_Symbol arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternSymbolEmpty);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolEmpty)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2298,7 +2420,14 @@ inline ATbool PT_isSymbolVarSym(PT_Symbol arg)
 
 inline ATbool PT_isSymbolLayout(PT_Symbol arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternSymbolLayout);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolLayout)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolLayout));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2774,7 +2903,14 @@ ATbool PT_isValidSymbols(PT_Symbols arg)
 
 inline ATbool PT_isSymbolsList(PT_Symbols arg)
 {
-  return !(ATmatchTerm((ATerm)arg, PT_patternSymbolsEmpty));
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolsList, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2782,7 +2918,14 @@ inline ATbool PT_isSymbolsList(PT_Symbols arg)
 
 inline ATbool PT_isSymbolsEmpty(PT_Symbols arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternSymbolsEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -3021,7 +3164,14 @@ ATbool PT_isValidCharRanges(PT_CharRanges arg)
 
 inline ATbool PT_isCharRangesList(PT_CharRanges arg)
 {
-  return !(ATmatchTerm((ATerm)arg, PT_patternCharRangesEmpty));
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangesList, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -3029,7 +3179,14 @@ inline ATbool PT_isCharRangesList(PT_CharRanges arg)
 
 inline ATbool PT_isCharRangesEmpty(PT_CharRanges arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternCharRangesEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangesEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
