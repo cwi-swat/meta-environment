@@ -146,7 +146,17 @@ lengthOfSymbols(PT_Symbols symbols)
 
 static int lengthOfAttr(PT_Attr attr)
 {
-   return strlen(ATwriteToString(PT_makeTermFromAttr(attr)));
+  ATerm attribute;
+
+
+  if (PT_isAttrAterm(attr)) {
+    attribute = PT_makeTermFromATerm(PT_getAttrTerm(attr));
+  }
+  else {
+    attribute = PT_makeTermFromAttr(attr);
+  }
+
+  return strlen(ATwriteToString(attribute));
 }
 
 static int lengthOfAttrs(PT_Attrs attrs)
@@ -165,7 +175,7 @@ static int
 lengthOfAttributes(PT_Attributes attrs)
 {
   if (PT_hasAttributesAttrs(attrs)) {
-    return 2 + lengthOfAttrs(PT_getAttributesAttrs(attrs));
+    return 3 + lengthOfAttrs(PT_getAttributesAttrs(attrs));
   }
   
   return 0;
@@ -397,11 +407,18 @@ static int
 yieldAttr(PT_Attr attr, int idx, char *buf, int bufSize)
 {
   char *str; 
+  ATerm attribute;
 
-  str = ATwriteToString(PT_makeTermFromAttr(attr));
+  if (PT_isAttrAterm(attr)) {
+    attribute = PT_makeTermFromATerm(PT_getAttrTerm(attr));
+  }
+  else {
+    attribute = PT_makeTermFromAttr(attr);
+  }
 
-  strcpy(buf+idx, str);
-  
+  str = ATwriteToString(attribute);
+  strcpy(buf+idx,str);
+
   return idx + strlen(str);
 }
 
@@ -427,6 +444,7 @@ static int
 yieldAttributes(PT_Attributes attrs, int idx, char *buf, int bufSize)
 {
   if (PT_hasAttributesAttrs(attrs)) {
+    buf[idx++] = ' ';
     buf[idx++] = '{';
     idx = yieldAttrs(PT_getAttributesAttrs(attrs), idx, buf, bufSize);
     buf[idx++] = '}';
