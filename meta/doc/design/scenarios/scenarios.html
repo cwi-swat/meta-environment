@@ -45,9 +45,9 @@ generates a parse request.
 This parse request contains the complete text of the term,
 a unique identification for it (URL?), and the name of
 the module over which the text has to be parsed.
-<LI> The <EM>parser</EM> intercepts this request and check if it
+<LI> The <EM>parser</EM> intercepts this request and checks if it
 already has a parse table for this module.
-<LI> The <EM>parser</EM> generates requests the most up-to-date
+<LI> The <EM>parser</EM> requests the most up-to-date
 syntax for the given top module. This request contains a list
 of version numbers for the modules on which the old parse table
 was based.
@@ -115,8 +115,8 @@ to edit terms, and syntax and equations of modules.
      editor</EM> window
      and displays the text representation of this AsFix term.
      When the syntax on which the object being edited is based is valid,
-     the editor starts in text editing mode. Otherwise, the editor starts
-     in structure editing mode.
+     the editor starts in structure editing mode. Otherwise, the editor starts
+     in text editing mode.
      The text editing window contains some indication that the term
      is unchanged.
 <LI> When the user wants to perform a structure editing operation, the
@@ -136,9 +136,9 @@ to edit terms, and syntax and equations of modules.
      of the object in the <EM>module database</EM> or <EM>term database</EM>
      is updated. The user must do an explicit update to accomplish this!
 <LI> To update (save?) the AsFix represention of the object being edited
-     in the <EM>AsFix database</EM>,
+     in the <EM>term database</EM>,
      the user must explicitly indicate this. The term is send to the
-     apropriate database so it can update its internal representation.
+     appropriate database so it can update its internal representation.
      See the <A HREF="#UpdatingTerms">scenario for updating terms</A>,
      the <A HREF="#UpdatingSyntax">scenario for updating the syntax
      of a module</A>, and the <A HREF="#UpdatingEquations">scenario
@@ -146,7 +146,7 @@ to edit terms, and syntax and equations of modules.
      or equation section is updated.
 <LI> When the user wants to update the term, but the editor is not
      in structure editing mode (i.e. the term has not yet been parsed),
-     a special AsFix representation of the text is send to the apropriate
+     a special AsFix representation of the text is send to the appropriate
      database for updating.
 </OL>
 
@@ -193,8 +193,8 @@ should also be able to change the syntax of modules.
      that depend on the changed module as 'invalid'.
 <LI> The <EM>module database</EM> stores the new syntax in its internal
      database.
-<LI> The module database broadcasts a note contain the module name and version
-number of the module that is changed.
+<LI> The module database broadcasts a note containing the module name 
+     and version number of the module that is changed.
 </OL>
 
 
@@ -220,7 +220,7 @@ to change the equations of a module.
 </OL>
 
 <A NAME="RewritingTerms">
-<H2>Scenario for Reducing Terms</H2>
+<H2>Scenario for Reducing Terms (Interpreted)</H2>
 </A>
 Case: a user wants to reduce a term over a certain module, this action will
 be activated by pressing, e.g., the "Reduce"-button on a <EM>term editor</EM>.
@@ -240,17 +240,17 @@ already has the equations for this module.
 equations for the given top module. This request contains a list
 of version numbers for the modules on which the old equations were based.
 <LI> The <EM>module database</EM> intercepts the request for the
-new equations, and checks if it is up-to-date.
-If not, the <EM>module database</EM> retrieves the newest equations
-for the given top module and sends it back.
-<LI> The <EM>interpreter</EM> now knows it has the correct equations,
+most up-to-date equations, and checks if it is up-to-date.
+The <EM>module database</EM> returns all modules that are not up-to-date.
+<LI> The <EM>interpreter</EM> now has the correct equations,
 so it rewrites the term.
-<LI> The normal form containing an unique identification of the term is
+<LI> The normal form containing a unique identification of the term is
 generated.
-<LI> The unparser intercepts this normal form and updates the layout, see
-<A HREF="#UnparsingTerms">scenario for unparsing terms</A>.
-<LI> The term database intercepts the "unparsed" normal form, stores
-the term with the unique identification in its database, and creates
+<LI> The <EM>unparser</EM> intercepts this normal form and updates the layout,
+ see <A HREF="#UnparsingTerms">scenario for unparsing terms</A>.
+<LI> The <EM>term database</EM> intercepts the "unparsed" normal form, stores
+the term with the unique identification in its database.
+<LI> The <EM>term editor</EM> creates
 a new term editor to visualize the textual representation of the term.
 </OL>
 
@@ -264,12 +264,13 @@ This request contains the name of the module for
 which the C executable must be build.
 <LI> The <EM>module database</EM> intercepts this request,
 the module database calculates the transitive closure of the import relation
-and uses this result to retrieve the needed modules. 
+and uses this result to retrieve all needed modules.
 Given this set of modules a reshuffling of functions and equations is performed
 <EM>all</EM> equations with the same outermost function symbol are moved
-to a new unique module together with the corresponding syntax function.
+to a new unique module together with the corresponding context-free
+function definition.
 <LI> The <EM>module database</EM> generates a number of compile module
-request containing the new created modules.
+request containing the modules just created.
 <LI> The <EM>compiler</EM> intercepts these requests.
 For each request the following actions are performed:
 <OL>
@@ -285,26 +286,28 @@ broadcasted.
 <A NAME="UnparsingTerms">
 <H2>Scenario for Unparsing Terms</H2>
 </A>
-Case: some term has to be pretty printed or unparsed before it is display
-via a term editor to the user.
+Case: some term has to be pretty printed or unparsed before it can
+be shown to the user.
 <OL>
-<LI> The <EM>unparser</EM> intercepts a normal form term produced by the
-<EM>evaluator</EM>. This message consists of a term and a module name.
-<LI> The  <EM>unparser</EM> checks whether the pretty print rules are up-to-datefor the given module.
+<LI> The <EM>unparser</EM> intercepts an unparse request.
+     This message consists of a term and a module name.
+<LI> The  <EM>unparser</EM> checks whether the pretty print rules are 
+     up-to-date for the given module.
 <LI> The  <EM>unparser</EM> generates a request to obtain the most up-to-date
-unparsing rules for the given module.
-This request consists of a list of version numbers for the modules on which
-the old unparsing rules were based.
+     unparsing rules for the given module.
+     This request consists of a list of version numbers for the modules 
+     on which the old unparsing rules were based.
 <LI> The <EM>module database</EM> intercepts this request and checks whether
-the syntax parts of these modules are still up-to-date.
-If not, a list of syntax rules for which new new unparsing rules must be
-generated is send back.
+     the syntax parts of these modules are still up-to-date.
+     If not, a list of syntax rules for which new new unparsing rules must be
+     generated is send back.
 <LI> If a new version of the syntax is available, the unparser request
-for new unparsing rules,
-see <A HREF="#UnparserGenerator">scenario for generating unparsing rules</A>.
+     for new unparsing rules,
+     see <A HREF="#UnparserGenerator">scenario for generating unparsing 
+     rules</A>.
 <LI> The <EM>unparser</EM> now knows it has the most up-to-date unparsing
-rules and it can update the layout in the normal form term.
-<LI> The <EM>unparser</EM> generates a message with the update normal form.
+     rules and it can update the layout in the normal form term.
+<LI> The <EM>unparser</EM> generates a message with the updated normal form.
 </OL>
 
 <A NAME="FormattingSpecs">
@@ -340,8 +343,8 @@ request to generate a new unparsing rules.
 This request contains a list of syntax rules for which unparsing must be
 generated.
 <LI> The <EM>unparser generator</EM> intercepts this request
-and generates a new unparsing rules based on the syntax rules.
-<LI> The resulting unparsing rules is send back to the
+and generates new unparsing rules based on the syntax rules.
+<LI> The resulting unparsing rules are send back to the
 <EM>unparser</EM>.
 </OL>
 
