@@ -182,7 +182,6 @@ AC_CONFIG_FILES([Makefile
    term-store/snapshot/Makefile
    editors/Makefile
    editors/manager/Makefile
-   editors/manager/src/Makefile
    editors/text/Makefile
    editors/text/common/Makefile
    editors/text/gvim/Makefile
