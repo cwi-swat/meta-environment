@@ -7,7 +7,6 @@ let
   Focus          : term,
   Tree           : term,
   ErrMsg         : str,
-  StartSymbols   : term,  
   ErrorFoci      : term,
   Text           : str,
   DirtyFoci      : list,
@@ -27,14 +26,7 @@ in
         "Unable to open parse table for %s", [ModuleName])))
     +
       rec-msg(parsetable-set(eqs(ModuleName)))
-    ) .
-    snd-msg(get-top-symbols(eqs(ModuleName))) .
-    (
-      rec-msg(startsymbols(eqs(ModuleName), StartSymbols?))
-    +
-      rec-msg(language-not-open(eqs(ModuleName))).
-      StartSymbols := []
-    )
+    ) 
   +
     rec-msg(unavailable) .
     snd-msg(get-eqs-text(ModuleName)) .
@@ -53,13 +45,10 @@ in
           "Could not create empty equations: %s", [ErrMsg])))
       )
     ) .
-    snd-msg(initialize-structure-editor(EditorId, Text)) .
-    StartSymbols := []
+    snd-msg(initialize-structure-editor(EditorId, Text))
   ) .
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
-  snd-msg(register-startsymbols(EditorId, StartSymbols)) .
-  rec-msg(startsymbols-registered) .
   Killed := false .
   (
     (

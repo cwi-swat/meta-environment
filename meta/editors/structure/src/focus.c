@@ -75,7 +75,6 @@ SE_Focus createRootFocus(PT_ParseTree parse_tree, int focus_status)
 
 SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
 {
-  SE_SymbolList startSymbols;
   SE_Path path;
   SE_Steps steps;
   PT_ParseTree parse_tree;
@@ -90,23 +89,18 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
     return createRootFocus(parse_tree, focus_status);
   }
 
-  startSymbols = SE_getEditorStartSymbols(editor);
   steps = SE_getPathSteps(path);
   tree  = PT_getParseTreeTree(parse_tree);
 
   if (SE_isStepsEmpty(steps)) {
-    PT_Tree sub_tree = getTreeAt(tree, steps);
-    char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
-    if (isStartSymbol(sort_name, startSymbols) ||
-        PT_isTreeFlatLayout(sub_tree)) {
+    PT_Tree sub_tree = getTreeAt(tree, steps); 
+    if (PT_isTreeFlatLayout(sub_tree)) {
       return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
     }
   }
   while (!SE_isStepsEmpty(steps)) {
-    PT_Tree sub_tree = getTreeAt(tree, steps);
-    char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
-    if (isStartSymbol(sort_name, startSymbols) ||
-        PT_isTreeFlatLayout(sub_tree)) {
+    PT_Tree sub_tree = getTreeAt(tree, steps); 
+    if (PT_isTreeFlatLayout(sub_tree)) {
       return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
     }
     steps = stepUp(steps);

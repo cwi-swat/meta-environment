@@ -9,7 +9,6 @@ let
   Tree      : term,
   Time      : term,
   Modules   : term,
-  StartSymbols : term,   
   ErrorFoci : term,
   Text      : str,
   DirtyFoci : list,
@@ -41,15 +40,6 @@ in
   +
     rec-msg(sdf2-language-opened)
   ) .
-  snd-msg(get-top-symbols(trm("Sdf2"))) .
-  (
-    rec-msg(startsymbols(trm("Sdf2"), StartSymbols?))
-  +
-    rec-msg(language-not-open(trm("Sdf2"))).
-    StartSymbols := []
-  ) .
-  snd-msg(register-startsymbols(EditorId, StartSymbols)) .
-  rec-msg(startsymbols-registered) .    
   Killed := false .
   (
     (  

@@ -14,7 +14,6 @@ let
   Type         : str,
   ModuleName   : str,
   EditorId     : term,
-  StartSymbols : term,
   Pos          : int,
   Nonterminal  : str,
   Tree         : term,
@@ -24,25 +23,17 @@ let
   Amount       : int,
   ModuleId     : term
 in                     
-  Id := process-id . 
+  Id := process-id .     
   (
     rec-msg(parse-focusses(EditorId?, ModuleId?)) .
     Type := fun(ModuleId) .
     ModuleName := first(args(ModuleId)).
     if equal(Type, "eqs") then
-      Nonterminal := "Equations"
+      snd-msg(get-rules-top-sort) .
+      rec-msg(set-rules-top-sort(sort(Nonterminal?)))
     else
       Nonterminal := ""
     fi . 
-    snd-msg(get-top-symbols(ModuleId)) .
-    (
-      rec-msg(startsymbols(ModuleId, StartSymbols?))
-    +
-      rec-msg(language-not-open(ModuleId)).
-      StartSymbols := []
-    ) .
-    snd-msg(register-startsymbols(EditorId, StartSymbols)) .
-    rec-msg(startsymbols-registered) .
     ErrorFoci := [] .
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) . 

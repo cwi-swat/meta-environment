@@ -1,5 +1,9 @@
 # $Id$
 
+2001/11/30 (vandenbr@loria.fr)
+ * Removed start symbols functionality from structure editor.
+ * Added functionality to obtain the start sort for rules explicitly.
+
 2001/11/29 (vandenbr@loria.fr)
  * File extensions are now parameters of in-output.
 

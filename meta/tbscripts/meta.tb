@@ -53,6 +53,9 @@ in
   (
     rec-msg(get-file-extensions) .
     snd-msg(set-file-extensions(syntax(".sdf"),rules(".asf"),term(".trm")))
+  +
+    rec-msg(get-rules-top-sort) .
+    snd-msg(set-rules-top-sort(sort("Equations")))
   )*delta
 endlet
 

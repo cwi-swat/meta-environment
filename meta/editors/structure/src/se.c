@@ -330,35 +330,6 @@ ATerm calc_error_location(int cid, ATerm f, ATerm error)
 }
 
 /*}}}  */
-/*{{{  void register_symbols(int cid, ATerm editorId, ATerm startSymbols) */
-
-void register_symbols(int cid, ATerm editorId, ATerm startSymbols)
-{
-  SE_Editor editor;
-  SE_SymbolList start_symbols;
-
-  ATermList old_list, new_list;
-  old_list = (ATermList)startSymbols;
-  new_list = ATempty;
-
-  while (!ATisEmpty(old_list)) {
-    ATermAppl start_symbol = (ATermAppl)ATgetFirst(old_list);
-    ATerm symbol = ATgetArgument(start_symbol, 0);
-    new_list = ATinsert(new_list, symbol);
-    old_list = ATgetNext(old_list);
-  }
-  
-  start_symbols = SE_makeSymbolListFromTerm((ATerm)new_list);
-  editor = getEditor(editorId);
-
-  if (editor) {
-    editor = SE_setEditorStartSymbols(editor, start_symbols);
-
-    putEditor(editorId, editor);
-  }
-}
-
-/*}}}  */
 /*{{{  ATerm get_modification_status(int cid, ATerm editorId) */
 
 ATerm get_modification_status(int cid, ATerm editorId)
