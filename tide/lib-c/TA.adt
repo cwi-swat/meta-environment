@@ -1,0 +1,30 @@
+[
+  [Location, line,     line(<pid(int)>,<line(int)>)],
+  [Location, line-col, lc(<pid(int)>,<line(int)>,<col(int)>)],
+
+  [Port, step,     step],
+  [Port, stopped,  stopped],
+  [Port, started,  started],
+
+  [Expr, true,   true],
+  [Expr, false,  false],
+  [Expr, cpe,	 cpe],
+  [Expr, eval,   eval(<expr(str)>)],
+  [Expr, break,  break],
+  [Expr, resume, resume],
+  [Expr, var,    var(<name(str)>)],
+  [Expr, source-var, source-var(<pid(int)>,<line(int)>,<col(int)>,<source(str)>)],
+
+
+  [Values, empty,     []],
+  [Values, list,      [<head(Value)>,<[tail(Values)]>]],
+
+  [Value, true,      true],
+  [Value, false,     false],
+  [Value, int-const, <integer(int)>],
+  [Value, str-const, <string(str)>],
+  [Value, list,      [<[values(Values)]>]],
+  [Value, error,     error(<msg(str)>,<value(Value)>)],
+  [Value, expr,      expr(<expr(Expr)>)],
+  [Value, location,  location(<location(Location)>)]
+]

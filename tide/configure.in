@@ -1,0 +1,69 @@
+
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(tide, 0.1)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Which compiler to use?
+AC_REQUIRE([AC_PROG_CC])
+AC_PROG_CC
+AC_SET_MAKE
+
+dnl Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, tifstoc,
+   [ --with-aterm=DIR         Specify location of the ATerm library])
+AC_SUBST(ATERM)
+
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      Specify location of the ToolBus])
+AC_SUBST(TOOLBUS)
+
+dnl Find out which libraries we need
+SOCKET_FOUND=no
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsun"])
+if test ${SOCKET_FOUND} = no; then
+   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsocket"])
+   if test ${SOCKET_FOUND} = no; then
+      AC_CHECK_LIB(bsd,
+                   socket,
+                   [SOCKET_FOUND=yes;LIBS="$LIBS -lbsd";DEFS="$DEFS -D_BSD=43"]
+)
+   fi
+fi
+
+AC_CHECK_LIB(dl, dlopen)
+
+GETHOSTNAME_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GETHOSTNAME_FOUND=yes])
+if test ${GETHOSTNAME_FOUND} = no; then
+   AC_CHECK_LIB(nsl,gethostname,[GETHOSTNAME_FOUND=yes;LIBS="$LIBS -lnsl"])
+fi
+
+dnl Find out if we have rand48 suite
+AC_CHECK_FUNCS(lrand48 srand48)
+
+AC_OUTPUT( \
+	Makefile \
+	lib-c/Makefile \
+	tool/Makefile \
+	tool/support/Makefile \
+	tool/proclist/Makefile \
+	tool/ruleinspector/Makefile \
+        examples/Makefile \
+	examples/pico/Makefile \
+	, )
