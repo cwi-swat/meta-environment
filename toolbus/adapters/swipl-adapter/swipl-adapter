@@ -1,5 +1,10 @@
 #!/bin/sh
 PROGRAM=tbswipl
+NAME="assert(tb_tool(unknown)),"
+TBHOST="assert(tb_host($HOST)),"
+PORT="assert(tb_port(8998)),"
+TID="assert(tb_tid(-1)),"
+
 
 TRACE="assert(tb_trace(no))"
 VERBOSE="assert(tb_verbose(no)),"
@@ -11,7 +16,7 @@ do
 	case "$1" in
 		-TB_TOOL_NAME)	NAME="assert(tb_tool($2))," ;shift;shift
 				;;
-		-TB_HOST)	HOST="assert(tb_host('$2'))," ;shift;shift
+		-TB_HOST)	TBHOST="assert(tb_host('$2'))," ;shift;shift
 				;;
 		-TB_PORT)	PORT="assert(tb_port($2))," ;shift;shift
 				;;
@@ -45,5 +50,5 @@ done
 
 ASRT="assert(port($PORT))"
 
-#echo "executing: $PROGRAM $ARGS $NAME$HOST$PORT$TID$VERBOSE$TRACE"
-$PROGRAM $ARGS -tty $GOAL -g "$NAME$HOST$PORT$TID$VERBOSE$TRACE" < /dev/null
+#echo "executing: $PROGRAM $ARGS -tty $GOAL -g $NAME$TBHOST$PORT$TID$VERBOSE$TRACE"
+$PROGRAM $ARGS -tty $GOAL -g "$NAME$TBHOST$PORT$TID$VERBOSE$TRACE" < /dev/null
