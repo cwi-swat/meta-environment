@@ -7,6 +7,7 @@
 #include <sdf-renaming.idef>
 #include <term-store.idef>
 #define DEBUG printf("FILE: %s LINE: %d\n", __FILE__, __LINE__)
+#define POSINFO_DEPTH 4
 
 process ModuleDB is
 let
@@ -155,8 +156,7 @@ in
     rec-msg(ts-value(Path?)) .
     snd-msg(io-get-filename(Path, Name, ".asf")) .
     rec-msg(io-filename(FileName?)) .
-    printf("DEBUG: magical value 4 for depth of posinfo!\n") .
-    snd-msg(add-posinfo-to-depth(FileName,EqsTree,4)) .
+    snd-msg(add-posinfo-to-depth(FileName,EqsTree, POSINFO_DEPTH)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
     EqsTree := no-tree .
