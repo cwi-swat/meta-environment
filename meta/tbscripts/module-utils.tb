@@ -124,10 +124,10 @@ in
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
+    CloseModuleInUI(ModuleName).
     SaveSdfModules(Changed).
     snd-msg(notify-about-changed-modules(Changed, "sdf")) .
-    rec-msg(notify-about-changed-modules-done) .
-    snd-msg(module-deleted(ModuleName))
+    rec-msg(notify-about-changed-modules-done)
 endlet
 
 process DoRenameModule(Old : str, New : str, Path : str) is

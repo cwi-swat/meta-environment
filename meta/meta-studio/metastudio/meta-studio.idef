@@ -116,8 +116,6 @@ in
     ) +
     ( rec-event(UI, delete-module(ModName?)) .
       snd-msg(delete-module(ModName)) .
-      rec-msg(delete-module(ModName)) .
-      snd-do(UI, delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))
     ) +
     ( rec-msg(ui-delete-module(ModName?)).
