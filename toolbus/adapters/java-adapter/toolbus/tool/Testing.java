@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 23-Jun-97 11:50:41 AM
+// generation time: 15-Aug-97 3:03:35 PM
 
 package toolbus.tool;
 import toolbus.aterm.*;

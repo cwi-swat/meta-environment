@@ -852,6 +852,7 @@ TBbool eval_call_signs(term_list *args, int pid, term **result, char **msg)
 <<eval_eval_1>>=
 TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 {
+  int  res;
   char *expr;
 
   if(!TB_match(args, "[<str>]", &expr)) {
@@ -860,8 +861,13 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
     return TBfalse;
   }
 
-  Tcl_Eval(tide_interp, expr);
-  *result = TB_make("<str>", tide_interp->result);
+  /* Distinguish between a sensible value and an error - HDJ */
+  res = Tcl_Eval(tide_interp, expr);
+  if (res == TCL_OK)
+    *result = TB_make("value(<str>)", tide_interp->result);
+  else
+	*result = TB_make("error(<str>)", tide_interp->result);
+
   Tcl_ResetResult(tide_interp);
   return TBtrue;
 }
@@ -870,6 +876,7 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 <<eval_var_1>>=
 TBbool eval_var_1(term_list *args, int pid, term **result, char **msg)
 {
+  int  res;
   char *var;
   char expr[64];
 
@@ -882,8 +889,13 @@ TBbool eval_var_1(term_list *args, int pid, term **result, char **msg)
   strcpy(expr, "set ");
   strncat(expr, var, 58);
 
-  Tcl_Eval(tide_interp, expr);
-  *result = TB_make("<str>", tide_interp->result);
+  /* Distinguish between a sensible value and an error - HDJ */
+  res = Tcl_Eval(tide_interp, expr);
+  if (res == TCL_OK)
+    *result = TB_make("value(<str>)", tide_interp->result);
+  else
+	*result = TB_make("error(<str>)", tide_interp->result);
+
   Tcl_ResetResult(tide_interp);
   return TBtrue;
 }

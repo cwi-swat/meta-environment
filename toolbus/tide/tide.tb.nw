@@ -6,14 +6,13 @@
 <<process DEBUG-ADAPTER>>
 <<process BROADCAST>>
 <<process SOURCE-VIEWER>>
-<<process RULE-VIEWER>>
 <<process PROCESS-VIEWER>>
 <<process WATCHPOINT-VIEWER>>
 
 <<tool definitions>>
 
 toolbus(DAP-CONNECT, BROADCAST, 
-	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)
+	SOURCE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)
 @
 
 %}}}
@@ -28,7 +27,7 @@ In this section, we define the tools used in this ToolBus script.
 tool debug-adapter is { }
 tool source-viewer  is 
 	{ command = "java-adapter -class toolbus.tide.SourceViewerTool" }
-tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+#tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is 
 	{ command = "java-adapter -class toolbus.tide.WatchpointViewerTool" }
 tool process-viewer is

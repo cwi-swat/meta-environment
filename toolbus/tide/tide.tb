@@ -1,4 +1,4 @@
-#line 44 "tide.tb.nw"
+#line 43 "tide.tb.nw"
 process DAP-CONNECT is
 let
   D    : debug-adapter,
@@ -19,7 +19,7 @@ in
     snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
-#line 106 "tide.tb.nw"
+#line 105 "tide.tb.nw"
 process DEBUG-ADAPTER(D:debug-adapter) is
 let
   P     : term,   %% list of process-id's, or `all' indicating all
@@ -76,7 +76,7 @@ in
     snd-ack-event(D, disconnected(Callsign))
    ) * delta
 endlet
-#line 172 "tide.tb.nw"
+#line 171 "tide.tb.nw"
 process BROADCAST is
 let
   From : term,
@@ -86,7 +86,7 @@ in
     snd-note(event(From, Ev))
   ) * delta
 endlet
-#line 262 "tide.tb.nw"
+#line 261 "tide.tb.nw"
 process SOURCE-VIEWER is
 let
   S : source-viewer,
@@ -179,70 +179,7 @@ in
     snd-ack-event(S, ask-watchpoint(D,P,Port,Type))
   ) * delta
 endlet
-#line 360 "tide.tb.nw"
-process RULE-VIEWER is
-let
-  R : rule-viewer,
-  D : debug-adapter,
-  P : term,
-  Info : list,
-  Port : term,
-  Cond : term,
-  Acts : term,
-  Life : term,
-  Rid  : int,
-  Exprs: list, %% A list of [expression, value] pairs
-  Type : term
-in
-  execute(rule-viewer, R?) .
-  subscribe(event(<term>,dap-connected(<list>,<list>))) .
-  subscribe(event(<term>,dap-disconnected)) .
-  subscribe(event(<term>,rule-created(<int>,<term>,<term>,<term>,<term>))) .
-  subscribe(event(<term>,rule-modified(<int>,<term>,<term>,<term>,<term>))) .
-  subscribe(event(<term>,rule-destroyed(<int>))) .
-  subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
-  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
-  subscribe(event(<term>,current-port(<term>))) .
-  snd-note(new-tool("Rule viewer", R, [["Current adapter", "adapter"]])) .
-  ( rec-msg(tool-cmd(R, "Current adapter", [D?])) .
-    snd-do(R, view-rules(D))
-    +
-    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
-    snd-do(R, dap-connected(D, Info, P))
-    +
-    rec-note(event(proc(D?,P?), dap-disconnected)) .
-    snd-do(R, dap-disconnected(D))
-    +
-    rec-note(event(proc(D?,P?), rule-created(Rid?,Port?,Cond?,Acts?,Life?))) .
-    snd-do(R, rule-created(D,P,Rid,Port,Cond,Acts,Life))
-    +
-    rec-note(event(proc(D?,P?), rule-modified(Rid?,Port?,Cond?,Acts?,Life?))) .
-    snd-do(R, rule-modified(D,P,Rid,Port,Cond,Acts,Life))
-    +
-    rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
-    snd-do(R, rule-destroyed(D,P, Rid))
-    +
-    rec-note(event(proc(D?,P?), watchpoint(Rid?, Exprs?))) .
-    snd-do(R, watchpoint(D, P, Rid, Exprs))
-    +
-    rec-note(event(proc(D?,P?), current-port(Port?))) .
-    snd-do(R, current-port(D,P,Port))
-    +
-    rec-event(R, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
-    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
-    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
-    snd-ack-event(R, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
-    +
-    rec-event(R, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
-    snd-msg(proc(D,P),modify-rule(Rid,Port,Cond,Acts,Life)) .
-    snd-ack-event(R, modify-rule(Rid,D,P,Port,Cond,Acts,Life))
-    +
-    rec-event(R, destroy-rule(D?,P?,Rid?)) .
-    snd-msg(proc(D,P), destroy-rule(Rid)) .
-    snd-ack-event(R, destroy-rule(D,P,Rid))    
-  ) * delta
-endlet
-#line 498 "tide.tb.nw"
+#line 497 "tide.tb.nw"
 process PROCESS-VIEWER is
 let
   V : process-viewer,
@@ -315,7 +252,7 @@ in
   snd-ack-event(V, tide-shutdown) .
   shutdown("Thank you for using tide!\n")
 endlet
-#line 428 "tide.tb.nw"
+#line 427 "tide.tb.nw"
 process WATCHPOINT-VIEWER is
 let
   V    : watchpoint-viewer,
@@ -377,17 +314,17 @@ in
   ) * delta
 endlet
 
-#line 28 "tide.tb.nw"
+#line 27 "tide.tb.nw"
 tool debug-adapter is { }
 tool source-viewer  is 
 	{ command = "java-adapter -class toolbus.tide.SourceViewerTool" }
-tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+#tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is 
 	{ command = "java-adapter -class toolbus.tide.WatchpointViewerTool" }
 tool process-viewer is
 	{ command = "java-adapter -class toolbus.tide.ProcessViewerTool" }
 %%tool viewer is { command = "./buscontrol" }
 
-#line 15 "tide.tb.nw"
+#line 14 "tide.tb.nw"
 toolbus(DAP-CONNECT, BROADCAST, 
-	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)
+	SOURCE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)
