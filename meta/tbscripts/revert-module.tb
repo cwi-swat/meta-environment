@@ -67,7 +67,7 @@ in
                                                  char(Char?)],plain))).
         snd-msg(add-empty-module-to-db(Name2)).
         rec-msg(done).
-        printf("Character %d unexpected in line %d, column %d\n", Ch, Li, Co)
+        printf("Character %d unexpected in %s, line %d, column %d\n", Ch,Name2, Li, Co)
       )
     ).
     snd-note(ui-status(endstat(Id))).

@@ -63,7 +63,7 @@ in
                                                       line(Li?),
                                                       col(Co?),
                                                       char(Char?)],plain))).
-             printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
+             printf("Character %d unexpected in %s, line %d, column %d\n",Ch,Module,Li,Co).
              snd-msg(add-eqs-to-db(Module,Path,error,Time1,"unchanged")).
              rec-msg(done) 
            ).
