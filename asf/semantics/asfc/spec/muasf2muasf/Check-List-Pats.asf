@@ -98,8 +98,8 @@ equations
                 cond-contains-lists(Cond) \/
                 conds-contains-lists(Cond*)
 
-%% Equation to check whether a list contains at most
-%% one list variable.
+%% Equation to check if there is at least one list containing only
+%% one list var or no list vars at all
 
   [czolvr-1'1] contains-zero-or-one-list-vars-in-rule(Term1 = Term2) =
                 contains-zero-or-one-list-vars-in-term(Term1)
