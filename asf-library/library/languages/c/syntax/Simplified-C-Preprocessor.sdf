@@ -1,5 +1,8 @@
 module languages/c/syntax/Simplified-C-Preprocessor
 
+%% This grammar describes COMMON USAGE of C preprocessor
+%% statements as they are embedded in the C language.
+
 imports languages/c/syntax/Simplified-C
 
 hiddens
@@ -12,7 +15,7 @@ sorts Filename
 
 lexical syntax
 
-~[\"\']+ -> Filename
+~[\"\'\<\>]+ -> Filename
 
 context-free syntax
 

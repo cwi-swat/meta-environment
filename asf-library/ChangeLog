@@ -6,6 +6,10 @@ Tue Feb 22 16:48:01 CET 2005 <jurgenv@cwi.nl>
    specific arguments are exploited such that only one Expression sort
    remains. The priorities of operators is not guaranteed to be ANSI
    compliant. This needs to be investigated later.
+ * languages/c/syntax/Simplified-C-Preprocessor.sdf: defines common
+   usage of C preprocessor statements, as they are usually embedded 
+   in a C program. No guarantee whatsoever, but it allows one to play
+   with C programs that contain preprocessor directives.
 
 Wed Feb  9 09:15:20 CET 2005 <jurgenv@cwi.nl>
  * languages/asf/compiler: stored the fact that a builtin function has
