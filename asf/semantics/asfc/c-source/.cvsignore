@@ -3,4 +3,4 @@ Makefile
 .deps
 init.c
 *.asfix
-AsFix2C
+Compiler
