@@ -77,7 +77,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_AsFix2Sign_C16_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 11 ] ;
+ATerm tmp [ 10 ] ;
 PROF ( prof_lf_AUX_AsFix2Sign_C16_1 ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -104,38 +104,33 @@ if ( not_empty_list ( atmp0100000 ) ) {
 if ( term_equal ( list_head ( atmp0100000 ) , make_char ( 34 ) ) ) {
 tmp [ 0 ] = list_tail ( atmp0100000 ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 112 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 100 ) ) ) {
 tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 114 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 101 ) ) ) {
 tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 111 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 108 ) ) ) {
 tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 97 ) ) ) {
 tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 101 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 121 ) ) ) {
 tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 99 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 105 ) ) ) {
 tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 116 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 110 ) ) ) {
 tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 101 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 103 ) ) ) {
 tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 100 ) ) ) {
-tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
-if ( not_empty_list ( tmp [ 9 ] ) ) {
-tmp [ 10 ] = list_prefix ( tmp [ 9 ] ) ;
-if ( term_equal ( list_last ( tmp [ 9 ] ) , make_char ( 34 ) ) ) {
-return ( * ef7 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( lf2 ( ( ATerm ) ATmakeList ( 9 , char_table [ 112 ] , char_table [ 114 ] , char_table [ 111 ] , char_table [ 116 ] , char_table [ 101 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 101 ] , char_table [ 100 ] ) ) ) ) ) , lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( lf2 ( make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ) ;
-}
-}
+tmp [ 9 ] = list_prefix ( tmp [ 8 ] ) ;
+if ( term_equal ( list_last ( tmp [ 8 ] ) , make_char ( 34 ) ) ) {
+return ( * ef7 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef8 ) ( lf2 ( ( ATerm ) ATmakeList ( 8 , char_table [ 100 ] , char_table [ 101 ] , char_table [ 108 ] , char_table [ 97 ] , char_table [ 121 ] , char_table [ 105 ] , char_table [ 110 ] , char_table [ 103 ] ) ) ) ) ) , lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( lf2 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ;
 }
 }
 }

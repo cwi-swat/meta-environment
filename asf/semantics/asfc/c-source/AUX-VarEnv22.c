@@ -18,7 +18,7 @@ static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol lf_AUX_VarEnv22_1sym ;
 static ATerm lf_AUX_VarEnv22_1 ( ATerm arg1 ) ;
 void register_AUX_VarEnv22 ( ) {
-lf_AUX_VarEnv22_2sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[l(\"is-protected\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_VarEnv22_2sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[l(\"is-delaying\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv22_2sym ) ;
 lf4sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
@@ -28,7 +28,7 @@ ATprotectSymbol ( lf3sym ) ;
 lf_AUX_VarEnv22_1sym = ATmakeSymbol ( "listtype(sort(\"NamePair\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv22_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"NamePair\"),ql(\",\"))" ) , lf_AUX_VarEnv22_1 , lf_AUX_VarEnv22_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[l(\"is-protected\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv22_2 , lf_AUX_VarEnv22_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[l(\"is-delaying\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv22_2 , lf_AUX_VarEnv22_2sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Term\"),ql(\",\"))" ) , lf3 , lf3sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf4 , lf4sym ) ;
 }
@@ -52,7 +52,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_VarEnv22_2 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 48 ] ;
+ATerm tmp [ 46 ] ;
 PROF ( prof_lf_AUX_VarEnv22_2 ) ;
 if ( check_sym ( arg1 , lf_AUX_VarEnv22_1sym ) ) {
 {
@@ -90,45 +90,39 @@ tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 12 ] , 112 ) ) {
+if ( is_char ( tmp [ 12 ] , 100 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 13 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 13 ] , 114 ) ) {
+if ( is_char ( tmp [ 13 ] , 101 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 14 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 14 ] , 111 ) ) {
+if ( is_char ( tmp [ 14 ] , 108 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 15 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 15 ] , 116 ) ) {
+if ( is_char ( tmp [ 15 ] , 97 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 16 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 16 ] , 101 ) ) {
+if ( is_char ( tmp [ 16 ] , 121 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 17 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 17 ] , 99 ) ) {
+if ( is_char ( tmp [ 17 ] , 105 ) ) {
 if ( not_empty_list ( tmp [ 11 ] ) ) {
 tmp [ 18 ] = list_head ( tmp [ 11 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 18 ] , 116 ) ) {
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-tmp [ 19 ] = list_head ( tmp [ 11 ] ) ;
-tmp [ 11 ] = list_tail ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 19 ] , 101 ) ) {
+if ( is_char ( tmp [ 18 ] , 110 ) ) {
 if ( is_single_element ( tmp [ 11 ] ) ) {
-tmp [ 20 ] = list_head ( tmp [ 11 ] ) ;
-if ( is_char ( tmp [ 20 ] , 100 ) ) {
+tmp [ 19 ] = list_head ( tmp [ 11 ] ) ;
+if ( is_char ( tmp [ 19 ] , 103 ) ) {
 if ( check_sym ( tmp [ 9 ] , lf3sym ) ) {
-tmp [ 21 ] = arg_0 ( tmp [ 9 ] ) ;
-if ( not_empty_list ( tmp [ 21 ] ) ) {
+tmp [ 20 ] = arg_0 ( tmp [ 9 ] ) ;
+if ( not_empty_list ( tmp [ 20 ] ) ) {
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
 return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
-}
-}
 }
 }
 }
@@ -165,74 +159,70 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 atmp100 = list_head ( tmp [ 0 ] ) ;
 tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 if ( check_sym ( atmp100 , ef2sym ) ) {
-tmp [ 22 ] = arg_0 ( atmp100 ) ;
-tmp [ 23 ] = arg_1 ( atmp100 ) ;
-tmp [ 24 ] = arg_2 ( atmp100 ) ;
-if ( check_sym ( tmp [ 24 ] , lf3sym ) ) {
-tmp [ 25 ] = arg_0 ( tmp [ 24 ] ) ;
-tmp [ 26 ] = tmp [ 25 ] ;
-tmp [ 27 ] = tmp [ 25 ] ;
-while ( not_empty_list ( tmp [ 25 ] ) ) {
-tmp [ 28 ] = list_head ( tmp [ 25 ] ) ;
-tmp [ 25 ] = list_tail ( tmp [ 25 ] ) ;
-if ( check_sym ( tmp [ 28 ] , ef3sym ) ) {
-tmp [ 29 ] = arg_0 ( tmp [ 28 ] ) ;
-tmp [ 30 ] = arg_1 ( tmp [ 28 ] ) ;
-if ( check_sym ( tmp [ 29 ] , ef4sym ) ) {
-tmp [ 31 ] = arg_0 ( tmp [ 29 ] ) ;
-if ( check_sym ( tmp [ 31 ] , lf4sym ) ) {
-tmp [ 32 ] = arg_0 ( tmp [ 31 ] ) ;
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 33 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 33 ] , 112 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 34 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 34 ] , 114 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 35 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 35 ] , 111 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 36 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 36 ] , 116 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 37 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 37 ] , 101 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 38 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 38 ] , 99 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 39 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 39 ] , 116 ) ) {
-if ( not_empty_list ( tmp [ 32 ] ) ) {
-tmp [ 40 ] = list_head ( tmp [ 32 ] ) ;
-tmp [ 32 ] = list_tail ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 40 ] , 101 ) ) {
-if ( is_single_element ( tmp [ 32 ] ) ) {
-tmp [ 41 ] = list_head ( tmp [ 32 ] ) ;
-if ( is_char ( tmp [ 41 ] , 100 ) ) {
-if ( check_sym ( tmp [ 30 ] , lf3sym ) ) {
-tmp [ 42 ] = arg_0 ( tmp [ 30 ] ) ;
-if ( not_empty_list ( tmp [ 42 ] ) ) {
+tmp [ 21 ] = arg_0 ( atmp100 ) ;
+tmp [ 22 ] = arg_1 ( atmp100 ) ;
+tmp [ 23 ] = arg_2 ( atmp100 ) ;
+if ( check_sym ( tmp [ 23 ] , lf3sym ) ) {
+tmp [ 24 ] = arg_0 ( tmp [ 23 ] ) ;
+tmp [ 25 ] = tmp [ 24 ] ;
+tmp [ 26 ] = tmp [ 24 ] ;
+while ( not_empty_list ( tmp [ 24 ] ) ) {
+tmp [ 27 ] = list_head ( tmp [ 24 ] ) ;
+tmp [ 24 ] = list_tail ( tmp [ 24 ] ) ;
+if ( check_sym ( tmp [ 27 ] , ef3sym ) ) {
+tmp [ 28 ] = arg_0 ( tmp [ 27 ] ) ;
+tmp [ 29 ] = arg_1 ( tmp [ 27 ] ) ;
+if ( check_sym ( tmp [ 28 ] , ef4sym ) ) {
+tmp [ 30 ] = arg_0 ( tmp [ 28 ] ) ;
+if ( check_sym ( tmp [ 30 ] , lf4sym ) ) {
+tmp [ 31 ] = arg_0 ( tmp [ 30 ] ) ;
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 32 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 32 ] , 100 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 33 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 33 ] , 101 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 34 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 34 ] , 108 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 35 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 35 ] , 97 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 36 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 36 ] , 121 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 37 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 37 ] , 105 ) ) {
+if ( not_empty_list ( tmp [ 31 ] ) ) {
+tmp [ 38 ] = list_head ( tmp [ 31 ] ) ;
+tmp [ 31 ] = list_tail ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 38 ] , 110 ) ) {
+if ( is_single_element ( tmp [ 31 ] ) ) {
+tmp [ 39 ] = list_head ( tmp [ 31 ] ) ;
+if ( is_char ( tmp [ 39 ] , 103 ) ) {
+if ( check_sym ( tmp [ 29 ] , lf3sym ) ) {
+tmp [ 40 ] = arg_0 ( tmp [ 29 ] ) ;
+if ( not_empty_list ( tmp [ 40 ] ) ) {
 if ( check_sym ( arg0 , ef4sym ) ) {
-tmp [ 43 ] = arg_0 ( arg0 ) ;
+tmp [ 41 ] = arg_0 ( arg0 ) ;
+if ( check_sym ( tmp [ 41 ] , lf4sym ) ) {
+tmp [ 42 ] = arg_0 ( tmp [ 41 ] ) ;
+if ( check_sym ( tmp [ 22 ] , ef4sym ) ) {
+tmp [ 43 ] = arg_0 ( tmp [ 22 ] ) ;
 if ( check_sym ( tmp [ 43 ] , lf4sym ) ) {
 tmp [ 44 ] = arg_0 ( tmp [ 43 ] ) ;
-if ( check_sym ( tmp [ 23 ] , ef4sym ) ) {
-tmp [ 45 ] = arg_0 ( tmp [ 23 ] ) ;
-if ( check_sym ( tmp [ 45 ] , lf4sym ) ) {
-tmp [ 46 ] = arg_0 ( tmp [ 45 ] ) ;
-if ( not_empty_list ( tmp [ 46 ] ) ) {
-tmp [ 47 ] = list_head ( tmp [ 46 ] ) ;
-tmp [ 46 ] = list_tail ( tmp [ 46 ] ) ;
-if ( is_char ( tmp [ 47 ] , 95 ) ) {
-if ( term_equal ( ( * ef4 ) ( lf4 ( tmp [ 44 ] ) ) , ( * ef4 ) ( lf4 ( tmp [ 46 ] ) ) ) ) {
+if ( not_empty_list ( tmp [ 44 ] ) ) {
+tmp [ 45 ] = list_head ( tmp [ 44 ] ) ;
+tmp [ 44 ] = list_tail ( tmp [ 44 ] ) ;
+if ( is_char ( tmp [ 45 ] , 95 ) ) {
+if ( term_equal ( ( * ef4 ) ( lf4 ( tmp [ 42 ] ) ) , ( * ef4 ) ( lf4 ( tmp [ 44 ] ) ) ) ) {
 return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
 }
 }
@@ -262,10 +252,8 @@ return ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ;
 }
 }
 }
-}
-}
-tmp [ 27 ] = list_tail ( tmp [ 27 ] ) ;
-tmp [ 25 ] = tmp [ 27 ] ;
+tmp [ 26 ] = list_tail ( tmp [ 26 ] ) ;
+tmp [ 24 ] = tmp [ 26 ] ;
 }
 }
 }
