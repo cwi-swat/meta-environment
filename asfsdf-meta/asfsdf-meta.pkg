@@ -15,7 +15,7 @@ identification
 configuration interface
 
 requires
-   meta 1.1
+   meta 1.2
    asf 1.8
    pgen 2.0
    asf-library 1.0

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Jan 26 12:59:00 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * asfsdf-meta.pkg:
+   upgrade dependency on meta to 1.2
+
 2003/12/15 (markvdb@cwi.nl)
  * Added a "SdfUpgrade" button to the syntax editors.
 
