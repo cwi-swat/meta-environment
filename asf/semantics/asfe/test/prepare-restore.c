@@ -33,8 +33,8 @@
 #include <stdlib.h>
 #include "preparation.h"
 #include "asfix_utils.h"
-#include <PT.h>
-#include <ASF.h>
+#include <MEPT.h>
+#include <ASFME.h>
 
 int
 main(int argc, char *argv[])
@@ -44,8 +44,8 @@ main(int argc, char *argv[])
   PT_Tree term, prepared, restored;
 
   ATinit(argc, argv, &bottomOfStack);
-  PT_initPTApi();
-  ASF_initASFApi();
+  PT_initMEPTApi();
+  ASF_initASFMEApi();
 
   in = ATreadFromFile(stdin);
 

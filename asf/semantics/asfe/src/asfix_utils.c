@@ -76,49 +76,6 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 	return ATfalse;
       }
     }
-    else if (PT_isTreeList(asfix1) && PT_isTreeList(asfix2)) {
-      /* If it is a list skip the whitespace while checking
-       * equality modulo whitespace for each element.
-       * Also, we must checks the list sort and separators!
-       */
-      ATbool ok;
-      PT_Symbol sym1 = PT_getTreeIter(asfix1);
-      PT_Symbol sym2 = PT_getTreeIter(asfix2);
-
-      if ((PT_isSymbolIterStar(sym1) || PT_isSymbolIterPlus(sym1)) &&
-        (PT_isSymbolIterStar(sym2) || PT_isSymbolIterPlus(sym2))) {
-        ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1), 
-                              PT_getSymbolSymbol(sym2));
-      }
-      else if ((PT_isSymbolIterStarSep(sym1) ||
-              PT_isSymbolIterPlusSep(sym1)) &&
-             (PT_isSymbolIterStarSep(sym2) || PT_isSymbolIterPlusSep(sym2))) {
-         ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1),
-                               PT_getSymbolSymbol(sym2)) &&
-              !strcmp(PT_getSymbolSeparator(sym1),
-                      PT_getSymbolSeparator(sym2));
-      }
-      else {
-	ok = ATfalse;
-      }
-
-      if (ok) {
-	PT_Args elems1 = PT_getTreeArgs(asfix1);
-	PT_Args elems2 = PT_getTreeArgs(asfix2);
-
-	for (; PT_hasArgsHead(elems1) && PT_hasArgsHead(elems2) && ok;
-	     elems1 = PT_getArgsTail(elems1), elems2 = PT_getArgsTail(elems2)) {
-	  ok =
-	    isEqualModuloWhitespace(PT_getArgsHead(elems1), 
-                                    PT_getArgsHead(elems2));
-	}
-
-	if (PT_isEqualArgs(elems1, elems2) && ok) {	/* both ATempty */
-	  return ATtrue;
-	}
-      }
-      return ATfalse;
-    }
     else if (PT_isTreeLayout(asfix1) && PT_isTreeLayout(asfix2)) {
       /* here we treat all whitespace equally */
       return ATtrue;
@@ -161,15 +118,23 @@ PT_Args skipWhitespace(PT_Args list)
 {
   PT_Tree elem;
 
-  if (!PT_isArgsEmpty(list)) {
-    for (elem = PT_getArgsHead(list); PT_hasArgsHead(list) &&
-	 (PT_isTreeLayout(elem) || PT_isTreeSeparator(elem));
-	 list = PT_getArgsTail(list), elem = PT_getArgsHead(list));
+  if (PT_hasArgsHead(list)) {
+    elem = PT_getArgsHead(list); 
+
+    while (PT_isTreeLayout(elem)) {
+       if (PT_hasArgsTail(list)) {
+         list = PT_getArgsTail(list);
+         if (PT_hasArgsHead(list)) {
+           elem = PT_getArgsHead(list); 
+         }
+       } 
+       else {
+         break;
+       }
+    }
   }
 
-  assert(PT_isArgsEmpty(list) ||
-	 (!PT_isTreeLayout(PT_getArgsHead(list)) &&
-	  !PT_isTreeSeparator(PT_getArgsHead(list))));
+  assert(PT_isArgsEmpty(list) || !PT_isTreeLayout(PT_getArgsHead(list)));
 
   return list;
 }
@@ -179,18 +144,16 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
   PT_Tree elem;
   PT_Args prev = list;
 
-  assert(PT_isTreeLayout(PT_getArgsHead(list))
-	 || PT_isTreeSeparator(PT_getArgsHead(list)));
+  assert(PT_isTreeLayout(PT_getArgsHead(list)));
 
   if (!PT_isArgsEmpty(list)) {
-    for (elem = PT_getArgsHead(list); PT_hasArgsHead(list) &&
-	 (PT_isTreeLayout(elem) || PT_isTreeSeparator(elem));
+    for (elem = PT_getArgsHead(list); 
+         PT_hasArgsHead(list) && PT_isTreeLayout(elem);
 	 prev = list, list = PT_getArgsTail(list), elem = PT_getArgsHead(list));
   }
 
   assert(PT_isArgsEmpty(list) ||
-	 PT_isTreeLayout(PT_getArgsHead(prev)) ||
-	 PT_isTreeSeparator(PT_getArgsHead(prev)));
+	 PT_isTreeLayout(PT_getArgsHead(prev)));
 
   return prev;
 }
@@ -220,6 +183,13 @@ ATbool isValidList(PT_Args list)
       elem2 = PT_getArgsHead(next);
     }
     else {
+      /* check if the last element is not whitespace */
+      if (PT_isTreeLayout(elem1)) {
+        ATwarning
+	  ("Internal error. Last element is whitespace in list:\n%t\n", 
+           (ATerm) orig);
+        return ATfalse;
+      }
       break;
     }
 
@@ -229,13 +199,6 @@ ATbool isValidList(PT_Args list)
       return ATfalse;
     }
 
-    /* check if the last element is not whitespace */
-    if (PT_isArgsEmpty(next) && PT_isTreeLayout(elem1)) {
-      ATwarning
-	("Internal error. Last element is whitespace in list:\n%t\n", 
-         (ATerm) orig);
-      return ATfalse;
-    }
   }
 
   return ATtrue;

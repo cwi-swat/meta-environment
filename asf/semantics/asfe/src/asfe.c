@@ -35,8 +35,7 @@
 #include <assert.h>
 #include <deprecated.h>
 
-#include <PT-utils.h>
-#include <ASF-utils.h>
+#include <MEPT-utils.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
@@ -97,14 +96,18 @@ static ATbool aborted = ATfalse;
 /* innermost strategy */
 static PT_Tree rewrite(PT_Tree trm, ATerm env, int depth);
 static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
-			   PT_Args args1, PT_Args args2, ATerm lhs_posinfo,
-			   int depth);
-static ATerm listMatching(PT_Symbol sym, ATerm env, PT_Args elems1,
-			   PT_Args elems2, ASF_ConditionList conds, 
-                           PT_Args args1, PT_Args args2, 
-                           ATerm lhs_posinfo, int depth);
+			  PT_Args args1, PT_Args args2, 
+                          ATerm lhs_posinfo,
+			  int depth);
+static ATerm listMatching(ATerm env, PT_Symbol listSymbol,
+                          PT_Args elems1, PT_Args elems2,
+                          ASF_ConditionList conds, 
+                          PT_Args args1, PT_Args args2,
+                          ATerm lhs_posinfo, int depth);
 static PT_Args compareSubLists(Slice tuple, PT_Args elems2);
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
+static PT_Args appendSlice(PT_Args list, Slice slice);
+static Slice getListVariableValue(ATerm env, PT_Tree var);
 
 /* traversal strategy */
 static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
@@ -113,7 +116,6 @@ static PT_Args rewriteArgsTraversal(PT_Args args, ATerm env, int depth,
                                     Traversal *traversal);
 static PT_Args rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env,
                                     int depth, Traversal *traversal);
-
 
 
 void
@@ -183,21 +185,29 @@ debugging(int conn, ATerm on)
  * Retrieve the value of a variable
  */
 
+
 static PT_Tree
-getVariableValue(ATerm env, PT_Tree var)
+getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
 {
-  ATermList list = (ATermList) env;
+  if (PT_isIterSepSymbol(symbol) || 
+      PT_isIterSymbol(symbol)) {
+    Slice slice = getListVariableValue(env, var);
+    PT_Args newelems = appendSlice(PT_makeArgsEmpty(), slice);
+    return PT_makeTreeList(symbol, newelems);
+  }
+  else {
+    ATermList list = (ATermList) env;
+    ATerm atVar = ATmake("<str>", PT_yieldTree(var));
 
-  var = PT_removeTreeAnnotations(var);
+    while (!ATisEmpty(list)) {
+      ATermAppl tuple = (ATermAppl) ATgetFirst(list);
+      if (ATisEqual(ATgetArgument(tuple, 0), atVar)) {
+/*      assert(ATgetAFun(tuple) == plain_var);*/
+        return PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
+      }
 
-  while (!ATisEmpty(list)) {
-    ATermAppl tuple = (ATermAppl) ATgetFirst(list);
-    if (ATisEqual(ATgetArgument(tuple, 0), var)) {
-      assert(ATgetAFun(tuple) == plain_var);
-      return PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
+      list = ATgetNext(list);
     }
-
-    list = ATgetNext(list);
   }
 
   return NULL;
@@ -211,12 +221,14 @@ static Slice
 getListVariableValue(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
-  ATerm atVar = PT_makeTermFromTree(var);
+  /*ATerm atVar = PT_makeTermFromTree(var);*/
+  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
 
+/*
   if (AT_getAnnotations(atVar) != NULL) {
     atVar = AT_removeAnnotations(atVar);
   }
-
+*/
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
     if (ATisEqual(ATgetArgument(tuple, 0), atVar)) {
@@ -238,11 +250,14 @@ getListVariableValue(ATerm env, PT_Tree var)
 static ATerm
 putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 {
-  ATerm atVar = PT_makeTermFromTree(var);
+  /*ATerm atVar = PT_makeTermFromTree(var);*/
+  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
   ATerm atValue = PT_makeTermFromTree(value);
+/*
   if (AT_getAnnotations(atVar) != NULL) {
     atVar = AT_removeAnnotations(atVar);
   }
+*/
 
   return (ATerm) ATinsert((ATermList) env,
 			  (ATerm) ATmakeAppl2(plain_var, atVar, atValue));
@@ -251,13 +266,16 @@ putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 static ATerm
 putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 {
-  ATerm atVar = PT_makeTermFromTree(var);
+  /*ATerm atVar = PT_makeTermFromTree(var);*/
+  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
   ATerm atStart = PT_makeTermFromArgs(start);
   ATerm atEnd = PT_makeTermFromArgs(end);
 
+/*
   if (AT_getAnnotations(atVar) != NULL) {
     atVar = AT_removeAnnotations(atVar);
   }
+*/
 
   return (ATerm) ATinsert((ATermList) env,
 			  (ATerm) ATmakeAppl3(list_var, atVar,
@@ -291,11 +309,7 @@ static ATbool
 isBoundVariable(ATerm env, PT_Tree var)
 {
   ATermList list = (ATermList) env;
-
-  ATerm atVar = PT_makeTermFromTree(var);
-  if (AT_getAnnotations(atVar) != NULL) {
-    atVar = AT_removeAnnotations(atVar);
-  }
+  ATerm atVar = ATmake("<str>", PT_yieldTree(var));
 
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -326,8 +340,10 @@ prepend(PT_Args first, PT_Args last, PT_Args list)
   elem = PT_getArgsHead(first);
   temp = prepend(PT_getArgsTail(first), last, list);
 
-  if (PT_isArgsEmpty(temp) &&
-      (PT_isTreeSeparator(elem) || PT_isTreeLayout(elem))) {
+  if (PT_isArgsEmpty(temp) && PT_isTreeLayout(elem)) {
+/*
+      && (PT_isTreeSeparator(elem) || PT_isTreeLayout(elem))) {
+*/
     return PT_makeArgsEmpty();
   }
 
@@ -522,11 +538,13 @@ no_new_vars(PT_Tree trm, ATerm env)
    match the matching should be aborted. */
 
 static ATerm
-arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
-	     ASF_ConditionList conds,
-	     PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth)
+argMatching(ATerm env, 
+            PT_Tree arg1, PT_Tree arg2,
+	    ASF_ConditionList conds,
+	    PT_Args orgargs1, PT_Args orgargs2,
+            ATerm lhs_posinfo, int depth)
 {
-  PT_Symbol sym1, sym2;
+  PT_Symbol sym1, sym2, listSymbol;
   PT_Production prod1, prod2;
   PT_Args args1, args2;
   PT_Args elems1, elems2;
@@ -534,93 +552,115 @@ arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
 
   if (runVerbose) {
     ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",
-	      asource((PT_Tree) tagCurrentRule), arg1,arg2);
+	      asource((PT_Tree) tagCurrentRule), arg1, arg2);
   }
 
-   if (PT_isTreeAppl(arg1) && PT_isTreeAppl(arg2)) {
+  if (PT_isTreeAppl(arg1) && PT_isTreeAppl(arg2)) {
     prod1 = PT_getTreeProd(arg1);
     prod2 = PT_getTreeProd(arg2);
-    if (PT_isEqualProduction(prod1, prod2)) {
+    if (PT_isOptLayoutProd(prod1) &&
+        PT_isOptLayoutProd(prod2)) {
+      return argsMatching(newenv, conds, orgargs1, orgargs2,
+			  lhs_posinfo, depth);
+    }
+    else if (PT_isProductionList(prod1) &&
+             PT_isProductionList(prod2)) {
+      ATbool ok = ATfalse;
+      sym1 = PT_getProductionRhs(prod1);
+      sym2 = PT_getProductionRhs(prod2);
+      if ((PT_isSymbolIterStar(sym1) || PT_isSymbolIterPlus(sym1)) &&
+	  (PT_isSymbolIterStar(sym2) || PT_isSymbolIterPlus(sym2))) {
+        ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1), 
+                              PT_getSymbolSymbol(sym2));
+      }
+      else if ((PT_isSymbolIterStarSep(sym1) ||
+	        PT_isSymbolIterPlusSep(sym1)) &&
+	       (PT_isSymbolIterStarSep(sym2) || 
+                PT_isSymbolIterPlusSep(sym2))) {
+        ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1),
+			      PT_getSymbolSymbol(sym2)) &&
+	     PT_isEqualSymbol(PT_getSymbolSeparator(sym1),
+	                      PT_getSymbolSeparator(sym2));
+      }
+
+      if (ok) {
+        listSymbol = PT_getTreeSymbol(arg1);
+        elems1 = PT_getTreeArgs(arg1);
+        elems2 = PT_getTreeArgs(arg2);
+  
+        newenv = listMatching(newenv, listSymbol,
+                              elems1, elems2,
+			      conds, 
+                              orgargs1, orgargs2,
+                              lhs_posinfo, depth);
+      }
+      else {
+        newenv = fail_env;
+        if (runVerbose) {
+	  ATwarning("*** fail_env on line %d\n", __LINE__);
+        }
+      }
+    }
+    else if (PT_isEqualProduction(prod1, prod2)) {
       args1 = PT_getTreeArgs(arg1);
       args2 = PT_getTreeArgs(arg2);
       args1 = PT_concatArgs(args1, orgargs1);
       args2 = PT_concatArgs(args2, orgargs2);
 
       newenv = (ATerm) argsMatching(newenv, conds, args1, args2,
-				     lhs_posinfo, depth);
+				    lhs_posinfo, depth);
+    }
+    else if (PT_isVarDefault(prod1)) {
+      PT_Symbol rhs = PT_getProductionRhs(prod1);
+      PT_Tree trm = getVariableValue(newenv, arg1, rhs);
+      if (trm) {
+        if (isAsFixEqual(arg2, trm)) {
+	  newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
+			        lhs_posinfo, depth);
+        }
+        else {
+	  newenv = fail_env;
+	  if (runVerbose) {
+	    ATwarning("*** fail_env on line %d\n", __LINE__);
+	  }
+        }
+      }
+      else {
+        newenv = putVariableValue(newenv, arg1, arg2);
+        newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
+			      lhs_posinfo, depth);
+      }
     }
     else {
       return fail_env;
       if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
+        ATwarning("*** fail_env on line %d\n", __LINE__);
       }
     }
   }
   else if (PT_isTreeList(arg1) && PT_isTreeList(arg2)) {
-    ATbool ok = ATfalse;
-    sym1 = PT_getTreeIter(arg1);
-    sym2 = PT_getTreeIter(arg2);
-    if ((PT_isSymbolIterStar(sym1) || PT_isSymbolIterPlus(sym1)) &&
-	(PT_isSymbolIterStar(sym2) || PT_isSymbolIterPlus(sym2))) {
-      ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1), PT_getSymbolSymbol(sym2));
-    }
-    else if ((PT_isSymbolIterStarSep(sym1) ||
-	      PT_isSymbolIterPlusSep(sym1)) &&
-	     (PT_isSymbolIterStarSep(sym2) || PT_isSymbolIterPlusSep(sym2))) {
-      ok = PT_isEqualSymbol(PT_getSymbolSymbol(sym1),
-			    PT_getSymbolSymbol(sym2)) &&
-	   !strcmp(PT_getSymbolSeparator(sym1),
-	           PT_getSymbolSeparator(sym2));
-    }
+    listSymbol = PT_getTreeSymbol(arg1);
+    elems1 = PT_getTreeArgs(arg1);
+    elems2 = PT_getTreeArgs(arg2);
 
-    if (ok) {
-      elems1 = PT_getTreeArgs(arg1);
-      elems2 = PT_getTreeArgs(arg2);
-
-      newenv = listMatching(sym1, newenv, elems1, elems2,
-			     conds, orgargs1, orgargs2, lhs_posinfo, depth);
-    }
-    else {
-      newenv = fail_env;
-      if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
-  }
-  else if (PT_isTreeVar(arg1)) {
-    PT_Tree trm = getVariableValue(newenv, arg1);
-    if (trm) {
-      if (isAsFixEqual(arg2, trm)) {
-	newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
-			       lhs_posinfo, depth);
-      }
-      else {
-	newenv = fail_env;
-	if (runVerbose) {
-	  ATwarning("*** fail_env on line %d\n", __LINE__);
-	}
-      }
-    }
-    else {
-      newenv = putVariableValue(newenv, arg1, arg2);
-      newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
-			     lhs_posinfo, depth);
-    }
+    newenv = listMatching(newenv, listSymbol, elems1, elems2,
+			  conds, orgargs1, orgargs2, 
+                          lhs_posinfo, depth);
   }
   else { /* terms are not any of the above, and not equal */
       /* we didn't test for equality if rewriting with ws, so do it now */
       /* NOTE: is this still necessary? */
-      if (isEqualModuloWhitespace(arg1, arg2)) {
-	return argsMatching(newenv, conds, orgargs1, orgargs2,
-			     lhs_posinfo, depth);
+    if (isEqualModuloWhitespace(arg1, arg2)) {
+      return argsMatching(newenv, conds, orgargs1, orgargs2,
+                          lhs_posinfo, depth);
+    }
+    else {
+      newenv = fail_env;
+      if (runVerbose) {
+        ATwarning("*** fail_env on line %d\n", __LINE__);
       }
-      else {
-	newenv = fail_env;
-	if (runVerbose) {
-	  ATwarning("*** fail_env on line %d\n", __LINE__);
-	}
-      }
-  }
+    }
+  }   
 
   return newenv;
 }
@@ -631,7 +671,8 @@ arg_matching(ATerm env, PT_Tree arg1, PT_Tree arg2,
    the conditions are inspected. */
 static ATerm
 argsMatching(ATerm env, ASF_ConditionList conds,
-	      PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth)
+             PT_Args args1, PT_Args args2, 
+             ATerm lhs_posinfo, int depth)
 {
   PT_Tree arg1, arg2;
   ATerm newenv = env;
@@ -644,8 +685,9 @@ argsMatching(ATerm env, ASF_ConditionList conds,
       arg2 = PT_getArgsHead(args2);
       args2 = PT_getArgsTail(args2);
 
-      newenv = arg_matching(newenv, arg1, arg2, conds, args1, args2,
-			    lhs_posinfo, depth);
+      newenv = argMatching(newenv, arg1, arg2, conds, 
+                           args1, args2,
+                           lhs_posinfo, depth);
     }
     else {
       newenv = fail_env;
@@ -755,21 +797,23 @@ compareSubLists(Slice slice, PT_Args elems2)
  */
 
 static ATerm
-subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
-		  PT_Args elems1, PT_Args elems2,
-		  ASF_ConditionList conds,
-		  PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth)
+subListMatching(ATerm env, PT_Tree elem,
+		PT_Symbol listSymbol, PT_Args elems1, PT_Args elems2,
+		ASF_ConditionList conds,
+		PT_Args args1, PT_Args args2,
+                ATerm lhs_posinfo, int depth)
 {
   ATerm subenv, newenv;
   PT_Args last;
   
-  if (PT_isStarVar(elem)) {
+  if (PT_isTreeVarListStar(elem)) {
     /* try to match with zero elements for star variable */
     newenv = putListVariableValue(env, elem, PT_makeArgsEmpty(),
 				  PT_makeArgsEmpty());
     subenv =
-      listMatching(asym, newenv, elems1, elems2, conds, args1, args2,
-		    lhs_posinfo, depth);
+      listMatching(newenv, listSymbol, elems1, elems2, conds, 
+                   args1, args2,
+                   lhs_posinfo, depth);
   }
   else {
     /* if plus variable, do not try to match with zero elements */
@@ -795,8 +839,9 @@ subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
       assert(isValidSlice(elems2, last));
       newenv = putListVariableValue(env, elem, elems2, last);
       subenv =
-	listMatching(asym, newenv, elems1, last, conds, args1, args2,
-		      lhs_posinfo, depth);
+	listMatching(newenv, listSymbol, elems1, last,
+                     conds, args1, args2,
+		     lhs_posinfo, depth);
 
       if (!PT_hasArgsHead(last)) {
 	/* the entire list has been tried now */
@@ -809,130 +854,262 @@ subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
 }
 
 static ATerm
-listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
-	      ASF_ConditionList conds, PT_Args args1, PT_Args args2,
-	      ATerm lhs_posinfo, int depth)
+lastListElementMatching(ATerm env, PT_Tree elem1, 
+                        PT_Symbol listSymbol, PT_Args elems2,
+                        ASF_ConditionList conds, 
+                        PT_Args args1, PT_Args args2,
+                        ATerm lhs_posinfo, int depth) 
 {
-  PT_Tree elem1, elem2 = NULL;
+  PT_Tree elem2;
+  ATerm newenv;
+  if (PT_isTreeVarList(elem1)) {
+    Slice trms = getListVariableValue(env, elem1);
+    if (trms) {
+      if (compareLists(trms, elems2)) {
+        newenv = argsMatching(env, conds, args1, args2,
+    			      lhs_posinfo, depth);
+      }
+      else {
+        newenv = fail_env;
+        if (runVerbose) {
+          ATwarning("*** fail_env on line %d\n", __LINE__);
+        }
+      }
+    }
+    else {			/* TdictGet(env,elem1) == Tfalse */
+      if (PT_isTreeVarListPlus(elem1) && PT_isArgsEmpty(elems2)) {
+        newenv = fail_env;
+        if (runVerbose) {
+          ATwarning("*** fail_env on line %d\n", __LINE__);
+        }
+      }
+      else {
+        elems2 = skipWhitespace(elems2);
+        assert(isValidList(elems2));
+
+        if (PT_hasArgsHead(elems2)) {
+          elem2 = PT_getArgsHead(elems2);
+        }
+    
+        assert(isValidSlice(elems2, PT_makeArgsEmpty()));
+        newenv =
+          putListVariableValue(env, elem1, elems2, PT_makeArgsEmpty());
+        newenv =
+          argsMatching(newenv, conds, args1, args2, 
+                       lhs_posinfo, depth);
+      }
+    }
+  }
+  else {			/*is_list_var(elem1) == Tfalse */
+    if (!PT_isArgsEmpty(elems2)) {
+      elem2 = PT_getArgsHead(elems2);
+      elems2 = PT_getArgsTail(elems2);
+      if (PT_isArgsEmpty(elems2)) {	/* is singleton */
+        newenv =
+          argMatching(env, elem1, elem2,
+                      conds, args1, args2,
+                      lhs_posinfo, depth);
+      }
+      else {
+        newenv = fail_env;
+        if (runVerbose) {
+          ATwarning("*** fail_env on line %d\n", __LINE__);
+        }
+      }
+    }
+    else {
+      newenv = fail_env;
+      if (runVerbose) {
+        ATwarning("*** fail_env on line %d\n", __LINE__);
+      }
+    }
+  }
+  return newenv;
+}
+
+static ATbool 
+isListSeparator(PT_Tree elem, PT_Symbol listSymbol)
+{
+  PT_Symbol symbol;
+  PT_Symbol separator;
+  char *str;
+  PT_Production prod;
+
+  if (PT_isIterSepSymbol(listSymbol)) { 
+    separator = PT_getIterSepSeparator(listSymbol);
+    if (PT_isTreeAppl(elem)) {
+      prod = PT_getTreeProd(elem);
+      symbol = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+    }
+    else if (PT_isTreeList(elem)) {
+      symbol = PT_getTreeSymbol(elem);
+      ATwarning("symbol is %t\n", symbol);
+    }
+    else {
+      assert(PT_isTreeLit(elem));
+      str = PT_getTreeString(elem);
+      symbol = PT_makeSymbolLit(str);
+    }
+    return PT_isEqualSymbol(separator, symbol);
+  }
+  else {
+    return ATfalse;
+  }
+}
+
+static ATerm
+nextListElementMatching(ATerm env, PT_Tree elem1, 
+                        PT_Symbol listSymbol, PT_Args elems1, PT_Args elems2,
+                        ASF_ConditionList conds, 
+                        PT_Args args1, PT_Args args2,
+                        ATerm lhs_posinfo, int depth) 
+{
+  PT_Tree elem2 = NULL;
   ATerm newenv;
   PT_Tree newarg1, newarg2;
   PT_Args newargs1, newargs2;
 
-  assert(isValidList(skipWhitespace(elems1)));
-  assert(isValidList(skipWhitespace(elems2)));
+  if (runVerbose) {
+    ATwarning("%t:matching next element: %t\ngiven %t\n and %t\n\n\n",
+	      asource((PT_Tree) tagCurrentRule), elem1, elems2, listSymbol);
+  }
 
-    elems1 = skipWhitespace(elems1);
-    assert(isValidList(elems1));
+  if (PT_isTreeVarList(elem1)) {
+    Slice trms = getListVariableValue(env, elem1);
+    if (trms) {
+      elems2 = compareSubLists(trms, elems2);
+      if (elems2) {
+        newenv = listMatching(env, listSymbol, elems1, elems2, conds,
+                              args1, args2,
+                              lhs_posinfo, depth);
+      }
+      else {
+        newenv = fail_env;
+        if (runVerbose) {
+          ATwarning("*** fail_env on line %d\n", __LINE__);
+        }
+      }
+    }
+    else {      /* list variable elem1 does not occur in value env. */
+      newenv = subListMatching(env, elem1, 
+                               listSymbol, elems1, elems2,
+                               conds, args1, args2, 
+                               lhs_posinfo, depth);
+    }
+  }
+  else if (isListSeparator(elem1, listSymbol)) {
     elems2 = skipWhitespace(elems2);
     assert(isValidList(elems2));
+    if (PT_hasArgsHead(elems2)) {
+      elem2 = PT_getArgsHead(elems2);
+
+      if (isListSeparator(elem2, listSymbol)) {
+
+        elems2 = skipWhitespace(PT_getArgsTail(elems2));
+        assert(isValidList(elems2));
+      
+        newarg1 = PT_makeTreeList(listSymbol, elems1);
+        newarg2 = PT_makeTreeList(listSymbol, elems2);
+        newargs1 = PT_makeArgsList(newarg1, args1);
+        newargs2 = PT_makeArgsList(newarg2, args2);
+
+        newenv = argMatching(env, elem1, elem2, conds, 
+                             newargs1, newargs2, 
+                             lhs_posinfo, depth);
+      }
+      else {
+        elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
+        newenv = listMatching(env, listSymbol, elems1, elems2, conds,
+                              args1, args2,
+                              lhs_posinfo, depth);
+      }
+    }
+    else {
+      elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
+      newenv = listMatching(env, listSymbol, elems1, elems2, conds,
+                            args1, args2,
+                            lhs_posinfo, depth);
+    }
+  }
+  else {  /* elem1 is not a list variable and not a separator */
+    elems2 = skipWhitespace(elems2);
+    assert(isValidList(elems2));
+    if (PT_hasArgsHead(elems2)) {
+      elem2 = PT_getArgsHead(elems2);
+
+      elems2 = skipWhitespace(PT_getArgsTail(elems2)); 
+      assert(isValidList(elems2));
+
+      if (isListSeparator(elem2, listSymbol)) {
+        newenv = listMatching(env, listSymbol, elems1, elems2, conds,
+                              args1, args2,
+                              lhs_posinfo, depth);
+      }
+      else {
+        newarg1 = PT_makeTreeList(listSymbol, elems1);
+        newarg2 = PT_makeTreeList(listSymbol, elems2);
+        newargs1 = PT_makeArgsList(newarg1, args1);
+        newargs2 = PT_makeArgsList(newarg2, args2);
+
+        newenv = argMatching(env, elem1, elem2, conds, 
+                             newargs1, newargs2, 
+                             lhs_posinfo, depth);
+      }
+    }
+    else {
+      newenv = fail_env;
+      if (runVerbose) {
+        ATwarning("*** fail_env on line %d\n", __LINE__);
+      }
+    }
+  }
+  return newenv;
+}
+
+static ATerm
+listMatching(ATerm env, PT_Symbol listSymbol,
+             PT_Args elems1, PT_Args elems2,
+	     ASF_ConditionList conds, 
+             PT_Args args1, PT_Args args2,
+	     ATerm lhs_posinfo, int depth)
+{
+  PT_Tree elem1;
+  ATerm newenv;
+
+  elems1 = skipWhitespace(elems1);
+  assert(isValidList(elems1));
+  elems2 = skipWhitespace(elems2);
+  assert(isValidList(elems2));
+
+  if (runVerbose) {
+    ATwarning("%t:matching elements: %t\nwith\n%t given %t\n\n\n",
+	      asource((PT_Tree) tagCurrentRule), elems1, elems2, listSymbol);
+  }
 
 
   if (PT_hasArgsHead(elems1)) {
     elem1 = PT_getArgsHead(elems1);
 
-    if (!PT_hasArgsTail(elems1)) {	/* is a singleton ? */
-      if (PT_isListVar(elem1)) {
-	Slice trms = getListVariableValue(env, elem1);
-	if (trms) {
-	  if (compareLists(trms, elems2)) {
-	    newenv = argsMatching(env, conds, args1, args2,
-				   lhs_posinfo, depth);
-	  }
-	  else {
-	    newenv = fail_env;
-	    if (runVerbose) {
-	      ATwarning("*** fail_env on line %d\n", __LINE__);
-	    }
-	  }
-	}
-	else {			/* TdictGet(env,elem1) == Tfalse */
-	  if (PT_isPlusVar(elem1) && PT_isArgsEmpty(elems2)) {
-	    newenv = fail_env;
-	    if (runVerbose) {
-	      ATwarning("*** fail_env on line %d\n", __LINE__);
-	    }
-	  }
-	  else {
-	      elems2 = skipWhitespace(elems2);
-	      assert(isValidList(elems2));
+    elems1 = PT_getArgsTail(elems1);
 
-	    if (PT_hasArgsHead(elems2)) {
-	      elem2 = PT_getArgsHead(elems2);
-	    }
-
-	    assert(isValidSlice(elems2, PT_makeArgsEmpty()));
-	    newenv =
-	      putListVariableValue(env, elem1, elems2, PT_makeArgsEmpty());
-	    newenv =
-	      argsMatching(newenv, conds, args1, args2, lhs_posinfo, depth);
-	  }
-	}
-      }
-      else {			/*is_list_var(elem1) == Tfalse */
-	if (!PT_hasArgsTail(elems2)) {	/* is singleton */
-	  elem2 = PT_getArgsHead(elems2);
-	  newenv =
-	    arg_matching(env, elem1, elem2, conds, args1, args2,
-			 lhs_posinfo, depth);
-	}
-	else {
-	  newenv = fail_env;
-	  if (runVerbose) {
-	    ATwarning("*** fail_env on line %d\n", __LINE__);
-	  }
-	}
-      }
+    if (PT_isArgsEmpty(elems1)) { /* elems1 was a single element list */
+      newenv = lastListElementMatching(env, elem1, 
+                                       listSymbol, elems2,
+                                       conds, 
+                                       args1, args2,
+                                       lhs_posinfo, depth);
     }
-    else {			/* TlistSize(elems1) != 1 */
-      elems1 = PT_getArgsTail(elems1);
-
-      if (PT_isListVar(elem1)) {
-	Slice trms = getListVariableValue(env, elem1);
-	if (trms) {
-	  elems2 = compareSubLists(trms, elems2);
-	  if (elems2) {
-	    newenv = listMatching(sym, env, elems1, elems2, conds,
-				   args1, args2, lhs_posinfo, depth);
-	  }
-	  else {
-	    newenv = fail_env;
-	    if (runVerbose) {
-	      ATwarning("*** fail_env on line %d\n", __LINE__);
-	    }
-	  }
-	}
-	else {			/* TdictGet(env,elem1) == Tfalse */
-	  newenv = subListMatching(sym, env, elem1, elems1, elems2,
-				     conds, args1, args2, lhs_posinfo, depth);
-	}
-      }
-      else {			/*is_list_var(elem1) == Tfalse */
-	  elems2 = skipWhitespace(elems2);
-	  assert(isValidList(elems2));
-	if (PT_hasArgsHead(elems2)) {
-	  elem2 = PT_getArgsHead(elems2);
-
-	    elems2 = skipWhitespace(PT_getArgsTail(elems2));
-	    assert(isValidList(elems2));
-
-	  newarg1 = PT_makeTreeList(sym, elems1);
-	  newarg2 = PT_makeTreeList(sym, elems2);
-	  newargs1 = PT_makeArgsList(newarg1, args1);
-	  newargs2 = PT_makeArgsList(newarg2, args2);
-	  newenv =
-	    arg_matching(env, elem1, elem2, conds, newargs1,
-			 newargs2, lhs_posinfo, depth);
-	}
-	else {
-	  newenv = fail_env;
-	  if (runVerbose) {
-	    ATwarning("*** fail_env on line %d\n", __LINE__);
-	  }
-	}
-      }
+    else { /* elems1 contained more than one element in its pattern */
+      newenv = nextListElementMatching(env, elem1, 
+                                       listSymbol, elems1, elems2,
+                                       conds, 
+                                       args1, args2,
+                                       lhs_posinfo, depth);
     }
   }
-  else {			/* !elems1 */
+  else { /* elems1 is empty, so we are successful if elems2 are empty
+          * as well
+          */
     if (!PT_isArgsEmpty(elems2)) {
       newenv = fail_env;
       if (runVerbose) {
@@ -940,7 +1117,8 @@ listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
       }
     }
     else {
-      newenv = argsMatching(env, conds, args1, args2, lhs_posinfo, depth);
+      newenv = argsMatching(env, conds, args1, args2, 
+                            lhs_posinfo, depth);
     }
   }
 
@@ -996,8 +1174,9 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	else {
 	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
 	  newenv =
-	    arg_matching(newenv, rhs, lhstrm, conds,
-			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), NULL, depth);
+	    argMatching(newenv, rhs, lhstrm, conds,
+			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+                        NULL, depth);
 	}
       }
       else {
@@ -1007,8 +1186,9 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	  rhstrm = rewrite(rhs, newenv, depth + 1);
 	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
 	  newenv =
-	    arg_matching(newenv, lhs, rhstrm, conds,
-			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), NULL, depth);
+	    argMatching(newenv, lhs, rhstrm, conds,
+			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+                        NULL, depth);
 	}
 	else {
 	  RWsetError
@@ -1074,46 +1254,50 @@ apply_rule(PT_Tree trm, int depth)
   termargs = PT_getTreeArgs(trm);
 
   tmpargs = termargs;
-  while (PT_hasArgsHead(tmpargs)
-	 && !PT_isTreeAppl(PT_getArgsHead(tmpargs))) {
+  while (PT_hasArgsHead(tmpargs) &&
+	 (PT_isTreeLit(PT_getArgsHead(tmpargs)) ||
+	  PT_isTreeLayout(PT_getArgsHead(tmpargs)))) {
     tmpargs = PT_getArgsTail(tmpargs);
   }
 
   if (PT_hasArgsHead(tmpargs)) {
-    first_ofs = PT_getTreeProd(PT_getArgsHead(tmpargs));
+    PT_Tree firstArg = PT_getArgsHead(tmpargs);
+    if (PT_isTreeAppl(firstArg)) {
+      first_ofs = PT_getTreeProd(PT_getArgsHead(tmpargs));
 
     /* <PO:opt> we could build a table for each ofs in the
        specification, containing an entry for each first_ofs.
        Each entry consists of all the equations for this combination.
      */
-    while ((entry = find_equation(entry, top_ofs, first_ofs))) {
+      while ((entry = find_equation(entry, top_ofs, first_ofs))) {
 
-      if (runVerbose) {
-	ATwarning("Trying equation: %t.\n", asource((PT_Tree)entry->tag));
+        if (runVerbose) {
+	  ATwarning("Trying equation: %t.\n", asource((PT_Tree)entry->tag));
+        }
+
+        tagCurrentRule = entry->tag;
+
+        conds = entry->conds;
+        equargs = PT_getTreeArgs(entry->lhs);
+
+        env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
+			   PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+        tagCurrentRule = entry->tag;
+
+        if (!is_fail_env(env)) {
+	  TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+	  if (runVerbose) {
+	    ATwarning("Equation %t was successful.\n", 
+                      asource((PT_Tree)entry->tag));
+	  }
+
+	  rewrite_steps++;
+	  return make_cenv(entry->rhs, env);
+        }
+        else if (runVerbose) {
+	  ATwarning("Equation %t failed.\n", asource((PT_Tree)entry->tag));
+        }
       }
-
-      tagCurrentRule = entry->tag;
-
-      conds = entry->conds;
-      equargs = PT_getTreeArgs(entry->lhs);
-
-      env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-			  PT_getTreeAnnotation(entry->lhs, posinfo), depth);
-      tagCurrentRule = entry->tag;
-
-      if (!is_fail_env(env)) {
-	TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
-	if (runVerbose) {
-	  ATwarning("Equation %t was successful.\n", asource((PT_Tree)entry->tag));
-	}
-
-	rewrite_steps++;
-	return make_cenv(entry->rhs, env);
-      }
-      else if (runVerbose) {
-	ATwarning("Equation %t failed.\n", asource((PT_Tree)entry->tag));
-      }
-
     }
   }
 
@@ -1129,13 +1313,14 @@ apply_rule(PT_Tree trm, int depth)
     equargs = PT_getTreeArgs(entry->lhs);
 
     env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-			PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+                       PT_getTreeAnnotation(entry->lhs, posinfo), depth);
     tagCurrentRule = entry->tag;
 
     if (!is_fail_env(env)) {
       TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
       if (runVerbose) {
-	ATwarning("Equation: %t was successful.\n", asource((PT_Tree)entry->tag));
+	ATwarning("Equation: %t was successful.\n", 
+                  asource((PT_Tree)entry->tag));
       }
 
       rewrite_steps++;
@@ -1188,7 +1373,9 @@ rewriteArgs(PT_Args args, ATerm env, int depth)
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
       if (PT_isTreeAppl(arg) ||
-	  PT_isTreeVar(arg) || PT_isTreeList(arg) || PT_isTreeLexical(arg)) {
+	  PT_isTreeList(arg) || 
+	  PT_isTreeVar(arg) ||
+          PT_isTreeLexical(arg)) {
 	newarg = rewrite(arg, env, depth + 1);
       }
       else {
@@ -1204,7 +1391,9 @@ rewriteArgs(PT_Args args, ATerm env, int depth)
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
       if (PT_isTreeAppl(arg) ||
-	  PT_isTreeVar(arg) || PT_isTreeList(arg) || PT_isTreeLexical(arg)) {
+	  PT_isTreeList(arg) || 
+	  PT_isTreeVar(arg) || 
+          PT_isTreeLexical(arg)) {
 	newarg_table[i] = rewrite(arg, env, depth + 1);
       }
       else {
@@ -1225,76 +1414,94 @@ rewriteArgs(PT_Args args, ATerm env, int depth)
 /* The list of elements is rewritten and a new elementlist
    is constructed. */
 
+static PT_Args 
+concatElems(PT_Symbol listSymbol, PT_Args elems, PT_Args newElems)
+{
+  PT_Args newList;
+
+  if (PT_isArgsEmpty(elems)) {
+    newList = newElems;
+  }
+  else {
+    if (!PT_isArgsEmpty(newElems)) {
+      newList = PT_concatArgs(elems, newElems);
+    }
+    else {
+      if (PT_isIterSepSymbol(listSymbol)) {
+        int length = PT_getArgsLength(elems);
+        if (length > 3) {
+          newList = PT_sliceArgs(elems, 0, length-3);
+        }
+        else {
+          newList = PT_makeArgsEmpty();
+        }
+      }
+      else {
+        int length = PT_getArgsLength(elems);
+        if (length > 0) {
+          newList = PT_sliceArgs(elems, 0, length-1);
+        }
+        else {
+          newList = PT_makeArgsEmpty();
+        }
+      }
+    }
+  }
+  assert(isValidList(newList));
+  return newList;
+}
+
+static PT_Args 
+appendElem(PT_Symbol listSymbol, PT_Args elems, PT_Tree elem)
+{
+  if (PT_isArgsEmpty(elems)) {
+    if (PT_isTreeLayout(elem)) {
+      return elems;
+    }
+    else if (isListSeparator(elem, listSymbol)) {
+      return elems; 
+    }
+  }
+  return PT_appendArgs(elems, elem);
+}
+
 static PT_Args
-rewriteElems(PT_Symbol sym, PT_Args elems, ATerm env, int depth)
+rewriteElems(PT_Symbol listSymbol, PT_Args elems, ATerm env, int depth)
 {
   PT_Tree elem, newelem;
   PT_Args newelems = PT_makeArgsEmpty();
-  int len = PT_getArgsLength(elems);
 
-  if (len >= 32) {
-    while (PT_hasArgsHead(elems)) {
-      elem = PT_getArgsHead(elems);
-      if (PT_isListVar(elem)) {
-	Slice tuple = getListVariableValue(env, elem);
-	assert(tuple);
-	if (isSliceEmpty(tuple)) {
-	  newelems = skipWhitespace(newelems);
-	  assert(isValidList(newelems));
-	}
-	else {
-	  newelems = appendSlice(newelems, tuple);
-	}
+  assert(isValidList(elems));
+
+  while (PT_hasArgsHead(elems)) {
+    elem = PT_getArgsHead(elems);
+    if (PT_isTreeVarList(elem)) {
+      Slice tuple;
+      tuple = getListVariableValue(env, elem);
+      assert(tuple);
+      if (isSliceEmpty(tuple)) {
+	newelems = concatElems(listSymbol, newelems, PT_makeArgsEmpty());
       }
       else {
-	newelem = rewrite(elem, env, depth + 1);
-	newelems = PT_appendArgs(newelems, newelem);
+        newelems = appendSlice(newelems, tuple);
+        assert(isValidList(newelems));
       }
-      elems = PT_getArgsTail(elems);
     }
+    else {
+      newelem = rewrite(elem, env, depth + 1);
+      if (PT_isTreeList(newelem)) {
+        PT_Args elemArgs = PT_getTreeArgs(newelem);
+	newelems = concatElems(listSymbol, newelems, elemArgs);
+        assert(isValidList(newelems));
+      }
+      else {
+	newelems = appendElem(listSymbol, newelems, newelem);
+      }
+    }
+    elems = PT_getArgsTail(elems);
   }
-  else {
-    PT_Tree newelem_table[32];
-    int i = 0;
-    while (PT_hasArgsHead(elems)) {
-      elem = PT_getArgsHead(elems);
-      if (PT_isListVar(elem)) {
-	newelem_table[i] = (PT_Tree) getListVariableValue(env, elem);
-	if (newelem_table[i] == NULL) {
-	  RWsetError("variable not initialized", (ATerm) elem);
-	  return NULL;
-	}
-      }
-      else {
-	newelem_table[i] = rewrite(elem, env, depth + 1);
-      }
-      elems = PT_getArgsTail(elems);
-      i++;
-    }
-
-    for (--i; i >= 0; i--) {
-      newelem = newelem_table[i];
-      if (ATgetAFun((ATermAppl) newelem) == list_var) {
-	if (isSliceEmpty((Slice) newelem)) {
-	  newelems = skipWhitespace(newelems);
-	  assert(isValidList(newelems));
-	}
-	else {
-	  assert(isValidList(skipWhitespace(newelems)));
-	  newelems = prependSlice((Slice) newelem, newelems);
-	  assert(isValidList(newelems));
-	}
-      }
-      else {
-	if (!(PT_isArgsEmpty(newelems) &&
-	      (PT_isTreeSeparator(newelem) || PT_isTreeLayout(newelem)))) {
-	  newelems = PT_makeArgsList(newelem, newelems);
-	  assert(isValidList(skipWhitespace(newelems)));
-	}
-      }
-    }
-  }
-
+  newelems = skipWhitespace(newelems);
+  assert(isValidList(newelems));
   return newelems;
 }
 
@@ -1323,84 +1530,95 @@ rewrite(PT_Tree trm, ATerm env, int depth)
     return trm;
   }
 
-  if (PT_isTreeAppl(trm)) {
-    args = PT_getTreeArgs(trm);
-    newargs = rewriteArgs(args, env, depth);
-
-    if (PT_hasProductionBracketAttr(PT_getTreeProd(trm))) {
-      newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
-      rewtrm = newtrm;
-
+  if (PT_isTreeApplList(trm) || PT_isTreeList(trm)) {
+    PT_Args elems;
+    PT_Args newelems;
+    PT_Symbol listSymbol;
+    elems = PT_getTreeArgs(trm);
+    if ( PT_isTreeList(trm)) {
+      listSymbol = PT_getTreeSymbol(trm);
     }
-    else if (traversals_on && 
-             PT_hasProductionTraverseAttr(PT_getTreeProd(trm))) {
-      Traversal traversal;
-
-      if (runVerbose) {
-	ATwarning("Traversal...\n");
-      }
-
-      /* traversal and memo function */
-      if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {
-	newtrm = PT_setTreeArgs(trm, newargs);
-	assert(memo_table != NULL);
-	rewtrm = MemoTableLookup(memo_table, newtrm);
-
-	if (!rewtrm) {
-	  traversal = createTraversalPattern(newtrm);
-
-	  newtrm = selectTraversedArg(newargs);
-	  rewtrm =
-	    rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
-	  rewtrm = chooseNormalform(rewtrm, traversal);
-	  memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
-	}
-      }
-      else { /* traversal, not memo function */
-	newtrm = PT_setTreeArgs(trm, newargs);
-
-	traversal = createTraversalPattern(newtrm);
-
-	newtrm = selectTraversedArg(newargs);
-	rewtrm =
-	  rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
-	rewtrm = chooseNormalform(rewtrm, traversal);
-      }
+    else {
+      PT_Production prod = PT_getTreeProd(trm);
+      listSymbol = PT_getProductionRhs(prod);
     }
-    /* memo, not traversal function */
-    else if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {	
-      newtrm = PT_setTreeArgs(trm, newargs);
-      assert(memo_table != NULL);
-      rewtrm = MemoTableLookup(memo_table, newtrm);
-
-      if (!rewtrm) {
-	rewtrm = selectAndRewrite(newtrm, depth);
-	memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
-      }
-    }
-    else {			/* all other function types */
-      newtrm = PT_setTreeArgs(trm, newargs);
-      rewtrm = selectAndRewrite(newtrm, depth);
-    }
-
-  }
-  else if (PT_isTreeVar(trm)) {
-    rewtrm = getVariableValue(env, trm);
-
-    if (!rewtrm) {
-      rewtrm = trm;
-    }
-  }
-  else if (PT_isTreeList(trm)) {
-    PT_Args elems = PT_getTreeArgs(trm);
-    PT_Symbol sym = PT_getTreeIter(trm);
-    PT_Args newelems = rewriteElems(sym, elems, env, depth);
+    newelems = rewriteElems(listSymbol, elems, env, depth);
     if (newelems) {
       assert(isValidList(newelems));
       rewtrm = PT_setTreeArgs(trm, newelems);
     }
     else {
       rewtrm = trm;
+    }
+  }
+  else if (PT_isTreeAppl(trm)) {
+    PT_Production prod = PT_getTreeProd(trm);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhs = PT_getProductionRhs(prod);
+      rewtrm = getVariableValue(env, trm, rhs);
+
+      if (!rewtrm) {
+        rewtrm = trm;
+      }
+    }
+    else {
+      args = PT_getTreeArgs(trm);
+      newargs = rewriteArgs(args, env, depth);
+      if (PT_hasProductionBracketAttr(prod)) {
+        newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
+        rewtrm = newtrm;
+      }
+      else if (traversals_on && 
+               PT_hasProductionTraverseAttr(PT_getTreeProd(trm))) {
+        Traversal traversal;
+
+        if (runVerbose) {
+	  ATwarning("Traversal...\n");
+        }
+
+        /* traversal and memo function */
+        if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {
+	  newtrm = PT_setTreeArgs(trm, newargs);
+	  assert(memo_table != NULL);
+	  rewtrm = MemoTableLookup(memo_table, newtrm);
+
+	  if (!rewtrm) {
+	    traversal = createTraversalPattern(newtrm);
+
+	    newtrm = selectTraversedArg(newargs);
+	    rewtrm =
+	      rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
+	    rewtrm = chooseNormalform(rewtrm, traversal);
+	    memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
+	  }
+        }
+        else { /* traversal, not memo function */
+	  newtrm = PT_setTreeArgs(trm, newargs);
+  
+	  traversal = createTraversalPattern(newtrm);
+  
+	  newtrm = selectTraversedArg(newargs);
+	  rewtrm =
+	    rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
+	  rewtrm = chooseNormalform(rewtrm, traversal);
+        }
+      }
+      /* memo, not traversal function */
+      else if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {	
+        newtrm = PT_setTreeArgs(trm, newargs);
+        assert(memo_table != NULL);
+        rewtrm = MemoTableLookup(memo_table, newtrm);
+
+        if (!rewtrm) {
+	  rewtrm = selectAndRewrite(newtrm, depth);
+	  memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
+        }
+      }
+      else {			/* all other function types */
+        newtrm = PT_setTreeArgs(trm, newargs);
+
+        rewtrm = selectAndRewrite(newtrm, depth);
+      }
     }
   }
   else {
@@ -1461,13 +1679,15 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
     }
   }
   else if (PT_isTreeVar(trm)) {
-    rewtrm = getVariableValue(env, trm);
-    if (!rewtrm)
+    rewtrm = getVariableValue(env, trm, NULL);
+    if (!rewtrm) {
       rewtrm = trm;
+    }
   }
-  else if (PT_isTreeList(trm)) {
+  else if (PT_isTreeApplList(trm)) {
+    PT_Production prod = PT_getTreeProd(trm);
     PT_Args elems = PT_getTreeArgs(trm);
-    PT_Symbol sym = PT_getTreeIter(trm);
+    PT_Symbol sym = PT_getProductionRhs(prod);
     PT_Args newelems = rewriteElemsTraversal(sym, elems, env, depth, traversal);
     rewtrm = PT_setTreeArgs(trm, newelems);
   }
@@ -1487,8 +1707,9 @@ rewriteArgsTraversal(PT_Args args, ATerm env, int depth, Traversal * traversal)
   if (len > 32) {
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) || PT_isTreeVar(arg) ||
-          PT_isTreeList(arg) || PT_isTreeLexical(arg)) {
+      if (PT_isTreeAppl(arg) || 
+          PT_isTreeVar(arg) ||
+          PT_isTreeLexical(arg)) {
         newarg = rewriteTraversal(arg, env, depth + 1, traversal);
       }
       else {
@@ -1503,8 +1724,9 @@ rewriteArgsTraversal(PT_Args args, ATerm env, int depth, Traversal * traversal)
     int i = 0;
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) || PT_isTreeVar(arg) ||
-          PT_isTreeList(arg) || PT_isTreeLexical(arg)) {
+      if (PT_isTreeAppl(arg) || 
+          PT_isTreeVar(arg) ||
+          PT_isTreeLexical(arg)) {
         newarg_table[i] = rewriteTraversal(arg, env, depth + 1, traversal);
       }
       else {
@@ -1531,7 +1753,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
   if (len >= 32) {
     while (PT_hasArgsHead(elems)) {
       elem = PT_getArgsHead(elems);
-      if (PT_isListVar(elem)) {
+      if (PT_isTreeVarList(elem)) {
         Slice tuple = getListVariableValue(env, elem);
         assert(tuple);
         if (isSliceEmpty(tuple)) {
@@ -1554,7 +1776,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
     int i = 0;
     while (PT_hasArgsHead(elems)) {
       elem = PT_getArgsHead(elems);
-      if (PT_isListVar(elem)) {
+      if (PT_isTreeVarList(elem)) {
         newelem_table[i] = (PT_Tree) getListVariableValue(env, elem);
         if (newelem_table[i] == NULL) {
           RWsetError("variable not initialized", (ATerm) elem);
@@ -1579,8 +1801,7 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
         }
       }
       else {
-        if (!(PT_isArgsEmpty(newelems) &&
-              (PT_isTreeSeparator(newelem) || PT_isTreeLayout(newelem)))) {
+        if (!(PT_isArgsEmpty(newelems) && PT_isTreeLayout(newelem))) {
           newelems = PT_makeArgsList(newelem, newelems);
         }
       }
@@ -1589,4 +1810,3 @@ rewriteElemsTraversal(PT_Symbol sym, PT_Args elems, ATerm env, int depth,
 
   return newelems;
 }
-

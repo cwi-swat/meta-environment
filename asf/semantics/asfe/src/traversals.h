@@ -25,7 +25,7 @@
 #ifndef TRAVERSALS_H
 #define TRAVERSALS_H
 #include <aterm2.h>
-#include <PT-utils.h>
+#include <MEPT-utils.h>
 
 extern ATbool traversals_on;
 

@@ -33,8 +33,8 @@
 
 #include <aterm2.h>
 
-#include <PT.h>
-#include <ASF.h>
+#include <MEPT.h>
+#include <ASFME.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
@@ -117,8 +117,8 @@ main(int argc, char *argv[])
   signal(SIGUSR1, abort_handler);
 
   ATinit(argc, argv, &bottomOfStack);
-  PT_initPTApi();
-  ASF_initASFApi();
+  PT_initMEPTApi();
+  ASF_initASFMEApi();
 
   equations_db = ATdictCreate();
   ATprotect(&equations_db);

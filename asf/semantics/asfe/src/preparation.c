@@ -29,8 +29,8 @@
 #include "preparation.h"
 #include "asfix_utils.h"
 
-#include <PT.h>
-#include <ASF-utils.h>
+#include <MEPT.h>
+#include <ASFME-utils.h>
 
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
@@ -152,21 +152,34 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
   lhsargs = PT_getTreeArgs(lhs);
   top_ofs = PT_getTreeProd(lhs);
 
+  if (runVerbose) {
+    ATwarning("enter_equation: top_ofs = %t\n", top_ofs);
+  } 
+
   /* find first appl or var argument of the outermost function symbol */ 
-  while ( PT_hasArgsHead(lhsargs) && 
-         !PT_isTreeAppl(PT_getArgsHead(lhsargs)) && 
-         !PT_isTreeVar(PT_getArgsHead(lhsargs))) {
+  while (PT_hasArgsHead(lhsargs) && 
+         (PT_isTreeLit(PT_getArgsHead(lhsargs)) || 
+          PT_isTreeLayout(PT_getArgsHead(lhsargs)))) {
     lhsargs = PT_getArgsTail(lhsargs);
   }
 
   /* if it is a variable or we have a default equation */
-  if (PT_isArgsEmpty(lhsargs) || 
-      PT_isTreeVar(PT_getArgsHead(lhsargs)) || 
-      ASF_isTagDefault(tag)) {
+  if (PT_isArgsEmpty(lhsargs) || ASF_isTagDefault(tag)) { 
     first_ofs = (PT_Production) NULL;
   }
   else {
-    first_ofs = PT_getTreeProd(PT_getArgsHead(lhsargs));
+    PT_Tree firstArg = PT_getArgsHead(lhsargs);
+    if (PT_isTreeVar(firstArg) ||
+        PT_isTreeList(firstArg)) {
+      first_ofs = (PT_Production) NULL;
+    }
+    else {
+      first_ofs = PT_getTreeProd(firstArg);
+
+      if (runVerbose) {
+        ATwarning("enter_equation: first_ofs = %t\n", first_ofs);
+      } 
+    }
   }
 
   hnr = hash_function(table, top_ofs, first_ofs);
@@ -204,8 +217,9 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
     if (cur) {
-      while (cur->hnext)
+      while (cur->hnext) {
 	cur = cur->hnext;
+      }
       cur->hnext = entry;
     }
     else {
@@ -224,6 +238,9 @@ find_equation(equation_entry * from, PT_Production top_ofs,
 {
   if (runVerbose) {
     ATwarning("looking for equation with ofs: %t\n", top_ofs);
+    if (first_ofs) {
+      ATwarning("and first ofs: %t\n", first_ofs);
+    }
   }
 
   if (equations->size == 0) {
@@ -418,18 +435,22 @@ ASF_CondEquation prepareEquation(ASF_CondEquation equ)
 
 static PT_Tree lexicalToList(PT_Tree lextrm)
 {
-  PT_Symbol sort; 
+  PT_Symbol sort, rhs; 
+  PT_Production lexProd;
   ASF_CHAR newChar; 
   ASF_Tree newname;
   ASF_Tree newTree;
   PT_Tree newPTtree;
-  char emptyLayout[] = "";
-  char cbuf[4] = "\" \"", *lexstr, *sortstr;
+  PT_Args charList;
+  PT_Tree treeChar;
+  char *lexstr, *sortstr;
   ASF_CHARList newCharList = NULL;
   int i, l;
   ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lextrm));
 
-  sort = PT_getTreeSymbol(lextrm);
+  lexProd = PT_getTreeProd(lextrm);
+  rhs = PT_getProductionRhs(lexProd);
+  sort = PT_getSymbolSymbol(rhs);
 
   if (!PT_isSymbolSort(sort)) {
     ATerror("not a sort: %t\n", (ATerm) sort);
@@ -441,13 +462,23 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   }
 
   /* Get the string name that represents the lexical */
-  lexstr = PT_getTreeString(lextrm);
+  lexstr = PT_yieldTree(lextrm);
   l = strlen(lexstr);
   for (i = l-1; i >= 0; i--) {
-    cbuf[1] = lexstr[i];
-    newChar = ASF_makeCHARDefault(cbuf);
+    charList = PT_makeArgsList(
+                 PT_makeTreeChar('\"'),
+                 PT_makeArgsList(
+                   PT_makeTreeChar(lexstr[i]),
+                   PT_makeArgsList(
+                     PT_makeTreeChar('\"'),
+                     PT_makeArgsEmpty())));
+
+    treeChar = PT_makeTreeFlatLexical(charList);
+    newChar = ASF_makeCHARLexToCf((ASF_Lexical)treeChar);
     if (i != l-1) {
-      newCharList = ASF_makeCHARListMany(newChar, emptyLayout, newCharList);
+      newCharList = ASF_makeCHARListMany(newChar, 
+                                         ASF_makeLayoutEmpty(), 
+                                         newCharList);
     }
     else {
       newCharList = ASF_makeCHARListSingle(newChar);
@@ -456,16 +487,16 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
 
   assert(newCharList != NULL);
 
-  newname = PTtoASF(PT_makeTreeUnquotedLiteral(sortstr));
+  newname = PTtoASF(PT_makeTreeLit(sortstr));
 
   newTree = ASF_makeTreeLexicalConstructor(
               sortstr,
-              (ASF_Symbol) sort, 
+              (ASF_Symbol) rhs, 
               newname,
-              emptyLayout,
-              emptyLayout,
+              ASF_makeLayoutEmpty(),
+              ASF_makeLayoutEmpty(),
               newCharList,
-              emptyLayout);
+              ASF_makeLayoutEmpty());
   
   free(sortstr);
 
@@ -487,13 +518,13 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
     result = tree;
   }
+  else if (PT_isTreeLexical(tree)) {
+    result = lexicalToList(tree);
+  }
   else if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
     result = PT_setTreeArgs(tree, newargs);
-  }
-  else if (PT_isTreeLexical(tree)) {
-    result = lexicalToList(tree);
   }
   else {
     result = tree;
@@ -540,7 +571,9 @@ PT_Tree listToLexical(PT_Tree lexappl)
   ASF_CHARList charList;
   PT_Symbol symbol;
   ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lexappl));
-  PT_Tree newTree;
+  PT_Tree newTree, charTree, listChar;
+  PT_Args listChars, newCharList = PT_makeArgsEmpty();
+
   if (!ASF_isTreeLexicalConstructor(tree)) {
     ATerror("listToLexical: not a lexical constructor %t\n", lexappl);
   }
@@ -558,9 +591,11 @@ PT_Tree listToLexical(PT_Tree lexappl)
   i = 0; 
   while(ASF_hasCHARListHead(charList)) {
     ASF_CHAR ch = ASF_getCHARListHead(charList);
-    if (ASF_isCHARDefault(ch)) {
-      char *lexstr = (char*) ASF_getCHARLex(ch);
-      newlexstr[i++] = lexstr[1];
+    if (ASF_isCHARLexToCf(ch)) {
+      charTree = PT_makeTreeFromTerm(ASF_getCHARLex(ch));
+      listChars = PT_getTreeArgs(charTree);
+      listChar = PT_getArgsArgumentAt(listChars,1);
+      newCharList = PT_appendArgs(newCharList, listChar);
     }
     if (ASF_hasCHARListTail(charList)) {  
       charList = ASF_getCHARListTail(charList);
@@ -571,7 +606,7 @@ PT_Tree listToLexical(PT_Tree lexappl)
   }
   newlexstr[i] = '\0';
     
-  newTree = PT_makeTreeLexical(newlexstr, symbol);
+  newTree = PT_makeTreeFlatLexical(newCharList);
  
   if (annos != NULL) {
     newTree = PT_makeTreeFromTerm(

@@ -36,9 +36,9 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(PT_SUPPORT)/lib -lPT \
+                  -L$(PT_SUPPORT)/lib -lmept \
                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS) \
-		  -L$(ASF_SUPPORT)/lib -lASF
+		  -L$(ASF_SUPPORT)/lib -lASFME
 
 prepare-restore.o: ../src/libeval.a
 

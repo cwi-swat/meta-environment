@@ -30,7 +30,7 @@
 #define _MEMOTABLE_H
 
 #include <aterm2.h>
-#include <PT.h>
+#include <MEPT.h>
 
 typedef ATermTable MemoTable;
 

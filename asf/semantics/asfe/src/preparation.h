@@ -23,8 +23,8 @@
 #define PREPARATION_H
 
 #include <aterm2.h>
-#include <PT-utils.h>
-#include <ASF.h>
+#include <MEPT-utils.h>
+#include <ASFME.h>
 
 typedef struct equation_entry
 {
