@@ -1304,7 +1304,7 @@ static void atomic_steps(void)
 	pi_env(current_ProcInst) = at_env(Atom);
 	if(!is_enabled(Atom, current_ProcInst))
 	  continue;
-/* TBmsg("Atom = %t\n", Atom); */
+/* TBmsg("Atom = %t is enabled\n", Atom); */
 	if(simple_atomic_step(Atom)){
 	  nu(Atom, P, current_ProcInst, NULL);
 	  work = TBtrue;
@@ -1330,6 +1330,18 @@ static void atomic_steps(void)
 	      pi_env(current_ProcInst) = undefine(at_args(Atom), pi_env(current_ProcInst));
 	      P = propagate_env(P, pi_env(current_ProcInst));
 	      AP = expand(P, pi_env(current_ProcInst));
+	      /* Now merge the alternatives following endlet with the current
+		 list of alternatives for this process */
+	      if(!is_list(AP))
+		AP = mk_list(AP, NULL);
+	      if(alts == all_alts)
+		pi_alts(current_ProcInst) = all_alts = alts = list_concat(AP, next(alts));
+	      else {
+		term *alts1 = list_concat(AP, next(alts));
+		first(alts) = first(alts1);
+		next(alts) = next(alts1);
+	      }
+ /*
 	      if(is_list(AP)){
 		if(alts == all_alts)
 		  pi_alts(current_ProcInst) = all_alts = alts = list_concat(AP, next(alts));
@@ -1337,6 +1349,10 @@ static void atomic_steps(void)
 		  alts = list_concat(AP, next(alts));
 	      } else
 		  first(alts) = AP;
+*/
+	      /* work = TBtrue; */
+/*TBmsg("endlet done, going to retry, current alts are:\n");	 
+	      print_alts(pi_alts(current_ProcInst));*/
 	      goto retry;
 	  case  a_snd_msg: case  a_rec_msg:
 	    { proc_inst *comm_ProcInst; proc *P2; atom *Atom2;
@@ -1582,9 +1598,13 @@ static TBbool pending_events(void)
     assert(is_list(ev_pair));
     ti1 = first(ev_pair);
     ev1 = first(next(ev_pair));
-    /* TBmsg("pending_events, considering %t\n", ev1); */
-    /* TBmsg("tool_instance = %t\n", ti1); */
     next_phase = TCP_transition(ti1, ev1, TBfalse);
+/*
+    TBmsg("pending_events, considering %t\n", ev1);
+    TBmsg("tool_instance = %t\n", ti1);
+    TBmsg("next_phase = %d\n", next_phase);
+*/
+
     if((next_phase >= 0) && rec_from_tool_step1(ti1, ev1, next_phase)){
       if(verbose)TBmsg("DEQUEU EVENT: %t\n", ev1);
       next(prev) = next(events);

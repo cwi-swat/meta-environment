@@ -1312,10 +1312,13 @@ void err_warn(const char *fmt, ...)
   va_start(ap, fmt);
   err_doit(0, fmt, ap);
   va_end(ap);
+  return;
+/*
   if(ToolBus)
     return;
   else
     TBexit(1);
+*/
 }
 
 /* Fatal error unrelated to a system call.
