@@ -47,7 +47,7 @@ char   *parse_table_name  = NULL;
  *  ToolBus stubs
  */
 
-ATerm parse_string(int conn, ATerm L, char *G, char *S, char *path)
+ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *path)
 {
   ATerm tree = NULL;
   ATerm amb = NULL;

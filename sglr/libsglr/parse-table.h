@@ -105,7 +105,7 @@ ATbool        SG_PreferenceAction(action a);
 #endif
 #endif
 
-parse_table  *SG_AddParseTable(char *prgname, language L, char *FN);
+parse_table  *SG_AddParseTable(const char *prgname, language L, const char *FN);
 void          SG_RemoveParseTable(language L);
 parse_table  *SG_BuildParseTable(ATermAppl t);
 void          SG_DiscardParseTable(parse_table *pt);

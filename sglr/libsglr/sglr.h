@@ -70,17 +70,17 @@ void  SGinitParser(ATbool toolbus_mode);
 void  SG_InitPTGlobals();
 void  SGshowMode(void);
 
-ATerm SGopenLanguage(char *prgname, language L, char *FN);
-ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
+ATerm SGopenLanguage(const char *prgname, language L, const char *FN);
+ATerm SGopenLanguageFromTerm(const char *prgname, language L, ATerm tbl);
 
-ATerm SGparseString(language L, char *G, char *S, char *path);
-ATerm SGparseStringAsAsFix2(language L, char *G, char *S, char *path);
-ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S, char *path);
+ATerm SGparseString(language L, const char *G, const char *S, const char *path);
+ATerm SGparseStringAsAsFix2(language L, const char *G, const char *S, const char *path);
+ATerm SGparseStringAsAsFix2ME(language L, const char *G, const char *S, const char *path);
 
-ATerm SGparseFile(char *prgname, language L, char *G, char *FN);
-ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
-ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
-                            char *in, char *out);
+ATerm SGparseFile(const char *prgname, language L, const char *G, const char *FN);
+ATerm SGtermToFile(const char *prgname, ATerm t, const char *FN);
+ATerm SGparseFileUsingTable(const char *prg, const char *tbl, const char *sort,
+                            const char *in, const char *out);
 
 ATbool SGisParseTree(ATerm t);
 ATbool SGisParseError(ATerm t);
@@ -91,11 +91,11 @@ int   SGnrAmb(int Mode);
 enum  SG_SORTOPS { SG_SET, SG_UNSET, SG_GET };
 char *SGsort(int Mode, forest t);
 
-FILE *SG_OpenFile(char *prgname, char *std_error, char *FN);
+FILE *SG_OpenFile(const char *prgname, const char *std_error, const char *FN);
 void  SG_CloseFile(FILE *fd);
 
 void SG_PrintToken(FILE *out, token c);
-FILE *SG_OpenLog(char *program, char *fnam);
+FILE *SG_OpenLog(const char *program, const char *fnam);
 FILE *SG_log(void);
 void  SGcloseLog(void);
 

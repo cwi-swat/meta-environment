@@ -20,10 +20,10 @@
 
 
 ATerm  SG_TermToToolbus(ATerm t);
-size_t SG_FileSize(char *prg, char *FN);
+size_t SG_FileSize(const char *prg, const char *FN);
 void   SG_PrintToken(FILE *out, token c);
-void   SG_Validate(char *caller);
-char  *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize);
+void   SG_Validate(const char *caller);
+char  *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fsize);
 
 
 /*
@@ -85,7 +85,7 @@ void SGshowMode()
  language |L| from the term |tbl|.
  */
 
-ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
+ATerm SGopenLanguageFromTerm(const char *prgname, language L, ATerm tbl)
 {
   parse_table *pt = NULL;
 
@@ -110,7 +110,7 @@ ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
 }
 
 
-ATerm SGopenLanguage(char *prgname, language L, char *FN)
+ATerm SGopenLanguage(const char *prgname, language L, const char *FN)
 {
   parse_table *pt;
 
@@ -143,7 +143,7 @@ ATerm SGopenLanguage(char *prgname, language L, char *FN)
  This is done by duplicating it.
  */
 
-ATerm SGparseString(language L, char *G, char *S, char *path)
+ATerm SGparseString(language L, const char *G, const char *S, const char *path)
 {
   ATerm t;
   parse_table *pt;
@@ -164,7 +164,7 @@ ATerm SGparseString(language L, char *G, char *S, char *path)
 }
 
 
-ATerm SGparseStringAsAsFix2(language L, char *G, char *S, char *path)
+ATerm SGparseStringAsAsFix2(language L, const char *G, const char *S, const char *path)
 {
   ATerm t;
   
@@ -175,7 +175,7 @@ ATerm SGparseStringAsAsFix2(language L, char *G, char *S, char *path)
   return SG_TermToToolbus(t);
 }
 
-ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S, char *path)
+ATerm SGparseStringAsAsFix2ME(language L, const char *G, const char *S, const char *path)
 {
   ATerm t;
 
@@ -199,7 +199,7 @@ ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S, char *path)
  If either no filename or `-' is specified, standard input is used.
  */
 
-ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
+ATerm SGparseFile(const char *prgname, language L, const char *G, const char *FN)
 {
   forest ret;
   size_t ntok = 0;
@@ -231,7 +231,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
  Opening a file for writing and write a term to it.
  */
 
-ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
+ATerm SGtermToFile(const char *prgname, ATerm t, const char *FN)
 {
   FILE *output_file;
 
@@ -272,8 +272,8 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
  the parse tree to the output file and returns the parse result.
  */
 
-ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
-                            char *infil, char *outfil)
+ATerm SGparseFileUsingTable(const char *prg, const char *ptblfil, const char *sort,
+                            const char *infil, const char *outfil)
 {
   language L = ATmake("<str>", ptblfil);
 
@@ -352,7 +352,7 @@ ATerm SG_TermToToolbus(ATerm t)
 
 FILE  *SG_Log = NULL;
 
-FILE  *SG_OpenLog(char *prg, char *fnam)
+FILE  *SG_OpenLog(const char *prg, const char *fnam)
 {
   if (SG_Log)
     return SG_Log;
@@ -376,7 +376,7 @@ void SG_CloseLog(void)
   if(SG_Log) fclose(SG_Log);
 }
 
-size_t SG_FileSize(char *prg, char *FN)
+size_t SG_FileSize(const char *prg, const char *FN)
 {
   struct stat  statbuf;
 
@@ -427,7 +427,7 @@ void SG_PrintToken(FILE *out, token c)
  file is opened, &c.
  */
 
-void SG_Validate(char *caller)
+void SG_Validate(const char *caller)
 {
   IF_STATISTICS(
     if(!SG_log()) {
@@ -440,7 +440,7 @@ void SG_Validate(char *caller)
 
 /*  The function |SGopenFile| tries to open a named file for reading.  */
 
-FILE *SG_OpenFile(char *prgname, char *std_error, char *FN)
+FILE *SG_OpenFile(const char *prgname, const char *std_error, const char *FN)
 {
   FILE *file;
 
@@ -467,7 +467,7 @@ FILE *SG_OpenFile(char *prgname, char *std_error, char *FN)
 
 #define SG_BUFCHUNK  65536
 
-char *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize)
+char *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fsize)
 {
   FILE   *in;
   char   *buf;

@@ -82,8 +82,8 @@ void    SG_Reducer(stack *st0, state s, label prodl,
                    int attr);
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak);
-tree      SG_ParseResult(char *path, char *sort);
+static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak);
+tree      SG_ParseResult(const char *path, const char *sort);
 
 /*
  Some global vars, used for collecting statistics
@@ -501,7 +501,7 @@ void  SG_ParserCleanup(void)
  message depending on the status.
  */
 
-forest SG_Parse(char *path, parse_table *ptable, char *sort, int(*get_next_token)(void),
+forest SG_Parse(const char *path, parse_table *ptable, const char *sort, int(*get_next_token)(void),
 		size_t length)
 {
   forest result;
@@ -982,10 +982,10 @@ char *SGsort(int Mode, forest t)
   return SG_SAFE_STRING(sort);
 }
 
-static ERR_Location SG_CurrentPosInfo(char *fileName)
+static ERR_Location SG_CurrentPosInfo(const char *fileName)
 {
   ERR_Area area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
-  return ERR_makeLocationLocation(fileName, area);
+  return ERR_makeLocationLocation((char*) fileName, area);
 }
 
 static int SG_CountAmbiguities(ERR_Feedback feedback)
@@ -997,7 +997,7 @@ static int SG_CountAmbiguities(ERR_Feedback feedback)
   return 0;
 }
 
-static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm ambtrak)
+static forest SG_ParseError(const char *path, ATermList cycle, int excess_ambs, ATerm ambtrak)
 {
   ERR_Subject subject;
   ERR_Feedback error;
@@ -1054,11 +1054,11 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
   }
 
   return (forest)ERR_SummaryToTerm(
-                   ERR_makeSummaryFeedback("sglr", path, 
+                   ERR_makeSummaryFeedback("sglr", (char*) path, 
 					   ERR_makeFeedbackListSingle(error)));
 }
 
-static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak)
+static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak)
 {
   ERR_Feedback ambiguities = ERR_FeedbackFromTerm(ambtrak);
   int nrOfAmbs = SG_CountAmbiguities(ambiguities);
@@ -1069,7 +1069,7 @@ static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak)
 
   t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t, 
                          (ATerm) SG_GetATint(nrOfAmbs, 0));
-  ambiguityError = ERR_makeSummaryFeedback("sglr", path, 
+  ambiguityError = ERR_makeSummaryFeedback("sglr", (char*) path, 
                      ERR_makeFeedbackListSingle(ambiguities));
  
   result = (ATerm)ATmakeAppl2(SG_AmbiguousTree_AFun, 
@@ -1090,7 +1090,7 @@ tree SG_ConvertA2ToA2ME(tree t)
   return t;
 }    
 
-tree SG_ParseResult(char *path, char *sort)
+tree SG_ParseResult(const char *path, const char *sort)
 {
   ATermList cycle;
   tree      t;

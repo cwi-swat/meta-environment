@@ -1582,7 +1582,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
 
 
 
-tree SG_SelectOnTopSort(parse_table *pt, tree t, char *sort)
+tree SG_SelectOnTopSort(parse_table *pt, tree t, const char *sort)
 {
   ATermList allambs;
   ATerm amb, prod;

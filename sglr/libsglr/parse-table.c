@@ -1070,7 +1070,7 @@ void SG_DiscardParseTable(parse_table *pt)
  parse table database.
  */
 
-parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
+parse_table *SG_AddParseTable(const char *prgname, language L, const char *FN)
 {
   FILE        *input_file;
   parse_table *pt = NULL;

@@ -44,7 +44,7 @@ ATbool     SG_CycleEncountered(int Mode);
 ATermList  SG_CyclicTerm(parse_table *pt, forest t);
 
 tree       SG_FilterTree(parse_table *pt, tree t);
-tree       SG_SelectOnTopSort(parse_table *pt, tree t, char *sort); 
+tree       SG_SelectOnTopSort(parse_table *pt, tree t, const char *sort); 
 forest     SG_YieldTree(parse_table *pt, tree t);
 tree       SG_Apply(parse_table *, label, ATermList, int attr);
 ATerm      SG_TreeType(ATerm);

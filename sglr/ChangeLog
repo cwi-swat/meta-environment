@@ -1,5 +1,9 @@
 $Id$
 
+2004/02/09 (jurgenv@cwi.nl)
+ * Regenerated sglr.tif.c with new const char * arguments and transitively
+   closed all compiler warnings. No real problems detected!
+
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
  * fix Makefile.am to get "distcheck" working
 
