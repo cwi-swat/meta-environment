@@ -1,0 +1,11 @@
+module Filter
+signature
+"list(cf(iter-star(sort(\"E\"))))"(_);
+"LISTprod([lit(\"filter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"E\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Filter\")]))"(_,_){id(Filter)}
+rules
+default:
+"LISTprod([lit(\"filter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"E\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Filter\")]))"(V_E, "list(cf(iter-star(sort(\"E\"))))"(*V_E042)) =
+"list(cf(iter-star(sort(\"E\"))))"(*V_E042);
+
+"LISTprod([lit(\"filter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"E\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Filter\")]))"(V_E, "list(cf(iter-star(sort(\"E\"))))"(*V_E042049, V_E, *V_E042050)) =
+"LISTprod([lit(\"filter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"E\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Filter\")]))"(V_E, "list(cf(iter-star(sort(\"E\"))))"(*V_E042049, *V_E042050))

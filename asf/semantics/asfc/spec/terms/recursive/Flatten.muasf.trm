@@ -1,0 +1,8 @@
+module Flatten
+signature
+"list(cf(iter-star(sort(\"E\"))))"(_);
+"prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Flatten\")]))"(_){id(Flatten)};
+"prod([cf(sort(\"S\"))],cf(sort(\"E\")),attrs([id(\"Flatten\")]))"(_){id(Flatten)}
+rules
+"prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Flatten\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042049, "prod([cf(sort(\"S\"))],cf(sort(\"E\")),attrs([id(\"Flatten\")]))"("prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Flatten\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042050))), *V_E042051)) =
+"prod([lit(\"[\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"S\")),attrs([id(\"Flatten\")]))"("list(cf(iter-star(sort(\"E\"))))"(*V_E042049, *V_E042050, *V_E042051))
