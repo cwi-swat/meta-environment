@@ -597,16 +597,16 @@ char *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize)
     size_t curbufsize = SG_BUFCHUNK;
     register int    c;
 
-    buf = SG_Malloc(1, SG_BUFCHUNK);
+    buf = SG_Malloc(sizeof(char), SG_BUFCHUNK);
     while((c = getc(in)) != EOF) {
       if(*fsize >= curbufsize) {
         curbufsize += SG_BUFCHUNK;
-        buf = SG_Realloc(buf, curbufsize, sizeof(char));
+        buf = SG_Realloc(buf, sizeof(char), curbufsize);
       }
       buf[*fsize] = c;
       (*fsize)++;
     }
-    buf = SG_Realloc(buf, *fsize, sizeof(char));
+    buf = SG_Realloc(buf, (*fsize)+1, sizeof(char));
   }
   IF_STATISTICS(fprintf(SG_log(), "Read %ld input tokens from \"%s\" in %.6fs\n",
                         (long) *fsize, fnam, SG_Timer()));

@@ -19,6 +19,11 @@
 
 $Id$
 
+2000/11/04 (mdejonge@cwi.nl)
+    * Bug fix: of by one error in SG_ReadFile (sglr-interface,c)
+      which caused sglr to dump core when reading from standard input  is
+      fixed.
+
 2000/10/18 (jurgenv@cwi.nl, markvdb@cwi.nl)
   - Major revision of SGLR!
     * Filtering is moved from shifting/reducing phase to a postprocessing
