@@ -24,7 +24,7 @@ requires
    ptpretty	1.0
    pgen		2.0
    pt-support   1.1
-   graph-support   0.1.1
+   graph-support   0.2
    sdf-support  2.0
    asc-support   1.2
    asf-support   1.2
