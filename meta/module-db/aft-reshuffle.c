@@ -318,11 +318,7 @@ void AFTreshuffleModules(int cid, ATermList mods)
   if(!compiling && ATisEmpty(modules_to_process))
   {
     gen_makefile(top_module);
-    ATfprintf(stderr,"Compilation completed\n");
+    /*ATfprintf(stderr,"Compilation completed\n");*/
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
   }
 } 
-
-
-
-
