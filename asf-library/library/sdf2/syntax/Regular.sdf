@@ -17,7 +17,8 @@ exports
     Symbol "#" Symbol                -> Symbol {right}
     "(" Symbols "=>" Symbol ")"      -> Symbol
     Symbol "|" Symbol                -> Symbol {right}
-    "<<" Symbols ">>"                -> Symbol    
+    "<<" Symbols ">>"                -> Symbol 
+    "(" Symbol "->" Symbol ")"       -> Symbol %% ELAN specific extension.
   context-free priorities
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol
