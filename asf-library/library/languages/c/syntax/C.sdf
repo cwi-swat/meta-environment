@@ -1,3 +1,0 @@
-module languages/c/syntax/C
-imports languages/c/syntax/ReservedKeywords
-imports languages/c/syntax/Program 

@@ -1,6 +1,6 @@
 module languages/c/syntax/CAfterCPP
 
-imports languages/c/syntax/C
+imports languages/c/syntax/ANSI-C
 imports languages/c/syntax/Whitespace
 imports languages/c/syntax/VariableArgumentExpressions
 
