@@ -237,6 +237,8 @@ static ATerm call_unknown(PT_Production prod, ATermList args)
     result = (ATerm) ATmakeAppl1(sym, (ATerm) args);
   }
 
+  free(escaped);
+
   return result;
 }
 

@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/27 ({jong,markvdb}@cwi.nl)
+ * fixed memory-leak in call_unknown
+
 2001/07/17 (jong@cwi.nl)
  * version 1.0 released, bumped to 1.1
 
