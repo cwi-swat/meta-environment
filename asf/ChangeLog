@@ -1,3 +1,7 @@
+2002/07/16 (vandenbr@loria.fr, jurgenv@cwi.nl)
+ * Fixed a bug in the asf interpreter concerning functions that return 
+   lists but are not normalized to lists always.
+
 2002/07/01 (vandenbr@loria.fr)
  * Lexical and ambiguity constructor explicitly added to the
    corresponding productions.
