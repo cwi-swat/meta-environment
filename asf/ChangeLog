@@ -13,6 +13,9 @@ Tue Apr 27 14:42:13 CEST 2004 <jurgenv@cwi.nl>
    - TODO: refactor asc_support_main to have an extra argument.
      This is not doable for release 1.5
 
+Tue May  4 13:25:36 CEST 2004 <markvdb@cwi.nl>
+ * Improved the clickable error messages and fixed bug 295.
+
 Mon May  3 16:28:32 CEST 2004 <markvdb@cwi.nl>
 * All clickable warnings and error messages have become
   clickable.
