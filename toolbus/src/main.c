@@ -158,7 +158,11 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  signal(SIGINT, interrupt_handler);
+  signal(SIGINT,  interrupt_handler);
+  signal(SIGTERM, interrupt_handler);
+  signal(SIGHUP,  interrupt_handler);
+  signal(SIGQUIT, interrupt_handler);
+  /*signal(SIGCHLD, interrupt_handler);*/
 
   srand(fixed_seed ? 0 : time(NULL));
 

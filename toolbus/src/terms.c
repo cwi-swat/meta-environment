@@ -7,7 +7,7 @@
 #define TERMDB(x)
 
 static void mark_terms(void);
-
+static char *resolve(char *, const char *);
 
 /* Simple Garbage Collector */
 
