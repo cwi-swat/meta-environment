@@ -67,6 +67,13 @@ in
   fi
 endlet
 
+process StackIsEmpty(Stack : list, Empty : term?) is
+  if equal(Stack, []) then
+    Empty := true
+  else
+    Empty := false
+  fi
+
 process StackPopTerm(Stack : list, NewStack : list?, Top : term?) is
   Top := first(Stack).
   NewStack := next(Stack)
@@ -141,6 +148,7 @@ let
   TimeStamp : int,
   ErrorMessage : str,
   Mode : term,
+  Empty : term,
   Ext : str
 in
    (
@@ -303,10 +311,15 @@ in
         fi
       +
         rec-msg(run-asf-tests, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        StackPopTerm(Stack,Stack?,STree?) .
-        snd-msg(run-asf-tests(ModuleName)) .
-        ReturnSuccess(EditorId,Stack)
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+          StackPopTerm(Stack,Stack?,STree?) .
+          snd-msg(run-asf-tests(ModuleName)) .
+          ReturnSuccess(EditorId,Stack)
+        fi
       +
         rec-msg(pretty-print, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
@@ -557,38 +570,68 @@ in
         )
       +
 	rec-msg(edit-syntax, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(edit-syntax(ModuleName)) .
-	rec-msg(editor-opened(ModuleName,EditorId2?)) .
-	ReturnSuccess(EditorId, Stack)
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(edit-syntax(ModuleName)) .
+	  rec-msg(editor-opened(ModuleName,EditorId2?)) .
+	  ReturnSuccess(EditorId, Stack)
+	fi   
       +
 	rec-msg(edit-equations, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(edit-equations(ModuleName)) .
-        rec-msg(editor-opened(ModuleName,EditorId2?)) .
-	ReturnSuccess(EditorId, Stack)
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(edit-equations(ModuleName)) .
+          rec-msg(editor-opened(ModuleName,EditorId2?)) .
+	  ReturnSuccess(EditorId, Stack)
+	fi   
       +
 	rec-msg(dump-module, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(save-asfsdf-module(ModuleName)).
-        rec-msg(saved-asfsdf-module(ModuleName)).
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(save-asfsdf-module(ModuleName)).
+          rec-msg(saved-asfsdf-module(ModuleName)).
+	  ReturnSuccess(EditorId, Stack)	
+	fi   
       + 
 	rec-msg(revert-module, Stack?, EditorId?) .
-        StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(revert-module(ModuleName, syntax-editor)) .           
-        rec-msg(module-reverted(ModuleName)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack, Stack?, ModuleName?) .
+          snd-msg(revert-module(ModuleName, syntax-editor)) .           
+          rec-msg(module-reverted(ModuleName)) .
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       + 
 	rec-msg(close-module(Mode?), Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        snd-msg(close-module(ModuleName, Mode)) .           
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+          snd-msg(close-module(ModuleName, Mode)) .           
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       + 
 	rec-msg(delete-module, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        snd-msg(delete-module(ModuleName)) .           
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+          snd-msg(delete-module(ModuleName)) .           
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       + 
 	rec-msg(open-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
@@ -624,10 +667,15 @@ in
       +
 	rec-msg(edit-term, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        snd-msg(edit-term-file(ModuleName, FileName)) .
-        rec-msg(editor-opened(ModuleName, EditorId2?)).
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+          snd-msg(edit-term-file(ModuleName, FileName)) .
+          rec-msg(editor-opened(ModuleName, EditorId2?)).
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       +
 	rec-msg(ask-question(String?), Stack?, EditorId?) .
 	snd-msg(ask-question(String)) .
@@ -648,69 +696,119 @@ in
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(copy-module(ModuleName, NewModuleName, Path)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+       	  StackPopString(Stack, Stack?, ModuleName?) .
+	  snd-msg(copy-module(ModuleName, NewModuleName, Path)) .
+	  ReturnSuccess(EditorId, Stack)	
+	fi
       +
         rec-msg(rename-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(rename-module(ModuleName, NewModuleName, Path)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+       	  StackPopString(Stack, Stack?, ModuleName?) .
+	  snd-msg(rename-module(ModuleName, NewModuleName, Path)) .
+	  ReturnSuccess(EditorId, Stack)	
+	fi
       +
         rec-msg(import-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(import-module(ModuleName, NewModuleName, Path)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+       	  StackPopString(Stack, Stack?, ModuleName?) .
+	  snd-msg(import-module(ModuleName, NewModuleName, Path)) .
+	  ReturnSuccess(EditorId, Stack)	
+	fi
       +
         rec-msg(unimport-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModuleName?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(unimport-module(ModuleName, NewModuleName, Path)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+       	  StackPopString(Stack, Stack?, ModuleName?) .
+	  snd-msg(unimport-module(ModuleName, NewModuleName, Path)) .
+	  ReturnSuccess(EditorId, Stack)	
+	fi
       +
 	rec-msg(compile-module, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(compile-module(ModuleName)) .
-	rec-msg(compilation-ready(ModuleName)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(compile-module(ModuleName)) .
+	  rec-msg(compilation-ready(ModuleName)) .
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       +
 	rec-msg(dump-equations, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(dump-equations(ModuleName)) .
-	rec-msg(equations-dumped) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(dump-equations(ModuleName)) .
+	  rec-msg(equations-dumped) .
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       +
         rec-msg(dump-sdf-definition, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(dump-sdf-definition(ModuleName)) .
-	rec-msg(sdf-definition-dumped) .
-	ReturnSuccess(EditorId, Stack)
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(dump-sdf-definition(ModuleName)) .
+	  rec-msg(sdf-definition-dumped) .
+	  ReturnSuccess(EditorId, Stack)
+        fi
       +
 	rec-msg(dump-parse-table, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(dump-parse-table(ModuleName, trm)) .
-	rec-msg(parse-table-dumped) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(dump-parse-table(ModuleName, trm)) .
+	  rec-msg(parse-table-dumped) .
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       +
 	rec-msg(dump-eqs-parse-table, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(dump-parse-table(ModuleName, eqs)) .
-	rec-msg(parse-table-dumped) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(dump-parse-table(ModuleName, eqs)) .
+	  rec-msg(parse-table-dumped) .
+	  ReturnSuccess(EditorId, Stack)	
+        fi
       +
 	rec-msg(print-module, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(print-module(ModuleName)) .
-	rec-msg(module-printed(ModuleName)) .
-	ReturnSuccess(EditorId, Stack)	
+	StackIsEmpty(Stack, Empty?) .
+	if equal(Empty, true) then
+	  ReturnSuccess(EditorId, Stack)
+        else
+          StackPopString(Stack,Stack?,ModuleName?) .
+	  snd-msg(print-module(ModuleName)) .
+	  rec-msg(module-printed(ModuleName)) .
+	  ReturnSuccess(EditorId, Stack)	
+	fi
       +
         rec-msg(clear-all, Stack?, EditorId?) .
 	CloseAll .
