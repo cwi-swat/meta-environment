@@ -1,4 +1,4 @@
-include ../general-make
+include ../make-rules
 
 EXERCISES	= exercises.ltx pico.ltx
 
