@@ -1,4 +1,4 @@
-package casestudy.rmi;
+//package casestudy.rmi;
 
 import java.rmi.*;
 
