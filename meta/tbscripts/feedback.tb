@@ -38,8 +38,8 @@ in
     FileName := first(args(Location)) .
     snd-msg(edit-general(FileName)) .
     rec-msg(editor-opened(ModuleName?, EditorId?)) .
-    snd-msg(set-cursor-at-error-location(EditorId, Location)) .
-    snd-msg(set-focus-at-error-location(EditorId, Location)) 
+    snd-msg(set-cursor-at-location(EditorId, Location)) .
+    snd-msg(set-focus-at-location(EditorId, Location)) 
   else
     tau
   fi

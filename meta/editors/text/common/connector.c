@@ -33,12 +33,11 @@ struct _TextEditor
   move_to_front_t moveToFront;
   reread_contents_t rereadContents;
   display_message_t displayMessage;
-  set_cursor_at_location_t setCursorAtLocation;
   set_cursor_at_focus_t setCursorAtFocus;
   set_actions_t setActions;
   set_focus_t setFocus;
-  set_cursor_at_error_location_t setCursorAtErrorLocation;
-  set_focus_at_error_location_t setFocusAtErrorLocation;
+  set_cursor_at_location_t setCursorAtLocation;
+  set_focus_at_location_t setFocusAtLocation;
   get_contents getContents;
 };
 
@@ -95,9 +94,6 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionDisplayMessage(action)) {
     editor->displayMessage(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetCursorAtLocation(action)) {
-    editor->setCursorAtLocation(write_to_editor_fd, action);
-  }
   else if (TE_isActionSetCursorAtFocus(action)) {
     editor->setCursorAtFocus(write_to_editor_fd, action);
   }
@@ -107,11 +103,11 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetFocus(action)) {
     editor->setFocus(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetCursorAtErrorLocation(action)) {
-    editor->setCursorAtErrorLocation(write_to_editor_fd, action);
+  else if (TE_isActionSetCursorAtLocation(action)) {
+    editor->setCursorAtLocation(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetFocusAtErrorLocation(action)) {
-    editor->setFocusAtErrorLocation(write_to_editor_fd, action);
+  else if (TE_isActionSetFocusAtLocation(action)) {
+    editor->setFocusAtLocation(write_to_editor_fd, action);
   }
   else if (TE_isActionGetContents(action)) {
     editor->getContents(write_to_hive_fd, action);
@@ -127,12 +123,11 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  move_to_front_t moveToFront,
 			  reread_contents_t rereadContents,
 			  display_message_t displayMessage,
-			  set_cursor_at_location_t setCursorAtLocation,
 			  set_cursor_at_focus_t setCursorAtFocus,
 			  set_actions_t setActions,
 			  set_focus_t setFocus,
-                          set_cursor_at_error_location_t setCursorAtErrorLocation,
-                          set_focus_at_error_location_t setFocusAtErrorLocation,
+			  set_cursor_at_location_t setCursorAtLocation,
+                          set_focus_at_location_t setFocusAtLocation,
 			  get_contents getContents)
 {
   TextEditor textEditorImpl = (TextEditor) calloc(1, sizeof(struct _TextEditor));
@@ -142,12 +137,11 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   assert(moveToFront != NULL);
   assert(rereadContents != NULL);
   assert(displayMessage != NULL);
-  assert(setCursorAtLocation != NULL);
   assert(setCursorAtFocus != NULL);
   assert(setActions != NULL);
   assert(setFocus != NULL);
-  assert(setCursorAtErrorLocation != NULL);
-  assert(setFocusAtErrorLocation != NULL);
+  assert(setCursorAtLocation != NULL);
+  assert(setFocusAtLocation != NULL);
   assert(getContents != NULL);
 
   textEditorImpl->hiveClosed = hiveClosed;
@@ -155,12 +149,11 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   textEditorImpl->moveToFront = moveToFront;
   textEditorImpl->rereadContents = rereadContents;
   textEditorImpl->displayMessage = displayMessage;
-  textEditorImpl->setCursorAtLocation = setCursorAtLocation;
   textEditorImpl->setCursorAtFocus = setCursorAtFocus;
   textEditorImpl->setActions = setActions;
   textEditorImpl->setFocus = setFocus;
-  textEditorImpl->setCursorAtErrorLocation = setCursorAtErrorLocation;
-  textEditorImpl->setFocusAtErrorLocation = setFocusAtErrorLocation;
+  textEditorImpl->setCursorAtLocation = setCursorAtLocation;
+  textEditorImpl->setFocusAtLocation = setFocusAtLocation;
   textEditorImpl->getContents = getContents;
 
   return textEditorImpl;

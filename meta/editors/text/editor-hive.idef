@@ -13,8 +13,7 @@ let
   Focus : term,
   FocusText : str,
   Hive : editor-hive,
-  Location : int,
-  ErrorLocation : term,
+  Location : term,
   MenuEvent : term,
   Message : str,
   MouseEvent : int
@@ -45,17 +44,14 @@ in
     rec-msg(display-message(EditorId?, Message?))
     . snd-do(Hive, display-message(EditorId, Message))
   +
-    rec-msg(set-cursor-at-location(EditorId?, Location?))
-    . snd-do(Hive, set-cursor-at-location(EditorId, Location))
-  +
     rec-msg(set-cursor-at-focus(EditorId?, Focus?))
     . snd-do(Hive, set-cursor-at-focus(EditorId, Focus))
   +
-    rec-msg(set-cursor-at-error-location(EditorId?, ErrorLocation?))
-    . snd-do(Hive, set-cursor-at-error-location(EditorId, ErrorLocation))
+    rec-msg(set-cursor-at-location(EditorId?, Location?))
+    . snd-do(Hive, set-cursor-at-location(EditorId, Location))
   +
-    rec-msg(set-focus-at-error-location(EditorId?, ErrorLocation?))
-    . snd-do(Hive, set-focus-at-error-location(EditorId, ErrorLocation))
+    rec-msg(set-focus-at-location(EditorId?, Location?))
+    . snd-do(Hive, set-focus-at-location(EditorId, Location))
   +
     rec-msg(editor-to-front(EditorId?))
     . snd-do(Hive, editor-to-front(EditorId))

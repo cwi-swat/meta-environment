@@ -114,10 +114,10 @@ in
     ) .
     snd-msg(dirty-focuses(FocusList))
   +
-    rec-msg(get-error-position(Error?)) .
+    rec-msg(get-error-location(Error?)) .
     snd-eval(SE, calc-error-location(Error)) .
-    rec-value(SE, error-position(Location?)) .
-    snd-msg(error-position(Location))
+    rec-value(SE, error-location(PosInfo?)) .
+    snd-msg(error-location(PosInfo))
   +
     rec-msg(delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId)) 

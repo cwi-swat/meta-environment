@@ -276,9 +276,9 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction) */
 
-static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm locationTerm = TE_getActionErrorLocation(edAction);
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
@@ -381,14 +381,6 @@ static void gotoCursorAtLocation(int write_to_editor_fd, int location)
 }
 
 /*}}}  */
-/*{{{  static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction) */
-
-static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction)
-{
-  gotoCursorAtLocation(write_to_editor_fd, TE_getActionLocation(edAction));
-}
-
-/*}}}  */
 /*{{{  static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction) */
 
 static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
@@ -401,9 +393,9 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction) */
 
-static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm locationTerm = TE_getActionFocus(edAction);
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
@@ -460,12 +452,11 @@ int main(int argc, char *argv[])
 			       moveToFront,
 			       rereadContents,
 			       displayMessage,
-			       setCursorAtLocation,
 			       setCursorAtFocus,
 			       setActions,
 			       setFocus,
-			       setCursorAtErrorLocation,
-			       setFocusAtErrorLocation,
+			       setCursorAtLocation,
+			       setFocusAtLocation,
 			       getContents);
 
   hiveToEditor = TE_makePipeDefault(read_from_hive_fd, fileno(stdout));

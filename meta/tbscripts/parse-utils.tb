@@ -84,9 +84,9 @@ endlet
 process PrepareParseErrorForEditor(ModuleName : str, EditorId : term,
 			           Focus : term, ParseError : term) is
 let
-  Pos          : int,
-  FunSym       : str,
-  FileName     : str
+  Location : term,
+  FunSym   : str,
+  FileName : str
 in
   FunSym := fun(ParseError) .
   if equal(FunSym, "no-parse-table") then
@@ -97,9 +97,9 @@ in
     rec-msg(editor-filename(FileName?)) .
     snd-note(remove-feedback-summary("sglr", FileName)) .
     if not-equal(FunSym, "no-errors") then
-      snd-msg(get-error-position(ParseError)) .
-      rec-msg(error-position(Pos?)) .
-      snd-msg(set-cursor-at-location(EditorId, Pos)) .
+      snd-msg(get-error-location(ParseError)) .
+      rec-msg(error-location(Location?)) .
+      snd-msg(set-cursor-at-location(EditorId, Location)) .
       snd-msg(display-message(EditorId, "Parse error near cursor")) .
       snd-note(display-feedback-summary(ParseError)) .
       snd-msg(parse-failed(ModuleName, Focus))

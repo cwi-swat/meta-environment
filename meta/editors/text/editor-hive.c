@@ -236,18 +236,6 @@ void display_message(int c, ATerm editorId, char *message)
 }
 
 /*}}}  */
-/*{{{  void set_cursor_at_location(int c, ATerm editorId, int location) */
-
-void set_cursor_at_location(int c, ATerm editorId, int location)
-{
-  TE_Process process = getEditorProcess(editorId);
-
-  if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetCursorAtLocation(location));
-  }
-}
-
-/*}}}  */
 /*{{{  void set_cursor_at_focus(int c, ATerm editorId, ATerm focus) */
 
 void set_cursor_at_focus(int c, ATerm editorId, ATerm focus)
@@ -260,26 +248,26 @@ void set_cursor_at_focus(int c, ATerm editorId, ATerm focus)
 }
 
 /*}}}  */
-/*{{{  void set_cursor_at_error_location(int c, ATerm editorId, ATerm location) */
+/*{{{  void set_cursor_at_location(int c, ATerm editorId, ATerm location) */
 
-void set_cursor_at_error_location(int c, ATerm editorId, ATerm location)
+void set_cursor_at_location(int c, ATerm editorId, ATerm location)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetCursorAtErrorLocation(location));
+    sendToEditor(process, TE_makeActionSetCursorAtLocation(location));
   }
 }
 
 /*}}}  */
-/*{{{  void set_focus_at_error_location(int c, ATerm editorId, ATerm location) */
+/*{{{  void set_focus_at_location(int c, ATerm editorId, ATerm location) */
 
-void set_focus_at_error_location(int c, ATerm editorId, ATerm location)
+void set_focus_at_location(int c, ATerm editorId, ATerm location)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetFocusAtErrorLocation(location));
+    sendToEditor(process, TE_makeActionSetFocusAtLocation(location));
   }
 }
 

@@ -449,10 +449,9 @@ ATerm calc_error_location(int cid, ATerm error)
   ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
   ERR_Subject subject = ERR_getSubjectListHead(subjects);
   ERR_Location location = ERR_getSubjectLocation(subject);
-  ERR_Area area = ERR_getLocationArea(location);
-  int errorPos = ERR_getAreaOffset(area);
 
-  return ATmake("snd-value(error-position(<int>))", errorPos);
+  return ATmake("snd-value(error-location(<term>))", 
+                ERR_LocationToTerm(location));
 }
 
 /*}}}  */
