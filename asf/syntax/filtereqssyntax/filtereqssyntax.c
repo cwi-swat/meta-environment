@@ -18,11 +18,9 @@
 static ASF_Layout space;
 
 #define DEPTH_UNDEFINED -1
-/*}}}  */
+#define CHECK_AMB(tree)  if (PT_isTreeAmb((PT_Tree) (tree))) return (tree)
 
-/* temporary !!!!!!!!!!!!!!!!! */
-#define PT_isProductionInjection(p) ATtrue
-#define ASF_getConditionListLength(c) 0
+/*}}}  */
 
 /*{{{  static int countTreeInjections(PT_Tree tree) */
 
@@ -79,7 +77,6 @@ static int getInjectionDepth(PT_Tree eqOrCond)
 
 static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
 {
-
   if (PT_isTreeAmb(eqOrCond)) {
     PT_Args ambs = PT_getTreeArgs(eqOrCond);
     int count = PT_getArgsLength(ambs);
@@ -156,10 +153,12 @@ static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
 static ASF_Conditions filterConditions(ASF_Conditions conds)
 {
   ASF_ConditionList condlist = ASF_getConditionsList(conds);
-  int count = ASF_getConditionListLength(condeqslist);
+  int count = ASF_getConditionListLength(condlist);
   ASF_Condition* buffer = NULL;
   ASF_ConditionList new;
   int i;
+
+  CHECK_AMB(conds);
 
   buffer = (ASF_Condition*) calloc(count, sizeof(ASF_Condition));
 
@@ -206,6 +205,8 @@ static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
 {
   ASF_Equation eq;
 
+  CHECK_AMB(condeq);
+
   eq = ASF_getCondEquationEquation(condeq);
   eq = (ASF_Equation) filterEquationOrCondition((PT_Tree) eq);
   condeq = ASF_setCondEquationEquation(condeq, eq);
@@ -229,6 +230,8 @@ filterCondEquationList(ASF_CondEquationList condeqslist)
   ASF_CondEquation* buffer = NULL;
   ASF_CondEquationList new;
   int i;
+
+  CHECK_AMB(condeqslist);
 
   if (ASF_isCondEquationListEmpty(condeqslist)) {
     return condeqslist;
@@ -277,6 +280,8 @@ filterCondEquationList(ASF_CondEquationList condeqslist)
 
 static ASF_Equations filterEquations(ASF_Equations equations)
 {
+  CHECK_AMB(equations);
+
   if (ASF_isEquationsPresent(equations)) {
     ASF_CondEquationList condeqslist = ASF_getEquationsList(equations);
 
@@ -299,13 +304,11 @@ ASF_Equations filterEquationSyntax(ASF_Equations equations)
   space = (ASF_Layout) PT_makeTreeLayoutFromString(" ");
   ATprotect((ATerm*) &space);
 
-ATwarning("before: %t\n", PT_reportTreeAmbiguities((PT_Tree) equations));
-
-  equations = filterEquations(equations);
+  if (ASF_isValidEquations(equations)) {
+    equations = filterEquations(equations);
+  }
 
   ATunprotect(&space);
-
-ATwarning("after: %t\n", PT_reportTreeAmbiguities((PT_Tree) equations));
 
   return equations;
 }
