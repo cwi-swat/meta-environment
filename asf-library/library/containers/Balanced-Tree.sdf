@@ -1,4 +1,4 @@
-module Balanced-Tree[Elt]
+module containers/Balanced-Tree[Elt]
 
 imports basic/Integers
 	basic/Booleans
