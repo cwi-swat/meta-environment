@@ -38,17 +38,15 @@ call_toolbus () {
 touch Empty.sdf.baf Pico-Booleans.sdf.baf
 
 # Try to create a new equations section.
-rm -f Empty.asf
+rm -f ${builddir}/Empty.asf
 call_toolbus new-eqs-test.tb
-rm -f Empty.asf
+rm -f ${builddir}//Empty.asf
 
 ## Test whether ambiguities for asfix1 are corrected
 call_toolbus ambi-test.tb
 
 # Test for updating of unchanged modules
 call_toolbus update-test-module.tb
-
-
 
 echo ""
 
