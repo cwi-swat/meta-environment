@@ -36,7 +36,7 @@ in
 	  snd-msg(open-initial-module(Path, ModuleName, ".sdf"))
         +
           rec-msg(io-file-not-written(ErrMsg?)) .
-	  snd-note(ui-status(errorf("%s", [ErrMsg])))
+	  snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))
         )
       )
     )
@@ -66,13 +66,19 @@ in
         (
           rec-msg(io-file-written) .
 	  snd-msg(io-read-file(FileName)) .
-	  rec-msg(io-file-contents(Text?)) .
-          snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
-          rec-msg(eqs-added) .
-          snd-msg(new-equations-created)
+	  (
+	    rec-msg(io-file-contents(Text?)) .
+            snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+            rec-msg(eqs-added) .
+            snd-msg(new-equations-created)
+          +
+	    rec-msg(io-error-reading(ErrMsg?)) .
+	    snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
+            snd-msg(new-equations-not-created)
+          )
         +
           rec-msg(io-file-not-written(ErrMsg?)) . 
-	  snd-note(ui-status(errorf("%s", ErrMsg))) .
+	  snd-note(ui-status(errorf("%s: %s", [FileName,ErrMsg]))) .
           snd-msg(new-equations-not-created)
         )
       )
