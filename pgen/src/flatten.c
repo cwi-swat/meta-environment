@@ -304,8 +304,8 @@ ATerm SDFflattenCharacter(ATerm chr)
     nchr = AFTgetNumChar(chr);
     if(ATmatchTerm(nchr,pattern_asfix_lex, &str, &sort)) {
       return (ATerm)ATmakeInt(make_integer(str));
-    }
-  }
+    } 
+  } 
   return NULL;
 }
 

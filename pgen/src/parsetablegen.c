@@ -32,11 +32,8 @@ static char *name;
 
 ATbool run_verbose;
 
-static char *ptchars;
-static int ptsize = 0;
-
 static char myname[] = "parsetablegen";
-static char myversion[] = "1.5";
+static char myversion[] = "2.1";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -44,7 +41,7 @@ static char myversion[] = "1.5";
     explanation.
  */
 
-static char myarguments[] = "bhi:o:tsvV";
+static char myarguments[] = "bchi:o:tvV";
 
 /*}}}  */
 /*{{{  external functions */
@@ -104,7 +101,7 @@ ATerm add_name_norm_function(char *str, ATerm term)
   ATerm term_open, term_comma, term_close, term_ws;
 
   name = ATmake("<str>",str);
-  if(ATmatchTerm(term, pattern_asfix_term,
+  if (ATmatchTerm(term, pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                  &appl, &t[6], &t[7])) {
 
@@ -117,7 +114,7 @@ ATerm add_name_norm_function(char *str, ATerm term)
     nameterm = make_name_term(name);
 
     result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"normalize\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
+                        ATparse("prod(id(\"Sdf2-Normalization\"),w(\"\"),[ql(\"normalize\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
                         term_ws,
                         ATmakeList(11,t_name, term_ws,
                                       term_open, term_ws,
@@ -142,26 +139,29 @@ ATerm add_name_norm_function(char *str, ATerm term)
 
 ATerm add_norm_function(ATerm term)
 {
-  ATerm t_name;
+  ATerm t_name, q_t_name;
   ATerm t_mod_name;
   ATerm prod, appl;
   ATerm abbrevs;
-  ATerm term_open, term_close, term_ws;
+  ATerm term_open, q_term_open, term_close, q_term_close, term_ws;
   ATerm lit[2],w[4],id,arg;
 
   if(ATmatchTerm(term,pattern_asfix_term,
                  &lit[0],&w[0],&lit[1],&w[1],&id,&w[2],&arg,&w[3],NULL)) {
-    t_mod_name = ATparse("id(\"Sdf2-Parse-Table\")");
+    t_mod_name = ATparse("id(\"Sdf2-Normalization\")");
     t_name = ATparse("l(\"normalize\")");
+    q_t_name = ATparse("ql(\"normalize\")");
     abbrevs = ATparse("abbreviations([])");
     term_open = ATparse("l(\"(\")");
+    q_term_open = ATparse("ql(\"(\")");
     term_close = ATparse("l(\")\")");
+    q_term_close = ATparse("ql(\")\")");
     term_ws = ATparse("w(\"\")");     
 
     prod = AFmakeProd(t_mod_name,
-                      ATmakeList(7,t_name,term_ws,term_open,term_ws,
+                      ATmakeList(7,q_t_name,term_ws,q_term_open,term_ws,
                                  ATparse("sort(\"SDF\")"),
-                                 term_ws,term_close),
+                                 term_ws,q_term_close),
                       ATparse("sort(\"Grammar\")"),
                       ATparse("no-attrs"));
     appl = AFmakeAppl(prod,
@@ -178,53 +178,6 @@ ATerm add_norm_function(ATerm term)
     return NULL; /* Silence the compiler */
   }                             
 }
-/*}}}  */
-/*{{{  ATerm add_parsetable_function(ATerm term) */
-
-ATerm add_parsetable_function(ATerm term)
-{
-  ATerm t_name;
-  ATerm t_mod_name;
-  ATerm prod, appl;
-  ATerm abbrevs;
-  ATerm term_open, term_close, term_ws;
-  ATerm lit[2],w[4],id,arg;
-
-  if(ATmatchTerm(term,pattern_asfix_term,
-                 &lit[0],&w[0],&lit[1],&w[1],&id,&w[2],&arg,&w[3],NULL)) {
-    t_mod_name = ATparse("id(\"Sdf2-Parse-Table\")");
-    t_name = ATparse("l(\"parse-table\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    term_close = ATparse("l(\")\")");
-    term_ws = ATparse("w(\"\")");
-
-    prod = AFmakeProd(t_mod_name,
-                      ATmakeList(7,t_name,term_ws,term_open,term_ws,
-                                 ATparse("sort(\"SDF\")"),
-                                 term_ws,term_close),
-                      ATparse("sort(\"ATerm\")"),
-                      ATparse("no-attrs"));
-    appl = AFmakeAppl(prod,
-                      ATmakeList(7,t_name,term_ws,term_open,term_ws,
-                                 arg,
-                                 term_ws,term_close));
-    appl = AFmakeAppl(prod,
-                      ATmakeList(7,t_name,term_ws,term_open,term_ws,
-                                 arg,
-                                 term_ws,term_close));
-    return ATmake("term(<term>,<term>,<term>,<term>,<term>,<term>," \
-                  "<term>,<term>,<term>)",
-                   ATparse("l(\"term\")"),
-                   term_ws,lit[1],term_ws,id,term_ws,
-                   appl,term_ws,abbrevs);
-  }
-  else {
-    ATerror("Illegal term %t\n", term);
-    return NULL; /* Silence the compiler */
-  }
-}
-
 /*}}}  */
 /*{{{  ATerm normalize_and_generate_table(ATerm sdf2) */
 
@@ -254,65 +207,18 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 }
 
 /*}}}  */
-/*{{{  ATerm generate_parsetable(ATerm sdf2) */
-
-ATerm generate_parsetable(ATerm sdf2term)
-{
-  ATerm ptable = NULL, filename, modname, term, reduct, aptable;
-  int ptneeded;
-
-  if(ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
-                 &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
-    reduct = innermost(term);
-    aptable = toasfix(reduct, filename, modname);
-
-    ptneeded = AFsourceSize(aptable);
-    if(ptneeded > ptsize) {
-      if(ptchars)
-        free(ptchars);
-      if(!(ptchars =  (char *)malloc(ptneeded)))
-        ATerror("Generate parse table: Not enough memory\n");
-      ptsize = ptneeded;
-    }
-    ptchars[0] = '\0';
-    AFsource(aptable, ptchars);
-    
-    ptable = ATreadFromString(ptchars);
-  }
-  else {
-    ATwarning("not an asfix term: %t\n", sdf2term);
-  }
-
-  return ptable;
-}
-
-/*}}}  */
 /*{{{  ATerm generate_table(int cid, ATerm sdf, char *name, char *ext) */
 
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
-  FILE *file;
-  char full[1024];
   ATerm pt, expsdf, normsdf, packed;
 
   expsdf = AFexpandTerm(sdf);  
+
   normsdf = add_name_norm_function(name, expsdf);   
 
   pt = normalize_and_generate_table(normsdf);
  
-  if(pt) {
-    strcpy(full, name);
-    strcat(full, ".");
-    strcat(full, ext);
-    file = fopen(full, "w");
-    if (!file)
-      ATerror("asource: Could not open %s\n", full);
-
-    ATwriteToBinaryFile(pt,file);
-
-    fclose(file);
-  }
-
   packed = ATBpack(pt);
   packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
   return ATmake("snd-value(generation-finished(<term>))", packed);
@@ -327,36 +233,8 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 
 void usage(void)
 {
-    static char *myargumentsexplained = NULL;
-
-    /*  Represent the argument string in a slightly friendlier manner  */
-    if(!myargumentsexplained && *myarguments) {
-        int  i, hyphen = 0;
-        char *ptr0, *ptr1;
-
-        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
-            if(*ptr0 == ':')
-                i++;
-        ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 8*i + 2);
-        for(ptr0 = myarguments; *ptr0; ptr0++)
-            if(!*(ptr0+1) || *(ptr0+1) != ':') {
-                if(!hyphen++) {
-                    *ptr1++ = ' ';
-                    *ptr1++ = '-';
-                }
-                *ptr1++ = *ptr0;            } else {
-                hyphen = 0;
-                if(*(ptr1-1) != ' ')
-                    *ptr1++ = ' ';
-                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
-            }
-        *ptr1++ = '\0';
-    }
-
     ATwarning(
-        "Usage: %s%s . . .\n"
+        "Usage: %s [options]\n"
         "Options:\n"
         "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
@@ -364,9 +242,8 @@ void usage(void)
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
-        "\t-s              slow mode (use compiled ASF+SDF)\n"
         "\t-V              reveal program version (i.e. %s)\n",
-        myname, myargumentsexplained, myversion);
+        myname, myversion);
 }
 
 /*}}}  */
@@ -385,11 +262,10 @@ int main(int argc, char *argv[])
   FILE *iofile;
 
   int cid;
-  ATerm bottomOfStack, term, pt, expterm, normterm, ptterm;
+  ATerm bottomOfStack, term, pt, expterm, normterm;
   char *input = "-";
   char *output = "-";
   int bafmode = 1;
-  int slowmode = 0;
   int proceed = 1;
   
   extern char *optarg;
@@ -432,8 +308,8 @@ int main(int argc, char *argv[])
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
         case 'o':  output=optarg;                          break;
-        case 's':  slowmode = 1;                           break;
         case 'V':  version(); proceed = 0;                 break;
+	case 'c':  ATsetChecking(ATtrue);		   break;
 
         case 'h':
         default:   usage(); proceed = 0;                   break;
@@ -451,18 +327,12 @@ int main(int argc, char *argv[])
       term = ATreadFromFile(iofile);
       expterm = AFexpandTerm(term);  
   
-      if(slowmode) {
-        if(run_verbose) ATwarning("Parse table generation in slow mode\n");
-
-        ptterm = add_parsetable_function(expterm);
-        pt = generate_parsetable(ptterm);
+      if (run_verbose) {
+        ATwarning("Parse table generation in fast mode\n");
       }
-      else {
-        if(run_verbose) ATwarning("Parse table generation in fast mode\n");
 
-        normterm = add_norm_function(expterm);   
-        pt = normalize_and_generate_table(normterm);
-      }
+      normterm = add_norm_function(expterm);   
+      pt = normalize_and_generate_table(normterm);
 
       if (!strcmp(output, "") || !strcmp(output, "-"))
         iofile = stdout;
