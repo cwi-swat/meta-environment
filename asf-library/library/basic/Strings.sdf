@@ -17,9 +17,7 @@ exports
     "\\n" | "\\t" |  "\\\"" | "\\\\"        -> Escaped
     "\\" [0-7][0-7][0-7]		    -> Escaped
 
-    "\"" Contents ("\\\n" Contents)* "\"" -> StrCon
-
-    (Normal | Escaped)* -> Contents
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon
 
 exports
   context-free syntax
