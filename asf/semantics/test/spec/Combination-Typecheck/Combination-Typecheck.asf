@@ -1,6 +1,6 @@
 equations
 
-[] typecheck(Program,[]) = <Program2,Tenv>
+[] <Program2,Tenv> := typecheck(Program,[])
    ====>
    do-typecheck(Program) = Program2
 
