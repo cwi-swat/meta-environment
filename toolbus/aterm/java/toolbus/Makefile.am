@@ -22,13 +22,15 @@ noinst_SCRIPTS	= ${TESTCLASSES} ${EXAMPLECLASSES}
 
 bin_SCRIPTS	= tifstojava
 
+CLASSPATH_ENV	= CLASSPATH=${top_srcdir}/aterm/java:${ATERM}/classes
+
 ${EXAMPLECLASSES}: example.tifs JavaTif.class
-	CLASSPATH=${top_srcdir}/aterm/java:${CLASSPATH} \
+	$(CLASSPATH_ENV) \
 	${top_srcdir}/aterm/java/toolbus/tifstojava \
 	-tifs example.tifs -tool example -package toolbus
 
 ${TESTCLASSES}: test.tifs JavaTif.class
-	CLASSPATH=${top_srcdir}/aterm/java:${CLASSPATH} \
+	$(CLASSPATH_ENV) \
 	${top_srcdir}/aterm/java/toolbus/tifstojava \
 	-tifs test.tifs -tool testing -package toolbus
 
