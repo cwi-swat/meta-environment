@@ -1,4 +1,5 @@
 \section{Repositories}
+\label{repos}
 
 There are several repositories in the current prototype of the
 \metaenv.  The new \metaenv\ provides facilities to store (abstract)
@@ -8,6 +9,68 @@ repository to store the equations which are used to rewrite terms.
 All repositories were first specified in \asdf\ but for efficiency
 reasons implemented in C.
 
+\subsection{Tree Representation}
+\label{treerepr}
+
+In the current version of the \metaenv\ the abstract syntax trees are
+represented by means of VTP (Virtual Tree Processing formalism)
+offered by \centaur.  There are two problems connected to VTP: it is
+hard to learn programming in VTP and VTP does not offer enough
+facilities to prevent illegal access to constructed trees. This latter
+drawback causes a number of the maintenance problems in the \metaenv.
+
+These ``VTP-problems'' led to the development of an alternative
+formalism to represent syntax trees: \asfix.  This \asfix\ formalism
+is an instantiation of a generic {\em annotated term} format:
+\aterms~\cite{BKOV97}.  
+
+\aterms\ will be used to represent structured information to be
+exchanged between a heterogeneous collection of tools.  The \aterms\
+format should be independent of any specific tool, but it should be
+capable of representing {\em all} data that is exchanged between
+tools.  Consider the following example \aterms:
+\begin{tabbing}
+annotation\ \ \ \ \= f(123)\{\=xxxx\kill
+constant\>abc\\
+numeral\>123\\
+literal\>"abc" "123"\\
+list\>[] [1, "abc", 3] [1, 2, [3,4], 5]\\
+functions\>f("abc")\\
+annotation\>f(123)\{color("red"),path([0,2,1])\}
+\end{tabbing}
+The data format used in the \TB\ is also based on \aterms.
+So all functions for processing, constructing, and accessing \aterms\
+can be used on the \TB\ level as well.
+
+These functions are formally specified in \asdf~\cite{BKOV97} and
+this formal specification is used to make a library of C functions
+to manipulate terms.
+The redundancy in the \aterms\ format is solved by a powerful sharing
+mechanism provided by the function in the C implementation
+of the \aterms\ library.
+
+\subsubsection{\asfix}
+
+These \aterms\ are sufficient to encode parse trees (including
+optional annotations) for programs or specifications in any language.
+\asfix\ is an instance of \aterms\ used for representing the {\em
+parse trees} of \asdf\ specifications.  Parse trees mean that all
+keywords, whitespace, comments, etc.\ are preserved in the tree
+representation.  A self descriptive representation is used, i.e., each
+application of a syntax rule contains a copy of that rule (in the
+implementation these are all shared).
+
+%%\subsection{Implementation}
+%%
+%%One of the strong points of \aterms\ are the powerful access functions
+%%to retrieve information from the terms and the construction functions
+%%to build terms. 
+%%
+%%These functions are formally specified in \asdf~\cite{BKOV97} and
+%%this formal specification is used to make a library of C functions
+%%to manipulate terms.
+
+\subsection{Implementation}
 The ``tree-repository'' contains the \asfix\ representation of all
 modules of a specification under construction and of all terms being
 edited or rewritten.  The tree-repository provides facilities to add a
@@ -39,5 +102,18 @@ interpreter itself.
 
 \subsection{Discussion}
 
-The tree-repository should provided a sophisticated querying mechanism
-as described in \cite{BKV96b}.
+The current implementation of the import-repository and
+the equations-repository are based on a lazy mechanism.
+Only when the import relation or equations of some module are needed
+this information is derived and stored to be used later on.
+If the contents of the tree repository is changed this leads to clearing
+both the import-repository and equations-repository.
+There is thus no smart incremental updating algorithm implemented yet.
+
+The information stored in the tree-repository could be extended with
+all kind of extra information such as size of the file,
+creation date, etc.
+Furthermore, the tree-repository should provided a sophisticated
+querying mechanism as described in \cite{BKV96b}.
+Such a mechanism can be used to locate definitions of sorts, lexical
+and context-free syntax rules.

@@ -54,7 +54,7 @@
 
 \date{}
 
-%%\setlength{\textwidth}{13cm}
+\setlength{\textwidth}{13.7cm}
 %%\setlength{\textheight}{19cm}
 %%\setlength{\oddsidemargin}{0cm}
 %%\setlength{\topmargin}{0cm}
@@ -138,19 +138,30 @@ is no longer present.                                   \\ \hline \hline
 
 Based on the experiences gained with the Epoch-\gse-UI coupling it was
 decided to design and implement the new \metaenv\ from scratch.  The
-problems concerning \lelisp\ makes a ``from scratch'' approach even
+fact that the version of \lelisp\ on which the \metaenv\ is based
+may become obsolete makes a ``from scratch'' approach even
 more pressing.  In this paper we discuss the first prototype of the
 new \metaenv\ based on the \TB.  This prototype has a very restricted
 functionality but offers an extendible infrastructure to experiment
 with various designs.
 
+In the rest of this paper the various components of the
+new \metaenv\ are presented.
+In Section \ref{garch} the architecture of the new \metaenv\ is discussed.
+Section \ref{repos} describes various repository to store information
+on \asdf\ modules, furthermore the tree representation format
+is briefly discussed.
+The \ui\ is discussed in Section \ref{userin}.
+The structure editor is discussed in Section \ref{edit}. 
+The interpreter is described in Section \ref{interpreter}.
+
 \input{toolbus.ltx}
 
-\input{treerepr.ltx}
-
-\input{ui.ltx}
+%%\input{treerepr.ltx}
 
 \input{repos.ltx}
+
+\input{ui.ltx}
 
 \input{editors.ltx}
 
@@ -158,13 +169,26 @@ with various designs.
 
 \section{Conclusions}
 
-There is a huge bulk of future work to be done.  The \metaenv\ should
+In this paper the first prototype of the new \metaenv\ is discussed.
+This version of the prototype should be considered as a test case
+to see whether for instance the \TB\ is suited as backbone for
+the new \metaenv.
+One of the lessons we learned from the implementation of the
+old \metaenv\ is that it is essentail to have a flexible and
+extendable implementation.
+The \metaenv\ is first of all a research tool, which means that
+it should be able to test all kind of new ideas.
+
+Although all sections conclude with a short discussion in which 
+also the future work is described there are some general future
+work left. The \metaenv\ should
 provided facilities to compile specifications in order to generate
 stand-alone environments.  Finally, the new \metaenv\ should provide
-sophisticated help facilities and demonstration modes based on
-internet facilities.
+sophisticated help facilities and demonstration modes with WWW support.
 
+\begin{small}
 \bibliographystyle{alpha}
 \bibliography{metabib}
+\end{small}
 
 \end{document}
