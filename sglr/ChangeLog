@@ -1,5 +1,11 @@
 $Id$
 
+Fri Oct 22 11:42:47 CEST 2004 <jong@cwi.nl>
+ * sglr/libsglr/parse-table.c:
+   - fix SG_addParseTableErrorError did not deal with a NULL path.
+     This happens when it is invoked by the Meta Environment, as
+     opposed to commandline.
+
 Sat Aug 21 16:46:32 CEST 2004 <markvdb@cwi.nl>
  * Fixed a bug in the reporting of non existing start states.
  * Regenerated the test.

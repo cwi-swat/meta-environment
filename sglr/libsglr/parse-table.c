@@ -417,9 +417,14 @@ ATbool SG_IsParseTableErrorListEmpty()
 void SG_addParseTableErrorError(const char *path, const char *contentDescription)
 {
   if (ERR_isErrorListEmpty(ptErrorList)) {
-    ERR_Location posinfo = ERR_makeLocationFile(path);
-    ERR_Subject subject = ERR_makeSubjectLocalized(contentDescription, 
-  						   posinfo);
+    ERR_Subject subject;
+    if (path != NULL) {
+      ERR_Location posinfo = ERR_makeLocationFile(path);
+      subject = ERR_makeSubjectLocalized(contentDescription, posinfo);
+    }
+    else {
+      subject = ERR_makeSubjectSubject(contentDescription);
+    }
     ERR_Error error = ERR_makeErrorError("Parse Table error",
 	     		                 ERR_makeSubjectListSingle(subject));
     ptErrorList = ERR_makeErrorListMany(error, ptErrorList);
