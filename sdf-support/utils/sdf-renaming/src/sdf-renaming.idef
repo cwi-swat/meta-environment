@@ -1,6 +1,8 @@
 
 tool sdf-renaming is { command = "sdf-renaming" }
 
+toolbus(SdfRenaming)
+
 process SdfRenaming is
 let
  SR : sdf-renaming,
