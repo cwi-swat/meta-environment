@@ -35,6 +35,8 @@ void   SG_PropagateUnreject(stack *st);
 char  *SG_ProdSort(production t);
 
 
+void SG_PrintStatusBar(char *subject, long part, long whole);
+
 #ifdef DEBUG
 void   SG_ShowStackOffspring(stack *);
 void   SG_ShowStackAncestors(stack *);

@@ -54,7 +54,6 @@
 
 #define program_name "sglr"
 
-int     outputflag        = ATtrue;
 int     binaryflag        = ATtrue;
 int     filterflag        = ATtrue;
 int     cycleflag         = ATtrue;
@@ -145,7 +144,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
 #if !defined(HAVE_BOEHMGC)
   "g"
 #endif
-  "hlnPtvV] [-i file] [-o file] \\"
+  "hlPtvV] [-i file] [-o file] \\"
   "\n\t\t[-s sort] [-S file]\n";
 
   ATfprintf(stream, usage, program_name);
@@ -166,7 +165,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-h, -?   : display usage information\n"
               "\t-i file  : input from |file|                    [%s]\n"
               "\t-l       : toggle statistics logging            [%s]\n"
-              "\t-n       : toggle tree output                   [%s]\n"
               "\t-o file  : output to |file|                     [%s]\n"
               "\t-p file  : use parse table |file| (required)    [%s]\n"
               "\t-P       : toggle position information          [%s]\n"
@@ -177,25 +175,24 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-V       : reveal program version (i.e. %s)\n",
 #if !defined(NO_A2TOA1)
               DEFAULTMODE(asfix1flag), 
-							DEFAULTMODE(!asfix1flag),
+              DEFAULTMODE(!asfix1flag),
 #endif
               DEFAULTMODE(binaryflag), 
-							DEFAULTMODE(cycleflag),
+              DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
               DEFAULTMODE(filterflag),
 #if !defined(HAVE_BOEHMGC)
               DEFAULTMODE(gcflag),
 #endif
               input_file_name, 
-							DEFAULTMODE(statisticsflag),
-              DEFAULTMODE(outputflag), 
-							output_file_name,
+              DEFAULTMODE(statisticsflag),
+              output_file_name,
               parse_table_name?parse_table_name:"unspecified",
               DEFAULTMODE(posinfoflag),
               start_symbol ? start_symbol:"any", 
-							stackoutput ? stackoutput : "off",
+              stackoutput ? stackoutput : "off",
               DEFAULTMODE(!binaryflag),
-							DEFAULTMODE(verboseflag),
+              DEFAULTMODE(verboseflag),
               VERSION
     );
   }
@@ -226,7 +223,6 @@ struct option longopts[] =
   {"help",          no_argument,       NULL,               'h'},
   {"input",         required_argument, NULL,               'i'},
   {"log",           no_argument,       NULL,               'l'},
-  {"no-output",     no_argument,       &outputflag,        ATfalse},
   {"output",        required_argument, NULL,               'o'},
   {"parse-table",   required_argument, NULL,               'p'},
   {"position-info", no_argument,       &posinfoflag,       'P'},
@@ -280,7 +276,6 @@ void handle_options (int argc, char **argv)
       case 'h':   show_help        = ATtrue;              break;
       case 'i':   input_file_name  = optarg;              break;
       case 'l':   statisticsflag   = !statisticsflag;     break;
-      case 'n':   outputflag       = !outputflag;         break;
       case 'o':   output_file_name = optarg;              break;
       case 'p':   parse_table_name = optarg;              break;
       case 'P':   posinfoflag      = !posinfoflag;        break;
@@ -312,7 +307,6 @@ ATbool set_global_options(void)
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();
   if(stackoutput)    SG_SHOWSTACK_ON();
-  if(outputflag)     SG_OUTPUT_ON();
 #ifndef NO_A2TOA1
   if(asfix1flag)     SG_ASFIX1_ON();
 #endif
@@ -422,16 +416,11 @@ int SG_Batch (int argc, char **argv)
     int  nrambs;
     char *sort;
 
-    nrambs = SG_OUTPUT  ?
-    SGnrAmb(SG_NR_ASK)
-                                  : SG_MaxNrAmb(SG_NR_ASK);
+    nrambs = SGnrAmb(SG_NR_ASK);
     sort   = SGsort(SG_GET, NULL);
-    ATwarning("%s: %s parsed %s as sort %s, %s %d ambiguit%s\n",
+    ATwarning("%s: %s parsed %s as sort %s, with %d ambiguit%s\n",
               program_name, parse_table_name, input_file_name,
               sort ? sort : "[undetermined]",
-              SG_OUTPUT||!SG_MaxNrAmb(SG_NR_ASK) ?
-              "exactly"
-                                                            : "at most",
               nrambs, (nrambs==1)?"y":"ies");
   );
 

@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,6 +45,8 @@ typedef   ATermTable      multiset;
 #define SG_IS_MARKED(t)     IS_MARKED(t->header)
 #define SG_MARK(t)          SET_MARK(t->header)
 #define SG_UNMARK(t)        CLR_MARK(t->header)
+#define SG_PROD_TO_NR(l)    (l-257)
+#define SG_NR_TO_PROD(l)    (ATmakeInt(ATgetInt((ATermInt)l)+257))
 
 enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_GET,
                      SG_AMBTBL_ADD_INDEX, SG_AMBTBL_ADD_CLUSTER,
@@ -67,8 +70,9 @@ enum       SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET };
 ATbool     SG_CycleEncountered(int Mode);
 ATermList  SG_CyclicTerm(parse_table *pt, forest t);
 
-forest     SG_YieldForest(parse_table *pt, forest t,
-                          ATbool recurse, ATbool doambs);
+tree       SG_FilterTree(parse_table *pt, tree t);
+tree       SG_SelectOnTopSort(parse_table *pt, tree t, char *sort); 
+forest     SG_YieldTree(parse_table *pt, tree t);
 ATerm      SG_AmbTracker(forest t);
 tree       SG_Apply(parse_table *, label, ATermList, int attr, ATerm pi);
 ATerm      SG_TreeType(ATerm);

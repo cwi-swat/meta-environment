@@ -138,7 +138,7 @@ extern int  _SG_Mode;
 
 enum SGmodeFlags {
   SG_TOOLBUSFLAG, SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG,
-  SG_SHOWSTATFLAG, SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
+  SG_SHOWSTATFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
   SG_SHOWSTACKFLAG, SG_FILTERFLAG,
   SG_STARTSYMBOLFLAG, SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
 };
@@ -160,10 +160,6 @@ enum SGmodeFlags {
 #define SG_SHOWSTAT          (_SG_Mode  &  SG_BIT(SG_SHOWSTATFLAG))
 #define SG_SHOWSTAT_ON()     (_SG_Mode |=  SG_BIT(SG_SHOWSTATFLAG))
 #define SG_SHOWSTAT_OFF()    (_SG_Mode &= ~SG_BIT(SG_SHOWSTATFLAG))
-
-#define SG_OUTPUT            (_SG_Mode  &  SG_BIT(SG_OUTPUTFLAG))
-#define SG_OUTPUT_ON()       (_SG_Mode |=  SG_BIT(SG_OUTPUTFLAG))
-#define SG_OUTPUT_OFF()      (_SG_Mode &= ~SG_BIT(SG_OUTPUTFLAG))
 
 #define SG_ASFIX1            (_SG_Mode  &  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_ON()       (_SG_Mode |=  SG_BIT(SG_ASFIX1FLAG))
@@ -204,8 +200,6 @@ enum SGmodeFlags {
 
 
 #define SG_STATISTICS        (SG_SHOWSTAT || SG_DEBUG)
-#define SG_NEED_OUTPUT       (SG_OUTPUT)
-#define SG_NEED_TOP          (SG_NEED_OUTPUT || SG_STARTSYMBOL)
 
 #define IF_VERBOSE(s)        if(SG_VERBOSE) {s;}
 #define IF_DEBUG(s)          if(SG_DEBUG) {s;}

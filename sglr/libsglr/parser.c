@@ -31,6 +31,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include <assert.h>
 
 #include <aterm2.h>
 
@@ -103,7 +104,6 @@ void    SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 #endif
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-forest    SG_Prune(forest t, char *sort);
 ATermList SG_CurrentPosInfo(void);
 forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
 forest    SG_ParseResult(char *sort);
@@ -219,12 +219,14 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
   st_link   *l1 = NULL;
   ATermList newsons = NULL;
 
-  if (!st)
+  if (!st) {
     return paths;
+  }
 
   if (i == 0 && link_seen) {
     paths = SG_NewPath(st, sons, paths);
-  } else if (i > 0) {
+  }
+  else if (i > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
       l1 = SG_HEAD(ls);
       newsons = ATinsert(sons?sons:ATempty, (ATerm) SG_LK_TREE(l1));
@@ -339,8 +341,8 @@ void SG_PostParse(void)
 
   if(SG_SHOWSTACK) {
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), sg_tokens_read);
-		SG_StacksToDotFileFinalize(SG_StackDot());
-	}
+    SG_StacksToDotFileFinalize(SG_StackDot());
+  }
 }
 
 void  SG_ParserCleanup(void)
@@ -399,7 +401,7 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
   do {
     if(SG_SHOWSTACK) {
       SG_StacksToDotFile(active_stacks, sg_tokens_read);
-		}
+    }
 
     current_token = SG_NextToken(get_next_token);
 
@@ -409,23 +411,25 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
              fprintf(SG_log(), "\n");
              )
 
+/*
     IF_VERBOSE(
-	       if (isatty(fileno(stderr)))
-	         fprintf(stderr, "\rParsing  %6d", sg_tokens_read);
-	      )
+         if (isatty(fileno(stderr)))
+           fprintf(stderr, "\rParsing  %6d", sg_tokens_read);
+        )
+*/
 
     SG_ParseToken();
 
     IF_VERBOSE(
-	       if (isatty(fileno(stderr)))
-	         fprintf(stderr, "\rShifting %6d", sg_tokens_read);
-	      )
+         if (isatty(fileno(stderr)))
+           fprintf(stderr, "\rShifting %6d", sg_tokens_read);
+        )
 
     SG_Shifter();
 
-		if(SG_SHOWSTACK) {
+    if(SG_SHOWSTACK) {
       SG_StacksToDotFileFinalize(SG_StackDot());
-		}
+    }
 
   } while (current_token != SG_EOF_Token && active_stacks);
 
@@ -468,7 +472,7 @@ void SG_ParseToken(void)
       SG_Actor(st);
 
     if(SG_SHOWSTACK)
-			 SG_LinksToDot(SG_StackDot(), st); 
+       SG_LinksToDot(SG_StackDot(), st); 
 
     if(!actives && !for_actor) {
       for_actor         = for_actor_delayed;
@@ -616,64 +620,6 @@ void SG_DoReductions(stack *st, action a)
   SG_ClearPath(fps);
 }
 
-static ATbool SG_AmbClusterContainsProd(label prodl, tree t)
-{
-	ATermList ambs;
-	tree amb; 
-
-	ambs =  (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
-
-	for(; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-		amb = (tree) ATgetFirst(ambs);
-		
-		if(prodl == SG_GetApplProdLabel(amb)) {
-			return ATtrue;
-		}
-	}
-
-	return ATfalse;
-}
-
-static ATbool SG_CheckValidAssociativity(parse_table *pt, label prodl, ATermList kids)
-{
-	/* the rightmost child cluster of a left associative prod should
-	 * never be the same left associative prod, so we check for this
-	 *
-	 * Note that this can only happen in an amb cluster due to the filtering
-	 * algorithm because otherwise it would have been an error in the parsetable.
-	 *
-	 */
-	
-	if(SG_IsLeftAssociative(table, prodl)) {
-	  tree lastkid = (tree) ATgetLast(kids);
-
-		if(SG_AmbClusterContainsProd(prodl, lastkid)) {
-			/* illegal tree in ambcluster lastkid */
-			IF_DEBUG(fprintf(SG_log(),"Illegal tree for left associative node %d detected\n", 
-											 prodl));
-			return ATfalse;
-		}	
-	}
-
-	/* And vice versa for right associative prods */
-
-	if(SG_IsRightAssociative(table, prodl)) {
-	  tree firstkid = (tree) ATgetFirst(kids);
-
-		if(SG_AmbClusterContainsProd(prodl, firstkid)) {
-			/* removed all possibilities for this cluster */
-			IF_DEBUG(fprintf(SG_log(),"Illegal tree for right associative node %d detected\n", 
-											 prodl));
-			return ATfalse;
-		}	
-	}
-
-	/* if we are safe, or if not all possibilities of a
-	 * false ambcluster can be removed, we return true.
-	 */
-	return ATtrue;
-}
-
 /*
  For each path in |p|, |SG_Reducer| construct the parse tree with the
  list of descendants found and create a new stack.
@@ -711,11 +657,6 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
   IF_STATISTICS(num_reductions++);
 
-	/* if associativity not respected by children kill stack */
-	if(!SG_CheckValidAssociativity(table, prodl, kids)) {
-		return;
-	}
-
   t = SG_Apply(table, prodl, kids, attribute,
                SG_POSINFO ? (ATerm) SG_CurrentPosInfo() : NULL);
 
@@ -752,15 +693,14 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   }
 
   /*  A stack with state s already exists.  Ambiguity?  */
-  if((nl = SG_FindDirectLink(st1, st0))) {
+  if ((nl = SG_FindDirectLink(st1, st0))) {
     IF_DEBUG(
-      fprintf(SG_log(), "Ambiguity(%s): direct link %d -> %d%s\n",
-              SG_ProdSort(SG_LookupProduction(table, prodl)),
+      fprintf(SG_log(), "Ambiguity: direct link %d -> %d%s\n",
               SG_GETSTATE(SG_ST_STATE(st0)),
               SG_GETSTATE(SG_ST_STATE(st1)),
               (attribute == SG_PT_REJECT)?" {reject}":"")
     );
-    if(attribute == SG_PT_REJECT) {
+    if (attribute == SG_PT_REJECT) {
       /*  Reject?  */
       SG_MarkLinkRejected(nl);
     } else {
@@ -878,7 +818,7 @@ void SG_Shifter(void)
       l = SG_AddLink(st1, st0, (tree) t);
 
       if(SG_SHOWSTACK) 
-				 SG_LinksToDot(SG_StackDot(), st1); 
+      	 SG_LinksToDot(SG_StackDot(), st1); 
 
     } else IF_DEBUG(
       fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
@@ -943,9 +883,6 @@ char *SG_ApplSort(tree t)
 {
   production prod;
 
-  if(!SG_NEED_TOP)
-    return "[unavailable]";
-
   if(ATmatch((ATerm) t, "appl(<term>,<list>)", &prod, NULL)) {
     return SG_ProdSort(prod);
   }
@@ -954,48 +891,6 @@ char *SG_ApplSort(tree t)
     return("[multiple sorts]");
 
   return "[unknown sort]";
-}
-
-forest SG_Prune(forest a_forest, char *desiredsort)
-{
-  /*  Prune the forest  */
-  ATermList trees, bonsai = ATempty;
-  tree      t;
-  char      *sort;
-  ATbool    AmbStart = ATfalse;
-
-  /*  Is the top node ambiguous?  If so, all trees in it must be done  */
-  if(ATisEqual(ATgetAFun((ATermAppl) a_forest), SG_Amb_AFun)) {
-    AmbStart = ATtrue;
-    trees = (ATermList) ATgetFirst(ATgetArguments(a_forest));
-  } else {
-    trees = ATmakeList1((ATerm) a_forest);
-  }
-
-  for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
-    t = (tree) ATgetFirst(trees);
-    sort = SG_ApplSort(t);
-    if(sort) {
-      if(!strcmp(desiredsort, sort)) {
-        bonsai = ATinsert(bonsai, (ATerm) t);
-      }
-    }
-  }
-  if(!ATisEmpty(bonsai)) {
-    if(AmbStart) {
-      if(ATgetLength(bonsai) > 1) {
-        return (forest) ATmakeAppl1(SG_Amb_AFun, (ATerm) bonsai);
-      } else {
-        SGnrAmb(SG_NR_DEC);
-        return (forest) ATgetFirst(bonsai);
-      }
-    } else {
-      return (forest) ATgetFirst(bonsai);
-    }
-  } else {    /*  Nothing left  */
-    SGnrAmb(SG_NR_ZERO);
-    return (forest) NULL;
-  }
 }
 
 char *SGsort(int Mode, forest t)
@@ -1051,103 +946,136 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
                               (ATerm) errcode);
 }
 
-forest SG_ParseResult(char *sort)
+tree SG_ConvertA2ToA1(tree t)
 {
+  int nr_ambs = SGnrAmb(SG_NR_ASK);
 
-  if(!accepting_stack)
+  if(nr_ambs > 0) {
+    IF_DEBUG(
+      ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
+                " in AsFix1\n",
+                nr_ambs, nr_ambs>1?"ies":"y")
+    );
+
+    return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(t));
+  }
+
+  IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
+
+  IF_STATISTICS(SG_Timer());
+  t = (tree) a2toa1((ATerm) t, ATfalse);
+  IF_STATISTICS(fprintf(SG_log(),
+                        "AsFix1 conversion took %.4fs\n", SG_Timer()));
+  return t;
+}
+
+tree SG_ParseResult(char *sort)
+{
+  ATermList cycle;
+  tree      t;
+
+  if(!accepting_stack) {
     return SG_ParseError(ATempty, 0, NULL);
+  } 
+  else {
+    /* During parsing no filtering is performed.
+     * So, before printing the tree (forest) cycle detection,
+     * and filtering is performed. 
+     */
+    
+    t = (tree) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-  {
-    ATermList cycle;
-    forest    woods;
-
-    /*  Expand at least the top node to get the top sort  */
-    woods = SG_YieldForest(table,
-                           (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
-                           ATfalse, ATtrue);
-
-    /*  Select only the desired start symbols when so requested  */
-    if(sort) {
+    if (sort) {
       IF_STATISTICS(SG_Timer());
-      woods = SG_Prune(woods, sort);
+      t = SG_SelectOnTopSort(table, t, sort);
       IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.4fs\n",
                             SG_Timer()));
-      if(!woods) {
+      if (!t) {
         /*  Flag this error at start, not end, of file  */
         SG_ResetCoordinates();
         return SG_ParseError(ATempty, 0, NULL);
       }
     }
 
-    /*  Now detect, and report, cycles for the (pruned?) forest  */
-    if(SG_CYCLE && SG_NEED_OUTPUT) {
+    /*  Now detect, and report, cycles in the tree */
+    if (SG_CYCLE) {
       IF_STATISTICS(SG_Timer());
-      cycle = SG_CyclicTerm(table, woods);
+      cycle = SG_CyclicTerm(table, t);
       IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
-      if(!ATisEmpty(cycle)) {
+      if (!ATisEmpty(cycle)) {
         return SG_ParseError(cycle, 0, NULL);
       }
     }
 
-    SGsort(SG_SET, woods);
+    /* Now filtering starts, if SG_FILTER is false, it only
+     * converts amb clusters to amb nodes
+     */
 
-    /*  A full yield provides the output term and an exact ambiguity count  */
-    if(SG_NEED_OUTPUT) {
-      IF_STATISTICS(SG_Timer());
-      woods = SG_YieldForest(table, woods, ATtrue, ATtrue);
-      IF_STATISTICS(fprintf(SG_log(),
-                            "Aprod expansion took %.4fs\n", SG_Timer()));
-    }
+    IF_STATISTICS(SG_Timer());
+    t = SG_FilterTree(table, t);
+    IF_STATISTICS(fprintf(SG_log(), "Filtering took %.4fs\n", SG_Timer()));
 
-    if(!woods) {
-      ATwarning("Successful parse yielded no parse tree\n");
-      return SG_ParseError(ATempty, 0, NULL);
-    }
+    /* Finally, the parse tree (in AsFix format) is produced, if desired. */
+    SGnrAmb(SG_NR_ZERO);
+    IF_STATISTICS(SG_Timer());
+    t = SG_YieldTree(table, t);
+    IF_STATISTICS(fprintf(SG_log(),
+                          "Aprod expansion took %.4fs\n", SG_Timer()));
 
-#ifndef NO_A2TOA1
+    SGsort(SG_SET, t);     
+
     /*  Convert the forest in-line to AsFix1 upon request  */
-    if(SG_OUTPUT && SG_ASFIX1) {
-      int nr_ambs = SGnrAmb(SG_NR_ASK);
+    if(SG_ASFIX1) {
+      return SG_ConvertA2ToA1(t);
+    }
 
-      if(nr_ambs > 0) {
-        IF_DEBUG(
-          ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
-                    " in AsFix1\n",
-                    nr_ambs, nr_ambs>1?"ies":"y")
-        );
-        return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(woods));
+
+    /*
+        If you'd want return ambiguity tracks instead of ambiguous
+        AsFix2, that could be taken care of here...
+     */
+    if(SG_TOOLBUS) {
+      ATerm ambtrak = SG_AmbTracker(t);
+
+      if(ambtrak) {
+        return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
       }
-      IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
-      IF_STATISTICS(SG_Timer());
-      woods = (forest) a2toa1((ATerm) woods, ATfalse);
-      IF_STATISTICS(fprintf(SG_log(),
-                            "AsFix1 conversion took %.4fs\n", SG_Timer()));
-      return woods;
     }
-#endif
 
+    t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
+                           (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
 
-  /*
-      If you'd want return ambiguity tracks instead of ambiguous
-      AsFix2, that could be taken care of here...
-   */
-  if(SG_TOOLBUS) {
-    ATerm ambtrak = SG_AmbTracker(woods);
-
-    if(ambtrak) {
-      return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
-    }
-  }
-
-    woods = (forest) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) woods,
-                                 (ATerm) SG_GetATint(
-                                                     (SG_NEED_OUTPUT ?
-                                                      SGnrAmb(SG_NR_ASK) :
-                                                      SG_MaxNrAmb(SG_NR_ASK)), 0));
-    return woods;
+    return t;
   }
 }
 
+/* a function to print a running status bar on a tty */
+void SG_PrintStatusBar(char *subject, long part, long whole)
+{
+  static char bar[]  = "========================================";
+  long double factor;
+
+  if(whole == 0.0) {
+    return;
+  }
+
+  factor = (long double) part / (long double) whole;
+
+  if(!isatty(fileno(stderr))) {
+    return;
+  }
+
+  fprintf(stderr,"\r%s: [%-40.*s] %ld/%ld (%3d%%)",
+                 subject,
+                 (int) ((double) 40 * factor),
+                 bar,
+                 part,
+                 whole,
+                 (int) (factor * 100)
+         );
+
+  return;
+}
 
 #ifdef DEBUG
 /*  A few diagnostic routines (for debugging purposes)  */

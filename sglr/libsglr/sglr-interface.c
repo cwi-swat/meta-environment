@@ -73,7 +73,6 @@ void  SGinitParser(ATbool toolbus_mode)
   if(toolbus_mode) {
     SG_TOOLBUS_ON();
   }
-  SG_OUTPUT_ON();
   SG_FILTER_ON();
   SG_BINARY_ON();
   SG_CYCLE_ON();
@@ -89,7 +88,6 @@ void SGshowMode()
   ATfprintf(stderr, "VERBOSE:     %s\n", SG_VERBOSE?"y":"n");
   ATfprintf(stderr, "DEBUG:       %s\n", SG_DEBUG?"y":"n");
   ATfprintf(stderr, "SHOWSTAT:    %s\n", SG_SHOWSTAT?"y":"n");
-  ATfprintf(stderr, "OUTPUT:      %s\n", SG_OUTPUT?"y":"n");
   ATfprintf(stderr, "ASFIX1:      %s\n", SG_ASFIX1?"y":"n");
   ATfprintf(stderr, "BINARY:      %s\n", SG_BINARY?"y":"n");
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
@@ -348,24 +346,27 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
     return NULL;
   }
 
-  if (SG_OUTPUT && strcmp(FN, "/dev/null")) {
-    if (!strcmp(FN, "") || !strcmp(FN, "-"))
-      output_file = stdout;
-    else if (!(output_file = fopen(FN, "w"))) {
-      ATerror("%s: cannot create %s\n", prgname, FN);
-    } IF_VERBOSE(ATwarning("%s: writing %s to %s\n", prgname,
-                           SG_ERROR?"error output":"parse result", FN));
-    if(SG_BINARY) {
-      ATwriteToBinaryFile(t, output_file);
-    } else {
-      ATwriteToTextFile(t, output_file);
-      putc('\n', output_file);                /*  For convenience; sosumi!  */
-    }
+  if (!strcmp(FN, "") || !strcmp(FN, "-")) {
+    output_file = stdout;
+  }
+  else if (!(output_file = fopen(FN, "w"))) {
+    ATerror("%s: cannot create %s\n", prgname, FN);
+  }
+  IF_VERBOSE(ATwarning("%s: writing %s to %s\n", prgname,
+                       SG_ERROR?"error output":"parse result", FN));
+  if(SG_BINARY) {
+    ATwriteToBinaryFile(t, output_file);
+  }
+  else {
+    ATwriteToTextFile(t, output_file);
+    putc('\n', output_file);                /*  For convenience; sosumi!  */
+  }
 
-    if(output_file != stdout)
-      fclose(output_file);
-    else
-      fflush(output_file);                    /*  Avoid mixing stdout/stderr  */
+  if(output_file != stdout) {
+    fclose(output_file);
+  }
+  else {
+    fflush(output_file);                    /*  Avoid mixing stdout/stderr  */
   }
   return t;
 }
