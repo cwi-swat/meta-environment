@@ -115,9 +115,9 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     this.processInstance = processInstance;
     env = processInstance.getEnv();
     setFollow(follow);
-    //System.out.println(this.getClass().getName() + ": compiling");
+    //System.err.println(this.getClass().getName() + ": compiling");
     for (int i = 0; i < atomArgs.length; i++) {
-      //System.out.println("atomArg[" + i + "] = " + atomArgs[i]);
+      //System.err.println("atomArg[" + i + "] = " + atomArgs[i]);
       ATerm arg = TBTerm.compileVars(atomArgs[i].value, env);
       atomArgs[i].value = arg;
     }
@@ -128,7 +128,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
       return true;
     else {
       boolean res = TBTerm.isTrue(TBTerm.eval(test, getProcess()));
-      //System.out.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
+      //System.err.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
       return res;
     }
   }

@@ -45,12 +45,12 @@ public class ProcessInstance {
     toolinstance = definition.createToolInstance();
 
     if(ToolBus.isVerbose()) {
-      System.out.println(processId + ": " + call);
-      System.out.println(processId + ": atoms: =" + elements);
-      System.out.println(processId + ": prefix = " + currentState);
+      System.err.println(processId + ": " + call);
+      System.err.println(processId + ": atoms: =" + elements);
+      System.err.println(processId + ": prefix = " + currentState);
       for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
         Atom a = (Atom) it.next();
-        System.out.println(processId + ": " + a + " --> " + a.getFollow());
+        System.err.println(processId + ": " + a + " --> " + a.getFollow());
       }
     }
   }
@@ -93,13 +93,6 @@ public class ProcessInstance {
     return currentState.contains(a);
   }
 
-  //  public void nestState(StateElement a) {
-  //    if (!currentState.contains(a))
-  //      System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + currentState);
-  //    currentState = currentState.nextState(a);
-  //    //System.out.println("proc " + processId + ": follow(" + a + ") -> " + prefix);
-  //  }
-
   public State getCurrentState() {
     return currentState;
   }
@@ -108,7 +101,7 @@ public class ProcessInstance {
   }
 
   public boolean step() throws ToolBusException {
-    //System.out.println(this);
+    //System.err.println(this);
     return currentState.execute();
   }
 

@@ -17,7 +17,7 @@ public class LetDefinition implements ProcessExpression {
   public LetDefinition(ATermList formals, ProcessExpression PE) {
     this.formals = formals;
     this.PE = PE;
-    //System.out.println("LetDefinition: " + PE);
+    //System.err.println("LetDefinition: " + PE);
   }
 
   public ProcessExpression copy() {

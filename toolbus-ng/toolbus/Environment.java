@@ -22,7 +22,7 @@ public class Environment {
   // compile time methods
 
   public void add(ATermList vars) throws ToolBusException {
-    //System.out.println("Environment.add(" + vars + "), maxVar = " + maxVar + " declVec = " + declVec);
+    //System.err.println("Environment.add(" + vars + "), maxVar = " + maxVar + " declVec = " + declVec);
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
       if (TBTerm.isVar(var)) {
@@ -32,11 +32,11 @@ public class Environment {
         throw new ToolBusInternalError("env.add illegal var: " + var);
       }
     }
-    //System.out.println(declVec + ", maxVar = " + maxVar);
+    //System.err.println(declVec + ", maxVar = " + maxVar);
   }
 
   public void add(ATermList vars, ATermList actuals) throws ToolBusException {
-    //System.out.println("Environment.add(" + vars + ", " + actuals + "), maxVar = " + maxVar + " declVec = " + declVec);
+    //System.err.println("Environment.add(" + vars + ", " + actuals + "), maxVar = " + maxVar + " declVec = " + declVec);
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
       if (TBTerm.isVar(var)) {
@@ -47,7 +47,7 @@ public class Environment {
         if (!TBTerm.isResVar(actual)) {
           throw new ToolBusInternalError("env.add illegal actual: " + actual);
         }
-        //System.out.println("actual = " + actual);
+        //System.err.println("actual = " + actual);
         if (TBTerm.getVarType(var) != TBTerm.getVarType(actual)) {
           throw new ToolBusException("incompatible types for " + var + " and " + actual);
         }
@@ -111,7 +111,7 @@ public class Environment {
   public ATerm getVar(ATerm var) throws ToolBusException {
 
     ATerm val = (ATerm) declVec.elementAt(TBTerm.getVarIndex(var));
-    //System.out.println("getVar(" + var + "): " + val);
+    //System.err.println("getVar(" + var + "): " + val);
     if (val == null)
       throw new ToolBusException(var + " has undefined value");
     return val;
