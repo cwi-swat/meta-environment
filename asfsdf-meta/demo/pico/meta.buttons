@@ -15,7 +15,7 @@ buttons([
                      execute-action("Pico-eval -t"),
                      push-filename("reduct.out"),
                      push-string("Pico-eval"),
-                     edit-given-filename],
+                     activate-editor],
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
@@ -28,7 +28,7 @@ buttons([
            execute-action("Pico-typecheck -t"),
            push-filename("reduct.out"),
            push-string("Pico-typecheck"),
-           edit-given-filename]),
+           activate-editor]),
 
    button("Pico-syntax",
           "term",
@@ -46,7 +46,7 @@ buttons([
                      reduce,
                      push-filename("reduct.out"),
                      push-string("Pico-eval"),
-                     edit-given-filename],
+                     activate-editor],
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
@@ -59,7 +59,7 @@ buttons([
            reduce,
            push-filename("reduct.out"),
            push-string("Pico-typecheck"),
-           edit-given-filename]),
+           activate-editor]),
 
    button("Pico-syntax",
           "term",
