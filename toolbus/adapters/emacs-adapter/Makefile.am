@@ -21,7 +21,7 @@ bin_PROGRAMS          = emacs-adapter
 
 bin_SCRIPTS           = start-emacs
 
-data_DATA             = tb.el
+pkgdata_DATA             = tb.el
 
 EXTRA_DIST            = start-emacs.src tb.el
 
@@ -33,5 +33,5 @@ emacs_adapter_LDADD   = -L$(TOOLBUSLIB)/lib -ltb
 INCLUDES              = -I $(TOOLBUSLIB)/include
 
 start-emacs : start-emacs.src Makefile
-	sed 's#__DATADIR__#$(datadir)#g' < $< > $@
+	sed 's#__DATADIR__#$(pkgdatadir)#g' < $< > $@
 
