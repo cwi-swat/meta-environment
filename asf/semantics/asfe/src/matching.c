@@ -423,9 +423,10 @@ static ATerm matchArgument(ATerm env,
 {
   ATerm newenv = fail_env;
 
-  if (depth > MAX_DEPTH) {
+  if (depth > MAX_DEPTH / 2) {
     char tmp[256];
-    sprintf(tmp, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
+    sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
+	    MAX_DEPTH / 2);
     RWsetError(tmp, PT_makeTreeLit(""));
     return fail_env;
   }

@@ -24,23 +24,6 @@ in
     execute(asfe, Eval?) .
     snd-eval(Eval, interpret(ModuleName, Equations, Term, Tide)) .
     (
-      rec-event(Eval, event(EventName?,EventTree?,EventString?)).
-      if equal(EventName,tb-snd-note) then
-        snd-note(EventTree)
-      else
-        if equal(EventName,tb-snd-msg) then
-          snd-msg(EventTree)
-        else
-          if equal(EventName,tb-rec-msg) then
-            rec-msg(EventTree)
-          else
-            printf("unhandled event: %t\n", EventName)
-          fi
-        fi
-      fi.
-      snd-ack-event(Eval,event(EventName,EventTree,EventString))
-    ) *
-    (
       rec-value(Eval, rewrite-result(NormalForm?)) .
       snd-msg(rewrite-result(NormalForm))
     +
