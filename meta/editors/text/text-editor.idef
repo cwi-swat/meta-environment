@@ -127,16 +127,18 @@ in
     snd-terminate(TE, "You have been zapped!")
   ) .
   (
-    rec-msg(set-focus(EditorId, Focus?))
-  +
-    rec-msg(clear-focus(EditorId))
-  +
-    rec-msg(get-focus-text(EditorId, Focus?)) .
-    snd-msg(focus-text(EditorId, ""))
-  +
-    rec-msg(move-editor-to-front(EditorId))
-  +
-    rec-msg(display-error(EditorId, StartPos?))
-  ) * delta
+    (
+      rec-msg(set-focus(EditorId, Focus?))
+    +
+      rec-msg(clear-focus(EditorId))
+    +
+      rec-msg(get-focus-text(EditorId, Focus?)) .
+      snd-msg(focus-text(EditorId, ""))
+    +
+      rec-msg(move-editor-to-front(EditorId))
+    +
+      rec-msg(display-error(EditorId, StartPos?))
+    ) * delta
+  )
 )
 endlet
