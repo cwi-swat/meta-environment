@@ -275,14 +275,17 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
     return ATtrue;
   }
 
-  
-
-
   switch (ATgetType(t)) {
     case AT_APPL:
       /*  Ambiguity cluster?  */
-      cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
-      ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
+      if (SG_InputAmbiMapIsSet(*pos) > 0) {
+        cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
+        ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
+      }
+      else {
+        cluster_idx = NULL;
+        ambs = ATempty;
+      }
 
       if (inAmbs ||  ATisEmpty(ambs)) {
         /*  No ambiguity  */
@@ -294,8 +297,8 @@ ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
         int idx = ATgetInt(cluster_idx);
         size_t saved_pos = *pos;
 
-	if (SG_IsMarked((ATerm) t)) {
-          /*  Cycle detected  */
+        if (SG_IsMarked((ATerm) t)) {
+            /*  Cycle detected  */
           Cycle = ATempty;
           return ATtrue;
         }
@@ -815,25 +818,6 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
 }     
 
 /* Below we define the filters that compare two trees */
-
-/*
-static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
-{
-  ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
-  ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
-
-  if (SG_GtrPriority(pt, l0, l1)) {
-    IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t > %t\n", l0, l1))
-    return t0;
-  }
-  if (SG_GtrPriority(pt, l1, l0)) {
-    IF_DEBUG(ATfprintf(SG_log(), "Direct Priority: %t < %t\n", l0, l1))
-    return t1;
-  }
-
-  return NULL;
-}
-*/
 
 /*
  SG_MoreEager(t0, t1) returns true iff either
@@ -1410,11 +1394,17 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
 
   switch(type) {
   case AT_APPL:
-    ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
+    if (SG_InputAmbiMapIsSet(*pos) > 0) {
+      ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
+    }
+    else {
+      ambs = ATempty;
+    }
+
     if (!inAmbs && !ATisEmpty(ambs)) {
       IF_VERBOSE(
         SG_PrintStatusBar("sglr: filtering", 
-			  SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
+                          SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
       )
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
@@ -1438,7 +1428,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
 
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
       newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, pos,
-                        ATfalse);
+                          ATfalse);
       if (newargs) {
         t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
       }

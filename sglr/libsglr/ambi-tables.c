@@ -14,6 +14,8 @@
 static ATermTable cluster_table = NULL;  
 static ATermTable index_table = NULL;  
 
+static Bitmap InputAmbiMap;
+
 /*
  Ambiguity Tables provide a mapping from terms to sets of terms,
  reflecting the ambiguity relation.  Note that terms can be
@@ -30,6 +32,26 @@ static ATermTable index_table = NULL;
  simply by looking up the index from one of the terms that share the
  ambiguity, and update the ambiguity cluster that is found as desired.
  */  
+
+void SG_CreateInputAmbiMap(int length)
+{
+  InputAmbiMap = BitmapCreate(length+1);
+}
+
+void SG_DestroyInputAmbiMap()
+{
+  BitmapDestroy(InputAmbiMap);
+}
+
+int SG_InputAmbiMapIsSet(int index)
+{
+  return BitmapIsSet(InputAmbiMap, index);
+}
+
+static void SG_InputAmbiMapSet(int index)
+{
+  InputAmbiMap = BitmapSet(InputAmbiMap, index);
+}
 
 static ATerm SG_CreateAmbiKey(ATerm key, size_t pos)
 {
@@ -152,6 +174,7 @@ void SG_CreateAmbCluster(tree existing, tree new, size_t pos) {
   /*   Update ambiguity cluster  */
   SG_AmbiTablesAddIndex((ATerm) new, pos, ambidx);
   SG_AmbiTablesUpdateCluster(ambidx, newambs);
+  SG_InputAmbiMapSet(pos);
 
   return;
 }

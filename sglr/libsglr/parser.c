@@ -519,6 +519,8 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
   sg_total_tokens = length;
   table = ptable;
 
+  SG_CreateInputAmbiMap(length);
+
   SG_ParserPreparation();
 
   do {
@@ -551,6 +553,8 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
   result = SG_ParseResult(sort);
 
   SG_PostParseResult();
+
+  SG_DestroyInputAmbiMap();
 
   SG_ParserCleanup();
 

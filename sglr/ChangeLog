@@ -1,5 +1,10 @@
 $Id$
 
+2001/10/30 (markvdb@cwi.nl)
+  * BitMap introduced to mark that for a specific position a
+    ambiguity cluster was created.
+  * Performance back to normal.
+
 2001/10/29 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Replaced SG_MARK and UNMARK by an ATermIndexedSet implementation.
  * Marking only ambiguity clusters when detecting cycles.
