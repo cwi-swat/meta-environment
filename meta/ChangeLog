@@ -1,5 +1,8 @@
 # $Id$
 
+2002/06/06 (vandenbr@loria.fr)
+ * Replaced replace-text by replace-file.
+
 2002/06/04 (vandenbr@loria.fr)
  * Introduced a separate ProcessButtonActions process, in order to
    be able to have more than one editor with buttons active at the
