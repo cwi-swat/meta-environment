@@ -38,7 +38,7 @@ in
         snd-do(UI,open-module(Str1))
       + rec-msg(ui,imports(Name?,Str1?)).
         snd-do(UI,imports(Name,Str1))
-      + rec-note(import-relations(irels(Pairs?))).
+      + rec-note(import-relations(irels(Name?, Pairs?))).
         snd-do(UI,add-imports(Pairs))
       + rec-msg(cannot-open-module(ModName?)).
         snd-do(UI,open-empty-module(ModName)).
@@ -124,8 +124,8 @@ in
      rec-msg(done).
      snd-ack-event(UI,no-online-help)
    ) +
-   ( rec-note(import-relations(irels(Pairs?))).
-     snd-do(UI,add-imports(Pairs))
+   ( rec-note(import-relations(irels(Name?, Pairs?))).
+     snd-do(UI,update-imports(Name, Pairs))
    )
   ) *
   rec-event(UI,button(quit)).

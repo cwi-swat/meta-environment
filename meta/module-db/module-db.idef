@@ -74,7 +74,7 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb,add-module(AsFixModule)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-  snd-note(import-relations(irels(Pairs))).
+  snd-note(import-relations(irels(Name,Pairs))).
   snd-msg(need-modules(Modules))
 +
   rec-msg(add-empty-module-to-db(Name?)).
@@ -88,7 +88,7 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb,add-sdf2-module(Path,AsFixModule,Time,Status)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-  snd-note(import-relations(irels(Pairs))).
+  snd-note(import-relations(irels(Name,Pairs))).
   snd-msg(need-modules(Modules))
 +
 /* Path is the directory in which the file containing Module lives.
@@ -98,7 +98,7 @@ snd-do(Mdb, create-module-db).
     snd-eval(Mdb,update-sdf2-module(AsFixModule)).
     rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
 /* If a new module is added, we tell the world the new import relations */
-    snd-note(import-relations(irels(Pairs))).
+    snd-note(import-relations(irels(Name,Pairs))).
     snd-msg(extra-modules(Modules))
   else
     snd-msg(extra-modules([]))
