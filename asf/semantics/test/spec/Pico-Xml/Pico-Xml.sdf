@@ -11,5 +11,6 @@ context-free syntax
 
 context-free syntax
 
+xml(PROGRAM) -> PROGRAM
 xml(PROGRAM      , PICO-INT) -> PROGRAM      # PICO-INT {traversal(trafo,accu,bottom-up)}
 xml(PICO-STR-CON , PICO-INT) -> PICO-STR-CON # PICO-INT {traversal(trafo,accu,bottom-up)}
