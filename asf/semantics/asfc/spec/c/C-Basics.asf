@@ -92,8 +92,10 @@ equations
 
   [default-ic-1'3] is-char(Funid) = false
 
-  [tc] translate-char(funid("\" Char+)) = integer-constant(Char+) 
+  [default-tc] translate-char(funid("\" Char+)) = integer-constant(Char+) 
 
-  [tc] translate-char(funid(""""\" Char+ """)) = integer-constant(Char+)
+  [tc] translate-char(funid("\" "0" Char+)) = translate-char(funid("\" Char+))
 
-  [default-tc] translate-char(Funid) = 777
+  [tc] translate-char(funid(""""\" Char+ """)) = translate-char(funid("\"Char+))
+
+

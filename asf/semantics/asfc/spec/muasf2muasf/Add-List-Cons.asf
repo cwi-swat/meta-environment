@@ -88,6 +88,27 @@ alc-termlist(Term+) = Term+2
 ===>
 alc-termlist(Term, Term+) = Term2, Term+2
 
+[alc-15]
+alc-condlist(Cond) = alc-cond(Cond)
+
+[alc-16]
+alc-cond(Cond) = Cond2,
+alc-condlist(Cond+) = Cond+2
+===>
+alc-condlist(Cond & Cond+) = Cond2 & Cond+2
+
+[alc-17]
+alc-term(Term1) = Term3,
+alc-term(Term2) = Term4
+===>
+alc-cond(Term1 == Term2) = Term3 == Term4
+
+[alc-17]
+alc-term(Term1) = Term3,
+alc-term(Term2) = Term4
+===>
+alc-cond(Term1 != Term2) = Term3 != Term4
+
 [l2cl-1]
 list-to-conslist(Term+) = Term2
 ======>
