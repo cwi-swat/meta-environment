@@ -473,58 +473,59 @@ bag[bag[int]] BI = {{}, {1,2}, {}, {3,4}}
 
 %% ---- Type definitions
 
-type pair = <int theInt, str theStr>
+%%type pair = <int theInt, str theStr>
+%%
+%%type triple = <int theInt, str theStr, bool theBool>
+%%
+%%pair P = <1, "a">
+%%
+%%triple T = <2, "b", true>
+%%
+%%type double-pair = <pair pair1, pair pair2>
+%%
+%%double-pair DP = <<1, "a">, <2, "b">>
+%%
+%%assert "type, 1": P.theInt == 1
+%%assert "type, 2": P.theStr == "a"
+%%assert "type, 3": DP.pair1 == P
+%%assert "type, 4": DP.pair1.theStr == P.theStr
+%%assert "type, 5": DP.pair1.theInt == P.theInt
+%%assert "type, 6": DP.pair2 == <2,"b">
+%%assert "type, 7": DP.pair2.theInt == 2
+%%assert "type, 8": DP.pair2.theStr == "b"
+%%
+%%assert "type, 9": T.theInt == 2
+%%assert "type, 10": T.theStr == "b"
+%%assert "type, 11": T.theBool == true
+%%
+%%type pair-triple = <pair thePair, triple theTriple>
+%%
+%%pair-triple PT = <P, T>
+%%
+%%assert "type, 12": PT.thePair == P
+%%assert "type, 13": PT.theTriple == T
+%%assert "type, 14": PT.theTriple.theInt == T.theInt
+%%assert "type, 15": PT.theTriple.theStr == T.theStr
+%%assert "type, 16": PT.theTriple.theBool == T.theBool
+%%
+%%type myStr = str
+%%
+%%%%type myPair = <int theInt, myStr theStr>
+%%%%
+%%myPair MP = P
+%%
+%%myStr MS = "abc"
+%%
+%%assert "type, 17": MS == "abc"
+%%assert "type, 18": MP.theInt == P.theInt
+%%assert "type, 19": MP.theStr == P.theStr
+%%
+%%assert "type, 20": first(P) == 1
+%%assert "type, 21": second(P) == "a"
+%%
+%%type BagType = bag[int]
+%%
+%%BagType BT1 = {1,2,3}
+%%
+%%assert "type, 22": BT1 == {1,2,3}
 
-type triple = <int theInt, str theStr, bool theBool>
-
-pair P = <1, "a">
-
-triple T = <2, "b", true>
-
-type double-pair = <pair pair1, pair pair2>
-
-double-pair DP = <<1, "a">, <2, "b">>
-
-assert "type, 1": P.theInt == 1
-assert "type, 2": P.theStr == "a"
-assert "type, 3": DP.pair1 == P
-assert "type, 4": DP.pair1.theStr == P.theStr
-assert "type, 5": DP.pair1.theInt == P.theInt
-assert "type, 6": DP.pair2 == <2,"b">
-assert "type, 7": DP.pair2.theInt == 2
-assert "type, 8": DP.pair2.theStr == "b"
-
-assert "type, 9": T.theInt == 2
-assert "type, 10": T.theStr == "b"
-assert "type, 11": T.theBool == true
-
-type pair-triple = <pair thePair, triple theTriple>
-
-pair-triple PT = <P, T>
-
-assert "type, 12": PT.thePair == P
-assert "type, 13": PT.theTriple == T
-assert "type, 14": PT.theTriple.theInt == T.theInt
-assert "type, 15": PT.theTriple.theStr == T.theStr
-assert "type, 16": PT.theTriple.theBool == T.theBool
-
-type myStr = str
-
-type myPair = <int theInt, myStr theStr>
-
-myPair MP = P
-
-myStr MS = "abc"
-
-assert "type, 17": MS == "abc"
-assert "type, 18": MP.theInt == P.theInt
-assert "type, 19": MP.theStr == P.theStr
-
-assert "type, 20": first(P) == 1
-assert "type, 21": second(P) == "a"
-
-type BagType = bag[int]
-
-BagType BT1 = {1,2,3}
-
-assert "type, 22": BT1 == {1,2,3}

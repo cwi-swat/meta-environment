@@ -6,7 +6,7 @@ exports
 	REXP0 REXP REXPTYPE EQU DESTINATION
 	INITVAR TARGET
 
-  imports RscriptElem basic/Comments RscriptChecker
+  imports RscriptElem basic/Comments %% RscriptChecker
 
   lexical syntax
      [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}

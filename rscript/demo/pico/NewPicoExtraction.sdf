@@ -2,10 +2,11 @@ module NewPicoExtraction
 
 imports Pico-syntax
 imports basic/Integers
+imports utilities/PosInfo[PROGRAM]
 imports utilities/PosInfo[STATEMENT]
 imports utilities/PosInfo[EXP]
 imports utilities/PosInfo[PICO-ID]
-imports basic/Errors Rstore
+imports basic/Errors RscriptCalculator
 
 exports
    imports Rstore
@@ -43,6 +44,8 @@ hiddens
       
       "$Rel" [0-9\']*     	-> Bag[[Elem]]
       "$Loc" [0-9\']*	 	-> Location
+      "$Start" [0-9\']*	 	-> Location
+      "$Control" [0-9\']* 	-> Location
  	
       "$Decls" [0-9\']*         -> DECLS
       "$Stat" [0-9\']*          -> STATEMENT

@@ -62,6 +62,28 @@
 	===================================================
 	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $Var) = $Elem
 
+%% ---- Execute Rscript for given Rstore
+
+%%[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
+
+%% ---- Execute Rscript for empty Rstore
+
+%%[EX]	[| $Stat* |] = eval-rstats($Stat*, rstore())
+
+%% ---- Execute Rscript for empty Rstore and yield value of a var
+
+[EX2]   $Summary := check-rscript($Stat*),
+	is-type-correct($Summary) == false
+	===============================================================
+	[| $Stat* |] yield $Var = $Summary
+
+[default-EX3]   
+	[| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
+
+%% ---- Execute given Rexp
+
+%%[EXX1]	[| $Exp |] = evalx($Exp, rstore())
+
 %% ---- Eval statements
 
 [ES2]	eval-rstats($Stat $Stat*, $Rstore) = eval-rstats($Stat*, eval-rstat($Stat, $Rstore))
@@ -360,9 +382,13 @@
 
 %% ---- Simplify multiple generators
 
-[RF2]	{$Exp+ | $Gen+}  =  {$Gen+ :: {$Exp+}}
+[sg-1]	simplify({$Exp+ | $Gen+})  =  simplify1({$Gen+ :: {$Exp+}})
 
-[XX] 	{$Gen, $Gen+ :: $Exp } = { $Gen :: {$Gen+ :: $Exp}}
+[sg-2] 	simplify1({$Gen :: $Exp }) = { $Gen :: $Exp }
+[sg-2] 	simplify1({$Gen, $Gen+ :: $Exp }) = { $Gen :: simplify1({$Gen+ :: $Exp})}
+
+[ec-0]  evalx({$Exp+ | $Gen+}, $Rstore) = 
+	evalx(simplify(	{$Exp+ | $Gen+} ),  $Rstore)
 
 [ec-1]	$Elem := evalc({$Gen :: $Exp}, $Rstore)
 	====================================================================

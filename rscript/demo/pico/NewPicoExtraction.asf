@@ -16,21 +16,21 @@ equations
 %% ---- control flow of individual statements
 
 [cf3]  <$Entry, $Rel, $Exit> := cflow($Stat*),
-       $Loc := get-location($Exp)
+       $Control := get-location($Exp)
        =========================================================
        cflow(while $Exp do $Stat* od) = 
-       < {$Loc},
-         ({$Loc} x $Entry) union $Rel union ($Exit x {$Loc}),
-         {$Loc}
+       < {$Control},
+         ({$Control} x $Entry) union $Rel union ($Exit x {$Control}),
+         {$Control}
        >
 
 [cf4]  <$Entry1, $Rel1, $Exit1> := cflow($Stat*1), 
        <$Entry2, $Rel2, $Exit2> := cflow($Stat*2),
-       $Loc := get-location($Exp)
+       $Control := get-location($Exp)
        =========================================================
        cflow(if $Exp then $Stat*1 else $Stat*2 fi) =
-       < {$Loc},
-         ({$Loc} x $Entry1) union ({$Loc} x $Entry2) union  $Rel1 union $Rel2,
+       < {$Control},
+         ({$Control} x $Entry1) union ({$Control} x $Entry2) union  $Rel1 union $Rel2,
          $Exit1 union $Exit2
        > 
 
@@ -53,15 +53,15 @@ equations
 
 %% ----
 
-[er-1] $Loc := area-in-file("", area(0,0,0,0,0,0)),
-       begin $Decls $Stat+ end := $Program,
+[er-1] begin $Decls $Stat+ end := $Program,
+       $Start := get-location($Program),
        <$Entry, $Rel, $Exit> := cflow($Stat+),
-       $Rel1 := $Rel union ({$Loc} x $Entry),
+       $Rel1 := $Rel union ({$Start} x $Entry),
        $Rval := [| type expr = loc
 		   type var  = loc
 		   type name = str
 
-		   expr ROOT = $Loc
+		   expr ROOT = $Start
 
 		   rel[expr,expr] PRED = $Rel1
 		   rel[expr,name] DEFS = defs($Program, {})
@@ -73,7 +73,8 @@ equations
                              var V : USES[-,N], 
 			     <ROOT, expr E> : reachX({ROOT}, DEFS[-,N], PRED),
 			     V <= E
-		   }
+	           }
+
                 |] yield UNINIT
        ==========================================================
        uninit($Program) = convert2summary("Uninitialized variable", $Rval)

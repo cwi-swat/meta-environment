@@ -64,30 +64,7 @@ equations
 
 [ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, undefined, $Rel >)
 
-%% ---- Execute Rscript for given Rstore
-
-%%[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
-
-%% ---- Execute Rscript for empty Rstore
-
-
-[EX]
-	[| $Stat* |] = eval-rstats($Stat*, rstore())
-
-%% ---- Execute Rscript for empty Rstore and yield value of a var
-
-[EX2]   $Summary := check-rscript($Stat*),
-	is-type-correct($Summary) == false
-	===============================================================
-	[| $Stat* |] yield $Var = $Summary
-
-[default-EX3]   
-	[| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
-
-
-%% ---- Execute given Rexp
-
-[EXX1]	[| $Exp |] = evalx($Exp, rstore())
+%%----
 
 [UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
 [UN3]	xunion($Elem, $Bag) 	= union(insert($Elem, empty-bag), $Bag)
