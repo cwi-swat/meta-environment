@@ -109,6 +109,9 @@ in
       rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
       ParseError := no-errors
     +
+      rec-msg(parse-result-asfix2me(Id, ambiguous-tree(Tree?, ErrList?, ErrContent?))) .
+      ParseError := quote(ambigous-parse(ErrList, ErrContent))
+    +
       rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?, ErrContent?))) .
       Tree := error-tree .
       ParseError := quote(parse-error(ErrList, ErrContent))
