@@ -258,7 +258,7 @@ static char* treeToDot(char *dot, PT_Tree tree, int parent)
       dot = printNode(dot,parent,key, "LAYOUT?");
     }
 
-    if (!layout || layout_on) {
+    if ((layout_on || !layout) && (literals_on || !literal)) {
       for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
 	  PT_Tree arg = PT_getArgsHead(args);
 	  dot = treeToDot(dot,arg,key);
