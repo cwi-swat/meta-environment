@@ -308,6 +308,8 @@ PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
                            PT_SymbolToTerm(symbol)));
 
 }   
+
+/*}}}  */
 /*{{{  int PT_getSymbolsLength(PT_Symbols symbols)  */
 
 int PT_getSymbolsLength(PT_Symbols symbols) 
@@ -324,7 +326,6 @@ PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
 	 ATelementAt((ATermList)PT_makeTermFromSymbols(symbols), index));
 }
 
-/*}}}  */
 /*}}}  */
 /*{{{  PT_Symbols PT_reverseSymbols(PT_Symbols symbols) */
 

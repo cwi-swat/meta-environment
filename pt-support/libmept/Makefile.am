@@ -21,6 +21,7 @@ libmept_a_SOURCES = \
 	ordering.c
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
+
 INCLUDES =\
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include
