@@ -15,7 +15,6 @@ let
   Extension : str,
   Table     : term
 in
-  execute(parsetablegen,GENTABLE?) .
   (
     (
       rec-msg(generate-parsetable(Syntax?, eqs(Name?))) .
@@ -24,6 +23,7 @@ in
       rec-msg(generate-parsetable(Syntax?, trm(Name?))) .
       Extension := "trm.tbl"
     ) .
+    execute(parsetablegen,GENTABLE?) .
     snd-eval(GENTABLE, generate-table(Syntax, Name, Extension)) .
     (
       rec-value(GENTABLE, generation-finished(Table?)) .
@@ -31,7 +31,10 @@ in
       +
       rec-value(GENTABLE, generation-failed).
       snd-msg(no-parsetable)
-    )
+    ) .
+    snd-terminate(GENTABLE, "done") .
+    Syntax := none .
+    Table := none
   )*
   delta
 endlet
