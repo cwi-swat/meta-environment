@@ -122,15 +122,74 @@ equations
     $MessageId = get-area($Atom),
     $Signature = make-signature($Atom, $FormalParams, $VarDecls),
     $Tuple = <$MessageId, sign2str($Signature)>,
-    $Rstore2 = add-tuple(SENDMESSAGES, $Tuple, $Rstore1)
+    $Rstore2 = add-tuple(SENDMESSAGES, $Tuple, $Rstore1),
+    $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
+                                         $FormalParams, $VarDecls, $Rstore2)
     ===>
-    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore2
+    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
 
   [findReceiveMsg] 
     $Atom = rec-msg($TermPlus),
     $MessageId = get-area($Atom),
     $Signature = make-signature($Atom, $FormalParams, $VarDecls),
     $Tuple = <$MessageId, sign2str($Signature)>,
-    $Rstore2 = add-tuple(RECEIVEMESSAGES, $Tuple, $Rstore1)
+    $Rstore2 = add-tuple(RECEIVEMESSAGES, $Tuple, $Rstore1),
+    $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
+                                         $FormalParams, $VarDecls, $Rstore2)
     ===>
-    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore2
+    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
+
+  [extractSignatureFromTerms-single]
+    extractSignatureFromTerms($Term, $MessageId, $Path, 
+                              $FormalParams, $VarDecls, $Rstore) =
+      extractSignatureFromTerm($Term, $MessageId, $Path, 
+                               $FormalParams, $VarDecls, $Rstore)
+
+  [extractSignatureFromTerms-many]
+    extractSignatureFromTerm($Term, $MessageId, $Path, 
+                             $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
+    $Path = [$Steps, $Step],
+    extractSignatureFromTerms($TermPlus, $MessageId, [$Steps, $Step+1], 
+                              $FormalParams, $VarDecls, $Rstore2) = $Rstore3
+    ===>
+    extractSignatureFromTerms($Term, $TermPlus, $MessageId, $Path, 
+                              $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+
+  [extractSignatureFromTerm-compound]
+    $Term = $Id($TermPlus),
+    addTermSignature($Term, $MessageId, $Path, 
+                     $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
+    $Path = [$Stepplus],
+    extractSignatureFromTerms($TermPlus, $MessageId, [$Stepplus, 0], 
+                              $FormalParams, $VarDecls, $Rstore2) = $Rstore3
+    ===>
+    extractSignatureFromTerm($Term, $MessageId, $Path, 
+                             $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+
+  [default-extractSignatureFromTerm-basic]
+    addTermSignature($Term, $MessageId, $Path, 
+                     $FormalParams, $VarDecls, $Rstore1) = $Rstore2
+    ===>
+    extractSignatureFromTerm($Term, $MessageId, $Path, 
+                             $FormalParams, $VarDecls, $Rstore1) = $Rstore2
+
+  [addTermSignature-term]
+    $Type = getType($Term, $FormalParams, $VarDecls),
+    $Tuple1 = <path2str($Path), term2str($Type)>,
+    $Tuple2 = <$MessageId, $Tuple1>,
+    $Rstore2 = add-tuple(MSGTYPES, $Tuple2, $Rstore1),
+    $Tuple3 = <$Tuple2, get-area($Term)>,
+    $Rstore3 = add-tuple(MSGTYPE_OCCURS, $Tuple3, $Rstore2)
+    ===>    
+    addTermSignature($Term, $MessageId, $Path, 
+                     $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+
+
+  [path2str-basic]
+    path2str([natcon($Char*)]) = strcon(""" $Char* """)
+
+  [path2str-compound]
+    path2str([natcon($Char*), $Stepplus]) = 
+      strcon(""" $Char* """) 
+      || strcon(""" "," """) 
+      || path2str([$Stepplus])

@@ -7,6 +7,7 @@ imports MyPosInfo[VarDecl]
 imports MyPosInfo[ProcessDef]
 imports MyPosInfo[ProcessName]
 imports MyPosInfo[Atom]
+imports MyPosInfo[Term]
 
 exports
   context-free syntax
@@ -65,10 +66,21 @@ hiddens
     findMessages(Atom, RSTORE, 
                  {FormalParam ","}*, {VarDecl ","}*) -> 
       RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  sorts Path
+  context-free syntax
+    "[" {Integer ","}+ "]" -> Path 
+    path2str(Path) -> String
+  context-free syntax
+    extractSignatureFromTerms({Term ","}+, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
+    extractSignatureFromTerm(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
+    addTermSignature(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
     
 
 hiddens
   variables
+    "$Char*"[0-9]*              -> CHAR*
     "$Area"[0-9]*		-> Area      
     "$Rstore"[0-9]*		-> RSTORE
     "$Tuple"[0-9]*		-> Elem # Elem
@@ -76,6 +88,10 @@ hiddens
     "$ProcessDefId"		-> Area
     "$ProcessNameId"		-> Area
     "$MessageId"		-> Area
+    "$Path"[0-9]*               -> Path
+    "$Step"[0-9]*               -> Integer
+    "$Steps"[0-9]*              -> {Integer ","}*
+    "$Stepplus"[0-9]*           -> {Integer ","}+
 
     "$TscriptDefs"[0-9]*	-> TscriptDef*
     "$ProcessDef"[0-9]*		-> ProcessDef
@@ -86,7 +102,9 @@ hiddens
     "$Atom"[0-9]*		-> Atom
     "$Signature"[0-9]*		-> Term
     "$Term"[0-9]*		-> Term
+    "$Type"[0-9]*		-> Term
     "$Terms"[0-9]*		-> {Term ","}*
     "$TermPlus"[0-9]*		-> {Term ","}+
     "$Var"[0-9]*		-> Var
-    "$VarDecls"[0-9]*           -> {VarDecl ","}*
+    "$VarDecls"[0-9]*           -> {VarDecl ","}*  
+    "$Id"[0-9]*			-> Id

@@ -8,10 +8,10 @@ exports
     var2str(Var) -> String
     processname2str(ProcessName) -> String
     sign2str(Term) -> String
+    term2str(Term) -> String
 
 hiddens
   context-free syntax
-    term2str(Term) -> String
     terms2str({Term ","}*) -> String
 
 exports
@@ -19,22 +19,23 @@ exports
     get-formal-parameters(ProcessSignature) -> {FormalParam ","}*
     get-local-variables(ProcessBody)        -> {VarDecl ","}*
     make-signature(Atom, {FormalParam ","}*, {VarDecl ","}*) -> Term
+    getType(Term, {FormalParam ","}*, {VarDecl ","}*) -> Term
 
 hiddens
   context-free syntax
-    make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}*)
+    make-simple-signature({Term ","}+)
 	-> {Term ","}+ {traversal(trafo,top-down,break)}
 
-    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}*)
+    make-simple-signature(Term)
 	-> Term {traversal(trafo,top-down,break)}
 
 hiddens
   variables
     "$Atom"[0-9]* 		-> Atom
     "$String"			-> String
-    "$Int"			-> Int
+    "$Int"			-> Integer
     "$Real"			-> Real
-    "$Bool"			-> Bool
+    "$Bool"			-> Boolean
     "Char*"[0-9]* 		-> CHAR*
     "$Term"[0-9]*		-> Term
     "$Terms"[0-9]*		-> {Term ","}*
