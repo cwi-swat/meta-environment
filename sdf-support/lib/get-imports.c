@@ -6,9 +6,7 @@
 ATerm SDF_getImportModuleNamePlain(SDF_Import import)
 {
   SDF_ModuleName modname = SDF_getImportModuleName(import);
-  SDF_ModuleId   modid   = SDF_getModuleNameModuleId(modname);
-  char          *lex     = PT_yieldTree(SDF_getModuleIdLex(modid));
-  return ATmake("<str>", lex);
+  return SDF_getModuleNamePlain(modname);
 }
 
 /*}}}  */

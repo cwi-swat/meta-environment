@@ -1,6 +1,14 @@
 #include "SDFME-utils.h"
 #include <MEPT-utils.h>
 
+SDF_Import SDFmakeImport(char *moduleName)
+{
+  return SDF_makeImportModule(
+           SDF_makeModuleNameUnparameterized(
+             SDF_makeModuleIdLexToCf(
+               (SDF_Lexical)PT_makeTreeFlatLexicalFromString(moduleName))));
+}
+
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
                                     SDF_ImportList l2)
 {
@@ -190,3 +198,14 @@ SDF_Layout SDF_makeLayoutEmpty()
 {
   return (SDF_Layout)PT_makeTermFromTree(PT_makeTreeLayoutEmpty());
 }
+
+/*{{{  ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName) */
+
+ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
+{
+  SDF_ModuleId   modid   = SDF_getModuleNameModuleId(moduleName);
+  char          *lex     = PT_yieldTree(SDF_getModuleIdLex(modid));
+  return ATmake("<str>", lex);
+}
+
+/*}}}  */

@@ -19,6 +19,7 @@ void       SDFforeachGrammarInModule   (SDF_Module      module,
 					void           *user_data);
 
 
+ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName);
 ATerm SDF_getImportModuleNamePlain(SDF_Import import);
 ATermList      SDF_getImports(SDF_Module module);
 SDF_ImportList SDF_getModuleImportsList(SDF_Module module);
@@ -50,5 +51,9 @@ ATbool SDF_hasPreferAttribute(SDF_Production prod);
 ATbool SDF_hasAvoidAttribute(SDF_Production prod);
 
 SDF_Layout SDF_makeLayoutEmpty();
+
+SDF_Import SDFmakeImport(char *moduleName);
+
+PT_Symbol SDFsymbol2PtSymbol(SDF_Symbol sdfSymbol);
 
 #endif /* _SDF_UTILS_H */
