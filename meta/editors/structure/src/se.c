@@ -427,7 +427,7 @@ ATerm get_focus_sort(int cid, ATerm editorId)
 ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
 {
   char *sort;
-  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(t);
+  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
   PT_Symbol symbol = getParseTreeSort(parse_tree);
  
   sort = PT_yieldSymbol(symbol);

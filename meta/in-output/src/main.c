@@ -268,6 +268,24 @@ ATerm read_text_file(int cid, char *fileName)
 }
 
 /*}}}  */
+/*{{{  ATerm read_term_file(int cid, char *fileName) */
+
+ATerm read_term_file(int cid, char *fileName)
+{
+  ATerm result, contents;
+
+  contents = ATreadFromNamedFile(fileName);
+
+  if (contents == NULL) {
+    result = createErrorMessage(strerror(errno));
+  } else {
+    result = ATmake("snd-value(file-contents(<term>))", ATBpack(contents));
+  }
+
+  return result;
+}
+
+/*}}}  */
 /*{{{  ATerm write_text_file(int cid, char *fileName, ATerm content) */
 
 ATerm write_text_file(int cid, char *fileName, ATerm content)

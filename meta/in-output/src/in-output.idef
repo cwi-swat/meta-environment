@@ -79,6 +79,16 @@ in
       snd-msg(io-error-reading(ErrorMessage))
     )
   +
+    rec-msg(io-read-term-file(FileName?)) .
+    snd-eval(IO,read-term-file(FileName)) .
+    (
+      rec-value(IO,file-contents(Contents?)).
+      snd-msg(io-file-contents(Contents))
+    + 
+      rec-value(IO,failure(ErrorMessage?)).
+      snd-msg(io-error-reading(ErrorMessage))
+    )
+  +
     rec-msg(io-compare-files(FileName1?, FileName2?)) .
     snd-eval(IO, compare-files(FileName1, FileName2)) .
     (

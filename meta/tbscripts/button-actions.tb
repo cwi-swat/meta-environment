@@ -477,33 +477,31 @@ in
 	snd-msg(update-list-view(SList)) .
         ReturnSuccess(EditorId,Stack)        
       +
-        rec-msg(show-tree, Stack?, EditorId?) .
-        StackPopTerm(Stack, Stack?, STree?) .
-        ShowTree(STree) .
-        ReturnSuccess(EditorId,Stack)
-      +
-        rec-msg(save-tree(Name?, Path?), Stack?, EditorId?) .
+        rec-msg(save-tree, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,FileName?) .
         StackPopTerm(Stack,Stack?,Tree?) .
-        FunSym := fun(Tree) .
-        if not-equal(FunSym, "str") then
-          snd-msg(save-tree(Name,Path,Tree)) .
-          rec-msg(save-done(Name))
-        else
-          Text := first(args(Tree)) .
-          snd-msg(io-write-text-file(Path,[Text])).
-	  (
-            rec-msg(io-file-written) .
-            ReturnSuccess(EditorId, Stack)
-          +
-            rec-msg(io-file-not-written(ErrorMessage?)) .
-            snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
-	    ReturnAbort(EditorId, Stack)
-          )
-        fi 
+        snd-msg(io-write-term-file(FileName,Tree)) .
+	(
+          rec-msg(io-file-written) .
+          ReturnSuccess(EditorId, Stack)
+        +
+          rec-msg(io-file-not-written(ErrorMessage?)) .
+          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+	  ReturnAbort(EditorId, Stack)
+        )
       +
-        rec-msg(read-tree(Path?), Stack?, EditorId?) . 
-	printf("not yet implemented at line %d", __LINE__) .
-        ReturnAbort(EditorId,Stack) 
+        rec-msg(read-tree, Stack?, EditorId?) . 
+        StackPopString(Stack,Stack?,FileName?) .
+        snd-msg(io-read-term-file(FileName)) .
+        (
+          rec-msg(io-file-contents(Tree?)) .
+          StackPushTerm(Stack,Stack?,Tree) .
+          ReturnSuccess(EditorId, Stack)
+        +
+          rec-msg(io-error-reading(ErrorMessage?)) .
+          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+	  ReturnAbort(EditorId, Stack)
+        )
       +
         rec-msg(query(Query?), Stack?, EditorId?) .
 	snd-msg(execute-query(EditorId, Query)) .

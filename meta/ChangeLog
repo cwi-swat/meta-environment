@@ -1,5 +1,9 @@
 # $Id$
 
+2003/06/20 (markvdb@cwi.nl)
+ * Added save and read-tree.
+ * Fixed a bug in check-sort.
+
 2003/06/19 ({jong,markvdb}@cwi.nl)
  * Remove tbscripts/query.tb
  * include QueryDisplay iso query-tool
