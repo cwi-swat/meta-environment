@@ -1,15 +1,13 @@
 
-
 int ROOT = 0
 
 rel[str,int] D = dominators({<"y", 3>}, {<"y", 5>}, {<3, 2>, <2, 1>, <1, 0>})
 
-rel[str,int] DEFS    = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
+rel[str,int] DEFS  = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
 
 rel[str,int] USES    = {<"y", 3>, <"x", 3>, <"z", 5>}
 
 rel[int,int]  PRED   = {<0, 1>,<1, 2>, <2, 3>, <2, 4>, <3, 5>, <4, 5>}
-%%rel[int,int]  PRED   = inv(SUCC)
 
 rel[str,int] D0 = {<"y",3>}
 rel[str,int] D1 = (D0 o PRED) \ DEFS

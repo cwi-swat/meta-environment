@@ -17,21 +17,21 @@ exports
   context-free syntax
 
 %% Elementary values
-     Boolean                                	-> Elem  {avoid}
-     Integer                                	-> Elem  {avoid}
-     String				    	-> Elem  {avoid}
-     Area				    	-> Elem  {avoid}
+     Boolean                                	-> Elem  
+     Integer                                	-> Elem  
+     String				    	-> Elem  
+     Area				    	-> Elem  
 
 %% Extend Elem to allow nested bags and relations
 
-     Bag[[Elem]]                   	    	-> Elem  {avoid}
-     Rel[[Elem]]                           	-> Elem  {avoid}
-     Elem # Elem                              	-> Elem  {avoid}
+     Bag[[Elem]]                   	    	-> Elem  
+     Rel[[Elem]]                           	-> Elem  
+     Elem # Elem                              	-> Elem 
 
      Elem                                    	-> REXP 
      RVAR                                    	-> REXP
-     REXP # REXP			     	-> REXP
-     "{" {REXP ","}* "}"                     	-> REXP
+     REXP # REXP			     	-> REXP {avoid}
+     "{" {REXP ","}* "}"                     	-> REXP {avoid}
 
 %% Operators
      REXP "and" REXP                         	-> REXP {left}
@@ -93,6 +93,8 @@ exports
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
  
      RSTAT*                                     -> RSCRIPT
+
+     "dominators"				-> UQLiteral {avoid}
 
   context-free priorities
 
