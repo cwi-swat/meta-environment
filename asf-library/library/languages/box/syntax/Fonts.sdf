@@ -28,3 +28,7 @@ exports
     "VAR"     -> FontOperator {cons("variable")}
     "NUM"     -> FontOperator {cons("number")}
     "MATH"    -> FontOperator {cons("math")}
+    "ESC"     -> FontOperator {cons("escape")}
+    "COMM"    -> FontOperator {cons("comment")}
+    "STRING"  -> FontOperator {cons("string")}
+
