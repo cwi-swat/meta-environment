@@ -276,20 +276,20 @@ ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
   PT_Tree lhs = ASFtoPT(ASF_getASFConditionLhs(cond));
   PT_Tree rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
 
-  if (ASF_isASFConditionPositive(cond)) {
-    return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
-  }
-  else if (ASF_isASFConditionMatch(cond)) {
+  if (ASF_isASFConditionMatch(cond)) {
     return matchMatchCondition(cond, lhs, rhs, conds, env, depth);
-  }
-  else if (ASF_isASFConditionNoMatch(cond)) {
-    return matchNoMatchCondition(cond, lhs, rhs, conds, env, depth);
   }
   else if (ASF_isASFConditionEquality(cond)) {
     return matchEqualityCondition(cond, lhs, rhs, conds, env, depth);
   }
-  else {
+  else if (ASF_isASFConditionNegative(cond)) {
     return matchNegativeCondition(cond, lhs, rhs, conds, env, depth);
+  }
+  else if (ASF_isASFConditionPositive(cond)) {
+    return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
+  }
+  else {
+    return matchNoMatchCondition(cond, lhs, rhs, conds, env, depth);
   }
 }
 

@@ -12,7 +12,6 @@
 #include "matching.h"
 #include "traversalfunctions.h"
 #include "errors.h"
-#include "asf-api.h"
 #include "debug.h"
 #include <string.h>
 
