@@ -27,5 +27,6 @@ PeanoFactory.*
 Start*
 CHARLIST*
 *.class
-classjava.stamp
 peanotest
+*.java.test
+classcheck.stamp
