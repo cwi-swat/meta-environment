@@ -1,3 +1,6 @@
+2003/01/10 (markvdb@cwi.nl)
+ * Added a function to rename of renamings.
+
 2002/11/05 (vinju@loria.fr)
  * libME renamed to lib
  * Split of SDF2PT.a library such that SDFME.a becomes independent of
