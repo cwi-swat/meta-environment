@@ -15,6 +15,6 @@ requires
 
 error-support 0.2.1
 
-aterm 2.3
+aterm 2.3.1
 
 toolbuslib 0.8
