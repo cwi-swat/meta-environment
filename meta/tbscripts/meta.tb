@@ -38,7 +38,7 @@
 #include "restorebrackets.idef"
 #include "structure-editor.idef"
 #include "sglr.idef"
-#include "tree2graph.idef"
+#include "graph-converter.idef"
 #include "unparser.idef"
 
 #ifdef QUERY
@@ -100,7 +100,6 @@ in
   . create(RestoreTermBrackets, Pid?)
   . create(Save-modules, Pid?)
   . create(Set-parsetable, Pid?)
-  . create(Tree2Graph, Pid?)
 #ifdef QUERY
   . create(DisplayQuery, Pid?)
 #endif
