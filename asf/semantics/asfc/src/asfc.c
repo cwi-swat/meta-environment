@@ -129,17 +129,33 @@ static char *basename(const char *source)
 }
 
 /*}}}  */
+/*{{{  static char *remove_extension(const char *source) */
+
+static char *remove_extension(const char *source)
+{
+  char *duplicate = strdup(source);
+  char *p;
+  p = strrchr(duplicate, '.');
+  if (p != NULL) {
+    *p = '\0';
+  }
+  return duplicate;
+}
+
+/*}}}  */
 /*{{{  static PT_ParseTree compile(char *name, ATerm equations, char *output) */
 
-static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable, 
-			    char *output)
+static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable, 
+			    const char *output)
 {
   MA_Module muasf;
   PT_ParseTree c_code;
   FILE *fp = NULL;
   char *saveName = NULL;
+  char *prefix = remove_extension(output);
 
   saveName = dashesToUnderscores(name);
+  ATwarning("name: %s\noutput: %s\next: %s\n", name, output, prefix);
 
   if (input_muasf) {
     PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
@@ -192,10 +208,11 @@ static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable,
     if (make_toolbus_tool) {
       VERBOSE("generating idef script");
 
-      make_idef_script(saveName);
+      make_idef_script(prefix, saveName);
+
       
       if (use_c_compiler) {
-	idef2c(saveName);
+	idef2c(prefix, saveName);
       }
     }
 
@@ -203,12 +220,13 @@ static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable,
       
       VERBOSE("invoking C compiler");
 
-      call_c_compiler(name, saveName, output);
+      call_c_compiler(prefix, saveName, output);
     }
 
   }
 
   free(saveName);
+  free(prefix);
 
   return c_code;
 }
@@ -233,14 +251,12 @@ void rec_ack_event(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations, char *output) */
 
-ATerm compile_module(int cid, char *moduleName, ATerm equations)
+ATerm compile_module(int cid, const char *moduleName, const char *output, 
+		     ATerm equations)
 {
-  char output[_POSIX_PATH_MAX];
   PT_ParseTree result;
 
   toolbus_id = cid;
-
-  sprintf(output, "%s.c", moduleName);
 
   result = compile(moduleName, ATBunpack(equations), NULL, output);
 

@@ -5,12 +5,13 @@ let
   COM           : asfc,
   ModuleName    : str,
   Equations     : term,
-  Progress       : str 
+  Progress       : str,
+  OutputFile : str
 in
   (
-    rec-msg(compile-module(ModuleName?, Equations?)) .
+    rec-msg(compile-module(ModuleName?, OutputFile?, Equations?)) .
     execute(asfc, COM?) .
-    snd-eval(COM, compile-module(ModuleName, Equations)) .
+    snd-eval(COM, compile-module(ModuleName, OutputFile, Equations)) .
     ( 
       rec-event(COM, asfc-progress(Progress?)).
       snd-note(asfc-progress(Progress)).

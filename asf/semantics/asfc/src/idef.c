@@ -6,12 +6,12 @@
 
 extern ATbool run_verbose;
 
-void make_idef_script(char *name)
+void make_idef_script(const char *prefix, const char *name)
 {
   char file[BUFFER_SIZE];
   FILE *fp;
 
-  sprintf(file, "%s.idef", name);
+  sprintf(file, "%s.idef", prefix);
 
   fp = fopen(file,"wb");
 
@@ -56,15 +56,21 @@ void make_idef_script(char *name)
   }
 }
 
-void idef2c(char *name) {
+void idef2c(const char *prefix, const char *name) {
   char commandline[BUFFER_SIZE];
+  char ideffilename[BUFFER_SIZE];
+  char tifsfilename[BUFFER_SIZE];
 
-  sprintf(commandline,IDEF2TIF " %s.idef", name);
+  sprintf(ideffilename, "%s.idef", prefix);
+  sprintf(commandline,"%s %s",IDEF2TIF, ideffilename);
+
   if (run_verbose) {
     ATwarning("%s\n",commandline);
   }
   system(commandline);
-  sprintf(commandline,TIFSTOC " -tool tool%s %s.tifs", name, name);
+
+  sprintf(tifsfilename, "%s.tifs", prefix);
+  sprintf(commandline,"%s -tool tool%s %s", TIFSTOC, name, tifsfilename);
   if (run_verbose) {
     ATwarning("%s\n",commandline);
   }

@@ -61,6 +61,9 @@ equations
               eqs-and-conds-for-grammar(sorts Symbol Symbol*, SymbolsSet) = 
                (SymbolsSet2, Prod*)  
 
+  [eacfg-1'7] eqs-and-conds-for-grammar(context-free start-symbols Symbol*, SymbolsSet) =
+              eqs-and-conds-for-grammar(sorts Symbol*, SymbolsSet)
+
   [default-eacfg-1'4] eqs-and-conds-for-grammar(Grammar, SymbolsSet) = (SymbolsSet,)
 
   [eacfp-1'1] eqs-and-conds-for-productions(, SymbolsSet) = (SymbolsSet,)

@@ -83,7 +83,7 @@ static ATbool checkListProductionCompatibility(PT_Production ptProd);
 
 void capitalize(char *str)
 {
-  if (isalpha(str[0])) {
+  if (isalpha((int) str[0])) {
     str[0] = toupper(str[0]);
   }
 }

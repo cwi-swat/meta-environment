@@ -1,5 +1,6 @@
 #include <string.h>
 #include <aterm2.h>
+#include <stdlib.h>
 #include "MuASF.h"
 
 typedef struct ATerm _MA_CHARLIST;

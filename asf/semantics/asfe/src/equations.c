@@ -414,8 +414,15 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
           cur = cur->hnext;
         }
         if (!entered) {
-          entry->hnext = cur->hnext;
-          cur->hnext = entry;
+/* We are still at the first entry!*/
+          if (table->table[hnr] == cur) {
+            table->table[hnr] = entry;
+            entry->hnext = cur;
+          }
+          else {
+            entry->hnext = cur->hnext;
+            cur->hnext = entry;
+          }
         }
       }
     }
@@ -424,7 +431,6 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
     entry->hnext = NULL;
     table->table[hnr] = entry;
   }
-
   print_short_equation(0, "registered", entry);
 }
 

@@ -62,7 +62,7 @@ char* toalfanum(const char* str)
   }
 
   for(i = 0, j = 0; i < len; i++, j++) {
-    if (isalpha(str[i])) {
+    if (isalpha((int) str[i])) {
       new[j] = str[i];
     }
     else if (str[i] == '_') {
