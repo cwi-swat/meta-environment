@@ -63,8 +63,7 @@ in
     if not-equal(Errors,[]) then
       Message := first(Errors).
       Errors := next(Errors).
-      printf("WARNING: %s\n\n", Message)
-      /* snd-note(ui-status(errorf("%s",[Message]))) */
+      snd-note(ui-status(errorf("WARNING: %s",[Message])))
     fi *
     if equal(Errors,[]) then
       tau
