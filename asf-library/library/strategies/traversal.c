@@ -63,12 +63,8 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 	PT_Tree kidappl = (PT_Tree) ATmakeTerm(appl_pattern, kidtype, kidtype, 
 					       strategy, kid);
 	PT_Tree newkid;
-
-	runVerbose = ATtrue;
 	newkid = rewrite(kidappl);
-	runVerbose = ATfalse;
-ATwarning("KID: %s\n", PT_yieldTree(kid));
-ATwarning("NEWKID: %s\n", PT_yieldTree(newkid));
+
 	if (ATmatchTerm((ATerm) newkid, fail_pattern, NULL) ||
 	    PT_isEqualTree(kidappl, newkid)) {
 	   return (PT_Tree) ATmakeTerm(fail_pattern, type);
