@@ -86,6 +86,12 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])
 AC_SUBST(GRAPH_SUPPORT)
 
+dnl Require sdf-support package
+
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+   [  --with-sdf-support=DIR  sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
 dnl Require asf-support package
 
 AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
