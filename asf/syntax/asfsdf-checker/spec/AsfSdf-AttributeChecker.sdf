@@ -8,19 +8,23 @@ exports
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)           -> Messages {traversal(accu, top-down)}
-    check-attributes(Module, Messages)               -> Messages {traversal(accu, top-down)}
-    check-attributes(Module, Messages, ModuleId)     -> Messages {traversal(accu, top-down)}
-    check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
+    check-attributes(Definition, Messages)           -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-attributes(Module, Messages)               -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-attributes(Module, Messages, ModuleId)     -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
+    check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, top-down)} %%{traversal(accu, break, top-down)}
 
   context-free syntax
-    contains-accu({ATerm ","}*)  -> Boolean
-    contains-trafo({ATerm ","}*) -> Boolean
+    contains-accu({ATerm ","}*)      -> Boolean
+    contains-trafo({ATerm ","}*)     -> Boolean
+    contains-break({ATerm ","}*)     -> Boolean
+    contains-continue({ATerm ","}*)  -> Boolean
+    contains-top-down({ATerm ","}*)  -> Boolean
+    contains-bottom-up({ATerm ","}*) -> Boolean
 
   context-free syntax
-    is-accu-definition(Production)         -> Boolean
-    is-trafo-definition(Production)        -> Boolean
-    is-accu-trafo-definition(Production)   -> Boolean
+    is-accu-definition(Production)        -> Boolean
+    is-trafo-definition(Production)       -> Boolean
+    is-accu-trafo-definition(Production)  -> Boolean
 
 hiddens
   variables

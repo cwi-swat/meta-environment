@@ -1,0 +1,21 @@
+/*
+  $Id$
+   */
+process AsfChecker is
+let
+  Msgs  : list,
+  Rules : term,
+  AC    : asfchecker
+in
+  execute(asfchecker, AC?) .
+  (
+    rec-msg(check-asf(Rules?)) .
+    snd-eval(AC, check-asf(Rules)) .
+    rec-value(AC, messages(Msgs?)) .
+    snd-msg(messages(Msgs)) .
+    Rules := none
+  )*
+  delta
+endlet
+
+tool asfchecker is {command = "asfchecker"}

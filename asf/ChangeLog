@@ -1,3 +1,8 @@
+2002/06/24 (vandenbr@loria.fr)
+ * Improved the asfsdf-checker with respect to checking the traversal
+   attributes.
+ * First version of an asf-checker added.
+
 2002/06/10 (markvdb@cs.vu.nl)
  * Fixed the "restore-brackets bug" reported on 27-03-2002.
  * Improved the compiler specification with respect to processing

@@ -24,10 +24,10 @@ static char myname[] = "asfsdfchecker";
 static char myversion[] = "0.0";
 
 /*
- *     The argument vector: list of option letters, colons denote option
- *         arguments.  See Usage function, immediately below, for option
- *             explanation.
- *              */
+ * The argument vector: list of option letters, colons denote option
+ * arguments.  See Usage function, immediately below, for option
+ * explanation.
+ * */
 
 static char myarguments[] = "hi:vV";
 
