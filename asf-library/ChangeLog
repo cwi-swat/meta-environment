@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb  1 17:52:09 CET 2005 <jurgenv@cwi.nl>
+ * ASF-Normalization specifications now rewrites annotated specifications
+   (with pos-info), INSTEAD of removing all annotations.
+
 Thu Jan 27 09:18:01 CET 2005 <jurgenv@cwi.nl>
  * Bumped to 1.2 version
 
