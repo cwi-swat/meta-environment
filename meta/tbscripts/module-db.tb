@@ -76,6 +76,7 @@ in
       rec-msg(sm-imported-module-names(Modules?)) 
     else 
       ModuleId := Name .
+      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
       Modules := []
     fi .
     snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
