@@ -16,6 +16,7 @@
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
 set use_tide "@USE_TIDE@" 
+set library_dir "@ASF_LIBRARY@/share/asf-library"
 
 set help_meta "$metaname
 
@@ -782,15 +783,24 @@ proc ViewAll {} {
     $c configure -scrollregion $bbox -width $w -height $h
 }
 
-
 proc OpenModuleWidget {} {
+  OpenWidget "Open Module..." "."
+}
+
+proc OpenLibModuleWidget {} {
+  global library_dir
+
+  OpenWidget "Open Library Module..." $library_dir
+}
+
+proc OpenWidget {title location} {
 
   set types {
       {{SDF}   {.sdf}        }
       {{Any}    *              }
   }
-  set file [tk_getOpenFile -filetypes $types \
-                                       -title "Open Module..."]
+  set file [tk_getOpenFile -initialdir $location -filetypes $types \
+                                       -title $title]
   set mod [GetBasename $file ".sdf"]
   if [ expr [ string length $mod ] > 0 ] {
     OpenModule $file $mod
@@ -1029,6 +1039,7 @@ proc define-menu-bar {} {
     menu $m -tearoff 0
     $m add command -label "New"  -underline 0 -command {NewModuleWidget}
     $m add command -label "Open..." -underline 0 -command {OpenModuleWidget}
+    $m add command -label "Open Library..." -underline 0 -command {OpenLibModuleWidget}
     $m add separator
     $m add command -label "Save All" -underline 0 -command {SaveAll}
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
@@ -1293,6 +1304,7 @@ proc define-canvas-popup {} {
     menu $m -tearoff 0
     $m add command -label "New..." -command "NewModuleWidget"
     $m add command -label "Open..." -command "OpenModuleWidget"
+    $m add command -label "Open Library..." -command "OpenLibModuleWidget"
 }
 
 proc make-and-init-new-graph {} {
