@@ -118,7 +118,7 @@ Notify () {
 	if [ $verbose -gt 0 ] ; then
 		Warn $*
         else
-	        echo -n "."
+	        printf "."
 	fi
 }
 
