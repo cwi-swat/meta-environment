@@ -26,7 +26,8 @@ PT_Tree get_anno(ATerm builtin, PT_Tree input)
   PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
   PT_Tree value = NULL;
 
-  value = PT_TreeFromTerm(PT_getTreeAnnotation(term, PT_TreeToTerm(key)));
+
+  value = PT_TreeFromTerm(PT_getTreeAnnotation(term, (ATerm) key));
 
   if (value != NULL) {
     return value;
@@ -40,14 +41,22 @@ PT_Tree get_term_anno(ATerm builtin, PT_Tree input)
   PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
   PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
   PT_Tree value = NULL;
+  ATerm   label = ATparse(PT_yieldTree(key));
+  ATerm anno;
 
-  value = (PT_Tree) PTPT_explodeATerm(
-		     PT_getTreeAnnotation(term, PT_TreeToTerm(key)));
+  if (label == NULL) {
+    return input;
+  }
+
+  anno = PT_getTreeAnnotation(term, label);
+
+  if (anno != NULL) {
+    value = (PT_Tree) PTPT_explodeATerm(anno);
+  }
 
   if (value != NULL) {
     return value;
   }
 
   return input;
-
 }
