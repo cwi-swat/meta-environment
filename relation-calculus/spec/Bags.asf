@@ -155,7 +155,7 @@ equations
 
 %% --- diff($Bag1, $Bag2)
 
-[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
+[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem, $Elem*4})
 
 [default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
