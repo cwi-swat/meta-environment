@@ -1,3 +1,8 @@
+2002/05/14 (jurgenv@cwi.nl)
+ * Fixed a bug in addeqssyntax that caused module with multiple import 
+   sections to crash during parsetable generation.
+   Example: "module A imports B imports C"
+
 2002/05/13 (jurgenv@cwi.nl)
  * The asfc compiler renames slashes to underscores in the module name
    to cope with compound module names.
