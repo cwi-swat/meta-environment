@@ -2,7 +2,7 @@
    $Id$
  */
 
-process Open-modules(Eval: evaluator) is
+process Open-modules is
 let
   Id      : term,
   Name    : str,

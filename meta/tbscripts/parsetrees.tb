@@ -34,7 +34,7 @@ in
   execute(addeqssyntax,Addsyn?).
   /* Start all controlling processes */
   create(Retrieve-eqs(Eval), Tid?).
-  create(Open-modules(Eval),Tid?).
+  create(Open-modules, Tid?).
   create(Rewrite(Eval), Tid?).
   create(Evaluator(Eval), Tid?).
   create(Compiler(), Tid?).
