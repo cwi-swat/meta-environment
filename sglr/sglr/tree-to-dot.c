@@ -26,11 +26,11 @@ void
 print_character(FILE *dot, int c)
 {
   switch(c) {
-  case '\n' : fprintf(dot, "\\\\\\\\n");
+  case '\n' : fprintf(dot, "\\\\n");
     break;
-  case 32 : fprintf(dot, "\\\\\\\\32");
+  case 32 : fprintf(dot, "\\\\32");
     break;
-  case '\t' : fprintf(dot, "\\\\\\\\t");
+  case '\t' : fprintf(dot, "\\\\t");
     break;
 
 /*
