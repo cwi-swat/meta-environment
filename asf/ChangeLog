@@ -1,3 +1,5 @@
+2003/03/24 ({markvdb,iversen}@cwi.nl)
+ * Annotations are propagated over injections.
 
 2003/02/14 (jurgenv@cwi.nl)
  * Fixed a minor bug in concat-asf

@@ -206,6 +206,7 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
 static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
 {
   PT_Args args;
+  PT_Production prod;
   PT_Tree arg, newarg, reduct = FAIL;
   PT_Args newargs = PT_makeArgsEmpty();
   int len;
@@ -213,6 +214,7 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
 
   assert(PT_hasTreeArgs(trm));
 
+  prod = PT_getTreeProd(trm);
   args = PT_getTreeArgs(trm);
   len = PT_getArgsLength(args);
  
@@ -255,7 +257,18 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     reduct = FAIL;
   }
   else {
-    reduct = PT_setTreeArgs(trm, newargs);
+    if (!PT_isProductionInjection(prod)) {
+      reduct = PT_setTreeArgs(trm, newargs);
+    }
+    else {
+      PT_Tree localArg = PT_getArgsHead(newargs);
+      ATerm annos = PT_getTreeAnnotations(localArg);
+
+      reduct = PT_setTreeArgs(trm, newargs);
+      if (annos) {
+        reduct = PT_setTreeAnnotations(reduct, annos);
+      }
+    }
   }
 
   return reduct;
