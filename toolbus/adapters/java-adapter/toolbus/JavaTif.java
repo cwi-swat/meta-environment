@@ -26,7 +26,8 @@ public class JavaTif
 
   static void usage()
   {
-    System.err.println("usage: javatif -tool <tool> -tifs <tifs> " +
+    System.err.println("usage: tifstojava" + 
+                       " -tool <tool> -tifs <tifs> " +
 		       "[-class <class>] [-package <package>] [-swing]");
     System.exit(0);
   }
