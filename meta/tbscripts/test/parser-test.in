@@ -23,9 +23,9 @@ call_toolbus open-sdf2-lang-test.tb
 call_toolbus open-table-test-1.tb
 
 # Attempt to open an erroneous table.
-@rm -f ErroneousTable.tbl
-@echo "table" > ErroneousTable.tbl
+rm -f ErroneousTable.tbl
+echo "table" > ErroneousTable.tbl
 call_toolbus open-table-test-2.tb
-@rm -f ErroneousTable.tbl
+rm -f ErroneousTable.tbl
 
 echo ""
