@@ -36,7 +36,7 @@
   [Attr, cons, cons(<string(str)>)],
   [Attr, bracket, atr("bracket")],
   [Attr, memo, atr("memo")],
-  [Attr, traverse, atr("traverse")],
+  [Attr, traverse, traverse],
 
   [Args, list, [<head(Tree)>,<[tail(Args)]>]],
   [Args, empty, []],
