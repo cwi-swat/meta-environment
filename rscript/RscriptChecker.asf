@@ -163,15 +163,15 @@ $Error]>
 [check-const-bag1] 
        check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
        $Etype' = bag[$Etype],
-       check-const-bag({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
+       check-const-bag([ $Elem+ ], $Tenv') = <$Etype', $Tenv''>
        ==========================================
-       check-const-bag({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
+       check-const-bag([ $Elem, $Elem+ ], $Tenv) = <$Etype', $Tenv''>
 
 [check-const-bag2] 
        check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  bag[$Etype]
        ==========================================
-       check-const-bag({ $Elem }, $Tenv) = <$Etype', $Tenv'>
+       check-const-bag([ $Elem ], $Tenv) = <$Etype', $Tenv'>
 
 [check-const-rel1]   
 	check-const-tuple($Tuple, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
@@ -212,18 +212,18 @@ $Error]>
 [check-bag-exp1] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  container-type($Etype),
-       check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
+       check([ $Exp+ ], $Tenv') = <$Etype', $Tenv''>
        ==========================================
-       check({ $Exp, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
+       check([ $Exp, $Exp+ ], $Tenv) = <$Etype', $Tenv''>
 
 [check-bag-exp2] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  container-type($Etype)
        ==========================================
-       check({ $Exp }, $Tenv) = <$Etype', $Tenv'>
+       check([ $Exp ], $Tenv) = <$Etype', $Tenv'>
 
 [default-check-bag-or-rel]
-	check({$Exp*}, $Tenv) = <undefined, $Tenv + {$Exp*} cannot be typed>
+	check([$Exp*], $Tenv) = <undefined, $Tenv + {$Exp*} cannot be typed>
 
 %% --- Check Operators
 
@@ -560,24 +560,23 @@ $Error]>
 [default-ct]
       	container-type($Etype) = bag[$Etype]
 
-[check-valueformer1]
-	is-tuple-exp($Exp) = false
-	===================================================================
-	check({$Exp | $From+ }, $Tenv) = check(bag {$Exp | $From+ }, $Tenv) 
-
-[check-valueformer2]
-	is-tuple-exp($Exp) = true
-	===================================================================
-	check({$Exp | $From+ }, $Tenv) = check(rel {$Exp | $From+ }, $Tenv) 
+[check-valueformer3] 
+      	add-from($From+, $Tenv) = $Tenv',
+      	check($Exp, $Tenv') = <$Etype, $Tenv''>,
+      	container-type($Etype) = $Etype',
+      	del-from($From+, $Tenv'') = $Tenv''',
+	require-itertype($Exp, bag, $Etype', $Tenv''') = $Tenv''''
+      	======================================
+      	check([ $Exp | $From+ ], $Tenv) = <$Etype', $Tenv''''>
 
 [check-valueformer3] 
       	add-from($From+, $Tenv) = $Tenv',
       	check($Exp, $Tenv') = <$Etype, $Tenv''>,
       	container-type($Etype) = $Etype',
       	del-from($From+, $Tenv'') = $Tenv''',
-	require-itertype($Exp, $IterType, $Etype', $Tenv''') = $Tenv''''
+	require-itertype($Exp, rel, $Etype', $Tenv''') = $Tenv''''
       	======================================
-      	check($IterType {$Exp | $From+ }, $Tenv) = <$Etype', $Tenv''''>
+      	check({ $Exp | $From+ }, $Tenv) = <$Etype', $Tenv''''>
 
 %% --- Check Exists
 
@@ -646,11 +645,7 @@ $Error]>
 
 [check-vardef1]
       check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
-[check-vardef2]
-      check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
-[check-vardef3]
-      check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
-[check-vardef4] 
+[check-vardef2] 
       check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
 
 [check-fundef] 

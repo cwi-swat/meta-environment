@@ -4,15 +4,10 @@ exports
 imports basic/Booleans
 imports basic/Integers
 
-%%imports EmptyBag
-
   sorts Bag[[Elem]]
 
 context-free syntax
-%%   EmptyBag					-> Bag[[Elem]]
-%%   Bag[[Elem]]					-> Bags
-   "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
-
+   "[" {Elem ","}* "]"                   	-> Bag[[Elem]] {constructor}
 
    add(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
    del(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]

@@ -1,16 +1,40 @@
 module Relations[Elem]
 
 imports Bags[Elem]
-imports Bags[Tuple] [ Bag[[Tuple]] => Rel[[Elem]] ]
 
 exports
 
-  sorts Tuple
+  sorts Tuple Rel[[Elem]]
 
   context-free syntax
+	Elem # Elem					-> Tuple
+   	"{" {Tuple ","}* "}"                   		-> Rel[[Elem]] {constructor}
 
-     Elem # Elem					-> Tuple
-%%     "EmptyRel"						-> Rel[[Elem]]
+%% --- functions cloned from Bag
+
+   	add(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
+   	del(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
+
+   	equal(Rel[[Elem]], Rel[[Elem]])           	-> Boolean
+   	subset(Rel[[Elem]], Rel[[Elem]])          	-> Boolean
+   	strict-subset(Rel[[Elem]], Rel[[Elem]])   	-> Boolean
+   	superset(Rel[[Elem]], Rel[[Elem]])        	-> Boolean
+   	strict-superset(Rel[[Elem]], Rel[[Elem]])	-> Boolean
+
+   	union1(Tuple, Rel[[Elem]])			-> Rel[[Elem]]
+   	union2(Rel[[Elem]], Tuple)			-> Rel[[Elem]]
+   	union(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
+   	inter(Rel[[Elem]], Rel[[Elem]])          	-> Rel[[Elem]]
+   	diff(Rel[[Elem]], Rel[[Elem]])            	-> Rel[[Elem]]
+
+   	size(Rel[[Elem]])                         	-> Integer
+   	in(Tuple, Rel[[Elem]])                   	-> Boolean
+
+   	"if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
+                                           		-> Rel[[Elem]]
+
+%% --- end of cloned functions
+
 
      compose(Rel[[Elem]], Rel[[Elem]])       		-> Rel[[Elem]]
     
@@ -60,7 +84,6 @@ hiddens
   variables
      "$Bag" [0-9\']*             -> Bag[[Elem]]
      "$Rel" [0-9\']*             -> Rel[[Elem]]
-
 
      "$Elem" [0-9\']*            -> Elem
      "$Elem*" [0-9\']*           -> {Elem ","}*

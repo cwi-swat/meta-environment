@@ -30,7 +30,7 @@ exports
 
 %% The RSTORE itself, maps RVARs to RVALUEs
         
-        "[" { RVAR # RVALUE ","}* "]"         -> RSTORE
+        "store" "(" { RVAR # RVALUE ","}* ")"         -> RSTORE {prefer}
         assign(RVAR, RVALUE, RSTORE)          -> RSTORE
 	assign-when-undef(RVAR, RVALUE, RSTORE)	-> RSTORE
 	increment(RVAR, RSTORE)			-> RSTORE
@@ -71,11 +71,8 @@ exports
    sorts INFIXOP PREFIXOP POSTFIXOP
 
    context-free syntax
-
-%%	 ITERTYPE "{" {FROM ","}+ "::" REXP ("," REXP)? "}"	-> REXP
-
-	ITERTYPE "{" {FROM ","}+ "::" REXP "}"	-> REXP
-	TARGET					-> REXP
+	 "[" {FROM ","}+ "::" REXP "]"		-> REXP
+	 "{" {FROM ","}+ "::" REXP  "}"		-> REXP
  
         evalp(REXP, RSTORE)            		-> Boolean
         evale(REXP, RSTORE)            		-> Elem
@@ -84,9 +81,9 @@ exports
         evalr(REXP, RSTORE)            		-> Rel[[Elem]]
 
         evalx(REXP, RSTORE)            		-> RVALUE
-        apply "(" RVALUE INFIXOP RVALUE ")"   	-> RVALUE
-        apply "(" PREFIXOP RVALUE ")"         	-> RVALUE
-        apply "(" RVALUE POSTFIXOP ")"         	-> RVALUE
+        apply(RVALUE, INFIXOP, RVALUE)    	-> RVALUE
+        apply(PREFIXOP, RVALUE)         	-> RVALUE
+        apply(RVALUE, POSTFIXOP)        	-> RVALUE
 
 %% Binary operators
 
@@ -147,12 +144,13 @@ hiddens
 
         "$Var" [0-9\']*                -> RVAR
         "$Exp"  [0-9\']*               -> REXP
-        "$Test"  [0-9\']*               -> REXP
+        "$Test"  [0-9\']*              -> REXP
         "$Exp*"  [0-9\']*              -> { REXP ","}*
         "$Exp+"  [0-9\']*              -> { REXP ","}+
 
         "$Rel" [0-9\']*                -> Rel[[Elem]] 
         "$Bag" [0-9\']*                -> Bag[[Elem]]
+
         "$Elem"   [0-9\']*             -> Elem
         "$Elem*"  [0-9\']*             -> {Elem ","}*
         "$Elem+"  [0-9\']*             -> {Elem ","}+
@@ -165,7 +163,7 @@ hiddens
         "$From*" [0-9\']*              -> {FROM ","}*
         "$From+" [0-9\']*              -> {FROM ","}+
 
-        "$Rscript" [0-9\']*             -> RSCRIPT
+        "$Rscript" [0-9\']*            -> RSCRIPT
 
         "$Stat" [0-9\']*               -> RSTAT
         "$Stat*" [0-9\']*              -> RSTAT*
@@ -173,14 +171,13 @@ hiddens
 
         "$Bool" [0-9\']*               -> Boolean
         "$Integer" [0-9\']*            -> Integer
-        "$String" [0-9\']*           	-> String
+        "$String" [0-9\']*             -> String
 	"$Etype" [0-9\']*              -> REXPTYPE
 
 	"$Iop"				-> INFIXOP
 	"$Preop"			-> PREFIXOP
 	"$Postop"			-> POSTFIXOP
 
-        "$IterType"  [0-9\']*           -> ITERTYPE
 	"$Target"  [0-9\']*  		-> TARGET
 
 
