@@ -159,7 +159,13 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
     id   = SDF_removeModuleIdAnnotations(
 			    SDF_getModuleNameModuleId(name));
     smodule = MT_getModule(moduleTable, id);
-    module = SDF_getStartTopModule(smodule);
+    if (smodule) {
+      module = SDF_getStartTopModule(smodule);
+    }
+    else {
+      module = NULL;
+    }
+
     renamings = SDF_makeRenamingsRenamings(
                                  SDF_makeLayoutSpace(),
 			         SDF_makeRenamingListEmpty(),
