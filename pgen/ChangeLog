@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/18 (jurgenv@cwi.nl)
+ * Regenerated normalizer with new compiler, the performance gain
+   is significant.
+
 2001/07/17 (jong@cwi.nl)
  * version 1.0 released, bumped to 1.1
 

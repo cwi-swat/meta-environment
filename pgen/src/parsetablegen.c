@@ -36,9 +36,9 @@ static char myarguments[] = "bchi:lm:no:tvV";
 /*}}}  */
 /*{{{  external functions */
 
-extern void register_Sdf050_Normalization();
-extern void resolve_Sdf050_Normalization();
-extern void init_Sdf050_Normalization();
+extern void register_Sdf2_Normalization();
+extern void resolve_Sdf2_Normalization();
+extern void init_Sdf2_Normalization();
  
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -217,9 +217,9 @@ int main(int argc, char *argv[])
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   SDF_initSDFMEApi(); 
 
-  register_Sdf050_Normalization();
-  resolve_Sdf050_Normalization();
-  init_Sdf050_Normalization();
+  register_Sdf2_Normalization();
+  resolve_Sdf2_Normalization();
+  init_Sdf2_Normalization();
 
   if(toolbus_mode) {
     for (i=1; i<argc; i++) {
