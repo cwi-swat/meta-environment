@@ -12,12 +12,13 @@ let
   NewTerm : term,
   Table   : term
 in
-  execute(restorebrackets, RESTORE?) .
   (
     rec-msg(restore-brackets(Term?, Table?)) .
+    execute(restorebrackets, RESTORE?) .
     snd-eval(RESTORE, restore-brackets(Term, Table)) .
     (
       rec-value(RESTORE, brackets-restored(NewTerm?)) .
+      snd-terminate(RESTORE, "done") .
       snd-msg(brackets-restored(NewTerm))
     )
   ) * delta
