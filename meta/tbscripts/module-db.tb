@@ -118,8 +118,8 @@ in
       snd-msg(ts-put-value("sdf-text", ModuleId, text(SyntaxText))) .
       snd-msg(ts-put-value("module-paths", ModuleId, path(Path))) .
       printf("DEBUG: just get the imported modules, not just the new ones?\n").
-      snd-msg(sm-get-imports(SyntaxTree)) .
-      rec-msg(sm-imports(Modules?)) .
+      snd-msg(sm-get-imported-modules(SyntaxTree)) .
+      rec-msg(sm-imported-modules(Modules?)) .
       snd-msg(adding-succeeded(Name,ModuleId, Modules))
     +
       rec-msg(sm-modulename-is-invalid) .
@@ -369,8 +369,8 @@ in
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
     Stripper(Modules, Modules?) .
-    snd-msg(sm-get-all-imports(Modules, Name)) .
-    rec-msg(sm-all-imports(Imported?))
+    snd-msg(sm-get-all-needed-modules(Modules, Name)) .
+    rec-msg(sm-all-needed-modules(Imported?))
 endlet
 
 process MDB-GetImportedModules(Name : str, Imported : list?) is
