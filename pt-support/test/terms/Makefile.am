@@ -2,7 +2,7 @@
 # Just add a file ending with .pt to this directory and the dictonary
 # will get updated
 
-EXTRA_DIST=$(wildcard *.pt)
+EXTRA_DIST=genTermsDict.sh.src $(wildcard *.pt)
 
 noinst_LIBRARIES=libtestTerms.a
 noinst_SCRIPTS=genTermsDict.sh

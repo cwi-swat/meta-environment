@@ -8,6 +8,10 @@ $Id$
    It ignores layout and annotations, is complete and stable (if the
    parse tree format remains stable). Only trees of the same non-terminal
    can be compared.
+ * Added tests for libmept
+ * Test terms are put in an automatically generated dictionary. All
+   files ending in .pt in the test/terms directory are automagically
+   added to this dictionary
    
 2003/09/23 (jurgenv@cwi.nl)
  * Added PT_removeTreeAllLayoutAndAnnotations

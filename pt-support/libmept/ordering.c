@@ -11,7 +11,9 @@ static int PT_compareArgs(PT_Args args1, PT_Args args2)
   PT_Tree arg2;
   int result = 0;
 
-  while (result == 0 && !PT_isArgsEmpty(args1)) {
+  while (result == 0 && 
+	 !PT_isArgsEmpty(args1) &&
+	 !PT_isArgsEmpty(args2)) {
     arg1 = PT_getArgsHead(args1);
     arg2 = PT_getArgsHead(args2);
 
