@@ -121,7 +121,6 @@ void usage(void)
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              text output mode\n"
-        "\t-p              pretty printed output\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myname, myargumentsexplained, myversion);
 }
