@@ -21,7 +21,7 @@ if [ $result != 1 ]; then
 	exit 1
 fi
 
-if echo $output | grep -iq usage; then
+if echo $output | grep -i usage >/dev/null; then
 	exit 0
 else
   echo "$1 -h does not return \"usage\"";
