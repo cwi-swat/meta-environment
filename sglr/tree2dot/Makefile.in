@@ -16,12 +16,13 @@ libdir		= @libdir@
 includedir	= @includedir@
 docdir		= ${top_srcdir}/docs
 
-SHELL		= @SHELL@
-
 AR              = @AR@
 AR_FLAGS        = cr
 
+SHELL		= @SHELL@
 MAKEDEPEND	= @MAKEDEPEND@
+RANLIB		= @RANLIB@
+
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CFLAGSPROF	= -pg ${CFLAGS}
@@ -83,6 +84,7 @@ install: all
 	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@( cd ${libdir}; ${RANLIB} ${LIBFILES} )
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
 # uninstall target (remove all files installed by 'install' target)
@@ -107,6 +109,7 @@ clean:
 
 libtree2dot.a:  ${LIBOBJ}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
+	${RANLIB} $@
 
 tree2dot:	${LIBFILES} ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} ${LIBS} -o $@

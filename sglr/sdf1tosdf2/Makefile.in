@@ -80,7 +80,7 @@ doc: $(DOCFILES)
 
 # clean target (remove all easily build components and temporary files)
 clean:
-	rm -f $(CLEANFILES)
+	@rm -f $(CLEANFILES) /tmp/bogus
 
 # distclean target (also remove any files created by 'configure')
 spotless distclean: clean
