@@ -1,14 +1,16 @@
-% LLNCS DOCUMENT CLASS -- version 2.4
+% LLNCS DOCUMENT CLASS -- version 2.8
 % for LaTeX2e
 %
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{llncs}[1998/11/20 v2.4
+\ProvidesClass{llncs}[2000/05/16 v2.8
 ^^JLaTeX document class for Lecture Notes in Computer Science]
 % Options
 \let\if@envcntreset\iffalse
 \DeclareOption{envcountreset}{\let\if@envcntreset\iftrue}
 \DeclareOption{citeauthoryear}{\let\citeauthoryear=Y}
 \DeclareOption{oribibl}{\let\oribibl=Y}
+\let\if@custvec\iftrue
+\DeclareOption{orivec}{\let\if@custvec\iffalse}
 \let\if@envcntsame\iffalse
 \DeclareOption{envcountsame}{\let\if@envcntsame\iftrue}
 \let\if@envcntsect\iffalse
@@ -28,6 +30,10 @@
 
 \setlength{\textwidth}{12.2cm}
 \setlength{\textheight}{19.3cm}
+
+% Ragged bottom for the actual page
+\def\thisbottomragged{\def\@textbottom{\vskip\z@ plus.0001fil
+\global\let\@textbottom\relax}}
 
 \renewcommand\small{%
    \@setfontsize\small\@ixpt{11}%
@@ -204,10 +210,12 @@ You should not use \verb|\subparagraph| with this class.\vskip0.5cm}
 
 \let\footnotesize\small
 
+\if@custvec
 \def\vec#1{\mathchoice{\mbox{\boldmath$\displaystyle#1$}}
 {\mbox{\boldmath$\textstyle#1$}}
 {\mbox{\boldmath$\scriptstyle#1$}}
 {\mbox{\boldmath$\scriptscriptstyle#1$}}}
+\fi
 
 \def\squareforqed{\hbox{\rlap{$\sqcap$}$\sqcup$}}
 \def\qed{\ifmmode\squareforqed\else{\unskip\nobreak\hfil
@@ -358,6 +366,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
      \parindent \z@
      \rightskip \z@ plus 5em
      \hrule\vskip5pt
+     \large               % same size as for a contribution heading
      \bfseries\boldmath   % set line in boldface
      \leavevmode          % TeX command to enter horizontal mode.
      #1\par
@@ -588,9 +597,11 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
   \kern-3\p@
   \hrule\@width 2truecm
   \kern2.6\p@}
+  \newdimen\fnindent
+  \fnindent1em
 \long\def\@makefntext#1{%
-    \parindent 1em%
-    \leftskip 1em%
+    \parindent \fnindent%
+    \leftskip \fnindent%
     \noindent
     \llap{\hb@xt@1em{\hss\@makefnmark\ }}\ignorespaces#1}
 
@@ -606,7 +617,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
   \vskip\belowcaptionskip}
 
 \def\fps@figure{htbp}
-\def\fnum@figure{\figurename\thefigure}
+\def\fnum@figure{\figurename\thinspace\thefigure}
 \def \@floatboxreset {%
         \reset@font
         \small
@@ -614,7 +625,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
         \@setminipage
 }
 \def\fps@table{htbp}
-\def\fnum@table{\tablename\thetable}
+\def\fnum@table{\tablename~\thetable}
 \renewenvironment{table}
                {\setlength\abovecaptionskip{0\p@}%
                 \setlength\belowcaptionskip{10\p@}%
@@ -685,6 +696,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 \def\inst#1{\unskip$^{#1}$}
 \def\fnmsep{\unskip$^,$}
 \def\email#1{{\tt#1}}
+\AtBeginDocument{\@ifundefined{url}{\def\url#1{#1}}{}}
 \def\homedir{\~{ }}
 
 \def\subtitle#1{\gdef\@subtitle{#1}}
@@ -918,7 +930,8 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
          \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
                                    \@addtoreset{#1}{section}}
       \else
-         \let\spn@wtheorem=\@spynthm
+         \def\spn@wtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}
+                                   \@addtoreset{#1}{chapter}}%
       \fi
    \fi
 \fi
@@ -967,8 +980,8 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
     {\endlist}
 \renewcommand{\abstractname}{Abstract.}
 \renewcommand{\contentsname}{Table of Contents}
-\renewcommand{\figurename}{Fig.\thinspace}
-\renewcommand{\tablename}{Table~}
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\tablename}{Table}
 
 \newdimen\headlineindent             % dimension for space between
 \headlineindent=1.166cm              % number and text of headings.
