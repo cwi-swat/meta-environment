@@ -1,3 +1,6 @@
+2001/08/08 (jurgenv@cwi.nl)
+ * Added new predicate to library: PT_isProductionInjection
+
 2001/08/01 (jurgenv@cwi.nl)
  * Bugfix: ambiguities inside of lists could not be converted to AsFix2ME.
 

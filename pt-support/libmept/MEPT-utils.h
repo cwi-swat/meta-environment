@@ -17,6 +17,7 @@ ATbool PT_isOptLayoutProd(PT_Production arg);
 ATbool PT_prodHasVarSymAsRhs(PT_Production arg);
 ATbool PT_isVarDefault(PT_Production arg);
 ATbool PT_isLexicalInjectionProd(PT_Production prod);
+ATbool PT_isProductionInjection(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
 

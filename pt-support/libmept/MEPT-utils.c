@@ -44,6 +44,24 @@ ATbool PT_isLexicalProd(PT_Production prod)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isProductionInjection(PT_Production prod) */
+
+ATbool PT_isProductionInjection(PT_Production prod)
+{
+  PT_Symbols lhs = PT_getProductionLhs(prod);
+
+  if (PT_getSymbolsLength(lhs) == 1) {
+    PT_Symbol symbol = PT_getSymbolsHead(lhs);
+
+    if (!PT_isSymbolLit(symbol)) {
+      return ATtrue;
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod) */
 
 ATbool PT_prodHasLexLayoutAsRhs(PT_Production  prod)
