@@ -515,7 +515,7 @@ in
         StackPopTerm(Stack, Stack?, PosInfo?) .
         StackPopString(Stack,Stack?, ModuleName?) .
         FileName := first(args(PosInfo)) .
-        snd-msg(edit-general(ModuleName, FileName)) .
+        snd-msg(edit-general(FileName)) .
         rec-msg(editor-opened(ModuleName, EditorId2?)).
         GetTree(EditorId2, ModuleName, Tree?) .
         snd-msg(get-focus-at-posinfo(EditorId2, PosInfo)) .

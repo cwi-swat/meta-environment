@@ -45,19 +45,10 @@ endlet
 process ShowArea(Filename : str, Area : term) is
 let
   EditorId : term,
-  Start : int,
-  End : int, 
-  Length : int
+  ModuleName : str,
+  Focus : term,
+  Positions : list
 in
-  snd-msg(edit-general("unknown language", Filename)) .
-  rec-msg(editor-opened("unknown language", EditorId?)) .
-  if not(equal(Area, no-area)) then
-     Start := first(next(next(next(next(args(Area)))))) .
-     End := first(next(next(next(next(next(args(Area))))))) .
-     Length := sub(End, Start) .
-     snd-msg(set-focus(EditorId, 
-                       focus(root, "unavailable", area(Start, Length, 0))))
-  else 
-     tau
-  fi
+  snd-msg(edit-general(Filename)) .
+  rec-msg(editor-opened(ModuleName?, EditorId?)) 
 endlet  

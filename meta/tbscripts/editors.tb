@@ -6,8 +6,8 @@ let
   Tree       : term
 in
   (
-    rec-msg(edit-general(ModuleName?, FileName?)) .
-    GeneralEditorCreator(ModuleName, FileName)
+    rec-msg(edit-general(FileName?)) .
+    GeneralEditorCreator(FileName)
   +
     rec-msg(edit-syntax(ModuleName?)) .
     SyntaxEditorCreator(ModuleName)
@@ -27,18 +27,20 @@ in
   * delta
 endlet
 
-process GeneralEditorCreator (ModuleName : str, FullFileName : str) is
+process GeneralEditorCreator (FullFileName : str) is
 let
   Path : str,
   FileName : str,
   Extension : str,
-  AskedExtension : str
+  AskedExtension : str,
+  ModuleName : str
 in
   snd-msg(file-extension-hook(sdf)) .
   rec-msg(file-extension-hook-result(AskedExtension?)) .
   snd-msg(decons-file-name(FullFileName, AskedExtension)) .
   rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
   if equal(Extension, AskedExtension) then
+    MDB-GetModuleName(Path, FileName, ModuleName?) .
     SyntaxEditorCreator(ModuleName)
   else
     snd-msg(file-extension-hook(asf)) .
@@ -46,6 +48,7 @@ in
     snd-msg(decons-file-name(FullFileName, AskedExtension)) .
     rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
     if equal(Extension, AskedExtension) then
+      MDB-GetModuleName(Path, FileName, ModuleName?) .
       EquationsEditorCreator(ModuleName)
     else
       TermEditorCreator(ModuleName, FullFileName, none)
