@@ -16,7 +16,14 @@ test-lifting-to-term(PROGRAM) -> ATerm
 test-lifting-to-tree(PROGRAM) -> Tree
 test-term-compare(PROGRAM,PROGRAM) -> Measure
 
-
 variables
 
 "PROGRAM"[123] -> PROGRAM 
+"ATermList"    -> ATermList
+"Args"         -> Args
+"Tree" -> Tree
+"Ann" -> Ann
+"Prod" -> Production
+"Symbol" -> Symbol
+"ATerm+" -> {ATerm ","}+
+"AFun" -> AFun
