@@ -39,8 +39,8 @@ HDRS         = atsets.h ksdf2table.h statistics.h flatten.h
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = parsetablegen.tif.o \
-                        -L$(top_srcdir)/c-source -lSdf2-Normalization \
-                        -L$(top_srcdir)/c-lib -lnative \
+                        -L$(top_builddir)/c-source -lSdf2-Normalization \
+                        -L$(top_builddir)/c-lib -lnative \
                         -L$(ASC)/lib -lasc-support \
                         -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                         -L$(PT_SUPPORT)/lib -lPT \
