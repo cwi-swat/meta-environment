@@ -15,6 +15,7 @@ identification
 configuration interface
 
 requires
+  error-support 0.1
   asc-support	1.8
   sglr	        3.10.2
   asf-support	1.2
