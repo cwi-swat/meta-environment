@@ -77,6 +77,11 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb,irels(Pairs?)).
   snd-note(import-relations(irels(Pairs)))
 +
+  rec-msg(add-empty-module-to-db(Module?)).
+  snd-eval(Mdb,add-empty-module(Module)).
+  rec-value(Mdb,done).
+  snd-msg(done)
++
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(add-sdf2-module-to-db(Path?,Module?,Status?)).
@@ -160,8 +165,11 @@ snd-do(Mdb, create-module-db).
     rec-value(Mdb, syntax(Syntax?)).
     snd-msg(syntax(Syntax))
   +
-    rec-value(Mdb, syntax-unchanged).
-    snd-msg(syntax-unchanged)
+    rec-value(Mdb, syntax-unchanged(Syntax?)).
+    snd-msg(syntax-unchanged(Syntax))
+  +
+    rec-value(Mdb, unavailable).
+    snd-msg(unavailable)
   )
 +
   rec-msg(get-eqs-asfix(Module?)).
@@ -169,11 +177,14 @@ snd-do(Mdb, create-module-db).
   ( rec-value(Mdb, eqs(Eqs?)).
     snd-msg(eqs(Eqs))
   +
-    rec-value(Mdb, eqs-unchanged).
-    snd-msg(eqs-unchanged)
+    rec-value(Mdb, eqs-unchanged(Eqs?)).
+    snd-msg(eqs-unchanged(Eqs))
   +
     rec-value(Mdb, no-eqs).
     snd-msg(no-eqs)
+  +
+    rec-value(Mdb, unavailable).
+    snd-msg(unavailable)
   )
 +
   rec-msg(add-pgen-func(Module?,Syntax?)).
