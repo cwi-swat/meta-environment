@@ -4,7 +4,7 @@ SDF2TABLE - generate parse tables from SDF2 language definitions
 
 =head1 SYNOPSIS
 
-B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<l>][-B<o> I<file>] [-B<tvVx>] file0 ...
+B<sdf2table> [-B<bfh>] [-B<i> I<file>] [-B<l>] [-B<m> I<name>] [-B<o> I<file>] [-B<tvVx>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -35,6 +35,10 @@ or from the named files supplied as arguments.
 =item -B<l>
 
 Displays statistic information.
+
+=item -B<m> I<name>
+
+Use F<name> as top module when generating a parse table.
 
 =item -B<o> I<file>
 

@@ -40,7 +40,7 @@ ATbool run_verbose;
 ATbool statisticsMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "2.2";
+static char myversion[] = "2.3";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -48,7 +48,7 @@ static char myversion[] = "2.2";
     explanation.
  */
 
-static char myarguments[] = "bchi:lo:tvV";
+static char myarguments[] = "bchi:lm:o:tvV";
 
 /*}}}  */
 /*{{{  external functions */
@@ -254,6 +254,7 @@ void usage(void)
         "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
         "\t-i filename     input from file (default stdin)\n"
+        "\t-m modulename   name of top module (default Main)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
@@ -280,6 +281,7 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack, term, pt, expterm, normterm;
   char *input = "-";
   char *output = "-";
+  char *moduleName = "-";
   int bafMode = 1;
   int proceed = 1;
   
@@ -321,6 +323,7 @@ int main(int argc, char *argv[])
         case 'b':  bafMode = 1;                            break;
         case 'i':  input=optarg;                           break;
         case 'l':  statisticsMode = ATtrue;                break;
+        case 'm':  moduleName=optarg;                      break;
         case 'o':  output=optarg;                          break;
         case 't':  bafMode = 0;                            break;
         case 'v':  run_verbose = ATtrue;                   break;
@@ -335,8 +338,9 @@ int main(int argc, char *argv[])
     argv += optind;
 
     if(proceed) {
-      if (!strcmp(input, "") || !strcmp(input, "-"))
+      if (!strcmp(input, "") || !strcmp(input, "-")) {
         iofile = stdin;
+      }
       else if (!(iofile = fopen(input, "r")))
         ATerror("%s: cannot open %s\n", myname, input);
 
@@ -354,7 +358,12 @@ int main(int argc, char *argv[])
         }
       );
 
-      normterm = add_norm_function(expterm);   
+      if (!strcmp(moduleName, "-")) {
+        normterm = add_norm_function(expterm);   
+      }
+      else {
+        normterm = add_name_norm_function(moduleName, expterm);
+      }
       pt = normalize_and_generate_table(normterm);
 
       if (!strcmp(output, "") || !strcmp(output, "-"))
