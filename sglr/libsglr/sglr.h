@@ -43,9 +43,9 @@ void SG_Dump_ATtable(ATermTable t, char *s);
 
 /*  Data structures: states, actions, character ranges and parse tables  */
 
-typedef short            state;
-typedef short            label;
-typedef unsigned short   token;
+typedef int            state;
+typedef int            label;
+typedef unsigned short token;
 
 typedef ATerm     action;
 typedef ATermList lookahead;

@@ -1,5 +1,8 @@
 $Id$
 
+2001/06/12 (markvdb@cwi.nl)
+  * Changed size of state and label into int (was short).
+
 2001/05/23 (markvdb@cwi.nl)
   * Released version 3.2.2, and bumped into 3.2.3.
 
