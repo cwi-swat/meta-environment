@@ -25,6 +25,7 @@ SDF_SymbolList  SDF_getModuleSorts(SDF_Module module);
 SDF_ProductionList SDF_getModuleLexicalProductions(SDF_Module module);
 SDF_ProductionList SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
                                                               SDF_Module module);
+SDF_ProductionList SDF_getModuleContextFreeProductions(SDF_Module module);
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList list1, 
                                             SDF_ProductionList list2);
 

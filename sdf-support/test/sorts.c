@@ -8,7 +8,7 @@ int
 testSorts(void)
 {
   ATerm       contents;
-  ATermList   sorts;
+  SDF_SymbolList   sorts;
   SDF_Module  module;
   SDF_Symbol  symbol;
   SDF_Sort    sort;
@@ -19,11 +19,11 @@ testSorts(void)
 
   module = SDF_makeModuleFromTerm(contents);
 
-  sorts = SDFgetSorts(module);
+  sorts = SDF_getModuleSorts(module);
 
-  assert(ATgetLength(sorts) == 1);
+  assert(ATgetLength((ATermList)SDF_makeTermFromSymbolList(sorts)) == 1);
 
-  symbol = SDF_makeSymbolFromTerm(ATgetFirst(sorts));
+  symbol = SDF_getSymbolListHead(sorts);
   sort   = SDF_getSymbolSort(symbol);
   lex    = SDF_getSortLex(sort);
 

@@ -39,7 +39,7 @@ SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
   SDF_ProductionList lexProds = SDF_getModuleLexicalProductions(module);
   SDF_ProductionList newLexProds = SDF_makeProductionListEmpty();
 
-  while (!SDF_hasProductionListHead(lexProds)) {
+  while (SDF_hasProductionListHead(lexProds)) {
     SDF_Production lexProd = SDF_getProductionListHead(lexProds);
 
     SDF_Symbol rhsSymbol = SDF_getProductionResult(lexProd);
@@ -58,6 +58,35 @@ SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
     lexProds = SDF_getProductionListTail(lexProds);
   }
   return newLexProds;
+}
+
+/*}}}  */
+/*{{{  collect_cf_prods(SDF_Grammar grammar, SDF_Productions *cfProds) */
+
+static void
+collect_cf_prods(SDF_Grammar grammar, SDF_ProductionList *cfProds)
+{
+  if (SDF_isGrammarContextFreeSyntax(grammar)) {
+    SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
+    SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
+
+    *cfProds = SDF_concatProductionList(*cfProds, prods);
+  }
+}
+
+/*}}}  */
+/*{{{  SDF_getModuleContextFreeProductions(SDF_Module module) */
+
+SDF_ProductionList 
+SDF_getModuleContextFreeProductions(SDF_Module module)
+{
+  SDF_ProductionList cfProds = SDF_makeProductionListEmpty();
+
+  SDFforeachGrammarInModule(module,
+			    (SDFGrammarFunc)collect_cf_prods,
+			    (void *)&cfProds);
+
+  return cfProds;
 }
 
 /*}}}  */

@@ -9,16 +9,16 @@ testGrammars(void)
 {
   ATerm      contents;
   SDF_Module module;
-  ATermList  lexProds;
+  SDF_ProductionList lexProds;
 
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
 
   module = SDF_makeModuleFromTerm(contents);
 
-  lexProds = SDFgetLexicalProductions(module);
+  lexProds = SDF_getModuleLexicalProductions(module);
 
-  assert(ATgetLength(lexProds) == 3);
+  assert(ATgetLength((ATermList)SDF_makeTermFromProductionList(lexProds)) == 5);
 
   return 0;
 }
