@@ -29,7 +29,7 @@ public class ToolBus {
   private static String parseTable = "/home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
   private static String implodePT = "/home/paulk/bin/implodePT";
   private static boolean verbose = false;
-  
+
   /**
    * Constructor with explicit PrintWriter
    */
@@ -47,7 +47,7 @@ public class ToolBus {
     }
     parser = new TscriptParser(new ExternalParser(sglr, parseTable, implodePT));
   }
-  
+
   /**
    * Constructir with implicit PrintWriter
    */
@@ -55,7 +55,7 @@ public class ToolBus {
   public ToolBus() {
     this(new PrintWriter(System.out));
   }
-  
+
   /**
    * Constructor with explicit StringWriter
    */
@@ -63,7 +63,21 @@ public class ToolBus {
   public ToolBus(StringWriter out) {
     this(new PrintWriter(out));
   }
-  
+
+  private static String getHostName() {
+    String hostname = "";
+    try {
+      hostname = java.net.InetAddress.getLocalHost().getHostName();
+      int dotPosition = hostname.indexOf('.');
+      if (dotPosition != -1) {
+        hostname = hostname.substring(0, dotPosition);
+      }
+    } catch (java.net.UnknownHostException e) {
+      // ignore, unable to resolve hostname
+    }
+    return hostname;
+  }
+
   /**
    * Get the name of the property file to be used
    */
@@ -71,10 +85,17 @@ public class ToolBus {
   private static String getPropertyFile() {
     String stdName = "toolbus.props";
     String user = System.getProperty("user.name");
+    String hostname = getHostName();
+
     File f;
     String fname;
-    fname = user + "-" + stdName;
+    fname = user + "@" + hostname + "-" + stdName;
+    f = new File(fname);
+    if (f.exists()) {
+      return fname;
+    }
 
+    fname = user + "-" + stdName;
     f = new File(fname);
     if (f.exists()) {
       return fname;
@@ -86,7 +107,7 @@ public class ToolBus {
     }
     return null;
   }
-  
+
   /**
    * Load properties from property file; use defaults if absent
    */
@@ -101,7 +122,7 @@ public class ToolBus {
       implodePT = props.getProperty("implodePT.path", implodePT);
     }
   }
-  
+
   /**
    * Get the ATermFactory used.
    */
@@ -109,7 +130,7 @@ public class ToolBus {
   public ATermFactory getFactory() {
     return factory;
   }
-  
+
   /**
    *  Get the current vector of processes.
    */
@@ -117,7 +138,7 @@ public class ToolBus {
   public Vector getProcesses() {
     return processes;
   }
-  
+
   /**
    * Set verbose mode.
    */
@@ -125,7 +146,7 @@ public class ToolBus {
   public static void setVerbose(boolean b) {
     verbose = b;
   }
-  
+
   /**
    * Get verbose mode
    */
@@ -133,7 +154,7 @@ public class ToolBus {
   public static boolean isVerbose() {
     return verbose;
   }
-  
+
   /**
    * Get current PrintWriter.
    */
@@ -141,7 +162,7 @@ public class ToolBus {
   public PrintWriter getPrintWriter() {
     return out;
   }
-  
+
   /**
    * Generate next random integer.
    */
@@ -149,7 +170,7 @@ public class ToolBus {
   public static int nextInt(int n) {
     return rand.nextInt(n);
   }
-  
+
   /**
    * Generate next random boolean.
    */
@@ -157,7 +178,7 @@ public class ToolBus {
   public static boolean nextBoolean() {
     return rand.nextBoolean();
   }
-  
+
   /**
    * Parse a Tscript from file and add definitions to this ToolBus.
    */
@@ -165,7 +186,7 @@ public class ToolBus {
   public void parse(String filename) throws ToolBusException {
     parser.parse(this, filename);
   }
-  
+
   /**
    * Add a process definition.
    */
@@ -179,18 +200,17 @@ public class ToolBus {
     }
     procdefs.add(PD);
   }
-  
-  
-   /**
-   * Add a process (with actuals) and attached tool name.
-   */
+
+  /**
+  * Add a process (with actuals) and attached tool name.
+  */
 
   public ProcessInstance addProcess(String name, ATermList actuals, String toolname) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, name, actuals, toolname);
     processes.add(P);
     return P;
   }
-  
+
   /**
    * Add a process (with actuals).
    */
@@ -200,7 +220,7 @@ public class ToolBus {
     processes.add(P);
     return P;
   }
-  
+
   /**
    * Add a process (without actuals).
    */
@@ -208,7 +228,7 @@ public class ToolBus {
   public ProcessInstance addProcess(String name) throws ToolBusException {
     return addProcess(name, (ATermList) factory.make("[]"));
   }
-  
+
   /**
    * Add a process (as ProcessCall); previous two will become obsolete.
    */
@@ -218,13 +238,13 @@ public class ToolBus {
     processes.add(P);
     return P;
   }
-  
+
   public ProcessInstance addProcess(ProcessCall call, String toolName) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, call, toolName);
     processes.add(P);
     return P;
   }
-  
+
   /**
    * Get a process definition by name.
    */
@@ -237,7 +257,7 @@ public class ToolBus {
     }
     throw new ToolBusException("no definition for process " + name);
   }
-  
+
   /**
    * Shutdown of this ToolBus.
    */
@@ -249,7 +269,7 @@ public class ToolBus {
     }
     throw new ToolBusDeathException(msg);
   }
-  
+
   /**
    * Execute all the processes.
    */
