@@ -146,6 +146,9 @@ ATerm innermost(PT_Tree tree)
     else {
       result = call(prod, innermost_list(args));
     }
+  } else if (PT_isTreeAmb(tree)) {
+    ATerror("Ambiguous parse tree not supported\n");
+    return NULL;
   }
 
   return result;
