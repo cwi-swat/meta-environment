@@ -1,5 +1,7 @@
 2002/02/05 (jurgenv@cwi.nl)
  * Improved usage message of concat-asf
+ * Pos-info is no longer needed for asfe if debugging with Tide is 
+   not activated.
 
 2002/01/23 (jurgenv@cwi.nl)
  * Fixed a bug in addapisyntax; sequences were not supported.
