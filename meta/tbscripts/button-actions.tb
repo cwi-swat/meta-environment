@@ -143,7 +143,8 @@ let
   Path : str,
   Tree : term,
   Text : str,
-  TimeStamp : int
+  TimeStamp : int,
+  ErrorMessage : str
 in
    (
       rec-msg(apply(FuncName?, SortName?, NrOfArgs?), Stack?, EditorId?) .
@@ -476,12 +477,15 @@ in
         else
           Text := first(args(Tree)) .
           snd-msg(io-write-text-file(Path,[Text])).
-          rec-msg(io-file-written)
-      
-          rec-msg(io-file-not-written(ErrorMessage?))
-          snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
-        fi .
-        ReturnSuccess(EditorId, Stack)
+	  (
+            rec-msg(io-file-written) .
+            ReturnSuccess(EditorId, Stack)
+          +
+            rec-msg(io-file-not-written(ErrorMessage?)) .
+            snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage]))) .
+	    ReturnAbort(EditorId, Stack)
+          )
+        fi 
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) . 
 	printf("not yet implemented at line %d", __LINE__) .
@@ -699,13 +703,13 @@ in
     rec-msg(editor-name(FileName?)) .
     snd-msg(io-write-text-file(FileName,[Text])) .
     (
-      rec-msg(io-file-written(FileName)) .
+      rec-msg(io-file-written) .
       snd-note(reload-file(EditorId, FileName)) .
       snd-msg(move-focus-to-root(EditorId)) .
       rec-msg(focus-moved(EditorId, Focus?)) .
       snd-note(set-focus(EditorId, Focus))
     +
-      rec-msg(io-file-not-written(ErrorMessage?))
+      rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
     )
   +
