@@ -26,13 +26,32 @@ in
       )
     )
   +
-    rec-msg(Id?,open-eqs2-file(id(Name?))).
-    snd-eval(IO,open-eqs2-file(Name)).
-    ( rec-value(IO,opened-file(Name,Text?,Path?)).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
+    rec-msg(Id?,open-eqs2-asfix-file(id(Name?))).
+    snd-eval(IO,open-eqs2-asfix-file(Name)).
+    ( rec-value(IO,opened-asfix-file(Name,T?,Path?)).
+      snd-msg(Id,opened-file(baf,id(Name),T,Path))
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))
+    )
+  +
+    rec-msg(Id?,open-eqs2-text-file(id(Name?))).
+    snd-eval(IO,open-eqs2-text-file(Name)).
+    ( rec-value(IO,opened-file(Name,Text?,Path?)).
+      snd-msg(Id,opened-file(raw,id(Name),Text,Path)) 
+      +
+      rec-value(IO,error-opening(Name?)).
+      snd-msg(Id, error-opening(Name))
+    )
+  +
+    rec-msg(Id?,read-parse-table(id(Name?))).
+    snd-eval(IO,read-parse-table(Name)).
+    (
+      rec-value(IO,table-on-disk(Text?)).
+      snd-msg(Id,table-on-disk(Text))
+    +
+      rec-value(IO,error-opening(Name?)).
+      snd-msg(Id,no-table-on-disk)
     )
   +
     rec-msg(Id?,open-trm-file(id(Name?))).
@@ -50,7 +69,7 @@ in
     snd-msg(save-done)
   +
     rec-msg(save-eqs-asfix(id(Name?),Path?,Asfix?)).
-    snd-eval(IO,save-eqs-asfix(Name,Path,Asfix)).
+    snd-eval(IO,save-eqs2-asfix(Name,Path,Asfix)).
     rec-value(IO,save-done(Name?)).
     snd-msg(save-done)
   )*
