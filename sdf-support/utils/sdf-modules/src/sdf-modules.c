@@ -8,6 +8,7 @@
 
 #include <SDFME-utils.h>
 #include "sdf-modules.tif.h"
+#include "get-imports.h"
 
 #define SEP '/'
 
