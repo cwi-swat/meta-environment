@@ -1,11 +1,15 @@
 /* $Id$ */
 
+/*{{{  includes */
+
 #include <stdio.h>
 #include <assert.h>
 
 #include <PT2SDF.h>
 
 #include "findProduction.h"
+
+/*}}}  */
 
 /*{{{  static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2) */
 

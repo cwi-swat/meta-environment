@@ -2,6 +2,9 @@
 
 include $(top_srcdir)/make_rules
 
+# During development
+CFLAGS += -Werror
+
 QUERIES = \
 	findSortDefinition.c \
 	findProduction.c

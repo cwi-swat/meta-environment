@@ -63,7 +63,7 @@ ATerm findSortDefinition(ATerm atModule, ATerm atTree)
 }
 
 /*}}}  */
-/*{{{  ATerm findSortDefinition(ATerm atModule, ATerm atTree) */
+/*{{{  ATerm findProduction(ATerm atModule, ATerm atTree) */
 
 ATerm findProduction(ATerm atModule, ATerm atTree)
 {
