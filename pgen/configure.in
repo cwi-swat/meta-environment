@@ -20,7 +20,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(sdf, 0.1)
+AM_INIT_AUTOMAKE(pgen, 2.3)
 
 ACLOCAL="${ACLOCAL} -I ."
 
