@@ -95,7 +95,7 @@ all: meta.tifs $(BINFILES) $(LIBFILES) $(DATAFILES) $(INCLUDEFILES)
 test: module-test
     
 module-test: all
-	@cd test; make test
+	@cd test; $(MAKE) test
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
@@ -129,7 +129,7 @@ doc: $(DOCFILES)
 # clean target (remove all easily build components and temporary files)
 clean:
 	rm -f *.o *~ $(CLEANFILES)
-	cd test; make clean
+	cd test; $(MAKE) clean
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
