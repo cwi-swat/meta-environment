@@ -56,7 +56,7 @@ WISH            = @WISH@
 
 all:	${PROGRAMS} $(LIBFILES) $(SRCDOC) ${DOC} 
 
-wish-adapter: wish-adapter.c
+wish-adapter: wish-adapter.c ${LIBS}
 	$(COMPILE) wish-adapter.c -o wish-adapter ${LIBS}
 
 wish-adapter.c wish-adapter.c.tex: wish-adapter.c.nw
