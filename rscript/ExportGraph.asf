@@ -30,7 +30,7 @@ equations
 	export-graph-int($NatCon) = export-graph($NatCon)
 
 [export-graph-str1]
-	export-graph-str($String) = export-graph($String)
+	export-graph-str($StrCon) = export-graph($String)
 
 [export-graph-bag1]
 	export-graph-bag($Bag) = export-graph($Bag)

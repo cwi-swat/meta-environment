@@ -13,7 +13,9 @@ exports
      BoolCon                                	-> Elem  
      Integer                               	-> Elem  
      String				    	-> Elem  
-     Area				    	-> Elem  
+     Area				    	-> Elem 
+
+%%     "*undefined*"				-> Elem 
 
 %% Extend Elem to allow nested bags and relations
 
