@@ -22,10 +22,11 @@ public class ParseTreePanel extends ZoomableGraphPanel {
                         if (node.hasInfo("message")) {
                             bridge.postEvent(node.getInfo("message"));
                         }
+                        panel.setSelectedNode(node);
                     }
                 }
             }
         };
-        addMouseListener(listener);
+        panel.addMouseListener(listener);
     }
 }
