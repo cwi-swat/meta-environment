@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar 24 10:31:40 CET 2004 <{jong,kooiker}@cwi.nl>
+ * utils/addPosInfo: use Location API instead of Error API
+
 Tue Mar 23 09:37:57 CET 2004 <{jong,kooiker}@cwi.nl>
  * libmept:
    - remove flat-layout from MEPT.adt, regenerated

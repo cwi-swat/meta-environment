@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    initErrorApi();
+    LOC_initLocationApi();
 
     cid = ATBconnect(NULL, NULL, -1, position_annotator_handler);
     ATBeventloop();
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
   {
     ATinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
-    initErrorApi();
+    LOC_initLocationApi();
 
     if (argc == 1) {
       /* no arguments */
