@@ -19,9 +19,9 @@ buttons([
           reduce,
           push-filename("reduct.out"),
           push-active-module,
-          close-editor,
           push-filename("reduct.out"),
           push-active-module,
+          close-editor,
           activate-editor
          ]),
   button("*",
