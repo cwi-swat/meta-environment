@@ -20,7 +20,14 @@
 #
 # $Id$
 
+include ${top_srcdir}/make_rules
+
 bin_PROGRAMS    = asfix2c
+EXTRA_DIST      = asfix2c.pod
+
+man_MANS        = asfix2c.1
+
+CLEANFILES      = asfix2c.1
 
 asfix2c_SOURCES = asfix2c.c asfix-db.c asfix-db.h asfix-io.c asfix-reshuffle.c
 asfix2c_LDADD   = -L$(top_builddir)/compiler/c-source -lAsFix2C \
