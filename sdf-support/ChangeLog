@@ -1,5 +1,8 @@
 $Id$
 
+2003/09/23 (jurgenv@cwi.nl)
+ * Added label support.
+
 2003/08/01 (jurgenv@cwi.nl)
  * SDFProductionToPtProduction does not abort anymore after encountering
    a production it can not convert. A message is printed and NULL is 
