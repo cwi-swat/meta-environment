@@ -11,28 +11,20 @@ context-free syntax
 
 "feedback" "(" "[" {Feedback ","}* "]" ")" -> Summary {cons("feedback")}
 
-"info" "(" id:StrCon "," 
-           producer-id:StrCon "," 
-           producer-type:StrCon "," 
+"info" "(" producer:StrCon "," 
            description:StrCon "," 
            "[" {Subject ","}* "]" ")" -> Feedback {cons("info")}
 
-"warning" "(" id:StrCon "," 
-              producer-id:StrCon "," 
-              producer-type:StrCon "," 
+"warning" "(" producer:StrCon "," 
               description:StrCon "," 
               "[" {Subject ","}* "]" ")" -> Feedback {cons("warning")}
 
-"error" "(" id:StrCon "," 
-            producer-id:StrCon "," 
-            producer-type:StrCon "," 
+"error" "(" producer:StrCon "," 
             description:StrCon "," 
             "[" {Subject ","}* "]" ")" -> Feedback {cons("error")}
 
-"fatal-error" "(" id:StrCon "," 
-                  producer-id:StrCon "," 
-                  producer-type:StrCon "," 
+"fatal-error" "(" producer:StrCon "," 
                   description:StrCon "," 
                   "[" {Subject ","}* "]" ")" -> Feedback {cons("fatal-error")}
 
-"subject""("id:StrCon "," Location ")" -> Subject {cons("subject")}
+"subject""(" description:StrCon "," Location ")" -> Subject {cons("subject")}
