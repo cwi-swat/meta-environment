@@ -46,7 +46,9 @@ static ATbool allAlphaNumeric(const char* str)
 
 
   for (i = 0; i < len ; i++) {
-    if (!isalnum((unsigned int) str[i])) {
+    if (!isalnum((unsigned int) str[i])
+	&& str[i] != '-' 
+	&& str[i] != '_') {
       return ATfalse;
     }
   }
