@@ -370,6 +370,7 @@ private void paintDiamond(Graphics2D g, int x, int y, int w, int h, Color node_b
     g.fillPolygon(xs,ys,4); */
 	g.setColor(node_border);
 	g.drawPolygon(xs,ys,4);
+    g.drawRect(x,y,w,h);
 }
 
 private void paintEllipse(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
@@ -377,6 +378,7 @@ private void paintEllipse(Graphics2D g, int x, int y, int w, int h, Color node_b
 	g.fillOval(x,y,w,h);
 	g.setColor(node_border);
 	g.drawOval(x,y,w,h);
+    g.drawRect(x,y,w,h);
 }
 
 private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
