@@ -24,8 +24,7 @@ CPPFLAGS    = @CPP@ ${XCPPFLAGS}
 DEFS        = @DEFS@ ${XDEFS}
 INCLUDES    = @INCLUDES@ ${XINCLUDES}
 LIBS        = @LIBS@ ${XLIBS}
-SOCKLIBS    = @SOCKLIBS@
-GELLIBS     = @GELLIBS@
+SOCKLIBS    = @SOCKLIBS@ 
 
 INSTALL     = @INSTALL@
 INSTALL_DATA    = @INSTALL_DATA@
@@ -41,7 +40,7 @@ INCLUDE = -I../support -I$(includedir) -I$(ATERM)/../include
 CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus -L$(libdir) \
 	-L../support -lsupport-cc -lATerm-cc -lAsFix-cc -lATB-cc \
-	-lsocket -lnsl 
+	$(SOCKLIBS) 
 LFLAGS	=  
 AR	= ar
 
