@@ -3,9 +3,12 @@
 process PrettyPrintTerm(ModuleName : str, Tree : term, Result : term?) is
 let
   Syntax : term,
-  ErrorMessage : str
+  ErrorMessage : str,
+  Id : int
 in
+  Id := process-id .
   Result := error-tree .
+  snd-note(ui-status(stat(Id, "Pretty printing..."))) .
   snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
   (
     rec-msg(syntax(Syntax?)) .
@@ -19,5 +22,6 @@ in
   +
     rec-msg(no-syntax(ErrorMessage?)) .
     snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
-  )
+  ) .
+  snd-note(endstat(Id))
 endlet
