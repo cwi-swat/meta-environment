@@ -1,4 +1,4 @@
-Copyright (c) 1999, Stichting Mathematisch Centrum 
+Copyright (c) 1999, Stichting Mathematisch Centrum
 All rights reserved.
 
 
@@ -10,20 +10,22 @@ All rights reserved.
   the Distribution, and to permit persons to whom the Distribution is
   furnished to do so, subject to the following conditions:
 
-  - Redistributions containing source code from Distribution must retain
-    the above copyright notice, this list of conditions and the
+  - Redistributions containing source code from the Distribution must
+    retain the above copyright notice, this list of conditions and the
     following disclaimer.
 
-  - Redistributions containing parts of Distribution in binary form must
-    reproduce the above copyright notice, this list of conditions and
-    the following disclaimer in the documentation and/or other materials
-    provided with the distribution.
+  - Redistributions containing parts of the Distribution in binary form
+    must reproduce the above copyright notice, this list of conditions
+    and the following disclaimer in the documentation and/or other
+    materials provided with the distribution.
 
   - Neither name of the Stichting Mathematisch Centrum its institute
     Centrum voor Wiskunde en Informatica (CWI) nor the names of its
     contributors may be used to endorse or promote products derived from
     this software without specific prior written permission.
 
+
+DISCLAIMER
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS
 IS'' AND ANY  EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED
@@ -34,5 +36,5 @@ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
 NOT LIMITED  TO, PROCUREMENT  OF SUBSTITUTE GOODS  OR SERVICES;  LOSS OF
 USE, DATA, OR  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER  CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER  IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN  ANY WAY OUT  OF  THE USE 
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN  ANY WAY OUT  OF  THE USE
 OF  THIS  SOFTWARE, EVEN  IF ADVISED OF  THE POSSIBILITY OF SUCH DAMAGE.
