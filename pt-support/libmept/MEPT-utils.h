@@ -84,6 +84,8 @@ ATbool  PT_isTreeLayout(PT_Tree tree);
 PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args);
 PT_Tree PT_makeTreeLayoutFromString(const char *str);
 
+PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree);
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);  
 
 ATbool PT_isTreeVar(PT_Tree tree);

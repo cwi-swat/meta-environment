@@ -80,7 +80,8 @@
 
   [Symbol, iter-n, iter-n(<symbol(Symbol)>,<number(int)>)],
 
-  [Symbol, iter-sep-n, iter-sep-n(<symbol(Symbol)>,<separator(Symbol)>,<number(int)>)],
+  [Symbol, iter-sep-n, iter-sep-n(<symbol(Symbol)>,<separator(Symbol)>,
+                                  <number(int)>)],
 
   [Symbol, perm, perm(<symbols(Symbols)>)],
 

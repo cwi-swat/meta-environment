@@ -1,3 +1,6 @@
+2001/06/25 (jurgenv@cwi.nl)
+ * added a library function that builds an injection from lex to cf
+
 2001/06/19 (jurgenv@cwi.nl)
  * added a library function to concatenate to CharRanges
  * added a library function to create a flattened lexical from a string

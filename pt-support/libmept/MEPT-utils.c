@@ -641,6 +641,19 @@ PT_Tree PT_makeTreeLayoutFromString(const char *str)
   return PT_makeTreeLayoutNonEmpty(args);
 }
 
+
+PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
+{
+  PT_Symbol lexSymbol = PT_makeSymbolLex(sym);
+  PT_Symbol cfSymbol = PT_makeSymbolCf(sym);
+  PT_Symbols lhs = PT_makeSymbolsList(lexSymbol, PT_makeSymbolsEmpty());
+  PT_Attributes noattrs = PT_makeAttributesNoAttrs();
+  PT_Production prod = PT_makeProductionDefault(lhs, cfSymbol, noattrs);
+  PT_Args args = PT_makeArgsList(tree, PT_makeArgsEmpty());
+
+  return PT_makeTreeAppl(prod, args);
+}
+
 ATbool PT_isTreeLayout(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
