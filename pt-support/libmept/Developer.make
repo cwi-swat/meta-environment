@@ -11,7 +11,7 @@ ADT      = ${prefix}
 NAME     = MEPT
 PREFIX   = PT_
 
-api: ${NAME}.adt
+api: ${NAME}.c
 
 ${NAME}.c: ${NAME}.adt 
 	adt-to-c -i ${NAME}.adt --prefix ${PREFIX} -o ${NAME}
