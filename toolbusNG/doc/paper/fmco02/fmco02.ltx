@@ -422,7 +422,7 @@ process in that it does not need a return value:
 \end{verbatim}
 \end{footnotesize}
 
-\paragraph{The \texttt{SEARCH} process} \label{tb:search} in our example
+\paragraph{The \texttt{SEARCH}\,\,process} \label{tb:search} in our example
 implements but a single query: finding an address book entry by name. It
 shows how different results from a tool-evaluation request can be
 processed in much the same way that different messages are handled. Upon
@@ -496,12 +496,16 @@ session with the Address Book Service, the \TB\ itself does not
 execute instances of the UI (as it did with the address book tool).
 Instead \texttt{UITool} instances can connect, make zero or more
 requests to the service, and disconnect at their convenience.
+A \texttt{ui} tool is declared to exist, but no operating system
+level details are provided. 
 The following definition of the \texttt{UI} process shows how UI
 requests for the creation of a new entry and a name-change can
 be realized:
 
 \begin{footnotesize}
 \begin{verbatim}
+tool ui is { /* the ToolBus does not execute ui-instances */ }
+
 process UI is
 let
   UITool : ui,
