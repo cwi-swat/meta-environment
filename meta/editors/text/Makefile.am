@@ -20,10 +20,10 @@
 #
 # $Id$
 
-EXTRA_DIST  = editor.el editor.sh.src
+EXTRA_DIST  = editor.el editor.sh.src text-editor.idef
 
 bin_SCRIPTS = editor
-data_DATA   = editor.el
+data_DATA   = editor.el text-editor.idef
 
 CLEANFILES  = editor
 
