@@ -3,8 +3,8 @@
 CENTER="Meta-Environment Documentation"
 RELEASE="Meta-Conventions 1.0"
 
-doc=commandline
-files=${doc}.7 ${doc}.txt ${doc}.html ${doc}.bok
+target=commandline
+files=meta-skel ${target}.7 ${target}.txt ${target}.html ${target}.bok
 
 all:	${files}
 
