@@ -50,10 +50,13 @@ context-free syntax
   remove-emb-side(Term, FunIdHasEmbeddingAt) -> Term
   remove-emb-terms(TermList, FunIdHasEmbeddingAt) -> TermList
   remove-emb-term(Term, FunIdHasEmbeddingAt) -> Term
-  remove-emb-conds(CondList, FunIdHasEmbeddingAt) -> CondList
-  remove-emb-cond(Cond, FunIdHasEmbeddingAt) -> Cond
+  remove-emb-conds(CondList, FunIdHasEmbeddingAt,RemoveOption) -> CondList
+  remove-emb-cond(Cond, FunIdHasEmbeddingAt,RemoveOption) -> Cond
   remove-emb-args(TermList, EmbeddingAt) -> TermList
   remove-emb-arg(Term, Embedding) -> Term
+
+  "remove-all"                    -> RemoveOption
+  "remove-only-in-recursive-args" -> RemoveOption
 
   get-list-embedding(RuleList, NameTable) -> FunIdHasEmbeddingAt
   
@@ -103,3 +106,4 @@ variables
   "Char*"[0-9]* -> CHAR*
   "Nametable"[0-9]* -> NameTable
   "Namepair*"[0-9]* -> {NamePair ","}*
+  "RemoveOption"[0-9]* -> RemoveOption

@@ -1,3 +1,7 @@
+2001/06/18 (jurgenv@cwi.nl)
+  * Fixed a compiler bug. Coming back from an optimized recursive
+    function, checking of the expected function symbols was not done at all.
+
 2001/06/15 ({jurgenv,olivierp}@cwi.nl)
   * Fixed bug in rewriting with layout
   * Changed TB interface to completely functional approach
