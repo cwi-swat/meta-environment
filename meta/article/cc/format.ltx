@@ -19,7 +19,7 @@
            University of Amsterdam,
            Programming Research Group,
            Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands
-           \email{Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
+%%           \email{Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
 }
 
 \newcommand{\muasf}{$\mu\mbox{\sc Asf}$}
@@ -711,7 +711,7 @@ In Section~\ref{BigBenchmarks} we give measurements for some larger
 \subsection{\label{SmallBenchmarks}Three Small Benchmarks}
 All three benchmarks are
 based on symbolic evaluation of expressions $2 ^ n~{\bf mod}~17$, with
-$14 \leq n \leq 30$.  A nice aspect of these expressions is that there
+$17 \leq n \leq 23$.  A nice aspect of these expressions is that there
 are many ways to calculate their value, giving ample opportunity to
 validate the programs in the benchmark.  The actual source of the
 benchmarks can be obtained at
@@ -724,10 +724,10 @@ Note that these benchmarks were primarily designed to evaluate
 \emph{specific} implementation aspects such as the effect of sharing,
 lazy evaluation, and the like. They cannot (yet) be used to give an
 overall comparison between the various systems.  Also note that some
-systems failed to compute results for the complete range $14 \leq n
-\leq 30$ in some benchmarks. In those cases, the corresponding graph
+systems failed to compute results for the complete range $17 \leq n
+\leq 23$ in some benchmarks. In those cases, the corresponding graph
 also ends prematurely.  Measurements were performed on an ULTRA
-SPARC-IIi (300 MHz) with 576 Mb of memory.
+SPARC-5 (270 MHz) with 512 Mb of memory.
 
 So far we have used the following implementations
 in our benchmarks:
@@ -785,7 +785,7 @@ Elan                    & 287.0 \\ \hline
 \end{figure}
 
 \begin{figure}[tb]
-  \centerline{\psfig{figure=evalexp-tlog.eps}}
+  \centerline{\psfig{figure=evalexp-tlin.eps}}
   \caption{\label{evalexp-tlog}Execution times for the {\tt evalexp} benchmark}
 \end{figure}
 
@@ -814,7 +814,7 @@ really lagging behind.
 \end{figure}
 
 \begin{figure}[tb]
-  \centerline{\psfig{figure=evaltree-tlog.eps}}
+  \centerline{\psfig{figure=evaltree-tlin.eps}}
   \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
 \end{figure}
 
