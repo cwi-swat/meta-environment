@@ -1,0 +1,121 @@
+Basic idea
+==========
+
+Each process has a predefined variable Tid : transaction
+with value of the form transaction(<int>).
+(In reality I use the longer name TransactionId)
+
+We extend eval, event, snd-msg and rec-msg with an extra argument that
+represents the transaction.
+
+We introduce the following patterns
+( { ... } is an arbitrary process expression that may again contain
+these patterns;  => gives translation):
+
+eval trm { ... } value V?	
+     => eval trm Tid { ... } value V? Tid
+
+event trm { ... } ack V
+      => let Tid : transaction in event trm Tid? { ... } ack V Tid endlet
+
+snd-msg trm { ... } rec-msg trm'
+	=> snd-msg trm Tid { ... } rec-msg trm' Tid
+
+rec-msg trm { ... } snd-msg trm' => 
+	rec-msg trm Tid? { ... } snd-msg trm' Tid
+
+The idea is that the actions that are initiated "elsewhere" (event,
+rec-msg) import the transaction id of their caller.
+
+Issues:
+- This solves the problem of finding the right value with the
+  corresponding eval.
+- Ditto for event and ack-event.
+- snd-msg/rec-msg pairs are simply related by the same transaction id.
+
+However, not all scripts fit this pattern as Pieter's example shows
+(note that ack-events are not shown):
+
+rec-event login(Name?, Password?) .
+snd-msg login-attempt(Name, Password) .
+( rec-msg login-succeeded .
+  snd-ack-event status(true, "")
+  LOGGED-IN
++
+  rec-msg login-failed(Reason?) .
+  snd-ack-event status(false, Reason)
+)
+
+Several solutions for this problem are possible:
+
+process CLIENT is
+...
+(
+  rec-event login(Name?, Password?) {
+    snd-msg login-attempt(Name, Password) {
+    } rec-msg login-succeeded . LOGGED-IN
+    >>
+    rec-msg login-failed .
+  } ack-event
+) * delta
+ >>
+rec-disconnect
+
+The above solution is concise but has as disadvantage that
+the login event is only acknowledged after completion of LOGGED-IN.
+(This feels strange  but is it wrong?)
+
+Another solution for using a state variable and disrupt:
+
+process CLIENT is
+...
+(
+  Success := true
+  rec-event login(Name?, Password?) {
+    snd-msg login-attempt(Name, Password) {
+    } rec-msg login-succeeded
+    >>
+    rec-msg login-failed .
+    Success := false
+  } ack-event Success .
+  if (Success) then
+    LOGGED-IN
+  fi
+) * delta
+ >>
+rec-disconnect
+
+It seems that we need more expressiveness. Attempt (allowing
+alternatives for the rec-msg instead of a single rec-msg):
+
+ rec-event login(Name?, Password?) {
+    snd-msg login-attempt(Name, Password) {
+    } ( rec-msg login-succeeded + Succes := true
+      +
+        rec-msg login-failed . Success := false
+      )
+  } ack-event Success .
+  if (Success) then
+    LOGGED-IN
+  fi
+) * delta
+ >>
+rec-disconnect
+
+Issues:
+
+- May be we need an enumeration type. The event above could get the
+  type login : Name # PassWord -> [login-succeede,login-failed]
+
+- This might also help for cases where we don't have a general button(<str>),
+  but only need button(calc), button(quit), etc.
+
+
+** To be continued ** 
+
+
+
+
+
+
+

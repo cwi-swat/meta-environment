@@ -26,6 +26,7 @@ public class ProcessInstance {
   private ToolBus toolbus;
   private ToolInstance toolInstance;
   private String toolName;
+  private ATerm transactionIdVar;
 
   public ProcessInstance(ToolBus TB, ProcessCall call, String toolName) throws ToolBusException {
     toolbus = TB;
@@ -40,16 +41,16 @@ public class ProcessInstance {
     AFun afun = TBTerm.factory.makeAFun(processName, 1, false);
     processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
     
-    ATerm tid = TBTerm.TransactionIdVar;
+    transactionIdVar = TBTerm.TransactionIdVar;
     
-    env.introduceVars(TBTerm.factory.makeList(tid));
+    env.introduceVars(TBTerm.factory.makeList(transactionIdVar));
 
     call.expand(this, new Stack());
     call.compile(this, empty);
     currentState = call.getStartState();
-    tid = TBTerm.resolveVars(tid, env);
+    transactionIdVar = TBTerm.resolveVars(transactionIdVar, env);
     env.setExecuting();
-    env.assignVar(tid, TBTerm.newTransactionId());
+    env.assignVar(transactionIdVar, TBTerm.newTransactionId());
 
     Vector procs = TB.getProcesses();
     elements = call.getAtoms();
@@ -121,7 +122,11 @@ public class ProcessInstance {
 
   public void terminate(String msg) {
     if (toolInstance != null) {
-      toolInstance.terminate(msg);
+      try {
+      toolInstance.terminate(env.getValue(transactionIdVar), msg);
+      } catch (ToolBusException e) {
+        throw new ToolBusInternalError("no transactionId in process");
+      }
     }
   }
 

@@ -12,7 +12,7 @@ public interface ToolInstance {
 
   public void sndEvalToTool(ATerm id, ATermAppl call);
 
-  public boolean getValueFromTool(ATerm id, ATerm trm, Environment env);
+  public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException;
 
   public void sndDoToTool(ATerm id, ATermAppl call);
 
@@ -20,6 +20,6 @@ public interface ToolInstance {
 
   public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
 
-  public void terminate(String msg);
+  public void terminate(ATerm id, String msg);
 
 }
