@@ -51,6 +51,9 @@ else
 	ATERM=`dirname \`dirname ${ATERM}\``
 fi
 
+TOOLBUSDEFS = $(TRAVERSALSDEF)
+ACSUBST(TOOLBUSDEFS)
+
 dnl Our own version of libdir iwhose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
