@@ -1,5 +1,10 @@
 $Id$
 
+Tue Aug  3 10:05:01 CEST 2004 <{kooiker,jurgenv}@cwi.nl>
+ * libsglr/parse-table.c: added protect of global list of errors,
+   and more calls to initialization function for this list of errors.
+ * restorebrackets/src/main.c: added call to initErrApi();
+
 Thu Jul 15 15:49:40 CEST 2004 <markvdb@cwi.nl>
  * Introduced the Error-api for the situation the parse table
    could not be processed because:

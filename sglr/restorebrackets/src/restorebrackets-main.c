@@ -11,7 +11,7 @@
 #include <MEPT-utils.h>
 
 static char myname[] = "restorebrackets";
-static char myversion[] = "0.0";
+static char myversion[] = "0.1";
 
 static char myarguments[] = "bhi:o:p:tvV";
 
@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi(); 
+  initErrorApi();
 
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottomOfStack);

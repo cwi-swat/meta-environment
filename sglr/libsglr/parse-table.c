@@ -105,6 +105,8 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Col_AFun,         ATmakeAFun(SG_COL_AFUN,         1, ATfalse));
   SG_AFUN_INIT(SG_Offset_AFun,      ATmakeAFun(SG_OFFSET_AFUN,      1, ATfalse));
 
+
+
   inited = ATtrue;
 }
 
@@ -388,12 +390,17 @@ static void SG_StoreArgGtrPriority(parse_table *pt, ATermInt l1, ATermInt argNum
 
 /* Error administration */
 
-static ERR_ErrorList ptErrorList;
+static ERR_ErrorList ptErrorList = NULL;
 
 /*{{{  void SG_InitParseTableErrorList() */
 void SG_InitParseTableErrorList()
 {
-  ptErrorList = ERR_makeErrorListEmpty();
+  ERR_protectErrorList(&ptErrorList);
+
+  /* test for NULL, or we throw away messages when init is called twice */
+  if (ptErrorList == NULL) {
+    ptErrorList = ERR_makeErrorListEmpty();
+  }
 }
 
 /*}}}  */
@@ -1163,7 +1170,7 @@ parse_table *SG_BuildParseTable(ATermAppl t, const char *path)
   int         nrOfStates;
 
   SG_InitPTGlobals();  /*  Make sure the PT globals are initialised  */
-  SG_InitParseTableErrorList();
+  SG_InitParseTableErrorList(); 
 
   ptfun = ATgetAFun(t);
 
@@ -1307,6 +1314,7 @@ parse_table *SG_LookupParseTable(language L, const char *inFile)
   int i = 0;
   static char contentDescription[1024];
 
+  SG_InitParseTableErrorList();
 
   IF_DEBUG(ATfprintf(SG_log(), "Request for language %t\n",
                      SG_SAFE_LANGUAGE(L)));
