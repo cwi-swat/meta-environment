@@ -84,5 +84,5 @@ in
     )
   )
   *
-  delta
+  rec-msg(kill-editor(EditorId))
 endlet

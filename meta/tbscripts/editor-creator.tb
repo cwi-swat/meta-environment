@@ -89,7 +89,7 @@ in
     rec-msg(text-editor-disconnected(EditorId?)) .
     snd-msg(delete-structure-editor(EditorId)) .
     snd-msg(delete-editor(EditorId)) .
-    snd-msg(kill-term-editor(EditorId))
+    snd-msg(kill-editor(EditorId))
   )
   * delta
 endlet

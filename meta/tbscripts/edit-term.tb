@@ -115,5 +115,5 @@ in
     fi
   )
   *
-  rec-msg(kill-term-editor(EditorId))
+  rec-msg(kill-editor(EditorId))
 endlet
