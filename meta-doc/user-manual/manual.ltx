@@ -1952,18 +1952,19 @@ defining layout can be found in Section \link{Restrictions}[]{Restrictions}.
 \end{ifhtml}
 
 \begin{figure}
-\begin{IncCode}
+\T\begin{center}
 \begin{verbatim}
 module Layout
 
-%% In this module we define the comment convention for Sdf.
+%% In this module we define the 
+%% comment convention for Sdf.
 
 exports
   lexical syntax
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
 \end{verbatim}
-\end{IncCode}
+\T\end{center}
 \caption{\sdf\ comment}\label{CODE:sdfcomment}
 \end{figure}   
 
@@ -2283,7 +2284,7 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
-\begin{IncCode}
+\T\begin{center}
 \begin{verbatim}
 module LeesPlank
 
@@ -2297,7 +2298,7 @@ exports
     "mies"        -> Mies
     Aap Noot Mies -> LeesPlank  
 \end{verbatim}
-\end{IncCode}
+\T\end{center}
 \caption{Simple lexical functions}\label{CODE:simplelex}
 \end{figure}   
       
