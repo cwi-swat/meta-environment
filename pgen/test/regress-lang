@@ -23,20 +23,18 @@ Revision='$Revision$'
 ###
 #  Some global variables, that might require occasional modification
 ###
-
+set -x;
 update=0
 verbose=0
 
-cd `dirname $0`;
-mydir=`pwd`
-#echo $mydir
+mydir=../test
 MV=mv
 RM=rm
-COMPARE="atdiff"
-SDF2TABLE=sdf2table
+COMPARE=/ufs/jurgenv/meta-env/bin/atdiff
+SDF2TABLE=../src/sdf2table
 
 reference=$mydir/tables
-dirs="first grammars"
+dirs="$mydir/first $mydir/grammars"
 
 
 ###
@@ -142,7 +140,7 @@ RegressGenTable () {
 		Notify "No reference table for $ptbl"
 		continue
 	fi
-	if $SDF2TABLE $VERBOSE -i $1 -o $ptbl ; then
+	if ${SDF2TABLE} $VERBOSE -i $1 -o $ptbl ; then
 	        Notify Comparing $ptbl...
 	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
 	        then
@@ -176,12 +174,12 @@ fi
 error=0
 for dir in $dirs
 do
-	cd $dir
-        for stx in `ls *.sdf` ; do
+#	cd $dir
+        for stx in `ls $dir/*.sdf` ; do
 	        RegressGenTable $stx
         done
-	${RM} -f *.asfix[12]
-	cd ..
+	${RM} -f $dir/*.asfix[12]
+#	cd ..
 done
 
 exit $error
