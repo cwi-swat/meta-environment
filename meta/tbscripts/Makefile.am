@@ -2,6 +2,7 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
+  module-db.tb \
   abort.tb \
   clear-all.tb \
   compile-module.tb \
