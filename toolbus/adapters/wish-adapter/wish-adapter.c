@@ -149,7 +149,7 @@ static void print_string(char* s, int n)
 	case '}':
 	case '[':
 	case ']':
-	case ' ':
+/*	case ' ':*/
 	case ';':
 	case '$':	wputc('\\');
 	default:	wputc(*s);
