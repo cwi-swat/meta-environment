@@ -47,10 +47,10 @@ in
     rec-msg(read-parse-table(Name?)).
     snd-eval(IO,read-parse-table(Name)).
     (
-      rec-value(IO,table-on-disk(Text?,TimeStamp)).
-      snd-msg(table-on-disk(Text,TimeStamp))
+      rec-value(IO,table-on-disk(Path?,TimeStamp?)).
+      snd-msg(table-on-disk(Path,TimeStamp))
     +
-      rec-value(IO,error-opening(Name?)).
+      rec-value(IO,error-opening(Name)).
       snd-msg(no-table-on-disk)
     )
   +
