@@ -14,7 +14,6 @@ void initBuiltins(void)
   return;
 }
 
-/*
 PT_Tree shell(ATerm builtin, PT_Tree input)
 {
   PT_Tree cmd_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
@@ -25,7 +24,7 @@ PT_Tree shell(ATerm builtin, PT_Tree input)
   system(cmdline + 1);
 
   return input;
-}*/
+}
 
 PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
 {

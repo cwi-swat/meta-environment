@@ -13,6 +13,12 @@ CLEANFILES+=asf-builtins.h
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
+noinst_PROGRAMS=link-test
+link_test_SOURCES=link-test.c
+link_test_LDADD=-L. -lasf-builtins \
+                -L${PT_SUPPORT}/lib -lmept \
+                -L${ATERM}/lib -lATerm
+
 asf-builtins.h: Makefile
 	@(echo '#ifndef BUILTINS_H' ;\
 	  echo '#define BUILTINS_H' ;\
@@ -24,5 +30,3 @@ asf-builtins.h: Makefile
              echo "PT_Tree $${b}(ATerm builtin, PT_Tree input);" ; \
           done ;\
           echo '#endif' ) > $@
-
-
