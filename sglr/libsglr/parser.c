@@ -208,20 +208,36 @@ static shift_tuple *sg_shift_tuples = NULL;
 static shift_tuple *SG_AddShiftTuple(stack *st, action a)
 {
   shift_tuple *tuple;
+  shift_tuple *cur_tuple, *next_tuple;
+  ATbool exists = ATfalse;
 
-  ATwarning("SG_AddShiftTuple: token = %t\n", SG_A_TOKEN(a));
-  
-  tuple = alloc_shift_tuple();
-  tuple->next = sg_shift_tuples;
-  sg_shift_tuples = tuple;
+  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
+    int index = SG_STPL_INDEX(cur_tuple);
+    stack *cst = SG_STPL_STACK(cur_tuple);
+ 
+    if (cst == st && index != 0) {
+      exists = ATtrue;
+    }
+    next_tuple = cur_tuple->next; 
+  }
 
-  tuple->stack = st;
-  tuple->prod = SG_A_KWPROD(a);
-  tuple->token = (ATermList)SG_A_TOKEN(a);
-  tuple->index = 0;
-  tuple->length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
+  if (!exists) {
 
-  return tuple;
+   ATwarning("SG_AddShiftTuple: token = %t and stack = %d\n", SG_A_TOKEN(a), SG_ST_STATE(st)); 
+
+    tuple = alloc_shift_tuple();
+    tuple->next = sg_shift_tuples;
+    sg_shift_tuples = tuple;
+
+    tuple->stack = st;
+    tuple->prod = SG_A_KWPROD(a);
+    tuple->token = (ATermList)SG_A_TOKEN(a);
+    tuple->index = 0;
+    tuple->length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
+
+    return tuple;
+  }
+  return NULL;
 }
 
 static void SG_DiscardShiftTuple(shift_tuple *tuple)
@@ -689,6 +705,8 @@ void SG_Actor(stack *st)
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 
+  if (as) { ATwarning("state %d token %d yield %t\n", SG_ST_STATE(st), current_token, as);}
+
   for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
     a = ATgetFirst(as);
     switch(SG_ActionKind(a)) {
@@ -848,6 +866,7 @@ void SG_Reducer(stack *st0, state s, label prodl,
   IF_STATISTICS(num_reductions++);
 
   t = SG_Apply(table, prodl, kids, attribute);
+ATwarning("reducer builds %t for state %d\n", t, s);
   IF_DEBUG(
     fprintf(SG_log(), "Reducing; state %d, token: ", SG_GETSTATE(s));
     SG_PrintToken(SG_log(), current_token);
@@ -869,6 +888,7 @@ void SG_Reducer(stack *st0, state s, label prodl,
     if (attribute == SG_PT_REJECT) {
       SG_MarkLinkRejected(nl);
       IF_DEBUG(fprintf(SG_log(), "Reject [new]\n"))
+      ATwarning("Reject [new]\n");
     }
   }
   /*  A stack with state s already exists.  Ambiguity?  */
@@ -985,6 +1005,7 @@ void SG_Shifter(void)
     fprintf(SG_log(), ", line %ld, column %ld\n", (long) line, (long) col);
   );
 
+  ATwarning("shifting %d\n", current_token);
   t = SG_LookupProduction(table, current_token);
 
   for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
@@ -996,7 +1017,7 @@ void SG_Shifter(void)
 
     next_tuple = cur_tuple->next;
 
-    ATwarning("entering shifter with %t and %d\n", token, index);
+    ATwarning("entering shifter with %t and %d and stack %d\n", token, index, SG_ST_STATE(st0));
 
     if (index == length) { 
       if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) { 
@@ -1007,6 +1028,7 @@ void SG_Shifter(void)
         }
         rt = SG_Apply(table, prod, token, 0); 
         l = SG_AddLink(st1, st0, rt, 1);
+        ATwarning("recognized %t as %t and state %d\n", token, rt, rs);
       }
       SG_DiscardShiftTuple(cur_tuple);
     }
@@ -1017,6 +1039,7 @@ void SG_Shifter(void)
         new_active_stacks = SG_AddStack(st0, new_active_stacks);
       } 
       else {
+        ATwarning("failed to recognized %t\n", token);
         SG_DiscardShiftTuple(cur_tuple);
       }
     }
