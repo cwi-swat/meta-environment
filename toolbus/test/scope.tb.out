@@ -1,0 +1,5 @@
+scope.tb, line 7: double declaration of let variable `R'
+scope.tb, line 7: (warning) variable `R' redefines let variable in enclosing scope
+scope.tb, line 7: (warning) variable `R' redefines let variable in enclosing scope
+scope.tb, line 7: (warning) variable `T' redefines formal in enclosing scope
+ToolBus: execution stopped due to the above error(s)

@@ -1,0 +1,23 @@
+.PS
+dw = 0.2i
+Bus: box "\TB" wid 3
+
+Tool: box "Tool" at Bus.s + (0, -4*dw)
+arrow -> from Bus.s +(-dw,0) to Tool.n +(-dw,0)
+arrow <- from Bus.s +(dw,0) to Tool.n +(dw,0)
+
+arrow left <- from Tool.w
+arrow -> from Tool.sw +(-2*dw,-2*dw) to Tool.sw
+arrow down <- from Tool.s +(-dw,0)
+
+arc from Bus.s +(-4*dw,0) to Tool.s+(-dw,-4*dw) dotted
+"Term Ports" at Tool.w+(-5*dw,0)
+
+arrow down <- from Tool.s +(dw,0) dashed
+arrow -> from Tool.se +(2*dw,-2*dw) to Tool.se dashed
+arrow right <- from Tool.e dashed
+
+arc from Tool.s+(dw,-4*dw) to Tool.e+(4*dw,0) dotted
+"Character Ports" at Tool.e+(6*dw,0)
+.PE
+

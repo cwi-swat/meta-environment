@@ -1,0 +1,18 @@
+define CONSUMER(P) =
+       ( rec-msg(store, P, S1) . rec-msg(store, P, S2) . snd-do(store, S1, S2)
+       ) * delta
+
+define PRODUCER =
+       ( rec-event(P, S) . snd-msg(store, P, S) . snd-ack-event(P)
+       ) * delta
+
+define CONSUMER1 = CONSUMER(prod1)
+define CONSUMER2 = CONSUMER(prod2)
+
+tool prod1 {command = "producer -name prod1"}
+
+tool store {command = "store" }
+
+tool prod2 {command = "producer -name prod2" }
+
+toolbus(PRODUCER, CONSUMER1, CONSUMER2)

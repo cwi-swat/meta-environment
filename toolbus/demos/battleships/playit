@@ -1,0 +1,1 @@
+wish-adapter -TB_TOOL_NAME player -script XBattle.tcl -script-args $@

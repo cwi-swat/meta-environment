@@ -1,0 +1,61 @@
+#  Hayco de Jong -- 9011439 -- jong@fwi.uva.nl -- Battleships
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+CC		= @CC@
+SHELL		= /bin/sh
+CFLAGS		= @CFLAGS@
+INCLUDES	= @INCLUDES@ -I$(includedir)
+LIBS		= @LIBS@ 
+TBLIB		= $(libdir)/libtb.a
+
+CLEAN		= @CLEAN@
+
+DISTDIR		= $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/battleships
+DISTFILES	= HOWTOPLAY Makefile.in XBattle.tcl battle.c battle.tb \
+		doc.txt grey.25 lock.c playit README.txt
+
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(LIBS)
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+PROGRAMS	= battle lock
+
+all:    ${PROGRAMS}
+
+clean:
+	${CLEAN} ${PROGRAMS}
+
+distclean: clean
+	rm -f Makefile
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(DISTDIR) 2>/dev/null \
+	  || cp $(srcdir)/$$file $(DISTDIR); \
+	done
+
+battle: battle.tif.c battle.c
+	${COMPILE}
+
+battle.tif.c: battle.tifs
+	${bindir}/ctif -tool battle -tifs battle.tifs
+
+lock: lock.tif.c lock.c
+	${COMPILE}
+
+lock.tif.c: battle.tifs
+	${bindir}/ctif -tool lock -tifs battle.tifs
+
+battle.tifs: battle.tb
+	${bindir}/toolbus -gentifs battle.tb

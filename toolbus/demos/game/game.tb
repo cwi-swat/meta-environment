@@ -1,0 +1,41 @@
+
+
+process PLAYER(Bid : board, Player : str) is
+  let Pid : player, Row : int, Col : int, Msg : str, Player1 : str
+  in
+     execute(player(Player), Pid?) .
+     snd-do(Pid, mk-board(Player, 10)) .
+     subscribe(error(<str>)) . subscribe(wins(<str>)) . subscribe(draw) .
+     subscribe(occupy(<str>,<int>,<int>)) .
+     ( rec-event(Pid, push(Row?, Col?)) .
+         snd-eval(Bid, push(Player, Row, Col)) .
+         ( rec-value(Bid, ok) . snd-note(occupy(Player, Row, Col)) .
+		snd-do(Pid,occupy(Player, Row, Col))
+         + rec-value(Bid, error(Msg?)) . snd-do(Pid, error(Msg))
+	 ) . snd-ack-event(Pid, push(Row, Col))
+     + rec-note(error(Msg?)) . snd-do(Pid, error(Msg))
+     + rec-note(occupy(Player1?, Row?, Col?)) .
+	 snd-do(Pid,occupy(Player1, Row, Col))
+     ) *
+     ( rec-value(Bid, wins(Player1?)) . snd-note(wins(Player1)) .
+	snd-ack-event(Pid, push(Row, Col))
+     + rec-value(Bid, draw) . snd-note(draw) . snd-ack-event(Pid, push(Row, Col))
+     + rec-note(draw) . snd-do(Pid, draw)
+     + rec-note(wins(Player1?)) . snd-do(Pid, wins(Player1))
+     )
+  endlet
+
+tool player(A:str) is {command = "wish-adapter -script ui-game.tcl -script-args -name A"}
+
+
+process GAME is
+  let Bid : board, A : int, B : int
+  in
+    execute(board, Bid?) .
+    create(PLAYER(Bid, "playerA"), A?) .
+    create(PLAYER(Bid, "playerB"), B?)
+  endlet
+
+tool board is  {command = "board -size 10"}
+
+toolbus(GAME)

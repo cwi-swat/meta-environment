@@ -1,0 +1,34 @@
+process RCONS(Cid : cons, Uid : ui) is
+  let Moves : list(move)
+  in
+     rec-value(Cid, Moves?) .
+     if not-equal(Moves, []) then snd-do(Uid, moves(Moves)) else tau fi
+  endlet	
+
+process BALLS is
+  let Uid : ui, Cid : cons, X : int, Y : int, Name : str
+  in
+     execute(cons, Cid?) .
+     execute(ui, Uid?) .
+     BALL(Uid, Cid, "red","red",100,100) .
+     BALL(Uid, Cid, "blue","blue", 200, 200) .
+     BALL(Uid, Cid, "green","green", 300, 300) .
+     snd-eval(Cid, between("red","blue","green")) . RCONS(Cid, Uid) . %% constraint 1
+     snd-eval(Cid, above("red", "blue")) . RCONS(Cid, Uid) .          %% constraint 2
+     snd-eval(Cid, left("red", "blue")) . RCONS(Cid, Uid)  .          %% constraint 3
+     ( rec-event(Uid, move(Name?, X?, Y?)) .
+       snd-eval(Cid, move(Name, X, Y)) .
+       RCONS(Cid, Uid) .
+       snd-ack-event(Uid, move(Name, X, Y))
+     ) * delta
+  endlet
+
+process BALL(Uid : ui, Cid : cons, Name : str, Color : str, X : int, Y : int) is
+	snd-do(Uid, ball(Name, Color, X, Y)) .
+	snd-do(Cid, ball(Name, Color, X, Y))
+
+tool cons is {command = "cons"}
+
+tool ui is {command = "wish-adapter -tool-name ui -script ui-cons.tcl"}
+
+toolbus(BALLS)

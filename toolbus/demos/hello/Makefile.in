@@ -1,0 +1,96 @@
+# @configure_input@
+# demos/hello
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+CC		= @CC@
+SHELL		= /bin/sh
+CFLAGS		= @CFLAGS@
+INCLUDES	= @INCLUDES@ -I$(includedir)
+LIBS		= @LIBS@
+TBLIB		= $(libdir)/libtb.a
+
+CLEAN		= @CLEAN@
+
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(LIBS)
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+.SUFFIXES: .tb .tb.tex .c.tex .tcl .tcl.tex .perl .perl.tex
+
+.tb.tb.tex:
+	${bindir}/script2latex <$*.tb >$*.tb.tex
+.c.c.tex:
+	${bindir}/verbatim <$*.c >$*.c.tex
+.tcl.tcl.tex:
+	${bindir}/verbatim <$*.tcl >$*.tcl.tex
+.perl.perl.tex:
+	${bindir}/verbatim <$*.perl >$*.perl.tex
+
+PROGRAMS	= hello printer hello-gen hello1.tb.tex hello2.tb.tex hello.c.tex hello-gen.c.tex\
+		  hello.tif.c.tex hello.tcl.tex hello3.tb.tex hello.perl.tex pipe.tb.tex		  
+
+# Note: we distribute also all *generated* files to avoid calling programs
+# (i.e., verbatim, script2latex, ctif, toolbus) before they are properly installed.
+
+DISTFILES	= Makefile.in hello1.tb hello1.tb.tex \
+		  hello2.tb hello2.tb.tex \
+		  hello3.tb hello3.tb.tex \
+		  hello.c hello.c.tex \
+		  hello-gen.c hello-gen.c.tex \
+		  hello.tif.c hello.tif.c.tex \
+		  hello.tcl hello.tcl.tex \
+		  hello.perl hello.perl.tex \
+	          pipe.tb pipe.tb.tex \
+		  printer.c \
+		  PC.tb producer.c store.c
+
+all:    ${PROGRAMS}
+
+clean:
+	${CLEAN} store.out
+
+distclean: clean
+	rm -f Makefile
+
+hello:	hello.c
+	${COMPILE}
+
+hello-gen:	hello-gen.c hello.tif.c
+	${COMPILE}
+
+hello.tif.c: hello2.tifs
+	${bindir}/ctif -tool hello -tifs hello2.tifs
+
+hello2.tifs: hello2.tb
+	${bindir}/toolbus -gentifs hello2.tb
+
+printer: printer.c
+	${COMPILE}
+
+store:	store.c
+	${COMPILE}
+
+producer:	producer.c
+	${COMPILE}
+
+ 
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/hello 2> /dev/null \
+	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/hello; \
+	done
+
+
+
+

@@ -1,0 +1,19 @@
+process PIPE(Tid : gen, Cmd1 : str, Inp : str, Cmd2 : str, Res : str?) is
+  let Out1 : str
+  in
+     snd-eval(Tid, cmd(Cmd1, input(Inp))) .
+     rec-value(Tid, output(Out1?)) .
+     snd-eval(Tid, cmd(Cmd2, input(Out1))) .
+     rec-value(Tid, output(Res?))
+  endlet
+
+process A is
+  let Tid : gen, R : str
+  in
+     execute(gen, Tid?) .
+     PIPE(Tid, "ls -l", "", "wc -w", R?) .
+     printf(R)
+  endlet
+
+tool gen is {command = "gen-adapter"}
+toolbus(A)

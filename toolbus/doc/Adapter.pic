@@ -1,0 +1,15 @@
+.PS
+dw = 0.2i
+Bus: box "\TB" wid 3
+
+Adapt: box "Adapter" wid 1.5 at Bus.s + (0, -4*dw)
+arrow -> from Bus.s +(-dw,0) to Adapt.n +(-dw,0)
+arrow <- from Bus.s +(dw,0) to Adapt.n +(dw,0)
+
+Prog: box "Program" at Adapt.s + (0, -4*dw)
+
+arrow from Adapt.sw+(0.2,0) to (Adapt.sw.x+0.2,Prog.w.y) to Prog.w
+arrow from Adapt.se+(-0.2,0) to (Adapt.se.x-0.2,Prog.e.y) to Prog.e
+
+.PE
+

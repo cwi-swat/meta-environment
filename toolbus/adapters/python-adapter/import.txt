@@ -1,0 +1,13 @@
+>         if validationLib:
+>             importValidators = 'import ' + validationLib
+>             exec( importValidators )
+>             eval( 'self.validationLibDir = ' + validationLib + '.__dir__' )
+Try:
+    module = sys.modules[validationLib]
+    elf.validationLibDir = module.__dir__ # or whatever.
+
+HTH...
+
+Mark.
+----------------------------------------
+Mark Hammond - MHammond@skippinet.com.au

@@ -1,0 +1,163 @@
+# @configure_input@
+# directory: src
+
+PRODUCT 	= @PRODUCT@
+VERSION 	= @VERSION@
+
+SHELL		= /bin/sh
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+
+CC		= @CC@
+CFLAGS		= @CFLAGS@
+CPP		= @CPP@
+CPPFLAGS 	= @CPPFLAGS@
+DEFS 		= @DEFS@
+LIBS		= @LIBS@
+MODULES		= @MODULES@
+
+AR		= @AR@
+RANLIB		= @RANLIB@
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM	= @INSTALL_PROGRAM@
+LEX		= @LEX@
+LEXLIB		= @LEXLIB@
+YACC		= @YACC@
+YACCLIB		= @YACCLIB@
+CLEAN		= @CLEAN@
+@SET_MAKE@
+
+prefix 		= @prefix@
+exec_prefix 	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(CC) $(LDFLAGS) -o $@
+
+.SUFFIXES:
+.SUFFIXES: .c .o .y .l
+.c.o:
+	$(COMPILE) $<
+
+.l.c:
+	$(LEX) $<
+.y.c:
+	$(YACC) $<
+
+INCLUDES 	= -I$(srcdir)
+
+HEADERS		= env.h interpreter.h match.h procs.h terms.h tools.h toolbus.h \
+		  sockets.h tool.h monitor.h typecheck.h utils.h TB.h \
+		symbol.h
+
+SOURCES_C	= client.c \
+		  env.c  interpreter.c  match.c procs.c terms.c tools.c\
+		  server.c sockets.c tool.c monitor.c typecheck.c utils.c\
+		  txt_dbg.c main.c ctif.c script2latex.c verbatim.c symbol.c calls.c
+
+OBJECTS		= y.tab.o  client.o \
+		  env.o interpreter.o match.o  procs.o terms.o tools.o  \
+		  server.o sockets.o tool.o monitor.o  typecheck.o utils.o \
+		  main.o symbol.o calls.o $(MODULES)
+
+SOURCES_Y	= script.l script.y
+
+LIB_OBJECTS	= client.o sockets.o terms.o tool.o utils.o symbol.o
+
+DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
+		viewer.tcl
+
+# INIT_MODULES	= $(MODULES:.o=_init_module();)
+INIT_MODULES	=
+
+all:	libtb.a toolbus ctif script2latex verbatim
+
+toolbus: ${OBJECTS} 
+	${CC} ${CFLAGS} ${OBJECTS} -o toolbus ${LEXLIB} ${YACCLIB} ${LIBS}
+
+libtb.a: ${LIB_OBJECTS}
+	${AR} cr libtb.a ${LIB_OBJECTS}
+	${RANLIB} libtb.a
+
+txt_dbg: txt_dbg.o
+	${CC} ${CFLAGS} txt_dbg.o -o txt_dbg libtb.a ${LIBS}
+ctif: TB.h ctif.c
+	${CC} ${CFLAGS} ctif.c -o ctif libtb.a ${LIBS}
+script2latex: script2latex.c
+	${CC} ${CFLAGS} script2latex.c -o script2latex	
+verbatim: verbatim.c
+	${CC} ${CFLAGS} verbatim.c -o verbatim		
+
+txt_dbg.o: 	TB.h txt_dbg.c
+
+terms.o: 	toolbus.h terms.h symbol.h terms.c tools.h procs.h
+symbol.o:	toolbus.h terms.h symbol.h procs.h tools.h utils.h symbol.c
+env.o:		toolbus.h terms.h env.h env.c
+match.o:  	toolbus.h terms.h env.h procs.h match.h utils.h match.c
+procs.o: 	toolbus.h terms.h env.h match.h procs.h tools.h procs.c
+calls.o:	toolbus.h terms.h env.h procs.h interpreter.h calls.c
+interpreter.o: 	toolbus.h terms.h env.h procs.h match.h utils.h interpreter.h interpreter.c
+sockets.o:	toolbus.h terms.h utils.h sockets.h sockets.c
+server.o: 	toolbus.h terms.h utils.h server.c
+monitor.o: toolbus.h terms.h env.h procs.h tools.h match.h utils.h interpreter.h monitor.h monitor.c
+	${COMPILE} -DVIEWER_TCL=\"$(libdir)/viewer.tcl\" \
+		-DLOGGER_TCL=\"$(libdir)/logger.tcl\" monitor.c
+client.o: 	toolbus.h terms.h utils.h client.c
+utils.o: 	toolbus.h terms.h utils.h utils.c
+tools.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h tools.h tools.c
+main.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h tools.h main.c
+	${COMPILE} -DINIT_MODULES="$(INIT_MODULES)" main.c
+
+typecheck.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h typecheck.h typecheck.c
+tool.o:		toolbus.h terms.h utils.h tool.h tool.c
+modtest.o:	modtest.c
+y.tab.o: y.tab.c
+	${COMPILE} -DCPP='"$(CPP)"' y.tab.c
+
+lex.yy.c: script.l
+	${LEX} $(srcdir)/script.l
+
+y.tab.c: script.l lex.yy.c script.y toolbus.h terms.h env.h procs.h match.h utils.h interpreter.h
+	${YACC} $(srcdir)/script.y
+
+print: ${HEADERS} ${SOURCES_C} ${SOURCES_Y}
+	enscript -fCourier8 -p tmpxx ${HEADERS} ${SOURCES_C} ${SOURCES_Y}; lp tmpxx; rm tmpxx
+
+clean:
+	${CLEAN}
+	rm -f toolbus libtb.a ctif script2latex toolbus.Counts toolbus.Addrs toolbus.pixie mon.out
+
+distclean: clean
+	rm -f Makefile
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/src 2> /dev/null \
+	  || cp $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/src; \
+	done
+
+install: libtb.a toolbus logger.tcl viewer.tcl ctif script2latex
+	$(INSTALL) toolbus $(bindir)
+#	$(INSTALL) txt_dbg $(bindir)
+	$(INSTALL) ctif $(bindir)
+	$(INSTALL) script2latex $(bindir)
+	$(INSTALL) verbatim $(bindir)
+	$(INSTALL) -m 644 logger.tcl $(libdir)
+	$(INSTALL) -m 644 viewer.tcl $(libdir)
+	$(INSTALL) -m 644 libtb.a $(libdir)
+	for file in $(HEADERS); do \
+	   $(INSTALL) -m 644 $$file $(includedir); \
+	done
+
+uninstall:
+	rm -f $(bindir)/toolbus
+	rm -f $(bindir)/ctif
+	rm -f $(bindir)/script2latex
+	rm -f $(bindir)/verbatim
+	rm -f $(libdir)/logger.tcl
+	rm -f $(libdir)/viewer.tcl
+	rm -f $(libdir)/libtb.a
+	rm -f $(includedir)/TB.h

@@ -1,0 +1,65 @@
+# @configure_input@
+# adapters
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir      = @top_srcdir@
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+bindir          = $(exec_prefix)/bin
+libdir          = $(exec_prefix)/lib
+docdir		= $(top_srcdir)/doc
+includedir      = $(prefix)/include
+geldir		= @GELDIR@
+gellib		= $(geldir)/libgel.a
+gelincludedir	= $(geldir)
+
+SHELL		= /bin/sh
+
+CC		= @CC@
+CFLAGS		=
+INCLUDES	= @INCLUDES@ -I$(top_srcdir)/src
+DEFS		= @DEFS@
+
+INSTALL		= @INSTALL@
+
+CLEAN		= @CLEAN@
+LIBS		= $(top_srcdir)/src/libtb.a @LIBS@
+
+NOWEB		= @NOWEB@
+
+ADAPTERS	= @ADAPTERS@
+SUBDIRS		= asf+sdf-adapter gen-adapter perl-adapter python-adapter \
+		swipl-adapter wish-adapter tcltk-adapter
+
+DISTFILES	= Makefile.in Makefile.in.template
+
+all install uninstall clean distclean:
+	@SUBDIRS="${ADAPTERS}";\
+	case $@ in \
+	  distclean) ${CLEAN} Makefile ;; \
+	esac; \
+	for SUBDIR in $$SUBDIRS; \
+	do \
+		echo ${MAKE} $@ in $$SUBDIR; \
+		cd $${SUBDIR}; \
+		${MAKE} $@; \
+		cd ..; \
+	done
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/adapters 2> /dev/null \
+	  || cp $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/adapters; \
+	done
+	@for subdir in $(SUBDIRS); do \
+	  echo Making $@ in $$subdir; \
+	  dir=../../$(PRODUCT)-$(VERSION)/adapters/$$subdir; \
+	  mkdir $$dir; \
+	  chmod 777 $$dir; \
+	  (cd $$subdir && $(MAKE) $@) || exit 1; \
+	done

@@ -1,0 +1,10 @@
+\begin{verbatim}
+import TB
+
+def get_text():
+        TB.send('snd-value(%s)' % \
+          TB.TBstring('Hello World, my first ToolBus "tool" in Python!\n'))
+
+def rec_terminate(msg):
+        exit
+\end{verbatim}

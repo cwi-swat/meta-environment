@@ -1,0 +1,78 @@
+%% Programmeeromgevingen II - Eindopdracht
+%%
+%% Filename		: tic-tac-toe.tb
+%% Last update	: 28-09-1995
+%%
+%% Timme Dekker 9212396 tkdekker@fwi.uva.nl
+
+process TICTACTOE is
+let
+	Active : str, Id : int, P1ready : bool, P2ready : bool,
+	Pid : player, State : str
+in
+	P1ready := false .		%% Player 1 is not yet connected
+	P2ready := false .		%% Player 2 neither
+	Active := "X" .			%% X may start the game
+	(
+		(
+		rec-connect(Pid?) .					%% A player wants to connect
+		create(PLAYER(Pid, "X"), Id?) .		%% He will be X, create a process
+		P1ready := true .					%% Player 1 is now connected
+		delta
+		)
+		||
+		(
+		rec-connect(Pid?) .					%% A player wants to connect
+		create(PLAYER(Pid, "O"), Id?) .		%% He will be O, create a process
+		P2ready := true .					%% Player 2 is now connected
+		delta
+		)
+		||
+		(
+		if and(P1ready, P2ready) then	%% If both players are connected
+			(
+			snd-msg(your-turn(Active)) .	%% Give turn to Active player
+			rec-msg(req-update(Active, State?)) . %% Receive update info
+			if equal(Active, "X") then	%% Now the other player becomes active
+				Active := "O"
+			else
+				Active := "X"
+			fi .
+			snd-msg(req-update(Active, State)) %% Send him the info
+			)*delta
+		fi 
+		)*delta
+	)
+endlet
+
+process PLAYER(Pid : player, Id : str) is
+let 
+	State : str
+in
+	snd-do(Pid, you-are(Id)).	%% Tell identity to the player (X or O)
+	(
+		(
+			rec-msg(your-turn(Id)) .	%% If it's your turn
+			snd-do(Pid, wake-up) .		%% Wake the player up
+			rec-event(Pid, game-state(State?)) .	%% Receive his move
+			snd-do(Pid, sleep) .		%% Disable him again
+			snd-msg(req-update(Id, State)) . %% Request that his opponent be
+			snd-ack-event(Pid, game-state(State)) %% Updated and acknowledge
+		)
+		+	
+		(
+			rec-msg(req-update(Id, State?)) .	%% If you receive an update-
+			snd-do(Pid, update(State))	%% request, do this update
+		)
+	)*delta
+	||
+	(
+		rec-event(Pid, quit) .		%% If a user wants to quit the game is over
+		snd-ack-event(Pid, quit) .	%% Acknowledge the quit request
+		shutdown("Game Over")		%% Shut the ToolBus down
+	)
+endlet
+
+tool player is {command = "wish-adapter -script tic-tac-toe.tcl"}
+
+toolbus(TICTACTOE)

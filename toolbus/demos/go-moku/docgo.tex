@@ -1,0 +1,161 @@
+\documentstyle[11pt,a4wide,epsf]{article}
+
+\begin{document}
+\title{\bf Eindopdracht Programmeeromgevingen II \ Go-Moku }
+\author{Jan Kort\\Huidenstraat 13\\1016 ER Amsterdam\\e-mail: kort@fwi.uva.nl}
+\maketitle
+
+\begin{center} \leavevmode \epsfbox{dump.ps} \end{center}
+
+\pagebreak
+
+\section{Compilen en runnen}
+Het programma bestaat uit de volgende files:
+\begin{verbatim}
+Makefile        # De Makefile
+go.bm           # Icon bitmap, voor als de close knop word ingedrukt
+go.c            # Bevat de situatie van het bord en het spel.
+go.tb           # De toolbus code
+master.tcl      # master interface (bevat enkel een quit button)
+player          # roept player.tcl op de juiste manier aan
+player.tcl      # De user interface, bord, stenen, history, quit-button.
+docgo.tex       # Documentatie
+\end{verbatim}
+
+Compileer het programma door make in te tikken.
+Start de master op met:
+\begin{verbatim}
+toolbus go.tb
+\end{verbatim}
+Start de spelers op met:
+\begin{verbatim}
+player -TB_HOST <machine where toolbus runs on>
+\end{verbatim}
+De eerste speler krijgt zwart en de tweede wit. Mensen die nadat er al
+2 spelers spelen binnenkomen worden automatisch toeschouwer.
+Toeschouwers worden dus op dezelfde manier als een speler gestart.
+
+\section{Het C deel}
+Het meeste werk dat direct met het bord te maken heeft gebeurt in het C
+programma (go.c). De spelsituatie is opgeborgen in de game-structure:
+\begin{verbatim}
+struct game_struct {
+  int board[SIZE+1][SIZE+1]; /* 1..19 x 1..19                */
+  struct hist_struct history[1000];
+  int black;                 /* Pid of black player or NO_ID */
+  int white;                 /* Pid of white player or NO_ID */
+  int turn;                  /* Who's turn: BLACK or WHITE   */
+} game;
+\end{verbatim}
+Het history veld bevat alle tot nu toe gedane zetten. Dit is nodig om
+oude zetten te kunnen sturen naar toeschouwers die pas later binnenkomen.
+Het bord word geindiceerd met het rij nummer (1..19) eerst en dan het
+kolom nummer (1..19).
+
+De volgende C functies zijn geimplementeerd:
+\begin{itemize}
+\item{\bf winner} Kijk of iemand vijf op een rij heeft en dus gewonnen heeft.
+\item{\bf getmoves} Stuur een lijst met alle tot nu toe gedane zetten terug
+naar de Toolbus.
+\item{\bf place} Zet een steen neer, als het een legale positie is of
+genereer een foutcode als dit niet het geval is. De foutcode word op dit
+moment genegeerd, maar zou gebruikt kunnen worden om een irritante
+mededeling op het scherm te zetten zoals: ``Je mag niet op een ander
+steen zetten'' of ``Je bent niet aan de beurt''.
+\item{\bf assigncolor} Als de speler de eerste is krijgt ie zwart, als ie
+tweede is wit en anders word ie automatisch toeschouwer.
+\item{\bf playerquit} Als een speler stopt word zijn plaats vrijgegeven,
+dus als bijvoorbeeld zwart stopt met spelen kan iemand anders zijn
+plaats overnemen.
+\end{itemize}
+
+\section{Het ToolBus deel}
+Het hoofdproces ziet er als volgt uit:
+\begin{verbatim}
+process Go is
+let
+  Mid : master,
+  Gid : go,
+  Lid : player
+in
+  execute(master, Mid?) .
+  execute(go, Gid?) .
+  ( ConnectPlayer(Gid, Mid, Lid?) * delta ||
+    Synchronize(Gid) * delta ||
+    PlaceStone(Gid) * delta ||
+    PlayerQuit(Gid) * delta ||
+    ShutDown(Mid) * delta || rec-msg("dummy") * delta
+  )
+endlet
+\end{verbatim}
+Eerst word het grafische interface voor de master opgestart, wat in dit
+geval alleen uit een quit-button bestaat. Vervolgens word het C programma
+opgestart en kan de event loop beginnen.
+\begin{itemize}
+\item{\bf ConnectPlayer} Een speler kan op een willekeurig moment
+binnenkomen. Als er al twee spelers zijn word hij toeschouwer.
+\item{\bf Synchronize} De eerste speler kan al een zet gedaan terwijl de
+tweede nog moet binnekomen, of een speler kan quitten en later weer
+binnenkomen en het derde probleem is dat er op elk moment een toeschouwer
+kan binnenkomen. Al deze gevallen worden opgelost door een ingewikkelde
+uitziende synchronisatie. Het is echter heel simpel, elke zet word
+als een note verstuurd met een tag om aan te geven wat het zet nummer is.
+Aan de ontvangende kant worden alle zet-notes ontvangen en in de goede
+volgorde vertoond. Als bijvoorbeeld eerst zet 3 word verstuurd en daarna
+pas de zetten 1 en 2, word netjes gewacht op zetten 1 en 2, waarna de
+zetten 1,2 en 3 in oplopende volgorde vertoond worden.
+\item{\bf PlaceStone} Hier word de zet doorgegeven aan het C programma,
+als de zet inderdaad gelukt is word er gekeken of iemand al vijf op een
+rij heeft, als dit het geval is dan word er een note gestuurd om dit
+mee te delen aan beide spelers en alle toeschouwers.
+\item{\bf PlayerQuit} Als een speler quit en hij is geen toeschouwer dan
+word hij verweiderd uit het spel. Dit heeft als voordeel dat iemand anders
+door kan gaan in zijn plaats.
+\item{\bf ShutDown} Het Go process word beeindigd en dus ook alle spelers
+en toeschouwers.
+\end{itemize}
+
+\section{Het Tcl deel}
+Het master interface is zo uitermate simpel dat ik het maar laat voor wat
+het is.
+
+Het player interface is ook redelijk sober gehouden, het bestaat
+uit drie delen.
+\begin{enumerate}
+\item Het bord is een zo goed mogelijke representatie van een $19\times 19$
+go bord. Verder zijn er een aantal conversie functies om rij en kolom 
+nummers om te zetten naar scherm coordinaten en naar go notatie (A1,N15 etc).
+De procedure display-stone zorgt dat er gegeven een rij en een kolom
+nummer op de juiste plaats een cirkel word getekend.
+\item Er is een quit button, om te stoppen met spelen.
+\item Er is ook nog een postscript button die een postscript dump
+van het bord en de stenen naar de file ``dump.ps'' schrijft. Het
+plaatje op de titel pagina is op deze manier gemaakt.
+\item Het history/message window onderaan het scherm bevat alle zetten die
+er gedaan zijn en mededelingen zoals een welkomst bericht en of er iemand
+gewonnen heeft.
+\end{enumerate}
+
+\section{Conclusie}
+Het werkt allemaal prima, en afgezien van de synchronisatie procedure
+werkt alles nog redelijk snel ook. Uitbreidingen zoals het maken van
+een go-moku competitie waarbij meerdere mensen meerdere parijen tegelijk
+spelen is misschien mogelijk, maar dan moet er eerst wat aan de
+efficientie van m'n programma gedaan worden.
+
+Ik heb erg weinig aandacht aan efficientie besteed, bijvoorbeeld als een
+toeschouwer laat in de wedstrijd aankomt duurt het enkele seconden voordat
+alle zetten overgestuurd zijn. Dit is te verbeteren door
+lijsten van zetten te sturen.
+
+Op het moment is er geen andere mogelijkheid om een nieuw spel te starten
+dan het go tool quitten en opnieuw starten. Dit is niet bepaald eenvoudig
+om binnen de toolbus te doen, er moet een reset note gestuurd worden die
+door de spelers en het C programma ontvangen word ontvangen,
+de history word gereset , alle gedane zetten worden van het bord gehaald, de
+huidige zet komt weer op 1 te staan. Tijdens deze actie mogen er geen
+nieuwe toeschouwers binnenkomen, want dan loopt de synchronisatie mis.
+
+\end{document}
+
+

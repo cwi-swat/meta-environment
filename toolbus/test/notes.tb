@@ -1,0 +1,59 @@
+process CHK(N : int, Given : int, Required : int) is
+        if equal(Given, Required) then tau
+    	else
+	   printf("Test %d: given %d, but required %d\n", N, Given, Required) .
+	   shutdown("ERRORS IN TEST")
+        fi
+
+process A is
+  let X : int
+  in
+	snd-msg(begin) .
+	snd-note(nt) .
+	snd-note(nt(1)) .
+	X := 1 .
+	snd-note(nt(X)) .
+	snd-note(nt(2)) .
+	snd-note(nt(20)) .
+	snd-note(nt(10)) .
+	snd-note(nt(30,40)).
+	snd-note(nt(65)) .
+     	snd-note([1,2,3]) .
+     	snd-note([1.0, 2.0, 3.0]) .
+        snd-msg(nt(65)) .
+	snd-msg(end-of-notes) .
+
+	snd-msg(done)
+  endlet
+
+process B is
+  let X : int, Y : int, L1 : list, L2: list(real)
+  in
+	subscribe(nt) . subscribe(nt(<int>)) . subscribe(nt(<int>, <int>)) .
+        subscribe(<list(int)>) . subscribe(<list(real)>) .
+	rec-msg(begin) .
+	rec-note(nt) .
+	rec-note(nt(1)) .
+	rec-note(nt(1)) .
+	rec-note(nt(2)) .
+	rec-note(nt(20)) .
+	rec-note(nt(10)) .
+	X := 30 .
+	rec-note(nt(X, Y?)) . CHK(1, Y, 40) .
+	rec-note(L1?) .
+	rec-note(L2?) .
+	X := 55 .
+	no-note(nt(X)) .
+	rec-msg(nt(65)) .
+	( no-note(nt(65)) . printf("No note fails\n")
+	+ rec-msg(end-of-notes)
+	) .
+
+	rec-msg(done) .
+	shutdown("")
+  endlet
+
+process C is
+	shutdown("Test is hanging, aborted\n") delay(sec(5))
+
+toolbus(A, B, C)

@@ -1,0 +1,50 @@
+# @configure_input@
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+CC		= @CC@
+SHELL		= /bin/sh
+CFLAGS		= @CFLAGS@
+INCLUDES	= @INCLUDES@ -I$(includedir)
+LIBS		= @LIBS@
+TBLIB		= $(libdir)/libtb.a
+
+CLEAN		= @CLEAN@
+
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(LIBS)
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+PROGRAMS	= cons
+DISTFILES	= Makefile.in cons.c cons.tb ui-cons.tcl
+
+all:	${PROGRAMS}
+
+cons:	cons.c cons.tif.c
+	${COMPILE}
+
+cons.tif.c:	cons.tb
+	${bindir}/toolbus -gentifs cons.tb
+	${bindir}/ctif -tool cons -tifs cons.tifs
+
+clean:
+	${CLEAN} ${PROGRAMS}
+
+distclean: clean
+	rm -f Makefile
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/cons 2> /dev/null \
+	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/cons; \
+	done

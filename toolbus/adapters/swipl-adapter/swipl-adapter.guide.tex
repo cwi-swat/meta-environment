@@ -1,0 +1,108 @@
+
+%
+% The real SWI-Prolog section starts here.
+%
+\section{Writing tools in SWI-Prolog}
+
+Writing \TB\ tools in SWI-Prolog is greatly simplified by the
+{\tt swipl-adapter} described in this section.
+
+\subsection{\tt swipl-adapter}
+
+\paragraph{Synopsis.} Execute a SWI-Prolog program as a tool. For each request
+a query is sent to the prolog program and the result sent back to the \TB\.
+
+\paragraph{Example.} {\tt swipl-adapter -binary a.out}
+
+\paragraph{Specific arguments.}
+\begin{itemize}
+\item {\tt -binary}: The SWI-Prolog compiled binary to send queries to.
+If this flag is not present, the queries will be sent to the standard
+SWI-Prolog system. If all you need is SWI-Prolog built-ins, you don't have
+to specify a binary.
+\end{itemize}
+
+\paragraph{Communication.} \hspace{-0.3cm}\footnote{Communication is described
+from the point of view of the \TB, i.e., {\tt snd-} and {\tt rec-}
+mean, respectively, send by \TB\ and receive by \TB.}
+
+\begin{itemize}
+\item {\tt snd-eval($Tid$, query($Query$))} Send the query $Query$ to the
+prolog system. All \TB\ data types can be used.
+
+Where one would put a variable (an identifier starting with a capital) in
+SWI-Prolog, one should put the atom {\tt pl-var} here.
+This tells the {\tt swipl-adapter} and by way of the {\tt swipl-adapter}
+the SWI-Prolog system that the value should be treated as an unbound variable,
+as if the user entered a variable on the SWI-Prolog prompt.
+
+\item {\tt rec-value($Tid$, result($Success$, $Query$))} Receive the result of
+the query $Query$ to the prolog system. $Success$ will equal {\tt true} if the
+query succeeded (SWI-Prolog would say "Yes.") and will equal
+{\tt false} if the query failed (SWI-Prolog would say "No.").
+
+If $Success$ equals {\tt true}, $Query$ contains the query that was sent using
+{\tt snd-eval}, but unbound variables ({\tt pl-var} atoms in the original
+query) have now been assigned a value.
+
+For example, sending {\tt snd-value($Tid$, query(plus(2, 3, pl-var)))}
+will return\\
+{\tt rec-value($Tid$, result(true, plus(2, 3, 5)))}.
+
+\item {\tt rec-value($Tid$, error($Msg$))} Receive and error message from
+the {\tt swipl-adapter}. These errors should not occur under normal
+circumstances and usually mean that the {\tt swipl-adapter} has encountered
+an unknown \TB\ or SWI-Prolog data type.
+\end{itemize}
+
+The SWI-Prolog system has been integrated into the {\tt swipl-adapter}. When
+it is initialized it is given the {\tt -x} flag with the binary to execute.
+After that each query is sent to the SWI-Prolog system to evaluate.
+
+The binary that is needed should be compiled by the SWI-Prolog system by
+giving the system the {\tt -c} flag and the filename to compile. It will compile
+the prolog program and the output will be put in a file aptly named
+{\tt a.out}. To get the output in another file use the {\tt -o} switch.
+
+\subsection{An example}
+
+As an example we will demonstrate how to use the {\tt swipl-adapter} to
+calculate the successor of a character. The following steps should be
+followed:
+
+\begin{itemize}
+\item Write the SWI-Prolog code. The result is shown in
+Figure~\ref{fig:succ.pl}.
+\item Write the \T\ script. The result is shown in
+Figure~\ref{fig:succ.tb}.
+\item Compile the prolog code; {\tt swipl -o succ.pl.o -c succ.pl}
+\item Run the system; {\tt toolbus succ.tb}
+This will produce the output shown in
+Figure~\ref{fig:succ.output}
+\end{itemize}
+
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+\input{succ.pl.tex}
+	\caption{{\tt succ.pl}: the successor tool in SWI-Prolog}
+	\label{fig:succ.pl}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+\input{succ.tb.tex}
+	\caption{{\tt succ.tb}: the successor \T\ script}
+	\label{fig:succ.tb}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+\input{succ.output.tex}
+	\caption{The output of the \T\ script}
+	\label{fig:succ.output}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\end{document}

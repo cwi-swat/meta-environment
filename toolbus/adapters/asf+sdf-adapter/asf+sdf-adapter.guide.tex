@@ -1,0 +1,237 @@
+\section{\label{ToolsInASFSDF}Writing tools in \ASFSDF}
+
+Writing \TB\ tools in \ASFSDF\ is greatly simplified by the adapters described in
+this section:
+\begin{itemize}
+\item {\tt parser-adapter} (Section~\ref{parser-adapter}) is a universal parser 
+interface primarily intended for use in the \ASFSDF\ Meta-environment.
+
+\item {\tt asf+sdf-adapter} (Section~\ref{asf+sdf-adapter}) is a
+universal adapter for compiled \ASFSDF\ specifications.
+
+\end{itemize}
+
+\paragraph{Note.} The connection of tools written in \ASFSDF\ to the \TB\ is
+still under development. The descriptions of the adapters below may be
+subject to change.
+
+\subsection{\label{parser-adapter}{\tt parser-adapter}}
+
+\paragraph{Synopsis.} Execute a parser as tool. For each request a new parser is executed.
+
+\paragraph{Example.} {\tt parser-adapter -cmd parse-pascal}
+
+\paragraph{Specific arguments.} None.
+
+\paragraph{Communication.} \hspace{-0.3cm}\footnote{Communication is described
+from the point of view of the \TB, i.e., {\tt snd-} and {\tt rec-}
+mean, respectively, send by \TB\ and receive by \TB.}
+
+\begin{itemize}
+\item {\tt snd-eval($Tid$, input($S$))}: parse the string $S$.
+$Tid$ is a tool identifier 
+(as produced by {\tt execute} or {\tt rec-connect}) for an instance of the {\tt parser-adapter}.
+
+\item {\tt rec-value($Tid$, output($G$?))}: the return value for a previous parse request
+reporting successful completion of the parse.
+$G$ is a term of type {\tt gel(<bstr>)} and contains a binary representation (in \GEL)
+of the parse tree.
+
+\item {\tt rec-value($Tid$,syntax-error($Line$?, $Pos$?, $Msg$?))}: the return value
+for a previous parse request reporting a syntax error in the input text.
+$Line$ and $Pos$ are coordinates in the text where the syntax error was found.
+$Msg$ is a string describing the error.
+
+\item {\tt rec-value($Tid$,error($Msg$?))}: the return value for a previous parse request
+reporting a general error situation.
+
+\item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of {\tt parser-adapter}.
+\end{itemize}
+
+\noindent The actual parse command to be executed should write on the standard error stream
+error messages of the form
+\begin{verbatim}
+      syntax error at line %d, pos %d: %[^\n]\n
+\end{verbatim}
+and exit with non-zero status in case of a syntax error,
+otherwise it should write a representation of the parse tree to its standard output.
+
+\subsection{\label{asf+sdf-adapter}{\tt asf+sdf-adapter}}
+
+\paragraph{Synopsis.} Execute a compiled \ASFSDF\ specification as tool.
+Also provide a variable mechanism, to keep big terms in the adapter and
+lighten the communication burden for the \TB.
+
+\paragraph{Example.} {\tt asf+sdf-adapter -result gel -cmd Booleans}
+
+\paragraph{Specific arguments.}
+\begin{itemize}
+\item {\tt -result {\em Kind}}: determines the format of the output term.
+Possible values for {\em Kind} are: {\tt  gel} (produce a term in \GEL\ format),
+or {\tt term} (produce a \TB\ term).
+
+\item {\tt -details {\em String}}: define details of the mapping between
+\TB\ terms and \ASFSDF\ terms. The mapping is defined by a list of triples
+of the form
+\begin{quote}
+$Dir~~~~~TBpat~~~~~SDFdef$
+\end{quote}
+where
+\begin{itemize}
+\item $Dir$: gives the {\em direction} in which the mapping applies:
+{\tt in} (input only, i.e., from \TB\ to specification),
+{\tt out} (output only, i.e., from specification back to \TB),
+{\tt inout} (both directions).
+\item $TBpat$: is a term pattern (compare Section~\ref{Patterns}) defining
+a function symbol for a \TB\ term. For {\tt out} or {\tt inout} mapppings,
+only the [{\tt \%t}] directive is allowed. The following \emph{directives} are
+allowed for {\tt in}put only mappings:
+  \begin{itemize}
+    \item [{\tt \%t}]: corresponds to a normal \TB\ term that should be handled
+          recursively.
+    \item [{\tt \%b}]: corresponds to a binary string that is taken to be
+          in gel format.
+    \item [{\tt \%l}]: corresponds to a toolbus list that is translated into
+          a \ASFSDF\ list constructor.
+    \item [{\tt \%s}]: corresponds to a toolbus string that is translated into
+          a \ASFSDF\ lexical constructor.
+  \end{itemize}
+  The pattern should only be one level deep, i.e., all argument positions
+  should be pattern directives.
+  In adition to this, a directive of the form [{\tt \%c@var-name}] (with {\tt c}
+  one of the characters {\tt t, b, l, or s} as described above) means
+  that the corresponding argument is not present in the input term, but
+  shoud be taken from variable {\tt var-name}.
+
+  \item $SDFdef$: the literal text of the corresponding context-free function
+  declaration from the \ASFSDF\ definition with which the function symbol
+  defined in the previous point should correspond.
+  \end{itemize}
+\end{itemize}
+Example use of a mapping for Boolean terms and strings:
+\begin{verbatim}
+tool string is { 
+command = "asf+sdf-adapter -cmd bgelio spec/Editor -r1 -w1"
+details = <<
+inout   true            Booleans: "true" -> BOOL
+inout   false           Booleans: "false" -> BOOL
+in      and(%t,%t)      Booleans: and ( BOOL , BOOL ) -> BOOL
+in	str-con(%s)     STR-CON
+in	string(%t)      Strings: STR-CON -> STRING
+in	correct(%t@s,%t) Strings: equal ( STRING , STRING ) -> BOOL
+>>
+
+process CHECK-PWD is
+let
+  Str : string, S : str
+in
+  execute(string, Str?) .
+  snd-do(Str, set-variable("s", "top-secret")) .
+  read("Type a password", S?) .
+  snd-eval(Str, snd-eval(input(correct(string(str-con(S)))))) .
+  ( rec-value(Str, output(true)) .
+    printf("Password is correct.\n")
+    +
+    rec-value(Str, output(false)) .
+    printf("You are an intruder!, your termination is imminent.\n")
+  )
+endlet
+
+toolbus(CHECK-PWD)
+\end{verbatim}
+{itemize}
+
+\paragraph{Communication.} \hspace{-0.3cm}\footnote{Communication is described
+from the point of view of the \TB, i.e., {\tt snd-} and {\tt rec-}
+mean, respectively, send by \TB\ and receive by \TB.}
+
+
+\begin{itemize}
+  \item {\tt snd-eval($Tid$, input($T$))}: rewrite the term $T$.
+        There are two cases:
+  \begin{itemize}
+    \item $T$ is of type {\tt gel(<bstr>)} and contains a term in binary form (\GEL)
+          to be reduced;
+    \item otherwise, $T$ is a \TB\ term to be reduced.
+  \end{itemize}
+  $Tid$ is a tool identifier 
+  (as produced by {\tt execute} or {\tt rec-connect}) for an instance of 
+  the {\tt asf+sdf-adapter}.
+
+  \item {\tt snd-do($Tid$, store(input($T$), $S$)}: rewrite the term $T$, 
+        and store the result in variable $S$.
+        There are here also two cases:
+  \begin{itemize}
+    \item $T$ is of type {\tt gel(<bstr>)} and contains a term in binary form (\GEL)
+          to be reduced;
+    \item otherwise, $T$ is a \TB\ term to be reduced.
+  \end{itemize}
+
+  \item {\tt rec-value($Tid$, output($T$?))}: the normal form computed for 
+        a previous rewriting request. There are here also two cases:
+  \begin{itemize}
+    \item $T$ is of type {\tt gel(<bstr>)} and contains a term in binary form
+          representing the normal form;
+    \item otherwise, $T$ is a \TB\ term representing the normal form.
+  \end{itemize}
+
+  \item {\tt rec-value($Tid$, error($Msg$?))}: the return value for a previous
+        rewriting request reporting a general error described by the string 
+        $Msg$.
+
+  \item {\tt snd-do(set-variable($S$, $T$))}: assign value $T$ to variable
+        $S$.
+
+  \item {\tt snd-eval(get-variable($S$))}: retrieve the contents of
+        variable $S$.
+
+  \item {\tt rec-value(variable($S$, $T$))}: the value of a variable
+        requested by a previous retrieval request.
+
+  \item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of {\tt asf+sdf-adapter}.
+\end{itemize}
+
+\paragraph{Implementation note} The current implementation is still feeble
+in the following respects:
+\begin{itemize}
+\item The syntax checking of the triples in {\tt details} is marginal.
+\item In the $SDFdef$ layout symbols are unfortunately {\bf essential}.
+For instance, spaces should surround the parentheses and comma in
+the definition of {\tt and}. In addition, quoting should be
+{\bf exactly} as in the specification, e.g., {\tt true} and
+{\tt "true"} are considered to be different.
+\item Error handling is crude, in particular when a function
+symbol appears in a normal form for which a mapping is missing.
+\end{itemize}
+
+\subsection{On the status of \GEL} The implementation of the \ASFSDF\ meta-environment
+is currently in a transition phase regarding, among many other things, the use of \GEL.
+Older components use a version of \GEL\  that encodes trees as ASCII texts, while
+newer components use a newer version of \GEL\  that uses a much more concise binary
+encoding. As a result, both versions have to coexist for some time. Inventory:
+\begin{itemize}
+\item all generated parsers use ASCII \GEL.
+\item all compiled specifications use ASCII \GEL.
+\item the {\tt asf+sdf-adapter} already uses binary \GEL.
+\end{itemize}
+To bridge this gap, several conversion programs are available:
+\begin{itemize}
+\item {\tt gel2a}: convert binary \GEL\ to ASCII \GEL.
+\item {\tt gel2b}: convert ASCII \GEL\ to binary \GEL.
+\item {\tt bgelo}: execute a program that generates ASCII \GEL\ and converts its output
+to binary \GEL.
+\item {\tt bgelio}: execute a program that reads and writes ASCII \GEL: first convert 
+its input to binary, then execute the program, and finally convert its output
+to binary \GEL.
+\end{itemize}
+
+\noindent The practical consequences of this are:
+\begin{itemize}
+\item Execute a parser, e.g., {\tt pascal} as follows: {\tt bgelo pascal}.
+\item Execute a compiled \ASFSDF\ specification, e.g., {\tt Booleans} as follows:
+{\tt bgelio Booleans r1 w1}.
+\item The conversion programs {\tt bgelo} and {\t begelio} are located in the
+same directory as all other programs related to the \TB.
+\item Make sure that the conversion programs {\tt gel2a} and {\tt gel2b} are also
+on your search path. Normally they reside in the ``{\tt gel}'' directory.
+\end{itemize}

@@ -1,0 +1,39 @@
+
+In het spel "Zeeslagje", ook wel "Battleships" strijden twee spelers om het
+zo snel mogelijk vernietigen van de vloot schepen van de tegenstander.
+
+Het spel begint met een initialisatie-scherm waarop het aantal verschillende
+schepen en de grootte van het speelveld kunnen worden ingesteld. Wanneer beide
+spelers tevreden zijn drukken zij op de "done" knop.
+
+In de tweede fase legt iedere speler de positie van al zijn schepen op het
+speelbord vast. Per schip kan gekozen worden voor een horizontale dan wel
+verticale ligging. Dan klikt de speler met op de locatie waar hij de boeg
+van zijn schip wil hebben. Een schip mag langs de rand liggen, maar natuurlijk
+niet 'over' de rand. Als een speler dit probeert krijgt hij te zien dat die
+locatie niet geschikt is voor dat schip. Ook mag de rand direct om het schip
+niet worden gebruikt voor een ander schip. Wanneer een speler een schip te
+dicht bij een ander schip probeert te plaatsen worden de conflicterende sche-
+pen korte tijd grijs gemaakt om aan te geven welke schepen in de weg liggen.
+Als de speler niet geheel tevreden is over de ligging van een reeds geplaatst
+schip, dan kan deze met de rechtermuisknop weer van het speelveld verwijderd
+worden. Het schip kan dan opnieuw op een (andere) locatie geplaatst worden
+Wanneer alle schepen naar tevredenheid zijn geplaatst klikt de speler op de
+done-knop. Hierna verschijnt het speelveld van de tegenstander (uiteraard
+nog blanco).
+
+Als beide spelers hun schepen hebben geplaatst mogen zij om de beurt een
+schot lossen in het veld van de tegenstander. De speler die als eerste klaar
+was met het leggen van zijn schepen (i.e. de eerste die de "done"-knop
+aanklikt), mag beginnen met schieten.
+
+Het resultaat van een schot is te zien aan de kleur:
+	- Is het hokje blauw, dan lag daar geen schip. *PLONS*
+	- Wordt het hokje rood, dan ligt op die locatie een schip. Het is
+	  echter nog niet duidelijk wat voor soort schip. Dan zou immers bekend
+	  zijn hoe 'breed' het schip is. Pas wanneer het hele schip beschoten
+	  is, veranderd het van kleur om aan te geven dat het schip gezonken is.
+
+Wanneer de tegenstander geen 'drijvende' schepen meer heeft is het spel over.
+De uitslag verschijnt duidelijk bovenin beeld. De configuratie blijft nog
+in beeld zodat de spelers bij elkaar kunnen kijken waar de schepen lagen.

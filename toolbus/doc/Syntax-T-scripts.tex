@@ -1,0 +1,94 @@
+\small
+\begin{verbatim}
+exports
+  sorts BOOL NAT INT SIGN EXP UNSIGNED-REAL REAL STRING ID NAME VNAME BSTR
+        TERM TERM-LIST VAR GEN-VAR TYPE ATOM ATOMIC-FUN PROC PROC-APPL FORMALS
+        TIMER-FUN FEATURE-ASG FEATURES TB-CONFIG DEF T-SCRIPT
+  lexical syntax
+        [ \t\n]                                          -> LAYOUT
+        "%%" ~[\n]*                                      -> LAYOUT
+
+        [0-9]+                                           -> NAT
+        NAT                                              -> INT
+        SIGN NAT                                         -> INT
+        [+\-]                                            -> SIGN
+
+        [eE] NAT                                         -> EXP
+        [eE] SIGN NAT                                    -> EXP
+        NAT "." NAT                                      -> UNSIGNED-REAL
+        NAT "." NAT EXP                                  -> UNSIGNED-REAL
+        UNSIGNED-REAL                                    -> REAL
+        SIGN UNSIGNED-REAL                               -> REAL
+
+        [a-z][A-Za-z0-9\-]*                              -> ID
+        "\"" ~[\"]* "\""                                 -> STRING
+        [A-Z][A-Za-z0-9\-]*                              -> NAME
+        [A-Z][A-Za-z0-9\-]*                              -> VNAME
+        [a-z][a-z\-]*                                    -> ATOMIC-FUN
+
+        delay                                            -> TIMER-FUN
+        abs-delay                                        -> TIMER-FUN
+        timeout                                          -> TIMER-FUN
+        abs-timeout                                      -> TIMER-FUN
+  context-free syntax
+        true                                             -> BOOL
+        false                                            -> BOOL
+        BOOL                                             -> TERM
+        INT                                              -> TERM
+        REAL                                             -> TERM
+        STRING                                           -> TERM
+
+        TERM                                             -> TYPE
+
+        VNAME                                            -> VAR
+        VNAME ":" TYPE                                   -> VAR
+
+        VAR                                              -> GEN-VAR
+        VAR "?"                                          -> GEN-VAR
+        GEN-VAR                                          -> TERM
+        "<" TERM ">"                                     -> TERM
+        ID                                               -> TERM
+        ID "(" TERM-LIST ")"                             -> TERM
+        {TERM ","}*                                      -> TERM-LIST
+        "[" TERM-LIST "]"                                -> TERM
+
+        NAME                                             -> VNAME
+
+        ATOMIC-FUN "(" TERM-LIST ")"                     -> ATOM
+        delta                                            -> ATOM
+        tau                                              -> ATOM
+        create "(" NAME "(" TERM-LIST ")" ","  TERM ")"  -> ATOM
+        ATOM TIMER-FUN "(" TERM ")"                      -> ATOM
+        VNAME ":=" TERM                                  -> ATOM
+
+        ATOM                                             -> PROC
+        PROC "+" PROC                                    -> PROC  {left}
+        PROC "." PROC                                    -> PROC  {right}
+        PROC "||" PROC                                   -> PROC  {right}
+        PROC "*" PROC                                    -> PROC  {left}
+        "(" PROC ")"                                     -> PROC  {bracket}
+        if TERM then PROC else PROC fi                   -> PROC
+        if TERM then PROC fi                             -> PROC
+        execute(TERM-LIST)                               -> PROC
+        let {VAR ","}* in PROC endlet                    -> PROC
+
+        NAME                                             -> PROC-APPL
+        NAME "(" TERM-LIST ")"                           -> PROC-APPL
+        PROC-APPL                                        -> PROC
+
+        "(" {GEN-VAR ","}* ")"                           -> FORMALS
+                                                         -> FORMALS
+
+        process NAME FORMALS is PROC                     -> DEF
+        ID "=" STRING                                    -> FEATURE-ASG
+       "{" { FEATURE-ASG  ";"}* "}"                      -> FEATURES
+        tool ID FORMALS is FEATURES                      -> DEF
+        toolbus "("{PROC-APPL ","}+ ")"                  -> TB-CONFIG
+        DEF* TB-CONFIG                                   -> T-SCRIPT
+
+ priorities
+       PROC "*" PROC -> PROC > PROC "." PROC -> PROC >
+       PROC "+" PROC -> PROC > PROC "||" PROC -> PROC
+
+\end{verbatim}
+\normalsize

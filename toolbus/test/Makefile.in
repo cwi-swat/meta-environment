@@ -1,0 +1,98 @@
+# @configure_input@
+# test/Makefile.in
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+CC              = @CC@
+SHELL           = /bin/sh
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir      = @top_srcdir@
+
+CFLAGS          = @CFLAGS@
+
+INCLUDES        = @INCLUDES@ -I@top_srcdir@/src
+
+CLEAN           = @CLEAN@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= $(exec_prefix)/bin
+
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(top_srcdir)/src/libtb.a
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+PROGRAMS	= TBmatch1 TermIO
+SCRIPTS		= if.tb msg.tb notes.tb bind.tb expr.tb types.tb garbage.tb
+ERROR_SCRIPTS	= expr-errors.tb tc-errors.tb scope.tb
+ERROR_OUTPUT    = expr-errors.tb.out tc-errors.tb.out scope.tb.out
+DISTFILES	= Makefile.in TBmatch1.c TermIO.c terms1.c terms2.c env1.c \
+		  ${SCRIPTS} ${ERROR_SCRIPTS} ${ERROR_OUTPUT} sieve.tb
+
+all:    ${PROGRAMS}
+	@for TST in ${PROGRAMS} ; \
+	do \
+		echo "Running test program $${TST}"; \
+		$${TST};  \
+		if $? ; then \
+		echo "test program $${TST} OK" ; \
+		else \
+		echo "*** test $${TST} FAILED" ; \
+		fi ; \
+	done ; \
+	for S in ${SCRIPTS} ; \
+	do \
+	 	(${top_srcdir}/src/toolbus $${S};echo  $${S} "OK") || echo "$${S} returns error code, something wrong here" ;\
+	done; \
+	for S in ${ERROR_SCRIPTS} ; \
+	do \
+		echo ;\
+		${top_srcdir}/src/toolbus $${S} 2>tmp || echo "($${S} returns required error code, we ignore it here)" ;\
+		diff $${S}.out tmp ;\
+		echo $${S} "OK" ;\
+	done ;\
+	rm -f tmp
+clean:
+	${CLEAN} batch.out ${PROGRAMS}
+
+distclean: clean
+	rm -f Makefile
+
+TBmatch1:	TBmatch1.c
+	${COMPILE}
+
+TermIO:	TermIO.c
+	${COMPILE}
+
+terms1:	terms1.c
+	${COMPILE}
+
+terms2:	terms2.c
+	${COMPILE}
+
+env1:	env1.c
+	${COMPILE} ../src/env.o ../src/match.o
+
+expand1:	expand1.c
+	${COMPILE} ../src/env.o ../src/match.o ../src/procdef.o ../src/interpreter.o
+
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/test 2> /dev/null \
+	  || cp $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/test; \
+	done
+
+install uninstall:
+
+
+
+
+
+
+
+
+

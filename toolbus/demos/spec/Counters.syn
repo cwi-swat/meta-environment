@@ -1,0 +1,15 @@
+
+exports
+  sorts NAT
+  lexical syntax
+    [ \t\n]             -> LAYOUT
+  context-free syntax
+    init                -> NAT
+    "0"                 -> NAT
+    succ(NAT)           -> NAT
+    inc(NAT)            -> NAT
+
+
+hiddens
+  variables
+    N                   -> NAT

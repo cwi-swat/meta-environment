@@ -1,0 +1,250 @@
+\small
+\begin{verbatim}
+process CALC is
+  let Tid : calc, E : str, V : int
+  in
+     execute(calc, Tid?) .
+     ( rec-msg(compute, E?) . snd-eval(Tid, expr(E)) .
+       rec-value(Tid, V?) .
+       snd-msg(compute, E, V) . snd-note(compute(E, V))
+     ) * delta
+  endlet
+
+\end{verbatim}
+\noindent
+\normalsize
+ We take a closer look at the definition of the \script{CALC} process.
+ First, three typed variables are introduced: \script{Tid} (of type \script{calc},
+ a tool identifier representing the \script{calc}-tool, see below),
+ \script{E} (a string variable representing the expression whose value is to be computed),
+ and \script{V} (an integer variable representing the computed value of expressions).
+ The first atom,
+ \begin{quote}
+ \script{execute(calc, Tid?)}
+ \end{quote}
+ executes the \script{calc}-tool using the
+ command (and optionally also the desired host computer)
+ as defined in \script{calc}'s tool definition.  The
+ result variable \script{Tid} gets as value a descriptor of
+ this particular execution of the \script{calc}-tool. All
+ subsequent atoms (e.g., \script{snd-eval}, \script{rec-event})
+ that communicate with this tool instance will use this descriptor as
+ first argument. Next, we encounter a construct of the form
+ \begin{quote}
+ ( rec-msg(compute, E?)
+   ...
+ ) * delta
+ \end{quote}
+ describing an infinite repetition of all steps inside the parentheses.
+ Note that inaction (\script{delta}) will be avoided as long as there
+ are other steps possible.
+ Next, we see the atom
+ \begin{quote}
+ \script{rec-msg(compute, E?)}
+ \end{quote}
+ for receiving a computation request from another process. Here, \script{compute}
+ is a constant, and the variable \script{E} will get as value a string
+ representing the expression to be computed. Next, an evaluation request
+ goes to the \script{calc}-tool as a result of
+ \begin{quote}
+ \script{snd-eval(Tid, expr(E))}
+ \end{quote}
+ The resulting value is received by
+ \begin{quote}
+ \script{rec-value(Tid, V?)}
+ \end{quote}
+ Observe the combination of an ordinary variable \script{Tid} and
+ a result variable \script{V}.  Clearly, this atom should {\em only}
+ match with a value event coming from the \script{calc}-tool that was
+ executed at the beginning of the \script{CALC} process.  It is also
+ clear that \script{V} should get a value as a result of the match.
+ A reply to the original request \script{rec-msg(compute, E?)} is then given by
+ \begin{quote}
+ \script{snd-msg(compute, E, V)}
+ \end{quote}
+ and this is followed by the notification
+ \begin{quote}
+ \script{ snd-note(compute(E, V))}
+ \end{quote}
+ that will be used by the \script{LOG} process.
+
+ \noindent The definition for the \script{calc} tool is:
+
+\small
+\begin{verbatim}
+tool calc is {command = "./calc"}
+
+\end{verbatim}
+\noindent
+\normalsize
+ The string value given for \script{command} is the operating system level
+ command needed to execute the tool. It may contain additional arguments
+ as can be seen in the definition of the \script{ui}-tool below.
+
+ The user-interface is defined by the
+ process \script{UI}. First, it executes the \script{ui}-tool and then
+ it handles three kinds of buttons.
+ Note that the buttons ``calc'' and ``log'' exclude each other:
+ either the ``calc'' button or the ``log'' button may be pushed but not both at the same time.
+ The ``time'' button is independent of the other two buttons: it remains enabled
+ while any of the other two buttons has been pushed.
+
+\small
+\begin{verbatim}
+process UI is
+  let Tid : ui
+  in
+     execute(ui, Tid?) .
+     ( ( CALC-BUTTON(Tid) + LOG-BUTTON(Tid) ) * delta
+     ||
+       TIME-BUTTON(Tid) * delta
+     )
+  endlet
+
+tool ui is {command = "wish-adapter -script ui-calc.tcl"}
+
+\end{verbatim}
+\noindent
+\normalsize
+ The treatment of each button is defined in a separate, auxiliary,
+ process definition. They have a common structure:
+ \begin{itemize}
+ \item Receive an event from the user-interface.
+ \item Handle the event (either by doing a local
+ computation or by communicating with other \TB\ processes that may
+ communicate with other tools).
+ \item Send an acknowledgement to the user-interface that the handling
+ of the event is complete.
+ \end{itemize}
+
+\small
+\begin{verbatim}
+process CALC-BUTTON(Tid : ui) is
+  let  N : int, E : str, V : int
+  in
+     rec-event(Tid, N?, button(calc)) .
+     snd-eval(Tid, get-expr-dialog).
+     ( rec-value(Tid, cancel)
+     + rec-value(Tid, expr(E?)) .
+       snd-msg(compute, E) . rec-msg(compute, E, V?) .
+       snd-do(Tid, display-value(V))
+     ) . snd-ack-event(Tid, N)
+  endlet
+
+process LOG-BUTTON(Tid : ui) is
+  let N : int, L : term
+  in
+      rec-event(Tid, N?, button(showLog)) .
+      snd-msg(showLog) .  rec-msg(showLog, L?) .
+      snd-do(Tid, display-log(L)) .
+      snd-ack-event(Tid, N)
+  endlet
+
+process TIME-BUTTON(Tid : ui) is
+  let N : int, T : str
+  in
+      rec-event(Tid, N?, button(showTime)) .
+      snd-msg(showTime) . rec-msg(showTime, T?) .
+      snd-do(Tid, display-time(T)) .
+      snd-ack-event(Tid, N)
+  endlet
+
+\end{verbatim}
+\noindent
+\normalsize
+ The \script{BATCH} process executes the \script{batch} tool,
+ reads expressions from file, computes their value by exchanging messages
+ with process \script{CALC} and writes an (expression, value) pair
+ back to a file.
+
+\small
+\begin{verbatim}
+process BATCH is
+  let Tid : batch, E : str, V : int
+  in
+     execute(batch, Tid?) .
+     ( snd-eval(Tid, fromFile). rec-value(Tid, expr(E?)) .
+       snd-msg(compute, E). rec-msg(compute, E, V?).
+       snd-do(Tid, toFile(E, V))
+     ) * delta
+  endlet
+
+tool batch is {command = "./batch"}
+
+\end{verbatim}
+\noindent
+\normalsize
+ The \script{LOG} process subscribes to notes of the form \script{compute(<str>,<int>)},
+ i.e., a function \script{compute} with a string and an integer as arguments.
+
+\small
+\begin{verbatim}
+process LOG is
+  let Tid : log, E : str, V : int, L : term
+  in
+     subscribe(compute(<str>,<int>)) .
+     execute(log, Tid?) .
+     ( rec-note(compute(E?, V?)) . snd-do(Tid, writeLog(E, V))
+     + rec-msg(showLog) . snd-eval(Tid, readLog) .
+       rec-value(Tid, L?) . snd-msg(showLog, L)
+     ) * delta
+  endlet
+
+tool log is {command = "./log"}
+
+\end{verbatim}
+\noindent
+\normalsize
+ There are alternatives for the way in which the process definitions
+ in this example can be defined. The \script{LOG} process can, for instance,
+ be defined without resorting to a tool in the following manner:
+
+\small
+\begin{verbatim}
+process LOG1 is
+  let TheLog : list, E : str, V : int
+  in
+     subscribe(compute(<str>,<int>)) .
+     TheLog := [] .
+     ( rec-note(compute(E?, V?)) . TheLog := join(TheLog, [[E, V]])
+     + rec-msg(showLog) .  snd-msg(showLog, TheLog)
+     ) * delta
+  endlet
+
+\end{verbatim}
+\noindent
+\normalsize
+ Instead of storing the log in a tool we can use a variable (\script{TheLog})
+ for this purpose in which we maintain a list of pairs. We use
+ the function ``\script{join}'' (list concatenation) to append a new pair
+ to the list. Note that \script{join} operates on lists, hence we concatenate
+ a singleton list consisting of the pair as single element.
+ The process \script{CLOCK} executes the \script{clock} tool and answers
+ requests for the current time.
+
+\small
+\begin{verbatim}
+process CLOCK is
+  let Tid : clock, T : str
+  in
+     execute(clock, Tid?) .
+     ( rec-msg(showTime) .
+       snd-eval(Tid, readTime) .
+       rec-value(Tid, T?) .
+       snd-msg(showTime, T)
+     ) * delta
+  endlet
+
+tool clock is {command = "./clock"}
+
+\end{verbatim}
+\noindent
+\normalsize
+ Finally, we define one of the possible \TB\ configurations that can be defined
+ using the above definitions:
+
+\small
+\begin{verbatim}
+toolbus(UI, CALC, LOG1, CLOCK, BATCH)
+\end{verbatim}
+\normalsize

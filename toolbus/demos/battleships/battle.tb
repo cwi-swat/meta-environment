@@ -1,0 +1,219 @@
+%%     Hayco de Jong -- 9011439 -- jong@fwi.uva.nl -- Battleships
+
+
+%% Battleprocess.
+%% Accepts two players, handles communication about removing and placing
+%% of ships, eventually handling the actual gaming communication, alternating
+%% between the two players.
+process Battle is
+   let Bid : battle, Pid : player, Tid : int, Pl : int,
+	   Ship : str, X : int, Y : int, Hor : int, Setup : bool,
+	   Active : int, Res : int
+   in
+	  Setup := true . execute(battle, Bid?) .
+	  (
+		  ( rec-connect(Pid?) . create(Player(Pid, 1), Tid?) . delta )
+		  ||
+		  ( rec-connect(Pid?) . create(Player(Pid, 2), Tid?) . delta )
+		  ||
+		  ( rec-msg(Pl?, setupDone) . Active := Pl .
+			rec-msg(Pl?, setupDone) . Setup := false . delta
+		  )
+		  ||
+		  ( rec-msg(placeShip(Pl?, Ship?, X?, Y?, Hor?)) .
+			snd-do(Bid, placeShip(Pl, Ship, X, Y, Hor))
+		  ) * if equal(Setup, false) then delta fi
+		  ||
+		  ( rec-msg(removeShip(Pl?, Ship?)) .
+			snd-do(Bid, removeShip(Pl, Ship))
+		  ) * if equal(Setup, false) then delta fi
+		  ||
+		  ( if equal(Setup, false) then
+			   ( snd-msg(actPlayer(Active)) .
+				 rec-msg(hitLocation(Active, X?, Y?)) .
+				 snd-eval(Bid, hitLocation(Active, X, Y)) .
+				 rec-value(Bid, hitLocation(Active, Res?, Ship?)) .
+				 snd-msg(hitLocation(Active, Res, Ship)) .
+				 if equal(Active, 1) then
+					Active := 2
+				else
+					Active := 1
+				fi .
+				 snd-msg(notifyShot(Active, X, Y, Res))
+			   ) * delta
+			fi
+		  ) * delta
+      )
+
+   endlet
+
+tool battle is {command = "./battle"}
+
+
+
+%% Lockprocess.
+process Lock is
+   let Lid : lock, Pid : player, Name : str, B : bool
+   in
+      execute(lock, Lid?) .
+      (
+         ( rec-msg(try-lock(Pid?, Name?)) .
+           snd-eval(Lid, tryLock(Pid, Name)) .
+           rec-value(Lid, tryLock(Pid, Name, B?)) .
+           snd-msg(try-lock(Pid, Name, B))
+         )
+      +
+         ( rec-msg(do-unlock(Pid?)) .
+           snd-do(Lid, doUserUnlock(Pid))
+         )
+      +
+         ( rec-msg(do-unlock(Name?)) .
+           snd-do(Lid, doDataUnlock(Name))
+         )
+      +
+         ( rec-msg(check-lock(Pid?, Name?)) .
+           snd-eval(Lid, checkLock(Pid, Name)) .
+           rec-value(Lid, checkLock(Pid, Name, B?)) .
+           snd-msg(check-lock(Pid, Name, B))
+         )
+      +
+         ( rec-msg(check-data-lock(Name?)) .
+           snd-eval(Lid, checkDataIsLocked(Name)) .
+           rec-value(Lid, checkDataIsLocked(Name, B?)) .
+           snd-msg(check-data-lock(Name, B))
+         )
+      ) * delta
+   endlet
+
+tool lock  is { command = "./lock"  }
+
+
+%% Playerprocess.
+%% One such process is created for each player.
+%% There are three stages:
+%%  1. The first stage is where players setup the amount of ships
+%%     in the game and the boardsize.
+%%  2. The second stage is where each player sets up his own ships
+%%  3. The final stage is the actual playing. Each time a player gets
+%%     his turn, a message comes in, then his shot is accepted and checked.
+%%
+%%  Parallel with this are three other processes: the quit-button, and
+%%  sending/receiving a message.
+
+process Player(Pid : player, Pl : int) is
+   let Ship : str, X : int, Y : int, Hor : int, Res : int,
+	   OtherPlayer : int, Name : str, Msg : str, 
+	   DoneSelf : bool, DoneOther : bool, Lock : bool
+   in
+	  DoneSelf := false . DoneOther := false .
+	  if equal(Pl, 1) then
+		OtherPlayer := 2
+	  else
+		OtherPlayer := 1
+	  fi .
+	  (
+		  (
+			  ( rec-event(Pid, set-amount(Name?, Res?)) .
+				snd-msg(check-lock(Pid, Name)) .
+				rec-msg(check-lock(Pid, Name, Lock?)) .
+				if equal(Lock, quote(true)) then
+					DoneSelf  := false .
+					DoneOther := false .
+					snd-msg(OtherPlayer, set-amount(Name, Res)) .
+					snd-msg(do-unlock(Pid))
+				else
+					snd-do(Pid, not-locked(Name))
+				fi .
+				snd-ack-event(Pid, set-amount(Name, Res))
+			  )
+			  +
+			  ( rec-event(Pid, lock(Name?)) .
+				snd-msg(try-lock(Pid, Name)) .
+				rec-msg(try-lock(Pid, Name, Lock?)) .
+				snd-do(Pid, changeAmount(Name, Lock)) .
+				snd-ack-event(Pid, lock(Name))
+			  )
+			  +
+			  ( rec-event(Pid, boardsize(Res?)) .
+				DoneSelf := false . DoneOther := false .
+				snd-msg(OtherPlayer, boardsize(Res)) .
+				snd-ack-event(Pid, boardsize(Res))
+			  )
+			  +
+			  ( rec-event(Pid, init-done) .
+				DoneSelf := true .
+				snd-msg(OtherPlayer, init-done) .
+				snd-ack-event(Pid, init-done)
+			  )
+		  ) * if and(DoneSelf, DoneOther) then delta fi
+		  ||
+		  (
+			  ( rec-msg(Pl, boardsize(Res?)) .
+				DoneSelf := false . DoneOther := false .
+				snd-do(Pid, rec-size(Res))
+			  )
+			  +
+			  ( rec-msg(Pl, set-amount(Name?, Res?)) .
+				DoneSelf := false . DoneOther := false .
+				snd-do(Pid, rec-amount(Name, Res))
+			  )
+			  +
+			  ( rec-msg(Pl, init-done) .
+				snd-do(Pid, rec-done) .
+				DoneOther := true
+			  )
+		  ) * if and(DoneSelf, DoneOther) then delta fi
+	  	  ||
+		  if and(DoneSelf, DoneOther) then snd-do(Pid, doSetup) .
+		  (
+			  ( rec-event(Pid, place(Ship?, X?, Y?, Hor?)) .
+				snd-msg(placeShip(Pl, Ship, X, Y, Hor)) .
+				snd-ack-event(Pid, place(Ship, X, Y, Hor))
+			  )
+			  +
+			  ( rec-event(Pid, remove(Ship?)) .
+				snd-msg(removeShip(Pl, Ship)) .
+				snd-ack-event(Pid, remove(Ship))
+			  )
+		  ) *
+		  (
+			  ( rec-event(Pid, done) .
+				snd-msg(Pl, setupDone) .
+				snd-ack-event(Pid, done)
+			  ) .
+			  (
+				  ( rec-msg(actPlayer(Pl)) .
+					snd-do(Pid, activate) .
+					rec-event(Pid, hit(X?, Y?)) .
+					snd-msg(hitLocation(Pl, X, Y)) .
+					snd-do(Pid, deactivate) .
+					rec-msg(hitLocation(Pl, Res?, Name?)) .
+					snd-do(Pid, showResult(X, Y, Res, Name)) .
+					snd-ack-event(Pid, hit(X, Y))
+				  )
+				  +
+				  ( rec-msg(notifyShot(Pl, X?, Y?, Res?)) .
+					snd-do(Pid, notifyShot(X, Y, Res))
+				  )
+			  ) * delta
+		  ) fi
+	  )
+	  ||
+	  ( rec-event(Pid, quit) .
+		snd-ack-event(Pid, quit) .
+		shutdown("Game over.")
+	  )
+	  ||
+	  ( rec-event(Pid, chat(Msg?)) .
+		snd-msg(OtherPlayer, chat(Msg)) .
+		snd-ack-event(Pid, chat(Msg))
+	  ) * delta
+	  ||
+	  ( rec-msg(Pl, chat(Msg?)) .
+		snd-do(Pid, receiveChat(Msg))
+	  ) * delta
+   endlet
+
+tool player is {command = "wish-adapter -script XBattle.tcl"}
+
+toolbus(Battle, Lock)

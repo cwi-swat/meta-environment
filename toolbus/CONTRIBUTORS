@@ -1,0 +1,16 @@
+The following persons are kindly acknowledged for their
+contribution to the current implementation in the form
+of source code or comments on the distribution:
+
+Robert van Liere (provided the first version of the socket code)
+Simon Gray (binary strings, improvements to socket code)
+Pieter Olivier (asf+sdf-adapter, tcl tool interfacing)
+
+The following users are acknowledged for their comments:
+
+Doeco Bosscher
+Thomas Bullens
+Calin Groza
+Steven Klusener
+Wilco Koorn
+

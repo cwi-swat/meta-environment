@@ -1,0 +1,79 @@
+
+\section{\label{PYintact}Python interactive interpreter simulator}
+
+The Python interpreter will not enter interactive mode when it's input
+comes from a pipe but it will first read a complete script (until EOF)
+and then execute it.  However, for the Python adapter we need an
+interactive interpreter since each function call needs to be evaluated
+directly after it is send by the \TB.
+
+The solution is the use of this script which simulates the Python
+interactive interpreter by repeatedly reading a line from standard
+input and executing it.
+\nwfilename{PYintact.py.nw}\nwbegincode{1}\sublabel{NWPYiE-PYiB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWPYiE-PYiB-1}}}\moddef{PYintact.py~{\nwtagstyle{}\subpageref{NWPYiE-PYiB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{\relax}{NWPYiE-PYiB-2}\nwenddeflinemarkup
+# -----------------------------------------------------------------------
+# PYintact.py -- Python script which simulates interactive interpreter
+#
+# Author:       Leon Moonen,
+# Time-stamp:   <95/08/30 19:11:35 leon>
+# -----------------------------------------------------------------------
+
+import sys
+# add the path of the TB module to the module load-path
+# this is changed to the right path during "make install" 
+# (generally the path is 'root_of_ToolBus/lib')
+# <PO>: Removed this line, in favor of environment variable mechanism
+#       (because of the much cleaner installation procedure)
+# sys.path.append('@prefix@/lib')
+import TB
+import string
+import types
+import __main__
+\nwalsodefined{\\{NWPYiE-PYiB-2}\\{NWPYiE-PYiB-3}\\{NWPYiE-PYiB-4}}\nwnotused{PYintact.py}\nwendcode{}\nwbegindocs{2}\nwdocspar
+The \texttt{firstof} function is used by the \texttt{catch} function
+to get the first element of a sequence (in the case of an exception
+value tuple, this first element contains the error description).
+\nwenddocs{}\nwbegincode{3}\sublabel{NWPYiE-PYiB-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWPYiE-PYiB-2}}}\moddef{PYintact.py~{\nwtagstyle{}\subpageref{NWPYiE-PYiB-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWPYiE-PYiB-1}{NWPYiE-PYiB-3}\nwenddeflinemarkup
+def firstof(seq):
+        if (type(seq) == types.TupleType):
+                return seq[0]
+        elif (type(seq) == types.ListType):
+                return seq[0]
+        else:
+                return seq
+\nwendcode{}\nwbegindocs{4}\nwdocspar
+The \texttt{catch} function is used my the main loop to catch all
+possible exceptions (i.e. errors) while execution a line and
+convert and return them to the Python adapter.
+\nwenddocs{}\nwbegincode{5}\sublabel{NWPYiE-PYiB-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWPYiE-PYiB-3}}}\moddef{PYintact.py~{\nwtagstyle{}\subpageref{NWPYiE-PYiB-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWPYiE-PYiB-2}{NWPYiE-PYiB-4}\nwenddeflinemarkup
+def catch(line):
+        try:
+                exec line in vars(__main__)
+        except SystemExit:
+                sys.exit()
+        except:
+                cmd = string.strip(line)
+                TB.error("'%s: %s' while executing '%s'" %\\
+                         (sys.exc_type, firstof(sys.exc_value), cmd))
+\nwendcode{}\nwbegindocs{6}\nwdocspar
+The main part of the program repeatedly reads a line from standard
+input (whether or not that is a pipe) and executes it using the
+\texttt{catch} function.
+\nwenddocs{}\nwbegincode{7}\sublabel{NWPYiE-PYiB-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWPYiE-PYiB-4}}}\moddef{PYintact.py~{\nwtagstyle{}\subpageref{NWPYiE-PYiB-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWPYiE-PYiB-3}{\relax}\nwenddeflinemarkup
+# main:
+eof = 0
+while not eof:
+        try:
+                line = sys.stdin.readline()     
+                if (line == ''):
+                        eof = 1
+                else:
+                        catch(line)
+        except KeyboardInterrupt:
+                eof = 1;
+\nwendcode{}
+
+\nwixlogsorted{c}{{PYintact.py}{NWPYiE-PYiB-1}{\nwixd{NWPYiE-PYiB-1}\nwixd{NWPYiE-PYiB-2}\nwixd{NWPYiE-PYiB-3}\nwixd{NWPYiE-PYiB-4}}}%
+\nwbegindocs{8}\nwdocspar
+
+\nwenddocs{}

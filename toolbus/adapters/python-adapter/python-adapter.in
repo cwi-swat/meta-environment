@@ -1,0 +1,18 @@
+#!/usr/bin/sh
+
+PREFIX=@prefix@
+LIBDIR=$PREFIX/lib
+
+# adjust PYTHONPATH
+if test x$PYTHONPATH != x
+then
+  PYTHONPATH=$PYTHON_PATH:$LIBDIR
+  export PYTHONPATH
+else
+  PYTHONPATH=$LIBDIR
+  export PYTHONPATH
+fi
+echo $PYTHONPATH
+
+# start python
+python $LIBDIR/TBstart.py -TB_LIB $LIBDIR $@

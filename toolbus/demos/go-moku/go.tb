@@ -1,0 +1,224 @@
+
+%% go.tb
+%% Jan Kort
+%% 8912041
+%% The synchronization looks realy horrible, but there's no easier way I
+%% think. The problem is that I wanted to allow spectators, which means
+%% there has to be a correct synchronization process that passes all
+%% the moves that have already been played to the spectator. This is
+%% done by sending moves as notes, but since there's no way of receiving
+%% notes that have already been sent a manual synchronisation process
+%% (UpdateMove) is needed.
+
+%% Start of the go tool
+%% There are 5 actions that will be executed in parallel:
+%% ConnectPlayer : connect a player or a spectator
+%% Synchronize   : sent all the past moves
+%% PlaceStone    : if the move is legal place the stones
+%% PlayerQuit    : disconnect a player and free his slot
+%% ShutDown      : destroys everything, server, players etc.
+process Go is
+let
+  Mid : master,
+  Gid : go,
+  Lid : player
+in
+  execute(master, Mid?) .
+  execute(go, Gid?) .
+  ( ConnectPlayer(Gid, Mid, Lid?) * delta ||
+    Synchronize(Gid) * delta ||
+    PlaceStone(Gid) * delta ||
+    PlayerQuit(Gid) * delta ||
+    ShutDown(Mid) * delta || rec-msg("dummy") * delta
+  )
+endlet
+
+tool master is { command = "wish-adapter -script master.tcl" }
+
+%% Every function of the go tool is a seperate process
+%% ShutDown      Kill the game
+
+process ShutDown(Mid : master) is
+  rec-event(Mid, quit) .
+  shutdown("Exiting go tool.")
+
+%% Send notes to everyone who needs old moves for some reason:
+%% - spectators that start to watch in the middle of the game
+%% - the white player that logs on after black has alreay started
+process Synchronize(Gid : go) is
+let
+  L : list
+in
+  rec-msg(synchronize) .
+  snd-eval(Gid, getmoves()) .
+  rec-value(Gid, moves(L?)) .
+  snd-note(put-stones(L))
+endlet
+
+%% Place a stone and send notes to the two players and the spectators.
+%% If a player has won the game send a have-winner note.
+process PlaceStone(Gid : go) is
+let
+  Pid : int,
+  Row : int,
+  Col : int,
+  Err : int,
+  L : list,
+  Color : int
+in
+  rec-msg(place-stone(Pid?,Row?,Col?)) .
+  snd-eval(Gid, place(Pid, Row, Col)) .
+  (   rec-value(Gid, ok(L?)) .
+      snd-note(put-stones([L])) .
+      snd-eval(Gid, winner) .
+      ( rec-value(Gid, winner(Color?)) .
+        snd-note(have-winner(Color))
+        + rec-value(Gid, nowinner)
+      )
+    + rec-value(Gid, error(Err?))
+  )
+endlet
+
+%% Player leaves, open the slot for someone else.
+process PlayerQuit(Gid : go) is
+let
+  Pid : int
+in
+  rec-msg(player-quit(Pid?)) .
+  snd-do(Gid, playerquit(Pid))
+endlet
+
+%% Connect a player
+process ConnectPlayer(Gid : go, Mid : master, Lid : player?) is
+let
+  Pid : int
+in
+  rec-connect(Lid?) .
+  create(Player(Lid), Pid?) .
+  snd-do(Gid, assigncolor(Pid))
+endlet
+
+%% The first thing to do with a new player is synchronize so all the old
+%% moves are sent.
+%% Then wait for:
+%% - user wants to place a stone
+%% - notes to do the actual placement
+%% - user quits
+process Player(Lid : player) is
+let
+  Current : int,
+  L : list,
+  Pid : int
+in
+  Current := 1 .
+  L := [] .
+  Pid := process-id .
+  snd-msg(synchronize) .
+  ( PLACE-STONE(Lid) * delta ||
+    HANDLE-PLACE(Lid, L?, Current?) * delta ||
+    HAVE-WINNER(Lid) * delta ||
+    QUIT-BUTTON(Lid) * delta
+  )
+endlet
+
+process PLACE-STONE(Lid : player) is
+let
+  Row : int,
+  Col : int,
+  Pid : int
+in
+  Pid := process-id .
+  rec-event(Lid, push(Row?,Col?)) .
+  snd-msg(place-stone(Pid, Row, Col)) .
+  snd-ack-event(Lid, push(Row, Col)) 
+endlet
+
+process HAVE-WINNER(Lid : player) is
+let
+  Color : int
+in
+  subscribe(have-winner(<int>)) .
+  rec-note(have-winner(Color?)) .
+  if equal(Color, 0) then
+    snd-do(Lid, display-message("Black has won the game!\n"))
+  else
+    snd-do(Lid, display-message("White has won the game!"))
+  fi
+endlet
+
+%% Receive put-stones notes and add them to the waitinglist of stones to
+%% be shown. This is to make the synchronisation procedure easier.
+process HANDLE-PLACE(Lid : player, L : list?, Current : int?) is
+let
+  ML : list,
+  MoveNr : int,
+  Ok : bool,
+  Color : int
+in
+  subscribe(put-stones(<list>)) .
+  rec-note(put-stones(ML?)) .
+  L := join(ML, L) .    %% The new moves in front to save some time
+  Ok := true .
+  if Ok then
+    UpdateMove(Lid, L?, Current?, Ok?) * tau
+  fi *
+  if not(Ok) then
+    tau
+  fi
+endlet
+
+%% Update the next move and return true in Ok, if there is no move
+%% to update return false in Ok.
+%% This process displays the moves that are made starting from current,
+%% each time a move is displayed current is increased by 1, so that only
+%% an uninterupted sequence of moves can be displayed.
+process UpdateMove(Lid : player, L : list?, Current : int?, Ok : bool?) is
+let
+  TL : list,
+  MN : int,
+  Row : int,
+  Col : int,
+  Color : int,
+  X : list
+in
+  Ok := false .
+  TL := L .
+  if not(is-empty(TL)) then
+    X := first(TL) .
+    MN := first(X) .
+    Row := first(next(X)) .
+    Col := first(next(next(X))) .
+    Color := first(next(next(next(X)))) .
+    TL := next(TL) .
+    if equal(MN, Current) then
+      snd-do(Lid, display-stone(Row, Col, Color)) .
+      Current := add(Current, 1) .
+      L := diff(L,[X]) .
+      Ok := true
+    else
+      if less(MN, Current) then
+        L := diff(L, [X])
+      fi
+    fi
+  fi * 
+  if is-empty(TL) then
+    tau
+  fi
+endlet
+
+process QUIT-BUTTON(Lid : player) is
+let
+  Pid : int
+in
+  Pid := process-id .
+  rec-disconnect(Lid) .
+  snd-msg(player-quit(Pid)) .      %% notify the Go process that someone left
+  printf("%t left the game\n", Lid) .
+  delta
+endlet
+
+tool player is {command = "wish-adapter -script player.tcl" }
+tool go is {command = "./go"}
+
+toolbus(Go)
+

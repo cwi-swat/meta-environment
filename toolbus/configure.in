@@ -1,0 +1,220 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT
+
+PRODUCT=ToolBus
+VERSION=0.9.16f
+DEMOS="auction battleships calc cons edit game go-moku hello ttt wave"
+SWIPL_DEMOS="swipl-ttt"
+PERL_DEMOS="perl"
+GEL_DEMOS="spec"
+
+AC_SUBST(PRODUCT)
+AC_SUBST(VERSION)
+
+AC_PREFIX_DEFAULT(`pwd`)
+
+INSTALL='$(top_srcdir)/install-sh -c'
+INSTALL_PROGRAM='$(top_srcdir)/install-sh -c'
+INSTALL_DATA='$(top_srcdir)/install-sh -c -m 644'
+ALL_MODULES=
+
+AC_SUBST(INSTALL)
+AC_SUBST(INSTALL_PROGRAM)
+AC_SUBST(INSTALL_DATA)
+
+AC_PROG_RANLIB
+AR=ar
+AC_SUBST(AR)
+
+AC_PROG_CC
+AC_AIX
+AC_PROG_LEX
+AC_PROG_YACC
+AC_CHECK_LIB(y,yyerror,YACCLIB="-ly",YACCLIB="")
+AC_SUBST(YACCLIB)
+
+AC_PATH_X
+AC_SUBST(x_includes)
+AC_SUBST(x_libraries)
+
+AC_CHECK_PROG(NOWEB,noweb,noweb,true)
+AC_SUBST(NOWEB)
+
+AC_SET_MAKE
+
+#CFLAGS=-O2
+CFLAGS=
+# if test ${CC} = gcc ; then
+#	CFLAGS="-pedantic -Wall -g"
+# fi
+AC_SUBST(CFLAGS)
+AC_SUBST(DEFS)
+AC_SUBST(INCLUDES)
+
+CLEAN="rm -f *~ a.out core y.tab.c lex.yy.c *.o; \
+	rm -f *.[chly].tex *.dvi *.log *.aux"
+AC_SUBST(CLEAN)
+
+dnl Which modules?
+
+AC_ARG_WITH(modules,
+[  --with-modules          link with a certain set of modules],
+MODULES=${withval},
+MODULES=${ALL_MODULES})
+AC_SUBST(MODULES)
+
+dnl Do we need GeL?
+
+ADAPTERS=gen-adapter
+
+AC_ARG_WITH(gel,
+[  --with-gel              use GeL for interfacing with ASF+SDF system],
+if test ${withval} = "yes"
+then
+   GELDIR="$(top_srcdir)/../gel"
+   ADAPTERS="${ADAPTERS} asf+sdf-adapter"
+   DEMOS="${DEMOS} ${GEL_DEMOS}"
+else
+   if test ${withval} = "no"
+   then 
+     GELDIR=""
+   else
+     GELDIR=${withval};
+     ADAPTERS="${ADAPTERS} asf+sdf-adapter"
+     DEMOS="${DEMOS} ${GEL_DEMOS}"
+   fi
+fi,
+GELOBJECTS=)
+AC_SUBST(GELDIR)
+
+dnl Which adapters?
+
+AC_ARG_WITH(wish,
+[  --with-wish		   include Tcl/Tk support (wish-adapter)],
+if test ${withval} = "yes"
+then
+  ADAPTERS="${ADAPTERS} wish-adapter"
+fi,
+ADAPTERS="${ADAPTERS} wish-adapter"
+)
+
+AC_ARG_WITH(tcltk,
+[  --with-tcltk=<Tcl/Tk dir>	   include Tcl/Tk support (tcltk-adapter)],
+ADAPTERS="${ADAPTERS} tcltk-adapter"
+TCLTKTOP=${withval}
+)
+
+AC_ARG_WITH(perl,
+[  --with-perl		   include Perl support (perl-adapter)],
+if test ${withval} = "yes"
+then
+  ADAPTERS="${ADAPTERS} perl-adapter"
+  DEMOS="${DEMOS} ${PERL_DEMOS}"
+fi,
+ADAPTERS="${ADAPTERS} perl-adapter"
+DEMOS="${DEMOS} ${PERL_DEMOS}"
+)
+
+AC_ARG_WITH(python,
+[  --with-python	   include python support (python-adapter)],
+if test ${withval} = "yes"
+then
+"${ADAPTERS} python-adapter"
+fi,
+ADAPTERS="${ADAPTERS} python-adapter"
+)
+
+AC_ARG_WITH(swipl,
+[  --with-swipl		   include swi-prolog support (swipl-adapter)],
+if test ${withval} = "yes"
+then
+  echo "You will have to edit the file adapters/swipl-adapter/Makefile"
+  echo "so it can locate the swi-prolog home directory and the swi-prolog"
+  echo "architecture."
+  ADAPTERS="${ADAPTERS} swipl-adapter"
+  DEMOS="${DEMOS} ${SWIPL_DEMOS}"
+fi,
+)
+
+AC_SUBST(ADAPTERS)
+AC_SUBST(DEMOS)
+AC_SUBST(TCLTKTOP)
+
+AC_HEADER_CHECK(arpa/inet.h,:, echo "*** no arpa/inet.h";exit)
+AC_HEADER_CHECK(assert.h,:, echo "*** no assert.h";exit)
+AC_HEADER_CHECK(ctype.h,:, echo "*** no ctype.h";exit)
+AC_HEADER_CHECK(errno.h,:, echo "*** no errno.h";exit)
+AC_HEADER_CHECK(netdb.h,:, echo "*** no netdb.h";exit)
+AC_HEADER_CHECK(netinet/in.h,:, echo "*** no netinet/in.h";exit)
+AC_HEADER_CHECK(netinet/tcp.h,:, echo "*** no netinet/tcp.h";exit)
+AC_HEADER_CHECK(signal.h,:, echo "*** no sihnal.h";exit)
+AC_HEADER_CHECK(stdarg.h,:, echo "*** no stdarg.h";exit)
+AC_HEADER_CHECK(stdio.h,:, echo "*** no stdio.h";exit)
+AC_HEADER_CHECK(stdlib.h,:, echo "*** no stdlib.h";exit)
+AC_HEADER_CHECK(string.h,:, echo "*** no string.h";exit)
+
+AC_HEADER_CHECK(fcntl.h,:, echo "*** no fcntl.h";exit)
+AC_HEADER_CHECK(sys/ioctl.h,:, echo "*** no sys/ioctl.h";exit)
+AC_HEADER_CHECK(sys/param.h,:, echo "*** no sys/param.h";exit)
+AC_HEADER_CHECK(sys/socket.h,:, echo "*** no sys/socket.h";exit)
+AC_HEADER_CHECK(sys/stat.h,:, echo "*** no sys/stat.h";exit)
+AC_HEADER_CHECK(sys/time.h,:, echo "*** no sys/time.h";exit)
+AC_HEADER_CHECK(sys/types.h,:, echo "*** no sys/types.h";exit)
+AC_HEADER_CHECK(sys/uio.h,:, echo "*** no sys/uio.h";exit)
+AC_HEADER_CHECK(sys/un.h,:, echo "*** no sys/un.h";exit)
+AC_HEADER_CHECK(unistd.h,:, echo "*** no unistd.h";exit)
+AC_HEADER_CHECK(math.h,:, echo "*** no math.h";exit)
+
+AC_HAVE_FUNCS(strerror)
+AC_HAVE_FUNCS(strdup)
+AC_HAVE_FUNCS(yywrap)
+
+dnl Find out which libraries we need
+
+SOCKET_FOUND=no
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsun"])
+if test ${SOCKET_FOUND} = no; then
+   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsocket"])
+   if test ${SOCKET_FOUND} = no; then
+      AC_CHECK_LIB(bsd,
+                   socket,
+                   [SOCKET_FOUND=yes;LIBS="$LIBS -lbsd";DEFS="$DEFS -D_BSD=43"])
+   fi
+fi
+
+GETHOSTNAME_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GETHOSTNAME_FOUND=yes])
+if test ${GETHOSTNAME_FOUND} = no; then
+   AC_CHECK_LIB(nsl,gethostname,[GETHOSTNAME_FOUND=yes;LIBS="$LIBS -lnsl"])
+fi
+
+# Check for math lib (-lm), use arbitrary function (atof) from
+# C library, since using, e.g., sin leads to compilation errors
+
+AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
+
+dnl add outputfiles as argument below
+AC_OUTPUT(Makefile src/Makefile doc/Makefile \
+	test/Makefile \
+	demos/Makefile \
+        demos/auction/Makefile \
+	demos/calc/Makefile demos/edit/Makefile \
+	demos/cons/Makefile demos/game/Makefile \
+	demos/hello/Makefile \
+	demos/perl/Makefile \
+	demos/spec/Makefile \
+	demos/wave/Makefile \
+	demos/battleships/Makefile \
+	demos/go-moku/Makefile \
+	demos/ttt/Makefile \
+	demos/swipl-ttt/Makefile \
+	adapters/Makefile \
+	adapters/wish-adapter/Makefile \
+	adapters/tcltk-adapter/Makefile \
+	adapters/perl-adapter/Makefile \
+	adapters/python-adapter/Makefile \
+	adapters/python-adapter/python-adapter \
+	adapters/swipl-adapter/Makefile \
+	adapters/asf+sdf-adapter/Makefile \
+	adapters/gen-adapter/Makefile \
+	) 

@@ -1,0 +1,55 @@
+# @configure_input@
+# demos
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir      = @top_srcdir@
+
+SHELL           = /bin/sh
+CLEAN           = @CLEAN@
+DEMOS		= @DEMOS@
+SUBDIRS		= auction battleships calc cons edit game go-moku \
+		hello ttt wave swipl-ttt perl spec
+DISTFILES	= Makefile.in Makefile.in.template
+
+all:
+	@for SUBDIR in ${DEMOS}; \
+	do \
+		echo Make $@ in $${SUBDIR}; \
+		cd $$SUBDIR; \
+		${MAKE} $@; \
+		cd ..; \
+	done
+
+clean distclean:
+	@case $@ in \
+	  clean) ${CLEAN} ;;\
+	  distclean) ${CLEAN};rm -f Makefile;;\
+	esac; \
+	for SUBDIR in ${SUBDIRS}; \
+	do \
+		echo Make $@ in $${SUBDIR}; \
+		cd $${SUBDIR}; \
+		pwd; \
+		${MAKE} $@;  \
+		cd .. ; \
+	done
+
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos 2> /dev/null \
+	  || cp $(srcdir)/$$file $(top_srcdir)..//$(PRODUCT)-$(VERSION)/demos; \
+	done
+	@for subdir in $(SUBDIRS); do \
+	  echo Making $@ in $$subdir; \
+	  mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/$$subdir; \
+	  chmod 777 $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/$$subdir; \
+	  (cd  $$subdir && $(MAKE) $@) || exit 1; \
+	done
+
+install: all
+
+uninstall:

@@ -1,0 +1,70 @@
+# @configure_input@
+# ToolBus
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+SHELL		= /bin/sh
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+
+@SET_MAKE@
+prefix 		= @prefix@
+exec_prefix 	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+CLEAN		= @CLEAN@
+
+MODULES		= 
+SUBDIRS		= src test adapters demos doc
+DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
+		  configure.in configure CHANGES.txt
+
+all clean distclean install uninstall:
+	@SUBDIRS="${SUBDIRS}";\
+	case $@ in \
+	  clean) ${CLEAN} ;;\
+	  distclean) ${CLEAN};rm -f Makefile config.status config.log config.cache; rm -f lib/* include/* bin/* ;;\
+	  install) SUBDIRS="src test adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
+	  all) SUBDIRS="src test adapters";;\
+	esac; \
+	for SUBDIR in $$SUBDIRS; \
+	do \
+		echo Make $@ in $$SUBDIR; \
+		cd $${SUBDIR}; \
+		${MAKE} $@;  \
+		cd .. ; \
+	done
+
+docs:
+	(cd doc; ${MAKE})
+
+demos::
+	cd demos; \
+	${MAKE};  \
+	cd ..	
+
+dist: $(DISTFILES)
+	@rm -rf ../$(PRODUCT)-$(VERSION)
+	@mkdir ../$(PRODUCT)-$(VERSION)
+	@chmod 777 ../$(PRODUCT)-$(VERSION)
+	@echo "Copying distribution files"
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file ../$(PRODUCT)-$(VERSION) 2> /dev/null \
+	  || cp $(srcdir)/$$file ../$(PRODUCT)-$(VERSION); \
+	done
+	@for subdir in $(SUBDIRS); do \
+	  echo Making $@ in $$subdir; \
+	  mkdir ../$(PRODUCT)-$(VERSION)/$$subdir; \
+	  chmod 777 ../$(PRODUCT)-$(VERSION)/$$subdir; \
+	  (cd $$subdir && $(MAKE) $@) || exit 1; \
+	done
+	@ chmod -R +r  ../$(PRODUCT)-$(VERSION)
+	@ cd ..;tar chof $(PRODUCT)-$(VERSION).tar $(PRODUCT)-$(VERSION)
+	@ gzip ../$(PRODUCT)-$(VERSION).tar
+	# rm -rf ../$(PRODUCT)-$(VERSION)
+
+
+
+

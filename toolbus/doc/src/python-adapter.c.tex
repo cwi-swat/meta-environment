@@ -1,0 +1,914 @@
+
+\section{\label{Python adapter}Python adapter}
+
+This section describes the implementation of Python adapter. The 
+architecture of the adapter is shown in figure~\ref{arch}:
+\begin{figure}[h]
+\begin{center}
+\setlength{\unitlength}{0.00083300in}%
+\begin{picture}(3624,1974)(3289,-4723)
+\thicklines
+\put(4201,-4711){\framebox(1800,375){}}
+\put(3751,-3961){\framebox(2700,600){}}
+\put(3301,-2761){\line( 0,-1){300}}
+\put(3301,-3061){\line( 1, 0){3600}}
+\put(6901,-3061){\line( 0, 1){300}}
+\put(4201,-3061){\vector( 0,-1){300}}
+\put(6001,-3361){\vector( 0, 1){300}}
+\put(3976,-3961){\line( 0,-1){525}}
+\put(3976,-4486){\vector( 1, 0){225}}
+\put(6001,-4486){\line( 1, 0){225}}
+\put(6226,-4486){\vector( 0, 1){525}}
+\put(6901,-3361){\makebox(0,0)[lb]{sockets}}
+\put(6901,-4336){\makebox(0,0)[lb]{stdin/stdout}}
+\put(4501,-4561){\makebox(0,0)[lb]{Python interpreter}}
+\put(4576,-3736){\makebox(0,0)[lb]{Python Adapter}}
+\put(4801,-2911){\makebox(0,0)[lb]{\TB}}
+\end{picture}
+\end{center}
+\caption{\label{arch}Architecture of the Python adapter}
+\end{figure}
+An instance of the Python interpreter is connected to the adapter using 
+pipes. The adapter converts \TB\ terms into Python function calls and
+passes Python messages to the \TB.
+\nwfilename{python-adapter.c.nw}\nwbegincode{1}\sublabel{NWpytJ-pytH-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-pytH-1}}}\moddef{python-adapter.c*~{\nwtagstyle{}\subpageref{NWpytJ-pytH-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwenddeflinemarkup
+/*
+ * Python adapter -- Generic adapter for ToolBus <-> Python connection
+ *
+ * Author:      Leon Moonen,
+ * Time-stamp:  <95/08/30 18:36:41 leon>
+ *
+ * Synopsis: python-adapter [options]
+ * 
+ * Options are:
+ * -help                 print this message
+ * -python Python        use Python as Python interpreter
+ * -lazy-exec            postpone execution of Python until needed
+ * -script Name          use Name as script for the Python interpreter
+ * -script-args A1 ...   use A1 ... as arguments for the Python script
+ *
+ * Architecture:
+ *
+ *         ================== ToolBus
+ *            |          ^
+ *            v          |    (sockets)
+ *         +----------------+
+ *         | python-adapter |
+ *         +----------------+
+ *          |             ^
+ *          |  +--------+ |
+ *          +->| Python |-+    (standard input/output)
+ *             +--------+
+ *
+ */
+
+#include "TB.h"
+#include <unistd.h>
+#include <signal.h>
+#include <string.h>
+
+\LA{}globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}\RA{}
+\LA{}prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}\RA{}
+\LA{}interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}\RA{}
+\LA{}term handlers~{\nwtagstyle{}\subpageref{NWpytJ-terD-1}}\RA{}
+\LA{}ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}\RA{}
+\LA{}miscellaneous adapter functions~{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}\RA{}
+\nwnotused{python-adapter.c*}\nwendcode{}\nwbegindocs{2}\nwdocspar
+
+\subsection{Global variables and definitions}
+
+Some character strings that define the version, a copyright message 
+and the help message:
+\nwenddocs{}\nwbegincode{3}\sublabel{NWpytJ-glo7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\moddef{globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-glo7-2}\nwenddeflinemarkup
+char *version   = "Python adapter 1.0 (Aug 30 1995) by Leon Moonen\\n";
+char *copyright = "Copyright is the Right to Copy!\\n\\n";
+char *helpmsg   = "Synopsis: python-adapter [options]\\n\\
+\\n\\
+Options are:\\n\\
+-help                 print this message\\n\\
+-python Python        use Python as Python interpreter\\n\\
+-lazy-exec            postpone execution of Python until needed\\n\\
+-script Name          use Name as script for the Python interpreter\\n\\
+-script-args A1 ...   use A1 ... as arguments for the Python script\\n";
+\nwalsodefined{\\{NWpytJ-glo7-2}\\{NWpytJ-glo7-3}\\{NWpytJ-glo7-4}\\{NWpytJ-glo7-5}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{4}\nwdocspar
+A usefull debug macro which enables execution of debugging code by
+defining the macro ``\texttt{-DDEBUG}'' during compilation:
+\nwenddocs{}\nwbegincode{5}\sublabel{NWpytJ-glo7-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-glo7-2}}}\moddef{globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-glo7-1}{NWpytJ-glo7-3}\nwenddeflinemarkup
+#ifdef DEBUG
+#define Debug(code)     code
+#else
+#define Debug(code)     /* nop */
+#endif
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{6}\nwdocspar
+Initialize the adapter parameters to some sensible defaults:
+\nwenddocs{}\nwbegincode{7}\sublabel{NWpytJ-glo7-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-glo7-3}}}\moddef{globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-glo7-2}{NWpytJ-glo7-4}\nwenddeflinemarkup
+char *python_interpreter = "python";    /* the Python interpreter */
+TBbool lazy_exec = TBfalse;             /* use lazy execution */
+char *script = NULL;                    /* the userscript */
+char *def_args[] = \{NULL\};              /* default value for script_args */
+char **script_args = def_args;          /* arguments passed to the script */
+char *name = "python-adapter";          /* the adapter name: */
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{8}\nwdocspar
+Since we use pipes for the connection of the Python interpreter to the
+Python adapter, we want a file descriptor which gets connected to the
+standard input of the Python interpreter:
+\nwenddocs{}\nwbegincode{9}\sublabel{NWpytJ-glo7-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-glo7-4}}}\moddef{globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-glo7-3}{NWpytJ-glo7-5}\nwenddeflinemarkup
+FILE *to_python;        /* file descriptor connected to std input of Python */
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{10}\nwdocspar
+Furthermore, it is convenient to have character strings defining the name 
+and the path of both the Python interpreter $\leftrightarrow$ adapter 
+interface module and the user script:
+\nwenddocs{}\nwbegincode{11}\sublabel{NWpytJ-glo7-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-glo7-5}}}\moddef{globals~{\nwtagstyle{}\subpageref{NWpytJ-glo7-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-glo7-4}{\relax}\nwenddeflinemarkup
+char *tbpythonpath;
+char *tbpythonmodule;
+char *scriptpath;
+char *scriptmodule;
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{12}\nwdocspar
+
+\subsection{Function prototypes}
+
+There are two term handlers that respectively handle input from the
+Python interpreter and from the \TB:
+\nwenddocs{}\nwbegincode{13}\sublabel{NWpytJ-proA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-proA-2}\nwenddeflinemarkup
+term *handle_input_from_python(term *e);
+term *handle_input_from_toolbus(term *e);
+\nwalsodefined{\\{NWpytJ-proA-2}\\{NWpytJ-proA-3}\\{NWpytJ-proA-4}\\{NWpytJ-proA-5}\\{NWpytJ-proA-6}\\{NWpytJ-proA-7}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{14}\nwdocspar
+Functions to connect the adapter to an instance of the Python
+interpreter and to initialize the interpreter:
+\nwenddocs{}\nwbegincode{15}\sublabel{NWpytJ-proA-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-2}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-1}{NWpytJ-proA-3}\nwenddeflinemarkup
+void connect_to_python(char *script, char *name, TBcallbackTerm handler);
+void init_python(char *script, char **script_args);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{16}\nwdocspar
+Auxiliary functions to check the input signature of the \TB\ script 
+against the signature of the user defined Python script:
+\nwenddocs{}\nwbegincode{17}\sublabel{NWpytJ-proA-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-3}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-2}{NWpytJ-proA-4}\nwenddeflinemarkup
+void check_in_sign(void);
+void require_fun(char *funname, term_list *funargs);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{18}\nwdocspar
+Auxiliary functions to split a full filename into a pathname and a 
+(Python) modulename (without extension \texttt{.py}):
+\nwenddocs{}\nwbegincode{19}\sublabel{NWpytJ-proA-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-4}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-3}{NWpytJ-proA-5}\nwenddeflinemarkup
+char *get_module(char *filename);
+char *get_path(char *filename);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{20}\nwdocspar
+Functions to convert \TB\ terms to Python commands and send them to
+the interpreter instance:
+\nwenddocs{}\nwbegincode{21}\sublabel{NWpytJ-proA-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-5}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-4}{NWpytJ-proA-6}\nwenddeflinemarkup
+void ToPython(char *fmt, ...);
+void PYfun_name(char *funname);
+void PYterm_list(const term_list *tl, TBbool toplevel);
+void PYterm(term *t, TBbool toplevel);
+void PYenv(const env *e, TBbool toplevel);
+void PYstring(char *s, int n);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{22}\nwdocspar
+Auxiliary functions for conversion of \TB\ monitoring terms to Python
+commands:
+\nwenddocs{}\nwbegincode{23}\sublabel{NWpytJ-proA-6}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-6}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-5}{NWpytJ-proA-7}\nwenddeflinemarkup
+TBbool is_to_tool_comm(char *s);
+TBbool is_from_tool_comm(char *s);
+int bytes_in_term(term *t);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{24}\nwdocspar
+Auxiliary functions for the adapter:
+\nwenddocs{}\nwbegincode{25}\sublabel{NWpytJ-proA-7}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-proA-7}}}\moddef{prototypes~{\nwtagstyle{}\subpageref{NWpytJ-proA-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-proA-6}{\relax}\nwenddeflinemarkup
+void showhelp(void);
+void error_and_exit(const char *fmt, ...);
+void at_exit_handler(void);
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{26}\nwdocspar
+
+\subsection{Interpreter connection and initialization}
+
+The desired architecture is obtained as follows:
+\begin{enumerate}
+\item Create two pipes for the adapter $\leftrightarrow$ interpreter
+  communication.
+\item Fork the adapter process:
+  \begin{itemize}
+  \item In the parent:
+    \begin{enumerate}
+    \item Open the input of the pipe from adapter to interpreter for
+      writing.
+    \item Initialize the Python interpreter.
+    \item Check id the input signature of the \TB\ script matches with
+      the definitions in the user defined Python script.
+    \item Add the output of the pipe from interpreter to adapter as a
+      term port to the \TB\ event handler.
+    \end{enumerate}
+  \item In the child:
+    \begin{enumerate}
+    \item Redirect the output side of the pipe from adapter to
+      interpreter to the standard input.
+    \item Redirect standard output to the input side of the pipe from
+      interpreter to adapter.
+    \item Execute the interpreter.
+    \end{enumerate}
+  \end{itemize}
+\end{enumerate}
+
+\nwenddocs{}\nwbegincode{27}\sublabel{NWpytJ-intf-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\moddef{interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-intf-2}\nwenddeflinemarkup
+void connect_to_python(char *script, char *name, TBcallbackTerm handler) \{
+  int adapter2python[2];                /* pipe from adapter to Python */
+  int python2adapter[2];                /* pipe from Python to adapter */
+  int pid;
+
+  if ((pipe(adapter2python) < 0) || (pipe(python2adapter) < 0)) \{
+    TBmsg("Cannot create pipes"); 
+    TBexit(1);
+  \}
+  if ((pid = fork())) \{                         /* then this is the parent */
+    if (pid < 0) \{                              /* check for fork success */
+      TBmsg("Cannot fork\\n"); TBexit(1);
+    \}
+    close(python2adapter[1]); close(adapter2python[0]);
+    to_python = fdopen(adapter2python[1], "w");
+    init_python(script, script_args);           /* initialize interpreter */
+    check_in_sign();                            /* check input signature */
+    TBaddTermPort(python2adapter[0], handler);  /* add to TB event handler */
+  \} else \{                              /* then this is the child */
+    char *env, *newenv;
+    int len;
+
+    close(python2adapter[0]); close(adapter2python[1]);
+    if ((dup2(python2adapter[1], 1) < 0) || (dup2(adapter2python[0], 0) < 0)) \{
+      TBmsg("Cannot duplicate stdout and stdin to pipes"); 
+      TBexit(1);
+    \}
+    
+    /* <PO>: I hacked in this environment manipulation code,
+       so no dirty perl/sed substitution is needed by the makefile.
+       The ToolBus library path (in the PYTHONPATH define) is added
+       to the list of python paths in the shell environment variable 
+       PYTHONPATH.
+    */
+    len = strlen(PYTHONPATH)+2+strlen("PYTHONPATH=");
+    env = getenv("PYTHONPATH");
+    if(env) \{
+      len += strlen(env);
+      newenv = malloc(len);
+      strcpy(newenv, "PYTHONPATH=");
+      strcat(newenv, env);
+      strcat(newenv, ":");
+      strcat(newenv, PYTHONPATH);
+      putenv(newenv);
+    \} else \{
+      newenv = malloc(len);
+      strcpy(newenv, "PYTHONPATH=");
+      strcat(newenv, PYTHONPATH);
+      putenv(newenv);
+    \}
+          
+    if (execlp(python_interpreter, name, PYTHONINT, NULL) < 0) \{
+      TBmsg("Cannot execute `%s %s` as Python interpreter\\n",
+            python_interpreter, PYTHONINT);
+      TBexit(1);
+    \}
+  \}
+\}
+\nwalsodefined{\\{NWpytJ-intf-2}\\{NWpytJ-intf-3}\\{NWpytJ-intf-4}\\{NWpytJ-intf-5}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{28}\nwdocspar
+Initialization of the Python interpreter consists of resetting the
+prompts, appending the pathnames of the adapter interface module and
+the user script to the library search path, loading the adapter
+interface module, setting the script arguments and loading the user
+script.
+\nwenddocs{}\nwbegincode{29}\sublabel{NWpytJ-intf-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-intf-2}}}\moddef{interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-intf-1}{NWpytJ-intf-3}\nwenddeflinemarkup
+void init_python(char *script, char **script_args) \{
+  char **p;                             /* pointer in script argument list */
+
+  tbpythonpath = get_path(TBPYTHON);
+  tbpythonmodule = get_module(TBPYTHON);
+  scriptpath = get_path(script);
+  scriptmodule = get_module(script);
+
+  ToPython("import sys\\n");                     /* load system module */
+            /* add adapter and user module pathnames to library search path */
+  ToPython("sys.path.append('%s')\\n", tbpythonpath);
+  ToPython("sys.path.append('%s')\\n", scriptpath);
+  ToPython("import %s\\n", tbpythonmodule);      /* load adaptor module */
+  ToPython("sys.argv = [ '%s'", script);        /* set script arguments */
+  for (p = script_args; *p; p++) 
+    ToPython(", '%s'", *p);
+  ToPython(" ]\\n");
+  ToPython("import %s\\n", scriptmodule);        /* load user script */
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{30}\nwdocspar
+Checking the input signature consists of checking whether or not the
+given functions exist in the user script using calls to the Python
+function \texttt{require(mod, fun, args)} defined in the adapter
+interface module (see Section~\ref{TB.py}).
+\nwenddocs{}\nwbegincode{31}\sublabel{NWpytJ-intf-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-intf-3}}}\moddef{interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-intf-2}{NWpytJ-intf-4}\nwenddeflinemarkup
+void check_in_sign(void) \{ 
+  char *atf, *tn;
+  term *tid;
+  term_list *arg;
+  extern term_list *tool_in_sign;
+  term_list *reqs = tool_in_sign;
+  char pat[128];
+
+  Debug(TBmsg("DEBUG: check_in_sign\\n"));
+                /* construct match pattern, e.g. ``%f(<calc>,%l)'' */
+  sprintf(pat, "%%f(<%s>, %%l)", tool_name);    
+  for (; reqs; reqs = next(reqs)) \{
+    if (TBmatch(first(reqs), pat, &atf, &arg)) \{
+      if (streq(atf, "rec-do") || streq(atf, "rec-eval"))
+        require_fun(get_txt(fun_sym(first(arg))), fun_args(first(arg)));
+      else if (streq(atf, "rec-ack-event"))
+        require_fun("rec_ack_event", arg);
+      else if (streq(atf, "rec-terminate"))
+        require_fun("rec_terminate", arg);
+      else
+        TBmsg("check_in_sign: skipped %t\\n", first(reqs));
+    \} else
+      TBmsg("check_in_sign: skipped %t\\n", first(reqs));        
+  \}
+\}
+
+void require_fun(char *funname, term_list *funargs) \{
+  Debug(TBmsg("DEBUG: require_fun(%s, %l)\\n", funname, funargs));
+  ToPython("%s.require(%s, '", tbpythonmodule, scriptmodule);
+  PYfun_name(funname);
+  ToPython("',%d)\\n", length_list(funargs));
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{32}\nwdocspar
+The \texttt{get\_module} function returns a pointer to a newly created
+string containing the modulename part of a full filename (without
+directory and extension \texttt{.py}).  Example: the filename {\tt
+  /dir/sub/module.py} has modulename ``module''.
+\nwenddocs{}\nwbegincode{33}\sublabel{NWpytJ-intf-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-intf-4}}}\moddef{interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-intf-3}{NWpytJ-intf-5}\nwenddeflinemarkup
+char *get_module(char *filename) \{
+  char *module;
+  int beg_idx, end_idx, len;
+
+  beg_idx = strlen(filename) - 1;
+  while (beg_idx && (filename[beg_idx] != '/')) beg_idx--;
+
+  end_idx = strlen(filename) - 1;
+  while (end_idx && (filename[end_idx] != '.')) end_idx--;
+
+  if (filename[beg_idx] == '/') beg_idx++;
+  if (filename[end_idx] == '.') end_idx--;
+  else if (end_idx == 0)          end_idx = strlen(filename) - 1;
+
+  len = end_idx - beg_idx + 1;
+  if (len == 0) \{
+    TBmsg("%s does not contain a valid module name\\n", filename);
+    TBexit(1);
+  \} else \{
+    module = (char *) malloc((len+1)*sizeof(char));
+    strncpy(module, filename + beg_idx, len);
+    module[len] = '\\0';
+    return(module);
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{34}\nwdocspar
+The \texttt{get\_path} function returns a pointer to a newly created
+string containing the pathname part of a full filename of a Python
+module (without modulename and extension \texttt{.py}). Example: the
+filename \texttt{/dir/sub/module.py} has pathname ``/dir/sub/''.
+\nwenddocs{}\nwbegincode{35}\sublabel{NWpytJ-intf-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-intf-5}}}\moddef{interpreter connection and initialization~{\nwtagstyle{}\subpageref{NWpytJ-intf-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-intf-4}{\relax}\nwenddeflinemarkup
+char *get_path(char *filename) \{
+  char *path;
+  int idx;  
+  
+  idx = strlen(filename) - 1;
+  while (idx && (filename[idx] != '/')) idx--;
+  if ((idx == 0) && (filename[idx] != '/')) \{
+    return ".";
+  \} else \{
+    idx++;
+    path = (char *) malloc((idx+1)*sizeof(char));
+    strncpy(path, filename, idx);
+    path[idx] = '\\0';
+    return(path);
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{36}\nwdocspar
+
+\subsection{Term handlers}
+
+The term handler that handles input from the Python interpreter
+checks whether the received term is of the form:
+\begin{itemize}
+\item \texttt{python-adapter-error(\emph{Msg})}: in that case the included
+  error message is printed to the screen.
+\item \texttt{snd-disconnect(\emph{Trm})}: in that case the complete term is
+  passed to the \TB\ and the execution of the adapter is terminated.
+\item \emph{otherwise} the term is passed to the \TB.
+\end{itemize}
+\nwenddocs{}\nwbegincode{37}\sublabel{NWpytJ-terD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-terD-1}}}\moddef{term handlers~{\nwtagstyle{}\subpageref{NWpytJ-terD-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-terD-2}\nwenddeflinemarkup
+term *handle_input_from_python(term *e) \{
+  char *msg;     
+
+  Debug(TBmsg("DEBUG: handle_input_from_python(%t)\\n", e));
+
+  if (TBmatch(e, "python-adapter-error(%s)", &msg))\{
+    TBmsg("python-adapter-error: %s\\n", msg);
+    return NULL;
+  \} else if (TBmatch(e,"snd-disconnect"))\{
+    TBsend(e);
+    TBexit(0);
+  \} else \{
+    return e;
+  \}
+\}
+\nwalsodefined{\\{NWpytJ-terD-2}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{38}\nwdocspar
+The term handler that handles input from the \TB\ checks whether the
+received term is of the form:
+\begin{itemize}
+\item \texttt{rec-monitor(\emph{Trm})}: in that case the Python
+  function \texttt{monitor\_atom(\emph{ProcId}, \emph{AtFun},
+    \emph{Src}, \emph{Blino}, \emph{Bpos}, \emph{Elino}, \emph{Epos})}
+  in the user module is called where \emph{ProcId} is the process-id
+  of the process to which this atom belongs, \emph{AtFun} the action
+  function name of the atom (printf, tau, snd-do, snd-eval, rec-msg
+  etc.), \emph{Src} the source file where the atom is defined,
+  \emph{Blino} the number of the line where the atom starts,
+  \emph{Bpos} the column of the line where the atom starts,
+  \emph{Elino} the number of the line where the atom ends and
+  \emph{Epos} the column of the line where the atom ends (this
+  information can be used for example for highlighting a piece of
+  source code). After calling this function the term is further
+  analyzed, possibly resulting in (several) other Python function
+  calls. The following situations are considered:
+  \begin{itemize}
+  \item \emph{process creation}: then \texttt{create\_proc(\emph{ProcId},
+      \emph{ProcName})} in the user module is called.
+  \item \emph{tool creation}: then \texttt{create\_tool(\emph{ToolId},
+      \emph{ToolName})} in the user module is called.
+  \item \emph{process to tool communication}: then 
+    \texttt{proc\_tool\_comm(\emph{ToolId}, \emph{ProcId})} in the
+    user module is called.
+  \item \emph{tool to process communication}: then 
+    \texttt{tool\_proc\_comm(\emph{ProcId}, \emph{ToolId})} in the
+    user module is called.
+  \item \emph{process to process communication}: then 
+    \texttt{proc\_proc\_comm(\emph{ProcId1}, \emph{ProcId2})} in the
+    user module is called.
+  \item \emph{update the value of a variable in a process}: then 
+    \texttt{update\_var(\emph{ProcId}, \emph{VarName},
+      \emph{NewValue})} in the user module is called.
+  \item \emph{update the list of subscribtions of a process}: then 
+    \texttt{update\_subs(\emph{ProcId}, \emph{Subs})} in the user
+    module is called.
+  \item \emph{update the list of notes of a process}: then 
+    \texttt{update\_notes(\emph{ProcId}, \emph{Notes})} in the user
+    module is called.
+  \end{itemize}
+\item \texttt{rec-do(\emph{Fun}(\emph{Args}))} or
+  \texttt{rec-eval(\emph{Fun}(\emph{Args}))}: in that case the
+  functionname \emph{Fun} is translated to a Python function name
+  (change hyphens in underscores) and the argument list \emph{Args} is
+  translated to a Python argument list. Finally, the function is
+  called in the user module.
+\item \texttt{rec-ack-event(\emph{Trm})}: in that case the argument
+  \emph{Trm} is translated to a Python argument and
+  \texttt{rec\_ack\_event} in the user module is called.
+\item \texttt{rec-terminate(\emph{Trm})}: in that case the argument
+  \emph{Trm} is translated to a Python argument and
+  \texttt{rec\_terminate} in the user module is called.  Finally, the
+  execution of the adapter is terminated.
+\item \emph{otherwise} an error message is printed and the term is
+  ignored.
+\end{itemize}
+\nwenddocs{}\nwbegincode{39}\sublabel{NWpytJ-terD-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-terD-2}}}\moddef{term handlers~{\nwtagstyle{}\subpageref{NWpytJ-terD-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-terD-1}{\relax}\nwenddeflinemarkup
+term *handle_input_from_toolbus(term *e) \{
+  term *trm;  
+  int pid1, pid2;
+  term *Env, *Subs, *Notes, *AtArgs, *Coords;
+  char *AtFun;
+  char *fname;
+  term_list *fargs;
+  term *farg;
+  term *pe;
+  char *mon_point;
+
+  Debug(TBmsg("DEBUG: handle_input_from_toolbus(%t)\\n", e));
+
+  if (TBmatch(e, "rec-monitor(%f(%d,%f,%t,%t,%t,%t,%t,%d,%t))",
+              &mon_point,&pid1, &AtFun, &AtArgs, &Coords,
+              &Env, &Subs, &Notes, &pid2, &pe)) \{
+    term_list *ts = Env, *pair, *args;
+    term *var;
+    char *name, *tname;
+    char *filename;
+    int blino, bpos, elino, epos;
+    if (!Coords)\{
+      filename = "INIT"; 
+      blino = elino = bpos = epos = 0;
+    \} else if (!TBmatch(Coords, "[%s,%d,%d,%d,%d]", 
+                        &filename, &blino, &bpos, &elino, &epos)) \{
+      TBmsg("**** coords do not match\\n");
+    \}
+    if (streq(AtFun, "create"))\{                        /* create process */
+      if (!TBmatch(AtArgs, "[%f(%l), %t]", &name, &args, &var)) \{
+        TBmsg("**** args of create do not match\\n");
+      \}
+      ToPython("create_proc(");
+      PYterm(get_list(Env, var), TBtrue);
+      ToPython(",%s)\\n", name);
+    \} else if (streq(AtFun, "rec-connect"))\{            /* create tool */  
+      int tid;
+      if (!TBmatch(AtArgs, "[%t]", &var)) \{
+        TBmsg("**** args of rec-connect do not match: %t\\n", AtArgs);
+      \}
+      if (!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid)) \{
+        TBmsg("**** rec-connect: value of var does not match: var=%t, env=%t",
+              var, Env);
+        TBmsg("**** value_list(var, Env) = %t\\n", get_list_as_env(var, Env));
+      \}
+      ToPython("create_tool(%d,%s)\\n", tid, name);
+    \} else if (is_to_tool_comm(AtFun))\{            /* any comm to a tool */
+      int tid;
+      if (!TBmatch(AtArgs, "[%t, %l]", &var, &args)) \{
+        TBmsg("**** args of tool comm do not match:%t\\n", AtArgs);
+      \}
+      if (!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid)) \{
+        TBmsg("**** to_tool: value of var does not match: var=%t, env=%t",
+              var, Env);
+      \}
+      ToPython("proc_tool_comm(%d,%d,%d)\\n", pid1, tid, bytes_in_term(args)); 
+    \} else if (is_from_tool_comm(AtFun))\{       /* any comm from a tool */
+      int tid;
+      if (!TBmatch(AtArgs, "[%t, %l]", &var, &args)) \{
+        TBmsg("**** args of tool comm do not match:%t\\n", AtArgs);
+      \}
+      if (!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid)) \{
+        TBmsg("**** from_tool: value of var does not match: var=%t, env=%t",
+              var, Env);
+      \}
+      ToPython("tool_proc_comm(%d,%d,%d)\\n", pid1, tid, bytes_in_term(args)); 
+    \}
+    if (pid1 > 0)\{
+      for (ts = Env; ts; ts = next(ts)) \{
+        pair = first(ts);
+        ToPython("update_var(%d,", pid1);
+        PYterm(first(pair), TBtrue);
+        fputc(',', to_python);
+        PYterm(first(next(pair)), TBtrue);
+        ToPython(")\\n");
+      \} 
+      for (ts = Subs; ts; ts = next(ts)) \{
+        ToPython("update_subs(%d", pid1);
+        PYterm(first(ts), TBtrue);
+        ToPython(")\\n");
+      \}
+      for (ts = Notes; ts; ts=next(ts)) \{
+        ToPython("update_notes(%d,", pid1);  
+        PYterm(first(ts), TBtrue);
+        ToPython(")\\n");  
+      \}
+    \}
+    if (pid2 > 0) \{
+      int dir = streq(AtFun, "snd-msg") ? 1 : -1;
+      ToPython("proc_proc_comm(%d,%d,%d)\\n", pid1, pid2, dir);
+    \}
+    ToPython("monitor_atom(%d,%s,%s,%d,%d,%d,%d)\\n", 
+                pid1, AtFun, filename, blino, bpos, elino, epos);
+    return NULL;   
+  \} else if (TBmatch(e, "rec-do(%f(%l))", &fname, &fargs) ||
+             TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs)) \{
+    ToPython("%s.", scriptmodule);
+    PYfun_name(fname);
+    fputc('(', to_python);
+    PYterm_list(fargs, TBtrue);
+    ToPython(")\\n");
+    return NULL;
+  \} else if (TBmatch(e, "rec-ack-event(%t)", &farg))\{
+    ToPython("%s.rec_ack_event(", scriptmodule);
+    PYterm(farg, TBtrue);
+    ToPython(")\\n");
+    return NULL;
+  \} else if (TBmatch(e, "rec-terminate(%t)", &farg))\{
+    ToPython("%s.rec_terminate(", scriptmodule);
+    PYterm(farg, TBtrue);
+    ToPython(")\\n");
+    TBexit(0);
+  \} else \{
+    TBmsg("Ignored: %t\\n", e);
+    return NULL;
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{40}\nwdocspar
+
+
+\subsection{Sending Python commands to the interpreter}
+
+Using the \texttt{ToPython} function \TB\ terms can be send to the Python
+interpreter. The function takes a format string and a variable number
+of arguments. The format conversion specifiers are similar to the ones
+used in the TBprintf function.  
+\nwenddocs{}\nwbegincode{41}\sublabel{NWpytJ-Toof-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-Toof-2}\nwenddeflinemarkup
+void ToPython(char *fmt, ...) \{
+  va_list args;
+  va_start(args, fmt);
+  TBvprintf(to_python, fmt, args);
+  va_end(args);
+\}
+\nwalsodefined{\\{NWpytJ-Toof-2}\\{NWpytJ-Toof-3}\\{NWpytJ-Toof-4}\\{NWpytJ-Toof-5}\\{NWpytJ-Toof-6}\\{NWpytJ-Toof-7}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{42}\nwdocspar
+{\bf Note:} the \texttt{ToPython} function uses a \TB\ library function 
+which is not present in distribution version $0.9.12a$ (and earlier). 
+To update the library, add the following to the files utils.c and utils.h
+in the directory \texttt{your\_\TB\_root/src} and rebuild the \TB\ 
+library.
+\nwenddocs{}\nwbegincode{43}\sublabel{NWpytJ-addE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-addE-1}}}\moddef{add-to-utils.h~{\nwtagstyle{}\subpageref{NWpytJ-addE-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwenddeflinemarkup
+void   TBvprintf(FILE *f, char *fmt, va_list args);
+\nwnotused{add-to-utils.h}\nwendcode{}\nwbegindocs{44}\nwdocspar
+\nwenddocs{}\nwbegincode{45}\sublabel{NWpytJ-addE.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-addE.2-1}}}\moddef{add-to-utils.c~{\nwtagstyle{}\subpageref{NWpytJ-addE.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwenddeflinemarkup
+void TBvprintf(FILE *f, char *fmt, va_list args) \{
+  toFile = f;
+  gen_printf(fmt, args);
+  toFile = stderr;
+  fflush(f);
+\}
+\nwnotused{add-to-utils.c}\nwendcode{}\nwbegindocs{46}\nwdocspar
+
+
+\subsection{\TB\ term to Python command conversion}
+
+The \texttt{PYfun\_name} function converts a \TB\ function symbol to a
+Python function name (change hyphens into underscores).
+\nwenddocs{}\nwbegincode{47}\sublabel{NWpytJ-Toof-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-2}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-1}{NWpytJ-Toof-3}\nwenddeflinemarkup
+void PYfun_name(char *funname) \{
+  while (*funname) \{
+    if (*funname == '-') fputc('_', to_python);
+    else                 fputc(*funname, to_python);
+    funname++;
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{48}\nwdocspar
+The \texttt{PYstring} function converts a \TB\ string to a Python
+string (surround with quotes, escape special characters and use
+octal code for all other unprintable characters).
+\nwenddocs{}\nwbegincode{49}\sublabel{NWpytJ-Toof-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-3}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-2}{NWpytJ-Toof-4}\nwenddeflinemarkup
+void PYstring(char *s, int n) \{
+  TBbool instring = TBfalse;
+  TBbool prev_escaped = TBfalse;
+
+  fputc('\\'', to_python);
+  while (n) \{
+    switch(*s) \{
+      case '\\\\':                /* when a cur == \\ write \\\\ */
+        fputc('\\\\', to_python);
+        fputc('\\\\', to_python);
+        break;
+      case '\\"':                /* when a cur == " write \\" */
+        fputc('\\\\', to_python);
+        fputc('\\"', to_python);
+        break;
+      case '\\'':                /* when a cur == ' write \\' */
+        fputc('\\\\', to_python);
+        fputc('\\'', to_python);
+        break;
+      case '\\n':                /* when a cur == NL write \\n */
+        fputc('\\\\', to_python);
+        fputc('n', to_python);
+        break;
+      case '\\t':                /* when a cur == HT write \\v */
+        fputc('\\\\', to_python);
+        fputc('t', to_python);
+        break;
+      case '\\v':                /* when a cur == VT write \\t */
+        fputc('\\\\', to_python);
+        fputc('v', to_python);
+        break;
+      case '\\b':                /* when a cur == BS write \\b */
+        fputc('\\\\', to_python);
+        fputc('b', to_python);
+        break;
+      case '\\r':                /* when a cur == CR write \\r */
+        fputc('\\\\', to_python);
+        fputc('r', to_python);
+        break;
+      case '\\f':                /* when a cur == FF write \\f */
+        fputc('\\\\', to_python);
+        fputc('f', to_python);
+        break;
+      case '\\a':                /* when a cur == BEL write \\a */
+        fputc('\\\\', to_python);
+        fputc('a', to_python);
+        break;
+      case '\\?':                /* when a cur == ? write \\? */
+        fputc('\\\\', to_python);
+        fputc('?', to_python);
+        break;
+      default:                  /* else write cur */
+        if (isprint(*s)) \{
+          fputc(*s, to_python);
+        \} else \{
+          fprintf(to_python, "\\\\%.3o", (unsigned int) *s & 0xFF);
+        \}
+        break;
+    \}
+    s++, n--;
+  \}
+  fputc('\\'', to_python);
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{50}\nwdocspar
+The \texttt{PYterm} function converts a \TB\ term to a Python
+``term''. For the conversion specification we refer to the paragraph
+\emph{Incoming term conversion} in Section~\ref{python-adapter}.  Note
+that there is a tiny hack in the conversion of applications since
+booleans are recognized as applications, due to a bug in the \TB\
+library. 
+\nwenddocs{}\nwbegincode{51}\sublabel{NWpytJ-Toof-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-4}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-3}{NWpytJ-Toof-5}\nwenddeflinemarkup
+void PYterm(term *t, TBbool toplevel) \{
+  switch(tkind(t)) \{
+    case t_str:
+      PYstring(str_val(t), strlen(str_val(t)));
+      break;
+    case t_bstr:
+      PYstring(bstr_val(t), bstr_len(t));
+      break;
+    case t_bool:
+      ToPython("%d", bool_val(t));
+      break;
+    case t_int:
+      ToPython("%d", int_val(t));
+      break;
+    case t_real:
+      ToPython("%r", real_val(t));
+      break;
+    case t_var:
+      ToPython("'%s:%t%s'", get_txt(var_sym(t)), var_type(t), 
+               (var_result(t) ? "?" : ""));
+      break;
+    case t_placeholder:
+      ToPython("'<%t>'", placeholder_type(t));
+      break;
+    case t_appl:
+      /* this is a hack since a bool is recognized as a appl (ToolBus Bug) */
+      if (streq("true", get_txt(fun_sym(t)))) \{
+        fputc('1', to_python);
+      \} else if (streq("false" ,get_txt(fun_sym(t)))) \{
+        fputc('0', to_python);
+      \} else \{
+        if (toplevel) ToPython("'''");
+        ToPython("%s", get_txt(fun_sym(t)));
+        if (fun_args(t) != NULL) \{
+          fputc('(', to_python);
+          PYterm_list(fun_args(t), TBfalse);
+          fputc(')', to_python);
+        \}
+        if (toplevel) ToPython("'''");
+      \}
+      break;
+    case t_list:
+      fputc('[', to_python);
+      PYterm_list(t, toplevel);
+      fputc(']', to_python);
+      break;
+    case t_env:
+      PYenv(t, toplevel);
+      break;
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{52}\nwdocspar
+The \texttt{PYterm\_list} function converts a \TB\ term list to a
+comma separated list of Python ``terms'' (using PYterm on each
+element).
+\nwenddocs{}\nwbegincode{53}\sublabel{NWpytJ-Toof-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-5}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-4}{NWpytJ-Toof-6}\nwenddeflinemarkup
+void PYterm_list(const term_list *tl, TBbool toplevel) \{
+  TBbool first = TBtrue;
+
+  for( ; tl; tl = next(tl)) \{
+    assert(is_list(tl));    
+    if (first) first = TBfalse;
+    else       fputc(',', to_python);
+    PYterm(first(tl), toplevel);
+  \}
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{54}\nwdocspar
+The \texttt{PYenv} function converts a \TB\ environment to a Python
+``environment'' (a list where each element is a two element list of
+variable name and variable value).
+\nwenddocs{}\nwbegincode{55}\sublabel{NWpytJ-Toof-6}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-6}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-5}{NWpytJ-Toof-7}\nwenddeflinemarkup
+void PYenv(const env *e, TBbool toplevel) \{
+  TBbool first = TBtrue;
+
+  fputc('[', to_python);
+  for( ; e; e = env_next(e))\{
+    assert(is_env(e));    
+    if(first) first = TBfalse;
+    else      fputc(',', to_python);
+    ToPython("['%s',", get_txt(env_sym(e)));
+    PYterm(env_val(e), toplevel);
+    fputc(']', to_python);
+  \}
+  fputc(']', to_python);
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{56}\nwdocspar
+The \texttt{is\_to\_tool\_comm} and \texttt{is\_from\_tool\_comm}
+functions are boolean checks if a communication atom originates from a
+tool or from the \TB. The \texttt{bytes\_in\_term} function returns
+the number of bytes in a term. 
+\nwenddocs{}\nwbegincode{57}\sublabel{NWpytJ-Toof-7}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-Toof-7}}}\moddef{ToolBus term to Python command conversion~{\nwtagstyle{}\subpageref{NWpytJ-Toof-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-Toof-6}{\relax}\nwenddeflinemarkup
+TBbool is_to_tool_comm(char *s) \{
+  return(streq(s, "snd-eval") || streq(s, "snd-cancel") || 
+         streq(s, "snd-do")   || streq(s, "snd-ack-event") ||
+         streq(s, "snd-terminate"));
+\}
+
+TBbool is_from_tool_comm(char *s) \{
+  return(streq(s, "rec-value") || streq(s, "rec-event") || 
+         streq(s, "rec-disconnect"));
+\}
+
+int bytes_in_term(term *t) \{
+  return LENSPEC + strlen(TBsprintf("%t", t));
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{58}\nwdocspar
+
+
+\subsection{Miscellaneous adapter functions}
+
+
+The \texttt{showhelp} function displays the version, a copyright
+message and a help summary to the stderr screen.
+\nwenddocs{}\nwbegincode{59}\sublabel{NWpytJ-misV-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}}\moddef{miscellaneous adapter functions~{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{\relax}{NWpytJ-misV-2}\nwenddeflinemarkup
+void showhelp(void) \{
+  fprintf(stderr, version);
+  fprintf(stderr, copyright);
+  fprintf(stderr, helpmsg);
+\}
+\nwalsodefined{\\{NWpytJ-misV-2}\\{NWpytJ-misV-3}\\{NWpytJ-misV-4}}\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{60}\nwdocspar
+The \texttt{error\_and\_exit} function displays an error message and
+terminates execution of the adapter.
+\nwenddocs{}\nwbegincode{61}\sublabel{NWpytJ-misV-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-misV-2}}}\moddef{miscellaneous adapter functions~{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-misV-1}{NWpytJ-misV-3}\nwenddeflinemarkup
+void error_and_exit(const char *fmt, ...) \{
+  va_list args;
+
+  fprintf(stderr,"%s: ", name);
+  va_start(args, fmt);
+  vfprintf(stderr, fmt, args);
+  va_end(args);
+  fflush(stderr);
+  TBexit(1);
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{62}\nwdocspar
+The \texttt{at\_exit} function is called automatically whenever the
+execution of the adapter is terminated. It waits for a second, kills
+the interpreter child (if any) and really terminates execution.
+\nwenddocs{}\nwbegincode{63}\sublabel{NWpytJ-misV-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-misV-3}}}\moddef{miscellaneous adapter functions~{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-misV-2}{NWpytJ-misV-4}\nwenddeflinemarkup
+void at_exit_handler(void) \{
+  sleep(1);             /* make sure any incoming data will be consumed */
+  kill(0, SIGKILL);     /* kill the Python interpreter child */
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}\nwbegindocs{64}\nwdocspar
+The \texttt{main} function analyzes the adapter arguments and
+switches, initializes the \TB\ communication, connects to an instance
+of the Python interpreter and enters the \TB\ eventhandler.
+\nwenddocs{}\nwbegincode{65}\sublabel{NWpytJ-misV-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWpytJ-misV-4}}}\moddef{miscellaneous adapter functions~{\nwtagstyle{}\subpageref{NWpytJ-misV-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWpytJ-pytH-1}}\nwprevnextdefs{NWpytJ-misV-3}{\relax}\nwenddeflinemarkup
+void main(int argc, char *argv[]) \{
+  int i = 1;
+  TBbool help = TBfalse;
+  FILE *f;
+
+  Debug(fprintf(stderr,"DEBUGGING: %s", version));
+
+  while (i < argc) \{
+    if (streq(argv[i], "-help")) \{
+      help = TBtrue;
+    \} else if (streq(argv[i], "-TB_TOOL_NAME")) \{
+      name = argv[++i];
+    \} else if (streq(argv[i], "-script")) \{
+      script = argv[++i];
+    \} else if (streq(argv[i], "-lazy-exec")) \{
+      lazy_exec = TBtrue;
+    \} else if (streq(argv[i], "-python")) \{
+      python_interpreter = argv[++i];
+    \} else if (streq(argv[i], "-script-args")) \{
+      script_args = &argv[++i];
+      break;
+    \} 
+    i++;
+  \}
+  if (!help) \{
+    if (!script) error_and_exit("Missing -script argument\\n");
+    if ((f = fopen(script, "r"))) fclose(f);
+    else error_and_exit("Cannot open user script: '%s'\\n", script);
+    if ((f = fopen(TBPYTHON, "r"))) fclose(f);
+    else error_and_exit("Cannot open Python<->TB interface module: '%s'\\n", 
+                        TBPYTHON);
+    if ((f = fopen(PYTHONINT, "r"))) fclose(f);
+    else error_and_exit("Cannot open Python ``interactive'' module: '%s'\\n", 
+                        PYTHONINT);
+  \} else showhelp();
+
+  TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
+  while (lazy_exec && !TBpeek()) sleep(1);
+  connect_to_python(script, name, handle_input_from_python);
+  TBatexit(at_exit_handler);
+  TBeventloop();                        /* start the ToolBus event loop */
+\}
+\nwused{\\{NWpytJ-pytH-1}}\nwendcode{}
+
+\nwixlogsorted{c}{{add-to-utils.c}{NWpytJ-addE.2-1}{\nwixd{NWpytJ-addE.2-1}}}%
+\nwixlogsorted{c}{{add-to-utils.h}{NWpytJ-addE-1}{\nwixd{NWpytJ-addE-1}}}%
+\nwixlogsorted{c}{{globals}{NWpytJ-glo7-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-glo7-1}\nwixd{NWpytJ-glo7-2}\nwixd{NWpytJ-glo7-3}\nwixd{NWpytJ-glo7-4}\nwixd{NWpytJ-glo7-5}}}%
+\nwixlogsorted{c}{{interpreter connection and initialization}{NWpytJ-intf-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-intf-1}\nwixd{NWpytJ-intf-2}\nwixd{NWpytJ-intf-3}\nwixd{NWpytJ-intf-4}\nwixd{NWpytJ-intf-5}}}%
+\nwixlogsorted{c}{{miscellaneous adapter functions}{NWpytJ-misV-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-misV-1}\nwixd{NWpytJ-misV-2}\nwixd{NWpytJ-misV-3}\nwixd{NWpytJ-misV-4}}}%
+\nwixlogsorted{c}{{prototypes}{NWpytJ-proA-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-proA-1}\nwixd{NWpytJ-proA-2}\nwixd{NWpytJ-proA-3}\nwixd{NWpytJ-proA-4}\nwixd{NWpytJ-proA-5}\nwixd{NWpytJ-proA-6}\nwixd{NWpytJ-proA-7}}}%
+\nwixlogsorted{c}{{python-adapter.c*}{NWpytJ-pytH-1}{\nwixd{NWpytJ-pytH-1}}}%
+\nwixlogsorted{c}{{term handlers}{NWpytJ-terD-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-terD-1}\nwixd{NWpytJ-terD-2}}}%
+\nwixlogsorted{c}{{ToolBus term to Python command conversion}{NWpytJ-Toof-1}{\nwixu{NWpytJ-pytH-1}\nwixd{NWpytJ-Toof-1}\nwixd{NWpytJ-Toof-2}\nwixd{NWpytJ-Toof-3}\nwixd{NWpytJ-Toof-4}\nwixd{NWpytJ-Toof-5}\nwixd{NWpytJ-Toof-6}\nwixd{NWpytJ-Toof-7}}}%
+\nwbegindocs{66}\nwdocspar
+
+\nwenddocs{}

@@ -1,0 +1,1626 @@
+\documentstyle[a4,twoside,noweb]{article} % -*-latex-*-
+\setlength{\oddsidemargin}{0.235cm}
+\setlength{\evensidemargin}{0.235cm}
+\setlength{\textwidth}{16cm}
+\topmargin 0.5cm  % was: 0.2cm
+\pagestyle{myheadings}
+\begin{document}
+
+\newcommand{\TB}{{\sc ToolBus}}
+\newcommand{\T}{{\bf T}}
+\newcommand{\spec}[1]{{\rm #1}}
+\newcommand{\script}[1]{{\tt #1}}
+\newcommand{\ASFSDF}{{\sc Asf+Sdf}}
+\newcommand{\ASF}{{\sc Asf}}
+\newcommand{\SDF}{{\sc Sdf}}
+\newcommand{\GEL}{{\sc Gel}}
+\newcommand{\iter}{\,^*\,}
+
+\input{psfig.tex}
+
+\title{A Guide to \TB\ Programming\\
+Version 0.9}
+\author{P. Klint$^{1,2}$}
+\date{\today}
+\maketitle
+\begin{center}
+       {\footnotesize $^1$ Programming Research Group, University of Amsterdam\\
+        P.O. Box 41882, 1009 DB Amsterdam, The Netherlands\\
+        $^2$ Department of Software Technology\\
+        Centre for Mathematics and Computer Science\\
+        P.O. Box 4079, 1009 AB Amsterdam, The Netherlands}
+\end{center}
+
+\begin{abstract}
+The \TB\ is a new software architecture intended for building
+cooperating, distributed applications.  This guide aims at providing a
+comprehensive but complete explanation of ``\TB\ programming'':
+writing \TB\ scripts (or \T\ scripts for short) describing the overall architecture of an
+application and writing tools that actually implement the application's
+functionality.
+
+\end{abstract}
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+\subsection{Background and motivation}
+Building large, heterogeneous, distributed software systems poses
+serious problems for the software engineer.  Systems grow {\em larger}
+because the complexity of the tasks we want to automate
+increases.  They become {\em heterogeneous} because large systems may be
+constructed by re-using existing software as components.
+It is more than likely that these components have been developed
+using different implementation languages and run on different
+hardware platforms.
+Systems become {\em distributed} because they have to operate
+in the context of local area networks.
+
+We propose to get control over the possible
+interactions between software components (``tools'') by forbidding
+direct inter-tool communication.  Instead, all interactions are
+controlled by a process-oriented ``script'' that formalizes all the
+desired interactions among tools.  This leads to a component
+interconnection architecture resembling a hardware communication bus,
+and therefore we call it a ``\TB''.
+
+\subsection{The \TB\ architecture}
+
+\begin{figure}[t]
+\rule{\textwidth}{0.5mm}
+
+  \input{Arch.tex}
+  \centerline{\box\graph}
+  \caption{Global organization of the \TB}
+  \label{fig:Arch}
+
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+The global architecture of the \TB\  is shown in
+Figure~\ref{fig:Arch}.  The \TB\  serves the purpose of defining the
+cooperation of a variable number of {\em tools} $T _ i$ ($i = 1,...,m$) that
+are to be combined into a complete system. The internal behaviour or
+implementation of each tool is irrelevant: they may be implemented in
+different programming languages, be generated from specifications, etc.
+Tools may, or may not, maintain their own internal state.
+Here we concentrate on the external behaviour of each tool.
+In general an {\em adapter} will be needed for each tool
+to adapt it to the common data representation and message protocols
+imposed by the \TB.
+
+The \TB\ itself consists of a variable number of processes\footnote{By
+``processes'' we mean here computational activities {\em inside} the
+\TB\ as opposed to, for instance, processes at the operating system
+level.  When confusing might arise, we will call the former \TB\
+processes'' and the latter ``operating system level processes''.} $P _
+i$ ($i = 1,...,n$).  The parallel composition of the processes $P_ i$
+represents the intended behaviour of the whole system.  Tools are
+external, computational activities, most likely corresponding with
+operating system level processes. They come into existence either by
+an execution command issued by the \TB\ or their execution is initiated
+externally, in which case an explicit connect command has to be
+performed by the \TB.  Although a one-to-one correspondence between
+tools and processes seems simple and desirable, we do not enforce this
+and permit tools that are being controlled by more than one process as
+well as clusters of tools being controlled by a single process.
+
+\paragraph{Communication inside the \TB.}
+Inside the \TB, there are two communication mechanisms available.
+First, a process can send a {\em message} (using \script{snd-msg}) which
+should be received, synchronously, by one other process (using
+\script{rec-msg}). Messages are intended to request a service from another
+process. When the receiving process has completed the desired service
+it may inform the sender, synchronously, by means of another message (using
+\script{snd-msg}). The original sender can receive the reply using
+\script{rec-msg}.  By convention, part of the the original message is contained
+in the reply (but this is not enforced).
+
+Second, a process can send a {\em note} (using \script{snd-note}) which is
+broadcasted to other, interested, processes. The sending process does
+not expect an answer while the receiving processes read notes
+asynchronously (using \script{rec-note}) at a low priority. Notes are
+intended to notify others of state changes in the sending process.
+Sending notes amounts to {\em asynchronous selective broadcasting}.
+Processes will only receive notes to which they have {\em subscribed}.
+
+\paragraph{Communication between \TB\ and tools.}
+The communication between \TB\ and tools is based on handshaking
+communication between a \TB\ process and a tool.  A process may send
+messages in several formats to a tool (\script{snd-eval}, \script{snd-do},
+and \script{snd-ack-event}) while a tool may send the messages \script{snd-event}
+and \script{snd-value} to a \TB\ process.  There is no direct communication
+possible between tools.
+
+The execution and termination of the tools attached to the \TB\ can be
+explicitly controlled. It is also possible to connect or disconnect
+tools that have been executing independently of the \TB.
+
+\subsection{Purpose of this guide}
+This guide is a companion to the ``\TB\ reports''\footnote{ J.A. Bergstra and
+P. Klint, ``The ToolBus---a component interconnection architecture'',
+Report P9408, Programming Research Group, University of Amsterdam,
+1994, and J.A. Bergstra and P. Klint, ``The Discrete Time ToolBus'',
+Report P9502, Programming Research Group, University of Amsterdam, 1995.}
+fully describing the motivation and overall architecture of the
+\TB\ and explaining the \T\ scripts used to describe cooperating sets
+of tools. The reader is also referred to these reports for several examples
+of systems that have been described using the \TB\ approach.
+
+Here, the main  emphasis is on explaining {\em all} details needed to actually
+implement systems using the \TB. First, we will give a ``hello world'' example
+in the context of the \TB.
+
+\subsection{\label{Hello}Hello world}
+The most simple program that is frequently used to learn a new
+programming language is a program which prints some string (e.g.,
+``hello world'') as proof of competence of its author to write,
+compile, and execute a program in the language in question.  Clearly,
+it is the road to arrive at this result that counts and not the result
+itself (as the old proverb says).
+
+The simplest hello program possible is shown in Figure~\ref{fig:hello1.tb}.
+Typing the command
+\begin{quote}
+{\tt toolbus hello1.tb}
+\end{quote}
+will simply print the desired message.
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello1.tb.tex}
+  \caption{{\tt hello1}: first script for the {\tt hello} application.}
+  \label{fig:hello1.tb}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello2.tb.tex}
+  \caption{{\tt hello2}: second script for the {\tt hello} application.}
+  \label{fig:hello2.tb}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello.c.tex}
+  \caption{{\tt hello.c}: simple C code for the {\tt hello} tool.}
+  \label{fig:hello.c}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello-gen.c.tex}
+  \caption{{\tt hello-gen.c}: C code for the {\tt hello} tool using a generated tool interface.}
+  \label{fig:hello-gen.c}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+Let's now be more ambitious. In the above example, the text to be printed
+appears as a literal string in the script. We complicate the example
+by introducing a ``{\tt hello}'' tool that will provide the text to be printed.
+This results in the script given in Figure~\ref{fig:hello2.tb}.
+But how do we implement the {\tt hello} tool itself?
+We will explain in this guide the range of implementation languages that 
+can be used (i.e., C, Tcl, Perl, \ASFSDF\ ...).
+For the sake of this example we only show how a C implementation will look like.
+
+In Figure~\ref{fig:hello.c} a first, simple, version of the {\tt hello} tool
+is shown. It consists of the following parts\footnote{
+You are not yet supposed to understand every detail of these
+listings, but you {\em will} be able to do so after reading this guide!}:
+\begin{itemize}
+\item An include of a standard header file ({\tt TB.h}) that contains
+common definitions for all tools.
+\item A declaration of a function {\tt hello\_handler} that is called when there is
+input available from the \TB:
+its argument {\tt inp} is the input term, and its result (either a term
+or {\tt NULL}) will be sent back to the \TB.
+\footnote{It is important to stress that the handler should {\bf always} return a value:
+either a term or NULL.}
+The input is analyzed by using {\tt TBmatch}, a library function for matching
+terms. For the {\tt get-text} case, 
+the term
+\begin{quote}
+\verb+snd-value("Hello World, my first ToolBus tool in C!\n")+
+\end{quote}
+is constructed and returned to the \TB.
+
+\item A main program that calls an initialization function and
+then enters an event loop.
+
+\end{itemize}
+
+Although it is not yet clear from the examples given so far,
+it turns out that there is much commonality among the handlers
+written for different tools. In particular, the code for analyzing
+terms coming from the \TB\ is similar. This code also duplicates
+information in the script concerning the requests send to each tool.
+For this reason, we also provide a {\em tool interface generator}
+that automatically generates tool interfaces from a given script.
+
+This approach is shown in a second version of
+the {\tt hello} tool (Figure~\ref{fig:hello-gen.c}).
+It consists of the following parts:
+\begin{itemize}
+\item Include a file {\tt hello.tif.c} which is generated automatically
+from the script.\footnote{In section~\ref{ctif} this is fully explained.
+A listing of {\tt hello.tif.c} appears later on in Figure~\ref{fig:hello.tif.c}.}
+It contains the necessary interfacing code and
+function prototypes for the application.
+In particular, it defines the functions
+{\tt hello\_handler} (handles all requests coming from
+the \TB) and {\tt hello\_check\_in\_sign} (checks
+that the interface as expected by the \TB\ is compatible with the
+interface as provided by the tool).
+
+\item A declaration of the function {\tt get\_text} that handles the
+eval request coming from the \TB\ 
+Note that {\tt get\_text} is called by {\tt hello\_handler} and that
+its return value will be sent back to the \TB.
+
+\item A main program that calls an initialization function and
+then enters an event loop.
+
+\end{itemize}
+
+
+What we see in these examples is that
+building an application with the \TB\ requires the following steps:
+\begin{itemize}
+\item Design the overall behaviour of the application by writing a \T\ script ({\tt hello2.tb}).
+\item Write and compile the tools needed by the script ({\tt hello.c}).
+The required interfacing code can be written by hand or be generated
+automatically from the \T\ script ({\tt hello.tif.c}).
+\item Execute the \TB\ interpreter with the script as input.
+\end{itemize}
+
+\paragraph{Notes:}
+
+In the current version, the \TB\ does not yet support a ``stop'' action
+to terminate execution. As a result you will have to kill the interpreter yourself.
+
+\subsection{Further reading}
+If you have come this far, you may be intested to learn more about the details
+of \TB\ programming.
+In Section~\ref{ToolsInC} you will find a complete description
+of the library functions provided for writing tools in C.
+In Section~\ref{Executing} the ways to execute the \TB\ interpreter
+and tools are described.
+Next follows an intermezzo explaining the overall structure of \TB\ adapters.
+In the section that follow we explain how to write tool in various languages
+and systems: Tcl/Tk (Section~\ref{ToolsInTcl}),
+Perl (Section~\ref{ToolsInPerl}),
+\ASFSDF\ (Section~\ref{ToolsInASFSDF}), 
+and arbitrary Unix commands (Section~\ref{ToolsFromUnix}).
+Four appendices with summaries conclude this guide.
+
+\section{\label{ToolsInC}Writing tools in C}
+
+\subsection{Overview}
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+  \input{Tool.tex}
+  \centerline{\box\graph}
+  \caption{Global organization of a tool}
+  \label{fig:Tool}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+In its simplest form, a tool is a box connected via an input and an output port to a \TB.
+In the most general case, a tool has
+\begin{itemize}
+
+\item one input port from the \TB\ to the tool and
+can receive tree structures (terms) via this port.
+
+\item one output port from the tool to the \TB\ and
+can  send terms to the \TB\ via this port;
+
+\item zero or more {\em term ports} to receive terms from other sources;
+
+\item zero or more {\em character ports} to receive character data
+from other sources.
+\end{itemize}
+
+This global, architectural, structure of a tool is shown in Figure~\ref{fig:Tool}.
+With each input port, an {\em event handler} is associated that takes care
+of the processing of the data received via that port and is responsible
+for returning a result (if any). One tool may thus contain several event handlers.
+When a request is received the following steps
+are taken:
+\begin{itemize}
+\item The data received are parsed to check that they form a legal \TB\ term $T$.
+(If this is impossible a warning message is generated).
+\item The event handler is called with $T$ as argument.
+\item The event handler can do arbitrary processing needed to decompose
+$T$, to determine what has to be done, and perform any desired computation.
+\item The event handler returns either:
+\begin{itemize}
+\item a legal \TB\ term representing a reply to be send back to the \TB.
+\item {\tt NULL} indicating that there is no reply.
+\end{itemize}
+\end{itemize}
+
+The global mode of operation of a tool is now:
+\begin{itemize}
+\item receive data on any input port and respond to this
+by sending some term (or {\tt NULL}) to the \TB; or
+\item take the initiative to send a term to the \TB\ (typically to inform
+the \TB\ about some external event).
+\end{itemize}
+
+A tool is thus on the one hand a reactive engine that responds to a
+request from the \TB\ and returns the result back to the \TB\ in the
+form of a term (e.g., calculate the value of some expression) but on
+the other hand it can also take the initiative to send a term to the
+\TB (e.g., generate an event when a user pushes some button).
+
+At the level of the source code, the global structure of a purely
+reactive tool without additional term or character ports
+has already
+been illustrated in Figure~\ref{fig:hello.c}.
+The difference between term ports and character ports is further explained in 
+Sections~\ref{TBaddTermPort} and~\ref{TBaddCharPort}.
+
+\subsubsection{The include file {\tt TB.h}}
+
+Each tool needs to include the file {\tt TB.h}
+which defines some basic types as well as the types
+of library functions available.
+
+The basic types are:
+\begin{itemize}
+\item {\tt TBbool}: the boolean datatype defined by
+\begin{verbatim}
+      typedef enum TBbool {TBfalse, TBtrue} TBbool;
+\end{verbatim}
+It is mainly used as return value of library functions.
+
+\item {\tt term}: all information between tool and \TB\ is exchanged
+in the form of tree structures that are represented by the type
+{\tt term}. The tool library has been designed in such a way that
+only pointers to terms must be passed to or are returned by library
+functions. The primitives that are provided for constructing
+and decomposing terms are of such a high level that it is unnecessary
+to know the internal representation of terms.
+
+\item {\tt TBcallbackTerm}: the type of the event handlers for term ports.
+\item {\tt TBcallbackChar}: the type of the event handlers for character ports.
+\end{itemize}
+
+\subsubsection{The tool library {\tt libtb.a}}
+
+When compiling tools, the library {\tt libtb.a} must be specified
+in order to make the tool library available. It provides the following functions:
+
+\begin{itemize}
+\item {\tt TBinit}: tool initialization (Sections~\ref{TBinit}).
+\item {\tt TBaddTermPort}: add a term port to the tool (Section~\ref{TBaddTermPort}).
+\item {\tt TBaddCharPort}: add a character port to the tool (Section~\ref{TBaddCharPort}).
+\item {\tt TBreceive}: process one input event on a port (Section~\ref{TBreceive}).
+\item {\tt TBpeek}: check for input events on a port (Section~\ref{TBpeek}).
+\item {\tt TBeventloop}: a standard event loop for a tool (Section~\ref{TBeventloop}).
+\item {\tt TBsend}: send a term to the \TB\ (Section~\ref{TBsend}).
+\item {\tt TBmake}: construct a term (Section~\ref{TBmake}).
+\item {\tt TBmatch}: match and decompose a term (Section~\ref{TBmatch}).
+\item {\tt TBwrite}: write a term to a file (Section~\ref{TBread/write}).
+\item {\tt TBread}: read a term from a file (Section~\ref{TBread/write}).
+\item {\tt TBprintf}: formatted output to a file (Section~\ref{TBprintf}).
+\item {\tt TBsprintf}: formatted output to a string (Section~\ref{TBprintf}).
+\item {\tt TBprotect}: protect a term against garbage collection (Section~\ref{Memory}).
+\item {\tt TBunprotect}: undo the protection of a term (Section~\ref{Memory}).
+
+
+\end{itemize}
+
+In the following description, these functions are grouped into three categories:
+initialization and the main event loop (Section~\ref{Init}),
+composing and decomposing terms (Section~\ref{Compose}),
+and input/output of terms (Section~\ref{TermIO}).
+
+
+\subsection{\label{Init}Initialization and main event loop}
+
+During the initialization of each tool, some preparations have to made
+before the tool can be properly connected to the \TB. These preparations
+include
+\begin{itemize}
+\item Defining the {\em name} of the tool as it is known from a tool declaration
+in a \T\ script.
+\item Parsing standard program arguments that are passed to the tool
+when it is started.
+\item Creating a pair of socket connections with a \TB\ interpreter.
+\item Starting an event loop.
+\end{itemize}
+
+During execution of the event loop, the tool can either {\em receive} terms from
+the \TB\ or it can take the initiative to {\em send} terms to the \TB.
+It is thus possible for a tool to both respond to \TB\ requests
+{\em and asynchronously} send terms to the \TB.
+
+\subsubsection{\label{TBinit}{\tt TBinit}}
+
+The initialization of a tool is achieved by
+\begin{verbatim}
+      TBinit(char *ToolName, int argc, char **argv,
+             TBcallbackTerm handler,
+             term *(check_in_sign)(term *))
+\end{verbatim}
+which initializes the tool with name {\tt ToolName},
+parses the program arguments {\tt argc} and {\tt argv},
+connects it to the \TB, establish the event handler {\tt handler},
+and checks the input signature using {\tt check\_in\_sign}.
+
+The {\tt ToolName} should be identical to a tool name as appearing in
+a tool declaration in the \T\ script. This is important since the tool name
+is used when the tool is connected to the \TB.
+
+The standard program arguments that are passed (via  {\tt argc} and {\tt argv})
+are further described in Section~\ref{Executing}.
+
+The event handler {\tt handler} will handle all terms
+from the \TB\ and received by the tool. Event handlers are further explained
+in Section~\ref{TBaddTermPort}.
+
+The function {\tt check\_in\_sign} takes the input signature of the
+tool as received from the \TB\ and checks that it is compatible with
+the input signature as expected by the tool.  If this is the case,
+{\tt NULL} is returned as value.  Otherwise, the first offending
+signature element is returned as value.
+
+\subsubsection{\label{TBaddTermPort}{\tt TBaddTermPort}}
+
+A tool can be connected to other programs via two kinds of input channels:
+{\em term ports} for receiving data in the form of complete
+terms  and {\em character ports} for receiving data at the character level.
+Character ports are explained in Section~\ref{TBaddCharPort}, here we concentrate on
+term ports.
+
+Two aspects of term ports are important: the input channel used for
+the actual data transfer and the {\em handler} that takes care of processing
+the input term when it arrives.
+
+Input channels can be any valid file descriptor.  When adding a term
+port, the actual file descriptor to be used has to exist already.
+This implies that the identity of this particular input port has to be
+made known to potential senders. This falls, however,
+outside the responsibility (and possibilities) of {\tt TBaddTermPort}
+and has to be implemented separately.
+
+Handlers for term ports are functions from term to term and have the
+type:
+\begin{verbatim}
+      term *some_handler(term *input)
+\end{verbatim}
+The argument term {\tt input} is a term received from the input port
+and the resulting term is the reply to be sent  to the \TB\ in response
+to this input event, or {\tt NULL} if no reply is needed.
+
+The {\tt event\_handler} given as an argument to both {\tt TBinit} and
+{\tt TBaddTermPort} (see below) should be a pointer to such a handler function.
+This is described by the predefined type {\tt TBcallbackTerm}.
+
+A new term port can be added by
+\begin{verbatim}
+      int TBaddTermPort(int Fd, TBcallbackTerm event_handler)}
+\end{verbatim}
+which establishes {\tt event\_handler} as the handler for the term port {\tt Fd}.
+In this fashion, an arbitrary number of term input ports can be set up which
+will be read in parallel: as soon as a term arrives at one of the ports
+the associated handler is activated.
+
+\subsubsection{\label{TBaddCharPort}{\tt TBaddCharPort}}
+
+Character ports provide a mechanism to obtain character level input
+from other programs. They can be set up in a fashion similar 
+to term ports by
+\begin{verbatim}
+      int  TBaddCharPort(int Fd, TBcallbackChar event_handler)
+\end{verbatim}
+which establishes {\tt event\_handler} as the handler for the character port {\tt Fd}.
+
+Handlers for character ports are functions from a file descriptor (an integer)
+to a term:
+\begin{verbatim}
+      term *some_handler(int Fd)
+\end{verbatim}
+The {\tt event\_handler} given as argument to
+{\tt TBaddCharPort} should be a pointer to such a handler function.
+This is described by the predefined type {\tt TBcallbackChar}.
+
+There is one important difference between term ports and character ports:
+for term ports a complete term has already been read from the port,
+while for character ports the data is only available {\em but must still
+be read by the handler}. In this way, character ports have maximal
+freedom in the way they want to read and analyze incoming data.
+
+All character ports and term ports will be read in parallel
+and the handler of the first port that has data available will be called.
+This will happen as a result of calling {\tt TBeventloop} or {\tt TBget}.
+
+\subsubsection{\label{TBreceive}{\tt TBreceive}}
+
+Tool programming amounts, in essence, to event driven programming: most of the time
+a tool is awaiting the arrival of data on one of its
+ports and when the data are there, a reply is sent to the \TB\ by the
+handler associated with that port.  The sequence of activities needed for
+handling (once) the data available on one (single) port is captured by the function
+\begin{verbatim}
+      void TBreceive(void)
+\end{verbatim}
+
+{\bf Note:} The current implementation of event handlers is not reentrant.
+As a consequence, the function {\tt TBreceive} (as well as the
+functions {\tt TBpeek} and {\tt TBsend} discussed below)
+should not be called from within event handlers.
+
+\subsubsection{\label{TBpeek}{\tt TBpeek}}
+In computation-intensive tools the need may arize to
+check for the availability of incoming data from the \TB\ during
+computations. This achieved by the function
+\begin{verbatim}
+      TBbool TBpeek(void)
+\end{verbatim}
+which returns {\tt true} if incoming data from the \TB\ are available.
+Typical use:
+\begin{verbatim}
+      while(TBtrue)
+        if(TBpeek())      /* if there is an incoming event */
+          TBreceive();    /* handle it                     */
+        else {
+        ...               /* perform other computation     */
+        }
+\end{verbatim}
+
+
+
+\subsubsection{\label{TBeventloop}{\tt TBeventloop}}
+Many tools have the form of an infinite loop
+that processes input events.
+The function
+\begin{verbatim}
+      void TBeventloop(void)
+\end{verbatim}
+captures this idea and can be
+defined using {\tt TBreceive} as follows:
+\begin{verbatim}
+      void TBeventloop(void)
+      {
+          while(TBtrue)
+            TBreceive();
+      }
+\end{verbatim}
+
+\subsubsection{\label{TBsend}{\tt TBsend}}
+
+In some tools, a mixture of passively awaiting input
+and actively sending terms to the \TB\ can be seen.
+For the latter purpose, the function
+\begin{verbatim}
+      void TBsend(term *output)
+\end{verbatim}
+can be used that sends the term {\tt output} to the \TB.
+Using {\tt TBsend}, the most general global event loop of a tool becomes:
+
+\begin{verbatim}
+      while(TBtrue){
+        ... TBsend(e1); ...; TBsend(en); ...
+        TBreceive();
+      }
+\end{verbatim}
+
+In other words, each iteration starts by sending zero or more terms
+to the \TB\ (using {\tt TBsend}) and ends with processing one event
+coming from some port (using {\tt TBreceive}).  The \T\ script being used
+should, of course, be able to receive such events.
+
+
+\subsection{\label{Compose}Composing and decomposing terms}
+
+\subsubsection{\label{Patterns}Term patterns}
+Composition and decomposition of terms is {\em not} based on the
+direct manipulation of the underlying representation of terms.
+Instead, {\em term patterns} are used to guide composition and
+decomposition.  Such term patterns play the same role as format
+strings in the printf/scanf paradigm in C.  In first approximation, a
+term pattern is a literal string that would be obtained by a preorder
+traversal of a term.  For instance, the term pattern {\tt "or(true,
+false)"}, corresponds to a term whose root is label with the symbol
+{\tt or}, and whose children are labeled with, respectively, {\tt
+true} and {\tt false}. In this way, term patterns can be used to
+construct and to match terms.
+
+Term patterns become, however, much more useful if they can be parameterized
+with subterms that have been computed separately.
+To this end, we introduce the notion of {\em directives} as follows:
+
+\begin{description}
+\item[{\tt \%d}]: corresponds to an integer (in C: {\tt int});
+\item[{\tt \%s}]: corresponds to a string (in C: {\tt char *});
+\item[{\tt \%b}]: corresponds to a binary string (in C: a (pointer, length) pair 
+represented by two values of types, respectively, {\tt char *} and {\tt int});
+\item[{\tt \%t}]: corresponds to a term (in C: {\tt term *});
+\item[{\tt \%f}]: corresponds to one function symbol (in C: {\tt char *});
+\item[{\tt \%l}]: corresponds to a list of terms (in C: {\tt term *}).
+\end{description}
+
+The precise interpretation of these directives depends on the context
+in which they are used.  When constructing a term, directives indicate
+that a subterm should be obtained from some given variable.  When
+matching a term, directives indicate the assignment of subterms to
+given variables.
+
+\subsubsection{\label{TBmake}{\tt TBmake}}
+The function
+\begin{verbatim}
+      term *TBmake(char *Pattern, ...)
+\end{verbatim}
+constructs a term according to {\tt Pattern}, where occurrences of
+directives are replaced by the values of the variables
+occurring in {\tt ...}.
+
+For instance, assuming the declarations
+\begin{verbatim}
+      int n = 10;
+      char *fun = "pair", name = "any";
+      term *yellow = TBmake("yellow"), *t;
+\end{verbatim}
+the call
+\begin{verbatim}
+      t = TBmake("exam(%f(%t,9),%d,%s)", fun, yellow, 10, name)
+\end{verbatim}
+will construct the term {\tt t} with value
+\begin{verbatim}
+      exam(pair(yellow,9),10,"any")
+\end{verbatim}
+
+Binary string are used to represent arbitrary length, binary data
+that cannot be represented by ordinary C strings because they may
+contain ``null'' characters. A binary string is represented by
+a character pointer and a length. For instance, given
+\begin{verbatim}
+      char buf[12];
+      term *bstr;
+      buf[0] = 0; buf[1] = 1; buf[2] = 2;
+\end{verbatim}
+the call
+\begin{verbatim}
+      bstr = TBmake("exam(%b)", buf, 3);
+\end{verbatim}
+will construct a term with function symbol ``{\tt exam}'' and as single
+argument a binary string of length {\tt 3} consisting of the three
+values {\tt 0}, {\tt 1}, and {\tt 2}.
+
+\subsubsection{\label{TBmatch}{\tt TBmatch}}
+Matching terms amounts to
+\begin{itemize}
+\item determining whether there is a match or not,
+\item selectively assigning matched subterms to given variables.
+\end{itemize}
+
+\noindent This is precisely what the function
+\begin{verbatim}
+      TBbool TBmatch(term *Trm, char *Pattern, ...)
+\end{verbatim}
+does. It matches {\tt Trm} against {\tt Pattern} and, when a submatch
+is found that corresponds to a directive, it makes assignments to
+variables whose addresses appear in {\tt ...}.  {\tt Pattern} should
+be a well-formed, textual representation of a term which may contain
+any of the directives described earlier.  For instance, in the context
+\begin{verbatim}
+      term *t = TBmake("exam(pair(yellow,9),10, \"any\")");
+      term *t1;
+      int n;
+      char *ex;
+\end{verbatim}
+the call 
+\begin{verbatim}
+      TBmatch(t, "%f(%t,%d,%s)", &ex, &t1, &n, &s);
+\end{verbatim}
+yields true and is equivalent to the following assignments:
+\begin{verbatim}
+      ex = "exam";
+      t1 = TBmake("pair(yellow,9)");
+      n = 10;
+      s = "any";
+\end{verbatim}
+
+Matching binary string is the inverse of constructing them. Given
+the term {\tt bstr} constructed at the end of the previous paragraph
+can be done as follows:
+\begin{verbatim}
+      char *p;
+      int n;
+
+      TBmatch(bstr, "exam(%b)", &p, &n);
+\end{verbatim}
+{\tt TBmatch} will succeed and assign a pointer to the character data
+in the binary string to the variable 
+{\tt p} and it will assign {\tt 3} to the variable {\tt n}.
+
+
+\paragraph{Notes}
+\begin{itemize}
+\item Double quotes (``{\tt "}'') appearing {\em inside} the pattern argument
+of both {\tt TBmake} and {\tt TBmatch} have to be escaped using ``\verb-\"-''.
+\item The number and type of the variables whose addresses appear
+as arguments of {\tt TBmatch} should correspond, otherwise disaster
+will strike (as usual when using C).
+\item Assignments are being made during matching. As a result, some assignments
+may be performed, even if the match as a whole fails.
+\item Note that {\em receiving} a term from the \TB\ and {\em matching} it are distinct
+activities: a term is received once but can be used more than once
+as argument of {\tt TBmatch}.
+\end{itemize}
+
+\subsection{\label{TermIO}Input and output of terms}
+We make a distinction between the ``raw'' input and output of terms
+as they are, for instance, being sent through communication
+channels between \TB\ and tools, versus formatted input and output
+of terms. Raw term i/o is provided by {\tt TBwrite} and {\tt TBread}.
+Formatted term output is provided by {\tt TBprintf} and {\tt TBsprintf}.
+There are currently no primitives for formatted term input.
+
+\subsubsection{\label{TBread/write}{\tt TBread} and {\tt TBwrite}}
+The function
+\begin{verbatim}
+      void TBwrite(FILE *File, term *Trm)
+\end{verbatim}
+writes term {\tt Trm} to the file {\tt File}. The representation is
+in an internal format.
+For instance, in the context:
+\begin{verbatim}
+      FILE *f = fopen("foo", "w");
+      term *Trm1 = TBmake("%f(red,%d)", "freq", 17),
+           *Trm2;
+\end{verbatim}
+the statement
+\begin{verbatim}
+      TBwrite(f, Trm1);
+\end{verbatim}
+will write the value of {\tt Trm1} (i.e., {\tt freq(red,17)})
+to file ``{\tt foo}''.
+
+The function
+\begin{verbatim}
+      term *TBread(FILE *File)
+\end{verbatim}
+is the inverse of {\tt TBwrite}: it reads a term (in internal format) from
+a file and returns it as value. When end of file is encountered or
+the term could not be read, the value {\tt NULL} is returned.
+\footnote{Since {\tt NULL} is also used as the representation of the empty list
+``{\tt []}'', this implies that it is not possible to distinguish the
+case that an empty list is read from the error case.}
+
+\subsubsection{\label{TBprintf}{\tt TBprintf} and {\tt TBsprintf}}
+The function
+\begin{verbatim}
+      void TBprintf(FILE *File, char *Pattern, ...)
+\end{verbatim}
+writes formatted out to {\tt File}.
+{\tt Pattern} is printed literally except for occurrences
+of directives which are replaced by the textual representation
+of the values appearing in {\tt ...}. For instance,
+\begin{verbatim}
+      TBprintf(stderr, "Wrong event \"%t\" ignored\n", TBmake("failure(%d)", 13));
+\end{verbatim}
+will print:
+\begin{verbatim}
+Wrong event "failure(13)" ignored
+\end{verbatim}
+
+\noindent The function
+\begin{verbatim}
+      char * TBsprintf(char *Pattern, ...)
+\end{verbatim}
+resembles {\tt TBprintf} but it returns the formatted value as string
+rather then writing it to file. {\bf The string returned by {\tt TBsprintf}
+is volatile and may be overwritten by any other call to the
+\TB\ library. It is therefore good practice to duplicate or
+copy it immediately.}
+
+\subsection{\label{Memory}Memory management}
+The functions in the \TB\ library provide automatic memory management of
+terms that have been created but are no longer referenced.
+In order to protect terms from being collected the function
+\begin{verbatim}
+      void TBprotect(term **TrmPtr)
+\end{verbatim}
+can be used that has as single argument {\em a pointer to a variable
+with a pointer to a term as value}. The protection can be undone
+by the function
+\begin{verbatim}
+      void TBunprotect(term **TrmPtr)
+\end{verbatim}
+It is guaranteed that no garbage collection takes place during
+the execution of an event handler, hence it is not necessary to
+protect temporary terms that are constructed during the execution
+of an event handler.
+
+However, terms that have a longer life time must be protected
+in order to survive.
+
+Consider, for example, an event handler that maintains a list
+of all requests received from the \TB\ during the execution
+of the tool. Clearly, this list has a longer life-time than
+a single call of the handler, hence it has to be protected.
+This will have the following form:
+\begin{verbatim}
+term *event_list = NULL;    /* global declaration of the list */
+
+term *handler(term *inp)    /* event handler */
+{ ...
+  event_list = TBmake("[%l,%t"], event_list, inp);
+  ...
+}
+
+main()                      /* main program for tool */
+{ ...
+  TBprotect(&event_list);   /* protect the variable holding the
+                               list value */
+  ...
+}
+\end{verbatim}
+
+\subsection{Compiling tools written in C}
+When compiling a tool written in C the following questions
+should be answered:
+\begin{itemize}
+\item Where is the include file {\tt TB.h}?
+\item Where is the \TB\ library {\tt libtb.a}?
+\item Which other libraries are needed to compile the tool?
+\end{itemize}
+
+The answers to these questions are clearly system dependent.
+There are two strategies to answer them.
+
+\paragraph{Strategy 1:} find the desired locations on your system and hard code them in
+the compilation command. This will lead to a call to the C compiler
+like:
+\begin{quote}
+{\tt cc -I{\em dir-where-TB.h-is} hello.c -o hello {\em dir-where-libtb.a-is} {\em other-libs}}
+\end{quote}
+
+\paragraph{Strategy 2:}  write a make file that encodes this information.
+As a result, the location information is hardwired in the make file
+rather then in a command that has to be repeated over and over again.
+
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+  \input{Tifs.tex}  
+  \centerline{\box\graph}
+  \caption{Automatic generation of tool interfaces.}
+  \label{fig:Tifs}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\subsection{\label{ctif}Generating C tool interfaces with {\tt ctif}}
+
+The interface code for each tool depends on the particulars
+of the \T\ script in which it is used. Changing the number
+of arguments in an evaluation request to the tool,
+or adding a new request, requires making changes to the interface
+code that are easily forgotten and therefore error prone.
+
+As already mentioned in Section~\ref{Hello}, another observation
+is that the interface code for different tools has a lot in common.
+
+An obvious solution to both problems is to {\em generate}
+tool interfaces automatically, given a \T\ script.
+This generation process is shown in Figure~\ref{fig:Tifs}
+and consists of two steps:
+
+\begin{itemize}
+\item Generate a language-independent
+description of all tool interfaces used in the script.
+This amounts to a static analysis of all tool communication
+in the script. It is achieved by using the ``{\tt -gentifs}''
+option of the \TB\ interpreter. For instance,
+\begin{verbatim}
+      toolbus -gentifs hello2.tb
+\end{verbatim}
+will create a file {\tt hello2.tifs} contain the tool interfaces.
+
+\item Use the language independent interface description
+to generate a tool interface for a specific tool in a specific
+implementation language. Currently, only the generator ``{\tt ctif}''
+exists for generating C tool interfaces. It is called as follows:
+\begin{quote}
+      {\tt ctif -tool $Name$ -tifs $TifsFile$}
+\end{quote}
+and generates a file name $Name${\tt .tif.c}.
+For the hello example, we would have, for instance:
+\begin{verbatim}
+      ctif -tool hello -tifs hello2.tifs
+\end{verbatim}
+The resulting file {\tt hello.tif.c} is shown in
+Figure~\ref{fig:hello.tif.c}.
+\end{itemize}
+
+In Figure~\ref{fig:Tifs} it is also shown how tool interface generators
+for {\em other} languages (e.g., Fortan, Cobol) would fit into this scheme.
+These are, however, not yet available.
+
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello.tif.c.tex}
+  \caption{{\tt hello.tif.c}: generated tool interface {\tt hello.tif.c}.}
+  \label{fig:hello.tif.c}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\section{\label{Executing}Executing \TB\ and tools}
+
+The \TB\ interpreter ({\tt toolbus}) and all tools have some
+standard program arguments in common, but they have some specific
+arguments as well. In this section we describe all possible program arguments
+and the way to execute {\tt toolbus} and tools.
+
+\subsection{Common arguments}
+
+\TB\ and tools have the following optional arguments in common:
+\begin{itemize}
+
+\item {\tt -help}: prints a description of all arguments of the toolbus or tool.
+
+\item {\tt -verbose}: produces a log of steps taken by toolbus or tool
+that may be useful to debug your script or tool. The same effect may be obtained
+by setting the environment variable {\tt TB\_VERBOSE}
+to {\tt true} and export it.
+In the Korn shell this can, for instance, be achieved by:
+\begin{verbatim}
+      TB_VERBOSE=true
+      export TB_VERBOSE
+\end{verbatim}
+
+\item {\tt -TB\_INPORT} {\em port\_name}: defines the ``well known input socket'' {\em port\_name}
+to which all tools temporarily connect in order to set up their
+own private socket pair that connects them permanently to the \TB\ interpreter.
+When omitted, input socket 8998 will be used.
+\item {\tt -TB\_OUTPORT} {\em port\_name}:  defines the ``well known output socket'' {\em port\_name}
+of the \TB\ interpreter used during initialization.
+When omitted, output socket 8999 will be used.
+\item {\tt -TB\_LOCAL\_PORTS}: run with only local ports (useful for testing
+purposes on systems with only a dial-up Internet connection).
+
+\end{itemize}
+
+For the input/output sockets that connect each tool with the \TB\ interpreter,
+consecutive socket addresses starting at {\tt TB\_OUTPORT}$+1$ are used.
+Note that explicit arguments defining the input/output sockets are {\em only}
+needed when several \TB\ interpreters are running simultaneously on
+the {\em same} host machine.
+
+\subsection{\label{TB-args}\TB\ arguments}
+The $script\_name$ (see below) given as argument to the \TB\ is always
+preprocessed by the C preprocessor before it is parsed as \T\ script.
+In this way, directives like, e.g., {\tt \#define}, {\tt \#include} and
+{\tt \#ifdef} can be used freely in \T\ scripts. The following
+preprocessor arguments are accepted by the {\tt toolbus} command:
+
+\begin{itemize}
+
+\item {\tt -I$dir$}: append directory $dir$ to the list of directories
+searched for include files.
+
+\item {\tt -D$macro$}: define macro $macro$ with the string ``{\tt 1}'' as
+its definition.
+
+\item {\tt -D$macro$=$defn$}: define macro $macro$ with $defn$
+as definition.
+
+\end{itemize}
+
+\noindent Other arguments specific for the {\tt toolbus} command are:
+\begin{itemize}
+\item {\tt -logger}: execute a logger tool that will be attached to all
+processes in the \TB.
+If the script contains a tool definition for a tool named ``{\tt logger}'',
+that will be used for executing the logger. Otherwise a default tool definition
+is used.
+\item {\tt -viewer}: similar as above, for a viewer tool.
+The default viewer is the ``\TB\ viewer'' (previously known
+as the \TB\ debugger).
+
+\item {\tt -controller}: similar as above, for a controller tool.
+Currently, no default controller tool is provided.
+
+\item {\tt -gentifs}: only generate tool interfaces 
+for all tools used in the script
+in a language independent format. For a script file named {\tt script.tb}
+the tool interfaces are written to {\tt script.tifs}.
+Do not execute the script.
+
+\item {\tt -fixed-seed}: use a fixed seed for the random generator
+used by the interpreter for scheduling processes and selecting
+alternatives in processes.  By default, the random generator is
+initialized with the current time the {\tt toolbus} command is given.
+Using the {\tt -fixed-seed} option makes the execution of the script
+reproducible across multiple runs of the {\tt toolbus} command.
+
+\item {\em script\_name}: any other argument is the name of the
+\TB\ script to be interpreted.
+\end{itemize}
+
+\noindent As an example, consider first
+\begin{verbatim}
+      toolbus hello.tb
+\end{verbatim}
+which starts interpreting the script ``{\tt hello.tb}''. Next, consider
+\begin{verbatim}
+      toolbus -TB_INPORT 4000 -TB_OUTPORT 4001 hello.tb
+\end{verbatim}
+which interprets the same script, but uses sockets {\tt 4000} and {\tt 4001} for
+input, respectively, output. Next, consider,
+\begin{verbatim}
+      toolbus -Imy-include-dir -DCNT=33 wave.tb
+\end{verbatim}
+which searches the directory {\tt my-include-dir} for files used in {\tt \#include}
+directives in the script {\tt wave.tb} and it will define the macro
+{\tt CNT} with value {\tt 33}. All occurrences of {\tt CNT} in the script
+will be replaced by this value before parsing it as \T\ script.
+Finally,
+\begin{verbatim}
+      toolbus -gentifs hello.tb
+\end{verbatim}
+produces the tool interfaces file {\tt hello.tifs}.
+
+\subsection{\label{ToolArgs}Tool arguments}
+Arguments specific for tools are:
+\begin{itemize}
+\item {\tt -TB\_HOST} {\em host\_name}: defines the host machine {\em host\_name}
+on which the \TB\ interpreter is running and to which the tool should be connected.
+When omitted, the \TB\ interpreter should be running on the same
+host as the tool.
+\item {\tt -TB\_TOOL\_NAME} {\em tool\_name}: the tool name as
+defined in the \T\ script (added automatically, when a tool is executed
+by the \TB).
+\item {\tt -TB\_TOOL\_ID} {\em Id}: internal tool identifier of this tool execution
+(added automatically, when a tool is executed by the \TB).
+\end{itemize}
+
+\noindent The execution of a tool can start in two ways:
+\begin{itemize}
+\item The tool is started by an {\tt execute} command in the \T\ script.
+
+\item The initiative to execute the tool is taken
+outside the \TB. This requires that the script contains a {\tt rec-connect}
+for this particular tool.
+\end{itemize}
+
+\noindent When \TB\ and tool are running on different host machines, it is important
+to define the host machine on which the \TB\ interpreter is running
+when starting the execution of the tool.
+As an example, consider the ``{\tt hello}'' application described in Section~\ref{Hello}.
+The {\tt hello} tool will be executed by the \TB\ using
+the command
+\begin{verbatim}
+      hello -TB_INPORT 8998 -TB_OUTPORT 8999 -TB_HOST host1.institute.nl
+\end{verbatim}
+when running on machine {\tt host1.institute.nl}.
+
+Suppose, we replace the explicit {\tt execute} in Figure~\ref{fig:hello2.tb}
+by a {\tt rec-connect} as shown in Figure~\ref{fig:hello3.tb}.
+We may then manually start the
+{\tt hello} tool by typing
+\begin{verbatim}
+      hello
+\end{verbatim}
+where we use the default values for the input/output sockets and assume
+that tool and \TB\ interpreter are both running on the same host (i.e., {\tt host1.institute.nl}).
+Starting the execution from {\em another} host is achieved by typing
+(on, say, {\tt host2.institute.nl}):
+\begin{verbatim}
+      hello -TB_HOST host1.institute.nl
+\end{verbatim}
+
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{../demos/hello/hello3.tb.tex}
+  \caption{{\tt hello3}: {\tt hello} application with {\tt rec-connect}.}
+  \label{fig:hello3.tb}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+\section{Intermezzo: Tool adapters}
+\begin{figure}[t]
+\rule{\textwidth}{0.5mm}
+  \input{Adapter.tex}
+  \centerline{\box\graph}
+  \caption{General structure of a tool adapter}
+  \label{fig:adapter}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+The main purpose of tool adapters is to act as small ``wrappers'' around
+existing programs in order to transform them into tools that
+can be connected to the \TB. There exist two global strategies
+for constructing adapters:
+
+\begin{itemize}
+\item The adapter and the program to be adapted are executed as separate
+(Unix) processes. This structure is sketched in Figure~\ref{fig:adapter}.
+The advantage of this approach is that no access is
+needed to the source code of the program: it can remain a black box.
+Another advantage is that adapters may be reused for the adaptation of
+different programs. A possible disadvantage is some loss in
+efficiency.
+
+\item Integrate the adapter and the software to be adapted into a single
+(Unix) process. This approach permits the most detailed adaptation of
+the program and is also the most efficient solution. This approach
+leads, however, to potentially less reusable adapters than the
+previous approach.
+
+\end{itemize}
+
+Our experience so far is restricted to adapters of the first category.
+In this category a further subdivision is possible:
+\begin{itemize}
+\item The program is executed once as a child process of the adapter
+and all {\tt snd-eval}/{\tt snd-do} requests are directed to this child process.
+The program can thus maintain an internal state between requests.
+
+\item The same program is executed as a child process of the adapter
+for each {\tt snd-eval}/{\tt snd-do} request.
+
+\item A different program is executed as a child process of the adapter
+for each {\tt snd-eval}/{\tt snd-do} request.
+
+\end{itemize}
+
+\paragraph{Common arguments of adapters.} In order to achieve some uniformity,
+the current collection of adapters have the following optional program arguments
+in common:
+
+\begin{itemize}
+
+\item {\tt -cmd}: the (default) program to be executed by the adapter.
+All arguments of the adapter that follow {\tt -cmd} are interpreted as
+the name and arguments of the program to be executed.
+
+\item all tool arguments (see Section~\ref{ToolArgs}.)
+\end{itemize}
+
+\input{adapters}
+
+\section*{Acknowledgements}
+Simon Gray, Mark van den Brand, Pieter Olivier.
+\appendix
+
+
+\newpage
+\section{Differences with previous \TB\ versions}
+
+\subsection{\T\ scripts}
+
+\paragraph{Incompatibilities}
+\begin{itemize}
+
+\item All formal parameters and variables have to be declared.
+
+\item New and (incompatible) is the ``result operator'' {\tt ?} that is used
+  to mark assignable variables in patterns. In old \T\ scripts these
+  variable occurrences will have to be marked with a {\tt ?}.
+  The new implementation gives some help by generating
+  a warning when no result variables occur in {\tt rec-event}/{\tt rec-value}.
+  There is no such help for {\tt rec-msg}/{\tt snd-msg}.
+
+\item The syntax of {\tt create} has been changed from, e.g.,
+\begin{verbatim}
+      create P(1)
+\end{verbatim}
+to
+\begin{verbatim}
+      create(P(1), Pid?)
+\end{verbatim}
+
+\item The syntax of process definitions has been changed from
+\begin{verbatim}
+	define P = proc-expr
+\end{verbatim}
+  to
+\begin{verbatim}
+	process P is proc-expr
+\end{verbatim}
+
+\item  The syntax of tool definitions has been changed from
+\begin{verbatim}
+      tool T { }
+\end{verbatim}
+  to
+\begin{verbatim}
+      tool T is {}
+\end{verbatim}
+Tool definitions may now have formal parameters.
+
+\item Tools are no longer executed implicitly by the ToolBus, but an
+  explicit {\tt execute}/{\tt rec-connect} action is required in the script.
+
+\item The form of {\tt subscribe}/{\tt unsubscribe} has been changed. A complete
+  term is now required as argument, rather than a single function
+  symbol. Instead of
+\begin{verbatim}
+      subscribe(compute)
+\end{verbatim}
+  you have to write now
+\begin{verbatim}
+      subscribe(compute(<str>,<int>))
+\end{verbatim}
+
+\end{itemize}
+
+\paragraph{New features}
+\begin{itemize}
+\item Declarations and types.
+\item The types {\tt <real>} (floating point numbers) and {\tt <bstr>}
+  (binary strings).
+\item Assignment.
+\item {\tt if then else fi}.
+\item {\tt ||}.
+\item {\tt rec-connect}/{\tt rec-disconnect}.
+\item {\tt execute}/{\tt snd-terminate}.
+\item {\tt shutdown}.
+\item {\tt delay}/{\tt timeout}.
+\item Parameterized tool definitions.
+\end{itemize}
+
+\subsection{Tools}
+\paragraph{Incompatibilities}
+
+\begin{itemize}
+\item eval/do/event messages sent to/from tools no longer
+  have a tool identification as first arg (it is prefixed
+  automatically by the implementation).
+\item tools have to support new incoming requests for {\tt rec-terminate}.
+
+\item The following library functions have been renamed:
+\begin{tabular}{lll}
+	{\tt TBget}		& $\Rightarrow$ & {\tt TBreceive}\\
+	{\tt TBput}		& $\Rightarrow$ & {\tt TBsend}\\
+	{\tt TBmakeTerm}	& $\Rightarrow$ & {\tt TBmake}\\
+	{\tt TBwriteTerm}	& $\Rightarrow$ & {\tt TBwrite}\\
+\end{tabular}
+
+\end{itemize}
+
+\paragraph{New features}
+
+\begin{itemize}
+\item The following library functions are new:
+\begin{tabular}{l}
+	{\tt TBread}\\
+	{\tt TBprintf}\\
+	{\tt TBsprintf}\\
+	{\tt TBprotect}\\
+	{\tt TBunprotect}
+\end{tabular}
+\item The format ``\verb+%b+'' (for binary strings) has been added to term patterns 
+  used by, for instance, {\tt TBmatch}.
+
+\end{itemize}
+
+\subsection{The \TB\ interpreter}
+
+\paragraph{Incompatibilities}
+
+\begin{itemize}
+
+\item The implementation is now based on ``randomized'' execution
+in order to make operations like {\tt +} and {\tt ||}
+completely non-deterministic.
+\item The command line arguments of toolbus and tools have been
+  renamed/reorganized
+
+\end{itemize}
+
+\paragraph{New features}
+
+\begin{itemize}
+\item Nearly all built-in limits have been removed.
+\item The ToolBus protocol is now fully checked and errors are reported
+  when deviations from the protocol occur.
+\item The input/output signatures of tools are now used in two ways:
+(1) when a tools is executed (or connects), the \TB\ interpreter sends it
+the expected input/output signature of the tool; this can be used in the
+tool to check conformance with the signature as implemented by the tool.
+(2) during execution it is checked that tools only produce results that
+are in their output signature.
+\item Garbage collection has been implemented both in the \TB\ interpreter
+as well as in the library functions available for implementing tools.
+
+\item Type checking has become more strict. It is no longer allowed to
+assign to a (non-result) formal parameter. Instead a new local variable should be introduced.
+For instance, in the process definition
+\begin{verbatim}
+process P(N : int) is N := 3 . printf("N = %d\n", N)
+\end{verbatim}
+the assignment {\tt N := 3} is forbidden. This definition should 
+be replaced by something along the lines
+\begin{verbatim}
+process P(N : int) is let N1 : N in N1 := N . N1 := 3 . printf("N1 = %d\n", N1) endlet
+\end{verbatim}
+\end{itemize}
+
+\section{Limitations/extensions current implementation}
+
+The current implementation is a faithful implementation of the
+system described in ``The Discrete Time \TB''. There are some
+minor differences that are summarized here.
+
+\paragraph{Extensions}
+\begin{itemize}
+\item The types {\tt <bstr>} and {\tt <real>}.
+\item The atomic actions {\tt printf} and {\tt read}.
+\end{itemize}
+
+\paragraph{Limitations}
+\begin{itemize}
+\item Certain functions in expressions have not yet been implemented
+(see Appendix~\ref{AppExpr}).
+
+\item The atomic actions {\tt attach-monitor}, {\tt detach-monitor},
+and {\tt reconfigure} have not yet been implemented.
+\end{itemize}
+
+\newpage
+\section{The syntax of \T\ scripts}
+\subsection{Preprocessor directives}
+
+The $script\_name$ given as argument to the \TB\ is always
+preprocessed by the C preprocessor before it is parsed as \T\ script.
+In this way, directives like, e.g., {\tt \#define}, {\tt \#include} and
+{\tt \#ifdef} can be used freely in \T\ scripts. We summarize the
+most frequently used directives:
+\begin{itemize}
+\item {\tt \#define {\em identifier} {\em token-sequence}} causes
+the preprocessor to replace all occurrences of {\em identifier}
+by {\em token-sequence}.
+\item {\tt \#define {\em identifier} ( {\em identifier-list} ) {\em token-sequence}} is
+a macro definition with parameters given by {\em identifier-list}.
+Textual occurrences of the identifier followed by an argument list
+containing an appropriate number of tokens separated by comma's
+will be replaced by {\em token-sequence} after parameter substitution.
+\item {\tt \#include "{\em filename}"} will be replaced by the
+entire contents of the named file.
+\item {\tt \#if}, {\tt \#ifdef}, and {\tt \#ifndef} can be used for
+the conditional incorporation or exclusion of parts of a script.
+\end{itemize}
+
+\noindent We refer to any ANSII C manual for a detailed description of these
+directives. 
+
+See Section~\ref{TB-args} for a description
+of the preprocessor related arguments {\tt -I$dir$}, {\tt -D$macro$}, and
+{\tt -D$macro$=$defn$} of the {\tt toolbus} command.
+
+\subsection{Context-free syntax}
+\input{Syntax-T-scripts.tex}
+  
+\newpage
+\section{\label{AppExpr}Expressions in \T\ scripts}
+
+\subsection{Boolean and arithmetic functions}
+
+\begin{tabular}{|l|l|p{8cm}|} \hline
+ Function			& Result type 	& Description \\ \hline
+ {\tt not(<bool>$_1$)}		& {\tt  <bool>} & {\tt $\neg$ <bool>$_1$}\\
+ {\tt and(<bool>$_1$,<bool>$_2$)}	& {\tt  <bool>} & {\tt <bool>$_1$ $\wedge$ <bool>$_2$} \\
+ {\tt or(<bool>$_1$,<bool>$_2$)}	& {\tt  <bool>} & {\tt <bool>$_1$ $\vee$ <bool>$_2$} \\ \hline
+ {\tt equal(<term>$_1$, <term>$_2$)}	& {\tt  <bool>} & {\tt <term>$_1$ $\equiv$ <term>$_2$}; for lists multi-set equality\\ 
+ {\tt not-equal(<term>$_1$, <term>$_2$)}& {\tt  <bool>} & {\tt not(equal(<term>$_1$, <term>$_2$))}\\ \hline
+ {\tt add(<int>$_1$,<int>$_2$)}		& {\tt  <int>}  & {\tt <int>$_1$ $+$ <int>$_2$} \\ 
+ {\tt sub(<int>$_1$,<int>$_2$)}		& {\tt  <int>} & {\tt <int>$_1$ $-$ <int>$_2$} \\ 
+ {\tt mul(<int>$_1$,<int>$_2$)}		& {\tt  <int>} & {\tt <int>$_1$ $\times$ <int>$_2$} \\ 
+ {\tt div(<int>$_1$,<int>$_2$)}		& {\tt  <int>} & {\tt <int>$_1$ $/$ <int>$_2$} \\ 
+ {\tt mod(<int>$_1$,<int>$_2$)}		& {\tt  <int>} & {\tt <int>$_1$ {\bf mod} <int>$_2$} \\
+ {\tt abs(<int>$_1$)}			& {\tt  <int>} & absolute value $|$ {\tt <int>$_1$} $|$ \\
+
+ {\tt less(<int>$_1$,<int>$_2$)}	& {\tt  <bool>} & {\tt <int>$_1$ $<$ <int>$_2$} \\ 
+ {\tt less-equal(<int>$_1$,<int>$_2$)}	& {\tt  <bool>} & {\tt <int>$_1$ $\leq$ <int>$_2$} \\ 
+ {\tt greater(<int>$_1$,<int>$_2$)}	& {\tt  <bool>} & {\tt <int>$_1$ $>$ <int>$_2$} \\ 
+ {\tt greater-equal(<int>$_1$,<int>$_2$)}& {\tt  <bool>} & {\tt <int>$_1$ $\geq$ <int>$_2$} \\ \hline
+
+ {\tt radd(<real>$_1$,<real>$_2$)}	& {\tt  <real>}  & {\tt <real>$_1$ $+$ <real>$_2$} \\ 
+ {\tt rsub(<real>$_1$,<real>$_2$)}	& {\tt  <real>} & {\tt <real>$_1$ $-$ <real>$_2$} \\ 
+ {\tt rmul(<real>$_1$,<real>$_2$)}	& {\tt  <real>} & {\tt <real>$_1$ $\times$ <real>$_2$} \\ 
+ {\tt rdiv(<real>$_1$,<real>$_2$)}	& {\tt  <real>} & {\tt <real>$_1$ $/$ <real>$_2$} \\
+ {\tt rabs(<real>$_1$)}			& {\tt  <real>}  & absolute value $|${\tt <real>}$_1 |$ \\
+ {\tt rless(<real>$_1$,<real>$_2$)}	& {\tt  <bool>} & {\tt <real>$_1$ $<$ <real>$_2$} \\ 
+ {\tt rless-equal(<real>$_1$,<real>$_2$)}& {\tt  <bool>} & {\tt <real>$_1$ $\leq$ <real>$_2$} \\ 
+ {\tt rgreater(<real>$_1$,<real>$_2$)}	& {\tt  <bool>} & {\tt <real>$_1$ $>$ <real>$_2$} \\ 
+ {\tt rgreater-equal(<real>$_1$,<real>$_2$)}& {\tt  <bool>} & {\tt <real>$_1$ $\geq$ <real>$_2$} \\ \hline
+ {\tt sin(<real>$_1$)}			& {\tt  <real>}  & $sin(${\tt <real>}$_1)$ \\ 
+ {\tt cos(<real>$_1$)}			& {\tt  <real>}  & $cos(${\tt <real>}$_1)$ \\ 
+ {\tt atan(<real>$_1$)}			& {\tt  <real>}  & $tan^{-1}(${\tt <real>}$_1)$ in range $[-\pi/2, \pi/2]$ \\ 
+ {\tt atan2(<real>$_1$, <real>$_2$)}	& {\tt  <real>}  & $tan^{-1}(${\tt <real>}$_1 / ${\tt <real>}$_2 )$ in range $[-\pi, \pi]$ \\ 
+ {\tt exp(<real>$_1$)}			& {\tt  <real>}  & exponential function $e^{\mbox{{\tt <real>}}_1}$ \\ 
+ {\tt log(<real>$_1$)}			& {\tt  <real>}  & natural logarithm $ln(${\tt <real>}$_1)$, 
+						           {\tt <real>}$_1 > 0$  \\ 
+ {\tt log10(<real>$_1$)}		& {\tt  <real>}  &  base 10 logarithm $log_{10}(${\tt <real>}$_1)$,
+						           {\tt <real>}$_1 > 0$  \\ 
+ {\tt sqrt(<real>$_1$)}			& {\tt  <real>}  & $\sqrt{\mbox{{\tt <real>}$_1$}}$,
+						           {\tt <real>}$_1 \geq 0$  \\ \hline
+\end{tabular}
+
+\newpage
+
+\subsection{Functions on lists and multi-sets}
+
+\begin{tabular}{|l|l|p{8cm}|} \hline
+ Function			& Result type 	& Description \\ \hline
+ {\tt first(<list>$_1$)}		& {\tt  <term>}  & first element of {\tt <list>$_1$}; {\tt []} for non-lists\\
+ {\tt next(<list>$_1$)}			& {\tt  <list>}  & remaining elements of {\tt <list>$_1$}; {\tt []} for non-lists \\
+ {\tt join(<term>$_1$,<term>$_2$)}	& {\tt  <list>}  & concatenation of {\tt <term>$_1$} and {\tt <term>$_2$};
+							   for a list argument {\tt <term>$_i$} ($i=1,2$),
+							   the list elements are spliced into the new list;
+							   non-list arguments are included as single element of the
+							   new list. \\
+ {\tt size(<list>$_1$)}			& {\tt  <int>} 	 & {\tt $|$<list>$_1|$} (number of elements in list)\\ \hline
+
+ {\tt index(<list>$_1$,<int>$_1$)}	& {\tt <term>}	 & If {\tt |<list>$_1$|} $\leq$ {\tt <int>$_1$} return the
+							   {\tt <int>$_1$}th element from {\tt <list>$_1$};
+						           otherwise {\tt []} and give a warning.\\
+ {\tt replace(<list>$_1$,<int$_1$>,<term>$_1$)} & {\tt <list>}	 &  If {\tt |<list>$_1$|} $\leq$ {\tt <int>$_1$} replace the
+							   {\tt <int>$_1$}th element of {\tt <list>$_1$} by 
+							   {\tt <term>$_1$} and return the modified (and partially
+							   copied) version of {\tt <list>$_1$};
+						           otherwise return {\tt <list>$_1$} and give a warning.\\  \hline
+
+ {\tt get(<list>$_1$,<term>$_1$)}	& {\tt <term>}	 & If {\tt <list>$_1$} contains a pair
+							   {\tt [<term>$_1$, <term>$_1'$]} then {\tt <term>$_1'$};
+						           otherwise {\tt []}.\\
+ {\tt put(<list>$_1$,<term>$_1$, <term>$_2$)}	& {\tt <list>}	 & If {\tt <list>$_1$} contains a pair
+							   {\tt [<term>$_1$, <term>$_1'$]} then replace it by
+							   {\tt [<term>$_1$, <term>$_2$]}; otherwise add a new pair	
+							   {\tt [<term>$_1$, <term>$_2$]} to {\tt <list>$_1$}. \\ \hline
+
+
+ {\tt member(<term>$_1$,<list>$_2$)}	& {\tt  <bool>}  & {\tt <term>$_1$ $\in$ <list>$_2$} (membership in multi-set)\\
+ {\tt subset(<list>$_1$, <list>$_2$)}	& {\tt  <bool>}  & {\tt <list>$_1$ $\subseteq$ <list>$_2$} (subset on multi-sets)\\
+ {\tt diff(<list>$_1$, <list>$_2$)}	& {\tt  <list>}  & {\tt <list>$_1$ $-$ <list>$_2$} (difference on multi-sets)\\
+ {\tt inter(<list>$_1$, <list>$_2$)}	& {\tt  <list>}  & {\tt <list>$_1$ $\cap$ <list>$_2$} (intersection on multi-sets)\\ \hline
+\end{tabular}
+
+\subsection{Predicates and functions on terms}
+\begin{tabular}{|l|l|p{8cm}|} \hline
+ Function				& Result type 	& Description \\ \hline
+ {\tt is-bool(<term>)}			& {\tt  <bool>} & If {\tt <term>} is of type {\tt bool} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-int(<term>)}			& {\tt  <bool>} & If {\tt <term>} is of type {\tt int} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-real(<term>)}			& {\tt  <bool>} & If {\tt <term>} is of type {\tt real} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-str(<term>)}			& {\tt  <bool>} & If {\tt <term>} is of type {\tt str} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-bstr(<term>)}			& {\tt  <bool>} & If {\tt <term>} is of type {\tt bstr} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-appl(<term>)}			& {\tt  <bool>} & If {\tt <term>} is an application then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-list(<term>)}			& {\tt  <bool>} & If {\tt <term>} is a list then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-empty(<term>)}			& {\tt  <bool>} & If {\tt <term>} equals {\tt []} then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-var(<term>)}			& {\tt  <bool>} & If {\tt <term>} is a variable then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-result-var(<term>)}		& {\tt  <bool>} & If {\tt <term>} is a result variable then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt is-formal(<term>)}		& {\tt  <bool>} & If {\tt <term>} is a formal variable then {\tt true};
+							  otherwise {\tt false}.\\
+ {\tt fun(<term>)}			& {\tt  <str>} & If {\tt <term>} is an application then its function symbol;
+							  otherwise {\tt ""}.\\
+ {\tt args(<term>)}			& {\tt  <list>} & If {\tt <term>} is an application then its argument list;
+							  otherwise {\tt []}.\\ \hline
+\end{tabular}
+
+
+\subsection{Miscellaneous functions}
+
+\begin{tabular}{|l|l|p{8cm}|} \hline
+ Function				& Result type 	& Description \\ \hline
+ {\tt process-id}			& {\tt  <int>}   & id of current process \\
+ {\tt process-name}			& {\tt  <str>}   & name of current process\\
+ {\tt quote(<term>)}			& {\tt  <term>}  & quoted (unevaluated) term,
+							   only variables are replaced by their value \\
+ {\tt functions}			& {\tt  <list>}  & list of built-in functions\\ \hline
+ {\tt current-time}			& {\tt <list>}	 & six-tuple describing current absolute time\\
+ {\tt sec(<int>$_1$)}			& {\tt <int>}	 & convert {\tt <int>$_1$} in seconds \\
+ {\tt msec(<int>$_1$)}\dag		& {\tt <int>}	 & convert {\tt <int>$_1$} in milli-seconds\\ \hline
+\end{tabular}
+
+\vspace{\baselineskip}
+\noindent \dag Not yet implemented in the current version
+\newpage
+
+
+\section{Synopsis of primitives available in \T\ scripts}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline Primitive		& Description				\\ \hline \hline
+\script{delta}			& inaction (deadlock)			\\
+\script{tau}			& internal step				\\
+\script{$P_1$+$P_2$}		& choice				\\
+\script{$P_1$.$P_2$}		& sequential composition		\\
+\script{$P_1$||$P_2$}		& parallel composition			\\
+\script{$P_1$*$P_2$}		& iteration				\\
+\script{if $T$ then $P$ fi}	& guarded command			\\
+\script{if $T$ then $P_1$ else $P_2$ fi} & conditional			\\ \hline
+\script{create($Pnm$($T$,...), $Pid$?)}	& process creation$^1$		\\ \hline
+\script{$V$ := $T$}		& assignment, $T$ expression (see~\ref{AppExpr}) \\ \hline
+\script{snd-msg($T$,...)}	& send a message (binary, synchronous)	\\
+\script{rec-msg($T$,...)}	& receive a message (binary, synchronous)\\
+\script{snd-note($T$)}		& send a note (broadcast, asynchronous)	\\		
+\script{rec-note($T$)}		& receive a note (asynchronous)		\\
+\script{no-note($T$)}		& no notes available for process	\\
+\script{subscribe($T$)}		& subscribe to notes			\\
+\script{unsubscribe($T$)}	& unsubscribe from notes		\\ \hline
+\script{delay($T$)}		& relative time delay of atom		\\
+\script{abs-delay($T$,...)}	& absolute time delay of atom$^2$	\\
+\script{timeout($T$)}		& relative timeout of atom		\\
+\script{abs-timeout($T$,...)}	& absolute timeout of atom$^2$		\\ \hline
+\script{rec-connect($Tid$?)}	& receive a connection request from a tool \\
+\script{rec-disconnect($Tid$?)}	& receive a disconnection request form a tool	\\
+\script{execute($Tnm$($T$,...), $Tid$?)}	& execute a tool$^1$		\\
+\script{snd-terminate($Tid$, $T$)}& terminate the execution of a tool	\\
+\script{shutdown($T$)}		& terminate \TB				\\
+\script{reconfigure}		& reconfigure \TB\dag		\\ \hline
+\script{attach-monitor}		& attach a monitoring tool to a process\dag	 \\
+\script{detach-monitor}		& detach a monitoring tool from a process\dag\\ \hline
+\script{snd-eval($Tid$, $T$)}	& send evaluation request to tool	\\
+\script{snd-cancel($Tid$)}	& cancel an evaluation request to tool\dag \\
+\script{rec-value($Tid$, $T$)}	& receive a value from a tool		\\
+\script{snd-do($Tid$, $T$)}	& send request to tool (no return value)\\ \hline
+\script{rec-event($Tid$, $T$, ...)}& receive event from tool		\\
+\script{snd-ack-event($Tid$, $T$)}& acknowledge a previous event from a tool \\ \hline
+\script{printf($S$, $T$, ...)}	& print terms (after variable replacement) according to format $S$\\
+\script{read($T_1$, $T_2$)}	& give prompt $T_1$, read term, should match with $T_2$ \\ \hline
+\script{process $Pnm$($F$, ...) is $P$} & process definition$^3$	\\
+\script{let $F$, ... in $P$ endlet} & declare variables in $P$		\\ \hline
+\script{tool $Tnm$($F$,...) is \{ $Feat$, ... \}} & tool definition$^3$	\\
+\script{host = $Str$}		& host feature in tool definition	\\
+\script{command = $Str$}	& command feature in tool definition	\\
+\script{details = << $Lines$ >>}& details feature in tool definition	\\ \hline
+\script{toolbus($Pnm$($T$,...), ...)} & \TB\ configuration		\\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\begin{tabular}{ll}
+{\bf Notes}\\
+$^1$	&  {\tt ($T$, ...)} is optional\\
+$^2$	&  Absolute time described by a 6-tuple ($year$, $month$, $day$, $hour$, $minutes$, $seconds$) \\
+	&  with $year \ge 95$, $1 \le month \le 12$, $1 \le day \le 31 $, $0 \le hour \le 23$, $0 \le minutes \le 59$, \\
+	&  and $0 \le seconds \le 61$ (seconds can be greater than 59 to allow leap seconds).\\
+	&  Absolute time may be abbreviated, by omitting, at most, the first three elements\\
+	&  of the 6-tuple. Omitted elements default to their current value.\\
+$^3$	&  {\tt ($F$, ...)} is optional\\
+\dag	&  Not yet implemented\\
+\end{tabular}
+
+\begin{tabular}{ll}
+{\bf Legendum}\\
+$T$ 	& term \\
+{\tt $T$, ...} & list of terms separated by comma's\\
+$V$		& variable\\
+$F$		& declaration of formal or local variable of the form {\tt $V$:$Type$}\\
+$P$, $P_1$, $P_2$	& process expression \\
+$Tid$		& tool identifier, a variable of type $Tnm$ (with $Tnm$ declared as tool name)\\
+$Tnm$		& tool name \\
+$Pnm$		& process name \\
+$Pid$		& process identifier, a variable of type {\tt int}\\
+$Str$		& a string constant\\
+$Lines$		& list of lines\\
+\end{tabular}
+
+
+
+\end{document}
+

@@ -1,0 +1,81 @@
+# @configure_input@
+# demos/calc
+
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir 		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+
+CC		= @CC@
+SHELL		= /bin/sh
+CFLAGS		= @CFLAGS@
+INCLUDES	= @INCLUDES@ -I$(includedir)
+LIBS		= @LIBS@
+TBLIB		= $(libdir)/libtb.a
+
+CLEAN		= @CLEAN@
+
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(LIBS)
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+PROGRAMS	= clock log calc batch
+
+DISTFILES	= Makefile.in calc.tb batch.tif.c  batch.c calc.tif.c calc.c\
+		  clock.tif.c clock.c delay.h log.tif.c log.c ui-calc.tcl
+
+all:    ${PROGRAMS} calc.tb.tex
+
+clean:
+	${CLEAN} batch.out ${PROGRAMS}
+
+distclean: clean
+	rm -f Makefile
+
+clock:	clock.tif.c clock.c 
+	${COMPILE}
+
+clock.tif.c: calc.tifs
+	${bindir}/ctif -tool clock -tifs calc.tifs
+
+log:	log.tif.c log.c
+	${COMPILE}
+
+log.tif.c: calc.tifs
+	${bindir}/ctif -tool log -tifs calc.tifs
+
+calc:	calc.tif.c calc.c
+	${COMPILE}
+calc.tif.c: calc.tifs
+	${bindir}/ctif -tool calc -tifs calc.tifs
+
+batch:	batch.tif.c batch.c
+	${COMPILE}
+
+batch.tif.c: calc.tifs
+	${bindir}/ctif -tool batch -tifs calc.tifs
+
+calc.tifs: calc.tb
+	${bindir}/toolbus -gentifs calc.tb
+
+calc.tb.tex: calc.tb
+	${bindir}/script2latex <calc.tb >calc.tb.tex
+
+ 
+dist: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/calc 2> /dev/null \
+	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/demos/calc; \
+	done
+
+
+
+
