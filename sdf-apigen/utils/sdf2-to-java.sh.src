@@ -23,6 +23,7 @@ Parameters:
   -b | --bottom           only generate bottom sorts       [off]
   -i | --input  <FILE>    specify input specification      [?]
   -f | --folding          enable folding mode              [off]
+  -n | --name <STR>       name of the api                  [improvised]
   -o | --output <DIR>     specify basedir for output       [.]
   -p | --package <STR>    specify package                  [""]
   -t | --visitable        visitable enabled                [off]
@@ -79,6 +80,7 @@ FOLDINGOPT=""
 VISITABLEOPT=""
 GENBOTTOMSORT=1
 ONLYBOTTOM=0
+NAME=""
 
 # binaries
 SDF2TOADT=${bindir}/sdf2-to-adt
@@ -109,6 +111,9 @@ do
 
     -i | --input)
       shift; INPUT=$1 ;;
+
+    -n | --name)
+      shift; NAME=$1 ;;
 
     -o | --output)
       shift; OUTPUT=$1 ;;
@@ -152,6 +157,17 @@ fi
 
 BASE=`basename ${INPUT} .sdf`
 BASE=`basename ${BASE} .def`
+
+if [ "a${NAME}" = "a" ]; then
+  NAME=${BASE}
+fi
+
+if [ "a${PACKAGE}" = "a" ]; then
+  PACKAGEDECL=""
+else
+  PACKAGEDECL="package ${PACKAGE};"
+fi
+
 # }}}
 
 # {{{  err()
@@ -174,14 +190,17 @@ fi
 if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
-             -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} 
+             -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
 fi
 
 info " overwriting CHARLIST_StringImpl.java"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
   info " generating API for bottom sorts"
-  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_StringImpl.java.template \
-     > ${OUTPUT}/CHARLIST_StringImpl.java
+  sed "s@__PACKAGE__@${PACKAGE}@g;\
+       s@__NAME__@${NAME}@g;\
+       s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
+       < ${PKGDATA}/CHARLIST_StringImpl.java.template \
+       > ${OUTPUT}/CHARLIST_StringImpl.java
 fi
 
 # }}}
