@@ -4,7 +4,6 @@
 
 package toolbus;
 import java.io.*;
-import java.io.PrintWriter;
 import java.util.*;
 
 import toolbus.parser.*;
@@ -20,11 +19,11 @@ public class ToolBus {
   private Vector processes;
   private Vector procdefs;
   private TscriptParser parser;
-  private PrintStream out;
+  private PrintWriter out;
   
   private static boolean verbose = false;
 
-  public ToolBus(PrintStream out) {
+  public ToolBus(PrintWriter out) {
     this.out = out;
     this.factory = TBTerm.factory;
     processes = new Vector();
@@ -36,7 +35,11 @@ public class ToolBus {
   }
   
   public ToolBus(){
-    this(System.out);
+    this(new PrintWriter(System.out));
+  }
+  
+  public ToolBus(StringWriter out){
+    this(new PrintWriter(out));
   }
 
   public ATermFactory getFactory() {
@@ -55,7 +58,7 @@ public class ToolBus {
     return verbose;
   }
   
-  public PrintStream getPrintStream(){
+  public PrintWriter getPrintWriter(){
     return out;
   }
 

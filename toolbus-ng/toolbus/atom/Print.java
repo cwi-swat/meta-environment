@@ -22,7 +22,7 @@ public class Print extends Atom {
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
       Environment e = getEnv();
-      getToolBus().getPrintStream().println(TBTerm.substitute(arg.value, e));
+      getToolBus().getPrintWriter().println(TBTerm.substitute(arg.value, e).toString());
       return nextState();
     } else {
       return false;
