@@ -282,7 +282,7 @@ void remove_user_properties(int cid)
 {
   ATtableReset(userDescriptionsByType);
   ATtableReset(userActionsByDescription);
-  modulePaths = ATempty;
+  modulePaths = (ATermList) ATparse("[\".\"]");
 }
 
 /*}}}  */
@@ -446,7 +446,7 @@ void version(const char *msg)
 static void initConfigurationManager(void)
 {
   ATprotectList(&modulePaths);
-  modulePaths = ATempty;
+  modulePaths = (ATermList) ATparse("[\".\"]");
 
   ATprotectList(&userExtensions);
   userExtensions = ATempty;
