@@ -47,9 +47,9 @@ extern void resolve_all();
 extern void register_all();
 extern void init_all();
 
-ATerm expand_to_asfix(ATerm mod, char *name);
 void AFinitExpansionTerms();
 void AFinitAsFixPatterns();
+ATerm AFexpandAsFixModule(ATerm mod);
 
 ATerm innermost(ATerm t);
 ATerm toasfix(ATerm t, ATerm f, ATerm n);
@@ -154,6 +154,55 @@ void ToC_code(ATerm asfix, FILE *file)
 }        
 
 /*}}}  */   
+/*{{{  ATerm make_compiler_term(char *name, ATerm term) */
+
+static ATerm make_compiler_term(char *name, ATerm term)
+{
+  ATerm t_name;
+  ATerm t_mod_name;
+  ATerm prod, appl;
+  ATerm abbrevs;
+  ATerm a_name;
+  ATerm term_open, term_close, term_ws;
+
+  a_name = ATmake("l(<str>)",name);
+  t_mod_name = ATparse("id(\"AsFix2C\")");
+  t_name = ATparse("l(\"asfix2c\")");
+  abbrevs = ATparse("abbreviations([])");
+  term_open = ATparse("l(\"(\")");
+  term_close = ATparse("l(\")\")");
+  term_ws = ATparse("w(\"\")");
+
+  prod = AFmakeProd(t_mod_name,
+                    ATmakeList(7,t_name,term_ws,term_open,term_ws,
+                               ATparse("sort(\"ATerm\")"),
+                               term_ws,term_close),
+                    ATparse("sort(\"CProgram\")"),
+                    ATparse("no-attrs"));
+  appl = AFmakeAppl(prod,
+                    ATmakeList(7,t_name,term_ws,term_open,term_ws,
+                               term,
+                               term_ws,term_close));
+  return ATmake("term(<term>,<term>,<term>,<term>,<term>,<term>," \
+                "<term>,<term>,<term>)",
+                 ATparse("l(\"term\")"),
+                 term_ws,a_name,term_ws,t_mod_name,term_ws,
+                 appl,term_ws,abbrevs);
+}
+
+/*}}}  */
+/*{{{  static Term expand_to_asfix(ATerm mod, char *name) */
+
+
+static ATerm expand_to_asfix(ATerm mod, char *name)
+{
+  ATerm arg;
+
+  arg = AFexpandAsFixModule(mod);
+  return make_compiler_term(name,arg);
+}
+
+/*}}}  */
 /*{{{  ATerm generate_code(int cid, char *modname, ATerm module) */
 
 ATerm generate_code(int cid, char *modname, ATerm module)
