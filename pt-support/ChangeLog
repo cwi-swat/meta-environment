@@ -1,3 +1,6 @@
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 0.10
+
 2002/07/05 (jurgenv@cwi.nl)
  * Fixed a bug in the flattening of AsFix2 to AsFix2ME. Functions that
    yielded lists were not properly encapsulated by a list production.
