@@ -55,36 +55,35 @@ main (int argc, char **argv)
     exit(1);
   }
 
-  while ((c = getopt(argc, argv, myarguments)) != EOF)
+  while ((c = getopt(argc, argv, myarguments)) != EOF) {
     switch (c) {
-    case 'h':  
-      usage();                      
-      exit(0);
-    case 'i':
-      if (nInputs < MAX_ARGS) {
-      inputs[nInputs++] = strdup(optarg);  
-      } else {
-        ATerror("Maximum number of %s arguments exceeded.\n", MAX_ARGS);
-      }
-      break;
-    case 'o':  
-      output = strdup(optarg);    
-      break;
-    case 'f':  function = optarg;            break;  
-    case 's':  sort = optarg;                break;
-    case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
-      exit(0);
-    default :  usage();                      exit(1);
+      case 'h':  
+	usage();                      
+	exit(0);
+      case 'i':
+	if (nInputs < MAX_ARGS) {
+	  inputs[nInputs++] = strdup(optarg);  
+	} else {
+	  ATerror("Maximum number of %s arguments exceeded.\n", MAX_ARGS);
+	}
+	break;
+      case 'o':  
+	output = strdup(optarg);    
+	break;
+      case 'f':  function = optarg;            break;  
+      case 's':  sort = optarg;                break;
+      case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+		 exit(0);
+      default :  usage();                      exit(1);
     }
+  }
  
   if (nInputs == 0) {
     nInputs = 1;
-    inputs[0] = strdup("-");
   }
 
   /* check if all needed arguments were supplied */
-  if(!function || !strcmp(function, "") || 
-     !sort || !strcmp(sort,"")) {
+  if (!function || !strcmp(function, "") || !sort || !strcmp(sort,"")) {
     usage();
     exit(1);
   }
@@ -94,17 +93,12 @@ main (int argc, char **argv)
 
   args = PT_makeArgsEmpty(); 
 
-  if (!strcmp(inputs[0],"-")) {
-    nInputs++;
-  }
-
   for (--nInputs; nInputs >= 0; nInputs--) {
     parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
     if (parseTree == NULL) {
       ATerror("Unable to read in %s\n", inputs[nInputs]);
       exit(1);
     }
-    free(inputs[nInputs]);
     args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
   }
  

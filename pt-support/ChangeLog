@@ -1,4 +1,5 @@
 2001/11/14 (jong@cwi.nl)
+ * Fixed several bugs in argumenthandling in apply-function
  * Removed obsolete "-m <module>" stuff from apply-function program
    (It still suggested users pass a "-m <module>" both in usage() and
    in parameter checking. :(
