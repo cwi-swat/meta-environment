@@ -1,0 +1,12 @@
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(autocode, 0.1)
+
+AC_OUTPUT(
+Makefile
+config.h
+org/Makefile
+org/autocode/Makefile
+org/autocode/property/Makefile
+org/autocode/property/parser/Makefile
+test/Makefile
+)

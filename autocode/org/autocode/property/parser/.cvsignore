@@ -1,0 +1,11 @@
+*.class
+Makefile
+Makefile.in
+ParseException.java
+PropertyParser.java
+PropertyParserConstants.java
+PropertyParserTokenManager.java
+SimpleCharStream.java
+Token.java
+TokenMgrError.java
+classjava.stamp
