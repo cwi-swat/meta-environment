@@ -150,13 +150,40 @@ dap-admin.h: dap-admin.c.nw
 
 # Tcl modules
 tide-support.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-daps.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-processes.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-event-rules.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-cpe.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-exec-state.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-exec-control.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
 tide-current-port.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
+
+tide-ui-rule-list.tcl: tide-modules.tcl.nw
+	$(NOWEB) tide-modules.tcl.nw
+	touch $@
 
 # C dependencies
 buscontrol.o: buscontrol.c dap.h dap-admin.h viewer.tif.c debug-adapter.tif.c
