@@ -101,9 +101,10 @@ int  asfix_status = 0;
 char *find_newest_in_path(char *name)
 {
   int    i;
-  static char   thisname[PATH_LEN];
-  char   *newestname = NULL;
-  time_t newesttime = 0L, thistime;
+  char   thisname[PATH_LEN];
+  static char   newestnamebuf[PATH_LEN];
+  char*  newestname = NULL;
+  time_t newesttime = -1L, thistime;
 
   for(i=0; i<nr_paths; i++) {
     if(path_length_exceeded(strlen(paths[i])+strlen(name)+1, paths[i], name))
@@ -111,7 +112,8 @@ char *find_newest_in_path(char *name)
     sprintf(thisname, "%s/%s", paths[i], name);
     if((thistime = filetime(thisname)) > newesttime) {
       newesttime = thistime;
-      newestname = thisname;
+      strcpy( newestnamebuf, thisname );
+      newestname = newestnamebuf;
     }
   }
 ATfprintf(stderr,"(%s) found %s\n", name, newestname?newestname:"NULL");
