@@ -16,8 +16,8 @@ equations
 
 [] keys([]) = []
 [] keys([<Key,Value>,Pair*]) = [Key, Key*]
-    when keys([Pair*]) = [Key*]
+    when [Key*] := keys([Pair*])
 
 [] values([]) = []
 [] values([<Key,Value>,Pair*]) = [Value, Value*]
-     when values([Pair*]) = [Value*]
+     when [Value*] := values([Pair*])

@@ -35,7 +35,7 @@ hiddens
   imports basic/Comments
    
   context-free syntax
-    gt "(" Natural "," Natural ")" -> Boolean
+    "gt" "(" Natural "," Natural ")" -> Boolean
     Natural "-//" Natural          -> Natural
     Natural ">-" Natural           -> Natural
 

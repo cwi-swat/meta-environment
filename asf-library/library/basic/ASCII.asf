@@ -57,11 +57,11 @@ equations
 
 [sc]	str-comp("", "") = 0
 
-[sc]	length(string) > 0 = true
+[sc]	length(string) > 0 == true
 	====
 	str-comp(string, "") = 1
 
-[sc]	length(string) > 0 = true
+[sc]	length(string) > 0 == true
 	====
 	str-comp("", string) = -1
 
@@ -69,24 +69,24 @@ equations
 %% The following obviously begs for some refactoring...
 
 [sc]	strcon(char2) != strcon("\"),
-	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) = true
+	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) == true
 	===
 	str-comp(strcon(""" "\" char1 char*1 """), strcon(""" char2 char*2 """)) = -1
 
 
 [sc]	strcon(char1) != strcon("\"),
-	ascii-val(strcon(""" char1 """)) <  ascii-val(strcon(""" "\" char2""")) = true
+	ascii-val(strcon(""" char1 """)) <  ascii-val(strcon(""" "\" char2""")) == true
 	===
 	str-comp(strcon("""  char1 char*1 """), strcon(""" "\" char2 char*2 """)) = -1
 
 [sc]	strcon(char2) != strcon("\"),
-	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) = false
+	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon("""char2""")) == false
 	===
 	str-comp(strcon(""" "\" char1 char*1 """), strcon(""" char2 char*2 """)) = 1
 
 
 [sc]	strcon(char1) != strcon("\"),
-	ascii-val(strcon(""" char1 """)) < ascii-val(strcon(""" "\" char2""")) = false
+	ascii-val(strcon(""" char1 """)) < ascii-val(strcon(""" "\" char2""")) == false
 	===
 	str-comp(strcon("""  char1 char*1 """), strcon(""" "\" char2 char*2 """)) = 1
 
@@ -95,11 +95,11 @@ equations
 		str-comp(strcon("""char*1"""), strcon("""char*2 """))
 
 
-[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) = true
+[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) == true
 	===
 	str-comp(strcon(""""\" char1 char*1 """), strcon(""""\" char2 char*2 """)) = -1
 
-[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) = false
+[sc]	ascii-val(strcon(""" "\" char1 """)) < ascii-val(strcon(""" "\" char2 """)) == false
 	===
 	str-comp(strcon(""""\" char1 char*1 """), strcon(""""\" char2 char*2 """)) = 1
 
@@ -109,12 +109,12 @@ equations
 		str-comp(strcon("""char*1"""), strcon("""char*2"""))
 
 [default-sc]	
-	ascii-val(strcon("""char1""")) > ascii-val(strcon("""char2""")) = true
+	ascii-val(strcon("""char1""")) > ascii-val(strcon("""char2""")) == true
 	===
 	str-comp(strcon("""char1 char*1"""),strcon("""char2 char*2""")) = 1
 
 [default-sc]	
-	ascii-val(strcon("""char1""")) < ascii-val(strcon("""char2""")) = true
+	ascii-val(strcon("""char1""")) < ascii-val(strcon("""char2""")) == true
 	===
 	str-comp(strcon("""char1 char*1"""),strcon("""char2 char*2""")) = -1
 

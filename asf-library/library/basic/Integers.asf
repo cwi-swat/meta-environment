@@ -33,18 +33,18 @@ equations
    [79]   9 + 4 = 13    [80]   9 + 5 = 14    [81]   9 + 6 = 15
    [82]   9 + 7 = 16    [83]   9 + 8 = 17    [84]   9 + 9 = 18
 
-   [85a]  natcon(c1) + natcon(c2) = natcon(x c),
-          natcon (y1) + natcon(y2) + natcon("0" x) = natcon(y)
+   [85a]  natcon(x c) := natcon(c1) + natcon(c2),
+          natcon(y) := natcon (y1) + natcon(y2) + natcon("0" x)
           ========================================================
           natcon(y1 c1) + natcon(y2 c2) = natcon(y c)
 
-   [85b]  natcon(c1) + natcon(c2) = natcon(x c),
-          natcon(y2) + natcon("0" x) = natcon(y)
+   [85b]  natcon(x c) := natcon(c1) + natcon(c2),
+          natcon(y) := natcon(y2) + natcon("0" x)
           ======================================
           natcon(c1) + natcon(y2 c2) = natcon(y c)
 
-   [85c]  natcon(c1) + natcon(c2) = natcon(x c),
-          natcon(y1) + natcon("0" x) = natcon(y)
+   [85c]  natcon(x c) := natcon(c1) + natcon(c2),
+          natcon(y) := natcon(y1) + natcon("0" x)
           ======================================
           natcon(y1 c1) + natcon(c2) = natcon(y c)
 
@@ -71,14 +71,14 @@ equations
 
 %% -- auxiliary function gt
 
-   [133]  natcon(c1) -// natcon(c2) = natcon(c),
+   [133]  natcon(c) := natcon(c1) -// natcon(c2),
           natcon(c) != 0
           =========================================================
           gt(natcon(c1), natcon(c2)) = true
 
    [134]  gt(natcon(y1 c1), natcon(c2)) = true
    [135]  gt(natcon(y c1), natcon(y c2)) = gt(natcon(c1), natcon(c2))
-   [136]  gt(natcon(y1), natcon(y2)) = true
+   [136]  gt(natcon(y1), natcon(y2)) == true
           =========================================
           gt(natcon(y1 c1), natcon(y2 c2)) = true
 
@@ -88,37 +88,37 @@ equations
 
    [138]  natcon(c1) >- natcon(c2) = natcon(c1) -// natcon(c2)
 
-   [139a] natcon(c1)  -// natcon(c2)    = natcon(c3),
-          natcon (y1) >- natcon("0" x2) = natcon(y)
+   [139a] natcon(c3)    := natcon(c1)  -// natcon(c2),
+          natcon(y) := natcon (y1) >- natcon("0" x2)
           ==================================================
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c3)
 
-   [139b] natcon(c2)  -// natcon(c1) = natcon(c3),
-          10 -// natcon(c3) = natcon(c),
-          natcon ("0" x2) + 1 = Nat,
-          natcon(y1) >- Nat = natcon(y)
+   [139b] natcon(c3) := natcon(c2)  -// natcon(c1),
+          natcon(c) := 10 -// natcon(c3),
+          Nat := natcon ("0" x2) + 1,
+          natcon(y) := natcon(y1) >- Nat
           ==================================================
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c)
 
 
 %% -- cut off subtraction -/
-   [140]  gt(Nat1, Nat2) = true  === Nat1 -/ Nat2 = Nat1 >- Nat2
+   [140]  gt(Nat1, Nat2) == true  === Nat1 -/ Nat2 = Nat1 >- Nat2
    [141]  gt(Nat1, Nat2) != true === Nat1 -/ Nat2 = 0
 
 %% -- subtraction of naturals
 
-   [142]  gt(Nat1, Nat2) = true === Nat1 - Nat2 = Nat1 >- Nat2
+   [142]  gt(Nat1, Nat2) == true === Nat1 - Nat2 = Nat1 >- Nat2
 
    [143]  gt(Nat1, Nat2) != true === Nat1 - Nat2 = -(Nat2 >- Nat1)
 
    %% -- multiplication of naturals --
    [144] Nat * 0 = 0
    [145] Nat * 1 = Nat
-   [146] gt(natcon(c), 1) = true
+   [146] gt(natcon(c), 1) == true
          ===============================================
          Nat * natcon(c) = Nat + Nat * (natcon(c) - 1)
 
-   [147] natcon(y1) * natcon(y2) = natcon(y)
+   [147] natcon(y) := natcon(y1) * natcon(y2)
          ========================================================
          natcon(y1) * natcon(y2 c) =
                         natcon(y "0") + natcon(y1) * natcon(c)
@@ -128,18 +128,18 @@ equations
 
    [149]  Nat1 + -Nat2 = Nat1 - Nat2
    [150]  -Nat1 + Nat2 = Nat2 - Nat1
-   [151]  Nat1 + Nat2 = Nat  === -Nat1 + -Nat2 = -Nat
+   [151]  Nat := Nat1 + Nat2  === -Nat1 + -Nat2 = -Nat
 
    [152]  Nat1 - -Nat2 = Nat1 + Nat2
-   [153]  Nat1 + Nat2 = Nat === -Nat1 - Nat2 = -Nat
+   [153]  Nat := Nat1 + Nat2 === -Nat1 - Nat2 = -Nat
    [154]  -Nat1 - -Nat2 = Nat2 - Nat1
 
-   [155]  Nat1 * Nat2 = Nat  === Nat1 * -Nat2 = -Nat
-   [156]  Nat1 * Nat2 = Nat === -Nat1 * Nat2 = -Nat
+   [155]  Nat := Nat1 * Nat2  === Nat1 * -Nat2 = -Nat
+   [156]  Nat := Nat1 * Nat2 === -Nat1 * Nat2 = -Nat
    [157]  -Nat1 * -Nat2 = Nat1 * Nat2
 
 %% -- relational operators
-   [158]  gt(Nat1, Nat2) = true === Nat1 > Nat2 = true
+   [158]  gt(Nat1, Nat2) == true === Nat1 > Nat2 = true
    [159]  gt(Nat1, Nat2) != true === Nat1 > Nat2 = false
    [160]  Nat1 > -Nat2 = true
    [161]  -Nat1 > Nat2 = false

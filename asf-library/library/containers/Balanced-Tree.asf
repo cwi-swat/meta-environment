@@ -26,30 +26,30 @@ equations
 
 [m]	member(x, empty) = false
 
-[m]	elt-gt(x1,x2) = false,
-	elt-lt(x1,x2) = false
+[m]	elt-gt(x1,x2) == false,
+	elt-lt(x1,x2) == false
 	===
 	member(x1, tree(x2, n, l, r)) = true
 
-[m]	elt-lt(x, v) = true
+[m]	elt-lt(x, v) == true
 	===
 	member(x, tree(v, n, l, r)) = member(x, l)
 
-[m]	elt-gt(x, v) = true
+[m]	elt-gt(x, v) == true
 	===
 	member(x, tree(v, n, l, r)) = member(x, r)
 
 
-[f]	elt-gt(x1,x2) = false,
-	elt-lt(x1,x2) = false
+[f]	elt-gt(x1,x2) == false,
+	elt-lt(x1,x2) == false
 	===
 	find(x1, tree(x2, n, l, r)) = x2
 
-[f]	elt-lt(x, v) = true
+[f]	elt-lt(x, v) == true
 	===
 	find(x, tree(v, n, l, r)) = find(x, l)
 
-[f]	elt-gt(x, v) = true
+[f]	elt-gt(x, v) == true
 	===
 	find(x, tree(v, n, l, r)) = find(x, r)
 
@@ -69,35 +69,35 @@ equations
 [dr]	double-r(c, tree(a, n1, s, tree(b, n2, t1, t2)), u) =
 		new(b, new(a, s, t1), new(c, t2, u))
 
-[bn]	size(l) + size(r) < 2 = true
+[bn]	size(l) + size(r) < 2 == true
 	===
 	b-new(v, l, r) = new(v, l, r)
 
-[bn]	size(l) + size(r) < 2 = false,
-	size(r) > weight * size(l) = true,
-	r = tree(a, n, rl, rr),
-	size(rl) < size(rr) = true
+[bn]	size(l) + size(r) < 2 == false,
+	size(r) > weight * size(l) == true,
+	tree(a, n, rl, rr) := r,
+	size(rl) < size(rr) == true
 	===
 	b-new(v, l, r) = single-l(v, l, r)
 
-[bn]	size(l) + size(r) < 2 = false,
-	size(r) > weight * size(l) = true,
-	r = tree(a, n, rl, rr),
-	size(rl) < size(rr) = false
+[bn]	size(l) + size(r) < 2 == false,
+	size(r) > weight * size(l) == true,
+	tree(a, n, rl, rr) := r,
+	size(rl) < size(rr) == false
 	===
 	b-new(v, l, r) = double-l(v, l, r)
 
-[bn]	size(l) + size(r) < 2 = false,
-	size(l) > weight * size(r) = true,
-	l = tree(a, n, ll, lr),
-	size(lr) < size(ll) = true
+[bn]	size(l) + size(r) < 2 == false,
+	size(l) > weight * size(r) == true,
+	tree(a, n, ll, lr) := l,
+	size(lr) < size(ll) == true
 	===
 	b-new(v, l, r) = single-r(v, l, r)
 
-[bn]	size(l) + size(r) < 2 = false,
-	size(l) > weight * size(r) = true,
-	l = tree(a, n, ll, lr),
-	size(lr) < size(ll) = false
+[bn]	size(l) + size(r) < 2 == false,
+	size(l) > weight * size(r) == true,
+	tree(a, n, ll, lr) := l,
+	size(lr) < size(ll) == false
 	===
 	b-new(v, l, r) = double-r(v, l, r)
 
@@ -107,11 +107,11 @@ equations
 
 [ad]	add(empty, x) = tree(x, 1, empty, empty)
 
-[ad]	elt-lt(x, v) = true
+[ad]	elt-lt(x, v) == true
 	===
 	add(tree(v, n, l, r), x) = b-new(v, add(l, x), r)
 
-[ad]	elt-gt(x, v) = true
+[ad]	elt-gt(x, v) == true
 	===
 	add(tree(v, n, l, r), x) = b-new(v, l, add(r, x))
 
@@ -120,11 +120,11 @@ equations
 
 [del]	delete(empty, x) = empty
 
-[del]	elt-lt(x, v) = true
+[del]	elt-lt(x, v) == true
 	===
 	delete(tree(v, n, l, r), x) = b-new(v, delete(l, x), r)
 
-[del]	elt-gt(x, v) = true
+[del]	elt-gt(x, v) == true
 	===
 	delete(tree(v, n, l, r), x) = b-new(v, l, delete(r, x))
 
@@ -149,8 +149,8 @@ equations
 
 [un]	union(t, empty) = t
 
-[un]	l' = split-lt(t, v),
-	r' = split-gt(t, v)
+[un]	l' := split-lt(t, v),
+	r' := split-gt(t, v)
 	===
 	union(t, tree(v, n, l, r)) =
 		concat3(v, union(l', l), union(r', r))
@@ -160,15 +160,15 @@ equations
 
 [cat]	concat3(v, l, empty) = add(l, v)
 
-[cat]	l = tree(v1, n1, l1, r1),
-	r = tree(v2, n2, l2, r2),
-	weight * n1 < n2 = true
+[cat]	tree(v1, n1, l1, r1) := l,
+	tree(v2, n2, l2, r2) := r,
+	weight * n1 < n2 == true
 	===
 	concat3(v, l, r) = b-new(v2, concat3(v, l, l2), r2)
 
-[cat]	l = tree(v1, n1, l1, r1),
-	r = tree(v2, n2, l2, r2),
-	weight * n2 < n1 = true
+[cat]	tree(v1, n1, l1, r1) := l,
+	tree(v2, n2, l2, r2) := r,
+	weight * n2 < n1 == true
 	===
 	concat3(v, l, r) = b-new(v1, l1, concat3(v, r1, r))
 
@@ -177,11 +177,11 @@ equations
 
 [sl]	split-lt(empty, x) = empty
 
-[sl]	elt-lt(x, v) = true
+[sl]	elt-lt(x, v) == true
 	===
 	split-lt(tree(v, n, l, r), x) = split-lt(l, x)
 
-[sl]	elt-gt(x, v) = true
+[sl]	elt-gt(x, v) == true
 	===
 	split-lt(tree(v, n, l, r), x) = concat3(v, l, split-lt(r, x))
 
@@ -190,11 +190,11 @@ equations
 
 [sl]	split-gt(empty, x) = empty
 
-[sl]	elt-gt(x, v) = true
+[sl]	elt-gt(x, v) == true
 	===
 	split-gt(tree(v, n, l, r), x) = split-gt(r, x)
 
-[sl]	elt-lt(x, v) = true
+[sl]	elt-lt(x, v) == true
 	===
 	split-gt(tree(v, n, l, r), x) = concat3(v, split-gt(l, x), r)
 
@@ -206,8 +206,8 @@ equations
 [dif]	difference(s, empty) = s
 
 [default-dif]
-	l' = split-lt(s, v),
-	r' = split-gt(s, v)
+	l' := split-lt(s, v),
+	r' := split-gt(s, v)
 	===
 	difference(s, tree(v, n, l, r)) =
 		concat(difference(l',l), difference(r', r))
@@ -225,15 +225,15 @@ equations
 
 [con]	concat(t1, empty) = t1
 
-[con]	t1 = tree(v1, n1, l1, r1),
-	t2 = tree(v2, n2, l2, r2),
-	weight * n1 < n2 = true
+[con]	tree(v1, n1, l1, r1) := t1,
+	tree(v2, n2, l2, r2) := t2,
+	weight * n1 < n2 == true
 	===
 	concat(t1, t2) = b-new(v2, concat(t1, l2), r2)
 
-[con]	t1 = tree(v1, n1, l1, r1),
-	t2 = tree(v2, n2, l2, r2),
-	weight * n2 < n1 = true
+[con]	tree(v1, n1, l1, r1) := t1,
+	tree(v2, n2, l2, r2) := t2,
+	weight * n2 < n1 == true
 	===
 	concat(t1, t2) = b-new(v1, l1, concat(r1, t2))
 
@@ -246,30 +246,30 @@ equations
 [is]	intersection(s, empty) = empty
 
 [is]
-	l' = split-lt(s, v),
-	r' = split-gt(s, v),
-	member(v, s) = true
+	l' := split-lt(s, v),
+	r' := split-gt(s, v),
+	member(v, s) == true
 	===
 	intersection(s, tree(v, n, l, r)) =
 		concat3(v, intersection(l', l), intersection(r', r))
 
-[is]	l' = split-lt(s, v),
-	r' = split-gt(s, v),
-	member(v, s) = false
+[is]	l' := split-lt(s, v),
+	r' := split-gt(s, v),
+	member(v, s) == false
 	===
 	intersection(s, tree(v, n, l, r)) =
 		concat(intersection(l', l), intersection(r', r))
 
 [tr]	trim(lo, hi, empty) = empty
 
-[tr]	tree(v, n, l, r) = s,
-	elt-lt(lo, v) = true,
-	elt-lt(v, hi) = true
+[tr]	tree(v, n, l, r) := s,
+	elt-lt(lo, v) == true,
+	elt-lt(v, hi) == true
 	===
 	trim(lo, hi, s) = s
 
-[tr]	elt-lt(lo, v) = true,
-	elt-lt(v, hi) = false
+[tr]	elt-lt(lo, v) == true,
+	elt-lt(v, hi) == false
 	===
 	trim(lo, hi, tree(v, n, l, r)) = trim(lo, hi, l)
 
@@ -282,7 +282,7 @@ equations
 		concat3(v, split-gt(l, lo), split-lt(r, hi))
 
 [default-ubd]
-	s2 = tree(v2, n2, l2, r2)
+	tree(v2, n2, l2, r2) := s2
 	===
 	uni-bd(tree(v1, n1, l1, r1), s2 , lo, hi) =
 		concat3(v1,
@@ -291,8 +291,8 @@ equations
 
 [trl]	trim-lo(lo, empty) = empty
 
-[trl]	tree(v, n, l, r) = s,
-	elt-lt(lo, v) = true
+[trl]	tree(v, n, l, r) := s,
+	elt-lt(lo, v) == true
 	===
 	trim-lo(lo, s) = s
 
@@ -301,8 +301,8 @@ equations
 
 [trh]	trim-hi(hi, empty) = empty
 
-[trh]	tree(v, n, l, r) = s,
-	elt-lt(v, hi) = true
+[trh]	tree(v, n, l, r) := s,
+	elt-lt(v, hi) == true
 	===
 	trim-hi(hi, s) = s
 
@@ -314,7 +314,7 @@ equations
 [unh]	uni-hi(empty, tree(v, n, l, r), hi) =
 		concat3(v, l, split-lt(r, hi))
 
-[unh]	s2 = tree(v2,n2,l2,r2)
+[unh]	tree(v2,n2,l2,r2) := s2
 	===
 	uni-hi(tree(v1,n1,l1,r1), s2, hi) =
 		concat3(v1,
@@ -327,7 +327,7 @@ equations
 [unl]	uni-lo(empty, tree(v, n, l, r), lo) =
 		concat3(v, split-gt(l, lo), r)
 
-[unl]	s2 = tree(v2,n2,l2,r2)
+[unl]	tree(v2,n2,l2,r2) := s2
 	===
 	uni-lo(tree(v1,n1,l1,r1), s2, lo) =
 		concat3(v1,
@@ -339,7 +339,7 @@ equations
 
 [hun]	hedge-union(empty, s) = s
 
-[hun]	s2 = tree(v2,n2,l2,r2)
+[hun]	tree(v2,n2,l2,r2) := s2
 	===
 	hedge-union(tree(v1,n1,l1,r1), s2) =
 		concat3(v1,

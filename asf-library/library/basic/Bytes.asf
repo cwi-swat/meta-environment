@@ -5,75 +5,74 @@ equations
 
 [ctb1]	chars-to-bytes(strcon()) = bytes()
 
-
-[ctb2]	bytes(char*') = chars-to-bytes(strcon(char*))
+[ctb2]	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon("\" "n" char*)) = bytes("
 " char*')
 
-[ctb3]	bytes(char*') = chars-to-bytes(strcon(char*))
+[ctb3]	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon("\" "t" char*)) = bytes("	" char*')
 
 
-[ctb4]	bytes(char*') = chars-to-bytes(strcon(char*))
+[ctb4]	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon("\" """ char*)) = bytes(""" char*')
 
-[ctb5]	bytes(char*') = chars-to-bytes(strcon(char*))
+[ctb5]	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon("\" "\" char*)) = bytes("\" char*')
 
 [default-ctb]
-	n = natcon(char1 char2 char3),
-	byte(char) = octal-to-byte(n),
-	bytes(char*') = chars-to-bytes(strcon(char*))
+	n := natcon(char1 char2 char3),
+	byte(char) := octal-to-byte(n),
+	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon("\" char1 char2 char3 char*)) =	
 		bytes(char char*')
 
 [default-ctb]
 	strcon(char) != strcon("\"),
-	bytes(char*') = chars-to-bytes(strcon(char*))
+	bytes(char*') := chars-to-bytes(strcon(char*))
 	===
 	chars-to-bytes(strcon(char char*)) = bytes(char char*')
 
-[bts]	strcon(char*) = bytes-to-chars(bytes)
+[bts]	strcon(char*) := bytes-to-chars(bytes)
 	===
 	bytes-to-string(bytes) = strcon("""char*""")
 
 [btc1]	bytes-to-chars(bytes()) = strcon()
 
-[btc2]	strcon(char*') = bytes-to-chars(bytes(char*))
+[btc2]	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes("
 " char*)) = strcon("\" "n" char*')
 
-[btc3]	strcon(char*') = bytes-to-chars(bytes(char*))
+[btc3]	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes("	"char*)) = strcon("\" "t" char*')
 
-[btc4]	strcon(char*') = bytes-to-chars(bytes(char*))
+[btc4]	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes("\" char*)) = strcon("\" "\" char*')
 
-[btc5]	strcon(char*') = bytes-to-chars(bytes(char*))
+[btc5]	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes(""" char*)) = strcon("\" """ char*')
 
 [default-btc]
-	n = byte-to-octal(byte(char)),
-	n >= 40 & n <= 176 = false,
-	strcon(char1 char2 char3) = octal-to-string(n),
-	strcon(char*') = bytes-to-chars(bytes(char*))
+	n := byte-to-octal(byte(char)),
+	n >= 40 & n <= 176 == false,
+	strcon(char1 char2 char3) := octal-to-string(n),
+	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes(char char*)) = 
 		strcon("\" char1 char2 char3 char*')
 
 [default-btc]
-	n = byte-to-octal(byte(char)),
-	n >= 40 & n <= 176 = true,
-	strcon(char*') = bytes-to-chars(bytes(char*))
+	n := byte-to-octal(byte(char)),
+	n >= 40 & n <= 176 == true,
+	strcon(char*') := bytes-to-chars(bytes(char*))
 	===
 	bytes-to-chars(bytes(char char*)) = strcon(char char*')
 
@@ -87,12 +86,12 @@ equations
 		ascii-compare(bytes(char*1),bytes(char*2))
 
 [acmp3]	byte(char1) != byte(char2),
-	byte-to-octal(byte(char1)) < byte-to-octal(byte(char2)) = true
+	byte-to-octal(byte(char1)) < byte-to-octal(byte(char2)) == true
 	===
 	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = -1
 
 [acmp3]	byte(char1) != byte(char2),
-	byte-to-octal(byte(char1)) > byte-to-octal(byte(char2)) = true
+	byte-to-octal(byte(char1)) > byte-to-octal(byte(char2)) == true
 	===
 	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = 1
 
