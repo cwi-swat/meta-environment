@@ -544,12 +544,11 @@ term *mk_bstr(char *s, int n)
 
   t->trm_kind = t_bstr;
   bstr_len(t) = n;
-  bstr_val(t) = strdup(s);
+  bstr_val(t) = strndup(s,n);
   return t;
-
 }
 
-/* We use the following repreentation for binary strings:
+/* We use the following representation for binary strings:
 
 	" STRING_MARK D D D D D D D D  STRING_MARK B B B B B ... "
                       <------------->              <-------  ...
