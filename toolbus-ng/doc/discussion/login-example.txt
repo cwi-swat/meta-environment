@@ -136,66 +136,67 @@ tool Authentication is
  
  
  
-Try #2 to extend the login example with error recovery
-------------------------------------------------------
+Try #2 to extend the login example with error recovery (revised)
+----------------------------------------------------------------
 
-Experiment with a new transaction construct:
-	begin-transaction
-		// the normal handling of thing
-	transaction-complete:
-	    // What to do when normal handling is complete
-	abort-transaction:
-	   	// What to do in case of abort
-	end-transaction
-	
-In addition, there is an atom called "abort-transaction"
+Starting point is the backtracking operator P1 \+ P2
+defined in Bergstra, Ponse and Van Wamel "Process Algebra with backtracking"
 
-Optionally, the whole transaction block can return true/false
-so that we can test whether it succeeded.
+Informally, there are two cases
+(a) P1 completes normally, i.e. does not result in delta, then
+     P1 \+ P2 is equal to P1
+(b) P1 reduces to delta, then all side-effects caused by P1 are undone
+    and P1 \+ P2 is equal to P2.
+    
+We will write 
+    	try P1 otherwise P2
+instead of
+		P1 \+ P2
 	
-Properties:
+Properties and extensions:
 
 (a) When a transaction aborts all processes that are "involved in it"
     (i.e. are connected with it via a snd/rec-msg) are aborted as well.
 
 (b) Conceptually the local state of a process is saved before a transaction
     starts. In case of an abort, the local state is restored.
+    
+(c) Instead of a delta, failure can also be achieved by fail(T)
+
+(d) A new atom failed(T?) can test for a specific kind of failure.
 
 tool CLIENT is
 ...
 (
-  begin-transaction
-    rec-event login(Name?, Password?) . snd-msg (Name, Password) {
+  try {
+    @snd-msg (Name?, Password?) {
      } 
-     ( rec-msg login-succeeded . 			// Now Authentication becomes part of the transaction
-       LOGGED-IN
+     ( @rec-msg login-succeeded . LOGGED-IN
      +
-       rec-msg login-failed
-     ) >>
-     rec-disconnect . abort-transaction
- 
-   transaction-complete:
-   		snd-ack-event login
-   	
-   transaction-abort:
-    // clean up   
-     
-  end-transaction
- 
-
+       @rec-msg login-failed
+     )   
+     >>
+     rec-disconnect . fail("client")             // local failure: the client tool dies
+   } otherwise {							     // try to recreate the crashed tools
+    											 /
+     failed("Client") . create Client()
+     +
+     failed("Authentication") . create Authentication()
+     											// This is the *wrong* place: CLIENT should not
+     											// know about Authentication
+   }
 ) * delta
  
 tool Authentication is
 
-   rec-msg login(Name?, Password?) . 
-   ( snd-eval (Name, Pasword) .
-     (  rec-value login-succeeded . snd-msg login-succeeded
+   @rec-msg login(Name?, Password?) {
+   }
+     (  @snd-msg login-succeeded
      + 
-        rec-value login-failed . snd-msg login-failed
-     )   
-   ) >>   
+        @snd-msg login-failed
+     ) 
+   >>   
    rec-disconnect .						// the authentication tool disconnects
-   abort-transaction .
-   Authentication() . 					// restart it (perhaps add max retry counter?)
+   fail("Authentication").             // abort
      
    
