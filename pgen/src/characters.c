@@ -627,6 +627,7 @@ ATermList charrange_difference(ATermList crl1,ATermList crl2)
 ATwarning("difference(%t,%t) = ", crl1, crl2);
 */
 
+
   if(ATisEmpty(crl1))
     return ATempty;
   else if(ATisEmpty(crl2))
@@ -640,9 +641,11 @@ ATwarning("difference(%t,%t) = ", crl1, crl2);
       else
         crl1 = remove_char_from_charrange_list((ATermInt)cr1,crl1);
     }
+
 /*
 ATwarning("%t\n", crl1);
 */
+
     return crl1;
   }
 }

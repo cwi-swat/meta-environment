@@ -78,6 +78,7 @@ ATwarning("action_insert(%t,%t,%t)\n", actionset, charclass, reducelist);
 /*
 ATwarning("action_insert(%t,%t,%t)\n", actionset, charclass, reducelist);
 */
+
         newactionset = action_insert(actionset, charclass, reducelist);
         newcharrange = charrange_difference(charrange1, charrange2);
         return restrict(newcharrange,restrictions,len,prodnr,newactionset);

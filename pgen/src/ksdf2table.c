@@ -376,7 +376,7 @@ void process_restrictions(ATermList restricts)
 {
   ATerm restrict, symbol, symbols, lookaheads, symbollist, newsymbol,
         lookaheadlist, newlookahead, lookahead;
-  ATermList symbolelems, lookaheadelems, newlookaheads;
+  ATermList symbolelems, lookaheadelems, newlookaheads, oldlookaheads;
   int cnt = 0;
 
   while(!ATisEmpty(restricts)) {
@@ -425,6 +425,10 @@ void process_restrictions(ATermList restricts)
 
           if(!AFTisWS(symbol)) {
             newsymbol = SDFflattenSymbol(symbol);
+            oldlookaheads = (ATermList)ATtableGet(symbol_lookaheads_table, newsymbol);
+            if (oldlookaheads) {
+              newlookaheads = ATconcat(oldlookaheads, newlookaheads);
+            }
             ATtablePut(symbol_lookaheads_table, newsymbol, 
                        (ATerm)newlookaheads);
           }
