@@ -18,5 +18,4 @@
 #
 # $Id$
 
-EXTRA_DIST=Ambi.tbl Casl.tbl Cyclops.tbl Flat.tbl Isle.tbl Pico.tbl Risla.tbl \
-           Sdf2.tbl SimpleCobol.tbl Jacob.tbl Prefer.tbl
+EXTRA_DIST=Sdf2.tbl 
