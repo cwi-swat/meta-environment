@@ -8,7 +8,7 @@ CCstart_var	= string.uppercase
 CCvar		= CCappl
 CCstart_int	= string.digits + '-'
 CCint		= string.digits
-CCreal		= '.E'
+CCreal		= CCint + '.E' + '-'
 
 def parse(Str):
 	global S, i
@@ -44,6 +44,8 @@ def parse(Str):
 			Stack.append(['bstr', Word])
 		elif Token == 'bool':
 			Stack.append(['bool', Word])
+		elif Token == 'real':
+			Stack.append(['real', Word])
 
 	if len(Stack) > 1:
 		raise TermParseError, "unexpected end of string %s" % S
@@ -113,7 +115,7 @@ def lex(S, i):
 		j = i
 		while S[j] in CCint:
 			j = j + 1
-		if S[j] == '.':
+		if S[j] in CCreal:
 			while S[j] in CCreal:
 				j = j + 1
 			return ('real', string.atof(S[i:j]), j-start)
@@ -251,6 +253,6 @@ def doprof():
 	b2.sort_stats("cumulative")
 	b2.print_stats(10)
 
-# test_it()
+test_it()
 # bench_it(5000)
 # bench_it2(600)
