@@ -793,7 +793,7 @@ ATerm list_matching(ATerm sym,
 					 */
 					if(keep_whitespace) {
 						ATerm sep, ws, var;
-						ATwarning("ZIE JE WEL: %t AND %t\n", text(elems1), text(elems2));
+						ATwarning("ZIE JE WEL: %t AND %t\n", text((ATerm) elems1), text((ATerm) elems2));
 						
 						if(ATgetLength(elems1) == 3) {
 							sep = ATgetFirst(elems1);
