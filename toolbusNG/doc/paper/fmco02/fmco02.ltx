@@ -4,12 +4,12 @@
 \usepackage{epsfig}
 \usepackage{url}
 \usepackage{alltt}
+\usepackage{times}
+\usepackage{verbatim}
 \usepackage{xspace}
 \usepackage{latexsym}
 \usepackage{graphics}
-\usepackage{times}
 \usepackage{mathptm}
-\usepackage{verbatim}
  
 \newcommand{\TB}{\textsc{ToolBus}}
 \newcommand{\asfplussdf}{ASF+SDF}
@@ -455,15 +455,20 @@ endlet
 \paragraph{The \texttt{UPDATE} process} is more interesting. It
 shows that each update of an address entry is \emph{guarded}. A
 process wanting to update an entry first has to announce this fact
-by sending an \texttt{update-address} message, before it can do one
-or more updates to the entry. It then finishes the update by sending
-an \texttt{update-address-done} message. This message pair thus acts
-as a very primitive locking scheme. More elaborate schemes are very
-well possible, but are not discussed in this paper. Summarizing, the
-\texttt{UPDATE} process shows that \emph{outside} the implementation
-of the address book service, we can enforce the order in which certain
-parts of the service are invoked, as well as mutual exclusion of some
-of its sections.
+by sending an \texttt{update-entry} message, before it can do one or
+more updates to the entry. It then finishes the update by sending an
+\texttt{update-entry-done} message. Because matching \texttt{snd-msg} and
+\texttt{rec-msg} messages are connected synchronously, it is not possible
+for one update transaction to interfere with another. After a sender and
+receiver of the \texttt{update-entry} message are connected, all other
+processes that want to send a \texttt{update-entry} message have to wait
+until the receiving process is ready to receive an \texttt{update-entry}
+message again. This message pair thus acts as a very primitive locking
+scheme. More elaborate schemes are very well possible, but are not
+discussed in this paper. Summarizing, the \texttt{UPDATE} process shows
+that \emph{outside} the implementation of the address book service, we
+can enforce the order in which certain parts of the service are invoked,
+as well as mutual exclusion of some of its sections.
 
 \begin{footnotesize}
 \begin{verbatim}
