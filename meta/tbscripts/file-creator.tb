@@ -1,49 +1,30 @@
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
  * $Id$
  */
 
 process File-creator is
 let
-  FileName : str,
-  ModuleName: str,
-  ErrMsg: str
+  FileName   : str,
+  ModuleName : str,
+  ErrMsg     : str,
+  Path       : str
 in
   (
     %% Handle request to create a new module.
-    rec-msg(create-new-module(ModuleName?)) .
+    rec-msg(create-new-module(Path?, ModuleName?)) .
     snd-msg(is-module-in-db(ModuleName)) .
     (
       rec-msg(exists-in-module-db(ModuleName)) .
       snd-msg(module-not-created("Module already in database"))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(exists-sdf-module(ModuleName)) .
+      snd-msg(exists-sdf-module(Path)) .
       (
-        rec-msg(sdf-module-exists(ModuleName)) .
+        rec-msg(sdf-module-exists(Path)) .
         snd-msg(module-not-created("Module already exists in text or baf"))
       +
-        rec-msg(sdf-module-not-exists(ModuleName)) .
-        snd-msg(create-empty-sdf-module(ModuleName)) .
+        rec-msg(sdf-module-not-exists(Path)) .
+        snd-msg(create-empty-sdf-module(Path, ModuleName)) .
         (
           rec-msg(module-created(ModuleName)) .
       	  snd-msg(module-created)

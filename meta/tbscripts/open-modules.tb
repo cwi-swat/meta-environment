@@ -50,7 +50,7 @@ in
           +
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
-            snd-msg(open-file(Name)). ( 
+            snd-msg(open-sdf-file(Name)). ( 
               rec-msg(opened-file(Name2?,tree(T?), SdfPath?,Time?)).
               snd-msg(add-sdf2-module-to-db(Name, SdfPath, T, Time,
 			  "unchanged")).

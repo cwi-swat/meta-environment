@@ -69,8 +69,8 @@ in
     )
   +
     %% Create a (new) empty sdf module
-    rec-msg(create-empty-sdf-module(Name?)) .
-    snd-eval(IO, create-empty-sdf-module(Name)) .
+    rec-msg(create-empty-sdf-module(Path?, Name?)) .
+    snd-eval(IO, create-empty-sdf-module(Path, Name)) .
     (
       rec-value(IO, creation-succeeded) .
       snd-msg(module-created(Name))
@@ -102,17 +102,24 @@ in
     )
   +
     %% Name represents the module-name (without extension)
-    rec-msg(open-file(Name?)).
+    rec-msg(open-sdf-file(Name?)).
     snd-eval(IO,open-sdf-file(Name)).
     (
       rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
       snd-msg(opened-file(Name,Contents,Path,TimeStamp))
     + 
-      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
-      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-    +
       rec-value(IO,error-opening(Name?)).
       snd-msg(error-opening(Name))
+    )
+  +
+    rec-msg(open-file(Path?)).
+    snd-eval(IO,open-file(Path)).
+    (
+      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
+      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
+    + 
+      rec-value(IO,error-opening(Path?)).
+      snd-msg(error-opening(Path))
     )
   +
     rec-msg(open-asf-file(Name?, SdfPath?)).

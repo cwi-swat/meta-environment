@@ -36,8 +36,8 @@ in
   ( 
     /* Create a completely new module by a user */
     (
-      rec-event(UI, new-module(Str?)).
-      snd-msg(create-new-module(Str)).
+      rec-event(UI, new-module(Path?, Str?)).
+      snd-msg(create-new-module(Path, Str)).
       (
         rec-msg(module-not-created(ErrMsg?)).
 	snd-note(ui-status(errorf("%s",[ErrMsg])))
@@ -46,27 +46,29 @@ in
 	snd-msg(open-modules([Str])). 
 	( rec-note(import-graph(Mods?,Pairs?)).
           snd-do(UI,new-graph(Mods,Pairs))
-        + rec-msg(cannot-open-module(ModName?)).
+        +
+          rec-msg(cannot-open-module(ModName?)).
 	  snd-note(ui-status(errorf("cannot open module %s",[ModName])))
         )*
         rec-msg(finished-opening-modules).
 	snd-do(UI,finished-opening-modules(Str))
       ).
-      snd-ack-event(UI, new-module(Str))
+      snd-ack-event(UI, new-module(Path, Str))
     )
     +
     /* Add a new module by a user */
-    ( rec-event(UI, open-module(Str?)).
+    ( rec-event(UI, open-module(Path?, Str?)).
       snd-note(online-help(open-module)).
-      snd-msg(open-modules([Str])).
+      snd-msg(open-initial-module(Path, Str)). 
       ( rec-note(import-graph(Mods?,Pairs?)).
         snd-do(UI,new-graph(Mods,Pairs))
-      + rec-msg(cannot-open-module(ModName?)).
+      +
+        rec-msg(cannot-open-module(ModName?)).
 	snd-note(ui-status(errorf("cannot open module %s",[ModName])))
       )*
-      rec-msg(finished-opening-modules).
+      rec-msg(finished-opening-initial-module).
       snd-do(UI,finished-opening-modules(Str)).
-      snd-ack-event(UI, open-module(Str))
+      snd-ack-event(UI, open-module(Path, Str))
     ) +
     ( rec-msg(cannot-open-module(ModName?)).
       snd-note(ui-status(errorf("cannot open module %s",[ModName])))

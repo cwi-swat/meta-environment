@@ -380,9 +380,10 @@ ATerm exists_sdf_module(int cid, char *moduleName)
 
   sprintf(txtFileName, "%s%s", moduleName, SDF_EXT);
 
-  if (find_in_path(txtFileName)) {
+  if (fileexists(txtFileName)) {
     return ATmake("snd-value(exists)");
-  } else {
+  }
+  else {
     return ATmake("snd-value(not-exists)");
   }
 }
@@ -390,13 +391,13 @@ ATerm exists_sdf_module(int cid, char *moduleName)
 /*}}}  */
 /*{{{  ATerm create_empty_sdf_module(int cid, char *moduleName) */
 
-ATerm create_empty_sdf_module(int cid, char *moduleName)
+ATerm create_empty_sdf_module(int cid, char *path, char *moduleName)
 {
   FILE *f;
   char txtFileName[PATH_LEN] = {'\0'};
 
   /* Build sdf-text-filename from moduleName */
-  sprintf(txtFileName, "%s%s", moduleName, SDF_EXT);
+  sprintf(txtFileName, "%s%s", path, SDF_EXT);
 
   if (!(f = fopen(txtFileName, "w"))) {
     char *errmsg = strerror(errno);
@@ -466,6 +467,32 @@ ATerm create_empty_asf_section(int cid, char *name, char *sdfPath)
 
 /*}}}  */
 
+/*{{{  ATerm open_file(int cid, char *path) */
+
+ATerm open_file(int cid, char *path)
+{
+  char   newestbaf[PATH_LEN] = {'\0'};
+  char   newestraw[PATH_LEN] = {'\0'};
+  ATbool newest_is_binary = ATfalse;
+  ATerm  t;
+
+  strcpy(newestraw, path);
+  sprintf(newestbaf, "%s%s", newestraw, BAF_EXT);
+  
+  if (fileexists(newestbaf)) {
+    newest_is_binary = newerfile(newestbaf, newestraw);
+  }
+
+  if (newest_is_binary) {
+    t = read_term_from_named_file(newestbaf, path);
+  } else {
+    t = read_raw_from_named_file(newestraw, path);
+  }
+
+  return t;
+}
+
+/*}}}  */
 /*{{{  ATerm open_sdf_file(int cid, char *name) */
 
 ATerm open_sdf_file(int cid, char *name)

@@ -15,6 +15,7 @@
 #include "unparsePT.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
+#include "open-initial-module.tb"
 #include "file-creator.tb"
 #include "close-module.tb"
 #include "revert-module.tb"
@@ -48,7 +49,8 @@ toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB,
 	ProcessEqs, Save-modules, RevertModule, PrintModule, File-creator, SE,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, Asfe, 
 	Notify-about-changed-modules, Rewrite-Errors,
-	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Asfc, PGen, 
+	Asf-Syntax, AddEqSyn, RemoveVars, Open-initial-module,
+        Open-modules, Asfc, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         DumpParseTable, Compile-module, RenameModule) 
 
