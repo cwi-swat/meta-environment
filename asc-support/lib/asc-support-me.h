@@ -73,7 +73,7 @@ extern Symbol record_sym;
 #define get_sym(t) ATgetSymbol((ATermAppl) t)
 #define check_sym(t,s) (get_sym(t) == (s))
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
-#define remove_list(t) (ATgetArgument((ATermAppl) t,0))
+#define remove_list(t) (make_list(ATgetArgument((ATermAppl) t,0)))
 #define parse_sort(s)  (ATparse(s))
 
 #define accutrafo_tuple_first(t)    (ATgetArgument((ATermAppl) t,0))

@@ -1,5 +1,8 @@
 $Id$
 
+2001/12/20 ({olivierp,jong,jurgenv}@cwi.nl
+ * Fixed a dirty bug in the remove_list muasf primitive. 
+
 2001/12/14 (jurgenv@cwi.nl)
  * Added experimental support for accumulating transformers in the runtime 
    library.
