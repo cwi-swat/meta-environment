@@ -2,6 +2,13 @@
  * Removed module identifiers from productions:
    - Regenerated the compiler. 
    - Regenerated the MuASF library. 
+ * Changed commandline options of asfc.
+   - the name of a specification is automatically computed from the name
+     of the input file. This can be overridden by the -n option.
+   - if input is stdin, the -n option is obligatory.
+   - the standalone compiler does not call gcc by default anymore, only
+     if you provide the -c option. (the ToolBus version still compiler to
+     binary by default).
  
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions:

@@ -80,8 +80,8 @@ static void usage(void)
 	    "\t-i filename     input equations from file     (default stdin) \n"
 	    "\t-l              input muasf code              (default %s)    \n"
 	    "\t-m              output muasf code             (default %s)    \n"
-	    "\t-n name         name of the tool              (obligatory)    \n"
-	    "\t-o filename     output c code to file         (default <name>.c)\n"
+	    "\t-n name         name of the tool              (default <basename>)\n"
+	    "\t-o filename     output c code to file         (default stdout)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
@@ -224,13 +224,14 @@ int main(int argc, char *argv[])
   run_verbose = ATfalse;
   input_muasf = ATfalse;
   output_muasf = ATfalse;
-  use_c_compiler = ATtrue;
+  use_c_compiler = ATfalse;
   toolbus_mode = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
     if(!strcmp(argv[c], "-TB_TOOL_NAME")) {
       toolbus_mode = ATtrue;
+      use_c_compiler = ATtrue;
     }
   }
 
@@ -265,8 +266,22 @@ int main(int argc, char *argv[])
     }
 
     if (strlen(name) == 0) {
-      usage();
-      exit(1);
+      if (!strcmp(equations,"-")) {
+	ATwarning("The -n option is obligatory when reading from stdin.\n\n");
+	usage();
+	exit(1);
+      }
+      else {
+	int i;
+        name = strdup(equations);
+
+	for(i = 0; i < strlen(name); i++) {
+	  if (name[i] == '.') {
+	    name[i] = '\0';
+	    break;
+	  }
+	}
+      }
     }
 
     if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
