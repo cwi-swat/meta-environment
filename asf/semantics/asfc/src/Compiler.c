@@ -10141,7 +10141,7 @@ if ( check_sym ( tmp [ 8 ] , lf_15sym ) ) {
 if ( check_sym ( tmp [ 9 ] , lf_list_7sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-( tmp [ 11 ] = lf_633_recursive ( make_list ( tmp [ 0 ] ) , tmp [ 7 ] ) ) ;
+( tmp [ 11 ] = lf_633_recursive ( make_list ( tmp [ 1 ] ) , tmp [ 7 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , lf_15sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( check_sym ( tmp [ 12 ] , lf_list_7sym ) ) {
@@ -10201,7 +10201,7 @@ if ( check_sym ( tmp [ 8 ] , lf_15sym ) ) {
 if ( check_sym ( tmp [ 9 ] , lf_list_7sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 if ( not_empty_list ( tmp [ 10 ] ) ) {
-( tmp [ 11 ] = lf_633 ( make_nf1 ( lf_632sym , make_nf1 ( lf_list_100sym , make_list ( tmp [ 0 ] ) ) ) , tmp [ 7 ] ) ) ;
+( tmp [ 11 ] = lf_633 ( make_nf1 ( lf_632sym , make_nf1 ( lf_list_100sym , make_list ( tmp [ 1 ] ) ) ) , tmp [ 7 ] ) ) ;
 if ( check_sym ( tmp [ 11 ] , lf_15sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
 if ( check_sym ( tmp [ 12 ] , lf_list_7sym ) ) {
