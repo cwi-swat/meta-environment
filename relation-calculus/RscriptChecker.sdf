@@ -13,6 +13,7 @@ imports MyPosInfo[Rel[[Elem]]]
 
 exports
     sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]]
+	ITERTYPE
 
     context-free syntax
 
@@ -81,6 +82,8 @@ exports
 	require-bag-type(REXP, RVAR, REXPTYPE, TENV) 		-> TENV
 	require-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
 	require-itertype(REXP, ITERTYPE, REXPTYPE, TENV)	-> TENV
+	"bag"							-> ITERTYPE
+	"rel"							-> ITERTYPE
 
         container-type(REXPTYPE)				-> REXPTYPE
         

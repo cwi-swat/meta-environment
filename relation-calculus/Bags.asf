@@ -1,36 +1,33 @@
 equations
 
-%%[e1]	EmptyBag = {}
-
 %% --- add($Elem, $Bag)
 
-[a1]	add($Elem, {$Elem*}) = {$Elem, $Elem*}
-
+[a1]	add($Elem, [$Elem*]) = [$Elem, $Elem*]
 
 %% --- del($Elem, $Bag)
 
-[r1]	del($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}
+[r1]	del($Elem, [$Elem*1, $Elem, $Elem*2]) = [$Elem*1, $Elem*2]
 [default-r2]
 	del($Elem, $Bag) = $Bag
 
 %% --- equal(Rel1, Rel2)
 
-[eq-1]       equal({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2}) = equal({$Elem*}, {$Elem*1, $Elem*2})
+[eq-1]       equal([$Elem, $Elem*], [$Elem*1, $Elem, $Elem*2]) = equal([$Elem*], [$Elem*1, $Elem*2])
 
-[eq-2]       equal({$Elem+}, {})               = false
-[eq-3]       equal({}, {$Elem+})               = false
-[eq-4]       equal({}, {})                 = true
+[eq-2]       equal([$Elem+], [])               = false
+[eq-3]       equal([], [$Elem+])               = false
+[eq-4]       equal([], [])                 = true
 [default-eq] 
-             equal({$Elem+1}, {$Elem+2})           = false
+             equal([$Elem+1], [$Elem+2])           = false
 
 %% --- subset(Rel1, Rel22)
 
-[sub-1]      subset({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2})  = subset({$Elem*}, {$Elem*1, $Elem*2})
-[sub-2]      subset({$Elem+}, {})                = false
-[sub-3]      subset({}, {$Elem+})                = true
-[sub-4]      subset({}, {})                  = true
+[sub-1]      subset([$Elem, $Elem*], [$Elem*1, $Elem, $Elem*2])  = subset([$Elem*], [$Elem*1, $Elem*2])
+[sub-2]      subset([$Elem+], [])                = false
+[sub-3]      subset([], [$Elem+])                = true
+[sub-4]      subset([], [])                  = true
 [default-sub]
-             subset({$Elem+1},{$Elem+2})             = false
+             subset([$Elem+1],[$Elem+2])             = false
 
 %% --- ssubset(Rel1, Rel2)
 
@@ -46,62 +43,62 @@ equations
 
 %% --- union1($Elem, Rel)
 
-[un1-1]	in($Elem, {$Elem*}) = true			%% Note does not work with
-	=============================		%% {$Elem*} replaced by var $Bag??
-	union1($Elem, {$Elem*}) = {$Elem*}
+[un1-1]	in($Elem, [$Elem*]) = true			%% Note does not work with
+	=============================		%% [$Elem*] replaced by var $Bag??
+	union1($Elem, [$Elem*]) = [$Elem*]
 
 [default-un1-2]
-	union1($Elem, {$Elem*}) = {$Elem, $Elem*}
+	union1($Elem, [$Elem*]) = [$Elem, $Elem*]
 
 %% --- union2($Bag, $Elem)
 
-[un2-1]	in($Elem, {$Elem*}) = true
+[un2-1]	in($Elem, [$Elem*]) = true
 	=============================
-	union2({$Elem*}, $Elem) = {$Elem*}
+	union2([$Elem*], $Elem) = [$Elem*]
 
 [default-un2-2]
-	union2({$Elem*}, $Elem) = {$Elem*, $Elem}
+	union2([$Elem*], $Elem) = [$Elem*, $Elem]
 
 %% --- union($Bag1, $Bag2)
 
-[un-1] union({}, {$Elem*}) = {$Elem*}
-[un-2] union({$Elem*}, {}) = {$Elem*}
+[un-1] union([], [$Elem*]) = [$Elem*]
+[un-2] union([$Elem*], []) = [$Elem*]
 
-[un-3] {$Elem*4} = union({$Elem*1}, {$Elem*2, $Elem*3})
+[un-3] [$Elem*4] = union([$Elem*1], [$Elem*2, $Elem*3])
        ==============================
-       union({$Elem, $Elem*1}, {$Elem*2, $Elem, $Elem*3}) = {$Elem, $Elem*4}
+       union([$Elem, $Elem*1], [$Elem*2, $Elem, $Elem*3]) = [$Elem, $Elem*4]
 
 [default-un]
-       {$Elem*3} = union({$Elem*1}, {$Elem*2})
+       [$Elem*3] = union([$Elem*1], [$Elem*2])
        ==============================
-       union({$Elem, $Elem*1}, {$Elem*2}) = {$Elem, $Elem*3}
+       union([$Elem, $Elem*1], [$Elem*2]) = [$Elem, $Elem*3]
 
 %% --- diff($Bag1, $Bag2)
 
-[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
+[df-1] diff([$Elem*1, $Elem, $Elem*2], [$Elem*3, $Elem, $Elem*4]) = diff([$Elem*1, $Elem*2], [$Elem*3, $Elem*4])
 
-[default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[default-df-2] diff([$Elem*1], [$Elem*2]) = [$Elem*1]
 
 %% --- $Bag1 inter $Bag2
 
-[in-1] inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4}) = {$Elem*'}
+[in-1] inter([$Elem*1, $Elem*2], [$Elem*3, $Elem*4]) = [$Elem*']
        ==================================
-       inter({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = {$Elem, $Elem*'}
+       inter([$Elem*1, $Elem, $Elem*2], [$Elem*3, $Elem, $Elem*4]) = [$Elem, $Elem*']
 
 [default-in2] 
-       inter({$Elem*1}, {$Elem*2}) = {}
+       inter([$Elem*1], [$Elem*2]) = []
 
 %% --- size($Bag)
 
-[sz-1] size({}) = 0
-[sz-2] size({$Elem, $Elem*}) = 1 + size({$Elem*})
+[sz-1] size([]) = 0
+[sz-2] size([$Elem, $Elem*]) = 1 + size([$Elem*])
 
 %% --- in($Elem, $Bag)
 
-[in-1]  in($Elem, {$Elem*1, $Elem, $Elem*2}) = true
+[in-1]  in($Elem, [$Elem*1, $Elem, $Elem*2]) = true
 
 [default-in-2]
-	in($Elem, {$Elem*}) = false
+	in($Elem, [$Elem*]) = false
 
 %% if
 
