@@ -1,7 +1,12 @@
 $Id$
 
 2003/08/01 (jurgenv@cwi.nl)
- * Set version to  1.1.1
+ * Set version to 1.1.2
+ * Added new functionality to derive the direct dependencies of
+   modules.
+
+2003/08/01 (jurgenv@cwi.nl)
+ * Set version to 1.1.1
 
 2003/07/22 ({markvdb,jurgenv}@cwi.nl)
  * Changed is-valid-modulename-in-path to is-valid-modulename
