@@ -1,0 +1,189 @@
+module Rscript
+
+exports
+
+  sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
+	REXP0 REXP REXPTYPE EQU DESTINATION %% {REXP ","}+ 
+	INITVAR TARGET
+
+  imports RscriptElem basic/Comments
+
+  lexical syntax
+     [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
+      "comment" ~[]* "endcomment"		-> LAYOUT
+
+     "and" | "or" | "implies" | "in" | "notin" |
+     "union" | "inter" | "o" | "x" | "exists" |
+      "forall" | "bool" | "int" | "str" | 
+      "loc" | "bag" | "rel" | "init" | "yield" | 
+      "equations" | "limit" | "initial" | 
+      "satisfy" | "end"				-> RVAR {reject}
+
+  context-free restrictions
+     RVAR -/- [A-Za-z0-9\_\-]
+
+  context-free syntax
+
+     Elem                                    	-> REXP0
+     RVAR                                    	-> REXP0
+%%     REXP # REXP			     	-> REXP0 {avoid}
+     "<" {REXP ","}+ ">"			-> REXP0 {avoid}
+     "{" {REXP ","}* "}"                     	-> REXP0 {avoid}
+
+     "(" REXP ")"                             	-> REXP0
+
+     REXP0					-> REXP 
+
+
+     REXP "and" REXP                         	-> REXP {left}
+     REXP "or" REXP                          	-> REXP {left}
+     REXP "implies" REXP			-> REXP {left}
+     "not" REXP                              	-> REXP
+
+     REXP "in" REXP			     	-> REXP {non-assoc}
+     REXP "notin" REXP			     	-> REXP {non-assoc}
+
+     REXP "==" REXP                          	-> REXP {non-assoc}
+     REXP "!=" REXP                          	-> REXP {non-assoc}
+     REXP "<=" REXP                          	-> REXP {non-assoc}
+     REXP "<" REXP                           	-> REXP {non-assoc}
+     REXP ">=" REXP                          	-> REXP {non-assoc}
+     REXP ">" REXP                           	-> REXP {non-assoc}
+
+     REXP "+" REXP				-> REXP {left}
+     REXP "-" REXP				-> REXP {left}
+     REXP "*" REXP				-> REXP {left}
+     REXP "/" REXP				-> REXP {left}
+
+     REXP "union" REXP                       	-> REXP {left}
+     REXP "inter" REXP                       	-> REXP {left}
+     REXP "\\" REXP                          	-> REXP {left}
+     REXP "o" REXP                           	-> REXP {left}
+     REXP "x" REXP                           	-> REXP {left}
+
+     REXP0 "[" REXP "]"				-> REXP
+     REXP0 "[" REXP "," "-" "]"			-> REXP 
+     REXP0 "[" "-" "," REXP "]"			-> REXP
+
+     REXP "." REXP				-> REXP {left}
+
+     REXP "+"                                	-> REXP
+     REXP "*"                                	-> REXP
+     "#" REXP			    	     	-> REXP
+
+%% Comprehensions
+
+     "{" {REXP ","}+ "|" {GENERATOR ","}+ "}"	-> REXP
+
+     DCLRVAR					-> TARGET
+     REXP					-> TARGET
+
+     TARGET					-> DESTINATION
+     "<" {TARGET ","}+ ">"			-> DESTINATION
+
+     DESTINATION ":" REXP                      	-> SIMPLE-GENERATOR
+     SIMPLE-GENERATOR				-> GENERATOR
+     REXP					-> GENERATOR
+     DESTINATION "<-" REXP			-> GENERATOR {prefer}
+
+%% Quantifiers
+
+     "exists" "(" SIMPLE-GENERATOR "|" REXP ")" -> REXP
+     "forall" "(" SIMPLE-GENERATOR "|" REXP ")"	-> REXP
+
+%% Let expressions
+
+     REXP "where" RSTAT+ "end" "where"		-> REXP
+
+%% Functions
+
+     RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
+
+
+%% Types
+
+     "bool" | "int" | "str" | "loc"	     	-> ElemType
+     ElemType                                	-> REXPTYPE
+     "<" {REXPTYPE ","}+">"			-> REXPTYPE
+     "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
+     "rel" "[" {REXPTYPE ","}+ "]"		-> REXPTYPE
+     RVAR				     	-> REXPTYPE	%% user-defined type
+     "&" RVAR					-> REXPTYPE	%% type parameter
+
+%% Declarations and Statements
+
+     REXPTYPE RVAR			      	-> DCLRVAR
+
+     DCLRVAR				      	-> RSTAT
+
+     "type" RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
+     "type" RVAR "=" REXPTYPE			-> RSTAT
+
+     DCLRVAR "=" REXP                         	-> INITVAR
+     DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?
+     INITVAR					-> RSTAT
+
+     DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
+
+     "assert" String ":"  REXP			-> RSTAT
+
+     "yield" RVAR				-> RSTAT
+
+%% Highly experimental sets of equations
+     RVAR "=" REXP				-> EQU
+
+     "equations" ("(" "limit" Integer ")")?
+	"initial" INITVAR+
+        "satisfy"  EQU+
+     "end" "equations"				 -> RSTAT
+
+%% Complete Rscript
+
+     RSTAT*                             -> RSCRIPT
+
+  context-free priorities
+
+    {	REXP "+" -> REXP
+       	REXP "*" -> REXP
+    }					>
+%%    {	REXP "[" REXP "]" -> REXP
+%%	REXP "[" REXP "," "-" "]"  -> REXP
+%%	REXP "[" "-" "," REXP  "]" -> REXP
+%%    }					>
+
+    REXP "." REXP -> REXP		>
+    REXP "o" REXP -> REXP		>
+    REXP "x" REXP -> REXP		>
+
+    REXP "inter" REXP -> REXP		>
+    REXP "union" REXP -> REXP		>
+    REXP "\\" REXP -> REXP		>
+    "#" REXP -> REXP 			> 
+
+    REXP "*" REXP -> REXP 		>
+    REXP "/" REXP -> REXP 		>
+
+    {	   
+     	REXP "+" REXP -> REXP
+     	REXP "-" REXP -> REXP 
+    } 					> 
+
+    {	REXP "in" REXP -> REXP
+	REXP "notin" REXP -> REXP  
+	REXP "<=" REXP -> REXP 
+       	REXP "<" REXP -> REXP
+       	REXP ">=" REXP -> REXP
+       	REXP ">" REXP -> REXP
+       	REXP "!=" REXP -> REXP  
+      	REXP "==" REXP -> REXP  
+    }   				>
+    REXP "and" REXP -> REXP 		>
+    REXP "or" REXP -> REXP 		>
+    "not" REXP -> REXP			>
+    REXP "implies" REXP -> REXP
+ 
+
+     
+
+
+     

@@ -1,0 +1,60 @@
+module Bags[Elem]
+
+exports 
+imports basic/Booleans
+imports basic/Integers
+
+context-free start-symbols
+   Bag[[Elem]]
+   BagIterator[[Elem]]
+
+context-free syntax
+   elem-equal(Elem, Elem)			-> Boolean
+   elem-greater(Elem, Elem)			-> Boolean
+   elem-greater-equal(Elem, Elem)		-> Boolean
+
+context-free syntax
+   "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
+   "empty-bag"					-> Bag[[Elem]]
+
+   Bag[[Elem]]					-> BagIterator[[Elem]]
+   mk-iterator(Bag[[Elem]])			-> BagIterator[[Elem]]
+   is-empty-iter(BagIterator[[Elem]])		-> Boolean
+   head(BagIterator[[Elem]])			-> Elem
+   tail(BagIterator[[Elem]])			-> BagIterator[[Elem]]
+
+   insert(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+   delete(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+
+   sort(Bag[[Elem]])				-> Bag[[Elem]]
+   merge(Bag[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]
+   divide(Boolean, Bag[[Elem]])			-> <Bag[[Elem]], Bag[[Elem]]>
+
+   equal(Bag[[Elem]], Bag[[Elem]])           	-> Boolean
+   subset(Bag[[Elem]], Bag[[Elem]])          	-> Boolean
+   strict-subset(Bag[[Elem]], Bag[[Elem]])   	-> Boolean
+   superset(Bag[[Elem]], Bag[[Elem]])        	-> Boolean
+   strict-superset(Bag[[Elem]], Bag[[Elem]])	-> Boolean
+
+   union1(Elem, Bag[[Elem]])			-> Bag[[Elem]]
+   union2(Bag[[Elem]], Elem)			-> Bag[[Elem]]
+   union(Bag[[Elem]], Bag[[Elem]])           	-> Bag[[Elem]]
+   inter(Bag[[Elem]], Bag[[Elem]])          	-> Bag[[Elem]]
+   diff(Bag[[Elem]], Bag[[Elem]])            	-> Bag[[Elem]]
+
+   size(Bag[[Elem]])                         	-> Integer
+   in(Elem, Bag[[Elem]])                   	-> Boolean
+
+   "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
+                                           	-> Bag[[Elem]]
+
+hiddens
+  imports basic/Comments
+
+  variables
+    "$Bag" [0-9\']*           -> Bag[[Elem]]
+    "$BagIter" [0-9\']*       -> BagIterator[[Elem]]
+    "$Elem" [0-9\']*          -> Elem
+    "$Elem*" [0-9\']*         -> { Elem ","}*
+    "$Elem+" [0-9\']*         -> { Elem ","}+
+    "$Bool" [0-9\']*          -> Boolean

@@ -1,0 +1,25 @@
+module ExtendedIntegers
+
+imports basic/Integers
+
+exports
+   context-free syntax
+	remainder(Natural, Natural) -> Natural
+	ndiv(Natural, Natural)	    -> Natural
+
+	Integer "/" Integer	    -> Integer
+	max(Integer, Integer)	    -> Integer
+	min(Integer, Integer)	    -> Integer
+
+	Integer "==" Integer	    -> Boolean
+
+
+   context-free priorities
+	Integer "/" Integer -> Integer > Integer "*" Integer -> Integer
+hiddens
+   imports basic/Comments
+
+   variables	
+    "$Nat" [0-9\']*      -> Natural 
+    "$Nat-con" [0-9\']*  -> NatCon
+    "$Int" [0-9\']*      -> Integer

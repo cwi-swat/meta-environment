@@ -1,0 +1,282 @@
+
+
+Ha die Mark,
+
+Ik heb eens gespeeld met mijn huidige button definities en een 
+compactere notatie geprobeerd.  Hierbij een eerste poging.
+
+-- Paul
+
+Uitgangspunten:
+
+(a) De gebruiker ziet alleen (impliciet) getypeerde variabelen.
+    Het stack model is onzichtbaar.
+(b) Er kan zoveel mogelijk gecontroleerd worden. Hiervoor is alleen
+    zeer bescheiden type-inferentie nodig. We maken de scripts zo
+    dat dit makkelijk is.
+(c) Leesbaarheid.
+(d) Daar waar mogelijk worden acties automatisch gegenereerd.
+(e) We behouden zoveel als mogelijk is de functionaliteit van de huidige
+    buttondefinities.
+(f) Het verschil tussen text/term, packed/unpacked, e.d. wordt (zoveel
+    mogelijk) voor de gebruiker verborgen.
+
+Pm. In deze voorbeelden kom ik de Booleans nog niet tegen. Overigens
+hebben we al een ingebouwde soort, n.l. List!
+
+-----------------------------------------------------------------
+Current: 
+
+button("Rscript",
+        [description(term-editor, menu(["Rscript", "Check"]))],
+        [push-active-module,
+         get-root,
+	 push-string("RSCRIPT"),
+	 check-sort,
+	 push-term(true),
+	 if-equal([
+         	apply("check-rscript", "List", 1),
+         	push-modulename("RscriptChecker"),
+         	reduce,
+         	unparse,
+         	push-active-module,
+         	show-list],
+		[ message("Not an Rscript")
+		]
+         )
+        ])
+
+New:
+
+term-editor for "Rscript" {
+   menu "Rscript" button "Check" {
+
+	in := apply check-rscript(RSCRIPT) -> List to root; 
+	out := reduce("RscriptChecker", tin);
+	show-list(out);
+   }
+}
+
+-----------------------------------------------------------------
+Current:
+
+button("Rscript",
+          [description(term-editor, menu(["Rscript","Run"]))],
+          [push-active-module,
+           get-root,
+           push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+           	      	apply("check-rscript", "List", 1),
+           		push-modulename("RscriptChecker"),
+           		reduce,
+	   		dup,
+           		push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
+           		parse("RscriptChecker", "List"),
+           		if-equal([	push-active-module,
+                     			get-root,
+		     			apply("eval-rscript", "RSTORE", 1),
+		     			exists("RscriptCalculator"),
+		     			unpack-tree,
+		     			execute-action("RscriptCalculator -t"),
+                     			push-filename("RscriptCalculator.results"),
+                     			push-modulename("Rstore"),
+                     			close-editor,
+                     			push-filename("RscriptCalculator.results"),
+                     			push-modulename("Rstore"),
+                     			activate-editor],
+
+                    		[	message("Rscript contains type error(s)"),
+		     			unparse,
+		     			push-active-module,
+		     			show-list
+                    		])
+		],
+		[	message("Not an Rscript")
+		])
+           ]
+       )
+
+New: 
+
+term-editor for "Rscript" {
+   menu "Rscript" button "Run" {
+
+	tcin := apply check-rscript(RSCRIPT) -> List to root; 
+	tcout := reduce("RscriptChecker", tcin);
+	tcok := parse-string("RscriptChecker", List, "[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]");
+        if tcout = tcok 
+	then
+		evin := apply eval-rscript(RSCRIPT) -> RSTORE to root;
+		evout := execute("RscriptCalculator -t", evin);
+		close-editor("Rstore", "RscriptCalculator.results");
+		open-editor("Rstore", "RscriptCalculator.results", evout);
+	else
+		show-list(tcout)
+	fi
+   }
+}
+
+-----------------------------------------------------------------
+
+Current:
+
+button("Rscript",
+          [description(term-editor, menu(["Rscript","Run with Rstore"]))],
+          [push-active-module,
+           get-root,
+           push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			push-filename("RSTORE.rstore"),
+			dup,
+			push-string(""),
+			if-equal([	message("Rstore does not exist")
+				 ],
+				 [
+					message("Using fixed Rstore file RSTORE.rstore"),
+					parse("Rstore", "RSTORE"),
+					apply("check-rscript-with-rstore", "List", 2),
+					push-modulename("RscriptChecker"),
+					reduce,
+					dup,
+					push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
+					parse("RscriptChecker", "List"),
+					if-equal([		
+							push-active-module,
+							get-root, 
+							push-filename("RSTORE.rstore"),
+							parse("RscriptCalculator", "RSTORE"),
+							apply("eval-rscript-with-rstore", "RSTORE", 2),
+							exists("RscriptCalculator"),
+							unpack-tree,
+							message("Executing Rscript ..."),
+							execute-action("RscriptCalculator -t"),
+							message("Execution of Rscript completed"),
+							push-filename("RscriptCalculator.results"),
+							push-modulename("Rstore"),
+							close-editor,
+							push-filename("RscriptCalculator.results"),
+							push-modulename("Rstore"),
+							activate-editor
+
+							],
+						  [	message("Rscript contains type error(s)"),
+							unparse,
+							push-active-module,
+							show-list
+						  ])
+				  ])
+		    ],
+		    [ message("Not an Rscript")
+		    ])
+          ])
+
+New:
+
+term-editor for "Rscript" {
+   menu "Rscript" button "Run with Rstore" {
+
+	rstore := parse-file("RscriptCalculator", RSTORE, "RSTORE.rstore");
+	tcin := apply check-rscript-with-store(RSCRIPT, RSTORE) to root, rstore;
+	tcout := reduce("RscriptChecker", tcin);
+	tcok := parse-string("RscriptChecker", List, "[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]");
+        if tcout = tcok 
+	then
+		evin := apply eval-rscript-with-rstore(RSCRIPT, RSTORE) to root, rstore;
+		message("Executing Rscript ...");
+		evout := execute("RscriptCalculator -t");
+		close-editor("Rstore", "RscriptCalculator.results");
+		open-editor("Rstore", "RscriptCalculator.results", evout);
+	else
+		message("Rscript contains error(s)");
+		show-list(tcout);
+	fi
+}
+
+-----------------------------------------------------------------
+Current:
+
+
+button("Rstore",
+  	  [description(term-editor, menu(["Rstore", "View"]))],
+          [push-active-module,
+           get-focus,
+	   push-string("BoolCon"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			 apply("export-graph-bool", "Graph", 1),
+			 push-modulename("ExportGraph"),
+			 reduce,
+			 unparse,
+			 push-filename("Graph.graph"),
+			 save-text
+		    ],
+		    [	push-string("NatCon"),
+			check-sort,
+			push-term(true),
+			if-equal([
+					apply("export-graph-int", "Graph", 1),
+					push-modulename("ExportGraph"),
+					reduce,
+					unparse,
+					push-filename("Graph.graph"),
+					save-text
+				],
+				[ 	push-string("StrCon"),
+					check-sort,
+					push-term(true),
+					if-equal([
+							apply("export-graph-str", "Graph", 1),
+							push-modulename("ExportGraph"),
+							reduce,
+							unparse,
+							push-filename("Graph.graph"),
+							save-text
+						 ],
+						 [	push-string("Bag[[Elem]]"),
+							check-sort,
+							push-term(true),
+							if-equal([
+									apply("export-graph-bag", "Graph", 1),
+									push-modulename("ExportGraph"),
+									reduce,
+									unparse,
+									push-filename("Graph.graph"),
+									save-text
+								 ],
+								 [
+									message("Cannot view selected focus")
+								])
+						])
+				])
+			])			 
+		    ])
+
+
+term-editor for "Rstore" {
+   menu "Rstore" button "View" {
+
+	if focus isa BoolCon
+	then
+		in := apply export-graph-bool(BoolCon) -> Graph to focus
+	elseif focus isa NatCon
+		in := apply export-graph-int(NatCon) -> Graph to focus
+	elseif focus isa StrCon
+	       in := apply export-graph-str(StrCon) -> Graph to focus 
+	elseif focus isa Bag[[Elem]]
+	then
+		in := apply export-graph-bag(Bag[[Elem]]) -> Graph to focus 	
+	else
+		error("Cannot view selected focus");
+		exit
+	fi;
+	out := reduce("ExportGraph", in);
+	outpp := unparse(out);
+	save-text-file("Graph.graph", outpp);
+   }
+}
+-----------------------------------------------------------------   
