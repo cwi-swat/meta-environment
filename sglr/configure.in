@@ -32,7 +32,7 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR      ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-dnl Require ToolBus 
+dnl Optional package ToolBus 
 AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
    [  --with-toolbus=DIR      ToolBusLib is in DIR],
    [  AC_MSG_WARN([ToolBus package not found. It is required when building \
