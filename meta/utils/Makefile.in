@@ -71,7 +71,7 @@ OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
 OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES      = libutils-*.a
+CLEANFILES      = libutils.a
 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
@@ -97,27 +97,15 @@ test:	all
 %-prof.o: %.c
 	gcc -Wall -pg $(INCLUDES) -c -o $@ $<
 
-libutils-cc.a: meta-utils-cc.o module-utils-cc.o
-	$(AR) cr $@ meta-utils-cc.o module-utils-cc.o
+libutils.a: meta-utils.o module-utils.o
+	$(AR) cr $@ meta-utils.o module-utils.o
 	$(RANLIB) $@
 
-libutils-gcc.a: meta-utils-gcc.o module-utils-gcc.o
-	$(AR) cr $@ meta-utils-gcc.o module-utils-gcc.o
-	$(RANLIB) $@
+meta-paths: meta-paths.o libutils.a
+	${CC} -o $@ meta-paths.o libutils.a
 
-libutils-dbg.a: meta-utils-dbg.o module-utils-dbg.o
-	$(AR) cr $@ meta-utils-dbg.o module-utils-dbg.o
-	$(RANLIB) $@
-
-libutils-prof.a: meta-utils-prof.o module-utils-prof.o
-	$(AR) cr $@ meta-utils-prof.o module-utils-prof.o
-	$(RANLIB) $@
-
-meta-paths: meta-paths-${CC}.o libutils-${CC}.a
-	${CC} -o $@ meta-paths-${CC}.o libutils-${CC}.a
-
-imports: imports-${CC}.o libutils-${CC}.a
-	${CC} -o $@ imports-${CC}.o libutils-${CC}.a $(LIBS)
+imports: imports.o libutils.a
+	${CC} -o $@ imports.o libutils.a $(LIBS)
 
 
 uninstall:
