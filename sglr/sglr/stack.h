@@ -66,32 +66,33 @@
 typedef ATerm tree;
 
 typedef struct link {
-  tree          tree;
-  struct stack  *stack;
-  ATbool        rejected;
+  tree           tree;
+  struct stack   *stack;
+  ATbool         rejected;
 } st_link;
 
 typedef struct links {
-  st_link       *head;
-  struct links  *tail;
+  st_link        *head;
+  struct links   *tail;
 } st_links;
 
 typedef struct stack {
-  state         state;
+  state          state;
 #ifdef DEBUG
-  struct stack  *parent;
+  struct stack   *parent;
 #endif
-  struct stack  *kid;
-  st_links      *links;
+  struct stack  **kids;
+  int            kidcount;
+  st_links       *links;
 /*
   ATbool        rejected;
  */
-  ATbool        protected;
+  ATbool         protected;
 } stack;
 
 typedef struct stacks {
-  stack         *head;
-  struct stacks *tail;
+  stack          *head;
+  struct stacks  *tail;
 } stacks;
 
 

@@ -679,7 +679,7 @@ void SG_Shifter(void)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
 
   active_stacks = new_active_stacks;
-} /* shifter */
+} /*  Shifter  */
 
 
 /*
@@ -699,7 +699,12 @@ void SG_Shifter(void)
 
 void SG_AddStackHist(stack *parent, stack *kid)
 {
-  parent->kid = kid;
+  parent->kidcount++;
+  if(parent->kidcount == 1)    /*  First kid  */
+    parent->kids = SG_Malloc(sizeof(stack *));
+  else                         /*  Consecutive kids  */
+    parent->kids = SG_Realloc(parent->kids, parent->kidcount * sizeof(stack *));
+  parent->kids[parent->kidcount - 1] = kid;
 }
 
 void SG_PropagateReject(stack *st)
@@ -709,53 +714,62 @@ void SG_PropagateReject(stack *st)
   ATermInt  cmpstid;
   int       oldlen, newlen;
 
-  while(st != NULL) {
-    compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
-    cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
-    amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
-    if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
-      if (SG_DEBUG)
-        ATfprintf(SGlog(), "Reject: resolving an ambiguity cluster...\n");
-      compost = ATremoveAnnotation(compost, SG_ApplLabel());
-      trms = (ATermList) ATgetFirst(amb);
-      oldlen = ATgetLength(trms);
-      idxs = oldidxs = (ATermList) ATelementAt(amb, 1);
-      while(trms && !ATisEmpty(trms)) {
-        t = ATgetFirst(trms); trms = ATgetNext(trms);
-        i = ATgetFirst(idxs); idxs = ATgetNext(idxs);
-        if(ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
-          if (SG_DEBUG)
-            ATfprintf(SGlog(), "Removed from ambiguity cluster: %t\n", t);
-         } else {
-          if (SG_DEBUG)
-            ATfprintf(SGlog(), "Keeping in ambiguity cluster: %t\n", t);
-          newtrms = ATinsert(newtrms, t);
-        }
+  if(st == NULL)
+    return;
+
+  compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
+  cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
+  amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
+  if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
+    if (SG_DEBUG)
+      ATfprintf(SGlog(), "Reject: resolving an ambiguity cluster...\n");
+    compost = ATremoveAnnotation(compost, SG_ApplLabel());
+    trms = (ATermList) ATgetFirst(amb);
+    oldlen = ATgetLength(trms);
+    idxs = oldidxs = (ATermList) ATelementAt(amb, 1);
+    while(trms && !ATisEmpty(trms)) {
+      t = ATgetFirst(trms); trms = ATgetNext(trms);
+      i = ATgetFirst(idxs); idxs = ATgetNext(idxs);
+      if(ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
+        if (SG_DEBUG)
+          ATfprintf(SGlog(), "Removed from ambiguity cluster: %t\n", t);
+       } else {
+        if (SG_DEBUG)
+          ATfprintf(SGlog(), "Keeping in ambiguity cluster: %t\n", t);
+        newtrms = ATinsert(newtrms, t);
       }
-      /*  Update the full ambiguity cluster  */
-      amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
-      for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
-        SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
-      }
-      newlen = ATgetLength(newtrms);
-/*
-    An ambiguity resolved -- nice, but when yielding (which is driven
-    by the maximum of possible ambs -- we might need to substitute
-    a rejected term by its non-rejected counterpart in the ambiguity
-    cluster
-*/
-      if(newlen > 0) {
-        /*  Don't reject this link/propagate if part of this amb-cluster
-            is still valid
-         */
-        return;
-      } /*  If no terms were left in the amb-cluster: reject & propagate  */
     }
-    if (SG_DEBUG && st->kid)
-      ATfprintf(SGlog(), "Reject: propagating (%d->%d)\n",
-                SG_ST_STATE(st), SG_ST_STATE(st->kid));
-    SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
-    st = st->kid;
+    /*  Update the full ambiguity cluster  */
+    amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
+    for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
+      SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
+    }
+    newlen = ATgetLength(newtrms);
+/*
+  An ambiguity resolved -- nice, but when yielding (which is driven
+  by the maximum of possible ambs -- we might need to substitute
+  a rejected term by its non-rejected counterpart in the ambiguity
+  cluster
+*/
+    if(newlen > 0) {
+      /*  Don't reject this link/propagate if part of this amb-cluster
+          is still valid
+       */
+      return;
+    } /*  If no terms were left in the amb-cluster: reject & propagate  */
+  }
+
+  /*  Propagate for all this stack's kids  */
+  if(st->kidcount > 0) {
+    int  kididx;
+
+    for(kididx = 0; kididx < st->kidcount; kididx++) {
+      if (SG_DEBUG)
+        ATfprintf(SGlog(), "Reject: propagating (%d->%d)\n",
+                  SG_ST_STATE(st), SG_ST_STATE(st->kids[kididx]));
+      SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
+      SG_PropagateReject(st->kids[kididx]);
+    }
   }
 }
 
@@ -787,12 +801,13 @@ ATfprintf(stderr, "unreject: %xd contains an amb link: %t\n", st, l);
  *  A few diagnostic routines (for debugging purposes)
  */
 
-void SG_ShowStacks(stacks *sts)
+void SG_ShowStack(stack *st, int depth);
+
+void SG_ShowLinks(st_links *lks, int depth)
 {
-  if(sts == NULL) return;
-  while(sts != NULL) {
-    SG_ShowStack(head(sts),0);
-    sts = tail(sts);
+  for (; lks != NULL; lks = tail(lks)) {
+    fprintf(stderr, "%*.*s--%xd-->\n", 2*depth, 2*depth, "", (int)head(lks));
+    SG_ShowStack(SG_LK_STACK(head(lks)), depth+1);
   }
 }
 
@@ -803,22 +818,31 @@ void SG_ShowStack(stack *st, int depth)
   SG_ShowLinks(SG_ST_LINKS(st), depth+1);
 }
 
-void SG_ShowLinks(st_links *lks, int depth)
+void SG_ShowStacks(stacks *sts)
 {
-  for (; lks != NULL; lks = tail(lks)) {
-    fprintf(stderr, "%*.*s--%xd-->\n", 2*depth, 2*depth, "", (int)head(lks));
-    SG_ShowStack(SG_LK_STACK(head(lks)), depth+1);
+  if(sts == NULL) return;
+  while(sts != NULL) {
+    SG_ShowStack(head(sts),0);
+    sts = tail(sts);
   }
 }
 
 void SG_ShowStackOffspring(stack *st)
 {
-  while(st != NULL && st->kid != NULL) {
-    ATfprintf(stderr, "\t%d%s created %d%s\n",
-                     SG_ST_STATE(st), SG_Rejected(st)?"r":"",
-                     SG_ST_STATE(st->kid), SG_Rejected(st->kid)?"r":"");
-    st = st->kid;
+  int  kididx;
+
+  if(st == NULL || st->kidcount == 0)
+    return;
+
+  ATfprintf(stderr, "State %d%s created...\n",
+            SG_ST_STATE(st), SG_Rejected(st)?"r":"");
+  for(kididx = 0; kididx < st->kidcount; kididx++) {
+    ATfprintf(stderr, "\t... %d%s\n",
+              SG_ST_STATE(st->kids[kididx]),
+              SG_Rejected(st->kids[kididx])?"r":"");
   }
+  for(kididx = 0; kididx < st->kidcount; kididx++)
+    SG_ShowStackOffspring(st->kids[kididx]);
 }
 
 void SG_ShowStackAncestors(stack *st)

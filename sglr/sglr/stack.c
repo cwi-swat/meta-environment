@@ -42,16 +42,17 @@ stack *SG_NewStack(state s, stack *ancestor) {
   stack *res;
 
   if((res = SG_Malloc(sizeof(stack))) != NULL) {
-SG_AllocStats(INC);
+    SG_AllocStats(INC);
     res->state = s;
 #ifdef DEBUG
     res->parent = ancestor;
 #endif
-    res->kid       = NULL;
+    res->kids      = NULL;
+    res->kidcount  = 0;
     res->links     = NULL;
 /*
     res->rejected = ATfalse;
-*/
+ */
     res->protected = ATtrue;
   }
   return res;
@@ -238,6 +239,7 @@ void SG_DeleteStack(stack *st)
     SG_free(curlks);
     SG_free(lk);
   }
+  SG_free(st->kids);
   SG_free(st);
 }
 
