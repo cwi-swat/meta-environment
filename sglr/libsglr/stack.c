@@ -165,7 +165,8 @@ list *SG_MallocPool(list **free_list, size_t dtsize, size_t chunksize)
     pool = SG_Malloc(chunksize, dtsize);
     pool[0] = (list *) pool;
     for(i=1; i<chunksize; i++) {
-      pool[i] = pool[i-1]->tail = (list *) ((size_t)pool[i-1] + (size_t)dtsize);
+      pool[i] = (list *) ((size_t)pool[i-1] + (size_t)dtsize);
+      pool[i-1]->tail = pool[i];
     }
     pool[chunksize-1]->tail = NULL;
     *free_list = *pool;
@@ -192,9 +193,13 @@ stack *SG_MallocStack(void)
     pool = SG_Malloc(SG_STACKMEMCHUNK, sizeof(stack));
     pool[0] = (stack *) pool;
     for(i=1; i< SG_STACKMEMCHUNK; i++) {
+      pool[i] = (stack *)((size_t)pool[i-1] + (size_t)sizeof(stack));
+      pool[i-1]->links = (st_links *) pool[i];
+/*
       pool[i]
       = (stack *) pool[i-1]->links
-      = (st_link *) ((size_t)pool[i-1] + (size_t)sizeof(stack));
+      = (st_link *) ((size_t)pool[i-1] + (size_t)sizeof(stack)); 
+*/
     }
     pool[SG_STACKMEMCHUNK-1]->links = NULL;
     sg_stack_pool_free = *pool;
@@ -216,9 +221,8 @@ stacks *SG_MallocStacks(void)
     pool = SG_Malloc(SG_STACKMEMCHUNK, sizeof(stacks));
     pool[0] = (stacks *) pool;
     for(i=1; i< SG_STACKSMEMCHUNK; i++) {
-      pool[i]
-      = pool[i-1]->tail
-      = (stacks *) ((size_t)pool[i-1] + (size_t)sizeof(stacks));
+      pool[i] = (stacks *) ((size_t)pool[i-1] + (size_t)sizeof(stacks));
+      pool[i-1]->tail = pool[i];
     }
     pool[SG_STACKSMEMCHUNK-1]->tail = NULL;
     sg_stacks_pool_free = *pool;
@@ -240,9 +244,8 @@ st_link *SG_MallocLink(void)
     pool = SG_Malloc(SG_LINKMEMCHUNK, sizeof(st_link));
     pool[0] = (st_link *) pool;
     for(i=1; i< SG_LINKMEMCHUNK; i++) {
-      pool[i]
-      = (st_link *) pool[i-1]->stack
-      = (stack *) ((size_t)pool[i-1] + (size_t)sizeof(st_link));
+      pool[i] = (st_link *)((size_t)pool[i-1] + (size_t)sizeof(st_link));
+      pool[i-1]->stack = (stack *)pool[i];
     }
     pool[SG_LINKMEMCHUNK-1]->stack = NULL;
     sg_link_pool_free = *pool;
@@ -264,9 +267,8 @@ st_links *SG_MallocLinks(void)
     pool = SG_Malloc(SG_LINKSMEMCHUNK, sizeof(st_link));
     pool[0] = (st_links *) pool;
     for(i=1; i< SG_LINKSMEMCHUNK; i++) {
-      pool[i]
-      = pool[i-1]->tail
-      = (st_links *) ((size_t)pool[i-1] + (size_t)sizeof(st_links));
+      pool[i] = (st_links *) ((size_t)pool[i-1] + (size_t)sizeof(st_links));
+      pool[i-1]->tail = pool[i];
     }
     pool[SG_LINKSMEMCHUNK-1]->tail = NULL;
     sg_links_pool_free = *pool;
