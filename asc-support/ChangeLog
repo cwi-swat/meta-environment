@@ -1,6 +1,10 @@
 $Id$
 
+2001/07/03 (jurgenv@cwi.nl)
+ * Several bugfixes in list support
+
 2001/07/02 (jurgenv@cwi.nl)
+ * Version 0.8
  * Fully implemented AsFix2ME version of asc-support
 
 2001/06/21 (jurgenv@cwi.nl)
