@@ -1,0 +1,24 @@
+module basic/AreaOperations
+
+imports basic/Areas
+imports basic/NatCon
+
+exports
+
+context-free syntax
+  get-begin-line(Area) -> NatCon
+  get-begin-column(Area) -> NatCon
+  get-end-line(Area) -> NatCon
+  get-end-column(Area) -> NatCon
+  get-offset(Area) -> NatCon
+  get-length(Area) -> NatCon
+
+hiddens
+  imports basic/Whitespace
+  variables
+    "BeginLine" -> NatCon
+    "BeginColumn" -> NatCon
+    "EndLine" -> NatCon
+    "EndColumn" -> NatCon
+    "Offset" -> NatCon
+    "Length" -> NatCon

@@ -1,23 +1,14 @@
 module basic/Locations
 
-imports basic/Strings
-imports basic/Integers
+imports basic/Areas
+imports basic/StrCon
 
 exports
 
-sorts Location Area
- 
+sorts Location
 context-free syntax
 
-"location" "(" filename:StrCon "," Area ")" -> Location {cons("location")}
-"no-location"                               -> Location {cons("no-location")}
+  "file" "(" filename:StrCon ")" -> Location {cons("file")}
 
-"area" "(" begin-line:NatCon    "," 
-           begin-column:NatCon  ","
-           end-line:NatCon      ","
-           end-column:NatCon    ","
-           offset:NatCon        ","
-           length:NatCon 
-       ")" -> Area {cons("area")}
-
-"no-area" -> Area {cons("no-area")}
+  "area-in-file" "(" filename:StrCon "," Area ")"
+    -> Location {cons("area-in-file")}

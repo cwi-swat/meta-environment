@@ -8,5 +8,4 @@ SUBDIRS=\
 	cpp\
 	pico\
 	sdf2\
-	box\
-	c 
+	box

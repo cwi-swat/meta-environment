@@ -1,0 +1,17 @@
+module basic/Areas
+
+imports basic/NatCon
+
+exports
+
+sorts Area
+context-free syntax
+
+  "area" "("
+    begin-line:NatCon "," 
+    begin-column:NatCon ","
+    end-line:NatCon ","
+    end-column:NatCon ","
+    offset:NatCon ","
+    length:NatCon ")"
+  -> Area {cons("area")}

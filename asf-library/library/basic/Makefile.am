@@ -1,2 +1,3 @@
-include $(top_srcdir)/library/make_rules
+# $Id$
 
+include $(top_srcdir)/library/make_rules

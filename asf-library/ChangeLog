@@ -4,6 +4,9 @@ Fri Mar  5 13:55:46 CET 2004 <kooiker@cwi.nl>
  * library/languages/box/syntax/Pretty.sdf:
    - added generic prettyprint module 
 
+Tue Mar  2 11:39:49 CET 2004 <jurgenv@cwi.nl>
+ * Removed C syntax from languages
+
 Fri Feb 27 15:37:00 CET 2004 <{jong,kooiker}@cwi.nl>
  * library/basic:
    refactor LocationOperations out of Locations.sdf

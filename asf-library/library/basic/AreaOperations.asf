@@ -1,0 +1,19 @@
+equations
+
+[get-begin-line-0]
+  get-begin-line(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = BeginLine
+
+[get-begin-column-0]
+  get-begin-column(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = BeginColumn
+
+[get-end-line-0]
+  get-end-line(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = EndLine
+
+[get-end-column-0]
+  get-end-column(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = EndColumn
+
+[get-offset-0]
+  get-offset(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = Offset
+
+[get-length-0]
+  get-length(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = Length
