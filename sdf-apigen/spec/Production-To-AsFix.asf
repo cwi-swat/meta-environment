@@ -165,7 +165,7 @@ equations
 equations
 
 [left-attr]        
-attr-to-asfix($Attr) = uqliteral("a""s""s""o""c")(uqliteral("l""e""f""t"))
+attr-to-asfix(left) = uqliteral("a""s""s""o""c")(uqliteral("l""e""f""t"))
 
 [right-attr]       
 attr-to-asfix(right) = uqliteral("a""s""s""o""c")(uqliteral("r""i""g""h""t"))
@@ -189,5 +189,5 @@ attr-to-asfix(prefer) = uqliteral("p""r""e""f""e""r")
 attr-to-asfix(cons($ATerm)) = uqliteral("t""e""r""m")(cons($ATerm))
 
 [default-term-attr] 
-build-asfix-attr($ATerm) = uqliteral("t""e""r""m")($ATerm)
+attr-to-asfix($ATerm) = uqliteral("t""e""r""m")($ATerm)
 
