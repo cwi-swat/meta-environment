@@ -7,11 +7,8 @@ in
   execute(dot-adapter, D?) .
   (
     rec-msg(layout-graph(Graph?)) .
-    printf("layouting graph: %t\n", Graph) .
     snd-eval(D, input-term(Graph)) .
-    printf("waiting for output\n") .
     rec-value(D, output(Graph?)) .
-    printf("output received: %t\n", Graph) .
     snd-msg(graph-layouted(Graph))
   ) * delta
 endlet
