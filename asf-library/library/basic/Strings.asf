@@ -13,7 +13,7 @@ subst(
 subst(
 	strcon(\" match \"),
 	strcon(\" replacement \"),
-	strcon(\" char*1 replacement \"))
+	strcon(\" char*1 replacement char*2 \"))
 
 [default-done]
 subst(Str1,Str2,Str3) = Str3
