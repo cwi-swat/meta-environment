@@ -471,6 +471,11 @@ static ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
   return ATfalse;
 }
 
+ATbool SGGtrPriority(parse_table *pt, label l0, label l1)
+{
+  return SG_GtrPriority(pt, ATmakeInt(l0), ATmakeInt(l1));
+}
+
 static int SG_ProdType_AFun(AFun f)
 {
   if (f == SG_Regular_AFun) {

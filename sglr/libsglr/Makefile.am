@@ -9,9 +9,9 @@ INCLUDES		= -I$(ATERM)/include \
 
 lib_LIBRARIES		= libsglr.a
 
-include_HEADERS		= sglr.h
+include_HEADERS		= sglr.h parse-table.h
 
-noinst_HEADERS		= forest.h mem-alloc.h parse-table.h parser.h \
+noinst_HEADERS		= forest.h mem-alloc.h parser.h \
 			rsrc-usage.h sglr-strings.h sglr.h stack.h \
 			bitmap.h ambi-tables.h marking.h
 

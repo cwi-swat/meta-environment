@@ -290,6 +290,42 @@ production SG_LookupProduction(parse_table *pt, label l)
 }
 
 /*}}}  */
+/*{{{  production SG_LookupBracketProd(parse_table *pt, PT_Symbol symbol) */
+
+production SG_LookupBracketProd(parse_table *pt, PT_Symbol symbol)
+{
+  int i;
+  int maxProd = SG_PT_NUMPRODS(pt);
+
+  for (i = 0; i <= maxProd; i++) {
+    PT_Production p = PT_ProductionFromTerm((ATerm)SG_PT_PRODUCTIONS(pt)[i]);
+    PT_Symbol rhs = PT_getProductionRhs(p);
+    if (PT_isEqualSymbol(symbol, rhs) &&
+        PT_hasProductionBracketAttr(p)) {
+      return (production)PT_ProductionToTerm(p);
+    }
+  }
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATermList SG_LookupGtrPriority(parse_table *pt, label l) */
+/*{{{  label SG_LookupLabel(parse_table *pt, production p) */
+
+label SG_LookupLabel(parse_table *pt, production p)
+{
+  int i;
+  int maxProd = SG_PT_NUMPRODS(pt);
+
+  for (i = 0; i <= maxProd; i++) {
+    if (ATisEqual(p, SG_PT_PRODUCTIONS(pt)[i])) {
+      return i+SG_PROD_START;
+    }
+  }
+  return -1;
+}
+
+/*}}}  */
 /*{{{  ATermList SG_LookupGtrPriority(parse_table *pt, label l) */
 
 ATermList SG_LookupGtrPriority(parse_table *pt, label l)
@@ -318,7 +354,6 @@ ATbool SG_IsRightAssociative(parse_table *pt, label l)
 }
 
 /*}}}  */
-
 /*
  Storing and accessing character classes
 

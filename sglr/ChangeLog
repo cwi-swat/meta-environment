@@ -1,5 +1,9 @@
 $Id$
 
+2001/12/17 (vandenbr@loria.fr)
+ * Added basic functionality to enable restoring of brackets.
+ * Released version 3.6beta.
+
 2001/11/25 (mdejonge@cwi.nl)
  * package now uses toolbuslib package
  * extended functionality of program-check.m4 macros

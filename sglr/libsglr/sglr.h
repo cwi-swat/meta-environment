@@ -89,7 +89,6 @@ ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
 ATbool SGisParseTree(ATerm t);
 ATbool SGisParseError(ATerm t);
 
-
 enum  SG_NrMode {SG_NR_ASK, SG_NR_ZERO, SG_NR_INC, SG_NR_DEC};
 int   SGnrAmb(int Mode);
 
