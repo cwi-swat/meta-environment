@@ -1,6 +1,6 @@
 /* $Id$ */
 
-process RenameModule is
+process Module-Utilities is
 let
   Id : int,
   ModuleName1 : str,

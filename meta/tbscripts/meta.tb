@@ -97,7 +97,7 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
 	Meta-Interface,  Open-initial-module,
         Open-modules,  PGen, ApplyFunc,
 	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
-        DumpParseTable, RenameModule,
+        DumpParseTable, Module-Utilities,
 	RestoreTermBrackets, RestoreBrackets
 #ifdef METASTUDIO
 	, DOT-ADAPTER)
