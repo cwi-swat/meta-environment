@@ -39,7 +39,7 @@ static SE_Editor moveFocusUp(SE_Editor editor)
     return editor;
   }
 
-  focus = createFocus(parse_tree, pathUp(path), SE_getFocusDirty(focus));
+  focus = createFocus(parse_tree, pathUp(path), SE_getFocusUnparsed(focus));
 
   return SE_setEditorFocus(editor, focus);
 }
@@ -61,9 +61,9 @@ static SE_Editor moveFocusRight(SE_Editor editor)
   }
 
   /* What happens when we 'abandon' a dirty focus? */
-  assert(SE_getFocusDirty(focus) == FOCUS_CLEAN);
+  assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
 
-  focus = createFocus(parse_tree, path, FOCUS_CLEAN);
+  focus = createFocus(parse_tree, path, FOCUS_PARSED);
   editor = SE_setEditorFocus(editor, focus);
   if (PT_isTreeAppl(tree)
       || PT_isTreeList(tree)
@@ -88,7 +88,7 @@ static SE_Editor moveFocusDown(SE_Editor editor)
   if (!SE_isPathTerm(path)) {
     /* Select the top-level term */
     path = SE_makePathTerm(SE_makeStepsEmpty());
-    focus = createFocus(parse_tree, path, FOCUS_CLEAN);
+    focus = createFocus(parse_tree, path, FOCUS_PARSED);
     editor = SE_setEditorFocus(editor, focus);
     return editor;
   }
@@ -100,8 +100,8 @@ static SE_Editor moveFocusDown(SE_Editor editor)
     tree = getParseTreeTreeAt(parse_tree, new_path);
     if (tree) {
       /* What happens when we 'abandon' a dirty focus? */
-      assert(SE_getFocusDirty(focus) == FOCUS_CLEAN);
-      focus = createFocus(parse_tree, new_path, FOCUS_CLEAN);
+      assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
+      focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
       if (PT_isTreeAppl(tree)
 	  || PT_isTreeList(tree)
@@ -131,8 +131,8 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
     if (!SE_isEqualPath(path, new_path)) {
       tree = getParseTreeTreeAt(parse_tree, new_path);
       /* What happens when we 'abandon' a dirty focus? */
-      assert(SE_getFocusDirty(focus) == FOCUS_CLEAN);
-      focus = createFocus(parse_tree, new_path, FOCUS_CLEAN);
+      assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
+      focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
       if (PT_isTreeAppl(tree)
 	  || PT_isTreeList(tree)
@@ -178,14 +178,14 @@ static SE_Editor updateEditor(SE_Editor editor, int location, int delta_chars)
   PT_ParseTree new_tree;
   SE_Focus focus = SE_getEditorFocus(editor);
   SE_Focus new_focus;
-  SE_FocusList dirty_foci = SE_getEditorDirtyFoci(editor);
+  SE_FocusList dirty_foci = SE_getEditorUnparsedFoci(editor);
   SE_FocusList new_foci = SE_makeFocusListEmpty();
   SE_Path path = getPathInParseTree(parse_tree, location, delta_chars);
 
   dirty_foci = removeFocus(dirty_foci, focus);
 
   new_focus = updateFocus(focus, location, delta_chars);
-  new_focus = SE_setFocusDirty(new_focus, FOCUS_DIRTY);
+  new_focus = SE_setFocusUnparsed(new_focus, FOCUS_UNPARSED);
 
   new_tree = updateParseTreeLengthInfo(parse_tree, path, delta_chars);
   editor = SE_setEditorParseTree(editor, new_tree);
@@ -205,7 +205,9 @@ static SE_Editor updateEditor(SE_Editor editor, int location, int delta_chars)
   new_foci = SE_makeFocusListMulti(new_focus, new_foci);
 
   editor = SE_setEditorFocus(editor, new_focus);
-  editor = SE_setEditorDirtyFoci(editor, new_foci);
+  editor = SE_setEditorUnparsedFoci(editor, new_foci);
+
+  editor = SE_setEditorModified(editor, EDITOR_MODIFIED);
 
   return editor;
 }
@@ -223,11 +225,11 @@ static SE_Editor moveFocusToStartSymbol(SE_Editor editor, int location, int leng
     path = SE_makePathRoot();
   }
 
-  focus = createFocus(parse_tree, path, FOCUS_DIRTY);
+  focus = createFocus(parse_tree, path, FOCUS_UNPARSED);
 
   focus = expandFocusToStartSymbol(editor, focus);
   editor = SE_setEditorFocus(editor, focus);
-  editor = joinDirtyFoci(editor);
+  editor = joinUnparsedFoci(editor);
   return editor;
 }
 
@@ -267,7 +269,7 @@ SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars)
 SE_Editor moveFocusToTop(SE_Editor editor)
 {
   PT_ParseTree parse_tree = SE_getEditorParseTree(editor);
-  int focus_status = SE_getFocusDirty(SE_getEditorFocus(editor));
+  int focus_status = SE_getFocusUnparsed(SE_getEditorFocus(editor));
   SE_Focus root_focus = createRootFocus(parse_tree, focus_status);
 
   return SE_setEditorFocus(editor, root_focus);
@@ -292,7 +294,8 @@ SE_Editor moveFocus(SE_Editor editor, SE_Move move)
 
 /*{{{  SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, ATbool is_dirty) */
 
-SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, ATbool is_dirty)
+SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, 
+                             char *sort_name, ATbool is_dirty)
 {
   int       length;
   SE_Editor editor;
@@ -306,7 +309,7 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, ATbool is_dirty)
   length = PT_getParseTreeLengthAnno(parse_tree);
   area = SE_makeAreaDefault(1, length);
 
-  focus = SE_makeFocusNotEmpty(SE_makePathRoot(), SORT_INVALID, area, is_dirty);
+  focus = SE_makeFocusNotEmpty(SE_makePathRoot(), sort_name, area, is_dirty);
 
   dirty_foci = SE_makeFocusListEmpty();
   if (is_dirty) {
@@ -315,7 +318,11 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, ATbool is_dirty)
 
   start_symbols = SE_makeSymbolListEmpty();
 
-  editor = SE_makeEditorDefault(parse_tree, focus, dirty_foci, start_symbols);
+  editor = SE_makeEditorDefault(parse_tree, 
+                                focus, 
+                                dirty_foci, 
+                                EDITOR_UNMODIFIED, 
+                                start_symbols);
 
   return editor;
 }
@@ -328,7 +335,7 @@ SE_Editor newEditorGivenText(char *text)
   PT_Tree tree = PT_makeTreeLayout(text);
   PT_ParseTree parse_tree = PT_makeParseTreeTree("", tree, "");
 
-  return newEditorGivenTree(parse_tree, FOCUS_DIRTY);
+  return newEditorGivenTree(parse_tree, SORT_INVALID, FOCUS_UNPARSED);
 }
 
 /*}}}  */
@@ -369,7 +376,7 @@ SE_Focus getFocusAt(PT_ParseTree parse_tree, int location)
     path = SE_makePathTerm(steps);
   }
 
-  focus = createFocus(parse_tree, path, FOCUS_CLEAN);
+  focus = createFocus(parse_tree, path, FOCUS_PARSED);
 
   return focus;
 }
@@ -382,7 +389,7 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, PT_Tree tre
 {
   PT_ParseTree parse_tree = SE_getEditorParseTree(editor);
   PT_ParseTree new_tree;
-  SE_FocusList foci = SE_getEditorDirtyFoci(editor);
+  SE_FocusList foci = SE_getEditorUnparsedFoci(editor);
   SE_FocusList new_foci;
   SE_Path path;
 
@@ -392,12 +399,12 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, PT_Tree tre
   new_tree = PT_annotateParseTreeWithLength(new_tree);
 
   if (SE_isEqualFocus(SE_getEditorFocus(editor), focus)) {
-    focus = SE_setFocusDirty(focus, 0);
+    focus = SE_setFocusUnparsed(focus, 0);
     editor = SE_setEditorFocus(editor, focus);
   }
 
   editor = SE_setEditorParseTree(editor, new_tree);
-  editor = SE_setEditorDirtyFoci(editor, new_foci);
+  editor = SE_setEditorUnparsedFoci(editor, new_foci);
 
   return editor;
 }

@@ -54,9 +54,9 @@ ATerm SE_makeTermFromMove(SE_Move arg);
 /*}}}  */
 /*{{{  constructors */
 
-SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList dirtyFoci, SE_SymbolList startSymbols);
+SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols);
 SE_Focus SE_makeFocusEmpty();
-SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int dirty);
+SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed);
 SE_Area SE_makeAreaDefault(int start, int length);
 SE_FocusList SE_makeFocusListEmpty();
 SE_FocusList SE_makeFocusListMulti(SE_Focus head, SE_FocusList tail);
@@ -96,9 +96,12 @@ SE_Editor SE_setEditorParseTree(SE_Editor arg, SE_ParseTree parseTree);
 ATbool SE_hasEditorFocus(SE_Editor arg);
 SE_Focus SE_getEditorFocus(SE_Editor arg);
 SE_Editor SE_setEditorFocus(SE_Editor arg, SE_Focus focus);
-ATbool SE_hasEditorDirtyFoci(SE_Editor arg);
-SE_FocusList SE_getEditorDirtyFoci(SE_Editor arg);
-SE_Editor SE_setEditorDirtyFoci(SE_Editor arg, SE_FocusList dirtyFoci);
+ATbool SE_hasEditorUnparsedFoci(SE_Editor arg);
+SE_FocusList SE_getEditorUnparsedFoci(SE_Editor arg);
+SE_Editor SE_setEditorUnparsedFoci(SE_Editor arg, SE_FocusList unparsedFoci);
+ATbool SE_hasEditorModified(SE_Editor arg);
+int SE_getEditorModified(SE_Editor arg);
+SE_Editor SE_setEditorModified(SE_Editor arg, int modified);
 ATbool SE_hasEditorStartSymbols(SE_Editor arg);
 SE_SymbolList SE_getEditorStartSymbols(SE_Editor arg);
 SE_Editor SE_setEditorStartSymbols(SE_Editor arg, SE_SymbolList startSymbols);
@@ -118,9 +121,9 @@ SE_Focus SE_setFocusSort(SE_Focus arg, char * sort);
 ATbool SE_hasFocusArea(SE_Focus arg);
 SE_Area SE_getFocusArea(SE_Focus arg);
 SE_Focus SE_setFocusArea(SE_Focus arg, SE_Area area);
-ATbool SE_hasFocusDirty(SE_Focus arg);
-int SE_getFocusDirty(SE_Focus arg);
-SE_Focus SE_setFocusDirty(SE_Focus arg, int dirty);
+ATbool SE_hasFocusUnparsed(SE_Focus arg);
+int SE_getFocusUnparsed(SE_Focus arg);
+SE_Focus SE_setFocusUnparsed(SE_Focus arg, int unparsed);
 
 /*}}}  */
 /*{{{  SE_Area accessors */
@@ -197,8 +200,8 @@ ATbool SE_isMoveDown(SE_Move arg);
 /*}}}  */
 /*{{{  sort visitors */
 
-SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptDirtyFoci)(SE_FocusList), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList));
-SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptDirty)(int));
+SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptUnparsedFoci)(SE_FocusList), int (*acceptModified)(int), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList));
+SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int));
 SE_Area SE_visitArea(SE_Area arg, int (*acceptStart)(int), int (*acceptLength)(int));
 SE_FocusList SE_visitFocusList(SE_FocusList arg, SE_Focus (*acceptHead)(SE_Focus));
 SE_SymbolList SE_visitSymbolList(SE_SymbolList arg, char * (*acceptHead)(char *));

@@ -1,12 +1,13 @@
 [
 
 [Editor, Default, editor(<parse-tree(ParseTree)>,
-		                <focus(Focus)>,
-                        <dirty-foci(FocusList)>,
-                        <start-symbols(SymbolList)>)],
+		         <focus(Focus)>,
+                         <unparsed-foci(FocusList)>,
+                         <modified(int)>,
+                         <start-symbols(SymbolList)>)],
 
 [Focus, empty, empty-focus],
-[Focus, not-empty, focus(<path(Path)>,<sort(str)>,<area(Area)>,<dirty(int)>)],
+[Focus, not-empty, focus(<path(Path)>,<sort(str)>,<area(Area)>,<unparsed(int)>)],
 
 [Area,  Default, area(<start(int)>,<length(int)>)],
 

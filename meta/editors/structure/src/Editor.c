@@ -158,11 +158,11 @@ ATerm SE_makeTermFromMove(SE_Move arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList dirtyFoci, SE_SymbolList startSymbols) */
+/*{{{  SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols) */
 
-SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList dirtyFoci, SE_SymbolList startSymbols)
+SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols)
 {
-  return (SE_Editor)ATmakeTerm(SE_patternEditorDefault, parseTree, focus, dirtyFoci, startSymbols);
+  return (SE_Editor)ATmakeTerm(SE_patternEditorDefault, parseTree, focus, unparsedFoci, modified, startSymbols);
 }
 
 /*}}}  */
@@ -174,11 +174,11 @@ SE_Focus SE_makeFocusEmpty()
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int dirty) */
+/*{{{  SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed) */
 
-SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int dirty)
+SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed)
 {
-  return (SE_Focus)ATmakeTerm(SE_patternFocusNotEmpty, path, sort, area, dirty);
+  return (SE_Focus)ATmakeTerm(SE_patternFocusNotEmpty, path, sort, area, unparsed);
 }
 
 /*}}}  */
@@ -364,7 +364,7 @@ ATbool SE_isValidEditor(SE_Editor arg)
 
 ATbool SE_isEditorDefault(SE_Editor arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternEditorDefault, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, SE_patternEditorDefault, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -442,9 +442,9 @@ SE_Editor SE_setEditorFocus(SE_Editor arg, SE_Focus focus)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_hasEditorDirtyFoci(SE_Editor arg) */
+/*{{{  ATbool SE_hasEditorUnparsedFoci(SE_Editor arg) */
 
-ATbool SE_hasEditorDirtyFoci(SE_Editor arg)
+ATbool SE_hasEditorUnparsedFoci(SE_Editor arg)
 {
   if (SE_isEditorDefault(arg)) {
     return ATtrue;
@@ -453,28 +453,65 @@ ATbool SE_hasEditorDirtyFoci(SE_Editor arg)
 }
 
 /*}}}  */
-/*{{{  SE_FocusList SE_getEditorDirtyFoci(SE_Editor arg) */
+/*{{{  SE_FocusList SE_getEditorUnparsedFoci(SE_Editor arg) */
 
-SE_FocusList SE_getEditorDirtyFoci(SE_Editor arg)
+SE_FocusList SE_getEditorUnparsedFoci(SE_Editor arg)
 {
   if (SE_isEditorDefault(arg)) {
     return (SE_FocusList)ATgetArgument((ATermAppl)arg, 2);
   }
 
-  ATabort("Editor has no DirtyFoci: %t\n", arg);
+  ATabort("Editor has no UnparsedFoci: %t\n", arg);
   return (SE_FocusList)NULL;
 }
 
 /*}}}  */
-/*{{{  SE_Editor SE_setEditorDirtyFoci(SE_Editor arg, SE_FocusList dirtyFoci) */
+/*{{{  SE_Editor SE_setEditorUnparsedFoci(SE_Editor arg, SE_FocusList unparsedFoci) */
 
-SE_Editor SE_setEditorDirtyFoci(SE_Editor arg, SE_FocusList dirtyFoci)
+SE_Editor SE_setEditorUnparsedFoci(SE_Editor arg, SE_FocusList unparsedFoci)
 {
   if (SE_isEditorDefault(arg)) {
-    return (SE_Editor)ATsetArgument((ATermAppl)arg, (ATerm)dirtyFoci, 2);
+    return (SE_Editor)ATsetArgument((ATermAppl)arg, (ATerm)unparsedFoci, 2);
   }
 
-  ATabort("Editor has no DirtyFoci: %t\n", arg);
+  ATabort("Editor has no UnparsedFoci: %t\n", arg);
+  return (SE_Editor)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool SE_hasEditorModified(SE_Editor arg) */
+
+ATbool SE_hasEditorModified(SE_Editor arg)
+{
+  if (SE_isEditorDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  int SE_getEditorModified(SE_Editor arg) */
+
+int SE_getEditorModified(SE_Editor arg)
+{
+  if (SE_isEditorDefault(arg)) {
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
+  }
+
+  ATabort("Editor has no Modified: %t\n", arg);
+  return (int)NULL;
+}
+
+/*}}}  */
+/*{{{  SE_Editor SE_setEditorModified(SE_Editor arg, int modified) */
+
+SE_Editor SE_setEditorModified(SE_Editor arg, int modified)
+{
+  if (SE_isEditorDefault(arg)) {
+    return (SE_Editor)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(modified), 3);
+  }
+
+  ATabort("Editor has no Modified: %t\n", arg);
   return (SE_Editor)NULL;
 }
 
@@ -495,7 +532,7 @@ ATbool SE_hasEditorStartSymbols(SE_Editor arg)
 SE_SymbolList SE_getEditorStartSymbols(SE_Editor arg)
 {
   if (SE_isEditorDefault(arg)) {
-    return (SE_SymbolList)ATgetArgument((ATermAppl)arg, 3);
+    return (SE_SymbolList)ATgetArgument((ATermAppl)arg, 4);
   }
 
   ATabort("Editor has no StartSymbols: %t\n", arg);
@@ -508,7 +545,7 @@ SE_SymbolList SE_getEditorStartSymbols(SE_Editor arg)
 SE_Editor SE_setEditorStartSymbols(SE_Editor arg, SE_SymbolList startSymbols)
 {
   if (SE_isEditorDefault(arg)) {
-    return (SE_Editor)ATsetArgument((ATermAppl)arg, (ATerm)startSymbols, 3);
+    return (SE_Editor)ATsetArgument((ATermAppl)arg, (ATerm)startSymbols, 4);
   }
 
   ATabort("Editor has no StartSymbols: %t\n", arg);
@@ -661,9 +698,9 @@ SE_Focus SE_setFocusArea(SE_Focus arg, SE_Area area)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_hasFocusDirty(SE_Focus arg) */
+/*{{{  ATbool SE_hasFocusUnparsed(SE_Focus arg) */
 
-ATbool SE_hasFocusDirty(SE_Focus arg)
+ATbool SE_hasFocusUnparsed(SE_Focus arg)
 {
   if (SE_isFocusNotEmpty(arg)) {
     return ATtrue;
@@ -672,28 +709,28 @@ ATbool SE_hasFocusDirty(SE_Focus arg)
 }
 
 /*}}}  */
-/*{{{  int SE_getFocusDirty(SE_Focus arg) */
+/*{{{  int SE_getFocusUnparsed(SE_Focus arg) */
 
-int SE_getFocusDirty(SE_Focus arg)
+int SE_getFocusUnparsed(SE_Focus arg)
 {
   if (SE_isFocusNotEmpty(arg)) {
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
   }
 
-  ATabort("Focus has no Dirty: %t\n", arg);
+  ATabort("Focus has no Unparsed: %t\n", arg);
   return (int)NULL;
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_setFocusDirty(SE_Focus arg, int dirty) */
+/*{{{  SE_Focus SE_setFocusUnparsed(SE_Focus arg, int unparsed) */
 
-SE_Focus SE_setFocusDirty(SE_Focus arg, int dirty)
+SE_Focus SE_setFocusUnparsed(SE_Focus arg, int unparsed)
 {
   if (SE_isFocusNotEmpty(arg)) {
-    return (SE_Focus)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(dirty), 3);
+    return (SE_Focus)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(unparsed), 3);
   }
 
-  ATabort("Focus has no Dirty: %t\n", arg);
+  ATabort("Focus has no Unparsed: %t\n", arg);
   return (SE_Focus)NULL;
 }
 
@@ -1272,15 +1309,16 @@ ATbool SE_isMoveDown(SE_Move arg)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptDirtyFoci)(SE_FocusList), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList)) */
+/*{{{  SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptUnparsedFoci)(SE_FocusList), int (*acceptModified)(int), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList)) */
 
-SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptDirtyFoci)(SE_FocusList), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList))
+SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Focus (*acceptFocus)(SE_Focus), SE_FocusList (*acceptUnparsedFoci)(SE_FocusList), int (*acceptModified)(int), SE_SymbolList (*acceptStartSymbols)(SE_SymbolList))
 {
   if (SE_isEditorDefault(arg)) {
     return SE_makeEditorDefault(
         acceptParseTree ? acceptParseTree(SE_getEditorParseTree(arg)) : SE_getEditorParseTree(arg),
         acceptFocus ? acceptFocus(SE_getEditorFocus(arg)) : SE_getEditorFocus(arg),
-        acceptDirtyFoci ? acceptDirtyFoci(SE_getEditorDirtyFoci(arg)) : SE_getEditorDirtyFoci(arg),
+        acceptUnparsedFoci ? acceptUnparsedFoci(SE_getEditorUnparsedFoci(arg)) : SE_getEditorUnparsedFoci(arg),
+        acceptModified ? acceptModified(SE_getEditorModified(arg)) : SE_getEditorModified(arg),
         acceptStartSymbols ? acceptStartSymbols(SE_getEditorStartSymbols(arg)) : SE_getEditorStartSymbols(arg));
   }
   ATabort("not a Editor: %t\n", arg);
@@ -1288,9 +1326,9 @@ SE_Editor SE_visitEditor(SE_Editor arg, SE_ParseTree (*acceptParseTree)(SE_Parse
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptDirty)(int)) */
+/*{{{  SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int)) */
 
-SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptDirty)(int))
+SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*acceptSort)(char *), SE_Area (*acceptArea)(SE_Area), int (*acceptUnparsed)(int))
 {
   if (SE_isFocusEmpty(arg)) {
     return SE_makeFocusEmpty();
@@ -1300,7 +1338,7 @@ SE_Focus SE_visitFocus(SE_Focus arg, SE_Path (*acceptPath)(SE_Path), char * (*ac
         acceptPath ? acceptPath(SE_getFocusPath(arg)) : SE_getFocusPath(arg),
         acceptSort ? acceptSort(SE_getFocusSort(arg)) : SE_getFocusSort(arg),
         acceptArea ? acceptArea(SE_getFocusArea(arg)) : SE_getFocusArea(arg),
-        acceptDirty ? acceptDirty(SE_getFocusDirty(arg)) : SE_getFocusDirty(arg));
+        acceptUnparsed ? acceptUnparsed(SE_getFocusUnparsed(arg)) : SE_getFocusUnparsed(arg));
   }
   ATabort("not a Focus: %t\n", arg);
   return (SE_Focus)NULL;

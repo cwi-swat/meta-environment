@@ -80,7 +80,7 @@ ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
 
   assert(PT_isValidParseTree(parse_tree));
 
-  editor = newEditorGivenTree(parse_tree, FOCUS_CLEAN);
+  editor = newEditorGivenTree(parse_tree, SORT_TERM, FOCUS_PARSED);
   putEditor(editorId, editor);
 
   return ATmake("snd-value(<term>)", SE_makeTermFromFocus(SE_getEditorFocus(editor)));
@@ -173,7 +173,7 @@ void set_multiple_focus(int cid, ATerm editorId, ATerm f)
     foci = SE_makeFocusListFromTerm(f);
     assert(SE_isValidFocusList(foci));
 
-    editor = SE_setEditorDirtyFoci(editor, foci);
+    editor = SE_setEditorUnparsedFoci(editor, foci);
 
     putEditor(editorId, editor);
   }
@@ -262,7 +262,7 @@ ATerm get_dirty_focuses(int cid, ATerm editorId)
 
     putEditor(editorId, editor);
 
-    foci = SE_getEditorDirtyFoci(editor);
+    foci = SE_getEditorUnparsedFoci(editor);
 
     return ATmake("snd-value(foci(<term>))", SE_makeTermFromFocusList(foci));
   } else {
@@ -361,14 +361,12 @@ void register_symbols(int cid, ATerm editorId, ATerm startSymbols)
 ATerm get_modification_status(int cid, ATerm editorId)
 {
   SE_Editor editor = getEditor(editorId);
-  SE_FocusList foci;
   char *status;
   
+  assert(editor);
 
   if (editor) {
-    foci = SE_getEditorDirtyFoci(editor);
-
-    status = SE_isFocusListEmpty(foci) ? "unmodified" : "modified";
+    status = SE_getEditorModified(editor) ? "modified" : "unmodified";
   
     return ATmake("snd-value(modification-status(<term>))", ATparse(status));
   }
