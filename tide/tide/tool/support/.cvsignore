@@ -2,11 +2,3 @@ Makefile.in
 Makefile
 *.class
 classjava.stamp
-DebugToolTif.java
-DebugToolBridge.java
-DebugToolTool.java
-Expr.java
-Port.java
-Value.java
-Values.java
-Location.java
