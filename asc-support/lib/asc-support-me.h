@@ -11,9 +11,6 @@
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
 
-#define MEMO_OFF
-#define MEMO_MEM_INFO
-
 /*{{{  profiling */
 
 #define PROF(var)

@@ -225,24 +225,6 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 		(long)usage.ru_utime.tv_sec, (int)usage.ru_utime.tv_usec);
 	fprintf(stderr, "stime       : %ld.%06d sec.\n",
 		(long)usage.ru_stime.tv_sec, (int)usage.ru_stime.tv_usec);
-#if 0
-	/* The following rusage stats do not work yet */
-	fprintf(stderr, "maxrss   : %ld\n", usage.ru_maxrss);
-	fprintf(stderr, "ixrss    : %ld\n", usage.ru_ixrss);
-	fprintf(stderr, "idrss    : %ld\n", usage.ru_idrss);
-	fprintf(stderr, "isrss    : %ld\n", usage.ru_isrss);
-	fprintf(stderr, "minflt   : %ld\n", usage.ru_minflt);
-	fprintf(stderr, "majflt   : %ld\n", usage.ru_majflt);
-	fprintf(stderr, "nswap    : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "inblock  : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "oublock  : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "msgsnd   : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "msgrcv   : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "nsignals : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "nvcsw    : %ld\n", usage.ru_nswap);
-	fprintf(stderr, "nivcsw   : %ld\n", usage.ru_nswap);
-#endif
       }
     }
  
