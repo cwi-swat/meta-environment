@@ -1,5 +1,9 @@
 $Id$
 
+2002/10/01 (vandenbr@loria.fr)
+* Bumped into 0.4beta.
+* Increased the number of sockets that can be open.
+
 2002/07/24 (jurgenv@cwi.nl)
 * Released 0.3
 * Some debugging utilities were added to the source code
