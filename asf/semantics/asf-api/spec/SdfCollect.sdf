@@ -9,7 +9,10 @@ collect-productions(Sections, Production*) -> Production*
 {traversal(accu, top-down, break)}
 collect-productions(Production, Production*) -> Production* 
 {traversal(accu, top-down, break)}
-
+collect-productions(Section, Production*) -> Production* 
+{traversal(accu, top-down, break)}
+collect-productions(Grammar, Production*) -> Production* 
+{traversal(accu, top-down, break)}
 
 context-free syntax
 
@@ -35,3 +38,4 @@ variables
 "Production*"[0-9]* -> Production*
 "Sections"[0-9]* -> Sections
 "Literal"[0-9]* -> Literal
+"Grammar"[0-9]* -> Grammar

@@ -12,6 +12,7 @@ generate-api-and-write(Module) -> WriteResult
 
 context-free start-symbols
   WriteResult
+  <Module,Skeleton>
 
 hiddens
 

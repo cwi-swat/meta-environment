@@ -1,5 +1,14 @@
 equations
 
+[ignore-lexical-syntax]
+collect-productions(lexical syntax Production*, Production*2) = Production*
+
+[ignore-variable-syntax]
+collect-productions(variables Production*, Production*2) = Production*
+
+[ignore-hiddens]
+collect-productions(hiddens Grammar, Production*) = Production*
+
 [productions]
 collect-productions(Production, Production*) = Production Production*
 

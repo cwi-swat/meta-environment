@@ -16,6 +16,7 @@ generate() =
 [loop]
 generate(Production Production*) = 
 generate-for-production(Production) 
+
 generate(Production*)
 
 equations
@@ -33,7 +34,9 @@ generate-for-production(Symbol* -> Symbol
                         {Attribute*1, cons(qliteral("""c*""")), Attribute*2})
 = 
 Equation1
+
 Equation2
+
 Equation*
 
 
@@ -68,6 +71,7 @@ generate-get-and-set( ,Pattern) =
 [loop]
 generate-get-and-set(Symbol Symbol*, Pattern) =
 generate-get-and-set-field(Symbol, Pattern)
+
 generate-get-and-set(Symbol*, Pattern)
 
 [literal]
