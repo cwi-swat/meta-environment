@@ -1,5 +1,8 @@
 $Id$
 
+2002/10/16 ({vandenbr,vinju}@loria.fr)
+ * Fixed two bugs in restore-brackets tool.
+
 2002/09/18 (vandenbr@loria.fr)
  * The -c option (switch cycle detection off) does no longer imply
    switching of filtering as well.

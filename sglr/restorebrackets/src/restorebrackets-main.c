@@ -79,7 +79,9 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
 {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  ATerm atBracketProd = (ATerm)SG_LookupBracketProd(pt, rhs);
+  ATerm atBracketProd;
+
+  atBracketProd = (ATerm) SG_LookupBracketProd(pt, rhs);
   if (atBracketProd) {
     PT_Production bracketProd = PT_ProductionFromTerm(atBracketProd);
     PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
@@ -95,7 +97,7 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
     return PT_makeTreeAppl(bracketProd, newArgs);
   }
   else {
-    ATwarning("No brackets defined for symbol %t\n", PT_yieldSymbol(rhs));
+    ATwarning("No brackets defined for symbol %s\n", PT_yieldSymbol(rhs));
     return tree;
   }
 }
