@@ -22,6 +22,8 @@
 
 2000/4/16 (mdejonge@cwi.nl)
    * Online help files are now installed in <prefix>/share/meta
+   * replaced --with-tcldot option by --with-graphviz option to make
+     configuration more easy.
 
 2000/4/15 (mdejonge@cwi.nl)
    * ASF+SDF Meta-Environment is now configured/build using automake

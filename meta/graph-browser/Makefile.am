@@ -32,13 +32,13 @@ man_MANS    = graph-browser.1
 CLEANFILES  = graph-browser graph-browser.1
 
 % : %.sh.src Makefile
-	@if [ ! -d $(TCLDOT)/Tcldot ]; then \
-	   echo "Required library \`Tcldot' not found. Please specify its\
-	         location during configuration with the \`--with-tcldot'\
+	@if [ ! -d $(GRAPHVIZ)/lib ]; then \
+	   echo "Required package `graphviz' not found. Please specify its\
+	         location during configuration with the \`--with-graphviz'\
                  flag." >&2 ;\
 	   exit 1 ;\
 	 fi
 	sed 's@__WISH__@$(WISH)@g;\
-	     s@__TCLDOT__@$(TCLDOT)@g;\
+	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@

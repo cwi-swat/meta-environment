@@ -98,11 +98,11 @@ AC_ARG_WITH(toolbus-inc,
 TOOLBUSINC=${withval},TOOLBUSINC=${TOOLBUS}/include)
 AC_SUBST(TOOLBUSINC)
 
-dnl Handle --with-tcldot=... argument to configure
-AC_ARG_WITH(tcldot,
-   [  --with-tcldot=DIR       TclDot library is in DIR],
-   TCLDOT=${withval})
-AC_SUBST(TCLDOT)
+dnl Handle --with-graphviz=... argument to configure
+AC_ARG_WITH(graphviz,
+   [  --with-graphviz=DIR     graphviz package is in DIR],
+   GRAPHVIZ=${withval})
+AC_SUBST(GRAPHVIZ)
 
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish8.1 or wish8.0, we'll assume
