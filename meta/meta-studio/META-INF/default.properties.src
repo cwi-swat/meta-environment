@@ -1,6 +1,6 @@
 # MetaStudio default preferences
 
-library.dir=/ufs/jurgenv/glt/share/asf-library
+library.dir=__ASF_LIBRARY_PATH__
 
 module.extension=.sdf
 module.extension.description=Asf+Sdf Module (*.sdf)
@@ -61,7 +61,7 @@ toolbar.new-module.icon=/images/new-module.gif
 toolbar.new-module.text=New Module
 toolbar.open-module.icon=/images/open-module.gif
 toolbar.open-module.text=Open Module
-toolbar.open-lib-module.icon=/images/open-module.gif
+toolbar.open-lib-module.icon=/images/open-lib-module.gif
 toolbar.open-lib-module.text=Open Library Module
 toolbar.save-all.icon=/images/save-all.gif
 toolbar.save-all.text=Save All
