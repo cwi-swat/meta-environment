@@ -44,4 +44,6 @@ ATbool SDF_hasRejectAttribute(SDF_Production prod);
 ATbool SDF_hasPreferAttribute(SDF_Production prod);
 ATbool SDF_hasAvoidAttribute(SDF_Production prod);
 
+char *SDF_makeLayoutEmpty();
+
 #endif /* _SDF_UTILS_H */

@@ -149,3 +149,8 @@ ATbool SDF_hasAvoidAttribute(SDF_Production prod)
   }
   return found;
 }
+
+char *SDF_makeLayoutEmpty()
+{
+  return "";
+}
