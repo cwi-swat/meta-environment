@@ -30,11 +30,11 @@ process CALC is
  subsequent atoms (e.g., \script{snd-eval}, \script{rec-event})
  that communicate with this tool instance will use this descriptor as
  first argument. Next, we encounter a construct of the form
- \begin{quote}
+ \begin{verbatim}
  ( rec-msg(compute, E?)
    ...
  ) * delta
- \end{quote}
+ \end{verbatim}
  describing an infinite repetition of all steps inside the parentheses.
  Note that inaction (\script{delta}) will be avoided as long as there
  are other steps possible.
@@ -54,7 +54,8 @@ process CALC is
  \script{rec-value(Tid, V?)}
  \end{quote}
  Observe the combination of an ordinary variable \script{Tid} and
- a result variable \script{V}.  Clearly, this atom should {\em only}
+ a result variable \script{V}, indicated by a \script{?}.  
+ Clearly, this atom should {\em only}
  match with a value event coming from the \script{calc}-tool that was
  executed at the beginning of the \script{CALC} process.  It is also
  clear that \script{V} should get a value as a result of the match.

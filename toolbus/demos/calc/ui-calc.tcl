@@ -90,14 +90,20 @@ button .quit -text "Quit" -command {
 pack .calc .log .time .quit -fill both
 
 proc get-expr-dialog { } {
-  global w oldFocus expr
+  global w oldFocus expr ok
 
   set w ".getExprDialog"
   toplevel $w -class Dialog
 	wm title $w getExprDialog
 	label $w.label1 -width 30 -text "Give expression:"
 	entry $w.expr -width 30 -relief sunken -textvariable expr
-	pack $w.label1 $w.expr
+        button $w.cancel -text "Cancel" -command {
+	    sendTB "snd-value(cancel)"
+	    destroy $w
+	    focus $oldFocus
+	    set ok(1) 1
+	}
+	pack $w.label1 $w.expr $w.cancel
 	bind $w.expr <Return> {		
 		sendTB "snd-value(expr([TBstring $expr]))"
 		destroy $w
