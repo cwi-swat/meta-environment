@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Tue Apr 20 16:29:59 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix split-file-name arguments
+
 Mon Apr 19 17:34:23 CEST 2004 <jurgenv@cwi.nl>
  * Compile hook takes an extra argument for the target file name
 
