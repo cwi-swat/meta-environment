@@ -1,0 +1,18 @@
+user * {
+	group * {
+#include gamesquare.aco
+	}
+}
+
+group sen {
+	application word {
+		generator * {
+#import Client.aco
+		}
+	}
+
+	type Client { 
+		operation * { access protected { } }
+	}
+}
+
