@@ -3,29 +3,37 @@
 process RenameModule is
 let
   Id : int,
-  OldModuleName : str,
-  NewModuleName : str,
+  ModuleName1 : str,
+  ModuleName2 : str,
   NewPath : str
 in
   Id := process-id.
   (
-    rec-msg(rename-module(OldModuleName?, NewModuleName?, NewPath?)) .
-    DoRenameModule(OldModuleName, NewModuleName, NewPath)
+    rec-msg(rename-module(ModuleName1?, ModuleName2?, NewPath?)) .
+    DoRenameModule(ModuleName1, ModuleName2, NewPath)
   +
-    rec-msg(copy-module(OldModuleName?, NewModuleName?, NewPath?)).
-    DoCopyModule(OldModuleName, NewModuleName, NewPath)
+    rec-msg(copy-module(ModuleName1?, ModuleName2?, NewPath?)).
+    DoCopyModule(ModuleName1, ModuleName2, NewPath)
   +
-    rec-msg(import-module(OldModuleName?, NewModuleName?, NewPath?)).
-    DoImportModule(OldModuleName, NewModuleName, NewPath)
+    rec-msg(import-module(ModuleName1?, ModuleName2?, NewPath?)).
+    DoImportModule(ModuleName1, ModuleName2, NewPath)
   +
-    rec-msg(delete-module(OldModuleName?)) .
-    DoDeleteModule(OldModuleName)
+    rec-msg(delete-module(ModuleName1?)) .
+    DoDeleteModule(ModuleName1)
   +
-    rec-msg(unimport-module(OldModuleName?, NewModuleName?, NewPath?)).
-    DoUnimportModule(OldModuleName, NewModuleName, NewPath)
+    rec-msg(unimport-module(ModuleName1?, ModuleName2?, NewPath?)).
+    DoUnimportModule(ModuleName1, ModuleName2, NewPath)
+  +
+    rec-msg(revert-module(ModuleName1?)).
+    DoRevertModule(ModuleName1)
   ) *
   delta
 endlet
+
+process DoRevertModule(ModuleName : str) is
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules).
+  snd-msg(module-reverted)
 
 process DoDeleteModule(ModuleName : str) is
 let
