@@ -45,7 +45,7 @@ exports
     "$transform-syntax-rhs"(Symbol, AS-Syntax-Rhs)	-> Production* {prefer}
     "$transform-requires-rhs"(Symbol, AS-Requires-Rhs)	-> Production* {prefer}
 
-    "$transform-decons"({(Literal ":" Sort) ","}*)	
+    "$transform-decons"({(Literal ":" AS-Argument) ","}*)	
 							-> Production* {prefer}
 
   context-free syntax
@@ -138,4 +138,5 @@ exports
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
     "A"[0-9]?		   -> Action
     "FNR"[0-9]?		   -> FunResult
-    "LCS"[0-9]?"*"	   -> {(Literal ":" Sort) ","}*
+    "LCS"[0-9]?"*"	   -> {(Literal ":" AS-Argument) ","}*
+    "ASA"[0-9]?		   -> AS-Argument

@@ -190,3 +190,14 @@ equations
 
     join-results(, $SFR+, $STS) = $SFR+
 
+[remove-dobble-dataops-1] 
+
+  $SFR1+ := $FR1,
+  $FR3 := join-results($SFR1+, $FR2, $STS)
+  =============================================================================
+  remove-dobble-dataops([$DF1*,<$DO, $FR1>, $DF2*, <$DO, $FR2>, $DF3*], $STS) =
+              remove-dobble-dataops([$DF1*,<$DO, $FR3>, $DF2*, $DF3*], $STS)
+
+[default-remove-dobble-dataops-1] 
+
+  remove-dobble-dataops($DOS, $STS) = $DOS

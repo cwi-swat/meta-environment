@@ -50,8 +50,8 @@ equations
 
 [get-selectors-1] 
     
-      get-selectors($ATY, uqliteral($CH+) : $SO, $LS*) = 
-		<prefixdataop($CH+), using $ATY & giving sort-to-type($SO)>:
+      get-selectors($ATY, uqliteral($CH+) : $ASA, $LS*) = 
+		<prefixdataop($CH+), using $ATY & giving sort-to-type($ASA)>:
 		get-selectors($ATY, $LS*)
 
 [get-selectors-1] get-selectors($ATY, ) = []
@@ -60,7 +60,7 @@ equations
 
 	($TY*) := get-dataop-type($LS*)
 	==================================
-	get-dataop-type($LT : $SO, $LS*) = (sort-to-type($SO), $TY*)
+	get-dataop-type($LT : $ASA, $LS*) = (sort-to-type($ASA), $TY*)
 
 [get-dataop-type-1] get-dataop-type() = ()
 
@@ -69,6 +69,13 @@ equations
    bytes($CH2) := lower-case(bytes($CH1))
    =================================================================
    sort-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
+
+[sort-to-type-1] 
+
+   $TY := action[using get-using($FR) 
+		      giving get-giving($FR) raising get-raising($FR)]
+   =======================================================================
+   sort-to-type($FR) = $TY
 
 [join-sigs-1] 
 
@@ -85,4 +92,16 @@ equations
 			      get-fun-defs($AS*, defs($FD*))
 
 [get-fun-2] get-fun-defs($FD, defs($FD*)) = defs($FD, $FD*)
+
+[get-using-1] get-using($SFR1* & using $TY & $SFR2*) = $TY
+
+[default-get-using-1] get-using($FR) = empty
+
+[get-giving-1] get-giving($SFR1* & giving $TY & $SFR2*) = $TY
+
+[default-get-giving-1] get-giving($FR) = empty
+
+[get-raising-1] get-raising($SFR1* & raising $TY & $SFR2*) = $TY
+
+[default-get-raising-1] get-raising($FR) = empty
 

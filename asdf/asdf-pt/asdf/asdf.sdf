@@ -63,11 +63,14 @@ exports
     Literal                         -> AS-Requires-Rhs {cons("req-rhs-lit")}
     Literal Sort                    -> AS-Requires-Rhs {cons("req-rhs-prefix")}
     Sort Literal Sort               -> AS-Requires-Rhs {cons("req-rhs-infix")}
-    Literal "(" {Symbol ","}* ")"   -> AS-Requires-Rhs {cons("req-rhs-app")}
-    Literal "(" {(Literal ":" Sort) ","}* ")"
-		    -> AS-Requires-Rhs {cons("req-rhs-cons")}
+    Literal "(" {Symbol ","}* ")"   
+			      -> AS-Requires-Rhs {cons("req-rhs-app")}
+    Literal "(" {(Literal ":" AS-Argument) ","}* ")"
+		    -> AS-Requires-Rhs {prefer, cons("req-rhs-cons")}
     AS-Requires-Rhs "|" AS-Requires-Rhs	
 		    -> AS-Requires-Rhs {right,prefer, cons("req-rhs-union")}
+
+    Sort | FunResult		       -> AS-Argument
 
   context-free syntax
 

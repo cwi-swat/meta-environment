@@ -36,6 +36,14 @@ equations
    ===================================
    lowest-type($TY1, $TY2, $STS) = $TY1
 
+[lowest-2] 
+
+   lowest-type(action[using $TY1 giving $TY2 raising $TY3], 
+	        action[using $TY4 giving $TY5 raising $TY6], $STS) = 
+		  action[using lowest-type($TY1, $TY4, $STS) 
+		         giving lowest-type($TY2, $TY5, $STS) 
+			 raising lowest-type($TY3, $TY6, $STS) ]
+
 [default-lowest-1] lowest-type($TY1, $TY2, $STS) = $TY2
 
 [highest-1] 
@@ -43,5 +51,13 @@ equations
    subtype-of($TY1, $TY2, $STS) == yes
    ===================================
    highest-type($TY1, $TY2, $STS) = $TY2
+
+[highest-2] 
+
+   highest-type(action[using $TY1 giving $TY2 raising $TY3], 
+	        action[using $TY4 giving $TY5 raising $TY6], $STS) = 
+		  action[using highest-type($TY1, $TY4, $STS) 
+		         giving highest-type($TY2, $TY5, $STS) 
+			 raising highest-type($TY3, $TY6, $STS)]
 
 [default-highest-1] highest-type($TY1, $TY2, $STS) = $TY1

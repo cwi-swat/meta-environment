@@ -7,6 +7,10 @@ imports
 
 exports
 
+sorts
+
+  Environment
+
 context-free syntax
 
 %% Signatures , Unfold type
@@ -53,6 +57,7 @@ context-free syntax
   remove-dobble-sigs(Signatures, SubTypes)	-> Signatures
   join-results({ SingleFunResult "&" }*, FunResult, SubTypes)	
 				-> { SingleFunResult "&" }+
+  remove-dobble-dataops(DataOpSigs, SubTypes)	-> DataOpSigs
 
   Error		-> Answer
   Answer+	-> Answers
@@ -63,6 +68,8 @@ hiddens variables
   "$AT"[0-9]?		-> ActionType
   "$STS"[0-9]?		-> SubTypes
   "$DOS"[0-9]?		-> DataOpSigs
+  "$DF"[0-9]?"*"	-> {<DataOp, FunResult> "," }*
+  "$DO"[0-9]?		-> DataOp
   "$DCS"[0-9]?		-> DataConstants
   "$LT"[0-9]?		-> Literal
   "$SO"[0-9]?		-> Sort

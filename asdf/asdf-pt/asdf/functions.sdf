@@ -49,12 +49,12 @@ context-free syntax
 
   get-dataop-sigs(AtomicType, AS-Requires-Rhs, DataOpSigs)	 -> DataOpSigs 
 
-  get-selectors(AtomicType, {(Literal ":" Sort) ","}*)	
+  get-selectors(AtomicType, {(Literal ":" AS-Argument) ","}*)	
 					  -> List[[<DataOp, FunResult>]]
 
-  get-dataop-type({(Literal ":" Sort) ","}*)	-> Type
+  get-dataop-type({(Literal ":" AS-Argument) ","}*)	-> Type
 
-  sort-to-type(Sort)	  -> AtomicType
+  sort-to-type(AS-Argument)	  -> AtomicType
 
   get-data-constants(AS-Module, DataConstants)  
 			-> DataConstants {traversal(accu, break, top-down)}
@@ -74,6 +74,10 @@ context-free syntax
 			  -> FunctionDefs {traversal(accu, break, top-down)}
 
   {AS-FunctionDef ","}* 	-> SortWithPosition
+
+  get-using(FunResult)		-> Type
+  get-giving(FunResult)		-> Type
+  get-raising(FunResult)	-> Type
 
 hiddens variables
 
@@ -104,5 +108,5 @@ hiddens variables
   "$CH"[0-9]?"+"	-> CHAR+
   "$LT"[0-9]?		-> Literal
 
-  "$LS"[0-9]?"*"	-> {(Literal ":" Sort) ","}*
-
+  "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
+  "$ASA"[0-9]?		-> AS-Argument

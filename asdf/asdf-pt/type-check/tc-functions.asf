@@ -11,7 +11,8 @@ equations
 	$LDF1 := get-dataop-sigs($ENV1),
 	$LDF2 := initial-dataop-sigs,
 	$DOS2 := concat($LDF1, $LDF2),
-        $ENV2 := set-dataop-sigs($ENV1, $DOS2),
+        $DOS3 := remove-dobble-dataops($DOS2, $STS),
+        $ENV2 := set-dataop-sigs($ENV1, $DOS3),
 	$ANS := typecheck-definitions(defs($FD+), $ENV2),
 	$SUM := gen-summary($ANS)
 	=====================================================
