@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS = filtereqssyntax addeqssyntax removevarsyntax asfe asfc \
-          asfsdf-checker utils test addapisyntax \
-          asf-checker asf-operations meta-scripts
+SUBDIRS = syntax semantics
 
 EXTRA_DIST = reconf make_rules

@@ -148,36 +148,37 @@ dnl {{{  List output files
 
 AC_OUTPUT(
    Makefile
-   filtereqssyntax/Makefile
-   addeqssyntax/Makefile
-   addeqssyntax/spec/Makefile
-   addeqssyntax/src/Makefile
-   addapisyntax/Makefile
-   addapisyntax/spec/Makefile
-   addapisyntax/src/Makefile
-   removevarsyntax/Makefile
-   removevarsyntax/spec/Makefile
-   removevarsyntax/src/Makefile
-   asfc/Makefile
-   asfc/src/Makefile
-   asfc/src/muasf/Makefile
-   asfe/Makefile
-   asfe/src/Makefile
-   asfe/src/api/Makefile
-   asf-checker/Makefile
-   asf-checker/src/Makefile
-   asfsdf-checker/Makefile
-   asfsdf-checker/spec/Makefile
-   asfsdf-checker/src/Makefile
-   asf-operations/Makefile
-   asf-operations/src/Makefile
-   utils/Makefile
-   meta-scripts/Makefile
-   test/Makefile
-   test/eqs/Makefile
-   test/input/Makefile
-   test/output/Makefile
-   test/c-code/Makefile
+   syntax/Makefile
+   syntax/filtereqssyntax/Makefile
+   syntax/addeqssyntax/Makefile
+   syntax/addeqssyntax/spec/Makefile
+   syntax/addeqssyntax/src/Makefile
+   syntax/addapisyntax/Makefile
+   syntax/addapisyntax/spec/Makefile
+   syntax/addapisyntax/src/Makefile
+   syntax/removevarsyntax/Makefile
+   syntax/removevarsyntax/spec/Makefile
+   syntax/removevarsyntax/src/Makefile
+   syntax/asfsdf-checker/src/Makefile
+   syntax/asfsdf-checker/Makefile
+   syntax/asfsdf-checker/spec/Makefile
+   semantics/Makefile
+   semantics/asfc/Makefile
+   semantics/asfc/src/Makefile
+   semantics/asfc/src/muasf/Makefile
+   semantics/asfe/Makefile
+   semantics/asfe/src/Makefile
+   semantics/asfe/src/api/Makefile
+   semantics/asf-checker/Makefile
+   semantics/asf-checker/src/Makefile
+   semantics/asf-operations/Makefile
+   semantics/asf-operations/src/Makefile
+   semantics/utils/Makefile
+   semantics/test/Makefile
+   semantics/test/eqs/Makefile
+   semantics/test/input/Makefile
+   semantics/test/output/Makefile
+   semantics/test/c-code/Makefile
 )
 
 dnl }}}
