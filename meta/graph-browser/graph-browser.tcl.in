@@ -610,6 +610,15 @@ proc CompileModules { modlist } {
     }
 }
 
+#--
+# DumpEquations(M)
+#-
+# generates the toolbus event to request dump of equations for module M
+#--
+proc DumpEquations { module } {
+  GBevent "dump-equations([ToId $module])"
+}
+
 proc CompileModuleWidget { mods } {
     global g
 
@@ -765,20 +774,6 @@ proc ViewAll {} {
 
 
 proc OpenModuleWidget {} {
-#    set w .openModule
-#    catch {destroy $w}
-#    toplevel $w
-#    wm title $w "Open module"
-#    wm iconname $w "Open module"
-#    label $w.message -text "Open module:"
-#    entry $w.openModule
-#    bind $w.openModule <Return> "OpenModuleHelper $w"
-#    frame $w.buttons
-#    button $w.buttons.confirm -text OK -command "OpenModuleHelper $w"
-#    button $w.buttons.cancel -text Cancel -command "destroy $w"
-#    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-#    pack $w.message $w.openModule -side top -anchor w
-#    pack $w.buttons -side bottom -expand y -fill x -pady 2m
 
   set types {
       {{SDF2}   {.sdf2}        }
@@ -1224,6 +1219,8 @@ proc define-module-popup {} {
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModuleWidget [GetObjectName $c]}
+		$m add command -label "Dump Equations..." \
+        -command {DumpEquations [GetObjectName $c]}
     $m add separator
     $m add command -label "Module Info" \
         -command {GetModuleInfo [GetObjectName $c]}
