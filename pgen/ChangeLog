@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/08 (markvdb@cwi.nl)
+ * Adapted package dependencies.
+ * Bumped into version 2.0.
+
 2003/10/07 (markvdb@cwi.nl)
  * Introduced the new tuple syntax <A,B>.
  * Added a check to the sdf-checker which gives a warning
