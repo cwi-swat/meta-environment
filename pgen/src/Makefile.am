@@ -52,6 +52,7 @@ CLEANFILES	= sdf2table sdf2table.1 \
 # this is needed for testing
 %.test: %.src Makefile
 	sed 's@__BINDIR__@$(top_builddir)/src@g;\
+             s@__ACTIVATE__@0@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(top_builddir)/grammar@g;' < $< > $@ && \
 	chmod +x $@
@@ -59,6 +60,7 @@ CLEANFILES	= sdf2table sdf2table.1 \
 # and one sdf2table for installed binaries and data
 % : %.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
+             s@__ACTIVATE__@1@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
