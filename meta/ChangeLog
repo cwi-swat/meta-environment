@@ -1,5 +1,9 @@
 # $Id$
 
+2001/01/08 (vandenbr@loria.fr)
+ * Adapted the edit-term script and moved functionality to the
+   rewriter.
+
 2001/12/21 (jurgenv@cwi.nl)
  * The normal form after reducing can now be inspected using the
    structure editor without parsing first. This is needed for debugging

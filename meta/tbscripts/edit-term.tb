@@ -52,14 +52,6 @@ in
     snd-msg(rewrite(ModuleName, Equations, Tree)).
     (
       rec-msg(rewrite-result(NormalForm?)) .
-      snd-msg(get-parsetable(trm(ModuleName))) .
-      (
-        rec-msg(parse-table(Table?, Path?)) .
-        snd-msg(restore-brackets(NormalForm, Table)) .
-        rec-msg(brackets-restored(NormalForm?))
-      +
-        rec-msg(no-parse-table)
-      ) .
       snd-msg(unparse(NormalForm)) .
       rec-msg(unparsed-text(Text?)) .
 
