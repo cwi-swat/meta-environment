@@ -24,6 +24,7 @@ sdfchecker_SOURCES = sdfchecker.c Sdf-Checker.c sdfchecker.tif.c
 sdfchecker_LDADD = \
 	-L$(ASC_SUPPORT)/lib -lasc-support-me \
 	-L$(SGLR)/lib -lsglr \
+	-L$(TIDE)/lib -ltide-adapter \
 	-L$(SDF_SUPPORT)/lib -lSDFME \
 	-L$(ASF_SUPPORT)/lib -lASFME \
 	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \

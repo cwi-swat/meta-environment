@@ -4,6 +4,11 @@ Wed Sep 29 15:31:05 CEST 2004 <markvdb@cwi.nl>
  * Moved the check on cons attributes from the SdfChecker
    to the AsfSdfChecker.
 
+Mon Oct 11 17:42:09 CEST 2004 <jurgenv@cwi.nl>
+ * Temporarily added dependency on Tide package. In the near future
+   the small library that is needed from tide will be separated out
+   in a small package.
+
 Thu Sep 16 11:56:37 CEST 2004 <jurgenv@cwi.nl>
  * Bumped to 2.3
 
