@@ -3,3 +3,5 @@ Makefile.in
 ActionScriptChecker
 ActionScriptChecker.eqs
 actionchecker
+.deps
+.libs
