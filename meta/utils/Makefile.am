@@ -2,27 +2,11 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths
-bin_SCRIPTS        = ps-dot sdf2stats metascript
+bin_SCRIPTS        = ps-dot
 
-data_DATA          = lang.types
+EXTRA_DIST         = ps-dot.sh.src 
 
-noinst_LIBRARIES   = libutils.a
-
-EXTRA_DIST         = ps-dot.sh.src test-help test-version \
-                     lang.types sdf2stats.sh.src metascript.sh.src
-
-CLEANFILES         = ps-dot sdf2stats
-
-meta_paths_SOURCES = meta-paths.c
-meta_paths_LDADD   = libutils.a \
-                     -L$(ATERM)/lib -lATerm
-
-libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
-
-INCLUDES           = -I$(SDF_SUPPORT)/include \
-                     -I$(PT_SUPPORT)/include \
-                     -I$(ATERM)/include
+CLEANFILES         = ps-dot 
 
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
@@ -33,8 +17,4 @@ INCLUDES           = -I$(SDF_SUPPORT)/include \
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \
-	chmod +x $@
-
-%: %.pl.src Makefile
-	sed 's@__PERL__@$(PERL)@g' < $< > $@ && \
 	chmod +x $@
