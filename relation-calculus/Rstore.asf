@@ -31,19 +31,19 @@ equations
 	add-elem($Var, $Elem, $Rstore) = assign($Var, xappend($Val, $Elem), $Rstore)
 
 [default-AE]
-	add-elem($Var, $Elem, $Rstore) = assign($Var, {$Elem}, $Rstore)
+	add-elem($Var, $Elem, $Rstore) = assign($Var, insert($Elem, empty-bag), $Rstore)
 
 %% ---- Add tuple to a relation
 
 [AT1]	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var, $Val>, $VPair*)) = 
-	rstore(<$Var, xunion({<$Elem1, $Elem2>}, $Val)>, $VPair*)
+	rstore(<$Var, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
 
 [AT2]	$Var != $Var', 
 	rstore($VPair*') = add-tuple($Var, <$Elem1, $Elem2>, rstore($VPair*))
 	===============================================================
 	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var', $Val>, $VPair*)) = rstore(<$Var', $Val>, $VPair*')
 
-[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, {<$Elem1, $Elem2>} >)
+[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, insert(<$Elem1, $Elem2>, empty-bag) >)
 
 %% ---- Add tuples to a relation
 
@@ -57,9 +57,9 @@ equations
 [ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, $Rel >)
 
 [UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
-[UN3]	xunion($Elem, $Bag) 	= union({$Elem}, $Bag)
-[UN4]	xunion($Bag, $Elem) 	= union($Bag, {$Elem})
-[UN5]	xunion($Elem1, $Elem2)	= union({$Elem1}, {$Elem2})
+[UN3]	xunion($Elem, $Bag) 	= union(insert($Elem, empty-bag), $Bag)
+[UN4]	xunion($Bag, $Elem) 	= union($Bag, insert($Elem, empty-bag))
+[UN5]	xunion($Elem1, $Elem2)	= union(insert($Elem1, empty-bag), insert($Elem2,empty-bag))
 
 [AP1]	xappend($Elem, *undefined*) = $Elem
 [AP2]	xappend($Bag, $Elem) = union2($Bag, $Elem)
@@ -71,7 +71,7 @@ equations
 
 %% --- filter RSTORE
 
-[fr1]	$Bag != {},
+[fr1]	$Bag != empty-bag,
 	in(rvar2str($Var), $Bag) = false
 	=========================================	
 	filter(rstore($VPair*1, <$Var, $Val>, $VPair*2), $Bag) = 
@@ -110,11 +110,11 @@ equations
 [zip-rstores-1]
   zip-rstores($Rstore, rstore()) = $Rstore
 
-[zip-rstores-2]
-  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
-                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
-  = zip-rstores(rstore($VPair*),
-                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
+%%[zip-rstores-2]
+%%  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
+%%                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
+%%  = zip-rstores(rstore($VPair*),
+%%                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
 
 [default-zip-rstores]
   zip-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))

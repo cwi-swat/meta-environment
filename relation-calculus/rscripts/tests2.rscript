@@ -174,4 +174,3 @@ assert "min-4":		min({3, 2, 1})		== 1
 assert "min-5":		min({3, -2, 1})		== -2
 assert "min-6":		min({1, 2, 1, 2})	== 1
 
-

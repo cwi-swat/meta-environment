@@ -1,3 +1,4 @@
+
 rel[str, str] calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
 "e">, <"f", "e">, <"f", "g">, <"g", "e">}
 
@@ -33,12 +34,3 @@ assert "a5": calledFromF == {"e", "g"}
 bag[str] commonProcs = calledFromA inter calledFromF
 
 assert "a6": commonProcs == {"e"}
-
-
-
-
-
-
-
-
-

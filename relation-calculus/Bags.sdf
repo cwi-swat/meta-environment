@@ -4,13 +4,19 @@ exports
 imports basic/Booleans
 imports basic/Integers
 
-  sorts Bag[[Elem]]
+  sorts Bag[[Elem]] BagIterator[[Elem]]
 
 context-free syntax
    "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
+   "empty-bag"					-> Bag[[Elem]]
 
-   add(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
-   del(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+   Bag[[Elem]]					-> BagIterator[[Elem]]
+   is-empty-iter(BagIterator[[Elem]])		-> Boolean
+   head(BagIterator[[Elem]])			-> Elem
+   tail(BagIterator[[Elem]])			-> BagIterator[[Elem]]
+
+   insert(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+   delete(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
 
    equal(Bag[[Elem]], Bag[[Elem]])           	-> Boolean
    subset(Bag[[Elem]], Bag[[Elem]])          	-> Boolean

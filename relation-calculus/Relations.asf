@@ -8,126 +8,337 @@ equations
 	=============================================================
 	<$Elem1, $Elem2, $Elem+1> = <$Elem1, <$Elem2, $Elem', $Elem+2>>
 
-[comp-1] compose({<$Elem, $Elem'>, $Elem*1}, {$Elem*2}) = 
-         union(product($Elem, rimage($Elem', {$Elem*2})), compose({$Elem*1}, {$Elem*2}))
-[comp-2] compose({}, {$Elem*}) = {}
+%% ----	compose
 
-[x-1]    product($Elem, {$Elem', $Elem*}) = union( {<$Elem, $Elem'>}, product($Elem, {$Elem*}))
-[x-2]    product($Elem, {}) = {}
+[comp-0] compose($Bag1, $Bag2) = compose(mk-iterator($Bag1), $Bag2)
 
-[bx-1]   product({$Elem, $Elem*1}, {$Elem*2}) = union(product($Elem, {$Elem*2}), product({$Elem*1}, {$Elem*2}))
-[bx-2]   product({}, {$Elem*2}) = {}
+[comp-1]
+	is-empty-iter($BagIter) = false,
+	head($BagIter) = <$Elem, $Elem'>
+	=======================================================
+	compose($BagIter, $Bag) = union(product($Elem, rimage($Elem', $Bag)), compose(tail($BagIter), $Bag))
 
-[dom-1]  domain({<$Elem,$Elem'>, $Elem*}) = union({$Elem}, domain({$Elem*}))
-[dom-2]  domain({}) = {}
+[comp-2]   
+	is-empty-iter($BagIter) = true
+	=============================================
+	compose($BagIter, $Bag) = empty-bag
 
-[ran-1]  range({<$Elem,$Elem'>, $Elem*}) = union({$Elem'}, range({$Elem*}))
-[ran-2]  range({}) = {}
+%% ----	product
 
-[car-1]  carrier({<$Elem,$Elem'>, $Elem*}) = union(union({$Elem},{$Elem'}), carrier({$Elem*}))
-[car-2]  carrier({}) = {}
+[prode-0]
+	product($Elem, $Bag) = product($Elem, mk-iterator($Bag))
 
-[domR-1] in($Elem, {$Elem*}) = false
-         ==================================================
-         domR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = domR({$Elem*1, $Elem*2}, {$Elem*})
+[prode-1]   
+	is-empty-iter($BagIter) = false,
+	$Elem' = head($BagIter)
+	=============================================
+	product($Elem, $BagIter) = union1(<$Elem, $Elem'>, product($Elem, tail($BagIter)))
 
-[default-domR]
-	 domR({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[prode-2]
+	is-empty-iter($BagIter) = true
+	=============================================
+	product($Elem, $BagIter) = empty-bag
 
-[domX-1] in($Elem, {$Elem*}) = true
-         ==================================================
-         domX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = domX({$Elem*1, $Elem*2}, {$Elem*})
+[prodb-0]
+	product($Bag1, $Bag2) = product(mk-iterator($Bag1), $Bag2)
 
-[default-domX]
-	 domX({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[prodb-1] 
+	is-empty-iter($BagIter) = false,
+	$Elem = head($BagIter)
+	===============================================
+	product($BagIter, $Bag) = union(product($Elem, $Bag), product(tail($BagIter), $Bag))
 
-[ranR-1] in($Elem', {$Elem*}) = false
-         ==================================================
-         ranR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = ranR({$Elem*1, $Elem*2}, {$Elem*})
+[prodb-2] 
+	is-empty-iter($BagIter) = true
+	================================================
+	product($BagIter, $Bag) = empty-bag
 
-[default-ranR]
-	 ranR({$Elem*1}, {$Elem*2}) = {$Elem*1}
+%% ----	 domain
 
-[ranX-1] in($Elem', {$Elem*}) = true
-         ==================================================
-         ranX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = ranX({$Elem*1, $Elem*2}, {$Elem*})
+[dom-0]	 domain($Bag) = domain(mk-iterator($Bag))
 
-[default-ranX]
-	 ranX({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[dom-1]  is-empty-iter($BagIter) = false,
+	 <$Elem,$Elem'> = head($BagIter)
+	 =================================================
+	 domain($BagIter) = union1($Elem, domain(tail($BagIter)))
 
+[dom-2]  is-empty-iter($BagIter) = true
+	 =================================================
+	 domain($BagIter) = empty-bag
 
-[carR-1] in($Elem, {$Elem*}) & in($Elem', {$Elem*}) = false
-         ==================================================
-         carR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = carR({$Elem*1, $Elem*2}, {$Elem*})
+%% ---- range
 
-[default-carR]
-	 carR({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[ran-0]	 range($Bag) = range(mk-iterator($Bag))
 
-[carX-1] in($Elem, {$Elem*}) |  in($Elem', {$Elem*}) = true
-         ==================================================
-         carX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = carX({$Elem*1, $Elem*2}, {$Elem*})
+[ran-1]  is-empty-iter($BagIter) = false, 
+	 <$Elem,$Elem'> = head($BagIter)
+	 =================================================
+	 range($BagIter) = union1($Elem', range(tail($BagIter)))
 
-[default-carX]
-	 carX({$Elem*1}, {$Elem*2}) = {$Elem*1}
+[ran-2]  is-empty-iter($BagIter) = true
+	 =================================================
+	 range($BagIter) = empty-bag
 
+%% ----	 carrier
+
+[car-0]	 carrier($Bag) = carrier(mk-iterator($Bag))
+
+[car-1]	 is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter)
+	 ==============================================
+	 carrier($BagIter) = union(union1($Elem, insert($Elem', empty-bag)), carrier(tail($BagIter)))
+
+[car-2]	is-empty-iter($BagIter) = true
+	================================================
+	carrier($BagIter) = empty-bag
+
+%% ----	domR
+
+[domR-0] domR($Bag1, $Bag2) = domR(mk-iterator($Bag1), $Bag2)
+
+[domR-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) = false
+	 ===================================================
+	 domR($BagIter, $Bag) = domR(tail($BagIter), $Bag)
+
+[domR-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) = true
+	 ===================================================
+	 domR($BagIter, $Bag) = union1(<$Elem, $Elem'>, domR(tail($BagIter),
+	 $Bag))
+
+[domR-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 domR($BagIter, $Bag) = empty-bag
+
+%% ----	 domX
+
+[domX-0] domX($Bag1, $Bag2) = domX(mk-iterator($Bag1), $Bag2)
+
+[domX-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) = true
+	 ===================================================
+	 domX($BagIter, $Bag) = domX(tail($BagIter), $Bag)
+
+[domX-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) = false
+	 ===================================================
+	 domX($BagIter, $Bag) = union1(<$Elem, $Elem'>, domX(tail($BagIter), $Bag))
+
+[domX-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 domX($BagIter, $Bag) = empty-bag
+	
+%% ----	ranR
+
+[ranR-0] ranR($Bag1, $Bag2) = ranR(mk-iterator($Bag1), $Bag2)
+
+[ranR-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem', $Bag) = false
+	 ===================================================
+	 ranR($BagIter, $Bag) = ranR(tail($BagIter), $Bag)
+
+[ranR-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem', $Bag) = true
+	 ===================================================
+	 ranR($BagIter, $Bag) = union1(<$Elem, $Elem'>, ranR(tail($BagIter), $Bag))
+
+[ranR-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 ranR($BagIter, $Bag) = empty-bag
+
+%% ----	 ranX
+
+[ranX-0] ranX($Bag1, $Bag2) = ranX(mk-iterator($Bag1), $Bag2)
+
+[ranX-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem', $Bag) = true
+	 ===================================================
+	 ranX($BagIter, $Bag) = ranX(tail($BagIter), $Bag)
+
+[ranX-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem', $Bag) = false
+	 ===================================================
+	 ranX($BagIter, $Bag) = union1(<$Elem, $Elem'>, ranX(tail($BagIter), $Bag))
+
+[ranX-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 ranX($BagIter, $Bag) = empty-bag
+
+%% ----	 carR
+
+[carR-0] carR($Bag1, $Bag2) = carR(mk-iterator($Bag1), $Bag2)
+
+[carR-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) & in($Elem', $Bag) = false
+	 ===================================================
+	 carR($BagIter, $Bag) = carR(tail($BagIter), $Bag)
+
+[carR-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) & in($Elem', $Bag) = true	 
+	 ===================================================
+	 carR($BagIter, $Bag) = union1(<$Elem, $Elem'>, carR(tail($BagIter), $Bag))
+
+[carR-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 carR($BagIter, $Bag) = empty-bag
+
+%% ----	 carX
+
+[carX-0] carX($Bag1, $Bag2) = carX(mk-iterator($Bag1), $Bag2)
+
+[carX-1] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) | in($Elem', $Bag) = true
+	 ===================================================
+	 carX($BagIter, $Bag) = carX(tail($BagIter), $Bag)
+
+[carX-2] is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter),
+	 in($Elem, $Bag) | in($Elem', $Bag) = false	 
+	 ===================================================
+	 carX($BagIter, $Bag) = union1(<$Elem, $Elem'>, carX(tail($BagIter), $Bag))
+
+[carX-3] is-empty-iter($BagIter) = true
+	 ===================================================
+	 carX($BagIter, $Bag) = empty-bag
+
+%% ---- bottom
 
 [top-1]  top($Rel) = diff(domain($Rel), range($Rel))
 
+%% ----	 bottom
+
 [bot-1]  bottom($Rel) = diff(range($Rel), domain($Rel))
 
-[rim-1]  rimage($Elem, {$Elem*1, $Elem*2}) = {$Elem*}
-         =====================================
-         rimage($Elem, {$Elem*1, <$Elem, $Elem'>, $Elem*2}) = {$Elem', $Elem*}
+%% ----	 rimage
 
-[default-rim-2]
-         rimage($Elem, {$Elem*}) = {}
+[rim-0]	 rimage($Elem, $Bag) = rimage($Elem, mk-iterator($Bag))
 
-[brim-1] rimage({$Elem, $Elem*}, $Rel)  = union(rimage($Elem, $Rel),  rimage({$Elem*}, $Rel))
-[brim-2] rimage({}, $Rel) = {}
+[rim-1]	 is-empty-iter($BagIter) = false,
+	 <$Elem1, $Elem1'> = head($BagIter),
+	 $Elem = $Elem1
+	 ==================================================
+	 rimage($Elem, $BagIter) = union1($Elem1', rimage($Elem, tail($BagIter)))
 
+[rim-2]	 is-empty-iter($BagIter) = false,
+	 <$Elem1, $Elem1'> = head($BagIter),
+	 $Elem != $Elem1
+	 ==================================================
+	 rimage($Elem, $BagIter) = rimage($Elem, tail($BagIter))
 
-[lim-1]  limage({$Elem*1, $Elem*2}, $Elem')  = {$Elem*}
-         =====================================
-         limage({$Elem*1, <$Elem, $Elem'>, $Elem*2}, $Elem') = {$Elem, $Elem*}
+[rim-2]	 is-empty-iter($BagIter) = true
+	 ==================================================
+	 rimage($Elem, $BagIter) = empty-bag
 
-[default-lim-2]
-         limage({$Elem*}, $Elem') = {}
- 
-[slim-1] limage($Rel, {$Elem, $Elem*}) = union(limage($Rel, $Elem), limage($Rel, {$Elem*}))
-[slim-2] limage($Rel, {}) = {}
+[brim-0] rimage($Bag1, $Bag2) = rimage(mk-iterator($Bag1), $Bag2)
 
-[inv-1]  inv({<$Elem,$Elem'>, $Elem*}) = union({<$Elem',$Elem>}, inv({$Elem*}))
-[inv-2]  inv({}) = {}
+[brim-1] is-empty-iter($BagIter) = false,
+	 $Elem = head($BagIter)
+	 ===================================================
+	 rimage($BagIter, $Bag) = union(rimage($Elem, $Bag), rimage(tail($BagIter), $Bag))
+
+[brim-2] is-empty-iter($BagIter) = true
+	 ====================================================
+	 rimage($BagIter, $Bag) = empty-bag
+
+%% ----	 limage
+
+[lim-0]	 limage($Bag, $Elem) = limage(mk-iterator($Bag), $Elem)
+
+[lim-1]	 is-empty-iter($BagIter) = false,
+	 <$Elem1, $Elem1'> = head($BagIter),
+	 $Elem = $Elem1'
+	 ==================================================
+	 limage($BagIter, $Elem) = union1($Elem1, limage(tail($BagIter), $Elem))
+
+[lim-2]	 is-empty-iter($BagIter) = false,
+	 <$Elem1, $Elem1'> = head($BagIter),
+	 $Elem != $Elem1'
+	 ==================================================
+	 limage($BagIter, $Elem) = limage(tail($BagIter), $Elem)
+
+[lim-2]	 is-empty-iter($BagIter) = true
+	 ==================================================
+	 limage($BagIter, $Elem) = empty-bag
+
+[blim-0] limage($Bag1, $Bag2) = limage($Bag1, mk-iterator($Bag2))
+
+[blim-1] is-empty-iter($BagIter) = false,
+	 $Elem = head($BagIter)
+	 ===================================================
+	 limage($Bag, $BagIter) = union(limage($Bag, $Elem), limage($Bag, tail($BagIter)))
+
+[blim-2] is-empty-iter($BagIter) = true
+	 ====================================================
+	 limage($Bag, $BagIter) = empty-bag
+
+%% ----	 inv
+
+[inv-0]	 inv($Bag) = inv(mk-iterator($Bag))
+
+[inv-1]	 is-empty-iter($BagIter) = false,
+	 <$Elem, $Elem'> = head($BagIter)
+	 ====================================================
+	 inv($BagIter) = union1(<$Elem', $Elem>, inv(tail($BagIter)))
+
+[inv-2]	 is-empty-iter($BagIter) = true
+	 ===================================================
+	 inv($BagIter) = empty-bag
+
+%% ----	 compl
 
 [cmp-1]  $Bag = carrier($Rel)
          =====================================
          compl($Rel) = diff(product($Bag, $Bag), $Rel)
 
+%% ---- id
 
-[id-1]   id({$Elem, $Elem*}) = union({<$Elem, $Elem>}, id({$Elem*}))
-[id-2]   id({}) ={}
+[id-0]	 id($Bag) = id(mk-iterator($Bag))
+
+[id-1]	 is-empty-iter($BagIter) = false,
+	 $Elem = head($BagIter)
+	 ==================================================
+	 id($BagIter) = union1(<$Elem, $Elem>, id(tail($BagIter)))
+
+[id-2]	 is-empty-iter($BagIter) = true
+	 ==================================================
+	 id($BagIter) = empty-bag
 
 [cl-1] 	closure($Rel, $Rel1, $Rel1) = $Rel1
 
-[cl-2] 	$Rel1 != $Rel2
+[cl-2] 	equal($Rel1, $Rel2) = false
        	=========================================
        	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, union($Rel2, compose($Rel2, $Rel)))
 
-[tcl-1]  trans-closure($Rel) = closure($Rel, {}, $Rel)
+[default-cl]
+	closure($Rel, $Rel1, $Rel2) = $Rel1
+
+[tcl-1]  trans-closure($Rel) = closure($Rel, empty-bag, $Rel)
 
 [rtcl-1] rtrans-closure($Rel) = union(trans-closure($Rel), id(carrier($Rel)))
 
-%% --- reachX
+%% ---- reachX
 
-[rX-3] $Rel' = carX($Rel, $Bag2),
-       $Rel''= domR($Rel', $Bag1)
-       =========================================
-       reachX($Bag1, $Bag2, $Rel) = closure($Rel', {}, $Rel'')
+[rX-3]	$Rel' = carX($Rel, $Bag2),
+	$Rel''= domR($Rel', $Bag1)
+	=========================================
+	reachX($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
 
-%% --- reachR
+%% ---- reachR
 
-[rX-3] $Rel' = carR($Rel, $Bag2),
-       $Rel''= domR($Rel', $Bag1)
-       =========================================
-       reachR($Bag1, $Bag2, $Rel) = closure($Rel', {}, $Rel'')
+[rX-3]	$Rel' = carR($Rel, $Bag2),
+	$Rel''= domR($Rel', $Bag1)
+	=========================================
+	reachR($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
 

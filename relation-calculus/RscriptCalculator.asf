@@ -12,11 +12,8 @@
 
 %% ---- Equality on elements
 
-[ee1]	equal-elem($BoolCon, $BoolCon)	= true
-[ee2]	equal-elem($Integer, $Integer)	= true
-[ee3]	equal-elem($String, $String)	= true
-[ee4]	equal-elem($Bag1, $Bag2) 	= equal($Bag1, $Bag2)
-
+[ee1]	equal-elem($Elem, $Elem)		= true
+[ee2]	equal-elem($Bag1, $Bag2)		= equal($Bag1, $Bag2)
 [default-ee] 
 	equal-elem($Elem, $Elem') 		= false
 
@@ -30,9 +27,12 @@
 
 %% ---- Tests on RVALUEs
 
-[ir1]	is-rel({<$Elem1,$Elem2>, $Elem*}) = true
+[ir1]	is-empty-iter($BagIter) = false,
+	<$Elem1, $Elem2> = head($BagIter)
+	===============================================
+	is-rel($BagIter) = true				%%XXX!
 [default-ir]
-	is-rel($Val) = false
+	is-rel($BagIter) = false
 
 %% ---- Extract a list of variables from a declaration list
 
@@ -44,14 +44,14 @@
 
 %% ---- Eval a complete Rscript
 
-[ERS1]	$Rstore = eval-rstats($Stat*, rstore(<YIELD, {}>)),
+[ERS1]	$Rstore = eval-rstats($Stat*, rstore(<YIELD, empty-bag>)),	%%XXX
 	$Bag = value(YIELD, $Rstore)
 	===============================================================
 	eval-rscript($Stat*) = filter($Rstore, $Bag)
 
 %% ---- Eval a complete Rscript with given Rstore
 
-[ERS2]	$Rstore' = assign(YIELD, {}, $Rstore),
+[ERS2]	$Rstore' = assign(YIELD, empty-bag, $Rstore),			%%XXX
 	$Rstore'' = eval-rstats($Stat*, $Rstore'),
 	$Bag = value(YIELD, $Rstore'')
 	===============================================================
@@ -74,10 +74,10 @@
 [S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, 0, $Rstore)
 [S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, "", $Rstore)
 [S4]	eval-rstat(area $Var, $Rstore)		= assign-when-undef($Var, area("",0,0,0,0), $Rstore)
-[S5]	eval-rstat(bag[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, {}, $Rstore)	
+[S5]	eval-rstat(bag[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, empty-bag, $Rstore)	%%XXX
 	
 [S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Rstore) 
-						= assign-when-undef($Var, {}, $Rstore)
+						= assign-when-undef($Var, empty-bag, $Rstore)	%%XXX
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
 [S8]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, evalx($Exp, $Rstore), $Rstore)
@@ -182,13 +182,15 @@
 %% ---- Eval bags
 
 [EB2]   $Elem = evale($Exp, $Rstore),
-	{$Elem+} = evalb({$Exp+}, $Rstore)
+	$Bag = evalb({$Exp+}, $Rstore)				%%XXX
 	===================================================
-	evalx({$Exp, $Exp+}, $Rstore) = {$Elem, $Elem+}
+	evalx({$Exp, $Exp+}, $Rstore) = union1($Elem, $Bag)
 
-[EB2]   $Elem = evale($Exp, $Rstore)
+[EB2]   $Elem = evale($Exp, $Rstore)					%%XXX
 	===================================================
-	evalx({$Exp}, $Rstore) = {$Elem}
+	evalx({$Exp}, $Rstore) = insert($Elem, empty-bag)
+
+[EB3]	evalx({}, $Rstore) = empty-bag
 
 %% ---- Eval binary operators
 
@@ -309,7 +311,7 @@
 [eim4]	eval-im($Rel, $Bag)			= limage($Rel,  $Bag) when is-rel($Rel) = true
 
 [default-eim]
-	eval-im($Val1, $Val2)			= {}
+	eval-im($Val1, $Val2)			= empty-bag		%%XXX
 
 [IM1]	evalx($Exp1 . $Exp2, $Rstore)		= eval-im(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
@@ -361,33 +363,37 @@
 
 %% ---- Simple generator, extract one value V : E
 
-[ei-1]	$Val = evalx($Exp1, $Rstore)
+[ei-1]	$Bag = evalx($Exp1, $Rstore)
 	=======================================
-	evalx({ $Var : $Exp1 :: $Exp2 }, $Rstore) = eval-itern($Var, $Val, {}, $Exp2, $Rstore)
+	evalx({ $Var : $Exp1 :: $Exp2 }, $Rstore) = eval-itern($Var, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)	%%XXX
 
 %% ---- Simple generator, extract two values <V1, V2> : E
 
-[ei2-1]	$Val = evalx($Exp1, $Rstore)
+[ei2-1]	$Bag = evalx($Exp1, $Rstore)
 	=======================================
 	evalx({ <$Var1, $Var2> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Var1, $Var2, $Val, {}, $Exp2, $Rstore)
+	eval-itern($Var1, $Var2, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)	%%XXX
 
 %% ---- Simple generator, extract N values <V1, V2, ...> : E
 
-[ei2-1]	$Val = evalx($Exp1, $Rstore)
+[ei2-1]	$Bag = evalx($Exp1, $Rstore)
 	=======================================
 	evalx({ <$Var1, $Var2, $Var+> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Var1, $Var2, $Var+, $Val, {}, $Exp2, $Rstore)
+	eval-itern($Var1, $Var2, $Var+, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)    %%XXX
 
 %% ---- eval-itern: the workhorse for comprehensions
 
-[ei2-2]	$Rstore' = store-rvars($Var+, $Elem, $Rstore),
+[ei2-2]	is-empty-iter($BagIter) = false,
+	$Elem = head($BagIter),
+	$Rstore' = store-rvars($Var+, $Elem, $Rstore),
 	$Val' = evalx($Exp, $Rstore'),
-	eval-itern($Var+, {$Elem*}, append($Val, $Val'), $Exp, $Rstore') = $Elem'
+	eval-itern($Var+, tail($BagIter), append($Val, $Val'), $Exp, $Rstore') = $Elem'	%%XXX
 	======================================================
-	eval-itern($Var+, {$Elem, $Elem*}, $Val, $Exp, $Rstore) = $Elem'
+	eval-itern($Var+, $BagIter, $Val, $Exp, $Rstore) = $Elem'
 
-[ei2-3]	eval-itern($Var+, {}, $Elem, $Exp2, $Rstore) = $Elem
+[ei2-3]	is-empty-iter($BagIter) = true
+	======================================================
+	eval-itern($Var+, $BagIter, $Elem, $Exp2, $Rstore) = $Elem	  %%XXX
 
 %% ---- Auxiliary functions for evaluating comprehensions
 
@@ -430,7 +436,7 @@
 %%	======================================================
 %%	exists($Var+, {$Elem, $Elem*}, $Test, $Rstore) = $BoolCon
 
-[ex2]	exists($Var+, {}, $Test, $Rstore) = false
+[ex2]	exists($Var+, empty-bag, $Test, $Rstore) = false	 %%XXX
 
 %% ---- Forall
 
@@ -570,19 +576,39 @@
 
 %% ---- Auxiliary functions for powerset
 
-[ae1]	add-element($Elem, {{$Elem*1}, $Elem*2}) =
-	union({{$Elem, $Elem*1}}, add-element($Elem, {$Elem*2}))
+%%[ae1]	add-element($Elem, {{$Elem*1}, $Elem*2}) =			%%XXX
+%%	union({{$Elem, $Elem*1}}, add-element($Elem, {$Elem*2}))
 
-[ae2]	add-element($Elem, {}) = {}
+%%[ae2]	add-element($Elem, empty-bag) = empty-bag
+%%XXX
 
-[pw01]	power0({$Elem*}) = $Bag1,
-	add-element($Elem, $Bag1) = $Bag2
+[ae1]	is-empty-iter($BagIter) = false,
+	$Bag = head($BagIter),
+	$Bag' = insert($Elem, $Bag)
+	==================================================
+	add-element($Elem, $BagIter) = union1($Bag', add-element($Elem, tail($BagIter)))
+
+[ae2]	is-empty-iter($BagIter) = true
+	===================================================
+	add-element($Elem, $BagIter) = empty-bag
+
+%%[pw01]	power0({$Elem*}) = $Bag1,					%%XXX
+%%	add-element($Elem, $Bag1) = $Bag2
+%%	====================================================
+%%	power0({$Elem, $Elem*}) = union($Bag1, $Bag2)
+
+[pw01]	is-empty-iter($BagIter) = false,
+	$Elem = head($BagIter),
+	$Bag1 = power0(tail($BagIter)),
+	$Bag2 = add-element($Elem, mk-iterator($Bag1))
 	====================================================
-	power0({$Elem, $Elem*}) = union($Bag1, $Bag2)
+	power0($BagIter) = union($Bag1, $Bag2)
 
-[pw02]	power0({}) = {{}}
+[pw02]	is-empty-iter($BagIter) = true
+	====================================================
+	power0($BagIter) = insert(empty-bag, empty-bag)						%%XXX
 
-[pw11]	power1($Bag) = diff(power0($Bag), {{}})
+[pw11]	power1($Bag) = diff(power0($Bag), insert(empty-bag, empty-bag))				%%XXX
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 
@@ -596,13 +622,17 @@
 
 %% ---- sum
 
-[sumx1]
-	sumx({$Integer1, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer1 + $Integer2)
+[sumx1] is-empty-iter($BagIter) = false,
+	$Integer1 = head($BagIter)
+	=======================================	
+	sumx($BagIter, $Integer2) = sumx(tail($BagIter), $Integer1 + $Integer2)
 
-[sumx2]	sumx({}, $Integer) = $Integer
+[sumx2]	is-empty-iter($BagIter) = true
+	======================================
+	sumx($BagIter, $Integer) = $Integer
 
-[default-sumx]
-	sumx({$Elem, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer2)
+%%[default-sumx]
+%%	sumx({$Elem, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer2)
 
 [sum1]	$Bag = evalx($Exp, $Rstore)
 	========================================
@@ -622,22 +652,31 @@
 
 %% ---- max
 
-[max11]
-	max1({$Integer, $Elem*}) = max2({$Elem*}, $Integer)
-[max12]
-	max1({}) = 0
+[max11] is-empty-iter($BagIter) = false,
+	$Integer = head($BagIter)
+	========================================
+	max1($BagIter) = max2(tail($BagIter), $Integer)	%%XXX
+
+[max12]	is-empty-iter($BagIter) = true
+	======================================
+	max1($BagIter) = 0
+
 [default-max1]
-	max1({$Elem, $Elem*}) = max1({$Elem*})
+	max1($BagIter) = max1(tail($BagIter))
 
 
-[max21]	$Integer1 > $Integer2 = true
+[max21]	is-empty-iter($BagIter) = false,
+	$Integer1 = head($BagIter),
+	$Integer1 > $Integer2 = true
 	===========================================================================
-	max2({$Integer1, $Elem*}, $Integer2) = max2({$Elem*}, $Integer1)
+	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer1)	%%XXX
 
-[max22]	max2({}, $Integer) = $Integer
+[max22]	is-empty-iter($BagIter) = true
+	======================================
+	max2($BagIter, $Integer) = $Integer   %%XXX
 
 [default-max2]
-	max2({$Elem, $Elem*}, $Integer2) = max2({$Elem*}, $Integer2)
+	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer2)	%%XXX
 
 [max-1]	$Bag = evalx($Exp, $Rstore)
 	========================================
@@ -645,22 +684,31 @@
 
 %% ---- min
 
-[min11]
-	min1({$Integer, $Elem*}) = min2({$Elem*}, $Integer)
-[min12]
-	min1({}) = 0
+[min11]	is-empty-iter($BagIter) = false,
+	$Integer = head($BagIter)
+	========================================
+	min1($BagIter) = min2(tail($BagIter), $Integer)
+
+[min12]	is-empty-iter($BagIter) = true
+	========================================
+	min1($BagIter) = 0			%%XXX
+
 [default-min1]
-	min1({$Elem, $Elem*}) = min1({$Elem*})
+	min1($BagIter) = min1(tail($BagIter))	%%XXX
 
 
-[min21]	$Integer1 < $Integer2 = true
+[min21]	is-empty-iter($BagIter) = false,
+	$Integer1 = head($BagIter),
+	$Integer1 < $Integer2 = true
 	===========================================================================
-	min2({$Integer1, $Elem*}, $Integer2) = min2({$Elem*}, $Integer1)
+	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer1)	%%XXX
 
-[min22]	min2({}, $Integer) = $Integer
+[min22]	is-empty-iter($BagIter) = true
+	========================================
+	min2($BagIter, $Integer) = $Integer   %%XXX
 
 [default-min2]
-	min2({$Elem, $Elem*}, $Integer2) = min2({$Elem*}, $Integer2)
+	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer2)	%%XXX
 
 [min-1]	$Bag = evalx($Exp, $Rstore)
 	========================================
