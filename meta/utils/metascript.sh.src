@@ -77,6 +77,11 @@ cat << E_O_SCRIPT > ${output} && chmod +x ${output}
 name=${output}
 myversion=${version}
 
+SGLR="${SGLR} ${parser_options}"
+ASOURCE="${ASOURCE}"
+REDUCER="${reducer} ${reducer_options}"
+TABLE="${parsetable}"
+
 Usage() {
 cat << E_O_USAGE >&2
 Usage: \$name [options]
@@ -123,7 +128,7 @@ do
     shift
 done
 
-${SGLR} ${parser_options} -p ${parsetable} -i \${input} | \\
-${reducer} ${reducer_options} | \\
-${ASOURCE} -o \${output}
+\${SGLR}  -p \${TABLE} -i \${input} | \\
+\${REDUCER} | \\
+\${ASOURCE} -o \${output}
 E_O_SCRIPT

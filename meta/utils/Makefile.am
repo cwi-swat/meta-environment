@@ -10,7 +10,7 @@ data_DATA          = lang.types
 noinst_LIBRARIES   = libutils.a
 
 EXTRA_DIST         = ps-dot.sh.src test-help test-version \
-                     lang.types sdf2stats.sh.src 
+                     lang.types sdf2stats.sh.src metascript.sh.src
 
 CLEANFILES         = ps-dot sdf2stats
 
