@@ -20,7 +20,6 @@ let
 in
   (
     rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?,EditorId?)).
-    printf("received: %t\n", ButtonName) .
     snd-msg(get-button-actions(ButtonName,EditorType,ModuleName)).
     rec-msg(button-actions(ButtonName,EditorType,ModuleName,Actions?)).
     PerformButtonActions(EditorId, Actions) 
@@ -44,7 +43,6 @@ in
       if equal(FunName, "if-equal") then
         IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
       else
-        printf("Sending: %t\n", ButtonAction).
         snd-msg(ButtonAction, Stack, EditorId) .
         (
           rec-msg(stack(Stack?), EditorId)
