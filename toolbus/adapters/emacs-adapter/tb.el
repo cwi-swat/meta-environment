@@ -19,14 +19,19 @@
   (TBsend (concat "snd-event(" event ")"))
 )
 
+(defun TBvalue (term)
+  "Sends TERM to the ToolBus as snd-value(TERM)"
+  (TBsend (concat "snd-value(" term ")"))
+  )
+
 ;TBsend send an arbitrary term to the ToolBus
 (defun TBsend (term)
   (interactive)
 ; This writes to stderr. 
-  (send-string-to-terminal (concat (num-to-lenspec (+ lenspec
+  (send-string-to-terminal (set-min-msg-size (concat (num-to-lenspec (+ lenspec
 						      (length term))) 
 				   ":"
-				   (set-min-msg-size term))
+				   term))
 			   nil
 			   nil))
 
