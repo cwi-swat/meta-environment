@@ -1,5 +1,5 @@
 
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${TOOLBUS}/classes:${JAVA_ATERM}:${SHARED_OBJECTS}
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${EXTERNAL_JARS}
 javadir		= ${prefix}/classes/tide/tool/support
 JAVAROOT	= ${top_builddir}
 

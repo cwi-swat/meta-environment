@@ -1,6 +1,6 @@
 SUBDIRS		= tool .
 
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${TOOLBUS}/classes:${JAVA_ATERM}:${SHARED_OBJECTS}
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${EXTERNAL_JARS}
 
 javadir		= ${prefix}/classes/tide
 JAVAROOT	= ${top_builddir}

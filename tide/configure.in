@@ -1,6 +1,6 @@
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(tide, 0.4)
+AM_INIT_AUTOMAKE(tide, 0.5beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -36,22 +36,10 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        Specify location of the ATerm library])
 AC_SUBST(ATERM)
 
-dnl {{{ Handle --with-aterm-java
-
 AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
         [  --with-aterm-java=DIR  ATerm-Java-library is in DIR])
-JAVA_ATERM="${ATERM_JAVA}/share/aterm-1.1.jar"
+JAVA_ATERM=`${ATERM_JAVA}/bin/aterm-java-config`
 AC_SUBST(JAVA_ATERM)
-
-dnl }}}
-dnl {{{ Handle --with-shared-objects
-
-AC_PACKAGE_REQUIRE(shared-objects, shared-objects-config,
-        [  --with-shared-objects=DIR  Shared-Objects-library is in DIR])
-SHARED_OBJECTS="${SHARED_OBJECTS}/share/shared-objects-1.1.jar"
-AC_SUBST(SHARED_OBJECTS)
-
-dnl }}} 
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
@@ -62,6 +50,10 @@ dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      Specify location of the ToolBus])
 AC_SUBST(TOOLBUS)
+
+dnl Form CLASSPATH for external jars and classes
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes
+AC_SUBST(EXTERNAL_JARS)
 
 dnl Find out which libraries we need
 SOCKET_FOUND=no

@@ -2,7 +2,7 @@
 SUBDIRS		= support proclist ruleinspector srcviewer prefeditor \
 		stackviewer
 
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${TOOLBUS}/classes:${JAVA_ATERM}:${SHARED_OBJECTS}
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${EXTERNAL_JARS}:${CLASSPATH}
 
 javadir		= ${prefix}/classes/tide/tool
 JAVAROOT	= ${top_builddir}
