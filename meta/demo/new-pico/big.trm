@@ -7,7 +7,7 @@ begin
     k: natural,
     s: string,
     t: string;
-  input := 3;
+  input := 14;
   if input then
     i := input;
     s := "";
