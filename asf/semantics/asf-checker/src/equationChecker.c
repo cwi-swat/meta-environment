@@ -1,13 +1,10 @@
 /* $Id$ */
 
-/*{{{  includes */
 #include <ctype.h>
 
 #include <Error.h>
 #include "equationChecker.h"
 #include "statistics.h"
-
-/*}}}  */
 
 /*{{{  static int ASF_getASFConditionsListLength(ASF_ASFConditionsList l) */
 
@@ -70,8 +67,7 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
   while (!PT_isArgsEmpty(variables)) {
     PT_Tree variable = PT_getArgsHead(variables);
 
-    if (PT_isEqualTree(PT_removeTreeAnnotations(tree), 
-		       PT_removeTreeAnnotations(variable))) {
+    if (ATisEqualModuloAnnotations((ATerm) tree, (ATerm) variable)) {
       return ATtrue;
     }
 

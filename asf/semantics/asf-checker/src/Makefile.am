@@ -17,8 +17,11 @@ EXTRA_DIST = asfchecker.idef asfchecker.tif.c asfchecker.tif.h
 
 noinst_HEADERS 	= equationChecker.h asfchecker.tif.h statistics.h
 
-asfchecker_SOURCES = asfchecker.c equationChecker.c asfchecker.tif.c \
-			statistics.c
+asfchecker_SOURCES = \
+	asfchecker.c \
+	equationChecker.c \
+	asfchecker.tif.c \
+	statistics.c
 
 asfchecker_LDADD   = \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
