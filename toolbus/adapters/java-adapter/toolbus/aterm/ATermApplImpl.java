@@ -272,6 +272,7 @@ public class ATermApplImpl extends ATermImpl
 	  case '{':	case '}':	case '[':	case ']':
 	  case ';':	case ':':	case '<':	case '>':
 	  case ',':	case '.':	case '?':       case ' ':
+          case '/':
 	    o.write(c);
 	    break;
 	  default:    
@@ -324,6 +325,7 @@ public class ATermApplImpl extends ATermImpl
 	  case '{':	case '}':	case '[':	case ']':
 	  case ';':	case ':':	case '<':	case '>':
 	  case ',':	case '.':	case '?':       case ' ':
+          case '/':
 	    o.print(c);
 	    break;
 	  default:    
@@ -375,6 +377,7 @@ public class ATermApplImpl extends ATermImpl
 	  case '{':	case '}':	case '[':	case ']':
 	  case ';':	case ':':	case '<':	case '>':
 	  case ',':	case '.':	case '?':       case ' ':
+          case '/':
 	    size++;
 	    break;
 	  default:	

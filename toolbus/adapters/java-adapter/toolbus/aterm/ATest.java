@@ -171,8 +171,9 @@ public class ATest
     T[0] = world.makeSimple("g");
     T[1] = world.makeSimple("fgh(1,2,<3>)");
     T[2] = world.makeSimple("[1,3.5,4e6,123.21E-3,-12]");
+    T[3] = world.makeSimple("hh(\"-/-\")");
 
-    for(int i=0; i<3; i++) {
+    for(int i=0; i<4; i++) {
       System.out.print("term " + i + ": ");
       T[i].print(new PrintWriter(System.out));
       System.out.println("");
