@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/16 <markvdb@cwi.nl>
+ * Removed the query action.
+
 Mon Sep 15 10:55:29 CEST 2003 <{jong,kooiker}@cwi.nl>
  * meta-studio/metastudio/Message{List,Window}.java:
    - refactored

@@ -535,10 +535,6 @@ in
 	  ReturnAbort(EditorId, Stack)
         )
       +
-        rec-msg(query(Query?), Stack?, EditorId?) .
-	snd-msg(execute-query(EditorId, Query)) .
-        ReturnSuccess(EditorId, Stack)
-      +
 	rec-msg(edit-syntax, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
 	snd-msg(edit-syntax(ModuleName)) .
