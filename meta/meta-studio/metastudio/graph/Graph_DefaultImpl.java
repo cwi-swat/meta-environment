@@ -3,6 +3,12 @@ package metastudio.graph;
 abstract public class Graph_DefaultImpl
 extends Graph
 {
+  protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {
+    super.init(hashCode, annos, fun, args);
+  }
+  protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
+  	super.initHashCode(annos, fun, i_args);
+  }
   Graph_DefaultImpl(MetaGraphFactory factory) {
     super(factory);
   }
