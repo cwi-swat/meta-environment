@@ -1,3 +1,5 @@
+/*{{{  Copyright notice */
+
 /*
 
     Meta-Environment - An environment for language prototyping.
@@ -22,6 +24,10 @@
 /*
   $Id$
  */
+
+/*}}}  */
+/*{{{  Interface description? */
+
 /* The module-database is written by Mark van den Brand.
 
 The following functions are available.
@@ -59,9 +65,17 @@ Manipulation of modules in database:
    void reshuffle_modules_from(char *modulename)
 */
 
+/*}}}  */
+/*{{{  includes */
+
+
 #include <stdlib.h>
 
 #include "module-db.h"
+
+/*}}}  */
+/*{{{  variables */
+
 
 static char myversion[] = "1.3";
 
@@ -78,10 +92,34 @@ ATermTable compile_db;
 
 static char *outputDirName = NULL;
 
+/*}}}  */
+
+/*{{{  Forward declarations */
+
+ATermList get_imported_modules(ATerm name);
+ATbool complete_asf_specification(ATermList visited, ATerm module);
+ATermList get_import_section(ATermList sections);
+ATermList add_imports(ATerm name, ATermList mods);
+char *get_module_name(ATerm module);
+ATermList get_import_section_sdf2(ATerm module);
+ATermList replace_imports(ATerm name, ATermList mods);
+ATermList modules_depend_on(ATerm name, ATermList mods);
+ATbool is_valid_parse_table(ATermList visited, ATerm module, 
+                            int timeOfEqsTable, int timeOfTrmTable);
+ATermList AFTgetImports(ATerm mod);
+void AFTreshuffleModules(int cid, ATermList mods);
+
+/*}}}  */
+
+/*{{{  void rec_terminate(int cid, ATerm t) */
+
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
 }
+
+/*}}}  */
+/*{{{  set_output_dir(int cid, char *dirName) */
 
 void
 set_output_dir(int cid, char *dirName)
@@ -97,10 +135,14 @@ set_output_dir(int cid, char *dirName)
   }
 }
 
+/*}}}  */
+/*{{{  get_output_dir(void) */
+
 /*
  * The same construct is used in compiler.c
  * This obviously needs to be moved away altogether from the module-db.
  */
+
 char *
 get_output_dir(void)
 {
@@ -113,6 +155,9 @@ get_output_dir(void)
     }
 }
 
+/*}}}  */
+/*{{{  ATerm exists(int cid, char *modulename) */
+
 ATerm exists(int cid, char *modulename)
 {
   ATerm name = ATmake("<str>",modulename);
@@ -122,8 +167,8 @@ ATerm exists(int cid, char *modulename)
     return ATmake("snd-value(result(notexists(<term>)))", name);
 }
 
-ATermList get_imported_modules(ATerm name);
-ATbool complete_asf_specification(ATermList visited, ATerm module);
+/*}}}  */
+/*{{{  ATerm get_all_equations(int cid, char *moduleName) */
 
 ATerm get_all_equations(int cid, char *moduleName)
 {
@@ -156,12 +201,18 @@ ATerm get_all_equations(int cid, char *moduleName)
   }
 }
 
+/*}}}  */
+/*{{{  void create_module_db(int cid) */
+
 void create_module_db(int cid)
 {
   new_modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
 }
+
+/*}}}  */
+/*{{{  void clear_module_db(int cid) */
 
 void clear_module_db(int cid)
 {
@@ -170,10 +221,8 @@ void clear_module_db(int cid)
   trans_db = CreateValueStore(100,75);
 }
 
-ATermList get_import_section(ATermList sections);
-ATermList add_imports(ATerm name, ATermList mods);
-char *get_module_name(ATerm module);
-ATermList get_import_section_sdf2(ATerm module);
+/*}}}  */
+/*{{{  ATerm calc_import_graph(void) */
 
 ATerm calc_import_graph(void)
 {
@@ -197,9 +246,11 @@ ATerm calc_import_graph(void)
   return ATmake("import-graph([<list>],[<list>])", actualmodules, result);
 }
 
-
+/*}}}  */
+/*{{{  ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,  */
 /* Creation of a new entry in the database of a new Sdf2 definition. 
  */
+
 ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree, 
                       int timestamp, char *changed)
 {
@@ -258,9 +309,12 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   }
 }
 
+/*}}}  */
+/*{{{  void update_syntax_status_of_modules(ATermList mods) */
 /* This function "update..." removes the parse table and
    the asfix representation of the equations from the
    module database for all listed modules. */
+
 void update_syntax_status_of_modules(ATermList mods)
 {
   ATerm modname;
@@ -278,11 +332,11 @@ void update_syntax_status_of_modules(ATermList mods)
   }
 }
 
-ATermList replace_imports(ATerm name, ATermList mods);
-ATermList modules_depend_on(ATerm name, ATermList mods);
-
+/*}}}  */
+/*{{{  ATerm update_sdf2_module(int cid, ATerm newSdfTree) */
 /* Update an existing Sdf2 definition in the database.
  */
+
 ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 {
   ATerm t[8];
@@ -339,6 +393,9 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
   }
 }
 
+/*}}}  */
+/*{{{  ATerm add_empty_module(int cid, char *moduleName) */
+
 ATerm add_empty_module(int cid, char *moduleName)
 {
   ATerm atModuleName, entry, importGraph;
@@ -370,6 +427,9 @@ ATerm add_empty_module(int cid, char *moduleName)
   return ATmake("snd-value(empty-module-added(<term>))", importGraph);
 }
 
+/*}}}  */
+/*{{{  void add_tree_eqs_section(int cid, char *moduleName, char* path, */
+
 void add_tree_eqs_section(int cid, char *moduleName, char* path,
                           ATerm eqsTree, char *eqsText, int timestamp)
 {
@@ -397,6 +457,9 @@ void add_tree_eqs_section(int cid, char *moduleName, char* path,
   PutValue(new_modules_db, atModuleName, entry);
 }
 
+/*}}}  */
+/*{{{  void add_text_eqs_section(int cid, char *moduleName, char* path,  */
+
 void add_text_eqs_section(int cid, char *moduleName, char* path, 
                           char *eqsText, int timestamp)
 {
@@ -423,6 +486,9 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
   PutValue(new_modules_db, atModuleName, entry);
 }
 
+/*}}}  */
+/*{{{  void add_empty_eqs_section(int cid, char *moduleName, char* path) */
+
 void add_empty_eqs_section(int cid, char *moduleName, char* path)
 {
   ATerm entry;
@@ -442,6 +508,9 @@ void add_empty_eqs_section(int cid, char *moduleName, char* path)
   entry = (ATerm)ATreplace((ATermList)entry, atEqsText, EQS_TEXT_LOC);
   PutValue(new_modules_db, atModuleName, entry);
 }
+
+/*}}}  */
+/*{{{  ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree) */
 
 ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
 {
@@ -474,6 +543,9 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
     return ATmake("snd-value(changed-modules([]))");
   }
 }
+
+/*}}}  */
+/*{{{  ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp) */
 
 ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
 {
@@ -510,6 +582,9 @@ ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
   return ATmake("snd-value(parse-table-added)");
 }
 
+/*}}}  */
+/*{{{  ATerm get_path(int cid, char *modulename, ATerm type) */
+
 ATerm get_path(int cid, char *modulename, ATerm type)
 {
   ATerm entry, place, modname;
@@ -544,8 +619,11 @@ ATerm get_path(int cid, char *modulename, ATerm type)
   return NULL;
 }
 
+/*}}}  */
+/*{{{  ATerm get_asfix(int cid, char *modulename, ATerm type) */
 /* As above, type is either sdf2 or eqs, because slightly different
    actions need to be taken when the module does not exist. */
+
 
 ATerm get_asfix(int cid, char *modulename, ATerm type)
 {
@@ -607,15 +685,14 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   return NULL;
 }
 
-ATbool is_valid_parse_table(ATermList visited, ATerm module, 
-                            int timeOfEqsTable, int timeOfTrmTable);
+/*}}}  */
+/*{{{  ATerm get_parse_table(int cid, ATerm moduleId) */
 
 ATerm get_parse_table(int cid, ATerm moduleId)
 {
   ATermList entry;
   ATerm     table, modname;
   ATerm     contents;
-  /*char      *place;*/
   char      *moduleName;
   int tableLoc;
 
@@ -633,21 +710,24 @@ ATerm get_parse_table(int cid, ATerm moduleId)
   modname = ATmake("<str>", moduleName);
   if ((entry = (ATermList) GetValue(new_modules_db, modname))) {
     table = ATelementAt((ATermList)entry, tableLoc);
-    /*if (ATmatch(table,"table(<str>)", &place)) 
-      return ATmake("snd-value(table(<str>))",place);
-    */
     if (ATmatch(table,"table(<term>)", &contents)) {
-      return ATmake("snd-value(table(<term>))", ATBpack(contents));
+      ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
+      contents = (ATerm)ATgetArgument((ATermAppl)contents, 0);
+      contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
+      return ATmake("snd-value(table(<term>))", contents);
     }
   }
   return ATmake("snd-value(no-table)");
 }
 
+/*}}}  */
+/*{{{  void mdb_invalidate_parse_tables(ATermList visited, char *modulename) */
 /* This function traverses the import graph and visit all nodes
  * to check whether the parse tables are still valid and 
  * invalidates the parse table and "removes" the parse
  * tree of the equations section if necessary.
  */
+
 void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
 {
   int timeOfEqsTable, timeOfTrmTable;
@@ -684,10 +764,16 @@ void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
   }
 }
 
+/*}}}  */
+/*{{{  void invalidate_parse_tables(int cid, char *modulename) */
+
 void invalidate_parse_tables(int cid, char *modulename)
 {
   mdb_invalidate_parse_tables(ATempty,modulename);
 }
+
+/*}}}  */
+/*{{{  ATermList get_import_section(ATermList sections) */
 
 ATermList get_import_section(ATermList sections)
 {
@@ -716,9 +802,12 @@ ATermList get_import_section(ATermList sections)
   return import_strings;
 }
 
+/*}}}  */
+/*{{{  ATerm delete_module(int cid, char *moduleName) */
 /* If a module is delete a list of depending modules
  * should be calculated and returned.
  */
+
 ATerm delete_module(int cid, char *moduleName)
 {
   ATerm name = ATmake("<str>",moduleName);
@@ -732,6 +821,9 @@ ATerm delete_module(int cid, char *moduleName)
   return ATmake("snd-value(changed-modules([<term>,<list>]))",
                 name, changedMods);
 }
+
+/*}}}  */
+/*{{{  ATermList select_unknowns(ATermList mods) */
 
 ATermList select_unknowns(ATermList mods)
 {
@@ -748,6 +840,9 @@ ATermList select_unknowns(ATermList mods)
   return result;
 }
 
+/*}}}  */
+/*{{{  ATermList add_imports(ATerm name, ATermList mods) */
+
 ATermList add_imports(ATerm name, ATermList mods)
 {
   ATermList unknowns = ATempty;
@@ -760,6 +855,9 @@ ATermList add_imports(ATerm name, ATermList mods)
   return unknowns;
 }
 
+/*}}}  */
+/*{{{  ATermList replace_imports(ATerm name, ATermList mods) */
+
 ATermList replace_imports(ATerm name, ATermList mods)
 {
   trans_db = CreateValueStore(100,75);
@@ -767,6 +865,9 @@ ATermList replace_imports(ATerm name, ATermList mods)
   PutValue(import_db, name, (ATerm) mods);
   return select_unknowns(mods);
 }
+
+/*}}}  */
+/*{{{  ATbool complete_sdf2_specification(ATermList visited, ATerm module) */
 
 ATbool complete_sdf2_specification(ATermList visited, ATerm module)
 {
@@ -803,8 +904,11 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
+/*}}}  */
+/*{{{  ATbool is_valid_parse_table(ATermList visited, ATerm module,  */
+
 ATbool is_valid_parse_table(ATermList visited, ATerm module, 
-                            int timeOfEqsTable, int timeOfTrmTable)
+			    int timeOfEqsTable, int timeOfTrmTable)
 {
   ATbool result;
   ATermList imports;
@@ -826,28 +930,31 @@ ATbool is_valid_parse_table(ATermList visited, ATerm module,
     imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
     while(imports && !ATisEmpty(imports)) {
-			ATermList
- entry;
+      ATermList
+	entry;
       first = ATgetFirst(imports);
 
-			entry = (ATermList)GetValue(new_modules_db, first);
-			if(entry) {
-				timeOfEqsTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
-																												EQS_TABLE_TIME_LOC));
-				timeOfTrmTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
-																												TRM_TABLE_TIME_LOC));
+      entry = (ATermList)GetValue(new_modules_db, first);
+      if(entry) {
+	timeOfEqsTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+							EQS_TABLE_TIME_LOC));
+	timeOfTrmTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+							TRM_TABLE_TIME_LOC));
 
-				result = result && is_valid_parse_table(visited, first, 
-																								timeOfEqsTable, timeOfTrmTable);
-				imports = ATgetNext(imports);
-			} else {
-				return ATfalse;
-			}
-		}
-	}
-  
-	return result;
+	result = result && is_valid_parse_table(visited, first, 
+						timeOfEqsTable, timeOfTrmTable);
+	imports = ATgetNext(imports);
+      } else {
+	return ATfalse;
+      }
+    }
+  }
+
+  return result;
 } 
+
+/*}}}  */
+/*{{{  ATbool complete_asf_specification(ATermList visited, ATerm module) */
 
 ATbool complete_asf_specification(ATermList visited, ATerm module)
 {
@@ -882,6 +989,9 @@ ATbool complete_asf_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
+/*}}}  */
+/*{{{  ATbool complete_asf_sdf2_specification(ATerm module) */
+
 ATbool complete_asf_sdf2_specification(ATerm module)
 {
   if(complete_sdf2_specification(ATempty,module))
@@ -889,6 +999,9 @@ ATbool complete_asf_sdf2_specification(ATerm module)
   else
     return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATermList calc_trans(ATermList todo) */
 
 ATermList calc_trans(ATermList todo)
 {
@@ -907,6 +1020,9 @@ ATermList calc_trans(ATermList todo)
   return result;
 }
 
+/*}}}  */
+/*{{{  ATermList get_imported_modules(ATerm name) */
+
 ATermList get_imported_modules(ATerm name)
 {
   ATermList result;
@@ -921,6 +1037,9 @@ ATermList get_imported_modules(ATerm name)
   else
     return (ATermList) value;
 }
+
+/*}}}  */
+/*{{{  ATerm eqs_available_for_modules(int cid, char *moduleName) */
 
 ATerm eqs_available_for_modules(int cid, char *moduleName)
 {
@@ -950,6 +1069,9 @@ ATerm eqs_available_for_modules(int cid, char *moduleName)
   return ATmake("snd-value(modules([<list>]))",result);
 }
 
+/*}}}  */
+/*{{{  ATerm get_eqs_text(int cid, char *moduleName) */
+
 ATerm get_eqs_text(int cid, char *moduleName)
 {
   ATerm eqsText;
@@ -966,6 +1088,9 @@ ATerm get_eqs_text(int cid, char *moduleName)
   }
 }
 
+/*}}}  */
+/*{{{  ATerm get_all_modules(int cid) */
+
 ATerm get_all_modules(int cid)
 {
   ATermList list = ATtableKeys(import_db);
@@ -973,8 +1098,11 @@ ATerm get_all_modules(int cid)
   return ATmake("snd-value(all-modules([<list>]))",list);
 }
 
+/*}}}  */
+/*{{{  ATermList modules_depend_on(ATerm name, ATermList dependent) */
 /* The function "module_depend_on" determines which modules
    depend on the module "name" with respect to the import graph. */
+
 ATermList modules_depend_on(ATerm name, ATermList dependent)
 {  
   ATerm module;
@@ -1001,8 +1129,8 @@ ATermList modules_depend_on(ATerm name, ATermList dependent)
   return dependent;
 }
 
-/* A number of function to deal with modules which are recognized
-   via Sdf2. */
+/*}}}  */
+/*{{{  char *get_module_name(ATerm module) */
 
 char *get_module_name(ATerm module)
 {
@@ -1035,6 +1163,9 @@ char *get_module_name(ATerm module)
   }
 }
 
+/*}}}  */
+/*{{{  ATermList filter_import_names(ATermList imps) */
+
 ATermList filter_import_names(ATermList imps)
 {
   ATerm t[2], elem, arg;
@@ -1059,6 +1190,9 @@ ATermList filter_import_names(ATermList imps)
   }
   return imports;
 }
+
+/*}}}  */
+/*{{{  ATermList filter_import_list(ATermList imps) */
 
 ATermList filter_import_list(ATermList imps)
 {
@@ -1088,12 +1222,16 @@ ATermList filter_import_list(ATermList imps)
   return imports;
 }
 
-ATermList AFTgetImports(ATerm mod);
+/*}}}  */
+/*{{{  ATermList get_import_section_sdf2(ATerm module) */
 
 ATermList get_import_section_sdf2(ATerm module)
 {
   return filter_import_list(AFTgetImports(module));
 }
+
+/*}}}  */
+/*{{{  ATerm make_main_module(ATerm mainname) */
 
 ATerm make_main_module(ATerm mainname)
 {
@@ -1159,6 +1297,8 @@ ATerm make_main_module(ATerm mainname)
   return result;
 }
 
+/*}}}  */
+/*{{{  ATerm make_name_term(ATerm name) */
 
 ATerm make_name_term(ATerm name)
 {
@@ -1176,6 +1316,9 @@ ATerm make_name_term(ATerm name)
   }
   return result;
 }
+
+/*}}}  */
+/*{{{  ATerm get_syntax(ATerm name, ATermList modules) */
 
 ATerm get_syntax(ATerm name, ATermList modules)
 {
@@ -1227,6 +1370,9 @@ ATerm get_syntax(ATerm name, ATermList modules)
   return term;
 }
 
+/*}}}  */
+/*{{{  ATerm get_all_sdf2_definitions(int cid, char *modulename) */
+
 ATerm get_all_sdf2_definitions(int cid, char *modulename)
 {
   ATerm result, name;
@@ -1242,6 +1388,9 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
     return ATmake("snd-value(sdf2-definition-error(\"Specification is incomplete, can not generate parse table\"))");
   }
 }
+
+/*}}}  */
+/*{{{  ATerm unique_new_name(ATerm name) */
 
 ATerm unique_new_name(ATerm name)
 {
@@ -1266,6 +1415,9 @@ ATerm unique_new_name(ATerm name)
     return NULL; /* silence the compiler */
   }
 }
+
+/*}}}  */
+/*{{{  void gen_makefile(ATerm name) */
 
 void gen_makefile(ATerm name)
 {
@@ -1301,6 +1453,9 @@ void gen_makefile(ATerm name)
     ATerror("illegal name %t\n", name);
 }
 
+/*}}}  */
+/*{{{  void process_next_module(int cid) */
+
 void process_next_module(int cid)
 {
   ATerm event;
@@ -1320,6 +1475,9 @@ void process_next_module(int cid)
   }
 }
 
+/*}}}  */
+/*{{{  void rec_ack_event(int cid, ATerm term) */
+
 void rec_ack_event(int cid, ATerm term)
 {
   char *name;
@@ -1335,7 +1493,10 @@ void rec_ack_event(int cid, ATerm term)
     exit(1);
 }
 
-void AFTreshuffleModules(int cid, ATermList mods);
+/*}}}  */
+
+
+/*{{{  void reshuffle_modules_from(int cid, char *modulename) */
 
 void reshuffle_modules_from(int cid, char *modulename)
 {
@@ -1362,6 +1523,9 @@ void reshuffle_modules_from(int cid, char *modulename)
   } 
 }
 
+/*}}}  */
+/*{{{  void usage(char *prg, ATbool is_err) */
+
 void usage(char *prg, ATbool is_err)
 {
     ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
@@ -1370,14 +1534,19 @@ void usage(char *prg, ATbool is_err)
     exit(is_err ? 1 : 0);
 }
 
+/*}}}  */
+/*{{{  void version(const char *msg) */
+
 void version(const char *msg)
 {
     ATwarning("%s v%s\n", msg, myversion);
     exit(1);
 }
 
+/*}}}  */
 
-/* Main program */
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   int i, cid;
@@ -1403,3 +1572,5 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
+/*}}}  */
