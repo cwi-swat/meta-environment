@@ -11,6 +11,11 @@ imports
         Alias-Sdf-Normalization
 exports
   context-free syntax
+    normalize(SDF)               -> Grammar
+    normalize(ModuleName, SDF)   -> Grammar
+
+hiddens
+  context-free syntax
     normalize "[[" SDF "]]" "(" ModuleName "," Symbol ")" -> Grammar
     topsorts "[[" Grammar "]]" "(" Symbol ")"             -> Grammar
     topsorts(Symbol, Symbols)                             -> Productions

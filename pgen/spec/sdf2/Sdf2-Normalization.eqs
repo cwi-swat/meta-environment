@@ -2,6 +2,10 @@
 
 equations
 
+  [0] normalize(definition d) = normalize[[definition d]](Main,<START>)
+
+  [0] normalize(M, definition d) = normalize[[definition d]](M,<START>)
+
 %% \noindent
 %% The normalization of an \SDFII{} definition is defined by the following
 %% equation. The function \fun{normalize} is parameterized with a module name

@@ -1,9 +1,0 @@
-equations
-
-  [] atermlist(m*)      = [] when m* =
-  [] atermlist(m+1 m+2) = atermlist(m+1) ++ atermlist(m+2)
-  [] atermlist(m)       = [aterm(m)]
-
-  [] aterm(id(M))            = id(aterm(M))
-  [] aterm(moduleid(c+))     = literal(""" c+ """)
-  [] aterm(moduleid(c+)['a]) = literal(""" c+ """)(aterms(atermlist('a)))

@@ -1,9 +1,0 @@
-%%%% $Id$
-
-equations
-
-%% \noindent
-%% Encoding and decoding literals.
-
-  [] aterm(L)       = lit(L)
-  [] symbol(lit(L)) = L

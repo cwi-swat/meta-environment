@@ -1,7 +1,7 @@
 module Sdf2-Parse-Table
 imports
         Sdf2-Normalization
-%%%     Parse-Table-PCC
+        Parse-Table-PCC
 %%%        Table-to-Dot
 exports
   sorts ParseTable OutputGrammar
@@ -18,6 +18,8 @@ exports
 hiddens
   variables
     ModName[0-9]*        -> ModuleName
+    "_G"[0-9\']*        -> Grammar 
+    "d"[0-9\']*         -> Definition
 %%%  context-free syntax
 %%%    explode(SDF)        -> SDF
 %%%    explode(Definition) -> Definition

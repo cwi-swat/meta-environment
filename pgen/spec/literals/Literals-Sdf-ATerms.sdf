@@ -1,2 +1,0 @@
-module Literals-Sdf-ATerms
-imports Kernel-Sdf-ATerms Literals-Sdf-Tree-Constructors Literals-Sdf-Syntax
