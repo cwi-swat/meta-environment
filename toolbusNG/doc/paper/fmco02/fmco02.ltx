@@ -1,4 +1,4 @@
-\documentclass[runningheads]{llncs}
+\documentclass{llncs}
  
 \usepackage[english]{babel}
 \usepackage{epsfig}
@@ -25,18 +25,16 @@
 
 \begin{document}
 
-\pagestyle{headings}
-
 \mainmatter
 
 \title{ToolBus: the Next Generation}
-
-\titlerunning{ToolBus: the Next Generation}
 
 \author{Hayco de Jong\inst{1}
 \and Paul Klint\inst{1,2}}
 
 \institute{Centrum voor Wiskunde en Informatica,\\
+Kruislaan 413, P.O.Box 94079,\\
+1090 GB Amsterdam, The Netherlands\\
 \email{\{Hayco.de.Jong,Paul.Klint\}@cwi.nl}
 \and
 Informatics Institute,
@@ -845,7 +843,7 @@ how the recovery of \emph{tools} has to be organized. Most likely, we
 will add a limited undo request to the tool interface to recover from
 the last few operations carried out by a tool.
 
-\subsection{Call-by-value Versus Call-by-reference}
+\subsection{Call-By-Value Versus Call-By-Reference}
 \label{Sec:value-ref}
 
 \paragraph{Background}
