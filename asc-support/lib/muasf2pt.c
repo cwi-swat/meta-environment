@@ -27,11 +27,18 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
   PT_Tree sepTree = NULL;
   PT_Symbol rhs;
   PT_Args args = PT_makeArgsEmpty();
+  ATbool contextfree;
 
   rhs = PT_getProductionRhs(prod);
 
-  if (PT_isSymbolLex(rhs) || PT_isSymbolCf(rhs)) {
+  if (PT_isSymbolCf(rhs)) {
     rhs = PT_getSymbolSymbol(rhs);
+    contextfree = ATtrue;
+  } else if (PT_isSymbolLex(rhs)) {
+    rhs = PT_getSymbolSymbol(rhs);
+    contextfree = ATfalse;
+  } else {
+    contextfree = ATfalse;
   }
 
   if (PT_hasSymbolSeparator(rhs)) {
@@ -41,7 +48,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
   }
 
   for (;!ATisEmpty(elems); elems = ATgetNext(elems)) {
-    if (!PT_isArgsEmpty(args)) {
+    if (contextfree && !PT_isArgsEmpty(args)) {
       args = PT_makeArgsList(layout,args);
     }
     args = PT_makeArgsList(termToTree(ATgetFirst(elems)), args); 
