@@ -145,7 +145,7 @@ static PT_Tree parse_file(PT_Tree file)
   ATerm language = ATmake("<str>", toolname);
 
   if (initParser(toolname, language)) {
-    ATerm result = SGparseFile(toolname, language, NULL, PT_yieldTree(file)); 
+    ATerm result = SGparseFile(toolname, language, NULL, PT_yieldTree(file));
     return parse_result(result);
   }
 
