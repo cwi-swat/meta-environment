@@ -21,8 +21,8 @@ Options:
   -h (--help)              print help message
 
 Examples:
-  $PRG rscript/*.rstore.pt
-  $PRG -v -o hotdraw.rstore.pt rscript/*.rstore.pt
+  $PRG extracted-rstores/*.rstore.pt
+  $PRG -v -o hotdraw.rstore.pt extracted-rstores/*.rstore.pt
 
 ENDCAT
 }
