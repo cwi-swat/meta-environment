@@ -7,6 +7,10 @@
 #include <procs.h>
 #include <tool2.h>
 #include "Python.h"
+#include "allobjects.h"
+#include "sysmodule.h"
+#include "compile.h"
+#include "frameobject.h"
 #include <tcl.h>
 #include <tk.h>
 
@@ -17,11 +21,17 @@ static PyMethodDef TBMethods[];
 
 static PyObject *TBError;
 static PyObject *Dict;
-static char *Modules[MAX_CONNECTIONS] = { NULL };
+static PyObject *Modules[MAX_CONNECTIONS] = { NULL };
 static TBbool simplify_all = TBtrue;
 #ifndef NO_TK
 static TBbool enableTk = TBfalse;
 #endif
+static PyObject *LocalTraceFunc;
+static TBbool Debugging = TBfalse;
+
+/* Print traces on stderr */
+#define TRACE_CALLS 1
+static int trace_mode = 0;
 
 <<class term>>
 
@@ -38,6 +48,9 @@ static TBbool enableTk = TBfalse;
 
 <<TBP_eventloop>>
 <<TBP_enableTk>>
+<<TBP_enableDebugging>>
+<<TBP_traceFunction>>
+<<TBP_localTraceFunction>>
 
 <<TermMethods>>
 <<TBMethods>>
@@ -119,10 +132,16 @@ static PyTypeObject PyTerm_Type = {
 %{{{ utility functions
 
 {\tt name2kind} and {\tt kind2name} are two utility functions
-used by the term member functions.
+used by the term member functions. We need some declarations
+because of a circular dependency.
 <<class term>>=
+static PyObject *PyTerm_new(term *t);
+static PyObject *PyTerm_new_list(term_list *l);
+
 <<name2kind>>
 <<kind2name>>
+<<list_match>>
+<<term_match>>
 @
 
 %{{{ name2kind
@@ -179,6 +198,184 @@ const char *kind2name(int kind)
     return buf;
   }
   return k2n[kind];
+}
+@
+
+%}}}
+%{{{ term_match
+
+The function {\tt term_match} is used by both {\tt Term_match_term}
+and {\tt Term_match}. It does the actual work of matching two terms.
+<<term_match>>=
+TBbool term_match(term *t, term *template, PyObject **L)
+{
+  PyObject *Obj = NULL;
+
+  /*TBprintf(stdout, "term_match: %t matches %t?\n", t, template);*/
+
+  /* Now we perform a preorder search for placeholders */
+  if(is_placeholder(template)) {
+    <<matching template handling>>
+    if(Obj == Py_None) {
+      /* match failed */
+      Py_DECREF(*L);
+      Py_INCREF(Py_None);
+      *L = Py_None;
+      return TBtrue;
+    }
+    if(Obj) {
+      /* match succeeded */
+      PyList_Append(*L, Obj);
+      return TBtrue;
+    }
+    /* fall through: error occured */
+  } else if(is_appl(template)) {
+    return list_match(fun_args(t), fun_args(template), L);
+  } else if(is_list(template)) {
+    return list_match(t, template, L);
+  } else if(term_equal(t, template)) {
+    return TBtrue;
+  }
+  PyErr_SetString(TBError, "illegal term in matching");
+  return TBfalse;
+}
+@
+
+%{{{ matching template handling
+
+<<matching template handling>>=
+    sym_idx sym = fun_sym(placeholder_type(template));
+    switch(sym) {
+	<<matching: case type_term>>
+	<<matching: case type_list>>
+	<<matching: case type_bool>>
+	<<matching: case type_int>>
+	<<matching: case type_real>>
+	<<matching: case type_str>>
+	<<matching: case type_bstr>>
+	<<matching: default>>
+    }
+    if(Obj == Py_None)
+      *L = Py_None;
+    else
+      if(Obj)
+        PyList_Append(*L, Obj);
+      else
+        return TBfalse;
+    return TBtrue;
+@
+
+<<matching: case type_term>>=
+case type_term:	
+		Obj = PyTerm_new(t);
+		break;
+@
+
+<<matching: case type_list>>=
+case type_list:	if(!is_list(t))
+		  Obj = Py_None;
+		else 
+		  Obj = PyTerm_new_list(t);
+		break;
+@
+
+<<matching: case type_bool>>=
+case type_bool:	if(!is_bool(t))
+		  Obj = Py_None;
+		else
+		  if(bool_val(t) == TBtrue)
+		    Obj = PyInt_FromLong(1L);
+		  else
+		    Obj = Py_None;
+		break;
+@
+
+<<matching: case type_int>>=
+case type_int:	if(!is_int(t))
+		  Obj = Py_None;
+		else
+		  Obj = PyInt_FromLong(int_val(t));
+		break;
+@
+
+<<matching: case type_real>>=
+case type_real:	if(!is_real(t))
+		  Obj = Py_None;
+		else
+		  Obj = PyFloat_FromDouble(real_val(t));
+		break;
+@
+
+<<matching: case type_str>>=
+case type_str:	if(!is_str(t))
+		  Obj = Py_None;
+		else
+		  Obj = PyString_FromString(str_val(t));
+		break;
+@
+
+<<matching: case type_bstr>>=
+case type_bstr:	if(!is_bstr(t))
+		  Obj = Py_None;
+		else
+		  Obj = PyString_FromStringAndSize(bstr_val(t), bstr_len(t));
+		break;
+@
+
+<<matching: default>>=
+default:
+		if(streq(get_txt(sym), "appl")) {
+		  PyObject *Func, *Args;
+
+		  if(!is_appl(t))
+		    Obj = Py_None;
+		  else {
+		    Obj = PyTuple_New(2);
+		    Func = PyString_FromString(get_txt(fun_sym(t)));
+		    Args = PyTerm_new(fun_args(t));
+		    PyTuple_SetItem(Obj, 0, Func);
+		    PyTuple_SetItem(Obj, 1, Args);
+		  }
+		} else {
+		  PyErr_SetString(TBError, "not implemented yet!");
+                  return TBfalse;
+                }
+@
+
+%}}}
+
+%}}}%{{{  TBbool list_match(term_list *template, term_list *l, PyObject *L)
+%{{{ list_match
+
+<<list_match>>=
+static TBbool term_match(term *t, term *template, PyObject **L);
+
+static TBbool list_match(term_list *l, term_list *template, PyObject **L)
+{
+  /*TBprintf(stdout, "list_match: %t matches %t?\n", template, l);*/
+  /*PyObject_Print(L, stdout, 0);*/
+
+  if(list_length(template) != list_length(l)) {
+    Py_DECREF(*L);
+    Py_INCREF(Py_None);
+    *L = Py_None;
+    return TBtrue;
+  }
+
+  while(*L != Py_None && template && l) {
+    if(!term_match(first(l), first(template), L))
+      return TBfalse;
+    template = next(template);
+    l = next(l);
+  }
+  if(*L && *L != Py_None && (template || l)) {
+    /* One of the lists was longer than the other: match failed! */
+    Py_DECREF(*L);
+    Py_INCREF(Py_None);
+    *L = Py_None;
+    return TBtrue;
+  }
+  return TBtrue;
 }
 @
 
@@ -242,7 +439,7 @@ static PyObject *PyTerm_new_list(term_list *l)
     l = next(l);
   }
   
-  return T;
+  return L;
 }
 @
 
@@ -253,10 +450,7 @@ static PyObject *PyTerm_new_list(term_list *l)
 <<PyTerm_print>>=
 static int PyTerm_print(PyTerm *T, FILE *f, int flags)
 {
-  if(T->t)
-    TBprintf(f, "<term, %t", T->t);
-  else
-    TBprintf(f, "<term, null", T->t);
+  TBprintf(f, "<term, %t", T->t);
 
   if(T->t_attr) {
     fprintf(f, ", ");
@@ -286,9 +480,11 @@ static void PyTerm_dealloc(PyTerm *T)
 static PyObject *PyTerm_getattr(PyTerm *T, char *name)
 {
   static char error[64];
-  PyObject *v;
+  PyObject *v = NULL;
 
   int kind = name2kind(name);
+
+  /*TBprintf(stdout, "getattr: %t, %s\n", T->t, name);*/
 
   if(kind != -1 && tkind(T->t) != kind) {
     sprintf(error, "term is not of type %s", name);
@@ -323,14 +519,21 @@ static PyObject *PyTerm_getattr(PyTerm *T, char *name)
 		  v = T->t_attr;
                   if (v == NULL)
                     v = Py_None;
-		} else if (T->t_attr != NULL) {
-                  v =  PyDict_GetItemString(T->t_attr, name);
+		} else {
+		  v = Py_FindMethod(TermMethods, (PyObject *)T, name);
+		  if(v)
+		    return v;
 		}
-		if (v != NULL) {
+		if(!v) {
+		  if (T->t_attr != NULL)
+                    v =  PyDict_GetItemString(T->t_attr, name);
+		}
+  
+		if (v != NULL)
                   Py_INCREF(v);
-                  return v;
-                }
-		return Py_FindMethod(TermMethods, (PyObject *)T, name);
+		else
+		  PyErr_SetString(TBError, "unknown attribute");
+		return v;
   }
 }
 @
@@ -450,6 +653,9 @@ PyObject *PyTerm_repr(PyTerm *T)
 term objects also have one explicit member function: {\tt simplify}:
 <<class term>>=
 <<Term_simplify>>
+<<Term_match>>
+<<Term_matchTerm>>
+<<Term_kind>>
 @
 
 %{{{ Term_simplify
@@ -467,7 +673,7 @@ static PyObject *Term_simplify(PyObject *self, PyObject *args)
   if(!PyArg_ParseTuple(args, ""))
     return NULL;
 
-  TBprintf(stdout, "simplifying term %t\n", ((PyTerm *)self)->t);
+  /*TBprintf(stdout, "simplifying term %t\n", ((PyTerm *)self)->t);*/
   return pythonify_term(((PyTerm *)self)->t);    
 }
 @
@@ -538,6 +744,120 @@ static PyObject *pythonify_list(term_list *t)
 @
 
 %}}}
+%{{{ Term_matchTerm
+
+{\tt Term.matchTerm} takes a term containing holes and matches
+it against a ToolBus term. If the match succeeds, a list of 'hole
+fillings' is returned, else {\tt None} is returned.
+
+<<Term_matchTerm>>=
+static PyObject *Term_matchTerm(PyObject *self, PyObject *args)
+{
+  PyObject *template, *result;
+@
+
+First we check if exactly one argument was supplied. This argument
+must be a Python {\tt term} object.
+<<Term_matchTerm>>=
+  if(PyTuple_Size(args) != 1) {
+    PyErr_SetString(TBError, "term.match_term takes exactly 1 argument");
+    return NULL;
+  }
+
+  template = PyTuple_GetItem(args, 0);
+  if(!PyTerm_Check(template)) {
+    PyErr_SetString(TBError, "argument of term.match_term must be a term object");
+    return NULL;
+  }
+@
+
+The function {\tt match_template} does all the work!
+<<Term_matchTerm>>=
+  result = PyList_New(0);
+  if(!term_match(((PyTerm *)self)->t, ((PyTerm *)template)->t, &result)) {
+    Py_DECREF(result);
+    return NULL;
+  }
+  return result;
+}
+@
+
+%}}}
+%{{{ Term_match
+
+{\tt Term.match} takes a string representing a ToolBus term containing 
+holes and matches it against a ToolBus term. 
+If the match succeeds, a list of 'hole fillings' is returned, 
+else {\tt None} is returned.
+
+<<Term_match>>=
+static PyObject *Term_match(PyObject *self, PyObject *args)
+{
+  PyObject *template, *result;
+  term *tmpl;
+@
+
+First we check if exactly one argument was supplied. This argument
+must be a Python {\tt string} object.
+<<Term_match>>=
+  if(PyTuple_Size(args) != 1) {
+    PyErr_SetString(TBError, "term.match takes exactly 1 argument");
+    return NULL;
+  }
+
+  template = PyTuple_GetItem(args, 0);
+  if(!PyString_Check(template)) {
+    PyErr_SetString(TBError, "argument of term.match must be a string object");
+    return NULL;
+  }
+
+  tmpl = TBmake(PyString_AsString(template));
+@
+
+The function {\tt match_template} does all the work!
+<<Term_match>>=
+  result = PyList_New(0);
+  if(!term_match(((PyTerm *)self)->t, tmpl, &result)) {
+    Py_DECREF(result);
+    return NULL;
+  }
+  return result;
+}
+@
+
+%}}}
+%{{{ Term_kind
+
+Determine what kind of term we are dealing with.
+
+<<Term_kind>>=
+static PyObject *Term_kind(PyObject *self, PyObject *args)
+{
+  char *mykind;
+
+  if(!PyArg_ParseTuple(args, ""))
+    return NULL;
+
+  switch(tkind(((PyTerm *)self)->t)) {
+    case t_term:	mykind = "term"; break;
+    case t_bool:	mykind = "bool"; break;
+    case t_int:		mykind = "int";  break;
+    case t_real:	mykind = "real"; break;
+    case t_str:		mykind = "str";  break;
+    case t_bstr:	mykind = "bstr"; break;
+    case t_var:		mykind = "var";  break;
+    case t_placeholder: mykind = "placeholder"; break;
+    case t_appl:	mykind = "appl"; break;
+    case t_anno:	mykind = "anno"; break;
+    case t_env:		mykind = "env";  break;
+    case t_list:	mykind = "list"; break;
+    default: mykind = "*illegal*";
+  }
+  return PyString_FromString(mykind);
+}
+@
+
+%}}}
 
 %}}}
 
@@ -580,28 +900,38 @@ static term *toolbus_handler(int cid, term *t)
 term *call_python(int cid, char *func, term_list *args)
 {
   static char fbuf[MAX_FUN_LEN];
-  PyObject *globals, *mod, *dict;
-  PyObject *py_func, *py_args, *py_result;
+  PyObject *dict, *py_func, *py_args, *py_result;
+  PyFrameObject *Frame;
+  PyObject *LocalTraceFunc;
+  term *result;
   int i, len;
 
 
   hyphens2underscores(func, fbuf);
 
-  globals = PyEval_GetGlobals();
-  /*PyObject_Print(globals, stderr, 0);*/
-  mod = PyDict_GetItemString(globals, Modules[cid]);
-  if(!mod) {
-    fprintf(stderr, "couldn't find module %s\n", Modules[cid]);
-    return NULL;
+  if(Debugging) {
+    LocalTraceFunc = PyDict_GetItemString(Dict, "_local_trace_func");
+    Frame = (PyFrameObject *)PyEval_GetFrame();
+    while(Frame) {
+      Py_INCREF(LocalTraceFunc);
+      Frame->f_trace = LocalTraceFunc;
+      Frame = Frame->f_back;
+    }
   }
-  dict = PyModule_GetDict(mod);
+
+  dict = PyModule_GetDict(Modules[cid]);
   py_func = PyDict_GetItemString(dict, fbuf);
   if(!py_func) {
     fprintf(stderr, "couldn't find func %s in module %s\n", fbuf, Modules[cid]);
     return NULL;
   }
-  /*TBprintf(stderr, "calling python function %s in module %s with args %t\n", 
-		fbuf, Modules[cid], args);*/
+
+  if(trace_mode & TRACE_CALLS) {
+    PyObject *Name = PyDict_GetItemString(dict, "__name__");
+    char *name = PyString_AsString(Name);
+    TBprintf(stderr, "calling python function %s in module %s with args %l\n", 
+		fbuf, name, args);
+  }
 
   /* Building argument tuple */
   len = list_length(args);
@@ -614,7 +944,7 @@ term *call_python(int cid, char *func, term_list *args)
     for(i=0; i<len; i++, args = next(args))
       PyTuple_SetItem(py_args, i+1, PyTerm_new(first(args)));
   }
-  PyObject_Print(py_args, stderr, 0);
+  /*PyObject_Print(py_args, stderr, 0);*/
 
   /* Calling the actual python code */
   py_result = PyEval_CallObject(py_func, py_args);
@@ -624,15 +954,19 @@ term *call_python(int cid, char *func, term_list *args)
     PyErr_Print();
     PyErr_Clear();
   } else {
-    Py_DECREF(py_result);
-    if(py_result == Py_None)
+    if(py_result == Py_None) {
+      Py_DECREF(py_result);
       return NULL;
+    }
     if(!PyTerm_Check(py_result)) {
       fprintf(stderr, "return value of function %s in module %s was" \
 		 " not a term:\n", fbuf, Modules[cid]);
       PyObject_Print(py_result, stderr, 0);
+      Py_DECREF(py_result);
     } else {
-      return ((PyTerm *)py_result)->t;
+      result = ((PyTerm *)py_result)->t;
+      Py_DECREF(py_result);
+      return result;
     }
   }
   return NULL;
@@ -715,22 +1049,14 @@ TBbool signature_ok(int cid, term *func)
 TBbool check_python_func(int cid, char *func)
 {
   static char fbuf[MAX_FUN_LEN];
-  PyObject *globals, *mod, *dict;
-  PyObject *py_func, *py_args, *py_result;
+  PyObject *dict, *py_func, *py_args, *py_result;
   int i, len;
 
   /*TBprintf(stderr, "check_python_func: %d,%s\n", cid, func);*/
   hyphens2underscores(func, fbuf);
 
-  globals = PyEval_GetGlobals();
-
-  mod = PyDict_GetItemString(globals, Modules[cid]);
-  if(!mod) {
-    PyErr_SetString(TBError,
-		TBsprintf("couldn't find module %s\n", Modules[cid]));
-    return TBfalse;
-  }
-  dict = PyModule_GetDict(mod);
+  dict = PyModule_GetDict(Modules[cid]);
+  /*PyObject_Print(dict, stderr, 0);*/
   py_func = PyDict_GetItemString(dict, fbuf);
   if(py_func && PyCallable_Check(py_func))
     return TBtrue;
@@ -759,12 +1085,12 @@ void tk_handler(ClientData CID, int mask)
 %{{{ TBP_parseArgs
 
 <<TBP_parseArgs>>=
-<<get_arg>>
+<<get_one_arg>>
 
 static PyObject *TBP_parseArgs(PyObject *self, PyObject *args)
 {
-  PyObject *Args, *ScriptArgs, *Details;
-  char *mod;
+  PyObject *Args, *ScriptArgs = NULL, *Details;
+  PyObject *Mod;
   char *tool = NULL;
   char *host = NULL;
   char *details = NULL;
@@ -773,7 +1099,7 @@ static PyObject *TBP_parseArgs(PyObject *self, PyObject *args)
   int tid = -1;
   int len, i, cid;
 
-  if(!PyArg_ParseTuple(args, "Os", &Args, &mod))
+  if(!PyArg_ParseTuple(args, "OO", &Args, &Mod))
     return NULL;
   
   if(!PyList_Check(Args)) {
@@ -781,23 +1107,30 @@ static PyObject *TBP_parseArgs(PyObject *self, PyObject *args)
     return NULL;
   }
 
+  if(!PyModule_Check(Mod)) {
+    PyErr_SetString(TBError, "second argument must be a module");
+    return NULL;
+  }
+
   len = PyList_Size(Args);
   for(i=1; i<len; i++) {
-    char *arg = get_arg(Args, i);
+    char *arg = get_one_arg(Args, i);
     if(!arg)
       return NULL;
     if(streq(arg, "-TB_TOOL_NAME")) {
-      tool = get_arg(Args, ++i);
+      tool = get_one_arg(Args, ++i);
     } else if(streq(arg, "-TB_HOST")) {
-      host = get_arg(Args, ++i);
+      host = get_one_arg(Args, ++i);
     } else if(streq(arg, "-TB_PORT")) {
-      port = atoi(get_arg(Args, ++i));
+      port = atoi(get_one_arg(Args, ++i));
     } else if(streq(arg, "-TB_TOOL_ID")) {
-      tid = atoi(get_arg(Args, ++i));
+      tid = atoi(get_one_arg(Args, ++i));
     } else if(streq(arg, "-TB_VERBOSE")) {
       vb = TBtrue;
     } else if(streq(arg, "-details")) {
-      details = get_arg(Args, ++i);
+      details = get_one_arg(Args, ++i);
+    } else if(streq(arg, "-trace-calls")) {
+      trace_mode |= TRACE_CALLS;
     } else if(streq(arg, "-script-args")) {
       ScriptArgs = PyList_GetSlice(Args, i+1, len);
       Py_INCREF(ScriptArgs);
@@ -816,7 +1149,9 @@ static PyObject *TBP_parseArgs(PyObject *self, PyObject *args)
     return NULL;
   }
 
-  Modules[cid] = strdup(mod);
+  Py_INCREF(Mod);
+  Modules[cid] = Mod;
+
   TB_setTid(cid, tid);
   TB_setVerbose(cid, vb);
 
@@ -837,8 +1172,8 @@ static PyObject *TBP_parseArgs(PyObject *self, PyObject *args)
 }
 @
 
-<<get_arg>>=
-char *get_arg(PyObject *Args, int i)
+<<get_one_arg>>=
+char *get_one_arg(PyObject *Args, int i)
 {
   PyObject *Arg;
   char *arg;
@@ -865,21 +1200,21 @@ static PyObject *TBP_newConnection(PyObject *self, PyObject *args)
 {
   char *tool, *host;
   int port;
-  char *mod;
+  PyObject *Mod;
   int cid;
 
-  if(!PyArg_ParseTuple(args, "szis", &tool, &host, &port, &mod))
+  if(!PyArg_ParseTuple(args, "sziO", &tool, &host, &port, &Mod))
     return NULL;
 
-  fprintf(stderr, "callling TB_newConnection: %s,%s,%d,%s\n", 
-		tool, host ? host : "<null>", port, mod);
+  fprintf(stderr, "callling TB_newConnection: %s,%s,%d\n", 
+		tool, host ? host : "<null>", port);
   cid = TB_newConnection(tool,host,port, toolbus_handler, toolbus_sigchk);
   if(cid < 0) {
     PyErr_SetString(TBError, "couldn't open a new connection");
     return NULL;
   }
 
-  Modules[cid] = strdup(mod);
+  Modules[cid] = Mod;
   
   if(cid < 0) {
     PyErr_SetString(TBError, "Maximum number of connections reached");
@@ -906,7 +1241,7 @@ static PyObject *TBP_connect(PyObject *self, PyObject *args)
     return NULL;
   }
 
-  fprintf(stderr, "calling TB_connect: %d\n", cid);
+  /*fprintf(stderr, "calling TB_connect: %d\n", cid);*/
   result = TB_connect(cid);
   if(result < 0) {
     PyErr_SetFromErrno(TBError);
@@ -931,6 +1266,8 @@ static PyObject *TBP_connect(PyObject *self, PyObject *args)
 <<TBP_make>>=
 <<list_make>>
 <<term_make>>
+<<make_appl>>
+<<make_list>>
 
 static PyObject *TBP_make(PyObject *self, PyObject *args)
 {
@@ -956,46 +1293,60 @@ static PyObject *TBP_make(PyObject *self, PyObject *args)
   t = TBmake(fmt);
   
   idx = 1;
-  t = term_make(t, args, &idx);
+  if(term_make(t, args, &idx, &t) == TBfalse)
+    return NULL;
+
   return PyTerm_new(t);
 }
-
-
 @
 
-%{{{  term *list_make(term_list *l, PyObject *args, int *idx)
+%{{{  TBbool list_make(term_list *l, PyObject *args, int *idx, term **t)
 
 <<list_make>>=
-static term *term_make(term *template, PyObject *args, int *idx);
+static TBbool term_make(term *template, PyObject *args, int *idx, term **t);
 
-static term *list_make(term_list *l, PyObject *args, int *idx)
+static TBbool list_make(term_list *l, PyObject *args, int *idx, term **t)
 {
   term_list *cur = l;
+  term *trm;
 
   while(cur) {
-    first(cur) = term_make(first(cur), args, idx);
+    if(!term_make(first(cur), args, idx, &trm))
+      return TBfalse;
+    first(cur) = trm;
     cur = next(cur);
   }
-  return l;
+  *t = l;
+  return TBtrue;
 }
 @
 
 %}}}
-%{{{  term *term_make(term *template, PyObject *args, int *idx)
+%{{{  TBbool term_make(term *template, PyObject *args, int *idx, term **t)
 
 <<term_make>>=
-static term *term_make(term *template, PyObject *args, int *idx)
+static TBbool make_appl(char *str, PyObject *l, term **t);
+static TBbool make_list(PyObject *l, term **t);
+
+static TBbool term_make(term *template, PyObject *args, int *idx, term **t)
 {
+  term *trm;
+
   /* Here, we only perform a preorder search for placeholders */
   if(is_placeholder(template)) {
     <<template handling>>
+    return TBtrue;
   } else if(is_appl(template)) {
-    fun_args(template) = list_make(fun_args(template), args, idx);
-    return template;
+    if(!list_make(fun_args(template), args, idx, &trm))
+      return TBfalse;
+    fun_args(template) = trm;
+    *t = template;
+    return TBtrue;
   } else if(is_list(template)) {
-    return list_make(template, args, idx);
+    return list_make(template, args, idx, t);
   }
-  return template;
+  *t = template;
+  return TBtrue;
 }
 @
 
@@ -1003,7 +1354,6 @@ static term *term_make(term *template, PyObject *args, int *idx)
 
 <<template handling>>=
     int sym;
-    term *t;
     TBbool b;
     int i;
     double r;
@@ -1024,85 +1374,152 @@ static term *term_make(term *template, PyObject *args, int *idx)
 	<<case type_bstr>>
 	<<default>>
     }
-    return t;
+    return TBtrue;
 @
 
 <<case type_term>>=
-case type_term:	t = ((PyTerm *)arg)->t;
-		/* <PO>: missing tc, arg must be an PyTerm object! */
+case type_term:	if(!PyTerm_Check(arg)) {
+		  PyErr_SetString(TBError, "<term> needs a PyTerm object");
+		  return TBfalse;
+		}
+		*t = ((PyTerm *)arg)->t;
 		break;
 		
 @
 
 <<case type_list>>=
-case type_list:	t = ((PyTerm *)arg)->t; /* Not implemented yet! */
-		/* <PO>: missing tc, arg must be an PyTerm<list> object! */
+case type_list:	return make_list(arg, t);
 		break;
 @
 
 <<case type_bool>>=
 case type_bool:	if(arg == Py_None)
-		  t = mk_bool(TBfalse);
+		  *t = mk_bool(TBfalse);
 		else
-		  t = mk_bool(TBtrue);
+		  *t = mk_bool(TBtrue);
 		break;
 @
 
 <<case type_int>>=
 case type_int:	if(!PyInt_Check(arg)) {
 		  PyErr_SetString(TBError, "not an integer");
-		  return NULL;
+		  return TBfalse;
 		}
 		i = (int)PyInt_AsLong(arg);
-		t = mk_int(i);
+		*t = mk_int(i);
 		break;
 @
 
 <<case type_real>>=
 case type_real:	if(!PyFloat_Check(arg)) {
 		  PyErr_SetString(TBError, "not a float");
-		  return NULL;
+		  return TBfalse;
 		}
 		r = PyFloat_AsDouble(arg);
-		t = mk_real(r);
+		*t = mk_real(r);
 		break;
 @
 
 <<case type_str>>=
 case type_str:	if(!PyString_Check(arg)) {
 		  PyErr_SetString(TBError, "not a string");
-		  return NULL;
+		  return TBfalse;
 		}
 		s = PyString_AsString(arg);
-		t = mk_str(s);
+		*t = mk_str(s);
 		break;
 @
 
 <<case type_bstr>>=
 case type_bstr:	if(!PyString_Check(arg)) {
 		  PyErr_SetString(TBError, "not a string");
-		  return NULL;
+		  return TBfalse;
 		}
 		s = PyString_AsString(arg);
 		i = PyString_Size(arg);
-		return mk_bstr(s, i);
+		*t = mk_bstr(s, i);
+		break;
 @
 
 <<default>>=
-default:	if(streq(get_txt(sym), "appl")) {
+default:	/*fprintf(stderr, "default: %s\n", get_txt(sym));*/
+		if(streq(get_txt(sym), "appl")) {
 		  if(!PyArg_ParseTuple(arg, "sO", &s, &L))
-		    return NULL;
-		  assert(0); /* Not implemented yet! */
-		  /* The object should either be list object,
-		     in which case its arguments are translated into
-		     terms, or a PyTerm object representing a ToolBus list,
-		     supplying the arguments of the function. */
-		  return mk_appl(TBlookup(s), t);
-		}
-		assert(0);
+		    return TBfalse;
+		  return make_appl(s, L, t);
+		} else {
+		  PyErr_SetString(TBError, "not implemented yet!");
+                  return TBfalse;
+                }
 @
 
 %}}}
+
+%}}}
+
+%{{{  TBbool make_appl(char *str, PyObject *l, term **t)
+
+Make a term representing an application, given a string representing the
+function symbol and a Python list of terms representing the arguments.
+
+<<make_appl>>=
+static TBbool make_appl(char *str, PyObject *l, term **t)
+{
+  if(PyList_Check(l)) {
+    term_list *args = NULL;
+    int i,len = PyList_Size(l);
+    
+    for(i=0; i<len; i++) {
+      PyObject *el = PyList_GetItem(l, i);
+      if(!PyTerm_Check(el)) {
+        PyErr_SetString(TBError, "second argument of <appl> contains non-term object.");
+	return TBfalse;
+      }
+      args = list_concat_term(args, ((PyTerm *)el)->t);
+    }
+    *t = mk_appl(TBlookup(str), args);
+    return TBtrue;
+  }
+  if(PyTerm_Check(l) && is_list(((PyTerm *)l)->t)) {
+    *t = mk_appl(TBlookup(str), ((PyTerm *)l)->t);
+    return TBtrue;
+  }
+  PyErr_SetString(TBError, "second argument of <appl> must be a Python or ToolBus list!");
+  return TBfalse;
+}
+@
+
+%}}}
+%{{{  TBbool make_list(PyObject *l, term **t)
+
+Build a ToolBus list object from a Python list of {\tt PyTerm}'s.
+
+<<make_list>>=
+static TBbool make_list(PyObject *l, term **t)
+{
+  if(PyList_Check(l)) {
+    term_list *lst = NULL;
+    int i,len = PyList_Size(l);
+    
+    for(i=0; i<len; i++) {
+      PyObject *el = PyList_GetItem(l, i);
+      if(!PyTerm_Check(el)) {
+        PyErr_SetString(TBError, "argument of <list> contains non-term object.");
+	return TBfalse;
+      }
+      lst = list_concat_term(lst, ((PyTerm *)el)->t);
+    }
+    *t = lst;
+    return TBtrue;
+  }
+  if(PyTerm_Check(l) && is_list(((PyTerm *)l)->t)) {
+    *t = ((PyTerm *)l)->t;
+    return TBtrue;
+  }
+  PyErr_SetString(TBError, "argument of <list> must be a Python or ToolBus list!");
+  return TBfalse;
+}
+@
 
 %}}}
 
@@ -1194,6 +1611,91 @@ PyObject *TBP_enableTk(PyObject *self, PyObject *args)
 @
 
 %}}}
+%{{{ TBP_enableDebugging
+
+Enable Python debugging. This function takes one argument: the
+connection id of the connection with a debugger ToolBus.
+
+<<TBP_enableDebugging>>=
+PyObject *TBP_enableDebugging(PyObject *self, PyObject *args)
+{
+  int cid;
+  PyObject *GlobalTraceFunc;
+  PyFrameObject *Frame;
+
+  if(!PyArg_ParseTuple(args, "i", &cid))
+    return NULL;
+
+  fprintf(stderr, "starting debuggin via connection %d\n", cid);
+  if(!TB_validConnection(cid)) {
+    PyErr_SetString(TBError, "invalid debugging connection");
+    return NULL;
+  }
+
+  /* We need to get TBP_traceFunction as a function object */
+  GlobalTraceFunc = PyDict_GetItemString(Dict, "_trace_func");
+  assert(GlobalTraceFunc);
+
+  Py_INCREF(GlobalTraceFunc);
+  _PySys_TraceFunc = GlobalTraceFunc;
+
+  Py_INCREF(Py_None);
+  return Py_None; 
+}
+@
+
+%}}}
+%{{{ TBP_traceFunction
+
+<<TBP_traceFunction>>=
+PyObject *TBP_traceFunction(PyObject *self, PyObject *args)
+{
+  PyFrameObject *Frame;
+  int i;
+
+  if(PyTuple_Size(args) != 3) {
+    PyErr_SetString(TBError, 
+	"tracefunction called with an invalid number of arguments");
+    return NULL;
+  }
+  fprintf(stdout, "- TBP_traceFunction called:\n");
+  for(i=0; i<3; i++) {
+    PyObject_Print(PyTuple_GetItem(args, i), stdout, 0);
+    fprintf(stdout, ", ");
+  }
+  fprintf(stdout, "\n");
+
+  Py_INCREF(LocalTraceFunc);
+  return LocalTraceFunc;
+}
+@
+
+%}}}
+%{{{ TBP_localTraceFunction
+
+<<TBP_localTraceFunction>>=
+PyObject *TBP_localTraceFunction(PyObject *self, PyObject *args)
+{
+  int i;
+
+  if(PyTuple_Size(args) != 3) {
+    PyErr_SetString(TBError, 
+	"local tracefunction called with an invalid number of arguments");
+    return NULL;
+  }
+  fprintf(stdout, "- TBP_localTraceFunction called:\n");
+  for(i=0; i<3; i++) {
+    PyObject_Print(PyTuple_GetItem(args, i), stdout, 0);
+    fprintf(stdout, ", ");
+  }
+  fprintf(stdout, "\n");
+
+  Py_INCREF(LocalTraceFunc);
+  return LocalTraceFunc;
+}
+@
+
+%}}}
 
 
 %{{{ PyMethodDef TermMethods
@@ -1201,6 +1703,9 @@ PyObject *TBP_enableTk(PyObject *self, PyObject *args)
 <<TermMethods>>=
 static PyMethodDef TermMethods[] = {
   { "simplify",		Term_simplify,		1},
+  { "match",		Term_match,		1},
+  { "matchTerm",	Term_matchTerm,		1},
+  { "kind",		Term_kind,		1},
   { NULL, NULL} /* Sentinel */
 };
 @
@@ -1214,10 +1719,12 @@ static PyMethodDef TBMethods[] = {
   { "newConnection",	TBP_newConnection,	1},
   { "connect",		TBP_connect,		1},
   { "make",		TBP_make,		1},
-  { "match",		TBP_make,		1},
   { "send",		TBP_send,		1},
   { "eventloop",	TBP_eventloop,		1},
   { "enableTk",		TBP_enableTk,		1},
+  { "enableDebugging",	TBP_enableDebugging,	1},
+  { "_trace_func",	TBP_traceFunction,	1},
+  { "_local_trace_func",TBP_localTraceFunction,	1},
   { NULL,   NULL} /* Sentinel */
 };
 @
@@ -1231,13 +1738,19 @@ void initTB()
 {
   PyObject *m;
 
-  fprintf(stderr, "initTB called!\n");
+  /*fprintf(stderr, "initTB called!\n");*/
   m = Py_InitModule("TB", TBMethods);
   Dict = PyModule_GetDict(m);
   TBError = PyString_FromString("TB.error");
   PyDict_SetItemString(Dict, "error", TBError);
+
+  LocalTraceFunc = PyDict_GetItemString(Dict, "_local_trace_func");
+  assert(LocalTraceFunc);
+  
   TB_init();
 }
 @
 
 %}}}
+
+

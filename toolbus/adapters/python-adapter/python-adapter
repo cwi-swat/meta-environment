@@ -26,6 +26,8 @@ do
 				;;	
 		-details)	DETAILS=$2 ;shift; shift
 				;;
+		-trace-calls)	TRACE="$TRACE -trace-calls" ;shift
+				;;
 		-arg)		ARGS="$ARGS $2" ;shift;shift
 				;;
 		-script-args)	shift; SCRIPTARGS="-script-args $@" ;shift
@@ -37,6 +39,6 @@ do
 		*) break
 	esac
 done
-		
-#echo "executing: $PROGRAM $ARGS $SCRIPT $NAME $HOST $PORT $TID $VERBOSE $DBPORT $DBHOST -details $DETAILS $SCRIPTARGS"
-$PROGRAM $ARGS $SCRIPT $NAME $HOST $PORT $TID $VERBOSE $DBPORT $DBHOST -details "$DETAILS" $SCRIPTARGS
+
+#echo "executing: $PROGRAM $ARGS $SCRIPT $NAME $HOST $PORT $TID $VERBOSE $DBPORT $DBHOST $TRACE -details $DETAILS $SCRIPTARGS"
+$PROGRAM $ARGS $SCRIPT $NAME $HOST $PORT $TID $VERBOSE $DBPORT $DBHOST $TRACE -details "$DETAILS" $SCRIPTARGS 
