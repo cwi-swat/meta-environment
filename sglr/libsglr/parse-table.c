@@ -1021,7 +1021,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
 /*  Parse Table Database  */
 
-#define MAX_TABLES 4
+#define MAX_TABLES 1
 
 typedef struct _ptdb {
   language name;
