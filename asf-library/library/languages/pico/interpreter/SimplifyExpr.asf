@@ -1,0 +1,19 @@
+equations
+
+  [s-1] Nat-con1 := simplify(Exp1),
+        Nat-con2 := simplify(Exp2),
+        Nat1 := Nat-con1,
+        Nat2 := Nat-con2,
+        Nat-con3 := Nat1 + Nat2
+        ======================
+        simplify(Exp1 + Exp2) = Nat-con3
+
+  [s-2] Nat-con1 := simplify(Exp1),
+        Nat-con2 := simplify(Exp2),
+        Nat-con3 := Nat-con1 -/ Nat-con2
+        ===============================
+        simplify(Exp1 - Exp2) = Nat-con3
+
+  [s-3] simplify(Nat-con) = Nat-con
+
+  [default-s-3] simplify(Exp) = Exp

@@ -1,0 +1,13 @@
+module languages/pico/interpreter/SimplifyExpr
+
+imports languages/pico/syntax/Pico-Syntax
+
+exports
+  context-free syntax
+    simplify(EXP)        -> EXP
+
+hiddens
+  variables
+    "Exp"[0-9]*      -> EXP
+    "Nat"[0-9]*      -> Natural 
+    "Nat-con"[0-9]*  -> NatCon

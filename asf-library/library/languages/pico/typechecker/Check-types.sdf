@@ -1,0 +1,12 @@
+module languages/pico/typechecker/Check-types
+
+imports languages/pico/syntax/Pico-Types 
+imports basic/Booleans basic/Comments
+
+exports
+  context-free syntax
+    "compatible"(TYPE, TYPE) -> Boolean 
+
+hiddens
+  variables
+    "Type"[0-9]*  -> TYPE

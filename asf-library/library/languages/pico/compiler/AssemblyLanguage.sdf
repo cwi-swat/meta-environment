@@ -1,0 +1,31 @@
+module languages/pico/compiler/AssemblyLanguage
+
+imports basic/Integers basic/Strings 
+imports languages/pico/syntax/Pico-Identifiers
+
+exports 
+  sorts Label Instr
+  lexical syntax
+    [a-z0-9]+       -> Label 
+  context-free syntax
+    "dclnat"	PICO-ID	    -> Instr
+    "dclstr"	PICO-ID	    -> Instr
+
+    "push"	NatCon     -> Instr
+    "push"	StrCon     -> Instr
+    "rvalue"	PICO-ID  -> Instr 
+    "lvalue"	PICO-ID  -> Instr 
+    "assign"          -> Instr 
+    "add"             -> Instr 
+    "sub"             -> Instr 
+    "conc"            -> Instr 
+    "label"	Label     -> Instr 
+    "goto"	Label      -> Instr 
+    "gotrue"	Label    -> Instr 
+    "gofalse"	Label   -> Instr
+    "noop"            -> Instr
+
+  sorts Instrs
+context-free syntax
+{Instr";"
+}+ -> Instrs 

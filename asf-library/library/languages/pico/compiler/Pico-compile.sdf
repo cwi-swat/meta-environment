@@ -1,0 +1,37 @@
+module languages/pico/compiler/Pico-compile
+
+imports languages/pico/syntax/Pico-Syntax 
+imports languages/pico/compiler/AssemblyLanguage 
+imports languages/pico/compiler/NextLabel 
+
+  
+exports
+  context-free syntax
+    trp( PROGRAM ) -> Instrs
+  
+hiddens
+  context-free start-symbols
+    <{Instr ";"}+ , Label>
+  context-free syntax
+    trd(DECLS)                    -> {Instr ";"}+
+    trits({ID-TYPE  ","}*)        -> {Instr ";"}+ 
+    trs({STATEMENT ";"}*, Label)  -> <{Instr ";"}+ , Label>
+    trst(STATEMENT, Label)        -> <{Instr ";"}+ , Label >
+    tre(EXP)                      -> {Instr ";"}+
+
+hiddens
+  variables
+    "Decls"[0-9\']*   -> DECLS
+    "Exp"[0-9\']*     -> EXP
+    "Id"[0-9]*        -> PICO-ID
+    "Id-type*"[0-9]*  -> {ID-TYPE ","}*
+    "Nat"[0-9\']*     -> Natural
+    "Nat-con"[0-9\']* -> NatCon
+    "Series"[0-9\']*  -> {STATEMENT ";"}+
+    "Stat"[0-9\']*    -> STATEMENT
+    "Stat*"[0-9\']*   -> {STATEMENT ";"}*
+    "Str-con"[0-9\']* -> StrCon
+    "Str"[0-9\']*     -> String
+
+    "Instr*"[0-9\']*  -> {Instr ";"}+
+    "Label" [0-9\']*  -> Label

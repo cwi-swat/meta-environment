@@ -1,0 +1,11 @@
+module languages/pico/typechecker/Type-environments
+
+imports languages/pico/typechecker/Check-types 
+imports languages/pico/syntax/Pico-Identifiers 
+imports containers/Table[PICO-ID TYPE]
+
+exports 
+  sorts TENV
+
+  aliases
+    Table[[PICO-ID,TYPE]] -> TENV
