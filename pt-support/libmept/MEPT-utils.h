@@ -115,7 +115,7 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
 PT_Symbol makeSymbolAllChars();
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
-PT_Tree PT_makeTreeFlatLexicalFromString(char *str);
+PT_Tree PT_makeTreeFlatLexicalFromString(const char *str);
 ATbool PT_isTreeFlatLexical(PT_Tree tree);
 PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol);
 

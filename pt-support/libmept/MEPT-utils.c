@@ -856,7 +856,7 @@ PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 
 /*}}}  */
 
-PT_Tree PT_makeTreeFlatLexicalFromString(char *str)
+PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
 {
   PT_Args args = PT_makeArgsEmpty();
   int i;
