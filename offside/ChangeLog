@@ -1,3 +1,6 @@
+2002/10/15 (jurgenv@cwi.nl)
+ * Brought up-to-date with new Meta-Environment dependencies
+ 
 2002/04/04 (jurgenv@cwi.nl)
  * distcheck target fixed
  * added tests
