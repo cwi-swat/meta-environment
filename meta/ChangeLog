@@ -1,5 +1,10 @@
 # $Id$
 
+2003/01/28 (markvdb@cwi.nl)
+ * Release 0.12beta
+ * The error message in the equation and syntax editor was
+   lost due to a resetting of the focus.
+
 Fri Jan 24 10:09:13 CET 2003 <jong@cwi.nl>
  * add ${top_srcdir}/meta-studio to CLASSPATH during java compilation
    to satisfy distcheck needs
