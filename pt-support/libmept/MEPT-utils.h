@@ -43,6 +43,9 @@ char *PT_yieldArgs(PT_Args tree);
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
 
+ATerm PT_reportTreeAmbiguities(PT_Tree tree);
+ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree);
+
 PT_ParseTree implodeParseTree(PT_ParseTree tree);
 
 typedef void* PT_TreeVisitorData;
