@@ -1,6 +1,7 @@
-module Basic-Integers
+module utils/Basic-Integers
 
-imports IntCon
+imports utils/IntCon
+
 exports
   sorts Int
   context-free syntax

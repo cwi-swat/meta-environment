@@ -1,4 +1,4 @@
-module Layout
+module utils/Layout
 
 exports
   lexical syntax

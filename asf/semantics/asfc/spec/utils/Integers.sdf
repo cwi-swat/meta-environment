@@ -1,6 +1,8 @@
-module Integers
+module utils/Integers
 
-imports Basic-Integers Booleans
+imports utils/Basic-Integers
+imports utils/Booleans
+
 exports
   context-free syntax
     Int "-" Int            -> Int {left}

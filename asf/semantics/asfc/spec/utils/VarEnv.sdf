@@ -8,9 +8,11 @@
 %% access functions are defined to
 %% store and retrieve information from
 %% these datastructures.
-module VarEnv
+module utils/VarEnv
 
-imports Integers-Extended MuASF
+imports utils/Integers-Extended
+imports muasf/MuASF
+
 
 exports
   sorts VarEnv IntVarEnv

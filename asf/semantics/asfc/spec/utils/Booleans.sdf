@@ -1,6 +1,7 @@
-module Booleans
+module utils/Booleans
 
-imports Layout
+imports utils/Layout
+
 exports
   sorts Bool
   context-free syntax

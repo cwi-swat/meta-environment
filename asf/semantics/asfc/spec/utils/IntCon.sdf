@@ -1,6 +1,7 @@
-module IntCon
+module utils/IntCon
 
-imports Layout
+imports utils/Layout
+
 exports
   sorts NatCon IntCon
   lexical syntax
