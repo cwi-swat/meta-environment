@@ -47,7 +47,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
   eqs = RWprepareEquations(eqs, mark_new_layout);
   enter_equations(eqs);
 
-  RWclearError();
+  RWclearErrors();
 
   tree = PT_getParseTreeTree(parseTree);
   tree = RWprepareTerm(tree, allow_ambs);

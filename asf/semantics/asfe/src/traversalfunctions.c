@@ -113,21 +113,22 @@ static ATbool checkTraversalType(Traversal trav)
 
   if (trav.type == TRANSFORMER) {
     if (!PT_isEqualSymbol(trav.traversed, symbol)) {
-      RWsetError("First argument sort should be equal to result sort", 
-		 PT_makeTreeLit(""));
+      RWaddError("First argument sort should be equal to result sort", 
+		 PT_yieldSymbol(trav.traversed));
       return ATfalse;
     }
   }
   else if (trav.type == ACCUMULATOR) {
     if (!PT_isEqualSymbol(trav.accumulated, cleanSymbol)) {
-      RWsetError("Second argument sort should be equal to result sort", 
-		 PT_makeTreeLit(""));
+      RWaddError("Second argument sort should be equal to result sort", 
+		 PT_yieldSymbol(trav.accumulated));
       return ATfalse;
     }
   }
   else if (trav.type == COMBINATION) {
     if (!PT_isSymbolTuple(cleanSymbol)) {
-      RWsetError("Result sort should be a tuple", PT_makeTreeLit("")); 
+      RWaddError("Result sort should be a tuple", 
+		 PT_yieldSymbol(cleanSymbol));
       return ATfalse;
     }
     else {
@@ -135,13 +136,13 @@ static ATbool checkTraversalType(Traversal trav)
       PT_Symbol rhs = PT_getSymbolsHead(PT_getSymbolRest(cleanSymbol));
 
       if (!PT_isEqualSymbol(PT_getSymbolSymbol(trav.traversed),lhs)) {
-	RWsetError("First argument sort should be equal to the first sort"
-		  " of the tuple", PT_makeTreeLit(""));
+	RWaddError("First argument sort should be equal to the first sort"
+		  " of the tuple", PT_yieldSymbol(lhs));
         return ATfalse;
       }
       if (!PT_isEqualSymbol(trav.accumulated, rhs)) {
-	RWsetError("Second argument sort should be equal to second sort"
-		   "of the tuple", PT_makeTreeLit(""));
+	RWaddError("Second argument sort should be equal to second sort"
+		   "of the tuple", PT_yieldSymbol(rhs));
         return ATfalse;
       }
     }
@@ -238,8 +239,8 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
       }
       else if (ATisEqual(ATparse("bottom-up"), arg)) {
 	if (trav.strategy == TOPDOWN) {
-	  RWsetError("Ambiguous traversal attribute in production.",
-		     PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	  RWaddError("Ambiguous traversal attribute in production.",
+		     PT_yieldProduction(trav.prod));
 	}
 	else {
 	  trav.strategy = BOTTOMUP;
@@ -247,8 +248,8 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
       }
       else if (ATisEqual(ATparse("top-down"), arg)) {
 	if (trav.strategy == BOTTOMUP) {
-	  RWsetError("Ambiguous traversal attribute in production.",
-		     PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	  RWaddError("Ambiguous traversal attribute in production.",
+		     PT_yieldProduction(trav.prod));
 	}
 	else {
 	  trav.strategy = TOPDOWN;
@@ -256,8 +257,8 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
       }
       else if (ATisEqual(ATparse("break"), arg)) {
 	if (trav.continuation == CONTINUE) {
-	  RWsetError("Ambiguous continuation attribute in production.",
-		     PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	  RWaddError("Ambiguous continuation attribute in production.",
+		     PT_yieldProduction(trav.prod));
 	}
 	else {
 	  trav.continuation = BREAK;
@@ -265,28 +266,28 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
       }
       else if (ATisEqual(ATparse("continue"), arg)) {
 	if (trav.continuation == BREAK) {
-	  RWsetError("Ambiguous continuation attribute in production.",
-		     PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	  RWaddError("Ambiguous continuation attribute in production.",
+		     PT_yieldProduction(trav.prod));
 	}
 	else {
 	  trav.continuation = CONTINUE;
 	}
       }
       else if (ATisEqual(ATparse("generate-syntax"), arg)) {
-	RWsetError("generate-syntax attribute is not implemented.",
-		   PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	RWaddError("generate-syntax attribute is not implemented.",
+		   PT_yieldProduction(trav.prod));
       }
       else {
-	RWsetError("Unknown traversal specifier in production.",
-		   PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	RWaddError("Unknown traversal specifier in production.",
+		   PT_yieldProduction(trav.prod));
       }
     }
   }
 
   /* default strategy behaviour */
   if (trav.strategy == UNDEFINED_STRATEGY) {
-    RWsetError("top-down or bottom-up missing in traversal strategy.", 
-	       PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+    RWaddError("top-down or bottom-up missing in traversal strategy.", 
+	       PT_yieldProduction(trav.prod));
     if (trav.type == UNDEFINED_TYPE) { /* old style traversals */
       trav.strategy = TOPDOWN;
     }

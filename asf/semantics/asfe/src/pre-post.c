@@ -158,7 +158,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
       result = ambToAmbConstructor(tree,data);
     }
     else {
-      RWsetError("Illegal ambiguity", PT_makeTreeLit(""));
+      RWaddError("Illegal ambiguity", PT_yieldTree(tree));
       result = tree;
     }
   }
@@ -213,7 +213,7 @@ static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data)
   ambs = PT_makeArgsEmpty();
 
   if (ATisEmpty(args)) {
-    RWsetError("Empty ambiguity cluster encountered", PT_makeTreeLit(""));
+    RWaddError("Empty ambiguity cluster encountered", "");
     return tree;
   }
 

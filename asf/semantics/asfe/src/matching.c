@@ -532,7 +532,7 @@ static ATerm matchArgument(ATerm env,
     char tmp[256];
     sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
 	    MAX_DEPTH / 2);
-    RWsetError(tmp, PT_makeTreeLit(""));
+    RWaddError(tmp, "");
     return fail_env;
   }
 

@@ -561,7 +561,7 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
   if (depth > MAX_DEPTH) {
     char tmp[256];
     sprintf(tmp, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    RWsetError(tmp, PT_makeTreeLit(""));
+    RWaddError(tmp, PT_yieldTree((PT_Tree) tagCurrentRule));
     reduct = trm;
   }
 

@@ -65,11 +65,13 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   tagCurrentRule = tag;
 
   if (!no_new_vars(lhs, environment)) {
-    RWsetError("Left side of test introduces a variable", (PT_Tree) tag);
+    RWaddError("Left side of test introduces a variable", 
+	       PT_yieldTree((PT_Tree) tag));
     return tag;
   }
   if (!no_new_vars(rhs, environment)) {
-    RWsetError("Right side of test introduces a variable", (PT_Tree) tag);
+    RWaddError("Right side of test introduces a variable", 
+	       PT_yieldTree((PT_Tree) tag));
     return tag;
   }
 

@@ -6,90 +6,68 @@
 
 #include <aterm2.h>
 #include <MEPT-utils.h>
+#include <ErrorAPI.h>
 
-ATerm rewriteError = NULL;
+ERR_FeedbackList errors = NULL;
 
-/* Error registration */
 /*{{{  void RWclearError() */
 
-void RWclearError()
+void RWclearErrors()
 {
   static ATbool is_protected = ATfalse;
 
   if (!is_protected) {
     is_protected = ATtrue;
-    rewriteError = NULL;
-    ATprotect(&rewriteError);
+    errors = NULL;
+    ERR_protectFeedbackList(errors);
   }
 
-  rewriteError = NULL;
+  errors = NULL;
 }
 
 /*}}}  */
-/*{{{  void RWsetError(const char *message, PT_Tree subject) */
+/*{{{  ERR_FeedbackList RWgetError() */
 
-void RWsetError(const char *message, PT_Tree subject)
+ERR_FeedbackList RWgetErrors()
 {
-  ASF_OptLayout e = ASF_makeOptLayoutAbsent();
-
-  if (tagCurrentRule == NULL) {
-    tagCurrentRule = ASF_makeASFTagNotEmpty(e,ASF_makeASFTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
-  }
-
-  if (rewriteError == NULL) {
-    RWclearError();		
-    rewriteError = ATmake("[<str>,<term>,<term>])",
-			   message, tagCurrentRule,
-			   subject);
-  }
-
-  aborted = ATtrue;
+  return errors;
 }
 
 /*}}}  */
-/*{{{  ATerm RWgetError() */
+     
+/*{{{  void RWaddError(ERR_Feedback error)  */
 
-ATerm RWgetError()
+void RWaddError(char *msg, char *subject)
 {
-  return rewriteError;
+  ERR_Subject sub = ERR_makeSubjectSubject(subject, 
+					   ERR_makeLocationNoLocation());
+  ERR_Feedback error = ERR_makeFeedbackError(msg,
+					     ERR_makeSubjectListSingle(sub));
+
+  if (errors == NULL) {
+    RWclearErrors();
+    errors = ERR_makeFeedbackListSingle(error);
+  }
+  else {
+    errors = ERR_makeFeedbackListMany(error, errors);
+  }
 }
 
 /*}}}  */
-      
+
 /*{{{  void printErrors(void) */
 
 void printErrors(void)
 {
-  ATerm message, tag, subject;
-  char *tagText, *subjectText;
-  ATermList error;
+  ERR_FeedbackList runner = errors;
 
-  /* The errors are tuples containing a message and a subject */
-  error = (ATermList) RWgetError();
-  message = ATgetFirst(error);
-  tag = ATgetFirst(ATgetNext(error));
-  subject = ATgetFirst(ATgetNext(ATgetNext(error)));
+  for ( ; !ERR_isFeedbackListEmpty(runner); 
+	runner = ERR_getFeedbackListTail(runner)) {
+    ERR_Feedback error = ERR_getFeedbackListHead(runner);
 
-  if (tag) {
-    tagText = ASF_getCHARLISTString(ASF_getASFTagIdChars(ASF_getASFTagASFTagId(ASF_ASFTagFromTerm(tag))));
-  }
-  else {
-    tagText = strdup("");
+    ATwarning("error: %t\n", error);
   }
 
-  subjectText = strdup(PT_yieldTree(PT_makeTreeFromTerm(subject)));
-
-  if(tagText != NULL &&
-     subjectText != NULL) {
-    ATwarning("%t (%s, %s)\n", message, tagText, subjectText);
-
-  }
-  else {
-    ATwarning("Unable to show error message (no memory).\n");
-  }
-
-  free(tagText);
-  free(subjectText);
 }
 
 /*}}}  */

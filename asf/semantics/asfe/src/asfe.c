@@ -84,7 +84,7 @@ void version(char *prg)
 
 void abort_handler(int signal)
 {
-  RWsetError("aborted by user", PT_makeTreeLit(""));
+  RWaddError("aborted by user", "");
 }
 
 /*}}}  */
@@ -148,11 +148,11 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
   result
     = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse, ATtrue);
 
-  if (RWgetError() == NULL) {
+  if (RWgetErrors() == NULL || ERR_isFeedbackListEmpty(RWgetErrors())) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
   else {
-    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+    return ATmake("snd-value(rewrite-errors(<term>))", RWgetErrors());
   }
 }
 
@@ -173,11 +173,11 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
 
   result = (ATerm) runTests(eqsList, testList);
 
-  if (RWgetError() == NULL) {
+  if (RWgetErrors() == NULL && !ERR_isFeedbackListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
   }
   else {
-    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+    return ATmake("snd-value(rewrite-errors(<term>))", RWgetErrors());
   }
 }
 
@@ -297,9 +297,11 @@ int main(int argc, char *argv[])
 		       remove_layout, mark_new_layout, allow_ambs);
 
     /* If we have collected errors, pretty print them now */
-    returncode = (RWgetError() == NULL) ? 0 : 1;
+    returncode = (RWgetErrors() == NULL || 
+		  !ERR_isFeedbackListEmpty(RWgetErrors())) ? 0 : 1;
 
-    if (RWgetError() != NULL) {
+    if (RWgetErrors() != NULL ||
+	!ERR_isFeedbackListEmpty(RWgetErrors())) {
       printErrors();
     }
 
