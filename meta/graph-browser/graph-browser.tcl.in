@@ -1253,18 +1253,30 @@ proc define-shadowmodule-popup {} {
 
 proc define-modlist-popup {} {
     set m .modlist-popup
+
     menu $m -tearoff 0
-    $m add command -label "Edit Modules" \
-        -command {EditModules [SelectedModules]}
+     $m add command -label "Edit Syntax" \
+        -command {EditSyntaxModules [SelectedModules]}
+    $m add command -label "Edit Equations" \
+        -command {EditEquationsModules [SelectedModules]}
+    $m add command -label "Edit Term" \
+        -command {EditTermWidget [SelectedModules] "open"}
+    $m add command -label "New Term" \
+        -command {EditTermWidget [SelectedModules] "new"}
     $m add separator
-    $m add command -label "Save Modules" \
+    $m add command -label "Save Module" \
         -command {SaveModules [SelectedModules]}
-    $m add command -label "Revert Modules" \
+    $m add command -label "Revert Module" \
         -command {RevertModules [SelectedModules]}
-    $m add command -label "Delete Modules" \
+    $m add command -label "Delete Module" \
         -command {DeleteModules [SelectedModules]}
     $m add separator
-    $m add command -label "Modules Info" \
+    $m add command -label "Compile Module..." \
+        -command {CompileModuleWidget [SelectedModules]}
+		$m add command -label "Dump Equations..." \
+        -command {DumpEquations [SelectedModules]}
+    $m add separator
+    $m add command -label "Module Info" \
         -command {GetModuleInfo [SelectedModules]}
 }
 
