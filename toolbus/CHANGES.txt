@@ -1,7 +1,13 @@
 ------------------------------------------------------------------------------
+Date:   Tue Mar  7 18:08:23 MET 2000
+Version: 0.12
+Author:  Merijn & Tobias
+
+- Fixed dangling socketfile bug
+------------------------------------------------------------------------------
 Date:		Fri Mar  3 17:07:59 MET 2000
-Version:	0.9.16f
-Author:		Meerijn
+Version:	0.11.7
+Author:		Merijn
 
 - Added tool idef2tif and scripts directory
 ------------------------------------------------------------------------------
