@@ -23,9 +23,10 @@ CLEAN		= @CLEAN@
 NOWEB		= @NOWEB@
 
 ADAPTER-NAME	= java-adapter
-DISTFILES	= Makefile.in $(PROGRAMS)
+DISTFILES	= Makefile.in $(PROGRAMS) $(DOC)
 
 PROGRAMS        = java-adapter
+DOC		= java-adapter.guide.tex
 SUBDIRS		= toolbus/util toolbus/aterm toolbus/tool toolbus/tide
 
 all:
@@ -65,7 +66,10 @@ install: $(PROGRAMS)
 		cd $$dir; make $@; cd ../..; \
 	done
 
-doc: 
+doc: $(DOC)
+	for file in $(DOC); do \
+	  $(INSTALL) $$file $(docdir)/adapters; \
+	done
 	$(top_srcdir)/mkinstalldirs $(docdir)/classes
 	javadoc -author -version -d $(docdir)/classes \
 		-sourcepath $$CLASSPATH:toolbus/aterm:toolbus/tool:toolbus/util:toolbus/tide \

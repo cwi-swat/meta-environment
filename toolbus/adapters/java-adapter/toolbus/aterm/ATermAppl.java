@@ -221,7 +221,7 @@ public class ATermAppl extends ATerm
 
   public void print(PrintWriter w) 
   {
-    w.print(fun);
+    printFun(w);
     if(args != null) {
       w.print('(');
       args.print(w);
@@ -250,8 +250,12 @@ public class ATermAppl extends ATerm
   {
     if(trm.getType() == ATerm.APPL) {
       ATermAppl ap = (ATermAppl)trm;
-      if(ap.getFun() == getFun())
-	return getArgs().match(ap.getArgs(), subterms);
+      if(ap.getFun() == getFun()) {
+	if(getArgs() == null)
+	  return ap.getArgs() == null;
+	if(ap.getArgs() != null)
+	  return getArgs().match(ap.getArgs(), subterms);
+      }
     }
     return false;
   }
@@ -286,7 +290,7 @@ public class ATermAppl extends ATerm
 	  case '+':	case '=':	case '|':	case '~':
 	  case '{':	case '}':	case '[':	case ']':
 	  case ';':	case ':':	case '<':	case '>':
-	  case ',':	case '.':	case '?':
+	  case ',':	case '.':	case '?':       case ' ':
 	    o.write(c);
 	    break;
 	  default:    
@@ -303,6 +307,58 @@ public class ATermAppl extends ATerm
 	}
       }
       o.write('"');
+    }
+  }
+
+  //}
+  //{ private void printFun(PrintWriter w)
+
+  /**
+    * Print a function symbol.
+    */
+
+  private void printFun(PrintWriter o) 
+  {
+    if(!quoted) {
+      for(int i=0; i<fun.length(); i++)
+	o.print(fun.charAt(i));
+    } else {
+      boolean escaped = false;
+      o.print('"');
+      for(int i=0; i<fun.length(); i++) {
+	char c = fun.charAt(i);
+	switch(c) {
+	  case '\n':	o.print('\\');	o.print('n');	break;
+	  case '\t':	o.print('\\');	o.print('t');	break;
+	  case '\b':	o.print('\\');	o.print('b');	break;
+	  case '\r':	o.print('\\');	o.print('r');	break;
+	  case '\f':	o.print('\\');	o.print('f');	break;
+	  case '\\':	o.print('\\');	o.print('\\');	break;
+	  case '\'':	o.print('\\');	o.print('\'');	break;
+	  case '\"':	o.print('\\');	o.print('\"');	break;
+	  case '!':	case '@':	case '#':	case '$':
+	  case '%':	case '^':	case '&':	case '*':
+	  case '(':	case ')':	case '-':	case '_':
+	  case '+':	case '=':	case '|':	case '~':
+	  case '{':	case '}':	case '[':	case ']':
+	  case ';':	case ':':	case '<':	case '>':
+	  case ',':	case '.':	case '?':       case ' ':
+	    o.print(c);
+	    break;
+	  default:    
+	    if(Character.isLetterOrDigit(c)) {
+	      o.print(c);
+	    } else {
+	      o.print('\\');
+	      o.print((char)((int)'0' + (int)c/64));
+	      c = (char)(c % 64);
+	      o.print((char)((int)'0' + (int)c/8));
+	      c = (char)(c % 8);
+	      o.print((char)((int)'0' + (int)c));
+	    }
+	}
+      }
+      o.print('"');
     }
   }
 
@@ -337,7 +393,7 @@ public class ATermAppl extends ATerm
 	  case '+':	case '=':	case '|':	case '~':
 	  case '{':	case '}':	case '[':	case ']':
 	  case ';':	case ':':	case '<':	case '>':
-	  case ',':	case '.':	case '?':
+	  case ',':	case '.':	case '?':       case ' ':
 	    size++;
 	    break;
 	  default:	

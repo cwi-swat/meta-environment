@@ -417,36 +417,38 @@ class TifGenerator
   private ATermApplRef normalize(ATermApplRef appl)
   {
     ATermsRef args = appl.getArgs();
-    int len = args.length();
-    ATermRef[] newargs = new ATermRef[len];
-    String type = null;
+    if(args != null) {
+      int len = args.length();
+      ATermRef[] newargs = new ATermRef[len];
+      String type = null;
     
-    for(int i=0; i<len; i++) {
-      ATermRef arg = args.getFirst();
-      args = args.getNext();
-      switch(arg.getType()) {
-        case ATerm.APPL:
-	  type = "appl";
-	  break;
-        case ATerm.LIST:
-	  type = "list";
-	  break;
-        case ATerm.INT:
-	  type = "int";
-	  break;
-        case ATerm.REAL:
-	  type = "real";
-	  break;
-        case ATerm.PLACEHOLDER:
-	  newargs[i] = arg;
-	  break;
+      for(int i=0; i<len; i++) {
+        ATermRef arg = args.getFirst();
+        args = args.getNext();
+        switch(arg.getType()) {
+	  case ATerm.APPL:
+	    type = "appl";
+	    break;
+	  case ATerm.LIST:
+	    type = "list";
+	    break;
+	  case ATerm.INT:
+	    type = "int";
+	    break;
+	  case ATerm.REAL:
+	    type = "real";
+	    break;
+	  case ATerm.PLACEHOLDER:
+	    newargs[i] = arg;
+	    break;
+	}
+	if(newargs[i] == null)
+	  newargs[i] = new ATermPlaceholderRef(new ATermApplRef(type, null));
       }
-      if(newargs[i] == null)
-	newargs[i] = new ATermPlaceholderRef(new ATermApplRef(type, null));
+      args = null;
+      for(int i = len-1; i >= 0; i--)
+	args = new ATermsRef(newargs[i], args);
     }
-    args = null;
-    for(int i = len-1; i >= 0; i--)
-      args = new ATermsRef(newargs[i], args);
     return new ATermApplRef(appl.getFun(), args);    
   }
 

@@ -324,6 +324,8 @@ public class ATermPattern extends Vector
 	return (ATermRef)e.nextElement();
       if(fun.equals("list") && args == null)
 	return (ATermListRef)e.nextElement();
+      if(fun.equals("str") && args == null)
+	return new ATermApplRef((String)e.nextElement(), null, true);
       if(fun.equals("fun")) {
 	if(args == null)
 	  return new ATermApplRef((String)e.nextElement(), null);

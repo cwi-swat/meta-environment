@@ -85,6 +85,9 @@ public class ATermApplRef extends ATermRef
 
   public ATermsRef getArgs()
   {
+    if(appl.getArgs() == null)
+      return null;
+
     return new ATermsRef(appl.getArgs());
   }
 
