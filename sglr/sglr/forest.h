@@ -24,7 +24,7 @@ extern int nr_ambiguities;
   is invalid.
 */
 #define cons(t, ts)       mk_list(t, ts)
-term * apply(parse_table *, label , terms *);
+term *apply(parse_table *, label , terms *);
 void amb(term *, term *);
 term *tree_type(term *);
 term *term_yield(term *t);

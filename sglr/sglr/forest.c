@@ -101,8 +101,7 @@ void term_yield_aux(term *t)
   if (t == NULL)
     return;
   else if (TBmatch(t, "%d", &c)) {
-    temp[index] = c;
-    index++;
+    temp[index++] = c;
     temp[index] = '\0';
   } else if (TBmatch(t, "appl(%t,[%l])", &fun, &args))
     term_yield_aux(args);
@@ -133,33 +132,34 @@ void dot_term_yield_aux(term *t)
   if (t == NULL)
     return;
   else if (TBmatch(t, "%d", &c)) {
-    temp[index] = c;
-    index++;
-  }
-  else if (TBmatch(t, "appl(%t,[%l])", &fun, &args)) {
+    switch(c) {
+      case '\n':
+        temp[index++] = '\\';
+        temp[index++] = '\\';
+        temp[index++] = 'n';
+        break;
+      default:
+        temp[index++] = c;
+        break;
+    }
+  } else if (TBmatch(t, "appl(%t,[%l])", &fun, &args)) {
     if(list_length(args) > 1) {
-      temp[index] = '[';
-      index++;
+      temp[index++] = '[';
       dot_term_yield_aux(args);
-      temp[index] = ']';
-      index++;
+      temp[index++] = ']';
     } else
       dot_term_yield_aux(args);
-  }
-  else if (TBmatch(t, "[%t,%l]", &first, &rest)) {
+  } else if (TBmatch(t, "[%t,%l]", &first, &rest)) {
     dot_term_yield_aux(first);
     dot_term_yield_aux(rest);
-  }
-  else if (TBmatch(t, "amb([%l])", &rest)) {
+  } else if (TBmatch(t, "amb([%l])", &rest)) {
     while(pop(first, rest)) {
       dot_term_yield_aux(first);
       if(rest != NULL) {
-        temp[index] = '|';
-        index++;
+        temp[index++] = '|';
       }
     }
-  }
-  else {
+  } else {
     TBprintf(stderr, "term_yield_aux: strange term: %t\n", t);
     exit(1);
   }
