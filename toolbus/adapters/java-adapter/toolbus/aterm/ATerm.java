@@ -2,261 +2,193 @@
 package toolbus.aterm;
 import toolbus.util.Writer;
 import toolbus.util.PrintWriter;
-import toolbus.util.CharArrayWriter;
 import toolbus.util.*;
-import java.util.*;
 import java.io.*;
 
-/**
-  * The class ATerm is the base class for all Term implementation classes.
-  * A term implementation class represents unique term objects.
-  *
-  * @author Pieter Olivier
-  * @version 0.1, 4-Apr-1997
-  */
-
-abstract public class ATerm implements SimpleHashtableEntry, Cloneable
+abstract public class ATerm implements Cloneable
 {
-  private static SimpleHashtable table = new SimpleHashtable(43117);
-  private static SimpleHashtableEntry dummy = new DummyEntry();
+  abstract protected ATermImpl getATermImpl();
+  abstract protected void setAnno(ATerm anno);
 
-  public static final int ATERMS	= 1;
-  public static final int APPL		= 2;
-  public static final int LIST		= 3;
-  public static final int INT		= 4;
-  public static final int REAL		= 5;
-  public static final int PLACEHOLDER	= 6;
-  
-  private ATerm anno;
-  private int refcount = 0;
-  private SimpleHashtableEntry hnext = dummy;
-
-  public void print(Writer w)	   { print(new PrintWriter(w)); }
-  public void print(PrintWriter w)
-  { 
-    if(anno != null) { 
-      w.print(':'); 
-      anno.print(w);
-    }
-  }
-  public void write(OutputStream o) throws java.io.IOException {
-    if(anno != null) {
-      o.write(':');
-      anno.write(o);
-    }
-  }
-  abstract public int getType();
-  public boolean match(ATerm trm, Vector subterms) { return equals(trm); }
-
-  //{ ATerm(ATerm an)
+  public static final int ATERMS        = ATermImpl.ATERMS;
+  public static final int APPL          = ATermImpl.APPL;
+  public static final int LIST          = ATermImpl.LIST;
+  public static final int INT           = ATermImpl.INT;
+  public static final int REAL          = ATermImpl.REAL;
+  public static final int PLACEHOLDER   = ATermImpl.PLACEHOLDER;
+ 
+  //{ public synchronized Object clone()
 
   /**
-    *Construct a term given an annotation.
+    * Clone an ATerm.
     */
 
-  ATerm(ATerm an)
+  public synchronized Object clone()
   {
-    anno = an;
-    if(anno != null)
-      anno.increaseRef();
-  }
-
-  //}
-  //{ protected Object clone()
-
-  /** 
-    * Clone this object.
-    */
-
-  protected Object clone()
-  {
+    ATerm copy = null;
     try {
-      ATerm term = (ATerm)super.clone();
-      term.anno = anno;
-      if(term.anno != null)
-	term.anno.increaseRef();
-      return term;
+      copy = (ATerm)super.clone();
+      copy.getATermImpl().increaseRef();
     } catch (CloneNotSupportedException e) {
-      throw new InternalError();
+      System.err.println("huh? internal error!");
     }
-  }
-
-  //}
-  //{ protected void finalize()
-
-  protected void finalize()
-    throws Throwable
-  {
-    if(anno != null)
-      anno.decreaseRef();
-    super.finalize();
+    return copy;
   }
 
   //}
   //{ public boolean equals(Object obj)
 
   /**
-    * Equality test on terms.
+    * Two ATerm references are considered equal when they
+    * refer to the same term.
     */
 
   public boolean equals(Object obj)
-  { 
-    return (ATerm)anno == ((ATerm)obj).anno;
+  {
+    if(obj instanceof ATerm)
+      return getATermImpl() == ((ATerm)obj).getATermImpl();
+    return false;
+  }
+
+  //}
+  //{ public int getType()
+
+  public int getType()
+  {
+    return getATermImpl().getType();
   }
 
   //}
   //{ public ATerm getAnno()
 
   /**
-    * Retrieve the annotation of this term.
+    * Retrieve the annotation of a term.
     */
 
   public ATerm getAnno()
   {
-    return anno;
-  }
+    if(getATermImpl().getAnno() == null)
+      return null;
 
-  //}
-  //{ public void setAnno(ATerm a)
-
-  /**
-    * Change the annotation of this object.
-    */
-
-  public void setAnno(ATerm a)
-  { 
-    if(anno != null)
-      anno.decreaseRef();
-    anno = a;
-    if(anno != null)
-      anno.increaseRef();
+    switch(getATermImpl().getAnno().getType()) {
+      case ATermImpl.APPL:   return new ATermAppl((ATermApplImpl)getATermImpl().getAnno());
+      case ATermImpl.ATERMS: return new ATerms((ATermsImpl)getATermImpl().getAnno());
+      case ATermImpl.LIST:   return new ATermList((ATermListImpl)getATermImpl().getAnno());
+      case ATermImpl.INT:    return new ATermInt((ATermIntImpl)getATermImpl().getAnno());
+      case ATermImpl.REAL:   return new ATermReal((ATermRealImpl)getATermImpl().getAnno());
+      case ATermImpl.PLACEHOLDER: 
+	return new ATermPlaceholder((ATermPlaceholderImpl)getATermImpl().getAnno());
+    }
+    throw new IllegalArgumentException("illegal term type: " + getType());
   }
 
   //}
   //{ public int size()
 
   /**
-    * Calculate the number of nodes added by this object.
+    * Determine the size (number of nodes) of a term.
     */
 
   public int size()
   {
-    if(anno != null)
-      return anno.size();
-    return 0;
+    return getATermImpl().size();
+  }
+
+  //}
+  //{ public void write(OutputStream o)
+
+  /**
+    * Write a term to an output stream..
+    */
+
+  public void write(OutputStream o)
+    throws java.io.IOException
+  { 
+    getATermImpl().write(o);
+  }
+
+  //}
+  //{ public void print(OutputStream o)
+
+  /**
+    * Pretty-print a term to an OutputStream.
+    */
+
+  public void print(OutputStream o)
+  {
+    print(new PrintWriter(o));
+  }
+
+  //}
+  //{ public void println(OutputStream o)
+
+  /**
+    * Pretty-print a term to an OutputStream, followed by a newline.
+    */
+
+  public void println(OutputStream o)
+  {
+    println(new PrintWriter(o));
+  }
+
+  //}
+  //{ public void print(PrintWriter o)
+
+  /**
+    * Pretty-print a term to a PrintWriter stream.
+    */
+
+  public void print(PrintWriter w)
+  {
+    getATermImpl().print(w);
+    w.flush();
+  }
+
+  //}
+  //{ public void println(PrintWriter o)
+
+  /**
+    * Pretty-print a term to a PrintWriter stream, followed by a newline.
+    */
+
+  public void println(PrintWriter w)
+  { 
+    getATermImpl().print(w);
+    w.println("");
+    w.flush();
+  }
+
+  //}
+  //{ public void print(Writer o)
+
+  public void print(Writer w)
+  { 
+    getATermImpl().print(w);
+    try { w.flush(); } catch (IOException e) { }
+  }
+
+  //}
+  //{ public void println(Writer o)
+
+  public void println(Writer w)
+  { 
+    getATermImpl().print(w);
+    try {
+      w.write((int)'\n');
+      w.flush();
+    } catch (IOException e) { }
   }
 
   //}
   //{ public int printSize()
 
+  /**
+    * Determine the size of a term when printed.
+    */
+
   public int printSize()
   {
-    if(anno == null)
-      return 0; 
-    return anno.printSize()+2; // annotation + '{' and '}'
-  }
-
-  //}
-  //{ public static int tableSize()
-
-  static int tableSize()
-  {
-    return table.size();
-  }
-
-  //}
-  //{ public static Enumeration tableElements()
-
-  public static Enumeration tableElements()
-  {
-    return table.elements();
-  }
-
-  //}
-  //{ public synchronized void increaseRef()
-
-  /**
-    * Increase the reference count of this object.
-    */
-
-  public synchronized void increaseRef()
-  {
-    refcount++;
-  }
-
-  //}
-  //{ public synchronized void decreaseRef()
-
-  /**
-    * Decrease the reference count of this object.
-    * When the reference count goes to zero, and this
-    * object in the hash table, we remove
-    * the object from the hash table.
-    */
-
-public synchronized void decreaseRef()
-{ 
-  refcount--; 
-  if(refcount == 0 && hnext != dummy && table != null)
-    table.remove(this);
-}
-
-  //}
-  //{ public int refCount()
-
-  /**
-    * Retrieve the reference count of this object.
-    */
-
-  public int refCount()
-  {
-    return refcount;
-  }
-  
-  //}
-  //{ public SimpleHashtableEntry getNextHashEntry()
-
-  /**
-    * Retrieve the next hash bucket.
-    */
-
-  public SimpleHashtableEntry getNextHashEntry()
-  {
-    return hnext;
-  }
-
-  //}
-  //{ public synchronized void setNextHashEntry(SimpleHashtableEntry next)
-
-  /**
-    * Change the next hash bucket.
-    */
-
-  public synchronized void setNextHashEntry(SimpleHashtableEntry next)
-  {
-    hnext = next;
-  }
-  
-  //}
-
-  //{ public ATerm unique()
-
-  /**
-    * Return the unique representation of this term,
-    * by looking it up in the hash table. If it is not
-    * present in the hash table, this term will become
-    * its own unique representation, and we add it to
-    * the hash table.
-    */
-
-  public ATerm unique()
-  {
-    ATerm trm = (ATerm)table.get(this);
-    if(trm == null) {
-      table.put(this);
-      return this;
-    }
-    return trm;
+    return getATermImpl().printSize();
   }
 
   //}
@@ -264,21 +196,16 @@ public synchronized void decreaseRef()
 
   public String toString()
   {
-    CharArrayWriter buf = new CharArrayWriter();
-    
-    print(buf);
-    return buf.toString();
+    return getATermImpl().toString();
+  }
+
+  //}
+  //{ public int hashCode()
+
+  public int hashCode()
+  {
+    return getATermImpl().hashCode();
   }
 
   //}
 }
-
-//{ class DummyEntry
-
-class DummyEntry implements SimpleHashtableEntry
-{
-  public SimpleHashtableEntry getNextHashEntry() { return null; }
-  public void setNextHashEntry(SimpleHashtableEntry e) { }
-}
-
-//}

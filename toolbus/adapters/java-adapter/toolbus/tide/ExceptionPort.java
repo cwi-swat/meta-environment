@@ -26,16 +26,16 @@ public class ExceptionPort extends DebugPort
   }
 
   //}
-  //{ public ExceptionPort(ATermRef excep, int when)
+  //{ public ExceptionPort(ATerm excep, int when)
 
   /**
     * Construct a new ExceptionPort object given its term representation.
     */
   
-  public ExceptionPort(ATermRef excep, int when)
+  public ExceptionPort(ATerm excep, int when)
   {
     super(EXCEPTION, when);
-    exception = ((ATermApplRef)excep).getFun();
+    exception = ((ATermAppl)excep).getFun();
     init();
   }
 
@@ -68,14 +68,14 @@ public class ExceptionPort extends DebugPort
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be send 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return patternPort.make(getWhenTerm(), exception);
   }

@@ -19,10 +19,10 @@ public class AsFix {
   toolbus.aterm.AFun#init to find out which named elements are
   defined.  */
 
-  public static ATermRef acc(ATermApplRef t, AFun af2) throws Exception {
+  public static ATerm acc(ATermAppl t, AFun af2) throws Exception {
     AFun af1 = new AFun(t.getFun());
-    ATermApplRef at = af1.init();
-    return namedElem(af2,new ATermListRef(at.getArgs()),new ATermListRef(t.getArgs()));
+    ATermAppl at = af1.init();
+    return namedElem(af2,new ATermList(at.getArgs()),new ATermList(t.getArgs()));
   }
 
   /** repl is the AsFix replacement function. <p> <tt>t[sym :=
@@ -31,29 +31,29 @@ public class AsFix {
   <tt>t'</tt>.  <p> @see toolbus.aterm.AFun#init to find out which
   named elements are defined.*/
 
-  public static ATermApplRef repl(ATermApplRef t1, AFun af, ATermRef t2) throws Exception {
+  public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws Exception {
     AFun af1 = new AFun(t1.getFun());
-    ATermApplRef at = af1.init();
-    t1.setArgs(replace(new ATermListRef(t1.getArgs()), position(af,new ATermListRef(at.getArgs()), 0), t2).getATerms());
+    ATermAppl at = af1.init();
+    t1.setArgs(replace(new ATermList(t1.getArgs()), position(af,new ATermList(at.getArgs()), 0), t2).getATerms());
     return t1;
   }
   
   /** position find the index of a AFun in a list of ATerms.
    */
-  private static int position(AFun af, ATermListRef l, int i) {
+  private static int position(AFun af, ATermList l, int i) {
     if (af.equals(l.getATerms().getFirst())) {
       return i;
     } else {
-      return position(af, new ATermListRef(l.getATerms().getNext()), i+1);
+      return position(af, new ATermList(l.getATerms().getNext()), i+1);
     }
   }
   /** replace does the actual replacing. It replaces index <tt>i</tt>
    of list <tt>l</tt> with term <tt>t</tt>.  */
-  private static ATermListRef replace(ATermListRef l, int i, ATermRef t) {
+  private static ATermList replace(ATermList l, int i, ATerm t) {
     if (i == 0) {
-      return new ATermListRef(new ATermsRef(t,l.getATerms().getNext()));
+      return new ATermList(new ATerms(t,l.getATerms().getNext()));
     } else {
-      return new ATermListRef(new ATermsRef(l.getATerms().getFirst(), replace(new ATermListRef(l.getATerms().getNext()), i-1, t).getATerms()));
+      return new ATermList(new ATerms(l.getATerms().getFirst(), replace(new ATermList(l.getATerms().getNext()), i-1, t).getATerms()));
     }
   }
 
@@ -61,11 +61,11 @@ public class AsFix {
   /** namedElem is the same as in the AsFix specification. It looks up
    at which location <tt>af</tt> exists in <tt>l1</tt> and returns the
    term at taht location in list <tt>l2</tt> */
-  private static ATermRef namedElem(AFun af, ATermListRef l1, ATermListRef l2) {
+  private static ATerm namedElem(AFun af, ATermList l1, ATermList l2) {
     if (af.equals(l1.getATerms().getFirst())) {
       return l2.getATerms().getFirst();
     } else {
-      return namedElem(af, new ATermListRef(l1.getATerms().getNext()),new ATermListRef(l2.getATerms().getNext()));
+      return namedElem(af, new ATermList(l1.getATerms().getNext()),new ATermList(l2.getATerms().getNext()));
     }
   }
 }

@@ -100,63 +100,63 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
 
 
   // Override these abstract methods to handle incoming ToolBus terms
-  abstract void dapDisconnected(ATermApplRef a0) throws ToolException;
-  abstract void watchpoint(ATermApplRef a0, ATermRef t1, int i2, ATermListRef l3) throws ToolException;
-  abstract void ruleCreated(ATermApplRef a0, ATermRef t1, int i2, ATermRef t3, ATermRef t4, ATermRef t5, ATermRef t6) throws ToolException;
-  abstract void askWatchpoint(ATermApplRef a0, ATermRef t1, ATermRef t2, ATermRef t3) throws ToolException;
-  abstract void createWatchpoint(ATermApplRef a0, ATermRef t1) throws ToolException;
-  abstract void ruleDestroyed(ATermApplRef a0, ATermRef t1, int i2) throws ToolException;
-  abstract void dapConnected(ATermApplRef a0, ATermListRef l1, ATermRef t2) throws ToolException;
-  abstract void ruleModified(ATermApplRef a0, ATermRef t1, int i2, ATermRef t3, ATermRef t4, ATermRef t5, ATermRef t6) throws ToolException;
-  abstract void recTerminate(ATermRef t0) throws ToolException;
-  abstract void recAckEvent(ATermRef t0) throws ToolException;
+  abstract void dapDisconnected(ATermAppl a0) throws ToolException;
+  abstract void watchpoint(ATermAppl a0, ATerm t1, int i2, ATermList l3) throws ToolException;
+  abstract void ruleCreated(ATermAppl a0, ATerm t1, int i2, ATerm t3, ATerm t4, ATerm t5, ATerm t6) throws ToolException;
+  abstract void askWatchpoint(ATermAppl a0, ATerm t1, ATerm t2, ATerm t3) throws ToolException;
+  abstract void createWatchpoint(ATermAppl a0, ATerm t1) throws ToolException;
+  abstract void ruleDestroyed(ATermAppl a0, ATerm t1, int i2) throws ToolException;
+  abstract void dapConnected(ATermAppl a0, ATermList l1, ATerm t2) throws ToolException;
+  abstract void ruleModified(ATermAppl a0, ATerm t1, int i2, ATerm t3, ATerm t4, ATerm t5, ATerm t6) throws ToolException;
+  abstract void recTerminate(ATerm t0) throws ToolException;
+  abstract void recAckEvent(ATerm t0) throws ToolException;
 
   // The generic handler calls the specific handlers
-  protected ATermRef handler(ATermRef term)
+  protected ATerm handler(ATerm term)
 	throws ToolException
   {
     if(PdapDisconnected0.match(term)) {
       ATermPattern P = PdapDisconnected0;
-      dapDisconnected((ATermApplRef)P.elementAt(0));
+      dapDisconnected((ATermAppl)P.elementAt(0));
     } else if(Pwatchpoint0.match(term)) {
       ATermPattern P = Pwatchpoint0;
-      watchpoint((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATermListRef)P.elementAt(3));
+      watchpoint((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATermList)P.elementAt(3));
     } else if(PruleCreated0.match(term)) {
       ATermPattern P = PruleCreated0;
-      ruleCreated((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATermRef)P.elementAt(3), (ATermRef)P.elementAt(4), (ATermRef)P.elementAt(5), (ATermRef)P.elementAt(6));
+      ruleCreated((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATerm)P.elementAt(3), (ATerm)P.elementAt(4), (ATerm)P.elementAt(5), (ATerm)P.elementAt(6));
     } else if(PaskWatchpoint0.match(term)) {
       ATermPattern P = PaskWatchpoint0;
-      askWatchpoint((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), (ATermRef)P.elementAt(2), (ATermRef)P.elementAt(3));
+      askWatchpoint((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1), (ATerm)P.elementAt(2), (ATerm)P.elementAt(3));
     } else if(PcreateWatchpoint0.match(term)) {
       ATermPattern P = PcreateWatchpoint0;
-      createWatchpoint((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1));
+      createWatchpoint((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1));
     } else if(PruleDestroyed0.match(term)) {
       ATermPattern P = PruleDestroyed0;
-      ruleDestroyed((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), ((Integer)P.elementAt(2)).intValue());
+      ruleDestroyed((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1), ((Integer)P.elementAt(2)).intValue());
     } else if(PdapConnected0.match(term)) {
       ATermPattern P = PdapConnected0;
-      dapConnected((ATermApplRef)P.elementAt(0), (ATermListRef)P.elementAt(1), (ATermRef)P.elementAt(2));
+      dapConnected((ATermAppl)P.elementAt(0), (ATermList)P.elementAt(1), (ATerm)P.elementAt(2));
     } else if(PruleModified0.match(term)) {
       ATermPattern P = PruleModified0;
-      ruleModified((ATermApplRef)P.elementAt(0), (ATermRef)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATermRef)P.elementAt(3), (ATermRef)P.elementAt(4), (ATermRef)P.elementAt(5), (ATermRef)P.elementAt(6));
+      ruleModified((ATermAppl)P.elementAt(0), (ATerm)P.elementAt(1), ((Integer)P.elementAt(2)).intValue(), (ATerm)P.elementAt(3), (ATerm)P.elementAt(4), (ATerm)P.elementAt(5), (ATerm)P.elementAt(6));
     } else if(PrecTerminate0.match(term)) {
       ATermPattern P = PrecTerminate0;
-      recTerminate((ATermRef)P.elementAt(0));
+      recTerminate((ATerm)P.elementAt(0));
     } else if(PrecAckEvent0.match(term)) {
       ATermPattern P = PrecAckEvent0;
-      recAckEvent((ATermRef)P.elementAt(0));
+      recAckEvent((ATerm)P.elementAt(0));
     } else 
       notInInputSignature(term);
     return null;
   }
 
   // Check the input signature
-  protected void checkInputSignature(ATermListRef list)
+  protected void checkInputSignature(ATermList list)
          throws ToolException
   {
-    ATermsRef sigs = list.getATerms();
+    ATerms sigs = list.getATerms();
     while(sigs != null) {
-      ATermApplRef sig = (ATermApplRef)sigs.getFirst();
+      ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
       if(!sigTable.containsKey(sig)) {
         // Sorry, but the term is not in the input signature!
@@ -167,7 +167,7 @@ abstract public class WatchpointViewerTif extends toolbus.tool.Tool
 
   // This function is called when an input term
   // was not in the input signature.
-  void notInInputSignature(ATermRef t)
+  void notInInputSignature(ATerm t)
         throws ToolException
   {
     throw new ToolException(this, "term not in input signature", t);

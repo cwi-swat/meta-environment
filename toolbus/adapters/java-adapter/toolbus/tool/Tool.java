@@ -46,7 +46,7 @@ abstract public class Tool implements Runnable
   private boolean running;
   private Hashtable queues;
 
-  private ATermRef termSndVoid;
+  private ATerm termSndVoid;
   private ATermPattern patternRecDo;
   private ATermPattern patternRecTerminate;
   private ATermPattern patternRecAckEvent;
@@ -106,7 +106,7 @@ abstract public class Tool implements Runnable
   private void init()
   {
     try {
-      termSndVoid = new ATermApplRef("snd-void", null);
+      termSndVoid = new ATermAppl("snd-void", null);
       patternRecDo = new ATermPattern("rec-do(<term>)");
       patternRecTerminate = new ATermPattern("rec-terminate(<term>)");
       patternRecAckEvent = new ATermPattern("rec-ack-event(<term>)");
@@ -162,11 +162,11 @@ abstract public class Tool implements Runnable
 
     try {
       ATermPattern sigpat = new ATermPattern("rec-do(signature(<list>,<list>))");
-      ATermRef term = readTerm();
+      ATerm term = readTerm();
       if(sigpat.match(term)) {
         if(verbose)
           System.err.println("checking input signature...");
-        checkInputSignature((ATermListRef)sigpat.elementAt(0));
+        checkInputSignature((ATermList)sigpat.elementAt(0));
 	send(termSndVoid);
       } else
         throw new ToolException(this, "signature information garbled", term);
@@ -238,14 +238,14 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ protected synchronized ATermRef readTerm()
+  //{ protected synchronized ATerm readTerm()
 
-  protected synchronized ATermRef readTerm()
+  protected synchronized ATerm readTerm()
        throws ParseError, IOException
   {
     channel.reset();
     channel.read();
-    ATermRef t = ATermParser.parseATerm(channel);
+    ATerm t = ATermParser.parseATerm(channel);
     if(verbose) {
       System.err.print("tool " + name + " has read term: ");
       t.print(System.err);
@@ -255,9 +255,9 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ static public ATermRef readTerm(InputStream s)
+  //{ static public ATerm readTerm(InputStream s)
 
-  static public ATermRef readTerm(InputStream s)
+  static public ATerm readTerm(InputStream s)
     throws ParseError, IOException
   {
     ToolBusChannel channel = new ToolBusChannel(s);
@@ -267,9 +267,9 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ public synchronized void send(ATermRef term)
+  //{ public synchronized void send(ATerm term)
 
-  public synchronized void send(ATermRef term)
+  public synchronized void send(ATerm term)
     throws ToolException
   {
     try {
@@ -314,7 +314,7 @@ abstract public class Tool implements Runnable
       while(running && istream != null) {
 	channel.reset();
 	channel.read();
-	ATermRef t = ATermParser.parseATerm(channel);
+	ATerm t = ATermParser.parseATerm(channel);
 	if(verbose) {
 	  System.err.print("tool " + name + " has read term: ");
 	  t.print(System.err);
@@ -334,7 +334,7 @@ abstract public class Tool implements Runnable
 
   private synchronized void handleOne()
   {
-    ATermRef term, result;
+    ATerm term, result;
     try {
       term = readTerm();
       result = handler(term);
@@ -343,7 +343,7 @@ abstract public class Tool implements Runnable
       if(patternRecDo.match(term))
 	send(termSndVoid);
       if(patternRecAckEvent.match(term))
-	ackEvent((ATermApplRef)patternRecAckEvent.elementAt(0));
+	ackEvent((ATermAppl)patternRecAckEvent.elementAt(0));
       if(result != null)
         send(result);
     } catch (IOException e) {
@@ -356,11 +356,11 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ private synchronized void handleOne(ATermRef term)
+  //{ private synchronized void handleOne(ATerm term)
 
-  private synchronized void handleOne(ATermRef term)
+  private synchronized void handleOne(ATerm term)
   {
-    ATermRef result;
+    ATerm result;
     try {
       result = handler(term);
       if(patternRecTerminate.match(term))
@@ -368,7 +368,7 @@ abstract public class Tool implements Runnable
       if(patternRecDo.match(term))
 	send(termSndVoid);
       if(patternRecAckEvent.match(term))
-	ackEvent((ATermApplRef)patternRecAckEvent.elementAt(0));
+	ackEvent((ATermAppl)patternRecAckEvent.elementAt(0));
       if(result != null)
         send(result);
     } catch (ToolException e) {
@@ -378,15 +378,15 @@ abstract public class Tool implements Runnable
 
   //}
 
-  //{ abstract protected void checkInputSignature(ATermListRef sig)
+  //{ abstract protected void checkInputSignature(ATermList sig)
 
-  abstract protected void checkInputSignature(ATermListRef sig) 
+  abstract protected void checkInputSignature(ATermList sig) 
        throws ToolException;
 
   //}
-  //{ abstract protected ATermRef handler(ATermRef term)
+  //{ abstract protected ATerm handler(ATerm term)
 
-  abstract protected ATermRef handler(ATermRef term) throws ToolException;
+  abstract protected ATerm handler(ATerm term) throws ToolException;
 
   //}
   //{ protected void idle()
@@ -407,21 +407,21 @@ abstract public class Tool implements Runnable
 
   //}
 
-  //{ public void event(ATermApplRef appl)
+  //{ public void event(ATermAppl appl)
 
   /**
    * Send an event, without looking at the event queues.
    * @exception ToolException when a ToolBus connection error occurs.
    */
 
-  public void event(ATermApplRef appl)
+  public void event(ATermAppl appl)
      throws ToolException
   {
     send(patternSndEvent.make(appl));
   }
 
   //}
-  //{ public void post(ATermApplRef appl)
+  //{ public void post(ATermAppl appl)
 
   /**
    * Post an event. If no corresponding ack is waiting,
@@ -430,7 +430,7 @@ abstract public class Tool implements Runnable
    * @exception ToolException when a ToolBus connection error occurs.
    */
 
-  public void post(ATermApplRef appl)
+  public void post(ATermAppl appl)
      throws ToolException
   {
     EventQueue Queue = (EventQueue)queues.get(appl.getFun());
@@ -447,7 +447,7 @@ abstract public class Tool implements Runnable
   }
 
   //}
-  //{ protected void ackEvent(ATermRef t)
+  //{ protected void ackEvent(ATerm t)
 
   /**
    * Acknowledge an event. When this event has an event
@@ -455,10 +455,10 @@ abstract public class Tool implements Runnable
    * event is sent.
    */
 
-  private void ackEvent(ATermRef t)
+  private void ackEvent(ATerm t)
        throws ToolException
   {
-    ATermApplRef appl = (ATermApplRef)t;
+    ATermAppl appl = (ATermAppl)t;
     EventQueue queue = (EventQueue)queues.get(appl.getFun());
     if(queue != null && queue.ackWaiting()) {
       appl = queue.nextEvent();
@@ -538,19 +538,19 @@ class EventQueue
 
   public boolean ackWaiting() { return ack; }
   public void setAckWaiting() { ack = true; }
-  public ATermApplRef nextEvent()
+  public ATermAppl nextEvent()
   {
     if(events.size() == 0) {
       ack = false;
       return null;
     }
 
-    ATermApplRef event = (ATermApplRef)events.firstElement();
+    ATermAppl event = (ATermAppl)events.firstElement();
     events.removeElementAt(0);
     return event;
   }
   
-  public void addEvent(ATermApplRef event)
+  public void addEvent(ATermAppl event)
   {
     events.addElement(event);
   }

@@ -16,51 +16,51 @@ public class DebugRule
 
   private int id;
   private DebugPort port;
-  private ATermRef condition;
-  private ATermsRef actions;
+  private ATerm condition;
+  private ATerms actions;
   private int lifetime;
   private DebugProcess[] processes;
 
   private ATermPattern patternBreak;
   private ATermPattern patternWatch;
 
-  //{ static public int lifeTerm2Int(ATermRef lifetime)
+  //{ static public int lifeTerm2Int(ATerm lifetime)
 
   /**
     * Translate a lifetime term into an integer.
     */
 
-  static public int lifeTerm2Int(ATermRef lifetime)
+  static public int lifeTerm2Int(ATerm lifetime)
   {
-    if(((ATermApplRef)lifetime).getFun().equals("one-shot"))
+    if(((ATermAppl)lifetime).getFun().equals("one-shot"))
       return ONE_SHOT;
     return PERSISTENT;
   }
 
   //}
-  //{ static public ATermRef lifeInt2Term(int lifetime)
+  //{ static public ATerm lifeInt2Term(int lifetime)
 
   /**
     * Translate a lifetime integer into a term.
     */
 
-  static public ATermRef lifeInt2Term(int lifetime)
+  static public ATerm lifeInt2Term(int lifetime)
   {
     if(lifetime == ONE_SHOT)
-      return new ATermApplRef("one-shot", null);
-    return new ATermApplRef("persistent", null);
+      return new ATermAppl("one-shot", null);
+    return new ATermAppl("persistent", null);
   }
 
   //}
 
-  //{ public DebugRule(DebugProcess[] procs, DebugPort p, ATermRef cond, ATermsRef acts, int lifetime)
+  //{ public DebugRule(DebugProcess[] procs, DebugPort p, ATerm cond, ATerms acts, int lifetime)
 
   /**
    * Construct a new DebugRule object.
    */
 
-  public DebugRule(DebugProcess[] procs, DebugPort p, ATermRef cond, 
-		   ATermsRef acts, int lifetime)
+  public DebugRule(DebugProcess[] procs, DebugPort p, ATerm cond, 
+		   ATerms acts, int lifetime)
   {
     processes = procs;
     port = p;
@@ -72,14 +72,14 @@ public class DebugRule
   }
 
   //}
-  //{ public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATermRef cond, ATermsRef acts, int lifetime)
+  //{ public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATerm cond, ATerms acts, int lifetime)
 
   /**
    * Construct a new DebugRule object.
    */
 
-  public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATermRef cond, 
-		   ATermsRef acts, int lifetime)
+  public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATerm cond, 
+		   ATerms acts, int lifetime)
   {
     processes = procs;
     port = p;
@@ -155,7 +155,7 @@ public class DebugRule
 
   public boolean isBreakpoint()
   {
-    ATermsRef acts = actions;
+    ATerms acts = actions;
     while(acts != null) {
       if(patternBreak.match(acts.getFirst()))
 	return true;
@@ -174,7 +174,7 @@ public class DebugRule
 
   public boolean isWatchpoint()
   {
-    ATermsRef acts = actions;
+    ATerms acts = actions;
     while(acts != null) {
       if(patternWatch.match(acts.getFirst()))
 	return true;

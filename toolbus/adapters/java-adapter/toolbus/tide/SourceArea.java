@@ -36,23 +36,23 @@ public class SourceArea
   }
 
   //}
-  //{ public SourceArea(ATermsRef area)
+  //{ public SourceArea(ATerms area)
 
   /**
     * Construct a new SourceArea object given its term representation.
     */
 
-  public SourceArea(ATermsRef area)
+  public SourceArea(ATerms area)
   {
-    module = ((ATermApplRef)area.getFirst()).getFun();
+    module = ((ATermAppl)area.getFirst()).getFun();
     area = area.getNext();
-    start_line = ((ATermIntRef)area.getFirst()).getInt();
+    start_line = ((ATermInt)area.getFirst()).getInt();
     area = area.getNext();
-    start_col = ((ATermIntRef)area.getFirst()).getInt();
+    start_col = ((ATermInt)area.getFirst()).getInt();
     area = area.getNext();
-    end_line = ((ATermIntRef)area.getFirst()).getInt();
+    end_line = ((ATermInt)area.getFirst()).getInt();
     area = area.getNext();
-    end_col = ((ATermIntRef)area.getFirst()).getInt();
+    end_col = ((ATermInt)area.getFirst()).getInt();
   }
 
   //}

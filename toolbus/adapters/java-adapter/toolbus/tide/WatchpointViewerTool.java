@@ -43,7 +43,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 
 	//}
 
-	//{ void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+	//{ void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
 
 	/**
 	 * A debug-adapter has connected to the system. We need to
@@ -51,7 +51,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	 * the user can open viewers on it.
 	 */
 
-	void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+	void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
 	{
 		// No viewers yet for this adapter,
 		// so add an empty vector in the viewerTable
@@ -65,7 +65,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 		adapterTable.put(new Integer(dapid), dapInfo);
 
 		// The processes are stored in the RemoteDebugAdapterInfo object.
-		ATermsRef proclist = ((ATermListRef)procs).getATerms();
+		ATerms proclist = ((ATermList)procs).getATerms();
 		ATermPattern patTriple = null;
 
 		try
@@ -79,7 +79,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 
 		while(proclist != null)
 		{
-			ATermListRef triple = (ATermListRef)proclist.getFirst();
+			ATermList triple = (ATermList)proclist.getFirst();
 			proclist = proclist.getNext();
 			if(!patTriple.match(triple))
 				throw new IllegalArgumentException(
@@ -92,13 +92,13 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	}
 
 	//}
-	//{ void dapDisconnected(ATermApplRef dap)
+	//{ void dapDisconnected(ATermAppl dap)
 
 	/**
 	 * Handle debug adapter disconnection.
 	 */
 
-	void dapDisconnected(ATermApplRef dap)
+	void dapDisconnected(ATermAppl dap)
 	{
 		int dapid = DebugAdapterInfo.debugAdapterId(dap);
 		adapterTable.remove(new Integer(dapid));
@@ -112,8 +112,8 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	 * Handle rule creation.
 	 */
 
-	void ruleCreated(ATermApplRef dap, ATermRef proc, int rid, ATermRef port, 
-			 ATermRef cond, ATermRef acts, ATermRef life)
+	void ruleCreated(ATermAppl dap, ATerm proc, int rid, ATerm port, 
+			 ATerm cond, ATerm acts, ATerm life)
 	{
 		Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
 		RemoteDebugAdapterInfo dapInfo = 
@@ -122,7 +122,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 		DebugPort dbgport = DebugPort.newPort(port);
 		int lifetime = DebugRule.lifeTerm2Int(life);
 		DebugRule rule = new DebugRule(rid, procs, dbgport, cond,
-					 ((ATermListRef)acts).getATerms(), lifetime);
+					 ((ATermList)acts).getATerms(), lifetime);
 		dapInfo.addRule(rule);
 	}
 
@@ -133,8 +133,8 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	 * Handle rule modification.
 	 */
 
-	void ruleModified(ATermApplRef dap, ATermRef proc, int rid, ATermRef port,
-				ATermRef cond, ATermRef acts, ATermRef life)
+	void ruleModified(ATermAppl dap, ATerm proc, int rid, ATerm port,
+				ATerm cond, ATerm acts, ATerm life)
 	{
 		Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
 		RemoteDebugAdapterInfo dapInfo = 
@@ -143,7 +143,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 		DebugPort dbgport = DebugPort.newPort(port);
 		int lifetime = DebugRule.lifeTerm2Int(life);
 		DebugRule rule = new DebugRule(rid, procs, dbgport, cond,
-					 ((ATermListRef)acts).getATerms(), lifetime);
+					 ((ATermList)acts).getATerms(), lifetime);
 		dapInfo.removeRule(rid);
 
 		// Add the new break/watchpoint
@@ -151,13 +151,13 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	}
 
 	//}
-	//{ void ruleDestroyed(ATermApplRef dap, ATermRef proc, int rid)
+	//{ void ruleDestroyed(ATermAppl dap, ATerm proc, int rid)
 
 	/**
 	 * Handle rule destruction.
 	 */
 
-	void ruleDestroyed(ATermApplRef dap, ATermRef proc, int rid)
+	void ruleDestroyed(ATermAppl dap, ATerm proc, int rid)
 	{
 		Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
 		RemoteDebugAdapterInfo dapInfo = 
@@ -166,64 +166,64 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	}
 
 	//}
-	//{ void watchpoint(ATermApplRef dap, ATermRef proc, int ATermListRef exprs)
+	//{ void watchpoint(ATermAppl dap, ATerm proc, int ATermList exprs)
 
 	/**
 	 * Handle watchpoint triggering.
 	 */
 
-	void watchpoint(ATermApplRef dap, ATermRef proc, int rid,
-					ATermListRef exprs)
+	void watchpoint(ATermAppl dap, ATerm proc, int rid,
+					ATermList exprs)
 	{
 		System.out.println("WATCHPOINT::"+exprs.toString());
 	}
 
 	//}
 
-	//{ void recAckEvent(ATermRef evt)
+	//{ void recAckEvent(ATerm evt)
 
 	/**
 	 * Handle event acknowledgements.
 	 */
 
-	void recAckEvent(ATermRef evt)
+	void recAckEvent(ATerm evt)
 	{
 		
 	}
 
 	//}	
-	//{ void recTerminate(ATermRef arg)
+	//{ void recTerminate(ATerm arg)
 
 	/**
 	 * Handle a termination request.
 	 */
 
-	void recTerminate(ATermRef arg)
+	void recTerminate(ATerm arg)
 	{
 		System.exit(0);
 	}
 
 	//}
 
-	//{ void createWatchpoint(ATermApplRef dap)
+	//{ void createWatchpoint(ATermAppl dap)
 
 	/**
 	 * The user wants to create a watchpoint.
 	 */
 
-	void createWatchpoint(ATermApplRef dap)
+	void createWatchpoint(ATermAppl dap)
 	{
 		System.out.println("Create watchpoint received!");
 	}
 
 	//}
-	//{ void createWatchpoint(ATermApplRef dap, ATermRef procs)
+	//{ void createWatchpoint(ATermAppl dap, ATerm procs)
 
 	/**
 	 * The user wants to create a watchpoint.
 	 */
 
-	void createWatchpoint(ATermApplRef dap, ATermRef procs)
+	void createWatchpoint(ATermAppl dap, ATerm procs)
 	{
 		try
 		{
@@ -237,20 +237,20 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 	}
 
 	//}
-	//{ void askWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port, ATermRef type)
-	void askWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port,
-		ATermRef type)
+	//{ void askWatchpoint(ATermAppl dap, ATerm procs, ATerm port, ATerm type)
+	void askWatchpoint(ATermAppl dap, ATerm procs, ATerm port,
+		ATerm type)
 	{
 	}
 
 	//}
-	//{ void createWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port)
+	//{ void createWatchpoint(ATermAppl dap, ATerm procs, ATerm port)
 
 	/**
 	 * The user wants to create a watchpoint.
 	 */
 
-	void createWatchpoint(ATermApplRef dap, ATermRef procs, ATermRef port)
+	void createWatchpoint(ATermAppl dap, ATerm procs, ATerm port)
 	{
 		System.out.println("Create watchpoint received!");
 		Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
@@ -281,12 +281,12 @@ class WatchpointDialog extends Dialog implements ActionListener
 	private	TextField		text_entry;
 	private ATermPattern	patternSingleProcess;
 	private ATermPattern	patternWatchVar;
-	private	ATermRef		termAlways;
-	private	ATermRef		procs;
+	private	ATerm		termAlways;
+	private	ATerm		procs;
 
 	private RemoteDebugAdapterInfo dapInfo;
 
-	public WatchpointDialog(RemoteDebugAdapterInfo dapInfo, ATermRef procs)
+	public WatchpointDialog(RemoteDebugAdapterInfo dapInfo, ATerm procs)
 	{
 		super(new Frame(), "Watchpoint Dialog");
 
@@ -319,14 +319,14 @@ class WatchpointDialog extends Dialog implements ActionListener
 		pack();
 		show();
 
-		int pid = ((ATermIntRef)procs).getInt();
+		int pid = ((ATermInt)procs).getInt();
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource().equals(text_entry))
 		{
-			int pid = ((ATermIntRef)procs).getInt();
+			int pid = ((ATermInt)procs).getInt();
 			dapInfo.sendCreateRule(
 				"var",
 				patternSingleProcess.make(new Integer(pid)),

@@ -55,7 +55,7 @@ public class JavaTif
 
 class TifGenerator
 {
-  private ATermsRef tifs = null;
+  private ATerms tifs = null;
   private Hashtable doEvents = null;
   private Hashtable evalEvents = null;
   private Hashtable otherEvents = null;
@@ -98,14 +98,14 @@ class TifGenerator
   {
     tifs = null;
 
-    ATermApplRef appl = null;
+    ATermAppl appl = null;
 
     FileInputStream s = new FileInputStream(tifsfile);
     
     do {
       if(appl != null && appl.getFun().startsWith("rec-"))
-	tifs = new ATermsRef(appl, tifs);
-      appl = (ATermApplRef)Tool.readTerm(s);
+	tifs = new ATerms(appl, tifs);
+      appl = (ATermAppl)Tool.readTerm(s);
     } while(!appl.getFun().equals("end-of-tifs"));
   }
 
@@ -115,15 +115,15 @@ class TifGenerator
   public void selectTifs(String tool)
     throws ParseError, IOException
   {
-    ATermsRef list = tifs;
-    ATermRef T = new ATermPlaceholderRef(new ATermApplRef(tool, null));
+    ATerms list = tifs;
+    ATerm T = new ATermPlaceholder(new ATermAppl(tool, null));
 
     while(list != null) {
-      ATermApplRef appl = (ATermApplRef)list.getFirst();
+      ATermAppl appl = (ATermAppl)list.getFirst();
       if(appl.getArgs() != null && appl.getFun().startsWith("rec-") &&
 	 appl.getArgs().getFirst().equals(T)) {
 	if(appl.getFun().equals("rec-do")) {
-	  appl = (ATermApplRef)appl.getArgs().getNext().getFirst();
+	  appl = (ATermAppl)appl.getArgs().getNext().getFirst();
 	  appl = normalize(appl);
 	  SpecOrderVector v = (SpecOrderVector)doEvents.get(appl.getFun());
 	  if(v == null) {
@@ -132,7 +132,7 @@ class TifGenerator
 	  }
 	  v.insert(appl);
         } else if(appl.getFun().equals("rec-eval")) {
-	  appl = (ATermApplRef)appl.getArgs().getNext().getFirst();
+	  appl = (ATermAppl)appl.getArgs().getNext().getFirst();
 	  appl = normalize(appl);
 	  SpecOrderVector v = (SpecOrderVector)evalEvents.get(appl.getFun());
 	  if(v == null) {
@@ -142,7 +142,7 @@ class TifGenerator
 	  v.insert(appl);
 	} else {
 	  // Dump first argument (<tool>)
-	  appl = new ATermApplRef(appl.getFun(), appl.getArgs().getNext());
+	  appl = new ATermAppl(appl.getFun(), appl.getArgs().getNext());
 	  appl = normalize(appl);
 	  SpecOrderVector v = (SpecOrderVector)otherEvents.get(appl.getFun());
 	  if(v == null) {
@@ -266,10 +266,10 @@ class TifGenerator
     out.println("  // This method initializes the table with input signatures");
     out.println("  private void initSigTable()");
     out.println("  {");
-    ATermsRef sigs = tifs;
+    ATerms sigs = tifs;
     out.println("    try {");
     while(sigs != null) {
-      ATermRef sig = sigs.getFirst();
+      ATerm sig = sigs.getFirst();
       sigs = sigs.getNext();
       out.print("      sigTable.put(ATermParser.makeSimple(\"");
       sig.print(out);
@@ -319,7 +319,7 @@ class TifGenerator
   private void genHandler(PrintWriter out)
   {
     out.println("  // The generic handler calls the specific handlers");
-    out.println("  protected ATermRef handler(ATermRef term)");
+    out.println("  protected ATerm handler(ATerm term)");
     out.println("\tthrows ToolException");
     out.print("  {\n    ");
     Enumeration enum = doEvents.keys();
@@ -382,12 +382,12 @@ class TifGenerator
   private void genCheckInputSignature(PrintWriter out)
   {
     out.println("  // Check the input signature");
-    out.println("  protected void checkInputSignature(ATermListRef list)");
+    out.println("  protected void checkInputSignature(ATermList list)");
     out.println("         throws ToolException");
     out.println("  {");
-    out.println("    ATermsRef sigs = list.getATerms();");
+    out.println("    ATerms sigs = list.getATerms();");
     out.println("    while(sigs != null) {");
-    out.println("      ATermApplRef sig = (ATermApplRef)sigs.getFirst();");
+    out.println("      ATermAppl sig = (ATermAppl)sigs.getFirst();");
     out.println("      sigs = sigs.getNext();");
     out.println("      if(!sigTable.containsKey(sig)) {");
     out.println("        // Sorry, but the term is not in the input signature!");
@@ -404,7 +404,7 @@ class TifGenerator
   {
     out.println("  // This function is called when an input term");
     out.println("  // was not in the input signature.");
-    out.println("  void notInInputSignature(ATermRef t)");
+    out.println("  void notInInputSignature(ATerm t)");
     out.println("        throws ToolException");
     out.println("  {");
     out.println("    throw new ToolException(this, " +
@@ -414,18 +414,18 @@ class TifGenerator
 
   //}
 
-  //{ private ATermApplRef normalize(ATermApplRef term)
+  //{ private ATermAppl normalize(ATermAppl term)
 
-  private ATermApplRef normalize(ATermApplRef appl)
+  private ATermAppl normalize(ATermAppl appl)
   {
-    ATermsRef args = appl.getArgs();
+    ATerms args = appl.getArgs();
     if(args != null) {
       int len = args.length();
-      ATermRef[] newargs = new ATermRef[len];
+      ATerm[] newargs = new ATerm[len];
       String type = null;
     
       for(int i=0; i<len; i++) {
-        ATermRef arg = args.getFirst();
+        ATerm arg = args.getFirst();
         args = args.getNext();
         switch(arg.getType()) {
 	  case ATerm.APPL:
@@ -445,13 +445,13 @@ class TifGenerator
 	    break;
 	}
 	if(newargs[i] == null)
-	  newargs[i] = new ATermPlaceholderRef(new ATermApplRef(type, null));
+	  newargs[i] = new ATermPlaceholder(new ATermAppl(type, null));
       }
       args = null;
       for(int i = len-1; i >= 0; i--)
-	args = new ATermsRef(newargs[i], args);
+	args = new ATerms(newargs[i], args);
     }
-    return new ATermApplRef(appl.getFun(), args);    
+    return new ATermAppl(appl.getFun(), args);    
   }
 
   //}
@@ -460,12 +460,12 @@ class TifGenerator
 
 class SpecOrderVector extends Vector
 {
-  //{ public void insert(ATermApplRef appl)
+  //{ public void insert(ATermAppl appl)
 
-public void insert(ATermApplRef appl)
+public void insert(ATermAppl appl)
 {
   for(int i=0; i<size(); i++) {
-    if(moreSpecific(appl, (ATermApplRef)elementAt(i))) {
+    if(moreSpecific(appl, (ATermAppl)elementAt(i))) {
       insertElementAt(appl, i);
       return;
     }
@@ -474,9 +474,9 @@ public void insert(ATermApplRef appl)
 }
 
 //}
-  //{ private boolean moreSpecific(ATermRef a, ATermRef b)
+  //{ private boolean moreSpecific(ATerm a, ATerm b)
 
-private boolean moreSpecific(ATermRef a, ATermRef b)
+private boolean moreSpecific(ATerm a, ATerm b)
 {
   if(a == b)
     return true;
@@ -492,20 +492,20 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
     return false;
   switch(a.getType()) {
     case ATerm.APPL:
-      ATermApplRef appl1 = (ATermApplRef)a;
-      ATermApplRef appl2 = (ATermApplRef)b;
+      ATermAppl appl1 = (ATermAppl)a;
+      ATermAppl appl2 = (ATermAppl)b;
       if(appl1.getFun().equals(appl2.getFun()))
 	return moreSpecific(appl1.getArgs(), appl2.getArgs());
       if(moreSpecific(appl1.getFun(), appl2.getFun()))
 	return true;
       return false;
     case ATerm.PLACEHOLDER:
-      ATermPlaceholderRef p1 = (ATermPlaceholderRef)a;
-      ATermPlaceholderRef p2 = (ATermPlaceholderRef)b;
+      ATermPlaceholder p1 = (ATermPlaceholder)a;
+      ATermPlaceholder p2 = (ATermPlaceholder)b;
       return moreSpecific(p1.getPlaceholderType(), p2.getPlaceholderType());
     case ATerm.ATERMS:
-      ATermsRef terms1 = (ATermsRef)a;
-      ATermsRef terms2 = (ATermsRef)b;
+      ATerms terms1 = (ATerms)a;
+      ATerms terms2 = (ATerms)b;
       if(terms1.getFirst().equals(terms2.getFirst()))
 	return moreSpecific(terms1.getNext(), terms2.getNext());
       return moreSpecific(terms1.getFirst(), terms2.getFirst());
@@ -534,7 +534,7 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
   public void print(PrintWriter out)
   {
     for(int i=0; i<size(); i++) {
-      ((ATermRef)elementAt(i)).println(out);
+      ((ATerm)elementAt(i)).println(out);
     }
   }
 
@@ -551,7 +551,7 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
       out.print("      P" + base + i + " = new ATermPattern(\"");
       if(func != null)
 	out.print(func + "(");
-      ((ATermRef)elementAt(i)).print(out);
+      ((ATerm)elementAt(i)).print(out);
       if(func != null)
 	out.print(")");
       out.println("\");");
@@ -577,7 +577,7 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
   public void genCalls(PrintWriter out, String base, boolean ret)
   {
     for(int i=0; i<size(); i++) {
-      ATermApplRef appl = ((ATermApplRef)elementAt(i));
+      ATermAppl appl = ((ATermAppl)elementAt(i));
       out.println("if(P" + base + i + ".match(term)) {");
       out.println("      ATermPattern P = P" + base + i + ";");
       if(ret)
@@ -590,30 +590,30 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
   }
 
   //}
-  //{ private static void genArgs(PrintWriter out, ATermsRef args)
+  //{ private static void genArgs(PrintWriter out, ATerms args)
 
-  private static void genArgs(PrintWriter out, ATermsRef args)
+  private static void genArgs(PrintWriter out, ATerms args)
   {
     int idx = 0;
 
     while(args != null) {
-      ATermPlaceholderRef ph = (ATermPlaceholderRef)args.getFirst();
-      String fun = ((ATermApplRef)ph.getPlaceholderType()).getFun();
+      ATermPlaceholder ph = (ATermPlaceholder)args.getFirst();
+      String fun = ((ATermAppl)ph.getPlaceholderType()).getFun();
       args = args.getNext();
       if(fun.equals("int"))
         out.print("((Integer)P.elementAt(" + idx + ")).intValue()");
       else if(fun.equals("real"))
         out.print("((Double)P.elementAt(" + idx + ")).doubleValue()");
       else if(fun.equals("term"))
-        out.print("(ATermRef)P.elementAt(" + idx + ")");
+        out.print("(ATerm)P.elementAt(" + idx + ")");
       else if(fun.equals("appl"))
-        out.print("(ATermApplRef)P.elementAt(" + idx + ")");
+        out.print("(ATermAppl)P.elementAt(" + idx + ")");
       else if(fun.equals("list"))
-        out.print("(ATermListRef)P.elementAt(" + idx + ")");
+        out.print("(ATermList)P.elementAt(" + idx + ")");
       else if(fun.equals("str"))
 	out.print("(String)P.elementAt(" + idx + ")");
       else
-	out.print("(ATermApplRef)P.elementAt(" + idx + ")");
+	out.print("(ATermAppl)P.elementAt(" + idx + ")");
       if(args != null)
         out.print(", ");
       idx++;
@@ -626,9 +626,9 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
   public void genMethods(PrintWriter out, String base, boolean ret)
   {
     for(int i=0; i<size(); i++) {
-      ATermApplRef appl = ((ATermApplRef)elementAt(i));
+      ATermAppl appl = ((ATermAppl)elementAt(i));
       if(ret)
-        out.print("  abstract ATermRef " + base + "(");
+        out.print("  abstract ATerm " + base + "(");
       else
 	out.print("  abstract void " + base + "(");
       genFormals(out, appl.getArgs());
@@ -637,30 +637,30 @@ private boolean moreSpecific(ATermRef a, ATermRef b)
   }
 
   //}
-  //{ private static void genFormals(PrintWriter out, ATermsRef args)
+  //{ private static void genFormals(PrintWriter out, ATerms args)
 
-  private static void genFormals(PrintWriter out, ATermsRef args)
+  private static void genFormals(PrintWriter out, ATerms args)
   {
     int idx = 0;
 
     while(args != null) {
-      ATermPlaceholderRef ph = (ATermPlaceholderRef)args.getFirst();
-      String fun = ((ATermApplRef)ph.getPlaceholderType()).getFun();
+      ATermPlaceholder ph = (ATermPlaceholder)args.getFirst();
+      String fun = ((ATermAppl)ph.getPlaceholderType()).getFun();
       args = args.getNext();
       if(fun.equals("int"))
         out.print("int i" + idx);
       else if(fun.equals("real"))
         out.print("double d" + idx);
       else if(fun.equals("term"))
-        out.print("ATermRef t" + idx);
+        out.print("ATerm t" + idx);
       else if(fun.equals("appl"))
-        out.print("ATermApplRef a" + idx);
+        out.print("ATermAppl a" + idx);
       else if(fun.equals("list"))
-        out.print("ATermListRef l" + idx);
+        out.print("ATermList l" + idx);
       else if(fun.equals("str"))
 	out.print("String s" + idx);
       else
-	out.print("ATermApplRef a" + idx);
+	out.print("ATermAppl a" + idx);
 
       if(args != null)
         out.print(", ");

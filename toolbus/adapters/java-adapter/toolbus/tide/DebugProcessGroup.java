@@ -21,13 +21,13 @@ abstract public class DebugProcessGroup
   protected RemoteDebugAdapterInfo dap;
   private int type;
 
-  //{ static public DebugProcessGroup newGroup(dap, ATermRef procs)
+  //{ static public DebugProcessGroup newGroup(dap, ATerm procs)
 
   /**
    * Create a new debug process group given a term process spec.
    */
 
-  static public DebugProcessGroup newGroup(RemoteDebugAdapterInfo dap, ATermRef procs)
+  static public DebugProcessGroup newGroup(RemoteDebugAdapterInfo dap, ATerm procs)
   {
     if(patternNone == null) {
       try {
@@ -48,7 +48,7 @@ abstract public class DebugProcessGroup
     if(patternList.match(procs)) {
       String name = "anon-" + anonGroupCount++;
       return new DebugProcessGroupList(dap, name, 
-	     ((ATermListRef)patternList.elementAt(0)).getATerms());
+	     ((ATermList)patternList.elementAt(0)).getATerms());
     }
     throw new IllegalArgumentException("illegal process spec: " + procs);
   }
@@ -90,14 +90,14 @@ abstract public class DebugProcessGroup
   }
 
   //}
-  //{ static public DebugProcessGroup newGroupList(dap, ATermsRef procs)
+  //{ static public DebugProcessGroup newGroupList(dap, ATerms procs)
 
   /**
    * Create a new process group representing a single process.
    */
 
   static public DebugProcessGroup newGroupList(RemoteDebugAdapterInfo dap, 
-					       String name, ATermsRef procs)
+					       String name, ATerms procs)
   {
     return new DebugProcessGroupList(dap, name, procs);
   }
@@ -179,10 +179,10 @@ class DebugProcessGroupOne extends DebugProcessGroup
 
 class DebugProcessGroupList extends DebugProcessGroup
 {
-  ATermsRef procs;
+  ATerms procs;
   String name;
 
-  public DebugProcessGroupList(RemoteDebugAdapterInfo dap, String name, ATermsRef procs)
+  public DebugProcessGroupList(RemoteDebugAdapterInfo dap, String name, ATerms procs)
   {
     super(dap, NONE);
     this.procs = procs;
@@ -194,7 +194,7 @@ class DebugProcessGroupList extends DebugProcessGroup
   }
   public boolean contains(int pid) {
     while(procs != null) {
-      ATermIntRef proc = (ATermIntRef)procs.getFirst();
+      ATermInt proc = (ATermInt)procs.getFirst();
       if(proc.getInt() == pid)
 	return true;
       procs = procs.getNext();

@@ -26,18 +26,20 @@ DISTFILES	= Makefile.in aterm-size $(SOURCE)
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/aterm
 
-SOURCE		= AFun.java AsFix.java ATerm.java ATerms.java ATermAppl.java ATermInt.java \
+SOURCE		= AFun.java AsFix.java ATermImpl.java ATermsImpl.java \
+		ATermApplImpl.java ATermIntImpl.java ATermListImpl.java \
+		ATermPlaceholderImpl.java ATermRealImpl.java \
+		ATerm.java ATerms.java ATermAppl.java ATermInt.java \
 		ATermList.java ATermPlaceholder.java ATermReal.java \
-		ATermRef.java ATermsRef.java ATermApplRef.java \
-		ATermIntRef.java ATermListRef.java ATermPlaceholderRef.java \
-		ATermRealRef.java ATermChannel.java ATermParser.java \
+		ATermChannel.java ATermParser.java \
 		ATermPattern.java ParseError.java \
 		ATermSize.java ATest.java
-CLASSES		= AFun.class AsFix.class ATerm.class ATerms.class ATermAppl.class ATermInt.class \
+CLASSES		= AFun.class AsFix.class ATermImpl.class ATermsImpl.class \
+		ATermApplImpl.class ATermIntImpl.class ATermListImpl.class \
+		ATermPlaceholderImpl.class ATermRealImpl.class \
+		ATerm.class ATerms.class ATermAppl.class ATermInt.class \
 		ATermList.class ATermPlaceholder.class ATermReal.class \
-		ATermRef.class ATermsRef.class ATermApplRef.class \
-		ATermIntRef.class ATermListRef.class ATermPlaceholderRef.class\
-		ATermRealRef.class ATermChannel.class ATermParser.class \
+		ATermChannel.class ATermParser.class \
 		ATermPattern.class ParseError.class \
 		ATermSize.class ATest.class InputChannel.class \
 		TestFailedException.class DummyEntry.class

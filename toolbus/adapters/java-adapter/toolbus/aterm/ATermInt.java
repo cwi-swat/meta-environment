@@ -1,49 +1,107 @@
 
 package toolbus.aterm;
-import toolbus.util.Writer;
-import toolbus.util.PrintWriter;
-import toolbus.util.*;
 import java.util.*;
 import java.io.*;
 
 public class ATermInt extends ATerm
 {
-  private int val;
+  ATermIntImpl value = null;
 
-  public ATermInt(int v, ATerm anno)	{ super(anno); val = v;	}
-  public ATermInt(int v)		{ this(v, null);	}
-  public Object clone() {
-    ATermInt i = (ATermInt)super.clone();
-    i.val = val;
-    return i;
+  //{ public ATermInt(ATermIntImpl val)
+
+  public ATermInt(ATermIntImpl val)
+  {
+    update(val);
   }
 
-  public boolean equals(Object obj) {
-    if(obj instanceof ATermInt)
-      return val == ((ATermInt)obj).val && super.equals(obj);
-    return false;
+  //}
+  //{ public ATermInt(int i, ATerm anno)
+
+  public ATermInt(int i, ATerm anno)
+  {
+    update(new ATermIntImpl(i, anno == null ? null : anno.getATermImpl()));
   }
 
-  public int hashCode()			{ return val;	}
-  public int getType()			{ return ATerm.INT; }
-  public int getInt()			{ return val;	}
-  public void setInt(int v)		{ val = v;	}
+  //}
+  //{ public ATermInt(int i)
 
-  public void print(PrintWriter w) {
-    w.print(val);
-    super.print(w);
+  public ATermInt(int i)
+  {
+    update(new ATermIntImpl(i));
   }
 
-  public void write(OutputStream o) throws java.io.IOException {
-    String str = "" + val;
-    for(int i=0; i<str.length(); i++)
-      o.write(str.charAt(i));
-    super.write(o);
+  //}
+  //{ public void setAnno(ATermImpl a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATerm a)
+  {
+    ATermIntImpl val = new ATermIntImpl(value.getInt(), a == null ? 
+		null:a.getATermImpl());
+    update(val);
   }
 
-  public int printSize() {
-    return super.printSize() + (""+val).length();
+  //}
+  //{ protected void finalize()
+
+  protected void finalize()
+    throws Throwable
+  {
+    value.decreaseRef();
+    super.finalize();
   }
 
-  public int size()		{ return 1 + super.size(); }
+  //}
+
+  //{ private void update(ATermIntImpl val)
+  
+  /**
+    * Update this reference to point to an integer term equal to {\tt val}.
+    */
+
+  private void update(ATermIntImpl val)
+  {
+    if(value != null)
+      value.decreaseRef();
+    value = (ATermIntImpl)val.unique();
+    value.increaseRef();
+  }
+
+  //}
+  //{ protected ATermImpl getATermImpl()
+
+  protected ATermImpl getATermImpl()
+  {
+    return value;
+  }
+
+  //}
+  //{ protected ATermIntImpl getATermIntImpl()
+
+  protected ATermIntImpl getATermIntImpl()
+  {
+    return value;
+  }
+
+  //}
+
+  //{ public int getInt()
+
+  public int getInt()
+  {
+    return value.getInt();
+  }
+
+  //}
+  //{ public int setInt()
+
+  public void setInt(int i)
+  {
+    update(new ATermIntImpl(i));
+  }
+
+  //}
 }

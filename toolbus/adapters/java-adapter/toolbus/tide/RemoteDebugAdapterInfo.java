@@ -22,13 +22,13 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   ATermPattern patternAskWatchpointVar;
   ATermPattern patternAskWatchpointExpr;
 
-  //{ public RemoteDebugAdapterInfo(ATermRef dap, ATermsRef inf, Tool tool)
+  //{ public RemoteDebugAdapterInfo(ATerm dap, ATerms inf, Tool tool)
 
   /**
     * Construct a new RemoteDebugAdapterInfo object.
     */
 
-  public RemoteDebugAdapterInfo(ATermRef dap, ATermsRef inf, Tool tool)
+  public RemoteDebugAdapterInfo(ATerm dap, ATerms inf, Tool tool)
   {
     super(dap, inf);
     this.tool = tool;
@@ -36,13 +36,13 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   }
 
   //}
-  //{ public RemoteDebugAdapterInfo(int ident, ATermsRef inf, Tool tool)
+  //{ public RemoteDebugAdapterInfo(int ident, ATerms inf, Tool tool)
 
   /**
     * Construct a new RemoteDebugAdapterInfo object.
     */
 
-  public RemoteDebugAdapterInfo(int ident, ATermsRef inf, Tool tool)
+  public RemoteDebugAdapterInfo(int ident, ATerms inf, Tool tool)
   {
     super(ident, inf);
     this.tool = tool;
@@ -77,17 +77,17 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
 
   //}
 
-  //{ public void sendExecuteActions(ATermRef procs, ATermRef actions)
+  //{ public void sendExecuteActions(ATerm procs, ATerm actions)
 
   /**
     * Send a list of actions to the remote debug adapter for execution.
     */
 
-  public void sendExecuteActions(ATermRef procs, ATermRef actions)
+  public void sendExecuteActions(ATerm procs, ATerm actions)
   {
     System.out.println("sendExecuteActions: " + actions + " to:" + procs);
     try {
-      tool.post((ATermApplRef)patternExecActions.make(new Integer(getId()), 
+      tool.post((ATermAppl)patternExecActions.make(new Integer(getId()), 
 						      procs, actions));
     } catch (ToolException e) {
       System.err.println("ToolBus connection failure, giving up!");
@@ -96,21 +96,21 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   }
 
   //}
-  //{ public void sendCreateRule(String type, ATermRef procs, DebugPort port,
+  //{ public void sendCreateRule(String type, ATerm procs, DebugPort port,
 
   /**
     * Send a create-rule request.
     */
 
-  public void sendCreateRule(String type, ATermRef procs, DebugPort port, 
-			     ATermRef cond, ATermRef acts, int lifetime)
+  public void sendCreateRule(String type, ATerm procs, DebugPort port, 
+			     ATerm cond, ATerm acts, int lifetime)
   {
     try {
-      ATermRef term = patternCreateRule.make(type, new Integer(getId()), 
+      ATerm term = patternCreateRule.make(type, new Integer(getId()), 
 					  procs, port.onthewire(),cond,acts, 
 					  DebugRule.lifeInt2Term(lifetime));
       System.out.println("send create rule " + term.toString());
-      tool.post((ATermApplRef)term);
+      tool.post((ATermAppl)term);
     } catch (ToolException e) {
       System.err.println("ToolBus connection failure, giving up!");
       System.exit(1);
@@ -119,23 +119,23 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   }
 
   //}
-  //{ public void askWatchpoint(ATermRef procs, DebugPort port)
+  //{ public void askWatchpoint(ATerm procs, DebugPort port)
 
   /**
    * Send a message to the watchpoint viewer in order to create a watchpoint.
    */
 
-  public void askWatchpoint(ATermRef procs, DebugPort port, boolean var)
+  public void askWatchpoint(ATerm procs, DebugPort port, boolean var)
   {
     try {
-      ATermRef term;
+      ATerm term;
       if(var)
 	term = patternAskWatchpointVar.make(new Integer(getId()),
 					    procs, port.onthewire());
       else
 	term = patternAskWatchpointExpr.make(new Integer(getId()),
 					     procs, port.onthewire());
-      tool.post((ATermApplRef)term);
+      tool.post((ATermAppl)term);
     } catch (ToolException e) {
       System.err.println("ToolBus connection failure, giving up!");
       System.exit(1);

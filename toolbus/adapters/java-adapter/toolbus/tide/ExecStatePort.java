@@ -26,13 +26,13 @@ public class ExecStatePort extends DebugPort
   }
 
   //}
-  //{ public ExecStatePort(ATermRef es, int when)
+  //{ public ExecStatePort(ATerm es, int when)
 
   /**
     * Construct a new ExecStatePort object given its term representation.
     */
 
-  public ExecStatePort(ATermRef es, int when)
+  public ExecStatePort(ATerm es, int when)
   {
     super(EXEC_STATE, when);
     exec_state = DebugProcess.execStateTerm2Int(es);
@@ -68,26 +68,26 @@ public class ExecStatePort extends DebugPort
   }
 
   //}
-  //{ public ATermRef getExecStateTerm()
+  //{ public ATerm getExecStateTerm()
 
   /**
    * Retrieve the exec state of this port.
    */
 
-  public ATermRef getExecStateTerm()
+  public ATerm getExecStateTerm()
   {
     return DebugProcess.execStateInt2Term(exec_state);
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be send 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return patternPort.make(getWhenTerm(), getExecStateTerm());
   }

@@ -5,13 +5,13 @@ import java.util.Stack;
 
 public class ATermParser
 {
-  //{ public static ATermRef parse(InputStream i)
+  //{ public static ATerm parse(InputStream i)
 
   /**
     * Parse a term from an input stream.
     */
 
-  public static ATermRef parse(InputStream i)
+  public static ATerm parse(InputStream i)
     throws IOException, ParseError
   {
     InputChannel channel = new InputChannel(i);
@@ -23,26 +23,26 @@ public class ATermParser
 
   //}
 
-  //{ public static ATermRef parseATerm(ATermChannel channel)
+  //{ public static ATerm parseATerm(ATermChannel channel)
 
-  public static ATermRef parseATerm(ATermChannel channel)
+  public static ATerm parseATerm(ATermChannel channel)
     throws IOException, ParseError
   {
-    ATermRef result, type;
-    ATermsRef terms;
+    ATerm result, type;
+    ATerms terms;
     String fun;
 
     switch(channel.last()) {
       case '[':	
 	if(channel.readNext() == ']') {
 	  channel.readNext();
-	  result = new ATermListRef((ATermsRef)null);
+	  result = new ATermList((ATerms)null);
 	} else {
 	  terms = parseATerms(channel);
 	  if(channel.last() != ']')
 	    throw new ParseError(channel, channel.last(), "']' expected");
 	  channel.readNext();
-	  result = new ATermListRef(terms);
+	  result = new ATermList(terms);
 	}
 	break;
       case '<':
@@ -50,7 +50,7 @@ public class ATermParser
 	type = parseATerm(channel);
 	if(channel.last() != '>')
 	  throw new ParseError(channel, channel.last(), "'>' expected");
-	result = new ATermPlaceholderRef(type);
+	result = new ATermPlaceholder(type);
 	channel.readNext();
 	break;
       case '"':
@@ -60,10 +60,10 @@ public class ATermParser
 	  terms = parseATerms(channel);
 	  if(channel.last() != ')')
 	    throw new ParseError(channel, channel.last(), "')' expected");
-	  result = new ATermApplRef(fun, terms, true);
+	  result = new ATermAppl(fun, terms, true);
 	  channel.readNext();
 	} else
-	  result = new ATermApplRef(fun, null, true);
+	  result = new ATermAppl(fun, null, true);
 	break;
       case '-':
       case '0':	case '1':	case '2': 	case '3': 	case '4':
@@ -79,10 +79,10 @@ public class ATermParser
 	    terms = parseATerms(channel);
 	    if(channel.last() != ')')
 	      throw new ParseError(channel, channel.last(), "')' expected");
-	    result = new ATermApplRef(fun, terms, false);
+	    result = new ATermAppl(fun, terms, false);
 	    channel.readNext();
 	  } else
-	    result = new ATermApplRef(fun, null, false);
+	    result = new ATermAppl(fun, null, false);
 	} else {
 	  throw new ParseError(channel, channel.last(), "illegal character");
 	}
@@ -91,9 +91,9 @@ public class ATermParser
   }
 
   //}
-  //{ private static ATermsRef parseATerms(ATermChannel channel)
+  //{ private static ATerms parseATerms(ATermChannel channel)
 
-  private static ATermsRef parseATerms(ATermChannel channel)
+  private static ATerms parseATerms(ATermChannel channel)
     throws IOException, ParseError
   {
     Stack stack = new Stack();
@@ -103,9 +103,9 @@ public class ATermParser
       channel.readNext();
       stack.push(parseATerm(channel));
     }
-    ATermsRef result = null;
+    ATerms result = null;
     while(!stack.empty())
-      result = new ATermsRef((ATermRef)stack.pop(), result);
+      result = new ATerms((ATerm)stack.pop(), result);
     return result;
   }
 
@@ -166,18 +166,18 @@ public class ATermParser
   }
 
   //}
-  //{ static ATermRef parseNumber(ATermChannel channel)
+  //{ static ATerm parseNumber(ATermChannel channel)
 
 /**
   * Parse a number. This function can eiter return an ATermInt,
   * or an ATermReal.
   */
 
-  private static ATermRef parseNumber(ATermChannel channel)
+  private static ATerm parseNumber(ATermChannel channel)
     throws ParseError, IOException
   {
     StringBuffer str = new StringBuffer();
-    ATermRef result;
+    ATerm result;
 
     do {
       str.append(channel.last());
@@ -190,7 +190,7 @@ public class ATermParser
       } catch (NumberFormatException e) {
 	throw new ParseError(channel, channel.last(), "malformed int");
       }
-      result = new ATermIntRef(val);
+      result = new ATermInt(val);
     } else {
       if(channel.last() == '.') {
 	str.append('.');
@@ -220,22 +220,22 @@ public class ATermParser
       } catch (NumberFormatException e) {
 	throw new ParseError(channel, channel.last(), "malformed real");
       }
-      result = new ATermRealRef(val);    
+      result = new ATermReal(val);    
     }
     return result;
   }
 
   //}
 
-  //{ static ATermRef makeSimple(String s)
+  //{ static ATerm makeSimple(String s)
 
-  static public ATermRef makeSimple(String s)
+  static public ATerm makeSimple(String s)
     throws ParseError
   {
-    byte[] array = new byte[s.length()]; // jdk 1.02
-    s.getBytes(0, s.length(), array, 0);
+    // byte[] array = new byte[s.length()]; // jdk 1.02
+    // s.getBytes(0, s.length(), array, 0);
 
-    // byte[] array = s.getBytes(); // jdk 1.1
+    byte[] array = s.getBytes(); // jdk 1.1
     
     ByteArrayInputStream stream = new ByteArrayInputStream(array);
     try {

@@ -32,15 +32,15 @@ class DebugProcess
   DebugPort port = null;
   private Hashtable aliases = new Hashtable(5);
   
-  //{ static public int execStateTerm2Int(ATermRef es)
+  //{ static public int execStateTerm2Int(ATerm es)
 
   /**
     * Transform a term representing an exec-state into an integer.
     */
 
-  static public int execStateTerm2Int(ATermRef es)
+  static public int execStateTerm2Int(ATerm es)
   {
-    String fun = ((ATermApplRef)es).getFun();
+    String fun = ((ATermAppl)es).getFun();
     if(fun.equals("stop"))
       return ES_STOP;
     if(fun.equals("run"))
@@ -58,21 +58,21 @@ class DebugProcess
   }
 
   //}
-  //{ static public ATermRef execStateInt2Term(int es)
+  //{ static public ATerm execStateInt2Term(int es)
 
   /**
     * Transform a term representing an exec-state into an integer.
     */
 
-  static public ATermRef execStateInt2Term(int es)
+  static public ATerm execStateInt2Term(int es)
   {
     switch(es) {
-      case ES_STOP:             return new ATermApplRef("stop", null);
-      case ES_RUN:              return new ATermApplRef("run", null);
-      case ES_SINGLE_STEP:      return new ATermApplRef("single-step", null);
-      case ES_STEP_OVER:        return new ATermApplRef("step-over", null);
-      case ES_RUN_UNTIL_PARENT: return new ATermApplRef("run-until-parent", null);
-      case ES_ALL:              return new ATermApplRef("all", null);
+      case ES_STOP:             return new ATermAppl("stop", null);
+      case ES_RUN:              return new ATermAppl("run", null);
+      case ES_SINGLE_STEP:      return new ATermAppl("single-step", null);
+      case ES_STEP_OVER:        return new ATermAppl("step-over", null);
+      case ES_RUN_UNTIL_PARENT: return new ATermAppl("run-until-parent", null);
+      case ES_ALL:              return new ATermAppl("all", null);
     }
     throw new IllegalArgumentException("illegal exec-state: " + es);
   }
@@ -284,13 +284,13 @@ class DebugProcess
   }
 
   //}
-  //{ public void addAlias(ATermRef alias)
+  //{ public void addAlias(ATerm alias)
 
   /**
     * Add an alias to this process.
     */
 
-  public void addAlias(ATermRef alias)
+  public void addAlias(ATerm alias)
   {
     aliases.put(alias,alias);
   }
@@ -308,13 +308,13 @@ class DebugProcess
   }
 
   //}
-  //{ public boolean isAlias(ATermRef alias)
+  //{ public boolean isAlias(ATerm alias)
 
   /**
     * Check if a term is an alias of this process.
     */
 
-  public boolean isAlias(ATermRef alias)
+  public boolean isAlias(ATerm alias)
   {
     return aliases.containsKey(alias);
   }

@@ -32,14 +32,14 @@ public class TestTool extends Tool
     super.idle();
   }
 
-  protected ATermRef handler(ATermRef term) {
+  protected ATerm handler(ATerm term) {
     System.out.println("handler called: ");
     term.print(System.out);
     System.out.println("");
     return null;
   }
 
-  protected void checkInputSignature(ATermListRef sig) {
+  protected void checkInputSignature(ATermList sig) {
     System.out.println("checkInputSignature called: ");
     sig.print(System.out);
     System.out.println("");

@@ -116,17 +116,17 @@ class DebugAdapterTool extends DebugAdapterTif
 
   //}
 
-  //{ ATermRef getInfo()
+  //{ ATerm getInfo()
 
   /**
     * Supply information about this debug adapter.
     */
 
-  ATermRef getInfo()
+  ATerm getInfo()
   {
-    ATermRef result;
+    ATerm result;
     try {
-      ATermsRef info = null;
+      ATerms info = null;
       ATermPattern addPattern = new ATermPattern("[[<fun>,<term>],<terms>]");
       ATermPattern returnPattern = new ATermPattern("snd-value(info([<terms>]))");
       Properties props = debugger.getProperties();
@@ -136,7 +136,7 @@ class DebugAdapterTool extends DebugAdapterTif
       while(names.hasMoreElements()) {
 	String prop = (String)names.nextElement();
 	String value = props.getProperty(prop);
-	info = ((ATermListRef)addPattern.make(prop, 
+	info = ((ATermList)addPattern.make(prop, 
 		       ATermParser.makeSimple(value), info)).getATerms();
       }
       result = returnPattern.make(info);
@@ -147,19 +147,19 @@ class DebugAdapterTool extends DebugAdapterTif
   }
 
   //}
-  //{ ATermRef getProcesses()
+  //{ ATerm getProcesses()
 
   /**
     * Retrieve the list of processes controlled by this
     * debug adapter.
     */
 
-  ATermRef getProcesses()
+  ATerm getProcesses()
   {
-    ATermRef result = null;
+    ATerm result = null;
 
     try {
-      ATermsRef procs = null;
+      ATerms procs = null;
       ATermPattern add = new ATermPattern("[<term>,<terms>]");
       ATermPattern pair = new ATermPattern("[<int>,<str>]");
       Enumeration e = debugger.getProcesses();
@@ -177,29 +177,29 @@ class DebugAdapterTool extends DebugAdapterTif
 
   //}
 
-  //{ ATermRef execActions(ATermRef procs, ATermListRef acts)
+  //{ ATerm execActions(ATerm procs, ATermList acts)
 
   /**
     * Execute a list of actions.
     */
 
-  ATermRef execActions(ATermRef procs, ATermListRef acts)
+  ATerm execActions(ATerm procs, ATermList acts)
   {
     return null;
   }
 
   //}
-  //{ ATermRef createRule(ATermRef procs, port, cond, acts, life)
+  //{ ATerm createRule(ATerm procs, port, cond, acts, life)
 
   /**
     * Create a new debug rule.
     */
 
-  ATermRef createRule(ATermRef Procs, ATermRef Port, ATermRef Cond, 
-		      ATermListRef Acts, ATermRef Life)
+  ATerm createRule(ATerm Procs, ATerm Port, ATerm Cond, 
+		      ATermList Acts, ATerm Life)
     throws ToolException
   {
-    ATermRef result = null;
+    ATerm result = null;
 
     try {
       ATermPattern value = new ATermPattern("snd-value(" +
@@ -226,14 +226,14 @@ class DebugAdapterTool extends DebugAdapterTif
   }
 
   //}
-  //{ void executeActions(ATermRef procs, ATermRef acts)
+  //{ void executeActions(ATerm procs, ATerm acts)
 
   /**
     * Execute a list of actions just as if a rule containing the
     * actions was triggered.
     */
 
-  void executeActions(ATermRef procs, ATermRef acts)
+  void executeActions(ATerm procs, ATerm acts)
   {
     DebugProcess[] processes = debugger.getProcessArray(procs);
     debugger.executeActions(processes, acts);
@@ -246,45 +246,45 @@ class DebugAdapterTool extends DebugAdapterTif
     * Modify an existing debug rule.
     */
 
-  void modifyRule(int rid, ATermRef procs, ATermRef port, ATermRef cond, 
-		  ATermListRef acts, ATermRef life)
+  void modifyRule(int rid, ATerm procs, ATerm port, ATerm cond, 
+		  ATermList acts, ATerm life)
     throws ToolException
   {
   }
 
   //}
-  //{ void destroyRule(ATermRef procs, int rid)
+  //{ void destroyRule(ATerm procs, int rid)
 
   /**
     * Destroy an existing rule.
     */
 
-  void destroyRule(ATermRef procs, int rid)
+  void destroyRule(ATerm procs, int rid)
     throws ToolException
   {
   }
 
   //}
 
-  //{ void recTerminate(ATermRef arg)
+  //{ void recTerminate(ATerm arg)
 
   /**
     * The debug adapter received a termination request from the debugger bus.
     */
 
-  void recTerminate(ATermRef arg)
+  void recTerminate(ATerm arg)
   {
     debugger.closeConnection();
   }
 
   //}
-  //{ void recAckEvent(ATermRef event)
+  //{ void recAckEvent(ATerm event)
 
   /**
     * Receive an event acknowledgement.
     */
 
-  void recAckEvent(ATermRef event)
+  void recAckEvent(ATerm event)
   {
   }
 

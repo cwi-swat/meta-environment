@@ -1,316 +1,235 @@
 
 package toolbus.aterm;
-import toolbus.util.Writer;
-import toolbus.util.PrintWriter;
 import toolbus.util.*;
-import java.util.*;
 import java.io.*;
-
-/**
-  * The class ATerms is the binary list constructor for aterms.
-  */
 
 public class ATerms extends ATerm
 {
-  private ATerm first;
-  private ATerms next;
-  private int hashcode;
+  ATermsImpl t;
 
-  //{ public ATerms(ATerm f, ATerms n, ATerm anno)
+  //{ public ATerms(ATermsImpl term)
 
-  /**
-    * Construct a new list from a first element and a tail.
-    */
-
-  public ATerms(ATerm f, ATerms n, ATerm an)
+  public ATerms(ATermsImpl term)
   {
-    super(an);
-    first = f;
-    next = n;
-    updateHashCode();
-    first.increaseRef();
-    if(next != null)
-      next.increaseRef();
+    if(term == null)
+      throw new NullPointerException();
+    update(term);
   }
 
   //}
   //{ public ATerms(ATerm f, ATerms n)
-  
-  /**
-    * Construct a new list from a first element and a tail.
-    */
 
   public ATerms(ATerm f, ATerms n)
   {
-    this(f, n, null);
+    update(new ATermsImpl(f.getATermImpl(), n == null ? null : (ATermsImpl)n.getATermImpl()));
   }
 
   //}
-  //{ public Object clone()
+  //{ public ATerms(ATerm f, ATerms n, ATerm anno)
 
-/**
-  * Cloning of ATerms amounts to making a SHALLOW copy.
-  */
-
-  public Object clone()
+  public ATerms(ATerm first, ATerms next, ATerm anno)
   {
-    ATerms terms = (ATerms)super.clone();
-    terms.first = first;
-    terms.next = next;
-    terms.hashcode = hashcode;
-    first.increaseRef();
-    if(next != null)
-      next.increaseRef();
-    return terms;
+    update(new ATermsImpl(first.getATermImpl(), 
+		      next == null ? null : (ATermsImpl)next.getATermImpl(),
+		      anno == null ? null : anno.getATermImpl()));
+  }
+
+  //}
+  //{ public ATerms(ATerm f)
+
+  public ATerms(ATerm f)
+  {
+    this(f, null);
+  }
+
+  //}
+  //{ public void setAnno(ATerm a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATerm a)
+  {
+    update(new ATermsImpl(t.getFirst(), t.getNext(), 
+	a == null ? null : a.getATermImpl()));
   }
 
   //}
   //{ protected void finalize()
 
   protected void finalize()
-    throws Throwable
   {
-    first.decreaseRef();
-    if(next != null)
-      next.decreaseRef();
-    super.finalize();
+    t.decreaseRef();
   }
 
   //}
 
-  //{ public boolean equals(Object obj)
+  //{ private void update(ATermsImpl val)
 
-/**
-  * Implement equality on ATerms.
-  */
-
-  public boolean equals(Object obj)
+  private void update(ATermsImpl val)
   {
-    if(obj instanceof ATerms)
-      return ((ATerms)obj).first == first && ((ATerms)obj).next == next &&
-	super.equals(obj);
-    return false;
+    if(t != null)
+      t.decreaseRef();
+    t = (ATermsImpl)val.unique();
+    t.increaseRef();
   }
 
   //}
-  //{ protected void updateHashCode()
+  //{ protected ATermImpl getATermImpl()
 
-  /**
-    * Calculate the hash-code of this term.
-    */
-  protected void updateHashCode()
+  protected ATermImpl getATermImpl()
   {
-    hashcode = first.hashCode() + (next == null ? 371 : next.hashCode());
+    return t;
   }
 
   //}
-  //{ public int hashCode()
-  
-  public int hashCode()
+  //{ protected ATermsImpl getATermsImpl()
+
+  protected ATermsImpl getATermsImpl()
   {
-    return hashcode;
+    return t;
   }
 
   //}
-  //{ public int getType()
 
-  public int getType()
-  {
-    return ATERMS;
-  }
-
-  //}
   //{ public ATerm getFirst()
-
-  /**
-    * Retrieve the first element of a list.
-    */
 
   public ATerm getFirst()
   {
-    return first;
+    ATermImpl term = t.getFirst();
+    switch(term.getType()) {
+      case ATermImpl.ATERMS:	return new ATerms((ATermsImpl)term);
+      case ATermImpl.APPL:	return new ATermAppl((ATermApplImpl)term);
+      case ATermImpl.LIST:	return new ATermList((ATermListImpl)term);
+      case ATermImpl.INT:	return new ATermInt((ATermIntImpl)term);
+      case ATermImpl.REAL:	return new ATermReal((ATermRealImpl)term);
+      case ATermImpl.PLACEHOLDER: return new ATermPlaceholder((ATermPlaceholderImpl)term);
+    }
+    return null;
   }
 
   //}
   //{ public ATerms getNext()
 
-  /**
-    * Retrieve the tail of a list.
-    */
-
   public ATerms getNext()
   {
-    return next;
+    if(t.getNext() == null)
+      return null;
+    
+    return new ATerms(t.getNext());
   }
 
   //}
-  //{ public void setFirst(ATerm frst)
 
-  /**
-    * Change the first element of a list.
-    */
+  //{ public void setFirst(ATerm first)
 
-  public void setFirst(ATerm frst)
+  public void setFirst(ATerm first)
   {
-    first.decreaseRef();
-    first = frst;
-    first.increaseRef();
-    updateHashCode();
+    update(new ATermsImpl(first.getATermImpl(), t.getNext()));
   }
 
   //}
-  //{ public void setNext(ATerms nxt)
+  //{ public void setNext(ATerms next)
 
-  /**
-    * Change the tail of a list.
-    */
-
-  public void setNext(ATerms nxt)
+  public void setNext(ATerms next)
   {
-    if(next != null)
-      next.decreaseRef();
-    next = nxt;
-    if(next != null)
-      next.increaseRef();
-    updateHashCode();
+    update(new ATermsImpl(t.getFirst(), next == null ? null : next.getATermsImpl()));
   }
 
   //}
-  //{ public void write(OutputStream o) 
 
-  /**
-    * Write a list to an OutputStream.
-    */
-
-  public void write(OutputStream o) 
-    throws java.io.IOException
-  { 
-    first.write(o);
-    if(next != null) {
-      o.write(',');
-      next.write(o);
-    }
-    super.write(o);
-  }
-
-  //}
-  //{ public void print(PrintWriter w) 
-
-  /**
-    * Print a list.
-    */
-
-  public void print(PrintWriter w) 
-  { 
-    first.print(w);
-    if(next != null) {
-      w.print(',');
-      next.print(w);
-    }
-    super.print(w);
-  }
-
-  //}
-  //{ public int printSize()
-
-  public int printSize()
-  {
-    int size = super.printSize();
-    size += first.printSize();
-    if(next != null) {
-      size++;	// The ',' separating first from next
-      size += next.printSize();
-    }
-    return size;
-  }
-
-  //}
-  //{ public int size()
-
-  /**
-    * Calculate the size of a list (total number of nodes in the
-    * list and all of its subterms).
-    */
-
-  public int size()
-  {
-    int size = super.size() + first.size() + 1;
-    if(next != null)
-      size += next.size();
-    return size;
-  }
-
-  //}
   //{ public int length()
 
   /**
-    * Calculate the length of a list.
+    * Determine the length of a list.
     */
 
   public int length()
   {
-    int length = 1;
-    ATerms tail = next;
-    while(tail != null) {
-      tail = tail.next;
-      length++;
+    if(t == null)
+      return 0;
+
+    return t.length();
+  }
+
+  //}
+  //{ public int search(ATerm el)
+
+  /**
+    * Search for the first element in a list.
+    */
+
+  public int search(ATerm el)
+  {
+    ATermsImpl cur = t;
+    int index = 0;
+    do {
+      if(cur.getFirst() == el.getATermImpl())
+	return index;
+       
+      index++;
+      cur = cur.getNext();
+    } while(cur != null);
+
+    return -1;
+  }
+
+  //}
+  //{ public int rsearch(ATerm el)
+
+  /**
+    * Search for the last element in a list.
+    */
+
+  public int rsearch(ATerm el)
+  {
+    int index = 0, last = -1;
+    for(ATermsImpl cur = t; cur != null; cur = cur.getNext()) {
+      if(cur.getFirst() == el.getATermImpl())
+	last = index;
+      index++;
     }
-    return length;
+    return last;
   }
 
   //}
   //{ public ATerms concat(ATerms rhs)
 
-  /** 
-    * Concatenate two ATerms and return the result.
+  /**
+    * Concatenate two lists. Returns a new object that contains the
+    * concatenation of the two lists.
     */
 
   public ATerms concat(ATerms rhs)
   {
-    if(next == null)
-      return (ATerms)(new ATerms(first, rhs)).unique();
-    return (ATerms)(new ATerms(first, next.concat(rhs))).unique();
+    if(rhs == null)
+      return (ATerms)clone();
+
+    return new ATerms(getATermsImpl().concat(rhs.getATermsImpl()));
   }
 
   //}
-
-  //{ public boolean match(ATerm trm, Vector subterms)
+  //{ public ATerms append(ATerm el)
 
   /**
-    * Match against {\tt trm}, using {\tt this} as a placeholder term.
+    * Add one element to a list.
     */
 
-  public boolean match(ATerm trm, Vector subterms)
+  public ATerms append(ATerm el)
   {
-    if(trm.getType() == ATerm.ATERMS) {
-      // First we need to handle the special case where the pattern <term>
-      // is used.
-      if(first.getType() == ATerm.PLACEHOLDER) {
-	ATerm ph = ((ATermPlaceholder)first).getPlaceholderType();
-	if(ph.getType() == ATerm.APPL) {
-	  ATermAppl appl = (ATermAppl)ph;
-	  if(appl.getFun().equals("terms") && appl.getArgs() == null) {
-	    subterms.addElement(new ATermsRef((ATerms)trm));
-	    return true;
-	  }
-	}
-      }
-      
-      // Just match the first element and the tail.
-      if(!first.match(((ATerms)trm).first, subterms))
-	return false;
-      
-      if(next != null) {
-	if(((ATerms)trm).next != null)
-	  return next.match(((ATerms)trm).next, subterms);
-	return false;
-      }
-      return ((ATerms)trm).next == null;
-    }
-    return false;
+    return concat(new ATerms(el));  
   }
 
-//}
+  //}
+ 
+  public boolean empty() {
+    return (this.length() == 0);
+  }
+
+/* ToDo:
+   insert, remove, delete, deleteOnce, replace, index, slice, reverse,
+   pairGetKey, pairGetValue, dictGet, dictPut, dictRemove
+*/
+
 }
-
-

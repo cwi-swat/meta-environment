@@ -75,13 +75,13 @@ class JavaDebugger extends DebugAdapterInfo implements DebuggerCallback
   }
 
   //}
-  //{ public void executeActions(DebugProcess[] procs, ATermRef acts)
+  //{ public void executeActions(DebugProcess[] procs, ATerm acts)
 
   /**
     * Execute a list of actions.
     */
 
-  public void executeActions(DebugProcess[] procs, ATermRef acts)
+  public void executeActions(DebugProcess[] procs, ATerm acts)
   {
     System.err.println("execute actions " + acts.toString() + "in processes:");
     for(int i=0; i<procs.length; i++)

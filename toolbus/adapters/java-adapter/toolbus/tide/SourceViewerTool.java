@@ -19,9 +19,9 @@ class SourceViewerTool extends SourceViewerTif
   private Hashtable adapterTable;
 
   private ATermPattern patternSingleProcess;
-  private ATermRef termCpePort;
-  private ATermRef termTrue;
-  private ATermRef termWatchCpe;
+  private ATerm termCpePort;
+  private ATerm termTrue;
+  private ATerm termWatchCpe;
 
   //{ static public void main(String[] args)
 
@@ -73,17 +73,17 @@ class SourceViewerTool extends SourceViewerTif
   public void test0()
   {
     try {
-      ATermApplRef dap = (ATermApplRef)ATermParser.makeSimple("debug-adapter(1)");
-      ATermListRef info = (ATermListRef)ATermParser.makeSimple(
+      ATermAppl dap = (ATermAppl)ATermParser.makeSimple("debug-adapter(1)");
+      ATermList info = (ATermList)ATermParser.makeSimple(
          "[[name,\"test.tcl-0\"],[type,\"Tcl\"]," +
 	 "[search-paths,[[config,[\".\"]],[source,[\".\"]]]]," +
 	 "[ports,[[exec-state,at],[always,before],[always,after]," +
 	 "[location,before],[location,after],[exception,at]]]," +
 	 "[exec-control,[single-step,step-over,run,stop]]]");
-      ATermRef procs = ATermParser.makeSimple("[[0,\"TEST\"," +
+      ATerm procs = ATermParser.makeSimple("[[0,\"TEST\"," +
                         "[alias(toolbus(8999),TEST(0))]]]");
       dapConnected(dap, info, procs);
-      ATermRef proc = ATermParser.makeSimple("0");
+      ATerm proc = ATermParser.makeSimple("0");
       viewProcess(dap, proc);
       Vector viewers = (Vector)viewerTable.get(new Integer(1));
       SourceViewer viewer = (SourceViewer)viewers.elementAt(0);
@@ -96,26 +96,26 @@ class SourceViewerTool extends SourceViewerTif
 
   //}
 
-  //{ void viewSource(ATermApplRef dap)
+  //{ void viewSource(ATermAppl dap)
 
   /**
    * Watch the source off all processes in an adapter.
    * @deprecated Use the viewProcess method instead.
    */
 
-  void viewSource(ATermApplRef dap)
+  void viewSource(ATermAppl dap)
   {
     System.out.println("viewSource : " + dap);
   }
 
   //}
-  //{ void viewProcess(ATermApplRef dap, ATermRef procs)
+  //{ void viewProcess(ATermAppl dap, ATerm procs)
 
   /**
    * Watch the source of a process or process-group.
    */
 
-  void viewProcess(ATermApplRef dap, ATermRef procs)
+  void viewProcess(ATermAppl dap, ATerm procs)
   {
     //System.out.println("viewProcess: " + dap + ", procs=" + procs);
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
@@ -126,7 +126,7 @@ class SourceViewerTool extends SourceViewerTif
     DebugProcess[] processes;
 
     if(procs.getType() == ATerm.INT) {
-      int pid = ((ATermIntRef)procs).getInt();
+      int pid = ((ATermInt)procs).getInt();
       DebugProcess process = dapInfo.getProcess(pid);
       SourceViewer viewer = new SourceViewer(dapInfo, process);
       viewers.addElement(viewer);
@@ -138,14 +138,14 @@ class SourceViewerTool extends SourceViewerTif
 
   //}
 
-  //{ void dapDisconnected(ATermApplRef dap)
+  //{ void dapDisconnected(ATermAppl dap)
 
   /**
    * A debug adapter has disconnected. If we have viewers connected to
    * it, we need to destroy them.
    */
 
-  void dapDisconnected(ATermApplRef dap)
+  void dapDisconnected(ATermAppl dap)
   {
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
     adapterTable.remove(new Integer(dapid));
@@ -157,7 +157,7 @@ class SourceViewerTool extends SourceViewerTif
   }
 
   //}
-  //{ void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+  //{ void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
 
   /**
    * A debug-adapter has connected to the system. We need to
@@ -165,7 +165,7 @@ class SourceViewerTool extends SourceViewerTif
    * the user can open viewers on it.
    */
 
-  void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+  void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
   {
     // No viewers yet for this adapter, so add an empty vector in the viewerTable
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
@@ -177,7 +177,7 @@ class SourceViewerTool extends SourceViewerTif
     adapterTable.put(new Integer(dapid), dapInfo);
 
     // The processes are stored in the RemoteDebugAdapterInfo object.
-    ATermsRef proclist = ((ATermListRef)procs).getATerms();
+    ATerms proclist = ((ATermList)procs).getATerms();
     ATermPattern patTriple = null;
     try {
       patTriple = new ATermPattern("[<int>,<str>,<list>]");
@@ -185,7 +185,7 @@ class SourceViewerTool extends SourceViewerTif
       throw new IllegalArgumentException("internal parse error");
     }
     while(proclist != null) {
-      ATermListRef triple = (ATermListRef)proclist.getFirst();
+      ATermList triple = (ATermList)proclist.getFirst();
       proclist = proclist.getNext();
       if(!patTriple.match(triple))
 	throw new IllegalArgumentException("malformed process def: " + triple);
@@ -203,8 +203,8 @@ class SourceViewerTool extends SourceViewerTif
    * A new process was created.
    */
 
-  void processCreation(ATermApplRef dap, ATermRef proc, String name, 
-		       ATermListRef aliases)
+  void processCreation(ATermAppl dap, ATerm proc, String name, 
+		       ATermList aliases)
   {
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
     if(!patternSingleProcess.match(proc))
@@ -217,13 +217,13 @@ class SourceViewerTool extends SourceViewerTif
   }
 
   //}
-  //{ void processDestruction(ATermApplRef dap, ATermRef proc)
+  //{ void processDestruction(ATermAppl dap, ATerm proc)
 
   /**
    * A process was destroyed.
    */
 
-  void processDestruction(ATermApplRef dap, ATermRef proc)
+  void processDestruction(ATermAppl dap, ATerm proc)
   {
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
     if(!patternSingleProcess.match(proc))
@@ -236,14 +236,14 @@ class SourceViewerTool extends SourceViewerTif
 
   //}
 
-  //{ void currentPort(ATermApplRef dap, ATermRef procs, ATermRef port)
+  //{ void currentPort(ATermAppl dap, ATerm procs, ATerm port)
 
   /**
    * The current port has changed. It might be a location port,
    * in which case, we have to update the selected line.
    */
 
-  void currentPort(ATermApplRef dap, ATermRef procs, ATermRef port)
+  void currentPort(ATermAppl dap, ATerm procs, ATerm port)
   {
   }
 
@@ -254,8 +254,8 @@ class SourceViewerTool extends SourceViewerTif
    * A new rule was created. Add it to the right debug adapter and ighlight it.
    */
 
-  void ruleCreated(ATermApplRef dap, ATermRef proc, int rid, ATermRef port, 
-		   ATermRef cond, ATermRef acts, ATermRef life)
+  void ruleCreated(ATermAppl dap, ATerm proc, int rid, ATerm port, 
+		   ATerm cond, ATerm acts, ATerm life)
   {
     Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
     RemoteDebugAdapterInfo dapInfo = 
@@ -264,7 +264,7 @@ class SourceViewerTool extends SourceViewerTif
     DebugPort dbgport = DebugPort.newPort(port);
     int lifetime = DebugRule.lifeTerm2Int(life);
     DebugRule rule = new DebugRule(rid, procs, dbgport, cond,
-				   ((ATermListRef)acts).getATerms(), lifetime);
+				   ((ATermList)acts).getATerms(), lifetime);
     dapInfo.addRule(rule);
     if(dbgport instanceof LocationPort) {
       boolean iswatch = rule.isWatchpoint();
@@ -290,8 +290,8 @@ class SourceViewerTool extends SourceViewerTif
    * A new rule was modified.
    */
 
-  void ruleModified(ATermApplRef dap, ATermRef proc, int rid, ATermRef port, 
-		   ATermRef cond, ATermRef acts, ATermRef life)
+  void ruleModified(ATermAppl dap, ATerm proc, int rid, ATerm port, 
+		   ATerm cond, ATerm acts, ATerm life)
   {
     Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
     RemoteDebugAdapterInfo dapInfo = 
@@ -300,7 +300,7 @@ class SourceViewerTool extends SourceViewerTif
     DebugPort dbgport = DebugPort.newPort(port);
     int lifetime = DebugRule.lifeTerm2Int(life);
     DebugRule rule = new DebugRule(rid, procs, dbgport, cond,
-				   ((ATermListRef)acts).getATerms(), lifetime);
+				   ((ATermList)acts).getATerms(), lifetime);
 
     // Remove the old break/watchpoint
     DebugRule oldrule = dapInfo.getRule(rid);
@@ -336,13 +336,13 @@ class SourceViewerTool extends SourceViewerTif
   }
 
   //}
-  //{ void ruleDestroyed(ATermApplRef dap, ATermRef pid, int rid)
+  //{ void ruleDestroyed(ATermAppl dap, ATerm pid, int rid)
 
   /**
    * A rule was destroyed. Remove any highlights.
    */
 
-  void ruleDestroyed(ATermApplRef dap, int rid)
+  void ruleDestroyed(ATermAppl dap, int rid)
   {
     Integer dapid = new Integer(DebugAdapterInfo.debugAdapterId(dap));
     RemoteDebugAdapterInfo dapInfo = 
@@ -361,24 +361,24 @@ class SourceViewerTool extends SourceViewerTif
 
   //}
 
-  //{ void execState(ATermApplRef dap, ATermRef proc, ATermRef es)
+  //{ void execState(ATermAppl dap, ATerm proc, ATerm es)
 
   /**
    * The current state of execution of a process has changed.
    */
 
-  void execState(ATermApplRef dap, ATermRef proc, ATermRef es)
+  void execState(ATermAppl dap, ATerm proc, ATerm es)
   {
   }
 
   //}
-  //{ void cpe(ATermApplRef dap, ATermRef proc, ATermRef cpe)
+  //{ void cpe(ATermAppl dap, ATerm proc, ATerm cpe)
 
   /**
    * The current point of execution of a process has changed.
    */
 
-  void cpe(ATermApplRef dap, ATermRef proc, ATermRef cpe)
+  void cpe(ATermAppl dap, ATerm proc, ATerm cpe)
   {
     //System.out.println("cpe of " + proc + " = " + cpe);
     LocationPort port = (LocationPort)DebugPort.newPort(cpe);
@@ -403,24 +403,24 @@ class SourceViewerTool extends SourceViewerTif
 
   //}
 
-  //{ void recAckEvent(ATermRef event)
+  //{ void recAckEvent(ATerm event)
 
   /**
    * The source-viewer received an event acknowledgement.
    */
 
-  void recAckEvent(ATermRef event)
+  void recAckEvent(ATerm event)
   {
   }
 
   //}
-  //{ void recTerminate(ATermRef arg)
+  //{ void recTerminate(ATerm arg)
 
   /**
    * The source-viewer received a termination request.
    */
 
-  void recTerminate(ATermRef arg)
+  void recTerminate(ATerm arg)
   {
     System.exit(0);
   }
@@ -936,9 +936,9 @@ class SourceViewer extends Frame implements TextHandler
 
     if(evt.target == start) {
       int pid = curProcess.getPid();
-      ATermsRef procs = new ATermsRef(new ATermIntRef(pid));
-      ATermsRef actions = new ATermsRef(new ATermApplRef(processMode.getSelectedItem(), null), null);
-      dap.sendExecuteActions(new ATermListRef(procs), new ATermListRef(actions));
+      ATerms procs = new ATerms(new ATermInt(pid));
+      ATerms actions = new ATerms(new ATermAppl(processMode.getSelectedItem(), null), null);
+      dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
       return true;
     }
 
@@ -947,9 +947,9 @@ class SourceViewer extends Frame implements TextHandler
 
     if(evt.target == stop) {
       int pid = curProcess.getPid();
-      ATermsRef procs = new ATermsRef(new ATermIntRef(pid));
-      ATermsRef actions = new ATermsRef(new ATermApplRef("stop", null), null);
-      dap.sendExecuteActions(new ATermListRef(procs), new ATermListRef(actions));
+      ATerms procs = new ATerms(new ATermInt(pid));
+      ATerms actions = new ATerms(new ATermAppl("stop", null), null);
+      dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
       return true;
     }
 

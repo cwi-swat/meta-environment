@@ -10,7 +10,7 @@ import toolbus.aterm.*;
 public class SendPort extends DebugPort
 {
   private int exec_state;
-  private ATermRef port;
+  private ATerm port;
 
   //{ public SendPort(int when, String pattern)
 
@@ -29,13 +29,13 @@ public class SendPort extends DebugPort
   }
 
   //}
-  //{ public SendPort(int when, ATermRef pattern)
+  //{ public SendPort(int when, ATerm pattern)
 
   /**
    * Construct a new SendPort object.
    */ 
 
-  public SendPort(int when, ATermRef pattern)
+  public SendPort(int when, ATerm pattern)
   {
     super(SEND, when);
     try {
@@ -47,14 +47,14 @@ public class SendPort extends DebugPort
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be send 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return port;
   }

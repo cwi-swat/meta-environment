@@ -4,12 +4,12 @@ import toolbus.aterm.*;
 
 public class ToolException extends Exception
 {
-  private ATermRef term = null;
+  private ATerm term = null;
   private Tool tool;
   private String msg;
 
   public ToolException(Tool t, String m) { tool = t; msg = m; }
-  public ToolException(Tool t, String m, ATermRef trm) 
+  public ToolException(Tool t, String m, ATerm trm) 
   { 
     tool = t; 
     msg = m;

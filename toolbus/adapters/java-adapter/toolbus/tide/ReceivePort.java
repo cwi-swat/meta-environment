@@ -10,7 +10,7 @@ import toolbus.aterm.*;
 public class ReceivePort extends DebugPort
 {
   private int exec_state;
-  private ATermRef port;
+  private ATerm port;
 
   //{ public ReceivePort(int when, String pattern)
 
@@ -29,13 +29,13 @@ public class ReceivePort extends DebugPort
   }
 
   //}
-  //{ public ReceivePort(int when, ATermRef pattern)
+  //{ public ReceivePort(int when, ATerm pattern)
 
   /**
    * Construct a new ReceivePort object.
    */ 
 
-  public ReceivePort(int when, ATermRef pattern)
+  public ReceivePort(int when, ATerm pattern)
   {
     super(RECEIVE, when);
     try {
@@ -47,14 +47,14 @@ public class ReceivePort extends DebugPort
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be Receive 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return port;
   }

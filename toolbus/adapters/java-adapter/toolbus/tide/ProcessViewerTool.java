@@ -84,7 +84,7 @@ public class ProcessViewerTool extends ProcessViewerTif
   }
 
   //}
-  //{ void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+  //{ void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
 
   /**
     * A new dap has connected to the debugger.
@@ -95,7 +95,7 @@ public class ProcessViewerTool extends ProcessViewerTif
      level in the other classes.
      */
 
-  void dapConnected(ATermApplRef dap, ATermListRef info, ATermRef procs)
+  void dapConnected(ATermAppl dap, ATermList info, ATerm procs)
   {
     try {
       //System.out.println("dapConnected: " + dap.toString());
@@ -105,16 +105,16 @@ public class ProcessViewerTool extends ProcessViewerTif
       viewer.addDebugAdapter(dapid, info.getATerms());
 
       // Then we add the new processes
-      ATermsRef proclist = ((ATermListRef)procs).getATerms();
+      ATerms proclist = ((ATermList)procs).getATerms();
       ATermPattern patTriple = new ATermPattern("[<int>,<str>,<list>]");
       while(proclist != null) {
-	ATermListRef triple = (ATermListRef)proclist.getFirst();
+	ATermList triple = (ATermList)proclist.getFirst();
 	proclist = proclist.getNext();
 	if(!patTriple.match(triple))
 	  throw new IllegalArgumentException("malformed process def: " + triple);
 	int pid = ((Integer)patTriple.elementAt(0)).intValue();
 	viewer.addProcess(dapid, pid, (String)patTriple.elementAt(1));
-	ATermsRef aliases = ((ATermListRef)patTriple.elementAt(2)).getATerms();
+	ATerms aliases = ((ATermList)patTriple.elementAt(2)).getATerms();
 	while(aliases != null) {
 	  viewer.addAlias(dapid, pid, aliases.getFirst());
 	  aliases = aliases.getNext();
@@ -124,38 +124,38 @@ public class ProcessViewerTool extends ProcessViewerTif
       //{ From now on, we want to watch process creation/destruction 
 
       RemoteDebugAdapterInfo dp = viewer.getAdapter(dapid);
-      dp.sendCreateRule("process-creation", new ATermApplRef("all", null),
+      dp.sendCreateRule("process-creation", new ATermAppl("all", null),
 			new ProcessCreationPort(),
-			new ATermApplRef("always", null),
+			new ATermAppl("always", null),
 			patternWatchProcessCreation.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("process-destruction", new ATermApplRef("all", null),
+      dp.sendCreateRule("process-destruction", new ATermAppl("all", null),
 			new ProcessDestructionPort(),
-			new ATermApplRef("always", null),
+			new ATermAppl("always", null),
 			patternWatchProcessDestruction.make(),
 			DebugRule.PERSISTENT);
 
       //}
       //{ And the exec state of its processes 
 
-      dp.sendCreateRule("exec-state", new ATermApplRef("all", null),
+      dp.sendCreateRule("exec-state", new ATermAppl("all", null),
 			new ExecStatePort(DebugProcess.ES_ALL, DebugPort.WHEN_AT),
-			new ATermApplRef("always", null), 
+			new ATermAppl("always", null), 
 			patternWatchExecState.make(), DebugRule.PERSISTENT);
 
       //}
       //{ And the sending/receiving of messages 
 
-      dp.sendCreateRule("send", new ATermApplRef("all", null),
+      dp.sendCreateRule("send", new ATermAppl("all", null),
 			new SendPort(DebugPort.WHEN_AT, "<term>"),
-			new ATermApplRef("always", null),
+			new ATermAppl("always", null),
 			patternWatchSend.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("receive", new ATermApplRef("all", null),
+      dp.sendCreateRule("receive", new ATermAppl("all", null),
 			new ReceivePort(DebugPort.WHEN_AT, "<term>"),
-			new ATermApplRef("always", null),
+			new ATermAppl("always", null),
 			patternWatchReceive.make(),
 			DebugRule.PERSISTENT);
 
@@ -166,33 +166,33 @@ public class ProcessViewerTool extends ProcessViewerTif
   }
 
   //}
-  //{ void dapDisconnected(ATermApplRef dap)
+  //{ void dapDisconnected(ATermAppl dap)
 
   /**
    * A debug adapter was disconnected. 
    */
 
-  void dapDisconnected(ATermApplRef dap)
+  void dapDisconnected(ATermAppl dap)
   {
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
     viewer.removeAdapter(dapid);
   }
 
   //}
-  //{ void watchpoint(ATermApplRef dp, ATermRef proc, int r, ATermRef exprs)
+  //{ void watchpoint(ATermAppl dp, ATerm proc, int r, ATerm exprs)
 
   /**
     * A watchpoint was triggered. This might indicate a change
     * in the list of processes.
     */
 
-  void watchpoint(ATermApplRef dap, ATermRef proc, int rid, ATermRef exprs)
+  void watchpoint(ATermAppl dap, ATerm proc, int rid, ATerm exprs)
   {
     //System.out.println("watchpoint, proc=" + proc + ", exprs=" + exprs.toString());
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
-    ATermsRef exprlist = ((ATermListRef)exprs).getATerms();
+    ATerms exprlist = ((ATermList)exprs).getATerms();
     while(exprlist != null) {
-      ATermsRef pair = ((ATermListRef)exprlist.getFirst()).getATerms();
+      ATerms pair = ((ATermList)exprlist.getFirst()).getATerms();
       watchpoint(dapid, proc, pair.getFirst(), pair.getNext().getFirst());
       exprlist = exprlist.getNext();
     }
@@ -202,7 +202,7 @@ public class ProcessViewerTool extends ProcessViewerTif
     * Handle an individual watchpoint expression.
     */
 
-  private void watchpoint(int dapid, ATermRef proc, ATermRef expr, ATermRef val)
+  private void watchpoint(int dapid, ATerm proc, ATerm expr, ATerm val)
   {
     //System.out.println("### watchpoint: " + expr + ", val=" + val);
 
@@ -222,8 +222,8 @@ public class ProcessViewerTool extends ProcessViewerTif
     //{ receive
 
     if(patternReceive.match(val)) {
-      ATermRef msg = (ATermRef)patternReceive.elementAt(0);
-      ATermRef from = (ATermRef)patternReceive.elementAt(1);
+      ATerm msg = (ATerm)patternReceive.elementAt(0);
+      ATerm from = (ATerm)patternReceive.elementAt(1);
       viewer.receive(dapid, pid, from, msg);
       return;
     }
@@ -232,8 +232,8 @@ public class ProcessViewerTool extends ProcessViewerTif
     //{ send
 
     if(patternSend.match(val)) {
-      ATermRef msg = (ATermRef)patternSend.elementAt(0);
-      ATermRef to = (ATermRef)patternSend.elementAt(1);
+      ATerm msg = (ATerm)patternSend.elementAt(0);
+      ATerm to = (ATerm)patternSend.elementAt(1);
       viewer.send(dapid, pid, to, msg);
       return;
     }
@@ -243,10 +243,10 @@ public class ProcessViewerTool extends ProcessViewerTif
 
     if(patternProcessCreation.match(val)) {
       String name;
-      ATermsRef aliases;
+      ATerms aliases;
 
       name = (String)patternProcessCreation.elementAt(0);
-      aliases = ((ATermListRef)patternProcessCreation.elementAt(1)).getATerms();
+      aliases = ((ATermList)patternProcessCreation.elementAt(1)).getATerms();
       viewer.addProcess(dapid, pid, name);
 
       while(aliases != null) {
@@ -271,49 +271,49 @@ public class ProcessViewerTool extends ProcessViewerTif
   }
 
   //}
-  //{ void connected(ATermRef callsign)
+  //{ void connected(ATerm callsign)
 
   /**
    * Connection with an external process was established.
    */
 
-  void connected(ATermRef callsign)
+  void connected(ATerm callsign)
   {
     viewer.addProcess(callsign);
   }
 
   //}
-  //{ void disconnected(ATermRef callsign)
+  //{ void disconnected(ATerm callsign)
 
   /**
    * Connection with an external process was destroyed.
    */
 
-  void disconnected(ATermRef callsign)
+  void disconnected(ATerm callsign)
   {
     System.out.println("disconnected: " + callsign);
   }
 
   //}
-  //{ void viewProcesses(ATermApplRef dap)
+  //{ void viewProcesses(ATermAppl dap)
 
   /**
     * View the process graph.
     */
 
-  void viewProcesses(ATermApplRef dap)
+  void viewProcesses(ATermAppl dap)
   {
     viewer.toFront();
   }
 
   //}
-  //{ void newTool(String name, ATermRef tool, ATermRef event)
+  //{ void newTool(String name, ATerm tool, ATerm event)
 
   /**
     * A new tool has registered. we need to add it to the Tool menu.
     */
 
-  void newTool(String name, ATermRef tool, ATermListRef tools)
+  void newTool(String name, ATerm tool, ATermList tools)
   {
     int argFlags = 0;
 
@@ -324,9 +324,9 @@ public class ProcessViewerTool extends ProcessViewerTif
       throw new IllegalArgumentException("internal parse error");
     }
 
-    ATermsRef toollist = tools.getATerms();
+    ATerms toollist = tools.getATerms();
     while(toollist != null) {
-      ATermRef pair = toollist.getFirst();
+      ATerm pair = toollist.getFirst();
       if(!pat.match(pair))
 	throw new IllegalArgumentException("illegal tool def: " + pair);
       viewer.addToolCmd(name, tool,
@@ -336,24 +336,24 @@ public class ProcessViewerTool extends ProcessViewerTif
   }
 
   //}
-  //{ void recAckEvent(ATermRef event)
+  //{ void recAckEvent(ATerm event)
 
   /**
     * Handle event acknowledgements.
     */
 
-  void recAckEvent(ATermRef event)
+  void recAckEvent(ATerm event)
   {
   }
 
   //}
-  //{ void recTerminate(ATermRef arg)
+  //{ void recTerminate(ATerm arg)
 
   /**
     * A termination request has been received.
     */
 
-  void recTerminate(ATermRef arg)
+  void recTerminate(ATerm arg)
   {
     System.exit(0);
   }

@@ -21,15 +21,15 @@ public class TestingTool extends Testing
     System.out.println("testit-2 called: s0=" + s0 + "i1=" + i1);
   }
 
-  void testit(String s0, ATermApplRef a1)
+  void testit(String s0, ATermAppl a1)
   {
     System.out.print("testit-3 called: s0=" + s0 + "a1=");
     a1.println(System.out);
   }
 
-  ATermRef question(ATermApplRef a0)
+  ATerm question(ATermAppl a0)
   {
-    ATermRef R = null;
+    ATerm R = null;
     System.out.print("question called: a0=");
     a0.println(System.out);
     try {
@@ -38,13 +38,13 @@ public class TestingTool extends Testing
     return R;
   }
 
-  void recTerminate(ATermRef t0)
+  void recTerminate(ATerm t0)
   {
     System.out.print("recTerminate called: ");
     t0.println(System.out);
   }
 
-  void recAckEvent(ATermRef t0)
+  void recAckEvent(ATerm t0)
   {
     System.out.print("recAckEvent called: ");
     t0.println(System.out);

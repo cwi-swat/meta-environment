@@ -18,14 +18,14 @@ public class DebugAdapterInfo
   Hashtable processes;
   Hashtable info;
 
-  //{ static protected int debugAdapterId(ATermRef dap)
+  //{ static protected int debugAdapterId(ATerm dap)
 
   /**
    * Analyze a term of the form "debug-adapter(<int>)", and return the
    * integer argument (which is the id of a debug adapter).
    */
 
-  static protected int debugAdapterId(ATermRef dap)
+  static protected int debugAdapterId(ATerm dap)
   {
     ATermPattern P = null;
     try {
@@ -38,13 +38,13 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ public DebugAdapterInfo(int ident, ATermsRef inf)
+  //{ public DebugAdapterInfo(int ident, ATerms inf)
 
   /**
    * Construct a new DebugAdapterInfo object.
    */
 
-  public DebugAdapterInfo(int ident, ATermsRef inf)
+  public DebugAdapterInfo(int ident, ATerms inf)
   {
     // Enter the information in the info hashtable
     try {
@@ -54,8 +54,8 @@ public class DebugAdapterInfo
 	if(!patPair.match(inf.getFirst()))
 	  throw new IllegalArgumentException("malformed information list: " 
 					     + inf.getFirst().toString());
-	String cat = ((ATermApplRef)patPair.elementAt(0)).getFun();
-	ATermRef val  = (ATermRef)patPair.elementAt(1);
+	String cat = ((ATermAppl)patPair.elementAt(0)).getFun();
+	ATerm val  = (ATerm)patPair.elementAt(1);
 	System.out.println(cat + ": " + val.toString());
 	info.put(cat, val);
 	inf = inf.getNext();
@@ -79,28 +79,28 @@ public class DebugAdapterInfo
   }
 
   //}
-  //{ public DebugAdapterInfo(ATermRef dap, ATermsRef inf)
+  //{ public DebugAdapterInfo(ATerm dap, ATerms inf)
 
   /**
    * Construct a new DebugAdapterInfo object given the term
    * representation of its id and information list.
    */
 
-  public DebugAdapterInfo(ATermRef dap, ATermsRef inf)
+  public DebugAdapterInfo(ATerm dap, ATerms inf)
   {
     this(debugAdapterId(dap), inf);
   }
 
   //}
 
-  //{ DebugProcess[] getProcessArray(ATermRef procs)
+  //{ DebugProcess[] getProcessArray(ATerm procs)
 
   /**
     * Build an array of processes consisting of the process-id's
     * found in procs.
     */
 
-  DebugProcess[] getProcessArray(ATermRef procs)
+  DebugProcess[] getProcessArray(ATerm procs)
   {
     DebugProcess[] result;
 
@@ -116,7 +116,7 @@ public class DebugAdapterInfo
 
       case ATerm.LIST:
 	// A list of process-ids
-	ATermsRef cur = ((ATermListRef)procs).getATerms();
+	ATerms cur = ((ATermList)procs).getATerms();
 	result = new DebugProcess[cur.length()];
 	try {
 	  ATermPattern pat = new ATermPattern("<int>");
@@ -152,15 +152,15 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ public ATermRef getInfo(String category)
+  //{ public ATerm getInfo(String category)
 
   /**
    * Retrieve information about a specific category.
    */
 
-  public ATermRef getInfo(String category)
+  public ATerm getInfo(String category)
   {
-    return (ATermRef)info.get(category);
+    return (ATerm)info.get(category);
   }
 
   //}
@@ -173,7 +173,7 @@ public class DebugAdapterInfo
 
   public String getName()
   {
-    ATermApplRef name = (ATermApplRef)info.get("name");
+    ATermAppl name = (ATermAppl)info.get("name");
     return name.getFun();
   }
 
@@ -187,7 +187,7 @@ public class DebugAdapterInfo
 
   public String getType()
   {
-    ATermApplRef type = (ATermApplRef)info.get("type");
+    ATermAppl type = (ATermAppl)info.get("type");
     return type.getFun();
   }
 
@@ -201,14 +201,14 @@ public class DebugAdapterInfo
   public Enumeration getSourcePaths()
   {
     Vector vector = new Vector();
-    ATermsRef paths = ((ATermListRef)getInfo("search-paths")).getATerms();
+    ATerms paths = ((ATermList)getInfo("search-paths")).getATerms();
     while(paths != null) {
-      ATermsRef pair = ((ATermListRef)paths.getFirst()).getATerms();
-      ATermApplRef kind = (ATermApplRef)pair.getFirst();
+      ATerms pair = ((ATermList)paths.getFirst()).getATerms();
+      ATermAppl kind = (ATermAppl)pair.getFirst();
       if(kind.getFun().equals("source")) {
-	paths = ((ATermListRef)pair.getNext().getFirst()).getATerms();
+	paths = ((ATermList)pair.getNext().getFirst()).getATerms();
 	while(paths != null) {
-	  ATermApplRef path = (ATermApplRef)paths.getFirst();
+	  ATermAppl path = (ATermAppl)paths.getFirst();
 	  vector.addElement(path.getFun());
 	  paths = paths.getNext();
 	}

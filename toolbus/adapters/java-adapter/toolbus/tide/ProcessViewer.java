@@ -188,13 +188,13 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public void addDebugAdapter(int dapid, ATermsRef inf)
+  //{ public void addDebugAdapter(int dapid, ATerms inf)
 
   /**
    * Add a new debug adapter.
    */
 
-  public void addDebugAdapter(int dapid, ATermsRef inf)
+  public void addDebugAdapter(int dapid, ATerms inf)
   {
     if(dapid > MAX_ADAPTERS)
       throw new IllegalArgumentException("debug-adapter id to large: " + dapid);
@@ -260,18 +260,18 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public void addProcess(ATermRef alias)
+  //{ public void addProcess(ATerm alias)
 
   /**
    * Add a process which is only known by one of its aliases.
    */
 
-  public void addProcess(ATermRef alias)
+  public void addProcess(ATerm alias)
   {
     if(getProcess(alias) == null) {
       int pid = anon_pid++;
 
-      ATermRef name = ((ATermApplRef)alias).getArgs().getNext().getFirst();
+      ATerm name = ((ATermAppl)alias).getArgs().getNext().getFirst();
 
       addProcess(ANON_DAPID, pid, name.toString());
       addAlias(ANON_DAPID, pid, alias);
@@ -279,25 +279,25 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public void addToolCmd(String name, ATermRef tool, String item, arg)
+  //{ public void addToolCmd(String name, ATerm tool, String item, arg)
 
   /**
     * Add a tool. Just add an item to the Tool menu.
     */
   
-  public void addToolCmd(String name, ATermRef tool, String item, String argtp)
+  public void addToolCmd(String name, ATerm tool, String item, String argtp)
   {
     menuBar.addToolItem(name, new ToolMenuItem(item, tool, argtp));
   }
 
   //}
-  //{ public void addAlias(int dapid, int pid, ATermRef alias)
+  //{ public void addAlias(int dapid, int pid, ATerm alias)
 
   /**
     * Add a new alias to a process.
     */
 
-  public void addAlias(int dapid, int pid, ATermRef alias)
+  public void addAlias(int dapid, int pid, ATerm alias)
   {
     //System.out.println("add alias " + alias + " to pid " + pid);
     ProcessPicture proc;
@@ -315,13 +315,13 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public void send(int dapid, int pid, ATermRef dest, ATermRef msg)
+  //{ public void send(int dapid, int pid, ATerm dest, ATerm msg)
 
   /**
     * Visualize the sending of a message from one process to another.
     */
 
-  public void send(int dapid, int pid, ATermRef dest, ATermRef msg)
+  public void send(int dapid, int pid, ATerm dest, ATerm msg)
   {
     ProcessPicture from = getProcess(dapid, pid);
     ProcessPicture to = getProcess(dest);
@@ -335,13 +335,13 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public void receive(int dapid, int pid, ATermRef source, ATermRef msg)
+  //{ public void receive(int dapid, int pid, ATerm source, ATerm msg)
 
   /**
     * Visualize the receiving of a message by a process.
     */
 
-  public void receive(int dapid, int pid, ATermRef source, ATermRef msg)
+  public void receive(int dapid, int pid, ATerm source, ATerm msg)
   {
     ProcessPicture from = getProcess(source);
     ProcessPicture to = getProcess(dapid, pid);
@@ -723,13 +723,13 @@ public class ProcessViewer extends Frame
   }
 
   //}
-  //{ public ProcessPicture getProcess(ATermRef alias)
+  //{ public ProcessPicture getProcess(ATerm alias)
 
   /**
     * Retrieve a process id given one of its aliases.
     */
 
-  public ProcessPicture getProcess(ATermRef alias)
+  public ProcessPicture getProcess(ATerm alias)
   {
     return (ProcessPicture)aliasTable.get(alias);
   }
@@ -1258,13 +1258,13 @@ class ProcessCanvas extends Canvas
   }
 
   //}
-  //{ public void addCommunication(ProcessPicture from, ProcessPicture to, ATermRef msg)
+  //{ public void addCommunication(ProcessPicture from, ProcessPicture to, ATerm msg)
 
   /**
     * Visualize the communication between two processes.
     */
 
-  public void addCommunication(ProcessPicture from, ProcessPicture to, ATermRef msg)
+  public void addCommunication(ProcessPicture from, ProcessPicture to, ATerm msg)
   {
   }
 
@@ -1280,13 +1280,13 @@ class DapPicture extends RemoteDebugAdapterInfo
   private boolean selected;
   private boolean current;
   
-  //{ public DapPicture(int dapid, ATermsRef info, Tool tool)
+  //{ public DapPicture(int dapid, ATerms info, Tool tool)
 
   /**
    * Construct a new DapAppearance object.
    */
 
-  public DapPicture(int dapid, ATermsRef info, Tool tool)
+  public DapPicture(int dapid, ATerms info, Tool tool)
   {
     super(dapid, info, tool);
   }
@@ -1377,10 +1377,10 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void start(String mode)
   {
-    ATermRef procs = new ATermApplRef("all", null);
-    ATermsRef actions = new ATermsRef(new ATermApplRef(mode, null), null);
+    ATerm procs = new ATermAppl("all", null);
+    ATerms actions = new ATerms(new ATermAppl(mode, null), null);
 
-    sendExecuteActions(procs, new ATermListRef(actions));
+    sendExecuteActions(procs, new ATermList(actions));
   }
 
   //}
@@ -1392,10 +1392,10 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void stop()
   {
-    ATermRef procs = new ATermApplRef("all", null);
-    ATermsRef actions = new ATermsRef(new ATermApplRef("stop", null), null);
+    ATerm procs = new ATermAppl("all", null);
+    ATerms actions = new ATerms(new ATermAppl("stop", null), null);
 
-    sendExecuteActions(procs, new ATermListRef(actions));
+    sendExecuteActions(procs, new ATermList(actions));
   }
 
   //}
@@ -1594,11 +1594,11 @@ class ProcessPicture extends DebugProcess
 
   public void start(String mode)
   {
-    ATermsRef procs = new ATermsRef(new ATermIntRef(getPid()));
-    ATermsRef actions = new ATermsRef(new ATermApplRef(mode, null), null);
+    ATerms procs = new ATerms(new ATermInt(getPid()));
+    ATerms actions = new ATerms(new ATermAppl(mode, null), null);
 
-    adapter.sendExecuteActions(new ATermListRef(procs), 
-			       new ATermListRef(actions));
+    adapter.sendExecuteActions(new ATermList(procs), 
+			       new ATermList(actions));
   }
 
   //}
@@ -1610,11 +1610,11 @@ class ProcessPicture extends DebugProcess
 
   public void stop()
   {
-    ATermsRef procs = new ATermsRef(new ATermIntRef(getPid()));
-    ATermsRef actions = new ATermsRef(new ATermApplRef("stop", null), null);
+    ATerms procs = new ATerms(new ATermInt(getPid()));
+    ATerms actions = new ATerms(new ATermAppl("stop", null), null);
 
-    adapter.sendExecuteActions(new ATermListRef(procs),
-			       new ATermListRef(actions));
+    adapter.sendExecuteActions(new ATermList(procs),
+			       new ATermList(actions));
   }
 
   //}
@@ -1703,11 +1703,11 @@ class ProcessPicture extends DebugProcess
 
 class MsgPicture
 {
-  private ATermRef msg;
+  private ATerm msg;
   private ProcessPicture from;
   private ProcessPicture to;
 
-  public MsgPicture(ProcessPicture from, ProcessPicture to, ATermRef msg)
+  public MsgPicture(ProcessPicture from, ProcessPicture to, ATerm msg)
   {
     this.msg = msg;
     this.from = from;
@@ -1722,7 +1722,7 @@ class MsgPicture
     return to;
   }
 
-  public ATermRef getMsg() {
+  public ATerm getMsg() {
     return msg;
   }
 
@@ -2189,11 +2189,11 @@ class ProcessViewerMenuBar extends MenuBar
 
 class ToolMenuItem extends MenuItem
 {
-  private ATermRef tool;
+  private ATerm tool;
   private String name;
   private String argtype;
 
-  public ToolMenuItem(String name, ATermRef tool, String argtype)
+  public ToolMenuItem(String name, ATerm tool, String argtype)
   {
     super(name);
     this.name = name;
@@ -2202,7 +2202,7 @@ class ToolMenuItem extends MenuItem
     Vector argtypes;
   }
 
-  public ATermRef getTool() { return tool; }
+  public ATerm getTool() { return tool; }
   public String getName() { return name; }
   public String getArgType() { return argtype; }
 

@@ -40,14 +40,14 @@ public class ProcessCreationPort extends DebugPort
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be send 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return patternPort.make();
   }

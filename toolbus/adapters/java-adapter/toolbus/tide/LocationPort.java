@@ -27,14 +27,14 @@ public class LocationPort extends DebugPort
   }
 
   //}
-  //{ public LocationPort(ATermRef loc, int when)
+  //{ public LocationPort(ATerm loc, int when)
 
   /**
     * Construct a new LocationPort object given the term representation
     * of the location.
     */
 
-  public LocationPort(ATermsRef loc, int when)
+  public LocationPort(ATerms loc, int when)
   {
     super(LOCATION, when);
     location = new SourceArea(loc);
@@ -70,14 +70,14 @@ public class LocationPort extends DebugPort
   }
 
   //}
-  //{ public ATermRef onthewire()
+  //{ public ATerm onthewire()
 
   /**
     * Build a term representing this debug port that can be send 
     * over the ToolBus.
     */
 
-  public ATermRef onthewire()
+  public ATerm onthewire()
   {
     return patternPort.make(getWhenTerm(), location.getModule(),
 			    new Integer(location.getStartLine()),

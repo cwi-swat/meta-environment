@@ -1,99 +1,114 @@
 
 package toolbus.aterm;
-import toolbus.util.Writer;
-import toolbus.util.PrintWriter;
 import toolbus.util.*;
-import java.util.*;
 import java.io.*;
 
 public class ATermList extends ATerm
 {
-  private ATerms aterms;
-  private int hashcode;
+  ATermListImpl list = null;
 
-  //{ public ATermList(ATerms terms, ATerm anno)
+  //{ public ATermList(ATermListImpl l)
 
-  public ATermList(ATerms terms, ATerm anno)
-  { 
-    super(anno);
-    aterms = terms; 
-    updateHashCode();
-    if(aterms != null)
-      aterms.increaseRef();
+  /**
+    * Create a list from an {\tt ATermListImpl} object.
+    */
+
+  ATermList(ATermListImpl l)
+  {
+    update(l);
   }
 
   //}
   //{ public ATermList(ATerms terms)
 
+  /**
+    * Create a list reference from an ATerms reference.
+    */
+
   public ATermList(ATerms terms)
   {
-    this(terms, null);
+    update(new ATermListImpl(terms == null ? null : terms.getATermsImpl()));
   }
 
   //}
-  //{ public Object clone()
+  //{ public ATermList(ATerms terms, ATerm anno)
 
-  public Object clone()
+  /**
+    * Create a list reference from an ATerms reference.
+    */
+
+  public ATermList(ATerms terms, ATerm anno)
   {
-    ATermList list = (ATermList)super.clone();
-    list.aterms = aterms;
-    list.hashcode = hashcode;
-    if(aterms != null)
-      aterms.increaseRef();
-    return list;
+    update(new ATermListImpl(terms == null ? null : terms.getATermsImpl(), 
+			 anno == null ? null : anno.getATermImpl()));
+  }
+
+  //}
+  //{ public void setAnno(ATerm a)
+
+  /**
+    * Change the annotation of a term.
+    */
+
+  public void setAnno(ATerm a)
+  {
+    update(new ATermListImpl(list.getATermsImpl(), a == null ? null : a.getATermImpl()));
   }
 
   //}
   //{ protected void finalize()
 
   protected void finalize()
-    throws Throwable
   {
-    if(aterms != null)
-      aterms.decreaseRef();
-    super.finalize();
+    if(list != null)
+      list.decreaseRef();
   }
 
   //}
-  //{ public boolean equals(Object obj)
 
-  public boolean equals(Object obj)
+  //{ private void update(ATermListImpl lst)
+
+  /**
+    * Update this reference to point to a term equal to {\tt lst}.
+    */
+
+  private void update(ATermListImpl lst)
   {
-    if(obj instanceof ATermList)
-      return aterms == ((ATermList)obj).aterms && super.equals(obj);
-    return false;
+    if(list != null)
+      list.decreaseRef();
+    if(lst == null)
+      list = null;
+    else {
+      list = (ATermListImpl)lst.unique();
+      list.increaseRef();
+    }
   }
 
   //}
-  //{ public void updateHashCode()
+  //{ protected ATermImpl getATermImpl()
 
-  public void updateHashCode()
+  protected ATermImpl getATermImpl()
   {
-    hashcode = aterms == null ? 0 : aterms.hashCode()+1;
+    return list;
   }
 
   //}
-  //{ public int hashCode()
+  //{ private ATermsImpl getATermListImpl()
 
-  public int hashCode()
+  private ATermListImpl getATermListImpl()
   {
-    return hashcode;
+    return list;
   }
 
   //}
-  //{ public int getType()
 
-  public int getType()
-  {
-    return ATerm.LIST;
-  }
-
-  //}
   //{ public ATerms getATerms()
 
   public ATerms getATerms()
   {
-    return aterms;
+    if(list == null || list.getATermsImpl() == null)
+      return null;
+    return new ATerms(list.getATermsImpl());
   }
 
   //}
@@ -101,75 +116,7 @@ public class ATermList extends ATerm
 
   public void setATerms(ATerms terms)
   {
-    if(aterms != null)
-      aterms.decreaseRef();
-    aterms = terms; 
-    updateHashCode();
-    if(aterms != null)
-      aterms.increaseRef();
-  }
-
-  //}
-  //{ public void write(OutputStream o)
-  
-  public void write(OutputStream o)
-    throws java.io.IOException
-  {
-    o.write('[');
-    if(aterms != null)
-      aterms.write(o);
-    o.write(']');
-    super.write(o);
-  }
-
-  //}
-  //{ public void print(PrintWriter w)
-
-  public void print(PrintWriter w)
-  {
-    w.print('[');
-    if(aterms != null)
-      aterms.print(w);
-    w.print(']');
-    super.print(w);
-  }
-
-  //}
-  //{ public int printSize()
-
-  public int printSize()
-  {
-    int size = super.printSize();
-    size += 2;	// The '[' and ']' characters.
-    if(aterms != null)
-      size += aterms.printSize();
-    return size;
-  }
-
-  //}
-  //{ public int size() 
-
-  public int size() 
-  { 
-    int size = 1 + super.size();
-    if(aterms != null)
-      size += aterms.size();
-    return size;
-  }
-
-  //}
-
-  //{ public boolean match(ATerm trm, Vector subterms)
-
-  /**
-    * Match against {\tt trm}, using {\tt this} as a placeholder term.
-    */
-
-  public boolean match(ATerm trm, Vector subterms)
-  {
-    if(trm.getType() == ATerm.LIST)
-      return aterms.match(((ATermList)trm).aterms, subterms);
-    return false;
+    update(terms == null ? null : new ATermListImpl(terms.getATermsImpl()));
   }
 
   //}

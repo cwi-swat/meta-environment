@@ -96,55 +96,55 @@ abstract public class DebugAdapterTif extends toolbus.tool.Tool
 
 
   // Override these abstract methods to handle incoming ToolBus terms
-  abstract void modifyRule(int i0, ATermRef t1, ATermRef t2, ATermRef t3, ATermListRef l4, ATermRef t5) throws ToolException;
-  abstract void destroyRule(ATermRef t0, int i1) throws ToolException;
-  abstract ATermRef getInfo() throws ToolException;
-  abstract ATermRef createRule(ATermRef t0, ATermRef t1, ATermRef t2, ATermListRef l3, ATermRef t4) throws ToolException;
-  abstract ATermRef execActions(ATermRef t0, ATermListRef l1) throws ToolException;
-  abstract ATermRef getProcesses() throws ToolException;
-  abstract void recTerminate(ATermRef t0) throws ToolException;
-  abstract void recAckEvent(ATermRef t0) throws ToolException;
+  abstract void modifyRule(int i0, ATerm t1, ATerm t2, ATerm t3, ATermList l4, ATerm t5) throws ToolException;
+  abstract void destroyRule(ATerm t0, int i1) throws ToolException;
+  abstract ATerm getInfo() throws ToolException;
+  abstract ATerm createRule(ATerm t0, ATerm t1, ATerm t2, ATermList l3, ATerm t4) throws ToolException;
+  abstract ATerm execActions(ATerm t0, ATermList l1) throws ToolException;
+  abstract ATerm getProcesses() throws ToolException;
+  abstract void recTerminate(ATerm t0) throws ToolException;
+  abstract void recAckEvent(ATerm t0) throws ToolException;
 
   // The generic handler calls the specific handlers
-  protected ATermRef handler(ATermRef term)
+  protected ATerm handler(ATerm term)
 	throws ToolException
   {
     if(PmodifyRule0.match(term)) {
       ATermPattern P = PmodifyRule0;
-      modifyRule(((Integer)P.elementAt(0)).intValue(), (ATermRef)P.elementAt(1), (ATermRef)P.elementAt(2), (ATermRef)P.elementAt(3), (ATermListRef)P.elementAt(4), (ATermRef)P.elementAt(5));
+      modifyRule(((Integer)P.elementAt(0)).intValue(), (ATerm)P.elementAt(1), (ATerm)P.elementAt(2), (ATerm)P.elementAt(3), (ATermList)P.elementAt(4), (ATerm)P.elementAt(5));
     } else if(PdestroyRule0.match(term)) {
       ATermPattern P = PdestroyRule0;
-      destroyRule((ATermRef)P.elementAt(0), ((Integer)P.elementAt(1)).intValue());
+      destroyRule((ATerm)P.elementAt(0), ((Integer)P.elementAt(1)).intValue());
     } else if(PgetInfo0.match(term)) {
       ATermPattern P = PgetInfo0;
       return getInfo();
     } else if(PcreateRule0.match(term)) {
       ATermPattern P = PcreateRule0;
-      return createRule((ATermRef)P.elementAt(0), (ATermRef)P.elementAt(1), (ATermRef)P.elementAt(2), (ATermListRef)P.elementAt(3), (ATermRef)P.elementAt(4));
+      return createRule((ATerm)P.elementAt(0), (ATerm)P.elementAt(1), (ATerm)P.elementAt(2), (ATermList)P.elementAt(3), (ATerm)P.elementAt(4));
     } else if(PexecActions0.match(term)) {
       ATermPattern P = PexecActions0;
-      return execActions((ATermRef)P.elementAt(0), (ATermListRef)P.elementAt(1));
+      return execActions((ATerm)P.elementAt(0), (ATermList)P.elementAt(1));
     } else if(PgetProcesses0.match(term)) {
       ATermPattern P = PgetProcesses0;
       return getProcesses();
     } else if(PrecTerminate0.match(term)) {
       ATermPattern P = PrecTerminate0;
-      recTerminate((ATermRef)P.elementAt(0));
+      recTerminate((ATerm)P.elementAt(0));
     } else if(PrecAckEvent0.match(term)) {
       ATermPattern P = PrecAckEvent0;
-      recAckEvent((ATermRef)P.elementAt(0));
+      recAckEvent((ATerm)P.elementAt(0));
     } else 
       notInInputSignature(term);
     return null;
   }
 
   // Check the input signature
-  protected void checkInputSignature(ATermListRef list)
+  protected void checkInputSignature(ATermList list)
          throws ToolException
   {
-    ATermsRef sigs = list.getATerms();
+    ATerms sigs = list.getATerms();
     while(sigs != null) {
-      ATermApplRef sig = (ATermApplRef)sigs.getFirst();
+      ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
       if(!sigTable.containsKey(sig)) {
         // Sorry, but the term is not in the input signature!
@@ -155,7 +155,7 @@ abstract public class DebugAdapterTif extends toolbus.tool.Tool
 
   // This function is called when an input term
   // was not in the input signature.
-  void notInInputSignature(ATermRef t)
+  void notInInputSignature(ATerm t)
         throws ToolException
   {
     throw new ToolException(this, "term not in input signature", t);

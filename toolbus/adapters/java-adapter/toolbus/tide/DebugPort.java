@@ -37,17 +37,17 @@ abstract public class DebugPort
   private int type;
   private int when;
 
-  abstract public ATermRef onthewire();
+  abstract public ATerm onthewire();
 
-  //{ static public int typeTerm2Int(ATermRef port)
+  //{ static public int typeTerm2Int(ATerm port)
 
   /**
     * Translate a port type into an integer.
     */
 
-  static public int typeTerm2Int(ATermRef port)
+  static public int typeTerm2Int(ATerm port)
   {
-    String fun = ((ATermApplRef)port).getFun();
+    String fun = ((ATermAppl)port).getFun();
     switch(fun.charAt(0)) {
       case 'e': 
 	if(fun.equals("exec-state"))
@@ -75,15 +75,15 @@ abstract public class DebugPort
   }
 
   //}
-  //{ static public int whenTerm2Int(ATermRef when)
+  //{ static public int whenTerm2Int(ATerm when)
 
   /**
     * Translate a when term into the corresponding integer.
     */
 
-  static public int whenTerm2Int(ATermRef when)
+  static public int whenTerm2Int(ATerm when)
   {
-    String fun = ((ATermApplRef)when).getFun();
+    String fun = ((ATermAppl)when).getFun();
     if(fun.equals("before"))
       return WHEN_BEFORE;
     if(fun.equals("after"))
@@ -108,23 +108,23 @@ abstract public class DebugPort
   }
 
   //}
-  //{ static public DebugPort newPort(ATermRef port)
+  //{ static public DebugPort newPort(ATerm port)
 
   /**
     * Construct a debug port from its term representation.
     */
 
-  static public DebugPort newPort(ATermRef port)
+  static public DebugPort newPort(ATerm port)
   {
     DebugPort result;
 
-    if(!(port instanceof ATermListRef))
+    if(!(port instanceof ATermList))
       System.err.println("expected list, got: " + port);
-    ATermsRef Data = ((ATermListRef)port).getATerms();
+    ATerms Data = ((ATermList)port).getATerms();
 
-    ATermRef Port = Data.getFirst();
+    ATerm Port = Data.getFirst();
     Data = Data.getNext();
-    ATermRef When = Data.getFirst();
+    ATerm When = Data.getFirst();
     Data = Data.getNext();
     
     int type = typeTerm2Int(Port);
@@ -213,12 +213,12 @@ abstract public class DebugPort
    * Retrieve the activation moment of this port.
    */
 
-  ATermRef getWhenTerm()
+  ATerm getWhenTerm()
   {
     switch(when) {
-      case WHEN_BEFORE: return new ATermApplRef("before", null);
-      case WHEN_AFTER:  return new ATermApplRef("after", null);
-      case WHEN_AT:     return new ATermApplRef("at", null);
+      case WHEN_BEFORE: return new ATermAppl("before", null);
+      case WHEN_AFTER:  return new ATermAppl("after", null);
+      case WHEN_AT:     return new ATermAppl("at", null);
     }
     throw new IllegalArgumentException("illegal when type: " + when);
   }
