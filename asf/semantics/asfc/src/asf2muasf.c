@@ -40,19 +40,18 @@ typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
 /*{{{  abbreviations for arbitrary layout  */
 
-static MA_Layout sp  = NULL; /* space */
-static MA_Layout nl  = NULL; /* newline */
-static MA_Layout nl2 = NULL; /* 2 newlines */
-static MA_Layout em  = NULL; /* empty */
+static MA_OptLayout sp  = NULL; /* space */
+static MA_OptLayout nl  = NULL; /* newline */
+static MA_OptLayout nl2 = NULL; /* 2 newlines */
+static MA_OptLayout em  = NULL; /* empty */
 
 
 /*}}}  */
 
 /*{{{  static function decls */
 
-static MA_Lexical stringToLexical(const char* str);
-static MA_Layout stringToLayout(const char *str);
-static MA_FunId stringToFunId(const char *str);
+static MA_OptLayout stringToLayout(char *str);
+static MA_FunId stringToFunId(char *str);
 static MA_FunId intToFunId(int ch);
 static void initLayoutAbbreviations(void);
 static int getProdArity(PT_Production prod, LayoutOption layout);
@@ -76,7 +75,7 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
 				  ATermIndexedSet funcdefs);
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 					       ATermIndexedSet funcdefs);
-static MA_ModId makeModId(const char *str);
+static MA_ModId makeModId(char *str);
 static ATbool checkListProductionCompatibility(PT_Production ptProd);
 
 /*}}}  */
@@ -107,31 +106,23 @@ static ATbool prodReturnsList(PT_Production prod)
 
 /*}}}  */
 
-/*{{{  static MA_Lexical stringToLexical(const char* str) */
-
-static MA_Lexical stringToLexical(const char* str)
-{
-  return (MA_Lexical) PT_makeTreeFlatLexicalFromString(str);
-}
-
-/*}}}  */
 /*{{{  static MA_Layout stringToLayout(const char *str) */
 
-static MA_Layout stringToLayout(const char *str)
+static MA_OptLayout stringToLayout(char *str)
 {
   if (strlen(str) == 0) {
-    return (MA_Layout) PT_makeTreeLayoutEmpty();
+    return (MA_OptLayout) PT_makeTreeLayoutEmpty();
   }
 
-  return (MA_Layout) PT_makeTreeLayoutFromString(str);
+  return (MA_OptLayout) PT_makeTreeLayoutFromString(str);
 }
 
 /*}}}  */
 /*{{{  static MA_FunId stringToFunId(const char *str) */
 
-static MA_FunId stringToFunId(const char *str)
+static MA_FunId stringToFunId(char *str)
 {
-  return MA_makeFunIdLexToCf(stringToLexical(str));
+  return MA_makeFunIdUnquoted(MA_makeCHARLISTString(str));
 }
 
 /*}}}  */
@@ -151,7 +142,7 @@ static MA_VarId stringToVarId(const char *str)
   strcpy(varid, "V_");
   strcat(varid, alfanum);
 
-  result = MA_makeVarIdLexToCf(stringToLexical(varid));
+  result = MA_makeVarIdDefault(MA_makeCHARLISTString(varid));
 
   free(alfanum);
   free(varid);
@@ -173,7 +164,7 @@ static MA_FunId intToFunId(int ch)
 
   sprintf(num+1,"%03d", ch);
 
-  return MA_makeFunIdLexToCf(stringToLexical(num));
+  return MA_makeFunIdUnquoted(MA_makeCHARLISTString(num));
 }
 
 /*}}}  */
@@ -181,10 +172,10 @@ static MA_FunId intToFunId(int ch)
 
 static void initLayoutAbbreviations(void)
 {
-  ATprotect(&em);
-  ATprotect(&sp);
-  ATprotect(&nl);
-  ATprotect(&nl2);
+  ATprotect((ATerm*) &em);
+  ATprotect((ATerm*) &sp);
+  ATprotect((ATerm*) &nl);
+  ATprotect((ATerm*) &nl2);
 
   em = stringToLayout("");
   sp = stringToLayout(" ");
@@ -247,6 +238,7 @@ static MA_Term atermToTerm(ATerm aterm)
   ATermList args;
   MA_Term result;
   MA_TermArgs list;
+  MA_TermList termList;
 
   if (ATgetType(aterm) == AT_APPL) {
     str = ATgetName(ATgetAFun((ATermAppl) aterm));
@@ -258,6 +250,11 @@ static MA_Term atermToTerm(ATerm aterm)
     else {
       result = MA_makeTermConstant(stringToFunId(str));
     }
+  }
+  else if (ATgetType(aterm) == AT_LIST) {
+    list = atArgsToTermArgs((ATermList) aterm);
+    termList = MA_makeTermListDefault((MA_TermElems) list);
+    result = MA_makeTermList(em,termList,em);
   }
   else {
     ATerror("atermToTerm: ATerm %t is not supported.\n", aterm);
@@ -815,9 +812,9 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 /*}}}  */
 /*{{{  static MA_ModId makeModId(const char *str) */
 
-static MA_ModId makeModId(const char *str)
+static MA_ModId makeModId(char *str)
 {
-  MA_ModId result = MA_makeModIdLexToCf(stringToLexical(str));
+  MA_ModId result = MA_makeModIdDefault(MA_makeCHARLISTString(str));
   return result;
 }
 

@@ -46,6 +46,7 @@
       FunId                           -> Term {cons("constant")}
       Int                             -> Term {cons("int")}
       FunId "(" args:{Term ","}+ ")"  -> Term {cons("func")}
+      "[" TermList "]"                -> Term {cons("list")}
 
       elems:{Term ","}*               -> TermList 
 
