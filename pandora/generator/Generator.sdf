@@ -5,9 +5,16 @@ imports languages/sdf2/syntax/Sdf2
 
 exports
   context-free syntax
-    ppSDFGenerator(Module) -> Module 
+    ppSDFGenerator(Definition) -> Definition 
 
 hiddens
+  context-free syntax
+    generateModule(Definition, Definition)
+      -> Definition {traversal(accu, top-down, break)}
+
+    generateModule(Module, Definition)
+      -> Definition {traversal(accu, top-down, break)}
+
   context-free syntax
     getProductions(Module, Productions) 
       -> Productions {traversal(accu, top-down, break)}
@@ -15,6 +22,7 @@ hiddens
     getProductions(Grammar, Productions) 
       -> Productions {traversal(accu, top-down, break)}    
 
+  context-free syntax
     generateProductions(Productions, Productions) 
       -> Productions {traversal(accu, top-down, break)}
 
@@ -23,6 +31,7 @@ hiddens
 
   context-free syntax
     addBrackets(Symbol) -> Symbol
+    makePPModuleName(ModuleName) -> ModuleName
     makePPSymbol(Symbol) -> Symbol 
 
   context-free syntax
@@ -36,14 +45,19 @@ hiddens
     "$Char"[0-9]* -> CHAR
     "$Char+"[0-9]* -> CHAR+
     "$Char*"[0-9]* -> CHAR*
+    "$Definition"[0-9]* -> Definition
     "$Grammar"[0-9]* -> Grammar
     "$ImpSection"[0-9]* -> ImpSection
+    "$ImpSection*"[0-9]* -> ImpSection*
     "$Literal"[0-9]* -> Literal
     "$Module"[0-9]* -> Module
+    "$Module*"[0-9]* -> Module*
+    "$ModuleName"[0-9]* -> ModuleName
     "$Production"[0-9]* -> Production
     "$Productions"[0-9]* -> Productions
     "$Production*"[0-9]* -> Production*
     "$Section"[0-9]* -> Section
+    "$Sections"[0-9]* -> Sections
     "$Sort"[0-9]* -> Sort
     "$Symbol"[0-9]* -> Symbol
     "$Symbols"[0-9]* -> Symbols

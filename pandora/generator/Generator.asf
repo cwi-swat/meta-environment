@@ -1,12 +1,16 @@
 equations
 
 [ppSDFGenerator-start]
-  $ImpSection := imports languages/box/syntax/box,
-  $Grammar := context-free syntax getProductions($Module0, ),
+  ppSDFGenerator($Definition) = generateModule($Definition, )
+
+[generateModule-0]
+  module $ModuleName $ImpSection* $Sections := $Module,
+  $ImpSection := imports $ModuleName languages/box/syntax/box,
+  $Grammar := context-free syntax getProductions($Module, ),
   $Section := exports $Grammar,
-  $Module1 := module test $ImpSection $Section
+  $Module := module makePPModuleName($ModuleName) $ImpSection $Section
   ===>
-  ppSDFGenerator($Module0) = $Module1
+  generateModule($Module, $Module*) = $Module* $Module
 
 [getProductions-0]
   context-free syntax $Productions := $Grammar
@@ -21,24 +25,29 @@ equations
     = generateProductions($Productions, $Production*)
 
 [generateProductions-0]
-  $Symbols -> $Symbol1 $Attributes := $Production0,
+  $Symbols -> $Symbol1 $Attributes := $Production,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
+  $Production := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
-  generateProductions($Production0, $Production*) = $Production1 $Production*
+  generateProductions($Production, $Production*) = $Production* $Production
 
 [generateProductions-1]
-  $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production0,
+  $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
+  $Production := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
-  generateProductions($Production0, $Production*) = $Production1 $Production*
+  generateProductions($Production, $Production*) = $Production* $Production
 
 [makePPSymbol-0]
   bytes(bytes($Char+)) := unparse-to-bytes($Symbol),
   bytes($Char*) := removeWhitespace(bytes($Char+))
   ===>
   makePPSymbol($Symbol) = uqliteral("p" "p" $Char*)
+
+[makePPModuleName-0]
+  bytes(bytes($Char+)) := unparse-to-bytes($ModuleName)
+  ===>
+  makePPModuleName($ModuleName) = uqliteral("P" "P" $Char+)
 
 [addBrackets-0]
   bytes(bytes($Char+)) := unparse-to-bytes($Symbol)
