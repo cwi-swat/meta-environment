@@ -38,7 +38,7 @@ apply_function_SOURCES	= apply-function.c
 apply_function_LDADD	= -L$(ASC_SUPPORT)/lib -lasc-support $(GENERIC_LDADD)  
 
 concat_asf = concat-asf.c
-concat_asf_LDADD   = $(GENERIC_LDADD) -L$(ASF_SUPPORT)/lib -lASF
+concat_asf_LDADD   = -L$(ASF_SUPPORT)/lib -lASF $(GENERIC_LDADD)
 
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
