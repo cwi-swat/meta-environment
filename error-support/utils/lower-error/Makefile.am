@@ -13,7 +13,7 @@ lower_error_LDADD=\
 	-L${ATERM}/lib -lATerm
 
 ERRORS=example
-EXTRA_DIST=$(wildcard *.ref) $(wildcard *.trm)
+EXTRA_DIST=$(wildcard *.ref) $(wildcard *.tree)
 CLEANFILES=$(TESTS)
 
 TESTS=$(foreach e, ${ERRORS}, $e.sh)
