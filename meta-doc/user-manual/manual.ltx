@@ -637,7 +637,7 @@ comma-separated list of elements enclosed in angle brackets.  For example,
   <true, 3, x>} is a valid example of such a tuple.  The tuple operator is
 right associative and binds weaker than the alternative operator.
 
-\subsubsection{Permutation}
+\subsubsection{Permutation (deprecated)}
 \label{PermutationOperator}
 
 \index{permutation operator@permutation operator}
@@ -648,15 +648,15 @@ permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.  Valid
 instantiations are, for instance, {\tt true 3 x} and {\tt x 3 true}.  There
 are six valid instantiations for this permutation.
 
+\subsubsection{Set (deprecated)}
+\label{SetOperator}
+\index{set operator@set operator}
+\index{{\tt Set[...]}@{\tt Set[...]}}
+
 This operator is deprecated and will disappear from \asfsdf\ specification 
 formalism in the near future. It is advisable not to use this operator
 any more.
 
-\subsubsection{Set}
-\label{SetOperator}
-
-\index{set operator@set operator}
-\index{{\tt Set[...]}@{\tt Set[...]}}
 The set operator {\tt Set[...]} is an abbreviation for defining a set of
 elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
 definition {\tt "\{" \{Int ","\}* "\}"}. As a consequence, {\tt \{1, 2, 3\}} is
