@@ -1,5 +1,12 @@
 $Id$
 
+2001/11/23 (vandenbr@loria.fr)
+ * fixed a bug: the character classes for lexical
+   definitions with the same rhs symbol where not merged.
+   [a-z]    -> Id
+   [a-zA-Z] -> Id
+   yields ambiguities.
+
 2001/11/13 (jong@cwi.nl)
  * released version 1.2
 
