@@ -58,7 +58,6 @@ whitespace.o: ../src/libeval.a
 
 whitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASCLIB) -lasc-support \
                  -L$(ASFIXLIB) -lAsFix \
                  -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
