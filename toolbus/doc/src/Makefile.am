@@ -41,26 +41,34 @@ CLEANFILES           = $(DOCS) *.dvi *.aux *.log *.toc adapters.tex \
 verbatim_SOURCES     = verbatim.c
 script2latex_SOURCES = script2latex.c
 
-doc: verbatim script2latex $(DOCS)
+doc: $(DOCS) $(noinst_PROGRAMS)
 
-Guide.dvi: $(EXAMPLES) Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
+Guide.dvi: everything \
+	   $(EXAMPLES) Arch.tex Tifs.tex Tool.tex \
+	   Adapter.tex  Guide.tex adapters.tex
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
 	export TEXINPUTS; \
 	latex Guide.tex; \
 	latex Guide.tex; \
 	latex Guide.tex
 
-Intro.dvi: $(EXAMPLES) Intro.tex calc.ps auction.ps
+Intro.dvi: everything \
+	   $(EXAMPLES) Intro.tex calc.ps auction.ps
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
 	export TEXINPUTS; \
 	latex Intro.tex; \
 	latex Intro.tex
 
-pamflet.dvi: pamflet.tex arch-simpel.ps battleships.eps zeeslag.ps
+pamflet.dvi: everything \
+	     pamflet.tex arch-simpel.ps battleships.eps zeeslag.ps
 	@TEXINPUTS=$(srcdir):$$TEXINPUTS:; \
 	export TEXINPUTS; \
 	latex pamflet.tex ;\
 	latex pamflet.tex
+
+everything:
+	cd $(top_builddir) ;\
+	$(MAKE)
 
 %.ps : %.dvi
 	@TEXINPUTS=$(top_srcdir)/adapters:$(srcdir):$$TEXINPUTS:; \
