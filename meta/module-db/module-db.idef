@@ -1,0 +1,84 @@
+process ModuleDB is
+let
+Id : term,
+T1 : term,
+T2 : term,
+Module: term,
+Name: term,
+Mdb : module-db,
+Modules: list,
+Equations: list,
+Pairs: list
+in
+
+/* First, execute the module db */
+execute(module-db, Mdb?).
+
+/* And initialize it */
+snd-do(Mdb, create-module-db).
+(
+/* When compiling modules, they need to be reshuffled such that a new 
+   module is generated for each context-free function in the spec
+*/
+  rec-msg(reshuffle-module(Name?)).
+  snd-do(Mdb, compile-module(Name)).
+/* Everytime a new module is finished it is returned, so that it can
+   already be compiled. This way, we don't have to wait for the whole
+   reshuffleing to finish.
+*/
+  ( rec-event(Mdb, generate-code(Name?,Module?)).
+    snd-msg(generate-code(Name,Module)).
+    snd-ack-event(Mdb, generate-code(Name, Module))
+  ) *
+/* When we're done, we're done */
+  rec-event(Mdb,done).
+  snd-msg(reshuffle-done).
+  snd-ack-event(Mdb,done)
++
+/* If we get the request to empty the db, we'll do it. */
+  rec-msg(clear-module-db).
+  snd-do(Mdb, clear-module-db)
++
+/* Delete one module from the db */
+  rec-msg(delete-module(Name?)).
+  snd-do(Mdb, delete-module(Name))
++
+/* See if a module is in the db */
+  rec-msg(is-module-in-db(Name?)).
+  snd-eval(Mdb, exists(Name)).
+  ( rec-value(Mdb, result(exists(Name))).
+    snd-msg(exists-in-module-db(Name))
+  +
+    rec-value(Mdb, result(notexists(Name))).
+    snd-msg(not-exists-in-module-db(Name))
+  )
++
+/* Add a module to the database */
+  rec-msg(add-module-to-db(Module?)).
+  snd-eval(Mdb,add-module(Module)).
+  rec-value(Mdb,imports(Name?,need-modules(Modules?))).
+  snd-msg(need-modules(Modules)).
+/* If a new module is added, we tell the world the new import relations */
+  snd-eval(Mdb,calc-import-rels(Name)).
+  rec-value(Mdb,irels(Pairs?)).
+  snd-note(import-relations(irels(Pairs)))
++
+/* Return a list of all modules imported by this one*/
+  rec-msg(get-all-imported-modules(Module?)).
+  snd-eval(Mdb, get-all-imported-modules(Module)).
+  rec-value(Mdb, all-imports(Modules?)).
+  snd-msg(all-imported-modules(Modules))
++
+
+/* Get all equations for a list of modules */
+  rec-msg(get-all-equations(Modules?)).
+  snd-eval(Mdb, get-equations(Modules)).
+  rec-value(Mdb, equations(Equations?)).
+  snd-msg(all-equations(Equations))
+) *
+delta
+endlet
+
+
+tool module-db is { command = "module-db" }
+
