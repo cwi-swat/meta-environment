@@ -6,7 +6,8 @@ rel[str,str] INHERITANCE
 
 rel[str,str] INHERITCLOSURE = INHERITANCE+
 
-rel[str,str,str] DegInh  = { <A, B, C> | <B, A> :  INHERITCLOSURE, <C, B1> :
+rel[str,str,str] DegInh  = { <A, B, C> | <str B, str A> :  INHERITCLOSURE,
+<str C, str B1> :
 INHERITANCE, B == B1, <C, A> in INHERITANCE}
 
 int size = # DegInh

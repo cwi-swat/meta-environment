@@ -1,7 +1,7 @@
 equations
 
 [extractInterface-1]
-	&Rstore1 := assign-when-undef(INTERFACES, rel[Interface,area], {}, &Rstore),
+	&Rstore1 := assign-when-undef(INTERFACES, rel[Interface,loc], {}, &Rstore),
 	&Rstore2 := extractInterface1(&CompilationUnit, &Rstore1)
 	=========================================================
 	extractInterface(&CompilationUnit, &Rstore) = &Rstore2
