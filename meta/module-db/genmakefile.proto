@@ -143,4 +143,7 @@ init.c: $(SPEC_SRCS)
 	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > $@
 
 clean:
-	$(RM) *.o init.c @TARGET@ @TARGET@-db @TARGET@-prof
+	$(RM) *.asfix *.o init.c @TARGET@ @TARGET@-db @TARGET@-prof
+
+realclean spotless:	clean
+	$(RM) *.c
