@@ -83,17 +83,18 @@ typedef ATermAppl forest;
 
 ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
                             char *in, char *out);
-ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN);
-ATerm SGcloseLanguage(char *prgname, int conn, char *L);
-ATerm SGreOpenLanguage(char *prgname, int conn, char *L, char *FN);
+ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl);
+ATerm SGopenLanguage(char *prgname, char *L, char *FN);
+ATerm SGcloseLanguage(char *prgname, char *L);
+ATerm SGreOpenLanguage(char *prgname, char *L, char *FN);
 
 FILE *SGopenFile(char *prgname, char *std_error, char *FN);
 void  SGcloseFile(FILE *fd);
 
-ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN);
-ATerm SGparseString(int conn, char *L, char *G, char *S);
-ATerm SGparseStringAsAsFix2(int conn, char *L, char *G, char *S);
-ATerm SGparseStringAsAsFix1(int conn, char *L, char *G, char *S);
+ATerm SGparseFile(char *prgname, char *L, char *G, char *FN);
+ATerm SGparseString(char *L, char *G, char *S);
+ATerm SGparseStringAsAsFix2(char *L, char *G, char *S);
+ATerm SGparseStringAsAsFix1(char *L, char *G, char *S);
 
 ATbool SGisParseTree(ATerm t);
 ATbool SGisParseError(ATerm t);

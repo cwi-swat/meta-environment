@@ -882,7 +882,6 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
   FILE        *input_file;
   parse_table *pt = NULL;
 
-  SG_InitPTGlobals();
   if(!(input_file = SGopenFile(prgname, "parse table not specified", FN))) {
     return NULL;
   }
@@ -927,6 +926,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   AFun        ptfun;
   size_t      goto_entries = 0, action_entries = 0;
   long        maxrss = 0, allocated;
+
+  SG_InitPTGlobals();
 
   ptfun = ATgetAFun(t);
 
