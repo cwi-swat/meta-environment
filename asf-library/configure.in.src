@@ -14,6 +14,12 @@ dnl AC_ARG_WITH(aterm,
 dnl    [  --with-aterm            Specify location of aterm library, default: ${prefix}], ATERM=$withval, ATERM=${prefix})
 dnl AC_SUBST(ATERM)
 
+AC_PACKAGE_REQUIRE(meta,meta,
+                   [  --with-meta=path       Location of the ASF+SDF Meta-Environment])
+AC_SUBST(META)
+
+
+
 
 AC_REVISION($Id$)
 
