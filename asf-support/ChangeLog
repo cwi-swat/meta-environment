@@ -1,3 +1,7 @@
+2002/10/03 (jurgenv@cwi.nl)
+ * Bumped to 0.9beta
+ * Added ASF_makeCondEquationListFromParseTrees
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 0.8
 
