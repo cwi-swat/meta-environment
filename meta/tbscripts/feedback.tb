@@ -11,17 +11,10 @@
 
 process ShowFeedbackLocation(Feedback : term) is
 let
-  Producer : str,
-  Description : str,
-  Subjects : list,
-  FirstSubject : term
+  Subjects : list
 in
-  Producer := first(args(Feedback)) .
-  Description := first(next(args(Feedback))) .
-  Subjects := first(next(next(args(Feedback)))) .
-
-  FirstSubject := first(Subjects) .
-  ShowSubjectLocation(FirstSubject)
+  Subjects := first(next(args(Feedback))) .
+  ShowSubjectLocation(first(Subjects))
 endlet
 
 process ShowSubjectLocation(Subject : term) is
