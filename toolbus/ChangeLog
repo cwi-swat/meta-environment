@@ -6,6 +6,7 @@ $Id$
   * toolbus/script.y:
     - fix: new version of bison found 7 missing ';' separators
   * adapters/java-adapter/toolbus/tifstojava.in:
+    - add: shared_objects' location via @SHARED_OBJECTS@
     - fix: aterm-java classes are in @ATERM_JAVA@, no longer in @ATERM@
 
 2002/10/30 (vinju@cwi.nl)

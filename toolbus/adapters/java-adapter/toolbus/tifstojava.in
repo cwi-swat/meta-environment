@@ -2,6 +2,7 @@
 
 prefix=@prefix@
 aterm=@JAVA_ATERM@/classes
+shared_objects=@SHARED_OBJECTS@/classes
 javadir=${prefix}/classes
 
-java -classpath ${javadir}:${aterm}:${CLASSPATH} toolbus.JavaTif $@
+java -classpath ${javadir}:${shared_objects}:${aterm}:${CLASSPATH} toolbus.JavaTif $@
