@@ -24,8 +24,8 @@
 
 
 typedef struct list {
-    struct list   *tail;
-    void          *head;
+  struct list   *tail;
+  void          *head;
 } list;
 
 
@@ -35,33 +35,33 @@ typedef list stacks;
 typedef list st_links;
 
 typedef struct link {
-    struct stack   *stack;
-    tree           tree;
-    ATbool         rejected;
+  struct stack   *stack;
+  tree           tree;
+  ATbool         rejected;
 } st_link;
 
 typedef struct stack {
-    st_links       *links;
-    state          state;
-    short          refcount;
-    ATbool         isshift;
+  st_links       *links;
+  state          state;
+  short          refcount;
+  ATbool         isshift;
 #ifdef DEBUG
-    struct stack   *parent;
+  struct stack   *parent;
 #endif
 } stack;
 
 
-#define SG_ST_STATE(s)          (((stack *)s)->state)     /* State of a stack * */
-#define SG_ST_LINKS(s)          (((stack *)s)->links)     /* List of links of a stack * */
-#define SG_ST_PARENT(s)         (((stack *)s)->parent     /* Parent stack of a stack * */
+#define SG_ST_STATE(s)          (((stack *)s)->state)     /* State of a stack */
+#define SG_ST_LINKS(s)          (((stack *)s)->links)     /* List of links of a stack */
+#define SG_ST_PARENT(s)         (((stack *)s)->parent     /* Parent stack of a stack */
 #define SG_ST_INCCOUNT(s)       (((stack *)s)->refcount++)
 #define SG_ST_DECCOUNT(s)       (((stack *)s)->refcount--)
 #define SG_ST_COUNT(s)          (((stack *)s)->refcount)
 #define SG_ST_ISSHIFT(s)        (((stack *)s)->isshift)
 
-#define SG_LK_TREE(l)           (((st_link *)l)->tree)      /* Tree of a link * */
-#define SG_LK_STACK(l)          (((st_link *)l)->stack)     /* Stack of a link * */
-#define SG_LK_REJECTED(l)       (((st_link *)l)->rejected)  /* Rejected attribute of a link * */
+#define SG_LK_TREE(l)           (((st_link *)l)->tree)      /* Tree of a link */
+#define SG_LK_STACK(l)          (((st_link *)l)->stack)     /* Stack of a link */
+#define SG_LK_REJECTED(l)       (((st_link *)l)->rejected)  /* Rejected attr. of link */
 
 #ifdef  MEMSTATS
 void      SG_ZeroAllocStats(void);

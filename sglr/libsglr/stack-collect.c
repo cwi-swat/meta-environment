@@ -29,21 +29,21 @@
 
 void SG_MarkStack(stack *st)
 {
-    if(st) {
-        SG_ST_INCCOUNT(st);
-        if(SG_ST_COUNT(st) == 1) {
-            st_links *lks;
+  if(st) {
+    SG_ST_INCCOUNT(st);
+    if(SG_ST_COUNT(st) == 1) {
+      st_links *lks;
 
-            for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks))
-                SG_MarkStack(SG_LK_STACK(SG_HEAD(lks)));
-        }
+      for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks))
+        SG_MarkStack(SG_LK_STACK(SG_HEAD(lks)));
     }
+  }
 }
 
 void SG_MarkStacks(stacks *sts)
 {
-    for(; sts; sts = SG_TAIL(sts))
-        SG_MarkStack(SG_HEAD(sts));
+  for(; sts; sts = SG_TAIL(sts))
+    SG_MarkStack(SG_HEAD(sts));
 }
 
 /*
@@ -53,70 +53,70 @@ void SG_MarkStacks(stacks *sts)
 
 void SG_SweepStack(stack *st, ATbool delete)
 {
-    if(st) {
-        SG_ST_DECCOUNT(st);
-        if(SG_ST_COUNT(st) <= 0) {
-            st_links *lks, *lks2;
+  if(st) {
+    SG_ST_DECCOUNT(st);
+    if(SG_ST_COUNT(st) <= 0) {
+      st_links *lks, *lks2;
 
-            for(lks = SG_ST_LINKS(st); lks;) {
-                st_link  *lk = SG_HEAD(lks);
+      for(lks = SG_ST_LINKS(st); lks;) {
+        st_link  *lk = SG_HEAD(lks);
 
-                lks2 = lks;
-                lks = SG_TAIL(lks);
-                SG_SweepStack(SG_LK_STACK(lk), delete);
-                if(delete) {
-                    SG_DeleteLink(lk);
-                    SG_DeleteLinks(lks2);
-                }
-            }
-            if(delete)
-                SG_DeleteStack(st);
+        lks2 = lks;
+        lks = SG_TAIL(lks);
+        SG_SweepStack(SG_LK_STACK(lk), delete);
+        if(delete) {
+          SG_DeleteLink(lk);
+          SG_DeleteLinks(lks2);
         }
+      }
+      if(delete)
+        SG_DeleteStack(st);
     }
+  }
 }
 
 void SG_SweepStacks(stacks *sts, ATbool delete)
 {
-    while(sts) {
-        stacks *osts;
+  while(sts) {
+    stacks *osts;
 
-        SG_SweepStack(SG_HEAD(sts), delete);
-        osts = sts;
-        sts = SG_TAIL(sts);
-        if(delete)
-            SG_DeleteStacks(osts);
-    }
+    SG_SweepStack(SG_HEAD(sts), delete);
+    osts = sts;
+    sts = SG_TAIL(sts);
+    if(delete)
+      SG_DeleteStacks(osts);
+  }
 }
 
 stacks *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept)
 {
 #ifdef MEMSTATS
-    if(SG_DEBUG) {
-        fprintf(SGlog(), "[Before GC] ");
-        SG_PrintCurAllocStats();
-    }
+  if(SG_DEBUG) {
+    fprintf(SGlog(), "[Before GC] ");
+    SG_PrintCurAllocStats();
+  }
 #endif
 
-    /*  Count references: mark...  */
-    if(accept)
-        SG_MarkStack(accept);
-    if(new)
-        SG_MarkStacks(new);
-    SG_MarkStacks(old);
+  /*  Count references: mark...  */
+  if(accept)
+    SG_MarkStack(accept);
+  if(new)
+    SG_MarkStacks(new);
+  SG_MarkStacks(old);
 
-    /*  Remove unreferenced items: sweep... */
-    SG_SweepStacks(old, ATtrue);
-    if(accept)
-        SG_SweepStack(accept, ATfalse);
-    if(new)
-        SG_SweepStacks(new, ATfalse);
+  /*  Remove unreferenced items: sweep... */
+  SG_SweepStacks(old, ATtrue);
+  if(accept)
+    SG_SweepStack(accept, ATfalse);
+  if(new)
+    SG_SweepStacks(new, ATfalse);
 
 #ifdef MEMSTATS
-    if(SG_DEBUG) {
-        fprintf(SGlog(), "[After  GC] ");
-        SG_PrintCurAllocStats();
-    }
+  if(SG_DEBUG) {
+    fprintf(SGlog(), "[After  GC] ");
+    SG_PrintCurAllocStats();
+  }
 #endif
 
-    return new;
+  return new;
 }

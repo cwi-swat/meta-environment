@@ -18,18 +18,18 @@
 token SG_EOF_Token;
 token SG_Zero_Token;
 AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
-    SG_Shift_AFun, SG_Reduce_AFun, SG_ReduceLA_AFun, SG_Accept_AFun,
-    SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
+      SG_Shift_AFun, SG_Reduce_AFun, SG_ReduceLA_AFun, SG_Accept_AFun,
+      SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
 #ifndef NO_EAGERNESS
-    SG_Eager_AFun, SG_Uneager_AFun,
+      SG_Eager_AFun, SG_Uneager_AFun,
 #endif
-    SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
-    SG_Action_AFun, SG_Goto_AFun, SG_PT3_AFun, SG_PT4_AFun,
-    SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
-    SG_ParseTreeAF1_AFun, SG_ParseError_AFun, SG_EOF_Error_AFun,
-    SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Error_AFun,
-    SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
-    SG_Offset_AFun;
+      SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
+      SG_Action_AFun, SG_Goto_AFun, SG_PT3_AFun, SG_PT4_AFun,
+      SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
+      SG_ParseTreeAF1_AFun, SG_ParseError_AFun, SG_EOF_Error_AFun,
+      SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Error_AFun,
+      SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
+      SG_Offset_AFun;
 
 /*  A few convenient macros to simplify initialization  */
 
@@ -40,122 +40,122 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
 
 void SG_InitPTGlobals(void)
 {
-    static ATbool inited = ATfalse;
+  static ATbool inited = ATfalse;
 
-    if(inited)
-        return;
+  if(inited)
+    return;
 
-    SG_TOKEN_INIT(SG_EOF_Token,       SG_MAKETOKEN(SG_EOF));
-    SG_TOKEN_INIT(SG_Zero_Token,      SG_MAKETOKEN('\0'));
+  SG_TOKEN_INIT(SG_EOF_Token,       SG_MAKETOKEN(SG_EOF));
+  SG_TOKEN_INIT(SG_Zero_Token,      SG_MAKETOKEN('\0'));
 
-    SG_AFUN_INIT(SG_Regular_AFun,     ATmakeAFun(SG_REGULAR_AFUN,     2, ATfalse));
-    SG_AFUN_INIT(SG_Reject_AFun,      ATmakeAFun(SG_REJECT_AFUN,      2, ATfalse));
-    SG_AFUN_INIT(SG_Eager_AFun,       ATmakeAFun(SG_PREFER_AFUN,      2, ATfalse));
-    SG_AFUN_INIT(SG_Uneager_AFun,     ATmakeAFun(SG_AVOID_AFUN,       2, ATfalse));
-    SG_AFUN_INIT(SG_Aprod_AFun,       ATmakeAFun(SG_APROD_AFUN,       1, ATfalse));
-    SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,	    1, ATfalse));
+  SG_AFUN_INIT(SG_Regular_AFun,     ATmakeAFun(SG_REGULAR_AFUN,     2, ATfalse));
+  SG_AFUN_INIT(SG_Reject_AFun,      ATmakeAFun(SG_REJECT_AFUN,      2, ATfalse));
+  SG_AFUN_INIT(SG_Eager_AFun,       ATmakeAFun(SG_PREFER_AFUN,      2, ATfalse));
+  SG_AFUN_INIT(SG_Uneager_AFun,     ATmakeAFun(SG_AVOID_AFUN,       2, ATfalse));
+  SG_AFUN_INIT(SG_Aprod_AFun,       ATmakeAFun(SG_APROD_AFUN,       1, ATfalse));
+  SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,	    1, ATfalse));
 
-    SG_AFUN_INIT(SG_GtrPrio_AFun,     ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
-    SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
-    SG_AFUN_INIT(SG_RightPrio_AFun,   ATmakeAFun(SG_RIGHTPRIO_AFUN,   2, ATfalse));
+  SG_AFUN_INIT(SG_GtrPrio_AFun,     ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
+  SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
+  SG_AFUN_INIT(SG_RightPrio_AFun,   ATmakeAFun(SG_RIGHTPRIO_AFUN,   2, ATfalse));
 
-    SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
-    SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
-    SG_AFUN_INIT(SG_ReduceLA_AFun,    ATmakeAFun(SG_REDUCE_AFUN,      4, ATfalse));
-    SG_AFUN_INIT(SG_Accept_AFun,      ATmakeAFun(SG_ACCEPT_AFUN,      0, ATfalse));
+  SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
+  SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
+  SG_AFUN_INIT(SG_ReduceLA_AFun,    ATmakeAFun(SG_REDUCE_AFUN,      4, ATfalse));
+  SG_AFUN_INIT(SG_Accept_AFun,      ATmakeAFun(SG_ACCEPT_AFUN,      0, ATfalse));
 
-    SG_AFUN_INIT(SG_Range_AFun,       ATmakeAFun(SG_RANGE_AFUN,       2, ATfalse));
-    SG_AFUN_INIT(SG_CharClass_AFun,   ATmakeAFun(SG_CHARCLASS_AFUN,   1, ATfalse));
-    SG_AFUN_INIT(SG_Action_AFun,      ATmakeAFun(SG_ACTION_AFUN,      2, ATfalse));
-    SG_AFUN_INIT(SG_Goto_AFun,        ATmakeAFun(SG_GOTO_AFUN,        2, ATfalse));
-    SG_AFUN_INIT(SG_PT3_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  3, ATfalse));
-    SG_AFUN_INIT(SG_PT4_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  4, ATfalse));
-    SG_AFUN_INIT(SG_StateRec_AFun,    ATmakeAFun(SG_STATEREC_AFUN,    3, ATfalse));
-    SG_AFUN_INIT(SG_Label_AFun,       ATmakeAFun(SG_LABEL_AFUN,       2, ATfalse));
+  SG_AFUN_INIT(SG_Range_AFun,       ATmakeAFun(SG_RANGE_AFUN,       2, ATfalse));
+  SG_AFUN_INIT(SG_CharClass_AFun,   ATmakeAFun(SG_CHARCLASS_AFUN,   1, ATfalse));
+  SG_AFUN_INIT(SG_Action_AFun,      ATmakeAFun(SG_ACTION_AFUN,      2, ATfalse));
+  SG_AFUN_INIT(SG_Goto_AFun,        ATmakeAFun(SG_GOTO_AFUN,        2, ATfalse));
+  SG_AFUN_INIT(SG_PT3_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  3, ATfalse));
+  SG_AFUN_INIT(SG_PT4_AFun,         ATmakeAFun(SG_PARSETABLE_AFUN,  4, ATfalse));
+  SG_AFUN_INIT(SG_StateRec_AFun,    ATmakeAFun(SG_STATEREC_AFUN,    3, ATfalse));
+  SG_AFUN_INIT(SG_Label_AFun,       ATmakeAFun(SG_LABEL_AFUN,       2, ATfalse));
 
-    SG_AFUN_INIT(SG_Appl_AFun,        ATmakeAFun(SG_APPL_AFUN,        2, ATfalse));
-    SG_AFUN_INIT(SG_ParseTree_AFun,   ATmakeAFun(SG_PARSETREE_AFUN,   2, ATfalse));
-    SG_AFUN_INIT(SG_Term_AFun,        ATmakeAFun(SG_TERM_AFUN,        9, ATfalse));
-    SG_AFUN_INIT(SG_ParseTreeAF1_AFun,ATmakeAFun(SG_AF1PARSETREE_AFUN,1, ATfalse));
-    SG_AFUN_INIT(SG_ParseError_AFun,  ATmakeAFun(SG_PARSEERROR_AFUN,  2, ATfalse));
+  SG_AFUN_INIT(SG_Appl_AFun,        ATmakeAFun(SG_APPL_AFUN,        2, ATfalse));
+  SG_AFUN_INIT(SG_ParseTree_AFun,   ATmakeAFun(SG_PARSETREE_AFUN,   2, ATfalse));
+  SG_AFUN_INIT(SG_Term_AFun,        ATmakeAFun(SG_TERM_AFUN,        9, ATfalse));
+  SG_AFUN_INIT(SG_ParseTreeAF1_AFun,ATmakeAFun(SG_AF1PARSETREE_AFUN,1, ATfalse));
+  SG_AFUN_INIT(SG_ParseError_AFun,  ATmakeAFun(SG_PARSEERROR_AFUN,  2, ATfalse));
 
-    SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
-    SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
-    SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
-    SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 1, ATfalse));
+  SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
+  SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
+  SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
+  SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 1, ATfalse));
 
-    SG_AFUN_INIT(SG_SndValue_AFun,    ATmakeAFun(SG_SNDVALUE_AFUN,    1, ATfalse));
+  SG_AFUN_INIT(SG_SndValue_AFun,    ATmakeAFun(SG_SNDVALUE_AFUN,    1, ATfalse));
 
-    SG_AFUN_INIT(SG_Character_AFun,   ATmakeAFun(SG_CHARACTER_AFUN,   1, ATfalse));
-    SG_AFUN_INIT(SG_Line_AFun,        ATmakeAFun(SG_LINE_AFUN,        1, ATfalse));
-    SG_AFUN_INIT(SG_Col_AFun,         ATmakeAFun(SG_COL_AFUN,         1, ATfalse));
-    SG_AFUN_INIT(SG_Offset_AFun,      ATmakeAFun(SG_OFFSET_AFUN,      1, ATfalse));
+  SG_AFUN_INIT(SG_Character_AFun,   ATmakeAFun(SG_CHARACTER_AFUN,   1, ATfalse));
+  SG_AFUN_INIT(SG_Line_AFun,        ATmakeAFun(SG_LINE_AFUN,        1, ATfalse));
+  SG_AFUN_INIT(SG_Col_AFun,         ATmakeAFun(SG_COL_AFUN,         1, ATfalse));
+  SG_AFUN_INIT(SG_Offset_AFun,      ATmakeAFun(SG_OFFSET_AFUN,      1, ATfalse));
 
-    inited = ATtrue;
+  inited = ATtrue;
 }
 
 /*  The function |SG_ActionKind| analyses an action and returns its kind.  */
 
 actionkind SG_ActionKind(action a)
 {
-    AFun fun = ATgetAFun(a);
+  AFun fun = ATgetAFun(a);
 
-    if(ATisEqual(fun, SG_Reduce_AFun))
-        return REDUCE;
-    if(ATisEqual(fun, SG_ReduceLA_AFun))
-        return REDUCE_LA;
-    if(ATisEqual(fun, SG_Shift_AFun))
-        return SHIFT;
-    if(ATisEqual(fun, SG_Accept_AFun))
-        return ACCEPT;
+  if(ATisEqual(fun, SG_Reduce_AFun))
+    return REDUCE;
+  if(ATisEqual(fun, SG_ReduceLA_AFun))
+    return REDUCE_LA;
+  if(ATisEqual(fun, SG_Shift_AFun))
+    return SHIFT;
+  if(ATisEqual(fun, SG_Accept_AFun))
+    return ACCEPT;
 
-    return ERROR;
+  return ERROR;
 }
 
 #if 0
 state SG_A_STATE(action a)
 {
-    return ATgetInt((ATermInt) ATgetArgument(a, 0));
+  return ATgetInt((ATermInt) ATgetArgument(a, 0));
 }
 
 int SG_A_NR_ARGS(action a)
 {
-    return ATgetInt((ATermInt) ATgetArgument(a, 0));
+  return ATgetInt((ATermInt) ATgetArgument(a, 0));
 }
 
 label  SG_A_PROD(action a)
 {
-    return (label) ATgetInt((ATermInt) ATgetArgument(a, 1));
+  return (label) ATgetInt((ATermInt) ATgetArgument(a, 1));
 }
 
 ATbool    SG_A_ATTRIBUTE(action a)
 {
-    return ATgetInt((ATermInt) ATgetArgument(a, 2));
+  return ATgetInt((ATermInt) ATgetArgument(a, 2));
 }
 
 lookahead SG_A_LOOKAHEAD(action a)
 {
-    return (lookahead) ATgetArgument(a, 3);
+  return (lookahead) ATgetArgument(a, 3);
 }
 
 ATbool SG_RegularAction(action a)
 {
-    return (SG_A_ATTRIBUTE(a) == SG_PT_REGULAR);
+  return (SG_A_ATTRIBUTE(a) == SG_PT_REGULAR);
 }
 
 ATbool SG_RejectAction(action a)
 {
-    return (SG_A_ATTRIBUTE(a) == SG_PT_REJECT);
+  return (SG_A_ATTRIBUTE(a) == SG_PT_REJECT);
 }
 
 ATbool SG_EagerAction(action a);
 {
-    return (SG_A_ATTRIBUTE(a) == SG_PT_EAGER);
+  return (SG_A_ATTRIBUTE(a) == SG_PT_EAGER);
 }
 
 ATbool SG_UneagerAction(action a);
 {
-    return (SG_A_ATTRIBUTE(a) == SG_PT_UNEAGER);
+  return (SG_A_ATTRIBUTE(a) == SG_PT_UNEAGER);
 }
 #endif
 
@@ -164,57 +164,57 @@ ATbool SG_UneagerAction(action a);
 
 hashkey SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
 {
-    hashkey the_key;
+  hashkey the_key;
 
-    the_key =  (l * pt->numstates) + s;
-    the_key *= HASH_PRIME;
-    return the_key % pt->gotos.size;
+  the_key =  (l * pt->numstates) + s;
+  the_key *= HASH_PRIME;
+  return the_key % pt->gotos.size;
 }
 
 /*  Parse Table Lookup  */
 
 state SG_LookupGoto(parse_table *pt, state s, label l)
 {
-    gotobucket *b;
-    hashkey    h;
+  gotobucket *b;
+  hashkey    h;
 
-    h = SG_ComputeGotoHashKey(pt, s, l);
+  h = SG_ComputeGotoHashKey(pt, s, l);
 
-    for(b = pt->gotos.table[h]; b; b=b->next) {
-        if((b->from==s) && (b->l==l)) {
-            IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == %d\n", s, l, b->to))
-            return b->to;
-        }
+  for(b = pt->gotos.table[h]; b; b=b->next) {
+    if((b->from==s) && (b->l==l)) {
+      IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == %d\n", s, l, b->to))
+      return b->to;
     }
+  }
 
-    IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == EOF\n", s, l))
-        return EOF;
+  IF_DEBUG(fprintf(SGlog(), "Goto(%d,%d) == EOF\n", s, l))
+    return EOF;
 }
 
 
 actions SG_LookupAction(parse_table *pt, state s, token c)
 {
-    actionbucket *a;
-    hashkey       h;
+  actionbucket *a;
+  hashkey       h;
 
-    h = SG_ComputeGotoHashKey(pt, s, c);
+  h = SG_ComputeGotoHashKey(pt, s, c);
 
-    for(a = pt->actions.table[h]; a; a=a->next) {
-        if((a->s==s) && (a->c==c)) {
-            IF_DEBUG(
-                     if(ATisEmpty((ATermList) a->a)) {
-                         fprintf(SGlog(), "No action(%d,%d)\n", s, c);
-                     } else if(ATgetLength(a->a) == 1) {
-                         ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, c,
-                                   ATgetFirst((ATermList) a->a));
-                     } else {
-                         ATfprintf(SGlog(), "Conflict(%d,%d) = %t\n", s, c, a->a);
-                     }
-                     )
-            return a->a;
+  for(a = pt->actions.table[h]; a; a=a->next) {
+    if((a->s==s) && (a->c==c)) {
+      IF_DEBUG(
+        if(ATisEmpty((ATermList) a->a)) {
+          fprintf(SGlog(), "No action(%d,%d)\n", s, c);
+        } else if(ATgetLength(a->a) == 1) {
+          ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, c,
+                    ATgetFirst((ATermList) a->a));
+        } else {
+          ATfprintf(SGlog(), "Conflict(%d,%d) = %t\n", s, c, a->a);
         }
+      );
+      return a->a;
     }
-    return (actions) ATempty;
+  }
+  return (actions) ATempty;
 }
 
 
@@ -227,50 +227,51 @@ actions SG_LookupAction(parse_table *pt, state s, token c)
  */
 ATermInt  SG_GetATint(int l, size_t maxprod)
 {
-    static size_t   tblsize = 0;
-    size_t   minsize;
-    static ATermInt *inttbl = NULL;
+  static size_t   tblsize = 0;
+  size_t   minsize;
+  static ATermInt *inttbl = NULL;
 
-    minsize = maxprod+1;
-    if(!inttbl || tblsize < minsize) {
-        if(inttbl) {  /* Resizing the table; unprotect, reprotect needed  */
-            ATunprotectArray((ATerm *) inttbl);
-            inttbl = SG_Realloc(inttbl, minsize, sizeof(ATermInt));
-        } else {
-            inttbl = SG_Malloc(minsize, sizeof(ATermInt));
-        }
-        for(; tblsize < minsize; tblsize++)
-            inttbl[tblsize] = ATmakeInt(tblsize);
-        /*  Protect the new (or grown) table  */
-        ATprotectArray((ATerm *) inttbl, tblsize);
+  minsize = maxprod+1;
+  if(!inttbl || tblsize < minsize) {
+    if(inttbl) {  /* Resizing the table; unprotect, reprotect needed  */
+      ATunprotectArray((ATerm *) inttbl);
+      inttbl = SG_Realloc(inttbl, minsize, sizeof(ATermInt));
+    } else {
+      inttbl = SG_Malloc(minsize, sizeof(ATermInt));
     }
-if(l >= tblsize-1)
-return ATmakeInt(l);
+    for(; tblsize < minsize; tblsize++) {
+      inttbl[tblsize] = ATmakeInt(tblsize);
+    }
+    /*  Protect the new (or grown) table  */
+    ATprotectArray((ATerm *) inttbl, tblsize);
+  }
+  if(l >= tblsize-1)
+    return ATmakeInt(l);
 
-return inttbl[l];
+  return inttbl[l];
 }
 
 production SG_LookupProduction(parse_table *pt, label l)
 {
-    int i = SG_GETLABEL(l);
+  int i = SG_GETLABEL(l);
 
-    if(i >= (SG_PROD_START+SG_PT_NUMPRODS(pt)))
-        return NULL;
+  if(i >= (SG_PROD_START+SG_PT_NUMPRODS(pt)))
+    return NULL;
 
-    return (i <=  SG_CHAR_CLASS_EOF)      ?
-        (production) SG_GetATint(l, 0) :
-        SG_PT_PRODUCTIONS(pt)[i-SG_PROD_START];
+  return (i <=  SG_CHAR_CLASS_EOF)      ?
+    (production) SG_GetATint(l, 0) :
+    SG_PT_PRODUCTIONS(pt)[i-SG_PROD_START];
 }
 
 ATermList SG_LookupPriority(parse_table *pt, label l)
 {
-    return (ATermList) ATtableGet(SG_PT_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
+  return (ATermList) ATtableGet(SG_PT_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
 }
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
 ATbool SG_Rejectable(state s)
 {
-    return ATtrue;
+  return ATtrue;
 }
 #endif
 
@@ -314,86 +315,86 @@ gotobucket   *sg_goto_pool_free = NULL;
 
 void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
 {
-    actionbucket *ab;
-    hashkey       h;
+  actionbucket *ab;
+  hashkey       h;
 
 #if 0     /*  Contrary to naive expectations, this wreaks havoc!  */
-    /****  Start of Ad-Hoc Action Filter  ****/
-    /*
-     Conflicts may occur in the action table; without resorting
-     to explicit disambiguation (rejects, priorities, restrictions, ...)
-     there still are `hints' that may be of use.  The following filter
-     selects a subset of reduce-actions in the following way:
+  /****  Start of Ad-Hoc Action Filter  ****/
+  /*
+   Conflicts may occur in the action table; without resorting
+   to explicit disambiguation (rejects, priorities, restrictions, ...)
+   there still are `hints' that may be of use.  The following filter
+   selects a subset of reduce-actions in the following way:
 
-     - there are four kinds of reduce actions:  regular,
-     reject, prefer, and avoid
-     - preferred reduces take precedence over regular reduces
-     - regular reduces take precedence over default reduces
+   - there are four kinds of reduce actions:  regular,
+   reject, prefer, and avoid
+   - preferred reduces take precedence over regular reduces
+   - regular reduces take precedence over default reduces
 
-     The set of reductions registered is the set of reductions of the
-     highest precedence: if there are preferred reduces, regular and
-     default reduces are ignored.  Otherwise: if there are regular
-     reduces, default reduces disappear.
-     */
-    actions as, preferred = NULL;
-    action  ac;
-    ATbool  haseager, hasregular, hasavoid;
+   The set of reductions registered is the set of reductions of the
+   highest precedence: if there are preferred reduces, regular and
+   default reduces are ignored.  Otherwise: if there are regular
+   reduces, default reduces disappear.
+   */
+  actions as, preferred = NULL;
+  action  ac;
+  ATbool  haseager, hasregular, hasavoid;
 
-    if(ATgetLength(acts) > 1) ATwarning("Actions: %t\n", acts);
+  if(ATgetLength(acts) > 1) ATwarning("Actions: %t\n", acts);
 
-    for(as = acts, haseager = hasregular = hasavoid = ATfalse;
-        !haseager && as && !ATisEmpty(as); as = ATgetNext(as)) {
-        ac = ATgetFirst(as);
-        if(ATgetAFun(ac) == SG_Reduce_AFun) {
-            switch(SG_A_ATTRIBUTE(ac)) {
-                case SG_PT_REGULAR:
-                    hasregular = ATtrue;
-                    break;
-                case SG_PT_EAGER:
-                    haseager = ATtrue;
-                    break;
-                case SG_PT_UNEAGER:
-                    hasavoid = ATtrue;
-                    break;
-                case SG_PT_REJECT:
-                default:
-                    break;
-            }
-        }
+  for(as = acts, haseager = hasregular = hasavoid = ATfalse;
+      !haseager && as && !ATisEmpty(as); as = ATgetNext(as)) {
+    ac = ATgetFirst(as);
+    if(ATgetAFun(ac) == SG_Reduce_AFun) {
+      switch(SG_A_ATTRIBUTE(ac)) {
+        case SG_PT_REGULAR:
+          hasregular = ATtrue;
+          break;
+        case SG_PT_EAGER:
+          haseager = ATtrue;
+          break;
+        case SG_PT_UNEAGER:
+          hasavoid = ATtrue;
+          break;
+        case SG_PT_REJECT:
+        default:
+          break;
+      }
     }
+  }
 
-    if(haseager || (hasregular && hasavoid)) { /*  Exclude certain reductions  */
-        for(as = acts, preferred = ATempty; as && !ATisEmpty(as); as = ATgetNext(as)) {
-            ac = ATgetFirst(as);
-            if(ATgetAFun(ac) != SG_Reduce_AFun ||    /*  Only weed out certain reduces  */
-                (!SG_UneagerAction(ac)           &&    /*  Ditch avoid reductions..  */
-                !(haseager && SG_RegularAction(ac)))) {
-                /*  ...and regulars, iff prefers exist */
-                preferred = ATinsert(preferred, ac);
-            }
-        }
+  if(haseager || (hasregular && hasavoid)) { /*  Exclude certain reductions  */
+    for(as = acts, preferred = ATempty; as && !ATisEmpty(as); as = ATgetNext(as)) {
+      ac = ATgetFirst(as);
+      if(ATgetAFun(ac) != SG_Reduce_AFun ||    /*  Only weed out certain reduces  */
+        (!SG_UneagerAction(ac)           &&    /*  Ditch avoid reductions..  */
+        !(haseager && SG_RegularAction(ac)))) {
+        /*  ...and regulars, iff prefers exist */
+        preferred = ATinsert(preferred, ac);
+      }
     }
+  }
 
 if(preferred && !ATisEmpty(preferred)) {
-    acts = preferred;
+  acts = preferred;
 }
 /****  End of Ad-Hoc Action Filter  ****/
 #endif
 
 if(sg_action_pool_free == NULL) {
-    /* If the action pool is empty, allocate a new chunk of action buckets */
-    size_t         i;
+  /* If the action pool is empty, allocate a new chunk of action buckets */
+  size_t         i;
 
-    sg_action_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(actionbucket));
-    if(!sg_action_pool_free) {
-        ATerror("failed to expand action pool\n");
-    }
+  sg_action_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(actionbucket));
+  if(!sg_action_pool_free) {
+    ATerror("failed to expand action pool\n");
+  }
 
-    for(i=0, ab=sg_action_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
-        ab->next = (actionbucket *) ((size_t) ab + (size_t)sizeof(actionbucket));
-        ab = ab->next;
-    }
-    ab->next = NULL;
+  for(i=0, ab=sg_action_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
+    ab->next = (actionbucket *) ((size_t) ab + (size_t)sizeof(actionbucket));
+    ab = ab->next;
+  }
+  ab->next = NULL;
 }
 ab = sg_action_pool_free;
 sg_action_pool_free = sg_action_pool_free->next;
@@ -412,273 +413,272 @@ pt->actions.table[h] = ab;
 void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
                                 actions acts)
 {
-    ATerm     firstTerm;
+  ATerm     firstTerm;
 
-    for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
-        firstTerm = ATgetFirst(classes);
-        if (ATgetType(firstTerm) == AT_INT) {
-            SG_AddToActionTable(pt, s, ATgetInt((ATermInt) firstTerm), acts);
-        } else {
-            if (ATgetAFun(firstTerm) == SG_Range_AFun) {
-                int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
-                int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
+  for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
+    firstTerm = ATgetFirst(classes);
+    if (ATgetType(firstTerm) == AT_INT) {
+      SG_AddToActionTable(pt, s, ATgetInt((ATermInt) firstTerm), acts);
+    } else {
+      if (ATgetAFun(firstTerm) == SG_Range_AFun) {
+        int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
+        int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-                for(; first <= last; first++)
-                    SG_AddToActionTable(pt, s, first, acts);
-            } else {
-                ATerror("SG_AddClassesToActionTable: bad char-class %t\n", firstTerm);
-            }
-        }
+        for(; first <= last; first++)
+          SG_AddToActionTable(pt, s, first, acts);
+      } else {
+        ATerror("SG_AddClassesToActionTable: bad char-class %t\n", firstTerm);
+      }
     }
+  }
 }
 
 size_t SG_CountClassesInActionTable(ATermList classes)
 {
-    ATerm     firstTerm;
-    size_t    numactions = 0;
+  ATerm     firstTerm;
+  size_t    numactions = 0;
 
-    for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
-        firstTerm = ATgetFirst(classes);
-        if (ATgetType(firstTerm) == AT_INT) {
-            numactions++;
-        } else {
-            if (ATgetAFun(firstTerm) == SG_Range_AFun) {
-                int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
-                int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
+  for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
+    firstTerm = ATgetFirst(classes);
+    if (ATgetType(firstTerm) == AT_INT) {
+      numactions++;
+    } else {
+      if (ATgetAFun(firstTerm) == SG_Range_AFun) {
+        int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
+        int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-                numactions += (last - first) + 1;
-            } else {
-                ATerror("SG_CountClassesInActionTable: bad char-class %t\n", firstTerm);
-            }
-        }
+        numactions += (last - first) + 1;
+      } else {
+        ATerror("SG_CountClassesInActionTable: bad char-class %t\n", firstTerm);
+      }
     }
-    return numactions;
+  }
+  return numactions;
 }
 
 void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
 {
-    ATerm     act;
+  ATerm     act;
 
-    for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
-        act = ATgetFirst(acts);
-        if(ATgetAFun(act) == SG_Action_AFun) {
-            ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);
-            ATerm     t       = ATgetArgument(act, 1);
+  for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
+    act = ATgetFirst(acts);
+    if(ATgetAFun(act) == SG_Action_AFun) {
+      ATermList classes = (ATermList) ATgetArgument(ATgetArgument(act, 0), 0);
+      ATerm     t       = ATgetArgument(act, 1);
 
-            SG_AddClassesToActionTable(pt, s, classes, (actions) t);
-        } else {
-            ATerror("SG_AddPTActions: bad action %t\n", act);
-        }
+      SG_AddClassesToActionTable(pt, s, classes, (actions) t);
+    } else {
+      ATerror("SG_AddPTActions: bad action %t\n", act);
     }
+  }
 }
 
 
 size_t SG_CountPTActions(ATermList acts)
 {
-    ATerm     act;
-    size_t    numactions = 0;
+  ATerm     act;
+  size_t    numactions = 0;
 
-    for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
-        act = ATgetFirst(acts);
-        if(ATgetAFun(act) == SG_Action_AFun) {
-            numactions += SG_CountClassesInActionTable((ATermList)
-                                                       ATgetArgument(ATgetArgument(act, 0), 0));
-        } else {
-            ATerror("SG_CountPTActions: bad action %t\n", act);
-        }
+  for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
+    act = ATgetFirst(acts);
+    if(ATgetAFun(act) == SG_Action_AFun) {
+      numactions += SG_CountClassesInActionTable((ATermList)
+                                                 ATgetArgument(ATgetArgument(act, 0), 0));
+    } else {
+      ATerror("SG_CountPTActions: bad action %t\n", act);
     }
-    return numactions;
+  }
+  return numactions;
 }
 
 
 void SG_AddToGotoTable(parse_table *pt, state from, label l, state to)
 {
-    /*  A goto for label l and state s is guaranteed not to exist  */
+  /*  A goto for label l and state s is guaranteed not to exist  */
 
-    gotobucket *gb;
-    hashkey     h;
+  gotobucket *gb;
+  hashkey     h;
 
+  if(sg_goto_pool_free == NULL) {
+    /* If the goto pool is empty, allocate a new chunk of goto buckets */
+    size_t         i;
 
-    if(sg_goto_pool_free == NULL) {
-        /* If the goto pool is empty, allocate a new chunk of goto buckets */
-        size_t         i;
-
-        sg_goto_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(gotobucket));
-        if(!sg_goto_pool_free) {
-            ATerror("failed to expand goto pool\n");
-        }
-
-        for(i=0, gb=sg_goto_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
-            gb->next = (gotobucket *) ((size_t) gb + (size_t)sizeof(gotobucket));
-            gb = gb->next;
-        }
-        gb->next = NULL;
+    sg_goto_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(gotobucket));
+    if(!sg_goto_pool_free) {
+      ATerror("failed to expand goto pool\n");
     }
-    gb = sg_goto_pool_free;
-    sg_goto_pool_free = sg_goto_pool_free->next;
+
+    for(i=0, gb=sg_goto_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
+      gb->next = (gotobucket *) ((size_t) gb + (size_t)sizeof(gotobucket));
+      gb = gb->next;
+    }
+    gb->next = NULL;
+  }
+  gb = sg_goto_pool_free;
+  sg_goto_pool_free = sg_goto_pool_free->next;
 
 
-    h = SG_ComputeGotoHashKey(pt, from, l);
-    gb->next = pt->gotos.table[h];
-    gb->from = from;
-    gb->l = l;
-    gb->to = to;
-    pt->gotos.table[h] = gb;
+  h = SG_ComputeGotoHashKey(pt, from, l);
+  gb->next = pt->gotos.table[h];
+  gb->from = from;
+  gb->l = l;
+  gb->to = to;
+  pt->gotos.table[h] = gb;
 }
 
 size_t SG_CountClassesInGotoTable(ATermList classes)
 {
-    ATerm     firstTerm;
-    size_t    numgotos = 0;
+  ATerm     firstTerm;
+  size_t    numgotos = 0;
 
-    for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
-        firstTerm = ATgetFirst(classes);
-        if (ATgetType(firstTerm) == AT_INT) {
-            numgotos++;
-        } else {
-            if (ATgetAFun(firstTerm) == SG_Range_AFun) {
-                int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
-                int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
+  for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
+    firstTerm = ATgetFirst(classes);
+    if (ATgetType(firstTerm) == AT_INT) {
+      numgotos++;
+    } else {
+      if (ATgetAFun(firstTerm) == SG_Range_AFun) {
+        int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
+        int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-                numgotos += (last - first) + 1;
-            }
-        }
+        numgotos += (last - first) + 1;
+      }
     }
-    return numgotos;
+  }
+  return numgotos;
 }
 
 void SG_AddClassesToGotoTable(parse_table *pt, state from, ATermList classes,
                               state to)
 {
-    ATerm     firstTerm;
+  ATerm     firstTerm;
 
-    for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
-        firstTerm = ATgetFirst(classes);
-        if (ATgetType(firstTerm) == AT_INT) {
-            SG_AddToGotoTable(pt, from, ATgetInt((ATermInt) firstTerm), to);
-        } else {
-            if (ATgetAFun(firstTerm) == SG_Range_AFun) {
-                int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
-                int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
+  for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
+    firstTerm = ATgetFirst(classes);
+    if (ATgetType(firstTerm) == AT_INT) {
+      SG_AddToGotoTable(pt, from, ATgetInt((ATermInt) firstTerm), to);
+    } else {
+      if (ATgetAFun(firstTerm) == SG_Range_AFun) {
+        int  first = ATgetInt((ATermInt) ATgetArgument(firstTerm, 0));
+        int  last  = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-                for(; first <= last; first++)
-                    SG_AddToGotoTable(pt, from, first, to);
-            } else {
-                ATerror("SG_AddClassesToTable: bad char-class %t\n", firstTerm);
-            }
-        }
+        for(; first <= last; first++)
+          SG_AddToGotoTable(pt, from, first, to);
+      } else {
+        ATerror("SG_AddClassesToTable: bad char-class %t\n", firstTerm);
+      }
     }
+  }
 }
 
 size_t SG_CountPTGotos(ATermList goto_lst)
 {
-    ATerm     firstTerm;
-    size_t    numgotos = 0;
+  ATerm     firstTerm;
+  size_t    numgotos = 0;
 
-    for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
-        if (ATgetAFun(firstTerm = ATgetFirst(goto_lst)) == SG_Goto_AFun) {
-            numgotos += SG_CountClassesInGotoTable((ATermList)
-                                                   ATgetArgument(ATgetArgument(firstTerm, 0), 0));
-        }
+  for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
+    if (ATgetAFun(firstTerm = ATgetFirst(goto_lst)) == SG_Goto_AFun) {
+      numgotos += SG_CountClassesInGotoTable((ATermList)
+                                             ATgetArgument(ATgetArgument(firstTerm, 0), 0));
     }
-    return numgotos;
+  }
+  return numgotos;
 }
 
 
 void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods)
 {
-    ATerm     firstTerm;
+  ATerm     firstTerm;
 
-    for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
-        if (ATgetAFun(firstTerm = ATgetFirst(goto_lst)) == SG_Goto_AFun) {
-            ATermList classes;
-            state     s2;
+  for (; !ATisEmpty(goto_lst); goto_lst = ATgetNext(goto_lst)) {
+    if (ATgetAFun(firstTerm = ATgetFirst(goto_lst)) == SG_Goto_AFun) {
+      ATermList classes;
+      state     s2;
 
-            classes = (ATermList) ATgetArgument(ATgetArgument(firstTerm, 0), 0);
-            s2 = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
+      classes = (ATermList) ATgetArgument(ATgetArgument(firstTerm, 0), 0);
+      s2 = ATgetInt((ATermInt) ATgetArgument(firstTerm, 1));
 
-            SG_AddClassesToGotoTable(pt, s, classes, s2);
-        } else {
-            ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", firstTerm);
-        }
+      SG_AddClassesToGotoTable(pt, s, classes, s2);
+    } else {
+      ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", firstTerm);
     }
+  }
 }
 
 size_t SG_CountPTStates(ATermList states)
 {
-    ATerm     curstate;
-    size_t    numgotos = 0;
+  ATerm     curstate;
+  size_t    numgotos = 0;
 
-    for(; !ATisEmpty(states); states=ATgetNext(states)) {
-        if(ATgetAFun(curstate = ATgetFirst(states)) == SG_StateRec_AFun) {
-            ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
+  for(; !ATisEmpty(states); states=ATgetNext(states)) {
+    if(ATgetAFun(curstate = ATgetFirst(states)) == SG_StateRec_AFun) {
+      ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
 
-            numgotos += SG_CountPTGotos(gotos);
-        }
+      numgotos += SG_CountPTGotos(gotos);
     }
-    return numgotos;
+  }
+  return numgotos;
 }
 
 void SG_AddPTStates(parse_table *pt, ATermList states)
 {
-    ATerm     curstate;
-    int       numgotos = 0, numactions = 0;
+  ATerm     curstate;
+  int       numgotos = 0, numactions = 0;
 
-    for(; !ATisEmpty(states); states=ATgetNext(states)) {
-        if(ATgetAFun(curstate = ATgetFirst(states)) == SG_StateRec_AFun) {
-            state s         = ATgetInt((ATermInt) ATgetArgument(curstate, 0));
-            ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
-            ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
+  for(; !ATisEmpty(states); states=ATgetNext(states)) {
+    if(ATgetAFun(curstate = ATgetFirst(states)) == SG_StateRec_AFun) {
+      state s         = ATgetInt((ATermInt) ATgetArgument(curstate, 0));
+      ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
+      ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
 
-            IF_STATISTICS(numgotos+=ATgetLength(gotos); numactions+=ATgetLength(acts))
-                SG_AddPTGotos(pt, s, gotos, SG_PT_NUMPRODS(pt));
-            SG_AddPTActions(pt, s, acts);
-        } else {
-            ATerror("SG_AddPTStates: bad state-rec %t\n", curstate);
-        }
+      IF_STATISTICS(numgotos+=ATgetLength(gotos); numactions+=ATgetLength(acts))
+        SG_AddPTGotos(pt, s, gotos, SG_PT_NUMPRODS(pt));
+      SG_AddPTActions(pt, s, acts);
+    } else {
+      ATerror("SG_AddPTStates: bad state-rec %t\n", curstate);
     }
-    IF_STATISTICS(fprintf(SGlog(), "No. of gotos: %d\nNo. of actions: %d\n",
-                          numgotos, numactions))
+  }
+  IF_STATISTICS(fprintf(SGlog(), "No. of gotos: %d\nNo. of actions: %d\n",
+                        numgotos, numactions));
 }
 
 ATbool SG_Injection(production prod)
 {
-    production in;
+  production in;
 
-    if(ATmatch((ATerm) prod, "prod([<term>],cf(sort(<str>)),<term>)",
-               &in, NULL, NULL)) {
-        if(ATmatch((ATerm) in, "lit(<str>)", NULL))
-            return ATfalse;
-        else
-            return ATtrue;
-    }
+  if(ATmatch((ATerm) prod, "prod([<term>],cf(sort(<str>)),<term>)",
+             &in, NULL, NULL)) {
+    if(ATmatch((ATerm) in, "lit(<str>)", NULL))
+      return ATfalse;
+    else
+      return ATtrue;
+  }
 
-    if(ATmatch((ATerm) prod, "prod([<term>],lex(sort(<str>)),<term>)",
-               &in, NULL, NULL)) {
-        if(ATmatch((ATerm) in, "lit(<str>)", NULL))
-            return ATfalse;
-        else
-            return ATtrue;
-    }
+  if(ATmatch((ATerm) prod, "prod([<term>],lex(sort(<str>)),<term>)",
+             &in, NULL, NULL)) {
+    if(ATmatch((ATerm) in, "lit(<str>)", NULL))
+      return ATfalse;
+    else
+      return ATtrue;
+  }
 
-    return ATfalse;
+  return ATfalse;
 }
 
 void SG_AddProduction(productiontable tbl, label lbl, production prod)
 {
-    tbl[SG_GETLABEL(lbl)-SG_PROD_START] = prod;
-    ATprotect((ATerm *) &tbl[SG_GETLABEL(lbl)-SG_PROD_START]);
+  tbl[SG_GETLABEL(lbl)-SG_PROD_START] = prod;
+  ATprotect((ATerm *) &tbl[SG_GETLABEL(lbl)-SG_PROD_START]);
 }
 
 void SG_AddInjection(injectiontable tbl, label lbl, ATbool is_inject)
 {
-    tbl[SG_GETLABEL(lbl)-SG_PROD_START] = is_inject;
+  tbl[SG_GETLABEL(lbl)-SG_PROD_START] = is_inject;
 }
 
 
 ATbool SG_ProdIsInjection(parse_table *pt, label l)
 {
-    return SG_PT_INJECTIONS(pt)[SG_GETLABEL(l)-SG_PROD_START];
+  return SG_PT_INJECTIONS(pt)[SG_GETLABEL(l)-SG_PROD_START];
 }
 
 /*
@@ -688,73 +688,73 @@ ATbool SG_ProdIsInjection(parse_table *pt, label l)
  */
 void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
 {
-    ATerm prod;
+  ATerm prod;
 
-    for (; !ATisEmpty(grammar); grammar = ATgetNext(grammar)) {
-        if(ATgetAFun(prod = ATgetFirst(grammar)) == SG_Label_AFun) {
-            production pr_prod  = (production) ATgetArgument(prod, 0);
-            label      pr_label = ATgetInt((ATermInt) ATgetArgument(prod, 1));
+  for (; !ATisEmpty(grammar); grammar = ATgetNext(grammar)) {
+    if(ATgetAFun(prod = ATgetFirst(grammar)) == SG_Label_AFun) {
+      production pr_prod  = (production) ATgetArgument(prod, 0);
+      label      pr_label = ATgetInt((ATermInt) ATgetArgument(prod, 1));
 
-            if(pr_label == SG_EOF)
-                ATerror("error, obsolete parse table format\n");
-            if(pr_label <  SG_PROD_START
-               || pr_label >= SG_PROD_START+SG_PT_NUMPRODS(pt))
-                ATerror("SG_AddPTGrammar: production %d out of range (%d..%d)\n",
-                        pr_label, SG_PROD_START, SG_PROD_START+SG_PT_NUMPRODS(pt)-1);
-            SG_AddProduction(SG_PT_PRODUCTIONS(pt), pr_label, pr_prod);
-            SG_AddInjection(SG_PT_INJECTIONS(pt), pr_label, SG_Injection(pr_prod));
-        } else {
-            ATerror("SG_AddPTGrammar: bad production %t\n", prod);
-        }
+      if(pr_label == SG_EOF)
+        ATerror("error, obsolete parse table format\n");
+      if(pr_label <  SG_PROD_START
+         || pr_label >= SG_PROD_START+SG_PT_NUMPRODS(pt))
+        ATerror("SG_AddPTGrammar: production %d out of range (%d..%d)\n",
+                pr_label, SG_PROD_START, SG_PROD_START+SG_PT_NUMPRODS(pt)-1);
+      SG_AddProduction(SG_PT_PRODUCTIONS(pt), pr_label, pr_prod);
+      SG_AddInjection(SG_PT_INJECTIONS(pt), pr_label, SG_Injection(pr_prod));
+    } else {
+      ATerror("SG_AddPTGrammar: bad production %t\n", prod);
     }
+  }
 }
 
 enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT };
 
 void SG_AddPTPriorities(parse_table *pt, ATermList prios)
 {
-    ATerm     prio;
-    AFun      fun;
-    ATermList args;
-    ATermInt  pr_num1, pr_num2;
-    int       ptype = P_IGNORE;
+  ATerm     prio;
+  AFun      fun;
+  ATermList args;
+  ATermInt  pr_num1, pr_num2;
+  int       ptype = P_IGNORE;
 
-    for (; !ATisEmpty(prios); prios = ATgetNext(prios)) {
-        prio = ATgetFirst(prios);
-        fun = ATgetAFun(prio);
-        if(ATisEqual(fun, SG_GtrPrio_AFun)) {
-            ptype = P_GTR;
-        } else if(ATisEqual(fun, SG_LeftPrio_AFun)) {
-            ptype = P_LEFT;
-        } else if(ATisEqual(fun, SG_RightPrio_AFun)) {
-            ptype = P_RIGHT;
-        } else {
-            ptype = P_IGNORE;
-        }
-        if(ptype != P_IGNORE) {
-            ATermList prev;
-
-            args = ATgetArguments((ATermAppl) prio);
-            pr_num1 = (ATermInt) ATelementAt(args, 0);
-            pr_num2 = (ATermInt) ATelementAt(args, 1);
-            switch(ptype) {
-                case P_GTR:
-                    if(ATisEqual(pr_num1, pr_num2))
-                        break;
-                    if(!(prev = (ATermList) ATtableGet(SG_PT_PRIORITIES(pt),
-                                                       (ATerm) pr_num1))) {
-                        ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
-                                   (ATerm) ATmakeList1((ATerm) pr_num2));
-                    } else {
-                        ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
-                                   (ATerm) ATinsert(prev, (ATerm) pr_num2));
-                    }
-                        break;
-                default:
-                    break;
-            }
-        }
+  for (; !ATisEmpty(prios); prios = ATgetNext(prios)) {
+    prio = ATgetFirst(prios);
+    fun = ATgetAFun(prio);
+    if(ATisEqual(fun, SG_GtrPrio_AFun)) {
+      ptype = P_GTR;
+    } else if(ATisEqual(fun, SG_LeftPrio_AFun)) {
+      ptype = P_LEFT;
+    } else if(ATisEqual(fun, SG_RightPrio_AFun)) {
+      ptype = P_RIGHT;
+    } else {
+      ptype = P_IGNORE;
     }
+    if(ptype != P_IGNORE) {
+      ATermList prev;
+
+      args = ATgetArguments((ATermAppl) prio);
+      pr_num1 = (ATermInt) ATelementAt(args, 0);
+      pr_num2 = (ATermInt) ATelementAt(args, 1);
+      switch(ptype) {
+        case P_GTR:
+          if(ATisEqual(pr_num1, pr_num2))
+            break;
+          if(!(prev = (ATermList) ATtableGet(SG_PT_PRIORITIES(pt),
+                                             (ATerm) pr_num1))) {
+            ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
+                       (ATerm) ATmakeList1((ATerm) pr_num2));
+          } else {
+            ATtablePut(SG_PT_PRIORITIES(pt), (ATerm) pr_num1,
+                       (ATerm) ATinsert(prev, (ATerm) pr_num2));
+          }
+            break;
+        default:
+          break;
+      }
+    }
+  }
 }
 
 
@@ -763,124 +763,124 @@ void SG_AddPTPriorities(parse_table *pt, ATermList prios)
 parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
                               size_t action_entries, size_t goto_entries)
 {
-    parse_table *pt;
-    size_t      tableclass, tablesize;
+  parse_table *pt;
+  size_t      tableclass, tablesize;
 
-    IF_STATISTICS(fprintf(SGlog(), "No. of states: %ld\n"
-                          "No. of productions: %ld\n"
-                          "No. of action entries: %ld\n"
-                          "No. of goto entries: %ld\n",
-                          (long) numstates, (long) numprods,
-                          (long) action_entries, (long) goto_entries))
+  IF_STATISTICS(fprintf(SGlog(), "No. of states: %ld\n"
+                        "No. of productions: %ld\n"
+                        "No. of action entries: %ld\n"
+                        "No. of goto entries: %ld\n",
+                        (long) numstates, (long) numprods,
+                        (long) action_entries, (long) goto_entries));
 
-        pt               = SG_Calloc(1, sizeof(struct _parse_table));
-    pt->initial      = initial;
-    pt->numstates    = numstates;
-    pt->numprods     = numprods;
+  pt               = SG_Calloc(1, sizeof(struct _parse_table));
+  pt->initial      = initial;
+  pt->numstates    = numstates;
+  pt->numprods     = numprods;
 
-    /*  Action table -- determine upper size/class bound, and initialize  */
-    for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < action_entries;
-        tablesize <<= 1) {
-        tableclass++;
-    }
-    pt->actions.sizeclass = tableclass;
-    pt->actions.size      = tablesize;
-    pt->actions.table     = SG_Calloc(tablesize, sizeof(actionbucket *));
-    if(!pt->actions.table) {
-        ATerror("could not allocate action table of size %d\n", tablesize);
-    }
+  /*  Action table -- determine upper size/class bound, and initialize  */
+  for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < action_entries;
+      tablesize <<= 1) {
+    tableclass++;
+  }
+  pt->actions.sizeclass = tableclass;
+  pt->actions.size      = tablesize;
+  pt->actions.table     = SG_Calloc(tablesize, sizeof(actionbucket *));
+  if(!pt->actions.table) {
+    ATerror("could not allocate action table of size %d\n", tablesize);
+  }
 
-    /*  Goto table -- determine upper size/class bound, and initialize  */
-    for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < goto_entries;
-        tablesize <<= 1) {
-        tableclass++;
-    }
-    pt->gotos.sizeclass = tableclass;
-    pt->gotos.size      = tablesize;
-    pt->gotos.table     = SG_Calloc(tablesize, sizeof(gotobucket *));
-    if(!pt->gotos.table) {
-        ATerror("could not allocate goto table of size %d\n", tablesize);
-    }
+  /*  Goto table -- determine upper size/class bound, and initialize  */
+  for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < goto_entries;
+      tablesize <<= 1) {
+    tableclass++;
+  }
+  pt->gotos.sizeclass = tableclass;
+  pt->gotos.size      = tablesize;
+  pt->gotos.table     = SG_Calloc(tablesize, sizeof(gotobucket *));
+  if(!pt->gotos.table) {
+    ATerror("could not allocate goto table of size %d\n", tablesize);
+  }
 
-    pt->productions  = SG_Calloc(numprods, sizeof(production));
-    if(!pt->productions) {
-        ATerror("could not allocate %d productions\n", numprods);
-    }
-    pt->injections  = SG_Calloc(numprods, sizeof(ATbool));
-    if(!pt->injections) {
-        ATerror("could not allocate %d booleans\n", numprods);
-    }
-    pt->priorities   = ATtableCreate(numprods, 75);
+  pt->productions  = SG_Calloc(numprods, sizeof(production));
+  if(!pt->productions) {
+    ATerror("could not allocate %d productions\n", numprods);
+  }
+  pt->injections  = SG_Calloc(numprods, sizeof(ATbool));
+  if(!pt->injections) {
+    ATerror("could not allocate %d booleans\n", numprods);
+  }
+  pt->priorities   = ATtableCreate(numprods, 75);
 
-    SG_GetATint(0, numprods+SG_CHAR_CLASS_EOF+1);
+  SG_GetATint(0, numprods+SG_CHAR_CLASS_EOF+1);
 
-    return pt;
+  return pt;
 }
 
 /*  Parse Table Destruction  */
 
 void SG_DiscardActions(parse_table *pt)
 {
-    size_t      s;
-    actionbucket *a, *next;
+  size_t      s;
+  actionbucket *a, *next;
 
-    for(s=0; s<pt->actions.size; s++) {
-        for(a = pt->actions.table[s]; a; a=next) {
-            ATunprotect((ATerm *) &(a->a));
-            next    = a->next;
-            a->next = sg_action_pool_free;        /*  Feed pool for later perusal  */
-            sg_action_pool_free = a;
-        }
+  for(s=0; s<pt->actions.size; s++) {
+    for(a = pt->actions.table[s]; a; a=next) {
+      ATunprotect((ATerm *) &(a->a));
+      next    = a->next;
+      a->next = sg_action_pool_free;        /*  Feed pool for later perusal  */
+      sg_action_pool_free = a;
     }
-    SG_Free(pt->actions.table);
+  }
+  SG_Free(pt->actions.table);
 }
 
 void SG_DiscardGotos(parse_table *pt)
 {
-    size_t      s;
-    gotobucket *g, *next;
+  size_t      s;
+  gotobucket *g, *next;
 
-    for(s=0; s<pt->gotos.size; s++) {
-        for(g = pt->gotos.table[s]; g; g=next) {
-            next = g->next;
-            g->next = sg_goto_pool_free;          /*  Feed pool for later perusal  */
-            sg_goto_pool_free = g;
-        }
+  for(s=0; s<pt->gotos.size; s++) {
+    for(g = pt->gotos.table[s]; g; g=next) {
+      next = g->next;
+      g->next = sg_goto_pool_free;          /*  Feed pool for later perusal  */
+      sg_goto_pool_free = g;
     }
-    SG_Free(pt->gotos.table);
+  }
+  SG_Free(pt->gotos.table);
 }
 
 void SG_DiscardProductions(parse_table *pt)
 {
-    int p;
+  int p;
 
-    for(p=0; p<SG_PT_NUMPRODS(pt); p++) {
-        if(pt->productions[p] != NULL) {
-            ATunprotect((ATerm *) &pt->productions[p]);
-        }
+  for(p=0; p<SG_PT_NUMPRODS(pt); p++) {
+    if(pt->productions[p] != NULL) {
+      ATunprotect((ATerm *) &pt->productions[p]);
     }
-    SG_Free(pt->productions);
+  }
+  SG_Free(pt->productions);
 }
 
 void SG_DiscardInjections(parse_table *pt)
 {
-    SG_Free(pt->injections);
+  SG_Free(pt->injections);
 }
 
 void SG_DiscardPriorities(parse_table *pt)
 {
-    ATtableDestroy(pt->priorities);
+  ATtableDestroy(pt->priorities);
 }
 
 void SG_DiscardParseTable(parse_table *pt)
 {
-    SG_DiscardActions(pt);
-    SG_DiscardGotos(pt);
-    SG_DiscardProductions(pt);
-    SG_DiscardInjections(pt);
-    SG_DiscardPriorities(pt);
+  SG_DiscardActions(pt);
+  SG_DiscardGotos(pt);
+  SG_DiscardProductions(pt);
+  SG_DiscardInjections(pt);
+  SG_DiscardPriorities(pt);
 
-    SG_Free(pt);
+  SG_Free(pt);
 }
 
 
@@ -893,33 +893,33 @@ void SG_DiscardParseTable(parse_table *pt)
 
 parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
 {
-    FILE        *input_file;
-    parse_table *pt = NULL;
+  FILE        *input_file;
+  parse_table *pt = NULL;
 
-    SG_InitPTGlobals();
-    if((input_file = SGopenFile(prgname, "parse table not specified", FN)) == NULL) {
-        return NULL;
-    }
+  SG_InitPTGlobals();
+  if((input_file = SGopenFile(prgname, "parse table not specified", FN)) == NULL) {
+    return NULL;
+  }
 
-    IF_STATISTICS(fprintf(SGlog(), "Language: %s\n", L); SG_Timer())
+  IF_STATISTICS(fprintf(SGlog(), "Language: %s\n", L); SG_Timer());
 
-        pt = SG_BuildParseTable((ATermAppl) ATreadFromFile(input_file));
+  pt = SG_BuildParseTable((ATermAppl) ATreadFromFile(input_file));
 
-    IF_STATISTICS(fprintf(SGlog(),
-                          "Obtaining parse table for %s took %.4fs\n",
-                          L, SG_Timer()))
+  IF_STATISTICS(fprintf(SGlog(),
+                        "Obtaining parse table for %s took %.4fs\n",
+                        L, SG_Timer()));
 
-        SGcloseFile(input_file);
-    if(pt)
-        SG_SaveParseTable(L, pt);
+  SGcloseFile(input_file);
+  if(pt)
+    SG_SaveParseTable(L, pt);
 
-    return pt;
+  return pt;
 }
 
 void SG_RemoveParseTable(char *L)
 {
-    if(SG_LookupParseTable(L, ATtrue))
-        SG_ClearParseTable(L);
+  if(SG_LookupParseTable(L, ATtrue))
+    SG_ClearParseTable(L);
 }
 
 /*
@@ -934,76 +934,74 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 #define SG_OLDPTFORMAT  "<int>,[<list>],states([<list>])"
 #define SG_PTFORMAT     SG_OLDPTFORMAT",priorities([<list>])"
 
-    ATermList   prods, states, sts, prios = ATempty;
-    state       initial_state;
-    parse_table *pt = NULL;
-    AFun        ptfun;
-    size_t      goto_entries = 0, action_entries = 0;
-    long        maxrss = 0, allocated;
+  ATermList   prods, states, sts, prios = ATempty;
+  state       initial_state;
+  parse_table *pt = NULL;
+  AFun        ptfun;
+  size_t      goto_entries = 0, action_entries = 0;
+  long        maxrss = 0, allocated;
 
-    ptfun = ATgetAFun(t);
+  ptfun = ATgetAFun(t);
 
-    if(ptfun != SG_PT3_AFun && ptfun != SG_PT4_AFun) {
-        ATwarning("parse table format error\n");
-        return NULL;
+  if(ptfun != SG_PT3_AFun && ptfun != SG_PT4_AFun) {
+    ATwarning("parse table format error\n");
+    return NULL;
+  }
+
+  initial_state = ATgetInt((ATermInt) ATgetArgument(t, 0));
+  prods = (ATermList) ATgetArgument(t, 1);
+  states = (ATermList) ATgetArgument(ATgetArgument(t, 2), 0);
+  if(ptfun == SG_PT4_AFun)
+    prios = (ATermList) ATgetArgument(ATgetArgument(t, 3), 0);
+
+  for(sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
+    ATerm     curstate = ATgetFirst(sts);
+    if(ATgetAFun(curstate) == SG_StateRec_AFun) {
+      ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
+      ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
+
+      goto_entries += SG_CountPTGotos(gotos);
+      action_entries += SG_CountPTActions(acts);
     }
+  }
 
-    initial_state = ATgetInt((ATermInt) ATgetArgument(t, 0));
-    prods = (ATermList) ATgetArgument(t, 1);
-    states = (ATermList) ATgetArgument(ATgetArgument(t, 2), 0);
-    if(ptfun == SG_PT4_AFun)
-        prios = (ATermList) ATgetArgument(ATgetArgument(t, 3), 0);
+  IF_STATISTICS(maxrss = SG_ResidentSetSize());
 
-    for(sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
-        ATerm     curstate = ATgetFirst(sts);
-        if(ATgetAFun(curstate) == SG_StateRec_AFun) {
-            ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
-            ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);
+  pt = SG_NewParseTable(initial_state, ATgetLength(states), ATgetLength(prods),
+                        action_entries, goto_entries);
 
-            goto_entries += SG_CountPTGotos(gotos);
-            action_entries += SG_CountPTActions(acts);
-        }
-    }
+  IF_STATISTICS(
+    allocated = SG_Allocated();
+    if(allocated > 0)
+    fprintf(SGlog(), "[mem] extra ATerm memory allocated for empty table: %ld\n",
+            allocated);
+    if(maxrss)
+    fprintf(SGlog(), "[mem] PT build: %ld before, %ld after table creation\n",
+            maxrss, SG_ResidentSetSize());
+    maxrss = SG_ResidentSetSize();
+  );
 
-    IF_STATISTICS(
-                  maxrss = SG_ResidentSetSize();
-                  )
+  SG_AddPTStates(pt, states);
+  SG_AddPTGrammar(pt, prods);
 
-        pt = SG_NewParseTable(initial_state, ATgetLength(states), ATgetLength(prods),
-                              action_entries, goto_entries);
+  if(!ATisEmpty(prios)) {
+    /*  Successful match, priorities included  */
+    SG_AddPTPriorities(pt, prios);
+  } else {
+    IF_VERBOSE(ATwarning("warning: no priority information in parse table\n"))
+  }
 
-    IF_STATISTICS(
-                  allocated = SG_Allocated();
-                  if(allocated > 0)
-                  fprintf(SGlog(), "[mem] extra ATerm memory allocated for empty table: %ld\n",
-                          allocated);
-                  if(maxrss)
-                  fprintf(SGlog(), "[mem] PT build: %ld before, %ld after table creation\n",
-                          maxrss, SG_ResidentSetSize());
-                  maxrss = SG_ResidentSetSize();
-                  )
+  IF_STATISTICS(
+    allocated = SG_Allocated();
+    if(allocated > 0)
+    fprintf(SGlog(), "[mem] extra ATerm memory allocated while filling table: %ld\n",
+            allocated);
+    if(maxrss)
+    fprintf(SGlog(), "[mem] PT build: %ld before, %ld after filling table\n",
+            maxrss, SG_ResidentSetSize());
+  );
 
-        SG_AddPTStates(pt, states);
-    SG_AddPTGrammar(pt, prods);
-
-    if(!ATisEmpty(prios)) {
-        /*  Successful match, priorities included  */
-        SG_AddPTPriorities(pt, prios);
-    } else {
-        IF_VERBOSE(ATwarning("warning: no priority information in parse table\n"))
-    }
-
-    IF_STATISTICS(
-                  allocated = SG_Allocated();
-                  if(allocated > 0)
-                  fprintf(SGlog(), "[mem] extra ATerm memory allocated while filling table: %ld\n",
-                          allocated);
-                  if(maxrss)
-                  fprintf(SGlog(), "[mem] PT build: %ld before, %ld after filling table\n",
-                          maxrss, SG_ResidentSetSize());
-                  )
-
-        return pt;
+  return pt;
 }
 
 /*  Parse Table Database  */
@@ -1011,8 +1009,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 #define MAX_TABLES 4
 
 typedef struct _ptdb {
-    char *name;
-    parse_table *table;
+  char *name;
+  parse_table *table;
 } PTDB;
 static PTDB tables[MAX_TABLES];
 static int last_table = 0;
@@ -1025,86 +1023,84 @@ static int last_table = 0;
 
 void SG_SaveParseTable(char *L, parse_table *pt)
 {
-    /*  Remove table for L, if already present  */
-    SG_RemoveParseTable(L);
+  /*  Remove table for L, if already present  */
+  SG_RemoveParseTable(L);
 
-    if (last_table >= MAX_TABLES) {
-        if(SG_VERBOSE) {
-            /*  Full?  Ditch oldest table in copybook^h^h^h^h^h^h^h^hdatabase  */
-            ATwarning("maximum number (%d) of languages reached\n"
-                      "removing table for %s to make room for %s\n",
-                      MAX_TABLES, tables[0].name, L);
-        }
-        SG_ClearParseTable(tables[0].name);
+  if (last_table >= MAX_TABLES) {
+    if(SG_VERBOSE) {
+      /*  Full?  Ditch oldest table in copybook^h^h^h^h^h^h^h^hdatabase  */
+      ATwarning("maximum number (%d) of languages reached\n"
+                "removing table for %s to make room for %s\n",
+                MAX_TABLES, tables[0].name, L);
     }
+    SG_ClearParseTable(tables[0].name);
+  }
 
-    /*  Add L in the next free slot  */
-    tables[last_table].name  = strdup(L);
-    tables[last_table].table = pt;
-    IF_DEBUG(fprintf(SGlog(),
-                     "Table for %s added to parse table database with index %d\n",
-                     L, last_table))
-        last_table++;
+  /*  Add L in the next free slot  */
+  tables[last_table].name  = strdup(L);
+  tables[last_table].table = pt;
+  IF_DEBUG(fprintf(SGlog(),
+                   "Table for %s added to parse table database with index %d\n",
+                   L, last_table));
+  last_table++;
 }
 
 void SG_ClearParseTable(char *L)
 {
-    int  i, j;
-    long maxrss = 0;
+  int  i, j;
+  long maxrss = 0;
 
-    /*  Locate L in parse table database  */
-    for (i = 0; i < last_table && strcmp(L, tables[i].name); i++);
-    if (i >= MAX_TABLES) {
-        ATwarning("no table for %s amongst the %d stored\n",
-                  L, MAX_TABLES);
-        return;
-    }
+  /*  Locate L in parse table database  */
+  for (i = 0; i < last_table && strcmp(L, tables[i].name); i++);
+  if (i >= MAX_TABLES) {
+    ATwarning("no table for %s amongst the %d stored\n",
+              L, MAX_TABLES);
+    return;
+  }
 
-    IF_STATISTICS(
-                  maxrss = SG_ResidentSetSize();
-                  )
+  IF_STATISTICS(maxrss = SG_ResidentSetSize());
 
-        /*  L has index i  */
-        SG_Free(tables[i].name);
-    SG_DiscardParseTable(tables[i].table);
-    tables[i].name  = NULL;
-    tables[i].table = NULL;
+  /*  L has index i  */
+  SG_Free(tables[i].name);
+  SG_DiscardParseTable(tables[i].table);
+  tables[i].name  = NULL;
+  tables[i].table = NULL;
 
-    /*  Shift rest of database  */
-    for (j = i+1; j < last_table; j++) {
-        tables[j-1].name  = tables[j].name;
-        tables[j-1].table = tables[j].table;
-    }
-    last_table--;
+  /*  Shift rest of database  */
+  for (j = i+1; j < last_table; j++) {
+    tables[j-1].name  = tables[j].name;
+    tables[j-1].table = tables[j].table;
+  }
+  last_table--;
 
-    IF_STATISTICS(
-                  if(maxrss)
-                  fprintf(SGlog(), "[mem] PT cleared: %ld before, %ld after\n",
-                          maxrss, SG_ResidentSetSize());
-                  fprintf(SGlog(), "Table for %s removed from parse table database\n", L)
-                  )
+  IF_STATISTICS(
+    if(maxrss)
+    fprintf(SGlog(), "[mem] PT cleared: %ld before, %ld after\n",
+            maxrss, SG_ResidentSetSize());
+    fprintf(SGlog(), "Table for %s removed from parse table database\n", L)
+  );
 }
 
 parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
 {
-    int i = 0;
+  int i = 0;
 
-    IF_DEBUG(fprintf(SGlog(), "Request for language %s\n", L))
+  IF_DEBUG(fprintf(SGlog(), "Request for language %s\n", L));
 
-        for (; L && i < last_table; i++)
-            if (!strcmp(L, tables[i].name)) {
-                IF_DEBUG(fprintf(SGlog(),
-                                 "Table for language %s available with index %d\n", L, i))
-                return tables[i].table;
-            } else IF_DEBUG(fprintf(SGlog(), "Table for %s not at index %d (%s)\n",
-                                    L, i, tables[i].name))
+  for (; L && i < last_table; i++)
+    if (!strcmp(L, tables[i].name)) {
+      IF_DEBUG(fprintf(SGlog(),
+                       "Table for language %s available with index %d\n", L, i))
+      return tables[i].table;
+    } else IF_DEBUG(fprintf(SGlog(), "Table for %s not at index %d (%s)\n",
+                            L, i, tables[i].name));
 
-                IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
-                                 L, MAX_TABLES))
-                if(!may_fail) {
-                    ATwarning("table for %s not amongst the %d stored\n", L, MAX_TABLES);
-                    ATerror("no language %s open\n", L);
-                }
+  IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
+                   L, MAX_TABLES));
+  if(!may_fail) {
+    ATwarning("table for %s not amongst the %d stored\n", L, MAX_TABLES);
+    ATerror("no language %s open\n", L);
+  }
 
-                return NULL;
+  return NULL;
 }

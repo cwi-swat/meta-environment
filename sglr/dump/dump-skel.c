@@ -14,10 +14,10 @@ void DoDump(parse_table *pt, int requested);
 
 void usage(char *prg)
 {
-    fprintf(stderr, "usage: %s [parse-table [state]]\n", prg);
-    fprintf(stderr, "note that no -at-xxx options can be used, "
-            "except -at-help :-(\n");
-    exit(0);
+  fprintf(stderr, "usage: %s [parse-table [state]]\n", prg);
+  fprintf(stderr, "note that no -at-xxx options can be used, "
+          "except -at-help :-(\n");
+  exit(0);
 }
 
 int main (int argc, char **argv)

@@ -16,29 +16,29 @@ void AT_collect(int size);
 typedef unsigned int  hashkey;
 
 typedef struct _abucket {
-    struct _abucket *next;
-    state            s;
-    token            c;
-    actions          a;
+  struct _abucket *next;
+  state            s;
+  token            c;
+  actions          a;
 } actionbucket;
 
 typedef struct _actiontable {
-    actionbucket **table;
-    size_t         size;
-    size_t         sizeclass;
+  actionbucket **table;
+  size_t         size;
+  size_t         sizeclass;
 } actiontable;
 
 typedef struct _gbucket {
-    struct _gbucket *next;
-    state            from;
-    label            l;
-    state            to;
+  struct _gbucket *next;
+  state            from;
+  label            l;
+  state            to;
 } gotobucket;
 
 typedef struct _gototable {
-    gotobucket **table;
-    size_t     size;
-    size_t     sizeclass;
+  gotobucket **table;
+  size_t     size;
+  size_t     sizeclass;
 } gototable;
 
 typedef production *productiontable;
@@ -46,14 +46,14 @@ typedef ATbool     *injectiontable;
 typedef ATermTable  prioritytable;
 
 typedef struct _parse_table  {
-    state            initial;
-    size_t           numstates;
-    size_t           numprods;
-    actiontable      actions;
-    gototable        gotos;
-    productiontable  productions;
-    injectiontable   injections;
-    prioritytable    priorities;
+  state            initial;
+  size_t           numstates;
+  size_t           numprods;
+  actiontable      actions;
+  gototable        gotos;
+  productiontable  productions;
+  injectiontable   injections;
+  prioritytable    priorities;
 } parse_table;
 
 typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
