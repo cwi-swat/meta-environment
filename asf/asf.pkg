@@ -17,7 +17,7 @@ configuration interface
 requires
   asc-support	1.8
   asf-support	1.2
-  sdf-support	1.2
+  sdf-support	2.0
   pt-support    1.0
   aterm         2.0.2
   toolbus       0.3.1
