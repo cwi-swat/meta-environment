@@ -309,7 +309,7 @@ term *reduce(int cid, term *trm)
   term *t;
 
   if(!TB_match(trm, "term(<term>)", &t)) \{
-    TBprintf(stderr, "malformed term in reduce: %t\\n", t);
+    TBprintf(stderr, "malformed term in reduce: %t\\n", trm);
     exit(1);
   \}
   t = apply_mappings(substitute(t), mappings);
