@@ -524,6 +524,11 @@ in
 	snd-msg(set-focus(EditorId2, Focus)) .
         ReturnSuccess(EditorId,Stack)        
       +
+        rec-msg(show-feedback-location, Stack?, EditorId?) .
+	StackPopTerm(Stack, Stack?, STree?) .
+	ShowFeedbackLocation(STree) .
+	ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(show-list, Stack?, EditorId?) .
         StackPopString(Stack, Stack?, ModuleName?) .
         StackPopString(Stack, Stack?, Text?) .

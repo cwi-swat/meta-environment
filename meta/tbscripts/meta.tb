@@ -19,6 +19,7 @@
 #include "restorebrackets.idef"
 
 /* to be resolved */
+#include "feedback.tb"
 #include "abort.tb"
 #include "parse-utils.tb"
 #include "editors.tb"
