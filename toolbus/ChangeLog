@@ -1,5 +1,8 @@
 $Id$
 
+2002/04/19 (jurgenv@cwi.nl)
+ * Release 0.23
+
 2002/04/03 (jurgenv@cwi.nl)
  * Fixed CLASSPATH in tifstojava to locate aterm classes correctly.
 
@@ -12,6 +15,7 @@ $Id$
  * Several adapters 'omgeSPECt' from 8 to 12 bytes
 
 2002/02/14 (olivierp@cwi.nl)
+ * Bumped to 0.23beta
  * Added dot-adapter
 
 2002/02/07 (jurgenv@cwi.nl)
