@@ -171,7 +171,7 @@ done
 ###
 #  Get to the real work now...
 ###
-if [ "x$gui" == "xeclipse" ] ; then
+if [ "x$gui" = "xeclipse" ] ; then
   gui="-DECLIPSE"
 else
   gui=""

@@ -7,6 +7,10 @@
 2003/08/27 <kooiker@cwi.nl>
  * fixed imports and importedby labels in tbscripts/module-db.tb
 
+Fri Aug 29 16:03:24 CEST 2003 <jong@cwi.nl>
+ * src/generic-meta.sh.src:
+   - need '=' instead of '==' for pure POSIX comparison of strings for sh
+
 Wed Aug 20 14:53:08 CEST 2003 <{jong,kooiker}@cwi.nl>
  * editors/structure/src/EditorData.adt:
    change alternative Path/term -> Path/tree
