@@ -267,12 +267,12 @@ public class JavaTool implements ToolInstance {
     return toolId;
   }
 
-  private MatchResult getFromTool(ATerm trm, Environment env, LinkedList fromTool) {
+  private boolean getFromTool(ATerm trm, Environment env, LinkedList fromTool) {
     System.err.println("getFromTool(" + trm + "), length fromTool = " + fromTool.size());
     if (!fromTool.isEmpty()) {
       try {
         System.err.println("first = " + fromTool.getFirst());
-        MatchResult mr = TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
+        boolean mr = TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
         fromTool.removeFirst();
         System.err.println("getFromTool returns: " + mr);
         return mr;
@@ -281,14 +281,14 @@ public class JavaTool implements ToolInstance {
       }
     }
     System.err.println("getFromTool returns false");
-    return new MatchResult(false, null, null);
+    return false;
   }
 
-  synchronized public MatchResult getValueFromTool(ATerm trm, Environment env) {
+  synchronized public boolean getValueFromTool(ATerm trm, Environment env) {
     return getFromTool(trm, env, valuesFromTool);
   }
 
-  synchronized public MatchResult getEventFromTool(ATerm trm, Environment env) {
+  synchronized public boolean getEventFromTool(ATerm trm, Environment env) {
     return getFromTool(trm, env, eventsFromTool);
   }
 
