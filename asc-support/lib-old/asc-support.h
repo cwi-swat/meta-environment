@@ -23,11 +23,6 @@
 #define ASC_SUPPORT_H
 
 #include <aterm2.h> 
-#include <PT-utils.h>
-#include <ASF-utils.h>
-
-#define ASFtoPT(tree) (PT_makeTreeFromTerm(ASF_makeTermFromTree(tree)))
-#define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
@@ -253,9 +248,5 @@ extern ATerm unquote(ATerm t);
 extern void register_all();
 extern void resolve_all();
 extern void init_all();
-
-extern ATerm innermost(PT_Tree tree);
-extern PT_ParseTree toasfix(ATerm tree);
-void ASC_initRunTime(int tableSize);
 
 #endif  /* ASC_SUPPORT_H */

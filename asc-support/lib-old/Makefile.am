@@ -1,6 +1,7 @@
 #
 #    Asf Sdf Compiler Runtime Library
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+#                        The Netherlands. 
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +26,8 @@ lib_LIBRARIES            = libasc-support.a
 include_HEADERS          = asc-support.h asc-apply.h
 EXTRA_DIST               = rewriter.tb rewriter.tif.c rewriter.tif.h
 
-SRCS = asc-support.c asc-support.h rewriter.c asc-apply.c asc-apply.h
+SRCS = asc-support.c asc-support.h _asc-support.h rewriter.c \
+       asc-apply.c asc-apply.h
 ALLSRCS = $(SRCS) rewriter.tif.c 
 
 libasc_support_a_SOURCES = $(SRCS)

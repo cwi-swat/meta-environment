@@ -1,5 +1,4 @@
-#include "asc-support.h"
-#include <PT-utils.h>
+#include "_asc-support.h"
 
 PT_Tree
 ASC_applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)

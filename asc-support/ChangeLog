@@ -1,5 +1,8 @@
 $Id$
 
+2001/05/04 (markvdb@cwi.nl)
+ * Fixed a dependency bug with respect to generated code.
+
 2001/03/08 (jurgenv@cwi.nl)
  * Apified asc-support
  * Added ASC_applyFunction function that can be used to

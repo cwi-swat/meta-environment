@@ -33,10 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <aterm2.h>
-#include <PT-utils.h>
-
-#include "asc-support.h"
+#include "_asc-support.h"
 
 #ifndef streq
 #define streq(s,t)    (!(strcmp(s,t)))
