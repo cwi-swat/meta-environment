@@ -1,5 +1,10 @@
 $Id$
 
+Mon Jul 19 11:34:53 CEST 2004 <jong@cwi.nl>
+ * sdf-support.pkg:
+   - remove dependency on toolbus
+   - add dependency on toolbus-java-adapter
+
 Tue Jul 13 14:45:59 CEST 2004 <jurgenv@cwi.nl>
  * Removed dependency on ToolBus package
  * Added dependency on new toolbus-java-adapter package
