@@ -1,5 +1,8 @@
 $Id$
 
+2002/04/19 (jurgenv@cwi.nl)
+ * Release 3.7
+
 2002/02/28 (vandenbr@loria.fr)
  * If there are more than SG_TOO_MANY_AMBS (10000) ambiguities
    SGLR generates an error messages and stops.
