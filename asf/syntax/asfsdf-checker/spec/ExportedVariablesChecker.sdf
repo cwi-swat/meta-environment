@@ -5,16 +5,16 @@ imports SdfCheckerFeedback
 
 exports
   context-free syntax
-    check-for-exported-variables(Definition) -> {Feedback ","}*
+    check-for-exported-variables(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-for-exported-variables(Definition, {Feedback ","}*) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-exported-variables(Module, {Feedback ","}*) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables(Definition, {Error ","}*) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables(Module, {Error ","}*) -> {Error ","}* {traversal(accu, break, top-down)}
 
-    check-for-exported-variables-section(Module, {Feedback ","}*, ModuleId) -> {Feedback ","}*  {traversal(accu, break, top-down)}
-    check-for-exported-variables-section(Section, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-exported-variables-section(Grammar, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Module, {Error ","}*, ModuleId) -> {Error ","}*  {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Section, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Grammar, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
     
 
 hiddens
@@ -25,6 +25,6 @@ hiddens
     "Grammar"[0-9]*    -> Grammar
     "Section"[0-9]*     -> Section
     "Production*"[0-9]* -> Production*
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
 
     "$String"[0-9]*    -> StrCon

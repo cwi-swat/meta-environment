@@ -7,14 +7,14 @@ imports
 
 exports
   context-free syntax
-    check-for-asf-sorts(Definition) -> {Feedback ","}*
+    check-for-asf-sorts(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-for-asf-sorts(Definition, {Feedback ","}*)   -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-asf-sorts(Module, {Feedback ","}*)       -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-asf-sorts(Module, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-asf-sorts(Sort, {Feedback ","}*, ModuleId)   -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-for-asf-sorts(Definition, {Error ","}*)   -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-asf-sorts(Module, {Error ","}*)       -> {Error ","}* {traversal(accu, break, top-down)}
+    check-asf-sorts(Module, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-asf-sorts(Sort, {Error ","}*, ModuleId)   -> {Error ","}* {traversal(accu, break, top-down)}
 
     is-asf-sort(Sort) -> Boolean
 
@@ -23,7 +23,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Sort"[0-9]*    -> Sort
 
     "$String"[0-9]* -> StrCon

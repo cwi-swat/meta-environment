@@ -133,7 +133,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
-  ATerm annos = AT_getAnnotations(PT_makeTermFromTree(tree));
+  ATerm annos = AT_getAnnotations(PT_TreeToTerm(tree));
 
   if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) { 
     result = (PT_Tree) 
@@ -167,8 +167,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   }
 
   if (annos != NULL) {
-    result = PT_makeTreeFromTerm(
-               AT_setAnnotations(PT_makeTermFromTree(result), annos));
+    result = PT_TreeFromTerm(AT_setAnnotations(PT_TreeToTerm(result), annos));
   }
 
   return result;

@@ -6,8 +6,8 @@
 typedef ATermAppl Slice;
 PT_Args appendSlice(PT_Args list, Slice slice);
 
-#define ASFtoPT(tree) (PT_makeTreeFromTerm(ASF_makeTermFromTree(tree)))
-#define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
+#define ASFtoPT(tree) (PT_TreeFromTerm(ASF_TreeToTerm(tree)))
+#define PTtoASF(tree) (ASF_TreeFromTerm(PT_TreeToTerm(tree)))
 
 #define isAsFixEqual(t1,t2) (isEqualModuloWhitespace(t1,t2))
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2);

@@ -1,20 +1,23 @@
+/*{{{  includes */
+
 #ifndef WIN32
-/* These files can not be included in Windows NT*/
 #include <atb-tool.h>
 #include "asfchecker.tif.h"
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>     /* used for exit(0) */
+#include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
 #include <unistd.h>
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 #include "equationChecker.h"
+
+/*}}}  */
 
 /*{{{  globals */
 
@@ -28,23 +31,23 @@ static char myarguments[] = "hi:vV";
 
 /*}}}  */
 
-/*{{{  static ATermList checkAsf(ATerm term) */
+/*{{{  static ERR_ErrorList checkAsf(ATerm term) */
 
-static ERR_FeedbackList checkAsf(ATerm term)
+static ERR_ErrorList checkAsf(ATerm term)
 {
   if (ATgetType(term) == AT_LIST) {
     ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
     return checkASFConditionalEquationList(rules);
   }
   else {
-    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
+    PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
     int ambs = PT_getParseTreeAmbCnt(parseTree);
     if (ambs == 0) {
       ASF_ASFModule module = ASF_getStartTopASFModule((ASF_Start) parseTree);
       ASF_ASFConditionalEquationList rules = ASF_getASFModuleEquationList(module);
       ASF_ASFTestEquationTestList tests = ASF_getASFModuleTestList(module);
 
-      return ERR_concatFeedbackList(checkEquations(rules), checkTests(tests));
+      return ERR_concatErrorList(checkEquations(rules), checkTests(tests));
     }
     else {
       return makeAmbiguityMessage(PT_getParseTreeTop(parseTree));
@@ -56,11 +59,11 @@ static ERR_FeedbackList checkAsf(ATerm term)
 
 /*{{{  static void displayMessages(ATermList errorList) */
 
-static void displayMessages(ERR_FeedbackList errorList)
+static void displayMessages(ERR_ErrorList errorList)
 {
-  while (!ERR_isFeedbackListEmpty(errorList)) {
-    ERR_Feedback fb = ERR_getFeedbackListHead(errorList);
-    ATwarning("%s\n", ERR_getFeedbackDescription(fb));
+  while (!ERR_isErrorListEmpty(errorList)) {
+    ERR_Error fb = ERR_getErrorListHead(errorList);
+    ATwarning("%s\n", ERR_getErrorDescription(fb));
   }
 }
 
@@ -70,7 +73,7 @@ static void displayMessages(ERR_FeedbackList errorList)
 
 ATerm check_asf(int cid, ATerm term)
 {
-  ERR_FeedbackList errorList = checkAsf(ATBunpack(term));    
+  ERR_ErrorList errorList = checkAsf(ATBunpack(term));    
 
   return ATmake("snd-value(messages(<term>))", (ATerm) errorList);
 }
@@ -114,7 +117,7 @@ static void version(void)
 int main(int argc, char *argv[])
 {
   ATerm rules = NULL; 
-  ERR_FeedbackList msgs = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList msgs = ERR_makeErrorListEmpty();
   char *input = "-";
   int cid;
   int c, toolbus_mode = 0;
@@ -128,9 +131,8 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
-  /*SDF_initSDFMEApi();*/
   ASF_initASFMEApi();
-  ERR_initErrorApi();
+  initErrorApi();
 
   if (toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */

@@ -2,13 +2,15 @@
 #include <stdio.h>
 #include <aterm1.h>
 
+#define BUFFER_SIZE 10240
+
 extern ATbool run_verbose;
 extern ATbool make_toolbus_tool;
 
 void call_c_compiler(const char* binary, const char* name, const char* source)
 {
-  char commandline[1024];
-  char sourcefiles[1024];
+  char commandline[BUFFER_SIZE];
+  char sourcefiles[BUFFER_SIZE];
 
   if (make_toolbus_tool) {
     sprintf(sourcefiles, "%s tool%s.tif.c", source, name);

@@ -14,6 +14,6 @@ exports
 hiddens
   variables
     "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$ModuleId"[0-9]*  -> ModuleId
     "$Char*" [0-9]*    -> CHAR*

@@ -1,11 +1,15 @@
 # $Id$
 
+Wed Mar 10 12:53:13 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API
+ * Upgrade static buffer sizes from 1024 10240 so construction of
+   system()'able commandlines doesn't SEGV for now.
+
 Wed Mar 10 09:56:02 CET 2004 <jurgenv@cwi.nl>
  * Added a new check to the asf-checker: functions that are wrapped in a 
    list on the left-hand side of a rule almost never rewrite. The reason
    is that people sometimes give the wrong return type to this function:
    it should have been a list but it is the element type of the list.
-
 
 Tue Mar  2 15:42:10 CET 2004 <jurgenv@cwi.nl>
  * fixed a bug in the condition checker:

@@ -80,7 +80,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
 					       PT_makeTreeLayoutEmpty());
   }
 
-  return PT_makeTermFromParseTree(parseTree);
+  return PT_ParseTreeToTerm(parseTree);
 }
 
 /*}}}  */

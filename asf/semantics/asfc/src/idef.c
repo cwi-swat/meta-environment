@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <aterm1.h>
 
+#define BUFFER_SIZE 10240
+
 extern ATbool run_verbose;
 
 void make_idef_script(char *name)
 {
-  char file[1024];
+  char file[BUFFER_SIZE];
   FILE *fp;
 
   sprintf(file, "%s.idef", name);
@@ -55,7 +57,7 @@ void make_idef_script(char *name)
 }
 
 void idef2c(char *name) {
-  char commandline[1024];
+  char commandline[BUFFER_SIZE];
 
   sprintf(commandline,IDEF2TIF " %s.idef", name);
   if (run_verbose) {

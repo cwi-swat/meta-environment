@@ -1,3 +1,5 @@
+/*{{{  includes */
+
 #include "evaluator.h"
 #include "reduction.h"
 #include "errors.h"
@@ -8,33 +10,41 @@
 #include <asc-builtins.h>
 #include <ASFME-utils.h>
 #include <MEPT-utils.h>
-#include <ErrorAPI.h>
+#include <Error.h>
 #include "equations.h"
 #include "values.h"
 
+/*}}}  */
+
+/*{{{  defines */
+
+#define BUFFER_SIZE 10240
+
+/*}}}  */
+
 /*{{{  static ATerm prettyTag(ASF_ASFTag tag) */
 
-static ERR_Feedback prettyTag(ASF_ASFTag tag)
+static ERR_Error prettyTag(ASF_ASFTag tag)
 {
+  char *description;
   ERR_Location location = PT_getTreeLocation((PT_Tree) tag);
   ERR_Subject subject;
 
-  if (location == NULL) {
-    location = ERR_makeLocationNoLocation();
-  }
-
   if (!ASF_isASFTagEmpty(tag)) {
-
     ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
-    subject = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) id),
-				     location);
+    description = PT_yieldTree((PT_Tree) id);
   }
   else {
-    subject = ERR_makeSubjectSubject("unnamed test", location);
+    description = "unnamed test";
   }
 
-  return ERR_makeFeedbackError("failed test", 
-			       ERR_makeSubjectListSingle(subject));
+  if (location == NULL) {
+    subject = ERR_makeSubjectSubject(description);
+  } else {
+    subject = ERR_makeSubjectLocalized(description, location);
+  }
+
+  return ERR_makeErrorError("failed test", ERR_makeSubjectListSingle(subject));
 }
 
 /*}}}  */
@@ -101,23 +111,23 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
 }
 
 /*}}}  */
-/*{{{  static ATermList testAll(ASF_ASFTestEquationTestList tests) */
+/*{{{  static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,  */
 
-static ERR_FeedbackList testAll(ASF_ASFTestEquationTestList tests, 
-				ERR_FeedbackList failed)
+static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests, 
+			     ERR_ErrorList failed)
 {
-  for (; !ASF_isASFTestEquationTestListEmpty(tests);
-       tests = ASF_getASFTestEquationTestListTail(tests)) {
+  while (!ASF_isASFTestEquationTestListEmpty(tests)) {
     ASF_ASFTestEquation test = ASF_getASFTestEquationTestListHead(tests);
     ASF_ASFTag result = testOne(test);
 
     if (result != NULL) {
-      failed = ERR_makeFeedbackListMany(prettyTag(result), failed);
+      failed = ERR_makeErrorListMany(prettyTag(result), failed);
     }
 
     if (!ASF_hasASFTestEquationTestListTail(tests)) {
       break;
     }
+    tests = ASF_getASFTestEquationTestListTail(tests);
   }
 
   return failed;
@@ -130,8 +140,10 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 	       ASF_ASFTestEquationTestList tests)
 {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
+   char msg[BUFFER_SIZE];
    int numberOfTests = ASF_getTestEquationListLength(tests);
-   ERR_FeedbackList failed = ERR_makeFeedbackListEmpty();
+   ERR_ErrorList failed = ERR_makeErrorListEmpty();
+   ERR_SubjectList subjectList = ERR_makeSubjectListEmpty();
 
    if (runVerbose) {
      ATwarning("initializing...\n");
@@ -159,23 +171,17 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 
    failed = testAll(tests, failed);
 
-   if (ERR_isFeedbackListEmpty(failed)) {
-     char msg[1024];
-
+   if (ERR_isErrorListEmpty(failed)) {
      sprintf(msg,"All %d tests succeeded", numberOfTests);
-     failed = ERR_makeFeedbackListSingle(ERR_makeFeedbackInfo(msg,
-							      ERR_makeSubjectListEmpty()));
+     failed = ERR_makeErrorListSingle(ERR_makeErrorInfo(msg, subjectList));
    }
    else {
-     char msg[1024];
-
      sprintf(msg,"%d out of %d tests failed",
-	   ERR_getFeedbackListLength(failed),
+	   ERR_getErrorListLength(failed),
 	   numberOfTests);
 
-     failed = ERR_makeFeedbackListMany(ERR_makeFeedbackError(msg,
-							     ERR_makeSubjectListEmpty()),
-							     failed);
+     failed = ERR_makeErrorListMany(ERR_makeErrorError(msg, subjectList),
+				    failed);
    }
 
    return ATmake("test-results(<term>)", failed);

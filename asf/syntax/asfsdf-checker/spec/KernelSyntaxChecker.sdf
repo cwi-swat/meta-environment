@@ -5,27 +5,27 @@ imports ModuleOperations
 
 exports
   context-free syntax
-    check-for-kernel-syntax(Definition) -> {Feedback ","}*
+    check-for-kernel-syntax(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-syntax(Definition, {Feedback ","}*)        -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-syntax(Module, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-syntax2(Module, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-syntax2(Grammar, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-syntax(Definition, {Error ","}*)        -> {Error ","}* {traversal(accu, break, top-down)}
+    check-syntax(Module, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
+    check-syntax2(Module, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
+    check-syntax2(Grammar, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-renamings(Definition, {Feedback ","}*)         -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-renamings(Module, {Feedback ","}*)             -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-renamings2(Module, {Feedback ","}*, ModuleId)   -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-renamings2(Renaming, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-renamings(Definition, {Error ","}*)         -> {Error ","}* {traversal(accu, break, top-down)}
+    check-renamings(Module, {Error ","}*)             -> {Error ","}* {traversal(accu, break, top-down)}
+    check-renamings2(Module, {Error ","}*, ModuleId)   -> {Error ","}* {traversal(accu, break, top-down)}
+    check-renamings2(Renaming, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "Prod"[0-9]*       -> Production
     "Prod*"[0-9]*      -> Production*
     "Prios"[0-9]*      -> Priorities

@@ -199,7 +199,6 @@ if ( check_sym ( atmp00 , lf_24sym ) ) {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_list_23sym ) ) {
 {
-ATerm atmp0000 = arg_0 ( atmp000 ) ;
 FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_19sym ) ) ;
 }
 }
@@ -513,7 +512,6 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Remove_Var_Syntax,                   
                           resolve_Remove_Var_Syntax,                    
-                          init_Remove_Var_Syntax, NULL, -1
-);}                                                        
-#endif                                                   
-
+                          init_Remove_Var_Syntax, NULL, -1, NULL);
+}
+#endif

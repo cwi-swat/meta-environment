@@ -50,8 +50,7 @@ ATerm get_name(int cid)
 static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
 {
   SDF_ModuleName sdfModuleName = SDF_makeModuleName(name);
-  PT_Tree ptModuleName = PT_makeTreeFromTerm(
-			   SDF_makeTermFromModuleName(sdfModuleName));
+  PT_Tree ptModuleName = PT_TreeFromTerm(SDF_ModuleNameToTerm(sdfModuleName));
   PT_Tree newTree = NULL;
 
   if (PT_isValidParseTree(parseTree)) {
@@ -75,12 +74,12 @@ static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
 
 static ATerm removeVarSyntax(char *name, ATerm term)
 {
-  PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
-  PT_Tree ptApplied      = addRemoveVarsFunction(name, parseTree);
-  ATerm reduct           = innermost(ptApplied);
-  PT_ParseTree asfix     = toasfix(reduct);
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
+  PT_Tree ptApplied = addRemoveVarsFunction(name, parseTree);
+  ATerm reduct = innermost(ptApplied);
+  PT_ParseTree asfix = toasfix(reduct);
   
-  return PT_makeTermFromParseTree(asfix);
+  return PT_ParseTreeToTerm(asfix);
 }
 
 /*{{{  ATerm remove_var_syntax(int cid, char *name, ATerm t) */

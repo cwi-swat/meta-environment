@@ -1,46 +1,52 @@
+/* $Id$ */
+
+/*{{{  includes */
+
+#include <Error.h>
 #include "equationChecker.h"
-#include "ErrorAPI.h"
 
-/*{{{  ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject) */
+/*}}}  */
 
-ERR_Feedback makeMessage(char *msg, ATerm subject)
+/*{{{  ERR_Error makeMessage(const char *msg, ATerm subject) */
+
+ERR_Error makeMessage(const char *msg, ATerm subject)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
   ERR_Subject sub;
   ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
 
   if (location != NULL) {
-    sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), location);
+    sub = ERR_makeSubjectLocalized(PT_yieldTree((PT_Tree) subject), location);
     subjects = ERR_makeSubjectListSingle(sub);
   }
   
-  return ERR_makeFeedbackError(msg, subjects);
+  return ERR_makeErrorError(msg, subjects);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback makeWarning(char *msg, ATerm subject) */
+/*{{{  ERR_Error makeWarning(char *msg, ATerm subject) */
 
-ERR_Feedback makeWarning(char *msg, ATerm subject)
+ERR_Error makeWarning(char *msg, ATerm subject)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
   ERR_Subject sub;
   ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
 
   if (location != NULL) {
-    sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), location);
+    sub = ERR_makeSubjectLocalized(PT_yieldTree((PT_Tree) subject), location);
     subjects = ERR_makeSubjectListSingle(sub);
   }
   
-  return ERR_makeFeedbackWarning(msg, subjects);
+  return ERR_makeErrorWarning(msg, subjects);
 }
 
 /*}}}  */
 
-/*{{{  ERR_FeedbackList makeAmbiguityMessage(void *subject) */
+/*{{{  ERR_ErrorList makeAmbiguityMessage(void *subject) */
 
-ERR_FeedbackList makeAmbiguityMessage(void *subject)
+ERR_ErrorList makeAmbiguityMessage(void *subject)
 {
-  return ERR_makeFeedbackListSingle(makeMessage("equations contain ambiguities",
+  return ERR_makeErrorListSingle(makeMessage("equations contain ambiguities",
 						(ATerm) subject));
 }
 
@@ -65,14 +71,14 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 
 /*}}}  */
 
-/*{{{  static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag,  */
+/*{{{  static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,  */
 
-static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag, 
+static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, 
 						PT_Tree tree, 
 						PT_Args variables)
 {
-  ERR_Feedback message;
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_Error message;
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(tree)) {
     return makeAmbiguityMessage(tree);
@@ -81,7 +87,7 @@ static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag,
     if (!lookupVariable(tree, variables)) {
       message = makeMessage("uninstantiated variable occurrence",  
 			    PT_TreeToTerm(tree));
-      return ERR_makeFeedbackListSingle(message);
+      return ERR_makeErrorListSingle(message);
     }
   }
 
@@ -91,7 +97,7 @@ static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag,
     while (!PT_isArgsEmpty(args)) {
       PT_Tree arg = PT_getArgsHead(args);
 
-      messages = ERR_concatFeedbackList(messages,
+      messages = ERR_concatErrorList(messages,
 					checkTreeGivenVariables(tag, arg, variables));
 
       args = PT_getArgsTail(args);
@@ -231,11 +237,11 @@ static ATbool isSingleton(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
-static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
     return makeAmbiguityMessage(lhsCond);
@@ -245,7 +251,7 @@ static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition 
   }
   if (!noNewVariables((PT_Tree)lhsCond, *variables) ||
       !noNewVariables((PT_Tree)rhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(makeMessage(
+    return ERR_makeErrorListSingle(makeMessage(
 					     "negative condition introduces variable(s)", 
 					     ASF_makeTermFromASFCondition(condition)));
   }
@@ -256,13 +262,13 @@ static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition 
 
 /*}}}  */
 
-/*{{{  static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
-static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
-  messages = ERR_makeFeedbackListSingle(
+  messages = ERR_makeErrorListSingle(
 				   makeWarning("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)", ASF_makeTermFromASFCondition(condition)));
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
@@ -274,7 +280,7 @@ static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition 
     return messages;
   }
   else {
-    return ERR_makeFeedbackListMany(
+    return ERR_makeErrorListMany(
 				    makeMessage(
 						"uninstantiated variables in both sides of condition",
 						ASF_makeTermFromASFCondition(condition)), messages);
@@ -284,35 +290,35 @@ static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition 
 }
 
 /*}}}  */
-/*{{{  static ERR_FeedbackList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
-static ERR_FeedbackList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   if (!noNewVariables((PT_Tree) lhsCond, *variables) || 
       !noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
+    return ERR_makeErrorListSingle(
 				 makeMessage(
 					     "uninstantiated variables in equality condition",
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
-  return ERR_makeFeedbackListEmpty();
+  return ERR_makeErrorListEmpty();
 }
 
 /*}}}  */
-/*{{{  static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
-static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
+    return ERR_makeErrorListSingle(
 	 makeMessage(
 	     "right-hand side of matching condition introduces variables",
 	     ASF_makeTermFromASFCondition(condition)));
   }
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
+    return ERR_makeErrorListSingle(
 	 makeMessage(
 	     "matching condition does not introduce new variables",
 		     ASF_makeTermFromASFCondition(condition)));
@@ -321,36 +327,35 @@ static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition con
     *variables = collectVariables((PT_Tree)lhsCond, *variables);
   }
 
-  return ERR_makeFeedbackListEmpty();
+  return ERR_makeErrorListEmpty();
 }
 
 /*}}}  */
-/*{{{  static ERR_FeedbackList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+/*{{{  static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
-static ERR_FeedbackList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
+    return ERR_makeErrorListSingle(
 				 makeMessage(
 					     "matching condition does not use new variables",
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
   if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
+    return ERR_makeErrorListSingle(
 				 makeMessage(
 					     "right-hand side of matching condition introduces variables",
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
-  return ERR_makeFeedbackListEmpty();
+  return ERR_makeErrorListEmpty();
 }
 
 /*}}}  */
+/*{{{  static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables)  */
 
-/*{{{  static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables)  */
-
-static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
+static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
     return makeAmbiguityMessage(condition);
@@ -382,7 +387,7 @@ static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition conditio
       return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else {
-      return ERR_makeFeedbackListSingle(
+      return ERR_makeErrorListSingle(
 				   makeMessage(
 					       "strange condition encountered", 
 					       ASF_makeTermFromASFCondition(condition)));
@@ -391,12 +396,11 @@ static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition conditio
 }
 
 /*}}}  */
+/*{{{  static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables)  */
 
-/*{{{  static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables)  */
-
-static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables) 
+static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionsToTerm(conditions)))) {
     return makeAmbiguityMessage(conditions);
@@ -408,7 +412,7 @@ static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condit
       ASF_ASFCondition condition =
 	ASF_getASFConditionListHead(conditionList);
 
-      messages = ERR_concatFeedbackList(messages,
+      messages = ERR_concatErrorList(messages,
 					checkCondition(tag, condition, variables));
 
       if (!ASF_hasASFConditionListTail(conditionList)) {
@@ -422,10 +426,9 @@ static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condit
 }
 
 /*}}}  */
+/*{{{  static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)  */
 
-/*{{{  static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)  */
-
-static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree) 
+static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree) 
 {
   PT_Tree ptTree = PT_TreeFromTerm(ASF_TreeToTerm(asfTree));
   if (PT_isTreeAmb(ptTree)) {
@@ -433,31 +436,30 @@ static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
   }
   else {
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
-      ERR_Feedback message = 
+      ERR_Error message = 
 	makeWarning(
     "constructor not expected as outermost function symbol of left hand side", 
     PT_TreeToTerm(ptTree));
-      return ERR_makeFeedbackListSingle(message);
+      return ERR_makeErrorListSingle(message);
     }
     else if (isSingleton(ptTree)) {
-      ERR_Feedback message = 
+      ERR_Error message = 
           makeWarning(
           "Left hand side only matches singleton lists", PT_TreeToTerm(ptTree));
-      return ERR_makeFeedbackListSingle(message);
+      return ERR_makeErrorListSingle(message);
     }
     else {
-      return ERR_makeFeedbackListEmpty();
+      return ERR_makeErrorListEmpty();
     }
   }
 }
 
 /*}}}  */
+/*{{{  static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)  */
 
-/*{{{  static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation)  */
-
-static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation) 
+static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionalEquationToTerm(condEquation)))) {
     return makeAmbiguityMessage(condEquation);
@@ -476,16 +478,16 @@ static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation)
       PT_Args variables = collectVariables((PT_Tree)lhsEq, 
 					   PT_makeArgsEmpty());
 
-      messages = ERR_concatFeedbackList(messages, checkLhs(tag, lhsEq));
+      messages = ERR_concatErrorList(messages, checkLhs(tag, lhsEq));
 
       if (ASF_hasASFConditionalEquationASFConditions(condEquation)) {
-	messages = ERR_concatFeedbackList(messages,
+	messages = ERR_concatErrorList(messages,
 					  checkConditions(tag,
 							  ASF_getASFConditionalEquationASFConditions(condEquation),
 							  &variables));
       }
 
-      messages =  ERR_concatFeedbackList(messages,
+      messages =  ERR_concatErrorList(messages,
 					 checkTreeGivenVariables(tag, 
 								 (PT_Tree)rhsEq, 
 								 variables));
@@ -495,13 +497,12 @@ static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation)
 }
 
 /*}}}  */
+/*{{{  static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)  */
 
-/*{{{  static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)  */
-
-static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation) 
+static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation) 
 {
-  ERR_Feedback message;
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_Error message;
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFTestEquationToTerm(testEquation)))) {
     return makeAmbiguityMessage(testEquation);
@@ -522,18 +523,18 @@ static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)
 
       if (!PT_isArgsEmpty(variables)) {
 	message = makeMessage("no variables may be introduced in left hand side of test", ASF_TreeToTerm(lhsCond));
-	messages = ERR_makeFeedbackListMany(message, messages);
+	messages = ERR_makeErrorListMany(message, messages);
 	variables = PT_makeArgsEmpty();
       }
 
       if (ASF_hasASFTestEquationASFConditions(testEquation)) {
-	messages = ERR_concatFeedbackList(messages,
+	messages = ERR_concatErrorList(messages,
 					  checkConditions(tag,
 							  ASF_getASFTestEquationASFConditions(testEquation),
 							  &variables));
       }
 
-      messages =  ERR_concatFeedbackList(messages,
+      messages =  ERR_concatErrorList(messages,
 					 checkTreeGivenVariables(tag, 
 								 (PT_Tree)rhsCond, 
 								 variables));
@@ -544,17 +545,17 @@ static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)
 
 /*}}}  */
 
-/*{{{  ERR_FeedbackList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList)  */
+/*{{{  ERR_ErrorList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList)  */
 
-ERR_FeedbackList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList) 
+ERR_ErrorList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   while (!ASF_isASFConditionalEquationListEmpty(condEquationList)) {
     ASF_ASFConditionalEquation condEquation =
       ASF_getASFConditionalEquationListHead(condEquationList);
 
-    messages = ERR_concatFeedbackList(messages,
+    messages = ERR_concatErrorList(messages,
 				      checkEquation(condEquation));
 
     if (!ASF_hasASFConditionalEquationListTail(condEquationList)) {
@@ -567,18 +568,17 @@ ERR_FeedbackList checkASFConditionalEquationList(ASF_ASFConditionalEquationList 
 }
 
 /*}}}  */
+/*{{{  ERR_ErrorList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList)  */
 
-/*{{{  ERR_FeedbackList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList)  */
-
-ERR_FeedbackList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList) 
+ERR_ErrorList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList) 
 {
-  ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   while (!ASF_isASFTestEquationTestListEmpty(testEquationList)) {
     ASF_ASFTestEquation testEquation =
       ASF_getASFTestEquationTestListHead(testEquationList);
 
-    messages = ERR_concatFeedbackList(messages,
+    messages = ERR_concatErrorList(messages,
 				      checkTest(testEquation));
 
     if (!ASF_hasASFTestEquationTestListTail(testEquationList)) {
@@ -591,9 +591,9 @@ ERR_FeedbackList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquati
 
 /*}}}  */
 
-/*{{{  ERR_FeedbackList checkEquations(ASF_ASFEquations equations)  */
+/*{{{  ERR_ErrorList checkEquations(ASF_ASFEquations equations)  */
 
-ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList equations) 
+ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
     return makeAmbiguityMessage(equations);
@@ -603,9 +603,9 @@ ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList equations)
 }
 
 /*}}}  */
-/*{{{  ERR_FeedbackList checkTests(ASF_ASFTestEquationTestList tests)  */
+/*{{{  ERR_ErrorList checkTests(ASF_ASFTestEquationTestList tests)  */
 
-ERR_FeedbackList checkTests(ASF_ASFTestEquationTestList tests) 
+ERR_ErrorList checkTests(ASF_ASFTestEquationTestList tests) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) tests))) {
     return makeAmbiguityMessage(tests);

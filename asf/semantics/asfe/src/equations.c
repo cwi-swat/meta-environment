@@ -185,9 +185,9 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
 
 ATerm getPosInfoEquals(ASF_ASFEquation equ)
 {
-  PT_Tree tree = PT_makeTreeFromTerm(ASF_makeTermFromASFEquation(equ));
+  PT_Tree tree = PT_TreeFromTerm(ASF_ASFEquationToTerm(equ));
   PT_Tree equals = PT_getArgsArgumentAt(PT_getTreeArgs(tree), 2);
-  return ATgetAnnotation(PT_makeTermFromTree(equals), posinfo);
+  return ATgetAnnotation(PT_TreeToTerm(equals), posinfo);
 }
 
 /*}}}  */

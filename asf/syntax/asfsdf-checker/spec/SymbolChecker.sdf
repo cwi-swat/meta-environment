@@ -5,20 +5,20 @@ imports SdfCheckerFeedback ModuleOperations
 
 exports
   context-free syntax
-    check-symbols(Definition) -> {Feedback ","}*
+    check-symbols(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-symbols(Definition, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-symbols(Module, {Feedback ","}*)                -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Module, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Grammar, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Production*, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Symbol, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-symbols(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols2(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols2(Grammar, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols2(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols2(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-charclass-list-symbols(Production*, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-charclass-list-symbols(Symbol, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-charclass-list-symbols(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-charclass-list-symbols(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
 
 hiddens
   context-free syntax
@@ -31,7 +31,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$Literal"[0-9]*   -> Literal
     "NatCon"[0-9]*     -> NatCon

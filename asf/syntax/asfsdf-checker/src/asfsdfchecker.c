@@ -62,12 +62,12 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
 
 static ATerm checkSdf(ATerm term, const char *name)
 {
-  PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
-  PT_Tree ptApplied      = addSdfCheckerFunction(parseTree, name);
-  ATerm reduct           = innermost(ptApplied);
-  PT_ParseTree asfix     = toasfix(reduct);
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
+  PT_Tree ptApplied = addSdfCheckerFunction(parseTree, name);
+  ATerm reduct = innermost(ptApplied);
+  PT_ParseTree asfix = toasfix(reduct);
 
-  return PT_makeTermFromParseTree(asfix);
+  return PT_ParseTreeToTerm(asfix);
 }
 
 static ATermList processMessages(ATerm term)
@@ -75,7 +75,7 @@ static ATermList processMessages(ATerm term)
   ATermList resultMsgs = ATempty;
   ATerm newMsg;
 
-  PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
 
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptMsgs = PT_getParseTreeTree(parseTree);

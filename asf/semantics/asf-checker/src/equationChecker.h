@@ -4,12 +4,12 @@
 #include <string.h>
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
-#include <ErrorAPI.h>
+#include <Error.h>
 
-ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList eqs);
-ERR_FeedbackList checkTests(ASF_ASFTestEquationTestList tests); 
-ERR_FeedbackList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList);
-ERR_Feedback makeMessage(char *msg, ATerm subject);
-ERR_FeedbackList makeAmbiguityMessage(void *subject);
+ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList eqs);
+ERR_ErrorList checkTests(ASF_ASFTestEquationTestList tests); 
+ERR_ErrorList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList);
+ERR_Error makeMessage(const char *msg, ATerm subject);
+ERR_ErrorList makeAmbiguityMessage(void *subject);
 
 #endif  /* EQS_CHECKER_H */

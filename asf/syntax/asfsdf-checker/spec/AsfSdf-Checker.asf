@@ -9,7 +9,7 @@ equations
         Msgs6 := check-for-exported-variables(Definition2)
         ====>
         check-asfsdf(definition Definition1) =
-          feedback("AsfSdfChecker", "Unknown", 
+          summary("AsfSdfChecker", "Unknown", 
                    [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
 
   [cd1] Msgs1 := check-sdf(Definition1),
@@ -22,5 +22,5 @@ equations
         moduleid($Char*) := $ModuleId
         ====>
         check-asfsdf(definition Definition1, $ModuleId) =
-          feedback("AsfSdfChecker", strcon(""" $Char* """), 
+          summary("AsfSdfChecker", strcon(""" $Char* """), 
                    [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])

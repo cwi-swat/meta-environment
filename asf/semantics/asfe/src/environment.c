@@ -38,7 +38,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var)
     while (!ATisEmpty(list)) {
       ATermAppl tuple = (ATermAppl) ATgetFirst(list);
       if (ATisEqual(ATgetArgument(tuple, 0), atVar)) {
-        return PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
+        return PT_TreeFromTerm(ATgetArgument(tuple, 1));
       }
 
       list = ATgetNext(list);
@@ -82,7 +82,7 @@ Slice getListVariableValue(ATerm env, PT_Tree var)
 ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 {
   ATerm atVar = ATmake("<str>", PT_yieldTree(var));
-  ATerm atValue = PT_makeTermFromTree(value);
+  ATerm atValue = PT_TreeToTerm(value);
 
   return (ATerm) ATinsert((ATermList) env,
 			  (ATerm) ATmakeAppl2(ATmakeAFun(PLAINVAR,2,ATtrue), 
@@ -95,8 +95,8 @@ ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value)
 ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end)
 {
   ATerm atVar = ATmake("<str>", PT_yieldTree(var));
-  ATerm atStart = PT_makeTermFromArgs(start);
-  ATerm atEnd = PT_makeTermFromArgs(end);
+  ATerm atStart = PT_ArgsToTerm(start);
+  ATerm atEnd = PT_ArgsToTerm(end);
 
   return (ATerm) ATinsert((ATermList) env,
 			  (ATerm) ATmakeAppl3(ATmakeAFun(LISTVAR,3,ATtrue), 

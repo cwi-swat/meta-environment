@@ -5,18 +5,18 @@ imports SdfCheckerFeedback
 
 exports
   context-free syntax
-    check-asf-attributes(Definition) -> {Feedback ","}*
+    check-asf-attributes(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-attributes(Definition, {Feedback ","}*)              -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-attributes(Module, {Feedback ","}*)                  -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-attributes(Definition, {Error ","}*)              -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes(Module, {Error ","}*)                  -> {Error ","}* {traversal(accu, break, top-down)}
     check-attributes-in-module(Module, 
-                               <{Feedback ","}*, Production*>, 
-                               ModuleId)                -> <{Feedback ","}*, Production*> {traversal(accu, break, top-down)}
+                               <{Error ","}*, Production*>, 
+                               ModuleId)                -> <{Error ","}*, Production*> {traversal(accu, break, top-down)}
     check-attributes-in-module(Production, 
-                               <{Feedback ","}*, Production*>, 
-                               ModuleId)                -> <{Feedback ","}*, Production*> {traversal(accu, break, top-down)}
+                               <{Error ","}*, Production*>, 
+                               ModuleId)                -> <{Error ","}*, Production*> {traversal(accu, break, top-down)}
 
   sorts Fb-Msg
   context-free syntax
@@ -24,11 +24,11 @@ hiddens
     "not-found"    -> Fb-Msg
     "inconsistent" -> Fb-Msg
    
-    consistent-defined(Production, Production*, ModuleId) -> <Fb-Msg, Feedback?>
+    consistent-defined(Production, Production*, ModuleId) -> <Fb-Msg, Error?>
 
   context-free syntax
-    check-form-production(Production, {Feedback ","}*, ModuleId)          -> {Feedback ","}*
-    check-attributes-in-production(Production, {Feedback ","}*, ModuleId) -> {Feedback ","}*
+    check-form-production(Production, {Error ","}*, ModuleId)          -> {Error ","}*
+    check-attributes-in-production(Production, {Error ","}*, ModuleId) -> {Error ","}*
 
   context-free syntax
     contains-accu({ATerm ","}*)      -> Boolean
@@ -66,8 +66,8 @@ hiddens
     "$Symbol*"[0-9]*   -> Symbol*
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "Msg"[0-9]*        -> Feedback
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msg"[0-9]*        -> Error
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Literal"[0-9]*   -> Literal
 
     "$String"[0-9]*    -> StrCon

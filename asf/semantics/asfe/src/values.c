@@ -44,7 +44,7 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
 
  PT_Args getSliceFirst(Slice slice)
 {
-  return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 1));
+  return PT_ArgsFromTerm(ATgetArgument((ATermAppl) slice, 1));
 }
 
 /*}}}  */
@@ -52,7 +52,7 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
 
  PT_Args getSliceLast(Slice slice)
 {
-  return PT_makeArgsFromTerm(ATgetArgument((ATermAppl) slice, 2));
+  return PT_ArgsFromTerm(ATgetArgument((ATermAppl) slice, 2));
 }
 
 /*}}}  */
@@ -213,10 +213,8 @@ PT_Tree getFirstArgument(PT_Tree trm)
 
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 {
-  asfix1 = PT_makeTreeFromTerm(
-	       ATremoveAnnotations(PT_makeTermFromTree(asfix1)));
-  asfix2 = PT_makeTreeFromTerm(
-	       ATremoveAnnotations(PT_makeTermFromTree(asfix2)));
+  asfix1 = PT_TreeFromTerm(ATremoveAnnotations(PT_TreeToTerm(asfix1)));
+  asfix2 = PT_TreeFromTerm(ATremoveAnnotations(PT_TreeToTerm(asfix2)));
 
   if (!PT_isEqualTree(asfix1, asfix2)) {
     if (PT_isTreeAppl(asfix1) && PT_isTreeAppl(asfix2)) {

@@ -16,7 +16,7 @@
 #include <MEPT.h>
 #include <PTMEPT.h>
 #include <ASFME.h>
-#include <ErrorAPI.h>
+#include <Error.h>
 
 #include "asfe.tif.h"
 #include "evaluator.h"
@@ -144,12 +144,12 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
   eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
 
   trm = ATBunpack(trm);
-  parseTree = PT_makeParseTreeFromTerm(trm);
+  parseTree = PT_ParseTreeFromTerm(trm);
 
   result
     = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse, ATtrue);
 
-  if (RWgetErrors() == NULL || ERR_isFeedbackListEmpty(RWgetErrors())) {
+  if (RWgetErrors() == NULL || ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
   else {
@@ -174,7 +174,7 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
 
   result = (ATerm) runTests(eqsList, testList);
 
-  if (RWgetErrors() == NULL || !ERR_isFeedbackListEmpty(RWgetErrors())) {
+  if (RWgetErrors() == NULL || !ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
   }
   else {
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
-  ERR_initErrorAPIApi();
+  ERR_initErrorApi();
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
 
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     }
 
     term = ATreadFromFile(iofile);
-    parseTree = PT_makeParseTreeFromTerm(term);
+    parseTree = PT_ParseTreeFromTerm(term);
     fclose(iofile);
 
     /* Optionally connect to the tide debugger */
@@ -300,10 +300,10 @@ int main(int argc, char *argv[])
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetErrors() == NULL || 
-		  !ERR_isFeedbackListEmpty(RWgetErrors())) ? 0 : 1;
+		  !ERR_isErrorListEmpty(RWgetErrors())) ? 0 : 1;
 
     if (RWgetErrors() != NULL &&
-	!ERR_isFeedbackListEmpty(RWgetErrors())) {
+	!ERR_isErrorListEmpty(RWgetErrors())) {
       printErrors();
     }
 

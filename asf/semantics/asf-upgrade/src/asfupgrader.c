@@ -35,9 +35,9 @@ static ATerm upgradeAsf(ATerm term)
   else {
     PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
     PT_Tree ptRules = PT_getParseTreeTree(parseTree);
-    ASF_ASFModule module = ASF_ASFModuleFromTerm(
-				      PT_makeTermFromTree(ptRules));
-      return (ATerm) PT_setParseTreeTree(parseTree, (PT_Tree) upgradeModule(module));
+    ASF_ASFModule module = ASF_ASFModuleFromTerm(PT_TreeToTerm(ptRules));
+      return (ATerm) PT_setParseTreeTree(parseTree,
+					 (PT_Tree) upgradeModule(module));
   }
 }
 
