@@ -14,14 +14,16 @@ exports
     "priorities"               Int
     "number" "of" "lhs"        Int 
     "total" "lhs" "size"       Int 
-    "maximum" "lhs" "size"     Int -> IntPair
+    "maximum" "lhs" "size"     Int 
+    "lists" "in" "lhs"         Int
+    "literals" "in" "lhs"      Int -> IntPair
 
     "count-prods" "(" SDF ")" -> IntPair
 
 hiddens
   sorts LhsInfo
   context-free syntax
-    "(" Int "," Int "," Int ")" -> LhsInfo 
+    "(" Int "," Int "," Int "," Int "," Int ")" -> LhsInfo 
   context-free syntax
     "count-kernel-prods" (Definition, Int)      -> Int {traverse}
     "count-kernel-prods" (Grammar, Int)         -> Int {traverse}
@@ -37,7 +39,11 @@ hiddens
     "count-follow-restricts" (Definition, Int)  -> Int {traverse}
     "count-follow-restricts" (Restriction, Int) -> Int {traverse}
     "count-priorities" (Definition, Int)        -> Int {traverse}
-    "count-priorities" (Priority, Int)          -> Int {traverse}
+    "count-priorities" (Grammar, Int)           -> Int {traverse}
+    "count-priorities" (Production, Int)        -> Int {traverse}
+    "count-associativities" (Definition, Int)   -> Int {traverse}
+    "count-associativities" (Grammar, Int)      -> Int {traverse}
+    "count-associativities" (Production, Int)   -> Int {traverse}
     "lhs-size-info" (Definition, LhsInfo)       -> LhsInfo {traverse}
     "lhs-size-info" (Grammar, LhsInfo)          -> LhsInfo {traverse}
     "lhs-size-info" (Production, LhsInfo)       -> LhsInfo {traverse}
@@ -45,6 +51,10 @@ hiddens
     "nr-of-symbols" (Symbol*)                   -> Int
     "nr-of-sep-symbols" ({Symbol ","}*)         -> Int
     "maximum" (Int, Int)                        -> Int
+    "count-lists" (Production, Int)             -> Int {traverse}
+    "count-lists" (Symbol, Int)                 -> Int {traverse}
+    "count-literals" (Production, Int)          -> Int {traverse}
+    "count-literals" (Symbol, Int)          -> Int {traverse}
 
   variables
     "Attributes"[0-9]*  -> Attributes
@@ -62,3 +72,4 @@ hiddens
     "Symbol*"[0-9]*     -> Symbol*
     "Symbol,*"[0-9]*    -> {Symbol ","}*
     "Symbol,+"[0-9]*    -> {Symbol ","}+
+    "NatCon"[0-9]*      -> NatCon
