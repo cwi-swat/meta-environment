@@ -84,11 +84,10 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
     newTree = PT_applyFunctionToTree("normalize",
-                                "Sdf2-Normalization",
-                                "Grammar",
-                                2,
-                                ptModuleName,
-                                ptSyntax);
+                                     "Grammar",
+                                     2,
+                                     ptModuleName,
+                                     ptSyntax);
   }
   else {
     ATerror("addNormalizeFunction: not a proper parse tree: %t\n",
