@@ -44,21 +44,19 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   useTide = debug;
 
   eqs = RWprepareEquations(eqs, mark_new_layout);
-  enter_equations(name, eqs);
-  select_equations(name);
+  enter_equations(eqs);
 
   RWclearError();
 
   tree = PT_getParseTreeTree(parseTree);
   tree = RWprepareTerm(tree, allow_ambs);
 
-  select_equations(name);
-
   if (runVerbose) {
     ATwarning("rewriting...\n");
   }
 
   if (memo_table == NULL) { 
+ATwarning("memo_table created\n");
     memo_table = MemoTableCreate();
   }
 
@@ -69,6 +67,8 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   result = rewrite(tree);
 
   MemoTableDestroy(memo_table);
+  memo_table = NULL;
+  destroy_equation_table();
 
   result = RWrestoreTerm(result, remove_layout);
   parseTree = PT_setParseTreeTree(parseTree, result);

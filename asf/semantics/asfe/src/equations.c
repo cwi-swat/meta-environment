@@ -1,29 +1,4 @@
-
-/*{{{  file header */
-
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-
-/*}}}  */
+/*{{{  includes */
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -41,6 +16,7 @@
 #include <MEPT.h>
 #include <ASFME-utils.h>
 
+/*}}}  */
 /*{{{  defines */
 
 /* These constants are dependent on Asfix2ME!!! */
@@ -48,13 +24,11 @@
 #define DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS 4
 #define DEPTH_OF_EQUATION_SIDES_IN_EQUATION    2
 
-
 /*}}}  */
 /*{{{  variables */
 
 equation_entry *currentRule = NULL;
 
-static equation_table *tables = NULL;
 equation_table *equations = NULL;
 
 ATerm posinfo;
@@ -90,11 +64,9 @@ equation_table *create_equation_table(int size)
   int i;
   equation_table *table = (equation_table *) malloc(sizeof(equation_table));
 
-  if (!table)
+  if (!table) {
     ATerror("out of memory in create_equation_table\n");
-  table->next = NULL;
-  table->module = NULL;
-  ATprotect(&table->module);
+  }
   table->size = size;
   table->table = (equation_entry **) malloc(sizeof(equation_entry *) * size);
   if (!table->table) {
@@ -109,9 +81,9 @@ equation_table *create_equation_table(int size)
 }
 
 /*}}}  */
-/*{{{  void flush_equations(equation_table * table) */
+/*{{{  static void flush_equations(equation_table * table) */
 
-void flush_equations(equation_table * table)
+static void flush_equations(equation_table * table)
 {
   int i;
   equation_entry *old, *entry;
@@ -132,23 +104,6 @@ void flush_equations(equation_table * table)
     }
     table->table[i] = NULL;
   }
-}
-
-/*}}}  */
-/*{{{  void destroy_equation_table(equation_table * table) */
-
-
-/*
-Free all memory associated with an equation table.
-*/
-
-
-void destroy_equation_table(equation_table * table)
-{
-  flush_equations(table);
-  ATunprotect(&table->module);
-  free(table->table);
-  free(table);
 }
 
 /*}}}  */
@@ -395,62 +350,7 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
 }
 
 /*}}}  */
-/*{{{  void select_equations(char *module) */
-
-void select_equations(char *module)
-{
-  equation_table *cur = tables;
-  ATerm t_module = ATmake("<str>", module);
-
-  while (cur && !ATisEqual(cur->module, t_module)) {
-    cur = cur->next;
-  }
-
-  if (!cur) {
-    ATerror("equations of module %s have not been registered.\n", module);
-  }
-
-  equations = cur;
-}
-
-/*}}}  */
-/*{{{  ATbool find_module(char *module) */
-
-ATbool find_module(char *module)
-{
-  equation_table *cur = tables;
-  ATerm t_module = ATmake("<str>", module);
-
-  while (cur && !ATisEqual(cur->module, t_module)) {
-    cur = cur->next;
-  }
-
-  if (cur) {
-    return ATtrue;
-  }
-  else {
-    return ATfalse;
-  }
-}
-
-/*}}}  */
-/*{{{  equation_table *find_equation_table(char *modname) */
-
-equation_table *find_equation_table(char *modname)
-{
-  equation_table *cur = tables;
-  ATerm t_module = ATmake("<str>", modname);
-
-  while (cur && !ATisEqual(cur->module, t_module)) {
-    cur = cur->next;
-  }
-
-  return cur;
-}
-
-
-/*}}}  */
-/*{{{  void enter_equations(char *modname, ASF_CondEquationList eqsList) */
+/*{{{  void enter_equations(ASF_CondEquationList eqsList) */
 
 /*
   The equations are ``sorted'' by outermost function symbols.
@@ -462,27 +362,16 @@ equation_table *find_equation_table(char *modname)
 */
 
 
-void enter_equations(char *modname, ASF_CondEquationList eqsList)
+void enter_equations(ASF_CondEquationList eqsList)
 {
-  equation_table *table;
-
-  table = find_equation_table(modname);
-
-  if (!table) {
-    table = create_equation_table(ASF_getCondEquationListLength(eqsList) * 2);
-    table->module = ATmake("<str>", modname);
-    table->next = tables;
-    tables = table;
-  }
-
-  flush_equations(table);
+  equations = create_equation_table(ASF_getCondEquationListLength(eqsList) * 2);
 
   if (runVerbose) {
     ATwarning("reading in equations:\n");
   }
 
   while (ASF_hasCondEquationListHead(eqsList)) {
-    enter_equation(table, ASF_getCondEquationListHead(eqsList));
+    enter_equation(equations, ASF_getCondEquationListHead(eqsList));
 
     if (ASF_hasCondEquationListTail(eqsList)) {
       eqsList = ASF_getCondEquationListTail(eqsList);
@@ -494,40 +383,19 @@ void enter_equations(char *modname, ASF_CondEquationList eqsList)
 }
 
 /*}}}  */
-/*{{{  void delete_equations(char *modname) */
+/*{{{  void destroy_equation_table(equation_table * table) */
 
-void delete_equations(char *modname)
+
+/*
+ * Free all memory associated with an equation table.
+ * */
+
+
+void destroy_equation_table()
 {
-  equation_table *cur = tables, *prev = NULL;
-  ATerm t_module = ATmake("<str>", modname);
-
-  while (cur && !ATisEqual(cur->module, t_module)) {
-    prev = cur;
-    cur = cur->next;
-  }
-
-  if (cur) {
-    if (prev) {
-      prev->next = cur->next;
-    }
-    else {
-      tables = cur->next;
-    }
-    destroy_equation_table(cur);
-  }
-}
-
-/*}}}  */
-/*{{{  void RWflushEquations() */
-
-void RWflushEquations()
-{
-  equation_table *table;
-  while (tables) {
-    table = tables;
-    tables = tables->next;
-    destroy_equation_table(table);
-  }
+  flush_equations(equations);
+  free(equations->table);
+  free(equations);
 }
 
 /*}}}  */
