@@ -86,6 +86,7 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
   }
 
   if (strcmp(editortype, "term") == 0) {
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "FocusToDot"));
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Reduce"));
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
   }
@@ -124,6 +125,14 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
                                ATmake("reduce(<str>)", moduleName));
       buttonActions = ATinsert(buttonActions, 
                                ATmake("get-root"));
+    }
+    if (strcmp(buttonName, "FocusToDot") == 0) {
+      buttonActions = ATinsert(buttonActions,
+                               ATmake("activate-given-tree(\"showdot\")"));
+      buttonActions = ATinsert(buttonActions,
+                               ATmake("activate-given-tree(\"tree2dot\")"));
+      buttonActions = ATinsert(buttonActions, 
+                               ATmake("get-focus"));
     }
   }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
