@@ -303,7 +303,7 @@ production SG_LookupBracketProd(parse_table *pt, PT_Symbol symbol)
   int i;
   int maxProd = SG_PT_NUMPRODS(pt);
 
-  for (i = 0; i <= maxProd; i++) {
+  for (i = 0; i < maxProd; i++) {
     PT_Production p = PT_ProductionFromTerm((ATerm)SG_PT_PRODUCTIONS(pt)[i]);
     PT_Symbol rhs = PT_getProductionRhs(p);
     if (PT_isEqualSymbol(symbol, rhs) &&
