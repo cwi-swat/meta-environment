@@ -2,6 +2,7 @@
 
 Thu Feb 12 13:38:55 CET 2004 <{jong,jurgenv}@cwi.nl>
  * prefixed all in/outgoing structure editor messages with "se-"
+ * prefixed all in/outgoing text editor messages with "te-"
 
 Tue Feb 10 17:49:38 CET 2004 <jurgenv@cwi.nl>
  * in-output and term-store tools run a garbage collect after 
