@@ -10,7 +10,7 @@ datadir=@datadir@
 
 PATH="$PATH:$bindir"
 
-A2TOA1="${bindir}/a2toa1 -silent"
+A2TOA1="${bindir}/a2toa1"
 TABLE="${datadir}/Sdf2.baf"
 PARSE="${bindir}/sglr -p $TABLE"
 

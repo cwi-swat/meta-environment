@@ -11,7 +11,7 @@ datadir=@datadir@
 PATH="$PATH:$bindir"
 
 PARSE="${bindir}/sglr"
-A2TOA1="${bindir}/a2toa1 -silent"
+A2TOA1="${bindir}/a2toa1"
 TABLES="${datadir}"
 LANGTYPEDIR="${datadir}"
 LANGTYPEFILE="lang.types"

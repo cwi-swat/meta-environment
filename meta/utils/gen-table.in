@@ -12,7 +12,7 @@ TMP=/tmp/`basename $0`.$$	# Junk files
 trap "rm -f $TMP*" 0 1 2 15	# Clean up afterwards
 
 PGEN="${bindir}/parsetablegen"
-A2TOA1="${bindir}/a2toa1 -silent"
+A2TOA1="${bindir}/a2toa1"
 EXTENSIONS=".sdf .sdf2"
 
 FASTGEN=1;	# Which parse table generator to use
