@@ -29,7 +29,8 @@ ${CONTROL_GEN}: ${top_builddir}/toolbus/tide.tifs
 	${TOOLBUS}/bin/tifstojava \
 		-tifs ${top_builddir}/toolbus/tide.tifs \
 		-tool tide-control \
-		-package tide
+		-package tide \
+		-swing
 
 #%.class: %.java
 #	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<

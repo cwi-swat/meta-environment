@@ -23,7 +23,8 @@ ${TOOL_GEN}: ${top_builddir}/toolbus/tide.tifs
 	${TOOLBUS}/bin/tifstojava \
 		-tifs ${top_builddir}/toolbus/tide.tifs \
 		-tool debug-tool \
-		-package tide.tool.support
+		-package tide.tool.support \
+		-swing
 
 #ADT	= ${top_srcdir}/lib-c/TA.adt
 #regen:
