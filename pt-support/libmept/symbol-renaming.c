@@ -1,4 +1,5 @@
 #include <MEPT-utils.h>
+#include <string.h>
 
 static
 PT_Symbol renameInSymbol(PT_Symbol symbol,
