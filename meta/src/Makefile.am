@@ -18,6 +18,8 @@ CLEANFILES  = generic-meta meta.1
 	     s@__GRAPH_SUPPORT__@$(GRAPH_SUPPORT)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
+	     s@__TIDE__@$(TIDE)@g;\
+	     s@__TIDE_SUPPORT__@$(TIDE_SUPPORT)@g;\
 	     s@__PANDORA__@$(PANDORA)@g;\
 	     s@__DEFAULT_EDITOR__@$(DEFAULT_EDITOR)@g;\
 	     s@__VERSION__@$(VERSION)@g;\

@@ -1,9 +1,5 @@
 #! /bin/sh
 
-# $Id$
-
-Revision='$Revision$'
-
 aterm=__ATERM__
 pt_support=__PT_SUPPORT__
 sdf_support=__SDF_SUPPORT__
@@ -13,14 +9,19 @@ sglr=__SGLR__
 pandora=__PANDORA__
 pgen=__PGEN__
 toolbus=__TOOLBUS__
+tide=__TIDE__
+tide_support=__TIDE_SUPPORT__
 prefix=__PREFIX__
 editor=__DEFAULT_EDITOR__
 myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${error_support}/bin:${graph_support}/bin:${toolbus}/bin:\
-${sdf_support}/bin:${pandora}/bin:${PATH}"; 
+${sdf_support}/bin:${pandora}/bin:${tide}/bin:${PATH}"; 
 export PATH
+
+CLASSPATH=__EXTERNAL_JARS__:${CLASSPATH}
+export CLASSPATH
 
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${prefix}/lib
 export LD_LIBRARY_PATH
@@ -190,6 +191,8 @@ toolbus $xargs ${toolbusdefs} \
    -I${sdf_support}/share/sdf-support \
    -I${graph_support}/share/graph-support \
    -I${sglr}/share/sglr \
+   -I${tide}/share/tide \
+   -I${tide_support}/share/tide-support \
    -I${pandora}/share/pandora \
    -I${pgen}/share/pgen \
    ${extra_scripts} \
