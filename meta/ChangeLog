@@ -5,6 +5,7 @@
    inside a cluster, the focus is set around the entire cluster 
    (to easily identify ambiguities).
  * Added Copy Module to Meta-Environment interface
+ * Added Import Module to Meta-Environment interface
 
 2002/10/09 (vinju@loria.fr)
  * Major refactoring of ToolBus scripts: 
