@@ -198,6 +198,9 @@ evaluator/Makefile
 evaluator/src/Makefile
 evaluator/test/Makefile 
 evaluator/test/terms/Makefile
+evaluator/test/eqs/Makefile
+evaluator/test/fail/Makefile
+evaluator/test/ref/Makefile
 graph-browser/Makefile
 graph-browser/graph-browser.tcl
 in-output/Makefile
