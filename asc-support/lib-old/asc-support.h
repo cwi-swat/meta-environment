@@ -223,8 +223,6 @@ extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
 extern ATerm unquote(ATerm t);
 
-extern void ToC_code(ATerm asfix, FILE *file);
-
 extern void register_all();
 extern void resolve_all();
 extern void init_all();

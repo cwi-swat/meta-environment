@@ -105,77 +105,66 @@ void rec_terminate(int cid, ATerm arg)
 
 int main(int argc, char *argv[])
 {
-	ATerm t, trm, reduct, asfix, file, modname;
-	ATbool printstats = ATfalse, use_toolbus = ATfalse,
-	       run_verbose = ATfalse;
-	int i, cid;
-	ATerm bottomOfStack;
-	name = argv[0];
+  ATerm t, trm, reduct, asfix, file, modname;
+  ATbool printstats = ATfalse, use_toolbus = ATfalse,
+         run_verbose = ATfalse;
+  int i, cid;
+  ATerm bottomOfStack;
+  name = argv[0];
 
-	for(i=1; i<argc; i++) {
-		if(streq(argv[i], "-stats"))
-			printstats = ATtrue;
-		else if(streq(argv[i], "-TB_TOOL_NAME"))
-			use_toolbus = ATtrue;
-		else if(streq(argv[i], "-name"))
-			name = argv[++i];
-		else if(streq(argv[i], "-v"))
-			run_verbose = ATtrue;
-	}
+  for(i=1; i<argc; i++) {
+  	if(streq(argv[i], "-stats"))
+  		printstats = ATtrue;
+  	else if(streq(argv[i], "-TB_TOOL_NAME"))
+  		use_toolbus = ATtrue;
+  	else if(streq(argv[i], "-name"))
+  		name = argv[++i];
+  	else if(streq(argv[i], "-v"))
+  		run_verbose = ATtrue;
+  }
  
-	if(use_toolbus) {
-		#ifndef WIN32 /* Code with Toolbus calls, non Windows */
-			ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
-			cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
-		#else
-			fprintf(stderr, "asource: Toolbus cannot be used in Windows.\n");
-		#endif
-	}
+  if(use_toolbus) {
+  	#ifndef WIN32 /* Code with Toolbus calls, non Windows */
+  		ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
+  		cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
+  	#else
+  		fprintf(stderr, "asource: Toolbus cannot be used in Windows.\n");
+  	#endif
+  }
 
-	AFinit(argc, argv, &bottomOfStack);
+  AFinit(argc, argv, &bottomOfStack);
 
-	init_patterns();
-	AFinitAsFixPatterns();
+  init_patterns();
+  AFinitAsFixPatterns();
 
-	c_rehash(INITIAL_TABLE_SIZE);
-	register_all();
-	resolve_all();
-	init_all();
+  c_rehash(INITIAL_TABLE_SIZE);
+  register_all();
+  resolve_all();
+  init_all();
 
-	if(use_toolbus) {
-		#ifndef WIN32 /* Code with Toolbus calls, non Windows */
-			ATBeventloop();
-		#endif
-	} 
-	else {
-		t = ATreadFromFile(stdin);
-		t = AFexpandTerm(t);
+  if(use_toolbus) {
+  	#ifndef WIN32 /* Code with Toolbus calls, non Windows */
+  		ATBeventloop();
+  	#endif
+  } 
+  else {
+    t = ATreadFromFile(stdin);
+    t = AFexpandTerm(t);
 
-		if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
-                  &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-			if(run_verbose) ATfprintf(stderr,"Reducing ...\n");
-			reduct = innermost(trm);
-			if(run_verbose) ATfprintf(stderr,"Reducing finished.\n");
-			/*
-			{
-			FILE *f = fopen("/tmp/pgen.out", "w");
-			assert(f);
-			AT_collect(2);
-			AT_printAllAFunCounts(f);
-			fclose(f);
-			}
-			*/
-			asfix = toasfix(reduct, file, modname);
-			ATwriteToBinaryFile(asfix,stdout);
-			/*ATwriteToTextFile(asfix,stdout);*/
-		}
-		else { /* Alex added {} after 'else' for readability */
-			ATfprintf(stderr, "not an asfix term: %t\n", t);
-		}
-	}
-	return 0;
+    if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
+                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
+      if(run_verbose) ATfprintf(stderr,"Reducing ...\n");
+      reduct = innermost(trm);
+      if(run_verbose) ATfprintf(stderr,"Reducing finished.\n");
+      asfix = toasfix(reduct, file, modname);
+      ATwriteToBinaryFile(asfix,stdout);
+      /*ATwriteToTextFile(asfix,stdout);*/
+    }
+    else { /* Alex added {} after 'else' for readability */
+      ATfprintf(stderr, "not an asfix term: %t\n", t);
+    }
+  }
+  return 0;
 }
-
-/*}}}  */
 
 /*}}}  */
