@@ -432,18 +432,19 @@ static void producerTest(){
 	static void ToolTest(){
 		
 		ToolDefinition Tool1 = new ToolDefinition("t1", "toolbus.tool.Example");
+		
 		ProcessDefinition P1 =
 			new ProcessDefinition("P1", (ATermList) aterms.make("[]"),
-				new LetDefinition((ATermList) aterms.make("[var(-1,t1,tool), var(-1,int,R)]"),
+				new LetDefinition((ATermList) aterms.make("[var(-1,t1,tool), var(-1,int,R), var(-1,str,Name)]"),
 					new Sequence(
 						new Execute(aterms.make("t1"), aterms.make("rvar(-1,qqq,tool)")),
-						new SndEval(aterms.make("var(-1,qqq,tool)"), aterms.make("aap(3)")),
-						new RecVal(aterms.make("var(-1,qqq,tool)"), aterms.make("rvar(-1,qqq,R)")),
+						new SndEval(aterms.make("var(-1,qqq,tool)"), aterms.make("msg(\"hello\")")),
+						new RecVal(aterms.make("var(-1,qqq,tool)"), aterms.make("count(rvar(-1,qqq,R))")),
 						new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
 						new Sequence(
-							new SndEval(aterms.make("var(-1,qqq,tool)"), aterms.make("aap(444)")),
-							new RecVal(aterms.make("var(-1,qqq,tool)"), aterms.make("rvar(-1,qqq,R)")),
-							new Print((ATermList) aterms.make("[var(-1,qqq,R)]"))
+							new RecEvent(aterms.make("var(-1,qqq,tool)"), aterms.make("button(rvar(-1,qqq,Name))")),
+							new Print((ATermList) aterms.make("[var(-1,qqq,Name)]")),
+							new SndAckEvent(aterms.make("var(-1,qqq,tool)"),aterms.make("button(var(-1,qqq,Name))"))
 						)
 					)
 				)

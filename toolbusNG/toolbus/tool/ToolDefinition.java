@@ -45,6 +45,6 @@ public class ToolDefinition{
 		AFun afun = TBTerm.factory.makeAFun(name, 1, false);
 		ATermAppl tid =  TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(ninstances));
 		ninstances++;
-		return new JavaTool(cmd, tid, new InternalToolBridge(TB), makeSig());
+		return new JavaTool(cmd, tid, makeSig());
 	}
 }

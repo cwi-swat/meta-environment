@@ -7,50 +7,64 @@ import toolbus.*;
 
 import aterm.*;
 
-class ToolShield extends Thread {
+class ToolShield extends Thread implements ToolBridge
+{
+	
 	private Object toolinstance;
 	private JavaTool javatool;
-	private LinkedList requests;
+	private LinkedList evalRequests;
 	
-	public ToolShield (Constructor cons, ToolBridge bridge, JavaTool javatool)
+	public ToolShield (Constructor cons, JavaTool javatool)
 	{
 		try {
-			Object actuals[] = new Object[] { bridge };
+			Object actuals[] = new Object[] { this };
 			toolinstance = cons.newInstance(actuals);
 		} catch (Exception e) {
 			System.out.println("ToolShield: " + e);
 		}
 		this.javatool = javatool;
-		requests = new LinkedList();
+		evalRequests = new LinkedList();
 	}
 	
-	public synchronized void addRequest(Method m, Object[] actuals){
-		requests.addLast(m);
-		requests.addLast(actuals);
+	public synchronized void addEvalRequest(Method m, Object[] actuals){
+		evalRequests.addLast(m);
+		evalRequests.addLast(actuals);
 	}
 	
 	private void handleRequest()
 	{
-		Method m = (Method) requests.getFirst(); 
-		requests.removeFirst();
+		Method m = (Method) evalRequests.getFirst(); 
+		evalRequests.removeFirst();
 	
-		Object[] actuals = (Object[])requests.getFirst();
-		requests.removeFirst();
+		Object[] actuals = (Object[])evalRequests.getFirst();
+		evalRequests.removeFirst();
 	
 		Object res = null;
   		try {
   			res = m.invoke(toolinstance, actuals);
   		}
   		catch (Exception e){
-  				System.out.println("ToolShield.request: " + e);
+  				System.out.println("ToolShield.HandleRequest: " + e);
   		}
-  		javatool.add(res);
+  		javatool.addValue(res);
+	}
+	
+	public ATermFactory getFactory(){
+		return TBTerm.factory;
+	}
+	
+	public void sndValue(ATerm trm){
+		javatool.addValue(trm);
+	}
+	
+	public void sndEvent(ATerm trm){
+		javatool.addEvent(trm);
 	}
 	
 	public void run(){
 		System.out.println("run of ToolShield called");
 		while(true){
-			while(!requests.isEmpty())
+			while(!evalRequests.isEmpty())
 				handleRequest();
 			Thread.yield();
 		}
@@ -71,14 +85,13 @@ public class JavaTool implements ToolInstance {
 	private Thread toolthread;
 	private Object toolinstance;
 	private Hashtable methodtable;
-	private ToolBridge bridge;
-	private LinkedList fromTool;
+	private LinkedList valuesFromTool;
+	private LinkedList eventsFromTool;
 	private ToolShield toolshield;
 
-	public JavaTool(String className, ATerm toolId, ToolBridge bridge, ATermList sigs) throws ToolBusException {
+	public JavaTool(String className, ATerm toolId, ATermList sigs) throws ToolBusException {
 		this.className = className;
 		this.toolId = toolId;
-		this.bridge = bridge;
 		try {
 			toolclass = Class.forName(className);
 		}
@@ -86,16 +99,13 @@ public class JavaTool implements ToolInstance {
 			throw new ToolBusException("class "+ className + " not found");
 		}
 		methodtable = new Hashtable();
-		fromTool = new LinkedList();
+		valuesFromTool = new LinkedList();
+		eventsFromTool = new LinkedList();
 		toolconstructor = findConstructor();
 		checkInputSignature(sigs);
-		toolshield = new ToolShield(toolconstructor, bridge, this);
+		toolshield = new ToolShield(toolconstructor, this);
 		toolshield.start();
 	}
-	
-//	public void run(){
-//		System.out.println("JavaTool: run");	
-//	}
 	
 	private Constructor findConstructor() throws ToolBusException 
 	{
@@ -110,17 +120,12 @@ public class JavaTool implements ToolInstance {
 		throw new ToolBusException("no appropriate constructor found for " + className);
 	}
 	
-	public void setToolInstance(Object ti){
-		toolinstance = ti;
-		System.out.println("setToolInstance("+ ti + ")");
-	}
-	
 	static private boolean equalType(ATerm t, Class c){
 		
 		if(t.getType() == ATerm.PLACEHOLDER)
 			t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
 			
-		//System.out.println("equalType(" + t + ", " + c + ")");
+		System.out.println("equalType(" + t + ", " + c + ")");
 		
 		String ctype = c.getName();
 				
@@ -128,17 +133,21 @@ public class JavaTool implements ToolInstance {
 			return  ctype.equals("int");
 		else
 		if(t == TBTerm.StrType)
-			return ctype.equals("String");
+			return ctype.equals("java.lang.String");
 		else
 		if(t == TBTerm.TermType)
 				return ctype.equals("aterm.ATerm");
+		else
+		if(t == TBTerm.VoidType)
+				return ctype.equals("void");
+				
 		return false;
 	}
 	
 	private Method findMethod(String name, ATermList args, boolean returnsVoid)
 	throws ToolBusException
 	{
-		//System.out.println("findMethod(" + name + ", " + args + ")");
+		System.out.println("findMethod(" + name + ", " + args + ")");
 		Method methods[] = toolclass.getDeclaredMethods();
 	searchMethods:
 		for(int i = 0; i < methods.length; i++){
@@ -170,16 +179,27 @@ public class JavaTool implements ToolInstance {
 		while(!sigs.isEmpty()) {
       		ATermAppl sig = (ATermAppl)sigs.getFirst();
       		sigs = sigs.getNext();
-      		if(sig.getName() == "rec-eval"){
+      		if(sig.getName().equals("rec-eval")){
       			ATerm call = sig.getArguments().getNext().getFirst();
       			String name = ((ATermAppl) call).getName();
       			ATermList args = ((ATermAppl) call).getArguments();
       			methodtable.put(name, findMethod(name, args, false));
       		}
+      		if(sig.getName().equals("rec-ack-event")){
+      			String name = "recAckEvent";
+      			ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
+      			methodtable.put(name, findMethod(name,args,true));
+      		}
+      		if(sig.getName().equals("rec-terminate")){
+      			String name = "recTerminate";
+      			ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
+      			methodtable.put(name, findMethod(name,args,true));
+      		}
+      		
 		}
 	}
 	
-  	synchronized public void sndTermToTool(ATermAppl call){
+  	synchronized public void sndEvalToTool(ATermAppl call){
   		String name = call.getName();
   		ATerm[] args = call.getArgumentArray();
   		Object actuals[]= new Object[args.length];
@@ -191,48 +211,51 @@ public class JavaTool implements ToolInstance {
   			if(ptype.equals("int"))
   				actuals[i] = new Integer(((ATermInt) args[i]).getInt());
   			else
-  			if(ptype.equals("String"))
+  			if(ptype.equals("java.lang.String"))
   				actuals[i] = ((ATermAppl) args[i]).getName();
   			else
   				actuals[i] = args[i];
   		}
-  		toolshield.addRequest(m, actuals);		
+  		toolshield.addEvalRequest(m, actuals);		
   	}
   	
-  	synchronized void add(Object obj){
-  		fromTool.addLast(obj);
-  		System.out.println("JavaTool.add: queued " + obj);
+  	synchronized void addValue(Object obj){
+  		valuesFromTool.addLast(obj);
+  		System.out.println("JavaTool.addValue: queued " + obj);
+  	}
+  	
+  	 synchronized void addEvent(Object obj){
+  		eventsFromTool.addLast(obj);
+  		System.out.println("JavaTool.addEvent: queued " + obj);
   	}
   	
   	synchronized public ATerm getToolId(){
   		return toolId;
   	}
   	
-//  	synchronized public MatchResult hasValue(ATerm trm, Environment env){
-//  		System.out.println("hasValue(" + trm + "), length fromTool = " + fromTool.size());
-//  		if(!fromTool.isEmpty()){
-//  			try {
-//				return TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
-//			} catch (ToolBusException e) {
-//				System.out.println("hasValue: cannot happen :-)");
-//			}
-//  		}
-//  		System.out.println("hasValue returns false");
-//		return new MatchResult(false, null, null);
-//  	}
-  	
-  	 synchronized public MatchResult getValue(ATerm trm, Environment env){
-  		System.out.println("getValue(" + trm + "), length fromTool = " + fromTool.size());
+  	private MatchResult getFromTool(ATerm trm, Environment env, LinkedList fromTool){
+  		System.out.println("getFromTool(" + trm + "), length fromTool = " + fromTool.size());
   		if(!fromTool.isEmpty()){
   			try {
+  				System.out.println("first = " + fromTool.getFirst());
 				MatchResult mr = TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
 				fromTool.removeFirst();
+				System.out.println("getFromTool returns: " + mr);
 				return mr;
 			} catch (ToolBusException e) {
-				System.out.println("hasValue: cannot happen :-)");
+				System.out.println("getFromTool: cannot happen :-)");
 			}
   		}
-  		System.out.println("hasValue returns false");
+  		System.out.println("getFromTool returns false");
 		return new MatchResult(false, null, null);
   	}
+  	
+  	synchronized public MatchResult getValue(ATerm trm, Environment env){
+  		return getFromTool(trm, env, valuesFromTool);
+  	}
+  	
+  	synchronized public MatchResult getEvent(ATerm trm, Environment env){
+  		return getFromTool(trm, env, eventsFromTool);
+  	}
+  	
 }

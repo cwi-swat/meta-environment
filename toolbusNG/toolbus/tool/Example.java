@@ -1,11 +1,18 @@
 package toolbus.tool;
 import aterm.*;
+import java.io.*;
+
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * @author paulk, Jul 30, 2002
  */
-public class Example {
-	ToolBridge bridge;
+public class Example extends Frame implements ActionListener {
+	private ToolBridge bridge;
+	private Button button;
+	private int count = 0;
+	private ATermFactory factory;
 
 	/**
 	 * Constructor for Example.
@@ -13,26 +20,54 @@ public class Example {
 	public Example(ToolBridge bridge) {
 		System.out.println("Yep, Example instance created");
 		this.bridge = bridge;
-		bridge.init(this);
-		bridge.run();
+		factory = bridge.getFactory();
 
+		// Build the user interface: just a single button
+		button = new Button("Button");
+		button.addActionListener(this);
+
+		add(button);
+		pack();
+		show();
 	}
-	
-	public Example(int n){
-	}
-	
-	public int funa(String s){
-		
-	return 0;
-  }
-  
-   public ATerm aap(int n){
-   	try {
+
+	public ATerm aap(int n) {
+		try {
 			Thread.sleep(1);
 		} catch (InterruptedException e) {
 			System.out.println("aap: " + e);
 		}
-   	return bridge.getFactory().makeInt(2 * n);
-   }
+		return factory.makeInt(2 * n);
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == button) {
+			System.out.println("actionPerformed(" + event + ")");
+			// When the user presses the button, we send an event to the ToolBus
+			bridge.sndEvent(factory.make("button(<str>)", button.getLabel()));
+		}
+	}
+
+	public ATerm msg(String message) {
+		// Print the incoming message
+		System.out.println("Example tool received msg: " + message);
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			System.out.println("msg: " + e);
+		}
+
+		// Increase the counter and return the current value to the ToolBus
+		return factory.make("count(<int>))", new Integer(count++));
+	}
+
+	public void recAckEvent(ATerm event) {
+		// This simple tool ignores event acknowledgements
+	}
+
+	public void recTerminate(ATerm arg) {
+		// Just exit when the ToolBus terminates
+		System.exit(0);
+	}
 
 }
