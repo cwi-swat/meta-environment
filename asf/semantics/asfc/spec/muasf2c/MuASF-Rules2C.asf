@@ -553,9 +553,24 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
                listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),
                get-first-vf-path(C-rule+2) = (Funid,Aint+),
                is-ignored-funid(Funid) = false,
+               Expression1 != make-c-temp(0), %% is the list the outermost function symbol?
                make-atmp(Aint+) = Expression,
                listpatterns2cstats(C-rule*,Expression1,Namepair*,Aint2) = (Stat*2,Aint3),
                Expression1 = arg_0(Expression); = Stat*3,
+               Stat*3 ++ Stat*2 = Stat*4,
+               Decl* ++d Stat*1 = Stat*5
+               =========================
+               listpatterns2cstats(C-rule;C-rule+1,Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+[lps2cs-1'3] select-on-same-list-pat(C-rule;C-rule+1) = (C-rule+2,C-rule*),
+               listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),
+               get-first-vf-path(C-rule+2) = (Funid,Aint+),
+               is-ignored-funid(Funid) = false,
+               Expression1 = make-c-temp(0), %% is the list the outermost function symbol?
+               make-atmp(Aint+) = Expression,
+               listpatterns2cstats(C-rule*,Expression1,Namepair*,Aint2) = (Stat*2,Aint3),
+               Expression1 = Expression; = Stat*3,
                Stat*3 ++ Stat*2 = Stat*4,
                Decl* ++d Stat*1 = Stat*5
                =========================
