@@ -21,5 +21,6 @@ FileDialog.java\
 ToolBar.java\
 MenuBar.java\
 ModulePopupMenu.java\
-ModuleTree.java
+ModuleTree.java\
+ModuleBrowser.java
 

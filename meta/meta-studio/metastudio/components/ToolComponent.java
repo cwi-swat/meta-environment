@@ -11,7 +11,7 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 
 /**
- * This class is (should be in the near future) the base class for all
+ * This class is  the base class for all
  * MetaStudio widgets that communicate with the ToolBus.
  * 
  * For posting events, an ATermFactory and a UserInterfaceBridge is made

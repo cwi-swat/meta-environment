@@ -7,12 +7,13 @@ import java.awt.event.MouseListener;
 import metastudio.MultiBridge;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
+import aterm.pure.PureFactory;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
     private GraphPanel panel;
     
-    public ParseTreePanel(MetaGraphFactory factory, final MultiBridge bridge) {
-        super(factory, bridge,"parsetree");
+    public ParseTreePanel(PureFactory factory, final MultiBridge bridge) {
+        super(new MetaGraphFactory(factory), bridge, "parsetree");
         this.panel = getGraphPanel();
         
         MouseListener listener = new MouseAdapter() {
