@@ -117,6 +117,7 @@ clean:
 	rm -f	core sglr.tifs sglr.tif.[ch]
 	rm -f	${OBJ} ${LIBOBJ}
 	rm -f	${OBJA2TOA1} ${LIBOBJA2TOA1}
+	rm -f	${LIBOBJA2TOA1GC}
 	rm -f	${LIBOBJGC}
 	rm -f	${LIBOBJPROF}
 
