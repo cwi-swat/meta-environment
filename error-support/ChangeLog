@@ -1,5 +1,12 @@
 $Id$
 
+2003/12/15 (jurgenv@cwi.nl)
+ * Regenerated both APIs using new apigen. 
+ * Added lexical definitions of String and NatCon manually to prevent 
+   bottom-sort generation in the parsed API (See lib/Lexicals.sdf)
+ * started on utility functions for lifting abstract errors to parsed errors
+   and vice versa.
+
 2003/12/04 (jurgenv@cwi.nl)
  * Initial version 0.1 of meta-errors package. This package will contain
    generated data-structures from basic/Errors and some convenience functions.
