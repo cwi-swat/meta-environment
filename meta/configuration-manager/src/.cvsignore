@@ -1,6 +1,7 @@
-Makefile.in
-Makefile
-.deps
-configmanager
-.libs
 *.tifs
+.deps
+.libs
+Makefile
+Makefile.in
+configmanager
+standard.buttons
