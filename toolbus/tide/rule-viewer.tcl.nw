@@ -7,6 +7,7 @@ points.
 <<rule-viewer.tcl>>=
 <<create-rule-viewer>>
 <<update-viewer>>
+<<update-buttons>>
 <<get-port>>
 <<get-cond>>
 <<get-acts>>
@@ -14,10 +15,13 @@ points.
 <<get-selected-rule>>
 <<clear-rule-selection>>
 <<change-cur-rule>>
+<<has-changed>>
 
 <<tide-process-selected-bv>>
 <<do-create-rule>>
+<<do-modify-rule>>
 <<do-destroy-rule>>
+<<do-restore-rule>>
 
 <<view-rules>>
 
@@ -57,6 +61,7 @@ proc create-rule-viewer { dap } {
   set Viewer($dap,win) $w
   set Viewer($dap,pids) all
   set Viewer($dap,cur-rule) ""
+  set Viewer($dap,changed) 0
 
   toplevel $w
   wm positionfrom $w program
@@ -94,7 +99,7 @@ Build the rule frame consisting of a label and a scrolled listbox.
 
 <<create-rule-frame>>=
 proc create-rule-frame { dap w } {
-  global Dap Viewer
+  global Dap Viewer Rule
 
   frame $w -relief groove -borderwidth 2
   label $w.label -text "Observation points:"
@@ -115,7 +120,7 @@ proc create-rule-frame { dap w } {
   set Viewer($dap,wrules) $w.list.box
 
   foreach rid $Dap($dap,rules) {
-    set text [format "%3d" $rid]
+    set text [format "%3d %s" $rid [lindex $Rule($dap,$rid,port) 0]]
     $Viewer($dap,wrules) insert end $text
   }
 
@@ -123,13 +128,20 @@ proc create-rule-frame { dap w } {
   button $w.buttons.create \
 	-text "Create" \
 	-command "do-create-rule $dap" \
-	-width 6
+	-width 5
+  button $w.buttons.modify \
+	-text "Modify" \
+	-command "do-modify-rule $dap" \
+	-width 5
   button $w.buttons.destroy \
 	-text "Destroy" \
 	-command "do-destroy-rule $dap" \
-	-width 6
+	-width 5
   pack $w.buttons.create -side left -expand 1
+  pack $w.buttons.modify -side left -expand 1
   pack $w.buttons.destroy -side left -expand 1
+
+  set Viewer($dap,wmodify) $w.buttons.modify
 
   pack $w.buttons -side top -fill x
 }
@@ -149,10 +161,16 @@ proc create-port-frame { dap w } {
   set type [lindex $Dap($dap,ports) 0]
   set Viewer($dap,port) $type
 
-  label $w.label -text "Port:"
-  pack $w.label -side top -fill x
+  frame $w.header
+  label $w.header.label -text "Port:"
+  pack $w.header.label -side left -expand 1 -fill x
+  pack $w.header -fill x
 
   <<when>>
+  button $w.header.restore -text "Restore" -command "do-restore-rule $dap"
+  pack $w.header.restore -side left
+  set Viewer($dap,wrestore) $w.header.restore
+
   <<exec-state>>
   <<always>>
   <<location>>
@@ -172,23 +190,26 @@ The {\tt when} frame. Lets the user choose between {\tt at}, {\tt before},
 or {\tt after}.
 
 <<when>>=
-  frame $w.when
-  label $w.when.label -text "When:"
-  radiobutton $w.when.at -text "at" \
+#  frame $w.when
+#  label $w.when.label -text "When:"
+  radiobutton $w.header.at -text "at" \
 	-variable Viewer($dap,port,when) \
-	-value "at"
-  radiobutton $w.when.before -text "before" \
+	-value "at" \
+	-command "has-changed $dap"
+  radiobutton $w.header.before -text "before" \
 	-variable Viewer($dap,port,when) \
-	-value "before"
-  radiobutton $w.when.after -text "after" \
+	-value "before" \
+	-command "has-changed $dap"
+  radiobutton $w.header.after -text "after" \
 	-variable Viewer($dap,port,when) \
-	-value "after"
+	-value "after" \
+	-command "has-changed $dap"
 
-  pack $w.when.label -side left
-  pack $w.when.at -side left
-  pack $w.when.before -side left
-  pack $w.when.after -side left
-  pack $w.when -side top -fill x
+#  pack $w.when.label -side left
+  pack $w.header.at -side left
+  pack $w.header.before -side left
+  pack $w.header.after -side left
+#  pack $w.when -side top -fill x
 @
 
 %}}}
@@ -200,40 +221,47 @@ or {\tt after}.
     set Viewer($dap,port,exec-state) stop
     radiobutton $w.es.exec-state -text "Exec state:" \
 		-value exec-state \
-		-variable Viewer($dap,port)
+		-variable Viewer($dap,port) \
+		-command "has-changed $dap"
     pack $w.es.exec-state -side left
     radiobutton $w.es.all -text "All" \
 		-value all \
-		-variable Viewer($dap,port,exec-state)
+		-variable Viewer($dap,port,exec-state) \
+		-command "has-changed $dap"
     pack $w.es.all -side left
     if { $Dap($dap,ec,stop) } {
       radiobutton $w.es.stop -text "Stop" \
 		-variable Viewer($dap,port,exec-state) \
-		-value "stop"
+		-value "stop" \
+		-command "has-changed $dap"
       pack $w.es.stop -side left
     }
     if { $Dap($dap,ec,single-step) } {
       radiobutton $w.es.single-step -text "Single step" \
 		-variable Viewer($dap,port,exec-state) \
-		-value "single-step"
+		-value "single-step" \
+		-command "has-changed $dap"
       pack $w.es.single-step -side left
     }
     if { $Dap($dap,ec,step-over) } {
       radiobutton $w.es.step-over -text "Step over" \
 		-variable Viewer($dap,port,exec-state) \
-		-value "step-over"
+		-value "step-over" \
+		-command "has-changed $dap"
       pack $w.es.step-over -side left
     }
     if { $Dap($dap,ec,run) } {
       radiobutton $w.es.run -text "Run" \
 		-variable Viewer($dap,port,exec-state) \
-		-value "run"
+		-value "run" \
+		-command "has-changed $dap"
       pack $w.es.run -side left
     }
     if { $Dap($dap,ec,run-until-parent) } {
       radiobutton $w.es.run-until-parent -text "Run until parent" \
 		-variable Viewer($dap,port,exec-state) \
-		-value "run-until-parent"
+		-value "run-until-parent" \
+		-command "has-changed $dap"
       pack $w.es.run-until-parent -side left
     }
     pack $w.es -side top -fill x
@@ -247,7 +275,8 @@ or {\tt after}.
 if { $Dap($dap,port,always) } {
   radiobutton $w.always -text "Always" \
 	-variable Viewer($dap,port) \
-	-value always
+	-value always \
+	-command "has-changed $dap"
   pack $w.always -anchor w
 }
 @
@@ -264,7 +293,8 @@ if { $Dap($dap,port,always) } {
 
     radiobutton $w.loc.top.radio -text "Location:" \
 		-variable Viewer($dap,port) \
-		-value location
+		-value location \
+		-command "has-changed $dap"
     entry $w.loc.top.module -textvariable Viewer($dap,port,module)
 
     label $w.loc.bottom.l1 -text "From:"
@@ -273,6 +303,12 @@ if { $Dap($dap,port,always) } {
     label $w.loc.bottom.l2 -text "To:"
     entry $w.loc.bottom.el -textvariable Viewer($dap,port,end-line) -width 5
     entry $w.loc.bottom.ec -textvariable Viewer($dap,port,end-col) -width 3
+
+    bind $w.loc.top.module <KeyPress> "+has-changed $dap"
+    bind $w.loc.bottom.sl <KeyPress> "+has-changed $dap"
+    bind $w.loc.bottom.sc <KeyPress> "+has-changed $dap"
+    bind $w.loc.bottom.el <KeyPress> "+has-changed $dap"
+    bind $w.loc.bottom.ec <KeyPress> "+has-changed $dap"
 
     pack $w.loc.top.radio -side left
     pack $w.loc.top.module -side left -expand 1 -fill x
@@ -305,27 +341,31 @@ The function/predicate ports.
 
     set f $w.fp.bottom
     if { $Dap($dap,port,call) } {
-      checkbutton $w.call -text "Call" \
-		-onvalue 1 -offvalue 0 \
-		-variable Viewer($dap,port,call)
+      radiobutton $w.call -text "Call" \
+		-value call \
+		-variable Viewer($dap,port) \
+		-command "has-changed $dap"
       pack $w.call -side top -anchor w
     }
     if { $Dap($dap,port,retry) } {
-      checkbutton $w.retry -text "Retry/backtrack" \
-		-onvalue 1 -offvalue 0 \
-		-variable Viewer($dap,port,retry)
+      radiobutton $w.retry -text "Retry/backtrack" \
+		-value retry \
+		-variable Viewer($dap,port) \
+		-command "has-changed $dap"
       pack $w.retry -side top -anchor w
     }
     if { $Dap($dap,port,fail) } {
-      checkbutton $w.fail -text "Fail" \
-		-onvalue 1 -offvalue 0 \
-		-variable Viewer($dap,port,fail)
+      radiobutton $w.fail -text "Fail" \
+		-value fail \
+		-variable Viewer($dap,port) \
+		-command "has-changed $dap"
       pack $w.fail -side top -anchor w
     }
     if { $Dap($dap,port,succeed) } {
-      checkbutton $w.succeed -text "Succeed" \
-		-onvalue 1 -offvalue 0 \
-		-variable Viewer($dap,port,succeed)
+      radiobutton $w.succeed -text "Succeed" \
+		-value succeed \
+		-variable Viewer($dap,port) \
+		-command "has-changed $dap"
       pack $w.succeed -side top -anchor w
     }
     pack $w.fp.top.label -side left
@@ -344,8 +384,10 @@ if { $Dap($dap,port,variable) } {
   frame $w.var
   radiobutton $w.var.radio -text "Variable change:" \
 	-variable Viewer($dap,port) \
-	-value "variable"
+	-value "variable" \
+	-command "has-changed $dap"
   entry $w.var.entry -textvariable Viewer($dap,port,variable)
+  bind $w.var.entry <KeyPress> "+has-changed $dap"
   pack $w.var.radio -side left
   pack $w.var.entry -side left
   pack $w.var -side top -fill x
@@ -360,8 +402,10 @@ if { $Dap($dap,port,exception) } {
   frame $w.exception
   radiobutton $w.exception.radio -text "Exception:" \
 	-variable Viewer($dap,port) \
-	-value exception
+	-value exception \
+	-command "has-changed $dap"
   entry $w.exception.entry -textvariable Viewer($dap,port,exception)
+  bind $w.exception.entry <KeyPress> "+has-changed $dap"
   pack $w.exception.radio -side left
   pack $w.exception.entry -side left
   pack $w.exception -side top -fill x
@@ -376,8 +420,10 @@ if { $Dap($dap,port,send) } {
   frame $w.send
   radiobutton $w.send.radio -text "Send:" \
 	-variable Viewer($dap,port) \
-	-value send
+	-value send \
+	-command "has-changed $dap"
   entry $w.send.entry -textvariable Viewer($dap,port,send)
+  bind $w.send.entry <KeyPress> "+has-changed $dap"
   pack $w.send.radio -side left
   pack $w.send.entry -side left
   pack $w.send -side top -fill x
@@ -392,8 +438,10 @@ if { $Dap($dap,port,receive) } {
   frame $w.receive
   radiobutton $w.receive.radio -text "Receive:" \
 	-variable Viewer($dap,port) \
-	-value receive
+	-value receive \
+	-command "has-changed $dap"
   entry $w.receive.entry -textvariable Viewer($dap,port,receive)
+  bind $w.receive.entry <KeyPress> "+has-changed $dap"
   pack $w.receive.radio -side left
   pack $w.receive.entry -side left
   pack $w.receive -side top -fill x
@@ -408,7 +456,8 @@ if { $Dap($dap,port,process-creation) } {
   frame $w.pc
   radiobutton $w.pc.radio -text "Process Creation" \
 	-variable Viewer($dap,port) \
-	-value process-creation
+	-value process-creation \
+	-command "has-changed $dap"
   pack $w.pc.radio -side left
   pack $w.pc -side top -fill x
 }
@@ -422,7 +471,8 @@ if { $Dap($dap,port,process-destruction) } {
   frame $w.pd
   radiobutton $w.pd.radio -text "Process Destruction" \
 	-variable Viewer($dap,port) \
-	-value process-destruction
+	-value process-destruction \
+	-command "has-changed $dap"
   pack $w.pd.radio -side left
   pack $w.pd -side top -fill x
 }
@@ -444,10 +494,10 @@ proc create-cond-frame { dap f } {
   pack $f.label -side top -fill x
 
   frame $f.expr
-  frame $f.expr.dummy -width 24
+#  frame $f.expr.dummy -width 24
   entry $f.expr.e  -textvariable Viewer($dap,cond)
 
-  pack $f.expr.dummy -side left
+#  pack $f.expr.dummy -side left
   pack $f.expr.e -side left -expand 1 -fill x
   pack $f.expr -side top -expand 1 -fill both
 }
@@ -512,10 +562,13 @@ proc update-viewer { dap } {
 
   set cur $Viewer($dap,cur-rule)
   if { $cur != "" } {
+    set Viewer($dap,when) $Rule($dap,$cur,when)
     <<update port widgets>>
-    <<update condition widgets>>
+    <<update condition widget>>
+    <<update action widget>>
     tide-ui-select-processes $dap $Rule($dap,$cur,pids)
   }
+  update-buttons $dap
 }
 @
 %{{{ update port widgets
@@ -528,7 +581,6 @@ proc update-viewer { dap } {
   set type [lindex $port 0]
   set when [lindex $port 1]
 
-  set Viewer($dap,port,module) $module
   set Viewer($dap,port) $type
   set Viewer($port,when) $when
 
@@ -558,20 +610,63 @@ proc update-viewer { dap } {
 @
 
 %}}}
-%{{{ update condition widgets
+%{{{ update condition widget
 
-<<update condition widgets>>=
+<<update condition widget>>=
   set cond $Rule($dap,$cur,cond)
 
   if { $cond == "always" } {
     set Viewer($dap,cond) "always"
   } else {
-    set Viewer($dap,cond) "expr"
-    set Viewer($dap,cond,expr) $cond
+    set Viewer($dap,cond) $cond
   }
 @
 
 %}}}
+%{{{ update action widget
+
+<<update action widget>>=
+  set acts $Rule($dap,$cur,acts)
+
+  $Viewer($dap,wacts) delete 1.0 end
+  $Viewer($dap,wacts) insert 1.0 $acts  
+@
+
+%}}}
+
+%}}}
+%{{{ proc update-buttons { dap }
+
+<<update-buttons>>=
+proc update-buttons { dap } {
+  global Viewer
+
+  if { $Viewer($dap,changed) && $Viewer($dap,cur-rule) != "" } {
+    $Viewer($dap,wmodify) configure -state normal
+    $Viewer($dap,wrestore) configure -state normal     
+  } else {
+    $Viewer($dap,wmodify) configure -state disabled
+    $Viewer($dap,wrestore) configure -state disabled   
+  }
+}
+@
+
+%}}}
+%{{{ proc has-changed { dap }
+
+The user changed the contents of the viewer.
+Update the buttons.
+
+<<has-changed>>=
+proc has-changed { dap } {
+  global Viewer
+
+  if { $Viewer($dap,changed) == 0 } {
+    set Viewer($dap,changed) 1
+    update-buttons $dap
+  }
+}
+@
 
 %}}}
 
@@ -698,11 +793,12 @@ proc change-cur-rule { dap x y } {
 
   set w $Viewer($dap,wrules)
   set idx [$w nearest $y]
-  $w selection clear
+  $w selection clear 0 end
   $w selection set $idx
 
   set rid [lindex $Dap($dap,rules) $idx]
   if { $Viewer($dap,cur-rule) != $rid } {
+    set Viewer($dap,changed) 0
     set Viewer($dap,cur-rule) $rid
     update-viewer $dap
   }
@@ -739,9 +835,33 @@ proc do-create-rule { dap } {
 @
 
 %}}}
+%{{{ proc do-modify-rule { dap }
+
+The user pushed the 'modify' button.
+Modify an existing rule using the current contents of
+the viewer window.
+
+<<do-modify-rule>>=
+proc do-modify-rule { dap } {
+  set rid [get-selected-rule $dap]
+  set procs [get-selected-procs $dap]
+
+  if { $rid != "" && $procs != {} } {
+    set port [get-port $dap]
+    set cond [get-cond $dap]
+    set acts [get-acts $dap]
+    set lifetime persistent
+
+    tide-modify-rule $rid $dap $procs $port $cond $acts $lifetime
+  }
+}
+@
+
+%}}}
 %{{{ proc do-destroy-rule { dap }
 
-The user has pushed the 'destroy rule' button.
+The user has pushed the 'destroy' button.
+Destroy the current rule.
 
 <<do-destroy-rule>>=
 proc do-destroy-rule { dap } {
@@ -749,6 +869,23 @@ proc do-destroy-rule { dap } {
 
   if { $rid != "" } {
     tide-destroy-rule $dap $rid
+  }
+}
+@
+
+%}}}
+%{{{ proc do-restore-rule { dap }
+
+The user pushed the 'restore' button.
+Restore the contents of the viewer window to reflect
+the current rule.
+
+<<do-restore-rule>>=
+proc do-restore-rule { dap } {
+  set rid [get-selected-rule $dap]
+
+  if { $rid != "" } {
+    update-viewer $dap
   }
 }
 @
@@ -814,11 +951,11 @@ proc tide-dap-disconnected-bv { dap } {
 A new rule has been created.
 
 <<tide-rule-created-bv>>=
-proc tide-rule-set-bv { dap rid pids port cond acts life } {
+proc tide-rule-created-bv { dap rid pids port cond acts life } {
   global Dap Viewer
 
   if { $Dap($dap,viewer) } {
-    $Viewer($dap,wrules) insert end "[format "%3d" $rid]"    
+    $Viewer($dap,wrules) insert end "[format "%3d: %s" $rid [lindex $port 0]]"    
     if { $Viewer($dap,cur-rule) == $rid } {
       update-viewer $dap
     }
@@ -832,7 +969,7 @@ proc tide-rule-set-bv { dap rid pids port cond acts life } {
 A rule was destroyed.
 
 <<tide-rule-destroyed-bv>>=
-proc tide-rule-cleared-bv { P rid } {
+proc tide-rule-destroyed-bv { P rid } {
   global Dap Viewer
 
   if { $Dap($dap,viewer) } {

@@ -29,8 +29,10 @@ void dap_dap_disconnected(term *dap);
 dap *dap_get(int dapid);
 
 /* Event rules */
-void dap_rule_created(int dapid, term_list *procs, 
-		term *port, term *cond, term *acts, term *lifetime, int rid);
+void dap_rule_created(int dapid, int rid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime);
+void dap_rule_modified(int dapid, int rid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime);
 void dap_rule_destroyed(int dapid, int rid);
 event_rule *dap_get_rule(int dapid, int ruleid);
 int dap_id(term *d);
@@ -206,6 +208,7 @@ dap *daps[MAX_DAPS];
 <<dap_id>>
 
 <<dap_rule_created>>
+<<dap_rule_modified>>
 <<dap_rule_destroyed>>
 <<dap_get_rule>>
 <<dap_eventport>>
@@ -335,8 +338,8 @@ int dap_id(term *d)
 %{{{ void dap_rule_created(dapid, procs, port, cond, acts, lifetime, rid)
 
 <<dap_rule_created>>=
-void dap_rule_created(int dapid, term_list *procs, 
-		term *port, term *cond, term *acts, term *lifetime, int rid)
+void dap_rule_created(int dapid, int rid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime)
 {
   event_rule *rule;
 
@@ -435,6 +438,115 @@ and read detailed port information when necessary.
 %}}}
 
 %}}}
+%{{{ void dap_rule_modified(dapid, rid, procs, port, cond, acts, lifetime)
+
+A rule is modified, record its new features.
+
+<<dap_rule_modified>>=
+void dap_rule_modified(int dapid, int rid, term_list *procs, 
+		term *port, term *cond, term *acts, term *lifetime)
+{
+  event_rule *rule;
+
+  assert(daps[dapid]);
+  rule = daps[dapid]->rules[rid];
+  assert(rule);
+
+  rule->pids = procs;
+  rule->cond = cond;
+  rule->acts = acts;
+  rule->lifetime = dap_eventlife(lifetime);
+
+  <<free old port>>
+  <<modify port>>
+  <<modify lifetime>>
+
+  rule->next = daps[dapid]->ports[rule->port.type];
+  daps[dapid]->ports[rule->port.type] = rule;
+}
+@
+
+%{{{ free old port
+
+<<free old port>>=
+  switch(rule->port.type) {
+    case PORT_LOCATION:	if(rule->port.u.loc.module)
+			  free(rule->port.u.loc.module);
+    case PORT_CALL:
+    case PORT_FAIL:
+    case PORT_RETRY:
+    case PORT_SUCCEED:	free(rule->port.u.function);
+			break;
+    case PORT_EXCEPTION:
+			free(rule->port.u.exception);
+			break;
+    case PORT_VARIABLE:	free(rule->port.u.var);
+			break;
+    case PORT_SEND:
+    case PORT_RECEIVE:	TBunprotect(&rule->port.u.msg);
+			break;
+  }
+@
+
+%}}}
+%{{{ modify port
+
+Interpret the port term. Analyze which port type it indicates,
+and read detailed port information when necessary.
+
+
+<<modify port>>=
+{
+  term *type = list_index(port, 1);
+  term *when = list_index(port, 2);
+
+  rule->port.when = dap_eventwhen(when);
+  rule->port.type = dap_eventport(type);
+  switch(rule->port.type) {  
+    case PORT_EXEC_STATE:
+			rule->port.u.exec_state = 
+					dap_term2es(list_index(port, 3));
+			break;
+    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(port)),
+				&rule->port.u.loc);
+			break;
+    case PORT_CALL:
+    case PORT_FAIL:
+    case PORT_RETRY:
+    case PORT_SUCCEED:	
+	rule->port.u.function = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_EXCEPTION:
+	rule->port.u.exception = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_VARIABLE:
+	rule->port.u.var = strdup(str_val(list_index(port, 3)));
+	break;
+
+    case PORT_SEND:
+    case PORT_RECEIVE:
+	rule->port.u.msg = list_index(port, 3);
+	TBprotect(&rule->port.u.msg);
+	break;
+  }
+}
+@
+
+%}}}
+%{{{ modify lifetime
+
+<<modify lifetime>>=
+  if(TBmatch(lifetime, "one-shot"))
+    rule->lifetime = ONE_SHOT;
+  else
+    rule->lifetime = PERSISTENT;
+@
+
+%}}}
+
+%}}}
 %{{{ void dap_rule_destroyed(int dapid, int rid)
 
 Remove all traces of an event rule.
@@ -472,7 +584,9 @@ void dap_rule_destroyed(int dapid, int rid)
 			break;
     case PORT_VARIABLE:	free(rule->port.u.var);
 			break;
-			
+    case PORT_SEND:
+    case PORT_RECEIVE:	TBunprotect(&rule->port.u.msg);
+			break;
   }
 }
 @

@@ -28,6 +28,7 @@ view, it is a \emph{debug-nub}.
 <<get_info>>
 <<get_processes>>
 <<create_rule>>
+<<modify_rule>>
 <<destroy_rule>>
 
 <<rec_monitor>>
@@ -372,7 +373,7 @@ term *get_processes(int cid)
 @
 
 %}}}
-%{{{ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
+%{{{ term *create_rule(int cid, term *procs, port, cond, acts, life)
 
 This ToolBus callback function is called to create a new rule. 
 
@@ -383,6 +384,19 @@ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term
   return TB_make(
 	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
 	procs, port, cond, acts, life, rid);
+}
+@
+
+%}}}
+%{{{ void modify_rule(int cid, rid, term *procs, port, cond, acts, life)
+
+This ToolBus callback function is called to modify an existing rule. 
+
+<<modify_rule>>=
+void modify_rule(int cid, int rid, term *procs, term *port, 
+				term *cond, term *acts, term *life)
+{
+  dap_rule_modified(0, rid, procs, port, cond, acts, life);
 }
 @
 

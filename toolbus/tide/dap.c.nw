@@ -398,13 +398,8 @@ TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
 
   TBprintf(stderr, "generating watchpoint, result = %t\n", *result);
 
-  if(TB_match(*result, "nothing"))
-    return TBtrue;
-
-  post_event(EVQ_WATCHPOINT, 
-	TB_make("watchpoint([<int>],<int>,<term>,<term>)",
-	pid, p->ruleid, expr, *result));
-
+  *result = TB_make("[<term>,<term>]", expr, *result);
+  
   return TBtrue;
 }
 @
@@ -568,11 +563,13 @@ static TBbool dap_execute_list(term_list *actions, int pid, term **result, char 
   term_list *el, *l = NULL;
 
   while(actions) {
+    el = NULL;
     if(!dap_execute(list_first(actions), pid, &el, msg)) {
       *result = el;
       return TBfalse;
     }
-    l = list_concat_term(l, el);
+    if(el)
+      l = list_concat_term(l, el);
     actions = list_next(actions);
   }
   *result = l;
@@ -703,7 +700,7 @@ int dap_create_rule(term *procs, term *port, term *cond,
     }
   } else {
     rid = RID++;
-    dap_rule_created(0, procs, port, cond, acts, life, rid);
+    dap_rule_created(0, rid, procs, port, cond, acts, life);
   }
   return rid;
 }
@@ -834,8 +831,17 @@ static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
   TBprintf(stderr, "triggering rule: %t\n", acts);
   p = dap_get_process(0, pid);
   p->ruleid = rid;
+  res = NULL;
   if(!dap_execute_list(acts, pid, &res, &msg))
     TBprintf(stderr, "execution failed: %t - %s\n", res, msg);
+
+
+  if(res) {
+    TBprintf(stderr, "posting result: %t\n", res);
+    post_event(EVQ_WATCHPOINT, 
+	TB_make("watchpoint([<int>],<int>,<term>)",
+	pid, p->ruleid, res));
+  }
 }
 @
 

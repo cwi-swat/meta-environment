@@ -101,10 +101,10 @@ tide.tb: tide.tb.nw
 	$(TOOLBUS) -gentifs $<
 
 debug-adapter.tif.c: tide.tifs
-	$(CTIF) -newstyle -tool debug-adapter -tifs tide.tifs
+	$(CTIF) -multi -tool debug-adapter -tifs tide.tifs
 
 viewer.tif.c: slave-example.tifs
-	$(CTIF) -newstyle -tool viewer -tifs slave-example.tifs
+	$(CTIF) -multi -tool viewer -tifs slave-example.tifs
 
 buscontrol: buscontrol.o
 	$(LINK) buscontrol.o -ltide -ltb $(LIBS)

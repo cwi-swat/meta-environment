@@ -480,18 +480,14 @@ proc tide-dap-disconnected-processes { dap } {
 @
 
 %}}}
-%{{{ proc tide-watchpoint-procs { dap pid rid expr val }
+%{{{ proc tide-watchpoint-procs { dap pid rid exprs }
 
 <<tide-watchpoint-procs>>=
-proc tide-watchpoint-procs { dap pid rid expr val } {
+proc tide-watchpoint-procs { dap pid rid exprs } {
   global Dap
 
-  puts stderr "tide-watchpoint-procs: $dap $pid $rid $expr $val"
-  if { [info exists Dap($dap,pc-rid)] } {
-    puts stderr "    pc-rid = $Dap($dap,pc-rid)"
-  }
   if { [info exists Dap($dap,pc-rid)] && $Dap($dap,pc-rid) == $rid } {
-    process-created $dap $pid $val
+    process-created $dap $pid [lindex [lindex $exprs 0] 1]
   }
   if { [info exists Dap($dap,pd-rid)] && $Dap($dap,pd-rid) == $rid } {
     process-destroyed $dap $pid
@@ -580,9 +576,11 @@ It also provides a couple of functions to set and clear event-rules.
 <<tide-dap-disconnected-event-rules>>
 <<rule-created>>
 <<rule-destroyed>>
+<<rule-modified>>
 <<watchpoint>>
 <<tide-create-rule>>
 <<tide-destroy-rule>>
+<<tide-modify-rule>>
 
 <<event-rule variables>>
 @
@@ -651,19 +649,35 @@ proc rule-created { dap pids rid port cond acts life } {
     set Rule($dap,$rid,life) $life
     set Rule($dap,$rid,pids) $pids
 
-    set count 0
-    foreach act $acts {
-      set Rule($dap,$rid,value$count) ""
-      set Rule($dap,$rid,expr$count) ""
-      if { [string match watch* $act] } {
-        set end [expr [string length $act] -2]
-        set Rule($dap,$rid,expr$count) [string range $act 6 $end]  
-      }
-      incr count
-    }
-    set Rule($dap,$rid,count) $count
-
     tide-call rule-created $dap $rid $pids $port $cond $acts $life
+  }
+}
+@
+
+%}}}
+%{{{ proc rule-modified { P D rid port cond acts life }
+
+A new event-rule has been modified.
+
+<<rule-modified>>=
+proc rule-modified { dap pids rid port cond acts life } {
+  global Dap Rule
+
+  set port [TCLport $port]
+  puts stderr "rule-modified: $dap, $rid, $pids, $port, $cond, $acts"
+
+  if { $rid != -1 && [lsearch $Dap($dap,rules) $rid] == -1 } {
+    if { [lsearch $Dap($dap,rules) $rid] == -1 } {
+      lappend Dap($dap,rules)  $rid
+    }
+    
+    set Rule($dap,$rid,port) $port
+    set Rule($dap,$rid,cond) $cond
+    set Rule($dap,$rid,acts) $acts
+    set Rule($dap,$rid,life) $life
+    set Rule($dap,$rid,pids) $pids
+
+    tide-call rule-modified $dap $rid $pids $port $cond $acts $life
   }
 }
 @
@@ -695,11 +709,11 @@ proc rule-destroyed { dap pid rid } {
 %{{{ proc watchpoint { dap pid rid expr val }
 
 <<watchpoint>>=
-proc watchpoint { dap pid rid expr val } {
+proc watchpoint { dap pid rid exprs } {
   global Dap Rule
 
-  puts stderr "watchpoint: $dap, $pid, $rid, $expr, $val"
-  tide-call watchpoint $dap $pid $rid $expr $val
+  puts stderr "watchpoint: $dap, $pid, $rid, $exprs"
+  tide-call watchpoint $dap $pid $rid $exprs
 }
 @
 
@@ -721,6 +735,27 @@ proc tide-create-rule { type dap pids port cond acts life } {
     set Pids [TBlist $pids]
     set Port [TBport $port]
     TBpost "create-rule($type,$dap,$Pids,$Port,$cond,$Acts,$life)"
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-modify-rule { rid dap pids port cond acts }
+
+Modify an event-rule.
+
+<<tide-modify-rule>>=
+proc tide-modify-rule { rid dap pids port cond acts life } {
+  set Acts \[$acts\]
+  if { $cond == "" } {
+    set cond always
+  }
+  if { $pids == "all" } {
+    TBpost "modify-rule($rid,$dap,all,[TBport $port],$cond,$Acts,$life)"
+  } else {
+    set Pids [TBlist $pids]
+    set Port [TBport $port]
+    TBpost "modify-rule($rid,$dap,$Pids,$Port,$cond,$Acts,$life)"
   }
 }
 @
@@ -823,19 +858,23 @@ proc tide-process-destroyed-cpe { dap pid } {
 
 %}}}
 
-%{{{ proc tide-watchpoint-cpe { dap pids rid expr val }
+%{{{ proc tide-watchpoint-cpe { dap pids rid exprs }
 
 <<tide-watchpoint-cpe>>=
-proc tide-watchpoint-cpe { dap pids rid expr val } {
+proc tide-watchpoint-cpe { dap pids rid exprs } {
   global Proc
 
-  if { $expr == "cpe" } {
-    set port [TCLport [concat $val]]
+  if { [llength $exprs] == 1 } {
+    set expr [lindex $exprs 0]
+    if { [lindex $expr 0] == "cpe" } {
+      set val [lindex $expr 1]
+      set port [TCLport [concat $val]]
 
-    foreach pid $pids {
-      set Proc($dap,$pid,cpe-port) $port
+      foreach pid $pids {
+        set Proc($dap,$pid,cpe-port) $port
 
-      tide-call cpe $dap $pid $port
+        tide-call cpe $dap $pid $port
+      }
     }
   }
 }
@@ -951,17 +990,21 @@ proc tide-process-destroyed-es { dap pid } {
 
 %}}}
 
-%{{{ proc tide-watchpoint-es { dap pid rid expr val }
+%{{{ proc tide-watchpoint-es { dap pid rid exprs }
 
 The exec-state of a process might have changed.
 
 <<tide-watchpoint-es>>=
-proc tide-watchpoint-es { dap pid rid expr es } {
+proc tide-watchpoint-es { dap pid rid exprs } {
   global Proc
 
-  if { $expr == "exec-state" } {
-    set Proc($dap,$pid,es) $es
-    tide-call exec-state $dap $pid $es
+  if { [llength $exprs] == 1 } {
+    set expr [lindex $exprs 0]
+    if { [lindex $expr 0] == "exec-state" } {
+      set es [lindex $expr 1]
+      set Proc($dap,$pid,es) $es
+      tide-call exec-state $dap $pid $es
+    }
   }
 }
 @
@@ -1084,24 +1127,14 @@ proc tide-dap-disconnected-current-port { dap } {
 @
 
 %}}}
-%{{{ proc current-port { P port }
+%{{{ proc current-port { dap pids port }
 
 The current port has changed. Notify any interested parties.
 
 <<current-port>>=
-proc current-port { P port } {
+proc current-port { dap pids port } {
   global Dap Break
-  global PAT_PROCS PAT_ALL
 
-  set port [TCLport $port]
-  if { [regexp $PAT_ALL $P P dap] } {
-    set pids all
-  } elseif { [regexp $PAT_PROCS $P P dap Pids] } {
-      set pids $Pids
-  } else {
-    puts stderr "*** current-port: wrongly formatted process spec $P"
-    return
-  }
   set Dap($dap,current-port) $port
   set Dap($dap,current-pids) $pids
 

@@ -106,26 +106,49 @@ let
   Acts  : list,   %% event actions
   Rid   : int,    %% event rule identifier
   Expr  : term,   %% Watchpoint expression
-  Value : term,   %% Value of an evaluated watchpoint expression
+  Exprs : term,   %% List of expression/value pairs.
   Result: term    %% ok or error(<str>)
 in
   ( rec-msg(proc(D,P?), create-rule(Port?,Cond?,Acts?,Life?)) .
     snd-eval(D, create-rule(P, Port,Cond,Acts,Life)) .
     rec-value(D, create-rule(P, Port,Cond,Acts,Life,Rid?)) .
-    snd-note(event(proc(D,P), rule-created(Port,Cond,Acts,Life,Rid))) .
+    snd-note(event(proc(D,P), rule-created(Rid,Port,Cond,Acts,Life))) .
     snd-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid))
+    +
+    rec-msg(proc(D,P?), modify-rule(Rid?,Port?,Cond?,Acts?,Life?)) .
+    snd-do(D, modify-rule(Rid,P,Port,Cond,Acts,Life)) .
+    snd-note(event(proc(D,P), rule-modified(Rid,Port,Cond,Acts,Life)))
     +
     rec-msg(proc(D,P?), destroy-rule(Rid?)) .
     snd-do(D, destroy-rule(P,Rid))
     +
-    rec-event(D, watchpoint(P?, Rid?, Expr?, Value?)) .
-    snd-note(event(proc(D,P), watchpoint(Rid, Expr, Value))) .
-    snd-ack-event(D, watchpoint(P, Rid, Expr, Value))
+    rec-event(D, watchpoint(P?, Rid?, Exprs?)) .
+    snd-note(event(proc(D,P), watchpoint(Rid, Exprs))) .
+    snd-ack-event(D, watchpoint(P, Rid, Exprs))
     +
     rec-event(D, rule-destroyed(Rid?)) .
     snd-note(event(proc(D,P), rule-destroyed(Rid))) .
     snd-ack-event(D, rule-destroyed(Rid))
    ) * delta
+endlet
+@
+
+%}}}
+%{{{ process BROADCAST
+
+This process just waits for event messages, and broadcasts them as
+notes. When a process has an event to share it just sends it as a message.
+Now the process can receive the note also.
+
+<<process BROADCAST>>=
+process BROADCAST is
+let
+  From : term,
+  Ev   : term
+in
+  ( rec-msg(event(From?, Ev?)) .
+    snd-note(event(From, Ev))
+  ) * delta
 endlet
 @
 
@@ -151,7 +174,7 @@ in
   subscribe(new-tool(<str>,<term>,<term>)) .
   execute(master-control, M?) .
   subscribe(event(<term>, dap-connected(<list>,<list>))) .
-  subscribe(event(<term>, dap-disconnected(<debug-adapter>))) .
+  subscribe(event(<term>, dap-disconnected)) .
   ( rec-note(new-tool(Name?, Tool?, Event?)) .
     snd-do(M, new-tool(Name, Tool, Event))
     +
@@ -159,7 +182,7 @@ in
     printf("dap-connected received: %t\n", D) .
     snd-do(M, dap-connected(D, Info, P))
     +
-    rec-note(event(proc(D?,P?), dap-disconnected(D?))) .
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
     snd-do(M, dap-disconnected(D))
     +
     rec-event(M, button(Tool?, Event?, D?)) .
@@ -172,27 +195,6 @@ endlet
 @
 
 %}}}
-
-%{{{ process BROADCAST
-
-This process just waits for event messages, and broadcasts them as
-notes. When a process has an event to share it just sends it as a message.
-Now the process can receive the note also.
-
-<<process BROADCAST>>=
-process BROADCAST is
-let
-  From : term,
-  Ev   : term
-in
-  ( rec-msg(event(From?, Ev?)) .
-    snd-note(event(From, Ev))
-  ) * delta
-endlet
-@
-
-%}}}
-
 %{{{ process SOURCE-VIEWER
 
 <<process SOURCE-VIEWER>>=
@@ -207,18 +209,19 @@ let
   Cond : term,		%% Event rule condition
   Acts : term,		%% Event rule actions
   Life : term,		%% Event rule lifetime
-  Expr : term,		%% Watchpoint expression
-  Val : term,		%% Watchpoint value 
+  Exprs: term,		%% A list of expression,value pairs
   Type : term		%% Rule type (handy to recognize the ack w.o. matching)
 in
   execute(source-viewer, S?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
   subscribe(event(<term>,dap-disconnected)) .
-  subscribe(event(<term>,rule-created(<term>,<term>,<term>,<term>,<int>))) .
+  subscribe(event(<term>,rule-created(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-modified(<int>,<term>,<term>,<term>,<term>))) .
   subscribe(event(<term>,rule-destroyed(<int>))) .
-  subscribe(event(<term>,watchpoint(<int>,cpe,<term>))) .
-  subscribe(event(<term>,watchpoint(<int>,exec-state,<term>))) .
-  subscribe(event(<term>,watchpoint(<int>,process-name,<term>))) .
+  subscribe(event(<term>,watchpoint(<int>,[[cpe,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
+  subscribe(event(<term>,current-port(<term>))) .
   snd-note(new-tool("Source viewer", S, view-source)) .
   ( rec-msg(S, view-source, D?) .
     snd-do(S, view-source(D))
@@ -229,14 +232,20 @@ in
     rec-note(event(proc(D?,P?), dap-disconnected)) .
     snd-do(S, dap-disconnected(D))
     +
-    rec-note(event(proc(D?,P?), rule-created(Port?,Cond?,Acts?,Life?,Rid?))) .
+    rec-note(event(proc(D?,P?), rule-created(Rid?,Port?,Cond?,Acts?,Life?))) .
     snd-do(S, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-modified(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(S, rule-modified(D,P,Rid,Port,Cond,Acts,Life))
     +
     rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
     snd-do(S, rule-destroyed(D,P, Rid))
     +
-    rec-note(event(proc(D?,P?), watchpoint(Rid?,Expr?,Val?))) .
-    snd-do(S, watchpoint(D, P, Rid, Expr,  Val))
+    rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
+    snd-do(S, watchpoint(D, P, Rid, Exprs))
+    +
+    rec-note(event(proc(D?,P?), current-port(Port?))) .
+    snd-do(S, current-port(D,P,Port))
     +
     rec-event(S, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
     snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
@@ -248,7 +257,7 @@ in
     snd-ack-event(S, destroy-rule(D,P,Rid))
     +
     rec-event(S, current-port(D?,P?,Port?)) .
-    snd-note(event(proc(D,P),current-port(Port))) .
+    snd-msg(event(proc(D,P),current-port(Port))) .
     snd-ack-event(S, current-port(D,P,Port))
   ) * delta
 endlet
@@ -269,13 +278,18 @@ let
   Acts : term,
   Life : term,
   Rid  : int,
+  Exprs: list, %% A list of [expression, value] pairs
   Type : term
 in
   execute(rule-viewer, R?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
   subscribe(event(<term>,dap-disconnected)) .
-  subscribe(event(<term>,rule-created(<term>,<term>,<term>,<term>,<int>))) .
+  subscribe(event(<term>,rule-created(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-modified(<int>,<term>,<term>,<term>,<term>))) .
   subscribe(event(<term>,rule-destroyed(<int>))) .
+  subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
+  subscribe(event(<term>,current-port(<term>))) .
   snd-note(new-tool("Rule viewer", R, view-rules)) .
   ( rec-msg(R, view-rules, D?) .
     snd-do(R, view-rules(D))
@@ -286,16 +300,28 @@ in
     rec-note(event(proc(D?,P?), dap-disconnected)) .
     snd-do(R, dap-disconnected(D))
     +
-    rec-note(event(proc(D?,P?), rule-created(Port?,Cond?,Acts?,Life?,Rid?))) .
+    rec-note(event(proc(D?,P?), rule-created(Rid?,Port?,Cond?,Acts?,Life?))) .
     snd-do(R, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-modified(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(R, rule-modified(D,P,Rid,Port,Cond,Acts,Life))
     +
     rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
     snd-do(R, rule-destroyed(D,P, Rid))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?, Exprs?))) .
+    snd-do(R, watchpoint(D, P, Rid, Exprs))
+    +
+    rec-note(event(proc(D?,P?), current-port(Port?))) .
+    snd-do(R, current-port(D,P,Port))
     +
     rec-event(R, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
     snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
     rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
     snd-ack-event(R, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(R, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),modify-rule(Rid,Cond,Acts,Life))
     +
     rec-event(R, destroy-rule(D?,P?,Rid?)) .
     snd-msg(proc(D,P), destroy-rule(Rid)) .
