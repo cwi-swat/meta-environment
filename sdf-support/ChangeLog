@@ -1,5 +1,9 @@
 $Id$
 
+2003/06/27 (markvdb@cwi.nl)
+ * Fixed a bug in the path calculation: path <some-path>/spec and
+   c/SomeName yielded the path <some-path>/spe!
+
 2003/06/25 (jurgenv@cwi.nl)
  * Added computation of new module names based on a search path to
    the sdf-modules tool. This is used to support compound module names,
