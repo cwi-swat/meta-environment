@@ -16,7 +16,9 @@ configuration([
                      reduce,
 	             push-active-module,
                      pretty-print,
-                     set-root],
+                     set-root,
+                     push-active-module,
+                     parse-action],
 		    [])]),
 
    button("languages/pico/syntax/Pico-Syntax",
