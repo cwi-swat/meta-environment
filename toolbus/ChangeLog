@@ -1,5 +1,9 @@
 $Id$
 
+2003-06-11 <kooiker@cwi.nl>
+ * fix viewer.tcl.src: lsearch only checked if breakpoint was first in the
+   list
+
 2003-06-10 <kooiker@cwi.nl>
  * Debugger stops running at breakpoints.
  * Breakpoints possible in more than one toolbus script (now recording
