@@ -47,3 +47,4 @@ hiddens
     "Symbol"[0-9]*       -> Symbol
     "Symbol*"[0-9]*      -> Symbol*
     "Sort"[0-9]*         -> Sort
+
