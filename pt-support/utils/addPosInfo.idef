@@ -6,11 +6,20 @@ process AddPosInfo is
 let
   API  : addPosInfo,
   Tree : term,
-  Path : str
+  Path : str,
+  Depth : int
 in
-  ( rec-msg(addPosInfo(Path?, Tree?)).
+  ( 
+    rec-msg(add-posinfo(Path?, Tree?)).
     execute(addPosInfo, API?).
-    snd-eval(API, addPosInfo(Path, Tree)).
+    snd-eval(API, add-posinfo(Path, Tree)).
+    rec-value(API, tree-with-pos-info(Tree?)).
+    snd-msg(tree-with-pos-info(Tree)).
+    snd-terminate(API,"")
+  +
+    rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
+    execute(addPosInfo, API?).
+    snd-eval(API, add-posinfo-to-depth(Path, Tree, Depth)).
     rec-value(API, tree-with-pos-info(Tree?)).
     snd-msg(tree-with-pos-info(Tree)).
     snd-terminate(API,"")
