@@ -1,5 +1,5 @@
 
-EXTRA_DIST	= MANIFEST.MF default.properties
+EXTRA_DIST	= MANIFEST.MF default.properties.src
 noinst_SCRIPTS  = default.properties
 CLEANFILES+=default.properties
 
