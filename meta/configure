@@ -1574,6 +1574,8 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	sglr/dump/Makefile \
 	sglr/parser/Makefile \
 	sglr/tree2dot/Makefile \
+	sglr/sdf1tosdf2/Makefile \
+	sglr/sdf1tosdf2/sdf1tosdf2 \
 	pgen/c-source/Makefile \
 	pgen/c-files/Makefile \
 	utils/Makefile \
@@ -1697,6 +1699,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	sglr/dump/Makefile \
 	sglr/parser/Makefile \
 	sglr/tree2dot/Makefile \
+	sglr/sdf1tosdf2/Makefile \
+	sglr/sdf1tosdf2/sdf1tosdf2 \
 	pgen/c-source/Makefile \
 	pgen/c-files/Makefile \
 	utils/Makefile \
