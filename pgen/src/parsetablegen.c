@@ -293,7 +293,7 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
   FILE *file;
   char full[1024];
-  ATerm pt, expsdf, normsdf;
+  ATerm pt, expsdf, normsdf, packed;
 
   expsdf = AFexpandTerm(sdf);  
   normsdf = add_name_norm_function(name, expsdf);   
@@ -312,12 +312,16 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 
     fclose(file);
   }
-  /*return ATmake("snd-value(generation-finished(<str>))",full);*/
-  return ATmake("snd-value(generation-finished(<term>))",ATBpack(pt));
+
+  packed = ATBpack(pt);
+  packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
+  return ATmake("snd-value(generation-finished(<term>))", packed);
 }
 
 /*}}}  */
-/*{{{  void usage(void)    
+/*{{{  void usage(void) */
+
+/*
  *     Usage: displays helpful usage information
  */
 
