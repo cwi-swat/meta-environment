@@ -5,6 +5,10 @@
 [VL1]   value(Var, [<Var, Val>, VPair*]) = Val
 [VL2]   Var != Var' ===> value(Var, [<Var', Val>, VPair*]) = value(Var, [VPair*])
 
+[RV1]   Rel = value(Var, Store)
+        =======================================
+        rel-value(Var, Store) = Rel
+
 [ASG1]  assign(Var, Val, [VPair*]) = [<Var, Val>, VPair*]
 
 [add1a]  add(Var, E, [<Var, Val>, VPair*]) = [<Var, apply({E} union Val)>, VPair*]
@@ -24,6 +28,18 @@
          add(Var, <E1, E2>, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
 
 [add2c]  add(Var, <E1, E2>, []) = [< Var, {<E1, E2>} >]
+
+
+[add3a]  add(Var, Rel, [<Var, Val>, VPair*]) = [<Var, apply(Rel union Val)>, VPair*]
+
+[add3b]  Var != Var', 
+	 [VPair*'] =add(Var, Rel, [VPair*])
+         ===============================================================
+         add(Var, Rel, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+
+[add3c]  add(Var, Rel, []) = [< Var, Rel >]
+
+
 
 
 %%---- if
@@ -65,18 +81,20 @@
 
 %% ---- Eval script
 
-[ES1]  eval(Stat*) = eval1(Stat*, [])
+[ES1]  eval-rscript(Stat*) = eval-rscript(Stat*, [])
 
-[ES2]  eval1(Stat Stat*, Store) = eval1(Stat*, eval(Stat, Store))
-[ES3]  eval1( , Store) = Store
+[ES2]  eval-rscript(Stat Stat*, Store) = eval-rscript(Stat*, eval-rscript(Stat, Store))
+[ES3]  eval-rscript( , Store) = Store
 
 %% ---- Eval statements
 
-[S1]  eval(def Var = Exp, Store) = assign(Var, evalx(Exp, Store), Store)
+[S1]  eval-rscript(def Var = Exp, Store) = assign(Var, evalx(Exp, Store), Store)
 
-[S3]   eval(fun Var1(Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
+[S3]   eval-rscript(fun Var1(Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
 
-[S7]   eval(fun Var1(Var2, Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
+[S7]   eval-rscript(fun Var1(Var2, Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
+
+[S8]   eval-rscript(fun Var1(Var2, Var3, Var4) = Exp, Store) = assign(Var1, <Var2, Var3, Var4, Exp>, Store)
 
 %% ---- Eval elementary predicates
 

@@ -21,10 +21,13 @@ exports
         "[" { VAR # VALUE ","}* "]"   -> RSTORE
         assign(VAR, VALUE, RSTORE)    -> RSTORE
         value(VAR, RSTORE)            -> VALUE
+        rel-value(VAR, RSTORE)        -> Rel[[Elem]]
 
         add(VAR, Elem, RSTORE)        -> RSTORE
 
 	add(VAR, Elem # Elem, RSTORE) -> RSTORE
+
+	add(VAR, Rel[[Elem]], RSTORE) -> RSTORE
  
         evalp(EXP, RSTORE)            -> Boolean
         evale(EXP, RSTORE)            -> Elem
@@ -46,9 +49,9 @@ exports
         "x"                          -> OP
         "."                          -> OP
 
-        eval(STAT, RSTORE)           -> RSTORE
-        eval(SCRIPT)                 -> RSTORE
-        eval1(STAT*, RSTORE)         -> RSTORE
+        eval-rscript(SCRIPT)         -> RSTORE
+        eval-rscript(STAT, RSTORE)   -> RSTORE
+        eval-rscript(STAT*, RSTORE)  -> RSTORE
 
         equal(Elem, Elem)            -> Boolean
 

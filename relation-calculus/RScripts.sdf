@@ -65,6 +65,7 @@ exports
 
      "fun" VAR "(" VAR ")" "=" EXP           -> STAT
      "fun" VAR "(" VAR "," VAR ")" "="  EXP  -> STAT
+     "fun" VAR "(" VAR "," VAR "," VAR ")" "="  EXP  -> STAT
 
      STAT*                                   -> SCRIPT
 

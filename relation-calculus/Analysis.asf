@@ -2,41 +2,78 @@ equations
 
 %% -- label the program
 
-[0]  label(Program, 1) = <Program', Int>
+[l1] label(Program, 1) = <Program', Int>
      ============================
      label(Program) = Program'
 
-[1] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
+[l2] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
 
-[2] label(if Exp then Stat*1 else Stat*2 fi, Int) =
-    < if [Int] Exp then Stat*1 else Stat*2 fi, Int+1 >
+[l3] label(if Exp then Stat*1 else Stat*2 fi, Int) =
+     < if [Int] Exp then Stat*1 else Stat*2 fi [Int+1], Int+2 >
 
-[3] label(while Exp do Stat* od, Int) =
-    < while [Int] Exp do Stat* od, Int + 1>
+[l4] label(while Exp do Stat* od, Int) =
+     < while [Int] Exp do Stat* od [Int+1], Int + 2>
 
-[cf1] Rstore1 = add(SUCC, <Int0, Int>, Rstore),
-      Rstore2 = add(SUCC, <Int, get-first(Stat*1)>, Rstore1),
-      Rstore3 = add(SUCC, <get-last(Stat*1), Int1>, Rstore2),
-      Rstore4 = add(SUCC, <Int, get-first(Stat*2)>, Rstore3),
-      Rstore5 = add(SUCC, <get-last(Stat*2), Int1>, Rstore2),
-      
+%% -- Construct the control flow graph
 
-     controlflow(if [Int] Exp then Stat*1 else Stat*2 fi, Rstore, Int0, Int1)
+[cf1] 
+      Rstore' = add(SUCC, {<Int1, get-first(Stat*)>, 
+                           <Int1, Int2>,
+                           <get-last(Stat*), Int1> }, 
+                   Rstore)
+      ========================================================
+      controlflow(while [Int1] Exp do  Stat* od [Int2], Rstore) = Rstore'
+
+[cf2]
+      Rstore' = add(SUCC, { <Int1, get-first(Stat*1)>,
+                            <get-last(Stat*1), Int2>,
+                            <Int1, get-first(Stat*2)>,
+                            <get-last(Stat*2), Int2> },
+                    Rstore)
+      ========================================================
+      controlflow(if [Int1] Exp then Stat*1 else Stat*2 fi [Int2], Rstore) = Rstore'
+
+[cf3] controlflow(Stat+, Rstore) = Rstore'
+      ========================================================
+      controlflow(Stat ; Stat+, Rstore) = 
+      add(SUCC, <get-last(Stat), get-first(Stat+)>, Rstore')
 
 [gf-1] get-first([Int] Stat; Stat*) = Int
+[gf-1] get-first(if [Int1] Exp then Stat*1 else Stat*2 fi [Int2]; Stat*) = Int1
+[gf-1] get-first(while [Int1] Exp do  Stat*1 od [Int2]; Stat*2) = Int1
 
 [gl-1] get-last(Stat*; [Int] Stat) = Int
+[gl-1] get-last(Stat*; if [Int1] Exp then Stat*1 else Stat*2 fi [Int2]) = Int2
+[gl-1] get-last(Stat*1; while [Int1] Exp do  Stat*2 od [Int2]) = Int2
 
-
-%% -- collect basic relations
-
-%% -- collect defines
+%% -- collect defines and uses
 
 [4] Rstore' = uses(Exp, Rstore, Int)
     ==========================================================
-    use-defs([Int] Id := Exp, Rstore) = add(DEFS, <Int, Id>, Rstore')
+    use-defs([Int] Id := Exp, Rstore) = add(DEFS, <Id, Int>, Rstore')
 
-[5] uses(Id, Rstore, Int) = add(USES, <Int, Id> , Rstore)
+[5] uses(Id, Rstore, Int) = add(USES, <Id, Int> , Rstore)
+
+%% -- Analyze a program
+
+[an1] Program1 = label(Program),
+      controlflow(Program1, []) = Rstore,
+      use-defs(Program1, Rstore) = Rstore',
+      undefined-query(Rstore') = Rstore''
+      =========================================================
+      analyze(Program) = rel-value(UN, Rstore'')
+
+
+[an2] undefined-query(Rstore) = 
+      eval-rscript(
+      	def PRED   = inv(SUCC)
+        fun reaches_root(R) = elem('1, ran(R))
+        def UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) },
+        Rstore
+      )
+
+
+
          
 
 

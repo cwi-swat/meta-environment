@@ -13,10 +13,10 @@ imports RelationCalculator[Item]
 
 exports
   context-free syntax
-     "[" Integer "]"                                                    -> LABEL
-     LABEL STATEMENT                                                    -> STATEMENT
-    "if" LABEL EXP "then" {STATEMENT ";"}* "else" {STATEMENT ";"}* "fi" -> STATEMENT
-    "while" LABEL EXP "do" {STATEMENT ";"}* "od"                        -> STATEMENT
+     "[" Integer "]"                                                          -> LABEL
+     LABEL STATEMENT                                                          -> STATEMENT
+    "if" LABEL EXP "then" {STATEMENT ";"}* "else" {STATEMENT ";"}* "fi" LABEL -> STATEMENT
+    "while" LABEL EXP "do" {STATEMENT ";"}* "od" LABEL                        -> STATEMENT
  
   context-free syntax
 
@@ -28,14 +28,18 @@ exports
       get-first({STATEMENT ";"}*)    -> Integer
       get-last({STATEMENT ";"}*)     -> Integer
 
-      controlflow(PROGRAM, RSTORE, Integer, Integer)   -> RSTORE {traversal(accu, bottom-up, continue)}
-      controlflow(STATEMENT, RSTORE, Integer, Integer) -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow(PROGRAM, RSTORE)   -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow(STATEMENT, RSTORE) -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow({ STATEMENT ";"}*, RSTORE) -> RSTORE {traversal(accu, bottom-up, continue)}
 
       use-defs(PROGRAM,   RSTORE)     -> RSTORE  {traversal(accu,top-down,break)}            
       use-defs(STATEMENT, RSTORE)     -> RSTORE  {traversal(accu,top-down,break)} 
 
       uses(EXP, RSTORE, Integer)      -> RSTORE  {traversal(accu,bottom-up,continue)} 
       uses(PICO-ID, RSTORE, Integer)  -> RSTORE  {traversal(accu,bottom-up,continue)}
+
+      analyze(PROGRAM)                -> Rel[[Item]]
+      undefined-query(RSTORE)	      -> RSTORE
 
 
   imports asf/syntax/Comments
