@@ -1,4 +1,4 @@
-
+EXTRA_DIST = asf-support-config.src
 
 bin_SCRIPTS = asf-support-config
 
