@@ -667,12 +667,15 @@ static size_t SG_CountAvoidsInTree(tree t0, tree t1)
 
     if(fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
+/*
       if (ATgetLength(ambs) > 1) { 
         return 0;
       }
       else {
         return SG_CountAvoidsInTree((tree) ATgetFirst(ambs), t1);
       }
+*/
+      return SG_CountAvoidsInTree((tree) ATgetFirst(ambs), t1);
     }
     else {
       if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
@@ -722,12 +725,15 @@ static size_t SG_CountPrefersInTree(tree t0, tree t1)
 
     if(fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
+/*
       if (ATgetLength(ambs) > 1) { 
         return 0;
       }
       else {
         return SG_CountPrefersInTree((tree) ATgetFirst(ambs), t1);
       }
+*/
+      return SG_CountPrefersInTree((tree) ATgetFirst(ambs), t1);
     }
     else {
       if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {

@@ -1,5 +1,10 @@
 $Id$
 
+2003/01/29 (markvdb@cs.vu.nl)
+ * Bumped into version 3.10beta.
+ * The counting of prefers/avoids in nested ambiguity
+   clusters fine-tuned.
+
 2003/01/24 ({jong,jurgenv}@cwi.nl)
  * Removed obsolete ToolBus requirements
 
