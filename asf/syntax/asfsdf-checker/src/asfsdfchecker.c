@@ -14,7 +14,6 @@
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
 
-
 static char *name;
 
 ATbool run_verbose;
@@ -40,14 +39,16 @@ extern void init_AsfSdf_Checker();
 
 /*{{{  static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) */
 
-static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
+static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree, const char *str)
 {
   PT_Tree newTree = NULL;
 
+  SDF_ModuleId strCon = SDF_makeModuleId((char *)str);
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("check-asfsdf", "Summary", 1, ptSyntax);
+    newTree = PT_applyFunctionToTree("check-asfsdf", "Summary", 2, ptSyntax,
+                                     SDF_ModuleIdToTerm(strCon));
   }
   else {
     ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
@@ -59,10 +60,10 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
 
 /*}}}  */
 
-static ATerm checkSdf(ATerm term)
+static ATerm checkSdf(ATerm term, const char *name)
 {
   PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
-  PT_Tree ptApplied      = addSdfCheckerFunction(parseTree);
+  PT_Tree ptApplied      = addSdfCheckerFunction(parseTree, name);
   ATerm reduct           = innermost(ptApplied);
   PT_ParseTree asfix     = toasfix(reduct);
 
@@ -110,9 +111,9 @@ static void displayMessages(ATerm term)
   }
 }
 
-ATerm check_asfsdf(int cid, ATerm term)
+ATerm check_asfsdf(int cid, ATerm term, const char *name)
 {
-  ATerm  output = checkSdf(ATBunpack(term));
+  ATerm  output = checkSdf(ATBunpack(term), name);
   /*
   ATermList errorList = processMessages(output);
   */
@@ -190,7 +191,7 @@ int main(int argc, char *argv[])
 
     syntax = ATreadFromNamedFile(input);
 
-    msgs = checkSdf(syntax);
+    msgs = checkSdf(syntax, input);
 
     displayMessages(msgs);
   }

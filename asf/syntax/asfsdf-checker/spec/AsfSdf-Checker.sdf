@@ -8,13 +8,12 @@ exports
   context-free start-symbols Summary
 
   context-free syntax
-    check-asfsdf(SDF)         -> Summary
-    check-asfsdf(SDF, StrCon) -> Summary
+    check-asfsdf(SDF)           -> Summary
+    check-asfsdf(SDF, ModuleId) -> Summary
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
-
     "Msgs"[0-9]*       -> {Feedback ","}*
-
-    "$String"[0-9]*    -> StrCon
+    "$ModuleId"[0-9]*  -> ModuleId
+    "$Char*" [0-9]*    -> CHAR*

@@ -7,7 +7,7 @@ equations
         Msgs4 := check-for-asf-sorts(Definition2),
         Msgs5 := check-for-kernel-syntax(Definition2),
         Msgs6 := check-for-exported-variables(Definition2)
-        ============================================
+        ====>
         check-asfsdf(definition Definition1) =
           feedback("AsfSdfChecker", "Unknown", 
                    [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
@@ -18,8 +18,9 @@ equations
         Msgs3 := check-symbols(Definition2),
         Msgs4 := check-for-asf-sorts(Definition2),
         Msgs5 := check-for-kernel-syntax(Definition2),
-        Msgs6 := check-for-exported-variables(Definition2)
-        ============================================
-        check-asfsdf(definition Definition1, $String) =
-          feedback("AsfSdfChecker", $String, 
+        Msgs6 := check-for-exported-variables(Definition2),
+        moduleid($Char*) := $ModuleId
+        ====>
+        check-asfsdf(definition Definition1, $ModuleId) =
+          feedback("AsfSdfChecker", strcon(""" $Char* """), 
                    [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])

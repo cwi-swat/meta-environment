@@ -1,3 +1,21 @@
 equations
 
   [cfev-1] check-for-exported-variables(Definition) =
+             check-for-exported-variables(Definition, ) 
+
+  [cfev-2] $ModuleId := get-module-name(Module)
+           ====>
+           check-for-exported-variables(Module, Msgs) =
+             check-for-exported-variables-section(Module, Msgs, $ModuleId)
+
+  [cfevs-1] check-for-exported-variables-section(exports Grammar, Msgs, $ModuleId) =
+              check-for-exported-variables-section(Grammar, Msgs, $ModuleId)
+
+  [default-cfevs-2] check-for-exported-variables-section(Section, Msgs, $ModuleId) = Msgs
+
+  [cfevs-2] $String1 := moduleid2str($ModuleId),
+            $String2 := "exported variables section"
+            ====>
+            check-for-exported-variables-section(variables Production*, Msgs, $ModuleId) =
+              Msgs, 
+make-warning($String2, $String1)

@@ -1,11 +1,30 @@
 module ExportedVariablesChecker 
 
 imports SdfCheckerFeedback
+        ModuleOperations
 
 exports
   context-free syntax
     check-for-exported-variables(Definition) -> {Feedback ","}*
 
 hiddens
+  context-free syntax
+    check-for-exported-variables(Definition, {Feedback ","}*) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables(Module, {Feedback ","}*) -> {Feedback ","}* {traversal(accu, break, top-down)}
+
+    check-for-exported-variables-section(Module, {Feedback ","}*, ModuleId) -> {Feedback ","}*  {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Section, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Grammar, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    
+
+hiddens
   variables
+    "Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
+    "Grammar"[0-9]*    -> Grammar
+    "Section"[0-9]*     -> Section
+    "Production*"[0-9]* -> Production*
+    "Msgs"[0-9]*       -> {Feedback ","}*
+
+    "$String"[0-9]*    -> StrCon
