@@ -96,13 +96,13 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 	cc -O $(INCLUDES) -c -o $@ $<
 
 %-gcc.o: %.c
-	gcc -Wall -pedantic -O4 $(INCLUDES) -c -o $@ $<
+	gcc -Wall -O4 $(INCLUDES) -c -o $@ $<
 
 %-dbg.o: %.c
-	gcc -Wall -pedantic -g $(INCLUDES) -c -o $@ $<
+	gcc -Wall -g $(INCLUDES) -c -o $@ $<
 
 %-prof.o: %.c
-	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
+	gcc -Wall -pg $(INCLUDES) -c -o $@ $<
 
 libsupport-cc.a: $(OBJ_CC)
 	$(AR) cr $@ $(OBJ_CC)
