@@ -5,7 +5,7 @@
 
 #include "error-support.tif.h"
 
-#define NR_SIG_ENTRIES	18
+#define NR_SIG_ENTRIES	20
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<error-support>,get-area-begin-line(<term>))",
@@ -20,6 +20,8 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<error-support>,get-subject-description(<term>))",
   "rec-eval(<error-support>,has-subject-location(<term>))",
   "rec-eval(<error-support>,get-subject-location(<term>))",
+  "rec-eval(<error-support>,get-error-description(<term>))",
+  "rec-eval(<error-support>,get-error-subjects(<term>))",
   "rec-eval(<error-support>,get-summary-producer(<term>))",
   "rec-eval(<error-support>,get-summary-id(<term>))",
   "rec-eval(<error-support>,get-summary-errors(<term>))",
@@ -35,26 +37,32 @@ ATerm error_support_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(get-location-area(<term>))", &t0)) {
-    return get_location_area(conn, t0);
-  }
-  if(ATmatch(term, "rec-eval(has-location-area(<term>))", &t0)) {
-    return has_location_area(conn, t0);
-  }
   if(ATmatch(term, "rec-eval(get-subject-description(<term>))", &t0)) {
     return get_subject_description(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-location-filename(<term>))", &t0)) {
-    return get_location_filename(conn, t0);
+  if(ATmatch(term, "rec-eval(get-location-area(<term>))", &t0)) {
+    return get_location_area(conn, t0);
   }
   if(ATmatch(term, "rec-eval(has-subject-location(<term>))", &t0)) {
     return has_subject_location(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-area-length(<term>))", &t0)) {
-    return get_area_length(conn, t0);
+  if(ATmatch(term, "rec-eval(has-location-area(<term>))", &t0)) {
+    return has_location_area(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-subject-location(<term>))", &t0)) {
     return get_subject_location(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-location-filename(<term>))", &t0)) {
+    return get_location_filename(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-error-description(<term>))", &t0)) {
+    return get_error_description(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-area-length(<term>))", &t0)) {
+    return get_area_length(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-error-subjects(<term>))", &t0)) {
+    return get_error_subjects(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-area-offset(<term>))", &t0)) {
     return get_area_offset(conn, t0);

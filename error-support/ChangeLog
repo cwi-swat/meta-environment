@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar 16 15:59:04 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Fully implement rest of error API at the ToolBus level
+
 Mon Mar 15 10:55:32 CET 2004 <{jong,kooiker}@cwi.nl>
  * Expose API to ToolBus interface level
 

@@ -10,6 +10,7 @@ let
   Column : int,
   Description : str,
   ES : error-support,
+  Error : term,
   Errors : list,
   FileName : str,
   Id : str,
@@ -18,8 +19,8 @@ let
   Location : term,
   Offset : int,
   Producer : str,
-  Result : bool,
   Subject : term,
+  Subjects : list,
   Summary : term
 in
   execute(error-support, ES?) .
@@ -62,8 +63,13 @@ in
   +
     rec-msg(has-location-area(Location?)) .
     snd-eval(ES, has-location-area(Location)) .
-    rec-value(ES, has-area(Result?)) .
-    snd-msg(has-location-area(Location, Result))
+    (
+      rec-value(ES, has-area(true)) .
+      snd-msg(location-has-area(Location))
+    +
+      rec-value(ES, has-area(false)) .
+      snd-msg(location-has-no-area(Location))
+    )
   +
     rec-msg(get-location-area(Location?)) .
     snd-eval(ES, get-location-area(Location)) .
@@ -78,13 +84,29 @@ in
   +
     rec-msg(has-subject-location(Subject?)) .
     snd-eval(ES, has-subject-location(Subject)) .
-    rec-value(ES, has-location(Result?)) .
-    snd-msg(has-subject-location(Subject, Result))
+    (
+      rec-value(ES, has-location(true)) .
+      snd-msg(subject-has-location(Subject))
+    +
+      rec-value(ES, has-location(false)) .
+      snd-msg(subject-has-no-location(Subject))
+    )
   +
     rec-msg(get-subject-location(Subject?)) .
     snd-eval(ES, get-subject-location(Subject)) .
     rec-value(ES, location(Location?)) .
     snd-msg(subject-location(Location))
+
+  +
+    rec-msg(get-error-description(Error?)) .
+    snd-eval(ES, get-error-description(Error)) .
+    rec-value(ES, description(Description?)) .
+    snd-msg(error-description(Description))
+  +
+    rec-msg(get-error-subjects(Error?)) .
+    snd-eval(ES, get-error-subjects(Error)) .
+    rec-value(ES, subjects(Subjects?)) .
+    snd-msg(error-subjects(Subjects))
 
   +
     rec-msg(get-feedback-producer(Summary?)) .
@@ -97,10 +119,10 @@ in
     rec-value(ES, id(Id?)) .
     snd-msg(identification(Id))
   +
-    rec-msg(get-feedback-subjects(Summary?)) .
+    rec-msg(get-summary-errors(Summary?)) .
     snd-eval(ES, get-summary-errors(Summary)) .
     rec-value(ES, errors(Errors?)) .
-    snd-msg(subjects(Errors))
+    snd-msg(summary-errors(Errors))
 
   +
     rec-msg(convert-feedback(Summary?)) .

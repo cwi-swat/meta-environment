@@ -9,13 +9,15 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_location_area(int conn, ATerm);
-ATerm has_location_area(int conn, ATerm);
 ATerm get_subject_description(int conn, ATerm);
-ATerm get_location_filename(int conn, ATerm);
+ATerm get_location_area(int conn, ATerm);
 ATerm has_subject_location(int conn, ATerm);
-ATerm get_area_length(int conn, ATerm);
+ATerm has_location_area(int conn, ATerm);
 ATerm get_subject_location(int conn, ATerm);
+ATerm get_location_filename(int conn, ATerm);
+ATerm get_error_description(int conn, ATerm);
+ATerm get_area_length(int conn, ATerm);
+ATerm get_error_subjects(int conn, ATerm);
 ATerm get_area_offset(int conn, ATerm);
 ATerm get_summary_producer(int conn, ATerm);
 ATerm get_area_end_column(int conn, ATerm);
