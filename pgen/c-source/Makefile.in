@@ -624,7 +624,7 @@ pgen-prof : $(PROFILE-OBJS)
 	$(CC) $(PROFILE-LD-FLAGS) -o $@ $(PROFILE-OBJS) $(LIBDIR) $(PROFILE-LIBS)
 
 
-install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+install: all
 	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
