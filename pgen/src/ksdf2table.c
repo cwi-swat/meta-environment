@@ -316,9 +316,9 @@ ATerm process_productions(SDF_ProductionList prods)
   }
   nr_of_kernel_prods = max_idx;
 
-  IF_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", max_idx));
-  IF_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
-  IF_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
+  IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", max_idx));
+  IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
+  IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
 
   ATindexedSetDestroy(unique_prods);
 
@@ -564,7 +564,7 @@ static ATerm process_priorities(SDF_PriorityList prios)
     prios = SDF_getPriorityListTail(prios);
   }
 
-  IF_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
+  IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
 
   return ATmake("[<list>]", prioentries);
 }
@@ -770,9 +770,9 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
     calc_follow_table();
     calc_goto_graph();
 
-    IF_STATISTICS(fprintf(PT_log (), "Number of states is %d\n", nr_of_states));
-    IF_STATISTICS(fprintf(PT_log (), "Maximum number of items per state is %d\n", max_nr_items));
-    IF_STATISTICS(fprintf(PT_log (), "Average number of items per state is %d\n", (nr_of_items/nr_of_states)));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of states is %d\n", nr_of_states));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of items per state is %d\n", max_nr_items));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of items per state is %d\n", (nr_of_items/nr_of_states)));
 
     for (i=nr_of_states-1; i >= 0; i--) {
       vnr = (ATerm)ATmakeInt(i);
@@ -783,9 +783,9 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
         gotos = ATempty;
       } 
       else {
-        IF_STATISTICS(nr_gotos = ATgetLength(gotos));
-        IF_STATISTICS(nr_of_gotos += nr_gotos);
-        IF_STATISTICS(if (nr_gotos > max_nr_gotos) { max_nr_gotos = nr_gotos;});
+        IF_PGEN_STATISTICS(nr_gotos = ATgetLength(gotos));
+        IF_PGEN_STATISTICS(nr_of_gotos += nr_gotos);
+        IF_PGEN_STATISTICS(if (nr_gotos > max_nr_gotos) { max_nr_gotos = nr_gotos;});
       }
 
       actions = (ATermList)ATtableGet(state_actions_pairs,vertex);
@@ -793,9 +793,9 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
         actions = ATempty;
       }
       else {
-        IF_STATISTICS(nr_actions = ATgetLength(actions));
-        IF_STATISTICS(nr_of_actions += nr_actions);
-        IF_STATISTICS(if (nr_actions > max_nr_actions) { max_nr_actions = nr_actions;});
+        IF_PGEN_STATISTICS(nr_actions = ATgetLength(actions));
+        IF_PGEN_STATISTICS(nr_of_actions += nr_actions);
+        IF_PGEN_STATISTICS(if (nr_actions > max_nr_actions) { max_nr_actions = nr_actions;});
       }
 
       /*ATwarning("actions before compression (vnr=%t) = %t\n", vnr, actions);*/
@@ -806,10 +806,10 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
       statelist = ATinsert(statelist,state);
     }
  
-    IF_STATISTICS(fprintf(PT_log (), "Maximum number of gotos per state is %d\n", max_nr_gotos));
-    IF_STATISTICS(fprintf(PT_log (), "Average number of gotos per state is %d\n", (nr_of_gotos/nr_of_states)));
-    IF_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));
-    IF_STATISTICS(fprintf(PT_log (), "Average number of actions per state is %d\n", (nr_of_actions/nr_of_states)));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of gotos per state is %d\n", max_nr_gotos));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of gotos per state is %d\n", (nr_of_gotos/nr_of_states)));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));
+    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of actions per state is %d\n", (nr_of_actions/nr_of_states)));
 
     return ATmake("parse-table(<term>,<term>,<term>,states([<list>]),priorities(<term>))",
                   ATmakeInt(version_nr),

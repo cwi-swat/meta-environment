@@ -286,8 +286,8 @@ ATermList gotos(ItemSet vertex, ATermList prods, CC_Set *chars)
 
   gotoElems = ATempty;
 
-  IF_STATISTICS(nr_of_items += ITS_size(vertex));
-  IF_STATISTICS(if (ITS_size(vertex) > max_nr_items)
+  IF_PGEN_STATISTICS(nr_of_items += ITS_size(vertex));
+  IF_PGEN_STATISTICS(if (ITS_size(vertex) > max_nr_items)
 		{max_nr_items = ITS_size(vertex);});
 
   while(!ATisEmpty(prods)) {

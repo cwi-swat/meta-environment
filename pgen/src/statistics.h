@@ -7,7 +7,7 @@
 
 extern ATbool statisticsMode;
 
-#define IF_STATISTICS(s)     if(statisticsMode) {s;}
+#define IF_PGEN_STATISTICS(s)     if(statisticsMode) {s;}
 double PT_Timer(void);
 
 FILE *PT_OpenLog(char *program, char *fnam);

@@ -120,7 +120,7 @@ static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2ter
   ATerm pt = NULL;
   PT_ParseTree ksdf;
 
-  IF_STATISTICS(PT_Timer()); 
+  IF_PGEN_STATISTICS(PT_Timer()); 
 
   if (generationMode) {
     ksdf = sdf2term;
@@ -128,7 +128,7 @@ static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2ter
     ksdf = normalize(name, sdf2term); 
   }
 
-  IF_STATISTICS(fprintf(PT_log(), 
+  IF_PGEN_STATISTICS(fprintf(PT_log(), 
                 "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
 
   if (normalizationMode) {
@@ -149,7 +149,7 @@ static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2ter
   }
   destroy_table_gen();       
 
-  IF_STATISTICS(fprintf(PT_log(), 
+  IF_PGEN_STATISTICS(fprintf(PT_log(), 
                 "Parse table generation took %.6fs\n", PT_Timer())); 
  
   return pt;
@@ -329,7 +329,7 @@ int main(int argc, char *argv[])
 	term = PT_ParseTreeFromTerm(ATreadFromFile(iofile));
 	assert(term);
 
-	IF_STATISTICS(
+	IF_PGEN_STATISTICS(
 		      if(!PT_log()) {
 		      ATwarning("Warning: implicitly opening logfile\n");
 		      PT_OpenLog(myname, "pgen-stats.txt");
