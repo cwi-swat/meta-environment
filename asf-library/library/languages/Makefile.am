@@ -6,4 +6,5 @@ SUBDIRS=\
 	aterm\
 	cpp\
 	pico\
-	sdf2
+	sdf2\
+	c
