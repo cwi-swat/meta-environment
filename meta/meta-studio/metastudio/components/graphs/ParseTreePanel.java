@@ -21,6 +21,7 @@ public class ParseTreePanel extends ZoomableGraphPanel {
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
+		System.err.println("ParseTreePanel:node: " + node);
                 if (node != panel.getSelectedNode()) {
                     if (node != null) {
                         if (node.hasInfo(MESSAGE)) {
