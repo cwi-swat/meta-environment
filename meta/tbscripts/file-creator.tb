@@ -8,7 +8,8 @@ let
   ModuleName : str,
   RealModule : str,
   ErrMsg     : str,
-  Path       : str
+  Path       : str,
+  Text       : str
 in
   (
     %% Handle request to create a new module.
@@ -16,25 +17,25 @@ in
     snd-msg(is-module-in-db(ModuleName)) .
     (
       rec-msg(exists-in-module-db(ModuleName)) .
-      snd-msg(module-not-created("Module already in database"))
+      snd-note(ui-status(errorf("Module %s already exists", 
+                                [ModuleName])))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(exists-syntax-module(Path)) .
+      snd-msg(exists-file(Path, ".sdf")) .
       (
-        rec-msg(syntax-module-exists(Path)) .
-        snd-msg(module-not-created("Module already exists in text or baf"))
+        rec-msg(file-exists) .
+        snd-note(ui-status(
+	errorf("Module %s already exists on disk", [ModuleName])))
       +
-        rec-msg(syntax-module-not-exists(Path)) .
-        snd-msg(create-empty-syntax-module(Path, ModuleName)) .
+        rec-msg(file-not-exists) .
+        snd-msg(write-text-file(Path, ".sdf", 
+	                        ["module ", ModuleName])) .
         (
-          rec-msg(module-created(Path?, RealModule?)) .
-      	  snd-msg(new-module-created(Path, RealModule))
+          rec-msg(file-written) .
+	  snd-msg(open-initial-module(Path, ModuleName))
         +
-          rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
-          snd-msg(new-module-not-created(ErrMsg))
-        +
-	  rec-msg(module-not-created(ErrMsg?)).
-	  snd-msg(new-module-not-created(ErrMsg))
+          rec-msg(file-not-written(ErrMsg?)) .
+	  snd-note(ui-status(errorf("%s", [ErrMsg])))
         )
       )
     )
@@ -43,27 +44,33 @@ in
     rec-msg(create-new-equations(ModuleName?)) .
     snd-msg(is-module-in-db(ModuleName)) .
     (
-      rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(equations-not-created("Module not in database"))
+      rec-msg(not-exists-in-module-db(ModuleName)) 
     +
       rec-msg(exists-in-module-db(ModuleName)) .
-	  snd-msg(get-eqs-path-from-db(ModuleName)) .
-	  rec-msg(path(FileName?)) .
-      snd-msg(exists-rules-section(ModuleName, FileName)) .
+      snd-msg(get-path-from-db(ModuleName)) .
+      rec-msg(path(Path?)) .
+      snd-msg(exists-file(Path, ".asf")) .
       (
-        rec-msg(rules-section-exists(ModuleName)) .
-        snd-msg(equations-not-created("Equations section already exists."))
+        rec-msg(file-exists) .
+	snd-msg(open-file(Path, ".asf")) .
+	rec-msg(opened-file(text(Text?))) .
+	snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+	rec-msg(eqs-added) .
+	snd-msg(new-equations-created)
       +
-        rec-msg(rules-section-not-exists(ModuleName)) .
-        snd-msg(create-empty-rules-section(ModuleName, FileName)) .
+        rec-msg(file-not-exists) .
+	snd-msg(write-text-file(Path, ".asf", [])) .
         (
-          rec-msg(empty-rules-section-created(FileName)) .
-          snd-msg(add-empty-eqs-to-db(ModuleName, FileName)) .
-          rec-msg(empty-eqs-added) .
-          snd-msg(new-equations-created(ModuleName, FileName))
+          rec-msg(file-written) .
+	  snd-msg(open-file(Path, ".asf")) .
+	  rec-msg(opened-file(text(Text?))) .
+          snd-msg(add-eqs-to-db(ModuleName, text(Text))) .
+          rec-msg(eqs-added) .
+          snd-msg(new-equations-created)
         +
-          rec-msg(empty-rules-section-not-created(ModuleName, ErrMsg?)) .
-          snd-msg(new-equations-not-created(ErrMsg))
+          rec-msg(file-not-written(ErrMsg?)) . 
+	  snd-note(ui-status(errorf("%s", ErrMsg))) .
+          snd-msg(new-equations-not-created)
         )
       )
     )

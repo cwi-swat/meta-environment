@@ -68,7 +68,6 @@ let
   Lst : list
 in
   Id := process-id.
-  subscribe(import-graph(<term>,<term>)).
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
 
@@ -84,41 +83,13 @@ in
   Mods := [] .
   Pairs := [] .
   ( 
-    /* Create a completely new module by a user */
-    (
-      rec-event(UI, new-module(Path?, Str?)).
-      snd-msg(create-new-module(Path, Str)).
-      (
-        rec-msg(new-module-not-created(ErrMsg?)).
-	snd-note(ui-status(errorf("%s",[ErrMsg])))
-      +
-        rec-msg(new-module-created(PathWithExt?, RealModuleName?)).
-	snd-msg(open-initial-module(PathWithExt, RealModuleName)).
-        ( rec-note(import-graph(Mods?, Pairs?)) .
-          snd-do(UI,new-graph(Mods,Pairs))
-        ) *
-        rec-msg(finished-opening-initial-module).
-	snd-do(UI,finished-opening-modules(Str))
-      ).
-      snd-ack-event(UI, new-module(Path, Str))
-    )
-    +
-    /* Add a new module by a user */
+    rec-event(UI, new-module(Path?, Str?)).
+    snd-msg(create-new-module(Path, Str)).
+    snd-ack-event(UI, new-module(Path, Str))
+  +
     ( rec-event(UI, open-module(Path?, Str?)).
-      snd-note(online-help(open-module)).
       snd-msg(open-initial-module(Path, Str)). 
-      snd-ack-event(UI, open-module(Path, Str)) .
-      ( rec-note(import-graph(Mods?,Pairs?))
-        +
-        rec-msg(cannot-open-module(ModName?)).
-	snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-      )*
-      rec-msg(finished-opening-initial-module) .
-      snd-do(UI,finished-opening-modules(Str)) .
-      snd-do(UI,new-graph(Mods,Pairs))
-    ) +
-    ( rec-msg(cannot-open-module(ModName?)).
-      snd-note(ui-status(errorf("cannot open module %s",[ModName])))
+      snd-ack-event(UI, open-module(Path, Str))
     )
     +
     ( rec-msg(display-graph(GraphId?, Graph?)) .
@@ -242,7 +213,7 @@ in
      snd-msg(debugging(On)) .
      snd-ack-event(UI,debugging(On))
    ) +
-   ( rec-note(import-graph(Mods?,Pairs?)).
+   ( rec-msg(display-import-graph(Mods?,Pairs?)).
      snd-do(UI,new-graph(Mods,Pairs))
    )
    +

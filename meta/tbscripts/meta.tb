@@ -87,16 +87,11 @@ in
 
   if not-equal(MODULENAME,"") then
     snd-msg(open-modules([MODULENAME])) .
-    (
-      rec-msg(cannot-open-module(ModuleName?)).
-      snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
-    )*
     rec-msg(finished-opening-modules)
   else
     tau
   fi
 endlet
-
 
 toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui, 
         Editors, ModuleDB, ProcessEqs, GetEquations, Save-modules, 

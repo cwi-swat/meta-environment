@@ -8,13 +8,14 @@ let
   Table     : term,
   ModuleId  : term,
   Syntax    : term,
+  SyntaxTree: term,
+  SyntaxText: str,
   EqsTree   : term,
   EqsText   : str,
   Name      : str,
   OldName   : str,
   NewName   : str,
   ErrorName : str,
-  Time      : int,
   Mdb       : module-db,
   Modules   : list,
   ChngMods  : list,
@@ -48,7 +49,11 @@ in
   snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
 
   (
-
+  rec-msg(get-import-graph) .
+  snd-eval(Mdb, retrieve-import-graph) .
+  rec-value(Mdb, import-graph(ActualMods?,Pairs?)) .
+  snd-msg(import-graph(ActualMods,Pairs))
++
 /* If we get the request to empty the db, we'll do it. */
   rec-msg(clear-module-db).
   snd-do(Mdb, clear-module-db)
@@ -84,15 +89,12 @@ in
 /* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf-module-to-db(Name?, Path?, Syntax?, timestamp(Time?))) .
-  snd-eval(Mdb, add-sdf-module(Name, Path, Syntax, Time)) .
+  rec-msg(add-sdf-module-to-db(Name?, Path?, 
+                               SyntaxText?, SyntaxTree?)) .
+  snd-eval(Mdb, add-sdf-module(Name, Path, SyntaxText, SyntaxTree)) .
   ( 
-    rec-value(Mdb,module(RealName?,imports(need-modules(Modules?),
-                  import-graph(ActualMods?, Pairs?)))).
-/* If a new module is added, we tell the world the current import relations */
-    snd-msg(real-module-name(Name, RealName)).
-    snd-note(import-graph(ActualMods, Pairs)).
-    snd-msg(need-modules(Modules))
+    rec-value(Mdb,module(RealName?,need-modules(Modules?))) .
+    snd-msg(adding-succeeded(Name, RealName, Modules))
   +
     rec-value(Mdb, name-consistency-error(ErrorName?)) .
     snd-msg(error-opening(Name, name-inconsistent))
@@ -191,20 +193,9 @@ in
     snd-msg(no-eqs-text(Name))
   )
 +
-  /* Add the equations as tree to the database for the given module name */
-  rec-msg(add-eqs-to-db(Name?, Path?, tree(EqsTree?), text(EqsText?), 
-                        timestamp(Time?))) .
-  snd-do(Mdb,add-tree-eqs-section(Name, Path, EqsTree, EqsText, Time)) .
-  snd-msg(eqs-added)
-+
-  /* Add the equations as tree to the database for the given module name */
-  rec-msg(add-empty-eqs-to-db(Name?, Path?)) .
-  snd-do(Mdb,add-empty-eqs-section(Name, Path)) .
-  snd-msg(empty-eqs-added)
-+
   /* Add the equations as text to the database for the given module name */
-  rec-msg(add-eqs-to-db(Name?, Path?, text(EqsText?), timestamp(Time?))) .
-  snd-do(Mdb,add-text-eqs-section(Name, Path, EqsText, Time)) .
+  rec-msg(add-eqs-to-db(Name?, text(EqsText?))) .
+  snd-do(Mdb,add-text-eqs-section(Name, EqsText)) .
   snd-msg(eqs-added)
 +
   /* Update the equations as tree in the database.
@@ -218,19 +209,14 @@ in
   snd-msg(eqs-text-updated(Name))
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(add-parse-table-to-db(ModuleId?, Table?, timestamp(Time?))) .
-  snd-eval(Mdb, add-parse-table(ModuleId, Table, Time)) .
+  rec-msg(add-parse-table-to-db(ModuleId?, Table?)) .
+  snd-eval(Mdb, add-parse-table(ModuleId, Table)) .
   rec-value(Mdb, parse-table-added) .
   snd-msg(parse-table-added)
 +
-  rec-msg(get-sdf2-path-from-db(Name?)).
-  snd-eval(Mdb,get-path(Name, sdf2)).
+  rec-msg(get-path-from-db(Name?)).
+  snd-eval(Mdb,get-path(Name)) .
   rec-value(Mdb,path(Path?)).
-  snd-msg(path(Path))
-+
-  rec-msg(get-eqs-path-from-db(Name?)) .
-  snd-eval(Mdb, get-path(Name, eqs)) .
-  rec-value(Mdb, path(Path?)) .
   snd-msg(path(Path))
 +
 /* Add parse table to the database for the given module name */

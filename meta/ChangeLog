@@ -1,5 +1,9 @@
 # $Id$
 
+2003/05/16 ({jurgenv,markvdb}@cwi.nl)
+ * Major revision of UI, IO, MDB.
+ * NOT YET FINISHED, SO DO NOT UPDATE!
+
 2003/05/15 ({jurgenv,markvdb}@cwi.nl)
  * Created a generic term-store tool
  * Some features are turned off for the moment (module refactorings)

@@ -1246,7 +1246,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
       String path = getFilePath(file, extension);
-      path += extension;
 
       ATerm event = factory.make("open-module(<str>,<str>)", path, module);
       bridge.postEvent(event);
@@ -1265,7 +1264,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
       String path = getFilePath(file, extension);
-      path += extension;
 
       ATerm event = factory.make("open-module(<str>,<str>)", path, module);
       bridge.postEvent(event);

@@ -20,10 +20,44 @@ in
       Invalidate-Dirty-ParseTables([RealModule])
     +
       rec-msg(exists-in-module-db(Module))
-    ).
-    snd-msg(finished-opening-initial-module)
+    )
   ) *
   delta
+endlet
+
+process DrawImportGraph is
+let
+  Nodes : list,
+  Vertices : list
+in
+  snd-msg(get-import-graph) .
+  rec-msg(import-graph(Nodes?, Vertices?)) .
+  snd-msg(display-import-graph(Nodes,Vertices))
+endlet
+
+process Locate-File(FileName : str, Extension : str,
+                    Path : str?) is
+let
+  Paths : list,
+  SPath : str
+in
+  Path := "" .
+  snd-msg(retrieve-search-paths) .
+  rec-msg(search-paths(Paths?)) .
+  if not-equal(Paths, []) then
+    SPath := first(Paths) .
+    Paths := next(Paths) .
+    snd-msg(find-file(SPath, FileName, Extension)) .
+    ( 
+      rec-msg(file-found(Path?)) .
+      Paths := []
+    +
+      rec-msg(file-not-found)
+    )
+  fi *
+  if equal(Paths, []) then
+    tau
+  fi
 endlet
 
 process Open-modules is 
@@ -34,7 +68,8 @@ let
   RealModules : list,
   RealModule : str,
   Imports : list,
-  Status : term
+  Status : term,
+  Path : str
 in
   Id := process-id.
   (
@@ -50,13 +85,15 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-        Open-Module(Module, "", Status?, RealModule?, Imports?).
+	Locate-File(Module, ".sdf", Path?) .
+        Open-Module(Module, Path, Status?, RealModule?, Imports?).
         Modules := join(Imports, Modules).
         RealModules := join(RealModules, RealModule)
       )
     fi *
     if equal(Modules, []) then
       Invalidate-Dirty-ParseTables(RealModules) .
+      DrawImportGraph() .
       snd-msg(finished-opening-modules)
     fi.
     snd-note(ui-status(endstat(Id)))
@@ -80,8 +117,8 @@ in
   fi
 endlet
 
-process Open-Module (Module : str, Path : str, Status : term?, 
-                     RealModule : str?, Imports : list?) 
+process Open-Module(Module : str, Path : str, Status : term?, 
+                    RealModule : str?, Imports : list?) 
 is
 let
   Id : int,
@@ -91,10 +128,9 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
-    Open-Syntax(Module, Path, Status?, RealModule?, RealPath?, Imports?).
+    Open-Syntax(Module, Path, Status?, RealModule?, Imports?).
     if equal(Status, success) then
-      Open-ParseTables(RealModule, RealPath).
-      Open-Equations(RealModule, RealPath)
+      Open-Equations(RealModule, Path)
     else
       RealModule := Module.
       Handle-Open-Module-Errors(RealModule, Status)
@@ -113,47 +149,32 @@ process Handle-Open-Module-Errors(Module : str, Status : term) is
     tau
   fi
 
-process Open-Syntax (Module : str, Path : str, Status : term?, 
-                     RealModule : str?, RealPath : str?, Imports : list?) 
-is
+process Open-Syntax(Module : str, Path : str, Status : term?, 
+                    RealModule : str?, Imports : list?) is
 let
   Tree : term,
   Text : str,
-  Time : term,
-  Dummy : str
+  Dummy : str,
+  Message : str
 in
   Tree := no-tree.
-  /* Either the path is specified by the user, or we used the search-path */
-  if equal(Path, "") then
-    snd-msg(open-syntax-file(Module)) 
+  if not-equal(Path, "") then
+    snd-msg(open-file(Path, ".sdf")) .
+    (
+      rec-msg(opened-file(text(Text?))) .
+      Parse-Syntax(Text, Status?, Tree?)
+    +
+      rec-msg(error-opening(Message?)) .
+      Status := no-such-file
+    )
   else
-    snd-msg(open-file(Path))
-  fi.
-  (
-    rec-msg(opened-file(Path, tree(Tree?), RealPath?, Time?))
-  +
-    rec-msg(opened-file(Module, tree(Tree?), RealPath?, Time?))
-  +
-    (
-      rec-msg(opened-file(Path, text(Text?), RealPath?, Time?))
-    +
-      rec-msg(opened-file(Module, text(Text?), RealPath?, Time?))
-    ).
-    Parse-Syntax(Text, Status?, Tree?)
-  +
-    (
-      rec-msg(error-opening(Path))
-    +
-      rec-msg(error-opening(Module))
-    ) .
-    Status := no-such-file
-  ).
-  if equal(Status,success) then
+     Status := no-such-file
+  fi .
+  if equal(Status, success) then
     Imports := [].
-    snd-msg(add-sdf-module-to-db(Module, RealPath, Tree, Time)).
+    snd-msg(add-sdf-module-to-db(Module, Path, Text, Tree)).
     (
-      rec-msg(real-module-name(Module, RealModule?)).
-      rec-msg(need-modules(Imports?))
+      rec-msg(adding-succeeded(Module, RealModule?, Imports?))
     +
       rec-msg(error-opening(Module, Status?))
     )
@@ -180,48 +201,19 @@ in
   )
 endlet
 
-process Open-ParseTables (Module : str, Path : str) is
-let
-  Table : term,
-  Time : term
-in
-  snd-msg(open-parse-table(Module, Path, asf)).
-  (
-    rec-msg(table-on-disk(Table?, Time?)).
-    snd-msg(add-parse-table-to-db(eqs(Module), Table, Time)).
-    rec-msg(parse-table-added)
-  +
-    rec-msg(no-table-on-disk)
-  ).
-  snd-msg(open-parse-table(Module, Path, trm)).
-  (
-    rec-msg(table-on-disk(Table?, Time?)).
-    snd-msg(add-parse-table-to-db(trm(Module), Table, Time)).
-    rec-msg(parse-table-added)
-  +
-    rec-msg(no-table-on-disk)
-  )
-endlet
-
 process Open-Equations (Module : str, Path : str)  is
 let
-  Time : term,
   Tree : term,
   Text : str,
-  RealPath : str
+  RealPath : str,
+  ErrorMessage : str
 in
-  snd-msg(open-rules-file(Module, Path)).
+  snd-msg(open-file(Path, ".asf")).
   (
-    rec-msg(opened-file(Module, text(Text?) , RealPath?, Time?)).
-    snd-msg(add-eqs-to-db(Module, RealPath, text(Text), Time)) .
+    rec-msg(opened-file(text(Text?))) .
+    snd-msg(add-eqs-to-db(Module, text(Text))) .
     rec-msg(eqs-added)
   +
-    rec-msg(opened-file(Module, tree(Tree?) , RealPath?, Time?)).
-    snd-msg(unparse(Tree)) .
-    rec-msg(unparsed-text(Text?)) .
-    snd-msg(add-eqs-to-db(Module, RealPath, tree(Tree), text(Text), Time)) .
-    rec-msg(eqs-added)
-  +
-    rec-msg(error-opening(Module))
+    rec-msg(error-opening(ErrorMessage?))
   )
 endlet

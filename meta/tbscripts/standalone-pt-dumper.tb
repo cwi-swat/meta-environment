@@ -12,10 +12,6 @@ in
 
   rec-note(search-paths-processed) .
   snd-msg(open-modules([MODULENAME])) .
-  ( 
-    rec-msg(cannot-open-module(ModuleName?)).
-    snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
-  )*
   rec-msg(finished-opening-modules) .
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(parse-table-dumped) .

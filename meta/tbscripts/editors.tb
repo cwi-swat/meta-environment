@@ -40,8 +40,7 @@ let
   Tree : term,
   Text : str,
   FileName : str,
-  Path : str,
-  Time : term
+  Message : str
 in
   Tree := none.
   Text := "".
@@ -52,14 +51,14 @@ in
     rec-msg(syntax(Tree?))
   +
     rec-msg(unavailable).
-    snd-msg(open-syntax-file(ModuleName)) .
+    snd-msg(open-syntax-file(FileName, ModuleName)) .
     (
-      rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
+      rec-msg(opened-file(text(Text?)))
     +
-      rec-msg(error-opening(ModuleName))
+      rec-msg(error-opening(Message?))
     )
   ) .
-  CreateEditor(ModuleName,"syntax",FileName,Text,Tree)
+  CreateEditor("syntax",ModuleName,FileName,".sdf",Text,Tree)
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -68,12 +67,14 @@ let
   Text : str,
   FileName : str,
   Path : str,
-  Time : int
+  Time : int,
+  Status : term
 in
+  Status := success .
   Tree := none .
   Text := "" .
-  snd-msg(get-eqs-path-from-db(ModuleName)) .
-  rec-msg(path(FileName?)) .
+  snd-msg(get-path-from-db(ModuleName)) .
+  rec-msg(path(Path?)) .
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?)) 
@@ -84,35 +85,45 @@ in
       rec-msg(eqs-text(ModuleName, Text?))
     +
       rec-msg(no-eqs-text(ModuleName)) .
-      CreateNewEquations(ModuleName)
+      snd-msg(create-new-equations(ModuleName))  .
+      (
+        rec-msg(new-equations-created)
+      +
+        rec-msg(new-equations-not-created) .
+	Status := failure
+      )
     )
   ) .
-  CreateEditor(ModuleName, "equations", FileName, Text, Tree)
+  if equal(Status, success) then
+    CreateEditor("equations",ModuleName,Path,".asf",Text,Tree)
+  else
+    tau
+  fi   
 endlet
 
 process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
 let
-  Text : str,
-  Path : str,
-  Time : term
+  Text : str
 in
   Text := "".
   snd-msg(open-trm-file(FileName)) .
   (
-    rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) 
+    rec-msg(opened-file(text(Text?)))
     +
     rec-msg(error-opening(FileName)) 
   ).
-  CreateEditor(ModuleName,"term",FileName,Text,Tree)
+  CreateEditor("term",ModuleName,FileName,"",Text,Tree)
 endlet
 
-process CreateEditor(ModuleName : str, Type : str,
-                   FileName : str, Text : str, Tree : term) is
+process CreateEditor(Type : str, ModuleName : str, 
+                     Path : str, Extension : str, 
+		     Text : str, Tree : term) is
 let
   EditorId   : term,
   ButtonList : list,
   Pid        : int,
-  Focus      : term
+  Focus      : term,
+  FileName   : str
 in
     /* The 'creates' in the following process are essential to 
      * spawn the actual editors and make the editor creation 
@@ -120,9 +131,9 @@ in
      */
     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName,ButtonList?)).
-    snd-msg(get-editor-id(FileName, ModuleName)) .
+    snd-msg(get-editor-id(Path, Extension, ModuleName)) .
     (
-      rec-msg(new-editor(FileName, EditorId?)) .
+      rec-msg(new-editor(FileName?, EditorId?)) .
       snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
       rec-msg(initial-focus(Focus?)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
@@ -131,7 +142,7 @@ in
       rec-msg(text-editor-initialized(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     +
-      rec-msg(existing-editor(FileName, EditorId?)) .
+      rec-msg(existing-editor(FileName?, EditorId?)) .
       snd-note(move-editor-to-front(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     )
@@ -237,19 +248,4 @@ in
   if equal(EditorList, []) then
     tau
   fi
-endlet
-
-process CreateNewEquations(ModuleName : str) is
-let
-  ErrMsg : str,
-  Path   : str
-in
-  snd-msg(create-new-equations(ModuleName)) .
-  (
-  	rec-msg(new-equations-created(ModuleName, Path?))
-  +
-  	rec-msg(new-equations-not-created(ErrMsg?)) .
-  	snd-note(ui-status(errorf(
-  		"Could not create empty equations: %s", [ErrMsg])))
-  )
 endlet

@@ -201,31 +201,58 @@ static ATerm sndValue(ATerm result)
 }
 
 /*}}}  */
+/*{{{  static char* makeFileName(char *path, char* extension) */
+
+static char* makeFileName(char *path, char* extension)
+{
+  char *fileName = calloc(sizeof(char), strlen(path) +
+			  strlen(extension) + 1);
+
+  if (fileName != NULL) {
+    sprintf(fileName, "%s%s", path, extension);
+  }
+
+  return fileName;
+}
+
+/*}}}  */
 
 /*{{{  ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString) */
 
-ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
+ATerm get_editor_id(int conn, char *pathAsString, 
+		    char* extensionAsString,
+		    char *moduleAsString)
 {
   ATerm editor;
   ATerm editorId;
   ATerm nameAsTerm;
   ATerm moduleAsTerm;
+  char* nameAsString;
 
-  assert(nameAsString);
+  assert(pathAsString);
+  assert(extensionAsString);
 
-  nameAsTerm = nameStringToTerm(nameAsString);
-  editor = getEditorByName(nameAsTerm);
+  nameAsString = makeFileName(pathAsString, extensionAsString);
 
-  if (editor != NULL) {
-    editorId = getEditorId(editor);
-    return sndValue(ATmake("existing-editor(<term>)", editorId));
+  if (nameAsString) {
+    nameAsTerm = nameStringToTerm(nameAsString);
+    editor = getEditorByName(nameAsTerm);
+
+    if (editor != NULL) {
+      editorId = getEditorId(editor);
+      return sndValue(ATmake("existing-editor(<term>)", editorId));
+    }
+
+    editorId = getUniqueId();
+    moduleAsTerm = moduleStringToTerm(moduleAsString);
+    addEditor(newEditor(editorId, nameAsTerm, moduleAsTerm));
+
+    return sndValue(ATmake("new-editor(<term>)", editorId));
   }
-
-  editorId = getUniqueId();
-  moduleAsTerm = moduleStringToTerm(moduleAsString);
-  addEditor(newEditor(editorId, nameAsTerm, moduleAsTerm));
-
-  return sndValue(ATmake("new-editor(<term>)", editorId));
+  else {
+    ATabort("Out of memory");
+    return NULL;
+  }
 }
 
 /*}}}  */

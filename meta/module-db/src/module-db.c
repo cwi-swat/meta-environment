@@ -209,7 +209,7 @@ ATermList MDB_getModulesWithoutEqs(ATerm moduleName)
 
 void MDB_updateEqsTree(ATerm moduleName, ATerm eqsTree)
 {
-  char *path = MS_getAsfTextPath(moduleName);
+  char *path = MS_getModulePath(moduleName);
 
   if (path) {
     eqsTree = PT_makeTermFromParseTree(

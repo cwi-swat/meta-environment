@@ -30,6 +30,11 @@ void init_module_db(int cid)
   MS_initModuleStore();
 }
 
+ATerm retrieve_import_graph(int cid)
+{
+  return ATmake("snd-value(<term>)", MDB_retrieveImportGraph());
+}
+
 void set_file_extensions(int cid, char *syntaxExt, char *eqsExt, char *termExt)
 {
   ES_addExtension("syntax", syntaxExt);
@@ -70,7 +75,7 @@ void clear_module_db(int cid)
 }
 
 ATerm add_sdf_module(int cid, char *moduleName, char *path, 
-                     ATerm sdfTree, int timestamp)
+                     char *sdfText, ATerm sdfTree)
 {
   ATerm atModuleName;
   ATermList unknowns;
@@ -91,14 +96,14 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
                 PT_makeParseTreeFromTerm(sdfTree)));
   
   MS_putModuleName(atModuleName);
-
   MS_putSdfTree(atModuleName, sdfTree);
-  MS_putSdfText(atModuleName, "", path, timestamp);
+  MS_putSdfText(atModuleName, sdfText);
+  MS_putModulePath(atModuleName, path);
 
   unknowns = MDB_unavailableImportedModules(atModuleName);
 
-  return ATmake("snd-value(module(<term>,imports(need-modules([<list>]),<term>)))",
-                atModuleName, unknowns, MDB_retrieveImportGraph());
+  return ATmake("snd-value(module(<term>,need-modules([<list>])))",
+                atModuleName, unknowns);
 }
 
 ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
@@ -188,32 +193,31 @@ ATerm all_equations_available(int cid, char *moduleName)
   }
 }
 
-void add_tree_eqs_section(int cid, char *moduleName, char* path,
-                          ATerm tree, char *eqsText, int timestamp)
+void add_tree_eqs_section(int cid, char *moduleName,
+                          ATerm tree, char *eqsText)
 {
-  MS_putAsfText(makeString(moduleName), eqsText, path, timestamp);
+  MS_putAsfText(makeString(moduleName), eqsText);
   MDB_updateEqsTree(makeString(moduleName), tree);
 }
 
-void add_text_eqs_section(int cid, char *moduleName, char* path, 
-                          char *eqsText, int timestamp)
+void add_text_eqs_section(int cid, char *moduleName,
+                          char *eqsText)
 {
-  MS_putAsfText(makeString(moduleName), eqsText, path, timestamp);
+  MS_putAsfText(makeString(moduleName), eqsText);
 }
 
 void update_eqs_text(int cid, char *moduleName, char *eqsText)
 {
   ATerm atModuleName = makeString(moduleName);
-  char *path = MS_getAsfTextPath(atModuleName);
 
-  MS_putAsfText(atModuleName, eqsText, path, 0);
+  MS_putAsfText(atModuleName, eqsText);
   MS_removeAsfTree(atModuleName);
 }
 
 
-void add_empty_eqs_section(int cid, char *moduleName, char* path)
+void add_empty_eqs_section(int cid, char *moduleName)
 {
-  MS_putAsfText(makeString(moduleName), "", path, 0);
+  MS_putAsfText(makeString(moduleName), "");
 }
 
 void update_eqs_tree(int cid, char *moduleName, ATerm tree)
@@ -380,35 +384,29 @@ ATerm get_parse_table(int cid, ATerm moduleId)
   }
   if (table) {
     ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
-    char *path = MS_getSdfTextPath(atModuleName);
-    int strLen = strlen(path);
-    int lenExtension = strlen(pathExt);
-
-    char *newPath = malloc(strLen+lenExtension+1);
-    strncpy(newPath, path, strLen-lenType);
-    strcpy(newPath+strLen-lenType, pathExt);
+    char *path = MS_getModulePath(atModuleName);
 
     contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
     contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
     result = ATmake("snd-value(table(<term>,<str>))", 
-                    contents, newPath);
-    free(newPath);
+                    contents, path);
+  
     return result;
   }
 
   return ATmake("snd-value(no-table)");
 }
 
-ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
+ATerm add_parse_table(int cid, ATerm moduleId, ATerm table)
 {
   char* moduleName;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
-    MS_putAsfParseTable(makeString(moduleName), table, timestamp);
+    MS_putAsfParseTable(makeString(moduleName), table);
     return ATmake("snd-value(parse-table-added)");
   }
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
-    MS_putTermParseTable(makeString(moduleName), table, timestamp);
+    MS_putTermParseTable(makeString(moduleName), table);
     return ATmake("snd-value(parse-table-added)");
   }
   else {
@@ -417,18 +415,14 @@ ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)
   }
 }
 
-ATerm get_path(int cid, char *moduleName, ATerm type)
+ATerm get_path(int cid, char *moduleName)
 {
   char *path;
   ATerm atModuleName = makeString(moduleName);
 
   if (MS_existsModule(atModuleName)) {
-    if (ATmatch(type, "eqs")) {
-      path = MS_getAsfTextPath(atModuleName);
-    }
-    else {
-      path = MS_getSdfTextPath(atModuleName);
-    }
+    path = MS_getModulePath(atModuleName);
+    
     if (path) {
       return ATmake("snd-value(path(<str>))", path);
     }
@@ -540,7 +534,7 @@ ATerm get_module_info(int cid, char *moduleName)
   ATermList info = ATempty;
 
   if (MS_existsModule(atModuleName)) {
-    char *path = MS_getSdfTextPath(atModuleName);
+    char *path = MS_getModulePath(atModuleName);
   
     pathInfo = ATmake("[path,<str>]", path);
   }

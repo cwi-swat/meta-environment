@@ -384,7 +384,7 @@ in
         fi
       +
         rec-msg(exists(FileName?), Stack?, EditorId?) .
-        snd-msg(exists-file(FileName)) .
+        snd-msg(exists-named-file(FileName)) .
         (
           rec-msg(file-exists(FileName)) .
           ReturnSuccess(EditorId,Stack)
@@ -479,14 +479,16 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) . 
-        snd-msg(open-file(Path)).
+	printf("not yet implemented at line %d", __LINE__) .
+        snd-msg(open-named-file(Path)).
         (
-          rec-msg(opened-file(Name?,tree(Tree?),Path?,TimeStamp?)).
+          rec-msg(opened-file(tree(Tree?))) .
           StackPushTerm(Stack,Stack?,Tree) .
           ReturnSuccess(EditorId,Stack)
         +
           rec-msg(error-opening(Path?)).
-          ReturnAbort(EditorId,Stack) /* This could be ReturnFailed as well */
+          /* This could be ReturnFailed as well: */
+          ReturnAbort(EditorId,Stack) 
         )
   ) * delta
 endlet
@@ -553,15 +555,13 @@ endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
 let
-  Name      : str,
-  TimeStamp : term, 
-  Path      : str
+  ErrorMessage      : str
 in
-  snd-msg(open-file(FileName)).
+  snd-msg(open-named-file(FileName)).
   (
-    rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?))
+    rec-msg(opened-file(text(Text?))) 
   +
-    rec-msg(error-opening(Name?)) .
+    rec-msg(error-opening(ErrorMessage?)) .
     Text := error-text
   )
 endlet

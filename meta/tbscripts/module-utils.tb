@@ -359,7 +359,7 @@ process CheckExistence(New : str, Status : term?) is
     +
       rec-msg(not-exists-in-module-db(New))
     ).
-    snd-msg(exists-syntax-module(New)) .
+    snd-msg(exists-syntax-module("/", New)) .
     (
       rec-msg(syntax-module-exists(New)) .
       Status := module-exists-on-disk
