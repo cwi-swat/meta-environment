@@ -36,7 +36,7 @@
 #include "layout-graph.idef"
 #include "parsetablegen.idef"
 #include "restorebrackets.idef"
-#include "se.idef"
+#include "structure-editor.idef"
 #include "sglr.idef"
 #include "tree2graph.idef"
 #include "unparsePT.idef"

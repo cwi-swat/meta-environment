@@ -2,11 +2,11 @@
 
 include $(top_srcdir)/make_rules
 
-EXTRA_DIST = se.idef
+EXTRA_DIST = structure-editor.idef
 
 bin_PROGRAMS = se
 lib_LIBRARIES = libStructure.a
-pkgdata_DATA = se.idef
+pkgdata_DATA = structure-editor.idef
 
 noinst_HEADERS = \
 	EditorData.h \
