@@ -1,3 +1,7 @@
+2001/12/03 (jurgenv@cwi.nl)
+ * Added interpretation of sequences, optionals and alternatives to 
+   implodePT.
+
 2001/11/29 (jurgenv@cwi.nl)
  * Syntax of attributes in productions has changes:
    assoc("left") becomes assoc(left) -- the quotes have dissappeared.

@@ -95,6 +95,8 @@ AC_OUTPUT(
   libmept/Makefile
   libasfix2/Makefile
   utils/Makefile
+  utils/implodePT/Makefile
+  utils/implodePT/test/Makefile
 )
 
 dnl }}}
