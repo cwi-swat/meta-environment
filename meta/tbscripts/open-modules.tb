@@ -181,7 +181,7 @@ in
       if equal(Error, name-inconsistent) then
         Error("Name of module %s inconsistent", [Module])
       else
-        Error("Opening module %s failed1: %s", [Module, Error])
+        Error("Opening module %s failed: %s", [Module, Error])
       fi
     else
       snd-note(show-feedback-summary(Error))

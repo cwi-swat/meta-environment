@@ -17,21 +17,7 @@ endlet
 
 /*}}}  */
 
-/*{{{  process AssertModuleSanity(Sid: term, Modulename: str) */
-
-process AssertModuleSanity(Sid: term, Modulename: str) is
-let
-  CurrentModulename: str
-in
-  GetModulename(Sid, CurrentModulename?)
-  . if not(equal(CurrentModulename, Modulename)) then
-    Error("Term is already being edited over module: %s", [Modulename])
-  else tau fi
-endlet
-
-/*}}}  */
-/*{{{  process GetFilename(Sid: term, Filename: str?) */
-
+/*{{{  process GetFilename(Sid: term, Filename: str?) */ 
 process GetFilename(Sid: term, Filename: str?) is
   snd-msg(em-get-filename(Sid))
   . rec-msg(em-filename(Sid, Filename?))
@@ -48,7 +34,7 @@ process GetModulename(Sid: term, Modulename: str?) is
 /*{{{  process Edit(Filename: str, Modulename: str, Sid: term?) */
 
 process Edit(Filename: str, Modulename: str, Sid: term?) is
-  snd-msg(em-get-session(Filename, Modulename))
+  snd-msg(em-create-session(Filename, Modulename))
   . rec-msg(em-session(Filename, Modulename, Sid?))
 
 /*}}}  */
@@ -254,8 +240,8 @@ let
   Sid: term,
   Sids: list
 in
-  snd-msg(em-get-session-ids(Modulename))
-  . rec-msg(em-session-ids(Modulename, Sids?))
+  snd-msg(em-get-sessions-by-modulename(Modulename))
+  . rec-msg(em-sessions(Modulename, Sids?))
   . printf("session ids: %t\n", Sids)
   .
   (
@@ -323,7 +309,6 @@ in
   EditorType := syntax-editor
   . FindModuleFilename(Modulename, sdf, Filename?)
   . Edit(Filename, Modulename, Sid?)
-  . AssertModuleSanity(Sid, Modulename)
   . EditText(Sid, EditorType)
   . GetSyntaxTree(Modulename, Tree?, Available?)
   .
@@ -356,13 +341,13 @@ endlet
 /*{{{  process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) */
 
 process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) is
-  snd-msg(get-eqs-tree(Modulename))
+  snd-msg(get-equations-for-module(Modulename))
   .
   (
-    rec-msg(tree(Tree?))
+    rec-msg(equations(Tree?))
     . Available := true
   +
-    rec-msg(unavailable)
+    rec-msg(no-equations)
     . Available := false
   )
 
@@ -407,10 +392,92 @@ endlet
 
 /*}}}  */
 
+/*{{{  process GetTermTree(Filename: str, Tree: term?, Available: bool?) */
+
+process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
+  snd-msg(get-term-tree(Filename))
+  .
+  (
+    rec-msg(term-tree(Filename, Tree?))
+    . Available := true
+  +
+    rec-msg(no-term-tree(Filename))
+    . Available := false
+  )
+
+/*}}}  */
+/*{{{  process CheckSanity(Filename: str, RequestedModulename: str, Valid: bool?) */
+
+process CheckSanity(Filename: str, RequestedModulename: str, Valid: bool?) is
+let
+  CurrentModulename: str,
+  Sid: term
+in
+  snd-msg(em-get-session-by-filename(Filename))
+  .
+  (
+    rec-msg(em-session(Filename, Sid?))
+    . snd-msg(em-get-modulename(Sid))
+    . rec-msg(em-modulename(Sid, CurrentModulename?))
+    . Valid := equal(CurrentModulename, RequestedModulename)
+  +
+    rec-msg(em-no-such-session(Filename))
+    . Valid := true
+  )
+endlet
+
+/*}}}  */
+/*{{{ process EditTerm(Filename: str, Modulename: str) */
+
+process EditTerm(Filename: str, Modulename: str) is
+let
+  Available: bool,
+  EditorType: term,
+  Sid: term,
+  Tree: term,
+  Valid: bool
+in
+  EditorType := term-editor
+  . CheckSanity(Filename, Modulename, Valid?)
+  .
+  if equal(Valid, true)
+  then
+    Edit(Filename, Modulename, Sid?)
+    . EditText(Sid, EditorType)
+    . GetTermTree(Filename, Tree?, Available?)
+    .
+    if equal(Available, true)
+    then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      MouseClicked(Sid)
+    +
+      TextChanged(Sid)
+    +
+      rec-msg(replace-focus(Sid, Tree?))
+      . EditStructure(Sid, Tree)
+    )
+    *
+    EditorDisconnected(Sid)
+    . DeleteSession(Sid)
+  else
+    Error("Term is already being edited over a different module.", [])
+  fi
+endlet
+
+/*}}}  */
+
 /*{{{  process EditorCreator */
 
 process EditorCreator is
 let
+  Filename: str,
   Modulename: str,
   Pid: int
 in
@@ -420,6 +487,9 @@ in
   +
     rec-msg(edit-equations(Modulename?))
     . create(EditEquations(Modulename), Pid?)
+  +
+    rec-msg(edit-term(Filename?, Modulename?))
+    . create(EditTerm(Filename, Modulename), Pid?)
   )
   * delta
 endlet

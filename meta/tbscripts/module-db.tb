@@ -10,30 +10,31 @@
 
 process ModuleDB is
 let
-  Path      : str,
-  Table     : term,
-  Type     : term,
-  ModuleId  : str,
-  Syntax    : term,
-  OldSyntaxTree : term,
-  SyntaxTree: term,
+  DependingModules: list,
+  EqsText: str,
+  EqsTree: term,
+  ErrorMsg: str,
+  Extension: str,
+  Filename: str,
+  LocalText: str,
+  ModuleId: str,
+  Modulenames: list,
+  Modules: list,
+  Name: str,
+  NewName: str,
+  NewPath: str,
+  OldName: str,
+  OldSyntaxTree: term,
+  Pairs: list,
+  Path: str,
+  RealFilename: str,
+  Syntax: term,
   SyntaxText: str,
-  EqsTree   : term,
-  EqsText   : str,
-  LocalText : str,
-  Name      : str,
-  OldName   : str,
-  NewName   : str,
-  NewPath   : str,
-  Modules   : list,
-  DependingModules : list,
-  ModuleNames : list,
-  FileName : str,
-  RealFileName : str,
-  Pairs    : list,
-  ErrorMsg : str,
-  Extension : str,
-  TableName : str
+  SyntaxTree: term,
+  Table: term,
+  Tablename: str,
+  TermTree: term,
+  Type: term
 in
   MDB-InitializeModuleDb() .
   snd-msg(termstore-initialized) .
@@ -81,12 +82,12 @@ in
       snd-msg(sm-get-module-path(Path, ModuleId)) .
       rec-msg(sm-module-path(NewPath?)) .
       snd-msg(io-get-filename(Path, Name, "")) .
-      rec-msg(io-filename(FileName?)) .
+      rec-msg(io-filename(Filename?)) .
       snd-msg(io-get-filename(NewPath, ModuleId, "")) .
-      rec-msg(io-filename(RealFileName?)) .
-      if equal(FileName, RealFileName) then
+      rec-msg(io-filename(RealFilename?)) .
+      if equal(Filename, RealFilename) then
         snd-msg(ts-put-str-value("module-paths", ModuleId, NewPath)) .
-        MDB-RegisterPath(FileName, ModuleId) .
+        MDB-RegisterPath(Filename, ModuleId) .
         MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
         snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
         snd-msg(sm-get-imported-module-names(SyntaxTree)) .
@@ -101,7 +102,7 @@ in
       else
         ModuleId := Name .
         snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
-        MDB-RegisterPath(FileName, ModuleId) .
+        MDB-RegisterPath(Filename, ModuleId) .
         Modules := [] .
         snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
         snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
@@ -186,8 +187,8 @@ in
     snd-msg(copy-module-done(OldName))
   +
     rec-msg(eqs-not-available-for-modules(Name?)) .
-    MDB-AllEquationsAvailable(Name, ModuleNames?) .
-    snd-msg(eqs-needed-for-modules(ModuleNames))
+    MDB-AllEquationsAvailable(Name, Modulenames?) .
+    snd-msg(eqs-needed-for-modules(Modulenames))
   +
     rec-msg(get-eqs-text(Name?)).
     snd-msg(ts-get-str-value("asf-text", Name)) .
@@ -214,8 +215,8 @@ in
     snd-msg(file-extension-hook(asf)) .
     rec-msg(file-extension-hook-result(Extension?)) .
     snd-msg(io-get-filename(Path, Name, Extension)) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(add-posinfo-to-depth(FileName,EqsTree, POSINFO_DEPTH)) .
+    rec-msg(io-filename(Filename?)) .
+    snd-msg(add-posinfo-to-depth(Filename,EqsTree, POSINFO_DEPTH)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
     EqsTree := no-tree .
@@ -280,8 +281,8 @@ in
     snd-msg(all-depending-modules(DependingModules))
   +
     rec-msg(get-all-imported-module-names(Name?)).
-    MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
-    snd-msg(all-imported-module-names(ModuleNames))
+    MDB-GetAllImportedModulenames(Name, Modulenames?) .
+    snd-msg(all-imported-module-names(Modulenames))
   +
     rec-msg(get-all-modules) .
     snd-msg(ts-get-all-values("sdf-tree")) .
@@ -295,19 +296,19 @@ in
   +
     rec-msg(get-all-module-names).
     snd-msg(ts-get-all-keys("active-modules")) .
-    rec-msg(ts-all-keys(ModuleNames?)) .
-    snd-msg(all-module-names(ModuleNames))
+    rec-msg(ts-all-keys(Modulenames?)) .
+    snd-msg(all-module-names(Modulenames))
   + 
     rec-msg(all-equations-available(Name?)).
-    MDB-AllEquationsAvailable(Name, ModuleNames?) .
-    if equal(ModuleNames, []) then
+    MDB-AllEquationsAvailable(Name, Modulenames?) .
+    if equal(Modulenames, []) then
       snd-msg(equations-available)
     else
       snd-msg(equations-incomplete)
     fi
   +
-    rec-msg(get-modules(ModuleNames?)) .
-    snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+    rec-msg(get-modules(Modulenames?)) .
+    snd-msg(ts-get-values("sdf-tree", Modulenames)) .
     (
       rec-msg(ts-values(Modules?)) .
       snd-msg(modules(Modules)) .
@@ -318,11 +319,11 @@ in
     )
   +
     rec-msg(get-all-syntax-definitions(Name?, Type?)) .
-    MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
-    snd-msg(pre-get-all-syntax-hook(ModuleNames, Type)) .
+    MDB-GetAllImportedModulenames(Name, Modulenames?) .
+    snd-msg(pre-get-all-syntax-hook(Modulenames, Type)) .
     (
-       rec-msg(pre-get-all-syntax-hook-result(tablename(TableName?))) .
-       snd-msg(ts-get-values(TableName, ModuleNames)) .
+       rec-msg(pre-get-all-syntax-hook-result(tablename(Tablename?))) .
+       snd-msg(ts-get-values(Tablename, Modulenames)) .
        (
          rec-msg(ts-values(Modules?)) .
          snd-msg(add-initial-syntax-modules-hook(Modules, Type)) .
@@ -357,17 +358,6 @@ in
       snd-msg(unavailable)
     )
   +
-    rec-msg(get-eqs-tree(Name?)) .
-    snd-msg(ts-get-term-value("asf-tree", Name)) .
-    (
-      rec-msg(ts-value(EqsTree?)) .
-      snd-msg(tree(EqsTree)) .
-      EqsTree := no-tree
-    +
-      rec-msg(ts-no-value) .
-      snd-msg(unavailable)
-    )
-  +
     rec-msg(get-equations-for-module(Name?)).   
     snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
@@ -377,6 +367,22 @@ in
     +
       rec-msg(ts-no-value) .
       snd-msg(no-equations)
+    )
+  +
+    rec-msg(put-term-tree(Filename?, TermTree?))
+    . printf("storing term-tree for: %s\n", Filename)
+    . snd-msg(ts-put-term-value("term-tree", Filename, TermTree))
+  +
+    rec-msg(get-term-tree(Filename?))
+    . snd-msg(ts-get-term-value("term-tree", Filename))
+    .
+    (
+      rec-msg(ts-value(TermTree?))
+      . snd-msg(term-tree(Filename, TermTree))
+      . TermTree := help-the-garbage-collector
+    +
+      rec-msg(ts-no-value)
+      . snd-msg(no-term-tree(Filename))
     )
   +
     rec-msg(invalidate-parse-tables(Name?)).
@@ -408,6 +414,7 @@ process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("sdf-text", "str")) .
   snd-msg(ts-add-table("asf-tree", "term")) .
   snd-msg(ts-add-table("asf-text", "str")) .
+  snd-msg(ts-add-table("term-tree", "term")) .
   snd-msg(ts-add-table("asf-parse-table", "term")) .
   snd-msg(ts-add-table("term-parse-table", "term")) .
   snd-msg(ts-add-table("import-relations", "term")) 
@@ -421,6 +428,7 @@ process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("sdf-text")) .
   snd-msg(ts-clear-table("asf-tree")) .
   snd-msg(ts-clear-table("asf-text")) .
+  snd-msg(ts-clear-table("term-tree")) .
   snd-msg(ts-clear-table("asf-parse-table")) .
   snd-msg(ts-clear-table("term-parse-table")) .
   snd-msg(ts-clear-table("import-relations")) .
@@ -464,7 +472,7 @@ in
     rec-msg(sm-depending-module-names(DependingModules?)) 
 endlet
 
-process MDB-GetAllImportedModuleNames(Name : str, Imported : list?) is
+process MDB-GetAllImportedModulenames(Name : str, Imported : list?) is
 let
   Pairs : list
 in
@@ -648,26 +656,26 @@ endlet
 
 process MDB-AllEquationsAvailable(Name : str, Missing : list?) is
 let
-  ModuleNames : list,
-  ModuleName  : str,
+  Modulenames : list,
+  Modulename  : str,
   Text    : str,
   Tree    : term
 in
-  MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
+  MDB-GetAllImportedModulenames(Name, Modulenames?) .
   Missing := [] .
-  if not(equal(ModuleNames, [])) then
-    ModuleName := first(ModuleNames) .
-    ModuleNames := next(ModuleNames) .
-    snd-msg(ts-get-str-value("asf-text", ModuleName)) . 
+  if not(equal(Modulenames, [])) then
+    Modulename := first(Modulenames) .
+    Modulenames := next(Modulenames) .
+    snd-msg(ts-get-str-value("asf-text", Modulename)) . 
     (
       rec-msg(ts-no-value)
     +
       rec-msg(ts-value(Text?)) .
       Text := "" .
-      snd-msg(ts-get-term-value("asf-tree", ModuleName)) .
+      snd-msg(ts-get-term-value("asf-tree", Modulename)) .
       (
         rec-msg(ts-no-value) .
-	Missing := join(ModuleName, Missing)
+	Missing := join(Modulename, Missing)
       +
         rec-msg(ts-value(Tree?)) .
 	Tree := no-tree
@@ -675,7 +683,7 @@ in
     )
   fi
   * 
-  if equal(ModuleNames, []) then
+  if equal(Modulenames, []) then
     tau
   fi
 endlet
@@ -735,7 +743,7 @@ process MDB-AddEquationsPosInfo(Module : str, In : term , Out : term?) is
 process MDB-AddPosInfo(Module : str, Type : term, In : term , Out : term?) is
 let
   Path : str,
-  FileName : str,
+  Filename : str,
   Extension : str
 in
   snd-msg(ts-get-str-value("module-paths", Module)) .
@@ -743,23 +751,23 @@ in
   snd-msg(file-extension-hook(Type)) .
   rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-get-filename(Path, Module, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(add-posinfo-packed(FileName, In)) .
+  rec-msg(io-filename(Filename?)) .
+  snd-msg(add-posinfo-packed(Filename, In)) .
   rec-msg(tree-with-pos-info(Out?)) 
 endlet
 
-process MDB-GetModuleName(Path : str, FileName : str, ModuleName : str?) is
+process MDB-GetModulename(Path : str, Filename : str, Modulename : str?) is
 let
-  FullFileName : str
+  FullFilename : str
 in
-  snd-msg(io-get-filename(Path, FileName, "")) .
-  rec-msg(io-filename(FullFileName?)) .
-  snd-msg(ts-get-str-value("path-modulename",FullFileName)) .
+  snd-msg(io-get-filename(Path, Filename, "")) .
+  rec-msg(io-filename(FullFilename?)) .
+  snd-msg(ts-get-str-value("path-modulename",FullFilename)) .
   (
-    rec-msg(ts-value(ModuleName?))
+    rec-msg(ts-value(Modulename?))
   +
     rec-msg(ts-no-value) .
-    ModuleName := FileName
+    Modulename := Filename
   )
 endlet
 

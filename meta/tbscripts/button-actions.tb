@@ -122,6 +122,7 @@ process ButtonActionExecutor is
 let
   Action : str,
   ActionEvent : term,
+  Available: bool,
   ArgList : list,
   Direction: term,
   EditorId : term,
@@ -152,6 +153,7 @@ let
   PosInfo : term,
   Query : str,
   RTree : term,
+  Sid: term,
   SList	: list,
   STree : term,
   SortName : str,
@@ -294,14 +296,16 @@ in
     StackPushString(Stack, Stack?, String) .
     ReturnSuccess(EditorId,Stack)
     +
-    rec-msg(get-root, Stack?, EditorId?) .
-    StackPopString(Stack, Stack?, ModuleName?) .
-    GetTree(EditorId, ModuleName, RTree?) .
-    if not-equal(RTree, error-tree) then
-      StackPushTerm(Stack,Stack?,RTree).
-      ReturnSuccess(EditorId,Stack)
+    rec-msg(get-root, Stack?, EditorId?)
+    . StackPopString(Stack, Stack?, ModuleName?)
+    . GetTree(EditorId, ModuleName, RTree?, Available?)
+    .
+    if equal(Available, true)
+    then
+      StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
     else
-      ReturnAbort(EditorId,Stack)
+      ReturnAbort(EditorId, Stack)
     fi
       +
         rec-msg(set-root, Stack?, EditorId?) .
@@ -339,15 +343,20 @@ in
           ReturnSuccess(EditorId, Stack)
         fi
       +
-        rec-msg(reduce, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        StackPopTerm(Stack,Stack?,STree?) .
-        ReduceTerm(STree, ModuleName, RTree?) .
-        if not-equal(RTree, error-tree) then
-          StackPushTerm(Stack,Stack?,RTree) .
-          ReturnSuccess(EditorId,Stack)
+        rec-msg(reduce, Stack?, EditorId?)
+        . StackPopString(Stack, Stack?, ModuleName?)
+        . StackPopTerm(Stack, Stack?, STree?)
+        . ReduceTerm(STree, ModuleName, RTree?)
+        .
+	if not-equal(RTree, error-tree)
+	then
+          StackPushTerm(Stack, Stack?, RTree)
+          . StackPushTerm(Stack, Stack?, RTree)
+	  . snd-msg(put-term-tree("reduct.out", RTree))
+          . ReturnSuccess(EditorId, Stack)
         else
-          ReturnAbort(EditorId,Stack)
+	  printf("RTree: %t\n", error-tree) .
+          ReturnAbort(EditorId, Stack)
         fi
       +
         rec-msg(run-asf-tests, Stack?, EditorId?) .
@@ -399,10 +408,10 @@ in
         StackPushString(Stack,Stack?,FileName) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(activate-editor, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        StackPopString(Stack,Stack?,FileName?) .
-        StackPopTerm(Stack,Stack?,STree?) .
+        rec-msg(activate-editor, Stack?, Sid?) .
+        StackPopString(Stack, Stack?, ModuleName?) .
+        StackPopString(Stack, Stack?, FileName?) .
+        StackPopTerm(Stack, Stack?, STree?) .
         FunSym := fun(STree) .
         if equal(FunSym, "str") then
           String := first(args(STree)) .
@@ -410,16 +419,12 @@ in
         else
           ActivateEditorWithTree(STree, ModuleName, FileName) 
         fi .    
-        ReturnSuccess(EditorId,Stack)
+        ReturnSuccess(Sid, Stack)
       +
-#if 0
-	rec-msg(close-editor, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        StackPopString(Stack,Stack?,FileName?) .
-	CloseEditor(ModuleName, FileName) .
-	ReturnSuccess(EditorId, Stack)
+	rec-msg(close-editor, Stack?, Sid?)
+	. DeleteSession(Sid)
+	. ReturnSuccess(Sid, Stack)
       +
-#endif
         rec-msg(debug-print-stack, Stack?, EditorId?) .
 	StackPopString(Stack, Stack?, ErrorMessage?) .
 	printf("%s: %t\n", ErrorMessage, Stack) .
@@ -728,7 +733,7 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,ModuleName?) .
-          snd-msg(edit-term-file(ModuleName, FileName)) .
+          snd-msg(edit-term(FileName, ModuleName)) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -1007,6 +1012,7 @@ let
   DependingModules : list,
   ModuleId : str /* module to be parsed over */
 in
+  printf("ParseSyntax(%t, %t)\n", Sid, Type) .
   snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   .
@@ -1017,39 +1023,35 @@ in
   snd-msg(parse-focusses(Sid, ModuleId, Type)) .
   (
     rec-msg(parse-ok(ModuleId)) .
-    snd-msg(se-get-tree(Sid)) .
+    snd-msg(se-get-parse-tree(Sid)) .
+    rec-msg(se-parse-tree(Sid, Tree?)) .
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(Text?)) .
+    snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
     (
-      rec-msg(se-tree(Tree?)) .
-      snd-msg(unparse(Tree)) .
-      rec-msg(unparsed-text(Text?)) .
-      snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
+      rec-msg(no-updating-needed) .
+      snd-note(te-clear-focus(Sid))
+    +
+      rec-msg(updating-succeeded(DependingModules?)).
+      snd-msg(update-module-in-db(Modulename, Tree, Type)) .
       (
-	rec-msg(no-updating-needed) .
-        snd-note(te-clear-focus(Sid))
+	rec-msg(updating-succeeded(NewModules?)).
+	snd-msg(notify-about-changed-modules(DependingModules, Type)) .
+	rec-msg(notify-about-changed-modules-done) .
+	snd-msg(open-modules(NewModules, Type)).
+	rec-msg(finished-opening-modules) .
+	snd-msg(te-clear-focus(Sid))
       +
-        rec-msg(updating-succeeded(DependingModules?)).
-        snd-msg(update-module-in-db(Modulename, Tree, Type)) .
-	(
-          rec-msg(updating-succeeded(NewModules?)).
-	  snd-msg(notify-about-changed-modules(DependingModules, Type)) .
-	  rec-msg(notify-about-changed-modules-done) .
-          snd-msg(open-modules(NewModules, Type)).
-          rec-msg(finished-opening-modules) .
-          snd-msg(te-clear-focus(Sid))
-        +
-          rec-msg(error-opening(Modulename, name-inconsistent)).
-          snd-msg(invalidate-sdf-in-db(Modulename)).
-          snd-note(ui-status(
-            errorf("Changing the name of %s is not permitted.",[Modulename])))
-        )
-      +
-        rec-msg(error-opening(Modulename, name-inconsistent)) .
+	rec-msg(error-opening(Modulename, name-inconsistent)).
 	snd-msg(invalidate-sdf-in-db(Modulename)).
-        snd-note(ui-status(
-          errorf("Changing the name of %s is not permitted.",[Modulename])))
+	snd-note(ui-status(
+	  errorf("Changing the name of %s is not permitted.",[Modulename])))
       )
     +
-      rec-msg(se-no-tree)
+      rec-msg(error-opening(Modulename, name-inconsistent)) .
+      snd-msg(invalidate-sdf-in-db(Modulename)).
+      snd-note(ui-status(
+	errorf("Changing the name of %s is not permitted.",[Modulename])))
     )
   +
     rec-msg(parse-failed(ModuleId)) .
@@ -1057,59 +1059,62 @@ in
   ) 
 endlet
 
-process ParseEquations(EditorId : term, ModuleName : str) is
+process ParseEquations(Sid: term, ModuleName : str) is
 let
   Tree : term
 in
-  snd-msg(parse-focusses(EditorId, ModuleName, eqs)) .
+  snd-msg(parse-focusses(Sid, ModuleName, eqs)) .
   (
     rec-msg(parse-ok(ModuleName)) .
-    snd-msg(se-get-tree(EditorId)) .
-    (
-      rec-msg(se-tree(Tree?)) .
-      snd-msg(postprocess-semantics-hook(ModuleName, Tree)).
-      rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?)).
-      snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
-      rec-msg(eqs-updated) .
-      snd-msg(te-clear-focus(EditorId))
-    +
-      rec-msg(se-no-tree)
-    )
+    snd-msg(se-get-parse-tree(Sid)) .
+    rec-msg(se-parse-tree(Sid, Tree?)) .
+    snd-msg(postprocess-semantics-hook(ModuleName, Tree)).
+    rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?)).
+    snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
+    rec-msg(eqs-updated) .
+    snd-msg(te-clear-focus(Sid))
   +
     rec-msg(parse-failed(ModuleName))
   )
 endlet
 
-process GetTree(EditorId: term, ModuleName: str, Tree: term?) is
+/*{{{  process ParseTermIfNecessary(Sid: term, Modulename: str) */
+
+process ParseTermIfNecessary(Sid: term, Modulename: str) is
 let
-  DirtyFoci  : term
+  Registered: bool
 in
-  Tree := error-tree.
-  snd-msg(se-get-dirty-focuses(EditorId)) .
-  rec-msg(se-dirty-focuses(DirtyFoci?)) .
-  if equal(DirtyFoci, []) then
-    snd-msg(se-get-tree(EditorId)) .
-    (
-      rec-msg(se-tree(Tree?))
-    +
-      rec-msg(se-no-tree)
-    )
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, false)
+  then
+    ParseTerm(Sid, Modulename)
   else
-    ParseTerm(EditorId, ModuleName) .
-    snd-msg(se-get-dirty-focuses(EditorId)) .
-    rec-msg(se-dirty-focuses(DirtyFoci?)) . 
-    if equal(DirtyFoci, []) then
-      snd-msg(se-get-tree(EditorId)) .
-      (
-        rec-msg(se-tree(Tree?))
-      +
-        rec-msg(se-no-tree)
-      )
-    else 
-      tau
-    fi
+    tau
   fi
 endlet
+
+/*}}}  */
+/*{{{  process GetTree(Sid: term, Modulename: str, Tree: term?, Available: bool?) */
+
+process GetTree(Sid: term, Modulename: str, Tree: term?, Available: bool?) is
+let
+  Registered: bool
+in
+  ParseTermIfNecessary(Sid, Modulename)
+  . IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true)
+  then
+    snd-msg(se-get-parse-tree(Sid))
+    . rec-msg(se-parse-tree(Sid, Tree?))
+    . Available := true
+  else
+    Available := false
+  fi
+endlet
+
+/*}}}  */
 
 process ReplaceRoot(EditorId: term, Tree: term) is
 let
@@ -1125,7 +1130,7 @@ process GetFocus(Sid: term, Tree: term?) is
   snd-msg(se-get-cursor(Sid))
   . rec-msg(se-cursor(Sid, Tree?))
 
-process ReplaceFocus(EditorId: term, Tree: term) is
+process ReplaceFocus(Sid: term, Tree: term) is
 let
   TotalTree : term,
   Text : str,
@@ -1133,27 +1138,23 @@ let
   FileName : str,
   ErrorMessage : str
 in
-  snd-msg(se-replace-focussed-tree(EditorId, Tree)) .
+  snd-msg(se-replace-focussed-tree(Sid, Tree)) .
   rec-msg(se-focus(Focus?)) .
-  snd-msg(se-get-tree(EditorId)) .
+  snd-msg(se-get-parse-tree(Sid)) .
+  rec-msg(se-parse-tree(Sid, TotalTree?)) .
+  snd-msg(unparse(TotalTree)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(get-editor-filename(Sid)) .
+  rec-msg(editor-filename(FileName?)) .
+  snd-msg(io-write-text-file(FileName,[Text])) .
   (
-    rec-msg(se-tree(TotalTree?)) .
-    snd-msg(unparse(TotalTree)) .
-    rec-msg(unparsed-text(Text?)) .
-    snd-msg(get-editor-filename(EditorId)) .
-    rec-msg(editor-filename(FileName?)) .
-    snd-msg(io-write-text-file(FileName,[Text])) .
-    (
-      rec-msg(io-file-written) . 
-      snd-msg(te-reread-contents(EditorId)) .
-      printf("snd-msg(te-set-cursor-at-focus(EditorId, Focus))\n") .
-      snd-msg(te-set-focus(EditorId, Focus))
-    +
-      rec-msg(io-file-not-written(ErrorMessage?)) .
-      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
-    )
+    rec-msg(io-file-written) . 
+    snd-msg(te-reread-contents(Sid)) .
+    printf("snd-msg(te-set-cursor-at-focus(Sid, Focus))\n") .
+    snd-msg(te-set-focus(Sid, Focus))
   +
-    rec-msg(se-no-tree)
+    rec-msg(io-file-not-written(ErrorMessage?)) .
+    snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
   )
 endlet
 
@@ -1197,23 +1198,24 @@ in
   )
 endlet
 
-process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
+process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
 let
   Text        : str,
   EditorId    : term,
-  NewModuleName : str,
+  NewModulename : str,
   ErrorMessage : str
 in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
-    snd-msg(io-write-text-file(FileName,[Text])) .
+    snd-msg(io-write-text-file(Filename, [Text])) .
     (
       rec-msg(io-file-written) .
-      snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
+      /*snd-msg(edit-term-file-with-tree(Modulename, Filename, Tree))*/
+      snd-msg(edit-term(Filename, Modulename))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
-      snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
+      snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
     )
   fi
 endlet
@@ -1224,7 +1226,7 @@ let
   NewModuleName : str,
   ErrorMessage : str
 in
-  snd-msg(io-write-text-file(FileName,[Text])) .
+  snd-msg(io-write-text-file(FileName, [Text])) .
   (
     rec-msg(io-file-written) .
     snd-msg(edit-term-file(ModuleName, FileName))
