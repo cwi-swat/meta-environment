@@ -52,13 +52,13 @@ int main (int argc, char **argv)
   PT_initMEPTApi();
 
   lang_name = ATmake("<str>", pt_name);
-  if(ATmatch(SGopenLanguage("dump", lang_name, pt_name),
+  if(ATmatch(SGopenLanguage(lang_name, pt_name, pt_name),
              "snd-value(open-language-failed(<str>,<str>))", &err, NULL)) {
     ATfprintf(stderr, "could not open %s as a parse table\n", err);
     return 1;
   }
 
-  if(!(pt = SG_LookupParseTable(lang_name))) {
+  if(!(pt = SG_LookupParseTable(lang_name, pt_name))) {
     ATfprintf(stderr, "failed to find parse table for languate %s\n", pt_name);
     return 1;
   }

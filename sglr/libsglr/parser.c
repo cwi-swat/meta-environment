@@ -74,7 +74,7 @@ stacks      *old_active_stacks[GC_CYCLE];
 
 /* Prototypes for the auxiliary functions  */
 
-void      SG_ParseToken(void);
+static void SG_ParseToken(void);
 void      SG_Actor(stack *);
 ATbool    SG_CheckLookAhead(lookahead la);
 void      SG_DoReductions(stack*, action);
@@ -84,7 +84,7 @@ void    SG_Reducer(stack *st0, state s, label prodl,
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
 static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak);
-tree      SG_ParseResult(const char *path, const char *sort);
+static tree SG_ParseResult(const char *path, const char *sort);
 
 /*
  Some global vars, used for collecting statistics
@@ -386,7 +386,7 @@ token SG_NextToken(int(*get_next_token)(void))
 long   sg_major, sg_minor;
 size_t sg_nr_rejects;
 
-void  SG_ParserPreparation(void)
+static void SG_ParserPreparation(void)
 {
   SG_InitInput();
   SGsort(SG_UNSET, NULL);
@@ -464,7 +464,7 @@ void SG_PostParseResult(void)
   );
 }
 
-void  SG_ParserCleanup(void)
+static void SG_ParserCleanup(void)
 {
   long allocated;
 
@@ -502,7 +502,11 @@ void  SG_ParserCleanup(void)
  message depending on the status.
  */
 
-forest SG_Parse(const char *path, parse_table *parseTable, const char *topSort, int(*get_next_token)(void), size_t length)
+forest SG_Parse(const char *path, 
+		parse_table *parseTable, 
+		const char *topSort, 
+		int(*get_next_token)(void),
+		size_t length)
 {
   forest result;
 
@@ -556,7 +560,7 @@ forest SG_Parse(const char *path, parse_table *parseTable, const char *topSort, 
  token.
  */
 
-void SG_ParseToken(void)
+static void SG_ParseToken(void)
 {
   stack   *st;
   stacks  *s;
@@ -1097,7 +1101,7 @@ tree SG_ConvertA2ToA2ME(tree t)
   return t;
 }    
 
-tree SG_ParseResult(const char *path, const char *sort)
+static tree SG_ParseResult(const char *path, const char *sort)
 {
   ATermList cycle;
   tree      t;

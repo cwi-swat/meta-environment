@@ -1,0 +1,20 @@
+definition
+
+module Main
+
+imports NoStartSymbol
+
+module NoStartSymbol
+imports Layout
+
+exports 
+  sorts Bool
+  context-free syntax
+    "true" -> Bool
+
+module Layout
+exports
+  lexical syntax
+    [\ \n] -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]

@@ -153,7 +153,7 @@ ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable)
   ATerm table = ATBunpack(packedTable);
   ATerm term = ATBunpack(packedTerm);
 
-  pt = SG_BuildParseTable((ATermAppl) table);
+  pt = SG_BuildParseTable((ATermAppl) table, "");
 
   restoredTerm
     = PT_ParseTreeToTerm(RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
@@ -252,12 +252,12 @@ int main(int argc, char *argv[])
     assert(tree);
     
     lang_name = ATmake("<str>", parse_table_file);
-    if (!SGopenLanguage("restorebrackets", lang_name, parse_table_file)) {
+    if (!SGopenLanguage(lang_name, parse_table_file, input)) {
       ATerror("could not open language!\n");
       return 1;
     }
     
-    pt = SG_LookupParseTable(lang_name);
+    pt = SG_LookupParseTable(lang_name, input);
     if (!pt) {
       ATerror("failed to find parse table for language %s\n", parse_table_file);
       return 1;

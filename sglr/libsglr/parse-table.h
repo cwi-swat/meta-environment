@@ -9,6 +9,7 @@ void AT_collect(int size);
 #define ATcollect()  AT_collect(2)
 
 #include "sglr.h"
+#include <Error-utils.h>
 
 #define STATE_SIZE 257
 #define ACTION_INDEX(s, c)        ((s)*STATE_SIZE + (c))
@@ -108,13 +109,16 @@ ATbool        SG_PreferenceAction(action a);
 #endif
 #endif
 
-parse_table  *SG_AddParseTable(const char *prgname, language L, const char *FN);
-void          SG_RemoveParseTable(language L);
-parse_table  *SG_BuildParseTable(ATermAppl t);
+void SG_InitParseTableErrorList();
+void SG_addParseTableErrorError(const char *path, const char *desc);
+ATbool SG_IsParseTableErrorListEmpty();
+ERR_Summary SG_makeParseTableErrorSummary(const char *path);
+
+parse_table  *SG_AddParseTable(language L, const char *FN, const char *inFile);
+parse_table  *SG_BuildParseTable(ATermAppl t, const char *path);
 void          SG_DiscardParseTable(parse_table *pt);
 void          SG_SaveParseTable(language L, parse_table *pt);
-void          SG_ClearParseTable(language L);
-parse_table  *SG_LookupParseTable(language L);
+parse_table  *SG_LookupParseTable(language L, const char *path);
 
 /*  Constants in parse tables  */
 #define       SG_PT_REGULAR         0

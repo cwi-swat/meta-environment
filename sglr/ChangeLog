@@ -1,5 +1,13 @@
 $Id$
 
+Thu Jul 15 15:49:40 CEST 2004 <markvdb@cwi.nl>
+ * Introduced the Error-api for the situation the parse table
+   could not be processed because:
+   - wrong version
+   - not a valid parse table
+   - parse table does not contain a start state.
+ * Added a test for the latter case.
+
 Fri Jul  9 15:12:11 CEST 2004 <markvdb@cwi.nl>
  * Removed every left-/right-/assoc-/non-assoc-prio.
  * Increased the parse table version number to 6.
@@ -7,6 +15,9 @@ Fri Jul  9 15:12:11 CEST 2004 <markvdb@cwi.nl>
    grammars, because start-symbols were missing. 
    Regenerated some tests because attributes are no longer 
    quoted.
+
+Fri Jul  2 10:20:58 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 3.12
 
 Mon May 17 15:07:52 CEST 2004 <{markvdb,jurgenv}@cwi.nl>
  * Introduced priorities on specific arguments as a filter.

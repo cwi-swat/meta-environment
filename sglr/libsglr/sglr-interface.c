@@ -19,11 +19,11 @@
 #include "rsrc-usage.h"
 
 
-ATerm SG_TermToToolbus(ATerm t);
-size_t SG_FileSize(const char *prg, const char *FN);
+ATerm  SG_TermToToolbus(ATerm t);
+static size_t SG_FileSize(const char *FN);
 void   SG_PrintToken(FILE *out, token c);
 void   SG_Validate(const char *caller);
-char  *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fsize);
+static char  *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fsize);
 
 
 /*
@@ -84,52 +84,25 @@ void SGshowMode()
  language |L| from the term |tbl|.
  */
 
-ATerm SGopenLanguageFromTerm(const char *prgname, language L, ATerm tbl)
+ATerm SGopenLanguageFromTerm(language L, ATerm tbl, const char *path)
 {
   parse_table *pt = NULL;
 
-  if(!(pt = SG_LookupParseTable(L))) {
-    IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
+  IF_STATISTICS(ATfprintf(SG_log(), "Language: %t\n", L); SG_Timer());
 
-    pt = SG_BuildParseTable((ATermAppl) tbl);
+  pt = SG_BuildParseTable((ATermAppl) tbl, path);
 
-    IF_STATISTICS(ATfprintf(SG_log(),
-                            "Obtaining parse table for %t took %.6fs\n",
-                            L, SG_Timer()));
-
-    if(pt)
-      SG_SaveParseTable(L, pt);
+  IF_STATISTICS(ATfprintf(SG_log(),
+                          "Obtaining parse table for %t took %.6fs\n",
+                          L, SG_Timer()));
+  if (pt) {
+    SG_SaveParseTable(L, pt);
   }
 
-#if 0
-  if (SG_TOOLBUS) {
-    if (pt == NULL) {
-      return ATmake("language-not-opened(<term>)", L);
-    }
-    else {
-      return ATmake("language-opened(<term>)", L);
-    }
-  }
-  else {
-    if (pt == NULL) {
-      return NULL;
-    }
-    else {
-      return (ATerm)ATempty;
-    }
-  }
-#endif
-#if 1
-  return SG_TOOLBUS
-    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
-                                 :  "language-not-opened(<term>)",
-                               L))
-    : (ATerm) (pt ? ATempty : NULL);
-#endif
+  return (ATerm) (pt ? ATempty : NULL);
 }
 
-
-ATerm SGopenLanguage(const char *prgname, language L, const char *FN)
+ATerm SGopenLanguage(language L, const char *FN, const char *inFile)
 {
   parse_table *pt;
 
@@ -139,11 +112,11 @@ ATerm SGopenLanguage(const char *prgname, language L, const char *FN)
 
   SG_Validate("SGopenLanguage");
   IF_VERBOSE(
-    if (FN) 
-      ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
+    if (FN)
+      ATwarning("opening parse table %s\n", SG_SAFE_STRING(FN))
   );
-  if(!(pt = SG_LookupParseTable(L))) {
-    pt = SG_AddParseTable(prgname, L, FN);
+  if (!(pt = SG_LookupParseTable(L, inFile))) {
+    pt = SG_AddParseTable(L, FN, inFile);
   }
 
   return (ATerm) (pt ? ATempty : NULL);
@@ -185,14 +158,8 @@ ATerm SGparseString(const char *input, SGLR_ParseTable parseTable, const char *t
 }
 
 
-ATerm SGparseStringAsAsFix2(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path)
-{
-  SG_ASFIX2ME_OFF();
-
-  return SGparseString(input, parseTable, topSort, path);
-}
-
-ATerm SGparseStringAsAsFix2ME(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path)
+ATerm SGparseStringAsAsFix(const char *input, SGLR_ParseTable parseTable, 
+			   const char *topSort, const char *path)
 {
   SG_ASFIX2ME_ON();
 
@@ -212,19 +179,23 @@ ATerm SGparseStringAsAsFix2ME(const char *input, SGLR_ParseTable parseTable, con
  If either no filename or `-' is specified, standard input is used.
  */
 
-ATerm SGparseFile(const char *prgname, language L, const char *G, const char *FN)
+ATerm SGparseFile(const char *prgname, 
+		  language L, 
+		  const char *G, 
+		  const char *FN)
 {
   forest ret;
   size_t ntok = 0;
   parse_table *pt;
 
   SG_Validate("SGparseFile");
-  if((pt = SG_LookupParseTable(L)) == NULL) {
-    IF_VERBOSE(ATwarning("no such parse table (%s)\n", SG_SAFE_LANGUAGE(L)));
+  if ((pt = SG_LookupParseTable(L, FN)) == NULL) {
+    IF_VERBOSE(ATwarning("no such parse table (%s)\n", 
+			 SG_SAFE_LANGUAGE(L)));
     return NULL;
   }
 
-  if((SG_theText = SG_ReadFile(prgname, NULL, FN, &ntok)) == NULL) {
+  if ((SG_theText = SG_ReadFile(prgname, NULL, FN, &ntok)) == NULL) {
     return NULL;
   }
   
@@ -285,20 +256,27 @@ ATerm SGtermToFile(const char *prgname, ATerm t, const char *FN)
  the parse tree to the output file and returns the parse result.
  */
 
-ATerm SGparseFileUsingTable(const char *prg, const char *ptblfil, const char *sort,
-                            const char *infil, const char *outfil)
+ATerm SGparseFileUsingTable(const char *prg, 
+			    const char *ptblfil, 
+			    const char *sort,
+                            const char *infil, 
+			    const char *outfil)
 {
   language L = ATmake("<str>", ptblfil);
 
-  if(infil && *infil && strcmp(infil,"-") && (int)SG_FileSize(prg, infil)<0) {
+  if (infil && 
+      *infil && 
+      strcmp(infil,"-") && 
+      (int)SG_FileSize(infil) < 0) {
     ATerror("%s: cannot open %s\n", prg, infil);
   }
-
-  if(!SGopenLanguage(prg, L, ptblfil)) {
-    ATwarning("could not open language!\n");
-    return NULL;
+  
+  SG_InitParseTableErrorList();
+  if (!SGopenLanguage(L, ptblfil, infil)) {
+    return SGtermToFile(prg,
+			ERR_SummaryToTerm(SG_makeParseTableErrorSummary(infil)),
+			outfil);
   }
-
   return SGtermToFile(prg, SGparseFile(prg, L, sort, infil), outfil);
 }
 
@@ -374,7 +352,7 @@ void SG_CloseLog(void)
   if(SG_Log) fclose(SG_Log);
 }
 
-size_t SG_FileSize(const char *prg, const char *FN)
+static size_t SG_FileSize(const char *FN)
 {
   struct stat  statbuf;
 
@@ -428,7 +406,7 @@ void SG_PrintToken(FILE *out, token c)
 void SG_Validate(const char *caller)
 {
   IF_STATISTICS(
-    if(!SG_log()) {
+    if (!SG_log()) {
       ATwarning("Warning: implicitly opening logfile\n");
       SG_OpenLog(caller, ".sglr-log");
     }
@@ -438,7 +416,7 @@ void SG_Validate(const char *caller)
 
 /*  The function |SGopenFile| tries to open a named file for reading.  */
 
-FILE *SG_OpenFile(const char *prgname, const char *std_error, const char *FN)
+FILE *SG_OpenFile(const char *std_error, const char *FN)
 {
   FILE *file;
 
@@ -465,7 +443,10 @@ FILE *SG_OpenFile(const char *prgname, const char *std_error, const char *FN)
 
 #define SG_BUFCHUNK  65536
 
-char *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fsize)
+static char *SG_ReadFile(const char *prg, 
+			 const char *err, 
+			 const char *fnam, 
+			 size_t *fsize)
 {
   FILE   *in;
   char   *buf;
@@ -473,11 +454,11 @@ char *SG_ReadFile(const char *prg, const char *err, const char *fnam, size_t *fs
   IF_STATISTICS(SG_Timer());
 
   *fsize = 0L;
-  if((in = SG_OpenFile(prg, err, fnam)) == NULL) {
+  if((in = SG_OpenFile(err, fnam)) == NULL) {
     return NULL;
   }
   if(in != stdin) {
-    *fsize = SG_FileSize(prg, fnam);
+    *fsize = SG_FileSize(fnam);
     /* we allocate one char extra for EOS */
     buf = SG_Malloc(1, *fsize+1);
     if(*fsize != fread(buf, 1, *fsize, in)) {

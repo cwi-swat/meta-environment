@@ -62,10 +62,10 @@ ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort)
   int ambiguityCount;
   ATerm result;
 
-  pt = SG_BuildParseTable((ATermAppl) ATBunpack(parseTable));
+  pt = SG_BuildParseTable((ATermAppl) ATBunpack(parseTable), NULL);
   assert(pt != NULL);
 
-  result = SGparseStringAsAsFix2ME(input, (SGLR_ParseTable)pt, topSort, NULL);
+  result = SGparseStringAsAsFix(input, (SGLR_ParseTable)pt, topSort, NULL);
 
   if (ERR_isValidError(ERR_ErrorFromTerm(result))) {
     result = ATmake("parse-error(<term>)", result);

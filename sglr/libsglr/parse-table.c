@@ -384,6 +384,49 @@ static void SG_StoreArgGtrPriority(parse_table *pt, ATermInt l1, ATermInt argNum
   }
 }
 
+/*}}}  */
+
+/* Error administration */
+
+static ERR_ErrorList ptErrorList;
+
+/*{{{  void SG_InitParseTableErrorList() */
+void SG_InitParseTableErrorList()
+{
+  ptErrorList = ERR_makeErrorListEmpty();
+}
+
+/*}}}  */
+/*{{{  ATbool SG_IsParseTableErrorListEmpty() */
+
+ATbool SG_IsParseTableErrorListEmpty()
+{
+  return ERR_isErrorListEmpty(ptErrorList);
+}
+
+/*}}}  */
+/*{{{  void SG_addParseTableErrorError(const char *path, const char *contentDescription) */
+
+void SG_addParseTableErrorError(const char *path, const char *contentDescription)
+{
+  ERR_Location posinfo = ERR_makeLocationFile(path);
+  ERR_Subject subject = ERR_makeSubjectLocalized(contentDescription, 
+						 posinfo);
+  ERR_Error error = ERR_makeErrorError("Parse Table error",
+	     		               ERR_makeSubjectListSingle(subject));
+  ptErrorList = ERR_makeErrorListMany(error, ptErrorList);
+}
+
+/*}}}  */
+/*{{{  ERR_Summary SG_makeParseTableErrorSummary(const char *path) */
+
+ERR_Summary SG_makeParseTableErrorSummary(const char *path)
+{
+  return ERR_makeSummarySummary("sglr", path, ptErrorList);
+}
+
+/*}}}  */
+
 /*
  Storing and accessing character classes
 
@@ -832,19 +875,22 @@ void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
   ATerm prod;
 
   for (; !ATisEmpty(grammar); grammar = ATgetNext(grammar)) {
-    if(ATgetAFun(prod = ATgetFirst(grammar)) == SG_Label_AFun) {
+    if (ATgetAFun(prod = ATgetFirst(grammar)) == SG_Label_AFun) {
       production pr_prod  = (production) ATgetArgument(prod, 0);
       label      pr_label = ATgetInt((ATermInt) ATgetArgument(prod, 1));
 
-      if(pr_label == SG_EOF)
+      if (pr_label == SG_EOF) {
         ATerror("error, obsolete parse table format\n");
-      if(pr_label <  SG_PROD_START
-         || pr_label >= SG_PROD_START+SG_PT_NUMPRODS(pt))
+      }
+      if (pr_label <  SG_PROD_START
+         || pr_label >= SG_PROD_START+SG_PT_NUMPRODS(pt)) {
         ATerror("SG_AddPTGrammar: production %d out of range (%d..%d)\n",
                 pr_label, SG_PROD_START, SG_PROD_START+SG_PT_NUMPRODS(pt)-1);
+      }
       SG_AddProduction(SG_PT_PRODUCTIONS(pt), pr_label, pr_prod);
       SG_AddInjection(SG_PT_INJECTIONS(pt), pr_label, SG_Injection(pr_prod));
-    } else {
+    } 
+    else {
       ATerror("SG_AddPTGrammar: bad production %t\n", prod);
     }
   }
@@ -1056,7 +1102,7 @@ void SG_DiscardParseTable(parse_table *pt)
 }
 
 /*}}}  */
-/*{{{  parse_table *SG_AddParseTable(char *prgname, language L, char *FN) */
+/*{{{  parse_table *SG_AddParseTable(language L, char *FN) */
 
 /*
  Add Parse Table
@@ -1065,13 +1111,13 @@ void SG_DiscardParseTable(parse_table *pt)
  parse table database.
  */
 
-parse_table *SG_AddParseTable(const char *prgname, language L, const char *FN)
+parse_table *SG_AddParseTable(language L, const char *FN, const char *inFile)
 {
   FILE        *input_file;
   parse_table *pt = NULL;
   ATerm t;
 
-  if(!(input_file = SG_OpenFile(prgname, "parse table not specified", FN))) {
+  if (!(input_file = SG_OpenFile("parse table not specified", FN))) {
     return NULL;
   }
 
@@ -1079,7 +1125,7 @@ parse_table *SG_AddParseTable(const char *prgname, language L, const char *FN)
 
   t = ATreadFromFile(input_file);
 
-  pt = SG_BuildParseTable((ATermAppl) t);
+  pt = SG_BuildParseTable((ATermAppl) t, inFile);
 
   IF_STATISTICS(ATfprintf(SG_log(),
                         "Obtaining parse table for %t took %.6fs\n",
@@ -1087,7 +1133,7 @@ parse_table *SG_AddParseTable(const char *prgname, language L, const char *FN)
 
   SG_CloseFile(input_file);
 
-  if(pt) {
+  if (pt) {
     SG_SaveParseTable(L, pt);
   }
 
@@ -1095,17 +1141,7 @@ parse_table *SG_AddParseTable(const char *prgname, language L, const char *FN)
 }
 
 /*}}}  */
-/*{{{  void SG_RemoveParseTable(language L) */
-
-void SG_RemoveParseTable(language L)
-{
-  if(SG_LookupParseTable(L)) {
-    SG_ClearParseTable(L);
-  }
-}
-
-/*}}}  */
-/*{{{  parse_table *SG_BuildParseTable(ATermAppl t) */
+/*{{{  parse_table *SG_BuildParseTable(ATermAppl t, const char *path) */
 /*
  Build Parse Table
 
@@ -1114,7 +1150,7 @@ void SG_RemoveParseTable(language L)
  */
 
 
-parse_table *SG_BuildParseTable(ATermAppl t)
+parse_table *SG_BuildParseTable(ATermAppl t, const char *path)
 {
   ATermList   prods, states;
   register ATermList sts, prios = ATempty;
@@ -1124,13 +1160,15 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   AFun        ptfun;
   size_t      goto_entries = 0, action_entries = 0;
   long        maxrss = 0, allocated;
+  int         nrOfStates;
 
   SG_InitPTGlobals();  /*  Make sure the PT globals are initialised  */
+  SG_InitParseTableErrorList();
 
   ptfun = ATgetAFun(t);
 
   if (ptfun != SG_PT5_AFun) {
-    ATwarning("parse table format error (%y != %y)\n", ptfun, SG_PT5_AFun);
+    SG_addParseTableErrorError(path, "Parse table format error");
     t = NULL;
     return NULL;
   }
@@ -1138,7 +1176,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   version_nr = ATgetInt((ATermInt) ATgetArgument(t, 0));
 
   if (version_nr != 6) {
-    ATwarning("versions of SGLR and parse table generator do not match\n");
+    SG_addParseTableErrorError(path, "Invalid parse table version");
     t = NULL;
     return NULL;
   }
@@ -1149,67 +1187,86 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   prios = (ATermList) ATgetArgument(ATgetArgument(t, 4), 0);
   t = NULL;
 
-  for(sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
-    ATerm     curstate = ATgetFirst(sts);
-    if(ATgetAFun(curstate) == SG_StateRec_AFun) {
-      ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
-      /*<PO: action list is no longer surrounded by the 'action' symbol
-       * ATermList acts  = (ATermList) ATgetArgument(ATgetArgument(curstate,2),0);*/
-      ATermList acts  = (ATermList) ATgetArgument(curstate,2);
+  nrOfStates = ATgetLength(states);
 
-      goto_entries += SG_CountPTGotos(gotos);
-      action_entries += SG_CountPTActions(acts);
+  if (nrOfStates == 2 &&
+      ATgetLength((ATermList)ATgetArgument(ATgetFirst(states), 2)) == 0 &&
+      ATgetLength((ATermList)ATgetArgument(ATgetFirst(ATgetNext(states)), 
+					   2)) == 0) {
+    SG_addParseTableErrorError(path, "No start state defined");
+    return NULL;
+  }
+  else {
+    for (sts=states; !ATisEmpty(sts); sts=ATgetNext(sts)) {
+      ATerm     curstate = ATgetFirst(sts);
+      if (ATgetAFun(curstate) == SG_StateRec_AFun) {
+        ATermList gotos = (ATermList) ATgetArgument(curstate, 1);
+        ATermList acts  = (ATermList) ATgetArgument(curstate, 2);
+
+        goto_entries += SG_CountPTGotos(gotos);
+        action_entries += SG_CountPTActions(acts);
+      }
     }
-  }
 
-  IF_STATISTICS(maxrss = SG_ResidentSetSize());
+    IF_STATISTICS(maxrss = SG_ResidentSetSize());
+  
+    pt = SG_NewParseTable(initial_state, 
+			  ATgetLength(states), 
+			  ATgetLength(prods),
+                          action_entries, 
+			  goto_entries);
 
-  pt = SG_NewParseTable(initial_state, ATgetLength(states), ATgetLength(prods),
-                        action_entries, goto_entries);
+    IF_STATISTICS(
+      allocated = SG_Allocated();
+      if (allocated > 0) {
+        fprintf(SG_log(), 
+		"[mem] extra ATerm memory allocated for empty table: %ld\n",
+                allocated);
+      }
+      if (maxrss) {
+        fprintf(SG_log(), 
+		"[mem] PT build: %ld before, %ld after table creation\n",
+                maxrss, SG_ResidentSetSize());
+      }
+      maxrss = SG_ResidentSetSize();
+    );
 
-  IF_STATISTICS(
-    allocated = SG_Allocated();
-    if(allocated > 0)
-    fprintf(SG_log(), "[mem] extra ATerm memory allocated for empty table: %ld\n",
-            allocated);
-    if(maxrss)
-    fprintf(SG_log(), "[mem] PT build: %ld before, %ld after table creation\n",
-            maxrss, SG_ResidentSetSize());
-    maxrss = SG_ResidentSetSize();
-  );
+    SG_AddPTStates(pt, states);
+    states = NULL;
+    SG_AddPTGrammar(pt, prods);
+    prods = NULL;
+  
+    if (!ATisEmpty(prios)) {
+      /*  Successful match, priorities included  */
+      SG_AddPTPriorities(pt, prios);
+      prios = NULL;
+    } else {
+      IF_VERBOSE(ATwarning("warning: no priority information in parse table\n"))
+    }
 
-  SG_AddPTStates(pt, states);
-  states = NULL;
-  SG_AddPTGrammar(pt, prods);
-  prods = NULL;
-
-  if(!ATisEmpty(prios)) {
-    /*  Successful match, priorities included  */
-    SG_AddPTPriorities(pt, prios);
-    prios = NULL;
-  } else {
-    IF_VERBOSE(ATwarning("warning: no priority information in parse table\n"))
-  }
-
-  IF_STATISTICS(
-    fprintf(SG_log(), "%scludes rejects\n",
-      SG_PT_HAS_REJECTS(pt)?"In":"Ex");
-    fprintf(SG_log(), "%scludes priorities\n",
+    IF_STATISTICS(
+      fprintf(SG_log(), "%scludes rejects\n",
+        SG_PT_HAS_REJECTS(pt)?"In":"Ex");
+      fprintf(SG_log(), "%scludes priorities\n",
       SG_PT_HAS_PRIORITIES(pt)?"In":"Ex");
-    fprintf(SG_log(), "%scludes prefer actions\n",
-      SG_PT_HAS_PREFERS(pt)   ?"In":"Ex");
-    fprintf(SG_log(), "%scludes avoid actions\n",
-      SG_PT_HAS_AVOIDS(pt)    ?"In":"Ex");
-    allocated = SG_Allocated();
-    if(allocated > 0)
-    fprintf(SG_log(), "[mem] extra ATerm memory allocated while filling table: %ld\n",
-            allocated);
-    if(maxrss)
-    fprintf(SG_log(), "[mem] PT build: %ld before, %ld after filling table\n",
-            maxrss, SG_ResidentSetSize());
-  );
-
-  return pt;
+      fprintf(SG_log(), "%scludes prefer actions\n",
+        SG_PT_HAS_PREFERS(pt)   ?"In":"Ex");
+      fprintf(SG_log(), "%scludes avoid actions\n",
+        SG_PT_HAS_AVOIDS(pt)    ?"In":"Ex");
+      allocated = SG_Allocated();
+      if (allocated > 0) {
+        fprintf(SG_log(), 
+		"[mem] extra ATerm memory allocated while filling table: %ld\n",
+                allocated);
+      }
+      if (maxrss) {
+        fprintf(SG_log(), 
+		"[mem] PT build: %ld before, %ld after filling table\n",
+                maxrss, SG_ResidentSetSize());
+      }
+    );
+    return pt;
+  }
 }
 
 /*}}}  */
@@ -1223,7 +1280,6 @@ typedef struct _ptdb {
   parse_table *table;
 } PTDB;
 static PTDB tables[MAX_TABLES];
-static int last_table = 0;
 
 /*{{{  void SG_SaveParseTable(language L, parse_table *pt) */
 
@@ -1234,93 +1290,43 @@ static int last_table = 0;
 
 void SG_SaveParseTable(language L, parse_table *pt)
 {
-  /*  Remove table for L, if already present  */
-  SG_RemoveParseTable(L);
-
-  if (last_table >= MAX_TABLES) {
-    if(SG_VERBOSE) {
-      /*  Full?  Ditch oldest table in database  */
-      ATwarning("maximum number (%d) of languages reached\n"
-                "removing table for %t to make room for %t\n",
-                MAX_TABLES, tables[0].name, SG_SAFE_LANGUAGE(L));
-    }
-    SG_ClearParseTable(tables[0].name);
+  if (tables[0].table) {
+    SG_DiscardParseTable(tables[0].table);
   }
-
-  /*  Add L in the next free slot  */
-  tables[last_table].name  = L;
-  tables[last_table].table = pt;
+  tables[0].name  = L;
+  tables[0].table = pt;
   IF_DEBUG(ATfprintf(SG_log(),
-                     "Table for %t added to parse table database with index %d\n",
-                     L, last_table));
-  last_table++;
+                     "Table for %t added to parse table database\n", L));
 }
 
 /*}}}  */
-/*{{{  void SG_ClearParseTable(language L) */
+/*{{{  parse_table *SG_LookupParseTable(language L, , const char *inFile) */
 
-void SG_ClearParseTable(language L)
-{
-  int  i, j;
-  long maxrss = 0;
-
-  /*  Locate L in parse table database  */
-  for (i = 0; i < last_table && !ATisEqual(L, tables[i].name); i++);
-  if (i >= MAX_TABLES) {
-    IF_VERBOSE(
-      ATwarning("no table for %t to remove\n", L)
-    );
-    return;
-  }
-
-  IF_STATISTICS(maxrss = SG_ResidentSetSize());
-
-  /*  L has index i  */
-  /*SG_Free(tables[i].name);*/
-  SG_DiscardParseTable(tables[i].table);
-  tables[i].name  = NULL;
-  tables[i].table = NULL;
-
-  /*  Shift rest of database  */
-  for (j = i+1; j < last_table; j++) {
-    tables[j-1].name  = tables[j].name;
-    tables[j-1].table = tables[j].table;
-  }
-  last_table--;
-
-  IF_STATISTICS(
-    if(maxrss)
-    fprintf(SG_log(), "[mem] PT cleared: %ld before, %ld after\n",
-            maxrss, SG_ResidentSetSize());
-    ATfprintf(SG_log(), "Table for %t removed from parse table database\n", L)
-  );
-}
-
-/*}}}  */
-/*{{{  parse_table *SG_LookupParseTable(language L) */
-
-parse_table *SG_LookupParseTable(language L)
+parse_table *SG_LookupParseTable(language L, const char *inFile)
 {
   int i = 0;
+  static char contentDescription[1024];
+
 
   IF_DEBUG(ATfprintf(SG_log(), "Request for language %t\n",
                      SG_SAFE_LANGUAGE(L)));
 
-  if(!L) {
-    IF_VERBOSE(ATwarning("can't lookup undefined language\n"));
+  if (!L) {
+    SG_addParseTableErrorError(inFile,
+			       "can not lookup undefined language\n");
     return NULL;
   }
-  for (; L && i < last_table; i++)
-    if (ATisEqual(L, tables[i].name)) {
-      IF_DEBUG(ATfprintf(SG_log(),
-                         "Table for language %t available with index %d\n", 
-                         L, i))
-      return tables[i].table;
-    } else IF_DEBUG(ATfprintf(SG_log(), "Table for %t not at index %d (%t)\n",
-                            L, i, tables[i].name));
+  if (ATisEqual(L, tables[0].name)) {
+    IF_DEBUG(ATfprintf(SG_log(),
+                       "Table for language %t available\n", 
+                       L))
+    return tables[i].table;
+  }
 
-  IF_DEBUG(ATfprintf(SG_log(), "Table for %t not amongst the %d stored\n",
-                   SG_SAFE_LANGUAGE(L), MAX_TABLES));
+  sprintf(contentDescription, "Table for %s not stored", 
+	  L ? "XXX" : "[undefined]");
+
+  SG_addParseTableErrorError(inFile, contentDescription);
 
   return NULL;
 }
