@@ -77,6 +77,7 @@ static ATerm pattern_char       = NULL;
 static ATerm pattern_lexical_constructor;
 static ATerm pattern_caller_id = NULL;
 static ATerm ws = NULL;
+static ATerm spws = NULL;
 
 /*static Symbol symbol_asfix_appl;
 static Symbol symbol_asfix_list;
@@ -552,7 +553,7 @@ static ATerm make_asfix_list_sep(ATermList l,
     tmp = term_to_asfix(ATelementAt(l, len-1),tsort);
     list = ATinsert(list, tmp);
     for(i = len-2; i >= 0; i--) {
-      list = ATinsert(list, ws);
+      list = ATinsert(list, spws);
       list = ATinsert(list, listsep);
       list = ATinsert(list, ws);
       tmp = term_to_asfix(ATelementAt(l, i),tsort);
@@ -653,31 +654,31 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
       ATerror("unknown production symbol: %s\n",
               ATgetName(ATgetSymbol((ATermAppl) t)));
     }
-		assert(ATgetType(prod) == AT_APPL);
-		appl = (ATermAppl)prod;
-		sym = ATgetSymbol(appl);
-		
+    assert(ATgetType(prod) == AT_APPL);
+    appl = (ATermAppl)prod;
+    sym = ATgetSymbol(appl);
+    
     if(ATmatchTerm(prod, pattern_lexical_constructor, NULL, &lexsort)) {
       return term_to_asfix(ATgetArgument((ATermAppl) t,0), lexsort);
     } else if(sym == symbol_prod) {
-			mod   = ATgetArgument(appl, 0);
-		  fargs = (ATermList)ATgetArgument(appl, 2);
-			sort  = ATgetArgument(appl, 6);
-			args  = terms_to_asfix(fargs, (ATermAppl)t, sort);
+      mod   = ATgetArgument(appl, 0);
+      fargs = (ATermList)ATgetArgument(appl, 2);
+      sort  = ATgetArgument(appl, 6);
+      args  = terms_to_asfix(fargs, (ATermAppl)t, sort);
       if(ATisEqual(mod, pattern_caller_id)) 
         result = ATgetFirst(args);
       else
         result = ATmakeTerm(pattern_asfix_appl, prod, ws, args);
-		} else if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
+    } else if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
       if(streq(listsort, "CHAR"))
-				result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) t,0),
+      	result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) t,0),
                                 sort);
       else
-				result = make_asfix_list((ATermList)ATgetArgument((ATermAppl) t,0),
+      	result = make_asfix_list((ATermList)ATgetArgument((ATermAppl) t,0),
                                  listsort);
     } else if(ATmatchTerm(prod, pattern_listtype_sep, &listsort, &sep))
       result = make_asfix_list_sep((ATermList) ATgetArgument((ATermAppl) t,0), 
-																	 listsort, sep);
+                                   listsort, sep);
     else 
       ATerror("cannot handle production: %t\n", prod);
   }
@@ -728,7 +729,7 @@ void deslash(char *str, char *buf)
 static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort) 
 {
   ATermList result = ATempty;
-	int arity = ATgetArity(ATgetSymbol(appl));
+  int arity = ATgetArity(ATgetSymbol(appl));
   int i, j = arity-1, len = ATgetLength(args);
   ATerm tmp2;
   char *str;
@@ -736,7 +737,7 @@ static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort)
   for(i=len-1; i>=0; i--) {
     ATerm tmp = ATelementAt(args,i);
     if(ATmatchTerm(tmp, pattern_asfix_ws, NULL)) {
-      result = ATinsert(result, tmp);
+      result = ATinsert(result, spws);
     } 
     else if(ATmatchTerm(tmp,pattern_asfix_ql,&str)) {
       deslash(str,conversionbuf);
@@ -808,6 +809,8 @@ void init_patterns()
 
   ATprotect(&ws);
   ws = ATparse("w(\"\\n\")");
+  ATprotect(&spws);
+  spws = ATparse("w(\" \")");
  
   ATprotect(&c_true);
   ATprotect(&c_false);
