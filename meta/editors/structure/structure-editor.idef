@@ -11,7 +11,8 @@ let
   Focus: term,
   Offset: int,
   ParseTree: term,
-  SE: structure-editor
+  SE: structure-editor,
+  Sort: str
 in
   execute(structure-editor, SE?)
   .
@@ -32,6 +33,11 @@ in
     . snd-eval(SE, get-focus-at-cursor(EditorId))
     . rec-value(SE, focus(Focus?))
     . snd-msg(se-focus-at-cursor(EditorId, Focus))
+  +
+    rec-msg(se-get-sort-at-cursor(EditorId?))
+    . snd-eval(SE, get-sort-at-cursor(EditorId))
+    . rec-value(SE, sort(Sort?))
+    . snd-msg(se-sort-at-cursor(EditorId, Sort))
   +
     rec-msg(se-move-cursor(EditorId?, Direction?))
     . snd-do(SE, move-cursor(EditorId, Direction))

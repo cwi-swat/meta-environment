@@ -9,10 +9,11 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-void delete_editor(int conn, ATerm);
 void set_cursor_at_offset(int conn, ATerm, int);
-void update_editor(int conn, ATerm, ATerm);
+void delete_editor(int conn, ATerm);
 ATerm get_focus_at_cursor(int conn, ATerm);
+void update_editor(int conn, ATerm, ATerm);
+ATerm get_sort_at_cursor(int conn, ATerm);
 void create_editor(int conn, ATerm, ATerm);
 void move_cursor(int conn, ATerm, ATerm);
 void rec_terminate(int conn, ATerm);

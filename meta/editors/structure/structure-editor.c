@@ -15,7 +15,12 @@
 #include "structure-editor.tif.h"
 
 /*}}}  */
+/*{{{  defines */
 
+#define SORT_AMBIGUOUS "<ambiguous>"
+#define SORT_UNKNOWN "<unknown>"
+
+/*}}}  */
 /*{{{  variables */
 
 static ATermTable editors = NULL;
@@ -39,7 +44,7 @@ static void setEditor(ATerm editorId, SE_StructureEditor editor)
   assert(editorId != NULL);
   assert(editor != NULL);
 
-  return ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
+  ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
 }
 
 /*}}}  */
@@ -48,7 +53,15 @@ static void setEditor(ATerm editorId, SE_StructureEditor editor)
 
 static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
 {
-  PT_Tree tree = PT_getParseTreeTop(parseTree);
+  PT_Tree tree;
+
+  assert(parseTree != NULL);
+  assert(PT_isValidParseTree(parseTree));
+
+  tree = PT_getParseTreeTop(parseTree);
+  assert(tree != NULL);
+  assert(PT_isValidTree(tree));
+
   if (PT_getTreeLocation(tree) == NULL) {
     ATerror("structure-editor.c: cannot edit parsetree without posinfo!\n");
   }
@@ -173,6 +186,30 @@ static SE_StructureEditor moveCursorRight(SE_StructureEditor editor)
 
 /*}}}  */
 
+/*{{{  static PT_Symbol getTreeSort(PT_Tree tree) */
+
+static PT_Symbol getTreeSort(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_getProductionRhs(prod);
+  }
+  else if (PT_isTreeChar(tree)) {
+    int ch = PT_getTreeCharacter(tree);
+
+    return PT_makeSymbolCharClass(PT_makeCharRangesSingle(
+                                  PT_makeCharRangeCharacter(ch)));
+  }
+  else if (PT_isTreeAmb(tree)) {
+    return PT_makeSymbolSort(SORT_AMBIGUOUS);
+  }
+  else {
+    return PT_makeSymbolSort(SORT_UNKNOWN);
+  }
+}
+
+/*}}}  */
+
 /*{{{  void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
 
 void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
@@ -246,19 +283,31 @@ ATerm get_focus_at_cursor(int cid, ATerm editorId)
 {
   SE_StructureEditor editor = getEditor(editorId);
 
-  if (editor != NULL) {
-    if (SE_hasStructureEditorCursor(editor)) {
-      SE_Tree cursor = SE_getStructureEditorCursor(editor);
-      LOC_Location location = PT_getTreeLocation(cursor);
-      LOC_Area area = LOC_getLocationArea(location);
-      return ATmake("snd-value(focus(<term>))", area);
-    }
-
-    ATwarning("get_focus_at_cursor: no cursor yet in %t\n", editorId);
-    return NULL;
+  if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
+    SE_Tree cursor = SE_getStructureEditorCursor(editor);
+    LOC_Location location = PT_getTreeLocation(cursor);
+    LOC_Area area = LOC_getLocationArea(location);
+    return ATmake("snd-value(focus(<term>))", area);
   }
 
-  ATwarning("get_focus_at_cursor: no such editor: %t\n", editorId);
+  ATwarning("get_focus_at_cursor: cannot get focus for: %t\n", editorId);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ATerm get_sort_at_cursor(int cid, ATerm editorId) */
+
+ATerm get_sort_at_cursor(int cid, ATerm editorId)
+{
+  SE_StructureEditor editor = getEditor(editorId);
+
+  if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
+    SE_Tree cursor = SE_getStructureEditorCursor(editor);
+    char *sort = PT_yieldSymbol(getTreeSort(cursor));
+    return ATmake("snd-value(sort(<str>))", sort);
+  }
+
+  ATwarning("get_sort_at_cursor: cannot get sort for: %t\n", editorId);
   return NULL;
 }
 

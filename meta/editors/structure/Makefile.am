@@ -4,8 +4,8 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS = structure-editor
 lib_LIBRARIES = libStructureEditor.a
-pkgdata_DATA = structure-editor.idef
 noinst_HEADERS = structure-editor.tif.h
+pkgdata_DATA = structure-editor.idef
 
 AM_CFLAGS = -Wall -Werror -g -O2
 
@@ -34,7 +34,8 @@ structure_editor_LDADD = \
 	$(SOCKLIBS)
 
 libStructureEditor_a_SOURCES = \
-	StructureEditor.c StructureEditor_dict.c
+	StructureEditor.c \
+	StructureEditor_dict.c
 
 CLEANFILES = \
 	structure-editor.tifs
@@ -46,8 +47,7 @@ EXTRA_DIST = \
 
 # Developers
 api: StructureEditor.sdf
-	(echo definition; cat $<) \
-	> `basename $< .sdf`.def
+	(echo definition; cat $<) > `basename $< .sdf`.def
 	sdf2-to-adt \
 		--imploded \
 		--input `basename $< .sdf`.def \
