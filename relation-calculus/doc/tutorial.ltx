@@ -46,8 +46,8 @@
 \begin{figure}[tb]
 \begin{center}
 \vspace*{-1cm}
-\epsfig{figure=figs/paradigm.eps,width=14cm}
-\vspace*{-6cm}
+\epsfig{figure=figs/paradigm.eps,width=10cm}
+\vspace*{-4cm}
 \end{center}
 \hrulefill
 \caption{\label{FIG:paradigm} The extract-enrich-view paradigm}
@@ -61,13 +61,13 @@ software system. \rscript fits well in the extract-enrich-view paradigm
 shown in Figure~\ref{FIG:paradigm}:
 
 \begin{description}
-\item[Extract:] Given the source text, extract relevant information
-from it in the form of relations. Examples are the CALLS relation that
-describes direct calls between procedures, the USE relation that
-relates statements with the variables that are used in the statements,
-and the PRED relation that relates a statement with its predecessors
-in the control flow graph.  The extraction phase is outside the scope
-of \rscript but may, for instance, be implemented using \asfsdf~\cite{BDHJJKKMOSVVV01}.
+\item[Extract:] Given the source text, extract relevant information from it in
+the form of relations. Examples are the CALLS relation that describes direct
+calls between procedures, the USE relation that relates statements with the
+variables that are used in the statements, and the PRED relation that relates
+a statement with its predecessors in the control flow graph.  The extraction
+phase is outside the scope of \rscript but may, for instance, be implemented
+using \asfsdf~\cite{BDHJJKKMOSVVV01} and we will give examples how to do this.
 
 
 \item[Enrich:] Derive additional information from the relations
@@ -75,25 +75,79 @@ extracted from the source text. For instance, use CALLS to compute
 procedures that can also call each other indirectly (using transitive
 closure).  Here is where \rscript shines.
 
-\item[View:] The result of the enrichment phase are again bags and
-relations.  These can be displayed with various tools like, Dot~\cite{Dot96}, Rigi~\cite{Mueller88}
-and others. \rscript is not concerned with viewing.
+\item[View:] The result of the enrichment phase are again bags and relations.
+These can be displayed with various tools like, Dot~\cite{Dot96},
+Rigi~\cite{Mueller88} and others. \rscript is not concerned with viewing.
 
 \end{description}
 
-\section{Background}
+\paragraph{Application of Relations to Program Analysis}
+
 Many algorithms for program analysis are usually presented as \emph{graph}
-algorithms and this seems to be at odds with our extensive experience of using
+algorithms and this seems to be at odds with the extensive experience of using
 \emph{term} rewriting for tasks as type checking, fact extraction, analysis
 and transformation.  The major obstacle is that graphs can and terms cannot
 contain cycles.  Fortunately, every graph can be represented as a relation and
 it is therefore natural to have a look at the combination of relations and
 term rewriting.
 
+Once you start considering problems from a relational perspective, elegant and
+concise solutions start to appear. Some examples are:
+\begin{itemize}
+\item Analysis of call graphs and the structure og software architectures.
+\item Detailed analysis of the control flow or dataflow of programs.
+\item Program slicing.
+\item Type checking.
+\item Constraint problems.
+\end{itemize}
+
+\paragraph{What's new in \rscript?}
+Given the considerable amount of related work to be discussed below, it is necessary to clearly
+establish what is and what is not new in our approach:
+
+\begin{itemize}
+
+\item We use sets and relations like  Rigi~\cite{Mueller88} and
+  GROK~\cite{Holt96} do. After extensive experimentation we have decided \emph{not}
+  to use bags and multi-relations like in RPA~\cite{FeijsKrikhaarOmmering98}.
+
+\item Unlike several other systems we allow \emph{nested} sets and relations
+  and also support $n$-ary relations as opposed to just binary relations but
+  don't support the complete repertoire of $n$-ary relations as in SQL.
+
+\item We offer a strongly typed language with user-defined types.
+
+\item Unlike Rigi~\cite{Mueller88}, GROK~\cite{Holt96} and
+  RPA~\cite{FeijsKrikhaarOmmering98} we provide a relational \emph{calculus}
+  as opposed to a relational algebra. Although the two have the same
+  expressive power, a calculus increases, in our opinion, the readability of
+  relational expressions beacuse they allow the introduction of variables to
+  express intermediate results.
+
+\item We integrate an equation solver in a relational language. In this way
+dataflow problems can be expressed.
+
+\item We introduce an \emph{location} datatype with associated operations to
+easily manipulate references to source code.
+
+\item There is some innovation in syntactic notation and specific built-in
+functions.
+
+\item We introduce the notion of an \rstore that generalizes the RSF tuple
+  format of Rigi. An \rstore consists of name/value pairs, where the values
+  may be arbitrary nested bags or relations. An \rstore is a
+  language-independent exchange format and can be used to exchange complex
+  relational data between programs written in different languages.
+
+\end{itemize}
+
+\section{Background}
+
+
 \paragraph{Relation-oriented Languages}
 There is a long tradition in Computer Science to organize languages around one
 a more prominent data types such as lists (Lisp), strings (SNOBOL), arrays
-(APL) or sets (SETL).  We use bags and relations as primary datatypes and the
+(APL) or sets (SETL).  We use sets and relations as primary datatypes and the
 sets and set formers in SETL~\cite{SETL} are the best historic reference for
 them. Set formers have later on be popularized in various functional languages
 since they were introduced in KRC~\cite{Turner82}.  An overview of languages
@@ -131,42 +185,7 @@ language are used to represent and query program facts.
 The requirements for a query language for reverse engineering are discussed
 in~\cite{holt-towards}.
 
-\paragraph{Application of Relations to Program Analysis}
-\note{To be written}
 
-\paragraph{What's new in \rscript?}
-Given the considerable amount of related work, it is necessary to clearly
-establish what is and what is not new in our approach:
-
-\begin{itemize}
-
-\item We use bags and multi-relations like in RPA~\cite{FeijsKrikhaarOmmering98}.
-
-\item Unlike Rigi~\cite{Mueller88}, GROK~\cite{Holt96} and
-RPA~\cite{FeijsKrikhaarOmmering98} we provide a relational \emph{calculus} as
-opposed to a relational algebra. Although the two have the same expressive
-power, a calculus increases, in our opinion, the readability of relational
-expressions.  We have extended binary relations with modest support for
-$n$-ary relations but don't support the complete repertoire of $n$-ary
-relations as in SQL.  We also allow nested bags and relations.  In addition,
-we offer a strongly typed language with user-defined types.
-
-\item We integrate an equation solver in a relational language. In this way
-dataflow problems can be expressed.
-
-\item We introduce an \emph{location} datatype with associated operations to
-easily manipulate references to source code.
-
-\item There is some innovation in syntactic notation and specific built-in
-functions.
-
-\item We introduce the notion of an \rstore that generalizes the RSF tuple
-  format of Rigi. An \rstore consists of name/value pairs, where the values
-  may be arbitrary nested bags or relations. An \rstore is a
-  language-independent exchange format and can be used to exchange complex
-  relational data between programs written in different languages.
-
-\end{itemize}
 
 \section{Plan for this Tutorial}
 
@@ -187,8 +206,16 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.
 
 \chapter{A Motivating Example} \label{SEC:motivating-example}
 
-Suppose a large software system ends up on your desk with several questions
-attached to it:
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/pandora.ps,width=5cm}
+\vspace*{0cm}
+\end{center}
+\end{figure}
+
+Suppose a mystery box ends up on your desk. When you open it, it contains a
+huge software system with several questions attached to it:
 
 \begin{itemize}
 
@@ -216,6 +243,16 @@ called but do not make any calls themselves?
 programming environment or tool suite that can immediately answer all these
 questions for you or you can use \rscript.
 
+\begin{figure}[tb]
+\begin{center}
+%%\vspace*{-1cm}
+\epsfig{figure=figs/calls-workflow.eps,width=10cm}
+\vspace*{-4cm}
+\end{center}
+\hrulefill
+\caption{\label{FIG:calls-workflow} Workflow for analyzing mystery box.}
+\end{figure}
+
 \paragraph{Preparations}
 
 \begin{figure}[tb]
@@ -229,13 +266,23 @@ questions for you or you can use \rscript.
 \end{figure}
 
 
-To illustrate this process consider the call graph shown in
-Figure~\ref{FIG:calls}. Recall that \rscript does not consider fact extraction
-\emph{per se} so we assume that this call graph has been extracted from the
-software by some other tool. Also keep in mind that a real call graph of a
-real application will contain thousands and thousands of calls. Drawing it in
-the way we do in Figure~\ref{FIG:calls} makes no sense since we get a
-uniformly black picture due to all the call dependencies.  This section is
+To illustrate this process consider the workflow in
+Figure~\ref{FIG:calls-workflow}. First we have to extract the calls from the
+source code. Recall that \rscript does not consider fact extraction \emph{per
+se} so we assume that this call graph has been extracted from the software by
+some other tool. Also keep in mind that a real call graph of a real
+application will contain thousands and thousands of calls. Drawing it in the
+way we do later on in Figure~\ref{FIG:calls} makes no sense since we get a
+uniformly black picture due to all the call dependencies. After the extraction
+phase, we try to understand the extracted facts by writing queries to explore
+their properties. For instance, we may want to know \emph{how many calls}
+there are, or \emph{how many procedures}. We may also want to enrich these
+facts, for instance, by computing who calls who in more than one step.
+Finally, we produce a simple textual report giving answers to the questions we
+are interested in.
+
+
+Now consider the call graph shown in Figure~\ref{FIG:calls}.  This section is
 intended to give you a first impression what can be done with \rscript. Please
 return to this example when you have digested the detailed description of
 \rscript in Chapters~\ref{SEC:rscript-language},~\ref{SEC:operators} and
@@ -285,7 +332,7 @@ in the tuples in the relation {\tt Calls} and then determining the
 number of names:
 
 \begin{exam}\begin{verbatim}
-bag[proc] procs = carrier(Calls)
+set[proc] procs = carrier(Calls)
 int nprocs = # procs
 \end{verbatim}
 \end{exam}
@@ -314,7 +361,7 @@ the graph. See Section~\ref{BI:bottom} for more details.
 Using this knowledge, the entry points can be computed by determining the top of the
 {\tt Calls} relation:
 \begin{exam}\begin{verbatim}
-bag[proc] entryPoints = top(Calls)
+set[proc] entryPoints = top(Calls)
 \end{verbatim}
 \end{exam}
 
@@ -327,7 +374,7 @@ In a similar spirit, we can determine the \emph{leaves} of this application,
 i.e., procedures that are being called but do not make any calls themselves:
 
 \begin{exam}\begin{verbatim}
-bag[proc] bottomCalls = bottom(Calls).
+set[proc] bottomCalls = bottom(Calls).
 \end{verbatim}
 \end{exam}
 In this case, {\tt bottomCalls} is equal to  \verb@{"c", "e"}@.
@@ -357,21 +404,21 @@ which procedures are called from each entry point. This is done by taking the
 yields all right-hand sides of tuples that have a given value as left-hand
 side:
 \begin{exam}\begin{verbatim}
-bag[proc] calledFromA = closureCalls["a"]
+set[proc] calledFromA = closureCalls["a"]
 \end{verbatim}
 \end{exam}
 yields \verb@{"b", "c", "d", "e"}@ and
 \begin{exam}\begin{verbatim}
-bag[proc] calledFromF = closureCalls["f"]
+set[proc] calledFromF = closureCalls["f"]
 \end{verbatim}
 \end{exam}
 yields \verb@{"e", "g"}@.
 
 \paragraph{Which procedures are called from all entry points?}
 Finally, we can determine which procedures are called from both entry points
-by taking the intersection of the two bags {\tt calledFromA} and {\tt calledFromF}
+by taking the intersection of the two sets {\tt calledFromA} and {\tt calledFromF}
 \begin{exam}\begin{verbatim}
-bag[proc] commonProcs = calledFromA inter calledFromF
+set[proc] commonProcs = calledFromA inter calledFromF
 \end{verbatim}
 \end{exam}
 which yields \verb@{"e"}@. In other words, the procedures called from both
@@ -396,7 +443,7 @@ functions. Usually, the value of one of these variables is what the writer of th
 script is interested in.
 
 The language has scalar types (Boolean, integer, string, location) and
-composite types (bag and relation). Expressions are constructed from
+composite types (set and relation). Expressions are constructed from
 comprehensions, function invocations and operators. These are all
 described below.
 
@@ -423,7 +470,7 @@ source text coordinates, they are always generated automatically but
 can be written as {\tt area-in-file("/usr/paulk/myfile.c", area(2, 3, 7,
 55))}.
 
-\section{Tuples, Bags and Relations}
+\section{Tuples, Sets and Relations}
 
 \paragraph{Tuples}
 
@@ -433,32 +480,32 @@ $T_2$ are arbitrary types. An example of a tuple type is {\tt <int, str>}.
 know as \emph{pairs}).  For convenience, $n$-ary tuples are also allowed, but
 there are some restrictions on their use, see the paragraph {\bf Relations} below. 
 
-\paragraph{Bags}
-Bags are represented by the type {\tt bag[$T$]}, where $T$ is an arbitrary
-type. Examples are {\tt bag[int]}, {{\tt bag[<int,int>]} and {\tt
-bag[bag[str]]}.  Bags are denoted by a list of elements, separated by comma's
+\paragraph{Sets}
+Sets are represented by the type {\tt set[$T$]}, where $T$ is an arbitrary
+type. Examples are {\tt set[int]}, {{\tt set[<int,int>]} and {\tt
+set[set[str]]}.  Sets are denoted by a list of elements, separated by comma's
 and enclosed in braces as in  \verb@{@{\tt $E_1$, $E_2$, ..., $E_n$}\verb@}@,
 where the $E_i$ ($1 \leq i \leq n$) are expressions that yield the desired element
 type. For example, 
 \begin{itemize}
-\item \verb@{1, 2, 3}@ is of type {\tt bag[int]},
-\item \verb@{<1,10>, <2,20>, <3,30>\}@ is of type {\tt bag[<int,int>]}, and 
-\item \verb@{{"a", "b"}, {"c", "d"}}@ is of type {\tt bag[bag[str]]}.
+\item \verb@{1, 2, 3}@ is of type {\tt set[int]},
+\item \verb@{<1,10>, <2,20>, <3,30>\}@ is of type {\tt set[<int,int>]}, and 
+\item \verb@{{"a", "b"}, {"c", "d"}}@ is of type {\tt set[set[str]]}.
 \end{itemize}
 
 \paragraph{Relations}
-Relations are nothing more than bags of tuples, but since they are used so
+Relations are nothing more than sets of tuples, but since they are used so
 often we provide some shorthand notation for them.
 
 Relations are represented by the type {\tt rel[$T_1$, $T_2$]}, where {\tt
 $T_1$} and {\tt $T_2$} are arbitrary types; it is a shorthand for {\tt
-bag[<$T_1$, $T_2$>]}.  Examples are {\tt rel[int,str]} and {\tt
-rel[int,bag[str]]}.  Relations are denoted by \verb@{@{\tt <$E_{11}$, $E_{12}$>, <$E_{21}$,
+set[<$T_1$, $T_2$>]}.  Examples are {\tt rel[int,str]} and {\tt
+rel[int,set[str]]}.  Relations are denoted by \verb@{@{\tt <$E_{11}$, $E_{12}$>, <$E_{21}$,
 $E_{22}$>, ..., <$E_{n1}$, $E_{n2}$>}\verb@}@, where the $E_{ij}$ are expressions that
 yield the desired element type. For example, \verb@{<1, "a">, <2, "b">, <3,"c">}@ is of type {\tt rel[int, str]}.
 
 Not surprisingly, $n$-ary relations are represented by the type {\tt
-rel[$T_1$, $T_2$, ..., $T_n$]} which is a shorthand for {\tt bag[<$T_1$,
+rel[$T_1$, $T_2$, ..., $T_n$]} which is a shorthand for {\tt set[<$T_1$,
 $T_2$, ..., $T_n$>]}.  Most built-in operators and functions require binary
 relations as arguments.  It is, however, perfectly possible to use $n$-ary
 relations as values, or as arguments or results of functions.
@@ -531,32 +578,32 @@ We will use the familiar notation
 \begin{exam}
   \verb@{@{\tt $E_1$, ..., $E_m$ | $G_1$, ..., $G_n$}\verb@}@
 \end{exam}
-to denote the construction of a bag consisting of the union of
+to denote the construction of a set consisting of the union of
 successive values of the expressions $E_1 ,..., E_m$.  The values and the
-generated bag are determined by  $E_1 ,..., E_m$ and the \emph{generators}
+generated set are determined by  $E_1 ,..., E_m$ and the \emph{generators}
 $G_1 ,..., G_n$.  $E$ is computed for all possible
 combinations of values produced by the generators.
 
 Each generator may introduce new variables
 that can be used in subsequent generators as well as in the expressions  $E_1 ,..., E_m$.
 A generator can use the variables introduced by preceding
-generators.  Generators may enumerate all the values in a bag or
+generators.  Generators may enumerate all the values in a set or
 relation, they may perform a test, or they may assign a value to
 variables.
 
 \subsection{Generators}
 
 \paragraph{Enumerator}
-Enumerators generate all the values in a given bag or relation.
+Enumerators generate all the values in a given set or relation.
 They come in two flavors: 
 
 \begin{itemize}
-\item {\tt $T$ $V$ : $E$}: the elements of the bag $B$ (of type {\tt bag[$T$]})
+\item {\tt $T$ $V$ : $E$}: the elements of the set $S$ (of type {\tt set[$T$]})
   that results from the evaluation
 of expression $E$ are enumerated and subsequently assigned to the new variable $V$ of type $T$.
 
-\item {\tt <$R_1$,~...,~$R_n$>~:~$E$}: the elements of the bag $B$ (of type
-{\tt bag[<$T'_1$,...,$T'_n$>]}, where $T'_i$ is determined by the type of each
+\item {\tt <$R_1$,~...,~$R_n$>~:~$E$}: the elements of the set $S$ (of type
+{\tt set[<$T'_1$,...,$T'_n$>]}, where $T'_i$ is determined by the type of each
 target $R_i$, see below) that results from the evaluation of expression $E$
 are enumerated. The $i$-the element ($i=1,...,n$) of the resulting $n$-tuple
 is subsequently combined with each target $R_i$ as follows:
@@ -565,7 +612,7 @@ is subsequently combined with each target $R_i$ as follows:
   \item If $R_i$ is an arbitrary expression $E_i$, then the value of
    the $i$-th element should be equal to the value of $E_i$. If they
    are unequal, computation continues with enumerating the next
-   element of the bag or relation $B$.
+   element of the bag or relation $S$.
 \end{itemize}
   
 \end{itemize}
@@ -602,7 +649,7 @@ resulting from the evaluation of expression $E$ with each $T_i$ as follows:
 
 \paragraph{Example}
 
-\verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the bag \verb@{3,4,5}@.
+\verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5}@.
 
 \paragraph{Example}
 
@@ -614,7 +661,7 @@ resulting from the evaluation of expression $E$ with each $T_i$ as follows:
 the given relation: \verb@{<10,1>, <20,2>}@.
 
 \paragraph{Example}
-\verb@{X, X * X | X : {1, 2, 3, 4, 5},  X >= 3}@ yields the bag \verb@{3,4,5,9,16,25}@.
+\verb@{X, X * X | X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5,9,16,25}@.
 
 \section{Declarations} \label{SEC:Declarations}
 
@@ -723,7 +770,7 @@ fashion, the assert statement has no affect.
 
 \paragraph{Example}
 \begin{exam}\begin{verbatim}
-assert "Equality on Bags 1": {1, 2, 3, 1} == {3, 2, 1, 1}
+assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}
 \end{verbatim}
 \end{exam}
 
@@ -779,6 +826,15 @@ The resulting value of {\tt T} is as expected:
 
 
 \chapter{Built-in Operators} \label{SEC:operators}
+
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/bookslibrary.ps,width=10cm}
+%%\vspace*{-4cm}
+\end{center}
+\end{figure}
+
 The built-in operators can be subdivided in several broad categories:
 
 \begin{itemize}
@@ -791,7 +847,7 @@ comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
 \item operations on locations (Section~\ref{BO:loc}).
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item Operations on bags or relations (Section~\ref{BO:bag-or-rel}):
+\item Operations on sets or relations (Section~\ref{BO:set-or-rel}):
 membership tests ({\tt in}, {\tt notin}),
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt
   >=}), and
@@ -928,17 +984,17 @@ In the following examples the offset and length part of an area are set to
 
 \end{itemize}
 
-\section{Operations on Bags or Relations} \label{BO:bag-or-rel}
+\section{Operations on Sets or Relations} \label{BO:set-or-rel}
 
 \subsection{Membership Tests} \label{BO:member}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 
-\emph{any} {\tt in} \emph{bag} & yields {\tt true} if \emph{any} occurs as element
-in \emph{bag} and {\tt false} otherwise \\ \hline
+\emph{any} {\tt in} \emph{set} & yields {\tt true} if \emph{any} occurs as element
+in \emph{set} and {\tt false} otherwise \\ \hline
 
-\emph{any} {\tt notin} \emph{bag} & yields {\tt false} if \emph{any} occurs as
-element in \emph{bag} and {\tt true} otherwise \\ \hline
+\emph{any} {\tt notin} \emph{set} & yields {\tt false} if \emph{any} occurs as
+element in \emph{set} and {\tt true} otherwise \\ \hline
 
 \emph{tuple} {\tt in} \emph{rel} & yields {\tt true} if \emph{tuple} occurs as element in
 \emph{rel}  and {\tt false} otherwise \\ \hline
@@ -961,48 +1017,48 @@ element in \emph{rel} and {\tt true} otherwise \\ \hline
 \end{itemize}
 
 \paragraph{Note} If the first argument of these operators has type $T$, then
-the second argument should have type {\tt bag[$T$]}.
+the second argument should have type {\tt set[$T$]}.
 
-\subsection{Comparisons} \label{BO:bag-comp}
+\subsection{Comparisons} \label{BO:set-comp}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{bag}$_1$ {\tt ==} \emph{bag}$_2$ & yields {\tt true} if both arguments are equal bags and {\tt false}
+\emph{set}$_1$ {\tt ==} \emph{set}$_2$ & yields {\tt true} if both arguments are equal sets and {\tt false}
 otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt !=} \emph{bag}$_2$ & yields {\tt true} if both arguments are unequal bags and {\tt false}
+\emph{set}$_1$ {\tt !=} \emph{set}$_2$ & yields {\tt true} if both arguments are unequal sets and {\tt false}
 otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt <=} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$ is a subset of \emph{bag}$_2$
+\emph{set}$_1$ {\tt <=} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$ is a subset of \emph{set}$_2$
 and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt <} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$ is a
-strict subset of \emph{bag}$_2$
+\emph{set}$_1$ {\tt <} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$ is a
+strict subset of \emph{set}$_2$
 and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt >=} \emph{bag}$_2$ & yields {\tt true} if \emph{bag}$_1$  is a
-superset of \emph{bag}$_2$
+\emph{set}$_1$ {\tt >=} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$  is a
+superset of \emph{set}$_2$
 and {\tt false} otherwise\\ \hline
 
-\emph{bag}$_1$ {\tt >} \emph{bag}$_2$ & yields {\tt true} if  \emph{bag}$_1$  is a strict superset of \emph{bag}$_2$
+\emph{set}$_1$ {\tt >} \emph{set}$_2$ & yields {\tt true} if  \emph{set}$_1$  is a strict superset of \emph{set}$_2$
 and {\tt false} otherwise\\ \hline 
 \end{tabular}
 
-\subsection{Construction} \label{BO:bag-cons}
+\subsection{Construction} \label{BO:set-cons}
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{bag}$_1$ {\tt union} \emph{bag}$_2$ & yields the bag resulting from the union of the two arguments.
+\emph{set}$_1$ {\tt union} \emph{set}$_2$ & yields the set resulting from the union of the two arguments.
 The number of occurrences of each element in the result is the {\bf maximum} of the number of occurrences of that element
-in \emph{bag}$_1$  and \emph{bag}$_2$.
+in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
-\emph{bag}$_1$ {\tt inter} \emph{bag}$_2$ & yields the bag resulting from the intersection of the two arguments.
+\emph{set}$_1$ {\tt inter} \emph{set}$_2$ & yields the set resulting from the intersection of the two arguments.
 The number of occurrences of each element in the result is the {\bf minimum} of the number of occurrences of that element
-in \emph{bag}$_1$  and \emph{bag}$_2$.
+in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
-\emph{bag}$_1$ \verb+\+ \emph{bag}$_2$ & yields the bag resulting from the difference of the two arguments.
+\emph{set}$_1$ \verb+\+ \emph{set}$_2$ & yields the set resulting from the difference of the two arguments.
 The number of occurrences of each element in the result is the {\bf difference} of the number of occurrences of that element
-in \emph{bag}$_1$  and \emph{bag}$_2$.
+in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
 \end{tabular}
@@ -1025,7 +1081,7 @@ in \emph{bag}$_1$  and \emph{bag}$_2$.
 \subsection{Miscellaneous} \label{BO:misc}
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 
-\verb@#@ \emph{bag} & yields the number of elements in \emph{bag}. \\ \hline
+\verb@#@ \emph{set} & yields the number of elements in \emph{set}. \\ \hline
 \verb@#@ \emph{rel} & yields the number of tuples in \emph{rel}. \\ \hline
 \end{tabular}
 
@@ -1043,11 +1099,11 @@ in \emph{bag}$_1$  and \emph{bag}$_2$.
 \emph{rel}$_1$ {\tt o} \emph{rel}$_2$ & yields the relation resulting from the composition of the two arguments
  \\ \hline
 
-\emph{bag}$_1$ {\tt x}~ \emph{bag}$_2$ & yields the relation resulting from the Cartesian product of the two arguments
+\emph{set}$_1$ {\tt x}~ \emph{set}$_2$ & yields the relation resulting from the Cartesian product of the two arguments
  \\ \hline
 
 
-\emph{rel} {\tt [-,} \emph{bag} {\tt ]} & yields the left image of the \emph{rel}
+\emph{rel} {\tt [-,} \emph{set} {\tt ]} & yields the left image of the \emph{rel}
  \\ \hline
 
 \emph{rel} {\tt [-,} \emph{elem} {\tt ]} & yields the left image of the \emph{rel}
@@ -1056,13 +1112,13 @@ in \emph{bag}$_1$  and \emph{bag}$_2$.
 \emph{rel} {\tt [} \emph{elem} {\tt ,-]} & yields the right image of \emph{rel}
  \\ \hline
 
-\emph{rel} {\tt [} \emph{bag} {\tt ,-]} & yields the right image of \emph{rel}
+\emph{rel} {\tt [} \emph{set} {\tt ,-]} & yields the right image of \emph{rel}
  \\ \hline
 
-\emph{bag} {\tt [} \emph{elem} {\tt ]} & yields the right image of \emph{rel}
+\emph{set} {\tt [} \emph{elem} {\tt ]} & yields the right image of \emph{rel}
  \\ \hline
 
-\emph{rel} {\tt [} \emph{bag} {\tt ]} & yields the right image of \emph{rel}
+\emph{rel} {\tt [} \emph{set} {\tt ]} & yields the right image of \emph{rel}
  \\ \hline
 
 
@@ -1093,13 +1149,13 @@ rel[&T1,&T3] compose(rel[&T1,&T2] R1, rel[&T2,&T3] R2) =
 
 
 \paragraph{Cartesian product: {\tt x}}
-The product operator combines two bags into a relation and can be defined as
+The product operator combines two sets into a relation and can be defined as
 follows:
 
 \begin{exam}
 \begin{verbatim}
-rel[&T1,&T2] product(bag[&T1] B1, bag[&T2] B2) = 
-   {<V, W> | &T1 V : B1, &T2 W : B2 }
+rel[&T1,&T2] product(set[&T1] S1, set[&T2] S2) = 
+   {<V, W> | &T1 V : S1, &T2 W : S2 }
 \end{verbatim}
 \end{exam}
 
@@ -1114,24 +1170,24 @@ Taking the left image of a relation amounts to selecting
 some elements from the domain of a relation.
 
 The \emph{left} image operator takes a relation and an element {\tt E} and
-produces a bag consisting of all elements {\tt E}$_i$ in the domain of the relation
+produces a set consisting of all elements {\tt E}$_i$ in the domain of the relation
 that occur in tuples of the form {\tt <E$_i$, E>}. It can be defined as
 follows:
 
 \begin{exam}
 \begin{verbatim}
-bag[&T1] left-image(rel[&T1,&T2] R, &T2 E) = 
+set[&T1] left-image(rel[&T1,&T2] R, &T2 E) = 
    { V | <&T1 V, &T2 W> : R, W == E }
 \end{verbatim}
 \end{exam}
 
-The left image operator can be extended to take a bag of elements as second
+The left image operator can be extended to take a set of elements as second
 element instead of a single element:
 
 \begin{exam}
 \begin{verbatim}
-bag[&T1] left-image(rel[&T1,&T2] R, bag[&T2] B) = 
-   { V | <&T1 V, &T2 W> : R, W in B }
+set[&T1] left-image(rel[&T1,&T2] R, set[&T2] S) = 
+   { V | <&T1 V, &T2 W> : R, W in S }
 \end{verbatim}
 \end{exam}
 
@@ -1149,24 +1205,24 @@ Taking the right image of a relation amounts to selecting
 some elements from the range of a relation.
 
 The \emph{right} image operator takes a relation and an element {\tt E} and
-produces a bag consisting of all elements {\tt E}$_i$ in the range of the relation
+produces a set consisting of all elements {\tt E}$_i$ in the range of the relation
 that occur in tuples of the form {\tt <E, E$_i$>}. It can be defined as
 follows:
 
 \begin{exam}
 \begin{verbatim}
-bag[&T2] right-image(rel[&T1,&T2] R, &T1 E) = 
+set[&T2] right-image(rel[&T1,&T2] R, &T1 E) = 
    { W | <&T1 V, &T2 W> : R, V == E }
 \end{verbatim}
 \end{exam}
 
-The right image operator can be extended to take a bag of elements as second
+The right image operator can be extended to take a set of elements as second
 element instead of a single element:
 
 \begin{exam}
 \begin{verbatim}
-bag[&T2] right-image(rel[&T1,&T2] R, bag[&T1] B) = 
-   { W | <&T1 V, &T2 W> : R, V in B}
+set[&T2] right-image(rel[&T1,&T2] R, set[&T1] S) = 
+   { W | <&T1 V, &T2 W> : R, V in S}
 \end{verbatim}
 \end{exam}
 
@@ -1186,10 +1242,18 @@ and
 
 \chapter{Built-in Functions} \label{SEC:functions}
 
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/library-girl.ps,width=7cm}
+%%\vspace*{-4cm}
+\end{center}
+\end{figure}
+
 The built-in functions can be subdivided in several broad categories:
 
 \begin{itemize}
-\item Elementary functions on bags and relations
+\item Elementary functions on sets and relations
   (Section~\ref{elementary-functions}): identity ({\tt id}), inverse ({\tt
   inv}), complement ({\tt compl}), and powerset ({\tt power0}, {\tt power1}).
 
@@ -1219,7 +1283,7 @@ first column ({\tt begincol}),
 ending line ({\tt endline}), and
 ending column ({\tt endcol}).
 
-\item Functions on bags of integers (Section~\ref{bags-of-integers}):
+\item Functions on sets of integers (Section~\ref{sets-of-integers}):
 sum ({\tt sum}), average ({\tt average}), maximum ({\tt max}), and minimum
 ({\tt min}).
 
@@ -1242,18 +1306,18 @@ Example(s):
 \newcommand{\functiona}[2]{\subsection{#1: {\tt #2}}\label{BI:#2}
 Definition:}
 
-\section{Elementary Functions on Bags and Relations}
+\section{Elementary Functions on Sets and Relations}
 \label{elementary-functions}
 
 
 \functiona{Identity Relation}{id}
 \begin{exam}
 \begin{verbatim}
-rel[&T, &T] id(bag[&T] B) = { <X, X> | &T X : B}
+rel[&T, &T] id(set[&T] S) = { <X, X> | &T X : S}
 \end{verbatim}
 \end{exam}
 {Yields the relation that results from transforming
-each element in {\tt B} into a pair with that element as first and
+each element in {\tt S} into a pair with that element as first and
 second element.
 }
 {Examples: 
@@ -1264,14 +1328,14 @@ second element.
 \end{itemize}
 }
 
-\functiona{Bag with unique elements}{unique}
+\functiona{Set with unique elements}{unique}
 \begin{exam}
 \begin{verbatim}
-bag[&T] unique(bag[&T] B) = primitive
+set[&T] unique(set[&T] S) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the bag (actually the set) that results from removing all duplicate
-  elements from {\tt B}.
+{Yields the set (actually the set) that results from removing all duplicate
+  elements from {\tt S}. \note{Obsolete}
 }
 {Example: 
 \begin{itemize}
@@ -1309,13 +1373,13 @@ argument relation {\tt R}, using the carrier set of {\tt R} as universe.
 \end{itemize}
 }
 %%----
-\functiona{Powerset of a Bag}{power0}
+\functiona{Powerset of a Set}{power0}
 \begin{exam}
 \begin{verbatim}
-bag[bag[&T]] power0(bag[&T] B) = primitive
+set[set[&T]] power0(set[&T] S) = primitive
 \end{verbatim}
 \end{exam}
-{ Yields the powerset of bag {\tt B} (including the empty bag).}
+{ Yields the powerset of set {\tt S} (including the empty set).}
 {Example:
 \begin{itemize}
 \item \verb@power0({1, 2, 3, 4})@ yields 
@@ -1328,13 +1392,13 @@ bag[bag[&T]] power0(bag[&T] B) = primitive
 \end{itemize}
 }
 %%----
-\functiona{Powerset of a Bag}{power1}
+\functiona{Powerset of a Set}{power1}
 \begin{exam}
 \begin{verbatim}
-bag[bag[&T]] power1(bag[&T] B) = primitive
+set[set[&T]] power1(set[&T] S) = primitive
 \end{verbatim}
 \end{exam}
-{ Yields the powerset of bag {\tt B} (excluding the empty bag).}
+{ Yields the powerset of set {\tt S} (excluding the empty set).}
 {Example:
 \begin{itemize}
 \item \verb@power1({1, 2, 3, 4})@ yields 
@@ -1352,10 +1416,10 @@ bag[bag[&T]] power1(bag[&T] B) = primitive
 \functiona{Domain of a Relation}{domain}
 \begin{exam}
 \begin{verbatim}
-bag[&T1] domain (rel[&T1,&T2] R) = { X | <&T1 X, &T2 Y> : R }
+set[&T1] domain (rel[&T1,&T2] R) = { X | <&T1 X, &T2 Y> : R }
 \end{verbatim}
 \end{exam}
-{Yields the bag that results from taking
+{Yields the set that results from taking
 the first element of each tuple in relation {\tt R}.
 }
 {Examples:
@@ -1368,10 +1432,10 @@ the first element of each tuple in relation {\tt R}.
 \functiona {Range of a Relation}{range}
 \begin{exam}
 \begin{verbatim}
-bag[&T2] range (rel[&T1,&T2] R) = { Y | <&T1 X, &T2 Y> : R }
+set[&T2] range (rel[&T1,&T2] R) = { Y | <&T1 X, &T2 Y> : R }
 \end{verbatim}
 \end{exam}
-{Yields the bag that results from taking
+{Yields the set that results from taking
 the second element of each tuple in relation {\tt R}.
 }
 {Examples:
@@ -1384,10 +1448,10 @@ the second element of each tuple in relation {\tt R}.
 \functiona {Carrier of a Relation}{carrier}
 \begin{exam}
 \begin{verbatim}
-bag[&T]  carrier (rel[&T,&T] R) = domain(R) union range(R)
+set[&T]  carrier (rel[&T,&T] R) = domain(R) union range(R)
 \end{verbatim}
 \end{exam}
-{Yields the bag that results from taking
+{Yields the set that results from taking
 the first and  second element of each tuple in the relation {\tt R}.
 Note that the domain and range type of {\tt R} should be the same.
 }
@@ -1402,12 +1466,12 @@ Note that the domain and range type of {\tt R} should be the same.
 \functiona{Domain Restriction of a Relation}{domainR}
 \begin{exam}
 \begin{verbatim}
-rel[&T1,&T2] domainR (rel[&T1,&T2] R, Bag[&T1] B) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X in B }
+rel[&T1,&T2] domainR (rel[&T1,&T2] R, set[&T1] S) =
+   { <X, Y> | <&T1 X, &T2 Y> : R, X in S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to the relation {\tt R}
-  but only containing tuples whose first element occurs in bag {\tt B}.
+  but only containing tuples whose first element occurs in set {\tt S}.
 }
 {Example:
 \begin{itemize}
@@ -1418,12 +1482,12 @@ rel[&T1,&T2] domainR (rel[&T1,&T2] R, Bag[&T1] B) =
 \functiona{Range Restriction of a Relation}{rangeR}
 \begin{exam}
 \begin{verbatim}
-rel[&T1,&T2] rangeR (rel[&T1,&T2] R, Bag[&T2] B) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, Y in B }
+rel[&T1,&T2] rangeR (rel[&T1,&T2] R, set[&T2] S) =
+   { <X, Y> | <&T1 X, &T2 Y> : R, Y in S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to relation {\tt R} but only containing tuples
-  whose second element occurs in bag {\tt B}.
+  whose second element occurs in set {\tt S}.
 }
 {Example:
 \begin{itemize}
@@ -1434,13 +1498,13 @@ rel[&T1,&T2] rangeR (rel[&T1,&T2] R, Bag[&T2] B) =
 \functiona{Carrier Restriction of a Relation}{carrierR}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] carrierR (rel[&T,&T] R, Bag[&T] B) = 
-   { <X, Y> | <&T X, &T Y> : R, X in B, Y in B }
+rel[&T,&T] carrierR (rel[&T,&T] R, set[&T] S) = 
+   { <X, Y> | <&T X, &T Y> : R, X in S, Y in S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to relation {\tt R}
-  but only containing tuples whose first and second element occur in bag {\tt
-    B}.
+  but only containing tuples whose first and second element occur in set {\tt
+    S}.
 }
 {Example:
 \begin{itemize}
@@ -1451,12 +1515,12 @@ rel[&T,&T] carrierR (rel[&T,&T] R, Bag[&T] B) =
 \functiona{Domain Exclusion of a Relation}{domainX}
 \begin{exam}
 \begin{verbatim}
-rel[&T1,&T2] domainX (rel[&T1,&T2] R, Bag[&T1] B) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X notin B }
+rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S) =
+   { <X, Y> | <&T1 X, &T2 Y> : R, X notin S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first element occurs in bag {\tt B}.}
+  but with all tuples removed whose first element occurs in set {\tt S}.}
 {Example:
 \begin{itemize}
 \item \verb@domainX({<1,10>, <2,20>, <3,30>}, {3, 1})@ yields \verb@{<2, 20>}@.
@@ -1466,12 +1530,12 @@ rel[&T1,&T2] domainX (rel[&T1,&T2] R, Bag[&T1] B) =
 \functiona{Range Exclusion of a Relation}{rangeX}
 \begin{exam}
 \begin{verbatim}
-rel[&T1,&T2] rangeX (rel[&T1,&T2] R, Bag[&T2] B) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, Y notin B }
+rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S) =
+   { <X, Y> | <&T1 X, &T2 Y> : R, Y notin S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to relation {\tt R} but with all tuples removed
-  whose  second element occurs in bag {\tt B}.}
+  whose  second element occurs in set {\tt S}.}
 {Example:
 \begin{itemize}
  \item \verb@rangeX({<1,10>, <2,20>, <3,30>}, {30, 10})@ yields \verb@{<2, 20>}@.
@@ -1481,13 +1545,13 @@ rel[&T1,&T2] rangeX (rel[&T1,&T2] R, Bag[&T2] B) =
 \functiona{Carrier Exclusion of a Relation}{carrierX}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] carrierX (rel[&T,&T] R, Bag[&T] B) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X notin B, Y notin B }
+rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S) =
+   { <X, Y> | <&T1 X, &T2 Y> : R, X notin S, Y notin S }
 \end{verbatim}
 \end{exam}
 { Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first or second element occurs in bag {\tt
-    B}.}
+  but with all tuples removed whose first or second element occurs in set {\tt
+    S.}
 {Example:
 \begin{itemize}
  \item \verb@carrierX({<1,10>, <2,20>, <3,30>}, {10, 1, 20})@ yields \verb@{<3,30>}@.
@@ -1529,10 +1593,10 @@ rel[&T,&T] carrierX (rel[&T,&T] R, Bag[&T] B) =
 \functiona {Top of a Relation}{top}
 \begin{exam}
 \begin{verbatim}
-bag[&T] top(rel[&T, &T] R) = unique(domain(R)) \ range(R)
+set[&T] top(rel[&T, &T] R) = unique(domain(R)) \ range(R)
 \end{verbatim}
 \end{exam}
-{Yields the bag of all roots when the relation {\tt R} is
+{Yields the set of all roots when the relation {\tt R} is
 viewed as a graph. Note that the domain and range type of {\tt R} should be the same.
 }
 {Example:
@@ -1544,10 +1608,10 @@ viewed as a graph. Note that the domain and range type of {\tt R} should be the 
 \functiona{Bottom of a Relation}{bottom}
 \begin{exam}
 \begin{verbatim}
-bag[&T] bottom(rel[&T,&T] R) = unique(range(R)) \ domain(R)
+set[&T] bottom(rel[&T,&T] R) = unique(range(R)) \ domain(R)
 \end{verbatim}
 \end{exam}
-{Yields the bag of all leaves when the relation {\tt R} is
+{Yields the set of all leaves when the relation {\tt R} is
 viewed as a graph. Note that the domain and range type of {\tt R} should be
 the same.
 }
@@ -1560,13 +1624,13 @@ the same.
 \functiona{Reachability with Restriction}{reachR}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachR( bag[&T] Start, bag[&T] Restr, rel[&T,&T] Rel) =
+rel[&T,&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel) =
    domainR(Rel, Start) o carrierR(Rel, Restr)+
 \end{verbatim}
 \end{exam}
 { Yields the relation that describes
-which elements can be reached from  bag {\tt Start} using the relation {\tt Rel}, such that only elements in
-bag {\tt Restr} are used.
+which elements can be reached from  set {\tt Start} using the relation {\tt Rel}, such that only elements in
+set {\tt Restr} are used.
 }
 {Example:
 \begin{itemize}
@@ -1577,13 +1641,13 @@ bag {\tt Restr} are used.
 \functiona{Reachability with Exclusion}{reachX}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachX( bag[&T] Start, bag[&T] Excl, rel[&T,&T] Rel) =
+rel[&T,&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel) =
    domainR(Rel, Start) o carrierX(Rel, Excl)+
 \end{verbatim}
 \end{exam}
 { Yields the relation that describes
-which elements can be reached from  bag {\tt Start} using the relation {\tt Rel}, such that no elements in
-bag {\tt Excl} are used.
+which elements can be reached from  set {\tt Start} using the relation {\tt Rel}, such that no elements in
+set {\tt Excl} are used.
 }
 {Example:
 \begin{itemize}
@@ -1658,54 +1722,54 @@ int endcol(loc A) = primitive
 \end{itemize}
 }
 %%----
-\section{Functions on Bags of Integers} \label{bags-of-integers}
+\section{Functions on Sets of Integers} \label{sets-of-integers}
 %%----
-\functiona{Sum of a Bag of Integers}{sum}
+\functiona{Sum of a Set of Integers}{sum}
 \begin{exam}
 \begin{verbatim}
-int sum(bag[int] B) = primitive
+int sum(set[int] S) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the sum of the integers in bag {\tt B}.}
+{Yields the sum of the integers in set {\tt S}.}
 {Example:
 \begin{itemize}
 \item \verb@sum({1, 2, 3})@ yields {\tt 6}.
 \end{itemize}
 }
 %%----
-\functiona{Average of a Bag of Integers}{average}
+\functiona{Average of a Set of Integers}{average}
 \begin{exam}
 \begin{verbatim}
-int average(bag[int] B) = sum(B)/(#B)
+int average(set[int] S) = sum(S)/(#S)
 \end{verbatim}
 \end{exam}
-{Yields the average of the integers in bag {\tt B}.}
+{Yields the average of the integers in set {\tt S}.}
 {Example:
 \begin{itemize}
 \item \verb@average({1, 2, 3})@ yields {\tt 3}.
 \end{itemize}
 }
 %%----
-\functiona{Maximum of a Bag of Integers}{max}
+\functiona{Maximum of a Set of Integers}{max}
 \begin{exam}
 \begin{verbatim}
-int max(bag[int] B) = primitive
+int max(set[int] S) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the largest integer in bag {\tt B}.}
+{Yields the largest integer in set {\tt S}.}
 {Example:
 \begin{itemize}
 \item \verb@max({1, 2, 3})@ yields {\tt 3}.
 \end{itemize}
 }
 %%----
-\functiona{Minimum of a Bag of Integers}{min}
+\functiona{Minimum of a Set of Integers}{min}
 \begin{exam}
 \begin{verbatim}
-int min(bag[int] B) = primitive
+int min(set[int] S) = primitive
 \end{verbatim}
 \end{exam}
-{Yields the smallest integer in bag {\tt B}.}
+{Yields the smallest integer in set {\tt S}.}
 {Example:
 \begin{itemize}
 \item \verb@min({1, 2, 3})@ yields {\tt 1}.
@@ -1715,6 +1779,13 @@ int min(bag[int] B) = primitive
 \newpage
 \chapter{Larger Examples} \label{SEC:larger-examples}
 
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/char_redlined_app.ps,width=7cm}
+%%\vspace*{-4cm}
+\end{center}
+\end{figure}
 
 \section{Analyzing the Call Structure of an Application}
 You may now want to reread the example of call graph analysis given earlier in
@@ -1743,7 +1814,7 @@ components.
 rel[proc,proc] Calls2 = {<"main", "a">, <"main", "b">, <"a", "b">, 
                          <"a", "c">, <"a", "d">, <"b", "d">}
 
-bag[comp] Components = {"Appl", "DB", "Lib"}
+set[comp] Components = {"Appl", "DB", "Lib"}
 
 rel[proc, comp] PartOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">,
                           <"c", "Lib">, <"d", "Lib">}
@@ -1861,7 +1932,7 @@ inheritance and containment. This is achieved as follows:
 
 \begin{exam}\begin{verbatim}
 rel[class,class] USE = CALL union CONTAINMENT union INHERITANCE
-bag[str] ClassesInCycle =
+set[str] ClassesInCycle =
    {C1 | <class C1, class C2> : USE+, C1 == C2}
 \end{verbatim}
 \end{exam}
@@ -1873,14 +1944,14 @@ dependency on itself.
 
 Probably, we do not only want to know which classes occur in a cyclic
 dependency, but we also want to know which classes are involved in such a
-cycle. In other words, we want to associate with each class a bag of classes
+cycle. In other words, we want to associate with each class a set of classes
 that are responsible for the cyclic dependency. This can be done as follows.
 
 \begin{exam}\begin{verbatim}
 rel[class,class] USE = CALL union CONTAINMENT union INHERITANCE
-bag[class] CLASSES = carrier(USE)
+set[class] CLASSES = carrier(USE)
 rel[class,class] USETRANS = USE+
-rel[class,bag[class]] ClassCycles = 
+rel[class,set[class]] ClassCycles = 
    {<C, USETRANS[C]> | class C : CLASSES, <C, C> in USETRANS }
 \end{verbatim}
 \end{exam}
@@ -2016,12 +2087,12 @@ program, i.e., variables that are defined but are used nowhere.
 This is done as follows:
 \begin{exam}
 \begin{verbatim}
-bag[var] UNUSED = range(DEFS) \ range(USES)
+set[var] UNUSED = range(DEFS) \ range(USES)
 \end{verbatim}
 \end{exam}
 Taking the range of the relations {\tt DEFS} and {\tt USES} yields the
 variables that are defined, respectively, used in the program. The difference
-of these two bags yields the unused variables, in this case \verb@{"p"}@.
+of these two sets yields the unused variables, in this case \verb@{"p"}@.
 
 \section{Using Locations to Represent Program Fragments}\label{SEC:UsingLocations}
 
@@ -2143,9 +2214,9 @@ definitions of variables are still valid at each statement?
 rel[stat,stat] dominators(rel[stat,stat] PRED) = 
    DOMINATES
 where
-    bag[stat] STATEMENT = carrier(PRED)
+    set[stat] STATEMENT = carrier(PRED)
 
-    bag[stat] ROOT = top(PRED)
+    set[stat] ROOT = top(PRED)
 
     rel[stat,stat] DOMINATES =
     { <S, S1> | stat S : STATEMENT , 
@@ -2173,7 +2244,7 @@ initial node of the flow graph to $n$ goes through $d$~\cite[Section
 10.4]{ASU86}. Dominators play a role in the analysis of conditional statements
 and loops. In Figure~\ref{FIG:dominators-function}, we show the function {\tt
 dominators} that computes the dominators for a given flow graph {\tt PRED}.
-First, the auxiliary bags {\tt STATEMENT} (all the statements) and {\tt ROOT}
+First, the auxiliary sets {\tt STATEMENT} (all the statements) and {\tt ROOT}
 (the initial nodes) of the flow graph are computed. The relation {\tt
   DOMINATES} consists of all pairs {\tt <S, S1>} such that
 \begin{itemize}
@@ -2309,7 +2380,7 @@ kills the definitions of {\tt i} in statements {\tt 4} and {\tt 7}.  Next, we
 introduce the collection of statements
 \begin{exam}
 \begin{verbatim}
-bag[stat] STATEMENTS = carrier(PRED)
+set[stat] STATEMENTS = carrier(PRED)
 \end{verbatim}
 \end{exam}
 which gets as value \verb@{1, 2, 3, 4, 5, 6, 7}@ and
@@ -2317,8 +2388,8 @@ two convenience functions to obtain
 the predecessor, respectively, the successor of a statement:
 \begin{exam}
 \begin{verbatim}
-bag[stat] predecessor(stat S) = PRED[-,S]
-bag[stat] successor(stat S) = PRED[S,-]
+set[stat] predecessor(stat S) = PRED[-,S]
+set[stat] successor(stat S) = PRED[S,-]
 \end{verbatim}
 \end{exam}
 
@@ -2413,14 +2484,14 @@ later on in Section~\ref{SEC:slicing} when defining program slicing.
 type def  = <stat theStat, var theVar>
 type use  = <stat theStat, var theVar>
 
-bag[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+set[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
 
-bag[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+set[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
 
 rel[stat, def] reaching-definitions(rel[stat,var] DEFS, rel[stat,stat] PRED) = 
    IN
 where
-    bag[stat] STATEMENT = carrier(PRED)
+    set[stat] STATEMENT = carrier(PRED)
 
     rel[stat,def] DEF  = {<S,<S,V>> | <stat S, var V> : DEFS}
 
@@ -2545,7 +2616,7 @@ follows:
 
 \item We assume the relations {\tt PRED}, {\tt DEFS} and {\tt USES} as before.
 
-\item We assume an additional bag {\tt CONTROL-STATEMENT} that defines which
+\item We assume an additional set {\tt CONTROL-STATEMENT} that defines which
   statements are control statements.
 
 \item To tie together dataflow and control flow, three auxiliary variables are
@@ -2571,8 +2642,8 @@ follows:
 \begin{figure}[tb]
 {\small
 \begin{verbatim}
-bag[use] BackwardSlice(
-    bag[stat] CONTROL-STATEMENT, 
+set[use] BackwardSlice(
+    set[stat] CONTROL-STATEMENT, 
     rel[stat,stat] PRED,
     rel[stat,var] USES,
     rel[stat,var] DEFS,    
@@ -2650,7 +2721,7 @@ rel[stat,var] USES  = {<5, "i">, <5, "n">, <6, "sum">, <6,"i">,
                        <7, "product">, <7, "i">, <8, "i">, <9, "sum">, 
                        <10, "product">}
 
-bag[int] CONTROL-STATEMENT = { 5 }
+set[int] CONTROL-STATEMENT = { 5 }
 \end{verbatim}
 \end{exam}
 The result of the slice
@@ -2879,7 +2950,8 @@ operators and functions.
 The subdirectory {\tt demo} contains larger demos.
 
 \section*{Acknowledgments}
-Taeke Kooiker, Tijs van der Storm.
+Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
+Jurgen Vinju.
 
 \appendix
 
@@ -2894,52 +2966,52 @@ Taeke Kooiker, Tijs van der Storm.
 {\bf Operator} & {\bf Description} & {\bf Section} \\ \hline \hline
 {\tt and} & Boolean and & \ref{BO:bool}\\
 {\tt implies} & Boolean implication & \ref{BO:bool}\\
-{\tt in}    & Membership test on bags/relations& \ref{BO:bag-or-rel}\\
-{\tt inter} & Intersection of bags/relations& \ref{BO:bag-or-rel}\\
+{\tt in}    & Membership test on sets/relations& \ref{BO:set-or-rel}\\
+{\tt inter} & Intersection of sets/relations& \ref{BO:set-or-rel}\\
 {\tt not} & Boolean negation & \ref{BO:bool}\\
-{\tt notin} & Non-membership test on bags/relations& \ref{BO:bag-or-rel}\\
+{\tt notin} & Non-membership test on sets/relations& \ref{BO:set-or-rel}\\
 {\tt or} & Boolean or & \ref{BO:bool}\\
-{\tt union} & Union of bags/relations& \ref{BO:bag-or-rel}\\
+{\tt union} & Union of sets/relations& \ref{BO:set-or-rel}\\
 {\tt ==}  & Equality of integers & \ref{BO:int}\\
 {\tt ==}  & Equality of areas & \ref{BO:loc}\\
-{\tt ==}  & Equality of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt ==}  & Equality of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt !=}  & Inequality of integers & \ref{BO:int}\\
 {\tt !=}  & Inequality of strings & \ref{BO:str}\\
 {\tt !=}  & Inequality of areas & \ref{BO:loc}\\
-{\tt !=}  & Inequality of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt !=}  & Inequality of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt <=}  & Less than or equal of integers & \ref{BO:int}\\
 {\tt <=}  & Less than or equal of strings & \ref{BO:str}\\
 {\tt <=}  & Textual inclusion of areas & \ref{BO:loc}\\
-{\tt <=}  & Subset of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt <=}  & Subset of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt <}  & Less than of integers & \ref{BO:int}\\
 {\tt <}  & Less than of strings & \ref{BO:str}\\
 {\tt <}  & Strict textual inclusion of areas & \ref{BO:loc}\\
-{\tt <}  & Strict subset of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt <}  & Strict subset of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt >=}  & Greater than or equal of integers & \ref{BO:int}\\
 {\tt >=}  & Greater than or equal of strings & \ref{BO:str}\\
 {\tt >=}  & Textual containment of areas & \ref{BO:loc}\\
-{\tt >=}  & Superset of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt >=}  & Superset of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt >}  & Greater than of integers & \ref{BO:int}\\
 {\tt >}  & Greater than of strings & \ref{BO:str}\\
 {\tt >}  & Strict textual containment of areas & \ref{BO:loc}\\
-{\tt >}  & Strict superset of bags/relations & \ref{BO:bag-or-rel}\\
+{\tt >}  & Strict superset of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt +}  & Addition of integers & \ref{BO:int}\\
 {\tt -}  & Subtraction of integers & \ref{BO:int}\\
 {\tt *}  & Multiplication of integers & \ref{BO:int}\\
 {\tt /}  & Division of integers & \ref{BO:int}\\
 
-\verb+\+   & Difference of bags/relations & \ref{BO:bag-or-rel}\\
+\verb+\+   & Difference of sets/relations & \ref{BO:set-or-rel}\\
 
 {\tt o}    & Composition of relations  & \ref{BO:relations}\\
-{\tt x}    & Carthesian product of bags & \ref{BO:relations}\\
+{\tt x}    & Carthesian product of sets & \ref{BO:relations}\\
 
-\verb@#@   & Number of elements of bag & \ref{BO:misc}\\
+\verb@#@   & Number of elements of set & \ref{BO:misc}\\
 \verb@#@   & Number of tuples of relation & \ref{BO:misc}\\
 
 {\tt [-, ]}    & Left image of relation & \ref{BO:relations}\\
@@ -2963,7 +3035,7 @@ Taeke Kooiker, Tijs van der Storm.
 
 {\bf Function}    & {\bf Description}   & {\bf Section} \\ \hline \hline
 
-{\tt average}     & Average of a bag of integers & \ref{BI:average} \\
+{\tt average}     & Average of a set of integers & \ref{BI:average} \\
 {\tt begincol}    & First column of an area & \ref{BI:begincol}\\
 {\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
 {\tt bottom}      & Bottom of a relation & \ref{BI:bottom} \\
@@ -2982,10 +3054,10 @@ Taeke Kooiker, Tijs van der Storm.
 {\tt domain}      & Domain of a relation & \ref{BI:domain} \\
 {\tt domainR}     & Domain restriction of a relation & \ref{BI:domainR} \\
 {\tt domainX}     & Domain exclusion of a relation & \ref{BI:domainX} \\
-{\tt min}         & Minimum of a bag of integers & \ref{BI:max} \\
-{\tt max}         & Maximum of a bag of integers & \ref{BI:max} \\
-{\tt power0}      & Powerset of a bag & \ref{BI:power0} \\
-{\tt power1}      & Powerset of a bag & \ref{BI:power1} \\
+{\tt min}         & Minimum of a set of integers & \ref{BI:max} \\
+{\tt max}         & Maximum of a set of integers & \ref{BI:max} \\
+{\tt power0}      & Powerset of a set & \ref{BI:power0} \\
+{\tt power1}      & Powerset of a set & \ref{BI:power1} \\
 
 {\tt range}       & Range of a relation  & \ref{BI:range} \\
 {\tt rangeR}      & Range restriction of a relation & \ref{BI:rangeR} \\
@@ -2994,21 +3066,22 @@ Taeke Kooiker, Tijs van der Storm.
 {\tt reachX}      & Reachability with exclusion& \ref{BI:reachX} \\
 
 {\tt second}      & Second element of a tuple & \ref{BI:second} \\
-{\tt sum}         & Sum of a bag of integers & \ref{BI:sum} \\
+{\tt sum}         & Sum of a set of integers & \ref{BI:sum} \\
 {\tt top}         & Top of a relation & \ref{BI:top} \\
-{\tt unique}      & Bag with unique elements & \ref{BI:unique}\\
+{\tt unique}      & Set with unique elements & \ref{BI:unique}\\
 
 \end{supertabular}
 \end{center}
 
 \chapter{TO DO}
 \begin{itemize}
-\item {\tt all-path-to} is not described.
+\item {\tt all-path-to}, {\tt sort} not described.
 \item $n$-ary relations
 \item Termination criteria for solving equations
 \item Access functions for $n$-ary tuples.
 \item Describe Rstores
 \item Give Rscript grammar
+\item Give workflows for fact extraction etc.
 \end{itemize}
 
 \bibliographystyle{plain}
