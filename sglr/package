@@ -11,7 +11,7 @@ identification
 configuration interface
 
 requires
-   pt-support 1.3
+   pt-support 2.0
 
 error-support 0.2.1
 
