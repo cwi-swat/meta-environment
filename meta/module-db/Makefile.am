@@ -1,4 +1,3 @@
-
 # $Id$
 
 include $(top_srcdir)/make_rules
@@ -10,14 +9,18 @@ EXTRA_DIST		= module-db.idef
 
 CLEANFILES		= module-db.tifs module-db.tif.c module-db.tif.h
 
-module_db_SOURCES	= module-db.c module-db.h renaming-symbols.c
-module_db_LDADD		= module-db.tif.o \
-			-L$(SDF_SUPPORT)/lib -lSDFME \
+noinst_HEADERS		= module-db.tif.h module-db.h
+module_db_SOURCES	= module-db.tif.c module-db.c renaming-symbols.c
+
+module_db_LDADD		= -L$(SDF_SUPPORT)/lib -lSDFME \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept \
-			-L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+			-L$(TOOLBUS)/lib -lATB \
+			-L$(ATERM)/lib -lATerm \
+			$(SOCKLIBS)
 
-INCLUDES	        = -I$(PT_SUPPORT)/include -I$(ATERM)/include  \
-                          -I$(ASF_SUPPORT)/include -I$(SDF_SUPPORT)/include
-
-module-db.o : module-db.tif.h renaming-symbols.c
+INCLUDES	        = -I$(PT_SUPPORT)/include \
+			-I$(TOOLBUS)/include  \
+			-I$(ATERM)/include  \
+			-I$(ASF_SUPPORT)/include \
+			-I$(SDF_SUPPORT)/include

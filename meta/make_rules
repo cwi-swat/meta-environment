@@ -7,7 +7,7 @@ POD2TXT=pod2text
 POD2HTML=pod2html
 
 %.tif.c %.tif.h: %.tifs
-	$(ATERM)/bin/tifstoc -tool $* $<
+	$(TOOLBUS)/bin/tifstoc -tool $* $<
 
 %.tifs: %.idef
 	$(TOOLBUS)/bin/idef2tif $<
