@@ -52,7 +52,7 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2)
 
       return ERR_isEqualArea(area1, area2);
     }
-    if (ERR_isLocationArea(location1) &&
+    else if (ERR_isLocationArea(location1) &&
 	ERR_isLocationArea(location2)) {
       ERR_Area area1 = ERR_getLocationArea(location1);
       ERR_Area area2 = ERR_getLocationArea(location2);
