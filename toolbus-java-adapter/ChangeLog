@@ -1,5 +1,8 @@
 $Id$
 
+Wed Jul 21 09:46:25 CEST 2004 <kooiker@cwi.nl>
+ * src: removed unused toolbus-java-config.sh.src, already present in root 
+
 Tue Jul 13 14:03:10 CEST 2004 <jurgenv@cwi.nl>
  * Package has a working distcheck target now
 
