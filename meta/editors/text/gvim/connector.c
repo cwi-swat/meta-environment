@@ -324,7 +324,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 /*}}}  */
 /*{{{  static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
 
-static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm locationTerm = TE_getActionFocus(edAction);
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
@@ -389,7 +389,7 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 /*}}}  */
 /*{{{  static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
 
-static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
+static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm locationTerm = TE_getActionFocus(edAction);
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
