@@ -420,7 +420,6 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
 {
   PT_Symbol sort; 
   ASF_CHAR newChar; 
-  ASF_Symbol qnewname;
   ASF_Tree newname;
   ASF_Tree newTree;
   PT_Tree newPTtree;
@@ -458,11 +457,9 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   assert(newCharList != NULL);
 
   newname = PTtoASF(PT_makeTreeUnquotedLiteral(sortstr));
-  qnewname = (ASF_Symbol)PT_makeTermFromSymbol(
-                           PT_makeSymbolQuotedLiteral(sortstr));
 
   newTree = ASF_makeTreeLexicalConstructor(
-              qnewname,
+              sortstr,
               (ASF_Symbol) sort, 
               newname,
               emptyLayout,
