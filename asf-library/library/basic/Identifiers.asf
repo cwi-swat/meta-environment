@@ -19,6 +19,35 @@ equations
 	===>
 	strcon2idcon(strcon(\" strchar(head1) char* \")) =
 	idcon(head1 head2 tail)
+
+equations
+
+[done]
+	natcon2strcon(natcon(digit)) = strcon(\" strchar(digit) \")
+
+[loop]
+	strcon(\" char* \") := natcon2strcon(natcon(digit+))
+	===>
+	natcon2strcon(natcon(digit digit+)) =
+	strcon(\" strchar(digit) char* \")	
+
+
+equations
+
+[0]	strcon2natcon("0") = 0
+[1]	strcon2natcon("1") = 1
+[2]	strcon2natcon("2") = 2
+[3]	strcon2natcon("3") = 3
+[4]	strcon2natcon("4") = 4
+[5]	strcon2natcon("5") = 5
+[6]	strcon2natcon("6") = 6
+[7]	strcon2natcon("7") = 7
+[8]	strcon2natcon("8") = 8
+[9]	strcon2natcon("9") = 9
+
+[loop]	natcon(digit)  := strcon2natcon(strcon(\" char \")),
+	natcon(digit+) := strcon2natcon(strcon(\" char+ \"))
+	===>
+	strcon2natcon(strcon(\" char char+ \")) = natcon(digit digit+)
+
 	
-
-
