@@ -291,7 +291,7 @@ You can find a brief sketch in Section~\ref{SEC:TechnologyandArchitecture}.
 Section~\ref{SEC:Components} briefly describes the most important components.
 \end{itemize}
 
-\subsection{Dowloading the \ASmetaenv}
+\subsection{Downloading the \ASmetaenv}
 
 You can download the \ASmetaenv\ from the following location:
 \begin{verbatim}
@@ -487,7 +487,7 @@ In all three cases a dialog window appears as shown in
 Figure~\ref{FIG:open-file}.
 
 {\tt Clear} removes all modules that have been opened so far from the
-Meta-Environment. If modules have been modified, you are expicitly
+Meta-Environment. If modules have been modified, you are explicitly
 asked to save them. The same effect can be achieved by leaving the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
@@ -545,7 +545,7 @@ will be shown.
 
 {\tt Animate while loading} defines the visualization of the import
 graph while the system is loading a specification. When enabled, the
-import graph will be updated each time a module from the specication
+import graph will be updated each time a module from the specification
 has been loaded in the system. When disabled, the new import graph
 will only be shown when the loading of the specification is complete.
 
@@ -595,7 +595,7 @@ is a {\tt Netscape} running, other browsers are not yet supported.
 The two left-most panes of the main window give two, alternative,
 views on the same information: the \asfsdf\ specification that has
 been loaded into the Meta-Environment.  Using one of these views, the
-same set of operations is available either via a popup menu or via the
+same set of operations is available either via a pop up menu or via the
 buttons in the pane at the right-hand side of the main window.
 
 \subsection{The Import Pane} \label{ImportPane}
@@ -705,7 +705,7 @@ gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump} ({\tt Dump Equations...}) dumps the equation of the selected
 module and all its imports. This feature is needed in order to run
-the evaluator in a standalone way, see Section \ref{SEC:interpretationgofterms}.
+the evaluator in a stand-alone way, see Section \ref{SEC:interpretationgofterms}.
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
 \begin{figure}[t]
@@ -1291,7 +1291,7 @@ Figures \ref{FIG:Pico-Booleans-sdf} and \ref{FIG:Pico-Booleans-eqs}.
   Types are `{\tt string}' and `{\tt natural}'.  
   There are three kinds of statements:
   assignments, if-then-else statements and while-loops. The Pico language
-  has also expressions for adding and substracting natural numbers and
+  has also expressions for adding and subtracting natural numbers and
   for concatenating strings.
 
 \paragraph{Notes:}
@@ -1654,7 +1654,7 @@ Character classes will be explained in
 
 Starting with the elementary symbols, more complex symbols can be constructed
 by way of operators that we will discuss now.
-Examples of the use of the various opertors will be given in the
+Examples of the use of the various operators will be given in the
 Sections~\ref{LexicalSyntax} and~\ref{ContexFreeSyntax}.
 
 \subsubsection{Option} \label{OptionOperator}
@@ -2133,7 +2133,7 @@ with a upper-case letter followed by one of the following:
 {\tt Aap}, {\tt NOOT}, and {\tt B49} are acceptable, but {\tt MiES}, {\tt
   B49a} and {\tt 007} are not.
 
-Note that the relation between juxtapostion and alternative operator is best
+Note that the relation between juxtaposition and alternative operator is best
 understood by looking at the line defining {\tt Id}. A parenthesized
 version of this same line would read as follows:
 \begin{quote}
@@ -2172,7 +2172,7 @@ exports
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
 \end{figure}   
 
-\noindent A slightly more readable defintion that is equivalent to the original one
+\noindent A slightly more readable definition that is equivalent to the original one
 in Figure~\ref{CODE:alternative1} is shown in Figure~\ref{CODE:alternative2}.  In
 any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
@@ -3700,9 +3700,25 @@ infinite loop during rewriting.
 
 \subsubsection{Common Errors when Executing Specifications}
 
-Note: new variable in {\tt !=}, lacking equation, infinite loops, 
-WARNING when a condition contains both instantiated and 
+\begin{itemize}
+
+\item When using the inequality operator {\tt !=} in a condition,
+no new variables may be introduced in either side of the inequality.
+
+\item If the normal form of a term still contains function symbols
+that should have been removed during rewriting, you probably have
+forgotten one or more equations that define the function.
+
+A typical situation is that you have given an \emph{incomplete} set of equations
+defining the function.
+
+\item The rewriting process does not stop. Your equations probably contain
+an infinite loop.
+
+\item Be carefull  when a condition contains both instantiated and 
 uninstantiated variables.
+
+\end{itemize}
 
 \newpage
 \section{Examples of \asfsdf\ Specifications}
@@ -4103,12 +4119,27 @@ This completes the specification of our code generator.
 
 \subsection{Large \asfsdf\ specifications}
 
-There are a number of very large \asfsdf\ specifications:
+There are a quite a few very large \asfsdf\ specifications around:
+
 \begin{itemize}
-\item the \asfsdf2C compiler.
-\item a part of the parse table generator for \sdf.
-\item the syntax and type checking of a domain specific language for
-describing financial products. 
+
+\item The \asfsdf2C compiler.
+
+\item A part of the parse table generator for \sdf.
+
+\item The syntax and type checking of a domain specific language for
+describing financial products.
+
+\item A compiler from UML diagrams to various target languages (Progress, Java, DB2).
+
+\item Transformation system for improving Cobol programs.
+
+\item A system for Java refactoring.
+
+\item Tooling for Action Semantics.
+
+\item Tooling for Casl.
+
 \end{itemize}
 
 \newpage
@@ -4583,6 +4614,8 @@ the near future. Don't hesitate to give us feedback on these plans!
       that can activate either specified functions or external tools.
 
 \item Generation of stand-alone environments.
+
+\item Support for representing and manipulating graphs.
 
 \item Introduction of generic services like error messaging and online help.
 
