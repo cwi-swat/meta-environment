@@ -12,26 +12,21 @@ dnl Package switches.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-
 AC_PATH_PROGS(SH, sh)
 
-TOOLS="util templates "
-UNRELEASED=""
-RELEASED="util templates"
-
-AC_SUBST(TOOLS)
-AC_SUBST(RELEASED)
-AC_SUBST(UNRELEASED)
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 AC_OUTPUT( 
 	Makefile 
         ac-macros/Makefile
         templates/Makefile
 	utils/Makefile 
-	src/Makefile 
-	src/LIB/Makefile 
-	src/LIB/asf/Makefile 
-	src/LIB/sdf/Makefile 
-	src/LIB/basic/Makefile 
-	src/LIB/containers/Makefile 
+	lib/Makefile 
+	lib/asf/Makefile 
+	lib/sdf/Makefile 
+	lib/basic/Makefile 
+	lib/containers/Makefile 
+	lib/aterm/Makefile 
+        src/Makefile
 )

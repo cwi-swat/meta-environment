@@ -1,0 +1,23 @@
+#! /bin/sh
+#
+# $Id$
+#
+# This script generates an include file
+
+BUILTINS=$*
+
+cat  << END_OF_FILE 
+#ifndef BUILTINS_H
+#define BUILTINS_H
+#include <MEPT.h>
+
+void initBuiltins(void);
+
+`
+for b in \${BUILTINS}; do 
+  echo "PT_Tree builtin_${b}(ATerm builtin, PT_Production prod, PT_Args args);" 
+done
+`
+
+#endif
+END_OF_FILE

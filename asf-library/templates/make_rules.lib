@@ -1,4 +1,5 @@
-libpackagedir = ${pkgdatadir}$(subst src/LIB,,$(subdir))
+LIBROOT=lib
+libpackagedir = ${pkgdatadir}$(subst $(LIBROOT),,$(subdir))
 
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
