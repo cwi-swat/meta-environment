@@ -228,3 +228,8 @@ SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
 
   return SDF_setModuleList(module, list);
 }
+
+SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s)
+{
+  return SDF_SymbolFromTerm(ATremoveAllAnnotations(SDF_SymbolToTerm(s)));
+}

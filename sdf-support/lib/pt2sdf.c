@@ -131,6 +131,49 @@ static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes)
 
 /*}}}  */
 
+
+/*{{{  char* escape(const char* str, const char* escaped_chars, QuotedOption quoted) */
+ 
+typedef enum { QUOTED, UNQUOTED } QuotedOption;
+
+static char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
+{
+  int i,j,e;
+  int len = strlen(str);
+  char *escaped = (char*) malloc(2 * len * sizeof(char) + (quoted ? 2 : 0) + 1);
+ 
+  if (escaped == NULL) {
+    ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
+    return NULL;
+  }
+ 
+  i = 0;
+  j = 0;
+ 
+  if (quoted == QUOTED) {
+    escaped[j++] = '\"';
+  }
+ 
+  for (; i < len; i++, j++) {
+    for (e = 0; escaped_chars[e]; e++) {
+      if (str[i] == escaped_chars[e]) {
+        escaped[j++] = '\\';
+      }
+    }
+    escaped[j] = str[i];
+  }
+ 
+  if (quoted == QUOTED) {
+    escaped[j++] = '\"';
+  }
+ 
+  escaped[j] = '\0';
+ 
+  return escaped;
+}
+ 
+/*}}}  */
+
 /*{{{  static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol) */
 
 SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
@@ -139,7 +182,9 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 
   if (PT_isSymbolLit(ptSymbol)) {
     char *str = PT_getSymbolString(ptSymbol);
-    SDF_Literal lit = SDF_makeLiteralQuoted(SDF_makeCHARLISTString(str));
+    char *qstr = escape(str, "\"\\", QUOTED);
+    SDF_Literal lit = SDF_makeLiteralQuoted(SDF_makeCHARLISTString(qstr));
+    free(qstr);
 
     result = SDF_makeSymbolLit(lit);
   }

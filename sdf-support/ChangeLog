@@ -1,3 +1,10 @@
+$Id$
+
+Sat Feb  8 08:46:04 CET 2003 <jong@cwi.nl>
+ * add SDF_removeSymbolAnnotations:
+   FIXME: duplicate escape() function from asf-library until we have
+   a general "utils" package to solve this.
+
 2003/02/02 ({jong,markvdb}@cwi.nl)
  * Bumped into version 1.1beta.
  * Started working on pt2sdf functionality.

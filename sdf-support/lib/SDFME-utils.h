@@ -65,4 +65,7 @@ SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 					       SDF_ModuleName actual);
 SDF_Renamings SDF_renameRenamings(SDF_Renamings source, SDF_Renamings target);
+
+SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
+
 #endif /* _SDF_UTILS_H */
