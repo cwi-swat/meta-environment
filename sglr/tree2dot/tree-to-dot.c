@@ -416,6 +416,9 @@ ATerm SG_TermYield(ATermAppl t)
   return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }
 
+#define AFunIs(f, s, ar, q) (ATisQuoted(f)==q && ATgetArity(f)==ar     \
+                            && !strcmp(s, ATgetName(f)))
+
 void SG_DotTermYieldAux(ATerm t)
 {
   AFun      fun;
@@ -439,7 +442,8 @@ void SG_DotTermYieldAux(ATerm t)
       }
       break;
     case AT_APPL:
-      if(ATisEqual(fun = ATgetAFun((ATermAppl) t), SG_ApplAFun())) {
+      fun = ATgetAFun((ATermAppl) t);
+      if(AFunIs(fun, "appl", 2, ATfalse)) {
         args = (ATermList) ATelementAt(ATgetArguments((ATermAppl) t), 1);
         if(ATgetLength(args) > 1) {
           SG_TYAuxBuf(TYA_ADD, '[');
@@ -448,7 +452,7 @@ void SG_DotTermYieldAux(ATerm t)
         } else {
           SG_DotTermYieldAux((ATerm) args);
         }
-      } else if(ATisEqual(fun, SG_AmbAFun())) {
+      } else if(AFunIs(fun, "amb", 1, ATfalse)) {
         args = ATgetArguments((ATermAppl) t);
         while(!ATisEmpty(args)) {
           SG_DotTermYieldAux(ATgetFirst(args));
