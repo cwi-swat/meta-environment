@@ -42,7 +42,10 @@
 %{{{ includes
 
 <<includes>>=
+#include <limits.h>
 #include <stdio.h>
+#include <tcl.h>
+#include <tk.h>
 #include <TB.h>
 #include <procs.h>
 #include <tool2.h>
@@ -51,8 +54,6 @@
 #include "sysmodule.h"
 #include "compile.h"
 #include "frameobject.h"
-#include <tcl.h>
-#include <tk.h>
 #ifdef USE_TIDE
 #include "debug-nub.tif.c"
 #endif
@@ -1336,9 +1337,10 @@ static PyObject *TBP_connect(PyObject *self, PyObject *args)
   lastCid = cid;
 
 #ifndef NO_TK
-  if(enableTk)
-    Tcl_CreateFileHandler(TB_getSocket(cid), TK_READABLE,
-					tcl_handler,(ClientData)cid);
+  if(enableTk) {
+    Tcl_File f = Tcl_GetFile((ClientData)TB_getSocket(cid), TCL_UNIX_FD);
+    Tcl_CreateFileHandler(f, TCL_READABLE, tcl_handler, (ClientData)cid);
+  }
 #endif
 
   Py_INCREF(Py_None);
@@ -1686,8 +1688,8 @@ PyObject *TBP_enableTk(PyObject *self, PyObject *args)
   enableTk = TBtrue;
   for(i=0; i<MAX_CONNECTIONS; i++) {
     if(TB_validConnection(i)) {
-      Tcl_CreateFileHandler(TB_getSocket(i), TK_READABLE, 
-					tcl_handler, (ClientData)i);
+      Tcl_File f = Tcl_GetFile((ClientData)TB_getSocket(i), TCL_UNIX_FD);
+      Tcl_CreateFileHandler(f, TCL_READABLE, tcl_handler, (ClientData)i);
     }
   }
 
