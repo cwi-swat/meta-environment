@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jul  1 13:20:05 CEST 2003 <jong@cwi.nl>
+ * aterm/atb-tool.c:
+   - clear buffer before sending out a term to prevent a previous term
+     from 'leaking'
+
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
 
