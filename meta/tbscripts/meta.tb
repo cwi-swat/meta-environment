@@ -106,7 +106,7 @@ in
   . create(Set-parsetable, Pid?)
   . create(Tree2Graph, Pid?)
 #ifdef QUERY
-  . create(QueryTool, Pid?)
+  . create(DisplayQuery, Pid?)
 #endif
 #ifdef TIMEOUT
   . create(AbortMetaEnvironment, Pid?)
