@@ -580,10 +580,7 @@ class SourceFileViewer
     } else if (event.getActionCommand().equals(ITEM_EDIT_RULE)) {
       //{{{ Handle editing of rules
 
-      String toolName = RuleInspectorFactory.NAME;
-      RuleInspector inspector = 
-	(RuleInspector)manager.launchProcessTool(toolName, process);
-      inspector.editRule(lastSelectedRule);
+      manager.editRule(process, lastSelectedRule);
 
       //}}}
     } else if (event.getActionCommand().equals(ITEM_DELETE_RULE)) {

@@ -66,7 +66,7 @@ public class SourceViewer
 
   //}}}
 
-  //{{{ public SourceViewer(final DebugProcess process, ToolManager manager)
+  //{{{ public SourceViewer(ToolManager manager, final DebugProcess process)
 
   public SourceViewer(ToolManager manager, final DebugProcess process)
   {
@@ -243,15 +243,6 @@ public class SourceViewer
   }
 
   //}}}
-  //{{{ private loadIcon(String name)
-
-  private Icon loadIcon(String name)
-  {
-    URL url = getClass().getClassLoader().getResource("images/" + name);
-    return new ImageIcon(url);
-  }
-
-  //}}}
 
   //{{{ private void requestSourceFiles()
 
@@ -328,7 +319,6 @@ public class SourceViewer
   public void evaluationResult(DebugProcess process, Expr expr,
 			       Expr value, String tag)
   {
-    System.out.println("evaluationResult: " + tag);
     if (tag.equals(tag_view_var)) {
       if (value.isError()) {
 	displayError(value);
@@ -357,7 +347,6 @@ public class SourceViewer
 	displayError("Strange variable result: ", value);
       }
     } else if (tag.equals(tag_add_source)) {
-      System.out.println("tag_add_source: " + value);
       if (value.isError()) {
 	displayError("Can't retrieve source files",
 		     value.getErrorData());
@@ -379,7 +368,6 @@ public class SourceViewer
 
   public void processStatusChanged(DebugProcess process)
   {
-    System.out.println("processStatusChanged: " + process);
     boolean stopped = process.isStopped();
 
     stepInto.setEnabled(stopped);

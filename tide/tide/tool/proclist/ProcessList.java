@@ -58,11 +58,23 @@ public class ProcessList
   public void adapterDisconnected(DebugTool tool, DebugAdapter adapter)
   {
     info.info("adapterDisconnected: " + adapter);
-    JComponent panel = (JComponent)adapters.get(adapter);
+    final JComponent panel = (JComponent)adapters.get(adapter);
     adapters.remove(adapter);
-    adapterPanel.remove(panel);
-    validate();
-    repaint();
+
+    // remove/validate/repaint must be called from the system
+    // event queue thread, because otherwise we encounter deadlocks
+    // as the 'ToolBus' thread and the 'UI' thread both want to
+    // modify the component tree at the same time
+    Runnable runnable = new Runnable()
+    {
+      public void run()
+      {
+	adapterPanel.remove(panel);
+	validate();
+	repaint();
+      }
+    };
+    getToolkit().getSystemEventQueue().invokeLater(runnable);
   }
 
   //}}}
