@@ -10,8 +10,8 @@
 \section{Editors}
 \label{edit}
 
-The structure editor in the new implementation provides roughly the
-same functionality to the user as the Generic Structure Editor
+The structure editing system in the new implementation provides roughly the
+same functionality as the Generic Structure Editor
 (\gse~\cite{Koo94.thesis}). There are, however a number of
 differences, both in the external and the internal behaviour.
 
@@ -20,9 +20,10 @@ differences, both in the external and the internal behaviour.
 The structure editing system consists of two parts. One is a
 \emph{structure} editor, the other is a \emph{text} editor. The
 structure editor operates on parse trees (encoded as AsFix terms). It
-only manipulates (sub)trees, i.e.\ it does not manipulate individual
+only manipulates (sub)trees, i.e., it does not manipulate the lexical
+content of 
 nodes in a parse tree. The text editor operates on a character level,
-it \emph{does} manipulate individual nodes in a parse tree.
+it \emph{does} manipulate the content of nodes in a parse tree.
 
 Both the text editor and the structure editor have a well defined
 external behaviour (a ToolBus interface)~\cite{Kui96}. This 
@@ -32,13 +33,13 @@ always been its limited text editing capabilities. By separating text
 and structure editing functionality we hope to address this problem. 
 
 The text and structure editors are tied together by means of a ToolBus
-script. This script provides us with a tight coupling between the
-two. This coupling makes sure that at any given time the data
+script. The script provides us with a one-to-one mapping from text to
+structure and back. It makes sure that at any given time the data
 structure in the text editor (the text) can be translated to the data
 structure in the structure editor (the parse tree), and vice
 versa. If a string $\alpha$ is a syntactically correct string in the
 language $L$, and we have a parser $\Pi_L$ over this language and a pretty printer $pp$
-then $pp(\Pi_L(\alpha)) = \alpha$. If $t$ is the parse tree that results
+then $pp(\Pi_L(\alpha)) = \alpha$. Furthermore, if $t$ is the parse tree that results
 from $\Pi_L(\alpha)$ then also $\Pi_L(pp(t)) = t$.
 
 \subsection{External behaviour}\label{externaleditor}
@@ -74,7 +75,13 @@ be created, which looks like this:
 \begin{codebox}
  x := 10 ;
  while x > \underline{2} do x := x - \underline{2} \end{codebox}
-Obviously, this results in less parsing than in \gse. Of course, this
+One of the motivations for using structure editors is the fact that they
+allow us to parse text incrementally. Only the parts of the text that
+have been changed need to be reparsed. As shown in the last example:
+this strategy obviously
+results in less parsing than in \gse. 
+
+Of course, this
 is a very benign example. If we take the original program again, and
 decide to put the body of the while loop between brackets, we get the
 following focus positions.
@@ -108,9 +115,9 @@ provides us with an implementation that is independent of the other
 components of the \metaenv, and sufficiently fast to cater for
 interactive use.
 
-The text editor we use is jedit, a public domain text editor written
+The text editor we use is \texttt{jedit}, a public domain text editor written
 in \tcltk. It is easily extendible which allows us to experiment with
-different lay-outs, and {\ui}s. 
+different lay-outs and {\ui}s. 
 
 \subsection{Discussion}
 
@@ -127,5 +134,12 @@ used with larger, more complex editing sessions.
 The text editor that is used currently needs to be replaced with a
 well known editor. We will try to incorporate emacs into the structure
 editing system.
+
+Finally, we need to realize a link between the structure editing
+system and the tree-repository (Section \ref{repos}). In \gse, when
+expanding a meta-variable, the editor lists all productions with the
+same sort as the meta-variable. As the new editing system is
+completely language independent, it needs to get the list of
+productions from the tree-repository explicitly.
 
 
