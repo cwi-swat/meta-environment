@@ -9,6 +9,7 @@
 #include <deprecated.h>
 #include "MEPT.h" 
 
+PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree);
 PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args);
 PT_ParseTree PT_applyFunctionToArgsParseTree(char *function, char *sort, 
 					     PT_Args args);

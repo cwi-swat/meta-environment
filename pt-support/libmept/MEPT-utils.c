@@ -613,6 +613,45 @@ ATbool PT_isTreeFlatLexical(PT_Tree tree)
 
 /*}}}  */
 
+/*{{{  PT_Args PT_removeArgsAllLayoutAndAnnotations(PT_Args args) */
+
+PT_Args PT_removeArgsAllLayoutAndAnnotations(PT_Args args)
+{
+  PT_Args new = PT_makeArgsEmpty();
+
+  for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    new = PT_makeArgsList(PT_removeTreeAllLayoutAndAnnotations(
+		       PT_getArgsHead(args)),
+		       new);
+  }
+
+  return PT_reverseArgs(new);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree) */
+
+PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree)
+{
+  if (PT_isTreeLayout(tree)) {
+    return PT_makeTreeLayoutEmpty();
+  }
+  else if (PT_isTreeAmb(tree)) {
+    return PT_makeTreeAmb(PT_removeArgsAllLayoutAndAnnotations(
+			       PT_getTreeArgs(tree)));
+  }
+  else if (PT_isTreeAppl(tree)) {
+    return PT_makeTreeAppl(PT_getTreeProd(tree),
+			   PT_removeArgsAllLayoutAndAnnotations(
+				PT_getTreeArgs(tree)));
+  }
+  else {
+    return PT_removeTreeAnnotations(tree);
+  }
+}
+
+/*}}}  */
+
 /* Args */
 /*{{{  PT_Args PT_concatArgs(PT_Args args1, PT_Args args2) */
 

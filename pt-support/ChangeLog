@@ -1,5 +1,8 @@
 $Id$
 
+2003/09/23 (jurgenv@cwi.nl)
+ * Added PT_removeTreeAllLayoutAndAnnotations
+
 2003/09/18 (jurgenv@cwi.nl)
  * Renamed parsePT to liftPT
 
