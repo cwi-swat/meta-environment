@@ -33,7 +33,7 @@ EXTRA_DIST = \
 	kernel-configuration.tb.src \
 	user-configuration.tb.src \
 	meta-kernel.properties \
-	meta-config-${API_VERSION}.jar
+	metaconfig-${API_VERSION}.jar
 
 noinst_HEADERS = \
 	configuration-manager.tif.h \
