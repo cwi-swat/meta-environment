@@ -1,6 +1,5 @@
 
 /*{{{   evaluator.c */
-
 /*
 A first version of an INTERPRETER in ToolBus C.
    This program is written by Mark van den Brand.
@@ -195,16 +194,16 @@ ATermAppl v_lookup_list(ATerm env, ATerm var)
 
 ATbool v_is_bound(ATerm env, ATerm var)
 {
-	ATermList list = (ATermList)env;
+  ATermList list = (ATermList)env;
 
-	while(!ATisEmpty(list)) {
-		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
-		if(ATisEqual(ATgetArgument(tuple, 0), var))
-			return ATtrue;
-		list = ATgetNext(list);
-	}
+  while(!ATisEmpty(list)) {
+    ATermAppl tuple = (ATermAppl)ATgetFirst(list);
+    if(ATisEqual(ATgetArgument(tuple, 0), var))
+      return ATtrue;
+    list = ATgetNext(list);
+  }
 
-	return ATfalse;
+  return ATfalse;
 }
 
 /*}}}  */
@@ -254,15 +253,12 @@ ATermList append_slice(ATermList list, ATermAppl slice)
    - ``add_equations'' to add a set of equations for a certain module.
    - ``interpret'' to rewrite a given term over a given module.  */
 
-ATerm exists(int cid, ATerm name)
-{
-  ATerm result;
-
-  if(find_equation(NULL, name, NULL))
-    result = ATmake("snd-value(result(exists(<term>)))", name);
+ATerm equations_available(int cid, ATerm name)
+{ 
+  if(find_module(name))
+    return ATmake("snd-value(eqs-available(<term>))", name);
   else 
-    result = ATmake("snd-value(result(notexists(<term>)))", name);
-  return result;
+    return ATmake("snd-value(eqs-not-available(<term>))", name); 
 }
 
 
@@ -424,7 +420,9 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList elems1, elems2;
   ATerm newenv = env;
 
-	/*ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);*/
+/*
+ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);
+*/
 
   if(ATisEqual(arg1,arg2))
     return args_matching(newenv,conds,orgargs1,orgargs2);
@@ -629,10 +627,10 @@ ATerm list_matching(ATerm sym,
         }
         else { /* TdictGet(env,elem1) == Tfalse */
           if(asfix_is_plus_var(elem1) && ATisEmpty(elems2)) {
-						newenv = fail_env;
-					} else {
-						newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
-						newenv = args_matching(newenv,conds,args1,args2);
+	    newenv = fail_env;
+	  } else {
+	    newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
+	    newenv = args_matching(newenv,conds,args1,args2);
 					}
         }
       } 
@@ -696,11 +694,18 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
   ATerm cond;
   ATerm lhs, rhs, lhstrm, rhstrm;
   ATerm newenv = env;
+ 
 
   if(!ATisEmpty(conds)) {
 		/* <PO:opt> we could do with iteration instead of recursion on the
-			 list of conditions! */
+			 list of conditions! */  
+
     cond = ATgetFirst(conds);
+
+/*
+ATfprintf(stderr,"conds_satisfied entered with %t\n and %t\n", cond, env);
+*/
+
     conds = ATgetNext(conds);
 		lhs = AFTgetCondLHS(cond);
 		rhs = AFTgetCondRHS(cond);
@@ -726,7 +731,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
         }
         else {
           ATfprintf(stderr,
-                   "Both sides of a condition introduces new variables.\n");
+                   "Both sides of a condition introduces new variables:%t\n", cond);
           newenv = fail_env;
         }
       }
@@ -784,23 +789,30 @@ ATerm apply_rule(ATerm trm)
 		*/
     while((entry = find_equation(entry, top_ofs, first_ofs))) { 
 
+
 ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
+
       conds = entry->conds;
       equargs = (ATermList) asfix_get_appl_args(entry->lhs);
 
       env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
       if(!is_fail_env(env)) {
+
 ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
+
         rewrite_steps++;
         return (ATerm) make_cenv(entry->rhs, env);
       }
+/*
       else {
         ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
       }
+*/
     }
   }
   
   while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) { 
+
 
 ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
 
@@ -809,13 +821,17 @@ ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
 
     env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
     if(!is_fail_env(env)) {
+
 ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
+
       rewrite_steps++;
       return (ATerm) make_cenv(entry->rhs, env);
     }
+/*
     else {
 ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
     }
+*/
   }
  
   return (ATerm) make_cenv(trm, fail_env);

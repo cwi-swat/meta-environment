@@ -37,5 +37,6 @@ equation_entry *find_equation(equation_entry *prev,
 															ATerm top_ofs, ATerm first_ofs);
 void select_equations(ATerm module);
 void enter_equations(ATerm module, ATermList eqs);
+ATbool find_module(ATerm module);
 
 #endif

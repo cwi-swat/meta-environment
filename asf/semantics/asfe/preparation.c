@@ -205,8 +205,10 @@ equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
     from = equations->table[hnr];
   }
   while(from && (!ATisEqual(from->top_ofs,top_ofs) || 
-								 !ATisEqual(from->first_ofs,first_ofs)))
+		 !ATisEqual(from->first_ofs,first_ofs))) {
+ATfprintf(stderr,"Looking at equation: %t\n",from->tag);
     from = from->hnext;
+  }
 /*  if(from)
     ATfprintf(stderr, "found: %t\n", from->equation);
   else
@@ -232,6 +234,20 @@ void select_equations(ATerm module)
 }
 
 
+/*}}}  */
+/*{{{  ATbool find_module(ATerm module) */
+ATbool find_module(ATerm module)
+{
+  equation_table *cur = tables;
+ 
+  while(cur && !ATisEqual(cur->module, module))
+    cur = cur->next;
+
+  if(cur) 
+    return ATtrue;
+  else
+    return ATfalse;
+}
 /*}}}  */
 /*{{{  void enter_equations(ATerm module, ATermList eqs) */
 
