@@ -30,3 +30,4 @@ exports
     "Stat*"[0-9\']*       -> {STATEMENT ";"}*
     "Stat+"[0-9\']*       -> {STATEMENT ";"}+
     "Exp" [0-9\']*          -> EXP
+    "Program" [0-9\']*      -> PROGRAM
