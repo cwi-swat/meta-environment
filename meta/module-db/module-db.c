@@ -63,7 +63,7 @@ Manipulation of modules in database:
 
 #include "module-db.h"
 
-static char myversion[] = "0.1";
+static char myversion[] = "1.0";
 
 ATermTable modules_db;
 ATermTable new_modules_db;
