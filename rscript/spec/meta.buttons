@@ -31,10 +31,9 @@ button("Rscript",
            	      	apply("check-rscript", "Summary", 1),
            		push-modulename("RscriptChecker"),
            		reduce,
-			convert-feedback,
 	   		dup,
- 			push-string("feedback(\"RscriptChecker\", \"Rscript\", [info(\"Rscript is type correct!\", [])])"),
-           		parse("RscriptChecker", "List"),
+ 			push-string("feedback(\"RscriptChecker\",\"Rscript\",[info(\"Rscript is type correct!\",[])])"),
+           		parse("RscriptChecker", "Summary"),
            		if-equal([	push-active-module,
                      			get-root,
 		     			apply("eval-rscript", "RSTORE", 1),
@@ -49,9 +48,8 @@ button("Rscript",
                      			activate-editor],
 
                     		[	message("Rscript contains type error(s)"),
-		     			unparse,
-		     			push-active-module,
-		     			show-list
+		     			convert-feedback,
+		     			show-feedback
                     		])
 		],
 		[	message("Not an Rscript")
