@@ -1,8 +1,10 @@
 # $Id$
 
-
-2002/02/07 (jurgenv@cwi.nl)
+2002/02/12 ({markvdb,jurgenv}@cwi.nl)
  * Release 0.8
+ * unparsePT, configmanager and restore-brackets are killed immediately
+   after they are finished. This reduces the footprint of the Meta-Environment
+   a bit. 
 
 2002/01/24 (vandenbr@cwi.nl)
  * Improved the sdf-checker:
