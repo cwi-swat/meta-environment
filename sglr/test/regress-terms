@@ -4,8 +4,9 @@
 VERBOSE=1
 ERROR=0
 
-A2TOA1="a2toa1 -t -silent"
 SGLR="sglr"
+#COMPARE="diff -w"
+COMPARE="cmp"
 
 cd `dirname $0`;
 mydir=`pwd`
@@ -35,19 +36,19 @@ do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
-		if $SGLR -p $ptbl -i $file -to $out
+		if $SGLR -p $ptbl -i $file -o $out
 		then
-			diff=1
+			diffs=1
 		        if [ `wc -c < $out` -eq `wc -c < $out.org` ]
 		        then
-	                        if diff -w $out $out.org	> /dev/null 2>&1
+	                        if $COMPARE $out $out.org	> /dev/null 2>&1
 	                        then
 				        Notify "Regression test for valid term $base succeeded"
 		                        rm -f $out
-				        diff=0
+				        diffs=0
 	                        fi
 			fi
-			if [ $diff -ne 0 ]
+			if [ $diffs -ne 0 ]
 			then
 				Notify "Regression test for valid term $base failed"
 				ERROR=1
@@ -63,8 +64,8 @@ do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
-		$SGLR -cp $ptbl -i $file -to $out            2>/dev/null
-	        if diff -w $out $out.org	> /dev/null 2>&1
+		$SGLR -cp $ptbl -i $file -to $out	2>/dev/null
+	        if $COMPARE $out $out.org		> /dev/null 2>&1
 	        then
 			Notify "Regression test for error term $base succeeded"
 		        rm -f $out
