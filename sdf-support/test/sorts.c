@@ -7,9 +7,12 @@
 int
 testSorts(void)
 {
-  ATerm      contents;
-  SDF_Module module;
-  ATermList  sorts;
+  ATerm       contents;
+  ATermList   sorts;
+  SDF_Module  module;
+  SDF_Symbol  symbol;
+  SDF_Sort    sort;
+  SDF_Lexical lex;
 
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
@@ -19,6 +22,12 @@ testSorts(void)
   sorts = SDFgetSorts(module);
 
   assert(ATgetLength(sorts) == 1);
+
+  symbol = SDF_makeSymbolFromTerm(ATgetFirst(sorts));
+  sort   = SDF_getSymbolSort(symbol);
+  lex    = SDF_getSortLex(sort);
+
+  assert(ATisEqual(lex, ATparse("\"PICO-BOOL\"")));
 
   return 0;
 }
