@@ -13,7 +13,8 @@ buttons([
 	             apply("evp", "VENV", 1),
 	             exists("Pico-eval"),
                      execute-action("Pico-eval -t"),
-                     edit("Pico-eval", "reduct.out")],
+                     push-filename("reduct.out"),
+                     edit-given-filename("Pico-eval")],
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
@@ -24,7 +25,8 @@ buttons([
            apply("tcp", "Boolean", 1),
 	   exists("Pico-typecheck"),
            execute-action("Pico-typecheck -t"),
-           edit("Pico-typecheck", "reduct.out")]),
+           push-filename("reduct.out"),
+           edit-given-filename("Pico-typecheck")]),
 
    button("Pico-syntax",
           "term",
@@ -38,7 +40,8 @@ buttons([
 	   if-equal([get-root,
                      apply("evp", "VENV", 1),
                      reduce("Pico-eval"),
-                     edit("Pico-eval", "reduct.out")],
+                     push-filename("reduct.out"),
+                     edit-given-filename("Pico-eval")],
 		    [message("Program contains type error")])]),
 
    button("Pico-syntax",
@@ -48,7 +51,8 @@ buttons([
            check-sort("PROGRAM"),
            apply("tcp", "Boolean", 1),
            reduce("Pico-typecheck"),
-           edit("Pico-typecheck", "reduct.out")]),
+           push-filename("reduct.out"),
+           edit-given-filename("Pico-typecheck")]),
 
    button("Pico-syntax",
           "term",
