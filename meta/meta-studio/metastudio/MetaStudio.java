@@ -118,7 +118,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         int x = (screenSize.width - width) / 2;
         int y = (screenSize.height - height) / 2;
 
-        setTitle("Meta-Environment");
         setSize(width, height);
         setLocation(x, y);
 

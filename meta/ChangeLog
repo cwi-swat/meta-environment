@@ -1,5 +1,13 @@
 # $Id$
 
+Tue Mar 22 10:36:11 CET 2005 <jong@cwi.nl>
+ * meta-studio/META-INF/default.properties
+   - reset colour of graphpane to white (asf-sdf-meta now sets the version
+   number in the title, so we don't need 1 colour per version we have, but
+   can have a "normal" colour again)
+ * meta-studio/metastudio/MetaStudio.java
+   - removed call to setTitle, as title gets set later on via TB script
+
 Tue Mar  1 14:07:44 CET 2005 <jurgenv@cwi.nl>
  * Syntax highlighting improved. There are now three levels, in increasing
    priority:
