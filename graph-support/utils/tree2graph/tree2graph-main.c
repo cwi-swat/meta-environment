@@ -59,7 +59,7 @@ void rec_terminate(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm tree2graph(int cid, char *name, ATerm tree) */
 
-ATerm tree2graph(int cid, char *name, ATerm tree)
+ATerm tree2graph(int cid, const char *name, ATerm tree)
 {
   Graph graph = PT_printAnyToGraph(name, tree, ATtrue, ATtrue,
 			           ATfalse, ATtrue);

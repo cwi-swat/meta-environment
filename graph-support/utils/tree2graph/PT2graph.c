@@ -96,7 +96,7 @@ static Graph printOverFlowNode(Graph graph,
 /*}}}  */
 /*{{{  static Graph printNode(Graph graph, int parent, int node, char *contents) */
 
-static Graph printNode(char *name,
+static Graph printNode(const char *name,
                        Graph graph, 
 		       Shape shape,
                        int parentNr, 
@@ -222,7 +222,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 
 /*{{{  static Graph treeToGraph(Graph graph, PT_Tree tree, int parent) */
 
-static Graph treeToGraph(char *name, Graph graph, PT_Tree tree, int parent)
+static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent)
 {
   long key = makeNodeId(tree);
   ATerm posInfoArea = (ATerm)PT_getTreeLocation(tree);
@@ -321,7 +321,7 @@ static Graph treeToGraph(char *name, Graph graph, PT_Tree tree, int parent)
 
 /*{{{  Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,  */
 
-Graph PT_printTreeToGraph(char *name, PT_Tree tree, ATbool characters, 
+Graph PT_printTreeToGraph(const char *name, PT_Tree tree, ATbool characters, 
 			  ATbool productions, 
 			  ATbool layout, ATbool literals)
 {
@@ -352,7 +352,7 @@ Graph PT_printTreeToGraph(char *name, PT_Tree tree, ATbool characters,
 /*}}}  */
 /*{{{  Graph PT_printParseTreeToGraph(PT_ParseTree parsetree,  */
 
-Graph PT_printParseTreeToGraph(char *name, PT_ParseTree parsetree, 
+Graph PT_printParseTreeToGraph(const char *name, PT_ParseTree parsetree, 
 			      ATbool characters, 
 			      ATbool productions, ATbool layout, 
 			      ATbool literals)
@@ -365,7 +365,7 @@ Graph PT_printParseTreeToGraph(char *name, PT_ParseTree parsetree,
 
 /*{{{  Graph PT_printAnyToGraph(char *name, ATerm term, ATbool characters,  */
 
-Graph PT_printAnyToGraph(char *name, ATerm term, ATbool characters, 
+Graph PT_printAnyToGraph(const char *name, ATerm term, ATbool characters, 
   		         ATbool productions, 
 		         ATbool layout, ATbool literals)
 {
