@@ -1,14 +1,17 @@
 # $Id$
 
+Thu Aug 14 08:45:06 CEST 2003 <jong@cwi.nl>
+ * editors/text/common/Makefile.am: add $(TOOLBUSLIB)/INCLUDE to includes
+ * reconf: add -I ${LIBTOOL_INCLUDE} to aclocal's include paths
+ * configure.in:
+   - add AC_LIBTOOL_DLOPEN
+   - test if LIBTOOL actually resolved to a non-empty string
+
 2003/08/14 (jurgenv@cwi.nl)
  * Regenerated graph API with new apigen and based on latest aterm-java lib
  * Fixed code to handle new generated API
  * Added experimental arrow-head drawing in graphs
  
-Thu Aug 14 08:45:06 CEST 2003 <jong@cwi.nl>
- * editors/text/common/Makefile.am: add $(TOOLBUSLIB)/INCLUDE to includes
- * ./reconf: add -I ${LIBTOOL_INCLUDE} to aclocal's include paths
-
 Tue Aug 12 13:31:39 CEST 2003 <{jong,kooiker}@cwi.nl>
  * remove dependency on xemacs 20.4 from meta.pkg
  * merge EDITOR_HIVE changes into HEAD.
