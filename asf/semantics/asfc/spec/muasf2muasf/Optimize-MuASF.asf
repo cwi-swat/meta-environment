@@ -41,7 +41,7 @@ equations
 %% 2. one of it's argument should be an (embedded) list
 %% 3. the embedding should be made of only constructors
 %% 4. the embedding should be the same for the left-hand side of all rules
-
+%% 5. the embedding should be the same in each recursive call
 
 %%
 %% It is this embedding that we are going to factorize out of 
@@ -52,7 +52,8 @@ equations
 
 [cr-0] is-recursive(Rule+)                = true,                %% req 1
        find-list-arg(Rule+, Nametable)    = FunIdHasEmbeddingAt, %% req 2,3
-       check-emb-lhs-rules(Rule+,FunIdHasEmbeddingAt) = true     %% req 4
+       check-emb-lhs-rules(Rule+,FunIdHasEmbeddingAt) = true,    %% req 4
+       check-emb-rhs-rules(Rule+,FunIdHasEmbeddingAt) = true     %% req 5
        ========================================================
        get-list-embedding(Rule+, Nametable)    = FunIdHasEmbeddingAt
 
@@ -200,7 +201,62 @@ equations
 %% All other variaties are dangerous to transform
 [default-celr] check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt) = false
 
+%% Here we check the recursive calls in the right-hand side and the conditions
 
+[cerrs-0] check-emb-rhs-rules(Rule; Rule+, FunIdHasEmbeddingAt) =
+             check-emb-rhs-rule(Rule, FunIdHasEmbeddingAt) /\
+             check-emb-rhs-rules(Rule+, FunIdHasEmbeddingAt)
+
+[cerrs-1] check-emb-rhs-rules(Rule, FunIdHasEmbeddingAt) =
+             check-emb-rhs-rule(Rule, FunIdHasEmbeddingAt)
+
+[cerr-0] check-emb-rhs-rule(Term1 = Term2, FunIdHasEmbeddingAt) = 
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt)
+
+[cerr-1] check-emb-rhs-rule(default: Term1 = Term2, FunIdHasEmbeddingAt) = 
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt) 
+
+[cerr-2] check-emb-rhs-rule(Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt) /\
+           check-emb-rhs-conds(Cond+, FunIdHasEmbeddingAt)
+
+[cerr-3] check-emb-rhs-rule(default: Cond+ ==> Term1 = Term2, 
+                        FunIdHasEmbeddingAt) = 
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt) /\
+           check-emb-rhs-conds(Cond+, FunIdHasEmbeddingAt)
+
+[cercs-0] check-emb-rhs-conds(Cond, FunIdHasEmbeddingAt) = 
+           check-emb-rhs-cond(Cond, FunIdHasEmbeddingAt)
+
+[cercs-1] check-emb-rhs-conds(Cond & Cond+, FunIdHasEmbeddingAt) = 
+           check-emb-rhs-cond(Cond, FunIdHasEmbeddingAt) /\
+           check-emb-rhs-conds(Cond+, FunIdHasEmbeddingAt)
+
+[cerc-0] check-emb-rhs-cond(Term1 == Term2, FunIdHasEmbeddingAt) =
+           check-emb-recursive-term(Term1, FunIdHasEmbeddingAt) /\
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt)
+
+[cerc-1] check-emb-rhs-cond(Term1 != Term2, FunIdHasEmbeddingAt) =
+           check-emb-recursive-term(Term1, FunIdHasEmbeddingAt) /\
+           check-emb-recursive-term(Term2, FunIdHasEmbeddingAt)
+
+[cert-0] check-emb-recursive-term(FunId(Term+), FunId has EmbeddingAt) =
+           check-emb-terms(Term+, EmbeddingAt)
+
+[cert-1] FunId != FunId2
+         ====
+         check-emb-recursive-term(FunId2(Term+), FunId has EmbeddingAt) =
+           check-emb-recursive-terms(Term+, FunId has EmbeddingAt)
+
+[default-cert] check-emb-recursive-term(Term, FunIdHasEmbeddingAt) = true
+
+[certs-0] check-emb-recursive-terms(Term, FunIdHasEmbeddingAt) = 
+            check-emb-recursive-term(Term, FunIdHasEmbeddingAt)
+
+[certs-1] check-emb-recursive-terms(Term, Term+, FunIdHasEmbeddingAt) =
+            check-emb-recursive-term(Term, FunIdHasEmbeddingAt) /\
+            check-emb-recursive-terms(Term+, FunIdHasEmbeddingAt)
+ 
 %% locate the correct argument using the number.
 
 [cets-0] check-emb-term(Term, Embedding) = Bool

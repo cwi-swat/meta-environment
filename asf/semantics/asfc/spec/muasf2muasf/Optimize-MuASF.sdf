@@ -79,6 +79,11 @@ context-free syntax
 
   check-emb-rhs-rule(Rule, FunIdHasEmbeddingAt) -> Bool
   check-emb-rhs-rules(RuleList, FunIdHasEmbeddingAt) -> Bool
+  check-emb-rhs-conds(CondList, FunIdHasEmbeddingAt) -> Bool
+  check-emb-rhs-cond(Cond, FunIdHasEmbeddingAt) -> Bool
+  check-emb-recursive-term(Term, FunIdHasEmbeddingAt) -> Bool
+  check-emb-recursive-terms(TermList, FunIdHasEmbeddingAt) -> Bool
+  
   
 variables
 
