@@ -31,3 +31,22 @@ int ASF_getCHARListLength(ASF_CHARList list)
 {
   return (ATgetLength((ATermList) ASF_makeTermFromCHARList(list)) / 2) + 1;
 }
+
+ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
+                                                ASF_CondEquationList l2)
+{
+  if (!ASF_isCondEquationListEmpty(l2)) {
+    if (ASF_hasCondEquationListHead(l1)) {
+      ASF_CondEquation head = ASF_getCondEquationListHead(l1);
+      ASF_CondEquationList tail = ASF_getCondEquationListTail(l1);
+      
+      return ASF_makeCondEquationListMany(head, " ",
+               ASF_concatCondEquationList(tail, l2));
+    }
+    else {
+      return l2;
+    }
+  } 
+
+  return l1;
+}
