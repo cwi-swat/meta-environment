@@ -96,7 +96,6 @@ if ($pc != 1) {
 print TB "toolbus(",$process,")\n";
 close(TB);
 
-print "toolbus -gentifs $stmp 2> $serr > /dev/null";
 system("toolbus -gentifs $stmp 2> $serr > /dev/null");
 #$err=-s $serr;
 $err=$?;
