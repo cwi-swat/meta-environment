@@ -227,4 +227,8 @@ extern void register_all();
 extern void resolve_all();
 extern void init_all();
 
+/* experimental traversal/analyze functions */
+extern ATerm traverse(Symbol func, int argc, int traverse_arg, ...);
+extern ATerm analyze(Symbol func, Symbol synthesizer, ATerm start, int argc, int traverse_arg, ...);
+
 #endif  /* ASC_SUPPORT_H */

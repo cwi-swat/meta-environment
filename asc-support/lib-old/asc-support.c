@@ -171,6 +171,7 @@ static ATermList terms_to_asfix(ATermList a, ATermAppl t, ATerm sort);
 #define slice_length(l1,l2) (ATgetLength(l1) - ATgetLength(l2))
 
 /*}}}  */
+
 /*{{{  void c_rehash(int newsize) */
 
 /**
@@ -224,12 +225,13 @@ void c_rehash(int newsize)
 }
 
 /*}}}  */
+
 /*{{{  unsigned in calc_hash(ATerm prod) */
 
 #ifdef NO_SHARING
-/**
-  * Calculate hash function of a term.
-  */
+/*
+ * Calculate hash function of a term.
+ */
 
 unsigned int calc_hash(ATerm t)
 {
@@ -775,6 +777,200 @@ static ATermList innermost_list(ATermList l)
 }
 
 /*}}}  */
+
+/*{{{
+ * The traverse function descends outermostly into the argument indicated by traverse_arg,
+ * calling func on every node. The other arguments carry information that is used by func.
+ */
+
+static ATerm ltraverse(Symbol func, int traverse_arg, ATermList args);
+
+ATerm traverse(Symbol func, int argc, int traverse_arg, ...)
+{
+  ATerm result;
+  va_list args;
+  ATerm arg;
+  ATermList arglist = ATempty;
+  int i;
+
+  va_start(args, traverse_arg);
+
+  /* We convert the arglist to an ATermList */
+  for(i = argc, arg = va_arg(args, ATerm); i != 0; arg = va_arg(args, ATerm), i--) 
+    arglist = ATinsert(arglist, arg);
+      
+  /* ATinsert does it backwardly, so reverse the list (optimizable!) */
+  arglist = ATreverse(arglist);
+
+  /* Now we call the function that does the work for us */
+  result = ltraverse(func, traverse_arg, arglist);
+
+  va_end(args);
+
+  return result;
+}
+
+ATerm ltraverse(Symbol func, int traverse_arg, ATermList args)
+{
+  ATerm t;
+  ATerm result;
+  
+  /* Retrieve the to be traversed term from the argument list */
+  t = ATelementAt(args, traverse_arg);
+  
+  switch(ATgetType(t)) {
+  case AT_APPL:
+    {
+      /* First we try the func on the current term */
+      ATerm funcprod = lookup_prod(func);
+      result = call(funcprod, args);
+      
+      /* If there was no match, then the func will be around the term as a normal form,
+       * so we need to remove it and then search deeper in the tree
+       */
+      if(check_sym(result, func)) {
+	ATermList kids;
+	Symbol sym;
+	ATerm prod;
+	
+	result = ATgetArgument(result,traverse_arg);
+
+	/* Recurse down to the kids */
+	kids = ATgetArguments((ATermAppl) result);
+	args = ATreplace(args, (ATerm) kids, traverse_arg);
+	kids = (ATermList) ltraverse(func, traverse_arg, args);
+	
+	/* Create a new normal form by calling the current production */
+	sym = (Symbol) ATgetAFun((ATermAppl) result);
+	prod = lookup_prod(sym);
+
+	return call(prod, kids);
+      } else {
+	/* Otherwise we will have found a match, and the recursion stops */
+	return result;
+      }
+    }
+    break;
+  case AT_LIST:
+    {
+      ATermList list = (ATermList) t;
+      ATermList newlist = ATempty;
+
+      /* We recursively call descend on each element and recreate the list */
+      for(;!ATisEmpty(list); list = ATgetNext(list)) {
+	args = ATreplace(args, ATgetFirst(list), traverse_arg);
+	newlist = ATinsert(newlist, ltraverse(func, traverse_arg, args));
+      }
+
+      /* ATreverse can be optimized using the term_buffer */
+      return (ATerm) ATreverse(newlist);
+    }
+    break;
+  default:
+    break;
+  }
+
+  return t;
+}
+
+/* Analyze does the same as traverse, but not returning the original sorts, but an
+ * different sort containing accumulated information. The analyze does an outermost search
+ * for a match of the function 'func'. All results are propagated upwardly, combining
+ * the results of recursive calls using the synthesizer in a left associative way.
+ */
+static ATerm lanalyze(Symbol func, Symbol synthesizer, ATerm start, int traverse_arg, ATermList args);
+
+ATerm analyze(Symbol func, Symbol synthesizer, ATerm start, int argc, int traverse_arg, ...)
+{
+  ATerm result;
+  va_list args;
+  ATerm arg;
+  ATermList arglist = ATempty;
+  int i;
+
+  va_start(args, traverse_arg);
+
+  /* We convert the arglist to an ATermList */
+  for(i = argc, arg = va_arg(args, ATerm); i != 0; arg = va_arg(args, ATerm), i--) 
+    arglist = ATinsert(arglist, arg);
+      
+  /* ATinsert does it backwardly, so reverse the list (optimizable!) */
+  arglist = ATreverse(arglist);
+
+  /* Now we call the function that does the work for us */
+  result = lanalyze(func, synthesizer, start, traverse_arg, arglist);
+
+  va_end(args);
+
+  return result;
+}
+
+static ATerm lanalyze(Symbol func, Symbol synthesizer, ATerm start, int traverse_arg, ATermList args)
+{
+  ATerm t;
+  ATerm result;
+  
+  /* Retrieve the to be traversed term from the argument list */
+  t = ATelementAt(args, traverse_arg);
+  
+  switch(ATgetType(t)) {
+  case AT_APPL:
+    {
+      /* First we try the func on the current term */
+      ATerm funcprod = lookup_prod(func);
+      result = call(funcprod, args);
+      
+      /* If there was no match, then the func will be around the term as a normal form,
+       * so we need to remove it and then search deeper in the tree
+       */
+      if(check_sym(result, func)) {
+	ATermList kids;
+	
+	result = ATgetArgument(result,traverse_arg);
+
+	/* Recurse down to the kids */
+	kids = ATgetArguments((ATermAppl) result);
+	args = ATreplace(args, (ATerm) kids, traverse_arg);
+	return lanalyze(func, synthesizer, start, traverse_arg, args);
+	
+      } else {
+	/* Otherwise we will have found a match, and the recursion stops */
+	return result;
+      }
+    }
+    break;
+  case AT_LIST:
+    {
+      ATermList list = (ATermList) t;
+      ATermList synthargs;
+      ATerm synthprod = lookup_prod(synthesizer);
+
+      /* We recursively call lanalyse on all elements of the list.
+       * The results are combined in a leftmost manner using a call to
+       * the synthesizer. Note that the leftmost manner is somewhat arbitrary.
+       * We might implement a more general algorithm in the future.
+       */
+      for(result = start;!ATisEmpty(list); list = ATgetNext(list)) {
+	args = ATreplace(args, ATgetFirst(list), traverse_arg);
+	synthargs = ATmakeList2(result, lanalyze(func, synthesizer, start, traverse_arg, args));
+	result = call(synthprod, synthargs);
+      }
+
+      return result;
+    }
+    break;
+  default:
+    /* A term with no kids, must be a literal so return the default value */
+    return start;
+    break;
+  }
+
+  return t; 
+}
+
+/*}}} */
+
+
 /*{{{  ATerm unquote(ATerm t) */
 
 /* Code to unqoute delayed reduction of terms, in order to implement
@@ -1147,11 +1343,11 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
 
       /* This check obsolete! */
       /* 
-      if(ATisEqual(modname, pattern_caller_id)) 
-        result = ATgetFirst(actualargs);
-      else 
+	 if(ATisEqual(modname, pattern_caller_id)) 
+	 result = ATgetFirst(actualargs);
+	 else 
       */
-        result = ATmakeTerm(pattern_asfix_appl, prod, ws, actualargs);
+      result = ATmakeTerm(pattern_asfix_appl, prod, ws, actualargs);
     } 
     /* We are converting a list without separators back to AsFix.
      * Lists without separators may be lists of characters which need
@@ -1191,18 +1387,18 @@ void deslash(char *str, char *buf)
 {
   while(*str) {
     switch(*str) {
+    case '\\':
+      str++;
+      switch(*str) {
       case '\\':
-        str++;
-        switch(*str) {
-          case '\\':
-            break;
-          default:
-            *buf++ = '\\';
-          }
-        *buf++ = *str;
-        break;
+	break;
       default:
-        *buf++ = *str;
+	*buf++ = '\\';
+      }
+      *buf++ = *str;
+      break;
+    default:
+      *buf++ = *str;
     }
     str++;
   }
@@ -1322,10 +1518,10 @@ void init_patterns()
   ATprotectSymbol(symbol_asfix_lex);
 
   pattern_asfix_term = ATparse("term(<term>,<term>,<term>," \
-				   "<term>,<term>,<term>,<term>,<term>,<term>)");
+			       "<term>,<term>,<term>,<term>,<term>,<term>)");
   pattern_asfix_appl = ATparse("appl(<term>,<term>,[<list>])");
   pattern_asfix_prod = ATparse("prod(<term>,<term>,<term>,<term>," \
-				   "<term>,<term>,<term>,<term>,<term>)");
+			       "<term>,<term>,<term>,<term>,<term>)");
   pattern_asfix_list = ATparse("list(<term>,<term>,[<list>])");
   pattern_asfix_lex  = ATparse("lex(<str>,<term>)");
   pattern_asfix_l    = ATparse("l(<str>)");
@@ -1336,13 +1532,13 @@ void init_patterns()
   pattern_listtype_sep = ATparse("listtype(sort(<str>),ql(<str>))");
   pattern_char       = ATparse("\"CHAR\"");
   pattern_lexical_constructor = ATparse(
-     "prod(id(\"caller\"),w(\"\"),[l(<str>),w(\"\"),ql(\"(\"),w(\"\")," \
-     "iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
-     "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
+					"prod(id(\"caller\"),w(\"\"),[l(<str>),w(\"\"),ql(\"(\"),w(\"\")," \
+					"iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
+					"w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
   pattern_term_lexical_constructor = ATparse(
-     "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<str>),w(\"\"),ql(\"(\")," \
-     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")]," \
-     "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
+					     "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<str>),w(\"\"),ql(\"(\")," \
+					     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")]," \
+					     "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
   pattern_caller_id   = ATparse("id(\"caller\")");
 
   ATprotect(&ws);
@@ -1397,7 +1593,7 @@ void init_patterns()
   record_sym = ATmakeSymbol("stats", 2, ATfalse);
   ATprotectSymbol(record_sym);
 
-   atexit(write_memo_profile);
+  atexit(write_memo_profile);
 #endif
 
 }
@@ -1422,7 +1618,7 @@ ATerm slice(ATerm l1, ATerm l2)
 
   len = slice_length(l1, l2);
   if( MAX_STORE < len )
-     len = MAX_STORE;
+    len = MAX_STORE;
 
   for(i=0; i<len; i++) {
     term_store[i] = ATgetFirst((ATermList)l1);
