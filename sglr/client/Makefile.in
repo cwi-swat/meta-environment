@@ -83,10 +83,10 @@ clean:
 # Generic rules
 
 %.tif.c: %.tifs
-	${prefix}/bin/tifstoc -tool $* $<
+	$(ATERM)/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	${prefix}/bin/toolbus -gentifs $<
+	$(TOOLBUS)/bin/toolbus -gentifs $<
 
 
 # Specific ones
