@@ -3,6 +3,7 @@ $Id$
 2003/10/07 (jurgenv@cwi.nl)
  * Moved builtins library from the asf package to this package
  * Renamed the libME subdirectory to 'lib'
+ * Set version to 1.8
 
 2003/10/07 (markvdb@cwi.nl)
  * Introduced the new tuple concept.
