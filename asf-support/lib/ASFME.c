@@ -1054,7 +1054,7 @@ ATbool ASF_isValidEquations(ASF_Equations arg)
 
 inline ATbool ASF_isEquationsAbsent(ASF_Equations arg)
 {
-  return ATisEqual((ATerm)arg, ASF_patternEquationsAbsent);
+  return ATmatchTerm((ATerm)arg, ASF_patternEquationsAbsent);
 }
 
 /*}}}  */
@@ -1062,7 +1062,7 @@ inline ATbool ASF_isEquationsAbsent(ASF_Equations arg)
 
 inline ATbool ASF_isEquationsPresent(ASF_Equations arg)
 {
-  return !(ATisEqual((ATerm)arg, ASF_patternEquationsAbsent));
+  return !(ATmatchTerm((ATerm)arg, ASF_patternEquationsAbsent));
 }
 
 /*}}}  */
@@ -1157,7 +1157,7 @@ ATbool ASF_isValidCondEquationList(ASF_CondEquationList arg)
 
 inline ATbool ASF_isCondEquationListEmpty(ASF_CondEquationList arg)
 {
-  return ATisEqual((ATerm)arg, ASF_patternCondEquationListEmpty);
+  return ATmatchTerm((ATerm)arg, ASF_patternCondEquationListEmpty);
 }
 
 /*}}}  */
@@ -2199,7 +2199,7 @@ ATbool ASF_isValidCHARList(ASF_CHARList arg)
 
 inline ATbool ASF_isCHARListEmpty(ASF_CHARList arg)
 {
-  return ATisEqual((ATerm)arg, ASF_patternCHARListEmpty);
+  return ATmatchTerm((ATerm)arg, ASF_patternCHARListEmpty);
 }
 
 /*}}}  */

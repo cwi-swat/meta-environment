@@ -1,5 +1,5 @@
 /*
- * Generated at Thu May 10 17:05:38 2001
+ * Generated at Tue May 15 17:05:21 2001
  */
 
 #include "ASFME_dict.h"
