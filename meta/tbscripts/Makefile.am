@@ -20,7 +20,6 @@ TBSCRIPTS = \
   parse-utils.tb \
   print-module.tb \
   process-eqs.tb \
-  query.tb \
   restore-term-brackets.tb \
   save-module.tb \
   set-parsetable.tb \
