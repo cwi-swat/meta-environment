@@ -124,7 +124,7 @@ static void debug_handler(int sig)
   if (f != NULL) {
     while (fgets(buf, BUFSIZ, f) != NULL) {
       int length = strlen(buf);
-      while (isspace(buf[length-1])) {
+      while (isspace((int)buf[length-1])) {
 	buf[--length] = '\0';
       }
       strncpy(processes[nr_dbg_procs], buf, MAX_PROCNAME_LENGTH-1);

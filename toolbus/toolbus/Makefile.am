@@ -17,23 +17,46 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-bin_PROGRAMS         = toolbus ctif
-bin_SCRIPTS          = idef2tif
+bin_PROGRAMS = toolbus ctif
+bin_SCRIPTS = idef2tif
 
-pkgdata_DATA            = logger.tcl viewer.tcl
+pkgdata_DATA = logger.tcl viewer.tcl
 
-EXTRA_DIST           = txt_dbg.c logger.tcl.src viewer.tcl.src \
-                       script.l script.y idef2tif.src
+EXTRA_DIST = \
+	txt_dbg.c \
+	logger.tcl.src \
+	viewer.tcl.src \
+	script.l \
+	script.y \
+	idef2tif.src
 
-toolbus_SOURCES      = calls.c env.c interpreter.c  main.c match.c \
-                       monitor.c procs.c server.c tools.c typecheck.c env.h \
-                       interpreter.h match.h monitor.h script.h typecheck.h
-toolbus_LDADD        = lex.yy.o y.tab.o  -L$(top_builddir)/libtb -ltb
+toolbus_SOURCES = \
+	calls.c \
+	env.c \
+	env.h \
+	interpreter.c \
+	interpreter.h \
+	main.c \
+	match.c \
+	match.h \
+	monitor.c \
+	monitor.h \
+	procs.c \
+	script.h \
+	server.c \
+	tools.c \
+	typecheck.c \
+	typecheck.h
 
-ctif_SOURCES         = ctif.c
-ctif_LDADD           = -L$(top_builddir)/libtb -ltb
+toolbus_LDADD = \
+	lex.yy.o \
+	y.tab.o \
+	-L$(top_builddir)/libtb -ltb
 
-CLEANFILES  = \
+ctif_SOURCES = ctif.c
+ctif_LDADD = -L$(top_builddir)/libtb -ltb
+
+CLEANFILES = \
 	lex.yy.c \
 	y.tab.c \
 	y.tab.h \
@@ -41,16 +64,20 @@ CLEANFILES  = \
 	viewer.tcl \
 	idef2tif
 
-YFLAGS               = -d
+YFLAGS = -d
 
-#DEBUG_DEFS	     = -DDBG_PROC_COMM
+#DEBUG_DEFS = -DDBG_PROC_COMM
 
-TOOLBUS_DEFS         = -DCPP='"$(CPP) $(CPPFLAGS)"' \
-                       -DVIEWER_TCL=\"$(pkgdatadir)/viewer.tcl\" \
-                       -DLOGGER_TCL=\"$(pkgdatadir)/logger.tcl\" \
-		       ${DEBUG_DEFS}
+TOOLBUS_DEFS = \
+	-DCPP='"$(CPP) $(CPPFLAGS)"' \
+	-DVIEWER_TCL=\"$(pkgdatadir)/viewer.tcl\" \
+	-DLOGGER_TCL=\"$(pkgdatadir)/logger.tcl\" \
+	${DEBUG_DEFS}
 
-INCLUDES            = -I$(top_srcdir)/libtb -I$(srcdir) -I. $(TOOLBUS_DEFS)
+INCLUDES = \
+	-I$(top_srcdir)/libtb \
+	-I$(srcdir) \
+	-I. $(TOOLBUS_DEFS)
 
 %.tcl : %.tcl.src
 	sed 's#__WISH__#$(WISH)#g;' < $< > $@
@@ -65,4 +92,3 @@ idef2tif : idef2tif.src Makefile
 	sed 's#__PERL__#$(PERL)#g;s#__TOOLBUSBIN__#$(bindir)#g;' \
 	   < $< > $@ && \
 	chmod +x $@
-

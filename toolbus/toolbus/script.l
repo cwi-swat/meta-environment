@@ -149,7 +149,7 @@ endlet        { ll_inc_pos(6);return(ENDLET); }
 		  *ptr++ = c;
 		  if(c == '\n'){
 		    lino++;
-		    while((c = input()) && isspace(c))
+		    while((c = input()) && isspace((int)c))
 			  ;
 		    if(c == '>'){
 		      if((c2 = input()) && (c2 == '>'))
