@@ -40,17 +40,17 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(ATERM)/lib -lATerm \
 		$(SOCKLIBS)
 
-DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
-          -DSGLR=\"$(SGLR)\"   \
-          -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
-          -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
-          -DERROR_SUPPORT=\"$(ERROR_SUPPORT)\"   \
-          -DATERM=\"$(ATERM)\" \
-          -DTOOLBUSLIB=\"$(TOOLBUSLIB)\" \
-          -DSOCKLIBS=\"$(SOCKLIBS)\" \
-          -DIDEF2TIF=\"$(TOOLBUS)/bin/idef2tif\" \
-          -DTIFSTOC=\"$(TOOLBUS)/bin/tifstoc\" \
-          -DCOMPILER=\"$(CC)\" \
+DEFINES = -DASC_SUPPORT="\"$(ASC_SUPPORT)\"" \
+          -DSGLR="\"$(SGLR)\""   \
+          -DPT_SUPPORT="\"$(PT_SUPPORT)\""   \
+          -DASF_SUPPORT="\"$(ASF_SUPPORT)\""   \
+          -DERROR_SUPPORT="\"$(ERROR_SUPPORT)\""   \
+          -DATERM="\"$(ATERM)\"" \
+          -DTOOLBUSLIB="\"$(TOOLBUSLIB)\"" \
+          -DSOCKLIBS="\"$(SOCKLIBS)\"" \
+          -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
+          -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
+          -DCOMPILER="\"$(CC)\"" \
           -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
 INCLUDES  = $(DEFINES) \
