@@ -7,6 +7,7 @@ INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(SDF_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include
 
 bin_PROGRAMS = ptpretty 
@@ -20,6 +21,7 @@ ptpretty_SOURCES = main.c pretty.c ptpretty.tif.c
 ptpretty_LDADD = \
 	-L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
 	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm  \
 	$(SOCKLIBS)

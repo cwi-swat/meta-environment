@@ -36,6 +36,11 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   ParseTree distribution is in DIR])
 AC_SUBST(PT_SUPPORT)
 
+dnl Require error-support package 
+AC_PACKAGE_REQUIRE(error-support, error-support,
+   [  --with-error-support=DIR   error-support distribution is in DIR])
+AC_SUBST(ERROR_SUPPORT)
+
 dnl Require sdf-support package
 AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config, 
    [  --with-sdf-support=DIR  sdf-support is in DIR])

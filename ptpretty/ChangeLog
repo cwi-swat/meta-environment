@@ -1,5 +1,8 @@
 # $Id$
 
+2004-01-13	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Added dependency on error-support
+
 2003-10-07	Jurgen Vinju	<jurgenv@cwi.nl>
   * Function productions are ignored from now on
  
