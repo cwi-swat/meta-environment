@@ -17,6 +17,7 @@ void   ATBdisconnect(int file_desc);
 int    ATBeventloop(void);
 
 ATerm ATBpack(ATerm t);
+ATerm ATBunpack(ATerm t);
 
 ATerm  ATBreadTerm(int file_desc);
 int    ATBwriteTerm(int file_desc, ATerm term);

@@ -94,8 +94,6 @@ static void resize_buffer(int size);
 static int mwrite(int fd, char *buf, int len);
 static int mread(int fd, char *buf, int len);
 static void handshake(Connection *connection);
-ATerm ATBunpack(ATerm t);
-
 /*}}}  */
 
 /*{{{  int ATBinitialize(int argc, char *argv[]) */
@@ -416,7 +414,7 @@ ATerm  ATBreadTerm(int fd)
   t = ATparse(buffer+LENSPEC);
   assert(t);
 
-  t = ATBunpack(t);
+  /*t = ATBunpack(t);*/
 
   return t;
 }
