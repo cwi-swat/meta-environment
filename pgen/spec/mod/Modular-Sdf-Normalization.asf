@@ -14,8 +14,11 @@ equations
 %% the module name the production was defined in).
 
 %%  [0] module M is* is s*              = module M is* exports is s*
-  [0] module M s* = module M s*' when annotate(M, s*) = s*', s* != s*'
-  [0] module M is* is s* = module M is* exports is s*' when annotate(M, s*) = s*'
+  [0] module M s* = module M s*' 
+        when annotate(M, s*) = s*', s* != s*'
+%%  [0] module M is* is s* = module M is* exports is s*' 
+%%        when annotate(M, s*) = s*'
+  [0] module M is* is s* = module M is* exports is s*
   [0] s*1 exports _G1 exports _G2 s*2 = s*1 exports _G1 _G2 s*2
   [0] s*1 hiddens _G1 hiddens _G2 s*2 = s*1 hiddens _G1 _G2 s*2
   [0] s*1 hiddens _G1 exports _G2 s*2 = s*1 exports _G2 hiddens _G1 s*2

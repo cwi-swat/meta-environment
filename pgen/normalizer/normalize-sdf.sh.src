@@ -90,7 +90,7 @@ done
 
 cat ${INPUT} | ${SGLR} -p ${SDF2TABLE} -1 > $tmp.parsed || exit 1
 
-CMD="${NORMALIZER} -i $tmp.parsed -o -"
+CMD="${NORMALIZER} -m ${TOPMODULE} -i $tmp.parsed -o -"
 
 
 if [ "a${UNPARSE}" = "atrue" ]; then

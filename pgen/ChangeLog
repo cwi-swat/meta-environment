@@ -19,6 +19,15 @@
 
 $Id$
 
+2001/04/27 (markvdb@cwi.nl)
+  * Added -m to normalizer.
+  * Regenerated some checks due to next point.
+  * Context-free functions defined in priority section are no
+    longer promoted to ordinary syntax section. Thus it is no
+    longer possible to define a (context-free) function by giving
+    only the priority declaration.
+  * Version number increased to 0.8!
+
 2001/03/15 (markvdb@cwi.nl)
   * Small bug removed in normalizer which causes r[[LAYOUT]] to occur
     as a non normalized term.

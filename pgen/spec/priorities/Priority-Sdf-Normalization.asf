@@ -8,8 +8,11 @@ equations
 %% priorities declarations and takes the transitive closure.
 
   [0]
-        Pr(_G) = pr*1, norm[[ pr*1 ]] = pr*2, ~Pr(_G) syntax[[ pr*2 ]] = _G'
-        ====================================================================
+        Pr(_G) = pr*1, 
+        norm[[ pr*1 ]] = pr*2,
+        %% ~Pr(_G) syntax[[ pr*2 ]] = _G'
+        ~Pr(_G) = _G'
+        =============
         p[[ _G ]] = _G' priorities trans[[ pr*2 ++ assoc[[_G']] ]]
 
 %% The function $\mfun{norm}\sem{\_}$ normalizes a priority declaration to a list
