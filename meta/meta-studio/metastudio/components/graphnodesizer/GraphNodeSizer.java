@@ -15,6 +15,7 @@ public class GraphNodeSizer implements GraphNodeSizerTif, Runnable {
 	private MetaGraphFactory factory;
 	private GraphNodeSizerBridge bridge;
 
+	// TODO: get rid of this static method, another way must be possible.
 	public static void registerFontMetrics(FontMetrics m) {
 		metrics = m;
 	}

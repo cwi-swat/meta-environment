@@ -2,7 +2,6 @@ package metastudio.components.graphs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -19,6 +18,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
+import metastudio.components.graphnodesizer.GraphNodeSizer;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
@@ -44,6 +44,9 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 
 		graphPanel = new GraphPanel(id);
 
+		// TODO: get this spaghetti crosslink out!
+		GraphNodeSizer.registerFontMetrics(graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT)));
+		
 		slider = createSlider();
 		setSliderToolTip();
 		MouseWheelListener wheel = new MouseWheelListener() {
@@ -124,40 +127,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 		}
 	}
 
-	public void renderGraph(String id, ATerm graphTerm) {
-	    if (id.equals(getId())) {
-	        Graph graph = factory.GraphFromTerm(graphTerm);
-	        final FontMetrics metrics = graphPanel.getFontMetrics(Preferences
-	                .getFont(GraphPanel.PREF_NODE_FONT));
-	        
-	        NodeSizer sizer = new NodeSizer() {
-	            public int getWidth(Node node) {
-	                return metrics.stringWidth(node.getLabel())
-	                + Preferences.getInteger("graph.node.border.width") * 2;
-	            }
-	            public int getHeight(Node node) {
-	                return metrics.getHeight()
-	                + Preferences.getInteger("graph.node.border.height")
-	                * 2;
-	            }
-	        };
-	        
-	        graph = orderNodes(graph);
-	        graph = sizeNodes(graph, sizer);
-	        
-	        postEvent(getFactory().make("rendered-graph(<str>,<term>)", getId(),
-	                graph.toTerm()));
-	        
-	    }
-	}
-
-	protected Graph orderNodes(Graph graph) {
-		return graph;
-	}
-
-	protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
-		return graph.sizeNodes(sizer);
-	}
+	
 
 	public GraphPanel getGraphPanel() {
 		return graphPanel;

@@ -9,6 +9,7 @@ SUBDIRS = \
 	errorlist \
 	infolist \
 	dialogtool \
+	graphnodesizer \
 	.
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}

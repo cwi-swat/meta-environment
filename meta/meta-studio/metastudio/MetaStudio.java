@@ -19,9 +19,11 @@ import javax.swing.JSplitPane;
 
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.dialogtool.DialogTool;
+import metastudio.components.graphnodesizer.GraphNodeSizer;
 import metastudio.components.menubar.MenuBar;
 import metastudio.components.statusbar.StatusBar;
 import metastudio.components.toolbar.ToolBar;
+import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
@@ -91,12 +93,14 @@ public class MetaStudio extends JFrame {
 
         Container content = getContentPane();
         content.setLayout(new BorderLayout());
+        
+        GraphNodeSizer sizer = new GraphNodeSizer(new MetaGraphFactory(factory), args);
+        spawn(sizer, "graph-node-sizer");
 
         ToolBar toolbar = new ToolBar(factory, args);
         spawn(toolbar, "tool-bar");
 
         content.add(toolbar, BorderLayout.NORTH);
-        
         content.add(createMainPane(args), BorderLayout.CENTER);
     }
 

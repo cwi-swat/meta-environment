@@ -10,6 +10,10 @@
 #include "sglr.idef"
 #include "structure-editor.idef"
 #include "unparser.idef"
+#include "kernel-configuration.tb"
+#include "user-configuration.tb"
+
+/* user interface */
 #include "user-interface.tb"
 #include "menubar.idef"
 #include "toolbar.idef"
@@ -18,8 +22,7 @@
 #include "errorlist.idef"
 #include "infolist.idef"
 #include "dialogtool.idef"
-#include "kernel-configuration.tb"
-#include "user-configuration.tb"
+#include "graphnodesizer.idef"
 
 /* tide support */
 #define TIDE_PASSIVE

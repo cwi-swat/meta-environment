@@ -44,13 +44,6 @@ in
       . snd-msg(debugging(On))
       . snd-ack-event(UI,debugging(On))
     +
-      rec-msg(ui-render-graph(GraphId?, Graph?))
-      . snd-do(UI, render-graph(GraphId, Graph))
-    +
-      rec-event(UI, rendered-graph(GraphId?, Graph?))
-      . snd-msg(ui-rendered-graph(GraphId, Graph))
-      . snd-ack-event(UI, rendered-graph(GraphId, Graph))
-    +
       rec-event(UI, get-events(Type?))
       . snd-msg(cm-get-events(Type))
       . rec-msg(cm-events(EventList?))

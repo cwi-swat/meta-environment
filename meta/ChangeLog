@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Nov 26 09:38:08 CET 2004 <jurgenv@cwi.nl>
+ * Factored out separate GraphNodeSizer tool from meta-studio.idef
+
 Thu Nov 25 10:45:32 CET 2004 <jurgenv@cwi.nl>
  * As an example, factored out StatusBar as a separate ToolBus tool
    from meta-studio.
