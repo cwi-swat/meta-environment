@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Nov  7 16:25:59 2001
+ * Generated at Thu Dec 13 17:19:15 2001
  */
 
 #ifndef __MuASF_dict_H

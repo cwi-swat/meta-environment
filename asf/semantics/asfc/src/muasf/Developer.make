@@ -18,7 +18,7 @@ adt-to-c=adt-to-c
 api: ${NAME}.c
 
 ${NAME}.adt: ${SOURCE}
-	${sdf2-to-adt} -2 -r -i $< -o ${NAME}.adt
+	${sdf2-to-adt} -r -i $< -o ${NAME}.adt
 
 ${NAME}.c: ${NAME}.adt ${NAME}.pro
 	${adt-to-c} -i ${NAME}.adt --prologue ${NAME}.pro \
