@@ -2,12 +2,12 @@
 
 TBSCRIPTS     = meta-interface.tb error-display.tb
 
-EXTRA_DIST    = meta-interface.tb.src error-display.tb
+EXTRA_DIST    = meta-interface.tb.src error-display.tb \
+		meta.sh.src pt-dump.sh.src eqs-dump.sh.src
 
 pkgdata_DATA     = $(TBSCRIPTS) 
 
 bin_SCRIPTS = meta pt-dump eqs-dump
-EXTRA_DIST = meta.sh.src pt-dump.sh.src eqs-dump.sh.src
 
 
 % : %.sh.src Makefile
