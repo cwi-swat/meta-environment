@@ -7,13 +7,9 @@ module Outstrings
 
   exports
     context-free syntax
-      "length" "of" String                 -> Integer
-      "length" "of" "quoteless" String     -> Integer
       "string" "of" Integer "layoutchars"  -> String
       "string" "of" Integer String "chars" -> String
       deslash(String)                      -> String 
-      slash(String)                        -> String  
-      noslash(String)                      -> String 
 
 hiddens
     variables

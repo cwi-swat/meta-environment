@@ -1,7 +1,7 @@
 module NewLine
 
 imports basic/Whitespace
-imports basic/Strings
+imports basic/Bytes
 
 exports
   context-free syntax

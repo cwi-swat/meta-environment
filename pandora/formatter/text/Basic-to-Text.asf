@@ -40,9 +40,9 @@ equations
              Text2 :=
                add to last line (Text1,
                                string of X1 - X2 layoutchars || String2)
-             =======
+             ===>
              place String1 with (X1,Y) & Defs and Text1 && (X2,Y) and 'C =
-               Text2 && (X1 + length of String2,Y)
+               Text2 && (X1 + length(String2),Y)
 
   [BtT2'2]   Y1 != Y2
              ========

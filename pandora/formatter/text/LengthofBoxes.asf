@@ -12,8 +12,8 @@ equations
 %%\smallskip
 
   [LoB1'1]   String2 := deslash(String1),
-             Int := length of String2
-             =======================
+             Int := length(String2)
+             ===>
              length of String1 with Frame and 'C = String2 (Int,0) ## (Int,0)
 
 %% The equations \ref{Eq:LoB1'2} through \ref{Eq:LoB1'16} deal with the

@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Aug 20 10:56:04 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text/Outstrings.{asf,sdf}:
+   - use library string length function
+   - removed unused slash and noslash
+
 Wed May 12 13:32:34 CEST 2004 <{jong,kooiker}@cwi.nl>
  * generator/main.c: default in/out to - (stdin)
 
