@@ -75,7 +75,6 @@ public class MetaStudio
     // TODO: move preference constants to Preferences class
     private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
     private static final double LEFTPANEL_DIVIDER_LOCATION = 0.65;
-    private static final double MAINPANEL_DIVIDER_LOCATION = 0.3;
 
     private static ATerm ACTION_MENUBAR;
     private static ATerm ACTION_TOOLBAR;
@@ -97,7 +96,7 @@ public class MetaStudio
     private int mouseX;
     private int mouseY;
 
-    private JTabbedPane graphTabs;
+    private JTabbedPane mainTabs;
 
     private Graph graph;
     private ImportGraphPanel importGraphPanel;
@@ -219,16 +218,6 @@ public class MetaStudio
         parseTreePanel = new ParseTreePanel(metaGraphFactory, bridge);
     }
 
-    private JSplitPane createMainPanel() {
-        JSplitPane leftPanel = createLeftPane();
-        JSplitPane rightPanel = createRightPane();
-        JSplitPane mainPanel =
-            new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-        mainPanel.setDividerLocation(MAINPANEL_DIVIDER_LOCATION);
-
-        return mainPanel;
-    }
-
     private JPanel createMessageStatusPanel() {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
@@ -247,11 +236,11 @@ public class MetaStudio
     }
 
     private JSplitPane createRightPane() {
-        graphTabs = createGraphTabs();
+        mainTabs = createGraphTabs();
         JPanel panel = createMessageStatusPanel();
 
         JSplitPane rightPanel =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphTabs, panel);
+            new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainTabs, panel);
         rightPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
         rightPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
         return rightPanel;
@@ -275,14 +264,16 @@ public class MetaStudio
     private JTabbedPane createGraphTabs() {
         JTabbedPane tabs = new JTabbedPane();
 
-        graphTabs = tabs;
+        mainTabs = tabs;
 
-        createModuleGraph();
-        addGraphPanel(importGraphPanel, "Import graph");
+        JSplitPane moduleBrowser = createModuleBrowser();
+        
+        mainTabs.insertTab("Modules", null, moduleBrowser, "Modules", mainTabs.getTabCount());
 
         createParsetreePanel();
-        addGraphPanel(parseTreePanel, "Parsetree graph");
-
+        addGraphPanel(parseTreePanel, "parsetree");
+        mainTabs.insertTab("Parse tree", null, new JScrollPane(parseTreePanel), "Parse tree", mainTabs.getTabCount());
+        
         return tabs;
     }
 
@@ -296,8 +287,7 @@ public class MetaStudio
         toolBar = createToolBar();
         content.add(toolBar, BorderLayout.NORTH);
 
-        JSplitPane mainPanel = createMainPanel();
-        content.add(mainPanel, BorderLayout.CENTER);
+        content.add(createRightPane(), BorderLayout.CENTER);
     }
 
     private JTabbedPane createMessageTabs() {
@@ -331,6 +321,15 @@ public class MetaStudio
         moduleStatus.setBackground(color);
     }
 
+    private JSplitPane createModuleBrowser() {
+        JSplitPane left = createLeftPane();
+        
+        createModuleGraph();
+        addGraphPanel(importGraphPanel, "import");
+        
+        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, new JScrollPane(importGraphPanel));
+    }
+    
     private void createModuleGraph() {
         Color color;
 
@@ -478,11 +477,8 @@ public class MetaStudio
 
     //}}}
 
-    private void addGraphPanel(GraphPanel panel, String toolTip) {
-        int index = graphPanels.size();
-        panel.setIndex(index);
-        graphPanels.put(panel.getId(), panel);
-        graphTabs.insertTab(panel.getId(), null, new JScrollPane(panel), toolTip, index);
+    private void addGraphPanel(GraphPanel panel, String id) {
+        graphPanels.put(id, panel);
     }
 
     private GraphPanel getGraphPanel(String id) {
@@ -626,10 +622,11 @@ public class MetaStudio
         if (id.equals(importGraphPanel.getId())) {
             this.graph = graph;
         }
+        System.err.println("id: " + id);
         GraphPanel graphPanel = getGraphPanel(id);
         graphPanel.setGraph(graph);
         graphPanel.repaint();
-        graphTabs.setSelectedIndex(graphPanel.getIndex());
+        mainTabs.setSelectedIndex(graphPanel.getIndex());
     }
 
     public void moduleSelected(Module module) {
