@@ -122,15 +122,32 @@ equations
   [trli-1'2] remove-trans-from-list-id(funid(""" "{" Char+ "}" "-" "t""r""a""n""s" """)) =
                funid(""" "{" Char+ "}" """)
 
-%% functions to check whether we are dealing with a dummy list function as part
+%% functions to check whether we are dealing with an ignored function as part
 %% of an optimization
-  [mrli-1'1] make-dummy-list-id(funid(""" "{" Char+ "}" """)) =
-               funid(""" "{" "d""u""m""m""y" "}" """)
+  [mrli-1'1] is-list-funid(funid("""Char+""")) = false
+             ====
+             make-ignored-funid(funid(""" Char+ """)) =
+               funid(""" Char+ "-""i""g""n""o""r""e""d" """)
 
-  [irli-1'1] is-dummy-list-id(funid(""" "{" "d""u""m""m""y" "}" """)) =
+  [mrli-1'3] make-ignored-funid(funid(""" "{" Char+ "}" """)) =
+               funid(""" "{" Char+ "-""i""g""n""o""r""e""d" "}" """)
+
+  [mrli-1'2] is-quoted-funid(funid(Char+)) = false
+             ====
+             make-ignored-funid(funid(Char+)) =
+               funid(Char+ "-""i""g""n""o""r""e""d")
+
+
+  [irli-1'1] is-ignored-funid(funid(""" Char+ "-""i""g""n""o""r""e""d" """)) =
                true
 
-  [default-irli] is-dummy-list-id(Funid) = false
+  [irli-1'2] is-ignored-funid(funid(""" "{" Char+ "-""i""g""n""o""r""e""d" "}" """)) =
+               true
+
+  [irli-1'3] is-ignored-funid(funid(Char+ "-""i""g""n""o""r""e""d")) =
+               true
+
+  [default-irli] is-ignored-funid(Funid) = false
 
   [ic-1'1] is-cons(funid("c""o""n""s")) = true
 

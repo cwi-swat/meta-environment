@@ -305,7 +305,7 @@ equations
               sigargs2cbuild(Sigarg,Sigarg+,Aint1) = (ActualArgs',,succ(Aint2))
 
   [l2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
-             is-dummy-list-id(Funid) = false,
+             is-ignored-funid(Funid) = false,
              make-atmp(Aint+) = Expression,
              make-c-temp(Aint1) = Expression2,
              listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = (Stat*2,Aint2),
@@ -317,7 +317,7 @@ equations
              list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*4,Aint2)
 
   [dl2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
-              is-dummy-list-id(Funid) = true,
+              is-ignored-funid(Funid) = true,
               make-c-temp(Aint1) = Expression2,
               listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = 
                 (Stat*2,Aint2)
