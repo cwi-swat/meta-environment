@@ -4,7 +4,7 @@ exports
 imports basic/Booleans
 imports basic/Integers
 
-  sorts Elem Bag[[Elem]]  
+  sorts Bag[[Elem]]  
 
 context-free syntax
    "{" {Elem ","}* "}"                       -> Bag[[Elem]] {constructor}

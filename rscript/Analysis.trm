@@ -1,14 +1,4 @@
-
-%%begin
-%%declare x : natural, y : natural, z : natural;
-
-%%[1] x := 3;
-%%[4] if 3 then [2] z := y + 3 else [3] x := 4 fi;
-%%[5] y := z
-%%end
-
-
-analyze(
+controlflow(
 
 begin
 declare x : natural, y : natural, z : natural;
@@ -16,7 +6,8 @@ declare x : natural, y : natural, z : natural;
 x := 3;
 if 3 then z := y + 3 else x := 4 fi;
 y := z
-end
+end,
+[]
 
 )
 
