@@ -534,6 +534,32 @@ static PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems,
 }
 
 /*}}}  */
+/*{{{  static ATerm getFirstArgument(PT_Tree trm) */
+
+static PT_Tree getFirstArgument(PT_Tree trm)
+{
+  PT_Args args;
+
+  if (!PT_hasTreeArgs(trm)) {
+    return NULL;
+  }
+
+  args = PT_getTreeArgs(trm);
+
+  while (PT_hasArgsHead(args) &&
+	 (PT_isTreeLit(PT_getArgsHead(args)) ||
+	  PT_isTreeLayout(PT_getArgsHead(args)))) {
+    args = PT_getArgsTail(args);
+  }
+
+  if (PT_hasArgsHead(args)) {
+    return PT_getArgsHead(args);
+  }
+
+  return NULL;
+}
+
+/*}}}  */
 
 /* Other utilities */
 /*{{{  static ATbool no_new_vars(PT_Tree trm, ATerm env) */
@@ -1260,6 +1286,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 }
 /*}}}  */
 
+
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
@@ -1306,38 +1333,34 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 
 static PT_Tree reduce(PT_Tree trm, int depth)
 {
-  PT_Production top_ofs, first_ofs;
-  PT_Args termargs, tmpargs;
+  PT_Tree first_arg;
+  PT_Production top_ofs;
   ATerm env = (ATerm) ATempty;
   equation_entry *entry = NULL;
 
   top_ofs = PT_getTreeProd(trm);
-  termargs = PT_getTreeArgs(trm);
+  first_arg = getFirstArgument(trm);
 
-  /* first try equations with guarded first arguments */
-  tmpargs = termargs;
-  while (PT_hasArgsHead(tmpargs) &&
-	 (PT_isTreeLit(PT_getArgsHead(tmpargs)) ||
-	  PT_isTreeLayout(PT_getArgsHead(tmpargs)))) {
-    tmpargs = PT_getArgsTail(tmpargs);
-  }
+  /* first try equations that have (guarded) first arguments */
+  if (first_arg != NULL) {
+    PT_Production first_ofs = PT_getTreeProd(first_arg);
 
-  if (PT_hasArgsHead(tmpargs)) {
-    PT_Tree firstArg = PT_getArgsHead(tmpargs);
-    if (PT_isTreeAppl(firstArg)) {
-      first_ofs = PT_getTreeProd(PT_getArgsHead(tmpargs));
+    while ((entry = find_equation(entry, top_ofs, first_ofs))) {
+      env = try(trm, entry, depth);
 
-      while ((entry = find_equation(entry, top_ofs, first_ofs))) {
-	env = try(trm, entry, depth);
-  
-	if (!is_fail_env(env)) {
-	  return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
-	}
+      if (!is_fail_env(env)) {
+	/* This should not happen here! Only substition should take
+	 * place here and in rewriteInnermost the recursive call should
+	 * be made.
+	 */
+	return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
       }
     }
   }
 
-  /* then try equations with variables as first arguments */
+  /* then try equations with variables as first arguments or
+   * that are constant terms
+   */
   while ((entry = find_equation(entry, top_ofs, (PT_Production) NULL))) {
     env = try(trm, entry, depth);
 
