@@ -7,9 +7,7 @@ TBSCRIPTS = \
   compile-module.tb \
   dump-equations.tb \
   dump-parsetable.tb \
-  edit-equations.tb \
-  edit-syntax.tb \
-  edit-term.tb \
+  editors.tb \
   editor-creator.tb \
   eqs-dumper.tb \
   file-creator.tb \
