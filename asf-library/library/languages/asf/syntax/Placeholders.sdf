@@ -1,9 +1,0 @@
-module languages/asf/syntax/Placeholders[X]
-
-exports
-
-lexical syntax
-
-"<" `X` ">" -> X
-
-
