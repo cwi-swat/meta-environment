@@ -10,10 +10,11 @@ tool text-edit is {
 
 process Edit-master is
 let
-TE: text-edit
+TE:text-edit 
 in
   rec-msg(get-editor-tool-id).
   execute(text-edit, TE?) . 
+  snd-do(TE,load-file("/home/kuipers/petr/lib/editor.el")).
   snd-msg(editor-tool-id(TE)). (
     rec-msg(get-editor-tool-id).
     snd-msg(editor-tool-id(TE))
