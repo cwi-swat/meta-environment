@@ -1,5 +1,18 @@
 /* $Id$ */
 
+Wed Sep  1 14:29:35 CEST 2004 <fagidiot@daimi.au.dk>
+ * meta-scripts/meta-interface.tb.src:
+   - process Meta-Interface, added
+      extra-mod-path-hook,
+      get-asf-equations-text-hook,
+      get-modulenames-for-consistency-checking-hook,
+      get-open-syntax-parse-handler-hook,
+      get-parse-equation-checking-hook,
+      termstore-consistency-check-hook.
+   - process Additional-Interface, added
+      do-consistency-check-hook.
+ * See ASDF/hooks for motivations.
+	
 Mon Aug  2 14:32:37 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
  * meta-scripts/error-display.tb:
    - Added message for clearing rewrite errors
