@@ -5,7 +5,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
 libdir=@libdir@
-PERL=@PERL@
+PERL=perl
 
 PATH="$PATH:$bindir"
 
