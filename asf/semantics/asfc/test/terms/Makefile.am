@@ -8,7 +8,7 @@ SPECS = LexConcat     \
         IterN \
         Perm \
         OutermostList \
-        Set \
+        Pico-Set \
         Tuple \
         ReturnsList
            

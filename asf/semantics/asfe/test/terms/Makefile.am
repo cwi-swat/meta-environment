@@ -1,8 +1,6 @@
 # $Id$
 
-EXTRA_DIST = Pico-Booleans.1.trm.afme \
-             Pico-Booleans.2.trm.afme \
-             Pico-Integers.1.trm.afme \
+EXTRA_DIST = Pico-Integers.1.trm.afme \
              Pico-Integers.2.trm.afme \
              Pico-Integers.3.trm.afme \
              Pico-eval.1.trm.afme \
