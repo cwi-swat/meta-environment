@@ -50,23 +50,21 @@ in
            rec-msg(done) 
          + 
            rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                      ambiguities(I?)))).
+                                                       ambiguities(I?)))).
            printf("Parse of %s returned %d ambiguities",Mname,I). 
            snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
            rec-msg(done)  
          + 
            rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                      cycle(Cycle?)))).
+                                                       cycle(Cycle?)))).
            printf("Parse returned a cycle\n").
            printf("Cycle is: %t\n",Cycle).
-           rec-msg(done) 
-/* 
+           rec-msg(done)  
          +
-           rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,plain))). 
+           rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
            printf("EOF unexpected while parsing %s\n",Mname).
            snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
            rec-msg(done) 
-*/
          +
            rec-msg(parse-result-asfix1(Id?,
                                        parse-error([character(Ch?),
@@ -76,7 +74,8 @@ in
            printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
            snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
            rec-msg(done) 
-         ) 
+         ).
+         snd-note(ui-status(endstat(Id)))
        +
        rec-msg(Id, error-opening(Mod?)).
        snd-msg(add-eqs-to-db(Module,"",no-equations,"unchanged")).

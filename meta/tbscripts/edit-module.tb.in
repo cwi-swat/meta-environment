@@ -7,8 +7,10 @@ let
   T      : term,
   Tid    : int,
   Fn     : str,
+  Mname  : str,
   TE     : text-edit,
   Path   : str,
+  Path2  : str,
   Syntax : term,
   Src    : str
 in
@@ -17,10 +19,84 @@ in
   snd-msg(get-sdf2-path-from-db(id(Module))).
   rec-msg(path(Path?)).
   snd-msg(get-sdf2-asfix(id(Module))).
-  rec-msg(syntax(Syntax?)).
-  snd-msg(pp(Syntax)).
-  rec-msg(source(Src?)).
+  (
+    rec-msg(syntax(Syntax?)).
+    snd-msg(pp(Syntax)).
+    rec-msg(source(Src?))
+  +
+    rec-msg(syntax-unchanged(Syntax?)).
+    snd-msg(pp(Syntax)).
+    rec-msg(source(Src?))
+  +
+    rec-msg(unavailable).
+    snd-msg(Id, open-file(id(Module))).
+    (
+      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?))
+    +
+      rec-msg(Id, error-opening(Path2?)).
+      Src := ""
+    )
+  ).
   create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
-  snd-msg(open-language("Sdf2", "@prefix@/lib/Sdf2.baf")).
+  snd-msg(open-language("Sdf2", 
+                        "@prefix@/lib/Sdf2.baf")).
+  snd-note(ui-status(endstat(Id)))
+endlet
+
+process Edit-eqs-module(Module: str) is
+let
+  Id     : term,
+  T      : term,
+  Tid    : int,
+  Fn     : str,
+  TE     : text-edit,
+  Path   : str,
+  Path2  : str,
+  Eqs    : term,
+  Table  : str,
+  Mname  : str,
+  Src    : str
+in
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Opening module editor..."))).
+  snd-msg(get-table-from-db(id(Module))) .
+  (
+    rec-msg(table(Table?))
+  +
+    rec-msg(no-table) .
+    snd-msg(generate-parsetable(id(Module))) .
+    rec-msg(parsetable(Table?)) .
+    snd-msg(Id,locate-parse-table-file(id(Module))) .
+    rec-msg(Id,located-parse-table-file(id(Module),Table?)) .
+    snd-msg(add-table-to-db(id(Module),Table)) .
+    rec-msg(done)
+  ). 
+  snd-msg(open-language(Module,Table)).
+  snd-msg(get-eqs-path-from-db(id(Module))).
+  rec-msg(path(Path?)).
+  snd-msg(get-eqs-asfix(id(Module))).
+  (
+    rec-msg(eqs(Eqs?)).
+    snd-msg(pp(Eqs)).
+    rec-msg(source(Src?))
+  +
+    rec-msg(eqs-unchanged(Eqs?)).
+    snd-msg(pp(Eqs)).
+    rec-msg(source(Src?))
+  +
+    rec-msg(no-eqs).
+    Src := ""
+  +
+    rec-msg(unavailable).
+    snd-msg(Id, open-eqs-text-file(id(Module))).
+    (
+      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?))
+    +
+      rec-msg(Id, error-opening(Path2?)).
+      Src := ""
+    )
+  ).
+  create(Editor(id(Module),Src,Path,Module), Tid?). 
+  snd-msg(open-language(Module, Table)).
   snd-note(ui-status(endstat(Id)))
 endlet

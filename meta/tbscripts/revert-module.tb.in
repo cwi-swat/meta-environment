@@ -15,7 +15,9 @@ let
   Ch    : int,
   Li    : int,
   Co    : int,
-  Char  : term
+  Char  : term,
+  ErrList : list,
+  Cycle   : list
 in 
   Id := process-id. (
     rec-msg(revert-module(Str?)).
@@ -33,31 +35,39 @@ in
       rec-msg(need-modules(M1s?))
     +
       rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)). 
-      snd-msg(open-language("Sdf2", "@prefix@/lib/Sdf2.baf")).
-      snd-msg(Id,parse-string("Sdf2","",FT)).
-      ((
-        rec-msg(Id,parse-result(parsetree(T?,I?))).
-        if equal(I,0) then
-         snd-msg(Id,a2toa1(T)).
-         rec-msg(Id,converted(T1?)).
-         snd-msg(ui,open-module(Name2)).
-         snd-msg(add-sdf2-module-to-db(Path,T1)).
-         rec-msg(need-modules(M1s?))
-        else
-         printf("Parse of %s returned %d ambiguities",Str,I).
-         printf("Term is: %t\n",T)
-        fi
-       )
-       +
-       (
-        rec-msg(Id, parse-result(eof-error)). 
-        printf("EOF unexpected while parsing %s\n",Str)
-       )
-       +
-       (
-        rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
-        printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co)
-       )
+      snd-msg(open-language("Sdf2", 
+                            "@prefix@/lib/Sdf2.baf")).
+      snd-msg(Id,parse-string-as-asfix1("Sdf2","",FT)).
+      ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
+        snd-msg(ui,open-module(Name2)).
+        snd-msg(add-sdf2-module-to-db(Path,T1,"changed")).
+        rec-msg(need-modules(M1s?)) 
+      +
+        rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+                                                    ambiguities(I?)))).
+        snd-msg(add-empty-module-to-db(Name2)).
+        rec-msg(done).
+        printf("Parse of ts returned %d ambiguities", Name2, I)
+      +
+        rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
+                                                    cycle(Cycle?)))).
+        snd-msg(add-empty-module-to-db(Name2)).
+        rec-msg(done).
+        printf("Parse returned a cycle\nCycle is: %t\n",Cycle)
+      +
+        rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))).
+        snd-msg(add-empty-module-to-db(Name2)).
+        rec-msg(done). 
+        printf("EOF unexpected while parsing %s\n", Name2)
+      +
+        rec-msg(parse-result-asfix1(Id?,
+                                    parse-error([character(Ch?),
+                                                 line(Li?),
+                                                 col(Co?),
+                                                 char(Char?)],plain))).
+        snd-msg(add-empty-module-to-db(Name2)).
+        rec-msg(done).
+        printf("Character %d unexpected in line %d, column %d\n", Ch, Li, Co)
       )
     ).
     snd-note(ui-status(endstat(Id))).

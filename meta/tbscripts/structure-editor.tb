@@ -49,21 +49,13 @@ in
         rec-msg(TE,focus-text(Str?)).
         snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
           rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
-/* The parser should return two different top-level function symbols for
-   succesfull parses, and for parse errors. Until that happens, this is 
-   a workaround
-*/
-          Fun := fun(T).
-          if equal(Fun,"parse-error") then
-            Args := args(T).
-            ErrList := index(Args,1).
-            snd-msg(set-error-focus(Fid,Foc,ErrList)). 
-            FF := join(FF,Foc)
-          else
-            snd-eval(SE,replaceFocus(Fid, T)).
-            rec-value(SE,Fl?)
-          fi
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,ambiguities(I?)))).
+          snd-eval(SE,replaceFocus(Fid, T)).
+          rec-value(SE,Fl?)
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
+          snd-msg(set-error-focus(Fid,Foc,ErrList)).
+          FF := join(FF,Foc)
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
+                                                     ambiguities(I?)))).
           printf("Parse of %s returned %d ambiguities",Str,I).
           printf("Term is: %t\n",T).
           FF :=join(FF,Foc)
@@ -71,7 +63,7 @@ in
           printf("Parse of %s returned a cycle\n",Str).
           printf("Cycle is: %t\n",Cycle).
           FF :=join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof))).
           printf("Error parsing %s\n",Str).
           printf("Error: %l\n", ErrList).
           FF := join(FF,Foc)

@@ -40,6 +40,7 @@ in
       + rec-note(import-relations(irels(Pairs?))).
         snd-do(UI,add-imports(Pairs))
       + rec-msg(ui,cannot-open-module(ModName?)).
+        snd-do(UI,open-empty-module(id(ModName))).
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
       ) *
       rec-msg(finished-opening-modules).
@@ -56,11 +57,18 @@ in
       snd-msg(save-module(Str)).
       rec-msg(saved-module(Str)).
       snd-ack-event(UI,save-module(Str))
-    ) +
+    ) 
+    +
     ( rec-event(UI,edit-module(id(ModName?))).
       create(Edit-module(ModName),EM?).
       snd-ack-event(UI,edit-module(id(ModName)))
-    ) +
+    ) 
+    +
+    ( rec-event(UI,edit-eqs-module(id(ModName?))).
+      create(Edit-eqs-module(ModName),EM?).
+      snd-ack-event(UI,edit-eqs-module(id(ModName)))
+    ) 
+    +
     ( rec-event(UI,revert-module(id(ModName?))).
       snd-msg(revert-module(ModName)).           
       rec-msg(reverted-module(ModName?)).

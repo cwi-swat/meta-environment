@@ -21,7 +21,7 @@ in
       snd-msg(save-sdf2-asfix(Module,Path,Syntax)).
       rec-msg(save-done)
     +
-      rec-msg(syntax-unchanged)
+      rec-msg(syntax-unchanged(Syntax?))
     ).
     snd-msg(get-eqs-asfix(Module)).
     ( rec-msg(eqs(Eqs?)).
@@ -30,9 +30,11 @@ in
       snd-msg(save-eqs-asfix(Module,Path,Eqs)).
       rec-msg(save-done)
     +
-      rec-msg(eqs-unchanged)
+      rec-msg(eqs-unchanged(Eqs?))
     +
       rec-msg(no-eqs)
+    +
+      rec-msg(unavailable)
     ).
     snd-msg(saved-module(Module))
     +
@@ -50,7 +52,7 @@ in
          snd-msg(save-sdf2-asfix(Module,Path,Syntax)).
          rec-msg(save-done)
        +
-         rec-msg(syntax-unchanged)
+         rec-msg(syntax-unchanged(Syntax?))
        ).
        snd-msg(get-eqs-asfix(Module)).
        ( rec-msg(eqs(Eqs?)).
@@ -59,9 +61,11 @@ in
          snd-msg(save-eqs-asfix(Module,Path,Eqs)).
          rec-msg(save-done)
        +
-         rec-msg(eqs-unchanged)
+         rec-msg(eqs-unchanged(Eqs?))
        +
          rec-msg(no-eqs)
+       +
+         rec-msg(unavailable)
        )
       fi
     )*
