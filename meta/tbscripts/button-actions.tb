@@ -454,12 +454,12 @@ in
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
             ParseText(String, FilePath, ModuleName, SortName, RTree?, Error?) .
-            ProcessParseError(Error)
+            printf("button-actions.tb:parse error ignored: %t\n", Error)
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
               ParseText(String, "Unknown", ModuleName, SortName, RTree?, Error?) .
-              ProcessParseError(Error)
+	      printf("button-actions.tb:parse error ignored: %t\n", Error)
             else
               RTree := error-tree
             fi

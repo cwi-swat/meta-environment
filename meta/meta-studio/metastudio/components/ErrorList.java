@@ -81,12 +81,6 @@ public class ErrorList extends UserInterfacePanel {
         }
     }
 
-    private void removeFeedbackList(Summary summary) {
-	String producer = summary.getProducer();
-	String id = summary.getId();
-	removeFeedbackList(producer, id);
-    }
-
     private void removeFeedbackList(String producer, String id) {
         data.removeAll(producer, id);
         repaint();
@@ -158,8 +152,7 @@ public class ErrorList extends UserInterfacePanel {
         setFeedbackList(summary);
     }
 
-    public void removeFeedbackSummary(ATerm t0) {
-        Summary summary = factory.SummaryFromTerm(t0);
-	removeFeedbackList(summary);
+    public void removeFeedbackSummary(String producer, String summaryId) {
+	removeFeedbackList(producer, summaryId);
     }
 }

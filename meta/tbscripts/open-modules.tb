@@ -35,6 +35,7 @@ let
 in
   snd-msg(get-import-relations) .
   rec-msg(import-relations(ImportRelations?)) .
+  printf("ImportRelations: %t\n", ImportRelations) .
   snd-note(display-import-graph(ImportRelations)) .
   ImportRelations := []
 endlet
@@ -154,16 +155,7 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
-    Open-Syntax(Path, Module, Type, Error?, RealPath?, RealModule?, Imports?).
-    if equal(Error, no-errors) then
-      if equal(Type, sdf) then 
-        Open-Equations(RealPath, RealModule)
-      else
-        tau
-      fi
-    else
-      HandleOpenModuleErrors(Module, Error)
-    fi
+    Open-Syntax(Path, Module, Type, Imports?)
   ).
   snd-note(ui-status(endstat(Id)))
 endlet
@@ -192,92 +184,130 @@ in
   fi
 endlet
 
-process Open-Syntax(Path: str, Module: str, Type: term, Error: term?,
-                    RealPath: str?, RealModule: str?, Imports: list?) is
+/*{{{ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) */
+
+process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
+  snd-msg(io-get-filename(Directory, Filename, Extension))
+  . rec-msg(io-filename(Path?))
+
+/*}}}  */
+/*{{{  process VerifyModuleId(Tree: term, ModuleId: str, Valid: bool?) */
+
+process VerifyModuleId(Tree: term, ModuleId: str, Valid: bool?) is
 let
-  Tree: term,
-  Text: str,
-  Message: str,
-  FileName: str,
-  Extension: str
+  TreeId: term
 in
-  snd-msg(sm-is-valid-modulename(Module)) .
-  ( 
-    rec-msg(sm-modulename-is-valid) .
-    snd-msg(file-extension-hook(Type)) .
-    rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-get-filename(Path, Module, Extension)) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(io-read-file(FileName)) .
-    (
-      rec-msg(io-file-contents(Text?)) .
-      Parse-Syntax(Text, Type, Tree?, Error?)
-    +
-      rec-msg(io-error-reading(Message?)) .
-      Error := no-such-file
-    ) .
-    if not-equal(Error, no-such-file) then
-      Imports := [].
-      snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
-      (
-        rec-msg(adding-succeeded(Module, RealPath?, RealModule?, Imports?))
-	. Error := no-errors
-      +
-        rec-msg(error-opening(Module, Error?))
-      )
-    else
-      tau
-    fi
-  +
-    rec-msg(sm-modulename-is-invalid) .
-    Error := invalid-module-name
-  )
+  snd-msg(sm-get-module-id(Tree))
+  . rec-msg(sm-module-id(TreeId?))
+  . Valid := equal(ModuleId, TreeId)
 endlet
 
-process Parse-Syntax(Text: str, Type: term, ParseResult: term?, Error: term?) is
+/*}}}  */
+/*{{{ process GetImportedModuleNames(Tree: term, Imports: list?) */
+
+process GetImportedModuleNames(Tree: term, Imports: list?) is
+  snd-msg(sm-get-imported-module-names(Tree))
+  . rec-msg(sm-imported-module-names(Imports?))
+
+/*}}}  */
+
+process Open-Syntax(Directory: str, ModuleId: str, Type: term, Imports: list?) is
 let
-  Sort: str,
-  ParseTable: term
+  AnnotatedTree: term,
+  Error: term,
+  Extension: str,
+  Message: str,
+  ParseResult: term,
+  ParseTable: term,
+  Path: str,
+  Sort: term,
+  Summary: term,
+  Text: str,
+  Valid: bool
 in
-  snd-msg(get-parse-table(Type))
+  snd-msg(sm-is-valid-modulename(ModuleId))
   .
-  (
-    rec-msg(parse-table(Type, ParseTable?))
-    . snd-msg(syntax-top-sort-hook(Type))
-    . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-    . snd-msg(sglr-parse(Text, ParseTable, Sort))
+  ( 
+    rec-msg(sm-modulename-is-valid)
+    . RegisterModule(ModuleId, Directory)
+    . snd-msg(file-extension-hook(Type))
+    . rec-msg(file-extension-hook-result(Extension?))
+    . BuildPath(Directory, ModuleId, Extension, Path?)
+    . snd-msg(io-read-file(Path))
     .
     (
-      rec-msg(sglr-parse-tree(ParseResult?))
+      rec-msg(io-file-contents(Text?))
+      . SetModuleSyntaxText(ModuleId, Text)
+      . snd-msg(get-parse-table(Type))
+      .
+      (
+	rec-msg(parse-table(Type, ParseTable?))
+	. snd-msg(syntax-top-sort-hook(Type))
+	. rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
+	. snd-msg(sglr-parse(Text, ParseTable, Sort))
+	.
+	(
+	  (
+	    rec-msg(sglr-parse-tree(ParseResult?))
+	  +
+	    rec-msg(sglr-parse-ambiguous(ParseResult?, Error?))
+	    . ParseErrorToSummary(Error, Path, Summary?)
+	    . ShowSummaryInGUI(Summary)
+	  )
+	  . VerifyModuleId(ParseResult, ModuleId, Valid?)
+	  .
+	  if equal(Valid, true)
+	  then
+	    printf("valid\n") .
+	    AnnotateTree(ParseResult, Path, AnnotatedTree?)
+	    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
+	    . GetImportedModuleNames(ParseResult, Imports?)
+	  else
+	    printf("invalid\n") .
+	    Imports := []
+	  fi
+	  . printf("Setting imports: %t -> %t\n", ModuleId, Imports)
+	+
+	  rec-msg(sglr-parse-error(Error?))
+	  . ParseErrorToSummary(Error, Path, Summary?)
+	  . ShowSummaryInGUI(Summary)
+	  . Imports := []
+	)
+	. SetModuleImports(ModuleId, Imports)
+      +
+	rec-msg(no-parse-table(Type, Error?))
+	. printf("Parse-Syntax: no parse table: %t\n", Error)
+      )
     +
-      rec-msg(sglr-parse-ambiguous(ParseResult?, Error?))
-    +
-      rec-msg(sglr-parse-error(Error?))
+      rec-msg(io-error-reading(Message?))
+      . printf("io-error-reading: %s\n", Message)
     )
   +
-    rec-msg(no-parse-table(Type, Error?))
-    . printf("Parse-Syntax: no parse table: %t\n", Error)
-    . ParseResult := no-tree
+    rec-msg(sm-modulename-is-invalid)
   )
 endlet
 
-process Open-Equations (Path : str, Module : str)  is
+process Open-Equations(ModuleId: str)  is
 let
-  Tree : term,
-  Text : str,
-  ErrorMessage : str,
-  FileName : str,
-  Extension : str
+  Directory: str,
+  ErrorMessage: str,
+  Extension: str,
+  FileName: str,
+  Text: str,
+  Tree: term
 in
-  snd-msg(file-extension-hook(asf)) .
-  rec-msg(file-extension-hook-result(Extension?)) .
-  snd-msg(io-get-filename(Path, Module, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(io-read-file(FileName)) .
+  snd-msg(ts-get-str-value("module-paths", ModuleId))
+  . rec-msg(ts-value(Directory?))
+  . snd-msg(file-extension-hook(asf))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(io-get-filename(Directory, ModuleId, Extension))
+  . rec-msg(io-filename(FileName?))
+  . snd-msg(io-read-file(FileName))
+  .
   (
-    rec-msg(io-file-contents(Text?)) .
-    snd-msg(add-eqs-to-db(Module, text(Text))) .
-    rec-msg(eqs-added)
+    rec-msg(io-file-contents(Text?))
+    . snd-msg(add-eqs-to-db(ModuleId, text(Text)))
+    . rec-msg(eqs-added)
   +
     rec-msg(io-error-reading(ErrorMessage?)) 
   )

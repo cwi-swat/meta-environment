@@ -36,25 +36,9 @@ in
   fi
 endlet
 
-process ProcessParseError(ParseError: term) is
-  if equal(fun(ParseError), "no-errors") then
-    tau
-  else
-    snd-note(remove-feedback-summary(ParseError)) .
-    snd-note(show-feedback-summary(ParseError)) 
-  fi
+process ClearSummaryInGUI(Producer: str, SummaryId: str) is
+  snd-msg(ui-remove-feedback-summary(Producer, SummaryId))
 
-process HandleParseError(Sid: term, Error: term) is
-let
-  Filename: str,
-  Result: term,
-  Summary: term
-in
-  GetFilename(Sid, Filename?)
-  . snd-msg(es-add-filename-in-error(Filename, Error))
-  . rec-msg(es-filename-in-error(Filename, Result?))
-  . snd-msg(es-make-summary("sglr", Filename, [Result]))
-  . rec-msg(es-summary(Summary?))
-  . ShowSummary(Sid, Summary)
-  . ProcessParseError(Summary)
-endlet
+process ShowSummaryInGUI(Summary: term) is
+ snd-msg(ui-show-feedback-summary(Summary)) 
+

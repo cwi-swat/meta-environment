@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 5, 2004 4:34:23 PM
+// generation time: Apr 6, 2004 3:55:17 PM
 
 package metastudio;
 
@@ -203,12 +203,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void removeFeedbackSummary(ATerm t0)
+  //{{{  public void removeFeedbackSummary(String s0, String s1)
 
-  public void removeFeedbackSummary(ATerm t0)
+  public void removeFeedbackSummary(String s0, String s1)
   {
     if (tool != null) {
-      tool.removeFeedbackSummary(t0);
+      tool.removeFeedbackSummary(s0, s1);
     }
     else {
       throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");

@@ -7,16 +7,11 @@ process GetText(EditorId: term, Text: str?) is
   . rec-msg(te-contents(EditorId, Text?))
 
 /*}}}  */
-/*{{{  process AnnotateTree(Sid: term, Tree: term, AnnotateTree: term?) */
+/*{{{  process AnnotateTree(Tree: term, Filename: str, AnnotateTree: term?) */
 
-process AnnotateTree(Sid: term, Tree: term, AnnotatedTree: term?) is
-let
-  Filename: str
-in
-  GetFilename(Sid, Filename?)
-  . snd-msg(add-posinfo-packed(Filename, Tree))
+process AnnotateTree(Tree: term, Filename: str, AnnotatedTree: term?) is
+  snd-msg(add-posinfo-packed(Filename, Tree))
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
-endlet
 
 /*}}}  */
 
@@ -34,13 +29,25 @@ in
   * delta
 endlet
 
+process ParseErrorToSummary(Error: term, Filename: str, Summary: term?) is
+let
+  Result: term
+in
+  snd-msg(es-add-filename-in-error(Filename, Error))
+  . rec-msg(es-filename-in-error(Filename, Result?))
+  . snd-msg(es-make-summary("sglr", Filename, [Result]))
+  . rec-msg(es-summary(Summary?))
+endlet
+
 process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
 let
   AnnotatedTree: term,
   Error: term,
+  Filename: str,
   ParseResult: term,
   Registered: bool,
-  Text: str
+  Text: str,
+  Summary: term
 in 
   IsStructureEditorRegistered(Sid, Registered?)
   .
@@ -48,23 +55,29 @@ in
   then
     snd-msg(parse-ok(Sid))
   else
-    GetText(Sid, Text?)
+    GetFilename(Sid, Filename?)
+    . GetText(Sid, Text?)
+    . ClearSummaryInGUI("sglr", Filename)
     . snd-msg(sglr-parse(Text, Table, Nonterminal))
     .
     (
       rec-msg(sglr-parse-tree(ParseResult?))
-      . AnnotateTree(Sid, ParseResult, AnnotatedTree?)
+      . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
       . EditStructure(Sid, AnnotatedTree)
       . snd-msg(parse-ok(Sid))
     +
       rec-msg(sglr-parse-forest(ParseResult?, Error?))
-      . AnnotateTree(Sid, ParseResult, AnnotatedTree?)
+      . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
       . EditStructure(Sid, AnnotatedTree)
-      . HandleParseError(Sid, Error)
+      . ParseErrorToSummary(Error, Filename, Summary?)
+      . ShowSummary(Sid, Summary)
+      . ShowSummaryInGUI(Summary)
       . snd-msg(parse-failed(Sid))
     +
       rec-msg(sglr-parse-error(Error?))
-      . HandleParseError(Sid, Error)
+      . ParseErrorToSummary(Error, Filename, Summary?)
+      . ShowSummary(Sid, Summary)
+      . ShowSummaryInGUI(Summary)
       . snd-msg(parse-failed(Sid))
     )
   fi

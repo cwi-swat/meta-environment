@@ -127,7 +127,7 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         // intentionally left empty
     }
 
-    public void removeFeedbackSummary(ATerm t0) {
+    public void removeFeedbackSummary(String producer, String summaryId) {
         // intentionally left empty
     }
     

@@ -24,11 +24,13 @@ let
   ModuleList : term,
   Modulename : str,
   On : term,
+  Producer : str,
   Pairs : list,
   Path : str,
   Question : str,
   Str : str,
   Summary : term,
+  SummaryId : str,
   Title : str,
   Tree : term,
   Type : term,
@@ -36,8 +38,6 @@ let
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
-  subscribe(show-feedback-summary(<term>)) .
-  subscribe(remove-feedback-summary(<term>)) .
   Id := process-id.
 #ifdef ECLIPSE
   rec-connect(UI?) . 
@@ -76,11 +76,11 @@ in
       rec-note(ui-status(messagef(Str?, Arguments?))) .
       snd-do(UI, messagef(Str, Arguments))
     +
-      rec-note(show-feedback-summary(Summary?)) .
+      rec-msg(ui-show-feedback-summary(Summary?)) .
       snd-do(UI, show-feedback-summary(Summary))
     +
-      rec-note(remove-feedback-summary(Summary?)) .
-      snd-do(UI, remove-feedback-summary(Summary))
+      rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?)) .
+      snd-do(UI, remove-feedback-summary(Producer, SummaryId))
     ) * delta 
   ||
     ( 

@@ -425,7 +425,8 @@ in
       rec-msg(no-updating-needed)
     +
       rec-msg(updating-succeeded(DependingModules?)) .
-      Parse-Syntax(FileText, Type, Tree?, Error?) .
+      /*Parse-Syntax(FileText, Type, Tree?, Error?) .*/
+      printf("this bites\n").
       if equal(Error, no-errors) then
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
 	(
@@ -437,7 +438,7 @@ in
           Error("Check consistency: module name %s contains an error", [ModuleName])
         )
       else
-        ProcessParseError(Error)
+        printf("CheckSyntaxConsistency: error ignored: %t\n", Error)
       fi
     )
   +

@@ -8,6 +8,51 @@
 #define DEBUG printf("FILE: %s LINE: %d\n", __FILE__, __LINE__)
 #define POSINFO_DEPTH 4
 
+/*{{{  process FilterActiveModules(ModuleId: str, Inactive: list?) */
+
+process FilterActiveModules(ModuleId: str, Inactive: list?) is
+let
+  Modules: term
+in
+  snd-msg(ts-get-term-value("import-relations", ModuleId))
+  . rec-msg(ts-value(Modules?))
+  . snd-msg(ts-filter-keys("module-paths", Modules))
+  . rec-msg(ts-keys(Inactive?))
+endlet
+
+/*}}}  */
+/*{{{ process SetModuleImports(ModuleId: str, Imports: list) */
+
+process SetModuleImports(ModuleId: str, Imports: list) is
+  snd-msg(ts-put-term-value("import-relations", ModuleId, Imports))
+
+/*}}}  */
+/*{{{ process SetModuleSyntaxText(ModuleId: str, Text: str) */
+
+process SetModuleSyntaxText(ModuleId: str, Text: str) is
+  snd-msg(ts-put-str-value("sdf-text", ModuleId, Text))
+
+/*}}}  */
+/*{{{ process SetModuleSyntaxTree(ModuleId: str, Tree: term) */
+
+process SetModuleSyntaxTree(ModuleId: str, Tree: term) is
+  snd-msg(ts-put-term-value("sdf-tree", ModuleId, Tree))
+
+/*}}}  */
+
+/*{{{  RegisterModule(ModuleId: str, Directory: str) */
+
+process RegisterModule(ModuleId: str, Directory: str) is
+let
+  Path: str
+in
+  snd-msg(ts-put-str-value("module-paths", ModuleId, Directory))
+  . BuildPath(Directory, ModuleId, "", Path?)
+  . MDB-RegisterPath(Path, ModuleId)
+endlet
+
+/*}}}  */
+
 process ModuleDB is
 let
   DependingModules: list,
@@ -64,7 +109,7 @@ in
     snd-msg(changed-modules(DependingModules))
   +
     rec-msg(is-module-in-db(Name?)) .
-    snd-msg(ts-contains-key("active-modules", Name)) .
+    snd-msg(ts-contains-key("module-paths", Name)) .
     ( 
       rec-msg(ts-contains-key).
       snd-msg(exists-in-module-db(Name))
@@ -73,59 +118,49 @@ in
       snd-msg(not-exists-in-module-db(Name))
     )
   +
+
+
+#if 0
     /* TODO: factorize this part into reusable processes */
-    rec-msg(add-module-to-db(Name?, Path?, sdf, SyntaxText?, SyntaxTree?)) .
-    if and(not-equal(SyntaxTree, error-tree),
-           not-equal(SyntaxTree, no-tree)) then
+    rec-msg(add-sdf-module-to-db(ModuleId?, Directory?, SyntaxText?, SyntaxTree?)) .
+    snd-msg(io-get-filename(Directory, ModuleId, "")) .
+    rec-msg(io-filename(Filename?)) .
+    printf("asmtd: Directory: [%s], ModuleId: [%s] Filename: [%s]\n\n", Directory, ModuleId, Filename).
+    SetModulePath(ModuleId, Directory) .
+    MDB-RegisterPath(Filename, ModuleId) .
+    if and(not-equal(SyntaxTree, error-tree), not-equal(SyntaxTree, no-tree))
+    then
+
       snd-msg(sm-get-module-id(SyntaxTree)) .
-      rec-msg(sm-module-id(ModuleId?)) .
-      snd-msg(sm-get-module-path(Path, ModuleId)) .
+      rec-msg(sm-module-id(IdInTree?)) .
+      snd-msg(sm-get-module-path(Directory, IdInTree)) .
       rec-msg(sm-module-path(NewPath?)) .
-      snd-msg(io-get-filename(Path, Name, "")) .
-      rec-msg(io-filename(Filename?)) .
-      snd-msg(io-get-filename(NewPath, ModuleId, "")) .
+      snd-msg(io-get-filename(NewPath, IdInTree, "")) .
       rec-msg(io-filename(RealFilename?)) .
+      printf("asmtd: NewPath: [%s], ModuleId: [%s] RealFilename: [%s]\n\n", NewPath, ModuleId, RealFilename).
+
       if equal(Filename, RealFilename) then
-        snd-msg(ts-put-str-value("module-paths", ModuleId, NewPath)) .
-        MDB-RegisterPath(Filename, ModuleId) .
         MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
-        snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
+	SetModuleSyntaxTree(ModuleId, SyntaxTree) .
         snd-msg(sm-get-imported-module-names(SyntaxTree)) .
         rec-msg(sm-imported-module-names(Modules?)) .
-        snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-        snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
-        snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
-        SyntaxText := "" .
-        snd-msg(ts-filter-keys("active-modules", Modules)) .
-        rec-msg(ts-keys(Modules?)) .
-        snd-msg(adding-succeeded(Name, NewPath, ModuleId, Modules))
+	SetModuleImports(ModuleId, Modules) .
+	SetModuleSyntaxText(ModuleId, SyntaxText)
+        snd-msg(adding-succeeded(ModuleId, NewPath, ModuleId))
       else
-        ModuleId := Name .
-        snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
-        MDB-RegisterPath(Filename, ModuleId) .
-        Modules := [] .
-        snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-        snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
-        SyntaxText := "" .
-        snd-msg(ts-filter-keys("active-modules", Modules)) .
-        rec-msg(ts-keys(Modules?)) .
-        snd-msg(error-opening(Name, name-inconsistent))
+        SetModuleImports(ModuleId, []) .
+        snd-msg(error-opening(ModuleId, name-inconsistent))
       fi .
       SyntaxTree := no-tree 
     else 
-      ModuleId := Name .
-      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
-      MDB-RegisterPath(Path, ModuleId) .
-      Modules := [] .
-      snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-      snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
-      snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
-      SyntaxText := "" .
-      snd-msg(ts-filter-keys("active-modules", Modules)) .
-      rec-msg(ts-keys(Modules?)) .
-      snd-msg(adding-succeeded(Name, Path, ModuleId, Modules))
+      SetModuleImports(ModuleId, []) .
+      SetModuleSyntaxText(ModuleId, SyntaxText)
+      snd-msg(adding-succeeded(ModuleId, Directory, ModuleId))
     fi 
   +
+#endif
+
+
     rec-msg(invalidate-sdf-in-db(Name?)) .
     MDB-InvalidateEntry(Name, "", DependingModules?)
   +
@@ -139,7 +174,7 @@ in
       SyntaxTree := no-tree .
       rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
-      snd-msg(ts-filter-keys("active-modules", Modules)) .
+      snd-msg(ts-filter-keys("module-paths", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       snd-msg(updating-succeeded(Modules))
     else
@@ -214,8 +249,7 @@ in
     rec-msg(ts-value(Path?)) .
     snd-msg(file-extension-hook(asf)) .
     rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-get-filename(Path, Name, Extension)) .
-    rec-msg(io-filename(Filename?)) .
+    BuildPath(Path, Name, Extension, Filename?) .
     snd-msg(add-posinfo-to-depth(Filename,EqsTree, POSINFO_DEPTH)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
@@ -283,7 +317,7 @@ in
     snd-msg(imported-modules(Modules))
   +
     rec-msg(get-all-module-names).
-    snd-msg(ts-get-all-keys("active-modules")) .
+    snd-msg(ts-get-all-keys("module-paths")) .
     rec-msg(ts-all-keys(Modulenames?)) .
     snd-msg(all-module-names(Modulenames))
   + 
@@ -395,7 +429,6 @@ endlet
 
 process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("extensions", "str")) .
-  snd-msg(ts-add-table("active-modules", "str")) .
   snd-msg(ts-add-table("module-paths", "str")) . 
   snd-msg(ts-add-table("path-modulename", "str")) . 
   snd-msg(ts-add-table("sdf-tree", "term")) .
@@ -409,7 +442,6 @@ process MDB-InitializeModuleDb is
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions")) .
-  snd-msg(ts-clear-table("active-modules")) .
   snd-msg(ts-clear-table("module-paths")) .
   snd-msg(ts-clear-table("path-modulename")) .
   snd-msg(ts-clear-table("sdf-tree")) .
@@ -609,7 +641,6 @@ in
   Syntax := no-tree .
   snd-msg(ts-put-str-value("module-paths", NewName, NewPath)) .
   MDB-RegisterPath(NewPath, NewName) .
-  snd-msg(ts-put-str-value("active-modules", NewName, NewPath)) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
     rec-msg(ts-value(Tree?)) .
@@ -740,17 +771,15 @@ in
   rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(Filename?)) .
-  snd-msg(add-posinfo-packed(Filename, In)) .
-  rec-msg(tree-with-pos-info(Out?)) 
+  AnnotateTree(In, Filename, Out?)
 endlet
 
-process MDB-GetModulename(Path : str, Filename : str, Modulename : str?) is
+process MDB-GetModulename(Directory: str, Filename: str, Modulename: str?) is
 let
-  FullFilename : str
+  Path: str
 in
-  snd-msg(io-get-filename(Path, Filename, "")) .
-  rec-msg(io-filename(FullFilename?)) .
-  snd-msg(ts-get-str-value("path-modulename",FullFilename)) .
+  BuildPath(Directory, Filename, "", Path?) .
+  snd-msg(ts-get-str-value("path-modulename", Path)) .
   (
     rec-msg(ts-value(Modulename?))
   +

@@ -220,12 +220,12 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
 
-    public void removeFeedbackSummary(ATerm t0) {
+    public void removeFeedbackSummary(String producer, String summaryId) {
         Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.removeFeedbackSummary(t0);
+            tif.removeFeedbackSummary(producer, summaryId);
         }
     }
 
