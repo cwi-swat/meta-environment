@@ -7,12 +7,22 @@ equations
 
 
 [] appl(prod([cf(layout)],cf(opt(layout)),no-attrs),ATermList) =
-     appl(prod([],cf(opt(layout)),no-attrs),[])
+     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+   when ATermList != [32]
+
+[] appl(prod([],cf(opt(layout)),no-attrs),ATermList) =
+    appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32]) 
+     when ATermList = []
 
 [] AFun ( ATerm+ ) Ann = AFun ( ATerm+ )
   
 [] appl(prod([cf(layout)],cf(opt(layout)),no-attrs),Args) =
-     appl(prod([],cf(opt(layout)),no-attrs),[])
+     appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+    when Args != [32]
+
+[] appl(prod([],cf(opt(layout)),no-attrs),Args) =
+    appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[32])
+    when Args = []
 
 [] Tree Ann = Tree
 
