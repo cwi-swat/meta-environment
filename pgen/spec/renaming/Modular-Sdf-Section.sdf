@@ -1,6 +1,6 @@
 module Modular-Sdf-Section
 imports
-     Modular-Sdf-Syntax
+     sdf2/syntax/Modules
      Renaming-Sdf-Renaming
 exports
   context-free syntax

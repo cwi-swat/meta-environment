@@ -77,7 +77,7 @@ equations
    [sed1] sorted()            = true
    [sed2] sorted(cr)          = true
    [sed3] sorted(cr1 cr2 )    = cr1 -<<< cr2
-   [sed4] sorted(cr1 cr2 cr+) = cr1 -<<< cr2 /\ sorted(cr2 cr+)
+   [sed4] sorted(cr1 cr2 cr+) = cr1 -<<< cr2 & sorted(cr2 cr+)
    [sed5] sorted([cr*])       = sorted(cr*)
 
 %% \subsection{Sorting and Merging Range Lists}
@@ -106,7 +106,7 @@ equations
         ==========================================
         _c1 - _c2 |> _c3 = <_c1 - max(_c2,_c3)>
    [mrg4]
-        _c1 == _c2 \/ succ(_c1) == _c2 = true
+        _c1 == _c2 | succ(_c1) == _c2 = true
         =====================================
         _c1 |> _c2 - _c3 = <_c1 - _c3>
    [mrg5]
@@ -205,14 +205,14 @@ equations
    [d1]
         _c1 / _c2 = if(_c1 == _c2, [], [_c1])
    [d2]
-        _c1 / _c3 - _c4 = if(_c3 <= _c1 /\ _c1 <= _c4, [] , [_c1])
+        _c1 / _c3 - _c4 = if(_c3 <= _c1 & _c1 <= _c4, [] , [_c1])
    [d3]
-        _c1 - _c2 / _c3 = if(_c1 <= _c3 /\ _c3 <= _c2,
+        _c1 - _c2 / _c3 = if(_c1 <= _c3 & _c3 <= _c2,
                                  [_c1 - pred(_c3) succ(_c3) - _c2], [_c1 - _c2])
    [d4]
         succ(_c4) = _c4'
         ==========================================================================
-        _c1 - _c2 / _c3 - _c4 = if(_c3 <= _c2 /\ _c1 < _c4',
+        _c1 - _c2 / _c3 - _c4 = if(_c3 <= _c2 & _c1 < _c4',
                                        [_c1 - pred(_c3) _c4' - _c2] , [_c1 - _c2])
 
 %% If either character class is empty, the difference is immediate.
@@ -268,7 +268,7 @@ equations
 
   [0] _c (- _c        = true
   [0] _c (- _c'       = false when _c != _c'
-  [0] _c (- _c1 - _c2 = _c1 <= _c /\ _c <= _c2
+  [0] _c (- _c1 - _c2 = _c1 <= _c & _c <= _c2
   [0] _c (-           = false
   [0] _c (- cr cr+    = false when _c -< cr = true
   [0] _c (- cr cr+    = true  when _c (- cr = true

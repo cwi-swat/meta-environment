@@ -1,5 +1,5 @@
 module Restrictions-Sdf-Renaming
-imports Restrictions-Sdf-Syntax Kernel-Sdf-Renaming
+imports sdf2/syntax/Restrictions Kernel-Sdf-Renaming
 exports
   context-free syntax
     "(" Restrictions ")" Renamings -> Restrictions

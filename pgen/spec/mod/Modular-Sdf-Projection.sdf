@@ -3,7 +3,7 @@ imports
         Modular-Sdf-Section
 exports
   context-free syntax
-    Import "(-" Imports                      -> Bool
+    Import "(-" Imports                      -> Boolean
     Imports "++" Imports                     -> Imports {assoc}
     "proj" "_" ModuleName "(" Definition ")" -> Sections
 

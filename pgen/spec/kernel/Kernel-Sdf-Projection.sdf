@@ -1,14 +1,14 @@
 module Kernel-Sdf-Projection
 imports
-        Kernel-Sdf-Syntax
+        sdf2/syntax/Kernel
         Symbol-Sets
 exports
   context-free syntax
     Productions "++" Productions                 -> Productions {right}
     Attributes "++" Attributes                   -> Attributes {right}
-    Production "(-" Productions                  -> Bool
-    Productions "(=" Productions                 -> Bool
-    Production "~=" Production                   -> Bool
+    Production "(-" Productions                  -> Boolean
+    Productions "(=" Productions                 -> Boolean
+    Production "~=" Production                   -> Boolean
 
     "P"(Grammar)                                 -> Productions {memo}
     "~P" "(" Grammar ")"                         -> Grammar

@@ -1,5 +1,7 @@
 module Regular-Sdf-Normalization
-imports Regular-Sdf-Syntax Priority-Sdf-Syntax Literals-Sdf-Syntax
+imports sdf2/syntax/Regular
+        sdf2/syntax/Priority
+        sdf2/syntax/Literals
         Kernel-Sdf-Normalization
 exports
   context-free syntax

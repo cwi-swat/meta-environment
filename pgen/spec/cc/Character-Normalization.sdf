@@ -1,5 +1,5 @@
 module Character-Normalization
-imports Character-Syntax
+imports sdf2/syntax/Character
 
 hiddens
   variables

@@ -1,6 +1,6 @@
 module Sdf-AttributeChecker
 
-imports Sdf-Messages Booleans ModuleOperations
+imports Sdf-Messages ModuleOperations
 
 exports
   context-free syntax
@@ -14,8 +14,8 @@ hiddens
     check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
 
   context-free syntax
-    is-binary-definition(Production)       -> Bool
-    is-bracket-definition(Production)      -> Bool
+    is-binary-definition(Production)       -> Boolean
+    is-bracket-definition(Production)      -> Boolean
 
 hiddens
   variables

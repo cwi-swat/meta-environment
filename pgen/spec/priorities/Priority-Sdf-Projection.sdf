@@ -1,13 +1,13 @@
 module Priority-Sdf-Projection
 imports
-    Priority-Sdf-Syntax
+    sdf2/syntax/Priority
     Kernel-Sdf-Projection
 exports
   context-free syntax
      Priorities "++" Priorities -> Priorities {assoc}
     "Pr"(Grammar)               -> Priorities {memo}
     "~Pr"(Grammar)              -> Grammar
-     Priority "(-" Priorities   -> Bool
+     Priority "(-" Priorities   -> Boolean
 
 hiddens
   context-free syntax

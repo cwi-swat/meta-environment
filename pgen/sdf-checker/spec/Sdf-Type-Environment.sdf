@@ -1,6 +1,7 @@
 module Sdf-Type-Environment
 
-imports Sdf-Messages Booleans ImportOperations ConstructorSetOperations
+imports Sdf-Messages
+        ImportOperations ConstructorSetOperations
 
 exports
   sorts Info-Msg-Tuple Module-Info-Entry Module-Info-Table
@@ -22,11 +23,11 @@ exports
         ProductionsSet "," ConstructorSet "]" -> Module-Info
 
   context-free syntax
-    "[" ModuleId "," Bool "," Module-Info "]" -> Module-Info-Entry
-    "{" Module-Info-Entry* "}"                  -> Module-Info-Table
+    "[" ModuleId "," Boolean "," Module-Info "]" -> Module-Info-Entry
+    "{" Module-Info-Entry* "}"                   -> Module-Info-Table
 
   context-free syntax
-    module-is-checked(ModuleId, Module-Info-Table)    -> Bool
+    module-is-checked(ModuleId, Module-Info-Table)    -> Boolean
 
   context-free syntax
     get-declared-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
@@ -58,7 +59,7 @@ exports
 
 hiddens
   variables
-    "Bool"[0-9]*             -> Bool
+    "Bool"[0-9]*             -> Boolean
     "Messages"[0-9]*         -> Messages
     "$ModuleId"[0-9]*        -> ModuleId
     "$ModuleName"[0-9]*      -> ModuleName

@@ -2,8 +2,8 @@ module Kernel-Sdf-Normalization
 imports
         Kernel-Sdf-Projection
         Grammar-Normalization
-        CC-Sdf-Syntax
-        Basic-Sdf-Syntax
+        sdf2/syntax/CC
+        sdf2/syntax/Basic
 
 exports
   context-free syntax
@@ -17,7 +17,7 @@ hiddens
     merge(Productions)                    -> Productions
     new-merge(Productions,Productions)    -> Productions
     attr-collect(Production,Productions)  -> Production
-    prod-contains(Production,Productions) -> Bool
+    prod-contains(Production,Productions) -> Boolean
   context-free syntax
     lexical-merge(Productions)            -> Productions
     lex-merge(Productions,Productions)    -> Productions

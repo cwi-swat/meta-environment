@@ -1,13 +1,13 @@
 module Character-Class-Membership
 imports
-        Character-Class-Syntax
+        sdf2/syntax/Character-Class
         Character-Arithmetic
 exports
   context-free syntax
-    Character "in" OptCharRanges -> Bool
-    Character "in" CharClass     -> Bool
-    CharClass "sub" CharClass    -> Bool
-    CharClass "equiv" CharClass  -> Bool
+    Character "in" OptCharRanges -> Boolean
+    Character "in" CharClass     -> Boolean
+    CharClass "sub" CharClass    -> Boolean
+    CharClass "equiv" CharClass  -> Boolean
 
 hiddens
   variables

@@ -1,6 +1,6 @@
 module SymbolSetOperations
 
-imports Sdf2 Booleans
+imports sdf2/syntax/Sdf2 basic/Booleans
 
 exports 
   sorts SymbolsSet
@@ -8,7 +8,7 @@ exports
   context-free syntax
     symbols(Symbol*)             -> SymbolsSet
     diff(SymbolsSet, SymbolsSet) -> SymbolsSet
-    contains(Symbol, SymbolsSet) -> Bool
+    contains(Symbol, SymbolsSet) -> Boolean
 
 hiddens
   variables

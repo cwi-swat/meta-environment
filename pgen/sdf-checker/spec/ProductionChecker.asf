@@ -84,7 +84,7 @@ used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3),
            check-priorities(Group1 Assoc Group2, Msgs1, $ModuleId, ProductionsSet) = Msgs3 
 
   [cp-2'1] Symbol1 != Symbol2,
-           is-injection-production(Symbol1, Symbol2, ProductionsSet) \/
+           is-injection-production(Symbol1, Symbol2, ProductionsSet) |
            is-injection-production(Symbol2, Symbol1, ProductionsSet) = false
            =================================================================
            check-priorities(Symbol* -> Symbol1 Attrs, 
@@ -93,7 +93,7 @@ used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3),
 inconsistent-rhs-in-priorities($ModuleId, Symbol2, Symbol* -> Symbol1 Attrs)
 
   [cp-2'2] Symbol1 != Symbol2,
-           is-injection-production(Symbol1, Symbol2, ProductionsSet) \/
+           is-injection-production(Symbol1, Symbol2, ProductionsSet) |
            is-injection-production(Symbol2, Symbol1, ProductionsSet) = false
            =================================================================
            check-priorities($Literal (Symbol,*) -> Symbol1 Attrs, 

@@ -1,10 +1,10 @@
 module Symbols-Projection
-imports Symbols Booleans Integers
+imports sdf2/syntax/Symbols basic/Booleans basic/Integers
 exports
   context-free syntax
     Symbols "++" Symbols -> Symbols {assoc}
-    "|" Symbols "|"      -> Int
-    Symbol "(-" Symbols  -> Bool
+    "|" Symbols "|"      -> Integer
+    Symbol "(-" Symbols  -> Boolean
 
 hiddens
   variables

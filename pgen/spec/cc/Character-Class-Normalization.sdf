@@ -4,14 +4,14 @@ imports Character-Class-Membership
 hiddens
   context-free syntax
     "(/)"                          -> CharRange
-    if(Bool, CharClass, CharClass) -> CharClass %% {delaying2,delaying3}
+    if(Boolean, CharClass, CharClass) -> CharClass %% {delaying2,delaying3}
     head(CharRanges)               -> CharRange
     tail(CharRanges)               -> CharRanges
-    CharRange "-<"   CharRange     -> Bool
-    CharRange "-<<"  CharRange     -> Bool
-    CharRange "-<<<" CharRange     -> Bool
-    sorted(OptCharRanges)          -> Bool
-    sorted(CharClass)              -> Bool
+    CharRange "-<"   CharRange     -> Boolean
+    CharRange "-<<"  CharRange     -> Boolean
+    CharRange "-<<<" CharRange     -> Boolean
+    sorted(OptCharRanges)          -> Boolean
+    sorted(CharClass)              -> Boolean
 
 hiddens
   sorts Result
@@ -27,11 +27,11 @@ hiddens
 
 exports
   context-free syntax
-    Character "(-" OptCharRanges -> Bool
-    Character "(-" CharClass -> Bool
-    CharClass "(=" CharClass -> Bool
-    CharClass "==" CharClass -> Bool
-    CharClass "<=" CharClass -> Bool
+    Character "(-" OptCharRanges -> Boolean
+    Character "(-" CharClass -> Boolean
+    CharClass "(=" CharClass -> Boolean
+    CharClass "==" CharClass -> Boolean
+    CharClass "<=" CharClass -> Boolean
 
 hiddens
   variables

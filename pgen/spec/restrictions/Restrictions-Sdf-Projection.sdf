@@ -1,5 +1,5 @@
 module Restrictions-Sdf-Projection
-imports Restrictions-Sdf-Syntax
+imports sdf2/syntax/Restrictions
 exports
   context-free syntax
    Restrictions "++" Restrictions        -> Restrictions {right}

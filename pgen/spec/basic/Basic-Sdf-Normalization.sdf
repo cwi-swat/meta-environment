@@ -1,5 +1,8 @@
 module Basic-Sdf-Normalization
-imports Basic-Sdf-Syntax Regular-Sdf-Syntax Priority-Sdf-Syntax Kernel-Sdf-Normalization
+imports sdf2/syntax/Basic
+        sdf2/syntax/Regular 
+        sdf2/syntax/Priority
+        Kernel-Sdf-Normalization
 exports
   context-free syntax
     "b[[" Grammar "]]"          -> Grammar

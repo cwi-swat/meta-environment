@@ -48,8 +48,7 @@ hiddens
 
 hiddens
   variables
-    "Attrs"[0-9]* -> Attributes
-    "Bool"[0-9]*            -> Bool
+    "Attrs"[0-9]*           -> Attributes
     "Msgs"[0-9]*            -> Messages
     "Module"[0-9]*          -> Module
     "$ModuleId"[0-9]*       -> ModuleId

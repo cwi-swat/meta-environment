@@ -1,6 +1,6 @@
 module LabelChecker
 
-imports Booleans Sdf-Messages ModuleOperations
+imports Sdf-Messages ModuleOperations
 
 exports
   context-free syntax
@@ -14,7 +14,7 @@ hiddens
     "[" LabelsSet "," Messages "]" -> Labels-Msgs-Tuple
 
   context-free syntax
-    contains(Literal, LabelsSet) -> Bool
+    contains(Literal, LabelsSet) -> Boolean
     Literal "++" LabelsSet       -> LabelsSet
 
   context-free syntax

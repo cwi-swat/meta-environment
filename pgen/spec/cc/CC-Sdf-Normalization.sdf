@@ -1,3 +1,5 @@
 module CC-Sdf-Normalization
-imports CC-Sdf-Syntax Character-Class-Normalization Kernel-Sdf-Normalization
+imports sdf2/syntax/CC
+        Character-Class-Normalization 
+        Kernel-Sdf-Normalization
 

@@ -1,6 +1,6 @@
 module Sorts-Sdf-Normalization
 imports
-        Sorts-Sdf-Syntax
+        sdf2/syntax/Sorts
         Kernel-Sdf-Normalization
 
 hiddens

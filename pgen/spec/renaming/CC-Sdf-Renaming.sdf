@@ -1,5 +1,5 @@
 module CC-Sdf-Renaming
-imports Kernel-Sdf-Renaming CC-Sdf-Syntax
+imports Kernel-Sdf-Renaming sdf2/syntax/CC
 
 hiddens
   variables

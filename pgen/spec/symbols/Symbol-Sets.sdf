@@ -8,7 +8,7 @@ exports
     SymbolSet "||" SymbolSet -> SymbolSet {right}
     SymbolSet "/" SymbolSet  -> SymbolSet {left}
     "(" SymbolSet ")"        -> SymbolSet {bracket}
-    Symbol "(-" SymbolSet    -> Bool {memo}
+    Symbol "(-" SymbolSet    -> Boolean {memo}
   context-free priorities
     SymbolSet "/" SymbolSet -> SymbolSet  >
     SymbolSet "||" SymbolSet -> SymbolSet

@@ -1,6 +1,6 @@
 module ProductionSetOperations
 
-imports Sdf2
+imports sdf2/syntax/Sdf2
 
 exports 
   sorts ProductionsSet

@@ -9,7 +9,7 @@ equations
   [0]         p (- p*1 p p*2 = true
   [default-0] p (- p*        = false
   [0]         (= p*          = true
-  [0]         p p*1 (= p*2   = p (- p*2 /\ p*1 (= p*2
+  [0]         p p*1 (= p*2   = p (- p*2 & p*1 (= p*2
 
 %% Concatenation of attribute lists. Attributes ocurring in both lists are
 %% added only once.

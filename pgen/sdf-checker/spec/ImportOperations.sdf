@@ -1,6 +1,6 @@
 module ImportOperations
 
-imports Booleans ModuleOperations
+imports basic/Booleans ModuleOperations
 
 exports
   sorts ImportRelation ImportRelations ImportsSet
@@ -35,7 +35,7 @@ exports
 exports
   context-free syntax
     get-modulename(Import) -> ModuleName
-    has-renamings(Import)  -> Bool
+    has-renamings(Import)  -> Boolean
     get-renamings(Import)  -> Renamings
 
 hiddens

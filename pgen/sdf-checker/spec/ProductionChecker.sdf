@@ -28,7 +28,7 @@ hiddens
     check-priorities(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, top-down)}
     get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)}
     get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)}
-    is-injection-production(Symbol, Symbol, ProductionsSet) -> Bool
+    is-injection-production(Symbol, Symbol, ProductionsSet) -> Boolean
 
 
 hiddens

@@ -1,6 +1,6 @@
 module ConstructorSetOperations
 
-imports Booleans Sdf2
+imports basic/Booleans sdf2/syntax/Sdf2
 
 exports
   sorts ConstructorSet SymbolConsPair
@@ -10,7 +10,7 @@ exports
     constructors(SymbolConsPair*) -> ConstructorSet
 
   context-free syntax
-    contains(Symbol, Literal, ConstructorSet) -> Bool
+    contains(Symbol, Literal, ConstructorSet) -> Boolean
     add(Symbol, Literal, ConstructorSet)      -> ConstructorSet
 
 hiddens

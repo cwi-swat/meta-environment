@@ -1,5 +1,5 @@
 module Sdf2-Renaming
-imports Sdf2-Syntax
+imports sdf2/syntax/Sdf2-Syntax
         Priority-Sdf-Renaming
         Regular-Sdf-Renaming
         Literals-Sdf-Renaming

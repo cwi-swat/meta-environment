@@ -1,5 +1,5 @@
 module Alias-Sdf-Projection
-imports Alias-Sdf-Syntax
+imports sdf2/syntax/Aliases
 exports
   context-free syntax
     Aliases "++" Aliases -> Aliases {right}

@@ -1,5 +1,9 @@
 $Id$
 
+2002/05/22 (vandenbr@loria.fr)
+ * Bumped into version 1.5beta.
+ * Based the specification on the Sdf definition in the new asf-library.
+
 2002/04/19 (jurgenv@cwi.nl)
  * Release 1.4
 

@@ -1,6 +1,6 @@
 module Label-Sdf-Renaming
 
-imports Label-Sdf-Syntax Kernel-Sdf-Renaming
+imports sdf2/syntax/Labels Kernel-Sdf-Renaming
 hiddens
   variables
     "L"[0-9\']*      -> Literal

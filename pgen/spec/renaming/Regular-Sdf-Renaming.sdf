@@ -1,5 +1,6 @@
 module Regular-Sdf-Renaming
-imports Kernel-Sdf-Renaming Regular-Sdf-Syntax
+imports Kernel-Sdf-Renaming 
+        sdf2/syntax/Regular
 
 hiddens
   variables 
