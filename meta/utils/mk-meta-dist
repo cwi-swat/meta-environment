@@ -1,7 +1,7 @@
 #! /bin/sh
 
 CVSROOT=/ufs/gipe/CVS; export CVSROOT
-RELEASE="cwi-meta"
+RELEASE="meta"
 COMPONENTS="toolbus aterm new-meta"
 cvs_root=gondel.cwi.nl:/ufs/gipe/CVS
 
@@ -41,7 +41,7 @@ trap 'echo "Removing intermediate files..."; rm -rf $TMPDIR/$RELEASE' 0
 for component in $COMPONENTS
 do
 	echo "Obtaining $component component..."
-	if cvs -d ${cvs_root} export -D $TAG $component > /dev/null 2>&1 ; then
+	if cvs -d ${cvs_root} export -D now $component > /dev/null 2>&1 ; then
 		:
 	else
 		echo "An error occurred; bailing out..."
