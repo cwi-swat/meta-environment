@@ -1,8 +1,12 @@
 $Id$
 
+2003/06/03 ({markvdb,jong}@cwi.nl)
+ * Fixed a bug in the renaming of renamings.
+
 2003/06/03 (markvdb@cwi.nl)
  * First refactoring operation (add-import) enabled. 
-2003/05/02 ({jong,jurgenv}@cwi.nl)
+
+2003/06/02 ({jong,jurgenv}@cwi.nl)
  * Added SDF_concatRenamingList
  * Changed order of includes in utils/src/sdf-modules
  * Added dealing with user defined renamings to getTransitiveImports
