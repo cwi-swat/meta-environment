@@ -1,6 +1,6 @@
 module languages/cpp/syntax/Macros
 
-imports languages/cpp/syntax/Basic
+imports languages/cpp/syntax/Text
 	languages/cpp/syntax/Replacement
 
 exports
@@ -29,10 +29,6 @@ context-free syntax
 
 
 	"#" "undef" id:Id NewLine -> Line {cons("undef")}
-
-	
-
-
 
 context-free restrictions
 	CId -/- [\(]
