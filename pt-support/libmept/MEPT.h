@@ -29,29 +29,53 @@ void PT_initMEPTApi(void);
 
 /*{{{  term conversion functions */
 
+#define PT_makeParseTreeFromTerm(t) (PT_ParseTreeFromTerm(t))
 PT_ParseTree PT_ParseTreeFromTerm(ATerm t);
+#define PT_makeTermFromParseTree(t) (PT_ParseTreeToTerm(t))
 ATerm PT_ParseTreeToTerm(PT_ParseTree arg);
+#define PT_makeTreeFromTerm(t) (PT_TreeFromTerm(t))
 PT_Tree PT_TreeFromTerm(ATerm t);
+#define PT_makeTermFromTree(t) (PT_TreeToTerm(t))
 ATerm PT_TreeToTerm(PT_Tree arg);
+#define PT_makeProductionFromTerm(t) (PT_ProductionFromTerm(t))
 PT_Production PT_ProductionFromTerm(ATerm t);
+#define PT_makeTermFromProduction(t) (PT_ProductionToTerm(t))
 ATerm PT_ProductionToTerm(PT_Production arg);
+#define PT_makeAttributesFromTerm(t) (PT_AttributesFromTerm(t))
 PT_Attributes PT_AttributesFromTerm(ATerm t);
+#define PT_makeTermFromAttributes(t) (PT_AttributesToTerm(t))
 ATerm PT_AttributesToTerm(PT_Attributes arg);
+#define PT_makeAttrsFromTerm(t) (PT_AttrsFromTerm(t))
 PT_Attrs PT_AttrsFromTerm(ATerm t);
+#define PT_makeTermFromAttrs(t) (PT_AttrsToTerm(t))
 ATerm PT_AttrsToTerm(PT_Attrs arg);
+#define PT_makeAttrFromTerm(t) (PT_AttrFromTerm(t))
 PT_Attr PT_AttrFromTerm(ATerm t);
+#define PT_makeTermFromAttr(t) (PT_AttrToTerm(t))
 ATerm PT_AttrToTerm(PT_Attr arg);
+#define PT_makeATermFromTerm(t) (PT_ATermFromTerm(t))
 PT_ATerm PT_ATermFromTerm(ATerm t);
+#define PT_makeTermFromATerm(t) (PT_ATermToTerm(t))
 ATerm PT_ATermToTerm(PT_ATerm arg);
+#define PT_makeArgsFromTerm(t) (PT_ArgsFromTerm(t))
 PT_Args PT_ArgsFromTerm(ATerm t);
+#define PT_makeTermFromArgs(t) (PT_ArgsToTerm(t))
 ATerm PT_ArgsToTerm(PT_Args arg);
+#define PT_makeSymbolFromTerm(t) (PT_SymbolFromTerm(t))
 PT_Symbol PT_SymbolFromTerm(ATerm t);
+#define PT_makeTermFromSymbol(t) (PT_SymbolToTerm(t))
 ATerm PT_SymbolToTerm(PT_Symbol arg);
+#define PT_makeSymbolsFromTerm(t) (PT_SymbolsFromTerm(t))
 PT_Symbols PT_SymbolsFromTerm(ATerm t);
+#define PT_makeTermFromSymbols(t) (PT_SymbolsToTerm(t))
 ATerm PT_SymbolsToTerm(PT_Symbols arg);
+#define PT_makeCharRangeFromTerm(t) (PT_CharRangeFromTerm(t))
 PT_CharRange PT_CharRangeFromTerm(ATerm t);
+#define PT_makeTermFromCharRange(t) (PT_CharRangeToTerm(t))
 ATerm PT_CharRangeToTerm(PT_CharRange arg);
+#define PT_makeCharRangesFromTerm(t) (PT_CharRangesFromTerm(t))
 PT_CharRanges PT_CharRangesFromTerm(ATerm t);
+#define PT_makeTermFromCharRanges(t) (PT_CharRangesToTerm(t))
 ATerm PT_CharRangesToTerm(PT_CharRanges arg);
 
 /*}}}  */

@@ -14,7 +14,7 @@ PREFIX   = PT_
 api: ${NAME}.c
 
 ${NAME}.c: ${NAME}.adt 
-	adt-to-c -i ${NAME}.adt --prefix ${PREFIX} -o ${NAME}
+	adt-to-c --compat-term -i ${NAME}.adt --prefix ${PREFIX} -o ${NAME}
 
 clean:
 	${RM} ${CLEANFILES} *.o ${NAME}.[ch] ${NAME}_dict.[ch] \
