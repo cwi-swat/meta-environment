@@ -20,10 +20,8 @@ public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelect
 
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
-                System.err.println("hier is geklikt");
                 Node node = panel.getNodeAt(event.getX(), event.getY());
                 if (node != panel.getSelectedNode()) {
-                    System.err.println("hier niet");
                     Module module;
                     if (node == null) {
                         module = null;
