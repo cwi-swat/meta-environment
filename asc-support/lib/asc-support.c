@@ -578,6 +578,7 @@ static ATermList trafo_kids_list(funcptr trav, ATermList args,
     return result;
   }
 }
+/*}}}  */
 
 /*{{{  ATerm trafo_kids(funcptr trav, ATerm arg0) */
 
