@@ -1,7 +1,8 @@
 SUBDIRS    = libtb aterm
 
 EXTRA_DIST = program-check.m4 reconf \
-             toolbuslib-config.sh.src
+             toolbuslib-config.sh.src \
+	     $(wildcard *.pkg)
 
 bin_SCRIPTS = toolbuslib-config
 
