@@ -1,3 +1,6 @@
+2002/07/01 (vandenbr@loria.fr)
+  * Rolled back the modifications performed on 2002/06/14.
+
 2002/06/14 (jong@cwi.nl,markvdb@cs.vu.nl)
   * Restructured the "Literal"s in ATerm syntax and Sdf syntax.
   * Added ATermOperations (in OO style).
