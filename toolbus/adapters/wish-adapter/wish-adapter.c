@@ -88,7 +88,7 @@ term *dummy_check_in_sign(term *t)
 
 require_fun(char *fname, term_list *fargs)
 {
-  TBprintf(to_wish, "TBrequire %s %s %d\n", tool_name, fname, length_list(fargs));
+  TBprintf(to_wish, "TBrequire %s %s %d\n", tool_name, fname, list_length(fargs));
 }
 
 check_in_sign()
@@ -388,7 +388,7 @@ term *handle_input_from_toolbus(term *e)
 	if(!TBmatch(AtArgs, "[%f(%l), %t]", &name, &args, &var))
 	  TBmsg("**** args of create do not match\n");
 
-	TBprintf(to_wish, "create_proc %t %s\n", get_list(Env, var), name);
+	TBprintf(to_wish, "create_proc %t %s\n", list_get(Env, var), name);
       } else if(streq(AtFun, "rec-connect")){         /* create tool */  
 	int tid;
 /* TBmsg("rec-connect\n");     	 */  
