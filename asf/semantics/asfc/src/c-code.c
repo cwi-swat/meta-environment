@@ -8,6 +8,8 @@
 
 /*}}}  */
 
+extern ATbool make_toolbus_tool;
+
 /*{{{  static void make_header(FILE *file, const char* compiler_version) */
 
 static void make_header(FILE *file, const char* compiler_version)
@@ -22,17 +24,38 @@ static void make_header(FILE *file, const char* compiler_version)
 
 static void make_main(const char *name, FILE *file)
 {
+
+  ATfprintf(file, "#ifdef ASF_MAIN\n");
+
+  if (make_toolbus_tool) {
+    ATfprintf(file,
+	      "#ifdef TOOLBUS\n"
+	      "#include <tb-asc-client.h>\n"
+	      "#include <%s.tif.h>\n"
+	      "#endif\n", name);
+  }
+
   ATfprintf(file,
-	    "#ifdef ASF_MAIN                                           \n"
 	    "int main(int argc, char *argv[])                         \n"
 	    "{                                                        \n"
-	    "  return asc_support_main(argc, argv,                    \n"
+	    "  ATerm bottom;\n"
+	    "  return asc_support_main(&bottom, argc, argv,           \n"
 	    "                          register_%s,                   \n"
             "                          resolve_%s,                    \n"
-	    "                          init_%s);                      \n"
+	    "                          init_%s\n",
+	    name, name, name);
+  if (make_toolbus_tool) {
+    ATfprintf(file,
+	      ", %s_handler);", name);
+  }
+  else {
+    ATfprintf(file, ");");
+  }
+
+  ATfprintf(file,
 	    "}                                                        \n"
-	    "#endif                                                   \n\n",
-	    name, name, name); 
+	    "#endif                                                   \n\n");
+
 }
 
 /*}}}  */

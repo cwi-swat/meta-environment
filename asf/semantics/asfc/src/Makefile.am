@@ -19,6 +19,7 @@ asfc_SOURCES = asfc.tif.c \
                lex-cons.c \
                muasf2c.c \
                c-compiler.c \
+               idef.c \
                Compiler.c
 
 noinst_HEADERS = asfc.tif.h \
@@ -28,7 +29,8 @@ noinst_HEADERS = asfc.tif.h \
                  lex-cons.h \
                  asfc.tif.h \
                  muasf2c.h \
-                 c-compiler.h
+                 c-compiler.h \
+                 idef.h
 
 asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept -lconversion -lasfix2  \
@@ -42,6 +44,9 @@ DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
           -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
           -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
           -DATERM=\"$(ATERM)\" \
+          -DTOOLBUSLIB=\"$(TOOLBUSLIB)\" \
+          -DIDEF2TIF=\"$(TOOLBUS)/bin/idef2tif\" \
+          -DTIFSTOC=\"$(TOOLBUS)/bin/tifstoc\" \
           -DCOMPILER=\"$(CC)\" \
           -DCOMPILERFLAGS="\"$(CFLAGS)\""
 

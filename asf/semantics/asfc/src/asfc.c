@@ -32,6 +32,7 @@
 #include "c-code.h"
 #include "c-compiler.h"
 #include "chars.h"
+#include "idef.h"
 
 /*}}}  */
 
@@ -39,6 +40,7 @@
 
 ATbool run_verbose;
 ATbool toolbus_mode;
+ATbool make_toolbus_tool;
 ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
@@ -48,7 +50,7 @@ int toolbus_id;
 char myname[] = "asfc";
 char myversion[] = "2.5";
 
-static char myarguments[] = "chi:lmn:o:vV";
+static char myarguments[] = "chi:lmn:o:tvV";
 
 
 /*}}}  */
@@ -82,12 +84,14 @@ static void usage(void)
 	    "\t-m              output muasf code             (default %s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
 	    "\t-o filename     output c code to file         (default stdout)\n"
+	    "\t-t              make toolbus tool             (default %s\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
 	    use_c_compiler ? "on" : "off",
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
+	    make_toolbus_tool ? "on" : "off",
 	    myversion);
   exit(0);
 }
@@ -162,12 +166,23 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
     ToC_code(saveName, c_code, fp , myversion);
     fclose(fp);
 
+    if (make_toolbus_tool) {
+      VERBOSE("generating idef script");
+
+      make_idef_script(saveName);
+      
+      if (use_c_compiler) {
+	idef2c(name);
+      }
+    }
+
     if (use_c_compiler) {
       
       VERBOSE("invoking C compiler");
 
       call_c_compiler(name, saveName, output);
     }
+
   }
 
   free(saveName);
@@ -230,6 +245,7 @@ int main(int argc, char *argv[])
   output_muasf = ATfalse;
   use_c_compiler = ATfalse;
   toolbus_mode = ATfalse;
+  make_toolbus_tool = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -263,6 +279,7 @@ int main(int argc, char *argv[])
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
+      case 't':  make_toolbus_tool=ATtrue; break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
       default:   usage();               break;
