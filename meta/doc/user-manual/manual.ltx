@@ -1,22 +1,3 @@
-%%
-%%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-%%    The Netherlands. 
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
 %{{{ LaTeX configuration
 
 % vim:ts=4:sw=4:tw=75
@@ -305,8 +286,6 @@ to \asfsdf\ in Section~\ref{ASF+SDF}.
 \item The architectural and implementational aspects of the system.
 \item The stand alone usage of various parts of the system.
 \end{itemize}
-
-\subsection{\sdf1 versus \sdf2}
 
 \subsection{Further Reading}
 
@@ -721,7 +700,7 @@ user can navigate in the tree.
 
 An editor for editing the syntax part of a module can be activated by
 pressing the {\tt Edit Syntax} button. An example is shown in
-Figure~\ref{FIG:Bool-example.sdf2}.  Initially the entire text is
+Figure~\ref{FIG:Bool-example.sdf}.  Initially the entire text is
 highlighted and the message ``{\tt Focus sort is invalid}'' appears
 in the status line at the bottom of the main window.
 
@@ -755,8 +734,8 @@ An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}.  An example is shown in Figure
 \ref{FIG:Bool-example.asf}.  
 
-The entries {\tt Parse Buffer} and {\tt Parse Focus} in the {\tt
-Meta-Environment} menu of the editor activate the parser for the
+The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
+activate the parser for the
 equations. It is possible that in order to parse the equations, a
 parse table must be generated. This is visible through the status
 message {\tt Generating Parse Table}.
@@ -767,8 +746,8 @@ An editor for editing a term over a module is activated via the button
 {\tt Edit Term}.  An example is shown in Figure
 \ref{FIG:Bool-example.trm},
 
-The entries {\tt Parse Buffer} and {\tt Parse Focus} in the {\tt
-Meta-Environment} menu of the editor activate the parser for this
+The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
+activate the parser for this
 term. It is possible that in order to parse the term, a parse table
 must be generated. This is visible through the status message {\tt
 Generating Parse Table}.
@@ -826,7 +805,7 @@ directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
 copy of the directory.
 
 For each module in a specification two files exist: `{\tt
-  $module$.sdf2}' contains the syntax of $module$ and `{\tt
+  $module$.sdf}' contains the syntax of $module$ and `{\tt
   $module$.asf}' contains the equations (semantics) of $module$. The
   directory {\tt pico} contains:
 
@@ -854,7 +833,7 @@ For each module in a specification two files exist: `{\tt
 \item Add the module {\tt Bool-example} by selecting the File menu, and
   choosing the Open button. In a dialog window, the system asks you to give
   the name of the module to be opened. It presents a list of all files with
-  extension `{\tt sdf2}'. Click once on `{\tt Bool-example.sdf2}' and then
+  extension `{\tt sdf}'. Click once on `{\tt Bool-example.sdf}' and then
   push the {\tt Open} button. This will load the module {\tt Module-example}
   (both its syntax and equations!) into the system.
   
@@ -919,7 +898,7 @@ refer to Section~\ref{ASF+SDF}.
 
 \begin{figure}[t]
   \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
-  \caption{\label{FIG:Bool-example.sdf2}Editor for the syntax of {\tt Bool-example}}
+  \caption{\label{FIG:Bool-example.sdf}Editor for the syntax of {\tt Bool-example}}
 \end{figure}
 
 \begin{figure}[t]
@@ -940,7 +919,7 @@ refer to Section~\ref{ASF+SDF}.
   of the {\tt Bool-example} specification: the \sdf\ section.  This editor is
   a version of the standard text editor Emacs extended with the menus {\tt
     Meta-Environment} and {\tt Move}. The result is shown in
-  Figure~\ref{FIG:Bool-example.sdf2}.
+  Figure~\ref{FIG:Bool-example.sdf}.
   
 \item Push the button {\tt Edit Equations}.  This will reuse the already 
   existing
@@ -1119,7 +1098,7 @@ and is saved in files ending on `{\tt .asf}'.
 \paragraph{Modifying the Syntax}
 
 The syntax part of a module starts with the keyword {\tt module}
-and  is saved in files ending on `{\tt .sdf2}'.
+and  is saved in files ending on `{\tt .sdf}'.
 Modifying the syntax causes the generated scanner and parser to be adapted.
 After each edit operation in the \sdf\ section that is followed by a parse of
 the \sdf\ section, the focus in both the equations section and the term editor
@@ -1174,7 +1153,7 @@ definitions define at least spaces and newlines to be {\tt LAYOUT}.
 
 \end{itemize}
 
-If you save the changes the files `{\tt Bool-example.sdf2}' and `{\tt
+If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
   Bool-example.asf}' will be modified.
 
 
@@ -1206,7 +1185,7 @@ Pico specification.
 \begin{figure}[t]
 
   \centerline{\epsfig{file=Pico-Booleans.sdf2.ps,width=12cm}}
-  \caption{\label{FIG:Pico-Booleans-sdf2}Editor for syntax of {\tt Pico-Booleans}}
+  \caption{\label{FIG:Pico-Booleans-sdf}Editor for syntax of {\tt Pico-Booleans}}
 
 \end{figure}
 
@@ -1227,7 +1206,7 @@ syntax and equations with {\tt Bool-example}.
 \end{itemize}
 
 Editors for syntax and equations of {\tt Pico-Booleans} are show in
-Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
+Figures \ref{FIG:Pico-Booleans-sdf} and \ref{FIG:Pico-Booleans-eqs}.
 
 
 \begin{itemize}
@@ -1237,7 +1216,7 @@ Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
   selecting the {\tt Open...} button.  In the dialog window that appears, click
-  on {\tt Pico-syntax.sdf2} and push the {\tt Open} button.
+  on {\tt Pico-syntax.sdf} and push the {\tt Open} button.
   
 \item As you can see in both the import pane and the module pane, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
@@ -1488,18 +1467,8 @@ an expression results in a value.
 Specification Formalism) and \sdf\ (Syntax Definition Formalism).  \asf\ is
 based on the notion of a module consisting of a signature defining the
 abstract syntax of functions and a set of conditional equations defining their
-semantics. Modules can be imported in other modules. \sdf\footnote{To be more
-  precise, we will describe \sdf2, a new version of \sdf. \sdf2 is more
-  expressive and offers some special features to write more powerful lexical
-  grammar definitions as well as more concise context-free grammar
-  definitions. However, some built-in features of \sdf, like lexical
-  disambiguation, have disappeared, and a specification writer should be aware
-  of this.
-  
-  Currently, the \ASmetaenv\ only supports a subset of \sdf2\ that is mostly
-  compatible with \sdf. In due time, full \sdf2\ will be supported. In this
-  manual, we only describe features that are supported by the current version
-  of the Meta-Environment.} allows the simultaneous definition of concrete
+semantics. Modules can be imported in other modules. 
+\sdf allows the simultaneous definition of concrete
 (i.e., lexical and context-free) and abstract syntax and implicitly defines a
 translation from text strings to abstract syntax trees.
 
@@ -1544,7 +1513,7 @@ sections and an optional equations section that defines conditional equations.
 Conceptually, a module is a single unit but for technical reasons the
 syntax sections and the equations section are stored in physically
 separate files.  For each module $M$ in a specification two files
-exist: `{\tt $M$.sdf2}' contains the syntax sections of $M$ and `{\tt
+exist: `{\tt $M$.sdf}' contains the syntax sections of $M$ and `{\tt
 $M$.asf}' contains the equations section of $M$.
 
 An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
@@ -1564,23 +1533,28 @@ exports                               hiddens
 can be a definition of one of the following: 
 \begin{itemize}
 \item Imports (Section~\ref{Imports}).
+\item Aliases (Section~\ref{Aliases}).
 \item Sorts (Section~\ref{Sorts}).
 \item Lexical syntax (Section~\ref{LexicalSyntax}).
 \item Context-free syntax (Section~\ref{ContexFreeSyntax}).
-\item Attributes of Lexical and Context-free Functions (Section~\ref{Attributes}).
 %\item lexical variables;
 %\item lexical priorities;
 \item Priorities (Section~\ref{Priorities}).
 \item Variables (Section~\ref{Variables}).
-%\item aliases;
+\end{itemize}
+
+There are a number of related properties which have an effect across the
+various grammar items, these items are intermixed with the discussion
+of the grammars:
+\begin{itemize}
+\item Symbols (Section~\ref{Symbols}).
+\item Attributes of Lexical and Context-free Functions (Section~\ref{Attributes}).
+\item Disambiguation (Section~\ref{Disambiguation}).
+\item Equations (Section~\ref{Equations}).
 \end{itemize}
 
 \noindent Each of these entities will now be described and illustrated by
 examples.
-
-Descriptions of syntactic disambiguation (Section~\ref{Disambiguation}) and of
-equations (Section~\ref{Equations}) complete this overview of an \asfsdf\ 
-module.
 
 \subsection{Imports} \label{Imports}
 
@@ -1605,6 +1579,85 @@ become available in the importing module. In addition, they are also exported
 by the importing module.  However, if the import section occurs within the
 scope of a hiddens keyword, the exported entities are only visible in the
 importing module but they are not exported by the importing module.
+
+\subsection{Symbols} \label{Symbols}
+
+The definition of syntax rules is based performed by means of basic
+symbols combination of symbol operators.
+Sorts, literals, and character classes are the basic symbols, e.g.,
+{\tt Bool}, {\tt true}, {\tt [a-z]}, or {\tt "\&"} are examples of 
+basic symbols. The notion of character classes will be explained
+in Section~\ref{CharacterClasses}, they are mainly used when describing
+the lexical syntax of a language.
+
+\subsubsection{Option Operator}
+If zero or exactly one occurrence of a symbol is desired the postfix
+operator {\tt ?} is available. It indicates that there should be zero
+or one occurrence of a symbol.
+
+\subsubsection{Sequence Operator}
+By means of the sequence operator two or more symbols can be considered
+as one. The sequence of symbols is marked by brackets, e.g.,
+{\tt (Bool "\&")}. It is no use to put a sequence operator around a
+single symbol, because in that case the brackets will have not effect.
+It is also possible to represent the empty sequence {\tt ()}.
+
+\subsubsection{Repetition Operators}
+In order to express that a symbol should occur several times
+it is possible to use repetition operators. In this way it is possible
+to construct flat lists. The repetition operators
+come in two disguises, with and without separators. Furthermore,
+it is possible to express that it should be zero or more occurrences and
+one or more occurrences even with a lower bound.
+Examples are {\tt Bool*}, {\tt \{Bool ","\}+}, and {\tt Bool3+}.
+Both the element as well as the separator can be an arbitrary
+symbol, although it is advisable that the element and the separator
+do not represent the same symbol, e.g., {\tt \{Bool Bool\}*}.
+
+\subsubsection{Alternative Operator}
+The alternative operator {\tt |} can be used to denote the choice between
+two symbols, e.g., {\tt true | false} represents that either a
+{\tt true} symbol or a {\tt false} symbol may occur here. The alternative
+operator is right associative and binds stronger than any other operator
+on symbols. This latter is important because {\tt Bool "," | Bool ";"}
+expresses {\tt Bool ("," | Bool) ";"} instead of
+{\tt (Bool ",") | (Bool ";")}. So, in case of doubt use the sequence
+operator in combination with the alternative operator.
+
+
+\subsubsection{Tuple Operator}
+The next four symbol operators have a different notation when defining
+and using.
+
+The tuple operator {\tt #} allows the grouping of symbols in the form of
+tuples. For example, {\tt Bool \# Int \# Id} represents a tuple with three
+elements, e.g., {\tt <true, 3, x>} is a valid instantiation of this
+tuple. The tuple operator is right associative and binds less stronger
+than the alternative operator.
+
+\subsubsection{Permutation Operator}
+The permutation operator expresses that the defined symbols 
+may occur in any permuation. For example, {\tt <<Bool Int Id>>} represents
+a permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.
+Valid instantiations are {\tt true 3 x}, {\tt x 3 true}, etc. There are
+six valid instantiations for this tuple.
+
+\subsubsection{Set Operator}
+The set operator is an abbreviation for defining a set elements
+of a given symbol.
+For example, {\tt Set[Int]} abbreviates the definition {\tt "\{" \{Int
+","\}* "\}"}. So, {\tt \{1, 2, 3\}} is an valid instantiation for the
+given definition.
+
+\subsubsection{Function Operator}
+The function operator, {\tt "(" Symbol* "=>" Symbol ")"}
+allows the definition of types of functions.
+For example, {\tt (Bool Int) => Int} represents a function which
+two arguments and maps it to an integer.
+
+\subsection{Aliases} \label{Aliases}
+
+The aliases allow the abbreviation of complicated symbol definitions.
 
 \subsection{Sorts} \label{Sorts}
 
@@ -1702,15 +1755,14 @@ exports
 \end{figure}   
       
 
-\paragraph{Lexical constructor functions}%
-\hspace{-0.3cm}\footnote{Lexical contructor functions will disappear when full \sdf2\ becomes available in the \ASmetaenv.}
+\paragraph{Lexical constructor functions}
 For each sort {\tt L} that appears as result sort in the lexical syntax a lexical
 constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
 added to the context-free syntax of the specification.  Here, `{\tt l}' is the
 name of sort `{\tt L}' written in lower-case letters.  In this way, you can
 get access to the characters of lexical tokens.
 
-\subsubsection{Character Classes}
+\subsubsection{Character Classes}\label{CharacterClasses}
 
 Enumerations of characters occur frequently in lexical definitions. They can
 be abbreviated by using character classes enclosed by `{\tt [}' and 
@@ -1914,9 +1966,9 @@ followed by zero or more letters or digits.
 
 \subsubsection{The Option Operator}
 
-If zero or exactly one occurence of a lexical token is desired the
+If zero or exactly one occurrence of a lexical token is desired the
 postfix operator {\tt ?} is available. It indicates that there
-should be zero or one occurence of the sort, literal or
+should be zero or one occurrence of the sort, literal or
 character class preceding the {\tt ?}. 
 
 
@@ -2122,10 +2174,6 @@ Elements of the left-hand side of a context-free function
 are separated by an invisible non-terminal {\tt LAYOUT?} 
 (optional {\tt LAYOUT}) in order to permit layout between these members.
 This optional layout non-terminal is automatically inserted.
-%%\footnote{\sdf2 offers the possibility to write
-%%down syntax rules in which the optional layout non-terminal
-%%is {\em not} automatically inserted. These rules should
-%%be written in the {\tt syntax}-section.}.
 
 \subsubsection{Context-free Functions}
 
@@ -2214,7 +2262,7 @@ sort $S$ separated by the literal $sep$.
 Lists may be used in the left-hand side of a context-free function and in the
 right-hand side of a variable declaration, see Section \ref{Variables}. They
 may {\em not} be used as result sort in the right-hand side of a context-free
-function.\footnote{This restriction will be lifted when full \sdf2\ will be supported.}
+function.
 This imposes no real restriction since a new sort can be introduced
 representing a list. This new sort may then be used in the right-hand side of
 other context-free rules.
@@ -2741,9 +2789,7 @@ not offer {\em fully automatic} lexical disambiguation.
 As a result, the specification writer has to be aware of lexical ambiguities
 and has to specify disambiguation rules explicitly.
 We will discuss various
-approaches to lexical disambiguation\footnote{This behaviour is specific for
-  \sdf2. In the original \sdf, most of these disambiguations were built-in.}
-and illustrate them by means of examples.
+approaches to lexical disambiguation and illustrate them by means of examples.
 
 \paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
 the input text that are included in a longer interpretation of the same 
@@ -2973,8 +3019,6 @@ superscript in a special way. Therefore, the special case `{\tt E sub E sup E
   -> E}' is introduced, which is prefered over a combination of the two
 functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
 See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
-
-
 
 \subsection{Variables} \label{Variables}
 
@@ -3305,9 +3349,6 @@ to remove the leading zeros for a number.
 
 \noindent Note: there is no check on the use of characters within the
 lexical constructor function.
-
-\noindent Note: the lexical constructor functions will disappear when 
-the \ASmetaenv\ supports fully \sdf2.
 
 \subsubsection{Default Equations}
 
@@ -3826,7 +3867,7 @@ This completes the specification of our code generator.
 There are a number of very large \asfsdf\ specifications:
 \begin{itemize}
 \item the \asfsdf2C compiler.
-\item a part of the parse table generator for \sdf2.
+\item a part of the parse table generator for \sdf.
 \item the syntax and type checking of a domain specific language for
 describing financial products. 
 \end{itemize}
@@ -3955,5 +3996,8 @@ be reduced via the compiled code as follows.
 The unparsing of parsed/normalized terms is currently quite primitive.
 
 {\tt asource < reduct.tree > reduct.txt}
+
+\bibliographystyle{plain}
+\bibliography{manual} 
 
 \end{document}
