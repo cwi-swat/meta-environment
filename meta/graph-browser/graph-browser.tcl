@@ -156,6 +156,20 @@ proc open-module { mod } {
     update-graph
 }
 
+#---
+# snd-do(open-empty-module(Mod))
+#-
+# Adds the named module, but it is being added as an oval
+# instead of a box.
+# Modules are added only once.
+# The proc update-graph is performed afterwards.
+#---
+proc open-empty-module { mod } {
+    global g MODULESTYLE
+    GBin "open-empty-module($mod)"
+    $g addnode [StripId $mod]
+    update-graph
+}
 
 #---
 # snd-do(delete-module(Mod))
@@ -564,6 +578,18 @@ proc SelectedModules {} {
 proc EditModules { modlist } {
     foreach mod $modlist {
 	GBpost [format "edit-module(%s)" [ToId $mod]]
+    }
+}
+
+proc EditSdf2Modules { modlist } {
+    foreach mod $modlist {
+	GBpost [format "edit-module(%s)" [ToId $mod]]
+    }
+}
+
+proc EditEqsModules { modlist } {
+    foreach mod $modlist {
+	GBpost [format "edit-eqs-module(%s)" [ToId $mod]]
     }
 }
 
@@ -1035,8 +1061,10 @@ proc define-modules-frame {} {
 
     frame .modules.buttons
 
-    button .modules.buttons.editmod -text "Edit" \
-	-command {EditModules [SelectedModules]}
+    button .modules.buttons.editsdfmod -text "Edit Sdf2" \
+	-command {EditSdf2Modules [SelectedModules]}
+    button .modules.buttons.editeqsmod -text "Edit Eqs" \
+	-command {EditEqsModules [SelectedModules]}
     button .modules.buttons.editterm -text "Term" \
 	-command {foreach i [SelectedModules] {
 	    EditTermWidget $i
@@ -1055,7 +1083,8 @@ proc define-modules-frame {} {
        -command {ParseEquations [SelectedModules]}
 
     pack append .modules.buttons \
-        .modules.buttons.editmod {top fillx} \
+        .modules.buttons.editsdfmod {top fillx} \
+        .modules.buttons.editeqsmod {top fillx} \
 	.modules.buttons.editterm {top fillx} \
         .modules.buttons.savemod {top fillx} \
         .modules.buttons.revertmod {top fillx} \
@@ -1128,8 +1157,10 @@ proc define-status-frame {} {
 proc define-module-popup {} {
     set m .module-popup
     menu $m -tearoff 0
-    $m add command -label "Edit module" \
-        -command {EditModules [GetObjectName $c]}
+    $m add command -label "Edit Sdf2 module" \
+        -command {EditSdf2Modules [GetObjectName $c]}
+    $m add command -label "Edit Eqs module" \
+        -command {EditEqsModules [GetObjectName $c]}
     $m add command -label "Edit term" \
         -command {EditTermWidget [GetObjectName $c]}
     $m add separator
@@ -1154,6 +1185,8 @@ proc define-shadowmodule-popup {} {
     menu $m -tearoff 0
     $m add command -label "Open this module" \
         -command {OpenModule [GetObjectName $c]}
+    $m add command -label "Edit this module" \
+        -command {EditModules [GetObjectName $c]}
 }
 
 proc define-modlist-popup {} {
