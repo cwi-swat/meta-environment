@@ -330,18 +330,20 @@ static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
   ERR_Area area = ERR_getLocationArea(location);
 
-  int start = ERR_getAreaOffset(area)+1;
-  int length = ERR_getAreaLength(area);
-  char buf[BUFSIZ];
+  if (ERR_isAreaArea(area)) {
+    int start = ERR_getAreaOffset(area)+1;
+    int length = ERR_getAreaLength(area);
+    char buf[BUFSIZ];
 
-  sprintf(buf, ":goto %d", start);
-  sendToVim(buf);
+    sprintf(buf, ":goto %d", start);
+    sendToVim(buf);
 
-  sendToVimVerbatim("v");
+    sendToVimVerbatim("v");
 
-  if (length > 1) {
-    sprintf(buf, "%d ", length-1);
-    sendToVimVerbatim(buf);
+    if (length > 1) {
+      sprintf(buf, "%d ", length-1);
+      sendToVimVerbatim(buf);
+    }
   }
 }
 
