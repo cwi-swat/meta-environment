@@ -29,12 +29,12 @@ public class ToolBar extends UserInterfacePanel {
         toolBar = new JToolBar();
         add(toolBar);
         
-        postEvent(factory.make("get-buttons(<term>,<str>)", ACTION_TOOLBAR, "*"));
+        postEvent(factory.make("get-events(<term>)", ACTION_TOOLBAR));
     }
 
-    public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
-        if (buttonType.equals(ACTION_TOOLBAR)) {
-            addToolBarActions((ATermList) buttons);
+    public void addEvents(ATerm type, ATerm events) {
+        if (type.equals(ACTION_TOOLBAR)) {
+            addToolBarActions((ATermList) events);
         }
     }
     

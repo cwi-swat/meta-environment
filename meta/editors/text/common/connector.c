@@ -37,7 +37,7 @@ struct _TextEditor
   write_contents_t writeContents;
   reread_contents_t rereadContents;
   display_message_t displayMessage;
-  set_actions_t setActions;
+  add_actions_t addActions;
   set_focus_t setFocus;
   set_cursor_at_offset_t setCursorAtOffset;
   is_modified_t isModified;
@@ -205,8 +205,8 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionDisplayMessage(action)) {
     editor->displayMessage(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetActions(action)) {
-    editor->setActions(write_to_editor_fd, action);
+  else if (TE_isActionAddActions(action)) {
+    editor->addActions(write_to_editor_fd, action);
   }
   else if (TE_isActionSetFocus(action)) {
     editor->setFocus(write_to_editor_fd, action);
@@ -229,7 +229,7 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  write_contents_t writeContents,
 			  reread_contents_t rereadContents,
 			  display_message_t displayMessage,
-			  set_actions_t setActions,
+			  add_actions_t addActions,
 			  set_focus_t setFocus,
 			  set_cursor_at_offset_t setCursorAtOffset,
 			  is_modified_t isModified)
@@ -254,8 +254,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   assert(displayMessage != NULL);
   textEditorImpl->displayMessage = displayMessage;
 
-  assert(setActions != NULL);
-  textEditorImpl->setActions = setActions;
+  assert(addActions != NULL);
+  textEditorImpl->addActions = addActions;
 
   assert(setFocus != NULL);
   textEditorImpl->setFocus = setFocus;

@@ -1,8 +1,10 @@
+*.dict
 *.tifs
 .deps
 .libs
 Makefile
 Makefile.in
 configmanager
+kernel-configuration.tb
 standard.buttons
-*.dict
+user-configuration.tb

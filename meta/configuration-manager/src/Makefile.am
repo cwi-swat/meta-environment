@@ -2,16 +2,37 @@
 
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS = configmanager
-
-pkgdata_DATA  = configuration-manager.idef standard.meta.buttons
-
-EXTRA_DIST = configuration-manager.idef standard.meta.buttons
+KERNEL_CONFIGURATION = "$(pkgdatadir)/meta-kernel.properties"
+USER_CONFIGURATION = "./meta.buttons"
+LIBRARY_PATH = 
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
-noinst_HEADERS = configuration-manager.tif.h configmanager.h
-include_HEADERS = MetaConfig.h MetaConfig_dict.h 
+INCLUDES = \
+	-I$(ATERM)/include \
+	-I$(TOOLBUSLIB)/include
+
+bin_PROGRAMS = configmanager
+
+pkgdata_DATA = \
+	configuration-manager.idef \
+	kernel-configuration.tb \
+	user-configuration.tb \
+	meta-kernel.properties
+
+EXTRA_DIST = \
+	configuration-manager.idef \
+	kernel-configuration.tb.src \
+	user-configuration.tb.src \
+	meta-kernel.properties
+
+noinst_HEADERS = \
+	configuration-manager.tif.h \
+	configmanager.h
+
+include_HEADERS = \
+	MetaConfig.h \
+	MetaConfig_dict.h 
 
 configmanager_SOURCES = \
 	MetaConfig.c \
@@ -24,11 +45,9 @@ configmanager_LDADD = \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
-INCLUDES = \
-	-I$(ATERM)/include \
-	-I$(TOOLBUSLIB)/include \
-	-DBINDIR=\"$(bindir)\" \
-	-DSTANDARD_META_BUTTONS=\"$(pkgdatadir)/standard.meta.buttons\"
+%.tb: %.tb.src Makefile
+	sed 's@__KERNEL_CONFIGURATION__@$(KERNEL_CONFIGURATION)@g;\
+	    s@__USER_CONFIGURATION__@$(USER_CONFIGURATION)@g;' < $< > $@
 
 api:
 	adt-to-c \
@@ -36,4 +55,4 @@ api:
 		--name MetaConfig \
 		--prefix MC_ \
 		--output . \
-		--version 1.04
+		--version 1.1

@@ -11,7 +11,7 @@ let
   Contents : str,
   EditorId : term,
   Editor : str,
-  FileName : str,
+  Filename : str,
   Focus : term,
   Hive : editor-hive,
   Offset : int,
@@ -27,9 +27,11 @@ in
 #endif
   .
   (
-    rec-msg(te-edit-text(EditorId?, Editor?, FileName?, ActionList?))
-    . snd-do(Hive, edit-file(EditorId, Editor, FileName))
-    . snd-do(Hive, set-actions(EditorId, ActionList))
+    rec-msg(te-edit-text(EditorId?, Editor?, Filename?))
+    . snd-do(Hive, edit-file(EditorId, Editor, Filename))
+  +
+    rec-msg(te-add-actions(EditorId?, ActionList?))
+    . snd-do(Hive, add-actions(EditorId, ActionList))
   +
     rec-msg(te-write-contents(EditorId?))
     . snd-do(Hive, write-contents(EditorId))

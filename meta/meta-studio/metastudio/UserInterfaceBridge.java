@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2004 1:34:44 PM
+// generation time: May 13, 2004 2:18:41 PM
 
 package metastudio;
 
@@ -56,6 +56,32 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `showListChoice' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void addEvents(ATerm t0, String s1, ATerm t2)
+
+  public void addEvents(ATerm t0, String s1, ATerm t2)
+  {
+    if (tool != null) {
+      tool.addEvents(t0, s1, t2);
+    }
+    else {
+      throw new UnsupportedOperationException("method `addEvents' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void addEvents(ATerm t0, ATerm t1)
+
+  public void addEvents(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.addEvents(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `addEvents' not supported.");
     }
   }
 
@@ -173,19 +199,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `error' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void buttonsFound(ATerm t0, String s1, ATerm t2)
-
-  public void buttonsFound(ATerm t0, String s1, ATerm t2)
-  {
-    if (tool != null) {
-      tool.buttonsFound(t0, s1, t2);
-    }
-    else {
-      throw new UnsupportedOperationException("method `buttonsFound' not supported.");
     }
   }
 

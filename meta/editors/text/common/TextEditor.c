@@ -376,9 +376,9 @@ TE_Action TE_makeActionClearFocus(void)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionSetActions(TE_ActionList actions) */
+/*{{{  TE_Action TE_makeActionAddActions(TE_ActionList actions) */
 
-TE_Action TE_makeActionSetActions(TE_ActionList actions)
+TE_Action TE_makeActionAddActions(TE_ActionList actions)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun11, (ATerm) actions));
 }
@@ -580,7 +580,7 @@ ATbool TE_isValidAction(TE_Action arg)
   else if (TE_isActionClearFocus(arg)) {
     return ATtrue;
   }
-  else if (TE_isActionSetActions(arg)) {
+  else if (TE_isActionAddActions(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -807,9 +807,9 @@ inline ATbool TE_isActionClearFocus(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool TE_isActionSetActions(TE_Action arg) */
+/*{{{  inline ATbool TE_isActionAddActions(TE_Action arg) */
 
-inline ATbool TE_isActionSetActions(TE_Action arg)
+inline ATbool TE_isActionAddActions(TE_Action arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -820,7 +820,7 @@ inline ATbool TE_isActionSetActions(TE_Action arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetActions, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionAddActions, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -932,7 +932,7 @@ TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
 
 ATbool TE_hasActionActions(TE_Action arg)
 {
-  if (TE_isActionSetActions(arg)) {
+  if (TE_isActionAddActions(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -952,7 +952,7 @@ TE_ActionList TE_getActionActions(TE_Action arg)
 
 TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions)
 {
-  if (TE_isActionSetActions(arg)) {
+  if (TE_isActionAddActions(arg)) {
     return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) actions), 0), 0);
   }
 
@@ -1916,8 +1916,8 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
   if (TE_isActionClearFocus(arg)) {
     return TE_makeActionClearFocus();
   }
-  if (TE_isActionSetActions(arg)) {
-    return TE_makeActionSetActions(
+  if (TE_isActionAddActions(arg)) {
+    return TE_makeActionAddActions(
         acceptActions ? acceptActions(TE_getActionActions(arg)) : TE_getActionActions(arg));
   }
   ATabort("not a Action: %t\n", arg);

@@ -14,6 +14,7 @@ extern ATerm EM_patternEditorTypeListEmpty;
 extern ATerm EM_patternSessionDefault;
 extern ATerm EM_patternSessionStatusZombie;
 extern ATerm EM_patternSessionStatusRunning;
+extern ATerm EM_patternModuleIdDefault;
 extern ATerm EM_patternEditorTypeDefault;
 extern ATerm EM_patternSidDefault;
 

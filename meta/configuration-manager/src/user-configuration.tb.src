@@ -1,0 +1,16 @@
+process UserConfiguration is
+let
+  Contents: str,
+  Error: str
+in
+  snd-msg(io-read-file(__USER_CONFIGURATION__))
+  . 
+  (
+    rec-msg(io-file-contents(Contents?))
+    . snd-msg(cm-add-system-properties(Contents))
+    . rec-msg(cm-system-properties-added)
+  +
+    rec-msg(io-error-reading(Error?))
+    . printf("UserConfiguration: %s\n", Error)
+  )
+endlet

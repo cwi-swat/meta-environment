@@ -13,6 +13,10 @@ exports
   context-free syntax
     name:StrCon -> EditorType
 
+  sorts ModuleId
+  context-free syntax
+    name:StrCon -> ModuleId
+
   sorts SessionStatus
   context-free syntax
     "running" -> SessionStatus {cons("running")}
@@ -22,8 +26,7 @@ exports
   context-free syntax
     "session" "("
       id:Sid ","
-      filename:StrCon ","
-      modulename:StrCon ","
+      path:StrCon ","
       status:SessionStatus ","
       reference-count:NatCon ","
       "{" {EditorType ","}* "}"

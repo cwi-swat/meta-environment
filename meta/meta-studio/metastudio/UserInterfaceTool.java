@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2004 1:34:44 PM
+// generation time: May 13, 2004 2:18:41 PM
 
 package metastudio;
 
@@ -20,6 +20,8 @@ abstract public class UserInterfaceTool
   private ATerm Pmessagef0;
   private ATerm PinitializeUi0;
   private ATerm PshowListChoice0;
+  private ATerm PaddEvents0;
+  private ATerm PaddEvents1;
   private ATerm Pwarningf0;
   private ATerm Pmessage0;
   private ATerm PnewGraph0;
@@ -29,7 +31,6 @@ abstract public class UserInterfaceTool
   private ATerm Perrorf0;
   private ATerm Pwarning0;
   private ATerm Perror0;
-  private ATerm PbuttonsFound0;
   private ATerm PremoveFeedbackSummary0;
   private ATerm PshowFeedbackSummary0;
   private ATerm PaddStatusf0;
@@ -74,7 +75,8 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,buttons-found(<term>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
@@ -92,6 +94,8 @@ abstract public class UserInterfaceTool
     Pmessagef0 = factory.parse("rec-do(messagef(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PshowListChoice0 = factory.parse("rec-do(showListChoice(<str>,<str>,<term>))");
+    PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
+    PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
     Pwarningf0 = factory.parse("rec-do(warningf(<str>,<term>))");
     Pmessage0 = factory.parse("rec-do(message(<str>))");
     PnewGraph0 = factory.parse("rec-do(new-graph(<term>))");
@@ -101,7 +105,6 @@ abstract public class UserInterfaceTool
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
     Pwarning0 = factory.parse("rec-do(warning(<str>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
-    PbuttonsFound0 = factory.parse("rec-do(buttons-found(<term>,<str>,<term>))");
     PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
     PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
     PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
@@ -135,6 +138,16 @@ abstract public class UserInterfaceTool
     result = term.match(PshowListChoice0);
     if (result != null) {
       showListChoice((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      return null;
+    }
+    result = term.match(PaddEvents0);
+    if (result != null) {
+      addEvents((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      return null;
+    }
+    result = term.match(PaddEvents1);
+    if (result != null) {
+      addEvents((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(Pwarningf0);
@@ -180,11 +193,6 @@ abstract public class UserInterfaceTool
     result = term.match(Perror0);
     if (result != null) {
       error((String)result.get(0));
-      return null;
-    }
-    result = term.match(PbuttonsFound0);
-    if (result != null) {
-      buttonsFound((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PremoveFeedbackSummary0);

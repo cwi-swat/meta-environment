@@ -46,6 +46,7 @@ char *EM_charsToString(ATerm arg)
 
 typedef struct ATerm _EM_Sid;
 typedef struct ATerm _EM_EditorType;
+typedef struct ATerm _EM_ModuleId;
 typedef struct ATerm _EM_SessionStatus;
 typedef struct ATerm _EM_Session;
 typedef struct ATerm _EM_EditorTypeList;
@@ -69,6 +70,11 @@ void EM_protectSid(EM_Sid *arg)
 }
 
 void EM_protectEditorType(EM_EditorType *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void EM_protectModuleId(EM_ModuleId *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -119,6 +125,22 @@ EM_EditorType EM_EditorTypeFromTerm(ATerm t)
 /*{{{  ATerm EM_EditorTypeToTerm(EM_EditorType arg) */
 
 ATerm EM_EditorTypeToTerm(EM_EditorType arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  EM_ModuleId EM_ModuleIdFromTerm(ATerm t) */
+
+EM_ModuleId EM_ModuleIdFromTerm(ATerm t)
+{
+  return (EM_ModuleId)t;
+}
+
+/*}}}  */
+/*{{{  ATerm EM_ModuleIdToTerm(EM_ModuleId arg) */
+
+ATerm EM_ModuleIdToTerm(EM_ModuleId arg)
 {
   return (ATerm)arg;
 }
@@ -232,6 +254,14 @@ EM_EditorType EM_makeEditorTypeDefault(const char* name)
 }
 
 /*}}}  */
+/*{{{  EM_ModuleId EM_makeModuleIdDefault(const char* name) */
+
+EM_ModuleId EM_makeModuleIdDefault(const char* name)
+{
+  return (EM_ModuleId)(ATerm)ATmakeAppl1(EM_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  EM_SessionStatus EM_makeSessionStatusRunning(void) */
 
 EM_SessionStatus EM_makeSessionStatusRunning(void)
@@ -248,11 +278,11 @@ EM_SessionStatus EM_makeSessionStatusZombie(void)
 }
 
 /*}}}  */
-/*{{{  EM_Session EM_makeSessionDefault(EM_Sid id, const char* filename, const char* modulename, EM_SessionStatus status, int referenceCount, EM_EditorTypeList list) */
+/*{{{  EM_Session EM_makeSessionDefault(EM_Sid id, const char* path, EM_SessionStatus status, int referenceCount, EM_EditorTypeList list) */
 
-EM_Session EM_makeSessionDefault(EM_Sid id, const char* filename, const char* modulename, EM_SessionStatus status, int referenceCount, EM_EditorTypeList list)
+EM_Session EM_makeSessionDefault(EM_Sid id, const char* path, EM_SessionStatus status, int referenceCount, EM_EditorTypeList list)
 {
-  return (EM_Session)(ATerm)ATmakeAppl6(EM_afun3, (ATerm) id, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(modulename, 0, ATtrue)), (ATerm) status, (ATerm) (ATerm) ATmakeInt(referenceCount), (ATerm) list);
+  return (EM_Session)(ATerm)ATmakeAppl5(EM_afun3, (ATerm) id, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)), (ATerm) status, (ATerm) (ATerm) ATmakeInt(referenceCount), (ATerm) list);
 }
 
 /*}}}  */
@@ -290,6 +320,11 @@ ATbool EM_isEqualSid(EM_Sid arg0, EM_Sid arg1)
 }
 
 ATbool EM_isEqualEditorType(EM_EditorType arg0, EM_EditorType arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool EM_isEqualModuleId(EM_ModuleId arg0, EM_ModuleId arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -430,6 +465,66 @@ EM_EditorType EM_setEditorTypeName(EM_EditorType arg, const char* name)
 /*}}}  */
 
 /*}}}  */
+/*{{{  EM_ModuleId accessors */
+
+/*{{{  ATbool EM_isValidModuleId(EM_ModuleId arg) */
+
+ATbool EM_isValidModuleId(EM_ModuleId arg)
+{
+  if (EM_isModuleIdDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool EM_isModuleIdDefault(EM_ModuleId arg) */
+
+inline ATbool EM_isModuleIdDefault(EM_ModuleId arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, EM_patternModuleIdDefault, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool EM_hasModuleIdName(EM_ModuleId arg) */
+
+ATbool EM_hasModuleIdName(EM_ModuleId arg)
+{
+  if (EM_isModuleIdDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* EM_getModuleIdName(EM_ModuleId arg) */
+
+char* EM_getModuleIdName(EM_ModuleId arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  EM_ModuleId EM_setModuleIdName(EM_ModuleId arg, const char* name) */
+
+EM_ModuleId EM_setModuleIdName(EM_ModuleId arg, const char* name)
+{
+  if (EM_isModuleIdDefault(arg)) {
+    return (EM_ModuleId)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue))), 0);
+  }
+
+  ATabort("ModuleId has no Name: %t\n", arg);
+  return (EM_ModuleId)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  EM_SessionStatus accessors */
 
 /*{{{  ATbool EM_isValidSessionStatus(EM_SessionStatus arg) */
@@ -511,7 +606,7 @@ inline ATbool EM_isSessionDefault(EM_Session arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternSessionDefault, NULL, NULL, NULL, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, EM_patternSessionDefault, NULL, NULL, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -550,9 +645,9 @@ EM_Session EM_setSessionId(EM_Session arg, EM_Sid id)
 }
 
 /*}}}  */
-/*{{{  ATbool EM_hasSessionFilename(EM_Session arg) */
+/*{{{  ATbool EM_hasSessionPath(EM_Session arg) */
 
-ATbool EM_hasSessionFilename(EM_Session arg)
+ATbool EM_hasSessionPath(EM_Session arg)
 {
   if (EM_isSessionDefault(arg)) {
     return ATtrue;
@@ -561,57 +656,24 @@ ATbool EM_hasSessionFilename(EM_Session arg)
 }
 
 /*}}}  */
-/*{{{  char* EM_getSessionFilename(EM_Session arg) */
+/*{{{  char* EM_getSessionPath(EM_Session arg) */
 
-char* EM_getSessionFilename(EM_Session arg)
+char* EM_getSessionPath(EM_Session arg)
 {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  EM_Session EM_setSessionFilename(EM_Session arg, const char* filename) */
+/*{{{  EM_Session EM_setSessionPath(EM_Session arg, const char* path) */
 
-EM_Session EM_setSessionFilename(EM_Session arg, const char* filename)
+EM_Session EM_setSessionPath(EM_Session arg, const char* path)
 {
   if (EM_isSessionDefault(arg)) {
-    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue))), 1);
+    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
   }
 
-  ATabort("Session has no Filename: %t\n", arg);
-  return (EM_Session)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool EM_hasSessionModulename(EM_Session arg) */
-
-ATbool EM_hasSessionModulename(EM_Session arg)
-{
-  if (EM_isSessionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* EM_getSessionModulename(EM_Session arg) */
-
-char* EM_getSessionModulename(EM_Session arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
-}
-
-/*}}}  */
-/*{{{  EM_Session EM_setSessionModulename(EM_Session arg, const char* modulename) */
-
-EM_Session EM_setSessionModulename(EM_Session arg, const char* modulename)
-{
-  if (EM_isSessionDefault(arg)) {
-    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(modulename, 0, ATtrue))), 2);
-  }
-
-  ATabort("Session has no Modulename: %t\n", arg);
+  ATabort("Session has no Path: %t\n", arg);
   return (EM_Session)NULL;
 }
 
@@ -632,7 +694,7 @@ ATbool EM_hasSessionStatus(EM_Session arg)
 EM_SessionStatus EM_getSessionStatus(EM_Session arg)
 {
   
-    return (EM_SessionStatus)ATgetArgument((ATermAppl)arg, 3);
+    return (EM_SessionStatus)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -641,7 +703,7 @@ EM_SessionStatus EM_getSessionStatus(EM_Session arg)
 EM_Session EM_setSessionStatus(EM_Session arg, EM_SessionStatus status)
 {
   if (EM_isSessionDefault(arg)) {
-    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) status), 3);
+    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) status), 2);
   }
 
   ATabort("Session has no Status: %t\n", arg);
@@ -665,7 +727,7 @@ ATbool EM_hasSessionReferenceCount(EM_Session arg)
 int EM_getSessionReferenceCount(EM_Session arg)
 {
   
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 4));
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 3));
 }
 
 /*}}}  */
@@ -674,7 +736,7 @@ int EM_getSessionReferenceCount(EM_Session arg)
 EM_Session EM_setSessionReferenceCount(EM_Session arg, int referenceCount)
 {
   if (EM_isSessionDefault(arg)) {
-    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(referenceCount)), 4);
+    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(referenceCount)), 3);
   }
 
   ATabort("Session has no ReferenceCount: %t\n", arg);
@@ -698,7 +760,7 @@ ATbool EM_hasSessionList(EM_Session arg)
 EM_EditorTypeList EM_getSessionList(EM_Session arg)
 {
   
-    return (EM_EditorTypeList)ATgetArgument((ATermAppl)arg, 5);
+    return (EM_EditorTypeList)ATgetArgument((ATermAppl)arg, 4);
 }
 
 /*}}}  */
@@ -707,7 +769,7 @@ EM_EditorTypeList EM_getSessionList(EM_Session arg)
 EM_Session EM_setSessionList(EM_Session arg, EM_EditorTypeList list)
 {
   if (EM_isSessionDefault(arg)) {
-    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 5);
+    return (EM_Session)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 4);
   }
 
   ATabort("Session has no List: %t\n", arg);
@@ -906,6 +968,19 @@ EM_EditorType EM_visitEditorType(EM_EditorType arg, char* (*acceptName)(char*))
 }
 
 /*}}}  */
+/*{{{  EM_ModuleId EM_visitModuleId(EM_ModuleId arg, char* (*acceptName)(char*)) */
+
+EM_ModuleId EM_visitModuleId(EM_ModuleId arg, char* (*acceptName)(char*))
+{
+  if (EM_isModuleIdDefault(arg)) {
+    return EM_makeModuleIdDefault(
+        acceptName ? acceptName(EM_getModuleIdName(arg)) : EM_getModuleIdName(arg));
+  }
+  ATabort("not a ModuleId: %t\n", arg);
+  return (EM_ModuleId)NULL;
+}
+
+/*}}}  */
 /*{{{  EM_SessionStatus EM_visitSessionStatus(EM_SessionStatus arg) */
 
 EM_SessionStatus EM_visitSessionStatus(EM_SessionStatus arg)
@@ -921,15 +996,14 @@ EM_SessionStatus EM_visitSessionStatus(EM_SessionStatus arg)
 }
 
 /*}}}  */
-/*{{{  EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptFilename)(char*), char* (*acceptModulename)(char*), EM_SessionStatus (*acceptStatus)(EM_SessionStatus), int (*acceptReferenceCount)(int), EM_EditorTypeList (*acceptList)(EM_EditorTypeList)) */
+/*{{{  EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptPath)(char*), EM_SessionStatus (*acceptStatus)(EM_SessionStatus), int (*acceptReferenceCount)(int), EM_EditorTypeList (*acceptList)(EM_EditorTypeList)) */
 
-EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptFilename)(char*), char* (*acceptModulename)(char*), EM_SessionStatus (*acceptStatus)(EM_SessionStatus), int (*acceptReferenceCount)(int), EM_EditorTypeList (*acceptList)(EM_EditorTypeList))
+EM_Session EM_visitSession(EM_Session arg, EM_Sid (*acceptId)(EM_Sid), char* (*acceptPath)(char*), EM_SessionStatus (*acceptStatus)(EM_SessionStatus), int (*acceptReferenceCount)(int), EM_EditorTypeList (*acceptList)(EM_EditorTypeList))
 {
   if (EM_isSessionDefault(arg)) {
     return EM_makeSessionDefault(
         acceptId ? acceptId(EM_getSessionId(arg)) : EM_getSessionId(arg),
-        acceptFilename ? acceptFilename(EM_getSessionFilename(arg)) : EM_getSessionFilename(arg),
-        acceptModulename ? acceptModulename(EM_getSessionModulename(arg)) : EM_getSessionModulename(arg),
+        acceptPath ? acceptPath(EM_getSessionPath(arg)) : EM_getSessionPath(arg),
         acceptStatus ? acceptStatus(EM_getSessionStatus(arg)) : EM_getSessionStatus(arg),
         acceptReferenceCount ? acceptReferenceCount(EM_getSessionReferenceCount(arg)) : EM_getSessionReferenceCount(arg),
         acceptList ? acceptList(EM_getSessionList(arg)) : EM_getSessionList(arg));

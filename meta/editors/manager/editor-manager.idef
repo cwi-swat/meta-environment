@@ -8,25 +8,36 @@ process EditorManager is
 let
   EditorType: term,
   EM : editor-manager,
-  Filename : str,
-  Modulename: str,
+  ModuleId: str,
+  Path : str,
   Sid : term,
   Sids: list
 in
   execute(editor-manager, EM?)
   .
   (
-    rec-msg(em-create-session(Filename?, Modulename?))
-    . snd-eval(EM, create-session(Filename,  Modulename))
+    rec-msg(em-create-session(Path?))
+    . snd-eval(EM, create-session(Path))
     . rec-value(EM, session(Sid?))
-    . snd-msg(em-session(Filename, Modulename, Sid))
+    . snd-msg(em-session(Path, Sid))
   +
-    rec-msg(em-get-filename(Sid?))
-    . snd-eval(EM, get-filename(Sid))
+    rec-msg(em-get-path(Sid?))
+    . snd-eval(EM, get-path(Sid))
     .
     (
-      rec-value(EM, filename(Filename?))
-      . snd-msg(em-filename(Sid, Filename))
+      rec-value(EM, path(Path?))
+      . snd-msg(em-path(Sid, Path))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-bind-session(Sid?, ModuleId?))
+    . snd-eval(EM, bind-session(Sid, ModuleId))
+    .
+    (
+      rec-value(EM, session-bound)
+      . snd-msg(em-session-bound(Sid, ModuleId))
     +
       rec-value(EM, no-such-session)
       . snd-msg(em-no-such-session(Sid))
@@ -36,11 +47,14 @@ in
     . snd-eval(EM, get-modulename(Sid))
     .
     (
-      rec-value(EM, modulename(Modulename?))
-      . snd-msg(em-modulename(Sid, Modulename))
+      rec-value(EM, modulename(ModuleId?))
+      . snd-msg(em-modulename(Sid, ModuleId))
     +
       rec-value(EM, no-such-session)
       . snd-msg(em-no-such-session(Sid))
+    +
+      rec-value(EM, session-not-bound)
+      . snd-msg(em-session-not-bound(Sid))
     )
   +
     rec-msg(em-register-editor(Sid?, EditorType?))
@@ -63,20 +77,20 @@ in
     rec-msg(em-unregister-editor(Sid?, EditorType?))
     . snd-do(EM, unregister-editor(Sid, EditorType))
   +
-    rec-msg(em-get-sessions-by-modulename(Modulename?))
-    . snd-eval(EM, get-sessions-by-modulename(Modulename))
+    rec-msg(em-get-sessions-by-modulename(ModuleId?))
+    . snd-eval(EM, get-sessions-by-modulename(ModuleId))
     . rec-value(EM, sessions(Sids?))
-    . snd-msg(em-sessions(Modulename, Sids))
+    . snd-msg(em-sessions(ModuleId, Sids))
   +
-    rec-msg(em-get-session-by-filename(Filename?))
-    . snd-eval(EM, get-session-by-filename(Filename))
+    rec-msg(em-get-session-by-path(Path?))
+    . snd-eval(EM, get-session-by-path(Path))
     .
     (
       rec-value(EM, session(Sid?))
-      . snd-msg(em-session(Filename, Sid))
+      . snd-msg(em-session(Path, Sid))
     +
       rec-value(EM, no-such-session)
-      . snd-msg(em-no-such-session(Filename))
+      . snd-msg(em-no-such-session(Path))
     )
   +
     rec-msg(em-delete-session(Sid?))

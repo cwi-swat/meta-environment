@@ -109,8 +109,8 @@ let
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Deleting %s", [ModuleName])))
-  . snd-msg(get-search-paths)
-  . rec-msg(search-paths(Directories?))
+  . snd-msg(get-module-paths)
+  . rec-msg(module-paths(Directories?))
   . snd-msg(file-extension-hook(sdf))
   . rec-msg(file-extension-hook-result(Extension?))
   . snd-msg(get-path-from-db(ModuleName))
@@ -159,8 +159,8 @@ let
   Path: str,
   SearchPaths: list
 in
-  snd-msg(get-search-paths)
-  . rec-msg(search-paths(SearchPaths?))
+  snd-msg(get-module-paths)
+  . rec-msg(module-paths(SearchPaths?))
   . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
   .
   (
@@ -198,7 +198,7 @@ in
   +
     rec-msg(sm-new-module-name-inconsistent)
     . snd-note(ui-status(errorf(
-      "Module %s in %s is inconsistent with search paths", [ModuleId, Path])))
+      "Module %s in %s is inconsistent with module paths", [ModuleId, Path])))
   )
 endlet
 
@@ -300,8 +300,8 @@ let
   Paths : list
 in
   Status := success .
-  snd-msg(get-search-paths) .
-  rec-msg(search-paths(Paths?)) .
+  snd-msg(get-module-paths) .
+  rec-msg(module-paths(Paths?)) .
   snd-msg(sm-get-new-module-name(Paths, Path, Name)) .
   (
     rec-msg(sm-new-module-name(RealPath?, RealName?)) 

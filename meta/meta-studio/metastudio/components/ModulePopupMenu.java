@@ -50,9 +50,10 @@ public class ModulePopupMenu extends UserInterfacePanel {
         _parent = parent;
     }
 
-    public void buttonsFound(ATerm type, String moduleName, ATerm buttons) {
-        if (type.equals(ACTION_MODULE_POPUP) || type.equals(ACTION_NEW_MODULE_POPUP)) {
-            showModulePopup(type, moduleName, buttons, _parent, _x, _y);
+    public void addEvents(ATerm type, String moduleId, ATerm events) {
+        if (type.equals(ACTION_MODULE_POPUP)
+	    || type.equals(ACTION_NEW_MODULE_POPUP)) {
+            showModulePopup(type, moduleId, events, _parent, _x, _y);
         }
     }
 

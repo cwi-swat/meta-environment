@@ -1,9 +1,4 @@
-/* $Id$ */        
-
-tool configuration-manager is {
-  command = "configmanager"
-}
-
+#if 0
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
@@ -12,108 +7,125 @@ tool configuration-manager is {
 #define BUTTON_FILE "meta.buttons"
 #endif
 
-process AddUserDefinedActions(CMNG: configuration-manager) is
+process AddUserProperties(CM: configuration-manager) is
 let
-  Contents : str,
-  ErrorMessage : str
+  Contents: str,
+  Error: str
 in
-  snd-msg(io-read-file(BUTTON_FILE)) .
+  snd-msg(io-read-file(BUTTON_FILE))
+  .
   (
-    rec-msg(io-file-contents(Contents?)) .
-    snd-do(CMNG, set-actions(Contents))
+    rec-msg(io-file-contents(Contents?))
+    . snd-do(CM, add-user-properties(Contents))
   +
-    rec-msg(io-error-reading(ErrorMessage?)) .
-    snd-do(CMNG, remove-actions)
+    rec-msg(io-error-reading(Error?))
+    . printf("AddUserProperties: %s\n", Error)
   )
 endlet
 
-process AddPredefinedActions(CMNG: configuration-manager) is
-let
-  Contents : str
-in
-  snd-msg(actions-hook) .
-  rec-msg(actions-hook-result(Contents?)) .
-  snd-do(CMNG, add-predefined-actions(Contents))
-endlet
-  
-process ConfigurationManager is
-let
-  CMNG : configuration-manager,
-  ButtonActions : list,
-  ButtonName : term,
-  ButtonNames : list,
-  Directories : list,
-  EditorType : term,
-  ErrorMessage : str,
-  Fid : str,
-  LibraryPath : str,
-  ModuleName : str,
-  Pid : int,
-  SearchPaths : list,
-  Extension : str,
-  Term : term,
-  Text : str,
-  Tree : term
-in
-  execute(configuration-manager, CMNG?) .
-  snd-msg(io-read-file(CONFIG_FILE)) .
+  . snd-msg(io-read-file(CONFIG_FILE))
+  .
   (
     rec-msg(io-file-contents(Text?))
   +
-    rec-msg(io-error-reading(ErrorMessage?)) .
-    Text := "."
-  ) .
-  snd-eval(CMNG, parse-config-file(Text)) .
-  rec-value(CMNG, directories(Directories?)) .
-  snd-msg(io-relative-to-absolute(Directories)) .
-  rec-msg(io-absolute-directories(Directories?)) .
-  snd-do(CMNG, register-user-directories(Directories)) .
+    rec-msg(io-error-reading(ErrorMessage?))
+    . Text := "."
+  )
+  . snd-eval(CM, parse-config-file(Text))
+  . rec-value(CM, directories(Directories?))
+  . snd-msg(io-relative-to-absolute(Directories))
+  . rec-msg(io-absolute-directories(Directories?))
+  . snd-do(CM, register-user-directories(Directories))
+  . AddUserProperties(CM)
 
-  snd-msg(library-location-hook).
-  rec-msg(library-location-hook-result(LibraryPath?)).
-  snd-do(CMNG, register-library(LibraryPath)) .
-  AddUserDefinedActions(CMNG) .
-  AddPredefinedActions(CMNG) .
+    rec-msg(refresh-buttons)
+    . snd-msg(CM, remove-user-properties)
+    . AddUserProperties(CM)
+    . snd-msg(buttons-refreshed)
+  +
+#endif
+
+tool configuration-manager is {
+  command = "configmanager"
+}
+
+process ConfigurationManager is
+let
+  Actions: list,
+  CM: configuration-manager,
+  Contents: str,
+  ButtonActions: list,
+  Event: term,
+  Events: list,
+  Directories: list,
+  Type: term,
+  ErrorMessage: str,
+  Fid: str,
+  LibraryPath: str,
+  ModuleId: str,
+  Pid: int,
+  ModulePaths: list,
+  Extension: str,
+  Term: term,
+  Text: str,
+  Tree: term
+in
+  execute(configuration-manager, CM?)
+  .
   (
-    rec-msg(refresh-buttons) .
-    AddUserDefinedActions(CMNG) .
-    snd-msg(buttons-refreshed)
+    rec-msg(cm-add-system-properties(Contents?))
+    . snd-do(CM, add-system-properties(Contents))
+    . snd-msg(cm-system-properties-added)
   +
-    rec-msg(get-auxiliary-buttons(EditorType?, ModuleName?)) .
-    snd-eval(CMNG, get-button-names(ModuleName, EditorType)) .
-    rec-value(CMNG, button-names(ButtonNames?)) .
-    snd-msg(button-list(ModuleName, ButtonNames))
+    rec-msg(cm-get-events(Type?))
+    . snd-eval(CM, get-events(Type))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-events(Events))
   +
-    rec-msg(get-actions(ButtonName?, EditorType?, ModuleName?)) .
-    snd-eval(CMNG, get-button-actions(ModuleName, EditorType, ButtonName)) .
-    rec-value(CMNG, button-actions(ButtonActions?)) .
-    snd-msg(actions(ButtonName, EditorType, ModuleName, ButtonActions))
+    rec-msg(cm-get-module-events(Type?, ModuleId?))
+    . snd-eval(CM, get-module-events(Type, ModuleId))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-module-events(Events))
   +
-    rec-msg(get-extension-modulename(Extension?)) .
-    snd-eval(CMNG, get-extension-modulename(Extension)) .
+    rec-msg(cm-get-actions(Type?, Event?))
+    . snd-eval(CM, get-actions(Type, Event))
+    . rec-value(CM, actions(Actions?))
+    . snd-msg(cm-actions(Actions))
+  +
+    rec-msg(cm-get-module-actions(Type?, Event?, ModuleId?))
+    . snd-eval(CM, get-module-actions(Type, Event, ModuleId))
+    . rec-value(CM, actions(Actions?))
+    . snd-msg(cm-module-actions(Actions))
+  +
+    rec-msg(get-extension-modulename(Extension?))
+    . snd-eval(CM, get-extension-modulename(Extension))
+    .
     (
-      rec-value(CMNG, extension-modulename(ModuleName?)) .
-      snd-msg(extension-modulename(Extension, ModuleName))
+      rec-value(CM, extension-modulename(ModuleId?))
+      . snd-msg(extension-modulename(Extension, ModuleId))
     +
-      rec-value(CMNG, no-modulename) .
-      snd-msg(no-extension-modulename(Extension))
+      rec-value(CM, no-modulename)
+      . snd-msg(no-extension-modulename(Extension))
     )
   +
-    rec-msg(get-modulename-extension(ModuleName?)) .
-    snd-eval(CMNG, get-modulename-extension(ModuleName)) .
+    rec-msg(get-modulename-extension(ModuleId?))
+    . snd-eval(CM, get-modulename-extension(ModuleId))
+    .
     (
-      rec-value(CMNG, modulename-extension(Extension?)) .
-      snd-msg(modulename-extension(ModuleName, Extension))
+      rec-value(CM, modulename-extension(Extension?))
+      . snd-msg(modulename-extension(ModuleId, Extension))
     +
-      rec-value(CMNG, no-extension) .
-      snd-msg(no-modulename-extension(ModuleName))
+      rec-value(CM, no-extension)
+      . snd-msg(no-modulename-extension(ModuleId))
     )
   +
-    rec-msg(get-search-paths) .
-    snd-eval(CMNG, get-search-paths) .
-    rec-value(CMNG, search-paths(SearchPaths?)) .
-    snd-msg(search-paths(SearchPaths))
-  ) * delta
+    rec-msg(get-module-paths)
+    . snd-eval(CM, get-module-paths)
+    . rec-value(CM, module-paths(ModulePaths?))
+    . snd-msg(module-paths(ModulePaths))
+  )
+  *
+  delta
 endlet
 
 toolbus(ConfigurationManager)

@@ -17,7 +17,7 @@ typedef void (*reread_contents_t)(int write_to_editor_fd);
 typedef void (*hive_closed_t)(int write_to_editor_fd);
 typedef void (*display_message_t)(int write_to_editor_fd, TE_Action);
 typedef void (*set_cursor_at_offset_t)(int write_to_editor_fd, TE_Action);
-typedef void (*set_actions_t)(int write_to_editor_fd, TE_Action);
+typedef void (*add_actions_t)(int write_to_editor_fd, TE_Action);
 typedef void (*set_focus_t)(int write_to_editor_fd, TE_Action);
 typedef void (*is_modified_t)(int write_to_editor_fd);
 
@@ -27,7 +27,7 @@ TextEditor initTextEditor(hive_closed_t,
 			  write_contents_t,
 			  reread_contents_t,
 			  display_message_t,
-			  set_actions_t,
+			  add_actions_t,
 			  set_focus_t,
 			  set_cursor_at_offset_t,
 			  is_modified_t);

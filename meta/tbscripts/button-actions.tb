@@ -143,6 +143,7 @@ let
   NrOfArgs : int,
   Origin: term,
   OutStr : str,
+  ParseSucceeded: bool,
   Path : str,
   Pid: int,
   PosInfo : term,
@@ -274,11 +275,17 @@ in
     StackPopString(Stack,Stack?,Modulename?) .
     ParseTerm(EditorId, Modulename) .
     ReturnSuccess(EditorId,Stack)
-    +
-    rec-msg(parse-syntax-action, Stack?, EditorId?).
-    ParseSyntax(EditorId, sdf).
-    ReturnSuccess(EditorId,Stack)
-    +
+  +
+    rec-msg(parse-syntax-action, Stack?, EditorId?)
+    . ParseSyntax(EditorId, sdf, ParseSucceeded?)
+    .
+    if equal(ParseSucceeded, true)
+    then
+      ReturnSuccess(EditorId, Stack)
+    else
+      ReturnAbort(EditorId, Stack)
+    fi
+  +
     rec-msg(parse-equations-action, Stack?, EditorId?).
     StackPopString(Stack,Stack?,Modulename?) .
     ParseEquations(EditorId,Modulename).
@@ -1030,7 +1037,7 @@ in
   )
 endlet
 
-process ParseSyntax(Sid: term, Type: term) is
+process ParseSyntax(Sid: term, Type: term, ParseSucceeded: bool?) is
 let
   DependingModules: list,
   Id: int,
@@ -1055,11 +1062,13 @@ in
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
-    rec-msg(parse-editor-ok(Sid)) .
-    GetParsetree(Sid, Tree?) .
-    snd-msg(unparse(Tree)) .
-    rec-msg(unparsed-text(Text?)) .
-    snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
+    rec-msg(parse-editor-ok(Sid))
+    . ParseSucceeded := true
+    . GetParsetree(Sid, Tree?)
+    . snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type))
+    .
     (
       rec-msg(no-updating-needed)
       . snd-msg(te-clear-focus(Sid))
@@ -1078,17 +1087,18 @@ in
 	rec-msg(error-opening(Modulename, name-inconsistent))
 	. snd-msg(invalidate-sdf-in-db(Modulename))
 	. snd-note(ui-status(
-	  errorf("Changing the name of %s is not permitted.",[Modulename])))
+	  errorf("Changing the name of %s is not permitted.", [Modulename])))
       )
     +
       rec-msg(error-opening(Modulename, name-inconsistent))
       . snd-msg(invalidate-sdf-in-db(Modulename))
       . snd-note(ui-status(
-	errorf("Changing the name of %s is not permitted.",[Modulename])))
+	errorf("Changing the name of %s is not permitted.", [Modulename])))
     )
   +
-    rec-msg(parse-editor-failed(Sid)) .
-    snd-msg(invalidate-sdf-in-db(Modulename))
+    rec-msg(parse-editor-failed(Sid))
+    . ParseSucceeded := false
+    . snd-msg(invalidate-sdf-in-db(Modulename))
   )
   . snd-note(ui-status(endstat(Id)))
 endlet
@@ -1380,8 +1390,8 @@ let
   Directory: str,
   Directories: list
 in
-  snd-msg(get-search-paths)
-  . rec-msg(search-paths(Directories?))
+  snd-msg(get-module-paths)
+  . rec-msg(module-paths(Directories?))
   . snd-msg(file-extension-hook(Type))
   . rec-msg(file-extension-hook-result(Extension?))
   . snd-msg(io-find-file(Directories, ModuleId, Extension))

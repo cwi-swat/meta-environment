@@ -10,7 +10,7 @@
                       action(set-cursor-at-offset(<offset(int)>))),
   constructor(Action, set-focus, action(set-focus(<focus(term)>))),
   constructor(Action, clear-focus, action(clear-focus)),
-  constructor(Action, set-actions, action(set-actions(<actions(ActionList)>))),
+  constructor(Action, add-actions, action(add-actions(<actions(ActionList)>))),
 
   constructor(Menu, default, menu(<items(Items)>)),
   constructor(Menu, shortcut, menu(<items(Items)>, <shortcut(str)>)),

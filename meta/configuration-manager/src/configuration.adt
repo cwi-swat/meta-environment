@@ -1,28 +1,32 @@
 [
-  constructor(Configuration,List,configuration(<list(Properties)>)),
-  list(Properties,Property),
-  constructor(Property,button,button(<module(str)>,<descriptions(ButtonDescriptionList)>,<actions(term)>)),
-  constructor(Property,extension,extension(<language(str)>,<extension(str)>)),
+  constructor(Configuration, list, configuration(<list(Properties)>)),
+  list(Properties, Property),
 
-  list(ButtonDescriptionList,ButtonDescription),
-  constructor(ButtonDescription,default,description(<type(ButtonType)>,<args(ButtonArgs)>)),
+  constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <actions(term)>)),
+  constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
+  constructor(Property, module-path, module-path(<name(str)>)),
 
-  constructor(ButtonType,term-editor,term-editor),
-  constructor(ButtonType,equations-editor,equations-editor),
-  constructor(ButtonType,syntax-editor,syntax-editor),
-  constructor(ButtonType,feedback-list,feedback-list),
-  constructor(ButtonType,tree-panel,tree-panel),
-  constructor(ButtonType,module-popup,module-popup),
-  constructor(ButtonType,new-module-popup,new-module-popup),
-  constructor(ButtonType,studio-menubar,studio-menubar),
-  constructor(ButtonType,studio-toolbar,studio-toolbar),
-  constructor(ButtonType,wildcard,"*"),
+  constructor(ActionDescription, default, description(<type(ActionType)>, <event(Event)>)),
+  list(ActionDescriptionList, ActionDescription),
 
-  constructor(ButtonArgs, click, click),
-  constructor(ButtonArgs, icon, icon(<title(str)>, <path(str)>)),
+  constructor(ActionType, term-editor, term-editor),
+  constructor(ActionType, term-editor-for-module, term-editor(<module-id(str)>)),
 
-  constructor(ButtonArgs, default, menu(<items(Items)>)),
-  constructor(ButtonArgs, shortcut, menu(<items(Items)>, <shortcut(str)>)),
+  constructor(ActionType, equations-editor, equations-editor),
+  constructor(ActionType, syntax-editor, syntax-editor),
+  constructor(ActionType, feedback-list, feedback-list),
+  constructor(ActionType, tree-panel, tree-panel),
+  constructor(ActionType, module-popup, module-popup(<module-id(str)>)),
+  constructor(ActionType, new-module-popup, new-module-popup),
+  constructor(ActionType, studio-menubar, studio-menubar),
+  constructor(ActionType, studio-toolbar, studio-toolbar),
+  constructor(ActionType, wildcard, "*"),
+
+  constructor(Event, click, click),
+  constructor(Event, icon, icon(<title(str)>, <path(str)>)),
+
+  constructor(Event, default, menu(<items(Items)>)),
+  constructor(Event, shortcut, menu(<items(Items)>, <shortcut(str)>)),
   list(Items, str),
 
   constructor(ModuleName, wildcard, "*")

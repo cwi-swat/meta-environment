@@ -293,16 +293,16 @@ void editor_to_front(int c, ATerm editorId)
 }
 
 /*}}}  */
-/*{{{  void set_actions(int c, ATerm editorId, ATerm actions) */
+/*{{{  void add_actions(int c, ATerm editorId, ATerm actions) */
 
-void set_actions(int c, ATerm editorId, ATerm actions)
+void add_actions(int c, ATerm editorId, ATerm actions)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
     TE_ActionList editActions;
     editActions = TE_ActionListFromTerm(actions);
-    sendToEditor(process, TE_makeActionSetActions(editActions));
+    sendToEditor(process, TE_makeActionAddActions(editActions));
   }
 }
 

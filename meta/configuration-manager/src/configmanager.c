@@ -12,15 +12,99 @@
 /*{{{  defines */
 
 #define MAX_MESSAGE_LENGTH 133
+#define INITIAL_TABLE_SIZE 100
+#define TABLE_RESIZE_PERCENTAGE 75
 
 /*}}}  */
-/*{{{  globals */
+/*{{{  variables */
 
-static char myversion[] = "4.0";     
-static MC_Properties properties = NULL;
-static MC_Properties standardProperties = NULL;
-static ATermList userSearchPaths = NULL;
-static ATerm librarySearchPath = NULL;
+static char myversion[] = "5.0";     
+
+static ATermTable userDescriptionsByType = NULL;
+static ATermTable systemDescriptionsByType = NULL;
+
+static ATermTable userActionsByDescription = NULL;
+static ATermTable systemActionsByDescription = NULL;
+
+static ATermList userExtensions = NULL;
+static ATermList systemExtensions = NULL;
+
+static ATermList modulePaths = NULL;
+
+/*}}}  */
+
+/*{{{  static void addDescription(ATermTable table, MC_ActionDescription desc) */
+
+static void addDescription(ATermTable table, MC_ActionDescription desc)
+{
+  ATerm type;
+  ATermList list;
+
+  type = MC_ActionTypeToTerm(MC_getActionDescriptionType(desc));
+
+  list = (ATermList) ATtableGet(table, type);
+  if (list == NULL) {
+    list = ATempty;
+  }
+  list = ATinsert(list, MC_ActionDescriptionToTerm(desc));
+
+  ATtablePut(table, type, (ATerm) list);
+}
+
+/*}}}  */
+/*{{{  static MC_ActionDescriptionList getDescriptions(MC_ActionType type) */
+
+static MC_ActionDescriptionList getDescriptions(MC_ActionType type)
+{
+  MC_ActionDescriptionList result;
+  MC_ActionDescriptionList list;
+  ATerm key;
+  ATerm value;
+
+  key = MC_ActionTypeToTerm(type);
+  result = MC_makeActionDescriptionListEmpty();
+
+  value = ATtableGet(userDescriptionsByType, key);
+  if (value != NULL) {
+    list = MC_ActionDescriptionListFromTerm(value);
+    result = MC_concatActionDescriptionList(result, list);
+  }
+
+  value = ATtableGet(systemDescriptionsByType, key);
+  if (value != NULL) {
+    list = MC_ActionDescriptionListFromTerm(value);
+    result = MC_concatActionDescriptionList(result, list);
+  }
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  static void setActions(ATermTable table, MC_ActionDescription desc, ATermList actions) */
+
+static void setActions(ATermTable table, MC_ActionDescription desc, ATermList actions)
+{
+  ATerm key = MC_ActionDescriptionToTerm(desc);
+  ATtablePut(table, key, (ATerm) actions);
+}
+
+/*}}}  */
+/*{{{  static ATermList getActions(MC_ActionDescription desc) */
+
+static ATermList getActions(MC_ActionDescription desc)
+{
+  ATerm key;
+  ATermList value;
+
+  key = MC_ActionDescriptionToTerm(desc);
+  value = (ATermList) ATtableGet(userActionsByDescription, key);
+  if (value == NULL) {
+    value = (ATermList) ATtableGet(systemActionsByDescription, key);
+  }
+
+  return value;
+}
 
 /*}}}  */
 
@@ -35,7 +119,7 @@ void rec_terminate(int cid, ATerm t)
 
 /*{{{  ATerm parse_config_file(int cid, const char *contents) */
 
-ATerm parse_config_file(int cid, char *contents)
+ATerm parse_config_file(int cid, const char *contents)
 {
   int i;
   int j = 0;
@@ -81,272 +165,271 @@ ATerm parse_config_file(int cid, char *contents)
 
 void register_user_directories(int cid, ATerm paths)
 {
-  userSearchPaths = (ATermList) paths;
+  modulePaths = (ATermList) paths;
 }
 
 /*}}}  */
-/*{{{  void register_library(int cid, char *path) */
 
-void register_library(int cid, char *path)
+/*{{{  static void addExtension(ATermList extensions, MC_Property property) */
+
+static void addExtension(ATermList extensions, MC_Property property)
 {
-  librarySearchPath = ATmake("<str>", path);
+  extensions = ATinsert(extensions, MC_PropertyToTerm(property));
 }
 
 /*}}}  */
-/*{{{  void set_actions(int cid, char *contents) */
 
-void set_actions(int cid, char *contents)
+/*{{{  static void addSystemProperty(MC_Property property) */
+
+static void addSystemProperty(MC_Property property)
 {
-  ATerm atButtons = ATreadFromString(contents);
-  properties = MC_makePropertiesEmpty();
-
-  if (atButtons != NULL) {
-
-    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(atButtons))) {
-      properties = MC_getConfigurationList(MC_ConfigurationFromTerm(atButtons));
+  if (MC_isPropertyExtension(property)) {
+    addExtension(systemExtensions, property);
+  }
+  else if (MC_isPropertyModulePath(property)) {
+    const char *path = MC_getPropertyName(property);
+    modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
+  }
+  else if (MC_isPropertyAction(property)) {
+    ATermList actions = (ATermList) MC_getPropertyActions(property);
+    MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
+    while (!MC_isActionDescriptionListEmpty(list)) {
+      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+      addDescription(systemDescriptionsByType, cur);
+      setActions(systemActionsByDescription, cur, actions);
+      list = MC_getActionDescriptionListTail(list);
     }
   }
   else {
-    ATwarning("WARNING: ignored button file, it contains parse errors.\n");
+    ATabort(__FILE__ ":addSystemProperty: unhandled property: %t\n", property);
   }
 }
 
 /*}}}  */
-/*{{{  void remove_actions(int cid) */
+/*{{{  void add_system_properties(int cid, const char *contents) */
 
-void remove_actions(int cid)
-{
-  properties = MC_makePropertiesEmpty();
-}
-
-/*}}}  */
-/*{{{  void add_predefined_actions(int cid, char *contents) */
-
-void add_predefined_actions(int cid, char *contents)
+void add_system_properties(int cid, const char *contents)
 {
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
-    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(actions))) {
-      MC_Properties newActions = MC_getConfigurationList(MC_ConfigurationFromTerm(actions));
-      standardProperties = MC_concatProperties(newActions, standardProperties);
+    MC_Configuration configuration = MC_ConfigurationFromTerm(actions);
+    if (MC_isValidConfiguration(configuration)) {
+      MC_Properties properties = MC_getConfigurationList(configuration);
+      while (!MC_isPropertiesEmpty(properties)) {
+	MC_Property property = MC_getPropertiesHead(properties);
+	addSystemProperty(property);
+	properties = MC_getPropertiesTail(properties);
+      }
     }
   }
   else {
-    ATwarning("A syntax error was found in the predefined configuration.");
+    ATwarning(__FILE__ ":add_system_properties: parse error in input.\n");
   }
 }
 
 /*}}}  */
 
-/*{{{  static MC_Properties getProperties() */
+/*{{{  static void addUserProperty(MC_Property property) */
 
-static MC_Properties getProperties()
+static void addUserProperty(MC_Property property)
 {
-  return MC_concatProperties(standardProperties, properties);
-}
-
-/*}}}  */
-/*{{{  static ATbool moduleNameMatches(const char *suspect, const char *peer) */
-
-static ATbool moduleNameMatches(const char *suspect, const char *peer)
-{
-  return !strcmp(suspect, peer) || !strcmp(suspect, "*");
-}
-
-/*}}}  */
-/*{{{  static ATbool typeMatches(MC_ButtonType suspect, MC_ButtonType peer) */
-
-static ATbool typeMatches(MC_ButtonType suspect, MC_ButtonType peer)
-{
-  return MC_isEqualButtonType(suspect, peer)
-    || MC_isButtonTypeWildcard(suspect);
-}
-
-/*}}}  */
-
-/*{{{  static ATermList getButtonArgs(MC_Property button, MC_ButtonType requestedType) */
-
-static ATermList getButtonArgs(MC_Property button, MC_ButtonType requestedType)
-{
-  ATermList events = ATempty;
-  MC_ButtonDescriptionList descriptions;
-
-  descriptions = MC_getPropertyDescriptions(button);
-  assert(MC_isValidButtonDescriptionList(descriptions));
-
-  while (!MC_isButtonDescriptionListEmpty(descriptions)) {
-    MC_ButtonDescription desc = MC_getButtonDescriptionListHead(descriptions);
-    MC_ButtonType type = MC_getButtonDescriptionType(desc);
-
-    assert(MC_isValidButtonType(type));
-
-    if (typeMatches(type, requestedType)) {
-      MC_ButtonArgs args = MC_getButtonDescriptionArgs(desc);
-      if (!MC_isValidButtonArgs(args)) {
-	ATerror("configmanager.c:getButtonArgs: illegal args: %t\n", args);
-      }
-      events = ATinsert(events, MC_ButtonArgsToTerm(args));
+  if (MC_isPropertyExtension(property)) {
+    addExtension(userExtensions, property);
+  }
+  else if (MC_isPropertyAction(property)) {
+    ATermList actions = (ATermList) MC_getPropertyActions(property);
+    MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
+    while (!MC_isActionDescriptionListEmpty(list)) {
+      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+      addDescription(userDescriptionsByType, cur);
+      setActions(userActionsByDescription, cur, actions);
+      list = MC_getActionDescriptionListTail(list);
     }
-
-    descriptions = MC_getButtonDescriptionListTail(descriptions);
   }
-
-  return events;
+  else {
+    ATabort(__FILE__ ":addUserProperty: unhandled property: %t\n", property);
+  }
 }
 
 /*}}}  */
-/*{{{  static ATbool buttonContainsDescription(MC_Property button, MC_ButtonDescription desc) */
+/*{{{  void add_user_properties(int cid, const char *contents) */
 
-static ATbool buttonContainsDescription(MC_Property button,
-					MC_ButtonType type,
-					MC_ButtonArgs args)
+void add_user_properties(int cid, const char *contents)
 {
-  MC_ButtonDescriptionList descriptions;
+  ATerm actions = ATreadFromString(contents);
 
-  descriptions = MC_getPropertyDescriptions(button);
-  assert(MC_isValidButtonDescriptionList(descriptions));
-
-  while (!MC_isButtonDescriptionListEmpty(descriptions)) {
-    MC_ButtonDescription cur = MC_getButtonDescriptionListHead(descriptions);
-    MC_ButtonType curType = MC_getButtonDescriptionType(cur);
-    MC_ButtonArgs curArgs = MC_getButtonDescriptionArgs(cur);
-
-    assert(MC_isValidButtonType(curType));
-
-    if (typeMatches(curType, type) && MC_isEqualButtonArgs(curArgs, args)) {
-      return ATtrue;
-    }
-
-    descriptions = MC_getButtonDescriptionListTail(descriptions);
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
-
-/*{{{  ATerm get_button_names(int cid, char *modulename, ATerm requestedType) */
-
-ATerm get_button_names(int cid, char *modulename, ATerm requestedType)
-{
-  MC_Properties buttonList = getProperties();
-  ATermList events = ATempty;
-
-  while (!ATisEmpty(buttonList)) {
-    MC_Property button = MC_getPropertiesHead(buttonList);
-
-    if (MC_isPropertyButton(button)) {
-      char *buttonModule = MC_getPropertyModule(button);
-
-      if (moduleNameMatches(buttonModule, modulename)) {
-	MC_ButtonType requestedButtonType = MC_ButtonTypeFromTerm(requestedType);
-	events = ATconcat(events, getButtonArgs(button, requestedButtonType));
+  if (actions != NULL) {
+    MC_Configuration configuration = MC_ConfigurationFromTerm(actions);
+    if (MC_isValidConfiguration(configuration)) {
+      MC_Properties properties = MC_getConfigurationList(configuration);
+      while (!MC_isPropertiesEmpty(properties)) {
+	MC_Property property = MC_getPropertiesHead(properties);
+	addUserProperty(property);
+	properties = MC_getPropertiesTail(properties);
       }
     }
-    buttonList = MC_getPropertiesTail(buttonList);
   }
-
-  return ATmake("snd-value(button-names(<term>))", events);
+  else {
+    ATwarning(__FILE__ ":set_user_properties: parse error in input.\n");
+  }
 }
 
 /*}}}  */
-/*{{{  ATerm get_button_actions(int cid, char *modulename, ATerm requestedType, ATerm requestedArgs) */
+/*{{{  void remove_user_properties(int cid) */
 
-ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
+void remove_user_properties(int cid)
 {
-  MC_Properties buttonList = getProperties();
-  ATerm actions = NULL;
+  ATtableReset(userDescriptionsByType);
+  ATtableReset(userActionsByDescription);
+  modulePaths = ATempty;
+}
 
-  while (!ATisEmpty(buttonList)) {
-    MC_Property button = MC_getPropertiesHead(buttonList);
+/*}}}  */
 
-    if (MC_isPropertyButton(button)) {
-      char *buttonModule = MC_getPropertyModule(button);
+/*{{{  ATerm get_events(int cid, ATerm type) */
 
-      if (moduleNameMatches(buttonModule, modulename)) {
-	MC_ButtonType curType = MC_ButtonTypeFromTerm(type);
-	MC_ButtonArgs curArgs = MC_ButtonArgsFromTerm(args);
-	if (buttonContainsDescription(button, curType, curArgs)) {
-	  actions = MC_getPropertyActions(button);
-	  break;
-	}
-      }
+ATerm get_events(int cid, ATerm actionType)
+{
+  ATermList result = ATempty;
+  MC_ActionType type = MC_ActionTypeFromTerm(actionType);
+  MC_ActionDescriptionList list = getDescriptions(type);
+
+  if (list != NULL) {
+    while (!MC_isActionDescriptionListEmpty(list)) {
+      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+      MC_Event event = MC_getActionDescriptionEvent(cur);
+      result = ATinsert(result, MC_EventToTerm(event));
+      list = MC_getActionDescriptionListTail(list);
     }
-    buttonList = MC_getPropertiesTail(buttonList);
   }
+
+  ATwarning(__FILE__ ":get_events: %t -> %t\n", actionType, result);
+
+  return ATmake("snd-value(events(<term>))", result);
+}
+
+/*}}}  */
+/*{{{  ATerm get_module_events(int cid, ATerm type, const char *moduleId) */
+
+ATerm get_module_events(int cid, ATerm type, const char *moduleId)
+{
+  ATerm boundType;
+
+  boundType = ATmake("<term>(<str>)", type, moduleId);
+
+  ATwarning("get_module_events: boundType = %t\n", boundType);
+
+  return get_events(cid, boundType);
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_actions(int cid, ATerm type, ATerm event) */
+
+ATerm get_actions(int cid, ATerm type, ATerm event)
+{
+  MC_ActionDescription desc;
+  ATermList actions;
+
+  ATwarning("%s:get_actions: %t, %t\n", __FILE__, type, event);
+
+  desc = MC_makeActionDescriptionDefault(MC_ActionTypeFromTerm(type),
+					 MC_EventFromTerm(event));
+  actions = getActions(desc);
 
   if (actions == NULL) {
-    char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
-    strncat(message, ATwriteToString(args), 
-	    MAX_MESSAGE_LENGTH - strlen(message));
-
-    actions = ATmake("[message(<str>)]", message); /* XXX */
+    ATabort("configmanager.c:get_actions: no actions for: %t, %t\n",
+	    type, event);
   }
 
-  return ATmake("snd-value(button-actions(<term>))", actions);
+  ATwarning("%s:get_actions: actions = %t\n", __FILE__, actions);
+
+  return ATmake("snd-value(actions(<term>))", actions);
 }
 
 /*}}}  */
-/*{{{  ATerm get_extension_modulename(int cid, char *extension) */
+/*{{{  ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId) */
 
-ATerm get_extension_modulename(int cid, char *extension)
+ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
 {
-  MC_Properties properties = getProperties();
+  ATerm boundType;
+
+  boundType = ATmake("<term>(<str>)", type, moduleId);
+
+  ATwarning("get_module_actions: boundType = %t\n", boundType);
+
+  return get_actions(cid, boundType, event);
+}
+
+/*}}}  */
+
+/*{{{  static ATermList getExtensions() */
+
+static ATermList getExtensions()
+{
+  return ATconcat(userExtensions, systemExtensions);
+}
+
+/*}}}  */
+/*{{{  ATerm get_extension_modulename(int cid, const char *extension) */
+
+ATerm get_extension_modulename(int cid, const char *extension)
+{
+  ATermList extensions = getExtensions();
+  ATwarning("%s:get_extension_modulename: [%s]\n", __FILE__, extension);
   
-  while (!MC_isPropertiesEmpty(properties)) {
-    MC_Property property = MC_getPropertiesHead(properties);
+  while (!ATisEmpty(extensions)) {
+    MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));
 
     if (MC_isPropertyExtension(property)) {
-      char *language = MC_getPropertyLanguage(property);
-      char *stored = MC_getPropertyExtension(property);
+      const char *language = MC_getPropertyLanguage(property);
+      const char *stored = MC_getPropertyExtension(property);
 
       if (strcmp(extension, stored) == 0) {
-	return ATmake("snd-value(extension-modulename(<str>))",
-		      language);
+	return ATmake("snd-value(extension-modulename(<str>))", language);
       }
     }
 
-    properties = MC_getPropertiesTail(properties);
+    extensions = ATgetNext(extensions);
   }
 
   return ATmake("snd-value(no-modulename)");
 }
 
 /*}}}  */
-/*{{{  ATerm get_modulename_extension(int cid, char *modulename) */
+/*{{{  ATerm get_modulename_extension(int cid, const char *modulename) */
 
-ATerm get_modulename_extension(int cid, char *modulename)
+ATerm get_modulename_extension(int cid, const char *modulename)
 {
-  MC_Properties properties = getProperties();
+  ATermList extensions = getExtensions();
+  ATwarning("%s:get_modulename_extension: [%s]\n", __FILE__, modulename);
 
-  while (!MC_isPropertiesEmpty(properties)) {
-    MC_Property property = MC_getPropertiesHead(properties);
+  while (!ATisEmpty(extensions)) {
+    MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));
 
     if (MC_isPropertyExtension(property)) {
       char *language = MC_getPropertyLanguage(property);
       char *extension = MC_getPropertyExtension(property);
 
       if (strcmp(language, modulename) == 0) {
-	return ATmake("snd-value(modulename-extension(<str>))",
-		      extension);
+	return ATmake("snd-value(modulename-extension(<str>))", extension);
       }
     }
 
-    properties = MC_getPropertiesTail(properties);
+    extensions = ATgetNext(extensions);
   }
 
   return ATmake("snd-value(no-extension)");
 }
 
 /*}}}  */
-/*{{{  ATerm get_search_paths(int cid) */
 
-ATerm get_search_paths(int cid)
+/*{{{  ATerm get_module_paths(int cid) */
+
+ATerm get_module_paths(int cid)
 {
-  ATermList searchPaths = ATappend(userSearchPaths, librarySearchPath);
-
-  return ATmake("snd-value(search-paths(<term>))", searchPaths);
+  return ATmake("snd-value(module-paths(<term>))", modulePaths);
 }
 
 /*}}}  */
@@ -371,13 +454,37 @@ void version(const char *msg)
 
 /*}}}  */
 
+/*{{{  static void initConfigurationManager(void) */
+
+static void initConfigurationManager(void)
+{
+  ATprotect((ATerm*) &modulePaths);
+  modulePaths = ATempty;
+
+  ATprotect((ATerm *) &userExtensions);
+  userExtensions = ATempty;
+
+  ATprotect((ATerm *) &systemExtensions);
+  systemExtensions = ATempty;
+
+  userDescriptionsByType = ATtableCreate(INITIAL_TABLE_SIZE,
+					 TABLE_RESIZE_PERCENTAGE);
+  systemDescriptionsByType = ATtableCreate(INITIAL_TABLE_SIZE,
+					   TABLE_RESIZE_PERCENTAGE);
+
+  userActionsByDescription = ATtableCreate(INITIAL_TABLE_SIZE,
+					   TABLE_RESIZE_PERCENTAGE);
+  systemActionsByDescription = ATtableCreate(INITIAL_TABLE_SIZE,
+					     TABLE_RESIZE_PERCENTAGE);
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
   int i, cid;
   ATerm bottomOfStack;
-  ATerm standard = NULL;
 
   for (i=1; i<argc; i++) {
     if (strcmp(argv[i], "-h") == 0) {
@@ -387,25 +494,10 @@ int main(int argc, char *argv[])
     }
   }
 
-  ATBinit(argc, argv,&bottomOfStack);
+  ATBinit(argc, argv, &bottomOfStack);
   MC_initMetaConfigApi();
-
-  ATprotect((ATerm*) &properties);
-  ATprotect((ATerm*) &standardProperties);
-  ATprotect((ATerm*) &userSearchPaths);
-  ATprotect(&librarySearchPath);
-
-  properties = MC_makePropertiesEmpty();
-  standard = ATreadFromNamedFile(STANDARD_META_BUTTONS);
-
-  if (standard != NULL) {
-    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(standard))) {
-      standardProperties = MC_getConfigurationList(MC_ConfigurationFromTerm(standard));
-    }
-  }
-  else {
-    ATwarning("Could not read: " STANDARD_META_BUTTONS "\n");
-  }
+  initConfigurationManager();
+  ATsetChecking(ATtrue);
 
   cid = ATBconnect(NULL, NULL, -1, configuration_manager_handler);
 

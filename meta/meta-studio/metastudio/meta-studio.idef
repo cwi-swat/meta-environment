@@ -1,181 +1,173 @@
-tool user-interface is {
-  command = "meta-studio"
-}
+tool user-interface is { command = "meta-studio" }
 
 process Ui is
 let
-  Answer : term,
-  Arguments : list,
-  ButtonList : list,
-  ButtonNames : str,
-  Choice : str,
-  Choices : list,
-  EditorId : term,
-  EnvironmentName : str,
-  Error : term,
-  Event : term,
-  Extension : str,
-  FileName : str,
-  Graph : term,
-  GraphId : str,
-  Id : term,
-  LayoutedGraph : term,
-  Mods : list,
-  ModuleList : term,
-  Modulename : str,
-  On : term,
-  Producer : str,
-  Pairs : list,
-  Path : str,
-  Question : str,
-  Str : str,
-  Summary : term,
-  SummaryId : str,
-  Title : str,
-  Tree : term,
-  Type : term,
-  UI : user-interface
+  Aap: term,
+  Answer: term,
+  Arguments: list,
+  EventList: list,
+  ButtonNames: str,
+  Choice: str,
+  Choices: list,
+  EditorId: term,
+  EnvironmentName: str,
+  Error: term,
+  Event: term,
+  Extension: str,
+  FileName: str,
+  Graph: term,
+  GraphId: str,
+  Id: term,
+  LayoutedGraph: term,
+  Mods: list,
+  ModuleList: term,
+  ModuleId: str,
+  On: term,
+  Producer: str,
+  Pairs: list,
+  Path: str,
+  Question: str,
+  Str: str,
+  Summary: term,
+  SummaryId: str,
+  Title: str,
+  Tree: term,
+  Type: term,
+  UI: user-interface
 in
-  subscribe(ui-status(<term>)) .
-  Id := process-id.
-#ifdef ECLIPSE
-  rec-connect(UI?) . 
-#else
-  execute(user-interface,UI?).
-#endif
-  snd-msg(environment-name-hook).
-  rec-msg(environment-name-hook-result(EnvironmentName?)).
-  snd-do(UI, initialize-ui(EnvironmentName)) .
+  subscribe(ui-status(<term>))
+  . Id := process-id
+  . execute(user-interface, UI?)
+  . snd-msg(environment-name-hook)
+  . rec-msg(environment-name-hook-result(EnvironmentName?))
+  . snd-do(UI, initialize-ui(EnvironmentName))
+  .
   (
-    ( 
-      rec-note(ui-status(stat(Id?, Str?))) .
-      snd-do(UI, add-status(Id, Str))
-    +
-      rec-note(ui-status(statf(Id?, Str?, Arguments?))) .
-      snd-do(UI, add-statusf(Id, Str, Arguments))
-    +
-      rec-note(ui-status(endstat(Id?))) .
-      snd-do(UI, end-status(Id))
-    +
-      rec-note(ui-status(error(Str?))) .
-      snd-do(UI, error(Str))
-    +
-      rec-note(ui-status(errorf(Str?, Arguments?))) .
-      snd-do(UI, errorf(Str, Arguments))
-    +
-      rec-note(ui-status(warning(Str?))) .
-      snd-do(UI, warning(Str))
-    +
-      rec-note(ui-status(warningf(Str?, Arguments?))) .
-      snd-do(UI, warningf(Str, Arguments))
-    +
-      rec-note(ui-status(message(Str?))) .
-      snd-do(UI, message(Str))
-    +
-      rec-note(ui-status(messagef(Str?, Arguments?))) .
-      snd-do(UI, messagef(Str, Arguments))
-    +
-      rec-msg(ui-show-feedback-summary(Summary?)) .
-      snd-do(UI, show-feedback-summary(Summary))
-    +
-      rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?)) .
-      snd-do(UI, remove-feedback-summary(Producer, SummaryId))
-    ) * delta 
-  ||
-    ( 
-      rec-msg(display-graph(GraphId?, Graph?)) .
-      snd-do(UI, display-graph(GraphId, Graph))
-    +
-      rec-event(UI, clear-all).
-      snd-msg(clear-all).
-      rec-msg(cleared-all).
-      snd-ack-event(UI, clear-all)
-    +
-      rec-event(UI, debugging(On?)) .
-      snd-msg(debugging(On)) .
-      snd-ack-event(UI, debugging(On))
-    +
-      rec-msg(display-import-graph(Pairs?)).
-      snd-do(UI, new-graph(Pairs)) .
-      Pairs := []
-    +
-      rec-event(UI, layout-graph(GraphId?, Graph?)) .
-      snd-msg(layout-graph(Graph)) .
-      rec-msg(graph-layouted(LayoutedGraph?)) .
-      snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
-      snd-ack-event(UI, layout-graph(GraphId, Graph))
-    + 
-      rec-event(UI, get-buttons(Type?, Modulename?)) .
-      snd-msg(get-auxiliary-buttons(Type, Modulename)) .
-      rec-msg(button-list(Modulename, ButtonList?)).
-      snd-do(UI, buttons-found(Type, Modulename, ButtonList)) .
-      snd-ack-event(UI, get-buttons(Type, Modulename))
-    +
-#ifdef ECLIPSE
-      rec-event(UI, eclipse-open-modules(ModuleList?, Type?)) .
-      snd-msg(open-modules(ModuleList, Type)) .
-      rec-msg(finished-opening-modules) .
-      snd-ack-event(UI, eclipse-open-modules(ModuleList, Type))
-    +
-      rec-event(UI, eclipse-open-initial-module(FileName?)) .
-      snd-msg(decons-file-name(FileName, ".sdf")) .
-      rec-msg(decons-file-name-result(Path?, Modulename?, Extension?)) .
-      snd-msg(open-modules([Modulename], sdf)) .
-      rec-msg(finished-opening-modules) .
-      snd-ack-event(UI, eclipse-open-initial-module(FileName))
-    +
-      rec-event(UI, eclipse-edit-term-file(Modulename?, FileName?)) .
-      snd-msg(edit-term-file(Modulename, FileName)) .
-      rec-msg(editor-opened(Modulename?, EditorId?)) .
-      snd-ack-event(UI, eclipse-edit-term-file(Modulename, FileName))
-    +
-#endif
-      rec-event(UI, button-selected(Type?, Event?))
-      . snd-msg(ui-button-selected(Type, Event, "*"))
-      . snd-ack-event(UI, button-selected(Type, Event))
-    +
-      rec-event(UI, button-selected(Type?, Modulename?, Event?))
-      . snd-msg(ui-button-selected(Type, Event, Modulename))
-      . snd-ack-event(UI, button-selected(Type, Modulename, Event))
-
-    +
-      rec-msg(ask-for-file(Title?, Path?, Extension?)) .
-      snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
-      rec-value(UI, file-name(FileName?)) . 
-      snd-msg(ask-for-file-result(FileName)) 
-    +
-      rec-msg(ask-question(Title?)) .
-      snd-eval(UI, show-question-dialog(Title)) .
-      rec-value(UI, answer(Answer?)) . 
-      snd-msg(ask-question-result(Answer)) 
-    +
-      rec-msg(clear-history) .
-      snd-do(UI, clear-history) 
-    + 
-      rec-event(UI, node-info(Modulename?, Tree?))
-      . snd-msg(ui-node-selected(Modulename, Tree))
-      . snd-ack-event(UI, node-info(Modulename, Tree)) 
-    +
-      rec-event(UI, error-selected(Error?)) .
-      snd-msg(ui-error-selected(Error)) .
-      snd-ack-event(UI, error-selected(Error))
-    +
-      rec-msg(show-list-choice(Title?, Question?, Choices?)) .
-      snd-do(UI, showListChoice(Title, Question, Choices))
-    +
-      rec-event(UI, list-choice(Title, Choice?)) .
-      snd-msg(list-choice(Title, Choice)) .
-      snd-ack-event(UI, list-choice(Title, Choice))
-    +
-      rec-event(UI, cancel-list-choice(Title)) .
-      snd-msg(cancel-list-choice(Title)) .
-      snd-ack-event(UI, cancel-list-choice(Title))
-    ) * 
     (
-      rec-event(UI, quit)
-    + 
+      rec-note(ui-status(stat(Id?, Str?)))
+      . snd-do(UI, add-status(Id, Str))
+    +
+      rec-note(ui-status(statf(Id?, Str?, Arguments?)))
+      . snd-do(UI, add-statusf(Id, Str, Arguments))
+    +
+      rec-note(ui-status(endstat(Id?)))
+      . snd-do(UI, end-status(Id))
+    +
+      rec-note(ui-status(error(Str?)))
+      . snd-do(UI, error(Str))
+    +
+      rec-note(ui-status(errorf(Str?, Arguments?)))
+      . snd-do(UI, errorf(Str, Arguments))
+    +
+      rec-note(ui-status(warning(Str?)))
+      . snd-do(UI, warning(Str))
+    +
+      rec-note(ui-status(warningf(Str?, Arguments?)))
+      . snd-do(UI, warningf(Str, Arguments))
+    +
+      rec-note(ui-status(message(Str?)))
+      . snd-do(UI, message(Str))
+    +
+      rec-note(ui-status(messagef(Str?, Arguments?)))
+      . snd-do(UI, messagef(Str, Arguments))
+    +
+      rec-msg(ui-show-feedback-summary(Summary?))
+      . snd-do(UI, show-feedback-summary(Summary))
+    +
+      rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
+      . snd-do(UI, remove-feedback-summary(Producer, SummaryId))
+    )
+    *
+    delta ||
+    (
+      rec-msg(display-graph(GraphId?, Graph?))
+      . snd-do(UI, display-graph(GraphId, Graph))
+    +
+      rec-event(UI,clear-all)
+      . snd-msg(clear-all)
+      . rec-msg(cleared-all)
+      . snd-ack-event(UI,clear-all)
+    +
+      rec-event(UI,debugging(On?))
+      . snd-msg(debugging(On))
+      . snd-ack-event(UI,debugging(On))
+    +
+      rec-msg(display-import-graph(Pairs?))
+      . snd-do(UI, new-graph(Pairs))
+      . Pairs := []
+    +
+      rec-event(UI,layout-graph(GraphId?, Graph?))
+      . snd-msg(layout-graph(Graph))
+      . rec-msg(graph-layouted(LayoutedGraph?))
+      . snd-do(UI, graph-layouted(GraphId, LayoutedGraph))
+      . snd-ack-event(UI,layout-graph(GraphId, Graph))
+    +
+      rec-event(UI, get-events(Type?))
+      . printf("meta-studio: get-events(%t)\n", Type)
+      . snd-msg(cm-get-events(Type))
+      . rec-msg(cm-events(EventList?))
+      . snd-do(UI, add-events(Type, EventList))
+      . snd-ack-event(UI, get-events(Type))
+    +
+      rec-event(UI, get-events(Type?, ModuleId?))
+      . printf("meta-studio: get-events(%t, %s)\n", Type, ModuleId)
+
+      . snd-msg(cm-get-events(Type))
+      . rec-msg(cm-events(EventList?))
+      . snd-do(UI, add-events(Type, EventList))
+
+      . snd-msg(cm-get-module-events(Type, ModuleId))
+      . rec-msg(cm-module-events(EventList?))
+      . snd-do(UI, add-events(Type, ModuleId, EventList))
+
+      . snd-ack-event(UI, get-events(Type, ModuleId))
+    +
+      rec-event(UI,button-selected(Type?, Event?))
+      . snd-msg(ui-button-selected(Type, Event))
+      . snd-ack-event(UI,button-selected(Type, Event))
+    +
+      rec-event(UI,button-selected(Type?, ModuleId?, Event?))
+      . snd-msg(ui-button-selected(Type, Event, ModuleId))
+      . snd-ack-event(UI,button-selected(Type, ModuleId, Event))
+    +
+      rec-msg(ask-for-file(Title?, Path?, Extension?))
+      . snd-eval(UI, show-file-dialog(Title, Path, Extension))
+      . rec-value(UI, file-name(FileName?))
+      . snd-msg(ask-for-file-result(FileName))
+    +
+      rec-msg(ask-question(Title?))
+      . snd-eval(UI, show-question-dialog(Title))
+      . rec-value(UI, answer(Answer?))
+      . snd-msg(ask-question-result(Answer))
+    +
+      rec-msg(clear-history)
+      . snd-do(UI, clear-history)
+    +
+      rec-event(UI,node-info(ModuleId?, Tree?))
+      . snd-msg(ui-node-selected(ModuleId, Tree))
+      . snd-ack-event(UI,node-info(ModuleId, Tree))
+    +
+      rec-event(UI,error-selected(Error?))
+      . snd-msg(ui-error-selected(Error))
+      . snd-ack-event(UI,error-selected(Error))
+    +
+      rec-msg(show-list-choice(Title?, Question?, Choices?))
+      . snd-do(UI, showListChoice(Title, Question, Choices))
+    +
+      rec-event(UI,list-choice(Title, Choice?))
+      . snd-msg(list-choice(Title, Choice))
+      . snd-ack-event(UI,list-choice(Title, Choice))
+    +
+      rec-event(UI,cancel-list-choice(Title))
+      . snd-msg(cancel-list-choice(Title))
+      . snd-ack-event(UI,cancel-list-choice(Title))
+    )
+    *
+    (
+      rec-event(UI,quit)
+    +
       rec-disconnect(UI)
-    ) .
-    shutdown("MetaStudio exiting\n")
+    )
+    . shutdown("MetaStudio exiting\n")
   )
 endlet

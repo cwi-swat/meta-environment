@@ -106,7 +106,11 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         // intentionally left empty
     }
 
-    public void buttonsFound(ATerm t0, String s1, ATerm t2) {
+    public void addEvents(ATerm t0, ATerm t1) {
+        // intentionally left empty
+    }
+
+    public void addEvents(ATerm t0, String s1, ATerm t2) {
         // intentionally left empty
     }
 

@@ -17,7 +17,7 @@ void reread_contents(int conn, ATerm);
 void clear_focus(int conn, ATerm);
 void write_contents(int conn, ATerm);
 void display_message(int conn, ATerm, const char *);
-void set_actions(int conn, ATerm, ATerm);
+void add_actions(int conn, ATerm, ATerm);
 void editor_to_front(int conn, ATerm);
 void edit_file(int conn, ATerm, const char *, const char *);
 void kill_editor(int conn, ATerm);

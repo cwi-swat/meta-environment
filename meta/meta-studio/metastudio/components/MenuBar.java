@@ -34,16 +34,16 @@ public class MenuBar extends UserInterfacePanel {
         
         ACTION_MENUBAR = factory.parse("studio-menubar");
 
-        postEvent(factory.make("get-buttons(<term>,<str>)", ACTION_MENUBAR, "*"));
+        postEvent(factory.make("get-events(<term>)", ACTION_MENUBAR));
     }
 
     public JMenuBar getJMenuBar() {
         return bar;
     }
 
-    public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
-        if (buttonType.equals(ACTION_MENUBAR)) {
-            addMenu(buttonType, moduleName, (ATermList) buttons);            
+    public void addEvents(ATerm type, ATerm events) {
+        if (type.equals(ACTION_MENUBAR)) {
+            addMenu(type, (ATermList) events);            
         }
     }
 
@@ -105,7 +105,7 @@ public class MenuBar extends UserInterfacePanel {
         return cur;
     }
 
-    private void addMenu(final ATerm type, String moduleName, ATermList buttons) {
+    private void addMenu(final ATerm type, ATermList buttons) {
         while (!buttons.isEmpty()) {
             final ATerm action = buttons.getFirst();
             ATermList menuItems = (ATermList) ((ATermAppl) action).getArgument(0);
@@ -117,9 +117,7 @@ public class MenuBar extends UserInterfacePanel {
                 public void actionPerformed(ActionEvent e) {
                     ATerm event =
                         getFactory().make(
-                            "button-selected(<term>, <term>)",
-                            type,
-                            action);
+                            "button-selected(<term>, <term>)", type, action);
 
                     postEvent(event);
                 }

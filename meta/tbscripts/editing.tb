@@ -1,18 +1,28 @@
 /* $Id$ */
 
-/*{{{  process FindModuleFilename(Modulename: str, Type: term, Filename: str?) */
+/*{{{  process FindModuleFilename(Modulename: str, Type: term, Path: str?) */
 
-process FindModuleFilename(Modulename: str, Type: term, Filename: str?) is
+process FindModuleFilename(Modulename: str, Type: term, Path: str?) is
 let
   Extension: str,
-  Path: str
+  Basedir: str
 in
+  printf("Modulename: %s, Type: %t\n", Modulename, Type) .
   snd-msg(get-path-from-db(Modulename))
-  . rec-msg(path(Path?))
-  . snd-msg(file-extension-hook(Type))
-  . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Path, Modulename, Extension))
-  . rec-msg(io-filename(Filename?))
+  .
+  (
+    rec-msg(path(Basedir?))
+    . printf("Basedir (cached): %s\n", Basedir)
+    . snd-msg(file-extension-hook(Type))
+    . rec-msg(file-extension-hook-result(Extension?))
+    . printf("Extension: %t\n", Extension)
+    . BuildPath(Basedir, Modulename, Extension, Path?)
+  +
+    rec-msg(no-path)
+    . LocateFile(Modulename, Type, Path?)
+    . printf("Basedir (located): %s\n", Path)
+  )
+  . printf("Path: %s\n", Path)
 endlet
 
 /*}}}  */
@@ -53,9 +63,9 @@ endlet
 
 /*{{{  process Edit(Filename: str, Modulename: str, Sid: term?) */
 
-process Edit(Filename: str, Modulename: str, Sid: term?) is
-  snd-msg(em-create-session(Filename, Modulename))
-  . rec-msg(em-session(Filename, Modulename, Sid?))
+process Edit(Path: str, Sid: term?) is
+  snd-msg(em-create-session(Path))
+  . rec-msg(em-session(Path, Sid?))
 
 /*}}}  */
 
@@ -104,12 +114,11 @@ in
     snd-msg(te-editor-to-front(Sid))
   else
     snd-msg(em-register-editor(Sid, text))
-    . GetModulename(Sid, Modulename?)
-    . snd-msg(get-auxiliary-buttons(Type, Modulename))
-    . rec-msg(button-list(Modulename, Actions?))
     . GetFilename(Sid, Filename?)
-    . snd-msg(te-edit-text(Sid, EDITOR, Filename, Actions))
-    /*. snd-msg(te-set-actions(Sid, Actions))*/
+    . snd-msg(te-edit-text(Sid, EDITOR, Filename))
+    . snd-msg(get-edit-actions(Type))
+    . rec-msg(edit-actions(Type, Actions?))
+    . snd-msg(te-add-actions(Sid, Actions))
   fi
 endlet
 
@@ -328,24 +337,25 @@ process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) is
   )
 
 /*}}}  */
-/*{{{  process EditSyntax(Modulename: str) */
+/*{{{  process EditSyntax(Path: str) */
 
-process EditSyntax(Modulename: str) is
+process EditSyntax(Path: str) is
 let
   Available: bool,
   EditorType: term,
   Filename: str,
   HasText: bool,
   HasStructure: bool,
+  ParseSucceeded: bool,
   Sid: term,
   Tree: term
 in
   EditorType := syntax-editor
-  . FindModuleFilename(Modulename, sdf, Filename?)
-  . Edit(Filename, Modulename, Sid?)
+  . Edit(Path, Sid?)
   . EditText(Sid, EditorType)
-  . snd-msg(syntax-editor-started(Modulename, Sid))
-  . GetSyntaxTree(Modulename, Tree?, Available?)
+  . snd-msg(syntax-editor-started(Path, Sid))
+  /*. GetSyntaxTree(Modulename, Tree?, Available?)*/
+  . Available := false
   .
   if equal(Available, true)
   then
@@ -368,7 +378,7 @@ in
   .
   if and(HasText, not(HasStructure))
   then
-    ParseSyntax(Sid, sdf)
+    ParseSyntax(Sid, sdf, ParseSucceeded?)
   else
     tau
   fi
@@ -403,7 +413,7 @@ let
 in
   EditorType := equations-editor
   . FindModuleFilename(Modulename, asf, Filename?)
-  . Edit(Filename, Modulename, Sid?)
+  . Edit(Filename, Sid?)
   . EditText(Sid, EditorType)
   . snd-msg(equations-editor-started(Modulename, Sid))
   . GetEquationsTree(Modulename, Tree?, Available?)
@@ -468,6 +478,7 @@ endlet
 
 process EditTerm(Filename: str, Modulename: str) is
 let
+  Actions: list,
   Available: bool,
   EditorType: term,
   Sid: term,
@@ -479,8 +490,11 @@ in
   .
   if equal(Valid, true)
   then
-    Edit(Filename, Modulename, Sid?)
+    Edit(Filename, Sid?)
     . EditText(Sid, EditorType)
+    . snd-msg(get-edit-term-actions(Modulename))
+    . rec-msg(edit-term-actions(Modulename, Actions?))
+    . snd-msg(te-add-actions(Modulename, Actions))
     . snd-msg(term-editor-started(Filename, Modulename, Sid))
     . GetTermTree(Filename, Tree?, Available?)
     .

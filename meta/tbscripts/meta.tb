@@ -11,6 +11,8 @@
 #include "structure-editor.idef"
 #include "unparser.idef"
 #include "user-interface.tb"
+#include "kernel-configuration.tb"
+#include "user-configuration.tb"
 
 /* sdf-meta */
 #include "parsetablegen.idef"
@@ -57,7 +59,10 @@ let
   Sort : term,
   Pid : int
 in
-  Id := process-id .
+  Id := process-id
+  . KernelConfiguration()
+  . UserConfiguration()
+  .
   (
     rec-msg(get-file-extensions) .
     snd-msg(file-extensions-hook).

@@ -169,9 +169,9 @@ static void moveToFront(int write_to_editor_fd)
 }
 
 /*}}}  */
-/*{{{  static void setActions(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void addActions(int write_to_editor_fd, TE_Action edAction) */
 
-static void setActions(int write_to_editor_fd, TE_Action edAction)
+static void addActions(int write_to_editor_fd, TE_Action edAction)
 {
   TE_ActionList actionList;
 
@@ -320,7 +320,7 @@ int main(int argc, char *argv[])
 			      writeContents,
 			      rereadContents,
 			      displayMessage,
-			      setActions,
+			      addActions,
 			      setFocus,
 			      setCursorAtOffset,
 			      isModified);

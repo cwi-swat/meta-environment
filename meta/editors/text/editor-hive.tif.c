@@ -9,7 +9,7 @@
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,edit-file(<term>,<str>,<str>))",
-  "rec-do(<editor-hive>,set-actions(<term>,<list>))",
+  "rec-do(<editor-hive>,add-actions(<term>,<list>))",
   "rec-do(<editor-hive>,write-contents(<term>))",
   "rec-do(<editor-hive>,reread-contents(<term>))",
   "rec-do(<editor-hive>,is-modified(<term>))",
@@ -65,8 +65,8 @@ ATerm editor_hive_handler(int conn, ATerm term)
     display_message(conn, t0, s0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(set-actions(<term>,<term>))", &t0, &t1)) {
-    set_actions(conn, t0, t1);
+  if(ATmatch(term, "rec-do(add-actions(<term>,<term>))", &t0, &t1)) {
+    add_actions(conn, t0, t1);
     return NULL;
   }
   if(ATmatch(term, "rec-do(editor-to-front(<term>))", &t0)) {

@@ -51,12 +51,21 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
     
-    public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
+    public void addEvents(ATerm type, ATerm events) {
         Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.buttonsFound(buttonType, moduleName, buttons);
+            tif.addEvents(type, events);
+        }
+    }
+
+    public void addEvents(ATerm type, String moduleId, ATerm events) {
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.addEvents(type, moduleId, events);
         }
     }
 

@@ -72,7 +72,7 @@ public class ModuleBrowser extends UserInterfacePanel {
             popup = factory.parse("new-module-popup");
         }
         
-        bridge.postEvent(factory.make("get-buttons(<term>,<str>)", popup, current.getName()));
+        bridge.postEvent(factory.make("get-events(<term>,<str>)", popup, current.getName()));
     }
 
     

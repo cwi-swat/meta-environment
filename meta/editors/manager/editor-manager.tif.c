@@ -5,17 +5,18 @@
 
 #include "editor-manager.tif.h"
 
-#define NR_SIG_ENTRIES	12
+#define NR_SIG_ENTRIES	13
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<editor-manager>,create-session(<str>,<str>))",
-  "rec-eval(<editor-manager>,get-filename(<term>))",
+  "rec-eval(<editor-manager>,create-session(<str>))",
+  "rec-eval(<editor-manager>,get-path(<term>))",
+  "rec-eval(<editor-manager>,bind-session(<term>,<str>))",
   "rec-eval(<editor-manager>,get-modulename(<term>))",
   "rec-do(<editor-manager>,register-editor(<term>,<term>))",
   "rec-eval(<editor-manager>,is-editor-registered(<term>,<term>))",
   "rec-do(<editor-manager>,unregister-editor(<term>,<term>))",
   "rec-eval(<editor-manager>,get-sessions-by-modulename(<str>))",
-  "rec-eval(<editor-manager>,get-session-by-filename(<str>))",
+  "rec-eval(<editor-manager>,get-session-by-path(<str>))",
   "rec-do(<editor-manager>,delete-session(<term>))",
   "rec-eval(<editor-manager>,request-transaction(<term>))",
   "rec-do(<editor-manager>,end-transaction(<term>))",
@@ -27,41 +28,44 @@ ATerm editor_manager_handler(int conn, ATerm term)
 {
   ATerm in, out;
   /* We need some temporary variables during matching */
-  char *s0, *s1;
+  char *s0;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-do(unregister-editor(<term>,<term>))", &t0, &t1)) {
-    unregister_editor(conn, t0, t1);
-    return NULL;
-  }
   if(ATmatch(term, "rec-eval(is-editor-registered(<term>,<term>))", &t0, &t1)) {
     return is_editor_registered(conn, t0, t1);
   }
-  if(ATmatch(term, "rec-eval(get-sessions-by-modulename(<str>))", &s0)) {
-    return get_sessions_by_modulename(conn, s0);
+  if(ATmatch(term, "rec-do(unregister-editor(<term>,<term>))", &t0, &t1)) {
+    unregister_editor(conn, t0, t1);
+    return NULL;
   }
   if(ATmatch(term, "rec-do(register-editor(<term>,<term>))", &t0, &t1)) {
     register_editor(conn, t0, t1);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-session-by-filename(<str>))", &s0)) {
-    return get_session_by_filename(conn, s0);
+  if(ATmatch(term, "rec-eval(get-sessions-by-modulename(<str>))", &s0)) {
+    return get_sessions_by_modulename(conn, s0);
   }
   if(ATmatch(term, "rec-eval(get-modulename(<term>))", &t0)) {
     return get_modulename(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-session-by-path(<str>))", &s0)) {
+    return get_session_by_path(conn, s0);
+  }
+  if(ATmatch(term, "rec-eval(bind-session(<term>,<str>))", &t0, &s0)) {
+    return bind_session(conn, t0, s0);
   }
   if(ATmatch(term, "rec-do(delete-session(<term>))", &t0)) {
     delete_session(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-filename(<term>))", &t0)) {
-    return get_filename(conn, t0);
+  if(ATmatch(term, "rec-eval(get-path(<term>))", &t0)) {
+    return get_path(conn, t0);
   }
   if(ATmatch(term, "rec-eval(request-transaction(<term>))", &t0)) {
     return request_transaction(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(create-session(<str>,<str>))", &s0, &s1)) {
-    return create_session(conn, s0, s1);
+  if(ATmatch(term, "rec-eval(create-session(<str>))", &s0)) {
+    return create_session(conn, s0);
   }
   if(ATmatch(term, "rec-do(end-transaction(<term>))", &t0)) {
     end_transaction(conn, t0);
