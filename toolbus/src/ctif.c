@@ -17,6 +17,12 @@
  *   compatible with the generated input signature of the tool.
  *
  * Author: Paul Klint, February, 1995.
+ *
+ * Pieter: - Added -newstyle option (1996)
+ *         - Added -backdoor option (feb. 1997)
+ *         - Renamed -newstyle to -multi
+ *	   - Added -newstyle option
+ *         - Added -header option
  */
 
 #include "TB.h"
@@ -33,7 +39,17 @@ int tot[N_TERM_KINDS];     /* max number of vars per type */
 
 int cur[N_TERM_KINDS];    /* number of vars per type in current call */
 
-TBbool oldstyle = TBtrue;  /* old style handlers */
+TBbool multitools = TBfalse;	/* old style handlers */
+TBbool backdoor = TBfalse;	/* Leave the back door open */
+TBbool placeholders = TBfalse;	/* Use placeholder matching style */
+char *termptr = "term *";	/* Wat does a term pointer look like? */
+char *Tmatch   = "TBmatch";	/* How to match terms */
+char *TmatchSimple = "TBmatch"; /* How to match terms without patterns */
+char *is_empty = NULL;	        /* What is the `is_empty' predicate? */
+char *Tprintf = "TBprintf";	/* How to print terms */
+char *first   = "list_first";	/* How to get the first element of a list */
+char *next    = "list_next";	/* How to get the tail of a list */
+char *header_file = "TB.h";	/* Header file */
 
 void reset_arg_counters(void)
 {
@@ -56,19 +72,26 @@ void reset_arg_counters(void)
 void gen_var_decls(FILE *fout)
 {
   int i;
-  for(i = 0; i < N_TERM_KINDS; i++){
-    if(tot[i] > 0){
-      switch(i)
-	{    
-	case t_bool:      fprintf(fout, "\tterm *bool_arg[%d];\n", tot[i]); break;
-	case t_int:       fprintf(fout, "\tint int_arg[%d];\n", tot[i]); break;
-	case t_real:      fprintf(fout, "\tdouble real_arg[%d];\n", tot[i]); break;
-	case t_str:       fprintf(fout, "\tchar *str_arg[%d];\n", tot[i]); break;
-	case t_bstr:      fprintf(fout, "\tchar *bstr_arg[%d]; int bstr_size[%d];\n", 
-				  tot[i], tot[i]); break;
-	case t_list:      fprintf(fout, "\tterm_list *term_list_arg[%d];\n", tot[i]); break;
-	case t_term:      fprintf(fout, "\tterm *term_arg[%d];\n", tot[i]); break;  
-	}
+  for(i = 0; i < N_TERM_KINDS; i++) {
+    if(tot[i] > 0) {
+      switch(i) {
+	case t_bool:    fprintf(fout, "\t%sbool_arg[%d];\n", termptr, tot[i]);
+			break;
+	case t_int:     fprintf(fout, "\tint int_arg[%d];\n", tot[i]);
+			break;
+	case t_real:    fprintf(fout, "\tdouble real_arg[%d];\n", tot[i]); 
+			break;
+	case t_str:	fprintf(fout, "\tchar *str_arg[%d];\n", tot[i]); 
+			break;
+	case t_bstr:	fprintf(fout, "\tchar *bstr_arg[%d]; " \
+				"int bstr_size[%d];\n", tot[i], tot[i]); 
+			break;
+	case t_list:	fprintf(fout, "\t%sterm_list_arg[%d];\n",
+				termptr, tot[i]);
+			break;
+	case t_term:	fprintf(fout, "\t%sterm_arg[%d];\n",termptr,tot[i]);
+			break;  
+      }
     }
   }
   fprintf(fout, "\n");
@@ -106,14 +129,14 @@ void C_visit_args(term_list *args, char *pref, void (*f)(term *, char *, int))
 
 void C_proto_arg(term *a, char *pref, int n)
 {
-       if(TBmatch(a, "<bool>")) fprintf(fout, "term *");
+       if(TBmatch(a, "<bool>")) fprintf(fout, "%s", termptr);
   else if(TBmatch(a, "<int>"))  fprintf(fout, "int");
   else if(TBmatch(a, "<real>")) fprintf(fout, "double");
   else if(TBmatch(a, "<str>"))  fprintf(fout, "char *");
   else if(TBmatch(a, "<bstr>")) fprintf(fout, "char *, int");
-  else if(TBmatch(a, "<list>")) fprintf(fout, "term_list *");
+  else if(TBmatch(a, "<list>")) fprintf(fout, "%s", termptr);
   else 
-    fprintf(fout, "term *");
+    fprintf(fout, "%s", termptr);
 }
 
 /* Handle one argument position and generate corresponding code
@@ -122,14 +145,25 @@ void C_proto_arg(term *a, char *pref, int n)
 
 void C_format_arg(term *a, char *pref, int n)
 {
-  if(TBmatch(a, "<bool>")) fprintf(fout, "%%t");
-  else if(TBmatch(a, "<int>"))  fprintf(fout, "%%d");
-  else if(TBmatch(a, "<real>")) fprintf(fout, "%%r");
-  else if(TBmatch(a, "<str>"))  fprintf(fout, "%%s");
-  else if(TBmatch(a, "<bstr>")) fprintf(fout, "%%b");
-  else if(TBmatch(a, "<list>")) fprintf(fout, "[%%l]");
-  else 
-    fprintf(fout, "%%t");
+  if(placeholders) {
+    if(TBmatch(a, "<bool>")) fprintf(fout, "<term>");
+    else if(TBmatch(a, "<int>"))  fprintf(fout, "<int>");
+    else if(TBmatch(a, "<real>")) fprintf(fout, "<real>");
+    else if(TBmatch(a, "<str>"))  fprintf(fout, "<str>");
+    else if(TBmatch(a, "<bstr>")) fprintf(fout, "<bstr>");
+    else if(TBmatch(a, "<list>")) fprintf(fout, "<list>");
+    else 
+      fprintf(fout, "<term>");
+  } else {
+    if(TBmatch(a, "<bool>")) fprintf(fout, "%%t");
+    else if(TBmatch(a, "<int>"))  fprintf(fout, "%%d");
+    else if(TBmatch(a, "<real>")) fprintf(fout, "%%r");
+    else if(TBmatch(a, "<str>"))  fprintf(fout, "%%s");
+    else if(TBmatch(a, "<bstr>")) fprintf(fout, "%%b");
+    else if(TBmatch(a, "<list>")) fprintf(fout, "[%%l]");
+    else 
+      fprintf(fout, "%%t");
+  }
 }
 
 /* Handle one argument position and generate corresponding code
@@ -176,7 +210,7 @@ void C_proto(char *rtype, term *t)
     fprintf(fout, "%s ", rtype);
     C_fun_name(fname, fout);
     fputc('(', fout);
-    if(oldstyle) {
+    if(!multitools) {
       if(!fargs)
         fprintf(fout, "void");
       else
@@ -200,11 +234,11 @@ void C_test_eval_do(char *els, char *op, term *t, term *whole)
   term_list *fargs;
   char *fname;
 
-  C_proto(streq(op, "rec-eval") ? "term *" : "void  ", t);
+  C_proto(streq(op, "rec-eval") ? termptr : "void  ", t);
   fout = tmp1;
 
   if(TBmatch(t, "%f(%l)", &fname, &fargs)){
-    fprintf(fout, "%sif(TBmatch(e, \"%s(%s(", els, op, fname);
+    fprintf(fout, "%sif(%s(e, \"%s(%s(", els, Tmatch, op, fname);
     C_visit_args(fargs, "", C_format_arg);
 
     fprintf(fout, "))\"%s ", fargs ? "," : "");
@@ -213,7 +247,7 @@ void C_test_eval_do(char *els, char *op, term *t, term *whole)
     if(streq(op, "rec-eval"))
       fprintf(fout, "return ");
     C_fun_name(fname, fout);
-    if(oldstyle)
+    if(!multitools)
       fprintf(fout, "(");
     else
       if(fargs)
@@ -236,11 +270,11 @@ void C_test_monitor(char *els, term *t, term *whole)
   term_list *fargs;
   char *fname;
 
-  C_proto("term *", t);
+  C_proto(termptr, t);
   fout = tmp1;
 
   if(TBmatch(t, "%f(%l)", &fname, &fargs)){
-    fprintf(fout, "%sif(TBmatch(e, \"%s(", els, fname);
+    fprintf(fout, "%sif(%s(e, \"%s(", els, Tmatch, fname);
     C_visit_args(fargs, "", C_format_arg);
 
     fprintf(fout, ")\"%s ", fargs ? "," : "");
@@ -248,7 +282,7 @@ void C_test_monitor(char *els, term *t, term *whole)
     fprintf(fout, ")){\n\t\t");
     fprintf(fout, "return ");
     C_fun_name(fname, fout);
-    if(oldstyle)
+    if(!multitools)
       fprintf(fout, "(");
     else
       fprintf(fout, "(cid, ");
@@ -268,14 +302,14 @@ void C_test_other(char *els, term *t, term *whole)
   fout = tmp1;
 
   if(TBmatch(t, "%f(%l)", &fname, &fargs)){
-    fprintf(fout, "%sif(TBmatch(e, \"%s(", els, fname);
+    fprintf(fout, "%sif(%s(e, \"%s(", els, Tmatch, fname);
     C_visit_args(fargs, "", C_format_arg);
 
     fprintf(fout, ")\"%s ", fargs ? "," : "");
     C_visit_args(fargs, "&", C_var_arg);
     fprintf(fout, ")){\n\t\t");
     C_fun_name(fname, fout);
-    if(oldstyle)
+    if(!multitools)
       fprintf(fout, "(");
     else
       fprintf(fout, "(cid, ");
@@ -323,16 +357,28 @@ void copy_file(char *name, FILE *tofile)
 }
 
 void gen_header(char *the_tool_name)
-{ char *s =
-"/* GENERATED AUTOMATICALLY, DO NOT MODIFY */\n\
-/* Tool Interface File for tool: %s */\n\
-\n\
-#include \"TB.h\"\n\
-\n\
-/* Prototypes for functions used in event handler */\n";
+{ 
+  fprintf(handler, "/* GENERATED AUTOMATICALLY, DO NOT MODIFY */\n" \
+	    	   "/* Tool Interface File for tool: %s */\n\n",the_tool_name);
 
-fprintf(handler, s, the_tool_name);
+  if(header_file)
+    fprintf(handler, "#include \"%s\"\n\n", header_file);
 
+  fprintf(handler, "/* Prototypes for functions used in event handler */\n");
+
+  if(backdoor) {
+    if(!multitools) {
+      fprintf(handler, "%s%s_backdoor_handler(%s);\n",
+					termptr, the_tool_name, termptr);
+      fprintf(handler, "%s%s_backdoor_check_in_sign(%s);\n", 
+					termptr, the_tool_name, termptr);
+    } else {
+      fprintf(handler, "%s%s_backdoor_handler(int cid, %s);\n", 
+					termptr, the_tool_name, termptr);
+      fprintf(handler, "%s%s_backdoor_check_in_sign(int cid, %s);\n", 
+					termptr, the_tool_name, termptr);
+    }
+  }
 }
 
 /* Read the tool interfaces file and generate parts of the
@@ -378,7 +424,17 @@ void read_tifs(int tifs, char *the_tool_name)
   if(nelements == 0)
     err_fatal("No matches found, probably wrong tool name `%s'", the_tool_name);
 
-  fprintf(tmp1, " %s {\n\t\tTBprintf(stderr, \"Ignored: %%t\\n\", e);\n\t\treturn NULL;\n\t}", els);
+  if(backdoor) {
+    if(!multitools)
+      fprintf(tmp1, " %s {\n\t\treturn %s_backdoor_handler(e);\n\t}", 
+	    els, the_tool_name);
+    else
+      fprintf(tmp1, " %s {\n\t\treturn %s_backdoor_handler(cid, e);\n\t}", 
+	    els, the_tool_name);
+  } else {
+    fprintf(tmp1, " %s {\n\t\t%s(stderr, \"Ignored: %%t\\n\", " \
+	    "e);\n\t\treturn NULL;\n\t}", els, Tprintf);
+  }
   fprintf(tmp1, "\n}\n");
   fclose(tmp1);
   fclose(tmp2);
@@ -393,12 +449,12 @@ void read_tifs(int tifs, char *the_tool_name)
 void gen_handler(char *the_tool_name, char *tmp)
 {
   fprintf(handler, "\n/* Event handler for tool: %s */\n\n", the_tool_name);
-  fprintf(handler, "term *");
+  fprintf(handler, termptr);
   C_fun_name(the_tool_name, handler);
-  if(oldstyle)
-    fprintf(handler, "_handler(term *e){\n");
+  if(!multitools)
+    fprintf(handler, "_handler(%se){\n", termptr);
   else
-    fprintf(handler, "_handler(int cid, term *e){\n");
+    fprintf(handler, "_handler(int cid, %se){\n", termptr);
   gen_var_decls(handler);
 
   copy_file(tmp, handler);
@@ -415,29 +471,37 @@ void gen_test_in_sign(char *the_tool_name, char *tmp)
  *          does NOT appear in the actual terms that will be sent to the tool.\n\
  */\n\n";
 
-  char *for_loop = "\n\
-\tfor( ; reqs; reqs = next(reqs)){\n\
-\t\tfor(i = 0; i < %d; i++){\n\
-\t\t\tif(TBmatch(first(reqs), in_sign[i])) goto found;\n\
-\t\t}\n\
-\t\treturn first(reqs);\n\
-\t\tfound:;\n\t}\n\
-\treturn NULL;\n}\n";
-
   fprintf(handler, header, the_tool_name, the_tool_name);
 
   /* generate the function header */
-  fprintf(handler, "term *");
+  fprintf(handler, termptr);
   C_fun_name(the_tool_name, handler);
-  if(oldstyle)
-    fprintf(handler, "_check_in_sign(term_list *reqs){\n");
+  if(!multitools)
+    fprintf(handler, "_check_in_sign(%sreqs){\n", termptr);
   else
-    fprintf(handler, "_check_in_sign(int cid, term_list *reqs){\n");
+    fprintf(handler, "_check_in_sign(int cid, %sreqs){\n", termptr);
   fprintf(handler, "\tchar *in_sign[%d];\n\tint i;\n\n", n_in_sign_test);
   copy_file(tmp, handler);
   unlink(tmp);
 
-  fprintf(handler, for_loop, n_in_sign_test);
+  /* generate the for loop */
+  if(!is_empty)
+     fprintf(handler, "\n\tfor( ; reqs; reqs=%s(reqs)) {\n", next);
+  else
+     fprintf(handler, "\n\tfor( ; %s(reqs); reqs=%s(reqs)) {\n", is_empty, next);
+  fprintf(handler, "\t  for(i=0; i<%d; i++) {\n", n_in_sign_test);
+  fprintf(handler, "\t    if(%s(%s(reqs), in_sign[i])) goto found;\n", TmatchSimple, first);
+  fprintf(handler, "\t  }\n");
+  fprintf(handler, "\t  return %s(reqs);\n", first);
+  fprintf(handler, "\t  found:;\n");
+  if(backdoor)
+    if(multitools)
+      fprintf(handler, "\t  return %s_backdoor_check_in_sign(cid, %s(reqs));\n", first);
+    else
+      fprintf(handler, "\t  return %s_backdoor_check_in_sign(%s(reqs));\n", first);
+  fprintf(handler, "\t}\n");
+  fprintf(handler, "\treturn NULL;\n");
+  fprintf(handler, "}\n");
 }
 
 /* ------------- usage and help functions --------------------------------*/
@@ -457,7 +521,10 @@ Options are:\n\
 -tifs ToolInterfaces  interfaces files as generated by the ToolBus, e.g.\n\
                           toolbus -gentifs my_script.tb\n\
                       will generate the file my_script.tifs\n\
--newstyle             generate new style handlers (including cid arg.)\n\
+-multi                generate multi-tool ready C code including cid refs.\n\
+-newstyle             generate new style handlers, i.e. t_term * and Tmatch\n\
+-backdoor             generate a backdoor in situations where not all\n\
+                      functions are known\n\
 \n\
 The generated tool interface is always written to a file named ToolName.tif.c\n\
 For example ``calc.tif.c'' when the tool name is ``calc''\n";
@@ -488,8 +555,24 @@ void main(int argc, char **argv)
     } else if(streq(argv[i], "-tifs")){
       i++;
       tifs_name = argv[i];
+    } else if(streq(argv[i], "-multi")) {
+      multitools = TBtrue;
+    } else if(streq(argv[i], "-backdoor")) {
+      backdoor = TBtrue;
     } else if(streq(argv[i], "-newstyle")) {
-      oldstyle = TBfalse;
+      termptr = "t_term *";
+      Tmatch   = "Tmatch";
+      TmatchSimple = "TmatchSimple";
+      Tprintf = "Tprintf";
+      first   = "t_list_first";
+      next    = "t_list_next";
+      header_file  = "termlib.h";
+      placeholders = TBtrue;
+      is_empty = "t_is_empty";
+    } else if(streq(argv[i], "-header")) {
+      header_file = argv[++i];
+      if(streq(header_file, "-"))
+        header_file = NULL;
     } else if(streq(argv[i], "-help")){
       help();
       exit(0);
@@ -531,7 +614,3 @@ void main(int argc, char **argv)
   close(tifs);
   exit(0);
 } 
-
-
-
-

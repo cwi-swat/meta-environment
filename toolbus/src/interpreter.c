@@ -1474,7 +1474,7 @@ static TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
     term_list *sel;
     term *mon;
 
-    /* TBmsg("rec_from_tool_step1(%t,%t, %d)\n", ti, Inp, next_phase); */
+    /*TBmsg("rec_from_tool_step1(%t,%t, %d)\n", ti, Inp, next_phase); */
     switch(fun_sym(Inp))
       {
       case a_snd_attach_monitor:

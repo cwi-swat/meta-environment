@@ -202,7 +202,6 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
   term *t;
 
   /*TBmsg("TCP_transition(%t,%t)\n", ti, event);*/
-
   switch(ti_phase(ti)){
   case PHASE1:
     if(ev == a_snd_connect){
