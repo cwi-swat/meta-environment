@@ -1,4 +1,4 @@
-dptprettynl Process this file with autoconf to produce a configure script.
+dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(meta, 1.6)
@@ -187,7 +187,6 @@ AC_CONFIG_FILES([Makefile
    editors/text/gvim/Makefile
    editors/text/emacs/Makefile
    editors/structure/Makefile
-   editors/structure/src/Makefile
    tbscripts/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
