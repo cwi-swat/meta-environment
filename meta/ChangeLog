@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Mar 23 10:54:30 CET 2005 <jong@cwi.nl>
+ * configuration-manager/src/meta-kernel.properties
+   - fix rgb value out of range in text category "Comment"
+
 Tue Mar 22 10:36:11 CET 2005 <jong@cwi.nl>
  * meta-studio/META-INF/default.properties
    - reset colour of graphpane to white (asf-sdf-meta now sets the version
