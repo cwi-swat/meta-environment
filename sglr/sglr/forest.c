@@ -164,7 +164,9 @@ ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
                                 SG_YieldPT(ATelementAt(args, 1)));
     return t;
   }
-  /*  Encountered an ambiguity cluster -- singular? */
+  /*  Encountered an ambiguity cluster  */
+  SG_MaxNrAmb(SG_NRAMB_DEC);
+  /*  Singular?  */
   trms = (ATermList) ATgetFirst(ambs);
   if (ATgetLength(trms) == 1) {
     t = ATgetFirst(trms);
@@ -187,8 +189,7 @@ ATerm SG_YieldPT(ATerm t)
   ATermList args, l;
   int       maxambs;
 
-  if((maxambs  = SG_MaxNrAmb(SG_NRAMB_ASK)) == 0
-  ||  maxambs <= SGnrAmb(SG_NRAMB_ASK))
+  if((maxambs  = SG_MaxNrAmb(SG_NRAMB_ASK)) == 0)
     return t;
 
   switch(ATgetType(t)) {

@@ -728,8 +728,16 @@ void SG_PropagateReject(stack *st)
         SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
       }
       newlen = ATgetLength(newtrms);
-      if(oldlen >= 2 && newlen < 2)   /*  One ambiguity resolved  */
+/*
+    An ambiguity resolved -- nice, but when yielding (which is driven
+    by the maximum of possible ambs -- we might need to substitute
+    a rejected term by its non-rejected counterpart in the ambiguity
+    cluster
+*/
+/*
+      if(oldlen >= 2 && newlen < 2)
         SG_MaxNrAmb(SG_NRAMB_DEC);
+ */
       if(newlen > 0) {
         /*  Don't reject this link/propagate if part of this amb-cluster
             is still valid
