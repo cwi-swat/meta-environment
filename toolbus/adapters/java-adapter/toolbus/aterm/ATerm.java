@@ -8,7 +8,7 @@ import java.io.*;
 abstract public class ATerm implements Cloneable
 {
   abstract protected ATermImpl getATermImpl();
-  abstract protected void setAnno(ATerm anno);
+  public abstract void setAnno(ATerm anno);
 
   public static final int ATERMS        = ATermImpl.ATERMS;
   public static final int APPL          = ATermImpl.APPL;
