@@ -73,6 +73,9 @@ in
     snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))  
   +
     rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
+    snd-msg(check-asfsdf(Syntax)) .
+    rec-msg(messages(Msgs?)) .
+    snd-msg(display-sdf-errors(Msgs)) .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(add-api-syntax(Syntax)).
