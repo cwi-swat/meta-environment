@@ -1,6 +1,6 @@
 $Id$
 
-2002/17/04 (jurgenv@cwi.nl)
+2002/17/04 ({olivierp,jurgenv}@cwi.nl)
  * Fixed a bug in traversal functions. Intermediate tuple representation
    was not protected from the gc.
  * Bumped to 1.4beta
