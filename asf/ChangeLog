@@ -1,5 +1,6 @@
 2002/06/26 (jurgenv@cwi.nl)
- * Improved asf-check a bit. Less 'cascading' error messages. 
+ * Improved asf-checker a bit. Less 'cascading' error messages. 
+ * Removed 'instantiated and uninstantiated variables' error message.
 
 2002/06/26 (vandenbr@loria.fr)
  * Fixed a number of small bugs.
