@@ -1,6 +1,7 @@
 #
 #    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+#                        The Netherlands. 
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -37,7 +38,7 @@ HDRS         = atsets.h ksdf2table.h
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = parsetablegen.tif.o \
-                        -L$(top_builddir)/c-source -lParseTable-Generator \
+                        -L$(top_builddir)/c-source -lSdf2-Normalization \
                         -L$(top_builddir)/c-lib -lnative \
                         -L$(ASCLIB) -lasc-support \
                         -L$(ASFIXLIB) -lAsFix \
