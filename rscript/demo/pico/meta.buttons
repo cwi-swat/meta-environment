@@ -49,7 +49,7 @@ button("Pico-syntax",
 			 push-filename("extracted-relations.trm"),
 			 parse("RscriptCalculator", "RSTORE"),
 
-			 apply("pico-query", "Summary", 4),
+			 apply("pico-query", "Summary", 3),
 			 push-modulename("PicoQuery"),
 			 reduce,
 			 convert-feedback,
