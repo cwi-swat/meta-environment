@@ -24,6 +24,51 @@ in
   )  
 endlet
 
+process ProcessParseErrors(Errors: term) is
+let
+  Id        : term,
+  ErrArgs   : list
+in
+  Id := process-id .
+  if not-equal(Errors, no-errors) then
+    ErrArgs := args(Errors)
+  fi
+endlet
+
+process ParseText(Text: str, ModuleName: str, Tree: term?, Errors: term?) is
+let
+  Id        : term,
+  Name      : str,
+  ErrList   : list,
+  ErrorType : term, 
+  Path      : str
+in
+  Id := process-id . 
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules) .
+  snd-msg(set-parsetable(trm(ModuleName))) .
+  (
+    rec-msg(parsetable-not-set(trm(ModuleName))) .
+    snd-note(ui-status(errorf(
+      "Unable to open parse table for %s", [ModuleName]))) .
+    Tree := error-tree .
+    Errors := no-errors
+  +
+    rec-msg(parsetable-set(trm(ModuleName))) .
+    snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), "", Text)) . 
+    snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
+    (
+      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
+      Errors := no-errors
+    +
+      rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, ErrorType?))) .
+      Errors := quote(parse-error(ErrList, ErrorType)) .
+      Tree := error-tree
+    ) .
+    snd-note(ui-status(endstat(Id)))
+  )  
+endlet
+
 process ParseFile(FileName: str, ModuleName: str, Tree: term?) is
 let
   Id        : term,
@@ -167,15 +212,6 @@ in
   )
 endlet
 
-process ApplyFunction(Function: str, Sort: str, ArgList: list, RTree: term?) is 
-let
-  Id          : int
-in
-  Id := process-id .
-  snd-msg(apply-function(Function, Sort, ArgList)) .
-  rec-msg(tree(RTree?))
-endlet
-
 process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
   Id          : int,
@@ -269,25 +305,8 @@ in
       +
         rec-msg(extra-button-action(EditorId, ButtonName?)) .
         snd-msg(extra-button-action(ButtonName, ModuleName, EditorId)) 
-/*
-        snd-msg(get-dirty-focuses(EditorId)) .
-        rec-msg(dirty-focuses(DirtyFoci?)) .
-        if equal(DirtyFoci, []) then
-          snd-msg(extra-button-action(ButtonName, ModuleName, EditorId)) 
-        else
-          snd-msg(invalidate-tree(EditorId)) .
-          ParseTerm(EditorId, ModuleName) .
-	  snd-msg(get-dirty-focuses(EditorId)) .
-	  rec-msg(dirty-focuses(DirtyFoci?)) . 
-	  if equal(DirtyFoci, []) then
-            snd-msg(extra-button-action(ButtonName, ModuleName, EditorId)) 
-          else 
-            tau
-          fi
-        fi
-*/
       +
-        rec-msg(apply-function-action(FuncName?, SortName?, NrOfArgs?), 
+        rec-msg(apply(FuncName?, SortName?, NrOfArgs?), 
                 Stack?, EditorId) .
         ArgList := [] .
         (
@@ -301,7 +320,6 @@ in
         if equal(NrOfArgs, 0) then
           tau
         fi .
-        /*ApplyFunction(FuncName, SortName, ArgList, RTree?) .*/
         snd-msg(apply-function(FuncName, SortName, ArgList)) .
         rec-msg(tree(RTree?)) .
         if not-equal(RTree, error-tree) then
@@ -316,7 +334,7 @@ in
         ParseTerm(EditorId, NewModName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(get-tree-action(NewModName?), Stack?, EditorId) .
+        rec-msg(get-root(NewModName?), Stack?, EditorId) .
         GetTree(EditorId, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
@@ -325,7 +343,7 @@ in
           snd-msg(error-stack)
         fi
       +
-        rec-msg(get-focus-action, Stack?, EditorId) .
+        rec-msg(get-focus, Stack?, EditorId) .
         GetFocus(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
@@ -334,13 +352,13 @@ in
           snd-msg(error-stack)
         fi
       +
-        rec-msg(replace-focus-action, Stack?, EditorId) .
+        rec-msg(set-focus, Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
         ReplaceFocus(EditorId, STree) .
         snd-msg(stack(Stack))
       +
-        rec-msg(check-tree-sort-action(SortName?), Stack?, EditorId) .
+        rec-msg(check-sort(SortName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
         CheckTreeSort(STree, SortName, RTree?) .
@@ -351,7 +369,7 @@ in
           snd-msg(error-stack)
         fi
       +
-        rec-msg(reduce-action(NewModName?), Stack?, EditorId) .
+        rec-msg(reduce(NewModName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
         ReduceTerm(STree, NewModName, RTree?) .
@@ -362,7 +380,7 @@ in
           snd-msg(error-stack)
         fi
       +
-        rec-msg(get-focus-given-editor(NewModName?, FilePath?), Stack?, EditorId) .
+        rec-msg(get-other-focus(NewModName?, FilePath?), Stack?, EditorId) .
         snd-msg(get-editor-id(FilePath, NewModName)) .
         (
           rec-msg(existing-editor(FilePath?, EditorId2?)).
@@ -380,13 +398,13 @@ in
           snd-msg(error-stack)
         )
       +
-        rec-msg(activate-editor(NewModName?, EditorName?), Stack?, EditorId) .
+        rec-msg(edit(NewModName?, EditorName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
         ActivateEditor(STree, NewModName, EditorName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(parse-file(FilePath?, NewModName?), Stack?, EditorId) .
+        rec-msg(parse(FilePath?, NewModName?), Stack?, EditorId) .
         ParseFile(FilePath, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .

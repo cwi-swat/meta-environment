@@ -5,27 +5,84 @@ tool genadapt is {
   command = "gen-adapter"
 }
 
-process ADAPTER(Id : genadapt, Cmd : str, Inp : str) is
-let
-  Out : str
-in
+tool termgenadapt is {
+  command = "gen-adapter -term-output"
+}
+
+process ADAPTER(Id : genadapt, Cmd : str, Inp : str, Outp : str?) is
    snd-eval(Id,cmd(Cmd, input(Inp))).
-   rec-value(Id, output(Out?))
-endlet
+   rec-value(Id, output(Outp?))
+
+process TERM-IN-ADAPTER(Id : genadapt, Cmd : str, Inp : term, Outp : str?) is
+   snd-eval(Id,cmd(Cmd, input-term(Inp))).
+   rec-value(Id, output(Outp?))
+
+process TERM-IN-OUT-ADAPTER(Id : termgenadapt, Cmd : str, 
+                            Inp : term, Outp : term?) is
+   snd-eval(Id, cmd(Cmd, input-term(Inp))).
+   rec-value(Id, output(Outp?))
 
 process GenAdapt is
 let
-  GENADAPT : genadapt,
-  Action   : str,
-  EditorId : term,
-  Stack    : list
+  GENADAPT     : genadapt,
+  TERMGENADAPT : termgenadapt,
+  Action       : str,
+  OutStr       : str,
+  InStr        : str,
+  FunSym       : str,
+  EditorId     : term,
+  Stack        : list,
+  STree        : term,
+  RTree        : term
 in
   execute(genadapt, GENADAPT?) .
+  execute(termgenadapt, TERMGENADAPT?) .
   (
     rec-msg(activate-gen(Action?), Stack?, EditorId?) .
-    ADAPTER(GENADAPT, Action, "") .
-    printf("") .
-    snd-msg(stack(Stack))
+    ADAPTER(GENADAPT, Action, "", OutStr?) .
+    if not-equal(OutStr, "") then
+      RTree := quote(str(OutStr)) .
+      Stack := join(RTree, Stack) .
+      snd-msg(stack(Stack))
+    else
+      snd-msg(stack(Stack))
+    fi
+  +
+    rec-msg(activate-gen-on-tree(Action?), Stack?, EditorId?) .
+    STree := first(Stack) .
+    Stack := next(Stack) .
+    FunSym := fun(STree) .
+    if not-equal(FunSym, "str") then
+      TERM-IN-ADAPTER(GENADAPT, Action, STree, OutStr?) .
+      if not-equal(OutStr, "") then
+        RTree := quote(str(OutStr)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack))
+      else
+        snd-msg(stack(Stack))
+      fi
+    else
+      InStr := first(args(STree)) .
+      ADAPTER(GENADAPT, Action, InStr, OutStr?) .
+      if not-equal(OutStr, "") then
+        RTree := quote(str(OutStr)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack))
+      else
+        snd-msg(stack(Stack))
+      fi
+    fi
+  +
+    rec-msg(execute-action(Action?), Stack?, EditorId?) .
+    STree := first(Stack) .
+    Stack := next(Stack) .
+    TERM-IN-OUT-ADAPTER(TERMGENADAPT, Action, STree, RTree?) .
+    if not-equal(RTree, error-tree) then
+      Stack := join(RTree, Stack) .
+      snd-msg(stack(Stack))
+    else
+      snd-msg(error-stack)
+    fi
   )*
   delta
 endlet
