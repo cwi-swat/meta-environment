@@ -1,3 +1,6 @@
+2001/06/28 (jurgenv@cwi.nl)
+ * extended support for variables to support lexical variables
+
 2001/06/25 (jurgenv@cwi.nl)
  * added a library function that builds an injection from lex to cf
 
