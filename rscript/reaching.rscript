@@ -3,6 +3,8 @@
 
 rel[str,str] PRED = { <"B1", "B2">, <"B2",  "B3">, <"B2", "B4">, <"B3", "B4">, <"B4", "B2">}
 
+rel[str,str] PRED-OF = inv(PRED)
+
 rel[str,str] GEN = { 
 <"B1", "d1">, <"B1", "d2">, <"B1", "d3">,
 <"B2", "d4">, <"B2", "d5">,
@@ -17,13 +19,14 @@ rel[str,str] KILL = {
 
 bag[str] BLOCKS = carrier(PRED)
 
-rel[str,str] EMPTY = domR(PRED, {"B100"})
-
-rel[str,str] IN = EMPTY
-rel[str,str] OUT = EMPTY
+rel[str,str] IN = empty
+rel[str,str] OUT = empty
 
 solve {
-	IN  = { B x {P. OUT | P : PRED . B} | B : BLOCKS },
-	OUT = { B x (B. GEN union ( B. IN \ B . KILL)) | B : BLOCKS }
+%%	IN  = { B x { OUT[P] | P : PRED-OF[B] } | B : BLOCKS },
+%%	OUT = { B x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
+
+	IN =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]},
+	OUT = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
 }
 

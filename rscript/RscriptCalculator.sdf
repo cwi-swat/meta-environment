@@ -46,7 +46,7 @@ exports
 
 %% should be hidden
 
-   sorts OP
+   sorts INFIXOP PREFIXOP POSTFIXOP
 
    context-free syntax
 
@@ -58,24 +58,42 @@ exports
         evalr(REXP, RSTORE)            		-> Rel[[Elem]]
 
         evalx(REXP, RSTORE)            		-> RVALUE
-        apply "(" RVALUE OP RVALUE ")"   	-> RVALUE
-        apply "(" OP RVALUE ")"         	-> RVALUE
+        apply "(" RVALUE INFIXOP RVALUE ")"   	-> RVALUE
+        apply "(" PREFIXOP RVALUE ")"         	-> RVALUE
+        apply "(" RVALUE POSTFIXOP ")"         	-> RVALUE
 
-        "in"			       -> OP
-        "notin"			       -> OP
-        "=="                           -> OP
-        "!="                           -> OP
-        "<="                           -> OP
-        "<"                            -> OP
-        ">="                           -> OP
-        ">"                            -> OP
-        "union"                        -> OP
-        "inter"                        -> OP
-        "\\"                           -> OP
-        "o"                            -> OP
-        "x"                            -> OP
-        "."                            -> OP
-        "#"                            -> OP
+%% Binary operatorsn
+
+	"and"					-> INFIXOP
+	"or"					-> INFIXOP
+
+        "in"			       		-> INFIXOP
+        "notin"			       		-> INFIXOP
+
+        "=="                           		-> INFIXOP
+        "!="                           		-> INFIXOP
+        "<="                           		-> INFIXOP
+        "<"                            		-> INFIXOP
+        ">="                           		-> INFIXOP
+        ">"                            		-> INFIXOP
+
+        "union"                        		-> INFIXOP
+        "inter"                        		-> INFIXOP
+        "\\"                           		-> INFIXOP
+        "o"                            		-> INFIXOP
+        "x"                            		-> INFIXOP
+        "."                            		-> INFIXOP
+
+%% Prefix Operators
+
+	"not"					-> PREFIXOP
+        "#"                            		-> PREFIXOP
+
+%% Postfix Operators
+
+	"+"					-> POSTFIXOP
+	"*"					-> POSTFIXOP
+
 
         equal(Elem, Elem)              -> Boolean
 	equal(RVALUE, RVALUE)		-> Boolean
@@ -131,6 +149,11 @@ hiddens
         "$Integer" [0-9\']*            -> Integer
         "$String" [0-9\']*           	-> String
 	"$Etype" [0-9\']*              -> REXPTYPE
+
+	"$Iop"				-> INFIXOP
+	"$Preop"			-> PREFIXOP
+	"$Postop"			-> POSTFIXOP
+
 
      
 
