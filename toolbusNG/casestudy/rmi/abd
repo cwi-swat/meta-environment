@@ -1,3 +1,3 @@
 #! /bin/sh
 
-java -classpath ../.. casestudy.rmi.AddressBookServer &
+CLASSPATH=../.. java casestudy.rmi.AddressBookServer &

@@ -8,11 +8,11 @@ public class RemoteClient {
       AddressBook ab = (AddressBook) Naming.lookup("rmi://localhost/AddressBookService");
       //System.out.println("lookup '"+args[0]+"': " + ab.getAddress(args[0]));
 
-      String a1 = ab.getAddress("hayco");
-      System.out.println("hayco: " + a1);
+      Address a1 = ab.getAddress("hayco");
+      System.out.println("hayco: " + a1.getStreet() + " " + a1.getNumber());
 
-      String a2 = ab.getAddress("loge");
-      System.out.println("loge : " + a2);
+      Address a2 = ab.getAddress("loge");
+      System.out.println("loge : " + a2.getStreet() + " " + a2.getNumber());
 
       System.out.println("equal: " + a1.equals(a2));
       System.out.println("a1 == a2: " + ((a1 == a2) ? "yes" : "no"));

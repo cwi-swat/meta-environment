@@ -14,15 +14,15 @@ case "$1" in
   'stop')
     echo -n "Stopping $DESC: "
 
-    pkill rmiregistry 2>&1 >/dev/null
+    pkill rmiregistry >& /dev/null
     echo -n "rmiregistry "
 
     PROCS=`/bin/ps x \
-      | grep 'java AddressBookServer' | grep -v grep \
-      | cut -d' ' -f1`
+      | grep 'casestudy.rmi.AddressBookServer' | grep -v grep \
+      | awk '{print $1}'`
 
     if [ "x$PROCS" != "x" ]; then
-      kill $PROCS
+      kill $PROCS >& /dev/null
     fi
     echo "abd."
   ;;
