@@ -81,3 +81,4 @@ hiddens
     "Attrlist"[0-9\']*     -> ATermList
     "Char*"[0-9]*          -> CHAR*
     "Sortlist"[0-9]*       -> SortList
+    "$Equations"[0-9\']*   -> ATerm

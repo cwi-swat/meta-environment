@@ -66,3 +66,5 @@ hiddens
     "Afun"[0-9\']*         -> AFun
     "Attr"[0-9\']*         -> ATerm
     "$L"[0-9\']*           -> Literal
+    "LexFuncs"[0-9\']*     -> ATermList
+    "CfFuncs"[0-9\']*      -> ATermList

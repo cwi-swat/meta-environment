@@ -23,7 +23,17 @@ equations
 %% the lexical syntax and context-free syntax definition
 %% of a module.
 
-  [a2me-1'1] Amodule[module-name] = Aname1,
+  [a2me-1'1] get-org-modname(Aname1) = Aname2,
+             lexfuncs2sign(LexFuncs,{sort("LAYOUT")},Nametable1) =
+               (Funcdef*1,Sortlist,Nametable2),
+             cffuncs2sign(Aname2,CfFuncs,Nametable2) = 
+               (Funcdef*2,Nametable3)
+             ============================
+             asfix2sign([Aname1, LexFuncs, CfFuncs, $Equations],
+                        Nametable1) =
+               (Funcdef*1 ++ Funcdef*2, Nametable3)
+
+  [default-a2me-1'1] Amodule[module-name] = Aname1,
              get-org-modname(Aname1) = Aname2,
              Amodule[sections] = Sections
              ============================
