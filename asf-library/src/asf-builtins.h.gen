@@ -12,6 +12,7 @@ cat  << END_OF_FILE
 #include <MEPT.h>
 
 void initBuiltins(void);
+PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input);
 
 `
 for b in \${BUILTIN_NAMES}; do 
