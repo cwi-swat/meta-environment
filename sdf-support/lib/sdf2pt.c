@@ -5,7 +5,7 @@
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
 
-static PT_Symbols    SDFSymbolToPtSymbols(SDF_Symbols sdfSymbols);
+static PT_Symbols    SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols);
 static PT_Attributes SDFAttributesToPtAttributes(SDF_Attributes sdfAttributes);
 static PT_Attr       SDFAttributeToPtAttr(SDF_Attribute sdfAttribute);
 static PT_CharRanges SDFCharClassToPtCharRanges(SDF_CharClass sdfCharClass);
@@ -13,44 +13,40 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges);
 static PT_CharRange  SDFCharRangeToPtCharRange(SDF_CharRange sdfCharRange);
 static int           SDFCharacterToInt(SDF_Character sdfCharacter);
 
-PT_Symbols SDFProductionToPtProdFunSymbols(SDF_Literal sdfPrefixFunc,
-				       SDF_SymbolArguments sdfPrefixArgs)
+static char *unquote_str(char *s)
 {
-  PT_Symbols ptPrefixArgs;
-  PT_Symbol  ptPrefixArg;
-  PT_Symbol ptPrefixFunc = SDFSymbolToPtSymbol(SDF_makeSymbolLit(sdfPrefixFunc));
-  PT_Symbol layout = PT_makeSymbolLayout();
-  PT_Symbol comma  = PT_makeSymbolLit(",");
-  PT_Symbol open   = PT_makeSymbolLit("(");
-  PT_Symbol close  = PT_makeSymbolLit(")");
+  int len = strlen(s), i, j;
+  static char *rs = NULL;
+  static int   rs_size = 0;
 
-  ptPrefixArgs = PT_makeSymbolsList(ptPrefixFunc, PT_makeSymbolsEmpty());
-  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
-  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, open);
-  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
-
-  while (SDF_hasSymbolArgumentsHead(sdfPrefixArgs)) {
-    ptPrefixArg  = SDFSymbolToPtSymbol(SDF_getSymbolArgumentsHead(sdfPrefixArgs));
-    ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, ptPrefixArg);
-
-    if (SDF_hasSymbolArgumentsTail(sdfPrefixArgs)) {
-      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
-      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, comma);
-      ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
+  if (len > rs_size) {
+    rs = (char *)realloc(rs, len);
+    if(!rs) {
+      ATerror("Run out of memory!\n");
     }
-    else {
-      break;
-    }
-
-    sdfPrefixArgs = SDF_getSymbolArgumentsTail(sdfPrefixArgs);
+    rs_size = len;
   }
-  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, layout);
-  ptPrefixArgs = PT_appendSymbols(ptPrefixArgs, close);
 
-  return ptPrefixArgs;
+  if(s[0] == '\"' && s[len-1] == '\"') {
+    j = 0;
+    for(i=1; i<=len-2; i++) {
+      if((s[i] == '\\' && s[i+1] == '"') ||
+         (s[i] == '\\' && s[i+1] == '\\'))
+        rs[j++] = s[++i];
+      else if (s[i] == '\\' && s[i+1] == 'n') {
+        rs[j++] = '\n';
+        i++;
+      }
+      else
+        rs[j++] = s[i];
+    }
+    rs[j] = '\0';
+    return rs;
+  }
+  return s;
 }
 
-PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction,                                                   SDF_ModuleName sdfModuleName)
+PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
 {
   SDF_Symbol  sdfResult;
   SDF_Attributes sdfAttributes;
@@ -65,14 +61,9 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction,         
 
   if (SDF_isProductionProd(sdfProduction)) {
     SDF_Symbols sdfSymbols = SDF_getProductionSymbols(sdfProduction);
-    ptSymbols = SDFSymbolToPtSymbols(sdfSymbols);
+    ptSymbols = SDFSymbolsToPtSymbols(sdfSymbols);
   }
-  else if (SDF_isProductionProdFun(sdfProduction)) {
-     SDF_Literal sdfLiteral = SDF_getProductionFunctionSymbol(sdfProduction);
-     SDF_SymbolArguments sdfArgs = SDF_getProductionArguments(sdfProduction);
-
-     ptSymbols = SDFProductionToPtProdFunSymbols(sdfLiteral, sdfArgs);
-  } else {
+  else {
     ATerror("SDFProductionToPtProduction: unable to flatten %s\n", 
 	    PT_yieldTree((PT_Tree) sdfProduction));
     return NULL;
@@ -81,21 +72,17 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction,         
   return PT_makeProductionDefault(ptSymbols, ptResult, ptAttributes);
 }
 
-PT_Symbols SDFSymbolToPtSymbols(SDF_Symbols sdfSymbols)
+PT_Symbols SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols)
 {
   SDF_SymbolList sdfSymbolList = SDF_getSymbolsList(sdfSymbols);
   PT_Symbols ptSymbols = PT_makeSymbolsEmpty();
-  PT_Symbol layout = PT_makeSymbolLayout();
 
   while (SDF_hasSymbolListHead(sdfSymbolList)) {
     SDF_Symbol sdfSymbol = SDF_getSymbolListHead(sdfSymbolList);
     PT_Symbol ptSymbol = SDFSymbolToPtSymbol(sdfSymbol);
 
-    if (!PT_isSymbolsEmpty(ptSymbols)) {
-      ptSymbols = PT_appendSymbols(ptSymbols, layout);      
-    }
-
     ptSymbols = PT_appendSymbols(ptSymbols, ptSymbol);
+
 
     if (SDF_isSymbolListSingle(sdfSymbolList)) {
       break;
@@ -110,21 +97,20 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
 {
   PT_Symbol result = NULL;
 
-  if (SDF_isSymbolSort(sdfSymbol)) {
+  if (SDF_isSymbolStart(sdfSymbol)) {
+    result = PT_makeSymbolSort("<START>"); 
+  }
+  else if (SDF_isSymbolFileStart(sdfSymbol)) {
+    result = PT_makeSymbolSort("<Start>"); 
+  }
+  else if (SDF_isSymbolSort(sdfSymbol)) {
     char *str = PT_yieldTree((PT_Tree) SDF_getSymbolSort(sdfSymbol));
     result = PT_makeSymbolSort(str); 
   }
   else if (SDF_isSymbolLit(sdfSymbol)) {
     SDF_Literal sdfLit = SDF_getSymbolLiteral(sdfSymbol);
-    char *str = PT_yieldTree((PT_Tree) sdfLit);
-    if (str[0] == '\"') { 
-       /* make the symbol without the quotes */
-       str[strlen(str)] = '\0';
-       result = PT_makeSymbolLit(str+1);
-    }
-    else { /* not quoted */
-       result = PT_makeSymbolLit(str);
-    }
+    char *str = unquote_str(PT_yieldTree((PT_Tree) sdfLit));
+    result = PT_makeSymbolLit(str);
   }
   else if (SDF_isSymbolIter(sdfSymbol)) {
     SDF_Symbol sdfIterSymbol = SDF_getSymbolSymbol(sdfSymbol);
@@ -193,7 +179,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_SymbolList sdfTail = (SDF_SymbolList) SDF_getSymbolTail(sdfSymbol);
     SDF_Symbols sdfSymbols = SDF_makeSymbolsDefault(sdfTail);
     PT_Symbol ptHead = SDFSymbolToPtSymbol(sdfHead);
-    PT_Symbols ptTail = SDFSymbolToPtSymbols(sdfSymbols);
+    PT_Symbols ptTail = SDFSymbolsToPtSymbols(sdfSymbols);
     result = PT_makeSymbolSeq(PT_makeSymbolsList(ptHead, ptTail));
   }
   else if (SDF_isSymbolOpt(sdfSymbol)) {
@@ -216,7 +202,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
   else if (SDF_isSymbolFunc(sdfSymbol)) {
     SDF_Symbols sdfArguments = SDF_getSymbolArguments(sdfSymbol);
     SDF_Symbol sdfResult = SDF_getSymbolResults(sdfSymbol);
-    PT_Symbols ptArguments = SDFSymbolToPtSymbols(sdfArguments);
+    PT_Symbols ptArguments = SDFSymbolsToPtSymbols(sdfArguments);
     PT_Symbol ptResult = SDFSymbolToPtSymbol(sdfResult);
     result = PT_makeSymbolFunc(ptArguments,ptResult);
   }
@@ -229,7 +215,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
   }
   else if (SDF_isSymbolPerm(sdfSymbol)) {
     SDF_Symbols sdfSyms = SDF_getSymbolSymbols(sdfSymbol);
-    PT_Symbols ptSyms = SDFSymbolToPtSymbols(sdfSyms);
+    PT_Symbols ptSyms = SDFSymbolsToPtSymbols(sdfSyms);
     result = PT_makeSymbolPerm(ptSyms);
   }
   else if (SDF_isSymbolCharClass(sdfSymbol)) {
@@ -280,8 +266,13 @@ static PT_Attributes SDFAttributesToPtAttributes(SDF_Attributes sdfAttributes)
       }
     }
 
-    ptAttributes = PT_makeAttributesAttrs(
-                     PT_reverseAttrs(ptAttrList));
+    if (ptAttrList == NULL) {
+      ptAttributes = PT_makeAttributesNoAttrs();
+    }
+    else {
+      ptAttributes = PT_makeAttributesAttrs(
+                       PT_reverseAttrs(ptAttrList));
+    }
   }
 
   return ptAttributes;
@@ -453,4 +444,10 @@ static PT_CharRanges SDFCharClassToPtCharRanges(SDF_CharClass sdfCharClass)
   }
   
   return result;
+}
+
+PT_Symbol SDFCharClassToPtSymbol(SDF_CharClass sdfCharClass)
+{
+  return PT_makeSymbolCharClass(
+           SDFCharClassToPtCharRanges(sdfCharClass));
 }

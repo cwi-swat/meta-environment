@@ -30,3 +30,11 @@ SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *newName)
 
   return SDF_setModuleModuleName(sdfModule, newModuleName);
 }
+/*{{{  SDF_Module SDFmakeModuleName(char *moduleName) */
+
+SDF_ModuleName SDFmakeModuleName(char *moduleStr)   
+{
+  return SDF_makeModuleNameUnparameterized(
+           SDF_makeModuleIdLexToCf(
+             (SDF_Lexical)PT_makeTreeFlatLexicalFromString(moduleStr)));
+}

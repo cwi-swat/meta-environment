@@ -5,6 +5,7 @@
 
 char      *SDFgetModuleName (SDF_Module sdfModule);
 SDF_Module SDFsetModuleName (SDF_Module sdfModule, char *name);
+SDF_ModuleName SDFmakeModuleName(char *moduleStr);
 
 ATermList  SDFgetGrammars              (SDF_Module module);
 typedef    void (*SDFGrammarFunc)      (SDF_Grammar, ATerm *);
@@ -54,8 +55,8 @@ SDF_Layout SDF_makeLayoutEmpty();
 
 SDF_Import SDFmakeImport(char *moduleName);
 
-PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction, 
-					  SDF_ModuleName sdfModuleName);
+PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction);
 PT_Symbol SDFSymbolToPtSymbol(SDF_Symbol symbol);
+PT_Symbol SDFCharClassToPtSymbol(SDF_CharClass sdfCharClass);
 
 #endif /* _SDF_UTILS_H */
