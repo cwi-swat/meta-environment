@@ -37,7 +37,7 @@ include Make.modules
 
 XCFLAGS = -O2 ${INCLUDE}
 INCLUDE = -I../support -I$(includedir) -I$(ATERM)/include
-LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
+LIBS	= -L$(ATERM)/lib   \
 	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
 	-lAsFix-${CC} -lATB-${CC} \
 	$(SOCKLIBS) 
