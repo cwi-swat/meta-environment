@@ -88,6 +88,7 @@ GETOPTC         = getopt.c getopt1.c
 GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
 CSRC            = sglr-main.c
 OBJ             = ${patsubst %.c,%.o,${CSRC}}
+OBJ             = ${patsubst %.c,%-prof.o,${CSRC}}
 OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
 all:	${PROG}
@@ -197,8 +198,8 @@ sglr-a2toa1-gc: ${GETOPTOBJ} ${OBJA2TOA1} ${SGLRLIBA2TOA1GC} sglr.tif.c
 	${CC} ${LDFLAGS} ${OBJA2TOA1} ${GETOPTOBJ}		\
 		${SGLRLIBA2TOA1GC} ${XA2TOA1GCLIB} ${LIBS} -o $@
 
-sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF} sglr.tif.c
-	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} ${SGLRLIBPROF} ${LIBSPROF} -o $@
+sglr-prof: ${GETOPTOBJ} ${OBJPROF} ${SGLRLIBPROF} sglr.tif.c
+	${CC} ${LDFLAGSPROF} ${OBJPROF} ${GETOPTOBJ} ${SGLRLIBPROF} ${LIBSPROF} -o $@
 
 parse-client: ${GETOPTOBJ} parse-client.o parse-client.tif.c
 	${CC} ${LDFLAGS} $@.o ${GETOPTOBJ} ${LIBS} -o $@
