@@ -21,7 +21,9 @@ libmept_a_SOURCES = \
 	ordering.c
 
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
-INCLUDES                = -I${ATERM}/include
+INCLUDES =\
+	-I${ATERM}/include \
+	-I${ERROR_SUPPORT}/include
 
 api: 
 	adt-to-c --compat-term -i MEPT.adt --prefix PT_ -o MEPT

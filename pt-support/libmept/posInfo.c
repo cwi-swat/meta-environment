@@ -2,6 +2,7 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
+#include <ErrorAPI.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -34,24 +35,36 @@ typedef struct PT_Position_Tag {
 
 /*}}}  */
 
-ATerm PT_getTreePosInfoArea(PT_Tree tree)
+/*{{{  ERR_Location PT_getTreeLocation(PT_Tree tree) */
+
+ERR_Location PT_getTreeLocation(PT_Tree tree)
 {
-  return ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info"));
+  return ERR_LocationFromTerm(
+           ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info")));
 }
+
+/*}}}  */
 
 /*{{{  ATbool PT_getTreePosInfo(tree,path,start_line,start_col,end_line,end_col) */
 
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col)
 {
-  ATerm t = PT_getTreePosInfoArea(tree);
+  ERR_Location location = PT_getTreeLocation(tree);
+  ERR_Area area;
 
-  if (!t) {
+  if (!location) {
     return ATfalse;
   }
 
-  return ATmatch(t, "area(<str>,<int>,<int>,<int>,<int>)", path,
-		 start_line, start_col, end_line, end_col);
+  area = ERR_getLocationArea(location);
+  *path = ERR_getLocationFilename(location);
+  *start_line= ERR_getAreaBeginLine(area);
+  *start_col= ERR_getAreaBeginColumn(area);
+  *end_line= ERR_getAreaEndLine(area);
+  *end_col= ERR_getAreaEndColumn(area);
+
+  return ATtrue;
 }
 
 /*}}}  */
@@ -59,8 +72,10 @@ ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start
 
 static ATerm PT_makePosInfo(const char *path, int line1, int col1, int line2, int col2)
 {
-  return ATmake("area(<str>,<int>,<int>,<int>,<int>)",
-                path, line1, col1, line2, col2);
+  ERR_Area area = ERR_makeAreaArea(line1, col1, line2, col2);
+  ERR_Location location = ERR_makeLocationLocation((char*) path, area);
+
+  return (ATerm) location;
 }
 
 /*}}}  */
