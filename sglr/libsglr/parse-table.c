@@ -319,17 +319,6 @@ ATbool SG_IsRightAssociative(parse_table *pt, label l)
 }
 
 /*}}}  */
-/*{{{  ATbool SG_Rejectable(state s) */
-#ifdef HAVE_REJECTABILITY_DETERMINATION
-
-ATbool SG_Rejectable(state s)
-{
-  return ATtrue;
-}
-
-#endif
-/*}}}  */
-
 
 /*
  Storing and accessing character classes

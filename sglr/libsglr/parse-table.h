@@ -81,13 +81,6 @@ ATermInt      SG_GetATint(int l, size_t numprods);
 ATbool SG_IsLeftAssociative(parse_table *pt, label l);
 ATbool SG_IsRightAssociative(parse_table *pt, label l);
 
-#ifdef HAVE_REJECTABILITY_DETERMINATION
-ATbool SG_Rejectable(state s);
-#else
-#define SG_Rejectable(s)  ATtrue
-#endif
-
-
 actionkind    SG_ActionKind(action a);
 ATbool        SG_ReduceAction(action a);
 

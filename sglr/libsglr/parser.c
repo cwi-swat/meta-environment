@@ -646,7 +646,7 @@ ATbool SG_CharInCharClass(int c, register ATermList cc)
       case AT_LIST:
       {
         register ATermList l = (ATermList) ccitem;
-
+        assert(0 && "Hypothesis: This should never happen\n");
         for(; !ATisEmpty(l); l = ATgetNext(l))
           if(c == ATgetInt((ATermInt) ATgetFirst((ATermList) l)))
             return ATtrue;
@@ -784,11 +784,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
      a stack might converge with it, later on
      */
     active_stacks = SG_AddStack(st1, active_stacks);
-    if (SG_Rejectable(SG_ST_STATE(st1))) {
-      for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
-    } else {
-      for_actor         = SG_AddStack(st1, for_actor);
-    }
+    for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
+    
     if (attribute == SG_PT_REJECT) {
       SG_MarkLinkRejected(nl);
       IF_DEBUG(fprintf(SG_log(), "Reject [new]\n"))
