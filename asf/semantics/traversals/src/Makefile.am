@@ -21,6 +21,8 @@
 
 include ${top_srcdir}/make_rules
 
+INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+
 bin_PROGRAMS = traversals
 man_MANS     = traversals.1
 data_DATA    = traversals.idef
