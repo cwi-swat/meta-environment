@@ -35,12 +35,12 @@ all:
 # run Toolbus with --viewer
 tbrunv:
 	echo "use toolbus option -verbose if you like"
-	toolbus -I. -viewer httpd.tb
+	toolbus -TB_PORT 11000 -I. -viewer httpd.tb
 
 # stop and start Apache
 apstop:
-	${APACHE}/bin/apachectl stop
+	$(APACHE)/bin/apachectl stop
 
 aprun:
-	${APACHE}/bin/apachectl start	
+	$(APACHE)/bin/apachectl start	
 		
