@@ -13,8 +13,9 @@ context-free syntax
 test-unparsing(PROGRAM) -> String
 test-lifting-to-term(PROGRAM) -> ATerm
 test-lifting-to-tree(PROGRAM) -> Tree
-test-term-compare(PROGRAM,PROGRAM) -> Measure
+test-term-compare(PROGRAM,PROGRAM) -> Boolean
 
+hiddens
 variables
 
 "PROGRAM"[123] -> PROGRAM 

@@ -6,7 +6,7 @@ equations
 
 [] test-lifting-to-term(PROGRAM1) = lift-to-term(PROGRAM1)
 [] test-lifting-to-tree(PROGRAM1) = lift-to-tree(PROGRAM1)
-[] test-term-compare(PROGRAM1,PROGRAM2) = compare(PROGRAM1,PROGRAM2)
+[] test-term-compare(PROGRAM1,PROGRAM2) = PROGRAM1 < PROGRAM2
 
 
 [] appl(prod([cf(layout)],cf(opt(layout)),no-attrs),ATermList) =
