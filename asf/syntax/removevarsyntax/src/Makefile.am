@@ -17,7 +17,7 @@ data_DATA    = removevarsyntax.idef
 EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h \
                removevarsyntax.pod
 
-removevarsyntax_SOURCES = removevarsyntax.c RemoveVarSyntax.c
+removevarsyntax_SOURCES = removevarsyntax.c Remove-Var-Syntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \

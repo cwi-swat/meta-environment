@@ -33,9 +33,9 @@ static char myarguments[] = "m:hi:o:vV";
 void init_patterns();
 void c_rehash(int newsize);
 
-extern void register_Remove045Var045Syntax();
-extern void resolve_Remove045Var045Syntax();
-extern void init_Remove045Var045Syntax();
+extern void register_Remove_Var_Syntax();
+extern void resolve_Remove_Var_Syntax();
+extern void init_Remove_Var_Syntax();
 
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -152,9 +152,9 @@ int main(int argc, char *argv[])
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  register_Remove045Var045Syntax();
-  resolve_Remove045Var045Syntax();
-  init_Remove045Var045Syntax();
+  register_Remove_Var_Syntax();
+  resolve_Remove_Var_Syntax();
+  init_Remove_Var_Syntax();
 
   if(toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
