@@ -1,5 +1,8 @@
 $Id$
 
+2001/09/21 (jurgenv@cwi.nl)
+ * Added -u switch to dump-productions (unparses the productions).
+
 2001/08/31 (markvdb@cwi.nl)
  * Version 3.5beta.
  * Improved (I hope you are never sure in life) the prefer/avoid
