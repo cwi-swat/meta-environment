@@ -17,7 +17,20 @@
 %%    along with this program; if not, write to the Free Software
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
-equations
+equations 
+
+  [ilip-0] is-list-injection-production(prod(id(Aterm1),Ws0,
+                                            [iter(Aterm2,Ws1,l(L0))],
+                                            Ws2, l(L1),
+                                            Ws3, $Symbol2, Ws4, no-attrs)) = true
+
+  [ilip-1] is-list-injection-production(prod(id(Aterm1),Ws0,
+                                       [iter-sep(l("{"), Ws1, Aterm2,Ws2, Aterm3, 
+                                                 Ws3, l("}"), Ws4, l(L2))],
+                                        Ws5, l(L3),
+                                        Ws6, $Symbol2, Ws7, no-attrs)) = true
+
+  [default-ilip] is-list-injection-production(Aterm) = false
 
   [ra-1'1] remove-annotation(Aterm) = term(Aterm)
 

@@ -27,6 +27,7 @@ exports
     "remove-annotation" "(" ATerm ")" -> ATerm
   context-free syntax
     "is-term-production" "(" ATerm ")" -> Bool
+    "is-list-injection-production" "(" ATerm ")" -> Bool
     "is-term-ceq" "(" ATerm ")"        -> Bool
     "is-iter-term" "(" ATerm ")"       -> Bool
     "is-iter-sep-term" "(" ATerm ")"   -> Bool

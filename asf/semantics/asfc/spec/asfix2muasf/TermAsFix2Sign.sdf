@@ -60,6 +60,7 @@ hiddens
     "associativity-attr2id" "(" ATerm ")"    -> FunId
     "term-iter2id" "(" ATerm ")"             -> FunId
     "ext-term-iter2id" "(" ATerm ")"         -> FunId
+    "make-constructor-attr" "(" ATerm ")"    -> TermList
 
 exports
   context-free syntax

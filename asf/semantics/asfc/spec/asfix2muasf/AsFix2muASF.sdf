@@ -44,6 +44,8 @@ hiddens
     listargs2muasf(ATermList,NameTable) -> FuncTermTableTuple
     listarg2muasf(ATerm,NameTable)      -> FuncTermTableTuple
 
+
+
 hiddens
   variables
     "Aname"[0-9\']*        -> ATerm

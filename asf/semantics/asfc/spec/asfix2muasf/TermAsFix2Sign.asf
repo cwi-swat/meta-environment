@@ -85,7 +85,6 @@ equations
 
   [default-cf2a-2'4] term-cfelem2args(CfElem,Nametable) = (,,Nametable)
 
-
   [tcf2i-1'1] is-production-prod(Prod) = true,
               symbols2id(Symbols) = Funid1,
               symbol2id($Symbol) = Funid2,

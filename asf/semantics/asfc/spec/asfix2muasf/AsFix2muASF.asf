@@ -21,6 +21,10 @@ equations
 
 %% Before a translation can take place the abbreviations
 %% in the equation have to be expanded.
+
+%% Watch out! Parts of these rules are transforming OLD metaenvironment AsFix.
+%% Some of the similar constructs in new AsFix are transformed in different places.
+
   [a2m-1'1] Amodule[module-name] = Aname,
             id2modname(Aname) = Mname,
             modname2lf(Aname) = Funid1,
@@ -104,6 +108,7 @@ equations
 
   [at2ma-1'3] Aterm[prod] = Afunc,
               is-bracket-func(Afunc) = false,
+              is-list-injection-production(Afunc) = false,
               cffunc2id(Afunc) = Funid1,
               Afunc[attrs] = Attr,
               attrs2terms(Attr) = Term*1,
@@ -111,6 +116,23 @@ equations
               Aterm[args] = Args,
               args2muasf(Args,Nametable2) = (Funcdef*1,Term*2,Nametable3),
               make-external-funcdef(Funid2,Term*2) = Funcdef,
+              Funcdef ++ Funcdef*1 = Funcdef*2
+              ================================
+              aterm2muasf(appl,Aterm,Nametable1) =
+                (Funcdef*2,make-func(Funid2,Term*2),Nametable3)
+
+  %% list injections are always constructors:
+ [at2ma-1'3'2] 
+              Aterm[prod] = Afunc,
+              is-bracket-func(Afunc) = false,
+              is-list-injection-production(Afunc) = true,
+              cffunc2id(Afunc) = Funid1,
+              Afunc[attrs] = Attr,
+              attrs2terms(Attr) = Term*1,
+              nt-lookup(Funid1, Term*1, constructor, Nametable1) = (Funid2,Nametable2),
+              Aterm[args] = Args,
+              args2muasf(Args,Nametable2) = (Funcdef*1,Term*2,Nametable3),
+              make-external-funcdef(Funid2, Term*2) = Funcdef,
               Funcdef ++ Funcdef*1 = Funcdef*2
               ================================
               aterm2muasf(appl,Aterm,Nametable1) =
@@ -216,3 +238,4 @@ equations
              Funcdef*1 ++ Funcdef*2 = Funcdef*3
              ==================================
              cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 != Term2,Nametable3)
+
