@@ -1,0 +1,20 @@
+module Pico-typecheck
+
+imports basic/Booleans Pico-syntax Type-environments
+
+exports
+  context-free syntax
+    "tcp" "(" PROGRAM ")"                    -> Boolean
+    "tcd" "(" DECLS ")"                      -> TENV
+    "tcits" "(" {ID-TYPE  ","}* "," TENV ")" -> TENV
+    "tcit" "(" ID-TYPE "," TENV ")"          -> TENV
+    "tcs" "(" {STATEMENT ";"}* "," TENV ")"  -> Boolean
+    "tcst" "(" STATEMENT "," TENV ")"        -> Boolean
+    "tce" "(" EXP "," TENV ")"               -> TYPE
+
+  variables
+    "Nat" [0-9\']*      -> Natural 
+    "Nat-con" [0-9\']*  -> NatCon
+    "Int" [0-9\']*      -> Integer
+    "Str-con" [0-9\']*  -> StrCon
+    "Str" [0-9\']*      -> String

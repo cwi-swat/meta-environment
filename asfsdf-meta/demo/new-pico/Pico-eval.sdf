@@ -1,0 +1,19 @@
+module Pico-eval
+
+imports Pico-syntax Value-environments
+
+exports
+  context-free syntax
+    "evp" "(" PROGRAM ")"             -> VENV
+    "evd" "(" DECLS ")"               -> VENV
+    "evits" "(" {ID-TYPE  ","}* ")"   -> VENV
+    "evs" "(" {STATEMENT ";"}* ","  VENV ")"    -> VENV
+    "evst" "(" STATEMENT "," VENV ")" -> VENV
+    "eve" "(" EXP "," VENV ")"        -> VALUE
+
+  variables
+    "Nat" [0-9\']*      -> Natural 
+    "Nat-con" [0-9\']*  -> NatCon
+    "Int" [0-9\']*      -> Integer
+    "Str-con" [0-9\']*  -> StrCon
+    "Str" [0-9\']*      -> String

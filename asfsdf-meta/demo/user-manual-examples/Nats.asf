@@ -1,0 +1,3 @@
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)     

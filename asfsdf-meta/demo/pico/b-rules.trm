@@ -1,0 +1,4 @@
+B1 & B2      => not(not(B1) | not(B2))
+not(not(B1)) => B1
+not(true)    => false
+not(false)   => true

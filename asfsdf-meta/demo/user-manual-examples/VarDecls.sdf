@@ -1,0 +1,22 @@
+module VarDecls
+
+imports Layout
+
+exports
+  sorts ID DECL TYPE 
+
+  lexical syntax
+    [a-z]+ -> ID
+ 
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -> DECL 
+    "integer"                 -> TYPE 
+    "real"                    -> TYPE 
+
+  variables
+    "Id"           -> ID 
+    "Type"[0-9]*   -> TYPE 
+    "Id-list"[\']* -> {ID ","}* 
+    "Id-ne-list"   -> {ID ","}+
+
+

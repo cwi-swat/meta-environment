@@ -1,0 +1,12 @@
+module Values
+
+imports Pico-Integers Pico-Strings
+
+exports
+  sorts VALUE
+  context-free syntax
+    PICO-INT         -> VALUE
+    PICO-STRING      -> VALUE
+    "nil-value" -> VALUE
+  variables
+    "Value"[0-9\']* -> VALUE

@@ -1,0 +1,22 @@
+module Pair[X Y]
+ 
+imports Booleans
+ 
+hiddens
+  sorts X Y
+exports
+  sorts Pair
+ 
+  context-free syntax
+    "[" fst:Bool "," snd:Y "]"      -> Pair[[X,Y]] {cons("mpair")}
+ 
+    make-pair(X, Y)      -> Pair[[X,Y]]
+    first(Pair[[X,Y]])   -> X
+    second(Pair[[X,Y]])  -> Y
+    is-pair(Pair[[X,Y]]) -> Bool
+
+hiddens
+  variables
+    "x"[0-9]* -> X
+    "y"[0-9]* -> Y
+    "p"[0-9]* -> Pair[[X,Y]]

@@ -1,0 +1,18 @@
+module Expr1
+
+imports Layout
+
+exports
+  sorts E 
+
+  lexical syntax
+    [0-9]+ -> E 
+
+  context-free syntax
+    E "+" E   -> E {left}
+    E "*" E   -> E {left}
+    "(" E ")" -> E {bracket}
+
+  context-free priorities
+    E "*" E -> E > 
+    E "+" E -> E

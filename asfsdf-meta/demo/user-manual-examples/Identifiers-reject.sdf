@@ -1,0 +1,13 @@
+module Identifiers-reject
+
+imports Layout
+
+exports
+lexical syntax
+  [a-zA-Z][a-zA-Z0-9]* -> Id
+
+context-free restrictions
+  Id -/- [a-zA-Z0-9]  
+
+context-free syntax
+  "begin" -> Id {reject}

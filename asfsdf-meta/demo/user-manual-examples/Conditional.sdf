@@ -1,0 +1,12 @@
+module Conditional
+
+imports Booleans Expressions 
+
+exports
+  context-free syntax
+    "if" Bool "then" Exp "else" Exp "fi" -> Exp {delaying1, delaying2}
+
+hiddens
+  variables
+    "Bool"[0-9]* -> Bool
+    "Exp"[0-9]*  -> Exp                  

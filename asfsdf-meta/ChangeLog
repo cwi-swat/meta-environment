@@ -5,3 +5,4 @@
    communicate with the rest of the Meta-Environment and some shell scripts
    to start everything up.
  * Version is 1.3beta
+ * Moved the demo directory to this location.

@@ -1,0 +1,3 @@
+true & not(false) | true & true & false & true & true & false 
+
+

@@ -1,0 +1,10 @@
+   equations
+
+      [B1]   true | Bool   = true
+      [B2]   false | Bool  = Bool
+
+      [B3]   true & Bool   = Bool
+      [B4]   false & Bool  = false
+
+      [B5]   not(false) = true
+      [B6]   not ( true )  = false
