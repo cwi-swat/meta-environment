@@ -175,5 +175,6 @@ AC_OUTPUT(
    configuration-manager/Makefile
    configuration-manager/src/Makefile
    query-tool/Makefile
+   query-tool/spec/Makefile
    query-tool/src/Makefile
 )
