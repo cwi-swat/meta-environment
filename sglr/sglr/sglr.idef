@@ -109,9 +109,11 @@ process Parser is
       rec-msg(get-top-symbols(L?)) .
       snd-eval(P, get-top-symbols(L)) .
       (
-	rec-value(P, startsymbols(L, Start?))
+        rec-value(P, startsymbols(L, Start?)) .
+	snd-msg(startsymbols(L, Start))
       +
-	rec-value(P, language-not-available(L))
+        rec-value(P, language-not-available(L)) .
+	snd-msg(anguage-not-open(L))
       )
     )
     * rec-disconnect(P)
