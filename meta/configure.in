@@ -75,7 +75,7 @@ fi
 
 dnl Handle --with-sglr=... argument to configure
 AC_ARG_WITH(sglr,
-   [  --with-sglr=DIR        sglr is in DIR],
+   [  --with-sglr=DIR         sglr is in DIR],
    SGLR=${withval},)
 
 AC_SUBST(SGLR)
@@ -89,7 +89,7 @@ fi
 
 dnl Handle --with-pgen=... argument to configure
 AC_ARG_WITH(pgen,
-   [  --with-pgen=DIR        pgen is in DIR],
+   [  --with-pgen=DIR         pgen is in DIR],
    PGEN=${withval},)
 
 AC_SUBST(PGEN)
@@ -103,7 +103,7 @@ fi
 
 dnl Handle --with-evaluator=... argument to configure
 AC_ARG_WITH(evaluator,
-   [  --with-evaluator=DIR        evaluator is in DIR],
+   [  --with-evaluator=DIR    evaluator is in DIR],
    EVALUATOR=${withval},)
 
 AC_SUBST(EVALUATOR)
@@ -112,7 +112,7 @@ ASC_SUPPORT='${prefix}'
 
 dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,
-   [  --with-asc-support=DIR        asc-support is in DIR],
+   [  --with-asc-support=DIR  asc-support is in DIR],
    ASC_SUPPORT=${withval},)
 
 AC_SUBST(ASC_SUPPORT)
@@ -145,7 +145,7 @@ AC_SET_MAKE
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
-[  --with-tide		  TIDE is in DIR],
+   [  --with-tide             TIDE is in DIR],
    TIDE=${withval}
    TIDEDEF=-DUSE_TIDE
    TIDEINC=-I${TIDE}
@@ -174,20 +174,11 @@ if test "${GRAPHVIZ}" = "no" ; then
 fi
 AC_SUBST(GRAPHVIZ)
 
+dnl Check for wish
+META_CHECK_WISH
 
-dnl Try to find a suitable wish version
-AC_PATH_PROGS(WISH,wish8.0 wish8.1 wish, no)
-
-dnl Handle --with-wish=... argument to configure
-AC_ARG_WITH( wish,
-   [  --with-wish=DIR         Wish program is in DIR],
-   WISH=${withval})
-
-dnl Fail when wish was not specified and could not be found automatically.
-if test "${WISH}" = "no" ; then
-   AC_ERROR(Required \"wish\" program not found.)
-fi
-AC_SUBST(WISH)
+dnl Check for graphviz
+META_CHECK_GRAPHVIZ
 
 dnl Try to find xemacs
 AC_PATH_PROGS(XEMACS,xemacs, no)
@@ -210,7 +201,7 @@ dnl Handle --with-debug-c-code to activate c debug info
 dnl and shut off optimizations
 CFLAGS="-Wall -O4 -DNDEBUG"
 AC_ARG_WITH(debug-c-code,
-   [ --with-debug-c-code      C flags set to -Wall -g],
+   [  --with-debug-c-code     C flags set to -Wall -g],
    CFLAGS="-Wall -g -O2"
 )
 AC_SUBST(CFLAGS)
@@ -247,6 +238,7 @@ AC_SUBST(SOCKLIBS)
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
+   config/Makefile
    compiler/Makefile
    compiler/c-source/Makefile
    compiler/test/Makefile

@@ -20,31 +20,4 @@
 #
 # $Id$
 
-include ${top_srcdir}/make_rules
-
-SUBDIRS     = config compiler asfix2c-compiler editors graph-browser \
-              in-output module-db utils tbscripts demo doc  \
-              configuration-manager
-
-EXTRA_DIST  = make_rules meta.sh.src meta.pod
-
-bin_SCRIPTS = meta
-
-man_MANS    = meta.1
-
-CLEANFILES  = meta meta.1
-
-% : %.sh.src Makefile
-	sed 's@__PREFIX__@$(prefix)@g;\
-	     s@__ATERM__@$(ATERM)@g;\
-	     s@__ASFIX__@$(ASFIX)@g;\
-	     s@__SGLR__@$(SGLR)@g;\
-	     s@__PGEN__@$(PGEN)@g;\
-	     s@__EVALUATOR__@$(EVALUATOR)@g;\
-	     s@__TOOLBUS__@$(TOOLBUS)/toolbus@g;\
-	     s@__WISH__@$(WISH)@g;\
-	     s@__XEMACS__@$(XEMACS)@g;\
-	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
-	chmod +x $@
-
-
+EXTRA_DIST = README $(wildcard *.m4)

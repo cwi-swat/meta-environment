@@ -20,7 +20,14 @@
 #
 # $Id$
 
-2001/02/01 (jurgenv@cwi.nl)
+2001/02/01 (mdejonge@cwi.nl)
+   * Added ./config directory containing m4 macro files implementing meta
+     -environment specific configuration macros used in the top-level
+     configure.in script.
+   * added check-graphviz.m4, program-check.m4, and check-wish.m4 macro
+     files for configuration checking of graphviz and wish.
+
+2001/01/31 (jurgenv@cwi.nl)
    * moved Booleans from spec-lib to addeqs/spec.
    * removed spec-lib
    * moved asf-syntax/configmanager to configuration-manager
