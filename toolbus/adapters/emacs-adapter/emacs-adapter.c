@@ -301,6 +301,10 @@ void help(void)
 {
   char * str =
 "\n\
+**** Make sure your .emacs file contains the line\n\
+\n\
+(gnuserv-start)\n\
+\n\
 Synopsis: emacs-adapter [options]\n\
 \n\
 Options are:\n\
@@ -354,7 +358,8 @@ void emacs_create(char *emacsapp) {
        able to run gnuclient, i.e. emacs must have run gnuserv-start
     */
     sleep(30);
-    sprintf(cmd_buf,"load-file \"tb.el\"");
+    sprintf(cmd_buf,"load-file ");
+    strcat(cmd_buf,TBEL); /* TBEL is location of tb.el file from Makefile*/
     exec_cmd();
     /*    cmd_buf[0] = '\0';*/
     /*    sprintf(cmd_buf,"send-pid %ld",(long) getpid());*/
