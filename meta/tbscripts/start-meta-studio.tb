@@ -1,7 +1,12 @@
-#include "button-actions.tb"
-#include "graph-utils.tb"
 #include "meta.tb"
 #include "meta-studio.idef"
+
+/* sdf-meta */
+#include "graph-utils.tb"
+#include "sdf-import-graph.idef"
+
+/* to be resolved */
+#include "button-actions.tb"
 
 process MetaGUI is
 let

@@ -32,7 +32,6 @@
 
 /* sdf-meta */
 #include "parsetablegen.idef"
-#include "sdf-import-graph.idef"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
