@@ -2,7 +2,7 @@
 
     MEPT -- The Meta-Environment Parse Tree library
 
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -619,7 +619,7 @@ applicationToAsFix1(PT_Tree tree, ATbool inList)
     return layoutToAsFix1(tree);
   }
 
-  if (PT_prodHasLexAsLhsAndCfAsRhs(prod)) {
+  if (PT_isLexicalInjectionProd(prod)) {
     PT_Symbol sort = PT_getSymbolSymbol(PT_getProductionRhs(prod));
     return ATmakeTerm(pattern_asfix_lexterm,
 		      treeToString(tree), PT_makeTermFromSymbol(sort));

@@ -315,6 +315,58 @@ static PT_Tree flattenLexical(PT_Tree tree)
   }
 }
 
+static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars);
+
+static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
+{
+  if (PT_isTreeChar(tree)) {
+    chars = PT_appendArgs(chars, tree);
+  }
+  else if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
+    PT_Args treeArgs = PT_getTreeArgs(tree);
+    chars = flattenArgsRecursive(treeArgs, chars);
+  }
+  else if (PT_isTreeLit(tree)) { 
+    int i, len;
+    char *lit = PT_getTreeString(tree);
+    len = strlen(lit);
+
+    for (i = 0; i < len; i++) { 
+      chars = PT_appendArgs(chars, PT_makeTreeChar(lit[i]));
+    }
+  }
+
+  return chars;
+}
+
+static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars)
+{
+  while (PT_hasArgsHead(treeArgs)) {
+    PT_Tree tree = PT_getArgsHead(treeArgs);
+    treeArgs = PT_getArgsTail(treeArgs);
+
+    chars = flattenLexicalRecursive(tree, chars);
+  }
+
+  return chars;
+}
+
+static PT_Tree flattenLexicalTotally(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production outerProd = PT_getTreeProd(tree);
+    PT_Tree newTree = flattenLexical(tree);
+    PT_Args charList = flattenLexicalRecursive(newTree, PT_makeArgsEmpty());
+    PT_Args newArgs = PT_makeArgsList(
+                        PT_makeTreeList(makeSymbolAllChars(), charList),
+                        PT_makeArgsEmpty());
+    return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
+  }
+  else { 
+    return tree;
+  }
+}
+
 static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
 {
   while (PT_hasArgsHead(args)) {
@@ -434,8 +486,13 @@ static PT_Tree flattenTerm(PT_Tree tree)
     return flattenLayout(tree);
   }
 
+/*
   if (PT_isLexicalProd(prod)) {
     return flattenLexical(tree);
+  }
+*/
+  if (PT_isLexicalInjectionProd(prod)) {
+    return flattenLexicalTotally(tree);
   }
 
   if (PT_isVarDefault(prod)) {
