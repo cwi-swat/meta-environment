@@ -1,6 +1,9 @@
 $Id$
 
-2002/03/52 (vandenbr@cwi.nl)
+2002/03/25 (vandenbr@cwi.nl)
+ * Added -s switch to sdf2table to call the sdfchecker.
+
+2002/03/22 (vandenbr@cwi.nl)
  * Improved the handling of aliased symbols.
 
 2002/03/22 (vandenbr@cwi.nl)
