@@ -60,37 +60,37 @@ bag[use] BackwardSlice(
 	rel[stat,var] USES,
 	rel[stat,var] DEFS,	
 	use Criterion) 
-= UU[Criterion]
+= USE-USE[Criterion]
 
 where
 	rel[stat, def] REACH = reaching-definitions(DEFS, PRED)
 
-	rel[stat, stat] POST-DOMINATOR = domainR(dominators(PRED), CONTROL-STATEMENT)
-
 	%% Compute the relation between each use and corresponding definitions: ud
 
-	rel[use,def] ud = 
+	rel[use,def] use-def = 
  	 {<<S1,V>, <S2,V>> | <stat S1, var V> : USES, <stat S2, V> : REACH[S1]}
 
-	%% Internal use in definition: du
+	%% Internal dependencies per statement
 
-	rel[def,use] du  = 
+	rel[def,use] def-use-per-stat  = 
      		{<<S,V1>, <S,V2>> | <stat S, var V1> : DEFS, <S, var V2> : USES}
     		 union
-    		 {<<S,V>, <S,"eps">> | <stat S, var V> : DEFS}
+    		 {<<S,V>, <S,"EXEC">> | <stat S, var V> : DEFS}
     		 union
-    		 {<<S,"tau">,<S,V>> | stat S : CONTROL-STATEMENT, 
-			    		<S, var V> : domainR(USES, {S})}
+    		 {<<S,"TEST">,<S,V>> | stat S : CONTROL-STATEMENT, 
+			    	 	  <S, var V> : domainR(USES, {S})}
 
-	%% Control dependence: cd
+	%% Control dependence: control-dependence
 
-	rel[def,use] cd  =
-	   { <<S2, "eps">,<S1,"tau">> | <stat S1, stat S2> : POST-DOMINATOR}
+	rel[stat, stat] CONTROL-DOMINATOR = domainR(dominators(PRED), CONTROL-STATEMENT
 
-	%% Control and data dependence: ucd
+	rel[def,use] control-dependence  =
+	   { <<S2, "EXEC">,<S1,"TEST">> | <stat S1, stat S2> : CONTROL-DOMINATOR}
 
-	rel[use,def] ucd = ud union cd
-	rel[use,use] UU = (ucd o du)*
+	%% Control and data dependence: use-control-def
+
+	rel[use,def] use-control-def = use-def union control-dependence
+	rel[use,use] USE-USE = (use-control-def o def-use-per-stat)*
 %%	rel[def,def] DD = (du o ucd)*
 %%	rel[use,def] UD = ucd o (du o ucd)*
 %%	rel[def,use] DU = du o (ucd o du)*
@@ -131,14 +131,14 @@ bag[use] Example2 =
 
 
 assert "Example 1": Example1 == 
-	     { <1, "eps">, <2, "eps">,  <3, "eps">, <5, "i">, <5, "n">,  
-	        <6, "sum">, <6, "i">, <6, "eps">, <8, "i">, <8, "eps">, 
+	     { <1, "EXEC">, <2, "EXEC">,  <3, "EXEC">, <5, "i">, <5, "n">,  
+	        <6, "sum">, <6, "i">, <6, "EXEC">, <8, "i">, <8, "EXEC">, 
 	       <9, "sum"> }
 
 assert "Example2": Example2 == 
-            { <1, "eps">,  <2, "eps">, <4, "eps">, <5, "i">, <5, "n">, 
-	      <7, "i">, <7, "product">, <7, "eps">, 
-	       <8, "i">, <8, "eps">, <10,  "product">  }
+            { <1, "EXEC">,  <2, "EXEC">, <4, "EXEC">, <5, "i">, <5, "n">, 
+	      <7, "i">, <7, "product">, <7, "EXEC">, 
+	       <8, "i">, <8, "EXEC">, <10,  "product">  }
 
 comment ---------------------------------------------------------------
 
