@@ -1,0 +1,10 @@
+%%% $Id$
+                                                   
+module aterm/RealCon
+imports aterm/IntCon
+exports
+  sorts OptExp RealCon
+  context-free syntax
+    "e" IntCon                -> OptExp
+                              -> OptExp
+    IntCon "." NatCon OptExp  -> RealCon   
