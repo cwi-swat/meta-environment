@@ -14,9 +14,9 @@ exports
         Bag[[Elem]]                  -> VALUE
         Rel[[Elem]]                  -> VALUE
         Elem # Elem                  -> VALUE
-        VAR # EXP                    -> VALUE
-        VAR # VAR # EXP              -> VALUE
-        VAR # VAR # VAR # EXP        -> VALUE
+        VAR # REXP                    -> VALUE
+        VAR # VAR # REXP              -> VALUE
+        VAR # VAR # VAR # REXP        -> VALUE
         
         "[" { VAR # VALUE ","}* "]"   -> RSTORE
         assign(VAR, VALUE, RSTORE)    -> RSTORE
@@ -29,13 +29,15 @@ exports
 
 	add(VAR, Rel[[Elem]], RSTORE) -> RSTORE
  
-        evalp(EXP, RSTORE)            -> Boolean
-        evale(EXP, RSTORE)            -> Elem
-        evalb(EXP, RSTORE)            -> Bag[[Elem]]
-        evalr(EXP, RSTORE)            -> Rel[[Elem]]
+        evalp(REXP, RSTORE)            -> Boolean
+        evale(REXP, RSTORE)            -> Elem
+        evalb(REXP, RSTORE)            -> Bag[[Elem]]
+        evalr(REXP, RSTORE)            -> Rel[[Elem]]
 
-        evalx(EXP, RSTORE)            -> VALUE
+        evalx(REXP, RSTORE)            -> VALUE
         apply "(" VALUE OP VALUE ")"  -> VALUE
+
+        "dominators"                  -> VAR {prefer}
 
         "=="                         -> OP
         "<="                         -> OP
@@ -64,7 +66,7 @@ exports
         "get_next" "(" GENS ")"                           -> GENS
         "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
 
-        valformer(GENS, VALUE, EXP, RSTORE, EXP)          -> VALUE
+        valformer(GENS, VALUE, REXP, RSTORE, REXP)          -> VALUE
         "if" Boolean "then" VALUE "else" VALUE "fi"       -> VALUE
 
 hiddens
@@ -76,9 +78,9 @@ hiddens
         "VPair*" [0-9\']*             -> { VAR # VALUE ","}*
 
         "Var" [0-9\']*                -> VAR
-        "Exp"  [0-9\']*               -> EXP
-        "Exp*"  [0-9\']*              -> { EXP ","}*
-        "Exp+"  [0-9\']*              -> { EXP ","}+
+        "Exp"  [0-9\']*               -> REXP
+        "Exp*"  [0-9\']*              -> { REXP ","}*
+        "Exp+"  [0-9\']*              -> { REXP ","}+
 
         "Rel" [0-9\']*                -> Rel[[Elem]]
         "Bag" [0-9\']*                -> Bag[[Elem]]
@@ -86,7 +88,7 @@ hiddens
         "E*"  [0-9\']*                -> {Elem ","}*
         "E+"  [0-9\']*                -> {Elem ","}+
 
-        "Texp" [0-9\']*               -> EXP # EXP
+        "Texp" [0-9\']*               -> REXP # REXP
         "Texp*" [0-9\']*              -> { TEXP  ","}*
         "Texp+" [0-9\']*              -> { TEXP  ","}+
 

@@ -15,76 +15,76 @@ equations
 [default-r2]
              del(E, Bag) = Bag
 
-%% --- Bag1 == Bag2
+%% --- equal(Bag1, Bag2)
 
-[eq-1]       {E, E*} == {E*1, E, E*2} = {E*} == {E*1, E*2}
+[eq-1]       equal({E, E*}, {E*1, E, E*2}) = equal({E*}, {E*1, E*2})
 
-[eq-2]       {E+} == {}               = false
-[eq-3]       {} == {E+}               = false
-[eq-4]       {} == {}                 = true
+[eq-2]       equal({E+}, {})               = false
+[eq-3]       equal({}, {E+})               = false
+[eq-4]       equal({}, {})                 = true
 [default-eq] 
-             {E+1} == {E+2}           = false
+             equal({E+1}, {E+2})           = false
 
-%% --- Bag1 <= Bag2
+%% --- subset(Bag1, Bag2)
 
-[sub-1]      {E, E*} <= {E*1, E, E*2} = {E*} <= {E*1, E*2}
-[sub-2]      {E+} <= {}               = false
-[sub-3]      {} <= {E+}               = true
-[sub-4]      {} <= {}                 = true
+[sub-1]      subset({E, E*}, {E*1, E, E*2})  = subset({E*}, {E*1, E*2})
+[sub-2]      subset({E+}, {})                = false
+[sub-3]      subset({}, {E+})                = true
+[sub-4]      subset({}, {})                  = true
 [default-sub]
-             {E+1} <= {E+2}           = false
+             subset({E+1},{E+2})             = false
 
-%% --- Bag1 < Bag2
+%% --- ssubset(Bag1, Bag2)
 
-[ssub-1] Bag1 < Bag2 = (Bag1 <= Bag2) & not(Bag1 == Bag2)
+[ssub-1] strict-subset(Bag1, Bag2) = subset(Bag1, Bag2) & not(equal(Bag1, Bag2))
 
-%% --- Bag1 >= Bag2
+%% --- superset(Bag1, Bag2)
 
-[sup-1] Bag1 >= Bag2 = Bag2 <= Bag1
+[sup-1] superset(Bag1, Bag2) = subset(Bag2, Bag1)
 
-%% --- Bag1 > Bag2
+%% --- strict-superset(Bag1, Bag2)
 
-[ssup-1] Bag1 > Bag2 = Bag2 < Bag1
+[ssup-1] strict-superset(Bag1, Bag2) = strict-subset(Bag2, Bag1)
 
-%% --- Bag1 union Bag2
+%% --- union(Bag1, Bag2)
 
-[un-2] {} union {E*} = {E*}
-[un-3] {E*} union {} = {E*}
+[un-1] union({}, {E*}) = {E*}
+[un-2] union({E*}, {}) = {E*}
 
-[un-1] {E*4} = {E*1} union {E*2, E*3}
+[un-3] {E*4} = union({E*1}, {E*2, E*3})
        ==============================
-       {E, E*1} union {E*2, E, E*3} = {E, E*4}
+       union({E, E*1}, {E*2, E, E*3}) = {E, E*4}
 
 [default-un]
-       {E*3} = {E*1} union {E*2}
+       {E*3} = union({E*1}, {E*2})
        ==============================
-       {E, E*1} union {E*2} = {E, E*3}
+       union({E, E*1}, {E*2}) = {E, E*3}
 
-%% --- Bag1 \ Bag2
+%% --- diff(Bag1, Bag2)
 
-[df-1] {E*1, E, E*2} \ {E*3, E, E*4} = {E*1, E*2} \ {E*3, E*4}
+[df-1] diff({E*1, E, E*2}, {E*3, E, E*4}) = diff({E*1, E*2}, {E*3, E*4})
 
-[default-df-2] {E*1} \ {E*2} = {E*1}
+[default-df-2] diff({E*1}, {E*2}) = {E*1}
 
 %% --- Bag1 inter Bag2
 
-[in-1] {E*1, E*2} inter {E*3, E*4} = {E*'}
+[in-1] inter({E*1, E*2}, {E*3, E*4}) = {E*'}
        ==================================
-       {E*1, E, E*2} inter {E*3, E, E*4} = {E, E*'}
+       inter({E*1, E, E*2}, {E*3, E, E*4}) = {E, E*'}
 
 [default-in2] 
-       {E*1} inter {E*2} = {}
+       inter({E*1}, {E*2}) = {}
 
-%% --- # Bag
+%% --- size(Bag)
 
-[len-1] # {} = 0
-[len-2] # {E, E*} = 1 + #{E*}
+[sz-1] size({}) = 0
+[sz-2] size({E, E*}) = 1 + size({E*})
 
-%% --- Elen in Bag
+%% --- elem(E, Bag)
 
-[in-1]  E in {E*1, E, E*2} = true
-[default-in-2]
-	E in {E*} = false
+[el-1]  elem(E, {E*1, E, E*2}) = true
+[default-el-2]
+	elem(E, {E*}) = false
 
 %% if
 

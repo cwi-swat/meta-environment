@@ -4,94 +4,94 @@ equations
 
 [eq-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 == Rel2 = BagEE1 == BagEE2
+         equal(Rel1, Rel2) = equal(BagEE1, BagEE2)
 
 [le-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 <= Rel2 = BagEE1 <= BagEE2
+         subset(Rel1, Rel2) = subset(BagEE1, BagEE2)
 
 [lt-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 < Rel2 = BagEE1 < BagEE2
+         strict-subset(Rel1, Rel2) = strict-subset(BagEE1, BagEE2)
 
 [ge-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 >= Rel2 = BagEE1 >= BagEE2
+         superset(Rel1, Rel2) = superset(BagEE1, BagEE2)
 
 [gt-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 > Rel2 = BagEE1 > BagEE2
+         strict-superset(Rel1, Rel2) = strict-superset(BagEE1, BagEE2)
 
 [un-1]   Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 union Rel2 = BagEE1 union BagEE2
+         union(Rel1, Rel2) = union(BagEE1, BagEE2)
 
 [intr-1] Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 inter Rel2 = BagEE1 inter BagEE2
+         inter(Rel1, Rel2) = inter(BagEE1, BagEE2)
 
 [diff-1] Rel1 = BagEE1, Rel2 = BagEE2
          =========================
-         Rel1 \ Rel2 = BagEE1 \ BagEE2	
+         diff(Rel1, Rel2) = diff(BagEE1, BagEE2)	
 
-[comp-1] {<E, E'>, Tuple*1} o {Tuple*2} = 
-         E x (E' . {Tuple*2}) union ({Tuple*1} o {Tuple*2})
-[comp-2] {} o {Tuple*} = {}
+[comp-1] compose({<E, E'>, Tuple*1}, {Tuple*2}) = 
+         union(product(E, E' . {Tuple*2}), compose({Tuple*1}, {Tuple*2}))
+[comp-2] compose({}, {Tuple*}) = {}
 
-[x-1]    E x {E', E*} = {<E, E'>} union (E x {E*})
-[x-2]    E x {} = {}
+[x-1]    product(E, {E', E*}) = union( {<E, E'>}, product(E, {E*}))
+[x-2]    product(E, {}) = {}
 
-[bx-1]   {E, E*1} x {E*2} = (E x {E*2}) union ({E*1} x {E*2})
-[bx-2]   {} x {E*2} = {}
+[bx-1]   product({E, E*1}, {E*2}) = union(product(E, {E*2}), product({E*1}, {E*2}))
+[bx-2]   product({}, {E*2}) = {}
 
-[dom-1]  dom {<E,E'>, Tuple*} = {E} union dom {Tuple*}
-[dom-2]  dom {} = {}
+[dom-1]  domain({<E,E'>, Tuple*}) = union({E}, domain({Tuple*}))
+[dom-2]  domain({}) = {}
 
-[ran-1]  ran {<E,E'>, Tuple*} = {E'} union ran {Tuple*}
-[ran-2]  ran {} = {}
+[ran-1]  range({<E,E'>, Tuple*}) = union({E'}, range({Tuple*}))
+[ran-2]  range({}) = {}
 
-[car-1]  car {<E,E'>, Tuple*} = {E} union ({E'} union (car {Tuple*}))
-[car-2]  car {} = {}
+[car-1]  carrier({<E,E'>, Tuple*}) = union({E}, union({E'}, carrier({Tuple*})))
+[car-2]  carrier({}) = {}
 
-[domR-1] {<E, E'>, Tuple*} domR {E*1} = 
-         if E in {E*1} then {<E,E'>} union ({Tuple*} domR {E*1})
-                       else {Tuple*} domR {E*1}
+[domR-1] domR({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E, {E*1}) then union({<E,E'>}, domR({Tuple*}, {E*1}))
+                       else domR({Tuple*}, {E*1})
          fi
-[domR-2] {} domR {E*1} = {}
+[domR-2] domR({}, {E*1}) = {}
 
-[domX-1] {<E, E'>, Tuple*} domX {E*1} = 
-         if E in {E*1} then {Tuple*} domX {E*1}
-                       else {<E,E'>} union ({Tuple*} domX {E*1})
+[domX-1] domX({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E, {E*1}) then domX({Tuple*}, {E*1})
+                       else union({<E,E'>}, domX({Tuple*}, {E*1}))
          fi
-[domX-2] {} domX {E*1} = {}
+[domX-2] domX({}, {E*1}) = {}
 
-[ranR-1] {<E, E'>, Tuple*} ranR {E*1} = 
-         if E' in {E*1} then {<E,E'>} union ({Tuple*} ranR {E*1})
-                        else {Tuple*} ranR {E*1}
+[ranR-1] ranR({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E', {E*1}) then union({<E,E'>}, ranR({Tuple*}, {E*1}))
+                        else ranR({Tuple*}, {E*1})
          fi
-[ranR-2] {} ranR {E*1} = {}
+[ranR-2] ranR({}, {E*1}) = {}
 
-[ranX-1] {<E, E'>, Tuple*} ranX {E*1} = 
-         if E' in {E*1} then {Tuple*} ranX {E*1}
-                        else {<E,E'>} union ({Tuple*} ranX {E*1})
+[ranX-1] ranX({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E', {E*1}) then ranX({Tuple*}, {E*1})
+                        else union({<E,E'>}, ranX({Tuple*}, {E*1}))
          fi
-[ranX-2] {} ranX {E*1} = {}
+[ranX-2] ranX({}, {E*1}) = {}
 
-[carR-1] {<E, E'>, Tuple*} carR {E*1} = 
-         if E in {E*1} & E' in {E*1} then {<E,E'>} union ({Tuple*} carR {E*1})
-                                     else {Tuple*} carR {E*1}
+[carR-1] carR({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E, {E*1}) & elem(E', {E*1}) then union({<E,E'>}, carR({Tuple*}, {E*1}))
+                                     else carR({Tuple*}, {E*1})
          fi
-[carR-2] {} carR {E*1} = {}
+[carR-2] carR({}, {E*1}) = {}
 
-[carX-1] {<E, E'>, Tuple*} carX {E*1} = 
-         if E in {E*1} | E'in {E*1} then {Tuple*} carX {E*1}
-                                    else {<E,E'>} union ({Tuple*} carX {E*1})
+[carX-1] carX({<E, E'>, Tuple*}, {E*1}) = 
+         if elem(E, {E*1}) | elem(E', {E*1}) then carX({Tuple*}, {E*1})
+                                    else union({<E,E'>}, carX({Tuple*}, {E*1}))
          fi
-[carX-2] {} carX {E*1} = {}
+[carX-2] carX({}, {E*1}) = {}
 
-[top-1]  top Rel = dom Rel \ ran Rel
+[top-1]  top(Rel) = diff(domain(Rel), range(Rel))
 
-[bot-1]  bot Rel = ran Rel\ dom Rel
+[bot-1]  bottom(Rel) = diff(range(Rel), domain(Rel))
 
 [rim-1]  E . {Tuple*1, Tuple*2} = {E*}
          =====================================
@@ -100,7 +100,7 @@ equations
 [default-rim-2]
          E . {Tuple*} = {}
 
-[brim-1] {E, E*} . Rel  = (E . Rel) union ({E*} . Rel)
+[brim-1] {E, E*} . Rel  = union(E . Rel,  {E*} . Rel)
 [brim-2] {} . Rel = {}
 
 
@@ -111,44 +111,44 @@ equations
 [default-lim-2]
          {Tuple*} . E' = {}
  
-[slim-1] Rel . {E, E*} = (Rel . E) union ({E*} . Rel)
+[slim-1] Rel . {E, E*} = union(Rel . E, {E*} . Rel)
 [slim-2] Rel . {} = {}
 
 [size-1] Rel = {Tuple*}
          ====================================
-         #Rel = #{Tuple*}
+         size(Rel) = size({Tuple*})
 
-[inv-1]  inv {<E,E'>, Tuple*} = {<E',E>} union inv {Tuple*}
-[inv-2]  inv {} = {}
+[inv-1]  inv({<E,E'>, Tuple*}) = union({<E',E>}, inv({Tuple*}))
+[inv-2]  inv({}) = {}
 
-[cmp-1]  Bag = (car Rel)
+[cmp-1]  Bag = carrier(Rel)
          =====================================
-         compl Rel = (Bag x Bag) \ Rel 
+         compl(Rel) = diff(product(Bag, Bag), Rel)
 
 
-[id-1]   id {E, E*} = {<E, E>} union id {E*}
-[id-2]   id {} ={}
+[id-1]   id({E, E*}) = union({<E, E>}, id({E*}))
+[id-2]   id({}) ={}
 
-[cl-1]   Rel2 o Rel = {}
+[cl-1]   compose(Rel2, Rel) = {}
          =========================================
-    	 closure(Rel, Rel1, Rel2) = Rel1 union Rel2
+    	 closure(Rel, Rel1, Rel2) = union(Rel1, Rel2)
 
-[cl-2]   Rel2 o Rel = Rel', Rel' != {}
+[cl-2]   compose(Rel2, Rel) = Rel', Rel' != {}
          =========================================
-	 closure(Rel, Rel1, Rel2) = closure(Rel, Rel1 union Rel2, Rel')
+	 closure(Rel, Rel1, Rel2) = closure(Rel, union(Rel1, Rel2), Rel')
 
 [tcl-1]  Rel+ = closure(Rel, {}, Rel)
 
-[rtcl-1] Rel* = closure(Rel, id car Rel, Rel)
+[rtcl-1] Rel* = closure(Rel, id(carrier(Rel)), Rel)
 
-[icl-1]  Bag .+ Rel = closure(Rel, {}, Rel domR Bag)
+%%[icl-1]  Bag .+ Rel = closure(Rel, {}, domR(Rel, Bag))
 
 
-[dm1-1]  Rel4 o Rel3 = Rel', Rel' != {}, Rel'' = Rel' \ Rel2
+[dm1-1]  compose(Rel4, Rel3) = Rel', Rel' != {}, Rel'' = diff(Rel', Rel2)
         ==========================================
-        dominators1(Rel1, Rel2, Rel3, Rel4) = dominators1(Rel1 union Rel'', Rel2, Rel3, Rel'') 
+        dominators1(Rel1, Rel2, Rel3, Rel4) = dominators1(union(Rel1, Rel''), Rel2, Rel3, Rel'') 
 
-[dm1-2]  Rel4 o Rel3 = Rel', Rel' = {}
+[dm1-2]  compose(Rel4, Rel3) = Rel', Rel' = {}
         ==========================================
         dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
 

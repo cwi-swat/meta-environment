@@ -138,7 +138,7 @@
 
 %% ---- Eval Elements
 
-[EE1]  evalx(E, Store) = E
+%%[EE1]  evalx(E, Store) = E
 
 [EE2]  evalx('E, Store) = E
 
@@ -182,49 +182,49 @@
        ====================================================
        evalx(Exp1 union Exp2, Store) = apply(Val1 union Val2)
 
-[UN2]  apply(Bag1 union Bag2)   = Bag1 union Bag2
+[UN2]  apply(Bag1 union Bag2)   = union(Bag1, Bag2)
 [UN3]  apply(*empty* union Bag) = Bag 
 [UN4]  apply(Bag union *empty*) = Bag
 [UN5]  apply(E union *empty*)   = E
 [UN6]  apply(*empty* union E)   = E
-[UN7]  apply(E1 union E2)       = {E1} union {E2}
-[UN8]  apply(E union Bag)       = {E} union Bag
-[UN9]  apply(Bag union E)       = Bag union {E}
+[UN7]  apply(E1 union E2)       = union({E1}, {E2})
+[UN8]  apply(E union Bag)       = union({E}, Bag)
+[UN9]  apply(Bag union E)       = union(Bag, {E})
 
-[UN10] apply(Rel1 union Rel2)     = Rel1 union Rel2
+[UN10] apply(Rel1 union Rel2)     = union(Rel1, Rel2)
 [UN11] apply(*empty* union Rel)   = Rel
 [UN12] apply(Rel union *empty*)   = Rel
 [UN13] apply(Tuple union *empty*) = Tuple
 [UN14] apply(*empty* union Tuple) = Tuple
-[UN15] apply(Tuple1 union Tuple2) = {Tuple1} union {Tuple2}
-[UN16] apply(Tuple union Rel)     = {Tuple} union Rel
-[UN17] apply(Rel union Tuple)     = Rel union {Tuple}
+[UN15] apply(Tuple1 union Tuple2) = union({Tuple1}, {Tuple2})
+[UN16] apply(Tuple union Rel)     = union({Tuple}, Rel)
+[UN17] apply(Rel union Tuple)     = union(Rel, {Tuple})
 
 [IN1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 inter Exp2, Store) = apply(Val1 inter Val2)
 
-[IN2]  apply(Bag1 inter Bag2) = Bag1 inter Bag2
-[IN3]  apply(Rel1 inter Rel2) = Rel1 inter Rel2
+[IN2]  apply(Bag1 inter Bag2) = inter(Bag1, Bag2)
+[IN3]  apply(Rel1 inter Rel2) = inter(Rel1,  Rel2)
 
 [DF1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 \  Exp2, Store) = apply(Val1 \ Val2)
 
-[DF2]  apply(Bag1 \ Bag2) = Bag1 \ Bag2
-[DF3]  apply(Rel1 \ Rel2) = Rel1 \ Rel2
+[DF2]  apply(Bag1 \ Bag2) = diff(Bag1, Bag2)
+[DF3]  apply(Rel1 \ Rel2) = diff(Rel1, Rel2)
 
 [CM1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 o  Exp2, Store) = apply(Val1 o Val2)
 
-[CM2]  apply(Rel1 o Rel2) = Rel1 o Rel2
+[CM2]  apply(Rel1 o Rel2) = compose(Rel1, Rel2)
 
 [CP1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 x  Exp2, Store) = apply(Val1 x Val2)
 
-[CP2]  apply(Bag1 x Bag2) = Bag1 x Bag2
+[CP2]  apply(Bag1 x Bag2) = product(Bag1, Bag2)
 
 [PJ1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
@@ -234,13 +234,6 @@
 [PJ3]  apply(Rel . Bag) = Rel . Bag
 [PJ4]  apply(E . Rel)   = E . Rel
 [PJ5]  apply(Bag . Rel) = Bag . Rel
-
-%%[UN1]  Bag1 = evalb(Exp1, Store),  
-%%       Bag2 = evalb(Exp2, Store), 
-%%       Rel = evalr(Exp3, Store)
-%%       ===================================================
-%%       evalx(Exp1 until(Exp2, Exp3), Store) = Bag1 until(Bag2, Rel)
-       
 
 [TC1] Rel = evalr(Exp, Store)
       ===================================================
@@ -343,35 +336,35 @@
 
 [Fid]   Bag  = evalb(Exp, Store)
         ====================================================
-        evalx(id(Exp), Store) = id Bag
+        evalx(id(Exp), Store) = id(Bag)
 
 [Fdom]  Rel = evalr(Exp, Store)
         ====================================================
-        evalx(dom(Exp), Store) = dom Rel
+        evalx(domain(Exp), Store) = domain(Rel)
 
 [Fran]  Rel = evalr(Exp, Store)
         ====================================================
-        evalx(ran(Exp), Store) = ran Rel
+        evalx(range(Exp), Store) = range(Rel)
 
 [Fcar]  Rel = evalr(Exp, Store)
         ====================================================
-        evalx(car(Exp), Store) = car Rel
+        evalx(carrier(Exp), Store) = carrier(Rel)
    
 [Ftop]  Rel = evalr(Exp, Store)
         ====================================================
-        evalx(top(Exp), Store) = top Rel
+        evalx(top(Exp), Store) = top(Rel)
 
 [Fbot]  Rel = evalr(Exp, Store)
         ====================================================
-        evalx(bot(Exp), Store) = bot Rel
+        evalx(bottom(Exp), Store) = bottom(Rel)
 
 [Finv]  Rel = evalr(Exp, Store)
         ===================================================
-        evalx(inv(Exp), Store) = inv Rel
+        evalx(inv(Exp), Store) = inv(Rel)
 
 [Fcmp]  Rel = evalr(Exp, Store)
         ===================================================
-        evalx(compl(Exp), Store) = compl Rel
+        evalx(compl(Exp), Store) = compl(Rel)
 
 %% ---- FUN ( EXP , EXP )  -> EXP
 
@@ -389,31 +382,31 @@
 
 [RdomR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ===================================================
-        evalx(domR(Exp1, Exp2), Store) = Rel domR Bag
+        evalx(domR(Exp1, Exp2), Store) = domR(Rel, Bag)
 
 [FranR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ===================================================
-        evalx(ranR(Exp1, Exp2), Store) = Rel ranR Bag
+        evalx(ranR(Exp1, Exp2), Store) = ranR(Rel, Bag)
 
 [FcarR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(carR(Exp1, Exp2), Store) = Rel carR Bag
+        evalx(carR(Exp1, Exp2), Store) = carR(Rel, Bag)
 
 [FdomX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(domX(Exp1, Exp2), Store) = Rel domX Bag
+        evalx(domX(Exp1, Exp2), Store) = domX(Rel, Bag)
 
 [FranX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(ranX(Exp1, Exp2), Store) = Rel ranX Bag
+        evalx(ranX(Exp1, Exp2), Store) = ranX(Rel, Bag)
 
 [FcarX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(carX(Exp1, Exp2), Store) = Rel carX Bag
+        evalx(carX(Exp1, Exp2), Store) = carX(Rel, Bag)
 
 [Felm1]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(elem(Exp1, Exp2), Store) = E in Bag
+        evalx(elem(Exp1, Exp2), Store) = elem(E, Bag)
 
 %% Note elem(Tuple, Rel)
 
