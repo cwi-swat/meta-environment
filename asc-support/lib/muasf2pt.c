@@ -18,6 +18,21 @@
 
 /*}}}  */
 
+/*{{{  globals */
+
+#define TREE_TABLE_INITIAL_SIZE        5000
+#define TREE_TABLE_MAX_LOAD_PERCENTAGE 75
+static ATermTable treeTable = NULL;
+
+/*}}}  */
+
+/*{{{  local functions */
+
+static PT_Tree termToTree(ATerm tree);
+static PT_Tree listToTree(PT_Production prod, ATermList elems);
+static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl);
+
+/*}}}  */
 /*{{{  static PT_Tree listToTree(PT_Production prod, ATermList elems) */
 
 static PT_Tree listToTree(PT_Production prod, ATermList elems)
@@ -103,33 +118,63 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
 /*}}}  */
 /*{{{  PT_Tree termToTree(ATerm tree) */
 
-PT_Tree termToTree(ATerm tree)
+static PT_Tree termToTree(ATerm tree)
 {
-  PT_Tree result = (PT_Tree) tree;
+  PT_Tree result = NULL;
   ATerm prod = NULL;
   PT_Production ptProd = NULL;
   PT_Symbols formalargs = NULL;
   PT_Args actualargs = NULL;
-  
-  if(ATgetType(tree) == AT_APPL) {
-    prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
-    if(!prod) {
-      ATabort("unknown production symbol: %s\n",
-              ATgetName(ATgetSymbol((ATermAppl) tree)));
+
+  result = (PT_Tree) ATtableGet(treeTable,tree); 
+
+  if (result == NULL) {
+    if(ATgetType(tree) == AT_APPL) {
+      prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
+      if(!prod) {
+	ATabort("unknown production symbol: %s\n",
+		ATgetName(ATgetSymbol((ATermAppl) tree)));
+      }
+
+      ptProd = PT_makeProductionFromTerm(prod);
+     
+      if (PT_isProductionDefault(ptProd)) { 
+	formalargs = PT_getProductionLhs(ptProd);
+	actualargs = termsToArgs(formalargs, (ATermAppl)tree);
+        result     = PT_makeTreeAppl(ptProd,actualargs);
+      }
+      else { /* a list */
+	result = listToTree(ptProd,
+			    (ATermList) ATgetArgument((ATermAppl)tree,0));
+      }
+    } 
+    else {
+      assert(ATgetType(tree) == AT_INT);
+      result = (PT_Tree) tree;
     }
 
-    ptProd = PT_makeProductionFromTerm(prod);
-   
-    if (PT_isProductionDefault(ptProd)) { 
-      formalargs = PT_getProductionLhs(ptProd);
-      actualargs = termsToArgs(formalargs, (ATermAppl)tree);
-    }
-    else { /* a list */
-      return listToTree(ptProd,(ATermList) ATgetArgument((ATermAppl)tree,0));
-    }
 
-    result = PT_makeTreeAppl(ptProd,actualargs);
+    ATtablePut(treeTable, tree, (ATerm) result);
   }
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree yieldTree(ATerm tree) */
+
+PT_Tree yieldTree(ATerm tree)
+{
+  PT_Tree result;
+
+  treeTable = ATtableCreate(TREE_TABLE_INITIAL_SIZE,
+			    TREE_TABLE_MAX_LOAD_PERCENTAGE);
+
+  result = termToTree(tree);
+
+  ATtableDestroy(treeTable);
+  treeTable = NULL;
 
   return result;
 }

@@ -5,6 +5,6 @@
 
 #include <MEPT.h>
 
-PT_Tree termToTree(ATerm tree);
+PT_Tree yieldTree(ATerm tree);
 
 #endif

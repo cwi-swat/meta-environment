@@ -606,7 +606,7 @@ PT_ParseTree toasfix(ATerm term)
   PT_Symbol symbol;
   PT_Symbols symbols;
 
-  tree = termToTree(term);  
+  tree = yieldTree(term);  
   symbol = PT_getProductionRhs(PT_getTreeProd(tree));
   symbols = PT_makeSymbolsList(symbol, PT_makeSymbolsEmpty());
 
