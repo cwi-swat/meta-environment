@@ -517,8 +517,7 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
     return ATmake("snd-value(syntax(<term>))", ATBpack(definition));
   }
   else {
-    return ATmake("snd-value(sdf2-definition-error(\"Incomplete specification\")
-    )");
+  return ATmake("snd-value(sdf2-definition-error(\"Incomplete specification\"))");
   }
 }
 
