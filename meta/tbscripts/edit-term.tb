@@ -38,8 +38,18 @@ in
     snd-msg(process-eqs(Mod)).
     rec-msg(eqs-processed(Name2?)).
     snd-msg(get-table-from-db(Mod)).
-    rec-msg(table(Table?)).
-    snd-note(ui-status(endstat(Id))).
+    ( rec-msg(table(Table?)).
+      snd-note(ui-status(endstat(Id)))
+    +
+      rec-msg(no-table).
+      snd-note(ui-status(endstat(Id))).
+      snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
+      snd-msg(generate-parsetable(id(Name2))).
+      rec-msg(parsetable(Table?)).
+      snd-msg(add-table-to-db(id(Name2),Table)).
+      rec-msg(done).
+      snd-note(ui-status(endstat(Id)))
+    ).
     snd-note(ui-status(stat(Id,"Parsing Term ..."))).
     snd-msg(open-language(Mod,Table)).
     snd-msg(Id,parse-string(Mod,"",Text)).
@@ -48,7 +58,7 @@ in
        if equal(I,0) then
         snd-msg(Id,a2toa1(T1)).
         rec-msg(Id,converted(T2?)).
-        snd-msg(rewrite(Mod,T))
+        snd-msg(rewrite(Mod,T2))
        else
         printf("Parse of %t returned %d ambiguities",Mod,I).
         printf("Term is: %t\n",T1)
