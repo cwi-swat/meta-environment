@@ -6,16 +6,16 @@ imports basic/Feedback
 
 exports 
 
-
+sorts ParseResult
 context-free syntax
 
   "parse-tree" "(" left-layout:Bytes  "," 
                    tree:Sort          "," 
-                   right-layout:Bytes  ","
+                   right-layout:Bytes ","
                    amb-cnt:NatCon
-               ")"                   -> ParseResult[[Sort]] {cons("success")}
+               ")"                   -> ParseResult {cons("success")}
 
-  "parse-error" "(" Feedback ")"     -> ParseResult[[Sort]] {cons("failure")}
+  "parse-error" "(" Feedback ")"     -> ParseResult {cons("failure")}
  
 sorts BytesResult
 context-free syntax
