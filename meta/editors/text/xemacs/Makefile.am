@@ -1,6 +1,6 @@
 # $Id$
 
-CFLAGS += -Werror
+AM_CFLAGS = -Werror
 
 SCRIPT = xemacs.el
 

@@ -8,7 +8,7 @@ INCLUDES	= -I$(ASC_SUPPORT)/include \
 		-I$(ERROR_SUPPORT)/include \
 		-I$(ATERM)/include
 
-CFLAGS += -DASF_MAIN
+AM_CFLAGS = -DASF_MAIN
 bin_PROGRAMS = ActionScriptChecker
 bin_SCRIPTS = actionchecker
 

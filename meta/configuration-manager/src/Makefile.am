@@ -8,7 +8,7 @@ pkgdata_DATA  = configuration-manager.idef standard.meta.buttons
 
 EXTRA_DIST = configuration-manager.idef standard.meta.buttons
 
-CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 noinst_HEADERS = configuration-manager.tif.h configmanager.h
 include_HEADERS = MetaConfig.h MetaConfig_dict.h 
