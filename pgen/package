@@ -27,6 +27,6 @@ sglr 3.12.1
 
 aterm 2.3
 
-toolbuslib 0.6
+toolbuslib 0.8
 
-tide-support 1.0
+tide-support 1.1
