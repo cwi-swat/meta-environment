@@ -68,7 +68,7 @@ ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     entry = GetValue(new_modules_db,mod);
-    amod = ATelementAt((ATermList)entry, EQS_LOC); 
+    amod = ATelementAt((ATermList)entry, EQS_TREE_LOC); 
     eqs = (ATermList)AFTgetEqs(amod);
     eqs = asfix_filter_layout(eqs);
     while(!ATisEmpty(eqs)) {

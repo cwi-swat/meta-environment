@@ -1,0 +1,38 @@
+#include "../../in-output/in-output.idef"
+#include "../module-db.idef"
+#include "../../toolbus/prettyprinter.tb"
+
+process Test is
+let
+  SdfTree  : term,
+  EqsText  : str,
+  EqsTree  : term,
+  Path     : str,
+  Time     : term
+in
+  snd-msg(open-file("Pico-Booleans")) .
+  (
+    rec-msg(opened-file("Pico-Booleans", tree(SdfTree?), Path?, Time?)) .
+    snd-msg(add-sdf2-module-to-db(Path, SdfTree, Time, "unchanged")) .
+    rec-msg(need-modules([]))
+  +
+    shutdown("module-db-test-4a FAILED! (timeout)\n") delay(sec(50000))
+  ).
+  snd-msg(open-eqs-file("Pico-Booleans")) .
+  (
+    rec-msg(opened-file("Pico-Booleans", tree(EqsTree?), Path?, Time?)) .
+    snd-msg(unparse(EqsTree)) .
+    rec-msg(unparsed-text(EqsText?)) .
+    snd-msg(add-eqs-to-db("Pico-Booleans", Path, tree(EqsTree), text(EqsText), Time)) .  
+    rec-msg(eqs-added) .
+    snd-msg(update-eqs-tree-in-db("Pico-Booleans", tree(EqsTree))) .
+    rec-msg(eqs-updated) .
+    snd-msg(eqs-available-for-modules("Pico-Booleans")) .
+    rec-msg(eqs-for-modules([]))
+  +
+    shutdown("module-db-test-4b FAILED! (timeout)\n") delay(sec(50000))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, ModuleDB, Io, Prettyprinter)
