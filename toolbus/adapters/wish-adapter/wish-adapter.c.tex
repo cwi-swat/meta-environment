@@ -137,7 +137,6 @@ We define some constants, which make it easy to change some defaults.
    "-script Name          use Name as Tcl script for wish\\n" \\
    "-script-args A1 ...   use A1 ... as arguments for the wish execution\\n"
 
-#define DEBUG_ON
 #ifdef DEBUG_ON
 #define CHAR2WISH(c)                    fputc(c, to_wish); \\
                                         fputc(c, stderr)
