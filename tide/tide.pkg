@@ -14,5 +14,5 @@ configuration interface
 requires
   aterm		2.0.2
   toolbuslib	0.5
-  toolbus	0.3
+  toolbus	1.0
 
