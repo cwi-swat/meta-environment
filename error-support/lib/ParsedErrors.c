@@ -268,17 +268,6 @@ int PME_getSubjectSubjectListLength (PME_SubjectSubjectList arg) {
   }
   return (ATgetLength((ATermList) arg) / 4) + 1;
 }
-PME_SubjectSubjectList PME_appendSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject arg1) {
-  return PME_concatSubjectSubjectList(arg0, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectListSingle(arg1));
-}
-PME_SubjectSubjectList PME_concatSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_SubjectSubjectList arg1) {
-  if (ATisEmpty((ATermList) arg0)) {
-    return arg1;
-  }
-  arg1 = PME_makeSubjectSubjectListMany((PME_Subject)ATgetFirst((ATermList) arg0), wsAfterFirst, sep, wsAfterSep,  arg1);
-  arg1 = (PME_SubjectSubjectList) ATgetNext((ATermList) arg1);
-  return (PME_SubjectSubjectList) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
 PME_SubjectSubjectList reverseSubjectSubjectList(PME_SubjectSubjectList arg) {
   ATermList list = (ATermList) arg;
   ATerm head;
@@ -320,6 +309,41 @@ PME_SubjectSubjectList reverseSubjectSubjectList(PME_SubjectSubjectList arg) {
   }
 
   return (PME_SubjectSubjectList) result;
+}
+PME_SubjectSubjectList PME_appendSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject arg1) {
+  return PME_concatSubjectSubjectList(arg0, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectListSingle(arg1));
+}
+PME_SubjectSubjectList PME_concatSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_SubjectSubjectList arg1) {
+  if (ATisEmpty((ATermList) arg0)) {
+    return arg1;
+  }
+  arg1 = PME_makeSubjectSubjectListMany((PME_Subject)ATgetFirst((ATermList) arg0), wsAfterFirst, sep, wsAfterSep,  arg1);
+  arg1 = (PME_SubjectSubjectList) ATgetNext((ATermList) arg1);
+  return (PME_SubjectSubjectList) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PME_SubjectSubjectList PME_sliceSubjectSubjectList(PME_SubjectSubjectList arg, int start, int end) {
+  return (PME_SubjectSubjectList) ATgetSlice((ATermList) arg, start * 4, end * 4);
+}
+PME_Subject PME_getSubjectSubjectListSubjectAt(PME_SubjectSubjectList arg, int index) {
+ return (PME_Subject) ATelementAt((ATermList) arg, index * 4) ;
+}
+PME_SubjectSubjectList PME_replaceSubjectSubjectListSubjectAt(PME_SubjectSubjectList arg, PME_Subject elem, int index) {
+ return (PME_SubjectSubjectList) ATreplace((ATermList) arg, (ATerm) elem, index * 4);
+}
+PME_SubjectSubjectList PME_makeSubjectSubjectList2(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2) {
+  return PME_makeSubjectSubjectListMany(elem1, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectListSingle(elem2));
+}
+PME_SubjectSubjectList PME_makeSubjectSubjectList3(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3) {
+  return PME_makeSubjectSubjectListMany(elem1, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectList2(wsAfterFirst, sep, wsAfterSep, elem2, elem3));
+}
+PME_SubjectSubjectList PME_makeSubjectSubjectList4(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4) {
+  return PME_makeSubjectSubjectListMany(elem1, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectList3(wsAfterFirst, sep, wsAfterSep, elem2, elem3, elem4));
+}
+PME_SubjectSubjectList PME_makeSubjectSubjectList5(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4, PME_Subject elem5) {
+  return PME_makeSubjectSubjectListMany(elem1, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectList4(wsAfterFirst, sep, wsAfterSep, elem2, elem3, elem4, elem5));
+}
+PME_SubjectSubjectList PME_makeSubjectSubjectList6(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4, PME_Subject elem5, PME_Subject elem6) {
+  return PME_makeSubjectSubjectListMany(elem1, wsAfterFirst, sep, wsAfterSep, PME_makeSubjectSubjectList5(wsAfterFirst, sep, wsAfterSep, elem2, elem3, elem4, elem5, elem6));
 }
 
 /*}}}  */

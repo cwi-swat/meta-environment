@@ -244,28 +244,25 @@ ME_SubjectSubjectList ME_sliceSubjectSubjectList(ME_SubjectSubjectList arg, int 
   return (ME_SubjectSubjectList) ATgetSlice((ATermList) arg, start, end);
 }
 ME_Subject ME_getSubjectSubjectListSubjectAt(ME_SubjectSubjectList arg, int index) {
- return (ME_Subject) ATelementAt((ATermList) arg, index);
+ return (ME_Subject) ATelementAt((ATermList) arg, index) ;
 }
 ME_SubjectSubjectList ME_replaceSubjectSubjectListSubjectAt(ME_SubjectSubjectList arg, ME_Subject elem, int index) {
  return (ME_SubjectSubjectList) ATreplace((ATermList) arg, (ATerm) elem, index);
 }
-ME_SubjectSubjectList ME_makeSubjectSubjectList1(ME_Subject elem1) {
-  return (ME_SubjectSubjectList) ATmakeList1((ATerm) elem1);
-}
 ME_SubjectSubjectList ME_makeSubjectSubjectList2(ME_Subject elem1, ME_Subject elem2) {
-  return (ME_SubjectSubjectList) ATmakeList2((ATerm) elem1, (ATerm) elem2);
+  return (ME_SubjectSubjectList) ATmakeList2((ATerm) elem2, (ATerm) elem2);
 }
 ME_SubjectSubjectList ME_makeSubjectSubjectList3(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3) {
-  return (ME_SubjectSubjectList) ATmakeList3((ATerm) elem1, (ATerm) elem2, (ATerm) elem3);
+  return (ME_SubjectSubjectList) ATmakeList3((ATerm) elem3, (ATerm) elem3, (ATerm) elem3);
 }
 ME_SubjectSubjectList ME_makeSubjectSubjectList4(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3, ME_Subject elem4) {
-  return (ME_SubjectSubjectList) ATmakeList4((ATerm) elem1, (ATerm) elem2, (ATerm) elem3, (ATerm) elem4);
+  return (ME_SubjectSubjectList) ATmakeList4((ATerm) elem4, (ATerm) elem4, (ATerm) elem4, (ATerm) elem4);
 }
 ME_SubjectSubjectList ME_makeSubjectSubjectList5(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3, ME_Subject elem4, ME_Subject elem5) {
-  return (ME_SubjectSubjectList) ATmakeList5((ATerm) elem1, (ATerm) elem2, (ATerm) elem3, (ATerm) elem4, (ATerm) elem5);
+  return (ME_SubjectSubjectList) ATmakeList5((ATerm) elem5, (ATerm) elem5, (ATerm) elem5, (ATerm) elem5, (ATerm) elem5);
 }
 ME_SubjectSubjectList ME_makeSubjectSubjectList6(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3, ME_Subject elem4, ME_Subject elem5, ME_Subject elem6) {
-  return (ME_SubjectSubjectList) ATmakeList6((ATerm) elem1, (ATerm) elem2, (ATerm) elem3, (ATerm) elem4, (ATerm) elem5, (ATerm) elem6);
+  return (ME_SubjectSubjectList) ATmakeList6((ATerm) elem6, (ATerm) elem6, (ATerm) elem6, (ATerm) elem6, (ATerm) elem6, (ATerm) elem6);
 }
 
 /*}}}  */

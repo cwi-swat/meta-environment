@@ -20,9 +20,6 @@ ATerm  PME_CHARLISTToTerm(PME_CHARLIST arg);
 PME_CHARLIST PME_CHARLISTFromTerm(ATerm trm);
 PME_CHARLIST PME_makeCHARLISTString(char *str);
 
-typedef ATerm PME_String;
-typedef ATerm PME_NatCon;
-
 /*}}}  */
 /*{{{  typedefs */
 
@@ -80,9 +77,17 @@ ATerm PME_OptLayoutToTerm(PME_OptLayout arg);
 /*{{{  list functions */
 
 int PME_getSubjectSubjectListLength (PME_SubjectSubjectList arg);
+PME_SubjectSubjectList reverseSubjectSubjectList(PME_SubjectSubjectList arg);
 PME_SubjectSubjectList PME_appendSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject arg1);
 PME_SubjectSubjectList PME_concatSubjectSubjectList(PME_SubjectSubjectList arg0, PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_SubjectSubjectList arg1);
-PME_SubjectSubjectList reverseSubjectSubjectList(PME_SubjectSubjectList arg);
+PME_SubjectSubjectList PME_sliceSubjectSubjectList(PME_SubjectSubjectList arg, int start, int end);
+PME_Subject PME_getSubjectSubjectListSubjectAt(PME_SubjectSubjectList arg, int index);
+PME_SubjectSubjectList PME_replaceSubjectSubjectListSubjectAt(PME_SubjectSubjectList arg, PME_Subject elem, int index);
+PME_SubjectSubjectList PME_makeSubjectSubjectList2(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2);
+PME_SubjectSubjectList PME_makeSubjectSubjectList3(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3);
+PME_SubjectSubjectList PME_makeSubjectSubjectList4(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4);
+PME_SubjectSubjectList PME_makeSubjectSubjectList5(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4, PME_Subject elem5);
+PME_SubjectSubjectList PME_makeSubjectSubjectList6(PME_OptLayout wsAfterFirst, char* sep, PME_OptLayout wsAfterSep, PME_Subject elem1, PME_Subject elem2, PME_Subject elem3, PME_Subject elem4, PME_Subject elem5, PME_Subject elem6);
 
 /*}}}  */
 /*{{{  constructors */
@@ -618,3 +623,7 @@ PME_OptLayout PME_visitOptLayout(PME_OptLayout arg, PME_CHARLIST (*acceptChars)(
 /*}}}  */
 
 #endif /* _PARSEDERRORS_H */
+/*{{{  definition of bottom types */
+
+typedef ATerm PME_String;typedef ATerm PME_NatCon;typedef ATerm PME_CHARLIST;
+/*}}}  */

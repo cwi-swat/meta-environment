@@ -68,7 +68,6 @@ ME_SubjectSubjectList ME_concatSubjectSubjectList(ME_SubjectSubjectList arg0, ME
 ME_SubjectSubjectList ME_sliceSubjectSubjectList(ME_SubjectSubjectList arg, int start, int end);
 ME_Subject ME_getSubjectSubjectListSubjectAt(ME_SubjectSubjectList arg, int index);
 ME_SubjectSubjectList ME_replaceSubjectSubjectListSubjectAt(ME_SubjectSubjectList arg, ME_Subject elem, int index);
-ME_SubjectSubjectList ME_makeSubjectSubjectList1(ME_Subject elem1);
 ME_SubjectSubjectList ME_makeSubjectSubjectList2(ME_Subject elem1, ME_Subject elem2);
 ME_SubjectSubjectList ME_makeSubjectSubjectList3(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3);
 ME_SubjectSubjectList ME_makeSubjectSubjectList4(ME_Subject elem1, ME_Subject elem2, ME_Subject elem3, ME_Subject elem4);
@@ -316,3 +315,7 @@ ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine)(int), int (*acceptStart
 /*}}}  */
 
 #endif /* _ERRORS_H */
+/*{{{  definition of bottom types */
+
+
+/*}}}  */
