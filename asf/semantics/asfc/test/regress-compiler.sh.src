@@ -23,7 +23,6 @@ Revision='$Revision$'
 ###
 #  Some global variables, that might require occasional modification
 ###
-set -x;
 verbose=0
 
 cd `dirname $0`;
