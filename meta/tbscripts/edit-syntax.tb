@@ -56,11 +56,19 @@ in
           rec-msg(parse-ok(trm("Sdf2"))) .
           snd-msg(get-tree(EditorId)) .
           rec-msg(tree(Tree?)) .
-          snd-msg(update-module-in-db(Tree, "Sdf2")).
-          rec-msg(extra-modules(Modules?)).
-          snd-msg(open-modules(Modules)).
-          rec-msg(finished-opening-modules) .
-          snd-msg(clear-focus(EditorId))
+          snd-msg(update-module-in-db(ModuleName, Tree, "Sdf2")).
+          (
+            rec-msg(extra-modules(Modules?)).
+            snd-msg(open-modules(Modules)).
+            rec-msg(finished-opening-modules) .
+            snd-msg(clear-focus(EditorId))
+          +
+            rec-msg(error-opening(ModuleName, name-inconsistent)).
+            snd-msg(invalidate-sdf-in-db(ModuleName)).
+            snd-msg(invalidate-tree(EditorId)).
+            snd-note(ui-status(
+              errorf("Changing the name of %s is not permitted.",[ModuleName])))
+          )
         +
           rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
           snd-msg(invalidate-sdf-in-db(ModuleName)).
