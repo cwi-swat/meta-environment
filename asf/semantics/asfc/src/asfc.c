@@ -40,6 +40,7 @@
 ATbool run_verbose;
 ATbool toolbus_mode;
 ATbool output_muasf;
+ATbool input_muasf;
 ATbool use_c_compiler;
 
 int toolbus_id;
@@ -47,7 +48,7 @@ int toolbus_id;
 char myname[] = "asfc";
 char myversion[] = "2.1";
 
-static char myarguments[] = "chi:mn:o:vV";
+static char myarguments[] = "chi:lmn:o:vV";
 
 
 /*}}}  */
@@ -77,6 +78,7 @@ static void usage(void)
 	    "\t-c              toggle compilation to a binary(default: %s)   \n"
 	    "\t-h              display this message                           \n"
 	    "\t-i filename     input equations from file     (default stdin) \n"
+	    "\t-l              input muasf code              (default %s)    \n"
 	    "\t-m              output muasf code             (default %s)    \n"
 	    "\t-n name         name of the tool              (obligatory)    \n"
 	    "\t-o filename     output c code to file         (default <name>.c)\n"
@@ -84,6 +86,7 @@ static void usage(void)
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
 	    use_c_compiler ? "on" : "off",
+	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
 	    myversion);
   exit(0);
@@ -101,10 +104,9 @@ static void version(void)
 
 /*}}}  */
 
-/*{{{  static PT_ParseTree compile(char *name, ASF_CondEquationList equations) */
+/*{{{  static PT_ParseTree compile(char *name, ATerm equations, char *output) */
 
-static PT_ParseTree compile(char *name, ASF_CondEquationList equations, 
-			    char *output)
+static PT_ParseTree compile(char *name, ATerm eqs, char *output)
 {
   MA_Module muasf;
   PT_ParseTree c_code;
@@ -113,9 +115,15 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
 
   saveName = dashesToUnderscores(name);
 
-  VERBOSE("transforming ASF to MuASF");
+  if (input_muasf) {
+    PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
+    ATerm tree = PT_getParseTreeTree(parse_tree);
+    muasf = MA_ModuleFromTerm(tree);
+  } else {
+    VERBOSE("transforming ASF to MuASF");
 
-  muasf = asfToMuASF(saveName, equations);
+    muasf = asfToMuASF(saveName, ASF_CondEquationListFromTerm(eqs));
+  }
 
   if (output_muasf) {
     PT_ParseTree pt =
@@ -188,16 +196,13 @@ void rec_ack_event(int cid, ATerm t)
 ATerm compile_module(int cid, char *moduleName, ATerm equations)
 {
   char output[2000];
-  ASF_CondEquationList eqsList;
   PT_ParseTree result;
 
   toolbus_id = cid;
 
   sprintf(output, "%s.c", moduleName);
 
-  eqsList    = ASF_makeCondEquationListFromTerm(equations);
-
-  result = compile(moduleName, eqsList, output);
+  result = compile(moduleName, equations, output);
 
   return ATmake("snd-value(compilation-done)");
 }                              
@@ -217,6 +222,7 @@ int main(int argc, char *argv[])
   ATerm eqs;
 
   run_verbose = ATfalse;
+  input_muasf = ATfalse;
   output_muasf = ATfalse;
   use_c_compiler = ATtrue;
   toolbus_mode = ATfalse;
@@ -233,7 +239,7 @@ int main(int argc, char *argv[])
   ASF_initASFMEApi();
   MA_initMuASFApi();
 
-  ATsetChecking(ATtrue);
+  /*ATsetChecking(ATtrue);*/
 
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottom);  
@@ -248,6 +254,7 @@ int main(int argc, char *argv[])
       case 'c':  use_c_compiler = !use_c_compiler; break;	
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
+      case 'l':  input_muasf=ATtrue;    break;
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
@@ -277,7 +284,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    compile(name,ASF_CondEquationListFromTerm(eqs),output);
+    compile(name, eqs, output);
   }
 
   return 0;

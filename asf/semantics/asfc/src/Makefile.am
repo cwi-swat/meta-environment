@@ -9,6 +9,8 @@ data_DATA        = asfc.idef
 
 EXTRA_DIST       = asfc.idef
 
+#CFLAGS		= -DNO_SHARING
+
 asfc_SOURCES = asfc.tif.c \
                asfc.c \
                chars.c \
