@@ -30,7 +30,8 @@
 #include "preparation.h"
 #include "asfix_utils.h"
 #include "asfe.h"
-#include <AsFix.h>
+#include <MEPT-utils.h>
+
 
 ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace);
 
@@ -40,7 +41,8 @@ int main(int argc, char *argv[])
   ATerm eqs = NULL, term = NULL, result[2] = {NULL};
   ATerm bottomOfStack;
 
-  AFinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
+  PT_initMEPTApi();
 	
   /* init */
   equations_db = ATdictCreate();

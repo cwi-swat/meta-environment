@@ -1,1 +1,0 @@
-term(l("term"),w(""),l("X"),w(""),id("X"),w(""),appl(prod(id("Types"),w(""),[ql("natural")],w(""),l("->"),w(""),sort("TYPE"),w(""),no-attrs),w(""),[l("natural")]),w(""),no-abbreviations)

@@ -30,11 +30,11 @@ diff=${aterm}/bin/atdiff
 
 # HOW TO ADD A REGRESSION TEST:
 #
-# 1. add <modulename>.eqs.asfix1 to ./eqs. This file should contain a 
+# 1. add <modulename>.eqs.afme to ./eqs. This file should contain a 
 #    dump of the needed equations
-# 2. add terms to ./terms of the form <modulename>.[0-9]+.trm.asfix1.
+# 2. add terms to ./terms of the form <modulename>.[0-9]+.trm.afme.
 #    These files will be used in conjunction with the eqs file you provided
-# 3. add normal forms to ./ref of the form <modulename>.[0-9]+.ref.asfix1
+# 3. add normal forms to ./ref of the form <modulename>.[0-9]+.ref.afme
 #    that correspond with the terms in ./terms
 
 # HOW TO ADD TESTS THAT SHOULD FAIL
@@ -45,11 +45,11 @@ diff=${aterm}/bin/atdiff
 # first we do all equations that should succeed, and check if the normal
 # forms are what we expected.
 
-for e in ${srcdir}/eqs/*.eqs.asfix1; do
-  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
-    res=`basename $t .trm.asfix1`.res.asfix1
+for e in ${srcdir}/eqs/*.eqs.afme; do
+  for t in ${srcdir}/terms/`basename $e .eqs.afme`*; do
+    res=`basename $t .trm.afme`.res.afme
     rm -f $res
-    ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
+    ref=${srcdir}/ref/`basename $t .trm.afme`.ref.afme
     ${evaluator} -w on -e $e -i $t | ${removeannos} -o $res
     ${diff} $ref $res
     if [ $? -ne 0 ]; then
@@ -63,11 +63,11 @@ done
 
 # now we do all equations that should generate error messages from
 # the evaluator
-for e in ${srcdir}/fail/*.eqs.asfix1; do
-  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
-    res=`basename $t .trm.asfix1`.res.asfix1
+for e in ${srcdir}/fail/*.eqs.afme; do
+  for t in ${srcdir}/terms/`basename $e .eqs.afme`*; do
+    res=`basename $t .trm.afme`.res.afme
     rm -f $res
-    ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
+    ref=${srcdir}/ref/`basename $t .trm.afme`.ref.afme
     ${evaluator} -w on -e $e -i $t -o /dev/null 2> /dev/null
     if [ $? -eq 0 ]; then
        echo "term failed: $t"

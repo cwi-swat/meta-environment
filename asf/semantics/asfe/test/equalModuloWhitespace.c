@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include "preparation.h"
 #include "asfix_utils.h"
-#include <AsFix.h>
+#include <MEPT-utils.h>
 
 int main(int argc, char *argv[])
 {
@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
 	ATerm asfix1, asfix2, term1, term2;
 	ATerm bottomOfStack;
 
-	AFinit(argc, argv, &bottomOfStack);
+	ATinit(argc, argv, &bottomOfStack);
+        PT_initMEPTApi();
 
 	if(argc != 3) {
 		ATerror("Usage: equalModuloWhitespace asfixfile asfixfile\nSupply two asfix files that are expected to be equal modulo whitespace, but not equal otherwise.\n");

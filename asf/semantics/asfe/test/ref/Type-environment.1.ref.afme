@@ -1,0 +1,1 @@
+parsetree(appl(prod([cf(opt(layout)),cf(sort("TYPE")),cf(opt(layout))],sort("<START>"),no-attrs),[appl(prod([],cf(opt(layout)),no-attrs),[]),appl(prod([lit("natural")],cf(sort("TYPE")),attrs([id("Types")])),[lit("natural")]),appl(prod([],cf(opt(layout)),no-attrs),[])]),0)

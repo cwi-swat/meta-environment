@@ -28,8 +28,8 @@ srcdir=__SRCDIR__
 
 set -e
 
-for e in ${srcdir}/eqs/*.eqs.asfix1; do
-  for t in ${srcdir}/terms/`basename $e .eqs.asfix1`*; do
+for e in ${srcdir}/eqs/*.eqs.afme; do
+  for t in ${srcdir}/terms/`basename $e .eqs.afme`*; do
     ./whitespace $e $t
     printf "."
   done

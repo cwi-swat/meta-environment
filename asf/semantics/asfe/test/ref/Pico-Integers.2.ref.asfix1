@@ -1,1 +1,0 @@
-term(l("term"),w(""),l("X"),w(""),id("X"),w(""),appl(prod(id("Pico-Integers"),w(""),[sort("PICO-NAT")],w(""),l("->"),w(""),sort("PICO-INT"),w(""),no-attrs),w(""),[appl(prod(id("Pico-Integers"),w(""),[sort("PICO-NAT-CON")],w(""),l("->"),w(""),sort("PICO-NAT"),w(""),no-attrs),w(""),[lex("20",sort("PICO-NAT-CON"))])]),w("\n"),no-abbreviations)
