@@ -89,10 +89,12 @@ in
   +
     rec-event(TE, insert(Fid, Location?, Text?)) .
     snd-msg(insert-chars(Fid, Location, Text)) .
+    rec-msg(ack-insert-chars(Fid)).
     snd-ack-event(TE, insert(Fid, Location, Text))
   +
     rec-event(TE, delete(Fid, Location?, Count?)) .
     snd-msg(delete-chars(Fid, Location, Count)).
+    rec-msg(ack-delete-chars(Fid)).
     snd-ack-event(TE, delete(Fid, Location, Count))
   +
     rec-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid)) .
