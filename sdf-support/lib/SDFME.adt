@@ -88,8 +88,8 @@
 , attrs ( [ id ( "Kernel-Sdf-Syntax" ) ] ) )
 , [ lit ( "{" )
 , < "ws-after-{" ( Layout ) >
-, list ( cf ( iter-star-sep ( sort ( "Attribute" )
-, lit ( "," ) ) )
+, appl ( list ( cf ( iter-star-sep ( sort ( "Attribute" )
+, lit ( "," ) ) ) )
 , < list ( Attribute-list ) > )
 , < ws-after-list ( Layout ) >
 , lit ( "}" ) ] ) ]
@@ -135,7 +135,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Production" ) ) ) ]
 , cf ( sort ( "Productions" ) )
 , attrs ( [ id ( "Kernel-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Production" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Production" ) ) ) )
 , < list ( Production-list ) > ) ] ) ]
 , [ Production-list
 , empty
@@ -287,7 +287,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Module" ) ) ) ]
 , cf ( sort ( "Definition" ) )
 , attrs ( [ id ( "Modular-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Module" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Module" ) ) ) )
 , < list ( Module-list ) > ) ] ) ]
 , [ Module-list
 , empty
@@ -315,7 +315,7 @@
 , < "ws-after-module" ( Layout ) >
 , < ModuleName ( ModuleName ) >
 , < ws-after-ModuleName ( Layout ) >
-, list ( cf ( iter-star ( sort ( "ImpSection" ) ) )
+, appl ( list ( cf ( iter-star ( sort ( "ImpSection" ) ) ) )
 , < list ( ImpSection-list ) > )
 , < ws-after-list ( Layout ) >
 , < Sections ( Sections ) > ] ) ]
@@ -355,7 +355,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Section" ) ) ) ]
 , cf ( sort ( "Sections" ) )
 , attrs ( [ id ( "Modular-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Section" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Section" ) ) ) )
 , < list ( Section-list ) > ) ] ) ]
 , [ Section-list
 , empty
@@ -431,7 +431,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Import" ) ) ) ]
 , cf ( sort ( "Imports" ) )
 , attrs ( [ id ( "Modular-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Import" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Import" ) ) ) )
 , < list ( Import-list ) > ) ] ) ]
 , [ Import-list
 , empty
@@ -500,7 +500,7 @@
 , < "ws-after-(" ( Layout ) >
 , < head ( Symbol ) >
 , < ws-after-head ( Layout ) >
-, list ( cf ( iter ( sort ( "Symbol" ) ) )
+, appl ( list ( cf ( iter ( sort ( "Symbol" ) ) ) )
 , < tail ( Symbol-tail ) > )
 , < ws-after-tail ( Layout ) >
 , lit ( ")" ) ] ) ]
@@ -794,8 +794,8 @@
 , lit ( ">" ) ) ) ]
 , cf ( sort ( "Priority" ) )
 , attrs ( [ id ( "Priority-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-sep ( sort ( "Group" )
-, lit ( ">" ) ) )
+, [ appl ( list ( cf ( iter-sep ( sort ( "Group" )
+, lit ( ">" ) ) ) )
 , < list ( Group-list ) > ) ] ) ]
 , [ Group-list
 , single
@@ -827,8 +827,8 @@
 , lit ( "," ) ) ) ]
 , cf ( sort ( "Priorities" ) )
 , attrs ( [ id ( "Priority-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star-sep ( sort ( "Priority" )
-, lit ( "," ) ) )
+, [ appl ( list ( cf ( iter-star-sep ( sort ( "Priority" )
+, lit ( "," ) ) ) )
 , < list ( Priority-list ) > ) ] ) ]
 , [ Priority-list
 , empty
@@ -922,8 +922,8 @@
 , < ws-after-function-symbol ( Layout ) >
 , lit ( "(" )
 , < "ws-after-(" ( Layout ) >
-, list ( cf ( iter-star-sep ( sort ( "Symbol" )
-, lit ( "," ) ) )
+, appl ( list ( cf ( iter-star-sep ( sort ( "Symbol" )
+, lit ( "," ) ) ) )
 , < arguments ( Symbol-arguments ) > )
 , < ws-after-arguments ( Layout ) >
 , lit ( ")" )
@@ -1064,8 +1064,8 @@
 , attrs ( [ id ( "Restrictions-Sdf-Syntax" ) ] ) )
 , [ lit ( "[[" )
 , < "ws-after-[[" ( Layout ) >
-, list ( cf ( iter-star-sep ( sort ( "Lookahead" )
-, lit ( "," ) ) )
+, appl ( list ( cf ( iter-star-sep ( sort ( "Lookahead" )
+, lit ( "," ) ) ) )
 , < list ( Lookahead-list ) > )
 , < ws-after-list ( Layout ) >
 , lit ( "]]" ) ] ) ]
@@ -1101,7 +1101,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Restriction" ) ) ) ]
 , cf ( sort ( "Restrictions" ) )
 , attrs ( [ id ( "Restrictions-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Restriction" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Restriction" ) ) ) )
 , < list ( Restriction-list ) > ) ] ) ]
 , [ Restriction-list
 , empty
@@ -1171,7 +1171,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Alias" ) ) ) ]
 , cf ( sort ( "Aliases" ) )
 , attrs ( [ id ( "Alias-Sdf-Syntax" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Alias" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Alias" ) ) ) )
 , < list ( Alias-list ) > ) ] ) ]
 , [ Alias-list
 , empty
@@ -1204,7 +1204,7 @@
 , appl ( prod ( [ cf ( iter-star ( sort ( "Symbol" ) ) ) ]
 , cf ( sort ( "Symbols" ) )
 , attrs ( [ id ( "Symbols" ) ] ) )
-, [ list ( cf ( iter-star ( sort ( "Symbol" ) ) )
+, [ appl ( list ( cf ( iter-star ( sort ( "Symbol" ) ) ) )
 , < list ( Symbol-list ) > ) ] ) ]
 , [ Symbol-list
 , empty
@@ -1260,7 +1260,7 @@
 , attrs ( [ id ( "Renaming-Sdf-Syntax" ) ] ) )
 , [ lit ( "[" )
 , < "ws-after-[" ( Layout ) >
-, list ( cf ( iter-star ( sort ( "Renaming" ) ) )
+, appl ( list ( cf ( iter-star ( sort ( "Renaming" ) ) ) )
 , < list ( Renaming-list ) > )
 , < ws-after-list ( Layout ) >
 , lit ( "]" ) ] ) ]
