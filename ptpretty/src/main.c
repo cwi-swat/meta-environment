@@ -49,14 +49,15 @@ static void version(void)
 
 ATerm format(int cid, ATerm syntax, ATerm tree)
 {
-  ATerm result = PT_ParseTreeToTerm(pretty(SDF_SDFFromTerm(syntax),
-					   PT_ParseTreeFromTerm(tree)));
+  SDF_Start start = SDF_StartFromTerm(ATBunpack(syntax));
+  ATerm result = PT_ParseTreeToTerm(pretty(SDF_getStartTopSDF(start),
+		   PT_ParseTreeFromTerm(ATBunpack(tree))));
 
   if (result != NULL) {
-    return ATmake("snd-result(formatted(<term>))", result);
+    return ATmake("snd-value(formatted(<term>))", result);
   }
   else {
-    return ATmake("snd-result(error(\"Unknown error during formatting\"))");
+    return ATmake("snd-value(error(\"Unknown error during formatting\"))");
   }
 }
 
