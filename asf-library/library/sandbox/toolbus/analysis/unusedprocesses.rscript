@@ -2,5 +2,5 @@ rel[node,str] PROCESSNAMES
 rel[node,str] PROCESSCREATES
 rel[node,str] PROCESSINVOCATIONS
 rel[node,str] USED_PROCESSES = PROCESSCREATES union PROCESSINVOCATIONS
-rel[node,str] UNUSED_PROCESSES 
-  = {<N,V> | <N,V> : PROCESSNAMES, V notin range(USED_PROCESSES)}
+rel[str,<node,str>] UNUSED_PROCESSES 
+  = {<"Unused process ",<N,V>> | <N,V> : PROCESSNAMES, V notin range(USED_PROCESSES)}

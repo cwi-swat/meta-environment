@@ -4,8 +4,7 @@ imports ListOperations
 
 exports
   context-free syntax
-    display-query(String, RSCRIPT, String, RSTORE) -> List
-    display-query(String, RVALUE) -> List
+    display-query(RSCRIPT, String, RSTORE) -> List
 
     str2rvar(String) -> RVAR
 
@@ -16,4 +15,3 @@ hiddens
     "$Rvalue"[0-9]*  -> RVALUE
     "$Script"[0-9]*  -> RSCRIPT
     "$String"[0-9]*  -> String
-    "$ActionName"[0-9]*  -> String

@@ -22,10 +22,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unused Variables"],
-         [push-string("\"Unused variable \""),
-          parse("basic/Strings", "String"),
-
-          push-filename("complexunused.rscript"),
+         [push-filename("complexunused.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNUSED_VARS\""),
@@ -35,7 +32,7 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 4),
+          apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
@@ -43,10 +40,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unused Processes"],
-         [push-string("\"Unused process \""),
-          parse("basic/Strings", "String"),
-
-          push-filename("unusedprocesses.rscript"),
+         [push-filename("unusedprocesses.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNUSED_PROCESSES\""),
@@ -56,7 +50,7 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 4),
+          apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
@@ -64,10 +58,7 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Unmatched Messages"],
-         [push-string("\"Unmatched message \""),
-          parse("basic/Strings", "String"),
-
-          push-filename("mismatchmsg.rscript"),
+         [push-filename("mismatchmsg.rscript"),
           parse("Rscript", "RSCRIPT"),
 
           push-string("\"UNMATCHED_MESSAGES\""),
@@ -77,28 +68,25 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 4),
+          apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
         ]),
   button("Tscript",
          ["term"],
-         ["ToolBus", "Test"],
-         [push-string("\"Unmatched message \""),
-          parse("basic/Strings", "String"),
-
-          push-filename("mismatchmsg.rscript"),
+         ["ToolBus", "All"],
+         [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
-          push-string("\"UNMATCHED_MESSAGES\""),
+          push-string("\"ALL_MESSAGES\""),
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 4),
+          apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list

@@ -1,12 +1,11 @@
 equations
 
 [display-query1] 
-  display-query($ActionName, $Script, $String2, $Rstore) =
-      convertl($ActionName,
-               rval2rel(eval-rscript($Script, str2rvar($String2), $Rstore)))
-
-[display-query2] 
-  display-query($ActionName, $Rvalue) = 
-    convertl($ActionName, rval2rel($Rvalue))
+  display-query($Script, $String2, $Rstore) =
+    convertl(
+      rval2rel(
+        eval-rscript($Script, 
+                     str2rvar($String2), 
+                     $Rstore)))
 
 [sv1] str2rvar(strcon("""  $Char* """)) = rvar($Char*)

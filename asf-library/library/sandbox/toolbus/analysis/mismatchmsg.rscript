@@ -1,7 +1,9 @@
 rel[node,str] SENDMESSAGES
 rel[node,str] RECEIVEMESSAGES
 
-rel[node,str] UNMATCHED_SENDS = {<N,V> | <N,V> : SENDMESSAGES , V notin range(RECEIVEMESSAGES)} 
-rel[node,str] UNMATCHED_RECEIVES = {<N,V> | <N,V> : RECEIVEMESSAGES , V notin range(SENDMESSAGES)}
+rel[str,<node,str>] UNMATCHED_SENDS = 
+{<"Unmatched send ",<N,V>> | <N,V> : SENDMESSAGES , V notin range(RECEIVEMESSAGES)} 
+rel[str,<node,str>] UNMATCHED_RECEIVES = 
+{<"Unmatced receive ",<N,V>> | <N,V> : RECEIVEMESSAGES , V notin range(SENDMESSAGES)}
 
-rel[node,str] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
+rel[str,<node,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
