@@ -309,10 +309,10 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     PTPT_Symbol rhs = PTPT_liftSymbol(PT_getSymbolRhs(symbol));
     result = PTPT_makeSymbolAlt(e,e,lhs,e,e,rhs,e);
   }
-  else if (PT_isSymbolPair(symbol)) {
-    PTPT_Symbol lhs = PTPT_liftSymbol(PT_getSymbolLhs(symbol));
-    PTPT_Symbol rhs = PTPT_liftSymbol(PT_getSymbolRhs(symbol));
-    result = PTPT_makeSymbolPair(e,e,lhs,e,e,rhs,e);
+  else if (PT_isSymbolTuple(symbol)) {
+    PTPT_Symbol head = PTPT_liftSymbol(PT_getSymbolHead(symbol));
+    PTPT_Symbols rest = PTPT_liftSymbols(PT_getSymbolRest(symbol));
+    result = PTPT_makeSymbolTuple(e,e,head,e,e,rest,e);
   }
   else if (PT_isSymbolSort(symbol)) {
     PTPT_Literal lit = PTPT_liftLiteral(PT_getSymbolString(symbol), ATtrue);

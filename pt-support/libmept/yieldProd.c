@@ -97,10 +97,10 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
     return lengthOfSymbol(leftSymbol) + 3 + lengthOfSymbol(rightSymbol);
   }
-  if (PT_isSymbolPair(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
-    return lengthOfSymbol(leftSymbol) + 3 + lengthOfSymbol(rightSymbol);
+  if (PT_isSymbolTuple(symbol)) {
+    PT_Symbol headSymbol = PT_getSymbolHead(symbol);
+    PT_Symbols restSymbols = PT_getSymbolRest(symbol);
+    return lengthOfSymbol(headSymbol) + 3 + lengthOfSymbols(restSymbols);
   }
   if (PT_isSymbolIterPlus(symbol) 
       ||
@@ -387,15 +387,15 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
     return idx;
   }
-  if (PT_isSymbolPair(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
+  if (PT_isSymbolTuple(symbol)) {
+    PT_Symbol headSymbol = PT_getSymbolHead(symbol);
+    PT_Symbols restSymbols = PT_getSymbolRest(symbol);
 
-    idx = yieldSymbol(leftSymbol, idx, buf, bufSize);
-    buf[idx++] = ' ';
-    buf[idx++] = '#';
-    buf[idx++] = ' ';
-    idx = yieldSymbol(rightSymbol, idx, buf, bufSize);
+    buf[idx++] = '<';
+    idx = yieldSymbol(headSymbol, idx, buf, bufSize);
+    buf[idx++] = ',';
+    idx = yieldSymbolParameters(restSymbols, idx, buf, bufSize);
+    buf[idx++] = '>';
 
     return idx;
   }

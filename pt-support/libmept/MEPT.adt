@@ -52,7 +52,7 @@
 
   [Symbol, alt, alt(<lhs(Symbol)>,<rhs(Symbol)>)], 
 
-  [Symbol, pair, pair(<lhs(Symbol)>,<rhs(Symbol)>)], 
+  [Symbol, tuple, tuple(<head(Symbol)>,<rest(Symbols)>)], 
 
   [Symbol, sort, sort(<string(str)>)], 
 

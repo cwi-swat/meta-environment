@@ -16,7 +16,7 @@ CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
 
 # Developers only:
 api: AsFix.def
-	sdf2-to-c -r -i $< -P PTPT_ -o PTMEPT
+	/home/markvdb/sdf-apigen/bin/sdf2-to-c -r -i $< -P PTPT_ -o PTMEPT
 
 api-clean:
 	rm -f PTMEPT.[ch] PTMEPT_dict.* PTMEPT.adt PTMEPT_bottom.c

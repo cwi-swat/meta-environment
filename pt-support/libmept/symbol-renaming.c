@@ -72,6 +72,20 @@ PT_Symbol renameInSymbol(PT_Symbol symbol,
  
     symbol = PT_setSymbolRhs(symbol, newArg);
   }
+  if (PT_hasSymbolHead(symbol)) {
+    PT_Symbol arg = PT_getSymbolHead(symbol);
+
+    PT_Symbol newArg = renameInSymbol(arg, formalParam, actualParam);
+ 
+    symbol = PT_setSymbolHead(symbol, newArg);
+  }
+  if (PT_hasSymbolRest(symbol)) {
+    PT_Symbols args = PT_getSymbolRest(symbol);
+
+    PT_Symbols newArgs = renameInSymbols(args, formalParam, actualParam);
+ 
+    symbol = PT_setSymbolRest(symbol, newArgs);
+  }
   if (PT_hasSymbolSeparator(symbol)) {
     PT_Symbol arg = PT_getSymbolSeparator(symbol);
 

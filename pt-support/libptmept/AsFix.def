@@ -95,7 +95,7 @@ lex(symbol:Symbol)                                       -> Symbol {cons("lex")}
 opt(symbol:Symbol)                                       -> Symbol {cons("opt")}
 alt(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("alt")}
 seq(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("seq")}
-pair(lhs:Symbol,rhs:Symbol)                              -> Symbol {cons("pair")}
+tuple(head:Symbol,rest:Symbols)                          -> Symbol {cons("tuple")}
 sort(string:Literal)                                     -> Symbol {cons("sort")}
 iter(symbol:Symbol)                                      -> Symbol {cons("iter")}
 iter-star(symbol:Symbol)                                 -> Symbol {cons("iter-star")}

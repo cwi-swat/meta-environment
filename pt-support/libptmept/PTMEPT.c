@@ -947,11 +947,11 @@ PTPT_Symbol PTPT_makeSymbolSeq(PTPT_OptLayout wsAfterSeq, PTPT_OptLayout wsAfter
 }
 
 /*}}}  */
-/*{{{  PTPT_Symbol PTPT_makeSymbolPair(PTPT_OptLayout wsAfterPair, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol lhs, PTPT_OptLayout wsAfterLhs, PTPT_OptLayout wsAfterComma, PTPT_Symbol rhs, PTPT_OptLayout wsAfterRhs) */
+/*{{{  PTPT_Symbol PTPT_makeSymbolTuple(PTPT_OptLayout wsAfterTuple, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol head, PTPT_OptLayout wsAfterHead, PTPT_OptLayout wsAfterComma, PTPT_Symbols rest, PTPT_OptLayout wsAfterRest) */
 
-PTPT_Symbol PTPT_makeSymbolPair(PTPT_OptLayout wsAfterPair, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol lhs, PTPT_OptLayout wsAfterLhs, PTPT_OptLayout wsAfterComma, PTPT_Symbol rhs, PTPT_OptLayout wsAfterRhs)
+PTPT_Symbol PTPT_makeSymbolTuple(PTPT_OptLayout wsAfterTuple, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol head, PTPT_OptLayout wsAfterHead, PTPT_OptLayout wsAfterComma, PTPT_Symbols rest, PTPT_OptLayout wsAfterRest)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun59))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterRhs), (ATerm)rhs), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterPair), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun59))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun60))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterRest), (ATerm)rest), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterHead), (ATerm)head), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterTuple), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun60))));
 }
 
 /*}}}  */
@@ -959,7 +959,7 @@ PTPT_Symbol PTPT_makeSymbolPair(PTPT_OptLayout wsAfterPair, PTPT_OptLayout wsAft
 
 PTPT_Symbol PTPT_makeSymbolSort(PTPT_OptLayout wsAfterSort, PTPT_OptLayout wsAfterParenOpen, PTPT_Literal string, PTPT_OptLayout wsAfterString)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun17)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun60))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterString), (ATerm)string), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterSort), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun60))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun17)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun61))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterString), (ATerm)string), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterSort), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun61))));
 }
 
 /*}}}  */
@@ -967,7 +967,7 @@ PTPT_Symbol PTPT_makeSymbolSort(PTPT_OptLayout wsAfterSort, PTPT_OptLayout wsAft
 
 PTPT_Symbol PTPT_makeSymbolIter(PTPT_OptLayout wsAfterIter, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun61))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIter), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun61))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun62))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIter), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun62))));
 }
 
 /*}}}  */
@@ -975,7 +975,7 @@ PTPT_Symbol PTPT_makeSymbolIter(PTPT_OptLayout wsAfterIter, PTPT_OptLayout wsAft
 
 PTPT_Symbol PTPT_makeSymbolIterStar(PTPT_OptLayout wsAfterIterStar, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun62))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterStar), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun62))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun63))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterStar), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun63))));
 }
 
 /*}}}  */
@@ -983,7 +983,7 @@ PTPT_Symbol PTPT_makeSymbolIterStar(PTPT_OptLayout wsAfterIterStar, PTPT_OptLayo
 
 PTPT_Symbol PTPT_makeSymbolIterSep(PTPT_OptLayout wsAfterIterSep, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol, PTPT_OptLayout wsAfterComma, PTPT_Symbol separator, PTPT_OptLayout wsAfterSeparator)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun63))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterSep), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun63))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun64))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterSep), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun64))));
 }
 
 /*}}}  */
@@ -991,7 +991,7 @@ PTPT_Symbol PTPT_makeSymbolIterSep(PTPT_OptLayout wsAfterIterSep, PTPT_OptLayout
 
 PTPT_Symbol PTPT_makeSymbolIterStarSep(PTPT_OptLayout wsAfterIterStarSep, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol, PTPT_OptLayout wsAfterComma, PTPT_Symbol separator, PTPT_OptLayout wsAfterSeparator)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun64))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterStarSep), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun64))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun65))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterStarSep), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun65))));
 }
 
 /*}}}  */
@@ -999,7 +999,7 @@ PTPT_Symbol PTPT_makeSymbolIterStarSep(PTPT_OptLayout wsAfterIterStarSep, PTPT_O
 
 PTPT_Symbol PTPT_makeSymbolIterN(PTPT_OptLayout wsAfterIterN, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol, PTPT_OptLayout wsAfterComma, PTPT_NatCon number, PTPT_OptLayout wsAfterNumber)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun16)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun65))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterNumber), (ATerm)number), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterN), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun65))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun16)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun66))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterNumber), (ATerm)number), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterN), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun66))));
 }
 
 /*}}}  */
@@ -1007,7 +1007,7 @@ PTPT_Symbol PTPT_makeSymbolIterN(PTPT_OptLayout wsAfterIterN, PTPT_OptLayout wsA
 
 PTPT_Symbol PTPT_makeSymbolIterSepN(PTPT_OptLayout wsAfterIterSepN, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol, PTPT_OptLayout wsAfterComma1, PTPT_Symbol separator, PTPT_OptLayout wsAfterSeparator, PTPT_OptLayout wsAfterComma2, PTPT_NatCon number, PTPT_OptLayout wsAfterNumber)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun16)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun66))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterNumber), (ATerm)number), (ATerm)wsAfterComma2), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma1), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterSepN), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun66))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun16)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun67))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterNumber), (ATerm)number), (ATerm)wsAfterComma2), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSeparator), (ATerm)separator), (ATerm)wsAfterComma1), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterIterSepN), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun67))));
 }
 
 /*}}}  */
@@ -1015,7 +1015,7 @@ PTPT_Symbol PTPT_makeSymbolIterSepN(PTPT_OptLayout wsAfterIterSepN, PTPT_OptLayo
 
 PTPT_Symbol PTPT_makeSymbolPerm(PTPT_OptLayout wsAfterPerm, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbols symbols, PTPT_OptLayout wsAfterSymbols)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun68))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbols), (ATerm)symbols), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterPerm), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun68))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun68))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbols), (ATerm)symbols), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterPerm), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun68))));
 }
 
 /*}}}  */
@@ -1031,7 +1031,7 @@ PTPT_Symbol PTPT_makeSymbolSet(PTPT_OptLayout wsAfterSet, PTPT_OptLayout wsAfter
 
 PTPT_Symbol PTPT_makeSymbolFunc(PTPT_OptLayout wsAfterFunc, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbols symbols, PTPT_OptLayout wsAfterSymbols, PTPT_OptLayout wsAfterComma, PTPT_Symbol symbol, PTPT_OptLayout wsAfterSymbol)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun70))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbols), (ATerm)symbols), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterFunc), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun70))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun70))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterSymbol), (ATerm)symbol), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSymbols), (ATerm)symbols), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterFunc), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun70))));
 }
 
 /*}}}  */
@@ -1071,7 +1071,7 @@ PTPT_Symbol PTPT_makeSymbolStrategy(PTPT_OptLayout wsAfterStrategy, PTPT_OptLayo
 
 PTPT_Symbol PTPT_makeSymbolParametrizedSort(PTPT_OptLayout wsAfterParametrizedSort, PTPT_OptLayout wsAfterParenOpen, PTPT_Literal sort, PTPT_OptLayout wsAfterSort, PTPT_OptLayout wsAfterComma, PTPT_Symbols parameters, PTPT_OptLayout wsAfterParameters)
 {
-  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun17)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun76))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterParameters), (ATerm)parameters), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSort), (ATerm)sort), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterParametrizedSort), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun76))));
+  return (PTPT_Symbol)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun17)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun76))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterParameters), (ATerm)parameters), (ATerm)wsAfterComma), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterSort), (ATerm)sort), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterParametrizedSort), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun76))));
 }
 
 /*}}}  */
@@ -1079,7 +1079,7 @@ PTPT_Symbol PTPT_makeSymbolParametrizedSort(PTPT_OptLayout wsAfterParametrizedSo
 
 PTPT_Symbols PTPT_makeSymbolsList(PTPT_OptLayout wsAfterBracketOpen, PTPT_SymbolList list, PTPT_OptLayout wsAfterList)
 {
-  return (PTPT_Symbols)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun24))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl2(PTPT_afun77, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun27))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun24))), (ATerm)wsAfterList), (ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl1(PTPT_afun28, (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl2(PTPT_afun77, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))))), (ATerm)list)), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun27))));
+  return (PTPT_Symbols)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun24))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl2(PTPT_afun77, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun27))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun24))), (ATerm)wsAfterList), (ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl1(PTPT_afun28, (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl2(PTPT_afun77, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))))), (ATerm)list)), (ATerm)wsAfterBracketOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun27))));
 }
 
 /*}}}  */
@@ -1191,7 +1191,7 @@ PTPT_TreeList PTPT_makeTreeListMany(PTPT_Tree head, PTPT_OptLayout wsAfterFirst,
 
 PTPT_Production PTPT_makeProductionDefault(PTPT_OptLayout wsAfterProd, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbols lhs, PTPT_OptLayout wsAfterLhs, PTPT_OptLayout wsAfterComma1, PTPT_Symbol rhs, PTPT_OptLayout wsAfterRhs, PTPT_OptLayout wsAfterComma2, PTPT_Attributes attributes, PTPT_OptLayout wsAfterAttributes)
 {
-  return (PTPT_Production)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun21)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun80))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun13))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterAttributes), (ATerm)attributes), (ATerm)wsAfterComma2), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterRhs), (ATerm)rhs), (ATerm)wsAfterComma1), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterProd), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun80))));
+  return (PTPT_Production)(ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun21)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun53)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun80))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun13))), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun10))), (ATerm)wsAfterAttributes), (ATerm)attributes), (ATerm)wsAfterComma2), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterRhs), (ATerm)rhs), (ATerm)wsAfterComma1), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun12))), (ATerm)wsAfterLhs), (ATerm)lhs), (ATerm)wsAfterParenOpen), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun14))), (ATerm)wsAfterProd), (ATerm)ATmakeAppl1(PTPT_afun9, (ATerm)ATmakeAppl0(PTPT_afun80))));
 }
 
 /*}}}  */
@@ -1535,7 +1535,7 @@ PTPT_Start PTPT_makeStartCharRange(PTPT_OptLayout wsBefore, PTPT_CharRange topCh
 
 PTPT_Start PTPT_makeStartSymbols(PTPT_OptLayout wsBefore, PTPT_Symbols topSymbols, PTPT_OptLayout wsAfter, int ambCnt)
 {
-  return (PTPT_Start)(ATerm)ATmakeAppl2(PTPT_afun96, (ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun67)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun97)), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topSymbols), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
+  return (PTPT_Start)(ATerm)ATmakeAppl2(PTPT_afun96, (ATerm)ATmakeAppl2(PTPT_afun0, (ATerm)ATmakeAppl3(PTPT_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun59)))), (ATerm)ATmakeAppl1(PTPT_afun2, (ATerm)ATmakeAppl1(PTPT_afun5, (ATerm)ATmakeAppl0(PTPT_afun6)))), (ATerm)ATmakeAppl1(PTPT_afun3, (ATerm)ATmakeAppl0(PTPT_afun97)), (ATerm)ATmakeAppl0(PTPT_afun8)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)wsAfter), (ATerm)topSymbols), (ATerm)wsBefore)), (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -4615,7 +4615,7 @@ ATbool PTPT_isValidSymbol(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return ATtrue;
   }
   else if (PTPT_isSymbolSort(arg)) {
@@ -4821,9 +4821,9 @@ inline ATbool PTPT_isSymbolSeq(PTPT_Symbol arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool PTPT_isSymbolPair(PTPT_Symbol arg) */
+/*{{{  inline ATbool PTPT_isSymbolTuple(PTPT_Symbol arg) */
 
-inline ATbool PTPT_isSymbolPair(PTPT_Symbol arg)
+inline ATbool PTPT_isSymbolTuple(PTPT_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -4834,7 +4834,7 @@ inline ATbool PTPT_isSymbolPair(PTPT_Symbol arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTPT_patternSymbolPair, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTPT_patternSymbolTuple, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -5228,7 +5228,7 @@ ATbool PTPT_hasSymbolWsAfterParenOpen(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return ATtrue;
   }
   else if (PTPT_isSymbolSort(arg)) {
@@ -5299,7 +5299,7 @@ PTPT_OptLayout PTPT_getSymbolWsAfterParenOpen(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
   }
   else if (PTPT_isSymbolSort(arg)) {
@@ -5368,7 +5368,7 @@ PTPT_Symbol PTPT_setSymbolWsAfterParenOpen(PTPT_Symbol arg, PTPT_OptLayout wsAft
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterParenOpen, 3), 1);
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterParenOpen, 3), 1);
   }
   else if (PTPT_isSymbolSort(arg)) {
@@ -5909,9 +5909,6 @@ ATbool PTPT_hasSymbolLhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return ATtrue;
-  }
   else if (PTPT_isSymbolStrategy(arg)) {
     return ATtrue;
   }
@@ -5929,9 +5926,6 @@ PTPT_Symbol PTPT_getSymbolLhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-  }
   else 
     return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
@@ -5945,9 +5939,6 @@ PTPT_Symbol PTPT_setSymbolLhs(PTPT_Symbol arg, PTPT_Symbol lhs)
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 4), 1);
   }
   else if (PTPT_isSymbolSeq(arg)) {
-    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 4), 1);
-  }
-  else if (PTPT_isSymbolPair(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)lhs, 4), 1);
   }
   else if (PTPT_isSymbolStrategy(arg)) {
@@ -5969,9 +5960,6 @@ ATbool PTPT_hasSymbolWsAfterLhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return ATtrue;
-  }
   else if (PTPT_isSymbolStrategy(arg)) {
     return ATtrue;
   }
@@ -5989,9 +5977,6 @@ PTPT_OptLayout PTPT_getSymbolWsAfterLhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-  }
   else 
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
 }
@@ -6005,9 +5990,6 @@ PTPT_Symbol PTPT_setSymbolWsAfterLhs(PTPT_Symbol arg, PTPT_OptLayout wsAfterLhs)
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 5), 1);
   }
   else if (PTPT_isSymbolSeq(arg)) {
-    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 5), 1);
-  }
-  else if (PTPT_isSymbolPair(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterLhs, 5), 1);
   }
   else if (PTPT_isSymbolStrategy(arg)) {
@@ -6029,7 +6011,7 @@ ATbool PTPT_hasSymbolWsAfterComma(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return ATtrue;
   }
   else if (PTPT_isSymbolIterSep(arg)) {
@@ -6064,7 +6046,7 @@ PTPT_OptLayout PTPT_getSymbolWsAfterComma(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
   }
   else if (PTPT_isSymbolIterSep(arg)) {
@@ -6097,7 +6079,7 @@ PTPT_Symbol PTPT_setSymbolWsAfterComma(PTPT_Symbol arg, PTPT_OptLayout wsAfterCo
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterComma, 7), 1);
   }
-  else if (PTPT_isSymbolPair(arg)) {
+  else if (PTPT_isSymbolTuple(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterComma, 7), 1);
   }
   else if (PTPT_isSymbolIterSep(arg)) {
@@ -6134,9 +6116,6 @@ ATbool PTPT_hasSymbolRhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return ATtrue;
-  }
   else if (PTPT_isSymbolStrategy(arg)) {
     return ATtrue;
   }
@@ -6154,9 +6133,6 @@ PTPT_Symbol PTPT_getSymbolRhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
-  }
   else 
     return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
 }
@@ -6170,9 +6146,6 @@ PTPT_Symbol PTPT_setSymbolRhs(PTPT_Symbol arg, PTPT_Symbol rhs)
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 8), 1);
   }
   else if (PTPT_isSymbolSeq(arg)) {
-    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 8), 1);
-  }
-  else if (PTPT_isSymbolPair(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rhs, 8), 1);
   }
   else if (PTPT_isSymbolStrategy(arg)) {
@@ -6194,9 +6167,6 @@ ATbool PTPT_hasSymbolWsAfterRhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return ATtrue;
-  }
   else if (PTPT_isSymbolStrategy(arg)) {
     return ATtrue;
   }
@@ -6214,9 +6184,6 @@ PTPT_OptLayout PTPT_getSymbolWsAfterRhs(PTPT_Symbol arg)
   else if (PTPT_isSymbolSeq(arg)) {
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
   }
-  else if (PTPT_isSymbolPair(arg)) {
-    return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
-  }
   else 
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
 }
@@ -6230,9 +6197,6 @@ PTPT_Symbol PTPT_setSymbolWsAfterRhs(PTPT_Symbol arg, PTPT_OptLayout wsAfterRhs)
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterRhs, 9), 1);
   }
   else if (PTPT_isSymbolSeq(arg)) {
-    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterRhs, 9), 1);
-  }
-  else if (PTPT_isSymbolPair(arg)) {
     return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterRhs, 9), 1);
   }
   else if (PTPT_isSymbolStrategy(arg)) {
@@ -6277,35 +6241,167 @@ PTPT_Symbol PTPT_setSymbolWsAfterSeq(PTPT_Symbol arg, PTPT_OptLayout wsAfterSeq)
 }
 
 /*}}}  */
-/*{{{  ATbool PTPT_hasSymbolWsAfterPair(PTPT_Symbol arg) */
+/*{{{  ATbool PTPT_hasSymbolWsAfterTuple(PTPT_Symbol arg) */
 
-ATbool PTPT_hasSymbolWsAfterPair(PTPT_Symbol arg)
+ATbool PTPT_hasSymbolWsAfterTuple(PTPT_Symbol arg)
 {
-  if (PTPT_isSymbolPair(arg)) {
+  if (PTPT_isSymbolTuple(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PTPT_OptLayout PTPT_getSymbolWsAfterPair(PTPT_Symbol arg) */
+/*{{{  PTPT_OptLayout PTPT_getSymbolWsAfterTuple(PTPT_Symbol arg) */
 
-PTPT_OptLayout PTPT_getSymbolWsAfterPair(PTPT_Symbol arg)
+PTPT_OptLayout PTPT_getSymbolWsAfterTuple(PTPT_Symbol arg)
 {
   
     return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
 /*}}}  */
-/*{{{  PTPT_Symbol PTPT_setSymbolWsAfterPair(PTPT_Symbol arg, PTPT_OptLayout wsAfterPair) */
+/*{{{  PTPT_Symbol PTPT_setSymbolWsAfterTuple(PTPT_Symbol arg, PTPT_OptLayout wsAfterTuple) */
 
-PTPT_Symbol PTPT_setSymbolWsAfterPair(PTPT_Symbol arg, PTPT_OptLayout wsAfterPair)
+PTPT_Symbol PTPT_setSymbolWsAfterTuple(PTPT_Symbol arg, PTPT_OptLayout wsAfterTuple)
 {
-  if (PTPT_isSymbolPair(arg)) {
-    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterPair, 1), 1);
+  if (PTPT_isSymbolTuple(arg)) {
+    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterTuple, 1), 1);
   }
 
-  ATabort("Symbol has no WsAfterPair: %t\n", arg);
+  ATabort("Symbol has no WsAfterTuple: %t\n", arg);
+  return (PTPT_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTPT_hasSymbolHead(PTPT_Symbol arg) */
+
+ATbool PTPT_hasSymbolHead(PTPT_Symbol arg)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbol PTPT_getSymbolHead(PTPT_Symbol arg) */
+
+PTPT_Symbol PTPT_getSymbolHead(PTPT_Symbol arg)
+{
+  
+    return (PTPT_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbol PTPT_setSymbolHead(PTPT_Symbol arg, PTPT_Symbol head) */
+
+PTPT_Symbol PTPT_setSymbolHead(PTPT_Symbol arg, PTPT_Symbol head)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)head, 4), 1);
+  }
+
+  ATabort("Symbol has no Head: %t\n", arg);
+  return (PTPT_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTPT_hasSymbolWsAfterHead(PTPT_Symbol arg) */
+
+ATbool PTPT_hasSymbolWsAfterHead(PTPT_Symbol arg)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTPT_OptLayout PTPT_getSymbolWsAfterHead(PTPT_Symbol arg) */
+
+PTPT_OptLayout PTPT_getSymbolWsAfterHead(PTPT_Symbol arg)
+{
+  
+    return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbol PTPT_setSymbolWsAfterHead(PTPT_Symbol arg, PTPT_OptLayout wsAfterHead) */
+
+PTPT_Symbol PTPT_setSymbolWsAfterHead(PTPT_Symbol arg, PTPT_OptLayout wsAfterHead)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterHead, 5), 1);
+  }
+
+  ATabort("Symbol has no WsAfterHead: %t\n", arg);
+  return (PTPT_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTPT_hasSymbolRest(PTPT_Symbol arg) */
+
+ATbool PTPT_hasSymbolRest(PTPT_Symbol arg)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbols PTPT_getSymbolRest(PTPT_Symbol arg) */
+
+PTPT_Symbols PTPT_getSymbolRest(PTPT_Symbol arg)
+{
+  
+    return (PTPT_Symbols)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbol PTPT_setSymbolRest(PTPT_Symbol arg, PTPT_Symbols rest) */
+
+PTPT_Symbol PTPT_setSymbolRest(PTPT_Symbol arg, PTPT_Symbols rest)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)rest, 8), 1);
+  }
+
+  ATabort("Symbol has no Rest: %t\n", arg);
+  return (PTPT_Symbol)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PTPT_hasSymbolWsAfterRest(PTPT_Symbol arg) */
+
+ATbool PTPT_hasSymbolWsAfterRest(PTPT_Symbol arg)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PTPT_OptLayout PTPT_getSymbolWsAfterRest(PTPT_Symbol arg) */
+
+PTPT_OptLayout PTPT_getSymbolWsAfterRest(PTPT_Symbol arg)
+{
+  
+    return (PTPT_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
+}
+
+/*}}}  */
+/*{{{  PTPT_Symbol PTPT_setSymbolWsAfterRest(PTPT_Symbol arg, PTPT_OptLayout wsAfterRest) */
+
+PTPT_Symbol PTPT_setSymbolWsAfterRest(PTPT_Symbol arg, PTPT_OptLayout wsAfterRest)
+{
+  if (PTPT_isSymbolTuple(arg)) {
+    return (PTPT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterRest, 9), 1);
+  }
+
+  ATabort("Symbol has no WsAfterRest: %t\n", arg);
   return (PTPT_Symbol)NULL;
 }
 
@@ -14292,9 +14388,9 @@ PTPT_ParseTree PTPT_visitParseTree(PTPT_ParseTree arg, PTPT_OptLayout (*acceptWs
 }
 
 /*}}}  */
-/*{{{  PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCf)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSymbol)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLex)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterOpt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAlt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeq)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPair)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSort)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIter)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStar)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeparator)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStarSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterN)(PTPT_OptLayout), PTPT_NatCon (*acceptNumber)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNumber)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSepN)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPerm)(PTPT_OptLayout), PTPT_Symbols (*acceptSymbols)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterSymbols)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSet)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterFunc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterVarsym)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCharClass)(PTPT_OptLayout), PTPT_CharRanges (*acceptCharRanges)(PTPT_CharRanges), PTPT_OptLayout (*acceptWsAfterCharRanges)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterStrategy)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParametrizedSort)(PTPT_OptLayout), PTPT_Literal (*acceptSort)(PTPT_Literal), PTPT_Symbols (*acceptParameters)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterParameters)(PTPT_OptLayout)) */
+/*{{{  PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCf)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSymbol)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLex)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterOpt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAlt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeq)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterTuple)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterHead)(PTPT_OptLayout), PTPT_Symbols (*acceptRest)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterRest)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSort)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIter)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStar)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeparator)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStarSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterN)(PTPT_OptLayout), PTPT_NatCon (*acceptNumber)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNumber)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSepN)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPerm)(PTPT_OptLayout), PTPT_Symbols (*acceptSymbols)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterSymbols)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSet)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterFunc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterVarsym)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCharClass)(PTPT_OptLayout), PTPT_CharRanges (*acceptCharRanges)(PTPT_CharRanges), PTPT_OptLayout (*acceptWsAfterCharRanges)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterStrategy)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParametrizedSort)(PTPT_OptLayout), PTPT_Literal (*acceptSort)(PTPT_Literal), PTPT_Symbols (*acceptParameters)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterParameters)(PTPT_OptLayout)) */
 
-PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCf)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSymbol)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLex)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterOpt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAlt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeq)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPair)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSort)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIter)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStar)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeparator)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStarSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterN)(PTPT_OptLayout), PTPT_NatCon (*acceptNumber)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNumber)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSepN)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPerm)(PTPT_OptLayout), PTPT_Symbols (*acceptSymbols)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterSymbols)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSet)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterFunc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterVarsym)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCharClass)(PTPT_OptLayout), PTPT_CharRanges (*acceptCharRanges)(PTPT_CharRanges), PTPT_OptLayout (*acceptWsAfterCharRanges)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterStrategy)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParametrizedSort)(PTPT_OptLayout), PTPT_Literal (*acceptSort)(PTPT_Literal), PTPT_Symbols (*acceptParameters)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterParameters)(PTPT_OptLayout))
+PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCf)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSymbol)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLex)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterOpt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAlt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeq)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterTuple)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterHead)(PTPT_OptLayout), PTPT_Symbols (*acceptRest)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterRest)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSort)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIter)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStar)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeparator)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStarSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterN)(PTPT_OptLayout), PTPT_NatCon (*acceptNumber)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNumber)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSepN)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPerm)(PTPT_OptLayout), PTPT_Symbols (*acceptSymbols)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterSymbols)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSet)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterFunc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterVarsym)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCharClass)(PTPT_OptLayout), PTPT_CharRanges (*acceptCharRanges)(PTPT_CharRanges), PTPT_OptLayout (*acceptWsAfterCharRanges)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterStrategy)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParametrizedSort)(PTPT_OptLayout), PTPT_Literal (*acceptSort)(PTPT_Literal), PTPT_Symbols (*acceptParameters)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterParameters)(PTPT_OptLayout))
 {
   if (PTPT_isSymbolEmpty(arg)) {
     return PTPT_makeSymbolEmpty();
@@ -14310,52 +14406,52 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
     return PTPT_makeSymbolCf(
         acceptWsAfterCf ? acceptWsAfterCf(PTPT_getSymbolWsAfterCf(arg)) : PTPT_getSymbolWsAfterCf(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolLex(arg)) {
     return PTPT_makeSymbolLex(
         acceptWsAfterLex ? acceptWsAfterLex(PTPT_getSymbolWsAfterLex(arg)) : PTPT_getSymbolWsAfterLex(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolOpt(arg)) {
     return PTPT_makeSymbolOpt(
         acceptWsAfterOpt ? acceptWsAfterOpt(PTPT_getSymbolWsAfterOpt(arg)) : PTPT_getSymbolWsAfterOpt(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolAlt(arg)) {
     return PTPT_makeSymbolAlt(
         acceptWsAfterAlt ? acceptWsAfterAlt(PTPT_getSymbolWsAfterAlt(arg)) : PTPT_getSymbolWsAfterAlt(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterLhs ? acceptWsAfterLhs(PTPT_getSymbolWsAfterLhs(arg)) : PTPT_getSymbolWsAfterLhs(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterRhs ? acceptWsAfterRhs(PTPT_getSymbolWsAfterRhs(arg)) : PTPT_getSymbolWsAfterRhs(arg));
   }
   if (PTPT_isSymbolSeq(arg)) {
     return PTPT_makeSymbolSeq(
         acceptWsAfterSeq ? acceptWsAfterSeq(PTPT_getSymbolWsAfterSeq(arg)) : PTPT_getSymbolWsAfterSeq(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterLhs ? acceptWsAfterLhs(PTPT_getSymbolWsAfterLhs(arg)) : PTPT_getSymbolWsAfterLhs(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterRhs ? acceptWsAfterRhs(PTPT_getSymbolWsAfterRhs(arg)) : PTPT_getSymbolWsAfterRhs(arg));
   }
-  if (PTPT_isSymbolPair(arg)) {
-    return PTPT_makeSymbolPair(
-        acceptWsAfterPair ? acceptWsAfterPair(PTPT_getSymbolWsAfterPair(arg)) : PTPT_getSymbolWsAfterPair(arg),
+  if (PTPT_isSymbolTuple(arg)) {
+    return PTPT_makeSymbolTuple(
+        acceptWsAfterTuple ? acceptWsAfterTuple(PTPT_getSymbolWsAfterTuple(arg)) : PTPT_getSymbolWsAfterTuple(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
-        acceptWsAfterLhs ? acceptWsAfterLhs(PTPT_getSymbolWsAfterLhs(arg)) : PTPT_getSymbolWsAfterLhs(arg),
+        PTPT_visitSymbol(PTPT_getSymbolHead(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        acceptWsAfterHead ? acceptWsAfterHead(PTPT_getSymbolWsAfterHead(arg)) : PTPT_getSymbolWsAfterHead(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
-        acceptWsAfterRhs ? acceptWsAfterRhs(PTPT_getSymbolWsAfterRhs(arg)) : PTPT_getSymbolWsAfterRhs(arg));
+        acceptRest ? acceptRest(PTPT_getSymbolRest(arg)) : PTPT_getSymbolRest(arg),
+        acceptWsAfterRest ? acceptWsAfterRest(PTPT_getSymbolWsAfterRest(arg)) : PTPT_getSymbolWsAfterRest(arg));
   }
   if (PTPT_isSymbolSort(arg)) {
     return PTPT_makeSymbolSort(
@@ -14368,41 +14464,41 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
     return PTPT_makeSymbolIter(
         acceptWsAfterIter ? acceptWsAfterIter(PTPT_getSymbolWsAfterIter(arg)) : PTPT_getSymbolWsAfterIter(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolIterStar(arg)) {
     return PTPT_makeSymbolIterStar(
         acceptWsAfterIterStar ? acceptWsAfterIterStar(PTPT_getSymbolWsAfterIterStar(arg)) : PTPT_getSymbolWsAfterIterStar(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolIterSep(arg)) {
     return PTPT_makeSymbolIterSep(
         acceptWsAfterIterSep ? acceptWsAfterIterSep(PTPT_getSymbolWsAfterIterSep(arg)) : PTPT_getSymbolWsAfterIterSep(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSeparator ? acceptWsAfterSeparator(PTPT_getSymbolWsAfterSeparator(arg)) : PTPT_getSymbolWsAfterSeparator(arg));
   }
   if (PTPT_isSymbolIterStarSep(arg)) {
     return PTPT_makeSymbolIterStarSep(
         acceptWsAfterIterStarSep ? acceptWsAfterIterStarSep(PTPT_getSymbolWsAfterIterStarSep(arg)) : PTPT_getSymbolWsAfterIterStarSep(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSeparator ? acceptWsAfterSeparator(PTPT_getSymbolWsAfterSeparator(arg)) : PTPT_getSymbolWsAfterSeparator(arg));
   }
   if (PTPT_isSymbolIterN(arg)) {
     return PTPT_makeSymbolIterN(
         acceptWsAfterIterN ? acceptWsAfterIterN(PTPT_getSymbolWsAfterIterN(arg)) : PTPT_getSymbolWsAfterIterN(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
         acceptNumber ? acceptNumber(PTPT_getSymbolNumber(arg)) : PTPT_getSymbolNumber(arg),
@@ -14412,10 +14508,10 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
     return PTPT_makeSymbolIterSepN(
         acceptWsAfterIterSepN ? acceptWsAfterIterSepN(PTPT_getSymbolWsAfterIterSepN(arg)) : PTPT_getSymbolWsAfterIterSepN(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg),
         acceptWsAfterComma1 ? acceptWsAfterComma1(PTPT_getSymbolWsAfterComma1(arg)) : PTPT_getSymbolWsAfterComma1(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSeparator(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSeparator ? acceptWsAfterSeparator(PTPT_getSymbolWsAfterSeparator(arg)) : PTPT_getSymbolWsAfterSeparator(arg),
         acceptWsAfterComma2 ? acceptWsAfterComma2(PTPT_getSymbolWsAfterComma2(arg)) : PTPT_getSymbolWsAfterComma2(arg),
         acceptNumber ? acceptNumber(PTPT_getSymbolNumber(arg)) : PTPT_getSymbolNumber(arg),
@@ -14432,7 +14528,7 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
     return PTPT_makeSymbolSet(
         acceptWsAfterSet ? acceptWsAfterSet(PTPT_getSymbolWsAfterSet(arg)) : PTPT_getSymbolWsAfterSet(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolFunc(arg)) {
@@ -14442,14 +14538,14 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
         acceptSymbols ? acceptSymbols(PTPT_getSymbolSymbols(arg)) : PTPT_getSymbolSymbols(arg),
         acceptWsAfterSymbols ? acceptWsAfterSymbols(PTPT_getSymbolWsAfterSymbols(arg)) : PTPT_getSymbolWsAfterSymbols(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolVarsym(arg)) {
     return PTPT_makeSymbolVarsym(
         acceptWsAfterVarsym ? acceptWsAfterVarsym(PTPT_getSymbolWsAfterVarsym(arg)) : PTPT_getSymbolWsAfterVarsym(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolSymbol(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterSymbol ? acceptWsAfterSymbol(PTPT_getSymbolWsAfterSymbol(arg)) : PTPT_getSymbolWsAfterSymbol(arg));
   }
   if (PTPT_isSymbolLayout(arg)) {
@@ -14466,10 +14562,10 @@ PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)
     return PTPT_makeSymbolStrategy(
         acceptWsAfterStrategy ? acceptWsAfterStrategy(PTPT_getSymbolWsAfterStrategy(arg)) : PTPT_getSymbolWsAfterStrategy(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PTPT_getSymbolWsAfterParenOpen(arg)) : PTPT_getSymbolWsAfterParenOpen(arg),
-        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolLhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterLhs ? acceptWsAfterLhs(PTPT_getSymbolWsAfterLhs(arg)) : PTPT_getSymbolWsAfterLhs(arg),
         acceptWsAfterComma ? acceptWsAfterComma(PTPT_getSymbolWsAfterComma(arg)) : PTPT_getSymbolWsAfterComma(arg),
-        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterPair, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
+        PTPT_visitSymbol(PTPT_getSymbolRhs(arg), acceptWsAfterLit, acceptWsAfterParenOpen, acceptString, acceptWsAfterString, acceptWsAfterCf, acceptWsAfterSymbol, acceptWsAfterLex, acceptWsAfterOpt, acceptWsAfterAlt, acceptWsAfterLhs, acceptWsAfterComma, acceptWsAfterRhs, acceptWsAfterSeq, acceptWsAfterTuple, acceptWsAfterHead, acceptRest, acceptWsAfterRest, acceptWsAfterSort, acceptWsAfterIter, acceptWsAfterIterStar, acceptWsAfterIterSep, acceptWsAfterSeparator, acceptWsAfterIterStarSep, acceptWsAfterIterN, acceptNumber, acceptWsAfterNumber, acceptWsAfterIterSepN, acceptWsAfterComma1, acceptWsAfterComma2, acceptWsAfterPerm, acceptSymbols, acceptWsAfterSymbols, acceptWsAfterSet, acceptWsAfterFunc, acceptWsAfterVarsym, acceptWsAfterCharClass, acceptCharRanges, acceptWsAfterCharRanges, acceptWsAfterStrategy, acceptWsAfterParametrizedSort, acceptSort, acceptParameters, acceptWsAfterParameters),
         acceptWsAfterRhs ? acceptWsAfterRhs(PTPT_getSymbolWsAfterRhs(arg)) : PTPT_getSymbolWsAfterRhs(arg));
   }
   if (PTPT_isSymbolParametrizedSort(arg)) {
