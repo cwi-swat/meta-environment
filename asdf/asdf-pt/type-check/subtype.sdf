@@ -2,31 +2,9 @@ module type-check/subtype
 
 imports
 
-  containers/List[<AtomicType, AtomicType>]
-  type-check/Layout
   type-check/types
-  type-check/types/asdf-types
-  type-check/environment
+  containers/List[<AtomicType, AtomicType>]
 
-exports
-
-sorts
-
-  Type
-
-context-free syntax
+exports context-free syntax
 
   List[[<AtomicType, AtomicType>]]	-> SubTypes
-
-  subtype-of(Type, Type, Environment)	-> Answer
-
-
-hiddens variables
-
-  "$ATY"[0-9]?		-> AtomicType
-  "$TY"[0-9]?		-> Type
-  "$TY"[0-9]?"*"	-> { Type "," }*
-  "$AT"[0-9]?		-> ActionType
-  "$EN"[0-9]?		-> Environment
-  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
-  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
