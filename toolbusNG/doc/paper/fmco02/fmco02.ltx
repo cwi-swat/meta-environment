@@ -466,8 +466,9 @@ session with the Address Book Service, the ToolBus itself does not
 execute instances of the UI (as it did with the address book tool).
 Instead \texttt{UITool} instances can connect, make zero or more
 requests to the service, and disconnect at their convenience.
-The following definition of the \texttt{UI} process shows how two
-of the UI requests can be handled, 
+The following definition of the \texttt{UI} process shows how UI
+requests for the creation of a new entry and a name-change can
+be realized:
 
 \begin{footnotesize}
 \begin{verbatim}
