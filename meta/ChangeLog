@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/02 (jurgenv@cwi.nl)
+ * Bumped to version 0.2 and release
+
 2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
    of the term-store.
