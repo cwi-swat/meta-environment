@@ -188,11 +188,11 @@ def init(argvec):
 			HOST = l[1]
 			l = l[2:]
 		elif l[0] == "-TB_INPORT":
-			INPORT = l[1]
-			l = l[2]
+			INPORT = string.atoi(l[1])
+			l = l[2:]
 		elif l[0] == "-TB_OUTPORT":
-			OUTPORT = l[2]
-			l = l[2]
+			OUTPORT = string.atoi(l[1])
+			l = l[2:]
 		elif l[0][0:8] == "-details":
 			l = l[1:]
 		elif l[0] == "-script-args" or l[0] == "-args":

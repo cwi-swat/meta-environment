@@ -490,7 +490,7 @@ tool_id *create_tool(term *creator, term_list *args)
 {
   char buf[EXP_TOOL_DEF], *cbuf = buf, *cbufmax = &buf[EXP_TOOL_DEF];
   char *command, *host_tool, *details, *cmd_args, *cmd_arg, *p;
-  char tid_buf[12];
+  char tid_buf[12], inport_buf[12], outport_buf[12];
   int k, pid;
   char *std_args[NTOOLARGS];
   tool_def *td;
@@ -537,6 +537,10 @@ tool_id *create_tool(term *creator, term_list *args)
   std_args[k++] = "-TB_TOOL_ID";   std_args[k++] = tid_buf;
   std_args[k++] = "-details";      std_args[k++] = details;
 
+  sprintf(inport_buf, "%d", WellKnownSocketInPort);
+  sprintf(outport_buf, "%d", WellKnownSocketOutPort);
+  std_args[k++] = "-TB_INPORT";    std_args[k++] = inport_buf;
+  std_args[k++] = "-TB_OUTPORT";   std_args[k++] = outport_buf;
   
   if(local_ports){
       std_args[k++] = "-TB_LOCAL_PORTS";

@@ -184,7 +184,9 @@ int createsocket (const char *host, int port)
   /* Prepare socket queue for connect requests */
   listen(sock,1);
 
-  if(ToolBus && ((port==TB_INPORT) || (port==TB_OUTPORT)))
+  /* <PO> was: ((port==TB_INPORT) || (port==TB_OUTPORT)) */
+  if(ToolBus && ((port==WellKnownSocketInPort) || 
+		 (port==WellKnownSocketOutPort)))
     return sock;
   else {
     if (host == NULL){

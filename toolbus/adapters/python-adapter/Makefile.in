@@ -53,7 +53,7 @@ EXTRA_LIBS	=
 
 all:	${PROGRAMS} $(LIBFILES) $(SRCDOC) ${DOC} 
 
-TBterm.mar: TBterm.py
+parser: TBterm.py
 	python -c "import TBterm; TBterm.build_term_parser()"
 
 # The rules below this line are general rules and are based on the

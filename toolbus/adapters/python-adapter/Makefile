@@ -8,7 +8,7 @@ VERSION		= 0.9.16f
 srcdir		= .
 top_srcdir      = ../..
 
-prefix          = /nfs/adam/ada1/olivierp/ToolBus-0.9.16c
+prefix          = /nfs/adam/ada1/olivierp/ToolBus
 exec_prefix     = ${prefix}
 bindir          = $(exec_prefix)/bin
 libdir          = $(exec_prefix)/lib
@@ -32,7 +32,8 @@ NOWEB		= noweb
 
 COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
-DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
+DISTFILES	= Makefile.in python-adapter.in \
+		$(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
 
 # With a little bit of luck, you only have to change the value of
 # these variables, and add some rules to actually build your programs:

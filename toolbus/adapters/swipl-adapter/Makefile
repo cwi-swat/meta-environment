@@ -13,7 +13,7 @@ VERSION		= 0.9.16f
 srcdir		= .
 top_srcdir      = ../..
 
-prefix          = /nfs/adam/ada1/olivierp/ToolBus-0.9.16c
+prefix          = /nfs/adam/ada1/olivierp/ToolBus
 exec_prefix     = ${prefix}
 bindir          = $(exec_prefix)/bin
 libdir          = $(exec_prefix)/lib

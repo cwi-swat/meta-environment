@@ -288,6 +288,7 @@ def start_tool():
 		return
 
 
+print "args: ", sys.argv
 start_tool()
 
 try:
