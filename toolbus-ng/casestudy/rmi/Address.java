@@ -14,6 +14,7 @@ public class Address implements Serializable {
   public String getStreet() {
     return street;
   }
+  
   public String getNumber() {
     return number;
   }
