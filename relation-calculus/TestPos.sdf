@@ -1,11 +1,11 @@
 module TestPos
 
-imports asf/tools/PosInfo[STATEMENT] Pico-syntax
+imports MyPosInfo Pico-syntax
 
 exports
  
   context-free syntax
-      IntCon ":" STATEMENT -> STATEMENT
+      Area  ":" STATEMENT -> STATEMENT
 
       label(PROGRAM)           -> PROGRAM  {traversal(trafo, bottom-up, continue)}
       label(STATEMENT)         -> STATEMENT {traversal(trafo, bottom-up, continue)}

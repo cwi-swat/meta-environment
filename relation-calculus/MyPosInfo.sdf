@@ -1,6 +1,5 @@
-module MyPosInfo
+module MyPosInfo[X]
 
-imports Pico-syntax
 
 imports basic/Integers basic/Strings
 
@@ -9,11 +8,9 @@ exports
   context-free syntax
 
     area(StrCon, IntCon, IntCon, IntCon, IntCon) -> Area
-    get-area(STATEMENT)			        -> Area
+    get-area(X)			         -> Area
 
- hiddens
-
-   imports asf/tools/PosInfo[STATEMENT]
+   imports asf/tools/PosInfo[X]
 
    context-free syntax
 
@@ -21,5 +18,5 @@ exports
 
   
   variables
-    "X" [0-9\']*     -> STATEMENT
+    "X" [0-9\']*     -> X
     "Char*" [0-9\']* -> CHAR*

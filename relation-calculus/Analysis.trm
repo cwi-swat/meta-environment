@@ -1,13 +1,11 @@
-controlflow(
+analyze(
 
 begin
 declare x : natural, y : natural, z : natural;
 
-x := 3;
-if 3 then z := y + 3 else x := 4 fi;
-y := z
-end,
-[]
+x := 3
+
+end
 
 )
 

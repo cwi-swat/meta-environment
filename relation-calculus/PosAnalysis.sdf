@@ -2,7 +2,7 @@ module PosAnalysis
 
 imports Pico-syntax
 imports basic/Integers
-imports MyPosInfo
+imports MyPosInfo[STATEMENT]
 
 exports
   sorts NodeId Item
