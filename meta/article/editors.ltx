@@ -32,15 +32,16 @@ adheres to the interface. One of the main weaknesses of \gse\ has
 always been its limited text editing capabilities. By separating text
 and structure editing functionality we hope to address this problem. 
 
-The text and structure editors are tied together by means of a ToolBus
-script. The script provides us with a one-to-one mapping from text to
-structure and back. It makes sure that at any given time the data
-structure in the text editor (the text) can be translated to the data
-structure in the structure editor (the parse tree), and vice
-versa. If a string $\alpha$ is a syntactically correct string in the
-language $L$, and we have a parser $\Pi_L$ over this language and a pretty printer $pp$
-then $pp(\Pi_L(\alpha)) = \alpha$. Furthermore, if $t$ is the parse tree that results
-from $\Pi_L(\alpha)$ then also $\Pi_L(pp(t)) = t$.
+The text and structure editors are tied together by means of a ToolBus 
+script.  The script provides us with a one-to-one mapping from text to 
+structure and back.  It makes sure that at any given time the data 
+structure in the text editor (the text) can be translated to the data 
+structure in the structure editor (the parse tree), and vice versa.  
+If a string $\alpha$ is a syntactically correct string in the language 
+$L$, and we have a parser $\Pi_L$ over this language and a pretty 
+printer $pp$ then $pp(\Pi_L(\alpha)) = \alpha$.  As a consequence, if 
+$t$ is the parse tree that results from $\Pi_L(\alpha)$ then also 
+$\Pi_L(pp(t)) = t$.
 
 \subsection{External Behaviour}\label{externaleditor}
 
@@ -48,9 +49,17 @@ If the edited text is not syntactically correct (which is inevitable
 during editing) then the smallest subtree that contains an incorrect
 program fragment will be held in a focus. In \gse\ a similar approach
 is used. The main difference between \gse\ and the new structure
-editor is that \gse\ has 2 specific modes, one for text editing and one
-for structure editing. The new editor does not need this
-distinction. The difference between these approaches is perhaps best
+editor is that \gse\ has two specific modes, one for text editing and one
+for structure editing. Once the switch to text-editing mode is made,
+all structure information is lost. 
+
+The new editor does not need this
+distinction. It allows text-editing while retaining structure
+information. Furthermore, the new structure editor can create multiple
+focuses, thus minimalizing the amount of text that needs to be
+(re)parsed after an edit session. 
+
+The difference between these approaches is perhaps best
 illustrated with an example.
 
 Consider the following program in the language While (See \cite{Vis97.spl} for a specification).
@@ -81,8 +90,7 @@ have been changed need to be reparsed. As shown in the last example:
 this strategy obviously
 results in less parsing than in \gse. 
 
-Of course, this
-is a very benign example. If we take the original program again, and
+This is not always the case. If we take the original program again, and
 decide to put the body of the while loop between brackets, we get the
 following focus positions.
 \begin{codebox}
@@ -118,6 +126,11 @@ interactive use.
 The text editor we use is \texttt{jedit}, a public domain text editor written
 in \tcltk. It is easily extendible which allows us to experiment with
 different lay-outs and {\ui}s. 
+
+The parsing strategies mentioned in the previous section are
+implemented as part of the \TB-script. In the script we decide whether
+a focus should be parsed, or whether it should first be expanded, and
+then parsed.
 
 \subsection{Future Work}
 
