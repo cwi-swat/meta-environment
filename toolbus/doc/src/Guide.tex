@@ -17,10 +17,11 @@
 %%    along with this program; if not, write to the Free Software
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
-\documentclass[a4,twoside,noweb]{article} % -*-latex-*-
+\documentclass[twoside]{article} % -*-latex-*-
 \setlength{\oddsidemargin}{0.235cm}
 \setlength{\evensidemargin}{0.235cm}
 \setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
 \topmargin 0.5cm  % was: 0.2cm
 \pagestyle{myheadings}
 \usepackage{psfig}
@@ -41,7 +42,7 @@
 %\input{psfig.tex}
 
 \title{A Guide to \TB\ Programming\\
-Version $Version: $}
+Version $$Version: $$}
 \author{P. Klint$^{1,2}$}
 \date{\today}
 \maketitle
@@ -68,7 +69,6 @@ functionality.
 
 \section{Introduction}
 
-{\em TEST}
 \subsection{Background and motivation}
 Building large, heterogeneous, distributed software systems poses
 serious problems for the software engineer.  Systems grow {\em larger}
@@ -182,7 +182,8 @@ of systems that have been described using the \TB\ approach.
 Here, the main  emphasis is on explaining {\em all} details needed to actually
 implement systems using the \TB. First, we will give a ``hello world'' example
 in the context of the \TB.
-\begin{figure}[tbh]
+
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{hello1.tb.tex}
   \caption{{\tt hello1}: first script for the {\tt hello} application.}
@@ -190,7 +191,7 @@ in the context of the \TB.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{hello2.tb.tex}
   \caption{{\tt hello2}: second script for the {\tt hello} application.}
@@ -198,7 +199,7 @@ in the context of the \TB.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{hello.c.tex}
   \caption{{\tt hello.c}: simple C code for the {\tt hello} tool.}
@@ -206,7 +207,7 @@ in the context of the \TB.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{hello-gen.c.tex}
   \caption{{\tt hello-gen.c}: C code for the {\tt hello} tool using a generated tool interface.}
@@ -277,21 +278,24 @@ that automatically generates tool interfaces from a given script.
 This approach is shown in a second version of
 the {\tt hello} tool (Figure~\ref{fig:hello-gen.c}).
 From the script {\tt hello2.tb} we generate automatically\footnote{In
-  section~\ref{ctif} this is fully explained.} the following two files:
+  section~\ref{tifstoc} this is fully explained.} the following two files:
 
 \begin{itemize}
   
 \item {\tt hello.tif.h}: this includes necessary header files, and declares
-  prototypes for application functions {\tt get\_text} {\tt rec\_terminate} and
+  prototypes for application functions {\tt get\_text}, {\tt rec\_terminate} and
   the ToolBus interfacing functions {\tt hello\_handler} (handles all requests
   coming from the \TB) and {\tt hello\_checker} (checks that the interface as
   expected by the \TB\ is compatible with the interface as provided by the
-  tool).  A listing of {\tt hello.tif.h} appears later on in
-  Figure~\ref{fig:hello.tif.h}.
-
-\item  {\tt hello.tif.c}: includes {\tt hello.tif.h} and contains the 
-declarations for  {\tt hello\_handler} and {\tt hello\_checker}.
-A listing of {\tt hello.tif.c} appears later on in Figure~\ref{fig:hello.tif.c}.
+  tool).  %% A listing of {\tt hello.tif.h} appears later on in
+          %% Figure~\ref{fig:hello.tif.h}.
+  
+\item \begin{sloppypar} {\tt hello.tif.c}: includes {\tt hello.tif.h} and
+    contains the declarations for {\tt hello\_handler} and {\tt
+      hello\_checker}.
+    %% A listing of {\tt hello.tif.c} appears later on in
+    %% Figure~\ref{fig:hello.tif.c}.
+    \end{sloppypar}
 
 \end{itemize}
 
@@ -304,7 +308,7 @@ eval request coming from the \TB\
 Note that {\tt get\_text} is called by {\tt hello\_handler} and that
 its return value will be sent back to the \TB.
 
-\item A declaration of the function {\tt rec\_terminate} thats is always
+\item A declaration of the function {\tt rec\_terminate} that is always
   called on termination of a tool.
 
 \item A main program that calls an initialization function and
@@ -505,6 +509,15 @@ Starting the execution from {\em another} host is achieved by typing
       hello -TB_HOST host1.institute.nl
 \end{verbatim}
 
+\begin{figure}[tb]
+\rule{\textwidth}{0.5mm}
+\input{hello3.tb.tex}
+  \caption{{\tt hello3}: {\tt hello} application with {\tt rec-connect}.}
+  \label{fig:hello3.tb}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+
+
 \section{\label{Adapters}Adapters for tools and languages}
 \begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
@@ -568,9 +581,28 @@ the name and arguments of the program to be executed.
 
 \section{\label{ToolsInC}Writing tools in C}
 
-(******** intro *******)
+Although \TB\ tools can be implemented in many languages (including Java, C++,
+Perl, Tcl/Tk, Prolog, ASF+SDF, Cobol and others) we start explaining how tools
+can be written in C. In other languages identical notions will be used with
+only minor adjustements to language-specific features and limitations.
+Writing tools in C amounts to:
 
-\subsection{\label{Compose}ATerms: Composing and decomposing terms}
+\begin{itemize}
+
+\item ATerms: the essential data type that is used to exchange
+information between tool and \TB\ (Section~\ref{ATerms}).
+
+\item The global structure of a \TB\ tool (Section~\ref{GlobalStructureTool}).
+
+\item The \TB\ Application Programmer's Interface  (Section~\ref{ToolBusAPI}).
+
+\item Compiling \TB\ tools written in C (Section~\ref{CompilingTools}).
+  
+\item Generating tool interfaces with {\tt tifstoc} (Section~\ref{tifstoc}).
+
+\end{itemize}
+
+\subsection{\label{ATerms}ATerms: Composing and decomposing terms}
 
 We use a datatype called ATerms for creating, matching, reading and
 writing terms. ATerms are fully described elsewhere.\footnote{H. A. de
@@ -870,7 +902,7 @@ be explicitly protected if they should survive $T$.
 \end{itemize}
 
 
-\subsubsection{Initializing and using the ATerm library}
+\subsubsection{Initializing and using the ATerm library}\label{ATinit}
 
 Using the ATerm library requires the following:
 
@@ -899,20 +931,20 @@ that will be used to determine the bottom of C's runtime stack.
 This is achieved using the {\tt -lATerm} option of the C compiler.
 \end{itemize}
 
-A typical usage pattern is as follows:
+\noindent A typical usage pattern is as follows:
 
 \begin{verbatim}
-#include <aterm1.h>
-int main(int argc, char *argv[])
-{
-  ATerm bottomOfStack;
-  ATinit(argc, argv, &bottomOfStack);
-  /* ... code that uses ATerms ... */
-}
+      #include <aterm1.h>
+      int main(int argc, char *argv[])
+      {
+        ATerm bottomOfStack;
+        ATinit(argc, argv, &bottomOfStack);
+       /* ... code that uses ATerms ... */
+      }
 \end{verbatim}
 
 
-\subsection{The global structure of a \TB tool}
+\subsection{\label{GlobalStructureTool}The global structure of a \TB\ tool}
 
 \begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
@@ -976,8 +1008,6 @@ At the level of the source code, the global structure of a purely
 reactive tool without additional term or character ports
 has already
 been illustrated in Figure~\ref{fig:hello.c}.
-The difference between term ports and character ports is further explained in 
-Sections~\ref{TBaddTermPort} and~\ref{TBaddCharPort}.
 
 \subsubsection{The include file {\tt atb-tool.h}}
 
@@ -1010,9 +1040,9 @@ compiler). It provides the following functions\footnote{For an
 \item {\tt ATBeventloop}: a standard event loop for a tool
   (Section~\ref{ATBeventloop}).
 
-\item {\tt TBreceive}: process one input event on a port (Section~\ref{TBreceive}).
+\item {\tt ATBreadTerm}: process one input event on a port (Section~\ref{ATBreadTerm}).
 
-\item {\tt TBwriteTerm}: send a term to the \TB\ (Section~\ref{ATBwriteTerm}).
+\item {\tt ATBwriteTerm}: send a term to the \TB\ (Section~\ref{ATBreadTerm}).
 
 \end{itemize}
 
@@ -1050,36 +1080,11 @@ are fully described in Section~\ref{Executing}. Particularly important is that
 the tool is initialized with a proper name.  It should be literally equal
 (including the case of letters) to a tool name as appearing in a tool
 declaration in the \T\ script. This is important since the tool name will be
-used when the tool is connected to the \TB.
+used when the tool is connected to the \TB. Note that {\tt ATBinit} also
+initializes the ATerm library (hence the {\tt bottomOfStack} argument, see Section
+\ref{ATinit}).
 
-
-***************************************************
-which initializes the tool with name {\tt ToolName},
-parses the program arguments {\tt argc} and {\tt argv},
-and, if {\tt handler} is not {\tt NULL},
-
-
-connects it to the \TB, establish the event handler {\tt handler},
-and checks the input signature using {\tt check\_in\_sign}.
-
-If {\tt handler} is {\tt NULL}, the tool is executed stand-alone
-and no connection with the \TB\ is made.
-(This can also be achieved with the {\tt TB\_SINGLE} arguments,
-see Section~\ref{Executing}.)
-
-The event handler {\tt handler} will handle all terms
-from the \TB\  received by the tool. Event handlers are further explained
-in Section~\ref{TBaddTermPort}.
-
-The function {\tt check\_in\_sign} takes the input signature of the
-tool as received from the \TB\ and checks that it is compatible with
-the input signature as expected by the tool.  If this is the case,
-{\tt NULL} is returned.  Otherwise, the first offending
-signature element is returned.
-
-*****************************************************
-
-\subsubsection{\label{ATBconnect}{\tt ATBconnect}}
+\subsubsection{\label{ATBconnect}{\tt ATBconnect} and {\tt ATBdisconnect}}
 
 A tool can be connected to the ToolBus using {\em term ports} that can be
 using for sending and receiving data in the form of complete terms.  Two
@@ -1128,7 +1133,6 @@ The function
       int ATBeventloop(void)
 \end{verbatim}
 captures this idea. It never returns, unless something goes wrong.
-
 We can now give a skeleton that many tools have in common:
 
 \begin{verbatim}
@@ -1152,7 +1156,7 @@ We can now give a skeleton that many tools have in common:
 \end{verbatim}
 
 
-\subsubsection{\label{ATBwriteTerm}{\tt ATBwriteTerm}}
+\subsubsection{\label{ATBreadTerm}{\tt ATBwriteTerm} and {\tt ATBreadTerm}}
 So far, we have seen primitives for tools that only receive
 terms from the \TB. In the case of, for instance,
 events that are generated by a tool, a term needs to be sent from the tool
@@ -1166,7 +1170,7 @@ return value {\tt -1}. A typical usage is:
       ATBwriteTerm(conn, ATmake(snd-event(button("ok")).
 \end{verbatim}
 
-Summetrically, a term can be read from a \TB\ connection as follows:
+Symmetrically, a term can be read from a \TB\ connection as follows:
 \begin{verbatim}
       ATerm ATBreadTerm(int conn).
 \end{verbatim}
@@ -1229,10 +1233,10 @@ computations:
         while(ATtrue)
         { 
           if(n = ATBpeekAny() >= 0)      /* if there is an incoming event */
-            ATBreceive(n);               /* handle it                     */
-           else {
-             ...                            /* perform other computation     */
-           }
+            ATBhandleOne(n);             /* handle it                     */
+          else {
+             ...                         /* perform other computation     */
+          }
         }
 \end{verbatim}
 
@@ -1254,12 +1258,14 @@ to the \TB\ (using {\tt ATBwriteTerm}) and ends with processing one event
 coming from some port (using {\tt ATBhandleAny}).  The \T\ script being used
 should, of course, be able to receive such events.
 
-\subsection{Compiling \TB\ tools written in C}
+\subsection{\label{CompilingTools}Compiling \TB\ tools written in C}
 When compiling a tool written in C the following questions
 should be answered:
 \begin{itemize}
-\item Where is the include file {\tt TB.h}?
-\item Where is the \TB\ library {\tt libtb.a}?
+\item Where is the include file {\tt aterm1.h}?
+\item Where is the include file {\tt atb-tool.h}?
+\item Where is the ATerm library {\tt libATerm.a}?
+\item Where is the \TB\ API library {\tt libATB.a}?
 \item Which other libraries are needed to compile the tool?
 \end{itemize}
 
@@ -1268,14 +1274,23 @@ There are two strategies to answer them.
 
 \paragraph{Strategy 1:} find the desired locations on your system and hard code them in
 the compilation command. This will lead to a call to the C compiler
-like:
-\begin{quote}
-{\tt cc -I{\em dir-where-TB.h-is} hello.c -o hello {\em dir-where-libtb.a-is} {\em other-libs}}
-\end{quote}
+with the following arguments:
+
+\begin{itemize}
+\item {\tt -I}\emph{dir-where-aterm1.h-is}
+\item {\tt -I}\emph{dir-where-ATB-tool.h-is}
+\item {\tt hello.c -o hello}
+\item {\tt -L}\emph{dir-where-libATerm.a-is}
+
+\item {\tt -lATerm}
+\item {\tt -L}\emph{dir-where-libATB.a-is}
+\item {\tt -lATB}
+\item \emph{other libraries}.
+\end{itemize}
 
 \paragraph{Strategy 2:}  write a make file that encodes this information.
 As a result, the location information is hardwired in the make file
-rather then in a command that has to be repeated over and over again.
+rather than in a command that has to be repeated over and over again.
 
 \begin{figure}[h]
 \rule{\textwidth}{0.5mm}
@@ -1286,7 +1301,7 @@ rather then in a command that has to be repeated over and over again.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\subsection{\label{ctif}Generating C tool interfaces with {\tt tifstoc}}
+\subsection{\label{tifstoc}Generating C tool interfaces with {\tt tifstoc}}
 
 The interface code for each tool depends on the particulars
 of the \T\ script in which it is used. Changing the number
@@ -1315,7 +1330,9 @@ will create a file {\tt hello2.tifs} containing the tool interfaces.
 
 \item Use the language independent interface description
 to generate a tool interface for a specific tool in a specific
-implementation language. The generator {\tt tifstoc}
+implementation language. The generator {\tt tifstoc}\footnote{
+This is an ATerm-compatible version of a similar generator called {\tt ctif}.
+{\tt ctif} is still in use for some older tools but will be gradually phased out.}
 exists for generating C tool interfaces. It is called as follows:
 \begin{quote}
       {\tt tifstoc -tool $Name  $ $TifsFile$}
@@ -1325,32 +1342,22 @@ For the hello example, we would have, for instance:
 \begin{verbatim}
       tifstoc -tool hello hello2.tifs
 \end{verbatim}
-The resulting file {\tt hello.tif.c} is shown in
-Figure~\ref{fig:hello.tif.c}.
+%The resulting file {\tt hello.tif.c} is shown in
+%Figure~\ref{fig:hello.tif.c}.
 \end{itemize}
 
+%\begin{figure}[tb]
+%\rule{\textwidth}{0.5mm}
+%\input{hello.tif.c.tex}
+%  \caption{{\tt hello.tif.c}: generated tool interface {\tt hello.tif.c}.}
+%  \label{fig:hello.tif.c}
+%\rule{\textwidth}{0.5mm}
+%\end{figure}
+
 In Figure~\ref{fig:Tifs} it is also shown how tool interface generators for
-{\em other} languages (e.g., Fortan, Cobol, Java) would fit into this scheme.
-Currently, we alo support generating Java interfaces by way of {\tt javatif}
-(See Section~\ref{ToolsInJava}).
-
-\begin{figure}[tb]
-\rule{\textwidth}{0.5mm}
-\input{hello.tif.c.tex}
-  \caption{{\tt hello.tif.c}: generated tool interface {\tt hello.tif.c}.}
-  \label{fig:hello.tif.c}
-\rule{\textwidth}{0.5mm}
-\end{figure}
-
-
-\begin{figure}[tb]
-\rule{\textwidth}{0.5mm}
-\input{hello3.tb.tex}
-  \caption{{\tt hello3}: {\tt hello} application with {\tt rec-connect}.}
-  \label{fig:hello3.tb}
-\rule{\textwidth}{0.5mm}
-\end{figure}
-
+{\em other} languages (e.g., Java, Cobol) fit into this scheme.  In addition
+to {\tt tifstoc}, we alo support the generation of Java interfaces by way of
+{\tt javatif} (See Section~\ref{ToolsInJava}).
 
 \input{adapters}
 
@@ -1360,157 +1367,59 @@ Simon Gray, Mark van den Brand, Pieter Olivier.
 
 
 \newpage
-\section{Differences with previous \TB\ versions}
+\section{Incompatibilities with older \TB\ versions}
 
-\subsection{\T\ scripts}
+\subsection{Include files, Libraries and API's}
 
-\paragraph{Incompatibilities}
-\begin{itemize}
+In older versions, tools had to include the file {\tt TB.h}.
+Currently, this is {\tt atb-tool.h}.
 
-\item All formal parameters and variables have to be declared.
+In older versions, the \TB\ API was provided by {\tt libTB}.  Currently, this
+is split over to libraries: {\tt libATerm.a} (the ATerm functions) and {\tt
+  libATB.a} (the \TB\ API).
+As a consequence, older tools have to be compiled with the compiler flag {\tt
+  -lTB}.
 
-\item New and (incompatible) is the ``result operator'' {\tt ?} that is used
-  to mark assignable variables in patterns. In old \T\ scripts these
-  variable occurrences will have to be marked with a {\tt ?}.
-  The new implementation gives some help by generating
-  a warning when no result variables occur in {\tt rec-event}/{\tt rec-value}.
-  There is no such help for {\tt rec-msg}/{\tt snd-msg}.
+In the older API's, all functions begin with the prefix {\tt TB}.  Currently,
+functions begin with either {\tt AT} (ATerms) or {\tt ATB} (\TB\ API).
 
-\item The syntax of {\tt create} has been changed from, e.g.,
-\begin{verbatim}
-      create P(1)
-\end{verbatim}
-to
-\begin{verbatim}
-      create(P(1), Pid?)
-\end{verbatim}
+The old and the new API's can be compared as follows:
 
-\item The syntax of process definitions has been changed from
-\begin{verbatim}
-        define P = proc-expr
-\end{verbatim}
-  to
-\begin{verbatim}
-        process P is proc-expr
-\end{verbatim}
+\begin{center}
+\begin{tabular}{|l|l|} \hline
+Old                & New \\ \hline \hline
 
-\item  The syntax of tool definitions has been changed from
-\begin{verbatim}
-      tool T { }
-\end{verbatim}
-  to
-\begin{verbatim}
-      tool T is {}
-\end{verbatim}
-Tool definitions may now have formal parameters.
+{\tt TBinit}       & {\tt ATinit}\\
+{\tt TBmake}       & {\tt ATmake}\\
+{\tt TBmatch}      & {\tt ATmatch}\\
+{\tt TBwrite}      & {\tt ATwriteTerm}\\
+{\tt TBread}       & {\tt ATreadTerm}\\
+{\tt TBreadTerm}   & ---\\
+{\tt TBprintf}     & {\tt ATprintf}\\
+{\tt TBsprintf}    & {\tt ATsprintf}\\
+{\tt TBprotect}    & {\tt ATprotect}\\
+{\tt TBunprotect}  & {\tt ATunprotect}\\
+{\tt TBcollect}    & ---\\ \hline
 
-\item Tools are no longer executed implicitly by the ToolBus, but an
-  explicit {\tt execute}/{\tt rec-connect} action is required in the script.
+{\tt TBinit}       & {\tt ATBinit}\\
+---                & {\tt ATBconnect}\\
+---                & {\tt ATBdisconnect}\\
 
-\item The form of {\tt subscribe}/{\tt unsubscribe} has been changed. A complete
-  term is now required as argument, rather than a single function
-  symbol. Instead of
-\begin{verbatim}
-      subscribe(compute)
-\end{verbatim}
-  you have to write now
-\begin{verbatim}
-      subscribe(compute(<str>,<int>))
-\end{verbatim}
-
-\end{itemize}
-
-\paragraph{New features}
-\begin{itemize}
-\item Declarations and types.
-\item The types {\tt <real>} (floating point numbers) and {\tt <bstr>}
-  (binary strings).
-\item Assignment.
-\item {\tt if then else fi}.
-\item {\tt ||}.
-\item {\tt rec-connect}/{\tt rec-disconnect}.
-\item {\tt execute}/{\tt snd-terminate}.
-\item {\tt shutdown}.
-\item {\tt delay}/{\tt timeout}.
-\item Parameterized tool definitions.
-\end{itemize}
-
-\subsection{Tools}
-\paragraph{Incompatibilities}
-
-\begin{itemize}
-\item eval/do/event messages sent to/from tools no longer
-  have a tool identification as first arg (it is prefixed
-  automatically by the implementation).
-\item tools have to support new incoming requests for {\tt rec-terminate}.
-
-\item The following library functions have been renamed:
-\begin{tabular}{lll}
-        {\tt TBget}             & $\Rightarrow$ & {\tt TBreceive}\\
-        {\tt TBput}             & $\Rightarrow$ & {\tt TBsend}\\
-        {\tt TBmakeTerm}        & $\Rightarrow$ & {\tt TBmake}\\
-        {\tt TBwriteTerm}       & $\Rightarrow$ & {\tt TBwrite}\\
+{\tt TBaddTermPort}& ---\\
+{\tt TBaddCharPort}& ---\\
+{\tt TBreceive}    & {\tt ATBreadTerm}\\
+{\tt TBsend}       & {\tt ATBwriteTerm}\\
+{\tt TBeventloop}  & {\tt ATBeventloop}\\
+{\tt TBpeek}       & {\tt ATBpeekAny}\\
+                   & {\tt ATBpeekOne}\\
+---                & {\tt ATBhandleOne}\\
+---                & {\tt ATBhandleAny}\\
+---                & {\tt ATBgetDescriptors}\\ \hline
 \end{tabular}
+\end{center}
 
-\end{itemize}
-
-\paragraph{New features}
-
-\begin{itemize}
-\item The following library functions are new:
-\begin{tabular}{l}
-        {\tt TBread}\\
-        {\tt TBprintf}\\
-        {\tt TBsprintf}\\
-        {\tt TBprotect}\\
-        {\tt TBunprotect}
-\end{tabular}
-\item The format ``\verb+<blob>+'' (for binary strings) has been added to term patterns 
-  used by, for instance, {\tt TBmatch}.
-
-\end{itemize}
-
-\subsection{The \TB\ interpreter}
-
-\paragraph{Incompatibilities}
-
-\begin{itemize}
-
-\item The implementation is now based on ``randomized'' execution
-in order to make operations like {\tt +} and {\tt ||}
-completely non-deterministic.
-\item The command line arguments of toolbus and tools have been
-  renamed/reorganized
-
-\end{itemize}
-
-\paragraph{New features}
-
-\begin{itemize}
-\item Nearly all built-in limits have been removed.
-\item The ToolBus protocol is now fully checked and errors are reported
-  when deviations from the protocol occur.
-\item The input/output signatures of tools are now used in two ways:
-(1) when a tools is executed (or connects), the \TB\ interpreter sends it
-the expected input/output signature of the tool; this can be used in the
-tool to check conformance with the signature as implemented by the tool.
-(2) during execution it is checked that tools only produce results that
-are in their output signature.
-\item Garbage collection has been implemented both in the \TB\ interpreter
-as well as in the library functions available for implementing tools.
-
-\item Type checking has become more strict. It is no longer allowed to
-assign to a (non-result) formal parameter. Instead a new local variable should be introduced.
-For instance, in the process definition
-\begin{verbatim}
-process P(N : int) is N := 3 . printf("N = %d\n", N)
-\end{verbatim}
-the assignment {\tt N := 3} is forbidden. This definition should 
-be replaced by something along the lines
-\begin{verbatim}
-process P(N : int) is let N1 : N in N1 := N . N1 := 3 . printf("N1 = %d\n", N1) endlet
-\end{verbatim}
-\end{itemize}
+In addition, the new API's provide other functions taht are not listed in this
+table.
 
 \section{Limitations/extensions current implementation}
 

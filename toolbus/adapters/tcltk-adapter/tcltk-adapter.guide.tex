@@ -20,17 +20,29 @@
 
 \section{\label{ToolsInTcl2}Writing tools in Tcl/Tk}
 
-Besides the wish-adapter, there is a second, more efficient but also
-less flexible way to connect tools written in Tcl/Tk to the Toolbus.
+There are two ways to connect tools written in Tcl/Tk
+(see Figure \ref{tcltk-adapters}):
+
+\begin{itemize}
+
+\item Connect {\tt wish}, Tcl/Tk's windowing shell, to the \TB\ via an adapter
+sends commands to {\tt wish} via a pipe and receives the outpt of {\tt wish}
+via another pipe. This strategy is used in the {\tt wish-adapter}
+(available, but not further described in this guide).
+
+\item Use an adapter that is completely integrated with a Tcl/Tk interpreter.
+This is more efficient, but less flexible than the previous approach.
+
+\end{itemize}
+
 When the ToolBus distribution has been configured using the option
 {\tt --with-tcltk=<tcl/tk-basepath>}, the {\tt tcltk-adapter} is build.
-In contrast with the wish-adapter, this adapter is completely integrated 
-with a tcl/tk interpreter. This eliminates the piped communication between
-the wish-adapter and the wish interpreter (see Figure \ref{tcltk-adapters}.
 
 \begin{figure}[htb]
-  \centerline{\psfig{figure=tcltk-adapter/adapters.ps,width=13cm,height=8cm}}
+\rule{\textwidth}{0.5mm}
+  \centerline{\psfig{figure=../../adapters/tcltk-adapter/adapters.ps,height=14cm,width=18cm}}
   \caption{\label{tcltk-adapters}The wish-adapter and the tcltk-adapter}
+\rule{\textwidth}{0.5mm}
 \end{figure}
  
 
@@ -151,6 +163,14 @@ the standard error stream for print statements in the Tcl script,
 since using standard output will disrupt the communication with the
 \TB}.
 
+\begin{figure}
+\rule{\textwidth}{0.5mm}
+\input{hello.tcl.tex}
+  \caption{{\tt hello.tcl}: the hello tool in Tcl}
+  \label{fig:hello.tcl}
+\rule{\textwidth}{0.5mm}
+\end{figure}
+         
 \subsection{\label{Ex-hello2.tcl}The hello example in tcl: {\tt hello.tcl}}
 
 Writing the hello tool in Tcl requires two steps:

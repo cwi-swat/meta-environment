@@ -7,11 +7,11 @@ ellipse "{\tt toolbus -gentifs $S$.tb}" width 2.5
 arrow down from last ellipse.s
 TIFS:box "{\tt $S$.tifs}"
 arrow down from last box.s
-CTIF: ellipse "{\tt ctif -tool $Nm$ -tifs $S$.tifs}" width 2.5
+CTIF: ellipse "{\tt tifstoc -tool $Nm$ $S$.tifs}" width 2.5
 arrow down
 box "{\tt $Nm$.tif.c}"
 
-FTN:ellipse "{\tt ftntif}" dashed at CTIF+(-2,0)
+FTN:ellipse "{\tt javatif}" dashed at CTIF+(-2,0)
 COB:ellipse "{\tt coboltif}" dashed at CTIF+(2,0)
 arrow dashed from TIFS.w to FTN.n
 arrow dashed from TIFS.e to COB.n

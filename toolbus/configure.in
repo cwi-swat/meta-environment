@@ -57,7 +57,7 @@ AC_SUBST(NOWEB)
 AC_SET_MAKE
 
 ALL_ADAPTERS="gen-adapter emacs-adapter java-adapter perl-adapter \
-              python-adapter tcltk-adapter java-adapter"
+              python-adapter tcltk-adapter"
 AC_SUBST(ALL_ADAPTERS)
 
 dnl Default adapters

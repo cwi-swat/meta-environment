@@ -53,7 +53,7 @@ mean, respectively, send by \TB\ and receive by \TB.}
 \begin{itemize}
 \item {\tt snd-eval($Tid$, cmd($Cmd$, input($Str$))}: execute the Unix command
 \begin{quote}
-	{\tt $Cmd$ < $Str$}
+        {\tt $Cmd$ < $Str$}
 \end{quote}
 i.e., execute $Cmd$ with $Str$ as standard input. The output of this command execution
 is captured and will be returned by default as string value (see below).
@@ -85,7 +85,7 @@ where ``{\tt ls -l}'' produces the directory listing and
 ``{\tt wc -w}'' counts the number of words in this listing.
 The same effect is achieved by the script given in Figure~\ref{fig:pipe.tb}.
 
-\begin{figure}
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{pipe.tb.tex}
   \caption{{\tt pipe.tb}: Executing the pipe line {\tt ls -l | wc} in a script.}
