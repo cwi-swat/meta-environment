@@ -786,7 +786,7 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   pt->numprods     = numprods;
 
   /*  Action table -- determine upper size/class bound, and initialize  */
-  for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < action_entries;
+  for(tableclass=4, tablesize=(1 << tableclass) ; tablesize < action_entries;
       tablesize <<= 1) {
     tableclass++;
   }
@@ -798,7 +798,7 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   }
 
   /*  Goto table -- determine upper size/class bound, and initialize  */
-  for(tableclass=14, tablesize=(1 << tableclass) ; tablesize < goto_entries;
+  for(tableclass=4, tablesize=(1 << tableclass) ; tablesize < goto_entries;
       tablesize <<= 1) {
     tableclass++;
   }
