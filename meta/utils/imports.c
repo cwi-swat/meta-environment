@@ -41,9 +41,9 @@ extern char* optarg;
    "   that are imported by an ASF+SDF module.\n"\
    "\n"\
    "usage:\n"\
-   "   imports [-option] msm-paths-file module\n"\
+   "   imports [-option] meta.conf-file module\n"\
    "\n"\
-   "      msm-paths-file file containing search paths\n"\
+   "      meta.conf-file file containing search paths\n"\
    "      module         AsFix representation of ASF+SDF module\n"\
    "\n"\
    "      options:\n"\

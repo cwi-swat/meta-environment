@@ -390,7 +390,7 @@ int main(int argc, char **argv)
   int cid, i=0;
   ATerm bottomOfStack;
 
-  FILE *f = fopen(".msm-paths", "r");
+  FILE *f = fopen("meta.conf", "r");
   if(f) {
     while(fgets(paths[nr_paths], PATH_LEN, f))
       if(strlen(paths[nr_paths]) > 0 && paths[nr_paths][0] != '#') {
@@ -399,7 +399,10 @@ int main(int argc, char **argv)
         nr_paths++;
       }
   } else {
-    fprintf(stderr, "warning: cannot open .msm-paths file");
+    paths[nr_paths][0] = '.';
+    paths[nr_paths][1] = '\0';
+    nr_paths++;
+    ATfprintf(stderr, "warning: cannot open meta.conf file\n");
   }
   for(i=0; i<nr_paths; i++)
     ATfprintf(stderr, "path %d = %s\n", i, paths[i]);

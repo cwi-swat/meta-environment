@@ -24,7 +24,7 @@
 #include <errno.h>
 #include <limits.h>
 
-#include "msm-utils.h"
+#include "meta-utils.h"
 #include "module-utils.h"
 
 /* Macros for displaying error messages */
@@ -144,12 +144,12 @@ ATermList _getImports( char* path )
  * These options can be 'or-ed' together.
  *
  * location of modules is performed relatively to the directories
- * specified in the msm-aths file msmPathFile.
+ * specified in the meta.conf-paths file metaPathFile.
  *
  */
-ATermList getImports( char* msmPathsFile, char* topModule, unsigned int options )
+ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options )
 {
-   msm_paths mp;
+   meta_paths mp;
    char*  path;
    char   module[_POSIX_PATH_MAX];
    ATermList imports;
@@ -165,10 +165,10 @@ ATermList getImports( char* msmPathsFile, char* topModule, unsigned int options 
    imports = ATmakeList0();
    
       
-   /* open msm-paths file */
-   if( msmPathsOpen( &mp, msmPathsFile ) == -1 )
+   /* open meta.conf-paths file */
+   if( metaPathsOpen( &mp, metaPathsFile ) == -1 )
    {
-      FAIL1( "msmPathsOpen", msmPathsFile );
+      FAIL1( "metaPathsOpen", metaPathsFile );
       exit( 1 );
    }
 
@@ -182,7 +182,7 @@ ATermList getImports( char* msmPathsFile, char* topModule, unsigned int options 
       strcat( module, ".asfix" );
 
    /* locate teh top module... */
-   path = msmPathsLocate( &mp, module );
+   path = metaPathsLocate( &mp, module );
    if( path == NULL )
       return imports;
 
@@ -213,14 +213,14 @@ ATermList getImports( char* msmPathsFile, char* topModule, unsigned int options 
         /* from the list thus obtained, we remove entries that are
          * already contained in imports. Furthermore, we construct
          * full path names from the module names, by locating their location.
-         * relative to the path names defined in msmPathsFile
+         * relative to the path names defined in metaPathsFile
          */
          t = ATgetFirst( modules );
          modules = ATgetNext( modules );
 
          ATmatch( t, "<str>", &path );
          sprintf( module, "%s.asfix", path );
-         path = msmPathsLocate( &mp, module );
+         path = metaPathsLocate( &mp, module );
          if( path == NULL )
          {
             /* module could not be located. FailWhenNotFound option
