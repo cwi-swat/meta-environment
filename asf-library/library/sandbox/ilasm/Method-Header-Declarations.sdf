@@ -1,0 +1,89 @@
+module ilasm/Method-Header-Declarations
+
+imports ilasm/Native-Type-Declarations
+	ilasm/Signature-Type-Specifications
+
+exports
+
+sorts MethodHead MethodAttr MethodAttrs PInvAttr PInvAttrs
+      MethodName ParamAttr ParamAttrs ImplAttr ImplAttrs
+      SigArgs SigArgList SigArg
+
+context-free syntax
+	".method" MethodAttrs CallConv ParamAttrs Type 
+		MethodName SigArgs ImplAttrs  -> MethodHead
+
+	".method" MethodAttrs CallConv ParamAttrs Type 
+		"marshal" "(" NativeType ")"
+		MethodName SigArgs ImplAttrs  -> MethodHead
+
+	MethodAttr* -> MethodAttrs
+
+	"static" -> MethodAttr	
+	"public" -> MethodAttr	
+	"private" -> MethodAttr	
+	"family" -> MethodAttr	
+	"assembly" -> MethodAttr	
+	"famandassem" -> MethodAttr	
+	"famorassem" -> MethodAttr	
+	"privatescope" -> MethodAttr	
+	"final" -> MethodAttr	
+	"virtual" -> MethodAttr	
+	"abstract" -> MethodAttr	
+	"hidebysig" -> MethodAttr	
+	"newslot" -> MethodAttr	
+	"reqsecobj" -> MethodAttr	
+	"specialname" -> MethodAttr	
+	"rtspecialname" -> MethodAttr	
+	"unmanagedexp" -> MethodAttr	
+	"pinvokeimpl" "(" CompQString "as" 
+		CompQString PInvAttr ")" -> MethodAttr	
+	"pinvokeimpl" "(" CompQString PInvAttr ")" -> MethodAttr	
+	"pinvokeimpl" "(" PInvAttr ")" -> MethodAttr	
+
+	PInvAttr* -> PInvAttrs
+
+	"nomangle" -> PInvAttr
+	"ansi" -> PInvAttr
+	"unicode" -> PInvAttr
+	"autochar" -> PInvAttr
+	"lasterr" -> PInvAttr
+	"winapi" -> PInvAttr
+	"cdecl" -> PInvAttr
+	"stdcall" -> PInvAttr
+	"thiscall" -> PInvAttr
+	"fastcall" -> PInvAttr
+
+	".ctor" -> MethodName
+	".cctor" -> MethodName
+	CompName -> MethodName
+
+	ParamAttr* -> ParamAttrs
+
+	"[" "in" "]" -> ParamAttr
+	"[" "out" "]" -> ParamAttr
+	"[" "opt" "]" -> ParamAttr
+
+	ImplAttr* -> ImplAttrs
+
+	"native" -> ImplAttr
+	"cil" -> ImplAttr
+	"optil" -> ImplAttr
+	"managed" -> ImplAttr
+	"unmanaged" -> ImplAttr
+	"forwardref" -> ImplAttr
+	"preservesig" -> ImplAttr
+	"runtime" -> ImplAttr
+	"internalcall" -> ImplAttr
+	"synchronized" -> ImplAttr
+	"noinlining" -> ImplAttr
+
+	{SigArg ","}* SigArgs 
+
+	"..." -> SigArg
+	ParamAttr Type -> SigArg
+	ParamAttr Type Id -> SigArg
+	ParamAttr Type "marshal" "(" NativeType ")" -> SigArg
+	ParamAttr Type "marshal" "(" NativeType ")" Id -> SigArg
+
+

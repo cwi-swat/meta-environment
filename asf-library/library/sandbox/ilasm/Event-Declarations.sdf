@@ -1,0 +1,28 @@
+module ilasm/Event-Declarations
+
+imports ilasm/External-Source-Declarations
+
+exports
+
+sorts EventHead EventAttrs EventAttr EventDecls EventDecl
+
+context-free syntax
+	".event" EventAttrs TypeSpec Id -> EventHead
+	".event" EventAttrs Id -> EvenetHead
+
+	EventAttr* -> EventAttrs
+
+	"rtspecialname" -> EventAttr
+	"specialname" -> EventAttr
+
+	EventDecl* -> EventDecls
+
+	".addon" MethodRef -> EventDecl
+	".removeon" MethodRef -> EventDecl
+	".fire" MethodRef -> EventDecl
+	".other" MethodRef-> EventDecl
+	CustomAttrDecl -> EventDecl
+	ExtSourceSpec -> EventDecl
+	LanguageDecl -> EventDecl
+
+

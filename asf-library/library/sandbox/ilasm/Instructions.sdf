@@ -1,0 +1,314 @@
+module ilasm/Instructions
+
+imports ilasm/Identifier-Nonterminals
+
+exports
+
+sorts INSTR-NONE INSTR-VAR INSTR-I INSTR-I8 INSTR-R
+      INSTR-BRTARGET INSTR-METHOD INSTR-FIELD
+      INSTR-TYPE INSTR-STRING INSTR-SIG INSTR-TOK
+      INSTR-SWITCH
+
+context-free syntax
+
+%% This need checking agains the instruction set reference. (got it from DotGNU pnet-0.5.0).
+
+"add"					-> INSTR-NONE	
+"add.ovf"				-> INSTR-NONE
+"add.ovf.un"			-> INSTR-NONE
+"and"					-> INSTR-NONE
+"ann.catch"				-> INSTR-NONE
+"ann.def"				-> INSTR-NONE
+"ann.hoisted"			-> INSTR-NONE
+"ann.lab"				-> INSTR-NONE
+"arglist"				-> INSTR-NONE
+"break"					-> INSTR-NONE
+"ceq"					-> INSTR-NONE
+"cgt"					-> INSTR-NONE
+"cgt.un"				-> INSTR-NONE
+"ckfinite"				-> INSTR-NONE
+"clt"					-> INSTR-NONE
+"clt.un"				-> INSTR-NONE
+"conv.i"				-> INSTR-NONE
+"conv.i1"				-> INSTR-NONE
+"conv.i2"				-> INSTR-NONE
+"conv.i4"				-> INSTR-NONE
+"conv.i8"				-> INSTR-NONE
+"conv.ovf.i"			-> INSTR-NONE
+"conv.ovf.i.un"			-> INSTR-NONE
+"conv.ovf.i1"			-> INSTR-NONE
+"conv.ovf.i1.un"		-> INSTR-NONE
+"conv.ovf.i2"			-> INSTR-NONE
+"conv.ovf.i2.un"		-> INSTR-NONE
+"conv.ovf.i4"			-> INSTR-NONE
+"conv.ovf.i4.un"		-> INSTR-NONE
+"conv.ovf.i8"			-> INSTR-NONE
+"conv.ovf.i8.un"		-> INSTR-NONE
+"conv.ovf.u"			-> INSTR-NONE
+"conv.ovf.u.un"			-> INSTR-NONE
+"conv.ovf.u1"			-> INSTR-NONE
+"conv.ovf.u1.un"		-> INSTR-NONE
+"conv.ovf.u2"			-> INSTR-NONE
+"conv.ovf.u2.un"		-> INSTR-NONE
+"conv.ovf.u4"			-> INSTR-NONE
+"conv.ovf.u4.un"		-> INSTR-NONE
+"conv.ovf.u8"			-> INSTR-NONE
+"conv.ovf.u8.un"		-> INSTR-NONE
+"conv.r.un"				-> INSTR-NONE
+"conv.r4"				-> INSTR-NONE
+"conv.r8"				-> INSTR-NONE
+"conv.u"				-> INSTR-NONE
+"conv.u1"				-> INSTR-NONE
+"conv.u2"				-> INSTR-NONE
+"conv.u4"				-> INSTR-NONE
+"conv.u8"				-> INSTR-NONE
+"cpblk"					-> INSTR-NONE
+"div"					-> INSTR-NONE
+"div.un"				-> INSTR-NONE
+"dup"					-> INSTR-NONE
+"endfault"				-> INSTR-NONE	
+"endfilter"				-> INSTR-NONE
+"endfinally"			-> INSTR-NONE
+"initblk"				-> INSTR-NONE
+"ldarg.0"				-> INSTR-NONE
+"ldarg.1"				-> INSTR-NONE
+"ldarg.2"				-> INSTR-NONE
+"ldarg.3"				-> INSTR-NONE
+"ldc.i4.0"				-> INSTR-NONE
+"ldc.i4.1"				-> INSTR-NONE
+"ldc.i4.2"				-> INSTR-NONE
+"ldc.i4.3"				-> INSTR-NONE
+"ldc.i4.4"				-> INSTR-NONE
+"ldc.i4.5"				-> INSTR-NONE
+"ldc.i4.6"				-> INSTR-NONE
+"ldc.i4.7"				-> INSTR-NONE
+"ldc.i4.8"				-> INSTR-NONE
+"ldc.i4.m1"				-> INSTR-NONE
+"ldc.i4.M1"				-> INSTR-NONE	
+"ldelem.i"				-> INSTR-NONE
+"ldelem.i1"				-> INSTR-NONE
+"ldelem.i2"				-> INSTR-NONE
+"ldelem.i4"				-> INSTR-NONE
+"ldelem.i8"				-> INSTR-NONE
+"ldelem.r4"				-> INSTR-NONE
+"ldelem.r8"				-> INSTR-NONE
+"ldelem.ref"			-> INSTR-NONE
+"ldelem.u1"				-> INSTR-NONE
+"ldelem.u2"				-> INSTR-NONE
+"ldelem.u4"				-> INSTR-NONE
+"ldelem.u8"				-> INSTR-NONE	
+"ldind.i"				-> INSTR-NONE
+"ldind.i1"				-> INSTR-NONE
+"ldind.i2"				-> INSTR-NONE
+"ldind.i4"				-> INSTR-NONE
+"ldind.i8"				-> INSTR-NONE
+"ldind.r4"				-> INSTR-NONE
+"ldind.r8"				-> INSTR-NONE
+"ldind.ref"				-> INSTR-NONE
+"ldind.u1"				-> INSTR-NONE
+"ldind.u2"				-> INSTR-NONE
+"ldind.u4"				-> INSTR-NONE
+"ldind.u8"				-> INSTR-NONE	
+"ldlen"					-> INSTR-NONE
+"ldloc.0"				-> INSTR-NONE
+"ldloc.1"				-> INSTR-NONE
+"ldloc.2"				-> INSTR-NONE
+"ldloc.3"				-> INSTR-NONE
+"ldnull"				-> INSTR-NONE
+"localloc"				-> INSTR-NONE
+"mul"					-> INSTR-NONE
+"mul.un"				-> INSTR-NONE 
+"mul.ovf"				-> INSTR-NONE
+"mul.ovf.un"			-> INSTR-NONE
+"neg"					-> INSTR-NONE
+"nop"					-> INSTR-NONE
+"not"					-> INSTR-NONE
+"or"					-> INSTR-NONE
+"pop"					-> INSTR-NONE
+"refanytype"			-> INSTR-NONE
+"rem"					-> INSTR-NONE
+"rem.un"				-> INSTR-NONE
+"ret"					-> INSTR-NONE
+"rethrow"				-> INSTR-NONE
+"shl"					-> INSTR-NONE
+"shr"					-> INSTR-NONE
+"shr.un"				-> INSTR-NONE
+"stelem.i"				-> INSTR-NONE
+"stelem.i1"				-> INSTR-NONE
+"stelem.i2"				-> INSTR-NONE
+"stelem.i4"				-> INSTR-NONE
+"stelem.i8"				-> INSTR-NONE
+"stelem.r4"				-> INSTR-NONE
+"stelem.r8"				-> INSTR-NONE
+"stelem.ref"			-> INSTR-NONE
+"stind.i"				-> INSTR-NONE
+"stind.i1"				-> INSTR-NONE
+"stind.i2"				-> INSTR-NONE
+"stind.i4"				-> INSTR-NONE
+"stind.i8"				-> INSTR-NONE
+"stind.r4"				-> INSTR-NONE
+"stind.r8"				-> INSTR-NONE
+"stind.ref"				-> INSTR-NONE
+"stloc.0"				-> INSTR-NONE
+"stloc.1"				-> INSTR-NONE
+"stloc.2"				-> INSTR-NONE
+"stloc.3"				-> INSTR-NONE
+"sub"					-> INSTR-NONE
+"sub.ovf"				-> INSTR-NONE
+"sub.ovf.un"			-> INSTR-NONE
+"tail."					-> INSTR-NONE
+"tail"					-> INSTR-NONE		
+"throw"					-> INSTR-NONE
+"volatile."				-> INSTR-NONE
+"volatile"				-> INSTR-NONE	
+"xor"					-> INSTR-NONE
+
+"ann.dead"				-> INSTR-VAR	
+"ann.live"				-> INSTR-VAR
+"ann.ref"				-> INSTR-VAR
+"ann.ref.s"				-> INSTR-VAR
+"ldarg"					-> INSTR-VAR
+"ldarg.s"				-> INSTR-VAR
+"ldarga"				-> INSTR-VAR
+"ldarga.s"				-> INSTR-VAR
+"ldloc"					-> INSTR-VAR
+"ldloc.s"				-> INSTR-VAR
+"ldloca"				-> INSTR-VAR
+"ldloca.s"				-> INSTR-VAR
+"starg"					-> INSTR-VAR
+"starg.s"				-> INSTR-VAR
+"stloc"					-> INSTR-VAR
+"stloc.s"				-> INSTR-VAR
+
+"ldc.i4"				-> INSTR-I
+"ldc.i4.s"				-> INSTR-I8
+"ldc.i8"				-> INSTR-I8
+"ldc.r4"				-> INSTR-R
+"ldc.r8"				-> INSTR-R
+
+%%"unaligned."			-> INSTR-I8
+"unaligned"				-> INSTR-I8
+
+"ann.data"				-> INSTR-BRANCH 
+"ann.data.s"			-> INSTR-BRANCH
+"beq"					-> INSTR-BRANCH
+"beq.s"					-> INSTR-BRANCH
+"bge"					-> INSTR-BRANCH
+"bge.s"					-> INSTR-BRANCH
+"bge.un"				-> INSTR-BRANCH
+"bge.un.s"				-> INSTR-BRANCH
+"bgt"					-> INSTR-BRANCH
+"bgt.s"					-> INSTR-BRANCH
+"bgt.un"				-> INSTR-BRANCH
+"bgt.un.s"				-> INSTR-BRANCH
+"ble"					-> INSTR-BRANCH
+"ble.s"					-> INSTR-BRANCH
+"ble.un"				-> INSTR-BRANCH
+"ble.un.s"				-> INSTR-BRANCH
+"blt"					-> INSTR-BRANCH
+"blt.s"					-> INSTR-BRANCH
+"blt.un"				-> INSTR-BRANCH
+"blt.un.s"				-> INSTR-BRANCH
+"bne.un"				-> INSTR-BRANCH
+"bne.un.s"				-> INSTR-BRANCH
+"br"					-> INSTR-BRANCH
+"br.s"					-> INSTR-BRANCH
+"brfalse"				-> INSTR-BRANCH
+"brfalse.s"				-> INSTR-BRANCH
+"brtrue"				-> INSTR-BRANCH
+"brtrue.s"				-> INSTR-BRANCH
+"leave"					-> INSTR-BRANCH
+"leave.s"				-> INSTR-BRANCH
+
+"brnull"				-> INSTR-BRANCH	
+"brnull.s"				-> INSTR-BRANCH
+"brzero"				-> INSTR-BRANCH
+"brzero.s"				-> INSTR-BRANCH
+"brinst"				-> INSTR-BRANCH
+"brinst.s"				-> INSTR-BRANCH
+
+"ann.call"				-> INSTR-METHOD 
+"ann.hoisted-call"		-> INSTR-METHOD
+"call"					-> INSTR-METHOD
+"callvirt"				-> INSTR-METHOD
+"jmp"					-> INSTR-METHOD
+"ldftn"					-> INSTR-METHOD
+"ldvirtftn"				-> INSTR-METHOD
+"newobj"				-> INSTR-METHOD
+
+"ldfld"					-> INSTR-FIELD	
+"ldflda"				-> INSTR-FIELD
+"ldsfld"				-> INSTR-FIELD
+"ldsflda"				-> INSTR-FIELD
+"stfld"					-> INSTR-FIELD
+"stsfld"				-> INSTR-FIELD
+
+"box"					-> INSTR-TYPE		
+"castclass"				-> INSTR-TYPE
+"cpobj"					-> INSTR-TYPE
+"initobj"				-> INSTR-TYPE
+"isinst"				-> INSTR-TYPE
+"ldelema"				-> INSTR-TYPE
+"ldobj"					-> INSTR-TYPE
+"mkrefany"				-> INSTR-TYPE
+"newarr"				-> INSTR-TYPE
+"refanyval"				-> INSTR-TYPE
+"sizeof"				-> INSTR-TYPE
+"stobj"					-> INSTR-TYPE
+"unbox"					-> INSTR-TYPE
+
+"ldstr"					-> INSTR-STRING
+
+"calli"					-> INSTR-SIG
+"jmpi"					-> INSTR-SIG
+
+%%"ldptr"					->  ??
+
+%% "ann.phi"				-> ??
+
+"switch"				-> INSTR-SWITCH
+
+
+
+%%	"nop" -> INSTR-NONE 
+%%	"ldarg" -> INSTR-VAR 
+%%	"ldarga" -> INSTR-VAR 
+%%	"starg" -> INSTR-VAR 
+%%	"ldloc" -> INSTR-VAR 
+%%	"ldloca" -> INSTR-VAR 
+%%	"stloc" -> INSTR-VAR 
+%%	"ldc.i4" -> INSTR-I 
+%%	"ldc.i8" -> INSTR-I8 
+%%	"" -> INSTR-R
+%%	"" -> INSTR-R
+%%	"" -> INSTR-R
+%%	"br" -> INSTR-BRTARGET 
+%%	"brtrue" -> INSTR-BRTARGET 
+%%	"brfalse" -> INSTR-BRTARGET 
+%%	"beq" -> INSTR-BRTARGET 
+%%	"bne" -> INSTR-BRTARGET 
+%%	"call" -> INSTR-METHOD 
+%%	"callvirt" -> INSTR-METHOD 
+%%	"jmp" -> INSTR-METHOD 
+%%	"newobj" -> INSTR-METHOD 
+%%	"ldftn" -> INSTR-METHOD 
+%%	"ldvirtftn" -> INSTR-METHOD 
+%%	"ldfld" -> INSTR-FIELD
+%%	"ldsfld" -> INSTR-FIELD
+%%	"ldflda" -> INSTR-FIELD
+%%	"ldsflda" -> INSTR-FIELD
+%%	"stfld" -> INSTR-FIELD
+%%	"stsfld" -> INSTR-FIELD
+%%	"ldobj" -> INSTR-TYPE 
+%%	"stobj" -> INSTR-TYPE 
+%%	"box" -> INSTR-TYPE 
+%%	"unbox" -> INSTR-TYPE 
+%%	"newarr" -> INSTR-TYPE 
+%%	"ldstr" -> INSTR-STRING 
+%%	"calli" -> INSTR-SIG 
+%%	"ldtoken" -> INSTR-TOK
+%%	"switch" -> INSTR-SWITCH
+%%	"ldstr" -> INSTR-STRING 
+%%	"calli" -> INSTR-SIG 
+%%	"ldtoken" -> INSTR-TOK
+%%	"switch" -> INSTR-SWITCH

@@ -1,0 +1,16 @@
+module ilasm/Custom-Attribute-Declarations
+
+imports ilasm/Signature-Type-Specifications
+
+exports
+
+sorts CustomAttrDecl CustomType
+
+context-free syntax
+	".custom" CustomType -> CustomAttrDecl
+	".custom" CustomType "=" CompQString -> CustomAttrDecl
+	".custom" CustomType "=" "(" Bytes ")" -> CustomAttrDecl
+	".custom" "(" OwnerType ")" CustomType -> CustomAttrDecl
+	".custom" "(" OwnerType ")" CustomType "=" CompQString -> CustomAttrDecl
+	".custom" "(" OwnerType ")" CustomType "=" "(" Bytes ")" -> CustomAttrDecl
+

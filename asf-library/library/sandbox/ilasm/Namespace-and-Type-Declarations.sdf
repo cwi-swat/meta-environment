@@ -1,0 +1,83 @@
+module ilasm/Namespace-and-Type-Declarations
+
+imports ilasm/External-Source-Declarations
+	ilasm/Signature-Type-Specifications
+	ilasm/Field-Declarations
+	ilasm/Data-Declarations
+	ilasm/Method-Header-Declarations
+	ilasm/Method-Body-Declarations
+	ilasm/Event-Declarations
+	
+
+exports
+
+sorts NameSpaceHead ClassHead ClassAttrs ClassAttr ExtendsClause
+      ImplClause ClassRefs ClassRef SlashedName ClassDecls ClassDecl
+
+context-free syntax
+	".namespace" CompName -> NameSpaceHead
+
+	".class" ClassAttrs Id ExtendsClause ImplClause -> ClassHead
+
+	ClassAttr* -> ClassAttrs
+
+	%% Book says: ClassAttr "public" -> ClassAttr 
+	%% So ClassAttr is a list itself also?
+	%% We take the normal route.
+
+	"public" -> ClassAttr
+	"private" -> ClassAttr
+	"nested" "public" -> ClassAttr
+	"nested" "private" -> ClassAttr
+	"nested" "family" -> ClassAttr
+	"nested" "assembly" -> ClassAttr
+	"nested" "famandassem" -> ClassAttr
+	"nested" "famorassem" -> ClassAttr
+	"value" -> ClassAttr
+	"enum" -> ClassAttr
+	"interface" -> ClassAttr
+	"sealed" -> ClassAttr
+	"abstract" -> ClassAttr
+	"auto" -> ClassAttr
+	"sequential" -> ClassAttr
+	"explicit" -> ClassAttr
+	"ansi" -> ClassAttr
+	"unicode" -> ClassAttr
+	"autochar" -> ClassAttr
+	"import" -> ClassAttr
+	"serializable" -> ClassAttr
+	"beforefieldinit" -> ClassAttr
+	"specialname" -> ClassAttr
+	"rtspecialname" -> ClassAttr
+
+	("extends" ClassRef)? -> ExtendsClause
+
+	("implements" ClassRefs)? -> ImplClause
+
+	{ClassRef ","}+ -> ClassRefs
+
+	"[" CompName "]" SlashedName -> ClassRef
+	"[" ".module" CompName "]" SlashedName -> ClassRef
+	SlashedName -> ClassRef
+
+	{CompName "/"}+ -> SlashedName
+
+	ClassDecl* -> ClassDecls
+
+	MethodHead "{" MethodDecls "}" -> ClassDecl
+	ClassHead "{" ClassDecls "}" -> ClassDecl
+	EventHead "{" EventDecls "}" -> ClassDecl
+	PropHead "{" PropDecls "}" -> ClassDecl
+	FieldDecl -> ClassDecl
+	DataDecl -> ClassDecl
+	SecDecl -> ClassDecl
+	ExtSourceSpec -> ClassDecl
+	CustomAttrDecl -> ClassDecl
+	".size" Int32 -> ClassDecl
+	".pack" Int32 -> ClassDecl
+	".override" TypeSpec "::" MethodName
+		"with" CallConv Type TypeSpec "::"
+		MethodName "(" SigArgs ")" -> ClassDecl
+	LanguageDecl -> ClassDecl
+
+

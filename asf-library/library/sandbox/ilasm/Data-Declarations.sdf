@@ -1,0 +1,37 @@
+module ilasm/Data-Declarations
+
+imports ilasm/Field-Declarations
+
+exports
+
+sorts DataDecl DataHead Tls DataBody DataItemList DataItem
+
+context-free syntax
+	DataHead DataBody -> DataDecl
+
+	".data" Tls Id "=" -> DataHead
+	".data" Tls -> DataHead
+
+	"tls"? -> Tls
+
+	"{" DataItemList "}" -> DataBody
+	DataItem -> DataBody
+
+	{DataItem ","}+ -> DataItemList
+
+	"char" "*" "(" CompQString ")" -> DataItem
+	"&" Id -> DataItem
+	"bytearray" "=" "(" Bytes ")" -> DataItem
+	"float32" "(" Float64 ")" RepeatOpt -> DataItem
+	"float64" "(" Float64 ")" RepeatOpt -> DataItem
+	"int64" "(" Int64 ")" RepeatOpt -> DataItem
+	"int32" "(" Int32 ")" RepeatOpt -> DataItem
+	"int16" "(" Int32 ")" RepeatOpt -> DataItem
+	"int8" "(" Int32 ")" RepeatOpt -> DataItem
+	"float32"  RepeatOpt -> DataItem
+	"float64" RepeatOpt -> DataItem
+	"int64" RepeatOpt -> DataItem
+	"int32" RepeatOpt -> DataItem
+	"int16" RepeatOpt -> DataItem
+	"int8" RepeatOpt -> DataItem
+

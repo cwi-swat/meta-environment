@@ -1,0 +1,20 @@
+module ilasm/External-Source-Declarations
+
+imports ilasm/Identifier-Nonterminals
+
+exports
+
+sorts ExtSourceSpec LanguageDecl VTFixupDecl VTFixupAttr
+
+context-free syntax
+	".line" Int32 SQString -> ExtSourceSpec
+	".line" Int32  -> ExtSourceSpec
+	".line" Int32 ":" Int32 SQString -> ExtSourceSpec
+	".line" Int32 ":" Int32  -> ExtSourceSpec
+
+	".language" {SQSTRING ","}3+ -> LanguageDecl
+
+	".vtfixup" "[" Int32 "]" VTFixupAttr "at" Id -> VTFixupDecl
+
+	("int32"|"int64"|"fromunmanaged"|"callmostderived")* -> VTFixupAttr
+	

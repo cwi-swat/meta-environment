@@ -1,0 +1,12 @@
+module ilasm/Identifier-Nonterminals
+
+imports ilasm/Lexical-Tokens
+
+exports
+
+sorts Id CompName
+
+context-free syntax
+	SQSTRING | ID -> Id
+	Id | DOTTEDNAME -> CompName
+	CompName "." CompName -> CompName {left}

@@ -1,0 +1,51 @@
+module ilasm/Field-Declarations
+
+imports ilasm/Signature-Type-Specifications
+	ilasm/Native-Type-Declarations
+
+exports
+
+sorts FieldDecl RepeatOpt FieldAttrs FieldAttr AtOpt InitOpt FieldInit
+
+context-free syntax
+	".field" RepeatOpt FieldAttrs Type Id AtOpt InitOpt -> FieldDecl
+
+	("[" Int32 "]")? -> RepeatOpt
+
+	FieldAttr* -> FieldAttrs
+
+	"public" -> FieldAttr
+	"private" -> FieldAttr
+	"family" -> FieldAttr
+	"assembly" -> FieldAttr
+	"famandassem" -> FieldAttr
+	"famorassem" -> FieldAttr
+	"privatescope" -> FieldAttr
+	"static" -> FieldAttr
+	"initonly" -> FieldAttr
+	"rtspecialname" -> FieldAttr
+	"marshal" "(" NativeType ")" -> FieldAttr
+	"literal" -> FieldAttr
+	"notserialized" -> FieldAttr
+
+	("at" Id)? -> AtOpt
+
+	("=" FieldInit)? -> InitOpt
+
+	"float32" "(" Float64 ")" -> FieldInit
+	"float64" "(" Float64 ")" -> FieldInit
+	"float32" "(" Int64 ")" -> FieldInit
+	"float64" "(" Int64 ")" -> FieldInit
+	"int64" "(" Int64 ")" -> FieldInit
+	"int32" "(" Int64 ")" -> FieldInit
+	"int16" "(" Int64 ")" -> FieldInit
+	"char" "(" Int64 ")" -> FieldInit
+	"int8" "(" Int64 ")" -> FieldInit
+	"bool" "(" TrueFalse ")" -> FieldInit
+	CompQString -> FieldInit
+	"bytearray" "(" Bytes ")" -> FieldInit
+	"nullref" -> FieldInit
+
+
+
+
