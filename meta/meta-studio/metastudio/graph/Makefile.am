@@ -48,8 +48,6 @@ java_JAVA = \
 	Edge_DefaultImpl.java \
 	Graph.java \
 	GraphImpl.java \
-	GraphPanel.java \
-	GraphWrapper.java \
 	Graph_Default.java \
 	Graph_DefaultImpl.java \
 	MetaGraphConstructor.java \

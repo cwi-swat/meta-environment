@@ -27,7 +27,7 @@ implements aterm.ATerm
    this.term = term;
   }
 
-  protected MetaGraphFactory getMetaGraphFactory() {
+  public MetaGraphFactory getMetaGraphFactory() {
     return (MetaGraphFactory) getFactory();
   }
 
