@@ -496,6 +496,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
         if (node != null) {
             Rectangle rect = getNodeRectangle(node);
+            
             scrollRectToVisible(rect);
         }
         repaint();

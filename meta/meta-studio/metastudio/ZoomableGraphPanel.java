@@ -39,6 +39,7 @@ public class ZoomableGraphPanel extends JPanelTool {
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 graphPanel.setScale(slider.getValue());
+                graphPanel.setSelectedNode(graphPanel.getSelectedNode());
             }
         });
         

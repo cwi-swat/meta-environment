@@ -44,7 +44,7 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         importedBy = new LinkedList();
         importedByMenu = makeModuleSelectionMenu("imported by", importedBy, moduleManager);
         add(importedByMenu);
-
+        
         clearInfo();
         
         moduleManager.addModuleSelectionListener(this);

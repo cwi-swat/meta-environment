@@ -34,6 +34,10 @@ public class Module implements Comparable {
 	public String getName() {
 		return _name;
 	}
+    
+    public String getAbbreviation() {
+        return _name.substring(_name.lastIndexOf('/'),-1);
+    }
 
 	private void setName(String name) {
 		_name = name;

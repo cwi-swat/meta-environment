@@ -106,4 +106,8 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 		path[0] = root;
 		fireTreeStructureChanged(new TreeModelEvent(root, path));
 	}
+    
+    public List getModules() {
+        return new LinkedList(moduleTable.values());
+    }
 }
