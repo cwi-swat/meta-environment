@@ -51,8 +51,7 @@ booltest.pt: Booleans.trm.tbl booltest.trm
 	${SDF2JAVA} --input $< \
                     --output ${top_srcdir} \
                     --name $* \
-		    --package test \
-		    --verbose
+		    --package test 
 	${JAVAC} -classpath ${top_srcdir}:${JAVA_ATERM} \
 		${top_srcdir}/test/$($*_Main).java
 	@(echo "#! /bin/sh";\
