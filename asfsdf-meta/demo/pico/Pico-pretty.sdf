@@ -5,6 +5,7 @@ imports languages/pico/syntax/Pico-Syntax
 
 exports
   context-free syntax
+    program2box(PROGRAM)                -> Box {to-box}
     statementlist2box({STATEMENT ";"}*) -> Box {to-box}
     idtype2box(ID-TYPE)                 -> Box {to-box}
     idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
@@ -12,16 +13,20 @@ exports
     box2decls(Box)                      -> DECLS {from-box}
     box2idtype(Box)                     -> ID-TYPE {from-box}
     box2idtypelist(Box)                 -> {ID-TYPE ","}* {from-box}
+    box2statementlist(Box)              -> {STATEMENT ";"}* {from-box}
     box2program(Box)                    -> PROGRAM {from-box}
 
 hiddens
   context-free syntax
 
   variables
-    "Program"[0-9]*    -> PROGRAM
+    "Box"[0-9]*        -> Box
+    "Box*"[0-9]*       -> Box*
+    "Decls"[0-9]*      -> DECLS
     "IdType"[0-9]*     -> ID-TYPE
     "IdType*"[0-9]*    -> {ID-TYPE ","}*
     "IdType+"[0-9]*    -> {ID-TYPE ","}+
-    "Decls"[0-9]*      -> DECLS
+    "PicoId"[0-9]*     -> PICO-ID
+    "Program"[0-9]*    -> PROGRAM
     "Statement*"[0-9]* -> {STATEMENT ";"}*
-    "Box"[0-9]*        -> Box
+    "Type"[0-9]*       -> TYPE

@@ -1,15 +1,27 @@
 equations
 
 [pp-program-1]
-begin Decls Statement* end = 
-   box2program(V ["begin" 
-                     I [decls2box(Decls)]
-                     I [statementlist2box(Statement*)]
-                     "end"])
+  begin Decls Statement* end = 
+    box2program(V ["begin" 
+                      I [decls2box(Decls)]
+                      I [statementlist2box(Statement*)]
+                   "end"])
 
 [pp-decls] 
-declare IdType* ; = 
-box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
+  declare IdType* ; = 
+    box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
+
+[idtypelist2box-0]
+  Box := idtype2box(IdType)
+  ===>
+  idtypelist2box(IdType) = V [Box]
+
+[idtypelist2box-1]
+  Box1 := idtype2box(IdType),
+  Box2 := H hs=0 [Box1","],
+  V [Box*] := idtypelist2box(IdType*)
+  ===>
+  idtypelist2box(IdType, IdType*) = V [Box2 Box*]
 
 %% [list]
 %% IdType , IdType+ = 
