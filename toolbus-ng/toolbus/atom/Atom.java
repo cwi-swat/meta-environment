@@ -45,6 +45,20 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   public void setAtomArgs(Ref[] refs) {
     atomArgs = refs;
   }
+  
+  public void addAtomArg(ATerm arg){
+    int n = atomArgs.length;
+    Ref[] newAtomArgs = new Ref[n+1];
+    for(int i = 0; i < n; i++){
+      newAtomArgs[i] = atomArgs[i];
+    }
+    newAtomArgs[n] = new Ref(arg);
+    atomArgs = newAtomArgs;
+  }
+  
+  public ATerm getAtomArgValue(int i){
+    return atomArgs[i].value;
+  }
 
   public Environment getEnv() {
     return env;

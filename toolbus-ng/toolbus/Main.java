@@ -25,6 +25,7 @@ public class Main {
      //DisruptTest();
     //MergeTest();
     //ParseTest();
+    //SndAndRecTest();
     ToolTest();
   }
  
@@ -348,22 +349,47 @@ static void producerTest(){
     
   }
   
+  static void SndAndRecTest(){
+    
+           ToolBus T = new ToolBus();
+      try {
+        ProcessDefinition P1 =
+        new ProcessDefinition("P1",
+        new MsgPair(false, true,  aterms.make("msg1"),
+           new Print ((ATermList) aterms.make("[a,b,c]")),
+           "Disrupt",
+           new Alternative(new SndMsg(aterms.make("msg1reply")),
+                new SndMsg(aterms.make("msg2reply")))
+           ));
+           
+           T.setVerbose(true);
+           T.addProcessDefinition(P1);
+           T.addProcess("P1");
+           T.execute();
+      } catch (ToolBusException e) {
+        e.printStackTrace();
+      }
+  }
   
   static void ToolTest(){
-    
+    try {
     ProcessDefinition P1 =
       new ProcessDefinition("P1", (ATermList) aterms.make("[]"),
-        new LetDefinition((ATermList) aterms.make("[var(-1,int,R), var(-1,str,Name)]"),
-          new Sequence(
-            new Eval(aterms.make("msg(\"hello\")")),
-            new RecVal(aterms.make("count(rvar(-1,qqq,R))")),
-            new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
-            new Sequence(
-              new Event(aterms.make("button(rvar(-1,qqq,Name))")),
-              new Print((ATermList) aterms.make("[var(-1,qqq,Name)]")),
-              new AckEvent(aterms.make("button(var(-1,qqq,Name))"))
-            ) //seq
-          ) //seq
+        new LetDefinition((ATermList) aterms.make("[var(-1,int,R), var(-1,str,Name), var(-1, str, M)]"),
+         // new Sequence(
+            new MsgPair(false, true, 
+                 aterms.make("msg(rvar(-1,qqq,M))"),
+                 new Tau(),
+                 "Sequence",
+                 new SndMsg(aterms.make("count(rvar(-1,qqq,R))"))
+            )
+//            new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
+//            new SndAndRecMsg(true, true,
+//              aterms.make("button(rvar(-1,qqq,Name))")),
+//              new Print((ATermList) aterms.make("[var(-1,qqq,Name)]")),
+//              new AckEvent(aterms.make("button(var(-1,qqq,Name))"))
+//            ) //seq
+//         ) //seq
         ) //let
       );
       
@@ -371,8 +397,15 @@ static void producerTest(){
       
     ProcessDefinition P2 =
       new ProcessDefinition("P2",
-        new LetDefinition((ATermList) aterms.make("[var(-1,int, N)]"),
+        new LetDefinition((ATermList) aterms.make("[var(-1,int, N), var(-1, str, R)]"),
           new Sequence(
+            new MsgPair(true, false,
+             aterms.make("msg(\"hello\")"), 
+             new Tau(),
+             "Sequence",
+             new RecMsg(aterms.make("count(rvar(-1,qqq,R))"))
+             ),
+             new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
             new Assign(aterms.make("var(-1,int, N)"), aterms.make("0")),
             new Iteration(
               new IfThen(aterms.make("less(<term>,15)", varN),
@@ -389,7 +422,7 @@ static void producerTest(){
       )
     );  
     
-    try {
+  
       ToolBus T = new ToolBus();
       T.addProcessDefinition(P1);
       T.addProcessDefinition(P2);
