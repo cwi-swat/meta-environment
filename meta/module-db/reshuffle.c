@@ -356,7 +356,7 @@ void gen_makefile(ATerm name)
       while (!ATisEmpty(modules)) {
         module = ATgetFirst(modules);
         if(ATmatchTerm(module,pattern_asfix_id,&mtext)) {
-          ATfprintf(output,"%s.c\\\n", mtext);
+          ATfprintf(output,"%s.c\n", mtext);
         }
         modules = ATgetNext(modules);
       }
