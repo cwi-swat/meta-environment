@@ -267,11 +267,21 @@ ATerm SGparseString(char *L, char *G, char *S)
 ATerm SGparseStringAsAsFix2(char *L, char *G, char *S)
 {
   ATerm t;
-
+  ATerm tree;
+  ATerm amb;
+  
   SG_ASFIX1_OFF();
+
   t = SGparseString(L, G, S);
 
-  return SG_TermToToolbus(ATBpack(t));
+  if(!SGisParseError(t)) {
+    tree = ATgetArgument( t, 0 );
+    amb  = ATgetArgument( t, 1 ); 
+    t = (ATerm) ATmakeAppl2( SG_ParseTree_AFun, ATBpack(tree), amb );
+
+  }
+
+  return SG_TermToToolbus(t);
 }
 
 ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)

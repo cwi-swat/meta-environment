@@ -18,6 +18,11 @@
 
 $Id$
 
+2000/7/12 (mdejonge@cwi.nl)
+   * Bug fix in libsglr/sglr-interface.c. SGparseStringAsAsFix2 used ATBpack
+     to pack the complete parse term which caused pattern matching in
+     sglr/sglr.idef to fail.
+
 2000/7/11 (mdejonge@cwi.nl)
    * Bug fixed in regress-test/grammars/Makefile.am which caused make dist
      to fail
@@ -113,3 +118,4 @@ $Id$
    * Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
      ambiguities, number of lines, characters per second
    * Characters per second is the main metric we want to improve
+v
