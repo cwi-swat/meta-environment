@@ -170,7 +170,6 @@ ATbool SG_StartInjection(parse_table *pt, label l)
 
 
 static ATerm sg_posinfo_label = NULL;
-static ATerm sg_injections_label = NULL;
 
 ATerm SG_GetPosInfoLabel(forest t)
 {
@@ -392,7 +391,7 @@ void SG_PrintTree(tree t, ATbool inAmbs)
       elt = (tree) ATgetFirst(args);
       SG_PrintTree(elt, ATfalse);
       if (!ATisEmpty(ATgetNext(args))) {
-	ATfprintf(SG_log(), ",");
+  ATfprintf(SG_log(), ",");
       }
     }
     ATfprintf(SG_log(), "]");
@@ -407,8 +406,8 @@ void SG_PrintTree(tree t, ATbool inAmbs)
       ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
       assert(ambs);
       if (!ATisEmpty(ambs)) {
-	SG_PrintAmbs(ambs);
-	return;
+  SG_PrintAmbs(ambs);
+  return;
       }
     }
 
@@ -491,15 +490,15 @@ forest     SG_YieldForest(parse_table *pt, forest t,
 
   /*  Expand {regular|eager|avoid}(prod())s, handling ambiguity resolution  */
   /*  Are we encountering an ambiguity cluster?  */
-	ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+  ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
 
   /* Are we even interested?  If not, we were invoked to expand
    * terms that are part of an ambiguity cluster, for which the
    * ambiguity-lookup would simply recurse infinitely
    */
-	if(!doambs 
-		 /*  Is this one mapped to an ambiguity cluster?  */
-		 || ATisEmpty(ambs)) {
+  if(!doambs 
+     /*  Is this one mapped to an ambiguity cluster?  */
+     || ATisEmpty(ambs)) {
    
     /*  No ambiguity, or we're doing one that's part of an ambiguity cluster */
     /*  First argument is an `aprod(X'), to be expanded  */
@@ -912,14 +911,14 @@ ATermList SG_GetMultiSetKeys(multiset ms)
 multiset SG_GetMultiSet(register tree t, register multiset ms);
 multiset SG_GetMultiSetInAmbCluster(ATermList ambs, register multiset ms)
 {
-	if(ATgetLength(ambs) > 1) {
-		/* This is a real ambiguity. We don't know how to
-		 * calculate a multiset over ambiguity clusters, so 
-		 * bail out!
-		 */
-		ms = NULL;
-	} else {
-		ms = SG_GetMultiSet((tree) ATgetFirst(ambs), ms);
+  if(ATgetLength(ambs) > 1) {
+    /* This is a real ambiguity. We don't know how to
+     * calculate a multiset over ambiguity clusters, so 
+     * bail out!
+     */
+    ms = NULL;
+  } else {
+    ms = SG_GetMultiSet((tree) ATgetFirst(ambs), ms);
   }
 
   return ms;
@@ -953,10 +952,10 @@ multiset SG_GetMultiSetRecursive(register tree t, register multiset ms)
       }
       for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
         ms = SG_GetMultiSetRecursive((tree) ATgetFirst((ATermList) t), ms);
-				if(!ms) {
-					/* if one of the elements contains an ambiguity, we can stop now */
-					break;
-				}
+        if(!ms) {
+          /* if one of the elements contains an ambiguity, we can stop now */
+          break;
+        }
       }
       break;
     case AT_INT:
@@ -987,10 +986,10 @@ multiset SG_GetMultiSet(register tree t, register multiset ms)
       }
       for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
         ms = SG_GetMultiSetRecursive((tree) ATgetFirst((ATermList) t), ms);
-				if(!ms) {
-					/* if one of the elements contains an ambiguity, we can stop now */
-					break;
-				}
+        if(!ms) {
+          /* if one of the elements contains an ambiguity, we can stop now */
+          break;
+        }
       }
       break;
     case AT_INT:
@@ -1018,14 +1017,14 @@ ATbool SG_MultiSetGtr(parse_table *pt, multiset msM, ATermList kM,
   }
   if (!kN) {
     kN = SG_GetMultiSetKeys (msN);
-	}
+  }
 
-	if(!kM || !kN) {
-		/* one of the multisets is not calculated, probably because
-		 * an amb node was encountered
-		 */
-		return ATfalse;
-	}
+  if(!kM || !kN) {
+    /* one of the multisets is not calculated, probably because
+     * an amb node was encountered
+     */
+    return ATfalse;
+  }
 
   /*  multi-prio is irreflexive  */
   /*
@@ -1307,45 +1306,45 @@ size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections);
 
 size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t, size_t injections)
 {
-	label l;
-	ATermList ambs;
-	ATerm kids;
+  label l;
+  ATermList ambs;
+  ATerm kids;
 
   switch (ATgetType(t)) {
-	case AT_APPL:
-		l = SG_GetApplProdLabel(t);
-		ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+  case AT_APPL:
+    l = SG_GetApplProdLabel(t);
+    ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
 
-		if(ATisEmpty(ambs)) {
-			kids = ATgetArgument((ATermAppl) t, 1);
+    if(ATisEmpty(ambs)) {
+      kids = ATgetArgument((ATermAppl) t, 1);
 
-			if(SG_ProdIsInjection(pt, l)) {
-				injections++;
-			}
-			
-			injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
-		} else {
-			/* Either we have a singleton or
-			 * the injection count of all elements in the cluster are
-			 * equal due to earlier filtering, so we just take the first.
-			 */
-			tree first = (tree) ATgetFirst(ambs);
-			injections = SG_CountInjectionsInTree(pt, first, injections);
-		}
-				
-		break;
-	case AT_LIST:
-		for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-			ATerm elem = ATgetFirst((ATermList) t);
-			injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
-		}
-		break;
-	case AT_INT:
-	case AT_REAL:
-	case AT_PLACEHOLDER:
-	case AT_BLOB:
-	default:
-		break;
+      if(SG_ProdIsInjection(pt, l)) {
+        injections++;
+      }
+      
+      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
+    } else {
+      /* Either we have a singleton or
+       * the injection count of all elements in the cluster are
+       * equal due to earlier filtering, so we just take the first.
+       */
+      tree first = (tree) ATgetFirst(ambs);
+      injections = SG_CountInjectionsInTree(pt, first, injections);
+    }
+        
+    break;
+  case AT_LIST:
+    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+      ATerm elem = ATgetFirst((ATermList) t);
+      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
+    }
+    break;
+  case AT_INT:
+  case AT_REAL:
+  case AT_PLACEHOLDER:
+  case AT_BLOB:
+  default:
+    break;
   }
 
   return injections;
@@ -1353,32 +1352,32 @@ size_t SG_CountInjectionsInTreeRecursive(parse_table *pt, tree t, size_t injecti
 
 size_t SG_CountInjectionsInTree(parse_table *pt, tree t, size_t injections)
 {
-	label    l;
-	ATerm kids;
+  label    l;
+  ATerm kids;
 
   switch (ATgetType(t)) {
-	case AT_APPL:
-		l = SG_GetApplProdLabel(t);
-		kids = ATgetArgument((ATermAppl) t, 1);
-		
-		if(SG_ProdIsInjection(pt, l)) {
-			injections++;
-		}
-		
-		injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
-		break;
-	case AT_LIST:
-		for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-			ATerm elem = ATgetFirst((ATermList) t);
-			injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
-		}
-		break;
-	case AT_INT:
-	case AT_REAL:
-	case AT_PLACEHOLDER:
-	case AT_BLOB:
-	default:
-		break;
+  case AT_APPL:
+    l = SG_GetApplProdLabel(t);
+    kids = ATgetArgument((ATermAppl) t, 1);
+    
+    if(SG_ProdIsInjection(pt, l)) {
+      injections++;
+    }
+    
+    injections = SG_CountInjectionsInTreeRecursive(pt, (tree) kids, injections);
+    break;
+  case AT_LIST:
+    for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+      ATerm elem = ATgetFirst((ATermList) t);
+      injections = SG_CountInjectionsInTreeRecursive(pt, (tree) elem, injections);
+    }
+    break;
+  case AT_INT:
+  case AT_REAL:
+  case AT_PLACEHOLDER:
+  case AT_BLOB:
+  default:
+    break;
   }
 
   return injections;
@@ -1446,11 +1445,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     return NULL;
   }
 
-	/* the next code is a filter that finds the topmost preference in both
-	 * trees. If one of them is prefered or avoided, and the other has no
-	 * explicit preference, then it throws one of them away.
-	 */
-	
+  /* the next code is a filter that finds the topmost preference in both
+   * trees. If one of them is prefered or avoided, and the other has no
+   * explicit preference, then it throws one of them away.
+   */
+  
 /* The next ifdef maybe removed when it is clear that
  * this code has no effect. (03-10-2000) 
  * Mark
@@ -1464,7 +1463,7 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     /* search for avoids */
     ATbool has_avoids0 = SG_HasAvoidedProds(t0);
     ATbool has_avoids1 = SG_HasAvoidedProds(t1);
-	
+  
     /* draw safe conclusions */
     if (has_prefs0 && !has_prefs1) {
       IF_DEBUG(ATfprintf(SG_log(), 
@@ -1504,13 +1503,13 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
     }
     m1 = SG_GetMultiSet(t1, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
 
-		if(!m0 || !m1) {
-			/* at least one of the multisets wasn't calculated.
-			 * probably due to an ambiguity node in the tree.
-			 * So bail out!
-			 */
-			return NULL;
-		}
+    if(!m0 || !m1) {
+      /* at least one of the multisets wasn't calculated.
+       * probably due to an ambiguity node in the tree.
+       * So bail out!
+       */
+      return NULL;
+    }
 
     if (!k0) {
       k0 = SG_GetMultiSetKeys(m0);
@@ -1547,9 +1546,9 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   /*  No multiset ordering either?  Count injections.  */
     size_t in0 = 0, in1 = 0;
 
-		in0 = SG_CountInjectionsInTree(pt, t0, 0);
-		in1 = SG_CountInjectionsInTree(pt, t1, 0);
-		
+    in0 = SG_CountInjectionsInTree(pt, t0, 0);
+    in1 = SG_CountInjectionsInTree(pt, t1, 0);
+    
     IF_STATISTICS(
       if (in0 != in1) {
         SG_InjectionFilterSucceeded(SG_NR_INC);
@@ -1594,61 +1593,61 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
   /*  Multiset construction is needed only when really filtering  */
   if (SG_FILTER) {
     m = SG_GetMultiSet(t, SG_NewMultiSet(SG_PT_NUMPRODS(pt)));
-		
-		if(m) {
-			/* if m is NULL, then the multiset would not have been
-			 * calculated due to an ambiuity node inside the tree
-			 */ 
-			k = SG_GetMultiSetKeys(m);
-		} 
-	}
+    
+    if(m) {
+      /* if m is NULL, then the multiset would not have been
+       * calculated due to an ambiuity node inside the tree
+       */ 
+      k = SG_GetMultiSetKeys(m);
+    } 
+  }
 
-	if(m) {	
-		/*  Filter term against existing terms in ambiguity cluster  */
+  if(m) {  
+    /*  Filter term against existing terms in ambiguity cluster  */
 
-		IF_DEBUG(fprintf(SG_log(), "original tree:"));
-		IF_DEBUG(SG_PrintTree(t, ATfalse));
-		IF_DEBUG(fprintf(SG_log(), "\n"));
+    IF_DEBUG(fprintf(SG_log(), "original tree:"));
+    IF_DEBUG(SG_PrintTree(t, ATfalse));
+    IF_DEBUG(fprintf(SG_log(), "\n"));
 
-		for (;!ATisEmpty(old); old = ATgetNext(old)) {
-			prev = (tree) ATgetFirst(old);
-			
-			IF_DEBUG(fprintf(SG_log(), "previous tree:"));
-			IF_DEBUG(SG_PrintTree(prev, ATfalse));
-			IF_DEBUG(fprintf(SG_log(), "\n"));
+    for (;!ATisEmpty(old); old = ATgetNext(old)) {
+      prev = (tree) ATgetFirst(old);
+      
+      IF_DEBUG(fprintf(SG_log(), "previous tree:"));
+      IF_DEBUG(SG_PrintTree(prev, ATfalse));
+      IF_DEBUG(fprintf(SG_log(), "\n"));
 
-			/* Add prev to new, unless t has a higher priority  */
-			max = SG_Filter(pt, t, prev, m, k);
-			if (!max || (term_filtered_out=ATisEqual(max, prev))) {
-				new = ATinsert(new, (ATerm) prev);
-			}
-			if (max) {
-				if (SG_GetApplProdLabel(prev) == SG_GetApplProdLabel(t)) {
+      /* Add prev to new, unless t has a higher priority  */
+      max = SG_Filter(pt, t, prev, m, k);
+      if (!max || (term_filtered_out=ATisEqual(max, prev))) {
+        new = ATinsert(new, (ATerm) prev);
+      }
+      if (max) {
+        if (SG_GetApplProdLabel(prev) == SG_GetApplProdLabel(t)) {
           IF_DEBUG(fprintf(SG_log(), "\nmax:"));
           IF_DEBUG(SG_PrintTree(max, ATfalse));
           IF_DEBUG(fprintf(SG_log(), "\n"));
         }
-				IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
-												 SG_GetApplProdLabel(prev),
-												 ATisEqual(max, prev)?'>':'<',
-												 SG_GetApplProdLabel(t))
-								 );
-			}
-		}
-		if (!term_filtered_out) {
-			new = ATinsert(new, (ATerm) t);
-		}
-		
-		if (m) {
-			ATtableDestroy(m);
-		}
-		
-	} else {
-		/* no multiset for this term, so we give up */
-		new =  ATinsert(old, (ATerm) t);
-	}
-	
-	return new;
+        IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
+                         SG_GetApplProdLabel(prev),
+                         ATisEqual(max, prev)?'>':'<',
+                         SG_GetApplProdLabel(t))
+                 );
+      }
+    }
+    if (!term_filtered_out) {
+      new = ATinsert(new, (ATerm) t);
+    }
+    
+    if (m) {
+      ATtableDestroy(m);
+    }
+    
+  } else {
+    /* no multiset for this term, so we give up */
+    new =  ATinsert(old, (ATerm) t);
+  }
+  
+  return new;
 }
 
 /*
@@ -1671,8 +1670,8 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
   }
 
   ambidx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, (ATerm) existing, NULL);
-	/* What the hAck is going on here? What does ATisEmpty((ATermList) ambidx) mean? */
-	/* Maybe it has something to do with cycle detection ???? Or whatever. */
+  /* What the hAck is going on here? What does ATisEmpty((ATermList) ambidx) mean? */
+  /* Maybe it has something to do with cycle detection ???? Or whatever. */
   if(!ambidx  || ATisEmpty((ATermList) ambidx) ) { 
     /* New ambiguity */
     ambidx = (ATerm) ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
