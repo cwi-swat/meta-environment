@@ -38,6 +38,8 @@
 
 /*{{{  variables */
 
+ATerm pos_info;
+
 static int pid;
 static ATerm env = NULL;
 
@@ -197,7 +199,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 
   equ_tree =
     PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
-  pos_anno = PT_getTreeAnnotation(equ_tree, ATmake("posinfo"));
+  pos_anno = PT_getTreeAnnotation(equ_tree, pos_info);
 
   if (!pos_anno) {
     return TA_makeExprError("no position information on equation", NULL);
@@ -314,6 +316,9 @@ void Tide_connect()
 {
   char *name = "Asf+Sdf";
 
+  pos_info = ATmake("pos-info");
+  ATprotect(&pos_info);
+
   TA_registerFunction(ATmakeAFun("resume",     0, ATfalse), eval_resume);
   TA_registerFunction(ATmakeAFun("break",      0, ATfalse), eval_break);
   TA_registerFunction(ATmakeAFun("var",        1, ATfalse), eval_var);
@@ -335,6 +340,7 @@ void Tide_disconnect()
   if (TA_isConnected()) {
     TA_disconnect(ATtrue);
   }
+  ATunprotect(&pos_info);
 }
 
 /*}}}  */
@@ -364,7 +370,6 @@ void Tide_step(ATerm position, ATerm newenv, int level)
 
     assert(tagCurrentRule);
     assert(currentRule);
-    assert(position);
 
     if (!position) {
       static ATbool warning_printed = ATfalse;

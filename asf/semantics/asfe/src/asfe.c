@@ -98,7 +98,7 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
+/*{{{  ATerm interpret(int cid, char *modname, ATerm trm, ATerm tide) */
 
 ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 {
@@ -109,11 +109,13 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 
   if (ATmatch(tide, "on")) {
     debug = ATtrue;
+    Tide_connect();
   }
   else {
     debug = ATfalse;
   }
 
+  /*ATfprintf(stderr, "equations: %t\n", eqs);*/
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
   parseTree = PT_makeParseTreeFromTerm(trm);
 
@@ -221,6 +223,7 @@ int main(int argc, char *argv[])
     if (use_tide) {
 #ifdef USE_TIDE
       ATBinit(argc, argv, &bottomOfStack);
+      Tide_connect();
 #else
       ATwarning("tide support is not enabled! (try configuring --with-tide)\n");
       exit(1);

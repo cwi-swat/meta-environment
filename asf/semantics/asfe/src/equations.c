@@ -180,15 +180,14 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
         PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), tree);
     return equ;
   }
-  /*
-  fprintf(stderr, "pos-info to start equ %s: %s,%d,%d,%d,%d\n",
+
+  /*fprintf(stderr, "pos-info to start equ %s: %s,%d,%d,%d,%d\n",
 	  PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), path, start_line, start_col, end_line, end_col);
 	  */
 
-
   /* Annotate to a depth so that the list of conditions is annotated */
-  tree = PT_addTreePosInfoToDepth(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,
-				  start_line, start_col);
+  tree = PT_addTreePosInfoSome(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,
+			       ATfalse, ATtrue, start_line, start_col);
   /*ATwarning("tree after annotating the equations: %t\n", tree);*/
   equ = ASF_CondEquationFromTerm(PT_TreeToTerm(tree));
 
@@ -203,9 +202,9 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
       /* Annotate to a depth so that the lhs and rhs of the conditions is
        * annotated
        */
-      tree = PT_addTreePosInfoToDepth(path, tree,
+      tree = PT_addTreePosInfoSome(path, tree,
 				      DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS,
-				      start_line, start_col);
+				      ATfalse, ATtrue, start_line, start_col);
       conds = ASF_ConditionsFromTerm(PT_TreeToTerm(tree));
       equ = ASF_setCondEquationConditions(equ, conds);
       /*ATwarning("tree after annotating the conditions: %t\n", tree);*/
@@ -219,9 +218,9 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
     ATwarning("no position information on equation, crippled debugging: %t\n",
 	      tree);
   } else {
-    tree = PT_addTreePosInfoToDepth(path, tree,
+    tree = PT_addTreePosInfoSome(path, tree,
 				    DEPTH_OF_EQUATION_SIDES_IN_EQUATION,
-				    start_line, start_col);
+				    ATfalse, ATtrue, start_line, start_col);
     equation = ASF_EquationFromTerm(PT_TreeToTerm(tree));
 
     equ = ASF_setCondEquationEquation(equ, equation);

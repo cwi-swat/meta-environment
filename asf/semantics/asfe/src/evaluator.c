@@ -41,11 +41,12 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
 
   ATprotect((ATerm*)&tagCurrentRule);
 
+  useTide = debug;
+
   eqs = RWprepareEquations(eqs, mark_new_layout);
   enter_equations(name, eqs);
   select_equations(name);
 
-  useTide = debug;
   RWclearError();
 
   tree = PT_getParseTreeTree(parseTree);

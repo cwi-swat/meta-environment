@@ -31,11 +31,13 @@
 static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth);
 static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
 			    ATerm env, int depth);
-static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs, 
+static ATerm matchNegativeCondition(ASF_Condition cond,
+				    PT_Tree lhs, PT_Tree rhs, 
 				    ASF_ConditionList conds,
 				    ATerm env, 
 				    int depth);
-static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs, 
+static ATerm matchPositiveCondition(ASF_Condition cond,
+				    PT_Tree lhs, PT_Tree rhs, 
 				    ASF_ConditionList conds,
 				    ATerm env, int depth);
 static ATerm matchArguments(ATerm env, ASF_ConditionList conds,
@@ -59,9 +61,32 @@ static ATerm matchArgument(ATerm env,
 
 /*}}}  */
 
+/*{{{  static ATerm getConditionSign(ASF_Condition cond) */
+
+/* Retrieve the sign (= or !=) part of a condition as a term.
+ * Note that this function uses MEPT specific knowledge because
+ * apigen is not good enough (yet) to generate getters for literals!
+ *
+ * This function is only used to make it possible to retrieve the
+ * position information of the sign for debugging using tide!
+ */
+
+static ATerm getConditionSign(ASF_Condition cond)
+{
+  PT_Tree tree = PT_TreeFromTerm(ASF_ConditionToTerm(cond));
+
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Tree sign = PT_getArgsHead(PT_getArgsTail(PT_getArgsTail(args)));
+
+  return PT_TreeToTerm(sign);
+}
+
+
+/*}}}  */
 /*{{{  static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs, 
+static ATerm matchNegativeCondition(ASF_Condition cond,
+				    PT_Tree lhs, PT_Tree rhs, 
 				    ASF_ConditionList conds,
 				    ATerm env, 
 				    int depth)
@@ -84,6 +109,7 @@ static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,
     return fail_env;
   }
 
+  TIDE_STEP(getConditionSign(cond), env, depth);
   if (isAsFixEqual(lhstrm, rhstrm)) {
     return fail_env;
   }
@@ -94,12 +120,11 @@ static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,
 /*}}}  */
 /*{{{  static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs, 
+static ATerm matchPositiveCondition(ASF_Condition cond, PT_Tree lhs, PT_Tree rhs, 
 				    ASF_ConditionList conds,
 				    ATerm env, int depth)
 {
-  PT_Tree lhstrm = lhs;
-  PT_Tree rhstrm = rhs;
+  PT_Tree lhstrm, rhstrm;
 
   /* assuming that not both sides have new vars */
 
@@ -110,12 +135,13 @@ static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,
       return fail_env;
     }
     TIDE_STEP(rhs, env, depth);
+    TIDE_STEP(getConditionSign(cond), env, depth);
     return matchArgument(env, rhs, lhstrm, conds, 
 			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
 			 NULL, depth);
   }
   else if (!no_new_vars(lhs, env)) { /* flip the sides */
-    return matchPositiveCondition(rhs, lhs, conds, env, depth);
+    return matchPositiveCondition(cond, rhs, lhs, conds, env, depth);
   }
   else { /* an equality condition */
     TIDE_STEP(lhs, env, depth);
@@ -130,6 +156,7 @@ static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,
       return fail_env;
     }
 
+    TIDE_STEP(getConditionSign(cond), env, depth);
     if (isAsFixEqual(lhstrm, rhstrm)) {
       return matchConditions(conds, env, depth);
     }
@@ -148,12 +175,11 @@ static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
   PT_Tree lhs = ASFtoPT(ASF_getConditionLhs(cond));
   PT_Tree rhs = ASFtoPT(ASF_getConditionRhs(cond));
 
-
   if (ASF_isConditionPositive(cond)) {
-    return matchPositiveCondition(lhs, rhs, conds, env, depth);
+    return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
   }
   else {
-    return matchNegativeCondition(lhs, rhs, conds, env, depth);
+    return matchNegativeCondition(cond, lhs, rhs, conds, env, depth);
   }
 }
 
@@ -433,7 +459,7 @@ ATerm matchEquation(equation_entry *entry, PT_Tree trm, int depth)
 {
   return matchArgument((ATerm) ATempty, entry->lhs, trm, entry->conds,
 		       PT_makeArgsEmpty(), PT_makeArgsEmpty(),
-		       NULL, depth);
+		       PT_TreeToTerm(entry->lhs), depth);
 }
 
 /*}}}  */

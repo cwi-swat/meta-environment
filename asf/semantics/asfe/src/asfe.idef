@@ -12,6 +12,7 @@ let
   Tide       : term
 in
   Id := process-id .
+  Tide := off .
   (
     rec-msg(debugging(Tide?))  /* 'on' or 'off' */
   +
