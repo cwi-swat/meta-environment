@@ -54,31 +54,6 @@ execute(module-db, Mdb?).
 /* And initialize it */
 snd-do(Mdb, create-module-db).
 (
-  /* When compiling modules, they need to be reshuffled such that a new
-   * module is generated for each context-free function in the spec
-   *
-   * reshuffle ::=
-   *   1. Gather all context-free functions for module "Name".
-   *   2. For each cff, gather all equations that have this cff
-   *      as outermost function symbol.
-   *   3. Use the results of steps 1 and 2 to create several new
-   *      modules, called "AUX-<Name>-<i>". (i is generated)
-   */
-  rec-msg(reshuffle-module(Name?, OutputDir?)) .
-  snd-do(Mdb, set-output-dir(OutputDir)) .
-  snd-do(Mdb, reshuffle-modules-from(Name)).
-  (
-    /* Everytime a new AUX-module is created, we receive an event
-     * so we can propagate it to the code-generator.
-     */
-    rec-event(Mdb, new-aux-module(Name?, AsFixModule?)).
-    snd-msg(new-aux-module(Name, AsFixModule)).
-    snd-ack-event(Mdb, new-aux-module(Name, AsFixModule))
-  ) *
-  rec-event(Mdb, done).
-  snd-msg(reshuffle-done).
-  snd-ack-event(Mdb, done)
-+
 /* If we get the request to empty the db, we'll do it. */
   rec-msg(clear-module-db).
   snd-do(Mdb, clear-module-db)
