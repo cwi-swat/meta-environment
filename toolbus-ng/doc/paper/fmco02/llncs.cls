@@ -1,14 +1,33 @@
-% LLNCS DOCUMENT CLASS -- version 2.6
-% for LaTeX2e
+% LLNCS DOCUMENT CLASS -- version 2.13 (28-Jan-2002)
+% Springer Verlag LaTeX2e support for Lecture Notes in Computer Science
 %
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{llncs}[1999/04/27 v2.6
-^^JLaTeX document class for Lecture Notes in Computer Science]
+\ProvidesClass{llncs}[2002/01/28 v2.13
+^^J LaTeX document class for Lecture Notes in Computer Science]
 % Options
 \let\if@envcntreset\iffalse
 \DeclareOption{envcountreset}{\let\if@envcntreset\iftrue}
 \DeclareOption{citeauthoryear}{\let\citeauthoryear=Y}
 \DeclareOption{oribibl}{\let\oribibl=Y}
+\let\if@custvec\iftrue
+\DeclareOption{orivec}{\let\if@custvec\iffalse}
 \let\if@envcntsame\iffalse
 \DeclareOption{envcountsame}{\let\if@envcntsame\iftrue}
 \let\if@envcntsect\iffalse
@@ -19,6 +38,11 @@
 \let\if@openbib\iffalse
 \DeclareOption{openbib}{\let\if@openbib\iftrue}
 
+% languages
+\let\switcht@@therlang\relax
+\def\ds@deutsch{\def\switcht@@therlang{\switcht@deutsch}}
+\def\ds@francais{\def\switcht@@therlang{\switcht@francais}}
+
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 
 \ProcessOptions
@@ -28,6 +52,145 @@
 
 \setlength{\textwidth}{12.2cm}
 \setlength{\textheight}{19.3cm}
+\renewcommand\@pnumwidth{2em}
+\renewcommand\@tocrmarg{3.5em}
+%
+\def\@dottedtocline#1#2#3#4#5{%
+  \ifnum #1>\c@tocdepth \else
+    \vskip \z@ \@plus.2\p@
+    {\leftskip #2\relax \rightskip \@tocrmarg \advance\rightskip by 0pt plus 2cm
+               \parfillskip -\rightskip \pretolerance=10000
+     \parindent #2\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima #3\relax
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {#4}\nobreak
+     \leaders\hbox{$\m@th
+        \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
+        mu$}\hfill
+     \nobreak
+     \hb@xt@\@pnumwidth{\hfil\normalfont \normalcolor #5}%
+     \par}%
+  \fi}
+%
+\def\switcht@albion{%
+\def\abstractname{Abstract.}
+\def\ackname{Acknowledgement.}
+\def\andname{and}
+\def\lastandname{\unskip, and}
+\def\appendixname{Appendix}
+\def\chaptername{Chapter}
+\def\claimname{Claim}
+\def\conjecturename{Conjecture}
+\def\contentsname{Table of Contents}
+\def\corollaryname{Corollary}
+\def\definitionname{Definition}
+\def\examplename{Example}
+\def\exercisename{Exercise}
+\def\figurename{Fig.}
+\def\keywordname{{\bf Key words:}}
+\def\indexname{Index}
+\def\lemmaname{Lemma}
+\def\contriblistname{List of Contributors}
+\def\listfigurename{List of Figures}
+\def\listtablename{List of Tables}
+\def\mailname{{\it Correspondence to\/}:}
+\def\noteaddname{Note added in proof}
+\def\notename{Note}
+\def\partname{Part}
+\def\problemname{Problem}
+\def\proofname{Proof}
+\def\propertyname{Property}
+\def\propositionname{Proposition}
+\def\questionname{Question}
+\def\remarkname{Remark}
+\def\seename{see}
+\def\solutionname{Solution}
+\def\subclassname{{\it Subject Classifications\/}:}
+\def\tablename{Table}
+\def\theoremname{Theorem}}
+\switcht@albion
+% Names of theorem like environments are already defined
+% but must be translated if another language is chosen
+%
+% French section
+\def\switcht@francais{%\typeout{On parle francais.}%
+ \def\abstractname{R\'esum\'e.}%
+ \def\ackname{Remerciements.}%
+ \def\andname{et}%
+ \def\lastandname{ et}%
+ \def\appendixname{Appendice}
+ \def\chaptername{Chapitre}%
+ \def\claimname{Pr\'etention}%
+ \def\conjecturename{Hypoth\`ese}%
+ \def\contentsname{Table des mati\`eres}%
+ \def\corollaryname{Corollaire}%
+ \def\definitionname{D\'efinition}%
+ \def\examplename{Exemple}%
+ \def\exercisename{Exercice}%
+ \def\figurename{Fig.}%
+ \def\keywordname{{\bf Mots-cl\'e:}}
+ \def\indexname{Index}
+ \def\lemmaname{Lemme}%
+ \def\contriblistname{Liste des contributeurs}
+ \def\listfigurename{Liste des figures}%
+ \def\listtablename{Liste des tables}%
+ \def\mailname{{\it Correspondence to\/}:}
+ \def\noteaddname{Note ajout\'ee \`a l'\'epreuve}%
+ \def\notename{Remarque}%
+ \def\partname{Partie}%
+ \def\problemname{Probl\`eme}%
+ \def\proofname{Preuve}%
+ \def\propertyname{Caract\'eristique}%
+%\def\propositionname{Proposition}%
+ \def\questionname{Question}%
+ \def\remarkname{Remarque}%
+ \def\seename{voir}
+ \def\solutionname{Solution}%
+ \def\subclassname{{\it Subject Classifications\/}:}
+ \def\tablename{Tableau}%
+ \def\theoremname{Th\'eor\`eme}%
+}
+%
+% German section
+\def\switcht@deutsch{%\typeout{Man spricht deutsch.}%
+ \def\abstractname{Zusammenfassung.}%
+ \def\ackname{Danksagung.}%
+ \def\andname{und}%
+ \def\lastandname{ und}%
+ \def\appendixname{Anhang}%
+ \def\chaptername{Kapitel}%
+ \def\claimname{Behauptung}%
+ \def\conjecturename{Hypothese}%
+ \def\contentsname{Inhaltsverzeichnis}%
+ \def\corollaryname{Korollar}%
+%\def\definitionname{Definition}%
+ \def\examplename{Beispiel}%
+ \def\exercisename{\"Ubung}%
+ \def\figurename{Abb.}%
+ \def\keywordname{{\bf Schl\"usselw\"orter:}}
+ \def\indexname{Index}
+%\def\lemmaname{Lemma}%
+ \def\contriblistname{Mitarbeiter}
+ \def\listfigurename{Abbildungsverzeichnis}%
+ \def\listtablename{Tabellenverzeichnis}%
+ \def\mailname{{\it Correspondence to\/}:}
+ \def\noteaddname{Nachtrag}%
+ \def\notename{Anmerkung}%
+ \def\partname{Teil}%
+%\def\problemname{Problem}%
+ \def\proofname{Beweis}%
+ \def\propertyname{Eigenschaft}%
+%\def\propositionname{Proposition}%
+ \def\questionname{Frage}%
+ \def\remarkname{Anmerkung}%
+ \def\seename{siehe}
+ \def\solutionname{L\"osung}%
+ \def\subclassname{{\it Subject Classifications\/}:}
+ \def\tablename{Tabelle}%
+%\def\theoremname{Theorem}%
+}
 
 % Ragged bottom for the actual page
 \def\thisbottomragged{\def\@textbottom{\vskip\z@ plus.0001fil
@@ -208,10 +371,12 @@ You should not use \verb|\subparagraph| with this class.\vskip0.5cm}
 
 \let\footnotesize\small
 
+\if@custvec
 \def\vec#1{\mathchoice{\mbox{\boldmath$\displaystyle#1$}}
 {\mbox{\boldmath$\textstyle#1$}}
 {\mbox{\boldmath$\scriptstyle#1$}}
 {\mbox{\boldmath$\scriptscriptstyle#1$}}}
+\fi
 
 \def\squareforqed{\hbox{\rlap{$\sqcap$}$\sqcup$}}
 \def\qed{\ifmmode\squareforqed\else{\unskip\nobreak\hfil
@@ -362,6 +527,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
      \parindent \z@
      \rightskip \z@ plus 5em
      \hrule\vskip5pt
+     \large               % same size as for a contribution heading
      \bfseries\boldmath   % set line in boldface
      \leavevmode          % TeX command to enter horizontal mode.
      #1\par
@@ -393,8 +559,9 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 
 \def\l@chapter#1#2{\addpenalty{-\@highpenalty}
  \vskip 1.0em plus 1pt \@tempdima 1.5em \begingroup
- \parindent \z@ \rightskip \@pnumwidth
- \parfillskip -\@pnumwidth
+ \parindent \z@ \rightskip \@tocrmarg
+ \advance\rightskip by 0pt plus 2cm
+ \parfillskip -\rightskip \pretolerance=10000
  \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip
  {\large\bfseries\boldmath#1}\ifx0#2\hfil\null
  \else
@@ -410,12 +577,23 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
  \@tempdima \z@
  \begingroup
  \parindent \z@ \rightskip \@tocrmarg
- \parfillskip -\@tocrmarg
+ \advance\rightskip by 0pt plus 2cm
+ \parfillskip -\rightskip \pretolerance=10000
  \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip
  #1\nobreak
  \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern
  \@dotsep mu$}\hfill
  \nobreak\hbox to\@pnumwidth{\hss #2}\par
+ \penalty\@highpenalty \endgroup}
+
+\def\l@author#1#2{\addpenalty{\@highpenalty}
+ \@tempdima=\z@ %15\p@
+ \begingroup
+ \parindent \z@ \rightskip \@tocrmarg
+ \advance\rightskip by 0pt plus 2cm
+ \pretolerance=10000
+ \leavevmode \advance\leftskip\@tempdima %\hskip -\leftskip
+ \textit{#1}\par
  \penalty\@highpenalty \endgroup}
 
 \setcounter{tocdepth}{0}
@@ -612,8 +790,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
   \vskip\belowcaptionskip}
 
 \def\fps@figure{htbp}
-% J$ \def\fnum@figure{\figurename\thefigure}
-\def\fnum@figure{\figurename~\thefigure}
+\def\fnum@figure{\figurename\thinspace\thefigure}
 \def \@floatboxreset {%
         \reset@font
         \small
@@ -621,7 +798,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
         \@setminipage
 }
 \def\fps@table{htbp}
-\def\fnum@table{\tablename\thetable}
+\def\fnum@table{\tablename~\thetable}
 \renewenvironment{table}
                {\setlength\abovecaptionskip{0\p@}%
                 \setlength\belowcaptionskip{10\p@}%
@@ -646,8 +823,6 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 \newcounter{@inst}
 \newcounter{@auth}
 \newcounter{auco}
-\def\andname{and}
-\def\lastandname{\unskip, and}
 \newdimen\instindent
 \newbox\authrun
 \newtoks\authorrunning
@@ -675,8 +850,9 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
  \noindent$^{\the@inst}$\enspace\ignorespaces}%
  \setbox0=\vbox{\def\thanks##1{}\@institute}%
  \ifnum\c@@inst=1\relax
+   \gdef\fnnstart{0}%
  \else
-   \setcounter{footnote}{\c@@inst}%
+   \xdef\fnnstart{\c@@inst}%
    \setcounter{@inst}{1}%
    \noindent$^{\the@inst}$\enspace
  \fi
@@ -692,7 +868,13 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 \def\inst#1{\unskip$^{#1}$}
 \def\fnmsep{\unskip$^,$}
 \def\email#1{{\tt#1}}
-% \def\url#1{#1}
+\AtBeginDocument{\@ifundefined{url}{\def\url#1{#1}}{}%
+\@ifpackageloaded{babel}{%
+\@ifundefined{extrasenglish}{}{\addto\extrasenglish{\switcht@albion}}%
+\@ifundefined{extrasfrenchb}{}{\addto\extrasfrenchb{\switcht@francais}}%
+\@ifundefined{extrasgerman}{}{\addto\extrasgerman{\switcht@deutsch}}%
+}{\switcht@@therlang}%
+}
 \def\homedir{\~{ }}
 
 \def\subtitle#1{\gdef\@subtitle{#1}}
@@ -752,9 +934,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
       \protected@xdef\scratch{\the\tocauthor}%
       \protected@xdef\toc@uthor{\scratch}%
     \fi
-    \addtocontents{toc}{{\protect\raggedright\protect\leftskip15\p@
-    \protect\rightskip\@tocrmarg
-    \protect\itshape\toc@uthor\protect\endgraf}}%
+    \addcontentsline{toc}{author}{\toc@uthor}%
     \if@runhead
        \if!\the\authorrunning!
          \value{@inst}=\value{@auth}%
@@ -774,7 +954,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
        \markboth{\@author}{\@title}%
      \fi
   \endgroup
-  \setcounter{footnote}{0}%
+  \setcounter{footnote}{\fnnstart}%
   \clearheadinfo}
 %
 \def\@maketitle{\newpage
@@ -791,6 +971,7 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
              \unskip,
           \fi}%
  \begin{center}%
+ \let\newline\\
  {\Large \bfseries\boldmath
   \pretolerance=10000
   \@title \par}\vskip .8cm
@@ -974,11 +1155,6 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
       \rightmargin\leftmargin}\item[\hskip\labelsep
                                     \bfseries\abstractname]}
     {\endlist}
-\renewcommand{\abstractname}{Abstract.}
-\renewcommand{\contentsname}{Table of Contents}
-% J$ \renewcommand{\figurename}{Fig.\thinspace}
-\renewcommand{\figurename}{Fig.\medspace}
-\renewcommand{\tablename}{Table~}
 
 \newdimen\headlineindent             % dimension for space between
 \headlineindent=1.166cm              % number and text of headings.
@@ -1010,3 +1186,4 @@ to0pt{\kern0.55\wd0\vrule height0.45\ht0\hss}\box0}}}}
 \setlength\tabcolsep{1.4\p@}
 
 \endinput
+%end of file llncs.cls
