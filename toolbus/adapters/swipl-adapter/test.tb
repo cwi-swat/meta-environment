@@ -1,0 +1,20 @@
+
+process TBTEST is
+let
+  T : testpl,
+  X : term
+in
+  execute(testpl, T?) .
+  printf("testpl executed: %t\n", T) .
+  snd-eval(T, just-a-test(X?)) .
+  rec-value(T, just-a-test(X?)) .
+  printf("got back: %t\n", X) .
+  snd-do(T, gen-event(123)) .
+  rec-event(T, evt(X?)) .
+  printf("got event: %t\n", X) .
+  snd-ack-event(T, evt(X))
+endlet
+
+tool testpl is { command = "./swipl-adapter -program testpl -goal run" }
+
+toolbus(TBTEST)

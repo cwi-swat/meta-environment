@@ -1,0 +1,49 @@
+#!/bin/sh
+PROGRAM=tbswipl
+
+TRACE="assert(tb_trace(no))"
+VERBOSE="assert(tb_verbose(no)),"
+
+usage="$0 -TB_TOOL_NAME <name> -TB_HOST <host> -TB_PORT <port> -TB_TOOL_ID <tid> -TB_VERBOSE -script <script> -program <prog>"
+
+while :
+do
+	case "$1" in
+		-TB_TOOL_NAME)	NAME="assert(tb_tool($2))," ;shift;shift
+				;;
+		-TB_HOST)	HOST="assert(tb_host('$2'))," ;shift;shift
+				;;
+		-TB_PORT)	PORT="assert(tb_port($2))," ;shift;shift
+				;;
+		-TB_TOOL_ID)	TID="assert(tb_tid($2))," ;shift;shift
+				;;
+		-TB_VERBOSE)	VERBOSE="assert(tb_verbose(yes))," ;shift
+				;;
+		-TB_DEBUGPORT)	DBPORT="-TB_DEBUGPORT $2" ;shift;shift
+				;;
+		-TB_DEBUGHOST)  DBHOST="-TB_DEBUGHOST $2" ;shift;shift
+				;;
+		-program)	PROGRAM=$2 ;shift;shift
+				;;	
+		-goal)		GOAL="-t $2"; shift; shift
+				;;
+		-trace-calls)	TRACE="assert(tb_trace(yes))" ;shift
+				;;
+		-arg)		ARGS="$ARGS $2" ;shift;shift
+				;;
+		-details)	DETAILS=$2; shift;shift
+				;;
+		-script-args)	shift; SCRIPTARGS="assert(tb_args('$@'))" ;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift
+				;;
+		-*)		$echo "unknown option: $1"
+				$echo "$usage" >&2
+				exit 1
+				;;
+		*) break
+	esac
+done
+
+ASRT="assert(port($PORT))"
+
+#echo "executing: $PROGRAM $ARGS $NAME$HOST$PORT$TID$VERBOSE$TRACE"
+$PROGRAM $ARGS -tty $GOAL -g "$NAME$HOST$PORT$TID$VERBOSE$TRACE" < /dev/null

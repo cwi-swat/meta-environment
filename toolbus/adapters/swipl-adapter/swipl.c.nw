@@ -1,0 +1,651 @@
+%{{{ swipl.c
+
+<<swipl.c*>>=
+<<includes>>
+<<declarations>>
+
+<<prolog handler>>
+<<prolog check input signature>>
+
+<<tb_new_connection>>
+<<tb_connect>>
+<<tb_send>>
+<<tb_eventloop>>
+
+<<pl_print>>
+<<pl_printm>>
+
+<<tb_to_pl>>
+<<tb_to_pl_list>>
+<<tb_to_pl_appl>>
+<<tb_to_pl_var>>
+<<pl_to_tb>>
+<<pl_to_tb_list>>
+<<pl_to_tb_appl>>
+
+<<main>>
+<<PL_extensions>>
+@
+
+%}}}
+
+%{{{ includes
+
+<<includes>>=
+#include <stdio.h>
+#include <SWI-Prolog.h>
+#include <TB.h>
+#include "tool2.h"
+@
+
+%}}}
+%{{{ declarations
+
+Some function/constant declarations.
+
+<<declarations>>=
+#define MAX_FUN_LEN 256
+static char buf[MAX_FUN_LEN];
+
+static void pl_print(FILE *f, term_t t);
+static TBbool tb_to_pl(term *tb_term, term_t pl_term);
+static TBbool pl_to_tb(term_t pl_term, term **tb_term);
+@
+
+%}}}
+
+%{{{ prolog handler
+
+Handle ToolBus events, by handing the appropriate query to Prolog.
+
+<<prolog handler>>=
+<<hyphens2underscores>>
+<<underscores2hyphens>>
+<<call_prolog>>
+<<prolog_handler>>
+@
+
+%{{{ prolog_handler
+
+<<prolog_handler>>=
+term *prolog_handler(int cid, term *t)
+{
+  char *func;
+  term_list *args;
+  term *arg, *result = NULL;
+
+  /*TBprintf(stdout, "prolog_handler called: %d,%t\n", cid, t);*/
+  if(TB_match(t, "rec-do(<appl>)", &func, &args)) {
+    call_prolog(cid, func, args);
+  } else if(TB_match(t, "rec-eval(<appl>)", &func, &args)) {
+    result = TB_make("snd-value(<term>)", call_prolog(cid, func, args));
+  } else if(TB_match(t, "rec-ack-event(<term>)", &arg)) {
+    call_prolog(cid, "rec_ack_event", mk_list1(arg));
+  } else if(TB_match(t, "rec-monitor(<appl>)", 
+		TB_make("[<str>, <list>]", &func, &args))) {
+    call_prolog(cid, "rec_monitor", args);
+  } else if(TB_match(t, "rec-terminate(<term>)", &arg)) {
+    call_prolog(cid, "rec_terminate", mk_list1(arg));
+  } else {
+    TBprintf(stderr, "warning: cannot handle term: %t\n", t);
+  }
+
+  return result;
+}
+@
+
+%}}}
+%{{{ call_prolog
+
+<<call_prolog>>=
+term *call_prolog(int cid, char *func, term_list *args)
+{
+  term_t t;
+  term *trm;
+
+  /*TBprintf(stdout, "call_prolog: %d,%s,%t\n", cid, func, args);*/
+
+  hyphens2underscores(func, buf);  
+  trm = TB_make("<appl>", buf, mk_list(TB_make("<int>", cid), args));
+  t = PL_new_term_ref();
+  tb_to_pl(trm, t);
+  if(PL_call(t, NULL)) {
+    if(pl_to_tb(t, &trm)) {
+      /* Drop the 'CID' argument */
+      TB_match(trm, "<appl>", &func, &args);
+      return TB_make("<appl>", func, next(args));
+    }
+    TBprintf(stderr, "couldn't translate prolog term into ToolBus term:\n");
+    pl_print(stderr, t);
+  } else {
+    TBprintf(stdout, "call %s(%l) failed\n", func, args);
+  }
+
+  return NULL;
+}
+@
+
+%}}}
+%{{{ hyphens2underscores
+
+<<hyphens2underscores>>=
+void hyphens2underscores(const char *name, char *buf)
+{
+  int i;
+
+  for(i=0; i<MAX_FUN_LEN && name[i]; i++)
+    if(name[i] == '-')
+      buf[i] = '_';
+    else
+      buf[i] = name[i];
+
+  buf[i] = '\0';
+}
+@
+
+%}}}
+%{{{ underscores2hyphens
+
+<<underscores2hyphens>>=
+void underscores2hyphens(const char *name, char *buf)
+{
+  int i;
+
+  for(i=0; i<MAX_FUN_LEN && name[i]; i++)
+    if(name[i] == '_')
+      buf[i] = '-';
+    else
+      buf[i] = name[i];
+
+  buf[i] = '\0';
+}
+@
+
+%}}}
+
+%}}}
+%{{{ prolog check input signature
+
+<<prolog check input signature>>=
+<<prolog_check_in_sign>>
+@
+
+%{{{ prolog_check_in_sign
+
+The ToolBus callback function {\tt prolog_check_in_sign} checks if the
+input signature of a certain tool is correct. In the Prolog case,
+we just return NULL, because predicates can be created dynamically.
+
+<<prolog_check_in_sign>>=
+term *prolog_check_in_sign(int cid, term *t)
+{
+  return NULL;
+}
+@
+
+%}}}
+
+%}}}
+
+%{{{ tb_new_connection
+
+<<tb_new_connection>>=
+static foreign_t tb_new_connection(term_t tname, term_t thost, 
+				term_t tport, term_t ttid, term_t tcid)
+{
+  char *name, *host;
+  int port, tid, cid, len;
+
+  <<get tool name>>
+  fprintf(stdout, "tool name: %s\n", name);  
+  <<get host>>
+  <<get port>>
+  <<get tid>>
+
+  if(!PL_is_variable(tcid))
+    PL_fail;
+
+  cid = TB_newConnection(name, host, port, 
+				prolog_handler, prolog_check_in_sign);
+  TB_setTid(cid, tid);
+
+  return PL_unify_integer(tcid, (long)cid);
+}
+@
+
+%{{{ get tool name
+
+Get the name of the tool. If {\tt tname} is a variable, we retrieve
+the default tool name from the global variable {\tt tool_name} and unify
+the variable with that value. Otherwise, we just assume {\tt tname} is
+a string and retrieve its value.
+
+<<get tool name>>=
+/*if(PL_is_variable(tname)) {
+  name = get_default_string("tool_name");
+  if(!PL_unify_string_chars(tname, name))
+    PL_fail;
+} else {
+  if(!PL_get_string(tname, &name, &len))
+    PL_fail;
+  name = strdup(name);
+}*/
+  if(!PL_get_atom_chars(tname, &name))
+    PL_fail;
+@
+
+%}}}
+%{{{ get host
+
+Get the name of the host. If {\tt thost} is a variable, we retrieve
+the default host name from the global variable {\tt host} and unify
+the variable with that value. Otherwise, we just assume {\tt thost} is
+a string and retrieve its value. Use the empty string ('') to connect
+on the local host.
+
+<<get host>>=
+/*if(PL_is_variable(thost)) {
+  host = get_default_string("host");
+  if(!PL_unify_string_chars(thost, host))
+    PL_fail;
+} else {
+  if(!PL_get_string(thost, &host, &len))
+    PL_fail;
+  host = strdup(host);
+}*/
+  if(!PL_get_atom_chars(thost, &host))
+    PL_fail;
+@
+
+%}}}
+%{{{ get port 
+
+Get the port number. If {\tt tport} is a variable, we retrieve
+the default port from the global variable {\tt port} and unify
+the variable with that value. Otherwise, we just assume {\tt tport} is
+an integer and retrieve its value. Use the port number -1 to use the
+standard ToolBus port (8998).
+
+<<get port>>=
+/*if(PL_is_variable(tport)) {
+  port = get_default_int("port");
+  if(!PL_unify_integer(tport, (long)port))
+    PL_fail;
+} else {
+*/
+  if(!PL_get_integer(tport, &port))
+    PL_fail;
+/*}*/
+@
+
+%}}}
+%{{{ get tid
+
+Get the tool id. If {\tt ttid} is a variable, we retrieve
+the default tid from the global variable {\tt tid} and unify
+the variable with that value. Otherwise, we just assume {\tt ttid} is
+an integer and retrieve its value.
+
+<<get tid>>=
+/*if(PL_is_variable(ttid)) {
+  tid = get_default_int("tid");
+  if(!PL_unify_integer(ttid, (long)tid))
+    PL_fail;
+} else {
+*/
+  if(!PL_get_integer(ttid, &tid))
+    PL_fail;
+/*}*/
+@
+
+%}}}
+
+%}}}
+%{{{ tb_connect
+
+<<tb_connect>>=
+static foreign_t tb_connect(term_t tcid)
+{
+  int cid;
+
+  if(!PL_get_integer(tcid, &cid))
+    PL_fail;
+
+  if(TB_connect(cid) < 0)
+    PL_fail;
+
+  PL_succeed;
+}
+@
+
+%}}}
+%{{{ tb_send
+
+<<tb_send>>=
+static foreign_t tb_send(term_t tcid, term_t pl_ev)
+{
+  int cid;
+  term *ev;
+
+  if(!PL_get_integer(tcid, &cid))
+    PL_fail;
+
+  if(!TB_validConnection(cid))
+    PL_fail;
+
+  if(!pl_to_tb(pl_ev, &ev))
+    PL_fail;
+
+  TB_send(cid, ev);
+  PL_succeed;
+}
+@
+
+%}}}
+%{{{ tb_eventloop
+
+<<tb_eventloop>>=
+static foreign_t tb_eventloop(term_t tcid)
+{
+  if(TB_eventloop() < 0)
+    PL_fail;
+
+  PL_succeed;
+}
+@
+
+%}}}
+
+%{{{ pl_print
+
+<<pl_print>>=
+static void pl_print(FILE *f, term_t t)
+{
+  atom_t atom;
+  int i, arity;
+  long l;
+  double dbl;
+  char *s;
+  term_t arg = PL_new_term_ref();
+
+  switch(PL_term_type(t))
+  {
+    case PL_VARIABLE:	fprintf(f, "_%d", (int) t);
+			break;
+    case PL_ATOM:	PL_get_atom_chars(t, &s);
+			fprintf(f, "%s", s);
+			break;
+    case PL_STRING:	PL_get_string(t, &s, &i);
+			fprintf(f, "\"%s\"", s);
+			break;
+    case PL_INTEGER:	PL_get_long(t, &l);
+			fprintf(f, "%ld", l);
+			break;
+    case PL_FLOAT:	PL_get_float(t, &dbl);
+			fprintf(f, "%f", dbl);
+			break;
+    case PL_TERM:	PL_get_name_arity(t, &atom, &arity);
+			fprintf(f, "%s(", PL_atom_chars(atom));
+			for(i = 1; i <= arity; i++) {
+			   if(i != 1)
+			     fprintf(f, ", ");
+			   PL_get_arg(i, t, arg);
+			   pl_print(f, arg);
+			}
+			fprintf(f, ")");
+			break;
+    default:		fprintf(stderr, "Illegal type in PL_print: %d!",
+				PL_term_type(t));
+			exit(1);
+  }
+}
+@
+
+%}}}
+%{{{ pl_printm
+
+<<pl_printm>>=
+void pl_printm(FILE *f, char *msg, term_t t)
+{
+  fprintf(f, "%s: ", msg);
+  pl_print(f, t);
+  fprintf(f, "\n");
+}
+@
+
+%}}}
+
+%{{{ tb_to_pl
+
+Translate a ToolBus term into a Prolog term.
+
+<<tb_to_pl>>=
+static TBbool tb_to_pl_appl(char *fun, term_list *args, term_t pl_term);
+static TBbool tb_to_pl_list(term_list *l, term_t pl_term);
+static TBbool tb_to_pl_var(term *v, term_t pl_term);
+
+static TBbool tb_to_pl(term *tb_term, term_t pl_term)
+{
+  /*TBprintf(stderr, "translating term %t to prolog\n", tb_term);*/
+  switch(tkind(tb_term)) {
+    case t_bool:	if(bool_val(tb_term))
+			  PL_put_atom_chars(pl_term, "true");
+			else
+			  PL_put_nil(pl_term);
+			break;
+    case t_int:		PL_put_integer(pl_term, int_val(tb_term));
+			break;
+    case t_real:	PL_put_float(pl_term, real_val(tb_term));
+			break;
+    case t_str:		PL_put_string_chars(pl_term, str_val(tb_term));
+			break;
+    case t_appl:	return tb_to_pl_appl(get_txt(fun_sym(tb_term)), 
+				fun_args(tb_term), pl_term);
+    case t_list:	return tb_to_pl_list(tb_term, pl_term);
+    case t_var:		return tb_to_pl_var(tb_term, pl_term);
+	
+    case t_bstr:	fprintf(stderr, "prolog adapter cannot handle binary strings, giving up\n");
+			exit(1);
+			break;
+    default:		fprintf(stderr, "cannot handle toolbus term type: %d\n",
+				tkind(tb_term));
+			exit(1);
+  }
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ tb_to_pl_appl
+
+Translate a ToolBus application into a prolog term.
+
+<<tb_to_pl_appl>>=
+static TBbool tb_to_pl_appl(char *fun, term_list *args, term_t pl_term)
+{
+  int i, len;
+  functor_t f = PL_new_functor(PL_new_atom(fun), list_length(args));
+  term_t arg  = PL_new_term_ref();
+  
+  PL_put_functor(pl_term, f);
+  len = list_length(args);
+  for(i=1; i<=len; i++) {
+    if(!tb_to_pl(first(args), arg))
+      return TBfalse;
+    PL_unify_arg(i, pl_term, arg);
+    args = next(args);
+  }
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ tb_to_pl_list
+
+Translate a ToolBus list into a prolog list.
+
+<<tb_to_pl_list>>=
+static TBbool tb_to_pl_list(term_list *l, term_t pl_term)
+{
+  term_t el = PL_new_term_ref();
+
+  l = list_reverse(l);
+  PL_put_nil(pl_term);
+  while(l) {
+    if(!tb_to_pl(first(l), el))
+      return TBfalse;
+    PL_cons_list(pl_term, el, pl_term);
+    l = next(l);
+  }
+  
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ tb_to_pl_var
+
+Translate a ToolBus variable into a prolog variable.
+
+<<tb_to_pl_var>>=
+static TBbool tb_to_pl_var(term *var, term_t pl_term)
+{
+  PL_put_variable(pl_term);
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ pl_to_tb
+
+<<pl_to_tb>>=
+static TBbool pl_to_tb_list(term_t pl_list, term_list **tb_list);
+static TBbool pl_to_tb_appl(term_t pl_term, term **tb_term);
+
+static TBbool pl_to_tb(term_t pl_term, term **tb_term)
+{
+  char *func, *str;
+  int len;
+  long l;
+  double dbl;
+
+  /*fprintf(stderr, "pl_to_tb: ");
+  pl_print(stderr, pl_term);
+  fprintf(stderr, "\n");*/
+  switch(PL_term_type(pl_term)) {
+    case PL_VARIABLE:	*tb_term = TB_make("A?");
+			break;
+    case PL_ATOM:	PL_get_atom_chars(pl_term, &func);
+			underscores2hyphens(func, buf);
+			*tb_term = TB_make("<appl>", buf, NULL);
+			break;
+    case PL_STRING:	PL_get_string(pl_term, &str, &len);
+			*tb_term = TB_make("<str>", str);
+			break;
+    case PL_INTEGER:	PL_get_long(pl_term, &l);
+			*tb_term = TB_make("<int>", l);
+			break;
+    case PL_FLOAT:	PL_get_float(pl_term, &dbl);
+			*tb_term = TB_make("<real>", dbl);
+			break;
+    case PL_TERM:	if(PL_is_list(pl_term))
+			  return pl_to_tb_list(pl_term, tb_term);
+			else
+			  return pl_to_tb_appl(pl_term, tb_term);
+    default:		return TBfalse;
+  }
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ pl_to_tb_list
+
+<<pl_to_tb_list>>=
+TBbool pl_to_tb_list(term_t pl_list, term_list **tb_list)
+{
+  term_t head = PL_new_term_ref();
+  term_t list = PL_copy_term_ref(pl_list);
+  term *el;
+
+  *tb_list = NULL;
+  if(PL_get_nil(pl_list))
+    return TBtrue;
+  while(PL_get_list(list, head, list)) {
+    if(!pl_to_tb_list(head, &el))
+      return TBfalse;
+    *tb_list = list_concat_term(*tb_list, el);
+  }
+  return TBtrue;
+}
+@
+
+%}}}
+%{{{ pl_to_tb_appl
+
+<<pl_to_tb_appl>>=
+TBbool pl_to_tb_appl(term_t pl_term, term **tb_term)
+{
+  atom_t atom;
+  int i,arity;
+  const char *func;
+  term_t pl_arg;
+  term *tb_arg;
+  term_list *args = NULL;
+
+  /*fprintf(stderr, "pl_to_tb_appl: ");
+  pl_print(stderr, pl_term);
+  fprintf(stderr, "\n");*/
+
+  if(!PL_get_name_arity(pl_term, &atom, &arity))
+    return TBfalse;
+
+  pl_arg = PL_new_term_ref();
+  func = PL_atom_chars(atom);
+
+  for(i=1; i<=arity; i++) {
+    PL_get_arg(i, pl_term, pl_arg);
+    if(!pl_to_tb(pl_arg, &tb_arg))
+      return TBfalse;
+    args = list_concat_term(args, tb_arg);
+  }
+  underscores2hyphens(func, buf);
+  *tb_term = TB_make("<appl>", buf, args);
+  return TBtrue;
+}
+@
+
+%}}}
+
+%{{{ main
+
+<<main>>=
+int main(int argc, char *argv[], char **env)
+{
+  if(!PL_initialise(argc, argv, env))
+    PL_halt(1);
+
+  PL_install_readline();
+
+  TB_init();
+
+  PL_halt(PL_toplevel() ? 0 : 1);
+}
+@
+
+%}}}
+%{{{ PL_extensions
+
+<<PL_extensions>>=
+PL_extension PL_extensions[] =
+{
+/*{ "name",		arity,	function,	PL_FA<flags> 	},*/
+  { "tb_new_connection",5,	tb_new_connection,0		},
+  { "tb_connect",	1,	tb_connect,	0,		},
+  { "tb_eventloop",	0,	tb_eventloop,	0,		},
+  { "tb_send",		2,	tb_send,	0,		},
+  { NULL,		0,	NULL,		0		} /*sentinel*/
+};
+@
+
+%}}}
