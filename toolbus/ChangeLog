@@ -1,9 +1,13 @@
 $Id$
 
-Tue Mar  5 15:47:40 CET 2002 <jong@cwi.nl>
+2002/03/27 (jurgenv@cwi.nl)
+ * Made toolbus take CPPFLAGS into account when calling the C preprocessor.
+   This should fix some portability issue for MacOS X.
+
+2002/03/05 (jong@cwi.nl)
  * Several adapters 'omgeSPECt' from 8 to 12 bytes
 
-Thu Feb 14 13:23:50 CET 2002 <olivierp>
+2002/02/14 (olivierp@cwi.nl)
  * Added dot-adapter
 
 2002/02/07 (jurgenv@cwi.nl)
