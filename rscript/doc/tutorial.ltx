@@ -651,7 +651,7 @@ Examples are:
 \begin{itemize}
 \item \verb@<str K, int N> : <"a",10>, <"b",20>, <"c",30>}@<
 \item \verb@<str K, int N> : FREQUENCIES@, where {\tt FREQUENCIES} should
-  evaluate to a value of
+  evaluate to a value of type {\tt rel[str,int]}.
 \item \verb@<str K, 10> : FREQUENCIES@, will only generate pairs with {\tt 10}
   as second element.
 \end{itemize}
@@ -667,11 +667,11 @@ of values is undesired, and that another combination should be
 tried. Examples:
 
 \begin{itemize}
-\item \verb@N >= 3@ test that {\tt N} has a value greater than or equal {\tt 3}.
-\item \verb@S == "coffee"@ test that {\tt S} is equal to the string {\tt
+\item \verb@N >= 3@ tests whether {\tt N} has a value greater than or equal {\tt 3}.
+\item \verb@S == "coffee"@ tests whether {\tt S} is equal to the string {\tt
 "coffee"}.
 \end{itemize}
-In both examples, the variable should have been introduced by a generator that
+In both examples, the variable ({\tt N}, respectively, {\tt S}) should have been introduced by a generator that
 occurs earlier in the enclosing comprehension.
 
 \paragraph{Assignment}
@@ -694,6 +694,23 @@ resulting from the evaluation of expression $E$ with each $T_i$ as follows:
 
 \end{itemize}
 
+Examples of assignments are:
+\begin{itemize}
+
+\item {\tt rel[str,str] ALLCALLS <- CALLS+} assigns the transitive
+closure of the relation {\tt CALLS} to the variable {\tt ALLCALLS}.
+
+\item {\tt bool Smaller <- A <= B} assigns the result of the test {\tt
+A <= B} to the Boolean variable {\tt Smaller}.
+
+\item {\tt <int N, str S, 10> <- E} evaluates expression {\tt E}
+(which should yield a tuple of type {\tt <int, str, int>}) and
+performs a tuple-wise assignment to the new variables {\tt N} and {\tt
+S} \emph{provided} that the third element of the result is equal to
+{\tt 10}. Otherwise the assignment acts as a test that fails.
+
+\end{itemize}
+
 
 \subsection{Examples of Comprehensions}
 
@@ -701,13 +718,13 @@ resulting from the evaluation of expression $E$ with each $T_i$ as follows:
 
 \item \verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5}@.
 
-\item \verb@{<X, Y> | int X :{1, 2, 3}, int Y :{2, 3, 4}, X >= Y}@ yields the
+\item \verb@{<X, Y> | int X : {1, 2, 3}, int Y : {2, 3, 4}, X >= Y}@ yields the
   relation
 \newline
 \verb@{<2, 2>, <3, 2>, <3, 3>}@.
 
 
-\item \verb@{<Y, X> | <int X, int Y> :{<1,10>, <2,20>}}@ yields the inverse of
+\item \verb@{<Y, X> | <int X, int Y> : {<1,10>, <2,20>}}@ yields the inverse of
 the given relation: \verb@{<10,1>, <20,2>}@.
 
 \item 
