@@ -98,14 +98,7 @@ static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem);
 static ATbool no_new_vars(PT_Tree trm, ATerm env);
 static ATerm argMatching(ATerm env, PT_Tree arg1, PT_Tree arg2, ASF_ConditionList conds, PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth);
 static ATerm argsMatching(ATerm env, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATbool compareLists(Slice tuple, PT_Args list);
-static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
-			       PT_Production listProd);
 static ATerm subListMatching(ATerm env, PT_Tree elem, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm lastListElementMatching(ATerm env, PT_Tree elem1, PT_Args elems2, 
-				     PT_Production listProd, 
-				     ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm nextListElementMatching(ATerm env, PT_Tree elem1, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
 static PT_Tree reduce(PT_Tree trm, int depth);
@@ -746,87 +739,6 @@ static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
 /*}}}  */
 
 /* List Matching functionality */
-/*{{{  static ATbool compareLists(Slice tuple, PT_Args list) */
-
-static ATbool compareLists(Slice tuple, PT_Args list)
-{
-  PT_Args first, last;
-
-  assert(ATgetAFun(tuple) == list_var);
-  first = getSliceFirst(tuple);
-  last = getSliceLast(tuple);
-
-  while (!PT_isEqualArgs(first, last)) {
-    PT_Tree elem1, elem2;
-
-    if (PT_isArgsEmpty(list)) {
-      return ATfalse;
-    }
-
-    elem1 = PT_getArgsHead(first);
-    elem2 = PT_getArgsHead(list);
-
-    if (!isAsFixEqual(elem1, elem2)) {
-      return ATfalse;
-    }
-
-    first = PT_getArgsTail(first);
-    list = PT_getArgsTail(list);
-  }
-
-  return PT_isArgsEmpty(list);
-}
-
-/*}}}  */
-/*{{{  static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
- * PT_Production listProd) */
-
-static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
-			       PT_Production listProd)
-{
-  PT_Tree elem1, elem2;
-  PT_Args first, last;
-  ATbool match = ATtrue;
-
-  assert(ATgetAFun(slice) == list_var);
-  first = getSliceFirst(slice);
-  last = getSliceLast(slice);
-
-    first = skipWhitespaceAndSeparator(first,listProd);
-    elems2 = skipWhitespaceAndSeparator(elems2,listProd);
-
-    pedantic_assert(isValidSlice(first, last));
-    pedantic_assert(isValidList(elems2));
-
-  while (!PT_isEqualArgs(first, last) && match) {
-      first = skipWhitespaceAndSeparator(first,listProd);
-      assert(isValidSlice(first, last));
-
-    elem1 = PT_getArgsHead(first);
-    if (PT_hasArgsHead(elems2)) {
-      elem2 = PT_getArgsHead(elems2);
-      match = isAsFixEqual(elem1, elem2);
-
-	elems2 = skipWhitespaceAndSeparator(PT_getArgsTail(elems2),listProd);
-	assert(isValidList(elems2));
-    }
-    else {
-      match = ATfalse;
-    }
-
-    first = PT_getArgsTail(first);
-  }
-
-  if (match) {
-    pedantic_assert(isValidList(elems2));
-    return elems2;
-  }
-  else {
-    return NULL;
-  }
-}
-
-/*}}}  */
 /*{{{  static ATerm subListMatching(env, el, listProd, e1, e2, cnds, a1, a2, pos, d) */
 
 
@@ -836,321 +748,101 @@ static PT_Args compareSubLists(Slice slice, PT_Args elems2,
  */
 
 static ATerm
-subListMatching(ATerm env, PT_Tree elem,
+subListMatching(ATerm env, PT_Tree listvar,
 		PT_Production listProd, PT_Args elems1, PT_Args elems2,
 		ASF_ConditionList conds,
 		PT_Args args1, PT_Args args2,
                 ATerm lhs_posinfo, int depth)
 {
-  ATerm subenv, newenv;
+  ATerm newenv = fail_env;
   PT_Args last;
  
-/* 
-ATwarning("subListMatching entered for %t with %t\n",
-          yieldTree(elem),
-          yieldArgs(elems2)); 
-*/
-
-  if (PT_isTreeVarListStar(elem)) {
-    /* try to match with zero elements for star variable */
-    newenv = putListVariableValue(env, elem, PT_makeArgsEmpty(),
-				  PT_makeArgsEmpty());
-
-    subenv =
-      listMatching(newenv, listProd, elems1, elems2, conds, 
-                   args1, args2,
-                   lhs_posinfo, depth);
+  if (PT_isTreeVarListStar(listvar)) {
+    last = elems2;
   }
   else {
-    /* if plus variable, do not try to match with zero elements */
-    subenv = fail_env;
-    if (runVerbose) {
-      ATwarning("*** fail_env on line %d\n", __LINE__);
-    }
-  }
-
-  /* Make sure we begin at a regular element */
-  elems2 = skipWhitespaceAndSeparator(elems2, listProd);
-  pedantic_assert(isValidList(elems2));
-
-  /* If the star variable didn't match or we have a plus variable
-   * we continue matching with increasing length while possible.
-   */
-
-  if (PT_hasArgsHead(elems2)) {
-    for (last = PT_getArgsTail(elems2);	/* create a singleton */
-	 is_fail_env(subenv);
-	 /* add an element to the slice */
-	 last = PT_getArgsTail(skipWhitespaceAndSeparator(last, listProd))) {
-      pedantic_assert(isValidSlice(elems2, last));
-      newenv = putListVariableValue(env, elem, elems2, last);
-      subenv =
-	listMatching(newenv, listProd, elems1, last,
-                     conds, args1, args2,
-		     lhs_posinfo, depth);
-
-      if (!PT_hasArgsHead(last)) {
-	/* the entire list has been tried now */
-	break;
-      }
-    }
-  }
-
-  return subenv;
-}
-
-
-/*}}}  */
-/*{{{  static ATerm lastListElementMatching(env, el1, els2, conds, a1, a2, pos, d) */
-
-static ATerm
-lastListElementMatching(ATerm env, PT_Tree elem1, 
-                        PT_Args elems2,
-			PT_Production listProd,
-                        ASF_ConditionList conds, 
-                        PT_Args args1, PT_Args args2,
-                        ATerm lhs_posinfo, int depth) 
-{
-  PT_Tree elem2;
-  ATerm newenv;
-
-  if (runVerbose) {
-    ATwarning("lastListElementMatching: %t matched with %t\n",
-              yieldTree(elem1),
-              yieldArgs(elems2));
-  }
-
-  if (PT_isTreeVarList(elem1)) {
-    Slice trms = getListVariableValue(env, elem1);
-    if (trms) {
-      if (compareLists(trms, elems2)) {
-        newenv = argsMatching(env, conds, args1, args2,
-    			      lhs_posinfo, depth);
-      }
-      else {
-        newenv = fail_env;
-        if (runVerbose) {
-          ATwarning("*** fail_env on line %d\n", __LINE__);
-        }
-      }
-    }
-    else {			/* TdictGet(env,elem1) == Tfalse */
-      if (PT_isTreeVarListPlus(elem1) && PT_isArgsEmpty(elems2)) {
-        newenv = fail_env;
-        if (runVerbose) {
-          ATwarning("*** fail_env on line %d\n", __LINE__);
-        }
-      }
-      else {
-        elems2 = skipWhitespaceAndSeparator(elems2, listProd);
-        pedantic_assert(isValidList(elems2));
-
-        if (PT_hasArgsHead(elems2)) {
-          elem2 = PT_getArgsHead(elems2);
-        }
-    
-        pedantic_assert(isValidSlice(elems2, PT_makeArgsEmpty()));
-        newenv =
-          putListVariableValue(env, elem1, elems2, PT_makeArgsEmpty());
-        newenv =
-          argsMatching(newenv, conds, args1, args2, 
-                       lhs_posinfo, depth);
-      }
-    }
-  }
-  else {			/*is_list_var(elem1) == Tfalse */
-    if (!PT_isArgsEmpty(elems2)) {
-      elem2 = PT_getArgsHead(elems2);
-      elems2 = PT_getArgsTail(elems2);
-      if (PT_isArgsEmpty(elems2)) {	/* is singleton */
-        newenv =
-          argMatching(env, elem1, elem2,
-                      conds, args1, args2,
-                      lhs_posinfo, depth);
-      }
-      else {
-        newenv = fail_env;
-        if (runVerbose) {
-          ATwarning("*** fail_env on line %d\n", __LINE__);
-        }
-      }
+    if (PT_hasArgsHead(elems2)) {
+      last = PT_getArgsTail(skipWhitespaceAndSeparator(elems2, listProd));
     }
     else {
-      newenv = fail_env;
-      if (runVerbose) {
-        ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
+      return fail_env;
     }
   }
+
+  while (is_fail_env(newenv)) {
+    newenv = putListVariableValue(env, listvar, elems2, last);
+
+    newenv = listMatching(newenv, listProd, elems1, last,
+			  conds, args1, args2,
+			  lhs_posinfo, depth);
+
+    if (PT_hasArgsHead(last)) {
+      last = PT_getArgsTail(skipWhitespaceAndSeparator(last, listProd));
+    }
+    else {
+      break;
+    }
+  }
+
   return newenv;
 }
 
 
 /*}}}  */
-/*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
+/*{{{  static ATerm listMatching(ATerm env, PT_Production listProd, */
 
-static ATerm
-nextListElementMatching(ATerm env, PT_Tree elem1, 
-                        PT_Production listProd, 
-                        PT_Args elems1, PT_Args elems2,
-                        ASF_ConditionList conds, 
-                        PT_Args args1, PT_Args args2,
-                        ATerm lhs_posinfo, int depth) 
-{
-  PT_Tree elem2 = NULL;
-  ATerm newenv;
-
-  if (runVerbose) {
-    ATwarning("%t:matching next element: %t\ngiven %t\n and %s\n\n\n",
-	      yieldTree((PT_Tree) tagCurrentRule), 
-              yieldTree(elem1), 
-              yieldArgs(elems2), 
-              PT_yieldProduction(listProd));
-  }
-
-  if (PT_isTreeVarList(elem1)) {
-    Slice trms = getListVariableValue(env, elem1);
-    if (trms) {
-      elems2 = compareSubLists(trms, elems2, listProd);
-      if (elems2) {
-        newenv = listMatching(env, listProd, elems1, elems2, conds,
-                              args1, args2,
-                              lhs_posinfo, depth);
-      }
-      else {
-        newenv = fail_env;
-        if (runVerbose) {
-          ATwarning("*** fail_env on line %d\n", __LINE__);
-        }
-      }
-    }
-    else {      /* list variable elem1 does not occur in value env. */
-      newenv = subListMatching(env, elem1, 
-                               listProd, elems1, elems2,
-                               conds, args1, args2, 
-                               lhs_posinfo, depth);
-    }
-  }
-  else if (isListSeparator(elem1, listProd)) {
-    if (PT_hasArgsHead(elems2)) {
-      elem2 = PT_getArgsHead(elems2);
-
-      if (isListSeparator(elem2, listProd)) {
-
-        elems2 = skipWhitespace(PT_getArgsTail(elems2));
-
-        pedantic_assert(isValidList(elems2));
-      
-	newenv = argMatching(env, elem1, elem2, conds,
-                             addElemsToArgs(listProd, elems1, args1),
-                             addElemsToArgs(listProd, elems2, args2),
-			     lhs_posinfo, depth);
-      }
-      else {
-        elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
-        newenv = listMatching(env, listProd, elems1, elems2, conds,
-                              args1, args2,
-                              lhs_posinfo, depth);
-      }
-    }
-    else {
-      elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
-      newenv = listMatching(env, listProd, elems1, elems2, conds,
-                            args1, args2,
-                            lhs_posinfo, depth);
-    }
-  }
-  else {  /* elem1 is not a list variable and not a separator */
-    if (PT_hasArgsHead(elems2)) {
-      elem2 = PT_getArgsHead(elems2);
-
-      elems2 = skipWhitespace(PT_getArgsTail(elems2)); 
-      pedantic_assert(isValidList(elems2));
-
-      if (isListSeparator(elem2, listProd)) {
-        newenv = listMatching(env, listProd, elems1, elems2, conds,
-                              args1, args2,
-                              lhs_posinfo, depth);
-      }
-      else {
-	newenv=  argMatching(env, elem1, elem2, conds,
-                             addElemsToArgs(listProd, elems1, args1),
-                             addElemsToArgs(listProd, elems2, args2),
-			     lhs_posinfo, depth);
-      }
-    }
-    else {
-      newenv = fail_env;
-      if (runVerbose) {
-        ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
-  }
-  return newenv;
-}
-
-
-/*}}}  */
-/*{{{  static ATerm listMatching(env, listProd, elems1, elems2, conds, args1, ...) */
-
-static ATerm
-listMatching(ATerm env, PT_Production listProd,
-             PT_Args elems1, PT_Args elems2,
-	     ASF_ConditionList conds, 
-             PT_Args args1, PT_Args args2,
-	     ATerm lhs_posinfo, int depth)
+static ATerm listMatching(ATerm env, PT_Production listProd,
+			  PT_Args elems1, PT_Args elems2,
+			  ASF_ConditionList conds, 
+			  PT_Args args1, PT_Args args2,
+			  ATerm lhs_posinfo, int depth)
 {
   PT_Tree elem1;
-  ATerm newenv;
+  ATerm newenv = fail_env;
 
   elems1 = skipWhitespaceAndSeparator(elems1,listProd);
-  pedantic_assert(isValidList(elems1));
   elems2 = skipWhitespaceAndSeparator(elems2,listProd);
-  pedantic_assert(isValidList(elems2));
 
-  if (runVerbose) {
-    ATwarning("%t:matching elements: %t\nwith\n%t given %s\n\n\n",
-	      yieldTree((PT_Tree) tagCurrentRule), 
-              yieldArgs(elems1), 
-              yieldArgs(elems2), 
-              PT_yieldProduction(listProd));
+  if (PT_isArgsEmpty(elems1) && PT_isArgsEmpty(elems2)) {
+    newenv = argsMatching(env, conds, args1, args2, lhs_posinfo, depth);
   }
+  else {
+    if (PT_hasArgsHead(elems1)) {
+      elem1 = PT_getArgsHead(elems1);
+      elems1 = PT_getArgsTail(elems1);
 
-
-  if (PT_hasArgsHead(elems1)) {
-    elem1 = PT_getArgsHead(elems1);
-    elems1 = PT_getArgsTail(elems1);
-
-    if (PT_isArgsEmpty(elems1)) { /* elems1 was a single element list */
-      newenv = lastListElementMatching(env, elem1, elems2, listProd, conds, 
-                                       args1, args2, lhs_posinfo, depth);
-    }
-    else { /* elems1 contained more than one element in its pattern */
-      newenv = nextListElementMatching(env, elem1, 
-                                       listProd, elems1, elems2,
-                                       conds, 
-                                       args1, args2,
-                                       lhs_posinfo, depth);
-    }
-  }
-  else { /* elems1 is empty, so we are successful if elems2 are empty
-          * as well
-          */
-    if (!PT_isArgsEmpty(elems2)) {
-      newenv = fail_env;
-      if (runVerbose) {
-	ATwarning("*** fail_env on line %d\n", __LINE__);
+      if (PT_isTreeVarList(elem1)) {
+	Slice slice = getListVariableValue(env, elem1);
+	if (slice != NULL) {
+	  newenv = listMatching(env, listProd, 
+				prependSlice(slice, elems1), 
+				elems2, conds,
+				args1, args2,
+				lhs_posinfo, depth);
+	}
+	else {
+	  newenv = subListMatching(env, elem1, 
+				   listProd, elems1, elems2,
+				   conds, args1, args2, 
+				   lhs_posinfo, depth);
+	}
       }
-    }
-    else {
-      newenv = argsMatching(env, conds, args1, args2, 
-                            lhs_posinfo, depth);
+      else {
+	if (PT_hasArgsHead(elems2)) {
+	  PT_Tree elem2 = PT_getArgsHead(elems2);
+	  elems2 = PT_getArgsTail(elems2); 
+
+	  newenv=  argMatching(env, elem1, elem2, conds,
+			       addElemsToArgs(listProd, elems1, args1),
+			       addElemsToArgs(listProd, elems2, args2),
+			       lhs_posinfo, depth);
+	}
+      }
     }
   }
 
   return newenv;
 }
-
 
 /*}}}  */
 
