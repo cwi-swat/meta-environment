@@ -1,8 +1,3 @@
-SUBDIRS=booleans
-
-# Let's find those warnings before this gets shipped
-CFLAGS += -Werror
-
 BUILTIN_NAMES=\
               set-anno get-anno\
               get-term-anno \
@@ -22,14 +17,25 @@ BUILTIN_SOURCES=common.c \
 		shell.c \
 		traversal.c \
                 toolbus.c \
-		term-compare.c \
-		${srcdir}/booleans/Booleans.c \
-		${srcdir}/booleans/Booleans_dict.c \
-		${srcdir}/booleans/Booleans_bottom.c
+		term-compare.c 
+
+#The names of the modules that need to be included in a generated lib
+LIBRARY_MODULES=basic/Booleans
+
+#Below here should not be changed when adding a builtin:
+
+EXTRA_DIST = Library.def
+
+noinst_HEADERS = Library.h Library_dict.h 
 
 noinst_LIBRARIES=libasf-builtins.a
 noinst_HEADERS=asf-builtins.h common.h
-libasf_builtins_a_SOURCES=forward.c ${BUILTIN_SOURCES} ./booleans/libBooleans.a
+libasf_builtins_a_SOURCES=\
+	forward.c\
+	Library.c\
+	Library_dict.c\
+	Library_bottom.c\
+	${BUILTIN_SOURCES} 
 
 # To check whether we implemented all the builtins mentioned we
 # generate a program that calls all builtins and try to compile and link 
@@ -60,3 +66,16 @@ asf-builtins.h: ${BUILTIN_SOURCES} Makefile
 link-test.c: asf-builtins.h ${BUILTIN_SOURCES} Makefile 
 	${GENLNKTST} "${BUILTIN_NAMES}" > $@
 
+# Developers only:
+api: Library.def
+	sdf2-to-c -i $< -P CO_ -o Library
+
+api-clean:
+	rm -f Library.[ch] Library_dict.* Library.adt Library_bottom.c
+
+LIBRARY=$(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)
+
+Library.def:
+	@(echo "definition" ; \
+          cat ${LIBRARY}) > \
+	  $@
