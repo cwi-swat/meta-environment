@@ -1,5 +1,10 @@
 # $Id$
 
+2002/05/13 (jurgenv@cwi.nl)
+* Refactored implementation of module renaming
+* Changed renaming widget to file browser in graphbrowser
+* Made renaming work with compound module names too.
+
 2002/05/09 (jurgenv@cwi.nl)
  * Enhanced support for compound module names. New compound module names
    are computed automatically using the meta.conf path and the selected
