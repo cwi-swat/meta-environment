@@ -1,0 +1,7 @@
+equations
+
+[le-0]       less-equal(X,X)   = true
+[default-le] less-equal(X1,X2) = less(X1,X2)
+
+[g ] greater(X1,X2)       = not(less-equal(X1,X2))
+[ge] greater-equal(X1,X2) = not(less(X1,X2))

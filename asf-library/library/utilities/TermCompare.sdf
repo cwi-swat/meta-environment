@@ -1,4 +1,4 @@
-module utilities/TermCompare[X]
+module utilities/TermCompare[Sort]
 
 imports basic/Booleans
 
@@ -6,8 +6,23 @@ exports
 
 context-free syntax
 
-  %% Compares two terms modulo LAYOUT and annotations
-  %% The ordering is complete, but dynamic. It may change
-  %% between runs of the interpreter because it is based
-  %% on memory layout.
-  less(X,X) -> Boolean {built-in("term-compare-less")}
+  %% 'less' compares two terms modulo LAYOUT and annotations.
+  %%
+  %% The ordering is based on the memory address of the terms.
+  %% That's why this ordering is very FRAGILE. The ordering
+  %% may change after a garbage collection if the terms that are
+  %% compared are collected and reinstantiated afterwards. 
+  %% Of course, the ordering may also change between runs of the 
+  %% interpreter.
+
+  less(Sort,Sort)          -> Boolean {built-in("term-compare-less")}
+  less-equal(Sort,Sort)    -> Boolean
+  greater(Sort,Sort)       -> Boolean
+  greater-equal(Sort,Sort) -> Boolean
+
+hiddens
+
+  imports basic/Whitespace
+
+  variables
+  "X"[0-9]* -> Sort
