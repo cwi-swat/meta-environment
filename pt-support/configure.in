@@ -11,7 +11,6 @@ AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
 dnl }}}
-
 dnl {{{  Handle --with-cflags option
 AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
@@ -29,11 +28,16 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl }}}
+dnl {{{  Require ToolBus library
+
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR      ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl }}}
+dnl {{{  Optional package ToolBus
 
 dnl Optional package ToolBus
 AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
@@ -42,6 +46,7 @@ AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
 AC_SUBST(TOOLBUS)
 
 dnl }}}
+
 dnl {{{  Require socket/gethostname
 
 NOSOCKLIBS=$LIBS
@@ -67,15 +72,15 @@ AC_SUBST(SOCKLIBS)
 LIBS=$NOSOCKLIBS
 
 dnl }}}
+dnl {{{  Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+dnl }}}
 
 dnl {{{  Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
-
-dnl }}}
-dnl {{{  Is ranlib needed on this system?
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl }}}
 dnl {{{  What commands are needed to set the variable MAKE in Makefiles?

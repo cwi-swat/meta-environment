@@ -18,7 +18,7 @@
   * Fixed a bug when dealing with ambiguities in lists.
 
 2001/11/21 ({jong,jurgenv}@cwi.nl)
-  * Fixed some bugs in usage info and file opening in implodePT.
+  * Fixed some bugs in usage info and file opening in implodePT, unparsePT.
 
 2001/11/20 (jurgenv@cwi.nl)
   * Added PT_yieldSymbolVisualVariables to MEPT-utils that pretty prints
