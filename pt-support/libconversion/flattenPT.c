@@ -364,11 +364,11 @@ static PT_Tree flattenLexical(PT_Tree tree)
       PT_Tree newTerm = flattenTerm(arg, ATfalse);
 
       if (newTerm) {
-        newArgs = PT_appendArgs(newArgs, newTerm);
+        newArgs = PT_insertArgs(newArgs, newTerm);
       }
       args = PT_getArgsTail(args);
     }
-    return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
+    return PT_makeTreeAppl(flattenProd(outerProd), PT_reverseArgs(newArgs));
   }
   else { 
     return tree;
@@ -380,7 +380,7 @@ static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars);
 static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
 {
   if (PT_isTreeChar(tree)) {
-    chars = PT_appendArgs(chars, tree);
+    chars = PT_insertArgs(chars, tree);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Args treeArgs = PT_getTreeArgs(tree);
@@ -392,7 +392,7 @@ static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
     len = strlen(lit);
 
     for (i = 0; i < len; i++) { 
-      chars = PT_appendArgs(chars, PT_makeTreeChar(lit[i]));
+      chars = PT_insertArgs(chars, PT_makeTreeChar(lit[i]));
     }
   }
 
@@ -420,7 +420,7 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
     PT_Args newArgs = PT_makeArgsList(
                         PT_makeTreeAppl(
                           PT_makeProductionList(makeSymbolAllChars()),
-                          charList),
+                          PT_reverseArgs(charList)),
                         PT_makeArgsEmpty());
     return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
   }
@@ -505,12 +505,12 @@ static PT_Tree flattenVar(PT_Tree tree)
         PT_Tree arg = PT_getArgsHead(argsInner);
         PT_Tree newArg = flattenTerm(arg, ATfalse);
         if (newArg) {
-          newVarArgs = PT_appendArgs(newVarArgs, newArg);
+          newVarArgs = PT_insertArgs(newVarArgs, newArg);
         }
         argsInner = PT_getArgsTail(argsInner);
       }
       newVarArg = PT_makeArgsList(PT_makeTreeAppl(flattenProd(prodVarsymInner),
-                                                  newVarArgs),
+                                                  PT_reverseArgs(newVarArgs)),
                                   newVarArg);
       return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }

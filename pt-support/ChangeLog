@@ -1,3 +1,8 @@
+2002/01/29 (vandenbr@loria.fr)
+ * Fixed the efficiency bug discovered by Leon Moonen and
+   Juergen Stuber. Replaced PT_appendArgs by PT_insertArgs
+   followed by a PT_reverseArgs.
+   
 2002/01/22 (jurgenv@cwi.nl)
  * Added support for ambiguities in addPosInfo
  * Bumped version of addPosInfo to 1.1
