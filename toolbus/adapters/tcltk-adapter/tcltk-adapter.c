@@ -1,11 +1,11 @@
-#line 37 "tcltk-adapter.c.nw"
+#line 39 "tcltk-adapter.c.nw"
 #include <TB.h>
 #include <tcl.h>
 #include <tk.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#line 51 "tcltk-adapter.c.nw"
+#line 53 "tcltk-adapter.c.nw"
 /* 20 Kb should suffice for most applications. */
 #define DEFAULT_BUF_SIZE	20480
 
@@ -21,20 +21,20 @@ int offset;
 TBbool use_toolbus = TBfalse;
 int cid;
 Tcl_File toolbus_file;
-#line 74 "tcltk-adapter.c.nw"
+#line 76 "tcltk-adapter.c.nw"
 void pr_type_wish(type *tp);
 void pr_term_list_wish(const term_list *tl, char sep);
 void pr_env_wish(const env *e);
 void pr_string_wish(char *s, int len);
 static void print_term(term *t);
 static void print_list(term_list* l, char* left, char* sep, char* right);
-#line 110 "tcltk-adapter.c.nw"
+#line 112 "tcltk-adapter.c.nw"
 void reset_buffer()
 {
   offset = 0;
   BUF[0] = '\0';
 }
-#line 123 "tcltk-adapter.c.nw"
+#line 125 "tcltk-adapter.c.nw"
 char *wish_type_string(tkind kind)
 {
   static char *types[] =
@@ -47,7 +47,7 @@ char *wish_type_string(tkind kind)
 
   return "unknown";
 }
-#line 163 "tcltk-adapter.c.nw"
+#line 165 "tcltk-adapter.c.nw"
 void printb_char(char c)
 {
   if(offset >= bufsize)
@@ -57,7 +57,7 @@ void printb_char(char c)
     BUF[offset] = '\0';
   }
 }
-#line 144 "tcltk-adapter.c.nw"
+#line 146 "tcltk-adapter.c.nw"
 void printb_str(char *str)
 {
   int len = strlen(str);
@@ -70,13 +70,13 @@ void printb_str(char *str)
     BUF[offset] = '\0';
   }
 }
-#line 181 "tcltk-adapter.c.nw"
+#line 183 "tcltk-adapter.c.nw"
 static void error( const char* msg )
 {
    fprintf(stderr, "fatal error: %s\n", msg); 
    exit(1);
 }
-#line 195 "tcltk-adapter.c.nw"
+#line 197 "tcltk-adapter.c.nw"
 static void wputc( int c )
 {
    printb_char(c);
@@ -84,7 +84,7 @@ static void wputc( int c )
       fputc( c, stderr );
    #endif
 }
-#line 211 "tcltk-adapter.c.nw"
+#line 213 "tcltk-adapter.c.nw"
 static void wprintf(char* fmt, ...)
 {
   va_list ap;
@@ -96,7 +96,7 @@ static void wprintf(char* fmt, ...)
   #endif
   va_end(ap);
 }
-#line 233 "tcltk-adapter.c.nw"
+#line 235 "tcltk-adapter.c.nw"
 static void print_string(char* s, int n)
 {
   wputc('"');
@@ -123,7 +123,7 @@ static void print_string(char* s, int n)
   }
   wputc('"');
 }
-#line 267 "tcltk-adapter.c.nw"
+#line 269 "tcltk-adapter.c.nw"
 static void print_var(term* e)
 {
    char* txt;
@@ -134,7 +134,7 @@ static void print_var(term* e)
    if(var_result(e))
      wputc('?');
 }
-#line 285 "tcltk-adapter.c.nw"
+#line 287 "tcltk-adapter.c.nw"
 static void print_env(env* e)
 {
    TBbool first = TBtrue;
@@ -156,7 +156,7 @@ static void print_env(env* e)
    }
    wputc('"');
 }
-#line 315 "tcltk-adapter.c.nw"
+#line 317 "tcltk-adapter.c.nw"
 static void print_term(term* t)
 {
    switch(tkind(t))
@@ -201,7 +201,7 @@ static void print_term(term* t)
          break;
    }
 }
-#line 367 "tcltk-adapter.c.nw"
+#line 369 "tcltk-adapter.c.nw"
 static void print_list(term_list* l, char* left, char* sep, char* right)
 {
    int i;
@@ -214,7 +214,7 @@ static void print_list(term_list* l, char* left, char* sep, char* right)
    }
    wprintf(right);
 }
-#line 387 "tcltk-adapter.c.nw"
+#line 389 "tcltk-adapter.c.nw"
 static void print_args(term_list *args)
 {
   while(args) {
@@ -228,31 +228,33 @@ static void print_args(term_list *args)
   }
 }
 
-#line 101 "tcltk-adapter.c.nw"
+#line 103 "tcltk-adapter.c.nw"
 void pr_term_wish(term *t)
 {
   print_term(t);
 }
 
-#line 409 "tcltk-adapter.c.nw"
+#line 411 "tcltk-adapter.c.nw"
 term *TclString2Term(char *str)
 {
   return TBmake(str);
 }
 
 
-#line 803 "tcltk-adapter.c.nw"
-#include <tide.h>
+#line 13 "tcltk-adapter.c.nw"
+#ifdef USE_TIDE
+#line 806 "tcltk-adapter.c.nw"
+#include <dap.h>
 #include "debug-adapter.tif.c"
 #include <limits.h>
-#line 812 "tcltk-adapter.c.nw"
+#line 815 "tcltk-adapter.c.nw"
 TBbool use_tide = TBfalse;
 TBbool trace_ports = TBfalse;
 int tide_cid = -1;
 Tcl_Interp *tide_interp = NULL;
 Tcl_File tide_file = NULL;
 
-#line 837 "tcltk-adapter.c.nw"
+#line 840 "tcltk-adapter.c.nw"
 TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
 {
   char *expr;
@@ -273,16 +275,16 @@ TBbool eval_eval_1(term_list *args, int pid, term **result, char **msg)
   return TBfalse;
 }
 
-#line 830 "tcltk-adapter.c.nw"
+#line 833 "tcltk-adapter.c.nw"
 func_entry func_table[] =
 { { "eval", 1, eval_eval_1, NULL, "evaluate an expression" },
   { NULL, 0, NULL, NULL, NULL }
 };
-#line 862 "tcltk-adapter.c.nw"
+#line 865 "tcltk-adapter.c.nw"
 act_entry act_table[] =
 { { NULL, 0, NULL, NULL, NULL }
 };
-#line 871 "tcltk-adapter.c.nw"
+#line 874 "tcltk-adapter.c.nw"
 char *information_table[] =
 { "search-paths", 		NULL,
   "observation-ports",		"[[on-halt,at,[]], [every-stat,before,[]]," \
@@ -293,31 +295,32 @@ char *information_table[] =
   NULL,				NULL
 };
 
-#line 889 "tcltk-adapter.c.nw"
+#line 892 "tcltk-adapter.c.nw"
 int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 {
   if(use_tide) {
-    dap_exception(0, "error", msg, info);
-    dap_exec_control(0, ES_STOP, -1);
-    return 1;
+    dap_activate_rules(0, TB_make("[exception,at,error,<str>,<str>]", msg, info));
+    /*return 1; For now, we also want to print the error. */
   }
   return 0;
 }
-#line 939 "tcltk-adapter.c.nw"
+#line 941 "tcltk-adapter.c.nw"
 void tcl_tide_handler(ClientData data, int mask)
 {
   if(TB_peek(tide_cid))
     TB_handle_one(tide_cid);
 }
-#line 950 "tcltk-adapter.c.nw"
+#line 952 "tcltk-adapter.c.nw"
 void tide_event_loop()
 {
-  while(dap_exec_state(0) == ES_STOP || 
-        dap_exec_state(0) == ES_HIGH_WATER) {
+  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
+        dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
+    fprintf(stderr, "handle one\n");
     TB_handle_one(tide_cid);
   }
+  fprintf(stderr, "continuing...\n");
 }
-#line 1009 "tcltk-adapter.c.nw"
+#line 1065 "tcltk-adapter.c.nw"
 int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
   term *port;
@@ -334,17 +337,17 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
     TBprintf(stdout, "port: %t\n", port);
 
   if(use_tide) {
-    dap_check_observation_points(0, port);
-    switch(dap_exec_state(0)) {
-      case ES_STOP:		dap_stop_process(0);
-				break;
-      case ES_SINGLE_STEP:	dap_stop_process(0);
+    dap_activate_rules(0, port);
+
+    switch(dap_get_exec_state(0, 0)) {
+      case ES_STOP:		
+      case ES_SINGLE_STEP:	dap_change_exec_state(0, ES_STOP);
 				break;
       case ES_RUN_UNTIL_PARENT:
       case ES_STEP_OVER:	Tcl_Eval(interp, "info level");
 				level = atoi(interp->result);
-				if(level <= dap_stop_level(0))
-				  dap_stop_process(0);
+				if(level <= dap_get_stop_level(0, 0))
+				  dap_change_exec_state(0, ES_STOP);
 				break;
     }
     tide_event_loop();
@@ -356,7 +359,33 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
   }
 }
 
-#line 906 "tcltk-adapter.c.nw"
+#line 1011 "tcltk-adapter.c.nw"
+void cbdap_process_created(int dapid, int pid)
+{
+}
+#line 1022 "tcltk-adapter.c.nw"
+void cbdap_process_destroyed(int dapid, int pid)
+{
+}
+#line 1035 "tcltk-adapter.c.nw"
+void cbdap_change_exec_state(int pid, int exec_state)
+{
+}
+#line 1044 "tcltk-adapter.c.nw"
+term *cbdap_supply_info(char *key)
+{
+  fprintf(stderr, "supply_info: %s\n", key);
+  if(streq(key, "search-paths")) {
+    static char path[_POSIX_PATH_MAX];
+    getcwd(path, _POSIX_PATH_MAX);
+
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
+  }
+
+  return NULL;
+}
+
+#line 908 "tcltk-adapter.c.nw"
 void handle_tide_args(int argc, char *argv[])
 {
   int i, port = 9500;
@@ -382,108 +411,93 @@ void handle_tide_args(int argc, char *argv[])
 			debug_adapter_handler, debug_adapter_check_in_sign);
   }
 }
-#line 966 "tcltk-adapter.c.nw"
+#line 969 "tcltk-adapter.c.nw"
 int Tide_Init(Tcl_Interp *interp)
 {
   tide_interp = interp;
 
   Tcl_CreateCommand(interp, "TBtide", Tcl_TBtide, NULL, NULL);
 
-  if(use_tide) {
-    TB_connect(tide_cid);
-    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
-    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
-  }
-  dap_init(tide_cid, func_table, act_table);
-
   if(use_tide || trace_ports) {
     if(Tcl_EvalFile(interp, LIBDIR "/tide.tcl") != TCL_OK) {
-      interp->result = "cannot open file " LIBDIR "/tide.tcl";
+      /*interp->result = "cannot open file " LIBDIR "/tide.tcl";*/
+      Tcl_AddErrorInfo(interp, "while loading file " LIBDIR "/tide.tcl\n");
       return TCL_ERROR;
     }
   }
 
   if(use_tide) {
+    TB_connect(tide_cid);
+    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
+    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
+  }
+
+  if(use_tide) {
+    dap_init(tide_cid, information_table, func_table, act_table);
     if(script)
-      dap_create_process(0, script, ES_STOP);
+      dap_process_created(0, 0, script, ES_STOP);
     else {
       char buf[32];
       sprintf(buf, "wish-%d", getpid());
-      dap_create_process(0, buf, ES_STOP);
+      dap_process_created(0, 0, buf, ES_STOP);
     }
   }
-  dap_set_observation_point(tide_cid, TB_make("all"), 
-	TB_make("[on-halt,at,\"\"]"), TB_make("always"), TB_make("[watch(cpe)]"));
 
   return TCL_OK;
 }
 
-#line 1055 "tcltk-adapter.c.nw"
-void continue_process(int pid)
-{
-}
-#line 1064 "tcltk-adapter.c.nw"
-void stop_process(int pid)
-{
-}
-#line 1074 "tcltk-adapter.c.nw"
-term *supply_info(int cid, char *key)
-{
-  fprintf(stderr, "supply_info: %s\n", key);
-  if(streq(key, "search-paths")) {
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
-
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
-  }
-
-  return NULL;
-}
-
-#line 1093 "tcltk-adapter.c.nw"
+#line 1109 "tcltk-adapter.c.nw"
 term *get_info(int cid)
 {
-  return dap_get_info(cid);
+  return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 }
-#line 1105 "tcltk-adapter.c.nw"
-term *set_observation_point(int cid, term *pids, term *port, term *cond, term_list *acts)
+#line 1121 "tcltk-adapter.c.nw"
+term *get_processes(int cid)
 {
-  return dap_set_observation_point(cid, pids, port, cond, acts);
-}
-#line 1117 "tcltk-adapter.c.nw"
-void clear_observation_point(int cid, term *pids, int oid)
-{
-  dap_clear_observation_point(cid, pids, oid);
-}
+  int i;
+  term_list *procs = NULL;
 
-#line 1129 "tcltk-adapter.c.nw"
-void exec_control(int cid, term *pids, term *mode)
-{
-  int level, es = dap_term2es(mode);
-
-  Tcl_Eval(tide_interp, "info level");
-  level = atoi(tide_interp->result);
-  dap_exec_control(0, es, level);
+  for(i=0; i<MAX_PROCESSES; i++) {
+    process *p = dap_get_process(0, i);
+    if(p)
+      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+  }
+  return TB_make("snd-value(processes(<term>))", procs);
 }
-#line 1145 "tcltk-adapter.c.nw"
-term *execute_actions(int cid, term *pids, term_list *actions)
+#line 1141 "tcltk-adapter.c.nw"
+term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 {
-  return TB_make("snd-value(execute-actions(<term>,<term>,error(<str>)))",
-			pids, actions, "not implemented yet");
+  int rid = dap_create_rule(procs, port, cond, acts, life);
+  return TB_make(
+	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
+	procs, port, cond, acts, life, rid);
 }
-
-#line 1159 "tcltk-adapter.c.nw"
+#line 1156 "tcltk-adapter.c.nw"
+void modify_rule(int cid, int rid, term *procs, term *port, 
+				term *cond, term *acts, term *life)
+{
+  dap_rule_modified(0, rid, procs, port, cond, acts, life);
+}
+#line 1169 "tcltk-adapter.c.nw"
+void destroy_rule(int cid, term *procs, int rid)
+{
+  dap_destroy_rule(rid);
+}
+#line 1182 "tcltk-adapter.c.nw"
 void rec_ack_event(int cid, term *event)
 {
   dap_rec_ack_event(cid, event);
 }
-#line 1171 "tcltk-adapter.c.nw"
+#line 1194 "tcltk-adapter.c.nw"
 void rec_terminate(int cid, term *arg)
 {
   dap_rec_terminate(cid, arg);
+  use_tide = TBfalse;
 }
+#line 15 "tcltk-adapter.c.nw"
+#endif
 
-#line 712 "tcltk-adapter.c.nw"
+#line 716 "tcltk-adapter.c.nw"
 static void signal_handler(int sig)
 {
 #ifdef USE_TIDE
@@ -495,7 +509,7 @@ static void signal_handler(int sig)
 
   exit(1);
 }
-#line 731 "tcltk-adapter.c.nw"
+#line 735 "tcltk-adapter.c.nw"
 static void signals_set()
 {
    struct sigaction act;
@@ -512,7 +526,7 @@ static void signals_set()
 /*   sigaction( SIGCHLD, &act, NULL );*/
 }
 
-#line 421 "tcltk-adapter.c.nw"
+#line 423 "tcltk-adapter.c.nw"
 void handle_error(Tcl_Interp *interp, char *msg)
 {
   char *info = Tcl_GetVar(interp, "errorInfo", TCL_GLOBAL_ONLY);
@@ -525,13 +539,13 @@ void handle_error(Tcl_Interp *interp, char *msg)
 
   fprintf(stderr, "error in Tcl script: %s\n%s\n", msg, info);
 }
-#line 439 "tcltk-adapter.c.nw"
+#line 441 "tcltk-adapter.c.nw"
 void tcl_toolbus_handler(ClientData data, int mask)
 {
   if(TB_peek(cid))
     TB_handle_one(cid);
 }
-#line 451 "tcltk-adapter.c.nw"
+#line 453 "tcltk-adapter.c.nw"
 term *from_toolbus(int cid, term *t) 
 {
   char *fname;
@@ -606,7 +620,7 @@ term *from_toolbus(int cid, term *t)
   TBmsg("Ignored: %t\n", t);
   return NULL;
 }
-#line 532 "tcltk-adapter.c.nw"
+#line 534 "tcltk-adapter.c.nw"
 int Tcl_TBsend(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
   term *t;
@@ -625,7 +639,7 @@ int Tcl_TBsend(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
   return TCL_OK;
 }
-#line 556 "tcltk-adapter.c.nw"
+#line 558 "tcltk-adapter.c.nw"
 int Tcl_TBstring(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
   char *buf,*src,*dest,size;
@@ -657,13 +671,13 @@ int Tcl_TBstring(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
   Tcl_SetResult(interp, buf, TCL_DYNAMIC);
   return TCL_OK;
 }
-#line 593 "tcltk-adapter.c.nw"
+#line 595 "tcltk-adapter.c.nw"
 int Tcl_bgerror(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
   handle_error(interp, argv[1]);
   return TCL_OK;
 }
-#line 639 "tcltk-adapter.c.nw"
+#line 643 "tcltk-adapter.c.nw"
 int Tcl_AppInit(Tcl_Interp *interp)
 {
   if(Tcl_Init(interp) == TCL_ERROR)
@@ -688,7 +702,7 @@ int Tcl_AppInit(Tcl_Interp *interp)
 
   return TCL_OK;
 }
-#line 608 "tcltk-adapter.c.nw"
+#line 610 "tcltk-adapter.c.nw"
 int TB_Init(Tcl_Interp *interp)
 {
   global_interp = interp;
@@ -712,8 +726,10 @@ int TB_Init(Tcl_Interp *interp)
     interp->result = "Cannot load file " LIBDIR "/tcltk.tcl";
     return TCL_ERROR;
   }
+
+  Tcl_SetVar(interp, "TB_LIBDIR", LIBDIR, TCL_GLOBAL_ONLY);
 }
-#line 672 "tcltk-adapter.c.nw"
+#line 676 "tcltk-adapter.c.nw"
 void handle_args(int argc, char *argv[])
 {
   int i;
@@ -748,7 +764,7 @@ void handle_args(int argc, char *argv[])
   if(use_toolbus)
     cid = TB_parseArgs(argc, argv, from_toolbus, NULL);
 }
-#line 752 "tcltk-adapter.c.nw"
+#line 756 "tcltk-adapter.c.nw"
 int main(int argc, char *argv[])
 {
   Tk_Window main_win;

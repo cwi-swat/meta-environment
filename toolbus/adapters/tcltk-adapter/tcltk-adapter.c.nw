@@ -10,7 +10,9 @@ of the following sections:
 <<term printing>>
 <<TclString2Term>>
 
+#ifdef USE_TIDE
 <<Tide support>>
+#endif
 
 <<signal_handler>>
 <<signals_set>>
@@ -628,6 +630,8 @@ int TB_Init(Tcl_Interp *interp)
     interp->result = "Cannot load file " LIBDIR "/tcltk.tcl";
     return TCL_ERROR;
   }
+
+  Tcl_SetVar(interp, "TB_LIBDIR", LIBDIR, TCL_GLOBAL_ONLY);
 }
 @
 
@@ -779,20 +783,19 @@ int main(int argc, char *argv[])
 <<tide_event_loop>>
 <<Tcl_TBtide>>
 
+<<cbdap_process_created>>
+<<cbdap_process_destroyed>>
+<<cbdap_change_exec_state>>
+<<cbdap_supply_info>>
+
 <<handle_tide_args>>
 <<Tide_Init>>
 
-<<continue_process>>
-<<stop_process>>
-<<supply_info>>
-
 <<get_info>>
-<<set_observation_point>>
-<<clear_observation_point>>
-
-<<exec_control>>
-<<execute_actions>>
-
+<<get_processes>>
+<<create_rule>>
+<<modify_rule>>
+<<destroy_rule>>
 <<rec_ack_event>>
 <<rec_terminate>>
 @
@@ -800,7 +803,7 @@ int main(int argc, char *argv[])
 %{{{ tide includes
 
 <<tide includes>>=
-#include <tide.h>
+#include <dap.h>
 #include "debug-adapter.tif.c"
 #include <limits.h>
 @
@@ -889,9 +892,8 @@ char *information_table[] =
 int handle_tide_error(Tcl_Interp *interp, char *code, char *msg, char *info)
 {
   if(use_tide) {
-    dap_exception(0, "error", msg, info);
-    dap_exec_control(0, ES_STOP, -1);
-    return 1;
+    dap_activate_rules(0, TB_make("[exception,at,error,<str>,<str>]", msg, info));
+    /*return 1; For now, we also want to print the error. */
   }
   return 0;
 }
@@ -949,15 +951,16 @@ void tcl_tide_handler(ClientData data, int mask)
 <<tide_event_loop>>=
 void tide_event_loop()
 {
-  while(dap_exec_state(0) == ES_STOP || 
-        dap_exec_state(0) == ES_HIGH_WATER) {
+  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
+        dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
+    fprintf(stderr, "handle one\n");
     TB_handle_one(tide_cid);
   }
+  fprintf(stderr, "continuing...\n");
 }
 @
 
 %}}}
-
 %{{{ int Tide_Init(Tcl_Interp *interp)
 
 Initialize Tide.
@@ -969,33 +972,86 @@ int Tide_Init(Tcl_Interp *interp)
 
   Tcl_CreateCommand(interp, "TBtide", Tcl_TBtide, NULL, NULL);
 
-  if(use_tide) {
-    TB_connect(tide_cid);
-    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
-    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
-  }
-  dap_init(tide_cid, func_table, act_table);
-
   if(use_tide || trace_ports) {
     if(Tcl_EvalFile(interp, LIBDIR "/tide.tcl") != TCL_OK) {
-      interp->result = "cannot open file " LIBDIR "/tide.tcl";
+      /*interp->result = "cannot open file " LIBDIR "/tide.tcl";*/
+      Tcl_AddErrorInfo(interp, "while loading file " LIBDIR "/tide.tcl\n");
       return TCL_ERROR;
     }
   }
 
   if(use_tide) {
+    TB_connect(tide_cid);
+    tide_file = Tcl_GetFile((ClientData)TB_getSocket(tide_cid), TCL_UNIX_FD);
+    Tcl_CreateFileHandler(tide_file, TCL_READABLE, tcl_tide_handler, NULL);
+  }
+
+  if(use_tide) {
+    dap_init(tide_cid, information_table, func_table, act_table);
     if(script)
-      dap_create_process(0, script, ES_STOP);
+      dap_process_created(0, 0, script, ES_STOP);
     else {
       char buf[32];
       sprintf(buf, "wish-%d", getpid());
-      dap_create_process(0, buf, ES_STOP);
+      dap_process_created(0, 0, buf, ES_STOP);
     }
   }
-  dap_set_observation_point(tide_cid, TB_make("all"), 
-	TB_make("[on-halt,at,\"\"]"), TB_make("always"), TB_make("[watch(cpe)]"));
 
   return TCL_OK;
+}
+@
+
+%}}}
+
+%{{{ void cbdap_process_created(int dapid, int pid)
+
+This callback function is called when a new process was created.
+
+<<cbdap_process_created>>=
+void cbdap_process_created(int dapid, int pid)
+{
+}
+@
+
+%}}}
+%{{{ void cbdap_process_destroyed(int dapid, int pid)
+
+This callback function is called when a new process was created.
+
+<<cbdap_process_destroyed>>=
+void cbdap_process_destroyed(int dapid, int pid)
+{
+}
+@
+
+%}}}
+%{{{ void cbdap_change_exec_state(int pid, int exec_state)
+
+This function is used as a callback to physically change
+the execution state of a process.
+In the tcltk-adapter this is handled at a higher level.
+
+<<cbdap_change_exec_state>>=
+void cbdap_change_exec_state(int pid, int exec_state)
+{
+}
+@
+
+%}}}
+%{{{ term *cbdap_supply_info(int cid, char *key)
+
+<<cbdap_supply_info>>=
+term *cbdap_supply_info(char *key)
+{
+  fprintf(stderr, "supply_info: %s\n", key);
+  if(streq(key, "search-paths")) {
+    static char path[_POSIX_PATH_MAX];
+    getcwd(path, _POSIX_PATH_MAX);
+
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
+  }
+
+  return NULL;
 }
 @
 
@@ -1022,17 +1078,17 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
     TBprintf(stdout, "port: %t\n", port);
 
   if(use_tide) {
-    dap_check_observation_points(0, port);
-    switch(dap_exec_state(0)) {
-      case ES_STOP:		dap_stop_process(0);
-				break;
-      case ES_SINGLE_STEP:	dap_stop_process(0);
+    dap_activate_rules(0, port);
+
+    switch(dap_get_exec_state(0, 0)) {
+      case ES_STOP:		
+      case ES_SINGLE_STEP:	dap_change_exec_state(0, ES_STOP);
 				break;
       case ES_RUN_UNTIL_PARENT:
       case ES_STEP_OVER:	Tcl_Eval(interp, "info level");
 				level = atoi(interp->result);
-				if(level <= dap_stop_level(0))
-				  dap_stop_process(0);
+				if(level <= dap_get_stop_level(0, 0))
+				  dap_change_exec_state(0, ES_STOP);
 				break;
     }
     tide_event_loop();
@@ -1047,105 +1103,72 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 
 %}}}
 
-%{{{ void continue_process(int pid)
-
-The tcl/tk adapter does not have to do anything special when a process
-is restarted.
-<<continue_process>>=
-void continue_process(int pid)
-{
-}
-@
-
-%}}}
-%{{{ void stop_process(int pid)
-
-<<stop_process>>=
-void stop_process(int pid)
-{
-}
-@
-
-%}}}
-
-%{{{ term *supply_info(int cid, char *key)
-
-<<supply_info>>=
-term *supply_info(int cid, char *key)
-{
-  fprintf(stderr, "supply_info: %s\n", key);
-  if(streq(key, "search-paths")) {
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
-
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
-  }
-
-  return NULL;
-}
-@
-
-%}}}
-
 %{{{ term *get_info(int cid)
 
 <<get_info>>=
 term *get_info(int cid)
 {
-  return dap_get_info(cid);
+  return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 }
 @
 
 %}}}
-%{{{ void set_observation_point(int cid, term *pids, term *port, term *cond, term *acts)
+%{{{ term *get_processes(int cid)
 
-Set an observation point.
+ToolBus callback. Returns a list of process identifier/name pairs.
 
-<<set_observation_point>>=
-term *set_observation_point(int cid, term *pids, term *port, term *cond, term_list *acts)
+<<get_processes>>=
+term *get_processes(int cid)
 {
-  return dap_set_observation_point(cid, pids, port, cond, acts);
+  int i;
+  term_list *procs = NULL;
+
+  for(i=0; i<MAX_PROCESSES; i++) {
+    process *p = dap_get_process(0, i);
+    if(p)
+      procs = list_concat_term(procs, TB_make("[<int>,<str>]", i, p->name));
+  }
+  return TB_make("snd-value(processes(<term>))", procs);
 }
 @
 
 %}}}
-%{{{ void clear_observation_point(int cid, term *pids, int oid)
+%{{{ term *create_rule(int cid, term *procs, port, cond, acts, life)
 
-Remove an observation point.
+This ToolBus callback function is called to create a new rule. 
 
-<<clear_observation_point>>=
-void clear_observation_point(int cid, term *pids, int oid)
+<<create_rule>>=
+term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 {
-  dap_clear_observation_point(cid, pids, oid);
+  int rid = dap_create_rule(procs, port, cond, acts, life);
+  return TB_make(
+	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
+	procs, port, cond, acts, life, rid);
 }
 @
 
 %}}}
-%{{{ void exec_control(int cid, term *, term *)
+%{{{ void modify_rule(int cid, rid, term *procs, port, cond, acts, life)
 
-Control the execution state of a tool.
+This ToolBus callback function is called to modify an existing rule. 
 
-<<exec_control>>=
-void exec_control(int cid, term *pids, term *mode)
+<<modify_rule>>=
+void modify_rule(int cid, int rid, term *procs, term *port, 
+				term *cond, term *acts, term *life)
 {
-  int level, es = dap_term2es(mode);
-
-  Tcl_Eval(tide_interp, "info level");
-  level = atoi(tide_interp->result);
-  dap_exec_control(0, es, level);
+  dap_rule_modified(0, rid, procs, port, cond, acts, life);
 }
 @
 
 %}}}
-%{{{ term *execute_actions(int cid, term *pids, term_list *actions)
+%{{{ void destroy_rule(int cid, term *procs, int rid)
 
-Execute a set of actions.
+This ToolBus callback function is called to destroy an existing rule.
 
-<<execute_actions>>=
-term *execute_actions(int cid, term *pids, term_list *actions)
+<<destroy_rule>>=
+void destroy_rule(int cid, term *procs, int rid)
 {
-  return TB_make("snd-value(execute-actions(<term>,<term>,error(<str>)))",
-			pids, actions, "not implemented yet");
+  dap_destroy_rule(rid);
 }
 @
 
@@ -1171,6 +1194,7 @@ Propagate termination requests to the tide library.
 void rec_terminate(int cid, term *arg)
 {
   dap_rec_terminate(cid, arg);
+  use_tide = TBfalse;
 }
 @
 
