@@ -1,4 +1,9 @@
 
+2003-09-17	Jurgen Vinju	<jurgenv@cwi.nl>
+  * Moved repository to GLT 
+  * Bumped version number to 1.0
+  * Added generation of package definition file
+
 2002-07-23	Jurgen Vinju	<jurgenv@cwi.nl>
   * Fixed configure.in bug
   * Fixed some compiler warnings
