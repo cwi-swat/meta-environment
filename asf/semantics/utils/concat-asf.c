@@ -16,12 +16,7 @@ static char myname[]    = "concat-asf";
 static char myversion[] = "1.0";
 static char myarguments[] = "ho:V";
 
-
-/*
-    Usage: displays helpful usage information
- */
-void 
-usage(void)
+void usage(void)
 {
     fprintf(stderr,
 	"\nConcat-asf concatenates parse trees of asf modules creating a\n"
@@ -77,7 +72,7 @@ main (int argc, char **argv)
     if (nInputs < MAX_MODULES) {
       inputs[nInputs++] = strdup(argv[i]);  
     } else {
-      ATerror("Maximum number of %s modules exceeded.\n", MAX_MODULES);
+      ATerror("Maximum number of %d modules exceeded.\n", MAX_MODULES);
       exit(1);
     }
   }
@@ -91,7 +86,6 @@ main (int argc, char **argv)
   PT_initMEPTApi();
   ASF_initASFMEApi();
 
- 
   list = ATempty;
   for (--nInputs; nInputs >= 0; nInputs--) {
     ATerm p = ATreadFromNamedFile(inputs[nInputs]); 
