@@ -19,7 +19,7 @@ Table~\ref{components} gives an overview of all currently available
 components in the prototype. For each component it is listed whether
 this component is specified and in which language it is implemented.
 
-\begin{table}
+\begin{table}[bt]
 \begin{center}
 \begin{tabular}{|l|l|l|} \hline
 Activity            & Specification & Implementation  \\
@@ -43,19 +43,17 @@ Import manager      & \asdf         & C               \\
 
 %{{{ Intro
 
-Our whole design is based on the
-\TB\ software application architecture\cite{TB-AMAST96,BK96a}
-which is a software application architecture that 
-utilizes a scripting language based on process 
-algebra\cite{BW90} to
-describe the communication between software tools. A \TB\ \emph{script}
-describes a number of processes that can communicate with each other and
-with \emph{tools} existing outside the \TB\ (Figure \ref{TB}).
-A tool is roughly equivalent to an operating system process.
-A language-dependent adapter that translates between the internal
-\TB\ data format and the data format used by the individual tools
-makes it possible to write every tool in the language best suitable
-for the task(s) it has to perform.
+Our whole design is based on the \TB\ software application
+architecture~\cite{TB-AMAST96,BK96a} which is a software application
+architecture that utilizes a scripting language based on process
+algebra~\cite{BW90} to describe the communication between software
+tools. A \TB\ \emph{script} describes a number of processes that can
+communicate with each other and with \emph{tools} existing outside the
+\TB\ (Figure \ref{TB}).  A tool is roughly equivalent to an operating
+system process.  A language-dependent adapter that translates between
+the internal \TB\ data format and the data format used by the
+individual tools makes it possible to write every tool in the language
+best suitable for the task(s) it has to perform.
 
 \begin{figure}[htb]
   \centerline{\epsfig{file=toolbus.ps,scale=0.5}}
@@ -64,7 +62,7 @@ for the task(s) it has to perform.
 
 The following sections give an overview of the most important \TB\
 features. For a more complete description of \TB\ expressions and
-primitives see \cite{BK96a}.
+primitives see~\cite{BK96a}.
 
 \subsubsection{Communication inside the \TB}
 There are two mechanisms available for processes in the \TB\ to
@@ -112,11 +110,12 @@ primitive {\tt create} can be used to create new processes.
 %{{{ Types and variables
 
 \subsubsection{Types and variables}
-All terms within the \TB\ are \emph{typed}. The \TB\ defines a number of
-basic types for booleans, integers, reals, strings, and binary strings. Complex
-types can be formed using a list constructor or function application. The type
-{\tt term} is a supertype of all other types. The {\tt let-in-endlet} construction
-makes it possible to declare variables.
+All terms within the \TB\ are \emph{typed}. The \TB\ defines a number
+of basic types for booleans, integers, reals, strings, and binary
+strings. Complex types can be formed using a list constructor or
+function application. The type {\tt term} is a supertype of all other
+types. The {\tt let-in-endlet} construction makes it possible to
+declare variables.
 
 %}}}
 
@@ -131,19 +130,20 @@ Debugging in the context of the new \metaenv\ has three dimensions:
 \end{enumerate}
 
 Our recent work on generic debugging techniques for distributed,
-heterogeneous environments\cite{COORD97.tide}
-cover both dimension {\tt 1} and {\tt 2}. 
-More research is needed to also use this technology to cover dimension {\tt 3},
-which is closely related to techniques like {\em origin tracking}\cite{DHK96}.
+he\-te\-ro\-ge\-neous en\-vi\-ron\-ments~\cite{COORD97.tide} cover
+both dimension {\tt 1} and {\tt 2}.  More research is needed to also
+use this technology to cover dimension {\tt 3}, which is closely
+related to techniques like {\em origin tracking}~\cite{DHK96}.
 
 \subsection{Discussion}
 
 There is a huge bulk of future work to be done.  First of all, the
-parser and parser generator \cite{Vis97.SGLRP} have to be integrated in
-the new \metaenv.  Second, the unparser and unparser generator
-\cite{BV96} have to be integrated as well as the To\LaTeX\ facilities
-\cite{Vis95.tolatex}. This should be done on top of the {\sc Box}
-language.  Third, the \metaenv\ should provide facilities to compile
-specifications in order to generate stand-alone environments.  Finally,
-a debugging facility for debugging specifications should be provided
-as well.  
+parser and parser generator~\cite{Vis97.SGLRP} have to be integrated
+in the new \metaenv.  Second, the unparser and unparser
+generator~\cite{BV96} have to be integrated as well as the To\LaTeX\ 
+facilities~\cite{Vis95.tolatex}. This should be done on top of the
+{\sc Box} language.  Third, the \metaenv\ should provide facilities to
+compile specifications in order to generate stand-alone environments.
+Finally, a debugging facility for debugging specifications should be
+provided as well.
+

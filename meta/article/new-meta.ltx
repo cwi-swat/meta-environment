@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[twoside]{article}
 \usepackage{amsmath}
 \usepackage{latexsym}
 \usepackage{ASF+SDF,ASF+SDF-options}
@@ -54,10 +54,25 @@
 
 \date{}
 
-\setlength{\textwidth}{13.7cm}
-%%\setlength{\textheight}{19cm}
-%%\setlength{\oddsidemargin}{0cm}
-%%\setlength{\topmargin}{0cm}
+\setlength{\textwidth}{140mm}
+\setlength{\textheight}{210mm}
+\setlength{\topmargin}{5mm}
+\setlength{\headsep}{7mm}
+\setlength{\marginparsep}{2mm}
+\setlength{\marginparwidth}{22mm}
+%
+\if@twoside
+\setlength{\oddsidemargin}{15mm}
+\setlength{\evensidemargin}{4.1mm}
+\else
+\setlength{\oddsidemargin}{10.5mm}
+\setlength{\evensidemargin}{10.5mm}
+\fi
+
+%% define separator macro for proofreading 
+%% (puts each part on separate page)
+%% \def\separator{}
+\def\separator{\cleardoublepage}
 
 \begin{document}
 
@@ -112,27 +127,34 @@ architecture \cite{BK96a,TB-AMAST96} which takes care of the communication
 of software components.
 
 \begin{table}
-\begin{center}
-\begin{tabular}{|l|} \hline
-Complaints or shortcomings \\ \hline\hline
-The \ui{} is old-fashioned and badly organised: \\
-reduced terms not in term-editor and long flat lists of  \\
-modules for deleting and editing of modules and terms.   \\ \hline
-An often heard complaint was: ``The editor is too        \\
-restricted, why is it not emacs- or vi-like?''            \\ \hline
-The creation of stand-alone environments is not possible. \\ \hline
-It is impossible to port to different architectures.      \\
-Limited availability of \lelisp\ on various platforms.      \\
-Our version of \lelisp\ is becoming obsolete.               \\ \hline 
-The tree formalism VTP is not easy to use, connection     \\
-\lelisp/VTP is complicated.                                \\ \hline
-The current monolithic system is hard to maintain. New    \\
-research ideas are hard to implement.                     \\ \hline 
-Bugs are not fixed anymore, because the knowledge about \\
-the intrinsics of the system needed to fix these bugs \\
-is no longer present.                                   \\ \hline \hline
+\centering
+\begin{tabular}{|p{13cm}|} \hline
+  Complaints or shortcomings
+  \\ \hline\hline 
+  The \ui{} is old-fashioned and badly organised: reduced terms not in
+  term-editor and long flat lists of modules for deleting and editing
+  of modules and terms.
+  \\ \hline
+  An often heard complaint was: ``The editor is too restricted, why is
+  it not emacs- or vi-like?''
+  \\ \hline
+  The creation of stand-alone environments is not possible.
+  \\ \hline
+  It is impossible to port to different architectures.  Limited
+  availability of \lelisp\ on various platforms.  Our version of
+  \lelisp\ is becoming obsolete.
+  \\ \hline 
+  The tree formalism VTP is not easy to use, connection \lelisp/VTP is
+  complicated.
+  \\ \hline
+  The current monolithic system is hard to maintain. New research
+  ideas are hard to implement.
+  \\ \hline 
+  Bugs are not fixed anymore, because the knowledge about the
+  intrinsics of the system needed to fix these bugs is no longer
+  present.
+  \\ \hline \hline
 \end{tabular}
-\end{center}
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
 \end{table}
 
@@ -155,18 +177,26 @@ The \ui\ is discussed in Section \ref{userin}.
 The structure editor is discussed in Section \ref{edit}. 
 The interpreter is described in Section \ref{interpreter}.
 
+
+\separator
 \input{toolbus.ltx}
 
-%%\input{treerepr.ltx}
+%%\separator
+%%\input{treerepr.ltx}     %% moved to repos
 
+\separator
 \input{repos.ltx}
 
+separator
 \input{ui.ltx}
 
+\separator
 \input{editors.ltx}
 
+\separator
 \input{interpreter.ltx}
 
+\separator
 \section{Conclusions}
 
 In this paper the first prototype of the new \metaenv\ is discussed.
