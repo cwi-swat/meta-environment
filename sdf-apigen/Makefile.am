@@ -2,7 +2,7 @@ SUBDIRS		= spec utils test
 
 ACLOCAL_FLAG = -I .
 
-EXTRA_DIST	= make_rules $(wildcard *.pkg)
+EXTRA_DIST	= make_rules $(wildcard *.pkg) program-check.m4
 
 CLEANFILES = ${PACKAGE}-*.pkg
 
