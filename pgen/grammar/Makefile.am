@@ -20,4 +20,5 @@ bootstrap: Sdf2.def
 	sglr -p $(srcdir)/Sdf2-bootstrap.tbl \
 		-i $(srcdir)/Sdf2.def \
 		-o Sdf2.asfix
+	${top_builddir}/sdf-checker/src/sdfchecker -i Sdf2.asfix
 	${top_builddir}/src/parsetablegen < Sdf2.asfix > Sdf2.baf
