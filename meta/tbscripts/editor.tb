@@ -14,7 +14,7 @@ in
   execute(text-edit, TE?) . 
   snd-do(TE,tb-init(Name,Text,Filename)).
   snd-msg(Id,editortool(TE)).
-  create(Structure-editor(TE, Text), Tid?).
+  create(Structure-editor(TE, "\"\""), Tid?).
   create(Focus(TE), Tid?). (
     rec-note(language-available(L?)).
     snd-do(TE,registerlang(L))
