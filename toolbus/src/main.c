@@ -110,6 +110,9 @@ int main(int argc, char *argv[])
   sigemptyset(&act.sa_mask);
   act.sa_flags = SA_RESTART;
   sigaction(SIGINT,  &act, NULL);
+  sigaction(SIGTERM, &act, NULL);
+  sigaction(SIGHUP,  &act, NULL);
+  sigaction(SIGQUIT, &act, NULL);
   act.sa_handler = chld_handler;
   sigaction(SIGCHLD, &act, NULL);
   
@@ -158,11 +161,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  signal(SIGINT,  interrupt_handler);
-  signal(SIGTERM, interrupt_handler);
-  signal(SIGHUP,  interrupt_handler);
-  signal(SIGQUIT, interrupt_handler);
-  /*signal(SIGCHLD, interrupt_handler);*/
 
   srand(fixed_seed ? 0 : time(NULL));
 

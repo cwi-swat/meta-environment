@@ -737,8 +737,10 @@ int mread(int fd, char *buf, int len)
   /* TBmsg("mread(%d, %d)\n", fd, len); */
 
   while(cnt < len){
-    if((n = read(fd, &buf[cnt], len - cnt)) <= 0)
-      return -1;
+    if((n = read(fd, &buf[cnt], len - cnt)) <= 0) {
+      if(errno != EINTR)
+        return n;
+    }
     cnt += n;
     /* TBmsg("mread: cnt := %d\n", cnt); */
   }
@@ -1425,10 +1427,6 @@ void err_sys_warn(const char *fmt, ...)
   va_start(ap, fmt);
   err_doit(1, fmt, ap);
   va_end(ap);
-  if(ToolBus)
-    return;
-  else
-    TBexit(1);
 }
 
 /* Fatal error related to a system call.
@@ -1491,9 +1489,11 @@ static void err_doit(int errnoflag, const char *fmt, va_list ap)
   if(errnoflag)
     sprintf(buf+strlen(buf), " (%s)", strerror(errno_save));
   strcat(buf, "\n");
+
   fflush(stdout); /* in case stdout and stderr are the same */
   fprintf(stderr, "%s: ", tool_name);
   fputs(buf, stderr);
+
   fflush(stderr);
 /*  fflush(NULL);   flushes all stdio output streams */
   return;

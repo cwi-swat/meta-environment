@@ -32,7 +32,6 @@ static int pgid = -1;
 
 void chld_handler(int sig)
 {
-   signal(sig, SIG_IGN);
    if(pgid != -1)
    {
       /* wait for childs in process group pgid */
@@ -615,6 +614,16 @@ tool_id *create_tool(term *creator, term_list *args)
     }
     if(pgid == -1)
       pgid = pid;	/* One processgroup for all slaves */
+ 
+     /* 
+      * Set process group ID of child.
+      * Note. This may fail due to a call to setpgid in the slave
+      * process. The extra call here is still needed to prevent
+      * from a race condition. Because of the possible failure,
+      * we don't check the result value
+      */
+     setpgid( pid, pgid );
+ 
     /* lcc generated bad code for the next line (Probably because of
        the many recursive calls when the preprocessor expands it. I've
        tried many experiments, but haven't been able to reproduce it in
@@ -631,7 +640,14 @@ tool_id *create_tool(term *creator, term_list *args)
     /* <PO> sleep(n_tool_inst); */
     if(pgid == -1)
       pgid = getpid();
-    if(setpgid(pid, pgid) == -1)
+
+    /*
+     * Set proces group ID of process. See note before
+     * in parent. We thus ignore the result value here
+     * to
+     */
+    setpgid(0, pgid);
+
       err_sys_warn("setpgid failed");
     if(execvp(command, std_args) < 0){
       err_sys_warn("can't execute tool `%s'", command);
@@ -658,7 +674,7 @@ int read_from_any_channel(tool_inst **pti)
 
 retry:
   retry_cnt++;
-  if(retry_cnt > 10)
+  if(retry_cnt > 20)
     return -1;
   FD_ZERO(&read_template);
   for(til = Tools; til; til = next(til)){

@@ -1,0 +1,208 @@
+
+%{{{ evq.h
+
+This include file defines the {\tt event_queue} structure and
+the functions handling event queues:
+
+\begin{itemize}
+\item {\tt TBcreate_evq}: Creates an event queue.
+\item {\tt TBdestroy_evq}: Destroyes an event queue when it is no longer
+      needed.
+\item {\tt TBpost_event}: Posts an event in an event queue.
+\item {\tt TBevq_is_full}: Checks if an event queue is full.
+\item {\tt TBevq_is_empty}: Checks if an event queue is empty.
+\item {\tt TBevq_length}: Returns the length of an event queue.
+\item {\tt TBcheck_ack_event}: An acknowledgement came in. Check if the
+event was sent from this queue. If it was, send the next event (if any).
+\end{itemize}
+
+<<evq.h*>>=
+#ifndef EVQ_H
+#define EVQ_H
+
+#include "TB.h"
+
+typedef struct {
+  int cid;
+  int max_size;
+  term_list *events;
+  term *pending;
+} event_queue;
+
+event_queue *TBevq_create(int max_size, int cid);
+void TBevq_destroy(event_queue *q);
+void TBevq_post(event_queue *q, term *event);
+TBbool TBevq_is_full(event_queue *q);
+TBbool TBevq_is_empty(event_queue *q);
+int TBevq_length(event_queue *q);
+TBbool TBevq_ack_event(event_queue *q, term *event);
+
+#endif
+@
+
+%}}}
+%{{{ evq.c
+
+To get a grip on the protocol errors generated when an event
+was sent before the previous one was acknowledged, we have
+introduced the notion of 'event queue'. Wen posting an event
+when no event is 'underway', the event is sent directly.
+Otherwise it is put in the queue. After an acknowledgement
+comes in, the queue is checked to find if any other events
+need to be send. The user of the queue can check the length
+of the queue to see if it is in danger of overflowing.
+Every queue has a maximum lenght, so queue overruns can
+be handled somewhat gracefully.
+
+<<evq.c*>>=
+#include "evq.h"
+
+<<TBevq_create>>
+<<TBevq_destroy>>
+<<TBevq_post>>
+<<TBevq_is_full>>
+<<TBevq_is_empty>>
+<<TBevq_length>>
+<<TBevq_ack_event>>
+@
+
+%}}}
+
+%{{{ TBevq_create
+
+<<TBevq_create>>=
+event_queue *TBevq_create(int max_size, int cid)
+{
+  event_queue *q;
+
+  q = malloc(sizeof(event_queue));
+  if(!q) {
+    return NULL;
+  }
+  q->max_size = max_size;
+  q->cid = cid;
+  q->events = NULL;
+  q->pending = NULL;
+  TBprotect(&q->events);
+  TBprotect(&q->pending);
+
+  return q;
+}
+@
+
+%}}}
+%{{{ TBevq_destroy
+
+Destroy an event queue. Take care to unprotect the event
+list it contains.
+<<TBevq_destroy>>=
+void TBevq_destroy(event_queue *q)
+{
+  assert(q);
+  TBunprotect(&q->events);
+  TBunprotect(&q->pending);
+  free(q);
+}
+@
+
+%}}}
+%{{{ TBevq_post
+
+Post an event. If an event was already underway, append
+this one to the end of the queue.
+
+<<TBevq_post>>=
+void TBevq_post(event_queue *q, term *event)
+{
+  /* First check for a queue overrun */
+  if(TBevq_length(q) == q->max_size)
+    TBmsg("event queue overrun, 'forgetting' event %t\n", event);
+  else {
+    /* If an event was already pending, put the event at the end
+       of the event list. */
+    if(q->pending)
+      q->events = list_concat_term(q->events, event);
+    else {
+      /* No events where pending. Send this one immediately. */
+      if(q->cid >= 0)
+        TB_send(q->cid, TB_make("snd-event(<term>)", event));
+      else
+        TBsend(TB_make("snd-event(<term>)", event));
+      q->pending = event;
+    }
+  }
+}
+@
+
+%}}}
+%{{{ TBevq_is_full
+
+Check if an event queue is full.
+
+<<TBevq_is_full>>=
+TBbool TBevq_is_full(event_queue *q)
+{
+  return TBevq_length(q) >= q->max_size;
+}
+@
+
+%}}}
+%{{{ TBevq_is_empty
+
+Check if an event queue is empty.
+
+<<TBevq_is_empty>>=
+TBbool TBevq_is_empty(event_queue *q)
+{
+  return !q->pending;
+}
+@
+
+%}}}
+%{{{ TBevq_length
+
+Return the length of the queue.
+
+<<TBevq_length>>=
+int TBevq_length(event_queue *q)
+{
+  return list_length(q->events);
+}
+@
+
+%}}}
+%{{{ TBevq_ack_event
+
+Check if an acknowledged event was originally send by this
+queue. If so serve the next event (if any), and return {\tt TBtrue}.
+If not, return {\tt TBfalse}.
+
+<<TBevq_ack_event>>=
+TBbool TBevq_ack_event(event_queue *q, term *ev)
+{
+  term *event;
+
+  if(q->pending && term_equal(q->pending, ev)) {
+    /* Send the next event */
+    if(q->events == NULL) {
+      q->pending = NULL;
+    } else {
+      event = first(q->events);
+      if(q->cid >= 0)
+        TB_send(q->cid, TB_make("snd-event(<term>)", event));
+      else
+        TBsend(TB_make("snd-event(<term>)", event));
+      q->pending = event;
+      q->events  = next(q->events);
+    }
+    return TBtrue;
+  }
+  return TBfalse;
+}
+@
+
+%}}}
+
+
+
+

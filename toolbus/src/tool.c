@@ -110,8 +110,6 @@ int TBinit(char *tname, int argc, char *argv[],
   TBbool local_ports = TBfalse;
   term *trm;
 
-  setsid();
-
   tool_name = (tname) ? tname : "anonymous_tool";
   ToolBus = TBfalse;
   init_terms();
@@ -250,7 +248,7 @@ retry:
   }
   /* TBmsg("read_from_any_channel, before select\n"); */
   if((error = select(FD_SETSIZE, &read_template,
-                     NULL, NULL, NULL))){
+                     NULL, NULL, NULL)) >= 0){
 
     for(i = 0; i < ninports; i++){
       if(inportset[i].in >= 0 && 

@@ -19,7 +19,6 @@ tb_connection *connections[MAX_CONNECTIONS] = { NULL };
 int TB_init()
 {
   ToolBus = TBfalse;
-  setsid();
   init_terms();
   init_utils();
   return gethostname(this_host, MAXHOSTNAMELEN);
@@ -62,7 +61,7 @@ int TB_newConnection(char *tool_name, char *host, int port,
 int TB_parseArgs(int argc, char *argv[], TBcallback handler, TBsigcheck checker)
 {
   int i;
-  int cid = TB_newConnection(NULL, NULL, -1, handler, checker);
+  int cid = TB_newConnection(NULL, NULL, TB_PORT, handler, checker);
   if(cid >= 0) {
     for(i=0; i<argc; i++) {
       if(streq(argv[i], "-TB_TOOL_NAME")) {
