@@ -9,7 +9,7 @@ in
     execute(layoutgraph, D?) .
     snd-eval(D, layout-graph(Graph)) .
     rec-value(D, graph-layouted(Graph?)) .
-    snd-terminate(D,"done").
+    snd-terminate(D, "Thank you for laying out my graph") .
     snd-msg(graph-layouted(Graph))
   ) * delta
 endlet

@@ -181,99 +181,79 @@ void mergeGraphAttributes(AttributeList attrs)
 }
 
 /*}}}  */
+
 /*{{{  Graph layoutGraph(Graph graph) */
 
 Graph layoutGraph(Graph graph)
 {
-  int old_stdin, old_stdout, fd_to_dot, fd_from_dot, pid;
-  char to_template[] = "/tmp/dotto-XXXXXX";
-  char from_template[] = "/tmp/dotfrom-XXXXXX";
-  FILE *f_to_dot;
+  char dot_input[] = "/tmp/dotto-XXXXXX";
+  char dot_output[] = "/tmp/dotfrom-XXXXXX";
+  int fd;
+  FILE *f;
+  char invoke_dot[BUFSIZ];
+  extern FILE *yyin;
+
+  fd = mkstemp(dot_input);
+  if (fd < 0) {
+    perror("mkstemp:dot_input");
+    exit(errno);
+  }
+
+  f = fdopen(fd, "w");
+  if (f == NULL) {
+    perror("fdopen:dot_input");
+    exit(errno);
+  }
 
   initTermStore();
-
   storeNodes(getGraphNodes(graph));
+  graph2dot(graph, f);
 
-  old_stdin = dup(0);
-
-  if ((fd_to_dot = mkstemp(to_template)) < 0) {
-    fprintf(stderr, "Can't create to dot file");
-    exit(1);
-  }
-  f_to_dot = fdopen(fd_to_dot, "w");
-  graph2dot(graph, f_to_dot);
-  fflush(f_to_dot);
-
-  old_stdout = dup(1);
-  if ((fd_from_dot = mkstemp(from_template)) < 0) {
-    fprintf(stderr, "Can't create 'from dot' file");
-    exit(1);
+  if (fclose(f) == -1) {
+    perror("fclose:dot_input");
+    exit(errno);
   }
 
-  if ((pid = fork())) {
-    /* Parent */
-    if (pid < 0) {
-      fprintf(stderr, "Can't fork");
-      exit(1);
-    }
-    do {
-      int status;
-      if (waitpid(pid, &status, 0) == -1) {
-	if (errno != EINTR) {
-	  fprintf(stderr, "child killed\n");
-	  exit(1);
-	}
-      } else {
-	if (status != 0) {
-	  fprintf(stderr, "child exited with error code %d\n", status);
-	  exit(1);
-	} else {
-	  break;
-	}
-      }
-    } while (1);
-
-    lseek(fd_from_dot, 0, SEEK_SET);
-
-    {
-    extern FILE *yyin;
-    yyin = fdopen(fd_from_dot, "r");
-    }
-
-    yyparse();
-
-    close(fd_from_dot);
-    close(fd_to_dot);
-    unlink(to_template);
-    unlink(from_template);
-  } else {
-    /* Child */
-    close(fileno(stdin));
-    if (dup2(fd_to_dot, fileno(stdin)) < 0) {
-      perror("dup2 to_dot");
-    }
-    if (lseek(fileno(stdin), 0, SEEK_SET) < 0) {
-      perror("lseek");
-    }
-
-    close(1);
-    if (dup2(fd_from_dot, 1) < 0) {
-      perror("dup2 from_dot");
-    }
-
-    if (execl(DOT_COMMAND, NULL) < 0) {
-      perror("exec");
-    }
+  fd = mkstemp(dot_output);
+  if (fd < 0) {
+    perror("mkstemp:dot_output");
+    exit(errno);
   }
 
-  graph = buildGraph();
+  yyin = fdopen(fd, "r");
+  if (yyin == NULL) {
+    perror("fdopen:dot_output");
+    exit(errno);
+  }
 
-  initTermStore();
-  ATtableReset(nodeTable);
-  /*ATtableReset(edgeTable);*/
-  edgeList = makeEdgeListEmpty();
+  sprintf(invoke_dot, "%s -o %s %s", DOT_COMMAND, dot_output, dot_input);
+  if (system(invoke_dot) == -1) {
+    perror(invoke_dot);
+    exit(errno);
+  }
 
-  return graph;
+  if (fseek(yyin, 0, SEEK_SET) == -1) {
+    perror("fseek");
+    exit(errno);
+  }
+
+  yyparse();
+  if (fclose(yyin) == -1) {
+    perror("fclose:dot_output");
+    exit(errno);
+  }
+
+  if (unlink(dot_input) == -1) {
+    perror("unlink:dot_input");
+    exit(errno);
+  }
+
+  if (unlink(dot_output) == -1) {
+    perror("unlink:dot_output");
+    exit(errno);
+  }
+
+  return buildGraph();
 }
 
 /*}}}  */
