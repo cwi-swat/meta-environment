@@ -3,40 +3,39 @@ module RScripts[Elem]
 imports Relations[Elem]
 
 exports
-  sorts SCRIPT STAT PRED RVAR BVAR EVAR VAR FUN FROM BFROM RFROM TEXP EXP
+  sorts SCRIPT STAT VAR FROM BFROM RFROM TEXP EXP
 
   lexical syntax
-     [A-Z][A-Z][A-Z0-9]*     -> RVAR
-     [A-Z][a-z0-9]*          -> BVAR
-     "$" [A-Za-z0-9]+        -> EVAR
-     [a-z][A-Za-z0-9]*       -> FUN
+     [\$]?[A-Za-z][A-Za-z0-9]*                -> VAR
 
   context-free syntax
 
-     "true"                                  -> PRED
-     "false"                                 -> PRED
-     PRED "and" PRED                         -> PRED
-     PRED "or" PRED                          -> PRED
-     "not" PRED                              -> PRED
-     "(" PRED ")"                            -> PRED {bracket}
+     "true"                                  -> EXP
+     "false"                                 -> EXP
+     EXP "and" EXP                           -> EXP
+     EXP "or" EXP                            -> EXP
+     "not" EXP                               -> EXP
 
-     EXP "==" EXP                            -> PRED
-     EXP "<=" EXP                            -> PRED
-     EXP "<" EXP                             -> PRED
-     EXP ">=" EXP                            -> PRED
-     EXP ">" EXP                             -> PRED
+     EXP "==" EXP                            -> EXP
+     EXP "<=" EXP                            -> EXP
+     EXP "<" EXP                             -> EXP
+     EXP ">=" EXP                            -> EXP
+     EXP ">" EXP                             -> EXP
 
-     EXP in EXP                              -> PRED
+     EXP in EXP                              -> EXP
 
-     PRED                                    -> EXP
+%% Elementary values
 
      Elem                                    -> EXP
-     EVAR                                    -> EXP
-     BVAR                                    -> EXP
+     "'" Elem                                -> EXP
+     "'" Bag[[Elem]]                         -> EXP
+     "'" Rel[[Elem]]                         -> EXP
+     VAR                                     -> EXP
      "{" {EXP ","}* "}"                      -> EXP
-     RVAR                                    -> EXP 
      "<" EXP "," EXP ">"                     -> TEXP
      "{" {TEXP ","}* "}"                     -> EXP
+
+%% Operators
 
      EXP "union" EXP                         -> EXP
      EXP "inter" EXP                         -> EXP
@@ -44,34 +43,49 @@ exports
      EXP "o" EXP                             -> EXP
      EXP "x" EXP                             -> EXP
      EXP "." EXP                             -> EXP
-
      EXP "+"                                 -> EXP
      EXP "*"                                 -> EXP
      EXP "until" "(" EXP "," EXP ")"         -> EXP
 
-     "(" EXP ")"                             -> EXP {bracket}
+%% value formers
 
-     "{" BFROM "|" PRED "}"                  -> EXP
-     "{" {FROM ","}+ "|" PRED "|" EXP "}"    -> EXP
+     "{" BFROM "|" EXP "}"                  -> EXP
+     "{" {FROM ","}+ "|" EXP "|" EXP "}"    -> EXP
 
-     "{" RFROM "|" PRED "}"                  -> EXP
+     "{" RFROM "|" EXP "}"                  -> EXP
 
-     EVAR "in" EXP                           -> BFROM
-     "<" EVAR "," EVAR ">" in EXP            -> RFROM
+     VAR "in" EXP                            -> BFROM
+     "<" VAR "," VAR ">" in EXP              -> RFROM
      BFROM | RFROM                           -> FROM
 
-     FUN "(" EXP ")"                         -> EXP
-     FUN "(" EXP "," EXP ")"                 -> EXP
+%% functions
 
-     "rel" RVAR "=" EXP                      -> STAT
-     "bag" BVAR "=" EXP                      -> STAT
+     VAR "(" EXP ")"                         -> EXP
+     VAR "(" EXP "," EXP ")"                 -> EXP
+     "(" EXP ")"                             -> EXP {bracket}
 
-      EVAR | BVAR | RVAR                    -> VAR
+     "def" VAR "=" EXP                       -> STAT
 
-     "fun" FUN "(" VAR ")" "=" EXP           -> STAT
-     "fun" FUN "(" VAR "," VAR ")" "="  EXP  -> STAT
+     "fun" VAR "(" VAR ")" "=" EXP           -> STAT
+     "fun" VAR "(" VAR "," VAR ")" "="  EXP  -> STAT
 
      STAT*                                   -> SCRIPT
+
+  context-free priorities
+
+     EXP "o" EXP -> EXP>
+     EXP "x" EXP -> EXP >
+     EXP "." EXP -> EXP >
+     EXP "inter" EXP -> EXP >
+     EXP "union" EXP -> EXP
+
+%%     { EXP "<=" EXP -> EXP, 
+%%       EXP "<" EXP -> EXP, 
+%%       EXP ">=" EXP -> EXP, 
+%%       EXP ">" EXP -> EXP
+%%     } >
+%%       EXP "==" EXP -> EXP     
+
      
 
      

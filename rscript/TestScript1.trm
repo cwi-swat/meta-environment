@@ -10,25 +10,25 @@
 %% end
 
 eval(
-rel DEFS    = {<s1, x>, <s3, z>, <s4, x>, <s5, y>}
-rel ISCON   = {<s1, x>}
-rel USES    = {<s3, y>, <s3, x>, <s5, z>}
-rel PRED    = {<s0, s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>}
+def DEFS    = '{<s1, x>, <s3, z>, <s4, x>, <s5, y>}
+def ISCON   = '{<s1, x>}
+def USES    = '{<s3, y>, <s3, x>, <s5, z>}
+def PRED    = '{<s0, s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>}
 
-%%rel  REL1    = {<$u, $x> in USES | $x == x }
+def  REL1    = {<$u, $x> in USES | $u == 'x }
 
-bag  Bag1    = {$u in {a, b, c} | false }
+def  Bag1    =  {$u in '{a, b, c} | true | {$u}}
 
-rel UNINITIALIZED = {<$u, $x> in USES | s0 in ({$u} until((DEFS.{$x}) union {s0}, inv(PRED)))}
+def UNINITIALIZED = {<U, X> in USES | elem('s0, {U} until(DEFS.X union '{s0}, inv(PRED)))}
 
-%%bag Bag1     = {a, b, c}
-%%bag Bag2     = {d, e, f}
+def Bag1     = '{a, b, c}
+%%def Bag2     = '{d, e, f}
 
-%%bag Tst      = {$x in Bag1 | true }
-%%rel REL      =  {$x in Bag1, $y in Bag2 | true | {<$x, $y>}}
+%%def Tst      = {$x in Bag1 | true }
+%%def REL      = {$x in Bag1, $y in Bag2 | true | {<$x, $y>}}
 
-%%fun f(Bag)   = Bag
+fun f(Bag)   = id(Bag)
 
-%%bag Bag3      = f(Bag1)
+def Bag3      = f(Bag1)
 )
 

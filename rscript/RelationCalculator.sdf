@@ -4,16 +4,11 @@ imports RScripts[Elem]
 imports Relations[Elem]
 
 exports
-   sorts VALUE STORE GEN GENS OP
+   sorts VALUE RSTORE GEN GENS OP
 
    context-free syntax
 
-        RVAR                         -> VAR
-        BVAR                         -> VAR
-        EVAR                         -> VAR
-        FUN                          -> VAR
-
-        "Empty"                      -> VALUE
+        "*empty*"                    -> VALUE
         Boolean                      -> VALUE
         Elem                         -> VALUE
         Bag[[Elem]]                  -> VALUE
@@ -22,18 +17,18 @@ exports
         VAR # VAR # EXP              -> VALUE
 
         
-        "[" { VAR # VALUE ","}* "]"  -> STORE
-        assign(VAR, VALUE, STORE)    -> STORE
-        value(VAR, STORE)            -> VALUE
+        "[" { VAR # VALUE ","}* "]"   -> RSTORE
+        assign(VAR, VALUE, RSTORE)    -> RSTORE
+        value(VAR, RSTORE)            -> VALUE
+        add(VAR, VALUE, RSTORE)       -> RSTORE
 
-        evalp(EXP, STORE)            -> Boolean
-        evale(EXP, STORE)            -> Elem
-        evalb(EXP, STORE)            -> Bag[[Elem]]
-        evalr(EXP, STORE)            -> Rel[[Elem]]
+        evalp(EXP, RSTORE)            -> Boolean
+        evale(EXP, RSTORE)            -> Elem
+        evalb(EXP, RSTORE)            -> Bag[[Elem]]
+        evalr(EXP, RSTORE)            -> Rel[[Elem]]
 
-        evalx(EXP, STORE)            -> VALUE
-        apply "(" VALUE OP VALUE ")" -> VALUE
-
+        evalx(EXP, RSTORE)            -> VALUE
+        apply "(" VALUE OP VALUE ")"  -> VALUE
 
         "=="                         -> OP
         "<="                         -> OP
@@ -47,40 +42,34 @@ exports
 %%        "x"                          -> OP
         "."                          -> OP
 
-        eval(STAT, STORE)            -> STORE
-        eval(SCRIPT)                 -> STORE
-        eval1(STAT*, STORE)          -> STORE
+        eval(STAT, RSTORE)           -> RSTORE
+        eval(SCRIPT)                 -> RSTORE
+        eval1(STAT*, RSTORE)         -> RSTORE
 
         equal(Elem, Elem)            -> Boolean
 
-        gen(EVAR, Bag[[Elem]], Bag[[Elem]], Boolean)        -> GEN
-        gen(EVAR, EVAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
+        gen(VAR, Bag[[Elem]], Bag[[Elem]], Boolean)        -> GEN
+        gen(VAR, VAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
 
         "[" {GEN ","}* "]"                                  -> GENS
 
-        "get_from" "(" {FROM ","}* "," STORE ")"            -> GENS
+        "get_from" "(" {FROM ","}* "," RSTORE ")"           -> GENS
         "has_more" "(" GENS ")"                             -> Boolean
         "get_next" "(" GENS ")"                             -> GENS
-        "get_cur" "(" GENS "," STORE ")"                    -> STORE
+        "get_cur" "(" GENS "," RSTORE ")"                   -> RSTORE
 
-        bagformer(GENS, VALUE, PRED, STORE, EXP)     -> VALUE
-        "if" Boolean "then" VALUE "else" VALUE "fi"      -> VALUE
+        valformer(GENS, VALUE, EXP, RSTORE, EXP)           -> VALUE
+        "if" Boolean "then" VALUE "else" VALUE "fi"         -> VALUE
 
 hiddens
   imports asf/syntax/Comments
 
    variables
-        "Fun" [0-9\']*                -> FUN
-        "Store" [0-9\']*              -> STORE
+        "Store" [0-9\']*              -> RSTORE
         "Val" [0-9\']*                -> VALUE
         "VPair*" [0-9\']*             -> { VAR # VALUE ","}*
 
         "Var" [0-9\']*                -> VAR
-        "Evar" [0-9\']*               -> EVAR
-        "Bvar" [0-9\']*               -> BVAR
-        "Rvar" [0-9\']*               -> RVAR
-
-        "Pred" [0-9\']*               -> PRED
         "Exp"  [0-9\']*               -> EXP
         "Exp*"  [0-9\']*              -> { EXP ","}*
         "Exp+"  [0-9\']*              -> { EXP ","}+
