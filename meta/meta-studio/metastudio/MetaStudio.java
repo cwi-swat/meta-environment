@@ -174,6 +174,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	addTab(tabs, MODULES, moduleBrowser);
     	
     	TreeBrowser parseTreeBrowser = new TreeBrowser(graphFactory, args);
+    	
     	spawn(parseTreeBrowser, "tree-browser");
     	addTab(tabs, PARSE_TREE, parseTreeBrowser);
     	
