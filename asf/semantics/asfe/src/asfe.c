@@ -1579,6 +1579,7 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
       rewtrm = getVariableValue(env, trm, rhs);
 
       if (!rewtrm) {
+        RWsetError("Uninitialized variable in right-hand-side",(ATerm) trm);
 	rewtrm = trm;
       }
     }
@@ -1697,6 +1698,7 @@ PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal *traversal
       rewtrm = getVariableValue(env, trm, rhs);
 
       if (!rewtrm) {
+        RWsetError("Uninitialized variable in right-hand-side",(ATerm) trm);
         rewtrm = trm;
       }
     }
