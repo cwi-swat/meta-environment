@@ -189,3 +189,55 @@ ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree)
 }
 
 /*}}}  */
+
+/*{{{  static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) */
+
+static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
+{
+  ATbool* bool;
+
+  bool = (ATbool*) data;
+  
+  if (PT_isAttrTerm(attr)) {
+    ATerm term = PT_getAttrTerm(attr);
+
+    if (ATgetType(term) == AT_APPL) {
+      char *fun = ATgetName(ATgetSymbol(term));
+      
+
+      } 
+    }
+  }     
+                              
+  return attr;
+}       
+
+/*}}}  */
+/*{{{  ATbool ASF_isTreeTraversalFunction(PT_Tree trm) */
+
+ATbool ASF_isTreeTraversalFunction(ASF_Tree tree)
+{
+  PT_Tree trm = (PT_Tree) tree;
+
+  if (PT_hasTreeProd(trm)) {
+    PT_Production prod = PT_getTreeProd(trm);
+
+    if (PT_hasProductionAttributes(prod)) {
+      PT_Attributes attributes = PT_getProductionAttributes(prod);
+
+      if (PT_hasAttributesAttrs(attributes)) {
+        PT_Attrs attrs = PT_getAttributesAttrs(attributes);
+        ATbool data = ATfalse;
+
+        PT_foreachAttrInAttrs(attrs, isAttrTraversal,
+                              (PT_AttrVisitorData*) &data);
+
+        return data;
+      }
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
