@@ -102,7 +102,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef makeFromElements()
-    throws IllegalPlaceholder
   {
     return makeTerm(pattern.getATerm(), elements());
   }
@@ -115,7 +114,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make()
-    throws IllegalPlaceholder
   {
     setSize(0);
     return makeTerm(pattern.getATerm(), elements());
@@ -129,7 +127,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make(Object arg1)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(arg1);
@@ -144,7 +141,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make(Object arg1, Object arg2)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(arg1);
@@ -160,7 +156,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make(Object arg1, Object arg2, Object arg3)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(arg1);
@@ -177,7 +172,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make(Object arg1, Object arg2, Object arg3, Object arg4)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(arg1);
@@ -195,7 +189,6 @@ public class ATermPattern extends Vector
     */
 
   public ATermRef make(Object a1, Object a2, Object a3, Object a4, Object a5)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(a1);
@@ -215,7 +208,6 @@ public class ATermPattern extends Vector
 
   public ATermRef make(Object a1, Object a2, Object a3, Object a4, Object a5,
 		       Object a6)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(a1);
@@ -236,7 +228,6 @@ public class ATermPattern extends Vector
 
   public ATermRef make(Object a1, Object a2, Object a3, Object a4, Object a5,
 		       Object a6, Object a7)
-    throws IllegalPlaceholder
   {
     setSize(0);
     addElement(a1);
@@ -257,7 +248,6 @@ public class ATermPattern extends Vector
     */
 
   protected ATermRef makeTerm(ATerm pattern, Enumeration e)
-    throws IllegalPlaceholder
   {
     ATerms terms;
 
@@ -284,7 +274,6 @@ public class ATermPattern extends Vector
   //{ protected ATermsRef makeTerms(ATerms terms, Enumeration e)
 
   protected ATermsRef makeTerms(ATerms terms, Enumeration e)
-    throws IllegalPlaceholder
   {
     Vector result = new Vector();
     
@@ -346,7 +335,6 @@ public class ATermPattern extends Vector
   //{ protected ATermRef makePlaceholder(ATerm type, Enumeration e)
 
   protected ATermRef makePlaceholder(ATerm type, Enumeration e)
-    throws IllegalPlaceholder
   {
     if(type.getType() == ATerm.APPL) {
       ATermAppl appl = (ATermAppl)type;
@@ -379,7 +367,7 @@ public class ATermPattern extends Vector
 	return new ATermPlaceholderRef((ATermRef)e.nextElement());
       }
     }
-    throw new IllegalPlaceholder(type);
+    throw new IllegalArgumentException("illegal placeholder: " + type.toString());
   }
 
 //}

@@ -20,7 +20,7 @@ public class ATest
   //{ public static void main(String[] args)
 
   public static void main(String[] args)
-    throws IOException, ParseError, TestFailedException, IllegalPlaceholder
+    throws IOException, ParseError, TestFailedException
   {
     try {
       testATerm();
@@ -239,7 +239,7 @@ public class ATest
   //{ protected static void testATermPatternMake()
 
   protected static void testATermPatternMake()
-    throws ParseError, TestFailedException, IllegalPlaceholder
+    throws ParseError, TestFailedException
   {
     ATermRef[] T = new ATermRef[10];
     ATermPattern[] P = new ATermPattern[10];
