@@ -9,6 +9,6 @@ SUBDIRS		= config editors ${UI_PACKAGE} src \
 
 DIST_SUBDIRS	= config editors meta-studio src \
 		in-output module-db utils tbscripts \
-		configuration-manager showdot query-tool
+		configuration-manager query-tool
 
 EXTRA_DIST = make_rules
