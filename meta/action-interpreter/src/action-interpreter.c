@@ -3,7 +3,7 @@
 /*{{{  includes */
 
 #include "action-interpreter.tif.h"
-#include "actioninterpreter.h"
+#include "action-interpreter.h"
 #include <ctype.h>
 #include "Actions.h"
 #include <unistd.h>
@@ -259,7 +259,7 @@ static ATbool performActions(int cid)
 }
 
 /*}}}  */
-/*{{{  void perform_actions(int cid, ATerm actions, ATerm arguments) */
+/*{{{  void perform_actions(int cid, ATerm aScript, ATerm aStack) */
 
 void perform_actions(int cid, ATerm aScript, ATerm aStack)
 {
@@ -277,7 +277,8 @@ void perform_actions(int cid, ATerm aScript, ATerm aStack)
 }
 
 /*}}}  */
-/*{{{{ void perform_actions(int cid, ATerm aScript, ATerm aStack) */
+/*{{{  void process_result(int cid, ATerm aResult) */
+
 void process_result(int cid, ATerm aResult)
 {
   ATbool ready = ATfalse;
@@ -401,4 +402,3 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
-

@@ -1,5 +1,5 @@
 tool action-interpreter is {
-  command = "actioninterpreter"
+  command = "action-interpreter"
 }
 
 process ActionInterpreter is
@@ -14,9 +14,10 @@ in
   execute(action-interpreter, AI?)
   .
   (
+    Arguments := []
+    .
     (
       rec-msg(ai-perform-actions(Sid?, Actions?))
-      . Arguments := []
     +
       rec-msg(ai-perform-actions(Sid?, Actions?, Arguments?))
     )

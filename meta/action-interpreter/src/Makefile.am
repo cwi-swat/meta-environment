@@ -15,7 +15,7 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
-bin_PROGRAMS = actioninterpreter
+bin_PROGRAMS = action-interpreter
 #bin_SCRIPTS = metaconfig-config
 #noinst_SCRIPTS = metaconfig-config.local
 noinst_LIBRARIES = libActions.a
@@ -32,14 +32,14 @@ EXTRA_DIST = \
 
 noinst_HEADERS = \
 	action-interpreter.tif.h \
-	actioninterpreter.h
+	action-interpreter.h
 
 include_HEADERS = \
 	Actions.h \
 	Actions_dict.h 
 
-actioninterpreter_SOURCES = \
-	actioninterpreter.c \
+action_interpreter_SOURCES = \
+	action-interpreter.c \
 	action-interpreter.tif.c \
         Actions.c \
         Actions_dict.c
@@ -48,7 +48,7 @@ libActions_a_SOURCES = \
 	Actions.c \
 	Actions_dict.c 
 
-actioninterpreter_LDADD = \
+action_interpreter_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	-L$(PT_SUPPORT)/lib -lmept \
