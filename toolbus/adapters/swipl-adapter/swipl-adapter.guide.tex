@@ -13,7 +13,7 @@ Before adding \TB\ support to SWI-Prolog, you first have to retrieve and
 install SWI-Prolog, version 2.7.8 or later.
 If you need more information about SWI-Prolog, or more
 specific information about installing SWI-Prolog, you can visit the
-{\emph SWI-Prolog} at 
+\emp{SWI-Prolog} at 
 {\tt http://swi.psy.uva.nl/usr/jan/SWI-Prolog.html. In this document
 we assume you have succesfully installed SWI-Prolog and are only interested
 in adding \TB\ support.
@@ -21,7 +21,7 @@ in adding \TB\ support.
 You first need to change the first two lines of the file 
 {\tt adapters/swipl-adapter/Makefile.in}, because this is the location
 where SWI-Prolog can be found. You also might need to change the
-{\tt EXTRA_LIBS} variable in {\tt Makefile.in}, depending on your 
+{\tt EXTRA\_LIBS} variable in {\tt Makefile.in}, depending on your 
 system.
 
 Reconfigure the ToolBus to include
@@ -50,8 +50,8 @@ the \TB -aware SWI-Prolog executable with the right arguments.
 \begin{itemize}
   \item {\tt tbswipl -help}: Display help message;
   \item {\tt tbswipl -v}:    Display version information;
-  \item {\tt swipl \emph{[options]}}: Start an interactive SWI-Prolog session.;
-  \item {\tt swipl \emph{[options] [-o output] -c file ...}:
+  \item {\tt swipl [options]}: Start an interactive SWI-Prolog session.;
+  \item {\tt swipl [options] [-o output] -c file ...}:
 	Compile a SWI-Prolog program into byte code;
   \item {\tt swipl [options] [-o output] -b bootfile -c file ...}:
         Boot compilation. For system maintenance only.
@@ -93,7 +93,7 @@ query
 {\tt $Fun$($cid$,$A_1$, ..., $A_n$)}. Here $Tid$ is a tool identifier
 (as produced by {\tt execute} or {\tt rec-connect}) for an instance of the {\tt
 python-adapter}, and $cid$ is the connection id for this tools as returned
-by {\tt tb_new_connection}.
+by {\tt tb\_new\_connection}.
 \item {\tt snd-eval($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Prolog
 query
 {\tt $Fun$($cid$, $A_1$, ..., $A_n$}. $Tid$ and $cid$ as above.
@@ -119,36 +119,36 @@ Prolog programs executed by a \TB -aware SWI-Prolog byte-code interpreter.
 
 \begin{itemize}
 
-\item {\tt tb_tool(-$Tool$)}: $Tool$ is unified with the default tool name.
-      This is the tool name that is given as the {\tt -TB_TOOL_NAME $name$}
+\item {\tt tb\_tool(-$Tool$)}: $Tool$ is unified with the default tool name.
+      This is the tool name that is given as the {\tt -TB\_TOOL\_NAME $name$}
       argument to the {\tt swipl-adapter}.
 
-\item {\tt tb_host(-$Host$)}: $Host$ is unified with the default host.
-      This is the host name that is given as the {\tt -TB_HOST $host$}
+\item {\tt tb\_host(-$Host$)}: $Host$ is unified with the default host.
+      This is the host name that is given as the {\tt -TB\_HOST $host$}
       argument to the {\tt swipl-adapter}.
 
-\item {\tt tb_port(-$Port$)}: $Port$ is unified with the default port.
-      This is the port number that is given as the {\tt -TB_PORT $port$}
+\item {\tt tb\_port(-$Port$)}: $Port$ is unified with the default port.
+      This is the port number that is given as the {\tt -TB\_PORT $port$}
       argument to the {\tt swipl-adapter}.
 
-\item {\tt tb_tid(-$Tid$)}: $Tid$ is unified with the tool id.
-      This is the port number that is given as the {\tt -TB_TOOL_ID $tid$}
+\item {\tt tb\_tid(-$Tid$)}: $Tid$ is unified with the tool id.
+      This is the port number that is given as the {\tt -TB\_TOOL\_ID $tid$}
       argument to the {\tt swipl-adapter}.
 
-\item {\tt tb_new_connection(+$Tool$, +$Host$, +$Port$, +$Tid$, -$Cid$)}: 
+\item {\tt tb\_new\_connection(+$Tool$, +$Host$, +$Port$, +$Tid$, -$Cid$)}: 
       Create a new tool instance. $Tool$ and $Host$ are
       strings, $Port$, $Tid$, and $Cid$ are integers. 
       $Host$ can also be the {\tt []}, in which
       case the local host is always used. $Cid$ is unified with the 
       connection id of this new connection.
 
-\item {\tt tb_connect(+$Cid$)}: Create the actual connection with the \TB,
+\item {\tt tb\_connect(+$Cid$)}: Create the actual connection with the \TB,
       or fail when this cannot be done.
 
-\item {\tt tb_eventloop}: Start the ToolBus eventloop. Note that
+\item {\tt tb\_eventloop}: Start the ToolBus eventloop. Note that
       this predicate does not terminate!
 
-\item {\tt tb_send(+$Cid$, +$Term$)}: Send a term to the ToolBus.
+\item {\tt tb\_send(+$Cid$, +$Term$)}: Send a term to the ToolBus.
 
 \end{itemize}
 
