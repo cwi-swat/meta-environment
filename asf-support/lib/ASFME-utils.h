@@ -28,4 +28,7 @@ ASF_ASFTestEquationTestList ASF_getASFModuleTestList(ASF_ASFModule module);
 
 ASF_ASFTagId ASF_makeTagId(const char* str);
 
+ASF_ASFModule ASF_liftModule(ASF_ASFModule module);
+ASF_ASFModule ASF_lowerModule(ASF_ASFModule module);
+
 #endif

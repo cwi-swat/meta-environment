@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Feb  7 16:38:15 CET 2005 <jurgenv@cwi.nl>
+ * Added manual implementation of liftModule and lowerModule. These functions
+   find the user-defined terms in an ASF module and lift them to parsed
+   AsFix trees.
+
 Thu Jan 27 11:35:06 CET 2005 <jurgenv@cwi.nl>
  * Bumped to 1.4
 

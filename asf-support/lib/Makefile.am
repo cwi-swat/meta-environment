@@ -10,7 +10,9 @@ include_HEADERS = \
 libASFME_a_SOURCES = \
 	ASFME.c \
 	ASFME_dict.c \
-	ASFME-utils.c 
+	ASFME-utils.c  \
+	lift.c \
+	lower.c
 
 INCLUDES = \
 	-I${ATERM}/include \
