@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Feb 20 13:51:44 MET 2004 <markvdb@cwi.nl>
+ * Context switches from and to box added.
+
 Tue Feb 17 14:01:28 CET 2004 <kooiker@cwi.nl>
  * generator/pandora.c:
    - Skip layout in argsmanytobox
