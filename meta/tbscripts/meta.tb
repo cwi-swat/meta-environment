@@ -47,7 +47,7 @@
 #include "query.tb"
 #include "query-tool.idef"
 
-#include "meta-interface.tb"
+#include <meta-interface.tb>
 
 process META is
 let 
@@ -103,7 +103,7 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
 	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
         DumpParseTable, Module-Utilities,
 	RestoreTermBrackets, RestoreBrackets,
-	Query, FindSortDefinition
+	Query, QueryTool
 #ifdef METASTUDIO
 	, DOT-ADAPTER
 #endif
