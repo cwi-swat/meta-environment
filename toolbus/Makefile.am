@@ -1,4 +1,6 @@
-SUBDIRS    = toolbus aterm adapters tbviz doc demos test
+SUBDIRS = toolbus aterm adapters tbviz doc demos test
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 

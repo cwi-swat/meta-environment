@@ -6,3 +6,4 @@ config.*
 configure
 toolbus-*.pkg
 toolbus-*.tar.gz
+autom4*

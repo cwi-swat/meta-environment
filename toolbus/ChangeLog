@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 10 15:24:54 CET 2004 <m336@cwi.nl>
+ * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+ * version bump to 1.1
+
 Tue Feb 10 10:53:28 CET 2004 <kooiker@cwi.nl>
  * adapters/toolbus-adapter/toolbus-adapter.c,
    demos/calc/log.c, batch.c, calc.c: 
