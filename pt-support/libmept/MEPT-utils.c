@@ -842,7 +842,9 @@ ATbool PT_isTreeBracket(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_hasProductionBracketAttr(prod);
+    if (PT_isProductionDefault(prod)) {
+      return PT_hasProductionBracketAttr(prod);
+    }
   }
   return ATfalse;
 }
