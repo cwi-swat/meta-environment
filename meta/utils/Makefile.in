@@ -15,6 +15,7 @@ bindir		= @bindir@
 libdir		= @libdir@
 includedir	= ${prefix}/include
 
+RANLIB		= @RANLIB@
 SHELL		= @SHELL@
 CC              = @CC@
 CFLAGS          = @CFLAGS@ ${XCFLAGS}
@@ -58,7 +59,8 @@ CHDR            = meta-utils.h module-utils.h libutil.h
 # Ordering is important here: the toolbus dir. should come first
 BINFILES	= gen-table parse-sdf2 ps-dot sdf2table idef2tif \
                   meta-paths normalize-sdf imports
-LIBFILES	= Sdf2.baf
+LIBFILES	= 
+SDFTABLE	= Sdf2.baf
 INCLUDEFILES	=
 
 OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
@@ -67,7 +69,7 @@ OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
 OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES      =
+CLEANFILES      = libutils-*.a
 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
@@ -78,25 +80,29 @@ all:	${BINFILES} ${LIBFILES}
 	cc -O $(INCLUDES) -c -o $@ $<
 
 %-gcc.o: %.c
-	gcc -Wall -pedantic -O4 $(INCLUDES) -c -o $@ $<
+	gcc -Wall -O4 $(INCLUDES) -c -o $@ $<
 
 %-dbg.o: %.c
-	gcc -Wall -pedantic -g $(INCLUDES) -c -o $@ $<
+	gcc -Wall -g $(INCLUDES) -c -o $@ $<
 
 %-prof.o: %.c
-	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
+	gcc -Wall -pg $(INCLUDES) -c -o $@ $<
 
 libutils-cc.a: meta-utils-cc.o module-utils-cc.o
 	$(AR) cr $@ meta-utils-cc.o module-utils-cc.o
+	$(RANLIB) $@
 
 libutils-gcc.a: meta-utils-gcc.o module-utils-gcc.o
 	$(AR) cr $@ meta-utils-gcc.o module-utils-gcc.o
+	$(RANLIB) $@
 
 libutils-dbg.a: meta-utils-dbg.o module-utils-dbg.o
 	$(AR) cr $@ meta-utils-dbg.o module-utils-dbg.o
+	$(RANLIB) $@
 
 libutils-prof.a: meta-utils-prof.o module-utils-prof.o
 	$(AR) cr $@ meta-utils-prof.o module-utils-prof.o
+	$(RANLIB) $@
 
 meta-paths: meta-paths-${CC}.o libutils-${CC}.a
 	${CC} -o $@ meta-paths-${CC}.o libutils-${CC}.a
@@ -113,7 +119,7 @@ uninstall:
 install:	all
 	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
-	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES) $(SDFTABLE)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
 # clean target (remove all easily build components and temporary files)

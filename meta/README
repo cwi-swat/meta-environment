@@ -51,6 +51,24 @@ Installation instructions:
        controlling nuclear facilities severely apply.
 
 
+* Platform support
+                                                                   
+     The new-meta environment has been installed successfully on
+     the following platforms:
+ 
+     -- Sun Sparc & Solaris >= 2.5
+     -- Mips Inc. MIPS & SGI IRIX >= 6.2
+     -- IBM/Motorola PowerPC & Mac OS Server >= 1.0
+     -- IBM/Motorola PowerPC & Linux >= 2.0, MkLinux 3.0
+     -- Intel iX86 & Solaris >= 2.6
+     -- Intel iX86 & Linux >= 2.0
+ 
+     The new-meta environment has been tried with no success on
+     the following platforms:
+ 
+     -- Digital (`Compaq') Alpha & OSF1 v4.0 (`Compaq Tru64 Unix')
+
+
   * Dependencies
 
     The Meta-Environment distribution depends on four other

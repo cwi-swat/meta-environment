@@ -74,13 +74,15 @@ char *slurpfile(char *fnam, size_t *size)
                 return NULL;
         }
         if((buf = (char *)malloc(*size + 1)) == NULL ) {
-                fprintf(stderr, "could not allocate %i bytes for %s\n", *size + 1, fnam);
+                fprintf(stderr, "could not allocate %i bytes for %s\n",
+                        (int) *size+1, fnam);
                 fclose(fd);
                 *size = 0;
                 return NULL;
         }
         if(fread(buf, 1, *size, fd) != *size) {
-                fprintf(stderr, "could not fread() %i bytes %s\n", *size, fnam);
+                fprintf(stderr, "could not fread() %i bytes %s\n",
+                        (int) *size, fnam);
                 free(buf);
                 *size = 0;
                 buf = NULL;
