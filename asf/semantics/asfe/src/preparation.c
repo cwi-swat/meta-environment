@@ -63,6 +63,7 @@ static equation_table *tables = NULL;
 equation_table *equations = NULL;
 
 extern ATbool runVerbose;
+extern ATbool useTide;
 static ATbool mark_new_layout;
 static ATbool in_equations;
 
@@ -560,7 +561,9 @@ ASF_CondEquation prepareEquation(ASF_CondEquation equ)
 {
   ASF_Equation equation;
 
-  equ = add_equ_pos_info(equ);
+  if (useTide) {
+    equ = add_equ_pos_info(equ);
+  }
 
   if (ASF_isCondEquationWhen(equ) || ASF_isCondEquationImplies(equ)) {
     equ = ASF_setCondEquationConditions(equ,

@@ -53,6 +53,7 @@ static unsigned rewrite_steps = 0;
 ASF_Tag tagCurrentRule = NULL;
 
 ATbool runVerbose = ATfalse;
+ATbool useTide = ATfalse;
 
 /* rewrite_error contains the first error encountered during evaluation.
  * this error is later sent to the ToolBus (or dumped to stderr in case of 
@@ -144,10 +145,14 @@ void debugging(ATerm on)
   if (ATmatch(on, "on")) {
 #ifdef USE_TIDE
     Tide_connect();
+    useTide = ATtrue;
 #else
     ATwarning("*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
 	      "(you might want to try to configure the asf module --with-tide)\n");
 #endif
+  }
+  else {
+    useTide = ATfalse;
   }
 }
 
