@@ -1,2 +1,2 @@
 
-EXTRA_DIST	= MANIFEST.MF defaults.properties
+EXTRA_DIST	= MANIFEST.MF default.properties
