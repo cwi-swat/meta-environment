@@ -584,6 +584,18 @@ proc EditTerm {mod w} {
 
 
 #--
+# SaveModules(ML)
+#-
+# generates the toolbus event to request saving of modules ML
+#--
+proc SaveModules { modlist } {
+    foreach mod $modlist {
+        GBpost [format "save-module(%s)" [ToId $mod]]
+    }
+}
+
+
+#--
 # RevertModules(ML)
 #-
 # generates the toolbus event to request reverting of modules ML
@@ -615,6 +627,18 @@ proc DeleteModules { modlist graph } {
 proc CompileModules { modlist } {
     foreach mod $modlist {
 	GBpost [format "compile-module(%s)" [ToId $mod]] 
+    }
+}
+
+
+#--
+# ParseEquations(ML)
+#-
+# generates the toolbus event to request compilation of modules ML
+#--
+proc ParseEquations { modlist } {
+    foreach mod $modlist {
+       GBpost [format "parse-equations(%s)" [ToId $mod]]
     }
 }
 
@@ -668,6 +692,17 @@ proc ClearAll {c g} {
     $c delete all
     update-graph
 }
+
+
+#--
+# SaveAll
+#-
+# generates the toolbus event to request saving of all modules
+#--
+proc SaveAll {} {
+    GBevent "save-all"
+}
+
 
 
 #--
@@ -966,6 +1001,8 @@ proc define-menu-bar {} {
     $m add command -label "Save All" -underline 0 -command {SaveAll}
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add command -label "Revert All" -underline 0 -command {RevertAll}
+    $m add command -label "Save All" -underline 0 -command {SaveAll}
+
 
 # Adapted by Mark
 #    $m add separator
@@ -1026,14 +1063,18 @@ proc define-modules-frame {} {
 	-command {GetModuleInfo [SelectedModules]}
     button .modules.buttons.compile -text "Compile" \
 	-command {CompileModules [SelectedModules]}
+    button .modules.buttons.parseeqs -text "ParseEqs" \
+       -command {ParseEquations [SelectedModules]}
 
     pack append .modules.buttons \
         .modules.buttons.editmod {top fillx} \
 	.modules.buttons.editterm {top fillx} \
+        .modules.buttons.savemod {top fillx} \
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
         .modules.buttons.modinfo {top fillx} \
-        .modules.buttons.compile {top fillx}
+        .modules.buttons.compile {top fillx} \
+        .modules.buttons.parseeqs {top fillx}
 
     grid .modules.list    -row 0 -column 0 -rowspan 1 \
         -columnspan 1 -sticky news
@@ -1116,6 +1157,8 @@ proc define-module-popup {} {
     $m add separator
     $m add command -label "Compile module" \
         -command {CompileModules [GetObjectName $c]}
+    $m add command -label "Parse equations" \
+        -command {ParseEquations [GetObjectName $c]}
 }
 
 proc define-shadowmodule-popup {} {
@@ -1131,6 +1174,8 @@ proc define-modlist-popup {} {
     $m add command -label "Edit modules" \
         -command {EditModules [SelectedModules]}
     $m add separator
+    $m add command -label "Save modules" \
+        -command {SaveModules [SelectedModules]}
     $m add command -label "Revert modules" \
         -command {RevertModules [SelectedModules]}
     $m add command -label "Delete modules" \
