@@ -18,7 +18,7 @@ extern Symbol record_sym;
 #define CONS_EXIT(rhs)		 return rhs
 
 #define FUNC_ENTRY(sym,appl) \
-  unsigned int steps, count, start = ++rewrite_steps; \
+  unsigned int steps, count, start = rewrite_steps++; \
   ATerm result, record, term_steps; \
   ATermAppl term = appl
 

@@ -869,12 +869,15 @@ void write_memo_profile()
 
 	while(!ATisEmpty(keys)) {
 		ATerm key = ATgetFirst(keys);
-		ATermAppl record = (ATermAppl)ATtableGet(prof_table, key);
-		ATfprintf(f, "[");
-		AFsourceToFile(key, f);
-		ATfprintf(f, ",%t]\n", record);
+		ATermAppl stats = (ATermAppl)ATtableGet(prof_table, key);
+		ATerm asfix = lookup_prod(ATgetSymbol((ATermAppl)key));
+		
+		AFsourceToFile(asfix, f);
+		/*AFsourceToFile(ATparse(AFsourceToBuf(key)), f);*/
+		ATfprintf(f, ": %t\n", stats);
 		keys = ATgetNext(keys);
 	}
+	ATfprintf(f, "\n");
 
 	fclose(f);
 }
@@ -969,7 +972,7 @@ void init_patterns()
 
 #ifdef MEMO_PROFILING
 	prof_table = ATtableCreate(2048, 80);
-	record_sym = ATmakeSymbol("record", 2, ATfalse);
+	record_sym = ATmakeSymbol("stats", 2, ATfalse);
 	ATprotectSymbol(record_sym);
 
 	atexit(write_memo_profile);
