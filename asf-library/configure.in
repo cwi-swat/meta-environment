@@ -32,12 +32,12 @@ AC_OUTPUT(
 	lib/Makefile 
 	lib/asf/Makefile 
 	lib/asf/syntax/Makefile 
-dnl	lib/asf/tools/Makefile 
+	lib/asf/tools/Makefile 
 	lib/basic/Makefile 
-dnl	lib/containers/Makefile 
-dnl	lib/disambiguation/Makefile 
-dnl	lib/functions/Makefile 
-dnl	lib/strategies/Makefile 
+	lib/containers/Makefile 
+	lib/disambiguation/Makefile 
+        lib/functions/Makefile 
+        lib/strategies/Makefile 
 	lib/aterm/Makefile 
         lib/system/Makefile
 	lib/sdf2/Makefile 
