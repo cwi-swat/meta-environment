@@ -4,12 +4,10 @@
 
 NEWMETA 	= ../..
 DEMO		= $(NEWMETA)/demo
-PICO		= $(DEMO)/pico/Pico-syntax
+PICODIR         = $(DEMO)/pico
+PICOSYNTAX	= $(PICODIR)/Pico-syntax.sdf
 #PICO 		= /ufs/jurgenv/gipe/gb/grammars/pico/Pico
-PICOTRMS	= $(DEMO)/pico/big $(DEMO)/pico/fac $(DEMO)/pico/bool1
+PICOTRMS	= big fac bool1
 
 # General makerules for the MetaEnvironment
-
-%.tbl: %.sdf
-	sdf2table -i $< -o $@
 

@@ -1,0 +1,19 @@
+$Id$
+
+This directory contains a number of integration tests for the ASF+SDF
+Meta-Environment.
+
+usage:
+   make test      to run the tests
+
+adding new tests:
+-Add a new subdir for the test and add the name of this directory to the
+ SUBDIRS variable in the Makefile.
+-Create a Makefile in the new directory that contains the "test" target.
+ Take a look at ParsePicoTerm/Makefile to get an idea about how to write
+ your tests.
+
+Note. All files created during a test run should be removed before the end
+of the test run.
+
+

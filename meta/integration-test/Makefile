@@ -1,8 +1,6 @@
 #$Id$
 
-DEMO	= $(NEWMETA)/demo/
-PICO	= $(DEMO)/pico/Pico-syntax
-SUBDIRS = GenerateParseTable ParsePicoTerm
+SUBDIRS = ParsePicoTerm
 
 include Metarules.include
 
