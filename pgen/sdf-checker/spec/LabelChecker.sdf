@@ -5,26 +5,26 @@ imports SdfCheckerFeedback
 imports ModuleOperations
 
 exports
-  context-free start-symbols {Feedback ","}*
+  context-free start-symbols {Error ","}*
   context-free syntax
-    check-labels(Definition) -> {Feedback ","}*
+    check-labels(Definition) -> {Error ","}*
 
 hiddens
   sorts LabelsSet Labels-Msgs-Tuple
 
   context-free syntax
     labels(Literal*)               -> LabelsSet
-    "[" LabelsSet "," {Feedback ","}* "]" -> Labels-Msgs-Tuple
+    "[" LabelsSet "," {Error ","}* "]" -> Labels-Msgs-Tuple
 
   context-free syntax
     contains(Literal, LabelsSet) -> Boolean
     Literal "++" LabelsSet       -> LabelsSet
 
   context-free syntax
-    check-labels(Definition, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-labels(Module, {Feedback ","}*)                -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-labels2(Module, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-labels2(Production, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-labels(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
+    check-labels(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
+    check-labels2(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-labels2(Production, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
     check-labels3(Symbol*, Labels-Msgs-Tuple, 
                   ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
     check-labels3({Symbol ","}*, Labels-Msgs-Tuple, 
@@ -38,7 +38,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$Literal"[0-9]*   -> Literal
     "$Literal*"[0-9]*  -> Literal*

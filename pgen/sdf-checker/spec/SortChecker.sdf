@@ -10,7 +10,7 @@ hiddens
   sorts Symbols-Msg-Tuple
 
   context-free syntax
-    "[" SymbolPairsSet "," {Feedback ","}* "]" -> Symbols-Msg-Tuple
+    "[" SymbolPairsSet "," {Error ","}* "]" -> Symbols-Msg-Tuple
 
   context-free syntax
     get-parameter-symbols(Module, 
@@ -131,9 +131,9 @@ hiddens
 
     "$Grammar"[0-9]*        -> Grammar
 
-    "$Msg"[0-9]*            -> Feedback
-    "$Msg*"[0-9]*           -> {Feedback ","}*
-    "$Msgs"[0-9]*           -> {Feedback ","}*
+    "$Msg"[0-9]*            -> Error
+    "$Msg*"[0-9]*           -> {Error ","}*
+    "$Msgs"[0-9]*           -> {Error ","}*
     
     "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
     "ModuleInfoTable"[0-9]* -> Module-Info-Table

@@ -8,15 +8,15 @@ exports
         Module-Info
 
   context-free syntax
-    "[" Module-Info-Table "," {Feedback ","}* "]" -> Info-Msg-Tuple
+    "[" Module-Info-Table "," {Error ","}* "]" -> Info-Msg-Tuple
 
   context-free syntax
     create-info-msg-tuple()                            -> Info-Msg-Tuple
     create-module-entry(ModuleId, Module-Info-Table)   -> Module-Info-Table
     get-module-info(Info-Msg-Tuple)                    -> Module-Info-Table
-    get-messages(Info-Msg-Tuple)                       -> {Feedback ","}*
+    get-messages(Info-Msg-Tuple)                       -> {Error ","}*
     put-module-info(Module-Info-Table, Info-Msg-Tuple) -> Info-Msg-Tuple
-    put-messages({Feedback ","}*, Info-Msg-Tuple)             -> Info-Msg-Tuple
+    put-messages({Error ","}*, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
     "[" SymbolPairsSet "," 
@@ -75,7 +75,7 @@ exports
 hiddens
   variables
     "Bool"[0-9]*             -> Boolean
-    "Messages"[0-9]*         -> {Feedback ","}*
+    "Messages"[0-9]*         -> {Error ","}*
     "$ModuleId"[0-9]*        -> ModuleId
     "$ModuleName"[0-9]*      -> ModuleName
     "ModuleInfoEntry"[0-9]*  -> Module-Info-Entry

@@ -5,16 +5,16 @@ imports SdfCheckerFeedback
 imports ModuleOperations
 
 exports
-  context-free start-symbols {Feedback ","}*
+  context-free start-symbols {Error ","}*
   context-free syntax
-    check-sdf-attributes(Definition) -> {Feedback ","}*
+    check-sdf-attributes(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-attributes(Definition, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-attributes(Module, {Feedback ","}*)                -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-attributes2(Module, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-attributes2(Production, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-attributes(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes2(Module, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes2(Production, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
     is-binary-definition(Production)       -> Boolean
@@ -34,7 +34,7 @@ hiddens
     "$Symbol*"[0-9]*   -> Symbol*
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Literal"[0-9]*   -> Literal
 
     "$String"[0-9]*    -> StrCon

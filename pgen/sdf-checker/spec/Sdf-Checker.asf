@@ -4,12 +4,12 @@ equations
            moduleid($Char*) := $ModuleId
            ====>
            check-sdf(definition Definition, $ModuleId) =
-             feedback("SdfChecker", strcon(""" $Char* """), [Msg*])
+             summary("SdfChecker", strcon(""" $Char* """), [Msg*])
 
   [cs-1'1] Msg* := check-sdf(Definition)
            ====>
            check-sdf(definition Definition) =
-             feedback("SdfChecker", "Unknown", [Msg*])
+             summary("SdfChecker", "Unknown", [Msg*])
 
   [cs-1'1] Msg*1 := check-labels(Definition1),
            Definition2 := remove-labels(Definition1),

@@ -1,6 +1,6 @@
 module SdfCheckerFeedback
 
-imports basic/Feedback
+imports basic/Errors
 imports basic/Comments
 imports SymbolSetOperations 
 imports SdfOperations
@@ -8,8 +8,8 @@ imports ProductionSetOperations
 
 exports
   context-free syntax
-    make-warning(StrCon, StrCon) -> {Feedback ","}*
-    make-error(StrCon, StrCon)   -> {Feedback ","}*
+    make-warning(StrCon, StrCon) -> {Error ","}*
+    make-error(StrCon, StrCon)   -> {Error ","}*
 
 hiddens
   variables 

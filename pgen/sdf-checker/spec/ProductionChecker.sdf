@@ -21,13 +21,13 @@ hiddens
 
 hiddens
   context-free syntax
-    check-priorities(Module, {Feedback ","}*, ModuleId, ProductionsSet)               -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-priorities(Priority, {Feedback ","}*, ModuleId, ProductionsSet)             -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-priorities(Module, {Error ","}*, ModuleId, ProductionsSet)               -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities(Priority, {Error ","}*, ModuleId, ProductionsSet)             -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-priorities-given-symbol(Group, {Feedback ","}*, ModuleId, Symbol, ProductionsSet) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-priorities-given-symbol({Group ">"}+, {Feedback ","}*, ModuleId, Symbol, ProductionsSet) ->{Feedback ","}* {traversal(accu, break, top-down)}
-    check-priorities-given-symbol(Production, {Feedback ","}*, ModuleId, Symbol, ProductionsSet)   ->{Feedback ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Group, {Error ","}*, ModuleId, Symbol, ProductionsSet) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol({Group ">"}+, {Error ","}*, ModuleId, Symbol, ProductionsSet) ->{Error ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Production, {Error ","}*, ModuleId, Symbol, ProductionsSet)   ->{Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
     get-rhs-production(Group, SymbolsSet)                                      -> SymbolsSet {traversal(accu, break, top-down)}
@@ -37,14 +37,14 @@ hiddens
     is-injection-production(Symbol, Symbol, ProductionsSet)                    -> Boolean
 
   context-free syntax
-    check-right-hand-sides(Module, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-right-hand-sides(Production, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-sides(Module, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-sides(Production, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-right-hand-side-lexical-prod(Module, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Grammar, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Production*, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Production, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Grammar, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
 
 
 hiddens
@@ -60,9 +60,9 @@ hiddens
     "Module*"[0-9]*         -> Module*
     "$ModuleId"[0-9]*       -> ModuleId
 
-    "Msg"[0-9]*             -> Feedback
-    "Msg*"[0-9]*            -> {Feedback ","}*
-    "Msgs"[0-9]*            -> {Feedback ","}*
+    "Msg"[0-9]*             -> Error
+    "Msg*"[0-9]*            -> {Error ","}*
+    "Msgs"[0-9]*            -> {Error ","}*
 
     "Import*"[0-9]*         -> Import*
     

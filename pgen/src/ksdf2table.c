@@ -263,7 +263,7 @@ ATerm process_productions(SDF_ProductionList prods)
     assert(sdfflatprod);
     prod   = SDF_ProductionFromTerm(sdfflatprod);
     ptProd = SDFProductionToPtProduction(prod);
-    flatprod = PT_makeTermFromProduction(ptProd);
+    flatprod = PT_ProductionToTerm(ptProd);
                  
     if (statisticsMode) {
       nr_of_members = PT_getSymbolsLength(PT_getProductionLhs(ptProd));
@@ -728,8 +728,7 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
 
   PT_Tree ptTree = PT_getParseTreeTree(g);
   
-  SDF_Grammar grammarTerm = SDF_makeGrammarFromTerm(
-                              PT_makeTermFromTree(ptTree));
+  SDF_Grammar grammarTerm = SDF_GrammarFromTerm(PT_TreeToTerm(ptTree));
   if (SDF_isValidGrammar(grammarTerm)) {
     SDF_ProductionList  prods = SDF_getGrammarKernelProductions(grammarTerm);
     SDF_PriorityList    prios = SDF_getGrammarKernelPriorities(grammarTerm);

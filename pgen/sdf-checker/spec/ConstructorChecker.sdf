@@ -10,7 +10,7 @@ hiddens
   sorts Constructors-Msg-Tuple
 
   context-free syntax
-    "[" ConstructorSet "," {Feedback ","}* "]" -> Constructors-Msg-Tuple
+    "[" ConstructorSet "," {Error ","}* "]" -> Constructors-Msg-Tuple
   context-free syntax
     get-constructor-symbol-pairs(Module,
                                  Constructors-Msg-Tuple,
@@ -49,7 +49,7 @@ hiddens
 hiddens
   variables
     "Attrs"[0-9]*           -> Attributes
-    "Msgs"[0-9]*            -> {Feedback ","}*
+    "Msgs"[0-9]*            -> {Error ","}*
     "Module"[0-9]*          -> Module
     "$ModuleId"[0-9]*       -> ModuleId
 

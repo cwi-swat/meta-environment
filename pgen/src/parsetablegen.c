@@ -76,8 +76,7 @@ void rec_terminate(int cid, ATerm t) {
 static PT_Tree addNormalizeFunction(const char *str, PT_ParseTree parseTree)
 {
   SDF_ModuleName sdfModuleName = SDF_makeModuleName((char*) str);
-  PT_Tree ptModuleName = PT_makeTreeFromTerm(
-                           SDF_makeTermFromModuleName(sdfModuleName));
+  PT_Tree ptModuleName = PT_TreeFromTerm(SDF_ModuleNameToTerm(sdfModuleName));
   PT_Tree newTree = NULL;
 
   if (PT_isValidParseTree(parseTree)) {
@@ -175,8 +174,7 @@ ATerm generate_table(int cid, ATerm sdf, const char *name)
 
   unpackSdf = ATBunpack(sdf);
 
-  pt = normalize_and_generate_table(name, 
-         PT_makeParseTreeFromTerm(unpackSdf));
+  pt = normalize_and_generate_table(name, PT_ParseTreeFromTerm(unpackSdf));
 
   if (pt != NULL) {
     packed = ATBpack(pt);
@@ -328,7 +326,7 @@ int main(int argc, char *argv[])
 	  ATwarning("generating parsetable from %s\n", input[i]);
 	}
 
-	term = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
+	term = PT_ParseTreeFromTerm(ATreadFromFile(iofile));
 	assert(term);
 
 	IF_STATISTICS(

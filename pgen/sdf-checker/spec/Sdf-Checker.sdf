@@ -10,11 +10,11 @@ exports
   context-free syntax
     check-sdf(SDF)           -> Summary
     check-sdf(SDF, ModuleId) -> Summary
-    check-sdf(Definition)    -> {Feedback ","}*
+    check-sdf(Definition)    -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                          -> {Feedback ","}*
+    check-sorts-and-prods(Definition)                          -> {Error ","}*
     pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
     pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
     pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
@@ -28,9 +28,9 @@ hiddens
   variables
     "Definition"[0-9]* -> Definition
 
-    "Msg"[0-9]*        -> Feedback
-    "Msg*"[0-9]*       -> {Feedback ","}*
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msg"[0-9]*        -> Error
+    "Msg*"[0-9]*       -> {Error ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
 
     "Module"[0-9]*       -> Module
     "Module*"[0-9]*      -> Module*
@@ -50,7 +50,7 @@ hiddens
     "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
     "UsedSymbolPair*"[0-9]*     -> SymbolPair*
 
-    "$Msgs"[0-9]*           -> {Feedback ","}*
+    "$Msgs"[0-9]*           -> {Error ","}*
 
     "$Char*"[0-9]* -> CHAR*
 

@@ -1,26 +1,25 @@
 module DeprecatedSymbols
 
-%%imports utilities/PosInfo[Symbol]
 imports SdfCheckerFeedback
 imports ModuleOperations
 
 exports
   context-free syntax
-    check-for-deprecated-symbols(Definition) -> {Feedback ","}*
+    check-for-deprecated-symbols(Definition) -> {Error ","}*
 
 hiddens
   context-free syntax
-    check-for-deprecated-symbols(Definition, {Feedback ","}*)        -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-deprecated-symbols(Module, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-deprecated-symbols2(Module, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
-    check-for-deprecated-symbols2(Symbol, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)} 
+    check-for-deprecated-symbols(Definition, {Error ","}*)        -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols(Module, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols2(Module, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-for-deprecated-symbols2(Symbol, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)} 
 
 hiddens
   variables
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition 
-    "Msgs"[0-9]*       -> {Feedback ","}*
+    "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$UQLiteral"[0-9]* -> UQLiteral
 
