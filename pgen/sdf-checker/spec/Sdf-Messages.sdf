@@ -22,6 +22,7 @@ exports
     only-sort-allowed-in-right-hand-side-of-lexical-function(ModuleId, Production)     -> Message
 
     deprecated-unquoted-symbol-notation(ModuleId, Symbol) -> Message
+    deprecated-tuple-notation(ModuleId, Symbol) -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages

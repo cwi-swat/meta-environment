@@ -1,5 +1,8 @@
 $Id$
 
+Mon Dec  8 14:39:46 CET 2003 <jong@cwi.nl>
+ * improved "deprecated-symbol" warning for tuple syntax
+
 Thu Dec  4 15:17:29 CET 2003 <jong@cwi.nl>
  * improved "deprecated-symbol" warning: the symbols aren't deprecated at
    all, it's the notation (unquoted) that is deprecated. The message is

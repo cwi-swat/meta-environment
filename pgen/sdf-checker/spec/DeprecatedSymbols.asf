@@ -10,7 +10,7 @@ equations
 
 [cl-2'1]
   check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
-    Msgs + deprecated-unquoted-symbol-notation($ModuleId, $Symbol1 # $Symbol2)
+    Msgs + deprecated-tuple-notation($ModuleId, $Symbol1 # $Symbol2)
 
 [cl-2'2]
   check-for-deprecated-symbols2($UQLiteral, Msgs, $ModuleId) =
