@@ -177,6 +177,7 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	utils/Makefile \
 	utils/gen-table \
 	utils/parse-sdf2 \
+	utils/ps-dot \
 	utils/sdf2table \
 , chmod +x meta install-prog-sh install-data-sh; \
   chmod +x graph-browser/graph-browser editor/editor \
