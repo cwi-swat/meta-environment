@@ -59,11 +59,13 @@
 #include "addeqssyntax.idef"
 #include "removevarsyntax.idef"
 #include "dump-equations.tb"
+#include "compile-module.tb"
 
 toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
 	Notify-about-changed-modules, Rewrite-Errors, Traversals,
 	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
-	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations) 
+	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
+        Compile-module) 
 

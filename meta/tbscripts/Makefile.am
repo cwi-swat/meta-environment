@@ -28,7 +28,8 @@ TBSCRIPTS     = clear-all.tb close-module.tb editor-creator.tb \
                 open-modules.tb process-eqs.tb parse-focusses.tb \
                 revert-module.tb rewrite-errors.tb save-module.tb \
                 set-parsetable.tb status-display.tb \
-                ui.tb asf-syntax.tb dump-equations.tb
+                ui.tb asf-syntax.tb dump-equations.tb \
+                compile-module.tb
 
 GEN_TBSCRIPTS = sdf2-language.tb help.tb
 
