@@ -1,5 +1,11 @@
 # $Id$
 
+2003/04/29 ({iversen,jurgenv}@cwi.nl)
+  * Added a new widget to the MetaStudio: a message list
+  * Fixed a number of typos and wrong messages in the ToolBus scripts
+    that were introduced recently by jurgenv.
+  * Added a new type of 'editor' to the button language: message-list.
+
 2003/04/28 (markvdb@cs.vu.nl)
   * Clean up the new button language a bit.
   * Tested it on the boolean transformations.
