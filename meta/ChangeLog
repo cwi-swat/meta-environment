@@ -1,5 +1,10 @@
 # $Id$
 
+2002/18/04 (jurgenv@cwi.nl)
+ * Added a tool called 'metascript' that generates scripts with a common
+   commandline interface to call the parser with a fixed parsetable and
+   to run a fixed compiled specification. 
+
 2002/18/04 (vandenbr@loria.fr)
  * Variables are visualized with "*variable*" again, this bug
     was the result of the bug fix on 2002/03/26.
