@@ -335,7 +335,6 @@ overview of selected publications:
 \section*{Acknowledgements}
 Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
 
-\newpage
 \section{An Introduction to \asfsdf}
 \label{ASF+SDF}
 
@@ -1371,6 +1370,16 @@ and digits and is not a keyword of \asfsdf, it need not be surrounded by
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
 \link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}. But is 
 better to always write the quotes.
+
+\subsubsection{Prefix Functions}
+\label{PrefixFunctions}
+
+Prefix functions are a special kind of context-free functions. They have
+a ``fix'' syntax. They can be considered as an abbreviation mechanism for
+functions written as expected. For instance the function {\tt f(X,Y) -> Z}
+is a prefix function. This function can also be defined as an ordinary
+context-free function {\tt "f" "(" X "," Y ")" -> Z}. The prefix functions
+are often used in combination with \asf\ equations.
 
 \subsubsection{Lists}
 
@@ -3206,8 +3215,7 @@ the size of its definition will grow accordingly.  This becomes even
 more dramatic if we realize that the traversal function will only do
 some real work (apart from traversing) for very few node categories.
 
-Traversal functions in \asfsdf~\cite{BKV03} solve this 
-problem.
+Traversal functions in \asfsdf~\cite{BKV03} solve this problem.
 We distinguish three kinds of traversal functions, defined as follows.
 
 \begin{description}
@@ -3217,7 +3225,7 @@ will traverse its first argument. Possible extra arguments may contain
 additional data that can be used (but not modified) during the traversal.
 A transformer is declared as follows:
 
-\[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo)\}}\]
+\[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo, ...)\}}\]
 
 Because a transformer always returns the same sort, it is type-safe. A
 transformer is used to transform a tree.
@@ -3226,7 +3234,7 @@ transformer is used to transform a tree.
 It will traverse its first argument, while the second
 argument keeps the accumulated value. An accumulator is declared as follows:
 
-\[f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt \{traversal(accu)\}}\] 
+\[f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt \{traversal(accu, ...)\}}\] 
 
 After each application of an accumulator, the accumulated argument is updated.
 The next application of the accumulator, possibly somewhere else in the term,
@@ -3249,7 +3257,7 @@ first argument and accumulated value. An accumulating transformer
 is declared as follows:
 
 \[f(S_1 , S_2 , ..., S_n) \rightarrow S_1 \# S_2 \mbox{\{{\tt
-traversal(accu,trafo)}\}}\]
+traversal(accu, trafo, ...)}\}}\]
 
 An accumulating transformer is used to simultaneously extract information from a
 tree and transform it.
@@ -3271,6 +3279,30 @@ type of traversal:
   applies and does not visit the subtrees of that node. The annotation
   {\tt top-down} selects this behavior.
 \end{description}
+
+Beside the three types of traversals and the order of visiting, we can also
+influence whether we want to stop or continue at the matching occurrences:
+\begin{description}
+\item[Break:] the traversal stops at matching occurrences.
+\item[Continue:] the traversal continues at matching occurrences.
+\end{description}
+
+The visiting strategies in combination with the continuation strategies
+is visualized in the \link{``traversal cube''}[, see
+Figure~\Ref]{FIG:treetraversals}. The current implementation of the
+traversal mechanism only supports the left-to-right visiting strategy.
+
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:treetraversals}
+\T \includegraphics[width=8cm]{order}
+\W \htmlimage{order.gif}
+\caption{The ``traversal cube'': principal ways of traversing a tree}
+\end{Label}
+\end{center}
+\end{figure}
+
 
 We give two simple examples of traversal functions that are both
 based on the \link{tree language}[ defined in
@@ -3308,9 +3340,9 @@ all numbers have been incremented.
 \begin{verbatim}
 module Tree-inc
 imports Tree-syntax
-exports
-  context-free syntax
-    inc(TREE) -> TREE {traversal(trafo)}
+  exports
+    context-free syntax
+      inc(TREE) -> TREE {traversal(trafo, top-down, continue)}
 equations
 [1] inc(N) = N + 1  
 \end{verbatim}
@@ -3331,8 +3363,8 @@ see~\cite{BKV01}.
 module Tree-sum
 imports Tree-syntax
 exports
-context-free syntax
-   sum(TREE, NAT) -> NAT {traversal(accu)}
+  context-free syntax
+    sum(TREE, NAT) -> NAT {traversal(accu, top-down, continue)}
 equations
 [1] sum(N1, N2) = N1 + N2
 \end{verbatim}
@@ -3341,11 +3373,33 @@ equations
 \end{Label}
 \end{figure}   
 
-Implicitly, each traversal function corresponds to a set of functions,
-one for each sort that can be reached during a traversal.
-They are explicitly defined by the specification writer
-(this is the default).
-
+The \sdf\ definition of a traversal function has to fulfill a number of 
+requirements:
+\begin{itemize}
+\item Traversal functions can only be defined in the context-free syntax
+section.
+\item Traversal functions must be \link{prefix functions}[, see Section
+\Ref]{PrefixFunctions}.
+\item The first argument of the prefix function is always a sort of a node
+of the tree that is traversed, for both accumulating as well as
+transformation functions.
+\item In case of a transformation function the result sort should always
+be same as the sort of the first argument.
+\item In case of an accumulating function, the second argument represents
+the accumulator and the result sort should be of the same sort.
+\item In case of an accumulating transformation function, the first
+argument
+represents the tree node, the second the accumulator, and the result sort
+should be a tuple consisting of the tree node sort (first element
+of the tuple) and the accumulator (second element of the tuple).
+\item The traversal functions may have more arguments, the only restriction
+is that they should be consistent over the various occurrences of the
+same traversal function.
+\item The order of the traversal attributes is free, but should be used
+consistently.
+\end{itemize}
+In the \sdf\ part of a module it is needed to define traversal functions
+for all sorts which are needed in the equations. 
 
 \subsubsection{Which Specifications are Executable?}
 
@@ -3858,7 +3912,7 @@ describing financial products.
 
 \item Tooling for CASL.
 
-\item Toolin for ELAN.
+\item Tooling for ELAN.
 
 \end{itemize}
 
@@ -3866,8 +3920,7 @@ describing financial products.
 \label{compiling-specs}
 
 By means of the {\tt Compile ...} button in the
-\link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu} of the import pane
-or in the button pane the \asfsdf2C
+pop-up menu of the import pane the \asfsdf2C
 compiler can be activated. C code is generated for the selected module
 (exactly {\em one} module can be selected for compilation) including
 the imported modules. The C code is immediately compiled into an
@@ -4051,7 +4104,7 @@ are currently three ways to achieve this:
 
 \item Interactively using the \ASmetaenv\
 by selecting module {\tt M} and pushing the {\tt Dump Parse Table...} button in 
-the \link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu}.
+the pop-up menu.
 
 \item From the command line using the command {\tt pt-dump}.
 In the background the same actions are performed as in the interactive
@@ -4115,7 +4168,7 @@ performed in two different ways:
 \begin{itemize}
 \item Interactively using the \ASmetaenv\
 by selecting module {\tt M} and pushing the {\tt Dump Equations...} button in 
-the \link{pop-up menu}[ (Figure~\Ref)]{FIG:module-menu}.
+the pop-up menu.
 
 \item From the command line using the command {\tt eqs-dump}.
 In the background the same actions are performed as in the interactive
