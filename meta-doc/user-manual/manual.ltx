@@ -524,10 +524,9 @@ of the grammars:
 
 \item \link{Disambiguation}[ (Section~\Ref)]{Disambiguation}.
 
-\item \link{Parameterization and Renamings}[
-(Section~\Ref)]{ParametersRenamings}.
+\item \link{Parameterization and Renamings}[ (Section~\Ref)]{ParametersRenamings}.
 
-\item \link{Libraries}[(Section~\Ref)]{SEC:Libraries}.
+\item \link{Libraries}[ (Section~\Ref)]{Libraries}.
 \item \link{Equations}[ (Section~\Ref)]{Equations}.
 \end{itemize}
 
@@ -579,11 +578,11 @@ More details on defining layout can be found in
 \index{imports@{\tt imports}}
 \index{{\tt <ImportSection>}@{\tt <ImportSection>}}
 Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
-by one or more module names:
+by zero or more module names:
 
 \begin{verbatim}
 imports
-  <ModuleName>+
+  <ModuleName>*
 \end{verbatim}
 
 \noindent Modules can be combined by importing one module in another. 
@@ -920,7 +919,8 @@ module LeesPlank
 imports basic/Whitespace
 
 exports
-  sorts Aap Noot Mies
+  context-free start-symbols LeesPlank
+  sorts Aap Noot Mies LeesPlank
   lexical syntax
     "aap"         -> Aap
     "noot"        -> Noot
@@ -941,7 +941,7 @@ name of sort `{\tt L}' written in lower-case letters.  In this way, you can
 get access to the characters of lexical tokens.
 
 The lexical constructor functions will be discussed in more detail
-in the section on equations XXX.
+in the section on \link*{equations}[ see Section~\Ref]{Equations}.
 
 \subsubsection{Character Classes}
 \label{CharacterClasses}
@@ -981,6 +981,7 @@ module LettersDigits1
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Letter Digit
   sorts LCLetter UCLetter Letter Digit
   lexical syntax
     [a-z]    -> LCLetter
@@ -1007,6 +1008,7 @@ module LettersDigits2
 imports basic/Whitespace
 
 exports
+  context-free start-symbols LetterOrDigit
   sorts LetterOrDigit
   lexical syntax
     [a-z]    -> LetterOrDigit
@@ -1078,6 +1080,7 @@ This definition is equivalent to the one given
 \begin{verbatim}
 module LettersDigits3
 exports
+  context-free start-symbols LetterOrDigit
   sorts LetterOrDigit
   lexical syntax
     [a-z] \/ [A-Z] \/ [0-9]   -> LetterOrDigit
@@ -1103,6 +1106,7 @@ module Characters
 imports basic/Whitespace
 
 exports
+  context-free start-symbols L-Char
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
   lexical syntax
     "\\" ~[]                 -> AlphaNumericalEscChar
@@ -1145,7 +1149,8 @@ module Identifiers-repetition
 imports basic/Whitespace
 
 exports
-  sorts Letter DigitLetter
+  context-free start-symbols Id
+  sorts Letter DigitLetter Id
   lexical syntax
     [a-z]       -> Letter
     [a-z0-9]    -> DigitLetter
@@ -1180,7 +1185,8 @@ module Identifiers-optional
 imports basic/Whitespace
 
 exports
-  sorts Letter Digit
+  context-free start-symbols Id
+  sorts Letter Digit Id
   lexical syntax
     [a-z]  -> Letter
     [0-9]  -> Digit
@@ -1229,7 +1235,8 @@ module Identifiers-alternative1
 imports basic/Whitespace
 
 exports
-  sorts UCLetter Digit
+  context-free start-symbols Id
+  sorts LCLetter UCLetter Digit Id
   lexical syntax
     [A-Z]   -> UCLetter
     [a-z]   -> LCLetter
@@ -1277,7 +1284,8 @@ module Identifiers-alternative2
 imports basic/Whitespace
 
 exports
-  sorts UCLetter LCLetterDigit
+  context-free start-symbols Id
+  sorts UCLetter LCLetter Digit Id
   lexical syntax
     [A-Z]   -> UCLetter
     [a-z]   -> LCLetter
@@ -1319,6 +1327,7 @@ module Numbers
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Number
   sorts UnsignedInt SignedInt UnsignedReal Number 
 
   lexical syntax
@@ -1361,10 +1370,11 @@ module Strings
 imports basic/Whitespace
 
 exports
+  context-free start-symbols String
   sorts String StringChar
 
   lexical syntax
-    ~[\"\n]*              -> StringChar
+    ~[\"\n]               -> StringChar
     [\\][\"]              -> StringChar
     "\"" StringChar* "\"" -> String
 \end{verbatim}
@@ -1409,6 +1419,7 @@ module DrawingCommands
 imports basic/Whitespace
 
 exports
+  context-free start-symbols CMND 
   sorts NAT COORD CMND 
 
   lexical syntax
@@ -1485,15 +1496,16 @@ module Decls
 imports basic/Whitespace
 
 exports
-  sorts ID DECL TYPE 
+  context-free start-symbols Decl
+  sorts Id Decl Type 
 
   lexical syntax
-    [a-z]+ -> ID 
+    [a-z]+ -> Id 
 
   context-free syntax
-    "decl" {ID ","}+ ":" TYPE -> DECL
-    "integer"                 -> TYPE 
-    "real"                    -> TYPE
+    "decl" {Id ","}+ ":" Type -> Decl
+    "integer"                 -> Type 
+    "real"                    -> Type
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of a list of identifiers}
@@ -1506,7 +1518,7 @@ A context-free syntax may contain functions that do not add syntax, but serve
 the sole purpose of including a smaller syntactic notion into a larger one. 
 This notion is also known as {\em injections}. 
 Injections are functions ``without a name'' and with one argument sort
-like {\tt ID -> DATA}.
+like {\tt Id -> Data}.
 A typical example is the inclusion of identifiers in expressions or of natural
 numbers in reals. Such a \emph{chain function} has one of the following forms:
 
@@ -1529,7 +1541,7 @@ tree a tree of sort {\tt SORT-A} can be put wherever a tree of
 sort {\tt SORT-B} is required.
 \T In Figure~\ref{CODE:inj-exp} 
 \W In the example \link{below}[]{CODE:inj-exp}
-the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
+the symbols {\tt Nat} and {\tt Var} are injected in {\tt Exp}.
 
 \begin{figure}
 \begin{Label}{CODE:inj-exp}
@@ -1540,16 +1552,17 @@ module Exp
 imports basic/Whitespace
 
 exports
-  sorts NAT VAR EXP
+  context-free start-symbols Exp
+  sorts Nat Var Exp
 
   lexical syntax
-    [0-9]+   -> NAT
-    [XYZ]    -> VAR
+    [0-9]+   -> Nat
+    [XYZ]    -> Var
 
   context-free syntax
-    NAT                 -> EXP
-    VAR                 -> EXP
-    EXP "+" EXP         -> EXP
+    Nat                 -> Exp
+    Var                 -> Exp
+    Exp "+" Exp         -> Exp
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of expressions that uses injections}
@@ -1569,8 +1582,8 @@ when using this operators.
 
 In the example \link*{below}[ in Figure~\Ref]{CODE:lists-usage},
 two different lists are defined, 
-{\tt LIST1} represents a list of naturals separated
-by commas whereas {\tt LIST2} represents a list of naturals terminated
+{\tt List1} represents a list of naturals separated
+by commas whereas {\tt List2} represents a list of naturals terminated
 by commas.
 
 \begin{figure}[t]
@@ -1582,14 +1595,15 @@ module Lists
 imports basic/Whitespace
 
 exports
-  sorts NAT LIST1 LIST2
+  context-free start-symbols List1 List2
+  sorts Nat List1 List2
 
   lexical syntax
-    [0-9]+   -> NAT
+    [0-9]+   -> Nat
 
   context-free syntax
-    {NAT ","}+ -> LIST1
-    (NAT ",")+ -> LIST2
+    {Nat ","}+ -> List1
+    (Nat ",")+ -> List2
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of two list variants}
@@ -1619,15 +1633,16 @@ module Bool
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Bool1 Bool2
   sorts Bool1 Bool2
 
   context-free syntax
-    true                    -> Bool1
-    false                   -> Bool1
+    "true"                  -> Bool1
+    "false"                 -> Bool1
     Bool1 "|" Bool1         -> Bool1 {left}
     Bool1 "&" Bool1         -> Bool1 {left}
 
-    true | false            -> Bool2
+    "true" | "false"        -> Bool2
     Bool2 ("|" | "&") Bool2 -> Bool2 {left}
 \end{verbatim}
 \end{IncCode}
@@ -1655,6 +1670,7 @@ module Cycle
 imports basic/Whitespace
 
 exports
+  context-free start-symbols T
   sorts A P T
 
   context-free syntax
@@ -1688,6 +1704,7 @@ module Booleans
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Boolean
   sorts Boolean
 
   context-free syntax
@@ -1807,7 +1824,7 @@ In most cases, such brackets are only
 introduced for grouping and disambiguation, but have no further meaning. By
 adding the attribute {\tt bracket} to the function declaration, it will not be
 included in the abstract syntax.
-The definition of a bracket function for the sort {\tt EXPR} 
+The definition of a bracket function for the sort {\tt Expr} 
 is given
 \link*{below}[ in Figure~\Ref]{CODE:bracket-expr}.
 
@@ -1820,13 +1837,14 @@ module BracketExpr
 imports basic/Whitespace
 
 exports
-  sorts EXPR
+  context-free start-symbols Expr
+  sorts Expr
 
   lexical syntax
-    [0-9]+ -> EXPR
+    [0-9]+ -> Expr
 
   context-free syntax
-    "(" EXPR ")" -> EXPR {bracket}
+    "(" Expr ")" -> Expr {bracket}
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition with a bracket function}
@@ -1912,6 +1930,7 @@ module SimpleExpr
 imports basic/Whitespace
 
 exports
+  context-free start-symbols E 
   sorts E 
 
   lexical syntax
@@ -1961,6 +1980,7 @@ module ComplexExpr
 imports basic/Whitespace
 
 exports
+  context-free start-symbols E 
   sorts E 
 
   lexical syntax
@@ -2055,6 +2075,7 @@ module Functional
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Term 
   sorts Var Term
   lexical syntax
     [a-z]+ -> Var
@@ -2124,7 +2145,7 @@ illustrates the
 use of restrictions to extend the previous layout definition with C-style
 comments. For readability we give here \emph{two} restrictions whereas the
 first one is already imported from 
-\link{module {\tt basic/Whitespace}}[(Figure~\Ref)]{CODE:safe-layout}.  
+\link{module {\tt basic/Whitespace}}[ (Figure~\Ref)]{CODE:safe-layout}.  
 The repetition of this first restriction is
 redundant and could be eliminated.
 
@@ -2184,6 +2205,7 @@ module RestrictedExpressions
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Expr
   sorts Expr
 
   lexical syntax
@@ -2277,6 +2299,7 @@ module Identifiers-restrict
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Id
   sorts Id
   lexical syntax
     [a-zA-Z][a-zA-Z0-9]* -> Id
@@ -2325,6 +2348,9 @@ module Identifiers-reject
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Id
+  sorts Id
+
   lexical syntax
     [a-zA-Z][a-zA-Z0-9]* -> Id
 
@@ -2360,6 +2386,9 @@ module Identifiers-avoid
 imports basic/Whitespace
 
 exports
+  context-free start-symbols Id
+  sorts Id
+
   lexical syntax
     [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
 
@@ -2486,6 +2515,7 @@ module Eqn
 imports basic/Whitespace
 
 exports
+  context-free start-symbols E
   sorts E 
 
   context-free syntax
@@ -2525,6 +2555,7 @@ module DanglingElse
 imports basic/Whitespace
 
 exports
+  context-free start-symbols E S
   sorts E S
 
   context-free syntax
@@ -2575,11 +2606,13 @@ different instances of the same module.
 \begin{verbatim}
 module Pair[X Y]
 
-imports Booleans
+imports basicr/Booleans
 
 hiddens
   sorts X Y
+
 exports
+  context-free start-symbols Pair[[X,Y]]
   sorts Pair[[X,Y]]
 
   context-free syntax
@@ -2588,7 +2621,7 @@ exports
     make-pair(X, Y)      -> Pair[[X,Y]]
     first(Pair[[X,Y]])   -> X
     second(Pair[[X,Y]])  -> Y
-    is-pair(Pair[[X,Y]]) -> Bool
+    is-pair(Pair[[X,Y]]) -> Boolean
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
@@ -2599,7 +2632,7 @@ When importing a parameterized module the formal parameters have
 to be replaced by actual parameters. 
 The specification \link*{below}[in Figure~\Ref]{CODE:importing-pairs} shows 
 an example of a rather complicated import of a parameterized module. 
-The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
+The symbols {\tt Pair[[Boolean,Boolean]]} and {\tt Pair[[Integer,Integer]]} are the
 actual parameters of the module {\tt Pair[X Y]} in the last import.
 
 \begin{figure}
@@ -2608,9 +2641,9 @@ actual parameters of the module {\tt Pair[X Y]} in the last import.
 \begin{verbatim}
 module TestPair
 
-imports Booleans Pair[Bool Bool]
-        Integers Pair[Int Int]
-        Pair[Pair[[Bool,Bool]] Pair[[Int,Int]]]
+imports basic/Booleans Pair[Boolean Boolean]
+        basic/Integers Pair[Integer Integer]
+        Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
@@ -2637,7 +2670,7 @@ names when {\tt Pair} is imported.
 \begin{verbatim}
 module Pair
 
-imports Booleans
+imports basic/Booleans
 
 hiddens
   sorts X Y
@@ -2650,7 +2683,7 @@ exports
     make-pair(X, Y)      -> Pair[[X,Y]]
     first(Pair[[X,Y]])   -> X
     second(Pair[[X,Y]])  -> Y
-    is-pair(Pair[[X,Y]]) -> Bool
+    is-pair(Pair[[X,Y]]) -> Boolean
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of generic pairs}
@@ -2660,8 +2693,8 @@ exports
 During import such module symbols can be renamed via symbol renaming.
 The specification \link*{below}[in Figure~\Ref]{CODE:renaming-pairs} shows 
 an example of a rather complicated import of the module {\tt Pair}
-using renamings. Renaming {\tt X} to {\tt Bool} is, for instance,
-written as {\tt X => Bool}.
+using renamings. Renaming {\tt X} to {\tt Boolean} is, for instance,
+written as {\tt X => Boolean}.
 
 \begin{figure}
 \begin{Label}{CODE:renaming-pairs}
@@ -2669,9 +2702,9 @@ written as {\tt X => Bool}.
 \begin{verbatim}
 module TestPair
 
-imports Booleans Pair[X => Bool Y => Bool]
-        Integers Pair[X => Int  Y => Int]
-        Pair[X => Pair[[Bool,Bool]] Y => Pair[[Int,Int]]]
+imports basic/Booleans Pair[X => Boolean Y => Boolean]
+        basic/Integers Pair[X => Integer  Y => Integer]
+        Pair[X => Pair[[Boolean,Boolean]] Y => Pair[[Integer,Integer]]]
 \end{verbatim}
 \end{IncCode}
 \caption{Use of generic pair module}
@@ -2709,22 +2742,23 @@ module VarDecls
 imports basic/Whitespace
 
 exports
-  sorts ID DECL TYPE 
+  context-free start-symbols Decl
+  sorts Id Decl Type 
 
   lexical syntax
-    [a-z]+ -> ID
+    [a-z]+ -> Id
  
   context-free syntax
-    "decl" {ID ","}+ ":" TYPE -> DECL 
-    "integer"                 -> TYPE 
-    "real"                    -> TYPE 
+    "decl" {Id ","}+ ":" Type -> Decl 
+    "integer"                 -> Type 
+    "real"                    -> Type 
 
 hiddens
   variables
-    "Id"           -> ID 
-    "Type"[0-9]*   -> TYPE 
-    "Id-list"[\']* -> {ID ","}* 
-    "Id-ne-list"   -> {ID ","}+
+    "Id"           -> Id 
+    "Type"[0-9]*   -> Type 
+    "Id-list"[\']* -> {Id ","}* 
+    "Id-ne-list"   -> {Id ","}+
 \end{verbatim}
 \end{IncCode}
 \caption{Variable declarations using naming schemes}
@@ -2737,6 +2771,9 @@ allowed to use them in terms.
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
 strategy that was discussed in
 \link*{Lexical Ambiguities}[Section~\Ref]{lex-ambiguity}.
+
+\subsection{Libraries}
+\label{Libraries}
 
 \subsection{Equations}
 \label{Equations}
