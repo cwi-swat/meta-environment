@@ -53,6 +53,12 @@ static bucket **sym_table = NULL;
 
 static char conversionbuf[1024];
 
+unsigned int rewrite_steps = 0;
+
+#ifdef MEMO_PROFILING
+ATermTable prof_table = NULL;
+#endif
+
 ATerm c_true = NULL;
 ATerm c_false = NULL;
 ATerm char_table[256] = {NULL};
@@ -537,6 +543,8 @@ static ATermList innermost_list(ATermList l)
 	}
 }
 /*}}}  */
+/*{{{  ATerm unquote(ATerm t) */
+
 /* Code to unqoute delayed reduction of terms, in order to implement
    the outermost strategy */
 
@@ -586,6 +594,8 @@ ATerm unquote(ATerm t)
   }
   return t;
 }
+
+/*}}}  */
 
 /*{{{  static ATerm make_asfix_list( ATermList l, char *sort) */
 
@@ -838,6 +848,34 @@ static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort)
   return result;
 }
 /*}}}  */
+/*{{{  void write_memo_profile() */
+
+/**
+	* Write memo profiling info.
+	*/
+
+#ifdef MEMO_PROFILING
+void write_memo_profile()
+{
+	FILE *f = fopen("memo.prof", "w");
+	ATermList keys;
+
+	if(!f)
+		ATerror("cannot create file 'memo.prof'\n");
+
+	keys = ATtableKeys(prof_table);
+
+	while(!ATisEmpty(keys)) {
+		ATerm key = ATgetFirst(keys);
+		ATermAppl record = (ATermAppl)ATtableGet(prof_table, key);
+		ATfprintf(f, "%t: %t\n", key, record);
+	}
+
+	fclose(f);
+}
+#endif
+
+/*}}}  */
 /*{{{  void init_patterns(arena *ar) */
 
 void init_patterns()
@@ -923,6 +961,12 @@ void init_patterns()
   ATprotectSymbol(concsym);
   conssym = ATmakeSymbol("cons", 2, ATfalse);
   ATprotectSymbol(conssym);
+
+#ifdef MEMO_PROFILING
+	prof_table = ATtableCreate(2048, 80);
+
+	at_exit(write_memo_profile);
+#endif
 }
 /*}}}  */
 /*{{{  ATerm slice(ATerm l1, ATerm l2) */

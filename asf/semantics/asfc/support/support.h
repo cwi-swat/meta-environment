@@ -8,6 +8,38 @@
 #define MAX_LOAD 75
 
 #define PROF(var)
+
+#ifdef MEMO_PROFILING
+
+extern ATermTable prof_table;
+
+#define FUNC_ENTRY(sym,appl) \
+  unsigned int steps, count, start = ++rewrite_steps; \
+  ATerm result, record, term_steps;
+  ATermAppl term = appl;
+
+#define FUNC_EXIT(rhs) \
+  result = rhs;                          \
+  steps = rewrite_steps - start;         \
+                                         \
+  record = get_result(prof_table, term); \
+  if(record) {                           \
+		count = ATgetInt((ATermInt)ATgetArgument(appl, 1))+1; \
+		term_steps = ATgetArgument(appl, 2); \
+  } else {                               \
+		count = 1;                           \
+		term_steps = ATmakeInt(steps);       \
+	} \
+  record = ATmakeAppl3(record_sym, (ATermInt)ATmakeInt(count), term_steps); \
+  put_result(prof_table, term, record); \
+  return result;
+
+#else
+
+#define FUNC_ENTRY(sym,appl)
+#define FUNC_EXIT(rhs) return rhs;
+
+#endif
 /*
 #define streq(a,b) (!strcmp((a),(b)))
 */
@@ -133,6 +165,8 @@
 #define or(t0,t1)     (ATisEqual(t0, c_true) ? c_true : t1)
 
 typedef ATerm (*funcptr)();
+
+extern unsigned int rewrite_steps;
 
 extern ATerm c_false;
 extern ATerm c_true;
