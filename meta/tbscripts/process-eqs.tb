@@ -35,7 +35,7 @@ in
          snd-msg(set-parsetable(Mname)).
          rec-msg(parsetable-set(Mname)).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
-         snd-msg(Id,parse-string-as-asfix1(Mname,"",FT)).
+         snd-msg(Id,parse-string-as-asfix1(Mname,"Equations",FT)).
          ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
            snd-note(ui-status(endstat(Id))). 
            snd-msg(add-eqs-to-db(Mname,Path,T1,Time1,"changed")).
