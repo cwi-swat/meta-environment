@@ -1,5 +1,6 @@
 module EmptyBag
 exports
-   sorts EmptyBag
+   sorts EmptyBag Bags
    context-free syntax
-        "EmptyBag"              -> EmptyBag
+%%        "EmptyBag"              -> EmptyBag {prefer}
+	"EmptyBag"		-> Bags

@@ -1,114 +1,112 @@
 equations
 
-%% --- EmptyBag
+%%[e1]	EmptyBag = {}
 
-[empty] EmptyBag = {}
+%% --- add($Elem, $Bag)
 
-%% --- add(E, Bag)
-
-[a1]	add(E, {E*}) = {E, E*}
+[a1]	add($Elem, {$Elem*}) = {$Elem, $Elem*}
 
 
-%% --- del(E, Bag)
+%% --- del($Elem, $Bag)
 
-[r1]	del(E, {E*1, E, E*2}) = {E*1, E*2}
+[r1]	del($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}
 [default-r2]
-	del(E, Bag) = Bag
+	del($Elem, $Bag) = $Bag
 
-%% --- equal(Bag1, Bag2)
+%% --- equal(Rel1, Rel2)
 
-[eq-1]       equal({E, E*}, {E*1, E, E*2}) = equal({E*}, {E*1, E*2})
+[eq-1]       equal({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2}) = equal({$Elem*}, {$Elem*1, $Elem*2})
 
-[eq-2]       equal({E+}, {})               = false
-[eq-3]       equal({}, {E+})               = false
+[eq-2]       equal({$Elem+}, {})               = false
+[eq-3]       equal({}, {$Elem+})               = false
 [eq-4]       equal({}, {})                 = true
 [default-eq] 
-             equal({E+1}, {E+2})           = false
+             equal({$Elem+1}, {$Elem+2})           = false
 
-%% --- subset(Bag1, Bag2)
+%% --- subset(Rel1, Rel22)
 
-[sub-1]      subset({E, E*}, {E*1, E, E*2})  = subset({E*}, {E*1, E*2})
-[sub-2]      subset({E+}, {})                = false
-[sub-3]      subset({}, {E+})                = true
+[sub-1]      subset({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2})  = subset({$Elem*}, {$Elem*1, $Elem*2})
+[sub-2]      subset({$Elem+}, {})                = false
+[sub-3]      subset({}, {$Elem+})                = true
 [sub-4]      subset({}, {})                  = true
 [default-sub]
-             subset({E+1},{E+2})             = false
+             subset({$Elem+1},{$Elem+2})             = false
 
-%% --- ssubset(Bag1, Bag2)
+%% --- ssubset(Rel1, Rel2)
 
-[ssub-1] strict-subset(Bag1, Bag2) = subset(Bag1, Bag2) & not(equal(Bag1, Bag2))
+[ssub-1] strict-subset($Bag1, $Bag2) = subset($Bag1, $Bag2) & not(equal($Bag1, $Bag2))
 
-%% --- superset(Bag1, Bag2)
+%% --- superset(Rel1, Rel2)
 
-[sup-1] superset(Bag1, Bag2) = subset(Bag2, Bag1)
+[sup-1] superset($Bag1, $Bag2) = subset($Bag2, $Bag1)
 
-%% --- strict-superset(Bag1, Bag2)
+%% --- strict-superset(Rel1, Rel2)
 
-[ssup-1] strict-superset(Bag1, Bag2) = strict-subset(Bag2, Bag1)
+[ssup-1] strict-superset($Bag1, $Bag2) = strict-subset($Bag2, $Bag1)
 
-%% --- union1(E, Bag)
+%% --- union1($Elem, Rel)
 
-[un1-1]	in(E, {E*}) = true			%% Note does not work with
-	=============================		%% {E*} replaced by var Bag??
-	union1(E, {E*}) = {E*}
+[un1-1]	in($Elem, {$Elem*}) = true			%% Note does not work with
+	=============================		%% {$Elem*} replaced by var $Bag??
+	union1($Elem, {$Elem*}) = {$Elem*}
 
 [default-un1-2]
-	union1(E, {E*}) = {E, E*}
+	union1($Elem, {$Elem*}) = {$Elem, $Elem*}
 
-%% --- union2(Bag, E)
+%% --- union2($Bag, $Elem)
 
-[un2-1]	in(E, {E*}) = true
+[un2-1]	in($Elem, {$Elem*}) = true
 	=============================
-	union2({E*}, E) = {E*}
+	union2({$Elem*}, $Elem) = {$Elem*}
 
 [default-un2-2]
-	union2({E*}, E) = {E*, E}
+	union2({$Elem*}, $Elem) = {$Elem*, $Elem}
 
-%% --- union(Bag1, Bag2)
+%% --- union($Bag1, $Bag2)
 
-[un-1] union({}, {E*}) = {E*}
-[un-2] union({E*}, {}) = {E*}
+[un-1] union({}, {$Elem*}) = {$Elem*}
+[un-2] union({$Elem*}, {}) = {$Elem*}
 
-[un-3] {E*4} = union({E*1}, {E*2, E*3})
+[un-3] {$Elem*4} = union({$Elem*1}, {$Elem*2, $Elem*3})
        ==============================
-       union({E, E*1}, {E*2, E, E*3}) = {E, E*4}
+       union({$Elem, $Elem*1}, {$Elem*2, $Elem, $Elem*3}) = {$Elem, $Elem*4}
 
 [default-un]
-       {E*3} = union({E*1}, {E*2})
+       {$Elem*3} = union({$Elem*1}, {$Elem*2})
        ==============================
-       union({E, E*1}, {E*2}) = {E, E*3}
+       union({$Elem, $Elem*1}, {$Elem*2}) = {$Elem, $Elem*3}
 
-%% --- diff(Bag1, Bag2)
+%% --- diff($Bag1, $Bag2)
 
-[df-1] diff({E*1, E, E*2}, {E*3, E, E*4}) = diff({E*1, E*2}, {E*3, E*4})
+[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
 
-[default-df-2] diff({E*1}, {E*2}) = {E*1}
+[default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-%% --- Bag1 inter Bag2
+%% --- $Bag1 inter $Bag2
 
-[in-1] inter({E*1, E*2}, {E*3, E*4}) = {E*'}
+[in-1] inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4}) = {$Elem*'}
        ==================================
-       inter({E*1, E, E*2}, {E*3, E, E*4}) = {E, E*'}
+       inter({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = {$Elem, $Elem*'}
 
 [default-in2] 
-       inter({E*1}, {E*2}) = {}
+       inter({$Elem*1}, {$Elem*2}) = {}
 
-%% --- size(Bag)
+%% --- size($Bag)
 
 [sz-1] size({}) = 0
-[sz-2] size({E, E*}) = 1 + size({E*})
+[sz-2] size({$Elem, $Elem*}) = 1 + size({$Elem*})
 
-%% --- in(E, Bag)
+%% --- in($Elem, $Bag)
 
-[in-1]  in(E, {E*1, E, E*2}) = true
+[in-1]  in($Elem, {$Elem*1, $Elem, $Elem*2}) = true
 
 [default-in-2]
-	in(E, {E*}) = false
+	in($Elem, {$Elem*}) = false
 
 %% if
 
-[if-1] if true then Bag1 else Bag2 fi = Bag1
-[if-2] if false then Bag1 else Bag2 fi = Bag2
+[if-1] if true then $Bag1 else $Bag2 fi = $Bag1
+[if-2] if false then $Bag1 else $Bag2 fi = $Bag2
 
 
 

@@ -1,15 +1,16 @@
 module Relations[Elem]
 
-exports
-imports EmptyRel
-
-imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]] 
-                           ]
- 
 imports Bags[Elem]
+imports Bags[Tuple] [ Bag[[Tuple]] => Rel[[Elem]] ]
+
+exports
+
+  sorts Tuple
 
   context-free syntax
-     EmptyRel                                		-> Rel[[Elem]]
+
+     Elem # Elem					-> Tuple
+%%     "EmptyRel"						-> Rel[[Elem]]
 
      compose(Rel[[Elem]], Rel[[Elem]])       		-> Rel[[Elem]]
     
@@ -19,7 +20,7 @@ imports Bags[Elem]
      
      domain(Rel[[Elem]])                       		-> Bag[[Elem]]
      range(Rel[[Elem]])                        		-> Bag[[Elem]]
-     carrier(Rel[[Elem]])                      		-> Bag[[Elem]]
+     carrier(Rel[[Elem]])                     		-> Bag[[Elem]]
 
      domR(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
      ranR(Rel[[Elem]], Bag[[Elem]])  			-> Rel[[Elem]]
@@ -42,8 +43,6 @@ imports Bags[Elem]
 
      Elem "." Rel[[Elem]]             			-> Bag[[Elem]]
      Bag[[Elem]] "." Rel[[Elem]]      			-> Bag[[Elem]]
-
-     size(Rel[[Elem]])                  		-> Integer
      reachX(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
      reachR(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
      trans-closure(Rel[[Elem]])                		-> Rel[[Elem]]
@@ -51,8 +50,6 @@ imports Bags[Elem]
 
      "(" Rel[[Elem]] ")"              			-> Rel[[Elem]] {bracket}
 
-%%     "if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
-%%							-> Rel[[Elem]]
 
 hiddens
   imports asf/syntax/Comments
@@ -61,14 +58,19 @@ hiddens
      closure(Rel[[Elem]],Rel[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
 
   variables
-     "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]
-     "Bag" [0-9\']*              -> Bag[[Elem]]
-     "Rel" [0-9\']*              -> Rel[[Elem]]
-     "E" [0-9\']*                -> Elem
-     "E*" [0-9\']*               -> { Elem ","}*
-     "E+" [0-9\']*               -> { Elem ","}+
-     "Tuple" [0-9\']*            -> Elem # Elem
-     "Tuple*" [0-9\']*           -> {Elem # Elem ","}*
+     "$Bag" [0-9\']*             -> Bag[[Elem]]
+     "$Rel" [0-9\']*             -> Rel[[Elem]]
+
+
+     "$Elem" [0-9\']*            -> Elem
+     "$Elem*" [0-9\']*           -> {Elem ","}*
+     "$Elem+" [0-9\']*           -> {Elem ","}+
+
+     "$Tuple" [0-9\']*		 -> Tuple
+     "$Tuple*" [0-9\']*          -> { Tuple ","}*
+     "$Tuple+" [0-9\']*          -> { Tuple ","}+
+
+
 
 
 
