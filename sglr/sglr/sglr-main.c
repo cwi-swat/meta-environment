@@ -268,7 +268,7 @@ void handle_options (int argc, char **argv)
     exit(0);
   }
   if(show_version) {
-    ATfprintf(stdout, "%s v%s\n", program_name, VERSION);
+    ATfprintf(stderr, "%s v%s\n", program_name, VERSION);
     exit(0);
   }
 }
