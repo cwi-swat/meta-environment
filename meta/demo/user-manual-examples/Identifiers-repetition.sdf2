@@ -1,0 +1,10 @@
+module Idetntifiers-repetition
+
+imports Layout
+
+exports
+  lexical syntax
+    [a-z]       -> Let
+    [a-z0-9]    -> NumLet
+
+    Let NumLet* -> Id

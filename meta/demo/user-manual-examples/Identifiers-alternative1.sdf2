@@ -1,0 +1,11 @@
+module Identifiers-alternative1
+
+imports Layout
+
+exports
+  lexical syntax
+    [A-Z]    -> UcLet
+    [a-z]*   -> ScLets
+    [0-9]*   -> Digs
+
+    UcLet ScLets | UcLet* | Digs -> Id

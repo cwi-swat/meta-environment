@@ -1,0 +1,11 @@
+module Strings
+
+imports Layout
+
+exports
+  sorts String StringChar
+
+lexical syntax
+   ~[\"\n]*              -> StringChar
+   [\\][\"]              -> StringChar
+   "\"" StringChar* "\"" -> String

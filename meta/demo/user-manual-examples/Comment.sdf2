@@ -1,0 +1,14 @@
+module Comment
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    [\ \n\t]     -> LAYOUT
+    ~[\ \n\t\/]+ -> ComWord
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+
+  context-free syntax
+    "/*" ComWord * "*/" -> Comment
+    Comment             -> LAYOUT
