@@ -1,5 +1,5 @@
 
-\section{\label{ToolsInTcl}Writing tools in Python}
+\section{\label{ToolsInPython}Writing tools in Python}
 
 You can write \TB\ tools in Python using a \TB -aware Python interpreter.
 How to build such a \TB -aware Python interpreter is explained in
@@ -90,6 +90,8 @@ a previously generated event. Perform the Python function call
 \item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of the
 python tool. Perform the Python function call
 {\tt rec\_terminate($Tid$, $A_1$)}.
+\end{itemize}
+
 
 \subsection{\label{Python-functions}Predefined Python functions}
 The following Python functions are predefined and can be used freely in Python
@@ -100,7 +102,7 @@ scripts executed by a \TB -aware Python interpreter.
 \item {\tt TB.parseArgs($Args$, $Module$)}:  Parse the commandline
       options in $Args$, and create a new tool instance. $Module$ is
       the Python module associated with this tool, for instance
-      {\tt "__main__"}. The tool is not yet connected to the \TB, until
+      \verb@ "__main__"@. The tool is not yet connected to the \TB, until
       {\tt TB.connect} is called. This function returns the new tool
       instance id, or raises an exception.
 

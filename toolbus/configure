@@ -417,7 +417,7 @@ fi
 
 
 PRODUCT=ToolBus
-VERSION=0.9.16h
+VERSION=0.9.17
 DEMOS="auction battleships calc cons edit game go-moku hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
@@ -2318,7 +2318,6 @@ trap 'rm -fr `echo "Makefile src/Makefile doc/Makefile \
 	adapters/tcltk-adapter/Makefile \
 	adapters/perl-adapter/Makefile \
 	adapters/python-adapter/Makefile \
-	adapters/python-adapter/python-adapter \
 	adapters/swipl-adapter/Makefile \
 	adapters/asf+sdf-adapter/Makefile \
 	adapters/gen-adapter/Makefile \
@@ -2386,7 +2385,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile doc/Makefile \
 	adapters/tcltk-adapter/Makefile \
 	adapters/perl-adapter/Makefile \
 	adapters/python-adapter/Makefile \
-	adapters/python-adapter/python-adapter \
 	adapters/swipl-adapter/Makefile \
 	adapters/asf+sdf-adapter/Makefile \
 	adapters/gen-adapter/Makefile \

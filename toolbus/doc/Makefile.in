@@ -66,7 +66,7 @@ install: Guide.ps.Z
 
 distclean: clean
 	rm -f Makefile adapters.tex
-	rm -rf adapters
+	rm -rf adapters/*
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -74,8 +74,6 @@ dist: $(DISTFILES)
 	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc; \
 	done
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/adapters
-	cp $(srcdir)/adapters/README \
-		$(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/adapters/README
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src
 	cp $(srcdir)/src/README \
 		$(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src/README

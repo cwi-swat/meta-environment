@@ -18,6 +18,8 @@
 #undef		term
 #include	<TB.h>
 
+#define DEBUG 1
+
 /*
  * Global constants, can be overriden in Makefile.
  * PL_VAR_NAME has a reasonable default;
@@ -59,7 +61,7 @@ static void do_pl_display(term_t t)
 	functor_t	functor;
 	int			arity, n;
 
-	switch(PL_type(t))
+	switch(PL_term_type(t))
 	{
 	case PL_VARIABLE:
 		fprintf(stderr, "_%d", (int) t);
