@@ -2,8 +2,9 @@ module ToolBusExtraction
 
 imports RelationCalculator
 imports ToolBusOperations
-imports MyPosInfo[VarDecl]
 imports MyPosInfo[Var]
+imports MyPosInfo[VarDecl]
+imports MyPosInfo[ProcessDef]
 
 exports
   context-free syntax
@@ -17,18 +18,21 @@ hiddens
     extractRelations(ProcessDef, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
-    findVarInProcess(ProcessDef, RSTORE, ProcessName)
+    findVarInProcess(ProcessDef, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
-    findVarInProcess(VarDecl, RSTORE, ProcessName)
+    findVarInProcess(VarDecl, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
-    findVarInProcess(GenVar, RSTORE, ProcessName)
+    findVarInProcess(GenVar, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
   variables
     "$Area"[0-9]*		-> Area      
     "$Rstore"[0-9]*		-> RSTORE
+    "$Tuple"[0-9]*		-> Elem # Elem
+    "$VarId"[0-9]*		-> Area
+    "$ProcessDefId"		-> Area
 
     "$TscriptDefs"[0-9]*	-> TscriptDef*
     "$ProcessDef"[0-9]*		-> ProcessDef

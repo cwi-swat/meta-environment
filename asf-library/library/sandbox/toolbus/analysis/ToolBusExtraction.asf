@@ -1,32 +1,31 @@
 equations
 
   [extractRelations-start]
-    $Area =  area("",0,0,0,0),
-    $Rstore = assign(ROOT, $Area, [])
-    ===>
-    extractRelations($TscriptDefs) =
-      extractRelations($TscriptDefs, $Rstore)
+    extractRelations($TscriptDefs) = extractRelations($TscriptDefs, [])
 
   [extractRelations-process]
-    
-    $Rstore1 = findVarInProcess($ProcessDef, $Rstore, JustAProcessName)
-    ===>
-    extractRelations($ProcessDef, $Rstore) = $Rstore1
+    extractRelations($ProcessDef, $Rstore)
+	= findVarInProcess($ProcessDef, $Rstore, get-area($ProcessDef))
 
   [extractRelations-vardecl]
-    $Area1 = get-area(Var),
-    $Rstore2 = add-tuple(DECLS, <$Area1, var2str(Var)>, $Rstore1)
+    $Tuple = <$ProcessDefId, var2str($Var)>,
+    $Rstore2 = add-tuple(DECLS, $Tuple, $Rstore1),
+    $Tuple2 = <$Tuple, get-area($Var)>,
+    $Rstore3 = add-tuple(DECL_OCCURS, $Tuple2, $Rstore2)
     ===>
-    findVarInProcess(Var : $Term, $Rstore1, $ProcessName) = $Rstore2
+    findVarInProcess($Var : $Term, $Rstore1, $ProcessDefId) = $Rstore3
 
   [extractRelations-genvar]
-    $Area1 = get-area($Var),
-    $Rstore2 = add-tuple(USES, <$Area1, var2str($Var)>, $Rstore1)
+    $Tuple = <get-area($Var), var2str($Var)>,
+    $Rstore2 = add-tuple(USES, $Tuple, $Rstore1)
     ===>
-    findVarInProcess($Var, $Rstore1, $ProcessName) = $Rstore2
+    findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore2
 
   [extractRelations-genvar-q]
-    $Area1 = get-area($Var),
-    $Rstore2 = add-tuple(USES, <$Area1, var2str($Var)>, $Rstore1)
+    $VarId = get-area($Var),
+    $Tuple = <$VarId, var2str($Var)>,
+    $Rstore2 = add-tuple(YIELD, $Tuple, $Rstore1),
+    $Tuple2 = <$ProcessDefId, $VarId>,
+    $Rstore3 = add-tuple(DEFS, $Tuple2, $Rstore2)
     ===>
-    findVarInProcess($Var?, $Rstore1, $ProcessName) = $Rstore2
+    findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3
