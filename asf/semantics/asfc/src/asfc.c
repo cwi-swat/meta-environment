@@ -45,6 +45,7 @@
 #include <time.h>
 
 #include <asc-support.h>
+#include <AsFix2src.h>
 
 #include "compiler.tif.h"
 
