@@ -1,0 +1,27 @@
+module twine
+
+imports Tscript
+
+exports
+  context-free start-symbols
+    Tscript
+
+exports
+  context-free syntax
+  "substitute-process" "(" Tscript "," ProcessDef ")" -> Tscript
+  "substitute-processes" "(" Tscript "," ProcessDef+ ")" -> Tscript
+
+hiddens
+  context-free syntax
+    "get-process-name" "(" ProcessDef ")" -> ProcessName
+    "get-process-name" "(" ProcessSignature ")" -> ProcessName
+
+  variables
+  "$Tscript"[0-9]* -> Tscript
+  "$TscriptDef*"[0-9]* -> TscriptDef*
+  "$FormalParam*"[0-9]* -> {FormalParam ","}*
+  "$ProcessBody"[0-9]* -> ProcessBody
+  "$ProcessDef"[0-9]* -> ProcessDef
+  "$ProcessDef+"[0-9]* -> ProcessDef+
+  "$ProcessName"[0-9]* -> ProcessName
+  "$ProcessSignature"[0-9]* -> ProcessSignature

@@ -1,0 +1,25 @@
+equations
+
+['] substitute-processes($Tscript, $ProcessDef)
+    = substitute-process($Tscript, $ProcessDef)
+
+['] $Tscript2 := substitute-process($Tscript1, $ProcessDef),
+    $Tscript3 := substitute-processes($Tscript2, $ProcessDef+)
+    ===>
+    substitute-processes($Tscript1, $ProcessDef $ProcessDef+) = $Tscript3
+
+['] substitute-process(, $ProcessDef) =
+
+[']
+  get-process-name($ProcessDef1) == get-process-name($ProcessDef2)
+  ===>
+  substitute-process($TscriptDef*1 $ProcessDef1 $TscriptDef*2, $ProcessDef2) = 
+    $TscriptDef*1 $ProcessDef2 $TscriptDef*2
+
+['] get-process-name($ProcessName) = $ProcessName
+
+['] get-process-name($ProcessName($FormalParam*)) = $ProcessName
+
+[']
+  get-process-name(process $ProcessSignature is $ProcessBody)
+  = get-process-name($ProcessSignature)

@@ -7,37 +7,37 @@ exports
   sorts Tscript
 
   context-free syntax
-    %%TscriptDef* -> Tscript {cons("tscript")}
-    Preprocessor* TscriptDef* -> Tscript {cons("tscript")}
+    TscriptDef* -> Tscript {cons("tscript")}
+%%  Preprocessor* TscriptDef* -> Tscript {cons("tscript")}
 
-exports
-  sorts Preprocessor
-  sorts IncludeFile
-  context-free syntax
-    IncludeFile -> Preprocessor
-    LocalInclude -> IncludeFile
-    SystemInclude -> IncludeFile
-    %%Hack
-    %%IncludeFile -> LAYOUT
-
-  sorts LocalInclude
-  lexical syntax
-    "#include" [\ \t]* "<" FileName ">" -> SystemInclude
-
-  sorts SystemInclude
-  lexical syntax
-    "#include" [\ \t]* "\"" FileName "\"" -> LocalInclude
-
-  lexical syntax
-    [a-zA-Z0-9\.\-]* -> FileName
-
-hiddens
-  sorts FileName
-
-exports
-  lexical syntax
-    "#ifdef" [\ \t]* Vname -> Preprocessor
-    "#ifndef" [\ \t]* Vname -> Preprocessor
-    "#else" -> Preprocessor
-    "#define" [\ \t]* Vname ~[\n]* [\n] -> Preprocessor
-    "#endif" -> Preprocessor
+%% exports
+%%   sorts Preprocessor
+%%   sorts IncludeFile
+%%   context-free syntax
+%%     IncludeFile -> Preprocessor
+%%     LocalInclude -> IncludeFile
+%%     SystemInclude -> IncludeFile
+%%     %%Hack
+%%     %%IncludeFile -> LAYOUT
+%% 
+%%   sorts LocalInclude
+%%   lexical syntax
+%%     "#include" [\ \t]* "<" FileName ">" -> SystemInclude
+%% 
+%%   sorts SystemInclude
+%%   lexical syntax
+%%     "#include" [\ \t]* "\"" FileName "\"" -> LocalInclude
+%% 
+%%   lexical syntax
+%%     [a-zA-Z0-9\.\-]* -> FileName
+%% 
+%% hiddens
+%%   sorts FileName
+%% 
+%% exports
+%%   lexical syntax
+%%     "#ifdef" [\ \t]* Vname -> Preprocessor
+%%     "#ifndef" [\ \t]* Vname -> Preprocessor
+%%     "#else" -> Preprocessor
+%%     "#define" [\ \t]* Vname ~[\n]* [\n] -> Preprocessor
+%%     "#endif" -> Preprocessor
