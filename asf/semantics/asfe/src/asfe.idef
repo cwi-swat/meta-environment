@@ -9,9 +9,7 @@ let
   NormalForm : term,
   ErrorList  : list,
   Id         : term,
-  Tide       : term,
-  Path       : str,
-  Table      : term
+  Tide       : term
 in
   Id := process-id .
   (
@@ -21,17 +19,7 @@ in
     execute(asfe, Eval?) .
     snd-eval(Eval, interpret(ModuleName, Equations, Term, Tide)) .
     (
-      rec-value(Eval, rewrite-result(NormalForm?)) .
-      snd-msg(get-parsetable(trm(ModuleName))) .
-      (
-        rec-msg(parse-table(Table?, Path?)) .
-	snd-msg(restore-brackets(NormalForm, Table)) .
-	rec-msg(brackets-restored(NormalForm?)) .
-        snd-msg(rewrite-result(NormalForm))
-      +
-        rec-msg(no-parse-table) .
-	snd-msg(rewrite-errors([]))
-      )
+      rec-value(Eval, rewrite-result(NormalForm?)) 
     +
       rec-value(Eval, rewrite-errors(ErrorList?)) .
       snd-msg(rewrite-errors(ErrorList))
