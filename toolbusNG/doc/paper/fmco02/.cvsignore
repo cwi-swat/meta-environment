@@ -1,0 +1,6 @@
+*.class
+*.swp
+*.tifs
+AddressBookTif.java
+AddressBookTool.java
+AddressBookBridge.java
