@@ -63,27 +63,31 @@ ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort)
   ATerm result;
 
   pt = SG_BuildParseTable((ATermAppl) ATBunpack(parseTable), NULL);
-  assert(pt != NULL);
 
-  result = SGparseStringAsAsFix(input, (SGLR_ParseTable)pt, topSort, NULL);
+  if (pt != NULL) {
+    result = SGparseStringAsAsFix(input, (SGLR_ParseTable)pt, topSort, NULL);
 
-  if (ERR_isValidError(ERR_ErrorFromTerm(result))) {
-    result = ATmake("parse-error(<term>)", result);
-  }
-  else if (ATgetAFun((ATermAppl)result) == SG_AmbiguousTree_AFun) {
-    ATerm error = ATgetArgument((ATermAppl)result, 1);
-    tree = ATgetArgument((ATermAppl)result, 0);
-    result = ATmake("parse-forest(<term>,<term>)", ATBpack(tree), error);
-  }
-  else if (ATmatch(result, "parsetree(<term>,<int>)", &tree, &ambiguityCount)) {
-    result = ATmake("parse-tree(parsetree(<term>,<int>))",
-		      ATBpack(tree), ambiguityCount);
+    if (ERR_isValidError(ERR_ErrorFromTerm(result))) {
+      result = ATmake("parse-error(<term>)", result);
+    }
+    else if (ATgetAFun((ATermAppl)result) == SG_AmbiguousTree_AFun) {
+      ATerm error = ATgetArgument((ATermAppl)result, 1);
+      tree = ATgetArgument((ATermAppl)result, 0);
+      result = ATmake("parse-forest(<term>,<term>)", ATBpack(tree), error);
+    }
+    else if (ATmatch(result, "parsetree(<term>,<int>)", &tree, &ambiguityCount)) {
+      result = ATmake("parse-tree(parsetree(<term>,<int>))",
+		        ATBpack(tree), ambiguityCount);
+    }
+    else {
+      ATwriteToNamedBinaryFile(result, "parse.out");
+      ATabort("sglr-main.c:unhandled parse result (see parse.out)\n");
+    }
   }
   else {
-    ATwriteToNamedBinaryFile(result, "parse.out");
-    ATabort("sglr-main.c:unhandled parse result (see parse.out)\n");
+    result = ERR_ErrorToTerm(SG_makeParseTableErrorError());
+    result = ATmake("parse-error(<term>)", result);
   }
-
   return ATmake("snd-value(<term>)", result);
 }
 

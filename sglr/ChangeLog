@@ -1,5 +1,8 @@
 $Id$
 
+Wed Dec  1 13:24:18 CET 2004 <markvdb@cwi.nl,kooiker@cwi.nl>
+ * Fixed the handling of illegal parse tables, closes bug #406.
+
 Sun Oct 24 11:48:15 CEST 2004 <jong@cwi.nl>
  * package:
    - bump version to 3.12.1 as 3.12 was apparently already
