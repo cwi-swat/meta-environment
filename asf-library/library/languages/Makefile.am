@@ -9,4 +9,5 @@ SUBDIRS = \
 	cpp \
 	c \
 	pico \
-	sdf2 
+	sdf2  \
+	tex

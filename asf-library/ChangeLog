@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jan 27 09:18:01 CET 2005 <jurgenv@cwi.nl>
+ * Bumped to 1.2 version
+
 Wed Jan 26 10:13:00 CET 2005 <jurgenv@cwi.nl>
  * Added specifications: languages/asf/compiler and
    languages/asf/normalization. The compiler moved from the ASF package.
