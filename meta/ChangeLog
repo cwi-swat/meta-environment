@@ -6,6 +6,10 @@
    file by retrieving them from the store and overwriting the files on
    disk. It does not automagically also write the .trm.tbl file anymore,
    you can use the "Dump Parsetable" menu option for that.
+ * Removed initialization of metastudio with extensions and library locations
+ * Fixed a very strange bug: the type of updateList in the idef and the
+   studio differed. Now reading in a string that is converted to an ATerm
+   by calling factory.parse. 
 
 2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
