@@ -34,11 +34,6 @@ in
   (
     rec-msg(set-filename(EditorId, FileName?)) .
     snd-eval(TE, edit-file(FileName))
-/*
-  +
-    rec-msg(set-text(EditorId, Text?)) .
-    snd-eval(TE, edit-text("*reduct*", Text))
-*/
   ) .
   rec-value(TE, file-id(Fid?)) .
   if not-equal(EditorType, "term") then
@@ -57,13 +52,6 @@ in
       tau
     fi
   fi .
-/*
-  if equal(EditorType, "term") then
-    snd-do(TE, tb-add-menu-item("Meta-Environment", "Reduce"))
-  else
-    tau
-  fi .
-*/
   snd-do(TE, tb-add-menu-item("Move", "Left")) .
   snd-do(TE, tb-add-menu-item("Move", "Right")) .
   snd-do(TE, tb-add-menu-item("Move", "Up")) .
