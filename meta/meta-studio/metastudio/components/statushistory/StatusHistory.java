@@ -1,31 +1,35 @@
-package metastudio.components;
+package metastudio.components.statushistory;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import metastudio.MultiBridge;
-import metastudio.UserInterfacePanel;
 import metastudio.data.ListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
+import aterm.ATermFactory;
 import aterm.ATermList;
 
 // todo: add copy paste facility?
-public class HistoryPanel extends UserInterfacePanel {
+public class StatusHistory extends JPanel implements StatusHistoryTif, Runnable {
+	private StatusHistoryBridge bridge;
+	private ATermFactory factory;
+	
     private JList list;
     private ListModel data;
     private DateFormat dateFormat;
 
-    public HistoryPanel(aterm.ATermFactory factory, MultiBridge bridge) {
-        super(factory, bridge);
+    public StatusHistory(aterm.ATermFactory factory, String[] args) {
+    	this.factory = factory;
 
         this.data = new ListModel(new LinkedList());
 
@@ -39,6 +43,15 @@ public class HistoryPanel extends UserInterfacePanel {
         String format = Preferences.getString("history.dateformat");
         dateFormat = new SimpleDateFormat(format);
         add(new JScrollPane(list), BorderLayout.CENTER);
+        
+        try {
+        	bridge = new StatusHistoryBridge(factory, this);
+        	bridge.init(args);
+        	bridge.setLockObject(this);
+        	bridge.connect("status-history", null, -1);
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
     }
     
     private void scrollToLast() {
@@ -55,16 +68,16 @@ public class HistoryPanel extends UserInterfacePanel {
         scrollToLast();
     }
     
-    public void addStatus(ATerm id, String message) {
+    public void logStatus(ATerm id, String message) {
         addMessage(id.toString(), message);
     }
 
-    public void addStatusf(ATerm id, String format, ATerm args) {
+    public void logStatusf(ATerm id, String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
         addMessage(id.toString(), message);
     }
     
-    public void endStatus(ATerm id) {
+    public void logEndStatus(ATerm id) {
         String date = dateFormat.format(Calendar.getInstance().getTime());
         data.add(date + " - " + id + " - done");
         scrollToLast();
@@ -74,4 +87,16 @@ public class HistoryPanel extends UserInterfacePanel {
         data.setList(new LinkedList());
         repaint();
     }
+
+	public void recTerminate(ATerm t0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void run() {
+		bridge.run();
+		
+	}
+
+	
 }

@@ -1,0 +1,28 @@
+tool status-history is { }
+
+process StatusHistory is
+let
+  T : status-history,
+  Id: term,
+  List: list,
+  Arguments: list,
+  Str : str
+in
+  subscribe(ui-status(<term>))
+  . Id := process-id
+  . rec-connect(T?)
+  . (
+      rec-note(ui-status(stat(Id?, Str?)))
+      . snd-do(T, log-status(Id, Str))
+    +
+      rec-note(ui-status(statf(Id?, Str?, Arguments?)))
+      . snd-do(T, log-statusf(Id, Str, Arguments))
+    +
+      rec-note(ui-status(endstat(Id?)))
+      . snd-do(T, log-end-status(Id))
+    )
+    *
+    rec-disconnect(T)
+endlet
+
+toolbus(StatusHistory)

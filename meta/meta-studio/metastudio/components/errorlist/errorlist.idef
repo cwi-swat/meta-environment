@@ -5,7 +5,8 @@ let
   T : error-list,
   Summary : term,
   Producer : str,
-  SummaryId : str
+  SummaryId : str,
+  Error : term
 in
   rec-connect(T?)
   . 

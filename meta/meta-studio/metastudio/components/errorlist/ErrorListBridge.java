@@ -1,6 +1,6 @@
 // Java tool bridge ErrorListBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 10:59:26 AM
+// generation time: Nov 25, 2004 1:54:44 PM
 
 package metastudio.components.errorlist;
 
@@ -43,6 +43,19 @@ public class ErrorListBridge
     }
     else {
       throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void recAckEvent(ATerm t0)
+
+  public void recAckEvent(ATerm t0)
+  {
+    if (tool != null) {
+      tool.recAckEvent(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `recAckEvent' not supported.");
     }
   }
 

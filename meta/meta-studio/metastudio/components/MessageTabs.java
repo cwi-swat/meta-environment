@@ -6,6 +6,7 @@ import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
 import metastudio.components.errorlist.ErrorList;
 import metastudio.components.infolist.*;
+import metastudio.components.statushistory.*;
 import aterm.ATermFactory;
 
 public class MessageTabs extends UserInterfacePanel {
@@ -20,7 +21,10 @@ public class MessageTabs extends UserInterfacePanel {
     private void createMessageTabs(String[] args) {
         messageTabs = new JTabbedPane();
 
-        HistoryPanel historyPanel = new HistoryPanel(getFactory(), getBridge());
+        StatusHistory historyPanel = new StatusHistory(getFactory(), args);
+        Thread historyThread = new Thread(historyPanel);
+        historyThread.setName("history-list");
+        historyThread.start();
         
         ErrorList errorList = new ErrorList(getFactory(), args);
         Thread errorListThread = new Thread(errorList);

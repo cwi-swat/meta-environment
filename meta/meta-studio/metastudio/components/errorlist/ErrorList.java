@@ -131,4 +131,8 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 	public void run() {
 		bridge.run();
 	}
+
+	public void recAckEvent(ATerm t0) {
+		
+	}
 }

@@ -1,33 +1,33 @@
-// Java tool interface class ErrorListTool
+// Java tool interface class StatusHistoryTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 1:54:44 PM
+// generation time: Nov 25, 2004 1:47:58 PM
 
-package metastudio.components.errorlist;
+package metastudio.components.statushistory;
 
 import aterm.*;
 import toolbus.*;
 import java.util.*;
 
-abstract public class ErrorListTool
+abstract public class StatusHistoryTool
   extends SwingTool
-  implements ErrorListTif
+  implements StatusHistoryTif
 {
   // This table will hold the complete input signature
   private Map sigTable = new HashMap();
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PshowFeedbackSummary0;
-  private ATerm PremoveFeedbackSummary0;
-  private ATerm PrecAckEvent0;
+  private ATerm PlogStatus0;
+  private ATerm PlogEndStatus0;
+  private ATerm PlogStatusf0;
   private ATerm PrecTerminate0;
 
   //}}}
 
-  //{{{  protected ErrorListTool(ATermFactory factory)
+  //{{{  protected StatusHistoryTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
-  protected ErrorListTool(ATermFactory factory)
+  protected StatusHistoryTool(ATermFactory factory)
   {
     super(factory);
     initSigTable();
@@ -41,10 +41,10 @@ abstract public class ErrorListTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<error-list>,show-feedback-summary(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<error-list>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<error-list>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<error-list>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<status-history>,log-status(<term>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<status-history>,log-statusf(<term>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<status-history>,log-end-status(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-terminate(<status-history>,<term>)"), new Boolean(true));
   }
 
   //}}}
@@ -53,9 +53,9 @@ abstract public class ErrorListTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
-    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
-    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
+    PlogStatus0 = factory.parse("rec-do(log-status(<term>,<str>))");
+    PlogEndStatus0 = factory.parse("rec-do(log-end-status(<term>))");
+    PlogStatusf0 = factory.parse("rec-do(log-statusf(<term>,<str>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -68,19 +68,19 @@ abstract public class ErrorListTool
   {
     List result;
 
-    result = term.match(PshowFeedbackSummary0);
+    result = term.match(PlogStatus0);
     if (result != null) {
-      showFeedbackSummary((ATerm)result.get(0));
+      logStatus((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
-    result = term.match(PremoveFeedbackSummary0);
+    result = term.match(PlogEndStatus0);
     if (result != null) {
-      removeFeedbackSummary((String)result.get(0), (String)result.get(1));
+      logEndStatus((ATerm)result.get(0));
       return null;
     }
-    result = term.match(PrecAckEvent0);
+    result = term.match(PlogStatusf0);
     if (result != null) {
-      recAckEvent((ATerm)result.get(0));
+      logStatusf((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PrecTerminate0);
