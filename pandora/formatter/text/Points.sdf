@@ -1,14 +1,14 @@
 module Points
 
-imports Integer-Ops
+imports 
+  Integer-Ops
+  Conditionals[X]
+
 exports
-  context-free start-symbols Point
   sorts Point
   context-free syntax
-    "(" Integer "," Integer ")" -> Point
-
-    "if"  Boolean "then" Point "else" Point "fi" -> Point
+    "(" x:Integer "," y:Integer ")" -> Point
 
 hiddens
   variables
-    "Point"[0-9]*     -> Point
+    "Point"[0-9]* -> Point

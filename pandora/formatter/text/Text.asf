@@ -1,20 +1,11 @@
 equations
 
-  [c-1] text2btext(string*) = strings2bytes(string*,)
+[fwd]
+  concat-reverse(text) = concat-reverse(text, bytes())
 
-  [c-2] strings2bytes(,bytes*) = bytes* 
+[one]
+  concat-reverse(, bytes) = bytes
 
-  [c-2] strings2bytes(string string*, bytes*) = 
-          strings2bytes(string*, string2bytes(string) bytes*)
-
-  [c-3] bytes := string-to-bytes(string)
-        ===>
-        string2bytes(string) = bytes || newlinechar
-
-  [bc-1'3] bytes(Char*1) || bytes(Char*2) =
-             bytes(Char*1 Char*2)
-
-tests
-
-[newlineconc] 
-bytes-to-string(string-to-bytes("aap") || newlinechar) == "aap\n"
+[more]
+  concat-reverse(bytes1 bytes*, bytes2) =
+    concat-reverse(bytes*, bytes1 || newlinechar || bytes2)

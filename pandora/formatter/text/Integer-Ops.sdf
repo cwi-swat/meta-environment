@@ -2,16 +2,12 @@ module Integer-Ops
 
 imports basic/Comments
         basic/Integers
+        Conditionals[Integer]
 
 exports
   context-free syntax
-    max(Integer, Integer) -> Integer 
     min(Integer, Integer) -> Integer 
-    "if" Boolean "then" Integer "else" Integer "fi" -> Integer
 
 hiddens
   variables
-    [ij]        -> Integer
-    "Int"[0-9]* -> Integer
-
-%%%
+    [ij] -> Integer

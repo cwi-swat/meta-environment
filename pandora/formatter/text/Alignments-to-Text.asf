@@ -1,17 +1,3 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
- 
 equations
 
 [ABtI1'1] 
@@ -155,7 +141,7 @@ equations
   [ABtI10'2]  (X,Y) & Defs := Frame1,
               Frame2 := set rmargin Int1 in (0,0) & Defs,
               Frame3 := set lmargin in Frame2,
-              Struct2 := place B with Frame3 and "" && (0,0) and H,
+              Struct2 := place B with Frame3 and empty && (0,0) and H,
               Struct3 := align left Struct2 with Frame3,
               Text2 && Point2 := concat (Struct1,Struct3) with Frame1,
               Hs := set hs value given so* and Frame1,
@@ -167,7 +153,7 @@ equations
   [ABtI10'3]  (X,Y) & Defs := Frame1,
               Frame2 := set rmargin Int1 in (0,0) & Defs,
               Frame3 := set lmargin in Frame2,
-              Struct2 := place B with Frame3 and "" && (0,0) and H,
+              Struct2 := place B with Frame3 and empty && (0,0) and H,
               Struct3 := align right Struct2 with Frame3,
               Text2 && Point2 := concat (Struct1,Struct3) with Frame1,
               Hs := set hs value given so* and Frame1,
@@ -179,7 +165,7 @@ equations
   [ABtI10'4]  (X,Y) & Defs := Frame1,
               Frame2 := set rmargin Int1 in (0,0) & Defs,
               Frame3 := set lmargin in Frame2,
-              Struct2 := place B with Frame3 and "" && (0,0) and H,
+              Struct2 := place B with Frame3 and empty && (0,0) and H,
               Struct3 := align center Struct2 with Frame3,
               Text2 && Point2 := concat (Struct1,Struct3) with Frame1,
               Hs := set hs value given so* and Frame1,
@@ -187,9 +173,6 @@ equations
               ====================================
               align R [B B*] given (c,ao*) so* with Frame1 and Struct1 and (Int1,Int1) Point* =
                 align R [B*] given (ao*) so* with Frame4 and Text2 && Point2 and Point*
-
-%%[default-ABtI10'5] align B given (ao*) so* with Frame and Struct and Align-info =
-%%                       align R [B] given (ao*) so* with Frame and Struct and Align-info
 
   [ABtI11'1]  get column A (ao*) [] =
 
@@ -199,7 +182,7 @@ equations
 
   [ABtI11'3]  B*3 := get column A (ao*) [B*2]
               ==============================
-              get column A (ao*) [R [] B*2] = "" B*3
+              get column A (ao*) [R [] B*2] = empty B*3
 
   [default-ABtI11'4] B*3 := get column A (ao*) [B*2]
                      ==============================

@@ -4,23 +4,19 @@ imports Basic-to-Text
 imports ExtendedIntegers
 
 exports
-  %%sorts
-  %%  TextStruct
-  %%context-free syntax
-  %%  TEXT "&&" POINT                                       -> TextStruct
   context-free syntax
     "align" "left" TextStruct "with" Frame                   -> TextStruct
     "align" "right" TextStruct "with" Frame                  -> TextStruct
     "align" "center" TextStruct "with" Frame                 -> TextStruct
     "concat" "(" TextStruct "," TextStruct ")" "with" Frame  -> TextStruct
-    "add" "to" "last" "line" "(" Text "," String ")"         -> Text
+    "add" "to" "last" "line" "(" Text "," Bytes ")"         -> Text
 
 hiddens
   variables
     "Defs" -> Defs
     "Frame" -> Frame
     "Int"[0-9]* -> Integer
-    "String"[0-9]* -> String
-    "Text"[0-9]* -> String
+    "String"[0-9]* -> Bytes
+    "Text"[0-9]* -> Bytes
     "X"[0-9]* -> Integer
     "Y"[0-9]* -> Integer

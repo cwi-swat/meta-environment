@@ -1,58 +1,29 @@
 equations
-    [Out5'1]  string of Int layoutchars = string of Int " " chars
+    [Out5'1]  string of Int layoutchars = string of Int bytes(byte(\32)) chars
 
     [Out6'1]  Int <= 0 == true
               ===============
-              string of Int strcon(""" Ch """) chars = ""
-    [Out6'2]  string of 1 strcon(""" Ch """) chars = strcon(""" Ch """)
-    [Out6'3]  string of 2 strcon(""" Ch """) chars = strcon(""" Ch Ch """)
-    [Out6'4]  string of 3 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch """)
-    [Out6'5]  string of 4 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch """)
-    [Out6'6]  string of 5 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch """)
-    [Out6'7]  string of 6 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch """)
-    [Out6'8]  string of 7 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch Ch """)
-    [Out6'9]  Int > 7 == true
-              ==============
-              string of Int strcon(""" Ch """) chars =
-                strcon(""" Ch Ch Ch Ch Ch Ch Ch """) || string of Int-7 strcon(""" Ch """) chars
+              string of Int bytes(_byte) chars = bytes()
 
-%%    [Sop7'1]  deslash(strcon(""" """)) =
-%%                strcon(""" """)
-%%
-%%    [Sop7'2]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%              ========================================================
-%%              deslash(strcon(""" "\"""" Char*2 """)) =
-%%                strcon(""" """ Char*4 """)
-%%
-%%    [Sop7'3]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%              ==================================================================
-%%              deslash(strcon(""" "\""\" Char*2 """)) =
-%%                strcon(""" "\" Char*4 """)
-%%
-%%    [default-Sop7'4] strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
-%%                     ==================================================================
-%%                     deslash(strcon(""" Char Char*2 """)) =
-%%                       strcon(""" Char Char*4 """)
+    [Out6'2]  string of 1 bytes(byte) chars = bytes(byte)
+    [Out6'3]  string of 2 bytes(byte) chars = bytes(byte byte)
+    [Out6'4]  string of 3 bytes(byte) chars = bytes(byte byte byte)
+    [Out6'5]  string of 4 bytes(byte) chars = bytes(byte byte byte byte)
+    [Out6'6]  string of 5 bytes(byte) chars = bytes(byte byte byte byte byte)
 
-[deslash-0]
-  anychar(Char*2) := deslash-chars(anychar(Char*1))
-  ===>
-  deslash(strcon(""" Char*1 """)) = strcon(""" Char*2 """)
+  [Out6'7] 
+    string of 6 bytes(byte) chars = bytes(byte byte byte byte byte byte)
 
-[deslash-chars-0]
-  deslash-chars() =
+  [Out6'8]
+    string of 7 bytes(byte) chars = bytes(byte byte byte byte byte byte byte )
 
-[deslash-chars-1]
-  anychar(Char*2) := deslash-chars(anychar(Char*1))
-  ===>
-  deslash-chars(anychar("\" """ Char*1)) = anychar(""" Char*2)
+  [Out6'9]  
+    Int > 7 == true
+    ===>
+    string of Int bytes(byte) chars = bytes(byte byte byte byte byte byte byte) 
+      || string of Int-7 bytes(byte) chars
 
-[deslash-chars-2]
-  anychar(Char*2) := deslash-chars(anychar(Char*1))
-  ===>
-  deslash-chars(anychar("\" "\" Char*1)) = anychar("\" Char*2)
+equations
 
-[default-deslash-chars]
-  anychar(Char*2) := deslash-chars(anychar(Char*1))
-  ===>
-  deslash-chars(anychar(Char Char*1)) = anychar(Char Char*2)
+  [concat]
+    bytes(byte*1) || bytes(byte*2) = bytes(byte*1 byte*2)

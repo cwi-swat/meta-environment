@@ -1,41 +1,26 @@
 module Text
-%%
-%% A text is simply a list of strings, where each string denotes
-%% a line on a display. We will use \var{T} as variable for texts.
-%%\smallskip
 
 imports basic/Comments
-        basic/Strings
-        NewLine
+imports Outstrings
+imports NewLine
 
 exports
   sorts Text
-  context-free syntax
-    String* -> Text {constructor}
-
-  sorts BText
-  context-free syntax
-    Bytes*  -> BText {constructor} 
 
   context-free syntax
-    text2btext(String*)            -> Bytes*
-    strings2bytes(String*, Bytes*) -> Bytes*
-    string2bytes(String)           -> Bytes
+    Bytes* -> Text {constructor}
 
   context-free syntax
-      Bytes "||" Bytes -> Bytes {right}
-      "(" Bytes ")"    -> Bytes {bracket}
+    concat-reverse(Text) -> Bytes
 
 hiddens
+  context-free syntax
+    concat-reverse(Text,Bytes) -> Bytes
+
   variables
-    "string"  -> String
-    "string*" -> String*
-    "bytes"   -> Bytes
-    "bytes*"  -> Bytes*
-
-    "Char+"[0-9]*  -> CHAR+
-    "Char*"[0-9]*  -> CHAR*
-
-    
-
-%%%
+    "bytes"[0-9]* -> Bytes
+    "bytes*"[0-9]* -> Bytes*
+    "text"[0-9]* -> Text
+ 
+  lexical variables
+    "byte*"[0-9]* -> Byte*

@@ -7,4 +7,4 @@ imports Fonts-to-Text
 
 exports
   context-free start-symbols
-    BText
+    Text

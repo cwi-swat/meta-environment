@@ -1,36 +1,30 @@
 module Outstrings
 
-  imports
+imports
     basic/Comments
     basic/Strings 
     basic/Integers
 
-  exports
-    context-free start-symbols String
+exports
+  context-free start-symbols String
 
-  exports
-    context-free syntax
-      "string" "of" Integer "layoutchars"  -> String
-      "string" "of" Integer String "chars" -> String
-      deslash(String)                      -> String 
+exports
+  context-free syntax
+    "string" "of" Integer "layoutchars"  -> Bytes 
+    "string" "of" Integer Bytes "chars" -> Bytes
+ 
+    %% nesting on the right makes concatenation faster 
+    Bytes "||" Bytes -> Bytes {right} 
 
-  hiddens
-    context-free syntax
-      deslash-chars(ANYCHAR) -> ANYCHAR
+hiddens
+  lexical variables
+    "byte"[0-9]* -> Byte {strict}
+    "byte*"[0-9]* -> Byte* {strict}
+    "any"[0-9]*  -> ~[]  {strict}
 
-  hiddens
-    sorts ANYCHAR
+  lexical variables
+    "_byte"[0-9]* -> Byte {wild}
 
-  hiddens
-    lexical syntax
-      [a]* -> ANYCHAR
-
-  hiddens
-    variables
-      "Ch"[0-9]*     -> CHAR
-      "Char"[0-9]*   -> CHAR
-      "Char*"[0-9]*  -> CHAR*
-      "Char+"[0-9]*  -> CHAR+
-      "Int"[0-9]*    -> Integer
-      "String"[0-9]* -> String
-      
+  variables
+    "Int"[0-9]*    -> Integer
+    "String"[0-9]* -> String

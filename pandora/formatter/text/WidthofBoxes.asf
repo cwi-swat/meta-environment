@@ -1,9 +1,8 @@
 equations
 
-  [WoB1'1]   String2 := deslash(String1),
-             Int := length(String2)
+  [WoB1'1]   Int := length(String)
              =======================
-             width of String1 with Frame = Int
+             width of String with Frame = Int
 
   [WoB1'2]   width of H so* [] with Frame = 0
 

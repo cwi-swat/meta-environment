@@ -1,6 +1,6 @@
 module Frame
 
-imports languages/box/syntax/Box
+imports Strings
 
 imports Points
 

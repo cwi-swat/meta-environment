@@ -1,12 +1,12 @@
 equations
 
-  [CBtT1'1]   V [B*2] (X1,Y1) ## (X2,Y2) := length of V [B*1 ""] with Frame and 'C
+  [CBtT1'1]   V [B*2] (X1,Y1) ## (X2,Y2) := length of V [B*1 empty] with Frame and 'C
               ================================================================
               length of COMM [B*1] with Frame and 'C =
                 COMM [B*2] ## (X2,Y2)
 
   [CBtT2'1]   place COMM [] with Frame and Struct and 'C = Struct
 
-  [CBtT2'2]   Struct2 := place V [B+1 ""] with Frame1 and Struct1 and 'C
+  [CBtT2'2]   Struct2 := place V [B+1 empty] with Frame1 and Struct1 and 'C
               ======================================================
               place COMM [B+1] with Frame1 and Struct1 and 'C = Struct2

@@ -53,7 +53,7 @@ equations
   [TOp4'2]   Y1 != Y3
              ========
              concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs =
-               concat ( Text1 || "\n" && (0,Y1 + 1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs
+               concat ( Text1 || newlinechar && (0,Y1 + 1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs
 
   [TOp9'1]   add to last line (String1, String2) = String1 || String2
 

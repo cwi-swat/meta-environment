@@ -11,7 +11,7 @@ exports
 
 hiddens
   variables
-    "String"[0-9]* -> StrCon
+    "String"[0-9]* -> Bytes
     [B-E][0-9]* -> Box
     [B-E]"+"[0-9]* -> Box+
     [B-E]"*"[0-9]* -> Box*

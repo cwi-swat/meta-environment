@@ -5,8 +5,8 @@ module Basic-to-Text
 
   exports
     context-free syntax
-      box2text(Box) -> BText 
-      box2text(Box, Integer) -> BText 
+      box2text(Box) -> Text 
+      box2text(Box, Integer) -> Text 
       text(Box*) -> Text 
       text(Box*, Integer) -> Text 
 
@@ -18,10 +18,8 @@ context-free start-symbols TextStruct
 
 hiddens
   variables
-    "Text"[0-9]*      -> String* %%{TextBlock ","}*
-%%    "TextBlock"[0-9]* -> String*
+    "Text"[0-9]*      -> Bytes*
     "Struct"[0-9]*    -> TextStruct
-
 
   hiddens
     context-free syntax
@@ -32,12 +30,12 @@ hiddens
       "reshuffle" Box* "given" Frame "and" TextStruct "h" Integer "v" Integer "i" Integer -> TextStruct
       "dplace" Box* "with" Frame "and" TextStruct "and" Context -> TextStruct
       "startNewLine"(Text) -> Text
-      "add" "to" "last" "line" "(" Text "," String ")" -> Text
+      "add" "to" "last" "line" "(" Text "," Bytes ")" -> Text
       "setTs" "(" Frame "," SpaceOption* ")" -> Frame
 
 hiddens
   variables
-    "String"[0-9]* -> StrCon
+    "String"[0-9]* -> Bytes
     [B-E][0-9]*    -> Box
     [B-E]"+"[0-9]* -> Box+
     [B-E]"*"[0-9]* -> Box*

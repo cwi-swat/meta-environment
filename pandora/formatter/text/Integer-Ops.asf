@@ -1,12 +1,7 @@
 equations
 
-  [IO1'1] max(i, j) = i when i >= j == true
-  [IO1'2] max(i, j) = j when i <  j == true
-
-  [IO2'1] min(i, j) = i when i <  j == true
-  [IO2'2] min(i, j) = j when i >= j == true
-
-  [IO3'1] if true  then Int1 else Int2 fi = Int1
-  [IO3'2] if false then Int1 else Int2 fi = Int2
-
-%%%
+  [min-integer] 
+    min(i, j) = i when max(i, j) == j
+  
+  [default] 
+    min(i, j) = j 

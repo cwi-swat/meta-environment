@@ -1,0 +1,6 @@
+equations
+  [if-true]
+    if true then Statement1 else Statement2 fi = Statement1
+
+  [if-false]
+    if false then Statement1 else Statement2 fi = Statement2

@@ -7,24 +7,24 @@ equations
 
   [BtT1'0]   Text := text(B)
              ===>
-             box2text(B) = text2btext(Text)
+             box2text(B) = concat-reverse(Text)
 
   [BtT1'0]   Text := text(B,Int)
              ===>
-             box2text(B,Int) = text2btext(Text)
+             box2text(B,Int) = concat-reverse(Text)
 
-  [BtT1'1]   text() = ""
+  [BtT1'1]   text() = empty
 
-  [BtT1'2]   text(,Int) = ""
+  [BtT1'2]   text(,Int) = empty
 
   [BtT1'3]   Point1 & Defs := make frame,
-             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             Text && Point2 := place B with Point1 & Defs and empty && Point1 and V
              ==================================================================
              text(B) = Text
 
   [BtT1'4]   Frame := make frame,
              Point1 & Defs := set rmargin Int in Frame,
-             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             Text && Point2 := place B with Point1 & Defs and empty && Point1 and V
              ==================================================================
              text(B,Int) = Text
 
@@ -36,13 +36,12 @@ equations
 %% on the same line a number of new lines have to be inserted.
 %%\smallskip
 
-  [BtT2'1]   String2 := deslash(String1),
-             Text2 :=
+  [BtT2'1]   Text2 :=
                add to last line (Text1,
-                               string of X1 - X2 layoutchars || String2)
+                               string of X1 - X2 layoutchars || String)
              ===>
-             place String1 with (X1,Y) & Defs and Text1 && (X2,Y) and 'C =
-               Text2 && (X1 + length(String2),Y)
+             place String with (X1,Y) & Defs and Text1 && (X2,Y) and 'C =
+               Text2 && (X1 + length(String),Y)
 
   [BtT2'2]   Y1 != Y2
              ========
@@ -302,5 +301,5 @@ equations
 
   [BtT9'1]   add to last line (String1 Text, String2) = String1 || String2 Text
 
-  [snl-1'2] startNewLine(Text) = "" Text
+  [snl-1'2] startNewLine(Text) = empty Text
 
