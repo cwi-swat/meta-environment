@@ -13,7 +13,7 @@
 #include "layoutgraph.h"
 
 static ATermList buildDotAttributes(NodeId key, NodeId value, ATermList attrs);
-static AttributeList buildAttributeList(ATermList dotAttributes);
+static AttributeList buildAttributeList(int type,ATermList dotAttributes);
 static NodeId buildNodeId(char *id);
 
 %}
@@ -114,13 +114,13 @@ opt_comma:
 
 node_stmt:
 	node_id opt_attr_list {
-		mergeNodeAttributes($1.nodeId, buildAttributeList($2.attributes));
+		mergeNodeAttributes($1.nodeId, buildAttributeList(NODE,$2.attributes));
 	}
 	;
 
 edge_stmt:
 	node_id edge_rhs opt_attr_list {
-		mergeEdgeAttributes($1.nodeId, $2.nodeId, buildAttributeList($3.attributes));
+		mergeEdgeAttributes($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
 	}
 	;
 
@@ -210,23 +210,22 @@ static Attribute parseCoordinateList(char *coords, ATbool appendFirstToEnd)
   }
 
 	poly = PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
-
+ATwarning("poly: %t\n", poly);
   return makeAttributeCurvePoints(poly);
 }
 
-static AttributeList buildAttributeList(ATermList dotAttributes)
+static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 {
   AttributeList list = makeAttributeListEmpty();
 	int width = -1, height = -1;
-  /*dotAttributes = ATreverse(dotAttributes);*/
 
-	/*ATwarning("dotAttributes=%t\n", dotAttributes);*/
+	/* ATwarning("dotAttributes=%t\n", dotAttributes); */
   while (!ATisEmpty(dotAttributes)) {
     ATermList pair = (ATermList)ATgetFirst(dotAttributes);
 		ATerm key = ATgetFirst(pair);
 		ATerm value = ATgetFirst(ATgetNext(pair));
 		char *sval = ATgetName(ATgetAFun((ATermAppl)value));
-		/*ATwarning("key=%t, value=%s\n", key, sval);*/
+		ATwarning("key=%t, value=%s\n", key, sval); 
 
 		if (ATisEqual(key, ATparse("\"width\""))) {
       width = inchToPixel(atof(sval));
@@ -235,6 +234,10 @@ static AttributeList buildAttributeList(ATermList dotAttributes)
 		} else if (ATisEqual(key, ATparse("\"shape\""))) {
       Shape shape = ShapeFromTerm(ATparse(sval));
       list = makeAttributeListMulti(makeAttributeShape(shape), list);
+		}
+    else if (ATisEqual(key, ATparse("\"dir\""))) {
+      Direction dir = DirectionFromTerm(ATparse(sval));
+      list = makeAttributeListMulti(makeAttributeDirection(dir), list);
 		} else if (ATisEqual(key, ATparse("\"pos\""))) {
       if (sval[0] == 'e') {
         /* List of coordinates, last element first but the rest in order */
@@ -245,22 +248,25 @@ static AttributeList buildAttributeList(ATermList dotAttributes)
         Attribute attr = parseCoordinateList(sval+2, ATfalse);
 				list = makeAttributeListMulti(attr, list);
 			} else {
-        /* x,y pair */
-				char *sep = strchr(sval, ',');
-				int x, y;
-				assert(sep);
+        if (type == NODE) {
+					/* x,y pair */
+					char *sep = strchr(sval, ',');
+					int x, y;
+					assert(sep);
 
-				*sep = '\0';
-				x = atoi(sval);
-				*sep++ = ',';
-				y = atoi(sep);
-				list = makeAttributeListMulti(makeAttributeLocation(x, y), list);
+					*sep = '\0';
+					x = atoi(sval);
+					*sep++ = ',';
+					y = atoi(sep);
+					list = makeAttributeListMulti(makeAttributeLocation(x, y), list);
+				}
+        else {
+          Attribute attr = parseCoordinateList(sval, ATfalse);
+				  list = makeAttributeListMulti(attr, list);
+        }
+
 			}
 		}
-    else if (ATisEqual(key, ATparse("\"dir\""))) {
-      Direction dir = DirectionFromTerm(ATparse(sval));
-      list = makeAttributeListMulti(makeAttributeDirection(dir), list);
-    }
 
 		dotAttributes = ATgetNext(dotAttributes);
 	}
