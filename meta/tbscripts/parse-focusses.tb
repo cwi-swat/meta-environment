@@ -37,7 +37,8 @@ let
   Nonterminal  : str,
   Tree         : term,
   Errors       : term,
-  Status       : term
+  Status       : term,
+  FileName     : str
 in                     
   Id := process-id .     
   (
@@ -57,7 +58,9 @@ in
     GetText(EditorId, Text?, Focus?, Status?) .
     if equal(Status, parse-needed) then
       UpdateTextInModuleDb(Type, ModuleName, Text).
-      ParseString(ModuleName, Type, Nonterminal, Text, Tree?, Errors?) .
+      snd-msg(get-editor-filename(EditorId)) .
+      rec-msg(editor-filename(FileName?)) .
+      ParseString(ModuleName, FileName, Type, Nonterminal, Text, Tree?, Errors?) .
       PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
       ProcessTree(ModuleName, EditorId, Focus, Tree) .
       Tree := no-tree

@@ -441,22 +441,18 @@ ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
 /*}}}  */
 /*{{{  ATerm calc_error_location(int cid, ATerm focus, ATerm error) */
 
-ATerm calc_error_location(int cid, ATerm f, ATerm error)
+ATerm calc_error_location(int cid, ATerm error)
 {
-  ATerm posTerm;
-  SE_Focus focus;
-  int start;
-  int errorPos;
+  ERR_Summary summary = ERR_SummaryFromTerm(error);
+  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
+  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
+  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+  ERR_Subject subject = ERR_getSubjectListHead(subjects);
+  ERR_Location location = ERR_getSubjectLocation(subject);
+  ERR_Area area = ERR_getLocationArea(location);
+  int errorPos = ERR_getAreaOffset(area);
 
-  focus = SE_makeFocusFromTerm(f);
-  assert(SE_isValidFocus(focus));
-
-  start = SE_getAreaStart(SE_getFocusArea(focus));
-  posTerm = ATelementAt((ATermList) error, 3);
-
-  errorPos = ATgetInt((ATermInt) ATgetArgument((ATermAppl) posTerm, 0));
-
-  return ATmake("snd-value(error-position(<int>))", start + errorPos);
+  return ATmake("snd-value(error-position(<int>))", errorPos);
 }
 
 /*}}}  */

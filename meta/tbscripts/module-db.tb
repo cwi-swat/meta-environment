@@ -73,7 +73,8 @@ in
   +
     /* TODO: factorize this part into reusable processes */
     rec-msg(add-module-to-db(Name?, Path?, sdf, SyntaxText?, SyntaxTree?)) .
-    if not-equal(SyntaxTree, no-tree) then
+    if and(not-equal(SyntaxTree, error-tree),
+           not-equal(SyntaxTree, no-tree)) then
       snd-msg(sm-get-module-id(SyntaxTree)) .
       rec-msg(sm-module-id(ModuleId?)) .
       snd-msg(sm-get-module-path(Path, ModuleId)) .

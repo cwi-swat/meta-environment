@@ -1,5 +1,8 @@
 # $Id$
 
+2004/01/20 (markvdb@cwi.nl)
+ * First version of clickable parse errors.
+
 2004/01/13 (jurgenv@cwi.nl)
  * Add and remove imports choose from a list of available names instead 
    of a file selector.
