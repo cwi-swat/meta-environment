@@ -8,6 +8,7 @@
 #include "file-creator.tb"
 #include "module-db.idef"
 #include "unparsePT.idef"
+#include "sdfchecker.idef"
 #include "get-parsetable.tb"
 #include "set-parsetable.tb"
 #include "dump-equations.tb"
@@ -18,6 +19,7 @@
 #include "process-eqs.tb"
 #include "addeqssyntax.idef"
 #include "configmanager.idef"
+#include "textual-error-display.tb"
 #include "standalone-eqs-dumper.tb"
 #include "standalone-status-display.tb"
 
@@ -37,6 +39,7 @@ endlet
 
 toolbus(META, Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
         ModuleDB, File-creator, Notify-about-changed-modules,
+	SdfChecker, DisplayErrors,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, AddEqSyn, Open-modules, PGen, DumpEquations,
         ProcessEqs, Status-display) 

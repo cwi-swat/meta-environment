@@ -8,6 +8,7 @@
 #include "file-creator.tb"
 #include "module-db.idef"
 #include "unparsePT.idef"
+#include "sdfchecker.idef"
 #include "get-parsetable.tb"
 #include "set-parsetable.tb"
 #include "dump-parsetable.tb"
@@ -18,6 +19,7 @@
 #include "addeqssyntax.idef"
 #include "removevarsyntax.idef"
 #include "configmanager.idef"
+#include "textual-error-display.tb"
 #include "standalone-pt-dumper.tb"
 #include "standalone-status-display.tb"
 
@@ -36,7 +38,7 @@ in
 endlet
 
 toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
-        ModuleDB, File-creator, 
+        ModuleDB, File-creator, SdfChecker, DisplayErrors,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable, 
         Status-display) 
