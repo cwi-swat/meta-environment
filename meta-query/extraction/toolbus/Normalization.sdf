@@ -1,0 +1,8 @@
+module Normalization
+
+imports ToolBusExtraction
+imports utilities/PosInfo[ProcessExpr]
+
+hiddens
+  variables
+    "$ProcessExpr"[0-9]* -> ProcessExpr

@@ -1,0 +1,35 @@
+equations
+
+[choice-normalization-0]
+  $ProcessExpr1 . ( $ProcessExpr2 + $ProcessExpr3 ) = 
+    ( $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr1 . $ProcessExpr3 )
+
+[choice-normalization-1]
+  ( $ProcessExpr1 + $ProcessExpr2 ) . $ProcessExpr3 =
+    ( $ProcessExpr1 . $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 )
+
+[choice-normalization-2]
+  $ProcessExpr + $ProcessExpr = $ProcessExpr
+
+[comm-0]
+  ( $ProcessExpr1 + $ProcessExpr2 ) + $ProcessExpr3 =
+    $ProcessExpr1 + ( $ProcessExpr2 + $ProcessExpr3 )
+
+[comm-1]
+  ( $ProcessExpr1 . $ProcessExpr2 ) . $ProcessExpr3 =
+    $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 )
+
+[comm-2]
+  $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 ) =
+    $ProcessExpr1 . $ProcessExpr2 . $ProcessExpr3
+
+[comm-3]
+  $ProcessExpr1 + ( $ProcessExpr2 + $ProcessExpr3 ) =
+    $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr3
+
+[default-star-normalization]
+  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
+
+[star-normalization-0]
+  ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
+    ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
