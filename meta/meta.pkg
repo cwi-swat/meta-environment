@@ -1,0 +1,29 @@
+package 
+identification
+   name=meta
+   version=0.12beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/meta
+   description='The ASF+SDF Meta-Environment is an interactive tool suite
+                for building language-oriented tools for program
+                development, domain-specific languages, program analysis and
+                software renovation.'
+
+
+      keywords=meta-environment, asf, sdf, dsl, language environment, transformation, rewriting
+
+configuration interface
+
+requires
+   xemacs	20.4
+   aterm 	2.0
+   aterm-java 	1.2
+   toolbus	0.25 with java=on 
+   toolbuslib	0.4
+   sglr		3.10beta
+   pgen		1.6
+   pt-support   0.11
+   graph-support   0.1beta
+   sdf-support  1.0
+
+configuration

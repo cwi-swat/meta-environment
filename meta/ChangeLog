@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 2003/06/26 (iversen@cwi.nl)
  * Added some type parameters to processes in module database
  * Introduced hook to do something before collecting sdf2 definitions
