@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/08 (jurgenv@cwi.nl)
+ * Adapted package dependencies.
+
 2003/10/07 (jurgenv@cwi.nl)
  * Moved builtins library from the asf package to this package
  * Renamed the libME subdirectory to 'lib'
