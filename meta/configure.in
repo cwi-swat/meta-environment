@@ -16,7 +16,7 @@ dnl    You should have received a copy of the GNU General Public License
 dnl    along with this program; if not, write to the Free Software
 dnl    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 dnl
-toodnl $Id$
+dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
@@ -181,9 +181,6 @@ AC_CHECK_HEADER(getopt.h)
 
 AC_SUBST(SOCKLIBS)
 
-dnl Handle subpackages...
-AC_CONFIG_SUBDIRS(asc-support sglr pgen)
-
 dnl Which files need updating?
 AC_OUTPUT(
 	Makefile Makefile.skel meta \
@@ -207,3 +204,8 @@ AC_OUTPUT(
              utils/parse-sdf2 utils/ps-dot utils/sdf2table \
 						 utils/genmakefile.sh utils/parse-file
 )
+
+dnl Handle subpackages...
+AC_CONFIG_PKG(asc-support)
+AC_CONFIG_PKG(sglr)
+AC_CONFIG_PKG(pgen, --with-asc='\${top_builddir}/asc-support')
