@@ -20,7 +20,7 @@
 ------------------------------------------------------------------------------
 
 Date:	Tue Apr 24 11:19:23 CEST 2001
-Version 0.15
+Version 0.16
 Author: {jong,olivierp}@cwi.nl
 interpreter.c: Fix bug in single linked list code of dequeueing of queued events
 
