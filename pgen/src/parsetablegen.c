@@ -83,7 +83,7 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = ASC_applyFunction("normalize",
+    newTree = PT_applyFunctionToTree("normalize",
                                 "Sdf2-Normalization",
                                 "Grammar",
                                 2,
