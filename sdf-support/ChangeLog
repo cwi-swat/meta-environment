@@ -1,5 +1,8 @@
 $Id$
 
+2003/12/11 (markvdb@cwi.nl)
+  * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
+
 2003/10/09 (markvdb@cwi.nl)
  * By accident the strategy symbol was removed, added again.
 

@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Oct  9 11:30:56 2003
+ * Generated at Thu Dec 11 15:50:28 2003
  */
 
 #ifndef __SDFME_dict_H
@@ -236,6 +236,10 @@ extern AFun SDF_afun225;
 extern AFun SDF_afun226;
 extern AFun SDF_afun227;
 extern AFun SDF_afun228;
+extern AFun SDF_afun229;
+extern AFun SDF_afun230;
+extern AFun SDF_afun231;
+extern AFun SDF_afun232;
 
 extern ATerm SDF_patternStartAlias;
 extern ATerm SDF_patternStartAliases;
@@ -491,6 +495,9 @@ extern ATerm SDF_patternGrammarLexicalSyntax;
 extern ATerm SDF_patternGrammarImpSection;
 extern ATerm SDF_patternGrammarPriorities;
 extern ATerm SDF_patternGrammarSorts;
+extern ATerm SDF_patternGrammarContextFreeStartSymbols;
+extern ATerm SDF_patternGrammarLexicalStartSymbols;
+extern ATerm SDF_patternGrammarKernelStartSymbols;
 extern ATerm SDF_patternGrammarRestrictions;
 extern ATerm SDF_patternGrammarAliases;
 
