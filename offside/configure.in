@@ -107,6 +107,7 @@ AC_OUTPUT(
   spec/offside/Makefile
   spec/utils/Makefile
   src/Makefile
+  test/Makefile
 )
 
 dnl }}}
