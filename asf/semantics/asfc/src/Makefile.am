@@ -35,7 +35,8 @@ asfc_SOURCES = asfc.c \
                asf2muasf.c \
                lex-cons.c \
                asfc.tif.c \
-               muasf2c.c
+               muasf2c.c \
+               c-compiler.c
 
 asfc_LDADD   = -L$(top_builddir)/asfc/c-source -lCompiler \
                -L$(ASC_SUPPORT)/lib -lasc-support-me \
@@ -45,7 +46,12 @@ asfc_LDADD   = -L$(top_builddir)/asfc/c-source -lCompiler \
                -L./muasf -lMuASF \
                -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES  = -I$(ASC_SUPPORT)/include \
+DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
+          -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
+          -DATERM=\"$(ATERM)\"
+
+INCLUDES  = $(DEFINES) \
+            -I$(ASC_SUPPORT)/include \
             -I$(PT_SUPPORT)/include \
             -I$(ATERM)/include \
             -I$(srcdir)/muasf 

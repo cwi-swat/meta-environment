@@ -20,7 +20,7 @@ static void make_main(const char *name, FILE *file)
             "                          resolve_%s,                    \n"
 	    "                          init_%s);                      \n"
 	    "}                                                        \n"
-	    "#endif                                                   \n",
+	    "#endif                                                   \n\n",
 	    name, name, name, name); 
 }
 

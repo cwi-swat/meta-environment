@@ -31,6 +31,7 @@
 #include "asf2muasf.h"
 #include "muasf2c.h"
 #include "c-code.h"
+#include "c-compiler.h"
 
 /*}}}  */
 
@@ -38,11 +39,12 @@
 
 ATbool run_verbose;
 ATbool output_muasf;
+ATbool use_c_compiler;
 
 char myname[] = "asfc";
 char myversion[] = "2.0";
 
-static char myarguments[] = "hi:mn:o:vV";
+static char myarguments[] = "chi:mn:o:vV";
 
 
 /*}}}  */
@@ -54,14 +56,16 @@ static void usage(void)
   ATwarning(
             "Usage: %s [options]\n"
             "Options:\n"
-            "\t-h              display this message\n"
-            "\t-i filename     input equations from file (default stdin)\n"
-	    "\t-m              output muasf code         (default %s)\n"
-            "\t-n name         name of the specification (obligatory)\n"
-            "\t-o filename     output to file            (default stdout)\n"
-            "\t-v              verbose mode\n"
-            "\t-V              reveal program version (i.e. %s)\n",
+	    "\t-c              toggle compilation to a binary (default: %s)   \n"
+            "\t-h              display this message                           \n"
+            "\t-i filename     input equations from file      (default stdin) \n"
+	    "\t-m              output muasf code              (default %s)    \n"
+            "\t-n name         name of the tool               (obligatory)    \n"
+            "\t-o filename     output c code to file          (default stdout)\n"
+            "\t-v              verbose mode                                   \n"
+            "\t-V              reveal program version         (i.e. %s)       \n",
             myname, 
+	    use_c_compiler ? "on" : "off",
 	    output_muasf ? "on" : "off", 
 	    myversion);
   exit(0);
@@ -85,7 +89,7 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
   MA_Module muasf = asfToMuASF(name, equations);
 
   if (output_muasf) {
-    return (PT_ParseTree) muasf;
+   return (PT_ParseTree) muasf;
   }
 
   return muasfToC(muasf); 
@@ -135,6 +139,11 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
     }
 
     ToC_code(moduleName, result, fp , myversion);
+    fclose(fp);
+
+    if (use_c_compiler) {
+      call_c_compiler(moduleName, output);
+    }
   }
 
   return ATmake("snd-value(compilation-done)");
@@ -156,6 +165,7 @@ int main(int argc, char *argv[])
 
   run_verbose = ATfalse;
   output_muasf = ATfalse;
+  use_c_compiler = ATtrue;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -181,6 +191,7 @@ int main(int argc, char *argv[])
     /* Check commandline */ 
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+      case 'c':  use_c_compiler = !use_c_compiler; break;	
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
       case 'm':  output_muasf=ATtrue;   break;
