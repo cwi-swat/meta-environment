@@ -7,6 +7,7 @@ exports
 
   context-free syntax
     "none"					                     -> Message
+    module-not-available(ModuleId)                                   -> Message
     undeclared-symbols(ModuleId, SymbolsSet)                         -> Message
     sorts-without-production-definitions(ModuleId, SymbolsSet)       -> Message
     double-declared-symbol(ModuleId, Symbol)                         -> Message

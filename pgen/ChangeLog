@@ -1,6 +1,7 @@
 $Id$
 
 2002/03/22 (vandenbr@cwi.nl)
+ * Added a simple check in the completeness of the definition.
  * Moved the Sdf part of the sdf-checker from meta to pgen.
 
 2002/03/13 (jurgenv@cwi.nl)

@@ -17,11 +17,25 @@ equations
  
   [cms1] get-module-id($ModuleName) = $ModuleId,
          get-module($ModuleId, Definition) = Module,
+         Module != module-not-available,
          check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple2
          ===============================================================
          check-imports(imports($ModuleName Import*), 
                        Definition, InfoMsgTuple1) =
            check-imports(imports(Import*), Definition, InfoMsgTuple2)
+ 
+  [cms1] get-module-id($ModuleName) = $ModuleId,
+         get-module($ModuleId, Definition) = module-not-available,
+         get-module-info(InfoMsgTuple1) = ModuleInfoTable1,
+         ModuleInfoTable2 = create-module-entry($ModuleId, ModuleInfoTable1), 
+         put-module-info(ModuleInfoTable2, InfoMsgTuple1) =  InfoMsgTuple2,
+         Msgs1 = get-messages(InfoMsgTuple2),
+         Msgs2 = Msgs1 +
+module-not-available($ModuleId),
+         InfoMsgTuple3 = put-messages(Msgs2, InfoMsgTuple2)
+         ===================================================
+         check-imports(imports($ModuleName Import*), 
+                       Definition, InfoMsgTuple1) = InfoMsgTuple3
 
   [cms2] check-imports(imports(), Definition, InfoMsgTuple) = InfoMsgTuple
 

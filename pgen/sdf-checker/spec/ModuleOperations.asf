@@ -11,6 +11,8 @@ equations
                             $Module*2) =
         module $ModuleName $ImpSection* $Sections
 
+  [default-x] get-module($ModuleId, $Module*) = module-not-available
+
   [x] get-module-id($ModuleName) = $ModuleId
       ======================================
       get-module-name(module $ModuleName $ImpSection* $Sections) = $ModuleId
