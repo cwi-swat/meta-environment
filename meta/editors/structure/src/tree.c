@@ -29,20 +29,22 @@ PT_Symbol getParseTreeSort(PT_ParseTree parse_tree)
 PT_Symbol
 getTreeSort(PT_Tree tree)
 {
-/*
-  if (PT_hasTreeSymbol(tree)) {
-    return PT_getTreeSymbol(tree);
-  } else
-*/
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     return PT_getProductionRhs(prod);
   }
-/*
   else if (PT_isTreeList(tree)) {
-    return PT_getTreeIter(tree);
+    return PT_getTreeSymbol(tree);
   }
-*/
+  else if (PT_isTreeChar(tree)) {
+    char ch[2]; 
+    ch[0] = PT_getTreeCharacter(tree);
+    ch[1] = '\0';
+    return PT_makeSymbolSort(ch);
+  }
+  else if (PT_isTreeLit(tree)) {
+    return PT_makeSymbolSort(PT_getTreeString(tree));
+  }
   else {
     return PT_makeSymbolSort("invalid");
   }
