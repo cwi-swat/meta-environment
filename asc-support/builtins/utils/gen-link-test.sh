@@ -16,7 +16,7 @@ cat  << END_OF_FILE
 
 `
 for b in \${BUILTIN_NAMES}; do 
-echo "PT_Tree  ${b}(PT_Tree input);" | sed 's@-@_@g'
+echo "PT_Tree  ASFE_${b}(PT_Tree input);" | sed 's@-@_@g'
 done
 `
 
@@ -29,7 +29,7 @@ int main(void)
   if (fprintf(stderr, "This program does nothing\n") == 0) {
 `
 for b in \${BUILTIN_NAMES}; do
-echo "    ${b}(NULL);" | sed 's@-@_@g'
+echo "    ASFE_${b}(NULL);" | sed 's@-@_@g'
 done
 `
   }
