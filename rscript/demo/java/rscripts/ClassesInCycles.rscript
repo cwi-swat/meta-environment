@@ -9,26 +9,27 @@ type VarName = str
 type TypeName = str
 type FieldName = str
 
-rel[FileName, loc] FILES
-rel[InterfaceName,loc] INTERFACES
-rel[PackageName,loc] PACKAGES
-rel[ClassName,loc] CLASSES
-rel[MethodName, loc] METHODS
-rel[ClassUseName,loc] CLASS_USES
-rel[VarName, loc, TypeName] VARIABLE_DECLS
-rel[FieldName, loc, TypeName] FIELD_DECLS
+rel[FileName, loc] FILE
+rel[InterfaceName,loc] INTERFACE
+rel[PackageName,loc] PACKAGE
+rel[ClassName,loc] CLASS
+rel[MethodName, loc] METHOD
+rel[ClassUseName,loc] CLASS_USE
+rel[VarName, loc, TypeName] VARIABLE_DECL
+rel[FieldName, loc, TypeName] FIELD_DECL
 
 rel[ClassName,ClassName] EXTENDS_CLASS
 rel[ClassName,InterfaceName] IMPLEMENTS
 rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE
 
-rel[VarName, loc, MethodName] METHOD_CALLS
+rel[VarName, loc, MethodName] METHOD_CALL
 
 rel[str,str] INHERITANCE
 rel [str, str] CONTAINMENT
-rel[ClassName, ClassName] CALLS
+rel[ClassName, ClassName] CALL
 
-rel[ClassName,ClassName] USE = CALLS union CONTAINMENT union INHERITANCE
+%%rel[ClassName,ClassName] USE = CALL union CONTAINMENT union INHERITANCE
+rel[ClassName,ClassName] USE = CALL union CONTAINMENT union INHERITANCE
 
 %%bag[ClassName] ClassesInCycle = {C1 | <ClassName C1, ClassName C2> : USE+, C1 == C2}
 
@@ -36,10 +37,10 @@ rel[ClassName,ClassName] USE = CALLS union CONTAINMENT union INHERITANCE
 
 %%yield size
 
-bag[ClassName] CLASS_NAMES = domain(CLASSES)
+bag[ClassName] CLASS_NAME = domain(CLASS)
 
 rel[ClassName,ClassName] USETRANS = USE+
 
-rel[ClassName,bag[ClassName]] ClassCycles = {<C, USETRANS[C]> | ClassName C : CLASS_NAMES, <C, C> in USETRANS }
+rel[ClassName,bag[ClassName]] ClassCycles = {<C, USETRANS[C]> | ClassName C : CLASS_NAME, <C, C> in USETRANS }
 yield ClassCycles
 

@@ -17,7 +17,7 @@ exports
      "and" | "or" | "not" | "implies" | "in" | "notin" |
      "union" | "inter" | "o" | "x" | "exists" |
      "forall" | "bool" | "int" | "str" | 
-     "loc" | "bag" | "rel" | "init" | "yield" | 
+     "loc" | "bag" | "set" | "rel" | "init" | "yield" | 
      "equations" | "limit" | "initial" | 
      "satisfy" | "end"	| "type" |"yield" 	-> RVAR {reject}
 
@@ -109,6 +109,7 @@ exports
      ElemType                                	-> REXPTYPE
      "<" {REXPTYPE ","}+">"			-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
+     "set" "[" REXPTYPE "]"       	     	-> REXPTYPE
      "rel" "[" {REXPTYPE ","}+ "]"		-> REXPTYPE
      RVAR				     	-> REXPTYPE	%% user-defined type
      "&" RVAR					-> REXPTYPE	%% type parameter

@@ -2,6 +2,10 @@ equations
 
 %%-----------------------------------------------------------------------------------
 
+%% ---- transition from bag to set
+
+[xxx]   bag[$Etype] = set[$Etype]
+
 %% ---- Simplify constant type
 
 [xxx]	fun [] to $Etype = $Etype
@@ -15,12 +19,12 @@ equations
 
 %% ---- Element type
 
-[et1]	element-type(bag[$Etype], $Tenv)  = $Etype
+[et1]	element-type(set[$Etype], $Tenv)  = $Etype
 [et2]	element-type(rel[$Etype+], $Tenv) = <$Etype+>
 [et3]	element-type(<$Etype+>, $Tenv)    = <$Etype+>
 [et4]	element-type($Var, $Tenv)         = element-type(lookup($Tenv, $Var), $Tenv)
 [default-et]
-	element-type($Etype, $Tenv)       = undefined
+	element-type($Etype, $Tenv)       = undefined-type
 
 %% ---- Is rel type?
 
@@ -31,10 +35,10 @@ equations
 
 %% ---- is bag type?
 
-[ibt1] is-bag-type(bag[$Etype]) = true
+[ibt1] is-set-type(set[$Etype]) = true
 
 [default-ibt]
-	is-bag-type($Etype) = false
+	is-set-type($Etype) = false
 
 %% ---- First of type
 
@@ -53,13 +57,13 @@ equations
 [st2]	second(<$Etype1 $Var, $DclVar+>, $Tenv) = <$DclVar+>
 [st3]	second($Var, $Tenv) = second(lookup($Tenv, $Var), $Tenv)
 [default-st]
-	second($Etype, $Tenv) = undefined
+	second($Etype, $Tenv) = undefined-type
 
 %% ---- Normalize type
 
-[nm1]	norm(bag[$Etype], $Tenv) = bag[norm($Etype, $Tenv)]
+[nm1]	norm(set[$Etype], $Tenv) = set[norm($Etype, $Tenv)]
 
-[nm2]	norm(rel[$Etype+], $Tenv) = bag[norm(<$Etype+>, $Tenv)]
+[nm2]	norm(rel[$Etype+], $Tenv) = set[norm(<$Etype+>, $Tenv)]
 
 [nm3]	$Etype1' := norm($Etype1, $Tenv),
 	<$Etype+'> := norm(<$Etype2, $Etype+>, $Tenv)
@@ -84,18 +88,18 @@ equations
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt2]	bag[$Etype1'] := norm($Etype1, $Tenv),
-	bag[$Etype2'] := norm($Etype2, $Tenv)
+[eqt2]	set[$Etype1'] := norm($Etype1, $Tenv),
+	set[$Etype2'] := norm($Etype2, $Tenv)
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = equal-type($Etype1', $Etype2', $Tenv)
 
-[eqt3] empty-bag-type == norm($Etype1, $Tenv),
- 	bag[$Etype2']:= norm($Etype2, $Tenv)
+[eqt3]  empty-set-type == norm($Etype1, $Tenv),
+ 	set[$Etype2']:= norm($Etype2, $Tenv)
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
-[eqt4]	bag[$Etype1'] := norm($Etype1, $Tenv),
-	empty-bag-type == norm($Etype2, $Tenv)
+[eqt4]	set[$Etype1'] := norm($Etype1, $Tenv),
+	empty-set-type == norm($Etype2, $Tenv)
 	=====================================================
 	equal-type($Etype1, $Etype2, $Tenv) = true
 
@@ -133,7 +137,7 @@ equations
 
 %% ---- well-formed-type
 
-[wft1]	well-formed-type(bag[$Etype], $Tenv) = well-formed-type($Etype, $Tenv)
+[wft1]	well-formed-type(set[$Etype], $Tenv) = well-formed-type($Etype, $Tenv)
 
 [wft2]	well-formed-type(rel[$Etype+], $Tenv) = well-formed-type(<$Etype+>,$Tenv)
 
@@ -147,7 +151,7 @@ equations
 [wft5]	well-formed-type(<$DclVar+>, $Tenv) = well-formed-type(get-tuple-type(<$DclVar+>), $Tenv)
 
 [wft5]	$Etype := lookup($Tenv, $Var),
-        $Etype == undefined
+        $Etype == undefined-type
 	=======================================================
 	well-formed-type($Var, $Tenv) = $Tenv + Undeclared $Var
 
@@ -157,7 +161,7 @@ equations
 	well-formed-type(fun [$Etype+] to $Etype, $Tenv) = $Tenv''
 
 [wft6]	$Etype := lookup($Tenv, $Var),
-	$Etype != undefined
+	$Etype != undefined-type
 	=======================================================
 	well-formed-type($Var, $Tenv) = well-formed-type($Etype, $Tenv)
 
@@ -206,7 +210,7 @@ $Error]>
 [e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [localized("expr", get-location($Exp))])
 [e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [localized("stat", get-location($Stat))])
 [e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [localized("generator", get-location($Gen))])
-[e2i-4] e2i($Bag cannot be typed) 	= error("Bag cannot be typed", [localized("bag", get-location($Bag))])
+[e2i-4] e2i($Set cannot be typed) 	= error("Bag cannot be typed", [localized("bag", get-location($Set))])
 [e2i-5] e2i($Rel cannot be typed) 	= error("Relation cannot be typed", [localized("relation", get-location($Rel))])
 [e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [localized(rvar2str($Var), get-location($Var))])
 [e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [localized(rvar2str($Var), get-location($Var))])
@@ -224,8 +228,8 @@ $Error]>
 [e2i-11] e2i($Exp should have type $Etype)= 
 	 error("Expression should have type ", [localized(t2s($Etype), get-location($Exp))])
 
-[e2i-12] e2i($Exp should be of type bag) = 
-	 error("Expression should be of type bag", [localized("exp", get-location($Exp))])
+[e2i-12] e2i($Exp should be of type set) = 
+	 error("Expression should be of type set", [localized("exp", get-location($Exp))])
 
 [e2i-13] e2i($Exp should be of type rel) = 
 	 error("Expression should be of type relation", [localized("exp", get-location($Exp))])
@@ -247,14 +251,14 @@ $Error]>
 		   error($StrCon, [localized(rvar2str($Var), get-location($Var))])
 [e2i-18] $StrCon := "Type " || t2s($Etype) || " should be bag or relation"
 	 ==============================================================
-	e2i($Etype should be bag or rel type) =	error($StrCon, [localized(t2s($Etype), get-location($Etype))])
+	e2i($Etype should be set or rel type) =	error($StrCon, [localized(t2s($Etype), get-location($Etype))])
 
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
 [t2s-4] t2s(loc) 			= "loc"
-[t2s-5] t2s(undefined) 			= "undefined"
+[t2s-5] t2s(undefined-type) 		= "undefined-type"
 	
 [t2s-6] $StrCon :=  "<" || tl2sl($Etype+) || ">"
 	========================================================
@@ -264,11 +268,11 @@ $Error]>
 	========================================================
 	t2s([ $Etype+ ])		= $StrCon
 
-[t2s-ta] t2s(empty-bag-type)		= "{}"
+[t2s-ta] t2s(empty-set-type)		= "{}"
 
-[t2s-7] $StrCon :=  "bag[" || t2s($Etype) || "]"
+[t2s-7] $StrCon :=  "set[" || t2s($Etype) || "]"
 	========================================================
-	t2s(bag[$Etype])		= $StrCon
+	t2s(set[$Etype])		= $StrCon
 
 [t2s-8] $StrCon := "rel[" || tl2sl($Etype+) || "]"
 	========================================================
@@ -297,7 +301,7 @@ $Error]>
 	==============================================
 	lookup(<$Table, $Errors>, $Var) = $Etype
 [default-te]
-	lookup(<$Table, $Errors>, $Var) = undefined
+	lookup(<$Table, $Errors>, $Var) = undefined-type
 
 [te3]	$Tenv' := well-formed-type($Etype, $Tenv),
 	<$Table, $Errors> := $Tenv'
@@ -309,7 +313,7 @@ $Error]>
 %% ---- Check that variable is not yet defined
 
 [cnd]	check-not-defined($Var, $Tenv) = 
-	if equal-type(lookup($Tenv, $Var), undefined, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
+	if equal-type(lookup($Tenv, $Var), undefined-type, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
 
 %% ---- get index of a field (if any)
 
@@ -361,7 +365,7 @@ $Error]>
 	get-field-type(<$Etype $Var1, $DclVar*>, $Var2, $Tenv) = 
 	get-field-type(<$DclVar*>, $Var2, $Tenv)
 
-[gft3]	get-field-type(< > , $Var, $Tenv) = <undefined, $Tenv + No definition for field $Var>
+[gft3]	get-field-type(< > , $Var, $Tenv) = <undefined-type, $Tenv + No definition for field $Var>
 
 [rt1] 	<$Etype', $Tenv'> := check($Exp, $Tenv)
       	=========================================
@@ -405,48 +409,48 @@ $Error]>
 [check-const-tuple1]
 	check-const(<$Elem+>, $Tenv) = check-const-tuple(<$Elem+>, $Tenv)
 
-[check-const-bag1]
-	check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag),$Tenv)
+[check-const-set1]
+	check-const($Set, $Tenv) = check-const-set-or-rel(mk-iterator($Set),$Tenv)
 
 [check-const-br1]
 	is-tuple($Elem) == false,
 	<$Etype, $Tenv'> := check-const($Elem, $Tenv),
-	$Etype' := bag[$Etype],
-	<$Etype'', $Tenv''> := check-const-bag-or-rel({ $Elem+ }, $Tenv'),
+	$Etype' := set[$Etype],
+	<$Etype'', $Tenv''> := check-const-set-or-rel({ $Elem+ }, $Tenv'),
 	equal-type($Etype', $Etype'', $Tenv'') == true
 	==========================================
-	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
+	check-const-set-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
 
 [check-const-br2] 
 	is-tuple($Elem) == false,
 	<$Etype, $Tenv'> := check-const($Elem, $Tenv),
-	$Etype' :=  bag[$Etype]
+	$Etype' :=  set[$Etype]
 	==========================================
-	check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
+	check-const-set-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
 
 [check-const-br31]
 	is-tuple($Elem) == true,   
 	<<$Etype+>, $Tenv'> := check-const-tuple($Elem, $Tenv), 
 	$Etype := rel[$Etype+],
-	<$Etype', $Tenv''> := check-const-bag-or-rel({ $Elem+ }, $Tenv'),
+	<$Etype', $Tenv''> := check-const-set-or-rel({ $Elem+ }, $Tenv'),
 	equal-type($Etype, $Etype', $Tenv'') == true
 	==========================================
-	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
+	check-const-set-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
 
 [check-const-br4]
 	is-tuple($Elem) == true, 
 	<<$Etype+>, $Tenv'> := check-const-tuple($Elem, $Tenv), 
 	$Etype := rel[$Etype+]
        ==========================================
-       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
+       check-const-set-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
 
 [check-const-br5]
-	check-const-bag-or-rel({}, $Tenv) = <empty-bag-type, $Tenv>
+	check-const-set-or-rel({}, $Tenv) = <empty-set-type, $Tenv>
 
 [default-check-const-br]
-	{$Elem*} := $Bag
+	{$Elem*} := $Set
 	=========================================
-	check-const-bag-or-rel($Bag, $Tenv) = <undefined, $Tenv + $Bag cannot be typed>
+	check-const-set-or-rel($Set, $Tenv) = <undefined-type, $Tenv + $Set cannot be typed>
 
 %%-----------------------------------------------------------------------------------
 
@@ -455,7 +459,7 @@ $Error]>
 %% ---- Default case for check
 
 [default-check]
-	check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
+	check($Exp, $Tenv) = <undefined-type, $Tenv +  $Exp cannot be typed>
 
 %% ---- Parentheses
 
@@ -469,7 +473,7 @@ $Error]>
 	$Etype := lookup($Tenv, $Var)
 	============================================
 	check($Var, $Tenv) = 
-	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined-type, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
 
 [check-tuple-const]
  	check($Tuple, $Tenv) = check-const-tuple($Tuple, $Tenv)	
@@ -488,7 +492,7 @@ $Error]>
 
 [ct1]	container-type(<$Etype+>) = rel[$Etype+]
 [default-ct2] 
-	container-type($Etype) = bag[$Etype]
+	container-type($Etype) = set[$Etype]
 
 %% ---- Check bag/relation  expressions
 
@@ -506,10 +510,10 @@ $Error]>
 	check({ $Exp }, $Tenv) = <$Etype', $Tenv'>
 
 [check-bag-rel3]
-	check({}, $Tenv) =  <empty-bag-type, $Tenv>
+	check({}, $Tenv) =  <empty-set-type, $Tenv>
 
 [default-bag-rel]
-	check($Exp, $Tenv) = <undefined, $Tenv + $Exp cannot be typed>
+	check($Exp, $Tenv) = <undefined-type, $Tenv + $Exp cannot be typed>
 
 %% ---- Check Operators
 
@@ -537,13 +541,13 @@ $Error]>
 
 [check-in]
 	<$Etype1, $Tenv'> := check($Exp1, $Tenv),
-	$Tenv'' := require-type($Exp2, bag[$Etype1], $Tenv')
+	$Tenv'' := require-type($Exp2, set[$Etype1], $Tenv')
 	===================================================
 	check($Exp1 in $Exp2, $Tenv) = <bool, $Tenv''>
 
 [check-notin]
 	<$Etype1, $Tenv'> := check($Exp1, $Tenv),
-	$Tenv'' := require-type($Exp2, bag[$Etype1], $Tenv')
+	$Tenv'' := require-type($Exp2, set[$Etype1], $Tenv')
 	===================================================
 	check($Exp1 notin $Exp2, $Tenv) = <bool, $Tenv''>
 
@@ -565,13 +569,13 @@ $Error]>
 %% ---- compatibility for other comparison operators
 
 [compat-cmp1]
-	compat-cmp($Exp, bag[$Etype], bag[$Etype], $Tenv) = $Tenv
+	compat-cmp($Exp, set[$Etype], set[$Etype], $Tenv) = $Tenv
 [compat-cmp2]
-	compat-cmp($Exp, bag[$Etype], empty-bag-type, $Tenv) = $Tenv
+	compat-cmp($Exp, set[$Etype], empty-set-type, $Tenv) = $Tenv
 [compat-cmp3]
-	compat-cmp($Exp, empty-bag-type, bag[$Etype], $Tenv) = $Tenv
+	compat-cmp($Exp, empty-set-type, set[$Etype], $Tenv) = $Tenv
 [compat-cmp4]
-	compat-cmp($Exp, empty-bag-type, empty-bag-type, $Tenv) = $Tenv
+	compat-cmp($Exp, empty-set-type, empty-set-type, $Tenv) = $Tenv
 [compat-cmp5]
 	compat-cmp($Exp, int, int, $Tenv) = $Tenv
 [compat-cmp6]
@@ -640,20 +644,20 @@ $Error]>
 %% --- Union-like operators
 
 [compat-un1] 
-	compat-un($Exp, bag[$Etype], bag[$Etype], $Tenv) = <bag[$Etype], $Tenv>
+	compat-un($Exp, set[$Etype], set[$Etype], $Tenv) = <set[$Etype], $Tenv>
 
 [compat-un2] 
-	compat-un($Exp, bag[$Etype], empty-bag-type, $Tenv) = <bag[$Etype], $Tenv>
+	compat-un($Exp, set[$Etype], empty-set-type, $Tenv) = <set[$Etype], $Tenv>
 
 [compat-un3] 
-	compat-un($Exp, empty-bag-type, bag[$Etype], $Tenv) = <bag[$Etype], $Tenv>
+	compat-un($Exp, empty-set-type, set[$Etype], $Tenv) = <set[$Etype], $Tenv>
 
 [compat-un4] 
-	compat-un($Exp, empty-bag-type, empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-un($Exp, empty-set-type, empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 
 [default-compat-un]
 	compat-un($Exp, $Etype1, $Etype2, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [check-un1]
 	<$Etype1, $Tenv'> := check($Exp1, $Tenv), 
@@ -680,17 +684,17 @@ $Error]>
 %% --- Composition
 
 [compat-comp1] 
-	compat-comp($Exp, bag[<$Etype1,$Etype2>], bag[<$Etype2,$Etype3>], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
+	compat-comp($Exp, set[<$Etype1,$Etype2>], set[<$Etype2,$Etype3>], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
 [compat-comp2] 
-	compat-comp($Exp, bag[<$Etype1,$Etype2>], empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-comp($Exp, set[<$Etype1,$Etype2>], empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 [compat-comp3] 
-	compat-comp($Exp, empty-bag-type, bag[<$Etype2,$Etype3>], $Tenv) = <empty-bag-type, $Tenv>
+	compat-comp($Exp, empty-set-type, set[<$Etype2,$Etype3>], $Tenv) = <empty-set-type, $Tenv>
 [compat-comp4] 
-	compat-comp($Exp, empty-bag-type, empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-comp($Exp, empty-set-type, empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 
 [default-compat-comp]
 	compat-comp($Exp, $Etype1, $Etype2, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [c03] $Exp1 o $Exp2 := $Exp,
       <$Etype1, $Tenv'> := check($Exp1, $Tenv), 
@@ -702,17 +706,17 @@ $Error]>
 %% -- Product
 
 [compat-prod1] 
-	compat-prod($Exp, bag[$Etype1], bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
+	compat-prod($Exp, set[$Etype1], set[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
 [compat-prod2] 
-	compat-prod($Exp, bag[$Etype1], empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-prod($Exp, set[$Etype1], empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 [compat-prod3] 
-	compat-prod($Exp, empty-bag-type, bag[$Etype2], $Tenv) = <empty-bag-type, $Tenv>
+	compat-prod($Exp, empty-set-type, set[$Etype2], $Tenv) = <empty-set-type, $Tenv>
 [compat-prod4] 
-	compat-prod($Exp, empty-bag-type, empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-prod($Exp, empty-set-type, empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 
 [default-compat-prod]
 	compat-prod($Exp, $Etype1, $Etype2, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [check-product] 
 	$Exp1 x $Exp2 := $Exp,
@@ -724,23 +728,23 @@ $Error]>
 
 %% ---- Image
 
-[clm1]	compat-lim($Exp, bag[<$Etype1,$Etype2>], $Etype2, $Tenv) = <bag[$Etype1], $Tenv>
-[clm2]  compat-lim($Exp, bag[<$Etype1,$Etype2>], bag[$Etype2], $Tenv) = <bag[$Etype1], $Tenv>
-[clm3]  compat-lim($Exp, bag[<$Etype1,$Etype2>], empty-bag-type, $Tenv) = <bag[$Etype1], $Tenv>
-[clm4]  compat-lim($Exp, empty-bag-type, $Etype, $Tenv) = <empty-bag-type, $Tenv>
+[clm1]	compat-lim($Exp, set[<$Etype1,$Etype2>], $Etype2, $Tenv) = <set[$Etype1], $Tenv>
+[clm2]  compat-lim($Exp, set[<$Etype1,$Etype2>], set[$Etype2], $Tenv) = <set[$Etype1], $Tenv>
+[clm3]  compat-lim($Exp, set[<$Etype1,$Etype2>], empty-set-type, $Tenv) = <set[$Etype1], $Tenv>
+[clm4]  compat-lim($Exp, empty-set-type, $Etype, $Tenv) = <empty-set-type, $Tenv>
 
 [default-clm]
 	compat-lim($Exp, $Etype1, $Etype2, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
-[crm1]	compat-rim($Exp, bag[<$Etype1,$Etype2>], $Etype1, $Tenv) = <bag[$Etype2], $Tenv>
-[crm2]	compat-rim($Exp, bag[<$Etype1,$Etype2>], bag[$Etype1], $Tenv) = <bag[$Etype2], $Tenv>
-[crm2]	compat-rim($Exp, bag[<$Etype1,$Etype2>], empty-bag-type, $Tenv) = <bag[$Etype2], $Tenv>
-[crm2]	compat-rim($Exp, empty-bag-type, $Etype, $Tenv) = <empty-bag-type, $Tenv>
+[crm1]	compat-rim($Exp, set[<$Etype1,$Etype2>], $Etype1, $Tenv) = <set[$Etype2], $Tenv>
+[crm2]	compat-rim($Exp, set[<$Etype1,$Etype2>], set[$Etype1], $Tenv) = <set[$Etype2], $Tenv>
+[crm2]	compat-rim($Exp, set[<$Etype1,$Etype2>], empty-set-type, $Tenv) = <set[$Etype2], $Tenv>
+[crm2]	compat-rim($Exp, empty-set-type, $Etype, $Tenv) = <empty-set-type, $Tenv>
 
 [default-compat-rim]
 	compat-rim($Exp, $Etype1, $Etype2, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [check-im1] 	
 	$Exp0 [ -, $Exp1] := $Exp,
@@ -778,13 +782,13 @@ $Error]>
 %% --- Transitive closure
 
 [compat-trans1]
-	compat-trans($Exp, bag[<$Etype,$Etype>], $Tenv) = <rel[$Etype, $Etype], $Tenv>
+	compat-trans($Exp, set[<$Etype,$Etype>], $Tenv) = <rel[$Etype, $Etype], $Tenv>
 [compat-trans2]
-	compat-trans($Exp, empty-bag-type, $Tenv) = <empty-bag-type, $Tenv>
+	compat-trans($Exp, empty-set-type, $Tenv) = <empty-set-type, $Tenv>
 
 [default-compat-trans]
 	compat-trans($Exp, $Etype, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types $Etype in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types $Etype in $Exp>  
  
 [check-closure] 
 	$Exp1 + := $Exp,
@@ -803,12 +807,12 @@ $Error]>
 %% --- size
 
 [compat-size1]
-	compat-size($Exp, bag[$Etype], $Tenv) = <int, $Tenv>
+	compat-size($Exp, set[$Etype], $Tenv) = <int, $Tenv>
 [compat-size1]
-	compat-size($Exp, empty-bag-type, $Tenv) = <int, $Tenv>
+	compat-size($Exp, empty-set-type, $Tenv) = <int, $Tenv>
 [default-compat-size]
 	compat-size($Exp, $Etype, $Tenv) = 
-	<undefined, $Tenv + Incompatible argument types $Etype in $Exp>  
+	<undefined-type, $Tenv + Incompatible argument types $Etype in $Exp>  
  
 [check-size]
 	#  $Exp1 := $Exp,
@@ -823,7 +827,7 @@ $Error]>
 	
 %% ---- Check generators and add introduced variables to type environment
 
-[ag1] 	$Tenv' := require-type($Exp, bag[$Etype], $Tenv),
+[ag1] 	$Tenv' := require-type($Exp, set[$Etype], $Tenv),
       	$Tenv'' := store($Tenv', $Var, $Etype)
       	==========================================
       	add-generators($Etype $Var : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
@@ -862,14 +866,14 @@ $Error]>
 	match-targets($Target*, second($Etype2,$Tenv), $Tenv')
 
 [mt2]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) == false,
-	first($Etype2, $Tenv) != undefined	
+	first($Etype2, $Tenv) != undefined-type	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
 	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var should have type
 	first($Etype2, $Tenv))
 
 [mt3]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) == false,
-	first($Etype2, $Tenv) == undefined	
+	first($Etype2, $Tenv) == undefined-type	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
 	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var exceeds number of targets of generator)
@@ -1010,8 +1014,8 @@ $Error]>
 	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
 	=========================================
 	check-stat($Yield $Etype $Var += $Exp, $Tenv) =
-	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
-        else $Tenv2 + $Etype should be bag or rel type
+	if is-rel-type($Etype) | is-set-type($Etype) then $Tenv2 
+        else $Tenv2 + $Etype should be set or rel type
         fi
 
 %% ---- Check function declarations
@@ -1081,7 +1085,7 @@ $Error]>
 
 [frt1]	lookup($Tenv, $Var) == not-in-table
 	==================================
-	find-result-type($Var, [$Etype*], $Tenv) = <undefined, $Tenv + Undeclared $Var>
+	find-result-type($Var, [$Etype*], $Tenv) = <undefined-type, $Tenv + Undeclared $Var>
 
 [frt2]	fun [$Etype*2] to $Etype := lookup($Tenv, $Var),
 	<true, $Table> := match-types([$Etype*2],  [$Etype*1], new-table, $Tenv)
@@ -1089,7 +1093,7 @@ $Error]>
 	find-result-type($Var, [$Etype*1], $Tenv) = substitute($Etype, $Table, $Tenv)
 
 [default-frt]
-	find-result-type($Var, [$Etype*1], $Tenv) = <undefined, $Tenv + No definition for $Var with argument [$Etype*1]>
+	find-result-type($Var, [$Etype*1], $Tenv) = <undefined-type, $Tenv + No definition for $Var with argument [$Etype*1]>
 
 %% ---- match types
 
@@ -1115,19 +1119,19 @@ $Error]>
 
 [mt6]	<true, $Table'> := match-types($Etype1, $Etype2, $Table, $Tenv)
 	===================================================
-	match-types(bag[$Etype1], bag[$Etype2], $Table, $Tenv) =  <true, $Table'>
+	match-types(set[$Etype1], set[$Etype2], $Table, $Tenv) =  <true, $Table'>
 
-[mt6a]	match-types(bag[$Etype1], empty-bag-type, $Table, $Tenv) =  <true, $Table>
+[mt6a]	match-types(set[$Etype1], empty-set-type, $Table, $Tenv) =  <true, $Table>
 
-[mt7]	match-types(rel[$Etype+], $Etype, $Table, $Tenv) = match-types(bag[<$Etype+>], $Etype, $Table, $Tenv)
+[mt7]	match-types(rel[$Etype+], $Etype, $Table, $Tenv) = match-types(set[<$Etype+>], $Etype, $Table, $Tenv)
 
-[mt8]	match-types($Etype, rel[$Etype+], $Table, $Tenv) = match-types($Etype, bag[<$Etype+>], $Table, $Tenv)
+[mt8]	match-types($Etype, rel[$Etype+], $Table, $Tenv) = match-types($Etype, set[<$Etype+>], $Table, $Tenv)
 
 [mt9]	<true, $Table'> := match-types(<$Etype+>, <$Etype+'>, $Table, $Tenv)
 	===================================================
-	match-types(bag[<$Etype+>], bag[<$Etype+'>], $Table, $Tenv) =  <true, $Table'>
+	match-types(set[<$Etype+>], set[<$Etype+'>], $Table, $Tenv) =  <true, $Table'>
 
-[mt9a]	match-types(bag[<$Etype+>], empty-bag-type, $Table, $Tenv) =  <true, $Table>
+[mt9a]	match-types(set[<$Etype+>], empty-set-type, $Table, $Tenv) =  <true, $Table>
 
 [mt10]	<true, $Table'> := match-types($Etype1, $Etype1', $Table, $Tenv),
 	<true, $Table''> := match-types(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Table', $Tenv)
@@ -1157,24 +1161,24 @@ $Error]>
 
 %% ---- cover-empty
 
-[ce1]	cover-empty(rel[$Etype*, undefined, $Etype*']) = empty-bag-type
-[ce2]	cover-empty(bag[undefined]) = empty-bag-type
+[ce1]	cover-empty(rel[$Etype*, undefined-type, $Etype*']) = empty-set-type
+[ce2]	cover-empty(set[undefined-type]) = empty-set-type
 [default-ce]
 	cover-empty($Etype) = $Etype
 
 %% ---- Substitute type
 %% ---- We assume here that type variables &V that are undefined are the
-%% ---- result of an occurrence of empty-bag-type.
+%% ---- result of an occurrence of empty-set-type.
 
 [sb1]	$Etype := lookup($Table, $Var)
 	======================================================
 	substitute(& $Var, $Table, $Tenv) = 
-	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv > %%+ Undeclared $Var>
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined-type, $Tenv > %%+ Undeclared $Var>
 						   else <$Etype, $Tenv> fi
 
 [sb2]   <$Etype', $Tenv'> := substitute($Etype, $Table, $Tenv)
 	======================================================
-	substitute(bag[$Etype], $Table, $Tenv) = <cover-empty(bag[$Etype']), $Tenv>
+	substitute(set[$Etype], $Table, $Tenv) = <cover-empty(set[$Etype']), $Tenv>
 
 [sb3]	<<$Etype+'>, $Tenv'> := substitute(<$Etype+>, $Table, $Tenv)
 	=======================================================
@@ -1196,33 +1200,33 @@ $Error]>
 %% ---- The types of the built-in functions
 
 [bi-1]  built-ins = [
-		<id,      	fun [ bag[&T] ] 			to rel[&T,&T]>,
-      		<domain,  	fun [ rel[&T1,&T2] ] 			to bag[&T1]>,
-     		<range,   	fun [ rel[&T1,&T2] ] 			to bag[&T2]>,
-       		<carrier, 	fun [ rel[&T,&T] ] 			to bag[&T]>,
-		<top,     	fun [ rel[&T,&T] ] 			to bag[&T]>,
-		<bottom,  	fun [ rel[&T,&T] ] 			to bag[&T]>,
+		<id,      	fun [ set[&T] ] 			to rel[&T,&T]>,
+      		<domain,  	fun [ rel[&T1,&T2] ] 			to set[&T1]>,
+     		<range,   	fun [ rel[&T1,&T2] ] 			to set[&T2]>,
+       		<carrier, 	fun [ rel[&T,&T] ] 			to set[&T]>,
+		<top,     	fun [ rel[&T,&T] ] 			to set[&T]>,
+		<bottom,  	fun [ rel[&T,&T] ] 			to set[&T]>,
        		<inv,     	fun [ rel[&T1,&T2] ] 			to rel[&T2,&T1]>,
 		<compl,   	fun [ rel[&T1, &T2] ] 			to rel[&T1,&T2]>,
-		<unique,      	fun [ bag[&T] ] 			to bag[&T]>,
+		<unique,      	fun [ set[&T] ] 			to set[&T]>,
 
-       		<domainR, 	fun [ rel[&T1,&T2], bag[&T1] ]		to rel[&T1,&T2]>,
-       		<rangeR,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,
-       		<carrierR,    	fun [ rel[&T,&T], bag[&T] ] 		to rel[&T,&T]>,
+       		<domainR, 	fun [ rel[&T1,&T2], set[&T1] ]		to rel[&T1,&T2]>,
+       		<rangeR,    	fun [ rel[&T1,&T2], set[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierR,    	fun [ rel[&T,&T], set[&T] ] 		to rel[&T,&T]>,
 
-       		<domainX,    	fun [ rel[&T1,&T2], bag[&T1] ] 		to rel[&T1,&T2]>,
-       		<rangeX,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,
-       		<carrierX,    	fun [	rel[&T,&T], bag[&T] ] 		to rel[&T,&T]>,
+       		<domainX,    	fun [ rel[&T1,&T2], set[&T1] ] 		to rel[&T1,&T2]>,
+       		<rangeX,    	fun [ rel[&T1,&T2], set[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierX,    	fun [	rel[&T,&T], set[&T] ] 		to rel[&T,&T]>,
                 <first,     	fun [ <&T1,&T2>] 			to &T1>,
                 <second,     	fun [ <&T1,&T2> ] 			to &T2>,
 
-		<power0,	fun[ bag[&T] ]				to bag[bag[&T]]>,
-		<power1,	fun[ bag[&T] ]				to bag[bag[&T]]>,
+		<power0,	fun[ set[&T] ]				to set[set[&T]]>,
+		<power1,	fun[ set[&T] ]				to set[set[&T]]>,
 
-		<all-paths-from,fun[ rel[&T,&T], bag[&T] ]		to bag[rel[&T,&T]]>,
+		<all-paths-from,fun[ rel[&T,&T], set[&T] ]		to set[rel[&T,&T]]>,
 
-                <reachX,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
-                <reachR,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
+                <reachX,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
+                <reachR,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
 
 		<filename,	fun [ loc ]				to str >,
 		<beginline,	fun [ loc ]				to int >,
@@ -1231,10 +1235,10 @@ $Error]>
 		<endline,	fun [ loc ]				to int >,
 		<endcol,	fun [ loc ]				to int >,
 
-		<sum,		fun [ bag[int] ]			to int >,
-		<average,	fun [ bag[int] ]			to int >,
-		<max,		fun [ bag[int] ]			to int >,
-		<min,		fun [ bag[int] ]			to int >
+		<sum,		fun [ set[int] ]			to int >,
+		<average,	fun [ set[int] ]			to int >,
+		<max,		fun [ set[int] ]			to int >,
+		<min,		fun [ set[int] ]			to int >
 
         ]
 

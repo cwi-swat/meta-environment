@@ -25,7 +25,7 @@ assert "range-1" : range({}) == {}
 assert "range-2" : range(Rel1) == {10}
 assert "range-3" : range (Rel2) == {10,20,30}
 assert "range-4" : range (Rel4) == {10,20,10,10,20}
-bag[int] range4 = range (Rel4)
+set[int] range4 = range(Rel4)
 
 %% --- carrier
 

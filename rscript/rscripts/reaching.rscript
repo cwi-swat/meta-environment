@@ -25,6 +25,9 @@ rel[stat,stat] PRED-OF = inv(PRED)
 bag[stat] predecessor(stat S) = PRED[-,S]
 bag[stat] successor(stat S) = PRED[S,-]
 
+bag[stat] gpredecessor(rel[stat,stat] P, stat S) = P[-,S]
+bag[stat] gsuccessor(rel[stat,stat] P, stat S) = P[S,-]
+
 %% Reaching definitions
 
 equations
@@ -51,26 +54,26 @@ assert "OUT": OUT == {<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>
                       <6, <5, "j">>, <6, <4, "i">>, <7, <7, "i">>, <7, <5, "j">>,
                       <7, <3, "a">>, <7, <6, "a">>}
 
-rel[stat, def] reaching-definitions(rel[stat,var] DEFS, rel[stat,stat] PRED) = 
+rel[stat, def] reaching-definitions(rel[stat,var] MYDEFS, rel[stat,stat] MYPRED) = 
    IN
 where
-	bag[stat] STATEMENT = carrier(PRED)
+	bag[stat] STATEMENT = carrier(MYPRED)
 
-	rel[stat,def] DEF  = {<S,<S,V>> | <stat S, var V> : DEFS}
+	rel[stat,def] MYDEF  = {<S,<S,V>> | <stat S, var V> : MYDEFS}
 
-	rel[stat,def] KILL = 
- 	   {<S1, <S2, V>> | <stat S1, var V> : DEFS, <stat S2, V> : DEFS, S1 != S2}
+	rel[stat,def] MYKILL = 
+ 	   {<S1, <S2, V>> | <stat S1, var V> : MYDEFS, <stat S2, V> : MYDEFS, S1 != S2}
 
 	%% The set of mutually recursive dataflow equations that has to be solved:
 
 	equations 
 	   initial
-		rel[stat,def] IN init {}
+		rel[stat,def] MYIN init {}
 
-		rel[stat,def] OUT init DEF
+		rel[stat,def] MYOUT init DEF
 	   satisfy
-       		IN =  {<S, D> | int S : STATEMENT, stat P : predecessor(PRED,S), def D : OUT[P]}
-        	OUT = {<S, D> |  int S : STATEMENT, def D : DEF[S] union (IN[S] \ KILL[S])}
+       		MYIN =  {<S, D> | int S : STATEMENT, stat P : gpredecessor(PRED,S), def D : MYOUT[P]}
+        	MYOUT = {<S, D> |  int S : STATEMENT, def D : MYDEF[S] union (MYIN[S] \ MYKILL[S])}
 	end equations
 end where
 

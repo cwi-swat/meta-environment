@@ -25,12 +25,12 @@ exports
 	type-of(Elem)                  				-> ElemType
 	element-type(REXPTYPE, TENV)				-> REXPTYPE
 
-        "undefined"                       			-> REXPTYPE
+        "undefined-type"                       			-> REXPTYPE
 	field(Integer)						-> REXPTYPE
 	"<" { DCLRVAR ","}* ">"					-> REXPTYPE
         "fun" {REXPTYPE ","}* "to" REXPTYPE			-> REXPTYPE
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
-	"empty-bag-type"					-> REXPTYPE
+	"empty-set-type"					-> REXPTYPE
 	cover-empty(REXPTYPE)					-> REXPTYPE
 
 	first(REXPTYPE, TENV)					-> REXPTYPE
@@ -38,7 +38,7 @@ exports
 
 	is-tuple(Elem)						-> Boolean
 	is-rel-type(REXPTYPE)					-> Boolean
-	is-bag-type(REXPTYPE)					-> Boolean
+	is-set-type(REXPTYPE)					-> Boolean
 
 	norm(REXPTYPE, TENV)					-> REXPTYPE
 	well-formed-type(REXPTYPE, TENV)			-> TENV
@@ -58,13 +58,13 @@ exports
 
         "Incompatible argument types" REXPTYPE "in" REXP        -> ERROR
         REXP "should have type" REXPTYPE          		-> ERROR
-        REXP "should be of type bag"         			-> ERROR
+        REXP "should be of type set"         			-> ERROR
         REXP "should be of type rel"         			-> ERROR
         "No definition for" RVAR "with argument" REXPTYPE       -> ERROR
 	"No definition for field" RVAR				-> ERROR
 	RVAR "exceeds number of targets of generator"		-> ERROR
 	"Field name" RVAR "used at different record positions"	-> ERROR
-	REXPTYPE "should be bag or rel type"			-> ERROR
+	REXPTYPE "should be set or rel type"			-> ERROR
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
@@ -102,7 +102,7 @@ exports
 
 	check-const(Elem, TENV) 				-> <REXPTYPE, TENV>
 	check-const-tuple(Elem, TENV)				-> <REXPTYPE, TENV>
-	check-const-bag-or-rel(BagIterator[[Elem]], TENV) 	-> <REXPTYPE, TENV>
+	check-const-set-or-rel(BagIterator[[Elem]], TENV) 	-> <REXPTYPE, TENV>
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -183,8 +183,7 @@ hiddens
      "$Tuple+" [0-9\']*     	-> {Tuple ","}+
 
 
-     "$Bag" [0-9\']*        	-> Bag[[Elem]]
-     "$BagIter" [0-9\']*        -> BagIterator[[Elem]]
+     "$Set" [0-9\']*        	-> Bag[[Elem]]
      "$Rel" [0-9\']*        	-> Bag[[Elem]]
 
      "$BoolCon" [0-9\']*    	-> BoolCon
