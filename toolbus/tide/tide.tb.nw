@@ -25,7 +25,7 @@ toolbus(MAIN,
 %{{{ process MAIN
 
 <<process MAIN>>=
-tool tide-main is { command = "wish-adapter -script tide-main.tcl" }
+tool tide-main is { command = "wish-adapter -wish wish4.1 -script tide-main.tcl" }
 
 process MAIN is
 let

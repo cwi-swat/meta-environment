@@ -84,8 +84,7 @@ button .time -text "showTime" -command {
 }
 
 button .quit -text "Quit" -command {
-  sendTB "snd-event(button(quit))";
-  exit
+  sendTB "snd-event(button(quit))"
 }
 
 pack .calc .log .time .quit -fill both
@@ -144,7 +143,11 @@ proc show_list {name text value group} {
         pack $w.top.scroll -side right -fill y
 
         foreach e $value {
-          $w.top.list insert end "[lindex $e 0] = [lindex $e 1]"
+	  if {[llength $e] == 3} {
+            $w.top.list insert end "[lindex $e 0] = [lindex $e 1] ([lindex $e 2])"
+	  } else {
+            $w.top.list insert end "[lindex $e 0] = [lindex $e 1]"
+          }
         }
 
 	button $w.bot.ok -text ok -command "global ok; destroy $w; set ok($group) 1; enable $group"

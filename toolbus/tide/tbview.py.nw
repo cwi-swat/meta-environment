@@ -1063,7 +1063,6 @@ def action(self, type, event, constraints):
 	except:
 		print sys.exc_type
 		print sys.exc_value
-		print sys.exc_trace
 @
 
 %}}}
@@ -1654,6 +1653,7 @@ some administration on it.
 def toolbus_connected(cid, ID, info):
   global tbs, button_list
 
+  print "toolbus_connection: ", ID
   if tbs.has_key(ID):
     tbs[ID].change(info)
   else:
@@ -1698,12 +1698,12 @@ def view_toolbus(cid, ID):
 	global tbs
 
 	try:
+		print "view_toolbus: ", ID
 		tb = tbs[ID]
 		tb.show()
 	except:
 		print sys.exc_type
 		print sys.exc_value
-		print sys.exc_trace
 @
 
 %}}}

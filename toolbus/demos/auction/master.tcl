@@ -108,8 +108,6 @@ proc mkMaster {} {
   button $w.bot.new -text "New" -state normal -command button_new
 
   button $w.bot.quit -text "Quit" -state normal -command {
-    destroy .
-#    TBsend "snd-disconnect"
     TBsend "snd-event(quit)"
   }
   label $w.bot.status -text "No sale in progress" -width 40 -foreground red
@@ -126,6 +124,7 @@ proc button_new { } {
       if { $highest_bid == "" } {
          set highest_bid 0
       }
+      puts stderr "description: $description -> [TBstring $description]"
       TBsend "snd-event(new-item([TBstring $description],$highest_bid))"
  
       set current_bid $highest_bid

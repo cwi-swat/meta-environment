@@ -5,7 +5,7 @@
 
 \subsection{Script overview}
 
-The ToolBus script {\tt hearts.tb} controls the game of hearts.
+The ToolBus script {\tt hearts.tb} controls the hearts system.
 It defines six processes and two tools. The ToolBus configuraton
 command at the end of the script starts the
 {\tt MASTER}, {\tt UMPIRE}, and {\tt CONNECT-PLAYERS} processes,
@@ -15,7 +15,7 @@ and creates three robot players.
 <<process MASTER>>
 
 <<process UMPIRE>>
-<<process ONE-GAME>>
+<<process MATCH>>
 
 <<process CONNECT-PLAYERS>>
 <<process START-PLAYER>>
@@ -57,26 +57,26 @@ tool umpire is { command = "./umpire" }
 
 \subsection{the {\tt MASTER} process}
 
-The {\tt MASTER} process administrates which games and players are
-active, and keeps track of which players participate in which games.
+The {\tt MASTER} process administrates which matches and players are
+active, and keeps track of which players participate in which matches.
 
 <<process MASTER>>=
 process MASTER is
 let
   Players  : list,
-  Games    : list,
+  Matches  : list,
   PidCount : int,
-  GidCount : int
+  MidCount : int
 in
   PidCount := 1 .
-  GidCount := 1 .
+  MidCount := 1 .
   Players := [] .
-  Games := [] .
+  Matches := [] .
   ( <<MASTER: new-player>>
     +
-    <<MASTER: new-game>>
+    <<MASTER: new-match>>
     +
-    <<MASTER: join-game>>
+    <<MASTER: join-match>>
     +
     <<MASTER: player-quits>>
     +
@@ -92,7 +92,7 @@ in
     +
     <<MASTER: game-aborted>>
     +
-    <<MASTER: msg2game>>
+    <<MASTER: msg2match>>
   ) * delta
 endlet
 @
@@ -112,47 +112,47 @@ in
   Players := put(Players, PidCount, [Name,Type,Level,Version]) .
   PidCount := add(PidCount,1) .
   snd-note(players(Players)) .
-  snd-note(games(Games))
+  snd-note(matches(Matches))
 endlet
 @
 
 %}}}
-%{{{ new-game
+%{{{ new-match
 
-Start a new game. Hand out a new game-id ({\tt Gid}), register the new game,
+Start a new match. Hand out a new match-id ({\tt Mid}), register the new match,
 and tell everyone about it.
 
-<<MASTER: new-game>>=
+<<MASTER: new-match>>=
 let
   Pid : int
 in
-  rec-msg(new-game(Pid?)) .
-  Games := put(Games, GidCount, [[Pid], false]) .
-  snd-msg(new-game(GidCount)) .
-  GidCount := add(GidCount, 1) .
-  snd-note(games(Games))
+  rec-msg(new-match(Pid?)) .
+  Matches := put(Matches, MidCount, [[Pid], false]) .
+  snd-msg(new-match(MidCount)) .
+  MidCount := add(MidCount, 1) .
+  snd-note(matches(Matches))
 endlet
 @
 
 %}}}
-%{{{ join-game
+%{{{ join-match
 
-A player wants to join a game. First we lookup the game, and check
+A player wants to join a match. First we lookup the match, and check
 if the player may join.
 
-<<MASTER: join-game>>=
+<<MASTER: join-match>>=
 let
-  Gid  : int,  Pid : int,
-  Game : list, Started : bool,
+  Mid  : int,  Pid : int,
+  Match : list, Started : bool,
   Participants : list
 in
-  rec-msg(join-game(Pid?, Gid?)) .
-  Game := get(Games, Gid) .
-  if equal(Game, []) then
+  rec-msg(join-match(Pid?, Mid?)) .
+  Match := get(Matches, Mid) .
+  if equal(Match, []) then
     tau
   else
-    Participants := index(Game, 1) .
-    Started := index(Game, 2) .
+    Participants := index(Match, 1) .
+    Started := index(Match, 2) .
     if Started then
       tau
     else  
@@ -167,24 +167,24 @@ endlet
 @
 
 It didn't start yet, so add the new player. We need to check if the
-game can start now.
+match can start now.
 
 <<join>>=
   Participants := join(Participants, Pid) .
   if equal(size(Participants), 4) then
 @
-Enough players are there, so we can start the game. The {\tt UMPIRE} process
-takes care of this. We just register the game as being started.
+Enough players are there, so we can start the match. The {\tt UMPIRE} process
+takes care of this. We just register the match as being started.
 
 <<join>>=
     Started := true .
-    snd-msg(start-game(Gid, Participants))
+    snd-msg(start-match(Mid, Participants))
   else
     tau
   fi .
-  Game   := [Participants, Started] .
-  Games  := put(Games, Gid, Game) .
-  snd-note(games(Games))
+  Match   := [Participants, Started] .
+  Matches  := put(Matches, Mid, Match) .
+  snd-note(matches(Matches))
 @
 
 %}}}
@@ -200,7 +200,7 @@ in
   rec-msg(player-quits(Pid?)) .
   Player := get(Players, Pid) .
   Players := diff(Players, [[Pid, Player]]) .
-  snd-note(Players)
+  snd-note(players(Players))
 endlet
 @
 
@@ -212,18 +212,18 @@ Distribute a number of hands.
 
 <<MASTER: deal>>=
 let
-  Gid   : int,
+  Mid   : int,
   Pid   : int,
   Hands : list,
   Hand  : list,
   Cards : list
 in
-  rec-msg(deal(Gid?, Hands?)) .
+  rec-msg(deal(Mid?, Hands?)) .
   ( if not-equal(Hands, []) then
       Hand := index(Hands, 1) .
       Pid  := index(Hand, 1) .
       Cards := index(Hand, 2) .
-      snd-msg(deal(Pid, Gid, Cards)) .
+      snd-msg(deal(Pid, Mid, Cards)) .
       Hands := next(Hands)
     fi
   ) * 
@@ -237,22 +237,22 @@ endlet
 %{{{ card-played
 
 When a player played a card, the master tool relays this information
-to all the players in the game.
+to all the players in the match.
 
 <<MASTER: card-played>>=
 let
-  Gid    : int, Pid  : int,
+  Mid    : int, Pid  : int,
   Round  : int, Card : int,
-  Player : int, Game : list,
+  Player : int, Match : list,
   Participants : list
 in
-  rec-msg(card-played(Gid?, Round?, Pid?, Card?)) .
-  Game := get(Games, Gid) .
-  Participants := index(Game, 1) .
+  rec-msg(card-played(Mid?, Round?, Pid?, Card?)) .
+  Match := get(Matches, Mid) .
+  Participants := index(Match, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      snd-msg(card-played(Player, Gid, Round, Pid, Card))
+      snd-msg(card-played(Player, Mid, Round, Pid, Card))
     fi
   ) * if equal(Participants, []) then
     tau
@@ -268,18 +268,18 @@ all the participants.
 
 <<MASTER: trick-done>>=
 let
-  Gid    : int,  Round  : int,
+  Mid    : int,  Round  : int,
   Winner : int,  Score  : int,  
   Played : list, Player : int,
-  Game   : list, Participants : list
+  Match   : list, Participants : list
 in
-  rec-msg(trick-done(Gid?, Round?, Winner?, Score?, Played?)) .
-  Game := get(Games, Gid) .
-  Participants := index(Game, 1) .
+  rec-msg(trick-done(Mid?, Round?, Winner?, Score?, Played?)) .
+  Match := get(Matches, Mid) .
+  Participants := index(Match, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      snd-msg(trick-done(Player, Gid, Round, Winner, Score, Played))
+      snd-msg(trick-done(Player, Mid, Round, Winner, Score, Played))
     fi
   ) * if equal(Participants, []) then
     tau
@@ -294,17 +294,17 @@ The players finished a single game. Relay the scores to all the participants.
 
 <<MASTER: game-done>>=
 let
-  Gid    : int,  Game   : list,
+  Mid    : int,  Game   : list,
   Scores : list, Player : int,
   Participants : list
 in
-  rec-msg(game-done(Gid?,Scores?)) .
-  Game := get(Games, Gid) .
+  rec-msg(game-done(Mid?,Scores?)) .
+  Game := get(Matches, Mid) .
   Participants := index(Game, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      snd-msg(game-done(Player, Gid, Scores))
+      snd-msg(game-done(Player, Mid, Scores))
     fi
   ) * if equal(Participants, []) then
     tau
@@ -319,28 +319,26 @@ endlet
 The match is over. Send all participants a message stating the
 players that did not want to continue. Knowing who does want to
 go on and who doesn't, makes it easier to invite people for
-a new game.
+a new match.
 
 <<MASTER: match-done>>=
 let
-  Gid    : int,  Quitting : list,
-  Game   : list, Player   : int, 
+  Mid    : int,  Quitting : list,
+  Match   : list, Player   : int, 
   Participants : list
 in
-  rec-msg(match-done(Gid?,Quitting?)) .
-  printf("received match-done %d,%t\n", Gid, Quitting) .
-  Game := get(Games, Gid) .
-  Participants := index(Game, 1) .
+  rec-msg(match-done(Mid?,Quitting?)) .
+  Match := get(Matches, Mid) .
+  Participants := index(Match, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      printf("sending match-done(%d,%d,%t)\n", Player, Gid, Quitting) .
-      snd-msg(match-done(Player, Gid, Quitting))
+      snd-msg(match-done(Player, Mid, Quitting))
     fi
   ) * if equal(Participants, []) then
-    Game := get(Games, Gid) .
-    Games := diff(Games, [[Gid, Game]]) .
-    snd-note(games(Games))
+    Match := get(Matches, Mid) .
+    Matches := diff(Matches, [[Mid, Match]]) .
+    snd-note(matches(Matches))
   fi
 endlet
 @
@@ -353,46 +351,46 @@ fault to all the participants.
 
 <<MASTER: game-aborted>>=
 let
-  Gid  : int,  Pid    : int,
-  Game : list, Player : int,
+  Mid  : int,  Pid    : int,
+  Match : list, Player : int,
   Participants : list
 in
-  rec-msg(game-aborted(Gid?,Pid?)) .
-  Game := get(Games, Gid) .
-  Participants := index(Game, 1) .
+  rec-msg(game-aborted(Mid?,Pid?)) .
+  Match := get(Matches, Mid) .
+  Participants := index(Match, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      snd-msg(game-aborted(Player, Gid, Pid))
+      snd-msg(game-aborted(Player, Mid, Pid))
     fi
   ) * if equal(Participants, []) then
-    Game := get(Games, Gid) .
-    Games := diff(Games, [[Gid, Game]]) .
-    snd-note(games(Games))
+    Match := get(Matches, Mid) .
+    Matches := diff(Matches, [[Mid, Match]]) .
+    snd-note(matches(Matches))
   fi
 endlet
 @
 
 %}}}
 
-%{{{ msg2game
+%{{{ msg2match
 
-Send a message to all players in a one game.
+Send a message to all players in a one match.
 
-<<MASTER: msg2game>>=
+<<MASTER: msg2match>>=
 let
-  Gid  : int,  Pid    : int,
-  Game : list, Player : int,
+  Mid  : int,  Pid    : int,
+  Match : list, Player : int,
   Participants : list,
   Msg  : str
 in
-  rec-msg(msg2game(Pid?, Msg?, Gid?)) .
-  Game := get(Games, Gid) .
-  Participants := index(Game, 1) .
+  rec-msg(msg2match(Pid?, Msg?, Mid?)) .
+  Match := get(Matches, Mid) .
+  Participants := index(Match, 1) .
   ( if not-equal(Participants, []) then
       Player := first(Participants) .
       Participants := next(Participants) .
-      snd-msg(message(Player, Gid, Msg, Pid))
+      snd-msg(message(Player, Mid, Msg, Pid))
     fi
   ) * if equal(Participants, []) then
     tau
@@ -406,37 +404,37 @@ endlet
 
 %{{{ process UMPIRE
 
-The {\tt UMPIRE} process just starts new games.
+\subsection{The {\tt UMPIRE} process}
+
+The {\tt UMPIRE} process just starts new matches.
 
 <<process UMPIRE>>=
 process UMPIRE is
 let
-  U       : umpire,
-  Pid     : int,
-  Gid     : int,
-  Players : list,
-  Hands   : list,
-  Hand    : list,
-  Cards   : list
+  U       : umpire, 
+  Id      : int,
+  Mid     : int,
+  Players : list
 in
   execute(umpire, U?) .
-  ( rec-msg(start-game(Gid?, Players?)) .
-    snd-do(U, start-game(Gid, Players)) .
-    create(ONE-GAME(U, Gid), Pid?)
+  ( rec-msg(start-match(Mid?, Players?)) .
+    snd-do(U, start-match(Mid, Players)) .
+    create(MATCH(U, Mid), Id?)
   ) * delta
 endlet
 @
 
 %}}}
-%{{{ process ONE-GAME
+%{{{ process MATCH
 
-The process {\tt ONE-GAME} handles a single game of hearts.
+\subsection{The {\tt MATCH} process}
+The process {\tt MATCH} handles a single match of hearts.
 It starts by dealing out cards to the four participating players.
 Then it is up to the {\tt umpire} tool to initiate the playing
 sequence.
 
-<<process ONE-GAME>>=
-process ONE-GAME(U:umpire, Gid : int) is
+<<process MATCH>>=
+process MATCH(U:umpire, Mid : int) is
 let
   AbortPid : int,
   Abort    : bool,
@@ -465,8 +463,8 @@ in
     fi
   +
     if Abort then
-      snd-do(U, abort-game(Gid, AbortPid)) .
-      snd-msg(game-aborted(Gid, AbortPid))
+      snd-do(U, abort-game(Mid, AbortPid)) .
+      snd-msg(game-aborted(Mid, AbortPid))
     fi
   )
 endlet
@@ -480,14 +478,17 @@ Distribute dealt cards among the players.
 let
   Hands : list
 in
-  rec-event(U, deal-cards(Gid, Hands?)) .
-  snd-msg(deal(Gid, Hands)) .
-  snd-ack-event(U, deal-cards(Gid, Hands))
+  rec-event(U, deal-cards(Mid, Hands?)) .
+  snd-msg(deal(Mid, Hands)) .
+  snd-ack-event(U, deal-cards(Mid, Hands))
 endlet
 @
 
 %}}}
 %{{{ play-card
+
+The {\tt umpire} is ready to play another card. 
+He asks the next player to play a legal card.
 
 <<play-card>>=
 let
@@ -495,20 +496,19 @@ let
   Played : list, Legal : list, 
   Card   : int
 in
-  rec-event(U, play-card(Pid?, Gid, Round?, Played?, Legal?)) .
-  snd-ack-event(U, play-card(Pid, Gid, Round, Played, Legal)) .
-  /*printf("play-card: %d,%d,%d,%t,%t\n", Pid, Gid, Round, Played, Legal) .*/
+  rec-event(U, play-card(Pid?, Mid, Round?, Played?, Legal?)) .
+  snd-ack-event(U, play-card(Pid, Mid, Round, Played, Legal)) .
   Card := -1 .
   ( if not(or(Abort,member(Card, Legal))) then
-      snd-msg(play-card(Pid, Gid, Round, Played, Legal)) .
-      ( rec-msg(play-card(Pid, Gid, Round, Card?)) .
+      snd-msg(play-card(Pid, Mid, Round, Played, Legal)) .
+      ( rec-msg(play-card(Pid, Mid, Round, Card?)) .
         if not(member(Card, Legal)) then
-          snd-msg(cheating(Pid, Gid, Round, Legal, Card))
+          snd-msg(cheating(Pid, Mid, Round, Legal, Card))
         else
           tau
         fi
         +
-        rec-msg(abort-game(Pid, Gid)) .
+        rec-msg(abort-game(Pid, Mid)) .
 	AbortPid := Pid .
 	Abort := true
       )
@@ -517,8 +517,8 @@ in
     fi
   ) *
   ( if member(Card, Legal) then
-      snd-msg(card-played(Gid, Round, Pid, Card)) .
-      snd-do(U, card-played(Pid, Gid, Round, Card))
+      snd-msg(card-played(Mid, Round, Pid, Card)) .
+      snd-do(U, card-played(Pid, Mid, Round, Card))
     fi
   +
     if Abort then
@@ -539,10 +539,9 @@ let
   Round : int, Winner : int,
   Score : int, Played : list
 in
-  rec-event(U, trick-done(Gid, Round?, Winner?, Score?, Played?)) .
-  printf("trick-done: %d,%d,%d,%d,%t\n", Gid, Round, Winner, Score, Played) .
-  snd-msg(trick-done(Gid, Round, Winner, Score, Played)) .
-  snd-ack-event(U, trick-done(Gid, Round, Winner, Score, Played))
+  rec-event(U, trick-done(Mid, Round?, Winner?, Score?, Played?)) .
+  snd-msg(trick-done(Mid, Round, Winner, Score, Played)) .
+  snd-ack-event(U, trick-done(Mid, Round, Winner, Score, Played))
 endlet
 @
 
@@ -557,40 +556,38 @@ Notify the {\tt umpire} tool.
 let
   Pid : int
 in
-  rec-msg(next-trick(Pid?, Gid)) .
-  snd-do(U, next-trick(Pid, Gid))
+  rec-msg(next-trick(Pid?, Mid)) .
+  snd-do(U, next-trick(Pid, Mid))
 endlet
 @
 
 %}}}
 %{{{ game-done
 
-One game is done. Inform the players, of the scoring in this
-game.
+A game has finished. Let the players now the scores in this game.
 
 <<game-done>>=
 let
   Scores : list
 in
-  rec-event(U, game-done(Gid, Scores?)) .
-  printf("game-done: %d,%t\n", Gid, Scores) .
-  snd-msg(game-done(Gid, Scores)) .
-  snd-ack-event(U, game-done(Gid, Scores))
+  rec-event(U, game-done(Mid, Scores?)) .
+  snd-msg(game-done(Mid, Scores)) .
+  snd-ack-event(U, game-done(Mid, Scores))
 endlet
 @
 
 %}}}
 %{{{ next-game
 
-A game participant indicates if he wants to play another game.
+A match participant indicates if he wants to play another game.
 Notify the {\tt umpire} tool.
 
 <<next-game>>=
 let
   Pid : int, Yes : bool
 in
-  rec-msg(next-game(Pid?, Gid, Yes?)) .
-  snd-do(U, next-game(Pid, Gid, Yes))
+  rec-msg(next-game(Pid?, Mid, Yes?)) .
+  snd-do(U, next-game(Pid, Mid, Yes))
 endlet
 @
 
@@ -602,11 +599,10 @@ endlet
 let
   Players : list
 in
-  rec-event(U, match-done(Gid, Players?)) .
-  printf("received match-done(%d,%t)\n", Gid, Players) .
+  rec-event(U, match-done(Mid, Players?)) .
   Finish := true .
-  snd-msg(match-done(Gid, Players)) .
-  snd-ack-event(U, match-done(Gid, Players))
+  snd-msg(match-done(Mid, Players)) .
+  snd-ack-event(U, match-done(Mid, Players))
 endlet
 @
 
@@ -614,8 +610,7 @@ endlet
 %{{{ abort-game
 
 <<abort-game>>=
-rec-msg(abort-game(AbortPid?, Gid)) .
-printf("abort received: %d,%d\n", AbortPid, Gid) .
+rec-msg(abort-game(AbortPid?, Mid)) .
 Abort := true
 @
 
@@ -625,25 +620,23 @@ Abort := true
 
 %{{{ process CONNECT-PLAYERS
 
+\subsection{The {\tt CONNECT-PLAYERS} process}
+
 The process {\tt CONNECT-PLAYERS} waits for players to connect,
 and creates a new {\tt PLAYER} process for each of them.
 
 <<process CONNECT-PLAYERS>>=
 process CONNECT-PLAYERS is
 let
-  P    : player,
-  Pid  : int,
-  Name : str,
-  Type : str,
-  Level: str,
-  Version: str,
-  Cid  : int
+  P    : player, Pid  : int, Id : int,
+  Name : str,  Type : str, 
+  Level: str,  Version: str
 in
   ( rec-connect(P?) .
-    snd-msg(fresh-player(Cid?)) .
-    snd-eval(P, who-am-i(Cid)) .
+    snd-msg(fresh-player(Pid?)) .
+    snd-eval(P, who-am-i(Pid)) .
     rec-value(P, i-am(Name?,Type?,Level?,Version?)) .
-    create(PLAYER(P, Cid, Name), Pid?) .
+    create(PLAYER(P, Pid, Name), Id?) .
     snd-msg(new-player(Name,Type,Level,Version))
   ) * delta
 endlet
@@ -651,6 +644,8 @@ endlet
 
 %}}}
 %{{{ process START-PLAYER
+
+\subsection{The {\tt START-PLAYER} process}
 
 The process {\tt START-PLAYER} starts a new player. Useful for
 robot players and during debugging.
@@ -678,132 +673,260 @@ endlet
 %}}}
 %{{{ process PLAYER
 
+\subsection{The {\tt PLAYER} process}
+
 The process {\tt PLAYER} represents a human or robot player.
 
 <<process PLAYER>>=
-process PLAYER(P : player, Cid : int, Name : str) is
-let
-  Winner	: int,
-  Cid2		: int,
-  Pid2		: int,
-  Player	: int,
-  From		: int,
-  Gid		: int,
-  Msg		: str,
-  Players	: list,
-  Games		: list,
-  Info		: list,
-  Cards         : list,
-  Scores	: list,
-  Score		: int,
-  Accepted	: bool,
-  Round		: int,
-  Played	: list,
-  Legal		: list,
-  Card		: int,
-  Yes		: bool,
-  Quitting	: list
-in
+process PLAYER(P : player, Pid : int, Name : str) is
   subscribe(players(<list>)) .
-  subscribe(games(<list>)) .
+  subscribe(matches(<list>)) .
   subscribe(broadcast(<str>,<int>)) .
-  ( rec-note(players(Players?)) .
-    snd-do(P, players(Players))
+  ( <<note players>>
     +
-    rec-note(games(Games?)) .
-    snd-do(P, games(Games))
+    <<note matches>>
     +
-    rec-msg(card-played(Cid, Gid?, Round?, Player?, Card?)) .
-    snd-do(P, card-played(Cid, Gid, Round, Player, Card))
+    <<new matches>>
     +
-    rec-msg(trick-done(Cid, Gid?, Round?, Winner?, Score?, Played?)) .
-    snd-do(P, trick-done(Cid, Gid, Round, Winner, Score, Played))
+    <<playing cards>>
     +
-    rec-event(P, next-trick(Cid, Gid?)) .
-    snd-msg(next-trick(Cid, Gid)) .
-    snd-ack-event(P, next-trick(Cid, Gid))
+    <<trick done>>
     +
-    rec-event(P, next-game(Cid, Gid?, Yes?)) .
-    snd-msg(next-game(Cid, Gid, Yes)) .
-    snd-ack-event(P, next-game(Cid, Gid, Yes))
+    <<game done>>
     +
-    rec-msg(game-done(Cid, Gid?, Scores?)) .
-    snd-do(P, game-done(Cid, Gid, Scores))
+    <<match done>>
     +
-    rec-msg(match-done(Cid, Gid?, Quitting?)) .
-    printf("player received match-done(%d,%d,%t)\n", Cid, Gid, Quitting) .
-    snd-do(P, match-done(Cid, Gid, Quitting))
+    <<invitations>>
     +
-    rec-msg(game-aborted(Cid, Gid?, Pid2?)) .
-    snd-do(P, game-aborted(Cid, Gid, Pid2))
-    +
-    rec-msg(invite(Cid2?, Gid?, Cid)) .
-    snd-eval(P, invited(Cid, Gid, Cid2)) .
-    ( rec-value(P, invited(Cid, Gid, Cid2, true)) .
-      snd-msg(invitation(Cid2, Gid, Cid, true)) .
-      snd-msg(join-game(Cid, Gid))
-      +
-      rec-value(P, invited(Cid, Gid, Cid2, false)) .
-      snd-msg(invitation(Cid2, Gid, Cid, false))
-    )
-    +
-    rec-msg(invitation(Cid, Gid?, Cid2?, Accepted?)) .
-    snd-do(P, invitation(Cid, Gid, Cid2, Accepted))
-    +
-    rec-msg(message(Cid, Gid?, Msg?, From?)) .
-    snd-do(P, message(Cid, Gid, Msg, From))
-    +
-    rec-note(broadcast(Msg?, From?)) .
-    snd-do(P, broadcast(Cid, Msg, From)) 
-    +
-    rec-msg(deal(Cid, Gid?, Cards?)) .
-    snd-do(P, deal(Cid, Gid, Cards))
-    +
-    rec-msg(play-card(Cid, Gid?, Round?, Played?, Legal?)) .
-    snd-do(P, play-card(Cid, Gid, Round, Played, Legal))
-    +
-    rec-msg(cheating(Cid, Gid, Round, Legal, Card)) .
-    snd-do(P, cheating(Cid, Gid, Round, Legal, Card))
-    +
-    rec-event(P, play-card(Cid, Gid, Round, Card?)) .
-    printf("player %d playes card %d\n", Cid, Card) .
-    snd-msg(play-card(Cid, Gid, Round, Card)) .
-    snd-ack-event(P, play-card(Cid, Gid, Round, Card))
-    +
-    rec-event(P, abort-game(Cid, Gid)) .
-    printf("sending message 'abort-game(%d,%d)'\n", Cid, Gid) .
-    snd-msg(abort-game(Cid, Gid)) .
-    snd-ack-event(P, abort-game(Cid, Gid))
-    +
-    rec-event(P, new-game(Cid)) .
-    snd-msg(new-game(Cid)) .
-    rec-msg(new-game(Gid?)) .
-    snd-ack-event(P, new-game(Cid, Gid))
-    +
-    rec-event(P, join-game(Cid, Gid?)) .
-    snd-msg(join-game(Cid, Gid)) .
-    snd-ack-event(P, join-game(Cid, Gid))
-    +
-    rec-event(P, invite(Cid, Gid?, Cid2?)) .
-    snd-msg(invite(Cid, Gid, Cid2)) .
-    snd-ack-event(P, invite(Cid, Gid, Cid2))
-    +
-    rec-event(P, msg2player(Cid, Msg?, Cid2?)) .
-    snd-msg(message(Cid2, -1, Msg, Cid)) .
-    snd-ack-event(P, msg2player(Cid, Msg, Cid2))
-    +
-    rec-event(P, msg2game(Cid, Msg?, Gid?)) .
-    snd-msg(msg2game(Cid, Msg, Gid)) .
-    snd-ack-event(P, msg2game(Cid, Msg, Gid))
-    +
-    rec-event(P, msg2all(Cid, Msg?)) .
-    snd-note(broadcast(Msg, Cid)) .
-    snd-ack-event(P, msg2all(Cid, Msg))
+    <<messages>>
   ) * 
   rec-disconnect(P) .
-  snd-msg(player-quits(Cid))
+  snd-msg(player-quits(Pid))
+@
+
+%{{{ note players
+
+The player tool is notified of any changes in the list of players.
+
+<<note players>>=
+let
+  Players : list
+in
+  rec-note(players(Players?)) .
+  snd-do(P, players(Players))
 endlet
 @
+
+%}}}
+%{{{ note matches
+
+And in the list of matches.
+
+<<note matches>>=
+let
+  Matches : list
+in
+  rec-note(matches(Matches?)) .
+  snd-do(P, matches(Matches))
+endlet
+@
+
+%}}}
+%{{{ new matches
+
+Before a match begins, someone has to start it, and enough
+players must join (or accept an invitation).
+
+<<new matches>>=
+let
+  Mid : int, Cards : list
+in
+  rec-event(P, new-match(Pid)) .
+  snd-msg(new-match(Pid)) .
+  rec-msg(new-match(Mid?)) .
+  snd-ack-event(P, new-match(Pid, Mid))
+  +
+  rec-event(P, join-match(Pid, Mid?)) .
+  snd-msg(join-match(Pid, Mid)) .
+  snd-ack-event(P, join-match(Pid, Mid))
+  +
+  rec-msg(deal(Pid, Mid?, Cards?)) .
+  snd-do(P, deal(Pid, Mid, Cards))
+endlet
+@
+
+%}}}
+
+%{{{ playing cards
+
+The card-playing scenario goes like this:
+\begin{enumerate}
+\item The {\tt umpire} tool sends an event to the {\tt UMPIRE}
+      process, to ask for the next card.
+\item The {\tt UMPIRE} process sends a message to the apropriate
+      {\tt PLAYER} process, forwarding the request.
+\item The {\tt PLAYER} process asks its {\tt player} tool to 
+      play a new card.
+\item When the {\tt player} tool has decided which card to play,
+      it sends an event to the {\tt PLAYER} process.
+\item The {\tt PLAYER} process sends the card to play to
+      the {\tt UMPIRE} process (using the {\tt play-card} message).
+\item The {\tt UMPIRE} process sends the message {\tt card-played}
+      to the {\tt MASTER} process, so the {\tt MASTER} process can
+      notify all the players in the game.
+\item The {\tt UMPIRE} process also notifies the {\tt umpire} tool,
+      so this tool can decide what to do next (for instance, play
+      the next card).
+\end{enumerate}
+
+<<playing cards>>=
+let
+  Mid    : int,  Round : int, 
+  Player : int,  Card  : int,
+  Played : list, Legal : list
+in
+  rec-msg(play-card(Pid, Mid?, Round?, Played?, Legal?)) .
+  snd-do(P, play-card(Pid, Mid, Round, Played, Legal))
+  +
+  rec-msg(cheating(Pid, Mid, Round, Legal, Card)) .
+  snd-do(P, cheating(Pid, Mid, Round, Legal, Card))
+  +
+  rec-event(P, play-card(Pid, Mid?, Round?, Card?)) .
+  snd-msg(play-card(Pid, Mid, Round, Card)) .
+  snd-ack-event(P, play-card(Pid, Mid, Round, Card))
+  +
+  rec-msg(card-played(Pid, Mid?, Round?, Player?, Card?)) .
+  snd-do(P, card-played(Pid, Mid, Round, Player, Card))
+endlet
+@
+
+%}}}
+%{{{ trick done
+
+<<trick done>>=
+let
+  Mid    : int, Round  : int,
+  Winner : int, Score  : int, Played : list
+in
+  rec-msg(trick-done(Pid, Mid?, Round?, Winner?, Score?, Played?)) .
+  snd-do(P, trick-done(Pid, Mid, Round, Winner, Score, Played))
+  +
+  rec-event(P, next-trick(Pid, Mid?)) .
+  snd-msg(next-trick(Pid, Mid)) .
+  snd-ack-event(P, next-trick(Pid, Mid))
+endlet
+@
+
+%}}}
+%{{{ game-done
+
+<<game done>>=
+let
+  Mid : int, Scores : list, Yes : bool  
+in
+  rec-msg(game-done(Pid, Mid?, Scores?)) .
+  snd-do(P, game-done(Pid, Mid, Scores))
+  +
+  rec-event(P, next-game(Pid, Mid?, Yes?)) .
+  snd-msg(next-game(Pid, Mid, Yes)) .
+  snd-ack-event(P, next-game(Pid, Mid, Yes))
+endlet
+@
+
+%}}}
+%{{{ match done
+
+A match can end in two ways:
+\begin{itemize}
+\item At the end of a game, one or more of the players decide to quit
+      ({\tt Quitting contains a list of those players}).
+\item One of the players decides to abort a running game.
+\end{itemize}
+
+<<match done>>=
+let
+  Mid : int, Quitting : list, Pid2 : int
+in
+  rec-msg(match-done(Pid, Mid?, Quitting?)) .
+  snd-do(P, match-done(Pid, Mid, Quitting))
+  +
+  rec-msg(game-aborted(Pid, Mid?, Pid2?)) .
+  snd-do(P, game-aborted(Pid, Mid, Pid2))
+  +
+@
+A player can also abort a game himself:
+<<match done>>=
+  rec-event(P, abort-game(Pid, Mid)) .
+  snd-msg(abort-game(Pid, Mid)) .
+  snd-ack-event(P, abort-game(Pid, Mid))
+endlet
+@
+
+%}}}
+%{{{ invitations
+
+Players can invitate other players to join a game.
+
+<<invitations>>=
+let
+  Pid2 : int, Mid : int,
+  Accepted : bool
+in
+  rec-msg(invite(Pid2?, Mid?, Pid)) .
+  snd-eval(P, invited(Pid, Mid, Pid2)) .
+  ( rec-value(P, invited(Pid, Mid, Pid2, true)) .
+    snd-msg(invitation(Pid2, Mid, Pid, true)) .
+    snd-msg(join-match(Pid, Mid))
+    +
+    rec-value(P, invited(Pid, Mid, Pid2, false)) .
+    snd-msg(invitation(Pid2, Mid, Pid, false))
+  )
+  +
+  rec-msg(invitation(Pid, Mid?, Pid2?, Accepted?)) .
+  snd-do(P, invitation(Pid, Mid, Pid2, Accepted))
+  +
+  rec-event(P, invite(Pid, Mid?, Pid2?)) .
+  snd-msg(invite(Pid, Mid, Pid2)) .
+  snd-ack-event(P, invite(Pid, Mid, Pid2))
+endlet
+@
+
+%}}}
+%{{{ messages
+
+Players can send messages to:
+\begin{itemize}
+\item a single player,
+\item all the players in a single game (match),
+\item all the players in the system.
+\end{itemize}
+
+<<messages>>=
+let
+  Mid  : int, Msg : str, 
+  From : int, To  : int
+in
+  rec-msg(message(Pid, Mid?, Msg?, From?)) .
+  snd-do(P, message(Pid, Mid, Msg, From))
+  +
+  rec-note(broadcast(Msg?, From?)) .
+  snd-do(P, broadcast(Pid, Msg, From)) 
+  +
+  rec-event(P, msg2player(Pid, Msg?, To?)) .
+  snd-msg(message(To, -1, Msg, Pid)) .
+  snd-ack-event(P, msg2player(Pid, Msg, To))
+  +
+  rec-event(P, msg2match(Pid, Msg?, Mid?)) .
+  snd-msg(msg2match(Pid, Msg, Mid)) .
+  snd-ack-event(P, msg2match(Pid, Msg, Mid))
+  +
+  rec-event(P, msg2all(Pid, Msg?)) .
+  snd-note(broadcast(Msg, Pid)) .
+  snd-ack-event(P, msg2all(Pid, Msg))
+endlet
+@
+
+%}}}
 
 %}}}
 

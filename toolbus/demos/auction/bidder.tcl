@@ -67,7 +67,7 @@ proc reject-bid {} {
 proc new-item {descr amount} {
    global description highest_bid current_bid me my_bid
 
-   set description $descr
+   set description [TCLstring $descr]
    set highest_bid $amount
    set my_bid 0
    set current_bid ""

@@ -14,7 +14,7 @@ willekeurige kaart.
 
 <<who_am_i>>
 <<players>>
-<<games>>
+<<matches>>
 <<trick_done>>
 <<game_done>>
 <<match_done>>
@@ -109,11 +109,11 @@ void players(term_list *players)
 @
 
 %}}}
-%{{{ void games(term_list *games)
+%{{{ void matches(term_list *matches)
 
-{\tt randi} also ignores all information about which games are in progress.
-<<games>>=
-void games(term_list *games)
+{\tt randi} also ignores all information about which matches are in progress.
+<<matches>>=
+void matches(term_list *matches)
 {
 }
 @
@@ -171,7 +171,7 @@ void broadcast(int pid, char *msg, int from)
 %}}}
 %{{{ void deal(int pid, int gid, term_list *cards)
 
-A new game has started. {\tt randi} is not interested.
+A new match has started. {\tt randi} is not interested.
 
 <<deal>>=
 void deal(int pid, int gid, term_list *cards)

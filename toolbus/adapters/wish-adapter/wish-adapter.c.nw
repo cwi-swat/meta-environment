@@ -125,7 +125,7 @@ We define some constants, which make it easy to change some defaults.
 #endif
 
 #define MAX_ARG 50
-
+/*#define DEBUG_ON*/
 
 #define USAGE_MSG \
    "\n" \
@@ -259,6 +259,7 @@ their octal values are written.
 <<print_string>>=
 static void print_string(char* s, int n)
 {
+  wputc('"');
   while(n--)
   {
     if(isprint(*s)) {
@@ -279,6 +280,7 @@ static void print_string(char* s, int n)
     }
     s++;
   }
+  wputc('"');
 }
 @
 
@@ -412,10 +414,10 @@ static void print_args(term_list *args)
 {
   while(args) {
     if(!is_list(list_first(args)))
-      wprintf("\"");
+      wprintf("{");
     print_term(list_first(args));
     if(!is_list(list_first(args)))
-      wprintf("\"");
+      wprintf("}");
     wputc(' ');
     args = list_next(args);
   }

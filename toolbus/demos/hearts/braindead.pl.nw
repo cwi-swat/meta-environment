@@ -1,26 +1,22 @@
 
-{\tt braindead} is een robot speler geschreven in SWI-Prolog. Al heet
-hij geschreven te zijn in een ``logische'' taal, hij is niet slimmer
-dan {\tt randi} (de robot speler geschreven in C). 
-{\tt braindead} kiest de eerste de beste kaart die
-hij tegenkomt als hij gevraagd wordt om een kaart te spelen.
+{\tt braindead} is a robot player written in SWI-Prolog.
+Although this robot is written in a 'logical language', he
+is not smarter than {\tt rand}, the robot player written in C.
+{\tt braindead} chooses the first legal card, when asked to
+play a card.
 
 %{{{ braindead.pl
-
-The file {\tt braindead.pl} implements the {\tt braindead} robot player 
-in SWI-Prolog. This robot player is very stupid, and just plays the
-first legal card it encounters.
 
 <<braindead.pl>>=
 <<rec_terminate>>
 <<rec_ack_event>>
 <<who_am_i>>
 <<players>>
-<<games>>
+<<matches>>
 <<card_played>>
 <<trick_done>>
 <<game_done>>
-<<game_over>>
+<<match_done>>
 <<game_aborted>>
 <<invited>>
 <<invitation>>
@@ -88,12 +84,12 @@ players(_,_).
 @
 
 %}}}
-%{{{ games(Cid,Games)
+%{{{ matches(Cid,Matches)
 
-The set of games has changed. {\tt braindead} is not really interested.
+The set of matches has changed. {\tt braindead} is not really interested.
 
-<<games>>=
-games(_,_).
+<<matches>>=
+matches(_,_).
 @
 
 %}}}
@@ -128,13 +124,13 @@ game_done(Cid,Pid,Gid,_) :- tb_send(Cid,snd_event(next_game(Pid,Gid,true))).
 @
 
 %}}}
-%{{{ game_over(Cid,Pid,Gid,Quitting)
+%{{{ match_done(Cid,Pid,Gid,Quitting)
 
-Somebody didn't want to continue with the game.
+Somebody didn't want to continue with the match.
 {\tt braindead} doesn't really care.
 
-<<game_over>>=
-game_over(_,_,_,_).
+<<match_done>>=
+match_done(_,_,_,_).
 @
 
 %}}}

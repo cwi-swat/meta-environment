@@ -71,7 +71,7 @@ process MakeWave(N : int) is
 
 %% Define the {\tt display} tool.
 
-tool display is { command = "wish-adapter -script ui-wave.tcl" }
+tool display is { command = "wish-adapter -wish /usr/local/bin/wish -script ui-wave.tcl" }
 
 %% Define the initial \TB\ configuration.
 

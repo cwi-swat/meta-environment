@@ -24,7 +24,7 @@ term *substitute(term *t, env *loc_env)
       return t;
     else
       t2 = mk_appl(fun_sym(t), substitute_list(fun_args(t), loc_env));
-      fun_str_sym(t2) = fun_sym(t);
+      fun_str_sym(t2) = fun_str_sym(t);
       return t2;
   case t_anno:
     return mk_anno(anno_val(t), substitute(anno_term(t), loc_env));

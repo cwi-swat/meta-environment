@@ -369,6 +369,7 @@ proc fireShot {} {
 proc showResult {x y res name} {
 	global board ships gameover
 
+        set name [TCLstring $name]
 	set c $board(foe)
 	set id [$c find withtag $x,$y]
 	if {$res == -1} {
@@ -506,10 +507,11 @@ proc not-locked {type} {
 }
 
 proc changeAmount {type ok} {
-	global nr_$type ships
+	global nr_[TCLstring $type] ships
 
 	set w .init
 
+        set type [TCLstring $type]
 	if {$ok == "false"} {
 		global incoming
 		set type [lindex $ships($type) 0]
@@ -650,3 +652,6 @@ entry .chatout -width 40 -relief sunken -textvariable outgoing	\
 pack .chatout .chatin -in .chatfrm -pady 1m
 
 bind .chatout <Return> "sendChat"
+
+
+

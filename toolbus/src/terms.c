@@ -17,7 +17,7 @@ static void mark_terms(void);
    in a linked list pointed to by free_list.
 */
 
-#define NSEGMENT 200                /* Max. # of segments */
+#define NSEGMENT 3072                /* Max. # of segments */
 static term *segments[NSEGMENT];    /* pointers to the segments */
 static int nsegment = 0;            /* number of segments in use */
 static int nterm;                   /* total number of terms */

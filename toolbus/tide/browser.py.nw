@@ -363,6 +363,8 @@ Load the actual file.
 <<Browser.load_file>>=
 def load_file(self):
 	self.main.browser.delete("1.0","end")
+	file = None
+	print "self.dir = ", self.dir
 	try:
 		file = open(self.file, "r")
 	except IOError:
@@ -372,7 +374,9 @@ def load_file(self):
 		except IOError:
 			print "couldn't open file %s" % name
 	if file:
+		print "file opened:", file
 		text = file.read()
+		print "test: ", text
 		self.main.browser.config({"state":"normal"})
 		self.main.browser.insert("end", text)
 		self.main.browser.config({"state":"disabled"})
@@ -487,7 +491,7 @@ def browse(cid, tbid, tid):
 		if browsers != []:
 			browser = browsers[0]
 	if browser == None:
-		expr = regex.compile('"tb"("[^"]*",[0-9]+,"\([^"]*\)")')
+		expr = regex.compile('tb("[^"]*",[0-9]+,"\([^"]*\)")')
 		if expr.match(tbid) < 0:
 		  print "no match: %s" % tbid
 		  dir = "."
