@@ -148,20 +148,20 @@ static void addTopMenu(int write_to_editor_fd, const char *menu)
 }
 
 /*}}}  */
-/*{{{  static void addSubMenu(int write_to_editor_fd, const char *menu, const char *item) */
+/*{{{  static void addSubMenu(int write_to_editor_fd, const char *top, const char *sub, TE_Menu menu) */
 
-static void addSubMenu(int write_to_editor_fd, const char *menu, const char *item)
+static void addSubMenu(int write_to_editor_fd, const char *top, const char *sub, TE_Menu menu)
 {
   char buf[BUFSIZ];
-  char strippedMenu[BUFSIZ];
-  char strippedItem[BUFSIZ];
+  char strippedTop[BUFSIZ];
+  char strippedSub[BUFSIZ];
   char menuString[BUFSIZ];
   char escapedMenu[BUFSIZ];
 
-  strcpy(strippedMenu, stripIllegalMenuChars(menu));
-  strcpy(strippedItem, stripIllegalMenuChars(item));
+  strcpy(strippedTop, stripIllegalMenuChars(top));
+  strcpy(strippedSub, stripIllegalMenuChars(sub));
 
-  strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
+  strcpy(menuString, menuToString(menu));
   strcpy(escapedMenu, escapeQuotes(menuString));
 
   sprintf(buf,
@@ -171,9 +171,9 @@ static void addSubMenu(int write_to_editor_fd, const char *menu, const char *ite
 	  "  (cons \"%s\""
 	  "    (lambda () (interactive) (meta-menu-event \"%s\")))"
 	  ")"
-	  , META_MENU_PREFIX, strippedMenu
-	  , META_MENU_PREFIX, strippedMenu, strippedItem
-	  , item
+	  , META_MENU_PREFIX, strippedTop
+	  , META_MENU_PREFIX, strippedTop, strippedSub
+	  , sub
 	  , escapedMenu
 	  );
   sendToEmacs(write_to_editor_fd, buf);
@@ -185,11 +185,17 @@ static void addSubMenu(int write_to_editor_fd, const char *menu, const char *ite
 
 static void makeEmacsMenuItem(int write_to_editor_fd, TE_Menu menu)
 {
-  const char *mainMenu = TE_getMenuMain(menu);
-  const char *subMenu = TE_getMenuSub(menu);
+  TE_Items items;
+  const char *top;
+  const char *sub;
 
-  addTopMenu(write_to_editor_fd, mainMenu);
-  addSubMenu(write_to_editor_fd, mainMenu, subMenu);
+  items = TE_getMenuItems(menu);
+  top = TE_getItemsHead(items);
+  addTopMenu(write_to_editor_fd, top);
+
+  items = TE_getItemsTail(items);
+  sub = TE_getItemsHead(items);
+  addSubMenu(write_to_editor_fd, top, sub, menu);
 }
 
 /*}}}  */
