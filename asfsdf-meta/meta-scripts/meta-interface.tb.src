@@ -1,0 +1,121 @@
+/*
+ * $Id$
+ */
+#include "asfc.idef"
+#include "asfoperations.idef"
+#include "asfchecker.idef"
+#include "asfsdfchecker.idef"
+#include "asfe.idef"
+#include "addeqssyntax.idef"
+#include "addapisyntax.idef"
+#include "removevarsyntax.idef"
+#include "error-display.tb"
+
+process Create-Asf-Processes is
+let Pid : int 
+in
+  create(Asfe, Pid?).
+  create(AsfSdfChecker, Pid?).
+  create(AsfChecker, Pid?).
+  create(AsfOperations, Pid?).
+  create(AddEqSyn, Pid?).
+  create(AddAPISyn, Pid?).
+  create(RemoveVars, Pid?).
+  create(Asfc, Pid?).
+  create(DisplayErrors, Pid?)
+endlet
+
+process Meta-Interface is
+let
+  Id : int,
+  Syntax : term, 
+  Semantics  : term,
+  ModuleName : str,
+  Msgs : list,
+  Tree : term,
+  NormalForm : term,
+  Errors: list,
+  Text : str,
+  Progress : str,
+  Renamings : term,
+  Modules : list
+in
+  Id := process-id.
+  subscribe(asfc-progress(<term>)).
+  Create-Asf-Processes.
+  (
+    rec-msg(library-location-hook).
+    snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
+  +
+    rec-msg(file-extensions-hook).
+    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+  +
+    rec-msg(semantics-top-sort-hook).
+    snd-msg(semantics-top-sort-hook-result(sort("Equations")))
+  +
+    rec-msg(postprocess-semantics-hook(Semantics?)).
+    snd-msg(check-asf(Semantics)).
+    rec-msg(messages(Msgs?)).
+    snd-msg(display-asf-errors(Msgs)).
+    snd-msg(postprocess-semantics-hook-result(Semantics))
+  +
+    rec-msg(preprocess-syntax-hook(eqs(ModuleName?), Syntax?)).
+    snd-msg(check-asfsdf(Syntax)) .
+    rec-msg(messages(Msgs?)) .
+    snd-msg(display-sdf-errors(Msgs)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)). 
+    snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
+    rec-msg(extended-syntax(Syntax?)) .
+    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))  
+  +
+    rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
+    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)).
+    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+  +
+    rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
+    snd-note(ui-status(stat(Id, "Rewriting"))) .
+    snd-msg(rewrite(ModuleName, Semantics, Tree)).
+    (
+      rec-msg(rewrite-result(NormalForm?)).
+      snd-msg(restore-term-brackets(ModuleName, NormalForm)).
+      rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
+    +
+      rec-msg(rewrite-text(Text?)) .
+      NormalForm := quote(str(Text))
+    +
+      rec-msg(rewrite-errors(Errors?)).
+      snd-msg(display-rewrite-errors(Errors)).
+      NormalForm := error-tree
+    ).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(interpret-term-hook-result(NormalForm))
+  +
+    rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
+    snd-msg(compile-module(ModuleName, Semantics)) .
+    (
+      rec-note(asfc-progress(Progress?)).
+      snd-note(ui-status(endstat(Id))).
+      snd-note(ui-status(statf(Id,"Compiling %s - %s",
+                              [ModuleName, Progress])))
+    )*
+    rec-msg(compilation-done(ModuleName)).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(compile-semantics-hook-done(ModuleName))
+  + 
+    rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
+    snd-msg(rename(Renamings, Semantics)).
+    rec-msg(equations(Semantics?)).
+    snd-msg(rename-semantics-hook(Semantics))
+  +
+    rec-msg(postprocess-collected-semantics-hook(Modules?)).
+    snd-msg(flatten-equations(Modules)).
+    rec-msg(flatten-equations-result(Semantics?)).
+    snd-msg(postprocess-collected-semantics-hook-result(Semantics))
+
+  ) * delta
+endlet
+
