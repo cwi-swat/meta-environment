@@ -322,7 +322,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
 
 static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
 {
@@ -387,7 +387,7 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction) */
 
 static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
 {

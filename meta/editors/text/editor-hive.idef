@@ -34,7 +34,6 @@ in
     . snd-do(Hive, reread-contents(EditorId))
   +
     rec-msg(set-focus(EditorId?, Focus?))
-. printf("Focus = %t\n", Focus)
     . snd-do(Hive, set-focus(EditorId, Focus))
   +
     rec-msg(get-focus-text(EditorId?, Focus?))
@@ -50,11 +49,9 @@ in
     . snd-do(Hive, set-cursor-at-location(EditorId, Location))
   +
     rec-msg(set-cursor-at-focus(EditorId?, Focus?))
-. printf("Focus = %t\n", Focus)
     . snd-do(Hive, set-cursor-at-focus(EditorId, Focus))
   +
     rec-msg(set-cursor-at-error-location(EditorId?, ErrorLocation?))
-. printf("Location = %t\n", ErrorLocation)
     . snd-do(Hive, set-cursor-at-error-location(EditorId, ErrorLocation))
   +
     rec-msg(set-focus-at-error-location(EditorId?, ErrorLocation?))
