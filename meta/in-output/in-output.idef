@@ -79,7 +79,3 @@ endlet
 
 tool in-output is { command = "in-output" }
 
-#ifdef MAIN
-#else
-toolbus(Io)
-#endif

@@ -58,7 +58,7 @@ OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= in-output
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	=
+LIBFILES	= in-output.idef
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # Local includes
@@ -80,8 +80,8 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 %.tif.c: %.tifs
 	$(ATERM)/bin/tifstoc -tool $* $<
 
-%.tifs: %.tb
-	$(TOOLBUS)/bin/toolbus -gentifs $<
+%.tifs: %.idef
+    ${top_srcdir}/utils/idef2tif $<
 
 in-output: depend ${OBJ} ${LIBFILES} 
 	$(CC) -o $@ ${OBJ} $(LIBFILES) $(LIBS)
