@@ -64,6 +64,7 @@ libasc_support_me_a_SOURCES = \
 INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(SGLR)/include \
 	-I$(ATERM)/include 
 
