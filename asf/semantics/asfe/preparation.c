@@ -196,7 +196,7 @@ equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
                               ATerm first_ofs)
 {
 	/*ATfprintf(stderr, "looking for equation with ofs: %t\n", top_ofs);*/
-  if(!equations)
+  if(equations->size == 0)
     return NULL;
   if(from) {
     from = from->hnext;

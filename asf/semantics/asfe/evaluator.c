@@ -289,10 +289,12 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
   ATermList newequs;
   int l;
   
-  ATfprintf(stderr, "preparing equations...\n");
+  ATfprintf(stderr, "preparing equations...\n"); 
   newequs = RWprepareEqs((ATermList) equs);
-  enter_equations(name, newequs);
   l = ATgetLength(newequs);
+
+  enter_equations(name, newequs); 
+ 
   ATfprintf(stderr,"Processing %d equations of module %t\n",l,name);
   return ATmake("snd-value(equ-added(<term>))",name);
 }
