@@ -1,5 +1,32 @@
 # $Id$
 
+Mon Apr 19 16:18:50 CEST 2004 <jurgenv@cwi.nl>
+ * compiler uses output file name instead of specification name
+   to compute the binary name and the .idef and .tifs file names.
+
+Fri Apr 16 17:26:37 CEST 2004
+ * Fixed bug 267: if a default rule was entered before a
+   non-default rule, it remained in front of the list of
+   rules.
+
+Wed Apr 14 14:27:07 CEST 2004 <markvdb@cwi.nl>
+ * Regenerated the asfsdf-checker in order to detect CHAR sorts
+   in production rules.
+ * Removed a non-terminating rewriting, fixed bug 125.
+
+Wed Apr 14 14:17:44 CEST 2004 <jurgenv@cwi.nl>
+ * Generate equation syntax for context-free start symbols too.
+
+Wed Apr 14 11:24:34 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed bugs in ASFSDF Api generator: variables names now contain
+   underscores between type and postfix, labels are not used for
+   variable names anymore.
+
+Fri Mar 19 17:26:46 CET 2004 <markvdb@cwi.nl>
+ * Fixed the bug reported by Jorgen Iversen and me wrt to
+   atmp0010 and atmp0010, changed into atmp0_0_1_0 and
+   atmp0_0_10.
+
 Wed Apr 14 11:30:56 CEST 2004 <jurgenv@cwi.nl>
  * Fixed bugs in ASFSDF Api generator: variables names now contain
    underscores between type and postfix, labels are not used for

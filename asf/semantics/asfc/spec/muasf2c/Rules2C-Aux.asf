@@ -366,13 +366,13 @@ equations
 
   [ma-1'2] identifier(Char+2) := make-atmp2(Aint+)
            ======================================
-           make-atmp(Aint+,natcon(Char+1)) = identifier(Char+2 Char+1)
+           make-atmp(Aint+,natcon(Char+1)) = identifier(Char+2 "_" Char+1)
 
   [ma-2'1] make-atmp2(natcon(Char+)) = identifier("a""t""m""p" Char+)
 
   [ma-2'1] identifier(Char+2) := make-atmp2(Aint+)
            ======================================
-           make-atmp2(Aint+,natcon(Char+1)) = identifier(Char+2 Char+1)
+           make-atmp2(Aint+,natcon(Char+1)) = identifier(Char+2 "_" Char+1)
 
   [mss-1'1] make-select-stat(Aint) =
 

@@ -438,8 +438,8 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     }
     else if (isSingleton(ptTree)) {
       ERR_Error message = 
-          makeWarning(
-          "Left hand side only matches singleton lists", PT_TreeToTerm(ptTree));
+          makeMessage(
+          "Left hand side is contained in a list", PT_TreeToTerm(ptTree));
       return ERR_makeErrorListSingle(message);
     }
     else {
