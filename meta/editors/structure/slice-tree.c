@@ -101,9 +101,6 @@ static void treeToSlices(PT_Tree tree)
 {
   ATerm categoryAnno = NULL;
 
-  if (PT_isTreeAppl(tree)) {
-    argsToSlices(PT_getTreeArgs(tree));
-  }
 
   if (PT_isTreeAmb(tree)) {
     storeTree(tree, "Ambiguous");
@@ -125,16 +122,25 @@ static void treeToSlices(PT_Tree tree)
       else {
 	storeTree(tree, "NonAlphanumericLiterals");
       }
+
+      return;
     }
     else if (PT_isTreeVar(tree)) {
       storeTree(tree, "Variables");
+      return;
     }
     else if (PT_isTreeLayout(tree) && containsVisibles(tree)) {
       storeTree(tree, "Comments");
+      return;
     }
     else if (PT_isTreeLexical(tree)) {
       storeTree(tree, "Lexicals");
+      return;
     }
+  }
+
+  if (PT_isTreeAppl(tree)) {
+    argsToSlices(PT_getTreeArgs(tree));
   }
 }
 
