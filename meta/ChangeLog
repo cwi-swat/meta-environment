@@ -6,6 +6,9 @@
    - compare-files: checks if filenames point to the same file on the system
    - get-filename: construct filename from dir+name+ext
  * renamed some functions in the in-output tool
+ * split parsing, conversion to absolute paths and registering of the
+   meta.conf file
+ * dialog with io tool extended
 
 2003/05/19 (jurgenv@cwi.nl)
  * Moved term-store tool to toplevel
