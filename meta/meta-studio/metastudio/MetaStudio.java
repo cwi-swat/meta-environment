@@ -241,16 +241,13 @@ public class MetaStudio
     }
 
     private JPanel createLeftPane() {
-        JScrollPane moduleTreePane = createModuleTreePane();
-        JPanel treePanel = new JPanel();
-        treePanel.setLayout(new BorderLayout());
-        treePanel.add(moduleTreePane, BorderLayout.CENTER);
-
-        createModuleStatusPanel();
-
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.add(treePanel);
+        
+        JScrollPane moduleTreePane = createModuleTreePane();
+        createModuleStatusPanel();
+
+        leftPanel.add(moduleTreePane);
         leftPanel.add(moduleStatus);
         return leftPanel;
     }
@@ -319,8 +316,7 @@ public class MetaStudio
         addGraphPanel(importGraphPanel, "import");
         
         JSplitPane moduleBrowser = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
-        moduleBrowser.setDividerLocation(0.2);
-        moduleBrowser.setResizeWeight(0.2);
+        moduleBrowser.setDividerLocation(-1);
         return moduleBrowser;
     }
     

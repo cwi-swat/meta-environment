@@ -1,7 +1,8 @@
 package metastudio;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -17,10 +18,14 @@ import javax.swing.border.TitledBorder;
 import aterm.ATermFactory;
 
 public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionListener {
+    private static final String NOT_IMPORTED = "not imported";
+    private static final String NO_IMPORTS = "no imports";
+    private static final String IMPORTED_BY = "imported";
+    private static final String IMPORTS = "imports";
     private static final String NO_MODULE_NAME = "No module";
 
     private TitledBorder border;
-    
+
     private List imports;
     private List importedBy;
 
@@ -34,23 +39,30 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         super(factory, bridge);
 
         border = new TitledBorder(new LineBorder(Color.black), NO_MODULE_NAME);
-        setLayout(new GridLayout());
+
         setBorder(border);
 
         imports = new LinkedList();
-        importsMenu = makeModuleSelectionMenu("imports",imports,moduleManager);
-        add(importsMenu);
-        
+        importsMenu = makeModuleSelectionMenu(IMPORTS, imports, moduleManager);
+        add(importsMenu, BorderLayout.NORTH);
+
         importedBy = new LinkedList();
-        importedByMenu = makeModuleSelectionMenu("imported by", importedBy, moduleManager);
-        add(importedByMenu);
-        
+        importedByMenu = makeModuleSelectionMenu(IMPORTED_BY, importedBy, moduleManager);
+        add(importedByMenu, BorderLayout.SOUTH);
+
+        setMaximumSize(
+                new Dimension(
+                        (int) getMaximumSize().getWidth(),
+                        importsMenu.getHeight() + importedByMenu.getHeight()));
         clearInfo();
-        
+
         moduleManager.addModuleSelectionListener(this);
     }
-    
-    private JButton makeModuleSelectionMenu(String title, final List modules, final ModuleTreeModel manager) {
+
+    private JButton makeModuleSelectionMenu(
+        String title,
+        final List modules,
+        final ModuleTreeModel manager) {
         final JButton menu = new JButton(title);
         menu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,15 +72,18 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         return menu;
     }
 
-    protected void showModuleSelectionPopup(JButton menu, List modules, final ModuleTreeModel manager) {
+    protected void showModuleSelectionPopup(
+        JButton menu,
+        List modules,
+        final ModuleTreeModel manager) {
         JPopupMenu popup = new JPopupMenu();
         addItems(popup, modules, manager);
-        popup.show(menu,0,menu.getHeight());
+        popup.show(menu, menu.getWidth(), 0);
     }
 
-    private void addItems(JPopupMenu pop, List imports2, final ModuleTreeModel manager ) {
+    private void addItems(JPopupMenu pop, List imports2, final ModuleTreeModel manager) {
         Iterator iter = imports2.iterator();
-        
+
         while (iter.hasNext()) {
             final String itemName = (String) iter.next();
             JMenuItem item = new JMenuItem(itemName);
@@ -91,34 +106,51 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
 
     private void clearInfo() {
         imports.clear();
+        importsMenu.setText(NO_IMPORTS);
+        
         importedBy.clear();
-
-        setTitle(NO_MODULE_NAME);
-        importsMenu.setText("no imports");
-        importedByMenu.setText("not imported");
+        importedByMenu.setText(NOT_IMPORTED);
+        
+        setTitles(NO_MODULE_NAME);
     }
 
-
     private void updateInfo(Module module) {
-        imports.clear();
-        List children = module.getChildren();
-        if (children != null) {
-            imports.addAll(children);
-        }
+        updateImports(module);
+        updateImportedBy(module);
+        setTitles(module.getName());
+    }
 
+    private void updateImportedBy(Module module) {
         importedBy.clear();
         List parents = module.getParents();
         if (parents != null) {
             importedBy.addAll(parents);
         }
-        
-        setTitle(module.getName());
     }
-    
-    private void setTitle(String title) {
+
+    private void updateImports(Module module) {
+        imports.clear();
+        List children = module.getChildren();
+        if (children != null) {
+            imports.addAll(children);
+        }
+    }
+
+    private void setTitles(String title) {
         border.setTitle(title);
-        importsMenu.setText(imports.size() + " import" + (imports.size() > 1 ? "s" : ""));
-        importedByMenu.setText("imported by " + importedBy.size());
+
+        if (imports.size() > 0) {
+            importsMenu.setText(IMPORTS);
+        } else {
+            importsMenu.setText(NO_IMPORTS);
+        }
+
+        if (importedBy.size() > 0) {
+            importedByMenu.setText(IMPORTED_BY);
+        } else {
+            importedByMenu.setText(NOT_IMPORTED);
+        }
+
         repaint();
     }
 }

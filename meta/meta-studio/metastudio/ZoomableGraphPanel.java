@@ -2,6 +2,8 @@ package metastudio;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -14,6 +16,7 @@ import metastudio.graph.Node;
 import aterm.ATermFactory;
 
 public class ZoomableGraphPanel extends JPanelTool {
+    private static final int SLIDER_STEP_SIZE = 5;
     private GraphPanel graphPanel;
     private JSlider slider;
     
@@ -22,16 +25,29 @@ public class ZoomableGraphPanel extends JPanelTool {
         
         graphPanel = new GraphPanel(id);
         slider = createSlider();
+        setSliderToolTip();
         
         JScrollPane scrolledPane = new JScrollPane(graphPanel);
         scrolledPane.getViewport().setBackground(Color.white);
         
         add(scrolledPane, BorderLayout.CENTER);
         add(slider,BorderLayout.WEST);
+        
+        MouseWheelListener wheel = new MouseWheelListener() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                slider.setValue(slider.getValue() - e.getUnitsToScroll());
+            }
+        };
+        
+        scrolledPane.getViewport().addMouseWheelListener(wheel);
     }
     
+    private void setSliderToolTip() {
+        slider.setToolTipText("Zoom" + slider.getValue() + "%");
+    }
+
     private JSlider createSlider() {
-        slider = new JSlider(0,200,5);
+        slider = new JSlider(0,200,SLIDER_STEP_SIZE);
         slider.setOrientation(SwingConstants.VERTICAL);
         slider.setBackground(Color.white);
         slider.setValue(100);
@@ -39,7 +55,9 @@ public class ZoomableGraphPanel extends JPanelTool {
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 graphPanel.setScale(slider.getValue());
+                setSliderToolTip();
                 graphPanel.setSelectedNode(graphPanel.getSelectedNode());
+                graphPanel.setToolTipEnabled(slider.getValue() < 100);
             }
         });
         

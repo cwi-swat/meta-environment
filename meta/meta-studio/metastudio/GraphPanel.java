@@ -72,6 +72,8 @@ public class GraphPanel extends JComponent implements Scrollable {
     private Color nodeBGSelected;
     private Color nodeFGSelected;
 
+    private boolean toolTipEnabled = false;
+    
     public GraphPanel(String id) {
         this.id = id;
         transform = new AffineTransform();
@@ -86,6 +88,7 @@ public class GraphPanel extends JComponent implements Scrollable {
             boolean dragging;
             int lastX;
             int lastY;
+            
 
             public void mouseMoved(MouseEvent event) {
                 dragging = false;
@@ -95,6 +98,15 @@ public class GraphPanel extends JComponent implements Scrollable {
                         && (hoveredNode == null
                             || !hoveredNode.getId().equals(node.getId())))) {
                     hoveredNode = node;
+
+                    if (hoveredNode != null) {
+                        if (isToolTipEnabled()) {
+                            setToolTipText(hoveredNode.getLabel());
+                        }
+                        else {
+                            setToolTipText(null);
+                        }
+                    }
                     repaint();
                 }
             }
@@ -496,7 +508,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
         if (node != null) {
             Rectangle rect = getNodeRectangle(node);
-            
+
             scrollRectToVisible(rect);
         }
         repaint();
@@ -522,12 +534,14 @@ public class GraphPanel extends JComponent implements Scrollable {
     }
 
     public void setScale(int scale) {
-        transform = new AffineTransform();
         float rscale = ((float) scale) / 100;
-        transform.scale(rscale, rscale);
 
+        transform = new AffineTransform();
+        transform.scale(rscale, rscale);
+        
         updateGeometry();
     }
+   
 
     public Dimension getPreferredScrollableViewportSize() {
         return getPreferredSize();
@@ -579,6 +593,14 @@ public class GraphPanel extends JComponent implements Scrollable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public void setToolTipEnabled(boolean toolTipEnabled) {
+        this.toolTipEnabled = toolTipEnabled;
+    }
+
+    public boolean isToolTipEnabled() {
+        return toolTipEnabled;
     }
 
 }
