@@ -1,0 +1,8 @@
+module asf/Annotations[Term Key Value]
+
+exports
+
+context-free syntax
+
+set-anno(Term,Key,Value) -> Term {built-in("set-anno")}
+get-anno(Term,Key)       -> Value {built-in("get-anno")}
