@@ -105,16 +105,16 @@ all:	${BINFILES}
 
 # install target (install binaries, include files, and libraries)
 install:        all
-        mkdir -p $(bindir) $(libdir) $(includedir)
-        @$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
-        @$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
-        @$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	mkdir -p $(bindir) $(libdir) $(includedir)
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
-        @$(UNINSTALL) $(bindir) $(BINFILES)
-        @$(UNINSTALL) $(libdir) $(LIBFILES)
-        @$(UNINSTALL) $(includedir) $(INCLUDEFILES)
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 %-$(CC).o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
