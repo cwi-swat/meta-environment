@@ -867,7 +867,7 @@ void init_patterns()
   pattern_caller_id   = ATparse("id(\"caller\")");
 
   ATprotect(&ws);
-  ws = ATparse("w(\"\n\")");
+  ws = ATparse("w(\"\\n\")");
  
   ATprotect(&c_true);
   ATprotect(&c_false);
