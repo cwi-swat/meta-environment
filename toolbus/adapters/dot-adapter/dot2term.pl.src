@@ -13,6 +13,8 @@ undef $/;
 
 $_ = <STDIN>;
 
+s/\\\n//g;
+
 #open OUTPUT,">/tmp/dot/dot-$$.out";
 #print OUTPUT $_;
 #close OUTPUT;
