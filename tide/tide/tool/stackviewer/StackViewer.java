@@ -277,6 +277,7 @@ public class StackViewer
 				new StackFrame(depth, name, location, variables);
 			frames.addElement(stackFrame);
 		}
+		displayStackFrame((StackFrame)frames.firstElement());
 		trace.setListData(frames);
 	}
 

@@ -1,5 +1,9 @@
 
 
+Mon Dec 13 14:31:39 CET 2004 <kooiker@cwi.nl>
+ * tide/tool/stackviewer/StackViewer.java:
+   - Update frame content in stackviewer after debug step (closes #379) 
+
 Fri Nov 19 15:43:44 CET 2004 <jurgenv@cwi.nl>
  * Another merge
  * Bumped to 1.1
