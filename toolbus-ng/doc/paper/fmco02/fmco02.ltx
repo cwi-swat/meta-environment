@@ -223,10 +223,13 @@ between components.
 
 \end{itemize}
 
-\noindent The assumption is now that \emph{a rigorous separation of
-coordination from computation leads to flexible and reusable systems.}
+\noindent 
+The assumption is now that \emph{a rigorous separation of
+coordination, representation and computation leads to flexible and reusable systems.}
+This subdivision is sketched in Figure~\ref{Fig:component-architecture}.
 Our \TB\ approach follows this paradigm and is illustrated in
-Figure~\ref{Fig:component-architecture}.
+Figure~\ref{Fig:toolbus-architecture}
+
 
 \begin{figure}[tb]
 \begin{center}
@@ -246,14 +249,14 @@ Figure~\ref{Fig:component-architecture}.
 
 
 
-The goal of the \TB\ is to integrate tools written in different languages
-running on different machines. This is achieved by means of a programmable
-software bus as illustrated in Figure~\ref{Fig:toolbus-architecture}. The
-\TB\ coordinates the cooperation of a number of tools.  This cooperation
-is described by a \Tscript\ that runs inside the \TB. The result is a
-set of concurrent processes inside the \TB\ that can communicate with
-each other and with the tools. Tools can be written in any language and
-can run on different machines. They exchange data by way of \aterms.
+The goal of the \TB\ is to integrate tools written in different
+languages running on different machines. This is achieved by means of
+a programmable software bus. The \TB\ coordinates the cooperation of a
+number of tools.  This cooperation is described by a \Tscript\ that
+runs inside the \TB. The result is a set of concurrent processes
+inside the \TB\ that can communicate with each other and with the
+tools. Tools can be written in any language and can run on different
+machines. They exchange data by way of \aterms.
 
 A typical cooperation scenario is illustrated in
 Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
