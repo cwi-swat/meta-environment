@@ -24,6 +24,7 @@
     from the configuration-manager. A file called 'standard.buttons' is
     installed and the configuration-manager reads it in when the 
     Meta-Environment starts up.
+  * Used ApiGen to reimplement configuration manager
 
 2003/04/25 (jurgenv@cwi.nl)
  * Refactored button-actions to use StackPush/Pop operations
