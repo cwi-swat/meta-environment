@@ -91,10 +91,7 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 
 	if (moduleTable.put(name, module) == null) {
 	    root.addChild("", name);
-
-	    Object path[] = new Object[1];
-	    path[0] = root;
-	    fireTreeStructureChanged(new TreeModelEvent(root, path));
+	    repaintTree();
 	}
     }
 
@@ -105,6 +102,7 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
     {
 	moduleTable.remove(name);
 	root.removeChild(name);
+	repaintTree();
     }
 
     //}}}
@@ -114,6 +112,7 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
     {
 	moduleTable.clear();
 	root.clearChildren();
+	repaintTree();
     }
 
     //}}}
@@ -123,6 +122,12 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 	List l = root.makePath(name, new ArrayList());
 
 	return new TreePath(l.toArray());
+    }
+
+    public void repaintTree() {
+	Object path[] = new Object[1];
+	path[0] = root;
+	fireTreeStructureChanged(new TreeModelEvent(root, path));
     }
 }
 
