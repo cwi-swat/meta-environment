@@ -12,6 +12,7 @@ CLEANFILES	= meta-studio
 	     s@__JARDIR__@${pkgdatadir}@g;\
 	     s@__TBDIR__@${pkgdatadir}@g;\
 	     s@__ATERM__@${ATERM}@g;\
+	     s@__JJTRAVELER__@${JJTRAVELER}@g;\
 	     s@__TOOLBUS__@${TOOLBUS}@g;\
 	     s@__BUILDDIR__@$$reldir_to_absdir@g;\
 	     s@__TIDEDEF__@${TIDEDEF}@g;\

@@ -21,7 +21,7 @@ then
   export CLASSPATH
   __JAVA__ ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 else
-  CLASSPATH="__JARDIR__/meta-studio.jar:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
+  CLASSPATH="__JARDIR__/meta-studio.jar:__JJTRAVELER__:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
   export CLASSPATH
   __JAVA__ ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 fi
