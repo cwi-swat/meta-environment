@@ -62,8 +62,7 @@ in
           rec-msg(eqs-updated) .
           snd-msg(clear-focus(EditorId))
 	+
-	  rec-msg(parse-failed(eqs(ModuleName), ErrorFoci?)) .
-	  snd-msg(set-focus(EditorId, ErrorFoci))
+	  rec-msg(parse-failed(eqs(ModuleName), ErrorFoci?))
 	)
       )
     ) *
@@ -84,6 +83,4 @@ in
   else
     tau
   fi
-
-
 endlet

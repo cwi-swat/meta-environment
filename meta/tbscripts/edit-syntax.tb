@@ -58,8 +58,7 @@ in
         )
       +
         rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
-        snd-msg(invalidate-sdf-in-db(ModuleName)).
-        snd-msg(set-focus(EditorId, ErrorFoci)) 
+        snd-msg(invalidate-sdf-in-db(ModuleName))
       )
     ) *
     if equal(Killed, true) then
