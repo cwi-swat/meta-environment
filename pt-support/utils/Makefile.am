@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = implodePT tree2graph
+SUBDIRS = implodePT 
 
 EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
                           apply-function.idef

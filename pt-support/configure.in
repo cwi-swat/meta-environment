@@ -92,7 +92,6 @@ AC_OUTPUT(
   utils/implodePT/test/out/Makefile
   utils/implodePT/test/terms/Makefile
   utils/implodePT/test/grammar/Makefile
-  utils/tree2graph/Makefile
 )
 
 dnl }}}
