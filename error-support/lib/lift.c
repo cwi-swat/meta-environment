@@ -108,20 +108,20 @@ PERR_Location ERR_liftLocation(ERR_Location location)
 
 PERR_Subject ERR_liftSubject(ERR_Subject subject)
 {
-  char *id;
+  char *description;
   ERR_Location location;
-  PERR_StrCon pId;
+  PERR_StrCon pDescription;
   PERR_Location pLocation;
   PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  id = ERR_getSubjectId(subject);
+  description = ERR_getSubjectDescription(subject);
   location = ERR_getSubjectLocation(subject);
   
-  pId = ERR_liftStrCon(id);
+  pDescription = ERR_liftStrCon(description);
   pLocation = ERR_liftLocation(location);
   
   return PERR_makeSubjectSubject(e,e,
-				 pId,
+				 pDescription,
 				 e,e,
 				 pLocation,
 				 e);
@@ -150,38 +150,26 @@ PERR_SubjectList ERR_liftSubjects(ERR_SubjectList subjects)
 
 PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
 {
-  char *id;
-  char *producerId;
-  char *producerType;
+  char *producer;
   char *description;
   ERR_SubjectList subjects;
-  PERR_StrCon pId;
-  PERR_StrCon pProducerId;
-  PERR_StrCon pProducerType;
+  PERR_StrCon pProducer;
   PERR_StrCon pDescription;
   PERR_SubjectList pSubjects;
   PERR_OptLayout e;
 
-  id = ERR_getFeedbackId(feedback);
-  producerId = ERR_getFeedbackProducerId(feedback);
-  producerType = ERR_getFeedbackProducerType(feedback);
+  producer = ERR_getFeedbackProducer(feedback);
   description = ERR_getFeedbackDescription(feedback);
   subjects = ERR_getFeedbackList(feedback);
 
-  pId = ERR_liftStrCon(id);
-  pProducerId = ERR_liftStrCon(producerId);
-  pProducerType = ERR_liftStrCon(producerType);
+  pProducer = ERR_liftStrCon(producer);
   pDescription = ERR_liftStrCon(description);
   pSubjects = ERR_liftSubjects(subjects);
   e = PERR_makeOptLayoutAbsent();
 
   if (ERR_isFeedbackInfo(feedback)) {
     return PERR_makeFeedbackInfo(e,e,
-				pId, 
-				e,e,
-				pProducerId,
-				e,e,
-				pProducerType,
+				pProducer,
 				e,e,
 				pDescription,
 				e,e,e,
@@ -190,11 +178,7 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackWarning(feedback)) {
     return PERR_makeFeedbackWarning(e,e,
-				   pId, 
-				   e,e,
-				   pProducerId,
-				   e,e,
-				   pProducerType,
+				   pProducer,
 				   e,e,
 				   pDescription,
 				   e,e,e,
@@ -203,11 +187,7 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackError(feedback)) {
     return PERR_makeFeedbackError(e,e,
-				 pId, 
-				 e,e,
-				 pProducerId,
-				 e,e,
-				 pProducerType,
+				 pProducer,
 				 e,e,
 				 pDescription,
 				 e,e,e,
@@ -216,11 +196,7 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   }
   else if (ERR_isFeedbackFatalError(feedback)) {
     return PERR_makeFeedbackFatalError(e,e,
-				      pId, 
-				      e,e,
-				      pProducerId,
-				      e,e,
-				      pProducerType,
+				      pProducer,
 				      e,e,
 				      pDescription,
 				      e,e,e,

@@ -104,23 +104,19 @@ ERR_FeedbackList ERR_makeFeedbackListEmpty();
 ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head);
 ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head,
 					  ERR_FeedbackList tail);
-ERR_Feedback ERR_makeFeedbackInfo(char *id, char *producerId,
-				  char *producerType, char *description,
+ERR_Feedback ERR_makeFeedbackInfo(char *producer, char *description,
 				  ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackWarning(char *id, char *producerId,
-				     char *producerType, char *description,
+ERR_Feedback ERR_makeFeedbackWarning(char *producer, char *description,
 				     ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackError(char *id, char *producerId,
-				   char *producerType, char *description,
+ERR_Feedback ERR_makeFeedbackError(char *producer, char *description,
 				   ERR_SubjectList list);
-ERR_Feedback ERR_makeFeedbackFatalError(char *id, char *producerId,
-					char *producerType, char *description,
+ERR_Feedback ERR_makeFeedbackFatalError(char *producer, char *description,
 					ERR_SubjectList list);
 ERR_SubjectList ERR_makeSubjectListEmpty();
 ERR_SubjectList ERR_makeSubjectListSingle(ERR_Subject head);
 ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head,
 					ERR_SubjectList tail);
-ERR_Subject ERR_makeSubjectSubject(char *id, ERR_Location Location);
+ERR_Subject ERR_makeSubjectSubject(char *description, ERR_Location Location);
 ERR_Location ERR_makeLocationLocation(char *filename, ERR_Area Area);
 ERR_Location ERR_makeLocationNoLocation();
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine,
@@ -171,16 +167,9 @@ inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackError(ERR_Feedback arg);
 inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg);
-ATbool ERR_hasFeedbackId(ERR_Feedback arg);
-char *ERR_getFeedbackId(ERR_Feedback arg);
-ERR_Feedback ERR_setFeedbackId(ERR_Feedback arg, char *id);
-ATbool ERR_hasFeedbackProducerId(ERR_Feedback arg);
-char *ERR_getFeedbackProducerId(ERR_Feedback arg);
-ERR_Feedback ERR_setFeedbackProducerId(ERR_Feedback arg, char *producerId);
-ATbool ERR_hasFeedbackProducerType(ERR_Feedback arg);
-char *ERR_getFeedbackProducerType(ERR_Feedback arg);
-ERR_Feedback ERR_setFeedbackProducerType(ERR_Feedback arg,
-					 char *producerType);
+ATbool ERR_hasFeedbackProducer(ERR_Feedback arg);
+char *ERR_getFeedbackProducer(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackProducer(ERR_Feedback arg, char *producer);
 ATbool ERR_hasFeedbackDescription(ERR_Feedback arg);
 char *ERR_getFeedbackDescription(ERR_Feedback arg);
 ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char *description);
@@ -208,9 +197,9 @@ ERR_SubjectList ERR_setSubjectListTail(ERR_SubjectList arg,
 
 ATbool ERR_isValidSubject(ERR_Subject arg);
 inline ATbool ERR_isSubjectSubject(ERR_Subject arg);
-ATbool ERR_hasSubjectId(ERR_Subject arg);
-char *ERR_getSubjectId(ERR_Subject arg);
-ERR_Subject ERR_setSubjectId(ERR_Subject arg, char *id);
+ATbool ERR_hasSubjectDescription(ERR_Subject arg);
+char *ERR_getSubjectDescription(ERR_Subject arg);
+ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, char *description);
 ATbool ERR_hasSubjectLocation(ERR_Subject arg);
 ERR_Location ERR_getSubjectLocation(ERR_Subject arg);
 ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location);
@@ -262,15 +251,15 @@ ERR_Summary ERR_visitSummary(ERR_Summary arg,
 ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg,
 				       ERR_Feedback(*acceptHead)
 				       (ERR_Feedback));
-ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char *(*acceptId) (char *),
-			       char *(*acceptProducerId) (char *),
-			       char *(*acceptProducerType) (char *),
+ERR_Feedback ERR_visitFeedback(ERR_Feedback arg,
+			       char *(*acceptProducer) (char *),
 			       char *(*acceptDescription) (char *),
 			       ERR_SubjectList(*acceptList)
 			       (ERR_SubjectList));
 ERR_SubjectList ERR_visitSubjectList(ERR_SubjectList arg,
 				     ERR_Subject(*acceptHead) (ERR_Subject));
-ERR_Subject ERR_visitSubject(ERR_Subject arg, char *(*acceptId) (char *),
+ERR_Subject ERR_visitSubject(ERR_Subject arg,
+			     char *(*acceptDescription) (char *),
 			     ERR_Location(*acceptLocation) (ERR_Location));
 ERR_Location ERR_visitLocation(ERR_Location arg,
 			       char *(*acceptFilename) (char *),

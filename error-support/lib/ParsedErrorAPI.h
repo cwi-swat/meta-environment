@@ -166,70 +166,48 @@ PERR_FeedbackList PERR_makeFeedbackListMany(PERR_Feedback head,
 					    PERR_FeedbackList tail);
 PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo,
 				    PERR_OptLayout wsAfterParenOpen,
-				    PERR_StrCon id, PERR_OptLayout wsAfterId,
+				    PERR_StrCon producer,
+				    PERR_OptLayout wsAfterProducer,
 				    PERR_OptLayout wsAfterComma,
-				    PERR_StrCon producerId,
-				    PERR_OptLayout wsAfterProducerId,
-				    PERR_OptLayout wsAfterComma1,
-				    PERR_StrCon producerType,
-				    PERR_OptLayout wsAfterProducerType,
-				    PERR_OptLayout wsAfterComma2,
 				    PERR_StrCon description,
 				    PERR_OptLayout wsAfterDescription,
-				    PERR_OptLayout wsAfterComma3,
+				    PERR_OptLayout wsAfterComma1,
 				    PERR_OptLayout wsAfterBracketOpen,
 				    PERR_SubjectList list,
 				    PERR_OptLayout wsAfterList,
 				    PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning,
 				       PERR_OptLayout wsAfterParenOpen,
-				       PERR_StrCon id,
-				       PERR_OptLayout wsAfterId,
+				       PERR_StrCon producer,
+				       PERR_OptLayout wsAfterProducer,
 				       PERR_OptLayout wsAfterComma,
-				       PERR_StrCon producerId,
-				       PERR_OptLayout wsAfterProducerId,
-				       PERR_OptLayout wsAfterComma1,
-				       PERR_StrCon producerType,
-				       PERR_OptLayout wsAfterProducerType,
-				       PERR_OptLayout wsAfterComma2,
 				       PERR_StrCon description,
 				       PERR_OptLayout wsAfterDescription,
-				       PERR_OptLayout wsAfterComma3,
+				       PERR_OptLayout wsAfterComma1,
 				       PERR_OptLayout wsAfterBracketOpen,
 				       PERR_SubjectList list,
 				       PERR_OptLayout wsAfterList,
 				       PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError,
 				     PERR_OptLayout wsAfterParenOpen,
-				     PERR_StrCon id, PERR_OptLayout wsAfterId,
+				     PERR_StrCon producer,
+				     PERR_OptLayout wsAfterProducer,
 				     PERR_OptLayout wsAfterComma,
-				     PERR_StrCon producerId,
-				     PERR_OptLayout wsAfterProducerId,
-				     PERR_OptLayout wsAfterComma1,
-				     PERR_StrCon producerType,
-				     PERR_OptLayout wsAfterProducerType,
-				     PERR_OptLayout wsAfterComma2,
 				     PERR_StrCon description,
 				     PERR_OptLayout wsAfterDescription,
-				     PERR_OptLayout wsAfterComma3,
+				     PERR_OptLayout wsAfterComma1,
 				     PERR_OptLayout wsAfterBracketOpen,
 				     PERR_SubjectList list,
 				     PERR_OptLayout wsAfterList,
 				     PERR_OptLayout wsAfterBracketClose);
 PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError,
 					  PERR_OptLayout wsAfterParenOpen,
-					  PERR_StrCon id,
-					  PERR_OptLayout wsAfterId,
+					  PERR_StrCon producer,
+					  PERR_OptLayout wsAfterProducer,
 					  PERR_OptLayout wsAfterComma,
-					  PERR_StrCon producerId,
-					  PERR_OptLayout wsAfterProducerId,
-					  PERR_OptLayout wsAfterComma1,
-					  PERR_StrCon producerType,
-					  PERR_OptLayout wsAfterProducerType,
-					  PERR_OptLayout wsAfterComma2,
 					  PERR_StrCon description,
 					  PERR_OptLayout wsAfterDescription,
-					  PERR_OptLayout wsAfterComma3,
+					  PERR_OptLayout wsAfterComma1,
 					  PERR_OptLayout wsAfterBracketOpen,
 					  PERR_SubjectList list,
 					  PERR_OptLayout wsAfterList,
@@ -242,7 +220,8 @@ PERR_SubjectList PERR_makeSubjectListMany(PERR_Subject head,
 					  PERR_SubjectList tail);
 PERR_Subject PERR_makeSubjectSubject(PERR_OptLayout wsAfterSubject,
 				     PERR_OptLayout wsAfterParenOpen,
-				     PERR_StrCon id, PERR_OptLayout wsAfterId,
+				     PERR_StrCon description,
+				     PERR_OptLayout wsAfterDescription,
 				     PERR_OptLayout wsAfterComma,
 				     PERR_Location Location,
 				     PERR_OptLayout wsAfterLocation);
@@ -380,43 +359,18 @@ PERR_OptLayout PERR_getFeedbackWsAfterParenOpen(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterParenOpen(PERR_Feedback arg,
 					       PERR_OptLayout
 					       wsAfterParenOpen);
-ATbool PERR_hasFeedbackId(PERR_Feedback arg);
-PERR_StrCon PERR_getFeedbackId(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackId(PERR_Feedback arg, PERR_StrCon id);
-ATbool PERR_hasFeedbackWsAfterId(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterId(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterId(PERR_Feedback arg,
-					PERR_OptLayout wsAfterId);
+ATbool PERR_hasFeedbackProducer(PERR_Feedback arg);
+PERR_StrCon PERR_getFeedbackProducer(PERR_Feedback arg);
+PERR_Feedback PERR_setFeedbackProducer(PERR_Feedback arg,
+				       PERR_StrCon producer);
+ATbool PERR_hasFeedbackWsAfterProducer(PERR_Feedback arg);
+PERR_OptLayout PERR_getFeedbackWsAfterProducer(PERR_Feedback arg);
+PERR_Feedback PERR_setFeedbackWsAfterProducer(PERR_Feedback arg,
+					      PERR_OptLayout wsAfterProducer);
 ATbool PERR_hasFeedbackWsAfterComma(PERR_Feedback arg);
 PERR_OptLayout PERR_getFeedbackWsAfterComma(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterComma(PERR_Feedback arg,
 					   PERR_OptLayout wsAfterComma);
-ATbool PERR_hasFeedbackProducerId(PERR_Feedback arg);
-PERR_StrCon PERR_getFeedbackProducerId(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackProducerId(PERR_Feedback arg,
-					 PERR_StrCon producerId);
-ATbool PERR_hasFeedbackWsAfterProducerId(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterProducerId(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterProducerId(PERR_Feedback arg,
-						PERR_OptLayout
-						wsAfterProducerId);
-ATbool PERR_hasFeedbackWsAfterComma1(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterComma1(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterComma1(PERR_Feedback arg,
-					    PERR_OptLayout wsAfterComma1);
-ATbool PERR_hasFeedbackProducerType(PERR_Feedback arg);
-PERR_StrCon PERR_getFeedbackProducerType(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackProducerType(PERR_Feedback arg,
-					   PERR_StrCon producerType);
-ATbool PERR_hasFeedbackWsAfterProducerType(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterProducerType(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterProducerType(PERR_Feedback arg,
-						  PERR_OptLayout
-						  wsAfterProducerType);
-ATbool PERR_hasFeedbackWsAfterComma2(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterComma2(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterComma2(PERR_Feedback arg,
-					    PERR_OptLayout wsAfterComma2);
 ATbool PERR_hasFeedbackDescription(PERR_Feedback arg);
 PERR_StrCon PERR_getFeedbackDescription(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg,
@@ -426,10 +380,10 @@ PERR_OptLayout PERR_getFeedbackWsAfterDescription(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterDescription(PERR_Feedback arg,
 						 PERR_OptLayout
 						 wsAfterDescription);
-ATbool PERR_hasFeedbackWsAfterComma3(PERR_Feedback arg);
-PERR_OptLayout PERR_getFeedbackWsAfterComma3(PERR_Feedback arg);
-PERR_Feedback PERR_setFeedbackWsAfterComma3(PERR_Feedback arg,
-					    PERR_OptLayout wsAfterComma3);
+ATbool PERR_hasFeedbackWsAfterComma1(PERR_Feedback arg);
+PERR_OptLayout PERR_getFeedbackWsAfterComma1(PERR_Feedback arg);
+PERR_Feedback PERR_setFeedbackWsAfterComma1(PERR_Feedback arg,
+					    PERR_OptLayout wsAfterComma1);
 ATbool PERR_hasFeedbackWsAfterBracketOpen(PERR_Feedback arg);
 PERR_OptLayout PERR_getFeedbackWsAfterBracketOpen(PERR_Feedback arg);
 PERR_Feedback PERR_setFeedbackWsAfterBracketOpen(PERR_Feedback arg,
@@ -498,13 +452,15 @@ ATbool PERR_hasSubjectWsAfterParenOpen(PERR_Subject arg);
 PERR_OptLayout PERR_getSubjectWsAfterParenOpen(PERR_Subject arg);
 PERR_Subject PERR_setSubjectWsAfterParenOpen(PERR_Subject arg,
 					     PERR_OptLayout wsAfterParenOpen);
-ATbool PERR_hasSubjectId(PERR_Subject arg);
-PERR_StrCon PERR_getSubjectId(PERR_Subject arg);
-PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_StrCon id);
-ATbool PERR_hasSubjectWsAfterId(PERR_Subject arg);
-PERR_OptLayout PERR_getSubjectWsAfterId(PERR_Subject arg);
-PERR_Subject PERR_setSubjectWsAfterId(PERR_Subject arg,
-				      PERR_OptLayout wsAfterId);
+ATbool PERR_hasSubjectDescription(PERR_Subject arg);
+PERR_StrCon PERR_getSubjectDescription(PERR_Subject arg);
+PERR_Subject PERR_setSubjectDescription(PERR_Subject arg,
+					PERR_StrCon description);
+ATbool PERR_hasSubjectWsAfterDescription(PERR_Subject arg);
+PERR_OptLayout PERR_getSubjectWsAfterDescription(PERR_Subject arg);
+PERR_Subject PERR_setSubjectWsAfterDescription(PERR_Subject arg,
+					       PERR_OptLayout
+					       wsAfterDescription);
 ATbool PERR_hasSubjectWsAfterComma(PERR_Subject arg);
 PERR_OptLayout PERR_getSubjectWsAfterComma(PERR_Subject arg);
 PERR_Subject PERR_setSubjectWsAfterComma(PERR_Subject arg,
@@ -721,27 +677,16 @@ PERR_Feedback PERR_visitFeedback(PERR_Feedback arg,
 				 (PERR_OptLayout),
 				 PERR_OptLayout(*acceptWsAfterParenOpen)
 				 (PERR_OptLayout),
-				 PERR_StrCon(*acceptId) (PERR_StrCon),
-				 PERR_OptLayout(*acceptWsAfterId)
+				 PERR_StrCon(*acceptProducer) (PERR_StrCon),
+				 PERR_OptLayout(*acceptWsAfterProducer)
 				 (PERR_OptLayout),
 				 PERR_OptLayout(*acceptWsAfterComma)
-				 (PERR_OptLayout),
-				 PERR_StrCon(*acceptProducerId) (PERR_StrCon),
-				 PERR_OptLayout(*acceptWsAfterProducerId)
-				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterComma1)
-				 (PERR_OptLayout),
-				 PERR_StrCon(*acceptProducerType)
-				 (PERR_StrCon),
-				 PERR_OptLayout(*acceptWsAfterProducerType)
-				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterComma2)
 				 (PERR_OptLayout),
 				 PERR_StrCon(*acceptDescription)
 				 (PERR_StrCon),
 				 PERR_OptLayout(*acceptWsAfterDescription)
 				 (PERR_OptLayout),
-				 PERR_OptLayout(*acceptWsAfterComma3)
+				 PERR_OptLayout(*acceptWsAfterComma1)
 				 (PERR_OptLayout),
 				 PERR_OptLayout(*acceptWsAfterBracketOpen)
 				 (PERR_OptLayout),
@@ -769,8 +714,8 @@ PERR_Subject PERR_visitSubject(PERR_Subject arg,
 			       (PERR_OptLayout),
 			       PERR_OptLayout(*acceptWsAfterParenOpen)
 			       (PERR_OptLayout),
-			       PERR_StrCon(*acceptId) (PERR_StrCon),
-			       PERR_OptLayout(*acceptWsAfterId)
+			       PERR_StrCon(*acceptDescription) (PERR_StrCon),
+			       PERR_OptLayout(*acceptWsAfterDescription)
 			       (PERR_OptLayout),
 			       PERR_OptLayout(*acceptWsAfterComma)
 			       (PERR_OptLayout),

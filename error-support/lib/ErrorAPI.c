@@ -289,35 +289,35 @@ ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head, ERR_FeedbackList ta
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackInfo(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list) */
+/*{{{  ERR_Feedback ERR_makeFeedbackInfo(char* producer, char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackInfo(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
+ERR_Feedback ERR_makeFeedbackInfo(char* producer, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl3(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackWarning(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list) */
+/*{{{  ERR_Feedback ERR_makeFeedbackWarning(char* producer, char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackWarning(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
+ERR_Feedback ERR_makeFeedbackWarning(char* producer, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl3(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list) */
+/*{{{  ERR_Feedback ERR_makeFeedbackError(char* producer, char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
+ERR_Feedback ERR_makeFeedbackError(char* producer, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl3(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackFatalError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list) */
+/*{{{  ERR_Feedback ERR_makeFeedbackFatalError(char* producer, char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackFatalError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
+ERR_Feedback ERR_makeFeedbackFatalError(char* producer, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl3(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -345,11 +345,11 @@ ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head, ERR_SubjectList tail)
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location) */
+/*{{{  ERR_Subject ERR_makeSubjectSubject(char* description, ERR_Location Location) */
 
-ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location)
+ERR_Subject ERR_makeSubjectSubject(char* description, ERR_Location Location)
 {
-  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) Location);
+  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) Location);
 }
 
 /*}}}  */
@@ -681,7 +681,7 @@ inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackInfo, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackInfo, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -703,7 +703,7 @@ inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackWarning, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackWarning, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -725,7 +725,7 @@ inline ATbool ERR_isFeedbackError(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackError, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackError, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -747,7 +747,7 @@ inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackFatalError, NULL, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackFatalError, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -756,9 +756,9 @@ inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasFeedbackId(ERR_Feedback arg) */
+/*{{{  ATbool ERR_hasFeedbackProducer(ERR_Feedback arg) */
 
-ATbool ERR_hasFeedbackId(ERR_Feedback arg)
+ATbool ERR_hasFeedbackProducer(ERR_Feedback arg)
 {
   if (ERR_isFeedbackInfo(arg)) {
     return ATtrue;
@@ -776,9 +776,9 @@ ATbool ERR_hasFeedbackId(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  char* ERR_getFeedbackId(ERR_Feedback arg) */
+/*{{{  char* ERR_getFeedbackProducer(ERR_Feedback arg) */
 
-char* ERR_getFeedbackId(ERR_Feedback arg)
+char* ERR_getFeedbackProducer(ERR_Feedback arg)
 {
   if (ERR_isFeedbackInfo(arg)) {
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
@@ -794,144 +794,24 @@ char* ERR_getFeedbackId(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_setFeedbackId(ERR_Feedback arg, char* id) */
+/*{{{  ERR_Feedback ERR_setFeedbackProducer(ERR_Feedback arg, char* producer) */
 
-ERR_Feedback ERR_setFeedbackId(ERR_Feedback arg, char* id)
+ERR_Feedback ERR_setFeedbackProducer(ERR_Feedback arg, char* producer)
 {
   if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
   }
   else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
   }
   else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
   }
   else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
   }
 
-  ATabort("Feedback has no Id: %t\n", arg);
-  return (ERR_Feedback)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasFeedbackProducerId(ERR_Feedback arg) */
-
-ATbool ERR_hasFeedbackProducerId(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* ERR_getFeedbackProducerId(ERR_Feedback arg) */
-
-char* ERR_getFeedbackProducerId(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-  }
-  else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_setFeedbackProducerId(ERR_Feedback arg, char* producerId) */
-
-ERR_Feedback ERR_setFeedbackProducerId(ERR_Feedback arg, char* producerId)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue))), 1);
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue))), 1);
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue))), 1);
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue))), 1);
-  }
-
-  ATabort("Feedback has no ProducerId: %t\n", arg);
-  return (ERR_Feedback)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasFeedbackProducerType(ERR_Feedback arg) */
-
-ATbool ERR_hasFeedbackProducerType(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* ERR_getFeedbackProducerType(ERR_Feedback arg) */
-
-char* ERR_getFeedbackProducerType(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
-  }
-  else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_setFeedbackProducerType(ERR_Feedback arg, char* producerType) */
-
-ERR_Feedback ERR_setFeedbackProducerType(ERR_Feedback arg, char* producerType)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue))), 2);
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue))), 2);
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue))), 2);
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue))), 2);
-  }
-
-  ATabort("Feedback has no ProducerType: %t\n", arg);
+  ATabort("Feedback has no Producer: %t\n", arg);
   return (ERR_Feedback)NULL;
 }
 
@@ -961,16 +841,16 @@ ATbool ERR_hasFeedbackDescription(ERR_Feedback arg)
 char* ERR_getFeedbackDescription(ERR_Feedback arg)
 {
   if (ERR_isFeedbackInfo(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 3)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
   }
   else if (ERR_isFeedbackWarning(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 3)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
   }
   else if (ERR_isFeedbackError(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 3)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
   }
   else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 3)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -979,16 +859,16 @@ char* ERR_getFeedbackDescription(ERR_Feedback arg)
 ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char* description)
 {
   if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 3);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 1);
   }
   else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 3);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 1);
   }
   else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 3);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 1);
   }
   else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 3);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 1);
   }
 
   ATabort("Feedback has no Description: %t\n", arg);
@@ -1021,16 +901,16 @@ ATbool ERR_hasFeedbackList(ERR_Feedback arg)
 ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg)
 {
   if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 4);
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 2);
   }
   else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 4);
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 2);
   }
   else if (ERR_isFeedbackError(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 4);
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 2);
   }
   else 
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 4);
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -1039,16 +919,16 @@ ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg)
 ERR_Feedback ERR_setFeedbackList(ERR_Feedback arg, ERR_SubjectList list)
 {
   if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 4);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
   }
   else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 4);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
   }
   else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 4);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
   }
   else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 4);
+    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
   }
 
   ATabort("Feedback has no List: %t\n", arg);
@@ -1244,9 +1124,9 @@ inline ATbool ERR_isSubjectSubject(ERR_Subject arg)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasSubjectId(ERR_Subject arg) */
+/*{{{  ATbool ERR_hasSubjectDescription(ERR_Subject arg) */
 
-ATbool ERR_hasSubjectId(ERR_Subject arg)
+ATbool ERR_hasSubjectDescription(ERR_Subject arg)
 {
   if (ERR_isSubjectSubject(arg)) {
     return ATtrue;
@@ -1255,24 +1135,24 @@ ATbool ERR_hasSubjectId(ERR_Subject arg)
 }
 
 /*}}}  */
-/*{{{  char* ERR_getSubjectId(ERR_Subject arg) */
+/*{{{  char* ERR_getSubjectDescription(ERR_Subject arg) */
 
-char* ERR_getSubjectId(ERR_Subject arg)
+char* ERR_getSubjectDescription(ERR_Subject arg)
 {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_setSubjectId(ERR_Subject arg, char* id) */
+/*{{{  ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, char* description) */
 
-ERR_Subject ERR_setSubjectId(ERR_Subject arg, char* id)
+ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, char* description)
 {
   if (ERR_isSubjectSubject(arg)) {
-    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
   }
 
-  ATabort("Subject has no Id: %t\n", arg);
+  ATabort("Subject has no Description: %t\n", arg);
   return (ERR_Subject)NULL;
 }
 
@@ -1736,39 +1616,31 @@ ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg, ERR_Feedback (*acce
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptId)(char*), char* (*acceptProducerId)(char*), char* (*acceptProducerType)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList)) */
+/*{{{  ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptProducer)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList)) */
 
-ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptId)(char*), char* (*acceptProducerId)(char*), char* (*acceptProducerType)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList))
+ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptProducer)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList))
 {
   if (ERR_isFeedbackInfo(arg)) {
     return ERR_makeFeedbackInfo(
-        acceptId ? acceptId(ERR_getFeedbackId(arg)) : ERR_getFeedbackId(arg),
-        acceptProducerId ? acceptProducerId(ERR_getFeedbackProducerId(arg)) : ERR_getFeedbackProducerId(arg),
-        acceptProducerType ? acceptProducerType(ERR_getFeedbackProducerType(arg)) : ERR_getFeedbackProducerType(arg),
+        acceptProducer ? acceptProducer(ERR_getFeedbackProducer(arg)) : ERR_getFeedbackProducer(arg),
         acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
         acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
   }
   if (ERR_isFeedbackWarning(arg)) {
     return ERR_makeFeedbackWarning(
-        acceptId ? acceptId(ERR_getFeedbackId(arg)) : ERR_getFeedbackId(arg),
-        acceptProducerId ? acceptProducerId(ERR_getFeedbackProducerId(arg)) : ERR_getFeedbackProducerId(arg),
-        acceptProducerType ? acceptProducerType(ERR_getFeedbackProducerType(arg)) : ERR_getFeedbackProducerType(arg),
+        acceptProducer ? acceptProducer(ERR_getFeedbackProducer(arg)) : ERR_getFeedbackProducer(arg),
         acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
         acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
   }
   if (ERR_isFeedbackError(arg)) {
     return ERR_makeFeedbackError(
-        acceptId ? acceptId(ERR_getFeedbackId(arg)) : ERR_getFeedbackId(arg),
-        acceptProducerId ? acceptProducerId(ERR_getFeedbackProducerId(arg)) : ERR_getFeedbackProducerId(arg),
-        acceptProducerType ? acceptProducerType(ERR_getFeedbackProducerType(arg)) : ERR_getFeedbackProducerType(arg),
+        acceptProducer ? acceptProducer(ERR_getFeedbackProducer(arg)) : ERR_getFeedbackProducer(arg),
         acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
         acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
   }
   if (ERR_isFeedbackFatalError(arg)) {
     return ERR_makeFeedbackFatalError(
-        acceptId ? acceptId(ERR_getFeedbackId(arg)) : ERR_getFeedbackId(arg),
-        acceptProducerId ? acceptProducerId(ERR_getFeedbackProducerId(arg)) : ERR_getFeedbackProducerId(arg),
-        acceptProducerType ? acceptProducerType(ERR_getFeedbackProducerType(arg)) : ERR_getFeedbackProducerType(arg),
+        acceptProducer ? acceptProducer(ERR_getFeedbackProducer(arg)) : ERR_getFeedbackProducer(arg),
         acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
         acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
   }
@@ -1798,13 +1670,13 @@ ERR_SubjectList ERR_visitSubjectList(ERR_SubjectList arg, ERR_Subject (*acceptHe
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptId)(char*), ERR_Location (*acceptLocation)(ERR_Location)) */
+/*{{{  ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location)) */
 
-ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptId)(char*), ERR_Location (*acceptLocation)(ERR_Location))
+ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location))
 {
   if (ERR_isSubjectSubject(arg)) {
     return ERR_makeSubjectSubject(
-        acceptId ? acceptId(ERR_getSubjectId(arg)) : ERR_getSubjectId(arg),
+        acceptDescription ? acceptDescription(ERR_getSubjectDescription(arg)) : ERR_getSubjectDescription(arg),
         acceptLocation ? acceptLocation(ERR_getSubjectLocation(arg)) : ERR_getSubjectLocation(arg));
   }
   ATabort("not a Subject: %t\n", arg);
