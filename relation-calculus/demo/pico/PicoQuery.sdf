@@ -1,12 +1,13 @@
 module PicoQuery
 
-imports PicoExtraction
+imports RscriptCalculator
+imports PicoExtraction %% should be only convertl
 
 exports
   context-free syntax
-	pico-query(PROGRAM, RSCRIPT, String, RSTORE) -> List
+	pico-query(PROGRAM, RSCRIPT, String, RSTORE) 	-> List
 
-	str2rvar(String)		-> RVAR
+	str2rvar(String)				-> RVAR
 hiddens
   variables
 	"$Rstore" [0-9\']*  -> RSTORE

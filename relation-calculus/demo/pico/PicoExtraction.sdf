@@ -8,13 +8,13 @@ imports MyPosInfo[PICO-ID]
 imports ListItems
 
 exports
- imports RscriptCalculator
- imports RscriptChecker
+   imports Rstore
 
  context-free syntax
 
       extractRelations(PROGRAM)                	-> RSTORE
-      convertl(Bag[[Elem]])                   	-> List
+%%      convertl(Bag[[Elem]])                   	-> List
+      convertl(Elem)                   	-> List
 
 hiddens
   context-free syntax
