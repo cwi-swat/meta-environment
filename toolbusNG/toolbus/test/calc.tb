@@ -9,28 +9,34 @@ process UI is
 process CALC-BUTTON is
   let  E : expr, V : int
   in
-     event button(calc) .
-     eval get-expr-dialog . value E?  .     %% expr get-expr-dialog()
-     snd-msg compute(E) . rec-msg compute(E, V?) .
-     do display-value(V) .            %% void display-value(expr)
+     event button(calc) {                       << genereert nieuwe id
+     	eval get-expr-dialog  { } . value E?  .	%% expr get-expr-dialog(); genereert lokaal nieuwe id
+     	snd-msg compute(E) . 
+     	rec-msg V? .
+     	do display-value(V) .            		%% void display-value(expr)
+     }
      >> 
-     event cancel
+     event cancel { }
   endlet
 
 process LOG-BUTTON is
   let N : int, L : log
   in
-      event button(showLog)  .
-      snd-msg showLog  .  rec-msg showLog(L?) .
-      do display-log(L) .             %% void display-log(log)
+      event button(showLog)  {                  << genereert nieuwe id
+      	snd-msg showLog  .  
+      	rec-msg L? .
+      	do display-log(L) .             		%% void display-log(log)
+      }
   endlet
 
 process TIME-BUTTON is
   let T : time, P : process
   in
-      event button(showTime) .
-      snd-msg showTime to P? . rec-msg showTime(T?) from P .
-      do display-time(T) .            %% void display-time(time)
+      event button(showTime) {                  %% genereert nieuwe id
+      	snd-msg showTime . 
+      	rec-msg T? .
+        do display-time(T) .            		%% void display-time(time)
+      }
   endlet
 
 process QUIT-BUTTON is
@@ -58,16 +64,31 @@ end
 process CALC is
   let E : expr, V : int, P : process
   in
-     ( rec-msg compute(E?) from P? . 
-       eval compute(E) . value V? .          %% int compute(expr)
-       snd-msg compute(E, V) to P . 
+     ( rec-msg compute(E?) . 
+       eval compute(E) { } value V? .          	%% int compute(expr)
+       snd-msg  V . 
        snd-note compute(E, V)
      ) * delta
   endlet
+  
+%% Hoe worden hierboven de rec-msg en de snd-msg met elkaar verbonden?
+%% Idee:plaats de afhandeling van de rec-msg ook in een block.
+
+process CALC is
+  let E : expr, V : int, P : process
+  in
+     rec-msg compute(E?) {						<< ontvangt een id van buiten
+       eval compute(E) { } value V? .          	%% int compute(expr); nieuwe lokale id
+       snd-msg  V .                             %% gebruikt de ontvangen id
+       snd-note compute(E, V)
+     } * delta
+  endlet
+
 
 tool calc-tool defines
      signature
-	int compute(expr)
+     	functions
+			int compute(expr)
      kind = external/c
      command = "./calc"
 end
@@ -75,17 +96,17 @@ end
 %% -------------------------------------------------------------------------------
 
 process CLOCK is
- let T : time, P : process
+ let T : time
  in
-     ( rec-msg showTime from P? .
-       eval readTime . value T? .            %% time readtime()
-       snd-msg showTime(T) to P
-     ) * delta
+     rec-msg showTime {
+       eval readTime { } value T? .            	%% time readtime()
+       snd-msg T
+     } * delta
  endlet
 
 tool clock-tool defines
-     signature
-	functions 
+    signature
+		functions 
 		  time readtime()
 	kind = externa/c
 	command = "./clock"
@@ -96,10 +117,10 @@ end
 process BATCH is
   let E : expr, V : int
   in
-     ( eval fromFile . value E? .            %% expr fromFile()
+     ( eval fromFile { } value E? .            	%% expr fromFile()
        snd-msg compute(E). 
-       rec-msg compute(E, V?).
-       do toFile(E, V)                %% void toFile(expr, int)
+       rec-msg V? .
+       do toFile(E, V)                			%% void toFile(expr, int)
      ) * delta
   endlet
 
@@ -115,14 +136,15 @@ end
 %% -------------------------------------------------------------------------------
 
 process  LOG is
-  let  E : str, V : int, L : log, P : process
+  let  E : str, V : int, L : log
   in
      ( rec-note compute(E?, V?) . 
-       do writeLog(E, V)             %% void writeLog(expr,int)
+       do writeLog(E, V)             			%% void writeLog(expr,int)
      + 
-       rec-msg showLog from P? . 
-       eval readLog . value L? .            %% log readLog()
-       snd-msg readLog(L) to P
+       rec-msg showLog {
+       		eval readLog { } value L? .            	%% log readLog()
+       		snd-msg L
+       }
      ) * delta
   endlet
 
@@ -137,10 +159,12 @@ end
   
 %% -------------------------------------------------------------------------------
 
-toolbus(UI using user-interface-tool, 
+toolbus(
+	UI using user-interface-tool, 
 	CALC using calc-tool, 
-        LOG using log-tool, 
-        CLOCK using clock-tool)
+  	LOG using log-tool, 
+    CLOCK using clock-tool
+)
 
 %% -------------------------------------------------------------------------------
 
