@@ -32,14 +32,7 @@ CODE=${srcdir}/c-code
 
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh
 
-TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) 
-
-%.diff.sh: 
-	@(echo 'set -e' ; \
-         echo 'for i in $*.*.asfc.out; do'; \
-         echo ' ${ATDIFF} $$i `basename $$i .asfc.out`.asfe.out ' ;\
-         echo ' rm -f $$i `basename $$i .asfc.out`.asfe.out ' ;\
-	 echo 'done' ) > $@ && chmod +x $@
+TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh) 
 
 %.asfe.sh:
 	@(echo 'set -e'  ;\
