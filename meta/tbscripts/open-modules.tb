@@ -171,8 +171,8 @@ in
       fi
     fi.
 /* We are finished. Inform UI */
-    snd-msg(finished-opening-modules).
-    snd-note(ui-status(endstat(Id)))
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(finished-opening-modules)
   ) *
   delta
 endlet
