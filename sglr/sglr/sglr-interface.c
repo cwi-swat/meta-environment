@@ -108,6 +108,11 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
     return file;
 }
 
+void SGcloseFile(FILE *fd)
+{
+  if(fd != stdin) fclose(fd);
+}
+
 /*
   \paragraph{Open Language}
 
@@ -124,6 +129,7 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
     ATfprintf(stderr, "%s: reading parse table %s\n", prgname, FN);
   input_file = SGopenFile(prgname, "parse table not specified", FN);
   table = SG_BuildParseTable(ATreadFromFile(input_file));
+  SGcloseFile(input_file);
   if (table == NULL)
     return ATmake("snd-value(open-language-failed(<str>,<str>))", L, FN);
   else {
@@ -197,6 +203,7 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *FN)
   if (SG_VERBOSE)
     ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
   ret = SG_Parse(SG_LookupParseTable(L, ATfalse), SG_GetChar);
+  SGcloseFile(SG_inputFile);
   return ret ? ret : (ATerm) ATempty;
 }
 

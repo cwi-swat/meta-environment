@@ -66,13 +66,15 @@ SGLRLIBPROF     = libsglr-prof.a
 SGLRLIBS        = ${SGLRLIB} ${SGLRLIBA2TOA1} ${SGLRLIBGC} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
 LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
-LIBOBJ          = $(patsubst %.c,%.o,${LIBSRC})
-LIBOBJA2TOA1    = $(patsubst %.c,%-a2toa1.o,${LIBSRC})
-LIBOBJGC        = $(patsubst %.c,%-gc.o,${LIBSRC})
-LIBOBJPROF      = $(patsubst %.c,%-prof.o,${LIBSRC})
+LIBOBJ          = ${patsubst %.c,%.o,${LIBSRC}}
+LIBOBJA2TOA1    = ${patsubst %.c,%-a2toa1.o,${LIBSRC}}
+LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRC}}
+LIBOBJPROF      = ${patsubst %.c,%-prof.o,${LIBSRC}}
 
 PROG            = sglr
+PURE            = ${patsubst %,%.pure,${PROG}}
 PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-prof
+PUREPROGS       = ${patsubst %,%.pure,${PROGS}}
 GETOPTC         = getopt.c getopt1.c
 GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
 CSRC            = sglr-main.c
@@ -81,7 +83,9 @@ OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
 all:	${PROG}
 
-complete:	${PROGS}
+pure:	${PURE}
+
+complete:	${PROGS} ${PUREPROGS}
 
 install:	incinstall libinstall bininstall
 
@@ -104,13 +108,19 @@ bininstall:	${PROGS}
 	done
 
 distclean realclean:	clean
-	rm -f	${SGLRLIBS} ${PROGS} Makefile
+	rm -f	${SGLRLIBS} ${PROGS} ${PUREPROGS} Makefile
 
 clean:
-	rm -f	core sglr.tifs sglr.tif.[ch] ${OBJ} ${GETOPTOBJ} \
-		${LIBOBJ} ${LIBOBJA2TOA1} ${LIBOBJGC} ${LIBOBJPROF}
+	rm -f	core sglr.tifs sglr.tif.[ch] ${GETOPTOBJ}
+	rm -f	${OBJ} ${LIBOBJ}
+	rm -f	${OBJA2TOA1} ${LIBOBJA2TOA1}
+	rm -f	${LIBOBJGC}
+	rm -f	${LIBOBJPROF}
 
 # Generic rules
+
+%.pure:	%
+	purify $<
 
 %.c:	%.h
 

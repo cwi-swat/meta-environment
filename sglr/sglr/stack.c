@@ -123,8 +123,12 @@ ATbool SG_InStacks(stack *st1, stacks *sts)
 {
   stack *st2;
 
-  while(shift(st2, sts))
+//  while(shift(st2, sts))
+  while(sts) {
+    st2 = head(sts);
+    sts = tail(sts);
     if(st1 == st2) return ATtrue;
+  }
   return ATfalse;
 }
 
