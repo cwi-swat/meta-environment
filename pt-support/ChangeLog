@@ -1,5 +1,10 @@
 $Id$
 
+Wed Feb 23 11:18:18 CET 2005 <jurgenv@cwi.nl>
+ * libmept/flattenPT.c: fixed AsFix2 list patterns for lexical lists. They
+   only worked with either lists of char-classes, or directly sort names,
+   not more complex symbols.
+
 Wed Feb  2 16:59:50 CET 2005 <jurgenv@cwi.nl>
  * When renaming literals (the actual parameter, or the goal of the
    symbol renaming being a literal), we now have to construct a full literal
