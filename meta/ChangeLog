@@ -2,8 +2,9 @@
 
 2003/08/07 (markvdb@cwi.nl)
  * version bumped into 1.2
- * Added functionality to return imported and depending modules
+ * Added functionality to return imported and imported-by modules
    when asking for module info.
+ * MetaStudio ignores all information except path information.
  * Set dependency on sdf-support-1.1.2
  * Set dependency on sglr-3.10.2
 
