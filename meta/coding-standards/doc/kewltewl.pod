@@ -1,6 +1,6 @@
 =head1 NAME
 
-B<KEWLTEWL> - the B<K>ewlest B<T>ewl ever built
+KEWLTEWL - the Kewlest Tewl ever
 
 =head1 SYNOPSIS
 

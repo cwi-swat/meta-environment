@@ -4,7 +4,8 @@ CENTER="Meta-Environment Documentation"
 RELEASE="1.0"
 
 target=kewltewl
-files=${target}.7 ${target}.txt ${target}.html ${target}.bok
+files=	${addsuffix .7,${target}} ${addsuffix .txt,${target}} \
+	${addsuffix .html,${target}} ${addsuffix .bok,${target}}
 
 all:	${files}
 
