@@ -8,7 +8,7 @@ exports
 
 context-free syntax
 
-  "(" {Data ","}2+ ")"    -> Data
+  "(" Data "," {Data ","}+ ")"    -> Data
 
   "(" Data ")"		  -> Data {bracket}
 

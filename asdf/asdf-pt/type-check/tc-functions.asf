@@ -78,7 +78,7 @@ equations
       [] == $LC3
       ===================================================
       typecheck-definitions(defs($FD), $EN) = error("Type error", 
-	     [localized("Type check OK", get-location($FD))])
+	     [subject("Type check OK")])
 
 
 [tca-function] 

@@ -242,10 +242,10 @@ equations
 
 	check-last-constraints([], $M) = []
 
-[check-con-1] vmap($VT1*, <$TY, $TV1, $SU>, $VT2*) := $M,
+[check-con-1] vmap($VT1*, <$TY, $TV1, $SU2>, $VT2*) := $M,
 	      $TV2 !:= $TY,
 	      empty != $TY
 	      ===================================================
-	      check-con(not-equal-con($TV1, empty, $SU), $M) = yes
+	      check-con(not-equal-con($TV1, empty, $SU1), $M) = yes
 
 [default-check-con-1] check-con($CO, $M) = no
