@@ -28,10 +28,14 @@ PERR_Area ERR_liftArea(ERR_Area area)
   int beginColumn;
   int endLine;
   int endColumn;
+  int offset;
+  int length;
   PERR_NatCon pBeginLine;
   PERR_NatCon pBeginColumn;
   PERR_NatCon pEndLine;
   PERR_NatCon pEndColumn;
+  PERR_NatCon pOffset;
+  PERR_NatCon pLength;
   PERR_OptLayout e;
 
   if (ERR_isAreaArea(area)) {
@@ -39,11 +43,15 @@ PERR_Area ERR_liftArea(ERR_Area area)
     beginColumn = ERR_getAreaBeginColumn(area);
     endLine = ERR_getAreaEndLine(area);
     endColumn = ERR_getAreaEndColumn(area);
+    offset = ERR_getAreaOffset(area);
+    length = ERR_getAreaLength(area);
 
     pBeginLine = ERR_liftNatCon(beginLine);
     pBeginColumn = ERR_liftNatCon(beginColumn);
     pEndLine = ERR_liftNatCon(endLine);
     pEndColumn = ERR_liftNatCon(endColumn);
+    pOffset = ERR_liftNatCon(offset);
+    pLength = ERR_liftNatCon(length);
     e = PERR_makeOptLayoutAbsent();
 
     return PERR_makeAreaArea(e,e,
@@ -54,6 +62,10 @@ PERR_Area ERR_liftArea(ERR_Area area)
 			    pEndLine,
 			    e,e,
 			    pEndColumn,
+			    e,e,
+			    pOffset,
+			    e,e,
+			    pLength,
 			    e);
   }
   else {
