@@ -20,7 +20,7 @@ exports
     context-free syntax
 
 	type-of(Elem)                  				-> ElemType
-	element-type(REXPTYPE)					-> REXPTYPE
+	element-type(REXPTYPE, TENV)				-> REXPTYPE
 
         undefined                       			-> REXPTYPE
 	field(Integer)						-> REXPTYPE
@@ -36,6 +36,7 @@ exports
 	is-tuple(Elem)						-> Boolean
 
 	norm(REXPTYPE, TENV)					-> REXPTYPE
+	well-formed-type(REXPTYPE, TENV)			-> TENV
 	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
 	get-tuple-type(REXPTYPE)				-> REXPTYPE
 

@@ -7,9 +7,6 @@ equations
 [xxx]	fun [] to $Etype = $Etype
 
 %% ---- Simplify tuple of 1 element to element itself
-
-[xxx]	<$Etype> = $Etype
-
 %% ---- Type of element
 
 [to1]	type-of($Integer) = int 
@@ -19,15 +16,16 @@ equations
 
 %% ---- Element type
 
-[et1]	element-type(bag[$Etype]) = $Etype
-[et2]	element-type(rel[$Etype+]) = <$Etype+>
-[et3]	element-type(<$Etype+>) = <$Etype+>
+[et1]	element-type(bag[$Etype], $Tenv)  = $Etype
+[et2]	element-type(rel[$Etype+], $Tenv) = <$Etype+>
+[et3]	element-type(<$Etype+>, $Tenv)    = <$Etype+>
+[et4]	element-type($Var, $Tenv)         = element-type(lookup($Tenv, $Var), $Tenv)
 [default-et]
-	element-type($Etype) = undefined
+	element-type($Etype, $Tenv)       = undefined
 
-%% ---- first of type
+%% ---- First of type
 
-[ft1]	first(<$Etype1, $Etype+>, $Tenv) = $Etype1
+[ft1]	first(<$Etype1, $Etype*>, $Tenv) = $Etype1
 
 [ft2]	first(<$Etype1 $Var, $DclVar*>, $Tenv) = $Etype1
 
@@ -36,7 +34,7 @@ equations
 [default-ft]
 	first($Etype, $Tenv) = $Etype
 
-%% ---- second of type
+%% ---- Second of type
 
 [st1]	second(<$Etype1, $Etype+>, $Tenv) = <$Etype+>
 [st2]	second(<$Etype1 $Var, $DclVar+>, $Tenv) = <$DclVar+>
@@ -44,7 +42,7 @@ equations
 [default-st]
 	second($Etype, $Tenv) = undefined
 
-%% ---- normalize type
+%% ---- Normalize type
 
 [nm1]	norm(bag[$Etype], $Tenv) = bag[norm($Etype, $Tenv)]
 
@@ -89,6 +87,38 @@ equations
 [it1]	is-tuple(<$Elem+>) = true
 [default-it]
 	is-tuple($Elem) = false
+
+%% ---- well-formed-type
+
+[wft1]	well-formed-type(bag[$Etype], $Tenv) = well-formed-type($Etype, $Tenv)
+
+[wft2]	well-formed-type(rel[$Etype+], $Tenv) = well-formed-type(<$Etype+>,$Tenv)
+
+[wft3]	well-formed-type($Etype, $Tenv) = $Tenv',
+	well-formed-type(<$Etype+>, $Tenv') = $Tenv''
+	========================================================
+	well-formed-type(<$Etype, $Etype+>, $Tenv) = $Tenv''
+
+[wft4]	well-formed-type(<$Etype>, $Tenv) = well-formed-type($Etype, $Tenv)
+
+[wft5]	well-formed-type(<$DclVar+>, $Tenv) = well-formed-type(get-tuple-type(<$DclVar+>), $Tenv)
+
+[wft5]	lookup($Tenv, $Var) = not-in-table
+	=======================================================
+	well-formed-type($Var, $Tenv) = $Tenv + Undeclared $Var
+
+[wft6]	well-formed-type(<$Etype+>, $Tenv) = $Tenv',
+	well-formed-type($Etype, $Tenv') = $Tenv''
+	======================================================
+	well-formed-type(fun [$Etype+] to $Etype, $Tenv) = $Tenv''
+
+[wft6]	lookup($Tenv, $Var) = $Etype
+	=======================================================
+	well-formed-type($Var, $Tenv) = well-formed-type($Etype, $Tenv)
+
+[default-wft]
+	well-formed-type($Etype, $Tenv) = $Tenv
+
 
 %% ---- If-then-else on type environments
 
@@ -172,7 +202,12 @@ $Error]>
 %% ---- Lookup/store/delete
 
 [te2]	lookup(<$Table, $Errors>, $Var) = lookup($Table, $Var)
-[te3]	store(<$Table, $Errors>, $Var, $Etype) = <store($Table, $Var, $Etype), $Errors>
+
+[te3]	$Tenv' = well-formed-type($Etype, $Tenv),
+	$Tenv' = <$Table, $Errors>
+	===================================================================
+	store($Tenv, $Var, $Etype) = <store($Table, $Var, $Etype), $Errors>
+
 [te4]	delete(<$Table, $Errors>, $Var)  = <delete($Table, $Var), $Errors>
 
 %% ---- Check that variable is not yet defined
@@ -685,7 +720,7 @@ $Error]>
       	add-generators($Etype $Var : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag2] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-      	match-targets($Target+, element-type($Etype), $Tenv') = $Tenv''	
+      	match-targets($Target+, element-type($Etype, $Tenv), $Tenv') = $Tenv''	
       	==========================================
       	add-generators(<$Target+> : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
@@ -694,12 +729,12 @@ $Error]>
       	add-generators($Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv')
 
 [ag4] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-	match-targets($Target, element-type($Etype), $Tenv') = $Tenv''
+	match-targets($Target, element-type($Etype, $Tenv), $Tenv') = $Tenv''
       	==========================================
       	add-generators($Target <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag5] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-	match-targets($Target+, element-type($Etype), $Tenv') = $Tenv''
+	match-targets($Target+, element-type($Etype, $Tenv), $Tenv') = $Tenv''
       	==========================================
       	add-generators(<$Target+> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
@@ -723,19 +758,18 @@ $Error]>
 	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var should have type
 	first($Etype2, $Tenv))
 
-[mt2]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) = false,
+[mt3]	equal-type($Etype1, first($Etype2, $Tenv), $Tenv) = false,
 	first($Etype2, $Tenv) = undefined	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
 	match-targets($Target*, second($Etype2, $Tenv), $Tenv + $Var exceeds number of targets of generator)
 
-
-[mt3]	require-type($Exp, first($Etype, $Tenv), $Tenv) = $Tenv'
+[mt4]	require-type($Exp, first($Etype, $Tenv), $Tenv) = $Tenv'
 	=====================================================
 	match-targets($Exp, $Target*, $Etype, $Tenv) =
 	match-targets($Target*, second($Etype, $Tenv), $Tenv')
 
-[mt4]	match-targets( , $Etype, $Tenv) = $Tenv
+[mt5]	match-targets( , $Etype, $Tenv) = $Tenv
 
 %% ---  Delete a list of targets from the type environment
 
