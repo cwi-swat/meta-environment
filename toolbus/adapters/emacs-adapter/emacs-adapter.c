@@ -335,8 +335,9 @@ void emacs_create(char *emacsapp) {
     */
     sleep(30);
     /* Make sure emacs loads tb.el */
-    sprintf(cmd_buf,"load-file ");
+    sprintf(cmd_buf,"load-file \"");
     strcat(cmd_buf,TBEL); /* TBEL is location of tb.el file from Makefile*/
+    strcat(cmd_buf,"\"");
     exec_cmd();
     /* Tell emacs about LENSPEC and MIN_MSG_SIZE */
     sprintf(cmd_buf,"set-lenspec %d", LENSPEC);
