@@ -156,7 +156,14 @@ static ATerm make_asfix_list(ATermList l, char *sort);
 static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep);
 static int get_list_length(ATermList chars);
 static ATermList terms_to_asfix(ATermList a, ATermAppl t, ATerm sort);
-static int slice_length(ATerm l1, ATerm l2);
+
+/* Local macros */
+
+/* slice_length computes the number of elements in a slice that
+ * starts with the node l1, and ends JUST BEFORE the node specified
+ * with l2.
+ */
+#define slice_length(l1,l2) (ATgetLength(l1) - ATgetLength(l2))
 
 /*}}}  */
 /*{{{  void c_rehash(int newsize) */
@@ -1390,31 +1397,10 @@ void init_patterns()
 
 }
 /*}}}  */
-/*{{{  static int slice_length(ATerm l1, ATerm l2) */
 
-/* Calculates the length of a slice.
- */
-
-static int slice_length(ATerm l1, ATerm l2)
-{
-  int size = 0;
-  ATermList old = (ATermList)l1;
-
-  while(!ATisEqual(l1,l2)) {
-    assert(l1);
-    if(ATisEmpty((ATermList)l1))
-      ATwarning("sorry, %t not in %t\n", l2, old);
-    size++;
-    l1 = (ATerm)ATgetNext((ATermList)l1);
-  }
-
-  return size;
-}
-
-/*}}}  */
 /*{{{  ATerm slice(ATerm l1, ATerm l2) */
 
-/* Constructs the slice of a list starting at index "l1" and ending at 
+/* Constructs the slice of a list starting at index "l1" and ending JUST BEFORE 
  * index "l2". If the slice fits into the term_store a fast way of
  * copying can be used, otherwise the term_store is filled and the
  * rest is processed in a less efficient way.
