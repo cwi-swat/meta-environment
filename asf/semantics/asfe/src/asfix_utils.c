@@ -246,7 +246,7 @@ ATbool isValidSlice(ATermList begin, ATermList end)
 	}
 
 	/* check if no consecutive whitespace occurs */
-	for(;begin != end; begin = ATgetNext(begin)) {
+	for(;!ATisEmpty(begin) && begin != end; begin = ATgetNext(begin)) {
 		elem1 = ATgetFirst(begin);
 		next = ATgetNext(begin);
 		elem2 = ATgetFirst(next);

@@ -37,4 +37,6 @@ printf "."
 ./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
 printf "."
 ./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm2.asfix1
+printf "."
+./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm3.asfix1
 printf ".\n"
