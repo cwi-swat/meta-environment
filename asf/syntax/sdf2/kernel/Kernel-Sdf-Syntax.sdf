@@ -1,7 +1,7 @@
 %%% $Id$
                                                             
 module Kernel-Sdf-Syntax
-imports Symbols Grammar-Syntax
+imports ATerms Symbols Grammar-Syntax
 exports
   sorts Attribute Attributes Production Productions
   context-free syntax

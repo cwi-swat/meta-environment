@@ -4,9 +4,6 @@ exports
     [\ \t\n]           -> LAYOUT
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
-    "default-"         -> TagId
-  context-free syntax
-                       -> TagId  
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n\%]
