@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   ATBinit(argc, argv,&bottomOfStack);
-  bout = fopen("batch.out", "w");
+  bout = fopen("batch.out", "wb");
   if(!bout)
     bout = stdout;
   if(ATBconnect(NULL, NULL, -1, batch_handler) >= 0){

@@ -410,7 +410,7 @@ void copy_file(char *name, FILE *tofile)
   FILE *f;
   int c;
 
-  f = fopen(name, "r");
+  f = fopen(name, "rb");
   if(!f)
     err_sys_fatal("Cannot copy: %s", name);
   while((c = fgetc(f)) > 0)
@@ -738,23 +738,23 @@ int main(int argc, char **argv)
     err_sys_fatal("Can't open `%s'", tifs_name);
 
   sprintf(handler_name, "%s.tif.c", search_tool_name);
-  c_handler = fopen(handler_name, "w");
+  c_handler = fopen(handler_name, "wb");
   if(!c_handler)
     err_sys_fatal("Can't create `%s'", handler_name);
 
   if( split_output == TBtrue )
   {
     sprintf(handler_name, "%s.tif.h", search_tool_name);
-    h_handler = fopen(handler_name, "w");
+    h_handler = fopen(handler_name, "wb");
     if(!h_handler)
       err_sys_fatal("Can't create `%s'", handler_name);
   }
 
-  tmp1 = fopen(tmp_name1, "w");
+  tmp1 = fopen(tmp_name1, "wb");
   if(!tmp1)
     err_sys_fatal("Can't create tmp file `%s'", tmp_name1);
 
-  tmp2 = fopen(tmp_name2, "w");
+  tmp2 = fopen(tmp_name2, "wb");
   if(!tmp2)
     err_sys_fatal("Can't create tmp file `%s'", tmp_name2);
 

@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 {  ATerm bottomOfStack;
 
   ATBinit(argc, argv, &bottomOfStack);
-  Out = fopen("store.out", "w");
+  Out = fopen("store.out", "wb");
   if(ATBconnect(NULL, NULL, -1, store_handler) >= 0){
     ATBeventloop();
     return 0;

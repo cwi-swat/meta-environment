@@ -185,7 +185,7 @@ exec_cmd:
     while ((r = wait(&status)) != cmd_pid && r != -1)
       fprintf(stderr, "wait = %d\n", r);  
 
-    if((from_cmd = fopen(tmp_out, "r")) == NULL)
+    if((from_cmd = fopen(tmp_out, "rb")) == NULL)
       err_sys_fatal("Can't open tmp output file");
 
     /* Mon May  3 17:36:12 MET DST 1999 mdejonge

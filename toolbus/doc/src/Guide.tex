@@ -781,7 +781,7 @@ The function
 writes ATerm {\tt Trm} to the file {\tt File}.
 For instance, in the context:
 \begin{verbatim}
-      FILE *f = fopen("foo", "w");
+      FILE *f = fopen("foo", "wb");
       ATerm Trm1 = ATmake("<appl(red,<int>)>", "freq", 17);
 \end{verbatim}
 the statement

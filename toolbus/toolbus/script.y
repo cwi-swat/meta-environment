@@ -83,7 +83,7 @@ TBbool parse_script(char *name, int argc, char **argv)
   TBbool in_string = TBfalse;
    
   /* Open original file */
-  if((fname = fopen(name, "r")) == NULL)
+  if((fname = fopen(name, "rb")) == NULL)
     err_sys_fatal("cannot open file `%s'", name);
 
   /* Create a copy of it */
@@ -91,7 +91,7 @@ TBbool parse_script(char *name, int argc, char **argv)
   TBtmpname(namec, ".c");
   TBtmpname(namei, ".i");
   
-  if((fnamec = fopen(namec, "w")) == NULL)
+  if((fnamec = fopen(namec, "wb")) == NULL)
     err_sys_fatal("cannot create temp file `%s' for preprocessor", namec);
 
   fprintf(fnamec, "# 1 \"%s\"\n", name);  /* set original file name */

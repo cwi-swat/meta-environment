@@ -247,7 +247,7 @@ void copy_file(FILE *fout, char *name)
   FILE *f;
   char line[512];
 
-  if((f = fopen(name, "r")) == NULL)
+  if((f = fopen(name, "rb")) == NULL)
     err_sys_fatal("Can't open `%s'", name);
 
   while(fgets(line, 512, f) != NULL){
