@@ -3,45 +3,45 @@
  */
 process ProcessEqs is
 let
-  Id      : term,
-  ModName : str,
-  Module  : term,
-  Modules : list,
-  Table   : str,
-  Path    : str,
-  FT      : str,
-  I       : int,
-  T1      : term,
-  T2      : term,
-  Ch      : int,
-  Li      : int,
-  Co      : int,
-  Char    : term,
-  Time1   : term,
-  Time2   : term,
-  ErrList : list,
-  Ambs    : list,
-  Cycle   : list,
-  EqsText : str,
-  EqsTree : term
+  Id          : term,
+  ModName     : str,
+  Module      : term,
+  Modules     : list,
+  I           : int,
+  Ch          : int,
+  Li          : int,
+  Co          : int,
+  Char        : term,
+  ErrList     : list,
+  Ambs        : list,
+  Cycle       : list,
+  EqsText     : str,
+  EqsTree     : term,
+  Nonterminal : str
 in
   Id := process-id.
-  ( rec-msg(process-eqs(ModName?)).
-    snd-msg(eqs-available-for-modules(ModName)).
+  (
+    rec-msg(process-eqs(ModName?)).
+    snd-msg(get-rules-top-sort) .
+    rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
+    snd-msg(eqs-available-for-modules(ModName)) .
     rec-msg(eqs-for-modules(Modules?)).
-    ( if not-equal(Modules, []) then
+    (
+     if not-equal(Modules, []) then
        Module  := first(Modules).
        Modules := next(Modules).
        /* Get the text representation of the unparsed equations section. 
         */
        snd-msg(get-eqs-text(Module)).
-       ( rec-msg(eqs-text(Module?, EqsText?)).
+       (
+         rec-msg(eqs-text(Module?, EqsText?)).
          snd-msg(set-parsetable(eqs(Module))).
          (
 	   rec-msg(parsetable-set(eqs(Module))).
            snd-note(ui-status(statf(Id,"Parsing equations of %s",[Module]))).
-           snd-msg(Id,parse-string-as-asfix2me(eqs(Module), "Equations", EqsText)).
-           ( rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
+           snd-msg(Id,parse-string-as-asfix2me(eqs(Module), Nonterminal, EqsText)).
+           (
+             rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 
