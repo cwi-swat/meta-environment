@@ -1,6 +1,7 @@
 module languages/asfix/syntax/Symbol
 
 imports languages/aterm/syntax/Literals
+imports languages/aterm/syntax/IntCon
 
 exports
  
