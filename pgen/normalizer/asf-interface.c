@@ -33,8 +33,8 @@
 #include "asf-interface.h"
 #include <SDF.h>
 #include <PT.h>
-#include <asc-apply.h>
-#include <asc-support.h>
+
+#include <asc-support2.h>
 
 #define INITIAL_TABLE_SIZE 8191
 
