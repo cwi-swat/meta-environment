@@ -10,7 +10,20 @@ import toolbus.*;
 import toolbus.ToolBusException;
 import toolbus.atom.*;
 
-public class MsgPair extends AbstractProcessExpression {
+/*
+ *  Handle general message pairs of the following form:
+ * 
+ *    open inbetween operator postlude
+ * 
+ * open:      SndMsg or RecMsg
+ * inbetween: arbitrary process expression
+ * operator:  one of the binary process operators (i.e. Sequence, Iteration, Alternative)
+ * postlude:  arbitrary process expression whose first set contains either solely SndMsgs or RecMsgs
+ *            (depending on the open atom: open=SndMsg -> first set of postlude contains RecMsgs, etc.)
+ * 
+ */
+
+public class MsgPair extends AbstractProcessExpression implements StateElement {
   private boolean sndThenRec;
   private boolean inTool;
   private ATerm msg;
@@ -19,6 +32,8 @@ public class MsgPair extends AbstractProcessExpression {
   private String operator;
   private ProcessExpression PE;
   private Atom toolAtom = null;
+  
+  private ProcessInstance processInstance;
 
   public MsgPair(
     boolean sndThenRec,
@@ -88,6 +103,7 @@ public class MsgPair extends AbstractProcessExpression {
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+    processInstance = P;
     PE.expand(P, calls);
     setFirst(PE.getFirst());
     Vector atoms = postlude.getFirst().getElementsAsVector();
@@ -117,5 +133,20 @@ public class MsgPair extends AbstractProcessExpression {
 
   public String toString() {
     return "SndAndRecMsg(" + msg + ", " + inbetween + ", " + operator + ", " + postlude + ")";
+  }
+  
+  // Implementation of the StateElement interface
+
+  public boolean contains(StateElement a) {
+    return PE.getFirst().contains(a);
+  }
+
+  public ProcessInstance getProcess() {
+    return processInstance;
+  }
+
+  public boolean execute() throws ToolBusException {
+    return PE.getFirst().execute();
+   
   }
 }

@@ -93,6 +93,25 @@ public class TBTerm {
     return t == True || t == False;
   }
 
+  public static ATerm unquote(ATerm type) {
+    AFun afun = factory.makeAFun(((ATermAppl) type).getName(), 0, false);
+    return factory.makeAppl(afun);
+  }
+
+  public static ATerm mkAnyVar(String V, ATerm name, ATerm type) {
+    AFun afun = factory.makeAFun(V, 3, false);
+    ATerm cargs[] = new ATerm[] { factory.makeInt(-1), unquote(type), name };
+    return factory.makeAppl(afun, cargs);
+  }
+
+  public static ATerm mkVar(ATerm name, ATerm type) {
+    return mkAnyVar("var", name, type);
+  }
+
+  public static ATerm mkResVar(ATerm name, ATerm type) {
+    return mkAnyVar("rvar", name, type);
+  }
+
   public static boolean isResVar(ATerm t) {
     return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == "rvar";
   }

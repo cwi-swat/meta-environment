@@ -8,10 +8,10 @@ import toolbus.atom.State;
 import aterm.ATerm;
 
 public class GenSndMsg extends AbstractProcessExpression {
-  private ATerm msg;
-  private boolean inPair = false;
-  private boolean open = false;
-  private boolean inTool = false;
+  private ATerm msg; // The message to send/receive
+  private boolean inPair = false; // part of a send/receive pair (or not)
+  private boolean open = false; // the opening action
+  private boolean inTool = false; // the closing action
 
   public GenSndMsg(ATerm msg) {
     this.msg = msg;
