@@ -70,7 +70,6 @@ button("Rscript",
 			if-equal([	message("Rstore does not exist")
 				 ],
 				 [
-					message("Using fixed Rstore file RSTORE.rstore"),
 					parse("Rstore", "RSTORE"),
 					apply("check-rscript-with-rstore", "List", 2),
 					push-modulename("RscriptChecker"),

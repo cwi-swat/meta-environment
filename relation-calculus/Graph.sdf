@@ -29,30 +29,30 @@ exports
 
 	rgb(Integer, Integer, Integer)			-> Color
 
-	bold						-> Style
-	dashed						-> Style
-	dotted						-> Style
-	filled						-> Style
-	invisible					-> Style
-	solid						-> Style
+	"bold"						-> Style
+	"dashed"					-> Style
+	"dotted"					-> Style
+	"filled"					-> Style
+	"invisible"					-> Style
+	"solid"						-> Style
 
-	box						-> Shape
-	circle						-> Shape
-	diamond						-> Shape
-	egg						-> Shape
-	ellipse						-> Shape
-	hexagon						-> Shape
-	house						-> Shape
-	octagon						-> Shape
-	parallelogram					-> Shape	
-	plaintext					-> Shape
-	trapezium					-> Shape
-	triangle					-> Shape
+	"box"						-> Shape
+	"circle"					-> Shape
+	"diamond"					-> Shape
+	"egg"						-> Shape
+	"ellipse"					-> Shape
+	"hexagon"					-> Shape
+	"house"						-> Shape
+	"octagon"					-> Shape
+	"parallelogram"					-> Shape	
+	"plaintext"					-> Shape
+	"trapezium"					-> Shape
+	"triangle"					-> Shape
 
-	forward						-> Direction
-	back						-> Direction
-	both						-> Direction
-	none						-> Direction
+	"forward"					-> Direction
+	"back"						-> Direction
+	"both"						-> Direction
+	"none"						-> Direction
 
 	"[" {Edge ","}*	"]"				-> EdgeList
 	edge(NodeId, NodeId, AttributeList)		-> Edge

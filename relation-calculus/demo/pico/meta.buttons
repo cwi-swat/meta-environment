@@ -1,54 +1,22 @@
 buttons([
- button("Rscript",
-        [description(term-editor, menu(["Rscript", "Check"]))],
-        [push-active-module,
-         get-root,
-         check-sort("RSCRIPT"),
-         apply("check-rscript", "List", 1),
-         push-modulename("RscriptChecker"),
-         reduce,
-         unparse,
-         push-active-module,
-         show-list
-        ]),
-
- button("Rscript",
-	  [description(term-editor, menu(["Rscript", "Execute"]))],
-          [push-active-module,
-           get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript", "RSTORE", 1),
-           push-modulename("RscriptCalculator"),
-           reduce,
-           push-filename("RscriptCalculator.results"),
-           push-active-module,
-           activate-editor
-           ]),
-
- button("Rscript",
-	  [description(term-editor, menu(["Rscript", "TestSuite"]))],
-          [push-active-module,
-           get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript-testsuite", "TESTREPORT", 1),
-           push-modulename("RscriptTestsuites"),
-           reduce,
-           push-filename("RscriptCalculator.results"),
-           push-active-module,
-           activate-editor
-           ]),
 
 button("Pico-syntax",
 	  [description(term-editor, menu(["Pico", "Extract Relations"]))],
           [push-active-module,
 	   get-root,
-           check-sort("PROGRAM"),
-           apply("extractRelations", "RSTORE", 1),
-           push-modulename("PicoExtraction"),
-           reduce,
-	   push-filename("extracted-relations.trm"),
-	   push-active-module,
-	   activate-editor
+	   push-string("PROGRAM"),
+           check-sort,
+	   push-term(true),
+	   if-equal([	apply("extractRelations", "RSTORE", 1),
+			push-modulename("PicoExtraction"),
+			reduce,
+			push-filename("extracted-relations.trm"),
+			push-active-module,
+			activate-editor],
+		    [
+			message("Not a Pico program")
+		    ]
+           )
            ]),
 
    button("Pico-syntax",
@@ -64,69 +32,29 @@ button("Pico-syntax",
   button("Pico-syntax",
  	  [description(term-editor, menu(["Pico", "Unitialized Vars"]))],
           [
-	  push-active-module,
-	  get-root,
-           check-sort("PROGRAM"),
+	    push-active-module,
+	    get-root,
+	    push-string("PROGRAM"),
+	    check-sort,
+	    push-term(true),
+	    if-equal([
+			 push-filename("uninit.rscript"),
+			 parse("Rscript", "RSCRIPT"),
 
-	   push-filename("uninit.rscript"),
-           parse("Rscript", "RSCRIPT"),
+			 push-string("\"UNINIT-OCC\""),
+			 parse("basic/Strings", "String"),
 
-	   push-string("\"UNINIT\""),
-           parse("basic/Strings", "String"),
+			 push-filename("extracted-relations.trm"),
+			 parse("RscriptCalculator", "RSTORE"),
 
-	   push-filename("extracted-relations.trm"),
-           parse("RscriptCalculator", "RSTORE"),
+			 apply("pico-query", "List", 4),
+			 push-modulename("PicoQuery"),
+			 reduce,
+			 unparse,
+			 push-active-module,
+			 show-list],
+		     [ message("Not a Pico program") ]
+	   )
+           ])
 
-           apply("pico-query", "List", 4),
-           push-modulename("PicoQuery"),
-           reduce,
-	   unparse,
-	   push-active-module,
-           show-list
-           ]),
-
- button("Tscript",
-        [description(term-editor, menu(["ToolBus",
-                                        "Show Query Results"]))],
-        [push-filename("query-result.rvalue"),
-         read-tree,
-         check-sort("RVALUE"),
-         apply("display-result", "List", 1),
-         rewrite("DisplayQuery"),
-         unparse,
-         push-active-module,
-         show-list
-       ]),
- button("Tscript",
-        [description(term-editor, menu(["ToolBus",
-                                        "Evaluate Query"]))],
-        [push-filename("all.rscript"),
-         parse("Rscript", "RSCRIPT"),
-
-         push-string("\"ALL_MESSAGES\""),
-         parse("basic/Strings", "String"),
-
-         push-filename("extracted-relations.trm"),
-         read-tree,
-         check-sort("RSTORE"),
-
-         apply("evaluate-query", "RVALUE", 3),
-         rewrite("DisplayQuery"),
-         push-filename("query-result.rvalue"),
-         save-tree,
-         message("Derived query-results saved.")
-       ]),
- button("Tscript",
-        [description(term-editor, menu(["ToolBus",
-                                        "Extract Relations"]))],
-        [push-active-module,
-         get-root,
-         check-sort("Tscript"),
-         apply("extractRelations", "RSTORE", 1),
-         push-modulename("ToolBusExtraction"),
-         reduce,
-         push-filename("extracted-relations.trm"),
-         save-tree,
-         message("Extracted relations saved.")
-        ])
 ])

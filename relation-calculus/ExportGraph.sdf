@@ -11,11 +11,11 @@ exports
 hiddens
    imports basic/Comments
 
-   sorts Instr Integer # Integer # Instr
-         Integer # Integer # Instr # Bag[[Elem]]
+   sorts Instr %%Integer # Integer # Instr
+         %%Integer # Integer # Instr # Bag[[Elem]]
 
    context-free syntax
-	null						-> Instr
+	"null"						-> Instr
 	Node						-> Instr
 	Edge						-> Instr
 	Attribute					-> Instr
@@ -28,22 +28,22 @@ hiddens
 	mkNodeId(Integer)				-> NodeId
 	mkNodeId(String)				-> NodeId
 
-	mkBoolNode(BoolCon, Integer)			-> Integer # Integer # Instr
-	mkIntegerNode(Integer, Integer)			-> Integer # Integer # Instr
-	mkStringNode(String, Integer)			-> Integer # Integer # Instr
-	mkAreaNode(Area, Integer)			-> Integer # Integer # Instr
+	mkBoolNode(BoolCon, Integer)			-> <Integer, Integer, Instr>
+	mkIntegerNode(Integer, Integer)			-> <Integer, Integer, Instr>
+	mkStringNode(String, Integer)			-> <Integer, Integer, Instr>
+	mkAreaNode(Area, Integer)			-> <Integer, Integer, Instr>
 
-	gen(Elem, Integer)				-> Integer # Integer # Instr
-	gen-bag(Bag[[Elem]], Integer)			-> Integer # Integer # Instr
-	gen-bag1(Elem, Integer, Integer)		-> Integer # Integer # Instr
+	gen(Elem, Integer)				-> <Integer, Integer, Instr>
+	gen-bag(Bag[[Elem]], Integer)			-> <Integer, Integer, Instr>
+	gen-bag1(Elem, Integer, Integer)		-> <Integer, Integer, Instr>
 	
-	gen-rel(Elem, Integer)				-> Integer # Integer # Instr
-	gen-rel1(Elem, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+	gen-rel(Elem, Integer)				-> <Integer, Integer, Instr>
+	gen-rel1(Elem, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr, Bag[[Elem]]>
 
-	gen-tuple(Tuple, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+	gen-tuple(Tuple, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr, Bag[[Elem]]>
 
 
-	gen-elem(Elem, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+	gen-elem(Elem, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr,Bag[[Elem]]>
 
 	mkGraph(Instr)					-> Graph
 	

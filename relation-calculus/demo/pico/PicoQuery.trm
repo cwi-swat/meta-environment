@@ -15,24 +15,77 @@ end
 
 ,
 
- 	area ROOT
-        rel[area,area] PRED
-        rel[<area,str>,area] USE_OCCURS
-        rel[<area,str>,area] DEF_OCCURS
-        rel[area,str] USES
-        rel[area,str] DEFS
+type stat = area
+type var = str
+type var-occ = area
 
-        rel[str,area] occurrences(<area,str> S) = sec(S) x USE_OCCURS[S]
+stat ROOT
 
-        rel[str,area] UNDEF = 
-        { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
-        }
+rel[stat,stat] PRED
+rel[stat,var] USES
+rel[stat,var] DEFS
+rel[var,var-occ] OCCURS
+
+rel[stat, var] UNINIT =
+   { <S, V>| <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
+   }
+
+rel[var, var-occ] UNINIT-OCC =
+   { <V, VO> | <stat S, var V> : UNINIT, var-occ VO : OCCURS[V], VO <= S }
+
 
 ,
 
 "UNDEF",
 
+rstore(<ROOT, area("",0,0,0,0)>, <PRED,
+{<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",4,2,4,8),
+area("/home/pa ulk/research/relation-calculus/demo/pico/pico1.trm",5,2,5,8)>,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",5, 2,5,8),
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",6,2,10,4)>,
+<area("/home/paulk/research/relation-calculus/ demo/pico/pico1.trm",7,8,7,18),
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",11,2,11,8)>,
+<area("/home/paulk/re search/relation-calculus/demo/pico/pico1.trm",9,8,9,14),
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",11,2,11,8
+)>,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",6,2,10,4),
+area("/home/paulk/research/relation-calculus/demo/ pico/pico1.trm",7,8,7,18)>,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",6,2,10,4),
+area("/home/paulk/research /relation-calculus/demo/pico/pico1.trm",9,8,9,14)>,
+<area("",0,0,0,0),
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.
+trm",4,2,4,8)>}>, <USES,
+{<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",11,2,11,8),
+"z">, <area("/home/paulk/re
+search/relation-calculus/demo/pico/pico1.trm",6,2,10,4), "q">,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",7, 8,7,18),
+"x">,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",7,8,7,18),
+"y">}>, <OCCURS, {<"y", area("/home/pau
+lk/research/relation-calculus/demo/pico/pico1.trm",11,2,11,3)>, <"z",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.t
+rm",11,7,11,8)>, <"q",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",6,5,6,6)>,
+<"x", area("/home/paulk/research
+/relation-calculus/demo/pico/pico1.trm",9,8,9,9)>, <"z",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",7,8,7,9)> ,
+<"x",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",7,17,7,18)>,
+<"y", area("/home/paulk/research/relation-cal
+culus/demo/pico/pico1.trm",7,13,7,14)>, <"p",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",5,2,5,3)>,
+<"x",
+area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",4,2,4,3)>}>,
+<DEFS, {<area("/home/paulk/research/relation-calculus/de
+mo/pico/pico1.trm",11,2,11,8), "y">,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",9,8,9,14),
+"x">, <area("/hom
+e/paulk/research/relation-calculus/demo/pico/pico1.trm",7,8,7,18), "z">,
+<area("/home/paulk/research/relation-calculus/demo/pico/pic o1.trm",5,2,5,8),
+"p">,
+<area("/home/paulk/research/relation-calculus/demo/pico/pico1.trm",4,2,4,8),
+"x">}>)
 
-[<ROOT, area("",0,0,0,0)>, <PRED, {<area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), area("/home/paulk/research/RPA/pico1.trm",5,2,5,8)>, <area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), area("/home/paulk/research/RPA/pico1.trm",6,2,10,4)>, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), area("/home/paulk/research/RPA/pico1.trm",11,2,11,8)>, <area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), area("/home/paulk/research/RPA/pico1.trm",11,2,11,8)>, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), area("/home/paulk/research/RPA/pico1.trm",7,8,7,18)>, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), area("/home/paulk/research/RPA/pico1.trm",9,8,9,14)>, <area("",0,0,0,0), area("/home/paulk/research/RPA/pico1.trm",4,2,4,8)>}>, <USES, {<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "z">, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), "q">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "x">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "y">}>, <USE_OCCURS, {<<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "z">, area("/home/paulk/research/RPA/pico1.trm",11,7,11,8)>, <<area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), "q">, area("/home/paulk/research/RPA/pico1.trm",6,5,6,6)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "x">, area("/home/paulk/research/RPA/pico1.trm",7,17,7,18)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "y">, area("/home/paulk/research/RPA/pico1.trm",7,13,7,14)>}>, <DEFS, {<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "y">, <area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), "x">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "z">, <area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), "p">, <area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), "x">}>, <DEF_OCCURS, {<<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "y">, area("/home/paulk/research/RPA/pico1.trm",11,2,11,3)>, <<area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), "x">, area("/home/paulk/research/RPA/pico1.trm",9,8,9,9)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "z">, area("/home/paulk/research/RPA/pico1.trm",7,8,7,9)>, <<area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), "p">, area("/home/paulk/research/RPA/pico1.trm",5,2,5,3)>, <<area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), "x">, area("/home/paulk/research/RPA/pico1.trm",4,2,4,3)>}>]
+
 )
 

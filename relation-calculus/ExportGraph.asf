@@ -124,7 +124,7 @@ equations
 
 
 [gen-elem-1]
-	rimage($Elem, $Table) = {},
+	rimage($Table, $Elem) = {},
 	$Table = {$Elem*1},
 	$Table' = {<$Elem, $N>, $Elem*1},
 	gen($Elem, $N) = <$N1, $N1', $Instr>
@@ -132,6 +132,6 @@ equations
 	gen-elem($Elem, $N, $Table) = <$N1, $N1', $Instr, $Table'>
 
 [gen-elem-1]
-	rimage($Elem, $Table) = {$N1}
+	rimage($Table, $Elem) = {$N1}
 	=============================================
 	gen-elem($Elem, $N, $Table) = <$N1, $N, null, $Table>

@@ -31,7 +31,7 @@ hiddens
       extract-used-vars(EXP, RSTORE, Area)      -> RSTORE  {traversal(accu,top-down,break)}
 
 
-      convert(String # Area)                    -> ListItem
+      convert(<String, Area>)                   -> ListItem
       id2str(PICO-ID)		 	        -> String
 
  hiddens
