@@ -16,7 +16,6 @@ void SG_Dump_ATtable(ATermTable t, char *s);
 #include <aterm1.h>
 #include <aterm2.h>
 #include <MEPT.h>
-#include <conversion.h>
 
 
 /*  Data structures: states, actions, character ranges and parse tables  */

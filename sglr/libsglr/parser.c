@@ -21,6 +21,8 @@
 #include "sglr-strings.h"
 #include "rsrc-usage.h"
 
+#include <MEPT-utils.h>
+
 
 /*
  A shift pair is a pair of a state and a stack and is used to indicate
