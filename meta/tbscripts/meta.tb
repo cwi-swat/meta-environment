@@ -12,6 +12,7 @@
 #include "unparser.idef"
 #include "user-interface.tb"
 #include "menubar.idef"
+#include "toolbar.idef"
 #include "statusbar.idef"
 #include "statushistory.idef"
 #include "errorlist.idef"

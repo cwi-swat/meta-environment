@@ -189,6 +189,7 @@ AC_CONFIG_FILES([Makefile
    meta-studio/metastudio/components/Makefile
    meta-studio/metastudio/components/graphs/Makefile
    meta-studio/metastudio/components/menubar/Makefile
+   meta-studio/metastudio/components/toolbar/Makefile
    meta-studio/metastudio/components/statusbar/Makefile
    meta-studio/metastudio/components/statushistory/Makefile
    meta-studio/metastudio/components/errorlist/Makefile
