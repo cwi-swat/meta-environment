@@ -641,7 +641,7 @@ int main(int argc, char **argv)
         header_file = NULL;
     } else if(streq(argv[i], "-help") || streq(argv[i], "-h")) {
       help();
-      exit(1);
+      exit(0);
     } else if(streq(argv[i], "-split")){
       split_output = TBtrue;
     } else
