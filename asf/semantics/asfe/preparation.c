@@ -177,13 +177,15 @@ void enter_equation(equation_table *table, ATerm equation)
     table->table[hnr] = entry;
   }
 
-	{
-		ATerm anno = ATgetAnnotation(equation, ATparse("pos-info"));
-		if(anno)
-			ATfprintf(stderr, "annotations of %t: %t\n", entry->tag, anno);
-		else
-			ATfprintf(stderr, "no annotations.\n");
-	}
+/*
+  {
+    ATerm anno = ATgetAnnotation(equation, ATparse("pos-info"));
+    if(anno)
+      ATfprintf(stderr, "annotations of %t: %t\n", entry->tag, anno);
+    else
+      ATfprintf(stderr, "no annotations.\n");
+  }
+*/
 }
 
 /*}}}  */

@@ -148,6 +148,7 @@ ATerm v_lookup_plain(ATerm env, ATerm var)
 
 	if(AT_getAnnotations(var) != NULL)
 	  var = AT_removeAnnotations(var);
+
 	while(!ATisEmpty(list)) {
 		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
 		if(ATisEqual(ATgetArgument(tuple, 0), var)) {
@@ -195,6 +196,10 @@ ATermAppl v_lookup_list(ATerm env, ATerm var)
 ATbool v_is_bound(ATerm env, ATerm var)
 {
   ATermList list = (ATermList)env;
+
+
+  if(AT_getAnnotations(var) != NULL)
+    var = AT_removeAnnotations(var);
 
   while(!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl)ATgetFirst(list);
@@ -391,6 +396,7 @@ ATbool no_new_vars(ATerm trm, ATerm env)
     return ATtrue;
 }
 
+ 
 /*}}}  */
 /*{{{  ATermList arg_matching(env, arg1, arg2, conds, orgargs1, orgargs2) */
 
@@ -468,6 +474,9 @@ ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);
         newenv = fail_env;
     }
     else {
+      if(AT_getAnnotations(arg1) != NULL)
+        arg1 = AT_removeAnnotations(arg1);
+
       newenv = v_put(newenv,arg1,arg2);
       newenv = args_matching(newenv,conds,orgargs1,orgargs2);
     }
@@ -585,6 +594,9 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
   ATermList last;
  
   if(asfix_is_star_var(elem)) {
+    if(AT_getAnnotations(elem) != NULL)
+      elem = AT_removeAnnotations(elem);
+
     newenv = v_put_list(env, elem, ATempty, ATempty);
     subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
   }
@@ -594,9 +606,12 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 	}
 	last  = elems2;
   while(is_fail_env(subenv) && !ATisEmpty(last)) {
-		last   = ATgetNext(last);
-		newenv = v_put_list(env, elem, elems2, last);
-		subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2);
+    if(AT_getAnnotations(elem) != NULL)
+      elem = AT_removeAnnotations(elem);
+
+    last   = ATgetNext(last);
+    newenv = v_put_list(env, elem, elems2, last);
+    subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2);
   };
  
   return subenv;
@@ -629,6 +644,9 @@ ATerm list_matching(ATerm sym,
           if(asfix_is_plus_var(elem1) && ATisEmpty(elems2)) {
 	    newenv = fail_env;
 	  } else {
+            if(AT_getAnnotations(elem1) != NULL)
+              elem1 = AT_removeAnnotations(elem1);
+
 	    newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
 	    newenv = args_matching(newenv,conds,args1,args2);
 					}
