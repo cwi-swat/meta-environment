@@ -4,7 +4,9 @@ exports
 imports basic/Booleans
 imports basic/Integers
 
-  sorts Bag[[Elem]] BagIterator[[Elem]]
+context-free start-symbols
+   Bag[[Elem]]
+   BagIterator[[Elem]]
 
 context-free syntax
    elem-equal(Elem, Elem)			-> Boolean
