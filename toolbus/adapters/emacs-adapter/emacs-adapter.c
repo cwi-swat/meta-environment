@@ -243,7 +243,7 @@ char *print_args(term_list *args) {
   return result;
 }
 
-/** This handle incoming terms from the ToolBus */
+/** This handles incoming terms from the ToolBus */
 term *handle_input_from_toolbus(term *e) {
   term *result;
   term *arg;

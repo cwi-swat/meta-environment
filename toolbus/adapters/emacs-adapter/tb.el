@@ -34,6 +34,9 @@ for the rest of the msg"
   ;; Set handle-term-from-toolbus as the process-filter for the
   ;; adapter process. This function is passed all output from the
   ;; adapter
+  (process-kill-without-query adapter-process)
+  ;; Do not require a confirmation to kill the adapter process when
+  ;; killing xemacs. (I was hoping they had something like this :-)
   )
 
 (defun handle-term-from-toolbus (proc string)
