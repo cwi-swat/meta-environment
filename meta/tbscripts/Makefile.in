@@ -35,7 +35,13 @@ UNINSTALL	= @UNINSTALL@
 AR		= @AR@
 
 ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 include ${top_srcdir}/implicit-rules
@@ -77,7 +83,7 @@ all: meta.tifs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 meta.tifs: $(LIBFILES)
-	$(TOOLBUS)/bin/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/parser -gentifs meta.tb
+	$(TOOLBUSBIN)/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/parser -gentifs meta.tb
 
 ##########################################################
 ### Everything below this line should remain unchanged ###

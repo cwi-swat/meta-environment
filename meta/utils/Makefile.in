@@ -32,8 +32,14 @@ UNINSTALL	= @UNINSTALL@
 
 AR              = @AR@
 
-ATERM           = @ATERM@
-TOOLBUS         = @TOOLBUS@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
+TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 include ${top_srcdir}/implicit-rules
@@ -41,8 +47,8 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS         =
 XCPPFLAGS       =
-XINCLUDES       = -I$(ATERM)/include -I.
-XLIBS           = -L$(ATERM)/lib -lATerm-${CC} -lAsFix-${CC}
+XINCLUDES       = -I$(ATERMINC) -I.
+XLIBS           = -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC}
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.

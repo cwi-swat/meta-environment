@@ -34,7 +34,13 @@ UNINSTALL	= @UNINSTALL@
 AR		= @AR@
 
 ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 include ${top_srcdir}/implicit-rules
@@ -42,8 +48,8 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS		= -DBINDIR=\"$(bindir)\"
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
+XINCLUDES	= -I$(ATERMINC)
+XLIBS		= -L$(ATERMLIB) -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -73,7 +79,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 %.tif.c: %.tifs
-	$(ATERM)/bin/tifstoc -tool $* $<
+	$(ATERMBIN)/tifstoc -tool $* $<
 
 %.tifs: %.idef
 	${top_srcdir}/utils/idef2tif $<

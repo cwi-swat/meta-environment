@@ -2,9 +2,9 @@
 # $Id$
 
 prefix=@prefix@
-libdir=@prefix@/lib
+libdir=@libdir@
 classdir=@prefix@/classes
-toolbus=@TOOLBUS@/bin/toolbus
+toolbus=@TOOLBUSBIN@/toolbus
 
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
 

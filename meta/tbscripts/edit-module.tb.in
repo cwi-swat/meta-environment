@@ -39,7 +39,7 @@ in
   ).
   create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
   snd-msg(open-language("Sdf2", 
-                        "@prefix@/lib/Sdf2.baf")).
+                        "@libdir@/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet
 
