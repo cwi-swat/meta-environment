@@ -7,14 +7,14 @@ imports MyArea
 exports
   context-free syntax
 
-    get-area(X)			                 -> Area
+    get-area(X)			               -> Area
 
    imports utilities/PosInfo[X]
 
    context-free syntax
 
-   convert(Literal)	-> StrCon
-   mkId(IntCon, IntCon, IntCon, IntCon) -> StrCon
+     convert(Literal)				-> StrCon
+%%   mkId(IntCon, IntCon, IntCon, IntCon) -> StrCon
 
   
   variables
