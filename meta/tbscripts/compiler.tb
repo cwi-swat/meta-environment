@@ -1,4 +1,4 @@
-process Compiler(COM: compiler, Tdb: module-db) is
+process Compiler(COM: compiler) is
 let
 Id   : term,
 T    : term,
@@ -8,18 +8,15 @@ M    : term,
 Mod : term,
 Mods : list
 in
-  Id := process-id.(
-    ( rec-msg(com,compile-module(Name?)).
-      snd-do(Tdb,compile-module(Name)).
-      ( rec-event(Tdb,generate-code(Name?,Mod?)).
-        snd-eval(COM,generate-code(Name,Mod)).
-        rec-value(COM,c-code-ready).
-        snd-ack-event(Tdb,generate-code(Name, Mod))
-      )*rec-event(Tdb,done).
-      snd-ack-event(Tdb,done).
-      snd-msg(com,done)
-    )
-  ) *
-  delta
+( rec-msg(compile-module(Name?)).
+  snd-msg(reshuffle-module(Name)).
+  ( rec-msg(generate-code(Name?,Mod?)).
+    snd-eval(COM,generate-code(Name,Mod)).
+    rec-value(COM,c-code-ready)
+  )*
+  rec-msg(reshuffle-done).
+  snd-msg(compile-done)
+)*
+delta
 endlet
 

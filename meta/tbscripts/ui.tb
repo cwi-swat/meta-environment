@@ -23,6 +23,7 @@ ModName : str,
 T       : str
 in
   Id := process-id.
+  subscribe(import-relations(<term>)).
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
   ( 
@@ -33,7 +34,7 @@ in
         snd-do(UI,add-module(Str1))
       + rec-msg(ui,imports(Name?,Str1?)).
         snd-do(UI,imports(Name,Str1))
-      + rec-msg(ui,irels(Pairs?)).
+      + rec-note(import-relations(irels(Pairs?))).
         snd-do(UI,add-imports(Pairs))
       + rec-msg(ui,cannot-open-module(ModName?)).
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
@@ -80,8 +81,8 @@ in
    ) +
    ( rec-event(UI,compile-module(Str?)).
      snd-note(ui-status(stat(Id,"Compiling ..."))).
-     snd-msg(com,compile-module(Str)).
-     rec-msg(com,done).
+     snd-msg(compile-module(Str)).
+     rec-msg(compile-done).
      snd-note(ui-status(endstat(Id))).
      snd-ack-event(UI,compile-module(Str))
    ) +

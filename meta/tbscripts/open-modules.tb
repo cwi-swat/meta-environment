@@ -1,7 +1,7 @@
 /* $Id$
  */
 
-process Open-modules(Eval: evaluator, Tdb: module-db) is
+process Open-modules(Eval: evaluator) is
 let
   Id   : term,
   Name : term,
@@ -22,28 +22,22 @@ in
        /* First we should check here whether this module has already been 
         * opened...
         */
-        snd-eval(Tdb,exists(Name)). ( 
-          rec-value(Tdb,result(exists(Name?)))
+        snd-msg(is-module-in-db(Name)). ( 
+          rec-msg(exists-in-module-db(Name))
           +
           /* If it is not open, open it. */
-          rec-value(Tdb,result(notexists(Name?))). ( 
+          rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(Id, open-file(Name)). ( 
               rec-msg(Id, opened-file(asfix,Name,T?,Fn?)).
              /* Tell UI we added module Name */
               snd-msg(ui,add-module(Name)).
              /* Tell mdb we add module Name containing term T */
-              snd-eval(Tdb,add-module(T)).
+              snd-msg(add-module-to-db(T)).
              /* mdb returns the imports section of Name as well as the
               * list of modules which have to be still opened M1s */
-              rec-value(Tdb,imports(Name,need-modules(M1s?))).
+              rec-msg(need-modules(M1s?)).
              /* Add those modules to the list */
-              Ms := join(Ms,M1s).
-             /* This is UI stuff and should move somewhere else 
-              * Tdb should trigger an event for the UI process to catch
-              */
-              snd-eval(Tdb,calc-import-rels(Name)).
-              rec-value(Tdb,irels(Pairs?)).
-              snd-msg(ui,irels(Pairs)) 
+              Ms := join(Ms,M1s)
               +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(Id, error-opening(Str?)).

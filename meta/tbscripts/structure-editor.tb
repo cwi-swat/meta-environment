@@ -1,7 +1,8 @@
 /* $Id$ */
 
 tool se is {
-  command = "java-adapter -class nl.cwi.gipe.stred.SeTool"
+/*  command = "java-adapter -class nl.cwi.gipe.stred.SeTool"*/
+    command = "aap"
 }
 
 process Structure-editor(TE: text-edit, Fid: str, Text: str) is
@@ -16,7 +17,7 @@ in
 /* We're not selective about start symbols yet */
   G := "" .
 /* And here we'll tell the parser to open it */
-  snd-msg(open-language(L,"/ufs/kuipers/petr/new-meta/sglr/tables/Pico.tbl")).
+  snd-msg(open-language(L,"/ufs/markvdb/Research/new-meta/sglr/tables/Risla.tbl")).
   execute(se, SE?).
   snd-eval(SE, newEditor(Fid, Text)).
   rec-value(SE,Fl?).
@@ -50,6 +51,7 @@ in
               rec-value(SE,Fl?)
             else
               printf("Parse of %s returned %d ambiguities",Str,I).
+              printf("Term is: %t\n",T).
               FF :=join(FF,Foc)
             fi
           ) 

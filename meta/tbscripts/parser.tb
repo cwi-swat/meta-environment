@@ -37,5 +37,5 @@ tool sglr is {command="sglr"}
 
 #ifdef MAIN
 #else
-#toolbus(Parser)
+/*toolbus(Parser)*/
 #endif

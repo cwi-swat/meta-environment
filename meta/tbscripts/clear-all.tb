@@ -1,14 +1,14 @@
 /* $Id$
  */
 
-process Clear-all(Eval: evaluator, Tdb: module-db) is
+process Clear-all(Eval: evaluator) is
 let
 Id: term
 in
   Id := process-id. (
     rec-msg(clear-all).
     snd-note(ui-status(stat(Id,"Clearing ..."))).
-    snd-do(Tdb, clear-module-db).
+    snd-msg(clear-module-db).
 /*    snd-do(Eval, clear-equations-db).*/
     snd-note(ui-status(endstat(Id))).
     snd-msg(cleared-all)

@@ -1,7 +1,7 @@
 /* $Id$
  */
 
-process Rewrite(Eval: evaluator, Tdb: module-db) is
+process Rewrite(Eval: evaluator) is
 let
 Id: term,
 Tid:int,

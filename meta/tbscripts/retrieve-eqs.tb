@@ -1,7 +1,7 @@
 /* $Id$
  */
 
-process Retrieve-eqs(Eval: evaluator, Tdb: module-db) is
+process Retrieve-eqs(Eval: evaluator) is
 let
 Id    : term,
 Mod: term,
@@ -11,10 +11,10 @@ in
   Id := process-id. (
     rec-msg(retrieve-eqs(Mod?)).
     snd-note(ui-status(stat(Id,"Retrieving equations"))).
-    snd-eval(Tdb,get-all-imported-modules(Mod)).
-    rec-value(Tdb,all-imports(Mods?)).
-    snd-eval(Tdb,get-equations(Mods)).
-    rec-value(Tdb,equations(Eqs?)).
+    snd-msg(get-all-imported-modules(Mod)).
+    rec-msg(all-imported-modules(Mods?)).
+    snd-msg(get-all-equations(Mods)).
+    rec-msg(all-equations(Eqs?)).
     snd-eval(Eval,add-equations(Mod,Eqs)).
     rec-value(Eval,equ-added(Mod)).
     snd-msg(finished-retrieval).

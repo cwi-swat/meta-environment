@@ -7,9 +7,6 @@ tool evaluator is {
 tool import-db is {
   command = "import-db"
 }
-tool module-db is {
-  command = "module-db"
-}
 tool compiler is {
 /*  command = "compiler -print-gc-info -termtable 2097143 -hashinfo" */
   command = "compiler -print-gc-info -termtable 20"
@@ -19,7 +16,6 @@ process Parsetrees is
 let
 Com : compiler,
 Eval: evaluator,
-Tdb : module-db,
 Id : term,
 Tid: int,
 Mod: term,
@@ -29,17 +25,14 @@ in
   execute(evaluator, Eval?).
   printf("evaluator tool connected.\n") .
   snd-do(Eval, create-equations-db).
-  execute(module-db, Tdb?).
-  printf("module-db tool connected.\n") .
-  snd-do(Tdb, create-module-db).
   execute(compiler,Com?).
   /* Start all controlling processes */
-  create(Retrieve-eqs(Eval,Tdb), Tid?).
-  create(Open-modules(Eval,Tdb),Tid?).
-  create(Rewrite(Eval,Tdb), Tid?).
-  create(Compiler(Com,Tdb), Tid?).
-  create(Clear-all(Eval,Tdb), Tid?).
-  create(Close-modules(Eval,Tdb), Tid?)
+  create(Retrieve-eqs(Eval), Tid?).
+  create(Open-modules(Eval),Tid?).
+  create(Rewrite(Eval), Tid?).
+  create(Compiler(Com), Tid?).
+  create(Clear-all(Eval), Tid?).
+  create(Close-modules(Eval), Tid?)
 endlet
 /*
     rec-msg(Id?, rewrite-over(Mod?)).
