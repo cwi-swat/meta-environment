@@ -65,4 +65,8 @@ public class ListModel extends AbstractListModel {
      public Iterator iterator() {
          return list.iterator();
      }
+     
+     public boolean contains(Object o) {
+         return list.contains(o);
+     }
 }

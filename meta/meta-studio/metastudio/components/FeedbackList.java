@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -15,7 +13,7 @@ import javax.swing.ListSelectionModel;
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
 import metastudio.data.FeedbackItem;
-import metastudio.data.ListModel;
+import metastudio.data.FeedbackListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
@@ -28,14 +26,14 @@ import errorapi.types.Summary;
 public class FeedbackList extends UserInterfacePanel {
     private static final String ANONYMOUS_ORIGIN = "anonymous";
     private JList list;
-    private ListModel data;
+    private FeedbackListModel data;
     private Factory factory;
 
     public FeedbackList(aterm.ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
         this.factory = new Factory((PureFactory) factory);
-        this.data = new metastudio.data.ListModel(new LinkedList());
+        this.data = new metastudio.data.FeedbackListModel();
 
         this.list = new JList();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -156,14 +154,7 @@ public class FeedbackList extends UserInterfacePanel {
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {
-        Iterator iter = data.iterator();
-        while (iter.hasNext()) {
-            FeedbackItem item = (FeedbackItem) iter.next();
-            if (item.getProducer().equals(producer)
-                && item.getSummaryId().equals(summaryId)) {
-                iter.remove();
-            }
-        }
+        data.removeAll(producer, summaryId);
 
         repaint();
     }

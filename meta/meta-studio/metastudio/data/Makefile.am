@@ -14,4 +14,6 @@ ModuleSelectionModel.java \
 ModuleTreeModel.java \
 ModuleTreeNode.java \
 AbstractModuleTreeModel.java\
-FeedbackItem.java
+FeedbackItem.java\
+FeedbackListModel.java\
+FeedbackSummaryIdentifier.java

@@ -28,5 +28,4 @@ public class MessageTabs extends UserInterfacePanel {
         
         messageTabs.insertTab("history", null, historyPanel, "Execution history", 2);
     }
-
 }

@@ -1,16 +1,16 @@
 package metastudio.components;
 
 import java.awt.Component;
+import java.util.Iterator;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
 import metastudio.data.FeedbackItem;
+import metastudio.data.FeedbackSummaryIdentifier;
 import metastudio.utils.Preferences;
 import errorapi.types.Feedback;
-import errorapi.types.Location;
-import errorapi.types.Subject;
 import errorapi.types.SubjectList;
 
 public class FeedbackListCellRenderer extends DefaultListCellRenderer {
@@ -22,7 +22,8 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
         boolean isSelected,
         boolean cellHasFocus) {
         JLabel cell = (JLabel) super.getListCellRendererComponent(list,value, index, isSelected, cellHasFocus);
-        Feedback feedback = ((FeedbackItem) value).getFeedback();
+        FeedbackItem item = (FeedbackItem) value;
+        Feedback feedback = item.getFeedback();
 
         if (feedback.isInfo()) {
             cell.setForeground(Preferences.getColor("feedback.info.foreground"));
@@ -43,7 +44,7 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
         }
 
         cell.setText(getErrorMessage(feedback));
-        cell.setToolTipText(getTooltip(feedback));
+        cell.setToolTipText(getTooltip(item));
         
         if (isSelected) {
             cell.setBackground(list.getSelectionBackground());
@@ -69,19 +70,22 @@ public class FeedbackListCellRenderer extends DefaultListCellRenderer {
         return buf.toString();
     }
 
-    private String getTooltip(Feedback feedback) {
-        SubjectList subjects = feedback.getList();
-
-        for ( ; subjects.hasHead(); subjects = subjects.getTail()) {
-            Subject subject = subjects.getHead();
-            Location loc = subject.getLocation();
-
-            if (!loc.isNoLocation()) {
-                return "click to go " + loc.getFilename();
+    private String getTooltip(FeedbackItem item) {
+        Iterator ids = item.getIdentification();
+        StringBuffer buf = new StringBuffer();
+        
+        while (ids.hasNext()) {
+            FeedbackSummaryIdentifier id = (FeedbackSummaryIdentifier) ids.next();
+            
+            buf.append(id.getProducer());
+            buf.append(" - ");
+            buf.append(id.getSummaryId());
+            if (ids.hasNext()) {
+                buf.append(", ");
             }
         }
-
-        return "no source location available";
+        
+        return buf.toString();
     }
 
     
