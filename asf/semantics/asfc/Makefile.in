@@ -68,7 +68,7 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler.c compiler.tif.c
+CLEANFILES	= compiler compiler.tif.c
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
