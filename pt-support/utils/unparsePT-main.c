@@ -17,8 +17,7 @@
 /*{{{  variables */
 
 static char myname[] = "unparsePT";
-static char myversion[] = "1.3";
-
+static char myversion[] = "1.4";
 static char myarguments[] = "ahi:o:vV";
 
 /*}}}  */
@@ -27,15 +26,16 @@ static char myarguments[] = "ahi:o:vV";
 
 void usage(void)
 {
-  ATwarning("Usage: %s [%s]\n"
-            "Options:\n"
-	    "\t-a              visualize ambiguity clusters\n"
-            "\t-h              display help information (usage)\n"
-            "\t-i filename     input from file (default stdin)\n"
-            "\t-o filename     output to file (default stdout)\n"
-            "\t-v              verbose mode\n"
-            "\t-V              reveal program version (i.e. %s)\n",
-            myname, myarguments, myversion);
+  fprintf(stderr,
+	  "Usage: %s [%s]\n"
+	  "Options:\n"
+	  "\t-a              visualize ambiguity clusters\n"
+	  "\t-h              display help information (usage)\n"
+	  "\t-i filename     input from file (default stdin)\n"
+	  "\t-o filename     output to file (default stdout)\n"
+	  "\t-v              verbose mode\n"
+	  "\t-V              reveal program version (i.e. %s)\n",
+	  myname, myarguments, myversion);
 }
 
 /*}}}  */
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 	  version();
 	  proceed = ATfalse;
 	  break;
-	case 'h':
+	case 'h': /* fallthrough intended */
 	default:
 	  usage();
 	  proceed = ATfalse;
@@ -142,12 +142,12 @@ int main(int argc, char *argv[])
 	outputFile = stdout;
       } 
       else if (!(outputFile = fopen(outputName, "wb"))) {
-	ATerror("%s: cannot open %s for writing\n", argv[0], outputName);
+	ATerror("%s: cannot open %s for writing\n", myname, outputName);
       }
 
       term = ATreadFromNamedFile(inputName);
       if (term == NULL) {
-	ATerror("%s: parse error in input term.\n", argv[0]);
+	ATerror("%s: parse error in input term.\n", myname);
       }
       else {
 	char *text = PT_yieldAnyVisualAmbs(term, visualAmbs);
