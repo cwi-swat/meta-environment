@@ -19,8 +19,6 @@
 # $Id$
 #
 
-CFLAGS=-Wall -g -O2
-
 POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
@@ -61,3 +59,4 @@ CENTER="Meta-Environment Documentation"
 %.html: %.pod
 	-$(POD2HTML) $< > $@
 	-rm -f pod2html-*
+
