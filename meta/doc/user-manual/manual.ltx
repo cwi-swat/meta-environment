@@ -2810,25 +2810,10 @@ extending each variable declaration with the attribute {\tt prefer}
 
 \subsubsection{Context-free ambiguities}
 
-\paragraph{Removing Trees using Priorities}
-
-The priority and associativity declarations are used to eliminate trees 
-in three phases: 
-
-\begin{itemize}
-
-\item First, trees containing {\em prefer}ed nodes are selected, the
-other trees are removed.
-
-\item Next, trees containing internal conflicts (regarding priority or 
-associativity) are eliminated.
-
-\item Finally, the remaining trees are compared pair-wise and trees 
-are eliminated that are dominated by another one. The ordering used 
-is obtained by extending the priority
-ordering on context-free functions to an ordering on trees.
-
-\end{itemize}
+\paragraph{Associativity filtering} The associativity filtering
+is performed during the generation of the parse table. Based
+on the associativity relations certain entries in the parse table
+are removed.
 
 \paragraph{Removing Trees Containing Conflicts}
 
@@ -2860,9 +2845,35 @@ language definition in this example.
 \end{tabular}
 \end{center}
 
+\paragraph{Removing Trees using direct Priorities or direct {\tt prefer}/
+{\tt avoid} Attributes}
+
+The priority declarations are used to eliminate trees 
+in two phases: 
+
+\begin{enumerate}
+
+\item Trees containing direct conflicts (regarding priority) 
+are eliminated. Given the trees $T_1$ and $T_2$
+tree $T_2$ is removed if for production rule $p_1$ at the top
+of $T_1$ and production rule $p_2$ at the top
+of $T_2$ holds that $p_1 > p_2$. 
+
+\item Trees of which the syntax rule at top node has a {\tt prefer}
+attribute are selected whereas tree of which the syntax rule at the top
+node has an {\tt avoid} attribute are removed.
+
+\item Trees which contain a syntax rule with a {\tt prefer} attribute
+are selected, the trees without such rules are removed.
+\end{enumerate}
+
+\paragraph{Removing Trees containing Priorities or direct {\tt prefer}/
+{\tt avoid} Attributes}
+
 After removing all trees containing conflicts, more than one tree may remain.
 To further reduce this set of remaining trees, the priority ordering `{\tt >}'
-on context-free functions is extended to a priority ordering `{\tt >>}' 
+on context-free functions including the {\tt prefer}/{\tt avoid}
+attributes is extended to a priority ordering `{\tt >>}' 
 on trees. 
 A tree in the set is then rejected if there is another tree in the set with
 higher priority. The relation $T_1$ {\tt >>} $T_2$ holds between two 
@@ -2872,20 +2883,24 @@ trees $T_1$ and $T_2$ if
 
 \item $T_1$ is not equal to $T_2$;
  
-\item if, for any function {\tt F}, $T_1$ contains more nodes 
-corresponding to function {\tt F} than $T_2$, 
-then $T_2$ contains more nodes corresponding to some function {\tt G} 
-with {\tt G > F} in $T_1$. 
-(This also covers the case that there are no nodes corresponding to 
-{\tt F} in $T_2$ or no nodes corresponding to {\tt G} in $T_1$);
+\item $\forall y \in T_2$ such that $T_1(y) < T_2(y)$ (the number
+      of occurrences of $y$ is smaller in $T_1$ than in $T_2$) 
+      $\exists x \in T_1$ such that $y > x$ and $T_2(x) < T_1(x)$
+      ($y$ has a higher priority than $x$ and the number of 
+       occurrences of $x$ is smaller in $T_2$ than in $T_1$).
 
-\item injections counting. (*** uitwerken ***)
-
+      The production rules with a {\tt prefer} attribute are now considered
+      as production rules with higher priority than rules without this
+      attribute or with the {\tt avoid} attribute. The production rules
+      with an {\tt avoid} attribute have the lowest priority.
 \end{itemize}
-This definition of resolving the priority conflicts is based
-on {\em multi-set ordening}.
-(*** Paul deze definitie wijkt af van zowel definitie in Eelco's
-proefschrift als wat in SGLR is geimplementeerd. ***)
+
+\paragraph{Injection count}
+Finally, the number of injections in each of the resulting trees
+is calculated, the tree with the smallest number of injections
+is prefered.
+
+\paragraph{Example}
 
 The following example shows how the interaction (and resulting ambiguities)
 between general context-free functions and special case functions can be
