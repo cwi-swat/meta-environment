@@ -18,6 +18,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 $Id$
+
+2000/10/02 (markvdb@cwi.nl)
+   * A small correction with respect to priorities of lists.
+
 2000/4/26 (markvdb@cwi.nl)
    * Code added for dealing with {<symbol>}<nr>+ and {<symbol> <symbol>}<nr>+
      Sdf2 constructions.      
