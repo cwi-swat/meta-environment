@@ -311,10 +311,11 @@ term *handle_input_from_emacs(term *e) {
 }
 
 int main(int argc, char *argv[]) {
-  char string[80]; /* for the init commands */
-  char *name = "text-edit"; /* The name of the adapter told to the ToolBus*/
-/* This name needs to be parameterized, obviously... */
+  char string[80];      /* for the init commands */
+  char *name = NULL;    /* The name of the adapter told to the ToolBus*/
+  char *initfile = NULL;/* The e-lisp file to be loaded initially */ 
   int new_stdin;        /* The fd into which stdin gets dupped */
+  int i = 1;            /* Counter for cmdline arguments */
   
 /* If we connect stdin as file descriptor 0 then the ToolBus behaves
    completely different from when it is another number... :-( Therefore
@@ -325,7 +326,20 @@ int main(int argc, char *argv[]) {
     fprintf(stderr,"Unsetting close-on-exec on stdin failed\n");
   }
 
-  /* Now init the TB libarary, and add a port that listens to our dupped
+  /* Handle the relevant cmdline arguments */
+  while(i < argc){
+    if(streq(argv[i], "-initfile")) {
+      i++;
+      initfile = argv[i];
+    } else if(streq(argv[i], "-TB_TOOL_NAME")) {
+      i++;
+      name = argv[i];
+    }
+    i++;
+  } 
+
+
+  /* Now init the TB library, and add a port that listens to our dupped
      stdin.
   */
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
@@ -336,7 +350,12 @@ int main(int argc, char *argv[]) {
   exec_cmd(string);
   sprintf(string,"set-minmsgsize %d",MIN_MSG_SIZE);
   exec_cmd(string);  
- 
+  /* If there is an initfile */
+  if (initfile != NULL) {
+    /* Tell emacs about it */
+    sprintf(string, "load-file \"%s\"", initfile);
+    exec_cmd(string);
+  } 
   
 /* And start the main event loop */
   TBeventloop();
