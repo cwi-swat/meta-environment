@@ -1,4 +1,5 @@
 equations
+    
 
 [as-1] add-succ(Rel, Rstore) = add(SUCC, Rel, Rstore)
  
@@ -56,20 +57,21 @@ equations
 [ue-1] use-exp(Id, Rstore, NodeId) = add(USES, <Id, NodeId> , Rstore)
 
 
-
+[rt-1] root = area("",0,0,0,0)
 
  
-[an-1]
-      controlflow(Program, []) = Rstore,
-       use-defs(Program, Rstore) = Rstore',
-       undefined-query(Rstore') = Rstore''
+[an-1] Program = begin Decls Stat+ end,
+       Rstore = add-succ({<root, get-first(Stat+)>}, []),
+       controlflow(Program, Rstore') = Rstore'',
+       use-defs(Program, Rstore'') = Rstore''',
+       undefined-query(Rstore''') = Rstore''''
        =========================================================
-       analyze(Program) = rel-value(UN, Rstore'')
+       analyze(Program) = rel-value(UN, Rstore'''')
 
 [uq-1] undefined-query(Rstore) =
        eval-rscript(
       	def PRED   = inv(SUCC)
-        fun reaches_root(R) = elem('root, range(R))
+        fun reaches_root(R) = elem('area("",0,0,0,0), range(R))
         def UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) },
         Rstore
        )
