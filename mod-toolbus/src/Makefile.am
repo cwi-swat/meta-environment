@@ -16,11 +16,13 @@ TB_LIBS=\
 
 GCCFLAGS=-Wall -pedantic $(INCLUDES)
 
-include_HEADERS=aterm-html.h utf8.h
+include_HEADERS=aterm-html.h utf8.h parse-args.h
+
 SOURCEFILES=\
 	mod_toolbus.c\
 	aterm-html.c\
-	utf8.c
+	utf8.c\
+	parse-args.c
 
 # compile and installs mod_toolbus:
 # - creates mod_toolbus.so
