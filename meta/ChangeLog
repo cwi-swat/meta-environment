@@ -1,8 +1,8 @@
 # $Id$
 
 2002/05/13 (jurgenv@cwi.nl)
-* Refactored implementation of module renaming
-* Changed renaming widget to file browser in graphbrowser
+* Refactored implementation of module renaming.
+* Changed renaming widget to file browser in graphbrowser and metastudio.
 * Made renaming work with compound module names too.
 
 2002/05/09 (jurgenv@cwi.nl)
