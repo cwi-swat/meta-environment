@@ -1,4 +1,4 @@
-\section{Tree Representation}
+\section{Tree Representation Formalism}
 
 In the current version of the \metaenv\ the abstract syntax trees are
 represented by means of VTP (Virtual Tree Processing formalism)
@@ -13,7 +13,7 @@ is an instantiation of a generic {\em annotated term} format:
 \aterms~\cite{BKOV97}.  
 
 \aterms\ will be used to represent structured information to be
-exchanged between a heterogeneous collection of tools.  The AATerm
+exchanged between a heterogeneous collection of tools.  The \aterms\
 format should be independent of any specific tool, but it should be
 capable of representing {\em all} data that is exchanged between
 tools.  Consider the following example \aterms:
@@ -27,11 +27,24 @@ functions\>f("abc")\\
 annotation\>f(123)\{color("red"),path([0,2,1])\}
 \end{tabbing}
 
+\subsection{\asfix}
+
 These \aterms\ are sufficient to encode parse trees (including
 optional annotations) for programs or specifications in any language.
 \asfix\ is an instance of \aterms\ used for representing the {\em
-  parse trees} of \asdf\ specifications.  Parse trees mean that all
+parse trees} of \asdf\ specifications.  Parse trees mean that all
 keywords, whitespace, comments, etc.\ are preserved in the tree
 representation.  A self descriptive representation is used, i.e., each
 application of a syntax rule contains a copy of that rule (in the
 implementation these are all shared).
+
+\subsection{Implementation}
+
+One of the strong points of \aterms\ are the powerful access functions
+to retrieve information from the terms and the construction functions
+to build terms. 
+These functions are formally specified in \asdf~\cite{BKOV97} and
+this formal specification is used to make a library of C functions
+to manipulate terms.
+
+

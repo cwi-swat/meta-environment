@@ -42,20 +42,36 @@
 \def\tcldot{\textsf{TclDot}}
 \def\tcldg{\textsf{TclDG}}
 \def\ui{user interface}
+\def\java{Java}
+\newcommand{\gse}{\textsc{gse}}
 
 \makeatletter
 \def\up@case#1{\expandafter\uppercase{#1}}
 \def\upcase#1{\expandafter\up@case#1}
 \makeatother   
 
-%\input{psfig}
+\date{}
+
+%%\setlength{\textwidth}{13cm}
+%%\setlength{\textheight}{19cm}
+%%\setlength{\oddsidemargin}{0cm}
+%%\setlength{\topmargin}{0cm}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-To be written.
+The \metaenv\ has become a legacy system over the last few years.
+This paper describes the first steps towards a new implementation
+of the \metaenv. This implementation is based on the latest techniques
+concerning the coupling of software components, construction
+of \ui\ and modern programming languages such as \java.
+
+The general architecture of the new environment is discussed as
+well as the components which are currently implemented and 
+operational in the environment. Each component is independent
+of the other components and communicates via the \TB.
 \end{abstract}
 
 \section{Introduction}
@@ -83,10 +99,10 @@ done by Ph.D. researchers, and consequently the project has had a
 large turnover of staff.
 
 These complaints initiated a redesign and re-implementation of the
-\metaenv.  Initially we believed that an incremental re-implementation
+\metaenv.  Initially it was believed that an incremental re-implementation
 of the \metaenv\ was feasible, and therefore a number of people
 started working on the design and implementation of a new \ui{} and
-the replacement of the text editing facilities of GSE
+the replacement of the text editing facilities of \gse\
 \cite{Koo94.thesis} by Emacs and Epoch in 1992 \cite{KB93}.  However,
 it turned out that the resulting implementation was not deadlock free.
 This initiated the development of the \TB, a software interconnection
@@ -118,7 +134,7 @@ is no longer present.                                   \\ \hline \hline
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
 \end{table}
 
-Based on the experiences gained with the Epoch-GSE-UI coupling it was
+Based on the experiences gained with the Epoch-\gse-UI coupling it was
 decided to design and implement the new \metaenv\ from scratch.  The
 problems concerning \lelisp\ makes a ``from scratch'' approach even
 more pressing.  In this paper we discuss the first prototype of the
