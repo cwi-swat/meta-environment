@@ -1,8 +1,8 @@
 type C-CompilationUnit :: CompilationUnit
 {
   module : string
-  header-include : list<Include>
-  source-include : list<Include>
+  header-include : set<Include>
+  source-include : set<Include>
   struct : map<string,Struct>
   macro : list<Macro>
   function : list<Function>
@@ -40,12 +40,7 @@ type Function
   name : string
   return-value : string
   formal-parameter : list<FormalParameter>
-  body : FunctionBody
+  body : CodeBlock
   static : boolean
-}
-
-type FunctionBody
-{
-  line : list<String>
 }
 

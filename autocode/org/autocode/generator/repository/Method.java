@@ -13,15 +13,15 @@ public class Method
   private String name;
   private String resultType;
   private String description;
-  private MethodBody body;
+  private CodeBlock body;
   private Set exceptionSet;
   private List formalParameterList;
 
   //}}}
 
-  //{{{ public Method(String name, String resultType, MethodBody body)
+  //{{{ public Method(String name, String resultType, CodeBlock body)
 
-  public Method(String name, String resultType, MethodBody body)
+  public Method(String name, String resultType, CodeBlock body)
   {
     this.name = name;
     this.resultType = resultType;
@@ -66,17 +66,17 @@ public class Method
 
   //}}}
 
-  //{{{ public MethodBody getBody()
+  //{{{ public CodeBlock getBody()
 
-  public MethodBody getBody()
+  public CodeBlock getBody()
   {
     return body;
   }
 
   //}}}
-  //{{{ public void setBody(MethodBody body)
+  //{{{ public void setBody(CodeBlock body)
 
-  public void setBody(MethodBody body)
+  public void setBody(CodeBlock body)
   {
     this.body = body;
   }

@@ -17,7 +17,7 @@ public class JavaGeneratorPlugin
 
   public JavaMethod createMethod(PropertyContext operationContext,
 				 String methodName, String resultTypeName,
-				 MethodBody body)
+				 CodeBlock body)
   {
     boolean isAbstract = operationContext.getBoolean("abstract");
     boolean isStatic = operationContext.getBoolean("static");
@@ -37,7 +37,7 @@ public class JavaGeneratorPlugin
   //{{{ public JavaMethod createConstructor(operation, name, body)
 
   public JavaMethod createConstructor(PropertyContext operationContext,
-				      String name, MethodBody body)
+				      String name, CodeBlock body)
   {
     return createMethod(operationContext, name, null, body);
   }

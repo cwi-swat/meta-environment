@@ -40,6 +40,7 @@ type * {
       interface * {
         import := { }
       }
+      reference-type := true
     }
 
     //}}}
@@ -47,6 +48,7 @@ type * {
 
     type boolean? {
       implementation := "boolean"
+      reference-type := false
     }
 
     //}}}
@@ -54,6 +56,7 @@ type * {
 
     type integer? {
       implementation := "int"
+      reference-type := false
     }
 
     //}}}
@@ -61,6 +64,7 @@ type * {
 
     type real? {
       implementation := "float"
+      reference-type := false
     }
 
     //}}}
@@ -162,4 +166,5 @@ enum * {
 
 @import "org/autocode/generator/java/plugin/Constructor.aco"
 @import "org/autocode/generator/java/plugin/Accessor.aco"
+@import "org/autocode/generator/java/plugin/Equality.aco"
 

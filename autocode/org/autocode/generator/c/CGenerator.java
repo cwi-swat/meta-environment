@@ -207,7 +207,7 @@ public class CGenerator
     while (iter.hasNext()) {
       Function func = (Function)iter.next();
       if (func.isStatic() == statics) {
-	emitFunctionDeclaration(func);
+	print(buildFunctionDeclaration(func));
 	println(";");
       }
     }
@@ -215,20 +215,29 @@ public class CGenerator
   }
 
   //}}}
-  //{{{ protected void emitFunctionDeclaration(Function func)
+  //{{{ protected String buildFunctionDeclaration(Function func)
 
-  protected void emitFunctionDeclaration(Function func)
+  protected String buildFunctionDeclaration(Function func)
   {
-    print(func.getReturnValue() + " " + func.getName() + "(");
+    StringBuffer buf = new StringBuffer();
+
+    buf.append(func.getReturnValue());
+    buf.append(" ");
+    buf.append(func.getName());
+    buf.append("(");
     Iterator iter = func.fetchFormalParameterIterator();
     while (iter.hasNext()) {
       FormalParameter param = (FormalParameter)iter.next();
-      print(param.getType() + " " + param.getName());
+      buf.append(param.getType());
+      buf.append(" ");
+      buf.append(param.getName());
       if (iter.hasNext()) {
-	print(", ");
+	buf.append(", ");
       }
     }
-    print(")");
+    buf.append(")");
+
+    return buf.toString();
   }
 
   //}}}
@@ -240,6 +249,8 @@ public class CGenerator
     emitIncludes(compilationUnit.fetchSourceIncludeIterator());
     println();
     emitStructs();
+    println();
+    emitFunctions();
   }
 
   //}}}
@@ -281,6 +292,32 @@ public class CGenerator
   protected void emitField(Field field)
   {
     println(field.getType() + " " + field.getName() + ";");
+  }
+
+  //}}}
+  //{{{ protected void emitFunctions()
+
+  protected void emitFunctions()
+  {
+    Iterator iter = compilationUnit.fetchFunctionIterator();
+    while (iter.hasNext()) {
+      Function function = (Function)iter.next();
+      emitFunction(function);
+    }
+  }
+
+  //}}}
+  //{{{ protected void emitFunction(Function function)
+
+  protected void emitFunction(Function function)
+  {
+    String decl = buildFunctionDeclaration(function);
+    foldOpen(decl);
+    println(decl);
+    println("{");
+    function.getBody().emit(indentLevel+1, writer);
+    println("}");
+    foldClose();
   }
 
   //}}}
@@ -358,6 +395,20 @@ public class CGenerator
 
   //}}}
 
+  //{{{ private void addHeaderIncludes(Set includes)
+
+  private void addHeaderIncludes(Set includes)
+  {
+    Iterator iter = includes.iterator();
+
+    while (iter.hasNext()) {
+      String include = (String)iter.next();
+      getCompilationUnit().addHeaderInclude(new Include(include, true));
+    }
+  }
+
+  //}}}
+
   //{{{ public String fieldTypeName(PropertyContext fieldTypeContext)
 
   public String fieldTypeName(PropertyContext fieldTypeContext)
@@ -368,8 +419,9 @@ public class CGenerator
     if (typeName != null) {
       PropertyContext implementationContext
 	= new PropertyContext(fieldTypeContext, "implementation");
-      Set includes = implementationContext.getValueSet("include");
-      getCompilationUnit().mergeHeaderIncludeCollection(includes);
+      //Set includes = implementationContext.getValueSet("include");
+      Set includes = fieldTypeContext.getValueSet("include");
+      addHeaderIncludes(includes);
       return typeName;
     }
 

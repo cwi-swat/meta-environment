@@ -4,8 +4,8 @@ JAVAROOT = ${top_builddir}
 
 java_JAVA = \
 	Attribute.java \
+	CodeBlock.java \
 	CompilationUnit.java \
 	FormalParameter.java \
 	Method.java \
-	MethodBody.java \
 	Repository.java

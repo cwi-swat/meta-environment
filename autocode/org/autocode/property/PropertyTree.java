@@ -23,6 +23,14 @@ public class PropertyTree
   }
 
   //}}}
+  //{{{ public PropertyTree(String key, String value)
+
+  public PropertyTree(String key, String value)
+  {
+    this(key, value, new PropertyForest());
+  }
+
+  //}}}
   //{{{ public PropertyTree(String key, String value, PropertyForest properties)
 
   public PropertyTree(String key, String value, PropertyForest properties)

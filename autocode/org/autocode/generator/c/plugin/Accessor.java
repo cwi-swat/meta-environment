@@ -63,7 +63,7 @@ public class Accessor
     FormalParameter param
       = new FormalParameter("self", generator.typeName(typeName));
 
-    FunctionBody body = new FunctionBody();
+    CodeBlock body = new CodeBlock();
     body.addLine("return self->" + field_name + ";");
 
     Function function

@@ -95,15 +95,6 @@ abstract public class AutocodeGenerator
       generateVerbatim(getFileContent((String)iter.next()));
     }
 
-    Set operations = typeContext.getValueSet("operation");
-    iter = operations.iterator();
-    while (iter.hasNext()) {
-      String operationName = (String)iter.next();
-      PropertyContext operationContext
-	= new PropertyContext(typeContext, "operation", operationName);
-      generateTypeOperation(typeContext, operationContext);
-    }
-
     Set fields = typeContext.getValueSet("field");
     iter = fields.iterator();
     while (iter.hasNext()) {
@@ -111,6 +102,15 @@ abstract public class AutocodeGenerator
       PropertyContext fieldContext =
         new PropertyContext(typeContext, "field", fieldName);
       generateField(typeContext, fieldContext);
+    }
+
+    Set operations = typeContext.getValueSet("operation");
+    iter = operations.iterator();
+    while (iter.hasNext()) {
+      String operationName = (String)iter.next();
+      PropertyContext operationContext
+	= new PropertyContext(typeContext, "operation", operationName);
+      generateTypeOperation(typeContext, operationContext);
     }
   }
 

@@ -54,7 +54,8 @@ public class Accessor
     String attrType = generator.typeName(fieldTypeContext);
     String attrName = generator.attributeName(fieldName);
     String methodName = generator.methodName(name + "-" + fieldName);
-    MethodBody body = new MethodBody();
+    fieldContext.setSingletonValue("getter", methodName);
+    CodeBlock body = new CodeBlock();
     JavaMethod method;
 
 
@@ -134,8 +135,8 @@ public class Accessor
 
     String paramName = generator.parameterName(fieldName);
 
-    MethodBody body = new MethodBody("return " + attrName + "." + call
-				     + "(" + paramName + ");");
+    CodeBlock body = new CodeBlock("return " + attrName + "." + call
+				   + "(" + paramName + ");");
     JavaMethod method = createMethod(operationContext, methodName,
 				     "boolean", body);
 
@@ -171,8 +172,8 @@ public class Accessor
 
     String paramName = generator.parameterName(fieldName + "-key");
 
-    MethodBody body = new MethodBody("return " + attrName + ".containsKey("
-				     + paramName + ");");
+    CodeBlock body = new CodeBlock("return " + attrName + ".containsKey("
+				   + paramName + ");");
     JavaMethod method = createMethod(operationContext, methodName,
 				     "boolean", body);
 
@@ -207,7 +208,7 @@ public class Accessor
     FormalParameter param = new FormalParameter(paramName, attrType);
     param.setDescription(fieldContext.getString("description"));
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
     body.addLine(attrName + " = " + paramName + ";");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
@@ -239,7 +240,7 @@ public class Accessor
 
     String attrName = generator.attributeName(fieldName);
 
-    MethodBody body = new MethodBody(attrName + ".put(key, value);");
+    CodeBlock body = new CodeBlock(attrName + ".put(key, value);");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
 
     //{{{ Add key parameter
@@ -295,7 +296,7 @@ public class Accessor
     FormalParameter param = new FormalParameter(paramName, elementType);
     param.setDescription(fieldContext.getString("description"));
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
     body.addLine(attrName + ".add(" + paramName + ");");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
@@ -331,7 +332,7 @@ public class Accessor
 
     FormalParameter param = new FormalParameter("collection", "Collection");
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
     body.addLine(attrName + ".addAll(collection);");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
@@ -367,7 +368,7 @@ public class Accessor
 
     String attrName = generator.attributeName(fieldName);
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
     if (fieldTypeContext.getName().equals("map")) {
       body.addLine("return " + attrName + ".values().iterator();");
     } else {
@@ -407,7 +408,7 @@ public class Accessor
     Set imports = implementationContext.getValueSet("import");
     unit.mergeImportedCollection(imports);
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
     String fieldName = fieldContext.getName();
     String attrName = generator.attributeName(fieldName);
     body.addLine(attrName + " = new " + implementation + "();");

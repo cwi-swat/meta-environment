@@ -101,7 +101,7 @@ public class JavaGenerator
     //{{{ Add constructor
 
     String constructorName = constructorName(enumName);
-    MethodBody body = new MethodBody("super(value);");
+    CodeBlock body = new CodeBlock("super(value);");
     
     JavaMethod constructor = new JavaMethod(constructorName, null,
 					    publicAccess, isAbstract,
@@ -115,7 +115,7 @@ public class JavaGenerator
     //{{{ Add static parse method
 
     isStatic = true;
-    body = new MethodBody("return new " + className + "(value);");
+    body = new CodeBlock("return new " + className + "(value);");
     JavaMethod parse = new JavaMethod("parse", className,
 				      publicAccess, isAbstract,
 				      isFinal, isStatic, body);

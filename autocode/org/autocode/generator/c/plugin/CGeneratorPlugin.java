@@ -17,7 +17,7 @@ public class CGeneratorPlugin
 
   public Function createFunction(PropertyContext operationContext,
 			      String functionName, String typeName,
-			      FunctionBody body)
+			      CodeBlock body)
   {
     boolean isStatic = operationContext.getBoolean("static");
  

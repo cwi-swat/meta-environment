@@ -1,0 +1,13 @@
+plugin equality {
+  class := "org.autocode.generator.java.plugin.Equality"
+  provides operations {
+    type := { equals }
+  }
+}
+
+type * {
+  operation equals? {
+    call-super := false
+  }
+}
+

@@ -29,6 +29,7 @@ application c-repository {
     } 
 
     type Include {
+      operation += { equals }
       field system {
         operation := { is, set }
         operation set {
@@ -46,13 +47,10 @@ application c-repository {
     }
 
     type Function {
-      import += { "org.autocode.generator.repository.FormalParameter" }
+      import += { "org.autocode.generator.repository.FormalParameter",
+                  "org.autocode.generator.repository.CodeBlock" }
       field formal-parameter { operation := { init, add, fetch-iterator } }
       field static { operation := { is, set } }
-    }
-
-    type FunctionBody {
-      field line { operation := { init, add, fetch-iterator } }
     }
   }
 }

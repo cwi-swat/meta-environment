@@ -2,6 +2,9 @@ $Id$
 
 Fri Mar  8 17:01:38 CET 2002 <olivierp>
  * Added generation of structs and fields in structs
+ * Added Equality plugin for the JavaGenerator. It now generates
+   the 'equals' operation, but we still need the 'hashCode' operations
+   in order to be able to add generated objects to Sets.
 
 Sun Mar  3 16:35:48 CET 2002 <jong,olivierp>
  * Added operations in JavaGenerator: fetch-iterator, get, put, ...

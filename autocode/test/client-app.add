@@ -18,7 +18,7 @@ application client-app {
 
     @import "Client.add"
     type Client {
-      operation := { constructor }
+      operation := { constructor, equals }
   
       field name {
         access := public
@@ -46,7 +46,7 @@ application client-app {
 
     @import "Order.add"
     type Order {
-      operation := { constructor }
+      operation := { constructor, equals }
       field * {
 	operation := { get, set }
       }

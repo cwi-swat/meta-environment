@@ -24,7 +24,7 @@ public class JavaMethod
 
   public JavaMethod(String name, String resultType, JavaAccessSpecifier access,
 		    boolean isabstract, boolean isfinal, boolean isstatic,
-		    MethodBody body)
+		    CodeBlock body)
   {
     super(name, resultType, body);
     _access = access;

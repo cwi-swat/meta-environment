@@ -125,6 +125,17 @@ public class PropertyContext
   }
 
   //}}}
+  //{{{ public void setSingletonValue(String key, String value)
+
+  public void setSingletonValue(String key, String value)
+  {
+    PropertyTree tree = new PropertyTree(key, value);
+    PropertyForest forest = new PropertyForest();
+    forest.addTree(tree);
+    merge(forest);
+  }
+
+  //}}}
 
   //{{{ public Set getValueSet(String key)
 

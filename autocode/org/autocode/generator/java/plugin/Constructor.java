@@ -24,7 +24,7 @@ public class Constructor
   {
     String constructorName = generator.constructorName(typeContext.getName());
 
-    MethodBody body = new MethodBody();
+    CodeBlock body = new CodeBlock();
 
     JavaMethod constructor
       = createConstructor(operationContext, constructorName, body);
