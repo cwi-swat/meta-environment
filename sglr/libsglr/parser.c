@@ -949,15 +949,20 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
 tree SG_ConvertA2ToA1(tree t)
 {
   int nr_ambs = SGnrAmb(SG_NR_ASK);
+  ATermList ambs;
 
   if(nr_ambs > 0) {
     IF_DEBUG(
       ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
                 " in AsFix1\n",
-                nr_ambs, nr_ambs>1?"ies":"y")
+                nr_ambs, nr_ambs > 1 ? "ies":"y")
     );
 
-    return SG_ParseError(ATempty, nr_ambs, SG_AmbTracker(t));
+    ambs = SG_AmbTracker(t);
+
+    assert(ambs != NULL);
+
+    return SG_ParseError(ATempty, nr_ambs, ambs);
   }
 
   IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
@@ -1023,6 +1028,7 @@ tree SG_ParseResult(char *sort)
                           "Aprod expansion took %.4fs\n", SG_Timer()));
 
     SGsort(SG_SET, t);     
+
 
     /*  Convert the forest in-line to AsFix1 upon request  */
     if(SG_ASFIX1) {

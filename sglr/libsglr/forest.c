@@ -513,6 +513,8 @@ ATerm SG_AmbTracker(tree t)
   if(fun == SG_ParseTree_AFun) {
     amblist = SG_AmbTrackerRecursive((tree) ATgetArgument((ATermAppl) t, 0), 
                                      &currpos);
+  } else {
+    amblist = SG_AmbTrackerRecursive(t, &currpos);
   }
 
   if(ATisEmpty(amblist)) {
@@ -799,6 +801,20 @@ MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst,
   return ms;
 }
 
+ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2);
+
+/* NOTE: We temporarily maintain two versions of MultiSetGtr.
+ *
+ * The first was developed by fixing the existing implementation of v2.40
+ *
+ * The second was developed from scratch by
+ * implementing the multiset formula on p108 of Eelco Visser's dissertation.
+ *
+ * These implementations are expected to be equal.
+ */
+#define MULTISETGTR_ORIGINAL 
+#ifdef MULTISETGTR_ORIGINAL
+
 /* MultiSetGtr is the core of the multiset algorithm. See page XXX
  * of Eelco Visser's dissertation.
  *
@@ -812,8 +828,12 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
   int My, Ny, Mx, Nx;
   ATbool result, foundone, totalresult;
   int size = MultiSetGetSize(msM); /* equal to the other one */
-  
+
   IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
+
+  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
+    return ATfalse;
+  }
 
   /*  For all y in M such that M(y) > N(y) ...  */
 
@@ -840,10 +860,10 @@ ATwarning("\n");
         result = ATfalse;
         foundone = ATfalse;
         for (x = 0; !result && (x < size); x++) {
-          Nx = MultiSetGetCount(msN, x);  
+          Nx = MultiSetGetCount(msN, x);
           if (Nx > 0) {
-            Mx = MultiSetGetCount(msM, x);  
-      
+            Mx = MultiSetGetCount(msM, x);
+
             lx = SG_NR_TO_PROD(SG_GetATint(x, 0));
 
             if (SG_GtrPriority(pt, ly, lx) ||
@@ -865,7 +885,6 @@ ATwarning("ly = %t lx = %t yields %d\n", ly,lx, result);
       }
     }
   }
-  
   /*
    For all candidates,  a suitable "witness" has been found if we get
    here.  However, there may have been no candidates in the first
@@ -877,6 +896,92 @@ ATwarning("ly = %t lx = %t yields %d\n", ly,lx, result);
    */
   return totalresult;
 }
+
+#else /* MULTISETGTR translated from formula  */
+
+/* MultiSetGtr is the core of the multiset algorithm. See page 108
+ * of Eelco Visser's dissertation.
+ *
+ * We use Visser's notation msM and msN for easy reference, instead
+ * of our standard ms0 and ms1.
+ *
+ * There is a difference between our
+ * implementation and the formula in the dissertation! We implement
+ * the formula in a straightforward manner, but by keeping two extra
+ * variables: 'atleastoneresulti' and 'onegreater' we allow for SOME
+ * productions to have no relation at all (!onegreater), but if ALL
+ * productions have no relation at all (atleastoneresult) we cannot
+ * conclude a relation off course.
+ */
+
+
+ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
+{
+  ATermInt ly, lx;
+  int y, x;
+  int My, Ny, Mx, Nx;
+  ATbool oneresult, forallresult, onegreater, atleastoneresult;
+  int size = MultiSetGetSize(msM);
+
+  IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
+
+  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
+    return ATfalse;
+  }
+
+  /* and */
+
+  /* for all y in M */
+  atleastoneresult = ATfalse;
+  forallresult    = ATtrue;
+
+  for (y = 0; y < size && forallresult; y++) {
+    My = MultiSetGetCount(msM, y);
+
+    if (My != 0) { /* if key */
+       ATbool forallbody = ATfalse;
+       Ny = MultiSetGetCount(msN, y);
+
+       ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
+
+       if (!(My > Ny)) { /* M(y) > N(y)  */
+         forallbody = ATtrue;
+       }
+       if (!forallbody) { /* ===> (implies) */
+
+         /* for any x in N */
+         onegreater = ATfalse;
+         oneresult  = ATfalse;
+         for(x = 0; x < size && !oneresult; x++) {
+           Nx = MultiSetGetCount(msN, x);
+           Mx = MultiSetGetCount(msM, x);
+
+           if(Nx != 0) { /* if key */
+             ATbool onebody, greater;
+             lx = SG_NR_TO_PROD(SG_GetATint(x, 0));
+
+             /* y > x && M(x) < N(x) */
+             greater = (SG_GtrPriority(pt, ly, lx) ||
+                        SG_EagerPriority(pt, ly, lx));
+             onebody = greater && (Mx < Nx);
+
+            /* update inner and outer loop values */
+            onegreater = onegreater || greater;
+            oneresult = oneresult || onebody;
+            atleastoneresult = atleastoneresult || oneresult;
+           }
+         }
+         forallbody = oneresult || !onegreater;
+       }
+
+      /* update outer loop value */
+      forallresult = forallresult && forallbody;
+    }
+  }
+
+  return forallresult && atleastoneresult;
+}
+#endif
 
 ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
 {
@@ -1005,30 +1110,22 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
     return NULL;
   }
  
-  if (!SG_MultiSetEqual(ms0, ms1)) {
+  if (SG_MultiSetGtr(pt, ms0, ms1)) {
+    IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
+    max = t0;
+  } 
 
-/*
-ATwarning("t0 = %t\n", l0);
-ATwarning("t1 = %t\n", l1);
-*/
-
-    if (SG_MultiSetGtr(pt, ms0, ms1)) {
-      IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
-      max = t0;
-    } 
-
-    if (SG_MultiSetGtr(pt, ms1, ms0)) {
-      if (max) {
-        IF_DEBUG(fprintf(SG_log(),
-                         "Symmetric multiset priority relation ignored\n"))
-        max = NULL;
-      }
-      else { 
-        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
-        max = t1;
-      }
+  if (SG_MultiSetGtr(pt, ms1, ms0)) {
+    if (max) {
+      IF_DEBUG(fprintf(SG_log(),
+                       "Symmetric multiset priority relation ignored\n"))
+      max = NULL;
     }
-  }       
+    else { 
+      IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
+      max = t1;
+    }
+  }
 
   if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
