@@ -90,13 +90,14 @@ dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
    [  --with-tide             TIDE is in DIR],
    TIDE=${withval}
-   TIDEDEF=-DUSE_TIDE
-   USE_TIDE=1,
-   USE_TIDE=0
+   TIDEDEF="-DUSE_TIDE"
+   TIDEINC="-I${TIDE}/include"
+   TIDELIB="-L${TIDE}/lib -ltide-adapter",
 )
 AC_SUBST(TIDE)
 AC_SUBST(TIDEDEF)
-AC_SUBST(USE_TIDE)
+AC_SUBST(TIDEINC)
+AC_SUBST(TIDELIB)
 
 dnl Where is perl5?
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
