@@ -10,12 +10,13 @@ datadir		= @datadir@
 # CLEANFILES are removed by 'make clean'
 CLEANFILES	= module-test
 
-test: module-test
+test: module-test eqs-test
 	./module-test
+	./eqs-test
 
 clean:
 	rm -f *.o *~ $(CLEANFILES)
 
-module-test: module-test.in
+%: %.in
 	sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
 	chmod +x $@

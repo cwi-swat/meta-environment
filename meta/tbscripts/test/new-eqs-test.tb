@@ -1,0 +1,25 @@
+#include "in-output.idef"
+#include "module-db.idef"
+
+#include "../new-module.tb"
+
+process Test is
+let
+  Id: int,
+  Src: str,
+  Path: str,
+  Time: int
+in
+  Id := process-id.
+  snd-msg(Id, open-eqs-text-file("Aap")) .
+  (
+    rec-msg(Id, opened-file(raw,"Aap",Src?,Path?,timestamp(Time?)))
+   + 
+    rec-msg(Id, error-opening("Aap"))
+   +
+    shutdown("open-eqs-text-file FAILED! (timeout)\n")  delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)
