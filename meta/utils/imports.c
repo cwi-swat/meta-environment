@@ -50,7 +50,7 @@ extern char* optarg;
    "         -h  displays this message\n"\
    "         -l  print full paths names of modules\n"\
    "         -r  construct a list of modules recursively\n"\
-   "         -s  stop when a module cannotbe found\n"\
+   "         -s  stop when a module cannot be found\n"\
    "\n"
 
 /* Command line options used by imports */ 
