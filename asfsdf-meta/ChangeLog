@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Jul 11 2003 <j.iversen@daimi.au.dk>
+ * Added Type parameter to pre-get-all-sdf2-hook
+
 Fri Jul 11 10:38:38 CEST 2003 <jong@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - removed debug print
