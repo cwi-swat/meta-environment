@@ -16,6 +16,8 @@ exports
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"   -> RVALUE
 
+	Summary						-> RVALUE
+
 %% The RSTORE itself, maps RVARs to RVALUEs
 
        "rstore" "(" {  <RVAR, REXPTYPE, RVALUE>  ","}* ")"	-> RSTORE {prefer}
@@ -34,7 +36,7 @@ exports
 	rvar2str(RVAR)					-> String
 
 	"[|" RSTAT* "|]"				-> RSTORE
-	"[|" RSTAT* "|]" "yield" RVAR			-> Elem
+	"[|" RSTAT* "|]" "yield" RVAR			-> RVALUE
         "[|" REXP "|]"                                  -> RVALUE
 
 %% Import a Rigi RSF file
@@ -98,8 +100,10 @@ hiddens
 	"$Rel" [0-9\']*		       -> Bag[[Elem]]
 
 	"$Char*" [0-9\']*	       -> CHAR*
+
+	"$Summary"  [0-9\']*	       -> Summary
 	
-	"$RsfName" [0-9\']*	-> RSFNAME
+	"$RsfName" [0-9\']*		-> RSFNAME
 
 	"$RsfTuple" [0-9\']*		-> RSFTUPLE
 	"$RsfTuple*" [0-9\']*		-> RSFTUPLE*

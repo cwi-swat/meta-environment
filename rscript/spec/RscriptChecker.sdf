@@ -93,6 +93,8 @@ exports
 
 	check-rscript(RSCRIPT)					-> Summary
 	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> Summary
+
+	is-type-correct(Summary)				-> Boolean
         check-rscript(RSTAT*, TENV)				-> TENV
 	check-rstore(RSTAT*, RSTORE, TENV)			-> TENV
 	check(REXP, TENV) 					-> <REXPTYPE, TENV>
@@ -156,6 +158,8 @@ hiddens
      "$Error*" [0-9\']* 	-> {ERROR ";"}*
      "$Error+" [0-9\']* 	-> {ERROR ";"}+
      "$Errors" [0-9\']*		-> ERRORS
+
+     "$Summary"  [0-9\']*	-> Summary
      
      "$Exp0" [0-9\']*    	-> REXP0
      "$Exp" [1-9\']*    	-> REXP

@@ -57,7 +57,7 @@ equations
        begin $Decls $Stat+ end := $Program,
        <$Entry, $Rel, $Exit> := cflow($Stat+),
        $Rel1 := $Rel union ({$Loc} x $Entry),
-       $Rel2 := [| type expr = loc
+       $Rval := [| type expr = loc
 		   type var  = loc
 		   type name = str
 
@@ -76,7 +76,7 @@ equations
 		   }
                 |] yield UNINIT
        ==========================================================
-       uninit($Program) = convert2summary("Uninitialized variable", $Rel2)
+       uninit($Program) = convert2summary("Uninitialized variable", $Rval)
 
 %% ----- utilities
 
@@ -93,7 +93,6 @@ equations
 [cvt-4]	convert2summary($StrCon, $Elem) = 
         summary("PicoQuery", "PicoQuery", [convert2errorlist($StrCon, $Elem)])
 
+[cvt-5]	convert2summary($StrCon, $Summary) = $Summary
 
-%%[pq1] pico-query($Script, $Rstore, $StrCon) =
-%%      convert2summary(eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon))
 

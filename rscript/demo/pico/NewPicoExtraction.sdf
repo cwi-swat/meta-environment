@@ -5,7 +5,7 @@ imports basic/Integers
 imports utilities/PosInfo[STATEMENT]
 imports utilities/PosInfo[EXP]
 imports utilities/PosInfo[PICO-ID]
-imports basic/Errors
+imports basic/Errors Rstore
 
 exports
    imports Rstore
@@ -29,7 +29,7 @@ hiddens
       defs(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
       defs(STATEMENT, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
 
-      convert2summary(String, Elem)	        -> Summary
+      convert2summary(String, RVALUE)	        -> Summary
       convert2errorlist(String, Elem)		-> {Error ","}*
       convert2error(String, <String, Location>) -> Error
 
@@ -53,9 +53,13 @@ hiddens
       "$Program" [0-9\']*       -> PROGRAM
 
       "$Char*" [0-9]*   	-> CHAR*
-	"$StrCon" [0-9\']*  -> StrCon
+      "$StrCon" [0-9\']*  	-> StrCon
       "$Error*" [0-9\']*	-> {Error ","}*
       "$Elem" [0-9\']*		-> Elem
       "$Elem*" [0-9\']*		-> {Elem ","}*
 
       "$String" [0-9\']*	-> String
+
+      "$Rval" [0-9\']*		-> RVALUE
+      "$Summary" [0-9\']*	-> Summary
+	
