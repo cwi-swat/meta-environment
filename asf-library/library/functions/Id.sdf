@@ -1,0 +1,17 @@
+module functions/Id[A]
+
+exports
+
+context-free syntax
+
+id -> (A => A)
+
+hiddens
+
+sorts A 
+
+imports basic/Whitespace
+
+variables
+
+"A" -> A
