@@ -1,5 +1,9 @@
 $Id$
 
+Thu Aug 19 11:01:07 CEST 2004 <{jong,markvdb}@cwi.nl>
+ * libmept: regenerated MEPT API to reflect removal of "flat layout"
+ * libmept/yieldPT.c: remove call to non-existant PT_isTreeFlatLayout
+
 Thu Jul  8 09:35:01 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
  * libmept/posInfo.c: 
    - findTreeAtOffset does not go into ambiguity clusters because an arbitrary

@@ -37,7 +37,7 @@ lengthOfTree(PT_Tree tree, ATbool visualAmbs)
     PT_Args args = PT_getTreeArgs(tree);
     length = lengthOfArgs(args, visualAmbs);
   }
-  else if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
+  else if (PT_isTreeLit(tree)) {
     char *lit = PT_getTreeString(tree);
     int i;
     int len = strlen(lit);
@@ -116,7 +116,7 @@ yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufS
     PT_Args args = PT_getTreeArgs(tree);
     idx = yieldArgsRecursive(args, visualAmbs, idx, buf, bufSize);
   }
-  else if (PT_isTreeLit(tree) || PT_isTreeFlatLayout(tree)) {
+  else if (PT_isTreeLit(tree)) {
     int i, len;
     char *lit = PT_getTreeString(tree);
     len = strlen(lit);
