@@ -24,7 +24,7 @@
 	===================================================
 	extract-rvars($Etype $Var, $DclRvar+) = $Var, $Var+
 
-[erv2]	extract-rvars($Etype $Var) = $Var
+[erv2]	extract-rvars($Etype $Var ) = $Var
 
 %% ---- Eval a complete Rscript
 
@@ -64,7 +64,8 @@
 						= assign-when-undef($Var, empty-bag, $Rstore)	%%XXX
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
-[S8]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, evalx($Exp, $Rstore), $Rstore)
+[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, evalx($Exp, $Rstore), $Rstore)
+[S8b]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, evalx($Exp, $Rstore), $Rstore)
 [S9]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, evalx($Exp, $Rstore), $Rstore)
 
 [S10]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 
@@ -72,8 +73,7 @@
 						<extract-rvars($DclRvar+),
 						$Exp>, $Rstore)
 
-[S11]  eval-rstat(type $Var = < $DclRvar+ >, $Rstore) = eval-fields($DclRvar+,
-$Rstore, 1)
+[S11]  eval-rstat(type $Var = < $DclRvar+ >, $Rstore) = eval-fields($DclRvar+, $Rstore, 1)
 [S12]  eval-rstat(type $Var = $Etype, $Rstore) = $Rstore
 
 [default-assert]	
@@ -340,57 +340,63 @@ $Rstore, 1)
 
 [XX] 	{$Gen, $Gen+ :: $Exp } = { $Gen :: {$Gen+ :: $Exp}}
 
-%% ---- evalx-test
+[ec-1]	$Elem = evalc({$Gen :: $Exp}, $Rstore)
+	====================================================================
+	evalx({$Gen :: $Exp}, $Rstore) = $Elem
 
-[evx1]	evalx-test(true, $Exp, $Rstore) = evalx($Exp, $Rstore)
+[default-ec]
+	evalx({$Gen :: $Exp}, $Rstore) = {}
 
-[evx2]	evalx-test(false, $Exp, $Rstore)  = *undefined*
+%% ---- evalc-test
+
+[evc1]	evalc-test(true, $Exp, $Rstore) = evalc($Exp, $Rstore)
+
+[evc2]	evalc-test(false, $Exp, $Rstore)  = *undefined*
+
+%% ---- evalc: evaluate comprehensions
 
 %% ---- Generator: test
 
-[et-1a]	$Bool = evalp($Test, $Rstore)
-	======================================================================
-	evalx({$Test :: $Exp} , $Rstore) = evalx-test($Bool, $Exp,$Rstore)
+[ec-1]	$Bool = evalp($Test, $Rstore)
+	==================================================================
+	evalc({$Test :: $Exp} , $Rstore) = evalc-test($Bool, $Exp,$Rstore)
 
 %% ---- Generator: assignment,  one target T <- E
 
-[ea-1a]	$Val = evalx($Exp1, $Rstore),
+[ec-2]	$Val = evalx($Exp1, $Rstore),
 	$Val' = match-rvars($Target, $Val, $Exp2, $Rstore)
-	======================================================================
-	evalx({ $Target <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
+	=================================================================
+	evalc({ $Target <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
 
 %% ---- Generator: assignment, N targets: <T1, T2, ..., Tn> <- E
 
-[eat-1a]	
+[ec-3]	
 	$Val = evalx($Exp1, $Rstore),
 	$Val' =  match-rvars($Target+, $Val, $Exp2, $Rstore)
-	======================================================================
-	evalx({ <$Target+> <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
+	=================================================================
+	evalc({ <$Target+> <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
 
 %% ---- Simple generator, match and extract one target  T : E
 
-[ei-1]	$Bag = evalx($Exp1, $Rstore)
-	=======================================
-	evalx({ $Target : $Exp1 :: $Exp2 }, $Rstore) = 
+[ec-4]	$Bag = evalx($Exp1, $Rstore)
+	=================================================================
+	evalc({ $Target : $Exp1 :: $Exp2 }, $Rstore) = 
 	eval-itern($Target, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
-
-%% ---- Simple generator, match and extract two targets <T1, T2> : E
-
-%%[ei2-1]	$Bag = evalx($Exp1, $Rstore)
-%%	=======================================
-%%	evalx({ <$Target1, $Target2> : $Exp1 :: $Exp2 }, $Rstore) = 
-%%	eval-itern($Target1, $Target2, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
 
 %% ---- Simple generator, match and extract N targets <T1, T2, ...> : E
 
-[ei2-1]	$Bag = evalx($Exp1, $Rstore)
-	=======================================
-	evalx({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
+[ec-5]	$Bag = evalx($Exp1, $Rstore)
+	=================================================================
+	evalc({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
 	eval-itern($Target+, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
+
+%% ---- Ordinary expression as in { E | ... }
+
+[ec-6]	evalc($Exp, $Rstore) = evalx($Exp, $Rstore)
 
 %% ---- eval-itern: the workhorse for comprehensions
 
-[ei2-2]	is-empty-iter($BagIter) = false,
+[ei-1]	is-empty-iter($BagIter) = false,
 	$Elem = head($BagIter),
 	$Val = match-rvars($Target+, $Elem, $Exp, $Rstore),
 	$Bag' = append-rval($Bag, $Val)
@@ -398,7 +404,7 @@ $Rstore, 1)
 	eval-itern($Target+, $BagIter, $Bag, $Exp, $Rstore) =
 	eval-itern($Target+, tail($BagIter), $Bag', $Exp, $Rstore)
 
-[ei2-3]	is-empty-iter($BagIter) = true
+[ei-2]	is-empty-iter($BagIter) = true
 	======================================================
 	eval-itern($Target+, $BagIter, $Bag, $Exp, $Rstore) = $Bag
 
@@ -419,21 +425,21 @@ $Rstore, 1)
 
 [mv3]	$Rstore' = assign($Var, $Elem, $Rstore) 
 	=====================================================
-	match-rvars($Etype $Var, <$Elem>, $Exp, $Rstore) = evalx($Exp,$Rstore')
+	match-rvars($Etype $Var, <$Elem>, $Exp, $Rstore) = evalc($Exp,$Rstore')
 
 [mv4]	$Val = evalx($Exp1, $Rstore),	
 	equal-rval($Val, $Elem) = true
 	=====================================================
-	match-rvars($Exp1, <$Elem>, $Exp2, $Rstore) = evalx($Exp2, $Rstore)
+	match-rvars($Exp1, <$Elem>, $Exp2, $Rstore) = evalc($Exp2, $Rstore)
 
 [mv5]	$Rstore' = assign($Var, $Elem, $Rstore) 
 	=====================================================
-	match-rvars($Etype $Var, $Elem, $Exp, $Rstore) = evalx($Exp,$Rstore')
+	match-rvars($Etype $Var, $Elem, $Exp, $Rstore) = evalc($Exp,$Rstore')
 
 [mv6]	$Val = evalx($Exp1, $Rstore),	
 	equal-rval($Val, $Elem) = true
 	=====================================================
-	match-rvars($Exp1, $Elem, $Exp2, $Rstore) = evalx($Exp2, $Rstore)
+	match-rvars($Exp1, $Elem, $Exp2, $Rstore) = evalc($Exp2, $Rstore)
 
 [default-mv]
 	match-rvars($Target+, $Elem, $Exp, $Rstore) = *undefined* 

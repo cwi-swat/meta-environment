@@ -17,6 +17,6 @@ else
 	cat $2
 	echo ")"
 	echo ""
-	) | sglr -p RscriptCalculator.trm.tbl | RscriptCalculator | unparsePT -v
+	) | sglr -p RscriptCalculator.trm.tbl | RscriptCalculator -t -s  | unparsePT -v
 fi
 

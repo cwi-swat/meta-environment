@@ -30,11 +30,14 @@ exports
         evalx(REXP, RSTORE)            				-> Elem
 	evala(REXP, RSTORE)					-> Area
 
+	evalc(REXP, RSTORE)					-> RVALUE
+	evalc-test(Boolean, REXP, RSTORE)			-> RVALUE
+
 	eval-lt(RVALUE, RVALUE)					-> Boolean
 	eval-le(RVALUE, RVALUE)					-> Boolean
 	eval-rim(RVALUE, RVALUE)				-> Elem
 	eval-lim(RVALUE, RVALUE)				-> Elem
-	evalx-test(Boolean, REXP, RSTORE)			-> Elem
+
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
 
