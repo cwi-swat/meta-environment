@@ -119,10 +119,11 @@ static ATermList applyImports(SDF_ImportList imports, PT_ParseTree pt)
       SDF_Renamings renamings = SDF_getImportRenamings(import);
 
       result = ATinsert(result, 
-			PT_ParseTreeToTerm(applyRenamings(renamings, pt)));
+			ATBpack(
+			  PT_ParseTreeToTerm(applyRenamings(renamings, pt))));
     }
     else {
-      result = ATinsert(result, PT_ParseTreeToTerm(pt));
+      result = ATinsert(result, ATBpack(PT_ParseTreeToTerm(pt)));
     }
 
     if (SDF_hasImportListTail(imports)) {

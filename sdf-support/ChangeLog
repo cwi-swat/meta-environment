@@ -1,7 +1,8 @@
 $Id$
 
-2003/05/28 ({jong,jurgenv}@cwi.nl)
+2003/05/28 ({jong,jurgenv,markvdb}@cwi.nl)
  * utils/sdf-modules/sdf-modules.c: ATBpack added to make_sdf_definition
+ * Added an ATBpack in renaming of equations.
 
 2003/05/27 (markvdb@cwi.nl)
  * Some ATBpack and unpacks added.   
