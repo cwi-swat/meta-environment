@@ -1,0 +1,11 @@
+process AbortMetaEnvironment is
+let
+  TimeOut : int
+in
+#ifdef TIMEOUT
+  TimeOut := TIMEOUT.
+#else
+  TimeOut := 0.
+#endif
+  shutdown("Meta-Environment ran out of time!") delay(TimeOut)
+endlet
