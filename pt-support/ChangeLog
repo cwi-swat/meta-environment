@@ -1,3 +1,7 @@
+2003/01/31 (markvdb@cwi.nl)
+ * Bumped into version 0.12
+ * Added a first version of a tree2graph tool.
+
 2003/01/24 ({jong,jurgenv}@cwi.nl)
  * Removed obsolete ToolBus requirements
 

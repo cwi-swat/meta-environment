@@ -1,0 +1,22 @@
+/*
+  $Id $
+ */
+
+process Tree2Graph is
+let
+  TG   : tree2graph,
+  Tree : term,
+  Graph : term
+in
+  (
+    rec-msg(tree2graph(Tree?)).
+    execute(tree2graph, TG?).
+    snd-eval(TG, tree2graph(Tree)).
+    rec-value(TG, graph(Graph?)).
+    snd-terminate(TG, "done") .
+    snd-msg(graph(Graph))
+  ) *
+  delta
+endlet
+
+tool tree2graph is { command = "tree2graph" }  

@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(pt-support, 0.11)
+AM_INIT_AUTOMAKE(pt-support, 0.12beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -93,6 +93,7 @@ AC_OUTPUT(
   utils/implodePT/test/out/Makefile
   utils/implodePT/test/terms/Makefile
   utils/implodePT/test/grammar/Makefile
+  utils/tree2graph/Makefile
 )
 
 dnl }}}

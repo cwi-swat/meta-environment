@@ -1,9 +1,9 @@
 # $Id$
 
-SUBDIRS = implodePT
+SUBDIRS = implodePT tree2graph
 
 EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
-                          apply-function.idef 
+                          apply-function.idef
 
 bin_PROGRAMS		= flattenPT unparsePT unparseProd \
                           addPosInfo ambtracker tree2dot apply-function \
@@ -16,10 +16,11 @@ INCLUDES		= -I${top_srcdir}/libmept \
 			-I${ATERM}/include \
 			-I${TOOLBUSLIB}/include
 
-pkgdata_DATA		= unparsePT.idef addPosInfo.idef apply-function.idef
+pkgdata_DATA		= unparsePT.idef addPosInfo.idef \
+                          apply-function.idef
 
 noinst_HEADERS		= unparsePT.tif.h apply-function.tif.h \
-                          addPosInfo.tif.h
+                          addPosInfo.tif.h 
 
 apply_function_SOURCES  = apply-function.tif.c apply-function.c
 apply_function_LDADD    = -L../libmept -lmept \
