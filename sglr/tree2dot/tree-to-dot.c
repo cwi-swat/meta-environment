@@ -401,7 +401,7 @@ char *SG_TYAuxBuf(int Mode, char c) {
         break;
     case TYA_ADD:
         if((index+2) > tmpsize) {
-          tmp = (char *)SG_Realloc(tmp, tmpsize + TYA_TMPCHUNK);
+          tmp = (char *)SG_Realloc(tmp, tmpsize + TYA_TMPCHUNK, sizeof(char));
           if(!tmp) {
             ATfprintf(stderr, "memory reallocation error\n");
             exit(1);
