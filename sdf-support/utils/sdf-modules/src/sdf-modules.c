@@ -202,13 +202,16 @@ ATerm get_module_path(int cid, char *path, char *id)
 ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 {
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList list = 
-    GI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
-  SDF_ModuleList modules = SDF_makeModuleListEmpty();
-  SDF_OptLayout space = SDF_makeLayoutSpace();
+  ATermList list;
+  SDF_ModuleList modules;
+  SDF_OptLayout space;
   SDF_SDF sdf;
   SDF_Start start;
   ATerm result;
+
+  list = GI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
+  modules = SDF_makeModuleListEmpty();
+  space = SDF_makeLayoutSpace();
 
   for( ;!ATisEmpty(list); list = ATgetNext(list)) {
     SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));

@@ -10,6 +10,7 @@ static ModuleTable moduleTable = NULL;
 
 static void initModuleTable(ATermList modules)
 {
+  ATwarning("initializing with %d modules\n", ATgetLength(modules));
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     ATerm atModule = ATBunpack(ATgetFirst(modules));
@@ -80,11 +81,11 @@ static SDF_ImportList getImpsectionImportsList(SDF_ImpSection impsection)
 
 static void collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
 {
-    if (SDF_hasGrammarImpSection(grammar)) {
-          SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
-	      *imports = SDF_concatImportList(*imports, 
-					                                          getImpsectionImportsList(impsection));
-	        }
+  if (SDF_hasGrammarImpSection(grammar)) {
+    SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
+    *imports = SDF_concatImportList(*imports, 
+				    getImpsectionImportsList(impsection));
+  }
 }
 
 /*}}}  */
@@ -111,8 +112,8 @@ SDF_ImportList GI_getModuleImportsList(SDF_Module module)
 
   sections = SDF_getModuleSections(module);
   SDFforeachGrammarInSections(sections,
-                              (SDFGrammarFunc)collect_imports_list,
-                              &imports);
+			      (SDFGrammarFunc)collect_imports_list,
+			      &imports);
 
   return imports;
 }
@@ -428,7 +429,7 @@ static SDF_ImportList applyRenamingsToImports(SDF_Renamings renamings,
     SDF_Import import = SDF_getImportListHead(imports);
     SDF_Import new = applyRenamingsToImport(renamings, import);
 
-    result = SDF_concatImportList(result, SDF_makeImportListSingle(new));
+    result = SDF_insertImport(new, result);
 
     if (SDF_hasImportListTail(imports)) {
       imports = SDF_getImportListTail(imports);
@@ -471,10 +472,11 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 
       imports = GI_getModuleImportsList(module);
       imports = applyRenamingsToImports(renamings, imports);
-      todo = SDF_concatImportList(todo, imports);
+
+      todo = SDF_mergeImportList(todo, imports);
 
       import = makeRenamedImport(actualName, renamings);
-      result = SDF_concatImportList(result,SDF_makeImportListSingle(import));
+      result = SDF_insertImport(import, result);
     }
 
     if (SDF_hasImportListTail(todo)) {
