@@ -1,14 +1,16 @@
 %%  ProcessExpr
 
-imports Atom VarDecls
+imports Atom VarDecls TimeExpr
 
 exports
   sorts ProcessExpr
   context-free syntax
     Atom                        -> ProcessExpr
+    Atom TimeExpr               -> ProcessExpr
     "create" "(" ProcessName "(" {TERM ","}* ")""," GEN-VAR ")"  -> ProcessInvocation
     "create" "(" ProcessName "," GEN-VAR ")"   -> ProcessInvocation
     ProcessName             -> ProcessInvocation
+    ProcessName "(" {TERM ","}* ")"-> ProcessInvocation
     ProcessInvocation                   -> ProcessExpr
     ProcessExpr "." ProcessExpr -> ProcessExpr {left}
     ProcessExpr "+" ProcessExpr -> ProcessExpr {left}

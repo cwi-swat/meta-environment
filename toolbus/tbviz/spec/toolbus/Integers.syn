@@ -1,39 +1,19 @@
-   imports Layout Booleans
+   imports Layout
    exports
-      sorts NAT-CON NAT INT
+      sorts NAT-CON NAT INT REAL
       lexical syntax
          [0-9]+                 -> NAT-CON
       context-free syntax
          NAT-CON                -> NAT
-         NAT "-/" NAT           -> NAT {left}
+         INT "." NAT-CON    -> REAL
+
          "(" NAT ")"            -> NAT {bracket}
          NAT                    -> INT
          "+" NAT                -> INT
          "-" NAT                -> INT
-         INT "+" INT            -> INT {left}
-         INT "-" INT            -> INT {left}
-         INT "*" INT            -> INT {left}
-         INT ">" INT            -> BOOL
-         INT ">=" INT           -> BOOL
-         INT "<" INT            -> BOOL
-         INT "<=" INT           -> BOOL
-         INT "=" INT            -> BOOL
+
          "(" INT ")"            -> INT {bracket}
       variables
          Nat-con [0-9']*        -> NAT-CON
          Nat [0-9']*            -> NAT
          Int [0-9']*            -> INT
-
-   hiddens
-      context-free syntax
-         gt "(" NAT "," NAT ")" -> BOOL
-         NAT "-//" NAT          -> NAT
-      variables
-         n [0-9]*               -> NAT-CON
-         c [0-9]*               -> CHAR
-         x [0-9]*               -> CHAR*
-         y [0-9]*               -> CHAR+
-
-   priorities
-      {left: INT "+" INT -> INT, INT "-" INT -> INT} <
-                INT "*" INT -> INT

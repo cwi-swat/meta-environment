@@ -24,7 +24,8 @@ Atom.syn          ProcessExpr.syn   VarDecls.eqs \
 Booleans.eqs      Process.eqs       Terms.syn         VarDecls.syn \
 Booleans.syn      Process.syn       ToolDef.eqs \
 Integers.eqs      ProcessDef.eqs    ToolDef.syn \
-Integers.syn      ProcessDef.syn    Tscript.eqs
+Integers.syn      ProcessDef.syn    Tscript.eqs TimeExpr.syn
+
 
 TARGETFILES     = ${SPECFILES}
 DISTFILES	= Makefile.in ${TARGETFILES}

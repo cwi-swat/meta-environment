@@ -1,4 +1,4 @@
-imports Integers
+imports Integers Booleans
 exports
   sorts ID VNAME STRING TERM TERM-LIST VAR GEN-VAR
 
@@ -14,9 +14,11 @@ exports
 
         BOOL                            -> TERM
         INT                             -> TERM
+        REAL                            -> TERM
         STRING                          -> TERM
 
         VNAME                           -> VAR
+
 
         VAR                             -> GEN-VAR
         VAR "?"                         -> GEN-VAR
@@ -26,6 +28,7 @@ exports
         ID "(" TERM-LIST ")"            -> TERM
         {TERM ","}*                     -> TERM-LIST
         "[" TERM-LIST "]"               -> TERM
+
 
   variables
         T [0-9']*               -> TERM

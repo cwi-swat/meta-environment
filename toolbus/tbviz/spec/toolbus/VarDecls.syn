@@ -8,6 +8,7 @@ exports
     <LexicalFunction+>
   context-free syntax
     VAR ":" TERM                -> VarDecl
+    VAR ":" TERM "?"            -> VarDecl
     { VarDecl "," }*            -> VarDecls
   variables
     VDecl[0-9']*        -> VarDecl
