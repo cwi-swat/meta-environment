@@ -19,6 +19,12 @@ in
   rec-msg(finished-opening-modules) .
   snd-msg(dump-equations(MODULENAME, FILENAME)) .
   rec-msg(equations-dumped) .
+  if equal(SAVING,"true") then
+    snd-msg(save-all) .
+    rec-msg(saved)
+  else
+    tau
+  fi .
   shutdown("")
 
 endlet   
