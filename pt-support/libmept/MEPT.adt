@@ -19,8 +19,6 @@
 
   [Tree, flat-layout, flatlayout(<string(str)>)],
 
-  [Tree, flat-lexical, flatlexical(<string(str)>)],
-
   [Tree, Amb, amb(<args(Args)>)],
 
   [Production, Default, prod(<lhs(Symbols)>,

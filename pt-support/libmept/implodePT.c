@@ -36,7 +36,6 @@ ATbool remove_literals = ATfalse;
  
 static PT_Tree implodeTerm(PT_Tree t);
 static PT_Tree implodeLayout(PT_Tree t);
-static PT_Tree implodeLexical(PT_Tree t);
 static PT_Tree implodeVar(PT_Tree t);
 static PT_Production implodeProd(PT_Production prod);
 
@@ -104,16 +103,6 @@ static PT_Production implodeProd(PT_Production prod)
   return prod;
 }
 
-static PT_Tree implodeLexical(PT_Tree tree)
-{
-  if (lexical_to_string) {
-    return PT_makeTreeFlatLexical(PT_yieldTree(tree));
-  }
-  else { 
-    return tree;
-  }
-}
-
 static PT_Tree implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
@@ -151,10 +140,6 @@ static PT_Tree implodeApplication(PT_Tree tree)
      
   if (PT_isOptLayoutProd(prod)) {
     return implodeLayout(tree);
-  }
-
-  if (PT_prodHasLexAsLhsAndCfAsRhs(prod)) {
-    return implodeLexical(tree);
   }
 
   if (PT_isVarDefault(prod)) {

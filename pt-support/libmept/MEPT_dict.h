@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Apr 23 14:01:21 2001
+ * Generated at Mon Apr 23 14:29:48 2001
  */
 
 #ifndef __MEPT_dict_H
@@ -39,7 +39,6 @@ extern ATerm PT_patternAttributesAttrs;
 extern ATerm PT_patternAttributesNoAttrs;
 extern ATerm PT_patternProductionDefault;
 extern ATerm PT_patternTreeAmb;
-extern ATerm PT_patternTreeFlatLexical;
 extern ATerm PT_patternTreeFlatLayout;
 extern ATerm PT_patternTreeLit;
 extern ATerm PT_patternTreeChar;

@@ -257,14 +257,6 @@ PT_Tree PT_makeTreeFlatLayout(char * string)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeFlatLexical(char * string) */
-
-PT_Tree PT_makeTreeFlatLexical(char * string)
-{
-  return (PT_Tree)ATmakeTerm(PT_patternTreeFlatLexical, string);
-}
-
-/*}}}  */
 /*{{{  PT_Tree PT_makeTreeAmb(PT_Args args) */
 
 PT_Tree PT_makeTreeAmb(PT_Args args)
@@ -802,9 +794,6 @@ ATbool PT_isValidTree(PT_Tree arg)
   else if (PT_isTreeFlatLayout(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeFlatLexical(arg)) {
-    return ATtrue;
-  }
   else if (PT_isTreeAmb(arg)) {
     return ATtrue;
   }
@@ -849,14 +838,6 @@ ATbool PT_isTreeLit(PT_Tree arg)
 ATbool PT_isTreeFlatLayout(PT_Tree arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternTreeFlatLayout, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeFlatLexical(PT_Tree arg) */
-
-ATbool PT_isTreeFlatLexical(PT_Tree arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternTreeFlatLexical, NULL);
 }
 
 /*}}}  */
@@ -1044,9 +1025,6 @@ ATbool PT_hasTreeString(PT_Tree arg)
   else if (PT_isTreeFlatLayout(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeFlatLexical(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -1059,9 +1037,6 @@ char * PT_getTreeString(PT_Tree arg)
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
   else if (PT_isTreeFlatLayout(arg)) {
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else if (PT_isTreeFlatLexical(arg)) {
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
 
@@ -1078,9 +1053,6 @@ PT_Tree PT_setTreeString(PT_Tree arg, char * string)
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
   }
   else if (PT_isTreeFlatLayout(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
-  }
-  else if (PT_isTreeFlatLexical(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)), 0);
   }
 
@@ -2476,10 +2448,6 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
   }
   if (PT_isTreeFlatLayout(arg)) {
     return PT_makeTreeFlatLayout(
-        acceptString ? acceptString(PT_getTreeString(arg)) : PT_getTreeString(arg));
-  }
-  if (PT_isTreeFlatLexical(arg)) {
-    return PT_makeTreeFlatLexical(
         acceptString ? acceptString(PT_getTreeString(arg)) : PT_getTreeString(arg));
   }
   if (PT_isTreeAmb(arg)) {
