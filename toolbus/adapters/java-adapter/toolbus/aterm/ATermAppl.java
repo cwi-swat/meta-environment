@@ -1,4 +1,4 @@
-
+// $Id$
 package toolbus.aterm;
 import toolbus.util.*;
 import java.io.*;
@@ -75,13 +75,20 @@ public class ATermAppl extends ATerm
 
   //{ public ATermAppl(World world, String fun, ATerms args)
 
-  public ATermAppl(World world, String fun, ATerms args)
-  {
-    super(world);
-    intern(new ATermApplImpl(world, fun, args.getATermsImpl()));
-  }
+    public ATermAppl(World world, String fun, ATerms args)
+    {
+	super(world);
+	intern(new ATermApplImpl(world, fun, args.getATermsImpl()));
+    }
 
   //}
+    /** Construct an ATermAppl of which the fun can be a quoted string
+     */
+    public ATermAppl(World world, String fun, ATerms args, boolean isquoted) {
+	super(world);
+	intern(new ATermApplImpl(world, fun, args.getATermsImpl(), isquoted));
+    }
+
   //{ public ATermAppl(World world, String fun, ATerms args, ATerm anno)
 
   /**

@@ -34,6 +34,12 @@ public class ATermApplImpl extends ATermImpl
   }
 
   //}
+
+    /** ATermApplImpl can have a quoted function symbol
+     */
+    public ATermApplImpl(World world, String fn, ATermsImpl as, boolean iq) {
+	this(world,fn,as,null,iq);
+    }
   //{ public ATermApplImpl(World world, String fn, ATermsImpl as, ATermImpl an)
 
   public ATermApplImpl(World world, String fn, ATermsImpl as, ATermImpl an)
@@ -367,7 +373,7 @@ public class ATermApplImpl extends ATermImpl
 
   static boolean needsQuotes(String fn)
   {
-    if(Character.isLetter(fn.charAt(0)) || fn.charAt(0) == '_') {
+    if(fn.length() == 0 || Character.isLetter(fn.charAt(0)) || fn.charAt(0) == '_') {
       for(int i=1; i<fn.length(); i++) {
 	char c = fn.charAt(i);
 	if(!Character.isLetterOrDigit(c) && c != '_' && c != '-')
