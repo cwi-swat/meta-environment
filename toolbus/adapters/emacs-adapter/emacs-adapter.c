@@ -317,6 +317,7 @@ term *handle_input_from_toolbus(term *e) {
   if(TBmatch(e, "rec-terminate(%t)", &arg)){
     /* Tell emacs to terminate */
     exec_cmd("TBrecTerminate");
+    sleep(1);
     /* And follow that example */
     exit(0);
   } else if(TBmatch(e, "rec-ack-event(%t)", &fname)){
@@ -418,7 +419,7 @@ int main(int argc, char *argv[]) {
     sprintf(string, "load-file \"%s\"", initfile);
     exec_cmd(string);
   } 
-  
+
 /* And start the main event loop */
   TBeventloop();
 
