@@ -646,7 +646,7 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
       result = ambToAmbConstructor(tree,data);
     }
     else {
-      RWsetError("Illegal ambiguity", PT_makeTreeLit(""));
+      RWsetError("Illegal ambiguity", (ATerm) PT_makeTreeLit(""));
       result = tree;
     }
   }
