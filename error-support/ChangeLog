@@ -3,7 +3,10 @@ $Id$
 Wed Mar  3 10:17:29 CET 2004 <jurgenv@cwi.nl>
  * Readded jar files to the repository in order to prevent some
    circular dependencies (with sdf-apigen, asf-library, asf, ...)
-
+ * Bumped to version 0.2
+ * Removed implicit targets for jar files to prevent use of sdf2java
+   when some timestamp is not correct by accident in a release distribution
+ 
 Fri Feb 27 16:18:19 CET 2004 <{jong,kooiker}@cwi.nl>
  * lib/... generate separate Location library from the same sources
    as the Error API.
