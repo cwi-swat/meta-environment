@@ -21,7 +21,9 @@ let
   Table: term,
   Syntax: term,
   ErrorMsg: str,
-  Id: int
+  Id: int,
+  FileName: str,
+  Error : term
 in
   Id := process-id
   .
@@ -38,7 +40,7 @@ in
       . snd-msg(get-all-syntax-definitions(ModuleName, Type))
       .
       (
-        rec-msg(syntax(Syntax?))
+        rec-msg(syntax(Syntax?)) 
         . snd-msg(preprocess-syntax-hook(ModuleName, Type, Checking, Syntax))
         . rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?))
         . snd-msg(generate-parsetable(Syntax, ModuleName))

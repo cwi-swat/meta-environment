@@ -354,7 +354,6 @@ ATerm get_module_events(int cid, ATerm type, const char *moduleId)
   char *fun = ATgetName(ATgetAFun((ATermAppl)type));
   boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
                                            ATmake("<str>", moduleId));
-  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
 
   result1 = getEvents(type);
   result2 = getEvents(boundType);
@@ -403,7 +402,6 @@ ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
   char *fun = ATgetName(ATgetAFun((ATermAppl)type));
   boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
                                            ATmake("<str>", moduleId));
-  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
 
   actions = getEventActions(boundType, event);
   if (actions == NULL) {

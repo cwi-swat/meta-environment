@@ -10,45 +10,15 @@ static ATermTable slices;
 
 static void treeToSlices(PT_Tree tree);
 
-/*{{{  static ATbool containsVisibles(PT_Tree tree)  */
-
-static ATbool containsVisibles(PT_Tree tree) 
-{
-  PT_Args args;
-
-  assert(PT_isTreeLayout(tree) && "expected layout tree");
-
-  args = PT_getTreeArgs(tree);
-
-
-  for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
-    PT_Tree head = PT_getArgsHead(args);
-    int ch;
-
-    assert(PT_isTreeChar(head) && "expected list of chars");
-    ch = PT_getTreeCharacter(head);
-
-    if (!isspace(ch)) {
-      return ATtrue;
-    }
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  static ATbool allAlphaNumeric(const char* str)  */
 
-static ATbool allAlphaNumeric(const char* str) 
+static ATbool allAlphaNumeric(PT_Args chars)
 {
-  int len = strlen(str);
-  int i;
-
-
-  for (i = 0; i < len ; i++) {
-    if (!isalnum((unsigned int) str[i])
-	&& str[i] != '-' 
-	&& str[i] != '_') {
+  for ( ; !PT_isArgsEmpty(chars) ; chars = PT_getArgsTail(chars)) {
+    int val = PT_getTreeCharacter(PT_getArgsHead(chars));
+    if (!isalnum((unsigned int) val)
+	&& val != '-' 
+	&& val != '_') {
       return ATfalse;
     }
   }
@@ -114,9 +84,9 @@ static void treeToSlices(PT_Tree tree)
   }
   else {
     if (PT_isTreeLit(tree)) {
-      const char *str = PT_getTreeString(tree);
+      PT_Args chars = PT_getTreeArgs(tree);
 
-      if (allAlphaNumeric(str)) {
+      if (allAlphaNumeric(chars)) {
 	storeTree(tree, "AlphanumericLiterals"); 
       }
       else {
@@ -129,10 +99,11 @@ static void treeToSlices(PT_Tree tree)
       storeTree(tree, "Variables");
       return;
     }
-    else if (PT_isTreeLayout(tree) && containsVisibles(tree)) {
-      storeTree(tree, "Comments");
-      return;
-    }
+    /*else if (PT_isTreeLayout(tree)) {*/
+/* TODO: too much slices here! */
+      /*storeTree(tree, "Comments"); */
+      /*return;*/
+    /*}*/
     else if (PT_isTreeLexical(tree)) {
       storeTree(tree, "Lexicals");
       return;

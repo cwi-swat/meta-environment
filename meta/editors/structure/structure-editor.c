@@ -294,6 +294,15 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
     }
 
     editor = SE_makeStructureEditorDefault(parseTree, cursor);
+
+    if (PT_isTreeLit(cursor)) {
+      editor = moveCursorUp(editor);
+    }
+    while (PT_isTreeLexical(cursor)) {
+      editor = moveCursorUp(editor);
+      cursor = SE_getStructureEditorCursor(editor);
+    }
+
     setEditor(editorId, editor);
   }
   else {

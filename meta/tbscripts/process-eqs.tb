@@ -119,10 +119,15 @@ let
   Imports: list,
   Modules: list,
   Pid: int,
-  Specification: term
+  Specification: term,
+  Id : int,
+  Count : int,
+  Done : int
 in
-  MDB-GetAllImportedModulenames(ModuleId, Modules?)
+  Id := process-id
+  . MDB-GetAllImportedModulenames(ModuleId, Modules?)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
+  . Count := size(Modules)
   . Specification := []
   .
   if and(not-equal(Modules, []), equal(Error, undefined)) then
@@ -133,13 +138,25 @@ in
       rec-msg(no-equations(CurModule))
     +
       rec-msg(equations(CurModule, Equations?))
+      /* normalization should occur BEFORE renaming 
+       * proposal: merge the renaming and normalization tools,
+       * possibly including the get-imports tool. 
+       */
+      . snd-note(ui-status(statf(Id, "Normalizing %s",[CurModule])))
+      . snd-msg(normalize-module(Equations)) 
+      . rec-msg(normalize-module-result(Equations?))
+      . snd-note(ui-status(endstat(Id)))
+      . snd-note(ui-status(statf(Id, "Renaming %s",[CurModule])))
       . snd-msg(sr-rename-module(Imports, CurModule, Equations))
       . rec-msg(sr-renamed-module(Equations?))
+      . snd-note(ui-status(endstat(Id)))
       . Specification := join(Specification, Equations)
     +
       rec-msg(error-in-equations(CurModule, Error?))
     )
     . Modules := next(Modules)
+    . Done := sub(Count, size(Modules))
+    . printf("\rDone %d/%d\n", Done, Count )
   fi
   *
   (
@@ -148,7 +165,7 @@ in
     fi
   +
     if equal(Modules, []) then
-      snd-msg(specification(Specification))
+      snd-msg(specification(Specification)) 
     fi
   )
 endlet
