@@ -2,6 +2,8 @@
 
 2003/07/01 (jurgenv@cwi.nl)
  * Set version to 1.8
+ * Link all compiled specifications against -lErrorAPI because asc-support
+   needs that
 
 2003/12/23 (jurgenv@cwi.nl)
  * added dependency on error-support
