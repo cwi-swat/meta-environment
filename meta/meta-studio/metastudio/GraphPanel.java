@@ -30,7 +30,6 @@ import metastudio.graph.NodeList;
 import metastudio.graph.Point;
 import metastudio.graph.Polygon;
 import metastudio.graph.Shape;
-import metastudio.graph.Shape_Box;
 
 public class GraphPanel
   extends JComponent
@@ -299,6 +298,7 @@ public class GraphPanel
   }
 
   //}}}
+  
   //{{{ private void paintNode(Graphics2D g, Node node)
 
   private void paintNode(Graphics2D g, Node node)
@@ -338,28 +338,17 @@ public class GraphPanel
     Shape shape = getNodeShape(node);
     
     if (shape.isBox()) {
-      g.setColor(node_bg);
-      g.fillRect(x, y, w, h);
-      g.setColor(node_border);
-      g.drawRect(x, y, w, h);
+        paintBox(g, x, y, w, h, node_bg, node_border);
     }
     else if (shape.isEllipse()) {
-        g.setColor(node_bg);
-        g.fillOval(x,y,w,h);
-        g.setColor(node_border);
-        g.drawOval(x,y,w,h);
+        paintEllipse(g, x, y, w, h, node_bg, node_border);
     }
     else if (shape.isDiamond()) {
-        g.setColor(node_bg);
-        int[] xs = new int[] {x, x + w / 2, x + w, x + w / 2};
-        int[] ys = new int[] {y + h / 2, y, y + h /2, y + h};
-        g.fillPolygon(xs,ys,4);
-        g.setColor(node_border);
-        g.drawPolygon(xs,ys,4);
+        paintDiamond(g, x, y, w, h, node_bg, node_border);
     }
     else {
         // defautl case, we draw a rectangle
-        g.drawRect(x,y,w,h);
+        paintBox(g, x, y, w, h, node_bg, node_border);
     }
 
     String name = node.getLabel();
@@ -372,6 +361,29 @@ public class GraphPanel
     //g.setColor(Color.black);
     //g.drawString("(" + x + "," + y + ")", x, y);
   }
+
+private void paintDiamond(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
+	g.setColor(node_bg);
+	int[] xs = new int[] {x, x + w / 2, x + w, x + w / 2};
+	int[] ys = new int[] {y + h / 2, y, y + h /2, y + h};
+	g.fillPolygon(xs,ys,4);
+	g.setColor(node_border);
+	g.drawPolygon(xs,ys,4);
+}
+
+private void paintEllipse(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
+	g.setColor(node_bg);
+	g.fillOval(x,y,w,h);
+	g.setColor(node_border);
+	g.drawOval(x,y,w,h);
+}
+
+private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
+	g.setColor(node_bg);
+	  g.fillRect(x, y, w, h);
+	  g.setColor(node_border);
+	  g.drawRect(x, y, w, h);
+}
 
   //}}}
   
