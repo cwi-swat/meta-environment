@@ -1,11 +1,6 @@
-/*{{{  File header */
-
 /*
   $Id$
  */
-
-
-/*}}}  */
 
 /*{{{  includes */
 
@@ -86,32 +81,51 @@ static char error_buf[BUFSIZ];
 static ATbool aborted = ATfalse;
 
 /*}}}  */
-/*{{{  declarations */
+/*{{{  static declarations */
 
-/* innermost strategy */
-static PT_Tree rewrite(PT_Tree trm);
-static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
-static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
-			  PT_Args args1, PT_Args args2, 
-                          ATerm lhs_posinfo,
-			  int depth);
-static ATerm listMatching(ATerm env, PT_Production listProd,
-                          PT_Args elems1, PT_Args elems2,
-                          ASF_ConditionList conds, 
-                          PT_Args args1, PT_Args args2,
-                          ATerm lhs_posinfo, int depth);
-static PT_Args compareSubLists(Slice tuple, PT_Args elems2);
-static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
-static PT_Args appendSlice(PT_Args list, Slice slice);
+/* Used "cproto -S -I<include-dir>" to collect all static functions */
+
 static Slice getListVariableValue(ATerm env, PT_Tree var);
-
-/* traversal strategy */
-static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
-                          Traversal *traversal);
-
-
+static ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value);
+static ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end);
+static PT_Args getSliceFirst(Slice slice);
+static PT_Args getSliceLast(Slice slice);
+static ATbool isBoundVariable(ATerm env, PT_Tree var);
+static PT_Args prepend(PT_Args first, PT_Args last, PT_Args list);
+static PT_Args prependSlice(Slice slice, PT_Args list);
+static PT_Args appendSlice(PT_Args list, Slice slice);
+static PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems);
+static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem);
+static ATbool no_new_vars(PT_Tree trm, ATerm env);
+static ATerm argMatching(ATerm env, PT_Tree arg1, PT_Tree arg2, ASF_ConditionList conds, PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth);
+static ATerm argsMatching(ATerm env, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATbool compareLists(Slice tuple, PT_Args list);
+static PT_Args compareSubLists(Slice slice, PT_Args elems2);
+static ATerm subListMatching(ATerm env, PT_Tree elem, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm lastListElementMatching(ATerm env, PT_Tree elem1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATbool isListSeparator(PT_Tree elem, PT_Production listProd);
+static ATerm nextListElementMatching(ATerm env, PT_Tree elem1, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
+static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
+static ATermList apply_rule(PT_Tree trm, int depth);
+static PT_Tree selectAndRewrite(PT_Tree trm, int depth);
+static PT_Tree rewrite(PT_Tree trm);
+static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
+static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
+static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, Traversal *traversal);
+static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Args rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, void *extra);
+static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth, void *extra);
+static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra);
+static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, void *extra);
+static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth, void *extra);
 /*}}}  */
 
+/* ToolBus interfacing */
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
 void rec_terminate(int cid, ATerm t)
@@ -120,6 +134,49 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
+/*{{{  void debugging(int conn, ATerm on) */
+
+/*
+ * Switch debugging on/off
+ */
+
+void debugging(ATerm on)
+{
+  if (ATmatch(on, "on")) {
+#ifdef USE_TIDE
+    Tide_connect();
+#else
+    ATwarning("*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
+	      "(you might want to try to configure the asf module --with-tide)\n");
+#endif
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
+
+ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
+{
+  PT_ParseTree parseTree;
+  ASF_CondEquationList eqsList;
+  ATerm result;
+
+  eqsList = ASF_makeCondEquationListFromTerm(eqs);
+  parseTree = PT_makeParseTreeFromTerm(trm);
+
+  result = evaluator(modname, parseTree, eqsList, tide);
+
+  if (RWgetError() == NULL) {
+    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+  }
+  else {
+    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+  }
+}
+
+/*}}}  */
+
+/* Error registration */
 /*{{{  void RWclearError() */
 
 void RWclearError()
@@ -159,25 +216,50 @@ ATerm RWgetError()
 
 /*}}}  */
 
-/*{{{  void debugging(int conn, ATerm on) */
+/* Top level entry point*/
+/*{{{  ATerm evaluator(char *name, ATerm term) */
 
-/*
- * Switch debugging on/off
- */
-
-void debugging(ATerm on)
+ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
+                ATerm debug)
 {
-  if (ATmatch(on, "on")) {
-#ifdef USE_TIDE
-    Tide_connect();
-#else
-    ATwarning("*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
-	      "(you might want to try to configure the asf module --with-tide)\n");
-#endif
+  PT_Tree result;
+  PT_Tree tree;
+
+  ATsetChecking(ATtrue);
+  eqs = RWprepareEquations(eqs);
+  enter_equations(name, eqs);
+  select_equations(name);
+
+  debugging(debug);
+
+  tree = PT_getParseTreeTree(parseTree);
+  tree = RWprepareTerm(tree);
+
+  rewrite_steps = 0;
+  RWclearError();
+  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("");
+  memo_table = MemoTableCreate();
+  aborted = ATfalse;
+
+  select_equations(name);
+
+  if (runVerbose) {
+    ATwarning("rewriting...\n");
   }
+
+  result = rewrite(tree);
+
+  result = RWrestoreTerm(result);
+  parseTree = PT_setParseTreeTree(parseTree, result);
+
+  MemoTableDestroy(memo_table);
+
+  return PT_makeTermFromParseTree(parseTree);
 }
 
 /*}}}  */
+
+/* (List)variable functions and slicing functions */
 /*{{{  static PT_Tree getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol) */
 
 /*
@@ -287,15 +369,6 @@ static PT_Args getSliceLast(Slice slice)
 }
 
 /*}}}  */
-/*{{{  static ATbool isSliceEmpty(Slice slice) */
-
-static ATbool isSliceEmpty(Slice slice)
-{
-  return PT_isEqualArgs(skipWhitespace(getSliceFirst(slice)), 
-                        getSliceLast(slice));
-}
-
-/*}}}  */
 /*{{{  static ATbool isBoundVariable(ATerm env, PT_Tree var) */
 
 /*
@@ -368,70 +441,69 @@ static PT_Args appendSlice(PT_Args list, Slice slice)
 }
 
 /*}}}  */
+/*{{{  static PT_Args concatElems(listProd, PT_Args elems, PT_Args newElems) */
+
+/* The list of elements is rewritten and a new elementlist
+   is constructed. */
 
 
-/*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
-
-ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
+static PT_Args 
+concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
 {
-  PT_ParseTree parseTree;
-  ASF_CondEquationList eqsList;
-  ATerm result;
+  PT_Args newList;
 
-  eqsList = ASF_makeCondEquationListFromTerm(eqs);
-  parseTree = PT_makeParseTreeFromTerm(trm);
-
-  result = evaluator(modname, parseTree, eqsList, tide);
-
-  if (RWgetError() == NULL) {
-    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+  if (PT_isArgsEmpty(elems)) {
+    newList = newElems;
   }
   else {
-    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+    if (!PT_isArgsEmpty(newElems)) {
+      newList = PT_concatArgs(elems, newElems);
+    }
+    else {
+      if (PT_isIterSepSymbol(PT_getProductionRhs(listProd))) {
+        int length = PT_getArgsLength(elems);
+        if (length > 3) {
+          newList = PT_sliceArgs(elems, 0, length-3);
+        }
+        else {
+          newList = PT_makeArgsEmpty();
+        }
+      }
+      else {
+        int length = PT_getArgsLength(elems);
+        if (length > 0) {
+          newList = PT_sliceArgs(elems, 0, length-1);
+        }
+        else {
+          newList = PT_makeArgsEmpty();
+        }
+      }
+    }
   }
+
+  pedantic_assert(isValidList(newList));
+  return newList;
 }
 
 /*}}}  */
-/*{{{  ATerm evaluator(char *name, ATerm term) */
+/*{{{  static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) */
 
-ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
-                ATerm debug)
+static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
 {
-  PT_Tree result;
-  PT_Tree tree;
-
-  eqs = RWprepareEquations(eqs);
-  enter_equations(name, eqs);
-  select_equations(name);
-
-  debugging(debug);
-
-  tree = PT_getParseTreeTree(parseTree);
-  tree = RWprepareTerm(tree);
-
-  rewrite_steps = 0;
-  RWclearError();
-  tagCurrentRule = NULL;
-  memo_table = MemoTableCreate();
-  aborted = ATfalse;
-
-  select_equations(name);
-
-  if (runVerbose) {
-    ATwarning("rewriting...\n");
+  if (PT_isArgsEmpty(elems)) {
+    if (PT_isTreeLayout(elem)) {
+      return elems;
+    }
+    else if (isListSeparator(elem, listProd)) {
+      return elems; 
+    }
   }
-
-  result = rewrite(tree);
-
-  result = RWrestoreTerm(result);
-  parseTree = PT_setParseTreeTree(parseTree, result);
-
-  MemoTableDestroy(memo_table);
-
-  return PT_makeTermFromParseTree(parseTree);
+  return PT_appendArgs(elems, elem);
 }
 
 /*}}}  */
+
+/* Other utilities */
 /*{{{  static ATbool no_new_vars(PT_Tree trm, ATerm env) */
 /* A predicate which checks whether a term introduces new
    variables. This functions is used when dealing with the
@@ -466,6 +538,7 @@ static ATbool no_new_vars(PT_Tree trm, ATerm env)
 
 /*}}}  */
 
+/* Matching functionality (and condition checking) */
 /*{{{  static ATerm argMatching(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
 
 /* Function which tries to match two arguments.
@@ -587,7 +660,6 @@ argMatching(ATerm env,
 
 
 /*}}}  */
-
 /*{{{  static ATerm argsMatching(env, conds, args1, args2, lhs_posinfo, depth) */
 
 /* Two arguments lists are matched. As long as there are arguments
@@ -725,7 +797,6 @@ static PT_Args compareSubLists(Slice slice, PT_Args elems2)
 }
 
 /*}}}  */
-
 /*{{{  static ATerm subListMatching(env, el, listProd, e1, e2, cnds, a1, a2, pos, d) */
 
 
@@ -1092,7 +1163,6 @@ listMatching(ATerm env, PT_Production listProd,
 
 
 /*}}}  */
-
 /*{{{  static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth) */
 
 /* Function ``condSatisfied'' check whether the conditions
@@ -1206,6 +1276,8 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 }
 
 /*}}}  */
+
+/* Reduction functionality */
 /*{{{  static ATermList apply_rule(PT_Tree trm, int depth) */
 
 /* The function ``apply_rule'' tries to rewrite a term
@@ -1330,7 +1402,6 @@ static ATermList apply_rule(PT_Tree trm, int depth)
 }
 
 /*}}}  */
-
 /*{{{  static PT_Tree selectAndRewrite(PT_Tree trm, int depth) */
 
 /* The function ``select_and_rewrite'' selects the
@@ -1346,9 +1417,12 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
 
   complexenv = apply_rule(trm, depth);
   env = get_env(complexenv);
+
   if (!is_fail_env(env)) {
     newtrm = get_term(complexenv);
-    trm = rewriteInnermost(newtrm, env, depth + 1, NO_TRAVERSAL);
+
+    /* construct the right hand side */
+    trm = rewriteRecursive(newtrm, env, depth + 1, NULL);
   }
 
   return trm;
@@ -1356,28 +1430,202 @@ static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
 
 /*}}}  */
 
-/*{{{  static PT_Args rewriteArgs(args, ATerm env, int depth, Traversal *traversal) */
+/* Rewriting strategies  */
+/*{{{  static PT_Tree rewrite(PT_Tree trm) */
 
-/* The list of arguments is rewritten and a new argumentlist
-   is constructed. */
-
-static PT_Args rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traversal)
+static PT_Tree rewrite(PT_Tree trm)
 {
+  return rewriteRecursive(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra) */
+
+static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
+{
+  PT_Tree reduct;
+  equation_entry *entry = currentRule;
+
+  if (aborted) {
+    reduct = trm;
+  }
+
+  if (depth > MAX_DEPTH) {
+    sprintf(error_buf, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
+    RWsetError(error_buf, (ATerm) ATempty);
+    reduct = trm;
+  }
+
+  /* select the appriopriate rewriting strategy */
+  if (extra != NULL) {
+    reduct = rewriteTraversal(trm, env, depth, extra);
+  }
+  else {
+    reduct = rewriteInnermost(trm, env, depth, NO_TRAVERSAL);
+  }
+
+  currentRule = entry;
+
+  assert(reduct);
+
+  return reduct;
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra) */
+
+static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
+{
+  PT_Tree reduct = trm;
+
+  if (PT_isTreeVar(trm)) {
+    reduct = rewriteVariableAppl(trm, env, depth, extra);
+  }
+  else if (PT_hasTreeArgs(trm)) {
+    /* first the kids */    
+    trm = rewriteArgs(trm, env, depth, extra);
+
+    /* Then the parent */
+    reduct = rewriteTop(trm, env, depth, extra);
+  }
+
+  assert(reduct);
+  return reduct;
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, */
+
+static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
+				Traversal* traversal)
+{
+  PT_Tree reduct = trm;
+
+  if (PT_isTreeVar(trm)) {
+    reduct = rewriteVariableAppl(trm, env, depth, traversal);
+  }
+  else if (traversal->strategy == TOPDOWN) {
+    reduct = rewriteTraversalTopDown(trm,env,depth,traversal);
+  }
+  else if (traversal->strategy == BOTTOMUP) {
+    reduct = rewriteTraversalBottomUp(trm,env,depth,traversal);
+  }
+  else {
+    ATerror("rewriteTraversal: unknown traversal type");
+  }
+
+  assert(reduct);
+  return reduct;
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth, */
+
+static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
+					Traversal* traversal)
+{
+  PT_Tree reduct = trm;
+
+  if (PT_hasTreeArgs(trm)) {
+    PT_Tree travtrm;
+    trm = rewriteArgs(trm, env, depth, traversal);
+
+    travtrm = makeTraversalAppl(trm, *traversal);
+
+    reduct = rewriteTop(travtrm, env, depth, traversal);
+
+    if (PT_isEqualTree(reduct, travtrm)) {
+      reduct = trm;
+    }
+    else {
+      reduct = makeTraversalReduct(trm, reduct, traversal);
+    }
+  }
+
+  assert(reduct);
+  return reduct;
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,  */
+
+static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, 
+				       Traversal* traversal)
+{
+  PT_Tree reduct = trm;
+
+  if (PT_hasTreeArgs(trm)) {
+    PT_Tree travtrm = makeTraversalAppl(trm, *traversal);
+
+    reduct = rewriteTop(travtrm, env, depth, traversal);
+
+    if (PT_isEqualTree(reduct, travtrm)) {
+      trm = rewriteArgs(trm, env, depth, traversal);
+      reduct = rewriteTop(trm, env, depth, traversal);
+    }
+    else { 
+      reduct = makeTraversalReduct(trm, reduct, traversal);
+    }
+  }
+
+  assert(reduct);
+  return reduct;
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra) */
+
+static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
+{
+  PT_Tree reduct = trm;
+
+  /* The order of this if-then-else is important because the conditions
+   * are not mutually exclusive.
+   */
+ 
+  /* the function called below should not do any recursion in the current
+   * strategy, because this function only rewrites the top.
+   */ 
+  if (PT_isTreeApplList(trm)) {
+    reduct = rewriteListAppl(trm, env, depth, extra);
+  }
+  else if (PT_isTreeBracket(trm)) {
+    reduct = rewriteBracketAppl(trm, env, depth, extra);
+  }
+  else if (extra == NULL && isTreeTraversal(trm)) { 
+    /* only do this if we are not in a traversal already */
+    reduct = rewriteTraversalAppl(trm, env, depth, extra);
+  }
+  else if (PT_isTreeAppl(trm)) {
+    reduct = rewriteNormalAppl(trm, env, depth, extra);
+  }
+
+  assert(reduct);
+  return reduct;
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra) */
+
+static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
+{
+  PT_Args args;
   PT_Tree arg, newarg;
   PT_Args newargs = PT_makeArgsEmpty();
-  int len = PT_getArgsLength(args);
+  int len;
 
+  assert(PT_hasTreeArgs(trm));
+
+  args = PT_getTreeArgs(trm);
+  len = PT_getArgsLength(args);
+ 
   if (len > 32) {
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) ||
-	  PT_isTreeVar(arg) ||
-          PT_isTreeLexical(arg)) {
-	newarg = rewriteInnermost(arg, env, depth + 1, traversal);
-      }
-      else {
-	newarg = arg;
-      }
+      newarg = rewriteRecursive(arg, env, depth + 1, extra);
       newargs = PT_appendArgs(newargs, newarg);
       args = PT_getArgsTail(args);
     }
@@ -1387,14 +1635,7 @@ static PT_Args rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traver
     int i = 0;
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      if (PT_isTreeAppl(arg) ||
-	  PT_isTreeVar(arg) || 
-          PT_isTreeLexical(arg)) {
-	newarg_table[i] = rewriteInnermost(arg, env, depth + 1, traversal);
-      }
-      else {
-	newarg_table[i] = arg;
-      }
+      newarg_table[i] = rewriteRecursive(arg, env, depth + 1, extra);
       args = PT_getArgsTail(args);
       ++i;
     }
@@ -1403,67 +1644,8 @@ static PT_Args rewriteArgs(PT_Args args, ATerm env, int depth, Traversal *traver
       newargs = PT_makeArgsList(newarg_table[i], newargs);
     }
   }
-  return newargs;
-}
 
-/*}}}  */
-/*{{{  static PT_Args concatElems(listProd, PT_Args elems, PT_Args newElems) */
-
-/* The list of elements is rewritten and a new elementlist
-   is constructed. */
-
-
-static PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
-{
-  PT_Args newList;
-
-  if (PT_isArgsEmpty(elems)) {
-    newList = newElems;
-  }
-  else {
-    if (!PT_isArgsEmpty(newElems)) {
-      newList = PT_concatArgs(elems, newElems);
-    }
-    else {
-      if (PT_isIterSepSymbol(PT_getProductionRhs(listProd))) {
-        int length = PT_getArgsLength(elems);
-        if (length > 3) {
-          newList = PT_sliceArgs(elems, 0, length-3);
-        }
-        else {
-          newList = PT_makeArgsEmpty();
-        }
-      }
-      else {
-        int length = PT_getArgsLength(elems);
-        if (length > 0) {
-          newList = PT_sliceArgs(elems, 0, length-1);
-        }
-        else {
-          newList = PT_makeArgsEmpty();
-        }
-      }
-    }
-  }
-  pedantic_assert(isValidList(newList));
-  return newList;
-}
-
-/*}}}  */
-
-/*{{{  static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) */
-
-static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
-{
-  if (PT_isArgsEmpty(elems)) {
-    if (PT_isTreeLayout(elem)) {
-      return elems;
-    }
-    else if (isListSeparator(elem, listProd)) {
-      return elems; 
-    }
-  }
-  return PT_appendArgs(elems, elem);
+  return PT_setTreeArgs(trm, newargs);
 }
 
 /*}}}  */
@@ -1471,275 +1653,148 @@ static PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
 
 static PT_Args
 rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, 
-             Traversal *traversal)
+             void *extra)
 {
-  PT_Tree elem, newelem;
+  PT_Tree elem;
   PT_Args newelems = PT_makeArgsEmpty();
 
   pedantic_assert(isValidList(elems));
 
   while (PT_hasArgsHead(elems)) {
     elem = PT_getArgsHead(elems);
-    if (PT_isTreeVarList(elem)) {
-      Slice tuple;
-      tuple = getListVariableValue(env, elem);
-      if (tuple == NULL) {
-        RWsetError("Uninitialized list variable", (ATerm) elem);
-	return newelems;
-      }
-      
-      if (isSliceEmpty(tuple)) {
-	newelems = concatElems(listProd, newelems, PT_makeArgsEmpty());
-      }
-      else {
-        newelems = appendSlice(newelems, tuple);
-        pedantic_assert(isValidList(newelems));
-      }
+
+    if (PT_isTreeApplList(elem)) {
+      PT_Args elemArgs = PT_getTreeArgs(elem);
+      newelems = concatElems(listProd, newelems, elemArgs);
+
+      pedantic_assert(isValidList(newelems));
     }
     else {
-      newelem = rewriteInnermost(elem, env, depth + 1, traversal);
-      if (PT_isTreeApplList(newelem)) {
-        PT_Args elemArgs = PT_getTreeArgs(newelem);
-	newelems = concatElems(listProd, newelems, elemArgs);
-        pedantic_assert(isValidList(newelems));
-      }
-      else {
-	newelems = appendElem(listProd, newelems, newelem);
-      }
+      newelems = appendElem(listProd, newelems, elem);
     }
+    
     elems = PT_getArgsTail(elems);
   }
+
   newelems = skipWhitespace(newelems);
   pedantic_assert(isValidList(newelems));
+
   return newelems;
 }
 
 
 /*}}}  */
-/*{{{  static PT_Tree rewrite(PT_Tree trm) */
 
-static PT_Tree rewrite(PT_Tree trm)
+/*{{{  static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra)  */
+
+static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) 
 {
-  return rewriteInnermost(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
+  PT_Production prod = PT_getTreeProd(var);
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Tree value = getVariableValue(env, var, rhs);
+
+  if (!value) {
+    RWsetError("Uninitialized variable.",(ATerm) var);
+    return var;
+  }
+
+  return value;
 }
 
 /*}}}  */
-/*{{{  static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, traversal) */
+/*{{{  static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra) */
 
-/* The core function. It is checked whether the term
-   is an application, a variable, or a list. And the
-   appropriate actions are performed.
-   For non-constant functions the arguments should first
-   be rewritten, conform the innermost reduction strategy.
-   The resulting term can then be rewritten.
-   REMARK: comments should be improved.
-*/
-
-static PT_Tree
-rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
+static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra)
 {
-  PT_Tree newtrm, rewtrm;
-  PT_Args args, newargs;
-  equation_entry *entry = currentRule;
+  PT_Args elems;
+  PT_Args newelems;
+  PT_Production prod = PT_getTreeProd(list);
+  
+  elems = PT_getTreeArgs(list);
+  newelems = rewriteElems(prod, elems, env, depth, extra);
 
-  /* fix me, control flow guidance by using arguments ;-( */
-  if (traversal != NO_TRAVERSAL) {
-    return rewriteTraversal(trm,env,depth,traversal);
+  if (!newelems) {
+    return list;
   }
 
-  if (aborted) {
-    return trm;
-  }
-
-  if (depth > MAX_DEPTH) {
-    sprintf(error_buf, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    RWsetError(error_buf, (ATerm) ATempty);
-    return trm;
-  }
-
-  if (PT_isTreeApplList(trm)) {
-    PT_Args elems;
-    PT_Args newelems;
-    PT_Production listProd = PT_getTreeProd(trm);
-    elems = PT_getTreeArgs(trm);
-
-    newelems = rewriteElems(listProd, elems, env, depth, NO_TRAVERSAL);
-    if (newelems) {
-      pedantic_assert(isValidList(newelems));
-      rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
-    }
-    else {
-      rewtrm = trm;
-    }
-  }
-  else if (PT_isTreeAppl(trm)) {
-    PT_Production prod = PT_getTreeProd(trm);
-    if (PT_isVarDefault(prod)) {
-      PT_Symbol rhs = PT_getProductionRhs(prod);
-      rewtrm = getVariableValue(env, trm, rhs);
-
-      if (!rewtrm) {
-        RWsetError("Uninitialized variable in right-hand-side",(ATerm) trm);
-	rewtrm = trm;
-      }
-    }
-    else {
-      args = PT_getTreeArgs(trm);
-      newargs = rewriteArgs(args, env, depth, NO_TRAVERSAL);
-      if (PT_hasProductionBracketAttr(prod)) {
-	newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
-	rewtrm = newtrm;
-      }
-      else if (traversals_on && 
-	       PT_hasProductionTraverseAttr(PT_getTreeProd(trm))) {
-	Traversal traversal;
-
-	if (runVerbose) {
-	  ATwarning("Traversal...\n");
-	}
-
-	/* traversal and memo function */
-	if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {
-	  newtrm = PT_setTreeArgs(trm, newargs);
-	  assert(memo_table != NULL);
-	  rewtrm = MemoTableLookup(memo_table, newtrm);
-
-	  if (!rewtrm) {
-	    traversal = createTraversalPattern(newtrm);
-	    newtrm = selectTraversedArg(newargs);
-	    rewtrm =
-	      rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
-	    rewtrm = chooseNormalform(rewtrm, traversal);
-	    memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
-	  }
-	}
-	else { /* traversal, not memo function */
-	  newtrm = PT_setTreeArgs(trm, newargs);
-
-	  traversal = createTraversalPattern(newtrm);
-
-	  newtrm = selectTraversedArg(newargs);
-	  rewtrm =
-	    rewriteTraversal(newtrm, (ATerm) ATempty, depth, &traversal);
-	  rewtrm = chooseNormalform(rewtrm, traversal);
-	}
-      }
-      /* memo, not traversal function */
-      else if (PT_hasProductionMemoAttr(PT_getTreeProd(trm))) {	
-	newtrm = PT_setTreeArgs(trm, newargs);
-	assert(memo_table != NULL);
-	rewtrm = MemoTableLookup(memo_table, newtrm);
-
-	if (!rewtrm) {
-	  rewtrm = selectAndRewrite(newtrm, depth);
-	  memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
-	}
-      }
-      else {			/* all other function types */
-	newtrm = PT_setTreeArgs(trm, newargs);
-
-	rewtrm = selectAndRewrite(newtrm, depth);
-      }
-    }
-  }
-  else {
-    rewtrm = trm;
-  }
-
-  currentRule = entry;
-
-  return rewtrm;
+  pedantic_assert(isValidList(newelems));
+  return selectAndRewrite(PT_setTreeArgs(list, newelems), depth);
 }
 
 /*}}}  */
+/*{{{  static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,  */
 
-/*{{{  PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, traversal) */
-
-/* now follows the traversal strategy, copy pasted from the innermost
- * strategy. fix me fix me fix me
- */
-
-PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
+static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, 
+				 void *extra)
 {
-  PT_Tree newtrm, rewtrm, travtrm;
-  PT_Args args, newargs;
+  PT_Production prod = PT_getTreeProd(appl);
+  PT_Tree reduct;
+  ATbool isMemoFunction = ATfalse;
 
-  if (aborted) {
-    return trm;
-  }
-
-  if (depth > MAX_DEPTH) {
-    sprintf(error_buf, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    RWsetError(error_buf, (ATerm) ATempty);
-    return trm;
-  }
-
-
-  if (PT_isTreeApplList(trm)) {
-    PT_Args elems = PT_getTreeArgs(trm);
-    PT_Args newelems;
-    PT_Production listProd = PT_getTreeProd(trm);
-
-    newelems = rewriteElems(listProd, elems, env, depth, traversal);
-
-    if (newelems) {
-      pedantic_assert(isValidList(newelems));
-      rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
-    }
-    else {
-      rewtrm = trm;
+  /* retrieve possible memoized reduct */
+  if (PT_hasProductionMemoAttr(prod)) {
+    PT_Tree memo = MemoTableLookup(memo_table, appl);
+    isMemoFunction = ATtrue;
+ 
+    if (memo != NULL) {
+      return memo;
     }
   }
-  else if (PT_isTreeAppl(trm)) { 
-    PT_Production prod = PT_getTreeProd(trm);
 
-    if (PT_isVarDefault(prod)) {
-      PT_Symbol rhs = PT_getProductionRhs(prod);
-      rewtrm = getVariableValue(env, trm, rhs);
+  reduct = selectAndRewrite(appl, depth);
 
-      if (!rewtrm) {
-        RWsetError("Uninitialized variable in right-hand-side",(ATerm) trm);
-        rewtrm = trm;
-      }
-    }
-    else if (PT_hasProductionBracketAttr(prod)) {
-      args = PT_getTreeArgs(trm);
-      newargs = rewriteArgs(args, env, depth, traversal);
-      newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
-      rewtrm = newtrm;
-    }
-    else {
-      /* check for a match */
-      travtrm = makeTraversalAppl(trm, *traversal);
-      rewtrm = selectAndRewrite(travtrm, depth);
-
-      if (PT_isEqualTree(rewtrm, travtrm)) {
-        /* if no match, traverse down to the children */
-        args = PT_getTreeArgs(trm);
-        newargs = rewriteArgs(args, env, depth, traversal);
-        /* on the way back, we check for new redices */
-        rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newargs), depth);
-
-      }
-      else { /* reduction occurred, we need postprocessing */
-        if (traversal->type == ACCUMULATOR) {
-          *traversal = updateAccumulator(*traversal, rewtrm);
-          rewtrm = trm;
-        }
-        else if (traversal->type == COMBINATION) {
-          *traversal = updateAccumulator(*traversal, getTupleSecond(rewtrm));
-          rewtrm = getTupleFirst(rewtrm); 
-        }
-      }
-    }
-  }
-  else {
-    rewtrm = trm;
+  if (isMemoFunction) {
+    memo_table = MemoTableAdd(memo_table, appl, reduct);
   }
 
-  return rewtrm;
+  return reduct;
 }
 
 /*}}}  */
+/*{{{  static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,  */
 
+static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, 
+				    void *extra)
+{
+  PT_Tree reduct;
+  Traversal traversal;
 
+  assert(extra == NULL && "Nested traversal should have been reduced.");
+
+  if (!traversals_on) {
+    RWsetError("Traversal functions are not enabled", (ATerm) ATempty);
+    return trm;
+  }
+
+  traversal = createTraversalPattern(trm);
+
+  if (traversal.type == UNDEFINED_TYPE) {
+    return trm;
+  }
+
+  if (runVerbose) {
+    ATwarning("Traversing...\n");
+  }
+
+  trm = selectTraversedArg(PT_getTreeArgs(trm));
+
+  reduct = rewriteTraversal(trm, env, depth, &traversal);
+  reduct = chooseNormalform(reduct, traversal);
+
+  assert(reduct);
+  return reduct; 
+}
+
+/*}}}  */
+/*{{{  static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth,  */
+
+static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth, 
+				  void* extra)
+{
+  PT_Args args = PT_getTreeArgs(trm);
+
+  /* just remove the brackets */
+  return PT_getArgsHead(skipWhitespace(PT_getArgsTail(args)));
+}
+
+/*}}}  */

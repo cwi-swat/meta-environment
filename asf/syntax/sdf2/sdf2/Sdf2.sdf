@@ -45,9 +45,6 @@ exports
     "bracket"           -> UQLiteral {reject}
     "sorts"             -> UQLiteral {reject}
     "restrictions"      -> UQLiteral {reject}
-    "constructor"       -> UQLiteral {reject}
-    "memo"              -> UQLiteral {reject}
-    "traverse"          -> UQLiteral {reject}
 
     "aliases"           -> ModuleName {reject}
     "lexical"           -> ModuleName {reject}
@@ -69,9 +66,6 @@ exports
     "bracket"           -> ModuleName {reject}
     "sorts"             -> ModuleName {reject}
     "restrictions"      -> ModuleName {reject}
-    "constructor"       -> ModuleName {reject}
-    "memo"              -> ModuleName {reject}
-    "traverse"          -> ModuleName {reject}
 
     Literal "(" {Symbol ","}* ")" -> Symbols {reject}
   restrictions

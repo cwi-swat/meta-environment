@@ -1,3 +1,30 @@
+2001/10/01 (jurgenv@cwi.nl)
+ * Refactored the rewriting code in the ASF interpreter. Divided the
+   innermost rewriting function into smaller subfunctions.
+ * Refactored the code for the traversal functions in the ASF interpreter.
+   The interpreter now supports the following traversal attributes:
+     - traversal(trafo,bottom-up), 
+     - traversal(accu,bottom-up), 
+     - traversal(trafo,accu,bottom-up), 
+     - traversal(trafo,top-down), 
+     - traversal(accu,top-down), 
+     - traversal(trafo,accu,top-down) 
+ * For backward compatibility the "traverse" attribute is still supported.
+
+2001/09/27 (jurgenv@cwi.nl)
+ * Made some important changes in the Sdf grammar:
+     - added:   ATerm                      -> Attribute 
+     - removed: "cons" "(" term:ATerm ")"  -> Attribute 
+                "constructor"              -> Attribute 
+                "memo"                     -> Attribute 
+                "traverse"                 -> Attribute 
+     - refactored the ATerm grammar a bit
+ * NOTE: These changes affect any specification that imports the SDF 
+         grammar.
+ * Adapted compiler frontend to cope with new AsFix attribute format.
+ * Changed regression tests terms of asfc and asfe to new AsFix attribute
+   format.
+
 2001/08/30 (markvdb@cwi.nl)
  * Improved the efficiency of the Integer addition in the compiler spec.
 

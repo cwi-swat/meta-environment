@@ -249,21 +249,24 @@ static MA_Term attrToTerm(PT_Attr attr)
   MA_Term arg;
   MA_Term result = NULL;
 
-  if (PT_isAttrCons(attr)) {
-    str = PT_getAttrString(attr);
-    arg = MA_makeTermConstant(stringToFunId(str));
-    result =  MA_makeTermFunc(stringToFunId("cons"),em,em, 
-                           MA_makeTermArgsSingle(arg), em);
-  }
-  else if (PT_isAttrId(attr)) {
-    str = PT_getAttrString(attr);
+  if (PT_isAttrId(attr)) {
+    str = PT_getAttrModuleName(attr);
     arg = MA_makeTermConstant(stringToFunId(str));
     result =  MA_makeTermFunc(stringToFunId("id"),em,em, 
 			   MA_makeTermArgsSingle(arg), em);
   }
-  else if (PT_isAttrAterm(attr)) {
+  else if (PT_isAttrTerm(attr)) {
     ATerm term = (ATerm) PT_getAttrTerm(attr);
+    
     result =  atermToTerm(term);
+  }
+  else if (PT_isAttrAssoc(attr)) {
+    ATerm term = (ATerm) PT_getAttrAssoc(attr);
+    result = atermToTerm(term);
+  }
+  else {
+    ATerm term = PT_AttrToTerm(attr);
+    result = atermToTerm(term);
   }
 
   return result;

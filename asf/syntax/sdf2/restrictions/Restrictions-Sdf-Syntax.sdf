@@ -38,6 +38,7 @@ exports
     "reject"                     -> Attribute
     "prefer"                     -> Attribute
     "avoid"                      -> Attribute
+
   context-free priorities
     CharClass "." Lookaheads     -> Lookahead
   >  Lookaheads "|" Lookaheads   -> Lookaheads    

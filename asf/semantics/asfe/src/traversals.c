@@ -9,6 +9,7 @@
 #include "asfe.h"
 #include "traversals.h"
 
+#include <MEPT-utils.h>
 /*}}}  */
 
 /*{{{  structures */
@@ -111,6 +112,265 @@ PT_Tree selectTree(PT_Args args, int pos)
 
 /*}}}  */
 
+/*{{{  static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) */
+
+static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
+{
+  ATbool* bool;
+
+  bool = (ATbool*) data;
+
+  if (PT_isAttrAttr(attr)) {
+    ATerm term = PT_getAttrAttr(attr);
+
+    if (ATgetType(term) == AT_APPL) {
+      char *fun = ATgetName(ATgetSymbol(term));
+
+      if (!strcmp(fun,"traverse") ||
+	  !strcmp(fun,"traversal")) {
+	*bool = ATtrue;
+      }
+    }
+  }
+
+  return attr;
+}
+
+/*}}}  */
+/*{{{  static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data) */
+
+static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
+{
+  ATbool bool = ATfalse;
+  PT_Attr* thisattr;
+
+  thisattr = (PT_Attr*) data;
+
+  isAttrTraversal(attr, (PT_AttrVisitorData)  &bool);
+
+  if (bool) {
+    *thisattr = attr;
+  }
+
+  return attr;
+}
+
+/*}}}  */
+
+/*{{{  ATbool isTreeTraversal(PT_Tree trm) */
+
+ATbool isTreeTraversal(PT_Tree trm)
+{
+  if (PT_hasTreeProd(trm)) {
+    PT_Production prod = PT_getTreeProd(trm);
+    
+    if (PT_hasProductionAttributes(prod)) {
+      PT_Attributes attributes = PT_getProductionAttributes(prod);
+
+      if (PT_hasAttributesAttrs(attributes)) {
+	PT_Attrs attrs = PT_getAttributesAttrs(attributes);
+        ATbool data = ATfalse;
+
+	PT_foreachAttrInAttrs(attrs, isAttrTraversal, 
+			      (PT_AttrVisitorData*) &data);
+
+        return data;
+      }
+    } 
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  static Traversal computeTraversalType(Traversal trav) */
+
+static Traversal computeTraversalType(Traversal trav)
+{
+  PT_Symbol symbol;
+  PT_Symbol cleanSymbol;
+
+  symbol = PT_getProductionRhs(trav.prod);
+  cleanSymbol = PT_getSymbolSymbol(symbol);
+
+  if (PT_isEqualSymbol(trav.traversed, symbol)) {
+    trav.type = TRANSFORMER;
+  } 
+  else if(trav.accumulated != NULL) {
+    if(PT_isEqualSymbol(trav.accumulated, cleanSymbol)) {
+      trav.type = ACCUMULATOR;
+    }
+    else if(trav.accumulated != NULL && PT_isSymbolPair(cleanSymbol)) {
+      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
+      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
+      
+      if (PT_isEqualSymbol(PT_getSymbolSymbol(trav.traversed),lhs) &&
+	  PT_isEqualSymbol(trav.accumulated,rhs)) {
+	trav.type = COMBINATION;
+      }
+    }
+    
+  }
+
+  /* Warn about deprecated use of old traversal attribute */
+  ATwarning("WARNING: using deprecated traversal syntax \"traverse\" "
+            "in production:\n%s\n", PT_yieldProduction(trav.prod));
+
+  switch(trav.type) {
+    case TRANSFORMER:
+      ATwarning("Please use \"traversal(trafo, top-down)\"\n");
+      break;
+    case ACCUMULATOR:
+      ATwarning("Please use \"traversal(accu, top-down)\"\n");
+      break;
+    case COMBINATION:
+       ATwarning("Please use \"traversal(accu,trafo,top-down)\"\n");
+       break;
+    case UNDEFINED_TYPE:
+    default:
+      RWsetError("Illegal traversal syntax in production.", 
+  	         (ATerm) PT_makeTreeLit("")); 
+       break;
+  }
+
+  return trav;
+}
+
+/*}}}  */
+
+/*{{{  static ATbool checkTraversalType(Traversal trav) */
+
+static ATbool checkTraversalType(Traversal trav)
+{
+  PT_Symbol symbol = PT_getProductionRhs(trav.prod);
+  PT_Symbol cleanSymbol = PT_getSymbolSymbol(symbol);
+
+  if (trav.type == TRANSFORMER) {
+    if (!PT_isEqualSymbol(trav.traversed, symbol)) {
+      RWsetError("First argument sort should be equal to result sort", 
+		 (ATerm) PT_makeTreeLit(""));
+      return ATfalse;
+    }
+  }
+  else if (trav.type == ACCUMULATOR) {
+    if (!PT_isEqualSymbol(trav.accumulated, cleanSymbol)) {
+      RWsetError("Second argument sort should be equal to result sort", 
+		 (ATerm) PT_makeTreeLit(""));
+      return ATfalse;
+    }
+  }
+  else if (trav.type == COMBINATION) {
+    if (!PT_isSymbolPair(cleanSymbol)) {
+      RWsetError("Result sort should be a tuple", (ATerm) PT_makeTreeLit("")); 
+      return ATfalse;
+    }
+    else {
+      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
+      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
+
+      if (!PT_isEqualSymbol(PT_getSymbolSymbol(trav.traversed),lhs)) {
+	RWsetError("First argument sort should be equal to the first sort"
+		  " of the tuple", (ATerm) PT_makeTreeLit(""));
+        return ATfalse;
+      }
+      if (!PT_isEqualSymbol(trav.accumulated, rhs)) {
+	RWsetError("Second argument sort should be equal to second sort"
+		   "of the tuple", (ATerm) PT_makeTreeLit(""));
+        return ATfalse;
+      }
+    }
+  }
+  else {
+    return ATfalse;
+  }
+
+  return ATtrue;
+}
+
+/*}}}  */
+
+/*{{{  static Traversal setTraversalTypeAndStrategy(PT_Production prod) */
+
+static Traversal setTraversalTypeAndStrategy(Traversal trav)
+{
+  PT_Attributes attributes = PT_getProductionAttributes(trav.prod);
+
+  trav.type = UNDEFINED_TYPE;
+  trav.strategy = UNDEFINED_STRATEGY;
+
+  if (PT_hasAttributesAttrs(attributes)) {
+    PT_Attrs attrs = PT_getAttributesAttrs(attributes);
+    PT_Attr attr = NULL;
+    ATermList args;
+
+
+    PT_foreachAttrInAttrs(attrs, getTraversalAttr, (PT_AttrVisitorData) &attr);
+
+    args = ATgetArguments((ATermAppl) PT_getAttrAttr(attr));
+
+    for(;!ATisEmpty(args);args = ATgetNext(args)) {
+      ATerm arg = ATgetFirst(args);
+
+      if (ATisEqual(ATparse("\"trafo\""),arg)) {
+	if (trav.type == ACCUMULATOR || trav.type == COMBINATION) {
+	  trav.type = COMBINATION;
+	}
+	else {
+	  trav.type = TRANSFORMER;
+	}
+      }
+      else if (ATisEqual(ATparse("\"accu\""), arg)) {
+	if (trav.type == TRANSFORMER || trav.type == COMBINATION) {
+	  trav.type = COMBINATION;
+	}
+	else {
+	  trav.type = ACCUMULATOR;
+	}
+      }
+      else if (ATisEqual(ATparse("\"bottom-up\""), arg)) {
+	if (trav.strategy == TOPDOWN) {
+	  RWsetError("Ambiguous traversal attribute in production.",
+		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	}
+	else {
+	  trav.strategy = BOTTOMUP;
+	}
+      }
+      else if (ATisEqual(ATparse("\"top-down\""), arg)) {
+	if (trav.strategy == BOTTOMUP) {
+	  RWsetError("Ambiguous traversal attribute in production.",
+		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	}
+	else {
+	  trav.strategy = TOPDOWN;
+	}
+      }
+      else if (ATisEqual(ATparse("\"generate-syntax\""), arg)) {
+	; /* do nothing */
+      }
+      else {
+	RWsetError("Unknown traversal specifier in production.",
+		   (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+      }
+    }
+  }
+
+  /* default strategy behaviour */
+  if (trav.strategy == UNDEFINED_STRATEGY) {
+    if (trav.type == UNDEFINED_TYPE) { /* old style traversals */
+      trav.strategy = TOPDOWN;
+    }
+    else {
+      trav.strategy = BOTTOMUP;
+    }
+  }
+
+  return trav;
+}
+
+/*}}}  */
+
 /*{{{  Traversal createTraversalPattern(PT_Tree term) */
 
 /* create_traversal_pattern
@@ -123,67 +383,45 @@ PT_Tree selectTree(PT_Args args, int pos)
 
 Traversal createTraversalPattern(PT_Tree term)
 {
-  PT_Production prod;
-  PT_Args args;
-  PT_Symbols symbols;
-  PT_Symbol symbol, cleanSymbol;
-  PT_Symbol traversed;
-  PT_Symbol accumulated = NULL;
   PositionSymbolTuple symbolVisitorData;
-  Traversal traversal;
+  Traversal trav;
 
-  prod = PT_getTreeProd(term);
-  args = PT_getTreeArgs(term);
-
-  symbols = PT_getProductionLhs(prod);
-  symbol = PT_getProductionRhs(prod);
-  cleanSymbol = PT_getSymbolSymbol(symbol);
+  trav.accumulated = NULL;
+  trav.traversed = NULL;
+  trav.prod = PT_getTreeProd(term);
+  trav.args = PT_getTreeArgs(term);
+  trav.symbols = PT_getProductionLhs(trav.prod);
 
   /* get the symbol of the traversed arg */
   symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
   symbolVisitorData.symbol = NULL;
-  PT_foreachSymbolInSymbols(symbols, getSymbol, 
+  PT_foreachSymbolInSymbols(trav.symbols, getSymbol, 
                          (PT_SymbolVisitorData) &symbolVisitorData); 
-  traversed = symbolVisitorData.symbol;
-  assert(traversed != NULL);
+  trav.traversed = symbolVisitorData.symbol;
+  assert(trav.traversed != NULL);
 
   /* get the symbol of the accumulated arg */
   symbolVisitorData.pos = ACCUMULATED_SYMBOL_POS;
   symbolVisitorData.symbol = NULL;
-  PT_foreachSymbolInSymbols(symbols, getSymbol, 
+  PT_foreachSymbolInSymbols(trav.symbols, getSymbol, 
                          (PT_SymbolVisitorData) &symbolVisitorData); 
  
   if (symbolVisitorData.symbol != NULL) {
-    accumulated = PT_getSymbolSymbol(symbolVisitorData.symbol);
+    trav.accumulated = PT_getSymbolSymbol(symbolVisitorData.symbol);
   }
  
-
-  traversal.type = UNDEFINED;
- 
-  if (PT_isEqualSymbol(traversed, symbol)) {
-    traversal.type = TRANSFORMER;
-  } 
-  else if(accumulated != NULL) {
-    if(PT_isEqualSymbol(accumulated, cleanSymbol)) {
-      traversal.type = ACCUMULATOR;
-    }
-    else if(accumulated != NULL && PT_isSymbolPair(cleanSymbol)) {
-      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
-      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
-      
-      if (PT_isEqualSymbol(PT_getSymbolSymbol(traversed),lhs) &&
-	  PT_isEqualSymbol(accumulated,rhs)) {
-	traversal.type = COMBINATION;
-      }
-    }
-  }
+  trav = setTraversalTypeAndStrategy(trav);
   
-  traversal.prod = prod;
-  traversal.accumulated = accumulated;
-  traversal.args = args;
-  traversal.symbols = symbols;
+  if (trav.type == UNDEFINED_TYPE) { /* backward compatibility */
+    trav = computeTraversalType(trav);
+  }
 
-  return traversal;
+  if (!checkTraversalType(trav)) {
+    trav.type = UNDEFINED_TYPE;
+    trav.strategy = UNDEFINED_STRATEGY;
+  }
+
+  return trav;
 }
 
 /*}}}  */
@@ -233,14 +471,8 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
                                                    traversal.accumulated)));
     break;
   case ACCUMULATOR:
-  case UNDEFINED:
+  case UNDEFINED_TYPE:
   default:
-    /* do nothing */
-
-    /* Not putting "break" here implied the "default:" just seen is
-     * a label, which causes a warning in gcc-3.0.1:
-     *   warning: deprecated use of label at end of compound statement
-     */
     break;
   }
 
@@ -374,7 +606,7 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
   case COMBINATION:
     term = makeTuple(term, selectAccumulatedArg(traversal.args));
     break;
-  case UNDEFINED:
+  case UNDEFINED_TYPE:
   default:
     ATerror("Unknown traversal type: %d", traversal.type);
     break;
@@ -384,3 +616,28 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
 }
 
 /*}}}  */
+
+/*{{{  PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal) */
+
+PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
+{
+  PT_Tree reduct;
+
+  if (traversal->type == ACCUMULATOR) {
+    *traversal = updateAccumulator(*traversal, rhs);
+    reduct = orig;
+  } 
+  else if (traversal->type == COMBINATION) {
+    *traversal = updateAccumulator(*traversal, getTupleSecond(rhs));
+    reduct = getTupleFirst(rhs); 
+  } 
+  else {
+    reduct = rhs;
+  }
+
+  return reduct;
+}
+
+/*}}}  */
+
+

@@ -37,10 +37,11 @@ exports
     Section*                     -> Sections
     ModuleId                     -> ModuleName
     ModuleId "[" Symbols "]"     -> ModuleName
-    "id" "(" ModuleName ")"      -> Attribute
     "imports" Imports            -> ImpSection
     ImpSection                   -> Grammar
     Import*                      -> Imports
     ModuleName                   -> Import
     ModuleName Renamings         -> Import
     "(" Import ")"               -> Import {bracket}   
+
+    "id" "(" ModuleName ")"      -> Attribute 

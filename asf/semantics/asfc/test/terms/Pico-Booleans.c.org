@@ -19,19 +19,19 @@ lf_true_1sym = ATmakeSymbol ( "prod([lit(\"true\")],cf(sort(\"PICO-BOOL-CON\")),
 ATprotectSymbol ( lf_true_1sym ) ;
 lf_con_2sym = ATmakeSymbol ( "prod([cf(sort(\"PICO-BOOL-CON\"))],cf(sort(\"PICO-BOOL\")),attrs([cons(\"con\"),id(\"Pico-Booleans\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_con_2sym ) ;
-lf_or_3sym = ATmakeSymbol ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([atr(\"left\"),cons(\"or\"),id(\"Pico-Booleans\")]))" , 2 , ATtrue ) ;
+lf_or_3sym = ATmakeSymbol ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([assoc(\"left\"),cons(\"or\"),id(\"Pico-Booleans\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_or_3sym ) ;
 lf_false_4sym = ATmakeSymbol ( "prod([lit(\"false\")],cf(sort(\"PICO-BOOL-CON\")),attrs([cons(\"false\"),id(\"Pico-Booleans\")]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_false_4sym ) ;
-lf_and_5sym = ATmakeSymbol ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([atr(\"left\"),cons(\"and\"),id(\"Pico-Booleans\")]))" , 2 , ATtrue ) ;
+lf_and_5sym = ATmakeSymbol ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([assoc(\"left\"),cons(\"and\"),id(\"Pico-Booleans\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_and_5sym ) ;
 lf_not_6sym = ATmakeSymbol ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\")\")],cf(sort(\"PICO-BOOL\")),attrs([cons(\"not\"),id(\"Pico-Booleans\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_not_6sym ) ;
 register_prod ( ATparse ( "prod([lit(\"true\")],cf(sort(\"PICO-BOOL-CON\")),attrs([cons(\"true\"),id(\"Pico-Booleans\")]))" ) , lf_true_1 , lf_true_1sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"PICO-BOOL-CON\"))],cf(sort(\"PICO-BOOL\")),attrs([cons(\"con\"),id(\"Pico-Booleans\")]))" ) , lf_con_2 , lf_con_2sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([atr(\"left\"),cons(\"or\"),id(\"Pico-Booleans\")]))" ) , lf_or_3 , lf_or_3sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([assoc(\"left\"),cons(\"or\"),id(\"Pico-Booleans\")]))" ) , lf_or_3 , lf_or_3sym ) ;
 register_prod ( ATparse ( "prod([lit(\"false\")],cf(sort(\"PICO-BOOL-CON\")),attrs([cons(\"false\"),id(\"Pico-Booleans\")]))" ) , lf_false_4 , lf_false_4sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([atr(\"left\"),cons(\"and\"),id(\"Pico-Booleans\")]))" ) , lf_and_5 , lf_and_5sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\"))],cf(sort(\"PICO-BOOL\")),attrs([assoc(\"left\"),cons(\"and\"),id(\"Pico-Booleans\")]))" ) , lf_and_5 , lf_and_5sym ) ;
 register_prod ( ATparse ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"PICO-BOOL\")),cf(opt(layout)),lit(\")\")],cf(sort(\"PICO-BOOL\")),attrs([cons(\"not\"),id(\"Pico-Booleans\")]))" ) , lf_not_6 , lf_not_6sym ) ;
 }
 void resolve_Pico_Booleans ( ) {
