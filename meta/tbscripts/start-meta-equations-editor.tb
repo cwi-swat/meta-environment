@@ -25,4 +25,5 @@ in
   shutdown("")
 endlet   
 
-toolbus(StandAloneEquationsEditor, DummyDisplayGraph)
+toolbus(StandAloneEquationsEditor)
+toolbus(DummyDisplayGraph)

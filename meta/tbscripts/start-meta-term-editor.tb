@@ -26,4 +26,5 @@ in
   shutdown("")
 endlet
 
-toolbus(StandAloneAsfEditor, DummyDisplayGraph)
+toolbus(StandAloneAsfEditor)
+toolbus(DummyDisplayGraph)

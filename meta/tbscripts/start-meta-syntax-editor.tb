@@ -25,4 +25,5 @@ in
   shutdown("")
 endlet   
 
-toolbus(StandAloneSyntaxEditor, DummyDisplayGraph)
+toolbus(StandAloneSyntaxEditor)
+toolbus(DummyDisplayGraph)
