@@ -12,4 +12,4 @@ identification
 configuration interface
 
 requires
-   aterm	2.0
+   aterm	2.0.2
