@@ -1,0 +1,115 @@
+#! /bin/sh
+
+set -e
+
+# {{{  variables
+
+PRG=`basename $0`
+OUTPUT_DIR=./rstore
+TOP_SORT=
+INPUT_FILES=
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options] <input-files>
+
+Parameters:
+
+  -d | --output-dir <dir>  specify output directory (default: $OUTPUT_DIR)
+  -e | --equations <file>  specify extraction equations
+  -s | --sort <sort>       specify top sort during parsing
+  -t | --table <file>      specify parse table for input files
+
+Example:
+  $PRG -e TBExtraction.eqs -s Tscript -t Tscript.trm.tbl tbscripts/*.tb
+
+ENDCAT
+}
+
+# }}}
+# {{{  add_input_file
+
+add_input_file() {
+ INPUT_FILES="$INPUT_FILES $1"
+}
+
+# }}}
+# {{{  parse
+
+parse() {
+  echo -n "Parsing $1 .."
+  sglr -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
+  echo " done."
+}
+
+# }}}
+# {{{  addposinfo
+
+addposinfo() {
+  echo -n "AddPosInfo $1 .."
+  addPosInfo -i $1.pt -o $1.pos -p $1
+  echo " done."
+}
+
+# }}}
+# {{{  extract
+
+extract() {
+  echo -n "Rewriting $1 .."
+  apply-function -f "extractRelations" -s "RSTORE" -i $1.pos \
+    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore
+  echo " done."
+}
+
+# }}}
+# {{{  cleanup
+
+cleanup() {
+  rm -f $1.{c,pt,pos}
+}
+
+# }}}
+# {{{  extract_relations
+
+extract_relations() {
+  parse $1
+  addposinfo $1
+  extract $1
+  cleanup $1
+}
+
+# }}}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -d | --output-dir)
+      shift; OUTPUT_DIR=$1 ;;
+    -e | --equations)
+      shift; EQUATIONS=$1 ;;
+    -h | --help)
+      usage; exit 0 ;;
+    -s | --sort)
+      shift; TOP_SORT=$1 ;;
+    -t | --table)
+      shift; PARSE_TABLE=$1 ;;
+    *)
+      add_input_file $1 ;;
+  esac
+  shift
+done
+
+mkdir -p ${OUTPUT_DIR}
+
+for f in $INPUT_FILES; do
+  extract_relations $f
+done
