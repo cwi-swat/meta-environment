@@ -56,10 +56,10 @@ exports
   sorts Box
 
   context-free syntax
-    StrCon  -> Box {cons("string")}
-    "H" SOptions "[" list:Box* "]" -> Box {cons("H")}
-    "V" SOptions "[" list:Box* "]" -> Box {cons("V")}
-    "HV" SOptions "[" list:Box* "]" -> Box {cons("HV")}
+    StrCon                           -> Box {cons("string")}
+    "H" SOptions "[" list:Box* "]"   -> Box {cons("H")}
+    "V" SOptions "[" list:Box* "]"   -> Box {cons("V")}
+    "HV" SOptions "[" list:Box* "]"  -> Box {cons("HV")}
     "HOV" SOptions "[" list:Box* "]" -> Box {cons("HOV")}
-    "I" SOptions "[" Box "]" -> Box {cons("I")}
-    "WD" "[" Box "]" -> Box {cons("WD")}
+    "I" SOptions "[" Box "]"         -> Box {cons("I")}
+    "WD" "[" Box "]"                 -> Box {cons("WD")}
