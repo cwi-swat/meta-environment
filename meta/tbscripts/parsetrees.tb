@@ -15,7 +15,7 @@ tool compiler is {
 
 
 tool add-eqs-syntax is { 
-  command = "add-eqs-syntax"
+  command = "Add-Eqs-Syntax"
 }
 
 process Parsetrees is 
