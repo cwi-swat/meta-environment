@@ -44,7 +44,7 @@ in
   then
     snd-msg(parse-editor-ok(Sid))
   else
-    GetFilename(Sid, Filename?)
+    GetPath(Sid, Filename?)
     . snd-msg(ui-remove-feedback-summary("sglr", Filename))
     . GetText(Sid, Text?)
     . create(EditorParseHandler(Sid), Pid?)
@@ -62,7 +62,7 @@ let
   Summary: term
 in
   Pid := process-id
-  . GetFilename(Sid, Filename?)
+  . GetPath(Sid, Filename?)
   .
   (
     rec-msg(parse-tree(Pid, ParseResult?))

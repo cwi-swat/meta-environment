@@ -17,8 +17,8 @@ process HandleModuleEvent(Type: term, Event: term, Modulename: str) is
 let
   Actions: list
 in
-  snd-msg(cm-get-actions(Type, Event, Modulename))
-  . rec-msg(cm-actions(Actions?))
+  snd-msg(cm-get-module-actions(Type, Event, Modulename))
+  . rec-msg(cm-module-actions(Actions?))
   . snd-msg(perform-actions(ui-id, Actions, [str(Modulename)]))
   . rec-msg(actions-performed(ui-id, Actions))
 endlet
@@ -77,11 +77,11 @@ let
 in
   (
     rec-msg(ui-button-selected(Type?, Event?))
-    . printf("Type: %t, Event: %t\n", Type, Event)
+    /*. printf("Type: %t, Event: %t\n", Type, Event)*/
     . create(HandleEvent(Type, Event), Pid?)
   +
     rec-msg(ui-button-selected(Type?, Event?, Modulename?))
-    . printf("Type: %t, Event: %t, Modulename: %s\n", Type, Event, Modulename)
+    /*. printf("Type: %t, Event: %t, Modulename: %s\n", Type, Event, Modulename)*/
     . create(HandleModuleEvent(Type, Event, Modulename), Pid?)
   +
     rec-msg(ui-error-selected(Error?))

@@ -1,14 +1,10 @@
-/* $Id$ */
-
-/*{{{  process FindModuleFilename(Modulename: str, Type: term, Path: str?) */
-
-process FindModuleFilename(Modulename: str, Type: term, Path: str?) is
+process FindModuleFilename(ModuleId: str, Type: term, Path: str?) is
 let
   Extension: str,
   Basedir: str
 in
-  printf("Modulename: %s, Type: %t\n", Modulename, Type) .
-  snd-msg(get-path-from-db(Modulename))
+  printf("ModuleId: %s, Type: %t\n", ModuleId, Type)
+  . snd-msg(get-path-from-db(ModuleId))
   .
   (
     rec-msg(path(Basedir?))
@@ -16,38 +12,30 @@ in
     . snd-msg(file-extension-hook(Type))
     . rec-msg(file-extension-hook-result(Extension?))
     . printf("Extension: %t\n", Extension)
-    . BuildPath(Basedir, Modulename, Extension, Path?)
+    . BuildPath(Basedir, ModuleId, Extension, Path?)
   +
     rec-msg(no-path)
-    . LocateFile(Modulename, Type, Path?)
+    . LocateFile(ModuleId, Type, Path?)
     . printf("Basedir (located): %s\n", Path)
   )
   . printf("Path: %s\n", Path)
 endlet
 
-/*}}}  */
+process GetPath(Sid: term, Path: str?) is
+  snd-msg(em-get-path(Sid))
+  . rec-msg(em-path(Sid, Path?))
 
-/*{{{  process GetFilename(Sid: term, Filename: str?) */ 
-process GetFilename(Sid: term, Filename: str?) is
-  snd-msg(em-get-filename(Sid))
-  . rec-msg(em-filename(Sid, Filename?))
-
-/*}}}  */
-/*{{{  process GetModulename(Sid: term, Modulename: str?) */
-
-process GetModulename(Sid: term, Modulename: str?) is
+process GetModuleId(Sid: term, ModuleId: str?) is
   snd-msg(em-get-modulename(Sid))
-  . rec-msg(em-modulename(Sid, Modulename?))
-
-/*}}}  */
-/*{{{ process GetEditorType(Filename: str, EditorType: term?) */
+  . rec-msg(em-modulename(Sid, ModuleId?))
 
 process GetEditorType(Path: str, EditorType: term?) is
 let
   Extension: str
 in
-  snd-msg(io-get-path-extension(Path)) .
-  rec-msg(io-extension(Path, Extension?)) .
+  snd-msg(io-get-path-extension(Path))
+  . rec-msg(io-extension(Path, Extension?))
+  .
   if equal(Extension, ".sdf") then
     EditorType := syntax-editor
   else
@@ -59,17 +47,9 @@ in
   fi
 endlet
 
-/*}}}  */
-
-/*{{{  process Edit(Filename: str, Modulename: str, Sid: term?) */
-
 process Edit(Path: str, Sid: term?) is
   snd-msg(em-create-session(Path))
   . rec-msg(em-session(Path, Sid?))
-
-/*}}}  */
-
-/*{{{  process IsStructureEditorRegistered(Sid: term Registered: bool?) */
 
 process IsStructureEditorRegistered(Sid: term, Registered: bool?) is
   snd-msg(em-is-editor-registered(Sid, structure))
@@ -82,9 +62,6 @@ process IsStructureEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-/*}}}  */
-/*{{{  process IsTextEditorRegistered(Sid: term Registered: bool?) */
-
 process IsTextEditorRegistered(Sid: term, Registered: bool?) is
   snd-msg(em-is-editor-registered(Sid, text))
   .
@@ -96,34 +73,27 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-/*}}}  */
-
-/*{{{  process EditText(Sid: term, Type: term) */
-
 process EditText(Sid: term, Type: term) is
 let
-  Actions: list,
-  Filename: str,
-  Modulename: str,
+  Events: list,
+  Path: str,
+  ModuleId: str,
   Registered: bool
 in
   IsTextEditorRegistered(Sid, Registered?)
   .
-  if equal(Registered, true)
-  then
+  if equal(Registered, true) then
     snd-msg(te-editor-to-front(Sid))
   else
     snd-msg(em-register-editor(Sid, text))
-    . GetFilename(Sid, Filename?)
-    . snd-msg(te-edit-text(Sid, EDITOR, Filename))
-    . snd-msg(get-edit-actions(Type))
-    . rec-msg(edit-actions(Type, Actions?))
-    . snd-msg(te-add-actions(Sid, Actions))
+    . GetPath(Sid, Path?)
+    /*. printf("EditText: filename = %s\n", Path)*/
+    . snd-msg(te-edit-text(Sid, EDITOR, Path))
+    . snd-msg(cm-get-events(Type))
+    . rec-msg(cm-events(Events?))
+    . snd-msg(te-add-actions(Sid, Events))
   fi
 endlet
-
-/*}}}  */
-/*{{{  process EditStructure(Sid: term) */
 
 process EditStructure(Sid: term, Tree: term) is
 let
@@ -131,18 +101,13 @@ let
 in
   IsStructureEditorRegistered(Sid, Registered?)
   .
-  if equal(Registered, true)
-  then
+  if equal(Registered, true) then
     snd-msg(se-delete(Sid))
   else
     snd-msg(em-register-editor(Sid, structure))
   fi
   . snd-msg(se-create(Sid, Tree))
 endlet
-
-/*}}}  */
-
-/*{{{ process SynchronizeFocus(Sid: term) */
 
 process SynchronizeFocus(Sid: term) is
 let
@@ -157,16 +122,12 @@ in
   . snd-msg(te-set-focus(Sid, Focus))
 endlet
 
-/*}}}  */
-
-/*{{{  process MenuSelected(Sid: term, EditorType: term) */
-
 process MenuSelected(Sid: term, EditorType: term) is
 let
   Actions: list,
   Args: list,
   Event: term,
-  Modulename: str
+  ModuleId: str
 in
   rec-msg(te-menu-event(Sid, Event?))
   . snd-msg(em-request-transaction(Sid))
@@ -176,17 +137,14 @@ in
   +
     rec-msg(em-transaction-started(Sid))
     . Args := []
-    . GetModulename(Sid, Modulename?)
-    . snd-msg(get-actions(Event, EditorType, Modulename))
-    . rec-msg(actions(Event, EditorType, Modulename, Actions?))
+    . GetModuleId(Sid, ModuleId?)
+    . snd-msg(cm-get-module-actions(EditorType, Event, ModuleId))
+    . rec-msg(cm-module-actions(Actions?))
     . snd-msg(perform-actions(Sid, Actions))
     . rec-msg(actions-performed(Sid, Actions))
     . snd-msg(em-end-transaction(Sid))
   )
 endlet
-
-/*}}}  */
-/*{{{  process MouseClicked(Sid: term) */
 
 process MouseClicked(Sid: term) is
 let
@@ -203,8 +161,7 @@ in
     rec-msg(em-transaction-started(Sid))
     . IsStructureEditorRegistered(Sid, Registered?)
     .
-    if equal(Registered, true)
-    then
+    if equal(Registered, true) then
       snd-msg(se-set-cursor-at-offset(Sid, Offset))
       . SynchronizeFocus(Sid)
     else
@@ -213,9 +170,6 @@ in
     . snd-msg(em-end-transaction(Sid))
   )
 endlet
-
-/*}}}  */
-/*{{{  process TextChanged(Sid: term) */
 
 process TextChanged(Sid: term) is
 let
@@ -230,22 +184,17 @@ in
     rec-msg(em-transaction-started(Sid))
     . IsStructureEditorRegistered(Sid, Registered?)
     .
-    if equal(Registered, true)
-    then
+    if equal(Registered, true) then
       DeleteStructureEditor(Sid)
       . snd-msg(te-clear-focus(Sid))
       . snd-msg(te-display-message(Sid,
-	"Editor contents have changed, focus is unavailable until next parse."))
+                                   "Editor contents have changed, focus is unavailable until next parse."))
     else
       tau
     fi
     . snd-msg(em-end-transaction(Sid))
   )
 endlet
-
-/*}}}  */
-
-/*{{{  process EditorDisconnected(Sid: term) */
 
 process EditorDisconnected(Sid: term) is
   (
@@ -254,23 +203,13 @@ process EditorDisconnected(Sid: term) is
     rec-msg(kill-editor(Sid))
   )
 
-/*}}}  */
-
-/*{{{  process DeleteTextEditor(Sid: term) */
-
 process DeleteTextEditor(Sid: term) is
   snd-msg(te-kill-text-editor(Sid))
   . snd-msg(em-unregister-editor(Sid, text))
 
-/*}}}  */
-/*{{{  process DeleteStructureEditor(Sid: term) */
-
 process DeleteStructureEditor(Sid: term) is
   snd-msg(se-delete(Sid))
   . snd-msg(em-unregister-editor(Sid, structure))
-
-/*}}}  */
-/*{{{  process DeleteSession(Sid: term) */
 
 process DeleteSession(Sid: term) is
 let
@@ -278,55 +217,44 @@ let
 in
   IsTextEditorRegistered(Sid, Registered?)
   .
-  if equal(Registered, true)
-  then
+  if equal(Registered, true) then
     DeleteTextEditor(Sid)
   else
     tau
   fi
-
   . IsStructureEditorRegistered(Sid, Registered?)
   .
-  if equal(Registered, true)
-  then
+  if equal(Registered, true) then
     DeleteStructureEditor(Sid)
   else
     tau
   fi
-
   . snd-msg(em-delete-session(Sid))
 endlet
 
-/*}}}  */
-/*{{{  process DeleteSessions(Modulename: str) */
-
-process DeleteSessions(Modulename: str) is
+process DeleteSessions(ModuleId: str) is
 let
   Sid: term,
   Sids: list
 in
-  snd-msg(em-get-sessions-by-modulename(Modulename))
-  . rec-msg(em-sessions(Modulename, Sids?))
+  snd-msg(em-get-sessions-by-modulename(ModuleId))
+  . rec-msg(em-sessions(ModuleId, Sids?))
   .
   (
-    if not-equal(Sids, [])
-    then
+    if not-equal(Sids, []) then
       Sid := first(Sids)
       . DeleteSession(Sid)
       . Sids := next(Sids)
     fi
-  ) *
+  )
+  *
   if equal(Sids, []) then
     tau
   fi
 endlet
 
-/*}}}  */
-
-/*{{{  process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) */
-
-process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) is
-  snd-msg(get-syntax-tree(Modulename))
+process GetSyntaxTree(ModuleId: str, Tree: term?, Available: bool?) is
+  snd-msg(get-syntax-tree(ModuleId))
   .
   (
     rec-msg(syntax(Tree?))
@@ -336,16 +264,13 @@ process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-/*}}}  */
-/*{{{  process EditSyntax(Path: str) */
-
 process EditSyntax(Path: str) is
 let
   Available: bool,
   EditorType: term,
-  Filename: str,
   HasText: bool,
   HasStructure: bool,
+  ModuleId: str,
   ParseSucceeded: bool,
   Sid: term,
   Tree: term
@@ -354,21 +279,28 @@ in
   . Edit(Path, Sid?)
   . EditText(Sid, EditorType)
   . snd-msg(syntax-editor-started(Path, Sid))
-  /*. GetSyntaxTree(Modulename, Tree?, Available?)*/
-  . Available := false
+  . snd-msg(ts-get-str-value("path-modulename", Path))
   .
-  if equal(Available, true)
-  then
-    EditStructure(Sid, Tree)
-  else
-    tau
-  fi
+  (
+    rec-msg(ts-value(ModuleId?))
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetSyntaxTree(ModuleId, Tree?, Available?)
+    .
+    if equal(Available, true) then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
+  +
+    rec-msg(ts-no-value)
+  )
   .
   (
     MenuSelected(Sid, EditorType)
   +
     MouseClicked(Sid)
-  + 
+  +
     TextChanged(Sid)
   )
   *
@@ -376,8 +308,7 @@ in
   . IsTextEditorRegistered(Sid, HasText?)
   . IsStructureEditorRegistered(Sid, HasStructure?)
   .
-  if and(HasText, not(HasStructure))
-  then
+  if and(HasText, not(HasStructure)) then
     ParseSyntax(Sid, sdf, ParseSucceeded?)
   else
     tau
@@ -385,12 +316,8 @@ in
   . DeleteSession(Sid)
 endlet
 
-/*}}}  */
-
-/*{{{  process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) */
-
-process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) is
-  snd-msg(get-equations-for-module(Modulename))
+process GetEquationsTree(ModuleId: str, Tree: term?, Available: bool?) is
+  snd-msg(get-equations-for-module(ModuleId))
   .
   (
     rec-msg(equations(Tree?))
@@ -400,30 +327,34 @@ process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-/*}}}  */
-/*{{{ process EditEquations(Modulename: str) */
-
-process EditEquations(Modulename: str) is
+process EditEquations(Path: str) is
 let
   Available: bool,
   EditorType: term,
-  Filename: str,
+  ModuleId: str,
   Sid: term,
   Tree: term
 in
   EditorType := equations-editor
-  . FindModuleFilename(Modulename, asf, Filename?)
-  . Edit(Filename, Sid?)
+  . Edit(Path, Sid?)
   . EditText(Sid, EditorType)
-  . snd-msg(equations-editor-started(Modulename, Sid))
-  . GetEquationsTree(Modulename, Tree?, Available?)
+  . snd-msg(equations-editor-started(Path, Sid))
+  . snd-msg(ts-get-str-value("path-modulename", Path))
   .
-  if equal(Available, true)
-  then
-    EditStructure(Sid, Tree)
-  else
-    tau
-  fi
+  (
+    rec-msg(ts-value(ModuleId?))
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetEquationsTree(ModuleId, Tree?, Available?)
+    .
+    if equal(Available, true) then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
+  +
+    rec-msg(ts-no-value)
+  )
   .
   (
     MenuSelected(Sid, EditorType)
@@ -436,10 +367,6 @@ in
   EditorDisconnected(Sid)
   . DeleteSession(Sid)
 endlet
-
-/*}}}  */
-
-/*{{{  process GetTermTree(Filename: str, Tree: term?, Available: bool?) */
 
 process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
   snd-msg(get-term-tree(Filename))
@@ -452,54 +379,46 @@ process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-/*}}}  */
-/*{{{  process CheckSanity(Filename: str, RequestedModulename: str, Valid: bool?) */
-
-process CheckSanity(Filename: str, RequestedModulename: str, Valid: bool?) is
+process CheckSanity(Path: str, RequestedModuleId: str, Valid: bool?) is
 let
-  CurrentModulename: str,
+  CurrentModuleId: str,
   Sid: term
 in
-  snd-msg(em-get-session-by-filename(Filename))
+  snd-msg(em-get-session-by-path(Path))
   .
   (
-    rec-msg(em-session(Filename, Sid?))
+    rec-msg(em-session(Path, Sid?))
     . snd-msg(em-get-modulename(Sid))
-    . rec-msg(em-modulename(Sid, CurrentModulename?))
-    . Valid := equal(CurrentModulename, RequestedModulename)
+    . rec-msg(em-modulename(Sid, CurrentModuleId?))
+    . Valid := equal(CurrentModuleId, RequestedModuleId)
   +
-    rec-msg(em-no-such-session(Filename))
+    rec-msg(em-no-such-session(Path))
     . Valid := true
   )
 endlet
 
-/*}}}  */
-/*{{{ process EditTerm(Filename: str, Modulename: str) */
-
-process EditTerm(Filename: str, Modulename: str) is
+process EditTerm(Path: str, ModuleId: str) is
 let
   Actions: list,
   Available: bool,
   EditorType: term,
+  Error: str,
   Sid: term,
   Tree: term,
   Valid: bool
 in
   EditorType := term-editor
-  . CheckSanity(Filename, Modulename, Valid?)
+  . CheckSanity(Path, ModuleId, Valid?)
   .
-  if equal(Valid, true)
-  then
-    Edit(Filename, Sid?)
+  if equal(Valid, true) then
+    Edit(Path, Sid?)
     . EditText(Sid, EditorType)
-    . snd-msg(get-edit-term-actions(Modulename))
-    . rec-msg(edit-term-actions(Modulename, Actions?))
-    . snd-msg(te-add-actions(Modulename, Actions))
-    . snd-msg(term-editor-started(Filename, Modulename, Sid))
-    . GetTermTree(Filename, Tree?, Available?)
+    . snd-msg(term-editor-started(Path, ModuleId, Sid))
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetTermTree(Path, Tree?, Available?)
     .
-    if equal(Available, true)
-    then
+    if equal(Available, true) then
       EditStructure(Sid, Tree)
     else
       tau
@@ -516,13 +435,10 @@ in
     EditorDisconnected(Sid)
     . DeleteSession(Sid)
   else
-    Error("Term is already being edited over a different module.", [])
+    Error := "Term is already being edited over a different module."
+    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
   fi
 endlet
-
-/*}}}  */
-
-/*{{{  process GetModuleForPath(Path: str, ModuleId: str?) */
 
 process GetModuleForPath(Path: str, ModuleId: str?) is
   snd-msg(ts-get-str-value("path-modulename", Path))
@@ -534,10 +450,7 @@ process GetModuleForPath(Path: str, ModuleId: str?) is
     . ModuleId := ""
   )
 
-/*}}}  */
-/*{{{  process GetModuleByExtension(Path: str, Modulename: str?) */
-
-process GetModuleByExtension(Path: str, Modulename: str?, Available: bool?) is
+process GetModuleByExtension(Path: str, ModuleId: str?, Available: bool?) is
 let
   Extension: str
 in
@@ -546,7 +459,7 @@ in
   . snd-msg(get-extension-modulename(Extension))
   .
   (
-    rec-msg(extension-modulename(Extension, Modulename?))
+    rec-msg(extension-modulename(Extension, ModuleId?))
     . Available := true
   +
     rec-msg(no-extension-modulename(Extension))
@@ -554,41 +467,39 @@ in
   )
 endlet
 
-/*}}}  */
-
-/*{{{ process StartEditor(Path: str, EditorType: term) */
-
 process StartEditor(Path: str, EditorType: term) is
 let
   Available: bool,
-  Modulename: str,
+  ErrorMsg: str,
+  ModuleId: str,
   Pid: int,
   Sid: term
 in
-  if equal(EditorType, term-editor)
-  then
-    GetModuleByExtension(Path, Modulename?, Available?)
+  if equal(EditorType, term-editor) then
+    GetModuleByExtension(Path, ModuleId?, Available?)
     .
-    if equal(Available, true)
-    then
-      create(EditTerm(Path, Modulename), Pid?)
-      . rec-msg(term-editor-started(Path, Modulename, Sid?))
+    if equal(Available, true) then
+      create(EditTerm(Path, ModuleId), Pid?)
+      .
+      (
+        rec-msg(term-editor-started(Path, ModuleId, Sid?))
+      +
+        rec-msg(term-editor-not-started(Path, ModuleId, ErrorMsg?))
+        . Error(ErrorMsg, [])
+      )
     else
       snd-note(ui-status(errorf("Unable to determine modulename for: %s",
-      [Path])))
+                                [Path])))
     fi
   else
-    GetModuleForPath(Path, Modulename?)
+    GetModuleForPath(Path, ModuleId?)
     .
-    if equal(EditorType, syntax-editor)
-    then
-      create(EditSyntax(Modulename), Pid?)
-      . rec-msg(syntax-editor-started(Modulename, Sid?))
+    if equal(EditorType, syntax-editor) then
+      create(EditSyntax(ModuleId), Pid?)
+      . rec-msg(syntax-editor-started(ModuleId, Sid?))
     else
-      create(EditEquations(Modulename), Pid?)
-      . rec-msg(equations-editor-started(Modulename, Sid?))
+      create(EditEquations(ModuleId), Pid?)
+      . rec-msg(equations-editor-started(ModuleId, Sid?))
     fi
   fi
 endlet
-
-/*}}}  */

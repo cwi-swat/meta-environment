@@ -170,14 +170,16 @@ ATerm bind_session(int cid, ATerm sid, const char *moduleId)
   if (getSession(sid) == NULL) {
     return sndValue(ATmake("no-such-session"));
   }
+  else {
+    EM_ModuleId id = getModuleId(sid);
+    if (id != NULL && strcmp(moduleId, EM_getModuleIdName(id)) != 0) {
+      ATabort("editor-manager:bind_session: attempt to rebind %t (%s)\n",
+	      sid, moduleId);
+    }
+    putModuleId(sid, EM_makeModuleIdDefault(moduleId));
 
-  if (getModuleId(sid) != NULL) {
-    ATabort("editor-manager:bind_session: attempt to rebind %t (%s)\n",
-	    sid, moduleId);
+    return sndValue(ATmake("session-bound"));
   }
-  putModuleId(sid, EM_makeModuleIdDefault(moduleId));
-
-  return sndValue(ATmake("session-bound"));
 }
 
 /*}}}  */

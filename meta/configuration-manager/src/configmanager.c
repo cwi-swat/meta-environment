@@ -224,7 +224,7 @@ void add_system_properties(int cid, const char *contents)
     }
   }
   else {
-    ATwarning(__FILE__ ":add_system_properties: parse error in input.\n");
+    ATwarning("%s:add_system_properties: parse error in input.\n", __FILE__);
   }
 }
 
@@ -271,7 +271,7 @@ void add_user_properties(int cid, const char *contents)
     }
   }
   else {
-    ATwarning(__FILE__ ":set_user_properties: parse error in input.\n");
+    ATwarning("%s:set_user_properties: parse error in input.\n", __FILE__);
   }
 }
 
@@ -304,8 +304,6 @@ ATerm get_events(int cid, ATerm actionType)
     }
   }
 
-  ATwarning(__FILE__ ":get_events: %t -> %t\n", actionType, result);
-
   return ATmake("snd-value(events(<term>))", result);
 }
 
@@ -317,8 +315,6 @@ ATerm get_module_events(int cid, ATerm type, const char *moduleId)
   ATerm boundType;
 
   boundType = ATmake("<term>(<str>)", type, moduleId);
-
-  ATwarning("get_module_events: boundType = %t\n", boundType);
 
   return get_events(cid, boundType);
 }
@@ -332,18 +328,13 @@ ATerm get_actions(int cid, ATerm type, ATerm event)
   MC_ActionDescription desc;
   ATermList actions;
 
-  ATwarning("%s:get_actions: %t, %t\n", __FILE__, type, event);
-
   desc = MC_makeActionDescriptionDefault(MC_ActionTypeFromTerm(type),
 					 MC_EventFromTerm(event));
   actions = getActions(desc);
 
   if (actions == NULL) {
-    ATabort("configmanager.c:get_actions: no actions for: %t, %t\n",
-	    type, event);
+    ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
   }
-
-  ATwarning("%s:get_actions: actions = %t\n", __FILE__, actions);
 
   return ATmake("snd-value(actions(<term>))", actions);
 }
@@ -356,8 +347,6 @@ ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
   ATerm boundType;
 
   boundType = ATmake("<term>(<str>)", type, moduleId);
-
-  ATwarning("get_module_actions: boundType = %t\n", boundType);
 
   return get_actions(cid, boundType, event);
 }
@@ -377,7 +366,6 @@ static ATermList getExtensions()
 ATerm get_extension_modulename(int cid, const char *extension)
 {
   ATermList extensions = getExtensions();
-  ATwarning("%s:get_extension_modulename: [%s]\n", __FILE__, extension);
   
   while (!ATisEmpty(extensions)) {
     MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));
@@ -403,7 +391,6 @@ ATerm get_extension_modulename(int cid, const char *extension)
 ATerm get_modulename_extension(int cid, const char *modulename)
 {
   ATermList extensions = getExtensions();
-  ATwarning("%s:get_modulename_extension: [%s]\n", __FILE__, modulename);
 
   while (!ATisEmpty(extensions)) {
     MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));

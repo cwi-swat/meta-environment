@@ -1,41 +1,37 @@
-/* $Id$ */
-
-/*{{{ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) */
-
 process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
   snd-msg(io-get-filename(Directory, Filename, Extension))
   . rec-msg(io-filename(Path?))
 
-/*}}}  */
-
 process DrawImportGraph is
 let
-  ImportRelations : list
+  ImportRelations: list
 in
   snd-msg(ts-get-key-value-pairs("import-relations"))
   . rec-msg(ts-pairs(ImportRelations?))
   . snd-msg(display-import-graph(ImportRelations))
 endlet
 
-process DealWithMultipleOccurrences(Chosen : str, Name : str,
-                                    Extension : str, Peers : list) is
+process DealWithMultipleOccurrences(Chosen: str, Name: str, Extension: str,
+                                    Peers: list) is
 let
-  Directories : list,
-  Directory : str,
-  FileName : str
+  Directories: list,
+  Directory: str,
+  FileName: str
 in
-  Directories := Peers .
+  Directories := Peers
+  .
   if not-equal(Directories, []) then
-    Directory := first(Directories) .
-    Directories := next(Directories) .
-    BuildPath(Directory, Name, Extension, FileName?) .
-    snd-msg(io-compare-files(FileName, Chosen)) .
+    Directory := first(Directories)
+    . Directories := next(Directories)
+    . BuildPath(Directory, Name, Extension, FileName?)
+    . snd-msg(io-compare-files(FileName, Chosen))
+    .
     (
-      rec-msg(io-files-equal) 
+      rec-msg(io-files-equal)
     +
-      rec-msg(io-files-differ) .
-      snd-note(ui-status(messagef(
-      "Multiple occurrences of %s. Continuing with %s", [Name, Chosen]))) 
+      rec-msg(io-files-differ)
+      . snd-note(ui-status(messagef("Multiple occurrences of %s. Continuing with %s",
+                                    [Name, Chosen])))
     )
   fi
   *
@@ -61,7 +57,7 @@ in
   )
 endlet
 
-process OpenModules(Modules: list, Type: term) is 
+process OpenModules(Modules: list, Type: term) is
 let
   FileName: str,
   Imports: list,
@@ -71,44 +67,42 @@ let
 in
   Todo := Modules
   .
-  if not-equal(Todo, [])
-  then
+  if not-equal(Todo, []) then
     ModuleId := first(Todo)
     . Todo := next(Todo)
     . LocateFile(ModuleId, Type, Path?)
     .
-    if equal(Path, "")
-    then
+    if equal(Path, "") then
       Error("Unable to locate module: %s", [ModuleId])
-    else 
+    else
       snd-msg(ts-contains-key("path-modulename", Path))
       .
       (
-	rec-msg(ts-contains-key)
+        rec-msg(ts-contains-key)
       +
-	rec-msg(ts-not-contains-key)
-	. OpenSyntax(Path, Type)
-	. GetModuleImports(ModuleId, Imports?)
-	. Todo := join(Imports, Todo)
+        rec-msg(ts-not-contains-key)
+        . OpenSyntax(Path, Type)
+        . GetModuleImports(ModuleId, Imports?)
+        . Todo := join(Imports, Todo)
       )
     fi
   fi
   *
-  if equal(Todo, [])
-  then
+  if equal(Todo, []) then
     tau
   fi
 endlet
 
-process Error(Message : str, MessageArgs : list) is
+process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
-  
+
 process HandleOpenModuleErrors(Module: str, Error: term) is
 let
   FunSym: str
 in
-  FunSym := fun(Error) .
-  printf("HandleOpenModuleErrors: %t\n", Error) .
+  FunSym := fun(Error)
+  . printf("HandleOpenModuleErrors: %t\n", Error)
+  .
   if not-equal(Error, no-errors) then
     if not-equal(FunSym, "summary") then
       if equal(Error, name-inconsistent) then
@@ -151,10 +145,10 @@ in
       . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
-	rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
-	. SetModuleSyntaxText(ModuleId, Text)
+        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
+        . SetModuleSyntaxText(ModuleId, Text)
       +
-	rec-msg(open-syntax-parse-handler-done(Pid))
+        rec-msg(open-syntax-parse-handler-done(Pid))
       )
     +
       rec-msg(no-parse-table(Type, Error?))
@@ -188,7 +182,7 @@ in
     +
       rec-msg(parse-forest(Pid, ParseResult?, Error?))
       . ParseErrorToSummary(Error, Path, Summary?)
-      . snd-msg(ui-show-feedback-summary(Summary)) 
+      . snd-msg(ui-show-feedback-summary(Summary))
     )
     . AnnotateTree(ParseResult, Path, AnnotatedTree?)
     . snd-msg(sm-get-module-id(ParseResult))
@@ -201,10 +195,9 @@ in
     . rec-msg(io-extension(Path, Extension?))
     . BuildPath(Directory, ModuleId, Extension, Filename?)
     .
-    if equal(Filename, Path)
-    then
+    if equal(Filename, Path) then
       snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
-      . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId)) 
+      . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId))
       . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
       . snd-msg(sm-get-imported-module-names(ParseResult))
       . rec-msg(sm-imported-module-names(Imports?))
@@ -216,7 +209,7 @@ in
   +
     rec-msg(parse-error(Pid, Error?))
     . ParseErrorToSummary(Error, Path, Summary?)
-    . snd-msg(ui-show-feedback-summary(Summary)) 
+    . snd-msg(ui-show-feedback-summary(Summary))
     . snd-msg(open-syntax-parse-handler-done(Pid))
   )
 endlet

@@ -103,14 +103,14 @@ in
       . snd-ack-event(UI,layout-graph(GraphId, Graph))
     +
       rec-event(UI, get-events(Type?))
-      . printf("meta-studio: get-events(%t)\n", Type)
+      /*. printf("meta-studio: get-events(%t)\n", Type)*/
       . snd-msg(cm-get-events(Type))
       . rec-msg(cm-events(EventList?))
       . snd-do(UI, add-events(Type, EventList))
       . snd-ack-event(UI, get-events(Type))
     +
       rec-event(UI, get-events(Type?, ModuleId?))
-      . printf("meta-studio: get-events(%t, %s)\n", Type, ModuleId)
+      /*. printf("meta-studio: get-events(%t, %s)\n", Type, ModuleId)*/
 
       . snd-msg(cm-get-events(Type))
       . rec-msg(cm-events(EventList?))
