@@ -8,8 +8,6 @@ imports ExtMethod
 imports ExtPackage
 imports ExtVariable
 
-
-
 exports
   context-free syntax
     extractRelations(CompilationUnit) -> RSTORE
