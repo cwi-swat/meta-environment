@@ -8,7 +8,7 @@
 layout		[ \t\n\r]
 comment		"//".*\n
 ws		{layout}|{comment}
-id		[a-zA-Z_][a-zA-Z0-9_]*
+id		[a-zA-Z0-9_]+
 %%
 digraph { return DIGRAPH; }
 edge { return EDGE; }

@@ -337,7 +337,7 @@ static NodeId buildNodeId(char *id)
 
 void yyerror(char *s)
 {
-  fprintf(stderr, "%s\n", s);
+  fprintf(stderr, "during parsing of a dot file: %s\n", s);
   exit(1);
 }
 
