@@ -403,3 +403,19 @@ void calc_follow_table()
 }
 
 /*}}}  */
+/*{{{  void destroy_follow_table() */
+
+void destroy_follow_table()
+{
+  int i;
+
+  for (i=0; i<MAX_PROD; i++) {
+    if (follow_table[i] != NULL) {
+      CC_free(follow_table[i]);
+    }
+  }
+  free(follow_table);
+  follow_table = NULL;
+}
+
+/*}}}  */
