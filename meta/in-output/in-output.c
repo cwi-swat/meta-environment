@@ -33,10 +33,13 @@ aterm *open_file(int cid, char *type, char *name)
     fprintf(stderr, "trying file %s\n", full);
     f = fopen(full, "r");
     if(f) {
-      if(TreadTermFile(f, ar, &t) < 0)
+      if(TreadTermFile(f, ar, &t) < 0) {
         fprintf(stderr, "error reading file %s\n", full);
+        fclose(f);
+      }
       else {
         fprintf(stderr, "ok!\n");
+        fclose(f);
         return Tmake(ar, "snd-value(opened-file(<str>,<term>))", name, t);
       }
     }
