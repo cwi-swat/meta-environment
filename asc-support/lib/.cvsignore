@@ -1,5 +1,5 @@
 .deps
 Makefile
 Makefile.in
-rewriter.tif.c
-rewriter.tif.h
+rewriter-me.tif.c
+rewriter-me.tif.h

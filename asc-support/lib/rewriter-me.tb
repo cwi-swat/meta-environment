@@ -19,9 +19,9 @@
 
 */
 
-tool rewriter is { }
+tool rewriter-me is { }
 
-process REWRITER(R : rewriter) is
+process REWRITER(R : rewriter-me) is
 let
   N : str,
   F : str,
@@ -39,7 +39,7 @@ endlet
 
 process CONNECT-REWRITER is
 let
-  R : rewriter,
+  R : rewriter-me,
   P : int
 in
   ( rec-connect(R?) .

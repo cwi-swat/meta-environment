@@ -21,7 +21,7 @@
 #ifndef WIN32
 /* These files can not be included in Windows NT*/
 #include <atb-tool.h>
-#include "rewriter.tif.h"
+#include "rewriter-me.tif.h"
 #else
 #include <stdlib.h>	/* used for exit(0) */
 #endif
@@ -30,7 +30,7 @@
 #include <assert.h>
 #include <ctype.h>
 
-#include "asc-support2.h"
+#include "asc-support2-me.h"
 
 static char *name; 
 
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
  
   if(use_toolbus) {
     ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
-    cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
+    cid = ATBconnect(NULL, NULL, -1, rewriter_me_handler);
   }
 
   ATinit(argc, argv, &bottomOfStack);
