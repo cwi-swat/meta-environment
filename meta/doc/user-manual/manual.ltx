@@ -1500,7 +1500,7 @@ exports-or-hiddens
 \item context-free priorities section;
 %\item priorities section;
 \item lexical restrictions section;
-\item context-free restriction section.
+\item context-free restrictions section.
 %\item restriction section;
 %\item aliases section;
 \end{itemize}
@@ -1656,7 +1656,7 @@ You may use the following abbreviations in literals and in character classes:
 
 \item \verb+\t+: horizontal tabulation 
 
-\item {\tt $nr$}: a non-printable character with the decimal code $nr$.
+\item \verb+\+$nr$: a non-printable character with the decimal code $nr$.
 
 \end{itemize}
 
@@ -1666,8 +1666,8 @@ Besides the complementation operator for character classes there are
 also operators for:
 \begin{itemize}
 \item Difference between two character classes `{\tt /}'.
-\item Union of two character classes `{\tt  /\verb+\+}'.
-\item Intersection of two character classes `{\tt  \verb+\+/}'.
+\item Intersection of two character classes `{\tt  /\verb+\+}'.
+\item Union of two character classes `{\tt  \verb+\+/}'.
 \end{itemize}
 These three binary operators are left-associative.
 
@@ -1727,139 +1727,265 @@ lexical syntax
 
 \subsubsection{Optional Operators}
 
-It is common, that lexical tokens can only be described by patterns that
-exhibit a certain repetition. Two postfix operators are available for this
-purpose:
+If zero or exactly one occurence of a lexical token is desired the
+postfix operator {\tt ?} is available. It indicates that there
+should be zero or one occurence of the sort, literal or
+character class preceding the {\tt ?}. 
 
-\begin{itemize}
-
-\item {\tt *}: indicates zero or more repetitions of the sort, literal or
-  character class preceding the {\tt *}. 
-
-\item {\tt +}: indicates one or more repetitions of the sort, literal or
-  character class preceding the {\tt +}.
-
-\end{itemize}
-
-Figure \ref{CODE:repetition} shows the use of these repetition operators.
+Figure \ref{CODE:optional} shows the use of this optional operator.
 
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
 lexical syntax
-    [a-z]       -> Let
-    [a-z0-9]    -> NumLet
+    [a-z]+   -> Let
+    [0-9]    -> Num
 
-    Let NumLet* -> Id
+    Let Num? -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with repetition operator}\label{CODE:repetition}
+\caption{Lexical functions with optional operator}\label{CODE:optional}
 \end{figure}   
 
 \subsubsection{Alternative Operators}
 
-\subsubsection{Literals}
+Functions with the smae result sort together define the lexical syntax of
+tokens of that sort. Within the left-hand side of a lexical function
+definition alternative tokens can be defined. (* Beter formuleren *)
+By means of the binary operator {\tt |} the alternatives
+of a token can be defined. 
 
-All literal symbols such as keywords and operator symbols that appear in the
-context-free syntax are added to the lexical syntax implicitly.
+See Figure \ref{CODE:alternative1} for
+an example of this operator.
+This lexical definition describes identifiers starting
+with a capital letter followed by zero or more either small
+letters, capital letters, or digits, like: {\tt Aap}, {\tt NOOT},
+{\tt B49}, etc., however, MiES, 007, etc. are no legal identifiers
+given this definition.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [A-Z]    -> UcLet
+  [a-z]*   -> ScLets
+  [0-9]*   -> Digs
+
+  UcLet ScLets | UcLet* | Digs -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with alternative operator}\label{CODE:alternative1}
+\end{figure}   
+
+This mechanism can also be used as a short
+hand to define the alternatives of a sort. However some care has to take
+when using the alternative operator for this purpose. Given the example
+of Figure \ref{CODE:alternative1} it can be conclude that the alternative
+operator binds stronger than the invisible operator for the concatenation
+of tokens. So, in order to overrule this brackets should be used.
+See Figure \ref{CODE:alternative2} for an alternative definition
+of the identifier.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [A-Z]    -> UcLet
+  [a-z]*   -> ScLets
+  [0-9]*   -> Digs
+
+  (Uclet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with alternative operator}\label{CODE:alternative2}
+\end{figure}   
 
 \subsubsection{Lexical Ambiguities}
 
-(*** dit moet helemaal op de schop)
+\sdf\ offers {\em no} automatic lexical disambiguation, it has a number of
+mechanism to disambiguate on the lexical level. The specification writer
+has to specify the disambiguation rules explicitly. We will discuss
+the various lexical disambiguation mechanism and illustrate them by means
+of examples.
 
-Lexical ambiguities are resolved by the following four rules:
+\paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
+the input text that are included in a longer interpretation of the same 
+sort. Given a standard definition of identifiers, the input `{\tt xyz}' 
+will thus lead to recognition of the identifier `{\tt xyz}' and not to 
+either `{\tt x}' or `{\tt xy}'.
 
-\begin{itemize}
+This is achieved by defining a restriction on this lexical sort. This
+can be done in context-free restrictions 
+section (see Section \ref{cf-restrict}).
+Figure \ref{CODE:restrict-id} shows how to enforce the longest match
+for the sort {\tt Id}.
 
-\item Prefer Longest Match per Sort: reject all interpretations of the input text that are included
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [a-zA-Z][a-zA-Z0-9]* -> Id
 
-in a longer interpretation of the same sort. Given a standard definition of identifiers, the input `xyz' will thus lead to recognition of the identifier `xyz' and not to either `x' or `xy'. In the context of scanning Fortran, the input `3.NE.4' will lead to the recognition of two lexical tokens: the integer `3' and the floating constant `3.'. Both tokens are passed on to the parser which may decide if either (or both) tokens lead to a syntactically correct parse of the text.
+context-free restrictions
+  Id -/- [a-zA-Z0-9]  
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Longest match for identifiers}\label{CODE:restrict-id}
+\end{figure}   
 
-\item Prefer non-Layout: eliminate all interpretations of the text as layout symbol. When, after
+\paragraph{Prefer Literals} Give preference to interpretation as a literal, 
+i.e., as keyword or operator introduced in the context-free syntax, over 
+interpretation as a more general symbol (such as identifier). The definition
+of the context-free syntax will be discussed in Section \ref{cf-syntax}.
+In the left-hand side of a context-free syntax rule literals (keywords and/or
+operators) may be used. If these literals overlap with lexical tokens
+this causes ambiguities, e.g., {\tt begin} may be recognized as an
+identifier given the lexical definition of Figure \ref{CODE:restrict-id}.
+There are two alternatives to tackle this problem.
 
-applying this rule, no interpretations remain, the next lexical token is taken from the input text.
+The first alternative is to define context-free grammar rules for
+all literals with the lexical sort in the right-hand side and using
+the attribute {\tt reject}, see Figure \ref{CODE:reject-id} for
+sort {\tt Id}. The {\tt reject} attribute indicates that the recognizition
+of a keyword as a keyword of the given sort should be rejected.
 
-\item Prefer Literals: give preference to interpretation as a literal, i.e., as keyword or operator
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [a-zA-Z][a-zA-Z0-9]* -> Id
 
-introduced in the context-free syntax, over interpretation as a more general symbol (such as identifier).
+context-free restrictions
+  Id -/- [a-zA-Z0-9]  
 
-\item Prefer variables: give preference to interpretation as a variable (as defined in a variables
-section) over interpretation as a literal.
+context-free syntax
+  "begin" -> Id {reject}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Reject rules for identifiers}\label{CODE:reject-id}
+\end{figure}   
 
-\end{itemize}
 
-Ambiguities that cannot be solved by these rules remain, and are passed on to the syntax analysis phase.
+The second alternative is more compact. The lexical definition is
+extended with the attribute {\tt avoid}. This attribute indicates
+that when there is an alternative way of recognizing exists, this alternative
+will be prefered see Figure \ref{CODE:avoid-id} for sort {\tt Id}.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
+
+context-free restrictions
+  Id -/- [a-zA-Z0-9]  
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Using avoid for identifiers}\label{CODE:avoid-id}
+\end{figure}   
+
+\paragraph{Prefer Non-Layout} Eliminate all interpretations of the text 
+as layout symbol. Between the members in the left-hand side of a
+context-free syntax rule optional layout may be recognized. However,
+if a such a member recognizes the empty string, this gives rise to
+a lexical ambiguity. So, the safe way of defining {\tt LAYOUT} is
+presented in Figure{CODE:save-layout}.
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  [\ \t\n] -> LAYOUT
+
+context-free restrictions
+  LAYOUT? -/- [\ \t\n]
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Save way of defining {\tt LAYOUT}}\label{CODE:save-layout}
+\end{figure}
+
+\paragraph{Prefer Variables} Give preference to interpretation as a 
+variable (as defined in a variables section) over interpretation as a 
+lexical token. This rule will be discussed in Section \ref{variables}
+in more detail.
 
 \subsubsection{Examples of Lexical Syntax Definitions}
 
-\paragraph{Defining Identifiers}
-
-\begin{verbatim}
-
-sorts ID 
-
-lexical syntax
-
-   [a-zA-Z] [a-zA-Z0-9]* -> ID
-\end{verbatim}
-
-Observe that the space between the two character classes is ignored.
+We will present a number of non-trivial lexical syntax definitions
+in order to get some ideas what can be specified using 
+\sdf.
 
 \paragraph{Defining Numbers}
 
-\begin{verbatim}
+Definition of integers and real numbers can be found in 
+Figure \ref{CODE:numbers}.
 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 sorts UnsignedInt SignedInt UnsignedReal Number 
 
 lexical syntax
+  [0] | ([1-9][0-9]*)                           -> UnsignedInt
 
-   [0-9]+                                     -> UnsignedInt
-   UnsignedInt                                -> SignedInt 
-   [+\-] UnsignedInt                          -> SignedInt
-   UnsignedInt "." UnsignedInt                -> UnsignedReal
-   UnsignedInt "." UnsignedInt [eE] SignedInt -> UnsignedReal 
-   UnsignedInt [eE] SignedInt                 -> UnsignedReal
-   UnsignedInt                                -> Number 
-   UnsignedReal                               -> Number
+  [\+\-]? UnsignedInt                           -> SignedInt
 
-\end{verbatim}
+  UnsignedInt "." UnsignedInt ([eE] SignedInt)? -> UnsignedReal 
+  UnsignedInt [eE] SignedInt                    -> UnsignedReal
+
+  UnsignedInt                                   -> Number 
+  UnsignedReal                                  -> Number
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical definition of Numbers}\label{CODE:numbers}
+\end{figure}   
 
 \paragraph{Defining Strings}
 
-\begin{verbatim}
-sorts String 
+Figure \ref{CODE:string} contains the lexical definition of
+strings which may contain escaped quotes in the actual string.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+sorts String StringChar
 
 lexical syntax
-   "\"" ~ ["\n]* "\"" -> String
-\end{verbatim}
+   ~[\"\n]*              -> StringChar
+   [\\][\"]              -> StringChar
+   "\"" StringChar* "\"" -> String
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical definition of String}\label{CODE:string}
+\end{figure}   
 
 \paragraph{Defining Comments}
 
-\begin{verbatim}
+It is impossible to give {\em one} lexical definition of
+comments. We will give an example in which comments may be
+next like in C, see Figure \ref{CODE:c-comment}.
 
-sorts CommentChar 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 
-lexical syntax
+  sorts ComWord Comment
+  lexical syntax
+    [\ \n\t]     -> LAYOUT
+    ~[\ \n\t\/]+ -> ComWord
 
-   ~ [*]                  -> CommentChar
-   "*" ~ [)]              -> CommentChar
-   "(*" CommentChar* "*)" -> LAYOUT
-\end{verbatim}
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
 
-Note: In the current implementation the above definition does not work, since
-CommentChar is not properly treated as an auxiliary sort for the lexical
-syntax. As a result, every space will be recognized as a
-CommentChar. Temporary solution: omit the declaration for CommentChar (this
-produces an error message), but the parser will behave as expected.
-
-\begin{verbatim}
-
-lexical syntax
-   "%%" ~ [\n] * "\n" -> LAYOUT
-   "%" ~[\n%] * "%"   -> LAYOUT
-\end{verbatim}
+  context-free syntax
+    "/*" ComWord * "*/" -> Comment
+    Comment             -> LAYOUT
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical definition of C comments}\label{CODE:c-comment}
+\end{figure}
 
 \subsection{Context-free Syntax}
+\label{cf-syntax}
 
 The context-free syntax describes the concrete and abstract syntactic
 structure of sentences in a language. A context-free syntax contains a set of
