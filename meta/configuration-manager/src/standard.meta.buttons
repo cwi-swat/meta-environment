@@ -5,7 +5,7 @@ buttons([
          [show-area]),
   button("*",
          [description(feedback-list, click)],
-         [message("feedback source pinpoint not yet implemented")]),
+         [show-feedback-location]),
    button("*",
 	  [description(module-popup, menu(["Revert Module"]))],
 	  [revert-module]),

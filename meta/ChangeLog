@@ -1,5 +1,12 @@
 # $Id$
 
+2003/12/23 <jurgenv@cwi.nl>
+ * Basic functionality for dealing with the Feedback messages added.
+ * Known problems: the errorapi does not know the language of the file
+   that the error occurred in. That means that an editor is opened over
+   the "unknown language" with obvious disadvantages
+   
+
 2003/12/19 <jurgenv@cwi.nl>
  * MetaStudio revised towards an object oriented design:
  	- module browsing components (tree, graph and module stats) grouped into
