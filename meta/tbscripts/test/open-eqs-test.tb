@@ -1,0 +1,20 @@
+#include "in-output.idef"
+
+process Test is
+let
+  Src: str,
+  Path: str,
+  Time: int
+in
+  snd-msg(open-eqs-text-file("Aap")) .
+  (
+    rec-msg(opened-file(raw,"Aap",Src?,Path?,timestamp(Time?)))
+   + 
+    rec-msg(error-opening("Aap"))
+   +
+    shutdown("open-eqs-text-file FAILED! (timeout)\n")  delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)
