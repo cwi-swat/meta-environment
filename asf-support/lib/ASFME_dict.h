@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jul 20 17:20:39 2001
+ * Generated at Mon Jul 23 13:35:04 2001
  */
 
 #ifndef __ASFME_dict_H
@@ -42,10 +42,12 @@ extern AFun ASF_afun31;
 extern AFun ASF_afun32;
 extern AFun ASF_afun33;
 extern AFun ASF_afun34;
+extern AFun ASF_afun35;
 
 extern ATerm ASF_patternCHARLexToCf;
 extern ATerm ASF_patternTreeAmbsMany;
 extern ATerm ASF_patternTreeAmbsSingle;
+extern ATerm ASF_patternTreeAmbsEmpty;
 extern ATerm ASF_patternConditionNegative;
 extern ATerm ASF_patternConditionPositive;
 extern ATerm ASF_patternEquationDefault;

@@ -150,8 +150,8 @@ main(int argc, char *argv[])
     ATparse("prod([<lhs-symbol(Symbol)>,cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),<rhs-symbol(Symbol)>],cf(sort(\"Condition\")),attrs([id(\"GEN-Equations\")]))"));
 
   addSubstitution(
-    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"GEN-Equations\")])),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-sep(sort(\"Tree\"),lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"),
-    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(<amb(Symbol)>,lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(<symbol(Symbol)>),attrs([id(\"GEN-Equations\")])),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-sep(<list-symbol(Symbol)>,lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"));
+    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"GEN-Equations\")])),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"),
+    ATparse("appl(prod([lit(\"amb\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(<amb(Symbol)>,lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(<symbol(Symbol)>),attrs([id(\"GEN-Equations\")])),[lit(\"amb\"),<\"ws-after-amb\"(Layout)>,lit(\"(\"),<\"ws-after-(\"(Layout)>,appl(list(cf(iter-star-sep(<list-symbol(Symbol)>,lit(\",\")))),<ambs(Tree-ambs)>),<ws-after-ambs(Layout)>,lit(\")\")])"));
 
   addSubstitution(
     ATparse("prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"CHAR\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"GEN-LexConsFuncs\")]))"),

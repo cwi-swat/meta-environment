@@ -128,6 +128,7 @@ ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_Layout wsAfterFirst, ASF_CH
 ASF_Equation ASF_makeEquationDefault(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
 ASF_Condition ASF_makeConditionPositive(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterEquals, ASF_Tree rhs);
 ASF_Condition ASF_makeConditionNegative(ASF_Symbol lhsSymbol, ASF_Symbol rhsSymbol, ASF_Tree lhs, ASF_Layout wsAfterLhs, ASF_Layout wsAfterUnequal, ASF_Tree rhs);
+ASF_TreeAmbs ASF_makeTreeAmbsEmpty();
 ASF_TreeAmbs ASF_makeTreeAmbsSingle(ASF_Tree head);
 ASF_TreeAmbs ASF_makeTreeAmbsMany(ASF_Tree head, ASF_Layout wsAfterFirst, char * sep, ASF_Layout wsAfterSep, ASF_TreeAmbs tail);
 ASF_CHAR ASF_makeCHARLexToCf(ASF_Lexical lex);
@@ -409,6 +410,7 @@ ASF_Condition ASF_setConditionWsAfterUnequal(ASF_Condition arg, ASF_Layout wsAft
 /*{{{  ASF_TreeAmbs accessors */
 
 ATbool ASF_isValidTreeAmbs(ASF_TreeAmbs arg);
+inline ATbool ASF_isTreeAmbsEmpty(ASF_TreeAmbs arg);
 inline ATbool ASF_isTreeAmbsSingle(ASF_TreeAmbs arg);
 inline ATbool ASF_isTreeAmbsMany(ASF_TreeAmbs arg);
 ATbool ASF_hasTreeAmbsHead(ASF_TreeAmbs arg);
