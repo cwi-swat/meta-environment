@@ -337,27 +337,6 @@ static ATerm call(ATerm prod, ATermList args)
   return result;
 }
 /*}}}  */
-/*{{{  static ATerm make_caller_prod(ATerm sort) */
-
-ATerm make_caller_prod(ATerm sort)
-{
-  ATerm prod;
-  char *text;
-  int i;
-
-  assert(ATmatchTerm(sort, pattern_asfix_sort, &text));
-  text = strdup(text);
-  if(!text) {
-    fprintf(stderr,"Not enough memory\n");
-    exit(1);
-  }
-  for(i=0; text[i]; i++)
-    text[i] = tolower(text[i]);
-  prod = ATmakeTerm(pattern_lexical_constructor, text, sort);
-  free(text);
-  return prod;
-}
-/*}}}  */
 /*{{{  static ATerm make_list_type(ATerm type, ATerm args) */
 
 /**
