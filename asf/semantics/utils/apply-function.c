@@ -105,11 +105,15 @@ main (int argc, char **argv)
     default :  usage();                      exit(1);
     }
  
+  if (nInputs == 0) {
+    nInputs = 1;
+    inputs[0] = strdup("-");
+  }
+
   /* check if all needed arguments were supplied */
   if(!function || !strcmp(function, "") || 
      !sort || !strcmp(sort,"") ||
-     !module || !strcmp(module,"") ||
-     nInputs == 0) {
+     !module || !strcmp(module,"")) {
     usage();
     exit(1);
   }
