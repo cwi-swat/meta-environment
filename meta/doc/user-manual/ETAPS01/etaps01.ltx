@@ -158,7 +158,7 @@ languages.
 \asfsdf\ specifications are executed as rewrite rules. Both an
 interpreter and a compiler (ASF2C, see~\cite{BKO99}) are supported.  The
 latter generates very efficient C code that implements pattern
-matching and term traversal. The generated code is based on the ATerms library
+matching and term traversal. The generated code is based on ATerms 
 and ensures a minimal use of memory during normalization of terms.
 
 \begin{figure}
@@ -209,33 +209,39 @@ The application areas of \asfsdf\ can be split into three groups:
 \begin{enumerate}
 \item language prototyping (mainly in the area of domain specific
 languages),
-\item reverse engineering, and
+\item reverse engineering and system renovation, and
 \item algebraic specification of language processing tools
 (mainly components of the \metaenv\ itself).
 \end{enumerate}
 
 In the field of language prototyping \asfsdf\ has been used
-to describe the syntax and semantics of a domain specific
-language (Risla) for describing financial products \cite{??}.
-The syntax of the algebraic specification language Casl
+to describe the syntax and semantics of domain specific
+languages, for instance, the language Risla for describing financial products \cite{??}.
+As another example.
+the syntax of the algebraic specification language Casl
 has been prototyped using \asfsdf~\cite{BS00}.
 
 In the field of reverse engineering \asfsdf\ is used to
 analyze and transform COBOL legacy code \cite{BSV00}.
 
-Finally \asfsdf\ has been used to 
-specify a number of components of the \metaenv:
+Finally, \asfsdf\ has been used to 
+specify a number of components of the \metaenv\ itself:
 \begin{itemize}
 \item the ASF2C compiler, 
-\item unparser generator, and
+\item the unparser generator, and
 \item parts of the parsetable generator.
 \end{itemize}
+For other components, such as the ToolBus and the syntax-directed editor,
+an \asfsdf\ specification was made for prototyping only.
+That specification formed the basis for an optimized, manual, implementation.
 
 Components of the \metaenv\ are used as standalone tools in
-the Stratego compiler~\cite{VBT98}, Risla compiler, 
-Elan environment~\cite{BR00},
-and commercially available documentation generation tool (??).
- 
+a variety of applications. For instance,
+the Stratego compiler~\cite{VBT98}, the Risla compiler, 
+the Elan environment~\cite{BR00},
+a commercial tool for designing and implementing information systems,
+and a commercial documentation generation tool (??).
+
 \section{Demonstration}
 
 We will show a number of applications of the \metaenv\ ranging from a simple
