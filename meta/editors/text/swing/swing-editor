@@ -1,0 +1,5 @@
+#! /bin/sh
+
+CLASSPATH=`aterm-java-config`:`toolbuslib-config`/classes:/tmp/src:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/error-support/lib/locationapi-0.2.1.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/meta/editors/text/common/texteditorapi-1.0.jar
+
+java -classpath $CLASSPATH Main $* &
