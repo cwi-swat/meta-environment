@@ -1,5 +1,17 @@
 # $Id$
 
+Thu Jul  8 23:04:23 CEST 2004 <jurgenv@cwi.nl>
+ * Added a generic mapping from parse trees to RSTORE. The parse trees
+   must contain pos-info. After using the lift-to-tree builtin, it extracts:
+      a) which trees there are
+      b) which lists there are
+      c) which trees are children of which trees/lists
+      d) which trees have which constructor names
+      e) which trees have which types (only simple cf non-terminals supported)
+   The user must import the parameterized BasicFactExtraction module
+   with the top sort of the tree she wants to extract facts from and
+   call the 'extract-basic-facts' function.
+
 Thu Apr 29 11:15:45 CEST 2004 <jurgenv@cwi.nl,paulk@cwi.nl>
  * Brought RscriptChecker up-to-date with changes in Error api
  * Compiled specifications are configured for rewriting with annotations
