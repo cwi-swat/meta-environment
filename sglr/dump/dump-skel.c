@@ -70,7 +70,7 @@ int main (int argc, char **argv)
     return 1;
   }
 
-  if(!(pt = SG_LookupParseTable(pt_name, ATtrue))) {
+  if(!(pt = SG_LookupParseTable(pt_name))) {
     ATfprintf(stderr, "failed to find parse table for languate %s\n", pt_name);
     return 1;
   }
