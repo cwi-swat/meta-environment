@@ -65,7 +65,7 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
     ptSymbols = SDFSymbolsToPtSymbols(sdfSymbols);
   }
   else {
-    ATwarning("SDFProductionToPtProduction: unable to convert %s\n", 
+    ATerror("SDFProductionToPtProduction: unable to convert %s\n", 
 	    PT_yieldTree((PT_Tree) sdfProduction));
     return NULL;
   }
@@ -251,13 +251,6 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_CharRanges ptCR = SDFCharClassToPtCharRanges(sdfCC);
     result = PT_makeSymbolCharClass(ptCR);
   }
-  else if (SDF_isSymbolStrategy(sdfSymbol)) {
-    SDF_Symbol sdfLeft = SDF_getSymbolLeft(sdfSymbol);
-    SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
-    PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
-    PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
-    result = PT_makeSymbolStrategy(ptLeft, ptRight);
-  }
   else if (SDF_isSymbolLabel(sdfSymbol)) {
     SDF_Symbol arg = SDF_getSymbolSymbol(sdfSymbol);
     result = SDFSymbolToPtSymbol(arg);
@@ -357,10 +350,14 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
 
     ptAttr = PT_makeAttrAssoc(ptAssoc);
   }
+  else if (SDF_isAttributeId(sdfAttribute)) {
+    char *moduleName = PT_yieldTree((PT_Tree) sdfAttribute);
+    ptAttr = PT_makeAttrId(moduleName);
+  }
   else if (SDF_isAttributeTerm(sdfAttribute)) {
     ATerm term = ATmake(PT_yieldTree((PT_Tree) sdfAttribute));
     if (term == NULL) {
-      ATerror("SDFAttributeToPtAttr: unable to convert %s\n",
+      ATerror("SDFAttributeToPtAttr (term): unable to convert %s\n",
 	      PT_yieldTree((PT_Tree) sdfAttribute));
       ptAttr = NULL;
     }
