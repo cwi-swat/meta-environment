@@ -1,4 +1,4 @@
-
+check-rscript(
 %% Reaching definitions, example ASU, p626
 
 rel[str,str] PRED = { <"B1", "B2">, <"B2",  "B3">, <"B2", "B4">, <"B3", "B4">, <"B4", "B2">}
@@ -24,9 +24,9 @@ rel[str,str] OUT = {}
 
 solve {
 
-	IN =  {B x OUT[P] : B in BLOCKS, P in PRED-OF[B]},
-	OUT = {B x (GEN[B] union (IN[B] \ KILL[B])) : B in BLOCKS }
+	IN =  rel {B x OUT[P] | B : BLOCKS, P : PRED-OF[B]},
+	OUT = rel {B x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
 }
 
-
+)
 

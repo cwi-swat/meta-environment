@@ -47,6 +47,15 @@ equations
 [default-is-ct5]
 	is-compound-type($Etype) = false
 
+%% --- Is tuple exp
+
+[is-te1]
+	is-tuple-exp(<$Exp1, $Exp2>) = true
+[is-te2]
+	is-tuple-exp($Tuple) = true
+[default-te]
+	is-tuple-exp($Exp) = false
+
 %% --- If-then-else on type environments
 
 [ite1]
@@ -519,18 +528,18 @@ $Error]>
       	==========================================
       	add-from(<$Var1, $Var2> <- $Exp, $From*, $Tenv) = add-from($From*, $Tenv''')
 
-[af3] add-from( , $Tenv) = $Tenv
+[af3] 	add-from( , $Tenv) = $Tenv
 
 [default-af]
-      add-from($From, $From*, $Tenv) = $Tenv + $From cannot be typed
+      	add-from($From, $From*, $Tenv) = $Tenv + $From cannot be typed
 
-[df1] delete($Tenv, $Var) = $Tenv'
-      ==========================================
-      del-from($Var : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+[df1] 	delete($Tenv, $Var) = $Tenv'
+      	==========================================
+      	del-from($Var : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
 
-[df2] delete($Tenv, $Var1) = $Tenv', delete($Tenv', $Var2) = $Tenv''
-      ==========================================
-      del-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
+[df2] 	delete($Tenv, $Var1) = $Tenv', delete($Tenv', $Var2) = $Tenv''
+      	==========================================
+      	del-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
 
 [df3]	del-from($Exp, $From*, $Tenv) = del-from($From*, $Tenv)
 
@@ -542,31 +551,33 @@ $Error]>
 	=================================================================
 	del-from(<$Var1, $Var2> <- $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
 
-[df3] del-from( , $Tenv) = $Tenv
+[df3] 	del-from( , $Tenv) = $Tenv
 
-[ct1] container-type(<$Etype1,$Etype2>) = rel[$Etype1, $Etype2]
-[ct2] container-type(rel[$Etype1,$Etype2]) = rel[$Etype1, $Etype2]
-[ct3] container-type(bag[$Etype]) = bag[$Etype]
+[ct1] 	container-type(<$Etype1,$Etype2>) = rel[$Etype1, $Etype2]
+[ct2] 	container-type(rel[$Etype1,$Etype2]) = rel[$Etype1, $Etype2]
+[ct3] 	container-type(bag[$Etype]) = bag[$Etype]
 
 [default-ct]
-      container-type($Etype) = bag[$Etype]
+      	container-type($Etype) = bag[$Etype]
 
-[check-valueformer1] 
-      add-from($From+, $Tenv) = $Tenv',
-      check($Var, $Tenv') = <$Etype, $Tenv''>,
-      container-type($Etype) = bag[$Etype'],
-      del-from($From+, $Tenv'') = $Tenv'''
-      ======================================
-      check({$Var | $From+ }, $Tenv) = <bag[$Etype'], $Tenv'''>
+[check-valueformer1]
+	is-tuple-exp($Exp) = false
+	===================================================================
+	check({$Exp | $From+ }, $Tenv) = check(bag {$Exp | $From+ }, $Tenv) 
 
-[check-valueformer2] 
-      add-from($From+, $Tenv) = $Tenv',
-      check($Var1, $Tenv') = <$Etype1, $Tenv''>,
-      check($Var2, $Tenv'') = <$Etype2, $Tenv'''>,
-      container-type(<$Etype1,$Etype2>) = $Etype',
-      del-from($From+, $Tenv''') = $Tenv''''
-      ======================================
-      check({<$Var1, $Var2> | $From+ }, $Tenv) = <$Etype', $Tenv''''>
+[check-valueformer2]
+	is-tuple-exp($Exp) = true
+	===================================================================
+	check({$Exp | $From+ }, $Tenv) = check(rel {$Exp | $From+ }, $Tenv) 
+
+[check-valueformer3] 
+      	add-from($From+, $Tenv) = $Tenv',
+      	check($Exp, $Tenv') = <$Etype, $Tenv''>,
+      	container-type($Etype) = $Etype',
+      	del-from($From+, $Tenv'') = $Tenv''',
+	require-itertype($Exp, $IterType, $Etype', $Tenv''') = $Tenv''''
+      	======================================
+      	check($IterType {$Exp | $From+ }, $Tenv) = <$Etype', $Tenv''''>
 
 %% --- Check Exists
 

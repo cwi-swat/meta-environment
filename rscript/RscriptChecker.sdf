@@ -25,6 +25,7 @@ exports
         is-var(REXPTYPE)                        		-> Boolean
 	is-simple-type-or-tuple(REXPTYPE)			-> Boolean
 	is-compound-type(REXPTYPE)				-> Boolean
+	is-tuple-exp(REXP)					-> Boolean
 
 	REXPTYPE "==" REXPTYPE					-> Boolean
 

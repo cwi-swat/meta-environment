@@ -85,7 +85,7 @@ exports
 	RVAR 					-> TARGET
 	"<" RVAR "," RVAR ">"			-> TARGET
 
-    "{" TARGET "|" {FROM ","}+ "}"		-> REXP
+     ITERTYPE? "{" REXP "|" {FROM ","}+ "}"	-> REXP
 
      TARGET ":" REXP                           	-> FROM
      REXP					-> FROM

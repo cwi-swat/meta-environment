@@ -69,7 +69,7 @@
 [if1]	if true then $Val1 else $Val2 fi  = $Val1
 [if2]	if false then $Val1 else $Val2 fi = $Val2
 
-%%---- Equality on elements
+%%%%---- Equality on elements
 
 [e1]	equal-elem($Bool, $Bool)	= true
 [e1]	equal-elem($Integer, $Integer)	= true
@@ -87,25 +87,22 @@
 [default-e4] 
 	equal-rval($Val1, $Val2) = false
 
+%%[v2b]	rval2bag($Bag) = $Bag
+%%[v2r]	rval2rel($Rel) = $Rel
 
-[v2b]	rval2bag($Bag) = $Bag
-[v2r]	rval2rel($Rel) = $Rel
+%% ---- Tests on RVALUEs
+
+[it-1]	is-tuple(<$Elem1, $Elem2>) = true
+[default-it]
+	is-tuple($Val) = false
 
 %%---- Specialized versions of evalx that return value of required type
 
-[EVP]	$Bool = evalx($Exp, $Store)               ===> evalp($Exp, $Store) = $Bool
-
-%%[EVE2]	*empty* = evalx($Exp, $Store)        	  ===> evale($Exp, $Store) = EmptyElemBag
-[EVE2]	$Elem = evalx($Exp, $Store)               ===> evale($Exp, $Store) = $Elem
-[EVE3]	$Tuple = evalx($Exp, $Store)               ===> evalt($Exp, $Store) = $Tuple
-
-[EVB1]	$Bag = evalx($Exp, $Store)     ===> evalb($Exp, $Store) = $Bag
-
-%%[EVB2]	EmptyBag = evalx($Exp, $Store)  ===> evalb($Exp, $Store) = {}
-
-[EVR1]	$Rel = evalx($Exp, $Store)     ===> evalr($Exp, $Store) = $Rel
-
-%%[EVR1]	EmptyBag = evalx($Exp, $Store)  ===> evalr($Exp, $Store) = {}
+[EVP]	$Bool = evalx($Exp, $Store) 	===> evalp($Exp, $Store) = $Bool
+[EVE1]	$Elem = evalx($Exp, $Store)   	===> evale($Exp, $Store) = $Elem
+[EVE2]	$Tuple = evalx($Exp, $Store)	===> evalt($Exp, $Store) = $Tuple
+[EVB1]	$Bag = evalx($Exp, $Store)     	===> evalb($Exp, $Store) = $Bag
+[EVR1]	$Rel = evalx($Exp, $Store)     	===> evalr($Exp, $Store) = $Rel
 
 %% --- Test suite support
 
@@ -125,69 +122,74 @@
 
 %% ---- Eval complete script
 
-[ES0]	eval-rscript($Stat*, $Var, $Store) = value($Var, eval-rscript($Stat*, $Store))
+[ES1]	eval-rscript($Stat*) = eval-rstats($Stat*, [<NPASSED,0>,<NFAILED,0>,<FAILED,EmptyBag>])
 
-[ES1]	eval-rscript($Stat*) = eval-rscript($Stat*, [<NPASSED,0>,<NFAILED,0>,<FAILED,*empty*>])
-[ES2]	eval-rscript($Stat $Stat*, $Store) = eval-rscript($Stat*, eval-rscript($Stat, $Store))
-[ES3]	eval-rscript( , $Store) = $Store
+%% ---- Eval complete script and yield value of a variable
 
+[ES2]	eval-rscript($Stat*, $Var, $Store) = value($Var, eval-rstats($Stat*, $Store))
 
 %% ---- Eval statements
 
-[S1]	eval-rscript(bool $Var, $Store) 	= assign-when-undef($Var, true, $Store)
-[S2]	eval-rscript(int $Var, $Store)  	= assign-when-undef($Var, 0, $Store)
-[S3]	eval-rscript(str $Var, $Store)  	= assign-when-undef($Var, "", $Store)
-[S4]	eval-rscript(node $Var, $Store)		= assign-when-undef($Var, area("",0,0,0,0), $Store)
-[S5]	eval-rscript(bag[$Etype] $Var, $Store)  = assign-when-undef($Var, EmptyBag, $Store)	
+[ES2]	eval-rstats($Stat $Stat*, $Store) = eval-rstats($Stat*, eval-rstat($Stat, $Store))
+[ES3]	eval-rstats( , $Store) = $Store
+
+
+%% ---- Eval one statement
+
+[S1]	eval-rstat(bool $Var, $Store) 	= assign-when-undef($Var, true, $Store)
+[S2]	eval-rstat(int $Var, $Store)  	= assign-when-undef($Var, 0, $Store)
+[S3]	eval-rstat(str $Var, $Store)  	= assign-when-undef($Var, "", $Store)
+[S4]	eval-rstat(node $Var, $Store)		= assign-when-undef($Var, area("",0,0,0,0), $Store)
+[S5]	eval-rstat(bag[$Etype] $Var, $Store)  = assign-when-undef($Var, EmptyBag, $Store)	
 	
-[S6]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
-						 = assign-when-undef($Var, EmptyBag, $Store)
-[S7]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
-						 = assign-when-undef($Var, EmptyBag, $Store)
-[S8]	eval-rscript($Etype $Var, $Store)	= $Store
+[S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Store) 
+						 = assign-when-undef($Var, EmptyRel, $Store)
+[S7]	eval-rstat(rel[$Etype1, $Etype2] $Var = {}, $Store) 
+						 = assign-when-undef($Var, EmptyRel, $Store)
+[S8]	eval-rstat($Etype $Var, $Store)	= $Store
 
-[S9]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, EmptyBag, $Store)
-[S10] 	eval-rscript(rel[$Etype1,$Etype2] $Var = {}, $Store)  = assign($Var, EmptyBag, $Store)
+[S9]	eval-rstat(bag[$Etype] $Var = {}, $Store)  = assign($Var, EmptyBag, $Store)
+[S10] 	eval-rstat(rel[$Etype1,$Etype2] $Var = {}, $Store)  = assign($Var, EmptyRel, $Store)
 
-[S11]	eval-rscript($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
-[S12]	eval-rscript($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 
+[S11]	eval-rstat($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
+[S12]	eval-rstat($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Exp>, $Store)
 
-[S13]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3) = $Exp, $Store) 
+[S13]	eval-rstat($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Exp>, $Store)
 
-[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) 
+[S14]	eval-rstat($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Exp>, $Store)
 
-[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5) = $Exp, $Store) 
+[S14]	eval-rstat($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Exp>, $Store)
 
-[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6) = $Exp, $Store) 
+[S14]	eval-rstat($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Var6, $Exp>, $Store)
 
-[S14]	eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6, $Etype7 $Var7) = $Exp, $Store) 
+[S14]	eval-rstat($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4, $Etype5 $Var5, $Etype6 $Var6, $Etype7 $Var7) = $Exp, $Store) 
 						= assign($Var1, <$Var2, $Var3, $Var4, $Var5, $Var6, $Var7, $Exp>, $Store)
 
 [S15]	evalp($Exp,$Store) = true
 	===================================================
-	eval-rscript(assert $String : $Exp, $Store)= increment(NPASSED, $Store)
+	eval-rstat(assert $String : $Exp, $Store)= increment(NPASSED, $Store)
 
 [S16]	evalp($Exp,$Store) = false, add-elem(FAILED, $String, $Store) = $Store'
 	===================================================
-	eval-rscript(assert $String : $Exp, $Store)= increment(NFAILED, $Store')
+	eval-rstat(assert $String : $Exp, $Store)= increment(NFAILED, $Store')
 
 %% --- Solve Sets of equations
 
-[SL1]	eval-rscript(solve {$Var1 = $Exp1}, $Store) = 
+[SL1]	eval-rstat(solve {$Var1 = $Exp1}, $Store) = 
 	solve1(1000, $Var1, $Exp1, $Store)
 
-[SL1]	eval-rscript(solve($Integer) {$Var1 = $Exp1}, $Store) = 
+[SL1]	eval-rstat(solve($Integer) {$Var1 = $Exp1}, $Store) = 
 	solve1($Integer, $Var1, $Exp1, $Store)
 
-[SL2]	eval-rscript(solve {$Var1 = $Exp1, $Var2 = $Exp2}, $Store) = 
+[SL2]	eval-rstat(solve {$Var1 = $Exp1, $Var2 = $Exp2}, $Store) = 
 	solve2(1000, $Var1, $Exp1, $Var2, $Exp2, $Store)
 
-[SL2]	eval-rscript(solve($Integer){$Var1 = $Exp1, $Var2 = $Exp2}, $Store) = 
+[SL2]	eval-rstat(solve($Integer){$Var1 = $Exp1, $Var2 = $Exp2}, $Store) = 
 	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Store)
 
 [SL1-1]	$Integer > 0 = true,
@@ -220,7 +222,7 @@
 
 %% ---- Eval one REXP
 
-[ER1]	eval-rexp($Exp, $Store) = evalx($Exp, $Store)
+%%[ER1]	eval-rexp($Exp, $Store) = evalx($Exp, $Store)
 
 
 %% ---- The main evaluation function evalx
@@ -242,12 +244,12 @@
 
 %% ---- Eval bags
 
-[EB2]   $Elem = evale($Exp, $Store), %%is-tuple($Elem) = false, 
+[EB2]   $Val = evalx($Exp, $Store), $Val = $Elem,
 	{$Elem+} = evalb({$Exp+}, $Store)
 	===================================================
 	evalx({$Exp, $Exp+}, $Store) = {$Elem, $Elem+}
 
-[EB3]	$Elem = evale($Exp, $Store) %%, is-tuple($Elem) = false
+[EB3]	$Val = evalx($Exp, $Store), $Val = $Elem
 	===================================================
 	evalx({$Exp}, $Store) = {$Elem}
 
@@ -280,11 +282,7 @@
 
 [EQ1]	evalx($Exp1 == $Exp2, $Store) 	= apply(evalx($Exp1, $Store) == evalx($Exp2, $Store))
 
-[EQ2]	$Rel1 = $Rel2   ===> apply($Rel1 == $Rel2) = true
-[EQ2]	$Rel1 != $Rel2  ===> apply($Rel1 == $Rel2) = false
-
-[EQ3]	$Bag1 = $Bag2   ===> apply($Bag1 == $Bag2) = true
-[EQ4]	$Bag1 != $Bag2  ===> apply($Bag1 == $Bag2) = false
+[EQ2]	apply($Elem1 == $Elem2) 	= equal-elem($Elem1, $Elem2)
 
 [NE1]	$Bool = apply(evalx($Exp1, $Store) == evalx($Exp2, $Store))
 	===========================================================
@@ -310,21 +308,22 @@
 
 [UN1]	evalx($Exp1 union $Exp2, $Store)= apply(evalx($Exp1, $Store) union evalx($Exp2, $Store))
 [UN2]	apply($Rel1 union $Rel2)     	= union($Rel1, $Rel2)
-%%[UN3]	apply($Tuple union $Rel)     	= union({$Tuple}, $Rel)
-%%[UN4]	apply($Rel union $Tuple)     	= union($Rel, {$Tuple})
-%%[UN5]	apply($Tuple1 union $Tuple2) 	= union({$Tuple1}, {$Tuple2})
+[UN3]	apply($Tuple union $Rel)     	= union({$Tuple}, $Rel)
+[UN4]	apply($Rel union $Tuple)     	= union($Rel, {$Tuple})
+[UN5]	apply($Tuple1 union $Tuple2) 	= union({$Tuple1}, {$Tuple2})
 [UN6]	apply($Bag1 union $Bag2) 	= union($Bag1, $Bag2)
-%%[UN7]	apply($Elem union $Bag) 	= union({<$Elem,unit>}, $Bag)
+[UN7]	apply($Elem union $Bag) 	= union({$Elem}, $Bag)
+[UN8]	apply($Bag union $Elem) 	= union($Bag, {$Elem})
 
 [IN1]	evalx($Exp1 inter $Exp2, $Store)= apply(evalx($Exp1, $Store) inter evalx($Exp2, $Store))
 
-[IN1]	evalx($Exp1 inter $Exp2, $Store)= apply(evalx($Exp1, $Store) inter evalx($Exp2, $Store))
 [IN2]	apply($Rel1 inter $Rel2)     	= inter($Rel1, $Rel2)
-%%[IN3]	apply($Tuple inter $Rel)     	= inter({$Tuple}, $Rel)
-%%[IN4]	apply($Rel inter $Tuple)     	= inter($Rel, {$Tuple})
-%%[IN5]	apply($Tuple1 inter $Tuple2) 	= inter({$Tuple1}, {$Tuple2})
+[IN3]	apply($Tuple inter $Rel)     	= inter({$Tuple}, $Rel)
+[IN4]	apply($Rel inter $Tuple)     	= inter($Rel, {$Tuple})
+[IN5]	apply($Tuple1 inter $Tuple2) 	= inter({$Tuple1}, {$Tuple2})
 [IN6]	apply($Bag1 inter $Bag2) 	= inter($Bag1, $Bag2)
-%%[IN7]	apply($Elem inter $Bag) 	= inter({<$Elem,unit>}, $Bag)
+[IN7]	apply($Elem inter $Bag) 	= inter({$Elem}, $Bag)
+[IN8]	apply($Bag inter $Elem) 	= inter($Bag, {$Elem})
 
 %% -- difference
 
@@ -332,27 +331,28 @@
 
 [DF2]	evalx($Exp1 \ $Exp2, $Store)= apply(evalx($Exp1, $Store) \ evalx($Exp2, $Store))
 [DF3]	apply($Rel1 \ $Rel2)     	= diff($Rel1, $Rel2)
-%%[DF3]	apply($Tuple \ $Rel)     	= diff({$Tuple}, $Rel)
-%%[DF4]	apply($Rel \ $Tuple)     	= diff($Rel, {$Tuple})
-%%[DF5]	apply($Tuple1 \ $Tuple2) 	= diff({$Tuple1}, {$Tuple2})
+[DF3]	apply($Tuple \ $Rel)     	= diff({$Tuple}, $Rel)
+[DF4]	apply($Rel \ $Tuple)     	= diff($Rel, {$Tuple})
+[DF5]	apply($Tuple1 \ $Tuple2) 	= diff({$Tuple1}, {$Tuple2})
 [DF6]	apply($Bag1 \ $Bag2) 		= diff($Bag1, $Bag2)
-%%[DF7]	apply($Elem \ $Bag) 		= diff({<$Elem,unit>}, $Bag)
+[DF7]	apply($Elem \ $Bag) 		= diff({$Elem}, $Bag)
+[DF8]	apply($Bag \ $Elem) 		= diff($Bag, {$Elem})
 
 %% -- composition
 
 [CM1]	evalx($Exp1 o $Exp2, $Store)	= apply(evalx($Exp1, $Store) o evalx($Exp2, $Store))
 [CM2]	apply($Rel1 o $Rel2) 		= compose($Rel1, $Rel2)
-%%[CM3]	apply($Tuple o $Rel)     	= compose({$Tuple}, $Rel)
-%%[CM4]	apply($Rel o $Tuple)     	= compose($Rel, {$Tuple})
-%%[CM5]	apply($Tuple1 o $Tuple2) 	= compose({$Tuple1}, {$Tuple2})
+[CM3]	apply($Tuple o $Rel)     	= compose({$Tuple}, $Rel)
+[CM4]	apply($Rel o $Tuple)     	= compose($Rel, {$Tuple})
+[CM5]	apply($Tuple1 o $Tuple2) 	= compose({$Tuple1}, {$Tuple2})
 
 %% -- product
 
 [CP1]	evalx($Exp1 x $Exp2, $Store)	= apply(evalx($Exp1, $Store) x evalx($Exp2, $Store))
 
 [CP2]	apply($Bag1 x $Bag2) 		= product($Bag1, $Bag2)
-%%[CP3]	apply($Elem x $Bag)     	= product({$Elem}, $Bag)
-%%[CP4]	apply($Bag x $Elem)     	= product($Bag, {<$Elem,unit>})
+[CP3]	apply($Elem x $Bag)     	= product({$Elem}, $Bag)
+[CP4]	apply($Bag x $Elem)     	= product($Bag, {$Elem})
 
 %% -- Image
 
@@ -361,7 +361,8 @@
 [IM2]	apply($Rel . $Elem)		= $Rel . $Elem
 [IM3]	apply($Elem . $Rel)		= $Elem. $Rel
 
-%%[IM10]	apply($Bag . $Rel)		= $Bag . $Rel
+[IM4]	apply($Bag . $Rel)		= $Bag . $Rel
+[IM5]	apply($Rel. $Bag)		= $Rel . $Bag
 
 %%[default-IM11]
 %%	apply($Val1 . $Val2)		= *empty*
@@ -376,6 +377,7 @@
 
 [SZ1]	evalx(# $Exp, $Store) 		= apply(# evalx($Exp, $Store))
 [SZ1]	apply(# $Rel) 			= size($Rel)
+[SZ2]	apply(# $Bag) 			= size($Bag)
 
 %% --- Eval unary postfix operators
 
@@ -387,37 +389,22 @@
 
 %% ---- Eval bag and relation formers
 
-%% --- Simplify multiple Froms
+%% --- Determine resulttype and Simplify multiple Froms
 
-%%[RF1]	{$Exp : $From+}  =  bag {$From+ :: $Exp}
+[RF1]	$IterType {$Exp | $From+}  =   $IterType {$From+ :: $Exp}
 
-%%[RF1]	bag {$Exp : $From+}  =  bag {$From+ :: $Exp}
+[RF2]	{$Exp | $From+}  =   bag {$From+ :: $Exp}
 
-%%[RF1]	rel {$Exp : $From+}  =  rel {$From+ :: $Exp}
-
-%%[RF1]	$IterType {$From, $From+ :: $Exp } = $IterType{$From :: $IterType {$From+ :: $Exp}}
-
-%%[RF2]	{$Exp : $From+ | $Test} =  bag {$From+ :: $Test, $Exp}
-
-%%[RF2]	bag {$Exp : $From+ | $Test} =  bag {$From+ :: $Test, $Exp}
-
-%%[RF2]	rel {$Exp : $From+ | $Test} =  rel {$From+ :: $Test, $Exp}
-
-%%[RF1]	$IterType {$From, $From+ :: $Test, $Exp } = $IterType {$From :: $IterType {$From+ :: $Test, $Exp}}
-
-
-[RF1]	{$Var | $From+}  =   bag {$From+ :: $Var}
-
-[RF1]	{<$Var1, $Var2> | $From+}  =   rel {$From+ :: <$Var1, $Var2>}
+[RF3]	{<$Exp1, $Exp2> | $From+}  =   rel {$From+ :: <$Exp11, $Exp2>}
 
 [XX] 	$IterType {$From, $From+ :: $Exp } = $IterType {$From :: $IterType {$From+ :: $Exp}}
 
 %%%%%%%%
 
-[ep-1]	$Elem1 = evale($Var1, $Store),
-	$Elem2 = evale($Var2, $Store)
-	===================================================
-	evalx(<$Var1, $Var2>, $Store) = <$Elem1, $Elem2>
+%%[ep-1]	$Elem1 = evale($Var1, $Store),
+%%	$Elem2 = evale($Var2, $Store)
+%%	===================================================
+%%	evalx(<$Var1, $Var2>, $Store) = <$Elem1, $Elem2>
 
 [et-1]	$Bool =  evalp($Test, $Store)
 	======================================================================
@@ -428,9 +415,9 @@
 	======================================================================
 	evalx($IterType { $Var <- $Exp1 :: $Exp2}, $Store) = evalx($Exp2, $Store')
 
-[ea-1]	<$Val1, $Val2> = evalx($Exp1, $Store),
-	$Store' =  assign($Var1, $Val1, $Store),
-	$Store'' =  assign($Var2, $Val2, $Store'),
+[ea-1]	<$Elem1, $Elem2> = evalx($Exp1, $Store),
+	$Store' =  assign($Var1, $Elem1, $Store),
+	$Store'' =  assign($Var2, $Elem2, $Store')
 	======================================================================
 	evalx($IterType { <$Var1,$Var2> <- $Exp1 :: $Exp2}, $Store) = evalx($Exp2, $Store'')
 
@@ -473,94 +460,9 @@
 
 [ei2-3]	eval-iter2($Var1, $Var2, {}, $Val, $Exp2, $Store) = $Val
 
-%%%% --- eval-iter: iterate over a bag
-%%
-%%[ei-1]	$Bag = evalb($Exp1, $Store)
-%%	=======================================
-%%	evalx(bag {$Var in $Exp1 :: $Exp2}, $Store) = eval-iter($Var, $Bag, EmptyBag, $Exp2, $Store)
-%%
-%%
-%%[ei-1]	$Bag = evalb($Exp1, $Store),
-%%	=======================================
-%%	evalx(rel {$Var in $Exp1 :: $Exp2}, $Store) = eval-iter($Var, $Bag, EmptyRel, $Exp2, $Store)
-%%
-%%[ei-2]	$Store' = assign($Var, $Elem, $Store),
-%%	$Val' = evalx($Exp, $Store'),
-%%	eval-iter($Var, {$Elem*}, append($Val, $Val'), $Exp, $Store') = $Val''
-%%	======================================================
-%%	eval-iter($Var, {$Elem, $Elem*}, $Val, $Exp, $Store) =  $Val''
-%%
-%%[ei-3]	eval-iter($Var, {}, $Val, $Exp2, $Store) = $Val
-%%
-%%%% --- eval-citer: iterate over bag, with condition
-%%
-%%[eci-1]	$Bag = evalb($Exp1, $Store)
-%%	=======================================
-%%	evalx(bag {$Var in $Exp1 :: $Test, $Exp2}, $Store) = 
-%%	eval-citer($Var, $Bag, EmptyBag, $Test, $Exp2, $Store)
-%%
-%%[eci-1]	$Bag = evalb($Exp1, $Store)
-%%	=======================================
-%%	evalx(rel {$Var in $Exp1 :: $Test, $Exp2}, $Store) = 
-%%	eval-citer($Var, $Bag, EmptyRel, $Test, $Exp2, $Store)
-%%
-%%[eci-2]	$Store' = assign($Var, $Elem, $Store),
-%%	$Bool =  evalp($Test, $Store'),
-%%	$Val' = if $Bool then append($Val, evalx($Exp, $Store')) else $Val fi,
-%%	eval-citer($Var, {$Elem*}, $Val', $Test, $Exp, $Store') = $Val''
-%%	======================================================
-%%	eval-citer($Var, {$Elem, $Elem*}, $Val, $Test, $Exp, $Store) = $Val''
-%%
-%%[eci3]	eval-citer($Var, {}, $Val, $Test, $Exp, $Store) = $Val
-%%
-%%%% --- eval-iter2: iterate over relation
-%%
-%%[ei2-1]	$Rel = evalr($Exp1, $Store)
-%%	=======================================
-%%	evalx(bag { <$Var1, $Var2> in $Exp1 :: $Exp2 }, $Store) = 
-%%	eval-iter2($Var1, $Var2, $Rel, EmptyBag, $Exp2, $Store)
-%%
-%%[ei2-1]	$Rel = evalr($Exp1, $Store), 
-%%	=======================================
-%%	evalx(rel { <$Var1, $Var2> in $Exp1 :: $Exp2 }, $Store) = 
-%%	eval-iter2($Var1, $Var2, $Rel, EmptyRel, $Exp2, $Store)
-%%
-%%[ei2-2]	$Store' = assign($Var1, $Elem1, $Store),
-%%	$Store'' = assign($Var2, $Elem2, $Store'),
-%%	$Val' = evalx($Exp, $Store''),
-%%	eval-iter2($Var1, $Var2, {$Tuple*}, append($Val, $Val'), $Exp, $Store'') = $Val''
-%%	======================================================
-%%	eval-iter2($Var1, $Var2, {<$Elem1, $Elem2>, $Tuple*}, $Val, $Exp, $Store) = $Val''
-%%
-%%[ei2-3]	eval-iter2($Var1, $Var2, {}, $Val, $Exp2, $Store) = $Val
-%%
-%%%% --- eval-citer2: iterate over relation, with condition
-%%
-%%[eci2-1]	
-%%	$Rel = evalr($Exp1, $Store)
-%%	=======================================
-%%	evalx(bag { <$Var1, $Var2> in $Exp1 :: $Test, $Exp2 }, $Store) = 
-%%	eval-citer2($Var1, $Var2, $Rel, EmptyBag, $Test, $Exp2, $Store)
-%%
-%%[eci2-1]	
-%%	$Rel = evalr($Exp1, $Store)
-%%	=======================================
-%%	evalx(rel { <$Var1, $Var2> in $Exp1 :: $Test, $Exp2 }, $Store) = 
-%%	eval-citer2($Var1, $Var2, $Rel, EmptyRel, $Test, $Exp2, $Store)
-%%
-%%[eci2-2]
-%%	$Store' = assign($Var1, $Elem1, $Store),
-%%	$Store'' = assign($Var2, $Elem2, $Store'),
-%%	$Bool = evalp($Test, $Store''),
-%%	$Val' = if $Bool then append($Val, evalx($Exp, $Store'')) else $Val fi, 
-%%	eval-citer2($Var1, $Var2, {$Tuple*}, $Val', $Test, $Exp, $Store'') = $Val''
-%%	======================================================
-%%	eval-citer2($Var1, $Var2, {<$Elem1, $Elem2>, $Tuple*}, $Val, $Test, $Exp, $Store) = $Val''
-%%
-%%[eci2-3]
-%%	eval-citer2($Var1, $Var2, {}, $Val, $Test, $Exp, $Store) = $Val
 
 %% ---- Auxiliary functions for bag and relation formers
+
 [AP0]	append($Elem, *empty*) = $Elem
 
 [AP1]	append($Bag, $Elem) = union2($Bag, $Elem)
@@ -777,7 +679,7 @@
 
 %% --- Where expressions
 
-[WH1]	eval-rscript($Stat+, $Store) = $Store'
+[WH1]	eval-rstats($Stat+, $Store) = $Store'
 	=================================================
 	evalx($Exp where $Stat+ endwhere, $Store) =  evalx($Exp, $Store')	
 

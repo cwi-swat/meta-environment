@@ -26,6 +26,7 @@ exports
 
 	"EmptyBag"				-> RVALUE
 	"EmptyRel"				-> RVALUE
+	is-tuple(RVALUE)			-> Boolean
 
 %% The RSTORE itself, maps RVARs to RVALUEs
         
@@ -35,8 +36,8 @@ exports
 	increment(RVAR, RSTORE)			-> RSTORE
         value(RVAR, RSTORE)                   -> RVALUE
 
-        rval2rel(RVALUE)	 	      -> Rel[[Elem]]
-        rval2bag(RVALUE)		      -> Bag[[Elem]]
+ %%       rval2rel(RVALUE)	 	      -> Rel[[Elem]]
+ %%       rval2bag(RVALUE)		      -> Bag[[Elem]]
 
 	add-elem(RVAR, Elem, RSTORE)		-> RSTORE
 
@@ -51,10 +52,10 @@ exports
         eval-rscript-value(RSCRIPT, RSTORE)   -> RVALUE  %% not yet defined!
         eval-rscript(RSCRIPT, RVAR, RSTORE)   -> RVALUE
 
-        eval-rscript(RSTAT, RSTORE)           -> RSTORE
-        eval-rscript(RSTAT*, RSTORE)          -> RSTORE
+        eval-rstat(RSTAT, RSTORE)           	-> RSTORE
+        eval-rstats(RSTAT*, RSTORE)          -> RSTORE
 
-        eval-rexp(REXP, RSTORE)		      -> RVALUE
+%%        eval-rexp(REXP, RSTORE)		      -> RVALUE
 
 %% Test suite support
 

@@ -1,3 +1,5 @@
+
+check-rscript(
 %% A relational definiton of program slicing
 %%
 %% Based on the definitions given in 
@@ -12,10 +14,10 @@ rel[int, <str,int>] reaching-definitions(
 	rel[int,int] PRED-OF) 
 = IN
 where
-	rel[int,<str,int>] GEN  = {<S,<V,S>> : <V,S> in DEF}
+	rel[int,<str,int>] GEN  = {<S,<V,S>> | <V,S> : DEF}
 
 	rel[int,<str,int>] KILL = 
- 	   {<S1, <V2,S2>> : <V1,S1> in DEF, <V2,S2> in DEF | V1 == V2 and S1 != S2}
+ 	   {<S1, <V2,S2>> | <V1,S1> : DEF, <V2,S2> : DEF, V1 == V2,  S1 != S2}
 
 	rel[int,<str,int>] IN = {}
 
@@ -24,8 +26,8 @@ where
 	%% The set of mutually recursive dataflow equations that has to be solved:
 
 	solve {
-       		IN =  {S x OUT[P] : S in STATEMENT, P in PRED-OF[S]},
-        	OUT = {S x (GEN[S] union (IN[S] \ KILL[S])) : S in STATEMENT }
+       		IN =  rel {S x OUT[P] | S : STATEMENT, P : PRED-OF[S]},
+        	OUT = rel {S x (GEN[S] union (IN[S] \ KILL[S])) | S : STATEMENT }
 	}
 endwhere
 
@@ -40,8 +42,8 @@ rel[int,int] post-dominators(
 = domainR(DOMINATES, CONTROL-STATEMENT)
 where
   	rel[int,int] DOMINATES =
-  	{ S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) : 
-   	 S in STATEMENT }
+  	rel { S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) | 
+   	 S : STATEMENT }
 endwhere
 
 bag[<str,int>] BackwardSlice(
@@ -65,27 +67,27 @@ where
 	%% Compute the relation between each use and corresponding definitions: ud
 
 	rel[<str,int>,<str,int>] ud = 
- 	 {<<V,S>,Pair> : <V,S> in USE, Pair in RDIN[S] | V == first(Pair)}
+ 	 {<<V1,S1>, <V2,S2>> | <V1,S1> : USE, <V2,S2> : RDIN[S1], V1 == V2}
 
 	%% Note, it would be more readable (but currently not possible) to write the 
 	%% above expression as:
 	%%	rel[<str,int>,<str,int>] ud = 
-	%%	  {<<V1,S1>,<V2,S2>  : <V1,S1> in USE, <V2,S2> in RDIN[S] | V1 == V2}
+	%%	  {<<V1,S1>,<V2,S2>  : <V1,S1> : USE, <V2,S2> : RDIN[S], V1 == V2}
 
 	%% Internal use in definition: du
 
 	rel[<str,int>,<str,int>] du  = 
-     		{<<V1,S1>, <V2,S2>> : <V1, S1> in DEF, <V2, S2> in USE | S1 == S2 }
+     		{<<V1,S1>, <V2,S2>> | <V1, S1> : DEF, <V2, S2> : USE, S1 == S2}
     		 union
-    		 {<<V,S>, <"eps",S>> : <V, S> in DEF}
+    		 {<<V,S>, <"eps",S>> | <V, S> : DEF}
     		 union
-    		 {<<"tau",S1>,<V,S1>> : S1 in CONTROL-STATEMENT, 
-			    		<V, S2> in rangeR(USE, {S1}) | S1 == S2}
+    		 {<<"tau",S1>,<V,S1>> | S1 : CONTROL-STATEMENT, 
+			    		<V, S2> : rangeR(USE, {S1}), S1 == S2}
 
 	%% Control dependence: cd
 
 	rel[<str,int>,<str,int>] cd  =
-	   { <<"eps",S2>,<"tau",S1>> : <S1, S2> in POST-DOMINATOR}
+	   { <<"eps",S2>,<"tau",S1>> | <S1, S2> : POST-DOMINATOR}
 
 	%% Control and data dependence: ucd
 
@@ -305,3 +307,4 @@ DU == {<<"sum", 6>, <"eps", 3>>, <<"sum", 6>, <"sum", 6>>,
 
 
 endcomment
+)
