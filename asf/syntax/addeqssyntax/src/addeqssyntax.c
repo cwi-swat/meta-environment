@@ -38,12 +38,10 @@
 #include <ctype.h>
 #include <unistd.h>   
 
-#include <AsFix.h>
-#include <AsFix-expand.h>
-#include <AsFix-init-patterns.h>
-#include <deprecated.h>
-
-#include "asc-support.h"
+#include <asc-support.h>
+#include <asc-apply.h>
+#include <SDF.h>
+#include <PT.h>
 
 /*{{{  globals */
 
@@ -60,14 +58,8 @@ static char myversion[] = "1.1";
     explanation.
  */
 
-static char myarguments[] = "bm:hi:o:tvV";   
+static char myarguments[] = "m:hi:o:vV";   
 
-extern ATerm pattern_asfix_term;
-extern ATerm pattern_asfix_appl;
-extern ATerm pattern_asfix_lex;
-
-ATerm innermost(ATerm t);
-ATerm toasfix(ATerm t, ATerm f, ATerm n);
 void init_patterns();
 void c_rehash(int newsize);
 
@@ -80,135 +72,51 @@ ATerm get_name(int cid)
 }
 
 /*}}}  */
-/*{{{  ATerm add_addeqssyntax_function_standalone(ATerm term) */
 
-ATerm add_addeqssyntax_function_standalone(ATerm term)
+static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
 {
-  ATerm t[8], result = NULL, appl;
-  ATerm t_name;
-  ATerm abbrevs;
-  ATerm term_open, term_comma, term_close, term_ws;
+  SDF_ModuleName sdfModuleName = SDF_makeModuleNameUnparameterized(
+			       SDF_makeModuleIdWord(name));
+  PT_Tree ptModuleName = PT_makeTreeFromTerm(
+			   SDF_makeTermFromModuleName(sdfModuleName));
+  PT_Tree newTree = NULL;
 
-  if(ATmatchTerm(term, pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) { 
+  if (PT_isValidParseTree(parseTree)) {
+    PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    t_name = ATparse("l(\"add-equation-module\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    term_comma = ATparse("l(\",\")");
-    term_close = ATparse("l(\")\")");
-    term_ws = ATparse("w(\"\")");
-    result = ATmakeTerm(pattern_asfix_appl,
-                      ATparse("prod(id(\"Add-Eqs-Syntax\"),w(\"\"),[ql(\"add-equation-module\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
-                      term_ws,
-                      ATmakeList(7,t_name, term_ws,
-                                   term_open, term_ws,
-                                   appl, term_ws,
-                                   term_close)); 
-    term = ATmakeTerm(pattern_asfix_term,
-                      ATparse("l(\"term\")"),
-                      term_ws,
-                      ATparse("l(\"X\")"),
-                      term_ws,
-                      ATparse("id(\"X\")"),
-                      term_ws,
-                      result,
-                      term_ws,
-                      ATparse("no-abbreviations"));
-    return term;                                       
-  }
+    newTree = ASC_applyFunction("add-equation-module",
+                		     "Add-Eqs-Syntax",
+				     "SDF",
+				     2,
+				     ptModuleName,
+				     ptSyntax);
+
+  } 
   else {
-    ATerror("not a legal term: %t\n", term);
-    return NULL;
-  }  
+    ATerror("add_eqs_syntax: not a proper parse tree: %t\n", (ATerm) parseTree);
+    return (PT_Tree) NULL;
+  }
+
+  return newTree;
 }
 
-/*}}}  */
-/*{{{  ATerm add_addeqssyntax_function(char *str, ATerm term) */
-
-ATerm make_name_term(ATerm name)
+static ATerm addEqsSyntax(char *name, ATerm term)
 {
-  ATerm result = NULL;
-  char *text;
-
-  if(ATmatch(name,"<str>",&text)) {
-    result = ATmakeTerm(pattern_asfix_lex,
-                        text,
-                        ATparse("sort(\"ModuleId\")"));
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)")
-,
-                        ATparse("w(\"\")"),
-                        ATmakeList1(result));
-  }
-  return result;
-}      
-
-ATerm add_addeqssyntax_function(char *str, ATerm term)
-{
-  ATerm t[8], result = NULL, appl, nameterm, name;
-  ATerm t_name;
-  ATerm abbrevs;
-  ATerm term_open, term_comma, term_close, term_ws;
-
-  name = ATmake("<str>",str);
-  if(ATmatchTerm(term, pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) { 
-
-    t_name = ATparse("l(\"add-equation-module\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    term_comma = ATparse("l(\",\")");
-    term_close = ATparse("l(\")\")");
-    term_ws = ATparse("w(\"\")");
-    nameterm = make_name_term(name);
-    result = ATmakeTerm(pattern_asfix_appl,
-                      ATparse("prod(id(\"Add-Eqs-Syntax\"),w(\"\"),[ql(\"add-equation-module\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
-                      term_ws,
-                      ATmakeList(11,t_name, term_ws,
-                                    term_open, term_ws,
-                                    nameterm, term_ws,
-                                    term_comma, term_ws,
-                                    appl, term_ws,
-                                    term_close)); 
-    term = ATmakeTerm(pattern_asfix_term,
-                      ATparse("l(\"term\")"),
-                      term_ws,
-                      ATparse("l(\"X\")"),
-                      term_ws,
-                      ATparse("id(\"X\")"),
-                      term_ws,
-                      result,
-                      term_ws,
-                      ATparse("no-abbreviations"));
-    return term;                                       
-  }
-  else {
-    ATerror("not a legal term: %t\n", term);
-    return NULL;
-  }  
+  PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
+  PT_Tree ptApplied = addEqsSyntaxFunction(name, parseTree);
+  ATerm reduct           = innermost(ptApplied);
+  PT_ParseTree asfix     = toasfix(reduct);
+  
+  return PT_makeTermFromParseTree(asfix);
 }
 
-/*}}}  */
 /*{{{  ATerm add_eqs_syntax(int cid, char *name, ATerm t) */
 
-ATerm add_eqs_syntax(int cid, char *name, ATerm t)
+ATerm add_eqs_syntax(int cid, char *name, ATerm term)
 {
-  ATerm reduct, et, ft, asfix = NULL, file, modname, trm;
+  ATerm  output = addEqsSyntax(name, term);
 
-  et = AFexpandTerm(t);
-  ft = add_addeqssyntax_function(name, et);
-
-  if(ATmatchTerm(ft, pattern_asfix_term, NULL, NULL,
-                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    reduct = innermost(trm);
-    asfix = toasfix(reduct, file, modname);
-  } else
-    ATerror("not an asfix term: %t\n", t);
-
-  return ATmake("snd-value(extended-syntax(<term>))", ATBpack(asfix));
+  return ATmake("snd-value(extended-syntax(<term>))", ATBpack(output));
 }
 
 /*}}}  */
@@ -227,14 +135,12 @@ void rec_terminate(int cid, ATerm arg)
 void usage(void)
 {
     ATwarning(
-        "Usage: %s -b -m file -h -i file -o file -tvV . . .\n"
+        "Usage: %s -m file -h -i file -o file -vV . . .\n"
         "Options:\n"
-        "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
 	"\t-m module       topmodule of specification (default: Main)\n"
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
-        "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myname, myversion);
@@ -253,24 +159,26 @@ void version(void)
 
 int main(int argc, char *argv[])
 {
-  FILE *iofile;   
-
-  ATerm t = NULL, et, trm, reduct, asfix, file, modname;
+  ATerm syntax = NULL, extended = NULL;
   char *moduleName = "";
   char *input = "-";
   char *output = "-"; 
   int cid;
-  int c, toolbus_mode = 0, bafmode = 1, proceed = 1;
+  int c, toolbus_mode = 0;
   ATerm bottomOfStack;
   name = argv[0];
 
   /*  Check whether we're a ToolBus process  */
-  for(c=1; !toolbus_mode && c<argc; c++)
+  for(c=1; !toolbus_mode && c<argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME"); 
+  }
  
-  AFinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
+  PT_initPTApi();
+  SDF_initSDFApi();
+  ASF_initASFApi();
+
   init_patterns();
-  AFinitAsFixPatterns();
   c_rehash(INITIAL_TABLE_SIZE);
 
   register_all();
@@ -283,63 +191,30 @@ int main(int argc, char *argv[])
       cid = ATBconnect(NULL, NULL, -1, addeqssyntax_handler);
       ATBeventloop();
     #else
-      ATwarning("asource: Toolbus cannot be used in Windows.\n");
+      ATwarning("addeqssyntax: Toolbus cannot be used in Windows.\n");
     #endif
   }
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-        case 'b':  bafmode = 1;                            break;
-        case 't':  bafmode = 0;                            break;
 	case 'm':  moduleName=optarg;                      break;
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
         case 'o':  output=optarg;                          break;
-        case 'V':  version(); proceed = 0;                 break;
+        case 'V':  version(); exit(0);                     break;
 
         case 'h':
-        default:   usage(); proceed = 0;                   break;
+        default:   usage(); exit(0);                       break;
       }
     } 
     argc -= optind;
     argv += optind;
 
-    if(proceed) {  
-      if (!strcmp(input, "") || !strcmp(input, "-"))
-        iofile = stdin;
-      else if (!(iofile = fopen(input, "r")))
-        ATerror("%s: cannot open %s\n", myname, input);  
+    syntax = ATreadFromNamedFile(input);
+   
+    extended = addEqsSyntax(moduleName, syntax);  
 
-      t = ATreadFromFile(iofile);
-      t = AFexpandTerm(t);
-      
-      if(!strcmp(moduleName,"")) {
-        et = add_addeqssyntax_function_standalone(t);
-      } else {
-      	et = add_addeqssyntax_function(moduleName,t);
-      }
-
-      if(ATmatchTerm(et, pattern_asfix_term, NULL, NULL,
-                     &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-        if(run_verbose) ATwarning("Reducing ...\n");
-        reduct = innermost(trm);
-        if(run_verbose) ATwarning("Reducing finished.\n");
-        asfix = toasfix(reduct, file, modname);
-
-        if (!strcmp(output, "") || !strcmp(output, "-"))
-          iofile = stdout;
-        else if (!(iofile = fopen(output, "w")))
-          ATerror("%s: cannot open %s\n", myname, output);
-
-        if(bafmode)
-          ATwriteToBinaryFile(asfix, iofile);
-        else
-          ATwriteToTextFile(asfix, iofile); 
-      }
-      else { /* Alex added {} after 'else' for readability */
-        ATwarning("not an asfix term: %t\n", t);
-      }
-    }
+    ATwriteToNamedBinaryFile(extended, output);
   }
   return 0;
 }

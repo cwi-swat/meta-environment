@@ -21,7 +21,11 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES         = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include
+INCLUDES         = -I$(ASC_SUPPORT)/include \
+                   -I$(PT_SUPPORT)/include \
+                   -I$(SDF_SUPPORT)/include \
+                   -I$(ASF_SUPPORT)/include \
+                   -I$(ATERM)/include
 
 bin_PROGRAMS = addeqssyntax
 man_MANS     = addeqssyntax.1
@@ -36,11 +40,12 @@ addeqssyntax_LDADD   = addeqssyntax.tif.o \
                        -L$(top_builddir)/addeqssyntax/c-source \
                        -lAdd-Eqs-Syntax \
                        -L$(ASC_SUPPORT)/lib -lasc-support \
-                       -L$(PT_SUPPORT)/lib -lAsFix \
+                       -L$(SDF_SUPPORT)/lib -lSDF \
+                       -L$(ASF_SUPPORT)/lib -lASF \
+                       -L$(PT_SUPPORT)/lib -lPT \
                        -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 
 CLEANFILES = addeqssyntax.tifs addeqssyntax.1
 
-addeqssyntax.o : addeqssyntax.tif.h \
-                 $(top_builddir)/addeqssyntax/c-source/libAdd-Eqs-Syntax.a
+addeqssyntax.o: addeqssyntax.tif.h $(top_builddir)/addeqssyntax/c-source/libAdd-Eqs-Syntax.a
