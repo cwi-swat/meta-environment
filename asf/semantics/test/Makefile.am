@@ -17,10 +17,11 @@ TEST_MODULES=Bracket \
 	Pico-set \
 	Pico-typecheck \
 	Pico-Xml \
-	RelationsTest
+	RelationsTest \
 	ReturnsList \
 	SetAndElem \
 	Specificity \
+	StarStarVar \
 	Traversal-Typecheck \
 	Tuple
 
