@@ -2,13 +2,19 @@
 
 include ../Metarules.include
 
+ASFIXTRMS = $(addsuffix .pico.asfix, $(PICOTRMS))
+
 all:
 
-test: $(addsuffix .pico.asfix, $(PICOTRMS))
+test: $(ASFIXTRMS)
+	@$(RM) Pico-syntax.tbl
 
 clean:
-	rm -f $(PICO).tbl $(addsuffix .pico.asfix, $(PICOTRMS))
+	rm -f Pico-syntax.tbl
 
-%.pico.asfix: %.pico $(PICO).tbl
-	sglr -v -p $(PICO).tbl -i $< -o $@
+Pico-syntax.tbl : $(PICOSYNTAX)
+	@sdf2table -i $< -o $@
+
+%.pico.asfix: $(PICODIR)/%.pico Pico-syntax.tbl
+	@sglr -v -p Pico-syntax.tbl -i $< > /dev/null
 
