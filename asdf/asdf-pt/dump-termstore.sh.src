@@ -1,6 +1,9 @@
 #! /bin/sh
 
+echo "DUMPING TERMSTORE."
+
 /users/fagidiot/asenv1.5/install/bin/generic-meta -I /users/fagidiot/asenv1.5/install/share/asf \
                           -I /users/fagidiot/asenv1.5/install/share/asfsdf-meta \
                           -p /users/fagidiot/asenv1.5/install/bin \
+                          -p /users/fagidiot/asenv1.5/install/share/asdf/asdf-pt \
                           -S /users/fagidiot/asenv1.5/install/share/asdf/start-meta-termstore-dumper.tb $* 

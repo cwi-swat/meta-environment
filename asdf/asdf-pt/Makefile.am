@@ -1,10 +1,10 @@
 EXTRA_DIST=make_rules
 
 bin_SCRIPTS=dump_term gen_asdf_pt gen_asf gen_sdf \
-	get_imports get_module_name typecheck evaluation
+	get_imports get_module_name typecheck evaluation dump-termstore
 
 CLEANFILES=gen_asdf_pt gen_asf gen_sdf get_imports \
-	get_module_name typecheck evaluation
+	get_module_name typecheck evaluation dump-termstore
 
 SUBDIRS=asdf type-check src 
 
