@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
       if (!strcmp(outputName, "") || !strcmp(outputName, "-")) {
 	outputFile = stdout;
       } 
-      else if (!(outputFile = fopen(outputName, "w"))) {
+      else if (!(outputFile = fopen(outputName, "wb"))) {
 	ATerror("%s: cannot open %s for writing\n", argv[0], outputName);
       }
 

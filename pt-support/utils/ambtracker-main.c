@@ -164,7 +164,7 @@ int main (int argc, char **argv)
 
     if(!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
       fp = stdout;
-    } else if(!(fp = fopen(output_file_name, "w"))) {
+    } else if(!(fp = fopen(output_file_name, "wb"))) {
       ATerror("%s: could not open %s for output.\n", myname, output_file_name);
       return 1;
     }

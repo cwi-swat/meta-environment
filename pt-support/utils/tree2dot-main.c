@@ -105,7 +105,7 @@ int main (int argc, char *argv[])
     fprintf(stdout,dot);
   }
   else {
-    FILE *fp = fopen(output_file_name,"w");
+    FILE *fp = fopen(output_file_name,"wb");
 
     if (fp != NULL) {
       fprintf(fp,dot);
