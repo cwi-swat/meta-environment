@@ -41,7 +41,7 @@ int calculate(ATerm t)
       }
 }
 
-ATerm expr(int conn, char *s)
+ATerm expr(int conn, const char *s)
 { ATerm trm = ATmake(s);
 
   if(!trm)

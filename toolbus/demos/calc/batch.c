@@ -39,7 +39,7 @@ ATerm fromFile(int conn)
    return ATmake("snd-value(expr(<str>))", sbuf);
  }
 
-void toFile(int conn, char *expr, int val)
+void toFile(int conn, const char *expr, int val)
 {   ATfprintf(bout, "pair(%s, %d)\n", expr, val);
 }
 

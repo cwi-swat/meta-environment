@@ -30,7 +30,7 @@ ATerm readLog(int conn){
   return ATmake("snd-value(history(<term>))", history);
 }
 
-void writeLog(int conn, char *expr, ATerm val){
+void writeLog(int conn, const char *expr, ATerm val){
   history = ATmake("[pair(<str>,<term>),<list>])", expr, val, history);
   ATfprintf(stderr, "writeLog, history = %t\n", history);
 }

@@ -1,7 +1,8 @@
 $Id$
 
 Tue Feb 10 10:53:28 CET 2004 <kooiker@cwi.nl>
- * adapters/toolbus-adapter/toolbus-adapter.c: 
+ * adapters/toolbus-adapter/toolbus-adapter.c,
+   demos/calc/log.c: 
    - added const to char* arguments
 
 Mon Feb  9 14:48:28 CET 2004 <jurgenv@cwi.nl>
