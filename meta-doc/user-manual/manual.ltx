@@ -1857,16 +1857,15 @@ is given
 module BracketExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
-  context-free start-symbols Expr
-  sorts Expr
-
-  lexical syntax
-    [0-9]+ -> Expr
+  context-free start-symbols E
+  sorts E
 
   context-free syntax
-    "(" Expr ")" -> Expr {bracket}
+    NatCon    -> E
+    "(" E ")" -> E {bracket}
 \end{verbatim}
 \end{IncCode}
 \caption{Syntax definition with a bracket function}
@@ -1950,15 +1949,14 @@ associativities.
 module SimpleExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
   context-free start-symbols E 
   sorts E 
 
-  lexical syntax
-    [0-9]+ -> E 
-
   context-free syntax
+    NatCon    -> E
     E "+" E   -> E {left}
     E "*" E   -> E {left}
     "(" E ")" -> E {bracket}
@@ -2000,15 +1998,15 @@ an example of the use of grouped associativity.
 module ComplexExpr
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
   context-free start-symbols E 
+
   sorts E 
 
-  lexical syntax
-    [0-9]+ -> E
-
   context-free syntax
+    NatCon    -> E
     E "+" E   -> E {left}
     E "-" E   -> E {non-assoc}
     E "*" E   -> E {left}
@@ -3077,9 +3075,9 @@ exports
   lexical syntax
     [a-z]+ -> El
   context-free syntax
-    {El ","}* -> List
-    "length" "(" List ")"       -> Integer
-    "split-in-two" "(" List ")" -> List
+    {El ","}*          -> List
+    length(List)       -> Integer
+    split-in-two(List) -> List
 
 hiddens
   variables
@@ -3225,7 +3223,7 @@ exports
     "natural"     -> Type
     "string"      -> Type
     "nil-type"    -> Type
-    "compatible" "(" Type "," Type ")" -> Boolean
+    compatible(Type, Type) -> Boolean
 
 hiddens
   variables
@@ -3442,7 +3440,7 @@ an accumulating transformer is a tuple consisting of the transformed
 first argument and accumulated value. An accumulating transformer
 is declared as follows:
 
-\[f(S_1 , S_2 , ..., S_n) \rightarrow S_1 \# S_2 \mbox{\{{\tt
+\[f(S_1 , S_2 , ..., S_n) \rightarrow <S_1, S_2> \mbox{\{{\tt
 traversal(accu, trafo, ...)}\}}\]
 
 An accumulating transformer is used to simultaneously extract information from a
@@ -3502,14 +3500,14 @@ Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 \begin{verbatim}
 module Tree-syntax
 
-imports Naturals
+imports basic/NatCon
 
 exports
   context-free start-symbols Tree
   sorts Tree
 
   context-free syntax
-    Nat           -> Tree
+    NatCon        -> Tree
     f(Tree, Tree) -> Tree
     g(Tree, Tree) -> Tree
     h(Tree, Tree) -> Tree
@@ -3543,7 +3541,7 @@ equations
 
 Our \link{second example}[ (Figure~\Ref)]{FIG:sum}
 computes the sum of all numbers in a tree.
-For many more examples and a detailed description of traversal functions
+For more examples and a detailed description of traversal functions
 see~\cite{BKV01}.
 
 \begin{figure}
@@ -3575,18 +3573,48 @@ of the tree that is traversed, for both accumulating as well as
 transformation functions.
 \item In case of a transformation function the result sort should always
 be same as the sort of the first argument.
+\begin{verbatim}
+tf(Tree, A_1, ..., A_n) -> Tree {traversal(trafo, ...)}
+\end{verbatim}
 \item In case of an accumulating function, the second argument represents
 the accumulator and the result sort should be of the same sort.
+\begin{verbatim}
+tf(Tree, Accu, A_1, ..., A_n) -> Accu {traversal(accu, ...)}
+\end{verbatim}
 \item In case of an accumulating transformation function, the first
 argument
 represents the tree node, the second the accumulator, and the result sort
 should be a tuple consisting of the tree node sort (first element
 of the tuple) and the accumulator (second element of the tuple).
+\begin{verbatim}
+tf(Tree, Accu, A_1, ..., A_n) -> <Tree, Accu> {traversal(accu, trafo, ...)}
+\end{verbatim}
 \item The traversal functions may have more arguments, the only restriction
 is that they should be consistent over the various occurrences of the
 same traversal function.
+\begin{verbatim}
+tf(Tree1, Accu, A_1, A_2, ..., A_n) -> Tree1 {traversal(trafo, continue, top-down)}
+tf(Tree2, Accu, A_2, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
 \item The order of the traversal attributes is free, but should be used
-consistently.
+consistently, for instance the following definition is not allowed.
+\begin{verbatim}
+tf(Tree1, Accu, A_1, ..., A_n) -> Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+\item If the number of arguments of the traversal function changes, you
+should introduce a new function name. The following definitions are not
+correct:
+\begin{verbatim}
+tf(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+but should be:
+\begin{verbatim}
+tf1(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
+tf2(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
+\end{verbatim}
+
 \end{itemize}
 In the \sdf\ part of a module it is needed to define traversal functions
 for all sorts which are needed in the equations. 
@@ -3664,6 +3692,40 @@ Here are some examples of \asfsdf\ specifications, which are selected to
 illustrate specific features of the formalism. Larger examples can be found in
 the online specifications.
 
+\subsection{A simple evaluation function}
+Suppose we want to define a very simple evaluation function for the
+expressions as defined in 
+\link*{Simple Expressions}[ Figure~\Ref]{CODE:simple-prio}.
+\link*{Below}[Figure~\Ref]{CODE:simple-eval} shows the specification.
+
+\begin{figure}
+\begin{Label}{CODE:eval}
+\begin{IncCode}
+\begin{verbatim}
+module Eval 
+
+imports SimpleExpr
+imports basic/Integers
+
+exports
+  context-free syntax
+    eval(E) -> Integer
+
+hiddens
+  variables
+    "E"[0-9]* -> E
+    "N"[0-9]* -> NatCon
+
+equations
+ [e1] eval(E1 + E2) = eval(E1) + eval(E2)
+ [e2] eval(E1 * E2) = eval(E1) * eval(E2)
+ [e3] eval(N) = N
+\end{verbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification of a very simple {\tt eval} function}
+\end{Label}
+\end{figure}   
+
 \subsection{Symbolic Differentiation}
 
 Computing the derivative of an expression with respect to some variable is a
@@ -3691,17 +3753,17 @@ compute constant expressions.
 module Diff 
 
 imports basic/Whitespace
+imports basic/NatCon
 
 exports
   context-free start-symbols Exp
-  sorts Nat Var Exp
+  sorts Var Exp
  
   lexical syntax
-    [0-9]+   -> Nat 
     [XYZ]    -> Var
 
   context-free syntax
-    Nat                 -> Exp 
+    NatCon              -> Exp 
     Var                 -> Exp 
     Exp "+" Exp         -> Exp {left} 
     Exp "*" Exp         -> Exp {left} 
@@ -3713,7 +3775,7 @@ exports
 
 hiddens
   variables
-    "N"       -> Nat 
+    "N"       -> NatCon
     "V"[0-9]* -> Var 
     "E"[0-9]* -> Exp 
 
