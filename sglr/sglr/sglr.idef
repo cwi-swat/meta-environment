@@ -68,9 +68,6 @@ process Parser is
       +
         rec-msg(open-language(Lid?, FN?)) .
         snd-eval(P, open-language(Lid, FN))
-      +
-        rec-msg(reopen-language(Lid?, FN?)) .
-        snd-eval(P, reopen-language(Lid, FN))
       ) .
       (
 	rec-value(P, language-opened(Lid)) .

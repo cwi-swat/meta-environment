@@ -79,11 +79,6 @@ ATerm close_language(int conn, ATerm L)
   return SGcloseLanguage(program_name, L);
 }
 
-ATerm reopen_language(int conn, ATerm L, char *FN)
-{
-  return SGreOpenLanguage(program_name, L, FN);
-}
-
 void term_to_file(ATerm t, char *FN)
 {
   SGtermToFile(program_name, t, FN);

@@ -155,21 +155,6 @@ ATerm SGcloseLanguage(char *prgname, language L)
   return SG_TermToToolbus(ATmake("language-not-open(<term>)", SG_SAFE_LANGUAGE(L)));
 }
 
-/*
- The function |SGreOpenLanguage| initializes the parse table for language |L|
- from the file |FN|.
- */
-
-ATerm SGreOpenLanguage(char *prgname, language L, char *FN)
-{
-  SG_Validate("SGreOpenLanguage");
-  IF_VERBOSE(
-    if(FN) ATwarning("%s: (re)opening parse table %t\n", prgname, SG_SAFE_LANGUAGE(L))
-  );
-  SGcloseLanguage(prgname, L);
-  return SGopenLanguage(prgname, L, FN);
-}
-
 
 /*
  The function |SGparseString| parses the text in string |S| with the
