@@ -18,6 +18,9 @@
 
 $Id$
 
+2000/7/28 (jong@cwi.nl)
+  * In verbose mode, sglr prints which token-# it is parsing/shifting.
+
 2000/7/12 (markvdb@cwi.nl)
    * "char *L" replaced by "language L" where "language" is a typedef ATerm.
      L is used as key in the parsetable database.
