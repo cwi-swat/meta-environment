@@ -447,9 +447,14 @@ char* create_compound_module_name(const char* path, const char *moduleName)
   len = strlen(longest);
   if (len > 0) {
     strcpy(tmp, pathcpy + len + (pathcpy[len] == '/' ? 1 : 0));
+    strcpy(tmp+strlen(tmp),moduleName);
   }
+  else {
+    /* no path in the meta.conf file matched */
+    free(tmp);
+    return NULL;
+  } 
 
-  strcpy(tmp+strlen(tmp),moduleName);
 
   free(pathcpy);
   return tmp;
@@ -469,7 +474,7 @@ ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
   compoundName = create_compound_module_name(path, moduleName);
 
   if (compoundName == NULL) {
-    return ATmake("snd-value(creation-failed(\"out of memory\"))");
+    return ATmake("snd-value(creation-failed(\"not in meta.conf path\"))");
   }
 
   sprintf(txtFileName, "%s%s", path, syntax_ext);

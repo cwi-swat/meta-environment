@@ -5,6 +5,7 @@
    are computed automatically using the meta.conf path and the selected
    file name. The shortest possible module name is computed using the most
    specific path in the meta.conf file.
+ * Error message if new module is not in subtree of meta.conf path.
 
 2002/05/08 (markvdb@cwi.nl)
  * Replaced the fixed "parse" and "reduce" button by the
