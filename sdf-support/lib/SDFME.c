@@ -90,1121 +90,1121 @@ void SDF_initSDFMEApi(void)
 
 /*{{{  term conversion functions */
 
-/*{{{  SDF_Symbol SDF_makeSymbolFromTerm(ATerm t) */
+/*{{{  SDF_Symbol SDF_SymbolFromTerm(ATerm t) */
 
-SDF_Symbol SDF_makeSymbolFromTerm(ATerm t)
+SDF_Symbol SDF_SymbolFromTerm(ATerm t)
 {
   return (SDF_Symbol)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbol(SDF_Symbol arg) */
+/*{{{  ATerm SDF_SymbolToTerm(SDF_Symbol arg) */
 
-ATerm SDF_makeTermFromSymbol(SDF_Symbol arg)
+ATerm SDF_SymbolToTerm(SDF_Symbol arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Grammar SDF_makeGrammarFromTerm(ATerm t) */
+/*{{{  SDF_Grammar SDF_GrammarFromTerm(ATerm t) */
 
-SDF_Grammar SDF_makeGrammarFromTerm(ATerm t)
+SDF_Grammar SDF_GrammarFromTerm(ATerm t)
 {
   return (SDF_Grammar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromGrammar(SDF_Grammar arg) */
+/*{{{  ATerm SDF_GrammarToTerm(SDF_Grammar arg) */
 
-ATerm SDF_makeTermFromGrammar(SDF_Grammar arg)
+ATerm SDF_GrammarToTerm(SDF_Grammar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_SDF SDF_makeSDFFromTerm(ATerm t) */
+/*{{{  SDF_SDF SDF_SDFFromTerm(ATerm t) */
 
-SDF_SDF SDF_makeSDFFromTerm(ATerm t)
+SDF_SDF SDF_SDFFromTerm(ATerm t)
 {
   return (SDF_SDF)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSDF(SDF_SDF arg) */
+/*{{{  ATerm SDF_SDFToTerm(SDF_SDF arg) */
 
-ATerm SDF_makeTermFromSDF(SDF_SDF arg)
+ATerm SDF_SDFToTerm(SDF_SDF arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Attributes SDF_makeAttributesFromTerm(ATerm t) */
+/*{{{  SDF_Attributes SDF_AttributesFromTerm(ATerm t) */
 
-SDF_Attributes SDF_makeAttributesFromTerm(ATerm t)
+SDF_Attributes SDF_AttributesFromTerm(ATerm t)
 {
   return (SDF_Attributes)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAttributes(SDF_Attributes arg) */
+/*{{{  ATerm SDF_AttributesToTerm(SDF_Attributes arg) */
 
-ATerm SDF_makeTermFromAttributes(SDF_Attributes arg)
+ATerm SDF_AttributesToTerm(SDF_Attributes arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeList SDF_makeAttributeListFromTerm(ATerm t) */
+/*{{{  SDF_AttributeList SDF_AttributeListFromTerm(ATerm t) */
 
-SDF_AttributeList SDF_makeAttributeListFromTerm(ATerm t)
+SDF_AttributeList SDF_AttributeListFromTerm(ATerm t)
 {
   return (SDF_AttributeList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAttributeList(SDF_AttributeList arg) */
+/*{{{  ATerm SDF_AttributeListToTerm(SDF_AttributeList arg) */
 
-ATerm SDF_makeTermFromAttributeList(SDF_AttributeList arg)
+ATerm SDF_AttributeListToTerm(SDF_AttributeList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Production SDF_makeProductionFromTerm(ATerm t) */
+/*{{{  SDF_Production SDF_ProductionFromTerm(ATerm t) */
 
-SDF_Production SDF_makeProductionFromTerm(ATerm t)
+SDF_Production SDF_ProductionFromTerm(ATerm t)
 {
   return (SDF_Production)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromProduction(SDF_Production arg) */
+/*{{{  ATerm SDF_ProductionToTerm(SDF_Production arg) */
 
-ATerm SDF_makeTermFromProduction(SDF_Production arg)
+ATerm SDF_ProductionToTerm(SDF_Production arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Productions SDF_makeProductionsFromTerm(ATerm t) */
+/*{{{  SDF_Productions SDF_ProductionsFromTerm(ATerm t) */
 
-SDF_Productions SDF_makeProductionsFromTerm(ATerm t)
+SDF_Productions SDF_ProductionsFromTerm(ATerm t)
 {
   return (SDF_Productions)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromProductions(SDF_Productions arg) */
+/*{{{  ATerm SDF_ProductionsToTerm(SDF_Productions arg) */
 
-ATerm SDF_makeTermFromProductions(SDF_Productions arg)
+ATerm SDF_ProductionsToTerm(SDF_Productions arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ProductionList SDF_makeProductionListFromTerm(ATerm t) */
+/*{{{  SDF_ProductionList SDF_ProductionListFromTerm(ATerm t) */
 
-SDF_ProductionList SDF_makeProductionListFromTerm(ATerm t)
+SDF_ProductionList SDF_ProductionListFromTerm(ATerm t)
 {
   return (SDF_ProductionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromProductionList(SDF_ProductionList arg) */
+/*{{{  ATerm SDF_ProductionListToTerm(SDF_ProductionList arg) */
 
-ATerm SDF_makeTermFromProductionList(SDF_ProductionList arg)
+ATerm SDF_ProductionListToTerm(SDF_ProductionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleWord SDF_makeModuleWordFromTerm(ATerm t) */
+/*{{{  SDF_ModuleWord SDF_ModuleWordFromTerm(ATerm t) */
 
-SDF_ModuleWord SDF_makeModuleWordFromTerm(ATerm t)
+SDF_ModuleWord SDF_ModuleWordFromTerm(ATerm t)
 {
   return (SDF_ModuleWord)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModuleWord(SDF_ModuleWord arg) */
+/*{{{  ATerm SDF_ModuleWordToTerm(SDF_ModuleWord arg) */
 
-ATerm SDF_makeTermFromModuleWord(SDF_ModuleWord arg)
+ATerm SDF_ModuleWordToTerm(SDF_ModuleWord arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleId SDF_makeModuleIdFromTerm(ATerm t) */
+/*{{{  SDF_ModuleId SDF_ModuleIdFromTerm(ATerm t) */
 
-SDF_ModuleId SDF_makeModuleIdFromTerm(ATerm t)
+SDF_ModuleId SDF_ModuleIdFromTerm(ATerm t)
 {
   return (SDF_ModuleId)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModuleId(SDF_ModuleId arg) */
+/*{{{  ATerm SDF_ModuleIdToTerm(SDF_ModuleId arg) */
 
-ATerm SDF_makeTermFromModuleId(SDF_ModuleId arg)
+ATerm SDF_ModuleIdToTerm(SDF_ModuleId arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Definition SDF_makeDefinitionFromTerm(ATerm t) */
+/*{{{  SDF_Definition SDF_DefinitionFromTerm(ATerm t) */
 
-SDF_Definition SDF_makeDefinitionFromTerm(ATerm t)
+SDF_Definition SDF_DefinitionFromTerm(ATerm t)
 {
   return (SDF_Definition)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromDefinition(SDF_Definition arg) */
+/*{{{  ATerm SDF_DefinitionToTerm(SDF_Definition arg) */
 
-ATerm SDF_makeTermFromDefinition(SDF_Definition arg)
+ATerm SDF_DefinitionToTerm(SDF_Definition arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleList SDF_makeModuleListFromTerm(ATerm t) */
+/*{{{  SDF_ModuleList SDF_ModuleListFromTerm(ATerm t) */
 
-SDF_ModuleList SDF_makeModuleListFromTerm(ATerm t)
+SDF_ModuleList SDF_ModuleListFromTerm(ATerm t)
 {
   return (SDF_ModuleList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModuleList(SDF_ModuleList arg) */
+/*{{{  ATerm SDF_ModuleListToTerm(SDF_ModuleList arg) */
 
-ATerm SDF_makeTermFromModuleList(SDF_ModuleList arg)
+ATerm SDF_ModuleListToTerm(SDF_ModuleList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Module SDF_makeModuleFromTerm(ATerm t) */
+/*{{{  SDF_Module SDF_ModuleFromTerm(ATerm t) */
 
-SDF_Module SDF_makeModuleFromTerm(ATerm t)
+SDF_Module SDF_ModuleFromTerm(ATerm t)
 {
   return (SDF_Module)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModule(SDF_Module arg) */
+/*{{{  ATerm SDF_ModuleToTerm(SDF_Module arg) */
 
-ATerm SDF_makeTermFromModule(SDF_Module arg)
+ATerm SDF_ModuleToTerm(SDF_Module arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ImpSectionList SDF_makeImpSectionListFromTerm(ATerm t) */
+/*{{{  SDF_ImpSectionList SDF_ImpSectionListFromTerm(ATerm t) */
 
-SDF_ImpSectionList SDF_makeImpSectionListFromTerm(ATerm t)
+SDF_ImpSectionList SDF_ImpSectionListFromTerm(ATerm t)
 {
   return (SDF_ImpSectionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromImpSectionList(SDF_ImpSectionList arg) */
+/*{{{  ATerm SDF_ImpSectionListToTerm(SDF_ImpSectionList arg) */
 
-ATerm SDF_makeTermFromImpSectionList(SDF_ImpSectionList arg)
+ATerm SDF_ImpSectionListToTerm(SDF_ImpSectionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Section SDF_makeSectionFromTerm(ATerm t) */
+/*{{{  SDF_Section SDF_SectionFromTerm(ATerm t) */
 
-SDF_Section SDF_makeSectionFromTerm(ATerm t)
+SDF_Section SDF_SectionFromTerm(ATerm t)
 {
   return (SDF_Section)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSection(SDF_Section arg) */
+/*{{{  ATerm SDF_SectionToTerm(SDF_Section arg) */
 
-ATerm SDF_makeTermFromSection(SDF_Section arg)
+ATerm SDF_SectionToTerm(SDF_Section arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Sections SDF_makeSectionsFromTerm(ATerm t) */
+/*{{{  SDF_Sections SDF_SectionsFromTerm(ATerm t) */
 
-SDF_Sections SDF_makeSectionsFromTerm(ATerm t)
+SDF_Sections SDF_SectionsFromTerm(ATerm t)
 {
   return (SDF_Sections)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSections(SDF_Sections arg) */
+/*{{{  ATerm SDF_SectionsToTerm(SDF_Sections arg) */
 
-ATerm SDF_makeTermFromSections(SDF_Sections arg)
+ATerm SDF_SectionsToTerm(SDF_Sections arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_SectionList SDF_makeSectionListFromTerm(ATerm t) */
+/*{{{  SDF_SectionList SDF_SectionListFromTerm(ATerm t) */
 
-SDF_SectionList SDF_makeSectionListFromTerm(ATerm t)
+SDF_SectionList SDF_SectionListFromTerm(ATerm t)
 {
   return (SDF_SectionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSectionList(SDF_SectionList arg) */
+/*{{{  ATerm SDF_SectionListToTerm(SDF_SectionList arg) */
 
-ATerm SDF_makeTermFromSectionList(SDF_SectionList arg)
+ATerm SDF_SectionListToTerm(SDF_SectionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleName SDF_makeModuleNameFromTerm(ATerm t) */
+/*{{{  SDF_ModuleName SDF_ModuleNameFromTerm(ATerm t) */
 
-SDF_ModuleName SDF_makeModuleNameFromTerm(ATerm t)
+SDF_ModuleName SDF_ModuleNameFromTerm(ATerm t)
 {
   return (SDF_ModuleName)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModuleName(SDF_ModuleName arg) */
+/*{{{  ATerm SDF_ModuleNameToTerm(SDF_ModuleName arg) */
 
-ATerm SDF_makeTermFromModuleName(SDF_ModuleName arg)
+ATerm SDF_ModuleNameToTerm(SDF_ModuleName arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Attribute SDF_makeAttributeFromTerm(ATerm t) */
+/*{{{  SDF_Attribute SDF_AttributeFromTerm(ATerm t) */
 
-SDF_Attribute SDF_makeAttributeFromTerm(ATerm t)
+SDF_Attribute SDF_AttributeFromTerm(ATerm t)
 {
   return (SDF_Attribute)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAttribute(SDF_Attribute arg) */
+/*{{{  ATerm SDF_AttributeToTerm(SDF_Attribute arg) */
 
-ATerm SDF_makeTermFromAttribute(SDF_Attribute arg)
+ATerm SDF_AttributeToTerm(SDF_Attribute arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ImpSection SDF_makeImpSectionFromTerm(ATerm t) */
+/*{{{  SDF_ImpSection SDF_ImpSectionFromTerm(ATerm t) */
 
-SDF_ImpSection SDF_makeImpSectionFromTerm(ATerm t)
+SDF_ImpSection SDF_ImpSectionFromTerm(ATerm t)
 {
   return (SDF_ImpSection)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromImpSection(SDF_ImpSection arg) */
+/*{{{  ATerm SDF_ImpSectionToTerm(SDF_ImpSection arg) */
 
-ATerm SDF_makeTermFromImpSection(SDF_ImpSection arg)
+ATerm SDF_ImpSectionToTerm(SDF_ImpSection arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Imports SDF_makeImportsFromTerm(ATerm t) */
+/*{{{  SDF_Imports SDF_ImportsFromTerm(ATerm t) */
 
-SDF_Imports SDF_makeImportsFromTerm(ATerm t)
+SDF_Imports SDF_ImportsFromTerm(ATerm t)
 {
   return (SDF_Imports)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromImports(SDF_Imports arg) */
+/*{{{  ATerm SDF_ImportsToTerm(SDF_Imports arg) */
 
-ATerm SDF_makeTermFromImports(SDF_Imports arg)
+ATerm SDF_ImportsToTerm(SDF_Imports arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ImportList SDF_makeImportListFromTerm(ATerm t) */
+/*{{{  SDF_ImportList SDF_ImportListFromTerm(ATerm t) */
 
-SDF_ImportList SDF_makeImportListFromTerm(ATerm t)
+SDF_ImportList SDF_ImportListFromTerm(ATerm t)
 {
   return (SDF_ImportList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromImportList(SDF_ImportList arg) */
+/*{{{  ATerm SDF_ImportListToTerm(SDF_ImportList arg) */
 
-ATerm SDF_makeTermFromImportList(SDF_ImportList arg)
+ATerm SDF_ImportListToTerm(SDF_ImportList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Import SDF_makeImportFromTerm(ATerm t) */
+/*{{{  SDF_Import SDF_ImportFromTerm(ATerm t) */
 
-SDF_Import SDF_makeImportFromTerm(ATerm t)
+SDF_Import SDF_ImportFromTerm(ATerm t)
 {
   return (SDF_Import)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromImport(SDF_Import arg) */
+/*{{{  ATerm SDF_ImportToTerm(SDF_Import arg) */
 
-ATerm SDF_makeTermFromImport(SDF_Import arg)
+ATerm SDF_ImportToTerm(SDF_Import arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolTail SDF_makeSymbolTailFromTerm(ATerm t) */
+/*{{{  SDF_SymbolTail SDF_SymbolTailFromTerm(ATerm t) */
 
-SDF_SymbolTail SDF_makeSymbolTailFromTerm(ATerm t)
+SDF_SymbolTail SDF_SymbolTailFromTerm(ATerm t)
 {
   return (SDF_SymbolTail)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbolTail(SDF_SymbolTail arg) */
+/*{{{  ATerm SDF_SymbolTailToTerm(SDF_SymbolTail arg) */
 
-ATerm SDF_makeTermFromSymbolTail(SDF_SymbolTail arg)
+ATerm SDF_SymbolTailToTerm(SDF_SymbolTail arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Associativity SDF_makeAssociativityFromTerm(ATerm t) */
+/*{{{  SDF_Associativity SDF_AssociativityFromTerm(ATerm t) */
 
-SDF_Associativity SDF_makeAssociativityFromTerm(ATerm t)
+SDF_Associativity SDF_AssociativityFromTerm(ATerm t)
 {
   return (SDF_Associativity)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAssociativity(SDF_Associativity arg) */
+/*{{{  ATerm SDF_AssociativityToTerm(SDF_Associativity arg) */
 
-ATerm SDF_makeTermFromAssociativity(SDF_Associativity arg)
+ATerm SDF_AssociativityToTerm(SDF_Associativity arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Group SDF_makeGroupFromTerm(ATerm t) */
+/*{{{  SDF_Group SDF_GroupFromTerm(ATerm t) */
 
-SDF_Group SDF_makeGroupFromTerm(ATerm t)
+SDF_Group SDF_GroupFromTerm(ATerm t)
 {
   return (SDF_Group)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromGroup(SDF_Group arg) */
+/*{{{  ATerm SDF_GroupToTerm(SDF_Group arg) */
 
-ATerm SDF_makeTermFromGroup(SDF_Group arg)
+ATerm SDF_GroupToTerm(SDF_Group arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Priority SDF_makePriorityFromTerm(ATerm t) */
+/*{{{  SDF_Priority SDF_PriorityFromTerm(ATerm t) */
 
-SDF_Priority SDF_makePriorityFromTerm(ATerm t)
+SDF_Priority SDF_PriorityFromTerm(ATerm t)
 {
   return (SDF_Priority)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromPriority(SDF_Priority arg) */
+/*{{{  ATerm SDF_PriorityToTerm(SDF_Priority arg) */
 
-ATerm SDF_makeTermFromPriority(SDF_Priority arg)
+ATerm SDF_PriorityToTerm(SDF_Priority arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupList SDF_makeGroupListFromTerm(ATerm t) */
+/*{{{  SDF_GroupList SDF_GroupListFromTerm(ATerm t) */
 
-SDF_GroupList SDF_makeGroupListFromTerm(ATerm t)
+SDF_GroupList SDF_GroupListFromTerm(ATerm t)
 {
   return (SDF_GroupList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromGroupList(SDF_GroupList arg) */
+/*{{{  ATerm SDF_GroupListToTerm(SDF_GroupList arg) */
 
-ATerm SDF_makeTermFromGroupList(SDF_GroupList arg)
+ATerm SDF_GroupListToTerm(SDF_GroupList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Priorities SDF_makePrioritiesFromTerm(ATerm t) */
+/*{{{  SDF_Priorities SDF_PrioritiesFromTerm(ATerm t) */
 
-SDF_Priorities SDF_makePrioritiesFromTerm(ATerm t)
+SDF_Priorities SDF_PrioritiesFromTerm(ATerm t)
 {
   return (SDF_Priorities)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromPriorities(SDF_Priorities arg) */
+/*{{{  ATerm SDF_PrioritiesToTerm(SDF_Priorities arg) */
 
-ATerm SDF_makeTermFromPriorities(SDF_Priorities arg)
+ATerm SDF_PrioritiesToTerm(SDF_Priorities arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t) */
+/*{{{  SDF_PriorityList SDF_PriorityListFromTerm(ATerm t) */
 
-SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t)
+SDF_PriorityList SDF_PriorityListFromTerm(ATerm t)
 {
   return (SDF_PriorityList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromPriorityList(SDF_PriorityList arg) */
+/*{{{  ATerm SDF_PriorityListToTerm(SDF_PriorityList arg) */
 
-ATerm SDF_makeTermFromPriorityList(SDF_PriorityList arg)
+ATerm SDF_PriorityListToTerm(SDF_PriorityList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Sort SDF_makeSortFromTerm(ATerm t) */
+/*{{{  SDF_Sort SDF_SortFromTerm(ATerm t) */
 
-SDF_Sort SDF_makeSortFromTerm(ATerm t)
+SDF_Sort SDF_SortFromTerm(ATerm t)
 {
   return (SDF_Sort)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSort(SDF_Sort arg) */
+/*{{{  ATerm SDF_SortToTerm(SDF_Sort arg) */
 
-ATerm SDF_makeTermFromSort(SDF_Sort arg)
+ATerm SDF_SortToTerm(SDF_Sort arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_UQLiteral SDF_makeUQLiteralFromTerm(ATerm t) */
+/*{{{  SDF_UQLiteral SDF_UQLiteralFromTerm(ATerm t) */
 
-SDF_UQLiteral SDF_makeUQLiteralFromTerm(ATerm t)
+SDF_UQLiteral SDF_UQLiteralFromTerm(ATerm t)
 {
   return (SDF_UQLiteral)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromUQLiteral(SDF_UQLiteral arg) */
+/*{{{  ATerm SDF_UQLiteralToTerm(SDF_UQLiteral arg) */
 
-ATerm SDF_makeTermFromUQLiteral(SDF_UQLiteral arg)
+ATerm SDF_UQLiteralToTerm(SDF_UQLiteral arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Literal SDF_makeLiteralFromTerm(ATerm t) */
+/*{{{  SDF_Literal SDF_LiteralFromTerm(ATerm t) */
 
-SDF_Literal SDF_makeLiteralFromTerm(ATerm t)
+SDF_Literal SDF_LiteralFromTerm(ATerm t)
 {
   return (SDF_Literal)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLiteral(SDF_Literal arg) */
+/*{{{  ATerm SDF_LiteralToTerm(SDF_Literal arg) */
 
-ATerm SDF_makeTermFromLiteral(SDF_Literal arg)
+ATerm SDF_LiteralToTerm(SDF_Literal arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolArguments SDF_makeSymbolArgumentsFromTerm(ATerm t) */
+/*{{{  SDF_SymbolArguments SDF_SymbolArgumentsFromTerm(ATerm t) */
 
-SDF_SymbolArguments SDF_makeSymbolArgumentsFromTerm(ATerm t)
+SDF_SymbolArguments SDF_SymbolArgumentsFromTerm(ATerm t)
 {
   return (SDF_SymbolArguments)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbolArguments(SDF_SymbolArguments arg) */
+/*{{{  ATerm SDF_SymbolArgumentsToTerm(SDF_SymbolArguments arg) */
 
-ATerm SDF_makeTermFromSymbolArguments(SDF_SymbolArguments arg)
+ATerm SDF_SymbolArgumentsToTerm(SDF_SymbolArguments arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Lookahead SDF_makeLookaheadFromTerm(ATerm t) */
+/*{{{  SDF_Lookahead SDF_LookaheadFromTerm(ATerm t) */
 
-SDF_Lookahead SDF_makeLookaheadFromTerm(ATerm t)
+SDF_Lookahead SDF_LookaheadFromTerm(ATerm t)
 {
   return (SDF_Lookahead)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLookahead(SDF_Lookahead arg) */
+/*{{{  ATerm SDF_LookaheadToTerm(SDF_Lookahead arg) */
 
-ATerm SDF_makeTermFromLookahead(SDF_Lookahead arg)
+ATerm SDF_LookaheadToTerm(SDF_Lookahead arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Lookaheads SDF_makeLookaheadsFromTerm(ATerm t) */
+/*{{{  SDF_Lookaheads SDF_LookaheadsFromTerm(ATerm t) */
 
-SDF_Lookaheads SDF_makeLookaheadsFromTerm(ATerm t)
+SDF_Lookaheads SDF_LookaheadsFromTerm(ATerm t)
 {
   return (SDF_Lookaheads)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLookaheads(SDF_Lookaheads arg) */
+/*{{{  ATerm SDF_LookaheadsToTerm(SDF_Lookaheads arg) */
 
-ATerm SDF_makeTermFromLookaheads(SDF_Lookaheads arg)
+ATerm SDF_LookaheadsToTerm(SDF_Lookaheads arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadList SDF_makeLookaheadListFromTerm(ATerm t) */
+/*{{{  SDF_LookaheadList SDF_LookaheadListFromTerm(ATerm t) */
 
-SDF_LookaheadList SDF_makeLookaheadListFromTerm(ATerm t)
+SDF_LookaheadList SDF_LookaheadListFromTerm(ATerm t)
 {
   return (SDF_LookaheadList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLookaheadList(SDF_LookaheadList arg) */
+/*{{{  ATerm SDF_LookaheadListToTerm(SDF_LookaheadList arg) */
 
-ATerm SDF_makeTermFromLookaheadList(SDF_LookaheadList arg)
+ATerm SDF_LookaheadListToTerm(SDF_LookaheadList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Restriction SDF_makeRestrictionFromTerm(ATerm t) */
+/*{{{  SDF_Restriction SDF_RestrictionFromTerm(ATerm t) */
 
-SDF_Restriction SDF_makeRestrictionFromTerm(ATerm t)
+SDF_Restriction SDF_RestrictionFromTerm(ATerm t)
 {
   return (SDF_Restriction)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRestriction(SDF_Restriction arg) */
+/*{{{  ATerm SDF_RestrictionToTerm(SDF_Restriction arg) */
 
-ATerm SDF_makeTermFromRestriction(SDF_Restriction arg)
+ATerm SDF_RestrictionToTerm(SDF_Restriction arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Restrictions SDF_makeRestrictionsFromTerm(ATerm t) */
+/*{{{  SDF_Restrictions SDF_RestrictionsFromTerm(ATerm t) */
 
-SDF_Restrictions SDF_makeRestrictionsFromTerm(ATerm t)
+SDF_Restrictions SDF_RestrictionsFromTerm(ATerm t)
 {
   return (SDF_Restrictions)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRestrictions(SDF_Restrictions arg) */
+/*{{{  ATerm SDF_RestrictionsToTerm(SDF_Restrictions arg) */
 
-ATerm SDF_makeTermFromRestrictions(SDF_Restrictions arg)
+ATerm SDF_RestrictionsToTerm(SDF_Restrictions arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionList SDF_makeRestrictionListFromTerm(ATerm t) */
+/*{{{  SDF_RestrictionList SDF_RestrictionListFromTerm(ATerm t) */
 
-SDF_RestrictionList SDF_makeRestrictionListFromTerm(ATerm t)
+SDF_RestrictionList SDF_RestrictionListFromTerm(ATerm t)
 {
   return (SDF_RestrictionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRestrictionList(SDF_RestrictionList arg) */
+/*{{{  ATerm SDF_RestrictionListToTerm(SDF_RestrictionList arg) */
 
-ATerm SDF_makeTermFromRestrictionList(SDF_RestrictionList arg)
+ATerm SDF_RestrictionListToTerm(SDF_RestrictionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Alias SDF_makeAliasFromTerm(ATerm t) */
+/*{{{  SDF_Alias SDF_AliasFromTerm(ATerm t) */
 
-SDF_Alias SDF_makeAliasFromTerm(ATerm t)
+SDF_Alias SDF_AliasFromTerm(ATerm t)
 {
   return (SDF_Alias)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAlias(SDF_Alias arg) */
+/*{{{  ATerm SDF_AliasToTerm(SDF_Alias arg) */
 
-ATerm SDF_makeTermFromAlias(SDF_Alias arg)
+ATerm SDF_AliasToTerm(SDF_Alias arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Aliases SDF_makeAliasesFromTerm(ATerm t) */
+/*{{{  SDF_Aliases SDF_AliasesFromTerm(ATerm t) */
 
-SDF_Aliases SDF_makeAliasesFromTerm(ATerm t)
+SDF_Aliases SDF_AliasesFromTerm(ATerm t)
 {
   return (SDF_Aliases)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAliases(SDF_Aliases arg) */
+/*{{{  ATerm SDF_AliasesToTerm(SDF_Aliases arg) */
 
-ATerm SDF_makeTermFromAliases(SDF_Aliases arg)
+ATerm SDF_AliasesToTerm(SDF_Aliases arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_AliasList SDF_makeAliasListFromTerm(ATerm t) */
+/*{{{  SDF_AliasList SDF_AliasListFromTerm(ATerm t) */
 
-SDF_AliasList SDF_makeAliasListFromTerm(ATerm t)
+SDF_AliasList SDF_AliasListFromTerm(ATerm t)
 {
   return (SDF_AliasList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAliasList(SDF_AliasList arg) */
+/*{{{  ATerm SDF_AliasListToTerm(SDF_AliasList arg) */
 
-ATerm SDF_makeTermFromAliasList(SDF_AliasList arg)
+ATerm SDF_AliasListToTerm(SDF_AliasList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Symbols SDF_makeSymbolsFromTerm(ATerm t) */
+/*{{{  SDF_Symbols SDF_SymbolsFromTerm(ATerm t) */
 
-SDF_Symbols SDF_makeSymbolsFromTerm(ATerm t)
+SDF_Symbols SDF_SymbolsFromTerm(ATerm t)
 {
   return (SDF_Symbols)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbols(SDF_Symbols arg) */
+/*{{{  ATerm SDF_SymbolsToTerm(SDF_Symbols arg) */
 
-ATerm SDF_makeTermFromSymbols(SDF_Symbols arg)
+ATerm SDF_SymbolsToTerm(SDF_Symbols arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t) */
+/*{{{  SDF_SymbolList SDF_SymbolListFromTerm(ATerm t) */
 
-SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t)
+SDF_SymbolList SDF_SymbolListFromTerm(ATerm t)
 {
   return (SDF_SymbolList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg) */
+/*{{{  ATerm SDF_SymbolListToTerm(SDF_SymbolList arg) */
 
-ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg)
+ATerm SDF_SymbolListToTerm(SDF_SymbolList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Renamings SDF_makeRenamingsFromTerm(ATerm t) */
+/*{{{  SDF_Renamings SDF_RenamingsFromTerm(ATerm t) */
 
-SDF_Renamings SDF_makeRenamingsFromTerm(ATerm t)
+SDF_Renamings SDF_RenamingsFromTerm(ATerm t)
 {
   return (SDF_Renamings)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRenamings(SDF_Renamings arg) */
+/*{{{  ATerm SDF_RenamingsToTerm(SDF_Renamings arg) */
 
-ATerm SDF_makeTermFromRenamings(SDF_Renamings arg)
+ATerm SDF_RenamingsToTerm(SDF_Renamings arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingList SDF_makeRenamingListFromTerm(ATerm t) */
+/*{{{  SDF_RenamingList SDF_RenamingListFromTerm(ATerm t) */
 
-SDF_RenamingList SDF_makeRenamingListFromTerm(ATerm t)
+SDF_RenamingList SDF_RenamingListFromTerm(ATerm t)
 {
   return (SDF_RenamingList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRenamingList(SDF_RenamingList arg) */
+/*{{{  ATerm SDF_RenamingListToTerm(SDF_RenamingList arg) */
 
-ATerm SDF_makeTermFromRenamingList(SDF_RenamingList arg)
+ATerm SDF_RenamingListToTerm(SDF_RenamingList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Renaming SDF_makeRenamingFromTerm(ATerm t) */
+/*{{{  SDF_Renaming SDF_RenamingFromTerm(ATerm t) */
 
-SDF_Renaming SDF_makeRenamingFromTerm(ATerm t)
+SDF_Renaming SDF_RenamingFromTerm(ATerm t)
 {
   return (SDF_Renaming)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRenaming(SDF_Renaming arg) */
+/*{{{  ATerm SDF_RenamingToTerm(SDF_Renaming arg) */
 
-ATerm SDF_makeTermFromRenaming(SDF_Renaming arg)
+ATerm SDF_RenamingToTerm(SDF_Renaming arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_NatCon SDF_makeNatConFromTerm(ATerm t) */
+/*{{{  SDF_NatCon SDF_NatConFromTerm(ATerm t) */
 
-SDF_NatCon SDF_makeNatConFromTerm(ATerm t)
+SDF_NatCon SDF_NatConFromTerm(ATerm t)
 {
   return (SDF_NatCon)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromNatCon(SDF_NatCon arg) */
+/*{{{  ATerm SDF_NatConToTerm(SDF_NatCon arg) */
 
-ATerm SDF_makeTermFromNatCon(SDF_NatCon arg)
+ATerm SDF_NatConToTerm(SDF_NatCon arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_IntCon SDF_makeIntConFromTerm(ATerm t) */
+/*{{{  SDF_IntCon SDF_IntConFromTerm(ATerm t) */
 
-SDF_IntCon SDF_makeIntConFromTerm(ATerm t)
+SDF_IntCon SDF_IntConFromTerm(ATerm t)
 {
   return (SDF_IntCon)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromIntCon(SDF_IntCon arg) */
+/*{{{  ATerm SDF_IntConToTerm(SDF_IntCon arg) */
 
-ATerm SDF_makeTermFromIntCon(SDF_IntCon arg)
+ATerm SDF_IntConToTerm(SDF_IntCon arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_CharRange SDF_makeCharRangeFromTerm(ATerm t) */
+/*{{{  SDF_CharRange SDF_CharRangeFromTerm(ATerm t) */
 
-SDF_CharRange SDF_makeCharRangeFromTerm(ATerm t)
+SDF_CharRange SDF_CharRangeFromTerm(ATerm t)
 {
   return (SDF_CharRange)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromCharRange(SDF_CharRange arg) */
+/*{{{  ATerm SDF_CharRangeToTerm(SDF_CharRange arg) */
 
-ATerm SDF_makeTermFromCharRange(SDF_CharRange arg)
+ATerm SDF_CharRangeToTerm(SDF_CharRange arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_CharRanges SDF_makeCharRangesFromTerm(ATerm t) */
+/*{{{  SDF_CharRanges SDF_CharRangesFromTerm(ATerm t) */
 
-SDF_CharRanges SDF_makeCharRangesFromTerm(ATerm t)
+SDF_CharRanges SDF_CharRangesFromTerm(ATerm t)
 {
   return (SDF_CharRanges)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromCharRanges(SDF_CharRanges arg) */
+/*{{{  ATerm SDF_CharRangesToTerm(SDF_CharRanges arg) */
 
-ATerm SDF_makeTermFromCharRanges(SDF_CharRanges arg)
+ATerm SDF_CharRangesToTerm(SDF_CharRanges arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_OptCharRanges SDF_makeOptCharRangesFromTerm(ATerm t) */
+/*{{{  SDF_OptCharRanges SDF_OptCharRangesFromTerm(ATerm t) */
 
-SDF_OptCharRanges SDF_makeOptCharRangesFromTerm(ATerm t)
+SDF_OptCharRanges SDF_OptCharRangesFromTerm(ATerm t)
 {
   return (SDF_OptCharRanges)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromOptCharRanges(SDF_OptCharRanges arg) */
+/*{{{  ATerm SDF_OptCharRangesToTerm(SDF_OptCharRanges arg) */
 
-ATerm SDF_makeTermFromOptCharRanges(SDF_OptCharRanges arg)
+ATerm SDF_OptCharRangesToTerm(SDF_OptCharRanges arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_CharClass SDF_makeCharClassFromTerm(ATerm t) */
+/*{{{  SDF_CharClass SDF_CharClassFromTerm(ATerm t) */
 
-SDF_CharClass SDF_makeCharClassFromTerm(ATerm t)
+SDF_CharClass SDF_CharClassFromTerm(ATerm t)
 {
   return (SDF_CharClass)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromCharClass(SDF_CharClass arg) */
+/*{{{  ATerm SDF_CharClassToTerm(SDF_CharClass arg) */
 
-ATerm SDF_makeTermFromCharClass(SDF_CharClass arg)
+ATerm SDF_CharClassToTerm(SDF_CharClass arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_AlphaNumericalEscChar SDF_makeAlphaNumericalEscCharFromTerm(ATerm t) */
+/*{{{  SDF_AlphaNumericalEscChar SDF_AlphaNumericalEscCharFromTerm(ATerm t) */
 
-SDF_AlphaNumericalEscChar SDF_makeAlphaNumericalEscCharFromTerm(ATerm t)
+SDF_AlphaNumericalEscChar SDF_AlphaNumericalEscCharFromTerm(ATerm t)
 {
   return (SDF_AlphaNumericalEscChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAlphaNumericalEscChar(SDF_AlphaNumericalEscChar arg) */
+/*{{{  ATerm SDF_AlphaNumericalEscCharToTerm(SDF_AlphaNumericalEscChar arg) */
 
-ATerm SDF_makeTermFromAlphaNumericalEscChar(SDF_AlphaNumericalEscChar arg)
+ATerm SDF_AlphaNumericalEscCharToTerm(SDF_AlphaNumericalEscChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_DecimalEscChar SDF_makeDecimalEscCharFromTerm(ATerm t) */
+/*{{{  SDF_DecimalEscChar SDF_DecimalEscCharFromTerm(ATerm t) */
 
-SDF_DecimalEscChar SDF_makeDecimalEscCharFromTerm(ATerm t)
+SDF_DecimalEscChar SDF_DecimalEscCharFromTerm(ATerm t)
 {
   return (SDF_DecimalEscChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromDecimalEscChar(SDF_DecimalEscChar arg) */
+/*{{{  ATerm SDF_DecimalEscCharToTerm(SDF_DecimalEscChar arg) */
 
-ATerm SDF_makeTermFromDecimalEscChar(SDF_DecimalEscChar arg)
+ATerm SDF_DecimalEscCharToTerm(SDF_DecimalEscChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_EscChar SDF_makeEscCharFromTerm(ATerm t) */
+/*{{{  SDF_EscChar SDF_EscCharFromTerm(ATerm t) */
 
-SDF_EscChar SDF_makeEscCharFromTerm(ATerm t)
+SDF_EscChar SDF_EscCharFromTerm(ATerm t)
 {
   return (SDF_EscChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromEscChar(SDF_EscChar arg) */
+/*{{{  ATerm SDF_EscCharToTerm(SDF_EscChar arg) */
 
-ATerm SDF_makeTermFromEscChar(SDF_EscChar arg)
+ATerm SDF_EscCharToTerm(SDF_EscChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_LChar SDF_makeLCharFromTerm(ATerm t) */
+/*{{{  SDF_LChar SDF_LCharFromTerm(ATerm t) */
 
-SDF_LChar SDF_makeLCharFromTerm(ATerm t)
+SDF_LChar SDF_LCharFromTerm(ATerm t)
 {
   return (SDF_LChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLChar(SDF_LChar arg) */
+/*{{{  ATerm SDF_LCharToTerm(SDF_LChar arg) */
 
-ATerm SDF_makeTermFromLChar(SDF_LChar arg)
+ATerm SDF_LCharToTerm(SDF_LChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ATerms SDF_makeATermsFromTerm(ATerm t) */
+/*{{{  SDF_ATerms SDF_ATermsFromTerm(ATerm t) */
 
-SDF_ATerms SDF_makeATermsFromTerm(ATerm t)
+SDF_ATerms SDF_ATermsFromTerm(ATerm t)
 {
   return (SDF_ATerms)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromATerms(SDF_ATerms arg) */
+/*{{{  ATerm SDF_ATermsToTerm(SDF_ATerms arg) */
 
-ATerm SDF_makeTermFromATerms(SDF_ATerms arg)
+ATerm SDF_ATermsToTerm(SDF_ATerms arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ATermList SDF_makeATermListFromTerm(ATerm t) */
+/*{{{  SDF_ATermList SDF_ATermListFromTerm(ATerm t) */
 
-SDF_ATermList SDF_makeATermListFromTerm(ATerm t)
+SDF_ATermList SDF_ATermListFromTerm(ATerm t)
 {
   return (SDF_ATermList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromATermList(SDF_ATermList arg) */
+/*{{{  ATerm SDF_ATermListToTerm(SDF_ATermList arg) */
 
-ATerm SDF_makeTermFromATermList(SDF_ATermList arg)
+ATerm SDF_ATermListToTerm(SDF_ATermList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ACon SDF_makeAConFromTerm(ATerm t) */
+/*{{{  SDF_ACon SDF_AConFromTerm(ATerm t) */
 
-SDF_ACon SDF_makeAConFromTerm(ATerm t)
+SDF_ACon SDF_AConFromTerm(ATerm t)
 {
   return (SDF_ACon)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromACon(SDF_ACon arg) */
+/*{{{  ATerm SDF_AConToTerm(SDF_ACon arg) */
 
-ATerm SDF_makeTermFromACon(SDF_ACon arg)
+ATerm SDF_AConToTerm(SDF_ACon arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_AFun SDF_makeAFunFromTerm(ATerm t) */
+/*{{{  SDF_AFun SDF_AFunFromTerm(ATerm t) */
 
-SDF_AFun SDF_makeAFunFromTerm(ATerm t)
+SDF_AFun SDF_AFunFromTerm(ATerm t)
 {
   return (SDF_AFun)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAFun(SDF_AFun arg) */
+/*{{{  ATerm SDF_AFunToTerm(SDF_AFun arg) */
 
-ATerm SDF_makeTermFromAFun(SDF_AFun arg)
+ATerm SDF_AFunToTerm(SDF_AFun arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ATerm SDF_makeATermFromTerm(ATerm t) */
+/*{{{  SDF_ATerm SDF_ATermFromTerm(ATerm t) */
 
-SDF_ATerm SDF_makeATermFromTerm(ATerm t)
+SDF_ATerm SDF_ATermFromTerm(ATerm t)
 {
   return (SDF_ATerm)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromATerm(SDF_ATerm arg) */
+/*{{{  ATerm SDF_ATermToTerm(SDF_ATerm arg) */
 
-ATerm SDF_makeTermFromATerm(SDF_ATerm arg)
+ATerm SDF_ATermToTerm(SDF_ATerm arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Ann SDF_makeAnnFromTerm(ATerm t) */
+/*{{{  SDF_Ann SDF_AnnFromTerm(ATerm t) */
 
-SDF_Ann SDF_makeAnnFromTerm(ATerm t)
+SDF_Ann SDF_AnnFromTerm(ATerm t)
 {
   return (SDF_Ann)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAnn(SDF_Ann arg) */
+/*{{{  ATerm SDF_AnnToTerm(SDF_Ann arg) */
 
-ATerm SDF_makeTermFromAnn(SDF_Ann arg)
+ATerm SDF_AnnToTerm(SDF_Ann arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_TagId SDF_makeTagIdFromTerm(ATerm t) */
+/*{{{  SDF_TagId SDF_TagIdFromTerm(ATerm t) */
 
-SDF_TagId SDF_makeTagIdFromTerm(ATerm t)
+SDF_TagId SDF_TagIdFromTerm(ATerm t)
 {
   return (SDF_TagId)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromTagId(SDF_TagId arg) */
+/*{{{  ATerm SDF_TagIdToTerm(SDF_TagId arg) */
 
-ATerm SDF_makeTermFromTagId(SDF_TagId arg)
+ATerm SDF_TagIdToTerm(SDF_TagId arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_NumChar SDF_makeNumCharFromTerm(ATerm t) */
+/*{{{  SDF_NumChar SDF_NumCharFromTerm(ATerm t) */
 
-SDF_NumChar SDF_makeNumCharFromTerm(ATerm t)
+SDF_NumChar SDF_NumCharFromTerm(ATerm t)
 {
   return (SDF_NumChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromNumChar(SDF_NumChar arg) */
+/*{{{  ATerm SDF_NumCharToTerm(SDF_NumChar arg) */
 
-ATerm SDF_makeTermFromNumChar(SDF_NumChar arg)
+ATerm SDF_NumCharToTerm(SDF_NumChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_ShortChar SDF_makeShortCharFromTerm(ATerm t) */
+/*{{{  SDF_ShortChar SDF_ShortCharFromTerm(ATerm t) */
 
-SDF_ShortChar SDF_makeShortCharFromTerm(ATerm t)
+SDF_ShortChar SDF_ShortCharFromTerm(ATerm t)
 {
   return (SDF_ShortChar)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromShortChar(SDF_ShortChar arg) */
+/*{{{  ATerm SDF_ShortCharToTerm(SDF_ShortChar arg) */
 
-ATerm SDF_makeTermFromShortChar(SDF_ShortChar arg)
+ATerm SDF_ShortCharToTerm(SDF_ShortChar arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_Character SDF_makeCharacterFromTerm(ATerm t) */
+/*{{{  SDF_Character SDF_CharacterFromTerm(ATerm t) */
 
-SDF_Character SDF_makeCharacterFromTerm(ATerm t)
+SDF_Character SDF_CharacterFromTerm(ATerm t)
 {
   return (SDF_Character)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromCharacter(SDF_Character arg) */
+/*{{{  ATerm SDF_CharacterToTerm(SDF_Character arg) */
 
-ATerm SDF_makeTermFromCharacter(SDF_Character arg)
+ATerm SDF_CharacterToTerm(SDF_Character arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_OptExp SDF_makeOptExpFromTerm(ATerm t) */
+/*{{{  SDF_OptExp SDF_OptExpFromTerm(ATerm t) */
 
-SDF_OptExp SDF_makeOptExpFromTerm(ATerm t)
+SDF_OptExp SDF_OptExpFromTerm(ATerm t)
 {
   return (SDF_OptExp)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromOptExp(SDF_OptExp arg) */
+/*{{{  ATerm SDF_OptExpToTerm(SDF_OptExp arg) */
 
-ATerm SDF_makeTermFromOptExp(SDF_OptExp arg)
+ATerm SDF_OptExpToTerm(SDF_OptExp arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SDF_RealCon SDF_makeRealConFromTerm(ATerm t) */
+/*{{{  SDF_RealCon SDF_RealConFromTerm(ATerm t) */
 
-SDF_RealCon SDF_makeRealConFromTerm(ATerm t)
+SDF_RealCon SDF_RealConFromTerm(ATerm t)
 {
   return (SDF_RealCon)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRealCon(SDF_RealCon arg) */
+/*{{{  ATerm SDF_RealConToTerm(SDF_RealCon arg) */
 
-ATerm SDF_makeTermFromRealCon(SDF_RealCon arg)
+ATerm SDF_RealConToTerm(SDF_RealCon arg)
 {
   return (ATerm)arg;
 }

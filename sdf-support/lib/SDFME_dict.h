@@ -1,5 +1,5 @@
 /*
- * Generated at Wed May 23 14:13:07 2001
+ * Generated at Mon Jun 18 14:31:01 2001
  */
 
 #ifndef __SDFME_dict_H

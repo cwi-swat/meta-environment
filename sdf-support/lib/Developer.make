@@ -18,7 +18,7 @@ ${NAME}.adt: ${SOURCE}
 	sdf2-to-adt -2 -r -i $< -o ${NAME}.adt
 
 ${NAME}.c: ${NAME}.adt ${NAME}.pro
-	adt-to-c -i ${NAME}.adt --prologue ${NAME}.pro \
+	adt-to-c --compat-term -i ${NAME}.adt --prologue ${NAME}.pro \
                                 --prefix ${PREFIX} -o ${NAME}
 
 clean:
