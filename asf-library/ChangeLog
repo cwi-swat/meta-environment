@@ -1,3 +1,7 @@
+2003/09/17 (jurgenv@cwi.nl)
+  * Removed remaining unnecessary chmod calls in install and uninstall 
+    targets.
+
 2003/09/16 (jurgenv@cwi.nl)
   * Extracted asf-library from the asf package. The ChangeLog in the
     asf package between 2003/07/06 and 2003/09/16 contains some relevant

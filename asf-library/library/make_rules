@@ -9,16 +9,8 @@ EXTRA_DIST = $(MODULES)
 # Determine installation directory
 libpackagedir=${pkgdatadir}/library$(subst library,,$(subdir))
 
-install-data-hook: make-dir install-modules
-
-make-dir:
-	@if test -d $(DESTDIR)$(libpackagedir); then \
-           echo " chmod 755 $(DESTDIR)$(libpackagedir)"; \
-           chmod 755 $(DESTDIR)$(libpackagedir); \
-        fi
+install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
-
-install-modules:
 	@list='$(MODULES)'; for p in $$list; do \
           if test -f $(srcdir)/$$p; then \
             echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \

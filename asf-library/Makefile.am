@@ -1,8 +1,4 @@
-SUBDIRS=library
-
-uninstall:
-	chmod -R ugo+wr $(DESTDIR)$(pkgdatadir)
-	rm -r $(DESTDIR)$(pkgdatadir)
+SUBDIRS=library utils
 
 EXTRA_DIST= reconf $(wildcard *.pkg)
 

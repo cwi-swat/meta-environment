@@ -7,10 +7,9 @@ AM_INIT_AUTOMAKE(asf-library, 1.0)
 ACLOCAL="${ACLOCAL} -I ."
 AC_SET_MAKE
 
-dnl {{{  List output files
-
 AC_OUTPUT(
    Makefile
+   utils/Makefile
    library/Makefile
    library/asfix/Makefile
    library/asfix/syntax/Makefile
@@ -30,5 +29,3 @@ AC_OUTPUT(
    library/sdf2/projection/Makefile
    library/sdf2/renaming/Makefile
 )
-
-dnl }}}
