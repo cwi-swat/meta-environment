@@ -8,8 +8,8 @@ libdir=${exec_prefix}/lib
 
 PATH="$PATH:$bindir"
 
-PARSER="parse-sdf2 -1 -v"
-GENERATOR="gen-table"
+PARSER="${bindir}/parse-sdf2 -1 -v"
+GENERATOR="${bindir}/gen-table"
 
 VERBOSE=1;
 ERROR=0;
