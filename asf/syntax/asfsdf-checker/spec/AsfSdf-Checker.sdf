@@ -1,7 +1,7 @@
 module AsfSdf-Checker
 
 imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker 
-        SymbolChecker RemoveLabels
+        SymbolChecker RemoveLabels AsfSortChecker
 
 exports
   context-free syntax

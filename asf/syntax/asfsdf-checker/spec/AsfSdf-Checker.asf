@@ -4,7 +4,8 @@ equations
         remove-labels(Definition1) = Definition2,
         check-asf-attributes(Definition2) = Msgs2,
         check-symbols(Definition2) = Msgs3,
-        check-for-kernel-syntax(Definition2) = Msgs4
+        check-for-asf-sorts(Definition2) = Msgs4,
+        check-for-kernel-syntax(Definition2) = Msgs5
         ============================================
         check-asfsdf(definition Definition1) =
-          Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
+          Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4 ++ Msgs5

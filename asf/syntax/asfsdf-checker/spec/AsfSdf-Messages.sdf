@@ -18,4 +18,5 @@ exports
     inconsistent-arguments-of-traversal-productions(ModuleId, Production, Production) -> Message
     charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol)        -> Message
     production-renamings-not-supported(ModuleId, Renaming)                  -> Message
+    asf-equation-sort-must-not-be-used(ModuleId, Sort)                      -> Message
 
