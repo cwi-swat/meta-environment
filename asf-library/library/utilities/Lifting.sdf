@@ -1,0 +1,11 @@
+module Lifting[Sort]
+
+imports languages/asfix/syntax/Tree
+imports languages/aterm/syntax/ATerms
+
+exports
+
+context-free syntax
+
+  lift-to-tree(Sort) -> Tree  {built-in(lift-to-tree)}
+  lift-to-term(Sort) -> ATerm {built-in(lift-to-term)}
