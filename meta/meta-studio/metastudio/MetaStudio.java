@@ -422,9 +422,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     fileMenu.add(actionOpenModule).setIcon(null);
     fileMenu.add(actionOpenLibModule).setIcon(null);
     fileMenu.add(actionNewModule).setIcon(null);
-    fileMenu.add(actionSaveAll).setIcon(null);
     fileMenu.addSeparator();
+    fileMenu.add(actionSaveAll).setIcon(null);
     fileMenu.add(actionClearAll).setIcon(null);
+    fileMenu.addSeparator();
     fileMenu.add(actionRefreshButtons).setIcon(null);
     fileMenu.addSeparator();
     fileMenu.add(actionQuit).setIcon(null);
