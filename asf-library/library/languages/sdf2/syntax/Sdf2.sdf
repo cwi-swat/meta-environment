@@ -1,8 +1,8 @@
 %%% $Id$
 
-module sdf2/syntax/Sdf2
+module languages/sdf2/syntax/Sdf2
 
-imports sdf2/syntax/Sdf2-Syntax
+imports languages/sdf2/syntax/Sdf2-Syntax
 exports
   lexical syntax
     "LAYOUT"            -> Sort    {reject}

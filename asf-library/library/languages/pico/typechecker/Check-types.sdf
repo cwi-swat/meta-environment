@@ -1,6 +1,6 @@
-module demo/pico/typechecker/Check-types
+module languages/pico/typechecker/Check-types
 
-imports demo/pico/syntax/Pico-Types basic/Booleans asf/syntax/Comments
+imports languages/pico/syntax/Pico-Types basic/Booleans basic/Comments
 
 exports
   context-free syntax

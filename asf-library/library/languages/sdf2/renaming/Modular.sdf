@@ -1,6 +1,6 @@
-module sdf2/renaming/Modular
+module languages/sdf2/renaming/Modular
 imports
-        sdf2/projection/Modular
+        languages/sdf2/projection/Modular
 exports
   context-free syntax
     "(" Imports  ")" Renamings    -> Imports

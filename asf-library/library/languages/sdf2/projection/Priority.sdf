@@ -1,7 +1,7 @@
-module sdf2/projection/Priority
+module languages/sdf2/projection/Priority
 imports
-    sdf2/syntax/Priority
-    sdf2/projection/Kernel
+    languages/sdf2/syntax/Priority
+    languages/sdf2/projection/Kernel
 exports
   context-free syntax
      Priorities "++" Priorities -> Priorities {assoc}

@@ -1,4 +1,4 @@
-module languages/asf/syntax/Comments
+module basic/Comments
 
 imports
   basic/Whitespace

@@ -1,7 +1,7 @@
 %%% $Id$
                
-module sdf2/syntax/Restrictions
-imports sdf2/syntax/CC
+module languages/sdf2/syntax/Restrictions
+imports languages/sdf2/syntax/CC
 exports
   sorts Lookahead Lookaheads Restriction Restrictions
   context-free syntax

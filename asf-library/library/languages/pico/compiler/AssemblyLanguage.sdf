@@ -1,6 +1,6 @@
-module demo/pico/compiler/AssemblyLanguage
+module languages/pico/compiler/AssemblyLanguage
 
-imports basic/Integers basic/Strings demo/pico/syntax/Pico-Identifiers
+imports basic/Integers basic/Strings languages/pico/syntax/Pico-Identifiers
 exports 
   sorts Label Instr
   lexical syntax

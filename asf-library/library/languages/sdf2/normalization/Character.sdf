@@ -1,5 +1,5 @@
-module sdf2/normalization/Character
-imports sdf2/syntax/Character
+module languages/sdf2/normalization/Character
+imports languages/sdf2/syntax/Character
 
 hiddens
   variables

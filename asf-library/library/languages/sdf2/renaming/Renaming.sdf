@@ -1,5 +1,5 @@
-module sdf2/renaming/Renaming
-imports sdf2/renaming/Kernel
+module languages/sdf2/renaming/Renaming
+imports languages/sdf2/renaming/Kernel
 exports
   context-free syntax
     "(" Renamings   ")" Renamings -> Renamings

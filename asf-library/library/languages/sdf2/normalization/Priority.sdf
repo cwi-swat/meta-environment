@@ -1,7 +1,7 @@
-module sdf2/normalization/Priority
+module languages/sdf2/normalization/Priority
 imports
-        sdf2/normalization/Kernel
-        sdf2/projection/Priority
+        languages/sdf2/normalization/Kernel
+        languages/sdf2/projection/Priority
 exports
   context-free syntax
     "p[[" Grammar "]]"              -> Grammar

@@ -1,4 +1,4 @@
-module asf/tools/PosInfo[X]
+module utilities/PosInfo[X]
 
 imports asf/tools/ATermAnnotations[X]
 

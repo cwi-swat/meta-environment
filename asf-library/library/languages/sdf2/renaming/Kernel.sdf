@@ -1,5 +1,5 @@
-module sdf2/renaming/Kernel
-imports sdf2/projection/Renaming sdf2/projection/Kernel
+module languages/sdf2/renaming/Kernel
+imports languages/sdf2/projection/Renaming languages/sdf2/projection/Kernel
 exports
   context-free syntax
     "(" Symbol      ")" Renamings  -> Symbol

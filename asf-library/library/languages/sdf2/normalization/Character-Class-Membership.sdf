@@ -1,7 +1,7 @@
-module sdf2/normalization/Character-Class-Membership
+module languages/sdf2/normalization/Character-Class-Membership
 imports
-        sdf2/syntax/Character-Class
-        sdf2/normalization/Character-Arithmetic
+        languages/sdf2/syntax/Character-Class
+        languages/sdf2/normalization/Character-Arithmetic
 exports
   context-free syntax
     Character "in" OptCharRanges -> Boolean

@@ -1,6 +1,6 @@
 %%% $Id$
                     
-module sdf2/syntax/Grammars
+module languages/sdf2/syntax/Grammars
 imports aterm/Layout
 exports
   sorts Grammar

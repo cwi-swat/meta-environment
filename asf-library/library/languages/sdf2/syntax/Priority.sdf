@@ -1,7 +1,7 @@
 %%% $Id$   
 
-module sdf2/syntax/Priority
-imports sdf2/syntax/Kernel
+module languages/sdf2/syntax/Priority
+imports languages/sdf2/syntax/Kernel
 exports
   sorts Associativity Group Priority Priorities
   context-free syntax

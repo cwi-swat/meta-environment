@@ -1,15 +1,15 @@
-module sdf2/renaming/Sdf2-Renaming
-imports sdf2/syntax/Sdf2-Syntax
-        sdf2/renaming/Priority
-        sdf2/renaming/Regular
-        sdf2/renaming/Lifting
-        sdf2/renaming/Literals
-        sdf2/renaming/CC
-        sdf2/renaming/Sorts
-        sdf2/renaming/Restrictions
-        sdf2/renaming/Modular
-        sdf2/renaming/Aliases
-        sdf2/renaming/Labels
+module languages/sdf2/renaming/Sdf2-Renaming
+imports languages/sdf2/syntax/Sdf2-Syntax
+        languages/sdf2/renaming/Priority
+        languages/sdf2/renaming/Regular
+        languages/sdf2/renaming/Lifting
+        languages/sdf2/renaming/Literals
+        languages/sdf2/renaming/CC
+        languages/sdf2/renaming/Sorts
+        languages/sdf2/renaming/Restrictions
+        languages/sdf2/renaming/Modular
+        languages/sdf2/renaming/Aliases
+        languages/sdf2/renaming/Labels
 
 hiddens
   variables

@@ -1,6 +1,6 @@
-module sdf2/projection/Modular
+module languages/sdf2/projection/Modular
 imports
-        sdf2/renaming/Modular-Sections
+        languages/sdf2/renaming/Modular-Sections
 exports
   context-free syntax
     Import "(-" Imports                      -> Boolean

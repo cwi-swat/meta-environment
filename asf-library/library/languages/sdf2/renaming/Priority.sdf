@@ -1,6 +1,6 @@
-module sdf2/renaming/Priority
+module languages/sdf2/renaming/Priority
 
-imports sdf2/projection/Priority sdf2/renaming/Basic
+imports languages/sdf2/projection/Priority languages/sdf2/renaming/Basic
 exports
   context-free syntax
     "(" Priorities ")" Renamings -> Priorities

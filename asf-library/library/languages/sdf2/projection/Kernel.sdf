@@ -1,7 +1,7 @@
-module sdf2/projection/Kernel
+module languages/sdf2/projection/Kernel
 imports
-        sdf2/syntax/Kernel
-        sdf2/projection/Symbol-Sets
+        languages/sdf2/syntax/Kernel
+        languages/sdf2/projection/Symbol-Sets
 exports
   context-free syntax
     Productions "++" Productions                 -> Productions {right}

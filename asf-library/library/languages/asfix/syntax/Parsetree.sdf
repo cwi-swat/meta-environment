@@ -1,9 +1,9 @@
-module asfix/syntax/Parsetree
+module languages/asfix/syntax/Parsetree
  
-imports asfix/syntax/Attributes
-imports asfix/syntax/Symbol
-imports asfix/syntax/Tree 
-imports aterm/IntCon
+imports languages/asfix/syntax/Attributes
+imports languages/asfix/syntax/Symbol
+imports languages/asfix/syntax/Tree 
+imports languages/aterm/IntCon
 
 exports
 sorts ParseTree 

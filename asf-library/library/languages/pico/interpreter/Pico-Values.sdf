@@ -1,4 +1,4 @@
-module demo/pico/syntax/Pico-Values
+module languages/pico/syntax/Pico-Values
 
 imports basic/Integers basic/Strings
 

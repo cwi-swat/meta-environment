@@ -1,7 +1,7 @@
 %%% $Id$
            
-module sdf2/syntax/Character-Class
-imports sdf2/syntax/Character
+module languages/sdf2/syntax/Character-Class
+imports languages/sdf2/syntax/Character
 hiddens
   sorts CharRange CharRanges OptCharRanges 
 exports

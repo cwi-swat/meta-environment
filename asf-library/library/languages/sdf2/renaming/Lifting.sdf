@@ -1,7 +1,7 @@
-module sdf2/renaming/Lifting
+module languages/sdf2/renaming/Lifting
 
-imports  sdf2/renaming/Kernel 
-         sdf2/syntax/Lifting
+imports  languages/sdf2/renaming/Kernel 
+         languages/sdf2/syntax/Lifting
 
 hiddens
 

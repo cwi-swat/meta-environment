@@ -1,6 +1,6 @@
-module sdf2/renaming/Labels
+module languages/sdf2/renaming/Labels
 
-imports sdf2/syntax/Labels sdf2/renaming/Kernel
+imports languages/sdf2/syntax/Labels languages/sdf2/renaming/Kernel
 hiddens
   variables
     "L"[0-9\']*      -> Literal

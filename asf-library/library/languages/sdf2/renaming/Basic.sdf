@@ -1,5 +1,5 @@
-module sdf2/renaming/Basic
-imports sdf2/normalization/Basic sdf2/renaming/Kernel
+module languages/sdf2/renaming/Basic
+imports languages/sdf2/normalization/Basic languages/sdf2/renaming/Kernel
 exports
   context-free syntax
     "<" Renamings "-LEX" ">" -> Renamings

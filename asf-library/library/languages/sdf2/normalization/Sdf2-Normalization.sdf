@@ -1,15 +1,15 @@
-module sdf2/normalization/Sdf2-Normalization
+module languages/sdf2/normalization/Sdf2-Normalization
 imports
-        sdf2/projection/Sdf2-Projection
-        sdf2/renaming/Sdf2-Renaming
-        sdf2/normalization/Modular
-        sdf2/normalization/Priority
-        sdf2/normalization/Regular
-        sdf2/normalization/Lifting
-        sdf2/normalization/Literals
-        sdf2/normalization/Sorts
-        sdf2/normalization/Restrictions
-        sdf2/normalization/Aliases
+        languages/sdf2/projection/Sdf2-Projection
+        languages/sdf2/renaming/Sdf2-Renaming
+        languages/sdf2/normalization/Modular
+        languages/sdf2/normalization/Priority
+        languages/sdf2/normalization/Regular
+        languages/sdf2/normalization/Lifting
+        languages/sdf2/normalization/Literals
+        languages/sdf2/normalization/Sorts
+        languages/sdf2/normalization/Restrictions
+        languages/sdf2/normalization/Aliases
 exports
   context-free syntax
     normalize(SDF)               -> Grammar

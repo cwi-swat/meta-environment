@@ -1,6 +1,6 @@
 %%% $Id$
                      
-module sdf2/syntax/Character
+module languages/sdf2/syntax/Character
 imports aterm/Layout
 exports
   sorts Character NumChar ShortChar

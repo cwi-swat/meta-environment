@@ -1,5 +1,5 @@
-module sdf2/renaming/CC
-imports sdf2/renaming/Kernel sdf2/syntax/CC
+module languages/sdf2/renaming/CC
+imports languages/sdf2/renaming/Kernel languages/sdf2/syntax/CC
 
 hiddens
   variables

@@ -1,5 +1,5 @@
-module sdf2/projection/Aliases
-imports sdf2/syntax/Aliases
+module languages/sdf2/projection/Aliases
+imports languages/sdf2/syntax/Aliases
 exports
   context-free syntax
     Aliases "++" Aliases -> Aliases {right}

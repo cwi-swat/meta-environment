@@ -1,11 +1,11 @@
-module sdf2/normalization/Lifting
+module languages/sdf2/normalization/Lifting
 
 
-imports sdf2/syntax/Regular
-        sdf2/syntax/Literals
-        sdf2/syntax/Lifting
-        sdf2/syntax/Sorts
-        sdf2/normalization/Kernel
+imports languages/sdf2/syntax/Regular
+        languages/sdf2/syntax/Literals
+        languages/sdf2/syntax/Lifting
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/normalization/Kernel
 
 exports
 

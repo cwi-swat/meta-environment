@@ -1,4 +1,4 @@
-module asfix/syntax/Literals
+module languages/asfix/syntax/Literals
 
 imports basic/Whitespace
 

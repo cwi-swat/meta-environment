@@ -1,7 +1,7 @@
 %%% $Id$
                                   
-module aterm/Literals
-imports aterm/Layout
+module languages/aterm/Literals
+imports languages/aterm/Layout
 
 hiddens
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char

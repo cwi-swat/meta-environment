@@ -1,8 +1,8 @@
-module demo/pico/compiler/Pico-compile
+module languages/pico/compiler/Pico-compile
 
-imports demo/pico/syntax/Pico-syntax 
-imports demo/pico/compiler/AssemblyLanguage 
-imports demo/pico/compiler/NextLabel 
+imports languages/pico/syntax/Pico-syntax 
+imports languages/pico/compiler/AssemblyLanguage 
+imports languages/pico/compiler/NextLabel 
   
 exports
   context-free syntax

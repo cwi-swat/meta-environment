@@ -1,5 +1,5 @@
-module sdf2/projection/Sorts
-imports sdf2/projection/Kernel sdf2/syntax/Sorts
+module languages/sdf2/projection/Sorts
+imports languages/sdf2/projection/Kernel languages/sdf2/syntax/Sorts
 exports
   context-free syntax
     "S" ( Grammar ) -> Symbols

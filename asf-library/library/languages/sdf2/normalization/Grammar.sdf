@@ -1,5 +1,5 @@
-module sdf2/normalization/Grammar
-imports sdf2/syntax/Grammars
+module languages/sdf2/normalization/Grammar
+imports languages/sdf2/syntax/Grammars
 exports
   sorts Grammar-Grammar
   context-free syntax

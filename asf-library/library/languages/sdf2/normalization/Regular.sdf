@@ -1,8 +1,8 @@
-module sdf2/normalization/Regular
-imports sdf2/syntax/Regular
-        sdf2/syntax/Priority
-        sdf2/syntax/Literals
-        sdf2/normalization/Kernel
+module languages/sdf2/normalization/Regular
+imports languages/sdf2/syntax/Regular
+        languages/sdf2/syntax/Priority
+        languages/sdf2/syntax/Literals
+        languages/sdf2/normalization/Kernel
 exports
   context-free syntax
     "r[[" Grammar "]]"             -> Grammar

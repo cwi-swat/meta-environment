@@ -1,5 +1,5 @@
-module sdf2/normalization/Aliases
-imports sdf2/projection/Aliases sdf2/normalization/Kernel sdf2/renaming/Kernel
+module languages/sdf2/normalization/Aliases
+imports languages/sdf2/projection/Aliases languages/sdf2/normalization/Kernel languages/sdf2/renaming/Kernel
 exports
   context-free syntax
     "a[[" Grammar "]]" -> Grammar

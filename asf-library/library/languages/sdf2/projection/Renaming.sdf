@@ -1,5 +1,5 @@
-module sdf2/projection/Renaming
-imports sdf2/syntax/Renaming
+module languages/sdf2/projection/Renaming
+imports languages/sdf2/syntax/Renaming
 exports
   context-free syntax
     Renamings "++" Renamings                -> Renamings {right}

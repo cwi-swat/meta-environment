@@ -1,6 +1,6 @@
-module sdf2/renaming/Literals
+module languages/sdf2/renaming/Literals
 
-imports sdf2/renaming/Kernel sdf2/syntax/Literals
+imports languages/sdf2/renaming/Kernel languages/sdf2/syntax/Literals
 hiddens
   variables
     "L"[0-9\']* -> Literal

@@ -1,4 +1,4 @@
-module asf/syntax/Equations
+module languages/asf/syntax/Equations
 
 exports
   sorts Tag TagId CondEquation Equation Implies Condition Equations

@@ -1,7 +1,7 @@
-module demo/pico/interpreter/Value-environments
+module languages/pico/interpreter/Value-environments
 
-imports demo/pico/syntax/Pico-Identifiers 
-imports demo/pico/interpreter/Pico-Values 
+imports languages/pico/syntax/Pico-Identifiers 
+imports languages/pico/interpreter/Pico-Values 
 imports containers/Table[PICO-ID VALUE]
     
 exports

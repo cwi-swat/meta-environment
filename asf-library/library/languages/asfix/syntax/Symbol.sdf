@@ -1,6 +1,6 @@
-module asfix/syntax/Symbol
+module languages/asfix/syntax/Symbol
 
-imports asfix/syntax/Literals
+imports languages/asfix/syntax/Literals
 
 exports
 

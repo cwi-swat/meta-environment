@@ -1,7 +1,7 @@
 %%% $Id$
                                   
-module aterm/IntCon
-imports aterm/Layout
+module languages/aterm/IntCon
+imports languages/aterm/Layout
 exports
   sorts NatCon IntCon
   lexical syntax

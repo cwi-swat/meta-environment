@@ -1,6 +1,6 @@
 %%% $Id$
                      
-module sdf2/syntax/Symbols
+module languages/sdf2/syntax/Symbols
 imports aterm/Layout
 exports
   sorts Symbol Symbols

@@ -1,6 +1,6 @@
-module sdf2/normalization/Character-Class
+module languages/sdf2/normalization/Character-Class
 
-imports sdf2/normalization/Character-Class-Membership
+imports languages/sdf2/normalization/Character-Class-Membership
 hiddens
   context-free syntax
     "(/)"                          -> CharRange

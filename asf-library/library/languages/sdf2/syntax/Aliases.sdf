@@ -1,7 +1,7 @@
 %%% $Id$
                   
-module sdf2/syntax/Aliases
-imports sdf2/syntax/Kernel
+module languages/sdf2/syntax/Aliases
+imports languages/sdf2/syntax/Kernel
 exports
   sorts Alias Aliases
   context-free syntax

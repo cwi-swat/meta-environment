@@ -1,7 +1,7 @@
-module sdf2/normalization/Sorts
+module languages/sdf2/normalization/Sorts
 imports
-        sdf2/syntax/Sorts
-        sdf2/normalization/Kernel
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/normalization/Kernel
 
 hiddens
   variables

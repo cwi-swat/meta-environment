@@ -1,5 +1,5 @@
-module sdf2/normalization/Restrictions
-imports sdf2/syntax/Restrictions sdf2/normalization/CC
+module languages/sdf2/normalization/Restrictions
+imports languages/sdf2/syntax/Restrictions languages/sdf2/normalization/CC
 
 hiddens
   context-free syntax

@@ -1,7 +1,7 @@
-module demo/pico/syntax/Pico-syntax
+module languages/pico/syntax/Pico-syntax
 
-imports demo/pico/syntax/Pico-Identifiers 
-imports demo/pico/syntax/Pico-Types
+imports languages/pico/syntax/Pico-Identifiers 
+imports languages/pico/syntax/Pico-Types
 imports basic/Integers basic/Strings 
 
 exports

@@ -1,7 +1,7 @@
 %%% $Id$  
 
-module sdf2/syntax/Regular
-imports sdf2/syntax/Kernel aterm/IntCon
+module languages/sdf2/syntax/Regular
+imports languages/sdf2/syntax/Kernel aterm/IntCon
 exports
   context-free syntax
     "(" ")"                          -> Symbol

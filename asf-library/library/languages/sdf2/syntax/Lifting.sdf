@@ -1,6 +1,6 @@
-module sdf2/syntax/Lifting
+module languages/sdf2/syntax/Lifting
 
-imports sdf2/syntax/Kernel
+imports languages/sdf2/syntax/Kernel
 
 exports
 

@@ -1,8 +1,8 @@
-module demo/pico/typechecker/Pico-typecheck
+module languages/pico/typechecker/Pico-typecheck
 
 imports basic/Booleans 
-imports demo/pico/syntax/Pico-syntax 
-imports demo/pico/typechecker/Type-environments
+imports languages/pico/syntax/Pico-syntax 
+imports languages/pico/typechecker/Type-environments
 
 exports
   context-free syntax

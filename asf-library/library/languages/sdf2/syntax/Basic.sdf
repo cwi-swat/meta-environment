@@ -1,7 +1,7 @@
 %%% $Id$
                 
-module sdf2/syntax/Basic
-imports sdf2/syntax/Kernel
+module languages/sdf2/syntax/Basic
+imports languages/sdf2/syntax/Kernel
 exports
   context-free syntax
     "lexical" "syntax"      Productions -> Grammar

@@ -1,7 +1,7 @@
-module asfix/syntax/Tree
+module languages/asfix/syntax/Tree
 
-imports asfix/syntax/Annotations
-imports asfix/syntax/Literals
+imports languages/asfix/syntax/Annotations
+imports languages/asfix/syntax/Literals
 
 exports
 

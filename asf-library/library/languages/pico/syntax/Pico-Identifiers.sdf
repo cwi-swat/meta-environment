@@ -1,4 +1,4 @@
-module demo/pico/syntax/Pico-Identifiers
+module languages/pico/syntax/Pico-Identifiers
 
 imports basic/Whitespace
 

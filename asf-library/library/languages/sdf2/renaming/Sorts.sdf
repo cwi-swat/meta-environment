@@ -1,5 +1,5 @@
-module sdf2/renaming/Sorts
-imports sdf2/syntax/Sorts sdf2/renaming/Kernel
+module languages/sdf2/renaming/Sorts
+imports languages/sdf2/syntax/Sorts languages/sdf2/renaming/Kernel
 
 hiddens
   context-free syntax

@@ -1,4 +1,4 @@
-module asf/tools/ToolBus[X]
+module utilities/ToolBus[X]
 
 imports aterm/ATerms
 imports basic/Strings

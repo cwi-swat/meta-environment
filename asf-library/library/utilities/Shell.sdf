@@ -1,4 +1,4 @@
-module system/Shell
+module utilities/Shell
 
 imports basic/Strings
 

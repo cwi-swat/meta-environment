@@ -1,6 +1,6 @@
-module sdf2/projection/Symbol-Sets
+module languages/sdf2/projection/Symbol-Sets
 imports
-        sdf2/projection/Symbols
+        languages/sdf2/projection/Symbols
 exports
   sorts SymbolSet
   context-free syntax

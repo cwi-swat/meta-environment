@@ -1,7 +1,7 @@
 %%% $Id$
                                                   
-module sdf2/syntax/Literals
-imports sdf2/syntax/Kernel aterm/Literals
+module languages/sdf2/syntax/Literals
+imports languages/sdf2/syntax/Kernel aterm/Literals
 exports
   sorts UQLiteral
   lexical syntax

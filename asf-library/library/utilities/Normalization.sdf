@@ -1,4 +1,4 @@
-module asf/tools/Normalization[X]
+module utilities/Normalization[X]
 
 %% This function can be used when a term is retrieved
 %% by a side effect to compute its normal form

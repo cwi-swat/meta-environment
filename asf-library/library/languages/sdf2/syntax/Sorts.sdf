@@ -1,7 +1,7 @@
 %%% $Id$
                        
-module sdf2/syntax/Sorts
-imports sdf2/syntax/Kernel
+module languages/sdf2/syntax/Sorts
+imports languages/sdf2/syntax/Kernel
 exports
   sorts Sort
   lexical syntax

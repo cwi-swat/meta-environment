@@ -1,4 +1,4 @@
-module aterm/Layout
+module languages/aterm/Layout
 exports
   lexical syntax
     [\ \t\n]           -> LAYOUT

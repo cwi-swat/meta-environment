@@ -1,5 +1,5 @@
-module sdf2/normalization/Character-Arithmetic
-imports sdf2/normalization/Character basic/Integers
+module languages/sdf2/normalization/Character-Arithmetic
+imports languages/sdf2/normalization/Character basic/Integers
 exports
   context-free syntax
     int(Character)            -> NatCon

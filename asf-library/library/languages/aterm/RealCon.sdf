@@ -1,7 +1,7 @@
 %%% $Id$
                                                    
-module aterm/RealCon
-imports aterm/IntCon
+module languages/aterm/RealCon
+imports languages/aterm/IntCon
 exports
   sorts OptExp RealCon
   context-free syntax

@@ -1,6 +1,6 @@
-module sdf2/normalization/Labels
+module languages/sdf2/normalization/Labels
 
-imports sdf2/syntax/Labels sdf2/normalization/Literals
+imports languages/sdf2/syntax/Labels languages/sdf2/normalization/Literals
 hiddens
   variables
     "L"[0-9\']*      -> Literal 

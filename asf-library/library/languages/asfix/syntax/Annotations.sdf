@@ -1,6 +1,6 @@
-module asfix/syntax/Annotations
-imports asfix/syntax/Tree
-imports aterm/ATerms
+module languages/asfix/syntax/Annotations
+imports languages/asfix/syntax/Tree
+imports languages/aterm/ATerms
 
 exports
 

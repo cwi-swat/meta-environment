@@ -1,9 +1,9 @@
-module sdf2/normalization/Kernel
+module languages/sdf2/normalization/Kernel
 imports
-        sdf2/projection/Kernel
-        sdf2/normalization/Grammar
-        sdf2/syntax/CC
-        sdf2/syntax/Basic
+        languages/sdf2/projection/Kernel
+        languages/sdf2/normalization/Grammar
+        languages/sdf2/syntax/CC
+        languages/sdf2/syntax/Basic
 
 exports
   context-free syntax

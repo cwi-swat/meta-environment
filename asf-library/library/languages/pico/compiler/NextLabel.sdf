@@ -1,6 +1,6 @@
-module demo/pico/compiler/NextLabel
+module languages/pico/compiler/NextLabel
 
-imports demo/pico/compiler/AssemblyLanguage
+imports languages/pico/compiler/AssemblyLanguage
   
 exports
   context-free syntax

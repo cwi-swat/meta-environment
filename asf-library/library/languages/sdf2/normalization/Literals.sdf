@@ -1,7 +1,7 @@
-module sdf2/normalization/Literals
+module languages/sdf2/normalization/Literals
 imports
-        sdf2/syntax/Literals
-        sdf2/normalization/CC
+        languages/sdf2/syntax/Literals
+        languages/sdf2/normalization/CC
 exports
   context-free syntax
     "l[[" Grammar "]]"     -> Grammar
