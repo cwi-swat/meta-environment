@@ -1548,18 +1548,19 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
     }       
   } 
   
-  assert(ATgetLength(ambs) > 0);
+  if (ATgetLength(ambs) == 0) {
+    return (tree)NULL;
+  }
+
+  if (ATgetLength(ambs) == 1) {
+    return (tree)ATgetFirst(ambs);
+  }
 
   /* if there are ambiguities left, create an amb node */
   IF_DEBUG(ATfprintf(SG_log(), 
                      "Ambiguity cluster: %d equivalent node(s).\n", 
                      ATgetLength(ambs)))
-  if (ATgetLength(ambs) > 1) {
-    return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
-  }
-  else {
-    return (tree)ATgetFirst(ambs);
-  }
+  return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
 }
 
 static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
@@ -1581,9 +1582,14 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
       )
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
-      if (newt == NULL) {
+      if (!newt) {
         newt = SG_FilterAmbs(pt, mst, ambs);
-        ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
+        if (newt) {
+          ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
+        }
+        else {
+          return NULL;
+        }
       }
       t = newt;
     }

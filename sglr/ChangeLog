@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/13 (markvdb@cwi.nl)
+  * Bug fix: if all ambiguous nodes disappear, then return
+    NULL.
+
 2001/07/12 (markvdb@cwi.nl)
   * Bug fix: a single node is never ambiguous, so "amb" removed!
 
