@@ -19,6 +19,7 @@ in
   Id := process-id .     
   (
     rec-msg(parse-focusses(EditorId?, ModuleId?)) .
+    subscribe(delete-editor(EditorId))
     Type := fun(ModuleId) .
     ModuleName := first(args(ModuleId)).
     if equal(Type, "eqs") then
@@ -33,11 +34,17 @@ in
       Focus := first(DirtyFoci).
       DirtyFoci := next(DirtyFoci).
       snd-note(get-focus-text(EditorId, Focus)).
-      rec-msg(focus-text(EditorId, Text?)).
-      UpdateTextInModuleDb(Type, ModuleName, Text).
-      ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
-      PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
-      ProcessTree(ModuleId, EditorId, Focus, Tree)
+      (
+        rec-msg(focus-text(EditorId, Text?)).
+        UpdateTextInModuleDb(Type, ModuleName, Text).
+        ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
+        PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
+        ProcessTree(ModuleId, EditorId, Focus, Tree)
+      +
+        /* If the editor suddenly dissappears were done */
+        rec-note(delete-editor(EditorId)) .
+        snd-msg(parse-ok(ModuleId))
+      )
     else
       snd-msg(parse-ok(ModuleId))
     fi 
