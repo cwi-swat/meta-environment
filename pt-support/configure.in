@@ -81,10 +81,8 @@ dnl }}}
 dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
-  libconversion/Makefile
   libmept/Makefile
   libptmept/Makefile
-  libasfix2/Makefile
   test/Makefile
   test/terms/Makefile
   utils/Makefile

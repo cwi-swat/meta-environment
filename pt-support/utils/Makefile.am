@@ -58,9 +58,7 @@ addPosInfo_LDADD = \
 flattenPT_SOURCES = flattenPT-main.c
 
 flattenPT_LDADD	= \
-	-L../libconversion -lconversion \
 	-L../libmept -lmept \
-	-L../libasfix2 -lasfix2 \
 	-L${ATERM}/lib -lATerm
 
 liftPT_SOURCES	= liftPT-main.c

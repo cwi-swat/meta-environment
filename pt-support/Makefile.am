@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS		= libmept libptmept libasfix2 libconversion utils  test
+SUBDIRS		= libmept libptmept utils  test
 
 EXTRA_DIST=$(wildcard *.pkg)
 
