@@ -16,7 +16,7 @@ static char version[] = "1.3";
 
 /*{{{  ATerm addPosInfo(int cid, char* path, ATerm t) */
 
-ATerm add_posinfo(int cid, char* path, ATerm t)
+ATerm add_posinfo(int cid, const char* path, ATerm t)
 {
   PT_ParseTree result = PT_addParseTreePosInfoSome(path, 
 						   (PT_ParseTree) ATBunpack(t), 
@@ -28,7 +28,7 @@ ATerm add_posinfo(int cid, char* path, ATerm t)
 /*}}}  */
 /*{{{  ATerm add_posinfo_packed(int cid, char* path, ATerm t) */
 
-ATerm add_posinfo_packed(int cid, char* path, ATerm t)
+ATerm add_posinfo_packed(int cid, const char* path, ATerm t)
 {
   PT_ParseTree result 
     = PT_addParseTreePosInfoSome(path, 
@@ -41,7 +41,7 @@ ATerm add_posinfo_packed(int cid, char* path, ATerm t)
 /*}}}  */
 /*{{{  ATerm add_posinfo_to_depth(int cid, char* path, ATerm t, int depth) */
 
-ATerm add_posinfo_to_depth(int cid, char* path, ATerm t, int depth)
+ATerm add_posinfo_to_depth(int cid, const char* path, ATerm t, int depth)
 {
   PT_ParseTree result = PT_addParseTreePosInfoSome(path, 
 						   (PT_ParseTree) ATBunpack(t), 

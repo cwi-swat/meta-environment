@@ -13,10 +13,10 @@
 int PT_compareTree(PT_Tree tree1, PT_Tree tree2);
 
 PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree);
-PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args);
-PT_ParseTree PT_applyFunctionToArgsParseTree(char *function, char *sort, 
+PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args);
+PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function, const char *sort, 
 					     PT_Args args);
-PT_Tree PT_applyFunctionToTree(char *function, char* sort, int nArgs, ...);
+PT_Tree PT_applyFunctionToTree(const char *function, const char* sort, int nArgs, ...);
 
 PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree);
 PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore, 

@@ -72,7 +72,7 @@ ATerm get_argument_given_nr(int cid, ATerm tree, int argNr)
                 PT_makeTermFromParseTree(newParseTree));
 }
 
-ATerm apply_function_to_args(int cid, char *function, char *sort, ATerm args)
+ATerm apply_function_to_args(int cid, const char *function, const char *sort, ATerm args)
 {
   PT_ParseTree newParseTree;
   PT_Args ptArgs = PT_makeArgsEmpty(); 
