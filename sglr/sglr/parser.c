@@ -198,7 +198,7 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
 
 /*
   if (SG_DEBUG)
-    ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %xd)\n",
+    ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %x)\n",
               SG_ST_STATE(st), i, link_seen, (int) sons);
 */
   if (st == NULL) {
@@ -206,8 +206,8 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
   } else if (i == 0 && link_seen) {
     paths = SG_NewPath(st, sons, NULL);
   } else if (i > 0) {
-    for (ls = SG_ST_LINKS(st); ls != NULL; ls = tail(ls)) {
-      l1 = head(ls);
+    for (ls = SG_ST_LINKS(st); ls != NULL; ls = SG_TAIL(ls)) {
+      l1 = SG_HEAD(ls);
       newsons = ATinsert(sons?sons:ATempty, SG_LK_TREE(l1));
       paths = SG_ConcPaths(SG_FindPaths(SG_LK_STACK(l1), i - 1, l0,
                                         link_seen || (l0 == l1), newsons),
@@ -400,7 +400,7 @@ ATerm SG_Result(char *sort)
   if (accepting_stack != NULL) {
     ATerm forest;
 
-    forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
+    forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
     /*  We _must_ expand at least the top node  */
     was_abbrev = SG_ABBREV;
@@ -443,7 +443,7 @@ ATerm SG_Result(char *sort)
   } else
     return ATmake("parse-error([character(<int>), line(<int>),"
                   "col(<int>), char(<int>)])",
-                  current_token, line, col, sg_tokens_read);
+                  current_token, line, col-1, sg_tokens_read);
 }
 
 /*
@@ -467,11 +467,11 @@ void SG_ParseChar(void)
 
   while(for_actor != NULL  || for_actor_delayed != NULL) {
     if(for_actor != NULL) {
-      st = head(for_actor);
-      for_actor = tail(for_actor);
+      st = SG_HEAD(for_actor);
+      for_actor = SG_TAIL(for_actor);
     } else {
-      st = head(for_actor_delayed);
-      for_actor_delayed = tail(for_actor_delayed);
+      st = SG_HEAD(for_actor_delayed);
+      for_actor_delayed = SG_TAIL(for_actor_delayed);
     }
     SG_Actor(st);
     if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st);
@@ -648,35 +648,50 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     /* First check if one of the children of |st1| was not rejected already */
     nl = SG_AddLink(st1, st0, t);
     if(SG_DEBUG && SG_Rejected(st1)) {
-      ATfprintf(SGlog(),"Stack %xd (state %d) was already rejected\n",
+      ATfprintf(SGlog(),"Stack %x (state %d) was already rejected\n",
                 st1, SG_ST_STATE(st1));
     }
     /*  Reject?  */
     if (reject) {
+      ATfprintf(stderr, "Warning: stack %d rejected in presence of "
+                        "other links (linked to stack %d)\n",
+                SG_ST_STATE(st0), SG_ST_STATE(st1));
       if(SG_DEBUG)
         ATfprintf(SGlog(), "Warning: stack %d rejected in presence of "
                            "other links (linked to stack %d)\n",
                   SG_ST_STATE(st0), SG_ST_STATE(st1));
       SG_MarkStackRejected(st0);
+#ifdef DEBUG
+      ATfprintf(stderr, "Stack 0 (%x):\n", st0); SG_ShowStack(st0, 1);
+      ATfprintf(stderr, "Stack 1 (%x):\n", st1); SG_ShowStack(st1, 1);
+#endif
     }
     while(sts != NULL) {
       actions as;
       action a;
 
-      st2 = head(sts);
-      sts = tail(sts);
-/*
+      st2 = SG_HEAD(sts);
+      sts = SG_TAIL(sts);
+#ifdef	DEBUG
       if(SG_Rejected(st2)) {
-        ATfprintf(stderr,"Stack %xd was already rejected\n", SG_ST_STATE(st2));
-      } else
- */
+        if(SG_DeeplyRejected(st2))
+          ATfprintf(stderr,"Active Stack %x (state %d) is deeply rejected\n",
+                    st2, SG_ST_STATE(st2));
+        else
+          ATfprintf(stderr,"Active Stack %x (state %d) is shallowly rejected\n",
+                    st2, SG_ST_STATE(st2));
+	ATfprintf(stderr, "Stack 2 (%x):\n", st2); SG_ShowStack(st2, 1);
+      }
+#endif
+      if(!SG_DeeplyRejected(st2)) {
         if(!SG_InStacks(st2, for_actor, ATfalse)
          && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
-        as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
-        for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
-          a = ATgetFirst(as);
-          if(SG_ActionKind(a) == REDUCE)
-            SG_DoLimitedReductions(st2, a, nl);
+          as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
+          for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
+            a = ATgetFirst(as);
+            if(SG_ActionKind(a) == REDUCE)
+              SG_DoLimitedReductions(st2, a, nl);
+          }
         }
       }
     }
@@ -785,7 +800,7 @@ void SG_PropagateReject(stack *st)
   if(st == NULL)
     return;
 
-  compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
+  compost = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(st)));
   cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
   amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
   if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
@@ -845,7 +860,7 @@ void SG_PropagateReject(stack *st)
         ATfprintf(SGlog(), "Reject: propagating (%d->%d)\n",
                   SG_ST_STATE(st), SG_ST_STATE(st->kids[kididx]));
 #if 0
-      SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
+      SG_MarkLinkRejected(SG_HEAD(SG_ST_LINKS(st)));
 #endif
       SG_PropagateReject(st->kids[kididx]);
     }
@@ -858,15 +873,15 @@ void SG_PropagateUnreject(stack *st)
   ATermList l;
   ATermInt  annot;
 
-ATfprintf(stderr, "unrejecting %xd\n", st);
+ATfprintf(stderr, "unrejecting %x\n", st);
   while(st != NULL) {
-    annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(head(SG_ST_LINKS(st))),
+    annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(SG_HEAD(SG_ST_LINKS(st))),
                                        SG_ApplLabel());
     l = SG_AmbTable(SG_AMBTBL_LOOKUP, annot, NULL);
     if(!ATisEmpty(l)) {
-ATfprintf(stderr, "unreject: %xd contains an amb link: %t\n", st, l);
+ATfprintf(stderr, "unreject: %x contains an amb link: %t\n", st, l);
     }
-    SG_MarkLinkUnrejected(head(SG_ST_LINKS(st)));
+    SG_MarkLinkUnrejected(SG_HEAD(SG_ST_LINKS(st)));
 /*
     SG_MarkStackUnrejected(st);
  */
@@ -880,20 +895,19 @@ ATfprintf(stderr, "unreject: %xd contains an amb link: %t\n", st, l);
  *  A few diagnostic routines (for debugging purposes)
  */
 
-void SG_ShowStack(stack *st, int depth);
-
 void SG_ShowLinks(st_links *lks, int depth)
 {
-  for (; lks != NULL; lks = tail(lks)) {
-    fprintf(stderr, "%*.*s--%xd-->\n", 2*depth, 2*depth, "", (int)head(lks));
-    SG_ShowStack(SG_LK_STACK(head(lks)), depth+1);
+  for (; lks != NULL; lks = SG_TAIL(lks)) {
+    fprintf(stderr, "%*.*s--%x-->\n", 2*depth, 2*depth, "", (int)SG_HEAD(lks));
+    SG_ShowStack(SG_LK_STACK(HEAD(lks)), depth+1);
   }
 }
 
 void SG_ShowStack(stack *st, int depth)
 {
   if (st == NULL) return;
-  fprintf(stderr, "%*.*s%xd %d\n", 2*depth, 2*depth, "", (int)st, SG_ST_STATE(st));
+  fprintf(stderr, "%*.*s%x%s %d\n", 2*depth, 2*depth, "", (int)st,
+          SG_ST_REJECTED(st)?"R":"", SG_ST_STATE(st));
   SG_ShowLinks(SG_ST_LINKS(st), depth+1);
 }
 
@@ -901,8 +915,8 @@ void SG_ShowStacks(stacks *sts)
 {
   if(sts == NULL) return;
   while(sts != NULL) {
-    SG_ShowStack(head(sts),0);
-    sts = tail(sts);
+    SG_ShowStack(SG_HEAD(sts),0);
+    sts = SG_TAIL(sts);
   }
 }
 
@@ -914,11 +928,11 @@ void SG_ShowStackOffspring(stack *st)
     return;
 
   ATfprintf(stderr, "State %d%s created...\n",
-            SG_ST_STATE(st), SG_Rejected(st)?"r":"");
+            SG_ST_STATE(st), SG_Rejected(st)?"R":"");
   for(kididx = 0; kididx < st->kidcount; kididx++) {
     ATfprintf(stderr, "\t... %d%s\n",
               SG_ST_STATE(st->kids[kididx]),
-              SG_Rejected(st->kids[kididx])?"r":"");
+              SG_Rejected(st->kids[kididx])?"R":"");
   }
   for(kididx = 0; kididx < st->kidcount; kididx++)
     SG_ShowStackOffspring(st->kids[kididx]);
@@ -928,8 +942,8 @@ void SG_ShowStackAncestors(stack *st)
 {
   while(st != NULL && st->parent != NULL) {
     ATfprintf(stderr, "\t%d%s induced %d%s\n",
-                     SG_ST_STATE(st->parent), SG_Rejected(st->parent)?"r":"",
-                     SG_ST_STATE(st), SG_Rejected(st)?"r":"");
+                     SG_ST_STATE(st->parent), SG_Rejected(st->parent)?"R":"",
+                     SG_ST_STATE(st), SG_Rejected(st)?"R":"");
     st = st->parent;
   }
 }
@@ -943,9 +957,9 @@ void SG_ShowActiveStackStates(signed int c)
   level = (level>1)?(level+c):0;
   fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
   while(astks != NULL) {
-    stk   =  astks->head;
-    astks =  astks->tail;
-    ATfprintf(stderr, "%xd%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
+    stk   =  SG_HEAD(astks);
+    astks =  SG_TAIL(astks);
+    ATfprintf(stderr, "%x%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
   }
   ATfprintf(stderr, "\n");
 }
@@ -957,10 +971,15 @@ void SG_ShowStackRejects(stack *st, int depth)
 
   if(depth > 666) return;
 
-  for (; ls != NULL; ls = tail(ls)) {
-    l = head(ls);
-    fprintf(stderr, "%*.*s%s %xd: state %d ==> state %d\n", 2*depth, 2*depth, "",
-            SG_LK_REJECTED(l)?"+":"-", (int) l, SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
+  for (; ls != NULL; ls = SG_TAIL(ls)) {
+    l = SG_HEAD(ls);
+/*
+    ATfprintf(stderr, "%*.*s%s%x: state %d ==> state %d\n", 2*depth, 2*depth,
+              "", SG_LK_REJECTED(l)?"~":" ", (int) l, SG_ST_STATE(st),
+              SG_ST_STATE(SG_LK_STACK(l)));
+ */
+    ATfprintf(stderr, "%*.*s%x: state %d ==> state %d\n", 2*depth, 2*depth,
+              "", (int) l, SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
     SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
   }
 }
@@ -971,8 +990,8 @@ void SG_ShowActiveStackLinks(stacks *astks)
   stack  *stk;
 
   while(astks != NULL) {
-    stk   =  astks->head;
-    astks =  astks->tail;
+    stk   =  SG_HEAD(astks);
+    astks =  SG_TAIL(astks);
     SG_ShowStackRejects(stk,2);
   }
 }

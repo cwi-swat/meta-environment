@@ -150,8 +150,8 @@ void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
 
   while(old) {
     sts = old;
-    SG_MarkStack(head(sts), NULL, new);
-    old = tail(old);
+    SG_MarkStack(SG_HEAD(sts), NULL, new);
+    old = SG_TAIL(old);
     SG_free(sts);
   }
   if(accept != NULL)                    /*  Free this fragment too  */
@@ -160,7 +160,7 @@ void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
 
 void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
 {
-  if(st && st->protected               /*  Done if already unprotected */
+  if(st && SG_ST_PROTECTED(st)         /*  Done if already unprotected */
    && !SG_InStacks(st, sts, ATtrue)) { /*  or in a living stack        */
      st_links *lks = SG_ST_LINKS(st);
 
@@ -168,8 +168,8 @@ void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
       st->protected   = ATfalse;
 
      /*  The stacks descendants might also have been obsoleted         */
-     for (; lks != NULL; lks = tail(lks)) {
-       st_link *lk = head(lks);
+     for (; lks != NULL; lks = SG_TAIL(lks)) {
+       st_link *lk = SG_HEAD(lks);
 
        SG_MarkStack(SG_LK_STACK(lk), lk, sts);
      }
@@ -222,7 +222,7 @@ void SG_DeleteStacks(stacks *sts)
 
   while(sts != NULL) {
     osts = sts;
-    sts = tail(sts);
+    sts = SG_TAIL(sts);
     SG_free(osts);
   }
 }
@@ -233,10 +233,10 @@ void SG_DeleteStack(stack *st)
   st_link  *lk;
 
   while(lks != NULL) {
-    lk = head(lks);
+    lk = SG_HEAD(lks);
     ATunprotect(&(lk->tree));
     curlks = lks;
-    lks = tail(lks);
+    lks = SG_TAIL(lks);
     SG_free(curlks);
     SG_free(lk);
   }
@@ -250,8 +250,8 @@ ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
   stack *st2;
 
   while(sts) {
-    st2 = head(sts);
-    sts = tail(sts);
+    st2 = SG_HEAD(sts);
+    sts = SG_TAIL(sts);
     if(st1 == st2) return ATtrue;
     if(deep && SG_SubStack(st1, st2)) {
       return ATtrue;
@@ -271,8 +271,8 @@ ATbool SG_SubStack(stack *st1, stack *st0)
   }
 
   ls = SG_ST_LINKS(st0);
-  for (; ls != NULL; ls = tail(ls)) {
-    l = head(ls);
+  for (; ls != NULL; ls = SG_TAIL(ls)) {
+    l = SG_HEAD(ls);
     if (SG_SubStack(st1, SG_LK_STACK(l))) {
       return ATtrue;
     }
@@ -287,8 +287,8 @@ ATbool SG_SubStack(stack *st1, stack *st0)
 
 stack *SG_FindStack(state s, stacks *sts)
 {
-  for (; sts != NULL; sts = tail(sts))
-    if(SG_ST_STATE(head(sts)) == s) return head(sts);
+  for (; sts != NULL; sts = SG_TAIL(sts))
+    if(SG_ST_STATE(SG_HEAD(sts)) == s) return SG_HEAD(sts);
   return NULL;
 }
 
@@ -299,8 +299,8 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
 {
   st_links *ls = NULL;
 
-  for (ls = SG_ST_LINKS(st0); ls != NULL; ls = tail(ls))
-    if(SG_LK_STACK(head(ls)) == st1) return head(ls);
+  for (ls = SG_ST_LINKS(st0); ls != NULL; ls = SG_TAIL(ls))
+    if(SG_LK_STACK(SG_HEAD(ls)) == st1) return SG_HEAD(ls);
   return NULL;
 }
 
@@ -346,7 +346,7 @@ void SG_MarkLinkRejected(st_link *l)
 }
 #endif
 
-#ifdef DEBUG
+#if 0
 /*
     Is one of the stacks links rejected?
  */
@@ -357,8 +357,8 @@ ATbool SG_SomeRejected(stack *st)
   st_link *l;
   int count = 0;
 
-  for (; ls != NULL; ls = tail(ls)) {
-    l = head(ls);
+  for (; ls != NULL; ls = SG_TAIL(ls)) {
+    l = SG_HEAD(ls);
     if(SG_LK_REJECTED(l)) {
        return ATtrue;
     }
@@ -369,23 +369,41 @@ ATbool SG_SomeRejected(stack *st)
   }
   return ATfalse;
 }
-#endif /* DEBUG */
+#endif
 
-/*
-  A stack is rejected if all its links are.
-*/
 ATbool SG_Rejected(stack *st)
 {
-  return st->rejected;
+  return SG_ST_REJECTED(st);
 /*
   st_links *ls;
 
   if (!(ls = SG_ST_LINKS(st))) return ATfalse;
-  for (; ls != NULL; ls = tail(ls)) {
-    if(SG_LK_REJECTED(head(ls))) {
+  for (; ls != NULL; ls = SG_TAIL(ls)) {
+    if(SG_LK_REJECTED(SG_HEAD(ls))) {
       return ATtrue;
     }
   }
   return ATfalse;
  */
+}
+
+/*
+  Is the stack, and are all of the stacks a stack links to, rejected?
+*/
+ATbool SG_DeeplyRejected(stack *st)
+{
+  st_links *ls;
+
+  if(!SG_ST_REJECTED(st))
+    return ATfalse;
+
+  if (!(ls = SG_ST_LINKS(st)))	/*  No links, so no unrejected ones too  */
+    return ATtrue;
+
+  for (; ls != NULL; ls = SG_TAIL(ls)) {
+    if(!SG_ST_REJECTED(SG_LK_STACK(SG_HEAD(ls)))) {
+      return ATfalse;		/*  Found an unrejected direct substack  */
+    }
+  }
+  return ATtrue;
 }

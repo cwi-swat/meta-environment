@@ -31,7 +31,7 @@ LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
-DEFS		= @DEFS@ # -O2 -funroll-loops # -DDEBUG
+DEFS		= @DEFS@ # -DDEBUG # -O2 -funroll-loops 
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBSALL		= @LIBS@ ${SOCKLIBS} -L${libdir}
 LIBS		= ${LIBSALL} ${XLIBS}

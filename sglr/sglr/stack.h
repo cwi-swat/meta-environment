@@ -32,8 +32,8 @@
 \end{verbatim}
  */
 
-#define head(l)    ((l)->head)
-#define tail(l)    ((l)->tail)
+#define SG_HEAD(l)    ((l)->head)
+#define SG_TAIL(l)    ((l)->tail)
 
 /*
   #define shift(h,l) ((l) ? (h)=head(l), (l)=tail(l), ATtrue : ATfalse)
@@ -100,17 +100,17 @@ typedef struct stacks {
 #define SG_ST_LINKS(s)          ((s)->links)     /* List of links of a stack * */
 #define SG_ST_PARENT(s)         ((s)->parent     /* Parent stack of a stack * */
 #define SG_ST_KID(s)            ((s)->kid)       /* Kid stack of a stack * */
-#define SG_ST_REJECTED(x)       ((s)->rejected)
-#define SG_ST_PROTECTED(x)      ((s)->protected)
+#define SG_ST_REJECTED(s)       ((s)->rejected)
+#define SG_ST_PROTECTED(s)      ((s)->protected)
 
 #define SG_LK_TREE(l)           ((l)->tree)      /* Tree of a link * */
 #define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
 
 /*
 #define SG_LK_REJECTED(x)       (SG_LK_STACK(x)->rejected)
- */
 #define SG_LK_REJECTED(x)       (x)->rejected
 #define SG_LK_PROTECTED(x)      (x)->protected
+ */
 
 
 stack    *SG_NewStack(state s, stack *st);
@@ -132,13 +132,15 @@ stack *   SG_FindStack(state , stacks *);
 st_link  *SG_FindDirectLink(stack *, stack *);
 
 void     SG_MarkStackRejected(stack *);
+ATbool   SG_Rejected(stack *);
+ATbool   SG_DeeplyRejected(stack *);
+ATbool   SG_InStacks(stack *, stacks *, ATbool);
+ATbool   SG_SubStack(stack *, stack *);
+
 #if 0
 void     SG_MarkStackUnrejected(stack *);
 void     SG_MarkLinkRejected(st_link *);
 void     SG_MarkLinkUnrejected(st_link *);
 #endif
-ATbool   SG_Rejected(stack *);
-ATbool   SG_InStacks(stack *, stacks *, ATbool);
-ATbool   SG_SubStack(stack *, stack *);
 
 #endif  /* _STACK_H_ */

@@ -298,8 +298,8 @@ void SG_LinksToDot(FILE *dot, stack *st)
 
   ls = SG_ST_LINKS(st);
   while(ls) {
-    SG_LinkToDot(dot, st, head(ls));
-    ls = tail(ls);
+    SG_LinkToDot(dot, st, SG_HEAD(ls));
+    ls = SG_TAIL(ls);
   }
 }
 
@@ -313,16 +313,16 @@ void SG_StackToDot(FILE *dot, stack *st)
   ls = SG_ST_LINKS(st);
   SG_LinksToDot(dot, st);
   while(ls) {
-    SG_StackToDot(dot, SG_LK_STACK(head(ls)));
-    ls = tail(ls);
+    SG_StackToDot(dot, SG_LK_STACK(SG_HEAD(ls)));
+    ls = SG_TAIL(ls);
   }
 }
 
 void SG_StacksToDot(FILE *dot, stacks *sts)
 {
   while(sts) {
-    SG_StackToDot(dot, head(sts));
-    sts = tail(sts);
+    SG_StackToDot(dot, SG_HEAD(sts));
+    sts = SG_TAIL(sts);
   }
 }
 

@@ -353,7 +353,9 @@ int SG_GetMultiSet(ATermTable ms, ATermInt prodlabel)
   return 0;
 }
 
-// #define SG_MultiSetGtr(pt, M, N)	SG_MultiSetLwr(pt, N, M)
+/*
+ #define SG_MultiSetGtr(pt, M, N)	SG_MultiSetLwr(pt, N, M)
+ */
 
 ATbool SG_MultiSetGtr(parse_table *pt, ATermTable msM, ATermTable msN)
 {
