@@ -46,7 +46,7 @@ TOOLBUS         = @TOOLBUS@
 XCFLAGS		= ${DEFS}
 XINCLUDES	= -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix -lATB
-XLIBS		=  -L${libdir} ${addsuffix -${CC},${ATLIBS}}
+XLIBS		=  -L${libdir} -L$(ATERM)/lib ${addsuffix -${CC},${ATLIBS}}
 
 PROG		= parse-client
 SRC		= ${addsuffix .c,${PROG}}

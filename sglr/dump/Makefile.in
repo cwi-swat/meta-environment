@@ -51,7 +51,7 @@ TREE2DOTDIR	= ${top_srcdir}/sglr/tree2dot
 XCFLAGS		= ${DEFS}
 XINCLUDES	= -I${PARSERDIR} -I${ATERM}/include
 ATLIBS		= -lATerm -lAsFix -lATB
-XLIBS		=  -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir}	\
+XLIBS		= -L$(ATERM)/lib -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir}	\
 		   -lsglr -la2toa1 -ltree2dot ${addsuffix -${CC},${ATLIBS}}
 
 PROG		= dump-actions dump-gotos dump-priorities dump-productions
