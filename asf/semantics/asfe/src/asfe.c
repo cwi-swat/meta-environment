@@ -788,6 +788,11 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
   }
 
   while(first != last && match) {
+    if(keep_layout) {
+      first = skipWhitespace(first);
+      assert(isValidSlice(first, last));
+    }
+
     elem1 = ATgetFirst(first);
     if(!ATisEmpty(elems2)) {
       elem2 = ATgetFirst(elems2);
@@ -804,12 +809,7 @@ ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
       match = ATfalse;
     }
 		
-    if(keep_layout) {
-      first = skipWhitespace(ATgetNext(first));
-      assert(isValidSlice(first, last));
-    } else {
-      first = ATgetNext(first);
-    }
+    first = ATgetNext(first);
   }
 	
   if(match) {
