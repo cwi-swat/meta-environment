@@ -188,7 +188,7 @@ void select_equations(ATerm module)
 void enter_equations(ATerm module, ATermList eqs)
 {
   equation_table *cur = tables;
-
+ 
   while(cur && !ATisEqual(cur->module, module))
     cur = cur->next;
 
@@ -397,7 +397,7 @@ ATerm prepare_equ(ATerm equ, int *line, int *col)
   if(ATmatch(equ, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",    
 	&modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
     newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse); 
 
 /*
     ATfprintf(stderr, "equation: %t starts at %d,%d, ", tag, *line, *col);
@@ -506,8 +506,8 @@ ATerm prepare_term(ATerm t, ATbool lexcons)
     if(asfix_is_lex_constructor(t))
       newargs = prepare_list(args, ATtrue);
     else
-      newargs = prepare_list(args, ATfalse);
-    result = asfix_put_appl_args(t, newargs);
+      newargs = prepare_list(args, ATfalse); 
+    result = asfix_put_appl_args(t, newargs); 
   } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
     result = asfix_put_list_elems(t, prepare_list(elems, lexcons));
@@ -541,7 +541,7 @@ ATermList RWprepareEqs(ATermList eqs)
   ATerm el;
   ATermList result = ATempty;
   int line = 0, col = 0;
-  
+
   while(!ATisEmpty(eqs)) {
     do {
       el = ATgetFirst(eqs);
@@ -550,9 +550,9 @@ ATermList RWprepareEqs(ATermList eqs)
 	update_geometry_whitespace(el, &line, &col);
       if(asfix_is_list_sep(el))
         update_geometry_list_sep(el, &line, &col);
-    } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
+    } while(asfix_is_whitespace(el) || asfix_is_list_sep(el)); 
     result = ATappend(result, prepare_equ(el, &line, &col)); 
-  }
+  } 
   return result;
 }
 

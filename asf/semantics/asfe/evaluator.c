@@ -216,6 +216,7 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
   ATfprintf(stderr, "rewriting...\n");
   times(&start);
   newtrm = rewrite(realtrm,(ATerm) ATempty);
+ATfprintf(stderr,"result = %t\n", newtrm);
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
@@ -815,10 +816,9 @@ ATermList rewrite_args(ATermList args, ATerm env)
     }
     assert(i==len);
     for(--i; i > 0; i--) {
-      newarg_table[i] = (ATerm) ATconcat((ATermList) newarg_table[i], newargs); 
-      newargs = (ATermList) newarg_table[i];
+      newargs = ATinsert(newargs,newarg_table[i]);
     }
-    newargs = ATmakeList(2,newarg_table[0],(ATerm) newargs);
+    newargs = ATinsert(newargs,newarg_table[0]);
   }
   return newargs;
 }
@@ -889,19 +889,19 @@ ATerm rewrite(ATerm trm, ATerm env)
   ATerm newtrm, sym, rewtrm;
   ATermList args, newargs;
   ATermList elems, newelems; 
-
+ 
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
     if(!args)
       ATfprintf(stderr, "trm = %t\n", trm);
-    newargs = rewrite_args(args,env);
+    newargs = rewrite_args(args,env);  
     if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(ATgetNext(newargs));
       rewtrm = newtrm;
     }
     else {
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs); 
-      rewtrm = select_and_rewrite(newtrm);
+      rewtrm = select_and_rewrite(newtrm); 
     }
   }
   else if(asfix_is_var(trm)) {
