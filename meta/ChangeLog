@@ -1,5 +1,10 @@
 # $Id$
 
+2001/07/04 (jurgenv@cwi.nl)
+ * activated new compiler that supports almost all SDF2 constructs.
+   (See also asf package)
+ * Bumped to 0.4
+
 2001/07/03 (markvdb@cwi.nl)
  * Added parameterization and symbol renaming to the module database.
    We support now almost full Sdf2.
