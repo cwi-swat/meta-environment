@@ -28,21 +28,19 @@ process ShowSubjectLocation(Subject : term) is
 let
   Description : str,
   Location : term,
-  Filename : str,
-  Area : term
+  Filename : str
 in
   Description := first(args(Subject)) .
   Location := first(next(args(Subject))) .
   if not(equal(Location,no-location)) then
     Filename := first(args(Location)) .
-    Area := first(next(args(Location))) .
-    ShowArea(Filename, Area)
+    ShowLocation(Filename, Location)
   else
      snd-note(ui-status(messagef("Subject %s has no source location", [Description])))
   fi
 endlet
 
-process ShowArea(Filename : str, Area : term) is
+process ShowLocation(Filename : str, Location : term) is
 let
   EditorId : term,
   ModuleName : str,
@@ -50,5 +48,9 @@ let
   Positions : list
 in
   snd-msg(edit-general(Filename)) .
-  rec-msg(editor-opened(ModuleName?, EditorId?)) 
+  rec-msg(editor-opened(ModuleName?, EditorId?)) .
+  snd-msg(get-focus-at-posinfo(EditorId, Location)) .
+  rec-msg(focus-at-posinfo(EditorId, Location, Focus?)) .
+  snd-msg(set-cursor-at-focus(EditorId, Focus)) .
+  snd-msg(set-focus(EditorId, Focus)) 
 endlet  
