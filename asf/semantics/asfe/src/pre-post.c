@@ -118,13 +118,13 @@ static PT_Tree ambToAmbConstructor(PT_Tree tree, PT_TreeVisitorData data)
   }
 
   return (PT_Tree) 
-    ASF_makeTreeAmbConstructor((ASF_Symbol) symbol,
-			       (ASF_Symbol) symbol,
-			       (ASF_Layout) l,
-			       (ASF_Layout) l,
-			       (ASF_Symbol) symbol,
-			       (ASF_TreeAmbs) listargs,
-			       (ASF_Layout) l);
+    ASF_makeTreeAmbiguityConstructor((ASF_Symbol) symbol,
+			             (ASF_Symbol) symbol,
+			             (ASF_Layout) l,
+			             (ASF_Layout) l,
+			             (ASF_Symbol) symbol,
+			             (ASF_TreeAmbs) listargs,
+			             (ASF_Layout) l);
 }
 
 /*}}}  */

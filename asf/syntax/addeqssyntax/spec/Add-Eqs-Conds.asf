@@ -48,7 +48,7 @@ equations
                  Symbol "=" Symbol  -> Equation
                  Symbol "=" Symbol  -> Condition
                  Symbol "!=" Symbol -> Condition
-                 "amb" "(" {Symbol ","}* ")" -> Symbol
+                 "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")}
                  Prod*)
 
   [eacfg-1'6] includes(Symbol, SymbolsSet) = true,
