@@ -322,11 +322,14 @@ proc module-info { mod infolist } {
 # pops up a formatted error window which cannot be ignored
 #---
 proc errorf {fmt args} {
-    set nwargs {}
+    set nwargs ""
+    set fmt [TCLstring $fmt]
     foreach arg $args {
-        lappend nwargs [TCLstring $arg]
+        set nwargs "$nwargs [TCLstring $arg]"
     }
-    eval "set errormsg \[format $fmt $nwargs\]"
+
+    set errormsg [eval "format \"$fmt\" $nwargs"]
+
     set button [tk_messageBox -icon error -type ok \
 	-title Message -parent . -message $errormsg]
 }
