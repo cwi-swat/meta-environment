@@ -1,5 +1,5 @@
 
-\section{ToolBus}
+\subsection{The ToolBus}
 \label{toolbus}
 
 %{{{ Intro
@@ -18,7 +18,7 @@ makes it possible to write every tool in the language best suitable
 for the task(s) it has to perform.
 
 \begin{figure}[htb]
-  \centerline{\epsfig{file=toolbus.ps,scale=0.8}}
+  \centerline{\epsfig{file=toolbus.ps,scale=0.5}}
   \caption{\label{TB}The \TB\ software application architecture}
 \end{figure}
 
@@ -26,7 +26,7 @@ The following sections give an overview of the most important \TB\
 features. For a more complete description of \TB\ expressions and
 primitives see \cite{COORD96.toolbus}.
 
-\subsection{Communication inside the \TB}
+\subsubsection{Communication inside the \TB}
 There are two mechanisms available for processes in the \TB\ to
 communicate with each other, message passing and selective broadcasting.
 A process can synchronously send a \emph{message} using the {\tt snd-msg} 
@@ -40,7 +40,7 @@ amounts to \emph{asynchronous selective broadcasting}.
 %}}}
 %{{{ Communication between the ToolBus and tools
 
-\subsection{Communication between \TB\ and tools}
+\subsubsection{Communication between \TB\ and tools}
 A \TB\ process can initiate communication with a tool by sending a 
 message to a tool using {\tt snd-do}, or {\tt snd-eval} when an answer
 is expected. A process can receive the answer to a {\tt snd-eval} request 
@@ -58,7 +58,7 @@ primitives.
 %}}}
 %{{{ Process composition
 
-\subsection{Process composition}
+\subsubsection{Process composition}
 More complex processes can be created using process composition operators
 for \emph{choice} ({\tt +} operator), \emph{sequential composition} 
 ({\tt .} operator), 
@@ -71,7 +71,7 @@ primitive {\tt create} can be used to create new processes.
 %}}}
 %{{{ Types and variables
 
-\subsection{Types and variables}
+\subsubsection{Types and variables}
 All terms within the \TB\ are \emph{typed}. The \TB\ defines a number of
 basic types for booleans, integers, reals, strings, and binary strings. Complex
 types can be formed using a list constructor or function application. The type
@@ -79,139 +79,19 @@ types can be formed using a list constructor or function application. The type
 makes it possible to declare variables.
 
 %}}}
-%{{{ A small example
 
-\subsection{A small example}
+\subsection{Debugging}
 
-To familiarize the reader with the syntax and semantics of \TB\ scripts,
-this section contains a small example.
-In this example a \TB\ script is presented that connects two tools, 
-a calculator tool
-that calculates expressions and a user interface tool that asks the
-user for an expression and presents its value as result.
+Debugging in the context of the new \metaenv\ has three dimensions:
+\begin{enumerate}
+\item Debugging the new \metaenv\ itself.
+\item Debugging \asdf\ specifications.
+\item Debugging programs developed using generated programming environments.
+\end{enumerate}
 
-This \TB\ script contains two processes, a {\tt UI} process that
-handles user interface events and a {\tt CALC} process communicating with
-the calculator tool.
+Our recent work on generic debugging techniques for distributed,
+heterogeneous environments\cite{COORD97.tide}
+cover both dimension {\tt 1} and {\tt 2}. 
+More research is needed to also use this technology to cover dimension {\tt 3}.
 
-In addition to these processes, two tool types are introduced by
-\emph{tool declarations}, which make it possible for the \TB\ to find 
-and execute tools. 
-A tool declaration also introduces a new type, that can later be
-used to declare tool identifier variables of that type.
-\begin{verbatim}
-tool ui is { command = "wish-adapter -script ui.tcl" }
-\end{verbatim}
-
-The {\tt USER-INTERFACE} process uses three variables. 
-The first one, {\tt UI}, is a
-tool identifier of type {\tt ui}. The second variable {\tt E} contains
-any expressions to be calculated, the third variable {\tt V} contains
-the calculated result.
-
-The {\tt USER-INTERFACE} process first starts the user interface tool.
-The variable {\tt UI} is a \emph{result occurrence} of {\tt UI}, 
-because it is followed by a {\tt ?}. When a variable is used as a result
-variable a value is assigned to it, in contrast with a 
-\emph{value occurrence} of a variable (without a following {\tt ?}),
-when the current value of the variable is substituted.
-In this case, the tool identifier for the new instance of
-the user interface tool ({\tt ui}) is assigned to {\tt UI}.
-
-After starting the {\tt ui} tool, the {\tt UI} process enters a
-loop waiting for {\tt expr} events from the newly created
-user interface tool. Such an event is generated when the user
-enters an expression and wants to evaluate it. At this point the
-user interface tool generates an {\tt expr} event, for instance
-{\tt expr("3+4")}. The expression {\tt "3+4"} is assigned to the variable
-{\tt E}, and send to the {\tt CALC} process for evaluation using the
-{\tt snd-msg} action. The result is received in the {\tt rec-msg}
-action and returned to the user interface tool using {\tt snd-ack-event}.
-
-The loop continues until the user interface tool generates a {\tt quit}
-event, for instance when the user pressed the {\tt Quit} button.
-\begin{verbatim}
-process USER-INTERFACE is
-let
-  UI : ui,
-  E : str,
-  V : str
-in
-  execute(ui, UI?) .
-  ( rec-event(UI, expr(E?)) .
-    snd-msg(calc, expr(E)) .
-    rec-msg(calc, expr(E, V?)) .
-    snd-ack-event(UI, expr(E, V))
-  ) * 
-  rec-event(UI, quit) .
-  snd-ack-event(UI, quit) .
-  shutdown("Goodbye!")
-endlet
-\end{verbatim}
-
-The {\tt CALC} process starts the calculator tool and waits for
-calculation requests. It relays them to the calculator tool and 
-sends the result back.
-
-Because the {\tt delta} action is never executed, it can effectively
-be used in combination with the iteration operator to implement an 
-endless loop.
-
-\begin{verbatim}
-tool calculator is { command = "calc" }
-
-process CALC is
-let
-  Calc : calculator,
-  E : str,
-  V : str
-in
-  execute(calculator, Calc?) .
-  ( rec-msg(calc, expr(E?)) .
-    snd-eval(Calc, expr(E)) .
-    rec-value(Calc, expr(E, V?)) .
-    snd-msg(calc, expr(E, V))
-  ) * delta
-endlet
-\end{verbatim}
-
-The last construct of every \TB\ script is the \TB\ configuration 
-that starts a number of processes in parallel. In this case
-the processes {\tt UI} and {\tt CALC} are created and execution begins.
-\begin{verbatim}
-toolbus(UI,CALC)
-\end{verbatim}
-
-%}}}
-%{{{ Debugging \TB\ applications
-
-\subsection{Debugging \TB\ applications}
-\label{viewer}
-
-An important feature of the \TB\ is the builtin monitor protocol,
-which is an extension of the normal communication protocol between
-\TB\ and tools.
-Based on this protocol, a tool which acts as a viewer tool
-can be connected to the \TB.
-Using the monitor protocol, the viewer tool is notified of state
-changes in the \TB. For instance, whenever a new \TB\ process is created,
-the viewer tool is informed of the name and process-id of the new process.
-%% It is important to note that these viewer tools are ordinary
-%% \TB\ tools in every aspect, except that they adhere also to the
-%%monitor protocol.
-
-The current \TB\ distribution contains a viewer tool written in
-the user interface scripting language Tcl/Tk\cite{Tcl/Tk}. This tool
-implements a debugging interface consisting of a source window and
-a \TB\ window. In the source window, the \TB\ script being executed
-is displayed, and actions that are executed are highlighted.
-The user can run or step through the execution of processes,
-and can set breakpoints by double clicking on a specific source line.
-In the \TB\ window a picture is drawn of the current processes
-and tools connected to the \TB. In this picture, arrows are drawn
-indicating communication taking place between tools and processes.
-Double clicking on a process in the \TB\ window opens a new window
-containing the variables of the selected process and their current values.
-
-%}}}
 

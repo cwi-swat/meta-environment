@@ -2,7 +2,7 @@
 \usepackage{latexsym}
 \usepackage{ASF+SDF,ASF+SDF-options}
 \usepackage{epsfig}
-\usepackage{cmbcsc}
+%%\usepackage{cmbcsc}
 
 \title{Design and Implemention a New {\sc Asf+Sdf} Meta-Environment}
 
@@ -70,7 +70,7 @@ Ph.D. researchers, and consequently the project has had a
 large turnover of staff.
 
 These complaints initiated a redesign and reimplementation of the \metaenv.
-Initially we believed in an incremental reimplementation of the
+Initially we believed that an incremental reimplementation of the
 \metaenv\ was feasible, and therefore a number of people
 started working on the design and implementation of a new user-interface
 and the replacement of the text editing facilities of GSE \cite{Koo94.thesis}
@@ -98,28 +98,31 @@ The tree formalism VTP is not easy to use, connection     \\
 \lelisp/VTP is complicated.                                \\ \hline
 The current monolithic system is hard to maintain. New    \\
 research ideas are hard to implement.                     \\ \hline 
-Bugs are not fixed anymore, because the knowledge about
-the intrinsics of the system needed to fix these bugs is
-no longer present.					\\ \hline \hline
+Bugs are not fixed anymore, because the knowledge about \\
+the intrinsics of the system needed to fix these bugs \\
+is no longer present.					\\ \hline \hline
 \end{tabular}
 \end{center}
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
 \end{table}
 
-Based on the Epoch-GSE-UI coupling it was decided to
+Based on the experiences gained with the Epoch-GSE-UI coupling it was 
+decided to
 design and implement the new \metaenv\ from scratch.
 The problems concerning \lelisp\ makes a ``from scratch'' approach even
-more important.
+more pressing.
 In this paper we discuss the first prototype of the new \metaenv\ based
 on the \TB. 
 This prototype has a very restricted functionality but offers an extendable
 infrastructure to experiment with various designs.
 
+\input{toolbus.ltx}
+
 \subsection{Tree Representation}
 
 In the current version of the \metaenv\ the abstract syntax trees are 
 represented by means of VTP (Virtual Tree Processing formalism)
-offer by \centaur.
+offered by \centaur.
 There are two problems connected to VTP: it is hard to learn programming
 in VTP and VTP does not offer enough facilities to prevent illegal
 access to constructed trees. This latter drawback causes a number of
@@ -143,10 +146,10 @@ The \sdf\ definition of \aterms\ is presented in Figure~\ref{at}.
 \end{figure}
 
 \aterms\ will be used to represent structured information to be exchanged
-between a heterogenuous collection of tools.
-They should be independent of any specific tool, but
-they should be able to accomodate the representation of {\em all}
-data that is to be exchanged between tools.
+between a heterogeneous collection of tools.
+The AATerm format should be independent of any specific tool, but
+it should be capable of representing {\em all} data that is exchanged 
+between tools.
 Consider the following example \aterms:
 \begin{tabbing}
 annotation\ \ \ \ \= f(123)\{\=xxxx\kill
@@ -163,7 +166,7 @@ optional annotations) for programs or specifications in any
 language.
 \asfix\ is an instance of \aterms\ used for representing
 the {\em parse trees} of \asdf\ specifications.
-Parse trees means: all keywords, whitespace, comments, etc.\ are
+Parse trees mean that all keywords, whitespace, comments, etc.\ are
 preserved in the tree representation.
 A self descriptive representation is used, i.e., each application
 of a syntax rule contains a copy of that rule (in the implementation
@@ -248,15 +251,14 @@ user-interface/Dot  &               & Tcl/Tk          \\ \hline
 \caption{\label{components} Components of the new \metaenv\ which are finished.}
 \end{table}
 
-Figure \ref{nm} contains a screendump of the current prototype.
+Figure \ref{nm} contains a screendump of the user-interface of part of
+the current prototype.
 The various components will be discussed in the next sections.
 
 \begin{figure}[htb]
 \centerline{\psfig{figure=newmeta.ps,width=\textwidth}}
 \caption{\label{nm} Browsing the import graph in the new \metaenv.}
 \end{figure}
-
-\input{toolbus.ltx}
 
 \section{User-interface}
 
@@ -279,15 +281,15 @@ term, to remove a module or term, and to clear its entire repository.
 It is possible to check whether a module or term is already
 in the repository.
 Furthermore, given the name of a module it is possible to retrieve
-a specific section of a module, its imports section, its equations, etc.
+a specific section of a module, its import section, its equations, etc.
 The tree-repository is implemented as a table with the module name
 and term name as key and the \asfix\ representation as value.
 
-The ``imports-repository'' or ``import-manager'' provides all information
+The ``import-repository'' or ``import-manager'' provides all information
 concerning the import relations of an \asdf\ specification.
 It contains of all modules of a specification in the tree-repository
 the import sections.
-The imports-repository provides facilities to add the import section
+The import-repository provides facilities to add the import section
 of a new module, to remove the import section of a given module,
 and to clear its entire repository.
 Of course it is possible to retrieve the imports for a given module name.
@@ -295,7 +297,7 @@ It is also possible to calculate given a list of module names which
 modules are not yet in ``store''.
 Finally, a number of operations are provided to retrieve the transitive
 closure of the import relation for a given module.
-The imports-repository stores this calculated closure in a separate database.
+The import-repository stores this calculated closure in a separate database.
  
 The ``equations-repository'' of the interpreter will be discussed in
 Section \ref{interpreter}. In fact, there are facilities to
@@ -326,13 +328,13 @@ term editor is extended with a {\tt Reduce}-button.
 When pushing this button it is first checked
 whether the interpreter has the appropriate set of rewrite rules
 available. If not, the equations are retrieved from the tree repository.
-This is done by retrieving the transitive closure of the imports graph
+This is done by retrieving the transitive closure of the import graph
 from the import manager and sending this set of modules to
 the tree repository which then returns the set of equations.
 Finally, the \asfix\ representation of the term is
 sent to the interpreter.
 
-When the interpreter recieves a set of equations it performs
+When the interpreter receives a set of equations it performs
 some simple transformations to it, for instance,
 removal of unnecessary layout and lexicals are transformed into
 lists of characters.
@@ -346,7 +348,7 @@ layout is inserted and the lists of characters are translated into
 lexicals.
 This term is sent to the \TB\ to be display in an editor.
 
-The interpreter does not remove the equations they are stored.
+The interpreter does not remove the equations after rewriting.
 These equations are removed only when one of the modules in
 the specification is modified.
 
@@ -380,8 +382,19 @@ is calculated using the outermost function symbol of the left hand
 side of an equation and the outermost function symbol (if any) of
 the first argument of the left hand side of the equation.
 This improves the efficiency of the rewriting machine enormously,
-but it influence the semantics as well. In fact this implements a form of
-syntactic specificity. This implementation trick was also available
+but it influences the semantics as well. In fact this implements a form of
+syntactic specificity, because when the interpreter is looking for an
+equation that matches with a aterm, it first looks for
+an equation that has the same outermost function symbol (ofs), {\em and}
+has the same ofs at the first argument position.
+If no match can be found, the search is continued for an equation that
+has the same ofs as the term, but with a variable at the first argument
+position. This strategy means that equations with a variable at the
+first argument position are only applied when no other equation is applicable.
+Finally, when this search also fails the interpreter looks for a default
+equation that matches with the term.
+
+This implementation trick was also available
 in the interpreter of the old \metaenv.
 PIETER: How about the default rules?
 
@@ -395,7 +408,7 @@ context-free syntax
   rewrite(ATermList,ATerm,Env) -> ATerm
 \end{verbatim}
 \end{footnotesize}
-These rewrite functions are based on backtracking, to support list matching
+Recursion is used to implement the backtracking behaviour of list matching
 in \asf.
 The instantiation of list variables is done by assigning
 an ``arbitrary'' sublist to a list variable. 
@@ -413,7 +426,7 @@ it is not allowed to introduce new variables on both sides of
 a positive condition. If new variables are introduced on one side
 of a positive condition only the other side is rewritten which is
 then matched against the ``variable introducing side'' of the
-condition.
+condition, leading to new variable bindings.
 
 \subsection{Discussion}
 
@@ -425,7 +438,7 @@ old \metaenv\ performs 20.000 rewrite steps per second for the
 same specification and term. So, there is at least a factor 3 to be
 gained.
 
-Second, in the current version no or almost none preprocessing
+Second, in the current version no or almost no preprocessing
 of the specification is performed.
 A number of preprocessing steps could improve the performance 
 considerably.
@@ -449,15 +462,13 @@ integrated as well as the To\LaTeX\ facilities \cite{Vis95.tolatex}. This should
 on top of the {\sc Box} language.
 Third, the \metaenv\ should provided facilities to compile specifications
 in order to generate stand-alone environments.
-Fourth, a debugging facility for debugging specification should provided
+Fourth, a debugging facility for debugging specifications should be provided
 as well.
-Finally, the new \metaenv\ should provided sophisticated help facilities
-and demonstrations modes based on internet facilities.
+Finally, the new \metaenv\ should provide sophisticated help facilities
+and demonstration modes based on internet facilities.
 
 The tree-repository should provided a sophisticated querying mechanism
 as described in \cite{BKV96b}.
-
-\input{future-debugging.ltx}
 
 \bibliographystyle{alpha}
 \bibliography{metabib}
