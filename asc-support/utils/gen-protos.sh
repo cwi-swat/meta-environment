@@ -4,7 +4,7 @@
 #
 # This script generates an include file
 
-BUILTIN_NAMES=$1
+BUILTIN_NAMES=$*
 
 getName() {
   echo $1 | sed 's/\([a-z\-]*\)_\([0-9]*\)/\1/'
@@ -14,7 +14,7 @@ getArity() {
   echo $1 | sed 's/\([a-z\-]*\)_\([0-9]*\)/\2/'
 }
 
-formals() {
+getFormals() {
   ar=$1
   ty=$2
 
@@ -28,7 +28,7 @@ formals() {
   fi
 }
 
-cat  << END_OF_FILE 
+cat  << END_CAT
 #ifndef BUILTINS_H
 #define BUILTINS_H
 #include <MEPT.h>
@@ -37,17 +37,15 @@ cat  << END_OF_FILE
 
 void initBuiltins(void);
 PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input);
+END_CAT
 
-`
-for b in \${BUILTIN_NAMES}; do 
-  name=\`getName ${b}\`
-  arity=\`getArity ${b}\`
-  formals=\`formals ${arity} ATerm\`
+for b in ${BUILTIN_NAMES}; do 
+  name=`getName ${b}`
+  arity=`getArity ${b}`
+  formals=`getFormals ${arity} ATerm`
   echo "PT_Tree ASFE_${name}(PT_Tree input);" | sed 's@-@_@g'
   echo "PT_Tree ASC_${name}(${formals});" | sed 's@-@_@g'
   echo
 done
-`
 
-#endif
-END_OF_FILE
+echo "#endif"
