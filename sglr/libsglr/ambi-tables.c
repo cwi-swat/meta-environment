@@ -150,6 +150,10 @@ void SG_CreateAmbCluster(tree existing, tree new, size_t pos) {
   ATermInt  ambidx;
 
   IF_STATISTICS(SG_AmbCalls(SG_NR_INC));
+
+  if (!new) {
+    return;
+  }
   
   ambidx = SG_AmbiTablesGetIndex((ATerm) existing, pos);
   if (!ambidx) { 
