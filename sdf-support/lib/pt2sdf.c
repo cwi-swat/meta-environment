@@ -188,7 +188,9 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 
     result = SDF_makeSymbolLit(lit);
   }
-  else if (PT_isSymbolCf(ptSymbol) || PT_isSymbolLex(ptSymbol)) {
+  else if (PT_isSymbolCf(ptSymbol)
+	   || PT_isSymbolLex(ptSymbol)
+	   || PT_isSymbolVarSym(ptSymbol)) {
     result = PTSymbolToSDFSymbol(PT_getSymbolSymbol(ptSymbol));
   }
   else if (PT_isSymbolEmpty(ptSymbol)) {

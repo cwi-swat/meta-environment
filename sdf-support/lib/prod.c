@@ -14,21 +14,6 @@ collect_lex_prods(SDF_Grammar grammar, SDF_ProductionList *lexProds)
 }
 
 /*}}}  */
-/*{{{  collect_all_prods(SDF_Grammar grammar, SDF_Productions *allProds) */
-
-static void
-collect_all_prods(SDF_Grammar grammar, SDF_ProductionList *allProds)
-{
-  if (SDF_hasGrammarProductions(grammar)) {
-    SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
-    SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
-
-    *allProds = SDF_concatProductionList(*allProds, prods);
-  }
-}
-
-/*}}}  */
-
 /*{{{  SDF_getModuleLexicalProductions(SDF_Module module) */
 
 SDF_ProductionList 
@@ -45,55 +30,36 @@ SDF_getModuleLexicalProductions(SDF_Module module)
 
 /*}}}  */
 
-/*{{{  SDF_getModuleProductions(SDF_Module module) */
+/*{{{  collect_var_prods(SDF_Grammar grammar, SDF_Productions *varProds) */
+
+static void
+collect_var_prods(SDF_Grammar grammar, SDF_ProductionList *varProds)
+{
+  if (SDF_isGrammarVariables(grammar)) {
+    SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
+    SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
+
+    *varProds = SDF_concatProductionList(*varProds, prods);
+  }
+}
+
+/*}}}  */
+/*{{{  SDF_getModuleVariableProductions(SDF_Module module) */
 
 SDF_ProductionList 
-SDF_getModuleProductions(SDF_Module module)
+SDF_getModuleVariableProductions(SDF_Module module)
 {
-  SDF_ProductionList prods = SDF_makeProductionListEmpty();
+  SDF_ProductionList varProds = SDF_makeProductionListEmpty();
 
   SDFforeachGrammarInModule(module,
-			    (SDFGrammarFunc)collect_all_prods,
-			    (void *)&prods);
+			    (SDFGrammarFunc)collect_var_prods,
+			    (void *)&varProds);
 
-  return prods;
+  return varProds;
 }
 
 /*}}}  */
-/*{{{  SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
-                                                  SDF_Module module) */
 
-SDF_ProductionList
-SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
-                                           SDF_Module module)
-{
-  SDF_ProductionList lexProds = SDF_getModuleLexicalProductions(module);
-  SDF_ProductionList newLexProds = SDF_makeProductionListEmpty();
-
-  while (SDF_hasProductionListHead(lexProds)) {
-    SDF_Production lexProd = SDF_getProductionListHead(lexProds);
-
-    SDF_Symbol rhsSymbol = SDF_getProductionResult(lexProd);
-
-    if (SDF_isEqualSymbol(symbol, rhsSymbol)) {
-      if (SDF_isProductionListEmpty(newLexProds)) {
-        newLexProds = SDF_makeProductionListSingle(lexProd);
-      }
-      else {
-        newLexProds = SDF_makeProductionListMany(lexProd, 
-                                                 SDF_makeLayoutEmpty(), 
-                                                 newLexProds);
-      }
-    }
-    if (SDF_isProductionListSingle(lexProds)) {
-      break;
-    }
-    lexProds = SDF_getProductionListTail(lexProds);
-  }
-  return newLexProds;
-}
-
-/*}}}  */
 /*{{{  collect_cf_prods(SDF_Grammar grammar, SDF_Productions *cfProds) */
 
 static void
@@ -123,10 +89,41 @@ SDF_getModuleContextFreeProductions(SDF_Module module)
 }
 
 /*}}}  */
-/*{{{  collect_prods(SDF_Grammar grammar, SDF_Productions *prods) */
+
+/*{{{  collect_all_prods(SDF_Grammar grammar, SDF_Productions *allProds) */
 
 static void
-collect_prods(SDF_Grammar grammar, SDF_ProductionList *prods)
+collect_all_prods(SDF_Grammar grammar, SDF_ProductionList *allProds)
+{
+  if (SDF_hasGrammarProductions(grammar)) {
+    SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
+    SDF_ProductionList prods = SDF_getProductionsList(grammarProds);
+
+    *allProds = SDF_concatProductionList(*allProds, prods);
+  }
+}
+
+/*}}}  */
+/*{{{  SDF_getModuleProductions(SDF_Module module) */
+
+SDF_ProductionList 
+SDF_getModuleProductions(SDF_Module module)
+{
+  SDF_ProductionList prods = SDF_makeProductionListEmpty();
+
+  SDFforeachGrammarInModule(module,
+			    (SDFGrammarFunc)collect_all_prods,
+			    (void *)&prods);
+
+  return prods;
+}
+
+/*}}}  */
+
+/*{{{  collect_kernel_prods(SDF_Grammar grammar, SDF_Productions *prods) */
+
+static void
+collect_kernel_prods(SDF_Grammar grammar, SDF_ProductionList *prods)
 {
   if (SDF_isGrammarSyntax(grammar)) {
     SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
@@ -137,19 +134,18 @@ collect_prods(SDF_Grammar grammar, SDF_ProductionList *prods)
 }
 
 /*}}}  */
-/*{{{  SDF_getModuleProductions(SDF_Module module) */
+/*{{{  SDF_getGrammarKernelProductions(SDF_Grammar grammar) */
 
-SDF_ProductionList 
+SDF_ProductionList
 SDF_getGrammarKernelProductions(SDF_Grammar grammar)
 {
   SDF_ProductionList prods = SDF_makeProductionListEmpty();
 
   SDFforeachGrammar(grammar,
-		    (SDFGrammarFunc)collect_prods,
+		    (SDFGrammarFunc)collect_kernel_prods,
 		    (void *)&prods);
 
   return prods;
 }
 
 /*}}}  */
-

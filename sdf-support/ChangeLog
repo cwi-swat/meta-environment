@@ -1,5 +1,9 @@
 $Id$
 
+Tue Mar  4 10:18:52 CET 2003 <{markvdb,jong}@cwi.nl>
+ * some refactorings, weeding out of (hopefully) dead code
+ * add support to extract variable productions
+
 2003/02/11 ({jong,markvdb}@cwi.nl)
  * Added \r and restructured the AlphaNumericEscapeChar.
  * Regenerated.

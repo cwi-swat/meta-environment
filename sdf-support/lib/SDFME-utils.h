@@ -31,6 +31,7 @@ SDF_Module SDF_addModuleImport(SDF_Module mod, SDF_Import import);
 SDF_SymbolList  SDF_getModuleSorts(SDF_Module module);
 
 SDF_ProductionList SDF_getModuleProductions(SDF_Module module);
+SDF_ProductionList SDF_getModuleVariableProductions(SDF_Module module);
 SDF_ProductionList SDF_getModuleLexicalProductions(SDF_Module module);
 SDF_ProductionList SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
                                                               SDF_Module module);
