@@ -13,7 +13,15 @@ public class PropertyParser
   {
     PropertyParser parser = new PropertyParser(System.in);
     PropertyForest forest = parser.PropertyFile();
-    System.out.println("forest = " + forest);
+    System.out.println("forest: " + forest);
+  }
+
+  //}}}
+  //{{{ private static String unquote(String string)
+
+  private static String unquote(String string)
+  {
+    return string.substring(1, string.length()-1);
   }
 
   //}}}
@@ -53,7 +61,7 @@ TOKEN :
 | <COMMA: ",">
 | <PERIOD: ".">
 | <ADD: "+=">
-| <SET: "=">
+| <SET: ":=">
 }   
 
 //}}}
@@ -61,7 +69,7 @@ TOKEN :
 
 TOKEN :
 {
-  < IDENTIFIER: <WILDCARD> | ( <LETTER> (<LETTER>|<DIGIT>)* )>
+  < IDENTIFIER: <WILDCARD> | ( <LETTER> (<LETTER>|<DIGIT>|<DASH>)* )>
 |
   < #LETTER:
       [
@@ -101,6 +109,7 @@ TOKEN :
        "\u1040"-"\u1049"
       ]
   >
+| < #DASH: "-" >
 | < #WILDCARD: "*" >
 }
 
@@ -166,9 +175,42 @@ PropertyForest PropertyForest() :
 {
   PropertyForest forest = new PropertyForest();
   PropertyTree tree;
+  Token key;
+  int type;
+  List list;
+  String value;
 }
 {
-  ( tree=PropertyTree() { forest.addTree(tree); }
+  (
+    LOOKAHEAD(3)
+    key=<IDENTIFIER>
+    ( "+=" {type=PropertyTree.ADD;}
+    | ":=" {type=PropertyTree.SET;}
+    )
+    "{" list=PropertyValueList() "}"
+    {
+      Iterator iter = list.iterator();
+      while (iter.hasNext()) {
+        tree = new PropertyTree(key.image, (String)iter.next(),
+				new PropertyForest());
+	tree.setType(PropertyTree.ADD);
+	forest.addTree(tree);
+      }
+    }
+  |
+    LOOKAHEAD(2)
+    key=<IDENTIFIER>
+    ( "+=" {type=PropertyTree.ADD;}
+    | ":=" {type=PropertyTree.SET;}
+    )
+    value=PropertyValue()
+    {
+      tree = new PropertyTree(key.image, value, new PropertyForest());
+      tree.setType(PropertyTree.ADD);
+      forest.addTree(tree);
+    }
+  |
+    tree=PropertyTree() { forest.addTree(tree); }
   ) *
   { return forest; }
 }
@@ -178,9 +220,11 @@ PropertyForest PropertyForest() :
 
 PropertyTree PropertyTree() :
 {
-  Token key, value;
+  Token key;
   Token field, type;
+  List list;
   PropertyForest forest;
+  String value;
 }
 {
   LOOKAHEAD(2)
@@ -192,10 +236,48 @@ PropertyTree PropertyTree() :
    return new PropertyTree("field", field.image, forest);
   }
 |
-  key=<IDENTIFIER> value=<IDENTIFIER> "{" forest=PropertyForest() "}"
+  key=<IDENTIFIER> value=PropertyValue() "{" forest=PropertyForest() "}"
   {
-    return new PropertyTree(key.image, value.image, forest);
+    return new PropertyTree(key.image, value, forest);
   }
+}
+
+//}}}
+
+//{{{ PropertyValue
+
+String PropertyValue() :
+{
+  Token string;
+  String result;
+}
+{
+   ( string=<IDENTIFIER> { result = string.image; }
+   | string=<STRING_LITERAL> { result = unquote(string.image); }
+   | string=<INTEGER_LITERAL> { result = string.image; }
+   | string=<FLOATING_POINT_LITERAL> { result = string.image; }
+   )
+   { return result; }
+}
+
+//}}}
+//{{{ PropertyValueList
+
+List PropertyValueList() :
+{
+  List result = new LinkedList();
+  String propValue;
+}
+{
+  (
+  propValue=PropertyValue() { result.add(propValue); }
+  ( "," propValue=PropertyValue() { result.add(propValue); }
+  ) *
+  |
+  { /* empty list allowed as well */ }
+  )
+
+  { return result; }
 }
 
 //}}}

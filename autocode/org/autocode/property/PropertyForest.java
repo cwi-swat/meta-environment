@@ -27,18 +27,17 @@ public class PropertyForest
 
   public String toString()
   {
-    StringBuffer buf = new StringBuffer("{");
+    StringBuffer buf = new StringBuffer();
     Iterator iter = tree.iterator();
     boolean first = true;
     while (iter.hasNext()) {
       if (first) {
 	first = false;
       } else {
-	buf.append(',');
+	buf.append(' ');
       }
       buf.append(iter.next().toString());
     }
-    buf.append("}");
 
     return buf.toString();
   }

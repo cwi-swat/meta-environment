@@ -2,3 +2,25 @@ type Type
 {
   name : string
 }
+
+type Type
+{
+  field name {
+    type string {
+      nullable false { }
+      length := 3
+      default := "nobody"
+    }
+  }
+
+  operations += { get, set }
+
+  operations get {}
+  operations set {}
+
+  aap := { a, b, c }
+
+  aap a {}
+  aap b {}
+  aap c {}
+}
