@@ -8,6 +8,6 @@ SUBDIRS		= config editors ${UI_PACKAGE} src \
 
 DIST_SUBDIRS	= config editors graph-browser meta-studio src \
 		in-output module-db utils tbscripts demo \
-		configuration-manager
+		configuration-manager showdot
 
 EXTRA_DIST = make_rules
