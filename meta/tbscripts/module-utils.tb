@@ -39,18 +39,34 @@ let
   Status : term,
   Changed : list
 in
-  if equal(Recursive,recursive) then
-    printf("Recursive closing is not yet implemented, sorry!\n")
-  else tau fi.
   Status := success.
-  SoftCloseModuleInDB(ModuleName, Status?).
-  if equal(Status,success) then
-    CloseModuleInUI(ModuleName)
+  if equal(Recursive,recursive) then
+    DoRecursiveCloseModule(ModuleName, Status?)
   else 
+    printf ("closing %s\n", ModuleName).
+    SoftCloseModuleInDB(ModuleName, Status?).
+    if equal(Status,success) then
+      CloseModuleInUI(ModuleName)
+    else tau fi
+  fi.
+  if not(equal(Status, success)) then
     snd-note(ui-status(errorf("Module %s not closed because other modules depend on it", [ModuleName])))
-  fi
+  else tau fi
 endlet
 
+process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
+let
+  Imports : list
+in
+  Status := success.
+  snd-msg(get-all-imported-modules(ModuleName)).
+  rec-msg(all-modules(Imports?)).
+  SoftCloseModuleInDB(ModuleName, Status?).
+  if equal(Status, success) then
+    CloseModuleInUI(ModuleName).
+    printf ("recursive closing is not implemented yet!\n")
+  else tau fi
+endlet
 
 process DoRevertModule(ModuleName : str) is
   HardCloseModuleInDB(ModuleName).
@@ -202,7 +218,8 @@ let
 in
   snd-msg(get-all-depending-modules(ModuleName)).
   rec-msg(all-depending-modules(Depending?)).
-  if is-empty(Depending) then
+  if equal(Depending,[]) then
+    printf("depending: %t\n", Depending).
     HardCloseModuleInDB(ModuleName).
     Status := success
   else
