@@ -57,27 +57,26 @@ REGALL	:= $(patsubst %,register_%,$(INIT))
 EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
 RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
-CLEANFILES = AsFix2C libasfix2c.a init.c
+CLEANFILES     = *.o *~  AsFix2C libasfix2c.a init.c
+DISTCLEANFILES = Makefile
 
 all: libasfix2c.a
 
 AsFix2C : $(MODS)
-	$(CC) -o AsFix2C $(MODS) $(LIBS)
+	$(CC) -o $@ $^ $(LIBS)
 
 libasfix2c.a: $(MODS)
-	$(AR) cr libasfix2c.a $(MODS)
+	$(AR) cr $@ $^
 	$(RANLIB) $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
-init.o: init.c
-
 init.c:
 	../mk-init.sh >> $@
 
 clean: 
-	rm -f *.o *~ $(CLEANFILES)
+	rm -f $(CLEANFILES)
 
 distclean realclean spotless:	clean
 	rm -f ${DISTCLEANFILES}
