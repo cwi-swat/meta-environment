@@ -1,0 +1,29 @@
+definition
+
+module Main
+imports Jacob
+
+module Jacob
+
+imports Layout
+exports
+  sorts Prog Keyw Follow Prog Stat
+  lexical syntax
+    [A-Z][A-Z0-9]* -> Follow  {avoid}
+
+  lexical restrictions
+    Follow -/- [A-Z0-9]
+
+  context-free syntax
+   "MOVE"       -> Keyw
+   "ADD"        -> Keyw
+   Keyw Follow* -> Stat
+   Stat*        -> Prog
+
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
