@@ -1,0 +1,433 @@
+/* This used to be the module-db.idef, it now (temporarily) serves as
+ * a wrapper for a number of new tools that have replaced the module-db.
+ *
+ */
+
+#include <sdf-modules.idef>
+#include <term-store.idef>
+
+process ModuleDB is
+let
+  Id        : term,
+  Path      : str,
+  Table     : term,
+  ModuleId  : term,
+  Syntax    : term,
+  SyntaxTree: term,
+  SyntaxText: str,
+  EqsTree   : term,
+  EqsText   : str,
+  Name      : str,
+  OldName   : str,
+  NewName   : str,
+  ErrorName : str,
+  Mdb       : module-db,
+  Modules   : list,
+  ChngMods  : list,
+  Import    : term,
+  Imports   : list,
+  NewImports   : list,
+  Equations : term,
+  Renamings : list,
+  NewRenamings : term,
+  ModName   : term,
+  Params    : term,
+  Pairs     : list,
+  ActualMods: list,
+  Language  : str,
+  ErrorMsg  : str,
+  OutputDir : str, 
+  TableType : term,
+  RealName  : str,
+  EqsList1  : term,
+  EqsList2  : term,
+  EqsList3  : term,
+  SyntaxExt : str,
+  RulesExt  : str,
+  TermExt   : str
+in
+  create(SdfModules, Pid?) .
+  create(TermStore, Pid?) .
+  MDB-InitializeModuleDb() .
+  MDB-InitializeFileExtensions() .
+  (
+    rec-msg(get-import-graph) .
+    MDB-RetrieveImportGraph(Nodes?, Edges?) .
+    snd-msg(import-graph(Nodes,Edges))
+  +
+    rec-msg(clear-module-db) .
+    MDB-ClearModuleDb()
+  +
+    rec-msg(delete-module-from-db(Name?)).
+    MDB-GetAllDependingModules(Name, Depending?) .
+    snd-msg(ts-remove-value-from-all-tables(Name)) .
+    MDB-RemoveImportFromModules(Name, Depending) .
+    snd-msg(changed-modules(Depending))
+  +
+    rec-msg(close-module-in-db(Name?)) .
+    MDB-GetAllDependingModules(Name, Depending?) .
+    MDB-InvalidateModules(Depending) .
+    snd-msg(ts-remove-value-from-all-tables(Name))
+    snd-msg(changed-modules(Depending))
+  +
+    rec-msg(is-module-in-db(Name?)) .
+    snd-msg(ts-contains-key("active-modules", Name)) .
+    ( 
+      rec-msg(ts-contains-key).
+      snd-msg(exists-in-module-db(Name))
+    +
+      rec-msg(ts-not-contains-key).
+      snd-msg(not-exists-in-module-db(Name))
+    )
+  +
+    rec-msg(add-empty-module-to-db(Name?)).
+    snd-msg(ts-put-value("active-modules", Name, [])) .
+    MDB-RetrieveImportGraph(Nodes?, Edges?) .
+    snd-note(import-graph(Nodes, Edges)).
+    snd-msg(empty-module-added)
+  +
+    rec-msg(add-sdf-module-to-db(Name?, Path?, 
+				 SyntaxText?, SyntaxTree?)) .
+    snd-msg(sm-is-valid-modulename-in-path(Path, Name)) .
+    (
+      rec-msg(sm-modulename-is-valid) .
+      printf("DEBUG: addPosInfo still needs an extension concatenated\n") .
+      snd-msg(addPosInfo(Path, SyntaxTree)) .
+      rec-msg(tree-with-pos-info(SyntaxTree?)) .
+      snd-msg(sm-get-module-id(SyntaxTree)) .
+      rec-msg(module-id(ModuleId?)) .
+      snd-msg(ts-put-value("active-modules", ModuleId, []) .
+      snd-msg(ts-put-value("sdf-tree", ModuleId, [SyntaxTree]) .
+      snd-msg(ts-put-value("sdf-text", ModuleId, [SyntaxText]) .
+      snd-msg(ts-put-value("module-paths", ModuleId, [Path]) .
+      printf("DEBUG: just get the imported modules, not just the new ones?\n").
+      snd-msg(sm-get-imports(SyntaxTree)) .
+      rec-msg(sm-imports(Modules?)) .
+      snd-msg(adding-succeeded(Name,ModuleId, Modules))
+    +
+      rec-msg(sm-modulename-is-invalid) .
+      snd-msg(error-opening(Name, name-inconsistency))
+    )
+  +
+    rec-msg(invalidate-sdf-in-db(Name?)) .
+    snd-msg(ts-remove-value("sdf-tree", Name))
+  +
+    rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
+    printf("module-db: missing new text file for updated module?\n") .
+    snd-msg(sm-get-module-id(Syntax)) .
+    rec-msg(module-id(ModuleId?)) .
+    if equal(Name, ModuleId) then
+      snd-msg(ts-get-value("sdf-tree", Name)) .
+      rec-msg(ts-value([OldSyntax?])) .
+      if equal(Syntax, OldSyntax) then
+        printf("DEBUG: Nothing has changed in %s\n", Name) .
+	snd-msg(extra-modules([]))
+      else
+        snd-msg(sm-get-imports(Syntax)) .
+	printf("DEBUG: just get all imports, not just the new ones?") .
+	rec-msg(sm-imports(Modules?)) .
+        MDB-GetAllDependingModules(Name, Depending?) .
+	snd-msg(notify-about-changed-modules(Depending,"sdf")).
+	rec-msg(notify-about-changed-modules-done).
+	MDB-RetrieveImportGraph(Nodes?, Edges?) .
+	snd-note(import-graph(Nodes, Edges)).
+	snd-msg(extra-modules(Modules))
+      fi
+    else
+      snd-msg(error-opening(Name, name-inconsistent))
+    fi
+  +
+    rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
+    snd-eval(Mdb, rename-module(OldName, NewName, Path)) .
+    (
+      rec-value(Mdb, imports(changed-modules(Modules?),
+			     import-graph(ActualMods?, Pairs?))) .
+      snd-note(import-graph(ActualMods, Pairs)) .
+      snd-msg(renaming-done(OldName, Modules))
+    +
+      rec-value(Mdb, illegal-module-name(NewName)) .
+      snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+      snd-msg(renaming-not-done(OldName))
+    )
+  +
+    rec-msg(add-import-in-db(OldName?, NewName?, Path?)) .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    snd-msg(add-import-not-done(OldName))
+  +
+    rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    snd-msg(remove-import-not-done)
+  +
+    rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    snd-msg(copy-not-done(OldName))
+  +
+    rec-msg(eqs-not-available-for-modules(Name?)).
+    printf("This is supposed to be dead code (%s,%d)\n", __FILE__,__LINE__) .
+    snd-msg(eqs-needed-for-modules([]))
+  +
+    rec-msg(get-eqs-text(Name?)).
+    snd-msg(ts-get-value("asf-text", Name)) .
+    (
+      rec-msg(ts-value([EqsText?]))
+      snd-msg(eqs-text(Name, EqsText))
+    +
+      rec-msg(ts-no-value)
+      snd-msg(no-eqs-text(Name))
+    )
+  +
+    rec-msg(add-eqs-to-db(Name?, text(EqsText?))) .
+    snd-msg(ts-put-value("asf-text", [EqsText])) .
+    snd-msg(eqs-added)
+  +
+    rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
+    snd-msg(ts-get-value("module-paths", Name)) .
+    rec-msg(ts-value([Path?])) .
+    printf("DEBUG: no extension yet using addPosInfo and also no depth maximum!\n") .
+    snd-msg(addPosInfo(Path,EqsTree)) .
+    rec-msg(tree-with-pos-info(EqsTree?)) .
+    snd-msg(ts-put-value("asf-tree", [EqsTree]))
+    snd-msg(eqs-updated)
+  +
+    rec-msg(update-eqs-text-in-db(Name?, text(EqsText?))).
+    snd-msg(ts-remove-value("asf-tree", Name)) .
+    snd-msg(ts-put-value("asf-text", Name, [EqsText])) .
+    snd-msg(eqs-text-updated(Name))
+  +
+    rec-msg(add-parse-table-to-db(eqs(Name?), Table?)) .
+    snd-msg(ts-put-value("asf-parse-table", Name, [Table]))
+    snd-msg(parse-table-added)
+  +
+    rec-msg(add-parse-table-to-db(trm(Name?), Table?)) .
+    snd-msg(ts-put-value("term-parse-table", Name, [Table]))
+    snd-msg(parse-table-added)
+  +
+    rec-msg(get-path-from-db(Name?)).
+    snd-msg(ts-get-value("module-paths", Name)) .
+    rec-msg(value([Path?])) .
+    snd-msg(path(Path))
+  +
+    (
+      rec-msg(get-table-from-db(eqs(Name?))) .
+      snd-msg(ts-get-value("asf-parse-table", Name)) 
+    +
+      rec-msg(get-table-from-db(trm(Name?))) .
+      snd-msg(ts-get-value("term-parse-table", Name)) 
+    ).
+    (
+      rec-msg(ts-value([Table?])) .
+      snd-msg(table(Table))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-table)
+    )
+  +
+    rec-msg(get-all-depending-modules(Name?)).
+    MDB-GetAllDependingModules(Name, Depending?) .
+    snd-msg(all-depending-modules(Depending))
+  +
+    rec-msg(get-all-imported-modules(Name?)).
+    MDB-GetAllImportedModules(Name, Modules?)
+    snd-msg(all-modules(Modules))
+  +
+    rec-msg(get-imported-modules(Name?)).
+    MDB-GetImportedModules(Name, Modules?) .
+    snd-msg(imported-modules(Modules))
+  +
+    rec-msg(get-all-modules).
+    snd-msg(ts-get-all-keys("active-modules")) .
+    rec-msg(ts-all-keys(Modules?)) .
+    snd-msg(all-modules(Modules))
+  + 
+    rec-msg(all-equations-available(Name?)).
+    MDB-AllEquationsAvailable(Modules?) 
+    if equal(Missing, []) then
+      snd-msg(equations-available)
+    else
+      snd-msg(equations-incomplete)
+    fi
+  +
+
+    (
+      rec-msg(get-all-sdf2-definitions(eqs(Name?)))
+    +
+      rec-msg(get-all-sdf2-definitions(trm(Name?)))
+    ) .
+    printf("DEBUG: returning all modules instead of just the imported\n") .
+    snd-msg(ts-get-all-values("sdf-tree")) .
+    rec-msg(ts-all-values([Modules?])) .
+    snd-msg(sm-make-sdf-definition(Modules)) .
+    rec-msg(sm-sdf-definition(Syntax?)) .
+    snd-msg(syntax(Syntax))
+  +
+    rec-msg(get-sdf2-asfix(Name?)).
+    snd-msg(ts-get-value("sdf-tree", Name))
+    (
+      rec-msg(ts-value([Syntax?])) .
+      snd-msg(syntax(Syntax))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(unavailable)
+    )
+  +
+    rec-msg(get-eqs-tree(Name?)).
+    snd-msg(ts-get-value("asf-tree", Name))
+    (
+      rec-msg(ts-value([EqsTree?])) .
+      snd-msg(tree(EqsTree))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(unavailable)
+    )
+  +
+    rec-msg(get-equations-for-module(Name?)).
+    printf("DEBUG: get-equations needs to be implemented quite differently\n") .
+    snd-msg(no-equations) .
+  +
+    rec-msg(get-equations-for-renamed-import(Import?, Renamings?)) .
+    printf("DEBUG: this message will dissappear\n") .
+    snd-msg(no-equations)
+  +
+    rec-msg(invalidate-parse-tables(Name?)).
+    MDB-InvalidateParseTables(Name)
+  +
+    rec-msg(get-module-info(Name?)) .
+    snd-msg(ts-get-value("module-paths", Name)) .
+    (
+      rec-msg(ts-value([Path?])) .
+      snd-msg(module-info(Name, [[path, Path]]))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(module-info(Name, [[path,"not-available"]]))
+    )   
+) *
+delta
+endlet
+
+process MDB-InitializeModuleDb is
+  snd-msg(ts-add-table("extensions")) .
+  snd-msg(ts-add-table("active-modules")) .
+  snd-msg(ts-add-table("module-paths")) .
+  snd-msg(ts-add-table("sdf-tree")) .
+  snd-msg(ts-add-table("sdf-text")) .
+  snd-msg(ts-add-table("asf-tree")) .
+  snd-msg(ts-add-table("asf-text")) .
+  snd-msg(ts-add-table("asf-parse-table")) .
+  snd-msg(ts-add-table("term-parse-table"))
+
+process MDB-ClearModuleDb is
+  snd-msg(ts-clear-table("extensions")) .
+  snd-msg(ts-clear-table("active-modules")) .
+  snd-msg(ts-clear-table("module-paths")) .
+  snd-msg(ts-clear-table("sdf-tree")) .
+  snd-msg(ts-clear-table("sdf-text")) .
+  snd-msg(ts-clear-table("asf-tree")) .
+  snd-msg(ts-clear-table("asf-text")) .
+  snd-msg(ts-clear-table("asf-parse-table")) .
+  snd-msg(ts-clear-table("term-parse-table"))
+
+process MDB-InitializeFileExtensions is
+let
+  SyntaxExt : str,
+  RulesExt : str,
+  TermExt : str
+in  
+  snd-msg(get-file-extensions) .
+  rec-msg(set-file-extensions(syntax(SyntaxExt?),
+                              rules(RulesExt?),
+			      term(TermExt?))) .
+  snd-msg(ts-put-value("syntax", [SyntaxExt])) .
+  snd-msg(ts-put-value("equations", [RulesExt])) .
+  snd-msg(ts-put-value("term", [TermExt]))
+endlet
+ 
+process MDB-GetAllDependingModules(Name : str, Depending : list?) is
+let
+  Modules : list
+in
+    snd-msg(ts-get-all-values("sdf-tree")) .
+    rec-msg(ts-all-values(Modules?)) .
+    snd-msg(sm-get-all-depending-modules(Modules, Name)) .
+    rec-msg(sm-all-depending-modules(Depending?)) 
+endlet
+
+process MDB-GetAllImportedModules(Name : str, Imported : list?) is
+let
+  Modules : list
+in
+    snd-msg(ts-get-all-values("sdf-tree")) .
+    rec-msg(ts-all-values(Modules?)) .
+    snd-msg(sm-get-all-imports(Modules, Name)) .
+    rec-msg(sm-all-imports(Imported?))
+endlet
+
+process MDB-GetImportedModules(Name : str, Imported : list?) is
+let
+  Syntax : term
+in
+    snd-msg(ts-get-value("sdf-tree"), Name) .
+    rec-msg(ts-value([Syntax?])) .
+    snd-msg(sm-all-imports(Syntax)) .
+    rec-msg(sm-all-imports(Imported?))
+endlet
+
+process MDB-RemoveImportFromModules(Name : str, Modules : list) is
+let
+  Module : str
+in
+    if not(equal(Modules,[])) then
+      Module := first(Modules) .
+      Modules := next(Modules) .
+      ts-get-value("sdf-tree", Module) .
+      sm-remove-import-from-module(Module, Name) .
+      sm-import-removed-from-module(Module?) .
+      ts-put-value("sdf-tree", Module)
+    fi
+    *
+    if equal(Modules,[]) then
+      tau
+    fi 
+endlet
+
+process MDB-RetrieveImportGraph(Nodes : list?, Edges : list?) is
+let
+  Modules : list
+in
+    snd-msg(ts-get-all-values("sdf-tree")) .
+    rec-msg(ts-all-values(Modules?)) .
+    snd-msg(sm-get-import-graph(Modules)) .
+    rec-msg(sm-import-graph(Nodes?,Edges?)) 
+endlet
+
+process MDB-AllEquationsAvailable(Missing :list ? is
+let
+  Modules : list,
+  Module  : str
+  Text    : str,
+  Tree    : term
+in
+  snd-msg(ts-get-all-keys("active-modules")) .
+  rec-msg(ts-all-keys(Modules?)) .
+  Missing := [] .
+  if not(equal(Modules, [])) then
+    Module := first(Modules) .
+    Modules := next(Modules) .
+    snd-msg(ts-get-value("sdf-text", Module)) . 
+    (
+      rec-msg(ts-no-value)
+    +
+      rec-msg(ts-value([Text?])) .
+      snd-msg(ts-get-value("sdf-tree", Module)) .
+      (
+        rec-msg(ts-no-value) .
+	Missing := join(Module, Missing)
+      +
+        rec-msg(ts-value([Tree?]))
+      )
+    )
+  fi
+  * 
+  if equal(Modules, []) then
+    tau
+  fi
+
