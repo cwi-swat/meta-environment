@@ -632,7 +632,8 @@ $Error]>
       ===========================================
       check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
 
-
+[check-assert]
+	check-stat(assert $String : $Exp, $Tenv) = require-type($Exp, bool, $Tenv)
 
 %% --- Check set of equations
 
@@ -771,27 +772,27 @@ $Error]>
 %% -- The types of the built-in functions
 
 [bi-1]  built-ins = [
-		<id,      fun bag[T] to rel[T,T]>,
-      		<domain,  fun [ rel[T1,T2] ] to bag[T1]>,
-     		<range,   fun [ rel[T1,T2] ] to bag[T2]>,
-       		<carrier, fun [ rel[T,T] ] to bag[T]>,
-		<top,     fun [ rel[T,T] ] to bag[T]>,
-		<bottom,  fun[ rel[T,T] ] to bag[T]>,
-       		<inv,     fun [ rel[T1,T2] ] to rel[T2,T1]>,
-		<compl,   fun [ rel[T1, T2] ] to rel[T1,T2]>,
+		<id,      fun [ bag[T] ] 			to rel[T,T]>,
+      		<domain,  fun [ rel[T1,T2] ] 			to bag[T1]>,
+     		<range,   fun [ rel[T1,T2] ] 			to bag[T2]>,
+       		<carrier, fun [ rel[T,T] ] 			to bag[T]>,
+		<top,     fun [ rel[T,T] ] 			to bag[T]>,
+		<bottom,  fun [ rel[T,T] ] 			to bag[T]>,
+       		<inv,     fun [ rel[T1,T2] ] 			to rel[T2,T1]>,
+		<compl,   fun [ rel[T1, T2] ] 			to rel[T1,T2]>,
 
-       		<domR,    fun [ rel[T1,T2], bag[T1] ] to rel[T1,T2]>,
-       		<ranR,    fun [ rel[T1,T2], bag[T2] ] to rel[T1,T2]>,
-       		<carR,    fun [ rel[T,T], bag[T] ] to rel[T,T]>,
+       		<domR,    fun [ rel[T1,T2], bag[T1] ]		to rel[T1,T2]>,
+       		<ranR,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
+       		<carR,    fun [ rel[T,T], bag[T] ] 		to rel[T,T]>,
 
-       		<domX,    fun [ rel[T1,T2], bag[T1]] to rel[T1,T2]>,
-       		<ranX,    fun [ rel[T1,T2], bag[T2]] to rel[T1,T2]>,
-       		<carX,    fun [rel[T,T], bag[T]] to rel[T,T]>,
-                <fst,     fun [ <T1,T2>] to T1>,
-                <sec,     fun [ <T1,T2> ] to T2>,
+       		<domX,    fun [ rel[T1,T2], bag[T1] ] 		to rel[T1,T2]>,
+       		<ranX,    fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
+       		<carX,    fun [	rel[T,T], bag[T] ] 		to rel[T,T]>,
+                <fst,     fun [ <T1,T2>] 			to T1>,
+                <sec,     fun [ <T1,T2> ] 			to T2>,
 
-                <reachX,  fun [ bag[T], bag[T], rel[T,T] ] to rel[T,T] >,
-                <reachR,  fun [ bag[T], bag[T], rel[T,T] ] to rel[T,T] >
+                <reachX,  fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
+                <reachR,  fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >
 
         ]
 
