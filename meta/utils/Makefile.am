@@ -13,8 +13,6 @@ data_DATA          = lang.types
 
 noinst_LIBRARIES   = libutils.a
 
-TESTS              = perform-test
-
 EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src test-help test-version \
