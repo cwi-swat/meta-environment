@@ -30,7 +30,7 @@ Id := process-id.
     (
       rec-msg(syntax(Syntax?)).
 
-      snd-msg(check-sdf(Syntax)) .
+      snd-msg(check-asfsdf(Syntax)) .
       rec-msg(messages(Msgs?)) .
       snd-msg(display-sdf-errors(Msgs)) .
 
