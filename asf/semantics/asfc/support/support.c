@@ -528,23 +528,49 @@ static aterm *make_asfix_list_sep(arena *ar, aterm_list *l,
   * Build an asfix lex from a list of characters.
   */
 
+static int get_list_length(aterm_list *chars)
+{
+  int len = 0;
+  while(!t_is_empty(chars)) {
+    aterm *el = t_list_first(chars);
+    chars = t_list_next(chars);
+    if(t_is_list(el))
+      len += get_list_length(el);
+    else
+      len++;
+  }
+  return len;
+}
+
+static char *get_chars_from_list(char *buf, aterm_list *chars)
+{
+  while(!t_is_empty(chars)) {
+    aterm *el = t_list_first(chars);
+    chars = t_list_next(chars);
+    if(t_is_list(el))
+      buf = get_chars_from_list(buf, el);
+    else
+      *buf++ = t_int_val(el);
+  }
+  return buf;
+}
+
 static aterm *make_asfix_lex(arena *ar, aterm_list *chars, aterm *sort)
 {
-  char *buf;
-  int i, len = TlistSize(chars);
+  char *buf, *end;
+  aterm *result;
+  int len = get_list_length(chars);
+
   buf = malloc(len+1);
   if(!buf) {
     fatal_error("out of memory trying to allocate lex of %d chars\n", len);
     exit(1);
   }
-  i = 0;
-  while(!t_is_empty(chars)) {
-    buf[i++] = t_int_val(t_list_first(chars));
-    chars = t_list_next(chars);
-  }
-  buf[i] = '\0';
-
-  return TmakeTerm(ar, pattern_asfix_lex, buf, sort);
+  end = get_chars_from_list(buf, chars);
+  *end = '\0';
+  result = TmakeTerm(ar, pattern_asfix_lex, buf, sort);
+  free(buf);
+  return result;
 }
 
 /*}}}  */
@@ -704,11 +730,15 @@ void init_patterns(arena *ar)
 /*}}}  */
 
 /*{{{  list access functions */
+
 aterm *null()
 {
   t_protect(t_empty(w));
   return t_empty(w);
 }
+
+#ifndef DONT_NORMALIZE_LISTS
+/*{{{  Version with list normalization */
 
 aterm *list_head(aterm_list *l)
 {
@@ -726,8 +756,8 @@ aterm_list *list_tail(aterm_list *l)
 
 aterm_list *cons(aterm_list *l1, aterm_list *l2)
 {
-  aterm_list *old, *result, *oldl1;
-  int i, len, entries;
+  aterm_list *old, *result;
+  int i;
 
   if(t_is_empty(l2)) {
     /* For efficiency reasons, no need to traverse l1 when l2 is empty */
@@ -736,36 +766,12 @@ aterm_list *cons(aterm_list *l1, aterm_list *l2)
   }
 
   result = l2;
-
-  oldl1 = l1;
-  len = TlistSize(l1)-1;
-  entries = MIN(len, MAX_STORE);
-  for(i=0; i<entries; i++) {
-    term_store[i] = t_list_first(l1);
-    l1 = t_list_next(l1);
-  }
-
-  for(i=TlistSize(l1)-1; i>=0; i--) {
-    old = result;
-    result = TbuildList(w, TlistIndex(l1, i), result);
-    t_unprotect(old);
-  }
-
-  for(i=entries-1; i>=0; i--) {
-    old = result;
-    result = TbuildList(w, term_store[i], result);
-    t_unprotect(old);
-  }
-
-/*
   for(i=TlistSize(l1)-1; i>=0; i--) {
     old = result;
     result = TbuildList(w, TlistIndex(l1, i), result);
     t_unprotect(old);
   }
   t_unprotect(l1);
-*/
-  t_unprotect(oldl1);
   return result;
 }
 
@@ -818,10 +824,208 @@ aterm_list *list_prefix(aterm_list *l)
 }
 
 /*}}}  */
+#else
+/*{{{  Version without list normalization */
+
+/*{{{  aterm *list_head(aterm_list *l) */
+
+aterm *list_head(aterm_list *l)
+{
+  aterm_list *tmp = l;
+
+  while(t_is_list(tmp))
+    tmp = t_list_first(tmp);
+
+  t_protect(tmp);
+  t_unprotect(l);
+  return tmp;
+}
+
+/*}}}  */
+/*{{{  aterm_list *list_tail(aterm_list *l) */
+
+static aterm_list *get_tail(aterm_list *l)
+{
+  if(t_is_list(t_list_first(l))) {
+    aterm_list *tail = get_tail(t_list_first(l));
+    if(t_is_empty(tail)) {
+      /* The first list consists of a single element, wrapped in a number
+	 of lists. We can just return the tail of the list. */
+      t_protect(t_list_next(l));
+      t_unprotect(tail);
+      return t_list_next(l);
+    } else {
+      return TbuildList(w, tail, t_list_next(l));
+    }
+  }
+  /* We can now remove the first element, which is not a list. */
+  t_protect(t_list_next(l));
+  return t_list_next(l);
+}
+
+aterm_list *list_tail(aterm_list *l)
+{
+  aterm_list *result;
+  if(t_is_empty(l))
+    return l;
+
+  result = get_tail(l); 
+  t_unprotect(l);
+  return result;
+}
+
+/*}}}  */
+/*{{{  aterm_list *cons(aterm_list *l1, aterm_list *l2) */
+
+aterm_list *cons(aterm_list *l1, aterm_list *l2)
+{
+  aterm_list *result;
+
+  if(t_is_empty(l1)) {
+    t_unprotect(l1);
+    return l2;
+  } 
+  if(t_is_empty(l2)) {
+    t_unprotect(l2);
+    return l1;
+  }
+  result = TbuildList(w, l1, l2);
+  t_unprotect(l1);
+  t_unprotect(l2);
+  return result;
+}
+
+/*}}}  */
+/*{{{  static aterm *get_last(aterm_list *l) */
+
+static aterm *get_last(aterm_list *l)
+{
+  while(!t_is_empty(t_list_next(l)))
+    l = t_list_next(l);
+  return t_list_first(l);
+}
+
+/*}}}  */
+/*{{{  aterm *list_last(aterm_list *l) */
+
+aterm *list_last(aterm_list *l)
+{
+  aterm_list *tmp = l;
+
+  while(t_is_list(tmp))
+    tmp = get_last(tmp);
+  t_protect(tmp);
+  t_unprotect(l);
+  return tmp;
+}
+
+/*}}}  */
+/*{{{  static aterm_list *replace_last(aterm_list *l, aterm *t) */
+
+static aterm_list *replace_last(aterm_list *l, aterm *t)
+{
+  aterm_list *old, *result;
+  int i, entries, len;
+  
+  result = TbuildList(w, t, t_empty(w));
+
+  len = TlistSize(l)-1;
+  entries = MIN(len, MAX_STORE);
+
+  for(i=0; i<entries; i++) {
+    term_store[i] = t_list_first(l);
+    l = t_list_next(l);
+  }
+
+  for(i=TlistSize(l)-2; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, TlistIndex(l, i), result);
+    t_unprotect(old);
+  }
+
+  for(i=entries-1; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, term_store[i], result);
+    t_unprotect(old);
+  }
+
+  return result;  
+}
+
+/*}}}  */
+/*{{{  static aterm_list *delete_last(aterm_list *l) */
+
+static aterm_list *delete_last(aterm_list *l)
+{
+  aterm_list *old, *result;
+  int i, entries, len;
+  
+  result = t_empty(w);
+  t_protect(result);
+  len = TlistSize(l)-1;
+  entries = MIN(len, MAX_STORE);
+
+  for(i=0; i<entries; i++) {
+    term_store[i] = t_list_first(l);
+    l = t_list_next(l);
+  }
+
+  for(i=TlistSize(l)-2; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, TlistIndex(l, i), result);
+    t_unprotect(old);
+  }
+
+  for(i=entries-1; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, term_store[i], result);
+    t_unprotect(old);
+  }
+
+  return result;
+}
+
+/*}}}  */
+/*{{{  aterm_list *get_prefix(aterm_list *l) */
+
+aterm_list *get_prefix(aterm_list *l)
+{
+  aterm_list *last;
+
+  last = get_last(l);
+  if(t_is_list(last)) {
+    aterm_list *prefix = get_prefix(last);
+    if(!t_is_empty(prefix))
+      return replace_last(l, prefix);
+  }
+  return delete_last(l);
+}
+
+/*}}}  */
+/*{{{  aterm_list *list_prefix(aterm_list *l) */
+
+aterm_list *list_prefix(aterm_list *l)
+{
+  aterm_list *result;
+  if(t_is_empty(l))
+    return l;
+
+  result = get_prefix(l);
+  t_unprotect(l);
+  return result;
+}
+
+/*}}}  */
+
+/*}}}  */
+#endif
+
+/*}}}  */
 /*{{{  aterm *term_equal(aterm *t1, aterm *t2) */
 
 /* Test for equality on terms. */
 
+#ifndef DONT_NORMALIZE_LISTS
 extern Tbool term_equal(aterm *t1, aterm *t2)
 {
   if(t_equal(t1, t2)) {
@@ -833,6 +1037,89 @@ extern Tbool term_equal(aterm *t1, aterm *t2)
   t_unprotect(t2);
   return Tfalse;
 }
+#else
+
+static Tbool list_equality(aterm *t1, aterm *t2);
+
+static Tbool equality(aterm *t1, aterm *t2)
+{
+  if(t_equal(t1,t2))
+    return Ttrue;
+
+  if(t_type(t1) != t_type(t2))
+    return Tfalse;
+
+  switch(t_type(t1)) {
+    case trm_appl: return (t_appl_sym(t1) == t_appl_sym(t2)) &&
+		          equality(t_appl_args(t1), t_appl_args(t2));
+    case trm_list: return list_equality(t1, t2);
+
+    default: return t_equal(t1, t2);
+  }
+  return 0;
+}
+
+static aterm *get_list_element(aterm_list *l, int idx)
+{
+  while(1) {
+    aterm *head = t_list_first(l);
+    l = t_list_next(l);
+    if(t_is_list(head)) {
+      int size = get_list_length(head);
+      if(idx >= size) {
+	idx -= size;
+      } else {
+	l = head;
+      }
+    } else {
+      if(idx-- == 0)
+	return head;
+    }
+  }
+}
+
+static Tbool list_equality(aterm *t1, aterm *t2)
+{
+  int i, size = get_list_length(t1);
+  if(get_list_length(t2) != size)
+    return Tfalse;
+
+  for(i=0; i<size; i++) {
+    if(!equality(get_list_element(t1, i), get_list_element(t2, i)))
+      return Tfalse;
+  }
+  return Ttrue;
+}
+
+/*
+static Tbool list_equality(aterm *t1, aterm *t2)
+{
+  int idx = 0;
+
+  do {
+    count = fill_store(idx, 0, MAX_STORE/2, t1);
+    if(fill_store(idx, MAX_STORE/2, MAX_STORE, t2) != count)
+      return Tfalse;
+
+    for(i=0; i<count; i++) {
+      if(!equality(term_store[i], term_store[MAX_STORE/2+i]))
+	return Tfalse;
+    }
+
+    idx += count;
+  } while(count == MAX_STORE/2);
+  return Ttrue;
+}
+*/
+
+extern Tbool term_equal(aterm *t1, aterm *t2)
+{
+  Tbool result = equality(t1, t2);
+  t_unprotect(t1);
+  t_unprotect(t2);
+  return result;
+}
+#endif
 
 /*}}}  */
 /*{{{  Tbool not_empty_list(aterm *l) */
@@ -858,8 +1145,10 @@ Tbool not_empty_list(aterm *l)
   * Check if a list is a singleton list.
   */
 
+#ifndef DONT_NORMALIZE_LISTS
 Tbool is_single_element(aterm_list *l)
 {
+
   if(t_is_list(l) && (!t_is_empty(l) && t_is_empty(t_list_next(l)))) {
     t_unprotect(l);
     return Ttrue;
@@ -867,6 +1156,21 @@ Tbool is_single_element(aterm_list *l)
   t_unprotect(l);
   return Tfalse;
 }
+#else
+Tbool is_single_element(aterm_list *l)
+{
+  aterm *tail;
+  Tbool result;
+  if(!t_is_list(l) || t_is_empty(l)) {
+    t_unprotect(l);
+    return Tfalse;
+  } 
+  tail = list_tail(l);
+  result = t_is_empty(tail);
+  t_unprotect(tail);
+  return result;
+}
+#endif
 
 /*}}}  */
 /*{{{  aterm_list *make_list(aterm *t) */
@@ -1475,4 +1779,87 @@ aterm *arg_15(aterm *appl)
   return result;
 }
 
+/*}}}  */
+/*{{{  Converting back to readable C-code */
+void ToC_code(aterm *asfix, FILE *file)
+{
+  int c, prev = ' ';
+  int instring = 0;
+  int escaped = 0;
+  int firststring = 1;
+  static char *buf = NULL;
+  char *bp;
+  static int bufsize = -1;
+
+  int size3 = 0, size2, size = AFsourceSize(asfix);
+  if(size > bufsize) {
+    if(buf)
+      free(buf);
+    buf = (char *)malloc(size+1);
+    if(!buf)
+      fatal_error("out of memory in PrettyPrint");
+    bufsize = size;
+  }
+  size2 = AFsource(asfix, buf);
+  if(size2 != size)
+    fatal_error("sizes don't match: %d != %d in PrettyPrint", size, size2);
+
+  bp = buf;
+  do {
+    size3++;
+    c = *bp++;
+  } while(c != '#');
+
+  while(c != '"') {
+    fputc(c, file);
+    size3++;
+    c = *bp++;
+  }
+  fputc(' ', file);
+  fputc(c, file);
+  size3++;
+  c = *bp++;
+
+   while(c != '"') {
+    fputc(c, file);
+    size3++;
+    c = *bp++;
+  }
+  fputs("\"\n", file);
+
+  do {
+    size3++;
+    c = *bp++;
+    if(c >= 0) {
+      if(!instring && c == '\n')
+        c = ' ';
+      if(!(instring || prev != ' ' || c != ' '))
+        ;
+      else
+        fputc(c, file);
+      prev = c;
+    }
+    if(instring) {
+      if(!escaped && c == '"') {
+        instring = 0;
+        if(firststring) {
+          firststring = 0;
+          fputc('\n', file);
+        }
+      }
+      escaped = 0;
+      if(!escaped && c == '\\')
+        escaped = 1;
+    } else {
+      if(c == '"')
+        instring = 1;
+      else {
+        if(c == ';' || c == '}' || c == '{') {
+          fputc('\n', file);
+          prev = ' ';
+        }
+      }
+    }
+  } while(size3 != size);
+}
 /*}}}  */

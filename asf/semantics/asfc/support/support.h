@@ -93,6 +93,8 @@ extern aterm *arg_13(aterm *appl);
 extern aterm *arg_14(aterm *appl);
 extern aterm *arg_15(aterm *appl);
 
+extern void ToC_code(aterm *asfix, FILE *file);
+
 extern void register_all();
 extern void resolve_all();
 

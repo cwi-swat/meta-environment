@@ -674,88 +674,6 @@ Tprintf(stderr,"Creating new module: %t\n",newmod);
   return result;
 }
 
-void ToC_code(aterm *asfix, FILE *file)
-{
-  int c, prev = ' ';
-  int instring = 0;
-  int escaped = 0;
-  int firststring = 1;
-  static char *buf = NULL;
-  char *bp;
-  static int bufsize = -1;
-
-  int size3 = 0, size2, size = AFsourceSize(asfix);
-  if(size > bufsize) {
-    if(buf)
-      free(buf);
-    buf = (char *)malloc(size+1);
-    if(!buf)
-      fatal_error("out of memory in PrettyPrint");
-    bufsize = size;
-  }
-  size2 = AFsource(asfix, buf);
-  if(size2 != size)
-    fatal_error("sizes don't match: %d != %d in PrettyPrint", size, size2);
- 
-  bp = buf;
-  do {
-    size3++;
-    c = *bp++;
-  } while(c != '#');
-
-  while(c != '"') {
-    fputc(c, file);
-    size3++;
-    c = *bp++;
-  }
-  fputc(' ', file);
-  fputc(c, file);
-  size3++;
-  c = *bp++;
-
-   while(c != '"') {
-    fputc(c, file);
-    size3++;
-    c = *bp++;
-  }
-  fputs("\"\n", file);
-
-  do {
-    size3++;
-    c = *bp++;
-    if(c >= 0) {
-      if(!instring && c == '\n')
-        c = ' ';
-      if(!(instring || prev != ' ' || c != ' '))
-        ;
-      else
-        fputc(c, file);
-      prev = c;
-    }
-    if(instring) {
-      if(!escaped && c == '"') {
-        instring = 0;
-        if(firststring) {
-          firststring = 0;
-          fputc('\n', file);
-        }
-      }
-      escaped = 0;
-      if(!escaped && c == '\\')
-        escaped = 1;
-    } else {
-      if(c == '"')
-        instring = 1;
-      else {
-        if(c == ';' || c == '}' || c == '{') {
-          fputc('\n', file);
-          prev = ' ';
-        }
-      }
-    }
-  } while(size3 != size);
-}
-
 void compile_module(int cid,arena *ar,aterm_list *newmods)
 {
   char *text, *fname;
@@ -825,6 +743,7 @@ Tprintf(stderr,"Reducing finished.\n");
         aname  = Tmake(ar,"l(<str>)",fname);
         idname = TmakeSimple(ar,"id(\"AsFix2C\")");
         cmod = toasfix(ar, reduct, aname, idname);
+Tprintf(stderr,"toasfix finished.\n");
         free(fname);
         len = strlen(path) + strlen(text) + strlen(".c");
         fname = malloc(len + 1);
@@ -842,6 +761,7 @@ Tprintf(stderr,"Reducing finished.\n");
         else {
           /*AFsourceToFile(cmod,output);*/
           ToC_code(cmod,output);
+Tprintf(stderr,"ToC_code finished.\n");
           Tprintf(output, "\n");
           fclose(output);
         }

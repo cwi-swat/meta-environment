@@ -1440,6 +1440,10 @@ aterm *expand_asfix_prod(arena *ar, aterm *prod)
   if(b)
     return b->result;
 
+  if(!TmatchTerm(prod,pattern_asfix_prod,
+                 &id,&w[0],&prodargs,&w[1],&lit,&w[2],&term,&w[3],&attrs)) {
+    Tprintf(stderr,"expand_asfix_prod entered with %t\n", prod);
+  }
   assertp(TmatchTerm(prod,pattern_asfix_prod,
                  &id,&w[0],&prodargs,&w[1],&lit,&w[2],&term,&w[3],&attrs));
   args = make_aterm_aterms_to_aterms_appl(ar,
