@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/22 ({markvdb,jurgenv}@cwi.nl)
+ * Changed is-valid-modulename-in-path to is-valid-modulename
+ * Get-filename does not generate files with double '/' separators anymore
+
 2003/07/18 (jurgenv@cwi.nl)
  * Removed an unnecessary ATBunpack
 

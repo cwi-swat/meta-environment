@@ -174,19 +174,21 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
   for (; !ATisEmpty(search); search = ATgetNext(search)) {
     char *firstPath = ATgetName(ATgetAFun((ATermAppl) ATgetFirst(search)));
     int len = strlen(firstPath);
-    char end = path[len];
 
-    path[len] = '\0';
+    if (strlen(path) >= len) {
+      char end = path[len];
+      path[len] = '\0';
 
-    if (end == SEP) { 
-      if (!strcmp(path, firstPath)) {
-	if (strlen(chosenPath) < strlen(firstPath)) {
-	  strcpy(chosenPath,firstPath);
+      if (end == SEP || end == '\0') { 
+	if (!strcmp(path, firstPath)) {
+	  if (strlen(chosenPath) < strlen(firstPath)) {
+	    strcpy(chosenPath,firstPath);
+	  }
 	}
       }
-    }
 
-    path[len] = end;
+      path[len] = end;
+    }
   }
 
   if (strcmp(chosenPath,"")) {
@@ -203,6 +205,7 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
 		  chosenId);
   }
   else {
+    ATwarning("here\n");
     return ATmake("snd-value(module-name-inconsistent)");
   }
 }
@@ -246,25 +249,15 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
 
 /*}}}  */
 
-/*{{{  ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName) */
+/*{{{  ATerm is_valid_modulename(int cid, char* path, char *moduleName) */
 
-ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName)
+ATerm is_valid_modulename(int cid, char *moduleName)
 {
   int j;
-/*
-  int i,j;
-  int pathlen = strlen(path);
-*/
   int namelen = strlen(moduleName);
   ATerm no = ATmake("snd-value(result(no))");
   ATerm yes = ATmake("snd-value(result(yes))");
  
-/*
-  for(i=pathlen - 1, j=namelen - 1; i >= 0 && j >= 0; i--, j--) {
-    if (moduleName[j] != path[i]) {
-      return no;
-    }
-*/
   for(j=namelen - 1; j >= 0; j--) {
     if (!isalnum((int)moduleName[j])
         && moduleName[j] != '-'

@@ -80,8 +80,8 @@ in
     snd-msg(sm-sdf-definition(Definition)) .
     Definition := no-tree
   +
-    rec-msg(sm-is-valid-modulename-in-path(Path?, ModuleId?)) .
-    snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
+    rec-msg(sm-is-valid-modulename(ModuleId?)) .
+    snd-eval(SM, is-valid-modulename(ModuleId)) .
     (
       rec-value(SM, result(yes)) .
       snd-msg(sm-modulename-is-valid)
