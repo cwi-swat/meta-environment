@@ -22,8 +22,6 @@ Parameters:
   
   -i | --input  <FILE>    specify input specification      [unspecified]
   -o | --output <FILE>    specify name of generated ADT    [default: <IN>.adt]
-  -e | --expand-cons      propagate cons-annotations       [on]
-  -r | --remove-cons      remove cons-annotations          [off]
   -t | --table <FILE>     override APIGEN-parsetable       [see below]
   -l | --label <FILE>     override labeling equations      [see below]
   -g | --generator <FILE> override compiled generator      [see below]
@@ -38,7 +36,7 @@ Default locations:
   Standard generator = ${SDF2TOADT}
   Imploded generator = ${SDF2IMPL}
 
-Example: ${PRG} --remove-cons -i Booleans.sdf -o Booleans.adt
+Example: ${PRG} -i Booleans.sdf -o Booleans.adt
 
 ENDCAT
 }
@@ -95,7 +93,6 @@ OUTPUT=""
 VERBOSE=0
 CLEANUP=1
 IMPLODED=0
-CONSOPT='cons-expand'
 
 # data needed
  APITABLE=${PKGDATA}/Sdf2-to-ADT.trm.tbl
@@ -119,12 +116,6 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
-    -e | --expand-cons)
-      CONSOPT='cons-expand' ;;
-
-    -r | --remove-cons)
-      CONSOPT='cons-remove' ;;
-
     -i | --input)
       shift; INPUT=$1 ;;
 
@@ -179,7 +170,7 @@ if [ ${IMPLODED} -eq 1 ]; then
   FUNC="sdf-to-imploded-adt"
 else
   GENERATOR=${SDF2TOADT}
-  FUNC="sdf-to-asfix2me-adt-${CONSOPT}"
+  FUNC="sdf-to-asfix2me-adt"
 fi
 
 # }}}

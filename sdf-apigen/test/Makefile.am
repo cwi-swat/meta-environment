@@ -51,7 +51,7 @@ Booleans.c Booleans.h: Booleans.sdf
 		--verbose
 
 booltest.pt: Booleans.trm.tbl booltest.trm 
-	${SGLR} -p Booleans.trm.tbl -i ${top_srcdir}/test/booltest.trm -o $@
+	${SGLR} -2t -p Booleans.trm.tbl -i ${top_srcdir}/test/booltest.trm -o $@
 
 %.trm.tbl: %.sdf
 	${SDF2TABLE} -m `basename $< .sdf` -i $< -o $@

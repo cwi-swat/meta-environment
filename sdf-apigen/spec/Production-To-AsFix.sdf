@@ -1,0 +1,76 @@
+module Production-To-AsFix
+
+imports languages/sdf2/syntax/Sdf2
+imports Literals
+imports Parameterized-Symbols
+imports Symbols
+
+exports
+  context-free syntax
+    production-to-asfix(Production) -> ATerm
+    symbols-to-asfix ( Symbol* )    -> {ATerm ","}*
+    symbol-to-asfix ( Symbol )	    -> ATerm
+
+  context-free syntax
+    charclass-to-asfix(CharClass) -> ATerm
+    charranges-to-asfix(CharRanges) -> ATermList
+ 
+  context-free syntax
+    attrs-to-asfix ( Attributes )	-> ATerm
+    attr-list-to-asfix ( { Attribute "," }+ )	-> {ATerm ","}*
+    attr-to-asfix ( Attribute )			-> {ATerm ","}*
+
+hiddens
+  context-free syntax
+    "attr-to-asfix" -> AFun {reject}
+
+  context-free start-symbols
+	ATerm
+
+
+hiddens
+  variables
+	"_Symbol" -> Symbol {wild}
+	"_Symbol*" -> Symbol* {wild}
+	"_Attributes" -> Attributes {wild}
+	"_Label" -> Literal {wild}
+
+  variables
+	"$Symbol"[0-9]* -> Symbol {strict}
+
+  variables
+    "$AFSymbol" -> ATerm
+    "$AFSymbols" -> {ATerm ","}*
+    "$AFCharRanges"[0-9]* -> {ATerm ","}*
+
+    "$AFAttr"		-> ATerm
+    "$AFAttr+"[0-9]*	-> { ATerm "," }+
+    "$AFAttr*"[0-9]*	-> { ATerm "," }*
+    "$AFAttrs"		-> ATerm
+    "$AFProd"		-> ATerm
+    "$AFSep"		-> ATerm
+    "$AFSort"		-> Literal
+    "$ATerm"		-> ATerm
+    "$Attr"		-> Attribute
+    "$Attr*"[0-9]*	-> { Attribute "," }*
+    "$Attr+"		-> { Attribute "," }+
+    "$Attributes"	-> Attributes
+    "$Char*"[0-9]*	-> CHAR*
+    "$CharClass"[0-9]*  -> CharClass
+    "$CharRange"[0-9]*  -> CharRange
+    "$CharRanges"[0-9]* -> CharRanges
+    "$Label"		-> Literal
+    "$ListType"		-> AFun
+    "$Literal"		-> Literal
+    "$Production"	-> Production
+    "$Production*"	-> Production*
+    "$Sep"		-> Literal
+    "$Sort"[0-9]*	-> Sort
+    "$Symbol*"		-> Symbol*
+    "$Symbol+"		-> Symbol+
+    "$TypeId"		-> AFun
+    "$UQLit"		-> UQLiteral
+    "$QLit"		-> Literal
+    "$Attributes"	-> Attributes
+
+

@@ -1,0 +1,42 @@
+equations
+
+[with-args]
+ $QLit := get-cons($Symbol* -> $Symbol $Attributes),
+ $Treep := symbols-to-list($Symbol*)
+  ===>
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $QLit($Treep)
+
+[default-without-args]
+ $QLit := get-cons($Symbol* -> $Symbol $Attributes)
+ ===>
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $QLit
+
+equations
+
+[empty]
+ symbols-to-list() =
+
+[more]
+  $Trees1 := symbol-to-term($Symbol),
+  $Trees2 := symbols-to-list($Symbol*)
+  ===>
+  symbols-to-list($Symbol $Symbol*) = $Trees1, $Trees2
+
+equations
+
+[literal]
+  symbol-to-term(_Label:_Literal) = 
+
+[unlabeled-literal]
+  symbol-to-term(_Literal) = 
+
+[NatCon]
+  symbol-to-term($Label:NatCon) = <$Label(int)>
+
+[StrCon]
+  symbol-to-term($Label:StrCon) = <$Label(str)>
+
+[default-sort]
+  $Type := symbol-to-type($Label:$Symbol)
+  ===>
+  symbol-to-term($Label:$Symbol) = <$Label($Type)>

@@ -1,110 +1,89 @@
 module Sdf2-to-AsFix2ME-ADT
 
-imports UniqueLabels
-imports AddLabels
-imports Build-AsFix2ME-ADT 
+imports ATerm-Utils
+imports Parameterized-Symbols
+imports Production-To-Pattern
+imports Constructors
+
+ 
 
 exports
   context-free syntax
-    sdf-to-asfix2me-adt-cons-expand ( SDF ) -> ATerm
-    sdf-to-asfix2me-adt-cons-remove ( SDF ) -> ATerm
-
-    sdf-to-asfix2me-adt ( SDF, ConsOption )           -> ATerm
-    sdf-to-asfix2me-adt ( Module, ConsOption )        -> ATerm
-    sdf-module-to-asfix2me-adt ( Module, ConsOption ) -> ATerm
+    sdf-to-asfix2me-adt ( SDF )           -> ATerm
+    sdf-to-asfix2me-adt ( Module )        -> ATerm
+    sdf-module-to-asfix2me-adt ( Module ) -> ATerm
 
 context-free start-symbols
-  ATerm SDF 
+	ATerm
+	SDF 
 
-context-free syntax
-
-%% Literal -> Symbol {avoid}
-
-start-sorts-to-asfix2me-adt(Module) -> ATerm
-
-hiddens
-context-free syntax
-  "layout-adt" -> ATerm
-  "layout-adt" -> AFun {reject}
-  
-hiddens
-
-context-free syntax
-
-  collect-start-sorts(Module) -> Symbol*
-  collect-start-sorts(Module, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
-  collect-start-sorts(Grammar, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
- collect-start-sorts(Section, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
-  
-
-  start-sorts-to-adt(Symbol*) -> ATerm
-  start-sorts-to-adt(Symbol*, ATerm) -> ATerm 
-  start-sort-to-adt(Symbol, ATerm)    -> ATerm
 
 hiddens
 
   context-free syntax
-    section-to-adt ( ModuleName, Section, ConsOption )		-> {ATerm ","}*
-    grammar-to-adt ( ModuleName, Grammar, ConsOption )		-> {ATerm ","}*
-    productions-to-adt ( ModuleName, Production*, ConsOption )	-> {ATerm ","}*
-    production-to-adt ( ModuleName, Production, ConsOption )	-> {ATerm ","}*
-    lexicals-to-adt ( ModuleName, Production*, ConsOption )	-> {ATerm ","}*
-    lexical-to-adt ( ModuleName, Production, ConsOption )	-> {ATerm ","}*
+    grammars-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    grammars-to-adt (Grammar, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
 
-    build-list-entries ( Symbol* )			-> {ATerm ","}*
+    lists-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Grammar,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Symbol, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+
+    productions-to-adt (Production*)	-> {ATerm ","}*
+    production-to-adt (Production)	-> {ATerm ","}*
+
+    parameters-to-adt(Symbol*) -> {ATerm ","}*
+
+  context-free syntax
+
+    start-symbol-to-adt(Symbol) -> ATerm
+    "layout-adt()"              -> ATerm
 
 
-  variables
-    "$ADT"[0-9]*	-> ATerm
-    "$AFArg"		-> ATerm
-    "$AFArgs"		-> { ATerm "," }*
-    "$AFAttr"		-> ATerm
-    "$AFAttr+"[0-9]*	-> { ATerm "," }+
-    "$AFAttr*"[0-9]*	-> { ATerm "," }*
-    "$AFAttrs"		-> ATerm
-    "$AFIter"		-> ATerm
-    "$AFModName"	-> Literal
-    "$AFProd"		-> ATerm
-    "$AFSep"		-> ATerm
-    "$AFSort"		-> Literal
-    "$AltId"		-> AFun
-    "$ATerm"		-> ATerm
-    "$Attr"		-> Attribute
-    "$Attr*"[0-9]*	-> { Attribute "," }*
-    "$Attr+"		-> { Attribute "," }+
-    "$Attributes"	-> Attributes
-    "$Char*"[0-9]*	-> CHAR*
-    "$ConsOption"	-> ConsOption
-    "$ElemSortName"	-> AFun
-    "$ElemType"		-> AFun
-    "$Entries"[0-9]*	-> { ATerm "," }*
-    "$Entry"		-> ATerm
-    "$FieldName"	-> Literal
-    "$FieldId"		-> AFun
-    "$FieldType"	-> AFun
-    "$FieldWs"		-> ATerm
-    "$Grammar"[0-9]*	-> Grammar
-    "$ImpSection*"	-> ImpSection*
-    "$Label"		-> Literal
-    "$ListType"		-> AFun
-    "$Literal"		-> Literal
-    "$ModName"		-> ModuleName
-    "$Module"		-> Module
-    "$LabeledModule"    -> Module
-    "$Module*"		-> Module*
-    "$ModId"[0-9]*      -> ModuleId
-    "$Production"	-> Production
-    "$Production*"	-> Production*
-    "$SDF"		-> SDF
-    "$Section"		-> Section
-    "$Section*"[0-9]* 	-> Section*
-    "$Sep"		-> Literal
-    "$Sort"[0-9]*	-> Sort
-    "$Symbol"		-> Symbol
-    "$Symbol*"[0-9]*    -> Symbol*
-    "$Symbol+"		-> Symbol+
-    "$TypeId"		-> AFun
-    "$UQLit"		-> UQLiteral
-    "$QLit"		-> Literal
-  
+
+variables
+	"$PreprocessedModule" -> Module {strict}
+	"$Production*"	-> Production* {strict}
+	"$Production"	-> Production {strict}
+	"$Tree" -> ATerm {strict}
+	"$Type"[0-9]* -> Literal {strict}
+	"$Sep"		-> Literal {strict}
+	"$Label"		-> Literal {strict}
+	"$Symbol"[0-9]*	-> Symbol {strict}
+	"$Symbol*"[0-9]*    -> Symbol* {strict}
+	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
+	"$Literal"		-> Literal {strict}
+	"$Attributes"	-> Attributes {strict}
+	"$Grammar" -> Grammar {strict}
+	"$Module" -> Module {strict}
+	"$LabeledModule" -> Module {strict}	
+	"$ADT"[0-9]* -> ATerm  {strict}
+	"$Section*"[0-9]* -> Section*  {strict}
+	"$Section" -> Section  {strict}
+	"$Entries"[0-9]* -> {ATerm ","}* {strict}
+	"$Entry"[0-9]* -> ATerm {strict}
+	"$Module*" -> Module* {strict}
+	"$QLit"	-> QLiteral {strict}
+	"$AltId" -> QLiteral {strict}
+
+variables
+	"_ImpSection*" -> ImpSection* {wild}
+	"_ModuleId" -> ModuleId {wild}
+	"_Symbol*"[0-9]*    -> Symbol* {wild}
+	"_Symbol"[0-9]*	-> Symbol {wild}	
+	"_Attr*"[0-9]* -> {Attribute","}* {wild}
+	"_Production*"	-> Production* {wild}
+	"_Production"	-> Production {wild}
+	"_Literal"		-> Literal {wild}
+	"_Attributes"	-> Attributes {wild}
+	"_Label" -> Literal {wild}
+	"_CharClass" -> CharClass {wild}
+	"_Priorities" -> Priorities {wild}
+	"_Restrictions" -> Restrictions {wild}
+
+
 

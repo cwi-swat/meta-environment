@@ -1,0 +1,134 @@
+equations
+
+[context-free-syntax]
+context-free syntax _production* := $grammar
+===>
+preprocess($grammar) = b[[l[[$grammar]]]]
+
+[lexical-syntax]
+lexical syntax _production* := $grammar
+===>
+preprocess($grammar) = b[[l[[$grammar]]]]
+
+
+equations
+
+[concat-labels]
+	$label1:$label2:$symbol = $label1 || "-" || $label2 : $symbol
+
+equations 
+
+[ignore-labels-when-generating-literal-syntax]
+	literals({_label:$literal}) = literals({$literal})
+
+tests
+
+[test-generation-of-literals]
+  l[[lexical syntax "aap":"Aap" -> Monkey]] ==
+  	lexical syntax "aap":"Aap" -> Monkey 
+  	syntax [\65] [\97] [\112] -> "Aap"
+
+equations 
+
+[symbol-projection-over-lexical-syntax]
+	symbols(lexical syntax $production*) = 
+	symbols(syntax $production*)
+
+[symbol-projection-over-context-free-syntax]
+	symbols(context-free syntax $production*) = 
+	symbols(syntax $production*)
+
+equations
+
+[quote-labels]
+	uqliteral($char*):$symbol = qliteral("""$char*"""):$symbol
+
+[quote-literal]
+	$symbol*1 $label:uqliteral($char*) $symbol*2 -> $symbol $attributes =
+	$symbol*1 $label:qliteral("""$char*""") $symbol*2 -> $symbol 
+		$attributes
+
+[push-out-labels-cf]
+	<$label:$symbol-CF> = $label:<$symbol-CF>
+
+[push-out-labels-lex]
+	<$label:$symbol-LEX> = $label:<$symbol-LEX>
+
+[un-cf-literals]
+	<$literal-CF> = $literal
+
+[un-lex-literal]
+	<$literal-LEX> = $literal
+
+[un-cf-charclass]
+	<$charclass-CF> = $charclass
+
+[un-lex-charclass]
+	<$charclass-LEX> = $charclass
+
+equations
+
+[nest-all-literals]
+	_production*1 $symbol*3 -> $literal $attributes2 _production*2 := 
+		$production*1 $production*2
+	===
+	syntax
+		$production*1
+		$symbol*1 $label:$literal $symbol*2 -> $symbol $attributes1
+		$production*2
+	=
+	syntax
+		$production*1
+		$symbol*1 $label:nested-literal($symbol*3 -> $literal $attributes2)
+			$symbol*2 -> $symbol $attributes1
+		$production*2 
+		
+
+equations
+
+[label-all-layout]
+	$symbol*1 $label:$symbol1 <LAYOUT?-CF> $symbol*2 -> $symbol2 
+		$attributes
+	=
+	$symbol*1 $label:$symbol1 
+		"ws-after-" || $label:<LAYOUT?-CF> $symbol*2 -> $symbol2 
+			$attributes
+
+equations
+
+  [label-sorts]
+	$symbol*1 sort($char*) $symbol*2 -> $symbol $attributes =
+	$symbol*1 qliteral("""$char*"""):sort($char*) $symbol*2 -> $symbol 
+		$attributes 
+
+  [label-iter]
+	$symbol*1 $symbol1 + $symbol*2 -> $symbol2 $attributes =
+	$symbol*1 "list":$symbol1 + $symbol*2 -> $symbol2 $attributes
+
+  [label-iter-star]
+	$symbol*1 $symbol1 * $symbol*2 -> $symbol2 $attributes =
+	$symbol*1 "list":$symbol1 * $symbol*2 -> $symbol2 $attributes
+
+  [label-iter-sep]
+	$symbol*1 {$symbol1 $symbol2}+ $symbol*2 -> $symbol3 $attributes =
+	$symbol*1 "list":{$symbol1 $symbol2} + $symbol*2 -> $symbol3 
+		$attributes
+
+  [label-iter-star-sep]
+	$symbol*1 {$symbol1 $symbol2}* $symbol*2 -> $symbol3 $attributes =
+	$symbol*1 "list":{$symbol1 $symbol2}* $symbol*2 -> $symbol3 $attributes
+
+
+  [label-literals]
+	$symbol*1 $literal $symbol*2 -> $symbol $attributes =
+	$symbol*1 $literal:$literal $symbol*2 -> $symbol $attributes
+
+
+  [label-lexical-sorts]
+	$symbol*1 <sort($char*)-LEX> $symbol*2 -> $symbol $attributes =
+	$symbol*1 qliteral("""$char*"""):<sort($char*)-LEX> 
+		$symbol*2 -> $symbol $attributes
+
+  [label-charclasses]
+	$symbol*1 $charclass $symbol*2 -> $symbol $attributes =
+	$symbol*1 "ch":$charclass $symbol*2 -> $symbol $attributes

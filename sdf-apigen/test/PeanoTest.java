@@ -13,7 +13,7 @@ public class PeanoTest {
 
   public PeanoTest(Factory factory) {
     this.factory = factory;
-    this.e = factory.makeOptLayout_Present(" ");
+    this.e = factory.makeOptLayout_Present(factory.makeLayout_LexToCf(factory.makeLexLayoutList(factory.makeLexLayout_Whitespace(' '))));
   }
 
   public Nat make(int n) {
@@ -46,7 +46,7 @@ public class PeanoTest {
   }
 
   public final static void main(String[] args) {
-    PeanoTest test = new PeanoTest(new Factory(new PureFactory()));
+    PeanoTest test = new PeanoTest(Factory.getInstance(new PureFactory()));
     test.run();
   }
 

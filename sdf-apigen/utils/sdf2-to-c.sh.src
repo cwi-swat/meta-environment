@@ -22,8 +22,6 @@ Parameters:
   -i | --input  <FILE>	    specify input specification      [?]
   -o | --output <STEM>	    generate <STEM>.[ch] etc.        [improvised]
   -P | --prefix <STR>	    specify API-prefix               [""]
-  -e | --expand-cons	    propagate cons-annotations       [on]
-  -r | --remove-cons	    remove cons-annotations          [off]
   -I | --imploded	    create API for imploded terms    [off]
   -C | --term-compatibility generate old term conv. macros   [off]
   -v | --verbose	    be verbose during generation     [off]
@@ -68,7 +66,6 @@ OUTPUT=""
 VERBOSE=0
 VERBOSEOPT=""
 IMPLODEDOPT=""
-CONSOPT='-e'
 PREFIX=""
 COMPATTERMOPT=""
 
@@ -89,12 +86,6 @@ do
   case $1 in
     -C | --term-compatibility)
       COMPATTERMOPT='--term-compatibility';;
-
-    -e | --expand-cons)
-      CONSOPT='-e';;
-
-    -r | --remove-cons)
-      CONSOPT='-r';;
 
     -i | --input)
       shift; INPUT=$1 ;;
@@ -150,7 +141,7 @@ err() {
 
 
 info " generating ${OUTPUT}.adt "
-${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
+${SDF2TOADT} ${IMPLODEDOPT} ${VERBOSEOPT} \
           -i ${INPUT} -o ${OUTPUT}.adt || err
 
 info " generating C from ADT "

@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Dec 17 13:44:24 CET 2004 <jurgenv@cwi.nl>
+ * Bumped to 3.0
+ * Reimplemented sdf-apigen. 
+ * Supports only structured lexicals from now on.
+
 Sat Dec 11 13:28:56 CET 2004 <jurgenv@cwi.nl>
  * spec/Makefile.am:
   - added TIDE_SUPPORT

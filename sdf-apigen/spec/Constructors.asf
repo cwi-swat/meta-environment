@@ -1,0 +1,31 @@
+equations
+
+[consed]
+ 	get-cons(_Symbol* -> _Symbol {_Attr*1, cons($QLit), _Attr*2}) =
+	$QLit
+
+[opt-cf-absent]
+	get-cons( -> <_Symbol?-CF> _Attributes) = "Absent"
+
+[opt-cf-present]
+	get-cons(_Label:<$Symbol-CF> -> <$Symbol?-CF> _Attributes) = "Present"
+
+[opt-lex-absent]
+	get-cons( -> <_Symbol?-LEX> _Attributes) = "Absent"
+
+[opt-lex-present]
+	get-cons(_Label:<$Symbol-LEX> -> <$Symbol?-LEX> _Attributes) = "Present"
+
+[lex-to-cf]
+	get-cons(_Label:<$Symbol-LEX> -> <$Symbol-CF> _Attributes) = "Lex-to-cf"
+
+[layout-lex-to-cf]
+	get-cons(_Label:<LAYOUT+-LEX>	-> <LAYOUT-CF>) = "Lex-to-cf"
+
+[bracket-rule]
+	"Default" == get-cons($Symbol* -> $Symbol {$Attr*1, $Attr*2}) 
+	===>
+	get-cons($Symbol* -> $Symbol {$Attr*1, bracket, $Attr*2}) = "Bracket"
+
+[default-nothing]
+	get-cons(_Production) = "Default"

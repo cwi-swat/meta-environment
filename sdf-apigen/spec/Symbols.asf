@@ -1,0 +1,83 @@
+equations
+
+[default-recursive-cf-without-label]
+	symbol-to-type(<$Symbol-CF>) = symbol-to-type($Symbol)
+
+[default-recursive-lex-without-label]
+	symbol-to-type(<$Symbol-LEX>) = "Lex-" || symbol-to-type($Symbol)
+
+[default-recursive-cf-with-label]
+	symbol-to-type($Label:<$Symbol-CF>) = symbol-to-type($Label:$Symbol)
+
+[default-recursive-lex-with-label]
+	symbol-to-type($Label:<$Symbol-LEX>) = 
+		"Lex-" || symbol-to-type($Label:$Symbol)
+
+[sort]
+	symbol-to-type(_Label:$Sort) = 
+	symbol-to-type($Sort)
+
+[sort-unlabelled]
+	symbol-to-type(sort($Char*)) = qliteral(""" $Char* """)
+
+[iter]
+	symbol-to-type($Label:$Symbol +) = 
+	symbol-to-type($Label:$Symbol) || "-" || $Label
+
+[iter-star]
+	symbol-to-type($Label:$Symbol *) = 
+	symbol-to-type($Label:$Symbol +)
+	
+[iter-sep]
+	symbol-to-type($Label:{$Symbol1 _Symbol2} +) =  
+	symbol-to-type($Label:$Symbol1 +)
+
+[iter-star-sep]
+	symbol-to-type($Label:{$Symbol1 _Symbol2} *) =  
+	symbol-to-type($Label:$Symbol1 +)
+
+[opt-layout-cf]
+	symbol-to-type(<LAYOUT?-CF>) = "OptLayout"
+
+[opt-layout-lex]
+	symbol-to-type(<LAYOUT?-LEX>) = "LexOptLayout"
+
+[opt-layout]
+	symbol-to-type(_Label:LAYOUT?) = "OptLayout"
+
+[opt-layout-cf-strip-label]
+	symbol-to-type(_Label:<LAYOUT?-CF>) =
+	symbol-to-type(<LAYOUT?-CF>)
+
+[opt-layout-lex-strip-label]
+	symbol-to-type(_Label:<LAYOUT?-LEX>) = 
+	symbol-to-type(<LAYOUT?-LEX>)
+
+[layout-cf]
+	symbol-to-type(_Label:<LAYOUT-CF>) = "Layout"
+
+[layout-lex]
+	symbol-to-type(_Label:<LAYOUT-LEX>) = "LexLayout"
+
+[layout-label]
+	symbol-to-type(_Label:LAYOUT) = "Layout"
+
+[layout]
+	symbol-to-type(LAYOUT) = "Layout"
+
+[formal-parameter]
+	symbol-to-type($Label:<$Symbol-PARAM>) =
+	symbol-to-type($Label:$Symbol)
+
+[formal-parameter]
+	symbol-to-type(<$Symbol-PARAM>) =
+	symbol-to-type($Symbol)
+
+
+[parameterized-sort]
+	symbol-to-type(_Label:$Sort[[$Symbol]]) = 
+	symbol-to-type($Sort) || "-" || symbol-to-type($Symbol) 
+
+[parameterized-sort]
+	symbol-to-type($Sort[[$Symbol]]) = 
+	symbol-to-type($Sort) || "-" || symbol-to-type($Symbol) 

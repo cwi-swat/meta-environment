@@ -1,0 +1,111 @@
+equations
+
+[main]
+  $AFProd := production-to-asfix($Symbol* -> $Symbol $Attributes),
+  $AFTrees := symbols-to-args($Symbol*)
+  ===>
+  production-to-tree($Symbol* -> $Symbol $Attributes) =
+	appl($AFProd, [$AFTrees])
+
+equations
+
+[empty]
+  symbols-to-args() =
+
+[single]
+  symbols-to-args($Symbol) = symbol-to-tree($Symbol)
+
+[divide]
+  $AFTree := symbol-to-tree($Symbol),
+  $AFTrees := symbols-to-args($Symbol+)
+  ===>
+  symbols-to-args($Symbol $Symbol+) = $AFTree, $AFTrees
+
+equations
+
+[literal]
+  $AFProd := production-to-asfix($Symbol* -> $Literal $Attributes),
+  $AFTrees := symbols-to-args($Symbol*)
+  ===> 
+  symbol-to-tree(_Label:nested-literal($Symbol* -> $Literal $Attributes)) = 
+   appl($AFProd,[$AFTrees])
+
+[char-range-one-character-labeled]
+  symbol-to-tree(_Label:[numchar("\" $Char*)]) = natcon($Char*)
+
+[char-range-one-character-unlabelled]
+  symbol-to-tree([numchar("\" $Char*)]) = natcon($Char*)
+
+[char-range]
+  [_Character] !:= [$CharRanges]
+  ===>
+  symbol-to-tree($Label:[$CharRanges]) = <$Label(char)>
+
+[char-range-iter]
+  $AFSymbol := symbol-to-asfix(<[$CharRanges]+ -LEX>)
+  ===>
+  symbol-to-tree($Label:<[$CharRanges]+ -LEX>) =
+	appl(list($AFSymbol),<$Label(chars)>)
+
+[char-range-iter]
+  $AFSymbol := symbol-to-asfix(<[$CharRanges]* -LEX>)
+  ===>
+  symbol-to-tree($Label:<[$CharRanges]* -LEX>) =
+	appl(list($AFSymbol),<$Label(chars)>)
+
+[default-list-symbols]
+  is-list($Symbol) == true,
+  $AFSymbol := symbol-to-asfix($Symbol),
+  $Type := symbol-to-type($QLit:$Symbol)
+  ===>
+  symbol-to-tree($QLit:$Symbol) = 
+    appl(list($AFSymbol),<$QLit($Type)>)
+
+[default-symbol]
+  is-list($Symbol) == false,
+  $Type := symbol-to-type($QLit:$Symbol)
+  ===>
+  symbol-to-tree($QLit:$Symbol) = <$QLit($Type)>
+
+equations
+
+[iter]
+	is-list(_Symbol +) = true
+
+[iter-star]
+	is-list(_Symbol *) = true
+
+[iter-sep]
+	is-list({_Symbol1 _Symbol2}+) = true
+
+[iter-star-sep]
+	is-list({_Symbol1 _Symbol2}*) = true
+
+[recursive-cf]
+	is-list(<$Symbol-CF>) = is-list($Symbol)
+
+[recursive-lex]
+	is-list(<$Symbol-LEX>) = is-list($Symbol)
+
+[default]
+	is-list(_Symbol) = false
+
+
+equations
+
+[sort]
+	$Label := "top-" || symbol-to-type("top":$Symbol),
+	$Production := 
+	"ws-before":<LAYOUT?-CF>
+		$Label:$Symbol
+	"ws-after":<LAYOUT?-CF> -> <START>,
+	$AFTree := production-to-tree($Production)
+	===>
+	start-symbol-to-tree($Symbol) = parsetree($AFTree,<amb-cnt(int)>)
+
+equations
+
+[lit-0]
+	$Production := literals({$Literal})
+	===>
+	literal-to-tree($Literal) = production-to-tree($Production) 

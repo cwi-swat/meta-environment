@@ -1,8 +1,12 @@
 equations
 
-[unique-labels]
+[unique-labels-on-literals]
 $Symbol*0 $Label:$Lit $Symbol*1 $Label:$Lit $Symbol*2 -> $Symbol $Attributes =
 $Symbol*0 $Label:$Lit $Symbol*1 $Label + 1:$Lit $Symbol*2 -> $Symbol $Attributes
+[unique-labels-on-charclasses]
+$Symbol*0 $Label:$CharClass $Symbol*1 $Label:$CharClass $Symbol*2 -> $Symbol $Attributes =
+$Symbol*0 $Label:$CharClass $Symbol*1 $Label + 1:$CharClass $Symbol*2 -> $Symbol $Attributes
+
 [label-add]
 $Natcon3 := $Natcon1 + $Natcon2
 ===>

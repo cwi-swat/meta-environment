@@ -39,4 +39,5 @@ hiddens
     "$Section*" -> Section*
     "$ModuleName" -> ModuleName
     "$Natcon"[0-9]* -> NatCon
+    "$CharClass" -> CharClass
 

@@ -1,0 +1,45 @@
+
+module Production-To-ATerm
+
+imports Symbols
+imports languages/sdf2/syntax/Sdf2
+imports Literals
+imports Constructors
+
+exports
+
+context-free syntax
+
+production-to-imploded-tree(Production) -> ATerm
+
+ symbols-to-list (Symbol* )	-> {ATerm ","}*
+ symbol-to-term (Symbol )	-> {ATerm ","}*
+
+hiddens
+variables
+
+ "$Production"	-> Production {strict}
+ "$Production*"	-> Production* {strict}
+ "$Symbol"[0-9]*	-> Symbol {strict}
+ "$Symbol*"		-> Symbol* {strict}
+ "$Symbol+"		-> Symbol+ {strict}
+ "$Tree" -> ATerm {strict}
+ "$Trees"[0-9]* -> {ATerm ","}* {strict}
+ "$Treep"[0-9]* -> {ATerm ","}+ {strict}
+ "$AFProd" -> ATerm {strict}
+ "$Literal" -> Literal {strict}
+ "$Label" -> Literal {strict}
+ "$Attributes" -> Attributes {strict}
+ "$Sort" -> Sort {strict}
+ "$AFSymbol" -> ATerm {strict}
+ "$QLit" -> QLiteral {strict}
+ "$Type" -> QLiteral {strict}
+ "$Char*"[0-9]* -> CHAR* {strict}
+ "$Character"[0-9]* -> Character {strict}
+ "$CharRanges" -> CharRanges {strict}
+ 
+variables
+ "_Label" -> Literal {wild}
+ "_Symbol"[0-9]* -> Symbol {wild}
+ "_Character"[0-9]* -> Character {wild}
+ "_Literal" -> Literal {wild}

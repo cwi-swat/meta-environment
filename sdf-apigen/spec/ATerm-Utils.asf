@@ -18,7 +18,8 @@ equations
 
   [default-merge-adts-divide]
     merge-adts([$Entry*1], [$Entry, $Entry*2]) =
-	merge-adts([$Entry*1, $Entry], [$Entry*2])
+	merge-adts([$Entry*1,
+		    $Entry], [$Entry*2])
 
 equations
 

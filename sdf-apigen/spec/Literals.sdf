@@ -1,0 +1,18 @@
+module Literals
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+
+context-free syntax
+
+nested-literal(Production) -> Symbol
+
+context-free syntax
+
+Literal "||" Literal -> Literal {left}
+
+hiddens
+
+variables
+	"$Char*"[0-9]* -> CHAR* {strict}

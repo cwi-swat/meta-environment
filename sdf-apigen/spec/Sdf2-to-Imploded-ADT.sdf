@@ -1,8 +1,10 @@
 module Sdf2-to-Imploded-ADT
 
-imports Build-AsFix2ME-ADT
-imports AddLabels
-imports UniqueLabels
+imports Production-To-ATerm
+imports Constructors
+imports Normalization
+imports Symbols
+imports ATerm-Utils
 
 exports 
 
@@ -13,67 +15,63 @@ context-free syntax
     sdf-module-to-imploded-adt ( Module ) -> ATerm
 
 hiddens
-  context-free syntax
-    section-to-adt ( ModuleName, Section)		-> {ATerm ","}*
-    grammar-to-adt ( ModuleName, Grammar)		-> {ATerm ","}*
-    productions-to-adt ( ModuleName, Production*)	-> {ATerm ","}*
-    production-to-adt ( ModuleName, Production)	-> {ATerm ","}*
-    lexicals-to-adt ( ModuleName, Production*)	-> {ATerm ","}*
-    lexical-to-adt ( ModuleName, Production)	-> {ATerm ","}*
+  context-free start-symbols
+	ATerm
 
-    build-list-entries ( Symbol* )			-> {ATerm ","}*
-    build-imploded-args(Symbol*)        -> {ATerm ","}*
-    build-imploded-arg(Symbol)          -> {ATerm ","}*
+  context-free syntax
+
+    grammars-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    grammars-to-adt (Grammar, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+
+    lists-to-adt (Section*,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Grammar,{ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+    lists-to-adt (Symbol, {ATerm ","}*) -> {ATerm ","}* 
+	{traversal(accu,top-down,break)}
+
+    productions-to-adt ( Production*)	-> {ATerm ","}*
+    production-to-adt ( Production)	-> {ATerm ","}*
+    lexicals-to-adt (Production*)	-> {ATerm ","}*
+    lexical-to-adt ( Production)	-> {ATerm ","}*
+
+variables
+	"$PreprocessedModule" -> Module {strict}
+	"$Production*"	-> Production* {strict}
+	"$Production"	-> Production {strict}
+	"$Tree" -> ATerm {strict}
+	"$Type"[0-9]* -> Literal {strict}
+
+	"$Label"		-> Literal {strict}
+	"$Symbol"[0-9]*	-> Symbol {strict}
+	"$Symbol*"[0-9]*    -> Symbol* {strict}
+	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
+	"$Literal"		-> Literal {strict}
+	"$Attributes"	-> Attributes {strict}
+	"$Grammar" -> Grammar {strict}
+	"$Module" -> Module {strict}
+	"$LabeledModule" -> Module {strict}	
+	"$ADT"[0-9]* -> ATerm  {strict}
+	"$Section*" -> Section*  {strict}
+	"$Section" -> Section  {strict}
+	"$Entries"[0-9]* -> {ATerm ","}* {strict}
+	"$Entry"[0-9]* -> ATerm {strict}
+	"$Module*" -> Module* {strict}
+	"$QLit"	-> QLiteral {strict}
+	"$AltId" -> QLiteral {strict}
 
   variables
-    "$ADT"[0-9]*	-> ATerm
-    "$AFArg"		-> ATerm
-    "$Args"[0-9]*		-> { ATerm "," }*
-    "$Args+"[0-9]*		-> { ATerm "," }+
-    "$AFAttr"		-> ATerm
-    "$AFAttr+"[0-9]*	-> { ATerm "," }+
-    "$AFAttr*"[0-9]*	-> { ATerm "," }*
-    "$AFAttrs"		-> ATerm
-    "$AFIter"		-> ATerm
-    "$AFModName"	-> Literal
-    "$AFProd"		-> ATerm
-    "$AFSep"		-> ATerm
-    "$AFSort"		-> Literal
-    "$AltId"		-> AFun
-    "$ATerm"		-> ATerm
-    "$Attr"		-> Attribute
-    "$Attr*"[0-9]*	-> { Attribute "," }*
-    "$Attr+"		-> { Attribute "," }+
-    "$Attributes"	-> Attributes
-    "$Char*"[0-9]*	-> CHAR*
-    "$ConsOption"	-> ConsOption
-    "$ElemSortName"	-> AFun
-    "$ElemType"		-> AFun
-    "$Entries"[0-9]*	-> { ATerm "," }*
-    "$Entry"		-> ATerm
-    "$FieldName"	-> Literal
-    "$FieldId"		-> AFun
-    "$FieldType"	-> AFun
-    "$FieldWs"		-> ATerm
-    "$Grammar"[0-9]*	-> Grammar
-    "$ImpSection*"	-> ImpSection*
-    "$Label"		-> Literal
-    "$ListType"		-> AFun
-    "$Literal"		-> Literal
-    "$ModName"		-> ModuleName
-    "$Module"[0-9]*		-> Module
-    "$Module*"		-> Module*
-    "$Production"	-> Production
-    "$Production*"	-> Production*
-    "$SDF"		-> SDF
-    "$Section"		-> Section
-    "$Section*"		-> Section*
-    "$Sep"		-> Literal
-    "$Sort"		-> Sort
-    "$Symbol"		-> Symbol
-    "$Symbol*"		-> Symbol*
-    "$Symbol+"		-> Symbol+
-    "$TypeId"		-> AFun
-    "$UQLit"		-> UQLiteral
-    "$QLit"		-> Literal
+	"_Sep"		-> Literal {wild}
+	"_ImpSection*" -> ImpSection* {wild}
+	"_ModuleId" -> ModuleId {wild}
+	"_Symbol*"[0-9]*    -> Symbol* {wild}
+	"_Symbol"[0-9]*	-> Symbol {wild}	
+	"_Attr*"[0-9]* -> {Attribute","}* {wild}
+	"_Production*"	-> Production* {wild}
+	"_Production"	-> Production {wild}
+	"_Literal"		-> Literal {wild}
+	"_Attributes"	-> Attributes {wild}
+	"_Label" -> Literal {wild}
 

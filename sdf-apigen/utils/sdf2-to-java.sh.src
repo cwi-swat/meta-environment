@@ -78,7 +78,6 @@ OUTPUT="."
 VERBOSE=0
 VERBOSEOPT=""
 IMPLODEDOPT=""
-CONSOPT='-e'
 VISITABLEOPT=""
 VERSION="0.0.0"
 PACKAGEOPT=""
@@ -100,12 +99,6 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
-    -e | --expand-cons)
-      CONSOPT='-e';;
-
-    -r | --remove-cons)
-      CONSOPT='-r';;
-
     -i | --input)
       shift; INPUT=$1 ;;
 
@@ -164,7 +157,7 @@ BASE=`basename ${BASE} .def`
 # {{{  generate Java from SDF
 
 info "Generating ADT "
-${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
+${SDF2TOADT} ${IMPLODEDOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || bail_out
 
 

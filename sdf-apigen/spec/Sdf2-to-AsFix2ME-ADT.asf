@@ -1,255 +1,297 @@
+
 equations
 
-[equ-sdf-to-adt-cons-expand]
-  sdf-to-asfix2me-adt-cons-expand($SDF) = 
-    sdf-to-asfix2me-adt($SDF, cons-expand)
+[done]
+	sdf-to-asfix2me-adt(definition) = [ ]
+[loop]
+	$PreprocessedModule := preprocess($Module),
+	$ADT1 := sdf-module-to-asfix2me-adt($PreprocessedModule),
+	$ADT2 := sdf-to-asfix2me-adt(definition $Module*),
+	$ADT3 := layout-adt()
+	===>
+	sdf-to-asfix2me-adt(definition $Module $Module*) = 
+	merge-adts(merge-adts($ADT3,$ADT1),$ADT2)
 
-[equ-sdf-to-adt-cons-remove]
-  sdf-to-asfix2me-adt-cons-remove($SDF) = 
-    sdf-to-asfix2me-adt($SDF, cons-remove)
+equations
+  
+[module-start]
+  sdf-module-to-asfix2me-adt(module _ModuleId _ImpSection* $Section*) = 
+  	[grammars-to-adt($Section*, ), lists-to-adt($Section*, )]
 
-[equ-sdf-to-adt-definition-empty]
-  sdf-to-asfix2me-adt(definition ,$ConsOption) = [ ]
-
-[equ-sdf-to-adt-defintion-divide]
-  $LabeledModule := add-labels($Module),
-  $ADT1 := sdf-module-to-asfix2me-adt($LabeledModule, $ConsOption),
-  $ADT2 := merge-adts([], $ADT1),
-  $ADT3 := sdf-to-asfix2me-adt(definition $Module*, $ConsOption),
-  $ADT4 := merge-adts($ADT2, $ADT3),
-  $ADT5 := start-sorts-to-asfix2me-adt($Module),
-  $ADT6 := merge-adts($ADT4, $ADT5),
-  $ADT7 := merge-adts($ADT6, 
-[ constructor(OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])),
-  constructor(OptLayout, Present,appl(prod([cf(layout)],cf(opt(layout)),no-attrs),<string(chars)>))
-   ])
+[module-start-parameterized]
+  $Section*2 := mark-parameterized-symbols($Section*, $Symbol*)
   ===>
-  sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
+  sdf-module-to-asfix2me-adt(
+	module _ModuleId [$Symbol*] _ImpSection* $Section*) = 
+  	[grammars-to-adt($Section*2, ), 
+	 lists-to-adt($Section*2, ),
+         parameters-to-adt($Symbol*)]
+
+equations
+
+[kernel-grammar]
+	$Entries2 := productions-to-adt($Production*)
+	===>
+	grammars-to-adt(syntax $Production*, $Entries1) = 
+	$Entries1, $Entries2
+
+[start-symbols-grammar]
+	$Entry := start-symbol-to-adt($Symbol),
+	$Entries2 := grammars-to-adt(context-free start-symbols $Symbol*, )
+	===>
+	grammars-to-adt(context-free start-symbols $Symbol $Symbol*, 
+		$Entries1) =
+	$Entries1, $Entry, $Entries2
 
 
-
-
-[equ-sdf-to-adt-module]
-  sdf-to-asfix2me-adt($Module, $ConsOption) = 
-    sdf-module-to-asfix2me-adt($Module, $ConsOption)
-
-[equ-sdf-module-to-adt-empty]
-  sdf-module-to-asfix2me-adt(module $ModId $ImpSection*, $ConsOption) = [ ]
-
-[equ-sdf-module-to-adt-divide]
-  $Entries1 := section-to-adt($ModId, $Section, $ConsOption),
-  [ $Entries2 ] := sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section*, $ConsOption)
-  ===>
-  sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section $Section*, 
-                             $ConsOption) = 
-	[ $Entries1, $Entries2 ]
-
-
-[equ-sdf-module-to-adt-parametrized]
-$Section*2 := mark-parameterized-symbols($Section*, $Symbol*),
-[ $Entries ] := sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section*2, 
-                           $ConsOption)
-===>
-sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
-                           $ConsOption) = [ $Entries ]
-
-
-[equ-section-to-adt-exports]
-  section-to-adt($ModName, exports $Grammar, $ConsOption) =
-    grammar-to-adt(no-module-name, $Grammar, $ConsOption)
-
-[equ-section-to-adt-hiddens]
-  section-to-adt($ModName, hiddens $Grammar, $ConsOption) = 
-    grammar-to-adt($ModName, $Grammar, $ConsOption)
-
-[default-grammar-to-adt]
-  grammar-to-adt($ModName, $Grammar, $ConsOption) =
-
-[equ-grammar-to-adt-divide]
-  $Entries1 := grammar-to-adt($ModName, $Grammar1, $ConsOption),
-  $Entries2 := grammar-to-adt($ModName, $Grammar2, $ConsOption)
-  ===>
-  grammar-to-adt($ModName, $Grammar1 $Grammar2, $ConsOption) =
-    $Entries1, $Entries2
-
-[equ-grammar-to-adt-context-free-syntax]
-  grammar-to-adt($ModName, context-free syntax $Production*, $ConsOption) = 
-    productions-to-adt($ModName, $Production*, $ConsOption)
-
-[equ-grammar-to-adt-lexical-syntax]
-  grammar-to-adt($ModName, lexical syntax $Production*, $ConsOption) =
-    lexicals-to-adt($ModName, $Production*, $ConsOption)
+equations
 
 [equ-productions-to-adt-empty]
-  productions-to-adt($ModName,  , $ConsOption) =
+  productions-to-adt( ) =
 
 [equ-productions-to-adt-divide]
-  $Entries1 := production-to-adt($ModName, $Production, $ConsOption),
-  $Entries2 := productions-to-adt($ModName, $Production*, $ConsOption)
+  $Entries1 := production-to-adt($Production),
+  $Entries2 := productions-to-adt($Production*)
   ===>
-  productions-to-adt($ModName, $Production $Production*, $ConsOption) =
+  productions-to-adt($Production $Production*) =
     $Entries1, $Entries2
 
-[equ-production-to-adt-cons]
-  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId   := uqliteral($Char*),
-  $TypeId  := sort-to-afun($Sort),
-  $AFProd  := 
-    build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  := build-asfix-appl-args($Symbol*),
-  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
-  $Entries := build-list-entries($Symbol*)
-  ===>
-  production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
-    $Entry, $Entries
+equations
 
-[equ-production-to-adt-cons-parametrized]
-  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId   := uqliteral($Char*),
-  $TypeId  := sort-to-afun($Sort1),
-  $AFProd  := 
-    build-asfix-prod(cf, $ModName, $Symbol*, $Sort1[[$Sort2]], 
-                     $Attributes, $ConsOption),
-  $AFArgs  := build-asfix-appl-args($Symbol*),
-  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
-  $Entries := build-list-entries($Symbol*)
-  ===>
-  production-to-adt($ModName, $Symbol* -> $Sort1[[<$Sort2-PARAM>]] $Attributes, $ConsOption) = 
-    $Entry, $Entries
+[default-normal]
+	$Tree := production-to-tree($Symbol* -> $Symbol $Attributes),
+	$Type := symbol-to-type($Symbol),
+	$AltId := get-cons($Symbol* -> $Symbol $Attributes)
+	===>
+	production-to-adt($Symbol* -> $Symbol $Attributes) =
+	  constructor($Type,$AltId,$Tree)
 
-[equ-production-to-adt-bracket]
-  $Attributes == { bracket },
-  $AltId   := uqliteral("B" "r" "a" "c" "k" "e" "t"),
-  $TypeId  := sort-to-afun($Sort),
-  $AFProd  := 
-    build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  := build-asfix-appl-args($Symbol*),
-  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
-  $Entries := build-list-entries($Symbol*)
-  ===>
-  production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) =
-    $Entry, $Entries
- 
-[equ-production-to-adt-reject]
-  production-to-adt($ModName, $Symbol* -> $Sort { $Attr*1, reject, $Attr*2 }, 
-    $ConsOption) =
+[remove-layout-cons]
+  production-to-adt(<LAYOUT-CF> <LAYOUT-CF> -> <LAYOUT-CF> _Attributes) =
 
-[default-production-to-adt]
-  $AltId   := uqliteral("D" "e" "f" "a" "u" "l" "t"),
-  $TypeId  := sort-to-afun($Sort),
-  $AFProd  := 
-    build-asfix-prod(cf, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
-  $AFArgs  := build-asfix-appl-args($Symbol*),
-  $Entry   := constructor( $TypeId, $AltId, appl($AFProd,[$AFArgs]) ),
-  $Entries := build-list-entries($Symbol*)
-  ===>
-  production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) =
-    $Entry, $Entries
+[remove-layout-to-cf]
+  production-to-adt(<LAYOUT-LEX> -> <LAYOUT-CF> _Attributes) =
 
-[equ-lexicals-to-adt-empty]
-  lexicals-to-adt($ModName, , $ConsOption) =
+[reject-0]
+  production-to-adt(_Symbol* -> _Symbol { _Attr*1, reject, _Attr*2 }) =
 
-[equ-lexicals-to-adt-divide]
-  $Entries1 := lexical-to-adt($ModName, $Production, $ConsOption),
-  $Entries2 := lexicals-to-adt($ModName, $Production*, $ConsOption)
-  ===>
-  lexicals-to-adt($ModName, $Production $Production*, $ConsOption) =
-    $Entries1, $Entries2
+[production-to-adt-ignore-literals]
+   production-to-adt(_Symbol* -> _Literal _Attributes) =
 
-[equ-lexical-to-adt-LAYOUT]
-  lexical-to-adt($ModName, $Symbol* -> LAYOUT $Attributes, $ConsOption) =
+equations
 
-[equ-lexical-to-adt-reject]
-  lexical-to-adt($ModName, $Symbol* -> $Sort { $Attr*1, reject, $Attr*2 }, 
-    $ConsOption) =
+[iter-cf]
+	$Type1 := symbol-to-type($Label:<$Symbol+-CF>),
+	$Type2 := symbol-to-type($Label:<$Symbol-CF>),
+	$Type3 := symbol-to-type("ws-after-head":LAYOUT?)
+	===>
+	lists-to-adt($Label:<$Symbol +-CF>, $Entries) =
+	$Entries,
+	separated-list($Type1, $Type2, [<ws-after-head($Type3)>])
 
-[default-lexical-to-adt]
-  { $Attr*1, cons(qliteral(""" $Char* """)), $Attr*2 } := $Attributes,
-  $AltId := uqliteral($Char*),
-  $TypeId  := sort-to-afun($Sort),
-  $AFSort    := sort-to-lit($Sort),
-  $FieldType := sort-to-afun($Sort),
-  $AFAttrs   := build-asfix-attrs($Attributes, $ConsOption)
-  ===>
-  lexical-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
-    constructor( $TypeId, $AltId, 
-      appl(prod([lex(sort($AFSort))],cf(sort($AFSort)),no-attrs),
-       [appl(list(iter-star(char-class([range(0,255)]))),<string(chars)>)]) )
+[iter-star-cf]
+	lists-to-adt($Label:<$Symbol *-CF>, $Entries) =
+	lists-to-adt($Label:<$Symbol +-CF>, $Entries)
 
-[equ-build-list-entries-empty]
-  build-list-entries() =
+equations
 
-[equ-build-list-entries-divide]
-  $Entries1 := build-list-entries($Symbol),
-  $Entries2 := build-list-entries($Symbol+)
-  ===>
-  build-list-entries($Symbol $Symbol+) = $Entries1, $Entries2
+[iter-lex]
+	_CharClass !:= $Symbol,
+	$Type1 := symbol-to-type($Label:<$Symbol +-LEX>),
+	$Type2 := symbol-to-type($Label:<$Symbol-LEX>)
+	===>
+	lists-to-adt($Label:<$Symbol +-LEX>, $Entries) =
+	$Entries,
+	list($Type1, $Type2)
 
-[equ-build-list-entries-iter-star]
-  $FieldId := sdflit-to-afun($Label),
-  $ElemType := sort-to-afun($Sort),
-  $ListType := afun-concat($ElemType $FieldId)
-  ===>
-  build-list-entries($Label : $Sort *) = separated-list($ListType, $ElemType,[<ws-after-head(OptLayout)>])
-
-[equ-build-list-entries-iter-plus]
-  $FieldId := sdflit-to-afun($Label),
-  $ElemType := sort-to-afun($Sort),
-  $ListType := afun-concat($ElemType $FieldId)
-  ===>
-  build-list-entries($Label : $Sort +) = separated-list($ListType, $ElemType,[<ws-after-head(OptLayout)>])
-    
-
-[equ-build-list-entries-iter-sep-star]
-  $FieldId := sdflit-to-afun($Label),
-  $ElemType := sort-to-afun($Sort),
-  $ListType := afun-concat($ElemType $FieldId)
-  ===>
-  build-list-entries($Label : { $Sort $Sep } *) = 
-    separated-list($ListType, $ElemType,[<ws-after-head(OptLayout)>,lit($Sep), <ws-after-sep(OptLayout)>])
-
-  
-[equ-build-list-entries-iter-sep-plus]
-  $FieldId := sdflit-to-afun($Label),
-  $ElemType := sort-to-afun($Sort),
-  $ListType := afun-concat($ElemType $FieldId)
-  ===>
-  build-list-entries($Label : { $Sort $Sep } +) = 
-    separated-list($ListType, $ElemType,[<ws-after-head(OptLayout)>,lit($Sep), <ws-after-sep(OptLayout)>])
-
-[default-equ-build-list-entries]
-  build-list-entries($Symbol) =
-
-[css-1] collect-start-sorts($Module) = collect-start-sorts($Module, )
-[css-2] collect-start-sorts(sorts $Symbol*1,$Symbol*2) = $Symbol*1 $Symbol*2
-[css-3] collect-start-sorts(hiddens $Grammar, $Symbol*) = $Symbol*
-
-[0] $Symbol* := collect-start-sorts($Module),
-   $ADT := start-sorts-to-adt($Symbol*)
-   ===>
-   start-sorts-to-asfix2me-adt($Module) = $ADT
-
-[0] start-sorts-to-adt($Symbol*) = start-sorts-to-adt($Symbol*, [])
-
-[0] start-sorts-to-adt(,$ADT) = $ADT
-[0] $ADT2 := start-sort-to-adt($Symbol, $ADT),
-   $ADT3 := start-sorts-to-adt($Symbol*, $ADT2)
-   ===>
-   start-sorts-to-adt($Symbol $Symbol*, $ADT) = $ADT3
-
-[0] $FieldType := sort-to-afun($Sort),
-   $AFSort := sort-to-lit($Sort),   
-   sort($Char* ) := $Sort,
-   $AltId := uqliteral($Char*),
-   $FieldId := uqliteral("t" "o" "p" "-" $Char*)
-   ===>
-   start-sort-to-adt($Sort, [ $Entries ]) = 
-    [ constructor(Start, $AltId,
-      parsetree(appl(prod(
-                     [cf(opt(layout)),cf(sort($AFSort)),cf(opt(layout))],
-                       sort("<START>"), no-attrs),
-             [<ws-before(OptLayout)>,<$FieldId($FieldType)>,<ws-after(OptLayout)>]),
-                              <amb-cnt(int)>)), $Entries]
+[iter-star-lex]
+	lists-to-adt($Label:<$Symbol *-LEX>, $Entries) =
+	lists-to-adt($Label:<$Symbol +-LEX>, $Entries)
 
 
+equations
 
+[iter-sep-cf]
+	$Type1 := symbol-to-type($Label:<{$Symbol1 $Sep} +-CF>),
+	$Type2 := symbol-to-type($Label:<$Symbol1-CF>),
+	$Type3 := symbol-to-type(<LAYOUT?-CF>),
+	$Tree  := literal-to-tree($Sep)
+	===>
+	lists-to-adt($Label:<{$Symbol1 $Sep} +-CF>, $Entries) =
+	$Entries,
+	separated-list($Type1, $Type2, 
+	[<ws-after-head($Type3)>,$Tree,<ws-after-sep($Type3)>])
+
+[iter-sep-star-cf]
+	lists-to-adt($Label:<{$Symbol1 $Symbol2} *-CF>, $Entries) =
+	lists-to-adt($Label:<{$Symbol1 $Symbol2} +-CF>, $Entries)
+
+equations
+
+[ignore-cf-priorities]
+	lists-to-adt(context-free priorities _Priorities, $Entries) =
+	$Entries
+
+[ignore-lex-priorities]
+	lists-to-adt(lexical priorities _Priorities, $Entries) =
+	$Entries
+
+[ignore-kernel-priorities]
+	lists-to-adt(priorities _Priorities, $Entries) =
+	$Entries
+
+[ignore-cf-restrictions]
+	lists-to-adt(context-free restrictions _Restrictions, $Entries) =
+	$Entries
+
+[ignore-lex-restrictions]
+	lists-to-adt(lexical restrictions _Restrictions, $Entries) =
+	$Entries
+
+[ignore-kernel-restrictions]
+	lists-to-adt(restrictions _Restrictions, $Entries) =
+	$Entries
+
+
+[iter-sep-lex]
+	_CharClass !:= $Symbol1,
+	$Type1 := symbol-to-type($Label:<{$Symbol1 $Sep} +-LEX>),
+	$Type2 := symbol-to-type($Label:<$Symbol1-LEX>),
+	$Tree  := literal-to-tree($Sep)
+	===>
+	lists-to-adt($Label:<{$Symbol1 $Sep} +-LEX>, $Entries) =
+	$Entries,
+	separated-list($Type1, $Type2, [$Tree])
+
+[iter-star-sep-lex]
+	lists-to-adt($Label:<{$Symbol1 $Symbol2} *-LEX>, $Entries) =
+	lists-to-adt($Label:<{$Symbol1 $Symbol2} +-LEX>, $Entries)
+
+equations
+
+[start-symbol]
+	$Tree := start-symbol-to-tree($Symbol),
+	$AltId := symbol-to-type("top":$Symbol)
+	===>
+	start-symbol-to-adt($Symbol) =
+	constructor("Start",$AltId, $Tree)
+
+
+equations
+
+[done]
+	parameters-to-adt() =
+
+[loop]
+	$Type := symbol-to-type($Symbol),
+	$Entries1 := [constructor($Type, "cast", <$Type(term)>)],
+	$Entries2 := parameters-to-adt($Symbol*)
+	===>
+	parameters-to-adt($Symbol $Symbol*) =
+	$Entries1, $Entries2	
+
+equations
+
+[layout]
+	$Grammar :=
+	syntax
+				-> <LAYOUT?-CF>
+	"layout":<LAYOUT-CF>	-> <LAYOUT?-CF>
+	"list":<LAYOUT+-LEX>	-> <LAYOUT-CF>,
+	$Type1 := symbol-to-type("list":<LAYOUT+-LEX>),
+	$Type2 := symbol-to-type(<LAYOUT-LEX>)
+	===>
+	layout-adt() = 
+	[grammars-to-adt($Grammar, ), list($Type1,$Type2)]
+
+
+tests 
+
+[big-regression-test]
+sdf-to-asfix2me-adt(
+definition
+
+module Main
+
+exports
+
+lexical syntax
+
+[0-9]+ -> Digits
+Digits "." mant:Digits -> Real {cons("simple")}
+Digits "." mant:Digits "E" sign:[\+\-] exp:Digits -> Real {cons("math")}
+
+head:[A-Z] tail:[a-z]* -> Id
+
+"%" ~[\n]*  "\n" -> Comment
+Comment          -> LAYOUT {cons("comment")}
+
+[\ \t\n] -> LAYOUT {cons("whitespace")}
+
+context-free syntax
+
+"%%" Bool -> Bool {cons("percent")}
+
+lhs:Bool "&" rhs:Bool -> Bool {cons("and")}
+lhs:Bool "|" rhs:Bool -> Bool {cons("or")}
+
+)
+==
+[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"arg"("Layout")>])), list("Layout","Lex-Layout"),
+		    constructor("Lex-Digits","Default",appl(prod([lex(iter(char-class([range(48,57)])))],lex(sort("Digits")),no-attrs), [appl(list(lex(iter(char-class([range(48,57)])))),<"list"(chars)>)])),
+		    constructor("Digits","Lex-to-cf",appl(prod([lex(sort("Digits"))],cf(sort("Digits")),no-attrs), [<"Digits"("Lex-Digits")>])),
+		    constructor("Lex-Real","simple",appl(prod([lex(sort("Digits")), lit("."), lex(sort("Digits"))],lex(sort("Real")),attrs([term(cons("simple"))])), [<"Digits"("Lex-Digits")>, appl(prod([char-class([46])],lit("."),no-attrs),[46]), <"mant"("Lex-Digits")>])), constructor("Real","Lex-to-cf",appl(prod([lex(sort("Real"))],cf(sort("Real")),no-attrs), [<"Real"("Lex-Real")>])), constructor("Lex-Real","math",appl(prod([lex(sort("Digits")), lit("."), lex(sort("Digits")), lit("E"), char-class([43,45]), lex(sort("Digits"))],lex(sort("Real")),attrs([term(cons("math"))])), [<"Digits"("Lex-Digits")>, appl(prod([char-class([46])],lit("."),no-attrs),[46]), <"mant"("Lex-Digits")>, appl(prod([char-class([69])],lit("E"),no-attrs),[69]), <"sign"(char)>, <"exp"("Lex-Digits")>])),
+		    constructor("Lex-Id","Default",appl(prod([char-class([range(65,90)]), lex(iter-star(char-class([range(97,122)])))],lex(sort("Id")),no-attrs), [<"head"(char)>, appl(list(lex(iter-star(char-class([range(97,122)])))),<"tail"(chars)>)])),
+		    constructor("Id","Lex-to-cf",appl(prod([lex(sort("Id"))],cf(sort("Id")),no-attrs), [<"Id"("Lex-Id")>])),
+		    constructor("Lex-Comment","Default",appl(prod([lit("%"), lex(iter-star(char-class([range(0,9),range(11,255)]))), lit("\n")],lex(sort("Comment")),no-attrs), [appl(prod([char-class([37])],lit("%"),no-attrs),[37]), appl(list(lex(iter-star(char-class([range(0,9),range(11,255)])))),<"list"(chars)>), appl(prod([char-class([10])],lit("\n"),no-attrs),[10])])),
+		    constructor("Comment","Lex-to-cf",appl(prod([lex(sort("Comment"))],cf(sort("Comment")),no-attrs), [<"Comment"("Lex-Comment")>])),
+		    constructor("Lex-Layout","comment",appl(prod([lex(sort("Comment"))],lex(layout),attrs([term(cons("comment"))])), [<"Comment"("Lex-Comment")>])),
+		    constructor("Lex-Layout","whitespace",appl(prod([char-class([range(9,10),32])],lex(layout),attrs([term(cons("whitespace"))])), [<"char"(char)>])),
+		    constructor("Bool","percent",appl(prod([lit("%%"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("percent"))])), [appl(prod([char-class([37]), char-class([37])],lit("%%"),no-attrs),[37, 37]), <"ws-after-%%"("OptLayout")>, <"Bool"("Bool")>])),
+		    constructor("Bool","and",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("&"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("and"))])), [<"lhs"("Bool")>, <"ws-after-lhs"("OptLayout")>, appl(prod([char-class([38])],lit("&"),no-attrs),[38]), <"ws-after-&"("OptLayout")>, <"rhs"("Bool")>])),
+		    constructor("Bool","or",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("|"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("or"))])), [<"lhs"("Bool")>, <"ws-after-lhs"("OptLayout")>, appl(prod([char-class([124])],lit("|"),no-attrs),[124]), <"ws-after-|"("OptLayout")>, <"rhs"("Bool")>]))]
+
+[booleans-integration-test]
+sdf-to-asfix2me-adt(
+definition
+
+module Booleans
+
+exports
+  sorts Bool BoolList
+  context-free start-symbols Bool BoolList
+
+  lexical syntax
+    [\ \t\n]			-> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+
+  context-free syntax
+    true				-> Bool {cons("true")}
+    false				-> Bool {cons("false")}
+    "left":Bool "&" "right":Bool	-> Bool {cons("and")}
+    "left":Bool "|" "right":Bool	-> Bool {cons("or")}
+
+    "[" elems:{ Bool ";" }* "]" -> BoolList {cons("elems")}
+
+  context-free priorities
+    "left":Bool "&" "right":Bool -> Bool
+  > "left":Bool "|" "right":Bool -> Bool
+)
+
+==
+
+[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"arg"("Layout")>])), list("Layout","Lex-Layout"),
+		    [ constructor("Start","Bool", parsetree(appl(prod([cf(opt(layout)), sort("Bool"), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-Bool"("Bool")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)) ],
+		    [ constructor("Start","BoolList", parsetree(appl(prod([cf(opt(layout)), sort("BoolList"), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-BoolList"("BoolList")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)) ],
+		    constructor("Lex-Layout","Default",appl(prod([char-class([range(9,10),32])],lex(layout),no-attrs), [<"char"(char)>])),
+		    constructor("Bool","true",appl(prod([lit("true")],cf(sort("Bool")),attrs([term(cons("true"))])), [appl(prod([char-class([116]), char-class([114]), char-class([117]), char-class([101])],lit("true"),no-attrs),[116, 114, 117, 101])])),
+		    constructor("Bool","false",appl(prod([lit("false")],cf(sort("Bool")),attrs([term(cons("false"))])), [appl(prod([char-class([102]), char-class([97]), char-class([108]), char-class([115]), char-class([101])],lit("false"),no-attrs),[102, 97, 108, 115, 101])])),
+		    constructor("Bool","and",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("&"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("and"))])), [<"left"("Bool")>, <"ws-after-left"("OptLayout")>, appl(prod([char-class([38])],lit("&"),no-attrs),[38]), <"ws-after-&"("OptLayout")>, <"right"("Bool")>])),
+		    constructor("Bool","or",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("|"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("or"))])), [<"left"("Bool")>, <"ws-after-left"("OptLayout")>, appl(prod([char-class([124])],lit("|"),no-attrs),[124]), <"ws-after-|"("OptLayout")>, <"right"("Bool")>])),
+		    constructor("BoolList","elems",appl(prod([lit("["), cf(opt(layout)), cf(iter-star-sep(sort("Bool"),
+		      lit(";"))), cf(opt(layout)), lit("]")],cf(sort("BoolList")),attrs([term(cons("elems"))])), [appl(prod([char-class([91])],lit("["),no-attrs),[91]), <"ws-after-["("OptLayout")>, appl(list(cf(iter-star-sep(sort("Bool"),
+		      lit(";")))),<"elems"("Bool-elems")>), <"ws-after-elems"("OptLayout")>, appl(prod([char-class([93])],lit("]"),no-attrs),[93])])),
+		    separated-list("Bool-elems", "Bool", 
+	[<ws-after-head("OptLayout")>,appl(prod([char-class([59])],lit(";"),no-attrs), [59]),<ws-after-sep("OptLayout")>])]

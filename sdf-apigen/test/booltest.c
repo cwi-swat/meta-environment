@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
   ATprotect(&term);
 
   tree = SDFgetStartTopBoolList(SDFStartFromTerm(term));
-
+ATwarning("%t\n", tree);
   testBooleans(tree);
 
   return 0;

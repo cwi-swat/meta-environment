@@ -1,0 +1,188 @@
+tests
+
+[prod-test]
+ production-to-asfix(lhs:Bool "&" rhs:Bool -> Bool ) ==
+  prod([sort("Bool"),lit("&"),sort("Bool")],sort("Bool"),no-attrs)
+
+[normalized-prod-test]
+  production-to-asfix(
+	<Bool-CF> <LAYOUT?-CF> "&" <LAYOUT?-CF> <Bool-CF> -> <Bool-CF>)
+  ==
+  prod([cf(sort("Bool")),cf(opt(layout)),lit("&"),cf(opt(layout)),cf(sort("Bool"))],cf(sort("Bool")),no-attrs)
+
+equations
+
+[normal-prod]
+  $AFSymbols    := symbols-to-asfix($Symbol*),
+  $AFSymbol    := symbol-to-asfix($Symbol),
+  $AFAttrs   := attrs-to-asfix($Attributes)
+  ===>
+  production-to-asfix($Symbol* -> $Symbol $Attributes) =
+    prod([$AFSymbols],$AFSymbol,$AFAttrs)
+
+equations
+
+[equ-symbols-to-asfix-empty]
+  symbols-to-asfix( ) =
+
+[equ-symbols-to-asfix-single]
+  symbols-to-asfix( $Symbol) = 
+    symbol-to-asfix( $Symbol)
+
+[equ-build-asfix-cf-prod-args-divide]
+  $AFSymbol := symbol-to-asfix( $Symbol),
+  $AFSymbols := symbols-to-asfix( $Symbol+)
+  ===>
+  symbols-to-asfix( $Symbol $Symbol+) = $AFSymbol, $AFSymbols
+
+equations
+
+[default-equ-symbol-to-asfix-strip-label]
+  symbol-to-asfix( $Label : $Symbol) = 
+    symbol-to-asfix( $Symbol)
+    
+[lex-symbol]
+  symbol-to-asfix(<$Symbol-LEX>) =
+    lex(symbol-to-asfix($Symbol))
+
+[cf-symbol]
+  symbol-to-asfix(<$Symbol-CF>) =
+    cf(symbol-to-asfix($Symbol))
+
+[sort]
+  symbol-to-asfix(sort($Char*)) = sort(qliteral(""" $Char* """))
+
+
+[qlit]
+  symbol-to-asfix($QLit) = lit($QLit)
+
+[uqlit]
+  symbol-to-asfix(uqliteral($Char*)) = symbol-to-asfix(qliteral("""$Char*"""))
+
+[charclass]
+  symbol-to-asfix($CharClass) = 
+    charclass-to-asfix($CharClass)
+
+[iter-star]
+  symbol-to-asfix($Symbol *) = 
+	iter-star(symbol-to-asfix($Symbol))
+
+[iter]
+  symbol-to-asfix($Symbol +) = 
+	iter(symbol-to-asfix($Symbol))
+
+[iter-sep-star]
+  symbol-to-asfix({ $Symbol1 $Symbol2 } *) = 
+	iter-star-sep(symbol-to-asfix($Symbol1),
+		      symbol-to-asfix($Symbol2))
+
+[iter-sep]
+  symbol-to-asfix({ $Symbol1 $Symbol2 } +) = 
+	iter-sep(symbol-to-asfix($Symbol1),
+		 symbol-to-asfix($Symbol2))
+
+[optional]
+  symbol-to-asfix($Symbol?) = opt(symbol-to-asfix($Symbol))
+
+[layout]
+  symbol-to-asfix(LAYOUT) = layout
+
+[start]
+  symbol-to-asfix(<START>) = sort("<START>")
+
+[nested-lit]
+  symbol-to-asfix(nested-literal(_Symbol* -> $Symbol _Attributes)) =
+  symbol-to-asfix($Symbol)
+
+[parameterized]
+  symbol-to-asfix(sort($Char*)[[$Symbol]]) = 
+	parameterized-sort(qliteral("""$Char*"""),[symbol-to-asfix($Symbol)])
+
+[formal-param-labelled]
+  symbol-to-asfix($Label:<_Symbol-PARAM>) = 
+	sort(<"type-of-" || $Label(str)>)
+
+[formal-param]
+  symbol-to-asfix(<$Sort-PARAM>) = 
+	sort(<"type-of-" || symbol-to-type($Sort)(str)>)
+
+equations
+
+[equ-build-asfix-multiple-charrange]
+  [$AFCharRanges1] := charranges-to-asfix($CharRanges1),
+  [$AFCharRanges2] := charranges-to-asfix($CharRanges2)
+  ===>
+  charranges-to-asfix($CharRanges1 $CharRanges2) = 
+	[$AFCharRanges1,$AFCharRanges2]
+
+[equ-charclass-to-asfix]
+  charclass-to-asfix([$CharRanges]) = 
+    char-class(charranges-to-asfix($CharRanges))
+
+[equ-build-asfix-singlechar-charrange]
+  charranges-to-asfix(numchar("\" $Char*)) = 
+    [natcon($Char*)]
+
+[equ-build-asfix-multiplechars-charrange]
+  charranges-to-asfix(numchar("\" $Char*1)-numchar("\" $Char*2)) = 
+    [range(natcon($Char*1),natcon($Char*2))]
+
+equations
+
+[not-empty]
+  $AFAttr+ := attr-list-to-asfix($Attr+)
+  ===>
+  attrs-to-asfix({$Attr+}) = 
+    attrs([$AFAttr+])
+
+[default-empty]
+  attrs-to-asfix($Attributes) = no-attrs 
+
+equations
+
+[single]
+  attr-list-to-asfix($Attr) = 
+    attr-to-asfix($Attr)
+
+[divide]
+  $AFAttr+1 := attr-to-asfix($Attr),
+  $AFAttr+2 := attr-list-to-asfix($Attr+)
+  ===>
+  attr-list-to-asfix($Attr, $Attr+) =
+     $AFAttr+1,$AFAttr+2
+
+[default-divide]
+  $AFAttr*1 := attr-to-asfix($Attr),
+  $AFAttr*2 := attr-list-to-asfix($Attr+)
+  ===>
+  attr-list-to-asfix($Attr, $Attr+) = $AFAttr*1,$AFAttr*2
+
+equations
+
+[left-attr]        
+attr-to-asfix($Attr) = uqliteral("a""s""s""o""c")(uqliteral("l""e""f""t"))
+
+[right-attr]       
+attr-to-asfix(right) = uqliteral("a""s""s""o""c")(uqliteral("r""i""g""h""t"))
+
+[nonassoc-attr]       
+attr-to-asfix(non-assoc) =  uqliteral("a""s""s""o""c")(uqliteral("n""o""n""-""a""s""s""o""c"))
+
+[assoc-attr]       
+attr-to-asfix(assoc) = uqliteral("a""s""s""o""c")(uqliteral("a""s""s""o""c"))
+
+[bracket-attr]     
+attr-to-asfix(bracket) = uqliteral("b""r""a""c""k""e""t")
+
+[avoid-attr]       
+attr-to-asfix(avoid) = uqliteral("a""v""o""i""d")
+
+[prefer-attr]      
+attr-to-asfix(prefer) = uqliteral("p""r""e""f""e""r")
+
+[cons-attr]
+attr-to-asfix(cons($ATerm)) = uqliteral("t""e""r""m")(cons($ATerm))
+
+[default-term-attr] 
+build-asfix-attr($ATerm) = uqliteral("t""e""r""m")($ATerm)
+
