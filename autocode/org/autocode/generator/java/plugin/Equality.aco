@@ -1,13 +1,16 @@
 plugin equality {
   class := "org.autocode.generator.java.plugin.Equality"
   provides operations {
-    type := { equals }
+    type := { equals, hash-code }
   }
 }
 
 type * {
   operation equals? {
     call-super := false
+  }
+  field * {
+    hash := true
   }
 }
 

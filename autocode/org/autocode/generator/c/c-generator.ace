@@ -29,7 +29,7 @@ application c-repository {
     } 
 
     type Include {
-      operation += { equals }
+      operation += { equals, hash-code }
       field system {
         operation := { is, set }
         operation set {
