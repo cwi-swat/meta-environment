@@ -14,6 +14,7 @@
 \W\usepackage{longtable}
 \W\usepackage{makeidx}
 \W\usepackage{frames}
+%%%% \W\usepackage{manpanels}
 \W\usepackage{sequential}
 
 \T\usepackage{epsfig}
@@ -62,6 +63,11 @@
         {\crule \begin{center} \begin{small}}
         {\end{small} \end{center} \crule}
 
+\newcommand{\warning}[]{
+	\htmlonly{\htmlimage{warning.gif}}
+	\texonly{\noindent {\bf Warning}:}
+}
+
 \newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
 \newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
 \newcommand{\accumulatorprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_2}}
@@ -104,6 +110,8 @@ This is work under construction.
 
 \end{abstract}
 
+Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.com}.
+
 \T\tableofcontents
 
 \W\htmlmenu{0}
@@ -118,9 +126,9 @@ This is work under construction.
 
 \begin{itemize}
 \item Updated the text at various places.
-\item Added a section on 
-\link{parameterized sorts}[, see
-Section~\ref{ParameterizedSorts}]{ParameterizedSorts}.
+\item Added a section on \link{parameterized sorts}[, see Section~\Ref]{ParameterizedSorts}.
+\item Completed the conversion to HyperLaTex.
+\item Added section on \link{well-formedness checks for \sdf}[ (Section~\Ref)]{SEC:SDF-checker}.
 \end{itemize}
 
 \section{Overview}
@@ -4128,8 +4136,10 @@ distinguish the following cases:
   
 The evaluation of negative conditions is described by replacing in the above
 description `identical' and `match' by `not identical' and `do not
-match', respectively. 
-However, it is not allowed to introduce new variables in a negative condition.
+match', respectively.
+ 
+\warning{}
+It is not allowed to introduce new variables in a negative condition.
 %%A warning is appropriate here: a negative condition that introduces
 %%new variables nearly always succeeds (unless the sort has exactly one
 %% element) and this is almost certainly not what you want.
@@ -4312,7 +4322,8 @@ In the example \link*{below}[in Figure \Ref]{CODE:lcfs}
 the lexical constructor function {\tt nat-con} is used to remove the leading
 zeros from a number.
 
-\noindent {\bf Warning}: the argument of a lexical constructor may be an
+\warning{}
+The argument of a lexical constructor may be an
 arbitrary list of characters and there is \emph{no check that they match
 the lexical definition of the corresponding sort}.
 
@@ -5215,7 +5226,8 @@ compiler can be activated. C code is generated for the selected module
 the imported modules. The C code is immediately compiled into an
 executable.
 
-{\bf Warning}: The specification should be complete, i.e., no missing modules are
+\warning{}
+The specification should be complete, i.e., no missing modules are
 allowed, and the equations sections should be error free.
 
 If this requirement is satisfied, C code can be generated.
@@ -5337,6 +5349,7 @@ modules, parse tables, user-defined terms, etc.
 \end{itemize}
 
 \section{Well-formedness checks on \sdf}
+\label{SEC:SDF-checker}
 
 \section{Selected Components of the \ASmetaenv}
 \label{SEC:Components}
