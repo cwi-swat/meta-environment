@@ -1,5 +1,8 @@
 $Id$
 
+Mon Feb  2 16:40:44 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Fix Makefile.am's to get distcheck working
+
 2004/01/29 (markvdb@cwi.nl)
  * Added a ToolBus component for manipulating errors.
 

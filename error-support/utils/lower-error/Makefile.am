@@ -14,7 +14,11 @@ lower_error_LDADD=\
 
 ERRORS=example
 EXTRA_DIST=$(wildcard *.ref) $(wildcard *.tree)
-CLEANFILES=$(TESTS)
+
+GENERATED_BY_TESTS = \
+	example.trm
+
+CLEANFILES = $(TESTS) $(GENERATED_BY_TESTS)
 
 TESTS=$(foreach e, ${ERRORS}, $e.sh)
 

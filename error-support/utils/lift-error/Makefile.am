@@ -1,7 +1,7 @@
 
 bin_PROGRAMS=lift-error
 
-INCLUDES=\
+INCLUDES= \
 	-I${ATERM}/include\
 	-I${top_srcdir}/lib
 
@@ -14,7 +14,11 @@ lift_error_LDADD=\
 
 ERRORS=example
 EXTRA_DIST=$(wildcard *.ref) $(wildcard *.trm)
-CLEANFILES=$(TESTS)
+
+GENERATED_BY_TESTS = \
+	example.tree
+
+CLEANFILES=$(TESTS) $(GENERATED_BY_TESTS)
 
 TESTS=$(foreach e, ${ERRORS}, $e.sh)
 

@@ -1,4 +1,4 @@
-SUBDIRS=lift-error lower-error
+SUBDIRS = lift-error lower-error
 
 EXTRA_DIST = \
 	error-support.idef
