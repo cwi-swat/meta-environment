@@ -215,6 +215,13 @@ in
     printf("Tree display not yet implemented\n").
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
     +
+    /*
+    rec-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid)).
+    snd-msg(set-parsetable(Language)).
+    rec-msg(parsetable-set(Language)).
+    snd-ack-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid))
+    +
+    */
     rec-event(TE,menu-event("Move", Str?, Fid)).
     snd-eval(SE,moveFocus(Fid,Str)).
     rec-value(SE,Fl?).
