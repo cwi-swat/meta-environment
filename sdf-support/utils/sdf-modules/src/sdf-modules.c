@@ -124,6 +124,40 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
 }
 
 /*}}}  */
+/*{{{  ATerm get_import_graph(int cid, ATerm atModules) */
+
+ATerm get_import_graph(int cid, ATerm atModules)
+{
+  ATermList list = (ATermList) atModules;
+  ATermList nodes = ATempty;
+  ATermList edges = ATempty;
+
+  for (; !ATisEmpty(list); list = ATgetNext(list)) {
+    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
+    SDF_ModuleId id = SDF_getModuleNameModuleId(
+			SDF_getModuleModuleName(module));
+    ATerm name = ATmake("<str>", 
+                        SDF_getCHARLISTString(SDF_getModuleIdChars(id)));
+    ATermList imports = SDF_getImports(module);
+
+    for(; !ATisEmpty(imports); imports = ATgetNext(imports)) {
+      ATerm import = ATgetFirst(imports);
+      ATerm pair = ATmake("[<term>,<term>]", name, import);
+
+      if (ATindexOf(edges, pair, 0) < 0) {
+        edges = ATinsert(edges, pair);
+      }
+
+      imports = ATgetNext(imports);
+    }
+
+    nodes = ATinsert(nodes, name);
+  }
+
+  return ATmake("snd-result(import-graph(<term>,<term>))", nodes, edges);
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
