@@ -716,6 +716,11 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
     }
   }
 
+  /* We want to compile the rules in order given by the user for
+   * predictability.
+   */
+  rules = (MA_RuleElems) ATreverse((ATermList) rules);
+
   return MA_makeRulesOptPresent(nl,MA_makeRuleListDefault(rules));
 }
 
