@@ -1,3 +1,7 @@
+2002/05/15 (jurgenv@cwi.nl)
+ * Connected asfe to asf-builtins library
+ * Added configure switch for asf-library (for builtins)
+
 2002/05/14 (jurgenv@cwi.nl)
  * Fixed a bug in addeqssyntax that caused module with multiple import 
    sections to crash during parsetable generation.
