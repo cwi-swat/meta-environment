@@ -1,0 +1,115 @@
+\documentclass[10pt]{article}
+\usepackage{a4wide}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{times}
+\usepackage{xspace}
+\usepackage{alltt}
+\usepackage{supertabular}
+\usepackage{epsfig}
+
+
+\newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
+\newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
+\newcommand{\note}[1]{\paragraph{Note:} \emph{#1}}
+
+\title{Software Evolution 2003\\
+Analysis of Software Systems}
+\author{}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Deadline}
+
+\section{Introduction}
+
+This series of exercises is intended to get some experience with
+the analysis of the source code of software systems.
+
+\section{Preparations}
+
+\section{Exercises}
+
+\subsection{Some simple queries}
+ Given are:
+
+\begin{itemize}
+\item {\tt bag[int] B1 = \{ 83, 53, 79, 1, 13, 17, 71, 19, 27, 33, 49, 67\}}.
+
+\item {\tt rel[str,str] calls = \{
+<"R", "A">,<"R", "B">,
+<"A", "D">, <"B", "A">, <"B", "D">, <"B", "E">,
+<"C", "F">, <"C", "G">, <"D", "L">, <"E", "H">,
+<"F", "I">, <"G", "I">, <"G", "J">,<"H", "K">, <"H", "E">,
+<"I", "K">,  <"K", "I">,<"L", "H">
+\}}
+\end{itemize}
+
+Write an \rscript to answer each of the following questions:
+
+\begin{itemize}
+
+\item[Q1]
+Compute {\tt rel[int,bag[int] R} such that each element in {\tt B1} is related to all
+elements in {\tt B1} that are smaller than that element.
+
+\item[Q2] What are the \emph{entry points} of {\tt calls}?
+An entry point is a procedure that is itself not called by another procedure.
+
+\item[Q3] What are the \emph{leaves} of {\tt calls}?
+A leave is a procedure that does not makes calls to other procedures.
+
+\item[Q4] What is the transitive closure of the {\tt calls} relation?
+
+\item[Q5] Which procedures can be called
+(indirectly) from each entry point?
+
+\item[Q6] Which procedures are \emph{common}, i.e. are called from all entry points?
+
+\end{itemize}
+
+\subsection{Java Queries}
+
+Given are the following relations about the AWT sources:
+
+\begin{itemize}
+
+\item {\tt rel[str,str] INHERITANCE}: If {\tt <C$_1$, C$_2$>} is an
+element of {\tt INHERITANCE}, then class {\tt C$_1$} either extends
+class {\tt C$_2$} or {\tt C$_1$} implements interface {\tt C$_2$}.
+
+\item {\tt rel[str,str] CONTAINMENT}: If {\tt <C$_1$, C$_2$>} is an
+element of {\tt CONTAINMENT}, then one of the attributes of class {\tt
+C$_1$} is of type {\tt C$_2$}.
+
+\item {\tt rel[area,str] METHOD\_DECL}: relates the text area of a method
+declaration to the name of the declared method.
+
+\item {\tt rel[area,str] CLASS\_DECL}: relates the text area of a class
+declaration to the name of the declared class.
+
+\end{itemize}
+
+Write an \rscript to answer each of the following questions:
+
+\begin{itemize}
+
+\item[Q7] How many class declarations are there?
+
+\item[Q8] What is the largest class?
+
+\item[Q9] How many method declarations are there?
+
+\item[Q10] What is the largests method?
+
+\item[Q11] Which cases of degenerate inheritance are there?
+
+\item[Q12] Find similar classes. Here we define similar as: (a) contain the
+same classes; (b) inherit from the same classes.
+
+\end{itemize}
+
+\end{document}
