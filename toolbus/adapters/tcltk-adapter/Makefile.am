@@ -28,8 +28,9 @@ EXTRA_DIST   = tcltk-adapter.c.tex tcltk-adapter.guide.tex test.tcl.nw \
 
 tcltk_adapter_SOURCES = tcltk-adapter.c tcltk-tide.c tcltk-tide.h
 tcltk_adapter_LDADD   = -L$(TCLTK)/lib -ltk8.0 -ltcl8.0 \
+			-L${top_builddir}/aterm -lATB \
                         -L$(x_libraries) -lX11 -ldl \
-                        -L$(ATERM)/lib -lATB -lATerm
+                        -L$(ATERM)/lib -lATerm
 
 CLEANFILES   = adapters.ps
 TCLTK_DEFS   = -DLIBDIR=\"$(datadir)\"
