@@ -247,7 +247,7 @@ static int yieldInteger(int ch, int idx, char *buf, int bufSize)
   
   /* create escaped octal number */
   buf[idx++] = '\\';
-  sprintf(buf+idx,"%03o",ch);
+  sprintf(buf+idx,"%03d",ch);
   idx += 3;
 
   return idx;

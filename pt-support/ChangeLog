@@ -1,3 +1,9 @@
+2001/07/25 (jurgenv@cwi.nl)
+ * PT2dot functionality added to the library. This is a highly refactored
+   and parametrized version of tree2dot which migrated from the sglr package.
+ * Added tree2dot as a commandline tool.
+ * Changed yielding of characters classes from octal to decimal notation.
+
 2001/07/24 (jurgenv@cwi.nl)
  * reportAmbs added to the library. This used to be functionality in sglr.
  * also moved ambtracker tool from sglr to pt-support. Simplified its 
