@@ -22,6 +22,7 @@
 include ../make_rules
 
 bin_PROGRAMS     = afexpand asource
+data_DATA        = asource.idef
 
 EXTRA_DIST       = asource.idef asource.tif.c asource.tif.h
 
