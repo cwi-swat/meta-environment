@@ -19,4 +19,4 @@
 # $Id$
 
 EXTRA_DIST=Ambi.tbl Casl.tbl Cyclops.tbl Flat.tbl Isle.tbl Pico.tbl Risla.tbl \
-           Sdf2.tbl SimpleCobol.tbl
+           Sdf2.tbl SimpleCobol.tbl 
