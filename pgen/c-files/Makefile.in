@@ -34,7 +34,13 @@ AR		= @AR@
 AR_FLAGS        = cr
 
 ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 #include ${top_srcdir}/implicit-rules
@@ -42,8 +48,8 @@ TOOLBUS		= @TOOLBUS@
 # The eXtra parts of some variables
 XCFLAGS		=
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} $(SOCKLIBS)
+XINCLUDES	= -I$(ATERMINC)
+XLIBS		= -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -76,15 +82,15 @@ all: $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 add-pt-func.tif.h: add-pt-func.tifs
-	$(ATERM)/bin/tifstoc -tool add-pt-func add-pt-func.tifs
+	$(ATERMBIN)/tifstoc -tool add-pt-func add-pt-func.tifs
 
 add-norm-func.tif.h: add-norm-func.tifs
-	$(ATERM)/bin/tifstoc -tool add-norm-func add-norm-func.tifs
+	$(ATERMBIN)/tifstoc -tool add-norm-func add-norm-func.tifs
 
 %.tif.c:	%.tif.h
 
 %.tifs: %.tb
-	$(TOOLBUS)/bin/toolbus -gentifs $<
+	$(TOOLBUSBIN)/toolbus -gentifs $<
 
 add-pt-func:		$(POBJ)
 	$(CC) -o $@ $(POBJ) $(LIBS)

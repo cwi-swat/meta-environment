@@ -13,21 +13,21 @@ CC=@CC@
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
 # DEBUG-LD-FLAGS: optional flags for linking with debugging information
-DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-LIBS     = -L$(ATERMLIB) $(LOCALLIBS:=-dbg) $(LIBS)
 DEBUG-CC-FLAGS = -g
 DEBUG-LD-FLAGS = 
 
 # PROFILE-LIBS:     libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-PROFILE-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-LIBS     = -L$(ATERMLIB) $(LOCALLIBS:=-prof) $(LIBS)
 PROFILE-CC-FLAGS = -pg
 PROFILE-LD-FLAGS = -pg
 
 # STD-LIBS:     normal libraries
 # STD-CC-FLAGS: normal compiler flags
 # STD-LD-FLAGS: optional flags
-STD-LIBS      = -L$(ATERM)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-LIBS      = -L$(ATERMLIB) $(LOCALLIBS:=-$(CC)) $(LIBS)
 STD-CC-FLAGS  = 
 STD-LD-FLAGS  = 
 
@@ -53,10 +53,13 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
-ATERM           = @ATERM@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 
-XINCLUDES       = -I$(ATERM)/include -I$(includedir) -I$(top_srcdir)/compiler/support
-XLIBS           = -L$(top_srcdir)/compiler/support -L$(prefix)/lib $(SOCKLIBS)
+XINCLUDES       = -I$(ATERMINC) -I$(includedir) -I$(top_srcdir)/compiler/support
+XLIBS           = -L$(top_srcdir)/compiler/support -L$(ATERMLIB) $(SOCKLIBS)
 
 SPEC_SRCS=\
           AUX-ATerm-Lists9.c\
