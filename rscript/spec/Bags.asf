@@ -155,7 +155,7 @@ equations
 
 %% --- diff($Bag1, $Bag2)
 
-[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem, $Elem*4})
+[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
 
 [default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
@@ -186,6 +186,13 @@ equations
 
 [default-in-2]
 	in($Elem, {$Elem*}) = false
+
+[unique1]
+	unique({$Elem*1, $Elem, $Elem*2, $Elem, $Elem*3}) = 
+	unique({$Elem*1, $Elem, $Elem*2, $Elem*3})
+
+[default-unique]
+	unique($Bag) = $Bag
 
 %% if
 

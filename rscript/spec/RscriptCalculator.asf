@@ -542,6 +542,10 @@
 	====================================================
 	evalx(bottom($Exp), $Rstore) = bottom($Rel)
 
+[Funq]	$Bag := evalb($Exp, $Rstore)
+	====================================================
+	evalx(unique($Exp), $Rstore) = unique($Bag)
+
 [Finv]	$Rel := evalr($Exp, $Rstore)
 	===================================================
 	evalx(inv($Exp), $Rstore) = inv($Rel)
