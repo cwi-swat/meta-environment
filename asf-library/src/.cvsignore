@@ -1,5 +1,7 @@
 Makefile.in
 Makefile
 asf-builtins.h
+asf-forward.c
 .deps
+link-test
 

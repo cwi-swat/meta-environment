@@ -9,9 +9,9 @@ int main(void)
    * throw warnings
    */
 
-  assert(0 && "this program has no functionality");
+  if(fprintf(stderr, "This program does nothing!\n") == 0) {
+    forwardBuiltin(NULL,NULL);
+  }
 
-  forwardBuiltin(NULL,NULL);
-
-  return 0;
+  return 1;
 }

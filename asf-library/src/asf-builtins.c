@@ -5,14 +5,9 @@
 #include <aterm2.h>
 #include "asf-builtins.h"
 
-static ATbool initialized = ATfalse;
-
-void initBuiltins(void)
-{
-  initialized = ATtrue;
-
-  return;
-}
+/* This file should provide an implementation for every prototype
+ * in asf-builtins.h
+ */
 
 PT_Tree shell(ATerm builtin, PT_Tree input)
 {
@@ -26,6 +21,7 @@ PT_Tree shell(ATerm builtin, PT_Tree input)
   return input;
 }
 
+
 PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
 {
   PT_Tree file_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
@@ -35,7 +31,7 @@ PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
   PT_Tree tree = NULL;
   PT_Tree result = input;
   PT_Symbol input_rhs, tree_rhs;
-ATwarning("reading: %s\n", PT_yieldTree(input));
+
   if (PT_hasTreeProd(input)) {
     input_rhs = PT_getProductionRhs(PT_getTreeProd(input));
 
@@ -80,37 +76,4 @@ PT_Tree write_term_to_file(ATerm builtin, PT_Tree input)
   }
 
   return tree_arg;
-}
-
-/* Naive implementation: just do strcmp's until we find the correct
- * function. Idea: use asc-support or similar hashtable implementation.
- */
-PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
-{
-  AFun afun;
-  char *name = NULL;
-  PT_Tree result = input;
-
-  assert(initialized && "builtins are not initialized");
-  assert(ATgetType(builtin) == AT_APPL && "builtins should be ATermAppls");
-
-  afun = ATgetAFun(builtin);
-  name = ATgetName(afun);
-
-  if (!strcmp(name, "shell")) {
-    result = shell(builtin, input);
-  }
-  if (!strcmp(name, "read-term-from-file")) {
-    result = read_term_from_file(builtin, input);
-  }
-  if (!strcmp(name, "write-term-to-file")) {
-    result = write_term_to_file(builtin, input);
-  }
-
-  if (result == NULL) {
-    ATwarning("WARNING: builtin %s failed to return a valid term\n", name);
-    return input;
-  }
-
-  return result; 
 }
