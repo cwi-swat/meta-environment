@@ -25,8 +25,13 @@ in
       Extension := "trm.tbl"
     ) .
     snd-eval(GENTABLE, generate-table(Syntax, Name, Extension)) .
-    rec-value(GENTABLE, generation-finished(Table?)) .
-    snd-msg(parsetable(Table))
+    (
+      rec-value(GENTABLE, generation-finished(Table?)) .
+      snd-msg(parsetable(Table))
+      +
+      rec-value(GENTABLE, generation-failed).
+      snd-msg(no-parsetable)
+    )
   )*
   delta
 endlet

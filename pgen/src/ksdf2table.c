@@ -788,7 +788,8 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
                   initial_state,labelsection,statelist,priosection);
   }
   else {
-    ATerror("Expected grammars, got %t\n", grammarTerm);
+    ATwarning("parsetablegen: unexpected error in syntax definition!\n", 
+	      grammarTerm);
     return NULL;
   }
 }

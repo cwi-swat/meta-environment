@@ -173,10 +173,15 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 */
 
   pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
-  packed = ATBpack(pt);
 
-  packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
-  return ATmake("snd-value(generation-finished(<term>))", packed);
+  if (pt != NULL) {
+    packed = ATBpack(pt);
+    packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
+    return ATmake("snd-value(generation-finished(<term>))", packed);
+  }
+  else {
+    return ATmake("snd-value(generation-failed)");
+  }
 }
 
 /*}}}  */
@@ -334,6 +339,10 @@ int main(int argc, char *argv[])
 	}
 	else {
 	  pt = normalize_and_generate_table(moduleName, term);
+	}
+
+	if (pt == NULL) {
+	  exit (1);
 	}
 
 	if (nr_inputs > 1) {
