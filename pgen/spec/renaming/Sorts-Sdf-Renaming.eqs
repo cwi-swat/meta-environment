@@ -1,0 +1,11 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Renaming sorts.
+
+  [0] [_S] 'r = _S
+  [0] (sorts 'a) 'r = sorts ('a)*'r
+
+%%%

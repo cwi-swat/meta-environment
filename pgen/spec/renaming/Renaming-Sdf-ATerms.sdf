@@ -1,6 +1,0 @@
-module Renaming-Sdf-ATerms
-imports Renaming-Sdf-Tree-Constructors
-exports
-  context-free syntax
-    aterm(Renamings) -> ATerm
-    renamings(ATerm) -> Renamings
