@@ -97,24 +97,14 @@ CLEANFILES	= $(GENCSRC) $(GENCHDR) *.o *~ $(BINFILES)
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= Makefile
 
-SUBDIRS		= 
-
 # The all target must be defined:
-all: depend subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # Unit test target
 test:	asfix2c-test
 
 asfix2c-test:
 	@cd regress-test; ./regress-asfix2c 
-
-subdirs:
-	@for dir in $(SUBDIRS); \
-	do \
-		echo "make all in $$dir"; \
-		cd $$dir; ${MAKE} all; \
-		cd ..; \
-	done
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
@@ -135,27 +125,12 @@ install: all
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-#	@for DIR in $(SUBDIRS); \
-#	do \
-#	   echo Make $@ in $$DIR; \
-#	   cd $$DIR; \
-#	   $(MAKE) $@; \
-#	   cd ..; \
-#	done
-
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
 	@$(UNINSTALL) $(libdir) $(LIBFILES)
 	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
-	@for DIR in $(SUBDIRS); \
-	do \
-	   echo Make $@ in $$DIR; \
-	   cd $$DIR; \
-	   $(MAKE) $@; \
-	   cd ..; \
-	done
 
 # doc target (copy generated documentation files to $(docdir))
 doc: $(DOCFILES)
@@ -164,24 +139,10 @@ doc: $(DOCFILES)
 # clean target (remove all easily build components and temporary files)
 clean:
 	rm -f $(CLEANFILES)
-	@for DIR in $(SUBDIRS); \
-	do \
-	   echo Make $@ in $$DIR; \
-	   cd $$DIR; \
-	   $(MAKE) $@; \
-	   cd ..; \
-	done
 
 # distclean target (also remove any files created by 'configure')
 distclean realclean spotless: clean
 	rm -f $(DISTCLEANFILES)
-	@for DIR in $(SUBDIRS); \
-	do \
-	   echo Make $@ in $$DIR; \
-	   cd $$DIR; \
-	   $(MAKE) $@; \
-	   cd ..; \
-	done
 
 # Some extra dependencies, to work around problems with makedepend and
 # generated (.tif.?) sources
