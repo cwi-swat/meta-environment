@@ -8,6 +8,18 @@
 #include "equations.h"
 #include "values.h"
 
+/*{{{  static ATerm prettyTag(ASF_ASFTag tag) */
+
+static ATerm prettyTag(ASF_ASFTag tag)
+{
+  ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
+  AFun fun = ATmakeAFun(PT_yieldTree((PT_Tree) ASF_ASFTagIdToTerm(id)),
+			0, ATfalse);
+  return (ATerm) ATmakeAppl0(fun);
+}
+
+/*}}}  */
+
 /*{{{  static ASF_ASFTag testOne(ASF_TestEquation test) */
 
 static ASF_ASFTag testOne(ASF_ASFTestEquation test)
@@ -54,10 +66,7 @@ static ATermList testAll(ASF_ASFTestEquationTestList tests)
     ASF_ASFTag result = testOne(test);
 
     if (result != NULL) {
-      failed = ATinsert(failed, 
-			ATmake("<str>", 
-			       PT_yieldTree((PT_Tree) 
-					    ASF_ASFTagToTerm(result))));
+      failed = ATinsert(failed, prettyTag(result));
     }
 
     if (!ASF_hasASFTestEquationTestListTail(tests)) {
