@@ -112,6 +112,7 @@ proc monitor_atom {pid atfun src blino bpos elino epos} {
         do_stop
      }
 
+#    this if statement should have stopped viewer
      if { [string compare $tracer_state(mode) step_mode] == 0|| \
           [lsearch $tracer_state(proc_breaks) $pid] >= 0 || \
           [lsearch $tracer_state(line_breaks) $line_break] == 0 } {
@@ -285,7 +286,7 @@ proc addBreak {w} {
      regexp {([0-9]+)\.([0-9]+)} $lp clp l p;
      set breaks $tracer_state(line_breaks)
      set line_break [concat $current_src,$l]
-     set i [lsearch $breaks $l]
+     set i [lsearch $breaks $line_break]
      if { $i < 0 } {     
         lappend tracer_state(line_breaks) $line_break
         $w tag add break $l.0 [expr $l + 1].0
@@ -302,7 +303,7 @@ proc delBreak {w} {
      set lp [$w index insert]
      regexp {([0-9]+)\.([0-9]+)} $lp clp l p
      set breaks $tracer_state(line_breaks)
-     set line_break "$current_src $line_break"
+     set line_break [concat $current_src,$l]
      set i [lsearch $breaks $line_break]
      if { $i >= 0 } {
          set  $tracer_state(line_breaks) [lreplace $breaks $i $i]

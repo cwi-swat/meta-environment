@@ -1,6 +1,11 @@
 $Id$
 
 2003-06-11 <kooiker@cwi.nl>
+
+ * fix toolbus/viewer.tcl.src: bug introduced in previous version prevented 
+   resetting of breakpoints 
+
+2003-06-11 <kooiker@cwi.nl>
  * fix viewer.tcl.src: lsearch only checked if breakpoint was first in the
    list
 
