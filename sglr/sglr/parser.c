@@ -365,7 +365,7 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
   if(!ATisEmpty(bonsai)) {
     if(AmbStart) {
       if(ATgetLength(bonsai) > 1) {
-        return ATmake("amb(<list>)", bonsai);
+        return ATmake("amb([<list>])", bonsai);
       } else {
         SGnrAmb(SG_NRAMB_DEC);
         return ATgetFirst(bonsai);
