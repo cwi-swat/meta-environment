@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb  9 17:44:10 CET 2004 <jurgenv@cwi.nl>
+ * Using const char* in all ToolBus communication
+
+
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
  * fix Makefile.am to get "distcheck" working
 
