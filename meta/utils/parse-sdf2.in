@@ -52,7 +52,7 @@ in
 			then
 				if [ $CONVERT -eq 1 ]
 			        then
-				        out1=${NAMEDOUTPUT:-"$dir/$base.asfix2"}
+				        out1=${NAMEDOUTPUT:-"$dir/$base.asfix1"}
 					if [ $out2 = $out1 ]
 					then	# Move away $out2
 						mv $out2 $out2.tmp
