@@ -96,8 +96,10 @@ enum SGmodeFlags {
 #define SG_STARTSYMBOL_ON()  (SG_Mode |=  SG_BIT(SG_STARTSYMBOLFLAG))
 #define SG_STARTSYMBOL_OFF() (SG_Mode &= ~SG_BIT(SG_STARTSYMBOLFLAG))
 
-#define SG_GC              (SG_Mode  &  SG_BIT(SG_GCFLAG))
-#define SG_GC_ON()         (SG_Mode |=  SG_BIT(SG_GCFLAG))
-#define SG_GC_OFF()        (SG_Mode &= ~SG_BIT(SG_GCFLAG))
+#if !defined(HAVE_BOEHMGC)
+  #define SG_GC            (SG_Mode  &  SG_BIT(SG_GCFLAG))
+  #define SG_GC_ON()       (SG_Mode |=  SG_BIT(SG_GCFLAG))
+  #define SG_GC_OFF()      (SG_Mode &= ~SG_BIT(SG_GCFLAG))
+#endif
 
 #endif  /* _SGLR_H_ */

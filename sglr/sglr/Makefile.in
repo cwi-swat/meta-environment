@@ -31,7 +31,7 @@ LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
-DEFS		= @DEFS@ # -DDEBUG # -O2 -funroll-loops 
+DEFS		= @DEFS@ # -DDEBUG # -O2 -funroll-loops
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBSALL		= @LIBS@ ${SOCKLIBS} -L${libdir}
 LIBS		= ${LIBSALL} ${XLIBS}
@@ -56,7 +56,6 @@ XA2TOA1GCCFLAG	= ${XA2TOA1CFLAG} ${XGCCFLAG}
 XA2TOA1GCLIB	= ${XA2TOA1LIB} ${XGCLIB}
 XINCLUDES	= -I${ATERM}/include
 ATVERS		= ${CC}
-#ATVERS		= dbg
 XLIBS		= -lATerm-${ATVERS} -lAsFix-${ATVERS} -lATB-${ATVERS}
 XLIBSPROF	= -lATerm-prof  -lAsFix-prof  -lATB-prof
 
@@ -67,10 +66,12 @@ SGLRLIBA2TOA1GC = libsglr-a2toa1-gc.a
 SGLRLIBPROF     = libsglr-prof.a
 SGLRLIBS        = ${SGLRLIB} ${SGLRLIBA2TOA1} ${SGLRLIBGC} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
-LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
+LIBSRCGC        = sglr-main.c sglr-interface.c parse-table.c parser.c	\
+                  forest.c stack.c tree-to-dot.c
+LIBSRC          = ${LIBSRCGC} stack-collect.c
 LIBOBJ          = ${patsubst %.c,%.o,${LIBSRC}}
 LIBOBJA2TOA1    = ${patsubst %.c,%-a2toa1.o,${LIBSRC}}
-LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRC}}
+LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRCGC}}
 LIBOBJA2TOA1GC  = ${patsubst %.c,%-a2toa1-gc.o,${LIBSRC}}
 LIBOBJPROF      = ${patsubst %.c,%-prof.o,${LIBSRC}}
 
@@ -86,10 +87,6 @@ PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-a2toa1-gc sglr-prof
 PUREPROGS       = ${addsuffix .pure,${PROG}}
 GETOPTC         = getopt.c getopt1.c
 GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
-CSRC            = sglr-main.c
-OBJ             = ${patsubst %.c,%.o,${CSRC}}
-OBJPROF         = ${patsubst %.c,%-prof.o,${CSRC}}
-OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
 all:	${PROG}
 
@@ -205,16 +202,16 @@ parse-client: ${GETOPTOBJ} parse-client.o parse-client.tif.c
 	${CC} ${LDFLAGS} $@.o ${GETOPTOBJ} ${LIBS} -o $@
 
 dump-actions:	dump-actions.o ${SGLRLIB}
-	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@
 
 dump-gotos:	dump-gotos.o ${SGLRLIB}
-	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@
 
 dump-priorities:	dump-priorities.o ${SGLRLIB}
-	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@
 
 dump-productions:	dump-productions.o ${SGLRLIB}
-	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@
 
 # ObTribute to Larry Wall
 love:
@@ -231,8 +228,8 @@ getopt1.o: getopt1.c
 	${CC} -O3 -c $<
 
 # Handle dependencies
-depend: ${CSRC} ${LIBSRC} ${GETOPTC} ${CLIENTC} ${DUMPC} ${TIFS}
-	makedepend ${INCLUDES} ${CSRC} ${GETOPTC}	 -f -	>	$@
+depend: ${LIBSRC} ${GETOPTC} ${CLIENTC} ${DUMPC} ${TIFS}
+	makedepend ${INCLUDES} ${GETOPTC}	 -f -		>	$@
 	makedepend ${INCLUDES} ${CLIENTC} ${DUMPC} -f -		>>	$@
 	makedepend ${INCLUDES} ${LIBSRC} -f -			>	$@.tmp
 	cat	$@.tmp						>>	$@

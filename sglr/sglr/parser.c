@@ -241,8 +241,10 @@ void  SG_ParserPreparation(void)
 
 void  SG_ParserCleanup(void)
 {
+#if !defined(HAVE_BOEHMGC)
   if(SG_GC)
     SG_PurgeOldStacks(SG_AddStack(accepting_stack, active_stacks), NULL, NULL);
+#endif
   active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
@@ -533,8 +535,6 @@ void SG_Actor(stack *st)
          break;
       default:
       case ERROR:
-        ATfprintf(stderr, "SG_Actor: deleting hopeless stack\n");
-        SG_DeleteStack(st);
         break;
     }
   }
@@ -772,8 +772,10 @@ void SG_Shifter(void)
                 SG_ST_STATE(st0));
   }
 
+#if !defined(HAVE_BOEHMGC)
   if(SG_GC)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
+#endif
 
   if(!(active_stacks = new_active_stacks) && SG_DEBUG)
       ATfprintf(SGlog(), "Shifter: no stacks left\n");
