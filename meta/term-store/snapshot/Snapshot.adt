@@ -1,13 +1,11 @@
 [
-  [Snapshot, Main, term-store(<tables(Tables)>)],
+  constructor(Snapshot,Main,term-store(<tables(Tables)>)),
 
-  [Tables, Empty, []],
-  [Tables, Many,[<head(Table)>,<[tail(Tables)]>]],
+  list(Tables,Table),
 
-  [Table, default, table(<name(str)>,<value-type(str)>,<rows(Rows)>)],
+  constructor(Table,default,table(<name(str)>,<value-type(str)>,<rows(Rows)>)),
 
-  [Rows, Empty, []],
-  [Rows, Many, [<head(Row)>,<[tail(Rows)]>]],
+  list(Rows,Row),
 
-  [Row, default, row(<key(term)>,<value(term)>)]
+  constructor(Row,default,row(<key(term)>,<value(term)>))
 ]

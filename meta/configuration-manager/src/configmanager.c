@@ -445,13 +445,13 @@ void version(const char *msg)
 
 static void initConfigurationManager(void)
 {
-  ATprotect((ATerm*) &modulePaths);
+  ATprotectList(&modulePaths);
   modulePaths = ATempty;
 
-  ATprotect((ATerm *) &userExtensions);
+  ATprotectList(&userExtensions);
   userExtensions = ATempty;
 
-  ATprotect((ATerm *) &systemExtensions);
+  ATprotectList(&systemExtensions);
   systemExtensions = ATempty;
 
   userDescriptionsByType = ATtableCreate(INITIAL_TABLE_SIZE,

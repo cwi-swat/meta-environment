@@ -1,7 +1,3 @@
-/*
- * Generated at Fri Jun 27 17:10:44 2003
- */
-
 #ifndef __Snapshot_dict_H
 #define __Snapshot_dict_H
 
@@ -13,9 +9,11 @@ extern AFun SS_afun1;
 
 extern ATerm SS_patternRowDefault;
 extern ATerm SS_patternRowsMany;
+extern ATerm SS_patternRowsSingle;
 extern ATerm SS_patternRowsEmpty;
 extern ATerm SS_patternTableDefault;
 extern ATerm SS_patternTablesMany;
+extern ATerm SS_patternTablesSingle;
 extern ATerm SS_patternTablesEmpty;
 extern ATerm SS_patternSnapshotMain;
 
