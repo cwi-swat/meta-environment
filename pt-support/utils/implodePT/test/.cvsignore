@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+.deps
+*.tested
+*.tbl
+*.sh
+
