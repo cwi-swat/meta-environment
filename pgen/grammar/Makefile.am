@@ -19,18 +19,17 @@
 #
 # $Id$
 
-pkgdata_DATA = Sdf2.baf Sdf2.sdf2
-TESTS = test-grammar
+pkgdata_DATA = Sdf2.baf
 
-EXTRA_DIST = Sdf2-bootstrap.tbl test-grammar.src Sdf2.sdf2
-CLEANFILES = Sdf2.baf Sdf2.tbl.asfix test-grammar
+EXTRA_DIST = Sdf2.sdf2 Sdf2.asfix
+CLEANFILES = Sdf2.baf Sdf2.asfix
 
 TABLEGEN=../src/parsetablegen
 
-%.baf : %.tbl.asfix
+%.baf : %.asfix
 	$(TABLEGEN) < $< > $@
 	
-Sdf2.tbl.asfix : Sdf2-bootstrap.tbl Sdf2.sdf2
+Sdf2.asfix : Sdf2-bootstrap.tbl Sdf2.sdf2
 	PATH=$(SGLR):$$PATH; export PATH ;\
 	sglr -p $(srcdir)/Sdf2-bootstrap.tbl -1 -i $(srcdir)/Sdf2.sdf2 -o $@
 
