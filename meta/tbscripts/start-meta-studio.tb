@@ -6,8 +6,8 @@ let
   ModuleName : str,
   Pid : int
 in
-  create(MetaCreator, Pid?) .
   create(Ui, Pid?) .
+  create(MetaCreator, Pid?) .
   if not-equal(MODULENAME,"") then
     snd-msg(open-modules([MODULENAME])) .
     rec-msg(finished-opening-modules)
