@@ -22,7 +22,7 @@ dnl
 dnl $Id$
 
 AC_INIT(Makefile.in)
-AM_INIT_AUTOMAKE(asfix, 0.2.1)
+AM_INIT_AUTOMAKE(asfix, 0.2.2)
 
 dnl Default values
 CC_GCC=gcc
