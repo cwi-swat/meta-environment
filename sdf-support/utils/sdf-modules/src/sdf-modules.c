@@ -241,7 +241,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
 {
   ATermList list;
   SDF_ModuleList modules;
-  SDF_OptLayout space;
+  SDF_OptLayout newline;
   SDF_SDF sdf;
   SDF_Start start;
   ATerm result;
@@ -249,7 +249,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
   list = (ATermList) ATBunpack(atModules);
 
   modules = SDF_makeModuleListEmpty();
-  space = SDF_makeLayoutSpace();
+  newline = SDF_makeLayoutNewline();
 
   for( ;!ATisEmpty(list); list = ATgetNext(list)) {
     SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));
@@ -259,13 +259,13 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
       modules = SDF_makeModuleListSingle(module);
     }
     else {
-      modules = SDF_makeModuleListMany(module, space, modules);
+      modules = SDF_makeModuleListMany(module, newline, modules);
     }
   }
 
   if (!SDF_isModuleListEmpty(modules)) {
-    sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
-    start = SDF_makeStartSDF(space, sdf, space, 0);
+    sdf = SDF_makeSDFDefinition(newline, SDF_makeDefinitionDefault(modules));
+    start = SDF_makeStartSDF(newline, sdf, newline, 0);
     result = ATBpack(SDF_StartToTerm(start));
 
     return ATmake("snd-value(sdf-definition(<term>))", result);
