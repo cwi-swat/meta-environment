@@ -489,19 +489,23 @@ void  SG_ParserCleanup(void)
 {
   long allocated;
 
+  SG_CollectOldStacks(old_active_stacks, sg_tokens_read % GC_CYCLE,
+		      NULL, accepting_stack);
+
+  if (accepting_stack) {
+     SG_ClearStack(accepting_stack);
+  }
+
   active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
+
   IF_STATISTICS(
     allocated = SG_Allocated();
     if(allocated > 0)
       fprintf(SG_log(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
               allocated);
   );
-#if 0
-    /*  Seems to trigger a bug related to ATerm gc if running as ToolBus tool  */
-    ATcollect();
-#endif
 }
 
 /*
@@ -948,6 +952,12 @@ void SG_Shifter(void)
     );
   }
     SG_DiscardShiftPairs();
+
+  old_active_stacks[(sg_tokens_read-1) % GC_CYCLE] = active_stacks;
+  if (((sg_tokens_read-1) % GC_CYCLE) == (GC_CYCLE-1)) {
+    SG_CollectOldStacks(old_active_stacks, GC_CYCLE, new_active_stacks, 
+			accepting_stack);
+  }
 
   active_stacks = new_active_stacks;
 } /*  Shifter  */
