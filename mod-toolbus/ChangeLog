@@ -2,6 +2,9 @@
 Tue Oct 14 13:55:12 CEST 2003	<jurgenv@cwi.nl>
   * Added package definition
   * Renamed package from mod_toolbus to mod-toolbus 
+  * Added general HTTP get arguments to ATermList parser
+  * Changed the protocol to send all arguments of a GET in one
+    event to the ToolBus
 
 Mon Oct 13 09:18:52 CEST 2003	<jurgenv@cwi.nl>
   * Created a repository for mod-toolbus at cvs-sop.inria.fr:/CVS/aircube

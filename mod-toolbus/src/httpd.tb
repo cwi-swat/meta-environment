@@ -12,27 +12,32 @@ tool modToolbus is {}
 
 process Httpd is
 let
-  MYTOOL  : modToolbus,
-  Id      : int,
-  Request  : list,
-  S       : str
+  Httpd  : modToolbus,
+  Pid       : int,
+  Request  : list
 in  
-  %% loop, waiting for modToolbus tools to connect
   (
-    printf( "Waiting for a mod_toolbus connection...\n" ) . 
-    rec-connect(MYTOOL?) .
-    printf( "Connected\n") .
-    rec-event( MYTOOL, request(Request?) ) .
-    snd-ack-event( MYTOOL, request(Request) ) .
-    printf( "Request received: %t\n", Request ) .
-    snd-do(MYTOOL, reply-html(html([head(),body([p(Request)])]))) .
-    rec-disconnect( MYTOOL ) 
+    rec-connect(Httpd?) .
+    printf("Connected, starting session\n") .
+    create(Session(Httpd), Pid?) 
   )*
   delta
 endlet
 
-
-
+process Session(Httpd : modToolbus) is
+let
+  Id      : int,
+  Request  : list
+in
+    printf("Session created\n") .
+    rec-event( Httpd, request(Request?) ) .
+    snd-ack-event( Httpd, request(Request) ) .
+    printf( "Request received: %t\n", Request ) .
+    snd-do(Httpd, reply-html(html([head(),body([p(Request)])]))) .
+    printf("End of session\n") .
+    rec-disconnect( Httpd )  .
+    printf("Disconnected\n") 
+endlet
 
 
 %% netcat sends commands over a tcp connection
