@@ -72,7 +72,7 @@ open(TB,">$stmp") || die("can't create $stmp ($!)");
 
 $pc = 0;
 while(<IDEF>) {
-  if (/process (\w+) is/) {
+  if (/process ([\w-]+) is/) {
     $process = $1;
     $pc++;
   }
