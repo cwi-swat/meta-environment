@@ -1,3 +1,10 @@
+
+2001/11/06 (jurgenv@cwi.nl)
+ * Traversal functions in the compiler: 
+   - added support for traversal functions with a single variable as the first
+     argument in a defining equation.
+   - added support for accumulators that return a list symbol directly.
+
 2001/11/06 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions:
    - Regenerated the compiler. 
@@ -18,12 +25,14 @@
 
 2001/11/02 (jurgenv@cwi.nl)
  * Added support for accumulators to the compiler.
+ * RESTRICTION: accumulators that return a list sort are not supported yet.
 
 2001/11/01 (jurgenv@cwi.nl)
  * Added support for traversal functions to the compiler (transformers only).
    Bottom-up or top-down with optionally extra variables.
  * RESTRICTION: just a variable as the first argument of a traversal
    function in the left-hand side of a defining equation are NOT allowed.
+ * RESTRICTION: transformers that visit lists are not supported yet.
 
 2001/10/25 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Optimized evaluator. Lexical constructor functions are now imploded
