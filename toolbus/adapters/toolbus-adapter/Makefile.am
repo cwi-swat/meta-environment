@@ -18,18 +18,19 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 
+EXTRA_DIST		= hello.tb spawn-hello.tb
+
 bin_PROGRAMS        	= toolbus-adapter
-
 include_HEADERS		= toolbus-adapter.tbi
-
-toolbus_adapter_SOURCES = toolbus-adapter.c
-toolbus_adapter_LDADD   = toolbus-adapter.tif.o -L$(ATERM)/lib -lATB -lATerm \
-			-L${top_builddir}/libtb -ltb
 
 INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
 			 -I${top_srcdir}/libtb -I$(ATERM)/include 
 
-toolbus-adapter.o: toolbus-adapter.tif.c toolbus-adapter.tif.h
+toolbus_adapter_SOURCES = toolbus-adapter.c toolbus-adapter.tif.c \
+			toolbus-adapter.tif.h
+
+toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb -lATB \
+			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
 	${ATERM}/bin/tifstoc -tool $* $<
@@ -41,4 +42,3 @@ toolbus-adapter.o: toolbus-adapter.tif.c toolbus-adapter.tif.h
 	
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
-
