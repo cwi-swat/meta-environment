@@ -8,9 +8,10 @@ exports
 context-free syntax
 
   parse-file(file:Bytes)  -> ParseResult {built-in("parse-file")}
-  parse-bytes(Bytes)      -> ParseResult {built-in("parse-bytes")}
+  unparse-to-file(file:Bytes,Sort) -> Sort  {built-in("unparse-to-file")}
 
-  unparse(Sort)           -> Bytes {built-in("unparse")}
+  parse-bytes(Bytes)      -> ParseResult {built-in("parse-bytes")}
+  unparse-to-bytes(Sort)           -> Bytes {built-in("unparse-to-bytes")}
 
 context-free syntax
 
