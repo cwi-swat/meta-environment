@@ -149,6 +149,7 @@ do
                 then
 			Notify "Regression test for valid term $base succeeded"
 	                ${RM} -f $out
+                        printf "."
 		else
 			Error "Regression test for valid term $base failed"
                 fi
@@ -156,5 +157,7 @@ do
 		Abort "Error compiling $file"
 	fi
 done
+
+printf "\n"
 
 exit $error
