@@ -73,7 +73,6 @@ public class FeedbackList extends UserInterfacePanel {
     private void setFeedbackList(Summary summary) {
         String producer = summary.getProducer();
         String summaryId = summary.getId();
-        System.err.println("adding: " + summary);
 
         errorapi.types.FeedbackList messages = summary.getList();
         for (; !messages.isEmpty(); messages = messages.getTail()) {
@@ -130,7 +129,6 @@ public class FeedbackList extends UserInterfacePanel {
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {
-        System.err.println("removing errors for " + producer + ", " + summaryId);
         for (int i = 0; i < data.getSize(); i++) {
             FeedbackItem item = (FeedbackItem) data.getElementAt(i);
 
