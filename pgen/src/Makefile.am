@@ -70,3 +70,10 @@ CLEANFILES = \
              s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
+
+asfc: Sdf2-Normalization.eqs
+	asfc -i Sdf2-Normalization.eqs -o Sdf2-Normalization.c -v
+
+Sdf2-Normalization.eqs:
+	eqs-dump -m languages/sdf2/normalization/Sdf2-Normalization -o $@
+
