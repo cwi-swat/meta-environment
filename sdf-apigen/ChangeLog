@@ -1,14 +1,17 @@
 # $Id$
 
+2003/02/11 (jurgenv@cwi.nl)
+ * Added dependency on toolbuslib
+
 2003/01/22 (jurgenv@cwi.nl)
-  * Added dependency on error-support
-  * Upgraded dependencies (without looking if that's really needed) to 
+ * Added dependency on error-support
+ * Upgraded dependencies (without looking if that's really needed) to 
     latests unreleased versions of all packages.
 
 2003/12/15 (jurgenv@cwi.nl)
-  * renamed ws-after-first to ws-after-head
-  * removed char *sep field when the separator is fixed
-  * Not String, but StrCon leads to a <str> in an imploded ADT
+ * renamed ws-after-first to ws-after-head
+ * removed char *sep field when the separator is fixed
+ * Not String, but StrCon leads to a <str> in an imploded ADT
 
 2003/12/15 (jurgenv@cwi.nl)
  * CHARLIST sort is not used anymore in generated APIs! Instead, 
