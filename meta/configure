@@ -531,7 +531,7 @@ VERSION=0.01
 
 
 EPIC=`pwd`/..
-GEL=${EPIC}/gel
+GEL=`pwd`/..
 TOOLBUS=`pwd`/..
 ATERM=`pwd`/..
 
