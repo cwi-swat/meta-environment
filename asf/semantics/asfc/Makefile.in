@@ -54,10 +54,12 @@ XLIBS		=  -Lsupport -lsupport-cc -Lc-source -lasfix2c \
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= compiler.c compile-one-module.c
+#CSRC		= compiler.c compile-one-module.c
+CSRC		= compiler.c 
 CHDR		= compiler.tif.c compiler.tif.h
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler compile-one-module 
+#BINFILES	= compiler compile-one-module 
+BINFILES	= compiler 
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
@@ -66,7 +68,8 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler compile-one-module compiler.tif.c compiler.tif.h
+#CLEANFILES	= compiler compile-one-module compiler.tif.c compiler.tif.h
+CLEANFILES	= compiler compiler.tif.c compiler.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -92,8 +95,8 @@ compiler.tif.h: $(top_srcdir)/toolbus/meta.tifs
 compiler: compiler.o compiler.tif.o 
 	$(CC) -o compiler compiler.o compiler.tif.o $(LIBS)
 
-compile-one-module: compile-one-module.o
-	$(CC) -o compile-one-module compile-one-module.o $(LIBS)
+#compile-one-module: compile-one-module.o
+#	$(CC) -o compile-one-module compile-one-module.o $(LIBS)
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
