@@ -264,12 +264,7 @@ in
       snd-msg(equations-incomplete)
     fi
   +
-
-    (
-      rec-msg(get-all-sdf2-definitions(eqs(Name?)))
-    +
-      rec-msg(get-all-sdf2-definitions(trm(Name?)))
-    ) .
+    rec-msg(get-all-sdf2-definitions(Name?)) .
     printf("DEBUG: returning all modules instead of just the imported\n") .
     snd-msg(ts-get-all-values("sdf-tree")) .
     rec-msg(ts-all-values(Modules?)) .
