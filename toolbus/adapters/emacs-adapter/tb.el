@@ -22,9 +22,10 @@ for the rest of the msg"
 ; The functions
 (defun TBinit (args)
   "Called when starting emacs. ARGS are the arguments that are passed along to any ToolBus tool. "
+  (debug-out (concat "args of TBinit are: " (prin1-to-string args)))
   (setq adapter-process                      ; The handle to the adapter
 	(let ((process-connection-type nil)) ; Use a pipe
-	  (start-process "adapter" "*adapter*" "emacs-adapter" args)
+	  (apply 'start-process "adapter" "*adapter*" "emacs-adapter" (split-string args))
 	  ;; Start a proces named "adapter" which uses "*adapter*" as
 	  ;; its buffer. The executable "emacs-adapter" is executed
 	  ;; with args as arguments
@@ -37,6 +38,8 @@ for the rest of the msg"
   (process-kill-without-query adapter-process)
   ;; Do not require a confirmation to kill the adapter process when
   ;; killing xemacs. (I was hoping they had something like this :-)
+  (add-hook 'kill-emacs-hook 'TBkillemacs)
+  ;; Call TBkillemacs just before killing emacs
   )
 
 (defun handle-term-from-toolbus (proc string)
@@ -82,7 +85,11 @@ is the adapter process, STRING is the string to be processed"
       )
     )
   )
-
+(defun TBkillemacs () 
+  "This function is called when emacs is killed. It tells the ToolBus to disconnect emacs"
+  (TBsend "snd-disconnect")
+  )
+  
 (defun TBevent (event)
   "Send EVENT to the ToolBus as a snd-event(EVENT)"
   (TBsend (concat "snd-event(" event ")"))
