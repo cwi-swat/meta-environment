@@ -144,8 +144,8 @@ distclean: clean
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
-	  ln $(TIDE)/$$file ../../$(PRODUCT)-$(VERSION)/tide 2> /dev/null \
-	  || cp -r $(TIDE)/$$file ../../$(PRODUCT)-$(VERSION)/tide; \
+	  ln $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/tide 2> /dev/null \
+	  || cp -r $(srcdir)/$$file ../../$(PRODUCT)-$(VERSION)/tide; \
 	done
 
 stats:
