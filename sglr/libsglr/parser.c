@@ -582,7 +582,7 @@ void SG_ParseToken(void)
   for_actor         = NULL;
   for_actor_delayed = NULL;
 
-  while(actives || for_actor) {
+  while (actives || for_actor) {
     if(actives) {
       st      = SG_HEAD(actives);
       actives = SG_TAIL(actives);
@@ -592,10 +592,11 @@ void SG_ParseToken(void)
       SG_DeleteStacks(for_actor);
       for_actor = s;
     }
-    if(!SG_Rejected(st))
+    if (!SG_Rejected(st)) {
       SG_Actor(st);
+    }
 
-    if(!actives && !for_actor) {
+    if (!actives && !for_actor) {
       for_actor         = for_actor_delayed;
       for_actor_delayed = NULL;
     }
@@ -636,7 +637,7 @@ void SG_Actor(stack *st)
           IF_DEBUG(ATfprintf(SG_log(),"Lookahead restriction prohibited %t\n",a));
         break;
       case ACCEPT:
-        if(!SG_Rejected(st)) {
+        if (!SG_Rejected(st)) {
           IF_DEBUG(fprintf(SG_log(), "Reached the accept state\n"));
           accepting_stack = st;
         }
@@ -807,7 +808,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
      a stack might converge with it, later on
      */
     active_stacks = SG_AddStack(st1, active_stacks);
-    if(SG_Rejectable(SG_ST_STATE(st1))) {
+    if (SG_Rejectable(SG_ST_STATE(st1))) {
       for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     } else {
       for_actor         = SG_AddStack(st1, for_actor);
@@ -1196,6 +1197,7 @@ tree SG_ParseResult(char *sort)
       /* Finally, the parse tree (in AsFix format) is produced, if desired. */
       SGnrAmb(SG_NR_ZERO);
       IF_STATISTICS(SG_Timer());
+
       t = SG_YieldTree(table, t);
       IF_STATISTICS(fprintf(SG_log(),
                             "Aprod expansion took %.6fs\n", SG_Timer()));

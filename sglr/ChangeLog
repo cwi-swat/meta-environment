@@ -19,6 +19,11 @@
 
 $Id$
 
+2001/03/15 (markvdb@cwi.nl)
+  * Fixed a bug concerning the filtering of trees containing "rejects"
+    - New filter introduced which compares two trees and selects
+      the one without any rejects (if any).
+  
 2001/02/27 (jurgenv@cwi.nl)
   * Fixed location of parsetree libraries 
 

@@ -536,19 +536,20 @@ void SG_MarkLinkRejected(st_link *l)
 /*
  A stack is rejected if both the following conditions are met:
  (1)  it has rejected links
- (2)  is has no unrejected links
+ (2)  it has no unrejected links
  */
 
 ATbool SG_Rejected(stack *st)
 {
   st_links *ls;
 
-  if (!(ls = SG_ST_LINKS(st)))
+  if (!(ls = SG_ST_LINKS(st))) {
     /* No links, no reject */
     return ATfalse;
+  }
 
   for (; ls; ls = SG_TAIL(ls)) {
-    if(!SG_LK_REJECTED(SG_HEAD(ls))) {
+    if (!SG_LK_REJECTED(SG_HEAD(ls))) {
       /*  A link is not rejected  */
       return ATfalse;
     }

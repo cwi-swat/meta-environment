@@ -457,7 +457,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
     fun  = ATgetAFun(t);
 
     /*  A small sanity check  */
-    assert(fun != SG_Reject_AFun); 
+    assert(fun != SG_Reject_AFun);
 
     if(fun == SG_Amb_AFun) {
        SGnrAmb(SG_NR_INC);
@@ -776,6 +776,47 @@ int SG_ProdType_Tree(tree t)
   return TreeType;
 }
 
+/* Recursive check whether a tree contains at least
+ * one reject node.
+ */
+static ATbool SG_ContainsReject(tree t)
+{
+  AFun     fun;
+  ATbool   result = ATfalse;
+
+  switch (ATgetType(t)) {
+    case AT_APPL:
+      fun = ATgetAFun(t);
+
+      if (SG_ProdType_Tree(t) == SG_PT_REJECT) {
+        result = ATtrue;
+      }
+      else {
+        result = SG_ContainsReject((tree) ATgetArgument((ATermAppl) t, 1));
+      }
+      break;
+    case AT_LIST:
+      if (ATisEmpty((ATermList) t)) {
+        break;
+      }
+      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        result = result ||
+                 SG_ContainsReject((tree) ATgetFirst((ATermList) t));
+        if (result) {
+          /* if one of the elements contains an ambiguity, we can stop now */
+          break;
+        }
+      }
+      break;
+    case AT_INT:
+    case AT_REAL:
+    case AT_PLACEHOLDER:
+    case AT_BLOB:
+    default:
+      break;
+  }
+  return result;
+}
 
 /*
  SG_MoreEager(t0, t1) returns true iff either
@@ -1350,6 +1391,27 @@ ATwarning("tree %t has %d injections\n", l1, in1);
   return NULL;
 }
 
+tree SG_RejectFilter(tree t0, tree t1)
+{
+  tree max = NULL;
+
+  ATbool rejects0 = SG_ContainsReject(t0);                                        ATbool rejects1 = SG_ContainsReject(t1);
+  ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
+  ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+
+  if (rejects0 && !rejects1) {
+    IF_DEBUG(ATfprintf(SG_log(), 
+      "Reject filtering: %t (contains rejects) vs %t (contains no rejects)\n", 
+      l0, l1));
+    max = t1;
+  }
+  if (!rejects0 && rejects1) {
+    IF_DEBUG(ATfprintf(SG_log(), 
+      "Reject filtering: %t (contains no rejects) vs %t (contains rejects)\n", l0, l1));
+    max = t0;
+  }
+  return max;
+}
 
 /*
  SG_Filter -- a generic hook to add disambiguating `filters'
@@ -1369,11 +1431,17 @@ tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
   }
  
   /* the first filters are based on priorities and preferences */
+  if (SG_PT_HAS_REJECTS(pt)) {
+    max = SG_RejectFilter(t0, t1);
+    if (max) {
+      return max;
+    }
+  }
   if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
 
     /*  Always apply direct priority filtering first  */
     max = SG_Priority_Filter(pt, t0, t1);
-    if(max) {
+    if (max) {
       return max;
     }
 
