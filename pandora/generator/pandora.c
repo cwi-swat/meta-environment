@@ -126,6 +126,7 @@ static char *stripLayout(const char *input)
 
 static ATbool isIndentedType(PT_Production production)
 {
+  ATbool expectTerminal = ATtrue;
   PT_Symbol symbol;
   PT_Symbols productionLhs; 
 
@@ -133,18 +134,35 @@ static ATbool isIndentedType(PT_Production production)
   {
     return ATfalse;
   }
-
+  
   productionLhs = PT_getProductionLhs(production);
 
-  ATwarning("ProductionLhs: [%t]\n", productionLhs);
+  if (!PT_getSymbolsLength(productionLhs) >= 3)
+  {
+    return ATfalse;
+  }
   
   while (!PT_isSymbolsEmpty(productionLhs)) 
   {
     symbol = PT_getSymbolsHead(productionLhs);
     if (!PT_isOptLayoutSymbol(symbol))
     {
-
-      ATwarning("Symbol = %t\n", symbol);
+      if (expectTerminal == ATtrue)
+      {
+	if (!PT_isSymbolLit(symbol))
+	{
+	  return ATfalse;
+	}
+	expectTerminal = ATfalse;
+      }
+      else
+      {
+	if (PT_isSymbolLit(symbol))
+	{
+	  return ATfalse;
+	}
+	expectTerminal = ATtrue;
+      }	
     }
     productionLhs = PT_getSymbolsTail(productionLhs);
   }

@@ -14,7 +14,11 @@ static char* myversion = VERSION;
 static char* myarguments = "i:o:vVhs:";
 static ATbool run_verbose = ATfalse;
 
+/*{{{  defines */
+
 #define INITIAL_TABLE_SIZE 8191
+
+/*}}}  */
 
 /*{{{  external functions */
 
@@ -60,24 +64,22 @@ static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
 {
   PT_Tree newTree = NULL;
 
-  if (PT_isValidParseTree(parseTree)) {
+  if (PT_isValidParseTree(parseTree)) 
+  {
     PT_Tree ptBox = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("box2text",
-                                     "BText",
-                                     1,
-                                     ptBox);
+    newTree = PT_applyFunctionToTree("box2text", "BText", 1, ptBox);
   }
-  else {
+  else 
+  {
     ATerror("addBoxToTextFunction: not a proper parse tree: %t\n",
-              (ATerm) parseTree);
+	    (ATerm) parseTree);
     return (PT_Tree) NULL;
   }
   return newTree;
 }
 
 /*}}}  */
-
 /*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
 
 static PT_ParseTree toText(PT_ParseTree parseTree)
@@ -95,19 +97,15 @@ static PT_ParseTree toText(PT_ParseTree parseTree)
 int main(int argc, char *argv[]) 
 {
   ATerm bottomOfStack;
+  ATerm at_tree;
+  PT_ParseTree tree, ptText;
+  BOX_Start box;
   char *input = "";
   char *output = "";
   int c;
 
-  ATerm at_tree;
-  PT_ParseTree tree, ptText;
-
-  BOX_Start box;
-
   ATinit(argc, argv, &bottomOfStack); 
-
   ASC_initRunTime(INITIAL_TABLE_SIZE);
-
   PT_initMEPTApi(); 
   BOX_initBoxApi();
 
