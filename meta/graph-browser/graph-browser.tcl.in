@@ -17,16 +17,10 @@ set toolname "Graph Browser"
 set metaname "Meta-Environment"
 set use_tide "@USE_TIDE@" 
 
-if {[info exists env(COMPILER_OUTPUT)]} {
-    set outputdir $env(COMPILER_OUTPUT)
-} else {
-    set outputdir "."
-}
-
 set help_meta "$metaname
 
 A Meta-environment for ASF+SDF
-Copyright (C) 2000  CWI
+Copyright (C) 2000/2001  CWI
 
 $metaname development team:
 Mark van den Brand, Hayco de Jong, Merijn de Jonge,
@@ -36,7 +30,7 @@ Jeroen Scheerder, Jurgen Vinju
 Department of Software Technology, CWI"
 
 set help_about "$toolname  -  ASF+SDF Import Graph Browser
-Copyright (C) 2000  Leon Moonen <leon@cwi.nl>
+Copyright (C) 2000/2001  Leon Moonen <leon@cwi.nl>
 
 $toolname provides a graphical view of an ASF+SDF import graph.
 The layout of this graph is computed using the dot layout algorithm
@@ -612,7 +606,6 @@ proc DeleteModules { modlist } {
 # generates the toolbus event to request compilation of modules ML
 #--
 proc CompileModules { modlist } {
-    global outputdir
     foreach mod $modlist {
 	set posting \
 	[format "compile-module(%s)" [ToId $mod]]
@@ -637,35 +630,6 @@ proc DumpParseTable { module } {
 proc DumpEquations { module } {
   GBevent "dump-equations([ToId $module])"
 }
-
-#proc CompileModuleWidget { mods } {
-#    global g
-#
-#    set nrModules [llength $mods]
-#
-#    # Bail out if no modules were selected
-#    if { $nrModules != 1 } {
-#	Warning "Please select a single module to compile"
-#	return
-#    }
-#
-#    set w .compilemodule
-#    catch {destroy $w}
-#    toplevel $w
-#    wm title $w "Compile Module"
-#    wm iconname $w "Compile Module"
-#    label $w.message -text "Output directory:"
-#    entry $w.compilerOutput -textvariable outputdir
-#    bind $w.compilerOutput <Return> "CompileModules $mods ; destroy $w"
-#    frame $w.buttons
-#    button $w.buttons.confirm \
-#	-text OK \
-#	-command "CompileModules $mods ; destroy $w"
-#    button $w.buttons.cancel -text Cancel -command "destroy $w"
-#    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-#    pack $w.message $w.compilerOutput -side top -anchor w
-#    pack $w.buttons -side bottom -expand y -fill x -pady 2m
-#}
 
 #--
 # RenameModule(M)
@@ -842,7 +806,7 @@ proc OpenModuleWidget {} {
       {{Any}    *              }
   }
   set file [tk_getOpenFile -filetypes $types \
-                                       -title "Open SDF Module..."]
+                                       -title "Open Module..."]
   set mod [GetBasename $file ".sdf"]
   if [ expr [ string length $mod ] > 0 ] {
     OpenModule $file $mod
@@ -873,7 +837,7 @@ proc NewModuleWidget {} {
       {{SDF}   {.sdf}        }
       {{Any}    *              }
   }
-  set file [tk_getSaveFile -filetypes $types -title "New SDF Module..."]
+  set file [tk_getSaveFile -filetypes $types -title "New Module..."]
 
   if [ expr [ string length $file ] > 0 ] {
     NewModule $file
