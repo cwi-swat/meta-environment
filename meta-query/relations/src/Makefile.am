@@ -12,7 +12,7 @@ INCLUDES = \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ATERM)/include
 
-bin_PROGRAMS = DisplayQuery
+bin_PROGRAMS = DisplayQuery MergeRstores
 pkgdata_DATA = DisplayQuery.idef
 
 DisplayQuery_SOURCES = \
@@ -29,11 +29,14 @@ DisplayQuery_LDADD = \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
+MergeRstores: MergeRstores.eqs
+	asfc -c -i $<
+
 %.c: %.eqs
 	asfc -t -i $< -o $@
 
 %.idef: %.eqs
-	asfc -t -i $< -o /dev/null
+	asfc -t -i $< -o `basename $@ .idef`.c
 
 %.tifs: %.idef
 	idef2tif $<

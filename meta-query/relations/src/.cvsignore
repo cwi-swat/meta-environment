@@ -7,3 +7,5 @@ DisplayQuery.idef
 DisplayQuery.tifs
 toolDisplayQuery.tif.c
 toolDisplayQuery.tif.h
+MergeRstores
+MergeRstores.c
