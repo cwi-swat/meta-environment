@@ -22,7 +22,7 @@
 
 include $(top_srcdir)/make_rules
 
-SUBDIRS          = c-source regress-test
+SUBDIRS          = c-source test
 
 bin_PROGRAMS     = compiler
 data_DATA        = compiler.idef
