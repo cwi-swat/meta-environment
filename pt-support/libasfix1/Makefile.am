@@ -5,8 +5,8 @@
 #
 
 lib_LIBRARIES		= libPT.a
-include_HEADERS		= PT.h PT_dict.h
-libPT_a_SOURCES		= PT.c PT_dict.c
+include_HEADERS		= PT.h PT_dict.h PT-utils.h
+libPT_a_SOURCES		= PT.c PT_dict.c PT-utils.c
 
 bin_PROGRAMS		= get-parsetree
 

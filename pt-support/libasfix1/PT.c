@@ -9,7 +9,7 @@ typedef struct ATerm _PT_ModuleName;
 typedef struct ATerm _PT_Tree;
 typedef struct ATerm _PT_Var;
 typedef struct ATerm _PT_Production;
-typedef struct ATerm _PT_Iter;
+typedef struct ATerm _PT_Symbol;
 typedef struct ATerm _PT_Literal;
 typedef struct ATerm _PT_QLiteral;
 typedef struct ATerm _PT_Lexical;
@@ -108,17 +108,17 @@ ATerm PT_makeTermFromProduction(PT_Production arg)
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_makeIterFromTerm(ATerm t) */
+/*{{{  PT_Symbol PT_makeSymbolFromTerm(ATerm t) */
 
-PT_Iter PT_makeIterFromTerm(ATerm t)
+PT_Symbol PT_makeSymbolFromTerm(ATerm t)
 {
-  return (PT_Iter)t;
+  return (PT_Symbol)t;
 }
 
 /*}}}  */
-/*{{{  ATerm PT_makeTermFromIter(PT_Iter arg) */
+/*{{{  ATerm PT_makeTermFromSymbol(PT_Symbol arg) */
 
-ATerm PT_makeTermFromIter(PT_Iter arg)
+ATerm PT_makeTermFromSymbol(PT_Symbol arg)
 {
   return (ATerm)arg;
 }
@@ -221,11 +221,11 @@ ATerm PT_makeTermFromArgs(PT_Args arg)
 
 /*}}}  */
 
-/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Layout wsAfterTerm, PT_Layout wsAfterPath, PT_ModuleName moduleName, PT_Layout wsAfterModuleName, PT_Tree tree, PT_Layout wsAfterTree) */
+/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Layout layoutBeforeTree, PT_Tree tree, PT_Layout layoutAfterTree) */
 
-PT_ParseTree PT_makeParseTreeTree(PT_Layout wsAfterTerm, PT_Layout wsAfterPath, PT_ModuleName moduleName, PT_Layout wsAfterModuleName, PT_Tree tree, PT_Layout wsAfterTree)
+PT_ParseTree PT_makeParseTreeTree(PT_Layout layoutBeforeTree, PT_Tree tree, PT_Layout layoutAfterTree)
 {
-  return (PT_ParseTree)ATmakeTerm(PT_patternParseTreeTree, wsAfterTerm, wsAfterPath, moduleName, wsAfterModuleName, tree, wsAfterTree);
+  return (PT_ParseTree)ATmakeTerm(PT_patternParseTreeTree, layoutBeforeTree, tree, layoutAfterTree);
 }
 
 /*}}}  */
@@ -261,11 +261,11 @@ PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeList(PT_Iter iter, PT_Args elems) */
+/*{{{  PT_Tree PT_makeTreeList(PT_Symbol iter, PT_Args args) */
 
-PT_Tree PT_makeTreeList(PT_Iter iter, PT_Args elems)
+PT_Tree PT_makeTreeList(PT_Symbol iter, PT_Args args)
 {
-  return (PT_Tree)ATmakeTerm(PT_patternTreeList, iter, elems);
+  return (PT_Tree)ATmakeTerm(PT_patternTreeList, iter, args);
 }
 
 /*}}}  */
@@ -277,19 +277,19 @@ PT_Tree PT_makeTreeLexical(PT_Lexical lexical)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeLiteral(PT_Literal literal) */
+/*{{{  PT_Tree PT_makeTreeUnquotedLiteral(PT_Literal literal) */
 
-PT_Tree PT_makeTreeLiteral(PT_Literal literal)
+PT_Tree PT_makeTreeUnquotedLiteral(PT_Literal literal)
 {
-  return (PT_Tree)ATmakeTerm(PT_patternTreeLiteral, literal);
+  return (PT_Tree)ATmakeTerm(PT_patternTreeUnquotedLiteral, literal);
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeQLiteral(PT_QLiteral qliteral) */
+/*{{{  PT_Tree PT_makeTreeQuotedLiteral(PT_QLiteral qliteral) */
 
-PT_Tree PT_makeTreeQLiteral(PT_QLiteral qliteral)
+PT_Tree PT_makeTreeQuotedLiteral(PT_QLiteral qliteral)
 {
-  return (PT_Tree)ATmakeTerm(PT_patternTreeQLiteral, qliteral);
+  return (PT_Tree)ATmakeTerm(PT_patternTreeQuotedLiteral, qliteral);
 }
 
 /*}}}  */
@@ -301,11 +301,11 @@ PT_Tree PT_makeTreeSeparator(PT_Separator separator)
 }
 
 /*}}}  */
-/*{{{  PT_Var PT_makeVarDefault(PT_String name, PT_Symbol sort) */
+/*{{{  PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol) */
 
-PT_Var PT_makeVarDefault(PT_String name, PT_Symbol sort)
+PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol)
 {
-  return (PT_Var)ATmakeTerm(PT_patternVarDefault, name, sort);
+  return (PT_Var)ATmakeTerm(PT_patternVarDefault, name, symbol);
 }
 
 /*}}}  */
@@ -317,35 +317,35 @@ PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_makeIterStar(PT_Symbol sort) */
+/*{{{  PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol) */
 
-PT_Iter PT_makeIterStar(PT_Symbol sort)
+PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
 {
-  return (PT_Iter)ATmakeTerm(PT_patternIterStar, sort);
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolIterStar, symbol);
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_makeIterPlus(PT_Symbol sort) */
+/*{{{  PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol) */
 
-PT_Iter PT_makeIterPlus(PT_Symbol sort)
+PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol)
 {
-  return (PT_Iter)ATmakeTerm(PT_patternIterPlus, sort);
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolIterPlus, symbol);
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_makeIterSepStar(PT_Symbol sort, PT_Separator separator) */
+/*{{{  PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Separator separator) */
 
-PT_Iter PT_makeIterSepStar(PT_Symbol sort, PT_Separator separator)
+PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Separator separator)
 {
-  return (PT_Iter)ATmakeTerm(PT_patternIterSepStar, sort, separator);
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolIterStarSep, symbol, separator);
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_makeIterSepPlus(PT_Symbol sort, PT_Separator separator) */
+/*{{{  PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Separator separator) */
 
-PT_Iter PT_makeIterSepPlus(PT_Symbol sort, PT_Separator separator)
+PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Separator separator)
 {
-  return (PT_Iter)ATmakeTerm(PT_patternIterSepPlus, sort, separator);
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolIterPlusSep, symbol, separator);
 }
 
 /*}}}  */
@@ -365,11 +365,11 @@ PT_QLiteral PT_makeQLiteralDefault(PT_String chars)
 }
 
 /*}}}  */
-/*{{{  PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol sort) */
+/*{{{  PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol symbol) */
 
-PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol sort)
+PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol symbol)
 {
-  return (PT_Lexical)ATmakeTerm(PT_patternLexicalDefault, chars, sort);
+  return (PT_Lexical)ATmakeTerm(PT_patternLexicalDefault, chars, symbol);
 }
 
 /*}}}  */
@@ -425,7 +425,7 @@ ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PT_isEqualIter(PT_Iter arg0, PT_Iter arg1)
+ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -478,13 +478,13 @@ ATbool PT_isValidParseTree(PT_ParseTree arg)
 
 ATbool PT_isParseTreeTree(PT_ParseTree arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternParseTreeTree, NULL, NULL, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternParseTreeTree, NULL, NULL, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasParseTreeWsAfterPath(PT_ParseTree arg) */
+/*{{{  ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg) */
 
-ATbool PT_hasParseTreeWsAfterPath(PT_ParseTree arg)
+ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg)
 {
   if (PT_isParseTreeTree(arg)) {
     return ATtrue;
@@ -493,139 +493,28 @@ ATbool PT_hasParseTreeWsAfterPath(PT_ParseTree arg)
 }
 
 /*}}}  */
-/*{{{  PT_Layout PT_getParseTreeWsAfterPath(PT_ParseTree arg) */
+/*{{{  PT_Layout PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg) */
 
-PT_Layout PT_getParseTreeWsAfterPath(PT_ParseTree arg)
+PT_Layout PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_Layout)ATgetArgument((ATermAppl)arg, 3);
+    return (PT_Layout)ATgetArgument((ATermAppl)arg, 5);
   }
 
-  ATabort("ParseTree has no WsAfterPath: %t\n", arg);
+  ATabort("ParseTree has no LayoutBeforeTree: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeWsAfterPath(PT_ParseTree arg, PT_Layout wsAfterPath) */
+/*{{{  PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Layout layoutBeforeTree) */
 
-PT_ParseTree PT_setParseTreeWsAfterPath(PT_ParseTree arg, PT_Layout wsAfterPath)
+PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Layout layoutBeforeTree)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterPath, 3);
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)layoutBeforeTree, 5);
   }
 
-  ATabort("ParseTree has no WsAfterPath: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeWsAfterTree(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeWsAfterTree(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Layout PT_getParseTreeWsAfterTree(PT_ParseTree arg) */
-
-PT_Layout PT_getParseTreeWsAfterTree(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_Layout)ATgetArgument((ATermAppl)arg, 7);
-  }
-
-  ATabort("ParseTree has no WsAfterTree: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeWsAfterTree(PT_ParseTree arg, PT_Layout wsAfterTree) */
-
-PT_ParseTree PT_setParseTreeWsAfterTree(PT_ParseTree arg, PT_Layout wsAfterTree)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterTree, 7);
-  }
-
-  ATabort("ParseTree has no WsAfterTree: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeWsAfterTerm(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeWsAfterTerm(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Layout PT_getParseTreeWsAfterTerm(PT_ParseTree arg) */
-
-PT_Layout PT_getParseTreeWsAfterTerm(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_Layout)ATgetArgument((ATermAppl)arg, 1);
-  }
-
-  ATabort("ParseTree has no WsAfterTerm: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeWsAfterTerm(PT_ParseTree arg, PT_Layout wsAfterTerm) */
-
-PT_ParseTree PT_setParseTreeWsAfterTerm(PT_ParseTree arg, PT_Layout wsAfterTerm)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterTerm, 1);
-  }
-
-  ATabort("ParseTree has no WsAfterTerm: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeModuleName(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeModuleName(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_ModuleName PT_getParseTreeModuleName(PT_ParseTree arg) */
-
-PT_ModuleName PT_getParseTreeModuleName(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ModuleName)ATgetArgument((ATermAppl)arg, 4);
-  }
-
-  ATabort("ParseTree has no ModuleName: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeModuleName(PT_ParseTree arg, PT_ModuleName moduleName) */
-
-PT_ParseTree PT_setParseTreeModuleName(PT_ParseTree arg, PT_ModuleName moduleName)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)moduleName, 4);
-  }
-
-  ATabort("ParseTree has no ModuleName: %t\n", arg);
+  ATabort("ParseTree has no LayoutBeforeTree: %t\n", arg);
   return NULL;
 }
 
@@ -667,9 +556,9 @@ PT_ParseTree PT_setParseTreeTree(PT_ParseTree arg, PT_Tree tree)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasParseTreeWsAfterModuleName(PT_ParseTree arg) */
+/*{{{  ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg) */
 
-ATbool PT_hasParseTreeWsAfterModuleName(PT_ParseTree arg)
+ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg)
 {
   if (PT_isParseTreeTree(arg)) {
     return ATtrue;
@@ -678,28 +567,28 @@ ATbool PT_hasParseTreeWsAfterModuleName(PT_ParseTree arg)
 }
 
 /*}}}  */
-/*{{{  PT_Layout PT_getParseTreeWsAfterModuleName(PT_ParseTree arg) */
+/*{{{  PT_Layout PT_getParseTreeLayoutAfterTree(PT_ParseTree arg) */
 
-PT_Layout PT_getParseTreeWsAfterModuleName(PT_ParseTree arg)
+PT_Layout PT_getParseTreeLayoutAfterTree(PT_ParseTree arg)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_Layout)ATgetArgument((ATermAppl)arg, 5);
+    return (PT_Layout)ATgetArgument((ATermAppl)arg, 7);
   }
 
-  ATabort("ParseTree has no WsAfterModuleName: %t\n", arg);
+  ATabort("ParseTree has no LayoutAfterTree: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeWsAfterModuleName(PT_ParseTree arg, PT_Layout wsAfterModuleName) */
+/*{{{  PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Layout layoutAfterTree) */
 
-PT_ParseTree PT_setParseTreeWsAfterModuleName(PT_ParseTree arg, PT_Layout wsAfterModuleName)
+PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Layout layoutAfterTree)
 {
   if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)wsAfterModuleName, 5);
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)layoutAfterTree, 7);
   }
 
-  ATabort("ParseTree has no WsAfterModuleName: %t\n", arg);
+  ATabort("ParseTree has no LayoutAfterTree: %t\n", arg);
   return NULL;
 }
 
@@ -787,10 +676,10 @@ ATbool PT_isValidTree(PT_Tree arg)
   else if (PT_isTreeLexical(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeLiteral(arg)) {
+  else if (PT_isTreeUnquotedLiteral(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeQLiteral(arg)) {
+  else if (PT_isTreeQuotedLiteral(arg)) {
     return ATtrue;
   }
   else if (PT_isTreeSeparator(arg)) {
@@ -840,19 +729,19 @@ ATbool PT_isTreeLexical(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isTreeLiteral(PT_Tree arg) */
+/*{{{  ATbool PT_isTreeUnquotedLiteral(PT_Tree arg) */
 
-ATbool PT_isTreeLiteral(PT_Tree arg)
+ATbool PT_isTreeUnquotedLiteral(PT_Tree arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternTreeLiteral, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternTreeUnquotedLiteral, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isTreeQLiteral(PT_Tree arg) */
+/*{{{  ATbool PT_isTreeQuotedLiteral(PT_Tree arg) */
 
-ATbool PT_isTreeQLiteral(PT_Tree arg)
+ATbool PT_isTreeQuotedLiteral(PT_Tree arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternTreeQLiteral, NULL);
+  return ATmatchTerm((ATerm)arg, PT_patternTreeQuotedLiteral, NULL);
 }
 
 /*}}}  */
@@ -949,12 +838,12 @@ ATbool PT_hasTreeIter(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_getTreeIter(PT_Tree arg) */
+/*{{{  PT_Symbol PT_getTreeIter(PT_Tree arg) */
 
-PT_Iter PT_getTreeIter(PT_Tree arg)
+PT_Symbol PT_getTreeIter(PT_Tree arg)
 {
   if (PT_isTreeList(arg)) {
-    return (PT_Iter)ATgetArgument((ATermAppl)arg, 0);
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
 
   ATabort("Tree has no Iter: %t\n", arg);
@@ -962,9 +851,9 @@ PT_Iter PT_getTreeIter(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_setTreeIter(PT_Tree arg, PT_Iter iter) */
+/*{{{  PT_Tree PT_setTreeIter(PT_Tree arg, PT_Symbol iter) */
 
-PT_Tree PT_setTreeIter(PT_Tree arg, PT_Iter iter)
+PT_Tree PT_setTreeIter(PT_Tree arg, PT_Symbol iter)
 {
   if (PT_isTreeList(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)iter, 0);
@@ -1019,6 +908,9 @@ ATbool PT_hasTreeArgs(PT_Tree arg)
   if (PT_isTreeAppl(arg)) {
     return ATtrue;
   }
+  else if (PT_isTreeList(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1028,6 +920,9 @@ ATbool PT_hasTreeArgs(PT_Tree arg)
 PT_Args PT_getTreeArgs(PT_Tree arg)
 {
   if (PT_isTreeAppl(arg)) {
+    return (PT_Args)ATgetArgument((ATermAppl)arg, 2);
+  }
+  else if (PT_isTreeList(arg)) {
     return (PT_Args)ATgetArgument((ATermAppl)arg, 2);
   }
 
@@ -1041,6 +936,9 @@ PT_Args PT_getTreeArgs(PT_Tree arg)
 PT_Tree PT_setTreeArgs(PT_Tree arg, PT_Args args)
 {
   if (PT_isTreeAppl(arg)) {
+    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 2);
+  }
+  else if (PT_isTreeList(arg)) {
     return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)args, 2);
   }
 
@@ -1090,7 +988,7 @@ PT_Tree PT_setTreeLayout(PT_Tree arg, PT_Layout layout)
 
 ATbool PT_hasTreeLiteral(PT_Tree arg)
 {
-  if (PT_isTreeLiteral(arg)) {
+  if (PT_isTreeUnquotedLiteral(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1101,7 +999,7 @@ ATbool PT_hasTreeLiteral(PT_Tree arg)
 
 PT_Literal PT_getTreeLiteral(PT_Tree arg)
 {
-  if (PT_isTreeLiteral(arg)) {
+  if (PT_isTreeUnquotedLiteral(arg)) {
     return (PT_Literal)arg;
   }
 
@@ -1114,7 +1012,7 @@ PT_Literal PT_getTreeLiteral(PT_Tree arg)
 
 PT_Tree PT_setTreeLiteral(PT_Tree arg, PT_Literal literal)
 {
-  if (PT_isTreeLiteral(arg)) {
+  if (PT_isTreeUnquotedLiteral(arg)) {
     return (PT_Tree)literal;
   }
 
@@ -1127,7 +1025,7 @@ PT_Tree PT_setTreeLiteral(PT_Tree arg, PT_Literal literal)
 
 ATbool PT_hasTreeQliteral(PT_Tree arg)
 {
-  if (PT_isTreeQLiteral(arg)) {
+  if (PT_isTreeQuotedLiteral(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1138,7 +1036,7 @@ ATbool PT_hasTreeQliteral(PT_Tree arg)
 
 PT_QLiteral PT_getTreeQliteral(PT_Tree arg)
 {
-  if (PT_isTreeQLiteral(arg)) {
+  if (PT_isTreeQuotedLiteral(arg)) {
     return (PT_QLiteral)arg;
   }
 
@@ -1151,48 +1049,11 @@ PT_QLiteral PT_getTreeQliteral(PT_Tree arg)
 
 PT_Tree PT_setTreeQliteral(PT_Tree arg, PT_QLiteral qliteral)
 {
-  if (PT_isTreeQLiteral(arg)) {
+  if (PT_isTreeQuotedLiteral(arg)) {
     return (PT_Tree)qliteral;
   }
 
   ATabort("Tree has no Qliteral: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasTreeElems(PT_Tree arg) */
-
-ATbool PT_hasTreeElems(PT_Tree arg)
-{
-  if (PT_isTreeList(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_getTreeElems(PT_Tree arg) */
-
-PT_Args PT_getTreeElems(PT_Tree arg)
-{
-  if (PT_isTreeList(arg)) {
-    return (PT_Args)ATgetArgument((ATermAppl)arg, 2);
-  }
-
-  ATabort("Tree has no Elems: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_setTreeElems(PT_Tree arg, PT_Args elems) */
-
-PT_Tree PT_setTreeElems(PT_Tree arg, PT_Args elems)
-{
-  if (PT_isTreeList(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)elems, 2);
-  }
-
-  ATabort("Tree has no Elems: %t\n", arg);
   return NULL;
 }
 
@@ -1257,9 +1118,9 @@ ATbool PT_isVarDefault(PT_Var arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasVarSort(PT_Var arg) */
+/*{{{  ATbool PT_hasVarSymbol(PT_Var arg) */
 
-ATbool PT_hasVarSort(PT_Var arg)
+ATbool PT_hasVarSymbol(PT_Var arg)
 {
   if (PT_isVarDefault(arg)) {
     return ATtrue;
@@ -1268,28 +1129,28 @@ ATbool PT_hasVarSort(PT_Var arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getVarSort(PT_Var arg) */
+/*{{{  PT_Symbol PT_getVarSymbol(PT_Var arg) */
 
-PT_Symbol PT_getVarSort(PT_Var arg)
+PT_Symbol PT_getVarSymbol(PT_Var arg)
 {
   if (PT_isVarDefault(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
 
-  ATabort("Var has no Sort: %t\n", arg);
+  ATabort("Var has no Symbol: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Var PT_setVarSort(PT_Var arg, PT_Symbol sort) */
+/*{{{  PT_Var PT_setVarSymbol(PT_Var arg, PT_Symbol symbol) */
 
-PT_Var PT_setVarSort(PT_Var arg, PT_Symbol sort)
+PT_Var PT_setVarSymbol(PT_Var arg, PT_Symbol symbol)
 {
   if (PT_isVarDefault(arg)) {
-    return (PT_Var)ATsetArgument((ATermAppl)arg, (ATerm)sort, 1);
+    return (PT_Var)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 1);
   }
 
-  ATabort("Var has no Sort: %t\n", arg);
+  ATabort("Var has no Symbol: %t\n", arg);
   return NULL;
 }
 
@@ -1504,166 +1365,166 @@ PT_Production PT_setProductionModuleName(PT_Production arg, PT_String moduleName
 /*}}}  */
 
 /*}}}  */
-/*{{{  PT_Iter accessor implementations */
+/*{{{  PT_Symbol accessor implementations */
 
-/*{{{  ATbool PT_isValidIter(PT_Iter arg) */
+/*{{{  ATbool PT_isValidSymbol(PT_Symbol arg) */
 
-ATbool PT_isValidIter(PT_Iter arg)
+ATbool PT_isValidSymbol(PT_Symbol arg)
 {
-  if (PT_isIterStar(arg)) {
+  if (PT_isSymbolIterStar(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterPlus(arg)) {
+  else if (PT_isSymbolIterPlus(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterSepStar(arg)) {
+  else if (PT_isSymbolIterStarSep(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterSepPlus(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isIterStar(PT_Iter arg) */
-
-ATbool PT_isIterStar(PT_Iter arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternIterStar, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isIterPlus(PT_Iter arg) */
-
-ATbool PT_isIterPlus(PT_Iter arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternIterPlus, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isIterSepStar(PT_Iter arg) */
-
-ATbool PT_isIterSepStar(PT_Iter arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternIterSepStar, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isIterSepPlus(PT_Iter arg) */
-
-ATbool PT_isIterSepPlus(PT_Iter arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternIterSepPlus, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasIterSeparator(PT_Iter arg) */
-
-ATbool PT_hasIterSeparator(PT_Iter arg)
-{
-  if (PT_isIterSepStar(arg)) {
-    return ATtrue;
-  }
-  else if (PT_isIterSepPlus(arg)) {
+  else if (PT_isSymbolIterPlusSep(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PT_Separator PT_getIterSeparator(PT_Iter arg) */
+/*{{{  ATbool PT_isSymbolIterStar(PT_Symbol arg) */
 
-PT_Separator PT_getIterSeparator(PT_Iter arg)
+ATbool PT_isSymbolIterStar(PT_Symbol arg)
 {
-  if (PT_isIterSepStar(arg)) {
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolIterStar, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isSymbolIterPlus(PT_Symbol arg) */
+
+ATbool PT_isSymbolIterPlus(PT_Symbol arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlus, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isSymbolIterStarSep(PT_Symbol arg) */
+
+ATbool PT_isSymbolIterStarSep(PT_Symbol arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolIterStarSep, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isSymbolIterPlusSep(PT_Symbol arg) */
+
+ATbool PT_isSymbolIterPlusSep(PT_Symbol arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlusSep, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasSymbolSeparator(PT_Symbol arg) */
+
+ATbool PT_hasSymbolSeparator(PT_Symbol arg)
+{
+  if (PT_isSymbolIterStarSep(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isSymbolIterPlusSep(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Separator PT_getSymbolSeparator(PT_Symbol arg) */
+
+PT_Separator PT_getSymbolSeparator(PT_Symbol arg)
+{
+  if (PT_isSymbolIterStarSep(arg)) {
     return (PT_Separator)ATgetArgument((ATermAppl)arg, 4);
   }
-  else if (PT_isIterSepPlus(arg)) {
+  else if (PT_isSymbolIterPlusSep(arg)) {
     return (PT_Separator)ATgetArgument((ATermAppl)arg, 4);
   }
 
-  ATabort("Iter has no Separator: %t\n", arg);
+  ATabort("Symbol has no Separator: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_setIterSeparator(PT_Iter arg, PT_Separator separator) */
+/*{{{  PT_Symbol PT_setSymbolSeparator(PT_Symbol arg, PT_Separator separator) */
 
-PT_Iter PT_setIterSeparator(PT_Iter arg, PT_Separator separator)
+PT_Symbol PT_setSymbolSeparator(PT_Symbol arg, PT_Separator separator)
 {
-  if (PT_isIterSepStar(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)separator, 4);
+  if (PT_isSymbolIterStarSep(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)separator, 4);
   }
-  else if (PT_isIterSepPlus(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)separator, 4);
+  else if (PT_isSymbolIterPlusSep(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)separator, 4);
   }
 
-  ATabort("Iter has no Separator: %t\n", arg);
+  ATabort("Symbol has no Separator: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasIterSort(PT_Iter arg) */
+/*{{{  ATbool PT_hasSymbolSymbol(PT_Symbol arg) */
 
-ATbool PT_hasIterSort(PT_Iter arg)
+ATbool PT_hasSymbolSymbol(PT_Symbol arg)
 {
-  if (PT_isIterStar(arg)) {
+  if (PT_isSymbolIterStar(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterPlus(arg)) {
+  else if (PT_isSymbolIterPlus(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterSepStar(arg)) {
+  else if (PT_isSymbolIterStarSep(arg)) {
     return ATtrue;
   }
-  else if (PT_isIterSepPlus(arg)) {
+  else if (PT_isSymbolIterPlusSep(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getIterSort(PT_Iter arg) */
+/*{{{  PT_Symbol PT_getSymbolSymbol(PT_Symbol arg) */
 
-PT_Symbol PT_getIterSort(PT_Iter arg)
+PT_Symbol PT_getSymbolSymbol(PT_Symbol arg)
 {
-  if (PT_isIterStar(arg)) {
+  if (PT_isSymbolIterStar(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
-  else if (PT_isIterPlus(arg)) {
+  else if (PT_isSymbolIterPlus(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
-  else if (PT_isIterSepStar(arg)) {
+  else if (PT_isSymbolIterStarSep(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 2);
   }
-  else if (PT_isIterSepPlus(arg)) {
+  else if (PT_isSymbolIterPlusSep(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 2);
   }
 
-  ATabort("Iter has no Sort: %t\n", arg);
+  ATabort("Symbol has no Symbol: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Iter PT_setIterSort(PT_Iter arg, PT_Symbol sort) */
+/*{{{  PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol) */
 
-PT_Iter PT_setIterSort(PT_Iter arg, PT_Symbol sort)
+PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol)
 {
-  if (PT_isIterStar(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)sort, 0);
+  if (PT_isSymbolIterStar(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
-  else if (PT_isIterPlus(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)sort, 0);
+  else if (PT_isSymbolIterPlus(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
-  else if (PT_isIterSepStar(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)sort, 2);
+  else if (PT_isSymbolIterStarSep(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 2);
   }
-  else if (PT_isIterSepPlus(arg)) {
-    return (PT_Iter)ATsetArgument((ATermAppl)arg, (ATerm)sort, 2);
+  else if (PT_isSymbolIterPlusSep(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 2);
   }
 
-  ATabort("Iter has no Sort: %t\n", arg);
+  ATabort("Symbol has no Symbol: %t\n", arg);
   return NULL;
 }
 
@@ -1811,9 +1672,9 @@ ATbool PT_isLexicalDefault(PT_Lexical arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasLexicalSort(PT_Lexical arg) */
+/*{{{  ATbool PT_hasLexicalSymbol(PT_Lexical arg) */
 
-ATbool PT_hasLexicalSort(PT_Lexical arg)
+ATbool PT_hasLexicalSymbol(PT_Lexical arg)
 {
   if (PT_isLexicalDefault(arg)) {
     return ATtrue;
@@ -1822,28 +1683,28 @@ ATbool PT_hasLexicalSort(PT_Lexical arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getLexicalSort(PT_Lexical arg) */
+/*{{{  PT_Symbol PT_getLexicalSymbol(PT_Lexical arg) */
 
-PT_Symbol PT_getLexicalSort(PT_Lexical arg)
+PT_Symbol PT_getLexicalSymbol(PT_Lexical arg)
 {
   if (PT_isLexicalDefault(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
 
-  ATabort("Lexical has no Sort: %t\n", arg);
+  ATabort("Lexical has no Symbol: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Lexical PT_setLexicalSort(PT_Lexical arg, PT_Symbol sort) */
+/*{{{  PT_Lexical PT_setLexicalSymbol(PT_Lexical arg, PT_Symbol symbol) */
 
-PT_Lexical PT_setLexicalSort(PT_Lexical arg, PT_Symbol sort)
+PT_Lexical PT_setLexicalSymbol(PT_Lexical arg, PT_Symbol symbol)
 {
   if (PT_isLexicalDefault(arg)) {
-    return (PT_Lexical)ATsetArgument((ATermAppl)arg, (ATerm)sort, 1);
+    return (PT_Lexical)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 1);
   }
 
-  ATabort("Lexical has no Sort: %t\n", arg);
+  ATabort("Lexical has no Symbol: %t\n", arg);
   return NULL;
 }
 
@@ -2044,7 +1905,7 @@ ATbool PT_hasArgsTail(PT_Args arg)
 PT_Args PT_getArgsTail(PT_Args arg)
 {
   if (PT_isArgsDefault(arg)) {
-    return (PT_Args)ATelementAt((ATermList)ATelementAt((ATermList)arg, 1), 0);
+    return (PT_Args)ATgetTail((ATermList)arg, 1);
   }
 
   ATabort("Args has no Tail: %t\n", arg);
@@ -2057,7 +1918,7 @@ PT_Args PT_getArgsTail(PT_Args arg)
 PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail)
 {
   if (PT_isArgsDefault(arg)) {
-    return (PT_Args)ATreplace((ATermList)arg, (ATerm)ATreplace((ATermList)ATelementAt((ATermList)arg, 1), (ATerm)tail, 0), 1);
+    return (PT_Args)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
   }
 
   ATabort("Args has no Tail: %t\n", arg);

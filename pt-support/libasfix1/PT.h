@@ -11,7 +11,6 @@
 /*{{{  prologue */
 
 typedef ATerm PT_String;
-typedef ATerm PT_Symbol;
 typedef ATerm PT_Symbols;
 typedef ATerm PT_Attrs;
 
@@ -23,7 +22,7 @@ typedef struct _PT_ModuleName *PT_ModuleName;
 typedef struct _PT_Tree *PT_Tree;
 typedef struct _PT_Var *PT_Var;
 typedef struct _PT_Production *PT_Production;
-typedef struct _PT_Iter *PT_Iter;
+typedef struct _PT_Symbol *PT_Symbol;
 typedef struct _PT_Literal *PT_Literal;
 typedef struct _PT_QLiteral *PT_QLiteral;
 typedef struct _PT_Lexical *PT_Lexical;
@@ -45,8 +44,8 @@ PT_Var PT_makeVarFromTerm(ATerm t);
 ATerm PT_makeTermFromVar(PT_Var arg);
 PT_Production PT_makeProductionFromTerm(ATerm t);
 ATerm PT_makeTermFromProduction(PT_Production arg);
-PT_Iter PT_makeIterFromTerm(ATerm t);
-ATerm PT_makeTermFromIter(PT_Iter arg);
+PT_Symbol PT_makeSymbolFromTerm(ATerm t);
+ATerm PT_makeTermFromSymbol(PT_Symbol arg);
 PT_Literal PT_makeLiteralFromTerm(ATerm t);
 ATerm PT_makeTermFromLiteral(PT_Literal arg);
 PT_QLiteral PT_makeQLiteralFromTerm(ATerm t);
@@ -60,25 +59,25 @@ ATerm PT_makeTermFromLayout(PT_Layout arg);
 PT_Args PT_makeArgsFromTerm(ATerm t);
 ATerm PT_makeTermFromArgs(PT_Args arg);
 
-PT_ParseTree PT_makeParseTreeTree(PT_Layout wsAfterTerm, PT_Layout wsAfterPath, PT_ModuleName moduleName, PT_Layout wsAfterModuleName, PT_Tree tree, PT_Layout wsAfterTree);
+PT_ParseTree PT_makeParseTreeTree(PT_Layout layoutBeforeTree, PT_Tree tree, PT_Layout layoutAfterTree);
 PT_ModuleName PT_makeModuleNameDefault(PT_String id);
 PT_Tree PT_makeTreeLayout(PT_Layout layout);
 PT_Tree PT_makeTreeVar(PT_Var var);
 PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args);
-PT_Tree PT_makeTreeList(PT_Iter iter, PT_Args elems);
+PT_Tree PT_makeTreeList(PT_Symbol iter, PT_Args args);
 PT_Tree PT_makeTreeLexical(PT_Lexical lexical);
-PT_Tree PT_makeTreeLiteral(PT_Literal literal);
-PT_Tree PT_makeTreeQLiteral(PT_QLiteral qliteral);
+PT_Tree PT_makeTreeUnquotedLiteral(PT_Literal literal);
+PT_Tree PT_makeTreeQuotedLiteral(PT_QLiteral qliteral);
 PT_Tree PT_makeTreeSeparator(PT_Separator separator);
-PT_Var PT_makeVarDefault(PT_String name, PT_Symbol sort);
+PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol);
 PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attrs attrs);
-PT_Iter PT_makeIterStar(PT_Symbol sort);
-PT_Iter PT_makeIterPlus(PT_Symbol sort);
-PT_Iter PT_makeIterSepStar(PT_Symbol sort, PT_Separator separator);
-PT_Iter PT_makeIterSepPlus(PT_Symbol sort, PT_Separator separator);
+PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol);
+PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol);
+PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Separator separator);
+PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Separator separator);
 PT_Literal PT_makeLiteralDefault(PT_String chars);
 PT_QLiteral PT_makeQLiteralDefault(PT_String chars);
-PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol sort);
+PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol symbol);
 PT_Separator PT_makeSeparatorDefault(PT_String chars);
 PT_Layout PT_makeLayoutDefault(PT_String chars);
 PT_Args PT_makeArgsDefault(PT_Tree head, PT_Args tail);
@@ -90,7 +89,7 @@ ATbool PT_isEqualModuleName(PT_ModuleName arg0, PT_ModuleName arg1);
 ATbool PT_isEqualTree(PT_Tree arg0, PT_Tree arg1);
 ATbool PT_isEqualVar(PT_Var arg0, PT_Var arg1);
 ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1);
-ATbool PT_isEqualIter(PT_Iter arg0, PT_Iter arg1);
+ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1);
 ATbool PT_isEqualLiteral(PT_Literal arg0, PT_Literal arg1);
 ATbool PT_isEqualQLiteral(PT_QLiteral arg0, PT_QLiteral arg1);
 ATbool PT_isEqualLexical(PT_Lexical arg0, PT_Lexical arg1);
@@ -103,24 +102,15 @@ ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1);
 
 ATbool PT_isValidParseTree(PT_ParseTree arg);
 ATbool PT_isParseTreeTree(PT_ParseTree arg);
-ATbool PT_hasParseTreeWsAfterPath(PT_ParseTree arg);
-PT_Layout PT_getParseTreeWsAfterPath(PT_ParseTree arg);
-PT_ParseTree PT_setParseTreeWsAfterPath(PT_ParseTree arg, PT_Layout wsAfterPath);
-ATbool PT_hasParseTreeWsAfterTree(PT_ParseTree arg);
-PT_Layout PT_getParseTreeWsAfterTree(PT_ParseTree arg);
-PT_ParseTree PT_setParseTreeWsAfterTree(PT_ParseTree arg, PT_Layout wsAfterTree);
-ATbool PT_hasParseTreeWsAfterTerm(PT_ParseTree arg);
-PT_Layout PT_getParseTreeWsAfterTerm(PT_ParseTree arg);
-PT_ParseTree PT_setParseTreeWsAfterTerm(PT_ParseTree arg, PT_Layout wsAfterTerm);
-ATbool PT_hasParseTreeModuleName(PT_ParseTree arg);
-PT_ModuleName PT_getParseTreeModuleName(PT_ParseTree arg);
-PT_ParseTree PT_setParseTreeModuleName(PT_ParseTree arg, PT_ModuleName moduleName);
+ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg);
+PT_Layout PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg);
+PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Layout layoutBeforeTree);
 ATbool PT_hasParseTreeTree(PT_ParseTree arg);
 PT_Tree PT_getParseTreeTree(PT_ParseTree arg);
 PT_ParseTree PT_setParseTreeTree(PT_ParseTree arg, PT_Tree tree);
-ATbool PT_hasParseTreeWsAfterModuleName(PT_ParseTree arg);
-PT_Layout PT_getParseTreeWsAfterModuleName(PT_ParseTree arg);
-PT_ParseTree PT_setParseTreeWsAfterModuleName(PT_ParseTree arg, PT_Layout wsAfterModuleName);
+ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg);
+PT_Layout PT_getParseTreeLayoutAfterTree(PT_ParseTree arg);
+PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Layout layoutAfterTree);
 
 /*}}}  */
 /*{{{  PT_ModuleName accessor prototypes */
@@ -140,8 +130,8 @@ ATbool PT_isTreeVar(PT_Tree arg);
 ATbool PT_isTreeAppl(PT_Tree arg);
 ATbool PT_isTreeList(PT_Tree arg);
 ATbool PT_isTreeLexical(PT_Tree arg);
-ATbool PT_isTreeLiteral(PT_Tree arg);
-ATbool PT_isTreeQLiteral(PT_Tree arg);
+ATbool PT_isTreeUnquotedLiteral(PT_Tree arg);
+ATbool PT_isTreeQuotedLiteral(PT_Tree arg);
 ATbool PT_isTreeSeparator(PT_Tree arg);
 ATbool PT_hasTreeLexical(PT_Tree arg);
 PT_Lexical PT_getTreeLexical(PT_Tree arg);
@@ -150,8 +140,8 @@ ATbool PT_hasTreeSeparator(PT_Tree arg);
 PT_Separator PT_getTreeSeparator(PT_Tree arg);
 PT_Tree PT_setTreeSeparator(PT_Tree arg, PT_Separator separator);
 ATbool PT_hasTreeIter(PT_Tree arg);
-PT_Iter PT_getTreeIter(PT_Tree arg);
-PT_Tree PT_setTreeIter(PT_Tree arg, PT_Iter iter);
+PT_Symbol PT_getTreeIter(PT_Tree arg);
+PT_Tree PT_setTreeIter(PT_Tree arg, PT_Symbol iter);
 ATbool PT_hasTreeVar(PT_Tree arg);
 PT_Var PT_getTreeVar(PT_Tree arg);
 PT_Tree PT_setTreeVar(PT_Tree arg, PT_Var var);
@@ -167,9 +157,6 @@ PT_Tree PT_setTreeLiteral(PT_Tree arg, PT_Literal literal);
 ATbool PT_hasTreeQliteral(PT_Tree arg);
 PT_QLiteral PT_getTreeQliteral(PT_Tree arg);
 PT_Tree PT_setTreeQliteral(PT_Tree arg, PT_QLiteral qliteral);
-ATbool PT_hasTreeElems(PT_Tree arg);
-PT_Args PT_getTreeElems(PT_Tree arg);
-PT_Tree PT_setTreeElems(PT_Tree arg, PT_Args elems);
 ATbool PT_hasTreeProd(PT_Tree arg);
 PT_Production PT_getTreeProd(PT_Tree arg);
 PT_Tree PT_setTreeProd(PT_Tree arg, PT_Production prod);
@@ -179,9 +166,9 @@ PT_Tree PT_setTreeProd(PT_Tree arg, PT_Production prod);
 
 ATbool PT_isValidVar(PT_Var arg);
 ATbool PT_isVarDefault(PT_Var arg);
-ATbool PT_hasVarSort(PT_Var arg);
-PT_Symbol PT_getVarSort(PT_Var arg);
-PT_Var PT_setVarSort(PT_Var arg, PT_Symbol sort);
+ATbool PT_hasVarSymbol(PT_Var arg);
+PT_Symbol PT_getVarSymbol(PT_Var arg);
+PT_Var PT_setVarSymbol(PT_Var arg, PT_Symbol symbol);
 ATbool PT_hasVarName(PT_Var arg);
 PT_String PT_getVarName(PT_Var arg);
 PT_Var PT_setVarName(PT_Var arg, PT_String name);
@@ -205,19 +192,19 @@ PT_String PT_getProductionModuleName(PT_Production arg);
 PT_Production PT_setProductionModuleName(PT_Production arg, PT_String moduleName);
 
 /*}}}  */
-/*{{{  PT_Iter accessor prototypes */
+/*{{{  PT_Symbol accessor prototypes */
 
-ATbool PT_isValidIter(PT_Iter arg);
-ATbool PT_isIterStar(PT_Iter arg);
-ATbool PT_isIterPlus(PT_Iter arg);
-ATbool PT_isIterSepStar(PT_Iter arg);
-ATbool PT_isIterSepPlus(PT_Iter arg);
-ATbool PT_hasIterSeparator(PT_Iter arg);
-PT_Separator PT_getIterSeparator(PT_Iter arg);
-PT_Iter PT_setIterSeparator(PT_Iter arg, PT_Separator separator);
-ATbool PT_hasIterSort(PT_Iter arg);
-PT_Symbol PT_getIterSort(PT_Iter arg);
-PT_Iter PT_setIterSort(PT_Iter arg, PT_Symbol sort);
+ATbool PT_isValidSymbol(PT_Symbol arg);
+ATbool PT_isSymbolIterStar(PT_Symbol arg);
+ATbool PT_isSymbolIterPlus(PT_Symbol arg);
+ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
+ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
+ATbool PT_hasSymbolSeparator(PT_Symbol arg);
+PT_Separator PT_getSymbolSeparator(PT_Symbol arg);
+PT_Symbol PT_setSymbolSeparator(PT_Symbol arg, PT_Separator separator);
+ATbool PT_hasSymbolSymbol(PT_Symbol arg);
+PT_Symbol PT_getSymbolSymbol(PT_Symbol arg);
+PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol);
 
 /*}}}  */
 /*{{{  PT_Literal accessor prototypes */
@@ -242,9 +229,9 @@ PT_QLiteral PT_setQLiteralChars(PT_QLiteral arg, PT_String chars);
 
 ATbool PT_isValidLexical(PT_Lexical arg);
 ATbool PT_isLexicalDefault(PT_Lexical arg);
-ATbool PT_hasLexicalSort(PT_Lexical arg);
-PT_Symbol PT_getLexicalSort(PT_Lexical arg);
-PT_Lexical PT_setLexicalSort(PT_Lexical arg, PT_Symbol sort);
+ATbool PT_hasLexicalSymbol(PT_Lexical arg);
+PT_Symbol PT_getLexicalSymbol(PT_Lexical arg);
+PT_Lexical PT_setLexicalSymbol(PT_Lexical arg, PT_Symbol symbol);
 ATbool PT_hasLexicalChars(PT_Lexical arg);
 PT_String PT_getLexicalChars(PT_Lexical arg);
 PT_Lexical PT_setLexicalChars(PT_Lexical arg, PT_String chars);

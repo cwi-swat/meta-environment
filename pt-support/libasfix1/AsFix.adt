@@ -1,40 +1,39 @@
 [
-  [ParseTree, Tree, term(l("term"),
-                     <ws-after-term(Layout)>,
-                     l("X"),
-                     <ws-after-path(Layout)>,
-	             <module-name(ModuleName)>,
-	             <ws-after-module-name(Layout)>,
-	             <tree(Tree)>,
-	             <ws-after-tree(Layout)>,
-	             no-abbreviations
-                    ) 
+  [ParseTree, tree, term(l("term"),
+                         w(""),
+                         l("X"),
+                         w(""),
+	                 l("X"),
+	                 <layout-before-tree(Layout)>,
+	                 <tree(Tree)>,
+	                 <layout-after-tree(Layout)>,
+	                 no-abbreviations) 
   ],
   
 
-  [ModuleName, Default, id(<id(String)>)],
+  [ModuleName, default, id(<id(String)>)],
 
-  [Tree, Layout, <layout(Layout)>],
-  [Tree, Var, <var(Var)>], 
-  [Tree, Appl, appl(<prod(Production)>,
+  [Tree, layout, <layout(Layout)>],
+  [Tree, var, <var(Var)>], 
+  [Tree, appl, appl(<prod(Production)>,
                     w(""),
                     <args(Args)>
                    )
   ],
-  [Tree, List, list(<iter(Iter)>,
+  [Tree, list, list(<iter(Symbol)>,
                     w(""),
-                    <elems(Args)>
+                    <args(Args)>
                    )
   ],
-  [Tree, Lexical, <lexical(Lexical)>],
-  [Tree, Literal, <literal(Literal)>],
-  [Tree, QLiteral, <qliteral(QLiteral)>],
-  [Tree, Separator, <separator(Separator)>],
+  [Tree, lexical, <lexical(Lexical)>],
+  [Tree, unquoted-literal, <literal(Literal)>],
+  [Tree, quoted-literal, <qliteral(QLiteral)>],
+  [Tree, separator, <separator(Separator)>],
 
-  [Var, Default, var(<name(String)>,<sort(Symbol)>)],
+  [Var, default, var(<name(String)>,<symbol(Symbol)>)],
 
 
-  [Production, Default, prod(id(<module-name(String)>),
+  [Production, default, prod(id(<module-name(String)>),
                        w(""),
                        <lhs(Symbols)>,
                        w(""),
@@ -46,28 +45,28 @@
                       )
   ],
   
-  [Iter, Star, iter(<sort(Symbol)>,
+  [Symbol, iter-star, iter(<symbol(Symbol)>,
                     w(""),
                     l("*")
                    )
   ],
-  [Iter, Plus, iter(<sort(Symbol)>,
+  [Symbol, iter-plus, iter(<symbol(Symbol)>,
                     w(""),
                     l("+")
                    )
   ],
-  [Iter, SepStar, iter-sep(l("{"),
+  [Symbol, iter-star-sep, iter-sep(l("{"),
                            w(""),
-                           <sort(Symbol)>,
+                           <symbol(Symbol)>,
                            w(""),
                            <separator(Separator)>,
                            w(""),
                            l("}"),
                            w(""),
                            l("*"))],
-  [Iter, SepPlus, iter-sep(l("{"),
+  [Symbol, iter-plus-sep, iter-sep(l("{"),
                            w(""),
-                           <sort(Symbol)>,
+                           <symbol(Symbol)>,
                            w(""),
                            <separator(Literal)>,
                            w(""),
@@ -75,11 +74,11 @@
                            w(""),
                            l("+"))],
 
- [Literal, Default, l(<chars(String)>)],
- [QLiteral, Default, ql(<chars(String)>)],
- [Lexical, Default, lex(<chars(String)>,<sort(Symbol)>)],  
- [Separator, Default, sep(<chars(String)>)],
- [Layout, Default, w(<chars(String)>)], 
+ [Literal, default, l(<chars(String)>)],
+ [QLiteral, default, ql(<chars(String)>)],
+ [Lexical, default, lex(<chars(String)>,<symbol(Symbol)>)],  
+ [Separator, default, sep(<chars(String)>)],
+ [Layout, default, w(<chars(String)>)], 
 
- [Args, Default, [<head(Tree)>,[<tail(Args)>]]]
+ [Args, default, [<head(Tree)>,<[tail(Args)]>]]
 ]
