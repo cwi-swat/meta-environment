@@ -22,7 +22,7 @@ INSTALL		= @INSTALL@
 CLEAN		= @CLEAN@
 NOWEB		= @NOWEB@
 
-DISTFILES	= Makefile.in $(SOURCE) javatif test.tb 
+DISTFILES	= Makefile.in $(SOURCE) javatif.in test.tb 
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/tool
 

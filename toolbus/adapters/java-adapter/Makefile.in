@@ -27,7 +27,7 @@ DISTFILES	= Makefile.in $(PROGRAMS) $(DOC)
 
 PROGRAMS        = java-adapter
 DOC		= java-adapter.guide.tex
-SUBDIRS		= toolbus/util toolbus/aterm toolbus/tool @JTIDE@
+SUBDIRS		= toolbus/util toolbus/aterm toolbus/tool
 
 all:
 	@for dir in $(SUBDIRS); do \

@@ -9,7 +9,7 @@ let
   Y : int
 in
   execute(testing, T?) .
-  snd-do(T, testit("abc")) .
+  snd-do(T, testit("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHHIJKLMNOPQRSTUVWXYZ")) .
   snd-do(T, testit("a", 3)) .
   snd-do(T, testit("a", f(3))) .
   snd-eval(T, question(square)) .

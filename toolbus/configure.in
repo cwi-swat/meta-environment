@@ -121,18 +121,30 @@ AC_SUBST(EPDIR)
 dnl Use tide?
 AC_ARG_WITH(tide,
 [  --with-tide		compile TIDE support (debugger prototype)],
-TIDE='$(top_srcdir)/tide'
-TIDEDEF=-DUSE_TIDE
-TIDELIB=$TIDE/libtide.a
-JTIDE="toolbus/tide"
-XTRADIRS="${XTRADIRS} tide",
-DISTDIRS="${DISTDIRS} tide"
+if test ${withval} = "yes"
+then
+  TIDEDEF=-DUSE_TIDE
+  TIDE='${prefix}'
+else
+  if test ${withval} != "no"
+  then
+    TIDEDEF=-DUSE_TIDE
+	TIDE=${withval}
+  fi
+fi,
 )
+    
 AC_SUBST(TIDEDEF)
 AC_SUBST(TIDE)
-AC_SUBST(TIDELIB)
 AC_SUBST(DISTDIRS)
-AC_SUBST(JTIDE)
+
+AC_ARG_WITH(aterm,
+[  --with-aterm		designate location of aterm library stuff],
+ATERM=${withval},
+ATERM=${prefix}
+)
+
+AC_SUBST(ATERM)
 
 dnl Which adapters?
 
