@@ -925,7 +925,7 @@ int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
  * to make a comparison between the two.
  * 
  *  t1 is prefer over t2 if 
- *  !(#prefers in t1 < #prefers in t2 && #avoids in t1 > #avoids in t2)      
+ *  #prefers in t1 >= #prefers in t2 && #avoids in t1 <= #avoids in t2)      
  */
 
 ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
@@ -943,11 +943,11 @@ ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
   aM = SG_GetNrOfAvoids(pt, msM);
   aN = SG_GetNrOfAvoids(pt, msN);
 
-  if ((pM < pN) && (aM > aN)) {
-    return ATfalse;
+  if ((pM >= pN) && (aM <= aN)) {
+    return ATtrue;
   }
   else {
-    return ATtrue;
+    return ATfalse;
   }
 }
 
@@ -1378,9 +1378,9 @@ tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
     }
   }
  
-  /* injectionscount filter always applies  */
+  /* injectionscount filter always applies */
   max = SG_InjectionCount_Filter(pt, t0, t1);
-  
+
   return max;
 }
 
