@@ -8,6 +8,7 @@ endif
 
 EXTRA_DIST = $(wildcard *.ltx) \
              $(wildcard *.ps) \
+             $(wildcard *.eps) \
              $(wildcard *.pdf) \
              $(wildcard *.sty) \
              $(wildcard *.fig)
