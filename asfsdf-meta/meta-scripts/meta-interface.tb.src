@@ -129,9 +129,8 @@ in
     else
       tau
     fi .
-    printf("TODO: Removevarsyntax disabled until it is reimplemented.") .
-    /* snd-msg(remove-var-syntax(ModuleName, Syntax)) .
-    rec-msg(changed-syntax(Syntax?)) . */
+    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) . 
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   )*delta
