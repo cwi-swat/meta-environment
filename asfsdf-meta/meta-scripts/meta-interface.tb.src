@@ -53,7 +53,7 @@ in
       GetSpecificationTests(Specification, Tests?) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(stat(Id, "Running tests"))) .
-      snd-msg(run-tests(ModuleName, Equations, Tests)) .
+      snd-msg(run-tests(Equations, Tests)) .
       (
         rec-msg(test-results(Errors?)) .
         snd-msg(ui-remove-feedback-summary("asf-tests",ModuleName)) .

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Mar 23 15:23:57 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Removed unused variable ModuleName from run-tests message
+
 Tue Mar 22 10:37:53 CET 2005 <{jong,kooiker}@cwi.nl>
  * meta-scripts/Makefile.am
  * meta-scripts/meta-interface.tb.src
