@@ -28,7 +28,9 @@ ulimit -t 25
 
 TERM="f(a,b)"
 (echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/read.tb) > test.out 2>&1
-fgrep "result:$TERM" test.out > /dev/null 2>&1
+failed=$?
 
 rm test.out
+
+exit $failed
 
