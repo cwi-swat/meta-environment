@@ -56,11 +56,23 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
     }
   }
 
-  lhs = rewriteInnermost((PT_Tree) ASF_getASFConditionLhs(tobetested),
-			 environment, 0, NO_TRAVERSAL);
-  rhs = rewriteInnermost((PT_Tree) ASF_getASFConditionRhs(tobetested),
-			 environment, 0, NO_TRAVERSAL);
-		
+  lhs = (PT_Tree) ASF_getASFConditionLhs(tobetested);
+  rhs = (PT_Tree) ASF_getASFConditionRhs(tobetested);
+
+  lhs = rewriteInnermost(lhs, environment, 0, NO_TRAVERSAL);
+  rhs = rewriteInnermost(rhs, environment, 0, NO_TRAVERSAL); 
+
+  tagCurrentRule = tag;
+
+  if (!no_new_vars(lhs, environment)) {
+    RWsetError("Left side of test introduces a variable", (PT_Tree) tag);
+    return tag;
+  }
+  if (!no_new_vars(rhs, environment)) {
+    RWsetError("Right side of test introduces a variable", (PT_Tree) tag);
+    return tag;
+  }
+
   equal = isAsFixEqual(lhs, rhs);
 
   if (ASF_isASFConditionNegative(tobetested)) {

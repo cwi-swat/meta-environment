@@ -42,6 +42,9 @@ in
     (
       rec-value(Eval, test-results(Total?, Failed?, Tags?)) .
       snd-msg(test-results(Total, Failed, Tags))
+    +
+      rec-value(Eval, rewrite-errors(ErrorList?)) .
+      snd-msg(rewrite-errors(ErrorList))
     ) .
     Equations := none .
     Tests := none
