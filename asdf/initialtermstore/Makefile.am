@@ -1,4 +1,4 @@
 # $Id$
 
-support: ${prefix}/bin/dump-termstore -s 
+all: ${prefix}/bin/dump-termstore -s 
 
