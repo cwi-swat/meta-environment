@@ -1,3 +1,11 @@
+2001/07/04 (jurgenv@cwi.nl)
+  * Replaced asfix2muasf frontend by a new frontend, written in C: asf2muasf
+  * Removed reshuffling from the compiler
+  * Slightly altered the backend, muasf2c to be able to handle asfix2me muasf.
+  * Changed the interface of asfc to read in a .eqs file and print out C code.
+  * Bootstrapped the compiler to obtain an AsFix2ME compliant asf compiler.
+  * See also: asc-support package
+
 2001/07/04 (markvdb@cwi.nl)
   * Removed a bug from the evaluator, which was there all the time,
     nested sublist were not treated correctly!
