@@ -58,14 +58,14 @@ ATerm parse_string(int conn, ATerm L, char *G, char *S)
 
 ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
 {
-  PT_ParseTree tree = NULL;
-  ATerm result = SGparseStringAsAsFix2ME(L, G, S);
+  ATerm tree = NULL;
+  ATerm amb = NULL;
+  ATerm result;
 
-  if (ATmatch(result, "parsetree(<term>)", &tree)) {
-    PT_Tree pt = PT_getParseTreeTop(tree);
-    int amb = PT_getParseTreeAmbCnt(tree);
+  result = SGparseStringAsAsFix2ME(L, G, S);
 
-    return ATmake("parsetree(<term>,<int>)", ATBpack((ATerm) pt), amb);
+  if (ATmatch(result, "parsetree(<term>,<term>)", &tree, &amb)) {
+    return ATmake("snd-value(parsetree(<term>,<term>))", ATBpack(tree), amb);
   }
 
   return result;
