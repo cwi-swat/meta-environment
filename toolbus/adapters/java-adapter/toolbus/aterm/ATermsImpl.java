@@ -211,8 +211,10 @@ public class ATermsImpl extends ATermImpl
   { 
     if(first != null) {
       first.print(w);
-      w.print(',');
-      next.print(w);
+      if(!next.isEmpty()) {
+	w.print(',');
+	next.print(w);
+      }
     }
     super.print(w);
   }

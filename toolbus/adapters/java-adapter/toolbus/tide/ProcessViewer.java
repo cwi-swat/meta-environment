@@ -116,7 +116,7 @@ public class ProcessViewer extends Frame
     processGrid = new ProcessPicture[columns][rows];
 
     // Instantiate anonymous debug adapter
-    anon_dap = new DapPicture(ANON_DAPID, null, null);
+    anon_dap = new DapPicture(ANON_DAPID, world.empty, null);
     anon_dap.setGeometry(new Rectangle(0, 0, columns, rows));
     processes[ANON_DAPID] = new Hashtable();
     adapters[ANON_DAPID] = anon_dap;

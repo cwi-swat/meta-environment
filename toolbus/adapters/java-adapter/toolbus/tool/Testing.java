@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 12-Dec-97 7:59:26 PM
+// generation time: 05-Jan-98 3:22:58 PM
 
 package toolbus.tool;
 import toolbus.aterm.*;
@@ -35,12 +35,12 @@ abstract public class Testing extends toolbus.tool.Tool
   private void initSigTable()
   {
     try {
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<testing>,<term>,)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<testing>,<term>,)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<testing>,question(square,),)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,f(<int>,),),)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,<int>,),)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,),)"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-terminate(<testing>,<term>)"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-ack-event(<testing>,<term>)"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-eval(<testing>,question(square))"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-do(<testing>,testit(<str>,f(<int>)))"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-do(<testing>,testit(<str>,<int>))"), new Boolean(true));
+      sigTable.put(world.makeSimple("rec-do(<testing>,testit(<str>))"), new Boolean(true));
     } catch (ParseError e) { }
   }
 
@@ -48,12 +48,12 @@ abstract public class Testing extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Ptestit0 = world.makePattern("rec-do(testit(<str>,))");
-      Ptestit1 = world.makePattern("rec-do(testit(<str>,<int>,))");
-      Ptestit2 = world.makePattern("rec-do(testit(<str>,<appl>,))");
-      Pquestion0 = world.makePattern("rec-eval(question(<appl>,))");
-      PrecTerminate0 = world.makePattern("rec-terminate(<term>,)");
-      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>,)");
+      Ptestit0 = world.makePattern("rec-do(testit(<str>))");
+      Ptestit1 = world.makePattern("rec-do(testit(<str>,<int>))");
+      Ptestit2 = world.makePattern("rec-do(testit(<str>,<appl>))");
+      Pquestion0 = world.makePattern("rec-eval(question(<appl>))");
+      PrecTerminate0 = world.makePattern("rec-terminate(<term>)");
+      PrecAckEvent0 = world.makePattern("rec-ack-event(<term>)");
     } catch (ParseError e) {}
   }
 

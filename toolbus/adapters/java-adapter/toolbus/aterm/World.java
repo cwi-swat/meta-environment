@@ -1,14 +1,12 @@
 package toolbus.aterm;
 
-import toolbus.util.SimpleHashtable;
-import toolbus.util.SimpleHashtableEntry;
 import java.util.*;
 import java.io.*;
 
 public class World
 {
   private int table_size;
-  private SimpleHashtable table;
+  private Hashtable table;
   public ATermsImpl emptyImpl;
   public ATerms empty;
 
@@ -21,7 +19,7 @@ public class World
   public World(int table_size)
   {
     this.table_size = table_size;
-    table = new SimpleHashtable(43117);
+    table = new Hashtable(43117);
     emptyImpl = (ATermsImpl)intern(new ATermsImpl(this));
     empty = new ATerms(emptyImpl);
   }
@@ -37,7 +35,7 @@ public class World
   {
     ATermImpl result = (ATermImpl)table.get(term);
     if(result == null) {
-      table.put(term);
+      table.put(term,term);
       return term;
     }
     return result;

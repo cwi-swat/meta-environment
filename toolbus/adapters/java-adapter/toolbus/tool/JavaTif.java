@@ -272,7 +272,7 @@ class TifGenerator
     while(!sigs.isEmpty()) {
       ATerm sig = sigs.getFirst();
       sigs = sigs.getNext();
-      out.print("      sigTable.put(ATermParser.makeSimple(\"");
+      out.print("      sigTable.put(world.makeSimple(\"");
       sig.print(out);
       out.println("\"), new Boolean(true));");
     }

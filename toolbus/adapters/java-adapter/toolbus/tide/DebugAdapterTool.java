@@ -140,7 +140,7 @@ class DebugAdapterTool extends DebugAdapterTif
 	String prop = (String)names.nextElement();
 	String value = props.getProperty(prop);
 	info = ((ATermList)addPattern.make(prop, 
-		       ATermParser.makeSimple(value), info)).getATerms();
+		       world.makeSimple(value), info)).getATerms();
       }
       result = returnPattern.make(info);
     } catch (ParseError e) {
