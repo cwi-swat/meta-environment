@@ -1,15 +1,2 @@
 Makefile.in
 Makefile
-INSTALL
-aclocal.m4
-configure
-install-sh
-missing
-mkinstalldirs
-VERSION
-config.log
-config.h.in
-config.status
-config.cache
-*.tar.gz
-*.pkg
