@@ -104,7 +104,7 @@
 
 static unsigned rewrite_steps = 0;
 
-ATbool run_verbose = ATfalse;
+static ATbool run_verbose = ATfalse;
 
 static char myname[] = "evaluator";
 static char myversion[] = "0.1";
@@ -115,7 +115,7 @@ static char myversion[] = "0.1";
     explanation.
  */
 
-static char myarguments[] = "bthe:i:o:vV";
+static char myarguments[] = "be:hi:o:tvV";
 
 ATerm fail_env;
 ATerm tmp1, tmp2, tmp3;
@@ -1099,8 +1099,9 @@ int main(int argc, char *argv[])
   ATermList neweqs;
 
   /*  Check whether we're a ToolBus process  */
-  for(c=1; !toolbus_mode && c<argc; c++)
+  for (c=1; !toolbus_mode && c < argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
+  }
 
 
   AFinit(argc, argv, &bottomOfStack);
