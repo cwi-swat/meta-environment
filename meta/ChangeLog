@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Apr  3 15:35:50 CEST 2002 <olivierp@cwi.nl>
+ * Added new user interface (MetaStudio), add --with-metastudio to activate
+
 2002/22/03 (vandenbr@loria.fr)
   * Restructured the Sdf-Checker and moved to pgen and asf.
 
