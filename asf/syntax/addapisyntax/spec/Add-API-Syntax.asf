@@ -5,8 +5,8 @@ equations
 [1] add-api(Definition) = aa(Definition)
 
 [2] aa(lexical syntax Production*) =
-    lexical syntax
-    aaps(Production*, lex)
+    lexical syntax Production*
+%%    aaps(Production*, lex)
 
 [3] aa(context-free syntax Production*) =
     context-free syntax
