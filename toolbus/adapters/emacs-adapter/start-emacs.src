@@ -29,4 +29,11 @@ fi
 
 datadir=__DATADIR__
 
-xemacs -load ${datadir}/tb.el -eval "(TBinit \"$*\")"
+# emacs part of emacs-adapter consisist of some emacs lisp script tb.el
+tb_src=${datadir}/tb.el
+
+# Emacs ignores everything left to a double slash '//' in a path name.
+# Therefore we replace double occurences of '/' by a single slash.
+tb_src=`echo tb_src=${datadir}/tb.el | sed 's@//@/@g'`
+
+xemacs -load ${tb_src} -eval "(TBinit \"$*\")"
