@@ -248,4 +248,42 @@ equations
 	      ===================================================
 	      check-con(not-equal-con($TV1, empty, $SU1), $M) = yes
 
+[check-con-closed-1] 
+
+	      $ATV2 := get-variable($AT),
+	      vmap($VT1*, <($ATV2), ($SAT1* & closed & $SAT2*), $SU2>, 
+								$VT2*) := $M,
+	      vmap($VT3*, <($ATV1), ($SAT3* & closed & $SAT4*), $SU3>, 
+								$VT4*) := $M
+	      ===================================================
+	      check-con(closed-con($AT, $ATV1, $SU1), $M) = yes
+
+[check-con-closed-2] 
+		      
+	      $ATV2 := get-variable($AT),
+	      vmap($VT1*, <($ATV2), ($SAT1* & closed & $SAT2*), $SU2>, 
+								$VT2*) !:= $M,
+	      vmap($VT3*, <($ATV2), ($ATV1), $SU3>, $VT4*) := $M
+	      ===================================================
+	      check-con(closed-con($AT, $ATV1, $SU1), $M) = yes
+
+[check-con-infallible-1] 
+	
+	      $ATV2 := get-variable($AT),
+	      vmap($VT1*, <($ATV2), ($SAT1* & infallible & $SAT2*), $SU2>, 
+								$VT2*) := $M,
+	      vmap($VT3*, <($ATV1), ($SAT3* & infallible & $SAT4*), $SU3>, 
+								$VT4*) := $M
+	      ===================================================
+	      check-con(infallible-con($AT, $ATV1, $SU1), $M) = yes
+
+[check-con-infallible-2] 
+		      
+	      $ATV2 := get-variable($AT),
+	      vmap($VT1*, <($ATV2), ($SAT1* & infallible & $SAT2*), $SU2>, 
+								$VT2*) !:= $M,
+	      vmap($VT3*, <($ATV2), ($ATV1), $SU3>, $VT4*) := $M
+	      ===================================================
+	      check-con(infallible-con($AT, $ATV1, $SU1), $M) = yes
+
 [default-check-con-1] check-con($CO, $M) = no

@@ -48,7 +48,7 @@ equations
 
 [tcd-10] typecheck-data($VR, $EN) = <giving data, $EN>
 
-[tcd-10] [$DT1*, <$DO, $TY>, $DT2*] := get-data-constants($EN)
+[tcd-11] [$DT1*, <$DO, $TY>, $DT2*] := get-data-constants($EN)
 	 ==============================================================
 	 typecheck-dataop($DO, $EN) = <giving $TY & raising empty & 
 					      std-at, $EN>
