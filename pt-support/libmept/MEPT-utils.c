@@ -497,10 +497,13 @@ PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree)
 
   PT_Tree tree = PT_getParseTreeTree(parse_tree);
   tree = PT_annotateTreeWithLength(tree);
+  parse_tree = PT_setParseTreeTree(parse_tree, tree);
 
   length = PT_getTreeLengthAnno(tree);
 
-  parse_tree = PT_setParseTreeTree(parse_tree, tree);
+  length += strlen(PT_yieldTree(PT_getParseTreeLayoutBeforeTree(parse_tree)));
+  length += strlen(PT_yieldTree(PT_getParseTreeLayoutAfterTree(parse_tree)));
+
   parse_tree = PT_setParseTreeLengthAnno(parse_tree, length);
 
   return parse_tree;
@@ -818,6 +821,22 @@ PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 {
   return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
                          charList);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
+
+ATbool PT_isTreeFlatLexical(PT_Tree tree)
+{
+  static PT_Symbol allCharsSymbol;
+  allCharsSymbol = makeSymbolAllChars();
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production listProd = PT_getTreeProd(tree);
+    PT_Symbol listSymbol = PT_getProductionRhs(listProd);
+    return PT_isEqualSymbol(listSymbol, allCharsSymbol);
+  }
+  return ATfalse;
 }
 
 /*}}}  */

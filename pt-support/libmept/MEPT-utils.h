@@ -122,6 +122,7 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
 PT_Symbol makeSymbolAllChars();
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
+ATbool PT_isTreeFlatLexical(PT_Tree tree);
 PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol);
 
 PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree);

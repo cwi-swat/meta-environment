@@ -1,3 +1,7 @@
+2001/05/04 (markvdb@cwi.nl)
+ * Predicate added to see whether a node is a list of characters.
+ * Fixed bug in ParseTree length annotation.
+
 2001/03/26 (jong@cwi.nl)
  * fixed substitution of undefined variable TREE in asfix-tools/Makefile.am
    and test/Makefile.am. This caused building of pt-support to look for old
