@@ -1,0 +1,39 @@
+module languages/box/syntax/Comments
+
+%% The comments occurring in the orginal text must be
+%% restored in the resulting text. In the first version
+%% of the restore comments mechanism, the comment text
+%% was stored as a list of strings without any information
+%% concerning the orginal place of the comment text in
+%% the program text. During the development of the PSF
+%% documentation tool this approach proved to be not
+%% strong enough. The introduction of special box operators
+%% to deal with comments solves a lot of the problems
+%% which occurred during the formatting of box terms
+%% which contain comments.
+
+%% We distinguish three different types of comments:
+%% \begin{itemize}
+%% \item comments which occur after some symbol;
+%% \item comments which occur on a line which does not
+%%       contain any symbol except the comment text,
+%%       but the comment symbol does not occur in the
+%%       first column; and
+%% \item comments which start in the first column of
+%%       a new line.
+%% \end{itemize}
+%% Each of these comment types is represented by an
+%% unique box operator. The comment box operators
+%% have no space options but need two extra strings
+%% which represent the begin and end marker of the
+%% comment.
+%%\smallskip
+
+imports languages/box/syntax/Box
+exports
+  context-free syntax
+    "HPAR" BoxString BoxString "[" BoxList "]" -> Box
+    "VPAR" BoxString BoxString "[" BoxList "]" -> Box
+    "PAR"  BoxString BoxString "[" BoxList "]" -> Box
+
+%%%

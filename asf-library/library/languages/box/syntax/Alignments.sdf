@@ -1,0 +1,39 @@
+module languages/box/syntax/Alignments
+
+%% The introduction of an alignment operator is necessary
+%% because during the translation of the box to tex we can no
+%% longer make the assumption that the fonts are non-propotional.
+%% Furthermore, from the users viewpoint the use of an alignment
+%% operator is much easier than specifying the explicit calculation
+%% of columns.
+%%
+%% Columns are implemented by means of two box operators: {\sf A}
+%% and {\sf R}. The arguments of the {\sf A} operator are {\sf R}
+%% boxes. Each {\sf R} box represents a row. All {\sf R} boxes
+%% should have same number of arguments, equal to the desired number
+%% of columns. For each column the user can specify whether the
+%% alignment should be left, right, or centered. The number of
+%% alignment indications should be equal to the number of columns.
+%% Each alignment indication can be extended with space options,
+%% which are transferred to the columns to be formatted.
+%%\smallskip
+
+imports languages/box/syntax/Box
+
+exports
+  sorts AOption AOptions
+  context-free syntax
+    "AL" AOptions SOptions "[" BoxList "]" -> Box
+    "ROW" "[" BoxList "]"                  -> Box
+
+    "le" SOptions -> AOption
+    "ce" SOptions -> AOption
+    "ri" SOptions -> AOption
+
+    "(" {AOption ","}* ")" -> AOptions
+
+hiddens
+  variables
+    "ao"[0-9]*    -> AOption
+    "ao""*"[0-9]* -> {AOption ","}*
+    "ao""+"[0-9]* -> {AOption ","}+

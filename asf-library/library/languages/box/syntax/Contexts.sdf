@@ -1,0 +1,13 @@
+module languages/box/syntax/Contexts
+
+imports basic/Comments
+exports
+  sorts Context
+  context-free syntax
+    "H"  -> Context
+    "V"  -> Context
+
+hiddens
+  variables
+    "'C"[0-9]* -> Context
+%%%

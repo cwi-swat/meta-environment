@@ -1,0 +1,49 @@
+module languages/box/syntax/Fonts
+
+imports languages/box/syntax/Box
+        basic/Comments
+
+exports
+  sorts FontId
+  lexical syntax
+    [A-Za-z]+ -> FontId
+
+hiddens
+  variables
+   "Id"[0-9]* -> FontId
+
+exports
+  context-free syntax
+    ic -> BoxString
+exports
+  sorts FontParam FOption FOptions FontOperator
+  context-free syntax
+    FontParam "=" Integer        -> FOption
+    FontParam "=" FontId         -> FOption
+    FOption*                     -> FOptions
+    "F" FOptions                 -> FontOperator
+    FontOperator "[" Box "]"     -> Box
+    FontOperator "(" BoxList ")" -> BoxList
+
+    "fn" -> FontParam
+    "fm" -> FontParam
+    "se" -> FontParam
+    "sh" -> FontParam
+    "sz" -> FontParam
+    "cl" -> FontParam
+
+    "KW"      -> FontOperator
+    "VAR"     -> FontOperator
+    "NUM"     -> FontOperator
+    "MATH"    -> FontOperator
+    "ESC"     -> FontOperator
+    "COMM"    -> FontOperator
+    "STRING"  -> FontOperator
+
+hiddens
+  variables
+    [f][0-9]*     -> FontOperator
+    "fo"[0-9]*    -> FOption
+    "fo""*"[0-9]* -> FOption*
+    "fp"[0-9]*    -> FontParam
+%%%

@@ -1,0 +1,30 @@
+module languages/box/syntax/Box-Strings
+
+%% A string is a list of arbitrary characters except for a newline
+%% enclosed in double quotes. A double quote can only occur in a
+%% string if it is preceded (escaped) by a backslash.
+%%\smallskip
+
+imports basic/Comments 
+	basic/Strings
+	basic/Integers
+exports
+  sorts BoxString
+  context-free syntax
+    String                  -> BoxString
+    BoxString ":" BoxString -> BoxString {right}
+    BoxString "*" BoxString -> BoxString {right}
+    BoxString "." BoxString -> BoxString {right}
+    "(" BoxString ")"       -> BoxString {bracket}
+
+hiddens
+  variables
+    "String"[0-9]*  -> BoxString
+
+hiddens
+  variables
+    [ab][0-9]*    -> BoxString
+    "Char"[0-9]*  -> CHAR
+    "Char*"[0-9]* -> CHAR*
+    "Char+"[0-9]* -> CHAR+
+%%%
