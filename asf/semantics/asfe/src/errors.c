@@ -62,7 +62,13 @@ void printErrors(void)
   tag = ATgetFirst(ATgetNext(error));
   subject = ATgetFirst(ATgetNext(ATgetNext(error)));
 
-  tagText = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
+  if (tag) {
+    tagText = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
+  }
+  else {
+    tagText = strdup("");
+  }
+
   subjectText = strdup(PT_yieldTree(PT_makeTreeFromTerm(subject)));
 
   if(tagText != NULL &&

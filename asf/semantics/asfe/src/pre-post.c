@@ -242,14 +242,18 @@ static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data)
   while (PT_hasArgsHead(args)) {
     PT_Tree arg;
     PT_Tree amb;
+    int len;
 
     arg = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
     amb = restoreTerm(arg, data);
     ambs = PT_makeArgsList(amb,ambs);
 
-    
-    if (!PT_isArgsEmpty(args)) {
+   
+    len = PT_getArgsLength(args);
+    assert((len == 0 || len > 3) && "ill formed amb cluster");
+
+    if (len > 3) {
       args = PT_getArgsTail(args); 
       args = PT_getArgsTail(args); 
       args = PT_getArgsTail(args); 
