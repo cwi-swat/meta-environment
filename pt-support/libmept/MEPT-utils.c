@@ -855,6 +855,19 @@ PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 }
 
 /*}}}  */
+
+PT_Tree PT_makeTreeFlatLexicalFromString(char *str)
+{
+  PT_Args args = PT_makeArgsEmpty();
+  int i;
+
+  for (i = strlen(str); i >= 0; i--) {
+    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
+  }
+
+  return PT_makeTreeFlatLexical(args);
+}
+
 /*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
 
 ATbool PT_isTreeFlatLexical(PT_Tree tree)

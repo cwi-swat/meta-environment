@@ -1,3 +1,6 @@
+2001/06/19 (jurgenv@cwi.nl)
+ * added a library to create a flattened lexical from a string
+
 2001/06/07 (jurgenv@cwi.nl)
  * reactivated the addPosInfo commanline tool (it used to be called add-posinfo)
  * added library function for adding position information to a maximum depth
