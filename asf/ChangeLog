@@ -1,3 +1,7 @@
+2001/07/10 (jurgenv@cwi.nl)
+  * Added support for rewrite rules with a list as outermost function
+    to asfc
+
 2001/07/09 (jurgenv@cwi.nl)
   * started new collection of regression tests for asfc
 
