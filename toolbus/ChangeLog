@@ -1,5 +1,9 @@
 $Id$
 
+2002/10/10 (vinju@cwi.nl)
+ * On ctrl+\ only the pending snd-msgs are printed, such that you can see
+   immediately which messages are not received.
+
 2002/09/09 (vandenbr@loria.fr)
  * Started 0.25beta.
  * Added "#!/bin/sh" to generated scripts in order to make it
