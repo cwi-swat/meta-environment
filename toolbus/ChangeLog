@@ -1,6 +1,7 @@
 $Id$
 
 Mon Jun 30 10:03:16 CEST 2003 <jong@cwi.nl>
+ * add "--with-trans-adapter" to enable transparent TB-adapter
  * adapters/trans:
    - fix Taeke's renaming of java files in Makefile.am
 
