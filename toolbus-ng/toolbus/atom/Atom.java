@@ -127,7 +127,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     if (test == null)
       return true;
     else {
-      boolean res = TBTerm.isTrue(TBTerm.eval(test, env));
+      boolean res = TBTerm.isTrue(TBTerm.eval(test, getProcess()));
       //System.out.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
       return res;
     }

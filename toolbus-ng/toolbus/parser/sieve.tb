@@ -1,7 +1,7 @@
 process SIEVE(Max : int) is
   let ThisSieve: SIEVE, N : int, Filter2 : FILTER
   in
-     ThisSieve := processid .
+     ThisSieve := processId .
      create(FILTER(ThisSieve, 2), Filter2?) .
      N := 3 .
      if less(N, Max) then snd-msg N to Filter2 . N := add(N, 1) fi *
