@@ -3,15 +3,19 @@ module CodeGenerator
 imports Statements AssemblyLanguage NextLabel 
   
 exports
+  context-free start-symbols Instrs
+
   context-free syntax
-    "tr" "(" Stats ")" -> Instrs
+    tr(Stats) -> Instrs
   
 hiddens
   sorts Instrs-lab 
   context-free syntax
-    "<" Instrs "," Label ">"     -> Instrs-lab 
-    "tr" "(" Stats "," Label ")" -> Instrs-lab 
-    "tr" "(" Exp ")"             -> Instrs
+    "<" Instrs "," Label ">" -> Instrs-lab 
+
+  context-free syntax
+    tr(Stats, Label) -> Instrs-lab 
+    tr(Exp)          -> Instrs
 
 hiddens
   variables
