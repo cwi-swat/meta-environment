@@ -21,12 +21,13 @@ static char *escapeQuotes(const char *input)
   char *s;
 
   len = strlen(input);
-  buf = realloc(buf, len*2 + 1);
+  buf = realloc(buf, len*3 + 1);
 
   p = input;
   s = buf;
   while (p && *p) {
     if (*p == '"' || *p == '\\') {
+      *s++ = '\\';
       *s++ = '\\';
     }
     *s++ = *p++;

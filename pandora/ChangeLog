@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb 13 16:31:13 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Fixed number of escapes (missed one) 
+
 Fri Feb 13 15:23:47 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Pandora is now ToolBus enabled
  * Removed some debug stuff
