@@ -1,5 +1,8 @@
 # $Id$
 
+2002/22/03 (vandenbr@loria.fr)
+  * Restructured the Sdf-Checker and moved to pgen and asf.
+
 Fri Mar  8 15:07:32 CET 2002 <jong@cwi.nl>
  * in editors/structure, renamed Editor.[ch] to EditorData.[ch] to
    avoid conflicts on filename-case-insensitive platforms.
