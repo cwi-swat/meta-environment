@@ -841,6 +841,7 @@ ATerm get_parse_table(int cid, ATerm moduleId)
 
       if (!ATisEqual(table, MDB_NONE)) {
         ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
+ATwarning("retrieving table %s\n", ATgetName(ATgetAFun(table)));
         contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
         contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
         result = ATmake("snd-value(table(<term>,<str>))", contents, newpath);
