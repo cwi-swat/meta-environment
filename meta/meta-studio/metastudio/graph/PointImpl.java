@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class PointImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class PointImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Point peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortPoint()  {
     return true;
@@ -40,22 +38,22 @@ abstract public class PointImpl extends MetaGraphConstructor
 
   public int getX()
   {
-     throw new RuntimeException("This Point has no X");
+     throw new UnsupportedOperationException("This Point has no X");
   }
 
   public Point setX(int _x)
   {
-     throw new RuntimeException("This Point has no X");
+     throw new IllegalArgumentException("Illegal argument: " + _x);
   }
 
   public int getY()
   {
-     throw new RuntimeException("This Point has no Y");
+     throw new UnsupportedOperationException("This Point has no Y");
   }
 
   public Point setY(int _y)
   {
-     throw new RuntimeException("This Point has no Y");
+     throw new IllegalArgumentException("Illegal argument: " + _y);
   }
 
 }

@@ -1,5 +1,9 @@
 # $Id$
 
+2003/08/28 <kooiker@cwi.nl>
+ * updated generated code in meta-studio/metastudio/graph to match
+   aterm-1.5beta
+  
 2003/08/27 <kooiker@cwi.nl>
  * fixed imports and importedby labels in tbscripts/module-db.tb
 

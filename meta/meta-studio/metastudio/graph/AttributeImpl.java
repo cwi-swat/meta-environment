@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class AttributeImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Attribute peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortAttribute()  {
     return true;
@@ -125,122 +123,122 @@ abstract public class AttributeImpl extends MetaGraphConstructor
 
   public String getLabel()
   {
-     throw new RuntimeException("This Attribute has no Label");
+     throw new UnsupportedOperationException("This Attribute has no Label");
   }
 
   public Attribute setLabel(String _label)
   {
-     throw new RuntimeException("This Attribute has no Label");
+     throw new IllegalArgumentException("Illegal argument: " + _label);
   }
 
   public Shape getShape()
   {
-     throw new RuntimeException("This Attribute has no Shape");
+     throw new UnsupportedOperationException("This Attribute has no Shape");
   }
 
   public Attribute setShape(Shape _shape)
   {
-     throw new RuntimeException("This Attribute has no Shape");
+     throw new IllegalArgumentException("Illegal argument: " + _shape);
   }
 
   public int getX()
   {
-     throw new RuntimeException("This Attribute has no X");
+     throw new UnsupportedOperationException("This Attribute has no X");
   }
 
   public Attribute setX(int _x)
   {
-     throw new RuntimeException("This Attribute has no X");
+     throw new IllegalArgumentException("Illegal argument: " + _x);
   }
 
   public int getY()
   {
-     throw new RuntimeException("This Attribute has no Y");
+     throw new UnsupportedOperationException("This Attribute has no Y");
   }
 
   public Attribute setY(int _y)
   {
-     throw new RuntimeException("This Attribute has no Y");
+     throw new IllegalArgumentException("Illegal argument: " + _y);
   }
 
   public int getWidth()
   {
-     throw new RuntimeException("This Attribute has no Width");
+     throw new UnsupportedOperationException("This Attribute has no Width");
   }
 
   public Attribute setWidth(int _width)
   {
-     throw new RuntimeException("This Attribute has no Width");
+     throw new IllegalArgumentException("Illegal argument: " + _width);
   }
 
   public int getHeight()
   {
-     throw new RuntimeException("This Attribute has no Height");
+     throw new UnsupportedOperationException("This Attribute has no Height");
   }
 
   public Attribute setHeight(int _height)
   {
-     throw new RuntimeException("This Attribute has no Height");
+     throw new IllegalArgumentException("Illegal argument: " + _height);
   }
 
   public Polygon getPoints()
   {
-     throw new RuntimeException("This Attribute has no Points");
+     throw new UnsupportedOperationException("This Attribute has no Points");
   }
 
   public Attribute setPoints(Polygon _points)
   {
-     throw new RuntimeException("This Attribute has no Points");
+     throw new IllegalArgumentException("Illegal argument: " + _points);
   }
 
   public Point getFirst()
   {
-     throw new RuntimeException("This Attribute has no First");
+     throw new UnsupportedOperationException("This Attribute has no First");
   }
 
   public Attribute setFirst(Point _first)
   {
-     throw new RuntimeException("This Attribute has no First");
+     throw new IllegalArgumentException("Illegal argument: " + _first);
   }
 
   public Point getSecond()
   {
-     throw new RuntimeException("This Attribute has no Second");
+     throw new UnsupportedOperationException("This Attribute has no Second");
   }
 
   public Attribute setSecond(Point _second)
   {
-     throw new RuntimeException("This Attribute has no Second");
+     throw new IllegalArgumentException("Illegal argument: " + _second);
   }
 
   public Direction getDirection()
   {
-     throw new RuntimeException("This Attribute has no Direction");
+     throw new UnsupportedOperationException("This Attribute has no Direction");
   }
 
   public Attribute setDirection(Direction _direction)
   {
-     throw new RuntimeException("This Attribute has no Direction");
+     throw new IllegalArgumentException("Illegal argument: " + _direction);
   }
 
   public String getKey()
   {
-     throw new RuntimeException("This Attribute has no Key");
+     throw new UnsupportedOperationException("This Attribute has no Key");
   }
 
   public Attribute setKey(String _key)
   {
-     throw new RuntimeException("This Attribute has no Key");
+     throw new IllegalArgumentException("Illegal argument: " + _key);
   }
 
   public aterm.ATerm getValue()
   {
-     throw new RuntimeException("This Attribute has no Value");
+     throw new UnsupportedOperationException("This Attribute has no Value");
   }
 
   public Attribute setValue(aterm.ATerm _value)
   {
-     throw new RuntimeException("This Attribute has no Value");
+     throw new IllegalArgumentException("Illegal argument: " + _value);
   }
 
 }

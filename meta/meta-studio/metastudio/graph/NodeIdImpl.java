@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class NodeIdImpl extends MetaGraphConstructor
 {
@@ -35,12 +33,12 @@ abstract public class NodeIdImpl extends MetaGraphConstructor
 
   public String getId()
   {
-     throw new RuntimeException("This NodeId has no Id");
+     throw new UnsupportedOperationException("This NodeId has no Id");
   }
 
   public NodeId setId(String _id)
   {
-     throw new RuntimeException("This NodeId has no Id");
+     throw new IllegalArgumentException("Illegal argument: " + _id);
   }
 
 }

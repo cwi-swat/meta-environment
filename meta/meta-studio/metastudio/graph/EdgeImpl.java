@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class EdgeImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class EdgeImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Edge peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortEdge()  {
     return true;
@@ -45,32 +43,32 @@ abstract public class EdgeImpl extends MetaGraphConstructor
 
   public NodeId getFrom()
   {
-     throw new RuntimeException("This Edge has no From");
+     throw new UnsupportedOperationException("This Edge has no From");
   }
 
   public Edge setFrom(NodeId _from)
   {
-     throw new RuntimeException("This Edge has no From");
+     throw new IllegalArgumentException("Illegal argument: " + _from);
   }
 
   public NodeId getTo()
   {
-     throw new RuntimeException("This Edge has no To");
+     throw new UnsupportedOperationException("This Edge has no To");
   }
 
   public Edge setTo(NodeId _to)
   {
-     throw new RuntimeException("This Edge has no To");
+     throw new IllegalArgumentException("Illegal argument: " + _to);
   }
 
   public AttributeList getAttributes()
   {
-     throw new RuntimeException("This Edge has no Attributes");
+     throw new UnsupportedOperationException("This Edge has no Attributes");
   }
 
   public Edge setAttributes(AttributeList _attributes)
   {
-     throw new RuntimeException("This Edge has no Attributes");
+     throw new IllegalArgumentException("Illegal argument: " + _attributes);
   }
 
 }

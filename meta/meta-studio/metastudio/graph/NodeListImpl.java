@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class NodeListImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class NodeListImpl extends MetaGraphConstructor
   }
   public boolean isEqual(NodeList peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortNodeList()  {
     return true;
@@ -45,22 +43,22 @@ abstract public class NodeListImpl extends MetaGraphConstructor
 
   public Node getHead()
   {
-     throw new RuntimeException("This NodeList has no Head");
+     throw new UnsupportedOperationException("This NodeList has no Head");
   }
 
   public NodeList setHead(Node _head)
   {
-     throw new RuntimeException("This NodeList has no Head");
+     throw new IllegalArgumentException("Illegal argument: " + _head);
   }
 
   public NodeList getTail()
   {
-     throw new RuntimeException("This NodeList has no Tail");
+     throw new UnsupportedOperationException("This NodeList has no Tail");
   }
 
   public NodeList setTail(NodeList _tail)
   {
-     throw new RuntimeException("This NodeList has no Tail");
+     throw new IllegalArgumentException("Illegal argument: " + _tail);
   }
 
 }

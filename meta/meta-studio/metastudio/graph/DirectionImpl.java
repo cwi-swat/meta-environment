@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class DirectionImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class DirectionImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Direction peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortDirection()  {
     return true;

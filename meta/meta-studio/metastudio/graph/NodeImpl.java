@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class NodeImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class NodeImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Node peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortNode()  {
     return true;
@@ -40,22 +38,22 @@ abstract public class NodeImpl extends MetaGraphConstructor
 
   public NodeId getId()
   {
-     throw new RuntimeException("This Node has no Id");
+     throw new UnsupportedOperationException("This Node has no Id");
   }
 
   public Node setId(NodeId _id)
   {
-     throw new RuntimeException("This Node has no Id");
+     throw new IllegalArgumentException("Illegal argument: " + _id);
   }
 
   public AttributeList getAttributes()
   {
-     throw new RuntimeException("This Node has no Attributes");
+     throw new UnsupportedOperationException("This Node has no Attributes");
   }
 
   public Node setAttributes(AttributeList _attributes)
   {
-     throw new RuntimeException("This Node has no Attributes");
+     throw new IllegalArgumentException("Illegal argument: " + _attributes);
   }
 
 }

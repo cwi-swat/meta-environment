@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class PolygonImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class PolygonImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Polygon peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortPolygon()  {
     return true;
@@ -45,22 +43,22 @@ abstract public class PolygonImpl extends MetaGraphConstructor
 
   public Point getHead()
   {
-     throw new RuntimeException("This Polygon has no Head");
+     throw new UnsupportedOperationException("This Polygon has no Head");
   }
 
   public Polygon setHead(Point _head)
   {
-     throw new RuntimeException("This Polygon has no Head");
+     throw new IllegalArgumentException("Illegal argument: " + _head);
   }
 
   public Polygon getTail()
   {
-     throw new RuntimeException("This Polygon has no Tail");
+     throw new UnsupportedOperationException("This Polygon has no Tail");
   }
 
   public Polygon setTail(Polygon _tail)
   {
-     throw new RuntimeException("This Polygon has no Tail");
+     throw new IllegalArgumentException("Illegal argument: " + _tail);
   }
 
 }

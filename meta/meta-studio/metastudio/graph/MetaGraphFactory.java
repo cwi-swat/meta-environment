@@ -297,7 +297,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Graph_Default makeGraph_Default(NodeList _nodes, EdgeList _edges, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_nodes, _edges, _attributes};
-    return makeGraph_Default( funGraph_Default, args, empty);
+    return makeGraph_Default(funGraph_Default, args, getEmpty());
   }
 
   public Graph Graph_DefaultFromTerm(aterm.ATerm trm)
@@ -314,10 +314,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Graph_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((NodeList)arg.getArgument(0)).toTerm());
-    args.add(((EdgeList)arg.getArgument(1)).toTerm());
-    args.add(((AttributeList)arg.getArgument(2)).toTerm());
-    return make(patternGraph_Default, args);
+    args.add((arg.getNodes()).toTerm());    args.add((arg.getEdges()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternGraph_Default, args);
   }
 
   protected NodeList_Empty makeNodeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -329,7 +326,7 @@ public class MetaGraphFactory extends PureFactory
 
   public NodeList_Empty makeNodeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeNodeList_Empty( funNodeList_Empty, args, empty);
+    return makeNodeList_Empty(funNodeList_Empty, args, getEmpty());
   }
 
   public NodeList NodeList_EmptyFromTerm(aterm.ATerm trm)
@@ -358,7 +355,7 @@ public class MetaGraphFactory extends PureFactory
 
   public NodeList_Multi makeNodeList_Multi(Node _head, NodeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeNodeList_Multi( funNodeList_Multi, args, empty);
+    return makeNodeList_Multi(funNodeList_Multi, args, getEmpty());
   }
 
   public NodeList NodeList_MultiFromTerm(aterm.ATerm trm)
@@ -375,9 +372,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(NodeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Node)arg.getArgument(0)).toTerm());
-    args.add(((NodeList)arg.getArgument(1)).toTerm());
-    return make(patternNodeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternNodeList_Multi, args);
   }
 
   protected Node_Default makeNode_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -389,7 +384,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Node_Default makeNode_Default(NodeId _id, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_id, _attributes};
-    return makeNode_Default( funNode_Default, args, empty);
+    return makeNode_Default(funNode_Default, args, getEmpty());
   }
 
   public Node Node_DefaultFromTerm(aterm.ATerm trm)
@@ -406,9 +401,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Node_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((NodeId)arg.getArgument(0)).toTerm());
-    args.add(((AttributeList)arg.getArgument(1)).toTerm());
-    return make(patternNode_Default, args);
+    args.add((arg.getId()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternNode_Default, args);
   }
 
   protected NodeId_Default makeNodeId_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -420,7 +413,7 @@ public class MetaGraphFactory extends PureFactory
 
   public NodeId_Default makeNodeId_Default(String _id) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_id, 0, true))};
-    return makeNodeId_Default( funNodeId_Default, args, empty);
+    return makeNodeId_Default(funNodeId_Default, args, getEmpty());
   }
 
   public NodeId NodeId_DefaultFromTerm(aterm.ATerm trm)
@@ -437,8 +430,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(NodeId_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((aterm.ATermAppl)arg.getArgument(0)).getAFun().getName());
-    return make(patternNodeId_Default, args);
+    args.add(arg.getId());    return make(patternNodeId_Default, args);
   }
 
   protected AttributeList_Empty makeAttributeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -450,7 +442,7 @@ public class MetaGraphFactory extends PureFactory
 
   public AttributeList_Empty makeAttributeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeAttributeList_Empty( funAttributeList_Empty, args, empty);
+    return makeAttributeList_Empty(funAttributeList_Empty, args, getEmpty());
   }
 
   public AttributeList AttributeList_EmptyFromTerm(aterm.ATerm trm)
@@ -479,7 +471,7 @@ public class MetaGraphFactory extends PureFactory
 
   public AttributeList_Multi makeAttributeList_Multi(Attribute _head, AttributeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeAttributeList_Multi( funAttributeList_Multi, args, empty);
+    return makeAttributeList_Multi(funAttributeList_Multi, args, getEmpty());
   }
 
   public AttributeList AttributeList_MultiFromTerm(aterm.ATerm trm)
@@ -496,9 +488,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(AttributeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Attribute)arg.getArgument(0)).toTerm());
-    args.add(((AttributeList)arg.getArgument(1)).toTerm());
-    return make(patternAttributeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternAttributeList_Multi, args);
   }
 
   protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -510,7 +500,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Label makeAttribute_Label(String _label) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_label, 0, true))};
-    return makeAttribute_Label( funAttribute_Label, args, empty);
+    return makeAttribute_Label(funAttribute_Label, args, getEmpty());
   }
 
   public Attribute Attribute_LabelFromTerm(aterm.ATerm trm)
@@ -527,8 +517,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_LabelImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((aterm.ATermAppl)arg.getArgument(0)).getAFun().getName());
-    return make(patternAttribute_Label, args);
+    args.add(arg.getLabel());    return make(patternAttribute_Label, args);
   }
 
   protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -540,7 +529,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Shape makeAttribute_Shape(Shape _shape) {
     aterm.ATerm[] args = new aterm.ATerm[] {_shape};
-    return makeAttribute_Shape( funAttribute_Shape, args, empty);
+    return makeAttribute_Shape(funAttribute_Shape, args, getEmpty());
   }
 
   public Attribute Attribute_ShapeFromTerm(aterm.ATerm trm)
@@ -557,8 +546,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_ShapeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Shape)arg.getArgument(0)).toTerm());
-    return make(patternAttribute_Shape, args);
+    args.add((arg.getShape()).toTerm());    return make(patternAttribute_Shape, args);
   }
 
   protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -570,7 +558,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Location makeAttribute_Location(int _x, int _y) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
-    return makeAttribute_Location( funAttribute_Location, args, empty);
+    return makeAttribute_Location(funAttribute_Location, args, getEmpty());
   }
 
   public Attribute Attribute_LocationFromTerm(aterm.ATerm trm)
@@ -587,9 +575,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_LocationImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(0)).getInt()));
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(1)).getInt()));
-    return make(patternAttribute_Location, args);
+    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return make(patternAttribute_Location, args);
   }
 
   protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -601,7 +587,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Size makeAttribute_Size(int _width, int _height) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_width), makeInt(_height)};
-    return makeAttribute_Size( funAttribute_Size, args, empty);
+    return makeAttribute_Size(funAttribute_Size, args, getEmpty());
   }
 
   public Attribute Attribute_SizeFromTerm(aterm.ATerm trm)
@@ -618,9 +604,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_SizeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(0)).getInt()));
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(1)).getInt()));
-    return make(patternAttribute_Size, args);
+    args.add(new Integer(arg.getWidth()));    args.add(new Integer(arg.getHeight()));    return make(patternAttribute_Size, args);
   }
 
   protected Attribute_CurvePoints makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -632,7 +616,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_CurvePoints makeAttribute_CurvePoints(Polygon _points) {
     aterm.ATerm[] args = new aterm.ATerm[] {_points};
-    return makeAttribute_CurvePoints( funAttribute_CurvePoints, args, empty);
+    return makeAttribute_CurvePoints(funAttribute_CurvePoints, args, getEmpty());
   }
 
   public Attribute Attribute_CurvePointsFromTerm(aterm.ATerm trm)
@@ -649,8 +633,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_CurvePointsImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Polygon)arg.getArgument(0)).toTerm());
-    return make(patternAttribute_CurvePoints, args);
+    args.add((arg.getPoints()).toTerm());    return make(patternAttribute_CurvePoints, args);
   }
 
   protected Attribute_BoundingBox makeAttribute_BoundingBox(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -662,7 +645,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_BoundingBox makeAttribute_BoundingBox(Point _first, Point _second) {
     aterm.ATerm[] args = new aterm.ATerm[] {_first, _second};
-    return makeAttribute_BoundingBox( funAttribute_BoundingBox, args, empty);
+    return makeAttribute_BoundingBox(funAttribute_BoundingBox, args, getEmpty());
   }
 
   public Attribute Attribute_BoundingBoxFromTerm(aterm.ATerm trm)
@@ -679,9 +662,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_BoundingBoxImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Point)arg.getArgument(0)).toTerm());
-    args.add(((Point)arg.getArgument(1)).toTerm());
-    return make(patternAttribute_BoundingBox, args);
+    args.add((arg.getFirst()).toTerm());    args.add((arg.getSecond()).toTerm());    return make(patternAttribute_BoundingBox, args);
   }
 
   protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -693,7 +674,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Direction makeAttribute_Direction(Direction _direction) {
     aterm.ATerm[] args = new aterm.ATerm[] {_direction};
-    return makeAttribute_Direction( funAttribute_Direction, args, empty);
+    return makeAttribute_Direction(funAttribute_Direction, args, getEmpty());
   }
 
   public Attribute Attribute_DirectionFromTerm(aterm.ATerm trm)
@@ -710,8 +691,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_DirectionImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Direction)arg.getArgument(0)).toTerm());
-    return make(patternAttribute_Direction, args);
+    args.add((arg.getDirection()).toTerm());    return make(patternAttribute_Direction, args);
   }
 
   protected Attribute_Info makeAttribute_Info(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -723,7 +703,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Attribute_Info makeAttribute_Info(String _key, aterm.ATerm _value) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_key, 0, true)), _value};
-    return makeAttribute_Info( funAttribute_Info, args, empty);
+    return makeAttribute_Info(funAttribute_Info, args, getEmpty());
   }
 
   public Attribute Attribute_InfoFromTerm(aterm.ATerm trm)
@@ -740,9 +720,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_InfoImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((aterm.ATermAppl)arg.getArgument(0)).getAFun().getName());
-    args.add((aterm.ATerm)arg.getArgument(1));
-    return make(patternAttribute_Info, args);
+    args.add(arg.getKey());    args.add((aterm.ATerm)arg.getValue());    return make(patternAttribute_Info, args);
   }
 
   protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -754,7 +732,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Plaintext makeShape_Plaintext() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Plaintext( funShape_Plaintext, args, empty);
+    return makeShape_Plaintext(funShape_Plaintext, args, getEmpty());
   }
 
   public Shape Shape_PlaintextFromTerm(aterm.ATerm trm)
@@ -783,7 +761,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Ellipse makeShape_Ellipse() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Ellipse( funShape_Ellipse, args, empty);
+    return makeShape_Ellipse(funShape_Ellipse, args, getEmpty());
   }
 
   public Shape Shape_EllipseFromTerm(aterm.ATerm trm)
@@ -812,7 +790,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Circle makeShape_Circle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Circle( funShape_Circle, args, empty);
+    return makeShape_Circle(funShape_Circle, args, getEmpty());
   }
 
   public Shape Shape_CircleFromTerm(aterm.ATerm trm)
@@ -841,7 +819,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Egg makeShape_Egg() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Egg( funShape_Egg, args, empty);
+    return makeShape_Egg(funShape_Egg, args, getEmpty());
   }
 
   public Shape Shape_EggFromTerm(aterm.ATerm trm)
@@ -870,7 +848,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Triangle makeShape_Triangle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Triangle( funShape_Triangle, args, empty);
+    return makeShape_Triangle(funShape_Triangle, args, getEmpty());
   }
 
   public Shape Shape_TriangleFromTerm(aterm.ATerm trm)
@@ -899,7 +877,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Box makeShape_Box() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Box( funShape_Box, args, empty);
+    return makeShape_Box(funShape_Box, args, getEmpty());
   }
 
   public Shape Shape_BoxFromTerm(aterm.ATerm trm)
@@ -928,7 +906,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Diamond makeShape_Diamond() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Diamond( funShape_Diamond, args, empty);
+    return makeShape_Diamond(funShape_Diamond, args, getEmpty());
   }
 
   public Shape Shape_DiamondFromTerm(aterm.ATerm trm)
@@ -957,7 +935,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Trapezium makeShape_Trapezium() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Trapezium( funShape_Trapezium, args, empty);
+    return makeShape_Trapezium(funShape_Trapezium, args, getEmpty());
   }
 
   public Shape Shape_TrapeziumFromTerm(aterm.ATerm trm)
@@ -986,7 +964,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Parallelogram makeShape_Parallelogram() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Parallelogram( funShape_Parallelogram, args, empty);
+    return makeShape_Parallelogram(funShape_Parallelogram, args, getEmpty());
   }
 
   public Shape Shape_ParallelogramFromTerm(aterm.ATerm trm)
@@ -1015,7 +993,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_House makeShape_House() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_House( funShape_House, args, empty);
+    return makeShape_House(funShape_House, args, getEmpty());
   }
 
   public Shape Shape_HouseFromTerm(aterm.ATerm trm)
@@ -1044,7 +1022,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Hexagon makeShape_Hexagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Hexagon( funShape_Hexagon, args, empty);
+    return makeShape_Hexagon(funShape_Hexagon, args, getEmpty());
   }
 
   public Shape Shape_HexagonFromTerm(aterm.ATerm trm)
@@ -1073,7 +1051,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Shape_Octagon makeShape_Octagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Octagon( funShape_Octagon, args, empty);
+    return makeShape_Octagon(funShape_Octagon, args, getEmpty());
   }
 
   public Shape Shape_OctagonFromTerm(aterm.ATerm trm)
@@ -1102,7 +1080,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Direction_Forward makeDirection_Forward() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Forward( funDirection_Forward, args, empty);
+    return makeDirection_Forward(funDirection_Forward, args, getEmpty());
   }
 
   public Direction Direction_ForwardFromTerm(aterm.ATerm trm)
@@ -1131,7 +1109,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Direction_Back makeDirection_Back() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Back( funDirection_Back, args, empty);
+    return makeDirection_Back(funDirection_Back, args, getEmpty());
   }
 
   public Direction Direction_BackFromTerm(aterm.ATerm trm)
@@ -1160,7 +1138,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Direction_Both makeDirection_Both() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Both( funDirection_Both, args, empty);
+    return makeDirection_Both(funDirection_Both, args, getEmpty());
   }
 
   public Direction Direction_BothFromTerm(aterm.ATerm trm)
@@ -1189,7 +1167,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Direction_None makeDirection_None() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_None( funDirection_None, args, empty);
+    return makeDirection_None(funDirection_None, args, getEmpty());
   }
 
   public Direction Direction_NoneFromTerm(aterm.ATerm trm)
@@ -1218,7 +1196,7 @@ public class MetaGraphFactory extends PureFactory
 
   public EdgeList_Empty makeEdgeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeEdgeList_Empty( funEdgeList_Empty, args, empty);
+    return makeEdgeList_Empty(funEdgeList_Empty, args, getEmpty());
   }
 
   public EdgeList EdgeList_EmptyFromTerm(aterm.ATerm trm)
@@ -1247,7 +1225,7 @@ public class MetaGraphFactory extends PureFactory
 
   public EdgeList_Multi makeEdgeList_Multi(Edge _head, EdgeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeEdgeList_Multi( funEdgeList_Multi, args, empty);
+    return makeEdgeList_Multi(funEdgeList_Multi, args, getEmpty());
   }
 
   public EdgeList EdgeList_MultiFromTerm(aterm.ATerm trm)
@@ -1264,9 +1242,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(EdgeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Edge)arg.getArgument(0)).toTerm());
-    args.add(((EdgeList)arg.getArgument(1)).toTerm());
-    return make(patternEdgeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternEdgeList_Multi, args);
   }
 
   protected Edge_Default makeEdge_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -1278,7 +1254,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Edge_Default makeEdge_Default(NodeId _from, NodeId _to, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_from, _to, _attributes};
-    return makeEdge_Default( funEdge_Default, args, empty);
+    return makeEdge_Default(funEdge_Default, args, getEmpty());
   }
 
   public Edge Edge_DefaultFromTerm(aterm.ATerm trm)
@@ -1295,10 +1271,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Edge_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((NodeId)arg.getArgument(0)).toTerm());
-    args.add(((NodeId)arg.getArgument(1)).toTerm());
-    args.add(((AttributeList)arg.getArgument(2)).toTerm());
-    return make(patternEdge_Default, args);
+    args.add((arg.getFrom()).toTerm());    args.add((arg.getTo()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternEdge_Default, args);
   }
 
   protected Polygon_Empty makePolygon_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -1310,7 +1283,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Polygon_Empty makePolygon_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makePolygon_Empty( funPolygon_Empty, args, empty);
+    return makePolygon_Empty(funPolygon_Empty, args, getEmpty());
   }
 
   public Polygon Polygon_EmptyFromTerm(aterm.ATerm trm)
@@ -1339,7 +1312,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Polygon_Multi makePolygon_Multi(Point _head, Polygon _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makePolygon_Multi( funPolygon_Multi, args, empty);
+    return makePolygon_Multi(funPolygon_Multi, args, getEmpty());
   }
 
   public Polygon Polygon_MultiFromTerm(aterm.ATerm trm)
@@ -1356,9 +1329,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Polygon_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(((Point)arg.getArgument(0)).toTerm());
-    args.add(((Polygon)arg.getArgument(1)).toTerm());
-    return make(patternPolygon_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternPolygon_Multi, args);
   }
 
   protected Point_Default makePoint_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -1370,7 +1341,7 @@ public class MetaGraphFactory extends PureFactory
 
   public Point_Default makePoint_Default(int _x, int _y) {
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
-    return makePoint_Default( funPoint_Default, args, empty);
+    return makePoint_Default(funPoint_Default, args, getEmpty());
   }
 
   public Point Point_DefaultFromTerm(aterm.ATerm trm)
@@ -1387,9 +1358,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Point_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(0)).getInt()));
-    args.add(new Integer(((aterm.ATermInt)arg.getArgument(1)).getInt()));
-    return make(patternPoint_Default, args);
+    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return make(patternPoint_Default, args);
   }
 
   public Graph GraphFromTerm(aterm.ATerm trm)

@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class GraphImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class GraphImpl extends MetaGraphConstructor
   }
   public boolean isEqual(Graph peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortGraph()  {
     return true;
@@ -45,32 +43,32 @@ abstract public class GraphImpl extends MetaGraphConstructor
 
   public NodeList getNodes()
   {
-     throw new RuntimeException("This Graph has no Nodes");
+     throw new UnsupportedOperationException("This Graph has no Nodes");
   }
 
   public Graph setNodes(NodeList _nodes)
   {
-     throw new RuntimeException("This Graph has no Nodes");
+     throw new IllegalArgumentException("Illegal argument: " + _nodes);
   }
 
   public EdgeList getEdges()
   {
-     throw new RuntimeException("This Graph has no Edges");
+     throw new UnsupportedOperationException("This Graph has no Edges");
   }
 
   public Graph setEdges(EdgeList _edges)
   {
-     throw new RuntimeException("This Graph has no Edges");
+     throw new IllegalArgumentException("Illegal argument: " + _edges);
   }
 
   public AttributeList getAttributes()
   {
-     throw new RuntimeException("This Graph has no Attributes");
+     throw new UnsupportedOperationException("This Graph has no Attributes");
   }
 
   public Graph setAttributes(AttributeList _attributes)
   {
-     throw new RuntimeException("This Graph has no Attributes");
+     throw new IllegalArgumentException("Illegal argument: " + _attributes);
   }
 
 }

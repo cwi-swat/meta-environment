@@ -1,8 +1,6 @@
 package metastudio.graph;
 
 import aterm.*;
-import java.io.InputStream;
-import java.io.IOException;
 
 abstract public class AttributeListImpl extends MetaGraphConstructor
 {
@@ -17,7 +15,7 @@ abstract public class AttributeListImpl extends MetaGraphConstructor
   }
   public boolean isEqual(AttributeList peer)
   {
-    return term.isEqual(peer.toTerm());
+    return super.isEqual(peer);
   }
   public boolean isSortAttributeList()  {
     return true;
@@ -45,22 +43,22 @@ abstract public class AttributeListImpl extends MetaGraphConstructor
 
   public Attribute getHead()
   {
-     throw new RuntimeException("This AttributeList has no Head");
+     throw new UnsupportedOperationException("This AttributeList has no Head");
   }
 
   public AttributeList setHead(Attribute _head)
   {
-     throw new RuntimeException("This AttributeList has no Head");
+     throw new IllegalArgumentException("Illegal argument: " + _head);
   }
 
   public AttributeList getTail()
   {
-     throw new RuntimeException("This AttributeList has no Tail");
+     throw new UnsupportedOperationException("This AttributeList has no Tail");
   }
 
   public AttributeList setTail(AttributeList _tail)
   {
-     throw new RuntimeException("This AttributeList has no Tail");
+     throw new IllegalArgumentException("Illegal argument: " + _tail);
   }
 
 }
