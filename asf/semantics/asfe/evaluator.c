@@ -329,6 +329,7 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
   struct tms start, rewriting;
   clock_t user, system; 
   
+  trm = ATremoveAllAnnotations(trm);
   atrm = asfix_get_term(trm);
   realtrm = RWprepareTerm(atrm);
 
@@ -342,7 +343,9 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
 
   newatrm = RWrestoreTerm(newtrm);
   result = asfix_put_term(trm,newatrm);
-ATfprintf(stderr,"result = %t\n", result);
+/* 
+  ATfprintf(stderr,"result = %t\n", result);
+*/
 
 #ifdef PROFILING
   ATfprintf(stdout, "rewriting took %d rewrite steps.\n", rewrite_steps);
