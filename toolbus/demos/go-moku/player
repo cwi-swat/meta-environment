@@ -1,1 +1,2 @@
+#!/bin/sh
 wish-adapter -TB_TOOL_NAME player -script player.tcl -script-args $@
