@@ -56,11 +56,12 @@ package require Tcldot
 # switch to enable/disable printing of diagnostics to stderr
 set DIAG 0
 
-set MAXWINSIZE {1000 800}
-set MINWINSIZE {100 80}
+# Cf. Golden Rectangle
+set MAXWINSIZE {1078 666}
+set MINWINSIZE {356 220}
 
 # width of scrollbars
-set SBW 10
+set SBW 8
 
 # style for "shadowed" modules (i.e. modules that aren't loaded
 # but we know they are there)
@@ -80,6 +81,8 @@ set autoresize 1
 
 # toggle during opening of modules (to turn of animation)
 set opening 0
+
+set openhelp 0
 
 # counter for window id's
 set windowcnt 1
@@ -880,21 +883,14 @@ proc AddUniqueEdge { graph from to } {
 #--
 # OnlineHelp()
 #-
-# generates the toolbus event to start the online help facility.
+# generates the toolbus event to start/stop the online help facility.
 #--
-proc OnlineHelp { } { 
-
+proc OnlineHelp {on} { 
+  if { $on } {
     GBevent [format "online-help"]
-}
-
-#--
-# NoOnlineHelp()
-#-
-# generates the toolbus event to start the online help facility.
-#--
-proc NoOnlineHelp { } { 
-
+  } else {
     GBevent [format "no-online-help"]
+  }
 }
 
 proc Help {msg just class} {
@@ -1040,9 +1036,9 @@ proc define-menu-bar {} {
 
     menubutton .menu.file -text "File" -underline 0 -menu .menu.file.menu
     set m .menu.file.menu
-    menu $m
+    menu $m -tearoff 0
     $m add command -label "New" -state disabled -underline 0 -command {NewModuleWidget}
-    $m add command -label "Open" -underline 0 -command {OpenModuleWidget}
+    $m add command -label "Open..." -underline 0 -command {OpenModuleWidget}
     $m add command -label "Save" -underline 0 -command {SaveAll}
     $m add separator
     $m add command -label "Clear" -underline 0 -command {ClearAll $c $g}
@@ -1051,29 +1047,29 @@ proc define-menu-bar {} {
     $m add cascade -label "Export" -underline 1 -menu $m.export
 
     menu $m.export -tearoff 0
-    $m.export add command -label "Import-Graph ..." -underline 0 -command {saveFileAs ig}
-    $m.export add command -label "GIF ..." -underline 0 -command {saveFileAs gif}
-    $m.export add command -label "ISMAP ..." -underline 0 -command {saveFileAs ismap}
-    $m.export add command -label "HPGL ..." -underline 0 -command {saveFileAs hpgl}
-    $m.export add command -label "MIF ..." -underline 0 -command {saveFileAs mif}
-    $m.export add command -label "PCL ..." -underline 1 -command {saveFileAs pcl}
-    $m.export add command -label "PostScript ..." -underline 0 -command {saveFileAs ps}
+    $m.export add command -label "Import-Graph..." -underline 0 -command {saveFileAs ig}
+    $m.export add command -label "GIF..." -underline 0 -command {saveFileAs gif}
+    $m.export add command -label "ISMAP..." -underline 0 -command {saveFileAs ismap}
+    $m.export add command -label "HPGL..." -underline 0 -command {saveFileAs hpgl}
+    $m.export add command -label "MIF..." -underline 0 -command {saveFileAs mif}
+    $m.export add command -label "PCL..." -underline 1 -command {saveFileAs pcl}
+    $m.export add command -label "PostScript..." -underline 0 -command {saveFileAs ps}
     $m add separator
-    $m add command -label "Print Setup ..." -underline 0 -command {printSetup}
+    $m add command -label "Print Setup..." -underline 0 -command {printSetup}
     $m add command -label "Print" -underline 0 -command {Print}
     $m add separator
     $m add command -label "Quit" -underline 0 -command {GBevent button(quit)}
 
     menubutton .menu.edit -text "Edit" -underline 0 -menu .menu.edit.menu
     set m .menu.edit.menu
-    menu $m
+    menu $m -tearoff 0
     $m add command -label "Undo" -state disabled    -underline 0 -command {}
     $m add separator
     $m add command -label "Cut" -state disabled     -underline 2 -command {}
     $m add command -label "Copy" -state disabled    -underline 0 -command {}
     $m add command -label "Paste" -state disabled   -underline 0 -command {}
     $m add separator
-    $m add command -label "Preferences ..." -state disabled  -underline 1 -command {}
+    $m add command -label "Preferences..." -state disabled  -underline 1 -command {}
 
 #    menubutton .menu.specification -text "Specification" -underline 0 \
 #	-menu .menu.specification.menu
@@ -1086,28 +1082,27 @@ proc define-menu-bar {} {
 
     menubutton .menu.window -text "Graph" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
-    menu $m
+    menu $m -tearoff 0
     $m add command -label "View all" -underline 0 -command {ViewAll}
     $m add check -label "Autoresize after loading" -underline 0 -variable autoresize
     $m add separator
     $m add check -label "Animate while loading" -underline 0 -variable animate
 
     menubutton .menu.help -text "Help" -underline 0 -menu .menu.help.menu
-    menu .menu.help.menu
-    .menu.help.menu add command -label "About $metaname" -underline 0 \
+    set m .menu.help.menu
+    menu $m -tearoff 0
+    $m add command -label "About $metaname" -underline 0 \
         -command {Help $help_meta center a}
-    .menu.help.menu add command -label "About $toolname" -underline 9 \
+    $m add command -label "About $toolname" -underline 9 \
         -command {Help $help_about center b}
-    .menu.help.menu add command -label "Mouse Operations" -underline 0 \
+    $m add command -label "Mouse Operations" -underline 0 \
         -command {Help $help_mouse left c}
-    .menu.help.menu add command -label "Activate Online Help" -underline 10 \
-        -command {OnlineHelp}
-    .menu.help.menu add command -label "Deactivate Online Help" -underline 0 \
-        -command {NoOnlineHelp}
+    $m add check -label "Online Help" -underline 10 -variable openhelp \
+        -command {OnlineHelp $openhelp}
 
     menubutton .menu.debug -text "Debug" -underline 0 -menu .menu.debug.menu
     set m .menu.debug.menu
-    menu $m
+    menu $m -tearoff 0
     $m add check -label "Diagnostic messages"  -variable DIAG
 
 #        .menu.specification {left} 
@@ -1252,9 +1247,9 @@ proc define-module-popup {} {
 proc define-shadowmodule-popup {} {
     set m .shadowmodule-popup
     menu $m -tearoff 0
-    $m add command -label "Open this module" \
+    $m add command -label "Open module" \
         -command {OpenModule [GetObjectName $c]}
-    $m add command -label "Edit this module" \
+    $m add command -label "Edit module" \
         -command {EditModules [GetObjectName $c]}
 }
 
@@ -1278,7 +1273,7 @@ proc define-modlist-popup {} {
 proc define-canvas-popup {} {
     set m .canvas-popup
     menu $m -tearoff 0
-    $m add command -label "Open module" -command "OpenModuleWidget"
+    $m add command -label "Open..." -command "OpenModuleWidget"
 }
 
 proc make-and-init-new-graph {} {
@@ -1303,6 +1298,8 @@ wm iconname . $toolname
 
 define-menu-bar
 define-graph-frame
+# Snap to MINWINSIZE on startup
+ViewAll
 define-modules-frame
 define-status-frame
 
