@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/06 (jurgenv@cwi.nl)
+ * Removed attempt of retaining annotations because rewriting failed on 
+   some specificiations
+
 2003/10/05 (jurgenv@cwi.nl)
  * First attempt at retaining annotations on terms during the mappings
    from and to muASF representation
