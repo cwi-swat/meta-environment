@@ -23,10 +23,14 @@ import aterm.ATerm;
 
 // TODO: extract functionality from the GraphPanel that should be here.
 public class ZoomableGraphPanel extends ToolComponent {
-    private static final int SLIDER_STEP_SIZE = 5;
+    private int SLIDER_STEP_SIZE;
+    private int SLIDER_MINIMUM;
+    private int SLIDER_MAXIMUM;
+    private int SLIDER_DEFAULT;
     private GraphPanel graphPanel;
     private JSlider slider;
     private MetaGraphFactory factory;
+    private JViewport view;
 
     public ZoomableGraphPanel(
         MetaGraphFactory factory,
@@ -46,7 +50,7 @@ public class ZoomableGraphPanel extends ToolComponent {
         };
 
         JScrollPane scrolledPane = new JScrollPane(graphPanel);
-        JViewport view = scrolledPane.getViewport();
+        view = scrolledPane.getViewport();
         view.setBackground(Color.white);
         view.addMouseWheelListener(wheel);
 
@@ -55,7 +59,7 @@ public class ZoomableGraphPanel extends ToolComponent {
 
         scrolledPane.getViewport().addMouseWheelListener(wheel);
     }
-
+    
     public MetaGraphFactory getGraphFactory() {
         return factory;
     }
@@ -65,10 +69,14 @@ public class ZoomableGraphPanel extends ToolComponent {
     }
 
     private JSlider createSlider() {
-        slider = new JSlider(0, 200, SLIDER_STEP_SIZE);
+        SLIDER_MINIMUM = Preferences.getInteger("graphpane.scale.minimum");
+        SLIDER_MAXIMUM = Preferences.getInteger("graphpane.scale.minimum");
+        SLIDER_STEP_SIZE = Preferences.getInteger("graphpane.scale.stepsize");
+        SLIDER_DEFAULT = Preferences.getInteger("graphpane.scale.default");
+        slider = new JSlider(SLIDER_MINIMUM,SLIDER_MAXIMUM , SLIDER_STEP_SIZE);
         slider.setOrientation(SwingConstants.VERTICAL);
-        slider.setBackground(Color.white);
-        slider.setValue(100);
+        slider.setBackground(Preferences.getColor("graphpane.scale.background"));
+        slider.setValue(SLIDER_DEFAULT);
 
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {

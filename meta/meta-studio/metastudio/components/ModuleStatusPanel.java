@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 import metastudio.MultiBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
+import metastudio.utils.Preferences;
 import aterm.ATermFactory;
 
 // TODO: white color, and only last name in border
@@ -63,6 +64,7 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
                 importsMenu.getHeight() + importedByMenu.getHeight()));
         clearInfo();
 
+        setBackground(Preferences.getColor("statuspane.background"));
         moduleManager.addModuleSelectionListener(this);
     }
 

@@ -11,6 +11,7 @@ import javax.swing.ListSelectionModel;
 
 import metastudio.MultiBridge;
 import metastudio.data.ListModel;
+import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
 import aterm.ATermList;
@@ -48,9 +49,8 @@ public class FeedbackList extends ToolComponent {
 
         list.setModel(data);
         list.setCellRenderer(new FeedbackListCellRenderer());
+        list.setBackground(Preferences.getColor("messagepane.background"));
 
-        data.add(this.factory.makeFeedback_Error("me","just a test 1", this.factory.makeSubjectList(this.factory.makeSubject_Subject("subject1", this.factory.makeLocation_Location("meta.conf", this.factory.makeArea_NoArea())))));
-        data.add(this.factory.makeFeedback_Error("me","just a test 2", this.factory.makeSubjectList(this.factory.makeSubject_Subject("subject2", this.factory.makeLocation_Location("meta.conf", this.factory.makeArea_Area(1,1,4,4,1,6))))));
         add(new JScrollPane(list), BorderLayout.CENTER);
     }
 

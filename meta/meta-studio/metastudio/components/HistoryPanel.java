@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 
 import metastudio.MultiBridge;
 import metastudio.data.ListModel;
+import metastudio.utils.Preferences;
 
 
 // todo: add copy paste facility?
@@ -23,6 +24,7 @@ public class HistoryPanel extends ToolComponent {
         this.list = new JList();
 
         list.setModel(data);
+        list.setBackground(Preferences.getColor("messagepane.background"));
 
         add(new JScrollPane(list), BorderLayout.CENTER);
     }

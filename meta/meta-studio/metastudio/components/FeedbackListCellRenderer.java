@@ -27,8 +27,6 @@ public class FeedbackListCellRenderer extends JTextField implements ListCellRend
 
         Feedback feedback = (Feedback) value;
 
-        setBackground(Color.white);
-
         if (feedback.isInfo()) {
             setForeground(Color.black);
         } else if (feedback.isWarning()) {

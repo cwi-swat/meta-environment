@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import metastudio.MultiBridge;
+import metastudio.utils.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -28,6 +29,8 @@ public class MessageList extends ToolComponent implements ListSelectionListener 
 		list.addListSelectionListener(this);
 		
 		setLayout(new BorderLayout());
+        list.setBackground(Preferences.getColor("messagepane.background"));
+
 		add(new JScrollPane(list), BorderLayout.CENTER);
 	}
 

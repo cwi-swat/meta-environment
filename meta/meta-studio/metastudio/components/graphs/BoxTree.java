@@ -16,6 +16,7 @@ import metastudio.components.ToolComponent;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
+import metastudio.utils.Preferences;
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
@@ -34,8 +35,7 @@ public class BoxTree extends ToolComponent {
         rootPanel.setBackground(Color.white);
         JScrollPane scrolledPane = new JScrollPane(rootPanel);
         JViewport view = scrolledPane.getViewport();
-        view.setBackground(Color.white);
-
+        view.setBackground(Preferences.getColor("treepane.message.background"));
         add(scrolledPane);
     }
 
