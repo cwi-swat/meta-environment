@@ -1,5 +1,9 @@
 /* $Id$ */
 
+2003/07/24 (markvdb@cwi.nl)
+ * Introduced the notions of "warning(f)" and "message(f)" which
+   have a different appearance in the error message display of the
+   UI.
 2003/07/22 (markvdb@cwi.nl)
  * Improved the Pico-compilation specification.
 
