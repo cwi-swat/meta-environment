@@ -2,7 +2,7 @@
 
 noinst_LIBRARIES  = libsnapshot.a
 noinst_HEADERS    = Snapshot.h Snapshot_dict.h
-libsnapshot_a_SOURCES = Snapshot.c Snapshot_dict.c 
+libsnapshot_a_SOURCES =  Snapshot.c Snapshot_dict.c 
                           
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
