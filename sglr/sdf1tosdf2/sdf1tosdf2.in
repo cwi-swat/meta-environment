@@ -1,0 +1,36 @@
+#!/bin/sh
+# $Id$
+
+IMPORTS="@exec_prefix@/imports -lr"
+
+case $#
+in
+	2)
+		msm=$1
+		module=$2;
+		echo msm: $msm, module $module;
+		;;
+	*)
+		echo "Usage: `basename $0` msm-paths-file module"
+		exit;;
+esac
+
+modules=`$IMPORTS $msm $module`;
+
+echo "definition"
+echo
+
+for file in $modules
+do
+	dir=`dirname $file`
+	syn=`basename $file .asfix`
+	file=$dir/$syn.syn
+	if [ -f $file ]
+	then
+		echo module $syn
+		sed 's/^/  /' < $file
+		echo ""
+	else
+		echo "File $file does not exist!"		>& 2
+	fi
+done

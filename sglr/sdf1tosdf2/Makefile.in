@@ -1,0 +1,91 @@
+# Directory: sdf1tosdf2
+
+# Configure variable substitutions
+PRODUCT		= @PRODUCT@
+VERSION		= @VERSION@
+
+@SET_MAKE@
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+top_srcdir	= @top_srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= $(exec_prefix)/bin
+libdir		= $(exec_prefix)/lib
+includedir	= $(prefix)/include
+docdir		= $(top_srcdir)/docs
+
+SHELL		= @SHELL@
+CC		= @CC@
+CFLAGS		= @CFLAGS@ ${XCFLAGS}
+CPP		= @CPP@
+CPPFLAGS	= @CPP@ ${XCPPFLAGS}
+DEFS		= @DEFS@ ${XDEFS}
+INCLUDES	= @INCLUDES@ ${XINCLUDES}
+LIBS		= @LIBS@ ${XLIBS}
+SOCKLIBS	= @SOCKLIBS@
+
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROG	= @INSTALL_PROG@
+UNINSTALL	= @UNINSTALL@
+
+AR		= @AR@
+AR_FLAGS        = cr
+
+# Implicit rules
+include ${top_srcdir}/implicit-rules
+
+# All files in BINFILES are installed in $(bindir)
+BINFILES	= sdf1tosdf2
+# All files in LIBFILES are installed in $(libdir)
+LIBFILES	= 
+# All files in INCLUDEFILES are installed in $(includedir)
+INCLUDEFILES	= 
+# All files in DOCFILES are copied to $(docdir)
+DOCFILES	=
+
+# CLEANFILES are removed by 'make clean'
+CLEANFILES	= 
+# DISTCLEANFILES are removed by 'make distclean'
+DISTCLEANFILES	= Makefile ${BINFILES} ${LIBFILES}
+
+# The all target must be defined:
+all: depend $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
+
+libs:	${LIBFILES}
+
+
+##########################################################
+### Everything below this line should remain unchanged ###
+##########################################################
+
+# install target (install binaries, include files, and libraries)
+install: all
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+
+# uninstall target (remove all files installed by 'install' target)
+uninstall:
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
+
+# doc target (copy generated documentation files to $(docdir))
+doc: $(DOCFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(docdir) $(DOCFILES)
+
+# clean target (remove all easily build components and temporary files)
+clean:
+	rm -f $(CLEANFILES)
+
+# distclean target (also remove any files created by 'configure')
+spotless distclean: clean
+	rm -f $(DISTCLEANFILES)
+
+# Updating of included dependencies
+depend: $(CSRC) $(CHDR)
+	@makedepend ${INCLUDES} $(CSRC) -f - > $@
+
+-include depend
