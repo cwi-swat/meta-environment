@@ -1,5 +1,9 @@
 # $Id$
 
+Mon May 12 14:13:14 CEST 2003 ({jong,kooiker}@cwi.nl)
+ * Fixed bug: LAYOUT-GRAPH process was only started #if METASTUDIO was
+   defined, but this #define had been deemed "dead code" earlier
+
 2003/05/10 (jurgenv@cwi.nl)
  * Removed dead code taking care of switching between graphbrowser
    and metastudio.

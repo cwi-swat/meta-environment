@@ -109,10 +109,10 @@ toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui,
 	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
         DumpParseTable, Module-Utilities,
 	RestoreTermBrackets, RestoreBrackets,
-	Query, /* QueryTool , */ Tree2Graph
-#ifdef METASTUDIO
-	, LAYOUT-GRAPH
-#endif
+	Query,
+        /* QueryTool */
+        Tree2Graph,
+	LAYOUT-GRAPH
 #ifdef TIMEOUT
         , AbortMetaEnvironment
 #endif
