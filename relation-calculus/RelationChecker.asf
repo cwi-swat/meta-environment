@@ -55,23 +55,23 @@ $Error]>
 [e2i-4] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", [ "ShowSource" ], get-area($Rel))
 [e2i-5] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), [ "ShowSource" ], get-area($Var))
 [e2i-6] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), [ "ShowSource" ], get-area($Var))
-[e2i-7] e2i(Incompatible argument types $Etype in $Exp) = 
-		listitem("Incompatible arguments of type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
-[e2i-8] e2i($Exp should have type $Etype)= 
-	listitem("Expression should have type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
+%%[e2i-7] e2i(Incompatible argument types $Etype in $Exp) = 
+%%		listitem("Incompatible arguments of type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
+%%[e2i-8] e2i($Exp should have type $Etype)= 
+%%	listitem("Expression should have type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
 [e2i-9] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", [ "ShowSource" ], get-area($Exp))
 [e2i-10] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", [ "ShowSource" ], get-area($Exp))
-[e2i-11] e2i(No definition for $Var with argument $Etype) = 
-        listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), [ "ShowSource" ], get-area($Var))
+%%[e2i-11] e2i(No definition for $Var with argument $Etype) = 
+%%        listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), [ "ShowSource" ], get-area($Var))
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
 [t2s-4] t2s(node) 			= "node"
-[t2s-5] t2s(< $Etype1, $Etype2 >)	= "<" || t2s($Etype1) || "," || t2s($Etype2) || ">"
-[t2s-6] t2s(bag[$Etype])		= "bag[" || t2s($Etype)
-[t2s-7] t2s(rel[$Etype1, $Etype2]) 	= "bag[" || t2s($Etype1) || "," || t2s($Etype1) || "]"
-[t2s-8] t2s($Var) 			= rvar2str($Var)
+%%[t2s-5] t2s(< $Etype1, $Etype2 >)	= "<" || t2s($Etype1) || "," || t2s($Etype2) || ">"
+%%[t2s-6] t2s(bag[$Etype])		= "bag[" || t2s($Etype) || "]"
+%%[t2s-7] t2s(rel[$Etype1, $Etype2]) 	= "bag[" || t2s($Etype1) || "," || t2s($Etype1) || "]"
+%%[t2s-8] t2s($Var) 			= rvar2str($Var)
 
 
 %% --- Lookup/store/delete

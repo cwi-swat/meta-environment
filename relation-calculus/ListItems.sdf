@@ -1,6 +1,6 @@
 module ListItems
 
-imports basic/Strings
+imports basic/Strings MyArea
 
  exports
      sorts List ListItem

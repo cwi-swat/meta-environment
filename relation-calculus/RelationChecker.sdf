@@ -11,7 +11,7 @@ imports MyPosInfo[Rel[[Elem]]]
 
 
 exports
-    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]] ListItem
+    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]]
 
     context-free syntax
 
@@ -40,7 +40,7 @@ exports
 
         "[" {ERROR ";"} * "]"                			-> ERRORS
 
-	t2s(REXPTYPE)					-> String
+	t2s(ElemType)						-> StrCon
          convertl(ERRORS)                   			-> List
 	e2i(ERROR)						-> ListItem
 	 convert(String # Area)                    		-> ListItem
