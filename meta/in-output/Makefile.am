@@ -11,7 +11,7 @@ CLEANFILES		= in-output.tifs in-output.tif.c in-output.tif.h
 
 in_output_SOURCES	= in-output.tif.c in-output.c
 in_output_LDADD		= -L$(ATERM)/lib -lATerm \
-			-L$(TOOLBUS)/lib -lATB \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			$(SOCKLIBS)
 
-INCLUDES		= -I$(ATERM)/include -I$(TOOLBUS)/include
+INCLUDES		= -I$(ATERM)/include -I$(TOOLBUSLIB)/include

@@ -17,12 +17,12 @@ module_db_SOURCES	= module-db.tif.c module-db.c renaming-symbols.c \
 module_db_LDADD		= -L$(SDF_SUPPORT)/lib -lSDFME \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept \
-			-L$(TOOLBUS)/lib -lATB \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
 
 INCLUDES	        = -I$(PT_SUPPORT)/include \
-			-I$(TOOLBUS)/include  \
+			-I$(TOOLBUSLIB)/include  \
 			-I$(ATERM)/include  \
 			-I$(ASF_SUPPORT)/include \
 			-I$(SDF_SUPPORT)/include

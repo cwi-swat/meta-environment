@@ -16,10 +16,10 @@ se_SOURCES		= se.tif.c Editor.c Editor_dict.c se.c \
 			area.c editor.c focus.c path.c sort.c tree.c length.c
 
 se_LDADD		= -L$(PT_SUPPORT)/lib -lmept \
-			-L$(TOOLBUS)/lib -lATB \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
 
 INCLUDES		= -I$(PT_SUPPORT)/include \
 			-I$(ATERM)/include \
-			-I$(TOOLBUS)/include
+			-I$(TOOLBUSLIB)/include

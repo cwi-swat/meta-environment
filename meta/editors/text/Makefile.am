@@ -10,13 +10,13 @@ bin_SCRIPTS		= emacs-editor
 #bin_PROGRAMS		= gvim-editor
 #lib_LTLIBRARIES		= libmeta_gvim.la
 
-INCLUDES		= -I$(TOOLBUS)/include \
+INCLUDES		= -I$(TOOLBUSLIB)/include \
 			  -I $(ATERM)/include \
 			  -DLIBDIR="\"$(libdir)\"" \
 			  -DDATADIR="\"$(datadir)\""
 
 #gvim_editor_SOURCES	= gvim-editor.c text-editor.tif.c
-#gvim_editor_LDADD	= -L$(TOOLBUS)/lib -ltb -lATB \
+#gvim_editor_LDADD	= -L$(TOOLBUSLIB)/lib -ltb -lATB \
 			  -L$(ATERM)/lib -lATerm \
 			  $(SOCKLIBS)
 

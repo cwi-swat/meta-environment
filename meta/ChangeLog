@@ -1,5 +1,9 @@
 # $Id$
 
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
 2001/11/21 (jurgenv@cwi.nl)
  * Added visualization of variables symbols in editor.
  * Bumped to 0.8beta
