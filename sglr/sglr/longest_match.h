@@ -24,7 +24,7 @@ token        *token_stream_next(token_stream *);
 #define CUR(ts)     elm2(fun_args(ts))
 #define STACK(ts)   elm3(fun_args(ts))
 
-/* 
+/*
    Longest match
 */
 

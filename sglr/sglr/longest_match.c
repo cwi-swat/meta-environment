@@ -1,6 +1,6 @@
 /*
   \subsection {Longest Match}
-  
+
 */
 
 #include <TB.h>
@@ -16,7 +16,7 @@ extern FILE *log;
 extern bool debugflag;
 #endif
 
-/* 
+/*
    Function |tree_width| counts the number of character leaves
    of a tree.
 */
@@ -45,7 +45,7 @@ tree_width(term *t)
      {
        if(args != NULL)
 	 return tree_width(list_first(args));
-       else 
+       else
 	 return 0;
      }
    else
@@ -56,8 +56,8 @@ tree_width(term *t)
 }
 
 
-/* 
-   Function 
+/*
+   Function
 */
 
 void
@@ -65,7 +65,7 @@ print_tree_yield(FILE *F, term *t)
 {
   int i;
   term *prod, *args;
-  
+
   assert(t);
   if(TBmatch(t, "%d", &i))
     {
@@ -113,7 +113,7 @@ reset_token_stream(token_stream *ts)
 
 int
 is_token(term *prod)
-{      
+{
   term_list *fargs;
   term *res, attrs, name;
 
@@ -181,11 +181,11 @@ token_stream_next(token_stream *ts)
 }
 
 /*
-  
+
   The function |get_tokens| yields a list of terms of the form
   |token(t,i)| with |t| the term representing the token and |i|
   its length.
-  
+
 */
 
 token_stream *
@@ -194,29 +194,29 @@ get_tokens(term *t)
   term *prod, *fargs, *res, *attrs, *args, *tokens = NULL;
   int c;
   char *name;
-  
-  if(TBmatch(t, "appl(%t,[%l])", &prod, &args)) 
+
+  if(TBmatch(t, "appl(%t,[%l])", &prod, &args))
     {
       if(TBmatch(prod, "prod([lex(%t)],cf(%t),%t)", &fargs, &res, &attrs))
 	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t)); 
+	  return TBmake("[token(%t,%d)]", t, tree_width(t));
 	}
-      else if(TBmatch(prod, "prod([%l],sort(\"LAYOUT\"),%t)", 
+      else if(TBmatch(prod, "prod([%l],sort(\"LAYOUT\"),%t)",
 		      &fargs, &attrs))
 	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t)); 
-	}	
-      else if(TBmatch(prod, "prod([%l],%s,%t)", 
+	  return TBmake("[token(%t,%d)]", t, tree_width(t));
+	}
+      else if(TBmatch(prod, "prod([%l],%s,%t)",
 		      &fargs, &name, &attrs))
 	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t)); 
-	}	
+	  return TBmake("[token(%t,%d)]", t, tree_width(t));
+	}
       else while(args)
 	{
 	  tokens = list_join(tokens, get_tokens(list_first(args)));
 	  args = list_next(args);
-	} 
-      return tokens;			
+	}
+      return tokens;
     }
   else if(TBmatch(t, "%d", &c))
     {
@@ -226,14 +226,14 @@ get_tokens(term *t)
     {
       TBprintf(stderr, "get_tokens: funny tree: %t\n\n", t);
       exit(1);
-    }  	
+    }
 }
 
 /*
 
   The macro |TOK_LEN| is a projection function that gives the
-  second element of a token tuple, i.e., the length field. 
-  
+  second element of a token tuple, i.e., the length field.
+
 */
 
 #define TOK_LEN(t)  int_val(elm2(fun_args(t)))
@@ -248,7 +248,7 @@ get_tokens(term *t)
 
 int
 lm_comp(token_stream *ts1, token_stream *ts2)
-{     
+{
   int resolved = 0;
   token *tok1, *tok2;
   int k1, k2;
@@ -269,18 +269,18 @@ lm_comp(token_stream *ts1, token_stream *ts2)
       k1 = TOK_LEN(tok1);
       k2 = TOK_LEN(tok2);
       if(k1 > k2)
-	{      	
+	{
 	  /* |t1| has longer match than |t2|; continue with next term */
 	  /* TBprintf(stderr, "Current larger than next\n"); */
-	  resolved = -1;       
-	}                 
+	  resolved = -1;
+	}
       else if(k2 > k1)
 	{
 	  /* |t2| has longer match than all previous terms */
 	  /* TBprintf(stderr, "Next larger than current\n"); */
 	  resolved = 1; /* continue comparing |t1| with next term */
 	}
-      else  
+      else
 	{
 	  /* tokens have equal length until now; compare rest of
 	     token streams */
@@ -300,7 +300,7 @@ lm_comp(token_stream *ts1, token_stream *ts2)
   The function |longest_match| selects those trees from a list
   of trees that have the longest lexicals counting from left
   to right.
- 
+
 */
 
 term_list *
@@ -309,21 +309,19 @@ longest_match(term_list *trms)
    term *t1, *t2;
    term_list *res_trms = NULL;
    token_stream *ts1, *ts2;
-   token *tok1, *tok2;
-   int k1, k2;
- 
+
    assert(is_list(trms));
    assert(list_length(trms) > 1);
-   
+
    /* get first term in the list */
-   
+
    t1   = list_first(trms);
    ts1  = init_token_stream(t1);
    trms = list_next(trms);
    res_trms = mk_list(t1, NULL);
 
    /* TBprintf(stderr, "first token stream: %l\n", ts1a); */
-   
+
    while(trms)
    {
      /* get next term in the list */
@@ -332,14 +330,14 @@ longest_match(term_list *trms)
      ts2  = init_token_stream(t2);
 
      /* TBprintf(stderr, "next token stream: %l\n", ts2a); */
-   
+
      /* compare the token lists of the terms */
-     switch(lm_comp(ts1, ts2)) 
+     switch(lm_comp(ts1, ts2))
        {
-       case -1: 
+       case -1:
 	 /* |t1| is larger than |t2|; continue with other terms */
 	 break;
-       case 0: 
+       case 0:
 	 /* |t1| and |t2| are equal; join and continue comparing with |t1| */
 	 res_trms = mk_list(t1, res_trms);
 	 break;
@@ -347,7 +345,7 @@ longest_match(term_list *trms)
 	 /* |t2| is larger than |t1|; continue with |t2| as |t1| */
 	 t1  = t2;
 	 ts1 = ts2;
-	 res_trms = mk_list(t1, NULL); 
+	 res_trms = mk_list(t1, NULL);
 	 break;
        }
      reset_token_stream(ts1);
@@ -367,7 +365,7 @@ lm_filter(term *t)
 {
   term *prod, *args, *new_args = NULL;
   int i;
-  
+
   assert(t);
   if(TBmatch(t, "%d", &i))
     {
@@ -380,7 +378,7 @@ lm_filter(term *t)
           new_args = list_join(new_args, lm_filter(list_first(args)));
           args = list_next(args);
         }
-      return TBmake("appl(%t,[%l])", prod, new_args); 
+      return TBmake("appl(%t,[%l])", prod, new_args);
     }
   else if(TBmatch(t, "amb([%l])", &args))
     {
@@ -392,7 +390,7 @@ lm_filter(term *t)
           /* ambiguity solved */
           return(list_first(new_args));
         }
-      else 
+      else
         {
           /* still ambiguous */
           return TBmake("amb([%l])", new_args);
@@ -401,9 +399,12 @@ lm_filter(term *t)
   else if(TBmatch(t, "parsetree(%t,%d)", &args, &i))
     {
       if(i == 0) return t;
-      else 
+      else
 	return TBmake("parsetree(%t,%d)", lm_filter(args), 0);
     }
+/* Should never get here! */
+  TBprintf(stderr, "error: unexpected term %t\n", t);
+  return(NULL);
 }
 
 #ifdef MAIN
@@ -412,7 +413,7 @@ lm_filter(term *t)
 
   When compiled as a standalone tool, the longest match filter is applied
   to a term on standard input and the disambiguated term is written to
-  standard output. 
+  standard output.
 
 */
 

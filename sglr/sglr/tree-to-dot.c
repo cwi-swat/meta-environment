@@ -50,16 +50,16 @@ print_character(FILE *dot, int c)
   }
 }
 
-void 
+void
 print_symbol(FILE *dot, term *t)
 {
   char *name;
-  term *arg, *arg2, *arg3, *args;
+  term *arg, *arg2, *args;
   int c1, c2;
 
   if (TBmatch(t, "layout", &name))
     {
-      fprintf(dot, "L", name);
+      fprintf(dot, "L");
     }
   else if (TBmatch(t, "sort(%s)", &name))
     {
@@ -118,7 +118,6 @@ print_symbol(FILE *dot, term *t)
     }
   else if (TBmatch(t, "iter-n(%t, %d)", &arg, &c1))
     {
-      fprintf(dot, "");
       print_symbol(dot, arg);
       fprintf(dot, "%d+", c1);
     }
@@ -133,7 +132,7 @@ print_symbol(FILE *dot, term *t)
   else if (TBmatch(t, "seq([%l])", &args))
     {
       fprintf(dot, "(");
-      while (args) 
+      while (args)
 	{
 	  arg = first(args);
 	  args = next(args);
@@ -157,7 +156,7 @@ print_symbol(FILE *dot, term *t)
   else if (TBmatch(t, "char-class([%l])", &args))
     {
       fprintf(dot, "[");
-      while (args) 
+      while (args)
 	{
 	  arg = first(args);
 	  args = next(args);
@@ -180,7 +179,7 @@ print_symbol(FILE *dot, term *t)
       print_symbol(dot, arg);
       fprintf(dot, "-VAR>");
     }
-  else 
+  else
     {
       TBprintf(stderr, "%s: print_symbol: strange symbol %t\n", program_name, t);
       exit(1);
@@ -193,11 +192,11 @@ arrow(FILE *dot, term *t1, term *t2)
   fprintf(dot, "\tN%d -> N%d;\n", (int)t1, (int)t2);
 }
 
-void 
+void
 appl_node(FILE *dot, term* t, term *fun, int n)
 {
   term *args, *res, *attrs;
-  int c = 0;
+
   if (TBmatch(fun, "prod([%l], %t, %t)", &args, &res, &attrs))
     {
 /*
@@ -225,7 +224,7 @@ amb_node(FILE *dot, term *t, term *arg)
       print_symbol(dot, res);
       TBprintf(dot, "\"]\n");
     }
-  else 
+  else
     {
       TBprintf(stderr, "amb_node: warning strange node %d\n", t);
     }
@@ -243,14 +242,14 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
       TBprintf(dot, "\tN%d%d%d [label = \"", parent, child, c);
       print_character(dot, c);
       TBprintf(dot, "\"]\n", 0);
-      TBprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);      
+      TBprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);
 /*
       fprintf(dot, "\tN%d%d%d ["
 	      "label = \"",
 	      parent, child, c);
       print_character(dot, c);
       fprintf(dot, "\"]\n");
-      fprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);      
+      fprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);
 */
       prev_char_parent = parent;
       prev_char = c;
@@ -294,11 +293,11 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
     }
 }
 
-void 
+void
 tree_to_dotfile(char *file, term *t)
 {
   FILE *dot;
-  if (strcmp(file, "") == 0) 
+  if (strcmp(file, "") == 0)
     file = "parse.dot";
   if ((dot = fopen(file, "w")) == NULL)
     {
@@ -328,10 +327,11 @@ link_to_dot(FILE *dot, stack *st, st_link *l)
   int c;
   term *t;
 
-  fprintf(dot, "N%d [label = \"%d\" shape = box "
-	  "height = 0.2, width = 0.2];\n", st, STATE(st));
+  fprintf(dot,
+    "N%d [label = \"%d\" shape=box height=0.2, width=0.2];\n",
+    (int) st, STATE(st));
 
-  fprintf(dot, "N%d -> N%d [ label = \"", STACK(l), st);
+  fprintf(dot, "N%d -> N%d [ label = \"", (int) STACK(l), (int) st);
   t = tree_type(TREE(l));
   if(TBmatch(t, "%d", &c))
     print_character(dot, c);
@@ -343,16 +343,14 @@ link_to_dot(FILE *dot, stack *st, st_link *l)
   if(REJECTED(l))
     fprintf(dot, " style = dotted");
   fprintf(dot, "];\n");
-
 }
 
 void
 links_to_dot(FILE *dot, stack *st)
 {
-  int c;
-  term *t;
   st_link *l;
   st_links *ls;
+
   ls = LINKS(st);
   while(pop(l, ls)) {
     link_to_dot(dot, st, l);
@@ -364,8 +362,8 @@ stack_to_dot(FILE *dot, stack *st)
 {
   st_link *l;
   st_links *ls;
-  fprintf(dot, "N%d [label = \"%d\" shape = box "
-	  "height = 0.2, width = 0.2];\n", st, STATE(st));
+  fprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
+    (int) st, STATE(st));
   ls = LINKS(st);
   links_to_dot(dot, st);
   while(pop(l, ls)) {
@@ -376,8 +374,6 @@ stack_to_dot(FILE *dot, stack *st)
 void
 stacks_to_dot(FILE *dot, stack *sts1)
 {
-  st_link *l;
-  st_links *ls;
   stack *st;
   stacks *sts2;
 
@@ -393,15 +389,15 @@ char stack_file[256];
 
 FILE *stack_dot;
 
-void 
+void
 stack_to_dotfile(stack *t)
 {
-  
+
   sprintf(stack_file, "%s%d.dot", stack_dotoutput, text_length);
 
   if ((stack_dot = fopen(stack_file, "w")) == NULL)
     {
-      fprintf(stderr, "%s: cannot create dotfile %s\n", 
+      fprintf(stderr, "%s: cannot create dotfile %s\n",
 	      program_name, stack_file);
       exit(1);
     }
@@ -420,7 +416,7 @@ stack_to_dotfile(stack *t)
   stacks_to_dot(stack_dot, t);
 }
 
-void 
+void
 stack_to_dotfile_end()
 {
   fprintf(stack_dot, "}\n");

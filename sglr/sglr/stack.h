@@ -1,4 +1,4 @@
-/* 
+/*
    %% $Id$
    %% Graph Structured Stack
 
@@ -9,14 +9,14 @@
    of the stack. If later on different stacks reach the same state,
    they can be joined again. This leads to a graph structure.
 
-   Stacks are defined by means of |term|s. 
-   
+   Stacks are defined by means of |term|s.
+
 */
 
 extern FILE *stack_dot;
 extern int show_stack;
 
-typedef term stack; 
+typedef term stack;
 typedef term stacks;
 typedef term st_link;
 typedef term st_links;
@@ -38,7 +38,7 @@ typedef term st_links;
         LINKS(st1) = new_links(l = new_link(t, st0), LINKS(st1))
 
 #define add_link2(st1, t, st0) \
-        LINKS(st1) = new_links(new_link(t, st0), LINKS(st1)) 
+        LINKS(st1) = new_links(new_link(t, st0), LINKS(st1))
 
 #define add_stack(st, sts) \
         sts = new_stacks(st, sts)
@@ -54,7 +54,7 @@ typedef term st_links;
   while(pop(hd, lst)) {
     do something with hd
   }
-\end{verbatim} 
+\end{verbatim}
 */
 #define pop(hd, lst) ((lst)? (hd) = first(lst), \
 		      (lst) = next(lst), TRUE : FALSE)
@@ -69,3 +69,4 @@ void mark_stack_rejected(stack *, st_link *);
 void mark_link_rejected1(stack *, st_link *);
 void mark_link_rejected2(stack *, st_link *);
 bool  rejected(stack *);
+bool in_stacks(stack *, stacks *);

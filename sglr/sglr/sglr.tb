@@ -30,7 +30,7 @@ process Parser is
     * rec-disconnect(P)
   endlet
 
-tool sglr is {command = "/home/visser/syntax/sglr/src/sglr"}
+tool sglr is {command="sglr"}
 
 #ifdef MAIN
 #else

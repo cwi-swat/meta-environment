@@ -1,4 +1,4 @@
-/* 
+/*
    %% $Id$
    %%
    %% Main program source for the Scannerless Generalized LR Parser SGLR.
@@ -29,8 +29,8 @@
 
 char *version_string = "$Revision$";
 char *program_name   = "sglr";
-int   debugflag; 
-int   verboseflag; 
+int   debugflag;
+int   verboseflag;
 FILE *log = NULL;
 char *input_file_name = "";
 char *output_file_name = "";
@@ -51,7 +51,7 @@ void handle_options (int argc, char **argv);
 void term_to_file(term *t, char *L);
 FILE *open_file(char *std_error, char *FN);
 FILE *open_log(char *FN);
-/* 
+/*
    \subsection{The Main Function}
 
    If the program is called from the ToolBus, the connection with is
@@ -65,14 +65,13 @@ FILE *open_log(char *FN);
 int
 main (int argc, char **argv)
 {
-  if (called_from_toolbus(argc, argv))    
-    {
-      TBinit("sglr", argc, argv, sglr_handler, sglr_check_in_sign);
-      TBeventloop();
-      exit(0);
-    }
-  else 
+  if (called_from_toolbus(argc, argv)) {
+    TBinit("sglr", argc, argv, sglr_handler, sglr_check_in_sign);
+    TBeventloop();
+  } else {
     batch(argc, argv);
+  }
+  return(0);
 }
 /*
   If the program is called from the ToolBus, the option
@@ -87,7 +86,7 @@ called_from_toolbus(int argc, char **argv)
       return TRUE;
   return FALSE;
 }
-/* 
+/*
   \subsection{Batch Mode}
 
   In batch mode the program reads a parse table from file and uses
@@ -99,28 +98,28 @@ called_from_toolbus(int argc, char **argv)
 void
 batch (int argc, char **argv)
 {
-  term *parse_tree = NULL; 
+  term *parse_tree = NULL;
   int c, line, col, length;
 
   handle_options(argc, argv);
   init_terms();       /* ToolBus library */
   init_utils();       /* ToolBus library */
   stand_alone = TRUE; /* ToolBus library */
-  
+
   open_language(parse_table_name, parse_table_name);
   TBcollect();
   parse_tree = parse_file(parse_table_name, input_file_name);
   term_to_file(parse_tree, output_file_name);
 
-  if (TBmatch(parse_tree, 
+  if (TBmatch(parse_tree,
 	      "parse-error([character(%d), line(%d), col(%d), char(%d)])",
 	      &c, &line, &col, &length)) {
     if (c == 0)
-      fprintf(stderr, 
+      fprintf(stderr,
 	      "(%s) %s: error: end of file unexpected\n",
 	      parse_table_name, input_file_name);
     else
-      fprintf(stderr, 
+      fprintf(stderr,
 	      "(%s) %s: error at line %d, col %d : character `%c' unexpected\n",
 	      parse_table_name, input_file_name, line, col, c);
     exit(1);
@@ -128,9 +127,9 @@ batch (int argc, char **argv)
 
   if (generate_dot)
     tree_to_dotfile(dotoutput, parse_tree);
-  
+
   fprintf(stderr, "parsing succeeded\n");
-    
+
   exit(0);
 }
 /*
@@ -159,12 +158,12 @@ void
 usage(FILE *stream, int long_message)
 {
   if( !long_message )
-    fprintf (stream, 
-	     "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n", 
+    fprintf (stream,
+	     "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n",
 	     program_name);
   else {
-    fprintf 
-(stream, 
+    fprintf
+(stream,
  "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n"
  "\n"
  "\t-p file : use parse table |file| (obligatory)\n"
@@ -210,10 +209,10 @@ struct option longopts[] =
   {"parse-table", required_argument, NULL,               'p'},
   {"stack",       required_argument, NULL,               'S'},
   {"statistics",  no_argument,       &show_statistics,   FALSE},
-  {"verbose",     no_argument,       &verboseflag,       TRUE},          
+  {"verbose",     no_argument,       &verboseflag,       TRUE},
   {"version",     no_argument,       NULL,               'V'},
   {0, 0, 0, 0}
-}; 
+};
 /*
   The actual parsing is done by the function |getopt_long|, which
   returns an option character for each option. The string declares the
@@ -226,9 +225,8 @@ handle_options (int argc, char **argv)
   int c; /* option character */
   verboseflag = FALSE;
   debugflag   = FALSE;
-  while ((c = getopt_long(argc, argv, 
-/*			  "?adD:fghi:lno:p:sS:vV", longopts, NULL))  */
-			  "?adD:fghi:lno:p:sS:vV", longopts, NULL)) 
+  while ((c = getopt_long(argc, argv,
+			  "?adD:fghi:no:p:sS:vV", longopts, NULL))
 	 != EOF)
     switch (c) {
     case 0:   break;
@@ -268,7 +266,7 @@ handle_options (int argc, char **argv)
   \paragraph{The Parser Process}
 
   The following ToolBus script is an example of the usage of the
-  interface functions. 
+  interface functions.
 
   \input{sglr.tbtx}
 
@@ -277,14 +275,14 @@ handle_options (int argc, char **argv)
   On receipt of a termination request the program exits with code 0.
 
 */
-void   
+void
 rec_terminate(term *t)
 {
   exit(0);
 }
 /*
-  \paragraph{Open File} 
-  
+  \paragraph{Open File}
+
   The function |open_file| tries to open a named file for reading and
   gives an appropriate error message if this fails.
 */
@@ -297,7 +295,7 @@ open_file(char *std_error, char *FN)
       if (std_error == NULL) return stdin;
       fprintf(stderr, "%s: %s\n", program_name, std_error);
       usage(stderr, FALSE);
-      exit(1); 
+      exit(1);
     }
   else if ((file = fopen(FN, "r")) == NULL)
     {
@@ -325,13 +323,13 @@ open_language(char *L, char *FN)
   table = build_parse_table(TBreadTerm(input_file));
   if (table == NULL)
     return TBmake("snd-value(open-language-failed(%s,%s))", L, FN);
-  else 
+  else
     {
       save_parse_table(L, table);
       return TBmake("snd-value(language-opened(%s,%s))", L, FN);
     }
 }
-/* 
+/*
    \paragraph{Parse String}
 
    The function |parse_string| parses the text in string |S| with the
@@ -339,7 +337,7 @@ open_language(char *L, char *FN)
    variable |the_text|, which is accessed through the function
    |getchar_from_string|. This the function that is passed to the
    parser. The end of string character |'\0'| is converted into the
-   end of file value |EOF|.  
+   end of file value |EOF|.
 */
 static char *the_text;
 int text_index;
@@ -356,15 +354,15 @@ getchar_from_string(void)
   This is done now by making a duplicate of it, which is not efficient
   and clean.
 */
-term * 
+term *
 parse_string(char *L, char *S)
-{  
+{
   the_text = strdup(S);
   text_index = 0;
-  return TBmake("snd-value(%t)", 
+  return TBmake("snd-value(%t)",
 		parse(lookup_parse_table(L), getchar_from_string));
 }
-/* 
+/*
    \paragraph{Parse File}
 
    The function |parse_file| parses the text in file |FN| with the
@@ -384,7 +382,7 @@ getchar_from_input(void)
   If no filename is specified (|FN| is |""|), standard input
   is used.
 */
-term * 
+term *
 parse_file(char *L, char *FN)
 {
   input_file = open_file(NULL, FN);
@@ -423,7 +421,7 @@ open_log(char *FN)
 {
   FILE *fp;
 
-  if (FN == NULL || strcmp(FN, "") == 0) 
+  if (FN == NULL || strcmp(FN, "") == 0)
     FN = ".parse-log";
   if ((fp = fopen(FN, "w")) == NULL)
   {

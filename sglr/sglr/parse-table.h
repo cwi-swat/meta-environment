@@ -8,7 +8,7 @@
 
 #include <TB.h>
 
-/* 
+/*
    states, actions, character ranges and parse tables
 */
 typedef term terms;

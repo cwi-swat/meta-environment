@@ -1,4 +1,4 @@
-/* 
+/*
   \section{bool.h}
 
 */

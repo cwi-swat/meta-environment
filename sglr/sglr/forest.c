@@ -1,4 +1,4 @@
-/* 
+/*
   %% $Id$
 
   \section{Parse forests}
@@ -25,13 +25,13 @@ extern int abbreviation_flag;
 extern int debugflag;
 extern FILE *log;
 /*
-  The functions |apply| and |cons| are defined directly in terms 
+  The functions |apply| and |cons| are defined directly in terms
   of ToolBus term functions.
 */
 term *
 apply(parse_table *pt, label l, terms *ts)
 {
-  term *t; 
+  term *t;
   if (abbreviation_flag)
     t = TBmake("appl(aprod(%d),%t)", l, ts);
   else {
@@ -48,17 +48,16 @@ apply(parse_table *pt, label l, terms *ts)
   this |amb| node. If |t1| is already an ambiguous node the new
   term |t2| is simply added to the list of its arguments.
 */
-void 
+void
 amb(term *t1, term *t2)
 {
-  term *prod, *args, *arg; 
-  int n;
+  term *prod, *args;
 
-  if(debugflag) 
-    TBprintf(log, "creating ambiguity node for\n %t and %t\n", 
+  if(debugflag)
+    TBprintf(log, "creating ambiguity node for\n %t and %t\n",
 	     dot_trm_yield(t1), dot_trm_yield(t2));
 
-  if (TBmatch(t1, "appl(%t, %t)", &prod, &args)) 
+  if (TBmatch(t1, "appl(%t, %t)", &prod, &args))
     {
       /* create ambiguity node. */
       fun_sym(t1)  = TBlookup("amb");
@@ -82,13 +81,13 @@ amb(term *t1, term *t2)
 term *
 tree_type(term *t)
 {
-  term *types, *type, *attrs, *args, *arg; 
+  term *types, *type, *attrs, *args;
   int n;
 
   /* TBprintf(stderr, "tree_type(%t)\n", t); */
 
-  if (TBmatch(t, "appl(prod(%t,%t,%t), %t)", 
-	      &types, &type, &attrs, &args)) 
+  if (TBmatch(t, "appl(prod(%t,%t,%t), %t)",
+	      &types, &type, &attrs, &args))
     {
       return type;
     }
@@ -116,7 +115,7 @@ trm_yield_aux(term *t)
   int c;
 
   /* TBprintf(stderr, "yield_aux(%t)\n", t); */
- 
+
   if (t == NULL)
     return;
   else if (TBmatch(t, "%d", &c))
@@ -157,7 +156,7 @@ dot_trm_yield_aux(term *t)
   int c;
 
   /* TBprintf(stderr, "yield_aux(%t)\n", t); */
- 
+
   if (t == NULL)
     return;
   else if (TBmatch(t, "%d", &c))
@@ -174,7 +173,7 @@ dot_trm_yield_aux(term *t)
 	temp[index] = ']';
 	index++;
       } else
-	dot_trm_yield_aux(args);	
+	dot_trm_yield_aux(args);
     }
   else if (TBmatch(t, "[%t,%l]", &first, &rest))
     {

@@ -65,11 +65,11 @@ bst_find(term *tree, int key)
   int first, last;
   if (debugflag)
     TBprintf(log, "looking for %d in %t\n", key, tree);
-  while (tree != NULL) 
+  while (tree != NULL)
     if (TBmatch(tree, "node(%d,%t,%d,%t,%t)",
 		&first, &left, &last, &right, &val))
       {
-	if (key < first) 
+	if (key < first)
 	  {
 	    tree = left;
 	    continue;
@@ -98,7 +98,7 @@ bst_add(term **tree, int first, int last, term *val)
 {
   term *left2, *right2, *val2;
   int first2, last2;
-  while (TRUE) 
+  while (TRUE)
     {
       if (*tree == NULL)
 	{
@@ -116,7 +116,7 @@ bst_add(term **tree, int first, int last, term *val)
 	  fprintf(stderr, "mallformed bst\n");
 	  exit(1);
 	}
-      else if (last < first2) 
+      else if (last < first2)
 	{
 	  tree = &(elm2(fun_args(*tree)));
 	  continue;
@@ -135,15 +135,15 @@ bst_add(term **tree, int first, int last, term *val)
 }
 
 
-/* 
+/*
    \subsection{Parse Table Lookup}
 */
-state 
+state
 GOTO(parse_table *pt, state s, int c)
 {
   state s2; term *val;
   val = bst_find(pt->goto_table[s], c);
-  if (val == NULL) 
+  if (val == NULL)
     s2 = -1;
   else
     s2 = int_val(val);
@@ -169,7 +169,7 @@ ACTIONS(parse_table *pt, state s, int c)
   return as;
 }
 
-/* 
+/*
    \subsection{Parse Table Creation}
 */
 
@@ -193,7 +193,7 @@ new_parse_table(int states, int productions)
       pt->goto_table[i]   = NULL;
     }
 
-  for (i = 0; i <= productions; i++) 
+  for (i = 0; i <= productions; i++)
     {
       pt->productions[i].aterm = NULL;
       pt->productions[i].cons = NULL;
@@ -214,7 +214,7 @@ add_actions(parse_table *pt, state s, int first, int last, actions *as)
 }
 
 
-/* 
+/*
    \subsection{Printing Parse Tables}
 */
 
@@ -223,7 +223,7 @@ add_actions(parse_table *pt, state s, int first, int last, actions *as)
 /*
   \subsection{Parse Table Term to Parse Table}
 
-*/     
+*/
 
 state nr_of_states;
 
@@ -262,7 +262,7 @@ PT_actions(term *action_table, parse_table *pt, state s)
   while (action_table != NULL)
     {
       action = first(action_table);
-      if (TBmatch(action, "action(char-class(%t),%t)", 
+      if (TBmatch(action, "action(char-class(%t),%t)",
 		  &classes, &as))
 	{
 	  bst_add_classes(&(pt->action_table[s]), classes, as);
@@ -273,18 +273,18 @@ PT_actions(term *action_table, parse_table *pt, state s)
 	  exit(1);
 	}
       action_table = next(action_table);
-    }  
+    }
 }
 
 void
 PT_gotos(term *goto_table, parse_table *pt, state s1)
 {
-  term *goto_entry, *classes, *class;
+  term *classes;
   state s2;
-  
+
   while (goto_table != NULL)
-    {      
-      if (TBmatch(first(goto_table), "goto(char-class(%t), %d)", 
+    {
+      if (TBmatch(first(goto_table), "goto(char-class(%t), %d)",
 		  &classes, &s2))
 	{
 	  bst_add_classes(&(pt->goto_table[s1]), classes, mk_int(s2));
@@ -305,12 +305,10 @@ PT_items(term *vertices, parse_table *pt)
 {
   term *vertex, *itemset;
   int pr_num;
-  int c;
-  char str[2];
 
   for ( ; vertices != NULL; vertices = next(vertices))
     {
-      vertex = first(vertices); 
+      vertex = first(vertices);
       if (!TBmatch(vertex, "vertex(%d, %t)", &pr_num, &itemset))
 	{
 	  fprintf(stderr, "PT_actions: cannot parse vertex\n");
@@ -327,17 +325,17 @@ PT_items(term *vertices, parse_table *pt)
 void
 PT_states(term *states, parse_table *pt)
 {
-  term *state, *gotos, *actions, *classes, *class;
+  term *state, *gotos, *actions;
   int s;
-  
+
   nr_of_states = 0;
 
   /* TBprintf(stderr, "states: %t\n", states); */
   while (states != NULL)
-    {      
+    {
       state = first(states);
       /* TBprintf(stderr, "next state: %t\n", state); */
-      if (TBmatch(state, "state-rec(%d, %t, actions(%t))", 
+      if (TBmatch(state, "state-rec(%d, %t, actions(%t))",
 		  &s, &gotos, &actions))
 	{
 	  if(debugflag)
@@ -385,7 +383,7 @@ PT_grammar(term *grammar, parse_table *pt)
 	  fprintf(stderr, "PT_actions: cannot parse production\n");
 	  exit(1);
 	}
-      PROD(pt, pr_num) = production; 
+      PROD(pt, pr_num) = production;
       TBprotect(&(PROD(pt, pr_num)));
       if (pr_num > nr_of_productions)
 	nr_of_productions = pr_num;
@@ -421,14 +419,14 @@ build_parse_table(term *t)
   pt->org_table = t;
   TBprotect(&(pt->org_table));
 
-  if(!TBmatch(t, "parse-table(%d,%t,states(%t))", 
+  if(!TBmatch(t, "parse-table(%d,%t,states(%t))",
 	      &(pt->init), &prods, &sts))
     {
       fprintf(stderr, "error: Cannot parse parse table\n");
       return NULL;
     }
   PT_states(sts, pt);
-  PT_grammar(prods, pt);      
+  PT_grammar(prods, pt);
   return pt;
 }
 /*
@@ -444,7 +442,7 @@ typedef struct _ptdb {
 static PTDB tables[MAX_TABLES];
 int last_table = 0;
 
-void 
+void
 save_parse_table(char *L, parse_table *pt)
 {
   int i;
@@ -453,13 +451,13 @@ save_parse_table(char *L, parse_table *pt)
     {
       fprintf(stderr, "maximum number (%d) of languages exceeded\n", MAX_TABLES);
       exit(1);
-    }	
-  if (i == last_table) 
-    last_table++; 
+    }
+  if (i == last_table)
+    last_table++;
   else
     ; /* free tables[i].table */
   tables[i].name = strdup(L);
-  tables[i].table = pt; 
+  tables[i].table = pt;
   if (debugflag)
     fprintf(log, "language %s has index %d\n", L, i);
   return;
@@ -468,13 +466,13 @@ save_parse_table(char *L, parse_table *pt)
 parse_table *
 lookup_parse_table(char *L)
 {
-  int i; 
+  int i;
 
   if (debugflag)
     fprintf(log, "request for language %s\n", L);
 
   for (i = 0; i < last_table; i++)
-    if (!strcmp(L, tables[i].name)) 
+    if (!strcmp(L, tables[i].name))
       {
 	if (debugflag)
 	  fprintf(log, "table for language %s found at index %d\n", L, i);

@@ -29,7 +29,7 @@ struct BufferStruct {
 };
 typedef struct BufferStruct Buffer;
 
-/* 
+/*
    The constant |MIN_FILL| indicates the minimal amount of space that
    should be available in the buffer before reading.
 */
@@ -39,7 +39,7 @@ typedef struct BufferStruct Buffer;
 #define STDOUT 1
 #define STDERR 2
 
-/* 
+/*
    A buffer is created by means of |init_buffer| and released by
    |free_buffer|.
 */
@@ -47,7 +47,7 @@ typedef struct BufferStruct Buffer;
 Buffer *init_buffer(void);
 void free_buffer(Buffer *b);
 
-/* 
+/*
    |buf_open| opens a file with name |name| and associates the
    resulting file descriptor with buffer |b|. |buf_read| reads the
    entire file indicated by the file descriptor in buffer |b| into

@@ -1,4 +1,4 @@
-/* 
+/*
   %% $Id$
 
   \section{Graph Structured Stack}
@@ -18,7 +18,7 @@
 #include "parse-table.h"
 #include "stack.h"
 
-bool 
+bool
 in_stacks(stack *st1, stacks *sts)
 {
   stack *st2;
@@ -32,18 +32,18 @@ in_stacks(stack *st1, stacks *sts)
 stack *
 find_stack(state s, stacks *sts)
 {
-  for (; sts != NULL; sts = next(sts)) 
+  for (; sts != NULL; sts = next(sts))
     if(STATE(first(sts)) == s) return first(sts);
   return NULL;
 }
-/* 
+/*
    Find a direct link from |st1| to |st2|
 */
 st_link *
-find_direct_link(stack *st1, stack *st2) 
+find_direct_link(stack *st1, stack *st2)
 {
   st_links *ls = NULL;
-  for (ls = LINKS(st1); ls != NULL; ls = next(ls)) 
+  for (ls = LINKS(st1); ls != NULL; ls = next(ls))
     if(STACK(first(ls)) == st2) return first(ls);
   return NULL;
 }
@@ -72,7 +72,7 @@ mark_link_rejected2(stack *st, st_link *l)
 /*
   A stack is rejected if all its links are.
 */
-bool 
+bool
 rejected(stack *st)
 {
   register st_links *ls;
