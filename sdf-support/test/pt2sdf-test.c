@@ -1,3 +1,7 @@
+/* $Id$ */
+
+/*{{{  includes */
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -5,9 +9,16 @@
 #include <SDFME-utils.h>
 #include <PT2SDF.h>
 
-#define TEST_PT2SDF_FILE SRC_DIR "/pt2sdf.pt"
+/*}}}  */
+/*{{{  defines */
 
-int testPT2SDF(void)
+#define TEST_PT2SDF_FILE SRC_DIR "/BoolTerm.pt"
+
+/*}}}  */
+
+/*{{{  static int testPT2SDF(void) */
+
+static int testPT2SDF(void)
 {
   ATerm contents;
   PT_ParseTree parseTree;
@@ -33,6 +44,10 @@ ATwarning("sdfProduction: %t\n", sdfProduction);
   return 0;
 }
 
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
@@ -43,3 +58,5 @@ int main(int argc, char *argv[])
 
   return testPT2SDF();
 }
+
+/*}}}  */

@@ -1,3 +1,7 @@
+/* $Id$ */
+
+/*{{{  includes */
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -7,12 +11,22 @@
 #include "SDFME-utils.h"
 #include "PT2SDF.h"
 
+
+/*}}}  */
+
+static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols);
+
+/*{{{  static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes) */
+
 static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes)
 {
   return SDF_makeAttributesNoAttrs();
 }
 
-static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols);
+/*}}}  */
+
+/*{{{  static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol) */
+
 static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 {
   SDF_Symbol result;
@@ -167,44 +181,60 @@ static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
   return result;
 }
 
+/*}}}  */
+/*{{{  static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols) */
+
 static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols)
 {
-  int length = PT_getSymbolsLength(ptSymbols);
+  PT_Symbol ptHead;
+  SDF_Symbol sdfHead;
+  PT_Symbol ptLayout;
+  PT_Symbols ptTail;
+  SDF_SymbolList sdfTail;
+  SDF_SymbolList result;
 
-  if (length == 0) {
-    return SDF_makeSymbolListEmpty();
+  switch (PT_getSymbolsLength(ptSymbols)) {
+    case 0:
+      result = SDF_makeSymbolListEmpty();
+      break;
+
+    case 1:
+      ptHead = PT_getSymbolsHead(ptSymbols);
+      sdfHead = PTSymbolToSDFSymbol(ptHead);
+
+      result = SDF_makeSymbolListSingle(sdfHead);
+      break;
+
+    default:
+      ptHead = PT_getSymbolsHead(ptSymbols);
+      assert(!PT_isOptLayoutSymbol(ptHead));
+
+      ptTail = PT_getSymbolsTail(ptSymbols);
+      ptLayout = PT_getSymbolsHead(ptTail);
+      assert(PT_isOptLayoutSymbol(ptLayout));
+
+      ptTail = PT_getSymbolsTail(ptTail);
+      sdfHead = PTSymbolToSDFSymbol(ptHead);
+      sdfTail = PTSymbolsToSDFSymbolList(ptTail);
+
+      result = SDF_makeSymbolListMany(sdfHead, SDF_makeLayoutSpace(), sdfTail);
+      break;
   }
-  else if (length == 1) {
-    PT_Symbol ptHead = PT_getSymbolsHead(ptSymbols);
-    SDF_Symbol sdfHead = PTSymbolToSDFSymbol(ptHead);
 
-    return SDF_makeSymbolListSingle(sdfHead);
-  }
-  else {
-    PT_Symbol ptHead;
-    PT_Symbol ptLayout;
-    PT_Symbols ptTail;
-    SDF_Symbol sdfHead;
-    SDF_SymbolList sdfTail;
-
-    ptHead = PT_getSymbolsHead(ptSymbols);
-    assert(!PT_isOptLayoutSymbol(ptHead));
-    ptTail = PT_getSymbolsTail(ptSymbols);
-    ptLayout = PT_getSymbolsHead(ptTail);
-    assert(PT_isOptLayoutSymbol(ptLayout));
-    ptTail = PT_getSymbolsTail(ptTail);
-    
-    sdfHead = PTSymbolToSDFSymbol(ptHead);
-    sdfTail = PTSymbolsToSDFSymbolList(ptTail);
-
-    return SDF_makeSymbolListMany(sdfHead, SDF_makeLayoutSpace(), sdfTail);
-  }
+  return result;
 }
+
+/*}}}  */
+/*{{{  static SDF_Symbols PTSymbolsToSDFSymbols(PT_Symbols ptSymbols) */
 
 static SDF_Symbols PTSymbolsToSDFSymbols(PT_Symbols ptSymbols)
 {
   return SDF_makeSymbolsDefault(PTSymbolsToSDFSymbolList(ptSymbols));
 }
+
+/*}}}  */
+
+/*{{{  SDF_Production PTProductionToSDFProduction(PT_Production ptProduction) */
 
 SDF_Production PTProductionToSDFProduction(PT_Production ptProduction)
 {
@@ -232,4 +262,6 @@ SDF_Production PTProductionToSDFProduction(PT_Production ptProduction)
                                 SDF_makeLayoutSpace(), 
                                 sdfAttributes);
 }
+
+/*}}}  */
 

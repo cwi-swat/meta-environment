@@ -4,13 +4,14 @@
 # $Id$
 #
 
-TESTS			= pt2sdf grammars sorts
+TESTS = pt2sdf grammars sorts
 
-noinst_PROGRAMS		= ${TESTS}
-CFLAGS			= -g -Wall -O2
+EXTRA_DIST = Booleans.pt Layout.pt BoolTerm.pt
 
-LDLIBS			= -L../lib -lSDFME \
-                          -L$(ATERM)/lib -lATerm
+noinst_PROGRAMS = ${TESTS}
+
+CFLAGS = -g -Wall -O2
+
 INCLUDES = \
 	-I${top_srcdir}/lib \
 	-I$(PT_SUPPORT)/include \
@@ -23,10 +24,13 @@ pt2sdf_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ATERM)/lib -lATerm
 
-grammars_SOURCES	= grammars.c
-grammars_LDADD		= $(LDLIBS)
+LDLIBS = \
+	-L../lib -lSDFME \
+	-L$(ATERM)/lib -lATerm
 
-sorts_SOURCES		= sorts.c
-sorts_LDADD		= $(LDLIBS)
+grammars_SOURCES = grammars.c
+grammars_LDADD = $(LDLIBS)
 
-EXTRA_DIST             = Booleans.pt Layout.pt
+sorts_SOURCES = sorts.c
+sorts_LDADD = $(LDLIBS)
+

@@ -1,6 +1,7 @@
 2003/02/02 ({jong,markvdb}@cwi.nl)
  * Bumped into version 1.1beta.
  * Started working on pt2sdf functionality.
+ * Add testcase for pt2sdf
 
 2003/01/22 (markvdb@cwi.nl)
  * Release 1.0
