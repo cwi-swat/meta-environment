@@ -12,6 +12,7 @@ TBSCRIPTS = \
   editing.tb \
   feedback.tb \
   file-creator.tb \
+  graph-utils.tb \
   get-parsetable.tb \
   meta.tb \
   module-db.tb \

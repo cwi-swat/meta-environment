@@ -1,0 +1,8 @@
+process ShowImportGraph(ImportRelations: list) is
+let
+  Graph: term
+in
+  snd-msg(gl-layout-graph(ImportRelations))
+  . rec-msg(gl-graph(Graph?))
+  . snd-msg(ui-display-graph(import-graph, Graph))
+endlet

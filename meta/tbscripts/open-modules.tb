@@ -8,7 +8,7 @@ let
 in
   snd-msg(ts-get-key-value-pairs("import-relations"))
   . rec-msg(ts-pairs(ImportRelations?))
-  . snd-msg(display-import-graph(ImportRelations))
+  . ShowImportGraph(ImportRelations)
 endlet
 
 process DealWithMultipleOccurrences(Chosen: str, Name: str, Extension: str,

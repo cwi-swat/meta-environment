@@ -78,9 +78,11 @@ in
       . snd-do(UI, remove-feedback-summary(Producer, SummaryId))
     )
     *
-    delta ||
+    delta
+  ||
     (
-      rec-msg(display-graph(GraphId?, Graph?))
+      rec-msg(ui-display-graph(GraphId?, Graph?))
+      . printf("display-graph: GraphId: %t = %t\n", GraphId, Graph)
       . snd-do(UI, display-graph(GraphId, Graph))
     +
       rec-event(UI,clear-all)
@@ -92,15 +94,12 @@ in
       . snd-msg(debugging(On))
       . snd-ack-event(UI,debugging(On))
     +
-      rec-msg(display-import-graph(Pairs?))
-      . snd-do(UI, new-graph(Pairs))
-      . Pairs := []
+      rec-msg(ui-render-graph(GraphId?, Graph?))
+      . printf("render-graph: GraphId: %t = %t\n", GraphId, Graph)
+      . snd-do(UI, render-graph(GraphId, Graph))
     +
-      rec-event(UI,layout-graph(GraphId?, Graph?))
-      . snd-msg(layout-graph(Graph))
-      . rec-msg(graph-layouted(LayoutedGraph?))
-      . snd-do(UI, graph-layouted(GraphId, LayoutedGraph))
-      . snd-ack-event(UI,layout-graph(GraphId, Graph))
+      rec-event(UI, rendered-graph(GraphId?, Graph?))
+      . snd-msg(ui-rendered-graph(GraphId, Graph))
     +
       rec-event(UI, get-events(Type?))
       /*. printf("meta-studio: get-events(%t)\n", Type)*/
@@ -122,13 +121,13 @@ in
 
       . snd-ack-event(UI, get-events(Type, ModuleId))
     +
-      rec-event(UI,button-selected(Type?, Event?))
+      rec-event(UI, button-selected(Type?, Event?))
       . snd-msg(ui-button-selected(Type, Event))
-      . snd-ack-event(UI,button-selected(Type, Event))
+      . snd-ack-event(UI, button-selected(Type, Event))
     +
-      rec-event(UI,button-selected(Type?, ModuleId?, Event?))
+      rec-event(UI, button-selected(Type?, ModuleId?, Event?))
       . snd-msg(ui-button-selected(Type, Event, ModuleId))
-      . snd-ack-event(UI,button-selected(Type, ModuleId, Event))
+      . snd-ack-event(UI, button-selected(Type, ModuleId, Event))
     +
       rec-msg(ask-for-file(Title?, Path?, Extension?))
       . snd-eval(UI, show-file-dialog(Title, Path, Extension))
@@ -143,28 +142,28 @@ in
       rec-msg(clear-history)
       . snd-do(UI, clear-history)
     +
-      rec-event(UI,node-info(ModuleId?, Tree?))
+      rec-event(UI, node-info(ModuleId?, Tree?))
       . snd-msg(ui-node-selected(ModuleId, Tree))
-      . snd-ack-event(UI,node-info(ModuleId, Tree))
+      . snd-ack-event(UI, node-info(ModuleId, Tree))
     +
-      rec-event(UI,error-selected(Error?))
+      rec-event(UI, error-selected(Error?))
       . snd-msg(ui-error-selected(Error))
-      . snd-ack-event(UI,error-selected(Error))
+      . snd-ack-event(UI, error-selected(Error))
     +
       rec-msg(show-list-choice(Title?, Question?, Choices?))
-      . snd-do(UI, showListChoice(Title, Question, Choices))
+      . snd-do(UI, show-list-choice(Title, Question, Choices))
     +
       rec-event(UI,list-choice(Title, Choice?))
       . snd-msg(list-choice(Title, Choice))
-      . snd-ack-event(UI,list-choice(Title, Choice))
+      . snd-ack-event(UI, list-choice(Title, Choice))
     +
       rec-event(UI,cancel-list-choice(Title))
       . snd-msg(cancel-list-choice(Title))
-      . snd-ack-event(UI,cancel-list-choice(Title))
+      . snd-ack-event(UI, cancel-list-choice(Title))
     )
     *
     (
-      rec-event(UI,quit)
+      rec-event(UI, quit)
     +
       rec-disconnect(UI)
     )
