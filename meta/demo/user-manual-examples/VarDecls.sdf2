@@ -1,14 +1,12 @@
 module VarDecls
 
+imports Layout
+
 exports
   sorts ID DECL TYPE 
 
   lexical syntax
     [a-z]+ -> ID
-    [\ \n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
  
   context-free syntax
     "decl" {ID ","}+ ":" TYPE -> DECL 

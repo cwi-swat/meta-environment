@@ -1,14 +1,12 @@
 module Expr2
 
+imports Layout
+
 exports
   sorts E 
 
   lexical syntax
     [0-9]+ -> E
-    [\ \n] -> LAYOUT 
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
 
   context-free syntax
     E "+" E   -> E {left}
