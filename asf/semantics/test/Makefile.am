@@ -3,7 +3,6 @@ EXTRA_DIST=README
 
 TEST_MODULES=\
 	Bracket \
-	Builtins \
 	Collect \
 	Combination-Typecheck \
 	Func \
@@ -28,7 +27,7 @@ TEST_MODULES=\
 	Traversal-Typecheck \
 	Tuple
 
-TEST_MODULES_ASFE_ONLY=BoolAPI BoolPos Tree
+TEST_MODULES_ASFE_ONLY=BoolAPI BoolPos Tree Builtins
 
 ASFC=${top_builddir}/semantics/asfc/src/asfc
 ASFE=${top_builddir}/semantics/asfe/src/asfe
