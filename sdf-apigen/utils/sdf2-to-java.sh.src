@@ -128,7 +128,7 @@ do
       VERBOSE=1
       VERBOSEOPT='-v';;
 
-    -v | --verbose)
+    -V | --version)
       VERSION=$1;
       VERSIONOPT="--version ${VERSION}";;
 
