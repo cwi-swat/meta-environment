@@ -38,7 +38,7 @@ static void printPolygon(Polygon poly, FILE *file)
 static void printAttribute(Attribute attr, FILE *file)
 {
   if (isAttributeLabel(attr)) {
-    ATfprintf(file, "name=%y", ATmakeAFun(getAttributeLabel(attr), 0, ATtrue));
+    ATfprintf(file, "label=%y", ATmakeAFun(getAttributeLabel(attr), 0, ATtrue));
   } else if (isAttributeShape(attr)) {
     ATfprintf(file, "shape=%t", ShapeToTerm(getAttributeShape(attr)));
   } else if (isAttributeLocation(attr)) {
