@@ -1,10 +1,6 @@
-definition
-
-module Main
-imports Bool
-
 module Bool
 
+imports basic/Whitespace
 exports
   sorts Bool BoolSepList BoolList
   context-free syntax
@@ -14,10 +10,3 @@ exports
     Bool "/\\" Bool -> Bool {left}
     "<" Bool* ">" -> BoolList
     "[" {Bool ","}* "]" -> BoolSepList
-
-exports 
-  lexical syntax
-    [\ \n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
