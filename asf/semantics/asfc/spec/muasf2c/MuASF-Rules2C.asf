@@ -83,8 +83,8 @@ equations
               Stat*1 ++ Stat*2 = Stat*4,
               Stat*4 ++r Stat*3 = Stat*5,
               identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
-%%              remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
-Stat*5 = Stat*7,
+              remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
+%% Stat*5 = Stat*7,
               FUNC_ENTRY(identifier(Char* "s""y""m"),
                          ATmakeAppl(ActualArgs2)); ++ Stat*7 = Stat*8,
               Decl* ++d Stat*8 = Stat*9
