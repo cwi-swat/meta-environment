@@ -20,7 +20,7 @@ $Id$
 
 2000/11/09 (jurgenv@cwi.nl)
    * Version is now 0.4
-   * Small extensions for handling productions.
+   * Only minor maintenance differences
 
 2000/4/05 (mdejonge @cwi.nl)
    * Version is now 0.3
