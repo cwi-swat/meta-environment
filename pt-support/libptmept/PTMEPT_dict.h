@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Jan  9 15:27:37 2003
+ * Generated at Thu Jan  9 16:20:18 2003
  */
 
 #ifndef __PTMEPT_dict_H
@@ -103,6 +103,7 @@ extern AFun PTPT_afun92;
 extern AFun PTPT_afun93;
 extern AFun PTPT_afun94;
 extern AFun PTPT_afun95;
+extern AFun PTPT_afun96;
 
 extern ATerm PTPT_patternOptLayoutPresent;
 extern ATerm PTPT_patternOptLayoutAbsent;
@@ -190,6 +191,7 @@ extern ATerm PTPT_patternSymbolIterStar;
 extern ATerm PTPT_patternSymbolIter;
 extern ATerm PTPT_patternSymbolSort;
 extern ATerm PTPT_patternSymbolPair;
+extern ATerm PTPT_patternSymbolSeq;
 extern ATerm PTPT_patternSymbolAlt;
 extern ATerm PTPT_patternSymbolOpt;
 extern ATerm PTPT_patternSymbolLex;

@@ -91,6 +91,7 @@ cf(symbol:Symbol)                                        -> Symbol {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol {cons("lex")}
 opt(symbol:Symbol)                                       -> Symbol {cons("opt")}
 alt(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("alt")}
+seq(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("seq")}
 pair(lhs:Symbol,rhs:Symbol)                              -> Symbol {cons("pair")}
 sort(string:Literal)                                     -> Symbol {cons("sort")}
 iter(symbol:Symbol)                                      -> Symbol {cons("iter")}
