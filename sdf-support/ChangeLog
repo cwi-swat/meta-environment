@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 28 16:33:06 CET 2005 <{jurgenv,markvdb}@cwi.nl>
+ * Regenerated SDF support library after the syntax of priorities
+   was changed.
+
 Fri Dec 17 15:46:43 CET 2004 <jurgenv@cwi.nl>
  * Regenerated sdf API with structured lexicals.
  * Transformed SDFME-utils to deal with the changes. This means

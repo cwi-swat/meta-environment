@@ -65,11 +65,12 @@ typedef struct _SDF_ImpSectionList *SDF_ImpSectionList;
 typedef struct _SDF_SectionList *SDF_SectionList;
 typedef struct _SDF_ImportList *SDF_ImportList;
 typedef struct _SDF_Associativity *SDF_Associativity;
+typedef struct _SDF_ArgumentIndicator *SDF_ArgumentIndicator;
 typedef struct _SDF_Group *SDF_Group;
 typedef struct _SDF_Priority *SDF_Priority;
 typedef struct _SDF_Priorities *SDF_Priorities;
-typedef struct _SDF_GroupList *SDF_GroupList;
 typedef struct _SDF_NatConArguments *SDF_NatConArguments;
+typedef struct _SDF_GroupList *SDF_GroupList;
 typedef struct _SDF_PriorityList *SDF_PriorityList;
 typedef struct _SDF_SymbolTail *SDF_SymbolTail;
 typedef struct _SDF_SymbolRest *SDF_SymbolRest;
@@ -158,11 +159,12 @@ void SDF_protectImpSectionList(SDF_ImpSectionList *arg);
 void SDF_protectSectionList(SDF_SectionList *arg);
 void SDF_protectImportList(SDF_ImportList *arg);
 void SDF_protectAssociativity(SDF_Associativity *arg);
+void SDF_protectArgumentIndicator(SDF_ArgumentIndicator *arg);
 void SDF_protectGroup(SDF_Group *arg);
 void SDF_protectPriority(SDF_Priority *arg);
 void SDF_protectPriorities(SDF_Priorities *arg);
-void SDF_protectGroupList(SDF_GroupList *arg);
 void SDF_protectNatConArguments(SDF_NatConArguments *arg);
+void SDF_protectGroupList(SDF_GroupList *arg);
 void SDF_protectPriorityList(SDF_PriorityList *arg);
 void SDF_protectSymbolTail(SDF_SymbolTail *arg);
 void SDF_protectSymbolRest(SDF_SymbolRest *arg);
@@ -301,16 +303,18 @@ SDF_ImportList SDF_ImportListFromTerm(ATerm t);
 ATerm SDF_ImportListToTerm(SDF_ImportList arg);
 SDF_Associativity SDF_AssociativityFromTerm(ATerm t);
 ATerm SDF_AssociativityToTerm(SDF_Associativity arg);
+SDF_ArgumentIndicator SDF_ArgumentIndicatorFromTerm(ATerm t);
+ATerm SDF_ArgumentIndicatorToTerm(SDF_ArgumentIndicator arg);
 SDF_Group SDF_GroupFromTerm(ATerm t);
 ATerm SDF_GroupToTerm(SDF_Group arg);
 SDF_Priority SDF_PriorityFromTerm(ATerm t);
 ATerm SDF_PriorityToTerm(SDF_Priority arg);
 SDF_Priorities SDF_PrioritiesFromTerm(ATerm t);
 ATerm SDF_PrioritiesToTerm(SDF_Priorities arg);
-SDF_GroupList SDF_GroupListFromTerm(ATerm t);
-ATerm SDF_GroupListToTerm(SDF_GroupList arg);
 SDF_NatConArguments SDF_NatConArgumentsFromTerm(ATerm t);
 ATerm SDF_NatConArgumentsToTerm(SDF_NatConArguments arg);
+SDF_GroupList SDF_GroupListFromTerm(ATerm t);
+ATerm SDF_GroupListToTerm(SDF_GroupList arg);
 SDF_PriorityList SDF_PriorityListFromTerm(ATerm t);
 ATerm SDF_PriorityListToTerm(SDF_PriorityList arg);
 SDF_SymbolTail SDF_SymbolTailFromTerm(ATerm t);
@@ -515,18 +519,6 @@ SDF_ImportList SDF_makeImportList3(SDF_OptLayout wsAfterHead, SDF_Import elem1, 
 SDF_ImportList SDF_makeImportList4(SDF_OptLayout wsAfterHead, SDF_Import elem1, SDF_Import elem2, SDF_Import elem3, SDF_Import elem4);
 SDF_ImportList SDF_makeImportList5(SDF_OptLayout wsAfterHead, SDF_Import elem1, SDF_Import elem2, SDF_Import elem3, SDF_Import elem4, SDF_Import elem5);
 SDF_ImportList SDF_makeImportList6(SDF_OptLayout wsAfterHead, SDF_Import elem1, SDF_Import elem2, SDF_Import elem3, SDF_Import elem4, SDF_Import elem5, SDF_Import elem6);
-int SDF_getGroupListLength (SDF_GroupList arg);
-SDF_GroupList SDF_reverseGroupList(SDF_GroupList arg);
-SDF_GroupList SDF_appendGroupList(SDF_GroupList arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group arg1);
-SDF_GroupList SDF_concatGroupList(SDF_GroupList arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_GroupList arg1);
-SDF_GroupList SDF_sliceGroupList(SDF_GroupList arg, int start, int end);
-SDF_Group SDF_getGroupListGroupAt(SDF_GroupList arg, int index);
-SDF_GroupList SDF_replaceGroupListGroupAt(SDF_GroupList arg, SDF_Group elem, int index);
-SDF_GroupList SDF_makeGroupList2(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2);
-SDF_GroupList SDF_makeGroupList3(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3);
-SDF_GroupList SDF_makeGroupList4(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4);
-SDF_GroupList SDF_makeGroupList5(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4, SDF_Group elem5);
-SDF_GroupList SDF_makeGroupList6(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4, SDF_Group elem5, SDF_Group elem6);
 int SDF_getNatConArgumentsLength (SDF_NatConArguments arg);
 SDF_NatConArguments SDF_reverseNatConArguments(SDF_NatConArguments arg);
 SDF_NatConArguments SDF_appendNatConArguments(SDF_NatConArguments arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_NatCon arg1);
@@ -539,6 +531,18 @@ SDF_NatConArguments SDF_makeNatConArguments3(SDF_OptLayout wsAfterHead, SDF_OptL
 SDF_NatConArguments SDF_makeNatConArguments4(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_NatCon elem1, SDF_NatCon elem2, SDF_NatCon elem3, SDF_NatCon elem4);
 SDF_NatConArguments SDF_makeNatConArguments5(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_NatCon elem1, SDF_NatCon elem2, SDF_NatCon elem3, SDF_NatCon elem4, SDF_NatCon elem5);
 SDF_NatConArguments SDF_makeNatConArguments6(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_NatCon elem1, SDF_NatCon elem2, SDF_NatCon elem3, SDF_NatCon elem4, SDF_NatCon elem5, SDF_NatCon elem6);
+int SDF_getGroupListLength (SDF_GroupList arg);
+SDF_GroupList SDF_reverseGroupList(SDF_GroupList arg);
+SDF_GroupList SDF_appendGroupList(SDF_GroupList arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group arg1);
+SDF_GroupList SDF_concatGroupList(SDF_GroupList arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_GroupList arg1);
+SDF_GroupList SDF_sliceGroupList(SDF_GroupList arg, int start, int end);
+SDF_Group SDF_getGroupListGroupAt(SDF_GroupList arg, int index);
+SDF_GroupList SDF_replaceGroupListGroupAt(SDF_GroupList arg, SDF_Group elem, int index);
+SDF_GroupList SDF_makeGroupList2(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2);
+SDF_GroupList SDF_makeGroupList3(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3);
+SDF_GroupList SDF_makeGroupList4(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4);
+SDF_GroupList SDF_makeGroupList5(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4, SDF_Group elem5);
+SDF_GroupList SDF_makeGroupList6(SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Group elem1, SDF_Group elem2, SDF_Group elem3, SDF_Group elem4, SDF_Group elem5, SDF_Group elem6);
 int SDF_getPriorityListLength (SDF_PriorityList arg);
 SDF_PriorityList SDF_reversePriorityList(SDF_PriorityList arg);
 SDF_PriorityList SDF_appendPriorityList(SDF_PriorityList arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Priority arg1);
@@ -820,19 +824,20 @@ SDF_Associativity SDF_makeAssociativityLeft(void);
 SDF_Associativity SDF_makeAssociativityRight(void);
 SDF_Associativity SDF_makeAssociativityNonAssoc(void);
 SDF_Associativity SDF_makeAssociativityAssoc(void);
+SDF_ArgumentIndicator SDF_makeArgumentIndicatorDefault(SDF_OptLayout wsAfterLessThan, SDF_NatConArguments arguments, SDF_OptLayout wsAfterArguments);
+SDF_Group SDF_makeGroupWithArguments(SDF_Group Group, SDF_OptLayout wsAfterGroup, SDF_ArgumentIndicator ArgumentIndicator);
 SDF_Group SDF_makeGroupSimpleGroup(SDF_Production Production);
 SDF_Group SDF_makeGroupProdsGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Productions Productions, SDF_OptLayout wsAfterProductions);
 SDF_Group SDF_makeGroupAssocGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Associativity Associativity, SDF_OptLayout wsAfterAssociativity, SDF_OptLayout wsAfterColon, SDF_Productions Productions, SDF_OptLayout wsAfterProductions);
 SDF_Priority SDF_makePriorityChain(SDF_GroupList list);
 SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_OptLayout wsAfterLeft, SDF_Associativity Associativity, SDF_OptLayout wsAfterAssociativity, SDF_Group right);
-SDF_Priority SDF_makePriorityArgument(SDF_Production Production, SDF_OptLayout wsAfterProduction, SDF_OptLayout wsAfterLessThan, SDF_NatConArguments arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterGreaterThan, SDF_OptLayout wsAfterGreaterThan1, SDF_Group Group);
 SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list);
-SDF_GroupList SDF_makeGroupListEmpty(void);
-SDF_GroupList SDF_makeGroupListSingle(SDF_Group head);
-SDF_GroupList SDF_makeGroupListMany(SDF_Group head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_GroupList tail);
 SDF_NatConArguments SDF_makeNatConArgumentsEmpty(void);
 SDF_NatConArguments SDF_makeNatConArgumentsSingle(SDF_NatCon head);
 SDF_NatConArguments SDF_makeNatConArgumentsMany(SDF_NatCon head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_NatConArguments tail);
+SDF_GroupList SDF_makeGroupListEmpty(void);
+SDF_GroupList SDF_makeGroupListSingle(SDF_Group head);
+SDF_GroupList SDF_makeGroupListMany(SDF_Group head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_GroupList tail);
 SDF_PriorityList SDF_makePriorityListEmpty(void);
 SDF_PriorityList SDF_makePriorityListSingle(SDF_Priority head);
 SDF_PriorityList SDF_makePriorityListMany(SDF_Priority head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_PriorityList tail);
@@ -888,7 +893,7 @@ SDF_StrCon SDF_makeStrConLexToCf(SDF_LexStrCon StrCon);
 SDF_LexStrCharChars SDF_makeLexStrCharCharsEmpty(void);
 SDF_LexStrCharChars SDF_makeLexStrCharCharsSingle(SDF_LexStrChar head);
 SDF_LexStrCharChars SDF_makeLexStrCharCharsMany(SDF_LexStrChar head, SDF_LexStrCharChars tail);
-SDF_LexNatCon SDF_makeLexNatConDefault(const char* list);
+SDF_LexNatCon SDF_makeLexNatConDigits(const char* list);
 SDF_NatCon SDF_makeNatConLexToCf(SDF_LexNatCon NatCon);
 SDF_LexIdCon SDF_makeLexIdConDefault(char head, const char* tail);
 SDF_IdCon SDF_makeIdConLexToCf(SDF_LexIdCon IdCon);
@@ -949,11 +954,12 @@ ATbool SDF_isEqualImpSectionList(SDF_ImpSectionList arg0, SDF_ImpSectionList arg
 ATbool SDF_isEqualSectionList(SDF_SectionList arg0, SDF_SectionList arg1);
 ATbool SDF_isEqualImportList(SDF_ImportList arg0, SDF_ImportList arg1);
 ATbool SDF_isEqualAssociativity(SDF_Associativity arg0, SDF_Associativity arg1);
+ATbool SDF_isEqualArgumentIndicator(SDF_ArgumentIndicator arg0, SDF_ArgumentIndicator arg1);
 ATbool SDF_isEqualGroup(SDF_Group arg0, SDF_Group arg1);
 ATbool SDF_isEqualPriority(SDF_Priority arg0, SDF_Priority arg1);
 ATbool SDF_isEqualPriorities(SDF_Priorities arg0, SDF_Priorities arg1);
-ATbool SDF_isEqualGroupList(SDF_GroupList arg0, SDF_GroupList arg1);
 ATbool SDF_isEqualNatConArguments(SDF_NatConArguments arg0, SDF_NatConArguments arg1);
+ATbool SDF_isEqualGroupList(SDF_GroupList arg0, SDF_GroupList arg1);
 ATbool SDF_isEqualPriorityList(SDF_PriorityList arg0, SDF_PriorityList arg1);
 ATbool SDF_isEqualSymbolTail(SDF_SymbolTail arg0, SDF_SymbolTail arg1);
 ATbool SDF_isEqualSymbolRest(SDF_SymbolRest arg0, SDF_SymbolRest arg1);
@@ -2138,12 +2144,31 @@ inline ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg);
 inline ATbool SDF_isAssociativityAssoc(SDF_Associativity arg);
 
 /*}}}  */
+/*{{{  SDF_ArgumentIndicator accessors */
+
+ATbool SDF_isValidArgumentIndicator(SDF_ArgumentIndicator arg);
+inline ATbool SDF_isArgumentIndicatorDefault(SDF_ArgumentIndicator arg);
+ATbool SDF_hasArgumentIndicatorWsAfterLessThan(SDF_ArgumentIndicator arg);
+ATbool SDF_hasArgumentIndicatorArguments(SDF_ArgumentIndicator arg);
+ATbool SDF_hasArgumentIndicatorWsAfterArguments(SDF_ArgumentIndicator arg);
+SDF_OptLayout SDF_getArgumentIndicatorWsAfterLessThan(SDF_ArgumentIndicator arg);
+SDF_NatConArguments SDF_getArgumentIndicatorArguments(SDF_ArgumentIndicator arg);
+SDF_OptLayout SDF_getArgumentIndicatorWsAfterArguments(SDF_ArgumentIndicator arg);
+SDF_ArgumentIndicator SDF_setArgumentIndicatorWsAfterLessThan(SDF_ArgumentIndicator arg, SDF_OptLayout wsAfterLessThan);
+SDF_ArgumentIndicator SDF_setArgumentIndicatorArguments(SDF_ArgumentIndicator arg, SDF_NatConArguments arguments);
+SDF_ArgumentIndicator SDF_setArgumentIndicatorWsAfterArguments(SDF_ArgumentIndicator arg, SDF_OptLayout wsAfterArguments);
+
+/*}}}  */
 /*{{{  SDF_Group accessors */
 
 ATbool SDF_isValidGroup(SDF_Group arg);
+inline ATbool SDF_isGroupWithArguments(SDF_Group arg);
 inline ATbool SDF_isGroupSimpleGroup(SDF_Group arg);
 inline ATbool SDF_isGroupProdsGroup(SDF_Group arg);
 inline ATbool SDF_isGroupAssocGroup(SDF_Group arg);
+ATbool SDF_hasGroupGroup(SDF_Group arg);
+ATbool SDF_hasGroupWsAfterGroup(SDF_Group arg);
+ATbool SDF_hasGroupArgumentIndicator(SDF_Group arg);
 ATbool SDF_hasGroupProduction(SDF_Group arg);
 ATbool SDF_hasGroupWsAfterBraceOpen(SDF_Group arg);
 ATbool SDF_hasGroupProductions(SDF_Group arg);
@@ -2151,6 +2176,9 @@ ATbool SDF_hasGroupWsAfterProductions(SDF_Group arg);
 ATbool SDF_hasGroupAssociativity(SDF_Group arg);
 ATbool SDF_hasGroupWsAfterAssociativity(SDF_Group arg);
 ATbool SDF_hasGroupWsAfterColon(SDF_Group arg);
+SDF_Group SDF_getGroupGroup(SDF_Group arg);
+SDF_OptLayout SDF_getGroupWsAfterGroup(SDF_Group arg);
+SDF_ArgumentIndicator SDF_getGroupArgumentIndicator(SDF_Group arg);
 SDF_Production SDF_getGroupProduction(SDF_Group arg);
 SDF_OptLayout SDF_getGroupWsAfterBraceOpen(SDF_Group arg);
 SDF_Productions SDF_getGroupProductions(SDF_Group arg);
@@ -2158,6 +2186,9 @@ SDF_OptLayout SDF_getGroupWsAfterProductions(SDF_Group arg);
 SDF_Associativity SDF_getGroupAssociativity(SDF_Group arg);
 SDF_OptLayout SDF_getGroupWsAfterAssociativity(SDF_Group arg);
 SDF_OptLayout SDF_getGroupWsAfterColon(SDF_Group arg);
+SDF_Group SDF_setGroupGroup(SDF_Group arg, SDF_Group Group);
+SDF_Group SDF_setGroupWsAfterGroup(SDF_Group arg, SDF_OptLayout wsAfterGroup);
+SDF_Group SDF_setGroupArgumentIndicator(SDF_Group arg, SDF_ArgumentIndicator ArgumentIndicator);
 SDF_Group SDF_setGroupProduction(SDF_Group arg, SDF_Production Production);
 SDF_Group SDF_setGroupWsAfterBraceOpen(SDF_Group arg, SDF_OptLayout wsAfterBraceOpen);
 SDF_Group SDF_setGroupProductions(SDF_Group arg, SDF_Productions Productions);
@@ -2172,49 +2203,24 @@ SDF_Group SDF_setGroupWsAfterColon(SDF_Group arg, SDF_OptLayout wsAfterColon);
 ATbool SDF_isValidPriority(SDF_Priority arg);
 inline ATbool SDF_isPriorityChain(SDF_Priority arg);
 inline ATbool SDF_isPriorityAssoc(SDF_Priority arg);
-inline ATbool SDF_isPriorityArgument(SDF_Priority arg);
 ATbool SDF_hasPriorityList(SDF_Priority arg);
 ATbool SDF_hasPriorityLeft(SDF_Priority arg);
 ATbool SDF_hasPriorityWsAfterLeft(SDF_Priority arg);
 ATbool SDF_hasPriorityAssociativity(SDF_Priority arg);
 ATbool SDF_hasPriorityWsAfterAssociativity(SDF_Priority arg);
 ATbool SDF_hasPriorityRight(SDF_Priority arg);
-ATbool SDF_hasPriorityProduction(SDF_Priority arg);
-ATbool SDF_hasPriorityWsAfterProduction(SDF_Priority arg);
-ATbool SDF_hasPriorityWsAfterLessThan(SDF_Priority arg);
-ATbool SDF_hasPriorityArguments(SDF_Priority arg);
-ATbool SDF_hasPriorityWsAfterArguments(SDF_Priority arg);
-ATbool SDF_hasPriorityWsAfterGreaterThan(SDF_Priority arg);
-ATbool SDF_hasPriorityWsAfterGreaterThan1(SDF_Priority arg);
-ATbool SDF_hasPriorityGroup(SDF_Priority arg);
 SDF_GroupList SDF_getPriorityList(SDF_Priority arg);
 SDF_Group SDF_getPriorityLeft(SDF_Priority arg);
 SDF_OptLayout SDF_getPriorityWsAfterLeft(SDF_Priority arg);
 SDF_Associativity SDF_getPriorityAssociativity(SDF_Priority arg);
 SDF_OptLayout SDF_getPriorityWsAfterAssociativity(SDF_Priority arg);
 SDF_Group SDF_getPriorityRight(SDF_Priority arg);
-SDF_Production SDF_getPriorityProduction(SDF_Priority arg);
-SDF_OptLayout SDF_getPriorityWsAfterProduction(SDF_Priority arg);
-SDF_OptLayout SDF_getPriorityWsAfterLessThan(SDF_Priority arg);
-SDF_NatConArguments SDF_getPriorityArguments(SDF_Priority arg);
-SDF_OptLayout SDF_getPriorityWsAfterArguments(SDF_Priority arg);
-SDF_OptLayout SDF_getPriorityWsAfterGreaterThan(SDF_Priority arg);
-SDF_OptLayout SDF_getPriorityWsAfterGreaterThan1(SDF_Priority arg);
-SDF_Group SDF_getPriorityGroup(SDF_Priority arg);
 SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list);
 SDF_Priority SDF_setPriorityLeft(SDF_Priority arg, SDF_Group left);
 SDF_Priority SDF_setPriorityWsAfterLeft(SDF_Priority arg, SDF_OptLayout wsAfterLeft);
 SDF_Priority SDF_setPriorityAssociativity(SDF_Priority arg, SDF_Associativity Associativity);
 SDF_Priority SDF_setPriorityWsAfterAssociativity(SDF_Priority arg, SDF_OptLayout wsAfterAssociativity);
 SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right);
-SDF_Priority SDF_setPriorityProduction(SDF_Priority arg, SDF_Production Production);
-SDF_Priority SDF_setPriorityWsAfterProduction(SDF_Priority arg, SDF_OptLayout wsAfterProduction);
-SDF_Priority SDF_setPriorityWsAfterLessThan(SDF_Priority arg, SDF_OptLayout wsAfterLessThan);
-SDF_Priority SDF_setPriorityArguments(SDF_Priority arg, SDF_NatConArguments arguments);
-SDF_Priority SDF_setPriorityWsAfterArguments(SDF_Priority arg, SDF_OptLayout wsAfterArguments);
-SDF_Priority SDF_setPriorityWsAfterGreaterThan(SDF_Priority arg, SDF_OptLayout wsAfterGreaterThan);
-SDF_Priority SDF_setPriorityWsAfterGreaterThan1(SDF_Priority arg, SDF_OptLayout wsAfterGreaterThan1);
-SDF_Priority SDF_setPriorityGroup(SDF_Priority arg, SDF_Group Group);
 
 /*}}}  */
 /*{{{  SDF_Priorities accessors */
@@ -2224,26 +2230,6 @@ inline ATbool SDF_isPrioritiesDefault(SDF_Priorities arg);
 ATbool SDF_hasPrioritiesList(SDF_Priorities arg);
 SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg);
 SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list);
-
-/*}}}  */
-/*{{{  SDF_GroupList accessors */
-
-ATbool SDF_isValidGroupList(SDF_GroupList arg);
-inline ATbool SDF_isGroupListEmpty(SDF_GroupList arg);
-inline ATbool SDF_isGroupListSingle(SDF_GroupList arg);
-inline ATbool SDF_isGroupListMany(SDF_GroupList arg);
-ATbool SDF_hasGroupListHead(SDF_GroupList arg);
-ATbool SDF_hasGroupListWsAfterHead(SDF_GroupList arg);
-ATbool SDF_hasGroupListWsAfterSep(SDF_GroupList arg);
-ATbool SDF_hasGroupListTail(SDF_GroupList arg);
-SDF_GroupList SDF_getGroupListTail(SDF_GroupList arg);
-SDF_Group SDF_getGroupListHead(SDF_GroupList arg);
-SDF_OptLayout SDF_getGroupListWsAfterHead(SDF_GroupList arg);
-SDF_OptLayout SDF_getGroupListWsAfterSep(SDF_GroupList arg);
-SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head);
-SDF_GroupList SDF_setGroupListWsAfterHead(SDF_GroupList arg, SDF_OptLayout wsAfterHead);
-SDF_GroupList SDF_setGroupListWsAfterSep(SDF_GroupList arg, SDF_OptLayout wsAfterSep);
-SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail);
 
 /*}}}  */
 /*{{{  SDF_NatConArguments accessors */
@@ -2264,6 +2250,26 @@ SDF_NatConArguments SDF_setNatConArgumentsHead(SDF_NatConArguments arg, SDF_NatC
 SDF_NatConArguments SDF_setNatConArgumentsWsAfterHead(SDF_NatConArguments arg, SDF_OptLayout wsAfterHead);
 SDF_NatConArguments SDF_setNatConArgumentsWsAfterSep(SDF_NatConArguments arg, SDF_OptLayout wsAfterSep);
 SDF_NatConArguments SDF_setNatConArgumentsTail(SDF_NatConArguments arg, SDF_NatConArguments tail);
+
+/*}}}  */
+/*{{{  SDF_GroupList accessors */
+
+ATbool SDF_isValidGroupList(SDF_GroupList arg);
+inline ATbool SDF_isGroupListEmpty(SDF_GroupList arg);
+inline ATbool SDF_isGroupListSingle(SDF_GroupList arg);
+inline ATbool SDF_isGroupListMany(SDF_GroupList arg);
+ATbool SDF_hasGroupListHead(SDF_GroupList arg);
+ATbool SDF_hasGroupListWsAfterHead(SDF_GroupList arg);
+ATbool SDF_hasGroupListWsAfterSep(SDF_GroupList arg);
+ATbool SDF_hasGroupListTail(SDF_GroupList arg);
+SDF_GroupList SDF_getGroupListTail(SDF_GroupList arg);
+SDF_Group SDF_getGroupListHead(SDF_GroupList arg);
+SDF_OptLayout SDF_getGroupListWsAfterHead(SDF_GroupList arg);
+SDF_OptLayout SDF_getGroupListWsAfterSep(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head);
+SDF_GroupList SDF_setGroupListWsAfterHead(SDF_GroupList arg, SDF_OptLayout wsAfterHead);
+SDF_GroupList SDF_setGroupListWsAfterSep(SDF_GroupList arg, SDF_OptLayout wsAfterSep);
+SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail);
 
 /*}}}  */
 /*{{{  SDF_PriorityList accessors */
@@ -2678,7 +2684,7 @@ SDF_LexStrCharChars SDF_setLexStrCharCharsTail(SDF_LexStrCharChars arg, SDF_LexS
 /*{{{  SDF_LexNatCon accessors */
 
 ATbool SDF_isValidLexNatCon(SDF_LexNatCon arg);
-inline ATbool SDF_isLexNatConDefault(SDF_LexNatCon arg);
+inline ATbool SDF_isLexNatConDigits(SDF_LexNatCon arg);
 ATbool SDF_hasLexNatConList(SDF_LexNatCon arg);
 char* SDF_getLexNatConList(SDF_LexNatCon arg);
 SDF_LexNatCon SDF_setLexNatConList(SDF_LexNatCon arg, const char* list);
@@ -2769,11 +2775,12 @@ SDF_ImpSectionList SDF_visitImpSectionList(SDF_ImpSectionList arg, SDF_ImpSectio
 SDF_SectionList SDF_visitSectionList(SDF_SectionList arg, SDF_Section (*acceptHead)(SDF_Section), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_ImportList SDF_visitImportList(SDF_ImportList arg, SDF_Import (*acceptHead)(SDF_Import), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_Associativity SDF_visitAssociativity(SDF_Associativity arg);
-SDF_Group SDF_visitGroup(SDF_Group arg, SDF_Production (*acceptProduction)(SDF_Production), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_OptLayout (*acceptWsAfterProductions)(SDF_OptLayout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity), SDF_OptLayout (*acceptWsAfterAssociativity)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout));
-SDF_Priority SDF_visitPriority(SDF_Priority arg, SDF_GroupList (*acceptList)(SDF_GroupList), SDF_Group (*acceptLeft)(SDF_Group), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity), SDF_OptLayout (*acceptWsAfterAssociativity)(SDF_OptLayout), SDF_Group (*acceptRight)(SDF_Group), SDF_Production (*acceptProduction)(SDF_Production), SDF_OptLayout (*acceptWsAfterProduction)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_NatConArguments (*acceptArguments)(SDF_NatConArguments), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan1)(SDF_OptLayout), SDF_Group (*acceptGroup)(SDF_Group));
+SDF_ArgumentIndicator SDF_visitArgumentIndicator(SDF_ArgumentIndicator arg, SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_NatConArguments (*acceptArguments)(SDF_NatConArguments), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout));
+SDF_Group SDF_visitGroup(SDF_Group arg, SDF_OptLayout (*acceptWsAfterGroup)(SDF_OptLayout), SDF_ArgumentIndicator (*acceptArgumentIndicator)(SDF_ArgumentIndicator), SDF_Production (*acceptProduction)(SDF_Production), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_OptLayout (*acceptWsAfterProductions)(SDF_OptLayout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity), SDF_OptLayout (*acceptWsAfterAssociativity)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout));
+SDF_Priority SDF_visitPriority(SDF_Priority arg, SDF_GroupList (*acceptList)(SDF_GroupList), SDF_Group (*acceptLeft)(SDF_Group), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity), SDF_OptLayout (*acceptWsAfterAssociativity)(SDF_OptLayout), SDF_Group (*acceptRight)(SDF_Group));
 SDF_Priorities SDF_visitPriorities(SDF_Priorities arg, SDF_PriorityList (*acceptList)(SDF_PriorityList));
-SDF_GroupList SDF_visitGroupList(SDF_GroupList arg, SDF_Group (*acceptHead)(SDF_Group), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_NatConArguments SDF_visitNatConArguments(SDF_NatConArguments arg, SDF_NatCon (*acceptHead)(SDF_NatCon), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
+SDF_GroupList SDF_visitGroupList(SDF_GroupList arg, SDF_Group (*acceptHead)(SDF_Group), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_PriorityList SDF_visitPriorityList(SDF_PriorityList arg, SDF_Priority (*acceptHead)(SDF_Priority), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_SymbolTail SDF_visitSymbolTail(SDF_SymbolTail arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_SymbolRest SDF_visitSymbolRest(SDF_SymbolRest arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
