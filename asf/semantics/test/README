@@ -17,7 +17,9 @@ sglr -p <TopModuleName>.trm.tbl -i <input> -o ../../input/<TopModuleName>.1.pt
    This generated an error message and a c file.
 11. mv <TopModuleName>.c c-code
    To fix the c code as the correct result.
-12. cvs add eqs/*.eqs input/*.pt output/*.pt c-code/*.c
+12. cvs add spec/<TopModule>/*.{asf,sdf} eqs/*.eqs input/*.pt \
+            output/*.pt c-code/*.c
 13. type <TopModuleName>.test to verify that everything works.
 14. add <TopModuleName> to the list of tested specifications in ./Makefile.am
-15. DONE! 
+15. cvs commit
+16. DONE! 
