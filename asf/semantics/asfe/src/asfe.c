@@ -1656,8 +1656,18 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
     return trm;
   }
 
-  if (PT_isTreeAppl(trm)) {
-    if (PT_hasProductionBracketAttr(PT_getTreeProd(trm))) {
+  if (PT_isTreeAppl(trm)) { 
+    PT_Production prod = PT_getTreeProd(trm);
+
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhs = PT_getProductionRhs(prod);
+      rewtrm = getVariableValue(env, trm, rhs);
+
+      if (!rewtrm) {
+        rewtrm = trm;
+      }
+    }
+    else if (PT_hasProductionBracketAttr(prod)) {
       args = PT_getTreeArgs(trm);
       newargs = rewriteArgs(args, env, depth, traversal);
       newtrm = PT_getArgsHead(skipWhitespace(PT_getArgsTail(newargs)));
@@ -1676,7 +1686,7 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
         rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newargs), depth);
 
       }
-      else {    /* reduction occurred, we need postprocessing */
+      else { /* reduction occurred, we need postprocessing */
 
         if (traversal->type == ANALYZER) {
           /* We update the traversal with the rhs */
@@ -1685,12 +1695,6 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
           rewtrm = trm;
         }
       }
-    }
-  }
-  else if (PT_isTreeVar(trm)) {
-    rewtrm = getVariableValue(env, trm, NULL);
-    if (!rewtrm) {
-      rewtrm = trm;
     }
   }
   else if (PT_isTreeApplList(trm) || PT_isTreeList(trm)) {
