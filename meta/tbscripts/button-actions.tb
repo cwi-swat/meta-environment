@@ -43,7 +43,6 @@ in
       if equal(FunName, "if-equal") then
         IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
       else
-/*printf("ButtunAction = %t\n", ButtonAction).*/
         snd-msg(ButtonAction, Stack, EditorId) .
         (
           rec-msg(stack(Stack?), EditorId)
@@ -271,7 +270,7 @@ in
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
         else
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         fi
       +
         rec-msg(get-other-focus(NewModName?), Stack?, EditorId?) .
@@ -690,10 +689,8 @@ in
     rec-msg(tree(TotalTree?)) .
     snd-msg(unparse(TotalTree)) .
     rec-msg(unparsed-text(Text?)) .
-/*printf("text = %s\n", Text).*/
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-/*printf("filename = %s\n", FileName).*/
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
     snd-note(reload-file(EditorId, FileName)) .
@@ -736,8 +733,7 @@ in
     rec-msg(all-equations(Equations?)) .
     snd-note(ui-status(endstat(Id))).
     snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
-    rec-msg(interpret-term-hook-result(NormalForm?)) /*.
-printf("normal form %t\n", NormalForm)*/
+    rec-msg(interpret-term-hook-result(NormalForm?))
   +
     rec-msg(equations-incomplete) .
     NormalForm := error-tree .
