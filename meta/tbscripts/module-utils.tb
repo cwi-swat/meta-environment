@@ -13,6 +13,7 @@ in
     DoRenameModule(OldModuleName, NewModuleName, NewPath)
   +
     rec-msg(copy-module(OldModuleName?, NewModuleName?, NewPath?)).
+    printf("new path : %s\n", NewPath).
     DoCopyModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
@@ -31,7 +32,7 @@ in
     if equal(Status, success) then
       DeleteEditors(Old). tau.
       if equal(Status, success) then
-        RenameModuleInDB(Old, RealNew, Status?, Changed?). tau.
+        RenameModuleInDB(Old, RealNew, Path, Status?, Changed?). tau.
         if equal(Status, success) then 
           SaveSdfModules(Changed). tau.
           SaveAsfSdfModule(RealNew). tau.
@@ -54,7 +55,7 @@ in
   if equal(Status, success) then
     CheckExistence(RealNew, Status?).
     if equal (Status, success) then
-      CopyModuleInDB(Old, RealNew, Status?, Changed?).
+      CopyModuleInDB(Old, RealNew, Path, Status?, Changed?).
       if equal (Status, success) then
         SaveSdfModules(Changed).
 	SaveAsfSdfModule(RealNew)
@@ -104,9 +105,10 @@ process RemoveModule(Module : str) is
   snd-msg(remove-module(Module)) .
   rec-msg(removed-module)
 
-process RenameModuleInDB(Old : str, New : str, Status : term?, Changed : list?)
+process RenameModuleInDB(Old : str, New : str, Path : str, Status : term?, 
+                         Changed : list?)
 is
-  snd-msg(rename-module-in-db(Old, New)) .
+  snd-msg(rename-module-in-db(Old, New, Path)) .
   (
     rec-msg(renaming-done(Old, Changed?)) 
   + 
@@ -114,9 +116,10 @@ is
     Status := module-not-changed
   )
 
-process CopyModuleInDB(Old : str, New : str, Status : term?, Changed : list?)
+process CopyModuleInDB(Old : str, New : str, Path : str, Status : term?, 
+                       Changed : list?)
 is
-  snd-msg(copy-module-in-db(Old, New)) .
+  snd-msg(copy-module-in-db(Old, New, Path)) .
   (
     rec-msg(copy-done(Old, Changed?))
   +
