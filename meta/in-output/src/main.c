@@ -31,9 +31,9 @@ static char myarguments[] = "hvV";
 
 /*}}}  */
 
-/*{{{  static char *ATgetString(ATerm t) */
+/*{{{  static const char *ATgetString(ATerm t) */
 
-static char *ATgetString(ATerm t)
+static const char *ATgetString(ATerm t)
 {
   assert(t != NULL && ATgetType(t) == AT_APPL);
 
@@ -213,12 +213,10 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 {
   ATermList relativePaths = (ATermList) paths;
   ATermList result = ATempty;
-  char *relativePath = NULL;
-  char *absolutePath = NULL;
 
   for (; !ATisEmpty(relativePaths); relativePaths = ATgetNext(relativePaths)) {
-    relativePath = ATgetString(ATgetFirst(relativePaths));
-    absolutePath = expandPath(relativePath);
+    const char *relativePath = ATgetString(ATgetFirst(relativePaths));
+    char *absolutePath = expandPath(relativePath);
 
     if (absolutePath != NULL) {
       result = ATinsert(result, ATmake("<str>", absolutePath));
@@ -337,7 +335,7 @@ ATerm write_text_file(int cid, const char *fileName, ATerm content)
   else {
     for (; !ATisEmpty(list); list = ATgetNext(list)) {
       ATerm atString = ATgetFirst(list);
-      char *string = ATgetName(ATgetAFun((ATermAppl) atString));
+      const char *string = ATgetName(ATgetAFun((ATermAppl) atString));
       fputs(string, file);
     }
 
@@ -427,7 +425,7 @@ ATerm write_packed_term_file(int cid, const char *fileName, ATerm content)
 }
 
 /*}}}  */
-/*{{{  ATerm exists_file(int cid, char *path, char *name, char *extension) */
+/*{{{  ATerm exists_file(int cid, const char *fileName) */
 
 ATerm exists_file(int cid, const char *fileName)
 {
@@ -454,7 +452,7 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
  
   for (; !ATisEmpty(searchPaths); searchPaths = ATgetNext(searchPaths)) {
     ATerm path = ATgetFirst(searchPaths);
-    char *pathString = ATgetString(path);
+    const char *pathString = ATgetString(path);
     sprintf(filename, "%s%c%s%s", pathString, SEP, name, extension);
 
     if (fileExists(filename)) {
@@ -516,11 +514,12 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
 
 ATerm decons_filename(int conn, const char *filename, const char *extension)
 {
-  ATerm result;
-  char *buf, *save;
   int filenameLength = strlen(filename);
   int extensionLength = strlen(extension);
-  char *path;
+  ATerm result;
+  char *buf;
+  char *save;
+  const char *path;
   char *p;
 
   buf = strdup(filename);
@@ -558,7 +557,7 @@ ATerm decons_filename(int conn, const char *filename, const char *extension)
 
 ATerm get_extension(int conn, const char *filename)
 {
-  char *extension = NULL;
+  const char *extension = NULL;
 
   extension = strrchr(filename, '.'); // TODO: extract constant
 
@@ -580,9 +579,9 @@ void rec_terminate(int cid, ATerm arg)
 
 /*}}}  */
 
-/*{{{  static void usage(char *prg, ATbool is_err) */
+/*{{{  static void usage(const char *prg, ATbool is_err) */
 
-static void usage(char *prg, ATbool is_err)
+static void usage(const char *prg, ATbool is_err)
 {
   ATwarning(
 	    "Usage: %s [options]\n"
@@ -595,9 +594,9 @@ static void usage(char *prg, ATbool is_err)
 }
 
 /*}}}  */
-/*{{{  static void version(char *prg) */
+/*{{{  static void version(const char *prg) */
 
-static void version(char *prg)
+static void version(const char *prg)
 {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
