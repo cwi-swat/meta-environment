@@ -1,0 +1,15 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/meta-errors
+   info=http://www.cwi.nl/projects/MetaEnv/meta-errors
+   description='A generic data-structure for describing errors, warnings, etc.'
+
+
+   keywords=meta-environment, error-handling
+
+configuration interface
+
+requires
+  aterm		2.0.6
