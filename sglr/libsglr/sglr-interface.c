@@ -254,7 +254,7 @@ ATerm SGparseString(language L, char *G, char *S)
   SG_theText   = strdup(S);
   SG_textIndex = 0;
   SG_textEnd   = strlen(SG_theText);
-  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetChar);
+  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetChar, SG_textEnd);
   free(SG_theText);
   return t;
 }
@@ -339,7 +339,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
   SG_theText[SG_textEnd] = '\0';
 
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
-  ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar);
+  ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar, SG_textEnd);
   SG_Free(SG_theText);
   return (ATerm) ret;
 }

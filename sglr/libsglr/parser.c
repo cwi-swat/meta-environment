@@ -131,7 +131,7 @@ size_t num_reductions = 0;
 size_t line;           /* current line */
 size_t col;            /* current column */
 size_t sg_tokens_read; /* number of tokens read */
-
+size_t sg_total_tokens; /* total number of tokens */
 /*  By definition the start of the input is at column zero of line one  */
 
 void SG_ResetCoordinates(void)
@@ -145,6 +145,7 @@ void SG_InitInput(void)
   SG_ResetCoordinates();
   sg_tokens_read = 0;
 }
+
 
 #define     SG_SP_CHUNK 16
 shift_pair  *sg_shift_pairs = NULL;
@@ -405,10 +406,12 @@ void  SG_ParserCleanup(void)
  message depending on the status.
  */
 
-forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
+forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
+		size_t length)
 {
   forest result;
 
+  sg_total_tokens = length;
   table = ptable;
   SG_ParserPreparation();
 
@@ -425,19 +428,12 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
              fprintf(SG_log(), "\n");
              )
 
-/*
-    IF_VERBOSE(
-         if (isatty(fileno(stderr)))
-           fprintf(stderr, "\rParsing  %6d", sg_tokens_read);
-        )
-*/
-
     SG_ParseToken();
 
     IF_VERBOSE(
-         if (isatty(fileno(stderr)))
-           fprintf(stderr, "\rShifting %6d", sg_tokens_read);
-        )
+      SG_PrintStatusBar("sglr: shifting", sg_tokens_read, sg_total_tokens, 
+			1000);
+    )
 
     SG_Shifter();
 
@@ -447,7 +443,7 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
 
   } while (current_token != SG_EOF_Token && active_stacks);
 
-  IF_VERBOSE( if (isatty(fileno(stderr))) fprintf(stderr, ".\n"); )
+  IF_VERBOSE( SG_PrintDotAndNewLine() );
 
   /*  Core parsing done!  */
   SG_PostParse();
@@ -1071,26 +1067,29 @@ tree SG_ParseResult(char *sort)
   }
 }
 
-/* a function to print a running status bar on a tty */
-void SG_PrintStatusBar(char *subject, long part, long whole)
+/* a function to print a status bar on a tty */
+void SG_PrintStatusBar(char *subject, long part, long whole, long freq)
 {
-  static char bar[]  = "========================================";
+  static char bar[]  = "==============================";
+  static char daisy[] = "|/-\\";
   long double factor;
-
-  if(whole == 0.0) {
-    return;
-  }
-
-  factor = (long double) part / (long double) whole;
 
   if(!isatty(fileno(stderr))) {
     return;
   }
 
-  fprintf(stderr,"\r%s: [%-40.*s] %ld/%ld (%3d%%)",
+  if(whole == 0.0 || (part % freq && part != whole)) {
+    return;
+  }
+
+  factor = (long double) part / (long double) whole;
+
+
+  fprintf(stderr,"\r%s [%-30.*s] %c %ld/%ld (%3d%%)",
                  subject,
-                 (int) ((double) 40 * factor),
+                 (int) ((double) 30 * factor),
                  bar,
+		 part != whole ? daisy[(part / freq) % 4] : ' ',
                  part,
                  whole,
                  (int) (factor * 100)

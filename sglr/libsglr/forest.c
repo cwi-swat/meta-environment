@@ -190,6 +190,23 @@ int SGnrAmb(int mode)
   }
 }
 
+int SG_ClustersVisited(int mode)
+{
+    static int count = 0;
+
+    switch(mode) {
+    case SG_NR_ZERO:
+      return count = 0;
+    case SG_NR_INC:
+      return ++count;
+    case SG_NR_DEC:
+      return --count;
+    case SG_NR_ASK:
+    default:
+      return count;
+    }
+}
+
 ATbool SG_StartInjection(parse_table *pt, label l)
 {
   return ATmatch((ATerm) SG_LookupProduction(pt, l),
@@ -1456,7 +1473,8 @@ tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
   tree t;
   ATermList newambs;
   tree amb;
- 
+
+
   /* first we do the children */
   newambs = ATempty;
   for(;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
@@ -1519,6 +1537,12 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
   case AT_APPL:
     ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
     if (!inAmbs && !ATisEmpty(ambs)) {
+  
+      IF_VERBOSE(
+        SG_PrintStatusBar( "sglr: filtering", 
+			 SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK), 5);
+      )
+
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
       if (newt == NULL) {
         newt = SG_FilterAmbs(pt, mst, ambs);
@@ -1573,12 +1597,21 @@ tree SG_FilterTree(parse_table *pt, tree t)
 
    resolvedtable = ATtableCreate(2048, 75);
    nrAmbs = SGnrAmb(SG_NR_ASK);
- 
+   IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
+
    if (nrAmbs > 0) {
      mst = MultiSetTableCreate(nrAmbs);
    }
 
    t = SG_FilterTreeRecursive(pt, mst, t, ATfalse);
+   
+   IF_VERBOSE(
+      /* print 100% bar, the rest was solved by caching ambclusters */
+      SG_PrintStatusBar("sglr: filtering", 
+	    SGnrAmb(SG_NR_ASK), SGnrAmb(SG_NR_ASK), 5);
+      SG_PrintDotAndNewLine();
+      )
+
 
    if (mst) {
      MultiSetTableDestroy(mst);

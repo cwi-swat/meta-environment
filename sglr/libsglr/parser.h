@@ -25,7 +25,8 @@
 
 #include "stack.h"
 
-forest SG_Parse(parse_table *pt, char *sort, int(*getchar)(void));
+forest SG_Parse(parse_table *pt, char *sort, int(*getchar)(void), 
+		size_t length);
 
 void   SG_ZeroStackHist(void);
 void   SG_AddStackHist(stack *parent, stack *kid);
@@ -35,7 +36,8 @@ void   SG_PropagateUnreject(stack *st);
 char  *SG_ProdSort(production t);
 
 
-void SG_PrintStatusBar(char *subject, long part, long whole);
+void SG_PrintStatusBar(char *subject, long part, long whole, long freq);
+#define SG_PrintDotAndNewLine() if (isatty(fileno(stderr))) { fprintf(stderr, ".\n"); } 
 
 #ifdef DEBUG
 void   SG_ShowStackOffspring(stack *);
