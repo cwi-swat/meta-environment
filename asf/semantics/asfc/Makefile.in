@@ -136,6 +136,13 @@ doc: $(DOCFILES)
 # clean target (remove all easily build components and temporary files)
 clean:
 	rm -f *.o *~ $(CLEANFILES)
+	@for DIR in $(SUBDIRS); \
+	do \
+	   echo Make $@ in $$DIR; \
+	   cd $$DIR; \
+	   $(MAKE) $@; \
+	   cd ..; \
+	done
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
