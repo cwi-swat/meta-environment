@@ -1,3 +1,8 @@
+2003/12/10 (markvdb@cwi.nl)
+  * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
+  * Adapted the Sdf2-Normalization accordingly.
+  * Both sorts and start-symbols are now used as start symbols.
+
 2003/11/26 (jurgenv@cwi.nl)
   * added first version of generic error format
 
