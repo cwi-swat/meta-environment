@@ -1,0 +1,20 @@
+module Reverse
+
+exports
+
+sorts E*
+
+lexical syntax
+
+[\ \t\n] -> LAYOUT
+
+[a-z] -> E
+
+context-free syntax
+
+reverse(E*) -> E*
+
+variables
+
+"E"[0-9]* -> E
+"E*"[0-9]* -> E*

@@ -1,0 +1,9 @@
+equations
+
+[] 
+reverse(E2 E*) = E*2
+===>
+reverse(E1 E2 E*) = E*2 E1
+
+[default]
+reverse(E) = E
