@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/11 (jong@cwi.nl)
+ * patched Makefile.am's to comply with new location of -lATB.
+
 2001/07/11 (markvdb@cwi.nl)
   * Bug fix in dealing with filtering over injections. Sometimes it
     stopped in a non-application node.
