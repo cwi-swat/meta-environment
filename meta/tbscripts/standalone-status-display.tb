@@ -1,0 +1,18 @@
+/* $Id$ */
+
+process Status-display(UI: user-interface)  is
+let
+  Lst : list,
+  Str : str,
+  Id  : term
+in
+  subscribe(ui-status(<term>)) .
+  ( 
+    rec-note(ui-status(error(Str?))) .
+    printf(Str)
+    +
+    rec-note(ui-status(errorf(Str?, Lst?))) .
+    printf("%s [%t]\n", Str, Lst)
+  ) *
+  delta
+endlet

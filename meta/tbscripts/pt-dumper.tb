@@ -19,6 +19,7 @@
 #include "removevarsyntax.idef"
 #include "configmanager.idef"
 #include "standalone-pt-dumper.tb"
+#include "standalone-status-display.tb"
 
 process META is
 let
@@ -37,5 +38,6 @@ endlet
 toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
         ModuleDB, File-creator, 
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
-	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable) 
+	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable, 
+        StatusDisplay) 
 

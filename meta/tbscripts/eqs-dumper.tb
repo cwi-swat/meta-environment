@@ -19,6 +19,7 @@
 #include "addeqssyntax.idef"
 #include "configmanager.idef"
 #include "standalone-eqs-dumper.tb"
+#include "standalone-status-display.tb"
 
 process META is
 let
@@ -38,5 +39,5 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
         ModuleDB, File-creator, Notify-about-changed-modules,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, AddEqSyn, Open-modules, PGen, DumpEquations,
-        ProcessEqs) 
+        ProcessEqs, StatusDisplay) 
 

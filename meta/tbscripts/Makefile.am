@@ -9,7 +9,8 @@ TBSCRIPTS     = clear-all.tb close-module.tb editor-creator.tb \
                 ui.tb asf-syntax.tb dump-equations.tb dump-parsetable.tb \
                 rename-module.tb print-module.tb compile-module.tb \
                 pt-dumper.tb standalone-pt-dumper.tb \
-                eqs-dumper.tb standalone-eqs-dumper.tb open-initial-module.tb
+                eqs-dumper.tb standalone-eqs-dumper.tb open-initial-module.tb \
+                standalone-status-display.tb
 
 GEN_TBSCRIPTS = sdf2-language.tb help.tb
 
