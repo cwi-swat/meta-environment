@@ -7,7 +7,7 @@ INCLUDES	  = -I$(PT_SUPPORT)/include \
                     -I$(ERROR_SUPPORT)/include \
                     -I$(ASF_SUPPORT)/include
 
-bin_PROGRAMS	  = concat-asf lift-asf
+bin_PROGRAMS	  = concat-asf
 
 GENERIC_LDADD = -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
          	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
@@ -15,6 +15,3 @@ GENERIC_LDADD = -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 
 concat_asf = concat-asf.c
 concat_asf_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME $(GENERIC_LDADD)
-
-lift_asf = lift-asf.c
-lift_asf_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME $(GENERIC_LDADD)
