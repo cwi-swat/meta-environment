@@ -177,7 +177,7 @@ let
 in
   FunSym := fun(Error) .
   if not-equal(Error, no-errors) then
-    if not-equal(FunSym, "feedback") then
+    if not-equal(FunSym, "summary") then
       Error("Opening module %s failed: %s", [Module, Error])
     else
       snd-note(show-feedback-summary(Error))

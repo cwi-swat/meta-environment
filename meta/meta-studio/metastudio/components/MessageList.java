@@ -31,8 +31,8 @@ public class MessageList extends UserInterfacePanel implements ListSelectionList
 		
 		setLayout(new BorderLayout());
         list.setBackground(Preferences.getColor("messagepane.background"));
-        list.setForeground(Preferences.getColor("feedback.info.foreground"));
-        list.setFont(Preferences.getFont("feedback.info.font"));
+        list.setForeground(Preferences.getColor("error.info.foreground"));
+        list.setFont(Preferences.getFont("error.info.font"));
 
 		add(new JScrollPane(list), BorderLayout.CENTER);
 	}

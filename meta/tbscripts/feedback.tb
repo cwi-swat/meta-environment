@@ -26,8 +26,6 @@ in
     snd-msg(edit-general(FileName)) .
     rec-msg(editor-opened(ModuleName?, EditorId?)) .
     GoToEditorLocation(EditorId, Location)
-  +
-    rec-msg(no-location-filename)
   )
 endlet
 

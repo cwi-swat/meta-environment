@@ -6,7 +6,7 @@
 
 #include <atb-tool.h>
 #include <MEPT-utils.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 #include "structure-editor.tif.h"
 #include "EditorData.h"
@@ -76,7 +76,7 @@ void new_editor_given_text(int cid, ATerm editorId, const char *text)
 void new_editor_given_tree(int cid, ATerm editorId, ATerm t)
 {
   SE_Editor editor;
-  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
+  PT_ParseTree parse_tree = PT_ParseTreeFromTerm(ATBunpack(t));
 
   assert(PT_isValidParseTree(parse_tree));
 
@@ -148,7 +148,7 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
   PT_Tree tree;
   PT_ParseTree parse_tree;
   
-  parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
+  parse_tree = PT_ParseTreeFromTerm(ATBunpack(t));
   assert(PT_isValidParseTree(parse_tree));
 
   focus = SE_makeFocusFromTerm(f);
@@ -294,7 +294,7 @@ ATerm get_parse_tree(int cid, ATerm editorId)
   parse_tree = SE_getEditorParseTree(editor);
 
   return ATmake("snd-value(parse-tree(<term>))",
-		ATBpack(PT_makeTermFromParseTree(parse_tree)));
+		ATBpack(PT_ParseTreeToTerm(parse_tree)));
 }
 
 /*}}}  */
@@ -325,7 +325,7 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
       }
 
       return ATmake("snd-value(parse-tree(<term>))", 
-                    PT_makeTermFromParseTree(parse_tree));
+                    PT_ParseTreeToTerm(parse_tree));
     }
   }
 
@@ -348,7 +348,7 @@ ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm t)
   }
 
   focus = SE_getEditorFocus(editor);
-  parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
+  parse_tree = PT_ParseTreeFromTerm(ATBunpack(t));
   tree =  PT_getParseTreeTree(parse_tree);
 
   if (SE_isFocusNotEmpty(focus)) {
@@ -415,8 +415,10 @@ ATerm get_focus_location(int cid, ATerm editorId)
     }
   }
 
-  return ATmake("snd-value(focus-location(<term>))", 
-		ERR_makeLocationNoLocation());
+  /* FIXME */
+  /*return ATmake("snd-value(focus-location(<term>))", ERR_makeLocationNoLocation());*/
+  ATabort("se.c:get_focus_location:FIXME\n");
+  return NULL;
 }
 
 /*}}}  */
@@ -425,7 +427,7 @@ ATerm get_focus_location(int cid, ATerm editorId)
 ATerm check_tree_sort(int cid, const char *nonterminal, ATerm t)
 {
   char *sort;
-  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
+  PT_ParseTree parse_tree = PT_ParseTreeFromTerm(ATBunpack(t));
   PT_Symbol symbol = getParseTreeSort(parse_tree);
  
   sort = PT_yieldSymbol(symbol);
@@ -518,7 +520,7 @@ main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
 
   PT_initMEPTApi();
-  ERR_initErrorApi();
+  initErrorApi();
   SE_initEditorDataApi();
 
 

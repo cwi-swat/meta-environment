@@ -12,48 +12,47 @@ import javax.swing.ListSelectionModel;
 
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
-import metastudio.data.FeedbackItem;
-import metastudio.data.FeedbackListModel;
+import metastudio.data.ErrorItem;
+import metastudio.data.ErrorListModel;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 import errorapi.Factory;
-import errorapi.types.Feedback;
+import errorapi.types.Error;
 import errorapi.types.Summary;
 
-public class FeedbackList extends UserInterfacePanel {
+public class ErrorList extends UserInterfacePanel {
     private static final String ANONYMOUS_ORIGIN = "anonymous";
     private JList list;
-    private FeedbackListModel data;
+    private ErrorListModel data;
     private Factory factory;
 
-    public FeedbackList(aterm.ATermFactory factory, MultiBridge bridge) {
+    public ErrorList(aterm.ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
         this.factory = new Factory((PureFactory) factory);
-        this.data = new metastudio.data.FeedbackListModel();
+        this.data = new metastudio.data.ErrorListModel();
 
         this.list = new JList();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                FeedbackItem item = (FeedbackItem) list.getSelectedValue();
+                ErrorItem item = (ErrorItem) list.getSelectedValue();
 
                 if (item != null) {
-                    Feedback feedback = item.getFeedback();
-                    if (!feedback.getList().isEmpty())
-                    postEvent(
-                        getFactory().make(
-                            "feedback-selected(<term>)",
-                            feedback.toTerm()));
+                    Error error = item.getError();
+                    if (!error.getList().isEmpty()) {
+		      postEvent(getFactory().make("error-selected(<term>)",
+						  error.toTerm()));
+		    }
                 }
             }
         });
 
         list.setModel(data);
-        list.setCellRenderer(new FeedbackListCellRenderer());
+        list.setCellRenderer(new ErrorListCellRenderer());
         list.setBackground(Preferences.getColor("messagepane.background"));
 
         add(new JScrollPane(list), BorderLayout.CENTER);
@@ -76,7 +75,7 @@ public class FeedbackList extends UserInterfacePanel {
         String producer = summary.getProducer();
         String summaryId = summary.getId();
 
-        errorapi.types.FeedbackList messages = summary.getList();
+        errorapi.types.ErrorList messages = summary.getList();
         
         if (!messages.isEmpty()) {
           for (; !messages.isEmpty(); messages = messages.getTail()) {
@@ -100,52 +99,52 @@ public class FeedbackList extends UserInterfacePanel {
         parent.setSelectedComponent(this);
     }
 
-    private Feedback makeError(String msg) {
-        return getErrorFactory().makeFeedback_Error(
+    private Error makeError(String msg) {
+        return getErrorFactory().makeError_Error(
                 msg,
                 getErrorFactory().makeSubjectList());
     }
 
-    private Feedback makeWarning(String msg) {
-        return  getErrorFactory().makeFeedback_Warning(
+    private Error makeWarning(String msg) {
+        return  getErrorFactory().makeError_Warning(
                 msg,
                 getErrorFactory().makeSubjectList());
     }
-    private Feedback makeInfo(String msg) {
-        return  getErrorFactory().makeFeedback_Info(
+    private Error makeInfo(String msg) {
+        return  getErrorFactory().makeError_Info(
                 msg,
                 getErrorFactory().makeSubjectList());
     }
     
-    private void addAnonymousFeedbackItem(Feedback feedback) {
-        data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, feedback);
+    private void addAnonymousErrorItem(Error error) {
+        data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, error);
     }
 
     public void errorf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousFeedbackItem(makeError(message));
+        addAnonymousErrorItem(makeError(message));
     }
 
     public void error(String message) {
-        addAnonymousFeedbackItem(makeError(message));
+        addAnonymousErrorItem(makeError(message));
     }
 
     public void messagef(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousFeedbackItem(makeInfo(message));
+        addAnonymousErrorItem(makeInfo(message));
     }
 
     public void message(String message) {
-        addAnonymousFeedbackItem(makeInfo(message));
+        addAnonymousErrorItem(makeInfo(message));
     }
 
     public void warningf(String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        addAnonymousFeedbackItem(makeWarning(message));
+        addAnonymousErrorItem(makeWarning(message));
     }
 
     public void warning(String message) {
-        addAnonymousFeedbackItem(makeWarning(message));
+        addAnonymousErrorItem(makeWarning(message));
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {

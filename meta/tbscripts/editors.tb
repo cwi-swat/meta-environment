@@ -91,7 +91,7 @@ in
     CreateEditor(syntax-editor, ModuleName, FileName, Text, Tree)
   +
     rec-msg(no-path) .
-    snd-note(ui-status(errorf("Internal error, could not open editor for %s",
+    snd-note(ui-status(errorf("Internal error: could not find path to %s",
                        [ModuleName]))) .
     snd-msg(editor-opened(ModuleName, no-editor))
   )
@@ -143,7 +143,7 @@ in
     fi
   +
     rec-msg(no-path) .
-    snd-note(ui-status(errorf("Internal error, could not open editor for %s",
+    snd-note(ui-status(errorf("Internal error: could not find path to %s",
                        [ModuleName]))) .
     snd-msg(editor-opened(ModuleName, no-editor))
   )

@@ -275,6 +275,7 @@ in
     StackPopTerm(Stack, Stack?, Feedback?) .
     snd-msg(convert-feedback(Feedback)) .
     rec-msg(converted-feedback(Feedback?)) .
+    StackPushTerm(Stack, Stack?, Feedback) .
     ReturnSuccess(EditorId, Stack)
     +
     rec-msg(parse-action, Stack?, EditorId?) .

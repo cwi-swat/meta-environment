@@ -4,25 +4,25 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import errorapi.types.Feedback;
+import errorapi.types.Error;
 
-public class FeedbackItem {
-    private Feedback feedback;
+public class ErrorItem {
+    private Error error;
     private Set identification;
     
-    public FeedbackItem(String producer, String summaryId, Feedback feedback) {
-        this.feedback = feedback;
+    public ErrorItem(String producer, String summaryId, Error error) {
+        this.error = error;
         
         identification = new HashSet();
         addIdentification(producer, summaryId);
     }
 
-    private FeedbackSummaryIdentifier tuple(String producer, String summaryId) {
-        return new FeedbackSummaryIdentifier(producer, summaryId);
+    private ErrorSummaryIdentifier tuple(String producer, String summaryId) {
+        return new ErrorSummaryIdentifier(producer, summaryId);
     }
     
-    public Feedback getFeedback() {
-        return feedback;
+    public Error getError() {
+        return error;
     }
 
     public void addIdentification(String producer, String summaryId) {
@@ -36,12 +36,12 @@ public class FeedbackItem {
      * @return true if no producers/summaries are left, false otherwise
      */
     public boolean removeIdentification(String producer, String summaryId) {
-        FeedbackSummaryIdentifier peer = 
-            new FeedbackSummaryIdentifier(producer, summaryId);
+        ErrorSummaryIdentifier peer = 
+            new ErrorSummaryIdentifier(producer, summaryId);
         Iterator iter = identification.iterator();
         
         while (iter.hasNext()) {
-            FeedbackSummaryIdentifier id = (FeedbackSummaryIdentifier) iter.next();
+            ErrorSummaryIdentifier id = (ErrorSummaryIdentifier) iter.next();
             if (id.equals(peer)) {
                 iter.remove();
             }

@@ -1,10 +1,10 @@
 package metastudio.data;
 
-public class FeedbackSummaryIdentifier {
+public class ErrorSummaryIdentifier {
     private String producer;
     private String summaryId;
     
-    public FeedbackSummaryIdentifier(String producer, String summaryId) {
+    public ErrorSummaryIdentifier(String producer, String summaryId) {
         this.producer = producer;
         this.summaryId = summaryId;
     }
@@ -18,8 +18,8 @@ public class FeedbackSummaryIdentifier {
     }
     
     public boolean equals(Object o) {
-        if (o instanceof FeedbackSummaryIdentifier) {
-            FeedbackSummaryIdentifier peer = (FeedbackSummaryIdentifier) o;
+        if (o instanceof ErrorSummaryIdentifier) {
+            ErrorSummaryIdentifier peer = (ErrorSummaryIdentifier) o;
             if (peer.getProducer().equals(producer) &&
                     peer.getSummaryId().equals(summaryId)) {
                 return true;

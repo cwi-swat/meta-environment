@@ -269,7 +269,7 @@ static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
   LOC_Area area = LOC_getLocationArea(location);
 
   if (LOC_isAreaArea(area)) {
-    int start = LOC_getAreaOffset(area)+1;
+    int start = LOC_getAreaOffset(area);
     int length = LOC_getAreaLength(area);
     char buf[BUFSIZ];
 

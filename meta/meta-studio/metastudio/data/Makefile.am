@@ -11,9 +11,9 @@ javadir = ${prefix}/classes/metastudio
 
 java_JAVA = \
 	AbstractModuleTreeModel.java \
-	FeedbackItem.java \
-	FeedbackListModel.java \
-	FeedbackSummaryIdentifier.java \
+	ErrorItem.java \
+	ErrorListModel.java \
+	ErrorSummaryIdentifier.java \
 	ListModel.java \
 	Module.java \
 	ModuleSelectionModel.java \

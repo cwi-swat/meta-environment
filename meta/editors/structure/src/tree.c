@@ -30,16 +30,15 @@ PT_ParseTree flattenParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)
   subtree = getParseTreeTreeAt(parse_tree, path);
   
   if (subtree) { 
-    annos = AT_getAnnotations(PT_makeTermFromTree(subtree));
+    annos = AT_getAnnotations(PT_TreeToTerm(subtree));
      
     str = PT_yieldTree(subtree);
     assert(str);
 
     newsubtree = PT_makeTreeFlatLayout(str);
 
-    newsubtree = PT_makeTreeFromTerm(
-		   AT_setAnnotations(
-		     PT_makeTermFromTree(newsubtree), annos));
+    newsubtree = PT_TreeFromTerm(AT_setAnnotations(PT_TreeToTerm(newsubtree),
+						   annos));
       
     return setParseTreeTreeAt(parse_tree, newsubtree, path);  
   }

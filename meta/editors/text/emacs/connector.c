@@ -280,7 +280,7 @@ static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
   LOC_Area area = LOC_getLocationArea(location);
 
   if (LOC_isAreaArea(area)) {
-    int start = LOC_getAreaOffset(area) + 1;
+    int start = LOC_getAreaOffset(area);
     int length = LOC_getAreaLength(area);
     char buf[BUFSIZ];
 
@@ -330,7 +330,7 @@ static void gotoCursorAtLocation(int write_to_editor_fd, int offset)
 static void setCursorAtOffset(int write_to_editor_fd, TE_Action edAction)
 {
   int offset = TE_getActionOffset(edAction);
-  gotoCursorAtLocation(write_to_editor_fd, offset + 1);
+  gotoCursorAtLocation(write_to_editor_fd, offset);
 }
 
 /*}}}  */

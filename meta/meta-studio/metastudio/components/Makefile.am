@@ -11,8 +11,8 @@ EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
 	ChoiceDialog.java \
-	FeedbackList.java \
-	FeedbackListCellRenderer.java \
+	ErrorList.java \
+	ErrorListCellRenderer.java \
 	FileDialog.java \
 	HistoryPanel.java \
 	MainTabs.java \

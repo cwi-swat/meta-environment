@@ -3,36 +3,36 @@ package metastudio.data;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import errorapi.types.Feedback;
+import errorapi.types.Error;
 
-public class FeedbackListModel extends ListModel {
-    public FeedbackListModel() {
+public class ErrorListModel extends ListModel {
+    public ErrorListModel() {
         super(new LinkedList());
     }
     
     /* we will group feedback messages that have the
      * same error but a different producer and/or a different summaryId.
      */
-    public void add(String producer, String summary, Feedback feedback) {
+    public void add(String producer, String summary, Error error) {
        Iterator iter = iterator();
     
        while (iter.hasNext()) {
-          FeedbackItem head = (FeedbackItem) iter.next();
-          Feedback headFeedback = head.getFeedback();
+          ErrorItem head = (ErrorItem) iter.next();
+          Error headError = head.getError();
             
-          if (feedback.equals(headFeedback)) {
+          if (error.equals(headError)) {
              head.addIdentification(producer, summary);
              return;
           }
        }
         
-       super.add(new FeedbackItem(producer, summary, feedback));
+       super.add(new ErrorItem(producer, summary, error));
     }
     
     public void removeAll(String producer, String summary) {
         Iterator iter = iterator();
         while (iter.hasNext()) {
-            FeedbackItem item = (FeedbackItem) iter.next();
+            ErrorItem item = (ErrorItem) iter.next();
             if (item.removeIdentification(producer, summary)) {
                 iter.remove();
             }

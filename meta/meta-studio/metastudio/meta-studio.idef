@@ -28,8 +28,8 @@ let
   Arguments : list,
   ModuleList : term,
   EditorId : term,
-  Feedback : term,
-  FeedbackSummary : term,
+  Error : term,
+  Summary : term,
   Choices : list,
   Choice : str,
   Question : str,
@@ -78,8 +78,8 @@ in
       rec-note(ui-status(messagef(Str?, Arguments?))) .
       snd-do(UI, messagef(Str, Arguments))
     +
-      rec-note(show-feedback-summary(FeedbackSummary?)) .
-      snd-do(UI, show-feedback-summary(FeedbackSummary))
+      rec-note(show-feedback-summary(Summary?)) .
+      snd-do(UI, show-feedback-summary(Summary))
     +
       rec-note(remove-feedback-summary(Producer?, SummaryId?)) .
       snd-do(UI, remove-feedback-summary(Producer, SummaryId))
@@ -168,10 +168,10 @@ in
       rec-msg(update-list-view(ModuleName?, ButtonNames?)) .
       snd-do(UI, update-list(ModuleName, ButtonNames))
     +
-      rec-event(UI, feedback-selected(Feedback?)) .
-      snd-msg(extra-button-action(click, [Feedback],
+      rec-event(UI, error-selected(Error?)) .
+      snd-msg(extra-button-action(click, [Error],
                                   feedback-list, "*", feedback-list)) .
-      snd-ack-event(UI, feedback-selected(Feedback))
+      snd-ack-event(UI, error-selected(Error))
     +
       rec-msg(show-list-choice(Title?, Question?, Choices?)) .
       snd-do(UI, showListChoice(Title, Question, Choices))

@@ -1,5 +1,15 @@
 # $Id$
 
+Thu Mar 11 10:46:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/editors.tb: changed "Internal error" message
+ * tbscripts/feedback.tb: remove handling of no-location-filename
+ * editors/text/{gvim,gnu-emacs}/connector.c:
+   fix off-by-one error in handling of goto-cursor-at-offset, and
+   set-focus-at-location
+
+Wed Mar 10 11:35:20 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API 
+
 Mon Mar  8 11:00:00 CET 2004 <{jong,kooiker}@cwi.nl>
  * Use "location-api" instead of "error-api"
 

@@ -33,8 +33,8 @@ public class HistoryPanel extends UserInterfacePanel {
 
         list.setModel(data);
         list.setBackground(Preferences.getColor("messagepane.background"));
-        list.setForeground(Preferences.getColor("feedback.info.foreground"));
-        list.setFont(Preferences.getFont("feedback.info.font"));
+        list.setForeground(Preferences.getColor("error.info.foreground"));
+        list.setFont(Preferences.getFont("error.info.font"));
 
         String format = Preferences.getString("history.dateformat");
         dateFormat = new SimpleDateFormat(format);
