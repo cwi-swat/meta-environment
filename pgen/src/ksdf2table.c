@@ -457,7 +457,7 @@ static ATerm process_priorities(SDF_PriorityList prios)
       prioentry = processChainPriority(prio);
     }
     else {
-      ATwarning("process_priorities: illegal priority encountered.\n");
+      ATwarning("process_priorities: illegal priority encountered: %t\n", prio);
       prioentry = NULL;
     }
 
