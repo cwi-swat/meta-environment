@@ -11,7 +11,7 @@
 /* Prototypes for functions called from the event handler */
 void clear_focus(int conn, ATerm);
 void get_contents(int conn, ATerm, ATerm);
-void display_message(int conn, ATerm, char *);
+void display_message(int conn, ATerm, const char *);
 void write_contents(int conn, ATerm);
 void set_cursor_at_focus(int conn, ATerm, ATerm);
 void set_focus(int conn, ATerm, ATerm);
@@ -20,7 +20,7 @@ void reread_contents(int conn, ATerm);
 void set_focus_at_location(int conn, ATerm, ATerm);
 void set_actions(int conn, ATerm, ATerm);
 void editor_to_front(int conn, ATerm);
-void edit_file(int conn, ATerm, char *, char *);
+void edit_file(int conn, ATerm, const char *, const char *);
 void kill_editor(int conn, ATerm);
 void rec_ack_event(int conn, ATerm);
 void rec_terminate(int conn, ATerm);

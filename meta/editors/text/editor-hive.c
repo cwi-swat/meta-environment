@@ -226,12 +226,12 @@ void set_focus(int c, ATerm editorId, ATerm focus)
 /*}}}  */
 /*{{{  void display_message(int c, ATerm editorId, char *message) */
 
-void display_message(int c, ATerm editorId, char *message)
+void display_message(int c, ATerm editorId, const char *message)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionDisplayMessage(message));
+    sendToEditor(process, TE_makeActionDisplayMessage((char*) message));
   }
 }
 
@@ -324,7 +324,7 @@ void set_actions(int c, ATerm editorId, ATerm actions)
 /*}}}  */
 /*{{{  void edit_file(int c, ATerm editorId, char *editor, char *filename) */
 
-void edit_file(int c, ATerm editorId, char *editor, char *filename)
+void edit_file(int c, ATerm editorId, const char *editor, const char *filename)
 {
   char library[BUFSIZ];
   TE_Process process;
