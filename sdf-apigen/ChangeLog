@@ -3,6 +3,8 @@
 Sat Apr 17 11:19:32 CEST 2004 <jurgenv@cwi.nl>
  * Fixed automake-1.7.9 issues (similarly to the way they were fixed 
    in the apigen package). All problems located in the test directory. 
+ * Regenerated C code of specifications to get wrid of ununused variable
+   warnings
 
 2003/02/11 (jurgenv@cwi.nl)
  * Added dependency on toolbuslib
