@@ -4,4 +4,9 @@ This repository was created by:
 To checkout:
  setenv CVS_RSH ssh2
  cvs -d ralf@ssh.cwi.nl:/ufs/meta-env/CVS checkout fst
+This will create a directory fst.
+
+To commit:
+ cvs commit
+That should be done from withing the directory fst.
 
