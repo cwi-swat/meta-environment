@@ -21,7 +21,7 @@
 
 #include "asfix_utils.h"
 
-ATbool keep_whitespace = ATtrue;
+ATbool keep_whitespace = ATfalse;
 
 extern ATerm tagCurrentRule;
 
