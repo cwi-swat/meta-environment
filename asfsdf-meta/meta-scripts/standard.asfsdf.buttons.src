@@ -143,7 +143,6 @@ buttons([
            if-equal([],
            [split-file-name(".sdf"),
             open-module])]),
-  buttons([
    button("*",
           [description(equations-editor, menu(["Upgrade","Upgrade conditions"]))],
           [push-active-module,
@@ -154,6 +153,4 @@ buttons([
            message("Upgrading equations done"),
            set-root
           ])
-])
-
 ])
