@@ -32,6 +32,7 @@ graphviz=__GRAPHVIZ__
 
 PATH="${bindir}:${PATH}"; export PATH
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
+TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
 ###
 #  Handle the command line, &c.
@@ -63,8 +64,6 @@ E_O_USAGE
 }
 
 Version() {
-TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
-
     echo "$myname v$myversion" >&2
     addeqssyntax -V
     asource -V
