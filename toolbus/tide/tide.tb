@@ -193,32 +193,32 @@ in
   ) * delta
 endlet
 #line 411 "tide.tb.nw"
-process PROCESS-LIST is
+process PROCESS-VIEWER is
 let
-  PL : process-list,
+  V : process-viewer,
   D : debug-adapter,	%% Which debug adapter
   P : term,		%% List of processes (or in some cases 'all')
   Info : list,		%% Information about a debug adapter
   Exprs: term,		%% A list of expression,value pairs
   Rid : int		%% Event rule identifier
 in
-  execute(process-list, PL?) .
+  execute(process-viewer, V?) .
   subscribe(event(<term>,dap-connected(<list>,<list>))) .
   subscribe(event(<term>,dap-disconnected)) .
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
-  snd-note(new-tool("List processes", PL, list-processes)) .
-  ( rec-msg(PL, list-processes, D?) .
-    snd-do(PL, list-processes(D))
+  snd-note(new-tool("View processes", V, view-processes)) .
+  ( rec-msg(V, view-processes, D?) .
+    snd-do(V, view-processes(D))
     +
     rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
-    snd-do(PL, dap-connected(D, Info, P))
+    snd-do(V, dap-connected(D, Info, P))
     +
     rec-note(event(proc(D?,P?), dap-disconnected)) .
-    snd-do(PL, dap-disconnected(D))
+    snd-do(V, dap-disconnected(D))
     +
     rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
-    snd-do(PL, watchpoint(D, P, Rid, Exprs))
+    snd-do(V, watchpoint(D, P, Rid, Exprs))
   ) * delta
 endlet
 #line 343 "tide.tb.nw"
@@ -319,9 +319,9 @@ tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
-tool process-list is { command = "java-adapter -class toolbus.tide.ProcessList" }
+tool process-viewer is { command = "java-adapter -class toolbus.tide.ProcessViewerTool" }
 %%tool viewer is { command = "./buscontrol" }
 
 #line 16 "tide.tb.nw"
 toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
-	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-LIST)
+	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-VIEWER)

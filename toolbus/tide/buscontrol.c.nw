@@ -84,6 +84,7 @@ static act_entry act_table[] =
 
 char *inf_table[] =
 { "name",		NULL,
+  "type",		"\"ToolBus\"",
   "search-paths",	NULL,
   "ports",		"[[exec-state,at], [always, after],"\
 			"[location, after], [process-creation, at],"\
