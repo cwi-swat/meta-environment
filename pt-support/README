@@ -2,18 +2,14 @@ $Id$
 
 Parse Tree Support
 
-This package contains libraries and tools for three parse tree formats:
+This package contains libraries and tools for two parse tree formats:
 
-1. AsFix1   - the parse tree format for SDF
-2. AsFix2   - the parse tree format for SDF2
-3. AsFix2me - the parse tree format for SDF2, with flattened lexicals and 
+1. AsFix2   - the parse tree format for SDF2
+2. AsFix2ME - the parse tree format for SDF2, with flattened lexicals and 
               layout as used in the ASF+SDF Meta-Environment.
 
 The larger parts of these libraries have been generated automatically by our 
 tool called 'apigen'. 
-
-For backward compatibility, this package also provides the old AsFix library.
-Note that we expect to abandon this library in the near future. 
 
 
 Installation Instructions
