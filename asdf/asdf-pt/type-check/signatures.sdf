@@ -11,25 +11,6 @@ sorts
 context-free syntax
 
   get-fun-name(AS-FunctionSig)	-> Literal
-  get-using(AS-FunctionSig)	-> Type
-  get-giving(AS-FunctionSig)	-> Type
-  get-raising(AS-FunctionSig)	-> Type
-  failing(AS-FunctionSig)	-> Answer
-  terminates(AS-FunctionSig)	-> Answer
-  closed(AS-FunctionSig)	-> Answer
-  stable(AS-FunctionSig)	-> Answer
-  ineffective(AS-FunctionSig)	-> Answer
-  uncreative(AS-FunctionSig)	-> Answer
-  remove-using(ActionType)	-> {SingleActionType "&"}*
-  remove-giving(ActionType)	-> {SingleActionType "&"}*
-  remove-raising(ActionType)	-> {SingleActionType "&"}*
-  remove-infallible(ActionType)	-> {SingleActionType "&"}*
-  remove-terminates(ActionType)	-> {SingleActionType "&"}*
-  remove-closed(ActionType)	-> {SingleActionType "&"}*
-  remove-stable(ActionType)	-> {SingleActionType "&"}*
-  remove-ineffective(ActionType)   -> {SingleActionType "&"}*
-  remove-uncreative(ActionType)	-> {SingleActionType "&"}* 
-  remove-action(ActionType)	-> {SingleActionType "&"}* 
   remove-dobble-sigs(Signatures, Environment)	-> Signatures
   join-results(ActionType, ActionType, Environment)	
 				-> {SingleActionType "&"}*
@@ -54,3 +35,4 @@ hiddens variables
   "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*
   "$N"[0-9]?		-> Integer
   "$LC"[0-9]?		-> List[[Constraint]]
+  "$SU"[0-9]?		-> Subject
