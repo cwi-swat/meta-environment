@@ -15,9 +15,13 @@ typedef enum { UNDEFINED_TYPE = 0, TRANSFORMER = 1, ACCUMULATOR = 2,
 typedef enum { UNDEFINED_STRATEGY = 0, BOTTOMUP = 1, 
                TOPDOWN = 2 } TraversalStrategy;
 
+typedef enum { UNDEFINED_CONTINUATION = 0, CONTINUE = 1, 
+               BREAK = 2 } TraversalContinuation;
+
 typedef struct Traversal_tag {
 	TraversalType  type;
 	TraversalStrategy strategy;
+	TraversalContinuation continuation;
 	PT_Production  prod;
 	PT_Symbols     symbols;
         PT_Symbol      accumulated;

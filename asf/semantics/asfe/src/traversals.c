@@ -143,18 +143,18 @@ static Traversal computeTraversalType(Traversal trav)
   }
 
   /* Warn about deprecated use of old traversal attribute */
-  ATwarning("WARNING: using deprecated traversal syntax \"traverse\" "
+  ATwarning("WARNING: using deprecated traversal syntax "
             "in production:\n%s\n", PT_yieldProduction(trav.prod));
 
   switch(trav.type) {
     case TRANSFORMER:
-      ATwarning("Please use \"traversal(trafo, top-down)\"\n");
+      ATwarning("Please use \"traversal(trafo, top-down, break)\"\n");
       break;
     case ACCUMULATOR:
-      ATwarning("Please use \"traversal(accu, top-down)\"\n");
+      ATwarning("Please use \"traversal(accu, top-down, break)\"\n");
       break;
     case COMBINATION:
-       ATwarning("Please use \"traversal(accu,trafo,top-down)\"\n");
+       ATwarning("Please use \"traversal(accu,trafo,top-down, break)\"\n");
        break;
     case UNDEFINED_TYPE:
     default:
@@ -319,8 +319,27 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
 	  trav.strategy = TOPDOWN;
 	}
       }
+      else if (ATisEqual(ATparse("break"), arg)) {
+	if (trav.continuation == CONTINUE) {
+	  RWsetError("Ambiguous continuation attribute in production.",
+		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	}
+	else {
+	  trav.continuation = BREAK;
+	}
+      }
+      else if (ATisEqual(ATparse("continue"), arg)) {
+	if (trav.continuation == BREAK) {
+	  RWsetError("Ambiguous continuation attribute in production.",
+		     (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
+	}
+	else {
+	  trav.continuation = CONTINUE;
+	}
+      }
       else if (ATisEqual(ATparse("generate-syntax"), arg)) {
-	; /* do nothing */
+	RWsetError("generate-syntax attribute is not implemented.",
+		   (ATerm) PT_makeTreeLit(PT_yieldProduction(trav.prod)));
       }
       else {
 	RWsetError("Unknown traversal specifier in production.",
@@ -336,6 +355,15 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
     }
     else {
       trav.strategy = BOTTOMUP;
+    }
+
+  }
+  if (trav.continuation == UNDEFINED_CONTINUATION) {
+    if (trav.strategy == TOPDOWN) { /* top down stops */
+      trav.continuation = BREAK;
+    }
+    else {                          /* bottom-up continues */
+      trav.continuation = CONTINUE;
     }
   }
 
@@ -361,6 +389,7 @@ Traversal createTraversalPattern(PT_Tree term)
 
   trav.accumulated = NULL;
   trav.traversed = NULL;
+  trav.continuation = UNDEFINED_CONTINUATION;
   trav.prod = PT_getTreeProd(term);
   trav.args = PT_getTreeArgs(term);
   trav.symbols = PT_getProductionLhs(trav.prod);
@@ -588,13 +617,16 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
   switch (traversal.type) {
   case TRANSFORMER:
     /* we just return the term */
+    ATwarning("selecting trafo nf\n");
     break;
   case ACCUMULATOR:
     /* we only return the accumulated value */
     term = selectAccumulatedArg(traversal.args);
+    ATwarning("selecting accu nf\n");
     break;
   case COMBINATION:
     term = makeTuple(term, selectAccumulatedArg(traversal.args));
+    ATwarning("selecting trafo,accu nf\n");
     break;
   case UNDEFINED_TYPE:
   default:
@@ -602,6 +634,7 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
     break;
   }
 
+  ATwarning("nf = %s\n", PT_yieldTree(term));
   return term;
 }
 
@@ -614,6 +647,7 @@ PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
   PT_Tree reduct;
 
   if (traversal->type == ACCUMULATOR) {
+    ATwarning("updating accumulator with %s\n", PT_yieldTree(rhs));
     *traversal = updateAccumulator(*traversal, rhs);
     reduct = orig;
   } 
