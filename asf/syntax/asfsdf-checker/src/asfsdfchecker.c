@@ -47,7 +47,7 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("check-asfsdf", "Messages", 1, ptSyntax);
+    newTree = PT_applyFunctionToTree("check-asfsdf", "Summary", 1, ptSyntax);
   }
   else {
     ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
@@ -113,9 +113,11 @@ static void displayMessages(ATerm term)
 ATerm check_asfsdf(int cid, ATerm term)
 {
   ATerm  output = checkSdf(ATBunpack(term));
+  /*
   ATermList errorList = processMessages(output);
+  */
 
-  return ATmake("snd-value(messages(<term>))", errorList);
+  return ATmake("snd-value(feedback(<term>))", output);
 }
 
 void rec_terminate(int cid, ATerm arg)

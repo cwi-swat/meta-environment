@@ -3,16 +3,16 @@
    */
 process AsfSdfChecker is
 let
-  Msgs   : list,
-  Syntax : term,
-  ASC    : asfsdfchecker
+  Feedback : term,
+  Syntax   : term,
+  ASC      : asfsdfchecker
 in
   (
     rec-msg(check-asfsdf(Syntax?)) .
     execute(asfsdfchecker, ASC?) .
     snd-eval(ASC, check-asfsdf(Syntax)) .
-    rec-value(ASC, messages(Msgs?)) .
-    snd-msg(messages(Msgs)) .
+    rec-value(ASC, feedback(Feedback?)) .
+    snd-msg(feedback(Feedback)) .
     Syntax := none .
     snd-terminate(ASC, "done")
   )*
