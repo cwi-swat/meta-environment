@@ -1,0 +1,9 @@
+module asf/tools/ToolBus[X]
+
+exports
+
+context-free syntax
+
+toolbus-event(name:String, argument:X) -> X {built-in("toolbus-event")}
+toolbus-term-event(name:String, argument:ATerm) -> ATerm {built-in("toolbus-term-event")}
+
