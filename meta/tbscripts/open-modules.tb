@@ -115,18 +115,18 @@ in
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                   ambiguities(I?)))).
                   snd-note(ui-status(errorf(
-                           "Parse of ts returned %d ambiguities", 
+                           "Parse of %s returned %d ambiguities", 
                            [Name2, I]))) 
                 +
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                 cycle(Cycle?)))).
                   snd-note(ui-status(errorf(
-                           "Parse returned a cycle is: %t\n",
+                           "Parse returned a cycle: %t",
                            [Cycle])))
                 +
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
                   snd-note(ui-status(errorf(
-                           "EOF unexpected while parsing %s\n", 
+                           "EOF unexpected while parsing %s", 
                            [Name2])))
                 +
                   rec-msg(parse-result-asfix1(Id?,
@@ -134,7 +134,7 @@ in
                                        col(Co?), char(Char?)],
                                       plain))) .
                   snd-note(ui-status(errorf(
-                        "Character %d unexpected in %s, line %d, column %d\n",
+                        "Character %d unexpected in %s, line %d, column %d",
                         [Ch, Name2, Li, Co])))
                 ).
                 snd-msg(add-empty-module-to-db(Name2)).
