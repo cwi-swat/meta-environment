@@ -58,6 +58,22 @@ in
     +
       rec-msg(unavailable)
     ).
+    snd-msg(get-table-from-db(trm(Module))).
+    (
+      rec-msg(table(Table?, Path?)). 
+      snd-msg(save-table(Module, Path, Table)).
+      rec-msg(save-done)
+    +
+      rec-msg(no-table)
+    ).
+    snd-msg(get-table-from-db(eqs(Module))).
+    (
+      rec-msg(table(Table?, Path?)).
+      snd-msg(save-table(Module, Path, Table)).
+      rec-msg(save-done)
+    +
+      rec-msg(no-table)
+    ).
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-module(Module))
     +
