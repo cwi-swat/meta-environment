@@ -33,7 +33,7 @@ EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
 
 addeqssyntax_SOURCES = addeqssyntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
-                       -L$(top_builddir)/utils/addeqs/c-source \
+                       -L$(top_builddir)/addeqs/c-source \
                        -lAdd-Eqs-Syntax \
                        -L$(ASC_SUPPORT)/lib -lasc-support \
                        -L$(ASFIX)/lib -lAsFix \
