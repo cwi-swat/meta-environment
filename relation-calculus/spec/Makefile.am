@@ -2,7 +2,9 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS    = RscriptChecker RscriptCalculator Rstore RscriptTestsuites
 
-pkgdata_DATA    = Rscript.trm.tbl Rstore.trm.tbl
+pkgdata_DATA    = Rscript.trm.tbl Rstore.trm.tbl \
+			$(wildcard *.sdf) \
+			$(wildcard *.asf) 
 
 EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
