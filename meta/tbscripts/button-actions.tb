@@ -1,0 +1,204 @@
+/* This file contains the implementations of the
+ * primitive instructions of the button language
+ */
+
+process ShowTree(Tree: term) is
+let
+  Graph : term
+in
+  snd-msg(tree2graph(Tree)) .
+  rec-msg(graph(Graph?)) .
+  snd-msg(display-graph("parsetree", Graph))
+endlet
+
+process ParseTerm(EditorId: term, ModuleName: str) is
+let
+  ErrorFoci  : term
+in
+  snd-msg(invalidate-tree(EditorId)) .
+  snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
+  (
+    rec-msg(parse-ok(trm(ModuleName))) .
+    snd-msg(clear-focus(EditorId))
+  +
+    rec-msg(parse-failed(trm(ModuleName), ErrorFoci?))
+  )
+endlet
+
+process GetTextFromFile(FileName: str, Text: str?) is
+let
+  Name      : str,
+  TimeStamp : term, 
+  Path      : str
+in
+  snd-msg(open-file(FileName)).
+  (
+    rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?))
+  +
+    rec-msg(error-opening(Name?)) .
+    Text := error-text
+  )
+endlet
+
+process ParseText(Text: str, ModuleName: str, Nonterminal: str, 
+                  Tree: term?, ParseError: term?) is
+let
+  Id         : term,
+  ErrList    : list,
+  ErrContent : term,
+  ModuleId   : term
+in
+  Id := process-id . 
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules) .
+  ModuleId := quote(trm(ModuleName)) .
+  ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
+endlet
+
+process GetTree(EditorId: term, ModuleName: str, Tree: term?) is
+let
+  DirtyFoci  : term
+in
+  snd-msg(get-dirty-focuses(EditorId)) .
+  rec-msg(dirty-focuses(DirtyFoci?)) .
+  if equal(DirtyFoci, []) then
+    snd-msg(get-tree(EditorId)) .
+    rec-msg(tree(Tree?))
+  else
+    ParseTerm(EditorId, ModuleName) .
+    snd-msg(get-dirty-focuses(EditorId)) .
+    rec-msg(dirty-focuses(DirtyFoci?)) . 
+    if equal(DirtyFoci, []) then
+      snd-msg(get-tree(EditorId)) .
+      rec-msg(tree(Tree?))
+    else 
+      Tree := error-tree
+    fi
+  fi
+endlet
+
+process ReplaceRoot(EditorId: term, Tree: term) is
+let
+  TotalTree : term,
+  Text      : str,
+  Focus     : term,
+  FileName  : str
+in
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(focus-moved(EditorId, Focus?)) .
+  snd-msg(replace-focussed-tree(EditorId, Tree)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(get-tree(EditorId)) .
+  rec-msg(tree(TotalTree?)) .
+  snd-msg(unparse(TotalTree)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(get-editor-name(EditorId)) .
+  rec-msg(editor-name(FileName?)) .
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(reload-file(EditorId, FileName)) .
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(focus-moved(EditorId, Focus?)) .
+  snd-msg(set-focus(EditorId, Focus))
+endlet
+
+
+process GetFocus(EditorId: term, Tree: term?) is
+  snd-msg(get-focussed-tree(EditorId)) .
+  (
+    rec-msg(tree(Tree?))
+  +
+    rec-msg(no-tree) .
+    Tree := error-tree
+  )
+
+process ReplaceFocus(EditorId: term, Tree: term) is
+let
+  TotalTree : term,
+  Text      : str,
+  Focus     : term,
+  FileName  : str
+in
+  snd-msg(replace-focussed-tree(EditorId, Tree)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(get-tree(EditorId)) .
+  rec-msg(tree(TotalTree?)) .
+  snd-msg(unparse(TotalTree)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(get-editor-name(EditorId)) .
+  rec-msg(editor-name(FileName?)) .
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(reload-file(EditorId, FileName)) .
+  snd-msg(set-focus(EditorId, Focus))
+endlet
+
+process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
+let 
+  TreeSort : str 
+in
+  snd-msg(check-tree-sort(Sort, Tree)) .
+  ( 
+    rec-msg(wrong-sort(TreeSort?)) .
+    snd-note(ui-status(errorf("Top sort %s of tree does not match %s", 
+                              [TreeSort, Sort]))) .
+    RTree := error-tree
+  +
+    rec-msg(sort-ok) .
+    RTree := Tree
+  )
+endlet
+
+process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
+let
+  Id          : int,
+  ErrList     : list,
+  Equations   : term
+in
+  Id := process-id .
+  snd-msg(open-modules([ModuleName])) .
+  rec-msg(finished-opening-modules) .
+  snd-note(ui-status(stat(Id, "Retrieving equations"))) .
+  snd-msg(process-eqs(ModuleName)) .
+  rec-msg(eqs-processed(ModuleName)) .
+  snd-msg(get-all-equations(ModuleName)) .
+  (
+    rec-msg(all-equations(Equations?)) .
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
+    rec-msg(interpret-term-hook-result(NormalForm?))
+  +
+    rec-msg(equations-incomplete) .
+    NormalForm := error-tree .
+    snd-note(ui-status(endstat(Id))) .
+    snd-note(ui-status(errorf("Equations incomplete for %s.asf", [ModuleName])))
+  )
+endlet
+
+
+process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
+let
+  Text        : str,
+  EditorId    : term,
+  NewModuleName : str
+in
+  if not-equal(Tree, error-tree) then
+    snd-msg(unparse(Tree)) . 
+    rec-msg(unparsed-text(Text?)) .
+    snd-msg(save-text-file(FileName, Text)) .
+    rec-msg(save-done(FileName)) .
+    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
+    rec-msg(edit-term-file(NewModuleName?, EditorId?))
+  fi
+endlet
+
+process ActivateEditorWithString(Text: str, ModuleName: str, FileName: str) is
+let
+  EditorId    : term,
+  NewModuleName : str
+in
+  snd-msg(save-text-file(FileName, Text)) .
+  rec-msg(save-done(FileName)) .
+  snd-msg(edit-term-file(ModuleName, FileName)) .
+  rec-msg(edit-term-file(NewModuleName?, EditorId?))
+endlet

@@ -37,7 +37,8 @@ TBSCRIPTS = \
   standalone-eqs-dumper.tb \
   standalone-pt-dumper.tb \
   standalone-status-display.tb \
-  ui.tb
+  ui.tb \
+  button-actions.tb
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

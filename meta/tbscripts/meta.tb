@@ -4,28 +4,22 @@
 
 /*tool logger is { command = "tblog -logfile meta.log" }*/
 
+/* The Meta-Environment protocol is expressed in the
+ * following scripts:
+ */
 #include "abort.tb"
 #include "parse-utils.tb"
-#include "sglr.idef"
-#include "text-editor.idef"
 #include "editor-creator.tb"
-#include "editor-manager.idef"
 #include "edit-syntax.tb"
 #include "edit-equations.tb"
 #include "edit-term.tb"
-#include "restorebrackets.idef"
 #include "restore-term-brackets.tb"
-#include "unparsePT.idef"
-#include "addPosInfo.idef"
-#include "apply-function.idef"
-#include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
 #include "ui.tb"
 #include "clear-all.tb"
-#include "module-db.idef"
 #include "process-eqs.tb"
 #include "compile-module.tb"
 #include "save-module.tb" 
@@ -37,16 +31,27 @@
 #include "dump-parsetable.tb"
 #include "sdf2-language.tb"
 #include "parse-focusses.tb"
+#include "button-actions.tb"
 #include "notification.tb"
-#include "parsetablegen.idef"
 #include "dump-equations.tb"
-#include "configmanager.idef"
 #include "query.tb"
-/* #include "query-tool.idef" */
-#include "tree2graph.idef"
-#include "layoutgraph.idef"
-
 #include "meta-interface.tb"
+
+/* Tool interfaces */
+#include "sglr.idef"
+#include "layoutgraph.idef"
+#include "unparsePT.idef"
+#include "addPosInfo.idef"
+#include "in-output.idef"
+#include "module-db.idef"
+#include "restorebrackets.idef"
+#include "parsetablegen.idef"
+#include "text-editor.idef"
+#include "tree2graph.idef"
+#include "configmanager.idef"
+#include "editor-manager.idef"
+#include "apply-function.idef"
+/* #include "query-tool.idef" */
 
 process META is
 let 
