@@ -1,4 +1,4 @@
-module languages/c/syntax/CWithCppComments
+module languages/c/syntax/CWithComments
 
 imports languages/c/syntax/C
 imports languages/cpp/syntax/CommentsAsLayout

@@ -1,0 +1,4 @@
+module languages/c/syntax/CWithLineComments
+
+imports languages/c/syntax/CWithComments
+imports languages/cpp/syntax/LineCommentsAsLayout
