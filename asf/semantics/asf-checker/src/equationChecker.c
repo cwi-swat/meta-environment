@@ -7,17 +7,10 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
   ERR_Subject sub;
-  ERR_Area area;
-  ERR_Location location;
-  int startLine, endLine, startColumn, endColumn;
-  char *path;
+  ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
 
-  if (PT_getTreePosInfo((PT_Tree) subject,
-      &path, &startLine, &startColumn, &endLine, &endColumn)) {
-    area = ERR_makeAreaArea(startLine, startColumn, endLine, endColumn);
-    location = ERR_makeLocationLocation(path, area);
-    sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), 
-				     location);
+  if (location != NULL) {
+    sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), location);
     subjects = ERR_makeSubjectListSingle(sub);
   }
   
