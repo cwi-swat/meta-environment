@@ -60,7 +60,8 @@ ATerm ApplyFunction(ATerm term, char *function, char *module, char *sort,
    ATerm new_appl;
 
    if(!quoted) {
-      ATerror("Non quoted prefix functions not yet supported.\n");
+      ATerror("%s: non quoted prefix functions not yet supported.\n",
+              myname);
       return term;
    }
 
