@@ -77,7 +77,7 @@ unparsePT_SOURCES = \
 	unparsePT-main.c
 
 unparsePT_LDADD = \
-	-L../libmept -lmept \
+	../libmept/libmept.a \
 	-L${TOOLBUSLIB}/lib -lATB \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}

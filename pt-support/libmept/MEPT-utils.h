@@ -56,17 +56,6 @@ PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 PT_Args PT_makeArgsSingle(PT_Tree arg);
 
-char *PT_yieldAny(ATerm t);
-char *PT_yieldParseTree(PT_ParseTree tree);
-char *PT_yieldTree(PT_Tree tree);
-char *PT_yieldArgs(PT_Args tree);
-int PT_getTreeLength(PT_Tree tree);
-
-char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs);
-char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs);
-char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs);
-char *PT_yieldArgsVisualAmbs(PT_Args tree, ATbool visualAmbs);
-
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
 char *PT_yieldSymbolVisualVariables(PT_Symbol symbol);
@@ -190,5 +179,17 @@ PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack);
 
 PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree);
 LOC_Location PT_getTreeOrigin(PT_Tree tree);
+
+unsigned long PT_getTreeLength(PT_Tree tree);
+
+char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities);
+char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities);
+char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities);
+char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities);
+
+void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities);
+void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities);
+void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities);
+void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities);
 
 #endif /* _ME_PT_H */

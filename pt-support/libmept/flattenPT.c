@@ -835,7 +835,7 @@ static PT_Tree flattenLiteral(PT_Production prod)
 static PT_Tree flattenVar(PT_Tree tree)
 {
   PT_Production prodVarsymOuter = PT_getTreeProd(tree);
-  PT_Args       argsOuter       = PT_getTreeArgs(tree);
+  PT_Args argsOuter = PT_getTreeArgs(tree);
 
   PT_Tree outerArg = PT_getArgsHead(argsOuter);
 
@@ -844,11 +844,11 @@ static PT_Tree flattenVar(PT_Tree tree)
   }
   else if (PT_isTreeAppl(outerArg)) {
     PT_Production prodVarsymInner = PT_getTreeProd(outerArg);
-    PT_Args       argsInner       = PT_getTreeArgs(outerArg);
+    PT_Args argsInner = PT_getTreeArgs(outerArg);
 
     if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
       PT_Args newVarArg = PT_makeArgsEmpty();
-      char *varStr = PT_yieldArgs(argsInner);
+      char *varStr = PT_yieldArgsToString(argsInner, ATfalse);
       PT_Symbol newLhsArg = PT_makeSymbolLit(varStr);
       PT_Tree newArg = PT_makeTreeLit(varStr);
       PT_Symbols newLhs = PT_makeSymbolsSingle(newLhsArg);

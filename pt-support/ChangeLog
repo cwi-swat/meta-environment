@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 27 13:58:33 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * libmept, utils:
+   - refactored and implemented unparseToString and unparseToFile
+
 Thu Aug 19 11:01:07 CEST 2004 <{jong,markvdb}@cwi.nl>
  * libmept: regenerated MEPT API to reflect removal of "flat layout"
  * libmept/yieldPT.c: remove call to non-existant PT_isTreeFlatLayout

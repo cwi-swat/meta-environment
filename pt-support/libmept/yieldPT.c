@@ -1,6 +1,6 @@
-/*
-    $Id$
-*/
+/* $Id$ */
+
+/*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
@@ -8,213 +8,260 @@
 
 #include "MEPT-utils.h"
 
+/*}}}  */
+/*{{{  defines */
+
+#define INITIAL_BUFFER_SIZE 4*1024
+
 #define AMB_CLUSTER_START "\n<<<<<<<<<<\n"
 #define AMB_CLUSTER_SEP   "\n==========\n"
 #define AMB_CLUSTER_END   "\n>>>>>>>>>>\n"
 
-/*{{{  local function declarations */
+/*}}}  */
+/*{{{  structures and types */
 
-static int lengthOfArgs(PT_Args args, ATbool visualAmbs);
-static int yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
-			      char *buf, int bufSize);
-static int yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
-			      char *buf, int bufSize);
+typedef void (*charYielder)(char c);
+typedef void (*ambiguityAcceptor)(PT_Args ambiguities);
 
+typedef struct _TreeYielder
+{
+  charYielder yieldChar;
+  ambiguityAcceptor acceptAmbiguities;
+} *TreeYielder;
+
+/*}}}  */
+/*{{{  function declarations */
+
+static void countChar(char c);
+static void yieldCharToFile(char c);
+static void yieldCharToBuffer(char c);
+static void visitArgs(PT_Args args, TreeYielder yielder);
 
 /*}}}  */
 
-/*{{{  lengthOfTree(PT_Tree tree, ATbool visualAmbs) */
+/*{{{  variables */
 
-static int
-lengthOfTree(PT_Tree tree, ATbool visualAmbs)
-{
-  int length = 0;
+static unsigned long treeCount = 0;
+static struct _TreeYielder yielder = { countChar, NULL };
 
-  if (PT_isTreeChar(tree)) {
-    length = 1;
-  }
-  else if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-    length = lengthOfArgs(args, visualAmbs);
-  }
-  else if (PT_isTreeLit(tree)) {
-    char *lit = PT_getTreeString(tree);
-    int i;
-    int len = strlen(lit);
-    
-    for (i = 0; i < len; i++) {
-      if (i+1 < len && lit[i] == '\\') {
-	switch(lit[i+1]) {
-	  case 'n':
-	  case 't':
-	  case ' ':
-	  case '`':
-	    i++;
-	    break;
-	  default:
-	    break;
-	}
-      }
-      length++;
-    }
-  }
-  else if (PT_isTreeAmb(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
+static FILE *outputFile = NULL;
+static struct _TreeYielder treeToFile = { yieldCharToFile, NULL };
 
-    if (visualAmbs) {
-      length += strlen(AMB_CLUSTER_START);
-      length += ((PT_getArgsLength(args) - 1) * strlen(AMB_CLUSTER_SEP));
-      length += strlen(AMB_CLUSTER_END);
-      length += lengthOfArgs(args,visualAmbs);
-    }
-    else {
-      PT_Tree firstChild = PT_getArgsHead(args);
-      length = lengthOfTree(firstChild, visualAmbs);
-    }
-  }
-  else { 
-    ATerror("lengthOfTree: unknown term %t\n", tree);
-  }
-
-  return length;
-}
+static char *bufferStart = NULL;
+static char *bufferCur = NULL;
+static unsigned int bufferCapacity = 0;
+static struct _TreeYielder treeToBuffer = { yieldCharToBuffer, NULL };
 
 /*}}}  */
-/*{{{  lengthOfArgs(PT_Args args, ATbool visualAmbs) */
 
-static int
-lengthOfArgs(PT_Args args, ATbool visualAmbs)
+/*{{{  static char descape(const char **p) */
+
+static char descape(const char **p)
 {
-  int length = 0;
+  char c;
 
-  if (PT_isArgsEmpty(args)) {
-    return 0;
-  }
-
-  while (PT_hasArgsHead(args)) {
-    PT_Tree tree = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    length = length + lengthOfTree(tree, visualAmbs);
-  }
-
-  return length;
-}
-
-/*}}}  */
-/*{{{  yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufSize) */
-
-static int
-yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufSize)
-{
-  assert(idx <= bufSize);
-
-  if (PT_isTreeChar(tree)) {
-    buf[idx++] = PT_getTreeCharacter(tree);
-  }
-  else if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-    idx = yieldArgsRecursive(args, visualAmbs, idx, buf, bufSize);
-  }
-  else if (PT_isTreeLit(tree)) {
-    int i, len;
-    char *lit = PT_getTreeString(tree);
-    len = strlen(lit);
-
-    /* TO BE FIXED: there should be a complete mapping from all SDF2
-     * escapes to ascii here
-     */
-    for (i = 0; i < len; i++, idx++) {
-      if (i+1 < len && lit[i] == '\\') {
-	switch(lit[i+1]) {
-	  case 'n':
-	    buf[idx] = '\n';
-	    i++;
-	    break;
-	  case 't':
-	    buf[idx] = '\t';
-	    i++;
-	    break;
-	  case ' ':
-	    buf[idx] = ' ';
-	    i++;
-	    break;
-	  case '`':
-	    buf[idx] = '`';
-	    i++;
-	    break;
-	  default:
-	    buf[idx] = lit[i];
-	}
-
-      }
-      else {
-	buf[idx] = lit[i];
-      }
-    }
-  }
-  else if (PT_isTreeAmb(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-
-    if (visualAmbs) {
-      strcpy(buf+idx,AMB_CLUSTER_START);
-      idx += strlen(AMB_CLUSTER_START);
-      idx = yieldAmbsRecursive(args,visualAmbs,idx,buf,bufSize);
-      strcpy(buf+idx,AMB_CLUSTER_END);
-      idx += strlen(AMB_CLUSTER_END);
-    }
-    else {
-      PT_Tree firstTree = PT_getArgsHead(args);
-      idx = yieldTreeRecursive(firstTree, visualAmbs, idx,buf,bufSize);
+  if (**p == '\\') {
+    (*p)++;
+    switch (**p) {
+      case 'n':
+	c = '\n';
+	break;
+      case 't':
+	c = '\t';
+	break;
+      case ' ':
+      case '`':
+	c = **p;
+	break;
+      default:
+	c = '\\';
+	break;
     }
   }
   else {
-    ATerror("yieldTreeRecursive: unknown term %t\n", tree);
+    c = **p;
   }
 
-  return idx;
+  return c;
 }
 
 /*}}}  */
-/*{{{  yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf,  */
 
-static int
-yieldArgsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf, 
-		   int bufSize)
+/*{{{  static void visitTree(PT_Tree tree, TreeYielder yielder) */
+
+static void visitTree(PT_Tree tree, TreeYielder yielder)
 {
-  while (PT_hasArgsHead(args)) {
-    PT_Tree tree = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-   
-    idx = yieldTreeRecursive(tree, visualAmbs, idx, buf, bufSize);
+  if (PT_isTreeChar(tree)) {
+    yielder->yieldChar(PT_getTreeCharacter(tree));
   }
-
-  return idx;
-}
-
-/*}}}  */
-/*{{{  yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, char *buf,  */
-
-static int yieldAmbsRecursive(PT_Args args, ATbool visualAmbs, int idx, 
-			      char *buf, int bufSize)
-{
-  while (PT_hasArgsHead(args)) {
-    PT_Tree tree = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-   
-    idx = yieldTreeRecursive(tree, visualAmbs, idx, buf, bufSize);
-
-    if (PT_hasArgsHead(args)) {
-      strcpy(buf+idx,AMB_CLUSTER_SEP);
-      idx += strlen(AMB_CLUSTER_SEP);
+  else if (PT_isTreeLit(tree)) {
+    const char *s = PT_getTreeString(tree);
+    while (*s) {
+      char c = descape(&s);
+      yielder->yieldChar(c);
+      s++;
     }
   }
+  else if (PT_isTreeAppl(tree)) {
+    visitArgs(PT_getTreeArgs(tree), yielder);
+  }
+  else if (PT_isTreeAmb(tree)) {
+    if (yielder->acceptAmbiguities == NULL) {
+      visitTree(PT_getArgsHead(PT_getTreeArgs(tree)), yielder);
+    }
+    else {
+      ATabort("yieldAll ambiguities not yet implemented.");
+    }
+  }
+  else {
+    ATabort("visitTree: unknown tree: %t\n", tree);
+  }
+}
 
-  return idx;
+/*}}}  */
+/*{{{  static void visitArgs(PT_Args args, TreeYielder yielder) */
+
+static void visitArgs(PT_Args args, TreeYielder yielder)
+{
+  while (PT_hasArgsHead(args)) {
+    visitTree(PT_getArgsHead(args), yielder);
+    args = PT_getArgsTail(args);
+  }
 }
 
 /*}}}  */
 
+/*{{{  static void countChar(char c) */
+
+static void countChar(char c)
+{
+  treeCount++;
+  if ((treeCount & 0xFFFFF) == 0) {
+    fprintf(stderr, "\rcount: %ld", treeCount);
+  }
+}
+
+/*}}}  */
+/*{{{  unsigned long PT_getTreeLength(PT_Tree tree) */
+
+unsigned long PT_getTreeLength(PT_Tree tree)
+{
+  treeCount = 0;
+  visitTree(tree, &yielder);
+
+  return treeCount;
+}
+
+/*}}}  */
+
+/*{{{  static void yieldCharToFile(char c) */
+
+static void yieldCharToFile(char c)
+{
+  fputc((int)c, outputFile);
+}
+
+/*}}}  */
+/*{{{  static void yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities) */
+
+static void yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities)
+{
+  if (yieldAllAmbiguities) {
+    treeToFile.acceptAmbiguities = NULL; /* TODO */
+  }
+
+  outputFile = f;
+  visitTree(tree, &treeToFile);
+  outputFile = NULL;
+
+  fflush(f);
+  treeToFile.acceptAmbiguities = NULL;
+}
+
+/*}}}  */
+/*{{{  static void yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities) */
+
+static void yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities)
+{
+  if (yieldAllAmbiguities) {
+    treeToFile.acceptAmbiguities = NULL; /* TODO */
+  }
+
+  outputFile = f;
+  visitArgs(args, &treeToFile);
+  outputFile = NULL;
+
+  fflush(f);
+  treeToFile.acceptAmbiguities = NULL;
+}
+
+/*}}}  */
+
+/*{{{  static void yieldCharToBuffer(char c) */
+
+static void yieldCharToBuffer(char c)
+{
+  if (bufferCapacity == 0) {
+    bufferCapacity = INITIAL_BUFFER_SIZE;
+    bufferStart = (char *) malloc(bufferCapacity * sizeof(char));
+    bufferCur = bufferStart;
+  }
+  else if (bufferCapacity <= (bufferCur - bufferStart)) {
+    unsigned int index = bufferCur - bufferStart;
+    if (bufferCapacity < 1*1024*1024*1024) {
+      bufferCapacity = bufferCapacity * 2;
+    }
+    else {
+      bufferCapacity += 4*1024*1024;
+    }
+    bufferStart = (char *) realloc(bufferStart, bufferCapacity);
+    bufferCur = bufferStart + index;
+  }
+
+  assert(bufferStart != NULL);
+  assert(bufferCur - bufferStart <= bufferCapacity);
+
+  *bufferCur++ = c;
+}
+
+/*}}}  */
+/*{{{  static char *yieldTreeToBuffer(PT_Tree tree, ATbool yieldAllAmbiguities) */
+
+static char *yieldTreeToBuffer(PT_Tree tree, ATbool yieldAllAmbiguities)
+{
+  if (yieldAllAmbiguities) {
+    treeToBuffer.acceptAmbiguities = NULL; /* TODO */
+  }
+
+  bufferCur = bufferStart;
+  visitTree(tree, &treeToBuffer);
+  yieldCharToBuffer('\0');
+  treeToBuffer.acceptAmbiguities = NULL;
+
+  return bufferStart;
+}
+
+/*}}}  */
+/*{{{  static char *yieldArgsToBuffer(PT_Args args, ATbool yieldAllAmbiguities) */
+
+static char *yieldArgsToBuffer(PT_Args args, ATbool yieldAllAmbiguities)
+{
+  if (yieldAllAmbiguities) {
+    treeToBuffer.acceptAmbiguities = NULL; /* TODO */
+  }
+
+  memset(bufferStart, 0, bufferCapacity);
+  bufferCur = bufferStart;
+  visitArgs(args, &treeToBuffer);
+  yieldCharToBuffer('\0');
+  treeToBuffer.acceptAmbiguities = NULL;
+
+  return bufferStart;
+}
+
+/*}}}  */
+
+#if 0
 /*{{{  char *PT_yieldTree(PT_Tree tree)  */
 
 char *PT_yieldTree(PT_Tree tree) 
@@ -235,7 +282,7 @@ char *PT_yieldArgs(PT_Args args)
 
 char *PT_yieldParseTree(PT_ParseTree tree)
 {
-  return PT_yieldParseTreeVisualAmbs(tree,ATfalse);
+  return PT_yieldParseTreeVisualAmbs(tree, ATfalse);
 }
 
 /*}}}  */
@@ -247,87 +294,151 @@ char *PT_yieldAny(ATerm tree)
 }
 
 /*}}}  */
-/*{{{  char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs) */
+/*{{{  char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool yieldAllAmbiguities) */
 
-char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool visualAmbs)
+char *PT_yieldTreeVisualAmbs(PT_Tree tree, ATbool yieldAllAmbiguities)
 {
-  static char *buffer = NULL;
-  static int   bufferSize = 0;
-  int          idx = 0;
-  int          len;
-
-  len = lengthOfTree(tree, visualAmbs)+1;
-
-  if (len > bufferSize) {
-    buffer = (char *)realloc(buffer, len*sizeof(char));
-    bufferSize = len;
-  }
-
-  idx = yieldTreeRecursive(tree, visualAmbs, 0, buffer, len);
-
-  buffer[idx++] = '\0';
-//  assert(idx == len); (somehow this assert sometimes goes off, why?)
-
-  return buffer;
+  return yieldTreeToBuffer(tree, yieldAllAmbiguities);
 }
 
 /*}}}  */
-/*{{{  char *PT_yieldArgs(PT_Args args, ATbool visualAmbs) */
+/*{{{  char *PT_yieldArgs(PT_Args args, ATbool yieldAllAmbiguities) */
 
-char *PT_yieldArgsVisualAmbs(PT_Args args, ATbool visualAmbs)
+char *PT_yieldArgsVisualAmbs(PT_Args args, ATbool yieldAllAmbiguities)
 {
-  return PT_yieldTreeVisualAmbs(
-           PT_makeTreeAppl(
-             PT_makeProductionList(
-               PT_makeSymbolSort("")), args), visualAmbs);  
+  return yieldArgsToBuffer(args, yieldAllAmbiguities);
 }
 
 /*}}}  */
-/*{{{  char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs) */
+/*{{{  char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool yieldAllAmbiguities) */
 
-char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs)
+char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool yieldAllAmbiguities)
 {
-  if (PT_isParseTreeTop(tree)) {
-    return PT_yieldTreeVisualAmbs(PT_getParseTreeTop(tree), visualAmbs);
-  }
-
-  ATerror("PT_yieldParseTreeWithVisualAmbs: not a parsetree: %t\n", tree);
-  return NULL;
+  return PT_yieldTreeVisualAmbs(PT_getParseTreeTop(tree), yieldAllAmbiguities);
 }
 
 /*}}}  */
-/*{{{  char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs) */
+/*{{{  char *PT_yieldAnyVisualAmbs(ATerm t, ATbool yieldAllAmbiguities) */
 
-char *PT_yieldAnyVisualAmbs(ATerm t, ATbool visualAmbs)
+char *PT_yieldAnyVisualAmbs(ATerm t, ATbool yieldAllAmbiguities)
 {
-  char *text = NULL;
-
-  if (ATmatch(t,"parsetree(<term>,<term>)",NULL,NULL)) {
-    text = PT_yieldParseTreeVisualAmbs(PT_ParseTreeFromTerm(t), visualAmbs);
+  if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
+    return PT_yieldParseTreeVisualAmbs(PT_ParseTreeFromTerm(t),
+				       yieldAllAmbiguities);
   }
-  else if (ATmatch(t,"[<list>]",NULL)) {
-    text = PT_yieldArgsVisualAmbs(PT_ArgsFromTerm(t), visualAmbs);
+  else if (PT_isTreeAmb(PT_TreeFromTerm(t))) {
+    PT_Args args = PT_getTreeArgs(PT_TreeFromTerm(t));
+    return yieldArgsToBuffer(args, yieldAllAmbiguities);
   }
-  else if (ATmatch(t,"appl(<term>,<term>)",NULL,NULL) 
-        || ATmatch(t,"amb(<term>)",NULL)
-        || ATmatch(t,"<int>",NULL)
-        || ATmatch(t,"lit(<term>)",NULL)) {
-    text = PT_yieldTreeVisualAmbs(PT_TreeFromTerm(t), visualAmbs);
+  else if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
+        || ATmatch(t,"amb(<term>)", NULL)
+        || ATmatch(t,"<int>", NULL)
+        || ATmatch(t,"lit(<term>)", NULL)) {
+    return PT_yieldTreeVisualAmbs(PT_TreeFromTerm(t), yieldAllAmbiguities);
   }
   else {
-    ATerror("PT_yieldAny: Unknown term: %t\n", t);
+    ATabort("PT_yieldAny: Unknown term: %t\n", t);
+    return NULL;
   }
+}
 
-  return text;
+/*}}}  */
+#endif
+
+/*{{{  char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities) */
+
+char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities)
+{
+  return yieldTreeToBuffer(tree, yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities) */
+
+char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities)
+{
+  return yieldArgsToBuffer(args, yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities) */
+
+char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities)
+{
+  return yieldTreeToBuffer(PT_getParseTreeTop(pt), yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities) */
+
+char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities)
+{
+  if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
+    return PT_yieldParseTreeToString(PT_ParseTreeFromTerm(t),
+				     yieldAllAmbiguities);
+  }
+  else if (PT_isTreeAmb(PT_TreeFromTerm(t))) {
+    PT_Args args = PT_getTreeArgs(PT_TreeFromTerm(t));
+    return PT_yieldArgsToString(args, yieldAllAmbiguities);
+  }
+  else if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
+        || ATmatch(t,"amb(<term>)", NULL)
+        || ATmatch(t,"<int>", NULL)
+        || ATmatch(t,"lit(<term>)", NULL)) {
+    return PT_yieldTreeToString(PT_TreeFromTerm(t), yieldAllAmbiguities);
+  }
+  else {
+    ATabort("PT_yieldAnyToString: Unknown term: %t\n", t);
+    return NULL;
+  }
 }
 
 /*}}}  */
 
-/*{{{  int PT_getTreeLength(PT_Tree tree) */
+/*{{{  void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities) */
 
-int PT_getTreeLength(PT_Tree tree)
+void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities)
 {
-  return lengthOfTree(tree, ATfalse);
+  return yieldTreeToFile(tree, f, yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities) */
+
+void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities)
+{
+  return yieldArgsToFile(args, f, yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities) */
+
+void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities)
+{
+  return yieldTreeToFile(PT_getParseTreeTop(pt), f, yieldAllAmbiguities);
+}
+
+/*}}}  */
+/*{{{  void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities) */
+
+void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities)
+{
+  if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
+    PT_yieldParseTreeToFile(PT_ParseTreeFromTerm(t), f, yieldAllAmbiguities);
+  }
+  else if (PT_isTreeAmb(PT_TreeFromTerm(t))) {
+    PT_Args args = PT_getTreeArgs(PT_TreeFromTerm(t));
+    PT_yieldArgsToFile(args, f, yieldAllAmbiguities);
+  }
+  else if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
+        || ATmatch(t,"amb(<term>)", NULL)
+        || ATmatch(t,"<int>", NULL)
+        || ATmatch(t,"lit(<term>)", NULL)) {
+    PT_yieldTreeToFile(PT_TreeFromTerm(t), f, yieldAllAmbiguities);
+  }
+  else {
+    ATabort("PT_yieldAnyToFile: Unknown term: %t\n", t);
+  }
 }
 
 /*}}}  */

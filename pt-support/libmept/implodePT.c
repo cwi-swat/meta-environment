@@ -146,13 +146,13 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
 static ATerm implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
-    if (interpret_layout_place_holder &&
-	PT_getTreeAnnotation(tree, ATparse(DIRTY_LAYOUT_MARKER)) != NULL) {
+    if (interpret_layout_place_holder
+	&& PT_getTreeAnnotation(tree, ATparse(DIRTY_LAYOUT_MARKER)) != NULL) {
       return ATparse("layout(" DIRTY_LAYOUT_MARKER ")");
     }
     else {
 
-      char *str = PT_yieldTree(tree);
+      char *str = PT_yieldTreeToString(tree, ATfalse);
 
       if (strlen(str) > 0) {
 	return ATmake("layout([<str>])>", str);
@@ -184,7 +184,7 @@ static ATerm implodeFlatList(PT_Tree tree)
 static ATerm implodeLexical(PT_Tree tree)
 {
   if (implode_lexicals) {
-    return ATmake("<str>", PT_yieldTree(tree));
+    return ATmake("<str>", PT_yieldTreeToString(tree, ATfalse));
   }
 
   return PT_TreeToTerm(tree);
@@ -310,7 +310,7 @@ static ATerm implodeVar(PT_Tree tree)
 {
 
   if (implode_lexicals) {
-    return ATmake("varsym([<str>])>", PT_yieldTree(tree));
+    return ATmake("varsym([<str>])>", PT_yieldTreeToString(tree, ATfalse));
   }
 
   return PT_TreeToTerm(tree);

@@ -171,11 +171,9 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
 
 int PT_compareTree(PT_Tree tree1, PT_Tree tree2) 
 {
-  PT_Production prod1 = PT_getTreeProd(tree1);
-  PT_Production prod2 = PT_getTreeProd(tree2);
+  assert(PT_isEqualSymbol(PT_getProductionRhs(PT_getTreeProd(tree1)),
+			  PT_getProductionRhs(PT_getTreeProd(tree2))));
 
-  assert(PT_isEqualSymbol(PT_getProductionRhs(prod1),
-			  PT_getProductionRhs(prod2)));
   return PT_compareTreeRec(tree1, tree2);
 }
 

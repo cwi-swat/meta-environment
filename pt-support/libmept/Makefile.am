@@ -22,7 +22,7 @@ libmept_a_SOURCES = \
 	yieldPT.c \
 	yieldProd.c
 
-AM_CFLAGS = -Wall -Werror -g -O2 #-DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
 
 INCLUDES = \
 	-I${ATERM}/include \

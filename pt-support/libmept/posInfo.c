@@ -241,7 +241,9 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
       return tree;
     }
   } else {
-    ATwarning("unhandled tree: %s (%t)\n", PT_yieldTree(tree), tree);
+    ATwarning("unhandled tree: %s (%t)\n",
+	      PT_yieldTreeToString(tree, ATfalse),
+	      tree);
   }
 
   return PT_setTreePosInfo(tree, current->path, start_line, start_col,
