@@ -34,5 +34,10 @@ asfoperations_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -lATerm-dbg \
 	$(SOCKLIBS)
+
+# NOTE: the -a option to asfc activates rewriting with annotations,
+#       which is essential here.
+asfc:
+	asfc -i ASF-Normalization.eqs -o ASF-Normalization.c -v -a	
