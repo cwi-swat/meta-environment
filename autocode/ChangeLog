@@ -1,5 +1,9 @@
 $Id$
 
+Sun Feb 17 16:23:31 CET 2002 <jong,olivierp>
+ * Finished first version of generic property support
+ * Started working on AutocodeGenerator
+
 Thu Feb 14 11:55:37 CET 2002 <jong>
  * added add/set properties
  * added "key=value" syntax to PropertyParser
