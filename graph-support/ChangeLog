@@ -3,6 +3,7 @@ $Id$
 Thu Sep 11 12:47:17 CEST 2003 <jong.cwi.nl>
  * graph-support:
    - mv layoutgraph.idef -> layout-graph.idef
+   - mv tree2graph.idef -> graph-converter.idef
 
 2003/08/01 (jurgenv@cwi.nl)
  * Set to version 0.1.1
