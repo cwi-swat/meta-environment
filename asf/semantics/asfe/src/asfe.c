@@ -24,13 +24,12 @@
 #include <ASFME.h>
 #include <ASFAPI.h>
 
-#include "preparation.h"
 #include "asfe.tif.h"
-#include "traversals.h"
-#include "asfe.h"
+#include "evaluator.h"
+#include "errors.h"
 
 #ifdef USE_TIDE
-#include "eval-tide.h"
+#include "debug.h"
 #endif
 
 /*}}}  */
@@ -90,6 +89,47 @@ void abort_handler(int signal)
 
 /*}}}  */
 
+/* ToolBus interfacing */
+/*{{{  void rec_terminate(int cid, ATerm t) */
+
+void rec_terminate(int cid, ATerm t)
+{
+  exit(0);
+}
+
+/*}}}  */
+/*{{{  ATerm interpret(int cid, char *modname, ATerm trm) */
+
+ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
+{
+  PT_ParseTree parseTree;
+  ASF_CondEquationList eqsList;
+  ATerm result;
+  ATbool debug;
+
+  if (ATmatch(tide, "on")) {
+    debug = ATtrue;
+  }
+  else {
+    debug = ATfalse;
+  }
+
+  eqsList = ASF_makeCondEquationListFromTerm(eqs);
+  parseTree = PT_makeParseTreeFromTerm(trm);
+
+  result = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse,
+		     ATfalse);
+
+  if (RWgetError() == NULL) {
+    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+  }
+  else {
+    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+  }
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -128,21 +168,6 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   ASF_initASFMEApi();
   AA_initASFAPIApi();
-
-  equations_db = ATdictCreate();
-  ATprotect(&equations_db);
-
-  fail_env = ATparse("[fail]");
-  ATprotect(&fail_env);
-
-  posinfo = ATparse("pos-info");
-  ATprotect(&posinfo);
-
-  list_var = ATmakeAFun("*list-var*", 3, ATtrue);
-  ATprotectAFun(list_var);
-
-  plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
-  ATprotectAFun(plain_var);
 
   RWclearError();
 
@@ -207,38 +232,14 @@ int main(int argc, char *argv[])
     }
 
     /* Rewrite the term */
-    result = evaluator(name, parseTree, eqsList,
-		       use_tide ? ATparse("on") : ATparse("off"), 
+    result = evaluator(name, parseTree, eqsList, use_tide, 
 		       remove_layout, mark_new_layout, allow_ambs);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;
 
     if (RWgetError() != NULL) {
-      ATerm message, tag, subject;
-      char *tagText, *subjectText;
-      ATermList error;
-
-      /* The errors are tuples containing a message and a subject */
-      error = (ATermList) RWgetError();
-      message = ATgetFirst(error);
-      tag = ATgetFirst(ATgetNext(error));
-      subject = ATgetFirst(ATgetNext(ATgetNext(error)));
-      
-      tagText = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
-      subjectText = strdup(PT_yieldTree(PT_makeTreeFromTerm(subject)));
-
-      if(tagText != NULL &&
-         subjectText != NULL) {
-        ATwarning("%t (%s, %s)\n", message, tagText, subjectText);
-
-      }
-      else {
-        ATwarning("Unable to show error message (no memory).\n");
-      }
-        
-      free(tagText);
-      free(subjectText);
+      printErrors();
     }
 
     /* Communicate the reduct out of here */
