@@ -1,5 +1,8 @@
 $Id$
 
+2003/0307 (markvdb@cwi.nl)
+ * The sglr.idef contained an error when returning a cycle, T? instead T.
+
 2003/01/29 (markvdb@cs.vu.nl)
  * Bumped into version 3.10beta.
  * The counting of prefers/avoids in nested ambiguity
