@@ -1183,36 +1183,32 @@ endlet
 
 process ImportModule(ModuleName : str) is
 let
-  Title : str,
   Choices : list,
   Chosen : str
 in
   snd-msg(get-all-module-names) .
   rec-msg(all-module-names(Choices?)) .
-  Title := "Add import" .
-  snd-msg(show-list-choice(Title, "Choose a module to import", Choices)) .
+  snd-msg(show-list-choice(ModuleName, "Choose a module to import", Choices)) .
   (
-    rec-msg(list-choice(Title, Chosen?)) .
+    rec-msg(list-choice(ModuleName, Chosen?)) .
     snd-msg(import-module(ModuleName, Chosen))
   +
-    rec-msg(cancel-list-choice(Title)) 
+    rec-msg(cancel-list-choice(ModuleName)) 
   )
 endlet  
 
 process UnImportModule(ModuleName : str) is
 let
-  Title : str,
   Choices : list,
   Chosen : str
 in
-  snd-msg(get-all-imported-module-names(ModuleName)) .
-  rec-msg(all-imported-module-names(Choices?)) .
-  Title := "Remove import" .
-  snd-msg(show-list-choice(Title, "Choose a module to remove from the imports", Choices)) .
+  snd-msg(get-imported-modules(ModuleName)) .
+  rec-msg(imported-modules(Choices?)) .
+  snd-msg(show-list-choice(ModuleName, "Choose a module to remove from the imports", Choices)) .
   (
-    rec-msg(list-choice(Title, Chosen?)) .
+    rec-msg(list-choice(ModuleName, Chosen?)) .
     snd-msg(unimport-module(ModuleName, Chosen)) 
   +
-    rec-msg(cancel-list-choice(Title)) 
+    rec-msg(cancel-list-choice(ModuleName)) 
   )
 endlet  
