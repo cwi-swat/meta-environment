@@ -26,17 +26,10 @@
 #include <string.h>
 #include <assert.h>
 
+#include <mept.h>
 #include "conversion.h"
 
-ATbool flatten_lexical = ATtrue;
-ATbool interpret_cons = ATfalse;
-ATbool flatten_layout = ATtrue;
-ATbool remove_layout = ATfalse;
-ATbool flatten_list = ATtrue;
 ATbool char_to_string = ATfalse;
-ATbool lexical_to_string = ATfalse;
-ATbool layout_to_string = ATfalse;
-ATbool remove_literals = ATfalse;
  
 static ATerm flattenTerm(ATerm);
 static ATerm flattenLayout(ATerm t);
@@ -82,26 +75,13 @@ static ATerm asfix2_star_sep_star_sep_to_star_sep = NULL;
 static ATerm asfix2_star_sep_plus_sep_to_plus_sep = NULL;
 static ATerm asfix2_plus_sep_star_sep_to_plus_sep = NULL;
 
-static ATerm asfix2_prod_pattern = NULL;
-static ATerm asfix2_attrs_pattern = NULL;
-static ATerm asfix2_cons_pattern = NULL;
-static ATerm asfix2_aterm_cons_pattern = NULL;
-static ATerm asfix2_atr_pattern = NULL;
-static ATerm asfix2_id_pattern = NULL;
-static ATerm asfix_appl_pattern = NULL;
-static ATerm asfix2_list_pattern = NULL;
-static ATerm asfix2_parsetree_pattern = NULL;
 static ATerm asfix2_amb_pattern = NULL;
-static ATerm asfix2_prod_lit_pattern = NULL;
 static ATerm asfix2_prod_lex_layout_pattern = NULL;
 static ATerm asfix2_prod_cf_layout_pattern = NULL;
 static ATerm asfix2_prod_optlayout_pattern = NULL;
-static ATerm asfix2_prod_lexical_pattern = NULL;
 static ATerm asfix2_prod_var_pattern = NULL;
 static ATerm asfix2_prod_varsym_pattern = NULL;
 static ATerm asfix2_START_pattern = NULL;
-static ATerm asfix1_lit_pattern = NULL;
-static ATerm asfix1_list_pattern = NULL;
 static ATerm asfix1_layout_pattern = NULL;
 
 /*  pattern initializations  */
@@ -136,27 +116,14 @@ void init_asfix2_patterns()
   ATprotect(&asfix2_star_sep_star_sep_to_star_sep);
   ATprotect(&asfix2_star_sep_plus_sep_to_plus_sep);
   ATprotect(&asfix2_plus_sep_star_sep_to_plus_sep);
-  ATprotect(&asfix2_prod_pattern);
-  ATprotect(&asfix2_attrs_pattern);
-  ATprotect(&asfix2_cons_pattern);
-  ATprotect(&asfix2_aterm_cons_pattern);
-  ATprotect(&asfix2_atr_pattern);
-  ATprotect(&asfix2_id_pattern);
-  ATprotect(&asfix2_list_pattern);
-  ATprotect(&asfix2_parsetree_pattern);
   ATprotect(&asfix2_amb_pattern);
-  ATprotect(&asfix2_prod_lit_pattern);
   ATprotect(&asfix2_prod_lex_layout_pattern);
   ATprotect(&asfix2_prod_cf_layout_pattern);
   ATprotect(&asfix2_prod_optlayout_pattern);
-  ATprotect(&asfix2_prod_lexical_pattern);
   ATprotect(&asfix2_prod_var_pattern);
   ATprotect(&asfix2_prod_varsym_pattern);
   ATprotect(&asfix2_START_pattern);
-  ATprotect(&asfix1_lit_pattern);
-  ATprotect(&asfix1_list_pattern);
   ATprotect(&asfix1_layout_pattern);
-  ATprotect(&asfix_appl_pattern);
 
   asfix2_empty_to_star_lex_sort  =
     ATparse("prod([],lex(iter-star(sort(<term>))),no-attrs)");
@@ -245,36 +212,14 @@ void init_asfix2_patterns()
             "cf(opt(layout)),cf(iter-star-sep(<list>))],cf(iter-sep(<list>))," \
             "<term>)");
   
-  asfix2_prod_pattern =
-    ATparse("prod(<term>,<term>,<term>)");
-  asfix2_attrs_pattern =
-    ATparse("attrs([<list>])");
-  asfix2_cons_pattern =
-    ATparse("cons(<str>)");
-  asfix2_aterm_cons_pattern =
-    ATparse("aterm(cons(<str>))");
-  asfix2_atr_pattern =
-    ATparse("atr(<str>)");
-  asfix2_id_pattern =
-    ATparse("id(<str>)");
-  asfix_appl_pattern =
-    ATparse("appl(<term>,[<list>])");
-  asfix2_list_pattern =
-    ATparse("[<list>]");
-  asfix2_parsetree_pattern =
-    ATparse("parsetree(<term>,<term>)");
   asfix2_amb_pattern =
     ATparse("amb([<list>])");
-  asfix2_prod_lit_pattern =
-    ATparse("prod([<list>],lit(<str>),no-attrs)");
   asfix2_prod_lex_layout_pattern =
     ATparse("prod([<list>],lex(layout),<term>)");
   asfix2_prod_cf_layout_pattern =
     ATparse("prod([<list>],cf(layout),<term>)");
   asfix2_prod_optlayout_pattern =
     ATparse("prod([<list>],cf(opt(layout)),no-attrs)");
-  asfix2_prod_lexical_pattern =
-    ATparse("prod([<list>],lex(sort(<term>)),<term>)");
   asfix2_prod_var_pattern =
     ATparse("prod([varsym(<term>)],cf(<term>),<term>)");
   asfix2_prod_varsym_pattern =
@@ -282,12 +227,8 @@ void init_asfix2_patterns()
   asfix2_START_pattern =
     ATparse("appl(prod([cf(opt(layout)),<term>,cf(opt(layout))]," \
              "sort(\"<START>\"),no-attrs),[<list>])");
-  asfix1_lit_pattern =
-    ATparse("lit(<str>)");
   asfix1_layout_pattern =
     ATparse("layout([<list>])");
-  asfix1_list_pattern =
-    ATparse("list([<list>])");
 }
 
 void init_a2toa1_patterns(void)
@@ -369,11 +310,14 @@ static ATermList flattenLexicalList(ATerm t, ATermList tail)
   ATerm     prod;
   ATermList list;
 
-  if (!ATmatchTerm(t, asfix_appl_pattern, &prod, &list)) {
+  if (!PT_isTreeAppl(t)) {
     ATerror("flattenLexicalList: not an appl pattern: %t\n", t);
     return NULL;
   } 
   
+  prod = PT_getTreeProd(t);
+  list = PT_getTreeArgs(t);
+
   if (!isLexicalListProd(prod)) {
     ATerm newTerm;
     newTerm = flattenTerm(t);
@@ -447,10 +391,13 @@ static ATermList flattenCharClassList(ATerm t, ATermList tail)
     return ATinsert(tail, makeCharFromInt((ATermInt) t));
   }
 
-  if (!ATmatchTerm(t, asfix_appl_pattern, &prod, &list)) {
+  if (!PT_isTreeAppl(t)) { 
     ATerror("flattenCharClassList: not an appl pattern: %t\n", t);
   }
   
+  prod = PT_getTreeProd(t);
+  list = PT_getTreeArgs(t);
+
   if (!isCharClassListProd(prod)) {
     ATerm newTerm;
     newTerm = flattenTerm(t);
@@ -520,10 +467,13 @@ static ATermList flattenList(ATerm t, ATermList tail)
   ATerm     prod;
   ATermList list;
 
-  if (!ATmatchTerm(t, asfix_appl_pattern, &prod, &list)) {
+  if (!PT_isTreeAppl(t)) {
     ATerror("flattenList: not an appl pattern: %t\n", t);
     return NULL;
   }
+
+  prod = PT_getTreeProd(t);
+  list = PT_getTreeArgs(t);
 
   if (!isListProd(prod)) {
     ATerm newTerm = flattenTerm(t);
@@ -549,9 +499,7 @@ static ATermList flattenList(ATerm t, ATermList tail)
     ATerm rightBranch = ATelementAt(list,2);
   
     tail = flattenList(rightBranch, tail);
-    if (!remove_layout) {
-      tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
-    }
+    tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
     tail = flattenList(leftBranch, tail);
   
     return tail;
@@ -600,10 +548,13 @@ static ATermList flattenSepList(ATerm t, ATermList tail)
   ATerm     prod;
   ATermList list;
 
-  if (!ATmatchTerm(t, asfix_appl_pattern, &prod, &list)) {
+  if (!PT_isTreeAppl(t)) {
     ATerror("flattenSepList: not an appl pattern: %t\n", t);
     return NULL;
   }
+
+  prod = PT_getTreeProd(t);
+  list = PT_getTreeArgs(t);
 
   if (!isSepListProd(prod)) {
     ATerm newTerm = flattenTerm(t);
@@ -631,15 +582,9 @@ static ATermList flattenSepList(ATerm t, ATermList tail)
     ATerm rightBranch     = ATelementAt(list,4); 
 
     tail = flattenSepList(rightBranch, tail);
-    if (!remove_layout) {
-      tail = ATinsert(tail, flattenLayout(layoutAfterSep));
-    } 
-    if (!remove_literals) {
-      tail = ATinsert(tail, flattenTerm(separator));
-    }
-    if (!remove_layout) {
-      tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
-    } 
+    tail = ATinsert(tail, flattenLayout(layoutAfterSep));
+    tail = ATinsert(tail, flattenTerm(separator));
+    tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
     tail = flattenSepList(leftBranch, tail);
   
     return tail;
@@ -651,128 +596,11 @@ static ATermList flattenSepList(ATerm t, ATermList tail)
 
 static ATerm flattenProd(ATerm prod)
 {
-  ATerm         attr;
-  ATermList     attrs;
-  char          *lit;
-
-  if(!ATmatchTerm(prod, asfix2_prod_pattern, NULL, NULL, &attr)) {
+  if(!PT_isProductionDefault(prod)) {
     ATerror("flattenProd: not a production: %t\n", prod);
   }
-
-  if (ATmatchTerm(attr, asfix2_attrs_pattern, &attrs)) {
-    if (interpret_cons) {
-      while(!ATisEmpty(attrs)) {
-        attr = ATgetFirst(attrs);
-        attrs = ATgetNext(attrs);
-        if(ATmatchTerm(attr, asfix2_cons_pattern, &lit))
-          return ATmake("<str>",lit);
-        else if(ATmatchTerm(attr, asfix2_aterm_cons_pattern, &lit))
-          return ATmake("<str>",lit);
-      }
-    }
-  }
-
   return prod;
 }
-
-static int lengthOfLexicals(ATermList lexicals)
-{
-  ATermList  args;
-  char      *lit;
-  int        length = 0;
-
-  if (ATisEmpty(lexicals)) {
-    return 0;
-  }
-
-  while (!ATisEmpty(lexicals)) {
-    ATerm lex = ATgetFirst(lexicals);
-    lexicals = ATgetNext(lexicals);
-
-    if (ATgetType(lex) == AT_INT) {
-      length++;
-    }
-    else if (ATgetType(lex) == AT_LIST) {
-      length = length + lengthOfLexicals((ATermList)lex);
-    }
-    else if (ATmatchTerm(lex, asfix_appl_pattern, NULL, &args)) {
-      length = length + lengthOfLexicals(args);
-    }
-    else if (ATmatchTerm(lex, asfix1_lit_pattern, &lit)) {
-      length = length + strlen(lit);
-    }
-    else {
-      ATerror("lengthOfLexicals: unknown term %t\n", lex);
-      return 0;
-    }
-  }
-  return length;
-}
-
-static int lexicalsToStringRecursive(ATermList lexicals,
-                                     int idx, char *buf, int bufSize)
-{
-  ATermList  args;
-  char      *lit;
-
-  while (!ATisEmpty(lexicals)) {
-    ATerm lex = ATgetFirst(lexicals);
-    lexicals = ATgetNext(lexicals);
-
-    assert(idx <= bufSize);
-
-    if (ATgetType(lex) == AT_INT) {
-      buf[idx++] = (char)ATgetInt((ATermInt)lex);
-    }
-    else if (ATgetType(lex) == AT_LIST) {
-      idx = lexicalsToStringRecursive((ATermList)lex, idx, buf, bufSize);
-    }
-    else if (ATmatchTerm(lex, asfix_appl_pattern, NULL, &args)) {
-      idx = lexicalsToStringRecursive(args, idx, buf, bufSize);
-    }
-    else if (ATmatchTerm(lex, asfix1_lit_pattern, &lit)) {
-      int i, len = strlen(lit);
-
-      for (i = 0; i < len; i++) {
-        buf[idx++] = lit[i];
-      }
-    }
-    else {
-      ATerror("lexicalsToStringRecursive: unknown term %t\n", lex);
-    }
-  }
-  return idx;
-}       
-
-static ATerm lexicalsToString(ATermList lexicals)
-{
-  char *buf = NULL;
-  int   len = 0;
-
-  ATerm strTerm;
-  int   idx = 0;
-
-  if (ATisEmpty(lexicals)) {
-    return ATparse("\"\"");
-  }
-
-  len = lengthOfLexicals(lexicals);
-
-  buf = (char *) calloc(len+1, sizeof(char));
-
-  idx = lexicalsToStringRecursive(lexicals, 0, buf, len);
-
-  assert(idx == len);
-
-  /* terminate string */
-  buf[idx++] = '\0';
-
-  strTerm = ATmake("<str>", buf);
-
-  free(buf);
-
-  return strTerm;
-}    
 
 static ATerm flattenLexical(ATerm t)
 {
@@ -780,25 +608,20 @@ static ATerm flattenLexical(ATerm t)
   ATermList args;
   ATermList newArgs = ATempty;
 
-  if (flatten_lexical) {
-    if (ATmatchTerm(t, asfix_appl_pattern, &outerProd, &args)) {
+  if (PT_isTreeAppl(t)) {
+    outerProd = PT_getTreeProd(t);
+    args      = PT_getTreeArgs(t);
 
-      while (!ATisEmpty(args)) {
-        ATerm arg = ATgetFirst(args);
-        ATerm newTerm = flattenTerm(arg);
+    while (!ATisEmpty(args)) {
+      ATerm arg = ATgetFirst(args);
+      ATerm newTerm = flattenTerm(arg);
 
-        if (newTerm) {
-          newArgs = ATappend(newArgs, newTerm);
-        }
-        args = ATgetNext(args);
+      if (newTerm) {
+        newArgs = ATappend(newArgs, newTerm);
       }
+      args = ATgetNext(args);
     }
-    if (lexical_to_string) {
-      return lexicalsToString(newArgs);
-    }
-    else {
-      return ATmakeTerm(asfix_appl_pattern, flattenProd(outerProd), newArgs);
-    }
+    return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
   }
   else { 
     return t;
@@ -816,11 +639,13 @@ static ATermList flattenLayoutList(ATermList args, ATermList tail)
     if (ATgetType(arg) == AT_INT) {
       tail = ATinsert(tail, makeCharFromInt((ATermInt) arg));
     }
-    else if (ATmatchTerm(arg, asfix_appl_pattern, &prod, &list)) {
+    else if (PT_isTreeAppl(arg)) {
+      prod = PT_getTreeProd(arg);
+      list = PT_getTreeArgs(arg);
   
-      if (ATmatchTerm(prod, asfix2_prod_lex_layout_pattern, NULL, NULL)
+      if (PT_prodHasLexLayoutAsRhs(prod)
           ||
-          ATmatchTerm(prod, asfix2_prod_cf_layout_pattern, NULL, NULL)) {
+          PT_prodHasCfLayoutAsRhs(prod)) {
         tail = flattenLayoutList(ATreverse(list), tail);
       }
       else {
@@ -839,40 +664,24 @@ static ATerm flattenLayout(ATerm t)
 {
   ATermList args;
 
-  if (flatten_layout) {
-    if (ATmatchTerm(t, asfix_appl_pattern, NULL, &args)) {
-      ATermList newArgs = flattenLayoutList(args, ATempty);
+  if (PT_isTreeAppl(t)) {
+    ATermList newArgs;
 
-      if (layout_to_string) {
-        ATermList layoutString = ATmakeList1(lexicalsToString(newArgs));
-        return ATmakeTerm(asfix1_layout_pattern, layoutString);
-      }
-      else {
-        return ATmakeTerm(asfix1_layout_pattern, newArgs);
-      }
-    }
-    ATerror("flattenLayout: not an appl pattern: %t\n\n", t);
-    return NULL;
+    args = PT_getTreeArgs(t);
+    newArgs = flattenLayoutList(args, ATempty);
+
+    return ATmakeTerm(asfix1_layout_pattern, newArgs);
   }
-  else {
-    return t;
-  }
+  ATerror("flattenLayout: not an appl pattern: %t\n\n", t);
+  return NULL;
 }
 
 static ATerm flattenLiteral(ATerm prod)
 {
-  char *lit;
+  ATerm rhs = PT_getProductionRhs(prod);
+  char *lit = PT_getLitString(rhs);
 
-  if (remove_literals) {
-    return NULL;
-  }
-
-  if (ATmatchTerm(prod, asfix2_prod_lit_pattern, NULL, &lit)) {
-    return ATmakeTerm(asfix1_lit_pattern, lit);
-  } 
-
-  ATerror("flattenLiteral: not a literal prod: %t\n", prod);
-  return NULL;
+  return PT_makeSymbolLit(lit);
 }
 
 static ATerm flattenVar(ATerm t)
@@ -880,12 +689,18 @@ static ATerm flattenVar(ATerm t)
   ATerm prodVarsymOuter, prodVarsymInner;
   ATermList argsOuter, argsInner;
 
-  if (ATmatchTerm(t, asfix_appl_pattern, &prodVarsymOuter, &argsOuter)) {
+  if (PT_isTreeAppl(t)) {
+    prodVarsymOuter = PT_getTreeProd(t);
+    argsOuter       = PT_getTreeArgs(t);
+
     if (ATmatchTerm(prodVarsymOuter, asfix2_prod_var_pattern,
                     NULL, NULL, NULL)) {
       ATerm arg = ATgetFirst(argsOuter);
 
-      if (ATmatchTerm(arg, asfix_appl_pattern, &prodVarsymInner, &argsInner)) {
+      if (PT_isTreeAppl(arg)) {
+        prodVarsymInner = PT_getTreeProd(arg);
+        argsInner       = PT_getTreeArgs(arg);
+
         if (ATmatchTerm(prodVarsymInner, asfix2_prod_varsym_pattern,
                         NULL, NULL, NULL)) {
           ATermList newVarArg;
@@ -899,12 +714,9 @@ static ATerm flattenVar(ATerm t)
             }
             argsInner = ATgetNext(argsInner);
           }
-          newVarArg = ATmakeList1(ATmakeTerm(asfix_appl_pattern,
-                                             flattenProd(prodVarsymInner),
-                                             newVarArgs));
-          return ATmakeTerm(asfix_appl_pattern,
-                            flattenProd(prodVarsymOuter),
-                            newVarArg);
+          newVarArg = ATmakeList1(PT_makeTreeAppl(flattenProd(prodVarsymInner),
+                                                  newVarArgs));
+          return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
         }
       }
     }
@@ -926,28 +738,24 @@ static ATerm flattenTerm(ATerm t)
     return ATmakeTerm(asfix2_amb_pattern, flattenArgs(args));
   }
 
-  if (!ATmatchTerm(t, asfix_appl_pattern, &prod, &args)) {
+  if (!PT_isTreeAppl(t)) {
     ATerror("flattenTerm: not an appl pattern: %t\n", t);
     return NULL;
   }
+  prod = PT_getTreeProd(t);
+  args = PT_getTreeArgs(t);
 
-  /* Literal */
-  if (ATmatchTerm(prod, asfix2_prod_lit_pattern, NULL, NULL)) {
+  if (PT_prodHasLitAsRhs(prod)) {
     return flattenLiteral(prod);
   }
 
   /* Layout */
   if (ATmatchTerm(prod, asfix2_prod_optlayout_pattern, NULL)) {
-    if (!remove_layout) {
-      return flattenLayout(t);
-    }
-    else {
-      return NULL;
-    }
+    return flattenLayout(t);
   }
 
   /* Lexical */
-  if (ATmatchTerm(prod, asfix2_prod_lexical_pattern, NULL, NULL, NULL)) {
+  if (PT_prodHasLexSortAsRhs(prod)) {
     return flattenLexical(t);
   }
 
@@ -957,36 +765,35 @@ static ATerm flattenTerm(ATerm t)
   }
 
   /* Lists */
-  if (flatten_list) {
-    if (isSepListProd(prod)) {
-      ATermList newList = ATmakeList1((ATerm)flattenSepList(t, ATempty));
-      return ATmakeTerm(asfix_appl_pattern, flattenProd(prod), newList);
-    }
+  if (isSepListProd(prod)) {
+    ATermList newList = ATmakeList1((ATerm)flattenSepList(t, ATempty));
+    return PT_makeTreeAppl(flattenProd(prod), newList);
+  }
 
-    if (isListProd(prod)) {
-      ATermList newList = ATmakeList1((ATerm)flattenList(t, ATempty));
-      return ATmakeTerm(asfix_appl_pattern, flattenProd(prod), newList);
-    }
+  if (isListProd(prod)) {
+    ATermList newList = ATmakeList1((ATerm)flattenList(t, ATempty));
+    return PT_makeTreeAppl(flattenProd(prod), newList);
+  }
 
-    if (isLexicalListProd(prod)) {
-      return (ATerm)flattenLexicalList(t, ATempty);
-    }
+  if (isLexicalListProd(prod)) {
+    return (ATerm)flattenLexicalList(t, ATempty);
+  }
 
-    if (isCharClassListProd(prod)) {
-      return (ATerm)flattenCharClassList(t, ATempty);
-    }
+  if (isCharClassListProd(prod)) {
+    return (ATerm)flattenCharClassList(t, ATempty);
   }
 
   /* Default: application */
-  return ATmakeTerm(asfix_appl_pattern, flattenProd(prod), flattenArgs(args));
+  return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 }
 
 static ATerm flattenParseTree(ATerm tree)
 {
-  ATerm  newTree, ambCnt;
+  if (PT_isParseTreeTree(tree)) {
+    ATerm newTree = PT_getParseTreeTree(tree);
+    ATerm ambCnt = PT_getParseTreeAmbCnt(tree);
 
-  if (ATmatchTerm(tree, asfix2_parsetree_pattern, &newTree, &ambCnt)) {
-    return ATmakeTerm(asfix2_parsetree_pattern, flattenTerm(newTree), ambCnt);
+    return PT_makeParseTreeTree(flattenTerm(newTree), ambCnt);
   }
 
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);

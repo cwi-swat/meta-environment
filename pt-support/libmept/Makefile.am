@@ -6,7 +6,7 @@
 
 lib_LIBRARIES           = libmept.a
 include_HEADERS         = mept.h implodePT.h
-libmept_a_SOURCES = mept.c implodePT.c
+libmept_a_SOURCES 	= mept.c implodePT.c
 
 CFLAGS                  = -g -Wall -O2
 INCLUDES                = -I${ATERM}/include
