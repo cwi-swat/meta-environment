@@ -31,14 +31,12 @@ ALLSRCS = asc-support.c asc-support.h rewriter.c rewriter.tif.c
 libasc_support_a_SOURCES = $(SRCS)
 libasc_support_a_LIBADD  = rewriter.tif.o
 
-BUILT_SOURCES            = rewriter.tif.c rewriter.tif.h
-
 # Default include directories
 INCLUDES   = -I. -I$(ATERMINC)
 
 CLEANFILES = rewriter.tif.c rewriter.tif.h
 
-${srcdir}/rewriter.c: rewriter.tif.h
+rewriter.o: rewriter.tif.h
 
 # The output of toolbus is moved to $@ to make sure the generated
 # .tifs file exists in the current directory. The ToolBus idef2tif by
