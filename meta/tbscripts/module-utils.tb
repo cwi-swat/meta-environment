@@ -141,7 +141,7 @@ process DoDeleteModule(ModuleName : str) is
 let
   Changed : list
 in
-    RemoveModuleFromDisk(ModuleName).
+    RemoveModuleFromDisk("", ModuleName).
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
@@ -162,16 +162,16 @@ in
   if equal(Status, success) then
     CheckExistence(New, RealNew, Status?).
     if equal(Status, success) then
-      DeleteEditors(Old). tau.
+      DeleteEditors(Old). 
       if equal(Status, success) then
         RenameModuleInDB(Old, New, Path, Changed?) .
         SaveSdfModules(Changed).
-        SaveAsfSdfModule(RealNew). 
-        RemoveModuleFromDisk(Old)
+        SaveAsfSdfModule(New). 
+        RemoveModuleFromDisk(Path, Old)
       else tau fi
     else tau fi
   else tau fi.
-  HandleRenameModuleErrors(Old, RealNew, Status) . tau
+  HandleRenameModuleErrors(Old, RealNew, Status)
 endlet
 
 process DoCopyModule(Old : str, New : str, Path : str)  is
@@ -265,9 +265,11 @@ process SaveAsfSdfModule(Module : str) is
    snd-msg(save-asfsdf-module(Module)) .
    rec-msg(saved-asfsdf-module(Module))
 
-process RemoveModuleFromDisk(Module : str) is
-  snd-msg(remove-module(Module)) .
-  rec-msg(removed-module)
+process RemoveModuleFromDisk(Path : str, Module : str) is
+  snd-msg(io-remove-file(Path, Module, ".sdf")) .
+  rec-msg(io-file-removed) .
+  snd-msg(io-remove-file(Path, Module, ".asf")) .
+  rec-msg(io-file-removed)
 
 process SoftCloseModuleInDB(ModuleName : str, Status : term?) is
 let 

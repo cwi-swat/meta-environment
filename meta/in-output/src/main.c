@@ -235,6 +235,18 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 }
 
 /*}}}  */
+/*{{{  ATerm remove_file(int cid, char *fileName) */
+
+void remove_file(int cid, char *directory, char *name, char *extension)
+{
+  char fileName[PATH_LEN];
+
+  sprintf(fileName, "%s%s%s%s", directory, SEP, name, extension);
+
+  remove(fileName);
+}
+
+/*}}}  */
 /*{{{  ATerm read_text_file(int cid, char *fileName) */
 
 ATerm read_text_file(int cid, char *fileName)

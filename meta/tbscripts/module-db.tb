@@ -426,7 +426,9 @@ let
   Imports : list,
   Module : str,
   Path : str,
-  Syntax : term
+  Text : str,
+  Syntax : term,
+  Tree : term
 in
   MDB-GetAllDependingModules(OldName, Modules?) .
   Changed := [] .
@@ -464,6 +466,22 @@ in
   rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
   MDB-StoreModuleTree(NewName, Syntax) .
   Syntax := no-tree .
+  snd-msg(ts-get-term-value("asf-tree", OldName)) .
+  (
+    rec-msg(ts-value(Tree?)) .
+    snd-msg(ts-put-term-value("asf-tree", NewName, Tree)) .
+    Tree := no-tree
+  +
+    rec-msg(ts-no-value)
+  ) .
+  snd-msg(ts-get-str-value("asf-text", OldName)) .
+  (
+    rec-msg(ts-value(Text?)) .
+    snd-msg(ts-put-str-value("asf-text", NewName, Text)) .
+    Text := ""
+  +
+    rec-msg(ts-no-value)
+  ) .
   snd-msg(ts-remove-value-from-all-tables(OldName)) .
   MDB-DisplayGraph
 endlet
