@@ -44,7 +44,7 @@ void make_idef_script(char *name)
             "  delta\n"
             "endlet\n\n" 
             "tool tool%s is { command = \"%s\" }\n"
-	    "toolbus(%s)",
+	    "toolbus(%s)\n",
     name, name, name, name, name,
     name, name, name, name, name,
     name, name, name, name, name,
