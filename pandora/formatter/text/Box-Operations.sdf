@@ -3,23 +3,9 @@ module Box-Operations
 imports languages/box/syntax/Box
 
 exports
-
   context-free syntax
     BoxList "++" BoxList -> BoxList {right}
 
-  context-free syntax
-    "I*" SOptions "[" list:Box* "]" -> Box* {cons("Istar")}
-    "LST" "[" list:Box* "]" -> Box {cons("LST")}
-
 hiddens
-
- variables
-     [B-E][0-9]*    -> Box
-     [B-E]"+"[0-9]* -> Box+
-     [B-E]"*"[0-9]* -> Box*
-
-     "ss"[0-9]*      -> SpaceSymbol
-     "so"[0-9]*      -> SOption
-     "so""*"[0-9]*   -> SOption*
-     "o"[0-9]*       -> SOption
-     "o""*"[0-9]*    -> SOption*
+  variables
+    [BC]"*"[0-9]* -> Box*

@@ -1,8 +1,3 @@
 equations
 
   [CONC] B* ++ C* = B* C*
-
-  [0] I* so* [   ]    =
-  [0] I* so* [ B B* ] = I so*[B] ++ I* so* [ B* ]
-
-  [0] B* LST[ C* ] D* = B* C* D*
