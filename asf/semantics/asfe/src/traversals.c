@@ -110,7 +110,6 @@ ATerm create_traversal_pattern(ATerm term)
 	ATerm placeholder = ATparse("<term>");
 	ATermList args;
 	int traversed_pos = keep_layout ? 4 : 2;
-	int accumulated_pos = keep_layout ? 6 : 3;
 	
 	if(run_verbose) ATwarning("Creating traversal pattern: ");
 
@@ -200,7 +199,6 @@ ATerm make_traversal_appl(ATerm appl, ATerm traversal)
 ATerm change_traversal_appl(ATerm traversal, ATerm newarg)
 {
 	ATermList args;
-	ATerm term;
 	ATerm appl;
 	ATerm tuple;
 
@@ -289,7 +287,7 @@ ATerm get_first(ATerm tuple, ATerm combination)
  */
 ATerm get_second(ATerm tuple, ATerm combination)
 {
-	ATerm prod, ctuple, first, second, stub1, stub2;
+	ATerm prod, ctuple, first, second;
 	
 	/* We extract the second element of the tuple using the template in 
 	 * the combination argument
