@@ -253,7 +253,7 @@ exports
     Restriction*                 -> Restrictions
     "restrictions" Restrictions  -> Grammar
     "reject"                     -> Attribute
-  priorities
+  context-free priorities
     CharClass "." Lookaheads     -> Lookahead
   >  Lookaheads "|" Lookaheads   -> Lookaheads
 
