@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/07 (markvdb@cwi.nl)
+ * Replaced [Symbol, pair, pair(<lhs(Symbol)>,<rhs(Symbol)>)]
+   by [Symbol, tuple, tuple(<head(Symbol)>,<rest(Symbols)>)]
+
 2003/10/03 (markvdb@cwi.nl)
  * Removed perm, set, strategy symbol.
 
