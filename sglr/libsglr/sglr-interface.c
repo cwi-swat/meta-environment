@@ -598,27 +598,6 @@ void SG_CloseFile(FILE *fd)
     fclose(fd);
 }
 
-
-void SG_Dump_ATtable(ATermTable t, char *s)
-{
-  ATerm     key;
-  ATermList keys;
-  int       i=0;
-
-  if(s)
-    ATwarning("%s\n", s);
-
-  if(t) for(keys = ATtableKeys(t); keys && !ATisEmpty(keys);
-            keys=ATgetNext(keys)) {
-    key = ATgetFirst(keys);
-    if(ATgetType(key) != AT_INT)
-      ATwarning("%d\t%t: %t\n", i++, key,
-                SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER,
-                            SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, key, NULL),
-                            NULL));
-  }
-}
-
 void SG_ReportErrLine(int line, int col)
 {
   char *errmsg = SG_theText+SG_textIndex, linestr[16];

@@ -227,19 +227,22 @@ ATermList Cycle = NULL;
 /* During cycle detection we assume that *NO* new terms are
  * created!!!
  */
-ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited);
+ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, 
+              Bitmap visited);
 
-ATbool SG_TermIsCyclicAmbs(tree t, ATermList ambs, Bitmap visited)
+ATbool SG_TermIsCyclicAmbs(tree t, size_t *pos, ATermList ambs, Bitmap visited)
 {
   tree amb;
   ATbool hasCycle = ATfalse;
+  size_t saved_pos = *pos;       
 
   for (; !hasCycle && !ATisEmpty(ambs); ambs = ATgetNext(ambs)) { 
     SGnrAmb(SG_NR_INC);            /* Increase for each node in cluster */
     amb = (tree) ATgetFirst(ambs);
     if (!ATisEqual((ATerm) t, (ATerm) amb)) {
+      *pos = saved_pos;
       hasCycle =
-        SG_TermIsCyclicRecursive((tree) amb, ATtrue, visited);
+        SG_TermIsCyclicRecursive((tree) amb, pos, ATtrue, visited);
     }
   }
   return hasCycle;
@@ -260,7 +263,8 @@ label SG_GetRejectProdLabel(tree appl)
   return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
 }
 
-ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
+ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs,
+              Bitmap visited)
 {
   ATermList ambs;
 
@@ -275,30 +279,32 @@ ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
     return ATtrue;
   }
 
+/*
   SG_MARK(t);
+*/
   switch (ATgetType(t)) {
     case AT_APPL:
       /*  Ambiguity cluster?  */
-      ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+      ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
       if (inAmbs ||  ATisEmpty(ambs)) {
         /*  No ambiguity  */
         SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t, 1),
-                                 ATfalse, visited);
+                                 pos, ATfalse, visited);
       } 
       else {
         /*  Encountered an ambiguity cluster  */
-        int idx = ATgetInt((ATermInt) SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, 
-                                                  (ATerm) t, NULL));
-        if (!BitmapIsSet(visited,idx)) {
+        int idx = ATgetInt(SG_AmbiTablesGetIndex((ATerm) t, *pos));
+        size_t saved_pos = *pos;
+        if (!BitmapIsSet(visited, idx)) {
 
           SGnrAmb(SG_NR_INC); /* new ambcluster */
 
           /*  First check whether or not t itself is cyclic...  */
 
           SG_TermIsCyclicRecursive((forest) ATgetArgument((ATermAppl) t, 1),
-                                    ATtrue, visited);   
-
-          SG_TermIsCyclicAmbs(t, ambs, visited);
+                                    pos, ATtrue, visited);   
+          *pos = saved_pos;
+          SG_TermIsCyclicAmbs(t, pos, ambs, visited);
           visited = BitmapSet(visited, idx);
         }
       }
@@ -306,17 +312,22 @@ ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
     case AT_LIST:
       if (!ATisEmpty((ATermList) t)) {
         SG_TermIsCyclicRecursive((forest) ATgetFirst((ATermList) t), 
-                                 ATfalse, visited);
+                                 pos, ATfalse, visited);
         SG_TermIsCyclicRecursive((forest) ATgetNext((ATermList) t), 
-                                 ATfalse, visited);
+                                 pos, ATfalse, visited);
       }
+      break;
+    case AT_INT:
+      (*pos)++;
       break;
     default:
       break;
   }
 
   /*  Out of recursion here: restore term state  */
+/*
   SG_UNMARK(t);
+*/
 
   /*  Remember labels of productions in cycle */
   if (Cycle && ATgetType(t) == AT_APPL) {
@@ -332,10 +343,11 @@ ATbool SG_TermIsCyclic(tree t)
 {
   ATbool cyclic;
   Bitmap visited = BitmapCreate(SG_MaxNrAmb(SG_NR_ASK));
+  size_t pos = 0;
 
   SGnrAmb(SG_NR_ZERO);
 
-  cyclic = SG_TermIsCyclicRecursive(t, ATfalse, visited);
+  cyclic = SG_TermIsCyclicRecursive(t, &pos, ATfalse, visited);
 
   BitmapDestroy(visited);
 
@@ -435,84 +447,6 @@ tree SG_YieldTree(parse_table *pt, tree t)
   }
 
   return t;
-}
-
-/*
- Ambiguity Tables provide a mapping from terms to sets of terms,
- reflecting the ambiguity relation.  Note that terms can be
- `prioritized out' or rejected, so that the mapping may or may not
- yield a set containing the key term.
-
- The implementation consists of a two-level mapping, as follows:
-
- * a mapping from terms to indexes (of ambiguity clusters)
- * a mapping from indexes to sets of terms (the ambiguity cluster)
-
- Maintenance is relatively simple: for new ambiguity clusters, simply
- create.  Updates to existing ambiguity clusters can be performed
- simply by looking up the index from one of the terms that share the
- ambiguity, and update the ambiguity cluster that is found as desired.
- */
-
-ATerm SG_AmbTable(int Mode, ATerm key, ATerm value)
-{
-  static  ATermTable  ambtbl = NULL;
-  ATerm               ret = (ATerm) ATempty, idx = NULL;
-
-  switch (Mode) {
-    case SG_AMBTBL_GET:
-      if ((idx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, key, NULL))) {
-        ret = SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, idx, NULL);
-      }
-      break;
-    case SG_AMBTBL_INIT:
-      if (ambtbl) {
-        SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
-      }
-      ambtbl = ATtableCreate(4096, 75);
-      break;
-    case SG_AMBTBL_CLEAR:
-      if (ambtbl) {
-        ATtableDestroy(ambtbl);
-        ambtbl = NULL;
-      }
-      break;
-    case SG_AMBTBL_ADD_INDEX:
-    case SG_AMBTBL_ADD_CLUSTER:
-    case SG_AMBTBL_UPDATE_INDEX:
-    case SG_AMBTBL_UPDATE_CLUSTER:
-      if (!ambtbl) {
-        SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
-      }
-      ATtablePut(ambtbl, key, value);
-      break;
-    case SG_AMBTBL_REMOVE:
-      if (!ambtbl) {
-        break;
-      }
-      if ((idx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, key, NULL))) {
-        ATtableRemove(ambtbl, key);
-        if (!ATisEmpty((ATermList) SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER,
-                                              idx, NULL))) {
-          ATtableRemove(ambtbl, idx);
-        }
-      }
-        break;
-    case SG_AMBTBL_LOOKUP_INDEX:
-    case SG_AMBTBL_LOOKUP_CLUSTER:
-      if (!ambtbl) {
-        return (ATerm) ATempty;
-      }
-      ret = ATtableGet(ambtbl, key);
-      ret=ret?ret:(ATerm) ATempty;
-      break;
-#ifdef DEBUG
-    case SG_AMBTBL_DUMP:
-      if (ambtbl) SG_Dump_ATtable(ambtbl, "Ambs");
-      break;
-#endif
-  }
-  return ret;
 }
 
 /*
@@ -1391,14 +1325,15 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
   return t;
 }
 
-static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs);
+static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
+                 ATbool inAmbs);
 
-static tree SG_FilterAmbs(parse_table *pt, ATermList ambs)
+static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
 {
   ATermList newambs;
   tree amb, newamb;
   ATermList localAmbs = ambs;
-
+  size_t saved_pos = *pos;
 
   if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
     for (;!ATisEmpty(localAmbs); localAmbs = ATgetNext(localAmbs)) {
@@ -1412,8 +1347,9 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs)
   /* first we do the children */
   newambs = ATempty;
   for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+    *pos = saved_pos;
     amb = (tree) ATgetFirst(ambs);
-    newamb = SG_FilterTreeRecursive(pt, amb, ATtrue);
+    newamb = SG_FilterTreeRecursive(pt, amb, pos, ATtrue);
     if (newamb) {
       newambs = ATinsert(newambs, (ATerm)newamb);
     }
@@ -1457,7 +1393,8 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs)
   return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
 }
 
-static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
+static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
+                                   ATbool inAmbs)
 {
   int type = ATgetType(t);
   ATermList args, ambs;
@@ -1466,8 +1403,10 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
 
   switch(type) {
   case AT_APPL:
-    ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
+    ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
     if (!inAmbs && !ATisEmpty(ambs)) {
+
+        int idx = ATgetInt(SG_AmbiTablesGetIndex((ATerm) t, *pos));
   
       IF_VERBOSE(
         SG_PrintStatusBar("sglr: filtering", 
@@ -1476,7 +1415,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
       if (!newt) {
-        newt = SG_FilterAmbs(pt, ambs);
+        newt = SG_FilterAmbs(pt, ambs, pos);
         if (newt) {
           ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
         }
@@ -1494,7 +1433,8 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
       }
 
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
-      newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, ATfalse);
+      newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, pos,
+                        ATfalse);
       if (newargs) {
         t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
       }
@@ -1510,17 +1450,19 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
       arg = (tree) ATgetFirst(args);
       tail = ATgetNext(args);
 
+      newarg = (tree) SG_FilterTreeRecursive(pt, arg, pos, ATfalse);
+
       if (ATisEmpty(tail)) {
         newtail = ATempty;
       } 
       else {
-        newtail = (ATermList)SG_FilterTreeRecursive(pt, (tree)tail, ATfalse);
+        newtail = (ATermList)SG_FilterTreeRecursive(pt, (tree)tail, pos,
+                          ATfalse);
         if (!newtail) {
           return NULL;
         }
       }
     
-      newarg = (tree) SG_FilterTreeRecursive(pt, arg, ATfalse);
       if (newarg) {
         if (!ATisEqual((ATerm)newarg, (ATerm)arg) || 
             !ATisEqual(newtail, tail)) {
@@ -1532,6 +1474,9 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, ATbool inAmbs)
       }
     }
   break;
+  case AT_INT:
+    (*pos)++;
+    break;  
   default:
   break;
   }
@@ -1544,6 +1489,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
 {
    int nrAmbs;
    tree newT;
+   size_t pos = 0;
 
    /* We only cache multisets for ambiguity clusters
     * so we create a table with at most 
@@ -1554,7 +1500,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
    nrAmbs = SGnrAmb(SG_NR_ASK);
    IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
 
-   newT = SG_FilterTreeRecursive(pt, t, ATfalse);
+   newT = SG_FilterTreeRecursive(pt, t, &pos, ATfalse);
    
    IF_VERBOSE(
       /* print 100% bar, the rest was solved by caching ambclusters */
@@ -1575,27 +1521,26 @@ tree SG_FilterTree(parse_table *pt, tree t)
  applicable.
  */
 
-void SG_Amb(parse_table *pt, tree existing, tree new) {
+void SG_Amb(parse_table *pt, tree existing, tree new, size_t pos) {
   ATermList newambs;
-  ATerm     ambidx;
+  ATermInt  ambidx;
 
   IF_STATISTICS(SG_AmbCalls(SG_NR_INC));
   
-  ambidx = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, (ATerm) existing, NULL);
-  /* What the hAck is going on here? What does ATisEmpty((ATermList) ambidx) mean? */
-  /* Maybe it has something to do with cycle detection ???? Or whatever. */
-  if (!ambidx || ATisEmpty((ATermList) ambidx) ) { 
+  ambidx = SG_AmbiTablesGetIndex((ATerm) existing, pos);
+  if (!ambidx) { 
     /* New ambiguity */
-    ambidx = (ATerm) ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
+    ambidx = ATmakeInt(SG_MaxNrAmb(SG_NR_INC));
     /* Add mapping for existing term also */
-    SG_AmbTable(SG_AMBTBL_ADD_INDEX, (ATerm) existing, ambidx);
+    SG_AmbiTablesAddIndex((ATerm) existing, pos, ambidx);
 
     newambs = ATmakeList2((ATerm) existing, (ATerm) new);
-  } else {
+  }
+  else {
     /* Expand (or update) existing ambiguity */
     ATermList oldambs;
 
-    oldambs = (ATermList) SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, ambidx, NULL);
+    oldambs = SG_AmbiTablesGetClusterOnIndex(ambidx);
     if (ATindexOf(oldambs, (ATerm) new, 0) != -1) {
       return;  /*  Already present?  Done.  */
     }
@@ -1603,8 +1548,8 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
   }
 
   /*   Update ambiguity cluster  */
-  SG_AmbTable(SG_AMBTBL_ADD_INDEX, (ATerm) new, ambidx);
-  SG_AmbTable(SG_AMBTBL_UPDATE_CLUSTER, ambidx, (ATerm) newambs);
+  SG_AmbiTablesAddIndex((ATerm) new, pos, ambidx);
+  SG_AmbiTablesUpdateCluster(ambidx, newambs);
 
   return;
 }
@@ -1616,10 +1561,10 @@ tree SG_SelectOnTopSort(parse_table *pt, tree t, char *sort)
   ATermList newambs = ATempty;
   label l;
   char *prodsort;
-  ATerm index;
+  ATermInt index;
 
-  index = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, (ATerm) t, NULL);
-  allambs = (ATermList) SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, index, NULL);
+  index = SG_AmbiTablesGetIndex((ATerm) t, 0);
+  allambs = SG_AmbiTablesGetClusterOnIndex(index);
 
   if (!ATisEmpty(allambs)) {
 /* We have at least one tree in the ambiguity cluster
@@ -1639,7 +1584,8 @@ tree SG_SelectOnTopSort(parse_table *pt, tree t, char *sort)
         }
       }
     }
-    SG_AmbTable(SG_AMBTBL_UPDATE_CLUSTER, (ATerm) index, (ATerm) newambs);
+    SG_AmbiTablesUpdateCluster(index, newambs);
+
     if (ATisEmpty(newambs)) {
       return NULL;
     }

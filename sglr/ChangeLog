@@ -1,5 +1,12 @@
 $Id$
 
+2001/10/25-26 (jurgenv@cwi.nl,markvdb@cwi.nl)
+ * Added position information to the ambiguity cluster table in order
+   to make ambiguity clusters unique.
+ * Links and paths are extended with a length field.
+ * During cycle detection and filtering the position information
+   is updated.
+
 2001/10/11 (mdejonge@cwi.nl)
  * Changed order of EXTRA_DIST files
 

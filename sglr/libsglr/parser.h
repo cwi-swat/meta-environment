@@ -12,7 +12,7 @@ void   SG_ZeroStackHist(void);
 void   SG_AddStackHist(stack *parent, stack *kid);
 void   SG_PropagateReject(stack *st);
 void   SG_PropagateUnreject(stack *st);
-
+size_t SG_GetTokensRead(void);
 char  *SG_ProdSort(production t);
 
 

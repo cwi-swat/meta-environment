@@ -18,6 +18,7 @@
 #define _FOREST_H_  1
 
 #include  "parser.h"
+#include  "ambi-tables.h"
 
 typedef   ATermTable      multiset;
 
@@ -27,14 +28,6 @@ typedef   ATermTable      multiset;
 #define SG_PROD_TO_NR(l)    (l-257)
 #define SG_NR_TO_PROD(l)    (ATmakeInt(ATgetInt((ATermInt)l)+257))
 
-enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_GET,
-                     SG_AMBTBL_ADD_INDEX, SG_AMBTBL_ADD_CLUSTER,
-                     SG_AMBTBL_UPDATE_INDEX, SG_AMBTBL_UPDATE_CLUSTER,
-                     SG_AMBTBL_LOOKUP_INDEX, SG_AMBTBL_LOOKUP_CLUSTER,
-                     SG_AMBTBL_REMOVE, SG_AMBTBL_DUMP };
-
-ATerm      SG_AmbTable(int Mode, ATerm key, ATerm value);
-
 int        SG_InjectionFilterSucceeded(int mode);
 int        SG_CountEagernessFilterSucceeded(int mode);
 int        SG_InjectionCountCalls(int Mode);
@@ -43,7 +36,7 @@ int        SG_AmbCalls(int Mode);
 
 int        SG_MaxNrAmb(int Mode);
 
-void       SG_Amb(parse_table *, tree, tree);
+void       SG_Amb(parse_table *, tree, tree, size_t pos);
 
 enum       SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET };
 ATbool     SG_CycleEncountered(int Mode);
