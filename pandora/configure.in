@@ -36,16 +36,6 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   ParseTree distribution is in DIR])
 AC_SUBST(PT_SUPPORT)
 
-dnl Require error-support package 
-AC_PACKAGE_REQUIRE(error-support, error-support-config,
-   [  --with-error-support=DIR   error-support distribution is in DIR])
-AC_SUBST(ERROR_SUPPORT)
-
-dnl Require sdf-support package
-AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config, 
-   [  --with-sdf-support=DIR  sdf-support is in DIR])
-AC_SUBST(SDF_SUPPORT)
-
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
@@ -78,5 +68,5 @@ dnl }}}
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
-   src/Makefile 
+   generator/Makefile 
 )

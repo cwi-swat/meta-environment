@@ -1,0 +1,16 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   description='MetaEnvironment pretty printer based on Box language'
+
+   keywords=meta-environment, asfix, pretty printing, formatting, box
+
+configuration interface
+
+requires
+  pt-support    1.1
+  aterm         2.0.6
+  toolbuslib    0.5.1

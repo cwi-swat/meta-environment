@@ -1,5 +1,4 @@
-
-SUBDIRS = src
+SUBDIRS = generator
 
 EXTRA_DIST = reconf $(wildcard *.pkg)
 
