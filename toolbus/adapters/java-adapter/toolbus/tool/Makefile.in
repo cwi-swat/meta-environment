@@ -42,7 +42,7 @@ all:	${CLASSES}
 	javac -classpath ../..:$$CLASSPATH $<
 
 %.tifs: %.tb
-	toolbus -gentifs $<
+	$(top_srcdir)/src/toolbus -gentifs $<
 
 Testing.java: test.tifs
 	java -classpath ../..:$$CLASSPATH toolbus.tool.JavaTif -tool testing -tifs test.tifs -package toolbus.tool
