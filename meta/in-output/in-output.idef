@@ -59,15 +59,26 @@ in
       snd-msg(module-creation-failed(Name, Text))
     )
   +
+    %% Check if an equations section exists.
+    rec-msg(exists-eqs-section(Name?)) .
+    snd-eval(IO, exists-eqs-section(Name)) .
+    (
+      rec-value(IO, exists) .
+      snd-msg(eqs-section-exists(Name))
+    +
+      rec-value(IO, not-exists) .
+      snd-msg(eqs-section-not-exists(Name))
+    )
+  +
     %% Create a (new) equations section for a given module
     rec-msg(create-empty-equations(Name?)) .
     snd-eval(IO, create-empty-eqs-section(Name)) .
     (
       rec-value(IO, creation-succeeded(FileName?)) .
-      snd-msg(equations-created(FileName))
+      snd-msg(empty-equations-created(FileName))
     +
       rec-value(IO, creation-failed(Text?)) .
-      snd-msg(equations-creation-failed(Name, Text))
+      snd-msg(empty-equations-not-created(Name, Text))
     )
   +
     %% Name represents the module-name (without extension)
@@ -101,14 +112,14 @@ in
       snd-msg(Id, error-opening(Name))
     )
   +
-    rec-msg(Id?,open-eqs-text-file(Name?)).
+    rec-msg(open-eqs-text-file(Name?)).
     snd-eval(IO,open-eqs-text-file(Name)).
     (
       rec-value(IO,opened-file(raw,Name?,Text?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS))) 
+      snd-msg(opened-file(raw,Name,Text,Path,timestamp(TS))) 
       +
       rec-value(IO,error-opening(Name?)).
-      snd-msg(Id, error-opening(Name))
+      snd-msg(error-opening(Name))
     )
   +
     rec-msg(save-sdf2-asfix(Name?,Path?,Asfix?)).

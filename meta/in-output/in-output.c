@@ -294,6 +294,24 @@ ATerm create_empty_sdf2_module(int cid, char *moduleName)
 }
 
 /*
+ * Checks whether an equations section exists.
+ */
+ATerm exists_eqs_section(int cid, char *moduleName)
+{
+  char   txtFileName[PATH_LEN] = {'\0'};
+  char   bafFileName[PATH_LEN] = {'\0'};
+
+  sprintf(txtFileName, "%s%s", moduleName, EQS_TXT_EXT);
+  sprintf(bafFileName, "%s%s", moduleName, EQS_BAF_EXT);
+
+  if (fileexists(txtFileName) || fileexists(bafFileName)) {
+      return ATmake("snd-value(exists)");
+  } else {
+      return ATmake("snd-value(not-exists)");
+  }
+}
+
+/*
  * Create an empty equations section for a given module.
  */
 ATerm create_empty_eqs_section(int cid, char *moduleName)
