@@ -228,8 +228,12 @@ class RuleSelector
 
   public void valueChanged(ListSelectionEvent event)
   {
-    Rule rule = process.getRuleAt(table.getSelectedRow());
-    fireRuleSelected(rule);
+  	int row = table.getSelectedRow();
+  	
+  	if (row != -1) {
+      Rule rule = process.getRuleAt(table.getSelectedRow());
+      fireRuleSelected(rule);
+  	}
   }
 
   //}}}
