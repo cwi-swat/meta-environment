@@ -45,7 +45,7 @@ hiddens
     "&CompilationUnit"			-> CompilationUnit
     "&Expressions"			-> {Expression ","}*
     "&Identifier"			-> Identifier
-    "&Super"				-> Super
+    "&Super"				-> Super?
     "&Interfaces"			-> Interfaces?
     "&Modifiers"			-> Modifier*
     "&Name"				-> Name

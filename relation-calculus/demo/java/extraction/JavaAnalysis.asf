@@ -10,9 +10,9 @@ equations
   [| rel[File, loc] FILES               += extractCompilationUnit(&CompilationUnit, {})
      rel[Interface,loc] INTERFACES      += extractInterface(&CompilationUnit, {})
      rel[Package,loc] PACKAGES          += extractPackage(&CompilationUnit, {})
-     rel[Method, loc] METHODS           += extractMethod(&CompilationUnit,{})
      rel[Class,loc] CLASSES             += extractClasses(&CompilationUnit, {})
-     rel[ClassUse,loc] CLASSES_USES     += extractClassUses(&CompilationUnit, {})
+     rel[Method, loc] METHODS           += extractMethod(&CompilationUnit,{})
+     rel[ClassUse,loc] CLASS_USES       += extractClassUses(&CompilationUnit, {})
      rel[Var, loc, Type] VARIABLE_DECLS += extractVariables(&CompilationUnit,  {})
      rel[Field, loc, Type] FIELD_DECLS  += extractFields(&CompilationUnit, {})
 

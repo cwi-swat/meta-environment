@@ -40,7 +40,7 @@ equations
 		   type name = str
 
 		   expr ROOT = $Start
-		   str S = 13
+		 
 
 		   rel[expr,expr] PRED = $Rel1
 		   rel[expr,name] DEFS = defs($Program, {})
