@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug 17 13:34:17 CEST 2004 <kooiker@cwi.nl>
+ * editors/text/gvim/connector.c:
+   - Escape double quotes in displayMessage
+
 Mon Aug  2 09:19:26 CEST 2004 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
    - Defuse variable error removed in edit equations causing equations editor

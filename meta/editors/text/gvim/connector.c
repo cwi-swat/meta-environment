@@ -263,6 +263,7 @@ static void displayMessage(int write_to_editor_fd, TE_Action edAction)
   sprintf(buf, TE_getActionMessage(edAction));
 
   escaped = escape(buf, ESCAPE_CHAR);
+  escaped = escape(buf, QUOTE_CHAR);
   sprintf(buf, ":echo \"%s\"", escaped);
 
   sendToVim(buf);
