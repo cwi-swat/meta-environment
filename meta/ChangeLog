@@ -1,5 +1,11 @@
 # $Id$
 
+2002/06/04 (vandenbr@loria.fr)
+ * Introduced a separate ProcessButtonActions process, in order to
+   be able to have more than one editor with buttons active at the
+   same time.
+ *  Added extra argument (EditorId) when returning the stack.   
+
 2002/05/17 (vandenbr@loria.fr)
  * Restructured the ToolBus code a bit, introduced a separate 
    process errors process.
