@@ -23,6 +23,7 @@ aterm *expand_to_asfix(arena *ar,aterm *mod,char *name);
 int print_source(FILE *f, aterm *term);
 void pp_rnx(FILE *f, aterm *t, int indent);
 aterm *asfix2rnx(arena *ar,aterm *asfix);
+void init_expansion_terms();
 
 aterm_list *modules_db;
 
@@ -576,6 +577,7 @@ int main(int argc, char **argv)
   cid = TBnewConnection(NULL, NULL, NULL, -1, 
 			 compiler_handler, compiler_check_in_sign);
   TBconnect(cid);
+  init_expansion_terms();
   TBeventloop();
 
   return 0;

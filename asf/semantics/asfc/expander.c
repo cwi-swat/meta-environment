@@ -5,6 +5,27 @@
 
 #define TABLE_SIZE 2048
 
+static aterm *term_w_appl;
+
+void init_expansion_terms()
+{
+  arena local;
+  aterm *tmp;
+
+  TinitArena(NULL, &local);
+
+  /* Building a white-space appl */
+  tmp = AFmakeProd(&local, TmakeSimple(&local, "id(\"ParseTrees\")"),
+                        TmkList_n(&local,1,TmakeSimple(&local, "ql(\"w\")")), 
+                        TmakeSimple(&local, "sort(\"AFun\")"),
+                        TmakeSimple(&local, "no-attrs"));
+  term_w_appl = AFmakeAppl(&local, tmp, 
+                   TmkList_n(&local, 1, TmakeSimple(&local, "l(\"w\")")));
+
+  Tprotect(term_w_appl);
+  TdestroyArena(&local);
+}
+
 typedef struct prodbucket
 {
   struct prodbucket *next;
@@ -43,17 +64,6 @@ int is_sep(aterm *sep)
 {
   char *text;
   return Tmatch(sep,"sep(<str>)",&text);
-}
-
-aterm *make_w_appl(arena *ar)
-{
-  aterm *prod;
-
-  prod = AFmakeProd(ar, TmakeSimple(ar, "id(\"ParseTrees\")"),
-                        TmkList_n(ar,1,TmakeSimple(ar, "ql(\"w\")")), 
-                        TmakeSimple(ar, "sort(\"AFun\")"),
-                        TmakeSimple(ar, "no-attrs"));
-  return AFmakeAppl(ar, prod, TmkList_n(ar,1,TmakeSimple(ar, "l(\"w\")")));
 }
 
 aterm *make_l_appl(arena *ar)
@@ -672,6 +682,7 @@ aterm *make_afun_aterms_to_aterm_appl(arena *ar,aterm *fun,aterm *arg)
                               TmakeSimple(ar, "l(\")\")")));
 }
 
+/* <PO> wordt vaak aangeroepen + constant */
 aterm *make_aterm_aterms_to_aterms_prod(arena *ar)
 {
   return AFmakeProd(ar, TmakeSimple(ar, "id(\"ATerms\")"),
@@ -776,7 +787,7 @@ aterm *expand_asfix_ws(arena *ar, aterm *ws)
                                  make_literal_to_afun_appl(ar,
                                                            make_lex(ar,text)));
   return make_afun_aterms_to_aterm_appl(ar,
-                                        make_w_appl(ar),
+                                        term_w_appl,
                                         make_aterm_to_aterms_appl(ar,appl));
 }
 
