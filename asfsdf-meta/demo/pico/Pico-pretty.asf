@@ -26,18 +26,6 @@ equations
 [idtype2box-0]
   idtype2box(PicoId : Type) = H [H hs=0 [picoid2box(PicoId) ":"] type2box(Type)]
 
-[statementlist2box-0]
-  Box := statement2box(Statement)
-  ===>
-  statementlist2box(Statement) = V [Box]
-
-[statementlist2box-1]
-  Box1 := statement2box(Statement),
-  Box2 := H hs=0 [Box1 ";"],
-  V [Box*] := statementlist2box(Statement*)
-  ===>
-  statementlist2box(Statement; Statement*) = V [Box2 Box*]
-
 [if2box-0]
   if Exp then Statement*1 else Statement*2 fi =
     box2statement(V [HV ["if" exp2box(Exp) "then"] 

@@ -10,7 +10,6 @@ exports
     idtype2box(ID-TYPE)                 -> Box {to-box}
     idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
     picoid2box(PICO-ID)                 -> Box {to-box}
-    statement2box(STATEMENT)            -> Box {to-box}
     statementlist2box({STATEMENT ";"}*) -> Box {to-box}
     type2box(TYPE)                      -> Box {to-box}
     box2decls(Box)                      -> DECLS {from-box}
