@@ -92,7 +92,8 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
   while (!SE_isStepsEmpty(steps)) {
     PT_Tree sub_tree = getTreeAt(tree, steps);
     char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
-    if (isStartSymbol(sort_name, startSymbols)) {
+    if (isStartSymbol(sort_name, startSymbols) ||
+        PT_isTreeFlatLayout(sub_tree)) {
       return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
     }
     steps = stepUp(steps);
@@ -102,6 +103,22 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
 }
 
 /*}}}  */
+
+ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus)
+{
+  SE_FocusList unparsedFoci = SE_getEditorUnparsedFoci(editor);
+
+  while (SE_hasFocusListHead(unparsedFoci)) {
+    SE_Focus uf = SE_getFocusListHead(unparsedFoci);
+    if (SE_isEqualFocus(focus, uf)) {
+      return ATtrue;
+    }
+    unparsedFoci = SE_getFocusListTail(unparsedFoci);
+  }
+
+  return ATfalse;
+}
+
 /*{{{  SE_Focus updateFocus(SE_Focus focus, int location, int length) */
 
 SE_Focus updateFocus(SE_Focus focus, int location, int length)
@@ -167,7 +184,7 @@ SE_Editor joinUnparsedFoci(SE_Editor editor)
   SE_Focus focus;
 
   focus = SE_getEditorFocus(editor);
-  assert(SE_getFocusUnparsed(focus) == FOCUS_UNPARSED);
+  //assert(SE_getFocusUnparsed(focus) == FOCUS_UNPARSED);
 
   /* Check whether the current focus is a subfocus
    * of one of the dirty focuses. If so,

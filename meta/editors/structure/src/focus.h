@@ -20,6 +20,8 @@ SE_Focus updateFocus(SE_Focus focus, int location, int length);
 SE_Editor joinFoci(SE_Editor editor);
 SE_Editor joinUnparsedFoci(SE_Editor editor);
 
+ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus);
+
 SE_FocusList removeFocus(SE_FocusList foci, SE_Focus focus);
 
 #endif

@@ -39,7 +39,7 @@
 
 #include "Editor.h"
 
-#define SORT_INVALID "invalid"
+#define SORT_INVALID "unparsed"
 #define SORT_TERM    "term"
 
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars);
@@ -50,7 +50,7 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus,
 				   PT_Args left_layout, PT_Args right_layout);
 SE_Editor moveFocus(SE_Editor editor, SE_Move move);
 SE_Editor moveFocusToTop(SE_Editor editor);
-SE_Focus getFocusAt(PT_ParseTree parse_tree, int location);
+SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location);
 
 SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, char *sort, ATbool dirty);
 SE_Editor newEditorGivenText(char *text);

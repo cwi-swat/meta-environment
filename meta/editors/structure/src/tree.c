@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
+#include <aterm2.h>
 
 #include <MEPT.h>
 #include <MEPT-utils.h>
@@ -13,9 +14,36 @@
 #include "tree.h"
 #include "area.h"
 #include "focus.h"
+#include "editor.h"
 
 /*}}}  */
 
+
+PT_ParseTree flattenParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path) 
+{
+  PT_Tree subtree, newsubtree;
+  ATerm annos;
+  char *str = NULL;
+
+  subtree = getParseTreeTreeAt(parse_tree, path);
+  
+  if (subtree) { 
+    annos = AT_getAnnotations(PT_makeTermFromTree(subtree));
+     
+    str = PT_yieldTree(subtree);
+    assert(str);
+
+    newsubtree = PT_makeTreeFlatLayout(str);
+
+    newsubtree = PT_makeTreeFromTerm(
+		   AT_setAnnotations(
+		     PT_makeTermFromTree(newsubtree), annos));
+      
+    return setParseTreeTreeAt(parse_tree, newsubtree, path);  
+  }
+
+  return parse_tree;
+}
 
 /*{{{  PT_Symbol getParseTreeSort(PT_ParseTree parse_tree) */
 
@@ -44,11 +72,8 @@ getTreeSort(PT_Tree tree)
                                   PT_makeCharRangeCharacter(ch),
                                   PT_makeCharRangesEmpty()));
   }
-  else if (PT_isTreeLit(tree)) {
-    return PT_makeSymbolSort(PT_getTreeString(tree));
-  }
   else {
-    return PT_makeSymbolSort("invalid");
+    return PT_makeSymbolSort(SORT_INVALID);
   }
 }
 
@@ -117,6 +142,24 @@ PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)
 }
 
 /*}}}  */
+
+/*{{{  PT_ParseTree setParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path) */
+
+PT_ParseTree setParseTreeTreeAt(PT_ParseTree parse_tree, PT_Tree tree, SE_Path path)
+{
+  if (SE_hasPathSteps(path)) {
+    SE_Steps steps = SE_getPathSteps(path);
+    return PT_setParseTreeTree(
+             parse_tree,
+             setTreeAt(PT_getParseTreeTree(parse_tree),tree, steps));
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
+
 
 /*{{{  PT_Args concatLeftLayout(PT_Args l1, PT_Args l2) */
 
@@ -252,10 +295,9 @@ PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 
 ATbool isBasicLeafNode(PT_Tree tree)
 {
-  return !PT_isTreeAppl(tree) && !PT_isTreeList(tree);
-/*
-    && !PT_isTreeVar(tree) && !PT_isTreeLexical(tree);
-*/
+  return !PT_isTreeAppl(tree) && 
+         !PT_isTreeList(tree) && 
+         !PT_isTreeFlatLayout(tree);
 }
 
 /*}}}  */

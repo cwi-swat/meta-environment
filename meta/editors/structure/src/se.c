@@ -217,7 +217,7 @@ ATerm set_focus(int cid, ATerm editorId, int location)
 
   parse_tree = SE_getEditorParseTree(editor);
 
-  focus = getFocusAt(parse_tree, location);
+  focus = getFocusAt(editor, parse_tree, location);
 
   editor = SE_setEditorFocus(editor, focus);
 
