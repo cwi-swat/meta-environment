@@ -271,11 +271,11 @@ ME_SubjectSubjectList ME_makeSubjectSubjectList6(ME_Subject elem1, ME_Subject el
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  ME_Feedback ME_makeFeedbackInfo(ME_Info Info) */
+/*{{{  ME_Feedback ME_makeFeedbackInfo(ME_Information Information) */
 
-ME_Feedback ME_makeFeedbackInfo(ME_Info Info)
+ME_Feedback ME_makeFeedbackInfo(ME_Information Information)
 {
-  return (ME_Feedback)(ATerm)ATmakeAppl1(ME_afun0, (ATerm)Info);
+  return (ME_Feedback)(ATerm)ATmakeAppl1(ME_afun0, (ATerm)Information);
 }
 
 /*}}}  */
@@ -303,51 +303,51 @@ ME_Feedback ME_makeFeedbackFatalError(ME_FatalError FatalError)
 }
 
 /*}}}  */
-/*{{{  ME_Information ME_makeInformationInformation(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
+/*{{{  ME_Information ME_makeInformationInformation(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
 
-ME_Information ME_makeInformationInformation(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
+ME_Information ME_makeInformationInformation(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
 {
-  return (ME_Information)(ATerm)ATmakeAppl4(ME_afun4, (ATerm)id, (ATerm)producer, (ATerm)description, (ATerm)subjects);
+  return (ME_Information)(ATerm)ATmakeAppl4(ME_afun4, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)producer, (ATerm)description, (ATerm)subjects);
 }
 
 /*}}}  */
-/*{{{  ME_Warning ME_makeWarningWarning(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
+/*{{{  ME_Warning ME_makeWarningWarning(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
 
-ME_Warning ME_makeWarningWarning(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
+ME_Warning ME_makeWarningWarning(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
 {
-  return (ME_Warning)(ATerm)ATmakeAppl4(ME_afun5, (ATerm)id, (ATerm)producer, (ATerm)description, (ATerm)subjects);
+  return (ME_Warning)(ATerm)ATmakeAppl4(ME_afun5, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)producer, (ATerm)description, (ATerm)subjects);
 }
 
 /*}}}  */
-/*{{{  ME_Error ME_makeErrorError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
+/*{{{  ME_Error ME_makeErrorError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
 
-ME_Error ME_makeErrorError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
+ME_Error ME_makeErrorError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
 {
-  return (ME_Error)(ATerm)ATmakeAppl4(ME_afun6, (ATerm)id, (ATerm)producer, (ATerm)description, (ATerm)subjects);
+  return (ME_Error)(ATerm)ATmakeAppl4(ME_afun6, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)producer, (ATerm)description, (ATerm)subjects);
 }
 
 /*}}}  */
-/*{{{  ME_FatalError ME_makeFatalErrorFatalError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
+/*{{{  ME_FatalError ME_makeFatalErrorFatalError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects) */
 
-ME_FatalError ME_makeFatalErrorFatalError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
+ME_FatalError ME_makeFatalErrorFatalError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects)
 {
-  return (ME_FatalError)(ATerm)ATmakeAppl4(ME_afun7, (ATerm)id, (ATerm)producer, (ATerm)description, (ATerm)subjects);
+  return (ME_FatalError)(ATerm)ATmakeAppl4(ME_afun7, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)producer, (ATerm)description, (ATerm)subjects);
 }
 
 /*}}}  */
-/*{{{  ME_Producer ME_makeProducerProducer(ME_String id, ME_String type) */
+/*{{{  ME_Producer ME_makeProducerProducer(char* id, char* type) */
 
-ME_Producer ME_makeProducerProducer(ME_String id, ME_String type)
+ME_Producer ME_makeProducerProducer(char* id, char* type)
 {
-  return (ME_Producer)(ATerm)ATmakeAppl2(ME_afun8, (ATerm)id, (ATerm)type);
+  return (ME_Producer)(ATerm)ATmakeAppl2(ME_afun8, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(type, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  ME_Description ME_makeDescriptionDescription(ME_String String) */
+/*{{{  ME_Description ME_makeDescriptionDescription(char* String) */
 
-ME_Description ME_makeDescriptionDescription(ME_String String)
+ME_Description ME_makeDescriptionDescription(char* String)
 {
-  return (ME_Description)(ATerm)ATmakeAppl1(ME_afun9, (ATerm)String);
+  return (ME_Description)(ATerm)ATmakeAppl1(ME_afun9, (ATerm)ATmakeAppl0(ATmakeAFun(String, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -375,35 +375,35 @@ ME_SubjectSubjectList ME_makeSubjectSubjectListEmpty()
 }
 
 /*}}}  */
-/*{{{  ME_Subject ME_makeSubjectWithoutLocation(ME_String id, ME_Location location) */
+/*{{{  ME_Subject ME_makeSubjectWithoutLocation(char* id, ME_Location location) */
 
-ME_Subject ME_makeSubjectWithoutLocation(ME_String id, ME_Location location)
+ME_Subject ME_makeSubjectWithoutLocation(char* id, ME_Location location)
 {
-  return (ME_Subject)(ATerm)ATmakeAppl2(ME_afun11, (ATerm)id, (ATerm)location);
+  return (ME_Subject)(ATerm)ATmakeAppl2(ME_afun11, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), (ATerm)location);
 }
 
 /*}}}  */
-/*{{{  ME_Subject ME_makeSubjectWithLocation(ME_String id) */
+/*{{{  ME_Subject ME_makeSubjectWithLocation(char* id) */
 
-ME_Subject ME_makeSubjectWithLocation(ME_String id)
+ME_Subject ME_makeSubjectWithLocation(char* id)
 {
-  return (ME_Subject)(ATerm)ATmakeAppl1(ME_afun12, (ATerm)id);
+  return (ME_Subject)(ATerm)ATmakeAppl1(ME_afun12, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  ME_Location ME_makeLocationLocation(ME_String file, ME_Area area) */
+/*{{{  ME_Location ME_makeLocationLocation(char* file, ME_Area area) */
 
-ME_Location ME_makeLocationLocation(ME_String file, ME_Area area)
+ME_Location ME_makeLocationLocation(char* file, ME_Area area)
 {
-  return (ME_Location)(ATerm)ATmakeAppl2(ME_afun13, (ATerm)file, (ATerm)area);
+  return (ME_Location)(ATerm)ATmakeAppl2(ME_afun13, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), (ATerm)area);
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_makeAreaArea(ME_NatCon startLine, ME_NatCon startColumn, ME_NatCon endLine, ME_NatCon endColumn, ME_NatCon startOffset, ME_NatCon endOffset) */
+/*{{{  ME_Area ME_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset) */
 
-ME_Area ME_makeAreaArea(ME_NatCon startLine, ME_NatCon startColumn, ME_NatCon endLine, ME_NatCon endColumn, ME_NatCon startOffset, ME_NatCon endOffset)
+ME_Area ME_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset)
 {
-  return (ME_Area)(ATerm)ATmakeAppl6(ME_afun14, (ATerm)startLine, (ATerm)startColumn, (ATerm)endLine, (ATerm)endColumn, (ATerm)startOffset, (ATerm)endOffset);
+  return (ME_Area)(ATerm)ATmakeAppl6(ME_afun14, (ATerm)ATmakeInt(startLine), (ATerm)ATmakeInt(startColumn), (ATerm)ATmakeInt(endLine), (ATerm)ATmakeInt(endColumn), (ATerm)ATmakeInt(startOffset), (ATerm)ATmakeInt(endOffset));
 }
 
 /*}}}  */
@@ -582,9 +582,9 @@ inline ATbool ME_isFeedbackFatalError(ME_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ATbool ME_hasFeedbackInfo(ME_Feedback arg) */
+/*{{{  ATbool ME_hasFeedbackInformation(ME_Feedback arg) */
 
-ATbool ME_hasFeedbackInfo(ME_Feedback arg)
+ATbool ME_hasFeedbackInformation(ME_Feedback arg)
 {
   if (ME_isFeedbackInfo(arg)) {
     return ATtrue;
@@ -593,24 +593,24 @@ ATbool ME_hasFeedbackInfo(ME_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ME_Info ME_getFeedbackInfo(ME_Feedback arg) */
+/*{{{  ME_Information ME_getFeedbackInformation(ME_Feedback arg) */
 
-ME_Info ME_getFeedbackInfo(ME_Feedback arg)
+ME_Information ME_getFeedbackInformation(ME_Feedback arg)
 {
   
-    return (ME_Info)ATgetArgument((ATermAppl)arg, 0);
+    return (ME_Information)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  ME_Feedback ME_setFeedbackInfo(ME_Feedback arg, ME_Info Info) */
+/*{{{  ME_Feedback ME_setFeedbackInformation(ME_Feedback arg, ME_Information Information) */
 
-ME_Feedback ME_setFeedbackInfo(ME_Feedback arg, ME_Info Info)
+ME_Feedback ME_setFeedbackInformation(ME_Feedback arg, ME_Information Information)
 {
   if (ME_isFeedbackInfo(arg)) {
-    return (ME_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)Info, 0);
+    return (ME_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)Information, 0);
   }
 
-  ATabort("Feedback has no Info: %t\n", arg);
+  ATabort("Feedback has no Information: %t\n", arg);
   return (ME_Feedback)NULL;
 }
 
@@ -752,21 +752,21 @@ ATbool ME_hasInformationId(ME_Information arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getInformationId(ME_Information arg) */
+/*{{{  char* ME_getInformationId(ME_Information arg) */
 
-ME_String ME_getInformationId(ME_Information arg)
+char* ME_getInformationId(ME_Information arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Information ME_setInformationId(ME_Information arg, ME_String id) */
+/*{{{  ME_Information ME_setInformationId(ME_Information arg, char* id) */
 
-ME_Information ME_setInformationId(ME_Information arg, ME_String id)
+ME_Information ME_setInformationId(ME_Information arg, char* id)
 {
   if (ME_isInformationInformation(arg)) {
-    return (ME_Information)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Information)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("Information has no Id: %t\n", arg);
@@ -911,21 +911,21 @@ ATbool ME_hasWarningId(ME_Warning arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getWarningId(ME_Warning arg) */
+/*{{{  char* ME_getWarningId(ME_Warning arg) */
 
-ME_String ME_getWarningId(ME_Warning arg)
+char* ME_getWarningId(ME_Warning arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Warning ME_setWarningId(ME_Warning arg, ME_String id) */
+/*{{{  ME_Warning ME_setWarningId(ME_Warning arg, char* id) */
 
-ME_Warning ME_setWarningId(ME_Warning arg, ME_String id)
+ME_Warning ME_setWarningId(ME_Warning arg, char* id)
 {
   if (ME_isWarningWarning(arg)) {
-    return (ME_Warning)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Warning)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("Warning has no Id: %t\n", arg);
@@ -1070,21 +1070,21 @@ ATbool ME_hasErrorId(ME_Error arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getErrorId(ME_Error arg) */
+/*{{{  char* ME_getErrorId(ME_Error arg) */
 
-ME_String ME_getErrorId(ME_Error arg)
+char* ME_getErrorId(ME_Error arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Error ME_setErrorId(ME_Error arg, ME_String id) */
+/*{{{  ME_Error ME_setErrorId(ME_Error arg, char* id) */
 
-ME_Error ME_setErrorId(ME_Error arg, ME_String id)
+ME_Error ME_setErrorId(ME_Error arg, char* id)
 {
   if (ME_isErrorError(arg)) {
-    return (ME_Error)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Error)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("Error has no Id: %t\n", arg);
@@ -1229,21 +1229,21 @@ ATbool ME_hasFatalErrorId(ME_FatalError arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getFatalErrorId(ME_FatalError arg) */
+/*{{{  char* ME_getFatalErrorId(ME_FatalError arg) */
 
-ME_String ME_getFatalErrorId(ME_FatalError arg)
+char* ME_getFatalErrorId(ME_FatalError arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_FatalError ME_setFatalErrorId(ME_FatalError arg, ME_String id) */
+/*{{{  ME_FatalError ME_setFatalErrorId(ME_FatalError arg, char* id) */
 
-ME_FatalError ME_setFatalErrorId(ME_FatalError arg, ME_String id)
+ME_FatalError ME_setFatalErrorId(ME_FatalError arg, char* id)
 {
   if (ME_isFatalErrorFatalError(arg)) {
-    return (ME_FatalError)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_FatalError)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("FatalError has no Id: %t\n", arg);
@@ -1388,21 +1388,21 @@ ATbool ME_hasProducerId(ME_Producer arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getProducerId(ME_Producer arg) */
+/*{{{  char* ME_getProducerId(ME_Producer arg) */
 
-ME_String ME_getProducerId(ME_Producer arg)
+char* ME_getProducerId(ME_Producer arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Producer ME_setProducerId(ME_Producer arg, ME_String id) */
+/*{{{  ME_Producer ME_setProducerId(ME_Producer arg, char* id) */
 
-ME_Producer ME_setProducerId(ME_Producer arg, ME_String id)
+ME_Producer ME_setProducerId(ME_Producer arg, char* id)
 {
   if (ME_isProducerProducer(arg)) {
-    return (ME_Producer)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Producer)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("Producer has no Id: %t\n", arg);
@@ -1421,21 +1421,21 @@ ATbool ME_hasProducerType(ME_Producer arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getProducerType(ME_Producer arg) */
+/*{{{  char* ME_getProducerType(ME_Producer arg) */
 
-ME_String ME_getProducerType(ME_Producer arg)
+char* ME_getProducerType(ME_Producer arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 1);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  ME_Producer ME_setProducerType(ME_Producer arg, ME_String type) */
+/*{{{  ME_Producer ME_setProducerType(ME_Producer arg, char* type) */
 
-ME_Producer ME_setProducerType(ME_Producer arg, ME_String type)
+ME_Producer ME_setProducerType(ME_Producer arg, char* type)
 {
   if (ME_isProducerProducer(arg)) {
-    return (ME_Producer)ATsetArgument((ATermAppl)arg, (ATerm)type, 1);
+    return (ME_Producer)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(type, 0, ATtrue)), 1);
   }
 
   ATabort("Producer has no Type: %t\n", arg);
@@ -1481,21 +1481,21 @@ ATbool ME_hasDescriptionString(ME_Description arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getDescriptionString(ME_Description arg) */
+/*{{{  char* ME_getDescriptionString(ME_Description arg) */
 
-ME_String ME_getDescriptionString(ME_Description arg)
+char* ME_getDescriptionString(ME_Description arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Description ME_setDescriptionString(ME_Description arg, ME_String String) */
+/*{{{  ME_Description ME_setDescriptionString(ME_Description arg, char* String) */
 
-ME_Description ME_setDescriptionString(ME_Description arg, ME_String String)
+ME_Description ME_setDescriptionString(ME_Description arg, char* String)
 {
   if (ME_isDescriptionDescription(arg)) {
-    return (ME_Description)ATsetArgument((ATermAppl)arg, (ATerm)String, 0);
+    return (ME_Description)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(String, 0, ATtrue)), 0);
   }
 
   ATabort("Description has no String: %t\n", arg);
@@ -1753,27 +1753,27 @@ ATbool ME_hasSubjectId(ME_Subject arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getSubjectId(ME_Subject arg) */
+/*{{{  char* ME_getSubjectId(ME_Subject arg) */
 
-ME_String ME_getSubjectId(ME_Subject arg)
+char* ME_getSubjectId(ME_Subject arg)
 {
   if (ME_isSubjectWithoutLocation(arg)) {
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
   else 
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Subject ME_setSubjectId(ME_Subject arg, ME_String id) */
+/*{{{  ME_Subject ME_setSubjectId(ME_Subject arg, char* id) */
 
-ME_Subject ME_setSubjectId(ME_Subject arg, ME_String id)
+ME_Subject ME_setSubjectId(ME_Subject arg, char* id)
 {
   if (ME_isSubjectWithoutLocation(arg)) {
-    return (ME_Subject)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
   else if (ME_isSubjectWithLocation(arg)) {
-    return (ME_Subject)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+    return (ME_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(id, 0, ATtrue)), 0);
   }
 
   ATabort("Subject has no Id: %t\n", arg);
@@ -1852,21 +1852,21 @@ ATbool ME_hasLocationFile(ME_Location arg)
 }
 
 /*}}}  */
-/*{{{  ME_String ME_getLocationFile(ME_Location arg) */
+/*{{{  char* ME_getLocationFile(ME_Location arg) */
 
-ME_String ME_getLocationFile(ME_Location arg)
+char* ME_getLocationFile(ME_Location arg)
 {
   
-    return (ME_String)ATgetArgument((ATermAppl)arg, 0);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ME_Location ME_setLocationFile(ME_Location arg, ME_String file) */
+/*{{{  ME_Location ME_setLocationFile(ME_Location arg, char* file) */
 
-ME_Location ME_setLocationFile(ME_Location arg, ME_String file)
+ME_Location ME_setLocationFile(ME_Location arg, char* file)
 {
   if (ME_isLocationLocation(arg)) {
-    return (ME_Location)ATsetArgument((ATermAppl)arg, (ATerm)file, 0);
+    return (ME_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(file, 0, ATtrue)), 0);
   }
 
   ATabort("Location has no File: %t\n", arg);
@@ -1945,21 +1945,21 @@ ATbool ME_hasAreaStartLine(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaStartLine(ME_Area arg) */
+/*{{{  int ME_getAreaStartLine(ME_Area arg) */
 
-ME_NatCon ME_getAreaStartLine(ME_Area arg)
+int ME_getAreaStartLine(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 0);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaStartLine(ME_Area arg, ME_NatCon startLine) */
+/*{{{  ME_Area ME_setAreaStartLine(ME_Area arg, int startLine) */
 
-ME_Area ME_setAreaStartLine(ME_Area arg, ME_NatCon startLine)
+ME_Area ME_setAreaStartLine(ME_Area arg, int startLine)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)startLine, 0);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(startLine), 0);
   }
 
   ATabort("Area has no StartLine: %t\n", arg);
@@ -1978,21 +1978,21 @@ ATbool ME_hasAreaStartColumn(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaStartColumn(ME_Area arg) */
+/*{{{  int ME_getAreaStartColumn(ME_Area arg) */
 
-ME_NatCon ME_getAreaStartColumn(ME_Area arg)
+int ME_getAreaStartColumn(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 1);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaStartColumn(ME_Area arg, ME_NatCon startColumn) */
+/*{{{  ME_Area ME_setAreaStartColumn(ME_Area arg, int startColumn) */
 
-ME_Area ME_setAreaStartColumn(ME_Area arg, ME_NatCon startColumn)
+ME_Area ME_setAreaStartColumn(ME_Area arg, int startColumn)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)startColumn, 1);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(startColumn), 1);
   }
 
   ATabort("Area has no StartColumn: %t\n", arg);
@@ -2011,21 +2011,21 @@ ATbool ME_hasAreaEndLine(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaEndLine(ME_Area arg) */
+/*{{{  int ME_getAreaEndLine(ME_Area arg) */
 
-ME_NatCon ME_getAreaEndLine(ME_Area arg)
+int ME_getAreaEndLine(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 2);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaEndLine(ME_Area arg, ME_NatCon endLine) */
+/*{{{  ME_Area ME_setAreaEndLine(ME_Area arg, int endLine) */
 
-ME_Area ME_setAreaEndLine(ME_Area arg, ME_NatCon endLine)
+ME_Area ME_setAreaEndLine(ME_Area arg, int endLine)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)endLine, 2);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(endLine), 2);
   }
 
   ATabort("Area has no EndLine: %t\n", arg);
@@ -2044,21 +2044,21 @@ ATbool ME_hasAreaEndColumn(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaEndColumn(ME_Area arg) */
+/*{{{  int ME_getAreaEndColumn(ME_Area arg) */
 
-ME_NatCon ME_getAreaEndColumn(ME_Area arg)
+int ME_getAreaEndColumn(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 3);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaEndColumn(ME_Area arg, ME_NatCon endColumn) */
+/*{{{  ME_Area ME_setAreaEndColumn(ME_Area arg, int endColumn) */
 
-ME_Area ME_setAreaEndColumn(ME_Area arg, ME_NatCon endColumn)
+ME_Area ME_setAreaEndColumn(ME_Area arg, int endColumn)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)endColumn, 3);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(endColumn), 3);
   }
 
   ATabort("Area has no EndColumn: %t\n", arg);
@@ -2077,21 +2077,21 @@ ATbool ME_hasAreaStartOffset(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaStartOffset(ME_Area arg) */
+/*{{{  int ME_getAreaStartOffset(ME_Area arg) */
 
-ME_NatCon ME_getAreaStartOffset(ME_Area arg)
+int ME_getAreaStartOffset(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 4);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 4));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaStartOffset(ME_Area arg, ME_NatCon startOffset) */
+/*{{{  ME_Area ME_setAreaStartOffset(ME_Area arg, int startOffset) */
 
-ME_Area ME_setAreaStartOffset(ME_Area arg, ME_NatCon startOffset)
+ME_Area ME_setAreaStartOffset(ME_Area arg, int startOffset)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)startOffset, 4);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(startOffset), 4);
   }
 
   ATabort("Area has no StartOffset: %t\n", arg);
@@ -2110,21 +2110,21 @@ ATbool ME_hasAreaEndOffset(ME_Area arg)
 }
 
 /*}}}  */
-/*{{{  ME_NatCon ME_getAreaEndOffset(ME_Area arg) */
+/*{{{  int ME_getAreaEndOffset(ME_Area arg) */
 
-ME_NatCon ME_getAreaEndOffset(ME_Area arg)
+int ME_getAreaEndOffset(ME_Area arg)
 {
   
-    return (ME_NatCon)ATgetArgument((ATermAppl)arg, 5);
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 5));
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_setAreaEndOffset(ME_Area arg, ME_NatCon endOffset) */
+/*{{{  ME_Area ME_setAreaEndOffset(ME_Area arg, int endOffset) */
 
-ME_Area ME_setAreaEndOffset(ME_Area arg, ME_NatCon endOffset)
+ME_Area ME_setAreaEndOffset(ME_Area arg, int endOffset)
 {
   if (ME_isAreaArea(arg)) {
-    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)endOffset, 5);
+    return (ME_Area)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(endOffset), 5);
   }
 
   ATabort("Area has no EndOffset: %t\n", arg);
@@ -2136,13 +2136,13 @@ ME_Area ME_setAreaEndOffset(ME_Area arg, ME_NatCon endOffset)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Info (*acceptInfo)(ME_Info), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError)) */
+/*{{{  ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Information (*acceptInformation)(ME_Information), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError)) */
 
-ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Info (*acceptInfo)(ME_Info), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError))
+ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Information (*acceptInformation)(ME_Information), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError))
 {
   if (ME_isFeedbackInfo(arg)) {
     return ME_makeFeedbackInfo(
-        acceptInfo ? acceptInfo(ME_getFeedbackInfo(arg)) : ME_getFeedbackInfo(arg));
+        acceptInformation ? acceptInformation(ME_getFeedbackInformation(arg)) : ME_getFeedbackInformation(arg));
   }
   if (ME_isFeedbackWarning(arg)) {
     return ME_makeFeedbackWarning(
@@ -2161,9 +2161,9 @@ ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Info (*acceptInfo)(ME_Info), ME
 }
 
 /*}}}  */
-/*{{{  ME_Information ME_visitInformation(ME_Information arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
+/*{{{  ME_Information ME_visitInformation(ME_Information arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
 
-ME_Information ME_visitInformation(ME_Information arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
+ME_Information ME_visitInformation(ME_Information arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
 {
   if (ME_isInformationInformation(arg)) {
     return ME_makeInformationInformation(
@@ -2177,9 +2177,9 @@ ME_Information ME_visitInformation(ME_Information arg, ME_String (*acceptId)(ME_
 }
 
 /*}}}  */
-/*{{{  ME_Warning ME_visitWarning(ME_Warning arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
+/*{{{  ME_Warning ME_visitWarning(ME_Warning arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
 
-ME_Warning ME_visitWarning(ME_Warning arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
+ME_Warning ME_visitWarning(ME_Warning arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
 {
   if (ME_isWarningWarning(arg)) {
     return ME_makeWarningWarning(
@@ -2193,9 +2193,9 @@ ME_Warning ME_visitWarning(ME_Warning arg, ME_String (*acceptId)(ME_String), ME_
 }
 
 /*}}}  */
-/*{{{  ME_Error ME_visitError(ME_Error arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
+/*{{{  ME_Error ME_visitError(ME_Error arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
 
-ME_Error ME_visitError(ME_Error arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
+ME_Error ME_visitError(ME_Error arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
 {
   if (ME_isErrorError(arg)) {
     return ME_makeErrorError(
@@ -2209,9 +2209,9 @@ ME_Error ME_visitError(ME_Error arg, ME_String (*acceptId)(ME_String), ME_Produc
 }
 
 /*}}}  */
-/*{{{  ME_FatalError ME_visitFatalError(ME_FatalError arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
+/*{{{  ME_FatalError ME_visitFatalError(ME_FatalError arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects)) */
 
-ME_FatalError ME_visitFatalError(ME_FatalError arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
+ME_FatalError ME_visitFatalError(ME_FatalError arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects))
 {
   if (ME_isFatalErrorFatalError(arg)) {
     return ME_makeFatalErrorFatalError(
@@ -2225,9 +2225,9 @@ ME_FatalError ME_visitFatalError(ME_FatalError arg, ME_String (*acceptId)(ME_Str
 }
 
 /*}}}  */
-/*{{{  ME_Producer ME_visitProducer(ME_Producer arg, ME_String (*acceptId)(ME_String), ME_String (*acceptType)(ME_String)) */
+/*{{{  ME_Producer ME_visitProducer(ME_Producer arg, char* (*acceptId)(char*), char* (*acceptType)(char*)) */
 
-ME_Producer ME_visitProducer(ME_Producer arg, ME_String (*acceptId)(ME_String), ME_String (*acceptType)(ME_String))
+ME_Producer ME_visitProducer(ME_Producer arg, char* (*acceptId)(char*), char* (*acceptType)(char*))
 {
   if (ME_isProducerProducer(arg)) {
     return ME_makeProducerProducer(
@@ -2239,9 +2239,9 @@ ME_Producer ME_visitProducer(ME_Producer arg, ME_String (*acceptId)(ME_String), 
 }
 
 /*}}}  */
-/*{{{  ME_Description ME_visitDescription(ME_Description arg, ME_String (*acceptString)(ME_String)) */
+/*{{{  ME_Description ME_visitDescription(ME_Description arg, char* (*acceptString)(char*)) */
 
-ME_Description ME_visitDescription(ME_Description arg, ME_String (*acceptString)(ME_String))
+ME_Description ME_visitDescription(ME_Description arg, char* (*acceptString)(char*))
 {
   if (ME_isDescriptionDescription(arg)) {
     return ME_makeDescriptionDescription(
@@ -2282,9 +2282,9 @@ ME_SubjectSubjectList ME_visitSubjectSubjectList(ME_SubjectSubjectList arg, ME_S
 }
 
 /*}}}  */
-/*{{{  ME_Subject ME_visitSubject(ME_Subject arg, ME_String (*acceptId)(ME_String), ME_Location (*acceptLocation)(ME_Location)) */
+/*{{{  ME_Subject ME_visitSubject(ME_Subject arg, char* (*acceptId)(char*), ME_Location (*acceptLocation)(ME_Location)) */
 
-ME_Subject ME_visitSubject(ME_Subject arg, ME_String (*acceptId)(ME_String), ME_Location (*acceptLocation)(ME_Location))
+ME_Subject ME_visitSubject(ME_Subject arg, char* (*acceptId)(char*), ME_Location (*acceptLocation)(ME_Location))
 {
   if (ME_isSubjectWithoutLocation(arg)) {
     return ME_makeSubjectWithoutLocation(
@@ -2300,9 +2300,9 @@ ME_Subject ME_visitSubject(ME_Subject arg, ME_String (*acceptId)(ME_String), ME_
 }
 
 /*}}}  */
-/*{{{  ME_Location ME_visitLocation(ME_Location arg, ME_String (*acceptFile)(ME_String), ME_Area (*acceptArea)(ME_Area)) */
+/*{{{  ME_Location ME_visitLocation(ME_Location arg, char* (*acceptFile)(char*), ME_Area (*acceptArea)(ME_Area)) */
 
-ME_Location ME_visitLocation(ME_Location arg, ME_String (*acceptFile)(ME_String), ME_Area (*acceptArea)(ME_Area))
+ME_Location ME_visitLocation(ME_Location arg, char* (*acceptFile)(char*), ME_Area (*acceptArea)(ME_Area))
 {
   if (ME_isLocationLocation(arg)) {
     return ME_makeLocationLocation(
@@ -2314,9 +2314,9 @@ ME_Location ME_visitLocation(ME_Location arg, ME_String (*acceptFile)(ME_String)
 }
 
 /*}}}  */
-/*{{{  ME_Area ME_visitArea(ME_Area arg, ME_NatCon (*acceptStartLine)(ME_NatCon), ME_NatCon (*acceptStartColumn)(ME_NatCon), ME_NatCon (*acceptEndLine)(ME_NatCon), ME_NatCon (*acceptEndColumn)(ME_NatCon), ME_NatCon (*acceptStartOffset)(ME_NatCon), ME_NatCon (*acceptEndOffset)(ME_NatCon)) */
+/*{{{  ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine)(int), int (*acceptStartColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptStartOffset)(int), int (*acceptEndOffset)(int)) */
 
-ME_Area ME_visitArea(ME_Area arg, ME_NatCon (*acceptStartLine)(ME_NatCon), ME_NatCon (*acceptStartColumn)(ME_NatCon), ME_NatCon (*acceptEndLine)(ME_NatCon), ME_NatCon (*acceptEndColumn)(ME_NatCon), ME_NatCon (*acceptStartOffset)(ME_NatCon), ME_NatCon (*acceptEndOffset)(ME_NatCon))
+ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine)(int), int (*acceptStartColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptStartOffset)(int), int (*acceptEndOffset)(int))
 {
   if (ME_isAreaArea(arg)) {
     return ME_makeAreaArea(

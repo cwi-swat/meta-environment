@@ -78,23 +78,23 @@ ME_SubjectSubjectList ME_makeSubjectSubjectList6(ME_Subject elem1, ME_Subject el
 /*}}}  */
 /*{{{  constructors */
 
-ME_Feedback ME_makeFeedbackInfo(ME_Info Info);
+ME_Feedback ME_makeFeedbackInfo(ME_Information Information);
 ME_Feedback ME_makeFeedbackWarning(ME_Warning Warning);
 ME_Feedback ME_makeFeedbackError(ME_Error Error);
 ME_Feedback ME_makeFeedbackFatalError(ME_FatalError FatalError);
-ME_Information ME_makeInformationInformation(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
-ME_Warning ME_makeWarningWarning(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
-ME_Error ME_makeErrorError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
-ME_FatalError ME_makeFatalErrorFatalError(ME_String id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
-ME_Producer ME_makeProducerProducer(ME_String id, ME_String type);
-ME_Description ME_makeDescriptionDescription(ME_String String);
+ME_Information ME_makeInformationInformation(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
+ME_Warning ME_makeWarningWarning(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
+ME_Error ME_makeErrorError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
+ME_FatalError ME_makeFatalErrorFatalError(char* id, ME_Producer producer, ME_Description description, ME_Subjects subjects);
+ME_Producer ME_makeProducerProducer(char* id, char* type);
+ME_Description ME_makeDescriptionDescription(char* String);
 ME_Subjects ME_makeSubjectsSubjects(ME_SubjectSubjectList subjectList);
 ME_SubjectSubjectList ME_makeSubjectSubjectListMany(ME_Subject head, ME_SubjectSubjectList tail);
 ME_SubjectSubjectList ME_makeSubjectSubjectListEmpty();
-ME_Subject ME_makeSubjectWithoutLocation(ME_String id, ME_Location location);
-ME_Subject ME_makeSubjectWithLocation(ME_String id);
-ME_Location ME_makeLocationLocation(ME_String file, ME_Area area);
-ME_Area ME_makeAreaArea(ME_NatCon startLine, ME_NatCon startColumn, ME_NatCon endLine, ME_NatCon endColumn, ME_NatCon startOffset, ME_NatCon endOffset);
+ME_Subject ME_makeSubjectWithoutLocation(char* id, ME_Location location);
+ME_Subject ME_makeSubjectWithLocation(char* id);
+ME_Location ME_makeLocationLocation(char* file, ME_Area area);
+ME_Area ME_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -120,9 +120,9 @@ inline ATbool ME_isFeedbackInfo(ME_Feedback arg);
 inline ATbool ME_isFeedbackWarning(ME_Feedback arg);
 inline ATbool ME_isFeedbackError(ME_Feedback arg);
 inline ATbool ME_isFeedbackFatalError(ME_Feedback arg);
-ATbool ME_hasFeedbackInfo(ME_Feedback arg);
-ME_Info ME_getFeedbackInfo(ME_Feedback arg);
-ME_Feedback ME_setFeedbackInfo(ME_Feedback arg, ME_Info Info);
+ATbool ME_hasFeedbackInformation(ME_Feedback arg);
+ME_Information ME_getFeedbackInformation(ME_Feedback arg);
+ME_Feedback ME_setFeedbackInformation(ME_Feedback arg, ME_Information Information);
 ATbool ME_hasFeedbackWarning(ME_Feedback arg);
 ME_Warning ME_getFeedbackWarning(ME_Feedback arg);
 ME_Feedback ME_setFeedbackWarning(ME_Feedback arg, ME_Warning Warning);
@@ -139,8 +139,8 @@ ME_Feedback ME_setFeedbackFatalError(ME_Feedback arg, ME_FatalError FatalError);
 ATbool ME_isValidInformation(ME_Information arg);
 inline ATbool ME_isInformationInformation(ME_Information arg);
 ATbool ME_hasInformationId(ME_Information arg);
-ME_String ME_getInformationId(ME_Information arg);
-ME_Information ME_setInformationId(ME_Information arg, ME_String id);
+char* ME_getInformationId(ME_Information arg);
+ME_Information ME_setInformationId(ME_Information arg, char* id);
 ATbool ME_hasInformationProducer(ME_Information arg);
 ME_Producer ME_getInformationProducer(ME_Information arg);
 ME_Information ME_setInformationProducer(ME_Information arg, ME_Producer producer);
@@ -157,8 +157,8 @@ ME_Information ME_setInformationSubjects(ME_Information arg, ME_Subjects subject
 ATbool ME_isValidWarning(ME_Warning arg);
 inline ATbool ME_isWarningWarning(ME_Warning arg);
 ATbool ME_hasWarningId(ME_Warning arg);
-ME_String ME_getWarningId(ME_Warning arg);
-ME_Warning ME_setWarningId(ME_Warning arg, ME_String id);
+char* ME_getWarningId(ME_Warning arg);
+ME_Warning ME_setWarningId(ME_Warning arg, char* id);
 ATbool ME_hasWarningProducer(ME_Warning arg);
 ME_Producer ME_getWarningProducer(ME_Warning arg);
 ME_Warning ME_setWarningProducer(ME_Warning arg, ME_Producer producer);
@@ -175,8 +175,8 @@ ME_Warning ME_setWarningSubjects(ME_Warning arg, ME_Subjects subjects);
 ATbool ME_isValidError(ME_Error arg);
 inline ATbool ME_isErrorError(ME_Error arg);
 ATbool ME_hasErrorId(ME_Error arg);
-ME_String ME_getErrorId(ME_Error arg);
-ME_Error ME_setErrorId(ME_Error arg, ME_String id);
+char* ME_getErrorId(ME_Error arg);
+ME_Error ME_setErrorId(ME_Error arg, char* id);
 ATbool ME_hasErrorProducer(ME_Error arg);
 ME_Producer ME_getErrorProducer(ME_Error arg);
 ME_Error ME_setErrorProducer(ME_Error arg, ME_Producer producer);
@@ -193,8 +193,8 @@ ME_Error ME_setErrorSubjects(ME_Error arg, ME_Subjects subjects);
 ATbool ME_isValidFatalError(ME_FatalError arg);
 inline ATbool ME_isFatalErrorFatalError(ME_FatalError arg);
 ATbool ME_hasFatalErrorId(ME_FatalError arg);
-ME_String ME_getFatalErrorId(ME_FatalError arg);
-ME_FatalError ME_setFatalErrorId(ME_FatalError arg, ME_String id);
+char* ME_getFatalErrorId(ME_FatalError arg);
+ME_FatalError ME_setFatalErrorId(ME_FatalError arg, char* id);
 ATbool ME_hasFatalErrorProducer(ME_FatalError arg);
 ME_Producer ME_getFatalErrorProducer(ME_FatalError arg);
 ME_FatalError ME_setFatalErrorProducer(ME_FatalError arg, ME_Producer producer);
@@ -211,11 +211,11 @@ ME_FatalError ME_setFatalErrorSubjects(ME_FatalError arg, ME_Subjects subjects);
 ATbool ME_isValidProducer(ME_Producer arg);
 inline ATbool ME_isProducerProducer(ME_Producer arg);
 ATbool ME_hasProducerId(ME_Producer arg);
-ME_String ME_getProducerId(ME_Producer arg);
-ME_Producer ME_setProducerId(ME_Producer arg, ME_String id);
+char* ME_getProducerId(ME_Producer arg);
+ME_Producer ME_setProducerId(ME_Producer arg, char* id);
 ATbool ME_hasProducerType(ME_Producer arg);
-ME_String ME_getProducerType(ME_Producer arg);
-ME_Producer ME_setProducerType(ME_Producer arg, ME_String type);
+char* ME_getProducerType(ME_Producer arg);
+ME_Producer ME_setProducerType(ME_Producer arg, char* type);
 
 /*}}}  */
 /*{{{  ME_Description accessors */
@@ -223,8 +223,8 @@ ME_Producer ME_setProducerType(ME_Producer arg, ME_String type);
 ATbool ME_isValidDescription(ME_Description arg);
 inline ATbool ME_isDescriptionDescription(ME_Description arg);
 ATbool ME_hasDescriptionString(ME_Description arg);
-ME_String ME_getDescriptionString(ME_Description arg);
-ME_Description ME_setDescriptionString(ME_Description arg, ME_String String);
+char* ME_getDescriptionString(ME_Description arg);
+ME_Description ME_setDescriptionString(ME_Description arg, char* String);
 
 /*}}}  */
 /*{{{  ME_Subjects accessors */
@@ -255,8 +255,8 @@ ATbool ME_isValidSubject(ME_Subject arg);
 inline ATbool ME_isSubjectWithoutLocation(ME_Subject arg);
 inline ATbool ME_isSubjectWithLocation(ME_Subject arg);
 ATbool ME_hasSubjectId(ME_Subject arg);
-ME_String ME_getSubjectId(ME_Subject arg);
-ME_Subject ME_setSubjectId(ME_Subject arg, ME_String id);
+char* ME_getSubjectId(ME_Subject arg);
+ME_Subject ME_setSubjectId(ME_Subject arg, char* id);
 ATbool ME_hasSubjectLocation(ME_Subject arg);
 ME_Location ME_getSubjectLocation(ME_Subject arg);
 ME_Subject ME_setSubjectLocation(ME_Subject arg, ME_Location location);
@@ -267,8 +267,8 @@ ME_Subject ME_setSubjectLocation(ME_Subject arg, ME_Location location);
 ATbool ME_isValidLocation(ME_Location arg);
 inline ATbool ME_isLocationLocation(ME_Location arg);
 ATbool ME_hasLocationFile(ME_Location arg);
-ME_String ME_getLocationFile(ME_Location arg);
-ME_Location ME_setLocationFile(ME_Location arg, ME_String file);
+char* ME_getLocationFile(ME_Location arg);
+ME_Location ME_setLocationFile(ME_Location arg, char* file);
 ATbool ME_hasLocationArea(ME_Location arg);
 ME_Area ME_getLocationArea(ME_Location arg);
 ME_Location ME_setLocationArea(ME_Location arg, ME_Area area);
@@ -279,39 +279,39 @@ ME_Location ME_setLocationArea(ME_Location arg, ME_Area area);
 ATbool ME_isValidArea(ME_Area arg);
 inline ATbool ME_isAreaArea(ME_Area arg);
 ATbool ME_hasAreaStartLine(ME_Area arg);
-ME_NatCon ME_getAreaStartLine(ME_Area arg);
-ME_Area ME_setAreaStartLine(ME_Area arg, ME_NatCon startLine);
+int ME_getAreaStartLine(ME_Area arg);
+ME_Area ME_setAreaStartLine(ME_Area arg, int startLine);
 ATbool ME_hasAreaStartColumn(ME_Area arg);
-ME_NatCon ME_getAreaStartColumn(ME_Area arg);
-ME_Area ME_setAreaStartColumn(ME_Area arg, ME_NatCon startColumn);
+int ME_getAreaStartColumn(ME_Area arg);
+ME_Area ME_setAreaStartColumn(ME_Area arg, int startColumn);
 ATbool ME_hasAreaEndLine(ME_Area arg);
-ME_NatCon ME_getAreaEndLine(ME_Area arg);
-ME_Area ME_setAreaEndLine(ME_Area arg, ME_NatCon endLine);
+int ME_getAreaEndLine(ME_Area arg);
+ME_Area ME_setAreaEndLine(ME_Area arg, int endLine);
 ATbool ME_hasAreaEndColumn(ME_Area arg);
-ME_NatCon ME_getAreaEndColumn(ME_Area arg);
-ME_Area ME_setAreaEndColumn(ME_Area arg, ME_NatCon endColumn);
+int ME_getAreaEndColumn(ME_Area arg);
+ME_Area ME_setAreaEndColumn(ME_Area arg, int endColumn);
 ATbool ME_hasAreaStartOffset(ME_Area arg);
-ME_NatCon ME_getAreaStartOffset(ME_Area arg);
-ME_Area ME_setAreaStartOffset(ME_Area arg, ME_NatCon startOffset);
+int ME_getAreaStartOffset(ME_Area arg);
+ME_Area ME_setAreaStartOffset(ME_Area arg, int startOffset);
 ATbool ME_hasAreaEndOffset(ME_Area arg);
-ME_NatCon ME_getAreaEndOffset(ME_Area arg);
-ME_Area ME_setAreaEndOffset(ME_Area arg, ME_NatCon endOffset);
+int ME_getAreaEndOffset(ME_Area arg);
+ME_Area ME_setAreaEndOffset(ME_Area arg, int endOffset);
 
 /*}}}  */
 /*{{{  sort visitors */
 
-ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Info (*acceptInfo)(ME_Info), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError));
-ME_Information ME_visitInformation(ME_Information arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
-ME_Warning ME_visitWarning(ME_Warning arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
-ME_Error ME_visitError(ME_Error arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
-ME_FatalError ME_visitFatalError(ME_FatalError arg, ME_String (*acceptId)(ME_String), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
-ME_Producer ME_visitProducer(ME_Producer arg, ME_String (*acceptId)(ME_String), ME_String (*acceptType)(ME_String));
-ME_Description ME_visitDescription(ME_Description arg, ME_String (*acceptString)(ME_String));
+ME_Feedback ME_visitFeedback(ME_Feedback arg, ME_Information (*acceptInformation)(ME_Information), ME_Warning (*acceptWarning)(ME_Warning), ME_Error (*acceptError)(ME_Error), ME_FatalError (*acceptFatalError)(ME_FatalError));
+ME_Information ME_visitInformation(ME_Information arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
+ME_Warning ME_visitWarning(ME_Warning arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
+ME_Error ME_visitError(ME_Error arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
+ME_FatalError ME_visitFatalError(ME_FatalError arg, char* (*acceptId)(char*), ME_Producer (*acceptProducer)(ME_Producer), ME_Description (*acceptDescription)(ME_Description), ME_Subjects (*acceptSubjects)(ME_Subjects));
+ME_Producer ME_visitProducer(ME_Producer arg, char* (*acceptId)(char*), char* (*acceptType)(char*));
+ME_Description ME_visitDescription(ME_Description arg, char* (*acceptString)(char*));
 ME_Subjects ME_visitSubjects(ME_Subjects arg, ME_SubjectSubjectList (*acceptSubjectList)(ME_SubjectSubjectList));
 ME_SubjectSubjectList ME_visitSubjectSubjectList(ME_SubjectSubjectList arg, ME_Subject (*acceptHead)(ME_Subject));
-ME_Subject ME_visitSubject(ME_Subject arg, ME_String (*acceptId)(ME_String), ME_Location (*acceptLocation)(ME_Location));
-ME_Location ME_visitLocation(ME_Location arg, ME_String (*acceptFile)(ME_String), ME_Area (*acceptArea)(ME_Area));
-ME_Area ME_visitArea(ME_Area arg, ME_NatCon (*acceptStartLine)(ME_NatCon), ME_NatCon (*acceptStartColumn)(ME_NatCon), ME_NatCon (*acceptEndLine)(ME_NatCon), ME_NatCon (*acceptEndColumn)(ME_NatCon), ME_NatCon (*acceptStartOffset)(ME_NatCon), ME_NatCon (*acceptEndOffset)(ME_NatCon));
+ME_Subject ME_visitSubject(ME_Subject arg, char* (*acceptId)(char*), ME_Location (*acceptLocation)(ME_Location));
+ME_Location ME_visitLocation(ME_Location arg, char* (*acceptFile)(char*), ME_Area (*acceptArea)(ME_Area));
+ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine)(int), int (*acceptStartColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptStartOffset)(int), int (*acceptEndOffset)(int));
 
 /*}}}  */
 

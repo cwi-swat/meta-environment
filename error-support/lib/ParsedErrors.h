@@ -20,6 +20,9 @@ ATerm  PME_CHARLISTToTerm(PME_CHARLIST arg);
 PME_CHARLIST PME_CHARLISTFromTerm(ATerm trm);
 PME_CHARLIST PME_makeCHARLISTString(char *str);
 
+typedef ATerm PME_String;
+typedef ATerm PME_NatCon;
+
 /*}}}  */
 /*{{{  typedefs */
 
@@ -84,7 +87,7 @@ PME_SubjectSubjectList reverseSubjectSubjectList(PME_SubjectSubjectList arg);
 /*}}}  */
 /*{{{  constructors */
 
-PME_Feedback PME_makeFeedbackInfo(PME_Info Info);
+PME_Feedback PME_makeFeedbackInfo(PME_Information Information);
 PME_Feedback PME_makeFeedbackWarning(PME_Warning Warning);
 PME_Feedback PME_makeFeedbackError(PME_Error Error);
 PME_Feedback PME_makeFeedbackFatalError(PME_FatalError FatalError);
@@ -140,9 +143,9 @@ inline ATbool PME_isFeedbackInfo(PME_Feedback arg);
 inline ATbool PME_isFeedbackWarning(PME_Feedback arg);
 inline ATbool PME_isFeedbackError(PME_Feedback arg);
 inline ATbool PME_isFeedbackFatalError(PME_Feedback arg);
-ATbool PME_hasFeedbackInfo(PME_Feedback arg);
-PME_Info PME_getFeedbackInfo(PME_Feedback arg);
-PME_Feedback PME_setFeedbackInfo(PME_Feedback arg, PME_Info Info);
+ATbool PME_hasFeedbackInformation(PME_Feedback arg);
+PME_Information PME_getFeedbackInformation(PME_Feedback arg);
+PME_Feedback PME_setFeedbackInformation(PME_Feedback arg, PME_Information Information);
 ATbool PME_hasFeedbackWarning(PME_Feedback arg);
 PME_Warning PME_getFeedbackWarning(PME_Feedback arg);
 PME_Feedback PME_setFeedbackWarning(PME_Feedback arg, PME_Warning Warning);
@@ -597,7 +600,7 @@ PME_OptLayout PME_setOptLayoutChars(PME_OptLayout arg, PME_CHARLIST chars);
 /*}}}  */
 /*{{{  sort visitors */
 
-PME_Feedback PME_visitFeedback(PME_Feedback arg, PME_Info (*acceptInfo)(PME_Info), PME_Warning (*acceptWarning)(PME_Warning), PME_Error (*acceptError)(PME_Error), PME_FatalError (*acceptFatalError)(PME_FatalError));
+PME_Feedback PME_visitFeedback(PME_Feedback arg, PME_Information (*acceptInformation)(PME_Information), PME_Warning (*acceptWarning)(PME_Warning), PME_Error (*acceptError)(PME_Error), PME_FatalError (*acceptFatalError)(PME_FatalError));
 PME_Information PME_visitInformation(PME_Information arg, PME_OptLayout (*acceptWsAfterInformation)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
 PME_Warning PME_visitWarning(PME_Warning arg, PME_OptLayout (*acceptWsAfterWarning)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));
 PME_Error PME_visitError(PME_Error arg, PME_OptLayout (*acceptWsAfterError)(PME_OptLayout), PME_OptLayout (*acceptWsAfterParenOpen)(PME_OptLayout), PME_String (*acceptId)(PME_String), PME_OptLayout (*acceptWsAfterId)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC1)(PME_OptLayout), PME_Producer (*acceptProducer)(PME_Producer), PME_OptLayout (*acceptWsAfterProducer)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC2)(PME_OptLayout), PME_Description (*acceptDescription)(PME_Description), PME_OptLayout (*acceptWsAfterDescription)(PME_OptLayout), PME_OptLayout (*acceptWsAfterC3)(PME_OptLayout), PME_Subjects (*acceptSubjects)(PME_Subjects), PME_OptLayout (*acceptWsAfterSubjects)(PME_OptLayout));

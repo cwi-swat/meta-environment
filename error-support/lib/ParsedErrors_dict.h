@@ -47,7 +47,6 @@ extern AFun PME_afun36;
 extern AFun PME_afun24;
 extern AFun PME_afun35;
 extern AFun PME_afun29;
-extern AFun PME_afun46;
 extern AFun PME_afun1;
 extern AFun PME_afun6;
 

@@ -10,7 +10,7 @@ sorts Error FatalError Warning Information Producer Description Feedback
 
 context-free syntax
 
-Info -> Feedback {cons("info")}
+Information -> Feedback {cons("info")}
 Warning -> Feedback {cons("warning")}
 Error -> Feedback {cons("error")}
 FatalError -> Feedback {cons("fatal-error")}
