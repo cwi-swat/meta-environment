@@ -1,3 +1,6 @@
+2001/10/23 (markvdb@cwi.nl)
+ * Added #ifndef WITHOUT_TOOLBUS in order to rule out ToolBus code, in
+   unparsePT-main.c
 2001/09/27 (jurgenv@cwi.nl)
  * Made some important changes to the AsFix format. These changes are
    necessary to support some changes in the SDF syntax, and to fix some
