@@ -72,6 +72,7 @@ extern Symbol record_sym;
 #define singleton(t) (ATerm)(ATmakeList1((t)))
 #define get_sym(t) ATgetSymbol((ATermAppl) t)
 #define check_sym(t,s) (get_sym(t) == (s))
+#define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
 #define remove_list(t) (ATgetArgument((ATermAppl) t,0))
 
 /*}}}  */
@@ -266,6 +267,7 @@ extern Symbol conssym;
 extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
+extern ATerm get_sort(ATerm tree);
 extern ATerm unquote(ATerm t);
 extern ATerm call_kids_trafo(funcptr trav, ATerm arg, ATermList extra_args);
 extern ATerm call_kids_accu(funcptr trav, ATerm arg, ATerm accu, 
@@ -278,7 +280,6 @@ int asc_support_main(int argc, char *argv[],
 
 /*}}}  */
 
-extern ATbool check_sort(ATerm tree, ATerm sort);
 
 
 #endif  /* ASC_SUPPORT_H */

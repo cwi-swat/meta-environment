@@ -816,22 +816,19 @@ PT_ParseTree toasfix(ATerm term)
 
 /*}}}  */
 
-/*{{{  ATbool check_sort(ATerm tree, ATerm sort) */
+/*{{{  ATerm get_sort(ATerm tree) */
 
-ATbool check_sort(ATerm tree, ATerm sort)
+ATerm get_sort(ATerm tree)
 {
   if (ATgetType(tree) == AT_APPL) {
     Symbol sym = get_sym(tree);
 
     if (sym) {
-      if (ATisEqual(ATgetArgument((ATermAppl) lookup_prod(sym),1), 
-		    sort)) {
-	return ATtrue;
-      }
+      return ATgetArgument((ATermAppl) lookup_prod(sym),1); 
     }
   }
 
-  return ATfalse;
+  return (ATerm) ATempty;
 }
 
 /*}}}  */
