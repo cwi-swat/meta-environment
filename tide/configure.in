@@ -5,7 +5,6 @@ AM_INIT_AUTOMAKE(tide, 0.5beta)
 ACLOCAL="${ACLOCAL} -I ."
 
 dnl Which compiler to use?
-AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 AC_SET_MAKE
 
