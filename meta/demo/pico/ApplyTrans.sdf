@@ -3,12 +3,12 @@ module ApplyTrans
 imports Bool-Trans
 
 hiddens
-  sorts BoolEntry BoolEnv ErrorMsg ErrorMsgs
+  sorts BoolEntry BoolEnv ErrorMsgs
 exports
   sorts ErrorBool
   context-free syntax
-    rule TransRule could not be applied -> ErrorMsg
-    ErrorMsg*                           -> ErrorMsgs
+    rule TransRule could not be applied -> ErrorMsgs
+    no-errors                           -> ErrorMsgs
     BOOL # ErrorMsgs                    -> ErrorBool
   context-free syntax
     "(" BOOL "," BOOL ")"    -> BoolEntry
