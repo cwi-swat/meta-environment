@@ -483,18 +483,18 @@ An example of registering and resolving can be found in Figure \ref{boolexmpl4}.
 \begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt voi}\={\tt d register\_xor() \{}\\
-\>{\tt xorsym = "prod(Bool "xor" Bool -> Bool \{left\})";}\\
-\>{\tt register\_prod(}\={\tt "prod(Bool "xor" Bool -> Bool \{left\})",}\\
+\>{\tt xorsym = "prod(Bool xor Bool -> Bool \{left\})";}\\
+\>{\tt register\_prod(}\={\tt "prod(Bool xor Bool -> Bool \{left\})",}\\
 \>\>{\tt xor, xorsym);}\\
 {\tt \}}\\
 \\
 {\tt voi}\={\tt d resolve\_xor() \{}\\
-\>{\tt true = lookup\_func("prod("true" -> Bool)");}\\
-\>{\tt truesym = lookup\_sym("prod("true" -> Bool)");}\\
-\>{\tt false = lookup\_func("prod("false" -> Bool)");}\\
-\>{\tt falsesym = lookup\_sym("prod("false" -> Bool)");}\\
-\>{\tt not = lookup\_func("prod("not" Bool -> Bool)");}\\
-\>{\tt notsym = lookup\_sym("prod("not" Bool -> Bool)");}\\
+\>{\tt true = lookup\_func("prod(true -> Bool)");}\\
+\>{\tt truesym = lookup\_sym("prod(true -> Bool)");}\\
+\>{\tt false = lookup\_func("prod(false -> Bool)");}\\
+\>{\tt falsesym = lookup\_sym("prod(false -> Bool)");}\\
+\>{\tt not = lookup\_func("prod(not Bool -> Bool)");}\\
+\>{\tt notsym = lookup\_sym("prod(not Bool -> Bool)");}\\
 {\tt \}}\\
 \\
 {\tt ATe}\={\tt rm}\=\ {\tt xor(ATerm arg0, ATerm arg1) \{}\\
@@ -642,7 +642,7 @@ form is constructed independent of the input term. If we would modify
 the input term we would get graph rewriting instead of (innermost) term
 rewriting. Furthermore, the term library is very general and {\em not}
 strictly devoted to rewriting, destructive updates would cause unwanted
-side effects in components based on this term library.
+side effects in other components based on this term library.
 
 However, destructive operations on lists, like list concatenation and
 list slicing, become expensive. For instance, the most efficient way
@@ -766,7 +766,7 @@ loose much either.
 \begin{tabular}{|l|r|} \hline
 Compiler & Time (sec)\\ \hline \hline
 Clean (strict)          & 32.3 \\ \hline
-Sml                     & 32.9 \\ \hline 
+SML                     & 32.9 \\ \hline 
 Clean (lazy)            & 36.9 \\ \hline
 \asdf{} (with sharing)  & 37.7 \\ \hline 
 Haskell                 & 42.4 \\ \hline
@@ -803,10 +803,9 @@ requirements of this benchmark. Interestingly, \asdf\ (with sharing)
 has no problems whatsoever due to the use of maximal sharing, although
 it is also based on strict evaluation
 
-Execution times are plotted in Figure \ref{evalexp-tlog}.  Opal and
-Clean (lazy) are faster than \asdf\ (with sharing) but the differences
-are small.  The Haskell implementation is a bit slower, but Elan is
-really lagging behind.
+Execution times are plotted in Figure \ref{evalexp-tlog}. Only lazy
+Clean is faster than \asdf\ (with sharing) but the differences
+are small.
 
 \begin{figure}[tb]
   \centerline{\psfig{figure=evaltree-mlin.eps}}
@@ -897,7 +896,7 @@ be very effective.
 
 It is striking that our benchmarks show results that seem to
 contradict previous observations in the context of
-Sml~\cite{AppelGoncalves:93} where sharing resulted in slightly
+SML~\cite{AppelGoncalves:93} where sharing resulted in slightly
 increased execution speed and only marginal space savings.  On closer
 inspection, we come to the conclusion that both methods for term
 sharing are different and can not be compared easily.  We share terms
@@ -909,7 +908,7 @@ determined during garbage collection in order to minimize the overhead
 of a table lookup at term creation. This implies that local terms that
 have not yet survived one garbage collection are not yet shared thus
 loosing most of the benefits (space savings and fast equality test) as
-well. The different usage patterns of terms in Sml and \asdf\ may also
+well. The different usage patterns of terms in SML and \asdf\ may also
 contribute to these seemingly contradicting observations.
 
 There are several topics that need further exploration.  First, we
