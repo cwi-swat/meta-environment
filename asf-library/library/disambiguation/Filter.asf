@@ -1,5 +1,0 @@
-equations
-
-[] filter(amb(Amb*1, Amb, Amb*2), f) = filter(amb(Amb*1,Amb*2),f)
-    when f(Amb) = true
-
