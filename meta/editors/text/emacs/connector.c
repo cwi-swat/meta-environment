@@ -28,6 +28,9 @@
 
 #define META_MENU_PREFIX "meta"
 
+#define ESCAPE_CHAR '\\'
+#define QUOTE '"'
+
 /*}}}  */
 /*{{{  variables */
 
@@ -48,8 +51,11 @@ static char *escapeQuotes(const char *input)
   p = input;
   s = buf;
   while (p && *p) {
-    if (*p == '"') {
-      *s++ = '\\';
+    if (*p == ESCAPE_CHAR) {
+      *s++ = ESCAPE_CHAR;
+    }
+    else if (*p == QUOTE) {
+      *s++ = ESCAPE_CHAR;
     }
     *s++ = *p++;
   }
@@ -59,6 +65,7 @@ static char *escapeQuotes(const char *input)
 }
 
 /*}}}  */
+
 /*{{{  static char *stripSpaces(const char *input) */
 
 static char *stripSpaces(const char *input)

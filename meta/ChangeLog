@@ -1,6 +1,8 @@
 # $Id$
 
 Tue Sep 30 10:18:45 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * editors/text/emacs/connector.c: change function escapeQuotes to also
+   escape escape-characters. Closes: #48
  * ./reconf: first remove generated ./libtool, so it will not be found
    as "the" libtool when subsequently trying to find the system libtool
 
