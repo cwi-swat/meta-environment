@@ -50,7 +50,8 @@ configuration([
           reduce,
           push-filename("reduct.out"),
           push-active-module,
-          activate-editor
+          push-term(action-editor),
+          activate-typed-editor
          ]),
   action([description(term-editor, menu(["Actions","Pretty Print"]))],
          [push-active-module,
@@ -232,10 +233,10 @@ configuration([
   action([description(studio-menubar, menu(["File", "Open Library Module"])),
           description(studio-toolbar, icon("Open Library Module",
                                            "present.gif"))],
-         [prompt-for-file("Open LibraryModule", "__ASF_LIBRARY__", ".asdf"),
+         [prompt-for-file("Open LibraryModule", "__ASF_LIBRARY__", ".sdf"),
           dup,
           push-string(""),
           if-equal([],
           [split-file-name,
-           open-asdf-module])])
+           open-sdf-module])])
 ])
