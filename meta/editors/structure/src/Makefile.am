@@ -16,12 +16,12 @@ noinst_HEADERS = \
 	focus.h \
 	length.h \
 	path.h \
-	se.tif.h \
+	structure-editor.tif.h \
 	sort.h \
 	tree.h
 
 se_SOURCES = \
-	se.tif.c \
+	structure-editor.tif.c \
 	se.c \
 	area.c \
 	editor.c \

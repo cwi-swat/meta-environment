@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Aug 20 14:46:50 2003
+ * Generated at Mon Jan 12 14:50:31 2004
  */
 
 #include "EditorData_dict.h"
@@ -71,7 +71,7 @@ ATerm SE_patternEditorDefault = NULL;
  *
  */
 
-static ATermList _EditorData_dict = NULL;
+static ATerm _EditorData_dict = NULL;
 
 #define _EditorData_dict_LEN 316
 
@@ -102,11 +102,11 @@ void init_EditorData_dict()
 {
   ATermList afuns, terms;
 
-  _EditorData_dict = (ATermList)ATreadFromBinaryString(_EditorData_dict_baf, _EditorData_dict_LEN);
+  _EditorData_dict = ATreadFromBinaryString(_EditorData_dict_baf, _EditorData_dict_LEN);
 
-  ATprotect((ATerm *)&_EditorData_dict);
+  ATprotect(&_EditorData_dict);
 
-  afuns = (ATermList)ATelementAt(_EditorData_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_EditorData_dict, 0);
 
   SE_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -133,7 +133,7 @@ void init_EditorData_dict()
   SE_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt(_EditorData_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_EditorData_dict, 1);
 
   SE_patternMoveDown = ATgetFirst(terms);
   terms = ATgetNext(terms);

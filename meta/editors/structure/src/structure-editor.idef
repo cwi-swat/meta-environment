@@ -59,11 +59,6 @@ in
     rec-value(SE, focus(Focus?)) .  
     snd-msg(set-focus(EditorId, Focus)) 
   +
-    rec-msg(get-focus-at-posinfo(EditorId?, PosInfo?)) .
-    snd-eval(SE, get-focus-at-posinfo(EditorId, PosInfo)) .
-    rec-value(SE, focus(Focus?)) .  
-    snd-msg(focus-at-posinfo(EditorId, PosInfo, Focus)) 
-  +
     rec-msg(get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .
     (
