@@ -49,6 +49,11 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   ParseTree distribution is in DIR])
 AC_SUBST(PT_SUPPORT)
 
+dnl Require PT package (for AsFix)
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
 dnl Require asc-support package
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
