@@ -1,5 +1,18 @@
 # $Id$
 
+Tue Apr 27 14:42:13 CEST 2004 <jurgenv@cwi.nl>
+ * From now on, compiled ASF can deal with annotations!
+   - ATisEqual is replaced by ATisEqualModuloAnnotations
+   - innermost and muasf2pt preserve annotations
+   - asfc has a '-a' option to activate it.
+   - gcc must be called with -DASC_WITH_ANNOS to select the correct
+     equality implementation.
+   - before calling asc_support_main, you must call
+     setKeepAnnotations(ATtrue) to make innermost and muasf2pt behave
+     properly.
+   - TODO: refactor asc_support_main to have an extra argument.
+     This is not doable for release 1.5
+
 Mon Apr 19 16:18:50 CEST 2004 <jurgenv@cwi.nl>
  * compiler uses output file name instead of specification name
    to compute the binary name and the .idef and .tifs file names.
