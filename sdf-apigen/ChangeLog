@@ -2,6 +2,7 @@
 
 2003/11/09 (jurgenv@cwi.nl)
  * Made CHARLIST_String.java compatible with newest apigen code
+ * Made mapping to imploded adt up-to-date with ADT-2.0 format
 
 2003/11/07 (jurgenv@cwi.nl)
  * Made generation of ADT file compatible with apigen-1.7 (ADT format 2.0)
