@@ -27,8 +27,9 @@ static PT_Tree constructorCharToLexicalChar(ASF_CHAR ch)
 static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
 {
   PT_Tree tree = (PT_Tree) var;
-  PT_Tree nameTree = PT_makeTreeLit(PT_yieldTree(tree));
-  PT_Symbol nameSymbol = PT_makeSymbolLit(PT_yieldTree(tree));
+  char *name = NULL;
+  PT_Tree nameTree = PT_makeTreeLit(name);
+  PT_Symbol nameSymbol = PT_makeSymbolLit(name);
   PT_Symbol all = makeSymbolAllChars();
   PT_Attributes noattrs = PT_makeAttributesNoAttrs();
   PT_Symbol symbol;
