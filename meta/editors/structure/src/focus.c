@@ -54,8 +54,8 @@ SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status)
     length = PT_getTreeLengthAnno(tree);
     SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
     focus = SE_makeFocusNotEmpty(path, 
-				 PT_yieldSymbol(
-	 		           getTreeSort(tree)),
+				 PT_yieldSymbolVisualVariables(
+	 		           getTreeSort(tree),ATtrue),
 				createArea(parse_tree, path), focus_status);
   }
   return focus;
