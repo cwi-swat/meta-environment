@@ -354,7 +354,7 @@ PT_states(term *states, parse_table *pt)
       states = next(states);
     }
   if (debugflag || show_statistics)
-    fprintf(log, "\n%d states\n", nr_of_states);
+    fprintf(log, "%d states\n", nr_of_states);
   for (s = 0; s <= nr_of_states; s++) {
     TBprotect(&(pt->goto_table[s]));
     TBprotect(&(pt->action_table[s]));

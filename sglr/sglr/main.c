@@ -148,9 +148,8 @@ batch (int argc, char **argv)
   \item |-h|, |-?| : help (print usage information)
   \item |-v|       : verbose mode
   \item |-V|       : print version information
-  \item |-l|       : write log info to file .parse-log
   \item |-a|       : abbreviate productions in parse trees
-  \item |-s|       : show statistics
+  \item |-s|       : write show statistics to log file
   \item |-S|       : show stacks as dot files
   \item |-f|       : turn filtering on
   \item |-D [file]| : draw tree as graph.
@@ -161,12 +160,12 @@ usage(FILE *stream, int long_message)
 {
   if( !long_message )
     fprintf (stream, 
-	     "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n", 
+	     "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n", 
 	     program_name);
   else {
     fprintf 
 (stream, 
- "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n"
+ "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n"
  "\n"
  "\t-p file : use parse table |file| (obligatory)\n"
  "\t-i file : input from |file| (optional, default is stdin)\n"
@@ -177,7 +176,7 @@ usage(FILE *stream, int long_message)
  "\t-f      : turn filtering on\n"
  "\t-g      : no garbage collect\n"
  "\t-h      : help (print usage information)\n"
- "\t-l      : write log info to file .parse-log\n"
+/* "\t-l      : write log info to file .parse-log\n" */
  "\t-n      : don't write tree to output\n"
  "\t-s      : show statistics\n"
  "\t-S file : show stacks as dot files\n"
@@ -201,11 +200,11 @@ struct option longopts[] =
   {"abbreviate",  no_argument,       &abbreviation_flag, FALSE},
   {"debug",       no_argument,       &debugflag,         TRUE},
   {"dot",         no_argument,       NULL,               'D'},
-  {"filtering",   no_argument,       &filtering,         FALSE},
+  {"filtering",   no_argument,       &filtering,         'f'},
   {"garbagecollect", no_argument,    &gc,                TRUE},
   {"help",        no_argument,       NULL,               'h'},
   {"input",       required_argument, NULL,               'i'},
-  {"log",         no_argument,       NULL,               'l'},
+/*  {"log",         no_argument,       NULL,               'l'}, */
   {"no-output",   no_argument,       &write_output,      'n'},
   {"output",      required_argument, NULL,               'o'},
   {"parse-table", required_argument, NULL,               'p'},
@@ -228,6 +227,7 @@ handle_options (int argc, char **argv)
   verboseflag = FALSE;
   debugflag   = FALSE;
   while ((c = getopt_long(argc, argv, 
+/*			  "?adD:fghi:lno:p:sS:vV", longopts, NULL))  */
 			  "?adD:fghi:lno:p:sS:vV", longopts, NULL)) 
 	 != EOF)
     switch (c) {
@@ -235,17 +235,18 @@ handle_options (int argc, char **argv)
     case '?': usage(stderr, TRUE); exit(0);
     case 'a': abbreviation_flag = TRUE; break;
     case 'D': dotoutput = optarg; generate_dot = TRUE; break;
-    case 'd': debugflag = TRUE; log = open_log(".parse-log");
-              printf("debuging on\n", debugflag); break;
-    case 'f': filtering = !filtering; break;
+    case 'd': debugflag = TRUE; printf("debugging %s\n", debugflag?"on":"off");
+               log = open_log(".parse-log"); break;
+    case 'f': filtering = !filtering;
+              printf("filtering on\n", debugflag); break;
     case 'g': gc = !gc; break;
     case 'h': usage(stdout, TRUE); exit(0);
     case 'i': input_file_name  = optarg; break;
-    case 'l': log = open_log(".parse-log"); break;
+/*    case 'l': log = open_log(".parse-log"); break;	*/
     case 'n': write_output = FALSE; break;
     case 'o': output_file_name = optarg; break;
     case 'p': parse_table_name = optarg; break;
-    case 's': show_statistics = TRUE; break;
+    case 's': show_statistics = TRUE; log = open_log(".parse-log"); break;
     case 'S': show_stack = TRUE; stack_dotoutput = optarg; break;
     case 'v': verboseflag = TRUE; break;
     case 'V': fprintf(stdout, "%s %s\n", program_name, version_string);
@@ -420,15 +421,15 @@ term_to_file(term *t, char *FN)
 FILE *
 open_log(char *FN)
 {
-  FILE *log;
-  if (strcmp(FN, "") == 0) 
+  FILE *fp;
+
+  if (FN == NULL || strcmp(FN, "") == 0) 
     FN = ".parse-log";
-  if ((log = fopen(FN, "w")) == NULL)
-    {
-      fprintf(stderr, "%s: cannot create logfile %s\n", program_name, FN);
-      exit(1);
-    }
+  if ((fp = fopen(FN, "w")) == NULL)
+  {
+    fprintf(stderr, "%s: cannot create logfile %s\n", program_name, FN);
+    exit(1);
+  }
   fprintf(stdout, "writing log info to %s\n", FN);
-  fprintf(log,    "writing log info to %s\n", FN);
-  return log;
+  return fp;
 }

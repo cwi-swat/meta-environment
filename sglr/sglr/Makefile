@@ -85,7 +85,7 @@ sglr: $(csources) $(objects)
 
 longest_match: longest_match.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -DMAIN $^ $(libraries) -o $@
-	cp $@ $(BINDIR)
+#	cp $@ $(BINDIR)
 
 TermIO: TermIO.o
 	$(CC) $(CFLAGS) $(objects) $(libraries) -o TermIO
