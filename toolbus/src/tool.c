@@ -316,6 +316,7 @@ static term *tool_read_term(void)
   int nelem;
   term *trm, *rtrm;
   inport *inp;
+  TBbool sndvoid = TBfalse;
 
   while(TBtrue){
     if(stand_alone){
@@ -331,8 +332,10 @@ static term *tool_read_term(void)
     if(inp && inp->term_port){
       if((trm = parse_buffer())){
 	/*TBmsg("tool_read_term: ***%t***\n", trm);*/
-	rtrm = (*inp->callbackTerm)(trm);
 	if(streq(get_txt(fun_sym(trm)), "rec-do"))
+          sndvoid = TBtrue;
+	rtrm = (*inp->callbackTerm)(trm);
+	if(sndvoid)
 	  return Snd_Void;
 	else
 	  return rtrm;

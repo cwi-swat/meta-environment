@@ -165,8 +165,10 @@ void TBcollect()
   mark_sp = &mark_stack[0];
   
   for(i = 0; i < nroot; i++){
-    t = *mark_roots[i];
-    push_term(t);
+    if(mark_roots[i]) {
+      t = *mark_roots[i];
+      push_term(t);
+    }
   }
   mark_terms();
 

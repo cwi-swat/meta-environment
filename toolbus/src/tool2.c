@@ -196,15 +196,18 @@ TBbool TB_peek(int cid)
 int TB_handle_one(int cid)
 {
   term *trm, *result;
+  TBbool sndvoid = TBfalse;
 
   assert_valid_cid(cid);
 
   trm = TB_receive(cid);
+  if(streq(get_txt(fun_sym(trm)), "rec-do"))
+    sndvoid = TBtrue;
   result = connections[cid]->handler(cid, trm);
   if(result)
     return TB_send(cid, result);
   else
-    if(streq(get_txt(fun_sym(trm)), "rec-do"))
+    if(sndvoid)
 	  return TB_send(cid, TBmake("snd-void()"));
 }
 
