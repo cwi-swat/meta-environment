@@ -6,6 +6,8 @@ INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
+	-I$(SGLR)/include \
+	-I$(TIDE_SUPPORT)/include \
 	-I$(ASC_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
@@ -32,7 +34,6 @@ asfoperations_LDADD = \
 	-L$(SGLR)/lib -lsglr \
 	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
 	-L$(PT_SUPPORT)/lib -lPTMEPT -lmept \
-	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
