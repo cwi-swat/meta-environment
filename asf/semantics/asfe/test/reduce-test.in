@@ -22,18 +22,36 @@ exec_prefix=@exec_prefix@
 toolbus=@bindir@/toolbus
 datadir=@datadir@
 
+tests=0
+failed=0
 
 call_toolbus () {
   script=$1
+  tests=`expr $tests + 1`
   result=`${toolbus} -I${datadir} ${script} 2>&1`
-  if echo $result | grep -iq failed; then
-    echo ${result}
-    exit 1
+  toolbus_exit=$?
+  if [ $toolbus_exit != 0 ]; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  elif echo $result | grep -iq failed; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
   else
-    printf "."
+    printf .
   fi
 }
 
-call_toolbus reduce-test.tb
+# Test whether equations are available that *should* be available.
+call_toolbus reduce-test-1.tb
+
+# Test whether equations are available that *should not* be available.
+call_toolbus reduce-test-2.tb
 
 echo ""
+
+if [ $failed != 0 ]; then
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi

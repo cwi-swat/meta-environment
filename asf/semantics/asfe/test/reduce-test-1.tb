@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+    The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,16 +19,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-#include "evaluator.tb"
+#include "../evaluator.idef"
 
 process Test is 
-  snd-msg(eqs-available("NonExistingModule")) .
+let
+  List : list,
+  Eval : evaluator
+in
+  execute(evaluator, Eval?) .
+  List := [] .
+  snd-do(Eval, add-equations("Test", List)) .
+  snd-eval(Eval, equations-available("Test")) .
   (  
-    rec-msg(eqs-not-available)
+    rec-value(Eval, eqs-available("Test"))
   +
     shutdown("reduce-test-1 FAILED! (timeout)\n") delay(sec(5))
   ) .
   shutdown("") delay(sec(2))
+endlet
 
-
-toolbus(Evaluator, Test)
+toolbus(Test)
