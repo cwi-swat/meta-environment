@@ -77,6 +77,11 @@ INCLUDES        = @INCLUDES@ $(XINCLUDES)
 LIBS            = @LIBS@ $(XLIBS)
 SOCKLIBS        = @SOCKLIBS@
 
+INSTALL         = @INSTALL@
+INSTALL_DATA    = @INSTALL_DATA@
+INSTALL_PROG    = @INSTALL_PROG@
+UNINSTALL       = @UNINSTALL@
+
 ATERM           = @ATERM@
 NEW_META        = @NEW_META@
 
@@ -97,6 +102,19 @@ INCLUDEFILES=
 # Make rules
 
 all:	${BINFILES}
+
+# install target (install binaries, include files, and libraries)
+install:        all
+        mkdir -p $(bindir) $(libdir) $(includedir)
+        @$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+        @$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+        @$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+
+# uninstall target (remove all files installed by 'install' target)
+uninstall:
+        @$(UNINSTALL) $(bindir) $(BINFILES)
+        @$(UNINSTALL) $(libdir) $(LIBFILES)
+        @$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 %-$(CC).o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
