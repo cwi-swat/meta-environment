@@ -3,9 +3,7 @@ equations
 [] fold = foldr
 
 [] foldr(f B []) = B
-[] foldr(f B LA) = f(head(LA) foldr(f B tail(LA)))
-     when LA != []
+[] foldr(f B [A,T]) = f(A foldr(f B [T]))
 
-[] foldl(f' B []) = B
-[] foldl(f' B LA) = foldl(f' f'(B head(LA))  tail(LA))
-     when LA != []
+[] foldl(f B []) = B
+[] foldl(f B [A,T]) = foldl(f f(B A) [T])

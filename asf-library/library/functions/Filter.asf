@@ -2,8 +2,8 @@ equations
 
 [] filter(f []) = []
 
-[] filter(f [A,A*]) = cons(A,filter(f [A*]))
+[] filter(f [A,T]) = A : filter(f [T])
      when f(A) = true
 
-[] filter(f [A,A*]) = filter(f [A*])
+[] filter(f [A,T]) = filter(f [T])
      when f(A) = false

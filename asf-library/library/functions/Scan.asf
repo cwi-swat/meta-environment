@@ -3,9 +3,9 @@ equations
 [] scan = scanr
 
 [] scanl ( f A [] ) = [A]
-[] scanl ( f A [B,B*]) = cons(A, [A*])
-    when [A',A*] = scanl ( f f( A B ) [B*]) 
+[] scanl ( f A [H,T]) = A : [T']
+    when [A',T'] = scanl ( f f( A H ) [T]) 
 
 [] scanr (f A []) = [A]
-[] scanr (f A [B,B*]) = cons(f( A B ), [A*])
-    when [A',A*] = scanr(f A [B*])
+[] scanr (f A [H,T]) = f( A H ) :  [T']
+    when [A',T'] = scanr(f A [T])

@@ -1,6 +1,4 @@
 equations
 
-[default] map(f []) = []
-
-[] map(f LA) = cons(f(head(LA)),map(f tail(LA)))
-     when LA != []
+[] map(f [])    = []
+[] map(f [H,T]) = f(H) : map(f [T])

@@ -18,8 +18,7 @@ imports basic/Whitespace
 
 variables
 
-"A"[0-9\']* -> A
-"B"[0-9\']* -> B
-"LA"[0-9\']* -> List[[A]]
+"A" -> A
+"B" -> B
 "f" -> (A B => B)
-"f'" -> (B A => B)
+"f" -> (B A => B)

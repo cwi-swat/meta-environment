@@ -20,7 +20,5 @@ variables
 "f" -> (A => B)
 "A" -> A
 "B"   -> B
-"LA"   -> List[[A]]
-"LB"   -> List[[B]] 
 
 

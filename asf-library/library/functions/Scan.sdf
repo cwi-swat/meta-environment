@@ -22,7 +22,3 @@ variables
 "B""\'"? -> B
 "f" -> (A B => A)
 "f" -> (B A => A)
-"LB" -> List[[B]]
-"LA" -> List[[A]]
-"B*" -> {B ","}*
-"A*" -> {A ","}*

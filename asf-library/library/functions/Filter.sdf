@@ -20,5 +20,3 @@ variables
 "f" -> (A => Boolean)
 "A" -> A
 "B" -> Boolean
-"L" -> List[[A]]
-"A*" -> { A "," }*
