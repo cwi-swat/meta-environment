@@ -31,8 +31,6 @@ public class ModuleStatusPanel
 
   private ModuleTreeModel moduleManager;
 
-  //{{{ public ModuleStatusPanel(ModuleManager moduleManager)
-
   public ModuleStatusPanel(final ModuleTreeModel moduleManager)
   {
     this.moduleManager = moduleManager;
@@ -88,9 +86,6 @@ public class ModuleStatusPanel
     add(tabbedPane, BorderLayout.CENTER);
   }
 
-  //}}}
-  //{{{ public void moduleSelected(Module module)
-
   public void moduleSelected(Module module)
   {
     this.module = module;
@@ -111,9 +106,6 @@ public class ModuleStatusPanel
     repaint();
   }
 
-  //}}}
-  //{{{ public void setModuleInfo(String moduleName, List info)
-
   public void setModuleInfo(String moduleName, List info)
   {
     if (module != null && moduleName.equals(module.getName())) {
@@ -121,18 +113,11 @@ public class ModuleStatusPanel
     }
   }
 
-  //}}}
-
-  //{{{ private void clearInfo()
-
   private void clearInfo()
   {
     infoKeys.removeAll();
     infoValues.removeAll();
   }
-
-  //}}}
-  //{{{ private void updateInfo(List infoList)
 
   private void updateInfo(List infoList)
   {
@@ -153,7 +138,5 @@ public class ModuleStatusPanel
     infoPane.invalidate();
     infoPane.revalidate();
   }
-
-  //}}}
 }
 
