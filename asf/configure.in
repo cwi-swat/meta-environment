@@ -131,7 +131,6 @@ dnl {{{  List output files
 AC_OUTPUT(
    Makefile
    syntax/Makefile
-   syntax/filtereqssyntax/Makefile
    syntax/addeqssyntax/Makefile
    syntax/addeqssyntax/spec/Makefile
    syntax/addeqssyntax/src/Makefile
