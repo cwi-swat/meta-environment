@@ -40,4 +40,4 @@ addeqssyntax_LDADD   = addeqssyntax.tif.o \
 
 CLEANFILES = addeqssyntax.tifs addeqssyntax.1
 
-addeqssyntax.o : addeqssyntax.tif.h
+addeqssyntax.o : addeqssyntax.tif.h ../c-source/libAdd-Eqs-Syntax.a
