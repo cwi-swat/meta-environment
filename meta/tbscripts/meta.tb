@@ -46,7 +46,7 @@
 #include "dump-equations.tb"
 #include "configmanager.idef"
 #include "query.tb"
-#include "query-tool.idef"
+/* #include "query-tool.idef" */
 #include "tree2graph.idef"
 
 #include "meta-interface.tb"
