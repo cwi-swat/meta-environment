@@ -265,7 +265,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
   }
 
   if (initParser(toolname, language)) {
-    ATerm result = SGparseString(language, sort, PT_yieldTree(bytes)); 
+    ATerm result = SGparseString(language, sort, PT_yieldTree(bytes), "Unknown"); 
     return parse_result(toolname, "anonymous", result);
   }
 
