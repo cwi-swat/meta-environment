@@ -1,0 +1,420 @@
+module languages/c/syntax/Simplified-C
+
+%% This grammar is a transformed version from the ANSI-C grammar.
+%% It has far less sorts, because more priorities have been used,
+%% and optionals and lists have been inlined.
+%%
+%% It accepts more than ANSI-C because:
+%%   * more combinations of Expressions are allowed, while still remaining 
+%%     unambiguous.
+%%   * Watch out: the priority of the operators HAS NOT BEEN CHECKED 
+%%     completely with the standard yet.
+%%   * All type specifiers have been put into one non-terminal, so this
+%%     grammar accepts more type incorrect C code than the ANSI-C grammar.
+%%   * Abstract declarators and normal declarators are the same now, so 
+%%     this grammar also accepts partially abstract declarators, which is 
+%%     illegal in C. Also abstract declarators are accepted where 
+%%     previously only concrete declarators where accepted and vice versa.
+%%
+%% TODO: - The priority definitions still contain a lot of duplication
+%%       - Check the priorities with actual ANSI standard
+
+imports basic/Whitespace
+imports languages/cpp/syntax/CommentsAsLayout
+
+hiddens
+context-free start-symbols
+	TranslationUnit
+
+exports
+
+sorts 
+	Expression
+	Declaration
+	Specifiers
+	Declarator
+	Enumerator
+	ExternalDeclaration
+	FunctionDefinition
+	Identifier
+	InitDeclarator
+	Initializer
+	Keyword
+	Parameter
+	Parameters
+	Pointer
+	Statement
+	StringConstant
+	StructDeclaration
+	StructDeclarator
+	TranslationUnit
+	TypeName
+	Exponent
+
+lexical syntax
+
+"auto"			|
+"break"			|
+"case"			|
+"char"			|
+"const"			|
+"continue"		|
+"default"		|
+"do"			|
+"double"		|
+"else"			|
+"enum"			|
+"extern"		|
+"float"			|
+"for"			|
+"goto"			|
+"if"			|
+"int"			|
+"long"		  	|
+"register"		|
+"return"		|
+"short"			|
+"signed"		|
+"sizeof"		|
+"static"		|
+"struct"		|
+"switch"		|
+"typedef"		|
+"union"			|
+"unsigned"		|
+"void"			|
+"volatile"		|
+"while"			-> Keyword
+
+Keyword -> Identifier {reject}
+
+lexical syntax
+
+[a-zA-Z\_][a-zA-Z\_0-9]* -> Identifier
+
+lexical restrictions
+
+Identifier -/- [0-9a-zA-Z\_] 
+ 
+lexical syntax
+[0] [xX] [a-fA-F0-9]+ [uUlL]*		-> HexadecimalConstant
+[0-9]+ [uUlL]*		        	-> IntegerConstant
+[L]? [\'] (([\\]~[])|~[\\\'])+ [\']	-> CharacterConstant
+
+[Ee] [\+\-]? [0-9]+ -> Exponent
+
+[0-9]+ 		   Exponent  [uUlL]?	-> FloatingPointConstant
+[0-9]* [\.] [0-9]+ Exponent? [fFlL]?	-> FloatingPointConstant
+[0-9]+ [\.]	   Exponent? [fFlL]?	-> FloatingPointConstant
+
+
+[L]? [\"] ( ([\\]~[]) | ~[\\\"] )* [\"]	-> StringConstant
+
+lexical restrictions
+
+IntegerConstant 	-/- [0-9]
+FloatingPointConstant	-/- [0-9]
+HexadecimalConstant	-/- [a-fA-F0-9]
+
+context-free syntax
+
+Identifier 				-> Expression
+HexadecimalConstant 			-> Expression
+IntegerConstant				-> Expression
+CharacterConstant 			-> Expression
+FloatingPointConstant 			-> Expression
+StringConstant 				-> Expression
+"(" Expression ")" 			-> Expression {bracket}
+Expression "["	Expression "]"	 	-> Expression
+Expression "(" {Expression ","}* ")"	-> Expression
+Expression "." Identifier 		-> Expression 
+Expression "->" Identifier 		-> Expression
+Expression "++" 			-> Expression
+Expression "--" 			-> Expression
+
+context-free syntax
+
+"++" Expression 		-> Expression
+"--" Expression 		-> Expression
+"&" Expression 			-> Expression
+"*" Expression 			-> Expression
+"+" Expression 			-> Expression
+"-" Expression 			-> Expression
+"~" Expression 			-> Expression
+"!" Expression 			-> Expression
+"sizeof" Expression 	  	-> Expression
+"sizeof" "(" TypeName ")"	-> Expression
+
+context-free restrictions
+"&" -/- [\&]
+"-" -/- [\-]
+"+" -/- [\+]
+
+context-free syntax
+
+"(" TypeName ")" Expression -> Expression
+
+context-free syntax
+
+Expression "*" Expression	-> Expression {left}
+Expression "/" Expression	-> Expression {left}
+Expression "%" Expression	-> Expression {left}
+Expression "+" Expression	-> Expression {left}
+Expression "-" Expression 	-> Expression {left}
+Expression "<<" Expression 	-> Expression {left}
+Expression ">>" Expression 	-> Expression {left}
+Expression "<" Expression 	-> Expression {left}
+Expression ">" Expression 	-> Expression {left}
+Expression "<=" Expression 	-> Expression {left}
+Expression ">=" Expression 	-> Expression {left}
+Expression "==" Expression 	-> Expression {left}
+Expression "!=" Expression 	-> Expression {left}
+Expression "&" Expression 	-> Expression {left}
+Expression "^" Expression 	-> Expression {left}
+Expression "|" Expression 	-> Expression {left}
+Expression "&&" Expression 	-> Expression {left}
+Expression "||" Expression 	-> Expression {left}
+
+context-free syntax
+
+Expression "?" Expression ":" Expression   -> Expression 
+
+context-free syntax
+
+Expression "=" Expression 	-> Expression {right}
+Expression "*=" Expression 	-> Expression {right}
+Expression "/=" Expression 	-> Expression {right}
+Expression "%=" Expression 	-> Expression {right}
+Expression "+=" Expression 	-> Expression {right}
+Expression "-=" Expression 	-> Expression {right}
+Expression "<<=" Expression 	-> Expression {right}
+Expression ">>=" Expression 	-> Expression {right}
+Expression "&=" Expression 	-> Expression {right}
+Expression "^=" Expression 	-> Expression {right}
+Expression "|=" Expression 	-> Expression {right}
+
+context-free syntax
+
+Expression "," Expression 	-> Expression {left}
+
+context-free priorities
+Expression "(" {Expression ","}* ")"	-> Expression <0>
+>
+{
+Expression "." Identifier 		-> Expression 
+Expression "->" Identifier 		-> Expression
+Expression "++" 			-> Expression
+Expression "--" 			-> Expression
+"++" Expression 			-> Expression
+"--" Expression 			-> Expression
+"&" Expression 				-> Expression
+"*" Expression 				-> Expression
+"+" Expression 				-> Expression
+"-" Expression 				-> Expression
+"~" Expression 				-> Expression
+"!" Expression 				-> Expression
+"sizeof" Expression 	  		-> Expression
+} 
+
+context-free priorities
+Expression "["	Expression "]"	 	-> Expression <0> 
+> {
+Expression "." Identifier 		-> Expression 
+Expression "->" Identifier 		-> Expression
+Expression "++" 			-> Expression
+Expression "--" 			-> Expression
+"++" Expression 			-> Expression
+"--" Expression 			-> Expression
+"&" Expression 				-> Expression
+"*" Expression 				-> Expression
+"+" Expression 				-> Expression
+"-" Expression 				-> Expression
+"~" Expression 				-> Expression
+"!" Expression 				-> Expression
+"sizeof" Expression 	  		-> Expression
+} 
+
+context-free priorities
+{
+Expression "." Identifier 		-> Expression 
+Expression "->" Identifier 		-> Expression
+Expression "++" 			-> Expression
+Expression "--" 			-> Expression
+} >
+{
+"++" Expression 		-> Expression
+"--" Expression 		-> Expression
+"&" Expression 			-> Expression
+"*" Expression 			-> Expression
+"+" Expression 			-> Expression
+"-" Expression 			-> Expression
+"~" Expression 			-> Expression
+"!" Expression 			-> Expression
+"sizeof" Expression 	  	-> Expression
+} 
+> "(" TypeName ")" Expression -> Expression 
+> { left:
+Expression "*" Expression -> Expression {left}
+Expression "/" Expression -> Expression {left}
+Expression "%" Expression -> Expression {left}}
+> { left:
+Expression "+" Expression -> Expression {left}
+Expression "-" Expression -> Expression {left}}
+> { left:
+Expression "<<" Expression -> Expression {left}
+Expression ">>" Expression -> Expression {left}}
+> { left:
+Expression "<" Expression -> Expression {left}
+Expression ">" Expression -> Expression {left}
+Expression "<=" Expression -> Expression {left}
+Expression ">=" Expression -> Expression {left}}
+> Expression "&" Expression -> Expression {left}
+> Expression "^" Expression -> Expression {left}
+> Expression "|" Expression -> Expression {left}
+> Expression "&&" Expression -> Expression {left}
+> Expression "||" Expression -> Expression {left}
+>
+{non-assoc:
+Expression "=" Expression -> Expression {right}
+Expression "*=" Expression -> Expression {right}
+Expression "/=" Expression -> Expression {right}
+Expression "%=" Expression -> Expression {right}
+Expression "+=" Expression -> Expression {right}
+Expression "-=" Expression -> Expression {right}
+Expression "<<=" Expression -> Expression {right}
+Expression ">>=" Expression -> Expression {right}
+Expression "&=" Expression -> Expression {right}
+Expression "^=" Expression -> Expression {right}
+Expression "|=" Expression -> Expression {right}
+}
+>
+Expression "," Expression -> Expression {left}
+
+context-free priorities
+Expression "," Expression -> Expression {left} >
+Expression "?" Expression ":" Expression -> Expression 
+
+context-free priorities
+Expression "?" Expression ":" Expression -> Expression <0> >
+Expression "?" Expression ":" Expression -> Expression
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+context-free syntax
+Specifier+ {InitDeclarator ","}+ ";" -> Declaration
+
+context-free syntax
+Declarator                 -> InitDeclarator
+Declarator "=" Initializer -> InitDeclarator
+
+context-free syntax
+Identifier		-> Specifier
+
+"typedef"		-> Specifier
+"extern"		-> Specifier
+"static"		-> Specifier
+"auto"			-> Specifier
+"register"		-> Specifier
+"void"			-> Specifier
+"char" 			-> Specifier
+"short" 		-> Specifier
+"int" 			-> Specifier
+"long"			-> Specifier
+"float" 		-> Specifier
+"double"		-> Specifier
+"signed"		-> Specifier
+"unsigned" 		-> Specifier
+"const"    		-> Specifier
+"volatile" 		-> Specifier
+
+context-free syntax
+"struct"|"union" Identifier "{" StructDeclaration+ "}" -> Specifier
+"struct"|"union"            "{" StructDeclaration+ "}" -> Specifier
+"struct"|"union" Identifier                            -> Specifier
+
+context-free syntax
+"enum"            "{" {Enumerator ","}+  "}"	 -> Specifier
+"enum" Identifier "{" {Enumerator ","}+  "}"	 -> Specifier
+"enum" Identifier                                -> Specifier
+
+context-free syntax
+Specifier+ {StructDeclarator ","}+ ";" -> StructDeclaration
+
+context-free syntax
+Declarator                -> StructDeclarator
+           ":" Expression -> StructDeclarator
+Declarator ":" Expression -> StructDeclarator
+
+
+context-free syntax
+Identifier 		  	-> Enumerator
+Identifier "=" Expression 	-> Enumerator
+
+context-free syntax
+
+("*" Specifier*)+ -> Pointer
+
+context-free syntax
+{Parameter ","}+ MoreParameters? -> Parameters
+
+context-free syntax
+"," "..." -> MoreParameters
+
+context-free syntax
+Specifier+ Declarator 		-> Parameter
+Specifier+ 			-> Parameter
+
+context-free syntax
+Specifier+ Declarator?	-> TypeName
+
+context-free syntax
+Pointer Declarator 			-> Declarator {non-assoc}
+Identifier 				-> Declarator
+				 	-> Declarator 
+"(" Declarator ")" 			-> Declarator {bracket}
+Declarator "[" Expression? "]"		-> Declarator
+Declarator "(" Parameters? ")" 		-> Declarator
+
+context-free priorities
+{
+Declarator "(" Parameters? ")" 		-> Declarator
+Declarator "[" Expression? "]" 	-> Declarator
+}
+> Pointer Declarator 			-> Declarator
+
+context-free syntax
+Expression 		  -> Initializer
+"{" {Initializer ","}+ ","?  "}"  -> Initializer
+
+context-free syntax
+"{" Declaration* Statement*  "}" 			-> Statement
+Identifier ":" Statement 				-> Statement
+"case" Expression ":" Statement 			-> Statement
+"default" ":" Statement 				-> Statement
+";" 							-> Statement
+Expression ";" 						-> Statement
+"if" "(" Expression ")" Statement 		   	-> Statement
+"if" "(" Expression ")" Statement "else" Statement 	-> Statement
+"switch" "(" Expression ")" Statement 		   	-> Statement
+"while" "(" Expression ")" Statement 			-> Statement
+"do" Statement "while" "(" Expression ")" ";" 		-> Statement
+"for" "(" Expression? ";" Expression? ";" Expression? ")" Statement	
+							-> Statement
+"goto" Identifier ";" 					-> Statement
+"continue" ";" 						-> Statement
+"break" ";" 						-> Statement
+"return" ";" 						-> Statement
+"return" Expression ";" 				-> Statement
+
+context-free syntax
+ExternalDeclaration+ 	-> TranslationUnit
+
+context-free syntax
+FunctionDefinition 	-> ExternalDeclaration
+Declaration 		-> ExternalDeclaration
+
+context-free syntax
+Specifier* Declarator Declaration* "{" Declaration* Statement* "}" 
+							-> FunctionDefinition
+
+
+

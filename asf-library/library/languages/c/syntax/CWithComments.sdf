@@ -1,5 +1,5 @@
 module languages/c/syntax/CWithComments
 
-imports languages/c/syntax/AMSI-C
+imports languages/c/syntax/ANSI-C
 imports languages/cpp/syntax/CommentsAsLayout
 imports languages/c/syntax/Whitespace
