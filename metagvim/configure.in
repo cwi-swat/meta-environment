@@ -28,7 +28,7 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR      ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 AC_SUBST(LIBTOOL)
 
 dnl Determine which libraries to use for programs using sockets
