@@ -483,9 +483,9 @@ void AFinitAsFixPatterns()
               "l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)");
 
     af_prod_module_attr =
-      ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[l(\"id\"),"
-              "w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),"
-              "w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),"
+      ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[ql(\"id\"),"
+              "w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),"
+              "w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),"
               "sort(\"Attribute\"),w(\"\"),no-attrs)");
 
     af_prod_reject_attr =
