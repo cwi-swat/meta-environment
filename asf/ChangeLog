@@ -1,3 +1,6 @@
+2002/09/27 ({vinju,moreau}@loria.fr)
+ * Moved generic symbol renaming functionality to pt-support
+
 2002/09/27 (markvdb@cs.vu.nl)   
  * Added an operation to obtain the list of equations given a
    parse tree of the equations.
