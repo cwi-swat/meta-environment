@@ -1,0 +1,5 @@
+$Id$
+
+Thu Feb 14 11:55:37 CET 2002 <jong>
+ * added "key=value" syntax to PropertyParser
+ * inital automake stuff

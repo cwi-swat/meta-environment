@@ -13,6 +13,7 @@ public class PropertyParser
   {
     PropertyParser parser = new PropertyParser(System.in);
     PropertyForest forest = parser.PropertyFile();
+    System.out.println("forest = " + forest);
   }
 
   //}}}
@@ -178,12 +179,22 @@ PropertyForest PropertyForest() :
 PropertyTree PropertyTree() :
 {
   Token key, value;
-  PropertyForest properties;
+  Token field, type;
+  PropertyForest forest;
 }
 {
-  key=<IDENTIFIER> value=<IDENTIFIER> "{" properties=PropertyForest() "}"
+  LOOKAHEAD(2)
+  field=<IDENTIFIER> ":" type=<IDENTIFIER>
   {
-    return new PropertyTree(key.image, value.image, properties);
+   forest = new PropertyForest();
+   forest.addTree(new PropertyTree("type", type.image,
+				   new PropertyForest()));
+   return new PropertyTree("field", field.image, forest);
+  }
+|
+  key=<IDENTIFIER> value=<IDENTIFIER> "{" forest=PropertyForest() "}"
+  {
+    return new PropertyTree(key.image, value.image, forest);
   }
 }
 

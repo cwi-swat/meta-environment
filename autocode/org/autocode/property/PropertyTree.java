@@ -19,4 +19,13 @@ public class PropertyTree
   }
 
   //}}}
+
+  //{{{ public String toString()
+
+  public String toString()
+  {
+    return key + " " + value + " " + property.toString();
+  }
+
+  //}}}
 }
