@@ -1,0 +1,40 @@
+module Rstore2DiGraph
+
+imports Rstore
+imports DiGraph
+imports utilities/Parsing[NatCon]
+
+exports
+  context-free syntax
+    convert2digraph(RSTORE) -> DiGraph
+
+hiddens
+  context-free syntax
+    convert2edge(RVALUE, EdgeSection) -> EdgeSection
+    convert2label(RVALUE, LabelSection) -> LabelSection
+
+hiddens
+  context-free syntax
+    construct-graphnode(Location) -> GraphNode
+    string2graphnode(String) -> GraphNode
+
+hiddens
+  variables
+    "$Area"[0-9]* -> Area
+    "$Elem" -> Elem
+    "$Elem*" -> {Elem ","}*
+    "$EdgeSection" -> EdgeSection
+    "$GraphEdge" -> GraphEdge
+    "$GraphEdge*" -> GraphEdge*
+    "$GraphLabel" -> GraphLabel
+    "$GraphLabel*" -> GraphLabel*
+    "$GraphNode"[0-9]* -> GraphNode 
+    "$LabelSection" -> LabelSection
+    "$Length"[0-9]* -> NatCon
+    "$Location"[0-9]* -> Location
+    "$Name" -> StrCon
+    "$Offset"[0-9]* -> NatCon
+    "$Rstore" -> RSTORE
+    "$Rvalue"[0-9]* -> RVALUE
+    "$StrId" -> String
+    "$Char*" -> CHAR*

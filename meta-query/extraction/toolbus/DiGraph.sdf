@@ -1,20 +1,23 @@
 module DiGraph
  
-imports Rstore
+imports basic/StrCon
+imports basic/Whitespace
 
 exports
-  sorts DiGraph
+  sorts DiGraph DiGraphId GraphNode GraphLabel GraphEdge LabelSection EdgeSection
 
   context-free start-symbols DiGraph
+
+  lexical syntax
+    [a-zA-Z] [a-zA-Z0-9\_\-]* -> DiGraphId
+    [a-zA-Z] [a-zA-Z0-9\_\-]* -> GraphLabel
+    [a-zA-Z] [a-zA-Z0-9\_\-]* -> GraphNode
 
   context-free syntax
     "digraph" DiGraphId "{" LabelSection EdgeSection "}" -> DiGraph
 
-    Bytes -> GraphNode
-
     GraphNode "[" "label" "=" StrCon "]" -> GraphLabel
+    GraphNode "->" GraphNode -> GraphEdge
 
     GraphLabel* -> LabelSection
-
-    GraphNode "->" GraphNode -> GraphEdge
     GraphEdge* -> EdgeSection  

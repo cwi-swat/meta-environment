@@ -1,0 +1,63 @@
+equations
+
+[convert-to-digraph-0]
+  $Rvalue1 := value(AREA_NAME, $Rstore),
+  $LabelSection := convert2label($Rvalue1, ),
+  $Rvalue2 := value(CONTROL_FLOW, $Rstore),
+  $EdgeSection := convert2edge($Rvalue2, )
+  ===>
+  convert2digraph($Rstore) = digraph DiGraph { $LabelSection $EdgeSection }
+
+
+[convert-to-edge-0]
+  < $Location1, $Location2 > := $Elem,
+  $GraphNode1 := construct-graphnode($Location1),
+  $GraphNode2 := construct-graphnode($Location2),
+  $GraphEdge := $GraphNode1 -> $GraphNode2,
+  $EdgeSection := $GraphEdge $GraphEdge*
+  ===> 
+  convert2edge({ $Elem }, $GraphEdge*) = $EdgeSection
+
+[convert-to-edge-1]
+  < $Location1, $Location2 > := $Elem,
+  $GraphNode1 := construct-graphnode($Location1),
+  $GraphNode2 := construct-graphnode($Location2),
+  $GraphEdge := $GraphNode1 -> $GraphNode2,
+  $EdgeSection := $GraphEdge $GraphEdge*
+  ===> 
+  convert2edge({ $Elem , $Elem* }, $GraphEdge*) = 
+    convert2edge({ $Elem* }, $EdgeSection)
+
+
+[convert-to-label-0]
+  < $Location, $Name > := $Elem,
+  $GraphNode := construct-graphnode($Location),
+  $GraphLabel := $GraphNode [ label = $Name ],
+  $LabelSection := $GraphLabel $GraphLabel*
+  ===>
+  convert2label({ $Elem }, $GraphLabel*) = $LabelSection
+
+[convert-to-label-1]
+  < $Location, $Name > := $Elem,
+  $GraphNode := construct-graphnode($Location),
+  $GraphLabel := $GraphNode [ label = $Name ],
+  $LabelSection := $GraphLabel $GraphLabel*
+  ===>
+  convert2label({ $Elem , $Elem* }, $GraphLabel*) = 
+    convert2label({ $Elem* }, $LabelSection) 
+
+
+[construct-graphnode-0]
+  $Area := get-area($Location),
+  $Offset := get-offset($Area),
+  $Length := get-length($Area),
+  $StrId := "I_" || unparse-to-string($Offset) || unparse-to-string($Length),
+  $GraphNode := string2graphnode($StrId)
+  ===>
+  construct-graphnode($Location) = $GraphNode
+
+
+[string-to-graphnode-0]
+  bytes($Char*) := string-to-bytes($StrId)
+  ===>
+  string2graphnode($StrId) = graphnode($Char*)
