@@ -193,5 +193,6 @@ do
 	        fi
 	done
 done
+printf "\n"
 
 exit $error

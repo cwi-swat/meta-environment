@@ -8,4 +8,4 @@ EXTRA_DIST = Path.asfix2.org Path.casl Point.asfix2.org Point.casl \
              program.jcb evalstat.jcb evalstat.asfix2.org \
              lit.pfr lit.asfix2.org skips.acts skips.asfix2.org \
              test.cobisl test.asfix2.org rec.acts2 rec.asfix2.org \
-	     f.pre f.asfix2.org
+	     f.pre f.asfix2.org sin.exp sin.asfix2.org
