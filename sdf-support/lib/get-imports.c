@@ -445,7 +445,9 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
   while (!SDF_isImportListEmpty(todo)) {
     SDF_Import     import;
 
-    import = ATremoveAllAnnotations(SDF_getImportListHead(todo));
+    ATwarning("DEBUG: should still write a wrapper here %s - %d",
+	      __FILE__, __LINE__);
+    import = (SDF_Import) ATremoveAllAnnotations((ATerm) SDF_getImportListHead(todo));
 
     if (!SDF_containsImportListImport(result, import)) {
       SDF_Renamings renamings;
@@ -518,7 +520,6 @@ SDF_ImportList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId
   initModuleTable(modules);
  
   result = do_get_transitive_imports(moduleId);
-ATwarning("IMPORTS: %t\n", result);
   MT_destroyModuleTable(moduleTable);
   moduleTable = NULL;
   return result;
