@@ -23,7 +23,7 @@ public class RecVal extends ToolAtom {
     if (!isEnabled())
       return false;
     ToolInstance ti = getToolInstance();
-    if (ti.getValueFromTool(getToolTerm(), getEnv())){
+    if (ti.getValueFromTool(getId(), getToolTerm(), getEnv())){
       return nextState();
     } else
       return false;

@@ -21,7 +21,7 @@ public class Eval extends ToolAtom {
     if (!isEnabled())
       return false;
     ToolInstance ti = getToolInstance();
-    ti.sndEvalToTool(getSubstitutedCall(), getSubstitutedId());
+    ti.sndEvalToTool(getSubstitutedId(), getSubstitutedCall());
     return nextState();
   }
 

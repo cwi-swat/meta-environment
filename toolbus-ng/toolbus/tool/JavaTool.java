@@ -24,21 +24,18 @@ class ToolShield extends Thread implements ToolBridge {
     requests = new LinkedList();
   }
 
-  public synchronized void addRequest(Integer operation, Method m, Object[] actuals) {
-    requests.addLast(operation);
-    requests.addLast(m);
-    requests.addLast(actuals);
+  public synchronized void addRequest(ATerm id, Integer operation, Method m, Object[] actuals) {
+    requests.add(new Object[] { id, operation, m, actuals });
   }
 
   private void handleRequest() {
-    Integer operation = (Integer) requests.getFirst();
+    Object request[] = (Object[]) requests.getFirst();
     requests.removeFirst();
 
-    Method m = (Method) requests.getFirst();
-    requests.removeFirst();
-
-    Object[] actuals = (Object[]) requests.getFirst();
-    requests.removeFirst();
+    ATerm id = (ATerm) request[0];
+    Integer operation = (Integer) request[1];
+    Method m = (Method) request[2];
+    Object[] actuals = (Object[]) request[3];
 
     Object res = null;
     try {
@@ -48,7 +45,7 @@ class ToolShield extends Thread implements ToolBridge {
       e.printStackTrace();
     }
     if (operation == JavaTool.EVAL) {
-      javatool.addValue(res);
+      javatool.addValue(id, res);
     }
   }
 
@@ -56,12 +53,8 @@ class ToolShield extends Thread implements ToolBridge {
     return TBTerm.factory;
   }
 
-  public void sndValueToToolBus(ATerm trm) {
-    javatool.addValue(trm);
-  }
-
-  public void sndEventToToolBus(ATerm trm) {
-    javatool.addEvent(trm);
+  public ATerm sndEventToToolBus(ATerm trm) {
+    return javatool.addEvent(trm);
   }
 
   public void run() {
@@ -90,32 +83,35 @@ class ToolShield extends Thread implements ToolBridge {
 
 public class JavaTool implements ToolInstance {
   private String className;
-  private ATerm toolId;
+  //private ATerm toolId;
   private Class toolclass;
   private Constructor toolconstructor;
   private Thread toolthread;
   private Object toolinstance;
   private Hashtable methodtable;
-  private LinkedList valuesFromTool;
+  private Hashtable valuesFromTool;
   private LinkedList eventsFromTool;
+  private Hashtable pendingEvents;
   private ToolShield toolshield;
 
   protected static final Integer EVAL = new Integer(1);
   protected static final Integer DO = new Integer(2);
+  
   private static final String terminate = "terminate";
 
   public JavaTool(String className, ATerm toolId, ATermList sigs) throws ToolBusException {
     System.err.println("JavaTool");
     this.className = className;
-    this.toolId = toolId;
+    //    this.toolId = toolId;
     try {
       toolclass = Class.forName(className);
     } catch (ClassNotFoundException e) {
       throw new ToolBusException("class " + className + " not found");
     }
     methodtable = new Hashtable();
-    valuesFromTool = new LinkedList();
+    valuesFromTool = new Hashtable();
     eventsFromTool = new LinkedList();
+    pendingEvents = new Hashtable();
     toolconstructor = findConstructor();
     checkInputSignature(sigs);
     toolshield = new ToolShield(toolconstructor, this);
@@ -203,6 +199,7 @@ public class JavaTool implements ToolInstance {
       if (sig.getName().equals("AckEvent")) {
         String name = "ackEvent";
         ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
+        args = TBTerm.factory.makeList(TBTerm.TermPlaceholder, args);
         methodtable.put(name, findMethod(name, args, true));
       }
       if (sig.getName().equals("Terminate")) {
@@ -223,10 +220,10 @@ public class JavaTool implements ToolInstance {
     Object actuals[] = new Object[] { msg };
     Method m = (Method) methodtable.get(terminate);
     printMethod(m);
-    toolshield.addRequest(DO, m, actuals);
+    toolshield.addRequest(TBTerm.True, DO, m, actuals); //???
   }
 
-  private void sndRequestToTool(Integer operation, ATermAppl call) {
+  private void sndRequestToTool(ATerm id, Integer operation, ATermAppl call) {
     String name = call.getName();
     ATerm[] args = call.getArgumentArray();
     Object actuals[] = new Object[args.length];
@@ -242,40 +239,68 @@ public class JavaTool implements ToolInstance {
       else
         actuals[i] = args[i];
     }
-    toolshield.addRequest(operation, m, actuals);
+    toolshield.addRequest(id, operation, m, actuals);
   }
 
-  synchronized public void sndEvalToTool(ATermAppl call, ATerm id) {
-    sndRequestToTool(EVAL, call);
+  synchronized public void sndEvalToTool(ATerm id, ATermAppl call) {
+    sndRequestToTool(id, EVAL, call);
   }
 
-  synchronized public void sndDoToTool(ATermAppl call, ATerm id) {
-    sndRequestToTool(DO, call);
+  synchronized public void sndDoToTool(ATerm id, ATermAppl call) {
+    sndRequestToTool(id, DO, call);
   }
 
-  synchronized void addValue(Object obj) {
-    valuesFromTool.addLast(obj);
+  synchronized public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException {
+    ATerm event = (ATerm) pendingEvents.get(id);
+    if (event == null) {
+      throw new ToolBusException("cannot acknowledge event: " + result);
+    }
+    AFun afun = TBTerm.factory.makeAFun("ackEvent", 2, false);
+    ATermList args = TBTerm.factory.makeList(result);
+    args = TBTerm.factory.makeList(event, args);
+    ATermAppl call = TBTerm.factory.makeAppl(afun, args);
+    sndRequestToTool(id, DO, call);
+  }
+
+  synchronized void addValue(ATerm id, Object obj) {
+    valuesFromTool.put(id, obj);
     System.err.println("JavaTool.addValue: queued " + obj);
   }
 
-  synchronized void addEvent(Object obj) {
-    eventsFromTool.addLast(obj);
-    System.err.println("JavaTool.addEvent: queued " + obj);
+  synchronized ATerm addEvent(Object obj) {
+    Object event[] = new Object[] { TBTerm.newTransactionId(), obj };
+    eventsFromTool.addLast(event);
+    System.err.println("JavaTool.addEvent: id = " + event[0] + " obj= = " + event[1]);
+    return (ATerm) event[0];
   }
 
-  synchronized public ATerm getToolId() {
-    return toolId;
+  //  synchronized public ATerm getToolId() {
+  //    return toolId;
+  //  }
+
+  synchronized public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) {
+    ATerm result = (ATerm) valuesFromTool.get(id);
+    if (result == null) {
+      return false;
+    } else {
+      env.assignVar(trm, result);
+      return true;
+    }
   }
 
-  private boolean getFromTool(ATerm trm, Environment env, LinkedList fromTool) {
-    System.err.println("getFromTool(" + trm + "), length fromTool = " + fromTool.size());
-    if (!fromTool.isEmpty()) {
+  synchronized public boolean getEventFromTool(ATerm id, ATerm trm, Environment env) {
+    for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
-        System.err.println("first = " + fromTool.getFirst());
-        boolean mr = TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
-        fromTool.removeFirst();
-        System.err.println("getFromTool returns: " + mr);
-        return mr;
+        Object event[] = (Object[]) eventsFromTool.get(i);
+        ATerm eventId = (ATerm) event[0];
+        ATerm eventTerm = (ATerm) event[1];
+        boolean matches = TBTerm.match(trm, env, eventTerm, new Environment());
+        if (matches) {
+          env.assignVar(id, eventId);
+          eventsFromTool.remove(i);
+          pendingEvents.put(eventId, eventTerm);
+          return true;
+        }
       } catch (ToolBusException e) {
         System.err.println("getFromTool: cannot happen :-)");
       }
@@ -283,13 +308,4 @@ public class JavaTool implements ToolInstance {
     System.err.println("getFromTool returns false");
     return false;
   }
-
-  synchronized public boolean getValueFromTool(ATerm trm, Environment env) {
-    return getFromTool(trm, env, valuesFromTool);
-  }
-
-  synchronized public boolean getEventFromTool(ATerm trm, Environment env) {
-    return getFromTool(trm, env, eventsFromTool);
-  }
-
 }
