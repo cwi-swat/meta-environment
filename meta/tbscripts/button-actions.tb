@@ -552,9 +552,16 @@ in
         rec-msg(show-tree, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         StackPopString(Stack,Stack?, ModuleName?) .
-        ShowTree(ModuleName, STree) .
+        ShowTree(ModuleName, STree, false) .
         ReturnSuccess(EditorId,Stack)
       +
+        rec-msg(show-full-tree, Stack?, EditorId?) .
+        StackPopTerm(Stack,Stack?,STree?).
+        StackPopString(Stack,Stack?, ModuleName?) .
+        ShowTree(ModuleName, STree, true) .
+        ReturnSuccess(EditorId,Stack)
+      +
+
         rec-msg(show-area, Stack?, EditorId?)
         . StackPopString(Stack, Stack?, Message?)
         . StackPopTerm(Stack, Stack?, Location?)
@@ -958,14 +965,14 @@ endlet
 /* below here are implementations of button actions */
 /****************************************************/
 
-process ShowTree(ModuleName: str, Tree: term) is
+process ShowTree(ModuleName: str, Tree: term, ShowLeafs : term) is
 let
   Graph : term,
   Id : int
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Computing graph layout..."))) .
-  snd-msg(tree2graph(ModuleName, Tree)) .
+  snd-msg(tree2graph(ModuleName, Tree, ShowLeafs)) .
   rec-msg(graph(Graph?)) .
   snd-msg(display-graph("parsetree", Graph)).
   snd-note(ui-status(endstat(Id)))
