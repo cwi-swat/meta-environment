@@ -1,3 +1,6 @@
+2002/05/22 (jurgenv@cwi.nl)
+ * Fixed dependency bug on asf-library in configure.in
+
 2002/05/22 (vandenbr@loria.fr)
  * Based the specifications of AddApiSyntax, AddEqsSyntax,
    AsfSdfChecker, RemoveVarSyntax on the Sdf version of the
