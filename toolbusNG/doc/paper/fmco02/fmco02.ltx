@@ -934,6 +934,34 @@ an \texttt{int} (the unique id of the addressbook entry), we have to
 pick a number outside the range of valid identities (here we chose $-1$)
 to represent the case that the address is not in the database.
 
+So far, information about address book entries is exchanged by means
+of an identifier represented as an \texttt{int} and other parameters
+as \texttt{String}s. As an extension to the example, consider the case
+where we send compound information instead of just basic types. The
+address book entry consists of a name and an address, represented as
+a class in Java. So let us look at the modifications necessary to send
+the entire record.
+
+First, we take a look at the ToolBus version.
+
+\begin{footnotesize}
+\begin{verbatim}
+  return factory.make("snd-value(found(name(<string>),address(<string>)))",
+                      entry.getName(), entry.getAddress());
+\end{verbatim}
+\end{footnotesize}
+
+The \texttt{name} and \texttt{address} fields are encoded in the result
+term, each surrounded by a function symbol describing the fields. An
+example of such a result term, assuming that \texttt{name} equals
+\texttt{John Doe}, and \texttt{address} equals "1234 Elm Street" is:
+
+\begin{footnotesize}
+\begin{verbatim}
+ snd-value(found(name("John Doe"), address("1234 Elm Street")))
+\end{verbatim}
+\end{footnotesize}
+
 \section{Concluding Remarks}
 
 \section*{Acknowledgments}
