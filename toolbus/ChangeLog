@@ -18,6 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 ------------------------------------------------------------------------------
+Date:   Tue Apr 18 15:27:26 CEST 2000
+Version 0.15
+Author: Pieter Olivier
+- Fixed 'disappearing annotation' bug.
+
 Date:   Tue Jun 13 15:39:30 MET DST 2000
 Version 0.14
 Author:  Merijn de Jonge

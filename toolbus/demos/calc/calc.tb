@@ -1,3 +1,4 @@
+tool logger is { command = "xyz" }
 /*
 
     ToolBus -- The ToolBus Application Architecture

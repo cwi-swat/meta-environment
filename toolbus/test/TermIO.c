@@ -44,7 +44,7 @@ void write_read(char *name, term *t1)
   
   t2 =TBread(in);
   close(in);
-  unlink(name);
+/*  unlink(name);*/
   
   if(!t2)
     err_fatal("Parse errors during reading\n");
@@ -72,6 +72,8 @@ int main()
     TBprintf(stderr, "%d ", i);
     write_read("fbin", TBmake("%b", cbuf, i));
   }
+
+  write_read("blobby", TBmake("%b", "abc", 4));
 
   TBprintf(stderr, "Done\n");
   exit(0);
