@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for i in *.sdf2; do
+  mv $i `basename $i .sdf2`.sdf
+done

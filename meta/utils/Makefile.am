@@ -24,7 +24,7 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header genamakefile
+                     insert-header genamakefile change-sdf-ext
 
 man_MANS           = parse-sdf2.1
 
@@ -38,7 +38,7 @@ EXTRA_DIST         = genmakefile.in parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src README test-help test-version \
                      genmakefile.proto lang.types perform-test.sh.src \
-                     parse-sdf2.pod genamakefile.sh.src
+                     parse-sdf2.pod genamakefile.sh.src change-sdf-ext
 
 CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
                      insert-license perform-test parse-sdf2.1 genamakefile
