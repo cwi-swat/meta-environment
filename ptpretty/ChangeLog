@@ -1,3 +1,8 @@
+# $Id$
+
+Mon Sep 22 09:48:16 CEST 2003 <{jong,jurgenv}@cwi.nl>
+ * Attempt to fix distcheck in tests subdirectory (some fiddling with
+   DEFINITIONS variable
 
 2003-09-18	Jurgen Vinju	<jurgenv@cwi.nl>
   * ToolBus enabled ptpretty
