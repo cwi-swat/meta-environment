@@ -20,4 +20,4 @@
 #
 # $Id$
 
-SUBDIRS = text structure
+SUBDIRS = manager text structure
