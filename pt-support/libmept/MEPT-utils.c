@@ -173,6 +173,12 @@ ATbool PT_isIterSepSymbol(PT_Symbol symbol)
   return ATfalse;
 }
 
+PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol)
+{
+  PT_Symbol listSymbol = PT_getSymbolSymbol(symbol);
+  return PT_getSymbolSeparator(listSymbol);
+}
+
 ATbool PT_isIterSymbol(PT_Symbol symbol)
 {
   /* This implements: 
@@ -284,6 +290,13 @@ PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
   return PT_makeSymbolsFromTerm(
            (ATerm)ATconcat((ATermList)PT_makeTermFromSymbols(symbols1),
                            (ATermList)PT_makeTermFromSymbols(symbols2)));
+}
+
+PT_Args PT_sliceArgs(PT_Args args, int start, int end)
+{
+  return PT_makeArgsFromTerm(
+           (ATerm)ATgetSlice((ATermList)PT_makeTermFromArgs(args),
+                              start, end));
 }
 
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
@@ -594,7 +607,7 @@ ATbool PT_isTreeLexical(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_isLexicalProd(prod);
+    return PT_isLexicalInjectionProd(prod);
   }
   return ATfalse;
 }

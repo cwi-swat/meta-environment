@@ -52,6 +52,7 @@ PT_Args PT_reverseArgs(PT_Args args);
 int PT_getArgsLength(PT_Args args);
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
+PT_Args PT_sliceArgs(PT_Args args, int start, int end);
 
 char *PT_yieldParseTree(PT_ParseTree tree);
 char *PT_yieldTree(PT_Tree tree);
@@ -108,5 +109,6 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
 PT_Symbol makeSymbolAllChars();
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
+PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol);
 
 #endif /* _ME_PT_H */ 
