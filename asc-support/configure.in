@@ -36,6 +36,10 @@ AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
    [  --with-asf-support=DIR  asf-support is in DIR])
 AC_SUBST(ASF_SUPPORT)
 
+dnl Require sglr package
+AC_PACKAGE_REQUIRE(sglr, sglr,
+   [  --with-sglr=DIR  sglr is in DIR])
+AC_SUBST(SGLR)
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,

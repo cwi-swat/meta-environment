@@ -83,7 +83,7 @@ builtin_link_test_LDADD=\
 	-L. -lasc-support-me\
 	-L${SGLR}/lib -lsglr \
 	-L${ASF_SUPPORT}/lib -lASFME \
-	-L${PT_SUPPORT}/lib -lmept -lPTMEPT -lconversion -lasfix2 \
+	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}

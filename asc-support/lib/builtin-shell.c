@@ -5,11 +5,7 @@
 
 static CO_Boolean shell(PT_Tree cmd_arg)
 {
-  char *cmdline = PT_yieldTree(cmd_arg);
-
-  result = system(cmdline);
-
-  return result != 0 ?
+  return system(PT_yieldTree(cmd_arg)) != 0 ?
     CO_makeBooleanConstant(CO_makeBoolConTrue()) :
     CO_makeBooleanConstant(CO_makeBoolConFalse());
 }

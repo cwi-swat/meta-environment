@@ -17,6 +17,7 @@ cat  << END_OF_FILE
 #include <MEPT-utils.h>
 #include <PTMEPT.h>
 #include <aterm2.h>
+/* #include <asfix2.h> */
 #include "asc-builtins.h"
 #include "Library.h"
 
@@ -28,6 +29,7 @@ void initBuiltins(void)
 {
   CO_initLibraryApi();
   PTPT_initPTMEPTApi();
+  PT_initAsFix2Api(); 
   initialized = ATtrue;
 
   return;
