@@ -4,6 +4,7 @@
 process StandalonePtDumper is
 let
   ModuleName : str,
+  ErrorMessage : str,
   Pid : int
 in
   create(StatusDisplay, Pid?) .
