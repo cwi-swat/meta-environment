@@ -1,4 +1,4 @@
-
+EXTRA_DIST = $(wildcard *.sh.src)
 
 libexec_PROGRAMS = OffSide
 bin_SCRIPTS = offside
@@ -24,4 +24,4 @@ OffSide.c: $(top_srcdir)/spec/OffSide.eqs
              s@__SGLR__@$(SGLR)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g' < $< > $@ && chmod +x $@	
 
-CLEANFILES += ${bin_SCRIPTS}
+CLEANFILES += $(bin_SCRIPTS)
