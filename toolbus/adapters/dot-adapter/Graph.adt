@@ -4,11 +4,18 @@
 [NodeList, empty, []],
 [NodeList, multi, [<head(Node)>,<[tail(NodeList)]>]],
 
-[Node, unsized,      node(<name(str)>,<shape(Shape)>)],
-[Node, unpositioned, node(<name(str)>,<shape(Shape)>,
-                          <width(int)>,<height(int)>)],
-[Node, positioned,   node(<name(str)>,<shape(Shape)>,
-                          <x(int)>,<y(int)>,<width(int)>,<height(int)>)],
+[Node, default, node(<id(NodeId)>,<attributes(AttributeList)>)],
+
+[NodeId, default, <id(str)>],
+
+[AttributeList, empty, []],
+[AttributeList, multi, [<head(Attribute)>,<[tail(AttributeList)]>]],
+
+[Attribute, label, label(<label(str)>)],
+[Attribute, shape, shape(<shape(Shape)>)],
+[Attribute, location, location(<x(int)>,<y(int)>)],
+[Attribute, size, size(<width(int)>,<height(int)>)],
+[Attribute, curve-points, curve-points(<points(Polygon)>)],
 
 [Shape, plaintext, plaintext],
 [Shape, ellipse, ellipse],
@@ -23,11 +30,11 @@
 [Shape, hexagon, hexagon],
 [Shape, octagon, octagon],
 
+
 [EdgeList, empty, []],
 [EdgeList, multi, [<head(Edge)>,<[tail(EdgeList)]>]],
 
-[Edge, unpositioned, edge(<from(str)>,<to(str)>)],
-[Edge, positioned,   edge(<from(str)>,<to(str)>,<polygon(Polygon)>)],
+[Edge, default, edge(<from(NodeId)>,<to(NodeId)>,<attributes(AttributeList)>)],
 
 [Polygon, empty, []],
 [Polygon, multi, [<head(Point)>,<[tail(Polygon)]>]],

@@ -7,11 +7,11 @@ in
   execute(dot-adapter, D?) .
   (
     rec-msg(layout-graph(Graph?)) .
-    snd-eval(D, input-term(Graph)) .
-    rec-value(D, output(Graph?)) .
+    snd-eval(D, layout-graph(Graph)) .
+    rec-value(D, graph-layouted(Graph?)) .
     snd-msg(graph-layouted(Graph))
   ) * delta
 endlet
 
-tool dot-adapter is { command = "gen-adapter -term-output -cmd term2dot2term" }
+tool dot-adapter is { command = "dot-adapter" }
 

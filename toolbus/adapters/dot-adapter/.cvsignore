@@ -1,7 +1,10 @@
 Makefile.in
 Makefile
 *.o
-term2dot2term
-term2dot
-dot2term.pl
 .deps
+y.tab.[ch]
+y.output
+lex.yy.c
+dot-adapter.tif.[ch]
+dot-adapter
+
