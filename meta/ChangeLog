@@ -1,5 +1,12 @@
 # $Id$
 
+Mon Nov 29 11:38:48 CET 2004 <{jurgenv,kooiker,jong}@cwi.nl>
+ * Graph layout algorithm fixed such that arrows point in the
+   right direction.
+ * NOTA BENE: we no depend on the '-y' switch of graphviz's dot, which
+   does not appear in all released versions of graphviz (not in 1.5 for
+   example).
+
 Fri Nov 26 09:38:08 CET 2004 <jurgenv@cwi.nl>
  * Factored out separate GraphNodeSizer tool from meta-studio.idef
  * Factored out modulebrowser and treebrowser
