@@ -32,15 +32,15 @@ static char myarguments[] = "hi:vV";
 static ATermList checkAsf(ATerm term)
 {
   if (ATgetType(term) == AT_LIST) {
-    ASF_CondEquationList rules = ASF_makeCondEquationListFromTerm(term);
-    return checkCondEquationList(rules);
+    ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
+    return checkASFConditionalEquationList(rules);
   }
   else {
     PT_ParseTree parseTree = PT_makeParseTreeFromTerm(term);
     int ambs = PT_getParseTreeAmbCnt(parseTree);
     if (ambs == 0) {
       PT_Tree ptRules        = PT_getParseTreeTree(parseTree);
-      ASF_Equations rules    = ASF_EquationsFromTerm(
+      ASF_ASFEquations rules    = ASF_ASFEquationsFromTerm(
                                  PT_makeTermFromTree(ptRules));
       return checkEquations(rules);
     }

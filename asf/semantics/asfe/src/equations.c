@@ -117,23 +117,23 @@ static unsigned hash_function(equation_table *table, PT_Production top_ofs,
 
 /*}}}  */
 
-/*{{{  ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ) */
+/*{{{  ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ) */
 
-ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
+ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
 {
   PT_Tree tree;
   char *path;
   int start_line, start_col, end_line, end_col;
-  ASF_Equation equation;
+  ASF_ASFEquation equation;
 
-  tree = PT_TreeFromTerm(ASF_CondEquationToTerm(equ));
+  tree = PT_TreeFromTerm(ASF_ASFConditionalEquationToTerm(equ));
 
   if (!PT_getTreePosInfo(tree, &path, &start_line,
 			 &start_col, &end_line, &end_col)) {
     ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
 	      ASF_getCHARLISTString(
-	        ASF_getTagIdChars(
-		  ASF_getTagTagId(ASF_getCondEquationTag(equ)))), tree);
+	        ASF_getASFTagIdChars(
+		  ASF_getASFTagASFTagId(ASF_getASFConditionalEquationASFTag(equ)))), tree);
     return equ;
   }
 
@@ -141,11 +141,11 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
   tree = PT_addTreePosInfoSome(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,
 			       ATfalse, ATtrue, start_line, start_col);
   /*ATwarning("tree after annotating the equations: %t\n", tree);*/
-  equ = ASF_CondEquationFromTerm(PT_TreeToTerm(tree));
+  equ = ASF_ASFConditionalEquationFromTerm(PT_TreeToTerm(tree));
 
-  if (ASF_hasCondEquationConditions(equ)) {
-    ASF_Conditions conds = ASF_getCondEquationConditions(equ);
-    tree = PT_TreeFromTerm(ASF_ConditionsToTerm(conds));
+  if (ASF_hasASFConditionalEquationASFConditions(equ)) {
+    ASF_ASFConditions conds = ASF_getASFConditionalEquationASFConditions(equ);
+    tree = PT_TreeFromTerm(ASF_ASFConditionsToTerm(conds));
     if (!PT_getTreePosInfo(tree, &path, &start_line,
 			   &start_col, &end_line, &end_col)) {
       ATwarning("no position information on conditions, "
@@ -157,14 +157,14 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
       tree = PT_addTreePosInfoSome(path, tree,
 				      DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS,
 				      ATfalse, ATtrue, start_line, start_col);
-      conds = ASF_ConditionsFromTerm(PT_TreeToTerm(tree));
-      equ = ASF_setCondEquationConditions(equ, conds);
+      conds = ASF_ASFConditionsFromTerm(PT_TreeToTerm(tree));
+      equ = ASF_setASFConditionalEquationASFConditions(equ, conds);
       /*ATwarning("tree after annotating the conditions: %t\n", tree);*/
     }
   }
 
-  equation = ASF_getCondEquationEquation(equ);
-  tree = PT_TreeFromTerm(ASF_EquationToTerm(equation));
+  equation = ASF_getASFConditionalEquationASFEquation(equ);
+  tree = PT_TreeFromTerm(ASF_ASFEquationToTerm(equation));
   if (!PT_getTreePosInfo(tree, &path, &start_line, &start_col,
 			 &end_line, &end_col)) {
     ATwarning("no position information on equation, crippled debugging: %t\n",
@@ -173,20 +173,20 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
     tree = PT_addTreePosInfoSome(path, tree,
 				    DEPTH_OF_EQUATION_SIDES_IN_EQUATION,
 				    ATfalse, ATtrue, start_line, start_col);
-    equation = ASF_EquationFromTerm(PT_TreeToTerm(tree));
+    equation = ASF_ASFEquationFromTerm(PT_TreeToTerm(tree));
 
-    equ = ASF_setCondEquationEquation(equ, equation);
+    equ = ASF_setASFConditionalEquationASFEquation(equ, equation);
   }
 
   return equ;
 }
 
 /*}}}  */
-/*{{{  ATerm getPosInfoEquals(ASF_Equation equ) */
+/*{{{  ATerm getPosInfoEquals(ASF_ASFEquation equ) */
 
-ATerm getPosInfoEquals(ASF_Equation equ)
+ATerm getPosInfoEquals(ASF_ASFEquation equ)
 {
-  PT_Tree tree = PT_makeTreeFromTerm(ASF_makeTermFromEquation(equ));
+  PT_Tree tree = PT_makeTreeFromTerm(ASF_makeTermFromASFEquation(equ));
   PT_Tree equals = PT_getArgsArgumentAt(PT_getTreeArgs(tree), 2);
   return ATgetAnnotation(PT_makeTermFromTree(equals), posinfo);
 }
@@ -265,22 +265,22 @@ static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2)
 }
 
 /*}}}  */
-/*{{{  void enter_equation(equation_table * table, ASF_CondEquation equation) */
+/*{{{  void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation) */
 
 /* Enter an equation in an equation table.
 */
 
-void enter_equation(equation_table * table, ASF_CondEquation equation)
+void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
 {
   equation_entry *entry;
 
-  ASF_Equation equ;
+  ASF_ASFEquation equ;
   PT_Tree lhs = NULL, rhs = NULL;
   PT_Production top_ofs, first_ofs;
-  ASF_Tag tag = NULL; 
+  ASF_ASFTag tag = NULL; 
   PT_Args lhsargs;
-  ASF_ConditionList conds; 
-  ASF_Conditions conditions;
+  ASF_ASFConditionList conds; 
+  ASF_ASFConditions conditions;
   unsigned hnr;
   equation_entry *cur;
 
@@ -288,24 +288,24 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
     equation = add_equ_pos_info(equation);
   }
 
-  if (ASF_isCondEquationImplies(equation) 
-      || ASF_isCondEquationWhen(equation)) {
-    conditions = ASF_getCondEquationConditions(equation);
-    conds = ASF_getConditionsList(conditions);
+  if (ASF_isASFConditionalEquationImplies(equation) 
+      || ASF_isASFConditionalEquationWhen(equation)) {
+    conditions = ASF_getASFConditionalEquationASFConditions(equation);
+    conds = ASF_getASFConditionsList(conditions);
   }
   else {
-    conds = (ASF_ConditionList) NULL;
+    conds = (ASF_ASFConditionList) NULL;
   }
 
-  tag = ASF_getCondEquationTag(equation);
-  equ = ASF_getCondEquationEquation(equation);
+  tag = ASF_getASFConditionalEquationASFTag(equation);
+  equ = ASF_getASFConditionalEquationASFEquation(equation);
 
   /* this is where we switch API's from ASF_ to PT_ for the user-defined
    * term syntax
    */
 
-  lhs = ASFtoPT(ASF_getEquationLhs(equ));
-  rhs = ASFtoPT(ASF_getEquationRhs(equ));
+  lhs = ASFtoPT(ASF_getASFEquationLhs(equ));
+  rhs = ASFtoPT(ASF_getASFEquationRhs(equ));
 
   lhsargs = PT_getTreeArgs(lhs);
   top_ofs = PT_getTreeProd(lhs);
@@ -462,7 +462,7 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
 }
 
 /*}}}  */
-/*{{{  void enter_equations(ASF_CondEquationList eqsList) */
+/*{{{  void enter_equations(ASF_ASFConditionalEquationList eqsList) */
 
 /*
   The equations are ``sorted'' by outermost function symbols.
@@ -474,19 +474,19 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
 */
 
 
-void enter_equations(ASF_CondEquationList eqsList)
+void enter_equations(ASF_ASFConditionalEquationList eqsList)
 {
-  equations = create_equation_table(ASF_getCondEquationListLength(eqsList) * 2);
+  equations = create_equation_table(ASF_getASFConditionalEquationListLength(eqsList) * 2);
 
   if (runVerbose) {
     ATwarning("reading in equations:\n");
   }
 
-  while (ASF_hasCondEquationListHead(eqsList)) {
-    enter_equation(equations, ASF_getCondEquationListHead(eqsList));
+  while (ASF_hasASFConditionalEquationListHead(eqsList)) {
+    enter_equation(equations, ASF_getASFConditionalEquationListHead(eqsList));
 
-    if (ASF_hasCondEquationListTail(eqsList)) {
-      eqsList = ASF_getCondEquationListTail(eqsList);
+    if (ASF_hasASFConditionalEquationListTail(eqsList)) {
+      eqsList = ASF_getASFConditionalEquationListTail(eqsList);
     }
     else {
       break;

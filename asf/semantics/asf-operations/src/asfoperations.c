@@ -29,21 +29,21 @@ static char myarguments[] = "hV";
 ATerm extract_equations(int cid, ATerm modules)
 {
   ATermList list = (ATermList) modules;
-  ASF_CondEquationList eqsList;
+  ASF_ASFConditionalEquationList eqsList;
 
-  eqsList = ASF_makeCondEquationListEmpty();
+  eqsList = ASF_makeASFConditionalEquationListEmpty();
 
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     ATerm head = ATBunpack(ATgetFirst(list));
-    ASF_Equations eqs = ASF_getStartTopEquations(ASF_StartFromTerm(head));
+    ASF_ASFEquations eqs = ASF_getStartTopASFEquations(ASF_StartFromTerm(head));
    
-    if (ASF_hasEquationsList(eqs)) {
-      eqsList = ASF_unionCondEquationList(ASF_getEquationsList(eqs), eqsList);
+    if (ASF_hasASFEquationsList(eqs)) {
+      eqsList = ASF_unionASFConditionalEquationList(ASF_getASFEquationsList(eqs), eqsList);
     }
   }
 
   return ATmake("snd-value(extract-equations-result(<term>))",
-		ATBpack(ASF_CondEquationListToTerm(eqsList)));
+		ATBpack(ASF_ASFConditionalEquationListToTerm(eqsList)));
 }
 
 /*}}}  */

@@ -43,7 +43,7 @@ main (int argc, char **argv)
   int  nInputs = 0;
   char *output = "-";
   ATermList list;
-  ASF_CondEquationList alleqs;
+  ASF_ASFConditionalEquationList alleqs;
   int i;
 
   if(argc == 1) { /* no arguments */
@@ -100,9 +100,9 @@ main (int argc, char **argv)
     free(inputs[nInputs]);
   }
 
-  alleqs = ASF_makeCondEquationListFromParseTrees(list);
+  alleqs = ASF_makeASFConditionalEquationListFromParseTrees(list);
  
-  ATwriteToNamedBinaryFile(ASF_makeTermFromCondEquationList(alleqs), output);
+  ATwriteToNamedBinaryFile(ASF_makeTermFromASFConditionalEquationList(alleqs), output);
  
   return 0;
 }

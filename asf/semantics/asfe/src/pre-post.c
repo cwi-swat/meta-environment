@@ -21,62 +21,62 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data);
 static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data);
 
 
-/*{{{  ASF_Condition prepare_cond(ASF_Condition cond) */
+/*{{{  ASF_ASFCondition prepare_cond(ASF_ASFCondition cond) */
 
-ASF_Condition prepare_cond(ASF_Condition cond)
+ASF_ASFCondition prepare_cond(ASF_ASFCondition cond)
 {
   PT_Tree lhs, rhs;
   
-  lhs = ASFtoPT(ASF_getConditionLhs(cond));
-  cond = ASF_setConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
+  lhs = ASFtoPT(ASF_getASFConditionLhs(cond));
+  cond = ASF_setASFConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
     
-  rhs = ASFtoPT(ASF_getConditionRhs(cond));
-  cond = ASF_setConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
+  rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
+  cond = ASF_setASFConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
 
   return cond;
 }
 
 /*}}}  */
-/*{{{  ASF_Conditions prepareConditions(ASF_Conditions conds) */
+/*{{{  ASF_ASFConditions prepareConditions(ASF_ASFConditions conds) */
 
-ASF_Conditions prepareConditions(ASF_Conditions conds)
+ASF_ASFConditions prepareConditions(ASF_ASFConditions conds)
 {
-  ASF_ConditionList  condList = ASF_getConditionsList(conds);
+  ASF_ASFConditionList  condList = ASF_getASFConditionsList(conds);
   
-  condList = ASF_visitConditionList(condList, prepare_cond, NULL, NULL, NULL);
+  condList = ASF_visitASFConditionList(condList, prepare_cond, NULL, NULL, NULL);
 
-  return ASF_setConditionsList(conds, condList);
+  return ASF_setASFConditionsList(conds, condList);
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquation prepareEquation(ASF_CondEquation equ) */
+/*{{{  ASF_ASFConditionalEquation prepareEquation(ASF_ASFConditionalEquation equ) */
 
 /*
 Prepare an equation for rewriting. This includes removing the layout,
 and translating lexicals into lists.
 */
 
-ASF_CondEquation prepareEquation(ASF_CondEquation equ)
+ASF_ASFConditionalEquation prepareEquation(ASF_ASFConditionalEquation equ)
 {
-  ASF_Equation equation;
+  ASF_ASFEquation equation;
 
 
-  if (ASF_isCondEquationWhen(equ) || ASF_isCondEquationImplies(equ)) {
-    equ = ASF_setCondEquationConditions(equ,
-            prepareConditions(ASF_getCondEquationConditions(equ)));
+  if (ASF_isASFConditionalEquationWhen(equ) || ASF_isASFConditionalEquationImplies(equ)) {
+    equ = ASF_setASFConditionalEquationASFConditions(equ,
+            prepareConditions(ASF_getASFConditionalEquationASFConditions(equ)));
   }
 
-  equation = ASF_getCondEquationEquation(equ);
+  equation = ASF_getASFConditionalEquationASFEquation(equ);
 
-  equation = ASF_setEquationLhs(equation, 
-          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationLhs(equation)),
+  equation = ASF_setASFEquationLhs(equation, 
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getASFEquationLhs(equation)),
 				ATfalse)));
 
-  equation = ASF_setEquationRhs(equation,
-          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationRhs(equation)),
+  equation = ASF_setASFEquationRhs(equation,
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getASFEquationRhs(equation)),
 				ATfalse)));
 
-  return ASF_setCondEquationEquation(equ, equation); 
+  return ASF_setASFConditionalEquationASFEquation(equ, equation); 
 }
 
 /*}}}  */
@@ -206,19 +206,19 @@ PT_Tree RWprepareTerm(PT_Tree tree, ATbool allow_ambs)
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList) */
+/*{{{  ASF_ASFConditionalEquationList RWprepareEquations(ASF_ASFConditionalEquationList eqsList) */
 /*
 Prepare a list of equations for rewriting.
 */
 
 
-ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList, 
+ASF_ASFConditionalEquationList RWprepareEquations(ASF_ASFConditionalEquationList eqsList, 
 					ATbool mark_layout)
 {
-  ASF_CondEquationList new;
+  ASF_ASFConditionalEquationList new;
   mark_new_layout = mark_layout;
   in_equations = ATtrue;
-  new = ASF_visitCondEquationList(eqsList, prepareEquation, NULL);
+  new = ASF_visitASFConditionalEquationList(eqsList, prepareEquation, NULL);
   in_equations = ATfalse;
   return new;
 }

@@ -146,7 +146,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, char *output)
   } else {
     VERBOSE("transforming ASF to MuASF");
 
-    muasf = asfToMuASF(saveName, ASF_CondEquationListFromTerm(eqs));
+    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs));
   }
 
   if (muasf == NULL) {

@@ -46,11 +46,11 @@ static int getInjectionDepth(PT_Tree eqOrCond)
 {
   PT_Tree lhs;
 
-  if (ASF_isValidEquation((ASF_Equation) eqOrCond)) { 
-    lhs = (PT_Tree) ASF_getEquationLhs((ASF_Equation) eqOrCond);
+  if (ASF_isValidASFEquation((ASF_ASFEquation) eqOrCond)) { 
+    lhs = (PT_Tree) ASF_getASFEquationLhs((ASF_ASFEquation) eqOrCond);
   }
-  else if (ASF_isValidCondition((ASF_Condition) eqOrCond)) { 
-    lhs = (PT_Tree) ASF_getConditionLhs((ASF_Condition) eqOrCond);
+  else if (ASF_isValidASFCondition((ASF_ASFCondition) eqOrCond)) { 
+    lhs = (PT_Tree) ASF_getASFConditionLhs((ASF_ASFCondition) eqOrCond);
   }
   else {
     return DEPTH_UNDEFINED;
@@ -61,7 +61,7 @@ static int getInjectionDepth(PT_Tree eqOrCond)
 
 /*}}}  */
 
-/*{{{  static ASF_Equation filterEquationOrCondition(PT_Tree eqOrCond) */
+/*{{{  static ASF_ASFEquation filterASFEquationOrCondition(PT_Tree eqOrCond) */
 
 static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
 {
@@ -138,20 +138,20 @@ static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
 /*}}}  */
 /*{{{  static ASF_Conditions filterConditions(ASF_Conditions conds) */
 
-static ASF_Conditions filterConditions(ASF_Conditions conds)
+static ASF_ASFConditions filterConditions(ASF_ASFConditions conds)
 {
-  ASF_ConditionList condlist;
+  ASF_ASFConditionList condlist;
   int count;
-  ASF_Condition* buffer = NULL;
-  ASF_ConditionList new;
+  ASF_ASFCondition* buffer = NULL;
+  ASF_ASFConditionList new;
   int i;
 
   CHECK_AMB(conds);
   
-  condlist = ASF_getConditionsList(conds);
+  condlist = ASF_getASFConditionsList(conds);
   count = ASF_getConditionListLength(condlist);
 
-  buffer = (ASF_Condition*) calloc(count, sizeof(ASF_Condition));
+  buffer = (ASF_ASFCondition*) calloc(count, sizeof(ASF_ASFCondition));
 
   if (buffer == NULL) {
     ATerror("filterConditions: not enough memory\n");
@@ -160,12 +160,12 @@ static ASF_Conditions filterConditions(ASF_Conditions conds)
 
   ATprotectArray((ATerm*) buffer, count);
 
-  for(i = 0;ASF_hasConditionListHead(condlist);
-      condlist = ASF_getConditionListTail(condlist)) {
-    ASF_Condition cond = ASF_getConditionListHead(condlist);
-    buffer[i++] = (ASF_Condition) filterEquationOrCondition((PT_Tree) cond); 
+  for(i = 0;ASF_hasASFConditionListHead(condlist);
+      condlist = ASF_getASFConditionListTail(condlist)) {
+    ASF_ASFCondition cond = ASF_getASFConditionListHead(condlist);
+    buffer[i++] = (ASF_ASFCondition) filterEquationOrCondition((PT_Tree) cond); 
 
-    if (!ASF_hasConditionListTail(condlist)) {
+    if (!ASF_hasASFConditionListTail(condlist)) {
       break;
     }
   }
@@ -174,11 +174,11 @@ static ASF_Conditions filterConditions(ASF_Conditions conds)
 
   while (--i >= 0) {
     if (new == NULL) {
-      new = ASF_makeConditionListSingle(buffer[i]);
+      new = ASF_makeASFConditionListSingle(buffer[i]);
       assert(new);
     }
     else {
-      new = ASF_makeConditionListMany(buffer[i],space,",",space,new);
+      new = ASF_makeASFConditionListMany(buffer[i],space,",",space,new);
     }
   }
 
@@ -186,28 +186,28 @@ static ASF_Conditions filterConditions(ASF_Conditions conds)
   free(buffer);
   buffer = NULL;
 
-  return ASF_makeConditionsDefault(new);
+  return ASF_makeASFConditionsDefault(new);
 }
 
 /*}}}  */
 /*{{{  static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq) */
 
-static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
+static ASF_ASFConditionalEquation filterCondEquation(ASF_ASFConditionalEquation condeq)
 {
-  ASF_Equation eq;
+  ASF_ASFEquation eq;
 
   CHECK_AMB(condeq);
 
-  eq = ASF_getCondEquationEquation(condeq);
+  eq = ASF_getASFConditionalEquationASFEquation(condeq);
   assert(eq);
 
-  eq = (ASF_Equation) filterEquationOrCondition((PT_Tree) eq);
-  condeq = ASF_setCondEquationEquation(condeq, eq);
+  eq = (ASF_ASFEquation) filterEquationOrCondition((PT_Tree) eq);
+  condeq = ASF_setASFConditionalEquationASFEquation(condeq, eq);
 
-  if (ASF_hasCondEquationConditions(condeq)) {
-    ASF_Conditions conds = ASF_getCondEquationConditions(condeq);
+  if (ASF_hasASFConditionalEquationASFConditions(condeq)) {
+    ASF_ASFConditions conds = ASF_getASFConditionalEquationASFConditions(condeq);
     conds = filterConditions(conds);
-    condeq = ASF_setCondEquationConditions(condeq, conds);
+    condeq = ASF_setASFConditionalEquationASFConditions(condeq, conds);
   }
 
   return condeq; 
@@ -216,23 +216,23 @@ static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
 /*}}}  */
 /*{{{  static CondEquationsList filterCondEquationList(ASF_CondEquationList ... */
 
-static ASF_CondEquationList 
-filterCondEquationList(ASF_CondEquationList condeqslist)
+static ASF_ASFConditionalEquationList 
+filterCondEquationList(ASF_ASFConditionalEquationList condeqslist)
 {
   int count;
-  ASF_CondEquation* buffer = NULL;
-  ASF_CondEquationList new;
+  ASF_ASFConditionalEquation* buffer = NULL;
+  ASF_ASFConditionalEquationList new;
   int i;
 
   CHECK_AMB(condeqslist);
   
-  count = ASF_getCondEquationListLength(condeqslist);
+  count = ASF_getASFConditionalEquationListLength(condeqslist);
 
-  if (ASF_isCondEquationListEmpty(condeqslist)) {
+  if (ASF_isASFConditionalEquationListEmpty(condeqslist)) {
     return condeqslist;
   }
 
-  buffer = (ASF_CondEquation*) calloc(count, sizeof(ASF_CondEquation));
+  buffer = (ASF_ASFConditionalEquation*) calloc(count, sizeof(ASF_ASFConditionalEquation));
 
   if (buffer == NULL) {
     ATerror("filterCondEquationList: not enough memory\n");
@@ -241,12 +241,12 @@ filterCondEquationList(ASF_CondEquationList condeqslist)
 
   ATprotectArray((ATerm*) buffer, count);
 
-  for(i = 0;ASF_hasCondEquationListHead(condeqslist);
-      condeqslist = ASF_getCondEquationListTail(condeqslist)) {
-    ASF_CondEquation condeq = ASF_getCondEquationListHead(condeqslist);
+  for(i = 0;ASF_hasASFConditionalEquationListHead(condeqslist);
+      condeqslist = ASF_getASFConditionalEquationListTail(condeqslist)) {
+    ASF_ASFConditionalEquation condeq = ASF_getASFConditionalEquationListHead(condeqslist);
     buffer[i++] = filterCondEquation(condeq); 
 
-    if (!ASF_hasCondEquationListTail(condeqslist)) {
+    if (!ASF_hasASFConditionalEquationListTail(condeqslist)) {
       break;
     }
   }
@@ -255,11 +255,11 @@ filterCondEquationList(ASF_CondEquationList condeqslist)
 
   while (--i >= 0) {
     if (new == NULL) {
-      new = ASF_makeCondEquationListSingle(buffer[i]);
+      new = ASF_makeASFConditionalEquationListSingle(buffer[i]);
       assert(new);
     }
     else {
-      new = ASF_makeCondEquationListMany(buffer[i],space,new);
+      new = ASF_makeASFConditionalEquationListMany(buffer[i],space,new);
     }
   }
 
@@ -273,16 +273,16 @@ filterCondEquationList(ASF_CondEquationList condeqslist)
 /*}}}  */
 /*{{{  static ASF_Equations filterEquations(ASF_Equations equations) */
 
-static ASF_Equations filterEquations(ASF_Equations equations)
+static ASF_ASFEquations filterEquations(ASF_ASFEquations equations)
 {
   CHECK_AMB(equations);
 
-  if (ASF_isEquationsPresent(equations)) {
-    ASF_CondEquationList condeqslist = ASF_getEquationsList(equations);
+  if (ASF_isASFEquationsPresent(equations)) {
+    ASF_ASFConditionalEquationList condeqslist = ASF_getASFEquationsList(equations);
 
     condeqslist = filterCondEquationList(condeqslist);
 
-    return ASF_setEquationsList(equations, condeqslist);
+    return ASF_setASFEquationsList(equations, condeqslist);
   }
   else {
     return equations;
@@ -293,13 +293,13 @@ static ASF_Equations filterEquations(ASF_Equations equations)
 
 /*{{{  ASF_Equations filterEquationSyntax(ASF_Equations equations) */
 
-ASF_Equations filterEquationSyntax(ASF_Equations equations)
+ASF_ASFEquations filterEquationSyntax(ASF_ASFEquations equations)
 {
   /* initialize some globals */
   space = ASF_makeOptLayoutPresent(ASF_makeCHARLISTString(" "));
   ATprotect((ATerm*) &space);
 
-  if (ASF_isValidEquations(equations)) {
+  if (ASF_isValidASFEquations(equations)) {
     equations = filterEquations(equations);
   }
 

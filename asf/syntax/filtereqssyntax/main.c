@@ -54,7 +54,7 @@ static PT_ParseTree filter(PT_ParseTree parsetree)
     ATwarning("BEFORE FILTERING:\n%t\n", PT_reportTreeAmbiguities(tree));
   }
 
-  tree = (PT_Tree) filterEquationSyntax((ASF_Equations) tree);
+  tree = (PT_Tree) filterEquationSyntax((ASF_ASFEquations) tree);
   ambiguities = PT_reportTreeAmbiguities(tree);
 
   if (ATmatch(ambiguities,"ambiguities(<int>,[<list>])", &count, NULL)) {

@@ -22,7 +22,7 @@
 /*}}}  */
 
 /* global variables */
-ASF_Tag tagCurrentRule = NULL;
+ASF_ASFTag tagCurrentRule = NULL;
 ATbool aborted = ATfalse;
 ATbool runVerbose = ATfalse;
 ATbool useTide = ATfalse;
@@ -32,7 +32,7 @@ unsigned rewrite_steps = 0;
 
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
-ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
+ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs,
                 ATbool debug, ATbool remove_layout, ATbool mark_new_layout,
 		ATbool allow_ambs)
 {
@@ -60,7 +60,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
     memo_table = MemoTableCreate();
   }
 
-  tagCurrentRule = ASF_makeTagNotEmpty(e,ASF_makeTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
+  tagCurrentRule = ASF_makeASFTagNotEmpty(e,ASF_makeASFTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
   rewrite_steps = 0;
   initBuiltins();
   

@@ -3,6 +3,6 @@
 
 #include <ASFME.h>
 
-MA_Module asfToMuASF(char* name, ASF_CondEquationList equations);
+MA_Module asfToMuASF(char* name, ASF_ASFConditionalEquationList equations);
 
 #endif

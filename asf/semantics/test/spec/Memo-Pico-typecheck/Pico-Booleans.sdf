@@ -1,0 +1,24 @@
+module Pico-Booleans
+
+imports Layout
+
+exports
+  sorts PICO-BOOL
+  context-free syntax
+    "true"  -> PICO-BOOL-CON
+    "false" -> PICO-BOOL-CON
+
+  context-free syntax
+    PICO-BOOL-CON -> PICO-BOOL
+
+    PICO-BOOL "|" PICO-BOOL -> PICO-BOOL {left}
+    PICO-BOOL "&" PICO-BOOL -> PICO-BOOL {left}
+    "not" "(" PICO-BOOL ")" -> PICO-BOOL
+    "(" PICO-BOOL ")"       -> PICO-BOOL {bracket}
+  variables
+    "Bool"[0-9]* -> PICO-BOOL
+    "Bool-con"[0-9]* -> PICO-BOOL-CON
+
+  context-free priorities
+    PICO-BOOL "&" PICO-BOOL -> PICO-BOOL >
+    PICO-BOOL "|" PICO-BOOL -> PICO-BOOL

@@ -5,7 +5,7 @@
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
 
-ATermList checkEquations(ASF_Equations eqs);
-ATermList checkCondEquationList(ASF_CondEquationList condEquationList);
+ATermList checkEquations(ASF_ASFEquations eqs);
+ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList);
 
 #endif  /* EQS_CHECKER_H */

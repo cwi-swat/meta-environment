@@ -28,34 +28,34 @@
 
 /*{{{  local function declarations */
 
-static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth);
-static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
+static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth);
+static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
 			    ATerm env, int depth);
-static ATerm matchNegativeCondition(ASF_Condition cond,
+static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 				    PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ConditionList conds,
+				    ASF_ASFConditionList conds,
 				    ATerm env, 
 				    int depth);
-static ATerm matchPositiveCondition(ASF_Condition cond,
+static ATerm matchPositiveCondition(ASF_ASFCondition cond,
 				    PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ConditionList conds,
+				    ASF_ASFConditionList conds,
 				    ATerm env, int depth);
-static ATerm matchArguments(ATerm env, ASF_ConditionList conds,
+static ATerm matchArguments(ATerm env, ASF_ASFConditionList conds,
 			    PT_Args args1, PT_Args args2, 
 			    ATerm lhs_posinfo, int depth);
 static ATerm matchListVariable(ATerm env, PT_Tree listvar,
 		  PT_Production listProd, PT_Args elems1, PT_Args elems2,
-		  ASF_ConditionList conds,
+		  ASF_ASFConditionList conds,
 		  PT_Args args1, PT_Args args2,
 		  ATerm lhs_posinfo, int depth);
 static ATerm matchList(ATerm env, PT_Production listProd,
 		       PT_Args elems1, PT_Args elems2,
-		       ASF_ConditionList conds, 
+		       ASF_ASFConditionList conds, 
 		       PT_Args args1, PT_Args args2,
 		       ATerm lhs_posinfo, int depth);
 static ATerm matchArgument(ATerm env, 
 			   PT_Tree arg1, PT_Tree arg2,
-			   ASF_ConditionList conds,
+			   ASF_ASFConditionList conds,
 			   PT_Args orgargs1, PT_Args orgargs2,
 			   ATerm lhs_posinfo, int depth);
 
@@ -69,11 +69,11 @@ static ATerm matchArgument(ATerm env,
  * position information of the sign for debugging using tide!
  */
 
-/*{{{  ATerm getConditionSign(ASF_Condition cond) */
+/*{{{  ATerm getConditionSign(ASF_ASFCondition cond) */
 
-ATerm getConditionSign(ASF_Condition cond)
+ATerm getConditionSign(ASF_ASFCondition cond)
 {
-  PT_Tree tree = PT_TreeFromTerm(ASF_ConditionToTerm(cond));
+  PT_Tree tree = PT_TreeFromTerm(ASF_ASFConditionToTerm(cond));
 
   PT_Args args = PT_getTreeArgs(tree);
   PT_Tree sign = PT_getArgsHead(PT_getArgsTail(PT_getArgsTail(args)));
@@ -85,9 +85,9 @@ ATerm getConditionSign(ASF_Condition cond)
 
 /*{{{  static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm matchNegativeCondition(ASF_Condition cond,
+static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 				    PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ConditionList conds,
+				    ASF_ASFConditionList conds,
 				    ATerm env, 
 				    int depth)
 {
@@ -120,8 +120,8 @@ static ATerm matchNegativeCondition(ASF_Condition cond,
 /*}}}  */
 /*{{{  static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm matchPositiveCondition(ASF_Condition cond, PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ConditionList conds,
+static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ASFConditionList conds,
 				    ATerm env, int depth)
 {
   PT_Tree lhstrm, rhstrm;
@@ -167,15 +167,15 @@ static ATerm matchPositiveCondition(ASF_Condition cond, PT_Tree lhs, PT_Tree rhs
 }
 
 /*}}}  */
-/*{{{  static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds, */
+/*{{{  static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds, */
 
-static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
+static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
 			    ATerm env, int depth)
 {
-  PT_Tree lhs = ASFtoPT(ASF_getConditionLhs(cond));
-  PT_Tree rhs = ASFtoPT(ASF_getConditionRhs(cond));
+  PT_Tree lhs = ASFtoPT(ASF_getASFConditionLhs(cond));
+  PT_Tree rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
 
-  if (ASF_isConditionPositive(cond)) {
+  if (ASF_isASFConditionPositive(cond)) {
     return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
   }
   else {
@@ -184,21 +184,21 @@ static ATerm matchCondition(ASF_Condition cond, ASF_ConditionList conds,
 }
 
 /*}}}  */
-/*{{{  static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth) */
-static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth)
+/*{{{  static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth) */
+static ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth)
 {
-  ASF_Condition cond;
+  ASF_ASFCondition cond;
   ATerm newenv = env;
 
   if (conds == NULL) {
     return env;
   }
 
-  if (ASF_hasConditionListHead(conds)) {
-    cond = ASF_getConditionListHead(conds);
+  if (ASF_hasASFConditionListHead(conds)) {
+    cond = ASF_getASFConditionListHead(conds);
 
-    if (ASF_hasConditionListTail(conds)) {
-      conds = ASF_getConditionListTail(conds);
+    if (ASF_hasASFConditionListTail(conds)) {
+      conds = ASF_getASFConditionListTail(conds);
     }
     else {
       conds = NULL;
@@ -216,7 +216,7 @@ static ATerm matchConditions(ASF_ConditionList conds, ATerm env, int depth)
 
 static ATerm matchList(ATerm env, PT_Production listProd,
 		       PT_Args elems1, PT_Args elems2,
-		       ASF_ConditionList conds, 
+		       ASF_ASFConditionList conds, 
 		       PT_Args args1, PT_Args args2,
 		       ATerm lhs_posinfo, int depth)
 {
@@ -278,7 +278,7 @@ static ATerm matchList(ATerm env, PT_Production listProd,
 
 static ATerm matchListVariable(ATerm env, PT_Tree listvar,
 		  PT_Production listProd, PT_Args elems1, PT_Args elems2,
-		  ASF_ConditionList conds,
+		  ASF_ASFConditionList conds,
 		  PT_Args args1, PT_Args args2,
 		  ATerm lhs_posinfo, int depth)
 {
@@ -318,9 +318,9 @@ static ATerm matchListVariable(ATerm env, PT_Tree listvar,
 
 /*}}}  */
 
-/*{{{  static ATerm matchArguments(ATerm env, ASF_ConditionList conds, */
+/*{{{  static ATerm matchArguments(ATerm env, ASF_ASFConditionList conds, */
 
-static ATerm matchArguments(ATerm env, ASF_ConditionList conds,
+static ATerm matchArguments(ATerm env, ASF_ASFConditionList conds,
 			    PT_Args args1, PT_Args args2, 
 			    ATerm lhs_posinfo, int depth)
 {
@@ -356,7 +356,7 @@ static ATerm matchArguments(ATerm env, ASF_ConditionList conds,
 static ATerm matchVariable(ATerm env,
 			   PT_Tree var,
 			   PT_Tree arg2,
-			   ASF_ConditionList conds,
+			   ASF_ASFConditionList conds,
 			   PT_Args orgargs1, PT_Args orgargs2,
 			   ATerm lhs_posinfo, int depth)
 {
@@ -387,7 +387,7 @@ static ATerm matchVariable(ATerm env,
 static ATerm matchAppl(ATerm env,
 		       PT_Tree arg1,
 		       PT_Tree arg2,
-		       ASF_ConditionList conds,
+		       ASF_ASFConditionList conds,
 		       PT_Args orgargs1, PT_Args orgargs2,
 		       ATerm lhs_posinfo, int depth)
 {
@@ -416,7 +416,7 @@ static ATerm matchAppl(ATerm env,
 
 static ATerm matchArgument(ATerm env, 
 			   PT_Tree arg1, PT_Tree arg2,
-			   ASF_ConditionList conds,
+			   ASF_ASFConditionList conds,
 			   PT_Args orgargs1, PT_Args orgargs2,
 			   ATerm lhs_posinfo, int depth)
 {

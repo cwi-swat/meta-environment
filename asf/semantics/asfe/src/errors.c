@@ -33,7 +33,7 @@ void RWsetError(const char *message, PT_Tree subject)
   ASF_OptLayout e = ASF_makeOptLayoutAbsent();
 
   if (tagCurrentRule == NULL) {
-    tagCurrentRule = ASF_makeTagNotEmpty(e,ASF_makeTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
+    tagCurrentRule = ASF_makeASFTagNotEmpty(e,ASF_makeASFTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
   }
 
   if (rewriteError == NULL) {
@@ -71,7 +71,7 @@ void printErrors(void)
   subject = ATgetFirst(ATgetNext(ATgetNext(error)));
 
   if (tag) {
-    tagText = ASF_getCHARLISTString(ASF_getTagIdChars(ASF_getTagTagId(ASF_TagFromTerm(tag))));
+    tagText = ASF_getCHARLISTString(ASF_getASFTagIdChars(ASF_getASFTagASFTagId(ASF_ASFTagFromTerm(tag))));
   }
   else {
     tagText = strdup("");

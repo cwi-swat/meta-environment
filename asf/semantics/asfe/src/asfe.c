@@ -116,7 +116,7 @@ void rec_ack_event(int cid, ATerm t)
 ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 {
   PT_ParseTree parseTree;
-  ASF_CondEquationList eqsList;
+  ASF_ASFConditionalEquationList eqsList;
   ATerm result;
   ATbool debug;
 
@@ -132,7 +132,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 
   /*ATfprintf(stderr, "equations: %t\n", eqs);*/
   eqs = ATBunpack(eqs);
-  eqsList = ASF_makeCondEquationListFromTerm(eqs);
+  eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
 
   trm = ATBunpack(trm);
   parseTree = PT_makeParseTreeFromTerm(trm);
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
-  ASF_CondEquationList eqsList;
+  ASF_ASFConditionalEquationList eqsList;
   PT_ParseTree parseTree;
 
   /*  Check whether we're a ToolBus process  */
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     }
 
     eqs = ATreadFromFile(iofile);
-    eqsList = ASF_makeCondEquationListFromTerm(eqs);
+    eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
     fclose(iofile);
 
     /* Get the term from file */

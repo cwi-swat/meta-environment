@@ -10,9 +10,9 @@ typedef struct equation_entry
   struct equation_entry *hnext;
   unsigned hashnr;
 
-  ASF_Tag tag;
-  ASF_CondEquation equation;
-  ASF_ConditionList conds;
+  ASF_ASFTag tag;
+  ASF_ASFConditionalEquation equation;
+  ASF_ASFConditionList conds;
 
   PT_Production top_ofs;
   PT_Production first_ofs;
@@ -34,7 +34,7 @@ typedef struct equation_table
 
 equation_entry *find_equation(equation_entry *prev, PT_Production top_ofs, 
                               PT_Production first_ofs);
-void enter_equations(ASF_CondEquationList eqs);
+void enter_equations(ASF_ASFConditionalEquationList eqs);
 void print_short_equation(int stack, const char *msg, equation_entry *entry);
 void destroy_equation_table();
 

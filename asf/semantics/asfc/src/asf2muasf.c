@@ -66,14 +66,14 @@ static MA_FuncDef prodToFuncDef(PT_Production prod);
 static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs);
 static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, 
 			  LayoutOption layout);
-static MA_Cond conditionToCond(ASF_Condition condition, 
+static MA_Cond conditionToCond(ASF_ASFCondition condition, 
 			       ATermIndexedSet funcdefs);
-static MA_CondList conditionsToCondList(ASF_Conditions conditions, 
+static MA_CondList conditionsToCondList(ASF_ASFConditions conditions, 
 					ATermIndexedSet funcdefs);
 
-static MA_Rule condEquationToRule(ASF_CondEquation condEquation, 
+static MA_Rule condEquationToRule(ASF_ASFConditionalEquation condEquation, 
 				  ATermIndexedSet funcdefs);
-static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
+static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList list,
 					       ATermIndexedSet funcdefs);
 static MA_ModId makeModId(char *str);
 static ATbool checkListProductionCompatibility(PT_Production ptProd);
@@ -670,23 +670,23 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
 }
 
 /*}}}  */
-/*{{{  static MA_Cond conditionToCond(ASF_Condition condition, */
+/*{{{  static MA_Cond conditionToCond(ASF_ASFCondition condition, */
 
-static MA_Cond conditionToCond(ASF_Condition condition,
+static MA_Cond conditionToCond(ASF_ASFCondition condition,
 			       ATermIndexedSet funcdefs)
 {
-  ASF_Tree asfLhs = ASF_getConditionLhs(condition);
-  ASF_Tree asfRhs = ASF_getConditionRhs(condition);
+  ASF_Tree asfLhs = ASF_getASFConditionLhs(condition);
+  ASF_Tree asfRhs = ASF_getASFConditionRhs(condition);
   MA_Term maLhs = treeToTerm((PT_Tree) asfLhs, funcdefs, WITHOUT_LAYOUT);
   MA_Term maRhs = treeToTerm((PT_Tree) asfRhs, funcdefs, WITHOUT_LAYOUT);
   MA_Cond result = NULL;
 
   assert(maLhs != NULL && maRhs != NULL);
 
-  if (ASF_isConditionPositive(condition)) {
+  if (ASF_isASFConditionPositive(condition)) {
     result = MA_makeCondEqual(maLhs,sp,sp,maRhs);
   }
-  else if (ASF_isConditionNegative(condition)) {
+  else if (ASF_isASFConditionNegative(condition)) {
     result = MA_makeCondUnequal(maLhs,sp,sp,maRhs);
   }
   else {
@@ -699,16 +699,16 @@ static MA_Cond conditionToCond(ASF_Condition condition,
 }
 
 /*}}}  */
-/*{{{  static MA_CondList conditionsToCondList(ASF_Conditions conditions, */
+/*{{{  static MA_CondList conditionsToCondList(ASF_ASFConditions conditions, */
 
-static MA_CondList conditionsToCondList(ASF_Conditions conditions,
+static MA_CondList conditionsToCondList(ASF_ASFConditions conditions,
 					ATermIndexedSet funcdefs)
 {
-  ASF_ConditionList list = ASF_getConditionsList(conditions);
+  ASF_ASFConditionList list = ASF_getASFConditionsList(conditions);
   MA_CondElems elems = MA_makeCondElemsEmpty();
 
-  for(;ASF_hasConditionListHead(list); list = ASF_getConditionListTail(list)) {
-    ASF_Condition condition = ASF_getConditionListHead(list);
+  for(;ASF_hasASFConditionListHead(list); list = ASF_getASFConditionListTail(list)) {
+    ASF_ASFCondition condition = ASF_getASFConditionListHead(list);
     MA_Cond cond = conditionToCond(condition, funcdefs);
 
     if (MA_isCondElemsEmpty(elems)) {
@@ -718,7 +718,7 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions,
       elems = MA_makeCondElemsMany(cond,em,"&",sp,elems);
     }
 
-    if (!ASF_hasConditionListTail(list)) {
+    if (!ASF_hasASFConditionListTail(list)) {
       break;
     }
   }
@@ -728,15 +728,15 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions,
 }
 
 /*}}}  */
-/*{{{  static MA_Rule condEquationToRule(ASF_CondEquation condEquation, */
+/*{{{  static MA_Rule condEquationToRule(ASF_ASFConditionalEquation condEquation, */
 
-static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
+static MA_Rule condEquationToRule(ASF_ASFConditionalEquation condEquation,
 				  ATermIndexedSet funcdefs)
 {
-  ASF_Equation asfEq = ASF_getCondEquationEquation(condEquation);
-  ASF_Tree asfLhs = ASF_getEquationLhs(asfEq);
-  ASF_Tree asfRhs = ASF_getEquationRhs(asfEq);
-  ASF_Tag tag = ASF_getCondEquationTag(condEquation);
+  ASF_ASFEquation asfEq = ASF_getASFConditionalEquationASFEquation(condEquation);
+  ASF_Tree asfLhs = ASF_getASFEquationLhs(asfEq);
+  ASF_Tree asfRhs = ASF_getASFEquationRhs(asfEq);
+  ASF_ASFTag tag = ASF_getASFConditionalEquationASFTag(condEquation);
   MA_Term lhs = treeToTerm((PT_Tree) asfLhs, funcdefs, WITHOUT_LAYOUT);
   MA_Term rhs = treeToTerm((PT_Tree) asfRhs, funcdefs, WITHOUT_LAYOUT);
   MA_CondList conds = NULL;
@@ -747,8 +747,8 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
     return NULL;
   }
 
-  if (ASF_hasCondEquationConditions(condEquation)) {
-    conds = conditionsToCondList(ASF_getCondEquationConditions(condEquation),
+  if (ASF_hasASFConditionalEquationASFConditions(condEquation)) {
+    conds = conditionsToCondList(ASF_getASFConditionalEquationASFConditions(condEquation),
 				 funcdefs);
   }
 
@@ -773,16 +773,16 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
 }
 
 /*}}}  */
-/*{{{  static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list, */
+/*{{{  static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList list, */
 
-static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
+static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList list,
 					       ATermIndexedSet funcdefs)
 {
   MA_RuleElems rules = MA_makeRuleElemsEmpty();
 
-  for(;ASF_hasCondEquationListHead(list);
-       list = ASF_getCondEquationListTail(list)) {
-    ASF_CondEquation eq = ASF_getCondEquationListHead(list);
+  for(;ASF_hasASFConditionalEquationListHead(list);
+       list = ASF_getASFConditionalEquationListTail(list)) {
+    ASF_ASFConditionalEquation eq = ASF_getASFConditionalEquationListHead(list);
     MA_Rule rule = condEquationToRule(eq,funcdefs);
 
     if (rule == NULL) {
@@ -796,7 +796,7 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
       rules = MA_makeRuleElemsSingle(rule);
     }
 
-    if (ASF_isCondEquationListSingle(list)) {
+    if (ASF_isASFConditionalEquationListSingle(list)) {
       break;
     }
   }
@@ -848,9 +848,9 @@ MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs)
 
 /*}}}  */
 
-/*{{{  MA_Module asfToMuASF(char *name, ASF_CondEquationList equations) */
+/*{{{  MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations) */
 
-MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
+MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations)
 {
   MA_SignatureOpt maSignature;
   ATermIndexedSet funcdefs = ATindexedSetCreate(1024, 70);
@@ -859,7 +859,7 @@ MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
 
   initLayoutAbbreviations();
 
-  if (ASF_isCondEquationListEmpty(equations)) {
+  if (ASF_isASFConditionalEquationListEmpty(equations)) {
     maRules = MA_makeRulesOptAbsent();
   } 
   else {
