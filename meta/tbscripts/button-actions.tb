@@ -854,8 +854,19 @@ in
   (
     rec-msg(EditorId?, push-active-module)
     . snd-msg(em-get-modulename(EditorId))
-    . rec-msg(em-modulename(EditorId, Modulename?))
-    . snd-msg(EditorId, result(str(Modulename)))
+    .
+    (
+      rec-msg(em-modulename(EditorId, Modulename?))
+      . snd-msg(EditorId, result(str(Modulename)))
+    +
+      rec-msg(em-no-such-session(EditorId))
+      . printf("FIX ME: PushActiveModule: No such session, sending dummy modulename\n")
+      . snd-msg(EditorId, result(str("basic/Whitespace")))
+    +
+      rec-msg(em-session-not-bound(EditorId))
+      . printf("FIX ME: PushActiveModule: Session not bound, sending dummy modulename\n")
+      . snd-msg(EditorId, result(str("basic/Whitespace")))
+    )
   )
   *
   delta
