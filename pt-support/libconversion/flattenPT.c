@@ -15,6 +15,8 @@ ATbool char_to_string = ATfalse;
 static PT_Tree flattenTerm(PT_Tree t, ATbool inList);
 static PT_Tree flattenLayout(PT_Tree t);
 
+/*{{{  static ATbool sameListSymbol(PT_Symbol sym1, PT_Symbol sym2) */
+
 static ATbool sameListSymbol(PT_Symbol sym1, PT_Symbol sym2)
 {
   PT_Symbol elem1, elem2;
@@ -56,6 +58,9 @@ static ATbool sameListSymbol(PT_Symbol sym1, PT_Symbol sym2)
   return ATtrue;
 }
 
+/*}}}  */
+/*{{{  static PT_Args flattenArgs(PT_Args tl) */
+
 static PT_Args flattenArgs(PT_Args tl)
 {
   PT_Tree newTerm;
@@ -73,6 +78,9 @@ static PT_Args flattenArgs(PT_Args tl)
   }
 }
 
+/*}}}  */
+/*{{{  static PT_Tree makeCharFromInt(PT_Tree i) */
+
 static PT_Tree makeCharFromInt(PT_Tree i)
 {
   if (char_to_string) {
@@ -86,6 +94,9 @@ static PT_Tree makeCharFromInt(PT_Tree i)
     return i;
   }
 }
+
+/*}}}  */
+/*{{{  static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail) */
 
 static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail)
 {
@@ -135,6 +146,9 @@ static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail)
   return PT_makeArgsEmpty();
 }
 
+/*}}}  */
+/*{{{  static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail) */
+
 static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
 {
   PT_Production prod;
@@ -183,6 +197,10 @@ static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
     return PT_makeArgsList(makeCharFromInt(tree), tail);
   }
 }
+
+/*}}}  */
+
+/*{{{  static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail) */
 
 static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 {
@@ -257,6 +275,9 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
   ATerror("flattenList: illegal list: %t\n", tree);
   return PT_makeArgsEmpty();
 }
+
+/*}}}  */
+/*{{{  static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail) */
 
 static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 {
@@ -344,6 +365,9 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
   return PT_makeArgsEmpty();
 }
 
+/*}}}  */
+/*{{{  static PT_Production flattenProd(PT_Production prod) */
+
 static PT_Production flattenProd(PT_Production prod)
 {
   if (!PT_isProductionDefault(prod)) {
@@ -352,8 +376,12 @@ static PT_Production flattenProd(PT_Production prod)
   return prod;
 }
 
+/*}}}  */
+
 /* This function does not work for separated lists in 
  * a lexical syntax section! */
+/*{{{  static PT_Tree flattenLexical(PT_Tree tree) */
+
 static PT_Tree flattenLexical(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
@@ -377,7 +405,11 @@ static PT_Tree flattenLexical(PT_Tree tree)
   }
 }
 
+/*}}}  */
+
 static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars);
+
+/*{{{  static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars) */
 
 static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
 {
@@ -401,6 +433,9 @@ static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
   return chars;
 }
 
+/*}}}  */
+/*{{{  static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars) */
+
 static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars)
 {
   while (PT_hasArgsHead(treeArgs)) {
@@ -412,6 +447,9 @@ static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars)
 
   return chars;
 }
+
+/*}}}  */
+/*{{{  static PT_Tree flattenLexicalTotally(PT_Tree tree) */
 
 static PT_Tree flattenLexicalTotally(PT_Tree tree)
 {
@@ -430,6 +468,9 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
     return tree;
   }
 }
+
+/*}}}  */
+/*{{{  static PT_Args flattenLayoutList(PT_Args args, PT_Args tail) */
 
 static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
 {
@@ -465,6 +506,9 @@ static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
   return tail;
 }
 
+/*}}}  */
+/*{{{  static PT_Tree flattenLayout(PT_Tree tree) */
+
 static PT_Tree flattenLayout(PT_Tree tree)
 {
   PT_Production prod = PT_getTreeProd(tree);
@@ -480,6 +524,9 @@ static PT_Tree flattenLayout(PT_Tree tree)
   return (PT_Tree)NULL;
 }
 
+/*}}}  */
+/*{{{  static PT_Tree flattenLiteral(PT_Production prod) */
+
 static PT_Tree flattenLiteral(PT_Production prod)
 {
   PT_Symbol  rhs = PT_getProductionRhs(prod);
@@ -487,6 +534,9 @@ static PT_Tree flattenLiteral(PT_Production prod)
 
   return PT_makeTreeLit(lit);
 }
+
+/*}}}  */
+/*{{{  static PT_Tree flattenVar(PT_Tree tree) */
 
 static PT_Tree flattenVar(PT_Tree tree)
 {
@@ -526,6 +576,9 @@ static PT_Tree flattenVar(PT_Tree tree)
   }
   return (PT_Tree)NULL;
 }
+
+/*}}}  */
+/*{{{  static PT_Tree flattenTerm(PT_Tree tree, ATbool inList) */
 
 static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
 {
@@ -573,29 +626,27 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
     listSymbol = PT_getProductionRhs(prod);
   
     if (PT_isVarDefault(prod)) {
-      newArgs = PT_makeArgsList(
-                  flattenVar(tree),
-                  PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
+      newArgs = PT_makeArgsList( flattenVar(tree), PT_makeArgsEmpty());
     }
-    if (isSepListProd(prod)) {
+    else if (isSepListProd(prod)) {
       newArgs = flattenSepList(tree, listSymbol, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
-    if (isListProd(prod)) {
+    else if (isListProd(prod)) {
       newArgs = flattenList(tree, listSymbol, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
-    if (isLexicalListProd(prod)) {
+    else if (isLexicalListProd(prod)) {
       newArgs = flattenLexicalList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
-    if (isCharClassListProd(prod)) {
+    else if (isCharClassListProd(prod)) {
       newArgs = flattenCharClassList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
-    return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
+    else {
+      newArgs = PT_makeArgsList(
+		  PT_makeTreeAppl(flattenProd(prod), flattenArgs(args)),
+		  PT_makeArgsEmpty());
+    }
 
+    return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
   } 
 
   if (PT_isVarDefault(prod)) {
@@ -605,6 +656,9 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
   /* Default: application */
   return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 }
+
+/*}}}  */
+/*{{{  PT_ParseTree flattenPT(PT_ParseTree tree) */
 
 PT_ParseTree flattenPT(PT_ParseTree tree)
 {
@@ -618,7 +672,12 @@ PT_ParseTree flattenPT(PT_ParseTree tree)
   return NULL;
 }
 
+/*}}}  */
+/*{{{  PT_Tree flattenTree(PT_Tree tree) */
+
 PT_Tree flattenTree(PT_Tree tree)
 {
   return flattenTerm(tree, ATfalse);
 }
+
+/*}}}  */

@@ -1,3 +1,7 @@
+2002/07/05 (jurgenv@cwi.nl)
+ * Fixed a bug in the flattening of AsFix2 to AsFix2ME. Functions that
+   yielded lists were not properly encapsulated by a list production.
+
 2002/07/03 (jurgenv@cwi.nl)
  * Tree2dot can handle not only valid parse trees, but also partial
    parse trees and lists of parse trees.
