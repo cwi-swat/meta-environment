@@ -9,6 +9,7 @@ bin_PROGRAMS = tree2graph
 INCLUDES = \
   -I${top_srcdir}/lib \
   -I${PT_SUPPORT}/include \
+  -I${ERROR_SUPPORT}/include \
   -I${ATERM}/include \
   -I${TOOLBUSLIB}/include
 
