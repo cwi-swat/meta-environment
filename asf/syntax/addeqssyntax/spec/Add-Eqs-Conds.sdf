@@ -1,6 +1,6 @@
 module Add-Eqs-Conds 
 
-imports sdf2/syntax/Sdf2 basic/Booleans
+imports languages/sdf2/syntax/Sdf2 basic/Booleans
 
 exports
   sorts SymbolsSet

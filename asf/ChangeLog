@@ -1,5 +1,9 @@
 # $Id$
 
+2003/10/01 (markvdb@cwi.nl)
+ * Added the imports of a number of specifications in order
+   to be compatible with the new library.
+
 2003/09/25 (markvdb@cwi.nl)
  * Added a check to the asf-checker to check that the outermost
    function symbol of the left hand side of an equation is

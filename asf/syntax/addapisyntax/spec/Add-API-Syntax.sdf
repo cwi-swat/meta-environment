@@ -18,8 +18,8 @@ add-api(Definition) -> Definition
 
 context-free syntax
 
-aa(Definition) -> Definition {traversal(trafo,top-down)}
-aa(Grammar)    -> Grammar    {traversal(trafo,top-down)}
+aa(Definition) -> Definition {traversal(trafo,top-down,break)}
+aa(Grammar)    -> Grammar    {traversal(trafo,top-down,break)}
 
 aaps(Production*, "lex" | "cf" ) -> Production*
 aap(Production, "lex" | "cf")   -> Production*
