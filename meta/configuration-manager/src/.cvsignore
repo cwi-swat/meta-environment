@@ -3,3 +3,4 @@ Makefile
 .deps
 *.tif.[ch]
 configmanager
+.libs

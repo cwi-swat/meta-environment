@@ -4,3 +4,4 @@ Makefile
 module-db.tif.h
 module-db.tif.c
 module-db
+.libs

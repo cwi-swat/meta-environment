@@ -4,3 +4,4 @@ Makefile
 editor-manager.tif.h
 editor-manager.tif.c
 editor-manager
+.libs
