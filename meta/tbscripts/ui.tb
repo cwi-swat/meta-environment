@@ -43,7 +43,7 @@ in
     ) +
     ( rec-event(UI,delete-module(Str?)).
       snd-msg(close-module(Str)).
-      rec-msg(closed-modules(Str)).
+      rec-msg(closed-module(Str1?)).
       snd-ack-event(UI, delete-module(Str))
     ) +
     ( rec-event(UI,edit-module(Str?)).

@@ -37,8 +37,8 @@ in
   create(Retrieve-eqs(Eval,Tdb), Tid?).
   create(Open-modules(Eval,Tdb),Tid?).
   create(Rewrite(Eval,Tdb), Tid?).
-  create(Compiler(Com,Tdb), Tid?)
-/*  create(Close-modules(Eval,Tdb), Tid?)*/
+  create(Compiler(Com,Tdb), Tid?).
+  create(Close-modules(Eval,Tdb), Tid?)
 endlet
 /*
     rec-msg(Id?, rewrite-over(Mod?)).
