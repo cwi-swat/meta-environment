@@ -1,5 +1,8 @@
 $Id$
 
+2002/07/24 (jurgenv@cwi.nl)
+ * Release 1.5
+
 2002/07/11 (jurgenv@cwi.nl)
  * Moved entire normalizer specification to the asf-library such that 
    (parts of it) can be reused by other tools.
