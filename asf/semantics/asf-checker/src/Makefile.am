@@ -13,6 +13,8 @@ data_DATA    = asfchecker.idef
 
 EXTRA_DIST   = asfchecker.idef asfchecker.tif.c asfchecker.tif.h
 
+noinst_HEADERS 	= equationChecker.h
+
 asfchecker_SOURCES = asfchecker.c equationChecker.c
 asfchecker_LDADD   = asfchecker.tif.o \
                        -L$(ASF_SUPPORT)/lib -lASFME \
