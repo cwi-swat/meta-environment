@@ -1,6 +1,15 @@
 # $Id$
 
-2003/06/23 ({jurgenv,iversen}@cwi.nl)
+2003/06/25 ({jurgenv,iversen}@cwi.nl)
+ * fixed a number of bugs in the refactoring facilities:
+   - compound module names were not supported
+   - the old path names were stored instead of the new ones
+   - the new path name was used to delete obsolete files instead
+     of the old path name
+   - several inconsistencies where a complete filename was sent instead of
+     a module name
+
+2003/06/25 ({jurgenv,iversen}@cwi.nl)
  * Refactored a bit in the module tree panel 
  * Removed old module-db implementation
 
