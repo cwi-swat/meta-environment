@@ -14,6 +14,16 @@ import javax.swing.ImageIcon;
 public class Preferences {
 	static private String title;
 	static private Properties properties;
+
+	static final String PREF_NODE_BORDER_WIDTH = "node.border.width";
+	static final String PREF_NODE_BORDER_HEIGHT = "node.border.height";
+	static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
+	static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
+	static final String PREF_MSGPANE_STATUS = "messagepane.status";
+	static final String PREF_GRAPHPANE_BACKGROUND = "graphpane.background";
+	static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
+	static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
+    
 	static public void initialize(String title, Properties defaults) {
 		Preferences.title = title;
 		properties = new Properties(defaults);

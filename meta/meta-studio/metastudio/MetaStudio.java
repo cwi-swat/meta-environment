@@ -20,15 +20,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
 	private static final double LEFTPANEL_DIVIDER_LOCATION = 0.65;
 	private static final double MAINPANEL_DIVIDER_LOCATION = 0.3;
-	private static final int NODE_BORDER_WIDTH = 5;
-	private static final int NODE_BORDER_HEIGHT = 5;
-
-	private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
-	private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
-	private static final String PREF_MSGPANE_STATUS = "messagepane.status";
-	private static final String PREF_GRAPHPANE_BACKGROUND = "graphpane.background";
-	private static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
-	private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
 
 	private static ATerm ACTION_MENUBAR;
 	private static ATerm ACTION_TOOLBAR;
@@ -256,9 +247,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	}
 
 	private JPanel createStatusBarPanel() {
-		Color bgColor = Preferences.getColor(PREF_MSGPANE_STATUS + ".background");
-		Color fgColor = Preferences.getColor(PREF_MSGPANE_STATUS + ".foreground");
-		Font font = Preferences.getFont(PREF_MSGPANE_STATUS + ".font");
+		Color bgColor = Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".background");
+		Color fgColor = Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".foreground");
+		Font font = Preferences.getFont(Preferences.PREF_MSGPANE_STATUS + ".font");
 
 		JPanel statusBarPanel = new JPanel();
 		statusBarPanel.setBackground(bgColor);
@@ -266,7 +257,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		statusBarPanel.setLayout(new BorderLayout());
 
 		statusLog = new JCheckBox("Log Status");
-		statusLog.setSelected(Preferences.getBoolean(PREF_MSGPANE_STATUS + ".log"));
+		statusLog.setSelected(Preferences.getBoolean(Preferences.PREF_MSGPANE_STATUS + ".log"));
 		statusLog.setBackground(bgColor);
 		statusLog.setForeground(fgColor);
 		statusLog.setFont(font);
@@ -282,7 +273,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private void createModuleStatusPanel() {
 		Color color;
 		moduleStatus = new ModuleStatusPanel(moduleManager);
-		color = Preferences.getColor(PREF_STATUSPANE_BACKGROUND);
+		color = Preferences.getColor(Preferences.PREF_STATUSPANE_BACKGROUND);
 		moduleStatus.setBackground(color);
 	}
 
@@ -298,7 +289,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		history = new JTextPane(historyDoc);
 		history.setEditable(false);
 
-		color = Preferences.getColor(PREF_MSGPANE_BACKGROUND);
+		color = Preferences.getColor(Preferences.PREF_MSGPANE_BACKGROUND);
 		history.setBackground(color);
 	}
 
@@ -317,7 +308,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 			}
 		});
 
-		color = Preferences.getColor(PREF_GRAPHPANE_BACKGROUND);
+		color = Preferences.getColor(Preferences.PREF_GRAPHPANE_BACKGROUND);
 		importGraphPanel.setBackground(color);
 	}
 
@@ -348,7 +339,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 		JScrollPane listPane = new JScrollPane(moduleTree);
 
-		color = Preferences.getColor(PREF_TREEPANE_BACKGROUND);
+		color = Preferences.getColor(Preferences.PREF_TREEPANE_BACKGROUND);
 		moduleTree.setBackground(color);
 		return listPane;
 	}
@@ -373,7 +364,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	//{{{ private Vector parseScales()
 
 	private Vector parseScales() {
-		String scaleList = Preferences.getString(PREF_GRAPHPANE_SCALES);
+		String scaleList = Preferences.getString(Preferences.PREF_GRAPHPANE_SCALES);
 		Vector scales = new Vector();
 		StringTokenizer t = new StringTokenizer(scaleList, ",");
 		while (t.hasMoreTokens()) {
@@ -393,7 +384,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 			}
 		};
 
-		scaleBox.setSelectedItem(Preferences.getString(PREF_GRAPHPANE_SCALES + ".default"));
+		scaleBox.setSelectedItem(Preferences.getString(Preferences.PREF_GRAPHPANE_SCALES + ".default"));
 
 		ActionListener listener = new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -657,10 +648,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 		NodeSizer sizer = new NodeSizer() {
 			public int getWidth(Node node) {
-				return metrics.stringWidth(node.getLabel()) + NODE_BORDER_WIDTH * 2;
+				return metrics.stringWidth(node.getLabel()) + Preferences.getInteger(Preferences.PREF_NODE_BORDER_WIDTH) * 2;
 			}
 			public int getHeight(Node node) {
-				return metrics.getHeight() + NODE_BORDER_HEIGHT * 2;
+				return metrics.getHeight() + Preferences.getInteger(Preferences.PREF_NODE_BORDER_HEIGHT) * 2;
 			}
 		};
 
