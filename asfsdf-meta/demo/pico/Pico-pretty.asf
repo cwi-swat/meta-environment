@@ -11,7 +11,7 @@ begin Decls Statement* end =
 declare IdType* ; = 
 box2decls(V ["declare" I [H hs=0 [idtypelist2box(IdType*) ";"]]])
 
-[list]
-IdType , IdType+ = 
-box2idtypelist(V [H hs=0 [idtype2box(IdType) ","] idtypelist2box(IdType+)])
+%% [list]
+%% IdType , IdType+ = 
+%% box2idtypelist(V [H hs=0 [idtype2box(IdType) ","] idtypelist2box(IdType+)])
 

@@ -5,7 +5,6 @@ imports languages/pico/syntax/Pico-Syntax
 
 exports
   context-free syntax
-    pp(PROGRAM)                         -> PROGRAM
     statementlist2box({STATEMENT ";"}*) -> Box {to-box}
     idtype2box(ID-TYPE)                 -> Box {to-box}
     idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
@@ -17,9 +16,6 @@ exports
 
 hiddens
   context-free syntax
-    pp-trafo(PROGRAM)        -> PROGRAM {traversal(trafo, continue, bottom-up)}
-    pp-trafo(DECLS)          -> DECLS {traversal(trafo, continue, bottom-up)}
-    pp-trafo({ID-TYPE ","}*) -> {ID-TYPE ","}* {traversal(trafo, continue, bottom-up)}
 
   variables
     "Program"[0-9]*    -> PROGRAM
