@@ -10,7 +10,7 @@
 %%
 \ifundefined{ASF+SDF.sty}\catcode`@=11\input{ASF+SDF.sty}\catcode`@=12\fi
 %%
-\inputifundef{/home/markvdb/AsFix2C/muASF/TESTING/pico}{Booleans.imp}
+\inputifundef{/home/markvdb/AsFix2C/article/muasf}{Booleans.imp}
 %%
 %%
 \MODULEBEGIN{Booleans}
@@ -25,26 +25,30 @@
 \CFGFUN{% context-free function
 %
 %
-%                true                   -> BOOL
+%                true                   -> BOOL {constructor}
 \LEX{true}%
 }{% result sort
 \SORT{BOOL}% index information
 \CFGFUNINDEX{\LEX{true}%
-}{\SORT{BOOL}}{}
+}{\SORT{BOOL}}{\ATTRIBUTES{\KW{\LEX{constructor}%
+}}}
 }{% attributes
-}{% end-comment
+\ATTRIBUTES{\KW{\LEX{constructor}%
+}}}{% end-comment
 }%
  \CFGFUN{% context-free function
 %
 %
-%                false                  -> BOOL
+%                false                  -> BOOL {constructor}
 \LEX{false}%
 }{% result sort
 \SORT{BOOL}% index information
 \CFGFUNINDEX{\LEX{false}%
-}{\SORT{BOOL}}{}
+}{\SORT{BOOL}}{\ATTRIBUTES{\KW{\LEX{constructor}%
+}}}
 }{% attributes
-}{% end-comment
+\ATTRIBUTES{\KW{\LEX{constructor}%
+}}}{% end-comment
 }%
  \CFGFUN{% context-free function
 %
@@ -73,6 +77,24 @@
 \SORT{BOOL}}{% result sort
 \SORT{BOOL}% index information
 \CFGFUNINDEX{\SORT{BOOL} \DQLEX{\LEX{\&}%
+}%
+ \SORT{BOOL}}{\SORT{BOOL}}{\ATTRIBUTES{\KW{\LEX{left}%
+}}}
+}{% attributes
+\ATTRIBUTES{\KW{\LEX{left}%
+}}}{% end-comment
+}%
+ \CFGFUN{% context-free function
+%
+%
+%                BOOL "xor" BOOL        -> BOOL {left}
+\SORT{BOOL}\ %
+\DQLEX{\LEX{xor}%
+}%
+\ %
+\SORT{BOOL}}{% result sort
+\SORT{BOOL}% index information
+\CFGFUNINDEX{\SORT{BOOL} \DQLEX{\LEX{xor}%
 }%
  \SORT{BOOL}}{\SORT{BOOL}}{\ATTRIBUTES{\KW{\LEX{left}%
 }}}
@@ -131,7 +153,10 @@
 \PRIORCHAIN{\PRIOFUNa{\SORT{BOOL} \DQLEX{\SLEX{\mid}}%
  \SORT{BOOL}}{\SORT{BOOL}}%
 \PRIOLT{}%
-\PRIOFUNa{\SORT{BOOL} \DQLEX{\LEX{\&}%
+\PRIOFUNa{\SORT{BOOL} \DQLEX{\LEX{xor}%
+}%
+ \SORT{BOOL}}{\SORT{BOOL}}%
+\PRIOLT{}\PRIOFUNa{\SORT{BOOL} \DQLEX{\LEX{\&}%
 }%
  \SORT{BOOL}}{\SORT{BOOL}}%
 \PRIOLT{}\PRIOFUNa{\LEX{not}%
@@ -192,12 +217,7 @@ B2%
 }{% equal sign
 \LEX{\SLEX{=}}%
 }%
-}%
-%
-%
-\BEFORECOMMENT%
-\AFTERCOMMENT%
-\OLCEQENV{%
+\OLCEQLINESEP%
 \OLSeq%
 %
 %             [B3]   true & Bool  = Bool
@@ -244,12 +264,7 @@ B4%
 }{% equal sign
 \LEX{\SLEX{=}}%
 }%
-}%
-%
-%
-\BEFORECOMMENT%
-\AFTERCOMMENT%
-\OLCEQENV{%
+\OLCEQLINESEP%
 \OLSeq%
 %
 %             [B5]   not false   = true
@@ -285,6 +300,56 @@ B6%
 }{% rhs
 \TERM{t}{
 \CON{false}%
+}
+}{% equal sign
+\LEX{\SLEX{=}}%
+}%
+\OLCEQLINESEP%
+\OLSeq%
+%
+%             [B7]   true  xor Bool = not Bool
+{% tag
+B7%
+}{% conditions
+}{% lhs
+\TERM{t}{
+\CON{true}%
+\HSPACE%
+\LEX{xor}%
+\HSPACE%
+\VAR{}{}{\LEX{Bool}%
+}%
+}
+}{% rhs
+\TERM{t}{
+\LEX{not}%
+\HSPACE%
+\VAR{}{}{\LEX{Bool}%
+}%
+}
+}{% equal sign
+\LEX{\SLEX{=}}%
+}%
+\OLCEQLINESEP%
+\OLSeq%
+%
+%             [B8]   false xor Bool = Bool
+{% tag
+B8%
+}{% conditions
+}{% lhs
+\TERM{t}{
+\CON{false}%
+\HSPACE%
+\LEX{xor}%
+\HSPACE%
+\VAR{}{}{\LEX{Bool}%
+}%
+}
+}{% rhs
+\TERM{t}{
+\VAR{}{}{\LEX{Bool}%
+}%
 }
 }{% equal sign
 \LEX{\SLEX{=}}%

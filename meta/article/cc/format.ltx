@@ -160,7 +160,11 @@ list matching.  Figure \ref{setexmpl} shows a single equation which
 removes multiple occurrences of identifiers from a set. In this
 example, variables with a $^*$-superscript are list-variables that may
 match zero or more identifiers.  The implementation of list matching
-may involve backtracking to find a match.
+may involve backtracking to find a match, in order satisfies all conditions
+of the rewrite rule as well.
+There is only backtracking within the scope of a rewrite rule, 
+so if the right-hand side of the rewrite rule is normalized and this
+normalization fails {\em no} backtracking is performed to find a new match.
 
 The development of \asdf\ specifications is supported by an interactive
 programming environment, the \asdf\ Meta-Environment \cite{Kli93.meta}.
@@ -264,6 +268,7 @@ by introducing new variables and an auxiliary condition.
 \>{\tt false;}\\
 \>{\tt and(\_,\_);}\\
 \>{\tt or(\_,\_);}\\
+\>{\tt xor(\_,\_);}\\
 \>{\tt not(\_);}\\
 {\tt rules}\\
 \>{\tt and(true,B) = B;}\\
@@ -271,7 +276,9 @@ by introducing new variables and an auxiliary condition.
 \>{\tt or(true,B) = true;}\\
 \>{\tt or(false,B) = B;}\\
 \>{\tt not(true) = false;}\\
-\>{\tt not(false) = true;}
+\>{\tt not(false) = true;}\\
+\>{\tt xor(true,B) = not(B);}\\
+\>{\tt xor(false,B) = B;}
 \end{tabbing}
 \end{minipage}
 }
@@ -287,10 +294,10 @@ by introducing new variables and an auxiliary condition.
 {\tt si}\={\tt gnature}\\
 \>{\tt \{list\}(\_);}\\
 \>{\tt set(\_);}\\
-\>{\tt cons(\_,\_);}\\
+\>{\tt conc(\_,\_);}\\
 {\tt rules}\\
-\>{\tt se}\={\tt t(\{list\}(cons(*Id0,cons(Id,cons(*Id1,cons(Id,*Id2)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id0,cons(Id,cons(*Id1,*Id2)))));}
+\>{\tt se}\={\tt t(\{list\}(conc(*Id0,conc(Id,conc(*Id1,conc(Id,*Id2)))))) =}\\
+\>\>{\tt set(\{list\}(conc(*Id0,conc(Id,conc(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -306,14 +313,14 @@ by introducing new variables and an auxiliary condition.
 {\tt si}\={\tt gnature}\\
 \>{\tt \{list\}(\_);}\\
 \>{\tt set(\_);}\\
-\>{\tt cons(\_,\_);}\\
+\>{\tt conc(\_,\_);}\\
 \>{\tt t;}\\
 \>{\tt term-equal(\_,\_);}\\
 {\tt rules}\\
 \>{\tt term-equal(Id1,Id2) == t} \\
 \>{\tt ==>}\\
-\>{\tt se}\={\tt t(\{list\}(cons(*Id0,cons(Id1,cons(*Id1,cons(Id2,*Id2)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id0,cons(Id1,cons(*Id1,*Id2)))));}
+\>{\tt se}\={\tt t(\{list\}(conc(*Id0,conc(Id1,conc(*Id1,conc(Id2,*Id2)))))) =}\\
+\>\>{\tt set(\{list\}(conc(*Id0,conc(Id1,conc(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -403,8 +410,10 @@ symbol, but some other Boolean normal form.
 
 Figure \ref{setexmpl4} shows the C code generated for the Set example
 of Figure \ref{setexmpl}.  List matching is translated into nested
-while loops.  The functions {\tt not\_empty\_list}, {\tt list\_head},
-{\tt list\_tail}, {\tt cons}, and {\tt slice} are library functions
+while loops, this is possible because of the restricted nature of
+the backtracking in list matching. 
+The functions {\tt not\_empty\_list}, {\tt list\_head},
+{\tt list\_tail}, {\tt conc}, and {\tt slice} are library functions
 which give access to the C data structure which represents the \asdf\
 lists.  In this way the generated C code needs no knowledge of the
 internal list structure. We can even change the internal
@@ -432,9 +441,9 @@ checks the equality of two terms.
 \>\>\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 4}}$\ {\tt = list\_head(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
 \>\>\>\>{\tt if}\={\tt (term\_equal(}$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}$\mbox{\tt tmp}_{\mbox{\tt 4}}${\tt )) \{}\\
-\>\>\>\>\>{\tt return set(list(cons(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
-\>\>\>\>\>\>{\tt cons(}\={\tt }$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}\\
-\>\>\>\>\>\>\>{\tt cons(slice(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
+\>\>\>\>\>{\tt return set(list(conc(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
+\>\>\>\>\>\>{\tt conc(}\={\tt }$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}\\
+\>\>\>\>\>\>\>{\tt conc(slice(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
 \>\>\>\>{\tt \}}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1] = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]);}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  =}\ $\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1];}\\
@@ -461,11 +470,47 @@ the question how to translate the \asdf\ names into C names.  This
 problem arises since a direct translation would generate names that
 are too long for C compilers and linkage editors.  We have opted for a
 solution in which each generated C file contains a ``register''
-function which stores at run-time for each locally defined function a
-mapping between the derived C name and the original \asdf\ name. In
-addition, each C file contains a ``resolve'' function which connects
+function which stores at run-time for each defined function defined in
+this C file a
+mapping between the address of th generated function 
+and the original \asdf\ name. 
+In addition, each C file contains a ``resolve'' function which connects
 local function calls to the corresponding definitions based on their
 \asdf\ names.
+An example of registering and resolving can be found in Figure \ref{boolexmpl4}.
+
+\begin{figure}
+\centerline{\fbox{
+\begin{minipage}[tb]{\textwidth}
+\begin{tabbing}
+{\tt voi}\={\tt d register\_xor() \{}\\
+\>{\tt xorsym = "prod(Bool "xor" Bool -> Bool \{left\})";}\\
+\>{\tt register\_prod(}\={\tt "prod(Bool "xor" Bool -> Bool \{left\})",}\\
+\>\>{\tt xor, xorsym);}\\
+{\tt \}}\\
+\\
+{\tt voi}\={\tt d resolve\_xor() \{}\\
+\>{\tt true = lookup\_func("prod("true" -> Bool)");}\\
+\>{\tt truesym = lookup\_sym("prod("true" -> Bool)");}\\
+\>{\tt false = lookup\_func("prod("false" -> Bool)");}\\
+\>{\tt falsesym = lookup\_sym("prod("false" -> Bool)");}\\
+\>{\tt not = lookup\_func("prod("not" Bool -> Bool)");}\\
+\>{\tt notsym = lookup\_sym("prod("not" Bool -> Bool)");}\\
+{\tt \}}\\
+\\
+{\tt ATe}\={\tt rm}\=\ {\tt xor(ATerm arg0, ATerm arg1) \{}\\
+\>{\tt if (check\_sym(arg0, truesym))}\\
+\>\>{\tt return (*not)(arg1);}\\
+\>{\tt if (check\_sym(arg0, falsesym))}\\
+\>\>{\tt return arg1;}\\
+\>{\tt return make\_nf2(xorsym,arg0,arg1);}\\
+{\tt \}}
+\end{tabbing}
+\end{minipage}
+}
+}
+\caption{\label{boolexmpl4} Generated C for {\tt xor} function of the Booleans.}
+\end{figure}
 
 The second issue concerns the choice of a unit for separate
 compilation.  In most programming language environments, the basic
@@ -564,7 +609,8 @@ term creation whether a particular term already exists or not. This
 check implies a search through all existing terms but must nonetheless
 be executed {\em extremely fast} in order not to impose an
 unacceptable penalty on term creation.  Using a hash function that
-depends on the addresses of the function symbol and its arguments, we
+depends on the internal code of the function symbol and the addresses
+of its arguments, we
 can quickly search for a function application before creating it.  The
 (modest but not negligible) costs at term creation time are hence
 one hash table lookup.
@@ -592,6 +638,12 @@ During rewriting of terms by the generated code this restriction
 causes no problems since terms are created in a fully functional way.
 Normal forms are constructed bottom-up and there is no need to perform
 destructive updates on a term once it has been constructed.
+When normalizing an input term, this term is not modified, the normal
+form is constructed independent of the input term. If we would modify
+the input term we have graph rewriting instead of (innermost) term
+rewriting. Furthermore, the term library is very general and {\em not}
+strictly devoted to rewriting, destructive updates would cause unwanted
+side effects in components based on this term library.
 
 However, destructive operations on lists, like list concatenation and
 list slicing, become expensive. For instance, the most efficient way
