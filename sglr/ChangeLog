@@ -1,20 +1,24 @@
 $Id$
 
+2001/11/13 (jong@cwi.nl)
+ * Cleaned up ChangeLog
+ * Released version 3.5
+
 2001/11/07 (markvdb@cwi.nl)
-  * Version number introduced in the parse table format.
+ * Version number introduced in the parse table format.
 
 2001/11/01 ({jurgenv,markvdb}@cwi.nl)
 2001/10/31 ({jurgenv,markvdb}@cwi.nl)
-  * Fixed a bug with respect to storing filtered ambiguity clusters.
+ * Fixed a bug with respect to storing filtered ambiguity clusters.
    
 2001/10/30 (mdejonge@cwi.nl)
-  * Makefile.am: added program-check.m4 to EXTRA_DIST variable
-  * Makefile.am: removed ACLOCAL_AMFLAGS
+ * Makefile.am: added program-check.m4 to EXTRA_DIST variable
+ * Makefile.am: removed ACLOCAL_AMFLAGS
 
 2001/10/30 (markvdb@cwi.nl)
-  * BitMap introduced to mark that for a specific position a
-    ambiguity cluster was created.
-  * Performance back to normal.
+ * BitMap introduced to mark that for a specific position a
+   ambiguity cluster was created.
+ * Performance back to normal.
 
 2001/10/29 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Replaced SG_MARK and UNMARK by an ATermIndexedSet implementation.
