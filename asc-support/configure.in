@@ -38,6 +38,11 @@ AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
 AC_SUBST(ASF_SUPPORT)
 
 
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR      ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
