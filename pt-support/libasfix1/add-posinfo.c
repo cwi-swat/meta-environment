@@ -82,6 +82,12 @@ int main(int argc, char *argv[])
     }
   }
 
+  if(path == NULL) {
+    ATwarning("Missing -p <path>\n\n");
+    usage(argv[0],version);
+    exit(1);
+  }
+
   contents = ATreadFromFile(input);
   assert(contents != NULL);
 
