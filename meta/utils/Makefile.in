@@ -99,10 +99,10 @@ libutils-prof.a: msm-utils-prof.o module-utils-prof.o
 	$(AR) cr $@ msm-utils-prof.o module-utils-prof.o
 
 msm-paths: msm-paths-cc.o libutils-cc.a
-	$(CC) -o $@ msm-paths-cc.o libutils-cc.a
+	cc -o $@ msm-paths-cc.o libutils-cc.a
 
 imports: imports-cc.o libutils-cc.a
-	$(CC) -o $@ imports-cc.o libutils-cc.a $(LIBS)
+	cc -o $@ imports-cc.o libutils-cc.a $(LIBS)
 
 
 uninstall:
