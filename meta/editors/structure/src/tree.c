@@ -301,7 +301,8 @@ PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 ATbool isBasicLeafNode(PT_Tree tree)
 {
   return !PT_isTreeAppl(tree) && 
-         !PT_isTreeFlatLayout(tree);
+         !PT_isTreeFlatLayout(tree) &&
+	 !PT_isTreeAmb(tree);
 }
 
 /*}}}  */

@@ -172,7 +172,8 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
             PT_isTreeLayout(arg)) {
 	  return steps;
 	}
-	steps = SE_makeStepsMulti(step, getStepsInTree(arg, location, length));
+
+	steps = SE_makeStepsMulti(step,getStepsInTree(arg, location, length));
 	break;
       }
       location -= arg_len;
