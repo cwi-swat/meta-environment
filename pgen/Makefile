@@ -2,7 +2,7 @@
 #
 # Directory: pgen
 
-SUBDIRS		= c-files c-source fastgen addeqs/c-source addeqs/addeqs
+SUBDIRS		= c-files c-source fastgen addeqs
 
 all doc clean install uninstall distclean:
 	@for DIR in ${SUBDIRS};	\
