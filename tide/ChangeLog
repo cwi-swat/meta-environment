@@ -1,3 +1,6 @@
+2003/06/27 (jurgenv@cwi.nl)
+ * Added generation of package file with correct version number
+
 2003/05/30 (jurgenv@cwi.nl)
  * Fixed configure.in bug
 

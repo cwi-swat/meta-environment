@@ -1,7 +1,7 @@
 
 SUBDIRS		= toolbus lib-c tide META-INF images examples scripts .
 
-EXTRA_DIST      = $(wildcard tide-*.pkg)
+EXTRA_DIST      = $(wildcard *.pkg)
 
 data_DATA	= tide.jar
 
@@ -18,4 +18,10 @@ JARFILES	= ${srcdir}/META-INF/MANIFEST.MF \
 tide.jar: ${JARFILES}
 	FILES="${JARFILES}"; \
 	jar cf tide.jar $$FILES
+
+noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
+
+${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
+	sed 's#__VERSION__#${VERSION}#g;\
+             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
 
