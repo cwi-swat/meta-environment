@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Feb  5 13:30:47 CET 2003 <jong@cwi.nl>
+ * configure/automake stuff added for C implementation of query-tool
+
 2003/02/05 (markvdb@cs.vu.nl)
  * New message/function "close-module" which deals with "deleting"
    a module without removing from the imports in depending modules.
