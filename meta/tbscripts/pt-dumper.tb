@@ -20,7 +20,21 @@
 #include "configmanager.idef"
 #include "standalone-pt-dumper.tb"
 
-toolbus(Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
+process META is
+let
+  Id      : term
+in
+  Id := process-id.
+  (
+    rec-msg(get-file-extensions) .
+    snd-msg(set-file-extensions(syntax(".sdf"),rules(".asf"),term(".trm")))
+  +
+    rec-msg(get-rules-top-sort) .
+    snd-msg(set-rules-top-sort(sort("Equations")))
+  )*delta
+endlet
+
+toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
         ModuleDB, File-creator, 
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable) 

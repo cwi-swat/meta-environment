@@ -20,7 +20,21 @@
 #include "configmanager.idef"
 #include "standalone-eqs-dumper.tb"
 
-toolbus(Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
+process META is
+let
+  Id      : term
+in
+  Id := process-id.
+  (
+    rec-msg(get-file-extensions) .
+    snd-msg(set-file-extensions(syntax(".sdf"),rules(".asf"),term(".trm")))
+  +
+    rec-msg(get-rules-top-sort) .
+    snd-msg(set-rules-top-sort(sort("Equations")))
+  )*delta
+endlet
+
+toolbus(META, Parser, Unparser, Io, ConfigManager, StandaloneEqsDumper,
         ModuleDB, File-creator, Notify-about-changed-modules,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, AddEqSyn, Open-modules, PGen, DumpEquations,
