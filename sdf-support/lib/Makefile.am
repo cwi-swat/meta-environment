@@ -19,3 +19,6 @@ api: Sdf.label.def
 	sdf2-to-adt -s -r -i $< -o SDFME.adt
 	adt-to-c --compat-term -i SDFME.adt --prologue SDFME.pro \
                                 --prefix SDF_ -o SDFME
+
+api-clean:
+	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt
