@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
   ATerm bottomOfStack;
 
-  fname = "Test.asfix";
+  fname = argv[1];
 
   AFinit(argc, argv, &bottomOfStack);
   AFinitExpansionTerms();

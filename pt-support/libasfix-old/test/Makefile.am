@@ -22,21 +22,28 @@
 # vim:ts=8:sw=8
 include ../make_rules
 
-TESTS	          	= asfixtest
+TESTS	          = asfixtest-stub asource-test-1 asource-test-2
 
-EXTRA_DIST = Test.asfix
+EXTRA_DIST        = Test.asfix asource-test-1.src asource-test-2.src \
+                    Test.asfix1 Test.asfix2 Test.trm asfixtest-stub.src
 
-CLEANFILES = 
+CLEANFILES        = asource-test-1 asource-test-2 asfixtest-stub
 
-INCLUDES   = -I../libasfix -I$(ATERMINC) 
+INCLUDES          = -I../libasfix -I$(ATERMINC) 
 
-LDLIBS 		= -L../libasfix -lAsFix \
-		  -L$(ATERMLIB) -lATB -lATerm 
+LDLIBS 		  = -L../libasfix -lAsFix \
+		    -L$(ATERMLIB) -lATB -lATerm 
 
-noinst_PROGRAMS		= asfixtest
+noinst_PROGRAMS	  = asfixtest
 
-asfixtest_SOURCES       = asfixtest.c
-asfixtest_LDADD         = $(LDLIBS) 
+asfixtest_SOURCES = asfixtest.c
+asfixtest_LDADD   = $(LDLIBS) 
 
 test: asfixtest
 	./asfixtest
+
+% : %.src Makefile
+	sed 's@__TOP_BUILDDIR__@$(top_builddir)@g; \
+             s@__SRCDIR__@$(srcdir)@g' \
+	   < $< >$@ && \
+	chmod +x $@
