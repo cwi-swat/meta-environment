@@ -1,3 +1,5 @@
+/*{{{  includes */
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -7,13 +9,14 @@
 
 #include "findSortDefinition.tif.h"
 
+/*}}}  */
+/*{{{  globals */
 
-static char myversion[] = "1.0";
+static char version[] = "1.0";
 
-void rec_terminate(int cid, ATerm t)
-{
-  exit(0);
-}
+/*}}}  */
+
+/*{{{  static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol) */
 
 static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol)
 {
@@ -40,6 +43,9 @@ static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol)
   }
   return found;
 }
+
+/*}}}  */
+/*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
 
 ATerm query(int cid, ATerm atModule, ATerm atTree)
 {
@@ -71,6 +77,19 @@ ATerm query(int cid, ATerm atModule, ATerm atTree)
   }
 }
 
+/*}}}  */
+
+/*{{{  void rec_terminate(int cid, ATerm t) */
+
+void rec_terminate(int cid, ATerm t)
+{
+  exit(0);
+}
+
+/*}}}  */
+
+/*{{{  static void usage(char *prg, ATbool is_err) */
+
 static void usage(char *prg, ATbool is_err)
 {
   ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
@@ -79,13 +98,18 @@ static void usage(char *prg, ATbool is_err)
   exit(is_err ? 1 : 0);
 }
 
+/*}}}  */
+/*{{{  static void version(const char *msg) */
+
 static void version(const char *msg)
 {
-  ATwarning("%s v%s\n", msg, myversion);
+  ATwarning("%s v%s\n", msg, version);
   exit(1);
 }
 
-/* Main program */
+/*}}}  */
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   int i, cid;
@@ -109,3 +133,5 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
+/*}}}  */
