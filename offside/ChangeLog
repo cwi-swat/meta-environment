@@ -1,5 +1,6 @@
 2002/04/04 (jurgenv@cwi.nl)
  * distcheck target fixed
+ * added tests
 
 2002/04/03 (jurgenv@cwi.nl)
  * First version
