@@ -80,8 +80,11 @@ all:	${BINFILES} ${LIBFILES}
 
 # Unit test target
 test:	all
-	@echo "Unit test not yet implemented for: ${BINFILES}"; false
-
+	@for f in $(BINFILES); do \
+		echo $$f; \
+		./test-help ./$$f; \
+	done
+	
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
 
