@@ -3,7 +3,7 @@ module c/C
 %% adds \#include lines to C and defines a CProgram as
 %% INCLUDES followd by Translation-unit (cf. C)
 
-imports utils/Layout
+imports basic/Whitespace
 
 
 exports
