@@ -18,9 +18,3 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 SUBDIRS      = libtb toolbus adapters tbviz doc demos test
-
-DIST_SUBDIRS = libtb toolbus adapters tbviz doc demos test
-
-EXTRA_DIST   = everything
-
-everything: all
