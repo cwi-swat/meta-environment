@@ -51,7 +51,7 @@ XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I${top_srcdir}/asc-support -I$(ATERMINC)
 XLIBS		= -L${top_srcdir}/asc-support -lasc-support-${CC} \
-		  -Lc-source -lasfix2c \
+		  -Lc-source -lAsFix2C-${CC} \
 		  -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
 		  $(SOCKLIBS)
 

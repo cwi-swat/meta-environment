@@ -1,84 +1,164 @@
-# Directory: compiler/c-source
+#
+# Makefile.in for target "AsFix2C" 
+# generated automagically on Thu Nov 18 13:32:22 MET 1999
+#
+#
+# $Id$
+#
+# Template for Makefile(.in) for use with genmakefile.sh
+#
+# You might want to change some of the variables below:
+#	STD_CC_FLAGS: default compiler flags
+#	STD_LD_FLAGS: default linker flags
 
-# Configure variable substitutions
-PRODUCT     = @PRODUCT@
-VERSION     = @VERSION@
+STD_CC_FLAGS	:=
+STD_LD_FLAGS	:=
 
-@SET_MAKE@
+#	FLAGS_$(CC): Compiler dependent settings
 
-srcdir		= @srcdir@
-VPATH		= @srcdir@
-top_srcdir	= @top_srcdir@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-bindir		= @bindir@
-libdir		= @libdir@
-includedir	= $(prefix)/include
-docdir		= $(top_srcdir)/docs
+FLAGS_cc	:= -O
+FLAGS_gcc	:= -Wall -O4
 
-RANLIB      = @RANLIB@
-SHELL       = @SHELL@
-CC          = @CC@
-CFLAGS      = @CFLAGS@ ${XCFLAGS}
-CPP         = @CPP@
-CPPFLAGS    = @CPP@ ${XCPPFLAGS}
-DEFS        = @DEFS@ ${XDEFS}
-INCLUDES    = @INCLUDES@ ${XINCLUDES}
-LIBS        = @LIBS@ ${XLIBS}
-SOCKLIBS    = @SOCKLIBS@ 
+# DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
+# DEBUG-LD-FLAGS: optional flags for linking with debugging information
 
-INSTALL		= @INSTALL@
-INSTALL_DATA	= @INSTALL_DATA@
-INSTALL_PROG	= @INSTALL_PROG@
-UNINSTALL	= @UNINSTALL@
+DEBUG_CC_FLAGS	:= -g
+DEBUG_LD_FLAGS	:=
 
-ATERM		= @ATERM@
-ATERMBIN	= @ATERMBIN@
-ATERMLIB	= @ATERMLIB@
-ATERMINC	= @ATERMINC@
+# PROFILE_CC_FLAGS: compiler flags to store profile information in object files
+# PROFILE_LD_FLAGS: optional flags for linking profiled object code
 
-include Make.modules
+PROFILE_CC_FLAGS:= -pg
+PROFILE_LD_FLAGS:= -pg
 
-XCFLAGS = ${INCLUDE}
-INCLUDE = -I$(top_srcdir)/asc-support -I$(includedir) -I$(ATERMINC)
-LIBS	= -L$(ATERMLIB) -L$(top_srcdir)/asc-support -L$(libdir) \
-	  -lasc-support-${CC} -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} \
-	  $(SOCKLIBS) 
-AR	= ar
+LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -lAsFix2C
 
-BASE	= ..
+VPATH		:= @srcdir@
+srcdir		:= @srcdir@
+top_srcdir	:= @top_srcdir@
 
-FILES	:= $(notdir $(ASFIX))
-NAMES   := $(patsubst %.asfix,%,$(FILES))
-CSRC	:= $(patsubst %.asfix,%.c,$(FILES)) 
-MODS	:= init.o $(patsubst %.asfix,%.o,$(FILES))
-INIT	:= $(patsubst %.asfix,%();,$(FILES))
-REGALL	:= $(patsubst %,register_%,$(INIT))
-EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
-RESALL	:= $(patsubst %,resolve_%,$(INIT))
-ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
-CLEANFILES     = *.o *~  AsFix2C libasfix2c.a init.c
-DISTCLEANFILES = Makefile
+# Default compiler to use
+CC=@CC@
+# Building libraries: ar and ranlib
+AR=@AR@
+AR_FLAGS=cr
+RANLIB=@RANLIB@
 
-all: libasfix2c.a
+# DEBUG-LIBS: libraries containing debugging information
+DEBUG-LIBS	 = $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-CC-FLAGS	:= ${DEBUG_CC_FLAGS}
+DEBUG-LD-FLAGS	:= ${DEBUG_LD_FLAGS}
 
-AsFix2C : $(MODS)
-	$(CC) -o $@ $^ $(LIBS)
+# PROFILE-LIBS: libraries containing profile information
+# PROFILE-CC-FLAGS: compiler flags to store profile information in object files
+# PROFILE-LD-FLAGS: optional flags for linking profiled object code
+PROFILE-LIBS	 = $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-CC-FLAGS:= ${PROFILE_CC_FLAGS}
+PROFILE-LD-FLAGS:= ${PROFILE_LD_FLAGS}
 
-libasfix2c.a: $(MODS)
-	$(AR) cr $@ $^
+# STD-LIBS: normal libraries
+# STD-CC-FLAGS: normal compiler flags
+# STD-LD-FLAGS: optional flags
+STD-LIBS	 = $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-CC-FLAGS	:= ${STD_CC_FLAGS}
+STD-LD-FLAG	:= ${STD_LD_FLAGS}
+
+# FLAGS_$(CC): compiler dependent flags (e.g., FLAGS-gcc=-Wall)
+FLAGS-cc	:= ${FLAGS_cc}
+FLAGS-gcc	:= ${FLAGS_gcc}
+
+# There should be no need to change anything below
+
+prefix		:= @prefix@
+exec_prefix	:= @exec_prefix@
+bindir		:= @bindir@
+libdir		:= @libdir@
+includedir	:= @includedir@
+
+ATERM		:= @ATERM@
+NEW_META	:= @exec_prefix@
+
+
+SOCKLIBS	:= @SOCKLIBS@
+XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
+XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
+
+DEFS		:= @DEFS@
+INCLUDES	:= @INCLUDES@ $(XINCLUDES)
+LIBS		:= @LIBS@ $(XLIBS)
+
+SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/AsFix2C.module-list)
+SRCS		:= $(SPEC_SRCS) init.c
+
+STD-OBJS	:= $(SRCS:.c=-$(CC).o)
+DEBUG-OBJS	:= $(SRCS:.c=-dbg.o)
+PROFILE-OBJS	:= $(SRCS:.c=-prof.o)
+
+BINFILES	:= AsFix2C
+LIBFILES	:= libAsFix2C-$(CC).a
+INCLUDEFILES	:=
+
+# Make rules
+
+all:	${BINFILES}
+
+libs:	${LIBFILES}
+
+install:	${BINFILES}
+	$(foreach tool, $^, cp $(tool) $(bindir); chmod 755 $(bindir)/$(tool);)
+
+%-$(CC).o:	%.c
+	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
+
+%-dbg.o:	%.c
+	$(CC) $(FLAGS-$(CC)) $(DEBUG-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
+
+%-prof.o:	%.c
+	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
+
+libAsFix2C-$(CC).a:	$(STD-OBJS)
+	$(AR) $(AR_FLAGS) $@ $(STD-OBJS)
 	$(RANLIB) $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
+AsFix2C:	$(LIBFILES)
+	$(CC) $(STD-LD-FLAGS) -o $@ $(LIBDIR) $(STD-LIBS)
 
-init.c:
-	../mk-init.sh >> $@
+AsFix2C-debug:	$(DEBUG-OBJS)
+	$(CC) $(DEBUG-LD-FLAGS) -o $@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
 
-clean: 
-	rm -f $(CLEANFILES)
+AsFix2C-prof:	$(PROFILE-OBJS)
+	$(CC) $(PROFILE-LD-FLAGS) -o $@ $(PROFILE-OBJS) $(LIBDIR) $(PROFILE-LIBS)
 
-distclean realclean spotless:	clean
-	rm -f ${DISTCLEANFILES}
+debug:	AsFix2C-debug
 
-install: all
+profile: AsFix2C-prof
+
+init.c: $(SPEC_SRCS)
+	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\
+	SPEC_SRCS="$(SPEC_SRCS)" ;\
+	for file in $$SPEC_SRCS; do \
+		echo "extern void register_$$file();" ;\
+		echo "extern void resolve_$$file();" ;\
+		echo "extern void init_$$file();" ;\
+	done ;\
+	echo "void register_all() {" ;\
+	for file in $$SPEC_SRCS; do \
+		echo "  register_$$file();" ;\
+	done ;\
+	echo "}" ;\
+	echo "void resolve_all() {" ;\
+	for file in $$SPEC_SRCS; do \
+		echo "  resolve_$$file();" ;\
+	done ;\
+	echo "}" ;\
+	echo "void init_all() {" ;\
+	for file in $$SPEC_SRCS; do \
+		echo "  init_$$file();" ;\
+	done ;\
+	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > $@
+
+clean:
+	$(RM) *.asfix *.o init.c AsFix2C AsFix2C-db AsFix2C-prof
+
+realclean spotless distclean:	clean
+	$(RM) Makefile

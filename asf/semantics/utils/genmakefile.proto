@@ -27,7 +27,7 @@ DEBUG_LD_FLAGS	:=
 PROFILE_CC_FLAGS:= -pg
 PROFILE_LD_FLAGS:= -pg
 
-LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm
+LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -l@TARGET@
 
 VPATH		:= @srcdir@
 srcdir		:= @srcdir@
@@ -35,6 +35,10 @@ top_srcdir	:= @top_srcdir@
 
 # Default compiler to use
 CC=@CC@
+# Building libraries: ar and ranlib
+AR=@AR@
+AR_FLAGS=cr
+RANLIB=@RANLIB@
 
 # DEBUG-LIBS: libraries containing debugging information
 DEBUG-LIBS	 = $(LOCALLIBS:=-dbg) $(LIBS)
@@ -73,7 +77,7 @@ NEW_META	:= @exec_prefix@
 
 SOCKLIBS	:= @SOCKLIBS@
 XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
-XLIBS		:= -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
+XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)
@@ -87,7 +91,7 @@ DEBUG-OBJS	:= $(SRCS:.c=-dbg.o)
 PROFILE-OBJS	:= $(SRCS:.c=-prof.o)
 
 BINFILES	:= @TARGET@
-LIBFILES	:=
+LIBFILES	:= lib@TARGET@-$(CC).a
 INCLUDEFILES	:=
 
 # Make rules
@@ -108,8 +112,12 @@ install:	${BINFILES}
 %-prof.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
-@TARGET@:	$(STD-OBJS)
-	$(CC) $(STD-LD-FLAGS) -o $@ $(STD-OBJS) $(LIBDIR) $(STD-LIBS)
+lib@TARGET@-$(CC).a:	$(STD-OBJS)
+	$(AR) $(AR_FLAGS) $@ $(STD-OBJS)
+	$(RANLIB) $@
+
+@TARGET@:	$(LIBFILES)
+	$(CC) $(STD-LD-FLAGS) -o $@ $(LIBDIR) $(STD-LIBS)
 
 @TARGET@-debug:	$(DEBUG-OBJS)
 	$(CC) $(DEBUG-LD-FLAGS) -o $@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
