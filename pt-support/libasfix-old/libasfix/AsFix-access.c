@@ -478,10 +478,13 @@ ATerm AFTflattenSdf2Attrs(ATerm attrs)
     while(!ATisEmpty(attrelems)) {
       attr = ATgetFirst(attrelems);
       attrelems = ATgetNext(attrelems);
-      if(!AFTisWS(attr)) {
+      if(!AFTisWS(attr) && !AFTisSep(attr)) {
         newattr = AFTflattenSdf2Attr(attr);
-        if(!ATisEmpty(newattrlist))
+        if(!ATisEmpty(newattrlist)) {
           newattrlist = ATappend(newattrlist,ATparse("w(\"\")"));
+          newattrlist = ATappend(newattrlist,ATparse("sep(\",\")"));
+          newattrlist = ATappend(newattrlist,ATparse("w(\"\")"));
+        }
         newattrlist = ATappend(newattrlist,newattr);
       }
     }
