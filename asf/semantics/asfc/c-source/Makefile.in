@@ -37,8 +37,7 @@ ATERM       = @NEWATERM@/aterm
 include Make.modules
 
 CC	= cc
-INCLUDE = -I$(ATERM)/aterm -I$(ATERM)/asfix -I$(ATERM)/toolbus \
-          -I../support
+INCLUDE = -I../support -I$(includedir)
 CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
         -lATerm-cc -lAsFix-cc -lATB-cc -L../support -lsupport-cc \
