@@ -4,4 +4,4 @@ Makefile.in
 *.tested
 *.tbl
 *.sh
-
+*.in
