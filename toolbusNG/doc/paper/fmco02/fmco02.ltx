@@ -19,6 +19,8 @@
 \newcommand{\asf}{{\sc Asf}}
 \newcommand{\sdf}{{\sc Sdf}}
 
+\newcommand{\spec}[1]{\texttt{#1}}
+
 \title{ToolBus: The Next Generation}
 \author{Hayco de Jong and Paul Klint}
 \date{\today}
@@ -44,10 +46,46 @@ xxxxx
 
 
 \subsection{Software Engineering Issues}
+\begin{verbatim}
+200 KLOC Lisp code
+Monolithic
+Hard to maintain
+... all traits of a legacy system
+\end{verbatim}
+
 \subsection{Timeline}
+\begin{verbatim}
+1992: Unsuccessful decomposition experiments
+1994: First ToolBus, AMAST96
+1995: Discrete time ToolBus, SCP98
+2001: Meta-Environment restructured, CC01
+2002: preparing for the next generation ...
+\end{verbatim}
+
+
 \subsection{Plan of this Paper}
 
 \section{Coordination, Representation and Computation}
+
+\begin{verbatim}
+Coordination: the way in which program and system parts interact (procedure calls, RMI, ...)
+Representation: language and machine neutral data exchanged between components
+Computation: program code that carries out a specialized task
+
+A rigorous separation of coordination
+from computation is the key to 
+flexible and reusable systems
+\end{verbatim}
+
+\begin{verbatim}
+Applicative, prefix terms
+Maximal subterm sharing (=> DAG)
+cheap equality test, efficient rewriting
+Annotations
+Very concise, binary, sharing preserving encoding
+Language & machine independent exchange format
+Software Practice & Experience 2000
+\end{verbatim}
 
 \begin{figure}
 \epsfig{figure=figs/component-architecture.eps,width=\textwidth}
@@ -57,6 +95,61 @@ xxxxx
 
 
 \section{The \TB\ Architecture}
+
+\begin{verbatim}
+Goals: integrate tools written in different languages running on different machines
+A programmable software bus
+Scripts describe the cooperation of tools
+Scripts are based on Process Algebra
+Science of Computer Programming 1998
+\end{verbatim}
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline Primitive		& Description	\\ \hline \hline
+\spec{delta}			& inaction (``deadlock'') \\
+\spec{+}			& choice between two alternatives ($P_1$ or $P_2$)\\
+\spec{.}			& sequential composition ($P_1$ followed by $P_2$)\\
+\spec{*}			& iteration (zero or more times $P_1$ followed by $P_2$)\\
+\spec{create}			& process creation\\ \hline
+\spec{snd-msg}			& send a message (binary, synchronous)\\
+\spec{rec-msg}			& receive a message (binary, synchronous)\\ \hline
+\spec{snd-note}			& send a note (broadcast, asynchronous)\\
+\spec{rec-note}			& receive a note (asynchronous)	\\
+\spec{no-note}			& no notes available for process\\
+\spec{subscribe}		& subscribe to notes\\
+\spec{unsubscribe}		& unsubscribe from notes\\ \hline
+\spec{snd-eval}			& send evaluation request to tool\\
+\spec{rec-value}		& receive a value from a tool	\\
+\spec{snd-do}			& send request to tool (no return value)\\
+\spec{rec-event}		& receive event from tool\\
+\spec{snd-ack-event}		& acknowledge a previous event from a tool\\ \hline
+\spec{if ... then ... fi}	& guarded command\\
+\spec{if ... then ... else ... fi} 	& conditional\\
+				& expressions	\\
+\spec{||}			& communication-free merge (parallel composition) \\
+\spec{let ... in ... endlet}	& local variables \\
+\spec{:=}			& assignment	\\ \hline
+
+\spec{delay}			& relative time delay\\
+\spec{abs-delay}		& absolute time delay\\
+\spec{timeout}			& relative timeout\\
+\spec{abs-timeout}		& absolute timeout\\ \hline
+
+\spec{rec-connect}		& receive a connection request from a tool\\
+\spec{rec-disconnect}		& receive a disconnection request from a tool\\
+\spec{execute}			& execute a tool\\
+\spec{snd-terminate}		& terminate the execution of a tool\\
+\spec{shutdown}			& terminate \TB	\\ \hline
+
+\spec{attach-monitor}		& attach a monitoring tool to a process\\
+\spec{detach-monitor}		& detach a monitoring tool from a process \\ \hline
+\end{tabular}
+\caption{Overview of \TB\ primitives.}
+\label{fig:Features}
+\end{center}
+\end{figure}
 
 \begin{figure}
 \epsfig{figure=figs/toolbus.eps,width=\textwidth}
@@ -78,6 +171,45 @@ xxxxx
 \caption{XXX}
 \end{figure}
 
+\begin{tabular}{|l|r|r|r|} \hline
+
+Language        & KLOC$^\dagger$ & Generated KLOC & Total KLOC\\ \hline \hline
+
+ASF+SDF         & 12	 & 170 (C) & \\
+C 	        & 80$^{\dagger\dagger}$  & & \\
+Java, Tcl/Tk    &  5  & &\\
+Makefiles, etc	&  5  & &\\
+ToolBus scripts	&  5  & &\\ \hline
+Total LOC:	& 107 & 170 & 277 \\\hline
+
+ToolBus script &  4.6\% &  & 1.8\%\\ \hline
+\end{tabular}
+
+$^\dagger$ Kilo Lines of Code  excluding third party code
+such as emacs, dot, and the like.
+
+$^{\dagger\dagger}$ This includes 10000 LOC (C code) for the \TB\
+implementation itself.
+
+\begin{tabular}{|l|r|}\hline
+Primitive                            & Number of occurrences \\ \hline \hline
+
+process definitions                  & 104\\
+tool definitions                     & 27\\
+\texttt{.} (sequential composition)  & 4343\\
+\texttt{+} (choice)                  & 341\\
+\texttt{*} (iteration)               & 243\\
+\texttt{||} (parallell composition)  & 3\\
+
+\texttt{snd-msg}                     & 555\\
+\texttt{rec-msg}                     & 541\\
+\texttt{snd-note}                    & 100\\
+\texttt{rec-note}                    & 24\\
+\texttt{snd-do}/\texttt{snd-eval}    & 220\\
+\texttt{rec-event}                   & 56\\
+\texttt{create}                      & 58 \\ \hline
+\end{tabular}
+
 \section{Issues in a Next-Generation \TB}
 
 \subsection{Undisciplined Message Patterns}
@@ -94,8 +226,54 @@ xxxxx
 \caption{XXX}
 \end{figure}
 
+\begin{verbatim}
+call/reply regime has to be encoded in messages
+typically a message identifier
+error handling is hard
+which reply did not come?
+Script harder to understand
+unstructured combination of
+send/receive
+Operators . + * ||
+\end{verbatim}
+
+\begin{verbatim}
+Send and receive occur in pairs
+Inbetween arbitrary operations allowed
+In fact, a matching send/receive may be an arbitrary expression
+provided all alternatives begin with a matching send/receive
+\end{verbatim}
+
+\begin{verbatim}
+snd-msg(eval(E)) . rec-msg(A?)
+
+snd-msg(eval(E)) { } rec-msg(A?)
+
+snd-msg(eval(E)){
+   arbitrary process expression 
+    }  rec-msg(A?)
+
+snd-msg (eval(E)) 
+{arbitrary process expression 
+    } ( rec-msg(A?) 
+     + rec-msg(error(M?)
+     )
+
+\end{verbatim}
+
 
 \subsection{Exception Handling}
+
+\begin{verbatim}
+Java-style execption handling does not work
+always associated with one specific call
+We use a LOTOS-style disrupt operator
+P >> E
+Adds the exception E as alternative to each atom in the process expression P
+Solves local error handling
+Error propagation: open issue
+\end{verbatim}
+
 
 \subsection{Call-by-value versus Call-by-reference}
 
@@ -111,6 +289,32 @@ xxxxx
 \caption{XXX}
 \end{figure}
 
+\begin{verbatim}
+Call by ref:
+Efficient for infrequent access/update
+ Uncontrolled modifications
+ New versions of CORBA have call-by-value
+
+Call by value:
+Inefficient
+ Sharing between calls is lost (recall big parse trees)
+ Only works between Java components
+ Via IIOP connection with non-Java components
+\end{verbatim}
+
+\begin{verbatim}
+ToolBus now:
+Transparent model
+ Shared access can be           expressed in the script
+ No distributed garbage        collection
+ ToolBus is bottleneck for     large values
+
+ToolBus NG:
+Ad hoc data channel
+ Transparent model
+ Garbage collection of                   channels
+ No central bottleneck
+\end{verbatim}
 
 
 \begin{figure}
@@ -130,8 +334,19 @@ xxxxx
 
 \section{Current Status}
 
-\section{Concluding Remarks}
+\begin{verbatim}
+Current ToolBus
+implemented in C
+target: ASF+SDF Meta-Environment
+Next generation ToolBus
+implemented in Java
+Tools on same machine run in a separate thread
+Easy connection with RMI/CORBA, database access, ...
+target: gamesquare.nl
+multi-user game site, thousands of users.
+\end{verbatim}
 
+\section{Concluding Remarks}
 
 
 \end{document}
