@@ -2,6 +2,9 @@ equations
 
 %% Type checking rules for an (expanded) SDF module
 
+  [gps-1'1] get-parameter-symbols($ModuleId[$Symbols], SymbolsMsgs, $ModuleId, SymbolPairsSet) = 
+              get-declared-symbol($Symbols, SymbolsMsgs, $ModuleId, SymbolPairsSet)
+
   [tc1] get-exported-declared-symbols(exports $Grammar, SymbolsMsgs, $ModuleId, SymbolPairsSet) =
        	  get-declared-symbols($Grammar, SymbolsMsgs, $ModuleId, SymbolPairsSet)
 
@@ -121,10 +124,13 @@ aliased-symbol-already-declared($ModuleId, $Symbol2)]
                             get-module-info(InfoMsgTuple1)) = 
           symbolpairs(AliasedSymbolPair*1),
 
-        get-exported-declared-symbols($Module, [symbolpairs(),{}], $ModuleId, 
+        get-parameter-symbols($Module, [symbolpairs(),{}], $ModuleId, symbolpairs()) = 
+          [symbolpairs(ParameterSymbolPair*), $Msgs0],
+
+        get-exported-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*),{}], $ModuleId, 
                                       symbolpairs(DeclaredSymbolPair*1)) = 
           [symbolpairs(DeclaredSymbolPair*2), $Msgs1],
-        get-hidden-declared-symbols($Module, [symbolpairs(), {}], $ModuleId, 
+        get-hidden-declared-symbols($Module, [symbolpairs(ParameterSymbolPair*), {}], $ModuleId, 
                                     symbolpairs(DeclaredSymbolPair*2
                                                 DeclaredSymbolPair*1)) = 
           [symbolpairs(DeclaredSymbolPair*3), $Msgs2],
@@ -146,16 +152,18 @@ aliased-symbol-already-declared($ModuleId, $Symbol2)]
                                   de-modularize(symbolpairs(AliasedSymbolPair*3
                                                             AliasedSymbolPair*2
                                                             AliasedSymbolPair*1))),
+        symbols($Symbol*6) = de-modularize(symbolpairs(ParameterSymbolPair*)),
         $Msgs6 = $Msgs5 + 
 undeclared-symbols($ModuleId, diff(symbols($Symbol*3), 
-                                   de-modularize(symbolpairs(AliasedSymbolPair*3
+                                   de-modularize(symbolpairs(ParameterSymbolPair*
+                                                             AliasedSymbolPair*3
                                                              DeclaredSymbolPair*3 
                                                              AliasedSymbolPair*2
                                                              DeclaredSymbolPair*2
                                                              AliasedSymbolPair*1
                                                              DeclaredSymbolPair*1)))) +
 sorts-without-production-definitions($ModuleId,  diff(symbols($Symbol*5), 
-                                                      symbols($Symbol*4))),
+                                                      symbols($Symbol*6 $Symbol*4))),
         InfoMsgTuple3 = put-messages($Msgs1 ++ $Msgs2 ++ $Msgs3 ++ 
                                      $Msgs4 ++ $Msgs6, 
                                      InfoMsgTuple1),

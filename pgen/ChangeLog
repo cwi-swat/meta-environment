@@ -1,4 +1,8 @@
 $Id$
+
+2003/04/29
+ * Fixed the annoying bug wrt unnecessary warnings in case of parameters.
+
 2003/02/11
  * Bumped into 1.7beta.
  * Generate Sdf2.def from the asf/library Sdf2 definition.
