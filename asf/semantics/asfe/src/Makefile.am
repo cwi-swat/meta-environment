@@ -43,6 +43,7 @@ asfe_SOURCES =\
 asfe_LDADD		= \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(ASC_SUPPORT)/lib -lasc-support-me \
+			-L$(SGLR)/lib -lsglr \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \

@@ -11,6 +11,7 @@ let
   Id         : term,
   Tide       : term,
   TestResults : term,
+  ParseTable : term,
   Tests : term,
   Tags : term,
   Total : int,
@@ -21,9 +22,14 @@ in
   (
     rec-msg(debugging(Tide?))  /* 'on' or 'off' */
   +
-    rec-msg(rewrite(ModuleName?, Equations?, Term?)) .
+    (
+      rec-msg(rewrite(ModuleName?, Equations?, Term?)) .
+      ParseTable := none
+    +
+      rec-msg(rewrite(ModuleName?, Equations?, ParseTable?, Term?))
+    ) .
     execute(asfe, Eval?) .
-    snd-eval(Eval, interpret(ModuleName, Equations, Term, Tide)) .
+    snd-eval(Eval, interpret(ModuleName, Equations, ParseTable, Term, Tide)) .
     (
       rec-value(Eval, rewrite-result(NormalForm?)) .
       snd-msg(rewrite-result(NormalForm))

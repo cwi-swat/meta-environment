@@ -21,6 +21,7 @@
 #include "evaluator.h"
 #include "errors.h"
 #include "test-runner.h"
+#include "asc-support-me.h"
 
 #ifdef USE_TIDE
 #include "debug.h"
@@ -29,9 +30,9 @@
 /*}}}  */
 /*{{{  variables */
 
-static char myarguments[] = "abde:hi:lmo:w:tvV";
+static char myarguments[] = "abde:hi:lmo:p:tvV";
 static char myname[] = "asfe";
-static char myversion[] = "0.6";
+static char myversion[] = "0.7";
 
 /* global tool id for ToolBus purposes */
 int toolbus_id = -1;
@@ -61,6 +62,7 @@ void usage(char *prg, ATbool is_err)
 	    "\t-l              replace all layout by a single space\n"
 	    "\t-m              mark new layout for pretty printing\n"
 	    "\t-o filename     output to file (default stdout)\n"
+	    "\t-p filename     input parse table (not necessary)\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
 	    prg, 
@@ -115,12 +117,17 @@ void rec_ack_event(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm interpret(int cid, char *modname, ATerm trm, ATerm tide) */
 
-ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
+ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable, 
+		ATerm trm, ATerm tide)
 {
   PT_ParseTree parseTree;
   ASF_ASFConditionalEquationList eqsList;
   ATerm result;
   ATbool debug;
+
+  if (!ATmatch(parseTable, "none")) {
+    setParseTable(parseTable); 
+  }
 
   if (ATmatch(tide, "on")) {
     debug = ATtrue;
@@ -132,7 +139,6 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
     debug = ATfalse;
   }
 
-  /*ATfprintf(stderr, "equations: %t\n", eqs);*/
   eqs = ATBunpack(eqs);
   eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
 
@@ -192,6 +198,7 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *eqsfile = "-";
+  char *parsetable = NULL;
   int bafmode = 1;
   ATbool use_tide = ATfalse;
   ATbool remove_layout = ATfalse;
@@ -236,6 +243,7 @@ int main(int argc, char *argv[])
         case 'l': remove_layout=ATtrue;            break;		  
         case 'm': mark_new_layout=ATtrue;          break;		  
 	case 'o': output = optarg;                 break;
+	case 'p': parsetable = optarg;             break;
 	case 'd': use_tide = ATtrue;		   break;
 	case 'V': version(argv[0]);                break;
 	case 'h': usage(argv[0], ATfalse);         break;
@@ -246,6 +254,16 @@ int main(int argc, char *argv[])
     /* Get the equations from file */
     if (!(iofile = fopen(eqsfile, "rb"))) {
       ATerror("%s: cannot open %s\n", myname, eqsfile);
+    }
+
+    if (parsetable != NULL) {
+      ATerm pt = ATreadFromNamedFile(parsetable);
+      if (pt != NULL) {
+	setParseTable(pt);
+      }
+      else {
+	ATerror("%s: cannot open %s\n", myname, parsetable);
+      }
     }
 
     eqs = ATreadFromFile(iofile);
