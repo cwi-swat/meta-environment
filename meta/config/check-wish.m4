@@ -27,7 +27,7 @@ AC_DEFUN(META_WISH_VERSION_CHECK,
 [
    dnl See if we found a valid version of wish; version 8.0 or 
    dnl above is required
-   if test -e $1/lib/tkConfig.sh ; then
+   if test -f "$1/lib/tkConfig.sh" ; then
      tk_version=`eval . $1/lib/tkConfig.sh ; echo ${TK_VERSION} 2>/dev/null`
      if test "a${tk_version}" = "a"; then
         AC_ERROR( [ No wish program available or other error. ] )
@@ -39,9 +39,9 @@ AC_DEFUN(META_WISH_VERSION_CHECK,
      esac
      WISH=$1/bin/wish${tk_version}
    else
-     echo "==================================================================="
-     echo "WARNING! Unable to check wish version! (version >= 8.0 required) !!"
-     echo "==================================================================="
+     AC_MSG_WARN([======================================================])
+     AC_MSG_WARN([Unable to check wish version! Version >= 8.0 required!])
+     AC_MSG_WARN([======================================================])
      WISH=$1/bin/wish
    fi
 ])
