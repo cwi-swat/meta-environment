@@ -11,7 +11,8 @@ let
  Renamings : term,
  Module : term,
  Id : str,
- Depending : list
+ Depending : list,
+ Definition : term
 in
   execute(sdf-modules, SM?) .
   (
@@ -34,6 +35,11 @@ in
     snd-eval(SM, get-import-renamings(Import)) .
     rec-value(SM, renamings(Renamings?)) .
     snd-msg(sm-renamings(Renamings))
+  +
+    rec-msg(sm-make-sdf-definition(Modules?)) .
+    snd-eval(SM, make-sdf-definition(Modules)) .
+    rec-value(SM, sdf-definition(Definition?)) .
+    snd-msg(sm-sdf-definition(Definition))
   )
   *delta
 endlet

@@ -96,6 +96,35 @@ ATerm get_module_id(int cid, ATerm atModule)
 
 /*}}}  */
 
+/*{{{  ATerm make_sdf_definition(int cid, ATerm atModules) */
+
+ATerm make_sdf_definition(int cid, ATerm atModules)
+{
+  ATermList list = (ATermList) atModules;
+  SDF_ModuleList modules = SDF_makeModuleListEmpty();
+  SDF_OptLayout space = SDF_makeLayoutSpace();
+  SDF_SDF sdf;
+  SDF_Start start;
+
+  for( ;!ATisEmpty(list); list = ATgetNext(list)) {
+    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
+
+    if (SDF_isModuleListEmpty(modules)) {
+      modules = SDF_makeModuleListSingle(module);
+    }
+    else {
+      modules = SDF_makeModuleListMany(module, space, modules);
+    }
+  }
+
+  sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
+  start = SDF_makeStartSDF(space, sdf, space);
+
+  return ATmake("snd-result(sdf-definition(<term>))", start); 
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
