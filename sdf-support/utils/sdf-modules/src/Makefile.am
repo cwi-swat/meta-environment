@@ -9,7 +9,8 @@ bin_PROGRAMS = sdf-modules
 
 sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	module-table.c \
-	get-imports.c
+	sdf-imports.c \
+	plain-imports.c
 
 sdf_modules_LDADD =\
                  -L$(ATERM)/lib -lATerm \
@@ -19,7 +20,8 @@ sdf_modules_LDADD =\
 
 noinst_HEADERS = sdf-modules.tif.h \
 	module-table.h \
-	get-imports.h
+	sdf-imports.h \
+	plain-imports.h
 
 INCLUDES = \
 	-I$(ATERM)/include  \

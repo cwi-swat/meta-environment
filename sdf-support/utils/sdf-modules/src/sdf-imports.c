@@ -26,9 +26,9 @@ static void initModuleTable(ATermList modules)
 
 /*}}}  */
 
-/*{{{  ATerm GI_getImportModuleNamePlain(SDF_Import import) */
+/*{{{  ATerm SI_getImportModuleNamePlain(SDF_Import import) */
 
-ATerm GI_getImportModuleNamePlain(SDF_Import import)
+ATerm SI_getImportModuleNamePlain(SDF_Import import)
 {
   SDF_ModuleName modname = SDF_getImportModuleName(import);
   return SDF_getModuleNamePlain(modname);
@@ -47,7 +47,7 @@ static ATermList getImpsectionImports(SDF_ImpSection impsection)
   while (!SDF_isImportListEmpty(importslist)) {
     SDF_Import import = SDF_getImportListHead(importslist);
     modules = ATinsert(modules, 
-                       GI_getImportModuleNamePlain(import));
+                       SI_getImportModuleNamePlain(import));
 
     if (SDF_isImportListSingle(importslist)) {
       break;
@@ -91,9 +91,9 @@ static void collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
 
 /*}}}  */
 
-/*{{{  SDF_ImportList GI_getModuleImportsList(SDF_Module module) */
+/*{{{  SDF_ImportList SI_getModuleImportsList(SDF_Module module) */
 
-SDF_ImportList GI_getModuleImportsList(SDF_Module module)
+SDF_ImportList SI_getModuleImportsList(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_Sections       sections;
@@ -121,9 +121,9 @@ SDF_ImportList GI_getModuleImportsList(SDF_Module module)
 }
 
 /*}}}  */
-/*{{{  ATermList GI_getImports(SDF_Module module) */
+/*{{{  ATermList SI_getImports(SDF_Module module) */
 
-ATermList GI_getImports(SDF_Module module)
+ATermList SI_getImports(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_Sections       sections;
@@ -479,7 +479,7 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       SDF_ModuleName actualName = SDF_getImportModuleName(import);
       renamings = makeRenamingsFromModuleNames(formalName, actualName);
 
-      imports = GI_getModuleImportsList(module);
+      imports = SI_getModuleImportsList(module);
       imports = applyRenamingsToImports(renamings, imports);
 
       todo = SDF_mergeImportList(todo, imports);
@@ -592,7 +592,7 @@ static ATermList collect_imported_modules(SDF_ImportList imports)
 
 /*{{{  ATermList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId) */
 
-SDF_ImportList GI_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
+SDF_ImportList SI_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
 {
   SDF_ImportList result;
 
@@ -607,9 +607,9 @@ SDF_ImportList GI_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
 }
 
 /*}}}  */
-/*{{{  ATermList GI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId) */
+/*{{{  ATermList SI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId) */
 
-ATermList GI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
+ATermList SI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
 {
   ATermList result;
 
@@ -625,9 +625,9 @@ ATermList GI_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
 }
 
 /*}}}  */
-/*{{{  ATermList GI_getTransitiveImportedModules(ATermList modules,  */
+/*{{{  ATermList SI_getTransitiveImportedModules(ATermList modules,  */
 
-ATermList GI_getTransitiveImportedModules(ATermList modules, 
+ATermList SI_getTransitiveImportedModules(ATermList modules, 
 					   SDF_ModuleId moduleId)
 {
   ATermList result = ATempty;

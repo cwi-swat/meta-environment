@@ -8,7 +8,8 @@
 
 #include <SDFME-utils.h>
 #include "sdf-modules.tif.h"
-#include "get-imports.h"
+#include "sdf-imports.h"
+#include "plain-imports.h"
 
 #define SEP '/'
 
@@ -74,16 +75,12 @@ static ATermList importsToModuleList(SDF_ImportList imports)
 
 /*{{{  ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)  */
 
-ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name) 
+ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name) 
 {
-  ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  SDF_ImportList imports;
- 
-  imports = GI_getTransitiveImports(list, id);
+  ATerm id = ATmake("<str>", name);
 
   return ATmake("snd-value(all-needed-module-names(<term>))", 
-		importsToModuleList(imports));
+                PI_getTransitiveImports((ATermList) pairs, id));
 }
 
 /*}}}  */
@@ -93,7 +90,7 @@ ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)
 {
   ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList result = GI_getTransitiveImportedModules(list, id);
+  ATermList result = SI_getTransitiveImportedModules(list, id);
 
   return ATmake("snd-value(all-needed-modules(<term>))", result);
 }
@@ -107,7 +104,7 @@ ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
-  imports = GI_getTransitiveImports(list, id);
+  imports = SI_getTransitiveImports(list, id);
 
   return ATmake("snd-value(all-needed-imports(<term>))", imports);
 }
@@ -119,7 +116,7 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
 {
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module module = SDF_getStartTopModule(start);
-  ATermList imports = GI_getImports(module);
+  ATermList imports = SI_getImports(module);
  
   return ATmake("snd-value(imported-module-names(<term>))", imports);
 }
@@ -134,7 +131,7 @@ ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
 
   return ATmake("snd-value(all-depending-module-names(<term>))",
-		(ATerm) GI_getDependingModuleIds(list, id));
+		(ATerm) SI_getDependingModuleIds(list, id));
 }
 
 /*}}}  */
@@ -209,7 +206,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
   SDF_Start start;
   ATerm result;
 
-  list = GI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
+  list = SI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
 
   modules = SDF_makeModuleListEmpty();
   space = SDF_makeLayoutSpace();

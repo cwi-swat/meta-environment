@@ -10,6 +10,7 @@ let
  Pairs : list,
  ModuleId : str,
  Imports : term,
+ ModuleImportPairs : list,
  Import : term,
  Renamings : term,
  Module : term,
@@ -38,9 +39,10 @@ in
       snd-msg(sm-module-path-inconsistent)
     )
   +
-    rec-msg(sm-get-all-needed-module-names(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-needed-module-names(Modules, ModuleId)) .
-    Modules := [] .
+    rec-msg(sm-get-all-needed-module-names(ModuleImportPairs?, ModuleId?)) .
+printf("getting needed modulenames for %s\n", ModuleId) .
+    snd-eval(SM, get-all-needed-module-names(ModuleImportPairs, ModuleId)) .
+    ModuleImportPairs := [] .
     rec-value(SM, all-needed-module-names(ModuleNames?)) .
     snd-msg(sm-all-needed-module-names(ModuleNames))
   +
@@ -68,6 +70,7 @@ in
     snd-msg(sm-imported-module-names(ModuleNames))
   +
     rec-msg(sm-make-sdf-definition(Modules?, ModuleId?)) .
+printf("making sdf definition for %s\n", ModuleId) .
     snd-eval(SM, make-sdf-definition(Modules, ModuleId)) .
     Modules := [] .
     rec-value(SM, sdf-definition(Definition?)) .
