@@ -7,7 +7,7 @@ equations
            Msg*4 := check-for-deprecated-symbols(Definition2)
            =================================================
            check-sdf(definition Definition1) =
-             feedback([Msg*1, Msg*2, Msg*3, Msg*4])
+             feedback("SdfChecker", "Unknown", [Msg*1, Msg*2, Msg*3, Msg*4])
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
@@ -53,14 +53,14 @@ equations
               pre-check-imports(imports(Import*), Definition, InfoMsgTuple2)
  
   [pci-12] $ModuleName := get-modulename(Import),
-           $ModuleId := get-module-id($ModuleName),
-           get-module($ModuleId, Definition) == module-not-available,
+           moduleid($Char*) := get-module-id($ModuleName),
+           get-module(moduleid($Char*), Definition) == module-not-available,
            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
-           ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
+           ModuleInfoTable2 := create-module-entry(moduleid($Char*), ModuleInfoTable1), 
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
            Msgs1 := get-messages(InfoMsgTuple2),
-           Msgs2 := Msgs1 +
-module-not-available($ModuleId),
+           Msgs2 := Msgs1,
+make-warning("module-not-available", strcon(""" $Char* """)),
            InfoMsgTuple3 := put-messages(Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
@@ -137,8 +137,11 @@ module-not-available($ModuleId),
            symbols($Symbol*2) := de-modularize(symbolpairs(DeclaredSymbolPair*)), 
            symbols($Symbol*3) := de-modularize(symbolpairs(AliasedSymbolPair*)),
            $Msgs1 := get-messages(InfoMsgTuple1),
-           $Msgs2 := $Msgs1 +
-unused-sort-definitions(diff(symbols($Symbol*2 $Symbol*3),symbols($Symbol*1))),
+           symbols($Symbol*4) := diff(symbols($Symbol*2 $Symbol*3),
+                                      symbols($Symbol*1)),
+           $String := symbols2str($Symbol*4),
+           $Msgs2 := $Msgs1,
+make-warning("unused-sort-definitions", $String),
            InfoMsgTuple2 := put-messages($Msgs2, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2

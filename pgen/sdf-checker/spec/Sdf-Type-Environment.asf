@@ -1,6 +1,6 @@
 equations
 
-  [cimt-1'1] create-info-msg-tuple() = [{},{}]
+  [cimt-1'1] create-info-msg-tuple() = [{},]
 
   [cme-1'1] create-module-entry($ModuleId,{ModuleInfoEntry*}) =
               {[$ModuleId, true, 

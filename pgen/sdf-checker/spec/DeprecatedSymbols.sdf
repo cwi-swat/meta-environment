@@ -1,6 +1,6 @@
 module DeprecatedSymbols
 
-imports utilities/PosInfo[Symbol]
+%%imports utilities/PosInfo[Symbol]
 imports Sdf-Messages ModuleOperations
 
 exports
@@ -24,3 +24,5 @@ hiddens
     "$UQLiteral"[0-9]* -> UQLiteral
 
     "$Location"[0-9]* -> Location
+
+    "$String"[0-9]*   -> StrCon

@@ -28,7 +28,7 @@ hiddens
 
     "Msg"[0-9]*        -> Feedback
     "Msg*"[0-9]*       -> {Feedback ","}*
-    "Msgs"[0-9]*       -> Messages
+    "Msgs"[0-9]*       -> {Feedback ","}*
 
     "Module"[0-9]*       -> Module
     "Module*"[0-9]*      -> Module*
@@ -48,4 +48,8 @@ hiddens
     "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
     "UsedSymbolPair*"[0-9]*     -> SymbolPair*
 
-    "$Msgs"[0-9]*           -> Messages
+    "$Msgs"[0-9]*           -> {Feedback ","}*
+
+    "$Char*"[0-9]* -> CHAR*
+
+    "$String"[0-9]* -> StrCon

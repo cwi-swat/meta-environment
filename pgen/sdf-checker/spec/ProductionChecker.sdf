@@ -21,13 +21,13 @@ hiddens
 
 hiddens
   context-free syntax
-    check-priorities(Module, Messages, ModuleId, ProductionsSet)               -> Messages {traversal(accu, break, top-down)}
-    check-priorities(Priority, Messages, ModuleId, ProductionsSet)             -> Messages {traversal(accu, break, top-down)}
+    check-priorities(Module, {Feedback ","}*, ModuleId, ProductionsSet)               -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-priorities(Priority, {Feedback ","}*, ModuleId, ProductionsSet)             -> {Feedback ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-priorities-given-symbol(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, break, top-down)}
-    check-priorities-given-symbol({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, break, top-down)}
-    check-priorities-given-symbol(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Group, {Feedback ","}*, ModuleId, Symbol, ProductionsSet) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol({Group ">"}+, {Feedback ","}*, ModuleId, Symbol, ProductionsSet) ->{Feedback ","}* {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Production, {Feedback ","}*, ModuleId, Symbol, ProductionsSet)   ->{Feedback ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
     get-rhs-production(Group, SymbolsSet)                                      -> SymbolsSet {traversal(accu, break, top-down)}
@@ -37,14 +37,14 @@ hiddens
     is-injection-production(Symbol, Symbol, ProductionsSet)                    -> Boolean
 
   context-free syntax
-    check-right-hand-sides(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-right-hand-sides(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-right-hand-sides(Module, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-sides(Production, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-right-hand-side-lexical-prod(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Grammar, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Production*, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
-    check-right-hand-side-lexical-prod(Production, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Module, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Grammar, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production*, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-right-hand-side-lexical-prod(Production, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
 
 
 hiddens
@@ -60,9 +60,9 @@ hiddens
     "Module*"[0-9]*         -> Module*
     "$ModuleId"[0-9]*       -> ModuleId
 
-    "Msg"[0-9]*             -> Message
-    "Msg*"[0-9]*            -> Message*
-    "Msgs"[0-9]*            -> Messages
+    "Msg"[0-9]*             -> Feedback
+    "Msg*"[0-9]*            -> {Feedback ","}*
+    "Msgs"[0-9]*            -> {Feedback ","}*
 
     "Import*"[0-9]*         -> Import*
     
@@ -78,3 +78,5 @@ hiddens
     "Symbol,*"[0-9]*        -> {Symbol ","}*
     "Group"[0-9]*           -> Group
     "Group+"[0-9]*          -> {Group ">"}+
+
+    "$String"[0-9]*         -> StrCon

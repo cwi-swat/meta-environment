@@ -1,6 +1,6 @@
 module Sdf-AttributeChecker
 
-imports utilities/PosInfo[Production]
+%%imports utilities/PosInfo[Production]
 imports Sdf-Messages ModuleOperations
 
 exports
@@ -35,5 +35,7 @@ hiddens
     "$Symbol"[0-9]*    -> Symbol
     "Msgs"[0-9]*       -> {Feedback ","}*
     "$Literal"[0-9]*   -> Literal
+
+    "$String"[0-9]*    -> StrCon
 
     "$Location"[0-9]* -> Location

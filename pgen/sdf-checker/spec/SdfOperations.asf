@@ -15,6 +15,15 @@ equations
       || strcon(""" "-"">" """)
       || symbol2str($Symbol)
 
+  [productions2str-empty]
+     productions2str() = strcon(""" """)
+
+  [productions2str-non-empty]
+     productions2str($Production $Production*) =
+       production2str($Production)
+      || strcon(""" " " """)
+       || productions2str($Production*)
+
   [symbols2str-empty]
     symbols2str() = strcon(""" """) 
 
@@ -83,7 +92,13 @@ equations
     symbol2str($Symbol1 # $Symbol2) = 
       symbol2str($Symbol1) 
       || strcon(""" "#" """)
-      || symbol2str($Symbol2)  
+      || symbol2str($Symbol2)
+
+  [symbol2str-tuple]
+    symbol2str($Literal : $Symbol) = 
+      literal2str($Literal) 
+      || strcon(""" ":" """)
+      || symbol2str($Symbol)  
 
   [default-symbol2str-notimplemented]
     symbol2str($Symbol) = 
@@ -95,3 +110,6 @@ equations
   [literal2str-qliteral]
     literal2str(qliteral(""" $Char* """)) = 
       strcon(""" "\"""" $Char* "\"""" """)
+
+  [moduleid2string]
+    moduleid2str(moduleid($Char*)) = strcon(""" $Char* """)

@@ -9,12 +9,12 @@ equations
 
             [constructors(SymbolCons*2), Msgs1] := 
               get-constructor-symbol-pairs(Module, 
-                                         [constructors(SymbolCons*1),{}], 
+                                         [constructors(SymbolCons*1), ], 
                                          $ModuleId),
 
             Msgs2 := get-messages(InfoMsgTuple1), 
 
-            InfoMsgTuple2 := put-messages(Msgs1 ++ Msgs2, InfoMsgTuple1),
+            InfoMsgTuple2 := put-messages(Msgs1, Msgs2, InfoMsgTuple1),
 
             ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
             ModuleInfoTable2 := put-constructor-info($ModuleId, 
@@ -52,13 +52,16 @@ equations
                                              $ModuleId, Symbol,
                                              $Literal(Symbol,*) -> Symbol Attrs)
 
-  [gcsp-2'1] contains(Symbol, $Literal, ConstructorSet) == true
-             =================================================
+  [gcsp-2'1] contains(Symbol, $Literal, ConstructorSet) == true,
+             $String1 := moduleid2str($ModuleId),
+             $String2 := production2str(Prod),
+             $String3 := "constructor-has-already-been-used in " || $String1
+             ====>
              get-constructor-symbol-pairs2(cons( $Literal ), 
                                            [ConstructorSet, Msgs], 
                                            $ModuleId, Symbol, Prod) =
                [ConstructorSet, 
-Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
+                Msgs, make-warning($String3, $String2)]
 
   [gcsp-2'2] contains(Symbol, $Literal, ConstructorSet) == false
              ==================================================
@@ -88,10 +91,13 @@ Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
                                               $ModuleId, Symbol, Prod) = 
                ConsMsgTuple
 
-  [ccip-2'2] contains(Symbol, $Literal, ConstructorSet) == false
-             ==================================================
+  [ccip-2'2] contains(Symbol, $Literal, ConstructorSet) == false,
+             $String1 := moduleid2str($ModuleId),
+             $String2 := production2str(Prod),
+             $String3 := "unknown-constructor-used-in-priorities in " || $String1
+             ====>
              check-constructor-in-priorities2(cons( $Literal ), 
                                               [ConstructorSet, Msgs], 
                                               $ModuleId, Symbol, Prod) =
                [ConstructorSet, 
-Msgs + unknown-constructor-used-in-priorities($ModuleId, Prod)]
+                Msgs, make-warning($String3, $String2)]

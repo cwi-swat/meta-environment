@@ -52,18 +52,21 @@ equations
         productions(Prod*5) := productions(Prod*1) ++ productions(Prod*4),
         productions(Prod*6) := productions(Prod*2) ++ productions(Prod*5),
 
-        Msgs1 := check-priorities(Module, {}, $ModuleId, productions(Prod*6)),
-        Msgs2 := check-right-hand-sides(Module, {}, $ModuleId),
-        Msgs3 := check-right-hand-side-lexical-prod(Module, {}, $ModuleId),
+        Msgs1 := check-priorities(Module, , $ModuleId, productions(Prod*6)),
+        Msgs2 := check-right-hand-sides(Module, , $ModuleId),
+        Msgs3 := check-right-hand-side-lexical-prod(Module, , $ModuleId),
 
+        productions(Prod*7) := diff(productions(Prod*3), 
+                                    productions(Prod*6)),
+
+        $String1 := moduleid2str($ModuleId),
+        $String2 := productions2str(Prod*7),
+        $String3 := "used-in-priorities-but-undefined in " || $String1,
+ 
         Msgs4 := get-messages(InfoMsgTuple1),
-        Msgs5 := Msgs4 + 
-used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3), 
-                                                 productions(Prod*6))),
-        Msgs6 := Msgs5 ++ Msgs1,
-        Msgs7 := Msgs6 ++ Msgs2,
-        Msgs8 := Msgs7 ++ Msgs3,
-        InfoMsgTuple3 := put-messages(Msgs8, InfoMsgTuple1),
+        Msgs5 := Msgs4, make-warning($String3, $String2),
+
+        InfoMsgTuple3 := put-messages(Msgs5, Msgs1, Msgs2, Msgs3, InfoMsgTuple1),
 
         ModuleInfoTable1 := get-module-info(InfoMsgTuple3),
         ModuleInfoTable2 := put-production-info($ModuleId, 
@@ -92,21 +95,25 @@ used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3),
 
   [cp-2'1] Symbol1 != Symbol2,
            is-injection-production(Symbol1, Symbol2, ProductionsSet) |
-           is-injection-production(Symbol2, Symbol1, ProductionsSet) == false
-           =================================================================
+           is-injection-production(Symbol2, Symbol1, ProductionsSet) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str(Symbol* -> Symbol1 Attrs),
+           $String3 := "inconsistent-rhs-in-priorities in " || $String1
+           ====>
            check-priorities-given-symbol(Symbol* -> Symbol1 Attrs, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
-             Msgs + 
-inconsistent-rhs-in-priorities($ModuleId, Symbol2, Symbol* -> Symbol1 Attrs)
+             Msgs, make-warning($String3, $String2) 
 
   [cp-2'2] Symbol1 != Symbol2,
            is-injection-production(Symbol1, Symbol2, ProductionsSet) |
-           is-injection-production(Symbol2, Symbol1, ProductionsSet) == false
-           =================================================================
+           is-injection-production(Symbol2, Symbol1, ProductionsSet) == false,
+           $String1 := moduleid2str($ModuleId),
+           $String2 := production2str($Literal (Symbol,*) -> Symbol1 Attrs),
+           $String3 := "inconsistent-rhs-in-priorities in " || $String1
+           ====>
            check-priorities-given-symbol($Literal (Symbol,*) -> Symbol1 Attrs, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
-             Msgs + 
-inconsistent-rhs-in-priorities($ModuleId, Symbol2, $Literal (Symbol,*) -> Symbol1 Attrs)
+             Msgs, make-warning($String3, $String2)
 
   [grp-2'1] get-rhs-production(Symbol* -> Symbol Attrs, symbols()) = 
               symbols(Symbol)
@@ -122,13 +129,19 @@ inconsistent-rhs-in-priorities($ModuleId, Symbol2, $Literal (Symbol,*) -> Symbol
 
   [default-iip-1'2] is-injection-production(Symbol1, Symbol2, ProductionsSet) = false
 
-  [crhs-1'1] check-right-hand-sides(Symbol* -> $Literal Attrs, Msgs, $ModuleId) =
-               Msgs +
-literal-in-right-hand-side-not-allowed($ModuleId, Symbol* -> $Literal Attrs)
+  [crhs-1'1] $String1 := moduleid2str($ModuleId),
+             $String2 := production2str(Symbol* -> $Literal Attrs),
+             $String3 := "literal-in-right-hand-side-not-allowed in " || $String1
+             ====>
+             check-right-hand-sides(Symbol* -> $Literal Attrs, Msgs, $ModuleId) =
+               Msgs, make-warning($String3, $String2)
 
-  [crhs-1'2] check-right-hand-sides($Literal1 (Symbol,*) -> $Literal2 Attrs, Msgs, $ModuleId) =
-               Msgs +
-literal-in-right-hand-side-not-allowed($ModuleId, $Literal1 (Symbol,*) -> $Literal2 Attrs)
+  [crhs-1'2] $String1 := moduleid2str($ModuleId),
+             $String2 := production2str($Literal1 (Symbol,*) -> $Literal2 Attrs),
+             $String3 := "literal-in-right-hand-side-not-allowed in " || $String1
+             ====>
+             check-right-hand-sides($Literal1 (Symbol,*) -> $Literal2 Attrs, Msgs, $ModuleId) =
+               Msgs, make-warning($String3, $String2)
 
   [crl-1'1] check-right-hand-side-lexical-prod(lexical syntax Prod*, Msgs, $ModuleId) =
               check-right-hand-side-lexical-prod(Prod*, Msgs, $ModuleId)
@@ -139,13 +152,19 @@ literal-in-right-hand-side-not-allowed($ModuleId, $Literal1 (Symbol,*) -> $Liter
 
   [crl-1'3] check-right-hand-side-lexical-prod(Symbol* -> LAYOUT Attrs, Msgs, $ModuleId) = Msgs
 
-  [default-crl-1'1] check-right-hand-side-lexical-prod(Symbol* -> Symbol Attrs, Msgs, $ModuleId) =
-               Msgs +
-only-sort-allowed-in-right-hand-side-of-lexical-function($ModuleId, Symbol* -> Symbol Attrs)
+  [default-crl-1'1] $String1 := moduleid2str($ModuleId),
+                    $String2 := production2str(Symbol* -> Symbol Attrs),
+                    $String3 := "only-sort-allowed-in-right-hand-side-of-lexical-function in " || $String1
+                    ====>
+                    check-right-hand-side-lexical-prod(Symbol* -> Symbol Attrs, Msgs, $ModuleId) =
+                      Msgs, make-warning($String3, $String2)
 
   [crl-1'2] check-right-hand-side-lexical-prod($Literal (Symbol,*) -> $Sort Attrs, Msgs, $ModuleId) = Msgs
 
-  [crl-1'2] check-right-hand-side-lexical-prod($Literal (Symbol,*) -> Symbol Attrs, Msgs, $ModuleId) =
-               Msgs +
-only-sort-allowed-in-right-hand-side-of-lexical-function($ModuleId, $Literal (Symbol,*) -> Symbol Attrs)
+  [default-crl-1'2] $String1 := moduleid2str($ModuleId),
+                    $String2 := production2str($Literal (Symbol,*) -> Symbol Attrs),
+                    $String3 := "only-sort-allowed-in-right-hand-side-of-lexical-function in " || $String1
+                    ====>
+                    check-right-hand-side-lexical-prod($Literal (Symbol,*) -> Symbol Attrs, Msgs, $ModuleId) =
+                      Msgs, make-warning($String3, $String2)
  

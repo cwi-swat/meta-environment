@@ -1,0 +1,6 @@
+equations
+
+  [mw-1'1] make-warning($StrCon1, "") =
+
+  [default-mw-1'1] make-warning($StrCon1, $StrCon2) =
+                     warning($StrCon1, [subject($StrCon2, no-location)])

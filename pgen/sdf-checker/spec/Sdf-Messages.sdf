@@ -1,6 +1,6 @@
 module Sdf-Messages
 
-imports basic/Feedback
+imports SdfCheckerFeedback
 imports SymbolSetOperations 
 imports SdfOperations
 imports ProductionSetOperations

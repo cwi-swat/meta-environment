@@ -6,10 +6,12 @@ imports languages/sdf2/syntax/Sdf2
 exports
   context-free syntax
     production2str(Production)    -> String
+    productions2str(Production*)  -> String
     symbols2str(Symbol*)          -> String
     symbolssep2str({Symbol ","}*) -> String
     symbol2str(Symbol)            -> String
     literal2str(Literal)          -> String
+    moduleid2str(ModuleId)        -> String
 
 hiddens
   variables
@@ -21,3 +23,5 @@ hiddens
     "$Symbol+"[0-9]*		-> Symbol+
     "$Symbolstar"[0-9]*		-> {Symbol ","}*
     "$Symbolplus"[0-9]*		-> {Symbol ","}+
+    "$Production"[0-9]*         -> Production
+    "$Production*"[0-9]*        -> Production*

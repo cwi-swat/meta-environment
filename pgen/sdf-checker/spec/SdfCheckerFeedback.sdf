@@ -1,0 +1,12 @@
+module SdfCheckerFeedback
+
+imports basic/Feedback
+imports basic/Comments
+
+exports
+  context-free syntax
+    make-warning(StrCon, StrCon) -> {Feedback ","}*
+
+hiddens
+  variables 
+    "$StrCon"[0-9]* -> StrCon
