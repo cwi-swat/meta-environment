@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-
+#include <ctype.h>
 
 /*}}}  */
 /*{{{  meta includes */
@@ -80,6 +80,16 @@ static ATbool checkListProductionCompatibility(PT_Production ptProd);
 
 /*}}}  */
 
+/*{{{  char *capitalize(char *str) */
+
+void capitalize(char *str)
+{
+  if (isalpha(str[0])) {
+    str[0] = toupper(str[0]);
+  }
+}
+
+/*}}}  */
 /*{{{  static ATbool returnsList(PT_Production prod) */
 
 static ATbool prodReturnsList(PT_Production prod)
@@ -239,9 +249,12 @@ static MA_Term atermToTerm(ATerm aterm)
   MA_Term result;
   MA_TermArgs list;
   MA_TermList termList;
+  AFun afun;
 
   if (ATgetType(aterm) == AT_APPL) {
-    str = ATgetName(ATgetAFun((ATermAppl) aterm));
+    afun = ATgetAFun((ATermAppl) aterm);
+    str = ATgetName(afun);
+    str = ATisQuoted(afun) ? escape(str, "\\\n", QUOTED) : str;
     args = ATgetArguments((ATermAppl) aterm);
     if (!ATisEmpty(args)) { 
       list = atArgsToTermArgs(args);
@@ -275,7 +288,7 @@ static MA_Term attrToTerm(PT_Attr attr)
 
   if (PT_isAttrId(attr)) {
     str = PT_getAttrModuleName(attr);
-    arg = MA_makeTermConstant(stringToFunId(str));
+    arg = MA_makeTermConstant(stringToFunId(escape(str,"", QUOTED)));
     result =  MA_makeTermFunc(stringToFunId("id"),em,em, 
 			   MA_makeTermArgsSingle(arg), em);
   }
@@ -814,8 +827,8 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList li
 
 static MA_ModId makeModId(char *str)
 {
-  MA_ModId result = MA_makeModIdDefault(MA_makeCHARLISTString(str));
-  return result;
+  capitalize(str);
+  return MA_makeModIdDefault(MA_makeCHARLISTString(str));
 }
 
 /*}}}  */
