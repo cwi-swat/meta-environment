@@ -135,7 +135,7 @@ void     SG_MarkStackRejected(stack *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_DeeplyRejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
-ATbool   SG_SubStack(stack *, stack *);
+ATbool   SG_SubStack(stack *, stack *, ATermList);
 
 #if 0
 void     SG_MarkStackUnrejected(stack *);

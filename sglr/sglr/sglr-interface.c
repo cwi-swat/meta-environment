@@ -65,10 +65,12 @@ FILE    *SG_Log = NULL;
 
 FILE  *SGopenLog(char *prg, char *fnam)
 {
-  if (SG_Log != NULL) return SG_Log;
-  if (fnam == NULL || strcmp(fnam, "") == 0)
+  if (SG_Log)
+    return SG_Log;
+
+  if (!fnam || !strcmp(fnam, ""))
     fnam = ".parse-log";
-  if ((SG_Log = fopen(fnam, "w")) == NULL) {
+  if (!(SG_Log = fopen(fnam, "w"))) {
     ATfprintf(stderr, "%s%sCannot create logfile %s\n",
               prg?prg:"", prg?": ":"", fnam);
     exit(1);
@@ -92,7 +94,7 @@ size_t SG_FileSize(char *prg, char *FN)
 {
   struct stat  statbuf;
 
-  if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-"))
+  if (!FN || !strcmp(FN, "") || !strcmp(FN, "-"))
     return -1;	/*  We can't tell how many tokens to read  */
 
   if(stat(FN, &statbuf) < 0) {
@@ -115,15 +117,15 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
 {
   FILE *file;
 
-  if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-")) {
-      if (std_error == NULL || (FN && !strcmp(FN, "-")))
+  if (!FN || !strcmp(FN, "") || !strcmp(FN, "-")) {
+      if (!std_error || (FN && !strcmp(FN, "-")))
         return stdin;
 
       ATfprintf(stderr,"%s: %s\n", prgname, std_error);
       exit(1);
   }
 
-  if ((file = fopen(FN, "r")) == NULL) {
+  if (!(file = fopen(FN, "r"))) {
       ATfprintf(stderr, "%s: cannot open %s\n", prgname, FN);
       exit(1);
   }
@@ -132,7 +134,8 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
 
 void SGcloseFile(FILE *fd)
 {
-  if(fd != stdin) fclose(fd);
+  if(fd != stdin)
+    fclose(fd);
 }
 
 /*
@@ -147,22 +150,21 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
   parse_table *table;
 
   SG_Validate("SGopenLanguage");
-  if (SG_VERBOSE && (FN != NULL))
+  if (SG_VERBOSE && FN)
     ATfprintf(stderr, "%s: opening parse table %s\n", prgname, FN);
-  if((table = SG_LookupParseTable(L, ATtrue)) == NULL) {
+  if(!(table = SG_LookupParseTable(L, ATtrue))) {
     input_file = SGopenFile(prgname, "parse table not specified", FN);
     if (SG_DEBUG)
       ATfprintf(SGlog(), "Reading parse table for language %s\n", L);
     table = SG_BuildParseTable(ATreadFromFile(input_file));
     SGcloseFile(input_file);
-    if(table != NULL)
+    if(table)
       SG_SaveParseTable(L, table);
   }
 
   return ATmake(
-    (table != NULL)
-      ?  "snd-value(language-opened(<str>,<str>))"
-      :  "snd-value(open-language-failed(<str>,<str>))",
+    (table) ?  "snd-value(language-opened(<str>,<str>))"
+            :  "snd-value(open-language-failed(<str>,<str>))",
     L, FN);
 }
 
@@ -269,8 +271,9 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
   FILE *output_file;
 
   if (SG_OUTPUT) {
-    if (strcmp(FN, "") == 0 || strcmp(FN, "-") == 0) output_file = stdout;
-    else if ((output_file = fopen(FN, "w")) == NULL) {
+    if (!strcmp(FN, "") || !strcmp(FN, "-"))
+      output_file = stdout;
+    else if (!(output_file = fopen(FN, "w"))) {
       ATfprintf(stderr, "%s: cannot create %s\n", prgname, FN);
       exit(1);
     } if (SG_VERBOSE)
@@ -280,7 +283,8 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
     else
       ATwriteToTextFile(t, output_file);
 
-    if(output_file != stdout) fclose(output_file);
+    if(output_file != stdout)
+      fclose(output_file);
     else {
       if(! SG_BINARY) putc('\n', output_file);    /* For convenience */
       fflush(output_file);      /* To avoid mixing stdout/stderr when redirected */

@@ -17,7 +17,7 @@ void DumpOne(FILE *out, ATermTable tbl, ATerm key)
   if(!tbl)
     return;
 
-  if((val = ATtableGet(tbl, key)) == NULL)
+  if(!(val = ATtableGet(tbl, key)))
     return;
 
 /*
@@ -34,7 +34,7 @@ void DumpAll(ATermTable tbl)
   if(!tbl)
     return;
 
-  if (NULL == (out = popen ("sort -n", "w")))
+  if (!(out = popen ("sort -n", "w")))
     out = stdout;
 
   for(keys = ATtableKeys(tbl); keys && !ATisEmpty(keys);
@@ -75,7 +75,7 @@ int main (int argc, char **argv)
     return 1;
   }
 
-  if((pt = SG_LookupParseTable(pt_name, ATtrue)) == NULL) {
+  if(!(pt = SG_LookupParseTable(pt_name, ATtrue))) {
     ATfprintf(stderr, "failed to find parse table for languate %s\n", pt_name);
     return 1;
   }

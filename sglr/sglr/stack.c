@@ -42,7 +42,7 @@ long SG_AllocStats(int op)
 stack *SG_NewStack(state s, stack *ancestor) {
   stack *res;
 
-  if((res = SG_Malloc(sizeof(stack))) != NULL) {
+  if((res = SG_Malloc(sizeof(stack)))) {
     SG_AllocStats(INC);
     res->state = s;
 #ifdef DEBUG
@@ -60,7 +60,7 @@ stack *SG_NewStack(state s, stack *ancestor) {
 stacks *SG_AddStack(stack *st, stacks *sts) {
   stacks *res;
 
-  if((res = SG_Malloc(sizeof(stacks))) != NULL) {
+  if((res = SG_Malloc(sizeof(stacks)))) {
     res->head = st;
     res->tail = sts;
   }
@@ -70,7 +70,7 @@ stacks *SG_AddStack(stack *st, stacks *sts) {
 st_link *SG_NewLink(tree t, stack *st) {
   st_link *res;
 
-  if((res = SG_Malloc(sizeof(st_link))) != NULL) {
+  if((res = SG_Malloc(sizeof(st_link)))) {
     res->tree = t;
     ATprotect(&(res->tree));
     res->stack = st;
@@ -85,7 +85,7 @@ st_link *SG_AddLink(stack *frm, stack *to, tree t)
 {
   st_link *link;
 
-  if((link = SG_NewLink(t, to)) != NULL) {
+  if((link = SG_NewLink(t, to))) {
     frm->links = SG_AddLinks(link, frm->links);
   }
   return link;
@@ -95,7 +95,7 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
 {
   st_links *res;
 
-  if((res = SG_Malloc(sizeof(st_links))) != NULL) {
+  if((res = SG_Malloc(sizeof(st_links)))) {
     res->head = l;
     res->tail = ls;
   }
@@ -145,7 +145,7 @@ void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
 {
   stacks *sts;
 
-  if(accept != NULL)                    /*  Add the sacred accepting stack  */
+  if(accept )                    /*  Add the sacred accepting stack  */
     new = SG_AddStack(accept, new);
 
   while(old) {
@@ -154,7 +154,7 @@ void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
     old = SG_TAIL(old);
     SG_free(sts);
   }
-  if(accept != NULL)                    /*  Free this fragment too  */
+  if(accept)                    /*  Free this fragment too  */
     SG_free(new);
 }
 
@@ -168,7 +168,7 @@ void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
       st->protected   = ATfalse;
 
      /*  The stacks descendants might also have been obsoleted         */
-     for (; lks != NULL; lks = SG_TAIL(lks)) {
+     for (; lks; lks = SG_TAIL(lks)) {
        st_link *lk = SG_HEAD(lks);
 
        SG_MarkStack(SG_LK_STACK(lk), lk, sts);
@@ -200,7 +200,7 @@ void SG_StackCleanupList(int Mode, stack *st)
 */
       break;
     case SG_GC_ADD:
-      if(gcstacks == NULL) {
+      if(!gcstacks) {
         size += SG_GC_CHUNK;
         gcstacks = SG_Malloc(size * sizeof(stack *));
       } else if(count >= size) {
@@ -208,7 +208,7 @@ void SG_StackCleanupList(int Mode, stack *st)
         gcstacks = SG_Realloc(gcstacks, size * sizeof(stack *));
       }
 #ifdef DEBUG
-      if(gcstacks == NULL) {
+      if(!gcstacks) {
         ATfprintf(stderr, "SG_GC: memory (re)allocation error\n");
         exit(1);
       }
@@ -222,7 +222,7 @@ void SG_DeleteStacks(stacks *sts)
 {
   stacks *osts;
 
-  while(sts != NULL) {
+  while(sts) {
     osts = sts;
     sts = SG_TAIL(sts);
     SG_free(osts);
@@ -234,7 +234,7 @@ void SG_DeleteStack(stack *st)
   st_links *lks = SG_ST_LINKS(st), *curlks;
   st_link  *lk;
 
-  while(lks != NULL) {
+  while(lks) {
     lk = SG_HEAD(lks);
     ATunprotect(&(lk->tree));
     curlks = lks;
@@ -249,33 +249,43 @@ void SG_DeleteStack(stack *st)
 
 ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
 {
-  stack *st2;
+  stack *st0;
 
   while(sts) {
-    st2 = SG_HEAD(sts);
+    st0 = SG_HEAD(sts);
     sts = SG_TAIL(sts);
-    if(st1 == st2) return ATtrue;
-    if(deep && SG_SubStack(st1, st2)) {
+    if(st1 == st0) return ATtrue;
+    if(deep && SG_SubStack(st1, st0, ATempty)) {
       return ATtrue;
     }
   }
   return ATfalse;
 }
 
-ATbool SG_SubStack(stack *st1, stack *st0)
+ATbool SG_SubStack(stack *st1, stack *st0, ATermList visited)
 {
   st_link *l;
   st_links *ls;
+  ATerm    st0trm;
 
-  if(st0 == NULL || st1 == NULL) return ATfalse;
-  if(st1 == st0) {
+  if(!st0 || !st1)
+    return ATfalse;
+  if(st1 == st0)
     return ATtrue;
+
+  st0trm = (ATerm) ATmakeInt((int) st0);
+  if(ATindexOf(visited, st0trm, 0) != -1) {
+/*
+    ATfprintf(stderr, "Cyclic stack!\n", st0trm, st0);
+ */
+    return ATfalse;
   }
+  visited = ATinsert(visited, st0trm);
 
   ls = SG_ST_LINKS(st0);
-  for (; ls != NULL; ls = SG_TAIL(ls)) {
+  for (; ls; ls = SG_TAIL(ls)) {
     l = SG_HEAD(ls);
-    if (SG_SubStack(st1, SG_LK_STACK(l))) {
+    if (SG_SubStack(st1, SG_LK_STACK(l), visited)) {
       return ATtrue;
     }
   }
@@ -289,8 +299,9 @@ ATbool SG_SubStack(stack *st1, stack *st0)
 
 stack *SG_FindStack(state s, stacks *sts)
 {
-  for (; sts != NULL; sts = SG_TAIL(sts))
-    if(SG_ST_STATE(SG_HEAD(sts)) == s) return SG_HEAD(sts);
+  for (; sts; sts = SG_TAIL(sts))
+    if(SG_ST_STATE(SG_HEAD(sts)) == s)
+      return SG_HEAD(sts);
   return NULL;
 }
 
@@ -301,8 +312,9 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
 {
   st_links *ls = NULL;
 
-  for (ls = SG_ST_LINKS(st0); ls != NULL; ls = SG_TAIL(ls))
-    if(SG_LK_STACK(SG_HEAD(ls)) == st1) return SG_HEAD(ls);
+  for (ls = SG_ST_LINKS(st0); ls; ls = SG_TAIL(ls))
+    if(SG_LK_STACK(SG_HEAD(ls)) == st1)
+      return SG_HEAD(ls);
   return NULL;
 }
 
@@ -333,7 +345,7 @@ void SG_MarkLinkUnrejected(st_link *l)
 {
   SG_LK_REJECTED(l) = ATfalse;
 /*
-  ATfprintf(stderr, "Link state %d ==> state %d rejected\n",
+  ATfprintf(stderr, "Link state %d --> state %d rejected\n",
            SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
 */
 }
@@ -342,7 +354,7 @@ void SG_MarkLinkRejected(st_link *l)
 {
   SG_LK_REJECTED(l) = ATtrue;
 /*
-  ATfprintf(stderr, "Link state %d ==> state %d rejected\n",
+  ATfprintf(stderr, "Link state %d --> state %d rejected\n",
            SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
 */
 }
@@ -359,7 +371,7 @@ ATbool SG_SomeRejected(stack *st)
   st_link *l;
   int count = 0;
 
-  for (; ls != NULL; ls = SG_TAIL(ls)) {
+  for (; ls; ls = SG_TAIL(ls)) {
     l = SG_HEAD(ls);
     if(SG_LK_REJECTED(l)) {
        return ATtrue;
@@ -380,7 +392,7 @@ ATbool SG_Rejected(stack *st)
   st_links *ls;
 
   if (!(ls = SG_ST_LINKS(st))) return ATfalse;
-  for (; ls != NULL; ls = SG_TAIL(ls)) {
+  for (; ls; ls = SG_TAIL(ls)) {
     if(SG_LK_REJECTED(SG_HEAD(ls))) {
       return ATtrue;
     }
@@ -402,7 +414,7 @@ ATbool SG_DeeplyRejected(stack *st)
   if (!(ls = SG_ST_LINKS(st)))	/*  No links, so no unrejected ones too  */
     return ATtrue;
 
-  for (; ls != NULL; ls = SG_TAIL(ls)) {
+  for (; ls; ls = SG_TAIL(ls)) {
     if(!SG_ST_REJECTED(SG_LK_STACK(SG_HEAD(ls)))) {
       return ATfalse;		/*  Found an unrejected direct substack  */
     }

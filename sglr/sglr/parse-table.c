@@ -81,7 +81,7 @@ state SG_LookupGoto(parse_table *pt, state s, int token)
 
   val = ATtableGet(pt->gotos, (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
                                                   (ATerm) ATmakeInt(token)));
-  retstate = (val == NULL)?-1:ATgetInt((ATermInt) val);
+  retstate = (!val)?-1:ATgetInt((ATermInt) val);
 
   if (SG_DEBUG) ATfprintf(SGlog(), "Goto(%d,%d) == %d\n", s, token, retstate);
 
@@ -344,7 +344,7 @@ AFun  SG_GtrPrioAFun(void)
 {
   static AFun fun = (AFun) NULL;
 
-  if(fun == (AFun) NULL) {
+  if(!fun) {
     fun = ATmakeAFun("gtr-prio", 2, ATfalse);
     ATprotectAFun(fun);
   }
@@ -355,7 +355,7 @@ AFun  SG_LeftPrioAFun(void)
 {
   static AFun fun = (AFun) NULL;
 
-  if(fun == (AFun) NULL) {
+  if(!fun) {
     fun = ATmakeAFun("left-prio", 2, ATfalse);
     ATprotectAFun(fun);
   }
@@ -366,7 +366,7 @@ AFun  SG_RightPrioAFun(void)
 {
   static AFun fun = (AFun) NULL;
 
-  if(fun == (AFun) NULL) {
+  if(!fun) {
     fun = ATmakeAFun("right-prio", 2, ATfalse);
     ATprotectAFun(fun);
   }
@@ -386,11 +386,11 @@ void SG_AddPTPriorities(ATermList prios, parse_table *pt)
   for (; !ATisEmpty(prios); prios = ATgetNext(prios)) {
     prio = ATgetFirst(prios);
     fun = ATgetAFun(prio);
-    if(fun == SG_GtrPrioAFun()) {
+    if(ATisEqual(fun, SG_GtrPrioAFun())) {
       ptype = P_GTR;
-    } else if(fun == SG_LeftPrioAFun()) {
+    } else if(ATisEqual(fun, SG_LeftPrioAFun())) {
       ptype = P_LEFT;
-    } else if(fun == SG_RightPrioAFun()) {
+    } else if(ATisEqual(fun, SG_RightPrioAFun())) {
       ptype = P_RIGHT;
     } else {
       ptype = P_IGNORE;
@@ -403,7 +403,7 @@ void SG_AddPTPriorities(ATermList prios, parse_table *pt)
       pr_num2 = (ATermInt) ATelementAt(args, 1);
       switch(ptype) {
         case P_GTR:
-          if(pr_num1 == pr_num2)
+          if(ATisEqual(pr_num1, pr_num2))
             break;
           if(!(prev = (ATermList)ATtableGet(pt->priorities, (ATerm)pr_num1))) {
             ATtablePut(pt->priorities, (ATerm) pr_num1,

@@ -43,12 +43,12 @@ char *ReadFile(char *fnam, size_t *size)
   FILE *fd;
 
   *size = FileSize(fnam);
-  if((fd = fopen(fnam, "r")) == NULL) {
+  if(!(fd = fopen(fnam, "r"))) {
     fprintf(stderr, "could not fopen() %s\n", fnam);
     *size = 0;
     return(NULL);
   }
-  if((buf = (char *)malloc(*size + 1)) == NULL ) {
+  if(!(buf = (char *)malloc(*size + 1))) {
     fprintf(stderr, "could not allocate %i bytes for %s\n", *size + 1, fnam);
     fclose(fd);
     *size = 0;
@@ -74,7 +74,7 @@ void WriteFile(char *fnam, ATerm tree)
     return;
   }
 
-  if((fd = fopen(fnam, "w")) == NULL) {
+  if(!(fd = fopen(fnam, "w"))) {
     fprintf(stderr, "could not fopen() %s\n", fnam);
   }
   else {
@@ -89,7 +89,7 @@ void rec_ack_event(int cid, ATerm t) {
   size_t size;
 
   if(ATmatch(t,"open-language(<str>,<str>)",NULL,NULL)) { 
-    if((buf = ReadFile(input_file_name,&size)) == NULL)
+    if(!(buf = ReadFile(input_file_name,&size)))
       exit(1);
 
     ATBwriteTerm(cid,

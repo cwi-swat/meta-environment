@@ -230,9 +230,9 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 {
   FILE *dot;
 
-  if (strcmp(file, "") == 0)
+  if (!file || !strcmp(file, ""))
     file = "parse.dot";
-  if ((dot = fopen(file, "w")) == NULL) {
+  if (!(dot = fopen(file, "w"))) {
     ATfprintf(stderr, "%s: cannot create dotfile %s\n", prg, file);
     exit(1);
   }
@@ -286,7 +286,9 @@ void SG_StackToDot(FILE *dot, stack *st)
 {
   st_links *ls;
 
-  if(st == NULL) return;
+  if(!st)
+    return;
+
   ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
             (int) st, SG_ST_STATE(st));
   ls = SG_ST_LINKS(st);
@@ -316,8 +318,7 @@ char *SG_StackDotOut(char *s)
 {
   static char *sdo = NULL;
 
-  if(s != NULL) sdo = s;
-  return sdo;
+  return s?(sdo=s):sdo;
 }
 
 void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
@@ -326,7 +327,7 @@ void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
 
   sprintf(stk_file, "%s%d.dot", SG_StackDotOut(NULL), sg_tokens_read);
 
-  if ((SG_StackDotFP = fopen(stk_file, "w")) == NULL) {
+  if (!(SG_StackDotFP = fopen(stk_file, "w"))) {
     ATfprintf(stderr, "Cannot create stack dotfile %s\n", stk_file);
     return;
   }

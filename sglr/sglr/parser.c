@@ -49,7 +49,6 @@ size_t line;           /* current line */
 size_t col;            /* current column */
 size_t sg_tokens_read; /* number of tokens read */
 size_t sg_numtokens;   /* number of tokens in input file */
-#define eof 0
 
 /*
    By definition we say that the start of the input is at
@@ -84,7 +83,7 @@ int SG_NexToken(int(*get_next_char)(void))
   switch(c) {
     case '\n' : line++; col = 0         ; break;
     case '\t' : col = (col / 8 + 1) * 8 ; break;
-    case EOF  : c = eof                 ; break;
+    case EOF  :                         ; break;
     default   : col++                   ; break;
   }
   return c;
@@ -107,7 +106,7 @@ shift_pair *SG_NewShiftPair(stack *st, state s, shift_pair *sp0)
 {
   shift_pair *sp1;
 
-  if((sp1 = SG_Malloc(sizeof(shift_pair))) != NULL) {
+  if((sp1 = SG_Malloc(sizeof(shift_pair)))) {
     sp1->state = s;
     sp1->stack = st;
     sp1->tail  = sp0;
@@ -147,7 +146,7 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
 {
   path *p;
 
-  if((p = SG_Malloc(sizeof(path))) != NULL) {
+  if((p = SG_Malloc(sizeof(path)))) {
     p->stack = st;
     p->args  = sons;
     p->next  = ps;
@@ -187,14 +186,14 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
     ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %x)\n",
               SG_ST_STATE(st), i, link_seen, (int) sons);
 */
-  if (st == NULL)
+  if (!st)
     return paths;
 
   /* Yes, we have a stack... */
   if (i == 0 && link_seen) {
     paths = SG_NewPath(st, sons, paths);
   } else if (i > 0) {
-    for (ls = SG_ST_LINKS(st); ls != NULL; ls = SG_TAIL(ls)) {
+    for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
       l1 = SG_HEAD(ls);
       newsons = ATinsert(sons?sons:ATempty, SG_LK_TREE(l1));
       paths = SG_FindPaths(SG_LK_STACK(l1), i - 1, l0,
@@ -269,6 +268,7 @@ void  SG_ParserCleanup(void)
 ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
 {
   ATerm result;
+  ATbool E_O_F = ATfalse;
 
   table = ptable;
 
@@ -277,6 +277,11 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
   do {
     if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, sg_tokens_read);
     current_token = SG_NexToken(get_next_char);
+/* THIS IS A HACK!  FIX EOF HANDLING! */
+    if(current_token == EOF) {
+      E_O_F = ATtrue;
+      current_token = '\0';
+    }
     if(SG_DEBUG) {
       if(isprint(current_token))
         ATfprintf(SGlog(), "Token: '%c'\n", current_token);
@@ -285,7 +290,7 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
     }
     SG_ParseChar();
     SG_Shifter();
-  } while (current_token != eof && active_stacks != NULL);
+  } while (!E_O_F && active_stacks);
 
   if(SG_VERBOSE)
     ATfprintf(stderr, "parsing finished, read %d tokens\n", sg_tokens_read-1);
@@ -334,7 +339,7 @@ char *SG_ApplSort(ATerm t)
     return SG_ProdSort(prod);
   }
 
-  if(ATgetAFun((ATermAppl) t) == SG_AmbAFun())
+  if(ATisEqual(ATgetAFun((ATermAppl) t), SG_AmbAFun()))
     return("[multiple sorts]"); 
 
   return "[unknown sort]";
@@ -356,7 +361,7 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
   for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
     tree = ATgetFirst(trees);
     sort = SG_ApplSort(tree);
-    if(sort != NULL) {
+    if(sort) {
       if(!strcmp(desiredsort, sort)) {
         bonsai = ATinsert(bonsai, tree);
       }
@@ -399,21 +404,20 @@ ATerm SG_Result(char *sort)
   ATbool    was_abbrev;
   ATermList cycle;
 
-  if (accepting_stack != NULL) {
+  if (accepting_stack) {
     ATerm forest;
 
     forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-// ATfprintf(stderr, "Unexpanded Forest: %t\n", forest);
-
     /*  We _must_ expand at least the top node to get the top sort  */
     was_abbrev = SG_ABBREV;
     SG_ABBREV_OFF();
-    forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest, ATfalse);
+    forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest,
+                                       ATfalse, ATtrue);
     if(was_abbrev) SG_ABBREV_ON();
 
     /*  Select only the desired start symbols when so requested  */
-    if (sort!=NULL && !SG_ABBREV && (forest = SG_Prune(forest, sort))==NULL)
+    if (sort && !SG_ABBREV && !(forest = SG_Prune(forest, sort)))
         return ATmake("parse-error([character(<int>), line(<int>),"
                       "col(<int>), char(<int>)])",
                       current_token, line, col, sg_tokens_read);
@@ -475,8 +479,8 @@ void SG_ParseChar(void)
   ATfprintf(stderr, "p_c: %d\n", current_token);
 */
 
-  while(for_actor != NULL  || for_actor_delayed != NULL) {
-    if(for_actor != NULL) {
+  while(for_actor || for_actor_delayed) {
+    if(for_actor) {
       st = SG_HEAD(for_actor);
       for_actor = SG_TAIL(for_actor);
     } else {
@@ -514,7 +518,7 @@ void SG_Actor(stack *st)
 /*
   ATfprintf(stderr, "SG_Actor: actions[%d,%d] = %t\n", SG_ST_STATE(st), current_token, as);
 */
-  for(; as != NULL && !ATisEmpty(as); as = ATgetNext(as)) {
+  for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
     a = ATgetFirst(as);
     switch(SG_ActionKind(a)) {
       case SHIFT:
@@ -552,9 +556,8 @@ void SG_DoReductions(stack *st, action a)
 
   prod = SG_A_PROD(a);
 
-  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue,
-                              ATempty, NULL);
-      ps != NULL; ps = SG_P_NEXT(ps)) {
+  for(ps=fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty, NULL);
+      ps; ps = SG_P_NEXT(ps)) {
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_A_REJECT(a), st);
@@ -600,7 +603,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   if(SG_DEBUG) ATfprintf(SGlog(), "Reducing %t\n", SG_TermYield(t));
 
   /*  A stack with state s already exists?  */
-  if((st1 = SG_FindStack(s, active_stacks)) == NULL) {
+  if(!(st1 = SG_FindStack(s, active_stacks))) {
     /*  No existing stack for state s: new stack  */
     st1 = SG_NewStack(s, stpt);
     nl  = SG_AddLink(st1, st0, t);
@@ -616,7 +619,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
   /*  A stack with state s already exists.  */
   /*  Ambiguity?  */
-  if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
+  if((nl = SG_FindDirectLink(st1, st0))) {
     if(SG_DEBUG)
       ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d%s\n",
                           SG_ST_STATE(st0), SG_ST_STATE(st1),
@@ -677,7 +680,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       ATfprintf(stderr, "Stack 1 (%x):\n", st1); SG_ShowStack(st1, 1);
 #endif
     }
-    while(sts != NULL) {
+    while(sts) {
       actions as;
       action a;
 
@@ -723,9 +726,8 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 
   prod = SG_A_PROD(a);
 
-  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse,
-                              ATempty, NULL);
-      ps != NULL; ps = SG_P_NEXT(ps)) {
+  for(ps=fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse, ATempty, NULL);
+      ps; ps = SG_P_NEXT(ps)) {
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_A_REJECT(a), st);
@@ -753,13 +755,13 @@ void SG_Shifter(void)
 
   t = SG_LookupProduction(table, current_token);
 
-  for(shift_pair = for_shifter; shift_pair != NULL;
+  for(shift_pair = for_shifter; shift_pair;
       shift_pair = SG_SP_NEXT(shift_pair)) {
     s = SG_SP_STATE(shift_pair);
     st0 = SG_SP_STACK(shift_pair);
 
     if(!SG_Rejected(st0)) {
-      if((st1 = SG_FindStack(s, new_active_stacks)) == NULL) {
+      if(!(st1 = SG_FindStack(s, new_active_stacks))) {
         st1 = SG_NewStack(s, NULL);
         new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
@@ -773,7 +775,7 @@ void SG_Shifter(void)
   if(SG_GC)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
 
-  if((active_stacks = new_active_stacks) == NULL && SG_DEBUG)
+  if(!(active_stacks = new_active_stacks) && SG_DEBUG)
       ATfprintf(SGlog(), "Shifter: no stacks left\n");
 } /*  Shifter  */
 
@@ -805,45 +807,39 @@ void SG_AddStackHist(stack *parent, stack *kid)
 
 void SG_PropagateReject(stack *st)
 {
-  ATermList amb, trms, idxs, oldidxs, newtrms = ATempty;
-  ATerm     compost, t, i;
-  ATermInt  cmpstid;
+  ATermList ambs, newambs = ATempty;
+  ATerm     ambindex = NULL, compost, t;
   int       oldlen, newlen;
 
-  if(st == NULL)
+  if(!st)
     return;
 
-  if(SG_TAIL(SG_ST_LINKS(st))!=NULL)
+  if(SG_TAIL(SG_ST_LINKS(st)))
     ATfprintf(stderr, "PropagateReject: warning -- stack has >1 links\n");
 
   compost = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(st)));
-  cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
-  amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
-  if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
+  if((ambindex = SG_AmbTable(SG_AMBTBL_LOOKUP_INDEX, compost, NULL))) {
+    ambs = (ATermList) SG_AmbTable(SG_AMBTBL_LOOKUP_CLUSTER, ambindex, NULL);
+  }
+
+  if(ambindex && !ATisEmpty(ambs)) { /*  Ambiguity encountered  */
     if (SG_DEBUG)
       ATfprintf(SGlog(), "Reject: resolving an ambiguity cluster...\n");
-    compost = ATremoveAnnotation(compost, SG_ApplLabel());
-    trms = (ATermList) ATgetFirst(amb);
-    oldlen = ATgetLength(trms);
-    idxs = oldidxs = (ATermList) ATelementAt(amb, 1);
-    while(trms && !ATisEmpty(trms)) {
-      t = ATgetFirst(trms); trms = ATgetNext(trms);
-      i = ATgetFirst(idxs); idxs = ATgetNext(idxs);
-      if(ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
+    oldlen = ATgetLength(ambs);
+    for(; !ATisEmpty(ambs); ambs=ATgetNext(ambs)) {
+      t = ATgetFirst(ambs);
+      if(ATisEqual(compost, t)) {    /*  Ditch term from ambiguity  */
         if (SG_DEBUG)
           ATfprintf(SGlog(), "Removed from ambiguity cluster: %t\n", t);
        } else {
         if (SG_DEBUG)
           ATfprintf(SGlog(), "Keeping in ambiguity cluster: %t\n", t);
-        newtrms = ATinsert(newtrms, t);
+        newambs = ATinsert(newambs, t);
       }
     }
-    /*  Update the full ambiguity cluster  */
-    amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
-    for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
-      SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
-    }
-    newlen = ATgetLength(newtrms);
+    /*  Update the ambiguity cluster  */
+    SG_AmbTable(SG_AMBTBL_UPDATE_CLUSTER, ambindex, (ATerm) newambs);
+    newlen = ATgetLength(newambs);
 /*
   An ambiguity resolved -- nice, but when yielding (which is driven
   by the maximum of possible ambs -- we might need to substitute
@@ -890,7 +886,7 @@ void SG_PropagateUnreject(stack *st)
   ATermInt  annot;
 
 ATfprintf(stderr, "unrejecting %x\n", st);
-  while(st != NULL) {
+  while(st) {
     annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(SG_HEAD(SG_ST_LINKS(st))),
                                        SG_ApplLabel());
     l = SG_AmbTable(SG_AMBTBL_LOOKUP, annot, NULL);
@@ -913,7 +909,7 @@ ATfprintf(stderr, "unreject: %x contains an amb link: %t\n", st, l);
 
 void SG_ShowLinks(st_links *lks, int depth)
 {
-  for (; lks != NULL; lks = SG_TAIL(lks)) {
+  for (; lks; lks = SG_TAIL(lks)) {
     fprintf(stderr, "%*.*s--%x-->\n", 2*depth, 2*depth, "", (int)SG_HEAD(lks));
     SG_ShowStack(SG_LK_STACK(HEAD(lks)), depth+1);
   }
@@ -921,7 +917,9 @@ void SG_ShowLinks(st_links *lks, int depth)
 
 void SG_ShowStack(stack *st, int depth)
 {
-  if (st == NULL) return;
+  if (!st)
+    return;
+
   fprintf(stderr, "%*.*s%x%s %d\n", 2*depth, 2*depth, "", (int)st,
           SG_ST_REJECTED(st)?"R":"", SG_ST_STATE(st));
   SG_ShowLinks(SG_ST_LINKS(st), depth+1);
@@ -929,8 +927,10 @@ void SG_ShowStack(stack *st, int depth)
 
 void SG_ShowStacks(stacks *sts)
 {
-  if(sts == NULL) return;
-  while(sts != NULL) {
+  if (!st)
+    return;
+
+  while(sts) {
     SG_ShowStack(SG_HEAD(sts),0);
     sts = SG_TAIL(sts);
   }
@@ -940,7 +940,7 @@ void SG_ShowStackOffspring(stack *st)
 {
   int  kididx;
 
-  if(st == NULL || st->kidcount == 0)
+  if(!st || st->kidcount == 0)
     return;
 
   ATfprintf(stderr, "State %d%s created...\n",
@@ -956,7 +956,7 @@ void SG_ShowStackOffspring(stack *st)
 
 void SG_ShowStackAncestors(stack *st)
 {
-  while(st != NULL && st->parent != NULL) {
+  while(st && st->parent) {
     ATfprintf(stderr, "\t%d%s induced %d%s\n",
                      SG_ST_STATE(st->parent), SG_Rejected(st->parent)?"R":"",
                      SG_ST_STATE(st), SG_Rejected(st)?"R":"");
@@ -972,7 +972,7 @@ void SG_ShowActiveStackStates(signed int c)
 
   level = (level>1)?(level+c):0;
   fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
-  while(astks != NULL) {
+  while(astks) {
     stk   =  SG_HEAD(astks);
     astks =  SG_TAIL(astks);
     ATfprintf(stderr, "%x%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
@@ -987,14 +987,14 @@ void SG_ShowStackRejects(stack *st, int depth)
 
   if(depth > 666) return;
 
-  for (; ls != NULL; ls = SG_TAIL(ls)) {
+  for (; ls; ls = SG_TAIL(ls)) {
     l = SG_HEAD(ls);
 /*
-    ATfprintf(stderr, "%*.*s%s%x: state %d ==> state %d\n", 2*depth, 2*depth,
+    ATfprintf(stderr, "%*.*s%s%x: state %d --> state %d\n", 2*depth, 2*depth,
               "", SG_LK_REJECTED(l)?"~":" ", (int) l, SG_ST_STATE(st),
               SG_ST_STATE(SG_LK_STACK(l)));
  */
-    ATfprintf(stderr, "%*.*s%x: state %d ==> state %d\n", 2*depth, 2*depth,
+    ATfprintf(stderr, "%*.*s%x: state %d --> state %d\n", 2*depth, 2*depth,
               "", (int) l, SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
     SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
   }
@@ -1005,7 +1005,7 @@ void SG_ShowActiveStackLinks(stacks *astks)
 {
   stack  *stk;
 
-  while(astks != NULL) {
+  while(astks) {
     stk   =  SG_HEAD(astks);
     astks =  SG_TAIL(astks);
     SG_ShowStackRejects(stk,2);
@@ -1018,8 +1018,7 @@ void SG_ShowShiftPairs()
   stack *st;
 
   ATfprintf(stderr, "Shifters:\n");
-  for(sp = for_shifter; sp != NULL;
-      sp = SG_SP_NEXT(sp)) {
+  for(sp = for_shifter; sp; sp = SG_SP_NEXT(sp)) {
     ATfprintf(stderr, "%d: ", SG_SP_STATE(sp));
     st = SG_SP_STACK(sp);
     SG_ShowStackAncestors(st);
