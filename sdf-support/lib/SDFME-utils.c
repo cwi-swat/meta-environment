@@ -199,7 +199,10 @@ SDF_Layout SDF_makeLayoutEmpty()
   return (SDF_Layout)PT_makeTermFromTree(PT_makeTreeLayoutEmpty());
 }
 
-/*{{{  ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName) */
+SDF_Layout SDF_makeLayoutSpace()
+{
+  return (SDF_Layout)PT_makeTermFromTree(PT_makeTreeLayoutFromString(" "));
+}
 
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
 {
@@ -208,4 +211,15 @@ ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
   return ATmake("<str>", lex);
 }
 
-/*}}}  */
+SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
+{
+  SDF_Layout s = SDF_makeLayoutSpace();
+  SDF_ImpSectionList list = SDF_getModuleList(module);
+  SDF_ImportList ilist = SDF_makeImportListSingle(import);
+  SDF_Imports imports = SDF_makeImportsDefault(ilist);
+  SDF_ImpSection section = SDF_makeImpSectionImports(s, imports);
+  
+  list = SDF_makeImpSectionListMany(section, s, list);
+
+  return SDF_setModuleList(module, list);
+}
