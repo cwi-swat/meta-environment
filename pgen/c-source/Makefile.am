@@ -29,7 +29,7 @@ BUILT_SOURCES		= init.c
 bin_PROGRAMS		= ParseTable-Generator
 
 ParseTable_Generator_SOURCES		= init.c
-ParseTable_Generator_LDADD		= libParseTable-Generator.a ${LDLIBS}
+ParseTable_Generator_LDADD		= libParseTable-Generator.a ${LDLIBS} ${SOCKLIBS}
 
 libParseTable_Generator_a_SOURCES	= $(SPEC_SRCS)
 libParseTable_Generator_a_LIBADD	= init.o
