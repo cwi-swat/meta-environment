@@ -69,6 +69,15 @@ const char *getFileName()
 
 /*}}}  */
 
+/*{{{  void sendToHive(int write_to_hive_fd, TE_Event event) */
+
+void sendToHive(int write_to_hive_fd, TE_Event event)
+{
+  ATBwriteTerm(write_to_hive_fd, TE_EventToTerm(event));
+}
+
+/*}}}  */
+
 /*{{{  static void getContents(int write_to_hive_fd) */
 
 static void getContents(int write_to_hive_fd)
@@ -180,15 +189,6 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetFocusAtLocation(action)) {
     editor->setFocusAtLocation(write_to_editor_fd, action);
   }
-}
-
-/*}}}  */
-
-/*{{{  void sendToHive(int write_to_hive_fd, TE_Event event) */
-
-void sendToHive(int write_to_hive_fd, TE_Event event)
-{
-  ATBwriteTerm(write_to_hive_fd, TE_EventToTerm(event));
 }
 
 /*}}}  */

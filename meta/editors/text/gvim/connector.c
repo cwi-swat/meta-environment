@@ -214,11 +214,12 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void rereadContents(int write_to_editor_fd) */
+/*{{{  static void writeContents(int write_to_editor_fd) */
 
 static void writeContents(int write_to_editor_fd)
 {
-  sendToVim(":update");
+  sendToVim(":call WriteContents()");
+  protocol_expect(read_from_editor_fd, HANDSHAKE);
 }
 
 /*}}}  */
