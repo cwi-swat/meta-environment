@@ -15,6 +15,7 @@ ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
                                                 ASF_CondEquationList l2);
 ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList l1,
                                                ASF_CondEquationList l2);
+ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l);
 
 int ASF_getConditionListLength(ASF_ConditionList list);
 int ASF_getCHARListLength(ASF_CHARList list);

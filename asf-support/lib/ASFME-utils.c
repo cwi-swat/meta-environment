@@ -149,6 +149,29 @@ ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList cel1,
 }
 
 /*}}}  */
+/*{{{  ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l) */
+
+ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l)
+{
+  ASF_CondEquationList alleqs = ASF_makeCondEquationListEmpty();
+
+  for(; !ATisEmpty(l); l = ATgetNext(l)) {
+    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(ATgetFirst(l));
+    PT_Tree  tree = PT_getParseTreeTree(parseTree);
+    ASF_CondEquationList list;
+    ASF_Equations equations;
+
+    equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
+
+    list = ASF_getEquationsList(equations);
+    alleqs = ASF_concatCondEquationList(list,alleqs);
+  }
+
+  return alleqs;
+}
+
+/*}}}  */
+
 /*{{{  ASF_Layout ASF_makeLayoutEmpty() */
 
 ASF_Layout ASF_makeLayoutEmpty()
