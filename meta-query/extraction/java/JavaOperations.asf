@@ -1,0 +1,22 @@
+equations
+
+[identifier2string]
+  id2str(identifier(#Chars)) = strcon(""" #Chars """)
+
+[ids2string-0]
+  ids2str() = strcon(""" """)
+
+[ids2string-1]
+  ids2str(#Identifier) = id2str(#Identifier)
+
+[default-ids2string-2]
+  #String1 = id2str(#Identifier),
+  #String2 = ids2str(#Identifiers)
+  ===>
+  ids2str(#Identifier.#Identifiers) = #String1 || "." || #String2
+
+[name2string]
+  #String = ids2str(#Identifiersp)
+  ===>
+  name2str(#Identifiersp) = #String
+

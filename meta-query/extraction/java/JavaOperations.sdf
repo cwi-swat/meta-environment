@@ -1,0 +1,19 @@
+module JavaOperations
+
+imports Java
+imports basic/Strings
+
+exports
+  context-free syntax
+    id2str(Identifier) -> String
+    ids2str({Identifier "."}*) -> String
+    name2str(Name) -> String
+
+hiddens
+  variables
+    "#Chars" -> CHAR*
+    "#Name" -> Name
+    "#String"[0-9]* -> String
+    "#Identifier"[0-9]* -> Identifier
+    "#Identifiers"[0-9]* -> {Identifier "."}*
+    "#Identifiersp"[0-9]* -> {Identifier "."}+

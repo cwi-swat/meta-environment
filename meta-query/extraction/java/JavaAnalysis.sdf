@@ -1,0 +1,67 @@
+module JavaAnalysis
+
+imports RscriptCalculator
+imports JavaOperations
+imports MyPosInfo[ClassBody]
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[MethodBody]
+imports MyPosInfo[Identifier]
+imports MyPosInfo[PackageDeclaration]
+
+exports
+  context-free syntax
+    extractRelations(CompilationUnit) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractRelations(CompilationUnit, RSTORE)
+	-> RSTORE {traversal(accu, top-down, continue)}
+
+    extractRelations(MethodDeclaration, RSTORE)
+	-> RSTORE {traversal(accu, top-down, continue)}
+
+    extractRelations(PackageDeclaration, RSTORE)
+        -> RSTORE {traversal(accu, top-down, continue)}
+
+    extractRelations(TypeDeclaration, RSTORE) 
+        -> RSTORE {traversal(accu, top-down, continue)}
+
+hiddens
+  context-free syntax
+    extractClassDetails(ClassBody, RSTORE, Area)
+        -> RSTORE {traversal(accu, top-down, continue)}
+
+    extractClassDetails(VariableDeclarator, RSTORE, Area)
+        -> RSTORE {traversal(accu, top-down, continue)}
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&ClassBody" -> ClassBody
+    "&ClassId" -> Area
+    "&CompilationUnit" -> CompilationUnit
+    "&ExtendsInterfaces" -> ExtendsInterfaces?
+    "&FileName" -> String
+    "&FormalParameters" -> {FormalParameter ","}*
+    "&Identifier" -> Identifier
+    "&ImportDeclarations" -> ImportDeclaration*
+    "&Initializer" -> VariableInitializer 
+    "&InterfaceBody" -> InterfaceBody
+    "&InterfaceId" -> Area
+    "&Interfaces" -> Interfaces?
+    "&LineCount" -> Integer
+    "&MethodBody" -> MethodBody
+    "&MethodDeclaration" -> MethodDeclaration
+    "&MethodDeclarator" -> MethodDeclarator
+    "&MethodHeader" -> MethodHeader
+    "&MethodRes" -> MethodRes
+    "&Modifiers" -> Modifier*
+    "&Name" -> Name
+    "&PackageId" -> Area
+    "&PackageDeclaration" -> PackageDeclaration
+    "&Rstore"[0-9]* -> RSTORE
+    "&Super" -> Super?
+    "&Throws" -> Throws?
+    "&Tuple"[0-9]* -> Elem # Elem
+    "&TypeDeclaration" -> TypeDeclaration
+    "&TypeDeclarations" -> TypeDeclaration*

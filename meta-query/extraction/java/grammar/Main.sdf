@@ -1,0 +1,10 @@
+module Main
+imports Java
+
+exports
+  sorts CompilationUnits
+
+exports
+  context-free syntax
+    CompilationUnit* -> CompilationUnits {cons("CompilationUnits")}
+

@@ -1,0 +1,70 @@
+equations
+
+[extractRelations-start]
+  extractRelations(&CompilationUnit) 
+  = extractRelations(&CompilationUnit, rstore())
+
+[extract-class]
+  &TypeDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
+  &ClassId = get-area(&Identifier),
+  &Tuple = <&ClassId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(CLASSES, &Tuple, &Rstore1),
+  &Area = get-area(&ClassBody),
+  &LineCount = get-endline(&Area) - get-beginline(&Area),
+  &Tuple2 = <id2str(&Identifier), &LineCount>,
+  &Rstore3 = add-tuple(CLASS_LINE_COUNTS, &Tuple2, &Rstore2),
+  &Rstore4 = extractClassDetails(&ClassBody, &Rstore3, &ClassId)
+  ===>
+  extractRelations(&TypeDeclaration, &Rstore1) = &Rstore4
+
+[extract-compilationunit]
+  &Area = get-area(&CompilationUnit),
+  &FileName = get-filename(&Area),
+  &LineCount = get-endline(&Area),
+  &Tuple = <&FileName, &LineCount>, 
+  &Rstore2 = add-tuple(FILE_LINE_COUNTS, &Tuple, &Rstore1)
+  ===>
+  extractRelations(&CompilationUnit, &Rstore1) = &Rstore2
+
+[extract-method]
+  &MethodDeclaration = &MethodHeader &MethodBody,
+  &MethodHeader = &Modifiers &MethodRes &MethodDeclarator &Throws,
+  &MethodDeclarator = &Identifier ( &FormalParameters ),
+  &Area = get-area(&MethodBody),
+  &LineCount = get-endline(&Area) - get-beginline(&Area),
+  &Tuple = <id2str(&Identifier), &LineCount>,
+  &Rstore2 = add-tuple(METHOD_LINE_COUNTS, &Tuple, &Rstore1)
+  ===>
+  extractRelations(&MethodDeclaration, &Rstore1) = &Rstore2
+
+[extract-package]
+  &PackageDeclaration = package &Name ;,
+  &PackageId = get-area(&PackageDeclaration),
+  &Tuple = <&PackageId, name2str(&Name)>,
+  &Rstore2 = add-tuple(PACKAGES, &Tuple, &Rstore1)
+  ===>
+  extractRelations(&PackageDeclaration, &Rstore1) = &Rstore2
+
+[extract-interface]
+  &TypeDeclaration = &Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody,
+  &InterfaceId = get-area(&Identifier),
+  &Tuple = <&InterfaceId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(INTERFACES, &Tuple, &Rstore1)
+  ===>
+  extractRelations(&TypeDeclaration, &Rstore1) = &Rstore2
+
+[extract-class-details-0]
+  &Tuple = <&ClassId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(VAR_DECLS, &Tuple, &Rstore1),
+  &Tuple2 = <&Tuple, get-area(&Identifier)>,
+  &Rstore3 = add-tuple(VAR_DECL_OCCURENCES, &Tuple2, &Rstore2)
+  ===>
+  extractClassDetails(&Identifier, &Rstore1, &ClassId) = &Rstore3
+
+[extract-class-details-1]
+  &Tuple = <&ClassId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(VAR_DECLS, &Tuple, &Rstore1),
+  &Tuple2 = <&Tuple, get-area(&Identifier)>,
+  &Rstore3 = add-tuple(VAR_DECL_OCCURENCES, &Tuple2, &Rstore2)
+  ===>
+  extractClassDetails(&Identifier = &Initializer, &Rstore1, &ClassId) = &Rstore3
