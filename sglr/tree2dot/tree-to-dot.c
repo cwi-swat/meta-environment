@@ -261,7 +261,7 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
   ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
             (int) st, SG_ST_STATE(st));
   ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
-  tree = SG_LK_TREE(l);
+  tree = (ATerm) SG_LK_TREE(l);
   t = SG_TreeType(tree);
   if(ATmatch(t, "<int>", &c)) {
     SG_PrintChar(dot, c);
@@ -270,11 +270,7 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
     SG_PrintSymbol(dot, t);
   }
   ATfprintf(dot, "\"");
-#if 0
-  if(SG_LK_REJECTED(l)) ATfprintf(dot, " style = dotted");
-#else
   if(SG_Rejected(st)) ATfprintf(dot, " style = dotted");
-#endif
   ATfprintf(dot, "];\n");
 }
 
@@ -412,10 +408,10 @@ void SG_TYAux(ATerm t)
   }
 }
 
-ATerm SG_TermYield(ATerm t)
+ATerm SG_TermYield(ATermAppl t)
 {
   SG_TYAuxBuf(TYA_INIT, 0);         /* Initialize (hidden) buffer */
-  SG_TYAux(t);                      /* Yield to (hidden) buffer   */
+  SG_TYAux((ATerm) t);              /* Yield to (hidden) buffer   */
                                     /* Collect & return buffer    */
   return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }

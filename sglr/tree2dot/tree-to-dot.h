@@ -11,7 +11,7 @@ void SG_LinksToDot(FILE *, stack *);
 
 FILE  *SG_StackDot(void);
 
-ATerm      SG_TermYield(ATerm);
+ATerm      SG_TermYield(ATermAppl);
 ATerm      SG_DotTermYield(ATerm);
 
 #endif  /* _TREE_TO_DOT_H_ */
