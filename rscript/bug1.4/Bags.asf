@@ -1,0 +1,13 @@
+equations
+
+
+%% --- equal(Bag1, Bag2)
+
+[eq-1]       equal({E, E*}, {E*1, E, E*2}) = equal({E*}, {E*1, E*2})
+
+[eq-2]       equal({E+}, {})               = false
+[eq-3]       equal({}, {E+})               = false
+[eq-4]       equal({}, {})                 = true
+[default-eq] 
+             equal({E+1}, {E+2})           = false
+
