@@ -11,7 +11,7 @@ ATerm rewrite(int cid, ATerm trm)
     PT_Tree tree = PT_getParseTreeTree((PT_ParseTree) trm);
     ATerm reduct = innermost(tree);
     PT_ParseTree asfix = toasfix(reduct);
-    return ATmake("snd-result(normalform(<term>))", (ATerm) asfix);
+    return ATmake("snd-value(normalform(<term>))", (ATerm) asfix);
 }
 
 ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
