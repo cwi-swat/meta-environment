@@ -11,5 +11,5 @@ EXTRA_DIST = program-check.m4 package
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $ < $@
+	cp $< $@
 
