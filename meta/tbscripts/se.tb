@@ -1,0 +1,15 @@
+tool se is {
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -arg -mx64M"
+}
+
+process SE is
+let
+  SE: se
+in 
+  rec-msg(get-se-id).
+  execute(se,SE?).
+  ( snd-msg(se-id(SE)).
+    rec-msg(get-se-id)
+  ) *
+  delta
+endlet

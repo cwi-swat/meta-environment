@@ -1,0 +1,16 @@
+tool anno is { 
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.AnnoTool"
+}
+
+process Anno is
+let
+  Anno: anno
+in 
+  rec-msg(get-anno-id).
+  execute(anno,Anno?).
+  ( snd-msg(anno-id(Anno)).
+    rec-msg(get-anno-id)
+  ) *
+  delta
+endlet
+
