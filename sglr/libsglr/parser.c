@@ -82,7 +82,7 @@ void    SG_Reducer(stack *st0, state s, label prodl,
                    int attr);
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-forest    SG_AmbiguousParse(tree t, ATerm ambtrak);
+static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak);
 tree      SG_ParseResult(char *path, char *sort);
 
 /*
@@ -1002,22 +1002,6 @@ static ERR_Location SG_CurrentPosInfo(char *fileName)
 */
 }
 
-/*
-static ATerm SG_ReverseAmbiguities(ATerm ambtrack)
-{
-  ATermList ambiguities;
-  int nrOfAmbs;
-
-  if (ATmatch(ambtrack, "ambiguities(<int>,[<list>])",
-	      &nrOfAmbs, &ambiguities)) {
-    ambiguities = ATreverse(ambiguities);
-    return ATmake("ambiguities(<int>,[<list>])", nrOfAmbs, ambiguities);
-  } 
-
-  return NULL;   
-}
-*/
-
 static ERR_Location SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
 {
   ERR_Feedback feedback = ERR_FeedbackFromTerm(ambtrack);
@@ -1078,11 +1062,11 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
   error = ERR_makeFeedbackError("Parse error", 
                                 ERR_makeSubjectListSingle(subject));
   return (forest)ERR_SummaryToTerm(
-                   ERR_makeSummaryFeedback("sglr", "unknown", 
+                   ERR_makeSummaryFeedback("sglr", path, 
 					   ERR_makeFeedbackListSingle(error)));
 }
 
-forest SG_AmbiguousParse(tree t, ATerm ambtrak)
+static forest SG_AmbiguousParse(char *path, tree t, ATerm ambtrak)
 {
   SG_ERROR_ON();
 
@@ -1093,12 +1077,12 @@ forest SG_AmbiguousParse(tree t, ATerm ambtrak)
 
   t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t, 
                          (ATerm) SG_GetATint(nrOfAmbs, 0));
-  ambiguityError = ERR_makeSummaryFeedback("sglr", "unknown", 
+  ambiguityError = ERR_makeSummaryFeedback("sglr", path, 
                      ERR_makeFeedbackListSingle(ambiguities));
  
   result = (ATerm)ATmakeAppl2(SG_AmbiguousTree_AFun, 
                               (ATerm)t, ERR_SummaryToTerm(ambiguityError));
-ATwarning("result = %t\n", result);
+
   return (forest)result;
 }
 
@@ -1185,7 +1169,7 @@ tree SG_ParseResult(char *path, char *sort)
               if (SG_ASFIX2ME) {
                 t = SG_ConvertA2ToA2ME(t);
               }
-              return SG_AmbiguousParse(t, ambtrak);
+              return SG_AmbiguousParse(path, t, ambtrak);
             }
           }
 
