@@ -6,11 +6,12 @@
 
 #include <MEPT-utils.h>
 #include <assert.h>
+#include <terms_dict.h>
 
 #define test_equal(msg,a,b) (assert(a == b && msg))
 
 void testCompare()
-{ 
+{
   
 
 }
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  init_terms_dict();
 
   testCompare();
 
