@@ -267,6 +267,9 @@ snd-do(Mdb, create-module-db).
   +
     rec-value(Mdb, parameterized-equations(ModName?, Params?, Equations?)) .
     snd-msg(parameterized-equations(ModName, Params, Equations))
+  +
+    rec-value(Mdb, no-equations) .
+    snd-msg(no-equations)
   )
 +
 /* Validate the parse table */

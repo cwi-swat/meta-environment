@@ -667,7 +667,6 @@ ATerm get_asf_tree(int cid, char *modulename)
 
 ATerm get_equations_for_module(int cid, ATerm atImport)
 {
-  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListEmpty();
   SDF_Import import = SDF_makeImportFromTerm(atImport);
 
   SDF_ModuleName moduleName = SDF_getImportModuleName(import);
@@ -679,39 +678,33 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
     ATerm eqsTerm = MDB_getEntryAsfTree(entry);
 
     if (!ATisEqual(eqsTerm, MDB_NONE)) {
-      PT_Tree eqsTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(eqsTerm));
-      ASF_Equations asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
-      if (ASF_isEquationsPresent(asfEqs)) {
-        asfEqsList = ASF_getEquationsList(asfEqs);
+      if (SDF_isImportRenamedModule(import)) {
+        SDF_Renamings renamings = SDF_getImportRenamings(import);
 
-        if (SDF_isImportRenamedModule(import)) {
-          SDF_Renamings renamings = SDF_getImportRenamings(import);
-
-          return ATmake("snd-value(renaming-equations(<term>,<term>))", 
-                        SDF_makeTermFromRenamings(renamings),
-                        ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-        }
-
-        if (SDF_isModuleNameParameterized(moduleName)) {
-          SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
-      
-          ATerm sdfTerm = MDB_getEntrySdfTree(entry);
-          SDF_ModuleName formalModuleName = SDF_getModuleModuleName( 
-                                              SDF_makeModuleFromTerm(
-                                                PT_makeTermFromTree(
-                                                  PT_getParseTreeTree(
-                                                    PT_makeParseTreeFromTerm(sdfTerm)))));
-
-          return ATmake("snd-value(parameterized-equations(<term>,<term>,<term>))", 
-                        SDF_makeTermFromModuleName(formalModuleName),
-                        SDF_makeTermFromSymbols(actualParams),
-                        ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
-        }
+        return ATmake("snd-value(renaming-equations(<term>,<term>))", 
+                      SDF_makeTermFromRenamings(renamings),
+                      ATBpack(eqsTerm));
       }
+
+      if (SDF_isModuleNameParameterized(moduleName)) {
+        SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
+      
+        ATerm sdfTerm = MDB_getEntrySdfTree(entry);
+        SDF_ModuleName formalModuleName = SDF_getModuleModuleName( 
+                                            SDF_makeModuleFromTerm(
+                                              PT_makeTermFromTree(
+                                                PT_getParseTreeTree(
+                                                  PT_makeParseTreeFromTerm(sdfTerm)))));
+
+        return ATmake("snd-value(parameterized-equations(<term>,<term>,<term>))", 
+                      SDF_makeTermFromModuleName(formalModuleName),
+                      SDF_makeTermFromSymbols(actualParams),
+                      ATBpack(eqsTerm));
+      }
+      return ATmake("snd-value(plain-equations(<term>))", ATBpack(eqsTerm));
     }
   }
-  return ATmake("snd-value(plain-equations(<term>))", 
-                ATBpack(ASF_makeTermFromCondEquationList(asfEqsList)));
+  return ATmake("snd-value(no-equations)");
 }
 
 /*}}}  */
@@ -1505,7 +1498,6 @@ int main(int argc, char *argv[])
 
   PT_initMEPTApi();
   SDF_initSDFMEApi();
-  ASF_initASFMEApi();
   MDB_initMDBApi();
 
   MDB_NONE = ATparse("unavailable");
