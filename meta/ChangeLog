@@ -1,5 +1,8 @@
 # $Id$
 
+2003/03/18 ({iversen,markvdb}@cwi.nl
+ * Added 2 new button actions.
+
 2003/03/18 (jurgenv@cwi.nl)
  * Use shared-objects-config and aterm-java-config scripts to obtain last
    version of their jar files in configure.in
