@@ -1,8 +1,10 @@
 $Id$
 
-2003/06/12 (markvdb@cwi.nl)
+2003/06/12 ({markvdb,iversen}@cwi.nl)
  * Fixed a non-termination bug in the transitive closure calculation of
    imports.
+ * Fixed a bug in the dependingModule calculation, a module was depending
+   on itself.
 
 2003/06/03 (markvdb@cs.vu.nl)
  * Added import removal functionality.
