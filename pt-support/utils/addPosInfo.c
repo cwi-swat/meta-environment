@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "MEPT-utils.h"
+#include "ErrorAPI-utils.h"
 #include <stdlib.h>
 #include <string.h>
 #ifndef WITHOUT_TOOLBUS
@@ -128,6 +129,8 @@ int main(int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
+    ERR_initErrorApi();
+
     cid = ATBconnect(NULL, NULL, -1, position_annotator_handler);
     ATBeventloop();
   }

@@ -1,5 +1,11 @@
 $Id$
 
+2004/01/09 ({markvdb,jurgenv}@cwi.nl)
+ * Changed addPosInfo to use the locations from error-support. So the
+   annotations in parse trees are not longer
+   area(<str>,<int>,<int>,<int>,<int>)!
+ * Added dependency on error-support package
+
 2003/11/21 (jurgenv@cwi.nl)
  * Merged libasfix2 and libconversion, then removed library libconversions
    and put all functionality into libmept/flattenPT.c. Added flattenTree
