@@ -32,6 +32,7 @@
 #include <string.h>
 #include <aterm2.h>
 #include <atb-tool.h>
+#include <assert.h>
 
 #include "in-output.tif.h"
 
@@ -147,42 +148,60 @@ char *slurpfile(char *fnam, size_t *size)
     return buf ;
 }
 
-ATbool path_length_exceeded(int l, char *p, char *f)
+ATbool path_length_exceeded(int length)
 {
-    if(l <= PATH_LEN)
-	return ATfalse;
-
-    ATwarning("warning: path too long, ignored: %s/%s\n", p, f);
-    return ATtrue;
+    return (length > PATH_LEN);
 }
 
-int  nr_paths = 0;
-char *paths[MAX_PATHS];
+static int  nr_paths = 0;
+static char *paths[MAX_PATHS];
 
-char *find_newest_in_path(char *name)
+char *find_in_path(char *target)
 {
-    int    i;
-    char   thisname[PATH_LEN];
-    static char   newestnamebuf[PATH_LEN];
-    char*  newestname = NULL;
-    time_t  newesttime = -1L, thistime;
+    static char filename[PATH_LEN];
+    char thisname[PATH_LEN];
+    int i, name_length;
+    ATbool found = ATfalse;
 
-    for(i=0; i<nr_paths; i++) {
-	if(path_length_exceeded(strlen(paths[i])+strlen(name)+1, paths[i], name))
+    assert(target != NULL);
+
+    strcpy(filename, "");
+    name_length = strlen(target) + 1;
+
+    for (i=0; i<nr_paths; i++) {
+	/* Make sure pathlength doesn't exceed sane length. */
+	if (path_length_exceeded(name_length + strlen(paths[i]))) {
+	    ATwarning("warning: path too long: %s/%s\n", paths[i], target);
 	    continue;
-	sprintf(thisname, "%s/%s", paths[i], name);
-	if((thistime = filetime(thisname)) > newesttime) {
-	    newesttime = thistime;
-	    strcpy( newestnamebuf, thisname );
-	    newestname = newestnamebuf;
+	}
+
+	/* Construct filename, now that we know it will fit */
+	sprintf(thisname, "%s/%s", paths[i], target);
+
+	/* Check if this file exists */
+	if (fileexists(thisname)) {
+	    if (found) {
+		ATwarning("warning: found multiple files matching %s\n", target);
+		ATwarning("         using first entry in path: %s\n", filename);
+		ATwarning("         offending match: %s\n", thisname);
+	    }
+	    else {
+		found = ATtrue;
+		strcpy(filename, thisname);
+	    }
 	}
     }
 
-    if(newestname && run_verbose) {
-	ATwarning("Found %s\n", newestname);
+    if (run_verbose) {
+	if (found) {
+	    ATwarning("Found: %s\n", filename);
+	}
+	else {
+	    ATwarning("No entry in searchpath for %s\n", target);
+	}
     }
 
-    return newestname;
+    return found ? filename : NULL;
 }
 
 ATerm open_error(char *n)
@@ -252,7 +271,7 @@ ATerm get_timestamp(int cid, char *name, char *ext) {
 
     sprintf(file, "%s%s", name, ext);
     return ATmake("snd-value(timestamp(<int>))", 
-		  filetime(find_newest_in_path(file)));
+		  filetime(find_in_path(file)));
 }
 
 /*
@@ -360,9 +379,9 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
 	sprintf(newestraw, "%s%s", name, EQS_TXT_EXT);
     }
 
-    if((full = find_newest_in_path(newestraw)))
+    if((full = find_in_path(newestraw)))
 	strcpy(newestraw, full);
-    if((full = find_newest_in_path(newestbaf)))
+    if((full = find_in_path(newestbaf)))
 	strcpy(newestbaf, full);
     newest_is_binary = newerfile(newestbaf, newestraw);
 
@@ -386,7 +405,7 @@ ATerm open_eqs_text_file(int cid, char *name)
 
     sprintf(fullname, "%s%s", name, EQS_TXT_EXT);
 
-    if((full = find_newest_in_path(fullname))) {
+    if((full = find_in_path(fullname))) {
 	t = read_raw_from_named_file(full, name);
     } else {
 	if(run_verbose) {
@@ -407,7 +426,7 @@ ATerm read_parse_table(int cid, char *name, ATerm tableType)
 	sprintf(fullname, "%s%s", name, TRM_TBL_EXT);
     }
 
-    if((full = find_newest_in_path(fullname)))
+    if((full = find_in_path(fullname)))
 	return ATmake("snd-value(table-on-disk(<str>,timestamp(<int>)))",
 		      full, filetime(full));
 
@@ -419,7 +438,7 @@ ATerm open_trm_file(int cid, char *name)
     char *full;
     ATerm t;
 
-    if((full = find_newest_in_path(name))) {
+    if((full = find_in_path(name))) {
 	t = read_raw_from_named_file(full, name);
     } else {
 	if (run_verbose) {
