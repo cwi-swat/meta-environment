@@ -162,7 +162,7 @@ Production+1
   [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(Symbol,*) ) = qliteral("""$CH+""") -> PrefixDataOp
 
   [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(LCS*) ) = 
-qliteral("""$CH+""")	-> sort("S""o""r""t")
+qliteral("""$CH+""")	-> sort("T""y""p""e")
 qliteral("""$CH+""") -> PrefixDataOp
 $transform-decons(LCS*)
 
