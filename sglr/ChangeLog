@@ -18,6 +18,12 @@
 
 $Id$
 
+2000/8/09 (jurgenv@cwi.nl)
+  * Fixed a major bug that caused sglr to dump core while reading parsetables
+    in some infrequently occurring cases.
+  * Added prettyprinting of ambiguous productions
+  * Bumped version to 2.39
+  
 2000/8/01 (jurgenv@cwi.nl)
   * Fixed a major bug that caused sglr to throw away ambiguities
   * Bumped version to 2.38

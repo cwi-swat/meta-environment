@@ -486,7 +486,7 @@ int main (int argc, char **argv)
     char  *ATlibArgv[] = { program_name,
       "-at-silent",   /* Choose sensible options here */
       "-at-symboltable", "32768",
-      "-at-termtable", "18"
+			"-at-termtable", "18"
     };
     ATbool have_complete_config;
 

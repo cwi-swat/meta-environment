@@ -199,6 +199,15 @@ ATbool SG_ReduceAction(action a)
 
 /*  Hash function for the Action and Goto Table  */
 
+hashkey SG_ComputeActionHashKey(parse_table *pt, state s, label l)
+{
+  hashkey the_key;
+
+  the_key =  (l * pt->numstates) + s;
+  the_key *= HASH_PRIME;
+  return the_key % pt->actions.size;
+}
+
 hashkey SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
 {
   hashkey the_key;
@@ -234,7 +243,7 @@ actions SG_LookupAction(parse_table *pt, state s, token c)
   register actionbucket *a;
   hashkey h;
 
-  h = SG_ComputeGotoHashKey(pt, s, c);
+  h = SG_ComputeActionHashKey(pt, s, c);
 
   for(a = pt->actions.table[h]; a; a=a->next) {
     if((a->s==s) && (a->c==c)) {
@@ -373,7 +382,7 @@ void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
   ab = sg_action_pool_free;
   sg_action_pool_free = sg_action_pool_free->next;
 
-  h = SG_ComputeGotoHashKey(pt, s, c);
+  h = SG_ComputeActionHashKey(pt, s, c);
 
   ab->next = pt->actions.table[h];
   ab->s = s;
