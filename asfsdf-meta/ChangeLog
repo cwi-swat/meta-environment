@@ -7,6 +7,13 @@ Tue Mar 16  CET 2004 <iversen@cwi.nl>
    add-initial-syntax-modules-hook, clear-module-db-hook, 
    other-top-sort-hook.
 	
+Thu Mar 11 16:17:53 CET 2004 <markvdb@cwi.nl>
+ * Fixed a number of bugs reported by various users:
+   - Unnecessary messages suppressed.
+   - Upgrading of equations always parses before upgrading
+   - Reducing an erroneous term not longer generates a vague message.
+   - Improved some issues wrt the term-store.
+
 2004/02/16 (markvdb@cwi.nl)
  * The asfsdfchecker is now only called in case a parsetable
    has to be generated for parsing terms and equations in
