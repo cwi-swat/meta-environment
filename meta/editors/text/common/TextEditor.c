@@ -142,9 +142,9 @@ TE_Action TE_makeActionRereadContents()
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionDisplayMessage(char* message) */
+/*{{{  TE_Action TE_makeActionDisplayMessage(char * message) */
 
-TE_Action TE_makeActionDisplayMessage(char* message)
+TE_Action TE_makeActionDisplayMessage(char * message)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun3, (ATerm)ATmakeAppl0(ATmakeAFun(message, 0, ATtrue))));
 }
@@ -214,11 +214,19 @@ TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail)
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_makeMenuDefault(char* main, char* sub) */
+/*{{{  TE_Menu TE_makeMenuDefault(char * main, char * sub) */
 
-TE_Menu TE_makeMenuDefault(char* main, char* sub)
+TE_Menu TE_makeMenuDefault(char * main, char * sub)
 {
   return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun10, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl0(ATmakeAFun(sub, 0, ATtrue))), (ATerm)ATmakeAppl0(ATmakeAFun(main, 0, ATtrue))));
+}
+
+/*}}}  */
+/*{{{  TE_Menu TE_makeMenuShortcut(char * main, char * sub, char * shortcut) */
+
+TE_Menu TE_makeMenuShortcut(char * main, char * sub, char * shortcut)
+{
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl0(ATmakeAFun(sub, 0, ATtrue))), (ATerm)ATmakeAppl0(ATmakeAFun(main, 0, ATtrue))), (ATerm)ATmakeAppl0(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -226,7 +234,7 @@ TE_Menu TE_makeMenuDefault(char* main, char* sub)
 
 TE_Event TE_makeEventMenu(TE_Menu menu)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun11, (ATerm)menu);
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun12, (ATerm)menu);
 }
 
 /*}}}  */
@@ -234,15 +242,15 @@ TE_Event TE_makeEventMenu(TE_Menu menu)
 
 TE_Event TE_makeEventMouse(int location)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun12, (ATerm)ATmakeInt(location));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm)ATmakeInt(location));
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_makeEventContents(char* text) */
+/*{{{  TE_Event TE_makeEventContents(char * text) */
 
-TE_Event TE_makeEventContents(char* text)
+TE_Event TE_makeEventContents(char * text)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm)ATmakeAppl0(ATmakeAFun(text, 0, ATtrue)));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm)ATmakeAppl0(ATmakeAFun(text, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -250,7 +258,7 @@ TE_Event TE_makeEventContents(char* text)
 
 TE_Event TE_makeEventModified()
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun14);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun15);
 }
 
 /*}}}  */
@@ -258,7 +266,7 @@ TE_Event TE_makeEventModified()
 
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 {
-  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun15, (ATerm)toChild, (ATerm)fromChild);
+  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun16, (ATerm)toChild, (ATerm)fromChild);
 }
 
 /*}}}  */
@@ -266,7 +274,7 @@ TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 
 TE_Pipe TE_makePipeDefault(int read, int write)
 {
-  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun16, (ATerm)ATmakeInt(read), (ATerm)ATmakeInt(write));
+  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun17, (ATerm)ATmakeInt(read), (ATerm)ATmakeInt(write));
 }
 
 /*}}}  */
@@ -551,18 +559,18 @@ ATbool TE_hasActionMessage(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  char* TE_getActionMessage(TE_Action arg) */
+/*{{{  char * TE_getActionMessage(TE_Action arg) */
 
-char* TE_getActionMessage(TE_Action arg)
+char * TE_getActionMessage(TE_Action arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0)));
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_setActionMessage(TE_Action arg, char* message) */
+/*{{{  TE_Action TE_setActionMessage(TE_Action arg, char * message) */
 
-TE_Action TE_setActionMessage(TE_Action arg, char* message)
+TE_Action TE_setActionMessage(TE_Action arg, char * message)
 {
   if (TE_isActionDisplayMessage(arg)) {
     return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATmakeAppl0(ATmakeAFun(message, 0, ATtrue)), 0), 0);
@@ -815,6 +823,9 @@ ATbool TE_isValidMenu(TE_Menu arg)
   if (TE_isMenuDefault(arg)) {
     return ATtrue;
   }
+  else if (TE_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -823,11 +834,43 @@ ATbool TE_isValidMenu(TE_Menu arg)
 
 inline ATbool TE_isMenuDefault(TE_Menu arg)
 {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, TE_patternMenuDefault, NULL, NULL));
-#endif
-  return ATtrue;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuDefault, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isMenuShortcut(TE_Menu arg) */
+
+inline ATbool TE_isMenuShortcut(TE_Menu arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternMenuShortcut, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -838,24 +881,33 @@ ATbool TE_hasMenuMain(TE_Menu arg)
   if (TE_isMenuDefault(arg)) {
     return ATtrue;
   }
+  else if (TE_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* TE_getMenuMain(TE_Menu arg) */
+/*{{{  char * TE_getMenuMain(TE_Menu arg) */
 
-char* TE_getMenuMain(TE_Menu arg)
+char * TE_getMenuMain(TE_Menu arg)
 {
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 0))));
+  if (TE_isMenuDefault(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 0))));
+  }
+  else 
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 0))));
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuMain(TE_Menu arg, char* main) */
+/*{{{  TE_Menu TE_setMenuMain(TE_Menu arg, char * main) */
 
-TE_Menu TE_setMenuMain(TE_Menu arg, char* main)
+TE_Menu TE_setMenuMain(TE_Menu arg, char * main)
 {
   if (TE_isMenuDefault(arg)) {
+    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATmakeAppl0(ATmakeAFun(main, 0, ATtrue)), 0), 0);
+  }
+  else if (TE_isMenuShortcut(arg)) {
     return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATmakeAppl0(ATmakeAFun(main, 0, ATtrue)), 0), 0);
   }
 
@@ -871,28 +923,70 @@ ATbool TE_hasMenuSub(TE_Menu arg)
   if (TE_isMenuDefault(arg)) {
     return ATtrue;
   }
+  else if (TE_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* TE_getMenuSub(TE_Menu arg) */
+/*{{{  char * TE_getMenuSub(TE_Menu arg) */
 
-char* TE_getMenuSub(TE_Menu arg)
+char * TE_getMenuSub(TE_Menu arg)
 {
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 0), 1)));
+  if (TE_isMenuDefault(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 0), 1)));
+  }
+  else 
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 0), 1)));
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_setMenuSub(TE_Menu arg, char* sub) */
+/*{{{  TE_Menu TE_setMenuSub(TE_Menu arg, char * sub) */
 
-TE_Menu TE_setMenuSub(TE_Menu arg, char* sub)
+TE_Menu TE_setMenuSub(TE_Menu arg, char * sub)
 {
   if (TE_isMenuDefault(arg)) {
     return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATmakeAppl0(ATmakeAFun(sub, 0, ATtrue)), 1), 0);
   }
+  else if (TE_isMenuShortcut(arg)) {
+    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATmakeAppl0(ATmakeAFun(sub, 0, ATtrue)), 1), 0);
+  }
 
   ATabort("Menu has no Sub: %t\n", arg);
+  return (TE_Menu)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasMenuShortcut(TE_Menu arg) */
+
+ATbool TE_hasMenuShortcut(TE_Menu arg)
+{
+  if (TE_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char * TE_getMenuShortcut(TE_Menu arg) */
+
+char * TE_getMenuShortcut(TE_Menu arg)
+{
+  
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  TE_Menu TE_setMenuShortcut(TE_Menu arg, char * shortcut) */
+
+TE_Menu TE_setMenuShortcut(TE_Menu arg, char * shortcut)
+{
+  if (TE_isMenuShortcut(arg)) {
+    return (TE_Menu)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(shortcut, 0, ATtrue)), 1);
+  }
+
+  ATabort("Menu has no Shortcut: %t\n", arg);
   return (TE_Menu)NULL;
 }
 
@@ -1086,18 +1180,18 @@ ATbool TE_hasEventText(TE_Event arg)
 }
 
 /*}}}  */
-/*{{{  char* TE_getEventText(TE_Event arg) */
+/*{{{  char * TE_getEventText(TE_Event arg) */
 
-char* TE_getEventText(TE_Event arg)
+char * TE_getEventText(TE_Event arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_setEventText(TE_Event arg, char* text) */
+/*{{{  TE_Event TE_setEventText(TE_Event arg, char * text) */
 
-TE_Event TE_setEventText(TE_Event arg, char* text)
+TE_Event TE_setEventText(TE_Event arg, char * text)
 {
   if (TE_isEventContents(arg)) {
     return (TE_Event)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(text, 0, ATtrue)), 0);
@@ -1298,9 +1392,9 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
+/*{{{  TE_Action TE_visitAction(TE_Action arg, char * (*acceptMessage)(char *), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
+TE_Action TE_visitAction(TE_Action arg, char * (*acceptMessage)(char *), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
@@ -1357,23 +1451,29 @@ TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Men
 }
 
 /*}}}  */
-/*{{{  TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*)) */
+/*{{{  TE_Menu TE_visitMenu(TE_Menu arg, char * (*acceptMain)(char *), char * (*acceptSub)(char *), char * (*acceptShortcut)(char *)) */
 
-TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*))
+TE_Menu TE_visitMenu(TE_Menu arg, char * (*acceptMain)(char *), char * (*acceptSub)(char *), char * (*acceptShortcut)(char *))
 {
   if (TE_isMenuDefault(arg)) {
     return TE_makeMenuDefault(
         acceptMain ? acceptMain(TE_getMenuMain(arg)) : TE_getMenuMain(arg),
         acceptSub ? acceptSub(TE_getMenuSub(arg)) : TE_getMenuSub(arg));
   }
+  if (TE_isMenuShortcut(arg)) {
+    return TE_makeMenuShortcut(
+        acceptMain ? acceptMain(TE_getMenuMain(arg)) : TE_getMenuMain(arg),
+        acceptSub ? acceptSub(TE_getMenuSub(arg)) : TE_getMenuSub(arg),
+        acceptShortcut ? acceptShortcut(TE_getMenuShortcut(arg)) : TE_getMenuShortcut(arg));
+  }
   ATabort("not a Menu: %t\n", arg);
   return (TE_Menu)NULL;
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*)) */
+/*{{{  TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char * (*acceptText)(char *)) */
 
-TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*))
+TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char * (*acceptText)(char *))
 {
   if (TE_isEventMenu(arg)) {
     return TE_makeEventMenu(

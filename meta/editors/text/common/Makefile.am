@@ -26,4 +26,4 @@ libTextEditor_a_SOURCES = \
 	TextEditor_dict.c
 
 api: TextEditor.adt
-	adt-to-c --prefix TE_ --input $<
+	/users/jive/PROGRAMS/apigen-1.5/bin/adt-to-c --prefix TE_ --input $<

@@ -5,6 +5,9 @@
 (defvar current-partial-msg "")
 (defvar must-send-modified t)
 
+; used to parse keyboard shortcuts
+(require 'edmacro)
+
 (defun init (args)
   (setq emacs-connector
     (let ((process-connection-type nil))

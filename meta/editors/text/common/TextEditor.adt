@@ -13,6 +13,7 @@
   [ActionList, multi, [<head(Menu)>, <[tail(ActionList)]>]],
 
   [Menu, default, menu([<main(str)>,<sub(str)>])],
+  [Menu, shortcut, menuwithshortcut([<main(str)>,<sub(str)>],<shortcut(str)>)],
 
   [Event, menu, menu-event(<menu(Menu)>)],
   [Event, mouse, mouse-event(<location(int)>)],

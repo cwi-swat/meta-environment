@@ -41,7 +41,7 @@ ATerm TE_PipeToTerm(TE_Pipe arg);
 
 TE_Action TE_makeActionToFront();
 TE_Action TE_makeActionRereadContents();
-TE_Action TE_makeActionDisplayMessage(char* message);
+TE_Action TE_makeActionDisplayMessage(char * message);
 TE_Action TE_makeActionSetCursorAtLocation(int location);
 TE_Action TE_makeActionSetCursorAtFocus(ATerm focus);
 TE_Action TE_makeActionClearFocus();
@@ -50,10 +50,11 @@ TE_Action TE_makeActionGetContents(ATerm focus);
 TE_Action TE_makeActionSetActions(TE_ActionList actions);
 TE_ActionList TE_makeActionListEmpty();
 TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail);
-TE_Menu TE_makeMenuDefault(char* main, char* sub);
+TE_Menu TE_makeMenuDefault(char * main, char * sub);
+TE_Menu TE_makeMenuShortcut(char * main, char * sub, char * shortcut);
 TE_Event TE_makeEventMenu(TE_Menu menu);
 TE_Event TE_makeEventMouse(int location);
-TE_Event TE_makeEventContents(char* text);
+TE_Event TE_makeEventContents(char * text);
 TE_Event TE_makeEventModified();
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild);
 TE_Pipe TE_makePipeDefault(int read, int write);
@@ -82,8 +83,8 @@ inline ATbool TE_isActionSetFocus(TE_Action arg);
 inline ATbool TE_isActionGetContents(TE_Action arg);
 inline ATbool TE_isActionSetActions(TE_Action arg);
 ATbool TE_hasActionMessage(TE_Action arg);
-char* TE_getActionMessage(TE_Action arg);
-TE_Action TE_setActionMessage(TE_Action arg, char* message);
+char * TE_getActionMessage(TE_Action arg);
+TE_Action TE_setActionMessage(TE_Action arg, char * message);
 ATbool TE_hasActionLocation(TE_Action arg);
 int TE_getActionLocation(TE_Action arg);
 TE_Action TE_setActionLocation(TE_Action arg, int location);
@@ -112,12 +113,16 @@ TE_ActionList TE_setActionListTail(TE_ActionList arg, TE_ActionList tail);
 
 ATbool TE_isValidMenu(TE_Menu arg);
 inline ATbool TE_isMenuDefault(TE_Menu arg);
+inline ATbool TE_isMenuShortcut(TE_Menu arg);
 ATbool TE_hasMenuMain(TE_Menu arg);
-char* TE_getMenuMain(TE_Menu arg);
-TE_Menu TE_setMenuMain(TE_Menu arg, char* main);
+char * TE_getMenuMain(TE_Menu arg);
+TE_Menu TE_setMenuMain(TE_Menu arg, char * main);
 ATbool TE_hasMenuSub(TE_Menu arg);
-char* TE_getMenuSub(TE_Menu arg);
-TE_Menu TE_setMenuSub(TE_Menu arg, char* sub);
+char * TE_getMenuSub(TE_Menu arg);
+TE_Menu TE_setMenuSub(TE_Menu arg, char * sub);
+ATbool TE_hasMenuShortcut(TE_Menu arg);
+char * TE_getMenuShortcut(TE_Menu arg);
+TE_Menu TE_setMenuShortcut(TE_Menu arg, char * shortcut);
 
 /*}}}  */
 /*{{{  TE_Event accessors */
@@ -134,8 +139,8 @@ ATbool TE_hasEventLocation(TE_Event arg);
 int TE_getEventLocation(TE_Event arg);
 TE_Event TE_setEventLocation(TE_Event arg, int location);
 ATbool TE_hasEventText(TE_Event arg);
-char* TE_getEventText(TE_Event arg);
-TE_Event TE_setEventText(TE_Event arg, char* text);
+char * TE_getEventText(TE_Event arg);
+TE_Event TE_setEventText(TE_Event arg, char * text);
 
 /*}}}  */
 /*{{{  TE_Process accessors */
@@ -164,10 +169,10 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write);
 /*}}}  */
 /*{{{  sort visitors */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
+TE_Action TE_visitAction(TE_Action arg, char * (*acceptMessage)(char *), int (*acceptLocation)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu));
-TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*));
-TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*));
+TE_Menu TE_visitMenu(TE_Menu arg, char * (*acceptMain)(char *), char * (*acceptSub)(char *), char * (*acceptShortcut)(char *));
+TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char * (*acceptText)(char *));
 TE_Process TE_visitProcess(TE_Process arg, TE_Pipe (*acceptToChild)(TE_Pipe), TE_Pipe (*acceptFromChild)(TE_Pipe));
 TE_Pipe TE_visitPipe(TE_Pipe arg, int (*acceptRead)(int), int (*acceptWrite)(int));
 

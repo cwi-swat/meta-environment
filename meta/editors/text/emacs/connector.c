@@ -155,9 +155,10 @@ static void addTopMenu(int write_to_editor_fd, const char *menu)
 /*}}}  */
 /*{{{  static void addSubMenu(int write_to_editor_fd, char *menu, char *item) */
 
-static void addSubMenu(int write_to_editor_fd, char *menu, char *item)
+static void addSubMenu(int write_to_editor_fd, char *menu, char *item, char *shortcut)
 {
   char buf[BUFSIZ];
+  char shortcutbuf[BUFSIZ];
   char strippedMenu[BUFSIZ];
   char strippedItem[BUFSIZ];
   char menuString[BUFSIZ];
@@ -165,8 +166,22 @@ static void addSubMenu(int write_to_editor_fd, char *menu, char *item)
 
   strcpy(strippedMenu, stripIllegalMenuChars(menu));
   strcpy(strippedItem, stripIllegalMenuChars(item));
-  strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
-  strcpy(escapedMenu, escapeQuotes(menuString));
+
+  if (strcmp(shortcut, "")) {
+    strcpy(menuString, menuToString(TE_makeMenuShortcut(menu, item, shortcut)));
+    strcpy(escapedMenu, escapeQuotes(menuString));
+
+    sprintf(shortcutbuf, 
+	    "(define-key global-map (edmacro-parse-keys \"%s\")"
+	    " (lambda () (interactive) (meta-menu-event \"%s\")))",
+	    shortcut,
+	    escapedMenu);
+    sendToEmacs(write_to_editor_fd, shortcutbuf);
+  }
+  else {
+    strcpy(menuString, menuToString(TE_makeMenuDefault(menu, item)));
+    strcpy(escapedMenu, escapeQuotes(menuString));
+  }
 
   sprintf(buf,
 	  "(define-key-after"
@@ -187,10 +202,10 @@ static void addSubMenu(int write_to_editor_fd, char *menu, char *item)
 /*}}}  */
 /*{{{  static void makeEmacsMenuItem(int write_to_editor_fd, char *menu, char *item) */
 
-static void makeEmacsMenuItem(int write_to_editor_fd, char *menu, char *item)
+static void makeEmacsMenuItem(int write_to_editor_fd, char *menu, char *item, char *shortcut)
 {
   addTopMenu(write_to_editor_fd, menu);
-  addSubMenu(write_to_editor_fd, menu, item);
+  addSubMenu(write_to_editor_fd, menu, item, shortcut);
 }
 
 /*}}}  */
@@ -221,9 +236,18 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
   while (!TE_isActionListEmpty(actionList)) {
     TE_Menu menu = TE_getActionListHead(actionList);
     assert(TE_isValidMenu(menu));
-    makeEmacsMenuItem(write_to_editor_fd,
-		      TE_getMenuMain(menu),
-		      TE_getMenuSub(menu));
+    if (TE_hasMenuShortcut(menu) == ATtrue) {
+      makeEmacsMenuItem(write_to_editor_fd,
+			TE_getMenuMain(menu),
+			TE_getMenuSub(menu),
+			TE_getMenuShortcut(menu));
+    }
+    else {
+      makeEmacsMenuItem(write_to_editor_fd,
+			TE_getMenuMain(menu),
+			TE_getMenuSub(menu),
+			"");
+    }
     actionList = TE_getActionListTail(actionList);
   }
 }
