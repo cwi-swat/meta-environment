@@ -1,0 +1,19 @@
+module Compiler
+
+imports  MuASF2NameTable MuASF2MuASF MuASF2C
+
+exports
+
+context-free syntax
+
+  compile-muasf(Module) -> CProgram
+
+  "compile-muasf" -> FunId {reject}
+
+
+
+
+variables
+ "CProgram" -> CProgram
+ "Char*" -> CHAR*
+

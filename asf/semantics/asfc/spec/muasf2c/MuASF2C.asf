@@ -7,7 +7,7 @@ rulesopt2cfuncs(Modid,Funcdef*1,Rulesopt,Nametable) = (Funcdef*2,Decl*2),
 funcdefs2cfuncs(Funcdef*2) = Decl*3
 ===>
 muasf2c(module Modid2 Signopt Rulesopt, Nametable) =
-#include "asc-support.h"
+#include "asc-support-me.h"
 Decl*1 ++ 
 Decl*2 ++ 
 Decl*3
