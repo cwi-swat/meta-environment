@@ -37,7 +37,7 @@ equations
 
 equations
 
-[default-equ-symbol-to-asfix-strip-label]
+[default-strip-label]
   symbol-to-asfix( $Label : $Symbol) = 
     symbol-to-asfix( $Symbol)
     
@@ -100,11 +100,16 @@ equations
 
 [formal-param-labelled]
   symbol-to-asfix($Label:<_Symbol-PARAM>) = 
-	sort(<"type-of-" || $Label(str)>)
+	<"type-of-" || $Label(term)>
+
+[formal-param-labelled]
+  symbol-to-asfix($Label:<<_Symbol-PARAM>-CF>) = 
+	<"type-of-" || $Label(term)>
+
 
 [formal-param]
   symbol-to-asfix(<$Sort-PARAM>) = 
-	sort(<"type-of-" || symbol-to-type($Sort)(str)>)
+	<"type-of-" || symbol-to-type($Sort)(term)>
 
 equations
 

@@ -184,7 +184,7 @@ equations
 
 [loop]
 	$Type := symbol-to-type($Symbol),
-	$Entries1 := [constructor($Type, "cast", <$Type(term)>)],
+	$Entries1 := constructor($Type, "cast", <$Type(term)>),
 	$Entries2 := parameters-to-adt($Symbol*)
 	===>
 	parameters-to-adt($Symbol $Symbol*) =
