@@ -116,7 +116,7 @@ characters long. "
     (select-window (get-buffer-window filename t))
 
     (display-message 'focus (concat "Focus symbol: " str))
-
+    (goto-char start)
     ; first clear ALL colorings (including the previous focus)
     (remove-text-properties 1 (point-max buf) '(face nil) buf)
     ; then set the new focus
