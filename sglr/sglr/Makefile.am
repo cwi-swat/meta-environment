@@ -22,7 +22,7 @@ include $(top_srcdir)/make_rules
 
 INCLUDES += -I$(top_srcdir)/libsglr -I$(top_srcdir)/libtree2dot
 
-bin_PROGRAMS      = sglr #sglr_prof
+bin_PROGRAMS      = sglr 
 data_DATA         = sglr.idef
 
 EXTRA_DIST        = sglr.idef sglr.tif.c sglr.tif.h
@@ -33,7 +33,7 @@ HDRS              = getopt.h
 sglr_SOURCES      = $(SRCS) $(HDRS)
 sglr_LDADD        = -L$(top_srcdir)/libsglr -lsglr \
                     -L$(top_srcdir)/libtree2dot -ltree2dot \
-                    -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
+                    -L$(PT_SUPPORT)/lib -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 # remove built files during "make clean"
