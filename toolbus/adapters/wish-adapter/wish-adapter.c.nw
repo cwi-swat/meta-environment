@@ -276,7 +276,8 @@ static void print_string(char* s, int n)
 	default:	wputc(*s);
       }
     } else {
-      wprintf("\\%03o", (unsigned int)*s);
+	wputc(*s);
+/*      wprintf("\\%03o", (unsigned int)*s);*/
     }
     s++;
   }

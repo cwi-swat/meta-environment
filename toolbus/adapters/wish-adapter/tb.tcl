@@ -52,6 +52,30 @@ proc TBevent {txt} {
   TBsend "snd-event($txt)"
 }
 
+proc TBpost {event} {
+  global TBack 
+
+  regexp {([a-zA-Z\-_0-9]+)\(} $event event func
+  if { ![info exists TBack($func)] || !TBack($func) } {
+    TBevent $event
+    set TBack($func) 1 
+    set TBack($func,q) {}
+  } else {
+    lapppend TBack($func,q) $event
+  }
+}
+
+proc TBack {event} {
+  if { [info exists TBack($func)] && TBack($func) } {
+    if { $TBack($func,q) == {} } {
+      set TBack($func) 0
+    } else {
+      TBevent [lindex $TBack($func,q) 0]
+      set TBack($func,q) [lrange $TBack($func,q) 1 end]
+    } 
+  }
+}
+
 proc TBrequire {tool name nargs} {
   if { [llength [info procs $name]] != 1 } {
      puts stderr "$tool: *** WARNING: proc $name (with $nargs arguments) is missing\n"
