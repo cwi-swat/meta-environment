@@ -6,7 +6,7 @@ imports basic/Integers
 
 context-free start-symbols
    Bag[[Elem]]
-   BagIterator[[Elem]]
+%%   BagIterator[[Elem]]
 
 context-free syntax
    elem-equal(Elem, Elem)			-> Boolean
