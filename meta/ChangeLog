@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2000/9/4 (jurgenv@cwi.nl)
+   * Fixed unneccessary generation of parsetables bug
+
 2000/8/23 ({jong,olivierp}@cwi.nl)
    * Fixed genamakefile.sh.src to also generate executable 
    * Fixed bug in genamakefile.sh that caused corrupt 
