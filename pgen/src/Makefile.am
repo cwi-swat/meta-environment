@@ -40,6 +40,9 @@ CLEANFILES = parsetablegen.tifs sdf2table sdf2table.1 sdf2table.test
 parsetablegen.o : parsetablegen.tif.h
 sdf-help.o : parsetablegen.tif.h
 
+%.tif.c %.tif.h: %.tifs
+	@PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
+
 %.tifs: %.idef
 	@PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
