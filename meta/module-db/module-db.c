@@ -387,13 +387,17 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 
   tree      = PT_getParseTreeTree(parseTree);
   sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+ATwarning("moduleName: %s sdf: %s\n", moduleName, SDFgetModuleName(sdfModule));
 
   /* Sanity check: modulename inside module must equal name passed as str */
-  if (strcmp(moduleName, SDFgetModuleName(sdfModule)) != 0) {
+/*  if (strcmp(moduleName, SDFgetModuleName(sdfModule)) != 0) {
     return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
   }
+  REMOVED BY JURGEN TO CHECK HOW FAR WE COME 
+*/
 
-  modName = ATmake("<str>", moduleName);
+//  modName = ATmake("<str>", moduleName); 
+  modName = ATmake("<str>",  SDFgetModuleName(sdfModule));
   entry = MDB_makeEntryDefault(path,
                                sdfTree,
                                timestamp,
@@ -410,9 +414,9 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   fullImports = SDF_getModuleImportsList(sdfModule);
   unknowns = add_imports(modName, imports, fullImports);
   import_graph = calc_import_graph();
-
-  return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
-		unknowns, import_graph);
+ATwarning("ig: %t\n", import_graph);
+  return ATmake("snd-value(module(<term>,imports(need-modules([<list>]),<term>)))", 
+		modName, unknowns, import_graph);
 }
 
 /*}}}  */

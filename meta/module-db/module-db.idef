@@ -28,7 +28,8 @@ let
   Language  : str,
   ErrorMsg  : str,
   OutputDir : str, 
-  TableType : term
+  TableType : term,
+  RealName  : str
 in
 
 /* First, execute the module db */
@@ -68,9 +69,10 @@ snd-do(Mdb, create-module-db).
   rec-msg(add-sdf-module-to-db(Name?, Path?, AsFixModule?, timestamp(Time?))) .
   snd-eval(Mdb, add-sdf-module(Name, Path, AsFixModule, Time)) .
   ( 
-    rec-value(Mdb,imports(need-modules(Modules?),
-                  import-graph(ActualMods?, Pairs?))).
+    rec-value(Mdb,module(RealName?,imports(need-modules(Modules?),
+                  import-graph(ActualMods?, Pairs?)))).
 /* If a new module is added, we tell the world the current import relations */
+    snd-msg(real-module-name(Name, RealName)).
     snd-note(import-graph(ActualMods, Pairs)).
     snd-msg(need-modules(Modules))
   +
