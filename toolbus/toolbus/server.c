@@ -48,7 +48,7 @@ int mk_server_ports(TBbool local_port_only)
   WellKnownGlobalSocket = gsock;
 
   if(initialWellKnownSocketPort != WellKnownSocketPort) {
-		fprintf(stderr, "The toolbus server allocated port %d.\n", WellKnownSocketPort);
+		fprintf(stderr, "The toolbus server allocated port %d\n", WellKnownSocketPort);
   }
  
   return TB_OK;
