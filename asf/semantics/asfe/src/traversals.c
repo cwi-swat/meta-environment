@@ -263,7 +263,6 @@ static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
 
 /*}}}  */
 
-
 /*{{{  static Traversal setTraversalTypeAndStrategy(PT_Production prod) */
 static Traversal setTraversalTypeAndStrategy(Traversal trav)
 {
@@ -496,6 +495,7 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
 Traversal updateAccumulator(Traversal traversal, PT_Tree newarg)
 {
   PositionTreeTuple data;
+
   data.pos = ACCUMULATED_ARG_POS;
   data.tree = newarg;
 
@@ -644,7 +644,7 @@ PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
 
   if (traversal->type == ACCUMULATOR) {
     *traversal = updateAccumulator(*traversal, rhs);
-    reduct = orig;
+    reduct = selectTraversedArg(PT_getTreeArgs(orig));
   } 
   else if (traversal->type == COMBINATION) {
     *traversal = updateAccumulator(*traversal, getTupleSecond(rhs));

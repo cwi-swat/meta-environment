@@ -337,7 +337,7 @@ PT_Tree interpretAPICall(PT_Tree in)
     ATerror("interpretAPICall: unknown ASF api call %t\n", calls);
     return NULL;
   }
-ATwarning("API call returning: %s\n", PT_yieldTree(result));
+
   return result;
 }
 

@@ -1587,7 +1587,7 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
 				trm : reduct_top, env, depth, traversal);
 
       if (reduct_args != FAIL) {
-	reduct = rewriteTop(reduct_args, env, depth, traversal);
+	reduct = rewriteTop(reduct_args, env, depth, NO_TRAVERSAL);
 
 	if (reduct == FAIL) {
 	  reduct = reduct_args;
@@ -1796,16 +1796,23 @@ static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra)
   PT_Args elems;
   PT_Args newelems;
   PT_Production prod = PT_getTreeProd(list);
-  
+  PT_Tree reduct = FAIL;
+
   elems = PT_getTreeArgs(list);
   newelems = rewriteElems(prod, elems, env, depth, extra);
 
   if (!newelems) {
-    return list;
+    return FAIL;
   }
 
   pedantic_assert(isValidList(newelems));
-  return selectAndRewrite(PT_setTreeArgs(list, newelems), depth);
+  reduct = selectAndRewrite(PT_setTreeArgs(list, newelems), depth);
+
+  if (PT_isEqualTree(reduct,list)) {
+    reduct = FAIL;
+  }
+
+  return reduct;
 }
 
 /*}}}  */
@@ -1849,7 +1856,7 @@ static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,
 {
   PT_Tree reduct = FAIL;
   Traversal traversal;
-
+ATsetChecking(ATtrue);
   assert(extra == NULL && "Nested traversal should have been reduced.");
 
   traversal = createTraversalPattern(trm);
