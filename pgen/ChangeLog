@@ -1,5 +1,8 @@
 $Id$
 
+2003/05/19 ({markvdb,jong}@cwi.nl)
+ * Added explicit ATBpack and ATBunpack.
+
 2003/04/29
  * Fixed the annoying bug wrt unnecessary warnings in case of parameters.
 
