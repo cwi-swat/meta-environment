@@ -1,0 +1,6 @@
+$Id$
+
+Fri Jun 18 10:49:43 CEST 2004 <jurgenv@cwi.nl>
+ * Created separate package for toolbus java adapter classes and 
+   the java-adapter script.
+

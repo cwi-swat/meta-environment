@@ -1,0 +1,14 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/toolbus-java-adapter
+   info=http://www.cwi.nl/projects/MetaEnv/toolbus-java-adapter
+   description='Classes for connecting a Java application to the ToolBus' 
+
+   keywords=meta-environment, toolbus, client, java
+
+configuration interface
+
+requires
+   aterm-java	1.6
