@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 11 13:37:01 CEST 2003 <jong@cwi.nl>
+ * fix #include problems
+
 2003/04/02 (jurgenv@cwi.nl)
  * Extended dot parser with the ability to deal with direction attributes
    on edges

@@ -10,8 +10,8 @@ YFLAGS = -d
 
 INCLUDES = \
 	-DDOT_COMMAND=\"${GRAPHVIZ}/bin/dot\" \
-	-I${ATERM}/include \
         -I${top_srcdir}/lib \
+	-I${ATERM}/include \
 	-I${TOOLBUSLIB}/include
 
 noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
