@@ -1,6 +1,6 @@
 =head1 NAME
 
-B<SGLR> - the B<S>cannerless B<G>eneralized B<LR> parser
+SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 

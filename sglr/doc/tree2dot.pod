@@ -1,6 +1,6 @@
 =head1 NAME
 
-B<TREE2DOT> - Parse Trees to DOT converter
+TREE2DOT - Parse Trees to DOT converter
 
 =head1 SYNOPSIS
 
