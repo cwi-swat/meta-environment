@@ -143,7 +143,6 @@ createTraversalPattern(PT_Tree term)
   traversal.args = args;
   traversal.symbols = symbols;
 
-ATwarning("type: %d\nprod: %t\nsymbol: %t\n\n",traversal.type,traversal.prod,traversal.symbols);
   return traversal;
 }
 
@@ -176,7 +175,6 @@ makeTraversalAppl(PT_Tree appl, Traversal traversal)
                                         &symbolVisitorData);
 
   prod = PT_setProductionLhs(traversal.prod, symbols);
-ATwarning("new prod: %t\n", prod); 
   treeVisitorData.pos = TRAVERSED_ARG_POS;
   treeVisitorData.tree = appl;
 
