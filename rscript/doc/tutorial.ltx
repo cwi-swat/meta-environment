@@ -1701,7 +1701,14 @@ they are killed by the definition of {\tt i} in statement {\tt 4} itself. Defini
 
 \subsubsection{Live Variables}
 
-\note{To be done}
+The live variables of a certain statement are those variables whose value will
+be used by some successor of that statement. The mathematical formulation of
+this problem is as follows:
+
+\[
+IN[S] =USE[S] \cup (OUT[S] - DEF[S]) \]
+\[ OUT[S] = \bigcup_{S' \in successor of S} IN[S'] \]
+
 
 \subsubsection{Others}
 \note{Some ideas:
