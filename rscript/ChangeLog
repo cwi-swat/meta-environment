@@ -1,5 +1,10 @@
 # $Id$
 
+
+Tue Oct 12 11:00:41 CEST 2004 <{kooiker,storm}@cwi.nl>
+ * Difference operator on bags now removes all righthand 
+   side elements (and not just one).
+	
 Fri Jul  9 14:08:06 CEST 2004 <jong@cwi.nl>
  * include make_rules so pkg file can be generated
 
