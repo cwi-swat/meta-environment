@@ -35,7 +35,7 @@ AC_CHECK_PROGS(MAKEDEP, gccmakedep makedepend, no)
 AC_REQUIRE([AC_PROG_CC])
 AC_MSG_CHECKING([how to generate dependencies])
 AC_CACHE_VAL(ac_cv_prog_MAKEDEPEND,
-if test "$GCC" = yes; then
+if test "${GCC}" = "yes"; then
 	ac_cv_prog_MAKEDEPEND="${CC-cc} -MM"
 else
 	ac_cv_prog_MAKEDEPEND="$MAKEDEP -f-"
@@ -64,7 +64,7 @@ dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
 dnl Which CFLAGS to use?
-if test ${CC} = gcc ; then
+if test "${GCC}" = "yes" ; then
 	CFLAGS="-g -Wall -O4"
 fi
 AC_SUBST(CFLAGS)
