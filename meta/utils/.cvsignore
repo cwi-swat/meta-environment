@@ -12,3 +12,5 @@ insert-header
 genamakefile
 parse-sdf2.1
 perform-test
+remove-annotation
+apply-function
