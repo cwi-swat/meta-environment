@@ -24,11 +24,11 @@ TESTS       = toolbus-test module-test parser-test
 
 noinst_SCRIPTS = ambi-test.tb
 
-EXTRA_DIST  = toolbus-test.sh.src module-test.sh.src parser-test.sh.src \
+EXTRA_DIST  = toolbus-test.src module-test.src parser-test.src \
               new-eqs-test.tb new-module-test-1.tb new-module-test-2.tb \
               new-module-test-3.tb open-sdf2-lang-test.tb \
               open-table-test-1.tb open-table-test-2.tb update-test-module.tb \
-              Empty.sdf Empty.sdf.baf AmbiLanguage.baf ambi-test.tb \
+              Empty.sdf Empty.sdf.baf AmbiLanguage.baf ambi-test.tb.src \
               Pico-Booleans.sdf Pico-Booleans.sdf.baf
 
 CLEANFILES  = $(TESTS)

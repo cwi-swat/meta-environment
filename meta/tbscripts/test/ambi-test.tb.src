@@ -19,7 +19,6 @@
 
    $Id$
 */
-
 #include <sglr.idef>
 
 process Test is
@@ -28,7 +27,7 @@ let
   Amount: int,
   Ambs: list
 in
-  snd-msg(open-language("Ambi", "./AmbiLanguage.baf")).
+  snd-msg(open-language("Ambi","__SRCDIR__/AmbiLanguage.baf")).
   rec-msg(language-opened("Ambi")).
   snd-msg("aap", parse-string-as-asfix1("Ambi","","a")).
  (
