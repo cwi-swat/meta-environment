@@ -1,6 +1,14 @@
 #!/usr/local/bin/wish -f					-*- C -*-
 
 wm withdraw .
+#-------------------------------------------------------------
+# Set default options
+#-------------------------------------------------------------
+
+option add *Background AntiqueWhite
+option add *Foreground DeepPink
+
+option add *Entry.Foreground black
 
 # --------------------------------------------------------------------
 #
@@ -24,18 +32,18 @@ proc rec-ack-event {n} {
 }
 
 proc no-auction {} {
-     give_msg "No auction going on at the moment"
+     give_msg "No sale in progress"
 }
 
 proc any-higher-bid {} {
-     give_msg "*** Last chance to bid ***"
+     give_msg "Last chance to bid"
 }
 
 # ---------------------------------------------------------------------
 
 proc give_msg {txt} {
   global me
-   .bidder$me.bot.msg configure -text $txt
+   .bidder$me.buttons.msg configure -text $txt
 }
 
 proc accept-bid {} {
@@ -91,43 +99,51 @@ proc mkBidder {} {
   wm title $w "$me"
   wm minsize $w 10 10
 
+  label $w.f0 -text "Bidder $me"
+  pack $w.f0 -side top
+
   frame $w.f1
   pack $w.f1 -side top
-  label $w.f1.ldescr -text "Item for Sale"
-  entry $w.f1.descr -width 30 -relief sunken -textvariable description -state disabled
-  pack $w.f1.ldescr $w.f1.descr -side top
+  label $w.f1.ldescr -text "Item for Sale" -width 15 -anchor e
+  entry $w.f1.descr -width 30 -textvariable description -state disabled
+  pack $w.f1.ldescr $w.f1.descr -side left -padx 5
 
   frame $w.f2
   pack $w.f2 -side top
-  label $w.f2.lbid -text "Highest Bid"
-  entry $w.f2.bid -width 30 -relief sunken -textvariable highest_bid -state disabled
-  pack $w.f2.lbid $w.f2.bid -side top
+  label $w.f2.lbid -text "Highest Bid" -width 15 -anchor e
+  entry $w.f2.bid -width 30 -textvariable highest_bid -state disabled
+  pack $w.f2.lbid $w.f2.bid -side left -padx 5
 
   frame $w.f5
   pack $w.f5 -side top
-  label $w.f5.lamount -text "My Bid"
+  label $w.f5.lamount -text "My Bid" -width 15 -anchor e
   entry $w.f5.amount -width 30 -relief sunken -textvariable current_bid
-  pack $w.f5.lamount $w.f5.amount -side top
+  pack $w.f5.lamount $w.f5.amount -side left -padx 5
+  bind $w.f5.amount <Return> button_bid
 
   frame $w.buttons
   pack $w.buttons -side top
-  button $w.buttons.bid -text "Bid" -command {
-    global my_bid me
+  button $w.buttons.bid -text "Bid" -command button_bid -state disabled
+
+  button $w.buttons.quit -text "Quit" -command {destroy .; TBsend snd-disconnect}
+# pack $w.buttons.bid $w.buttons.quit -side left -padx 70
+
+#  frame $w.bot
+#  pack $w.bot -side bottom
+  label $w.buttons.msg -width 30 -text "No auction going on" -foreground blue
+# pack $w.bot.msg -side top
+
+  pack $w.buttons.bid $w.buttons.quit $w.buttons.msg -side left -padx 10
+}
+
+proc button_bid { } {
+    global my_bid me current_bid
+
     set my_bid $current_bid
     .bidder$me.buttons.quit configure -state disabled
     .bidder$me.buttons.bid configure -state disabled
     TBsend "snd-event(bid($current_bid))"
-  } -state disabled
-
-  button $w.buttons.quit -text "Quit" -command {destroy .; TBsend snd-disconnect}
-  pack $w.buttons.bid $w.buttons.quit -side left -padx 50
-
-  frame $w.bot
-  pack $w.bot -side bottom
-  label $w.bot.msg -width 30 -text "No auction going on"
-    
-  pack $w.bot.msg -side top
-}
+  }
 
 proc rec-terminate { n } {
   puts stderr "$n\n"
