@@ -1,3 +1,7 @@
+2001/07/04 (markvdb@cwi.nl)
+  * Removed a bug from the evaluator, which was there all the time,
+    nested sublist were not treated correctly!
+
 2001/06/18 (jurgenv@cwi.nl)
   * Fixed a compiler bug. Coming back from an optimized recursive
     function, checking of the expected function symbols was not done at all.
