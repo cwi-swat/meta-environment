@@ -805,7 +805,7 @@ ATerm get_parse_table(int cid, ATerm moduleId)
   ATerm     contents, result;
   char      *moduleName;
   char      *path, pathExt[9], *newpath;
-  int       strLen;
+  int       strLen, lenExtension;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     strcpy(pathExt, rules_ext);
@@ -832,9 +832,10 @@ ATerm get_parse_table(int cid, ATerm moduleId)
     path = MDB_getEntryPath(entry);
     if (pathAvailable(path)) {
       strLen = strlen(path);
-      newpath = malloc(strLen+5);
-      strncpy(newpath, path, strLen-4);
-      strcpy(newpath+strLen-4, pathExt);
+      lenExtension = strlen(pathExt);
+      newpath = malloc(strLen+lenExtension+1);
+      strncpy(newpath, path, strLen-lenExtension);
+      strcpy(newpath+strLen-lenExtension, pathExt);
       if (!ATisEqual(table, MDB_NONE)) {
         ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
         contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
