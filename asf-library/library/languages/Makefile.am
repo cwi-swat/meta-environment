@@ -4,6 +4,7 @@ SUBDIRS=\
 	asf\
 	asfix\
 	aterm\
+	casl\
 	cpp\
 	pico\
 	sdf2\
