@@ -1,5 +1,7 @@
 #include "equationChecker.h"
 
+/*{{{  static ATerm makeMessage(const char *msg, ASF_ASFTag tag, ATerm subject) */
+
 static ATerm makeMessage(const char *msg, ASF_ASFTag tag, ATerm subject)
 {
  return ATmake("[<str>,<term>,<term>]",
@@ -8,10 +10,18 @@ static ATerm makeMessage(const char *msg, ASF_ASFTag tag, ATerm subject)
 	       subject);
 }
 
+/*}}}  */
+
+/*{{{  static ATermList makeAmbiguityMessage() */
+
 static ATermList makeAmbiguityMessage()
 {
  return ATmakeList1(ATmake("[<str>]","Equations contain ambiguity/ies"));
 }
+
+/*}}}  */
+
+/*{{{  static ATbool lookupVariable(PT_Tree tree, PT_Args variables) */
 
 static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 {
@@ -27,6 +37,10 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
   }
   return ATfalse;
 }
+
+/*}}}  */
+
+/*{{{  static ATermList checkTreeGivenVariables(ASF_ASFTag tag,  */
 
 static ATermList checkTreeGivenVariables(ASF_ASFTag tag, 
                                          PT_Tree tree, 
@@ -62,6 +76,10 @@ static ATermList checkTreeGivenVariables(ASF_ASFTag tag,
   return messages;
 }
 
+/*}}}  */
+
+/*{{{  static PT_Args collectVariables(PT_Tree tree, PT_Args varList) */
+
 static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
 {
   if (PT_isTreeAmb(tree)) {
@@ -85,6 +103,10 @@ static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
 
   return varList;
 }
+
+/*}}}  */
+
+/*{{{  static ATbool noNewVariables(PT_Tree tree, PT_Args varList) */
 
 static ATbool noNewVariables(PT_Tree tree, PT_Args varList)
 {
@@ -116,6 +138,10 @@ static ATbool noNewVariables(PT_Tree tree, PT_Args varList)
   }
 }
 
+/*}}}  */
+
+/*{{{  static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList) */
+
 static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
 {
   PT_Tree arg;
@@ -146,11 +172,11 @@ static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
   }
 }
 
-static ATermList checkNegativeCondition(ASF_ASFTag tag,
-					ASF_ASFCondition condition,
-                                        ASF_Tree lhsCond,
-					ASF_Tree rhsCond,
-                                        PT_Args *variables) 
+/*}}}  */
+
+/*{{{  static ATermList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+
+static ATermList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   ATermList messages = ATempty;
   
@@ -173,20 +199,13 @@ static ATermList checkNegativeCondition(ASF_ASFTag tag,
   }
 }
 
-static ATermList checkPositiveCondition(ASF_ASFTag tag, 
-					ASF_ASFCondition condition,
-                                        ASF_Tree lhsCond,
-					ASF_Tree rhsCond,
-                                        PT_Args *variables) 
+/*}}}  */
+
+/*{{{  static ATermList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+
+static ATermList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
   ATermList messages = ATempty;
-
-  if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
-    return makeAmbiguityMessage();
-  }
-  if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(rhsCond)))) {
-    return makeAmbiguityMessage();
-  }
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
@@ -203,11 +222,59 @@ static ATermList checkPositiveCondition(ASF_ASFTag tag,
 		   tag,
 		   ASF_makeTermFromASFCondition(condition)));
   }
+
+
 }
 
-static ATermList checkCondition(ASF_ASFTag tag,
-                                ASF_ASFCondition condition,
-                                PT_Args *variables) 
+/*}}}  */
+/*{{{  static ATermList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+
+static ATermList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+{
+  if (!noNewVariables((PT_Tree) lhsCond, *variables) || 
+      !noNewVariables((PT_Tree) rhsCond, *variables)) {
+    return ATmakeList1(
+	       makeMessage(
+		   "uninstantiated variables in equality condition",
+		   tag,
+		   ASF_makeTermFromASFCondition(condition)));
+  }
+
+  return ATempty;
+}
+
+/*}}}  */
+/*{{{  static ATermList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
+
+static ATermList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
+{
+  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
+    return ATmakeList1(
+	       makeMessage(
+		   "matching condition does not introduce new variables",
+		   tag,
+		   ASF_makeTermFromASFCondition(condition)));
+  }
+  else {
+    *variables = collectVariables((PT_Tree)lhsCond, *variables);
+  }
+
+  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
+    return ATmakeList1(
+	       makeMessage(
+		   "right-hand side of matching condition introduces variables",
+		   tag,
+		   ASF_makeTermFromASFCondition(condition)));
+  }
+
+  return ATempty;
+}
+
+/*}}}  */
+
+/*{{{  static ATermList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables)  */
+
+static ATermList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
     return makeAmbiguityMessage();
@@ -216,11 +283,24 @@ static ATermList checkCondition(ASF_ASFTag tag,
     ASF_Tree lhsCond = ASF_getASFConditionLhs(condition);
     ASF_Tree rhsCond = ASF_getASFConditionRhs(condition);
 
+    if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
+      return makeAmbiguityMessage();
+    }
+    if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(rhsCond)))) {
+      return makeAmbiguityMessage();
+    }
+
     if (ASF_isASFConditionNegative(condition)) {
       return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionPositive(condition)) {
       return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
+    }
+    else if (ASF_isASFConditionMatch(condition)) {
+      return checkMatchCondition(tag, condition, lhsCond, rhsCond, variables);
+    }
+    else if (ASF_isASFConditionEquality(condition)) {
+      return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else {
       return ATmakeList1(
@@ -232,9 +312,11 @@ static ATermList checkCondition(ASF_ASFTag tag,
   }
 }
 
-static ATermList checkConditions(ASF_ASFTag tag,
-				 ASF_ASFConditions conditions,
-				 PT_Args *variables) 
+/*}}}  */
+
+/*{{{  static ATermList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables)  */
+
+static ATermList checkConditions(ASF_ASFTag tag, ASF_ASFConditions conditions, PT_Args *variables) 
 {
   ATermList messages = ATempty;
 
@@ -261,6 +343,10 @@ static ATermList checkConditions(ASF_ASFTag tag,
   }
 }
 
+/*}}}  */
+
+/*{{{  static ATermList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)  */
+
 static ATermList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree) 
 {
 
@@ -278,6 +364,10 @@ static ATermList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     }
   }
 }
+
+/*}}}  */
+
+/*{{{  static ATermList checkEquation(ASF_ASFConditionalEquation condEquation)  */
 
 static ATermList checkEquation(ASF_ASFConditionalEquation condEquation) 
 {
@@ -317,6 +407,10 @@ static ATermList checkEquation(ASF_ASFConditionalEquation condEquation)
     }
   }
 }
+
+/*}}}  */
+
+/*{{{  static ATermList checkTest(ASF_ASFTestEquation testEquation)  */
 
 static ATermList checkTest(ASF_ASFTestEquation testEquation) 
 {
@@ -363,6 +457,10 @@ static ATermList checkTest(ASF_ASFTestEquation testEquation)
   }
 }
 
+/*}}}  */
+
+/*{{{  ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList)  */
+
 ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList) 
 {
   ATermList messages = ATempty;
@@ -382,6 +480,10 @@ ATermList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEqu
   return messages;
 }
 
+/*}}}  */
+
+/*{{{  ATermList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList)  */
+
 ATermList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList) 
 {
   ATermList messages = ATempty;
@@ -400,6 +502,10 @@ ATermList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationList)
   }
   return messages;
 }
+
+/*}}}  */
+
+/*{{{  ATermList checkEquations(ASF_ASFEquations equations)  */
 
 ATermList checkEquations(ASF_ASFEquations equations) 
 {
@@ -423,3 +529,5 @@ ATermList checkEquations(ASF_ASFEquations equations)
   }
   return ATempty;
 }
+
+/*}}}  */

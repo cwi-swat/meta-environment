@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = asfe asfc utils test asf-checker asf-operations
+SUBDIRS = asfe asfc utils test asf-checker asf-operations asf-upgrade

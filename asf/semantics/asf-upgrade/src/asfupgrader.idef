@@ -1,0 +1,21 @@
+/*
+  $Id$
+   */
+process AsfUpgrader is
+let
+  Msgs  : list,
+  Rules : term,
+  AC    : asfupgrader
+in
+  execute(asfupgrader, AC?) .
+  (
+    rec-msg(upgrade-asf(Rules?)) .
+    snd-eval(AC, upgrade(Rules)) .
+    rec-value(AC, upgraded(Rules?)) .
+    snd-msg(upgraded-asf(Rules)) .
+    Rules := none
+  )*
+  delta
+endlet
+
+tool asfupgrader is {command = "asfupgrader"}

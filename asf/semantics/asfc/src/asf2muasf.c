@@ -696,7 +696,9 @@ static MA_Cond conditionToCond(ASF_ASFCondition condition,
 
   assert(maLhs != NULL && maRhs != NULL);
 
-  if (ASF_isASFConditionPositive(condition)) {
+  if (ASF_isASFConditionPositive(condition) ||
+      ASF_isASFConditionEquality(condition) ||
+      ASF_isASFConditionMatch(condition)) {
     result = MA_makeCondEqual(maLhs,sp,sp,maRhs);
   }
   else if (ASF_isASFConditionNegative(condition)) {

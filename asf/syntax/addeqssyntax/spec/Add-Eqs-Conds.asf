@@ -48,6 +48,8 @@ equations
                  Symbol "=" Symbol  -> ASF-Equation
                  Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
                  Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
+                 Symbol "==" Symbol -> ASF-Condition {cons("equality")}
+                 Symbol ":=" Symbol -> ASF-Condition {cons("match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")}
                  Prod*)
 
