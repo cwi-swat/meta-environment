@@ -9,5 +9,5 @@ noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 EXTRA_DIST=package
 
 ${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $ < $@
+	cp $< $@
 
