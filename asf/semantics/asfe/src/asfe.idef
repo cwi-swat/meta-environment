@@ -27,7 +27,7 @@ in
       rec-event(Eval, event(EventName?,EventTree?,EventString?)).
       snd-msg(rewrite-event(ModuleName,EventName,EventTree,EventString)).
       rec-msg(rewrite-event-result(ModuleName, EventName, EventResult?)).
-      snd-ack-event(Eval,event-result(EventName,EventResult))
+      snd-ack-event(Eval,event-result(EventName,EventTree,EventString))
     ) *
     (
       rec-value(Eval, rewrite-result(NormalForm?)) .
