@@ -101,6 +101,11 @@ ASCLIB=${ASC_SUPPORT}/lib
 AC_SUBST(ASCLIB)
 
 dnl }}}
+
+AC_PACKAGE_REQUIRE(meta, general-meta,
+   [  --with-meta=DIR  meta is in DIR])
+AC_SUBST(META)
+
 dnl {{{  Where is perl5?
 
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
@@ -167,6 +172,7 @@ AC_OUTPUT(
    asf-operations/Makefile
    asf-operations/src/Makefile
    utils/Makefile
+   meta-scripts/Makefile
    test/Makefile
    test/eqs/Makefile
    test/input/Makefile

@@ -1,3 +1,11 @@
+2002/10/09 (vinju@loria.fr)
+ * Added dependency on meta package
+ * Added directory meta-scripts that contains the meta-environment ToolBus
+   interface. These two scripts with the meta package together form the
+   ASF+SDF Meta-Environment now.
+ * Added the 'meta' script that calls the 'generic-meta' script from the meta
+   package with the correct ToolBus include path.
+
 2002/10/08 (vinju@loria.fr)
  * Refactored asf-operations tool
 
