@@ -43,7 +43,6 @@ void usage(char *prg)
 int main (int argc, char **argv)
 {
   ATerm       bottomOfStack;
-  /*char        *ATlibArgv[] = {"", "-silent"};*/
   char        *err;
   char        *pt_name;
   parse_table *pt;

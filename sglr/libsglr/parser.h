@@ -32,6 +32,9 @@ void   SG_AddStackHist(stack *parent, stack *kid);
 void   SG_PropagateReject(stack *st);
 void   SG_PropagateUnreject(stack *st);
 
+char  *SG_ProdSort(production t);
+
+
 #ifdef DEBUG
 void   SG_ShowStackOffspring(stack *);
 void   SG_ShowStackAncestors(stack *);

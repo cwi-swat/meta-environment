@@ -101,7 +101,6 @@ void    SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 #endif
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-char     *SG_ProdSort(production t);
 forest    SG_Prune(forest t, char *sort);
 ATermList SG_CurrentPosInfo(void);
 forest    SG_ParseError(ATermList cycle, int excess_ambiguities);

@@ -89,6 +89,7 @@ ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl);
 ATerm SGopenLanguage(char *prgname, char *L, char *FN);
 ATerm SGreOpenLanguage(char *prgname, char *L, char *FN);
 ATerm SGcloseLanguage(char *prgname, char *L);
+ATerm SGgetTopSymbols(char *L);
 
 ATerm SGparseString(char *L, char *G, char *S);
 ATerm SGparseStringAsAsFix2(char *L, char *G, char *S);
@@ -159,9 +160,14 @@ enum SGmodeFlags {
 #define SG_OUTPUT            (_SG_Mode  &  SG_BIT(SG_OUTPUTFLAG))
 #define SG_OUTPUT_ON()       (_SG_Mode |=  SG_BIT(SG_OUTPUTFLAG))
 #define SG_OUTPUT_OFF()      (_SG_Mode &= ~SG_BIT(SG_OUTPUTFLAG))
+
 #define SG_ASFIX1            (_SG_Mode  &  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_ON()       (_SG_Mode |=  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_OFF()      (_SG_Mode &= ~SG_BIT(SG_ASFIX1FLAG))
+#define SG_ASFIX2            !(SG_ASFIX1)
+#define SG_ASFIX2_ON()       SG_ASFIX1_OFF()
+#define SG_ASFIX2_OFF()      SG_ASFIX1_ON()
+
 #define SG_BINARY            (_SG_Mode  &  SG_BIT(SG_BINARYFLAG))
 #define SG_BINARY_ON()       (_SG_Mode |=  SG_BIT(SG_BINARYFLAG))
 #define SG_BINARY_OFF()      (_SG_Mode &= ~SG_BIT(SG_BINARYFLAG))

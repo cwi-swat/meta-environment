@@ -96,6 +96,11 @@ ATerm parse_string_as_asfix1(int conn, char *L, char *G, char *S)
   return SGparseStringAsAsFix1(L, G, S);
 }
 
+ATerm get_top_symbols(int conn, char *L)
+{
+  return SGgetTopSymbols(L);
+}
+
 ATerm open_language_from_term(int conn, char *L, ATerm tbl)
 {
   return SGopenLanguageFromTerm(program_name, L, tbl);

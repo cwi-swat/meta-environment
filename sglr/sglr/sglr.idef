@@ -22,16 +22,17 @@
 
 process Parser is
   let
-    P   : sglr,
-    L   : str,
-    G   : str,
-    S   : str,
-    Id  : term,
-    FN  : str,
-    Tbl : term,
-    T   : term,
-    Err : list,
-    Amb : int
+    P    : sglr,
+    L    : str,
+    G    : str,
+    S    : str,
+    Id   : term,
+    FN   : str,
+    Tbl  : term,
+    T    : term,
+    Err  : list,
+    Start: list,
+    Amb  : int
   in
     execute(sglr, P?) .
     (
@@ -103,6 +104,14 @@ process Parser is
 	snd-note(language-unavailable(L))
       +
 	rec-value(P, language-not-open(L?))
+      )
+    +
+      rec-msg(get-top-symbols(L?)) .
+      snd-eval(P, get-top-symbols(L)) .
+      (
+	rec-value(P, startsymbols(L, Start?))
+      +
+	rec-value(P, language-not-available(L))
       )
     )
     * rec-disconnect(P)

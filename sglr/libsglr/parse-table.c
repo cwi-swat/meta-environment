@@ -927,7 +927,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   size_t      goto_entries = 0, action_entries = 0;
   long        maxrss = 0, allocated;
 
-  SG_InitPTGlobals();
+  SG_InitPTGlobals();  /*  Make sure the PT globals are initialised  */
 
   ptfun = ATgetAFun(t);
 

@@ -101,6 +101,7 @@ SG_Aprod_AFun, SG_Amb_AFun;
 
 #define SG_Max(a,b)  ((a>b)?a:b)
 
+void          SG_InitPTGlobals(void);
 state         SG_LookupGoto(parse_table *pt, state s, label l);
 actions       SG_LookupAction(parse_table *pt, state s, token c);
 production    SG_LookupProduction(parse_table *pt, label c);
