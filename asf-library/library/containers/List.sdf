@@ -16,6 +16,8 @@ exports
     cons( X, List[[X]] ) -> List[[X]]
     X ":" List[[X]]      -> List[[X]]
 
+    concat(List[[X]], List[[X]]) 	-> List[[X]]
+
 %% Two special variables for head/tail construction/deconstruction
   variables
    "H"[A-Z0-9\']* -> X

@@ -27,3 +27,6 @@ equations
 [list-cons] cons(X, [ X,* ]) = [ X, X,* ]
 
 [list-cons] X : [X,*] = [X , X,*]
+
+[list-concat] concat([X,*1], [X,*2]) = [X,*1 , X,*2]
+
