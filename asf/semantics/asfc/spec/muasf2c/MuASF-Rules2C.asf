@@ -221,7 +221,8 @@ equations
               asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
                 (Decl* ++d Stat*1,Aint2)
 
-  [ar2cs-2'5] get-first-vf-path(C-rule+) = (Funid,Aint+),
+  [ar2cs-2'5'ignored] 
+              get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = true,
               is-ignored-funid(Funid) = true,
               make-ignored-select-stat(Aint+) = Decl*,
@@ -241,7 +242,8 @@ equations
               asfrules2cstats(C-rule+,,Namepair*,Aint1,MakeSelectStat) =
                 (Decl* ++d Stat*2,Aint2)
 
-[ar2cs-2'6'2] get-first-vf-path(C-rule+) = (Funid,Aint+),
+[ar2cs-2'6'ignored] 
+              get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
               is-ignored-funid(Funid) = true,
               make-ignored-select-stat(Aint+) = Decl*,
@@ -265,6 +267,22 @@ equations
               asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
                 (Stat*4,Aint4)
 
+ [ar2cs-2'7'ignored] 
+              get-first-vf-path(C-rule+1) = (Funid,Aint+),
+              is-list-funid(Funid) = true,
+              is-ignored-funid(Funid) = true,
+              make-ignored-select-stat(Aint+) = Decl*,
+              list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
+              select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
+              asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,no-select-stat) = 
+                (Stat*2,Aint3),
+              Decl* ++d Stat*1 = Stat*3,
+              Stat*3 ++ Stat*2 = Stat*4,
+              gtr(Aint2,Aint3) = Aint4
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Stat*4,Aint4)
+
   [ar2cs-2'9] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-ignored-funid(Funid) = false,
               make-c-expression((Funid,Aint+),Namepair*) = Ltest,
@@ -275,6 +293,21 @@ equations
               asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat) = 
                  (Stat*2,Aint3),
               make-cond(Ltest,Stat*1,Stat*2) = Stat*3,
+              gtr(Aint2,Aint3) = Aint4
+              ========================
+              asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
+                (Decl* ++d Stat*3,Aint4)
+
+[ar2cs-2'9'ignored]   
+              get-first-vf-path(C-rule+1) = (Funid,Aint+),
+              is-ignored-funid(Funid) = true,
+              make-ignored-select-stat(Aint+) = Decl*,
+              is-list-funid(Funid) = false,
+              asfrules2cstats1(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
+              select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
+              asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1,make-select-stat) = 
+                 (Stat*2,Aint3),
+              Stat*1 ++ Stat*2 = Stat*3,
               gtr(Aint2,Aint3) = Aint4
               ========================
               asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
