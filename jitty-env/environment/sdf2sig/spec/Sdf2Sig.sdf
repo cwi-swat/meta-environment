@@ -1,0 +1,32 @@
+module Sdf2Sig
+
+imports sdf2/syntax/Sdf2-Syntax
+imports basic/Integers
+exports
+
+context-free syntax
+
+sdf2sig(SDF) -> ATerm
+
+hiddens
+
+context-free syntax
+
+s2s(SDF,ATermList) -> ATermList {traversal(accu,top-down,break)}
+s2s(Production,ATermList) -> ATermList {traversal(accu,top-down,break)}
+
+arity(Symbol*) -> Integer
+
+variables
+
+"SDF" -> SDF
+"ATerm" -> ATerm
+"ATermList" -> ATermList
+"Production" -> Production
+"Symbol"[0-9]* -> Symbol
+"Symbol*"[0-9]* -> Symbol*
+"Attr*"[0-9]* -> {Attribute ","}*
+"ATerm*"[0-9]* -> {ATerm ","}*
+"AFun" -> AFun
+"char*" -> CHAR*
+"Literal" -> Literal

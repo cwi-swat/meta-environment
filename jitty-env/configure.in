@@ -1,0 +1,91 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(jitty-env,0.1beta)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Which compiler to use?
+AC_REQUIRE([AC_PROG_CC])
+AC_PROG_CC
+
+dnl {{{  Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+dnl }}}
+
+dnl Handle cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+AC_PACKAGE_REQUIRE(meta, generic-meta,
+   [  --with-meta=DIR          Meta-Environment is in DIR])
+AC_SUBST(META)
+
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR          ATerm library is in DIR])
+AC_SUBST(ATERM)
+
+AC_PACKAGE_REQUIRE(asf, asfc,
+   [  --with-asf=DIR           Asf is in DIR])
+AC_SUBST(ASF)
+ASF_LIBRARY=${ASF}/share/asf/library
+AC_SUBST(ASF_LIBRARY)
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+dnl Determine which libraries to use for programs using sockets
+NOSOCKLIBS=$LIBS
+dnl first, the socket functions
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  if test ${SOCKET_FOUND} = no; then
+    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
+  fi
+fi
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
+
+dnl Checks for header files.
+AC_CHECK_HEADER(getopt.h)
+
+
+dnl Which files need updating?
+AC_OUTPUT(
+  Makefile
+  environment/Makefile
+  environment/src/Makefile
+  environment/lib/Makefile
+  environment/lib/syntax/Makefile
+  environment/tb-scripts/Makefile
+  environment/addimports/Makefile
+  environment/addimports/src/Makefile
+  environment/sdf2sig/src/Makefile
+  environment/sdf2sig/Makefile
+  interpreter/Makefile
+)

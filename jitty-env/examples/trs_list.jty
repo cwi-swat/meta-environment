@@ -1,0 +1,26 @@
+signature
+  em(0)
+  cons(2)
+
+  append(2)
+
+  O(0)
+  S(1)
+  plus(2)
+
+  length(1)
+
+rules
+  
+  ap1([l],		append(em,l),		l)
+  ap2([l1,l2,x],	append(cons(x,l1),l2),	cons(x,append(l1,l2)))
+
+default justintime
+
+strategies
+
+end
+
+  rewrite(append(cons(O,cons(S(O),em)), cons(S(S(O)),cons(S(S(S(O))),em))))
+
+stop

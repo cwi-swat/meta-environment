@@ -1,0 +1,20 @@
+signature
+
+  S(1)
+  O(0)
+  plus(2)
+
+rules
+
+  p1([x],plus(x,O),x)
+  p2([x,y],plus(x,S(y)),S(plus(x,y)))
+
+default innermost
+
+strategies
+
+  Plus([2,p1,1])
+
+end
+
+stop

@@ -1,0 +1,147 @@
+/*
+ * $Id$
+ */
+/* #include "asfoperations.idef" */
+#include "addimports.idef"
+#include "error-display.tb"
+#include "jite.idef"
+#include "Sdf2Sig.idef"
+
+process Create-Asf-Processes is
+let Pid : int 
+in
+/*  create(AsfOperations, Pid?). */
+  create(Jite,Pid?).
+  create(AddImports, Pid?).
+  create(DisplayErrors, Pid?) .
+  create(Preprocess-syntax, Pid?) .
+  create(Interpret-term, Pid?) .
+  create(Postprocess-semantics, Pid?) .
+  create(Compile-semantics, Pid?) .
+  create(Rename-semantics, Pid?) .
+  create(Postprocess-collected-semantics, Pid?).
+  create(Sdf2Sig, Pid?)
+
+endlet
+
+process Preprocess-syntax is
+let
+  Syntax     : term, 
+  ModuleName : str,
+  Msgs       : list
+in
+  (
+    rec-msg(preprocess-syntax-hook(eqs(ModuleName?), Syntax?)).
+    snd-msg(add-imports(ModuleName, Syntax)) .
+    rec-msg(extended-syntax(Syntax?)) .
+    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))  
+  +
+    rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
+    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+  )*delta
+endlet
+
+process Interpret-term is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Tree       : term,
+  NormalForm : term,
+  Errors     : list,
+  Text       : str
+in
+  Id := process-id.
+  (
+    rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
+    snd-msg(rewrite(ModuleName,Semantics,Tree)).
+    rec-msg(rewrite-result(NormalForm?)).
+    snd-msg(interpret-term-hook-result(NormalForm))
+  )*delta
+endlet
+
+process Postprocess-semantics is
+let
+  Semantics : term,
+  Msgs      : list
+in
+  (
+    rec-msg(postprocess-semantics-hook(Semantics?)).
+    snd-msg(postprocess-semantics-hook-result(Semantics))
+  )*delta
+endlet
+
+process Compile-semantics is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Progress   : str
+in
+  Id := process-id .
+  (
+    rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
+    snd-msg(compile-semantics-hook-done(ModuleName))
+  )*delta
+endlet
+
+
+process Rename-semantics is
+let
+  Semantics : term,
+  Renamings : term
+in
+  (
+    rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
+    snd-msg(rename-semantics-hook-result(Semantics))
+  )*delta
+endlet
+
+
+process Postprocess-collected-semantics is
+let
+  Semantics : term,
+  Modules   : list,
+  ModuleName : term,
+  Syntax : term,
+  Signature : term,
+  ErrorMsg : str
+in 
+  (
+    rec-msg(postprocess-collected-semantics-hook(ModuleName?,Modules?)).
+    printf("%t\n", ModuleName).
+    snd-msg(get-all-sdf2-definitions(eqs(ModuleName))).
+    (
+      rec-msg(no-syntax(ErrorMsg?)).
+      snd-note(ui-status(errorf("%s",[ErrorMsg])))
+    +
+      rec-msg(syntax(Syntax?)).
+      snd-msg(apply-rewrite("Sdf2Sig","sdf2sig", "ATerm", [Syntax])).
+      rec-msg(normalform("Sdf2Sig", Signature?)).
+      Modules := [Signature, Modules]
+    ).
+    snd-msg(postprocess-collected-semantics-hook-result(ModuleName,Modules))
+  )*delta
+endlet
+
+process Meta-Interface is
+let
+  Id : int
+in
+  Id := process-id.
+  Create-Asf-Processes.
+  (
+    rec-msg(environment-name-hook).
+    snd-msg(environment-name-hook-result("Jitty Meta-Environment"))
+  +
+    rec-msg(library-location-hook).
+    snd-msg(library-location-hook-result("__JITTY_LIBRARY__"))
+  +
+    rec-msg(file-extensions-hook).
+    snd-msg(file-extensions-hook-result(".sdf",".jty",".trm"))
+  +
+    rec-msg(semantics-top-sort-hook).
+    snd-msg(semantics-top-sort-hook-result(sort("Module")))
+  ) * delta
+endlet
+

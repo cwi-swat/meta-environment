@@ -1,0 +1,29 @@
+process Sdf2Sig is
+let
+Sdf2SigTool : toolSdf2Sig,
+Term       : term,
+Args       : list,
+Id         : term,
+ Function   : str,
+ Sort       : str
+in
+  Id := process-id .
+  (
+    (
+      rec-msg(rewrite("Sdf2Sig", Term?)) .
+      execute(toolSdf2Sig, Sdf2SigTool?) .
+      snd-eval(Sdf2SigTool, rewrite(Term))
+    +
+      rec-msg(apply-rewrite("Sdf2Sig", Function?, Sort?, Args?)).
+      execute(toolSdf2Sig, Sdf2SigTool?) .
+      snd-eval(Sdf2SigTool, apply-rewrite(Function,Sort,Args))
+    ).
+    rec-value(Sdf2SigTool, normalform(Term?)) .
+    snd-terminate(Sdf2SigTool,"done").
+    snd-msg(normalform("Sdf2Sig", Term)).
+    Term := null
+  ) *
+  delta
+endlet
+
+tool toolSdf2Sig is { command = "Sdf2Sig" }

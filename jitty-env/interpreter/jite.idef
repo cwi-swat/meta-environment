@@ -1,0 +1,33 @@
+/* $Id$ */
+
+process Jite is
+let
+  Eval       : jite,
+  ModuleName : str,
+  Term       : term,
+  Equations  : term,
+  NormalForm : term,
+  ErrorList  : list,
+  Id         : term
+in
+  Id := process-id .
+  (
+    rec-msg(rewrite(ModuleName?, Equations?, Term?)) .
+    execute(jite, Eval?) .
+    snd-eval(Eval, interpret(ModuleName, Equations, Term)) .
+    (
+      rec-value(Eval, rewrite-result(NormalForm?)) .
+      snd-msg(rewrite-result(NormalForm))
+    +
+      rec-value(Eval, rewrite-errors(ErrorList?)) .
+      snd-msg(rewrite-errors(ErrorList))
+    ).
+    snd-terminate(Eval,"done").
+    %% Equations and terms can be big, so we clear the variables here
+    Equations := none.
+    Term      := none 
+  ) *
+  delta
+endlet
+
+tool jite is { command = "jite" }

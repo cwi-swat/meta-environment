@@ -1,0 +1,28 @@
+process  is
+let
+Tool : tool,
+Term       : term,
+Id         : term,
+ Function   : str,
+ Sort       : str
+in
+  Id := process-id .
+  (
+    (
+      rec-msg(rewrite("", Term?)) .
+      execute(tool, Tool?) .
+      snd-eval(Tool, rewrite(Term))
+    +
+      rec-msg(apply-rewrite("", Function?, Sort?, Term?)).
+      execute(tool, Tool?) .
+      snd-eval(Tool, apply(Function,Sort,Term))
+    ).
+    rec-value(Tool, normalform(Term?)) .
+    snd-terminate(Tool,"done").
+    snd-msg(normalform(Tool, Term)).
+    Term := null
+  ) *
+  delta
+endlet
+
+tool tool is { command = "" }

@@ -1,0 +1,26 @@
+JITty rewriter with strategy annotations -- VERSION 2
+
+This directory contains the JITty term rewriter with strategy annotations.
+Written by Jaco van de Pol (CWI, Amsterdam). Please direct comments to me.
+
+The following files are present:
+
+Makefile	-- Makefile to compile and link everything
+jitty.h		-- JITty API
+jitty.c		-- JITty implementation
+demo.c		-- a small standalone demonstrator
+demo2.c		-- these lines show how to use JITty from a C-program
+rw1.h		-- JITty interface to the muCRL tool set
+doc.ps		-- a small document describing JITty - published in RTA 2002
+INSTALL		-- installation directions
+jitty.tar.gz	-- the complete distribution
+examples	-- a directory with example files for the demo
+CHANGES		-- lists the changes between version 1 and version 2
+
+Type  'demo <examples/trs_bool' to try the examples.
+
+--
+Jaco van de Pol, CWI, P.O.Box 94079, 1090 GB, Amsterdam, NL
+Visitors: CWI Room M341, Kruislaan 413, Amsterdam.
+Phone: +31-(0)20-592 4137. Fax: +31-(0)20-592 4199.
+E-mail: Jaco.van.de.Pol@cwi.nl.   http://www.cwi.nl/~vdpol

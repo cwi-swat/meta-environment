@@ -1,0 +1,6 @@
+#! /bin/sh
+
+__META__/bin/generic-meta -I__PREFIX__/share/jitty-env \
+                          -I __PREFIX__/share/asfsdf-meta \
+			  -p __PREFIX__/bin \
+			  $*

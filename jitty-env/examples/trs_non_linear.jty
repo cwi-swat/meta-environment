@@ -1,0 +1,15 @@
+signature 
+one(0)
+eq(2)
+rules
+e([x],eq(x,x),one)
+default justintime
+strategies
+end
+rewrite(eq(one,one))
+rewrite(eq(x,one))
+assign(x,one)
+rewrite(eq(x,x))
+rewrite(eq(x,one))
+stop
+

@@ -1,0 +1,18 @@
+module Booleans
+
+imports syntax/Whitespace
+
+exports
+  sorts BOOL
+  context-free syntax
+
+  context-free syntax
+    "true"  -> BOOL {cons("true")}
+    "false" -> BOOL {cons("false")}
+    BOOL "|" BOOL      -> BOOL {cons("or"),left}
+    BOOL "&" BOOL      -> BOOL {cons("and"),left}
+    "not" "(" BOOL ")" -> BOOL {cons("not")}
+ 
+  context-free priorities
+    BOOL "&" BOOL -> BOOL >
+    BOOL "|" BOOL -> BOOL

@@ -1,0 +1,24 @@
+/*
+  $Id$
+ */
+process AddImports is
+let
+  NewSyntax : term,
+  Syntax    : term,
+  AES       : addimports,
+  ModuleName : str
+in  
+  (
+    rec-msg(add-imports(ModuleName?, Syntax?)).
+    execute(addimports,AES?).
+    snd-eval(AES,add-imports(ModuleName, Syntax)).
+    rec-value(AES,extended-syntax(NewSyntax?)). 
+    snd-msg(extended-syntax(NewSyntax)).
+    snd-terminate(AES,"done").
+    Syntax := none.
+    NewSyntax := none
+  )*
+  delta
+endlet
+
+tool addimports is {command = "addimports"}

@@ -1,0 +1,12 @@
+Changes from version 1 to version 2
+===================================
+. error with normalizing in the presence of hashing solved
+  by discriminating between toplevel and internal functions:
+   - JIT_normalize and normalize; 
+   - JIT_assign and assign
+
+. changes in interface:
+  - added JIT_flush (in order to clear the hashtable)
+  - added "hashing" flag to JIT_normalize
+
+. added 'void' to all functions with 0 arguments

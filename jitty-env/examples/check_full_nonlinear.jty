@@ -1,0 +1,11 @@
+signature 
+  one(0)
+  eq(2)
+rules
+  e([x],eq(x,x),one)
+default justintime
+strategies
+  eq([1,e,2])
+end
+stop
+
