@@ -22,7 +22,7 @@
   (setq new-string (concat current-partial-msg args))
   (let ((eval-list (split-string new-string "\n"))
 	(last-char (substring new-string -1)))
-    (while (< 1 (list-length eval-list))
+    (while (< 1 (length eval-list))
       (eval (head (read-from-string (head eval-list))))
       (set 'eval-list (tail eval-list))
     )
