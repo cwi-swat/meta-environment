@@ -44,7 +44,7 @@ static int pid;
 static ATerm env = NULL;
 
 static int             stack_level = -1;
-static ASF_Tag         tag_stack[MAX_DEPTH];
+static ASF_ASFTag         tag_stack[MAX_DEPTH];
 static equation_entry *rule_stack[MAX_DEPTH];
 static ATerm           env_stack[MAX_DEPTH];
 static ATerm	       position_stack[MAX_DEPTH];
@@ -198,7 +198,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   }
 
   equ_tree =
-    PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
+    PT_makeTreeFromTerm(ASF_makeTermFromASFConditionalEquation(currentRule->equation));
   pos_anno = PT_getTreeAnnotation(equ_tree, pos_info);
 
   if (!pos_anno) {
@@ -293,7 +293,7 @@ static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
       frame = ATmake("frame(<int>,\"anonymous\",location(unknown),[])", i);
     } else {
       var_list = varlist_from_env(env_stack[i]);
-      frame_name = PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(tag_stack[i])));
+      frame_name = PT_yieldTree(PT_TreeFromTerm(ASF_ASFTagToTerm(tag_stack[i])));
 
       frame = ATmake("frame(<int>,<str>,location(<term>),<term>)",
 		     i, frame_name, position_stack[i], var_list);
