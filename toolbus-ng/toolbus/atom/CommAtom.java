@@ -50,7 +50,7 @@ class CommAtom extends Atom {
 				Atom b = (Atom) partnervec.elementAt(pindex);
 				ProcessInstance pb = b.getProcess();
 				if (pb.prefixContains(b) && b.isEnabled()){
-					MatchResult r = this.matchArgs(b);
+					MatchResult r = matchArgs(b);
 					if (r.matches()) {
 //								System.out.println(
 //									"--- " +

@@ -9,14 +9,38 @@ Issues for improving toolbusNG prototype
     }
 
 - AtomSet: why implemented using a Vector and not a HashSet? (HashSet is commented out?)
+
+  ==> Beacuse we want to have a truely random iteration over all elements (in execute).
+      With a vector we can take a randowm start value, how can htis be achieved with
+      a Hashset?
+      
+      Traces of Hashset removed.
+  
+  
 - var definitions and other term expressions should not be 'inlined': aterms.make("var(-1,int,P)")
+
+  ==> I think that this now only done in examples. Will be replaced by generated terms (by parser).
+
 - Atom.copy: only args are copied? What about test, env, etc.
+
+  ==> Yep. An Atom is only ever copied **before** it is compiled. This is the case when a new
+      process is created or a process call is expanded. Agreed. three may be a more elegant solution.
+
+
 - TBTerm FunctionDescriptor: how about implementing an 'escape' to Java and implementing all these
   functions through that escape? We could map 'function symbols' to java methods or classes.
   At the least: evaluate expressions by calling 'fd.apply' (or fd.eval) instead of case statement
   for builtins. Note that one FunctionDescriptor class can implement multiple functions, for instance
   one FunctionDescriptor for all builtins to avoid a class flood.
+  
+  Good idea!
+  
 - Why use 'this.getEnv()' instead of 'getEnv()'?
+
+==> Yep: removed all redundant occurrences of this.
+
 - Shutdown atom: do not call 'System.exit(0)' but throw 'ToolbusDeathException': this gives us
   the flexibility to use the toolbus in a wider context.
+  
+  Yep: added ToolbusDeathException (and also added argument to shutdown).
   

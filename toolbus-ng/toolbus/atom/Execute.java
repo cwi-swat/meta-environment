@@ -25,7 +25,7 @@ public class Execute extends Atom {
 	{
 		super.compile(P, follow);
 		
-		ATermList args = this.getArgs();
+		ATermList args = getArgs();
 		toolcall = args.getFirst();
 		rvar = args.getLast();
 		if(toolcall.getType() != ATerm.APPL)
@@ -40,9 +40,9 @@ public class Execute extends Atom {
       if (super.execute()) {
 		String toolname = ((ATermAppl) toolcall).getName();
 		ATermList cargs = ((ATermAppl) toolcall).getArguments();
-		ATermList evargs = (ATermList) TBTerm.eval(cargs, this.getEnv());
+		ATermList evargs = (ATermList) TBTerm.eval(cargs, getEnv());
 
-		ToolBus TB = this.getProcess().getToolBus();
+		ToolBus TB = getProcess().getToolBus();
 				
 		ToolDefinition TD = TB.getToolDefinition(toolname);
 		
@@ -50,7 +50,7 @@ public class Execute extends Atom {
 		
 		TB.addTool(TI);
 		
-		this.getEnv().putVar(rvar, TI.getToolId());
+		getEnv().putVar(rvar, TI.getToolId());
 		
 		return true;
       } else {

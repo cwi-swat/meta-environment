@@ -26,7 +26,7 @@ public class Create extends Atom {
 	{
 		super.compile(P, follow);
 		
-		ATermList args = this.getArgs();
+		ATermList args = getArgs();
 		pcall = args.getFirst();
 		rvar = args.getLast();
 		if(pcall.getType() != ATerm.APPL)
@@ -45,11 +45,11 @@ public class Create extends Atom {
 		ATermList evargs = (ATermList) TBTerm.eval(cargs, this.getEnv());
 	
 		ProcessExpression PE = new ProcessCall(name, evargs);
-		ToolBus TB = this.getProcess().getToolBus();
+		ToolBus TB = getProcess().getToolBus();
 	
 		ProcessInstance P = TB.addProcess(PE);
 	
-		this.getEnv().putVar(rvar, rvar.getFactory().makeInt(P.getProcessId()));
+		getEnv().putVar(rvar, rvar.getFactory().makeInt(P.getProcessId()));
 		return true;
 
 	}

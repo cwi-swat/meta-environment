@@ -14,18 +14,15 @@ import toolbus.*;
 
 public class AtomSet {
 	private Vector atoms;
-	//private HashSet atomset;
 	private static Random rand = new Random();
 
 	public AtomSet() {
 		this.atoms = new Vector();
-		//this.atomset = new HashSet();
 	}
 
 	public AtomSet add(Atom a) {
 		if (!atoms.contains(a)) {
 			this.atoms.addElement(a);
-			//this.atomset.add(a);
 		}
 		return this;
 	}
