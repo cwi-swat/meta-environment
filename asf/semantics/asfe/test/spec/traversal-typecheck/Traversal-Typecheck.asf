@@ -13,11 +13,11 @@ equations
 [5] type(natural) + type(natural) = type(natural)
 [6] type(natural) - type(natural) = type(natural)
 
-%% [7] Stat*1; if type(natural) then Stat*2 else Stat*3 fi ; Stat*4 
-%%      = Stat*1; Stat*2; Stat*3; Stat*4
+[7] Stat*1; if type(natural) then Stat*2 else Stat*3 fi ; Stat*4 
+      = Stat*1; Stat*2; Stat*3; Stat*4
 
-%%[8] Stat*1; while type(natural) do Stat*2 od; Stat*3 
-%%      = Stat*1; Stat*2; Stat*3
+[8] Stat*1; while type(natural) do Stat*2 od; Stat*3 
+      = Stat*1; Stat*2; Stat*3
 
-%%[9] Stat*1; type(Type) := type(Type); Stat*2 
-%%      = Stat*1; Stat*2
+[9] Stat*1; type(Type) := type(Type); Stat*2 
+      = Stat*1; Stat*2
