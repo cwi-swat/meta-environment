@@ -1,3 +1,6 @@
+2002/09/11 (jong@cwi.nl)
+ * Removed debug print from posInfo.c
+
 2002/09/09 (vandenbr@loria.fr)
  * Added "#!/bin/sh" in order to make test scripts work under CYGWIN.
 

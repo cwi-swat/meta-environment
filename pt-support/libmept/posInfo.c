@@ -218,9 +218,6 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
 
   parsetree = PT_setParseTreeTop(parsetree, PT_addTreePosInfo(tree, &current));
 
-  ATwarning("result of PT_addParseTreePosInfoToDepth (depth=%d) = %t\n",
-	    maxDepth, parsetree);
-
   return parsetree;
 }
 
