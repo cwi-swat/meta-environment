@@ -246,6 +246,7 @@ static PT_Tree unparse_to_file(PT_Tree file, PT_Tree tree)
 {
   PT_Tree bytes = unparse_to_bytes(tree);
   write_bytes_to_file(file, bytes);
+  return tree;
 }
 
 /*}}}  */
@@ -254,7 +255,7 @@ static PT_Tree unparse_to_file(PT_Tree file, PT_Tree tree)
 PT_Tree ASFE_unparse_to_file(PT_Tree input)
 {
   PT_Tree file = CO_getFunctionArgument(input,0);
-  PT_Tree tree = CO_getFunctionArgument(input,0);
+  PT_Tree tree = CO_getFunctionArgument(input,1);
 
   return unparse_to_file(file, tree);
 }
@@ -438,10 +439,16 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
   char *filename = PT_yieldTree(input);
   FILE *fp = NULL;
 
-  if (!(fp = fopen(filename, "wb"))) {
+  fp = fopen(filename, "wb");
+
+  if (fp != NULL) {
     fputs(PT_yieldTree(bytes), fp);
     fclose(fp);
   }
+  else {
+    perror("write-bytes-to-file");
+    ATabort("builtin failed");
+  } 
 
   return bytes;
 }
