@@ -27,7 +27,7 @@
 ATbool run_verbose = ATfalse;
 
 static char myversion[] = "1.5";
-static char myarguments[] = "hvV";
+static char myarguments[] = "hmvV";
 
 /*}}}  */
 
@@ -458,6 +458,11 @@ static void version(char *prg)
 
 /*}}}  */
 
+static void memprof()
+{
+  read_term_file(0, "/ufs/markvdb/Research/asf/library/sandbox/toolbus/analysis/Meta.snapshot");
+}
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -482,6 +487,10 @@ int main(int argc, char *argv[])
 	case 'h':
 	  usage(argv[0], ATfalse);
 	  break;
+        case 'm':
+          ATBinit(argc, argv, &bottomOfStack);
+	  memprof();
+	  break;
 	default:
 	  usage(argv[0], ATtrue);
 	  break;
@@ -494,6 +503,7 @@ int main(int argc, char *argv[])
     cid = ATBconnect(NULL, NULL, -1, in_output_handler);
     ATBeventloop();
   }
+
 
   return 0;
 }

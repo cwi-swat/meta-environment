@@ -67,7 +67,8 @@ in
     +
       rec-value(IO, failure(ErrorMessage?)) .
       snd-msg(io-file-not-written(ErrorMessage))
-    )
+    ) .
+    Term := empty
   +
     rec-msg(io-read-file(FileName?)) .
     snd-eval(IO,read-text-file(FileName)) .
@@ -83,7 +84,8 @@ in
     snd-eval(IO,read-term-file(FileName)) .
     (
       rec-value(IO,file-contents(Contents?)).
-      snd-msg(io-file-contents(Contents))
+      snd-msg(io-file-contents(Contents)) .
+      Contents := empty
     + 
       rec-value(IO,failure(ErrorMessage?)).
       snd-msg(io-error-reading(ErrorMessage))
@@ -107,4 +109,4 @@ in
   delta
 endlet
 
-tool in-output is { command = "in-output" }
+tool in-output is { command = "memprof in-output" }

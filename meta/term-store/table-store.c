@@ -1,6 +1,8 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <string.h>
+#include <atb-tool.h>
+
 #include "table-store.h"
 
 #ifndef streq
@@ -350,7 +352,7 @@ void loadTable(SS_Table table)
 
 void loadTables(SS_Tables tables)
 {
-  for (; SS_isTablesEmpty(tables); tables = SS_getTablesTail(tables)) {
+  for (; !SS_isTablesEmpty(tables); tables = SS_getTablesTail(tables)) {
     SS_Table table = SS_getTablesHead(tables);
     loadTable(table);
   }
@@ -361,7 +363,7 @@ void loadTables(SS_Tables tables)
 
 void TS_loadSnapshot(ATerm s)
 {
-  SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
+  SS_Snapshot snapshot = SS_SnapshotFromTerm(ATBunpack(s));
   SS_Tables tables;
 
   if (!SS_isValidSnapshot(snapshot)) {

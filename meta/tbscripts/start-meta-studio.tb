@@ -14,7 +14,8 @@ in
       rec-msg(io-file-contents(TermStoreContents?)) .
       snd-msg(ts-load-snapshot(TermStoreContents)) .
       rec-msg(ts-snapshot-loaded) .
-      printf("TermStore %s restored\n", Name)
+      printf("TermStore %s restored\n", Name) .
+      DrawImportGraph()
     +
       rec-msg(io-error-reading(ErrorMessage?))
     )
