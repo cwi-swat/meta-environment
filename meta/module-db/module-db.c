@@ -450,7 +450,7 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
       module_type = sdf2;
   } else if (ATmatch(type, "eqs")) {
       updated_location = eqs_updated_loc;
-      location = syn_loc;
+      location = eqs_loc;
       module_type = eqs;
   } else {
       ATerror("Type not supported by database: %t", type);
@@ -495,47 +495,6 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   ATerror("Error in get_asfix");
   return NULL;
 }
-/*
-ATerm get_eqs_asfix(int cid, ATerm modname)
-{
-  ATerm entry, asfix;
-  ATerm status;
-
-  entry = GetValue(new_modules_db, modname);
-  status = ATelementAt((ATermList)entry, eqs_updated_loc);
-  if(ATisEqual(status,Mtrue)) {
-    asfix = ATelementAt((ATermList)entry, eqs_loc);
-    if(ATisEqual(asfix,ATparse("unavailable")) ||
-       ATisEqual(asfix,ATparse("error"))) {
-      return ATmake("snd-value(unavailable)");
-    }
-    else if(ATisEqual(asfix,ATparse("no-equations"))) {
-      return ATmake("snd-value(no-eqs)");
-    }
-    else {
-      status = Mfalse;
-      entry = (ATerm)ATreplace((ATermList)entry,
-                               status,
-                               eqs_updated_loc);
-      PutValue(new_modules_db, modname, entry);
-      return ATmake("snd-value(eqs(<term>))", asfix);
-    }
-  }
-  else {
-    asfix = ATelementAt((ATermList)entry, eqs_loc);
-    if(ATisEqual(asfix,ATparse("unavailable")) ||
-       ATisEqual(asfix,ATparse("error"))) {
-      return ATmake("snd-value(unavailable)");
-    }
-    else if(ATisEqual(asfix,ATparse("no-equations"))) {
-      return ATmake("snd-value(no-eqs)");
-    }
-    else {
-      return ATmake("snd-value(eqs-unchanged(<term>))", asfix);
-    }
-  }
-}
-*/
 
 ATbool valid_parse_tables(ATermList visited, ATerm module, int time);
 
