@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 16 19:33:49 CEST 2004 <jurgenv@cwi.nl>
+ * added max(Int, Int) to basic/Integers
+
 Tue Mar 30 12:56:23 CEST 2004 <{jong,kooiker}@cwi.nl>
  * add area alternative for Location
 
