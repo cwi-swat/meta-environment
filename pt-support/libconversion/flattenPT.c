@@ -408,6 +408,7 @@ static PT_Tree flattenTerm(PT_Tree tree)
 {
   PT_Production prod;
   PT_Args args;
+  PT_Symbol listSymbol;
 
   if (PT_isTreeChar(tree)) {
     return makeCharFromInt(tree);
@@ -443,19 +444,27 @@ static PT_Tree flattenTerm(PT_Tree tree)
 
   /* Lists */
   if (isSepListProd(prod)) {
-    return PT_makeTreeList(flattenSepList(tree, PT_makeArgsEmpty()));
+    listSymbol = PT_getProductionRhs(prod);
+    return PT_makeTreeList(listSymbol,
+                           flattenSepList(tree, PT_makeArgsEmpty()));
   }
 
   if (isListProd(prod)) {
-    return PT_makeTreeList(flattenList(tree, PT_makeArgsEmpty()));
+    listSymbol = PT_getProductionRhs(prod);
+    return PT_makeTreeList(listSymbol,
+                           flattenList(tree, PT_makeArgsEmpty()));
   }
 
   if (isLexicalListProd(prod)) {
-    return PT_makeTreeList(flattenLexicalList(tree, PT_makeArgsEmpty()));
+    listSymbol = PT_getProductionRhs(prod);
+    return PT_makeTreeList(listSymbol,
+                           flattenLexicalList(tree, PT_makeArgsEmpty()));
   }
 
   if (isCharClassListProd(prod)) {
-    return PT_makeTreeList(flattenCharClassList(tree, PT_makeArgsEmpty()));
+    listSymbol = PT_getProductionRhs(prod);
+    return PT_makeTreeList(listSymbol,
+                           flattenCharClassList(tree, PT_makeArgsEmpty()));
   }
 
   /* Default: application */
