@@ -51,10 +51,10 @@ Installation instructions:
 
 
 * Platform support
-                                                                   
+
      The new-meta environment has been installed successfully on
      the following platforms:
- 
+
      -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
      -- SGI IRIX/Mips >= 6.2
      -- NetBSD/PowerPC, NetBSD/iX86 >= 1.4
@@ -63,7 +63,7 @@ Installation instructions:
 
      The new-meta environment has been tried without success on
      the following platforms:
- 
+
      -- Digital (`Compaq') Alpha & OSF1 v4.0 (`Compaq Tru64 Unix')
 
 
