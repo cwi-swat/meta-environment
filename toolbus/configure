@@ -552,7 +552,7 @@ fi
 
 
 PRODUCT=ToolBus
-VERSION=0.11.7
+VERSION=0.12
 DEMOS="auction calc edit game hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
