@@ -48,6 +48,7 @@ let
   Co      : int,
   Char    : term,
   ErrList : list,
+  Ambs    : list,
   Cycle   : list
 in
   Id := process-id. 
@@ -142,7 +143,7 @@ in
               + 
                 (
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                  ambiguities(I?)))).
+                                                  ambiguities(I?, Ambs?)))).
                   snd-note(ui-status(errorf(
                            "Parse of %s returned %d ambiguities", 
                            [Name2, I]))) 

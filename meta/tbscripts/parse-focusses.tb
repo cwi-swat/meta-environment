@@ -38,6 +38,7 @@ let
   Nonterminal  : str,
   Tree         : term,
   ErrList      : list,
+  Ambs         : list,
   Cycle        : term,
   Amount       : int
 in                     
@@ -81,7 +82,7 @@ in
           ErrorFoci := join(ErrorFoci, Focus)
         +
           rec-msg(parse-result-asfix1(Id,
-            parse-error(ErrList?, ambiguities(Amount?)))) .
+            parse-error(ErrList?, ambiguities(Amount?, Ambs?)))) .
           printf("Parse of %s returned %d ambiguities", Text, Amount) .
           ErrorFoci := join(ErrorFoci, Focus)
         +

@@ -41,6 +41,7 @@ let
   Time1   : term,
   Time2   : term,
   ErrList : list,
+  Ambs    : list,
   Cycle   : list,
   EqsText : str,
   EqsTree : term
@@ -67,7 +68,7 @@ in
              rec-msg(eqs-updated)
            + 
              rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                         ambiguities(I?)))).
+                                                         ambiguities(I?, Ambs?)))).
              snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
                                        [Module,I])))
            + 
