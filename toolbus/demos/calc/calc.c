@@ -19,49 +19,54 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+#include <stdlib.h>
 #include "calc.tif.c"
 
-int calculate(term *t)
+int calculate(ATerm t)
 { int n;
   char *s;
-  term *t1, *t2;
+  ATerm t1, t2;
 
-  if(TBmatch(t, "%d", &n))
+  if(ATmatch(t, "<int>", &n))
      return n;
-  else if(TBmatch(t, "%s", &s))
+  else if(ATmatch(t, "<str>", &s))
 	  return atoi(s);
-  else if(TBmatch(t, "plus(%t,%t)", &t1, &t2))
+  else if(ATmatch(t, "plus(<term>,<term>)", &t1, &t2))
 	  return calculate(t1) + calculate(t2);
-  else if(TBmatch(t, "times(%t,%t)", &t1, &t2))
+  else if(ATmatch(t, "times(<term>,<term>)", &t1, &t2))
 	  return calculate(t1) * calculate(t2);
   else {
-        TBmsg("panic in calculate: %t\n", t);
+        ATerror("panic in calculate: %t\n", t);
         return 0;
       }
 }
 
-term *expr(char *s)
-{ term *trm = TBmake(s);
+ATerm expr(int conn, char *s)
+{ ATerm trm = ATmake(s);
 
   if(!trm)
-    return TBmake("snd-value(calc-error(%s))", s);
+    return ATmake("snd-value(calc-error(<str>))", s);
   else
-    return TBmake("snd-value(%d)", calculate(trm));
+    return ATmake("snd-value(<int>)", calculate(trm));
 }
 
-void rec_terminate(term *t)
+void rec_terminate(int conn, ATerm t)
 {
   exit(0);
 }
 
 int main(int argc, char *argv[])
 {
-  extern term_list *tool_in_sign, *tool_out_sign;
-  term *trm;
+  /* extern term_list *tool_in_sign, *tool_out_sign;
+     term *trm; */
+  ATerm bottomOfStack;
 
-  TBinit("calc", argc, argv, calc_handler, calc_check_in_sign);
-
-  TBeventloop();
+  ATBinit(argc, argv, &bottomOfStack);
+  if(ATBconnect(NULL, NULL, -1, calc_handler) >= 0){
+    ATBeventloop();
+  } else
+    fprintf(stderr, "calc: Could not connect to the ToolBus, giving up!\n");
+  ATBeventloop();
 
   return 0;
 }

@@ -19,27 +19,33 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-#include "TB.h"
+#include <atb-tool.h>
 
 FILE *Out;
 
-term *handle_input_from_toolbus(term *e)
+ATerm store_handler(int conn, ATerm e)
 {
   char *s1, *s2;
 
-  if(TBmatch(e, "do(store,%s,%s)", &s1, &s2)){
+  if(ATmatch(e, "do(store,<str>,<str>)", &s1, &s2)){
     fprintf(Out, "%s%s", s1, s2);
     return NULL;
   } else {
-    TBmsg("wrong event received: %t\n", e);
+    ATerror("store: wrong event received: %t\n", e);
     return NULL;
   }
 }
 
-void main(int argc, char *argv[])
-{
+int main(int argc, char *argv[])
+{  ATerm bottomOfStack;
 
-  TBinit("store", argc, argv, handle_input_from_toolbus, NULL);
+  ATBinit(argc, argv, &bottomOfStack);
   Out = fopen("store.out", "w");
-  TBeventloop();
+  if(ATBconnect(NULL, NULL, -1, store_handler) >= 0){
+    ATBeventloop();
+    return 0;
+  } else {
+    fprintf(stderr, "store: Could not connect to the ToolBus, giving up!\n");
+    return -1;
+  }
 }

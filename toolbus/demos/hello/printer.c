@@ -19,27 +19,35 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-#include "TB.h"
+#include "atb-tool.h"
 
-term *handle_input_from_toolbus(term *e)
+ATerm printer_handler(int conn, ATerm e)
 {
   char *text;
-  term *arg;
-  if(TBmatch(e, "rec-do(print-text(%s))", &text)){
-    TBmsg("%s", text);
+  ATerm arg;
+  if(ATmatch(e, "rec-do(print-text(<str>))", &text)){
+    ATprintf("%s", text);
     return NULL;
   } else
-    if(TBmatch(e, "rec-terminate(%t)", &arg)){
+    if(ATmatch(e, "rec-terminate(<term>)", &arg)){
       exit(0);
   } else {
-    TBmsg("wrong event received: %t\n", e);
+    ATerror("printer: wrong event received: %t\n", e);
     return NULL;
   }
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+  ATerm bottomOfStack;
 
-  TBinit("printer", argc, argv, handle_input_from_toolbus, NULL);
-  TBeventloop();
-}
+  ATBinit(argc, argv, &bottomOfStack);
+  if(ATBconnect(NULL, NULL, -1, printer_handler) >= 0){
+    ATBeventloop();
+  } else {
+    fprintf(stderr, "printer: Could not connect to the ToolBus, giving up!\n");
+    return -1;
+  }
+  return 0;
+}                    
+

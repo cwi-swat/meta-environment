@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-noinst_PROGRAMS   = hello printer hello-gen
+noinst_PROGRAMS   = hello hello-gen printer producer store
 
 EXTRA_DIST        = hello1.tb \
                     hello2.tb \
@@ -38,9 +38,15 @@ hello_gen_SOURCES = hello-gen.c hello.tif.c hello.tif.h
 hello_gen_LDADD   = -L$(ATERM)/lib -lATerm -lATB
 
 printer_SOURCES   = printer.c
-printer_LDADD     = -L$(top_builddir)/libtb -ltb
+printer_LDADD     = -L$(ATERM)/lib -lATerm -lATB
 
-INCLUDES          = -I$(ATERM)/include -I. -I../../libtb
+producer_SOURCES  = producer.c
+producer_LDADD    = -L$(ATERM)/lib -lATerm -lATB
+
+store_SOURCES     = store.c
+store_LDADD       = -L$(ATERM)/lib -lATerm -lATB
+
+INCLUDES          = -I$(ATERM)/include -I.
 
 %.tif.c: hello2.tifs
 	$(ATERM)/bin/tifstoc -tool $* $<

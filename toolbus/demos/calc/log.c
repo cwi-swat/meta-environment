@@ -21,27 +21,33 @@
 */
 #include "log.tif.c"
 
-term *history = NULL;
+ATerm history = NULL;
 
-term *readLog(void){
-  TBprintf(stderr, "readLog, history = %t\n", history);
-  return TBmake("snd-value(history(%t))", history);
+ATerm readLog(int conn){
+  ATfprintf(stderr, "readLog, history = %t\n", history);
+  return ATmake("snd-value(history(<term>))", history);
 }
 
-void writeLog(char *expr, term *val){
-  history = TBmake("[pair(%s,%t),%l])", expr, val, history);
-  TBprintf(stderr, "writeLog, history = %t\n", history);
+void writeLog(int conn, char *expr, ATerm val){
+  history = ATmake("[pair(<str>,<term>),<list>])", expr, val, history);
+  ATfprintf(stderr, "writeLog, history = %t\n", history);
 }
 
-void rec_terminate(term *t)
+void rec_terminate(int conn, ATerm t)
 {
   exit(0);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  TBinit("log", argc, argv, log_handler, log_check_in_sign);
-  history = TBmake("[]");
-  TBprotect(&history);
-  TBeventloop();
+  ATerm bottomOfStack;
+
+  ATBinit(argc, argv, &bottomOfStack);
+  history = ATmake("[]");
+  ATprotect(&history);
+  if(ATBconnect(NULL, NULL, -1, log_handler) >= 0){
+    ATBeventloop();
+  } else
+    fprintf(stderr, "log: Could not connect to the ToolBus, giving up!\n");
+  return 0;
 }

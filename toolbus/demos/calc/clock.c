@@ -20,28 +20,34 @@
 
 */
 
-#include "clock.tif.c"
 
 #include <time.h>
 #include <string.h>
+#include "clock.tif.c"
 
-term *readTime()
+ATerm readTime(int conn)
 {  time_t tloc;  
    char *s;  
 
    time(&tloc);  
    s = ctime(&tloc);
    s[strlen(s)-1] = '\0'; /* remove trailing newline */
-   return TBmake("snd-value(%s)", s);
+   return ATmake("snd-value(<str>)", s);
 }
 
-void rec_terminate(term *msg)
+void rec_terminate(int conn, ATerm msg)
 {
   exit(0);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  TBinit("clock", argc, argv, clock_handler, clock_check_in_sign);
-  TBeventloop();
+  ATerm bottomOfStack;
+
+  ATBinit(argc, argv, &bottomOfStack);
+  if(ATBconnect(NULL, NULL, -1, clock_handler) >= 0){
+    ATBeventloop();
+  } else
+    fprintf(stderr, "clock: Could not connect to the ToolBus, giving up!\n");
+  return 0;
 }

@@ -162,7 +162,7 @@ proc show_list {name text value group} {
 	frame $w.bot -relief raised -bd 1
 	pack $w.bot -side bottom -fill both
 	
-	listbox $w.top.list -relief raised -borderwidth 2 -geometry 40x10 -yscrollcommand "$w.top.scroll set"
+	listbox $w.top.list -relief raised -borderwidth 2 -yscrollcommand "$w.top.scroll set"
 	pack $w.top.list -side left
         scrollbar $w.top.scroll -command "$w.top.list yview"
         pack $w.top.scroll -side right -fill y

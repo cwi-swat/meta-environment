@@ -18,21 +18,21 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 noinst_PROGRAMS = clock log calc batch
-EXTRA_DIST      = calc.tb delay.h ui-calc.tcl
+EXTRA_DIST      = calc.tb ui-calc.tcl
 
 clock_SOURCES   = clock.c
-clock_LDADD     = -L$(top_builddir)/libtb -ltb
+clock_LDADD     = -L$(ATERM)/lib -lATerm -lATB
 
 log_SOURCES     = log.c
-log_LDADD       = -L$(top_builddir)/libtb -ltb
+log_LDADD       = -L$(ATERM)/lib -lATerm -lATB
 
 calc_SOURCES    = calc.c
-calc_LDADD      = -L$(top_builddir)/libtb -ltb
+calc_LDADD      = -L$(ATERM)/lib -lATerm -lATB
 
 batch_SOURCES   = batch.c
-batch_LDADD     = -L$(top_builddir)/libtb -ltb
+batch_LDADD     = -L$(ATERM)/lib -lATerm -lATB
 
-INCLUDES        = -I$(top_srcdir)/libtb -I.
+INCLUDES        = -I$(ATERM)/include -I.
 
 CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs
 
@@ -43,7 +43,7 @@ BUILT_SOURCES	= clock.tif.c calc.tif.c log.tif.c batch.tif.c
 #${srcdir}/batch.o: batch.tif.c
 
 %.tif.c: calc.tifs
-	$(top_builddir)/toolbus/ctif -tool $* -tifs $<
+	$(ATERM)/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<

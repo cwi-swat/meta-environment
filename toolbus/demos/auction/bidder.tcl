@@ -165,6 +165,7 @@ proc button_bid { } {
   }
 
 proc rec-terminate { n } {
+  global me
   puts stderr "$n\n"
   destroy .bidder$me
   exit 

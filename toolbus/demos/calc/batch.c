@@ -19,38 +19,47 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+#include <stdlib.h>
+#include <unistd.h>    
 #include "batch.tif.c"
 
 FILE *bout;
 
-term *fromFile()
+ATerm fromFile(int conn)
 {  int n1, n2, n3;
    char sbuf[128], *sp;
+
    n1 = rand()%100;
    n2 = rand()%100;
    n3 = rand()%100;
    sleep(rand()%20);
 
-   sp = TBsprintf("times(%d,plus(%d,%d))", n1, n2, n3);
+   sp = ATwriteToString(ATmake("times(%d,plus(%d,%d))", n1, n2, n3));
    strcpy(sbuf, sp);
-   return TBmake("snd-value(expr(%s))", sbuf);
+   return ATmake("snd-value(expr(<str>))", sbuf);
  }
 
-void toFile(char *expr, int val)
-{   TBprintf(bout, "pair(%s, %d)\n", expr, val);
+void toFile(int conn, char *expr, int val)
+{   ATfprintf(bout, "pair(%s, %d)\n", expr, val);
 }
 
-void rec_terminate(term *t)
+void rec_terminate(int conn, ATerm t)
 {
   exit(0);
 }
         
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  TBinit("batch", argc, argv, batch_handler, batch_check_in_sign);
+  ATerm bottomOfStack;
+
+  ATBinit(argc, argv,&bottomOfStack);
   bout = fopen("batch.out", "w");
   if(!bout)
     bout = stdout;
-  TBeventloop();
+  if(ATBconnect(NULL, NULL, -1, batch_handler) >= 0){
+    ATBeventloop();
+  } else
+    fprintf(stderr, "batch: Could not connect to the ToolBus, giving up!\n");
+  return 0;
 }
 

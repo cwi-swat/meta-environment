@@ -143,7 +143,6 @@ proc button_new { } {
       if { $highest_bid == "" } {
          set highest_bid 0
       }
-      puts stderr "description: $description -> [TBstring $description]"
       TBsend "snd-event(new-item([TBstring $description],$highest_bid))"
  
       set current_bid $highest_bid

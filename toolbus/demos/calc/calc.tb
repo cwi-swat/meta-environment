@@ -233,4 +233,5 @@ tool clock is {command = "./clock"}
 %% Finally, we define one of the possible \TB\ configurations that can be defined
 %% using the above definitions:
 
-toolbus(UI, CALC, LOG1, CLOCK, BATCH)
+toolbus(UI, CALC, LOG1, CLOCK)
+

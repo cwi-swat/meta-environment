@@ -28,7 +28,7 @@ int main(int argc, char *argv[])   /* main program of hello tool */
   if(ATBconnect(NULL, NULL, -1, hello_handler) >= 0){
     ATBeventloop();
   } else {
-    fprintf(stderr, "Could not connect to the ToolBus, giving up!\n");
+    fprintf(stderr, "hello: Could not connect to the ToolBus, giving up!\n");
     return -1;
   }
   return 0;

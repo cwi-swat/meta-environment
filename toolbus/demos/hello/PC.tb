@@ -19,21 +19,38 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-define CONSUMER(P) =
-       ( rec-msg(store, P, S1) . rec-msg(store, P, S2) . snd-do(store, S1, S2)
+
+process STORE is
+  let St : store,
+      S1 : str,
+      S2 : str
+  in
+     execute(store, St?) .
+     ( rec-msg(store, S1?, S2?) . snd-do(St, pair(S1, S2))
+     ) * delta
+  endlet
+
+process CONSUMER(Pname : str) is
+  let S1 : str,
+      S2 : str
+  in
+       ( rec-msg(produce, Pname, S1?) . rec-msg(produce, Pname, S2?) . snd-msg(store, S1, S2)
        ) * delta
+  endlet
 
-define PRODUCER =
-       ( rec-event(P, S) . snd-msg(store, P, S) . snd-ack-event(P)
-       ) * delta
+process PRODUCER(Name : str) is
+  let P :  prod,
+      S : str
+  in
+     execute(prod(Name), P?) .
+     ( rec-event(P, S?) . snd-msg(produce, Name, S) . snd-ack-event(P, S)
+     ) * delta
+   endlet
 
-define CONSUMER1 = CONSUMER(prod1)
-define CONSUMER2 = CONSUMER(prod2)
+tool prod(Name: str) is {command = "producer -name Name"}
 
-tool prod1 {command = "producer -name prod1"}
+tool store is {command = "store" }
 
-tool store {command = "store" }
-
-tool prod2 {command = "producer -name prod2" }
-
-toolbus(PRODUCER, CONSUMER1, CONSUMER2)
+toolbus(PRODUCER("prod1"), CONSUMER("prod1"), 
+        PRODUCER("prod2"), CONSUMER("prod2"), 
+        STORE)

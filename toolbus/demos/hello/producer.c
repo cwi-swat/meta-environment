@@ -19,24 +19,26 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-#include "TB.h"
+#include <atb-tool.h>
 
-term *name = NULL;
+ATerm *name = NULL;
 
-term *handle_input_from_toolbus(term *e)
+ATerm producer_handler(int conn, ATerm e)
 {
-  term *tool;
+  ATerm tool;
 
-  if(TBmatch(e, "ack-event(%t)", &tool)){
+  if(ATmatch(e, "ack-event(<term>)", &tool)){
     return NULL;
   } else {
-    TBmsg("wrong event received: %t\n", e);
+    ATprintf("producer: wrong event received: %t\n", e);
     return NULL;
   }
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+  ATerm bottomOfStack;
+  int conn;                      /* file descriptor of ToolBus connection */
   char line[128], *sname = NULL;
   int i = 1, n = 1;
   
@@ -51,16 +53,21 @@ void main(int argc, char *argv[])
   if(!sname){
     fprintf(stderr, "%s: No -name given\n", argv[0]);
     exit(1);
-  } else
-    name = TBmakeTerm("%f",sname);
-  TBinit(sname, argc, argv, handle_input_from_toolbus, NULL);
+  }
 
-  while(TBtrue){
+  ATBinit(argc, argv, &bottomOfStack);
+  conn = ATBconnect(sname, NULL, -1, producer_handler);
+  if(conn < 0){
+    fprintf(stderr, "producer: Could not connect to the ToolBus, giving up!\n");
+    return -1;
+  }
+  while(ATtrue){
     sprintf(line, "%s -- %s -- %s -- %s: %d\n", sname, sname, sname, sname, n);
     n++;
-    TBput(TBmakeTerm("event(%t,%s)", name, line));
-    TBget();
+    ATBwriteTerm(conn, ATmake("event(<term>,<str>)", name, line));
+    if(ATBhandleOne(conn) < 0)
+      return -1;
   }
-  TBeventloop();
+  return 0;
 }
 
