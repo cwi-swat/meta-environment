@@ -206,12 +206,7 @@ static Polygon parseCoordinateList(char *coords, ATbool endToBegin)
 	  poly = makePolygonMulti(last, poly);
   }
 
-  if (endToBegin) {
-		return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
-  }
-  else {
-    return poly;
-  }
+	return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
 }
 
 static Attribute parseBoundaries(char *coords)

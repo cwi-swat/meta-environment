@@ -226,7 +226,7 @@ Graph layoutGraph(Graph graph)
     exit(errno);
   }
 
-  sprintf(invoke_dot, "%s -o %s %s", DOT_COMMAND, dot_output, dot_input);
+  sprintf(invoke_dot, "%s -y -o %s %s", DOT_COMMAND, dot_output, dot_input);
   if (system(invoke_dot) == -1) {
     perror(invoke_dot);
     exit(errno);
