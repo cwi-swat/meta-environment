@@ -71,6 +71,8 @@
 
 %% ---- Eval complete script
 
+[ES0] eval-rscript($Stat*, $Var, $Store) = value($Var, eval-rscript($Stat*, $Store))
+
 [ES1]  eval-rscript($Stat*) = eval-rscript($Stat*, [])
 
 [ES2]  eval-rscript($Stat $Stat*, $Store) = eval-rscript($Stat*, eval-rscript($Stat, $Store))
@@ -87,6 +89,10 @@
 [S4]  eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3) = $Exp, $Store) = assign($Var1, <$Var2, $Var3, $Exp>, $Store)
 
 [S5]  eval-rscript($Etype1 $Var1($Etype2 $Var2, $Etype3 $Var3, $Etype4 $Var4) = $Exp, $Store) = assign($Var1, <$Var2, $Var3, $Var4, $Exp>, $Store)
+
+%% ---- Eval one REXP
+
+[ER1] eval-rexp($Exp, $Store) = evalx($Exp, $Store)
 
 
 %% ---- The main evaluation function evalx
