@@ -43,4 +43,7 @@ PT_Tree rewrite(PT_Tree trm)
   ATwarning("Hey dummy! Don't call this dummy function!\n");
   return trm;
 }
+
+int toolbus_id;
+ATerm acknowledgement;
 END_OF_FILE
