@@ -14,7 +14,8 @@ Mdb       : module-db,
 Modules   : list,
 Equations : list,
 Pairs     : list,
-Status    : str
+Status    : str,
+Language  : str
 in
 
 /* First, execute the module db */
@@ -92,6 +93,21 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb,calc-import-rels(Name)).
   rec-value(Mdb,irels(Pairs?)).
   snd-note(import-relations(irels(Pairs)))
++
+/* Path is the directory in which the file containing Module lives.
+   Module is the parsed SDF2 representation in Asfix1 */
+  rec-msg(update-module-in-db(Module?,Language?)).
+  if equal(Language,"Sdf2") then
+    snd-eval(Mdb,update-sdf2-module(Module)).
+    rec-value(Mdb,imports(Name?,need-modules(Modules?))).
+/* If a new module is added, we tell the world the new import relations */
+    snd-eval(Mdb,calc-import-rels(Name)).
+    rec-value(Mdb,irels(Pairs?)).
+    snd-note(import-relations(irels(Pairs))).
+    snd-msg(extra-modules(Modules))
+  else
+    snd-msg(extra-modules([]))
+  fi
 +
 /* Get the list of modules for which the equations are not yet
    available in the database */
@@ -191,6 +207,12 @@ snd-do(Mdb, create-module-db).
   snd-eval(Mdb, add-pgen-func(Module,Syntax)).
   rec-value(Mdb, decorated-syntax(NewSyntax?)).
   snd-msg(decorated-syntax(NewSyntax))
++
+/* Validate the parse table */
+  rec-msg(validate-parse-tables(Module?)).
+  snd-eval(Mdb, validate-parse-tables(Module)).
+  rec-value(Mdb, validation-done).
+  snd-msg(validation-done)
 ) *
 delta
 endlet

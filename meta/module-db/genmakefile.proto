@@ -12,8 +12,8 @@
 
 #      FLAGS_$(CC): Compiler dependent settings
 
-        FLAGS_cc="-O"
-       FLAGS_gcc="-Wall -O4"
+        FLAGS_cc=-O
+       FLAGS_gcc=-Wall -O4
 
 
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files

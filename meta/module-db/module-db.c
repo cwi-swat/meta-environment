@@ -38,7 +38,7 @@ void rec_terminate(int cid, ATerm t)
 
 ATerm exists(int cid,ATerm name)
 {
-  if(GetValue(modules_db,name))
+  if(GetValue(modules_db,name) || GetValue(new_modules_db,name))
     return ATmake("snd-value(result(exists(<term>)))", name);
   else
     return ATmake("snd-value(result(notexists(<term>)))", name);
@@ -175,6 +175,72 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix, char* changed)
   }
 }
 
+/* This function "update..." removes the parse table and
+   the asfix representation of the equations from the
+   module database for all listed modules. */
+void update_syntax_status_of_modules(ATermList mods)
+{
+  ATerm modname;
+  ATermList entry;
+
+  while (!ATisEmpty(mods)) {
+    modname = ATgetFirst(mods);
+    entry = (ATermList)GetValue(new_modules_db, modname);
+    entry = ATreplace(entry,ATparse("unavailable"),path_eqs_loc);
+    entry = ATreplace(entry,ATparse("unavailable"),eqs_loc);
+    entry = ATreplace(entry,Mtrue,eqs_updated_loc);
+    entry = ATreplace(entry,ATparse("unavailable"),table_loc);
+    PutValue(new_modules_db, modname, (ATerm)entry);
+    mods = ATgetNext(mods);
+  }
+}
+
+ATermList replace_imports(ATerm name, ATermList mods);
+ATermList modules_depend_on(ATerm name, ATermList mods);
+
+ATerm update_sdf2_module(int cid, ATerm asfix)
+{
+  ATerm t[8];
+  ATerm modname, appl, entry;
+  ATermList imports, unknowns, chg_mods;
+  ATerm place;
+  char  *path;
+
+  if(ATmatchTerm(asfix,pattern_asfix_term,
+                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
+                 &appl, &t[6], &t[7])) {
+    modname = get_module_name(appl);
+    entry = GetValue(new_modules_db, modname);
+    place = ATelementAt((ATermList)entry, path_syn_loc);
+
+    if(ATmatch(place,"<str>",&path)) {
+      entry = (ATerm) ATmakeList(7,ATmake("<str>",path),
+                                   asfix,
+                                   Mtrue,
+                                   ATparse("unavailable"),
+                                   ATparse("unavailable"),
+                                   Mtrue,
+                                   ATparse("unavailable"));
+      PutValue(new_modules_db, modname, entry);
+      chg_mods = modules_depend_on(modname,ATempty);
+ATfprintf(stderr,"Changed modules are %t\n", chg_mods);
+      update_syntax_status_of_modules(chg_mods); 
+      imports = get_import_section_sdf2(appl);
+ATfprintf(stderr,"Imported modules %t\n", imports);
+      unknowns = replace_imports(modname,imports);
+ATfprintf(stderr,"New modules %t\n", unknowns);
+      return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
+                    modname,unknowns);
+    } else {
+       ATerror("no path available for %t\n", asfix);
+       return NULL;
+    }
+  } else {
+    ATerror("not an asfix module: %t\n", asfix);
+    return NULL;
+  }
+}
+
 ATerm add_empty_module(int cid, ATerm modname)
 {
   ATerm entry;
@@ -267,7 +333,6 @@ ATerm get_sdf2_path(int cid, ATerm modname)
   }
 }
 
-
 ATerm get_eqs_path(int cid, ATerm modname)
 {
   ATerm entry, place;
@@ -354,6 +419,8 @@ ATerm get_eqs_asfix(int cid, ATerm modname)
   }
 }
 
+ATbool valid_parse_tables(ATermList visited, ATerm module);
+
 ATerm get_parse_table(int cid, ATerm modname)
 {
   ATermList entry;
@@ -367,6 +434,34 @@ ATerm get_parse_table(int cid, ATerm modname)
   }
 
   return ATmake("snd-value(no-table)");
+}
+
+/* This function traverses the import graph and visit all nodes
+   to check whether the parse tables are still valid.*/
+void mdb_validate_parse_tables(ATermList visited, ATerm modname)
+{
+  ATermList entry, imports;
+  ATerm import;
+
+  if(ATindexOf(visited, modname, 0) < 0) {
+    if(!valid_parse_tables(ATempty,modname))
+      if((entry = (ATermList)GetValue(new_modules_db, modname)))
+        entry = ATreplace(entry,ATparse("unavailable"),table_loc);
+    visited = ATinsert(visited, modname);
+    imports = (ATermList)GetValue(import_db, modname);
+    while(!ATisEmpty(imports)) {
+      import = ATgetFirst(imports);
+      mdb_validate_parse_tables(visited, import);
+      imports = ATgetNext(imports);
+    }
+  }
+}
+
+ATerm validate_parse_tables(int cid, ATerm modname)
+{
+  mdb_validate_parse_tables(ATempty,modname);
+
+  return ATmake("snd-value(validation-done)");
 }
 
 ATermList get_import_section(ATermList sections)
@@ -433,6 +528,14 @@ ATermList add_imports(ATerm name, ATermList mods)
   return unknowns;
 }
 
+ATermList replace_imports(ATerm name, ATermList mods)
+{
+  trans_db = CreateValueStore(100,75);
+  ATtableRemove(import_db, name);
+  PutValue(import_db, name, (ATerm) mods);
+  return select_unknowns(mods);
+}
+
 ATbool complete_specification(ATermList visited, ATerm module)
 {
   if(ATindexOf(visited, module, 0) < 0) {
@@ -485,6 +588,39 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
   }
   else
     return ATtrue;
+}
+
+ATbool valid_parse_tables(ATermList visited, ATerm module)
+{
+  ATbool result;
+  ATermList imports;
+  ATerm first, entry, status;
+
+  if(ATindexOf(visited, module, 0) < 0) {
+    result = ATtrue;
+    imports = (ATermList) GetValue(import_db,module);
+
+    visited = ATinsert(visited, module);
+    while(!ATisEmpty(imports)) {
+      first = ATgetFirst(imports);
+      entry = GetValue(new_modules_db, first);
+      status = ATelementAt((ATermList)entry, syn_updated_loc);
+      if(ATisEqual(status, Mtrue)) {
+        entry = (ATerm)ATreplace((ATermList)entry,
+                                 ATparse("unavailable"),
+                                 table_loc);
+        PutValue(new_modules_db, module, entry);
+        result = ATfalse;
+      }
+      else {
+        result = result && valid_parse_tables(visited, first);
+      };
+      imports = ATgetNext(imports);
+    };
+    return result;
+  }
+  else
+    return ATfalse;
 }
 
 ATbool complete_asf_specification(ATermList visited, ATerm module)
@@ -591,6 +727,34 @@ ATerm get_all_modules(int cid)
   ATermList list = ATtableKeys(import_db);
 
   return ATmake("snd-value(all-modules([<list>]))",list);
+}
+
+/* The function "module_depend_on" determines which modules
+   depend on the module "name" with respect to the import graph. */
+ATermList modules_depend_on(ATerm name, ATermList dependent)
+{  
+  ATerm module;
+  ATermList result = ATempty;
+  ATermList modules = ATtableKeys(import_db);
+
+  while (!ATisEmpty(modules)) {
+    module = ATgetFirst(modules);
+    if(ATindexOf((ATermList) GetValue(import_db,module), name, 0) >= 0) {
+      if(ATindexOf(result, module, 0) < 0)
+        result = ATinsert(result, module);
+    };
+    modules = ATgetNext(modules);
+  }
+
+  while(!ATisEmpty(result)) {
+    module = ATgetFirst(result);
+    if(ATindexOf(dependent, module, 0) < 0) { 
+      dependent = ATinsert(dependent, module);
+      dependent = modules_depend_on(module,dependent);
+    }
+    result = ATgetNext(result);
+  }
+  return dependent;
 }
 
 ATermList imported_by(ATerm name)
