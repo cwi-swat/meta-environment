@@ -11,7 +11,7 @@ extends CHARLIST
   }
   private static int index_string = 0;
 
-  public Object clone() {
+  public shared.SharedObject duplicate() {
     CHARLIST_String clone = new CHARLIST_String();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
