@@ -95,11 +95,6 @@ AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
 
-dnl Require SGLR 
-AC_PACKAGE_REQUIRE(sglr, sglr,
-   [  --with-sglr=DIR      SGLR library is in DIR])
-AC_SUBST(SGLR)
-
 ASCINC=${ASC_SUPPORT}/include
 AC_SUBST(ASCINC)
 ASCLIB=${ASC_SUPPORT}/lib
@@ -170,7 +165,6 @@ AC_OUTPUT(
    asfsdf-checker/spec/Makefile
    asfsdf-checker/src/Makefile
    utils/Makefile
-   restorebrackets/Makefile
    test/Makefile
    test/eqs/Makefile
    test/input/Makefile
