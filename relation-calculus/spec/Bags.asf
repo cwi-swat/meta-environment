@@ -16,7 +16,9 @@ equations
 
 %% --- delete($Elem, $Bag)
 
-[del1]	delete($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}	%% sb elem-equal
+[del1]	elem-equal($Elem1, $Elem2) == true				%% sb elem-equal
+	============================================
+	delete($Elem1, {$Elem*1, $Elem2, $Elem*2}) = {$Elem*1, $Elem*2}
 
 [default-del]
 	delete($Elem, $Bag) = $Bag
@@ -86,7 +88,10 @@ equations
 %%[default-eq]	   
 %%       equal($Bag1, $Bag2) = false
 
-[eq-1]       equal({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2}) = equal({$Elem*}, {$Elem*1, $Elem*2})
+[eq-1]       elem-equal($Elem1, $Elem2) == true
+	     ====================================================
+	     equal({$Elem1, $Elem*}, {$Elem*1, $Elem2, $Elem*2}) = 
+	     equal({$Elem*}, {$Elem*1, $Elem*2})
 
 [eq-2]       equal({$Elem+}, {})               = false
 [eq-3]       equal({}, {$Elem+})               = false
@@ -157,9 +162,10 @@ equations
 
 %% --- $Bag1 inter $Bag2
 
-[in-1] {$Elem*'} := inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
-       ==================================
-       inter({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = insert($Elem, {$Elem*'})
+[in-1] elem-equal($Elem1, $Elem2) == true,
+       {$Elem*'} := inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
+       ===============================================================
+       inter({$Elem*1, $Elem1, $Elem*2}, {$Elem*3, $Elem2, $Elem*4}) = insert($Elem1, {$Elem*'})
 
 [default-in2] 
        inter({$Elem*1}, {$Elem*2}) = {}
@@ -171,8 +177,7 @@ equations
 
 %% --- in($Elem, $Bag)
 
-[in-1]  %%elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal, but this
-	$Elem1 == $Elem2					%% is much too expensive
+[in-1]  elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal
 	============================================
 	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
 
@@ -180,8 +185,10 @@ equations
 	in($Elem, {$Elem*}) = false
 
 [unique1]
-	unique({$Elem*1, $Elem, $Elem*2, $Elem, $Elem*3}) = 
-	unique({$Elem*1, $Elem, $Elem*2, $Elem*3})
+	elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal
+	============================================
+	unique({$Elem*1, $Elem1, $Elem*2, $Elem2, $Elem*3}) = 
+	unique({$Elem*1, $Elem1, $Elem*2, $Elem*3})
 
 [default-unique]
 	unique($Bag) = $Bag

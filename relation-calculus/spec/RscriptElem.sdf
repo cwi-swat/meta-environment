@@ -36,5 +36,12 @@ hiddens
 imports basic/Whitespace
 
   variables
-  "$Elem"[0-9]* -> Elem
-  "$Bag"[0-9]* -> Bag[[Elem]]
+  "$BoolCon" [0-9]* 	-> BoolCon
+  "$Integer" [0-9]*  	-> Integer
+  "$String" [0-9]* 	-> String
+  "$Location" [0-9]* 	-> Location
+  
+  "$Elem"[0-9]* 	-> Elem
+  "$Elem*" [0-9\']*     -> {Elem ","}*
+  "$Elem+" [0-9\']*     -> {Elem ","}+
+  "$Bag"[0-9]* 		-> Bag[[Elem]]
