@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar  1 11:56:06 CET 2005 <kooiker@cwi.nl>
+ * utilities/Makefile.am: no install due to () iso {}
+
 Tue Feb 22 16:48:01 CET 2005 <jurgenv@cwi.nl>
  * languages/c/syntax/Simplified-C.sdf: Added a definition of C that 
    maximally uses priorities, optionals and lists. Priorities for
