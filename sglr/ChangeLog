@@ -1,5 +1,9 @@
 $Id$
 
+Tue Mar 15 13:57:38 CET 2005 <jurgenv@cwi.nl>
+ * Bumped version to 3.13 since sglr links to a much changed
+   version of libmept (no more flattening of lexicals and layout).
+
 Wed Dec  1 13:24:18 CET 2004 <markvdb@cwi.nl,kooiker@cwi.nl>
  * Fixed the handling of illegal parse tables, closes bug #406.
 
