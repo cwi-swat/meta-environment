@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
   if(ATBconnect(NULL, NULL, -1, calc_handler) >= 0){
     ATBeventloop();
-  } else
+  } else {
     fprintf(stderr, "calc: Could not connect to the ToolBus, giving up!\n");
-  ATBeventloop();
+  }
 
   return 0;
 }
