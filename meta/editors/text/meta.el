@@ -99,18 +99,24 @@ characters long. "
   ()
 )
 
-(defun tb-set-focus-unchanged (filename str start length)
-  "Set the focus. FILENAME is the file where the focus should be set.
-STR is the sortname of the focus. START is the starting
-character, and LENGTH the length (in characters) of the focus."
-; first we retrieve a handle to the buffer
+(defun tb-set-focus (filename str start length)
+  "Set the focus:
+   FILENAME is the file where the focus should be set.
+   STR is the sortname of the focus.
+   START is the starting character.
+   LENGTH the length (in characters) of the focus."
+
+; reactivate sending a message
+  (setq sendmessage t)
+
+; retrieve a handle to the buffer
   (let (buf (get-file-buffer filename))
 
     ; we find and select the window for this file ('t' means search in all frames)
     (select-window (get-buffer-window filename t))
 
     (display-message 'focus (concat "Focus symbol: " str))
-		    
+
     ; first clear ALL colorings (including the previous focus)
     (remove-text-properties 1 (point-max buf) '(face nil) buf)
     ; then set the new focus
@@ -121,11 +127,6 @@ character, and LENGTH the length (in characters) of the focus."
     )
   )
   () ; return nil
-)
-
-(defun tb-set-focus (filename str start length)
-  (setq sendmessage t)
-  (tb-set-focus-unchanged filename str start length)
 )
 
 (defun tb-get-focus (evt count)
@@ -161,9 +162,7 @@ point."
   (if (is-element (buffer-name) bufferlist)
     (if (eq sendmessage t)
       (progn (setq sendmessage ())
-             (TBevent (concat "changed(" (TBstring (buffer-name)) ")"))
-             (accept-process-output (get-process "adapter"))
-             (discard-input)
+             (TBevent (concat "modified(" (TBstring (buffer-name)) ")"))
       )
     )
   )

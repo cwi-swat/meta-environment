@@ -1,8 +1,4 @@
-/*
-
-  $Id$
-
-*/
+/* $Id$ */
 
 tool text-editor is {
   command = EDITOR
@@ -15,9 +11,6 @@ let
   Sort       : term,
   Dirty      : int,
   Fid        : str,
-  Ignored    : str,
-  Count      : int,
-  Text       : str,
   FileName   : str,
   Location   : int,
   SortName   : str,
@@ -61,10 +54,6 @@ in
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
     snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
   +
-    rec-msg(set-focus-unchanged(EditorId,
-      focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
-    snd-do(TE, tb-set-focus-unchanged(Fid, SortName, StartPos, Length))
-  +
     rec-msg(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +
@@ -87,15 +76,6 @@ in
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
     snd-ack-event(TE, set-current-location(Fid, Location))
-  +
-    rec-event(TE, changed(Fid)) .
-    (
-      rec-msg(set-focus(EditorId, Focus?)) 
-      *
-      snd-msg(change-status(EditorId))
-    ) .
-    rec-msg(ack-change-status(EditorId)).
-    snd-ack-event(TE, changed(Fid))
   +
     rec-event(TE, modified(Fid)) .
     snd-msg(set-modified(EditorId)) .
