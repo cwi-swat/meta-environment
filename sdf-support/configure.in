@@ -41,6 +41,11 @@ AC_SUBST(PT_SUPPORT)
 
 
 dnl }}}
+dnl {{{  toolbus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+dnl }}}
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
@@ -58,5 +63,6 @@ AC_OUTPUT(
   Makefile
   lib/Makefile
   utils/Makefile
+  utils/sdf-tool/Makefile
   test/Makefile
 )

@@ -1,5 +1,10 @@
 $Id$
 
+2003/05/17 (jurgenv@cwi.nl)
+ * Added dependency on toolbuslib
+ * Added (still empty) sdf toolbus tool that will serve as a 
+   ToolBus interface to the support library
+  
 2003/04/29 (markvdb@cwi.nl)
  * Fixed a bug in the renaming due to annotations.
 
