@@ -2,12 +2,10 @@
 
 include $(top_srcdir)/make_rules
 
-EXTRA_DIST = meta-config-${API_VERSION}.jar
-
 KERNEL_CONFIGURATION = "$(pkgdatadir)/meta-kernel.properties"
 USER_CONFIGURATION = "./meta.buttons"
 LIBRARY_PATH = 
-API_VERSION=1.0
+API_VERSION=0.1
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
@@ -22,13 +20,15 @@ pkgdata_DATA = \
 	kernel-configuration.tb \
 	user-configuration.tb \
 	meta-kernel.properties \
-	meta-config-${API_VERSION}.jar
+	metaconfig-${API_VERSION}.jar
 
 CLEANFILES = \
 	kernel-configuration.tb \
 	user-configuration.tb
 
+
 EXTRA_DIST = \
+	metaconfig-${API_VERSION}.jar \
 	configuration-manager.idef \
 	kernel-configuration.tb.src \
 	user-configuration.tb.src \
