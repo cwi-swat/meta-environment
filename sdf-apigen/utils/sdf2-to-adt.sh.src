@@ -5,7 +5,6 @@
      prefix=__PREFIX__
      bindir=__BINDIR__
     SGLRBIN=__SGLR__/bin
-     ASFBIN=__ASF__/bin
    ATERMBIN=__ATERM__/bin
       PTBIN=__PT_SUPPORT__/bin
     PKGDATA=__PKGDATA__
