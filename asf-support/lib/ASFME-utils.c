@@ -150,6 +150,8 @@ ASF_Layout ASF_makeLayoutEmpty()
 
 /*}}}  */
 
+/*{{{  ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree) */
+
 ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree)
 {
   extern ATerm ASF_patternTreeLexicalConstructor;
@@ -162,3 +164,20 @@ ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree)
   return ATfalse;
 }
 
+/*}}}  */
+
+/*{{{  ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree) */
+
+ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree)
+{
+  extern ATerm ASF_patternTreeAmbConstructor;
+
+  if (ATmatchTerm(ASF_TreeToTerm(tree), ASF_patternTreeAmbConstructor,
+                  NULL, NULL, NULL, NULL, NULL, NULL)) {
+    return ATtrue;
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
