@@ -1,5 +1,13 @@
 # $Id$
 
+2003/07/22 ({markvdb,jurgenv}@cwi.nl)
+ * Repaired a number of bugs concerning erroneous modules in conjunction
+   with compound module names.
+ * Repaired printing of error messages that occur before the MetaStudio has
+   started up completely.
+ * In in-output, get-filename does not generate files with double '/' 
+   separators anymore.
+
 2003/07/18 (markvdb@cwi.nl)
  * Repaired the "bug" with opening a term editor for a file which
    was already opened for a different module.
