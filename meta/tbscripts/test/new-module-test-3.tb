@@ -31,7 +31,7 @@ in
     rec-msg(module-created) .
     printf("new-module-test-3 FAILED!\n")
   +
-    rec-msg(module-exists)
+    rec-msg(module-not-created("Module already in database"))
   +
     shutdown("test-3 FAILED! (timeout)\n") delay(sec(5))
   )

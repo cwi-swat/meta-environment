@@ -4,7 +4,7 @@
 #include "../new-module.tb"
 
 process Test is
-  snd-msg(create-new-module("Non-existing-module")) .
+  snd-msg(create-new-module("NonExistingModule")) .
   (
     rec-msg(module-created)
   +

@@ -9,8 +9,7 @@ process Test is
     rec-msg(module-created) .
     printf("new-module-test-2 FAILED!\n")
   +
-    rec-msg(module-exists) .
-    printf("new-module-test-2 succeeded.\n")
+    rec-msg(module-not-created("Module already exists in text or baf"))
   +
     shutdown("test-2 FAILED! (timeout)\n") delay(sec(5))
   ) .

@@ -93,6 +93,7 @@ datadir=__datadir__
 
 # Test 1. Attempt to create a non-existing module.
 ${toolbus} -I${datadir} new-module-test-1.tb
+rm -f NonExistingModule.sdf2
 
 # Test 2. Attempt to create a module that would overwrite an existing file.
 rm -f ./ExistingModule.sdf2
