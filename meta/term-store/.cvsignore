@@ -2,3 +2,5 @@
 .libs
 Makefile
 Makefile.in
+term-store
+term-store.tifs

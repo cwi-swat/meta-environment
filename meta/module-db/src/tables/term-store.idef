@@ -9,7 +9,7 @@ let
  Value : list,
  ContainsKey : bool
 in
-  execute(term-store, TS?)
+  execute(term-store, TS?).
   (
     rec-msg(ts-add-table(TableName?)).
     printf("not implemented\n")
