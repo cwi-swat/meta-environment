@@ -23,7 +23,7 @@ void T_destroyTable(Table table)
 /*}}}  */
 /*{{{  void T_putValue(Table table, ATerm key, ATermList value) */
 
-void T_putValue(Table table, ATerm key, ATermList value)
+void T_putValue(Table table, ATerm key, ATerm value)
 {
   ATtablePut((ATermTable)table, key, (ATerm)value);
 }
@@ -31,9 +31,9 @@ void T_putValue(Table table, ATerm key, ATermList value)
 /*}}}  */
 /*{{{  ATermList T_getValue(Table table, ATerm key) */
 
-ATermList T_getValue(Table table, ATerm key)
+ATerm T_getValue(Table table, ATerm key)
 {
-  return (ATermList)ATtableGet((ATermTable)table, key);
+  return ATtableGet((ATermTable)table, key);
 }
 
 /*}}}  */

@@ -12,6 +12,7 @@
 
 typedef struct _table_entry_struct {
   char *name;
+  char *valueType;
   Table table;
 } TableEntry;
 
@@ -49,6 +50,14 @@ static int TS_findTable(char *name)
 }
 
 /*}}}  */
+/*{{{  char* TS_getTableValueType(char *name) */
+
+char* TS_getTableValueType(char *name)
+{
+  return tableStore[TS_findTable(name)].valueType;
+}
+
+/*}}}  */
 /*{{{  ATbool TS_tableExists(char *name) */
 
 ATbool TS_tableExists(char *name)
@@ -59,7 +68,7 @@ ATbool TS_tableExists(char *name)
 /*}}}  */
 /*{{{  void TS_addTable(char *name) */
 
-void TS_addTable(char *name)
+void TS_addTable(char *name, char* valueType)
 {
   int i;
   
@@ -67,6 +76,7 @@ void TS_addTable(char *name)
     for (i = 0; i < MAX_NR_OF_TABLES; i++) {
       if (tableStore[i].name == NULL) {
         tableStore[i].name = strdup(name);
+	tableStore[i].valueType = strdup(valueType);
         tableStore[i].table = T_createTable();
         return;
       }
@@ -122,8 +132,12 @@ Table TS_getTable(char *name)
 
 void TS_clearTable(char *name)
 {
+  char *valueType = strdup(TS_getTableValueType(name));
+
   TS_removeTable(name);
-  TS_addTable(name);
+  TS_addTable(name, valueType);
+
+  free(valueType);
 }
 
 /*}}}  */
@@ -143,7 +157,7 @@ void TS_removeValueFromAllTables(ATerm key)
 /*}}}  */
 /*{{{  void TS_putValue(char* name, ATerm key, ATermList value) */
 
-void TS_putValue(char* name, ATerm key, ATermList value)
+void TS_putValue(char* name, ATerm key, ATerm value)
 {
   Table table = TS_getTable(name);
 
@@ -155,7 +169,7 @@ void TS_putValue(char* name, ATerm key, ATermList value)
 /*}}}  */
 /*{{{  ATermList TS_getValue(char* name, ATerm key) */
 
-ATermList TS_getValue(char* name, ATerm key)
+ATerm TS_getValue(char* name, ATerm key)
 {
   Table table = TS_getTable(name);
 

@@ -8,15 +8,17 @@ let
  TS : term-store,
  TableName : str,
  Key : term,
- Value : term,
+ TermValue : term,
+ StrValue : str,
  ContainsKey : bool,
  Keys : list,
- Values : list
+ Values : list,
+ ValueType : str
 in
   execute(term-store, TS?).
   (
-    rec-msg(ts-add-table(TableName?)).
-    snd-do(TS,add-table(TableName))
+    rec-msg(ts-add-table(TableName?, ValueType?)).
+    snd-do(TS,add-table(TableName, ValueType))
   +
     rec-msg(ts-remove-table(TableName?)).
     snd-do(TS,remove-table(TableName))
@@ -24,14 +26,27 @@ in
     rec-msg(ts-clear-table(TableName?)).
     snd-do(TS,clear-table(TableName))
   +
-    rec-msg(ts-put-value(TableName?,Key?,Value?)).
-    snd-do(TS,put-value(TableName,Key,Value))
+    rec-msg(ts-put-term-value(TableName?,Key?,TermValue?)).
+    snd-do(TS,put-term-value(TableName,Key,TermValue))
   +
-    rec-msg(ts-get-value(TableName?,Key?)).
-    snd-eval(TS,get-value(TableName,Key)) .
+    rec-msg(ts-put-str-value(TableName?,Key?,StrValue?)).
+    snd-do(TS,put-str-value(TableName,Key,StrValue))
+  +
+    rec-msg(ts-get-str-value(TableName?,Key?)).
+    snd-eval(TS,get-str-value(TableName,Key)) .
     (
-      rec-value(TS,result(Value?)).
-      snd-msg(ts-value(Value))
+      rec-value(TS,result(StrValue?)).
+      snd-msg(ts-value(StrValue))
+    +
+      rec-value(TS,no-result) .
+      snd-msg(ts-no-value)
+    )
+  +
+    rec-msg(ts-get-term-value(TableName?,Key?)).
+    snd-eval(TS,get-term-value(TableName,Key)) .
+    (
+      rec-value(TS,result(TermValue?)).
+      snd-msg(ts-value(TermValue))
     +
       rec-value(TS,no-result) .
       snd-msg(ts-no-value)
