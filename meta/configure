@@ -534,7 +534,7 @@ VERSION=0.02
 
 EPIC='$(prefix)'
 GEL='$(prefix)'
-TOOLBUS='$(prefix)'
+TOOLBUS='${prefix}'
 ATERM='$(prefix)'
 
 INSTALL='$(top_srcdir)/install-sh'
