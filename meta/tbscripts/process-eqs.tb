@@ -32,10 +32,9 @@ in
        Modules := next(Modules).
        snd-msg(Id,open-eqs-text-file(Module)).
        ( rec-msg(Id, opened-file(raw,id(Mname?),FT?,Path?,Time1?)).
-         snd-msg(set-parsetable(Module)).
-         rec-msg(parsetable-set(Module)).
+         snd-msg(set-parsetable(Mname)).
+         rec-msg(parsetable-set(Mname)).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
-         snd-msg(reopen-language(Mname,Table)).
          snd-msg(Id,parse-string-as-asfix1(Mname,"",FT)).
          ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
            snd-note(ui-status(endstat(Id))). 

@@ -55,14 +55,13 @@ let
   Path2  : str,
   Eqs    : term,
   Time   : term,
-  Table  : str,
   Mname  : str,
   Src    : str
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening module editor..."))).
   snd-msg(set-parsetable(Module)).
-  rec-msg(parsetable-set(Module,Table?)).
+  rec-msg(parsetable-set(Module)).
   snd-msg(get-eqs-path-from-db(Module)).
   rec-msg(path(Path?)).
   snd-msg(get-eqs-asfix(Module)).

@@ -4,9 +4,11 @@
 
 process Set-parsetable is
 let
-  Module: str, Table: str, Time: term
+  Module: str, Table: str, Time: term, Id: term
 in
+Id := process-id.
 ( rec-msg(set-parsetable(Module?)).
+  snd-note(ui-status(stat(Id,"Generating parse table"))).
   snd-msg(get-table-from-db(Module)) .
   (
     rec-msg(table(Table?))
@@ -20,7 +22,8 @@ in
     rec-msg(done)
   ).
   snd-msg(reopen-language(Module,Table)) .
-  snd-msg(parsetable-set(Module,Table))
+  snd-msg(parsetable-set(Module)).
+  snd-note(ui-status(endstat(Id)))
 ) *
 delta
 endlet

@@ -21,7 +21,6 @@ let
   Flst  : list,
   Tslst : list,
   Src   : str,
-  Table : str,
   I     : int,
   Ch    : int,
   Li    : int,
@@ -31,8 +30,7 @@ in
   Id := process-id.
   subscribe(disconnected(<term>)) .
   snd-msg(set-parsetable(Mod)).
-  rec-msg(parsetable-set(Mod,Table?)).
-  printf("parsetable for %t: %t\n", Mod, Table) .
+  rec-msg(parsetable-set(Mod)).
   snd-msg(Id,open-trm-file(Term)) .
   (
     rec-msg(Id,opened-file(raw,Name?,Text?,Path?,Time?)) .
