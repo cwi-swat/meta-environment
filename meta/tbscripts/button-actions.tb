@@ -837,7 +837,7 @@ in
       rec-msg(tree(Tree?)) .
       snd-msg(unparse(Tree)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(update-module-text-in-db(ModuleName, Text, Type)) .
+      snd-msg(update-module-text-in-db(ModuleName, Text, Tree, Type)) .
       (
 	rec-msg(no-updating-needed) .
         snd-note(clear-focus(EditorId))
@@ -858,6 +858,12 @@ in
           snd-note(ui-status(
             errorf("Changing the name of %s is not permitted.",[ModuleName])))
         )
+      +
+        rec-msg(error-opening(ModuleName, name-inconsistent)) .
+	snd-msg(invalidate-sdf-in-db(ModuleName)).
+	InvalidateEditor(EditorId).
+        snd-note(ui-status(
+          errorf("Changing the name of %s is not permitted.",[ModuleName])))
       )
     +
       rec-msg(no-tree) /* editor dissappeared */

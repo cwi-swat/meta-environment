@@ -17,8 +17,12 @@ in
   (
     %% Handle request to create a new module.
     rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
+    printf("Path = %s\n", Path) .
+    printf("ModuleName = %s\n", ModuleName) .
+    printf("Type = %t\n", Type) .
     snd-msg(get-search-paths) .
     rec-msg(search-paths(SearchPaths?)) .
+    printf("Paths = %t\n", SearchPaths) .
     snd-msg(sm-get-new-module-name(SearchPaths, Path, ModuleName)) .
     (
       rec-msg(sm-new-module-name(Path?, ModuleName?)) .

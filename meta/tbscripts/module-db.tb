@@ -102,7 +102,6 @@ in
         Modules := [] .
         snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
         snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
-        snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
         SyntaxText := "" .
         snd-msg(ts-filter-keys("active-modules", Modules)) .
         rec-msg(ts-keys(Modules?)) .
@@ -125,7 +124,7 @@ in
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))
   +
-    rec-msg(update-module-in-db(Name?, SyntaxTree?, sdf)).
+    rec-msg(update-module-in-db(Name?, SyntaxTree?, sdf)) .
     snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(sm-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
@@ -142,21 +141,31 @@ in
       snd-msg(error-opening(Name, name-inconsistent))
     fi
   +
-    rec-msg(update-module-text-in-db(Name?, SyntaxText?, sdf)).
-    snd-msg(ts-get-str-value("sdf-text", Name)) .
-    rec-msg(ts-value(LocalText?)) .
-    if equal(SyntaxText, LocalText) then
-      SyntaxText := "" .
-      snd-msg(no-updating-needed)
+    rec-msg(update-module-text-in-db(Name?, SyntaxText?, SyntaxTree?, sdf)).
+    if equal(SyntaxTree, no-tree) then
+      ModuleId := Name
+    else   
+      snd-msg(sm-get-module-id(SyntaxTree)) .
+      rec-msg(sm-module-id(ModuleId?))
+    fi .
+    if equal(Name, ModuleId) then
+      snd-msg(ts-get-str-value("sdf-text", Name)) .
+      rec-msg(ts-value(LocalText?)) .
+      if equal(SyntaxText, LocalText) then
+        SyntaxText := "" .
+        snd-msg(no-updating-needed)
+      else
+        snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
+        snd-msg(ts-remove-value("sdf-tree", Name)) .
+        snd-msg(ts-put-term-value("import-relations", Name, [])) .
+        SyntaxText := "" .
+        MDB-GetAllDependingModules(Name, DependingModules?) .
+        MDB-InvalidateModule(Name, sdf) .
+        MDB-InvalidateModules(DependingModules, sdf) .
+        snd-msg(updating-succeeded(DependingModules))
+      fi
     else
-      snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
-      snd-msg(ts-remove-value("sdf-tree", Name)) .
-      snd-msg(ts-put-term-value("import-relations", Name, [])) .
-      SyntaxText := "" .
-      MDB-GetAllDependingModules(Name, DependingModules?) .
-      MDB-InvalidateModule(Name, sdf) .
-      MDB-InvalidateModules(DependingModules, sdf) .
-      snd-msg(updating-succeeded(DependingModules))
+      snd-msg(error-opening(Name, name-inconsistent))
     fi
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .

@@ -447,7 +447,7 @@ in
     rec-msg(io-file-exists) .
     snd-msg(io-read-file(FileName)) . 
     rec-msg(io-file-contents(FileText?)) .
-    snd-msg(update-module-text-in-db(ModuleName, FileText, Type)) .
+    snd-msg(update-module-text-in-db(ModuleName, FileText, no-tree, Type)) .
     (
       rec-msg(no-updating-needed)
     +
@@ -457,9 +457,14 @@ in
       Parse-Syntax(FileText, Type, Status?, Tree?) .
       if equal(Status, success) then
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
-        rec-msg(updating-succeeded(Imports?)).
-        snd-msg(open-modules(Imports, Type)) .
-        rec-msg(finished-opening-modules)
+	(
+          rec-msg(updating-succeeded(Imports?)).
+          snd-msg(open-modules(Imports, Type)) .
+          rec-msg(finished-opening-modules)
+        +
+	  rec-msg(error-opening(ModuleName, name-inconsistent)) .
+          Error("Check consistency: module name %s contains an error", [ModuleName])
+        )
       else
         Error("Check consistency: syntax of module %s contains an error", [ModuleName])
       fi
