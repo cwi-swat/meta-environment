@@ -21,6 +21,7 @@ extern ATerm pattern_asfix_nlws;
 extern ATerm pattern_asfix_sort;
 extern ATerm pattern_asfix_l;
 extern ATerm pattern_asfix_ql;
+extern ATerm pattern_asfix_sep;
 extern ATerm pattern_asfix_iter;
 extern ATerm pattern_asfix_itersep;
 extern ATerm pattern_asfix_noattrs;

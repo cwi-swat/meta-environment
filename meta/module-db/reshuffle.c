@@ -40,6 +40,9 @@ int equal_term(ATerm term1,ATerm term2)
   else if(ATmatchTerm(term1,pattern_asfix_ql,&text1) &&
           ATmatchTerm(term2,pattern_asfix_ql,&text2))
     return ATisEqual(term1,term2);
+  else if(ATmatchTerm(term1,pattern_asfix_sep,&text1) &&
+          ATmatchTerm(term2,pattern_asfix_sep,&text2))
+    return ATisEqual(term1,term2);
   else if(ATmatchTerm(term1,pattern_asfix_iter,
                      &t1[0],&t1[1],&t1[2]) &&
           ATmatchTerm(term2,pattern_asfix_iter,
