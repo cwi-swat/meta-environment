@@ -22,6 +22,7 @@
   $Id$
  */
 
+ATerm evaluator(char *name, ATerm term);
 ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
 ATerm v_lookup_plain(ATerm env, ATerm var);

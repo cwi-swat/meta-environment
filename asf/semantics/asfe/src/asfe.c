@@ -102,6 +102,7 @@
 #include "evaluator.tif.h"
 #include "asfix_utils.h"
 #include "evaluator.h"
+#include "memotable.h"
 
 #include "traversals.h"
 #ifdef TRAVERSALS
@@ -158,6 +159,7 @@ ATerm posinfo;
 AFun list_var, plain_var;
 
 ATerm equations_db = NULL;
+static MemoTable memo_table = NULL;
 
 static char error_buf[BUFSIZ];
 
@@ -473,39 +475,48 @@ void remove_equations(int cid, char *modname)
 
 ATerm interpret(int cid, char *modname, ATerm trm)
 {
-  ATerm newtrm, newatrm, result;
-  ATerm atrm, realtrm;
+	ATerm result = evaluator(modname, trm);
 
+	if (RWgetError() == NULL) {
+    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+  } else {
+    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+  }
+}
+
+ATerm evaluator(char *name, ATerm term)
+{
+  ATerm result, original_term = term;
   struct tms start, rewriting;
 
 #ifdef PROFILING
   clock_t user, system;
 #endif
 
-  trm = ATremoveAllAnnotations(trm);
-  atrm = asfix_get_term(trm);
-  realtrm = RWprepareTerm(atrm);
+  term = ATremoveAllAnnotations(term);
+  term = asfix_get_term(term);
+  term = RWprepareTerm(term);
 
   rewrite_steps = 0;
   RWclearError();
   tagCurrentRule = NULL;
+	memo_table = MemoTableCreate();
+  aborted = ATfalse;
 
-  select_equations(modname);
+  select_equations(name);
 	
   if(run_verbose) {
     ATwarning("rewriting...\n");
   }
 
   times(&start);
-
-  aborted = ATfalse;
-
-  newtrm = rewrite(realtrm,(ATerm) ATempty, 0);
-
+  result = rewrite(term,(ATerm) ATempty, 0);
   times(&rewriting);
 
-  newatrm = RWrestoreTerm(newtrm);
-  result = asfix_put_term(trm,newatrm);
+  result = RWrestoreTerm(result);
+  result = asfix_put_term(original_term,result);
+
+	MemoTableDestroy(memo_table);
 
 #ifdef PROFILING
   if(run_verbose) {
@@ -520,14 +531,10 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 #endif
 	
-  if (RWgetError() == NULL) {
-    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
-  } else {
-    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
-  }
+	return result;
 }
 
-/*}}}  */
+
 /*{{{  ATbool no_new_vars(ATerm trm,ATermList env) */
 
 /* A predicate which checks whether a term introduces new
@@ -1387,7 +1394,8 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
     newargs = rewrite_args(args, env, depth);
-    if(asfix_is_bracket_func(trm)) {
+    
+		if(asfix_is_bracket_func(trm)) {
       newtrm = ATgetFirst(keep_layout ? 
 			  skipWhitespace(ATgetNext(newargs)) :
 			  ATgetNext(newargs));
@@ -1396,15 +1404,39 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
     } else if(traversals_on && is_traversal_prod(asfix_get_appl_prod(trm))) {
       ATerm traversal;
 
-      if(run_verbose) 
-	ATwarning("Traversal...\n");
+      if(run_verbose) {
+				ATwarning("Traversal...\n");
+			}
 			
-      newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
-      traversal = create_traversal_pattern(newtrm); 
+			if (AFisMemoCfFunc(trm)) {
+				newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
+				rewtrm = MemoTableLookup(memo_table, newtrm);
 
-      newtrm    = select_traversed_arg(newargs);
-      rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
-      rewtrm    = choose_normalform(rewtrm, traversal);
+				if(!rewtrm) {
+					traversal = create_traversal_pattern(newtrm); 
+
+					newtrm    = select_traversed_arg(newargs);
+					rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
+					rewtrm    = choose_normalform(rewtrm, traversal);
+					memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
+				}
+			} else { /* not a memo func */
+					newtrm    = (ATerm) asfix_put_appl_args(trm,newargs);
+
+					traversal = create_traversal_pattern(newtrm); 
+
+					newtrm    = select_traversed_arg(newargs);
+					rewtrm    = rewrite_traversal(newtrm, (ATerm) ATempty, depth, &traversal);
+					rewtrm    = choose_normalform(rewtrm, traversal);
+			}
+		} else if (AFisMemoCfFunc(trm)) {
+			newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
+			rewtrm = MemoTableLookup(memo_table, newtrm);
+			
+			if(!rewtrm) {
+				rewtrm = select_and_rewrite(newtrm,depth);
+				memo_table = MemoTableAdd(memo_table, newtrm, rewtrm);
+			}
     } else {
       newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
       rewtrm = select_and_rewrite(newtrm,depth);

@@ -34,7 +34,7 @@ CLEANFILES        = evaluator.tif.c evaluator.tif.h evaluator.tifs
 
 libeval_a_SOURCES = evaluator.c evaluator.h asfix_utils.c asfix_utils.h \
                     preparation.c preparation.h eval-tide.c eval-tide.h \
-                    traversals.c traversals.h
+                    traversals.c traversals.h memotable.h memotable.c
  
 libeval_a_LIBADD  = evaluator.tif.o
 

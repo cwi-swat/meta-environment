@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
   int bafmode = 1;
   char *name = "Standalone";
   int returncode = 0;
-  ATerm eqs, term, aterm, realterm, newterm, newaterm, result;
+  ATerm eqs, term, result;
   ATermList neweqs;
 
 
@@ -200,39 +200,8 @@ int main(int argc, char *argv[])
     term = ATreadFromFile(iofile);
     fclose(iofile);
 
-    /* Prepare the term for rewriting */
-    term = ATremoveAllAnnotations(term);
-    aterm = asfix_get_term(term);
-    realterm = RWprepareTerm(aterm);
-
-    /* Rewrite the term */
-
-    /*rewrite_steps = 0;*/
-    select_equations(name);
-
-		
-    tagCurrentRule = NULL;
-
-    if(run_verbose) 
-      ATwarning("rewriting...\n");
-   
-#ifdef PROFILING 
-    times(&start);
-    newterm = rewrite(realterm,(ATerm) ATempty, 0);
-    times(&rewriting);
-
-    user = rewriting.tms_utime - start.tms_utime;
-    system = rewriting.tms_stime - start.tms_stime;
-   
-    ATwarning("rewriting: %f user, %f system\n", TICK2SEC(user), TICK2SEC(system)); 
-#else
-    newterm = (ATerm) rewrite(realterm, (ATerm) ATempty, 0);
-#endif
-
-
-    /* Postprocessing of reduct */
-    newaterm = RWrestoreTerm(newterm);
-    result = asfix_put_term(term,newaterm);
+		/* Rewrite the term */
+		result = evaluator(name, term);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;
@@ -254,13 +223,13 @@ int main(int argc, char *argv[])
       subjectText = (char*) malloc(AFsourceSize(subject));
 			
       if(messageText && tagText && subjectText) {
-	AFsource(message, messageText);
-	AFsource(tag,tagText);
-	AFsource(subject,subjectText);
+				AFsource(message, messageText);
+				AFsource(tag,tagText);
+				AFsource(subject,subjectText);
 				
-	ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
+				ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
       } else {
-	ATerror("No memory available to print errors.\n");
+				ATerror("No memory available to print errors.\n");
       }
     }
 
