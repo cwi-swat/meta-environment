@@ -31,17 +31,17 @@ SUBDIRS		= toolbus/util toolbus/aterm toolbus/tool toolbus/tide
 
 all:
 	@for dir in $(SUBDIRS); do \
-		cd $$dir; make $@; cd ../..; \
+		cd $$dir; $(MAKE) $@; cd ../..; \
 	done
 
 clean:
 	@for dir in $(SUBDIRS); do \
-		cd $$dir; make $@; cd ../..; \
+		cd $$dir; $(MAKE) $@; cd ../..; \
 	done
 
 distclean:
 	@for dir in $(SUBDIRS); do \
-		cd $$dir; make $@; cd ../..; \
+		cd $$dir; $(MAKE) $@; cd ../..; \
 	done
 
 dist: $(DISTFILES)
@@ -63,7 +63,7 @@ install: $(PROGRAMS)
 	  $(INSTALL) $$file $(bindir); \
 	done
 	@for dir in $(SUBDIRS); do \
-		cd $$dir; make $@; cd ../..; \
+		cd $$dir; $(MAKE) $@; cd ../..; \
 	done
 
 doc: $(DOC)
@@ -74,11 +74,11 @@ doc: $(DOC)
 	javadoc -author -version -d $(docdir)/classes \
 		-sourcepath $$CLASSPATH:toolbus/aterm:toolbus/tool:toolbus/util:toolbus/tide \
 		toolbus.aterm toolbus.util toolbus.tool
-	
+
 uninstall:
 	for file in $(PROGRAMS); do\
 	  rm -f $(bindir)/$$file; \
 	done
 	for dir in $(SUBDIRS); do \
-		cd $$dir; make $@; cd ../..; \
+		cd $$dir; $(MAKE) $@; cd ../..; \
 	done
