@@ -24,7 +24,7 @@
 
 ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
-static void rewrite_error(const char *message, ATerm subject);
+void rewrite_error(const char *message, ATerm subject);
 ATerm v_lookup_plain(ATerm env, ATerm var);
 ATermAppl v_lookup_list(ATerm env, ATerm var);
 ATbool v_is_bound(ATerm env, ATerm var);

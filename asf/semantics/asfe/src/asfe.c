@@ -188,7 +188,7 @@ void rec_terminate(int cid, ATerm t)
  * on.
  */
 
-static void rewrite_error(const char *message, ATerm subject)
+void rewrite_error(const char *message, ATerm subject)
 {
 	ATerm error = ATmake("[<str>,<term>,<term>])", message, tagCurrentRule, subject);
 	ATermList temp;
