@@ -4,9 +4,21 @@ process StatusDisplay is
 let
   Lst : list,
   Str : str,
-  Id  : term
+  Id  : term,
+  Tool : str,
+  Identification : str,
+  Error : term,
+  Errors : list,
+  Msg : str,
+  FeedbackName : str,
+  Subject : term,
+  Subjects : list,
+  SubjectMsg : str,
+  LocationName : str,
+  Location : term
 in
   subscribe(ui-status(<term>)) .
+  subscribe(display-feedback-summary(<term>)) .
   ( 
     rec-note(ui-status(error(Str?))) .
     printf("Error: %s", Str)
@@ -25,6 +37,38 @@ in
   +
     rec-note(ui-status(messagef(Str?, Lst?))) .
     printf("Message: %s [%t]\n", Str, Lst)
+  +
+    rec-note(display-feedback-summary(feedback(Tool?, Identification?, Errors?))) .
+    (
+      if not-equal(Errors, []) then
+        Error := first(Errors) .
+        Errors := next(Errors) .
+        FeedbackName := fun(Error) .
+        Msg := first(args(Error)) .
+        Subjects := first(next(args(Error))) .
+        (
+          if not-equal(Subjects, []) then
+            Subject := first(Subjects) .
+            Subjects := next(Subjects) .
+            SubjectMsg := first(args(Subject)) .
+            Location := first(next(args(Subject))) .
+            if not-equal(Location, no-location) then
+              LocationName := first(args(Location)) .
+              printf("%s: %s %s in %s\n", 
+                     FeedbackName, Msg, SubjectMsg, LocationName)
+            else 
+              printf("%s: %s %s\n", FeedbackName, Msg, SubjectMsg)
+            fi
+          fi
+        )*
+        if equal(Subjects, []) then
+          tau
+        fi
+      fi
+    )*
+    if equal(Errors, []) then
+      tau
+    fi
   ) *
   delta
 endlet
