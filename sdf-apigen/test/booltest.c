@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
   assert(term);
   ATprotect(&term);
 
-  tree = SDFgetStartBoolList(SDFStartFromTerm(term));
+  tree = SDFgetStartTop(SDFStartFromTerm(term));
 
   testBooleans(tree);
 
