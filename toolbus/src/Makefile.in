@@ -15,7 +15,7 @@ CPP		= @CPP@
 CPPFLAGS 	= @CPPFLAGS@
 DEFS 		= @DEFS@ -DVERSION="\"$(VERSION)\""
 LIBS		= @LIBS@
-SHARED_LIB	= @SHARED_LIB@
+SHARED_TB_LIB	= @SHARED_TB_LIB@
 MODULES		= @MODULES@
 
 AR		= @AR@
@@ -72,7 +72,7 @@ LIB_OBJECTS	= client.o sockets.o terms.o tool.o tool2.o utils.o symbol.o
 DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
 		viewer.tcl
 
-BUILD_TARGETS	= libtb.a toolbus ctif script2latex verbatim ${SHARED_LIB}
+BUILD_TARGETS	= libtb.a toolbus ctif script2latex verbatim ${SHARED_TB_LIB}
 TARGETS		= ${BUILD_TARGETS} logger.tcl viewer.tcl
 
 # INIT_MODULES	= $(MODULES:.o=_init_module();)
@@ -156,7 +156,7 @@ install: ${TARGETS}
 	$(INSTALL) verbatim $(bindir)
 	$(INSTALL) -m 644 logger.tcl $(libdir)
 	$(INSTALL) -m 644 viewer.tcl $(libdir)
-	for file in libtb.a $(SHARED_LIB); do \
+	for file in libtb.a $(SHARED_TB_LIB); do \
 	  $(INSTALL) $$file $(libdir); \
 	done
 	for file in $(HEADERS); do \

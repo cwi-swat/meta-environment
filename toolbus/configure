@@ -1051,9 +1051,9 @@ fi
 # Check whether --with-shared or --without-shared was given.
 withval="$with_shared"
 if test -n "$withval"; then
-  SHARED_LIB=libtb.so
+  SHARED_TB_LIB=libtb.so
 else
-  SHARED_LIB=libatb.so
+  SHARED_TB_LIB=libtb.so
 fi
 
 
@@ -2373,7 +2373,7 @@ s%@SET_MAKE@%$SET_MAKE%g
 s%@INCLUDES@%$INCLUDES%g
 s%@CLEAN@%$CLEAN%g
 s%@MODULES@%$MODULES%g
-s%@SHARED_LIB@%$SHARED_LIB%g
+s%@SHARED_TB_LIB@%$SHARED_TB_LIB%g
 s%@GELDIR@%$GELDIR%g
 s%@TBSWIPL@%$TBSWIPL%g
 s%@ADAPTERS@%$ADAPTERS%g
