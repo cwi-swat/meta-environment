@@ -84,7 +84,12 @@ equations
   [mr-2'4] make-rule(false,,Term1,Term2) = Term1 = Term2
 
 %% 
-[isf] is-string-funid(funid("""Char+""")) = true
+[isf] is-list-funid(Funid) = false,
+      is-returns-list-funid(Funid) = false,
+      Funid = funid("""Char+""")
+      ===>
+      is-string-funid(Funid) = true
+
 [default-isf] is-string-funid(Funid) = false
 
 %% A function to check whether we are dealing with a transformer

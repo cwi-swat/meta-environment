@@ -364,7 +364,9 @@ equations
            =====================================
            transform-call(Post,Funid,Namepair*,ActualArg*) = Post(ActualArg*)
 
-  [mp-1'32] is-string-funid(Funid) = true
+  [mp-1'32] is-list-funid(Funid) = false,
+            is-returns-list-funid(Funid) = false,
+            is-string-funid(Funid) = true
             =====================================
             transform-call(Post,Funid,Namepair*, ) = Post
 
