@@ -63,35 +63,31 @@ static size_t getFileSize(const char *s)
 
 static char *readFileContents(char *fnam, size_t *size)
 {
-  char *buf;
+  char *buf = NULL;
   FILE *fd;
 
   *size = getFileSize(fnam);
+
   if((fd = fopen(fnam, "rb")) == NULL) {
-    /* fprintf(stderr, "could not open %s\n", fnam); */
     *size = 0;
     return NULL;
   }
+
   if((buf = (char *)malloc(*size + 1)) == NULL ) {
-    /*
-       fprintf(stderr, "could not allocate %i bytes for %s\n",
-       (int) *size+1, fnam);
-       */
     fclose(fd);
     *size = 0;
     return NULL;
   }
+
   if(fread(buf, 1, *size, fd) != *size) {
-    /*
-       fprintf(stderr, "could not fread() %i bytes %s\n",
-       (int) *size, fnam);
-       */
     free(buf);
+    fclose(fd);
     *size = 0;
-    buf = NULL;
+    return NULL;
   }
+
   fclose(fd);
-  buf[*size] = '\0';	/* Terminate the string :-( */
+  buf[*size] = '\0';
   return buf ;
 }
 
@@ -162,7 +158,6 @@ static ATbool filesEqual(const char *f1, const char *f2)
 
 /*}}}  */
 
-/* ToolBus snd-eval return messages */
 /*{{{  static ATerm createErrorMessage(char *message) */
 
 static ATerm createErrorMessage(char *message)
@@ -212,27 +207,6 @@ static ATerm createFilesDifferentMessage()
 
 /*}}}  */
 
-/* REFACTOR: remove these when no longer needed */
-/*{{{  static ATerm read_raw_from_named_file(char *fn, char *n) */
-
-static ATerm read_raw_from_named_file(char *fileName)
-{
-  ATerm t;
-  char   *buf;
-  size_t size;
-
-  if (!(buf = readFileContents(fileName, &size))) {
-    t = createErrorMessage("could not open file");
-  } else {
-    t = ATmake("snd-value(file-contents(<str>))", buf);
-    free(buf);
-  }
-  return t;
-}
-
-/*}}}  */
-
-/* io-tool interface implementation */
 /*{{{  ATerm relative_to_absolute(int cid, ATerm paths) */
 
 ATerm relative_to_absolute(int cid, ATerm paths)
@@ -252,6 +226,9 @@ ATerm relative_to_absolute(int cid, ATerm paths)
     else {
       ATwarning("Unable to expand %s, skipping...\n", relativePath);
     }
+
+    free(absolutePath);
+    absolutePath = NULL;
   }
 
   return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
@@ -262,9 +239,19 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 
 ATerm read_text_file(int cid, char *fileName)
 {
-  ATerm t = read_raw_from_named_file(fileName);
+  ATerm t;
+  char *buf = NULL;
+  size_t size;
 
-  free(fileName);
+  buf = readFileContents(fileName, &size);
+
+  if (buf == NULL) {
+    t = createErrorMessage(strerror(errno));
+  } else {
+    t = ATmake("snd-value(file-contents(<str>))", buf);
+    free(buf);
+  }
+
   return t;
 }
 
@@ -350,7 +337,7 @@ ATerm exists_file(int cid, char *fileName)
   else {
     result = createErrorMessage("file does not exist");
   }
-  free(fileName);
+  
   return result;
 }
 
