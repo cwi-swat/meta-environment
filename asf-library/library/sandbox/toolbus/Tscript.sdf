@@ -1,14 +1,17 @@
 module Tscript
 
-imports ToolDef ProcessDef TComment
-
 exports
   sorts Tscript
   context-free syntax
-    TscriptDef*                         -> Tscript {cons("tscript")}
+    TscriptDef* -> Tscript {cons("tscript")}
+
+hiddens
+  imports ProcessDef
+  imports TComment
+  imports ToolDef
 
   sorts TscriptDef
   context-free syntax
-    ToolDef                             -> TscriptDef {cons("tooldefScript")}
-    ProcessDef                          -> TscriptDef {cons("procdefScript")}
+    ToolDef -> TscriptDef {cons("tooldefScript")}
+    ProcessDef -> TscriptDef {cons("procdefScript")}
     "toolbus" "(" ProcessInvocation ")" -> TscriptDef
