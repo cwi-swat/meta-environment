@@ -14,6 +14,8 @@ PT_Symbol renameInSymbol(PT_Symbol symbol,
                          PT_Symbol formalParam,
                          PT_Symbol actualParam);
 
+/*{{{  PT_Symbols renameInSymbols(PT_Symbols symbols, */
+
 static
 PT_Symbols renameInSymbols(PT_Symbols symbols,
                            PT_Symbol formalParam,
@@ -31,6 +33,9 @@ PT_Symbols renameInSymbols(PT_Symbols symbols,
     return PT_setSymbolsHead(PT_setSymbolsTail(symbols, newTail), newHead);
   }
 }
+
+/*}}}  */
+/*{{{  PT_Symbol renameInSymbol(PT_Symbol symbol, */
 
 static 
 PT_Symbol renameInSymbol(PT_Symbol symbol,
@@ -89,6 +94,9 @@ ATwarning("symbol = %t, formalParam = %t, actualParam = %t\n",
   return symbol;
 }
 
+/*}}}  */
+/*{{{  PT_Args renameProdInArgs(PT_Args trees, */
+
 static
 PT_Args renameProdInArgs(PT_Args trees,
                          PT_Production formalParam,
@@ -107,6 +115,9 @@ PT_Args renameProdInArgs(PT_Args trees,
   }
 }
 
+/*}}}  */
+/*{{{  PT_Args renameInArgs(PT_Args trees, */
+
 static
 PT_Args renameInArgs(PT_Args trees,
                      PT_Symbol formalParam,
@@ -118,12 +129,18 @@ PT_Args renameInArgs(PT_Args trees,
   else {
     PT_Tree head = PT_getArgsHead(trees);
     PT_Args tail = PT_getArgsTail(trees);
-   
-    PT_Tree newHead = renameInTree(head, formalParam, actualParam);
-    PT_Args newTail = renameInArgs(tail, formalParam, actualParam);
+    PT_Tree newHead;
+    PT_Args newTail;
+  
+    newHead = renameInTree(head, formalParam, actualParam);
+    newTail = renameInArgs(tail, formalParam, actualParam);
+
     return PT_setArgsHead(PT_setArgsTail(trees, newTail), newHead);
   }
 }
+
+/*}}}  */
+/*{{{  PT_Production renameInProduction(PT_Production prod, */
 
 static
 PT_Production renameInProduction(PT_Production prod,
@@ -147,6 +164,9 @@ PT_Production renameInProduction(PT_Production prod,
     return PT_setProductionRhs(prod, newRhs);
   }
 }
+
+/*}}}  */
+/*{{{  PT_Tree renameProdInTree(PT_Tree tree, */
 
 static
 PT_Tree renameProdInTree(PT_Tree tree,
@@ -179,6 +199,9 @@ ATwarning("prod =%t\nformalParam = %t\n", prod, formalParam);
   }
 }
 
+/*}}}  */
+/*{{{  PT_Tree renameInTree(PT_Tree tree, */
+
 static
 PT_Tree renameInTree(PT_Tree tree,
                      PT_Symbol formalParam,
@@ -209,6 +232,9 @@ PT_Tree renameInTree(PT_Tree tree,
   }
 }
 
+/*}}}  */
+/*{{{  ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList, */
+
 static
 ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList,
                                                   PT_Production formalParam,
@@ -236,6 +262,9 @@ ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList,
   return eqsList;
 }
 
+/*}}}  */
+/*{{{  ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList, */
+
 static
 ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
                                                  PT_Symbol formalParam,
@@ -262,6 +291,9 @@ ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
   }
   return eqsList;
 }
+
+/*}}}  */
+/*{{{  ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree, */
 
 static
 ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
@@ -305,6 +337,9 @@ ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
   return asfTree;
 }
 
+/*}}}  */
+/*{{{  ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,  */
+
 ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree, 
                                                  ASF_CondEquationList asfTree, 
                                                  SDF_Symbols actualParams)
@@ -322,6 +357,9 @@ ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,
     return asfTree;
   }
 }
+
+/*}}}  */
+/*{{{  ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,  */
 
 ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree, 
                                               SDF_Renamings renamings)
@@ -373,6 +411,9 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
   return asfTree;
 }
 
+/*}}}  */
+/*{{{  SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam, */
+
 static 
 SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam,
                                         SDF_Symbols formalParams,
@@ -415,6 +456,9 @@ ATwarning("formalParam: %t\nactualParam: %t\nlocalParam: %t\n\n",
   return localParam;
 }
 
+/*}}}  */
+/*{{{  SDF_SymbolList replaceParametersInParameters(SDF_SymbolList localParamList, */
+
 static 
 SDF_SymbolList replaceParametersInParameters(SDF_SymbolList localParamList,
                                              SDF_Symbols formalParams,
@@ -440,6 +484,9 @@ SDF_SymbolList replaceParametersInParameters(SDF_SymbolList localParamList,
   }
   return localParamList;
 }
+
+/*}}}  */
+/*{{{  SDF_Import replaceParametersInImport(SDF_Import import, */
 
 static 
 SDF_Import replaceParametersInImport(SDF_Import import,
@@ -467,6 +514,9 @@ SDF_Import replaceParametersInImport(SDF_Import import,
   return import;
 }
 
+/*}}}  */
+/*{{{  SDF_ImportList replaceParametersInImportList(SDF_ImportList importList, */
+
 static
 SDF_ImportList replaceParametersInImportList(SDF_ImportList importList,
                                              SDF_Symbols formalParams,
@@ -491,6 +541,9 @@ SDF_ImportList replaceParametersInImportList(SDF_ImportList importList,
   return importList;
 }
 
+/*}}}  */
+/*{{{  SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,  */
+
 SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName, 
                                             PT_Tree sdfTree,
                                             SDF_ImportList importList)
@@ -502,3 +555,5 @@ SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
                                    PT_makeTermFromTree(sdfTree))));
   return replaceParametersInImportList(importList, formalParams, actualParams);
 }
+
+/*}}}  */

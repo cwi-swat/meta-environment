@@ -1,6 +1,8 @@
 #include "module-db.h"
 #include "renaming-imports.h"
 
+/*{{{  static SDF_ImportList rename_modulename_in_importlist( */
+
 static SDF_ImportList rename_modulename_in_importlist(
                                        SDF_ImportList orgImports,
                                        SDF_ModuleId oldModuleName,
@@ -32,6 +34,9 @@ static SDF_ImportList rename_modulename_in_importlist(
   return orgImports;
 }
 
+/*}}}  */
+/*{{{  static SDF_ImpSection rename_modulename_in_impsection( */
+
 static SDF_ImpSection rename_modulename_in_impsection(
                                        SDF_ImpSection impSection,
                                        SDF_ModuleId oldModuleName,
@@ -47,6 +52,9 @@ static SDF_ImpSection rename_modulename_in_impsection(
   
   return SDF_setImpSectionList(impSection, newImports);
 }
+
+/*}}}  */
+/*{{{  static SDF_Grammar rename_modulename_in_grammar( */
 
 static SDF_Grammar rename_modulename_in_grammar(
                                        SDF_Grammar orgGrammar,
@@ -73,6 +81,9 @@ static SDF_Grammar rename_modulename_in_grammar(
   return orgGrammar;
 }
 
+/*}}}  */
+/*{{{  static SDF_Section rename_modulename_in_section( */
+
 static SDF_Section rename_modulename_in_section(
                                        SDF_Section orgSection,
                                        SDF_ModuleId oldModuleName,
@@ -87,6 +98,9 @@ static SDF_Section rename_modulename_in_section(
   }
   return orgSection;
 }
+
+/*}}}  */
+/*{{{  static SDF_SectionList rename_modulename_in_sectionlist( */
 
 static SDF_SectionList rename_modulename_in_sectionlist(
                                        SDF_SectionList orgSections,
@@ -113,6 +127,9 @@ static SDF_SectionList rename_modulename_in_sectionlist(
   }
   return orgSections;
 }
+
+/*}}}  */
+/*{{{  static SDF_ImpSectionList rename_modulename_in_impsections( */
 
 static SDF_ImpSectionList rename_modulename_in_impsections(
                                        SDF_ImpSectionList orgImpSections,
@@ -143,6 +160,10 @@ static SDF_ImpSectionList rename_modulename_in_impsections(
   return orgImpSections;
 }
 
+/*}}}  */
+
+/*{{{  SDF_Module rename_modulename_in_module(SDF_Module module, */
+
 SDF_Module rename_modulename_in_module(SDF_Module module,
                                        SDF_ModuleId oldModuleName,
                                        SDF_ModuleId newModuleName)
@@ -166,4 +187,6 @@ SDF_Module rename_modulename_in_module(SDF_Module module,
 
   return module;
 }
+
+/*}}}  */
 
