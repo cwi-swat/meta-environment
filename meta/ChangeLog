@@ -18,6 +18,9 @@
  	  All (most) components of the MetaStudio should extend this abstract class.
  	- introduced a package hierarchy below metastudio: "components" for GUI
  	  components, "data" for data representation.
+    - ModuleBrowser is now a separate component that can be reused and run
+      in multiple instances in a single MetaStudio.
+    - Improved efficiency of graph layout (FromTerm was executed twice!)
  	
 Mon Dec  8 14:12:18 CET 2003 <{jong,jurgenv,kooiker}@cwi.nl>
  * editors/text/gvim/{connector.c,meta.vim.src}:
