@@ -25,4 +25,4 @@ hiddens
   variables
         "$NatCon" [0-9\']*            		-> NatCon
         "$Literal" [0-9\']*             	-> Literal
-	"Char*" [0-9\']* 			-> CHAR*
+ 	"Char*" [0-9\']* 			-> CHAR*

@@ -9,7 +9,7 @@ exports
 context-free syntax
 	run(Integer, Bag[[Integer]], Bag[[Integer]])	-> Boolean
 
-  imports asf/syntax/Comments
+  imports basic/Comments
 variables
 	"$Bag" [0-9\']*		-> Bag[[Integer]]
 	"$N" [0-9\']*		-> Integer

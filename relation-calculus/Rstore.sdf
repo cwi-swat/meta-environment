@@ -10,13 +10,13 @@ exports
 
         Elem                          			-> RVALUE
         "*undefined*"                     		-> RVALUE
-        {RVAR ","}+ # REXP              		-> RVALUE
+         {RVAR ","}+ #  REXP            		-> RVALUE
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"   -> RVALUE
 
 %% The RSTORE itself, maps RVARs to RVALUEs
 
-       "rstore" "(" { RVAR # RVALUE ","}* ")"         	-> RSTORE {prefer}
+       "rstore" "(" {  RVAR # RVALUE  ","}* ")"       -> RSTORE {prefer}
         assign(RVAR, RVALUE, RSTORE)          		-> RSTORE
 	assign-when-undef(RVAR, RVALUE, RSTORE)		-> RSTORE
         value(RVAR, RSTORE)                   		-> RVALUE

@@ -9,4 +9,6 @@ equations
 [ec1] 	get-endcol(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4)) 	= $NatCon4
 
 
-%%[l2s] 	lit2str(literal(Char*)) 	= strcon(Char*)
+[l2s1] lit2str(uqliteral(Char*)) 	= strcon(""" Char* """)
+
+[l2s1] lit2str(qliteral(Char*)) 	= strcon(Char*)

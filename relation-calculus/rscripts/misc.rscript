@@ -1,24 +1,17 @@
 
 int ROOT = 0 
 
-rel[str,int] DEFS  = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
+rel[int, str] DEFS  = {<1, "x">, <3, "z">, <4, "x">, <5, "y">}
 
-rel[str,int] USES    = {<"y", 3>, <"x", 3>, <"z", 5>}
+rel[int,str] USES    = {<3, "y">, <3,"x">, <5, "z">}
 
-rel[int,int]  PRED   = {<0, 1>,<1, 2>, <2, 3>, <2, 4>, <3, 5>, <4, 5>}
+rel[int,int]  PRED   = {<1, 0>,<2, 1>, <3, 2>, <4, 2>, <5, 3>, <5, 4>}
 
-rel[str,int] D0 = {<"y",3>}
-rel[str,int] D1 = (D0 o PRED) \ DEFS
-
-rel[int,int] D4 = reachX({3}, "y" . DEFS, PRED)
-
-bool  reaches_root(rel[str,int] R) = 0 in range(R)
-
-rel[str,int]  UN = { <V, N> | <V, N> : USES, <ROOT, N> in reachX({0}, V . DEFS, PRED) }
+rel[int, str]  UN = { <N, V> | <N, V> : USES, <ROOT, N> in reachX({0}, DEFS . V, PRED) }
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> | <V, N> : USES,  <ROOT, N> in carrierX(PRED, V .  DEFS)+ }
+rel[int, str]  UN1 = { <N, V> | <N, V> : USES,  <ROOT, N> in carrierX(PRED, DEFS . V)+ }
 
 <T1,T2> swap(<T2,T1> P) = <second(P), first(P)>
 
@@ -46,8 +39,7 @@ rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { <X, Y> | X : R1, Y : R2 }
 rel[A,C] comp(rel[A,B] R1, rel[B,C] R2) =
     { <X, T> | <X, Y> : R1, <S, T> : R2, Y == S }
 
-rel[int,str] bag5     = inv(DEFS)
-bag[str] bag6     = fdom(DEFS)
+bag[int] bag6     = fdom(DEFS)
 
 bool B1 = Bag1 < Bag2
 bool B2 = Bag1 <= Bag2

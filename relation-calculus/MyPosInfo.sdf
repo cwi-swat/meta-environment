@@ -13,7 +13,7 @@ exports
 
    context-free syntax
 
-     convert(Literal)				-> StrCon
+%%     convert(Literal)				-> StrCon
 %%   mkId(IntCon, IntCon, IntCon, IntCon) -> StrCon
 
   

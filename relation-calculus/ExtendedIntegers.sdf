@@ -4,11 +4,15 @@ imports basic/Integers
 
 exports
    context-free syntax
-	Integer "/" Integer	-> Integer
-	Natural "/" Natural	-> Natural
-	max(Integer, Integer)	-> Integer
-	min(Integer, Integer)	-> Integer
+	remainder(Natural, Natural) -> Natural
+	ndiv(Natural, Natural)	    -> Natural
 
+	Integer "/" Integer	    -> Integer
+	max(Integer, Integer)	    -> Integer
+	min(Integer, Integer)	    -> Integer
+
+   context-free priorities
+	Integer "/" Integer -> Integer > Integer "*" Integer -> Integer
 hiddens
    imports basic/Comments
 
