@@ -1,7 +1,7 @@
 module languages/box/syntax/Fonts
 
-imports languages/box/syntax/Box
-        basic/Comments
+imports languages/box/syntax/Basic
+imports basic/Comments
 
 exports
   sorts FontId
@@ -23,7 +23,7 @@ exports
     FOption*                     -> FOptions
     "F" FOptions                 -> FontOperator
     FontOperator "[" Box "]"     -> Box
-    FontOperator "(" BoxList ")" -> BoxList
+%%    FontOperator "(" BoxList ")" -> BoxList
 
     "fn" -> FontParam
     "fm" -> FontParam
@@ -39,11 +39,3 @@ exports
     "ESC"     -> FontOperator
     "COMM"    -> FontOperator
     "STRING"  -> FontOperator
-
-hiddens
-  variables
-    [f][0-9]*     -> FontOperator
-    "fo"[0-9]*    -> FOption
-    "fo""*"[0-9]* -> FOption*
-    "fp"[0-9]*    -> FontParam
-%%%
