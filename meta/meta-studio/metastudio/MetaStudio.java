@@ -15,20 +15,36 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 
+import metastudio.components.TideControl;
 import metastudio.components.dialogtool.DialogTool;
+import metastudio.components.errorlist.ErrorList;
 import metastudio.components.graphnodesizer.GraphNodeSizer;
+import metastudio.components.infolist.InfoList;
 import metastudio.components.menubar.MenuBar;
+import metastudio.components.modulebrowser.ModuleBrowser;
 import metastudio.components.statusbar.StatusBar;
+import metastudio.components.statushistory.StatusHistory;
 import metastudio.components.toolbar.ToolBar;
+import metastudio.components.treebrowser.TreeBrowser;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
+import tide.tool.support.DebugAdapter;
+import tide.tool.support.DebugTool;
+import tide.tool.support.DebugToolListener;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 public class MetaStudio extends JFrame implements UserInterfaceTif {
     private static PureFactory factory;
     private UserInterfaceBridge bridge;
+    private static final String PARSE_TREE = "Parse tree";
+    private static final String MODULES = "Modules";
+    private static final String DEBUGGING = "Debugging";
+    private JTabbedPane tabs;
+    private Thread tideControlThread;
+    private JTabbedPane messageTabs;
 
     public static final void main(String[] args) throws IOException {
         new MetaStudio(args);
@@ -135,7 +151,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
 
 
     private JSplitPane createMainPane(String[] args) {
-        JComponent tabs = new MainTabs(factory,  args);
+        JComponent tabs = createMainTabs(args);
         JPanel panel = createMessageStatusPanel(args);
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
@@ -146,6 +162,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         return mainPanel;
     }
     
+
     private void postQuitEvent() {
         bridge.sendEvent(factory.parse("quit"));
     }
@@ -158,6 +175,59 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         });
     }
 
+    private JTabbedPane createMainTabs(String[] args) {
+    	tabs = new JTabbedPane();
+    	ModuleBrowser moduleBrowser = new ModuleBrowser(factory, args);
+    	spawn(moduleBrowser, "module-browser");
+    	addTab(tabs, MODULES, moduleBrowser);
+    	
+    	TreeBrowser parseTreeBrowser = new TreeBrowser(new MetaGraphFactory((PureFactory) factory), args);
+    	spawn(parseTreeBrowser, "tree-browser");
+    	addTab(tabs, PARSE_TREE, parseTreeBrowser);
+    	
+    	try {
+    		TideControl tide = new TideControl(factory, args);
+    		addTab(tabs, DEBUGGING, tide);
+    		
+    		tide.addDebugToolListener(new DebugToolListener() {
+    			public void adapterConnected(DebugTool tool, DebugAdapter adapter) {
+    				tabs.setSelectedIndex(tabs.indexOfTab(DEBUGGING));
+    			}
+
+    			public void adapterDisconnected(
+    					DebugTool tool,
+						DebugAdapter adapter) {
+    				tabs.setSelectedIndex(tabs.indexOfTab(MODULES));
+    			}
+    		});
+    	} catch (IOException e) {
+    		// TODO: 
+    		System.err.println("TODO: deal with this error properly");
+    	}
+    	
+    	return tabs;
+    }
+    
+    private void createMessageTabs(String[] args) {
+    	messageTabs = new JTabbedPane();
+
+    	StatusHistory historyPanel = new StatusHistory(factory, args);
+    	spawn(historyPanel, "history-list");
+    	
+    	ErrorList errorList = new ErrorList(factory, args);
+    	spawn(errorList, "error-list");
+    	
+    	InfoList systemInfo = new InfoList(factory, args);
+    	spawn(systemInfo, "info-list");
+    	
+    	messageTabs.insertTab("Errors", null, errorList, "Errors and warnings", 0);
+    	messageTabs.insertTab("Info",null, systemInfo,"System information", 1);
+    	messageTabs.insertTab("Log", null, historyPanel, "Status log", 2);
+    }
+    
+    private void addTab(JTabbedPane tabs, String title, JComponent tool) {
+    	tabs.insertTab(title, null, tool, null, tabs.getTabCount());
+    }
     public void initializeUi(String name) {
         setTitle(name);
         Preferences.setString("metastudio.name", name);
@@ -165,5 +235,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
 
 	public void recTerminate(ATerm t0) {
 		System.exit(0);
+		
 	}
 }
