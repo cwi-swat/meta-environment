@@ -313,6 +313,6 @@ equations
                "l(\"->\"),w(\"\")," ++
                "sort(\"" ++ literal2id(Lexical1) ++ "\"),w(\"\"),no-attrs)"
 
-  [tc-1'1] delaying(Term) ++del Term*1,delaying(Term*2),Term*3 = Term*1,delaying(Term,Term*2),Term*3
+  [tc-1'1] delaying(Term) ++del Term*1,delaying(Term+2),Term*3 = Term*1,delaying(Term,Term+2),Term*3
 
   [default-tc-1'2] Term ++del Term* = Term,Term*

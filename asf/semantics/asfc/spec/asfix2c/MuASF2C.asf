@@ -72,8 +72,8 @@ equations
             =============================================================
             funcdef2table(funid(Char*)(Sigarg+),Nametable1) = Nametable2
 
-  [f2t-2'2] Attrs = {Term*},
-            nt-add(funid(Char*),funid("_" Char*),Term*,Nametable1) = Nametable2
+  [f2t-2'2] Attrs = {Term+},
+            nt-add(funid(Char*),funid("_" Char*),Term+,Nametable1) = Nametable2
             ===================================================================
             funcdef2table(funid(Char*)(Sigarg+) Attrs,Nametable1) = Nametable2
 
@@ -81,7 +81,7 @@ equations
             =============================================================
             funcdef2table(funid(Char*),Nametable1) = Nametable2
 
-  [f2t-2'4] Attrs = {Term*},
-            nt-add(funid(Char*),funid("_" Char*),Term*,Nametable1) = Nametable2
+  [f2t-2'4] Attrs = {Term+},
+            nt-add(funid(Char*),funid("_" Char*),Term+,Nametable1) = Nametable2
             ===================================================================
             funcdef2table(funid(Char*) Attrs,Nametable1) = Nametable2

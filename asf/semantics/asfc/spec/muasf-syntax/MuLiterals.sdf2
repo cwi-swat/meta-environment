@@ -13,16 +13,16 @@ exports
     ~ [\000-\037\"\\]     -> QChar
     EscChar               -> QChar
 
-    [a-z][\-\_A-Za-z0-9\']* -> FunId %% identifiers start with lowercase
+    [a-z][\-\_A-Za-z0-9\']* -> FunId {uneager} %% identifiers start with lowercase
     "\"" QChar* "\""        -> FunId %% quoted strings are identifiers
     [\'][\!\\-\~]           -> FunId %% all printable characters
     [\\][0-2][0-9][0-9]     -> FunId %% all characters; decimally coded
 
-    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId
+    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId {uneager}
 
-    [A-Z][a-zA-Z0-9\.\-]*  -> ModId
+    [A-Z][a-zA-Z0-9\.\-]*  -> ModId {uneager}
 
-    [a-z][a-z\-]*         -> PropId
+    [a-z][a-z\-]*         -> PropId {uneager}
 
 exports
   context-free syntax

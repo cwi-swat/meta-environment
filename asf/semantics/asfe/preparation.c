@@ -501,7 +501,7 @@ ATerm lexical_to_list(ATerm lextrm)
   }
   newname  = ATmake("l(<str>)", sortstr);
   qnewname = ATmake("ql(<str>)", sortstr);
-  newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))");
+  newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"*\"))");
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
   newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",qnewname, newiter);
   newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);

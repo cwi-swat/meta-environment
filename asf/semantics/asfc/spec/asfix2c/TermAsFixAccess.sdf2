@@ -87,10 +87,3 @@ hiddens
     "Alhs"[0-9\']*         -> ATerm
     "Arhs"[0-9\']*         -> ATerm
     "Char*"[0-9]*          -> CHAR*
-
-hiddens
-  priorities
-    <<ATerm -CF> -VAR> -> <ATerm -CF> >
-    "Sort" -> <AFun -CF>,
-    <<ATerm -CF> -VAR> -> <ATerm -CF> >
-    "Symbol" -> <AFun -CF>

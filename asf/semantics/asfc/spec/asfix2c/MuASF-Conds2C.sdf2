@@ -16,7 +16,7 @@ hiddens
     test-cond2cstats({C-Rule ";"}*,{NamePair ","}*,IntCon)   -> SlI-tuple
 
   context-free syntax
-    listconds2cstats({C-Rule ";"}+,
+    listconds2cstats({C-Rule ";"}*,
                      {NamePair ","}*,IntCon,Expression)      -> SlI-tuple
     listcondspatterns2cstats({C-Rule ";"}+,Expression,
                              {NamePair ","}*,IntCon)         -> SlI-tuple

@@ -87,17 +87,17 @@ equations
               funargs2cexp(Term,Term+,Aint) = ((Term,identifier("a""r""g" Char*))) ++ Cenv4
 
   [mce-1'1] is-char(Funid) = true,
-            make-atmp(Aint*) = ActualArg1,
+            make-atmp(Aint+) = ActualArg1,
             translate-char(Funid) = ActualArg2
             ==================================
-            make-c-expression((Funid,Aint*),Namepair*) =
+            make-c-expression((Funid,Aint+),Namepair*) =
               is_char(ActualArg1,ActualArg2)
 
-  [mce-1'2] make-atmp(Aint*) = CConstant,
+  [mce-1'2] make-atmp(Aint+) = CConstant,
             is-char(Funid) = false,
             get-funid(Funid,Namepair*) = funid(Char*)
             =========================================
-            make-c-expression((Funid,Aint*),Namepair*) =
+            make-c-expression((Funid,Aint+),Namepair*) =
               check_sym(CConstant,identifier(Char* "s""y""m"))
 
   [mce-2'1] is-char(Funid) = true,

@@ -296,7 +296,7 @@ equations
 
   [flc-1'3] flatten-list-of-chars(Expression2) = Expression3
             ================================================
-            flatten-list-of-chars(Expression1 = Expression2) = Expression1 = Expression3
+            flatten-list-of-chars(Expression1 = Expression2) = (Expression1 = Expression3)
 
   [default-flc-1'4] is-function-call(Expression) = false
                     ====================================

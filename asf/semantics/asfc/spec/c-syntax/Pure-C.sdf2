@@ -4,9 +4,16 @@ exports
 
   sorts Integer-constant Identifier String
   lexical syntax
-    [0-9]+                 -> Integer-constant
-    [a-zA-Z\_][a-zA-Z\_0-9]* -> Identifier
-    "\"" ~[\n\"]* "\""      -> String
+    [0-9]+                   -> Integer-constant
+    [a-zA-Z\_][a-zA-Z\_0-9]* -> Identifier {uneager}
+    "\"" ~[\n\"]* "\""       -> String
+
+  lexical restrictions
+    Identifier -/- [a-zA-Z\_0-9]
+  
+  context-free syntax
+    "result" -> Identifier
+    "null"   -> Identifier
 
   sorts
     Expression Primary-expression Unary-operator Type-specifier

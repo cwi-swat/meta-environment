@@ -56,7 +56,7 @@ exports
     get-first-vf-path({C-Rule ";"}+)     -> FV-Path
     is-empty-vf-path({C-Rule ";"}+)      -> Bool
     is-single-vf-path({C-Rule ";"}+)     -> Bool
-    make-atmp({IntCon ","}+)             -> Identifier
+    make-atmp({IntCon ","}*)             -> Identifier
     make-atmp2({IntCon ","}+)            -> Identifier
     make-select-stat({IntCon ","}+)      -> Declaration-list-opt
 %%%    make-select-stat({IntCon ","}+,Bool) -> Declaration-list-opt

@@ -26,5 +26,5 @@ exports
     quote(Literal)        -> Literal
 hiddens
   variables
-    "c" "*" [0-9\']* -> CHAR*
-    "c"              -> CHAR
+    "c*" [0-9\']* -> CHAR*
+    "c"           -> CHAR

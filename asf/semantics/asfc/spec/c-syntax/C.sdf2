@@ -15,7 +15,7 @@ exports
     "/" CDir*                           -> CDirs
     "./" CDir*                          -> CDirs
     CDir+                               -> CDirs
-    [a-zA-Z0-9\_\-]+ "/"                 -> CDir
+    [a-zA-Z0-9\_\-]+ "/"                 -> CDir {uneager}
     "../"                               -> CDir
 
   context-free syntax
