@@ -1,0 +1,14 @@
+equations
+
+[extractPackage-start]
+	&Rstore1 := assign-when-undef(PACKAGES, rel[Package, loc], {}, &Rstore),
+	&Rstore2 := extract(&CompilationUnit, &Rstore1)
+	=========================================================
+	extractPackage(&CompilationUnit, &Rstore) = &Rstore2
+
+[extractPackage-0]
+	package &Name ; := &PackageDeclaration,
+	&Tuple := <name2str(&Name), get-location(&PackageDeclaration)>,
+	&Rstore2 := add-tuple(PACKAGES, &Tuple, &Rstore1)
+	=========================================================
+	extract(&PackageDeclaration, &Rstore1) = &Rstore2

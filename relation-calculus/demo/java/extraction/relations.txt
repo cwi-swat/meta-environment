@@ -1,0 +1,68 @@
+CLASS_DECL: <area, str>
+  relates occurence of classname (area) to its name (str)
+
+CLASS_OCCURS: <area1, area2>
+  relates occurence of a class (area1) in its parent (area2) method
+  or (inner-)class.
+
+EXTENDS_CLASS: <area1, area2>
+  relates class extension: "area1" extends "area2"
+  
+EXTENDS_INTERFACE: <area1, area2>
+  relates interface extension: "area1" extends "area2"
+
+FIELD_DECL_NAME: <area, str>
+  relates declaration of a field (area) to its name (str)
+
+FIELD_DECL_SCOPE: <area1, area2>
+  relates occurence of a field declaration (area1) in its scope (area2)
+  which is always a class
+
+FIELD_DECL_TYPE: <area, str>
+  relates occurrence of a field declaration (area) to the name of
+  its type (str)
+
+FILES: <area, str>
+  relates the occurence of a compilation unit (area) in a file (str)
+
+IMPLEMENTS: <area1, area2>
+  relates interface implementation: "area1" implements "area2"
+
+INTERFACES: <area, str>
+  relates the occurence of an interface (area) to its name (str)
+
+LOCAL_VARIABLE_DECL_NAME: <area, str>
+  relates local variable and formal parameter declaration (area)
+  to its name (str)
+
+LOCAL_VARIABLE_DECL_SCOPE: <area1, area2>
+  relates local variable and formal parameter declaration (area1)
+  to its scope (area2)
+
+LOCAL_VARIABLE_DECL_TYPE: <area, str>
+  relates local variable and formal parameter declaration (area1)
+  to the name of its type (str)
+
+METHOD_DECL: <area, str>
+  relates the occurence of a method declaration (area) to its name (str)
+
+METHOD_DECL_OCCURS: <area1, area2>
+  relates the occurence of a method declaration (area1) to its scope (area2)
+
+PACKAGES: <area, str>
+  relates the occurence of a package declaration (area) to its name (str)
+
+SUPER_CALL: <area1, area2>
+  relates the occurence of an explicit super-constructor invocation (area1)
+  in a class (area2): class A { A() {super();} }
+                     area2 -^        ^^^^^-area1
+  
+VARIABLE_USE: <area, str>
+  relates the occurence the use of a variable (area) to its name (str)
+  
+VARIABLE_USE_CALL: <area, str>
+  relates the occurence of the use of a method call (str)
+  on a variable (area)
+
+VARIABLE_USE_SCOPE: <area1, area2>
+  relates the occurence the use of a variable (area1) to its scope (area2)

@@ -1,0 +1,11 @@
+ANALYSIS=/home/paulk/research/relation-calculus/demo/java/extraction/JavaAnalysis.eqs
+TABLE=/home/paulk/research/relation-calculus/demo/java/extraction/grammar/Java.trm.tbl
+SOURCE=/home/paulk/software/source/sources/CH/ifa/draw
+SUBDIRS="applet application  contrib  figures  framework  images  samples  standard util"
+
+
+for d in $SUBDIRS
+do
+	echo $d
+	../../../util/extract-relations -e $ANALYSIS -s CompilationUnit -t $TABLE $SOURCE/$d/*.java
+done

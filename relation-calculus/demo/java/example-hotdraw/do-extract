@@ -1,0 +1,2 @@
+extract-relations -e JavaAnalysis.eqs -s CompilationUnit -t grammar/Java.trm.tbl \
+	/home/paulk/software/source/sources/CH/ifa/draw/applet/DrawApplet.java   

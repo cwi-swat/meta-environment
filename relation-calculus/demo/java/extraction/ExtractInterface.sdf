@@ -1,0 +1,29 @@
+module ExtractInterface
+
+imports Rstore
+imports JavaOperations
+imports utilities/PosInfo[CompilationUnit]
+imports utilities/PosInfo[InterfaceDeclaration]
+
+exports
+  context-free syntax
+    extractInterface(CompilationUnit, RSTORE)
+	-> RSTORE
+
+    extractInterface1(CompilationUnit, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    extractInterface1(InterfaceDeclaration, RSTORE)
+    	-> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&Loc"			-> Location
+    "&CompilationUnit"		-> CompilationUnit
+    "&ExtendsInterfaces"	-> ExtendsInterfaces?
+    "&Identifier"		-> Identifier
+    "&InterfaceBody"		-> InterfaceBody
+    "&InterfaceDeclaration"	-> InterfaceDeclaration
+    "&Modifiers"		-> Modifier*
+    "&Rstore"[0-9]*		-> RSTORE
+    "&Tuple"			-> Tuple

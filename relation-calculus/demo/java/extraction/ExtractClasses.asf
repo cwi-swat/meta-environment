@@ -1,0 +1,41 @@
+equations
+
+[extract-classes-start]
+	&Rstore1 := assign-when-undef(CLASSES, rel[Class,area], {}, &Rstore),
+	&Rstore2 := assign-when-undef(CLASS_USES, rel[ClassUse,area], {}, &Rstore1),
+	&Rstore3 := extract(&CompilationUnit, &Rstore2)
+	============================================================================
+	extractClasses(&CompilationUnit, &Rstore) = &Rstore3
+
+[extract-classes-0]
+	&Modifiers class &Identifier &Super &Interfaces &ClassBody := &ClassDeclaration,
+	&Tuple1 := <id2str(&Identifier), get-location(&ClassDeclaration)>,
+	&Rstore2 := add-tuple(CLASSES, &Tuple1, &Rstore1)
+	==============================================================================
+	extract(&ClassDeclaration, &Rstore1) = &Rstore2
+
+[extract-classes-1]
+	new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
+	&Tuple1 := <mkAnonymousClassId(&ClassInstanceCreationExpression), 
+		get-location(&ClassInstanceCreationExpression)>,
+	&Rstore2 := add-tuple(CLASSES, &Tuple1, &Rstore1),
+	&Rstore3 := add-tuple(CLASS_USES, &Tuple1, &Rstore2)
+	==============================================================================
+	extract(&ClassInstanceCreationExpression, &Rstore1) = &Rstore3
+
+[extract-classes-2]
+	new &ClassType ( &Expressions ) := &ClassInstanceCreationExpression,
+	&Name := &ClassType,
+	&Tuple1 := <name2str(&Name), get-location(&ClassInstanceCreationExpression) >,
+	&Rstore2 := add-tuple(CLASS_USES, &Tuple1, &Rstore1)
+	==============================================================================
+	extract(&ClassInstanceCreationExpression, &Rstore1) = &Rstore2
+
+
+[mkId]  new &ClassType ( &Expressions ) &ClassBody := &ClassInstanceCreationExpression,
+	&Name := &ClassType,
+	&Loc :=  get-location(&ClassInstanceCreationExpression),
+	&ClassId := name2str(&Name),
+	&LineId :=  nat2str(get-begin-line(&Loc))
+	======================================================================
+	mkAnonymousClassId(&ClassInstanceCreationExpression) = &ClassId || &LineId

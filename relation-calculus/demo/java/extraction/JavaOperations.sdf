@@ -1,0 +1,26 @@
+module JavaOperations
+
+imports Java
+imports basic/Strings
+
+exports
+  context-free syntax
+    id2str(Identifier)		   -> String
+    ids2str({Identifier "."}*)	   -> String
+    name2str(Name)		   -> String
+    type2str(Type)		   -> String
+    var2str(VariableDeclaratorId)  -> String
+    nat2str(NatCon)		   -> String
+
+hiddens
+  variables
+    "#ArrayType"[0-9]*		-> ArrayType
+    "#Chars"			-> CHAR*
+    "#Identifier"[0-9]*		-> Identifier
+    "#Identifiers"[0-9]*	-> {Identifier "."}*
+    "#Identifiersp"[0-9]*	-> {Identifier "."}+
+    "#Name"			-> Name
+    "#PrimitiveType"		-> PrimitiveType
+    "#String"[0-9]*		-> String
+    "#StrCon"[0-9]*		-> StrCon
+    "#VariableDeclaratorId"	-> VariableDeclaratorId
