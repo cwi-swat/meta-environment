@@ -1,7 +1,24 @@
 equations
      
 [concat]   
-strcon(\" c*1 \") || strcon(\" c*2 \") = strcon(\" c*1 c*2 \")
+strcon(\" char*1 \") || strcon(\" char*2 \") = strcon(\" char*1 char*2 \")
+
+equations
+
+[match]
+subst(
+	strcon(\" match \"),
+	strcon(\" replacement \"),
+	strcon(\" char*1 match char*2 \")) =
+subst(
+	strcon(\" match \"),
+	strcon(\" replacement \"),
+	strcon(\" char*1 replacement \"))
+
+[default-done]
+subst(Str1,Str2,Str3) = Str3
+
+equations
 
 equations
 

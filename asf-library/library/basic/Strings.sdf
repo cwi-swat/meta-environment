@@ -29,16 +29,16 @@ exports
 
   context-free syntax
     length(String)         -> Integer
+    subst(pattern:String,replacement:String,in:String) -> String
 
 hiddens
   imports
     basic/Whitespace
 
   lexical variables
-    "n"[0-9]*     -> ~[\0-\31\"\\\n]
-    "o"[0-9]*     -> [0-7]
-    "c*"[0-9]*    -> StrChar* 
+    "char*"[0-9]*    -> StrChar* 
+    "match"[0-9]*    -> StrChar* 
+    "replacement"[0-9]*    -> StrChar* 
 
   variables
-    "Str-con" [0-9\']* -> StrCon
     "Str" [0-9\']*     -> String
