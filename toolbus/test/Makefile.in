@@ -44,12 +44,12 @@ all:    ${PROGRAMS}
 	done ; \
 	for S in ${SCRIPTS} ; \
 	do \
-	 	(${top_srcdir}/src/toolbus $${S};echo  $${S} "OK") || echo "$${S} returns error code, something wrong here" ;\
+	 	(${top_srcdir}/src/toolbus -TB_PORT 9999 $${S};echo  $${S} "OK") || echo "$${S} returns error code, something wrong here" ;\
 	done; \
 	for S in ${ERROR_SCRIPTS} ; \
 	do \
 		echo ;\
-		${top_srcdir}/src/toolbus $${S} 2>tmp || echo "($${S} returns required error code, we ignore it here)" ;\
+		${top_srcdir}/src/toolbus -TB_PORT 9999 $${S} 2>tmp || echo "($${S} returns required error code, we ignore it here)" ;\
 		diff $${S}.out tmp ;\
 		echo $${S} "OK" ;\
 	done ;\
