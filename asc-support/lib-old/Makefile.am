@@ -2,9 +2,9 @@
 
 include make_rules
 
-lib_LIBRARIES            = libasc-support.a libasc-support-gcc.a \
-                           libasc-support-cc.a libasc-support-dbg.a \
-                           libasc-support-prof.a 
+lib_LIBRARIES            = libasc-support.a
+#noinstall_LIBRARIES	 = libasc-support-cc.a libasc-support-gcc.a \
+#			   libasc-support-dbg.a libasc-support-prof.a 
 
 include_HEADERS          = asc-support.h
 EXTRA_DIST               = rewriter.tb
