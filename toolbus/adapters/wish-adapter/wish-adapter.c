@@ -105,7 +105,6 @@ static FILE *from_wish = NULL;
 static TBbool connected = TBfalse;
 static TBbool lazy_exec = TBfalse;
 static char *name = NULL;
-static char backslashes[16] = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
 
 extern term_list *tool_in_sign;	/* for check_in_sign */
 extern char *tool_name;		/* idem */
@@ -912,10 +911,8 @@ main(int argc, char *argv[])
   signals_set();
 
   TBeventloop();
+
+  return 0;
 }
 
 /*}}}  */
-
-/*
- * EOF ./serie3/src/wa.c
- */
