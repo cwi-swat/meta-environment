@@ -36,6 +36,8 @@ exports
 	second(REXPTYPE, TENV)					-> REXPTYPE
 
 	is-tuple(Elem)						-> Boolean
+	is-rel-type(REXPTYPE)					-> Boolean
+	is-bag-type(REXPTYPE)					-> Boolean
 
 	norm(REXPTYPE, TENV)					-> REXPTYPE
 	well-formed-type(REXPTYPE, TENV)			-> TENV
@@ -61,15 +63,16 @@ exports
 	"No definition for field" RVAR				-> ERROR
 	RVAR "exceeds number of targets of generator"		-> ERROR
 	"Field name" RVAR "used at different record positions"	-> ERROR
+	REXPTYPE "should be bag or rel type"			-> ERROR
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
 	t2s(REXPTYPE)						-> StrCon
 	tl2sl({REXPTYPE ","}*)					-> StrCon
 	e2i(ERROR)						-> Error
-	 convert-errors(ERRORS)                    		-> Summary
-	 convert-errors1(ERRORS)                    		-> {Error ","}*
-         rvar2str(RVAR)		 	        		-> StrCon
+	convert-errors(ERRORS)                    		-> Summary
+	convert-errors1(ERRORS)                    		-> {Error ","}*
+        rvar2str(RVAR)		 	        		-> StrCon
  
 	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
 

@@ -22,6 +22,20 @@ equations
 [default-et]
 	element-type($Etype, $Tenv)       = undefined
 
+%% ---- Is rel type?
+
+[irt1] is-rel-type(rel[$Etype+]) = true
+
+[default-irt]
+	is-rel-type($Etype) = false
+
+%% ---- is bag type?
+
+[ibt1] is-bag-type(bag[$Etype]) = true
+
+[default-ibt]
+	is-bag-type($Etype) = false
+
 %% ---- First of type
 
 [ft1]	first(<$Etype1, $Etype*>, $Tenv) = $Etype1
@@ -222,6 +236,10 @@ $Error]>
 	===============================================================
 	e2i(Field name $Var used at different record positions) =
 		   error($StrCon, [localized(rvar2str($Var), get-location($Var))])
+[e2i-18] $StrCon := "Type " || t2s($Etype) || " should be bag or relation"
+	 ==============================================================
+	e2i($Etype should be bag or rel type) =	error($StrCon, [localized(t2s($Etype), get-location($Etype))])
+
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
@@ -959,13 +977,26 @@ $Error]>
 	check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
 
 [check-vardef2] 
-	check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
+	check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() =
+	$Exp, $Tenv)
 
-%%[check-vardef3]
-%%	check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
+[check-vardef3]
+	$Tenv1 := require-type($Var, $Etype, $Tenv),	
+	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
+	=========================================
+	check-stat($Etype $Var += $Exp, $Tenv) =
+	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
+        else $Tenv2 + $Etype should be bag or rel type
+        fi
 
-%%[check-vardef4]
-%%	check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
+[check-vardef4]
+	$Tenv1 := require-type($Var, $Etype, $Tenv),	
+	$Tenv2 := require-type($Exp, $Etype, $Tenv1)
+	=========================================
+	check-stat($Etype $Var -= $Exp, $Tenv) =
+	if is-rel-type($Etype) | is-bag-type($Etype) then $Tenv2 
+        else $Tenv2 + $Etype should be bag or rel type
+        fi
 
 %% ---- Check function declarations
 

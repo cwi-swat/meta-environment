@@ -1,3 +1,6 @@
+2004-10-27  Paul Klint  <paulk@heelal.lan>
+
+ * spec/RscriptCalculator.asf: added += and -= operators
 
 # $Id$
 

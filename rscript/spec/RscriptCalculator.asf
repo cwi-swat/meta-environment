@@ -64,7 +64,14 @@
 						= assign-when-undef($Var, rel[$Etype1, $Etype2], empty-bag, $Rstore)
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
-[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, $Etype,evalx($Exp, $Rstore), $Rstore)
+
+[S8b]	eval-rstat(rel[$Etype1, $Etype2] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, evalr($Exp, $Rstore), $Rstore)
+
+[S8c]	eval-rstat(bag[$Etype] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, evalb($Exp, $Rstore), $Rstore)
+
 [S8b]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
 [S9]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
 

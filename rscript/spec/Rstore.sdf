@@ -1,6 +1,6 @@
 module Rstore
 
-imports Rscript RSF Rviz
+imports Rscript RSF Rviz RscriptCalculator
 
 exports 
   sorts RVALUE RSTORE
@@ -32,6 +32,8 @@ exports
 
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
+
+	RSTORE "[" RSTAT* "]"				-> RSTORE
 
 %% Import a Rigi RSF file
 	import(RSFFILE)					-> RSTORE
@@ -79,7 +81,7 @@ hiddens
 
          "$Vdata*" [0-9\']*	       -> VDATA*
 	
-	
+        "$Stat*" [0-9\']*              -> RSTAT*	
 
         "$Var" [0-9\']*                -> RVAR
         "$Var*" [0-9\']*               -> {RVAR ","}*
