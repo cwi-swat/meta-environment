@@ -1,9 +1,5 @@
 configuration([
   button("*",
-         [description(message-list, click)],
-         [push-string("Message List selection"),
-          show-area]),
-  button("*",
          [description(tree-panel, click)],
          [push-string("Tree Panel selection"),
           show-area]),
