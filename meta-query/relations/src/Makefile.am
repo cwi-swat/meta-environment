@@ -16,9 +16,9 @@ bin_PROGRAMS = DisplayQuery
 pkgdata_DATA = DisplayQuery.idef
 
 DisplayQuery_SOURCES = \
-	DisplayQuery.c \
+	toolDisplayQuery.tif.h \
 	toolDisplayQuery.tif.c \
-	toolDisplayQuery.tif.h
+	DisplayQuery.c
 
 DisplayQuery_LDADD = \
 	-L$(ASC_SUPPORT)/lib -ltb-asc-support-me \
