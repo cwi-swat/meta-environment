@@ -1,7 +1,8 @@
 /*
 
     PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,7 +82,7 @@ ATerm add_name_norm_function(char *str, ATerm term)
     nameterm = make_name_term(name);
 
     result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Parse-Table\"),w(\"\"),[l(\"normalize\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),l(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
+                        ATparse("prod(id(\"Sdf2-Normalization\"),w(\"\"),[ql(\"normalize\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
                         term_ws,
                         ATmakeList(11,t_name, term_ws,
                                       term_open, term_ws,
