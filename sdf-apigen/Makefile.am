@@ -1,5 +1,7 @@
 SUBDIRS		= spec utils test
 
+ACLOCAL_FLAG = -I .
+
 EXTRA_DIST	= make_rules $(wildcard *.pkg)
 
 CLEANFILES = ${PACKAGE}-*.pkg

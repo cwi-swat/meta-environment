@@ -7,9 +7,6 @@ AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(sdf-apigen, 2.0)
 
-dnl Add current dir to searchpath
-ACLOCAL="${ACLOCAL} -I ."
-
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
