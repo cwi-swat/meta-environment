@@ -288,6 +288,7 @@ void SG_PostParse(void)
     long allocated;
 
     ptm = SG_Timer();
+
     SG_PageFlt(&sg_major, &sg_minor);
 
     fprintf(SG_log(), "Number of lines: %ld\n", (long) line);
@@ -298,13 +299,14 @@ void SG_PostParse(void)
             sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset);
 
     fprintf(SG_log(), "Parse time: %.2fs\n", ptm);
-    fprintf(SG_log(), "Characters/second: %.0f\n", sg_tokens_read/ptm);
+    fprintf(SG_log(), "Characters/second: %.0f\n", 
+       ptm == 0.0 ? 0 : sg_tokens_read/ptm);
 
     fprintf(SG_log(), "Number of rejects: %ld\n", (long) sg_nr_rejects);
 
     fprintf(SG_log(), "Number of reductions: %ld\n", (long) num_reductions);
     fprintf(SG_log(), "Number of reductions/sec: %.0f\n",
-            (double) num_reductions/ptm);
+       ptm == 0.0 ? 0 : (double) num_reductions/ptm);
     fprintf(SG_log(), "Number of reductions/token: %f\n",
             (double) num_reductions/(double)sg_tokens_read);
     fprintf(SG_log(), "Number of ambiguities: %d\n",
