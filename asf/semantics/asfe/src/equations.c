@@ -250,6 +250,24 @@ static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args)
                                     PT_getArgsTail(lhs2args));
     }
   }
+  else if (!PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {
+    PT_Tree head2 = PT_getArgsHead(lhs2args);
+    if (PT_isTreeVarList(head2)) {
+      return 1;
+    } 
+    else {
+      return 0;
+    }
+  }
+  else if (PT_hasArgsHead(lhs1args) && !PT_hasArgsHead(lhs2args)) {
+    PT_Tree head1 = PT_getArgsHead(lhs1args);
+    if (PT_isTreeVarList(head1)) {
+      return -1;
+    } 
+    else {
+      return 0;
+    }
+  }
   return 0;
 }
 

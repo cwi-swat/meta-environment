@@ -1,0 +1,20 @@
+module ListSpecific
+
+imports basic/Whitespace
+        basic/Booleans
+
+exports
+  sorts A B C
+
+  context-free syntax
+    "a" -> A
+    "b" -> B
+    "c" -> C
+
+    f(A*, B, C) -> Boolean
+
+hiddens
+  variables
+    "vA*"[0-9]* -> A*
+    "vB" [0-9]* -> B
+    "vC" [0-9]* -> C

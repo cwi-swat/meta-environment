@@ -11,6 +11,7 @@ TEST_MODULES=\
 	IterN \
 	LexConcat \
 	List \
+	ListSpecific \
 	Lookup \
 	Memo-Pico-typecheck \
 	NumberTree \

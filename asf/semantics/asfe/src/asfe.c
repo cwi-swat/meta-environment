@@ -130,7 +130,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
   ATbool debug;
 
   if (!ATmatch(parseTable, "none")) {
-    setParseTable((SGLR_ParseTable) parseTable); 
+    setParseTable(parseTable); 
   }
 
   if (ATmatch(tide, "on")) {
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
     if (parsetable != NULL) {
       ATerm pt = ATreadFromNamedFile(parsetable);
       if (pt != NULL) {
-	setParseTable((SGLR_ParseTable) pt);
+	setParseTable(pt);
       }
       else {
 	ATerror("%s: cannot open %s\n", myname, parsetable);

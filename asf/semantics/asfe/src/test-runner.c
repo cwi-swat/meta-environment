@@ -140,10 +140,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 	       ASF_ASFTestEquationTestList tests)
 {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
-   char msg[BUFFER_SIZE];
-   int numberOfTests = ASF_getTestEquationListLength(tests);
    ERR_ErrorList failed = ERR_makeErrorListEmpty();
-   ERR_SubjectList subjectList = ERR_makeSubjectListEmpty();
 
    if (runVerbose) {
      ATwarning("initializing...\n");
@@ -170,19 +167,6 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    failed = testAll(tests, failed);
-
-   if (ERR_isErrorListEmpty(failed)) {
-     sprintf(msg,"All %d tests succeeded", numberOfTests);
-     failed = ERR_makeErrorListSingle(ERR_makeErrorInfo(msg, subjectList));
-   }
-   else {
-     sprintf(msg,"%d out of %d tests failed",
-	   ERR_getErrorListLength(failed),
-	   numberOfTests);
-
-     failed = ERR_makeErrorListMany(ERR_makeErrorError(msg, subjectList),
-				    failed);
-   }
 
    return ATmake("test-results(<term>)", failed);
 }
