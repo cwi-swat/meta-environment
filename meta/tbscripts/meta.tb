@@ -11,6 +11,9 @@
 #include "structure-editor.idef"
 #include "unparser.idef"
 #include "user-interface.tb"
+#include "statusbar.idef"
+#include "errorlist.idef"
+#include "infolist.idef"
 #include "kernel-configuration.tb"
 #include "user-configuration.tb"
 
