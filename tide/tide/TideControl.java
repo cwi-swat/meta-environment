@@ -143,11 +143,11 @@ public class TideControl
 
     Thread thread = new Thread(tool);
     thread.start();
-    bridge.run();
+
+    thread = new Thread(bridge);
+    thread.start();
 
     //}}}
-
-    throw new RuntimeException("cannot reach this!");
   }
 
   //}}}
