@@ -1,44 +1,52 @@
-rel[str, str] calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
+
+type proc = str
+
+rel[proc, proc] Calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
 "e">, <"f", "e">, <"f", "g">, <"g", "e">}
 
-int ncalls = # calls
+int nCalls = # Calls
 
-bag[str] procs = carrier(calls)
+bag[proc] procs = carrier(Calls)
 
-int nprocs = # carrier(calls)
+int nprocs = # carrier(Calls)
 
-bag[str] entryPoints = top(calls)
+bag[proc] entryPoints = top(Calls)
 
 assert "a1": entryPoints == {"a", "f"}
 
-bag[str] bottomCalls = bottom(calls)
+bag[proc] bottomCalls = bottom(Calls)
 
 assert "a2": bottomCalls == {"c", "e"}
 
-rel[str,str] closureCalls = calls+
+rel[proc,proc] closureCalls = Calls+
 
 assert "a3": closureCalls == 
  		{<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, 
 		<"d","e">, <"f", "e">, <"f", "g">, <"g", "e">, 
 		<"a", "c">, <"a", "d">, <"b", "e">, <"a", "e">}
 
-bag[str] calledFromA = closureCalls["a"]
+bag[proc] calledFromA = closureCalls["a"]
 
 assert "a4": calledFromA == {"b", "c", "d", "e"}
 
-bag[str] calledFromF = closureCalls["f"]
+bag[proc] calledFromF = closureCalls["f"]
 
 assert "a5": calledFromF == {"e", "g"}
 
-bag[str] commonProcs = calledFromA inter calledFromF
+bag[proc] commonProcs = calledFromA inter calledFromF
 
 assert "a6": commonProcs == {"e"}
 
-bag[str] Parts = {"Appl", "DB", "Lib"}
+type comp = str
 
-rel[str, str] partOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c", "Lib">, <"d", "Lib">}
+rel[proc,proc] Calls2 = {<"main", "a">, <"main", "b">, <"a", "b">, <"a", "c">,
+<"a", "d">, <"b", "d">}
 
-rel[str,str] lift(rel[str,str] theCalls, rel[str,str] thePartOf, bag[str] theParts) =
-	     { <X, Y> | <str A, str B> : theCalls, <str X, str Y> : thePartOf[A] x thePartOf[B]}
+bag[comp] Components = {"Appl", "DB", "Lib"}
 
-rel[str,str] callsLift = lift(calls, partOf, Parts)
+rel[proc, comp] PartOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c", "Lib">, <"d", "Lib">}
+
+rel[comp,comp] lift(rel[proc,proc] aCalls, rel[proc,comp] aPartOf) =
+	     { <C1, C2> | <proc P1, proc P2> : aCalls, <comp C1, comp C2> : aPartOf[P1] x aPartOf[P2]}
+
+rel[comp,comp] ComponentCalls = lift(Calls2, PartOf)

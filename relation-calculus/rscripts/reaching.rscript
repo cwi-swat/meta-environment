@@ -1,33 +1,36 @@
 
 %% Reaching definitions, example ASU, p626
 
-rel[int,int] PRED = { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
+type stat = int
+type var = str
+type def  = <stat theStat, var theVar>
 
-rel[int, str] DEFS = { <1, "i">, <2, "j">, <3, "a">, <4, "i">, <5, "j">, <6, "a">, <7, "i">}
-rel[int, str] USES = { <1, "m">, <2, "n">, <3, "u1">, <4, "i">, <5, "j">, <6, "u2">, <7, "u3">}
+rel[stat,stat] PRED = { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
 
-rel[int, <int, str>] DEF =   {<S, <S, V>> | <int S, str V> : DEFS}
-rel[int, <int, str>] USE =   {<S, <S, V>> | <int S, str V> : USES}
+rel[stat, var] DEFS = { <1, "i">, <2, "j">, <3, "a">, <4, "i">, <5, "j">, <6, "a">, <7, "i">}
+rel[stat, var] USES = { <1, "m">, <2, "n">, <3, "u1">, <4, "i">, <5, "j">, <6, "u2">, <7, "u3">}
 
-rel[int, <int, str>] KILL = {<S1, <S2, V2>> |  <int S1, str V1> : DEFS, <int
-S2, str V2> : DEFS, V1 == V2, S1 != S2}
+rel[stat, def] DEF =   {<S, <S, V>> | <stat S, var V> : DEFS}
+rel[stat, def] USE =   {<S, <S, V>> | <stat S, var V> : USES}
+
+rel[stat, def] KILL = {<S1, <S2, V>> |  <stat S1, var V> : DEFS, <stat S2, V> : DEFS, S1 != S2}
 
 assert "kill": KILL ==  {<1, <4, "i">>, <1, <7, "i">>, <2, <5, "j">>, <3, <6, "a">>, 
                          <4, <1, "i">>, <4, <7, "i">>, <5, <2, "j">>, <6, <3, "a">>, 
                          <7, <1, "i">>, <7, <4, "i">>}
 
-bag[int] STATEMENTS = carrier(PRED)
-rel[int,int] PRED-OF = inv(PRED)
+bag[stat] STATEMENTS = carrier(PRED)
+rel[stat,stat] PRED-OF = inv(PRED)
 
 %% Reaching definitions
 
 equations
   initial
-	rel[int,<int,str>] IN init {}
-	rel[int,<int,str>] OUT init DEF
+	rel[stat,def] IN init {}
+	rel[stat,def] OUT init DEF
   satisfy
-	IN  =  {<S, OP> | int S : STATEMENTS, int P : PRED-OF[S], <int,str> OP : OUT[P]}
-	OUT =  {<S, OS> | int S : STATEMENTS, <int,str> OS : DEF[S] union  (IN[S] \ (KILL[S]))}
+	IN  =  {<S, D> | stat S : STATEMENTS, stat P : PRED-OF[S], def D : OUT[P]}
+	OUT =  {<S, D> | stat S : STATEMENTS, def D : DEF[S] union  (IN[S] \ (KILL[S]))}
 
 %% priorities!
 
@@ -51,11 +54,11 @@ assert "OUT": OUT == {<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>
 
 equations
   initial
-	rel[int,<int,str>] LIN init {}
-	rel[int,<int,str>] LOUT init DEF
+	rel[stat,def] LIN init {}
+	rel[stat,def] LOUT init DEF
   satisfy
-	LIN  =  { < S, I> | int S : STATEMENTS,  <int,str> I : USE[S] union (LOUT[S] \ (DEF[S]))}
-	LOUT =  { < S, O> | int S : STATEMENTS,  <int,str> O : LIN[S] }
+	LIN  =  { < S, I> | stat S : STATEMENTS,  def I : USE[S] union (LOUT[S] \ (DEF[S]))}
+	LOUT =  { < S, O> | stat S : STATEMENTS,  def O : LIN[S] }
 end equations
 
 assert "LIN": LIN == {<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, <4, <4, "i">>, 

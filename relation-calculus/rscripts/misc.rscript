@@ -1,13 +1,16 @@
 
-int ROOT = 0 
+type stat = int
+type var = str
 
-rel[int, str] DEFS  = {<1, "x">, <3, "z">, <4, "x">, <5, "y">}
+stat ROOT = 1 
 
-rel[int,str] USES    = {<3, "y">, <3,"x">, <5, "z">}
+rel[stat,stat]  PRED   = {<1, 3>,<3,4>,<4,5>,<5,6>,<5,8>,<6,10>,<8,10>}
 
-rel[int,int]  PRED   = {<1, 0>,<2, 1>, <3, 2>, <4, 2>, <5, 3>, <5, 4>}
+rel[stat, var] DEFS  = {<3, "x">, <4, "p">, <6, "z">, <8, "x">, <10, "y">}
 
-rel[int, str]  UN = { <N, V> | <int N, str V> : USES, <ROOT, N> in reachX({0}, DEFS[-,V], PRED) }
+rel[stat,var] USES    = {<5, "q">, <6,"y">, <6, "x">, <10, "z">}
+
+rel[stat, var]  UNINIT = { <S, V> | <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED) }
 
 bool tst(int N) = true
 
