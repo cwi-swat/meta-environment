@@ -11,6 +11,7 @@
 \usepackage{url}          
 
 \newcommand{\ASmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\metaenv}{Meta-En\-vir\-on\-ment}
 \newcommand{\sdf}{{\sc Sdf}}
 \newcommand{\asf}{{\sc Asf}}
 \newcommand{\asfsdf}{{\sc Asf}+{\sc Sdf}}
@@ -21,7 +22,7 @@
 \title{The \ASmetaenv: a component-based language laboratory}
 \author{M.G.J. van den Brand$^1$, J. Heering$^1$, H.A. de Jong$^1$, \\
         M. de Jonge$^1$, T. Kuipers$^1$, P. Klint$^1$, \\
-        L. Moonen$^1$, P.A. Olivier$^1$, J. Scheerder$^2$, \\
+        L. Moonen$^1$, P.A. Olivier$^1$, J.S. Scheerder$^2$, \\
         J.J. Vinju$^1$, E. Visser$^3$, and J. Visser$^1$}
 
 \institute{
@@ -46,7 +47,7 @@ $^3$ Faculty of Mathematics and Computer Science, Utrecht University,
   or other texts written in a formal language. Over the years, this system has
   been used in a variety of academic and commercial projects ranging from
   formal program manipulation to conversion of COBOL systems.  Since the
-  existing implementation of the Meta-Environment started exhibiting more and
+  existing implementation of the \metaenv\ started exhibiting more and
   more characteristics of a legacy system, we decided to build a completely
   new, component-based, version. We demonstrate this new system and stress its
   open, component-based, architecture.
@@ -198,23 +199,49 @@ user-defined terms, etc.
 
 \end{figure} 
 
-\begin{figure}
+\section{Applications of \asfsdf\ and the \metaenv}
 
-  \centerline{\psfig{file=../viewer.ps,width=12cm}}
-  \caption{\label{FIG:viewer}ToolBus viewer applied to the \ASmetaenv}
+There are several academic and industrial projects which use 
+either \asfsdf\ directly or components of the \metaenv\ in 
+one way or the other. 
 
-\end{figure} 
-        
+The application areas of \asfsdf\ can be split into three groups:
+\begin{enumerate}
+\item language prototyping (mainly in the area of domain specific
+languages),
+\item reverse engineering, and
+\item algebraic specification of language processing tools
+(mainly components of the \metaenv\ itself).
+\end{enumerate}
+
+In the field of language prototyping \asfsdf\ has been used
+to describe the syntax and semantics of a domain specific
+language (Risla) for describing financial products \cite{??}.
+The syntax of the algebraic specification language Casl
+has been prototyped using \asfsdf~\cite{BS00}.
+
+In the field of reverse engineering \asfsdf\ is used to
+analyze and transform COBOL legacy code \cite{BSV00}.
+
+Finally \asfsdf\ has been used to 
+specify a number of components of the \metaenv:
+\begin{itemize}
+\item the ASF2C compiler, 
+\item unparser generator, and
+\item parts of the parsetable generator.
+\end{itemize}
+
+Components of the \metaenv\ are used as standalone tools in
+the Stratego compiler~\cite{VBT98}, Risla compiler, 
+Elan environment~\cite{BR00},
+and commercially available documentation generation tool (??).
+ 
 \section{Demonstration}
 
-We will first demonstrate the ToolBus architecture.  Next we will show how the
-Meta-Environment uses the ToolBus while editing a very simple specification
-(Figure~\ref{FIG:viewer}).
-
-Next we will show a number of applications of the Meta-Environment ranging from a simple
+We will show a number of applications of the \metaenv\ ranging from a simple
 typechecking problem (Figure~\ref{FIG:meta-pico}), to syntax-directed
 editing (Figure~\ref{FIG:edit-cobol}) and transformation of COBOL
-systems \cite{BSV00}.
+systems.
 
 \bibliographystyle{alpha}
 \bibliography{etaps}  
