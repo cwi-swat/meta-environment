@@ -23,7 +23,7 @@
  * asfix_utils.c
  *
  * Extra utility functions on asfix that the evaluator uses.
- * This utility module is ment only to be used in evaluator.c
+ * This utility module is ment only to be used in asfe.c
  *
  *
  * $Id$
@@ -41,7 +41,7 @@
 #include <assert.h>
 
 #include "asfix_utils.h"
-#include "evaluator.h"
+#include "asfe.h"
 
 /* the KEEP_LAYOUT macro is supposed to be set at the commandline
  * of the compiler.

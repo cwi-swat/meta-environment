@@ -45,7 +45,7 @@ for e in ${srcdir}/eqs/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
-    ../src/evaluator -w on -e $e -i $t -o $res
+    ../src/asfe -w on -e $e -i $t -o $res
     ./equalModuloWhitespace $ref $res
     if [ $? -ne 0 ]; then
        echo "term failed: $t"
@@ -63,7 +63,7 @@ for e in ${srcdir}/fail/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
-    ../src/evaluator -w on -e $e -i $t -o $res > /dev/null 2>&1
+    ../src/asfe -w on -e $e -i $t -o $res > /dev/null 2>&1
     if [ $? -eq 0 ]; then
        echo "term failed: $t"
        exit 1

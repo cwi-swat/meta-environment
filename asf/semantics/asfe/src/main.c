@@ -37,14 +37,14 @@
 #include <AsFix-access.h>
 
 #include "preparation.h"
-#include "evaluator.tif.h"
+#include "asfe.tif.h"
 #include "traversals.h"
-#include "evaluator.h"
+#include "asfe.h"
 
 /*{{{  variables */
 
 static char myarguments[] = "be:hi:o:w:tvVl";
-static char myname[] = "evaluator";
+static char myname[] = "asfe";
 static char myversion[] = "0.1";
 
 /*}}}  */
@@ -147,10 +147,10 @@ int main(int argc, char *argv[])
   if(toolbus_mode) {
 #ifndef WIN32 /* Code with Toolbus calls, non Windows */
     ATBinit(argc, argv, &bottomOfStack); 
-    cid = ATBconnect(NULL, NULL, -1,evaluator_handler); 
+    cid = ATBconnect(NULL, NULL, -1,asfe_handler); 
     ATBeventloop();
 #else
-    ATwarning("evaluator: Toolbus cannot be used in Windows.\n");
+    ATwarning("asfe: Toolbus cannot be used in Windows.\n");
 #endif
   } 
   else {

@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include "preparation.h"
 #include "asfix_utils.h"
-#include "evaluator.h"
+#include "asfe.h"
 #include <AsFix.h>
 
 ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace);

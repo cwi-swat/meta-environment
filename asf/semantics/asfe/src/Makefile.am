@@ -22,23 +22,23 @@
 
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS      = evaluator
+bin_PROGRAMS      = asfe
 noinst_LIBRARIES  = libeval.a
 
-data_DATA         = evaluator.idef
+data_DATA         = asfe.idef
 
-EXTRA_DIST        = evaluator.idef
+EXTRA_DIST        = asfe.idef
 
-CLEANFILES        = evaluator.tif.c evaluator.tif.h evaluator.tifs
+CLEANFILES        = asfe.tif.c asfe.tif.h asfe.tifs
 
-libeval_a_SOURCES = evaluator.c evaluator.h asfix_utils.c asfix_utils.h \
+libeval_a_SOURCES = asfe.c asfe.h asfix_utils.c asfix_utils.h \
                     preparation.c preparation.h eval-tide.c eval-tide.h \
                     traversals.c traversals.h memotable.h memotable.c
  
-libeval_a_LIBADD  = evaluator.tif.o
+libeval_a_LIBADD  = asfe.tif.o
 
-evaluator_SOURCES = main.c
-evaluator_LDADD   = libeval.a \
+asfe_SOURCES = main.c
+asfe_LDADD   = libeval.a \
                    -L$(ASC)/lib -lasc-support \
                    -L$(PT_SUPPORT)/lib -lAsFix \
                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
@@ -48,4 +48,4 @@ INCLUDES          = ${TIDE} \
                     -I$(PT_SUPPORT)/include -I$(ATERM)/include \
                     ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 
-evaluator.o : evaluator.tif.h
+asfe.o : asfe.tif.h

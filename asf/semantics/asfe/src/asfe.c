@@ -26,7 +26,7 @@
 
 /*}}}  */
 
-/*{{{  evaluator.c */
+/*{{{  asfe.c */
 
 /*
    A first version of an INTERPRETER in ToolBus C.
@@ -99,9 +99,9 @@
 #include <deprecated.h>
 
 #include "preparation.h"
-#include "evaluator.tif.h"
+#include "asfe.tif.h"
 #include "asfix_utils.h"
-#include "evaluator.h"
+#include "asfe.h"
 #include "memotable.h"
 
 #include "traversals.h"

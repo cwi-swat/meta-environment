@@ -24,9 +24,9 @@
 process Test is 
 let
   List : term,
-  Eval : evaluator
+  Eval : asfe
 in
-  execute(evaluator, Eval?) .
+  execute(asfe, Eval?) .
   List := [] .
   snd-do(Eval, add-equations("Test", List)) .
   snd-eval(Eval, equations-available("Test2")) .
@@ -38,6 +38,6 @@ in
   shutdown("") delay(sec(2))
 endlet
 
-tool evaluator is {command="evaluator"}
+tool asfe is {command="asfe"}
 
 toolbus(Test)

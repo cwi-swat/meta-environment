@@ -1,6 +1,6 @@
 Makefile.in
 Makefile
 .deps
-evaluator.tif.h
-evaluator.tif.c
-evaluator
+asfe.tif.h
+asfe.tif.c
+asfe

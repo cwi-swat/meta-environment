@@ -21,9 +21,9 @@
 
 /* $Id$ */
 
-process Evaluator is
+process Asfe is
 let
-  Eval : evaluator,
+  Eval : asfe,
   ModuleName : str,
   Term : term,
   Equations : term,
@@ -35,7 +35,7 @@ let
 in
   Id := process-id .
 
-  execute(evaluator, Eval?) .
+  execute(asfe, Eval?) .
   subscribe(language-unavailable(<str>)) .
   subscribe(equations-changed(<str>)) .
   (
@@ -102,4 +102,4 @@ in
   delta
 endlet
 
-tool evaluator is { command = "evaluator" }
+tool asfe is { command = "asfe" }
