@@ -10,8 +10,10 @@ exports
 context-free syntax
 
   compile-muasf(Module) -> CProgram
+  muasf2muasf(Module)   -> Module
 
   "compile-muasf" -> FunId {reject}
+  "muasf2muasf" -> FunId {reject}
 
 
 
