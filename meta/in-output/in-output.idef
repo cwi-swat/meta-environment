@@ -124,7 +124,7 @@ in
     )
   +
     rec-msg(open-eqs-file(Name?)).
-    snd-eval(IO,open-asdf2-file(Name, eqs)).
+    snd-eval(IO, open-asdf2-file(Name, eqs)).
     (
       rec-value(IO, opened-file(Name, Contents?, Path?, TimeStamp?)) .
       snd-msg(opened-file(Name, Contents, Path, TimeStamp)) 

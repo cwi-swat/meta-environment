@@ -39,7 +39,7 @@
 #define	CURRENT_DIR "."
 #define	DEFAULT_CONFIG_FILE "meta.conf"
 
-#define PATH_LEN (_POSIX_PATH_MAX + 1) /* to be safe extra room for \0 */
+#define PATH_LEN (_POSIX_PATH_MAX)
 #define MAX_PATHS 256
 
 /* Macro's for sdf2 file extensions */
@@ -158,19 +158,19 @@ static char *paths[MAX_PATHS];
 
 char *find_in_path(char *target)
 {
-    static char filename[PATH_LEN];
-    char thisname[PATH_LEN];
+    static char filename[PATH_LEN + 1]; /* max. pathlength + '\0' */
+    char thisname[PATH_LEN + 1];
     int i, name_length;
     ATbool found = ATfalse;
 
     assert(target != NULL);
 
     strcpy(filename, "");
-    name_length = strlen(target) + 1;
+    name_length = 1 + strlen(target); /* '/' + filename */
 
     for (i=0; i<nr_paths; i++) {
 	/* Make sure pathlength doesn't exceed sane length. */
-	if (path_length_exceeded(name_length + strlen(paths[i]))) {
+	if (path_length_exceeded(strlen(paths[i]) + name_length)) {
 	    ATwarning("warning: path too long: %s/%s\n", paths[i], target);
 	    continue;
 	}
@@ -181,7 +181,7 @@ char *find_in_path(char *target)
 	/* Check if this file exists */
 	if (fileexists(thisname)) {
 	    if (found) {
-		ATwarning("warning: found multiple files matching %s\n", target);
+		ATwarning("warning: found multiple matches for %s\n", target);
 		ATwarning("         using first entry in path: %s\n", filename);
 		ATwarning("         offending match: %s\n", thisname);
 	    }
@@ -220,6 +220,7 @@ ATerm read_term_from_named_file(char *fn, char *n)
 	}
 	return open_error(n);
     }
+    /* FIXME: I see a magic "4" here? */
     strncpy(pn,fn,strlen(fn)-4);
     pn[strlen(fn)-4] = '\0';
     return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
@@ -270,8 +271,7 @@ ATerm get_timestamp(int cid, char *name, char *ext) {
     char file[PATH_LEN];
 
     sprintf(file, "%s%s", name, ext);
-    return ATmake("snd-value(timestamp(<int>))", 
-		  filetime(find_in_path(file)));
+    return ATmake("snd-value(timestamp(<int>))", filetime(find_in_path(file)));
 }
 
 /*
@@ -371,25 +371,27 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
     ATbool newest_is_binary = ATfalse;
     ATerm  t;
 
-    if(ATmatch(type, "sdf2")) {
+    if (ATmatch(type, "sdf2")) {
 	sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
 	sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
-    } else {
+    }
+    else {
 	sprintf(newestbaf, "%s%s", name, EQS_BAF_EXT);
 	sprintf(newestraw, "%s%s", name, EQS_TXT_EXT);
     }
 
-    if((full = find_in_path(newestraw)))
+    if ((full = find_in_path(newestraw)))
 	strcpy(newestraw, full);
-    if((full = find_in_path(newestbaf)))
+    if ((full = find_in_path(newestbaf)))
 	strcpy(newestbaf, full);
     newest_is_binary = newerfile(newestbaf, newestraw);
 
-    if(!newestraw[0] && !newestbaf[0]) {
+    if (!newestraw[0] && !newestbaf[0]) {
 	ATwarning("%s(.sdf2|.sdf2.baf) not found in path\n", name);
 	return open_error(name);
     }
-    if(newest_is_binary) {
+
+    if (newest_is_binary) {
 	t = read_term_from_named_file(newestbaf, name);
     } else {
 	t = read_raw_from_named_file(newestraw, name);
@@ -476,8 +478,9 @@ void add_path(char *pathname)
     }
 
     if (run_verbose) {
-	ATwarning("path[%d] := %s\n", nr_paths, pathname);
+	ATwarning("path[%d] = %s\n", nr_paths, pathname);
     }
+
     paths[nr_paths++] = pathname;
 }
 
@@ -485,41 +488,44 @@ void add_path(char *pathname)
 
 /* Expand a relative path to its absolute equivalent
  *
- * - aborts upon serious failure (no current directory)
+ * - aborts upon serious failure (no current directory, no memory)
  * - returns NULL when relative_path could not be expanded
- * - returns malloc()-ed pointer (by getcwd(3)) containing absolute path
- *   otherwise.
+ * - returns calloc(3)-ed pointer containing absolute path otherwise.
  */
 char *expand_path(const char *relative_path)
 {
     char *absolute_path = NULL;
-    char current_dir[PATH_LEN];
+    char *trial_path = NULL;
+    char current_dir[PATH_LEN + 1];
 
-    /* save current dir */
+    /* Save current dir */
     if (getcwd(current_dir, PATH_LEN) == NULL) {
 	ATerror("no current directory: %s\n", strerror(errno));
     }
 
-    /* go to relative dir */
+    /* Go to relative dir */
     if (chdir(relative_path) == -1) {
 	return NULL;
     }
 
-    /* get absolute path of relative dir */
-    absolute_path = (char*) malloc(PATH_LEN * sizeof(char));
-    if(absolute_path == NULL) {
-			ATerror("Out of memory in expand_path.\n");
-			return NULL;
-    }
-
-    absolute_path = getcwd(absolute_path, PATH_LEN);
-    if (absolute_path == NULL) {
+    /* Allocate sufficient memory for worstcase expansion */
+    trial_path = (char *) calloc(PATH_LEN + 1, sizeof(char));
+    if (trial_path == NULL) {
+	ATerror("expand_path: out of memory.\n");
 	return NULL;
     }
 
-    /* restore current dir */
+    /* Try to get absolute pathname */
+    absolute_path = getcwd(trial_path, PATH_LEN);
+
+    /* Restore current dir */
     if (chdir(current_dir) == -1) {
 	ATerror("could not chdir(%s): %s\n", current_dir, strerror(errno));
+    }
+
+    /* May have to cleanup allocated memory upon failure */
+    if (absolute_path == NULL) {
+	free(trial_path);
     }
 
     return absolute_path;
@@ -528,30 +534,40 @@ char *expand_path(const char *relative_path)
 void read_conf(char *config_filename)
 {
     FILE *fd;
+    char *absolute_path;
     char contents[BUFSIZ];
     int line_number = 0;
     int len;
 
+    /* Try to read the config file */
     fd = fopen(config_filename, "r");
+
+    /* Couldn't read, might be non-existent or unreadable */
     if (fd == NULL) {
-	char *absolute_current_dir;
-	if (run_verbose) {
-	    ATwarning("warning: no %s, using default config\n",
-		      config_filename);
+	if (run_verbose || fileexists(config_filename)) {
+	    ATwarning("warning: cannot read \"%s\": %s\n",
+		      config_filename, strerror(errno));
 	}
-       
-        absolute_current_dir = expand_path(CURRENT_DIR);
-        if(absolute_current_dir != NULL) {
-           add_path(absolute_current_dir);
-           return;
-        } else {
-           ATwarning("%s, line %d: %s\n", config_filename,
-                     line_number, strerror(errno));
-           return;
-        }
+
+	/* Let's try the current directory as default searchpath */
+        absolute_path = expand_path(CURRENT_DIR);
+
+	/* Even default searchpath failed */
+        if (absolute_path == NULL) {
+	    ATerror("panic: unable to construct default searchpath!\n");
+	    return;
+	}
+
+	/* Add default path */
+        add_path(absolute_path);
+	if (run_verbose) {
+     	    ATwarning("searchpath defaults to: \"%s\"\n", absolute_path);
+	}
+
+	return;
     }
 
-    /* Read file line by line */
+    /* Read config file line by line */
     while (fgets(contents, BUFSIZ, fd) != NULL) {
 	line_number++;
 
@@ -568,7 +584,7 @@ void read_conf(char *config_filename)
 
 	/* If sensible path remains, expand to absolute pathname and add */
 	if (len > 0) {
-	    char *absolute_path = expand_path(contents);
+	    absolute_path = expand_path(contents);
 	    if (absolute_path != NULL) {
 		add_path(absolute_path);
 	    }
@@ -579,7 +595,14 @@ void read_conf(char *config_filename)
 	}
     }
 
+    /* Done with config file */
     fclose(fd);
+
+    /* Assert sanity, we really should have a decent searchpath by now */
+    if (nr_paths <= 0) {
+	ATerror("panic: empty searchpath after parsing \"%s\"!\n",
+		config_filename);
+    }
 }
 
 void usage(char *prg, ATbool is_err)
@@ -610,23 +633,33 @@ int main(int argc, char *argv[])
 	toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
     }
 
-    if (toolbus_mode) {
-	read_conf(DEFAULT_CONFIG_FILE);
+    if (!toolbus_mode) {
+	while ((c = getopt(argc, argv, myarguments)) != -1) {
+	    switch (c) {
+		case 'v':
+		    run_verbose = ATtrue;
+	 	    break;
+		case 'V':
+		    version(argv[0]);
+		    break;
+		case 'h':
+		    usage(argv[0], ATfalse);
+    		    break;
+		default:
+		    usage(argv[0], ATtrue);
+   		    break;
+	    }
+	}
+    }
 
+    /* Now let's read the config file */
+    read_conf(DEFAULT_CONFIG_FILE);
+    
+    if (toolbus_mode) {
 	ATBinit(argc, argv, &bottomOfStack);
 	cid = ATBconnect(NULL, NULL, -1, in_output_handler);
 	ATBeventloop();
     }
-    else {
-	while ((c = getopt(argc, argv, myarguments)) != -1) {
-	    switch (c) {
-		case 'v':  run_verbose = ATtrue;                   break;
-		case 'V':  version(argv[0]);                       break;
 
-		case 'h':  usage(argv[0], ATfalse);                break;
-		default:   usage(argv[0], ATtrue);                 break;
-	    }
-	}
-    }
     return 0;
 }
