@@ -1,0 +1,99 @@
+module FastBagsNC[Elem]
+
+exports 
+imports basic/Booleans
+imports basic/Integers
+imports utilities/TermCompare[Elem]
+
+  sorts Bag[[Elem]] Color BagIterator[[Elem]]
+
+context-free syntax
+	"red"							-> Color
+	"black"							-> Color
+
+%%   	"{" {Elem ","}* "}"                   			-> Bag[[Elem]] {constructor}
+
+   	"empty-bag"						-> Bag[[Elem]] {prefer}
+   	bag(Color, 
+   Bag[[Elem]], 
+   Elem, 
+   Bag[[Elem]])							-> Bag[[Elem]]
+
+%%	Bag[[Elem]]						-> BagIterator[[Elem]]
+
+	iterator(Elem, Bag[[Elem]])				-> BagIterator[[Elem]]
+	empty-iterator						-> BagIterator[[Elem]]
+	is-empty-iter(BagIterator[[Elem]])			-> Boolean
+
+   	head(BagIterator[[Elem]])				-> Elem 
+   	tail(BagIterator[[Elem]])				-> BagIterator[[Elem]]
+
+	i(Bag[[Elem]])						-> Bag[[Elem]]
+	extern(Bag[[Elem]])					-> Bag[[Elem]]
+
+   	insert(Elem, Bag[[Elem]])            			-> Bag[[Elem]]
+   	delete(Elem, Bag[[Elem]])                    		-> Bag[[Elem]]
+	equal(Bag[[Elem]], Bag[[Elem]])				-> Boolean
+	subset(Bag[[Elem]], Bag[[Elem]])				-> Boolean
+	strict-subset(Bag[[Elem]], Bag[[Elem]])			-> Boolean
+	superset(Bag[[Elem]], Bag[[Elem]])			-> Boolean
+	strict-superset(Bag[[Elem]], Bag[[Elem]])		-> Boolean
+
+	union1(Elem, Bag[[Elem]])				-> Bag[[Elem]]
+	union2(Bag[[Elem]], Elem)				-> Bag[[Elem]]
+	union(Bag[[Elem]], Bag[[Elem]])				-> Bag[[Elem]]
+	inter(Bag[[Elem]], Bag[[Elem]])				-> Bag[[Elem]]
+	diff(Bag[[Elem]], Bag[[Elem]])				-> Bag[[Elem]]
+
+	size(Bag[[Elem]])					-> Integer
+	in(Elem, Bag[[Elem]])					-> Boolean
+
+	"if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi"	-> Bag[[Elem]]
+	"if" Boolean "then" Boolean "else" Boolean "fi"        	-> Boolean
+
+%%hiddens
+  imports basic/Comments
+
+  context-free syntax
+
+   	balance(Bag[[Elem]], Elem, Bag[[Elem]]) 		-> Bag[[Elem]]
+	blacken(Bag[[Elem]])				 	-> Bag[[Elem]]
+	is-black(Bag[[Elem]])					-> Boolean
+
+   	append(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]
+   	is-empty(Bag[[Elem]])					-> Boolean
+   	lookup(Elem, Bag[[Elem]])				-> Boolean
+
+   	ins(Elem, Bag[[Elem]])                			-> Bag[[Elem]]
+   	del(Elem, Bag[[Elem]])                    		-> Bag[[Elem]]
+	delFromLeft(Elem, Bag[[Elem]], Elem, Bag[[Elem]])	-> Bag[[Elem]]
+	balLeft(Bag[[Elem]], Elem, Bag[[Elem]])			-> Bag[[Elem]]
+	delFromRight(Elem, Bag[[Elem]], Elem, Bag[[Elem]])	-> Bag[[Elem]]
+	balRight(Bag[[Elem]], Elem, Bag[[Elem]])		-> Bag[[Elem]]
+	sub1(Bag[[Elem]])					-> Bag[[Elem]]
+	mk-iterator(Bag[[Elem]])				-> BagIterator[[Elem]]
+	mk-iterator1(Bag[[Elem]], Elem, Bag[[Elem]])		-> BagIterator[[Elem]]
+
+	equal(BagIterator[[Elem]], BagIterator[[Elem]])		-> Boolean
+	subset(BagIterator[[Elem]], BagIterator[[Elem]])	-> Boolean
+	union(BagIterator[[Elem]], BagIterator[[Elem]], Bag[[Elem]])
+								-> Bag[[Elem]]
+	diff(BagIterator[[Elem]], BagIterator[[Elem]], Bag[[Elem]])
+								-> Bag[[Elem]]
+	inter(BagIterator[[Elem]], BagIterator[[Elem]], Bag[[Elem]])
+								-> Bag[[Elem]]
+
+	add(BagIterator[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]
+
+  variables
+	"$Bag" [0-9\']*         -> Bag[[Elem]]
+	"$Elem" [0-9\']*        -> Elem
+	"$Elem*" [0-9\']*       -> { Elem ","}*
+	"$Elem+" [0-9\']*       -> { Elem ","}+
+	"$N" [0-9\']*		-> Integer
+	"$H" [0-9\']*		-> Integer
+
+	"$Bool" [0-9\']*	-> Boolean
+	"$C" [0-9\']*		-> Color
+
+	"$BagIter" [0-9\']*	-> BagIterator[[Elem]]
