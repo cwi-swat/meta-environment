@@ -1,0 +1,29 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/sdf-apigen
+   info=http://www.cwi.nl/projects/MetaEnv/sdf-apigen
+   description='The SDF2 frontend for apigen. It allows SDF2 definitions
+                to be used as signatured definitions for tree-like 
+                data-structures. The generated code can deal with either
+                AsFix (SGLR) parse trees or imploded ATerms' 
+
+      keywords=meta-environment, apigen, code generation, sdf, c, java, sglr
+
+configuration interface
+
+requires
+   aterm 	2.0
+   aterm-java   1.1
+   shared-objects 1.1 
+   sglr		3.9
+   pgen		1.6
+   asf          1.6
+   pt-support   0.11
+   sdf-support  1.0
+   asf-support  1.0
+   asc-support  1.6
+   apigen       1.5
+
+
