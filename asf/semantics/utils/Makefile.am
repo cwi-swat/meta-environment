@@ -28,10 +28,12 @@ bin_PROGRAMS	  = apply-function
 
 bin_SCRIPTS	  = genmakefile genamakefile
 
-EXTRA_DIST	  = genmakefile.proto genamakefile.sh.src
+pkgdata_DATA  = genmakefile.proto
+EXTRA_DIST	  = genamakefile.sh.src
 
 apply_function_SOURCES	= apply-function.c
-apply_function_LDADD	= -L$(PT_SUPPORT)/lib -lAsFix \
+apply_function_LDADD	= -L$(ASC_SUPPORT)/lib -lasc-support \
+                          -L$(PT_SUPPORT)/lib -lPT \
 			  -L$(ATERM)/lib -lATerm
 
 % : %.sh.src Makefile

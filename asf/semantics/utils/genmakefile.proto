@@ -52,7 +52,7 @@ DEBUG_LD_FLAGS	:=
 PROFILE_CC_FLAGS:= -pg
 PROFILE_LD_FLAGS:= -pg
 
-LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -l${TARGET}
+LOCALLIBS	:= -lasc-support -lATB -lPT -lASF -lATerm -l${TARGET}
 
 VPATH		:= @srcdir@
 srcdir		:= @srcdir@
@@ -97,12 +97,23 @@ libdir		:= @libdir@
 includedir	:= @includedir@
 
 ATERM		:= @ATERM@
-NEW_META	:= @exec_prefix@
-
+ASC_SUPPORT     := @ASC_SUPPORT@
+PT_SUPPORT      := @PT_SUPPORT@
+ASF_SUPPORT     := @ASF_SUPPORT@
 
 SOCKLIBS	:= @SOCKLIBS@
-XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ASFIX)/include -I$(ATERM)/include -I$(includedir)
-XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ASFIX)/lib -L$(ATERM)/lib -L$(libdir) $(SOCKLIBS)
+XINCLUDES	:= -I$(ASC_SUPPORT)/include \
+                   -I$(PT_SUPPORT)/include \
+                   -I$(ATERM)/include \
+                   -I$(ASF_SUPPORT)/include \
+                   -I$(includedir)
+
+XLIBS		:= -L$(srcdir) \
+                   -L$(ASC_SUPPORT)/lib \
+                   -L$(PT_SUPPORT)/lib \
+                   -L$(ATERM)/lib \
+                   -L$(ASF_SUPPORT)/lib \
+                   -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
 INCLUDES	:= $(XINCLUDES)

@@ -28,117 +28,54 @@
 #include <aterm2.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <AsFix.h>
-#include <AsFix-access.h>
-#include <AsFix2src.h>
-#include <deprecated.h>
+#include <string.h>
+
+#include <asc-apply.h>
 
 static char myname[]    = "apply-function";
 static char myversion[] = "1.1";
-static char myarguments[] = "qf:s:m:bhi:o:tVd";
-static ATbool debug = ATfalse;
+static char myarguments[] = "f:s:m:hi:o:V";
 
-
-#define asfix_get_prod_sort(p) AFgetProdSymbol(p)
-
-ATerm ApplyFunction(ATerm term, char *function, char *module, char *sort, 
-		    ATbool quoted)
-{
-   ATerm real;
-   ATerm real_prod;
-   ATerm real_sort;
-   ATerm new_prod;
-   ATerm new_module;
-   ATermList new_prod_symbols; 
-   ATerm ws, open, close, noattrs, arrow;
-   ATerm openlit, closelit;
-   ATerm new_function_symbol;
-   ATerm new_function_term;
-   ATermList new_appl_args;
-   ATerm new_term;
-   ATerm new_sort;
-   ATerm new_appl;
-
-   if(!quoted) {
-      ATerror("%s: non quoted prefix functions not yet supported.\n",
-              myname);
-      return term;
-   }
-
-   /* destructing the input term */
-   real = asfix_get_term(term);
-   real_prod = asfix_get_appl_prod(real);
-   real_sort = asfix_get_prod_sort(real_prod);
-   
-   /* standard terms */
-   ws = ATparse("w(\"\")");
-   open = ATparse("ql(\"(\")");
-   openlit = ATparse("l(\"(\")");
-   close = ATparse("ql(\")\")");
-   closelit = ATparse("l(\")\")");
-   noattrs = ATparse("no-attrs");
-   arrow  = ATparse("l(\"->\")");
-
-   /* creating the new outermost prod */
-   new_module = ATmake("id(<str>)", module);
-   new_sort   = ATmake("sort(<str>)", sort);
-   new_function_symbol = ATmake("ql(<str>)", function);
-   new_prod_symbols = ATmakeList(7, new_function_symbol, ws, open, ws,
-                                    real_sort, ws, close);
-   new_prod = ATmake("prod(<term>,<term>,[<list>],<term>,<term>,<term>,"
-		     "<term>,<term>,<term>)", new_module, ws, new_prod_symbols,
-		     ws, arrow, ws, new_sort, ws, noattrs); 
-   
-   /* creating the new outermost term */
-   new_function_term = ATmake("l(<str>)", function);
-   new_appl_args = ATmakeList(7, new_function_term, ws, openlit, ws, real, ws,
-                                 closelit);
-   new_appl = ATmake("appl(<term>, <term>, [<list>])", 
-		     new_prod, ws, new_appl_args);
-
-   /* put the new appl in the old term wrapper */
-   new_term = asfix_put_term(term, new_appl);
-
-   return new_term;
-}
 
 /*
     Usage: displays helpful usage information
  */
-void usage(void)
+void 
+usage(void)
 {
     fprintf(stderr,
-	"\nApply-function encapsulates AsFix1 terms with a quoted or unquoted prefix function.\n\n"
-        "Usage: apply-function -qdbh -f <name> -s <sort> -m <modulename>\n"
-        "                      -i <file> -o <file> -tV . . .\n"
+	"\nApply-function encapsulates parsed terms with a quoted or unquoted prefix function.\n\n"
+        "Usage: apply-function -h -f <name> -s <sort> -m <modulename>\n"
+        "                      -i <file> -o <file> -V . . .\n"
         "Options:\n"
-        "\t-q              unquoted prefix notation\n"
-        "\t-b              binary output mode (default)\n"
         "\t-h              display help information (usage)\n"
 	"\t-f name         name of prefix function\n"
 	"\t-s sort         result sort of function\n"
 	"\t-m module       module where function is defined\n"
-        "\t-i filename     input from file (default stdin)\n"
+        "\t-i filename     input argument tree from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
-        "\t-t              text output mode\n"
-	"\t-d              debug mode\n"
-        "\t-V              reveal program version (i.e. %s)\n",
+        "\t-V              reveal program version (i.e. %s)\n"
+        "\n"
+        "Supply a -i <file> option for each argument from left to right.\n",
         myversion);
 }
 
-int main (int argc, char **argv)
+#define MAX_ARGS 256
+
+int 
+main (int argc, char **argv)
 {
   int c; /* option character */
   ATerm bottomOfStack;
-  ATerm t;
-  ATbool txtout = ATfalse;
-  char  *ATlibArgv[] = { "", "-silent"};
-  char   *input_file_name  = "-";
-  char   *output_file_name = "-";
+  PT_ParseTree parseTree = NULL, newParseTree = NULL;
+  PT_Tree newTree;
+  char *inputs[MAX_ARGS] = { "-" };
+  int  nInputs = 0;
+  char *output = "";
   char *function = "";
   char *sort = "";
   char *module = "";
-  ATbool quoted = ATtrue;
+  PT_Args args;
  
   if(argc == 1) { /* no arguments */
     usage();
@@ -147,42 +84,54 @@ int main (int argc, char **argv)
 
   while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
-    case 'q':  quoted = ATfalse;              break;    
-    case 'h':  usage();                      exit(0);
-    case 'i':  input_file_name  = optarg;    break;
-    case 'o':  output_file_name = optarg;    break;
+    case 'h':  
+      usage();                      
+      exit(0);
+    case 'i':
+      if (nInputs < MAX_ARGS) {
+      inputs[nInputs++] = strdup(optarg);  
+      } else {
+        ATerror("Maximum number of %s arguments exceeded.\n", MAX_ARGS);
+      }
+      break;
+    case 'o':  
+      output = strdup(optarg);    
+      break;
     case 'f':  function = optarg;            break;  
     case 's':  sort = optarg;                break;
     case 'm':  module = optarg;              break;
-    case 'b':  txtout = ATfalse;             break;
-    case 't':  txtout = ATtrue;              break;
-    case 'd':  debug = ATtrue;               break;
     case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
       exit(0);
     default :  usage();                      exit(1);
     }
  
-  ATinit(2, ATlibArgv, &bottomOfStack);    /* Initialize Aterm library */
-  
-  t = ATreadFromNamedFile(input_file_name);
-  if(!t) {
-    ATerror("%s: could not read term from input file %s\n", myname, input_file_name);
-  }
-
+  /* check if all needed arguments were supplied */
   if(!function || !strcmp(function, "") || 
      !sort || !strcmp(sort,"") ||
-     !module || !strcmp(module,"")) {
+     !module || !strcmp(module,"") ||
+     nInputs == 0) {
     usage();
     exit(1);
-  } else {
-    t = ApplyFunction(t, function, module, sort, quoted);
   }
 
-  if(txtout) {
-    ATwriteToNamedTextFile(t, output_file_name);
-  } else {
-    ATwriteToNamedBinaryFile(t, output_file_name);
-  }
+  ATinit(argc, argv, &bottomOfStack); 
+  PT_initPTApi();
 
+  args = PT_makeArgsEmpty(); 
+  for (--nInputs; nInputs >= 0; nInputs--) {
+    parseTree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(inputs[nInputs]));
+    if (parseTree == NULL) {
+      ATerror("Unable to read in %s\n", inputs[nInputs]);
+      exit(1);
+    }
+    free(inputs[nInputs]);
+    args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
+  }
+ 
+  newTree = ASC_applyFunctionToArgs(function, module, sort, args);
+  newParseTree = PT_setParseTreeTree(parseTree, newTree);
+
+  ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(newParseTree), output);
+ 
   return 0;
 }
