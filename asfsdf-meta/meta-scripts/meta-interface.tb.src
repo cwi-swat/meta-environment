@@ -160,6 +160,15 @@ in
     rec-msg(library-location-hook).
     snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
   +
+    rec-msg(file-extension-hook(sdf)).
+    snd-msg(file-extension-hook-result(".sdf"))
+  +
+    rec-msg(file-extension-hook(asf)).
+    snd-msg(file-extension-hook-result(".asf"))
+  +
+    rec-msg(file-extension-hook(trm)).
+    snd-msg(file-extension-hook-result(".trm"))
+  +
     rec-msg(file-extensions-hook).
     snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
   +
