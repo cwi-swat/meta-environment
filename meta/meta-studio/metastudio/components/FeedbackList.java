@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 
 import metastudio.MultiBridge;
@@ -90,6 +91,13 @@ public class FeedbackList extends UserInterfacePanel {
         if (last != null) {
             list.scrollRectToVisible(last);
         }
+        setVisible(true);
+
+        // TODO: find a better solution for this, we don't want this component
+        // to know what type of parent it has!
+        JTabbedPane parent = (JTabbedPane) getParent();
+        parent.setSelectedComponent(this);
+        
         repaint();
     }
 

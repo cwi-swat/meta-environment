@@ -18,18 +18,18 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import metastudio.components.ChoiceDialog;
 import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
-import metastudio.components.ChoiceDialog;
 import metastudio.components.MenuBar;
 import metastudio.components.MessageList;
 import metastudio.components.ModuleBrowser;
 import metastudio.components.ModulePopupMenu;
+import metastudio.components.ParseTreeBrowser;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
-import metastudio.components.ParseTreeBrowser;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 

@@ -67,6 +67,7 @@ public class HistoryPanel extends UserInterfacePanel {
     public void endStatus(ATerm id) {
         String date = dateFormat.format(Calendar.getInstance().getTime());
         data.add(date + " - " + id + " - done");
+        scrollToLast();
     }
 
     public void clearHistory() {
