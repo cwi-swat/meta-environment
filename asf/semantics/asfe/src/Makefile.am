@@ -50,7 +50,7 @@ asfe_LDADD = \
 	$(SOCKLIBS)
 
 INCLUDES = \
-	-I${TIDE}/include \
+	-I${TIDE_SUPPORT}/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(SGLR)/include \
 	-I$(ATERM)/include \
