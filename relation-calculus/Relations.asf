@@ -109,18 +109,18 @@ equations
 
 [rtcl-1] Rel* = union(Rel+, id(carrier(Rel)))
 
-[bcl-1] closure(Bag, Rel) = range(closure(Rel, {}, domR(Rel, Bag)))
+[bcl-1]  closure(Bag, Rel) = range(closure(Rel, {}, domR(Rel, Bag)))
 
 
 [dm1-1]  compose(Rel4, Rel3) = Rel', Rel' != {}, Rel'' = diff(Rel', Rel2)
-        ==========================================
-        dominators1(Rel1, Rel2, Rel3, Rel4) = dominators1(union(Rel1, Rel''), Rel2, Rel3, Rel'') 
+         ==========================================
+         dominators1(Rel1, Rel2, Rel3, Rel4) = dominators1(union(Rel1, Rel''), Rel2, Rel3, Rel'') 
 
 [dm1-2]  compose(Rel4, Rel3) = Rel', Rel' = {}
-        ==========================================
-        dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
+         ==========================================
+         dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
 
-[dm-1]  dominators(Rel1, Rel2, Rel3) = dominators1(Rel1, Rel2, Rel3, Rel1)
+[dm-1]   dominators(Rel1, Rel2, Rel3) = dominators1(Rel1, Rel2, Rel3, Rel1)
 
-[if-1]   if true then Rel1 else Rel2 fi = Rel1
+[if-1]   if true then Rel1 else Rel2 fi  = Rel1
 [if-2]   if false then Rel1 else Rel2 fi = Rel2

@@ -1,0 +1,30 @@
+This is work in progress on the use of relations for program analysis.
+
+Bags		the Bag datatype
+Relations	the relation datatype
+RScript		the syntax of the scripting language
+RelationalCalculator
+		evaluator for RScript
+
+PicoExtraction	extract facts from a Pico program
+UndefinedQuery	example query
+
+Running an example:
+1.	meta -m Pico-syntax
+2.	open term pico1.trm
+3.	parse it
+4.	push Actions/Undefined Vars
+(a list a messaged is displayed in a Message list)
+5.	click on one of the messages
+(the corresponding variable is highligted in the text of pico1.trm)
+
+
+CAVEATS:
+
+(1) For reasons I do not understand precisely, the hidden imports
+    of asf/syntax/Comments do not work perfectly;
+    Effect: from PicoExtraction and higher, comments in the
+    equations lead to ambiguitites.
+
+(2) The interpreter of Rscripts is **VERY** unfriendly; it is hard
+    to pinpoint errors in your query.

@@ -33,10 +33,10 @@ exports
 
       extractRelations(PROGRAM)                    -> RSTORE
 
-      convertl(Rel[[Item]])                                 -> List
-      convert(PICO-ID # Area)                               -> ListItem
-      id2str(PICO-ID)				           -> String
-      rootNode					           -> Area
+      convertl(Rel[[Item]])                        -> List
+      convert(PICO-ID # Area)                      -> ListItem
+      id2str(PICO-ID)		 	           -> String
+      rootNode					   -> Area
 
 
  hiddens

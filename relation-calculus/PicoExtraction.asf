@@ -1,6 +1,5 @@
 equations
     
-
 [as-1] add-succ(Rel, Rstore) = extend-rel(SUCC, Rel, Rstore)
  
 
