@@ -20,6 +20,10 @@
 #
 # $Id$
 
+2000/5/01 (mdejonge@cwi.nl)
+   * bug fix: editor/editor.sh.src make sure no double slash (//) occurs in
+     argument passed to start-emacs
+
 2000/4/26 (markvdb@cwi.nl)
    * Code added for dealing with {<symbol>}<nr>+ and {<symbol> <symbol>}<nr>+
      Sdf2 constructions.
