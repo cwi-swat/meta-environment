@@ -1,6 +1,40 @@
+type Player
+{
+}
+
 type Type
 {
-  name : string
+  name : list<string>
+
+  name.type := string
+
+  field name {
+    type list { 
+      element-type := string
+    }
+    type string { }
+  }
+
+  operation name {
+  }
+
+  name.string.length 3 { }
+}
+
+Type.name.type := string
+Client.id.string.length := 3
+Server.name.type string { length := 3 }
+
+type Type {
+  field * {
+    color := red
+  }
+}
+
+type * {
+  field name {
+    color := green
+  }
 }
 
 type Type
@@ -17,10 +51,4 @@ type Type
 
   operations get {}
   operations set {}
-
-  aap := { a, b, c }
-
-  aap a {}
-  aap b {}
-  aap c {}
 }
