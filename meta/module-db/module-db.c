@@ -1438,9 +1438,6 @@ int main(int argc, char *argv[])
   }
 
   ATBinit(argc, argv, &bottomOfStack);
-  ATinit(argc, argv, &bottomOfStack);
-
-  ATsetChecking(ATtrue);
 
   PT_initMEPTApi();
   SDF_initSDFMEApi();
