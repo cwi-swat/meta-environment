@@ -2,6 +2,7 @@
 
 Thu Mar 25 13:27:35 CET 2004 <{jong,kooiker}@cwi.nl>
  * editors/manager: new editor-manager + API
+ * editors/text: implement get-focus-sort
  * editors/manager/src: removed
 
 Wed Mar 24 13:18:03 CET 2004 <{jong,kooiker}@cwi.nl>
