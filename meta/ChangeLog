@@ -1,5 +1,11 @@
 # $Id$
 
+2003/05/21 ({markvdb,jurgenv}@cwi.nl)
+ * working towards implementing the module-db coordination tasks in ToolBus
+   in tbscripts/module-db.tb
+ * term-store now has terms as values, not lists anymore
+ * all files in module-db/src are now deprecated, do not edit there anymore.
+
 Wed May 21 13:15:45 CEST 2003 <jong@cwi.nl>
  * Added -Werror in in-output and module-db Makefiles.
  * Fixed multiline string-constanct in ATmake construct in module-db/main.c
