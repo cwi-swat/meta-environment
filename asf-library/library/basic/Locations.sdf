@@ -9,7 +9,9 @@ sorts Location Area
  
 context-free syntax
 
-"location" "(" file:String "," area:Area ")" -> Location {cons("location")}
+"file" "(" file:String ")"  -> Location {cons("file")}
+"position" "(" file:String "," pos:Position ")" -> Location {cons("position")}
+"area" "(" file:String "," area:Area ")" -> Location {cons("area")}
 
 "area" "(" start-line:NatCon    "," 
            start-column:NatCon  ","
@@ -18,3 +20,7 @@ context-free syntax
            start-offset:NatCon  "," 
            end-offset:NatCon
        ")" -> Area {cons("area")}
+
+"position" "(" line:NatCon ","
+               column:NatCon ","
+               offset:NatCon ")" -> Position {cons("position")}
