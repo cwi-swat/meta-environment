@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <string.h>
 
 /*}}}  */
 
@@ -52,9 +52,9 @@ void usage(void)
 
 /*}}}  */
 
-/*{{{  int main (int argc, char **argv) */
+/*{{{  int main (int argc, char *argv[]) */
 
-int main (int argc, char **argv)
+int main (int argc, char *argv[])
 {
   int c; /* option character */
   ATerm bottomOfStack;

@@ -1,3 +1,7 @@
+2001/08/28 (jong@cwi.nl)
+ * Added #include directives to satisfy gcc-3.0.1
+ * version 0.7beta
+
 2001/08/08 (jurgenv@cwi.nl)
  * Added new predicate to library: PT_isProductionInjection
 
