@@ -25,16 +25,16 @@ In particular, we will discuss:
 From the scenarios, we can derive the following minimum set of
 tools needed to get the Meta-Environment running:
 <UL>
-     <LI> A <A HREF="../components/components.html#control-tool">control tool</A>, 
+     <LI> A <A HREF="../meta/components.html#control-tool">control tool</A>, 
 	  offering the basic user interface functionality
           to control the rest of the system.
-     <LI> A <A HREF="../components/components.html#hybrid-editor">hybrid editor</A>,
+     <LI> A <A HREF="../meta/components.html#hybrid-editor">hybrid editor</A>,
 	  consisting of two subcomponents,
           the <EM>structured editor</EM> and the <EM>text editor</EM>.
 	  An editor instance of the hybrid editor can be used to edit the
 	  syntax of a module, the equations of a module, or a term over
           a specific module.
-     <LI> A <A HREF="../metA/components.html#parser">parser</A>, w
+     <LI> A <A HREF="../meta/components.html#parser">parser</A>, w
           hich can parse terms given a parse table
           and an input string.
      <LI> A <A HREF="../meta/components.html#parser-generator">parser 
@@ -182,7 +182,7 @@ because we feel that this enables a simpler design to which we can
 easily add some eager features at a later stage using heuristics 
 that are based on observed behaviour of users.
 
-<H2><A NAME="ErrorHandling">Error Handling</A>
+<H2><A NAME="ErrorHandling">Error Handling</A></H2>
 
 A lot of operations in the Asf+Sdf Meta-Environment can fail, sometimes
 for unexpected reasons. Handling these failures by anticipating all possible
