@@ -57,18 +57,135 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
-/*{{{  ATerm lower_summary(int cid, ATerm t) */
+/*{{{  ATerm get_area_begin_line(int cid, ATerm t) */
 
-ATerm lower_summary(int cid, ATerm t)
+ATerm get_area_begin_line(int cid, ATerm t)
 {
-  PERR_Start startSummary = PERR_StartFromTerm(t);
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(begin-line(%d))", ERR_getAreaBeginLine(area));
+}
 
-  if (PERR_isStartSummary(startSummary)) {
-    PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);
-    t = ERR_SummaryToTerm(PERR_lowerSummary(pSummary));
+/*}}}  */
+/*{{{  ATerm get_area_begin_column(int cid, ATerm t) */
+
+ATerm get_area_begin_column(int cid, ATerm t)
+{
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(begin-column(%d))", ERR_getAreaBeginColumn(area));
+}
+
+/*}}}  */
+/*{{{  ATerm get_area_end_line(int cid, ATerm t) */
+
+ATerm get_area_end_line(int cid, ATerm t)
+{
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(end-line(%d))", ERR_getAreaEndLine(area));
+}
+
+/*}}}  */
+/*{{{  ATerm get_area_end_column(int cid, ATerm t) */
+
+ATerm get_area_end_column(int cid, ATerm t)
+{
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(end-column(%d))", ERR_getAreaEndColumn(area));
+}
+
+/*}}}  */
+/*{{{  ATerm get_area_offset(int cid, ATerm t) */
+
+ATerm get_area_offset(int cid, ATerm t)
+{
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(offset(%d))", ERR_getAreaOffset(area));
+}
+
+/*}}}  */
+/*{{{  ATerm get_area_length(int cid, ATerm t) */
+
+ATerm get_area_length(int cid, ATerm t)
+{
+  ERR_Area area = ERR_AreaFromTerm(t);
+  return ATmake("snd-value(length(%d))", ERR_getAreaLength(area));
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_location_filename(int cid, ATerm t) */
+
+ATerm get_location_filename(int cid, ATerm t)
+{
+  ERR_Location location = ERR_LocationFromTerm(t);
+  const char *filename = ERR_getLocationFilename(location);
+
+  return ATmake("snd-value(filename(<str>))", filename);
+}
+
+/*}}}  */
+/*{{{  ATerm has_location_area(int cid, ATerm t) */
+
+ATerm has_location_area(int cid, ATerm t)
+{
+  ERR_Location location = ERR_LocationFromTerm(t);
+
+  return ATmake("snd-value(has-area(<term>))",
+		ATmake(ERR_hasLocationArea(location) ? "true" : "false"));
+}
+
+/*}}}  */
+/*{{{  ATerm get_location_area(int cid, ATerm t) */
+
+ATerm get_location_area(int cid, ATerm t)
+{
+  ERR_Location location = ERR_LocationFromTerm(t);
+  if (ERR_hasLocationArea(location)) {
+    ERR_Area area = ERR_getLocationArea(location);
+
+    return ATmake("snd-value(area(<term>))", area);
   }
 
-  return ATmake("snd-value(lowered-summary(<term>))", t);
+  ATabort("error-support.c: no area: %t, use has_location_area\n", location);
+  return NULL;
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_subject_description(int cid, ATerm t) */
+
+ATerm get_subject_description(int cid, ATerm t)
+{
+  ERR_Subject subject = ERR_SubjectFromTerm(t);
+  const char *description = ERR_getSubjectDescription(subject);
+
+  return ATmake("snd-value(description(<str>))", description);
+}
+
+/*}}}  */
+/*{{{  ATerm has_subject_location(int cid, ATerm t) */
+
+ATerm has_subject_location(int cid, ATerm t)
+{
+  ERR_Subject subject = ERR_SubjectFromTerm(t);
+
+  return ATmake("snd-value(has-location(<str>))",
+		ATmake(ERR_hasSubjectLocation(subject) ? "true" : "false"));
+}
+
+/*}}}  */
+/*{{{  ATerm get_subject_location(int cid, ATerm t) */
+
+ATerm get_subject_location(int cid, ATerm t)
+{
+  ERR_Subject subject = ERR_SubjectFromTerm(t);
+  if (ERR_hasSubjectLocation(subject)) {
+    ERR_Location location = ERR_getSubjectLocation(subject);
+    
+    return ATmake("snd-value(location(<term>))", location);
+  }
+
+  ATabort("error-support.c: no location: %t, use has_subject_location\n", subject);
+  return NULL;
 }
 
 /*}}}  */
@@ -104,68 +221,22 @@ ATerm get_summary_errors(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm get_summary_first_error(int cid, ATerm t) */
 
-ATerm get_summary_first_error(int cid, ATerm t)
+/*{{{  ATerm lower_summary(int cid, ATerm t) */
+
+ATerm lower_summary(int cid, ATerm t)
 {
-  ERR_Summary summary = ERR_SummaryFromTerm(t);
-  ERR_ErrorList errors = ERR_getSummaryList(summary);
-  ERR_Error error = ERR_getErrorListHead(errors);
+  PERR_Start startSummary = PERR_StartFromTerm(t);
 
-  return ATmake("snd-value(error(<term>))", ERR_ErrorToTerm(error));
-
-}
-
-/*}}}  */
-
-/*{{{  ATerm get_error_first_subject_location(int cid, ATerm t) */
-
-ATerm get_error_first_subject_location(int cid, ATerm t)
-{
-  ERR_Error error = ERR_ErrorFromTerm(t);
-  ERR_SubjectList subjects = ERR_getErrorList(error);
-  ERR_Subject subject = ERR_getSubjectListHead(subjects);
-
-  if (ERR_hasSubjectLocation(subject)) {
-    ERR_Location location = ERR_getSubjectLocation(subject);
-
-    return ATmake("snd-value(location(<term>))", ERR_LocationToTerm(location));
+  if (PERR_isStartSummary(startSummary)) {
+    PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);
+    t = ERR_SummaryToTerm(PERR_lowerSummary(pSummary));
   }
 
-  ATabort("error-support.c:get_error_first_subject_location: no location!\n");
-  return NULL;
+  return ATmake("snd-value(lowered-summary(<term>))", t);
 }
 
 /*}}}  */
-
-/*{{{  ATerm get_location_filename(int cid, ATerm t) */
-
-ATerm get_location_filename(int cid, ATerm t)
-{
-  ERR_Location location = ERR_LocationFromTerm(t);
-  const char *filename = ERR_getLocationFilename(location);
-
-  return ATmake("snd-value(filename(<str>))", filename);
-}
-
-/*}}}  */
-/*{{{  ATerm get_location_area_offset(int cid, ATerm t) */
-
-ATerm get_location_area_offset(int cid, ATerm t)
-{
-  ERR_Location location = ERR_LocationFromTerm(t);
-  if (ERR_hasLocationArea(location)) {
-    ERR_Area area = ERR_getLocationArea(location);
-    int offset = ERR_getAreaOffset(area);
-
-    return ATmake("snd-value(offset(<int>))", offset);
-  }
-
-  return ATmake("snd-value(no-offset)");
-}
-
-/*}}}  */
-
 /*{{{  void display_summary(int cid, ATerm summary) */
 
 void display_summary(int cid, ATerm summary)

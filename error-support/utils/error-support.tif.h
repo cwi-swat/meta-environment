@@ -9,14 +9,22 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_summary_first_error(int conn, ATerm);
-ATerm get_summary_errors(int conn, ATerm);
-ATerm get_error_first_subject_location(int conn, ATerm);
-ATerm get_summary_id(int conn, ATerm);
+ATerm get_location_area(int conn, ATerm);
+ATerm has_location_area(int conn, ATerm);
+ATerm get_subject_description(int conn, ATerm);
 ATerm get_location_filename(int conn, ATerm);
+ATerm has_subject_location(int conn, ATerm);
+ATerm get_area_length(int conn, ATerm);
+ATerm get_subject_location(int conn, ATerm);
+ATerm get_area_offset(int conn, ATerm);
 ATerm get_summary_producer(int conn, ATerm);
-ATerm get_location_area_offset(int conn, ATerm);
+ATerm get_area_end_column(int conn, ATerm);
+ATerm get_summary_id(int conn, ATerm);
+ATerm get_area_end_line(int conn, ATerm);
+ATerm get_summary_errors(int conn, ATerm);
+ATerm get_area_begin_column(int conn, ATerm);
 ATerm lower_summary(int conn, ATerm);
+ATerm get_area_begin_line(int conn, ATerm);
 void display_summary(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm error_support_handler(int conn, ATerm term);

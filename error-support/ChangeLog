@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar 15 10:55:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Expose API to ToolBus interface level
+
 Thu Mar 11 14:40:46 CET 2004 <{jong,kooiker}@cwi.nl>
  * Bumped into version 0.2
  * Regenerated api's 
