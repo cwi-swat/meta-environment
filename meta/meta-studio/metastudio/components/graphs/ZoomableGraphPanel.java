@@ -57,6 +57,7 @@ public class ZoomableGraphPanel extends ToolComponent {
         add(slider, BorderLayout.WEST);
 
         scrolledPane.getViewport().addMouseWheelListener(wheel);
+        graphPanel.setScale(Preferences.getInteger("graph.scale.default"));
     }
     
     public MetaGraphFactory getGraphFactory() {
