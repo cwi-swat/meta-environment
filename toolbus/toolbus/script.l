@@ -27,6 +27,8 @@
 char *last_lex;      /* last lexical token read */
 void ll_inc_pos(int);
 void ll_coords(int,int);
+
+void switch_source(char *name, int n);
 %}
 
 layout        [ \t]

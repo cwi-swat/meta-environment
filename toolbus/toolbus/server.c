@@ -1,3 +1,5 @@
+/*{{{  includes */
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -8,9 +10,15 @@
 #include "utils.h"
 #include "sockets.h"
 
+/*}}}  */
+
+/*{{{  externals */
+
 extern int ntool;
 extern int find_tool_index(char *);
 extern int connect_tool(int, int, int);
+
+/*}}}  */
 
 /*{{{  int accept_client(TBbool local) */
 
@@ -21,7 +29,7 @@ int accept_client(TBbool local)
      2. sync.
      */
   int sock = TB_ERROR;
-  int nread, n;
+  int nread;
   char buf[TB_MAX_HANDSHAKE];
   char tname[256], hname[256];
   int that_tool_id = -1;

@@ -1,39 +1,53 @@
+/*{{{  header */
+
 /*
 
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
+   ToolBus -- The ToolBus Application Architecture
+   Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+   The  Netherlands.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+
+/*{{{  includes */
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
 #include "match.h"
 #include "procs.h"
 
+
+/*}}}  */
+
+/*{{{  variables */
+
 proc *Delta;           /* PROTECTED */
 proc *Tau;             /* PROTECTED */
 
-/*--- atoms ------------------------------------*/
+/*}}}  */
+
+/*{{{  TBbool communicate(sym_idx a1, sym_idx a2) */
 
 TBbool communicate(sym_idx a1, sym_idx a2)
 {
   switch(a1)
-    {
+  {
     case a_rec_msg:        return a2 == a_snd_msg;
     case a_snd_msg:        return a2 == a_rec_msg;
 
@@ -53,70 +67,83 @@ TBbool communicate(sym_idx a1, sym_idx a2)
     case a_snd_continue:   return a2 == a_rec_continue;
 
     default:
-      return TBfalse;
-    }
+			   return TBfalse;
+  }
 }
+
+/*}}}  */
+/*{{{  sym_idx reverse_role(sym_idx f) */
 
 sym_idx reverse_role(sym_idx f)
 {
   switch(f){
 
-  case a_snd_eval:            return a_rec_eval;
-  case a_rec_eval:            return a_snd_eval;
+    case a_snd_eval:            return a_rec_eval;
+    case a_rec_eval:            return a_snd_eval;
 
-  case a_snd_value:           return a_rec_value;
-  case a_rec_value:           return a_snd_value;
+    case a_snd_value:           return a_rec_value;
+    case a_rec_value:           return a_snd_value;
 
-  case a_snd_cancel:          return a_rec_cancel;
-  case a_rec_cancel:          return a_snd_cancel;
+    case a_snd_cancel:          return a_rec_cancel;
+    case a_rec_cancel:          return a_snd_cancel;
 
-  case a_snd_do:              return a_rec_do;
-  case a_rec_do:              return a_snd_do;
+    case a_snd_do:              return a_rec_do;
+    case a_rec_do:              return a_snd_do;
 
-  case a_rec_event:           return a_snd_event;
-  case a_snd_event:           return a_rec_event;
+    case a_rec_event:           return a_snd_event;
+    case a_snd_event:           return a_rec_event;
 
-  case a_snd_ack_event:       return a_rec_ack_event;
-  case a_rec_ack_event:       return a_snd_ack_event;
+    case a_snd_ack_event:       return a_rec_ack_event;
+    case a_rec_ack_event:       return a_snd_ack_event;
 
-  case a_rec_connect:         return a_snd_connect;
-  case a_snd_connect:         return a_rec_connect;
+    case a_rec_connect:         return a_snd_connect;
+    case a_snd_connect:         return a_rec_connect;
 
-  case a_rec_disconnect:      return a_snd_disconnect;
-  case a_snd_disconnect:      return a_rec_disconnect;
+    case a_rec_disconnect:      return a_snd_disconnect;
+    case a_snd_disconnect:      return a_rec_disconnect;
 
-  case a_snd_terminate :      return a_rec_terminate;
-  case a_rec_terminate:       return a_snd_terminate;
+    case a_snd_terminate :      return a_rec_terminate;
+    case a_rec_terminate:       return a_snd_terminate;
 
-  case a_snd_monitor:         return a_rec_monitor;
-  case a_rec_monitor:         return a_snd_monitor;
+    case a_snd_monitor:         return a_rec_monitor;
+    case a_rec_monitor:         return a_snd_monitor;
 
-  case a_rec_continue:        return a_snd_continue;
-  case a_snd_continue:        return a_rec_continue;
+    case a_rec_continue:        return a_snd_continue;
+    case a_snd_continue:        return a_rec_continue;
 
-  case a_snd_attach_monitor:  return a_rec_attach_monitor;
-  case a_rec_attach_monitor:  return a_snd_attach_monitor;
+    case a_snd_attach_monitor:  return a_rec_attach_monitor;
+    case a_rec_attach_monitor:  return a_snd_attach_monitor;
 
-  case a_snd_detach_monitor: return a_rec_detach_monitor;
-  case a_rec_detach_monitor: return a_snd_detach_monitor;
+    case a_snd_detach_monitor: return a_rec_detach_monitor;
+    case a_rec_detach_monitor: return a_snd_detach_monitor;
 
-  default:
-    err_fatal("reverse_role: %d", f);
-    return a_delta; /* pedantic */
+    default:
+			       err_fatal("reverse_role: %d", f);
+			       return a_delta; /* pedantic */
   }
 }
 
+/*}}}  */
+
+/*{{{  proc *mk_create(char *proc_name, term_list *args, var *v, coords *c) */
 
 proc *mk_create(char *proc_name, term_list *args, var *v, coords *c)
 {
   return mk_atom(a_create, mk_list2(mk_appl(TBlookup(proc_name), args), v), c);
 } 
 
+/*}}}  */
+/*{{{  proc *mk_proc_call(char *id, term_list *args) */
+
 proc *mk_proc_call(char *id, term_list *args)
 {
   return mk_appl(p_call, mk_list(mk_var(id, "", t_term), args));
 }
-  
+
+/*}}}  */
+
+/*{{{  void pr_atom(proc *a) */
+
 void pr_atom(proc *a)
 {
   assert(is_atom(a));
@@ -129,17 +156,23 @@ void pr_atom(proc *a)
   }
 }
 
-/*--- process definitions ----------------------*/
+/*}}}  */
+
+/*{{{  proc_def *mk_proc_def(char *name, */
 
 proc_def *mk_proc_def(char *name,
 		      term_list *formals,
 		      term_list *vars,
-                      proc *p)
+		      proc *p)
 { 
   assert(is_list(formals));
 
   return mk_appl4(s_proc_def, mk_var(name, "", t_term), formals, vars, p);
 }
+
+/*}}}  */
+
+/*{{{  void pr_proc_def(proc_def *pd) */
 
 void pr_proc_def(proc_def *pd)
 {
@@ -151,26 +184,33 @@ void pr_proc_def(proc_def *pd)
   fprintf(stderr, "\n");
 }
 
+/*}}}  */
+
+/*{{{  difficult #define */
 
 #define EXPDEF(str, sym, _restype, _evargs, _nargs, _arg0type, _arg1type, _arg2type)\
-             { expr_sign *sig; \
-	       SYMDEF(str,sym);\
-               sig		= malloc(sizeof(struct expr_sign)); \
-       	       sig->argtype     = malloc(sizeof(type *)*3); \
-               sig->name	= sym;\
-               sig->restype	= _restype;\
-               sig->evargs	= _evargs;\
-               sig->nargs	= _nargs;\
-               sig->argtype[0]	= _arg0type;\
-               sig->argtype[1]	= _arg1type;\
-               sig->argtype[2]	= _arg2type; \
-	       sig->func	= NULL; \
-	       sig->descr       = "empty"; \
-	       register_function(str, system_module, sig); \
-             }
+{ expr_sign *sig; \
+  SYMDEF(str,sym);\
+    sig		= malloc(sizeof(struct expr_sign)); \
+    sig->argtype     = malloc(sizeof(type *)*3); \
+    sig->name	= sym;\
+    sig->restype	= _restype;\
+    sig->evargs	= _evargs;\
+    sig->nargs	= _nargs;\
+    sig->argtype[0]	= _arg0type;\
+    sig->argtype[1]	= _arg1type;\
+    sig->argtype[2]	= _arg2type; \
+    sig->func	= NULL; \
+    sig->descr       = "empty"; \
+    register_function(str, system_module, sig); \
+}
+
+/*}}}  */
+/*{{{  void init_procs(void) */
 
 void init_procs(void)
-{ sym_idx idx;
+{
+  sym_idx idx;
 
   SYMDEF("system", system_module);
   register_module("system");
@@ -220,7 +260,7 @@ void init_procs(void)
   SYMDEF("snd-detach-monitor", a_snd_detach_monitor);
   SYMDEF("snd-reconfigure", a_snd_reconfigure);
   SYMDEF("snd-disconnect", a_snd_disconnect);
-  
+
   SYMDEF("rec-eval",  a_rec_eval);
   SYMDEF("rec-cancel", a_rec_cancel);
   SYMDEF("rec-do", a_rec_do);
@@ -235,7 +275,7 @@ void init_procs(void)
   SYMDEF("semi", p_semi);
   SYMDEF("fmerge", p_fmerge);
   SYMDEF("lmerge", p_lmerge);
- 
+
   SYMDEF("if", p_if);
   SYMDEF("let", p_let);
   SYMDEF("execute", p_execute);
@@ -331,7 +371,7 @@ void init_procs(void)
   EXPDEF("current-time",  e_current_time,  List,  TBfalse, 0, NULL, NULL, NULL);
   EXPDEF("sec",           e_sec,           Int,  TBtrue,  1, Int, NULL, NULL);
   EXPDEF("msec",          e_msec,          Int,  TBtrue,  1, Int, NULL, NULL);  
- 
+
   Delta = mk_atom(a_delta, NULL, NULL);
   Tau = mk_atom(a_tau, NULL, NULL);
 
@@ -339,3 +379,4 @@ void init_procs(void)
   TBprotect(&Tau);
 }
 
+/*}}}  */

@@ -25,11 +25,9 @@
 
 extern env *Bindings1, *Bindings2;
 
-       term     *substitute(term *, env *);
-       term     *substitute_list(term *, env *);
-       TBbool    match(term *, term *, env *, env *);
-static TBbool    match1(term *, term *);
-static TBbool    match_list(term *, term *);
+term     *substitute(term *, env *);
+term     *substitute_list(term *, env *);
+TBbool    match(term *, term *, env *, env *);
 
 TBbool    cmatchp(term *, term *);
 

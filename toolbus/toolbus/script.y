@@ -32,6 +32,10 @@
 #include "script.h"
 #include <fcntl.h>
 
+extern int yyparse(void);
+extern int yylex(void);
+extern int get_token(int);
+
 term *script_name = NULL;  /* term representing source file */
 int lino = 1;              /* line number in source file */
 int pos = 0;               /* position in line */
@@ -74,7 +78,7 @@ char *TBtmpname(char *name, char *suf)
 TBbool parse_script(char *name, int argc, char **argv)
 { int org_stdin, pres;
   char cmd[CMD_MAX], namec[ABS_PATH_MAX], namei[ABS_PATH_MAX], line[PP_LINE_MAX];
-  FILE *fnamec, *fname, *fcpp;
+  FILE *fnamec, *fname;
   int i;
   TBbool in_string = TBfalse;
    

@@ -1,24 +1,30 @@
+/*{{{  header */
+
 /*
 
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
+   ToolBus -- The ToolBus Application Architecture
+   Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+   The  Netherlands.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+/*{{{  includes */
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
@@ -41,33 +47,51 @@
 #include <sys/wait.h>
 #include <errno.h>
 
+/*}}}  */
+
+/*{{{  externals */
+
 extern int accept_client(TBbool);
 extern TBbool parse_script(char *);
+
+/*}}}  */
+
+/*{{{  variables */
 
 TBbool local_ports = TBfalse;
 
 static int pgid = -1;
 
-/*--- child handler ---------------------------------------*/
+/*}}}  */
+
+/*{{{  void chld_handler(int sig) */
 
 void chld_handler(int sig)
 {
-   if(pgid != -1)
-   {
-      /* wait for childs in process group pgid */
-      waitpid(-pgid, NULL, WNOHANG);
-   }
+  if(pgid != -1)
+  {
+    /* wait for childs in process group pgid */
+    waitpid(-pgid, NULL, WNOHANG);
+  }
 }
+
+/*}}}  */
 
 
 /*--- tool definitions ------------------------------------*/
 
 static tool_def_list *tool_defs = NULL;   /* PROTECTED */
 
+/*{{{  tool_def *get_tool_defs() */
+
 tool_def *get_tool_defs()
 {
   return tool_defs;
 }
+
+/*}}}  */
+
+/*{{{  tool_def *find_tool_def(sym_idx tname) */
 
 tool_def *find_tool_def(sym_idx tname)
 {
@@ -82,6 +106,10 @@ tool_def *find_tool_def(sym_idx tname)
   }
   return NULL;
 }
+
+/*}}}  */
+
+/*{{{  add_tool_def(....) */
 
 void add_tool_def(char *id, term_list *formals, 
 		  char *host, char *command, char *details,
@@ -102,6 +130,8 @@ void add_tool_def(char *id, term_list *formals,
   }
 }
 
+/*}}}  */
+
 /*
  * complete_tool_sigs adds to the signature of each tool definition:
  * to td_out_sign:
@@ -111,6 +141,8 @@ void add_tool_def(char *id, term_list *formals,
  *
  * and writes to the tool interfaces file, if needed.
  */
+
+/*{{{  void complete_tool_sigs() */
 
 void complete_tool_sigs()
 {
@@ -126,11 +158,13 @@ void complete_tool_sigs()
 
     trm = mk_appl2(a_rec_terminate, tld, placeT);
     con = mk_appl1(a_snd_connect, tld);
- 
+
     td_in_sign(td) = mk_list(trm, td_in_sign(td));
     td_out_sign(td) = mk_list(con, td_out_sign(td));
   }  
 }
+
+/*}}}  */
 
 /* -------- tool instances ------------------------ */
 
@@ -143,7 +177,9 @@ tool_inst_list *Tools;  /* PROTECTED */
    of the event. For instance:
    foo(bar) matches foo, but not foo(boo).
    foo(1,2,3) matches foo(1,2), but not foo(1,3) etc.
-*/
+   */
+
+/*{{{  TBbool has_prefix(term *t, term *p) */
 
 TBbool has_prefix(term *t, term *p)
 {
@@ -156,7 +192,7 @@ TBbool has_prefix(term *t, term *p)
     argp = fun_args(p);
     while(argp) {
       if(!argt || !term_equal(first(argt), first(argp)))
-        return TBfalse;
+	return TBfalse;
       argt = next(argt);
       argp = next(argp);
     }  
@@ -164,6 +200,10 @@ TBbool has_prefix(term *t, term *p)
   }
   return term_equal(t,p);
 }
+
+/*}}}  */
+
+/*{{{  TBbool event_present(term *ev, term *l) */
 
 TBbool event_present(term *ev, term *l)
 {
@@ -177,6 +217,10 @@ TBbool event_present(term *ev, term *l)
   }
   return TBfalse;
 }
+
+/*}}}  */
+
+/*{{{  term_list *event_delete(term_list *l, term *ev) */
 
 term_list *event_delete(term_list *l, term *ev)
 {
@@ -195,6 +239,8 @@ term_list *event_delete(term_list *l, term *ev)
   return result;
 }
 
+/*}}}  */
+
 /*
  * Transition function for Tool Control Protocol.
  * Note that the protocol is defined from the
@@ -205,7 +251,7 @@ term_list *event_delete(term_list *l, term *ev)
  * update: true => update ti, false => ti unchanged
  *
  * Returns: PHASE1, PHASE2, PHASE3 when legal transition
- *          -1 for illegal transition
+*          -1 for illegal transition
  *
  * Note there is one deviation from the "official" TCP protocol.
  * Similar to the rec-eval/snd-value pair we introduce a new
@@ -216,6 +262,8 @@ term_list *event_delete(term_list *l, term *ev)
 
 #define return_phase(PH) {if(update) ti_phase(ti) = PH; return PH;}
 
+/*{{{  int TCP_transition(tool_inst *ti, term *event, TBbool update) */
+
 int TCP_transition(tool_inst *ti, term *event, TBbool update)
 {
   sym_idx ev = fun_sym(event);
@@ -224,102 +272,105 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
 
   /*TBmsg("TCP_transition(%t,%t)\n", ti, event);*/
   switch(ti_phase(ti)){
-  case PHASE1:
-    if(ev == a_snd_connect){
-      return_phase(PHASE2);
-    } else
-      return -1;
-
-  case PHASE2:
-    switch(ev){
-    case a_rec_do:
-    case a_rec_eval:      return_phase(PHASE3);
-
-    case a_rec_terminate:
-    case a_snd_attach_monitor:
-    case a_snd_detach_monitor:
-    case a_rec_monitor:
-    case a_snd_continue:
-                             return_phase(PHASE2);
-    case a_snd_event:
-      pending = ti_pending(ti);
-      assert(list_length(fun_args(event)) >= 2);
-      t = first(next(fun_args(event)));
-	if(list_elem(t, pending))
-	  return -1;
-	else {
-	  if(update)
-	    ti_pending(ti) = mk_list(t, pending);
-	  return_phase(PHASE2);
-	}
-    case a_rec_ack_event:
-      pending = ti_pending(ti);
-      t = first(fun_args(event));
-      if(event_present(t, pending)){
-	if(update)
-	  ti_pending(ti) = event_delete(pending, t);
-	  return_phase(PHASE2);
+    case PHASE1:
+      if(ev == a_snd_connect){
+	return_phase(PHASE2);
       } else
 	return -1;
 
-    case a_snd_disconnect: return_phase(PHASE1);
+    case PHASE2:
+      switch(ev){
+	case a_rec_do:
+	case a_rec_eval:      return_phase(PHASE3);
 
-    case a_rec_cancel:
-    case a_snd_value:
-    case a_snd_connect:    return -1;
+	case a_rec_terminate:
+	case a_snd_attach_monitor:
+	case a_snd_detach_monitor:
+	case a_rec_monitor:
+	case a_snd_continue:
+			      return_phase(PHASE2);
+	case a_snd_event:
+			      pending = ti_pending(ti);
+			      assert(list_length(fun_args(event)) >= 2);
+			      t = first(next(fun_args(event)));
+			      if(list_elem(t, pending))
+				return -1;
+			      else {
+				if(update)
+				  ti_pending(ti) = mk_list(t, pending);
+				return_phase(PHASE2);
+			      }
+	case a_rec_ack_event:
+			      pending = ti_pending(ti);
+			      t = first(fun_args(event));
+			      if(event_present(t, pending)){
+				if(update)
+				  ti_pending(ti) = event_delete(pending, t);
+				return_phase(PHASE2);
+			      } else
+				return -1;
 
+	case a_snd_disconnect: return_phase(PHASE1);
+
+	case a_rec_cancel:
+	case a_snd_value:
+	case a_snd_connect:    return -1;
+
+	default:
+			       err_fatal("TCP_transition -- PHASE2, event: %t", event);
+			       return -1; /* pedantic */
+      }    
+    case PHASE3:
+      switch(ev){
+	case a_rec_cancel:
+	case a_snd_void:   
+	case a_snd_value:          return_phase(PHASE2);
+	case a_rec_monitor:
+	case a_snd_continue:
+	case a_rec_terminate:      return_phase(PHASE3);
+
+	case a_snd_event:
+				   pending = ti_pending(ti);
+				   assert(list_length(fun_args(event)) >= 2);
+				   t = first(next(fun_args(event)));
+				   if(list_elem(t, pending))
+				     return -1;
+				   else {
+				     if(update)
+				       ti_pending(ti) = mk_list(t, pending);
+				     return_phase(PHASE3);
+				   }
+	case a_rec_ack_event:
+				   pending = ti_pending(ti);
+				   t = first(fun_args(event));
+				   if(event_present(t, pending)){
+				     if(update)
+				       ti_pending(ti) = event_delete(pending, t);
+				     return_phase(PHASE3);
+				   } else
+				     return -1;
+
+	case a_rec_eval:
+	case a_rec_do:
+	case a_snd_connect:
+	case a_snd_disconnect:
+	case a_snd_attach_monitor:
+	case a_snd_detach_monitor:
+				   return -1;
+	default:
+
+				   err_fatal("TCP_transition -- PHASE3, event: %t", event);
+				   return -1; /* pedantic */
+      }
     default:
-      err_fatal("TCP_transition -- PHASE2, event: %t", event);
+      err_fatal("TCP_transition -- illegal PHASE");
       return -1; /* pedantic */
-    }    
-  case PHASE3:
-    switch(ev){
-    case a_rec_cancel:
-    case a_snd_void:   
-    case a_snd_value:          return_phase(PHASE2);
-    case a_rec_monitor:
-    case a_snd_continue:
-    case a_rec_terminate:      return_phase(PHASE3);
-
-    case a_snd_event:
-      pending = ti_pending(ti);
-      assert(list_length(fun_args(event)) >= 2);
-      t = first(next(fun_args(event)));
-	if(list_elem(t, pending))
-	  return -1;
-	else {
-	  if(update)
-	    ti_pending(ti) = mk_list(t, pending);
-	  return_phase(PHASE3);
-	}
-    case a_rec_ack_event:
-      pending = ti_pending(ti);
-      t = first(fun_args(event));
-      if(event_present(t, pending)){
-	if(update)
-	  ti_pending(ti) = event_delete(pending, t);
-	  return_phase(PHASE3);
-      } else
-	  return -1;
-
-    case a_rec_eval:
-    case a_rec_do:
-    case a_snd_connect:
-    case a_snd_disconnect:
-    case a_snd_attach_monitor:
-    case a_snd_detach_monitor:
-                             return -1;
-    default:
-
-      err_fatal("TCP_transition -- PHASE3, event: %t", event);
-      return -1; /* pedantic */
-    }
-  default:
-     err_fatal("TCP_transition -- illegal PHASE");
-    return -1; /* pedantic */
   }
 }
 
+/*}}}  */
+
+/*{{{  TBbool write_to_tool(sym_idx af, term_list *args) */
 
 TBbool write_to_tool(sym_idx af, term_list *args)
 {
@@ -328,11 +379,11 @@ TBbool write_to_tool(sym_idx af, term_list *args)
   tool_inst *ti;
   tool_id *tid;
   term *e;
-  
+
   if(TBverbose) TBmsg("write_to_tool(%s,%t)\n", get_txt(af), args);
 
   if(!(is_appl(first(args)) && (list_length(fun_args(first(args))) == 1) &&
-	 is_int(first(fun_args(first(args)))))){
+       is_int(first(fun_args(first(args)))))){
     err_warn("illegal tool identifier in: %f(%l)", get_txt(af), args);
     return TBfalse;
   }
@@ -350,11 +401,11 @@ TBbool write_to_tool(sym_idx af, term_list *args)
 
     if(equal_tool_id(tid, ti_tid(ti))){
       if((out = ti_out(ti)) < 0) {
-        if(stand_alone){
-          TBprintf(stdout, "send to %s: %t\n", get_txt(ti_name(ti)), e);
-          return TBtrue;
-        } else {
-          return TBfalse;
+	if(stand_alone){
+	  TBprintf(stdout, "send to %s: %t\n", get_txt(ti_name(ti)), e);
+	  return TBtrue;
+	} else {
+	  return TBfalse;
 	}
       }
       if(TCP_transition(ti, e, TBtrue) >= 0){
@@ -371,6 +422,9 @@ TBbool write_to_tool(sym_idx af, term_list *args)
   }
   return TBfalse;
 }
+
+/*}}}  */
+/*{{{  TBbool connect_tool(int tid, int in, int out) */
 
 TBbool connect_tool(int tid, int in, int out)
 {
@@ -393,6 +447,10 @@ TBbool connect_tool(int tid, int in, int out)
   return TBfalse;
 }
 
+/*}}}  */
+
+/*{{{  int add_tool(char *id, char *host) */
+
 int add_tool(char *id, char *host)
 {
   sym_idx idx = TBlookup(id);
@@ -411,17 +469,21 @@ int add_tool(char *id, char *host)
   return n_tool_inst++;
 }
 
+/*}}}  */
+
+/*{{{  void destroy_ports_for_tool(tool_inst *ti) */
+
 void destroy_ports_for_tool(tool_inst *ti)
 {
-  char name[128];
-  int tip;
-
   assert(is_tool_inst(ti));
 
   /* TBmsg("destroy_ports_for_tool(%t)\n", ti); */
   TBdestroyPort(ti_in(ti));
   TBdestroyPort(ti_out(ti));
 }
+
+/*}}}  */
+/*{{{  void destroy_ports(void) */
 
 void destroy_ports(void)
 { 
@@ -432,6 +494,8 @@ void destroy_ports(void)
   }
 }
 
+/*}}}  */
+
 /*
  * Copy and substitute a part of a tool definition.
  *
@@ -441,8 +505,8 @@ void destroy_ports(void)
  * formals - parameter list of tool definition
  * creator - the term creating the current tool instance
  * stop_at_space
- *         - return on first space character (used for expanding
- *           the arguments of a command.
+*         - return on first space character (used for expanding
+*           the arguments of a command.
  * 
  *
  * Effect: copy src text until '\0' or ' ' to result buffer.
@@ -454,7 +518,10 @@ void destroy_ports(void)
  * copied, and NULL otherwise.
  */
 
-char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals, term *creator, TBbool stop_at_space)
+/*{{{  copy_and_subs(....) */
+
+char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals,
+		    term *creator, TBbool stop_at_space)
 {
   char *org_buf = *pbuf, *buf = *pbuf, base_par_name[64], par_name[64], *s;
   char *src = *psrc;
@@ -469,7 +536,7 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals, te
   if(!*src)
     return NULL;
 
- loop:
+loop:
 
   while(!isupper(*src)){
     if(!*src || (stop_at_space && !in_quote && isspace(*src))){
@@ -480,26 +547,26 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals, te
     }
     if(!escape && *src == '\'') {
       if(in_quote)
-        in_quote = TBfalse;
+	in_quote = TBfalse;
       else
-        in_quote = TBtrue;
+	in_quote = TBtrue;
       src++;
     } else {
       if(!escape && *src == '\\') {
-        escape = TBtrue;
-        src++;
+	escape = TBtrue;
+	src++;
       } else {
-        if(escape)
-          ; /* Here we can check for special escape sequences,
+	if(escape)
+	  ; /* Here we can check for special escape sequences,
 	       like '\n', '\t' etc. */
-        escape = TBfalse;
-        if(buf < bmax)
-          *buf++ = *src++;
-        else {
-          too_long:
-          err_warn("%t: expanded tool definition is too long\n", creator);
-          return NULL;
-        }
+	escape = TBfalse;
+	if(buf < bmax)
+	  *buf++ = *src++;
+	else {
+too_long:
+	  err_warn("%t: expanded tool definition is too long\n", creator);
+	  return NULL;
+	}
       }
     }
   }
@@ -514,25 +581,25 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals, te
   for(forms = formals; forms; forms = next(forms)){
     if(streq(get_txt(var_sym(first(forms))), par_name)){
       switch(tkind(first(args))){
-      case t_int:
-	if(buf + 16 > bmax)
-	  goto too_long;
-	sprintf(buf, "%d", int_val(first(args)));
-	buf += strlen(buf);
-	goto loop;
-      case t_str:
-	s = str_val(first(args));
-	if(buf + strlen(s) > bmax)
-	  goto too_long;
-	if(*s)
-	{
-	  sprintf(buf, "%s", s);
+	case t_int:
+	  if(buf + 16 > bmax)
+	    goto too_long;
+	  sprintf(buf, "%d", int_val(first(args)));
 	  buf += strlen(buf);
-	}
-	goto loop;
-      default:
-	err_warn("%t: integer or string argument required\n", creator);
-	return TBfalse;
+	  goto loop;
+	case t_str:
+	  s = str_val(first(args));
+	  if(buf + strlen(s) > bmax)
+	    goto too_long;
+	  if(*s)
+	  {
+	    sprintf(buf, "%s", s);
+	    buf += strlen(buf);
+	  }
+	  goto loop;
+	default:
+	  err_warn("%t: integer or string argument required\n", creator);
+	  return TBfalse;
       }
     } else {
       args = next(args);
@@ -545,11 +612,15 @@ char *copy_and_subs(char **pbuf, char *bmax, char **psrc, term_list *formals, te
   goto loop;  
 }
 
+/*}}}  */
+
 #include <sys/types.h>
 #include <unistd.h>
 
 #define NTOOLARGS    20
 #define EXP_TOOL_DEF (5*1024)
+
+/*{{{  tool_id *create_tool(term *creator, term_list *args) */
 
 tool_id *create_tool(term *creator, term_list *args)
 {
@@ -604,26 +675,26 @@ tool_id *create_tool(term *creator, term_list *args)
 
   sprintf(port_buf, "%d", WellKnownSocketPort);
   std_args[k++] = "-TB_PORT";    std_args[k++] = port_buf;
-  
+
   if(local_ports){
-      std_args[k++] = "-TB_LOCAL_PORTS";
-    }
+    std_args[k++] = "-TB_LOCAL_PORTS";
+  }
 
   while((cmd_arg = copy_and_subs(&cbuf, cbufmax, &cmd_args, td_formals(td), creator, TBtrue))){
     if(k >= NTOOLARGS)
       err_fatal("tool command has too many arguments");
     std_args[k++] = cmd_arg;
   }
- 
+
   std_args[k] = NULL;
 
-/*
-  { int j;
-    for(j=0; j < k; j++)
-      fprintf(stderr,"%s\n", std_args[j]);
-    fprintf(stderr, "\n");
-  }
-*/
+  /*
+     { int j;
+     for(j=0; j < k; j++)
+     fprintf(stderr,"%s\n", std_args[j]);
+     fprintf(stderr, "\n");
+     }
+     */
 
 
   if((pid = fork())){
@@ -635,23 +706,23 @@ tool_id *create_tool(term *creator, term_list *args)
     }
     if(pgid == -1)
       pgid = pid;	/* One processgroup for all slaves */
- 
-     /* 
-      * Set process group ID of child.
-      * Note. This may fail due to a call to setpgid in the slave
-      * process. The extra call here is still needed to prevent
-      * from a race condition. Because of the possible failure,
-      * we don't check the result value
-      */
-     setpgid( pid, pgid );
- 
+
+    /* 
+     * Set process group ID of child.
+     * Note. This may fail due to a call to setpgid in the slave
+     * process. The extra call here is still needed to prevent
+     * from a race condition. Because of the possible failure,
+     * we don't check the result value
+     */
+    setpgid( pid, pgid );
+
     /* lcc generated bad code for the next line (Probably because of
        the many recursive calls when the preprocessor expands it. I've
        tried many experiments, but haven't been able to reproduce it in
        a small example yet), so I replaced it with 'TBmake'. <PO> */
     /*inst = mk_tool_inst(creator, n_tool_inst, td_host(td), -1,-1,PHASE1);*/
     inst = TBmake("tool-inst(%t,%d,%d,%d,%s,%d,[])",
-		creator, n_tool_inst, -1, -1, td_host(td), PHASE1);
+		  creator, n_tool_inst, -1, -1, td_host(td), PHASE1);
     /*TBprintf(stderr, "Inst = %t\n", inst);*/
     Tools = mk_list(inst, Tools);
     n_tool_inst++;
@@ -679,11 +750,13 @@ tool_id *create_tool(term *creator, term_list *args)
   return NULL;
 }
 
-/* --- reading ---------------------------------*/
+/*}}}  */
 
 int nexttool = 0; /* for scheduling below */
 
 extern struct timeval *get_timeout(void);
+
+/*{{{  int read_from_any_channel(tool_inst **pti) */
 
 int read_from_any_channel(tool_inst **pti)
 {
@@ -710,18 +783,18 @@ retry:
     FD_SET(WellKnownLocalSocket,&read_template);
     FD_SET(WellKnownGlobalSocket,&read_template);
   }
-  
+
   if((error = select(FD_SETSIZE, &read_template, NULL, NULL, get_timeout())) >= 0){
     if(stand_alone){
       nelem = read_from_stdin();
       return nelem;
     } else if(FD_ISSET(WellKnownLocalSocket, &read_template)){
       if(accept_client(TBtrue) == TB_ERROR)
-	     err_warn("could not accept client");
+	err_warn("could not accept client");
       all_internal_steps();
     } else if(FD_ISSET(WellKnownGlobalSocket, &read_template)){
       if(accept_client(TBfalse) == TB_ERROR)
-             err_warn("could not accept client");
+	err_warn("could not accept client");
       all_internal_steps();
     } else if(error == 0){           /* timeout expired */
       if(TBverbose)
@@ -734,22 +807,22 @@ retry:
     for(til = Tools; til; til = next(til)){
       ti = first(til);
       if((ti_in(ti) >= 0) &&
-         FD_ISSET(ti_in(ti),&read_template)){
-        nelem = multi_read(ti_in(ti));
-        if(nelem == 0){
-          ti_in(ti) = -1;
-          err_warn("lost connection with %t\n", ti);
-          /* <PO> was: goto retry; */
+	 FD_ISSET(ti_in(ti),&read_template)){
+	nelem = multi_read(ti_in(ti));
+	if(nelem == 0){
+	  ti_in(ti) = -1;
+	  err_warn("lost connection with %t\n", ti);
+	  /* <PO> was: goto retry; */
 	  *pti = ti;
 	  return 0;
-        }
-        if(nelem < 0){
-          err_sys_warn("%t: read failed", ti);
-          goto retry;
+	}
+	if(nelem < 0){
+	  err_sys_warn("%t: read failed", ti);
+	  goto retry;
 	  return -1;
-        }
+	}
 	*pti = ti;
-        return nelem;
+	return nelem;
       }
     }
     goto retry;
@@ -759,6 +832,10 @@ retry:
     goto retry;
   }   
 }
+
+/*}}}  */
+
+/*{{{  term *read_term(tool_inst **pti) */
 
 term *read_term(tool_inst **pti)
 {
@@ -794,10 +871,14 @@ term *read_term(tool_inst **pti)
   }
 }
 
-/*-------------------------------------------------------------*/
+/*}}}  */
+
+/*{{{  void init_tools(void) */
 
 void init_tools(void)
 {
   TBprotect(&tool_defs);
   TBprotect(&Tools);
 }
+
+/*}}}  */

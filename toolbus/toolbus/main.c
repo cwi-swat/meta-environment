@@ -1,3 +1,5 @@
+/*{{{  header */
+
 /*
 
     ToolBus -- The ToolBus Application Architecture
@@ -19,6 +21,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+
+/*{{{  includes */
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
@@ -40,13 +47,24 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
+#include <time.h>
+
+/*}}}  */
+
+/*{{{  externs :( */
 
 extern tool_inst_list *Tools;
 extern TBbool local_ports;
 extern void remove_socketfile();
+void expand_all_calls();
+
+/*}}}  */
+
+/*{{{  void bus_shutdown(term *arg) */
 
 void bus_shutdown(term *arg)
-{ tool_inst_list *til;
+{
+  tool_inst_list *til;
   tool_inst *ti;
   int out;
   term *e = mk_appl1(a_rec_terminate, arg);
@@ -70,10 +88,16 @@ void bus_shutdown(term *arg)
   exit(0);
 }
 
+/*}}}  */
+/*{{{  void interrupt_handler(int sig) */
+
 void interrupt_handler(int sig)
 {
   bus_shutdown(mk_str("ToolBus interrupted"));
 }
+
+/*}}}  */
+/*{{{  void usage(char *prg, int is_err) */
 
 void usage(char *prg, int is_err)
 {
@@ -84,10 +108,16 @@ void usage(char *prg, int is_err)
  exit(is_err);
 }
 
+/*}}}  */
+/*{{{  void version(void) */
+
 void version(void)
 {
   printf("version: ToolBus-%s\n", VERSION);
 }
+
+/*}}}  */
+/*{{{  void help(void) */
 
 void help(void)
 {
@@ -117,7 +147,9 @@ Options for the preprocessor are:\n\
   fprintf(stderr, str);
 }
 
-/*--- main program -----------------------------*/
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 { 
@@ -241,3 +273,4 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+/*}}}  */

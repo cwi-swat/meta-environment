@@ -1,24 +1,31 @@
+/*{{{  header */
+
 /*
 
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
+   ToolBus -- The ToolBus Application Architecture
+   Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+   The  Netherlands.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+
+/*{{{  includes */
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
@@ -28,41 +35,47 @@
 #include "utils.h"
 #include "interpreter.h"
 
+/*}}}  */
+
 #define CALLSDB(x)
 
 extern proc_def_list *Definitions; /* defined in interpreter.c */
 
 static int n_expanded_calls = 0;
 
-
 term_list *replace_formals_list(term_list *tl, env *e);
+
+/*{{{  proc *replace_formals(proc *p, env *e) */
 
 proc *replace_formals(proc *p, env *e)
 {
   switch(tkind(p)){
-  case t_bool:
-  case t_int:
-  case t_real:
-  case t_str:
-  case t_bstr:
-  case t_placeholder:
-    return p;
-  case t_var:
-    {
-      term * t = value(p, e);
-      if(is_result_var(t) && !is_result_var(p)){
-	t = mk_var_idx(var_sym(t), var_type(t));
+    case t_bool:
+    case t_int:
+    case t_real:
+    case t_str:
+    case t_bstr:
+    case t_placeholder:
+      return p;
+    case t_var:
+      {
+	term * t = value(p, e);
+	if(is_result_var(t) && !is_result_var(p)){
+	  t = mk_var_idx(var_sym(t), var_type(t));
+	}
+	return t;
       }
-      return t;
-  }
-  case t_appl:
-    return mk_appl(fun_sym(p), replace_formals_list(fun_args(p), e));
-  case t_list:
-    return replace_formals_list(p, e);
-  default: err_fatal("expand_body: %t, %t", p, e);
-    return NULL; /* pedantic */
+    case t_appl:
+      return mk_appl(fun_sym(p), replace_formals_list(fun_args(p), e));
+    case t_list:
+      return replace_formals_list(p, e);
+    default: err_fatal("expand_body: %t, %t", p, e);
+	     return NULL; /* pedantic */
   }
 }
+
+/*}}}  */
+/*{{{  term_list *replace_formals_list(term_list *tl, env *e) */
 
 term_list *replace_formals_list(term_list *tl, env *e)
 {
@@ -80,43 +93,50 @@ term_list *replace_formals_list(term_list *tl, env *e)
   return next(&head);
 }
 
+/*}}}  */
+
 term_list *expand_calls_list(term_list *tl);
+
+/*{{{  proc *expand_calls(proc *P) */
 
 proc *expand_calls(proc *P)
 {
   switch(tkind(P)){
-  case t_bool:
-  case t_int:
-  case t_real:
-  case t_str:
-  case t_bstr:
-  case t_placeholder:
-  case t_var:
-    return P;
-  case t_appl:
-    if(is_call(P)){
-      env *e;
-      proc *P1;
-      proc_def *pd = definition(var_sym(first(fun_args(P))));
+    case t_bool:
+    case t_int:
+    case t_real:
+    case t_str:
+    case t_bstr:
+    case t_placeholder:
+    case t_var:
+      return P;
+    case t_appl:
+      if(is_call(P)){
+	env *e;
+	proc *P1;
+	proc_def *pd = definition(var_sym(first(fun_args(P))));
 
-      if(!pd)
-	err_fatal("expand_calls -- undefined process name %s", get_txt(var_sym(first(fun_args(P)))));
-      n_expanded_calls++;
-      CALLSDB(TBmsg("expanding %t\n", P);)
-      e = create_env(pd_formals(pd), get_txt(pd_name(pd)), next(fun_args(P)), NULL);
-      P1 = replace_formals(pd_body(pd), e);
-      CALLSDB(TBmsg("into %t\n", P1);)
-      return P1;
-    } else {
-      return mk_appl(fun_sym(P), expand_calls_list(fun_args(P)));
-    }
-  case t_list:
-    return expand_calls_list(P);
+	if(!pd)
+	  err_fatal("expand_calls -- undefined process name %s", get_txt(var_sym(first(fun_args(P)))));
+	n_expanded_calls++;
+	CALLSDB(TBmsg("expanding %t\n", P);)
+	  e = create_env(pd_formals(pd), get_txt(pd_name(pd)), next(fun_args(P)), NULL);
+	P1 = replace_formals(pd_body(pd), e);
+	CALLSDB(TBmsg("into %t\n", P1);)
+	  return P1;
+      } else {
+	return mk_appl(fun_sym(P), expand_calls_list(fun_args(P)));
+      }
+    case t_list:
+      return expand_calls_list(P);
 
-  default: err_fatal("expand_body: %t", P);
-    return NULL; /* pedantic */
+    default: err_fatal("expand_body: %t", P);
+	     return NULL; /* pedantic */
   }
 }
+
+/*}}}  */
+/*{{{  term_list *expand_calls_list(term_list *tl) */
 
 term_list *expand_calls_list(term_list *tl)
 {
@@ -134,20 +154,25 @@ term_list *expand_calls_list(term_list *tl)
   return next(&head);
 }
 
+/*}}}  */
+/*{{{  void expand_all_calls() */
+
 void expand_all_calls()
-{  proc_def_list *pdl;
-   proc_def *pd;
-   int nexp;
+{
+  proc_def_list *pdl;
+  proc_def *pd;
+  int nexp;
 
-   for(nexp = -1, n_expanded_calls = 0; nexp != n_expanded_calls; ){
-     nexp = n_expanded_calls;
+  for(nexp = -1, n_expanded_calls = 0; nexp != n_expanded_calls; ){
+    nexp = n_expanded_calls;
 
-     for(pdl = Definitions ; pdl; pdl = next(pdl)){
-       pd = first(pdl);
-       CALLSDB(TBmsg("Before[%d]: %t\n\n", n_expanded_calls, pd);)
-       pd_body(pd) = expand_calls(pd_body(pd));
-       CALLSDB(TBmsg("After[%d]: %t\n", n_expanded_calls, pd);)
-     }
-   }
+    for(pdl = Definitions ; pdl; pdl = next(pdl)){
+      pd = first(pdl);
+      CALLSDB(TBmsg("Before[%d]: %t\n\n", n_expanded_calls, pd);)
+	pd_body(pd) = expand_calls(pd_body(pd));
+      CALLSDB(TBmsg("After[%d]: %t\n", n_expanded_calls, pd);)
+    }
+  }
 }
 
+/*}}}  */
