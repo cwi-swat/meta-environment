@@ -1,4 +1,8 @@
-SUBDIRS=library utils
+# $Id$
+
+SUBDIRS = library utils
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
