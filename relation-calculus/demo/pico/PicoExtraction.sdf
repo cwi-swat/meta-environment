@@ -1,0 +1,52 @@
+module PicoExtraction
+
+imports Pico-syntax
+imports basic/Integers
+imports MyPosInfo[STATEMENT]
+imports MyPosInfo[PICO-ID]
+
+imports ListItems
+
+exports
+ imports RscriptCalculator
+ imports RscriptChecker
+
+ context-free syntax
+
+      extractRelations(PROGRAM)                	-> RSTORE
+      convertl(Bag[[Elem]])                   	-> List
+
+hiddens
+  context-free syntax
+
+      get-first({STATEMENT ";"}*)               -> Area
+      get-last({STATEMENT ";"}*)                -> Bag[[Elem]]
+
+      add-pred(Bag[[Elem]], RSTORE)             -> RSTORE
+      add-last({STATEMENT ";"}*, Area, RSTORE)  -> RSTORE
+
+      extract(PROGRAM, RSTORE)                  -> RSTORE {traversal(accu, bottom-up, continue)}
+      extract({ STATEMENT ";"}*, RSTORE)        -> RSTORE {traversal(accu, bottom-up, continue)}
+
+      extract-used-vars(STATEMENT, RSTORE, Area)-> RSTORE  {traversal(accu,top-down,break)}
+      extract-used-vars(EXP, RSTORE, Area)      -> RSTORE  {traversal(accu,top-down,break)}
+
+
+      convert(String # Area)                    -> ListItem
+      id2str(PICO-ID)		 	        -> String
+
+ hiddens
+%%  imports asf/syntax/Comments
+
+  variables
+      "$Rstore" [0-9\']*  	-> RSTORE
+      
+      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Bag" [0-9\']*     	-> Bag[[Elem]]
+      "$Area" [0-9\']*	 	-> Area
+      "$Elem" [0-9\']*   	-> Elem
+      "$Elem*" [0-9\']*  	-> {Elem ","}*
+
+      "$ListItem*" [0-9\']*	-> {ListItem ","}*
+      "$Chars" [0-9]*   	-> CHAR*
+      "$String" [0-9\']*	-> String

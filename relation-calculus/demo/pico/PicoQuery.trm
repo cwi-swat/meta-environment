@@ -1,0 +1,38 @@
+pico-query(
+
+
+begin declare x : natural, y : natural, 
+              z : natural, p : natural;
+  x := 3;
+  p := 4;
+  if q then 
+        z := y + x
+  else
+        x := 4
+  fi;
+  y := z
+end
+
+,
+
+ 	node ROOT
+        rel[node,node] PRED
+        rel[<node,str>,node] USE_OCCURS
+        rel[<node,str>,node] DEF_OCCURS
+        rel[node,str] USES
+        rel[node,str] DEFS
+
+        rel[str,node] occurrences(<node,str> S) = sec(S) x USE_OCCURS[S]
+
+        rel[str,node] UNDEF = 
+        { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
+        }
+
+,
+
+"UNDEF",
+
+
+[<ROOT, area("",0,0,0,0)>, <PRED, {<area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), area("/home/paulk/research/RPA/pico1.trm",5,2,5,8)>, <area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), area("/home/paulk/research/RPA/pico1.trm",6,2,10,4)>, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), area("/home/paulk/research/RPA/pico1.trm",11,2,11,8)>, <area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), area("/home/paulk/research/RPA/pico1.trm",11,2,11,8)>, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), area("/home/paulk/research/RPA/pico1.trm",7,8,7,18)>, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), area("/home/paulk/research/RPA/pico1.trm",9,8,9,14)>, <area("",0,0,0,0), area("/home/paulk/research/RPA/pico1.trm",4,2,4,8)>}>, <USES, {<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "z">, <area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), "q">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "x">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "y">}>, <USE_OCCURS, {<<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "z">, area("/home/paulk/research/RPA/pico1.trm",11,7,11,8)>, <<area("/home/paulk/research/RPA/pico1.trm",6,2,10,4), "q">, area("/home/paulk/research/RPA/pico1.trm",6,5,6,6)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "x">, area("/home/paulk/research/RPA/pico1.trm",7,17,7,18)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "y">, area("/home/paulk/research/RPA/pico1.trm",7,13,7,14)>}>, <DEFS, {<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "y">, <area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), "x">, <area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "z">, <area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), "p">, <area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), "x">}>, <DEF_OCCURS, {<<area("/home/paulk/research/RPA/pico1.trm",11,2,11,8), "y">, area("/home/paulk/research/RPA/pico1.trm",11,2,11,3)>, <<area("/home/paulk/research/RPA/pico1.trm",9,8,9,14), "x">, area("/home/paulk/research/RPA/pico1.trm",9,8,9,9)>, <<area("/home/paulk/research/RPA/pico1.trm",7,8,7,18), "z">, area("/home/paulk/research/RPA/pico1.trm",7,8,7,9)>, <<area("/home/paulk/research/RPA/pico1.trm",5,2,5,8), "p">, area("/home/paulk/research/RPA/pico1.trm",5,2,5,3)>, <<area("/home/paulk/research/RPA/pico1.trm",4,2,4,8), "x">, area("/home/paulk/research/RPA/pico1.trm",4,2,4,3)>}>]
+)
+

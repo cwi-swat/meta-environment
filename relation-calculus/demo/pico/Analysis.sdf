@@ -1,0 +1,52 @@
+module Analysis
+
+imports Pico-syntax
+imports basic/Integers
+
+exports
+  sorts LABEL Item STATEMENT # Integer PROGRAM # Integer
+
+  context-free syntax
+     PICO-ID | Integer   ->Item
+
+imports RelationCalculator[Item]
+
+exports
+  context-free syntax
+     "[" Integer "]"                                                          -> LABEL
+     "skip"                                                                   -> STATEMENT
+     LABEL STATEMENT                                                          -> STATEMENT
+ 
+  context-free syntax
+
+      label(PROGRAM)                             -> PROGRAM
+      label(PROGRAM, Integer)                    -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
+      label(STATEMENT, Integer)                   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
+      label({STATEMENT ";"}*, Integer)            -> {STATEMENT ";"}* # Integer {traversal(accu, trafo, bottom-up, continue)} 
+
+      get-first({STATEMENT ";"}*)                 -> Integer
+      get-last({STATEMENT ";"}*)                  -> Bag[[Item]]
+
+      add-succ(Rel[[Item]], RSTORE)               -> RSTORE
+      add-last({STATEMENT ";"}*, Integer, RSTORE) -> RSTORE
+
+      controlflow(PROGRAM, RSTORE)                -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow(STATEMENT, RSTORE)              -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow({ STATEMENT ";"}*, RSTORE)      -> RSTORE {traversal(accu, bottom-up, continue)}
+
+      use-defs(PROGRAM, RSTORE, Integer)           -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(STATEMENT, RSTORE, Integer)         -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(EXP, RSTORE, Integer)               -> RSTORE  {traversal(accu,top-down,break)}
+
+      analyze(PROGRAM)                            -> Rel[[Item]]
+      undefined-query(RSTORE)	                  -> RSTORE
+
+
+  imports asf/syntax/Comments
+
+  variables
+      "Int" [0-9\']*     -> Integer
+      "Rstore" [0-9\']*  -> RSTORE
+      "Prg"              -> PROGRAM
+      "Rel" [0-9\']*     -> Rel[[Item]]
+      "Bag" [0-9\']*     -> Bag[[Item]]
