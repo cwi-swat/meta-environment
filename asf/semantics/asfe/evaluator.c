@@ -289,8 +289,8 @@ ATerm equations_available(int cid, char *name)
 /*{{{  ATerm add_equations(int cid, char *name, ATermList equs) */
 
 /* The function ``add_equations'' takes care of adding a new list
-   of equations is added to the internal database. The arguments
-   of this function is a module name and a list of equations.
+   of equations that is added to the internal database. The arguments
+   of this function are a module name and a list of equations.
    Before this list of equations is added to the database some
    preprocessing is needed.
    1. Layout and list separators are removed, and the lexicals are
@@ -1053,6 +1053,9 @@ ATerm rewrite(ATerm trm, ATerm env)
   return rewtrm;
 }
 
+/*}}}  */
+/*{{{  void usage(char *prg) */
+
  /*     Usage: displays helpful usage information
  */
 
@@ -1073,11 +1076,16 @@ void usage(char *prg)
 		exit(1);
 }
 
+/*}}}  */
+/*{{{  void version(char *prg) */
+
 void version(char *prg)
 {
     ATwarning("%s v%s\n", prg, myversion);
 		exit(1);
 }
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
