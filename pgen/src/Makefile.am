@@ -58,7 +58,7 @@ CENTER	= "Meta-Environment Documentation"
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
 %.test: %.src Makefile
-	sed 's@__BINDIR__@$(top_srcdir)/src@g;\
+	sed 's@__BINDIR__@$(top_builddir)/src@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
 	chmod +x $@
