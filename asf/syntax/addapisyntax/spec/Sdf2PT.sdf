@@ -1,6 +1,6 @@
 module Sdf2PT
 
-imports Sdf2
+imports sdf2/syntax/Sdf2
 
 exports
 

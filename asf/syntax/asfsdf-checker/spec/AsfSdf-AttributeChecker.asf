@@ -88,7 +88,7 @@ equations
               Msgs + illegal-traversal-attribute($ModuleId, traversal(Aterm+))
 
   [ca-2'22] $Literal2 != traversal,
-            contains-accu(Aterm+) \/ contains-trafo(Aterm+) = true
+            contains-accu(Aterm+) | contains-trafo(Aterm+) = true
             ======================================================
             check-attributes($Literal1 ( $Symbol,* ) -> $Symbol 
                              {Attr*1, $Literal2(Aterm+), Attr*2},
@@ -96,7 +96,7 @@ equations
               Msgs + illegal-traversal-attribute($ModuleId, $Literal2(Aterm+))
 
   [ca-2'23] $Literal2 != traversal,
-            contains-accu(Aterm+) \/ contains-trafo(Aterm+) = true
+            contains-accu(Aterm+) | contains-trafo(Aterm+) = true
             ======================================================
             check-attributes($Symbol* -> $Symbol 
                              {Attr*1, $Literal2(Aterm+), Attr*2},

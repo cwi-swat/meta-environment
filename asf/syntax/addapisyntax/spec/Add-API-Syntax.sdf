@@ -1,6 +1,6 @@
 module Add-API-Syntax
 
-imports Integers Sdf2PT 
+imports basic/Integers Sdf2PT 
 
 exports
 
@@ -36,8 +36,8 @@ make-predicate  (Symbol*,Symbol,Literal,ATerm) -> Production*
 make-getters    (Symbol*,Symbol,Literal,ATerm) -> Production*
 make-setters    (Symbol*,Symbol,Literal,ATerm) -> Production*
 
-make-getters(Symbol*, Symbol, INT, ATerm) -> Production*
-make-setters(Symbol*, Symbol, INT, ATerm) -> Production*
+make-getters(Symbol*, Symbol, Integer, ATerm) -> Production*
+make-setters(Symbol*, Symbol, Integer, ATerm) -> Production*
 
 context-free syntax
 
@@ -66,3 +66,7 @@ variables
 "Attribute*"[0-9]*   -> {Attribute ","}*
 "Symbol,*"[0-9]* -> {Symbol ","}*
 "Symbol*"[0-9]*  -> Symbol*
+
+hiddens
+  variables
+    "Int" [0-9\']*      -> Integer

@@ -1,6 +1,6 @@
 module Add-Eqs-Conds 
 
-imports Sdf2 Booleans
+imports sdf2/syntax/Sdf2 basic/Booleans
 
 exports
   sorts SymbolsSet
@@ -15,7 +15,7 @@ hiddens
   context-free syntax
     "(" SymbolsSet "," Productions ")" -> SymbolsSetProds
   context-free syntax
-    includes(Symbol, SymbolsSet) -> Bool
+    includes(Symbol, SymbolsSet) -> Boolean
     add(Symbol, SymbolsSet)      -> SymbolsSet
   context-free syntax
     "eqs-and-conds-for-mod" "(" Module "," SymbolsSet ")"              -> SymbolsSetProds

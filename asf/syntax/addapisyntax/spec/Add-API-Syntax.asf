@@ -84,7 +84,7 @@ equations
 
 [mgs] make-getters(,Rhs,Int,Term) =
 
-[mgs-1] Int = nat-con(c*), Intcon = natcon(c*)
+[mgs-1] Int = natcon(c*), Intcon = natcon(c*)
         ===>
         make-getters(Literal : Symbol Symbol*,Rhs,Int,Term) =
           quote(Literal)(Rhs) -> Symbol {asf-getter(Term,Intcon)}
@@ -97,7 +97,7 @@ equations
 
 [mss] make-setters(,Rhs,Int,Term) =
 
-[mss-1] Int = nat-con(c*), Intcon = natcon(c*),
+[mss-1] Int = natcon(c*), Intcon = natcon(c*),
         unquote(Literal) = uqliteral(c*2)
         ===>
         make-setters(Literal : Symbol Symbol*,Rhs,Int,Term) =

@@ -1,6 +1,6 @@
 module SymbolChecker
 
-imports Booleans AsfSdf-Messages ModuleOperations
+imports basic/Booleans AsfSdf-Messages ModuleOperations
 
 exports
   context-free syntax
@@ -21,9 +21,9 @@ hiddens
 
 hiddens
   context-free syntax
-    is-literal-symbol(Symbol)   -> Bool
-    is-list-symbol(Symbol)      -> Bool
-    is-charclass-symbol(Symbol) -> Bool
+    is-literal-symbol(Symbol)   -> Boolean
+    is-list-symbol(Symbol)      -> Boolean
+    is-charclass-symbol(Symbol) -> Boolean
 
 hiddens
   variables

@@ -1,6 +1,6 @@
 module Add-TagId-Rejects
 
-imports Sdf2 Booleans
+imports sdf2/syntax/Sdf2 basic/Booleans
 
 exports
   context-free syntax
@@ -19,7 +19,7 @@ hiddens
 
 hiddens
   context-free syntax
-    "are-tagid-chars" "(" Literal ")" -> Bool
+    "are-tagid-chars" "(" Literal ")" -> Boolean
 
 hiddens
   variables
