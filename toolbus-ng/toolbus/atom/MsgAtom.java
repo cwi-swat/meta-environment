@@ -3,17 +3,14 @@
  */
 
 package toolbus.atom;
-import java.util.*;
-
-import aterm.ATerm;
+import java.util.Vector;
 
 import toolbus.*;
 import toolbus.process.*;
-import toolbus.process.ProcessInstance;
+
+import aterm.ATerm;
 
 abstract class MsgAtom extends Atom {
-
-  protected static Random rand = new Random();
 
   private State partners = new State(); // communication partners in other processes
   private Ref msg;
@@ -60,7 +57,7 @@ abstract class MsgAtom extends Atom {
 
     if (psize > 0) {
       ProcessInstance pa = getProcess();
-      for (int pindex = rand.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1) % psize, pleft--) {
+      for (int pindex = ToolBus.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1) % psize, pleft--) {
         MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
         ProcessInstance pb = b.getProcess();
         if (pb.contains(b) && b.isEnabled()) {
@@ -71,7 +68,7 @@ abstract class MsgAtom extends Atom {
             r.getLeft().update(pa.getEnv());
             r.getRight().update(pb.getEnv());
 
-            // this.nextState() is done by AtomSet.execute
+            this.nextState();
             b.nextState();
             return true;
           }

@@ -17,7 +17,8 @@ public class Main {
     
     //atomTest();
     //TauTest();
-    //SndRecTest();
+    //SndRecTest1();
+    //SndRecTest2();
     //PETest();
     //LetTest();
     //CallTest();
@@ -26,8 +27,8 @@ public class Main {
     //CreateTest();
     //NestedIterTest();
      //DisruptTest();
-    MergeTest();
-    //SieveTest();
+    //MergeTest();
+    SieveTest();
     //producerTest();
     //ToolTest();
   }
@@ -57,9 +58,44 @@ public class Main {
      
   }
   
-  static void SndRecTest(){
+  static void SndRecTest1(){
     ProcessDefinition P1 = new ProcessDefinition("P1", new SndMsg(aterms.make("z")));
     ProcessDefinition P2 = new ProcessDefinition("P2", new RecMsg(aterms.make("z")));
+    try {    
+      ToolBus T = new ToolBus();
+      T.addProcessDefinition(P1);
+      T.addProcessDefinition(P2);
+    
+      T.addProcess("P1");
+      T.addProcess("P2");
+
+      T.execute();
+    }
+    catch (ToolBusException e) {
+      System.out.println(e.getMessage());
+    }
+    
+  }
+  
+   static void SndRecTest2(){
+    ProcessDefinition P1 = new ProcessDefinition("P1", 
+     new LetDefinition((ATermList) aterms.make("[var(-1,int,x)]"),
+      new Sequence(
+        new RecMsg(aterms.make("rvar(-1,int,x)")),
+        new Print((ATermList) aterms.make("[var(-1,int,x)]"))
+        )
+       )
+      );
+        
+    ProcessDefinition P2 = new ProcessDefinition("P2", 
+     new LetDefinition((ATermList) aterms.make("[var(-1,int,x)]"),
+      new Sequence(
+        new Assign(aterms.make("var(-1,int,x)"), aterms.make("27")),
+        new SndMsg(aterms.make("var(-1,int,x)"))
+        )
+       )
+      );
+    
     try {    
       ToolBus T = new ToolBus();
       T.addProcessDefinition(P1);
