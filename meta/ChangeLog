@@ -20,6 +20,13 @@ Tue Mar 16 16:00:20 CET 2004 <{jong,kooiker}@cwi.nl>
      in error-support library.
    - revamped PrepareParseErrorForEditor in various smaller pieces
 
+Tue Mar 16  CET 2004 <iversen@cwi.nl>
+
+ * Added and modified several hooks to facilitate implementation of 
+   Action Environment. The hooks are pre-get-all-syntax-hook, 
+   add-initial-syntax-modules-hook, clear-module-db-hook, 
+   other-top-sort-hook.
+	
 Thu Mar 11 10:46:32 CET 2004 <{jong,kooiker}@cwi.nl>
  * tbscripts/editors.tb: changed "Internal error" message
  * tbscripts/feedback.tb: remove handling of no-location-filename
