@@ -1,4 +1,9 @@
 
+2002/10/07 (vinju@loria.fr)
+ * Changed the name of the field that gets the tree out of the start pattern.
+   The name is now 'top-<type>' to disambiguate in case of multiple start
+   sorts
+   
 2002/10/03 (vinju@loria.fr)
  * Added generation of patterns based on start symbols. For every start
    symbol the pattern parsetree(appl(prod( ... ),..) etc. is generated in
