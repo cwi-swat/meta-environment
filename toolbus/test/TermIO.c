@@ -23,7 +23,7 @@ void write_read(char *name, term *t1)
   
   if(!t2)
     err_fatal("Parse errors during reading\n");
-  else if(!equal_term(t1,t2))
+  else if(!term_equal(t1,t2))
     err_fatal("Terms are unequal\n");
 }
 

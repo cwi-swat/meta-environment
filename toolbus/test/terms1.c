@@ -47,11 +47,11 @@ main()
   if(elem(mk_str("abc"), t3)) KO(6);  
 
   TST(80);
-  if(!equal_term(mk_bool(TBtrue), mk_bool(TBtrue))) KO(1);
-  if(!equal_term(mk_int(3), mk_int(3))) KO(2);
-  if(!equal_term(mk_str("abc"), mk_str("abc"))) KO(3);
-  if(!equal_term(t1, t1)) KO(4);
-  if(!equal_term(mk_appl(lookup("f"), t1), mk_appl(lookup("f"), mk_list(n25, mk_list(sabc, NULL))))) KO(5);
+  if(!term_equal(mk_bool(TBtrue), mk_bool(TBtrue))) KO(1);
+  if(!term_equal(mk_int(3), mk_int(3))) KO(2);
+  if(!term_equal(mk_str("abc"), mk_str("abc"))) KO(3);
+  if(!term_equal(t1, t1)) KO(4);
+  if(!term_equal(mk_appl(lookup("f"), t1), mk_appl(lookup("f"), mk_list(n25, mk_list(sabc, NULL))))) KO(5);
 
   
   TST(80);

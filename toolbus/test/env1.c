@@ -32,19 +32,19 @@ main()
   TST(10);
 
   e1 = assign(vx, t1, NULL);
-  if(!equal_term(value(vx,e1), t1)) KO(11);
+  if(!term_equal(value(vx,e1), t1)) KO(11);
 
   e1 = assign(vx, t2, e1);
-  if(!equal_term(value(vx,e1), t2)) KO(12); 
+  if(!term_equal(value(vx,e1), t2)) KO(12); 
 
   e1 = assign(vy, t1, e1);
-  if(!equal_term(value(vy,e1), t1)) KO(13);
+  if(!term_equal(value(vy,e1), t1)) KO(13);
 
   e1 = assign(vx, t1, assign(vy, t2, NULL));
   e2 =assign(vx, t2, NULL);
   e1 = update(e2, e1, 0);
   
-  if(!equal_term(value(vx,e1), t2)) KO(14); 
+  if(!term_equal(value(vx,e1), t2)) KO(14); 
 
   fprintf(stderr, "\nDone\n");     
 

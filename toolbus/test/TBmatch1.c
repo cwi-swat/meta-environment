@@ -119,7 +119,6 @@ void main(int argc, char *argv[])
 
   TST_S(53, "\"abc\"", "%s", "abc");
   TST_S(54, "f(\"abc\")", "f(%s)", "abc");
-
   TST_S(55, "fun(a,b)", "%f(a,b)", "fun");
   TST_S(56, "fun(a,b)", "%f (a,b)", "fun");
   TST_S(57, "fun", "%f", "fun");
@@ -129,7 +128,6 @@ void main(int argc, char *argv[])
   TST_T(61, "f(a,b,c)", "f(%t,b,c)", "a");
   TST_T(62, "f(a,b,c)", "f(a,%t,c)", "b");
   TST_T(63, "f(a,b,c)", "f(a,b,%t)", "c");
-
 
   TST_OK(70, "[]");
   TST_OK(71, " []");

@@ -30,7 +30,7 @@ main()
   if(!TBmatch(t2, "%b", &str2, &len2)) KO(4);
   if(len2 != strlen(str1)) KO(5);
 
-  if(!equal_term(t1, t2)) KO(6);
+  if(!term_equal(t1, t2)) KO(6);
  	
   fprintf(stderr, "\nDone\n");
   
