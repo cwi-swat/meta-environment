@@ -45,7 +45,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     private UserInterfaceBridge bridge;
     
     private JTabbedPane tabs;
-    private Thread tideControlThread;
     private JTabbedPane messageTabs;
 
     public static final void main(String[] args) throws IOException {

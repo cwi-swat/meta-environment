@@ -12,7 +12,6 @@ in
      rec-msg(ui-render-graph(GraphId?, Graph?))
      . snd-eval(T, size-graph(Graph)) 
      . rec-value(T, sized-graph(Graph?))
-     . printf("received sized graph from tool\n")
      . snd-msg(ui-rendered-graph(GraphId, Graph))
   ) *
   rec-disconnect(T)

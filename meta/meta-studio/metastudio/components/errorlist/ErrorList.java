@@ -69,10 +69,6 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 		}
 	}
 
-	private Factory getErrorFactory() {
-		return factory;
-	}
-
 	public void clearHistory() {
 		removeFeedbackList(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN);
 	}
@@ -109,10 +105,6 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 		// to know what type of parent it has!
 		JTabbedPane parent = (JTabbedPane) getParent();
 		parent.setSelectedComponent(this);
-	}
-
-	private void addAnonymousErrorItem(Error error) {
-		data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, error);
 	}
 
 	public void showFeedbackSummary(ATerm t0) {
