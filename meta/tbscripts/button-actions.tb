@@ -632,16 +632,16 @@ in
     )
   +
     rec-msg(edit-syntax, Stack?, EditorId?)
-      . StackPopString(Stack, Stack?, Modulename?)
-      . LocateFile(Modulename, sdf, Path?)
-      /*. snd-msg(ts-put-str-value("path-modulename", Path, Modulename))*/
-      . create(EditSyntax(Path), Pid?)
-      . rec-msg(syntax-editor-started(Path, Sid?))
-      . ReturnSuccess(EditorId, Stack)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . LocateFile(Modulename, sdf, Path?)
+    /*. snd-msg(ts-put-str-value("path-modulename", Path, Modulename))*/
+    . create(EditSyntax(Path), Pid?)
+    . rec-msg(syntax-editor-started(Path, Sid?))
+    . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(edit-equations, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
-    . LocateFile(Modulename, sdf, SdfPath?)
+    . LocateFile(Modulename, sdf, Path?)
     .
     if equal(Path, "") then
       ReturnAbort(EditorId, Stack)
