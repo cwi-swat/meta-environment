@@ -46,7 +46,7 @@ for b in ${BUILTIN_NAMES}; do
   formals=`getFormals ${arity} PT_Tree`
   echo "PT_Tree ASFE_${name}(PT_Symbol type, ${formals});" | sed 's@-@_@g'
   formals=`getFormals ${arity} ATerm`
-  echo "PT_Tree ASC_${name}(${formals});" | sed 's@-@_@g'
+  echo "PT_Tree ASC_${name}(ATerm type, ${formals});" | sed 's@-@_@g'
   echo
 done
 

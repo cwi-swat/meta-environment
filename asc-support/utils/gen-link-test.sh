@@ -61,7 +61,7 @@ arity=`getArity ${b}`
 forms=`getFormals ${arity} PT_Tree`
 echo "PT_Tree  ASFE_${name}(PT_Symbol type, ${forms});" | sed 's@-@_@g'
 forms=`getFormals ${arity} ATerm`
-echo "PT_Tree  ASC_${name}(${forms});" | sed 's@-@_@g'
+echo "PT_Tree  ASC_${name}(ATerm type, ${forms});" | sed 's@-@_@g'
 echo
 done
 
@@ -79,7 +79,7 @@ name=`getName ${b}`
 arity=`getArity ${b}`
 acts=`getActuals ${arity} ATerm`
 echo "    ASFE_${name}(NULL, ${acts});" | sed 's@-@_@g'
-echo "    ASC_${name}(${acts});" | sed 's@-@_@g'
+echo "    ASC_${name}(NULL, ${acts});" | sed 's@-@_@g'
 echo
 done
 
