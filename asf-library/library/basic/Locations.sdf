@@ -10,6 +10,7 @@ sorts Location Area
 context-free syntax
 
 "location" "(" filename:StrCon "," Area ")" -> Location {cons("location")}
+"no-location"                               -> Location {cons("no-location")}
 
 "area" "(" start-line:NatCon    "," 
            start-column:NatCon  ","
