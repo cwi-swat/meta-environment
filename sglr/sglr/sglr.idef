@@ -6,46 +6,31 @@ tool sglr is {
 
 process SGLR is
 let
-  SGLR        : sglr,
-  ModuleId    : term,
-  Nonterminal : str,
-  Text        : str,
-  ErrorId     : str,
-  ToolId      : str,
-  Path        : str,
-  Id          : term,
-  Table       : term,
-  Tree        : term,
-  Error       : list,
-  NrOfAmbs    : int,
-  FeedBack    : term
+  SGLR: sglr,
+  TopSort: str,
+  Input: str,
+  ParseTable: term,
+  ParseForest: term,
+  ParseTree: term,
+  Error: term
 in
   (
-    rec-msg(Id?, parse-string-given-table(ModuleId?, Table?, Nonterminal?, Text?, Path?)) .
-    execute(sglr, SGLR?) .
-    snd-eval(SGLR, open-language(ModuleId, Table)) .
+    rec-msg(sglr-parse(Input?, ParseTable?, TopSort?))
+    . execute(sglr, SGLR?)
+    . snd-eval(SGLR, parse(Input, ParseTable, TopSort))
+    .
     (
-      rec-value(SGLR, language-opened(ModuleId)) .
-      snd-eval(SGLR, parse-string(ModuleId, Nonterminal, Text, Path)) .
-      (
-        rec-value(SGLR, parsetree(Tree?, NrOfAmbs?)) .
-        snd-msg(parse-result-asfix2me(Id, parsetree(Tree, NrOfAmbs), no-errors))
-      +
-        rec-value(SGLR, summary(ToolId?, ErrorId?, Error?)) .
-        snd-msg(parse-result-asfix2me(Id, 
-                                      error-tree, 
-                                      summary(ToolId, ErrorId, Error)))
-      +
-        rec-value(SGLR, ambiguous-tree(Tree?, FeedBack?)) .
-        snd-msg(parse-result-asfix2me(Id, Tree, FeedBack))
-      )
+      rec-value(SGLR, parse-tree(ParseTree?))
+      . snd-msg(sglr-parse-tree(ParseTree))
     +
-      rec-value(SGLR, language-not-opened(ModuleId)) .
-      snd-msg(parse-result-asfix2me(Id, error-tree, no-parse-table))
-    ) .
-    snd-terminate(SGLR, "done")
-  )
-  * delta
+      rec-value(SGLR, parse-forest(ParseForest?, Error?))
+      . snd-msg(sglr-parse-forest(ParseForest, Error))
+    +
+      rec-value(SGLR, parse-error(Error?))
+      . snd-msg(sglr-parse-error(Error))
+    )
+    . snd-terminate(SGLR, "done")
+  ) * delta
 endlet
 
 toolbus(SGLR)

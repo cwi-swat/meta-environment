@@ -5,11 +5,10 @@
 
 #include "sglr.tif.h"
 
-#define NR_SIG_ENTRIES	3
+#define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<sglr>,open-language(<term>,<term>))",
-  "rec-eval(<sglr>,parse-string(<term>,<str>,<str>,<str>))",
+  "rec-eval(<sglr>,parse(<str>,<term>,<str>))",
   "rec-terminate(<sglr>,<term>)",
 };
 
@@ -18,14 +17,11 @@ ATerm sglr_handler(int conn, ATerm term)
 {
   ATerm in, out;
   /* We need some temporary variables during matching */
-  char *s0, *s1, *s2;
-  ATerm t0, t1;
+  char *s0, *s1;
+  ATerm t0;
 
-  if(ATmatch(term, "rec-eval(open-language(<term>,<term>))", &t0, &t1)) {
-    return open_language(conn, t0, t1);
-  }
-  if(ATmatch(term, "rec-eval(parse-string(<term>,<str>,<str>,<str>))", &t0, &s0, &s1, &s2)) {
-    return parse_string(conn, t0, s0, s1, s2);
+  if(ATmatch(term, "rec-eval(parse(<str>,<term>,<str>))", &s0, &t0, &s1)) {
+    return parse(conn, s0, t0, s1);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);

@@ -17,7 +17,6 @@ void SG_Dump_ATtable(ATermTable t, char *s);
 #include <aterm2.h>
 #include <MEPT.h>
 
-
 /*  Data structures: states, actions, character ranges and parse tables  */
 
 typedef int            state;
@@ -34,9 +33,7 @@ typedef ATermAppl forest;
 
 typedef ATerm language;
 
-/*
- Needed all the time...
- */
+typedef struct _apigen_prepared *SGLR_ParseTable;
 
 #define SG_MAX(a,b)     (a>b?a:b)
 /*
@@ -62,10 +59,6 @@ typedef ATerm language;
 #define SG_CHAR_CLASS_EOF (SG_CHAR_CLASS_TOP+1) /*  .. extended with EOF  */
 #define SG_PROD_START     (SG_CHAR_CLASS_EOF+1) /*  Start of prods  */
 
-/*
- Function prototypes
- */
-
 void  SGinitParser(ATbool toolbus_mode);
 void  SG_InitPTGlobals();
 void  SGshowMode(void);
@@ -73,9 +66,9 @@ void  SGshowMode(void);
 ATerm SGopenLanguage(const char *prgname, language L, const char *FN);
 ATerm SGopenLanguageFromTerm(const char *prgname, language L, ATerm tbl);
 
-ATerm SGparseString(language L, const char *G, const char *S, const char *path);
-ATerm SGparseStringAsAsFix2(language L, const char *G, const char *S, const char *path);
-ATerm SGparseStringAsAsFix2ME(language L, const char *G, const char *S, const char *path);
+ATerm SGparseString(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path);
+ATerm SGparseStringAsAsFix2(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path);
+ATerm SGparseStringAsAsFix2ME(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path);
 
 ATerm SGparseFile(const char *prgname, language L, const char *G, const char *FN);
 ATerm SGtermToFile(const char *prgname, ATerm t, const char *FN);

@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr  5 10:45:46 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * change error-handling in sglr and update erroneous tests accordingly
+
 Tue Mar 23 09:24:25 CET 2004 <{jong,kooiker}@cwi.nl>
  * libsglr/parser.c, restorebrackets/src/restorebrackets-main.c:
    Updated wrt to new MEPT API

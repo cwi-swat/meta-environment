@@ -2,9 +2,10 @@
 
 /*{{{  includes */
 
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <assert.h>
 
 #include <MEPT-utils.h>
 #include <Error-utils.h>
@@ -53,30 +54,40 @@ char   *parse_table_name  = NULL;
 
 /*}}}  */
 
-/*{{{  ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *path) */
+/*{{{  ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort) */
 
-ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *path)
+ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort)
 {
+  parse_table *pt;
   ATerm tree = NULL;
-  ATerm amb = NULL;
+  int ambiguityCount;
   ATerm result;
 
-  result = SGparseStringAsAsFix2ME(L, G, S, path);
+  pt = SG_BuildParseTable((ATermAppl) ATBunpack(parseTable));
+  assert(pt != NULL);
 
-  if (ATmatch(result, "parsetree(<term>,<term>)", &tree, &amb)) {
-    return ATmake("snd-value(parsetree(<term>,<term>))", ATBpack(tree), amb);
+  result = SGparseStringAsAsFix2ME(input, (SGLR_ParseTable)pt, topSort, NULL);
+
+  if (ERR_isValidError(ERR_ErrorFromTerm(result))) {
+    ATwarning("sglr-main.c:parse-error: %t\n", result);
+    result = ATmake("parse-error(<term>)", result);
+  }
+  else if (ATgetAFun((ATermAppl)result) == SG_AmbiguousTree_AFun) {
+    ATerm error = ATgetArgument((ATermAppl)result, 1);
+    tree = ATgetArgument((ATermAppl)result, 0);
+    ATwarning("sglr-main.c:ambiguities: %t\n", error);
+    result = ATmake("parse-forest(<term>,<term>)", ATBpack(tree), error);
+  }
+  else if (ATmatch(result, "parsetree(<term>,<int>)", &tree, &ambiguityCount)) {
+    result = ATmake("parse-tree(parsetree(<term>,<int>))",
+		      ATBpack(tree), ambiguityCount);
+  }
+  else {
+    ATwriteToNamedBinaryFile(result, "parse.out");
+    ATabort("sglr-main.c:unhandled parse result (see parse.out)\n");
   }
 
-  return result;
-}
-
-/*}}}  */
-
-/*{{{  ATerm open_language(int conn, ATerm L, ATerm tbl) */
-
-ATerm open_language(int conn, ATerm L, ATerm tbl)
-{
-  return SGopenLanguageFromTerm(program_name, L, ATBunpack(tbl));
+  return ATmake("snd-value(<term>)", result);
 }
 
 /*}}}  */
@@ -89,10 +100,6 @@ void term_to_file(ATerm t, char *FN)
 }
 
 /*}}}  */
-
-/*
- The function |SG_Usage| writes a short summary of the usage of the program.
- */
 
 #define DEFAULTMODE(b) (b ? "on" : "off")
 
@@ -346,9 +353,11 @@ int SG_Batch (int argc, char **argv)
     return 2;
   }
 
-  if (SGisParseError(parse_tree)) {
-    ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
-    ERR_displaySummary(summary);
+  if (ERR_isValidError(ERR_ErrorFromTerm(parse_tree))) {
+    /*SGisParseError(parse_tree)) {*/
+    ERR_Error error = ERR_ErrorFromTerm(parse_tree);
+    ATwarning("todo: display error: %t\n", error);
+    /*ERR_displaySummary(summary);*/
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {

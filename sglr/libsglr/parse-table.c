@@ -91,7 +91,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Appl_AFun,        ATmakeAFun(SG_APPL_AFUN,        2, ATfalse));
   SG_AFUN_INIT(SG_ParseTree_AFun,   ATmakeAFun(SG_PARSETREE_AFUN,   2, ATfalse));
   SG_AFUN_INIT(SG_Term_AFun,        ATmakeAFun(SG_TERM_AFUN,        9, ATfalse));
-  SG_AFUN_INIT(SG_ParseError_AFun,  ATmakeAFun(SG_PARSEERROR_AFUN,  3, ATfalse));
+  SG_AFUN_INIT(SG_ParseError_AFun,  ATmakeAFun(SG_PARSEERROR_AFUN,  2, ATfalse));
 
   SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
   SG_AFUN_INIT(SG_Too_Many_Ambiguities_Error_AFun, ATmakeAFun(SG_TOO_MANY_AMBS_AFUN,       0, ATfalse));
@@ -1134,8 +1134,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 
   ptfun = ATgetAFun(t);
 
-  if(ptfun != SG_PT5_AFun) {
-    ATwarning("parse table format error\n");
+  if (ptfun != SG_PT5_AFun) {
+    ATwarning("parse table format error (%y != %y)\n", ptfun, SG_PT5_AFun);
     t = NULL;
     return NULL;
   }

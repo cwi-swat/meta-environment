@@ -502,13 +502,12 @@ void  SG_ParserCleanup(void)
  message depending on the status.
  */
 
-forest SG_Parse(const char *path, parse_table *ptable, const char *sort, int(*get_next_token)(void),
-		size_t length)
+forest SG_Parse(const char *path, parse_table *parseTable, const char *topSort, int(*get_next_token)(void), size_t length)
 {
   forest result;
 
   sg_total_tokens = length;
-  table = ptable;
+  table = parseTable;
 
   SG_CreateInputAmbiMap(length);
 
@@ -541,7 +540,7 @@ forest SG_Parse(const char *path, parse_table *ptable, const char *sort, int(*ge
   /*  Core parsing done!  */
   SG_PostParse();
 
-  result = SG_ParseResult(path, sort);
+  result = SG_ParseResult(path, topSort);
 
   SG_PostParseResult();
 
@@ -985,8 +984,19 @@ char *SGsort(int Mode, forest t)
 
 static ERR_Location SG_CurrentPosInfo(const char *fileName)
 {
-  ERR_Area area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
-  return ERR_makeLocationAreaInFile(fileName, area);
+  ERR_Location location;
+  ERR_Area area;
+  
+  area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
+
+  if (fileName == NULL) {
+    location = ERR_makeLocationArea(area);
+  }
+  else {
+    location = ERR_makeLocationAreaInFile(fileName, area);
+  }
+
+  return location;
 }
 
 static int SG_CountAmbiguities(ERR_Error error)
@@ -1003,8 +1013,6 @@ static forest SG_ParseError(const char *path, ATermList cycle, int excess_ambs, 
   ERR_Subject subject;
   ERR_Error error;
   ERR_Location posinfo;
-  ERR_ErrorList errorList;
-  ERR_Summary summary;
   static char contentDescription[1024];
   static char errorDescription[1024];
   int descCnt;
@@ -1056,29 +1064,24 @@ static forest SG_ParseError(const char *path, ATermList cycle, int excess_ambs, 
 			       ERR_makeSubjectListSingle(subject));
   }
 
-  errorList = ERR_makeErrorListSingle(error);
-  summary = ERR_makeSummarySummary("sglr", path, errorList);
-
-  return (forest)ERR_SummaryToTerm(summary);
+  return (forest)error;
 }
 
 static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak)
 {
   ERR_Error ambiguities = ERR_ErrorFromTerm(ambtrak);
   int nrOfAmbs = SG_CountAmbiguities(ambiguities);
-  ERR_Summary ambiguityError;
   ATerm result;
 
   SG_ERROR_ON();
 
-  t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t, 
+  t = (tree) ATmakeAppl2(SG_ParseTree_AFun,
+			 (ATerm) t, 
                          (ATerm) SG_GetATint(nrOfAmbs, 0));
 
-  ambiguityError = ERR_makeSummarySummary("sglr", path, 
-                     ERR_makeErrorListSingle(ambiguities));
- 
-  result = (ATerm)ATmakeAppl2(SG_AmbiguousTree_AFun, 
-                              (ATerm)t, ERR_SummaryToTerm(ambiguityError));
+  result = (ATerm) ATmakeAppl2(SG_AmbiguousTree_AFun, 
+			       (ATerm) t,
+			       ERR_ErrorToTerm(ambiguities));
 
   return (forest)result;
 }

@@ -19,7 +19,7 @@
 #include "rsrc-usage.h"
 
 
-ATerm  SG_TermToToolbus(ATerm t);
+ATerm SG_TermToToolbus(ATerm t);
 size_t SG_FileSize(const char *prg, const char *FN);
 void   SG_PrintToken(FILE *out, token c);
 void   SG_Validate(const char *caller);
@@ -102,11 +102,31 @@ ATerm SGopenLanguageFromTerm(const char *prgname, language L, ATerm tbl)
       SG_SaveParseTable(L, pt);
   }
 
+#if 0
+  if (SG_TOOLBUS) {
+    if (pt == NULL) {
+      return ATmake("language-not-opened(<term>)", L);
+    }
+    else {
+      return ATmake("language-opened(<term>)", L);
+    }
+  }
+  else {
+    if (pt == NULL) {
+      return NULL;
+    }
+    else {
+      return (ATerm)ATempty;
+    }
+  }
+#endif
+#if 1
   return SG_TOOLBUS
     ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
                                  :  "language-not-opened(<term>)",
                                L))
     : (ATerm) (pt ? ATempty : NULL);
+#endif
 }
 
 
@@ -143,47 +163,41 @@ ATerm SGopenLanguage(const char *prgname, language L, const char *FN)
  This is done by duplicating it.
  */
 
-ATerm SGparseString(language L, const char *G, const char *S, const char *path)
+ATerm SGparseString(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path)
 {
   ATerm t;
-  parse_table *pt;
 
-  /* make really really sure that something is initialized */
   SG_InitPTGlobals();
 
-  if(!(pt = SG_LookupParseTable(L))) {
-    return NULL;
-  }
   SG_Validate("SGparseString");
-  SG_theText   = strdup(S);
+  SG_theText = strdup(input);
   SG_textIndex = 0;
-  SG_textEnd   = strlen(SG_theText);
-  t = (ATerm) SG_Parse(path, pt, G?(*G?G:NULL):NULL, SG_GetChar, SG_textEnd);
+  SG_textEnd = strlen(SG_theText);
+
+  if (topSort != NULL && *topSort == '\0') {
+    topSort = NULL;
+  }
+
+  t = (ATerm) SG_Parse(path, (parse_table *)parseTable, topSort, SG_GetChar, SG_textEnd);
+
   free(SG_theText);
+
   return t;
 }
 
 
-ATerm SGparseStringAsAsFix2(language L, const char *G, const char *S, const char *path)
+ATerm SGparseStringAsAsFix2(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path)
 {
-  ATerm t;
-  
   SG_ASFIX2ME_OFF();
 
-  t = SGparseString(L, G, S, path);
-
-  return SG_TermToToolbus(t);
+  return SGparseString(input, parseTable, topSort, path);
 }
 
-ATerm SGparseStringAsAsFix2ME(language L, const char *G, const char *S, const char *path)
+ATerm SGparseStringAsAsFix2ME(const char *input, SGLR_ParseTable parseTable, const char *topSort, const char *path)
 {
-  ATerm t;
-
   SG_ASFIX2ME_ON();
 
-  t = SGparseString(L, G, S, path);
-
-  return SG_TermToToolbus(t);
+  return SGparseString(input, parseTable, topSort, path);
 }
 
 /*
@@ -300,19 +314,6 @@ ATbool SGisParseTree(ATerm t)
 
 ATbool SGisParseError(ATerm t)
 {
-/*
-  ERR_Summary summary = ERR_SummaryFromTerm(t);
-  if (ERR_isSummaryFeedback(summary)) {
-    ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
-    if (!ERR_isFeedbackListEmpty(feedbacks)) {
-      ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
-      if (ERR_isFeedbackError(feedback)) {
-        return ATtrue;
-      }
-    }
-  }
-  return ATfalse;
-*/
   return ATgetAFun(t) == SG_ParseError_AFun;
 }
 
@@ -336,10 +337,7 @@ void SG_UnGetChar(void)
   SG_textIndex--;
 }
 
-/*
- The ToolBus interface...
- */
-
+#if 1
 ATerm SG_TermToToolbus(ATerm t)
 {
   SG_InitPTGlobals();  /*  Make REALLY sure the PT globals are initialised  */
@@ -348,6 +346,7 @@ ATerm SG_TermToToolbus(ATerm t)
     ? (ATerm) ATmakeAppl1(SG_SndValue_AFun, t)
     : t;
 }
+#endif
 
 
 FILE  *SG_Log = NULL;
