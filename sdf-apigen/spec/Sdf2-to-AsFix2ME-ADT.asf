@@ -108,6 +108,10 @@ equations
   production-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) =
     $Entry, $Entries
  
+[equ-production-to-adt-reject]
+  production-to-adt($ModName, $Symbol* -> $Sort { $Attr*1, reject, $Attr*2 }, 
+    $ConsOption) =
+
 [default-production-to-adt]
   $AltId   = afun("D" "e" "f" "a" "u" "l" "t"),
   $TypeId  = sort-to-afun($Sort),
