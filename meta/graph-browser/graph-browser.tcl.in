@@ -32,6 +32,7 @@
 #set toolname "Meta-Environment"
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
+set use_tide "@USE_TIDE@"
 
 if {[info exists env(COMPILER_OUTPUT)]} {
     set outputdir $env(COMPILER_OUTPUT)
@@ -83,6 +84,8 @@ package require Tcldot
 
 # switch to enable/disable printing of diagnostics to stderr
 set DIAG 0
+# switch to enable/disable debug support
+set DEBUG 0
 
 # Cf. Golden Rectangle
 set MAXWINSIZE {1078 666}
@@ -1002,9 +1005,19 @@ proc UpdateModuleList { graph } {
     }
 }
 
+proc toggle-debugging {name elem op} {
+    global DEBUG
+
+    if {$DEBUG == 1} {
+        GBpost "debugging(on)"
+    } else {
+        GBpost "debugging(off)"
+    }
+}
+
 
 proc define-menu-bar {} {
-    global toolname metaname
+    global toolname metaname DEBUG use_tide
 
     frame .menu -relief raised -borderwidth 1
 
@@ -1069,6 +1082,11 @@ proc define-menu-bar {} {
     set m .menu.debug.menu
     menu $m -tearoff 0
     $m add check -label "Diagnostic messages"  -variable DIAG
+    if { $use_tide } {
+      $m add check -label "Reduction debugging"  -variable DEBUG
+    }
+
+    trace variable DEBUG w toggle-debugging
 
 #        .menu.specification {left} 
     pack append .menu .menu.file {left} .menu.edit {left} \
