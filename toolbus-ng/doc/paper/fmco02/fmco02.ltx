@@ -900,6 +900,14 @@ the RMI compiler. Stubs act as a client-side proxy, delegating the method
 call via the RMI system to the server object. In RMI, any object that
 implements a remote interface is called a \emph{remote object}.
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/rmi.eps,height=12cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:rmi}Client-server model in RMI framework.}
+\end{figure}
+
 In RMI, arguments to or return values from remote methods can be
 primitive data (e.g. \texttt{int}), remote objects, or \emph{serializable}
 objects. In java, an object is said to be serializable if it implements
