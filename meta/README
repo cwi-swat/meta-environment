@@ -59,6 +59,12 @@ Installation instructions:
        controlling thermonuclear facilities and devices most certainly
        apply here.
 
+* Prerequisites for testing
+
+     In order to be able to test meta by executing
+		   make test
+		 you will need the JUnit Java Unit Testing framework. It is available
+		 from http://www.xprogramming.com/software.htm
 
 * Platform support
 
