@@ -34,12 +34,16 @@ public class Graph
   public static Graph fromImportList(ATermList nodeList, ATermList imports)
   {
     Set nodeSet = new HashSet();
+    List nodeSequence = new LinkedList();
+
     ATermList edges = imports.getFactory().makeList();
 
     while (!nodeList.isEmpty()) {
       ATerm nodeTerm = nodeList.getFirst();
       nodeList = nodeList.getNext();
-      nodeSet.add(nodeTerm);
+      if (nodeSet.add(nodeTerm)) {
+	nodeSequence.add(nodeTerm);
+      }
     }
 
     while (!imports.isEmpty()) {
@@ -49,8 +53,12 @@ public class Graph
       ATerm fromTerm = pair.getFirst();
       ATerm toTerm = pair.getNext().getFirst();
 
-      nodeSet.add(fromTerm);
-      nodeSet.add(toTerm);
+      if (nodeSet.add(fromTerm)) {
+	nodeSequence.add(fromTerm);
+      }
+      if (nodeSet.add(toTerm)) {
+	nodeSequence.add(toTerm);
+      }
 
       Edge edge = Edge.createUnpositionedEdge(fromTerm, toTerm);
       edges = edges.insert(edge.toTerm());
@@ -58,7 +66,7 @@ public class Graph
 
     ATermList nodes = imports.getFactory().makeList();
 
-    Iterator iter = nodeSet.iterator();
+    Iterator iter = nodeSequence.iterator();
     while (iter.hasNext()) {
       ATerm name = (ATerm)iter.next();
       Node node = Node.createUnsized(name);
