@@ -3,19 +3,19 @@ tool layoutgraph is {
   command = "layoutgraph"
 }
 
-process LAYOUT-GRAPH is
+process GraphLayouter is
 let
-  D : layoutgraph,
+  GL : layoutgraph,
   Graph : term
 in
   (
-    rec-msg(layout-graph(Graph?)) .
-    execute(layoutgraph, D?) .
-    snd-eval(D, layout-graph(Graph)) .
-    rec-value(D, graph-layouted(Graph?)) .
-    snd-terminate(D, "Thank you for laying out my graph") .
-    snd-msg(graph-layouted(Graph))
+    rec-msg(layout-graph(Graph?))
+    . execute(layoutgraph, GL?)
+    . snd-eval(GL, layout-graph(Graph))
+    . rec-value(GL, graph-layouted(Graph?))
+    . snd-terminate(GL, "done")
+    . snd-msg(graph-layouted(Graph))
   ) * delta
 endlet
 
-toolbus(LAYOUT-GRAPH)
+toolbus(GraphLayouter)
