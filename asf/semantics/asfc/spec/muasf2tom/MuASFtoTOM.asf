@@ -1,8 +1,9 @@
 equations
 
 [main] 
-muasf2tom(Module) = TomRuleSection*
-when module ModuleId SignatureOpt rules Rule* := rename-functions(Module),
+muasf2tom(Module1) = TomRuleSection*
+when Module2 := muasf2muasf(Module1),
+     module ModuleId SignatureOpt rules Rule* := rename-functions(Module2),
      TomRuleSection* := translate(Rule*)
 
 [grouping] 

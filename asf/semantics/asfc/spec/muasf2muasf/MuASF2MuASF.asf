@@ -19,3 +19,4 @@ muasf2muasf(Module1, Nametable) =  (Module8, Nametable33)
 
 [default]
 muasf2muasf(Module, Nametable) = (Module,Nametable)
+

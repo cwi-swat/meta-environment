@@ -1,7 +1,8 @@
 module muasf2tom/MuASFtoTOM
+imports Compiler
 imports tom/TomSyntax
 imports muasf2tom/RenameFunctions
-imports muasf2muasf/MuASF2MuASF
+
 
 exports
 context-free syntax
