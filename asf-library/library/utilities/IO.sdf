@@ -23,4 +23,4 @@ context-free syntax
 context-free syntax
 
   read-bytes(file:Bytes)        -> Bytes {built-in("read-bytes-from-file")}
-  write-bytes(file:Bytes,Bytes) -> Bytes {built-in("read-bytes-from-file")}
+  write-bytes(file:Bytes,Bytes) -> Bytes {built-in("write-bytes-from-file")}

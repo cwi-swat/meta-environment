@@ -4,6 +4,8 @@
     containing the lifted left and right layout and the parse tree itself.
   * read-term-from-file now produces the same structure as parse-file
   * added write-bytes-to-file and read-bytes-from-file builtins
+  * renamed unparse to unparse-to-bytes and added unparse-to-file
+
 
 2003/11/10 (jurgenv@cwi.nl)
   * Upgraded SDF2 normalizer specification in languages/sdf2. One ambiguity
