@@ -18,7 +18,7 @@ buttons([
       push-active-module,
       get-root,
       check-sort("Tscript"),
-      push-filename("unused-variables.trm"),
+      push-filename("query-result.trm"),
       read-tree,
       check-sort("Elem"),
       apply("remove-unused-variables", "Tscript", 2),

@@ -1,8 +1,8 @@
 process Editor1 is
 let
+  Editor : term,
   Aap : term,
   Noot : term,
-  Editor : term,
   Pid : int
 in
   snd-msg(open(Editor,Pid?)) .

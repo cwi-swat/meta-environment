@@ -31,10 +31,6 @@ hiddens
     get-process-body(ProcessDef) -> ProcessBody
     set-process-body(ProcessDef, ProcessBody) -> ProcessDef
 
-hiddens
-  context-free syntax
-    get-area(Elem) -> Area
-
 variables
   "$Area" -> Area
   "$Elem"[0-9]* -> Elem

@@ -72,6 +72,3 @@ equations
   ===>
   ruv-var-decls($VarDecls1, $Var : $Term, $VarDecls2, $Area)
   = $VarDecls1, $VarDecls2
-
-[get-area-0]
-  get-area(<$String1, <$Area, $String2>>) = $Area
