@@ -69,9 +69,9 @@ aspects that are relevant for renovation have to be formalized. In the
 case of application generation, the language in question is probably
 new and has to be designed from scratch.
 
-\begin{figure}
+\begin{figure}[tb]
 \epsfig{figure=figs/generator.eps,width=\textwidth,height=12cm}
-\vspace*{-7cm}
+\vspace*{-7.5cm}
 \caption{\label{Fig:generator}From language definition to generated programming environment}
 \end{figure}
 
@@ -135,15 +135,16 @@ tools and \TB\ took place using TCP/IP sockets. In this way,
 multi-language, distributed, applications could be built with
 significantly less effort than using plain C and sockets.
 
-Based on various experiments~\cite{XXX}, in 1995 a new version of the
-\TB\ was designed and implemented: the Discrete Time
-ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.  Its main
-innovation were primitives for expressing timing considerations
-(delay, timeout) and for operating on a limited set of built-in
-datatypes (booleans, integers, reals, lists).
-The Discrete Time \TB\ has been used for the restructuring of the
-\asdf\ Meta-Environment~\cite{BHK97}. A first version was released
-in 2001~\cite{BDHJJKKMOSVVV01}.
+Based on various
+experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},  in
+1995 a new version of the \TB\ was designed and implemented: the
+Discrete Time ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.
+Its main innovation were primitives for expressing timing
+considerations (delay, timeout) and for operating on a limited set of
+built-in datatypes (booleans, integers, reals, lists).  The Discrete
+Time \TB\ has been used for the restructuring of the \asdf\
+Meta-Environment~\cite{BHK97}. A first version was released in
+2001~\cite{BDHJJKKMOSVVV01}.
 
 In the meantime, the exchange format has also evolved from the toolbus
 terms mentioned above to ATerms~\cite{BJKO00}: a term format that
@@ -168,7 +169,7 @@ and what are the implications for the \TB\ design and implementation.
 \begin{center}
 \epsfig{figure=figs/component-architecture.eps,height=12cm}
 \end{center}
-\vspace*{-7cm}
+\vspace*{-7.5cm}
 \caption{\label{Fig:component-architecture}Separating coordination
   from computation}
 \end{figure}
@@ -212,7 +213,7 @@ reused in other projects~\cite{XXX}.
 \begin{center}
 \epsfig{figure=figs/toolbus.eps,height=14cm}
 \end{center}
-\vspace*{-9cm}
+\vspace*{-9.5cm}
 \caption{\label{Fig:toolbus-architecture}The \TB\ architecture}
 \end{figure}
 
@@ -511,11 +512,11 @@ public interface IAddressBookService {
 
 \section{Application to the \asdf\ Meta-Environment}
 
-\begin{figure}
+\begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/meta-env.eps,height=12cm}
 \end{center}
-\vspace*{-8.5cm}
+\vspace*{-8cm}
 \caption{\label{Fig:meta-env}Architecture of the \asdf\ Meta-Environment.}
 \end{figure}
 
@@ -629,7 +630,7 @@ posed by our users and ourselves are:
   \TB becomes a data bottleneck; can you improve this?
   See \S\ref{Sec:value-ref}.
 
-\item The \TB and tools are running as separate tasks of the operating
+\item The \TB\ and tools are running as separate tasks of the operating
   systems. Would it not be more efficient to run \TB\ and tools in
   single task? See \S\ref{Sec-status}.
 
@@ -643,7 +644,7 @@ posed by our users and ourselves are:
 \begin{center}
 \epsfig{figure=figs/rpc.eps,height=12cm}
 \end{center}
-\vspace*{-7cm}
+\vspace*{-7.5cm}
 \caption{\label{Fig:rpc}Communication pattern for remote procedure call}
 \end{figure}
 
@@ -651,7 +652,7 @@ posed by our users and ourselves are:
 \begin{center}
 \epsfig{figure=figs/msg.eps,height=12cm}
 \end{center}
-\vspace*{-7cm}
+\vspace*{-7.5cm}
 \caption{\label{Fig:message}Communication pattern for general messages}
 \end{figure}
 
@@ -816,7 +817,7 @@ parameter is transmitted to the body. Call-by-reference is efficient
 (only a pointer has to be transmitted) and the parameter value can be
 changed during execution of the procedure body (via the pointer).
 In the case of call-by-value, a \emph{physical copy} of the parameter
-is transmitted to the proecdure body. Call-by value is less efficient
+is transmitted to the procedure body. Call-by value is less efficient
 for large values and does not allow changes to the parameter value.
 
 These considerations also apply to value transmissions in a
@@ -830,7 +831,7 @@ lead to disaster.
 Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values
 and any sharing between calls is lost.\footnote{This is of particular
 interest for us, since we want to preserve sharing in huge parse
-trees.} In th case of Java/RMI~\cite{XXX}, value transmission is
+trees.} In the case of Java/RMI~\cite{XXX}, value transmission is
 achieved via serialization and works only for communication with other
 Java components. Using IIOP~\cite{XXX} communication with non-Java
 components is possible.
@@ -843,12 +844,12 @@ components is possible.
 \epsfig{figure=figs/toolbus-values.eps,height=12cm}
 \end{center}
 \vspace*{-8cm}
-\caption{\label{Fig:toolbus-values}Current value-based transmission in
+\caption{\label{Fig:toolbus-values}Value-based (a) versus channel-based (b) transmission in
   the \TB}
 \end{figure}
 
 Currently, the \TB\ provides a transport mechanism based on
-call-by-value as shown in Figure~{Fig:toolbus-values}. It is
+call-by-value as shown in Figure~\ref{Fig:toolbus-values}(a). It is
 transparent since the transmitted values are ATerms that can be
 exchanged with components written in any language. Since pure values
 are exchanged, there is no need for distributed garbage collection.
@@ -864,26 +865,18 @@ distributed environment.
 
 The downside is, however, that the \TB\ becomes a data bottleneck when
 huge values really have to be transmitted between tools. Currently, two
-workarounds are used.  A first workaround, is to get temporary relief
+workarounds are used.  A first workaround is to get temporary relief
 by sending compressed values rather than the values themselves.  A
-second workaround, is to store the large value in the filesystem and
+second workaround is to store the large value in the filesystem and
 to send a file name rather than the file itself. This approach does
 scale but creates an additional inter-tool dependency and assumes that
 both tools have access to the same shared file system.
 
 \subsubsection{Envisaged \TB\ Approach}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/toolbus-refs.eps,height=12cm}
-\end{center}
-\vspace*{-8cm}
-\caption{\label{Fig:toolbus-values}Channel-based transmission in the \TB}
-\end{figure}
-
 To overcome the problems of value-based transmission, we envisage the
 introduction of channels as sketched in
-Figure~\ref{Fig:toolbus-values}. This model is inspired by the second
+Figure~\ref{Fig:toolbus-values}(b). This model is inspired by the second
 workaround mentioned above and is completely transparent for the user.
 
 The idea is to stick to the strict call-by-value transmission model,
@@ -964,7 +957,7 @@ setting, the interface is derived from the inter-component communication
 described by ToolBus processes.
 
 \subsection{Comparison of the \texttt{findByName} implementation}
-Take a loot at the implementation of \texttt{findByName}. First the
+Take a look at the implementation of \texttt{findByName}. First the
 ToolBus version:
 
 \begin{footnotesize}
@@ -1034,7 +1027,7 @@ First, we take a look at the ToolBus version.
 The \texttt{name} and \texttt{address} fields are encoded in the result
 term, each surrounded by a function symbol describing the fields. An
 example of such a result term, assuming that \texttt{name} equals
-\texttt{John Doe}, and \texttt{address} equals "1234 Elm Street" is:
+\texttt{John Doe}, and \texttt{address} equals \texttt{"1234 Elm Street"} is:
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -1048,7 +1041,7 @@ we need to add \texttt{implements Serializable} to the class definition.
 In contrast to the ToolBus version, we do not write explicit serialization
 code (to linearize the entry to a stream for example), this is taken
 care of by the Java Serialization Protocol. RMI exploits the fact that
-only Java tools are interacting with eachother, whereas in the ToolBus
+only Java tools are interacting with each other, whereas in the ToolBus
 setting we represent the data in a platform and programming language
 independent term format, enabling data exchange between components
 written in different languages.
