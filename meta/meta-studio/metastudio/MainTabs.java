@@ -7,7 +7,7 @@ import javax.swing.JTabbedPane;
 
 import metastudio.components.ParseTreeBrowser;
 import metastudio.components.TideControl;
-import metastudio.components.modulebrowser.ModuleBrowser;
+import metastudio.components.ModuleBrowser;
 import tide.tool.support.DebugAdapter;
 import tide.tool.support.DebugTool;
 import tide.tool.support.DebugToolListener;
@@ -28,7 +28,7 @@ public class MainTabs extends UserInterfacePanel {
     
     private JTabbedPane createMainTabs(String[] args) {
         tabs = new JTabbedPane();
-        ModuleBrowser moduleBrowser = new ModuleBrowser(getFactory(), args);
+        ModuleBrowser moduleBrowser = new ModuleBrowser(getFactory(), getBridge(), args);
         ParseTreeBrowser parseTreeBrowser = new ParseTreeBrowser(getFactory(), getBridge());
 
         addTab(tabs, MODULES, moduleBrowser);

@@ -21,7 +21,7 @@ public class ModuleBrowser extends UserInterfacePanel {
 	private ModuleTreeModel moduleManager;
 	private MetaGraphFactory metaGraphFactory;
 
-	public ModuleBrowser(ATermFactory factory, MultiBridge bridge) {
+	public ModuleBrowser(ATermFactory factory, MultiBridge bridge, String []args ) {
 		super(factory, bridge);
 
 		metaGraphFactory = new MetaGraphFactory((PureFactory) factory);
