@@ -18,10 +18,10 @@ in
     EquationsEditorCreator(ModuleName)
   +
     rec-msg(edit-term-file(ModuleName?, FileName?)).
-    TermEditorCreator(ModuleName,FileName,none)
+    TermEditorCreator(ModuleName, FileName, none)
   +
     rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) .
-    TermEditorCreator(ModuleName,FileName,Tree)
+    TermEditorCreator(ModuleName, FileName, Tree)
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
     KillEditorsForModule(ModuleName)
@@ -61,34 +61,25 @@ endlet
 process SyntaxEditorCreator (ModuleName : str) is
 let
   Tree : term,
-  Text : str,
   FileName : str,
-  Message : str,
   Path : str,
   Extension : str
 in
   Tree := none.
-  Text := "".
   snd-msg(get-path-from-db(ModuleName)) .
   (
     rec-msg(path(Path?)) .
-    snd-msg(file-extension-hook(sdf)) .
-    rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-    rec-msg(io-filename(FileName?)) .
     snd-msg(get-syntax-tree(ModuleName)).
     (
       rec-msg(syntax(Tree?))
     +
-      rec-msg(unavailable) .
-      snd-msg(io-read-file(FileName)) .
-      (
-	rec-msg(io-file-contents(Text?))
-      +
-	rec-msg(io-error-reading(Message?))
-      )
+      rec-msg(unavailable)
     ) .
-    CreateEditor(syntax-editor, ModuleName, FileName, Text, Tree)
+    snd-msg(file-extension-hook(sdf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    CreateEditor(syntax-editor, ModuleName, FileName, Tree)
   +
     rec-msg(no-path) .
     snd-note(ui-status(errorf("Internal error: could not find path to %s",
@@ -100,47 +91,26 @@ endlet
 process EquationsEditorCreator (ModuleName : str) is
 let
   Tree : term,
-  Text : str,
   FileName : str,
   Path : str,
   Time : int,
-  Status : term,
   Extension : str
 in
-  Status := success .
   Tree := none .
-  Text := "" .
   snd-msg(get-path-from-db(ModuleName)) .
   (
     rec-msg(path(Path?)) .
-    snd-msg(file-extension-hook(asf)) .
-    rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-    rec-msg(io-filename(FileName?)) .
     snd-msg(get-eqs-tree(ModuleName)) .
     (
       rec-msg(tree(Tree?)) 
     +
-      rec-msg(unavailable) .
-      snd-msg(get-eqs-text(ModuleName)) .
-      (
-	rec-msg(eqs-text(ModuleName, Text?)) 
-      +
-	rec-msg(no-eqs-text(ModuleName)) .
-	snd-msg(create-new-equations(ModuleName))  .
-	(
-	  rec-msg(new-equations-created)
-	+
-	  rec-msg(new-equations-not-created) .
-	  Status := failure
-	)
-      )
+      rec-msg(unavailable)
     ) .
-    if equal(Status, success) then
-      CreateEditor(equations-editor, ModuleName, FileName, Text, Tree)
-    else
-      tau
-    fi
+    snd-msg(file-extension-hook(asf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    CreateEditor(equations-editor, ModuleName, FileName, Tree)
   +
     rec-msg(no-path) .
     snd-note(ui-status(errorf("Internal error: could not find path to %s",
@@ -168,24 +138,13 @@ in
   )
 endlet
 
-process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
-let
-  Text : str,
-  ErrorMessage : str
-in
-  Text := "".
-  snd-msg(io-read-file(FileName)) .
-  (
-    rec-msg(io-file-contents(Text?))
-    +
-    rec-msg(io-error-reading(ErrorMessage?)) 
-  ) .
-  CreateEditor(term-editor, ModuleName, FileName, Text, Tree)
-endlet
+process TermEditorCreator(ModuleName: str, FileName: str, Tree: term) is
+  CreateEditor(term-editor, ModuleName, FileName, Tree)
 
-process CreateEditor(Type : term, ModuleName : str, 
+process CreateEditor(Type : term,
+                     ModuleName : str, 
                      FileName : str, 
-		     Text : str, Tree : term) is
+		     Tree : term) is
 let
   EditorId : term,
   ButtonList : list,
@@ -197,9 +156,8 @@ in
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(EditorId?)) .
-      /*snd-msg(se-initialize-structure-editor(EditorId, Text, Tree)) .*/
       snd-msg(se-create(EditorId, Tree)) .
-      create(EditorActionsLoop(EditorId, Type, ModuleName, Text, Tree), Pid?) .
+      create(EditorActionsLoop(EditorId, Type, ModuleName, Tree), Pid?) .
       snd-msg(te-edit-text(EditorId, EDITOR, FileName, ButtonList))
     +
       rec-msg(existing-editor(EditorId?)) .
@@ -228,7 +186,10 @@ in
   )
 endlet
 
-process EditorActionsLoop(EditorId: term, Type : term, ModuleName: str, Text : str, Tree : term) is
+process EditorActionsLoop(EditorId: term,
+                          Type: term,
+			  ModuleName: str,
+			  Tree: term) is
 let
   ActionEvent : term,
   Pid : int,
@@ -236,7 +197,8 @@ let
   EditorsSynchronized : bool,
   Offset : int,
   Focus : term,
-  NewTree : term
+  NewTree : term,
+  SortName: str
 in
   subscribe(delete-editor(<term>)) .
   subscribe(syntax-changed(ModuleName)) .
@@ -271,7 +233,9 @@ in
       snd-msg(se-set-cursor-at-offset(EditorId, Offset)) .
       snd-msg(se-get-focus-at-cursor(EditorId)) .
       rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
-      snd-msg(te-set-focus(EditorId, Focus))
+      snd-msg(se-get-sort-at-cursor(EditorId)) .
+      rec-msg(se-sort-at-cursor(EditorId, SortName?)) .
+      snd-msg(te-set-focus(EditorId, Focus, SortName))
     else
       tau
     fi
