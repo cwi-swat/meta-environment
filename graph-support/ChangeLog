@@ -1,10 +1,10 @@
 $Id$
 
 Thu Oct  2 13:19:41 CEST 2003 <jong@cwi.nl>
- * utils/layoutgraph/dot.y:
-     #define YYERROR_VERBOSE to get better error message
- * relaxed dot parser, an identifier can also start with a digit now
- * changed yyerror message a bit
+ * utils/layoutgraph/dot.y:  Closes #54
+   - #define YYERROR_VERBOSE to get better error message
+   - relaxed dot parser, an identifier can also start with a digit now
+   - changed yyerror message a bit
 
 Thu Sep 11 12:47:17 CEST 2003 <jong.cwi.nl>
  * graph-support:
