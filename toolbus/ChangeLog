@@ -1,19 +1,15 @@
 $Id$
 
-2003-06-27 <kooiker@cwi.nl>
+2003-06-27 <{jong,kooiker}@cwi.nl>
+ * adapters/java-adapter/AbstractTool.java:
+   - fixed missing initialization of port (now set to -1)
  * toolbus/trans:
+   - Added first version of transparent toolbus-to-toolbus adapter
+   - Both sides of the adapter are generic now
    - Added startup parameters:
      -TB_HOST_NAME1, -TB_HOST_NAME2,
      -TB_PORT1, -TB_PORT2,
      -TB_TOOL_NAME1, -TB_TOOL_NAME2
-
-2003-06-27 <kooiker@cwi.nl>
- * toolbus/trans:
-   - Both sides of the adapter are generic now
-
-2003-06-27 <{jong,kooiker}@cwi.nl>
- * toolbus/trans:
-   - Added first version of transparent toolbus-to-toolbus adapter
  
 2003-06-26 <jurgenv@cwi.nl>
  * Added package definition file

@@ -23,7 +23,7 @@ abstract public class AbstractTool
 
   private String toolname;
   private InetAddress address;
-  private int port;
+  private int port = -1;
   private int toolid = -1;
 
   private Map queueMap;
