@@ -164,22 +164,17 @@ public class GraphPanel extends JComponent implements Scrollable {
 		g.setFont(Preferences.getFont(PREF_NODE_FONT));
 		metrics = g.getFontMetrics();
 
-    Attribute bbox = graph.getBoundingBox();
-    Point max = bbox.getSecond();
-    
-    max_x = max.getX().intValue();
-    max_y = max.getY().intValue();
+		Attribute bbox = graph.getBoundingBox();
+		Point max = bbox.getSecond();
 
-		Point2D point = transform.transform(new Point2D.Float((float) max_x, 
-                                                          (float) max_y), null);
+		max_x = max.getX().intValue();
+		max_y = max.getY().intValue();
+
+		Point2D point = transform.transform(new Point2D.Float((float) max_x, (float) max_y), null);
 
 		this.max_x = (int) point.getX();
 		this.max_y = (int) point.getY();
 	}
-
-	//}}}
-
-	//{{{ public void paint(Graphics g)
 
 	public void paint(Graphics g) {
 		g.setColor(getBackground());
@@ -336,7 +331,6 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 		Polygon poly = edge.getPolygon();
 
-		/* we expect either 4 or 5 curve points, this code breaks otherwise */
 		Point from = poly.getHead();
 		poly = poly.getTail();
 
@@ -368,7 +362,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 			poly = poly.getTail();
 			gp.lineTo((float) to.getX().intValue(), (float) to.getY().intValue());
 		}
-
+        
 		Graphics2D g2d = (Graphics2D) g;
 		if (edge.connectedTo(hoveredNode)) {
 			g2d.setColor(nodeBorderHovered);
@@ -377,6 +371,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 		} else {
 			g2d.setColor(nodeBorder);
 		}
+
 		g2d.draw(gp);
 	}
 
