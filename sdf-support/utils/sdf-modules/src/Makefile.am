@@ -12,13 +12,14 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	sdf-imports.c \
 	plain-imports.c
 
-sdf_modules_LDADD =\
-		 -L$(top_builddir)/lib -lSDFME  \
-                 -L$(TOOLBUSLIB)/lib -lATB \
-                 -L$(ATERM)/lib -lATerm \
-                 $(SOCKLIBS)
+sdf_modules_LDADD = \
+	-L$(top_builddir)/lib -lSDFME  \
+	-L$(TOOLBUSLIB)/lib -lATB \
+	-L$(ATERM)/lib -lATerm \
+	$(SOCKLIBS)
 
-noinst_HEADERS = sdf-modules.tif.h \
+noinst_HEADERS = \
+	sdf-modules.tif.h \
 	module-table.h \
 	sdf-imports.h \
 	plain-imports.h

@@ -1,5 +1,7 @@
 /* $Id$ */
 
+/*{{{  includes */
+
 #include <stdlib.h>
 #include <aterm2.h>
 #include <atb-tool.h>
@@ -12,10 +14,19 @@
 #include "sdf-imports.h"
 #include "plain-imports.h"
 
+/*}}}  */
+
+/*{{{  defines */
+
 #define SEP '/'
 #define PATH_LEN (_POSIX_PATH_MAX)
 
+/*}}}  */
+/*{{{  variables */
+
 static char myversion[] = "1.0";
+
+/*}}}  */
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
@@ -332,7 +343,8 @@ ATerm remove_import_from_module(int cid, ATerm atModule, const char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* from, ) */
+
+/*{{{  ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* name) */
 
 ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* name)
 {
@@ -346,12 +358,14 @@ ATerm rename_modulename_in_module(int cid, ATerm atModule, const char* name)
   return ATmake("snd-value(module(<term>))", ATBpack(atModule));
 }
 
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
-  int i, cid;
   ATerm bottomOfStack;
+  int i, cid;
 
   for (i=1; i<argc; i++) {
       if (strcmp(argv[i], "-h") == 0) {
