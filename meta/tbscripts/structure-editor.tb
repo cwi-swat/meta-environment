@@ -6,12 +6,17 @@ tool se is {
   command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool"
 }
 
+tool anno is { 
+  command = "java-adapter -class nl.cwi.gipe.stred.AnnoTool"
+}
+
+
 process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
 let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
   Char: term, G: str, ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list, Fid2: str
+  Fun: str, Args: list, Fid2: str, Anno: anno
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
@@ -19,6 +24,7 @@ in
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   execute(se, SE?).
+  execute(anno, Anno?).
 /*printf("newEditor is being started\n").*/
   snd-eval(SE, newEditor(Fid, Text)).
 /*printf("newEditor waiting\n").*/
@@ -45,30 +51,35 @@ in
     FF := []. (
       if not-equal(Fl,[]) then
         Foc:= first(Fl).
-        snd-msg(TE,get-focus-text(Foc)).
-        rec-msg(TE,focus-text(Str?)).
-        snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
-          rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
-          snd-eval(SE,replaceFocus(Fid, T)).
-          rec-value(SE,Fl?)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
-          snd-msg(set-error-focus(Fid,Foc,ErrList)).
-          FF := join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
-                                                     ambiguities(I?)))).
-          printf("Parse of %s returned %d ambiguities",Str,I).
-          printf("Term is: %t\n",T).
-          FF :=join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
-          printf("Parse of %s returned a cycle\n",Str).
-          printf("Cycle is: %t\n",Cycle).
-          FF :=join(FF,Foc)
-        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof))).
-          printf("Error parsing %s\n",Str).
-          printf("Error: %l\n", ErrList).
-          FF := join(FF,Foc)
-        )
-        .
+        snd-eval(Anno,get-anno("focusstatus",Foc)).
+	rec-value(Anno,annotation(T?)).
+        if equal(dirty,T) then
+          snd-msg(TE,get-focus-text(Foc)).
+          rec-msg(TE,focus-text(Str?)).
+          snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
+            rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
+            snd-eval(SE,replaceFocus(Fid, T)).
+            rec-value(SE,Fl?)
+          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
+            snd-msg(set-error-focus(Fid,Foc,ErrList)).
+            FF := join(FF,Foc)
+          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
+                                                       ambiguities(I?)))).
+            printf("Parse of %s returned %d ambiguities",Str,I).
+            printf("Term is: %t\n",T).
+            FF :=join(FF,Foc)
+          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
+            printf("Parse of %s returned a cycle\n",Str).
+            printf("Cycle is: %t\n",Cycle).
+            FF :=join(FF,Foc)
+          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof))).
+            printf("Error parsing %s\n",Str).
+            printf("Error: %l\n", ErrList).
+            FF := join(FF,Foc)
+          )
+        else 
+          tau
+        fi.
         snd-eval(SE,nextFocus(Fid)).
         rec-value(SE,Fl?)
       fi
@@ -107,7 +118,6 @@ in
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-eval(SE,setFocus(Fid,Foc)).
     rec-value(SE,Fl?).
-printf("New focus list: %t\n", Fl).
     snd-ack-event(TE,get-focus(Fid,I))
     +
     rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid2?)).
