@@ -808,31 +808,31 @@ char *SG_ProdSort(production t)
 {
   char          *sort = NULL;
 
-	if(ATmatch((ATerm) t, "prod(<term>,sort(\"<START>\"),<term>)", &t, NULL)) {
-		ATermList list = (ATermList) t;
-		ATerm elt, symbol;
-		static sg_growbuf *gb = NULL;
+  if(ATmatch((ATerm) t, "prod(<term>,sort(\"<START>\"),<term>)", &t, NULL)) {
+    ATermList list = (ATermList) t;
+    ATerm elt, symbol;
+    static sg_growbuf *gb = NULL;
 
-		if(!gb) {
-			gb = SG_Create_GrowBuf(32, 16, sizeof(char));
-		} else {
-			gb = SG_Reset_GrowBuf(gb);
-		}
+    if(!gb) {
+      gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+    } else {
+      gb = SG_Reset_GrowBuf(gb);
+    }
 
-		for(;!sort && !ATisEmpty(list); list = ATgetNext(list)) {
-			elt = ATgetFirst(list);
+    for(;!sort && !ATisEmpty(list); list = ATgetNext(list)) {
+      elt = ATgetFirst(list);
 
-			if(!ATmatch(elt, "cf(opt(layout))",elt)
-		  &&  ATmatch(elt, "cf(<term>)", &symbol)) {
-				SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol, ATfalse));
-			}
-		}
+      if(!ATmatch(elt, "cf(opt(layout))",elt)
+      &&  ATmatch(elt, "cf(<term>)", &symbol)) {
+        SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol, ATfalse));
+      }
+    }
 
     SG_AddToGrowBuf(gb,"\0",1); /* Don't forget null termination */
-		sort = SG_GetGrowBufContent(gb);
+    sort = SG_GetGrowBufContent(gb);
   }
 
-	return SG_SAFE_STRING(sort);
+  return SG_SAFE_STRING(sort);
 }
 
 char *SG_ApplSort(tree t)

@@ -727,8 +727,8 @@ int SG_ProdType_Tree(tree t)
 
 /*
  SG_MoreEager(t0, t1) returns true iff either
-	- t0 is eager and t1 is regular or avoid
-	- t0 is regular and t1 is avoid
+    - t0 is eager and t1 is regular or avoid
+    - t0 is regular and t1 is avoid
  */
 
 #ifndef NO_EAGERNESS

@@ -73,7 +73,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Eager_AFun,       ATmakeAFun(SG_PREFER_AFUN,      2, ATfalse));
   SG_AFUN_INIT(SG_Uneager_AFun,     ATmakeAFun(SG_AVOID_AFUN,       2, ATfalse));
   SG_AFUN_INIT(SG_Aprod_AFun,       ATmakeAFun(SG_APROD_AFUN,       1, ATfalse));
-  SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,	    1, ATfalse));
+  SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,         1, ATfalse));
 
   SG_AFUN_INIT(SG_GtrPrio_AFun,     ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
   SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
