@@ -82,7 +82,7 @@ int main (int argc, char *argv[])
       case 'x':  characters = ATtrue;          break;
       case 'p':  productions = ATtrue;         break;
       case 's':  sharing = ATtrue;         break;
-      case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+      case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
                                                exit(0);
       default :  usage();                      exit(1);
   }

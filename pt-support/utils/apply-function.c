@@ -72,7 +72,7 @@ main (int argc, char **argv)
 	break;
       case 'f':  function = optarg;            break;  
       case 's':  sort = optarg;                break;
-      case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+      case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
 		 exit(0);
       default :  usage();                      exit(1);
     }

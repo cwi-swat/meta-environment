@@ -142,7 +142,7 @@ int main (int argc, char **argv)
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
       case 'o':  output_file_name = optarg;    break;
-      case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+      case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
                                                exit(0);
       default :  usage();                      exit(1);
   }
