@@ -66,10 +66,10 @@ do
 		$SGLR -p $ptbl -i $file -to $out
 	        if diff -w $out $out.org	> /dev/null 2>&1
 	        then
-			Notify "Regression test for error term $base succeeded."
+			Notify "Regression test for error term $base succeeded"
 		        rm -f $out
 	        else
-			Notify "Regression test for error term $base failed."
+			Notify "Regression test for error term $base failed"
 			ERROR=1
 	        fi
 	done
