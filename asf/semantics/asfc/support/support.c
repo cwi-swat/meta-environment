@@ -39,8 +39,10 @@ static bucket **sym_table = NULL;
 aworld *w;
 aterm *c_true;
 aterm *c_false;
+aterm *char_table[256];
 
 asymbol *oksym;
+asymbol *tuplesym;
 asymbol *nullsym;
 
 aterm *pattern_asfix_term = NULL;
@@ -680,6 +682,8 @@ static aterm_list *terms_to_asfix(arena *ar, aterm_list *args,
 
 void init_patterns(arena *ar)
 {
+  int i;
+
   pattern_asfix_term = TmakeSimple(ar, "term(<term>,<term>,<term>," \
 				   "<term>,<term>,<term>,<term>,<term>,<term>)");
   pattern_asfix_appl = TmakeSimple(ar, "appl(<term>,<term>,<list>)");
@@ -724,6 +728,13 @@ void init_patterns(arena *ar)
 
   t_protect(c_true);
   t_protect(c_false);
+
+  /* make characters */
+  for(i=0; i<256; i++) {
+    char_table[i] = TbuildInt(w, i);
+    t_protect(char_table[i]);
+  }
+
 }
 
 /*}}}  */
@@ -1273,6 +1284,21 @@ aterm *ok(aterm *t)
   return result;
 }
 
+/*}}}  */
+/*{{{  aterm *tuple(aterm *t0,aterm *t1) */
+
+aterm *tuple(aterm *t0,aterm *t1)
+{
+  aterm *result, *args2;
+  aterm_list *args = TbuildList(w, t1, t_empty(w));
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, tuplesym, args2);
+  t_unprotect(args2);
+  return result;
+}
 /*}}}  */
 
 /*{{{  Make normal forms */
