@@ -107,7 +107,6 @@ in
       fi
       *
       if equal(ModuleNames,[]) then  
-        printf("done with: ModuleName := %s\n", ModuleName) .
         snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
 	rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
 	snd-msg(all-equations(AllEquations)) .
