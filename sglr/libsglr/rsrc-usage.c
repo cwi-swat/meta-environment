@@ -56,7 +56,10 @@ double SG_Timer(void)
   double prev;
 
   prev = cur;
-  getrusage(RUSAGE_SELF, &rsrc_usage);
+  if (getrusage(RUSAGE_SELF, &rsrc_usage) == -1) {
+    perror("getrusage");
+    return (double)0;
+  }
 
   cur  =  (double) (rsrc_usage.ru_utime.tv_sec) +
     (double) ((rsrc_usage.ru_utime.tv_usec) * 1.0e-06);

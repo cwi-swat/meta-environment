@@ -149,7 +149,7 @@ ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
     pt = SG_BuildParseTable((ATermAppl) tbl);
 
     IF_STATISTICS(ATfprintf(SG_log(),
-                            "Obtaining parse table for %t took %.4fs\n",
+                            "Obtaining parse table for %t took %.6fs\n",
                             L, SG_Timer()));
 
     if(pt)

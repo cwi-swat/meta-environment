@@ -1007,7 +1007,7 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
   pt = SG_BuildParseTable((ATermAppl) t);
 
   IF_STATISTICS(ATfprintf(SG_log(),
-                        "Obtaining parse table for %t took %.4fs\n",
+                        "Obtaining parse table for %t took %.6fs\n",
                         L, SG_Timer()));
 
   SG_CloseFile(input_file);

@@ -428,7 +428,7 @@ void SG_PostParse(void)
     fprintf(SG_log(), ", line %d, column %d (token #%d)\n",
             sg_sp_maxline, sg_sp_maxcol, sg_sp_maxoffset);
 
-    fprintf(SG_log(), "Parse time: %.2fs\n", ptm);
+    fprintf(SG_log(), "Parse time: %.6fs\n", ptm);
     fprintf(SG_log(), "Characters/second: %.0f\n",
             ptm < 1.0e-4 ? 0 : sg_tokens_read/ptm);
 
@@ -1145,7 +1145,7 @@ tree SG_ConvertA2ToA1(tree t)
   IF_STATISTICS(SG_Timer());
   t = (tree) a2toa1((ATerm) t, ATfalse);
   IF_STATISTICS(fprintf(SG_log(),
-                        "AsFix1 conversion took %.4fs\n", SG_Timer()));
+                        "AsFix1 conversion took %.6fs\n", SG_Timer()));
   return t;
 }
 
@@ -1169,7 +1169,7 @@ tree SG_ParseResult(char *sort)
       if (sort) {
         IF_STATISTICS(SG_Timer());
         t = SG_SelectOnTopSort(table, t, sort);
-        IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.4fs\n",
+        IF_STATISTICS(fprintf(SG_log(), "Topsort selection took %.6fs\n",
                               SG_Timer()));
         if (!t) {
           /*  Flag this error at start, not end, of file  */
@@ -1185,7 +1185,7 @@ tree SG_ParseResult(char *sort)
           IF_STATISTICS(SG_Timer());
           cycle = SG_CyclicTerm(table, t);
           IF_STATISTICS(fprintf(SG_log(), 
-                                "Cycle detection took %.4fs\n", SG_Timer()));
+                                "Cycle detection took %.6fs\n", SG_Timer()));
           if (!ATisEmpty(cycle)) {
             return SG_ParseError(cycle, 0, NULL);
           }
@@ -1199,7 +1199,7 @@ tree SG_ParseResult(char *sort)
           IF_STATISTICS(SG_Timer());
           t = SG_FilterTree(table, t);
           IF_STATISTICS(fprintf(SG_log(), 
-                                "Filtering took %.4fs\n", SG_Timer()));
+                                "Filtering took %.6fs\n", SG_Timer()));
         }
       }
 
@@ -1208,7 +1208,7 @@ tree SG_ParseResult(char *sort)
       IF_STATISTICS(SG_Timer());
       t = SG_YieldTree(table, t);
       IF_STATISTICS(fprintf(SG_log(),
-                            "Aprod expansion took %.4fs\n", SG_Timer()));
+                            "Aprod expansion took %.6fs\n", SG_Timer()));
 
       SGsort(SG_SET, t);     
 
