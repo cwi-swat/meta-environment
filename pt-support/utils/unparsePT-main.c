@@ -111,7 +111,7 @@ int main(int argc, char **argv)
       ATerror("asource: parse error in input term.\n");
     }
     else {
-      char *text = yieldParseTree(PT_makeParseTreeFromTerm(term));
+      char *text = PT_yieldParseTree(PT_makeParseTreeFromTerm(term));
       fprintf(outputFile, "%s", text);
       fclose(outputFile);
    }
