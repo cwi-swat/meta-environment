@@ -1,5 +1,7 @@
 SUBDIRS = src toolbus
 
+data_DATA = ${JARFILE}
+
 ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST = program-check.m4 reconf \
@@ -9,6 +11,12 @@ EXTRA_DIST = program-check.m4 reconf \
 bin_SCRIPTS = ${PACKAGE}-config
 
 CLEANFILES = ${PACKAGE}-config ${PACKAGE}-${VERSION}.pkg
+
+JARFILE = ${PACKAGE}-${VERSION}.jar
+
+${JARFILE}: Makefile
+	jar cf ${JARFILE} \
+	  `cd ${top_builddir} && find . -name '*.class'`
 
 % : %.sh.src
 	sed 's@__PREFIX__@$(prefix)@g' < $< > $@ && \

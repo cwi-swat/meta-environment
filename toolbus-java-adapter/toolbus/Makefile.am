@@ -1,6 +1,6 @@
 javadir		= ${prefix}/classes/toolbus
 
-EXTRA_DIST	= ${java_JAVA} test.tb test.tifs example.tb example.tifs
+EXTRA_DIST	= ${java_JAVA} 
 
 java_JAVA =\
 	Tool.java\
@@ -17,4 +17,3 @@ JAVAROOT	= ${top_builddir}
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${EXTERNAL_JARS}
 
-EXTRA_DIST = $(JAVASOURCES)
