@@ -279,7 +279,7 @@ ATerm write_text_file(int cid, char *fileName, ATerm content)
 
   if (fileName != NULL) {
     if (!(file = fopen(fileName, "w"))) {
-      message = createErrorMessage("could not open file");
+      message = createErrorMessage(strerror(errno));
     }
     else {
       int error = 1;
@@ -290,11 +290,11 @@ ATerm write_text_file(int cid, char *fileName, ATerm content)
 	error = fputs(string, file);
       }
 
-      if (error != EOF) {
+      if (!ferror(file)) {
 	message = createSuccessMessage();
       }
       else {
-	message = createErrorMessage("disk full");
+	message = createErrorMessage(strerror(errno));
       }
 
       fclose(file);
@@ -322,14 +322,19 @@ ATerm write_term_file(int cid,  char *fileName, ATerm packedContent)
     FILE *file = NULL;
 
     if (!(file = fopen(fileName, "w"))) {
-      message = createErrorMessage("could not open file");
+      message = createErrorMessage(strerror(errno));
     }
     else {
       if (ATwriteToBinaryFile(content, file)) {
         message = createSuccessMessage();
       }
       else {
-	message = createErrorMessage("disk full");
+	if (ferror(file)) {
+	  message = createErrorMessage(strerror(errno));
+	}
+	else {
+	  message = createErrorMessage("Could not write ATerm to file");
+	}
       }
       fclose(file);
     }
