@@ -1,6 +1,6 @@
 2001/05/24 (jurgenv@cwi.nl)
   * Added Stratego-like programming language with simple interpreter. 
-    Traversal primitives not supported yet. 
+    Heterogeneous data-types and traversals not supported (yet).
 
 2001/05/23 (jurgenv@cwi.nl)
   * Added experimental library for functional programming in ASF containing:
