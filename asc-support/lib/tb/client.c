@@ -1,6 +1,11 @@
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 
+ATerm rec_terminate(int cid, char* message)
+{
+  exit(0);
+}
+
 ATerm rewrite(int cid, ATerm trm)
 {
     PT_Tree tree = PT_getParseTreeTree((PT_ParseTree) trm);
@@ -9,7 +14,7 @@ ATerm rewrite(int cid, ATerm trm)
     return ATmake("snd-result(normalform(<term>))", (ATerm) asfix);
 }
 
-ATerm apply(int cid, char* function, char* sort,ATermList args)
+ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
 {
   PT_Args ptargs = PT_makeArgsEmpty();
   for(;!ATisEmpty(args);args = ATgetNext(args)) {

@@ -3,6 +3,10 @@
 
 #include <aterm2.h> 
 
+#ifdef TOOLBUS
+#include <atb-tool.h>
+#endif
+
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
 
@@ -281,13 +285,16 @@ extern ATerm call_kids_accutrafo(funcptr trav, ATerm arg, ATerm accu,
 
 extern ATerm correct_tuple(ATerm arg, ATerm rhs);
 
-int asc_support_main(int argc, char *argv[],
+
+int asc_support_main(ATerm *bottom, int argc, char *argv[],
                      void (*register_all)(void),
                      void (*resolve_all)(void),
-                     void (*init_all)(void));
+                     void (*init_all)(void)
+#ifdef TOOLBUS
+		     , ATBhandler handler
+#endif
+		     );
 
 /*}}}  */
-
-
 
 #endif  /* ASC_SUPPORT_H */

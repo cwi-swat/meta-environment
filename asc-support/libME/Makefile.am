@@ -1,6 +1,8 @@
 # $Id$
 
-lib_LIBRARIES            = libasc-support-me.a
+SUBDIRS=tb
+
+lib_LIBRARIES            = libasc-support-me.a 
 
 include_HEADERS          = asc-support-me.h \
                            asc-support2-me.h  \

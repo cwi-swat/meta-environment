@@ -14,10 +14,15 @@
 #include "asc-support2-me.h"
 #include <ASFME.h>
 
+#ifdef TOOLBUS
+#include <atb-tool.h>
+#endif
 /*}}}  */
 /*{{{  globals */
 
-#define streq(str1,str2) (!strcmp((str1),(str2)))
+#ifndef TOOLBUS
+#define streq(s1,s2) (!strcmp(s1,s2))
+#endif
 #define MAX_ARGS 32
 /*}}}  */
 
@@ -46,17 +51,23 @@ void usage(char *prg)
 
 /*{{{  int asc_support_main(int argc, char *argv[],  */
 
-int asc_support_main(int argc, char *argv[], 
+int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], 
 		     void (*register_all)(), 
 		     void (*resolve_all)(),
-		     void (*init_all)())
+		     void (*init_all)()
+#ifdef TOOLBUS
+		     , ATBhandler handler
+#endif
+		     )
 {
-  ATerm bottomOfStack;
   PT_ParseTree pt;
   PT_ParseTree asfix;
   PT_Tree trm;
   ATerm t; 
   ATerm reduct;
+#ifdef TOOLBUS
+  ATbool toolbus_mode = ATfalse;
+#endif
   ATbool produce_output = ATtrue;
   ATbool run_verbose = ATfalse;
   ATbool printstats = ATfalse;
@@ -68,6 +79,31 @@ int asc_support_main(int argc, char *argv[],
   char *result = "";
   int i;
 
+  ATinit(argc, argv, bottomOfStack);
+  PT_initMEPTApi();
+  ASF_initASFMEApi();
+  ASC_initRunTime(INITIAL_TABLE_SIZE);
+
+  register_all();
+  resolve_all();
+  init_all();
+
+#ifdef TOOLBUS
+  /*  Check whether we're a ToolBus process  */
+
+  for(i=1; !toolbus_mode && i<argc; i++) {
+    if(!strcmp(argv[i], "-TB_TOOL_NAME")) {
+      toolbus_mode = ATtrue;
+    }
+  }
+
+  if (toolbus_mode) {
+     ATBinit(argc, argv, bottomOfStack);
+     ATBconnect(NULL, NULL, -1, handler);
+     ATBeventloop();
+  }
+  else {
+#endif
   for(i=1; i<argc; i++) {
     if(streq(argv[i], "-v")) {
       run_verbose = ATtrue;
@@ -103,15 +139,7 @@ int asc_support_main(int argc, char *argv[],
       produce_output = ATfalse;
     }
   }
- 
-  ATinit(argc, argv, &bottomOfStack);
-  PT_initMEPTApi();
-  ASF_initASFMEApi();
-  ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  register_all();
-  resolve_all();
-  init_all();
 
   if (!streq(function,"")) {
     PT_Args args = PT_makeArgsEmpty();
@@ -222,6 +250,10 @@ int asc_support_main(int argc, char *argv[],
 
     }
   }
+
+#ifdef TOOLBUS
+  }
+#endif
 
   return 0;
 }
