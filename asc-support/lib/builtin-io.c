@@ -86,6 +86,35 @@ static CO_Bytes make_bytes(const char *value)
 
 /*}}}  */
 
+/*{{{  static char* getSort(PT_Symbol type) */
+
+static char* getSort(PT_Symbol type)
+{
+  /* return "Boolean" for 
+   * cf(parameterized-sort("ParseResult",[sort("Boolean")]))
+   */
+
+  if (PT_isSymbolCf(type)) {
+    type = PT_getSymbolSymbol(type);
+    
+    if (PT_isSymbolParameterizedSort(type)) {
+      PT_Symbols args = PT_getSymbolParameters(type);
+
+      if (PT_hasSymbolsHead(args)) {
+	type = PT_getSymbolsHead(args);
+
+	if (PT_isSymbolSort(type)) {
+	  return PT_getSymbolString(type);
+	}
+      }
+    }
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
 /*{{{  static ATbool initParser(char *toolname, ATerm language) */
 
 static ATbool initParser(char *toolname, ATerm language)
@@ -176,20 +205,28 @@ static PT_Tree parse_result(char *builtin, char *file, ATerm result)
 
 /*{{{  static PT_Tree parse_file(PT_Tree file) */
 
-static PT_Tree parse_file(PT_Tree file)
+static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
 {
   char  toolname[] = "parse-file";
   ATerm language = ATmake("<str>", toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
+  char *sort = getSort(type);
+
+  if (sort == NULL) {
+    return  (PT_Tree) CO_makeParseResultFailure(l,l,
+		makeGeneralError(toolname, "complex symbols are not supported"),
+	       	l);
+  }
 
   if (initParser(toolname, language)) {
     char *filename = getFilename(file);
-    ATerm result = SGparseFile(toolname, language, NULL, filename);
+    ATerm result = SGparseFile(toolname, language, sort, filename);
     return parse_result(toolname, filename, result);
   }
 
   return (PT_Tree) CO_makeParseResultFailure(l,l,
-					     makeGeneralError(toolname, "no parsetable available"),
+					     makeGeneralError(toolname, 
+					      "no parsetable available"),
 					     l);
 }
 
@@ -198,7 +235,7 @@ static PT_Tree parse_file(PT_Tree file)
 
 PT_Tree ASFE_parse_file(PT_Symbol type, PT_Tree file)
 {
-  return parse_file(file);
+  return parse_file(type, file);
 }
 
 /*}}}  */
@@ -208,21 +245,28 @@ PT_Tree ASC_parse_file(ATerm type, ATerm aterm)
 {
   PT_Tree file = muASFToTree(aterm);
 
-  return parse_file(file);
+  return parse_file((PT_Symbol) type, file);
 }
 
 /*}}}  */
 
 /*{{{  static PT_Tree parse_bytes(PT_Tree bytes) */
 
-static PT_Tree parse_bytes(PT_Tree bytes)
+static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
   char  toolname[] = "parse-bytes";
   ATerm language = ATparse(toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
+  char *sort = getSort(type);
+
+  if (sort == NULL) {
+    return  (PT_Tree) CO_makeParseResultFailure(l,l,
+		makeGeneralError(toolname, "complex symbols are not supported"),
+	       	l);
+  }
 
   if (initParser(toolname, language)) {
-    ATerm result = SGparseString(language, NULL, PT_yieldTree(bytes)); 
+    ATerm result = SGparseString(language, sort, PT_yieldTree(bytes)); 
     return parse_result(toolname, "anonymous", result);
   }
 
@@ -236,7 +280,7 @@ static PT_Tree parse_bytes(PT_Tree bytes)
 
 PT_Tree ASFE_parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
-  return parse_bytes(bytes);
+  return parse_bytes(type, bytes);
 }
 
 /*}}}  */
@@ -246,7 +290,7 @@ PT_Tree ASC_parse_bytes(ATerm type, ATerm aterm)
 {
   PT_Tree bytes = muASFToTree(aterm);
 
-  return parse_bytes(bytes);
+  return parse_bytes((PT_Symbol) type, bytes);
 }
 
 /*}}}  */
