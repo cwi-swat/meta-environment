@@ -22,10 +22,7 @@
 
 static char *name;
 
-extern ATerm pattern_asfix_term;
-
 ATerm innermost(ATerm t);
-ATerm toasfix(ATerm t, ATerm f, ATerm n);
 void init_patterns();
 void c_rehash(int newsize);
 
@@ -40,23 +37,14 @@ ATerm get_name(int cid)
 /*}}}  */
 /*{{{  ATerm *reduce(int cid, ATerm *t) */
 
-ATerm reduce(int cid, ATerm t)
+ATerm reduce(int cid, ATerm trm)
 {
-  ATerm reduct, asfix = NULL, file, modname, trm;
+  ATerm reduct;
 
-  t = AFexpandTerm(t);
-  if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
-                &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    ATfprintf(stderr,"Reducing ... \n");
-    reduct = innermost(trm);
-/*
-    ATfprintf(stderr, "%t\n", reduct);
-*/
-    ATfprintf(stderr,"Reducing finished.\n");
-    asfix = toasfix(reduct, file, modname);
-  } else
-    ATerror("not an asfix term: %t\n", t);
-  return ATmake("snd-value(reduct(<term>))", asfix);
+  ATfprintf(stderr,"Reducing ... \n");
+  reduct = innermost(trm);
+  ATfprintf(stderr,"Reducing finished.\n");
+  return ATmake("snd-value(reduct(<term>))", reduct);
 }
 
 /*}}}  */
@@ -72,7 +60,7 @@ void rec_terminate(int cid, ATerm arg)
 
 int main(int argc, char *argv[])
 {
-  ATerm t, trm, reduct, asfix, file, modname;
+  ATerm trm, reduct;
   ATbool printstats = ATfalse, use_toolbus = ATfalse;
   int i, cid;
   ATerm bottomOfStack;
@@ -114,15 +102,8 @@ ATfprintf(stderr,"Term read\n");
 
 ATfprintf(stderr,"Reducing ...\n");
     reduct = innermost(trm);
-/*
-ATfprintf(stderr, "%t\n", reduct);
-*/
 ATfprintf(stderr,"Reducing finished.\n");
-/*
-    asfix = toasfix(reduct, file, modname);
-    ATwriteToBinaryFile(reduct,stdout);
-*/
-ATfprintf(stderr, "%t\n", reduct);
+    ATfprintf(stderr, "%t\n", reduct);
   }
   return 0;
 }
