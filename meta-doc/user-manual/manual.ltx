@@ -738,13 +738,15 @@ based on \xemacs, so some familiarity with this editor is assumed.
 See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
 for documentation on \xemacs.
 
-The two pull-down menus {\tt Meta-Environment} and {\tt Move} have been
-added to the standard user-interface of \xemacs:
+The various pull-down menus {\tt Meta-Environment}, {\tt Term-Actions},
+and {\tt Move} have been added to the standard user-interface of \xemacs, 
+depending on the editor type:
 
 \begin{itemize}
-\item While editing syntax or equations, the {\tt Meta-Environment}
-menu contains a \link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} {\tt Parse} for applying the
-\asfsdf\ parser to the complete text buffer..
+\item The {\tt Meta-Environment} menu, which is only available for
+syntax and equation editors, contains a 
+\link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} 
+{\tt Parse} for applying the \asfsdf\ parser to the complete text buffer.
 
 \begin{figure}
 \begin{center}
@@ -758,30 +760,11 @@ menu contains a \link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} {\tt Pa
 \end{center}
 \end{figure}
 
-For term editors the {\tt Meta-Environment} menu contains \link{two
-buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: {\tt
-Parse} and {\tt Reduce}. {\tt Parse} parses the term in the editor and
-{\tt Reduce} that applies the evaluator to the text in the editor.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:meta-env-menu2}
-
-\T \includegraphics[width=1.6cm]{meta-env-menu2}
-\W \htmlimage{meta-env-menu2.gif}
-\caption{{\tt Meta-Environment} menu (term editor)}
-
-\end{Label}
-\end{center}
-\end{figure}
-
 \item The {\tt Move} pull-down menu
 contains \link{four buttons}[ (Figure~\Ref)]{FIG:move-menu}
 for structured traversal of the syntax tree of the text in the editor.
 Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
-\end{itemize}
-
 
 \begin{figure}
 \begin{center}
@@ -795,23 +778,54 @@ user can navigate in the tree.
 \end{center}
 \end{figure}
 
+\item The term editors have the {\tt Term-Actions} menu which contains
+at least \link{three buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: 
+{\tt Parse}, {\tt Reduce}, and {\tt ViewTree}. 
+
+\begin{description}
+\item[{\tt Parse}] parses the term in the editor.
+\item[{\tt Reduce}] that applies the evaluator to the text in the editor.
+\item[{\tt ViewTree}] displays the parse tree structure of the focus in
+the {\tt parsetree} pane.
+\end{description}
+These 3 buttons are the standard buttons in the {\tt Term-Actions} menu,
+however it is possible that the {\tt Term-Actions} contains more
+\link{user-defined buttons}[, see Section~Ref]{SEC:button-scripts}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-env-menu2}
+
+\T \includegraphics[width=1.6cm]{meta-env-menu2}
+\W \htmlimage{meta-env-menu2.gif}
+\caption{{\tt Term-Actions} menu (term editor)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
 Editing is now described in more detail.
 
 \subsection{Editing the Syntax Part of a Module}
 
 An editor for editing the syntax part of a module can be activated by
 pressing the {\tt Edit Syntax} button
-\link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
+of the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
 An example is shown \link*{here}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 
-Initially the entire text is
-highlighted and the message ``{\tt Focus symbol: term}'' appears
-in the status line at the bottom of the main window.
+Initially the text is not highlighted, but the text has already
+been parsed. Click at an arbitrary place you will see that
+part of the text will be highlighted, this is what we will
+call the \emph{focus} and the message ``{\tt Focus symbol: <SORT>}'' appears
+in the status line at the bottom of the main window, where {\tt <SORT>}
+will be the non-terminal/sort of the focus.
 
 Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
 editor, the parser can be activated.  The parser is finished when the
-status line in the main window displays ``{\tt Idle}'' again.
+status line in the main window displays {\tt Idle} again.
 
 Note: when parsing a large term it may take
 some time for the editor to be active again. If the parse was
@@ -819,70 +833,74 @@ successful, the bottom line in the \xemacs\ window displays the message
 {\tt Focus sort: None}. If the term contains an error, the cursor is
 located at the position where the error was detected and the bottom line
 in the \xemacs\ window displays the message
-{\tt Parse error near cursor}.
-Clicking on an arbitrary location in a correctly parsed term sets the focus
-and changes the bottom line message.
-
+{\tt Parse error near cursor}. 
 
 \subsection{Editing the Equations Section of a Module}
 
 An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}
-in the \link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
 An example is shown  \link*{here}[ in Figure \Ref]{FIG:Bool-example.asf}.
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
 activates the parser for the
 equations. It is possible that in order to parse the equations, a
 parse table must be generated. This is visible through the status
-message {\tt Generating Parse Table}.
+message {\tt Generating parsetable <ModuleName>}.
 
 \subsection{Editing Terms}
 \label{EditingTerms}
 
 An editor for editing a term over a module is activated via the button
 {\tt Edit Term}
-in the \link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
 An example is shown  \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
-The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
+The entry {\tt Parse} in the {\tt Term-Actions} menu of the editor 
 activate the parser for this
 term. It is possible that in order to parse the term, a parse table
 must be generated. This is visible through the status message {\tt
-Generating Parse Table}.
+Generating parsetable <ModuleName>}.
 
-The entry {\tt Reduce} in the {\tt Meta-Environment} menu of the
+The entry {\tt Reduce} in the {\tt Term-Actions} menu of the
 editor activates the evaluator\footnote{We will also use interpreter,
 rewriter, or reducer instead of evaluator, and equivalently we use 
-evaluating, interpreting, rewriting, or reducing of a term}. The term is
-reduced given the specified equations (if any). In order to reduce the
-term it may be necessary to parse the equations of various modules and
-to initialize the evaluator with this set of equations.
-
-\section{Executing Specifications} 
-\label{ExecutingSpecifications}
-
-Some (but not all!) \asfsdf\ specifications can be executed by interpreting
-each equation as a (conditional) rewrite rule from left to right.
+interpreting, rewriting, reducing, or evaluating of a term, respectively}. 
+The term is reduced given the specified equations (if any). 
+In order to reduce the term it may be necessary to parse the 
+equations of various modules and to initialize the evaluator 
+with this set of equations.
 
 When you have created a term (using a \link{term editor}[, see
 Section~\Ref]{EditingTerms}), 
 you can reduce it (by selecting the {\tt Reduce} entry from 
-the {\tt Meta-Environment} menu of the term
-editor).  As a result, rewrite rules will be applied until a normal
+the {\tt Term-Actions} menu of the term editor).  
+As a result, rewrite rules will be applied until a normal
 form is reached (a term for which no applicable rule can be
 found). This normal form is the result of the execution and is
 displayed in a new term window.
 
-The rewriting process is further described in Section
-\begin{iftex}
-\ref{Equations}.
-\end{iftex}
-\begin{ifhtml}
-\link{Equations}[]{Equations}.
-\end{ifhtml}
+The entry {\tt ViewTree} in the {\tt Term-Actions} menu of the term editor
+displays the parse tree of the focus, if any. The parse tree will be shown
+in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:meta-parsetree}.
+
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:meta-parsetree}
+\T \includegraphics[width=12cm]{meta-parsetree}
+\W \htmlimage{meta-parsetree.gif}
+
+\caption{Main window of \ASmetaenv\ with the parsetree panel activated}
+\end{Label}
+\end{center}
+\end{figure}
+
+\subsection{Parse Errors}
+
+\section{Button Scripts}
+\label{SEC:button-scripts}
 
 \section{Guided Tour}
 \label{GuidedTour}
@@ -900,8 +918,8 @@ The rewriting process is further described in Section
 %%\end{figure}
 
 To help you get acquainted with the \ASmetaenv\ the system
-contains two example specifications. The first is the one-module specification:
-{\tt Bool-example}, and the second is the specification of the syntax, 
+contains two example specifications. The first one is a very simple specification:
+{\tt Booleans}, and the second is the specification of the syntax, 
 typechecker, and dynamic semantics of the small programming language Pico.
 
 This Guided Tour is meant to guide you through these specifications, and show
@@ -916,24 +934,23 @@ the Meta-Environment will be installed, e.g., {\tt <path>/asfsdf-meta}.
 You will then find the files needed for this Guided Tour in the directory 
 {\tt <path>/share/asfsdf-meta/demo/pico}. 
 It is advisable to make your personal copy of this
-directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
+directory.  In this Guided Tour we will use {\tt pico} to refer to your own
 copy of the directory. Furthermore, all the examples given in this
 manual can be found in$\\$
 {\tt <path>/asfsdf-meta/share/demo/user-manual-examples}.
 
-For each module in a specification two files exist: `{\tt
-  $module$.sdf}' contains the syntax of $module$ and `{\tt
-  $module$.asf}' contains the equations (semantics) of $module$. The
-  directory {\tt pico} contains:
+For each module in a specification two files exist: {\tt $module$.sdf}
+contains the syntax of $module$ and {\tt $module$.asf} contains the 
+equations (semantics) of $module$. The directory {\tt pico} contains:
 
 \begin{itemize}
 
-\item Two files for the module {\tt Bool-example}.
+\item Two files for the module {\tt Booleans}.
 
 \item Files for the Pico-specification.
 
-\item Three examples of Pico-programs: `{\tt big.trm}', `{\tt fac.trm}',
-  `{\tt small.trm}'.
+\item Three examples of Pico-programs: {\tt big.trm}, {\tt fac.trm},
+  {\tt small.trm}.
 
 \item Terms for typechecking and evaluating these Pico-programs.
 
@@ -953,14 +970,15 @@ appear.
 appear as shown in Figure~\ref{FIG:meta-start}.
 \end{iftex}
   
-\item Add the module {\tt Bool-example} by selecting the File menu, and
-  choosing the Open button. In a dialog window, the system asks you to give
+\item Add the module {\tt Booleans} by selecting the File menu, and
+  choosing the {\tt Open Module} button. 
+  In a dialog window, the system asks you to give
   the name of the module to be opened. It presents a list of all files with
-  extension `{\tt sdf}'. Click once on `{\tt Bool-example.sdf}' and then
-  push the {\tt Open} button. This will load the module {\tt Module-example}
+  extension {\tt sdf}. Click once on {\tt Booleans.sdf} and then
+  push the {\tt Open Module} button. This will load the module {\tt Booleans}
   (both its syntax and equations!) into the system.
   
-\item Verify that module {\tt Bool-example} appears as a rectangle in
+\item Verify that module {\tt Booleans} appears as a rectangle in
 the import pane as well as in the module pane of the 
 \link{main window}[ as shown in Figure~\Ref]{FIG:meta-Bool-example}.
 
@@ -972,13 +990,13 @@ the import pane as well as in the module pane of the
 
 \T \includegraphics[width=12cm]{meta-Bool-example}
 \W \htmlimage{meta-Bool-example.gif}
-\caption{Main window after opening {\tt Bool-example}}
+\caption{Main window after opening {\tt Booleans}}
 
 \end{Label}
 \end{center}
 \end{figure}
 
-\subsection{The Module Bool-example}
+\subsection{The Module Booleans}
 \label{Bool-example}
 
 One of the simplest specifications possible, and therefore frequently used as
@@ -986,8 +1004,7 @@ an example, is the datatype of the Boolean values. It defines the constants
 {\tt true} and {\tt false} and the functions \emph{and} and \emph{or}
  (written in infix notation using
 the left-associative operators `{\tt \&}' and `{\tt |}', respectively) and
-\emph{not} (written
-in prefix notation using the function symbol `{\tt not}').
+\emph{not} (written in prefix notation using the function symbol `{\tt not}').
 The specification is \link*{as follows}[shown in Figure~\Ref]{CODE:Bool-example}.
 
 \begin{figure}
@@ -998,23 +1015,23 @@ module Bool-example
 
 imports basic/Whitespace
 exports
-  sorts BOOL 
+  sorts Bool 
 
   context-free syntax
-    "true"             -> BOOL
-    "false"            -> BOOL 
-    BOOL "|" BOOL      -> BOOL {left}
-    BOOL "&" BOOL      -> BOOL {left}
-    "not" "(" BOOL ")" -> BOOL
-    "(" BOOL ")"       -> BOOL {bracket}
+    "true"             -> Bool
+    "false"            -> Bool 
+    Bool "|" Bool      -> Bool {left}
+    Bool "&" Bool      -> Bool {left}
+    "not" "(" Bool ")" -> Bool
+    "(" Bool ")"       -> Bool {bracket}
 
   context-free priorities
-    BOOL "&" BOOL -> BOOL >
-    BOOL "|" BOOL -> BOOL
+    Bool "&" Bool -> Bool >
+    Bool "|" Bool -> Bool
 
 hiddens
   variables
-    "Bool"[0-9\']* -> BOOL
+    "Bool"[0-9\']* -> Bool
 
 equations
 
@@ -1028,24 +1045,24 @@ equations
   [B6] not(true) = false
 \end{verbatim}
 \end{IncCode}
-\caption{Specification of module {\tt Bool-example}}
+\caption{Specification of module {\tt Booleans}}
 \end{Label}
 \end{figure}
 
 The \asfsdf\ features used in this specification are explained in
 \link*{Introduction to \asfsdf}[Section~\Ref]{ASF+SDF}.
 
-\subsubsection{The Module Editor for {\tt Bool-example}}
+\subsubsection{The Module Editor for {\tt Booleans}}
 
 \begin{itemize}
   
-\item Select module {\tt Bool-example} from the module pane (the vertical list
-  of module names that now only contains {\tt Bool-example}) by clicking on it
-  once.
+\item Select module {\tt Booleans} from the module pane (the vertical list
+  of module names that now contains {\tt Booleans} and 
+  {\tt basic/Whitespace}) by clicking on it once.
   
 \item Push the button {\tt Edit Syntax} in the button pane at the right-hand
   side of the main window.  An editor will appear containing the syntax part
-  of the {\tt Bool-example} specification: the \sdf\ section.  This editor is
+  of the {\tt Booleans} specification: the \sdf\ section.  This editor is
   a version of the standard text editor Emacs extended with the menus 
  {\tt Meta-Environment} and {\tt Move}.
 The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
@@ -1056,7 +1073,7 @@ The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 
 \T \includegraphics[width=12cm]{Bool-example_sdf2}
 \W \htmlimage{Bool-example.sdf2.gif}
-\caption{Editor for the syntax of {\tt Bool-example}}
+\caption{Editor for the syntax of {\tt Booleans}}
 
 \end{Label}
 \end{center}
@@ -1064,7 +1081,7 @@ The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
   
 \item Push the button {\tt Edit Equations}.  This will open a new 
   instance of Emacs containing the semantic part
-  of the {\tt Bool-example} specification: a list of conditional equations.
+  of the {\tt Booleans} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
   the \sdf\ section. 
 The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
@@ -1075,7 +1092,7 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 
 \T \includegraphics[width=12cm]{Bool-example_asf}
 \W \htmlimage{Bool-example.asf.gif}
-\caption{Editor for the equations of {\tt Bool-example}}
+\caption{Editor for the equations of {\tt Booleans}}
 
 \end{Label}
 \end{center}
@@ -1083,11 +1100,11 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 
 \end{itemize}
 
-\subsubsection{A Term Editor for {\tt Bool-example}}
+\subsubsection{A Term Editor for {\tt Booleans}}
 
 \begin{itemize}
-\item Open a term-editor over module {\tt Bool-example} by first selecting
-  module {\tt Bool-example} in the module pane, and then pushing the {\tt
+\item Open a term-editor over module {\tt Booleans} by first selecting
+  module {\tt Booleans} in the module pane, and then pushing the {\tt
     Edit Term ...} button.  A standard dialog window pops up.
     Enter any new filename, for instance, `{\tt my-term}'.
 
@@ -1101,46 +1118,20 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
 \T \includegraphics[width=12cm]{Bool-example_trm}
 \W \htmlimage{Bool-example.trm.gif}
-\caption{Term editor for {\tt Bool-example} after entering `{\tt true \&
-    false}'}
+\caption{Term editor for {\tt Booleans} after entering `{\tt true \& false}'}
 
 \end{Label}
 \end{center}
 \end{figure}
 
-\item Click in the focus, this will move the cursor (a single character-sized
-  rectangle) 
-  
 \item From menu {\tt Term-Actions} click the {\tt Parse} button.  The text
-  in the focus is now parsed and the different background color has 
-  disappeared. 
-The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm2}
+  in the focus is now being parsed.
 
 
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:Bool-example.trm2}
-
-\T \includegraphics[width=12cm]{Bool-example_trm2}
-\W \htmlimage{Bool-example.trm2.gif}
-\T \caption{Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parsing}
-\W \caption{Same term editor as \link{above}[]{FIG:Bool-example.trm} after parsing}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-\end{itemize}
-
-All the text \emph{outside} the focus is (by definition) always syntactically
-correct. The text \emph{inside} the focus is fresh text which may contain syntax
-errors.
-
-\begin{itemize}
-
-\item Click on one of the characters of the word `{\tt false}'.  You
+\item Click on one of the characters of the word `{\tt false}', this will
+move the cursor (a single character-sized rectangle).  You
 have selected `{\tt false}' as new focus and the blue background
-reappears. 
+appears. 
 This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm2}.
 
 \begin{figure}
@@ -1196,7 +1187,7 @@ will be selected and becomes the focus.
   
   In the status line at the bottom of the edit window a message appears
   `{\tt Parse error near cursor}' and the cursor will be positioned in
-  the word `{\tt wrong}'
+  the word `{\tt wrong}'.
 
 \end{itemize}
 
@@ -1251,7 +1242,7 @@ brackets in the \sdf\ definition are put around the term `{\tt false | true}'.
 Thus `{\tt true \& (false | true})' is more likely to express what you
 intended.
 
-\subsubsection{Modifying {\tt Bool-example}}
+\subsubsection{Modifying {\tt Booleans}}
 
 The \ASmetaenv\ is an \emph{incremental environment generator}. After
 each edit operation on a module, its \emph{implementation} (i.e., scanner, parser and
@@ -1318,7 +1309,7 @@ Modifying layout in the lexical section:
 
 \item Remove the lexical syntax with the {\tt LAYOUT} definitions. 
 
-\item Try parsing equations of {\tt Bool-example}.
+\item Try parsing equations of {\tt Booleans}.
 
 \end{itemize}
 
@@ -1328,14 +1319,14 @@ definitions define at least spaces and newlines to be {\tt LAYOUT}.
 
 \begin{itemize}
   
-\item End the editing of your term and the module {\tt Bool-example} by
+\item End the editing of your term and the module {\tt Booleans} by
   selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  
-  If you like, you can save the changes to module Bool-example.
+  If you like, you can save the changes to module {\tt Booleans}.
 
 \end{itemize}
 
-If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
-  Bool-example.asf}' will be modified.
+If you save the changes the files `{\tt Booleans.sdf}' and `{\tt
+  Booleans.asf}' will be modified.
 
 
 \begin{itemize}
@@ -1388,7 +1379,7 @@ Pico specification. Pico is a toy language used demonstration purposes.
 \end{center}
 \end{figure}
 
-\item Study the differences in syntax and equations between with {\tt Bool-example}
+\item Study the differences in syntax and equations between with {\tt Booleans}
 and {\tt Pico-Booleans}.
 
 \end{itemize}
