@@ -21,9 +21,10 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 
 /*{{{  static ERR_FeedbackList makeAmbiguityMessage() */
 
-static ERR_FeedbackList makeAmbiguityMessage()
+static ERR_FeedbackList makeAmbiguityMessage(void *subject)
 {
-  return ERR_makeFeedbackListSingle(ERR_makeFeedbackError("equations contain ambiguities", ERR_makeSubjectListEmpty()));
+  return ERR_makeFeedbackListSingle(makeMessage("equations contain ambiguities",
+						NULL, (ATerm) subject));
 }
 
 /*}}}  */
@@ -57,7 +58,7 @@ static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag,
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   if (PT_isTreeAmb(tree)) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(tree);
   }
   if (PT_isTreeVar(tree)) {
     if (!lookupVariable(tree, variables)) {
@@ -188,10 +189,10 @@ static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition 
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(lhsCond);
   }
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(rhsCond)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(rhsCond);
   }
   if (!noNewVariables((PT_Tree)lhsCond, *variables) ||
       !noNewVariables((PT_Tree)rhsCond, *variables)) {
@@ -310,17 +311,17 @@ static ERR_FeedbackList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition c
 static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(condition);
   }
   else {
     ASF_Tree lhsCond = ASF_getASFConditionLhs(condition);
     ASF_Tree rhsCond = ASF_getASFConditionRhs(condition);
 
     if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(lhsCond)))) {
-      return makeAmbiguityMessage();
+      return makeAmbiguityMessage(lhsCond);
     }
     if (PT_isTreeAmb(PT_TreeFromTerm(ASF_TreeToTerm(rhsCond)))) {
-      return makeAmbiguityMessage();
+      return makeAmbiguityMessage(rhsCond);
     }
 
     if (ASF_isASFConditionNegative(condition)) {
@@ -357,7 +358,7 @@ static ERR_FeedbackList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condit
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionsToTerm(conditions)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(conditions);
   }
   else {
     ASF_ASFConditionList conditionList = ASF_getASFConditionsList(conditions);
@@ -388,7 +389,7 @@ static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
 
   PT_Tree ptTree = PT_TreeFromTerm(ASF_TreeToTerm(asfTree));
   if (PT_isTreeAmb(ptTree)) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(ptTree);
   }
   else {
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
@@ -410,7 +411,7 @@ static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation)
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionalEquationToTerm(condEquation)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(condEquation);
   }
   else {
     ASF_ASFTag tag = ASF_getASFConditionalEquationASFTag(condEquation);
@@ -418,7 +419,7 @@ static ERR_FeedbackList checkEquation(ASF_ASFConditionalEquation condEquation)
     ASF_ASFEquation equation = ASF_getASFConditionalEquationASFEquation(condEquation);
 
     if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFEquationToTerm(equation)))) {
-      return makeAmbiguityMessage();
+      return makeAmbiguityMessage(equation);
     }
     else {
       ASF_Tree lhsEq = ASF_getASFEquationLhs(equation);
@@ -454,7 +455,7 @@ static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFTestEquationToTerm(testEquation)))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(testEquation);
   }
   else {
     ASF_ASFTag tag = ASF_getASFTestEquationASFTag(testEquation);
@@ -462,7 +463,7 @@ static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)
     ASF_ASFCondition condition = ASF_getASFTestEquationASFCondition(testEquation);
 
     if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
-      return makeAmbiguityMessage();
+      return makeAmbiguityMessage(condition);
     }
     else {
       ASF_Tree lhsCond = ASF_getASFConditionLhs(condition);
@@ -546,7 +547,7 @@ ERR_FeedbackList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquati
 ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(equations);
   }
 
   return checkASFConditionalEquationList(equations);
@@ -558,7 +559,7 @@ ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList equations)
 ERR_FeedbackList checkTests(ASF_ASFTestEquationTestList tests) 
 {
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) tests))) {
-    return makeAmbiguityMessage();
+    return makeAmbiguityMessage(tests);
   }
 
   return checkASFTestEquationList(tests);
