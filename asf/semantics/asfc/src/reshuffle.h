@@ -1,9 +1,9 @@
 #ifndef _RESHUFFLE_H
 #define _RESHUFFLE_H   
 
-#include <PT-utils.h>
-#include <SDF-utils.h>
-#include <ASF-utils.h> 
+#include <MEPT-utils.h>
+#include <SDFME-utils.h>
+#include <ASFME-utils.h> 
 
 char *get_output_dir(void);
 void generateCode(char *modname, ATerm module);

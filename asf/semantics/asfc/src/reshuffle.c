@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <aterm2.h>
+
+#include <SDFME-utils.h>
+#include <ASFME-utils.h>
+#include <MEPT-utils.h>
+
 #include "reshuffle.h"
+
 
 static ATermList compiled_modules;
 
@@ -41,7 +47,7 @@ filterEquationsGivenProduction(PT_Production func, ASF_CondEquationList eqs)
   return equations;
 }
 
-static PT_ModuleName unique_new_name(SDF_ModuleName name)
+static char* unique_new_name(SDF_ModuleName name)
 {
   char *text, *newtext;
   ATerm newname;
@@ -63,12 +69,10 @@ static PT_ModuleName unique_new_name(SDF_ModuleName name)
   }
   compiled_modules = ATinsert(compiled_modules, newname);
 
-  newModuleName = PT_makeModuleNameDefault(newtext);
-  free(newtext);
-  return newModuleName;
+  return newtext;
 }
 
-static PT_ModuleName createNewModuleName(SDF_ModuleName modname)
+static char* createNewModuleName(SDF_ModuleName modname)
 { 
   return unique_new_name(modname);
 }
@@ -336,5 +340,6 @@ void compileModules(char *moduleName,
     }
     moduleList = SDF_getModuleListTail(moduleList);
   }
+  
   gen_makefile(moduleName);
 }

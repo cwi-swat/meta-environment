@@ -15,12 +15,13 @@
 
 typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
-/* abbreviations for layout */
+/* abbreviations for arbitrary layout (should be ATprotected) */
 static MA_Layout sp  = NULL; /* space */
 static MA_Layout nl  = NULL; /* newline */
 static MA_Layout nl2 = NULL; /* 2 newlines */
 static MA_Layout em  = NULL; /* empty */
 
+/* local functions */
 static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout);
 static MA_Lexical stringToLexical(const char* str);
 static MA_Layout stringToLayout(const char *str);
@@ -36,6 +37,7 @@ static MA_FunId prodToFunId(PT_Production prod);
 static MA_SigArgElems makeSigArgElems(int arity);
 static MA_FuncDef productionToFuncDef(SDF_Production prod, 
                                       SDF_ModuleName moduleName);
+static MA_FuncDef prodToFuncDef(PT_Production prod);
 static MA_SignatureOpt productionListToSignature(SDF_ProductionList list,
                                                  SDF_ModuleName moduleName);
 static MA_TermArgs argsToTermArgs(PT_Args args);
@@ -55,6 +57,10 @@ static MA_Lexical stringToLexical(const char* str)
 
 static MA_Layout stringToLayout(const char *str)
 {
+  if (strlen(str) == 0) {
+    return (MA_Layout) PT_makeTreeLayoutEmpty();
+  }
+
   return (MA_Layout) PT_makeTreeLayoutFromString(str);
 }
 
@@ -65,14 +71,14 @@ static MA_FunId stringToFunId(const char *str)
 
 static MA_FunId intToFunId(int ch)
 {
-  char num[4] = "\\";
+  char num[5] = "\\";
 
   if(ch < 0 || ch > 255) {
     ATerror("intToFunId: unable to process %d\n", ch);
     return NULL;
   }
 
-  sprintf(num+1,"%d", ch);
+  sprintf(num+1,"%03d", ch);
 
   return MA_makeFunIdLexToCf(stringToLexical(num));
 }
@@ -84,14 +90,10 @@ static void initLayoutAbbreviations(void)
   ATprotect(&nl);
   ATprotect(&nl2);
 
-  em = (MA_Layout) PT_makeTreeLayoutEmpty();
-ATwarning("em: %t\n", em);
+  em = stringToLayout("");
   sp = stringToLayout(" ");
-ATwarning("sp: %t\n", sp);
   nl = stringToLayout("\n");
-ATwarning("nl: %t\n", nl);
   nl2 = stringToLayout("\n\n");
-ATwarning("nl2: %t\n", nl2);
 }
 
 static char* prodToEscapedString(PT_Production prod)
@@ -135,7 +137,8 @@ static MA_Term attrToTerm(PT_Attr attr)
 			   MA_makeTermArgsSingle(arg), em);
   }
   else if (PT_isAttrAterm(attr)) {
-    ATwarning("ATerm attributes not supported by compiler yet.\n");
+    ATwarning("ATerm attributes not supported by compiler yet: %t\n",
+	      attr);
   }
 
   str = strdup(ATwriteToString((ATerm) attr));
@@ -193,16 +196,22 @@ static MA_SigArgElems makeSigArgElems(int arity)
   assert(arity > 0);
   
   for(--arity;arity > 0; arity--) {
-    list = MA_makeSigArgElemsMany(arg,sp,",",em,list);
+    list = MA_makeSigArgElemsMany(arg,em,",",em,list);
   }
 
   return list;
 }
 
-static MA_FuncDef productionToFuncDef(SDF_Production prod, 
+static MA_FuncDef productionToFuncDef(SDF_Production prod,
 				      SDF_ModuleName moduleName)
 {
   PT_Production ptProd = flattenSdfProduction(prod,moduleName);
+
+  return prodToFuncDef(ptProd);
+}
+
+static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
+{
   MA_FunId maFunId = prodToFunId(ptProd);
   PT_Attributes ptAttributes = PT_getProductionAttributes(ptProd);
   int arity = getProdArity(ptProd, WITHOUT_LAYOUT);
@@ -248,8 +257,13 @@ static MA_SignatureOpt productionListToSignature(SDF_ProductionList list,
       list = SDF_getProductionListTail(list)) {
     sdfProd = SDF_getProductionListHead(list);
     maFuncDef = productionToFuncDef(sdfProd, moduleName);
-    maFuncDefElems = MA_makeFuncDefElemsMany(maFuncDef,em,";",nl,
-					     maFuncDefElems);
+    if (!MA_isFuncDefElemsEmpty(maFuncDefElems)) {
+      maFuncDefElems = MA_makeFuncDefElemsMany(maFuncDef,em,";",nl,
+					       maFuncDefElems);
+    }
+    else {
+      maFuncDefElems = MA_makeFuncDefElemsSingle(maFuncDef);
+    }
     if (!SDF_hasProductionListTail(list)) {
       break;
     }
@@ -265,8 +279,6 @@ static MA_TermArgs argsToTermArgs(PT_Args args)
   PT_Tree arg = NULL;
   MA_Term term = NULL;
 
-  assert(args != NULL);
-
   if (PT_isArgsEmpty(args)) {
     return NULL;
   } else {
@@ -278,7 +290,7 @@ static MA_TermArgs argsToTermArgs(PT_Args args)
     
     if (term != NULL) {
       termArgs = MA_makeTermArgsSingle(term);
-      assert(args != NULL);
+    
       if (PT_hasArgsTail(args)) {
         args = PT_getArgsTail(args);
       }
@@ -328,7 +340,6 @@ static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout)
     result = MA_makeTermConstant(funid);
   }
   else if (PT_isTreeLit(tree)) {
-
     result = NULL; /* ignore literals */
   }
   else {
@@ -403,18 +414,18 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation)
 
   if (ASF_isTagDefault(tag)) {
     if (conds != NULL) {
-      result = MA_makeRuleDefaultWithConds(nl,conds,nl,nl,lhs,sp,sp,rhs);      
+      result = MA_makeRuleDefaultWithConds(nl,conds,nl,nl,lhs,sp,nl,rhs);      
     }
     else {
-      result = MA_makeRuleDefaultNoConds(nl,lhs,sp,sp,rhs);
+      result = MA_makeRuleDefaultNoConds(nl,lhs,sp,nl,rhs);
     }
   }
   else {
     if (conds != NULL) {
-      result = MA_makeRuleWithConds(conds,nl,nl,lhs,sp,sp,rhs);
+      result = MA_makeRuleWithConds(conds,nl,nl,lhs,sp,nl,rhs);
     }
     else {
-      result = MA_makeRuleNoConds(lhs,sp,sp,rhs);
+      result = MA_makeRuleNoConds(lhs,sp,nl,rhs);
     }
   }
 
@@ -428,7 +439,13 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list)
   for(;ASF_hasCondEquationListHead(list);
        list = ASF_getCondEquationListTail(list)) {
     ASF_CondEquation eq = ASF_getCondEquationListHead(list);
-    rules = MA_makeRuleElemsMany(condEquationToRule(eq),em,";",nl2,rules);
+
+    if (!MA_isRuleElemsEmpty(rules)) {
+      rules = MA_makeRuleElemsMany(condEquationToRule(eq),em,";",nl2,rules);
+    }
+    else {
+      rules = MA_makeRuleElemsSingle(condEquationToRule(eq));
+    }
 
     if (ASF_isCondEquationListSingle(list)) {
       break;
@@ -460,37 +477,15 @@ MA_Module
 asfSdfToMuASF(SDF_ModuleName name, SDF_ProductionList signature, 
 	    ASF_CondEquationList equations)
 {
-  MA_SignatureOpt maSignature = productionListToSignature(signature, name);
-  MA_RulesOpt maRules = condEquationListToRulesOpt(equations); 
-  MA_ModId maName = moduleNameToModId(name);
-
-  return MA_makeModuleModule(sp,maName,nl,maSignature,nl,maRules);
-}
-
-int main(int argc, char *argv[])
-{
-  ATerm bottom;
-  ATerm name, signature, equations;
-  ATerm module;
-
-  ATinit(argc, argv, &bottom);
-  ATsetChecking(ATtrue);
-  PT_initMEPTApi();
-  SDF_initSDFMEApi();
-  ASF_initASFMEApi();
-  MA_initMuASFApi();
-
-  name = ATreadFromNamedFile(argv[1]);
-  signature = ATreadFromNamedFile(argv[2]);
-  equations = ATreadFromNamedFile(argv[3]);
+  MA_SignatureOpt maSignature;
+  MA_RulesOpt maRules;
+  MA_ModId maName;
 
   initLayoutAbbreviations();
 
-  module = (ATerm) asfSdfToMuASF((SDF_ModuleName) name, 
-                         (SDF_ProductionList) signature,
-                         (ASF_CondEquationList) equations);
+  maSignature = productionListToSignature(signature, name);
+  maRules = condEquationListToRulesOpt(equations); 
+  maName = moduleNameToModId(name);
 
-  ATprintf("%t", module);   
-
-  return 0;
+  return MA_makeModuleModule(sp,maName,nl,maSignature,nl,maRules);
 }
