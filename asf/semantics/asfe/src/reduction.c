@@ -434,7 +434,8 @@ static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
 				  int depth, void* extra)
 {
-  return forwardBuiltin(builtin, trm);
+  return rewriteInnermost(forwardBuiltin(builtin, trm), env, depth, 
+			  NO_TRAVERSAL);
 }
 
 /*}}}  */
