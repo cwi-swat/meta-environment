@@ -4,8 +4,9 @@ module basic/Strings
 %% backslashes
 
 
+imports basic/StrCon
 imports basic/Integers
-	basic/Bytes
+imports	basic/Bytes
 
 hiddens 
   sorts Escaped Normal
@@ -13,15 +14,7 @@ hiddens
 exports
   context-free start-symbols String
 
-  sorts StrCon String
-
-  lexical syntax
-    ~[\0-\31\"\\\n] -> Normal
-
-    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped
-    "\\" [0-7][0-7][0-7]             -> Escaped
-
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon
+  sorts String
 
 exports
   context-free syntax

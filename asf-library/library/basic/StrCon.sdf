@@ -1,0 +1,14 @@
+module basic/StrCon
+
+exports
+
+sorts StrCon Normal Escaped
+
+
+lexical syntax
+    ~[\0-\31\"\\\n] -> Normal
+
+    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped
+    "\\" [0-7][0-7][0-7]             -> Escaped
+
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon

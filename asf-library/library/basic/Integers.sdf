@@ -1,15 +1,13 @@
 module basic/Integers
 
+imports basic/NatCon
 imports
   basic/Booleans
 
 exports
   context-free start-symbols Natural Integer
 
-  sorts NatCon Natural Integer
-
-  lexical syntax
-    [0-9]+ -> NatCon
+  sorts Natural Integer
 
   context-free syntax
      NatCon           		-> Natural
@@ -32,8 +30,7 @@ exports
     {left: Integer "+" Integer -> Integer
            Integer "-" Integer -> Integer}
 
-  lexical restrictions
-    NatCon -/- [0-9]
+
 
 hiddens
   imports basic/Comments
