@@ -39,9 +39,8 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
   if (ASF_isEquationsPresent(asfEqs)) {
     asfEqsList = ASF_getEquationsList(asfEqs);
     asfEqsList = doRenamingsInEquations(asfEqsList, renamings);
+    asfEqs = ASF_setEquationsList(asfEqs, asfEqsList);
   }
-
-  asfEqs = ASF_setEquationsList(asfEqs, asfEqsList);
  
   return ATmake("snd-value(equations(<term>))",
                 ATBpack(ASF_StartToTerm(ASF_setStartTopEquations(start,
