@@ -558,7 +558,7 @@ lexicalsToString(PT_Args lexicals)
 static ATerm
 treeToString(PT_Tree tree)
 {
-  return ATmake("<str>", yieldTree(tree));
+  return ATmake("<str>", PT_yieldTree(tree));
 }
 
 static ATerm
