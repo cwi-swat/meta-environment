@@ -15,9 +15,11 @@
 #include "module-db.tif.h"
 
 ATbool complete_asf_sdf2_specification(ATerm module);
-ATermList get_imported_modules(ATerm name); 
-ASF_CondEquationList getEquations(ATermList mods);
 SDF_SDF getSyntax(ATermList modules);
+
+ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree, ASF_CondEquationList asfEqs, SDF_Symbols actualParams);
+SDF_ImportList renameParametersInImportList(SDF_ModuleName name, PT_Tree sdfTree, SDF_ImportList importList);
+ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfEqs, SDF_Renamings renamings);
 
 #define GetValue(db,k) (ATtableGet(db,k))
 #define PutValue(db,k,v) (ATtablePut(db,k,v))

@@ -52,73 +52,201 @@ void rec_terminate(int cid, ATerm t)
 ATerm exists(int cid, char *modulename)
 {
   ATerm name = ATmake("<str>",modulename);
-  if(GetValue(modules_db,name))
+  if(GetValue(modules_db,name)) {
     return ATmake("snd-value(result(exists(<term>)))", name);
-  else
+  }
+  else {
     return ATmake("snd-value(result(notexists(<term>)))", name);
+  }
 }
 
 /*}}}  */
+/*{{{  SDF_ImportList calculateImportList(SDF_ModuleName moduleName) */
 
-/*{{{  ASF_CondEquationList getEquations(ATermList mods) */
-
-ASF_CondEquationList getEquations(ATermList mods)
+static
+SDF_ImportList calculateImportList(SDF_ModuleName moduleName)
 {
-  ATerm mod, entry, eqsTerm;
+  ATerm plainName = SDF_getModuleNamePlain(moduleName);
+  ATerm entry = GetValue(modules_db, plainName);
+  SDF_ImportList fullImports = SDF_makeImportListFromTerm(
+                                 GetValue(full_import_db, plainName));
+
+  if (SDF_isModuleNameParameterized(moduleName)) {
+    ATerm sdfTerm = ATelementAt((ATermList)entry, SYN_LOC);
+    PT_Tree sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
+
+    fullImports = renameParametersInImportList(moduleName, sdfTree, fullImports);
+  }
+  return fullImports;
+}
+
+/*}}}  */
+/*{{{  ASF_CondEquationList getEquations(SDF_Import import) */
+
+static
+ASF_CondEquationList getEquations(SDF_Import import)
+{
+  ATerm plainName, entry, eqsTerm, sdfTerm;
   ASF_CondEquationList asfEqsList;
   ASF_CondEquationList newAsfEqsList = ASF_makeCondEquationListEmpty();
-  PT_ParseTree eqsParseTree;
-  PT_Tree eqsTree;
+  PT_Tree eqsTree, sdfTree;
   ASF_Equations asfEqs;
+  SDF_ModuleName moduleName;
+  SDF_ImportList fullImports;
+  ATerm eqs;
+  ATerm atImport = SDF_makeTermFromImport(import);
 
-  while (!ATisEmpty(mods)) {
-    mod = ATgetFirst(mods);
-    entry = GetValue(modules_db, mod);
+  moduleName = SDF_getImportModuleName(import);
+  plainName = SDF_getModuleNamePlain(moduleName);
+
+  eqs = GetValue(eqs_db, atImport);
+  if (!eqs) {
+    entry = GetValue(modules_db, plainName);
+    fullImports = calculateImportList(moduleName);
     eqsTerm = ATelementAt((ATermList)entry, EQS_TREE_LOC);
 
     if (!ATisEqual(eqsTerm, ATparse("unavailable"))) {
-      eqsParseTree = PT_makeParseTreeFromTerm(eqsTerm);
-      eqsTree = PT_getParseTreeTree(eqsParseTree);
-/* Here should the renaming kick in! */
+      eqsTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(eqsTerm));
       asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
-
       if (ASF_isEquationsPresent(asfEqs)) {
-	asfEqsList = ASF_getEquationsList(asfEqs);
-	newAsfEqsList = ASF_concatCondEquationList(newAsfEqsList, asfEqsList);
+        asfEqsList = ASF_getEquationsList(asfEqs);
+        newAsfEqsList = ASF_unionCondEquationList(newAsfEqsList, asfEqsList);
       }
     }
-    mods = ATgetNext(mods);
+    
+/* To ensure termination when recursing */
+    PutValue(eqs_db, atImport, 
+             ASF_makeTermFromCondEquationList(
+               ASF_makeCondEquationListEmpty())); 
+
+    while (SDF_hasImportListHead(fullImports)) {
+      SDF_Import localImport = SDF_getImportListHead(fullImports);
+
+      newAsfEqsList = ASF_unionCondEquationList(
+                        newAsfEqsList,
+                        getEquations(localImport));
+
+      if (SDF_hasImportListTail(fullImports)) {
+        fullImports = SDF_getImportListTail(fullImports);
+      }
+      else {
+        break;
+      }
+    }
+
+    if (SDF_isImportRenamedModule(import)) {
+      SDF_Renamings renamings = SDF_getImportRenamings(import);
+
+      newAsfEqsList = renameSymbolsInEquations(newAsfEqsList, renamings);
+    }
+
+    if (SDF_isModuleNameParameterized(moduleName)) {
+      SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
+
+      sdfTerm = ATelementAt((ATermList)entry, SYN_LOC);
+      sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
+
+      newAsfEqsList = renameParametersInEquations(sdfTree, 
+                                                  newAsfEqsList, 
+                                                  actualParams);
+
+    }
+    eqs = ASF_makeTermFromCondEquationList(newAsfEqsList);
+
+    PutValue(eqs_db, atImport, eqs);
+
+    return newAsfEqsList;
   }
-  return newAsfEqsList;
+  else {
+    return ASF_makeCondEquationListFromTerm(eqs);
+  }
 }
 
 /*}}}  */
+/*{{{  ATermList calc_trans(ATermList todo) */
 
+static ATermList 
+calc_trans(SDF_ImportList todo)
+{
+  SDF_ImportList fullImports;
+  ATermList result = ATempty;
+
+  while (SDF_hasImportListHead(todo)) {
+    SDF_Import     import     = SDF_getImportListHead(todo);
+    ATerm          atImport   = SDF_makeTermFromImport(import);
+    SDF_ModuleName moduleName = SDF_getImportModuleName(import);
+    ATerm          name       = SDF_getModuleNamePlain(moduleName);
+    ATerm          sdfTerm;
+    PT_Tree        sdfTree;
+
+    if (ATindexOf(result, atImport, 0) < 0) {
+      ATerm entry = GetValue(modules_db, name);
+      if (entry) {
+        fullImports = SDF_makeImportListFromTerm(
+                        GetValue(full_import_db, name));
+
+        if (SDF_isModuleNameParameterized(moduleName)) {
+          sdfTerm = ATelementAt((ATermList)entry, SYN_LOC);
+          sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
+
+          fullImports = renameParametersInImportList(moduleName, sdfTree, fullImports);
+        }
+        result = ATappend(result, atImport);
+        todo = SDF_concatImportList(todo, fullImports);
+      }
+    };
+    if (SDF_hasImportListTail(todo)) {
+      todo = SDF_getImportListTail(todo);
+    }
+    else {
+      break;
+    }
+  }
+  return result;
+}
+
+/*}}}  */
+/*{{{  static ATermList get_imported_modules(ATerm name) */
+
+static
+ATermList get_imported_modules(char *name)
+{
+  ATermList result;
+  ATerm atName, value;
+
+  atName = ATmake("<str>", name);
+  value = GetValue(trans_db, atName);
+  if (!value) {
+    result = calc_trans(SDF_makeImportListSingle(SDFmakeImport(name)));
+    PutValue(trans_db, atName, (ATerm)result);
+    return result;
+  }
+  else {
+    return (ATermList)value;
+  }
+}
+
+/*}}}  */
 /*{{{  ATerm get_all_equations(int cid, char *moduleName) */
 
 ATerm get_all_equations(int cid, char *moduleName)
 {
   ATerm name;
   ATermList mods;
-  ATerm result, eqs;
+  ATerm result;
 
 /* calculate the transitive closure of the imported modules. */
   
   name = ATmake("<str>", moduleName);
-  eqs = GetValue(eqs_db, name);
-  if (!eqs) {
-    if (complete_asf_specification(ATempty, name)) {
-      mods = get_imported_modules(name);
-      result = ASF_makeTermFromCondEquationList(getEquations(mods)); 
-      PutValue(eqs_db, name, result);
-      return ATmake("snd-value(equations(<term>))", ATBpack(result));
-    }
-    else {
-      return ATmake("snd-value(equations-incomplete)");
-    }
+
+  if (complete_asf_specification(ATempty, name)) {
+    mods = get_imported_modules(moduleName);
+    result = ASF_makeTermFromCondEquationList(
+               getEquations(SDFmakeImport(moduleName)));
+    return ATmake("snd-value(equations(<term>))", ATBpack(result));
   }
   else {
-    return ATmake("snd-value(equations(<term>))", ATBpack(eqs));
+    return ATmake("snd-value(equations-incomplete)");
   }
 }
 
@@ -153,10 +281,10 @@ ATerm get_all_equations_for_compiler(int cid, char *moduleName)
   
   name = ATmake("<str>",moduleName);
   if (complete_asf_specification(ATempty, name)) {
-    mods = get_imported_modules(name);
+    mods = get_imported_modules(moduleName);
     result = transformEquations(
                (ATermList)ASF_makeTermFromCondEquationList(
-                            getEquations(mods))); 
+                            getEquations(SDFmakeImport(moduleName))));
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
   }
   else {
@@ -388,7 +516,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
       update_syntax_status_of_modules(chg_mods); 
       imports = SDF_getImports(sdfModule);
       fullImports = SDF_getModuleImportsList(sdfModule);
-/*ATwarning("fullImports = %t\n", fullImports);*/
+
       unknowns = replace_imports(modName, imports, fullImports);
       import_graph = calc_import_graph();
 
@@ -1128,49 +1256,6 @@ ATbool complete_asf_sdf2_specification(ATerm module)
 }
 
 /*}}}  */
-/*{{{  ATermList calc_trans(ATermList todo) */
-
-static ATermList 
-calc_trans(ATermList todo)
-{
-  ATerm name, entry;
-  ATermList imports, result = ATempty;
-
-  while(!ATisEmpty(todo)) {
-    name = ATgetFirst(todo);
-    if (ATindexOf(result, name, 0) < 0) {
-      entry = GetValue(modules_db, name);
-      if (entry) {
-        imports = (ATermList) GetValue(import_db,name);
-        result = ATappend(result, name);
-        todo = ATconcat(todo, imports);
-      }
-    };
-    todo = ATgetNext(todo);
-  }
-  return result;
-}
-
-/*}}}  */
-/*{{{  ATermList get_imported_modules(ATerm name) */
-
-ATermList get_imported_modules(ATerm name)
-{
-  ATermList result;
-  ATerm value;
-
-  value = GetValue(trans_db, name);
-  if (!value) {
-    result = calc_trans(ATmakeList1(name));
-    PutValue(trans_db, name, (ATerm)result);
-    return result;
-  }
-  else {
-    return (ATermList)value;
-  }
-}
-
-/*}}}  */
 /*{{{  ATerm eqs_available_for_modules(int cid, char *moduleName) */
 
 ATerm eqs_available_for_modules(int cid, char *moduleName)
@@ -1184,10 +1269,12 @@ ATerm eqs_available_for_modules(int cid, char *moduleName)
   atModuleName = ATmake("<str>",moduleName);
   if(GetValue(modules_db, atModuleName)) {
     /* Get all imported modules (including the module itself) */
-    modules = get_imported_modules(atModuleName);
+    modules = get_imported_modules(moduleName);
 
     while (!ATisEmpty(modules)) {
-      module = ATgetFirst(modules);
+      module = SDF_getModuleNamePlain(
+                 SDF_getImportModuleName(
+                   SDF_makeImportFromTerm(ATgetFirst(modules)))); 
       entry = GetValue(modules_db, module);
       eqsText = ATelementAt((ATermList)entry, EQS_TEXT_LOC);
       eqsTree = ATelementAt((ATermList)entry, EQS_TREE_LOC);
@@ -1276,7 +1363,9 @@ getSyntax(ATermList modules)
   } 
   else {
     while (!ATisEmpty(modules)) {
-      ATerm head = ATgetFirst(modules); 
+      ATerm head = SDF_getModuleNamePlain(
+                     SDF_getImportModuleName(
+                       SDF_makeImportFromTerm(ATgetFirst(modules)))); 
       ATerm entry = GetValue(modules_db, head);
       ATerm module = ATelementAt((ATermList)entry, SYN_LOC);
       PT_ParseTree parseTree = PT_makeParseTreeFromTerm(module);
@@ -1315,7 +1404,7 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
 
   name = ATmake("<str>", moduleName);
   if (complete_sdf2_specification(ATempty, name)) {
-    imports = get_imported_modules(name);
+    imports = get_imported_modules(moduleName);
     definition = getSyntax(imports);
     sdfTree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(definition));
     /*
