@@ -7,37 +7,37 @@
 
 /*}}}  */
 
+/*{{{  static ERR_SubjectList treeToSubjectList(PT_Tree tree) */
+
+static ERR_SubjectList treeToSubjectList(PT_Tree tree)
+{
+  ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
+  LOC_Location location = PT_getTreeLocation(tree);
+
+  if (location != NULL) {
+    char *yield = PT_yieldTree(tree);
+    ERR_Subject sub = ERR_makeSubjectLocalized(yield, (ERR_Location) location);
+    subjects = ERR_makeSubjectListSingle(sub);
+  }
+
+  return subjects;
+}
+
+/*}}}  */
+
 /*{{{  ERR_Error makeMessage(const char *msg, ATerm subject) */
 
 ERR_Error makeMessage(const char *msg, ATerm subject)
 {
-  ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
-  ERR_Subject sub;
-  ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
-
-  if (location != NULL) {
-    sub = ERR_makeSubjectLocalized(PT_yieldTree((PT_Tree) subject), location);
-    subjects = ERR_makeSubjectListSingle(sub);
-  }
-  
-  return ERR_makeErrorError(msg, subjects);
+  return ERR_makeErrorError(msg, treeToSubjectList(PT_TreeFromTerm(subject)));
 }
 
 /*}}}  */
-/*{{{  ERR_Error makeWarning(char *msg, ATerm subject) */
+/*{{{  ERR_Error makeWarning(const char *msg, ATerm subject) */
 
-ERR_Error makeWarning(char *msg, ATerm subject)
+ERR_Error makeWarning(const char *msg, ATerm subject)
 {
-  ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
-  ERR_Subject sub;
-  ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
-
-  if (location != NULL) {
-    sub = ERR_makeSubjectLocalized(PT_yieldTree((PT_Tree) subject), location);
-    subjects = ERR_makeSubjectListSingle(sub);
-  }
-  
-  return ERR_makeErrorWarning(msg, subjects);
+  return ERR_makeErrorWarning(msg, treeToSubjectList(PT_TreeFromTerm(subject)));
 }
 
 /*}}}  */
@@ -70,7 +70,6 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 }
 
 /*}}}  */
-
 /*{{{  static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,  */
 
 static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, 
@@ -108,7 +107,6 @@ static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,
 }
 
 /*}}}  */
-
 /*{{{  static PT_Args collectVariables(PT_Tree tree, PT_Args varList) */
 
 static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
@@ -117,7 +115,7 @@ static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
     return varList;
   }
   if (PT_isTreeVar(tree)) {
-    return PT_makeArgsList(tree, varList);
+    return PT_makeArgsMany(tree, varList);
   }
 
   if (PT_isTreeAppl(tree)) {
@@ -136,7 +134,6 @@ static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
 }
 
 /*}}}  */
-
 /*{{{  static ATbool noNewVariables(PT_Tree tree, PT_Args varList) */
 
 static ATbool noNewVariables(PT_Tree tree, PT_Args varList)
@@ -170,7 +167,6 @@ static ATbool noNewVariables(PT_Tree tree, PT_Args varList)
 }
 
 /*}}}  */
-
 /*{{{  static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList) */
 
 static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
@@ -204,7 +200,6 @@ static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
 }
 
 /*}}}  */
-
 /*{{{  static ATbool isSingleton(PT_Tree tree)  */
 
 static ATbool isSingleton(PT_Tree tree) 
@@ -261,7 +256,6 @@ static ERR_ErrorList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition con
 }
 
 /*}}}  */
-
 /*{{{  static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables)  */
 
 static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 

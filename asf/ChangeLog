@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Mar 23 11:03:14 CET 2004 <{jong,kooiker}@cwi.nl>
+ * upgrade wrt to new MEPT API
+
 Wed Mar 10 12:53:13 CET 2004 <{jong,kooiker}@cwi.nl>
  * Use new Error API
  * Upgrade static buffer sizes from 1024 10240 so construction of
