@@ -173,6 +173,23 @@ static void setCursorAtOffset(int write_to_editor_fd, TE_Action action)
 
 /*}}}  */
 
+/*{{{  static int handleEditorInput(int read_from_editor_fd, int write_to_hive_fd) */
+
+static int handleEditorInput(int read_from_editor_fd, int write_to_hive_fd)
+{
+  ATerm t;
+
+  t = ATBreadTerm(read_from_editor_fd);
+
+  ATwarning("handleEditorInput: t = [%t]\n", t);
+
+  ATBwriteTerm(write_to_hive_fd, t);
+
+  return 0;
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -242,6 +259,8 @@ int main(int argc, char *argv[])
 			       setFocus,
 			       setCursorAtOffset,
 			       isModified);
+
+  setEditorInputHandler(swingEditor, handleEditorInput);
 
   hiveToEditor = TE_makePipeDefault(read_from_hive_fd, editor_socket);
   editorToHive = TE_makePipeDefault(editor_socket, write_to_hive_fd);
