@@ -1,3 +1,5 @@
+/*{{{  Copyright notice */
+
 /*
 
     SGLR - the Scannerless Generalized LR parser.
@@ -21,6 +23,10 @@
 */
 /*  $Id$  */
 
+
+/*}}}  */
+/*{{{  includes */
+
 /*
  The implementation of parse tables: creation, lookup, maintenance.
  */
@@ -34,7 +40,17 @@
 #include  "sglr-strings.h"
 #include  "rsrc-usage.h"
 
-/*  A few globals...  */
+/*}}}  */
+/*{{{  defines */
+
+
+#define SG_AFUN_INIT(fun,val)  fun = val; ATprotectAFun(fun)
+#define SG_ATRM_INIT(trm,val)  trm = val; ATprotect((ATerm *) &trm)
+#define SG_TOKEN_INIT(tok,val) tok = val
+
+/*}}}  */
+/*{{{  variables */
+
 
 token SG_EOF_Token;
 token SG_Zero_Token;
@@ -53,12 +69,10 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
 
 ATerm SG_LeftPrio_Symbol, SG_RightPrio_Symbol;
 
-/*  A few convenient macros to simplify initialization  */
+/*}}}  */
 
-#define SG_AFUN_INIT(fun,val)  fun = val; ATprotectAFun(fun)
-#define SG_ATRM_INIT(trm,val)  trm = val; ATprotect((ATerm *) &trm)
-#define SG_TOKEN_INIT(tok,val) tok = val
 
+/*{{{  void SG_InitPTGlobals(void) */
 
 void SG_InitPTGlobals(void)
 {
@@ -122,6 +136,9 @@ void SG_InitPTGlobals(void)
   inited = ATtrue;
 }
 
+/*}}}  */
+/*{{{  actionkind SG_ActionKind(action a) */
+
 /*  The function |SG_ActionKind| analyses an action and returns its kind.  */
 
 actionkind SG_ActionKind(action a)
@@ -140,6 +157,9 @@ actionkind SG_ActionKind(action a)
   return ERROR;
 }
 
+/*}}}  */
+
+/*{{{  Old functions that are now macros */
 
 #if 0
 state SG_A_STATE(action a)
@@ -194,6 +214,9 @@ ATbool SG_PreferenceAction(action a)
 #endif
 
 
+/*}}}  */
+/*{{{  ATbool SG_ReduceAction(action a) */
+
 ATbool SG_ReduceAction(action a)
 {
   int kind = SG_ActionKind(a);
@@ -201,17 +224,8 @@ ATbool SG_ReduceAction(action a)
   return (kind == REDUCE) || (kind == REDUCE_LA);
 }
 
-/*  Hash function for the Action and Goto Table  */
-
-static hashkey
-SG_ComputeActionHashKey(parse_table *pt, state s, label l)
-{
-  hashkey the_key;
-
-  the_key =  (l * pt->numstates) + s;
-  the_key *= HASH_PRIME;
-  return the_key & (pt->actions.size - 1);
-}
+/*}}}  */
+/*{{{  SG_ComputeGotoHashKey(parse_table *pt, state s, label l) */
 
 static hashkey
 SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
@@ -222,6 +236,9 @@ SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
   the_key *= HASH_PRIME;
   return the_key & (pt->gotos.size - 1);
 }
+
+/*}}}  */
+/*{{{  state SG_LookupGoto(parse_table *pt, state s, label l) */
 
 /*  Parse Table Lookup  */
 
@@ -243,33 +260,8 @@ state SG_LookupGoto(parse_table *pt, state s, label l)
   return SG_EOF;
 }
 
-
-actions SG_LookupAction(parse_table *pt, state s, token c)
-{
-  register actionbucket *a;
-  hashkey h;
-
-  h = SG_ComputeActionHashKey(pt, s, c);
-
-  for(a = pt->actions.table[h]; a; a=a->next) {
-    if((a->s==s) && (a->c==c)) {
-      IF_DEBUG(
-        if(ATisEmpty((ATermList) a->a)) {
-          fprintf(SG_log(), "No action(%d,%d)\n", s, c);
-        } else if(ATgetLength(a->a) == 1) {
-          ATfprintf(SG_log(), "Action(%d,%d) = %t\n", s, c,
-                    ATgetFirst((ATermList) a->a));
-        } else {
-          ATfprintf(SG_log(), "Conflict(%d,%d) = %t\n", s, c, a->a);
-        }
-      );
-      return a->a;
-    }
-  }
-  return (actions) ATempty;
-}
-
-
+/*}}}  */
+/*{{{  ATermInt  SG_GetATint(int l, size_t maxprod) */
 /*
  |SG_GetATint| maps integers onto corresponding ATermInts.
  It uses a dynamically sized static array, that is expanded automatically
@@ -277,6 +269,7 @@ actions SG_LookupAction(parse_table *pt, state s, token c)
  then used to `cache' common integer conversions (within production range).
  Terms for numbers outside the range are created per request.
  */
+
 ATermInt  SG_GetATint(int l, size_t maxprod)
 {
   static size_t   tblsize = 0;
@@ -303,6 +296,9 @@ ATermInt  SG_GetATint(int l, size_t maxprod)
   return inttbl[l];
 }
 
+/*}}}  */
+/*{{{  production SG_LookupProduction(parse_table *pt, label l) */
+
 production SG_LookupProduction(parse_table *pt, label l)
 {
   int i = SG_GETLABEL(l);
@@ -315,11 +311,16 @@ production SG_LookupProduction(parse_table *pt, label l)
     SG_PT_PRODUCTIONS(pt)[i-SG_PROD_START];
 }
 
+/*}}}  */
+/*{{{  ATermList SG_LookupGtrPriority(parse_table *pt, label l) */
+
 ATermList SG_LookupGtrPriority(parse_table *pt, label l)
 {
   return (ATermList) ATtableGet(SG_PT_GTR_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
 }
 
+/*}}}  */
+/*{{{  ATbool SG_IsLeftAssociative(parse_table *pt, label l) */
 
 ATbool SG_IsLeftAssociative(parse_table *pt, label l)
 {
@@ -328,25 +329,33 @@ ATbool SG_IsLeftAssociative(parse_table *pt, label l)
 	return ATisEqual(assoc, SG_LeftPrio_Symbol);
 }
 
+/*}}}  */
+/*{{{  ATbool SG_IsRightAssociative(parse_table *pt, label l) */
+
 ATbool SG_IsRightAssociative(parse_table *pt, label l)
 {
 	ATerm assoc = ATtableGet(SG_PT_ASSOCIATIVITIES(pt), (ATerm) SG_GetATint(l, 0));
 
 	return ATisEqual(assoc, SG_RightPrio_Symbol);
-		}
+}
 
+/*}}}  */
+/*{{{  ATbool SG_Rejectable(state s) */
 #ifdef HAVE_REJECTABILITY_DETERMINATION
+
 ATbool SG_Rejectable(state s)
 {
   return ATtrue;
 }
+
 #endif
+/*}}}  */
 
 
 /*
  Storing and accessing character classes
 
- Parsing is done token bij token.  When looking up matching actions
+ Parsing is done token by token.  When looking up matching actions
  (or states), we have to return all actions (states) belonging to all
  character classes containing the token.
 
@@ -376,43 +385,23 @@ ATbool SG_Rejectable(state s)
 #define SG_ACTIONPOOLCHUNK  (2*SG_POOLCHUNK)
 #define SG_GOTOPOOLCHUNK    (SG_POOLCHUNK)
 
-actionbucket *sg_action_pool_free = NULL;
+/*actionbucket *sg_action_pool_free = NULL;*/
 gotobucket   *sg_goto_pool_free = NULL;
 
+static ATerm *action_term_table = NULL;
+static int    action_term_index = 0;
+
+
+/*{{{  void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts) */
 
 void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
 {
-  actionbucket *ab;
-  hashkey       h;
-
-  if(sg_action_pool_free == NULL) {
-    /* If the action pool is empty, allocate a new chunk of action buckets */
-    register size_t         i;
-
-    sg_action_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(actionbucket));
-    if(!sg_action_pool_free) {
-      ATerror("failed to expand action pool\n");
-    }
-
-    for(i=0, ab=sg_action_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
-      ab->next = (actionbucket *) ((size_t) ab + (size_t)sizeof(actionbucket));
-      ab = ab->next;
-    }
-    ab->next = NULL;
-  }
-  ab = sg_action_pool_free;
-  sg_action_pool_free = sg_action_pool_free->next;
-
-  h = SG_ComputeActionHashKey(pt, s, c);
-
-  ab->next = pt->actions.table[h];
-  ab->s = s;
-  ab->c = c;
-  ab->a = acts;
-  ATprotect((ATerm *) &(ab->a));
-  pt->actions.table[h] = ab;
+  /*action_term_table[action_term_index++] = (ATerm)acts;*/
+  pt->actiontable[ACTION_INDEX(s,c)] = acts;
 }
 
+/*}}}  */
+/*{{{  void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes, */
 
 void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
                                 actions acts)
@@ -454,6 +443,9 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
 
 }
 
+/*}}}  */
+/*{{{  size_t SG_CountClassesInActionTable(ATermList classes) */
+
 size_t SG_CountClassesInActionTable(ATermList classes)
 {
   ATerm     firstTerm;
@@ -476,6 +468,9 @@ size_t SG_CountClassesInActionTable(ATermList classes)
   }
   return numactions;
 }
+
+/*}}}  */
+/*{{{  void SG_AddPTActions(parse_table *pt, state s, ATermList acts) */
 
 void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
 {
@@ -501,6 +496,8 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
   }
 }
 
+/*}}}  */
+/*{{{  size_t SG_CountPTActions(register ATermList acts) */
 
 size_t SG_CountPTActions(register ATermList acts)
 {
@@ -519,6 +516,8 @@ size_t SG_CountPTActions(register ATermList acts)
   return numactions;
 }
 
+/*}}}  */
+/*{{{  void SG_AddToGotoTable(parse_table *pt, state from, label l, state to) */
 
 void SG_AddToGotoTable(parse_table *pt, state from, label l, state to)
 {
@@ -553,6 +552,9 @@ void SG_AddToGotoTable(parse_table *pt, state from, label l, state to)
   pt->gotos.table[h] = gb;
 }
 
+/*}}}  */
+/*{{{  size_t SG_CountClassesInGotoTable(register ATermList classes) */
+
 size_t SG_CountClassesInGotoTable(register ATermList classes)
 {
   ATerm     firstTerm;
@@ -573,6 +575,9 @@ size_t SG_CountClassesInGotoTable(register ATermList classes)
   }
   return numgotos;
 }
+
+/*}}}  */
+/*{{{  void SG_AddClassesToGotoTable(parse_table *pt, state from, ATermList classes, */
 
 void SG_AddClassesToGotoTable(parse_table *pt, state from, ATermList classes,
                               state to)
@@ -597,6 +602,9 @@ void SG_AddClassesToGotoTable(parse_table *pt, state from, ATermList classes,
   }
 }
 
+/*}}}  */
+/*{{{  size_t SG_CountPTGotos(register ATermList goto_lst) */
+
 size_t SG_CountPTGotos(register ATermList goto_lst)
 {
   ATerm     firstTerm;
@@ -611,6 +619,8 @@ size_t SG_CountPTGotos(register ATermList goto_lst)
   return numgotos;
 }
 
+/*}}}  */
+/*{{{  void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods) */
 
 void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods)
 {
@@ -631,6 +641,9 @@ void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods)
   }
 }
 
+/*}}}  */
+/*{{{  size_t SG_CountPTStates(register ATermList states) */
+
 size_t SG_CountPTStates(register ATermList states)
 {
   ATerm     curstate;
@@ -645,6 +658,9 @@ size_t SG_CountPTStates(register ATermList states)
   }
   return numgotos;
 }
+
+/*}}}  */
+/*{{{  void SG_AddPTStates(parse_table *pt, ATermList states) */
 
 void SG_AddPTStates(parse_table *pt, ATermList states)
 {
@@ -667,6 +683,9 @@ void SG_AddPTStates(parse_table *pt, ATermList states)
   IF_STATISTICS(fprintf(SG_log(), "No. of gotos: %d\nNo. of actions: %d\n",
                         numgotos, numactions));
 }
+
+/*}}}  */
+/*{{{  ATbool SG_Injection(production prod) */
 
 ATbool SG_Injection(production prod)
 {
@@ -691,28 +710,39 @@ ATbool SG_Injection(production prod)
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  void SG_AddProduction(productiontable tbl, label lbl, production prod) */
+
 void SG_AddProduction(productiontable tbl, label lbl, production prod)
 {
   tbl[SG_GETLABEL(lbl)-SG_PROD_START] = prod;
   ATprotect((ATerm *) &tbl[SG_GETLABEL(lbl)-SG_PROD_START]);
 }
 
+/*}}}  */
+/*{{{  void SG_AddInjection(injectiontable tbl, label lbl, ATbool is_inject) */
+
 void SG_AddInjection(injectiontable tbl, label lbl, ATbool is_inject)
 {
   tbl[SG_GETLABEL(lbl)-SG_PROD_START] = is_inject;
 }
 
+/*}}}  */
+/*{{{  ATbool SG_ProdIsInjection(parse_table *pt, label l) */
 
 ATbool SG_ProdIsInjection(parse_table *pt, label l)
 {
   return SG_PT_INJECTIONS(pt)[SG_GETLABEL(l)-SG_PROD_START];
 }
 
+/*}}}  */
+/*{{{  void SG_AddPTGrammar(parse_table *pt, ATermList grammar) */
 /*
  Adds the literal ATerm for a production to the production table.
  The label is the pointer in the table. It is used in reduce actions
  to refer to the production.
  */
+
 void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
 {
   ATerm prod;
@@ -736,7 +766,11 @@ void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
   }
 }
 
+/*}}}  */
+
 enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT };
+
+/*{{{  void SG_AddPTPriorities(parse_table *pt, register ATermList prios) */
 
 void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
 {
@@ -799,8 +833,8 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
   }
 }
 
-
-/*  Parse Table Creation  */
+/*}}}  */
+/*{{{  parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods, */
 
 parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
                               size_t action_entries, size_t goto_entries)
@@ -820,17 +854,27 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   pt->numstates    = numstates;
   pt->numprods     = numprods;
 
-  /*  Action table -- determine upper size/class bound, and initialize  */
-  for(tableclass=4, tablesize=(1 << tableclass) ; tablesize < action_entries;
-      tablesize <<= 1) {
-    tableclass++;
+  /* Allocate table to hold all action terms */
+#if 0
+  if (action_term_table) {
+    ATunprotectArray(action_term_table);
   }
-  pt->actions.sizeclass = tableclass;
-  pt->actions.size      = tablesize;
-  pt->actions.table     = SG_Calloc(tablesize, sizeof(actionbucket *));
-  if(!pt->actions.table) {
-    ATerror("could not allocate action table of size %d\n", tablesize);
+  action_term_table = (ATerm *)SG_Realloc(action_term_table, 
+					  sizeof(ATerm), action_entries);
+  if (!action_term_table) {
+    ATerror("could not allocation action_term_table of size %d\n",
+	    action_entries);
   }
+  action_term_index = 0;
+  memset(action_term_table, 0, sizeof(ATerm)*action_entries);
+  ATprotectArray(action_term_table, action_entries);
+#endif
+
+  pt->actiontable = SG_Calloc(numstates*STATE_SIZE, sizeof(actions));
+  if(!pt->actiontable) {
+    ATerror("could not allocate action table of size %d\n", numstates);
+  }
+  ATprotectArray((ATerm *)pt->actiontable, numstates*STATE_SIZE);
 
   /*  Goto table -- determine upper size/class bound, and initialize  */
   for(tableclass=4, tablesize=(1 << tableclass) ; tablesize < goto_entries;
@@ -865,23 +909,19 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
   return pt;
 }
 
+/*}}}  */
+
+
 /*  Parse Table Destruction  */
+/*{{{  void SG_DiscardActions(parse_table *pt) */
 
 void SG_DiscardActions(parse_table *pt)
 {
-  register size_t s;
-  actionbucket *a, *next;
-
-  for(s=0; s<pt->actions.size; s++) {
-    for(a = pt->actions.table[s]; a; a=next) {
-      ATunprotect((ATerm *) &(a->a));
-      next    = a->next;
-      a->next = sg_action_pool_free;        /*  Feed pool for later perusal  */
-      sg_action_pool_free = a;
-    }
-  }
-  SG_Free(pt->actions.table);
+  SG_Free(pt->actiontable);
 }
+
+/*}}}  */
+/*{{{  void SG_DiscardGotos(parse_table *pt) */
 
 void SG_DiscardGotos(parse_table *pt)
 {
@@ -898,6 +938,9 @@ void SG_DiscardGotos(parse_table *pt)
   SG_Free(pt->gotos.table);
 }
 
+/*}}}  */
+/*{{{  void SG_DiscardProductions(parse_table *pt) */
+
 void SG_DiscardProductions(parse_table *pt)
 {
   register size_t p;
@@ -910,16 +953,25 @@ void SG_DiscardProductions(parse_table *pt)
   SG_Free(pt->productions);
 }
 
+/*}}}  */
+/*{{{  void SG_DiscardInjections(parse_table *pt) */
+
 void SG_DiscardInjections(parse_table *pt)
 {
   SG_Free(pt->injections);
 }
+
+/*}}}  */
+/*{{{  void SG_DiscardPriorities(parse_table *pt) */
 
 void SG_DiscardPriorities(parse_table *pt)
 {
   ATtableDestroy(pt->gtr_priorities);
   ATtableDestroy(pt->associativities);
 }
+
+/*}}}  */
+/*{{{  void SG_DiscardParseTable(parse_table *pt) */
 
 void SG_DiscardParseTable(parse_table *pt)
 {
@@ -929,9 +981,12 @@ void SG_DiscardParseTable(parse_table *pt)
   SG_DiscardInjections(pt);
   SG_DiscardPriorities(pt);
 
+  ATunprotectArray((ATerm *)pt->actiontable);
   SG_Free(pt);
 }
 
+/*}}}  */
+/*{{{  parse_table *SG_AddParseTable(char *prgname, language L, char *FN) */
 
 /*
  Add Parse Table
@@ -966,18 +1021,24 @@ parse_table *SG_AddParseTable(char *prgname, language L, char *FN)
   return pt;
 }
 
+/*}}}  */
+/*{{{  void SG_RemoveParseTable(language L) */
+
 void SG_RemoveParseTable(language L)
 {
   if(SG_LookupParseTable(L))
     SG_ClearParseTable(L);
 }
 
+/*}}}  */
+/*{{{  parse_table *SG_BuildParseTable(ATermAppl t) */
 /*
  Build Parse Table
 
  Translating term representation of parse table into parse table
  data structure.
  */
+
 
 parse_table *SG_BuildParseTable(ATermAppl t)
 {
@@ -997,7 +1058,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   ptfun = ATgetAFun(t);
 
   if(ptfun != SG_PT3_AFun && ptfun != SG_PT4_AFun) {
-    ATwarning("parse table format error: %t\n", t);
+    ATwarning("parse table format error\n");
     return NULL;
   }
 
@@ -1065,6 +1126,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   return pt;
 }
 
+/*}}}  */
+
 /*  Parse Table Database  */
 
 #define MAX_TABLES 1
@@ -1076,6 +1139,7 @@ typedef struct _ptdb {
 static PTDB tables[MAX_TABLES];
 static int last_table = 0;
 
+/*{{{  void SG_SaveParseTable(language L, parse_table *pt) */
 
 /*
  Store parse table in parse table database; if the parse table
@@ -1105,6 +1169,9 @@ void SG_SaveParseTable(language L, parse_table *pt)
                      L, last_table));
   last_table++;
 }
+
+/*}}}  */
+/*{{{  void SG_ClearParseTable(language L) */
 
 void SG_ClearParseTable(language L)
 {
@@ -1143,6 +1210,9 @@ void SG_ClearParseTable(language L)
   );
 }
 
+/*}}}  */
+/*{{{  parse_table *SG_LookupParseTable(language L) */
+
 parse_table *SG_LookupParseTable(language L)
 {
   int i = 0;
@@ -1168,3 +1238,6 @@ parse_table *SG_LookupParseTable(language L)
 
   return NULL;
 }
+
+/*}}}  */
+

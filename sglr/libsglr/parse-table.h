@@ -31,23 +31,14 @@ void AT_collect(int size);
 
 #include "sglr.h"
 
+#define STATE_SIZE 257
+#define ACTION_INDEX(s, c)        ((s)*STATE_SIZE + (c))
+#define SG_LookupAction(pt, s, c) ((pt)->actiontable[ACTION_INDEX(s,c)])
+
 /*  Representation/data structures  */
 
 #define HASH_PRIME    677;
 typedef unsigned int  hashkey;
-
-typedef struct _abucket {
-  struct _abucket *next;
-  state            s;
-  token            c;
-  actions          a;
-} actionbucket;
-
-typedef struct _actiontable {
-  actionbucket **table;
-  size_t         size;
-  size_t         sizeclass;
-} actiontable;
 
 typedef struct _gbucket {
   struct _gbucket *next;
@@ -70,7 +61,7 @@ typedef struct _parse_table  {
   state            initial;
   size_t           numstates;
   size_t           numprods;
-  actiontable      actions;
+  actions         *actiontable;
   gototable        gotos;
   productiontable  productions;
   injectiontable   injections;
@@ -104,7 +95,6 @@ SG_Aprod_AFun, SG_Amb_AFun;
 
 void          SG_InitPTGlobals(void);
 state         SG_LookupGoto(parse_table *pt, state s, label l);
-actions       SG_LookupAction(parse_table *pt, state s, token c);
 production    SG_LookupProduction(parse_table *pt, label c);
 ATbool        SG_ProdIsInjection(parse_table *pt, label l);
 ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
