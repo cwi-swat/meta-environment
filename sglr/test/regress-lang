@@ -1,22 +1,110 @@
 #!/bin/sh
 # $Id$
+Revision='$Revision$'
 
-VERBOSE=1
+###
+#  Some global variables, that might require occasional modification
+###
+
+verbose=0
 
 cd `dirname $0`;
 mydir=`pwd`
 
-COMPARE="$mydir/trmdiff"
 RM=rm
+COMPARE="$mydir/trmdiff"
+SDF2TABLE=sdf2table
 
 reference=$mydir/tables
 dirs="first grammars"
 
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="hvV"
+
+if [ $myarguments ] ; then
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -h              display help information (usage)
+    -v              verbose mode
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage; shift;;
+        -v)
+            verbose=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
+}
+
+Error () {
+	Warn $*
+	error=1
+}
+
+Abort () {
+	Error $*
+	exit 2
+}
+
 Notify () {
-	if [ $VERBOSE -gt 0 ] ; then
-		echo $*                                   	>&2
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
 	fi
 }
+
 
 RegressGenTable () {
 	ptbl=`basename $1 .sdf2`.tbl
@@ -24,28 +112,40 @@ RegressGenTable () {
 		Notify "No reference table for $ptbl"
 		continue
 	fi
-	if sdf2table $1 ; then
+	if $SDF2TABLE $VERBOSE $1 ; then
 	        Notify Comparing $ptbl...
-	        if $COMPARE $ptbl $reference/$ptbl	>/dev/null
+	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
 	        then
 		        Notify "Regress test for $1 succeeded"
 		        ${RM} -f $ptbl
 	        else
-		        Notify "Regress test for $1 failed"
+		        Error "Regress test for $1 failed"
 	        fi
 	else
-		Notify "Failed to generate parse table for $1"
-		exit 1
+		Abort "Failed to generate parse table for $1"
 	fi
 }
 
 
+#
+## Main bit...
+#
+
+if [ $verbose -gt 0 ] ; then
+	VERBOSE="-v"
+else
+	VERBOSE=""
+fi
+
+error=0
 for dir in $dirs
 do
 	cd $dir
         for stx in *.sdf2 ; do
 	        RegressGenTable $stx
         done
-	rm -f *.asfix[12]
+	${RM} -f *.asfix[12]
 	cd ..
 done
+
+exit $error

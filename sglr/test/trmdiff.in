@@ -1,13 +1,72 @@
 #! /bin/sh
 # $Id$
+Revision='$Revision$'
 
 PERL5=@PERL@
 
-A=/tmp/$$.0
-B=/tmp/$$.1
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
 
-breakers="actions|amb|appl|goto|label|priorities|state-rec"
-break="s/($breakers)/\n\$1/g";
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="hvV"
+
+if [ $myarguments ] ; then
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -h              display help information (usage)
+    -v              verbose mode
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+
+# Default values
+verbose=0
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage; shift;;
+        -v)
+            verbose=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+###
+#  Get to the real work now...
+###
 
 case $# in
 	2)
@@ -23,10 +82,13 @@ case $# in
 		exit 2 ;;
 esac
 
+Warn () {
+	echo $*                                   	>&2
+}
+
 Notify () {
-	if [ $VERBOSE -gt 0 ]
-	then
-		echo $*                                   >&2
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
 	fi
 }
 
@@ -47,6 +109,13 @@ BinaryEqual () {
 if BinaryEqual $1 $2 ; then exit 0 ; fi
 
 Notify === `basename $1`/`basename $2` not binary identical  ===
+
+A=/tmp/$$.0
+B=/tmp/$$.1
+
+breakers="actions|amb|appl|goto|label|priorities|state-rec"
+break="s/($breakers)/\n\$1/g";
+
 trap 'rm -f $A $B' 0 1
 trmcat $1 | $PERL5 -pe "$break"	> $A
 trmcat $2 | $PERL5 -pe "$break"	> $B
