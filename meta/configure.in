@@ -168,7 +168,6 @@ AC_CONFIG_SUBDIRS(asc-support sglr)
 
 dnl Which files need updating?
 AC_OUTPUT(
-	t \
 	Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \

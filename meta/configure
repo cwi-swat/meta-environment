@@ -1726,8 +1726,7 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "t \
-	Makefile Makefile.skel meta \
+trap 'rm -fr `echo "Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	compiler/support-muasf/Makefile \
@@ -1847,8 +1846,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"t \
-	Makefile Makefile.skel meta \
+CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	compiler/support-muasf/Makefile \
