@@ -17,7 +17,9 @@
 %.pdf: %.ltx
 	TEXINPUTS=$$TEXINPUTS:${INPUTS} ;\
         export TEXINPUTS ;\
+	touch $*.ind ;\
         pdflatex $< ;\
+	makeindex $* ;\
 	fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && pdflatex $< ;\
 	while fgrep -s 'Rerun to get cross-references right' $*.log ;\
 	do \
