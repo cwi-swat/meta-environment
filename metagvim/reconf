@@ -1,6 +1,11 @@
 #! /bin/sh
 
-aclocal -I .
+LIBTOOL=`which libtool`
+LIBTOOL=`dirname ${LIBTOOL}`
+LIBTOOL=`dirname ${LIBTOOL}`
+LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
+
+aclocal -I ${LIBTOOL_INCLUDE} -I .
 autoconf
 autoheader
 automake -a
