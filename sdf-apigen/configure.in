@@ -119,13 +119,6 @@ SGLRBIN=${SGLR}/bin
 AC_SUBST(SGLRBIN)
 
 dnl }}}
-dnl {{{ Handle --with-asfe
-
-AC_PACKAGE_REQUIRE(asf, asfe,
-	[  --with-asf=DIR         asf is in DIR])
-AC_SUBST(ASF)
-
-dnl }}}
 dnl {{{ Handle --with-apigen
 
 AC_PACKAGE_REQUIRE(apigen, adt-to-c,

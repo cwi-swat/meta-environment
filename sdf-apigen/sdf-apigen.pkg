@@ -18,7 +18,6 @@ requires
    aterm-java   1.6
    sglr		3.11
    pgen		2.0
-   asf          1.8
    pt-support   1.1
    error-support   0.1
    sdf-support  2.0

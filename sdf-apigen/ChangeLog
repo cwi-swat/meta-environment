@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Apr 26 19:05:02 CEST 2004 <jurgenv@cwi.nl>
+ * Removed dependency on asf package. It was no longer used! 
+
 Sat Apr 17 11:19:32 CEST 2004 <jurgenv@cwi.nl>
  * Fixed automake-1.7.9 issues (similarly to the way they were fixed 
    in the apigen package). All problems located in the test directory. 
