@@ -281,7 +281,7 @@ void init_procs(void);
 term_list *mk_functions(void);
 void print_process(term *proc);
 void print_process_snd_msgs_only(term *proc);
-void print_alternatives(term *t, int snd_msgs_only);
-void print_alternative(term *t, int snd_msgs_only);
+void print_alternatives(term *proc_name, term *t, int snd_msgs_only);
+void print_alternative(term *proc_name, term *t, int snd_msgs_only);
 
 #endif /* __PROCS_H__ */

@@ -47,37 +47,32 @@ proc *Tau;             /* PROTECTED */
 
 void print_process(term *proc)
 {
-  TBprintf(stderr, "printing process %t:\n", pi_name(proc));
-  print_alternatives(pi_alts(proc), 0);
+  print_alternatives(pi_name(proc), pi_alts(proc), 0);
 }
 
 /*}}}  */
-/*{{{  void print_process(term *proc) */
-
 /*{{{  void print_process_snd_msgs_only(term *proc) */
 
 void print_process_snd_msgs_only(term *proc)
 {
-  TBprintf(stderr, "printing process %t:\n", pi_name(proc));
-  print_alternatives(pi_alts(proc), 1);
+  print_alternatives(pi_name(proc), pi_alts(proc), 1);
 }
 
 /*}}}  */
 
-/*}}}  */
 /*{{{  void print_alternatives(term_list *alts) */
 
-void print_alternatives(term_list *alts, int snd_msgs_only)
+void print_alternatives(term *proc_name, term_list *alts, int snd_msgs_only)
 {
   for (; alts; alts=next(alts)) {
-    print_alternative(first(alts), snd_msgs_only);
+    print_alternative(proc_name, first(alts), snd_msgs_only);
   }
 }
 
 /*}}}  */
 /*{{{  void print_alternative(term *t) */
 
-void print_alternative(term *t, int snd_msgs_only)
+void print_alternative(term *proc_name, term *t, int snd_msgs_only)
 {
   char *fun = get_txt(fun_sym(t));
   term *atom = first(fun_args(t));
@@ -85,7 +80,7 @@ void print_alternative(term *t, int snd_msgs_only)
   term_list *args = first(fun_args(atom));
 
   if (!snd_msgs_only || !strcmp(atom_fun, "snd-msg")) {
-    TBprintf(stderr, "  %s(%s(%l))\n", fun, atom_fun, args);
+    TBprintf(stderr, "%t: %s(%s(%l))\n", proc_name, fun, atom_fun, args);
   }
 }
 

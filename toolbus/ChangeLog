@@ -4,6 +4,9 @@ Fri Mar 19 08:24:48 CET 2004 <jong@cwi.nl>
  * toolbus/{main.c,script.l}:
    - add missing (int) casts to isspace functions
 
+Wed Apr  7 16:11:00 CEST 2004 <jurgenv@cwi.nl>
+ * Prints only the stopped processed with CTRL+\
+
 Thu Mar 11 18:37:51 CET 2004 <jurgenv@cwi.nl>
  * -ltb library from the toolbuslib package is deprecated and was only used 
    inside of the toolbus package. So I moved it into the toolbus package
