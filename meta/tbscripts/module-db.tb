@@ -32,7 +32,8 @@ let
   RealFileName : str,
   Pairs    : list,
   ErrorMsg : str,
-  Extension : str
+  Extension : str,
+  TableName : str
 in
   MDB-InitializeModuleDb() .
   snd-msg(termstore-initialized) .
@@ -324,6 +325,8 @@ in
        snd-msg(ts-get-values(TableName, ModuleNames)) .
        (
          rec-msg(ts-values(Modules?)) .
+         snd-msg(add-initial-syntax-modules-hook(Modules, Type)) .
+         rec-msg(initial-modules-added(Modules?)) .
          snd-msg(sm-make-sdf-definition(Modules)) .
          Modules := [] .
          (
@@ -420,7 +423,9 @@ process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("asf-text")) .
   snd-msg(ts-clear-table("asf-parse-table")) .
   snd-msg(ts-clear-table("term-parse-table")) .
-  snd-msg(ts-clear-table("import-relations"))
+  snd-msg(ts-clear-table("import-relations")) .
+  snd-msg(clear-module-db-hook) .
+  rec-msg(module-db-hook-done) 
 
 process MDB-InitializeFileExtensions is
 let
