@@ -21,9 +21,9 @@
 #
 include $(top_srcdir)/make_rules
 
-INCLUDES+= -I$(TREE)/libasfix-old/libasfix
+INCLUDES+= -I$(top_srcdir)/libasfix-old/libasfix
 
-GENERIC_LD_ADD =  -L$(TREE)/libasfix-old/libasfix -lAsFix \
+GENERIC_LD_ADD =  -L$(top_builddir)/libasfix-old/libasfix -lAsFix \
               -L$(ATERM)/lib -lATB -lATerm
 
 bin_PROGRAMS     = afexpand asource a2toa1

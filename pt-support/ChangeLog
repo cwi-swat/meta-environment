@@ -1,4 +1,9 @@
-2001/13/03 (jurgenv@cwi.nl)
+2001/03/26 (jong@cwi.nl)
+ * fixed substitution of undefined variable TREE in asfix-tools/Makefile.am
+   and test/Makefile.am. This caused building of pt-support to look for old
+   AsFix library in /lib/...
+
+2001/03/13 (jurgenv@cwi.nl)
  * changed flattening of cons attributes in conversion from asfix2me to asfix1.
    It used to be "cons(name)", and now it is cons("name").
 
