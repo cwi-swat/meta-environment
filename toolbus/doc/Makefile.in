@@ -27,9 +27,9 @@ CLEAN		= @CLEAN@
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-DOCUMENTS	= Guide.ps.gz
+DOCUMENTS	= Guide.ps.gz Intro.ps
 
-DISTFILES	= Makefile.in Guide.tex \
+DISTFILES	= Makefile.in Guide.tex Intro.tex \
 		  Arch.pic Arch.tex \
 		  Tool.pic Tool.tex \
 		  Tifs.pic Tifs.tex \
@@ -58,6 +58,17 @@ Guide.ps.gz: Arch.tex Tifs.tex Tool.tex Adapter.tex  Guide.tex adapters.tex
 	dvips Guide.dvi >Guide.ps
 	rm -f Guide.ps.Z Guide.ps.gz
 	gzip Guide.ps
+
+Intro.ps: Intro.tex calc.ps auction.ps
+	latex Intro.tex
+	latex Intro.tex
+	dvips Intro.dvi >Intro.ps
+
+calc.ps: calc.fig
+	fig2dev -Lps calc.fig calc.ps
+
+auction.ps: auction.fig
+	fig2dev -Lps auction.fig auction.ps
 
 clean:
 	${CLEAN} ${DOCUMENTS}

@@ -1,0 +1,227 @@
+\documentstyle[a4,twoside,noweb]{article} % -*-latex-*-
+\setlength{\oddsidemargin}{0.235cm}
+\setlength{\evensidemargin}{0.235cm}
+\setlength{\textwidth}{16cm}
+\topmargin 0.5cm  % was: 0.2cm
+\pagestyle{myheadings}
+\begin{document}
+
+\newcommand{\TB}{{\sc ToolBus}}
+\newcommand{\T}{{\bf T}}
+\newcommand{\spec}[1]{{\rm #1}}
+\newcommand{\script}[1]{{\tt #1}}
+\newcommand{\ASFSDF}{{\sc Asf+Sdf}}
+\newcommand{\ASF}{{\sc Asf}}
+\newcommand{\SDF}{{\sc Sdf}}
+\newcommand{\GEL}{{\sc Gel}}
+\newcommand{\iter}{\,^*\,}
+\newcommand{\emp}[1]{{\em #1}}
+\newcommand{\txttt}[1]{{\tt #1}}
+
+\input{psfig.tex}
+
+\title{A \TB\ introduction \\
+Version 0.1}
+\author{P.A. Olivier$^{1}$}
+\date{\today}
+\maketitle
+\begin{center}
+       {\footnotesize $^1$ Programming Research Group, University of Amsterdam\\
+        P.O. Box 41882, 1009 DB Amsterdam, The Netherlands}
+\end{center}
+
+\begin{abstract}
+
+The \TB\ is a new software architecture intended for building
+cooperating, distributed applications.  This document aims
+at providing an easy to use introduction to using and programming
+the ToolBus.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+\section{First steps}
+
+By the time you are reading this document, you have probably already
+found the ToolBus distribution, because this document is part of it.
+
+The first thing to do, is locating the \TB\ executable. It is usually
+called {\tt toolbus}, so you can try using the command {\tt which toolbus}
+to see if the {\tt toolbus} executable is already in your
+search path:
+
+\begin{verbatim}
+olivierp@gene 180> which toolbus
+/home/gipe/petr/bin/toolbus
+olivierp@gene 181>
+\end{verbatim}
+
+If this is not the case, your best bet might be to try the {\tt bin}
+directory of the \TB\ distribution from which you got this document.
+Or you might try to use the {\tt locate} command
+to find its location:
+\begin{verbatim}
+olivierp@gene 185> locate toolbus | grep bin
+/nfs/gene/gen3/gipe/petr/bin/toolbus
+\end{verbatim}
+
+When you have found the {\tt toolbus} executable, and it is not yet
+in your search path, you might want to add it. If you do not know how
+to do this, please consult somebody with a basic understanding of the
+unix shell, like your system administrator.
+
+Now please start the \TB\ with the {\tt -v} option, to test your setup,
+and to see which version of the \TB\ you are using:
+
+\begin{verbatim}
+olivierp@gene 186> toolbus -version
+version: ToolBus-0.9.19
+olivierp@gene 187>
+\end{verbatim}
+
+You are all set, and ready to go!
+
+\section{The {\tt calc} demo}
+
+We will show some of the \TB\ features using the simple {\tt calc} demo.
+First, {\tt cd} to the directory {\tt demos/calc} in the \TB\ distribution.
+Now start the calculator demo by issuing the following command:
+
+\begin{verbatim}
+toolbus calc.tb
+\end{verbatim}
+
+\begin{figure}[htb]
+\centerline{\psfig{file=calc-ui.eps}}
+\caption{The calculator user interface}
+\label{calc-ui}
+\end{figure}
+
+The calculator user interface comes up as shown in Figure \ref{calc-ui}.
+Pressing the {\tt Calc} button pops up a new window to ask you to enter
+an expression like {\tt plus(3,times(2,5))}.
+When you are done entering this expression, just press 
+\verb@<Return>@, and the result will pop up in another window.
+
+Pressing the {\tt showLog} button will popup a window showing the
+expressions calculated so far, including expressions calculated
+by a hidden {\tt batch} tool.
+
+
+The {\tt showTime} button can be used to display the current time.
+You can use the {\tt Quit} button to end the demo.
+
+\subsection{The calculator \TB\ configuration}
+
+Figure \ref{calc-impl} shows the calculator demo \TB\ configuration.
+The calculator demo consists of four tools:
+
+\begin{figure}[htb]
+\centerline{\psfig{file=calc.ps}}
+\caption{The calculator \TB\ configuration}
+\label{calc-impl}
+\end{figure}
+
+\begin{itemize}
+\item The {\tt clock} tool delivers the current time on request.
+\item The {\tt ui} tool implements the user interface of the calulator demo.
+\item The {\tt calc} tool calculates the values of expressions.
+\item The {\tt batch} tool generates expressions at random time intervals.
+\end{itemize}
+
+The communication between these four tools os controlled by five processes:
+\begin{itemize}
+\item The {\tt CLOCK} process catches requests for the current time,
+      relays them to the {\tt clock} tool, and sends the answer back.
+\item The {\tt UI} process waits for user actions, and translates
+      them into requests to the {\tt CLOCK}, {\tt CALC}, or {\tt LOG}
+      process.
+\item The {\tt CALC} process waits for expression calculation requests,
+      calculates the value of the expression, and sends the result back.
+      This process also broadcasts the expression/result pairs.
+\item The {\tt LOG} process waits on broadcasted expression/result pairs,
+      and logs them in a list.
+      On request, the {\tt LOG} process can send this complete log of
+      evaluated expressions.
+\item The {\tt BATCH} process waits for evaluation requests from the
+      batch tool, and relays them to the {\tt CALC} process.
+\end{itemize}
+
+\subsection{The calculator \TB\ script}
+\input{../demos/calc/calc.tb.tex}
+
+\section{The auction demo}
+
+Now we come to the {\tt auction} demo. {\tt cd} to the directory
+{\tt demos/auction} in the \TB\ distribution. Now start the calculator
+demo by issuing the following command:
+
+\begin{verbatim}
+toolbus auction.tb
+\end{verbatim}
+
+\begin{figure}[htb]
+\centerline{\psfig{file=auction-master.eps}}
+\caption{The auction master}
+\label{auction-master}
+\end{figure}
+
+This will start the auction master, shown in Figure \ref{auction-master}. 
+You can start different bidders (Figure \ref{auction-bidder})
+like this:
+
+\begin{verbatim}
+bidder -name Pieter
+\end{verbatim}
+
+\begin{figure}[htb]
+\centerline{\psfig{file=auction-bidder.eps}}
+\caption{A bidder}
+\label{auction-bidder}
+\end{figure}
+
+The auction begins when the auction master presses the {\tt New}
+button after entering an item for sale and the starting `highest
+bid'. The bidders can now freely bid, until nobody has makes a new
+bid for ten seconds. At everybody is notified that the bidding is
+about to end. If nobody reopens the bidding in another ten seconds,
+the item is sold to the highest bidder.
+
+\subsection{The auction \TB\ configuration}
+
+
+Figure \ref{auction-impl} shows the auction demo \TB\ configuration.
+The consists of demo consists of two different tools:
+
+\begin{itemize}
+\item The {\tt master} tool represents the auction master. Only one
+ of these can be present at any one time.
+\item The {\tt bidder} tool implements the bidder user interface.
+      Any number of bidders can be present. Bidders can enter and leave
+      the auction when they want.
+\end{itemize}
+
+\begin{figure}[htb]
+\centerline{\psfig{file=auction.ps}}
+\caption{The auction demo \TB\ configuration}
+\label{auction-impl}
+\end{figure}
+
+
+The communication between these four tools os controlled by two processes:
+\begin{itemize}
+\item The {\tt Auction} process regulates the auction demo. 
+      It connects new bidders,
+      and controls the auction of items.
+\item The{\tt Bidder} processes control individual bidders.
+      For every new bidder, the {\tt Auction} process creates a new
+      {\tt Bidder} process to control this new bidder.
+\end{itemize}
+
+
+\subsection{The auction \TB\ script}
+\input{../demos/auction/auction.tb.tex}
+
+\end{document}
