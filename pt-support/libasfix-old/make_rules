@@ -24,6 +24,10 @@
 # libraries.
 #
 
+POD2MAN=pod2man
+POD2TXT=pod2text
+POD2HTML=pod2html
+
 # Common defines for all libraries
 STDDEFS = $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS)
 
@@ -77,3 +81,16 @@ SHARED_COMPILE = $(CC_SHARED) $(CFLAGS_SHARED) $(DEFS_SHARED) $(STDDEFS)
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
+# Generic rules for the generation of documentation from POD files
+
+CENTER="AsFix Documentation"
+
+%.1:    %.pod
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
+
+%.txt: %.pod
+	-$(POD2TEXT) $< > $@
+
+%.html: %.pod
+	-$(POD2HTML) $< > $@
+	-rm -f pod2html-*

@@ -1,0 +1,78 @@
+=head1 NAME
+
+A2TOA1 - Parse Trees to DOT converter
+
+=head1 SYNOPSIS
+
+B<a2toa1> [-B<bctvV>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>]
+
+=head1 DESCRIPTION
+
+The B<a2toa1> converter translates AsFix2 to AsFix1.
+
+A number of options can be supplied; these are as follows:
+
+=over 4
+
+=item -B<b>, -B<t>
+
+Choose between binary (B<b>) and plaintext (B<t>) output formats.  Default
+is binary output.
+
+=item -B<c>
+
+Uses the constructors indicated by `cons' attributes for as term
+constructors.
+
+=item -B<h>
+
+Displays concise usage information.
+
+=item -B<i> I<file>
+
+Read parse forest from F<file>; by default, input is read from stdin.
+
+=item -B<o> I<file>
+
+Write dot output to F<file>.  By default, output goes to stdout.
+
+=item -B<v>
+
+Present for compatibility reasons only; ignored.
+
+=item -B<V>
+
+Reveal program version.
+
+=back
+
+
+=head1 EXAMPLES
+
+    $ a2toa1 < Test.asfix2 > Test.asfix1
+    $ a2toa1 -c -i Test.asfix2 > Test.asfix1
+    $ a2toa1 -o Test.dot < Test.asfix1
+    $ a2toa1 -i Test.asfix2-o Test.asfix1
+    $ cat MyCode.cod | sglr -p Term.tbl | a2toa1 > Test.asfix1
+
+
+=head1 EXIT STATUS
+
+Returns an error if for some reason the conversion was unsuccessful.
+
+=head1 SEE ALSO
+
+L<sglr>
+
+=head1 KNOWN BUGS
+
+AsFix2 in which an ambiguous node occurs (i.e. a parse forest) cannot
+be represented in AsFix1.
+
+=head1 NOTES
+
+In a different context altogether, B<a2toa1> runs as a C<ToolBus> client.
+
+=head1 AUTHOR
+
+Jeroen Scheerder <S<js@cwi.nl>>

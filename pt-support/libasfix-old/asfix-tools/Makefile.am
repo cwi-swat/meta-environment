@@ -22,10 +22,16 @@
 include ../make_rules
 
 bin_PROGRAMS     = afexpand asource a2toa1
+
 data_DATA        = asource.idef a2toa1.idef
 
+man_MANS         = a2toa1.1
+
 EXTRA_DIST       = asource.idef asource.tif.c asource.tif.h \
-                   a2toa1.idef a2toa1.tif.c a2toa1.tif.h
+                   a2toa1.idef a2toa1.tif.c a2toa1.tif.h \
+                   a2toa1.pod
+
+CLEANFILES       = a2toa1.1
 
 afexpand_SOURCES = afexpand.c
 afexpand_LDADD   = -L../libasfix -lAsFix \

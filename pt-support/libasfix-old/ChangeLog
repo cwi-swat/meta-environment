@@ -20,6 +20,9 @@
 # $Id$
 #
 
+2000-04-25 <mdejonge@cwi.nl>
+   * Added pod documentation for a2toa1 tool (moved from sglr distribution)
+
 2000-04-18 <mdejonge@cwi.nl>
    * asfix-tools/a2toa1 tool added
 
@@ -30,3 +33,4 @@
 Version 0.1
    * Initiation of separate AsFix library
    * AsFix library configuration/building using autoconf/automake
+v
