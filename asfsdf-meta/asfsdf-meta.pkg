@@ -16,4 +16,4 @@ configuration interface
 
 requires
    meta 1.1
-   asf 1.7
+   asf 1.7.1
