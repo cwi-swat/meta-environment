@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar 30 12:56:23 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * add area alternative for Location
+
 Fri Mar  5 13:55:46 CET 2004 <kooiker@cwi.nl>
  * library/languages/box/syntax/Pretty.sdf:
    - added generic prettyprint module 
