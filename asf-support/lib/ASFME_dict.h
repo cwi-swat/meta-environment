@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Apr 26 13:52:35 2001
+ * Generated at Wed May  2 13:18:46 2001
  */
 
 #ifndef __ASFME_dict_H
