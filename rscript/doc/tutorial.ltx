@@ -1590,6 +1590,91 @@ the effect of statements on their surroundings. Typical examples are:
 \item and more.
 \end{itemize}
 
+\subsubsection{Dominators}
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+rel[stat,stat] dominators(rel[stat,stat] PRED) = 
+   DOMINATES
+where
+    bag[stat] STATEMENT = carrier(PRED)
+
+    bag[stat] ROOT = top(PRED)
+
+    rel[stat,stat] DOMINATES =
+    { <S, S1> | stat S : STATEMENT , 
+                stat S1 : STATEMENT \ (ROOT union {S}) \ range(reachX(ROOT, {S}, PRED)) 
+    }
+endwhere
+\end{verbatim}
+}
+\caption{\label{FIG:dominators-function}The functions {\tt dominators}}
+\end{figure}
+
+A node $d$ of a flow graph \emph{dominates} a node $n$, if every path from the
+initial node of the flow graph to $n$ goes through $d$~\cite[Section
+10.4]{ASU86}. Dominators play a role in the analysis of conditional statements
+and loops. In Figure~\ref{FIG:dominators-function}, we show the function {\tt
+dominators} that computes the dominators for a given flow graph {\tt PRED}.
+First, the auxiliary bags {\tt STATEMENT} (all the statements) and {\tt ROOT}
+(the initial nodes) of the flow graph are computed. The relation {\tt
+  DOMINATES} consists of all pairs {\tt <S, S1>} such that
+\begin{itemize}
+\item {\tt S1} is not an initial node or equal to {\tt S}.
+\item {\tt S1} can be reached from the initial node without going through {\tt S}.
+\end{itemize}
+
+\noindent Consider the flow graph
+
+\begin{verbatim}
+rel[int,int] PRED = {
+<1,2>, <1,3>,
+<2,3>,
+<3,4>,
+<4,3>,<4,5>, <4,6>,
+<5,7>,
+<6,7>,
+<7,4>,<7,8>,
+<8,9>,<8,10>,<8,3>,
+<9,1>,
+<10,7>
+}
+\end{verbatim}
+and the result of applying {\tt dominators} to it:
+
+\begin{verbatim}
+{<1, {2, 3, 4, 5, 6, 7, 8, 9, 10}>, 
+<2, {}>, 
+<3, {4, 5, 6, 7, 8, 9, 10}>, 
+<4, {5, 6, 7, 8, 9, 10}>, 
+<5, {}>, <6, {}>, 
+<7, {8, 9, 10}>, 
+<8, {9, 10}>, 
+<9, {}>, <10, {}>}
+\end{verbatim}
+
+The original flow graph and the resulting \emph{dominator tree} are shown in
+Figures~\ref{FIG:dominators} and \ref{FIG:dominator-tree}.
+The dominator tree has the initial node as root and each node $d$ in the tree
+only dominates its descendants in the tree.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/dominators.eps,width=10cm}
+\vspace*{-6cm}
+\end{center}
+\caption{\label{FIG:dominators} Flow graph for dominators example}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/dominator-tree.eps,width=10cm}
+\vspace*{-8cm}
+\end{center}
+\caption{\label{FIG:dominator-tree} Dominator tree for flow graph in Figure~\ref{FIG:dominators}}
+\end{figure}
+
 \subsubsection{Reaching Definitions}
 
 \begin{figure}[tb]
@@ -1737,7 +1822,49 @@ Observe, again for statement {\tt 4}, that
 all definitions of variable  {\tt i} are missing in {\tt OUT[4]} since
 they are killed by the definition of {\tt i} in statement {\tt 4} itself. Definitions for
 {\tt a} and {\tt j} are, however, contained in {\tt OUT[4]}.
-The result of reaching definitions computation is illustrated in Figure~\ref{FIG:reach}.
+The result of reaching definitions computation is illustrated in
+Figure~\ref{FIG:reach}.
+
+In Figure~\ref{FIG:reaching-definitions} the above definitions are used to
+formulate the function {\tt reaching-definitions}. It assumes appropriate
+definitions for the types {\tt stat} and {\tt var}. It also assumes more
+general versions of {\tt predecessor} and {\tt successor}.  We will use it
+later on in Section~\ref{SEC:slicing} when defining program slicing.
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+type def  = <stat theStat, var theVar>
+type use  = <stat theStat, var theVar>
+
+bag[stat] predecessor(rel[stat,stat] P, stat S) = P[-,S]
+
+bag[stat] successor(rel[stat,stat] P, stat S) = P[S,-]
+
+rel[stat, def] reaching-definitions(rel[stat,var] DEFS, rel[stat,stat] PRED) = 
+   IN
+where
+    bag[stat] STATEMENT = carrier(PRED)
+
+    rel[stat,def] DEF  = {<S,<S,V>> | <stat S, var V> : DEFS}
+
+    rel[stat,def] KILL = 
+        {<S1, <S2, V>> | <stat S1, var V> : DEFS, <stat S2, V> : DEFS, S1 != S2}
+
+    equations 
+       initial
+           rel[stat,def] IN init {}
+           rel[stat,def] OUT init DEF
+       satisfy
+           IN  =  {<S, D> | int S : STATEMENT, stat P : predecessor(PRED,S), 
+                            def D : OUT[P]}
+           OUT = {<S, D> |  int S : STATEMENT, def D : DEF[S] union (IN[S] \ KILL[S])}
+    end equations
+end where
+\end{verbatim}
+}
+\caption{\label{FIG:reaching-definitions}Reaching definitions}
+\end{figure}
 
 \begin{figure}[tb]
 \begin{center}
@@ -1778,11 +1905,14 @@ equations
 end equations
 \end{verbatim}
 
-\noindent The results of live variable analysis for our running example are illustrated in Figure~\ref{FIG:live}.
+\noindent The results of live variable analysis for our running example are
+illustrated in Figure~\ref{FIG:live}.
+
+\subsection{Program Slicing} \label{SEC:slicing}
+
 \subsubsection{Others}
 \note{Some ideas:
 \begin{itemize}
-\item Dominator tree
 \item Type system
 \item Constraint-like puzzle
 \end{itemize}
@@ -1851,7 +1981,7 @@ New:
 \end{itemize}
 
 \section*{Acknowledgements}
-Taeke Kooiker
+Taeke Kooiker, Tijs van der Storm.
 
 \appendix
 
