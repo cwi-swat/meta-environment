@@ -94,6 +94,11 @@ AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
 
+dnl Require ptpretty package
+AC_PACKAGE_REQUIRE(ptpretty, ptpretty,
+   [  --with-ptpretty=DIR         ptpretty is in DIR])
+AC_SUBST(PTPRETTY)
+
 ASCINC=${ASC_SUPPORT}/include
 AC_SUBST(ASCINC)
 ASCLIB=${ASC_SUPPORT}/lib
