@@ -1,3 +1,6 @@
+2002/11/07 (vandenbr@loria.fr)
+ * Restructured the ToolBus script for hooks by introducing process
+   which run in parallel.
 
 2002/10/13 (vinju@loria.fr)
  * This package uses the meta package and the asf package to construct
