@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Mar 17 CET 2004 <iversen@cwi.nl>
+
+ * Added hook call to process-eqs.tb
+ * Made Syntaxchecking in ParseFocusses dependent on Type
+
 Tue Mar 16 16:00:20 CET 2004 <{jong,kooiker}@cwi.nl>
  * standard.meta.buttons:
    - split tree-panel and message-list implementation
