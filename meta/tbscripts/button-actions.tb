@@ -304,7 +304,7 @@ in
         StackPushString(Stack,Stack?,FileName) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(edit-given-filename, Stack?, EditorId?) .
+        rec-msg(activate-editor, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,NewModName?) .
         StackPopString(Stack,Stack?,FileName?) .
         StackPopTerm(Stack,Stack?,STree?) .
