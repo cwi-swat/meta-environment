@@ -13,6 +13,9 @@ sorts
 
 context-free syntax
 
+  check-infallible(AS-FunctionDef, AS-FunctionSig, Answer)
+				-> Answers
+
   check-terminates(AS-FunctionDef, AS-FunctionSig, Environment)
 				-> Answers
   terminates(AS-FunctionDef, Answers, Signatures)	
@@ -20,11 +23,25 @@ context-free syntax
   terminates(Action, Answers, Signatures)	
 				-> Answers {traversal(accu, break, top-down)}
 
-  check-stable(AS-FunctionDef, AS-FunctionSig, Environment)
+  check-closed(AS-FunctionDef, AS-FunctionSig, Environment)
 				-> Answers
-  stable(AS-FunctionDef, Answers, Signatures)	
+  closed(AS-FunctionDef, Answers, Signatures)	
 				-> Answers {traversal(accu, break, top-down)}
-  stable(Action, Answers, Signatures)	
+  closed(Action, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  
+  check-ineffective(AS-FunctionDef, AS-FunctionSig, Environment)
+				-> Answers
+  ineffective(AS-FunctionDef, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  ineffective(Action, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  
+  check-uncreative(AS-FunctionDef, AS-FunctionSig, Environment)
+				-> Answers
+  uncreative(AS-FunctionDef, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  uncreative(Action, Answers, Signatures)	
 				-> Answers {traversal(accu, break, top-down)}
   
 hiddens

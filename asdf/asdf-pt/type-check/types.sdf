@@ -18,11 +18,10 @@ context-free syntax
 
 %% Types
 
-  "AR" "[" NormalType"," ExceptionalType"," ExcepNoData "]" 
+  "AR" "[" NormalType"," ExceptionalType"," Answer "]" 
 				-> ActionResult
   "nor" "=" Type		-> NormalType
   "exc" "=" Type		-> ExceptionalType
-  "yes" | "no"			-> ExcepNoData
 
   ActionResult  		-> Type
 
@@ -32,7 +31,7 @@ context-free syntax
   type-concat(Type, Type) 	-> Type
   unify(Type, Type, SubTypes)	-> Type
 
-  ExcepNoData answerOr ExcepNoData 	-> ExcepNoData
+  Answer "answerOr" Answer 	-> Answer
 
   highest-type(Type, Type, SubTypes)	-> Type
   lowest-type(Type, Type, SubTypes)	-> Type
@@ -45,7 +44,7 @@ hiddens
 
 variables
 
-  "$END"[1-9]?	-> ExcepNoData
+  "$END"[1-9]?	-> Answer
   "$TY"[1-9]?	-> Type
   "$TY"[1-9]?"*"	-> {Type ","}*
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]

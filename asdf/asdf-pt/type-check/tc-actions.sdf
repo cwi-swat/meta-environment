@@ -23,7 +23,7 @@ variables
   "$A"[1-9]?	-> Action
   "$IA"		-> InfixAction
   "$D"[0-9]?	-> Data
-  "$END"[1-9]?	-> ExcepNoData
+  "$END"[1-9]?	-> Answer
   "$ER"[1-9]?"+"	-> Error+
   "$DO"[0-9]?	-> DataOp
 

@@ -52,7 +52,7 @@ variables
   "$TY"[1-9]?	-> Type
   "$CO"[1-9]?	-> Constructor
   "$ET"		-> AS-Eqs-Tag
-  "$END"[1-9]?	-> ExcepNoData
+  "$END"[1-9]?	-> Answer
 
   "$AN"		-> Answer
   "$ANS"[1-9]?	-> Answer+

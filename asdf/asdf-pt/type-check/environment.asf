@@ -41,6 +41,10 @@ equations
 
 [default-get-raising-1] get-raising($FS) = empty
 
+[failing-1] failing($LT : $SO -> $SFR1* & infallible & $SFR2*) = no
+
+[default-failing-1] failing($FS) = yes
+
 [terminates-1] terminates($LT : $SO -> $SFR1* & terminates & $SFR2*) = yes
 
 [default-terminates-1] terminates($FS) = no
@@ -48,6 +52,18 @@ equations
 [stable-1] stable($LT : $SO -> $SFR1* & stable & $SFR2*) = yes
 
 [default-stable-1] stable($FS) = no
+
+[closed-1] closed($LT : $SO -> $SFR1* & closed & $SFR2*) = yes
+
+[default-closed-1] closed($FS) = no
+
+[ineffective-1] ineffective($LT : $SO -> $SFR1* & ineffective & $SFR2*) = yes
+
+[default-ineffective-1] ineffective($FS) = no
+
+[uncreative-1] uncreative($LT : $SO -> $SFR1* & uncreative & $SFR2*) = yes
+
+[default-uncreative-1] uncreative($FS) = no
 
 [remove-using-1] remove-using($SFR1* & using $TY & $SFR2*) = $SFR1* & $SFR2*
 
@@ -65,9 +81,30 @@ equations
 
 [default-remove-infallible-1] remove-infallible($SFR+) = $SFR+
 
+[rm-terminates-1] remove-terminates($SFR1* & terminates & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-terminates-1] remove-terminates($SFR+) = $SFR+
+
+[rm-closed-1] remove-closed($SFR1* & closed & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-closed-1] remove-closed($SFR+) = $SFR+
+
+[rm-stable-1] remove-stable($SFR1* & stable & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-stable-1] remove-stable($SFR+) = $SFR+
+
+[rm-ineffective-1] remove-ineffective($SFR1* & ineffective & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-ineffective-1] remove-ineffective($SFR+) = $SFR+
+
+[rm-uncreative-1] remove-uncreative($SFR1* & uncreative & $SFR2*) = $SFR1* & $SFR2*
+
+[default-remove-uncreative-1] remove-uncreative($SFR+) = $SFR+
+
 [rm-action-1] remove-action($SFR1* & Action & $SFR2*) = $SFR1* & $SFR2*
 
 [default-remove-action-1] remove-action($SFR+) = $SFR+
+
 
 [rm-dobble-sigs-1] 
 
@@ -115,10 +152,35 @@ equations
 
 [join-res-4] 
 	     
+    join-results($SFR1* & terminates & $SFR2*, $FR, $STS) = terminates & 
+         join-results($SFR1* & $SFR2*, Action & remove-infallible($FR),$STS)
+
+[join-res-4] 
+	     
+    join-results($SFR1* & closed & $SFR2*, $FR, $STS) = closed & 
+         join-results($SFR1* & $SFR2*, Action & remove-closed($FR),$STS)
+
+[join-res-5] 
+	     
+    join-results($SFR1* & stable & $SFR2*, $FR, $STS) = stable & 
+         join-results($SFR1* & $SFR2*, Action & remove-stable($FR),$STS)
+
+[join-res-6] 
+	     
+    join-results($SFR1* & ineffective & $SFR2*, $FR, $STS) = ineffective & 
+         join-results($SFR1* & $SFR2*, Action & remove-ineffective($FR),$STS)
+
+[join-res-6] 
+	     
+    join-results($SFR1* & uncreative & $SFR2*, $FR, $STS) = uncreative & 
+         join-results($SFR1* & $SFR2*, Action & remove-uncreative($FR),$STS)
+
+[join-res-7] 
+	     
     join-results(Action & $SFR1*, $FR, $STS) = 
             Action & join-results($SFR1*, Action & remove-action($FR), $STS)
 
-[join-res-5]
+[join-res-8]
 
     join-results(, $SFR+, $STS) = $SFR+
 

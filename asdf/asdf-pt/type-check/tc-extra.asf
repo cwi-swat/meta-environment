@@ -1,5 +1,14 @@
 equations
 
+[check-infallible-1] 
+
+  check-infallible($FD, $LT : $SO -> $SFR1* & infallible & $SFR2*, no) = yes
+
+[default-check-infallible-1] check-infallible($FD, $AFS, $ANS) = 
+      error("Type error", 
+          [localized("Semantic function can fail", 
+			get-location($FD))])
+
 [check-terminates-1] 
 
   $ANS := terminates($FD, yes, get-signatures($ENV))
@@ -43,31 +52,58 @@ equations
 [localized("Semantic function might not terminate due to semantic function not terminating", 
 			get-location($AC))])
 
-[check-stable-1] 
+[check-closed-1] 
 
-  $ANS := stable($FD, yes, get-signatures($ENV))
+  $ANS := closed($FD, yes, get-signatures($ENV))
   ======================================================
-  check-stable($FD, $LT : $SO -> $SFR1* & stable & $SFR2*, $ENV) = $ANS
+  check-closed($FD, $LT : $SO -> $SFR1* & closed & $SFR2*, $ENV) = $ANS
 
-[default-check-stable-1] check-stable($FD, $AFS, $ENV) = yes
+[default-check-closed-1] check-closed($FD, $AFS, $ENV) = yes
 
-[stable-1]      
+[closed-1]      
 
-     $AC == update
+     $AC == give bound
      ===================================
-     stable($AC, $ANS, $SS) = $ANS error("Type error", 
-          [localized("Semantic function is not stable due to use of update", 
+     closed($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not closed due to use of bound", 
 			get-location($AC))])
 
-[stable-2] 
+[closed-2] 
 
      $LT $CO := $AC,
      sigs($AFS1*, $AFS1, $AFS2*) := $SS,
      $LT == get-fun-name($AFS1),
-     stable($AFS1) == no
+     closed($AFS1) == no
      ===================================
-     stable($AC, $ANS, $SS) = $ANS error("Type error", 
-[localized("Semantic function is not stable due to semantic function not being stable", 
+     closed($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function is not closed due to semantic function not being closed", 
+			get-location($AC))])
+
+[check-ineffective-1] 
+
+  $ANS := ineffective($FD, yes, get-signatures($ENV))
+  ======================================================
+  check-ineffective($FD, $LT : $SO -> $SFR1* & ineffective & $SFR2*, $ENV) = $ANS
+
+[default-check-ineffective-1] check-ineffective($FD, $AFS, $ENV) = yes
+
+[ineffective-1]      
+
+     $AC == update
+     ===================================
+     ineffective($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not ineffective due to use of update", 
+			get-location($AC))])
+
+[ineffective-2] 
+
+     $LT $CO := $AC,
+     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
+     $LT == get-fun-name($AFS1),
+     ineffective($AFS1) == no
+     ===================================
+     ineffective($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function is not ineffective due to semantic function not being ineffective", 
 			get-location($AC))])
 
 [check-uncreative-1] 

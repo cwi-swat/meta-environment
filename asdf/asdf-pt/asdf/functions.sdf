@@ -62,6 +62,7 @@ context-free syntax
   lookup-signature(FunctionSignature, ActionType, Literal) 
 		-> ActionType {traversal(accu, break, bottom-up)}
 
+  {AS-FunctionDef ","}* 	-> SortWithPosition
 
 hiddens variables
 

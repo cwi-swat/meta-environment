@@ -32,12 +32,21 @@ context-free syntax
   get-using(AS-FunctionSig)	-> Type
   get-giving(AS-FunctionSig)	-> Type
   get-raising(AS-FunctionSig)	-> Type
+  failing(AS-FunctionSig)	-> Answer
   terminates(AS-FunctionSig)	-> Answer
+  closed(AS-FunctionSig)	-> Answer
   stable(AS-FunctionSig)	-> Answer
+  ineffective(AS-FunctionSig)	-> Answer
+  uncreative(AS-FunctionSig)	-> Answer
   remove-using(FunResult)	-> { SingleFunResult "&" }*
   remove-giving(FunResult)	-> { SingleFunResult "&" }*
   remove-raising(FunResult)	-> { SingleFunResult "&" }*
   remove-infallible(FunResult)	-> { SingleFunResult "&" }*
+  remove-terminates(FunResult)	-> { SingleFunResult "&" }*
+  remove-closed(FunResult)	-> { SingleFunResult "&" }*
+  remove-stable(FunResult)	-> { SingleFunResult "&" }*
+  remove-ineffective(FunResult)	-> { SingleFunResult "&" }*
+  remove-uncreative(FunResult)	-> { SingleFunResult "&" }*
   remove-action(FunResult)	-> { SingleFunResult "&" }*
   remove-dobble-sigs(Signatures, SubTypes)	-> Signatures
   join-results({ SingleFunResult "&" }*, FunResult, SubTypes)	

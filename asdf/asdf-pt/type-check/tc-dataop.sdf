@@ -35,7 +35,7 @@ variables
   "$N"		-> Number
   "$B"		-> Boolean
   "$TK"[0-9]?	-> Token
-  "$END"[1-9]?	-> ExcepNoData
+  "$END"[1-9]?	-> Answer
   "$R"[1-9]?	-> ActionResult
   "$ER"[1-9]?"+"	-> Error+
   "$DO"[0-9]?	-> DataOp
