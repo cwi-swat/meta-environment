@@ -22,6 +22,7 @@ hiddens
       -> Productions {traversal(accu, top-down, break)}
 
   context-free syntax
+    addBrackets(Symbol) -> Symbol
     makePPSymbol(Symbol) -> Symbol 
 
   context-free syntax

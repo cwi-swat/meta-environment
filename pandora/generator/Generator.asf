@@ -23,14 +23,14 @@ equations
 [generateProductions-0]
   $Symbols -> $Symbol1 $Attributes := $Production0,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production1 := $Symbol2 -> $Symbol1
+  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
   generateProductions($Production0, $Production*) = $Production1 $Production*
 
 [generateProductions-1]
   $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production0,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production1 := $Symbol2 -> $Symbol1
+  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
   generateProductions($Production0, $Production*) = $Production1 $Production*
 
@@ -39,6 +39,11 @@ equations
   bytes($Char*) := removeWhitespace(bytes($Char+))
   ===>
   makePPSymbol($Symbol) = uqliteral("p" "p" $Char*)
+
+[addBrackets-0]
+  bytes(bytes($Char+)) := unparse-to-bytes($Symbol)
+  ===>
+  addBrackets($Symbol) = uqliteral("(" $Char+ ")")
 
 [default-removeWhitespace]
   removeWhitespace($Bytes) = $Bytes
