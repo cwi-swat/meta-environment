@@ -97,12 +97,15 @@ all:  $(LIBFILES) $(PROGS) $(GENSRC) $(TCLMODS) $(GENTCL)
 	$(NOWEB) $<
 	touch $@.tex
 
-.c.nw.h:
+%.h: %.c.nw
 	$(NOWEB) $<
 	touch $*.h $@ $@.tex
 
-.c.o:
+%.o: %.c
 	$(COMPILE)
+
+%.tifs: %.tb
+	$(TOOLBUS) -gentifs $<
 
 # Explicit dependencies
 tide.tb: tide.tb.nw
@@ -112,9 +115,6 @@ tide.tb: tide.tb.nw
 tide.tb.tex: tide.tb.nw
 	$(NOWEB) tide.tb.nw
 	touch tide.tb.tex
-
-.tb.tifs:
-	$(TOOLBUS) -gentifs $<
 
 debug-adapter.tif.c: tide.tifs
 	$(CTIF) -multi -tool debug-adapter -tifs tide.tifs

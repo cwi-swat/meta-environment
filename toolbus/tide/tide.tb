@@ -1,4 +1,4 @@
-#line 41 "tide.tb.nw"
+#line 43 "tide.tb.nw"
 process DAP-CONNECT is
 let
   D    : debug-adapter,
@@ -19,7 +19,7 @@ in
     snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
-#line 102 "tide.tb.nw"
+#line 104 "tide.tb.nw"
 process EVENT-RULES(D:debug-adapter) is
 let
   P     : term,   %% list of process-id's, or `all' indicating all
@@ -55,7 +55,7 @@ in
     snd-ack-event(D, rule-destroyed(Rid))
    ) * delta
 endlet
-#line 147 "tide.tb.nw"
+#line 149 "tide.tb.nw"
 process BROADCAST is
 let
   From : term,
@@ -65,7 +65,7 @@ in
     snd-note(event(From, Ev))
   ) * delta
 endlet
-#line 204 "tide.tb.nw"
+#line 206 "tide.tb.nw"
 process SOURCE-VIEWER is
 let
   S : source-viewer,
@@ -129,7 +129,7 @@ in
     snd-ack-event(S, current-port(D,P,Port))
   ) * delta
 endlet
-#line 273 "tide.tb.nw"
+#line 275 "tide.tb.nw"
 process RULE-VIEWER is
 let
   R : rule-viewer,
@@ -192,7 +192,36 @@ in
     snd-ack-event(R, destroy-rule(D,P,Rid))    
   ) * delta
 endlet
-#line 341 "tide.tb.nw"
+#line 411 "tide.tb.nw"
+process PROCESS-LIST is
+let
+  PL : process-list,
+  D : debug-adapter,	%% Which debug adapter
+  P : term,		%% List of processes (or in some cases 'all')
+  Info : list,		%% Information about a debug adapter
+  Exprs: term,		%% A list of expression,value pairs
+  Rid : int		%% Event rule identifier
+in
+  execute(process-list, PL?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
+  snd-note(new-tool("List processes", PL, list-processes)) .
+  ( rec-msg(PL, list-processes, D?) .
+    snd-do(PL, list-processes(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(PL, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(PL, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
+    snd-do(PL, watchpoint(D, P, Rid, Exprs))
+  ) * delta
+endlet
+#line 343 "tide.tb.nw"
 process WATCHPOINT-VIEWER is
 let
   V    : watchpoint-viewer,
@@ -251,7 +280,7 @@ in
     snd-ack-event(V, destroy-rule(D,P,Rid))    
   ) * delta
 endlet
-#line 167 "tide.tb.nw"
+#line 169 "tide.tb.nw"
 process MASTER-CONTROL is
 let
   M     : master-control,
@@ -284,14 +313,15 @@ in
   shutdown("Thank you for using tide!\n")
 endlet
 
-#line 28 "tide.tb.nw"
+#line 29 "tide.tb.nw"
 tool debug-adapter is { }
 tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
+tool process-list is { command = "java-adapter -class toolbus.tide.ProcessList" }
 %%tool viewer is { command = "./buscontrol" }
 
-#line 15 "tide.tb.nw"
+#line 16 "tide.tb.nw"
 toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
-	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER)
+	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-LIST)

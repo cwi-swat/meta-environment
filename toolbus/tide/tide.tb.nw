@@ -7,13 +7,14 @@
 <<process BROADCAST>>
 <<process SOURCE-VIEWER>>
 <<process RULE-VIEWER>>
+<<process PROCESS-LIST>>
 <<process WATCHPOINT-VIEWER>>
 <<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
 toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
-	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER)
+	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER, PROCESS-LIST)
 @
 
 %}}}
@@ -30,6 +31,7 @@ tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
+tool process-list is { command = "java-adapter -class toolbus.tide.ProcessList" }
 %%tool viewer is { command = "./buscontrol" }
 @
 
@@ -394,6 +396,44 @@ in
     rec-event(V, destroy-rule(D?,P?,Rid?)) .
     snd-msg(proc(D,P), destroy-rule(Rid)) .
     snd-ack-event(V, destroy-rule(D,P,Rid))    
+  ) * delta
+endlet
+@
+
+%}}}
+
+%{{{ process PROCESS-LIST
+
+The process-list tool presents the user with a list of processes,
+and their current execution state.
+
+<<process PROCESS-LIST>>=
+process PROCESS-LIST is
+let
+  PL : process-list,
+  D : debug-adapter,	%% Which debug adapter
+  P : term,		%% List of processes (or in some cases 'all')
+  Info : list,		%% Information about a debug adapter
+  Exprs: term,		%% A list of expression,value pairs
+  Rid : int		%% Event rule identifier
+in
+  execute(process-list, PL?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
+  subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
+  snd-note(new-tool("List processes", PL, list-processes)) .
+  ( rec-msg(PL, list-processes, D?) .
+    snd-do(PL, list-processes(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(PL, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(PL, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?,Exprs?))) .
+    snd-do(PL, watchpoint(D, P, Rid, Exprs))
   ) * delta
 endlet
 @

@@ -39,6 +39,7 @@ DISTFILES	= Makefile.in Guide.tex Intro.tex \
 		  calc.fig calc-ui.eps auction.fig auction-bidder.eps \
 		  auction-master.eps \
 		  Guide.ps.gz \
+		  adapters.tex \
 		  classes
 
 all:    ${DOCUMENTS}
