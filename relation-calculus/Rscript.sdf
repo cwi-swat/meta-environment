@@ -3,7 +3,7 @@ module Rscript
 exports
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
-	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR
+	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR TARGET
 
   imports RscriptElem basic/Comments
 
@@ -18,8 +18,8 @@ exports
 
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
-     REXP #  REXP			     	-> REXP {avoid}
-     "<" REXP "," REXP "," {REXP ","}+ ">"	-> REXP {avoid}
+%%     REXP # REXP			     	-> REXP {avoid}
+     "<" REXP "," {REXP ","}+ ">"		-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
 
 
@@ -51,6 +51,8 @@ exports
      REXP "." REXP                           	-> REXP {left}
      REXP "[" REXP "]"				-> REXP
 
+     REXP "@" RVAR				-> REXP
+
      REXP "+"                                	-> REXP
      REXP "*"                                	-> REXP
      "#" REXP			    	     	-> REXP
@@ -59,9 +61,11 @@ exports
 
      "{" {REXP ","}+ "|" {GENERATOR ","}+ "}"	-> REXP
 
-     RVAR 					-> DESTINATION
-     "<" RVAR "," RVAR ">"			-> DESTINATION
-     "<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> DESTINATION
+     DCLRVAR					-> TARGET
+     REXP					-> TARGET
+
+     TARGET					-> DESTINATION
+     "<" TARGET "," {TARGET ","}+ ">"		-> DESTINATION
 
      DESTINATION ":" REXP                      	-> SIMPLE-GENERATOR
      SIMPLE-GENERATOR				-> GENERATOR
@@ -86,9 +90,7 @@ exports
 
      "bool" | "int" | "str" | "area"	     	-> ElemType
      ElemType                                	-> REXPTYPE
-     "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
-     "<" REXPTYPE "," REXPTYPE "," {REXPTYPE ","}+">" 
-				          	-> REXPTYPE
+     "<" REXPTYPE "," {REXPTYPE ","}+">"       	-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
      "rel" "[" REXPTYPE "," {REXPTYPE ","}+ "]" -> REXPTYPE
      RVAR				     	-> REXPTYPE
@@ -99,8 +101,10 @@ exports
 
      DCLRVAR				      	-> RSTAT
 
+     type RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
+
      DCLRVAR "=" REXP                         	-> INITVAR
-     DCLRVAR "init" REXP 			-> INITVAR
+     DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?
      INITVAR					-> RSTAT
 
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT

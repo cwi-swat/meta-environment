@@ -19,7 +19,7 @@ exports
         eval-rstat(RSTAT, RSTORE)           			-> RSTORE
         eval-rstats(RSTAT*, RSTORE)          			-> RSTORE
 
-	 "{" {GENERATOR ","}+ "::" {REXP ","}+  "}"		-> REXP
+	"{" {GENERATOR ","}+ "::" {REXP ","}+  "}"		-> REXP
  
         evalp(REXP, RSTORE)            				-> Boolean
         evali(REXP, RSTORE)            				-> Integer
@@ -37,28 +37,31 @@ exports
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
 
+	eval-fields({DCLRVAR ","}*, RSTORE, Integer)		-> RSTORE
+	select-field(REXP, Integer)				-> Elem
+
 	add-element(Elem, BagIterator[[Elem]])			-> Bag[[Elem]]
 	power0(BagIterator[[Elem]])				-> Bag[[Elem]]
 	power1(BagIterator[[Elem]])				-> Bag[[Elem]]
 
 	%% All paths from roots in the second bag.
-	all-paths-from(Bag[[Elem]],Bag[[Elem]]) -> Bag[[Elem]] 
+	all-paths-from(Bag[[Elem]],Bag[[Elem]])			-> Bag[[Elem]] 
 
-	chain-bag(Bag[[Elem]]) -> Bag[[Elem]]
-	chain-each(Bag[[Elem]]) -> Bag[[Elem]]
-	all-nodes-from(Bag[[Elem]], Bag[[Elem]]) -> Bag[[Elem]]
+	chain-bag(Bag[[Elem]])					-> Bag[[Elem]]
+	chain-each(Bag[[Elem]])					-> Bag[[Elem]]
+	all-nodes-from(Bag[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]
 
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
 
 	equal-rval(RVALUE, RVALUE)				-> Boolean
 
-	eval-itern({RVAR ","}+,  BagIterator[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> Bag[[Elem]]
+	eval-itern({TARGET ","}+,  BagIterator[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> Bag[[Elem]]
 
-	store-rvars({RVAR ","}+, RVALUE, RSTORE)		-> RSTORE
+	match-rvars({TARGET ","}*, RVALUE, REXP, RSTORE)		-> RVALUE
 
 	append-rval(Bag[[Elem]], RVALUE)			-> Bag[[Elem]]
-	exists({RVAR ","}+, Bag[[Elem]], REXP, RSTORE)		-> Boolean
+	exists({TARGET ","}+, BagIterator[[Elem]], REXP, RSTORE)	-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
@@ -105,6 +108,8 @@ hiddens
         "$Gen*" [0-9\']*               -> {GENERATOR ","}*
         "$Gen+" [0-9\']*               -> {GENERATOR ","}+
 
+        "$SimpleGen" [0-9\']*          -> SIMPLE-GENERATOR	
+
         "$Rscript" [0-9\']*            -> RSCRIPT
 
         "$Stat" [0-9\']*               -> RSTAT
@@ -122,6 +127,7 @@ hiddens
 	"$Etype*" [0-9\']*             -> {REXPTYPE ","}*
 	"$Etype+" [0-9\']*             -> {REXPTYPE ","}+
 
+	"$DclRvar*" [0-9\']*		-> { DCLRVAR ","}*
 	"$DclRvar+" [0-9\']*		-> { DCLRVAR ","}+
 	"$Area" [0-9\']* 		-> Area
 
@@ -132,6 +138,11 @@ hiddens
        "$Eq" [0-9\']*		-> EQU
        "$Eq*" [0-9\']*		-> EQU*
        "$Eq+" [0-9\']*		-> EQU+
+
+       "$Target" [0-9\']*		-> TARGET
+       "$Target*" [0-9\']*		-> {TARGET ","}*
+       "$Target+" [0-9\']*		-> {TARGET ","}+
+
 
 
 
