@@ -139,10 +139,10 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     return lengthOfSymbol(newSymbol) + 5;
   }
-  if (PT_isSymbolParameter(symbol)) {
-    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
-    return lengthOfSymbols(newSymbols) + lengthOfSymbol(newSymbol) + 4;
+  if (PT_isSymbolParameterizedSort(symbol)) {
+    char *str = PT_getSymbolSort(symbol);
+    PT_Symbols newSymbols = PT_getSymbolParameters(symbol);
+    return lengthOfSymbols(newSymbols) + strlen(str) + 4;
   }
   if (PT_isSymbolFunc(symbol)) {
     PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
@@ -480,10 +480,15 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     buf[idx++] = ']';
     return idx;
   }
-  if (PT_isSymbolParameter(symbol)) {
-    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
-    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+  if (PT_isSymbolParameterizedSort(symbol)) {
+    char *str = PT_getSymbolSort(symbol);
+    PT_Symbols newSymbols = PT_getSymbolParameters(symbol);
+    int len = strlen(str);
+
+    for (i = 0; i < len; i++) {
+      buf[idx++] = str[i];
+    }
+
     buf[idx++] = '[';
     buf[idx++] = '[';
     idx = yieldSymbolParameters(newSymbols, idx, buf, bufSize);
