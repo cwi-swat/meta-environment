@@ -34,8 +34,7 @@ static char* getFilename(PT_Tree str)
 
 static CO_Feedback makeGeneralError(char *producer, char *msg)
 {
-  ERR_Feedback feedback = ERR_makeFeedbackError(producer,
-						msg,
+  ERR_Feedback feedback = ERR_makeFeedbackError(msg,
 						ERR_makeSubjectListEmpty());
 
   return (CO_Feedback) ERR_liftFeedback(feedback);
@@ -57,7 +56,7 @@ static CO_Feedback makeParseError(char *producer, char *file, ATerm error)
   area = ERR_makeAreaArea(line, col, line, col, offset, 1);
   location = ERR_makeLocationLocation(file, area);
   subject = ERR_makeSubjectSubject("cursor", location);
-  feedback = ERR_makeFeedbackError(producer, "parse-error",
+  feedback = ERR_makeFeedbackError("parse-error",
 				   ERR_makeSubjectListSingle(subject));
 
   return (CO_Feedback) ERR_liftFeedback(feedback);
