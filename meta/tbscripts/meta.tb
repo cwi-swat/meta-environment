@@ -33,7 +33,7 @@
 #include "editor-manager.idef"
 #include "generic-adapter.idef" 
 #include "in-output.idef"
-#include "layoutgraph.idef"
+#include "layout-graph.idef"
 #include "parsetablegen.idef"
 #include "restorebrackets.idef"
 #include "se.idef"
@@ -86,7 +86,6 @@ in
   . create(GetEquations, Pid?)
   . create(GetParseTable, Pid?)
   . create(Io, Pid?)
-  . create(LAYOUT-GRAPH, Pid?)
   . create(Meta-Interface, Pid?)
   . create(Module-Utilities, Pid?)
   . create(ModuleDB, Pid?)
@@ -96,7 +95,6 @@ in
   . create(Open-modules, Pid?)
   . create(PGen, Pid?)
   . create(ParseFocusses, Pid?)
-  . create(Parser, Pid?)
   . create(PrintModule, Pid?)
   . create(RestoreBrackets, Pid?)
   . create(RestoreTermBrackets, Pid?)
