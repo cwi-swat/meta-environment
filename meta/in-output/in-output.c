@@ -247,6 +247,26 @@ ATerm open_old_asfix_file(int cid, char *name)
   return t;
 }
 
+/*
+ * Checks whether the sdf2 module exists, either in
+ * text or baf format.
+ *
+ */
+ATerm exists_sdf2_module(int cid, char *moduleName)
+{
+  char   rawFileName[PATH_LEN] = {'\0'};
+  char   bafFileName[PATH_LEN] = {'\0'};
+
+  sprintf(rawFileName, "%s%s", moduleName, ".sdf2");
+  sprintf(bafFileName, "%s%s", moduleName, ".sdf2.baf");
+
+  if (fileexists(rawFileName) || fileexists(bafFileName)) {
+      return ATmake("snd-value(exists)");
+  } else {
+      return ATmake("snd-value(not-exists)");
+  }
+}
+
 ATerm open_sdf2_file(int cid, char *name)
 {
   char   *full;

@@ -82,9 +82,12 @@ DISTCLEANFILES	= depend Makefile in-output.tif.c in-output.tif.h
 # The all target must be defined:
 all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
+.PHONY: test
+
 # Unit test target
 test:	all
 	${top_srcdir}/utils/test-help ./in-output
+	@cd test; make test
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'

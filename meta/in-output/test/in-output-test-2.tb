@@ -1,0 +1,15 @@
+#include "in-output.idef"
+
+process Test is
+  snd-msg(exists-sdf2-module("Empty1")) .
+  (
+    rec-msg(sdf2-module-exists("Empty1"))
+  +
+    rec-msg(sdf2-module-not-exists("Empty1")) .
+    printf("in-output-test-2 FAILED!\n")
+  +
+    shutdown("test-2 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+toolbus(Test, Io)

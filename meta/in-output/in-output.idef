@@ -47,6 +47,17 @@ in
       snd-msg(Id, error-opening(Name))
     )
   +
+    %% Check if a sdf2 module exists.
+    rec-msg(exists-sdf2-module(Name?)) .
+    snd-eval(IO, exists-sdf2-module(Name)) .
+    (
+      rec-value(IO, exists) .
+      snd-msg(sdf2-module-exists(Name))
+    +
+      rec-value(IO, not-exists) .
+      snd-msg(sdf2-module-not-exists(Name))
+    )
+  +
     %% Name represents the module-name (without extension)
     rec-msg(Id?,open-file(Name?)).
     snd-eval(IO, open-old-asfix-file(Name)).
