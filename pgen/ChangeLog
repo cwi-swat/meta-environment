@@ -1,5 +1,8 @@
 $Id$
 
+2003/08/01 (jurgenv@cwi.nl)
+ * Set version to 1.7.1
+
 2003/07/24 ({jurgenv,markvdb}@cwi.nl)
  * Added lexical restrictions on ModuleWord and ModuleId.
  * Added a warning when literals are detected in the right hand side
