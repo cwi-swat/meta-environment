@@ -1,0 +1,17 @@
+module languages/c/syntax/CWithPreprocessor
+
+imports languages/c/syntax/CWithComments
+imports languages/cpp/syntax/Macros
+	languages/cpp/syntax/Div
+	languages/cpp/syntax/If
+        languages/cpp/syntax/Include
+
+exports
+
+context-free syntax
+ 
+  
+  ExternalDefinition -> Text
+  MemberDeclaration  -> Text
+  Line  -> ExternalDefinition
+  Line  -> MemberDeclaration

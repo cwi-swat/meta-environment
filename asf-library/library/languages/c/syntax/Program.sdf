@@ -13,7 +13,24 @@ exports
     Declaration        -> ExternalDefinition
 
   context-free syntax
-    ( DeclarationSpecifier | TypeSpecifier | DeclarationQualifierList | TypeQualifierList )? 
-    IdentifierDeclarator | ( OldFunctionDeclarator Declaration* ) 
-    CompoundStatement -> FunctionDefinition 
+%%    ( DeclarationSpecifier 
+%%      | TypeSpecifier 
+%%      | DeclarationQualifierList 
+%%      | TypeQualifierList )?  
+%%    (IdentifierDeclarator 
+%%    | ( OldFunctionDeclarator
+%%        Declaration* 
+%%      ) )
+%%    CompoundStatement -> FunctionDefinition
 
+
+   ( DeclarationSpecifier 
+      | TypeSpecifier 
+      | DeclarationQualifierList 
+      | TypeQualifierList )? OldFunctionDeclarator Declaration* CompoundStatement -> FunctionDefinition
+
+   ( DeclarationSpecifier 
+      | TypeSpecifier 
+      | DeclarationQualifierList 
+      | TypeQualifierList )? IdentifierDeclarator CompoundStatement -> FunctionDefinition
+    

@@ -1,0 +1,14 @@
+module languages/c/syntax/LineDirectives
+
+imports languages/c/syntax/Constants
+
+exports
+
+context-free syntax
+
+"#" linenum:INTEGERconstant filename:STRINGliteral Flag* -> LineDirective
+
+"1" -> Flag {cons("start-of-file")}
+"2" -> Flag {cons("returning-from-file")}
+"3" -> Flag {cons("system-file")}
+"4" -> Flag {cons("c-code-indicator")}

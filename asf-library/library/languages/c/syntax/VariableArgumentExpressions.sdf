@@ -1,0 +1,7 @@
+module languages/c/syntax/VariableArgumentExpressions
+
+exports
+
+context-free syntax
+
+"__builtin_va_arg" "(" Expression "," TypeName ")" -> Expression {prefer}

@@ -115,18 +115,6 @@ exports
   context-free syntax
     TypeSpecifier {MemberDeclarator ","}+ ";" 		    -> MemberDeclaration 
     TypeQualifierList {MemberIdentifierDeclarator ","}+ ";" -> MemberDeclaration 
-
-   %% MemberDeclaringList ";"        -> MemberDeclaration 
-   %% MemberDefaultDeclaringList ";" -> MemberDeclaration 
-
-  %%context-free syntax
-  %%  TypeQualifierList MemberIdentifierDeclarator  -> MemberDefaultDeclaringList {cons("TypeQualifierList-MemberIdentifierDeclarator")}
-  %%  MemberDefaultDeclaringList "," MemberIdentifierDeclarator -> MemberDefaultDeclaringList 
-
-  %%context-free syntax
-  %%  TypeSpecifier MemberDeclarator           -> MemberDeclaringList {cons("TypeSpecifier-MemberDeclarator")}
-  %%  MemberDeclaringList "," MemberDeclarator -> MemberDeclaringList 
-
   context-free syntax
     IdentifierDeclarator BitFieldSizeOpt -> MemberDeclarator 
     BitFieldSize                         -> MemberDeclarator
@@ -183,4 +171,13 @@ exports
     Expression                      -> Initializer
 
 exports
-  sorts  Initializer InitializerOpt TypeName TypeSpecifier ParameterDeclaration DeclarationQualifierList ParameterTypedefDeclarator DeclarationSpecifier ParameterList EnumeratorValue Enumerator EnumSpecifier BitFieldSize BitFieldSizeOpt MemberIdentifierDeclarator MemberDeclarator MemberDeclaration MemberDeclarationList UnionSpecifier StructSpecifier ElaboratedTypeName BasicTypeName StorageClass TypedefTypeSpecifier TypeQualifier TypedefDeclarationSpecifier DeclarationQualifier SueTypeSpecifier SueDeclarationSpecifier BasicTypeSpecifier BasicDeclarationSpecifier DeclaringList DefaultDeclaringList Declaration 
+  sorts  Initializer InitializerOpt TypeName TypeSpecifier
+  ParameterDeclaration DeclarationQualifierList ParameterTypedefDeclarator
+  DeclarationSpecifier ParameterList EnumeratorValue Enumerator
+  EnumSpecifier BitFieldSize BitFieldSizeOpt MemberIdentifierDeclarator
+  MemberDeclarator MemberDeclaration MemberDeclarationList UnionSpecifier
+  StructSpecifier ElaboratedTypeName BasicTypeName StorageClass
+  TypedefTypeSpecifier TypeQualifier TypedefDeclarationSpecifier
+  DeclarationQualifier SueTypeSpecifier SueDeclarationSpecifier
+  BasicTypeSpecifier BasicDeclarationSpecifier DeclaringList
+  DefaultDeclaringList Declaration

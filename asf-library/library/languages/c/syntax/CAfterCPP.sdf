@@ -1,0 +1,22 @@
+module languages/c/syntax/CAfterCPP
+
+imports languages/c/syntax/C
+imports languages/c/syntax/Whitespace
+imports languages/c/syntax/VariableArgumentExpressions
+
+%% This module assumes you've run the "cpp" command on a C system
+exports
+
+context-free syntax
+
+"#" linenum:INTEGERconstant filename:STRINGliteral Flag* -> LineDirective
+
+"1" -> Flag {cons("start-of-file")}
+"2" -> Flag {cons("returning-from-file")}
+"3" -> Flag {cons("system-file")}
+"4" -> Flag {cons("c-code-indicator")}
+
+LineDirective -> ExternalDefinition
+LineDirective -> Statement
+LineDirective -> MemberDeclaration
+
