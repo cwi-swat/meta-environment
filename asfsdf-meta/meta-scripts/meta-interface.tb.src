@@ -58,6 +58,7 @@ in
       snd-note(ui-status(errorf("Failed tests are %t\n", [TestResults])))
     +  
       rec-msg(equations-incomplete) .
+      snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
     )
   ) * delta
