@@ -49,83 +49,62 @@ in
   snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
 
   (
-  rec-msg(get-import-graph) .
-  snd-eval(Mdb, retrieve-import-graph) .
-  rec-value(Mdb, import-graph(ActualMods?,Pairs?)) .
-  snd-msg(import-graph(ActualMods,Pairs))
-+
-/* If we get the request to empty the db, we'll do it. */
-  rec-msg(clear-module-db).
-  snd-do(Mdb, clear-module-db)
-+
-/* Delete one module from the db */
-  rec-msg(delete-module-from-db(Name?)).
-  snd-eval(Mdb, delete-module(Name)).
-  rec-value(Mdb, changed-modules(ChngMods?)).
-  snd-msg(changed-modules(ChngMods))
-+
-/* Delete one module from the db */
-  rec-msg(close-module-in-db(Name?)).
-  snd-eval(Mdb, close-module(Name)).
-  rec-value(Mdb, changed-modules(ChngMods?)).
-  snd-msg(changed-modules(ChngMods))
-+
-/* See if a module is in the db */
-  rec-msg(is-module-in-db(Name?)).
-  snd-eval(Mdb, exists(Name)).
-  ( rec-value(Mdb, exists).
-    snd-msg(exists-in-module-db(Name))
+    rec-msg(get-import-graph) .
+    snd-eval(Mdb, retrieve-import-graph) .
+    rec-value(Mdb, import-graph(ActualMods?,Pairs?)) .
+    snd-msg(import-graph(ActualMods,Pairs))
   +
-    rec-value(Mdb, notexists).
-    snd-msg(not-exists-in-module-db(Name))
-  )
-+
-  rec-msg(add-empty-module-to-db(Name?)).
-  snd-eval(Mdb,add-empty-module(Name)).
-  rec-value(Mdb,empty-module-added(import-graph(ActualMods?, Pairs?))) .
-  snd-note(import-graph(ActualMods, Pairs)).
-  snd-msg(empty-module-added)
-+
-/* Add a term-asfix module to the database */
-/* Path is the directory in which the file containing Module lives.
-   Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf-module-to-db(Name?, Path?, 
-                               SyntaxText?, SyntaxTree?)) .
-  snd-eval(Mdb, add-sdf-module(Name, Path, SyntaxText, SyntaxTree)) .
-  ( 
-    rec-value(Mdb,module(RealName?,need-modules(Modules?))) .
-    snd-msg(adding-succeeded(Name, RealName, Modules))
+    rec-msg(clear-module-db).
+    snd-do(Mdb, clear-module-db)
   +
-    rec-value(Mdb, name-consistency-error(ErrorName?)) .
-    snd-msg(error-opening(Name, name-inconsistent))
+    rec-msg(delete-module-from-db(Name?)).
+    snd-eval(Mdb, delete-module(Name)).
+    rec-value(Mdb, changed-modules(ChngMods?)).
+    snd-msg(changed-modules(ChngMods))
   +
-    rec-value(Mdb, illegal-module-error(ErrorName?)) .
-    snd-msg(error-opening(Name, erroneous-module))
-  )
-+
-  rec-msg(invalidate-sdf-in-db(Name?)).
-  snd-do(Mdb, invalidate-sdf(Name))
-+
-/* Path is the directory in which the file containing Module lives.
-   Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
-  if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(Name, Syntax)) .
+    rec-msg(close-module-in-db(Name?)).
+    snd-eval(Mdb, close-module(Name)).
+    rec-value(Mdb, changed-modules(ChngMods?)).
+    snd-msg(changed-modules(ChngMods))
+  +
+    rec-msg(is-module-in-db(Name?)).
+    snd-eval(Mdb, exists(Name)).
     (
-      rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
-                            import-graph(ActualMods?, Pairs?))).
-      snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
-      rec-msg(notify-about-changed-modules-done).
-      snd-note(import-graph(ActualMods, Pairs)).
-      snd-msg(extra-modules(Modules))
+      rec-value(Mdb, exists).
+      snd-msg(exists-in-module-db(Name))
+    +
+      rec-value(Mdb, notexists).
+      snd-msg(not-exists-in-module-db(Name))
+    )
+  +
+    rec-msg(add-sdf-module-to-db(Name?, Path?, 
+                                 SyntaxText?, SyntaxTree?)) .
+    snd-eval(Mdb, add-sdf-module(Name, Path, SyntaxText, SyntaxTree)) .
+    ( 
+      rec-value(Mdb,module(RealName?,need-modules(Modules?))) .
+      snd-msg(adding-succeeded(Name, RealName, Modules))
+    +
+      rec-value(Mdb, name-consistency-error(ErrorName?)) .
+      snd-msg(error-opening(Name, name-inconsistent))
+    +
+      rec-value(Mdb, illegal-module-error(ErrorName?)) .
+      snd-msg(error-opening(Name, erroneous-module))
+    )
+  +
+    rec-msg(invalidate-sdf-in-db(Name?)).
+    snd-do(Mdb, invalidate-sdf(Name))
+  +
+    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?)).
+    snd-eval(Mdb,update-sdf-module(Name, SyntaxText, SyntaxTree)) .
+    (
+      rec-value(Mdb,imports(changed-modules(ChngMods?),
+			    need-modules(Modules?))) .
+      snd-msg(updating-succeeded(ChngMods, Modules))
     +
       rec-value(Mdb, name-consistency-error(ErrorName?)) .
       snd-msg(error-opening(ErrorName, name-inconsistent))
     )
-  else
-    snd-msg(extra-modules([]))
-  fi
-+
+  +
   rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
   snd-eval(Mdb, rename-module(OldName, NewName, Path)) .
   (
@@ -198,8 +177,6 @@ in
   snd-do(Mdb,add-text-eqs-section(Name, EqsText)) .
   snd-msg(eqs-added)
 +
-  /* Update the equations as tree in the database.
-   */
   rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
   snd-do(Mdb, update-eqs-tree(Name, EqsTree)) .
   snd-msg(eqs-updated)

@@ -575,9 +575,11 @@ endlet
  
 process ParseSyntax(EditorId : term, ModuleName : str) is
 let
-  Tree : term,
-  Focus : term,
-  Modules : list
+  Tree             : term,
+  Text             : str,
+  Focus            : term,
+  NewModules       : list,
+  DependingModules : list
 in
       InvalidateEditor(EditorId).
       snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
@@ -586,10 +588,14 @@ in
         snd-msg(get-tree(EditorId)) .
         (
           rec-msg(tree(Tree?)) .
-          snd-msg(update-module-in-db(ModuleName, Tree, "Sdf2")).
+          snd-msg(unparse(Tree)) .
+          rec-msg(unparsed-text(Text?)) .
+          snd-msg(update-module-in-db(ModuleName, Text, Tree)) .
           (
-            rec-msg(extra-modules(Modules?)).
-            snd-msg(open-modules(Modules)).
+            rec-msg(updating-succeeded(DependingModules?, NewModules?)).
+	    snd-msg(notify-about-changed-modules(DependingModules, "sdf")) .
+	    rec-msg(notify-about-changed-modules-done) .
+            snd-msg(open-modules(NewModules)).
             rec-msg(finished-opening-modules) .
             snd-note(clear-focus(EditorId))
           +

@@ -80,12 +80,6 @@ in
       snd-msg(not-exists-in-module-db(Name))
     )
   +
-    rec-msg(add-empty-module-to-db(Name?)).
-    snd-msg(ts-put-value("active-modules", Name, [])) .
-    MDB-RetrieveImportGraph(Nodes?, Edges?) .
-    snd-note(import-graph(Nodes, Edges)).
-    snd-msg(empty-module-added)
-  +
     rec-msg(add-sdf-module-to-db(Name?, Path?, 
 				 SyntaxText?, SyntaxTree?)) .
     snd-msg(sm-is-valid-modulename-in-path(Path, Name)) .

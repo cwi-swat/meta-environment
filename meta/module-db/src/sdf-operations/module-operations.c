@@ -109,10 +109,7 @@ ATbool SO_checkModuleNameWithPath(const char *moduleName,
   int pathlen = strlen(path);
   int namelen = strlen(moduleName);
  
-  /* first skip extension (may not use knowledge of which extension it is) */
-  for(i=pathlen - 1; i >= 0 && path[i] != '.'; i --);
- 
-  for(j=namelen - 1, --i; i >= 0 && j >= 0; i--, j--) {
+  for(j=namelen - 1, i=pathlen-1; i >= 0 && j >= 0; i--, j--) {
     if (moduleName[j] != path[i]) {
       return ATfalse;
     }

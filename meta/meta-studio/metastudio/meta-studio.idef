@@ -69,6 +69,7 @@ let
 in
   Id := process-id.
   execute(user-interface,UI?).
+  subscribe(display-import-graph(<list>,<list>)) .
   create(Status-display(UI),SD?).
 
   snd-msg(library-location-hook).
@@ -213,7 +214,7 @@ in
      snd-msg(debugging(On)) .
      snd-ack-event(UI,debugging(On))
    ) +
-   ( rec-msg(display-import-graph(Mods?,Pairs?)).
+   ( rec-note(display-import-graph(Mods?,Pairs?)).
      snd-do(UI,new-graph(Mods,Pairs))
    )
    +

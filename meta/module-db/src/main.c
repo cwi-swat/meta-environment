@@ -78,35 +78,47 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
                      char *sdfText, ATerm sdfTree)
 {
   ATerm atModuleName;
-  ATermList unknowns;
+  ATermList unknowns = ATempty;
   
-  SDF_Module sdfModule = SDF_getStartTopModule(
-                           SDF_StartFromTerm(sdfTree));
+  if (ATisEqual(sdfTree, ATmake("no-tree"))) {
+    if (!SO_checkModuleNameWithPath(moduleName, path)) {
+      return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+    }
+  
+    atModuleName = makeString(moduleName); 
 
-  if (!SO_checkModuleNameWithPath(SDF_getModuleName(sdfModule), 
-                                  path)) {
-    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+    MS_putModuleName(atModuleName);
+    MS_putSdfText(atModuleName, sdfText);
+    MS_putModulePath(atModuleName, path);
   }
+  else {
+    SDF_Module sdfModule = SDF_getStartTopModule(
+                             SDF_StartFromTerm(sdfTree));
+
+    if (!SO_checkModuleNameWithPath(SDF_getModuleName(sdfModule), 
+                                    path)) {
+      return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+    }
   
-  atModuleName = makeString(SDF_getModuleName(sdfModule)); 
+    atModuleName = makeString(SDF_getModuleName(sdfModule)); 
 
-  sdfTree = PT_makeTermFromParseTree(
-              PT_addParseTreePosInfo(
-                path,
-                PT_makeParseTreeFromTerm(sdfTree)));
+    sdfTree = PT_makeTermFromParseTree(
+                PT_addParseTreePosInfo(
+                  path,
+                  PT_makeParseTreeFromTerm(sdfTree)));
   
-  MS_putModuleName(atModuleName);
-  MS_putSdfTree(atModuleName, sdfTree);
-  MS_putSdfText(atModuleName, sdfText);
-  MS_putModulePath(atModuleName, path);
+    MS_putModuleName(atModuleName);
+    MS_putSdfTree(atModuleName, sdfTree);
+    MS_putSdfText(atModuleName, sdfText);
+    MS_putModulePath(atModuleName, path);
 
-  unknowns = MDB_unavailableImportedModules(atModuleName);
-
+    unknowns = MDB_unavailableImportedModules(atModuleName);
+  }
   return ATmake("snd-value(module(<term>,need-modules([<list>])))",
                 atModuleName, unknowns);
 }
 
-ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
+ATerm update_sdf_module(int cid, char *moduleName, char *sdfText, ATerm sdfTree)
 {
   ATerm atModuleName;
   ATermList dependingModules;
@@ -132,6 +144,7 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
   if (oldSdfTree) {
     if (!ATisEqual(oldSdfTree, sdfTree)) {
       MS_putSdfTree(atModuleName, sdfTree);
+      MS_putSdfText(atModuleName, sdfText);
       MS_removeAsfTree(atModuleName);
       MS_removeAsfParseTable(atModuleName);
       MS_removeTermParseTable(atModuleName);
@@ -142,17 +155,28 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
       unknowns = MDB_unavailableImportedModules(atModuleName);
 
       return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
-		    "need-modules([<list>]),<term>))",
-		    atModuleName, dependingModules, unknowns, 
-                    MDB_retrieveImportGraph());
+		                       "need-modules([<list>])))",
+		    atModuleName, dependingModules, unknowns);
     }
     else {
-      return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
-		    "need-modules([<list>]),<term>))",
-		    ATempty, ATempty, MDB_retrieveImportGraph());
+      return ATmake("snd-value(imports(changed-modules([<list>]),"
+		                       "need-modules([<list>])))", 
+		    ATempty, ATempty);
     }
   }
-  return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+  else {
+    MS_putSdfTree(atModuleName, sdfTree);
+    MS_putSdfText(atModuleName, sdfText);
+
+    dependingModules = MDB_getDependingModules(atModuleName);
+    MDB_invalidateModules(dependingModules);
+     
+    unknowns = MDB_unavailableImportedModules(atModuleName);
+
+    return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
+                                     "need-modules([<list>])))",
+		  atModuleName, dependingModules, unknowns);
+  }
 }
 
 ATerm get_sdf_tree(int cid, char *moduleName)
@@ -160,25 +184,20 @@ ATerm get_sdf_tree(int cid, char *moduleName)
   ATerm atModuleName = makeString(moduleName);
   if (MS_existsModule(atModuleName)) {
     ATerm tree = MS_getSdfTree(atModuleName);
-    return ATmake("snd-value(asfix(syntax(<term>)))", tree); 
+    if (tree) {
+      return ATmake("snd-value(asfix(syntax(<term>)))", tree); 
+    }
   }
   else {
     ATwarning("get_sdf_tree: Module %t not in database!\n", 
               moduleName);
-    return ATmake("snd-value(asfix(unavailable))");
   }
+  return ATmake("snd-value(asfix(unavailable))");
 }
 
 void invalidate_sdf(int cid, char *moduleName)
 {
   MS_removeSdfTree(makeString(moduleName));
-}
-
-ATerm add_empty_module(int cid, char *moduleName)
-{
-  MS_putModuleName(makeString(moduleName));
-  return ATmake("snd-value(empty-module-added(<term>))", 
-		MDB_retrieveImportGraph());
 }
 
 ATerm all_equations_available(int cid, char *moduleName)

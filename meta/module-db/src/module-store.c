@@ -86,7 +86,12 @@ void MS_removeModulePath(ATerm moduleName)
 
 ATerm MS_getSdfTree(ATerm moduleName)
 {
-  return getTreeValue(TS_getValue("sdf-tree", moduleName));
+  ATermList value = TS_getValue("sdf-tree", moduleName);
+
+  if (value) {
+    return getTreeValue(value);
+  }
+  return NULL;
 }
 
 void MS_putSdfTree(ATerm moduleName, ATerm moduleTree)

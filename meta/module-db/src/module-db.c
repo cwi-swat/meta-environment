@@ -20,10 +20,14 @@ SDF_ImportList MDB_getImports(ATerm moduleName)
   SDF_ImportList result = SDF_makeImportListEmpty();
 
   if (MS_existsModule(moduleName)) {
-    SDF_Module module = SDF_getStartTopModule(
-                          SDF_StartFromTerm(
-                            MS_getSdfTree(moduleName)));
-    result = SDF_getModuleImportsList(module);
+    ATerm sdfTree = MS_getSdfTree(moduleName);
+
+    if (sdfTree) {
+      SDF_Module module = SDF_getStartTopModule(
+                            SDF_StartFromTerm(sdfTree));
+
+      result = SDF_getModuleImportsList(module);
+    }
   }
   else {
     ATwarning("getImports: Module %t not in database!\n", moduleName);

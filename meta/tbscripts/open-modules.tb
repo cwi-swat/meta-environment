@@ -187,7 +187,6 @@ let
   Dummy : str,
   Message : str
 in
-  Tree := no-tree.
   if not-equal(Path, "") then
     snd-msg(read-file(Path, ".sdf")) .
     (
@@ -200,7 +199,7 @@ in
   else
      Status := no-such-file
   fi .
-  if equal(Status, success) then
+  if not-equal(Status, no-such-file) then
     Imports := [].
     snd-msg(add-sdf-module-to-db(Module, Path, Text, Tree)).
     (
@@ -227,6 +226,7 @@ in
     rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
   +
     rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))).
+    Tree := no-tree.
     Status := parse-error 
   )
 endlet
