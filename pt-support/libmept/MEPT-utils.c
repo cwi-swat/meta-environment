@@ -289,6 +289,25 @@ ATbool PT_isTreeSeq(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isTreeOpt(PT_Tree tree) */
+
+ATbool PT_isTreeOpt(PT_Tree tree)
+{
+  PT_Production prod = PT_getTreeProd(tree);
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+
+  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+    rhs = PT_getSymbolSymbol(rhs);
+  }
+
+  if (PT_isSymbolOpt(rhs)) {
+    return ATtrue;
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  ATbool PT_isTreeApplList(PT_Tree tree) */
 
 ATbool PT_isTreeApplList(PT_Tree tree)

@@ -30,6 +30,7 @@ ATbool PT_isTreeListInjection(PT_Tree tree);
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isTreeAlt(PT_Tree tree);
 ATbool PT_isTreeSeq(PT_Tree tree);
+ATbool PT_isTreeOpt(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);
 ATbool PT_isIterSymbol(PT_Symbol sym);
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod);

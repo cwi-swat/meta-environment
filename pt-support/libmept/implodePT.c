@@ -18,6 +18,7 @@ ATbool implode_lexicals = ATfalse;
 ATbool keep_annotations = ATtrue;
 ATbool interpret_alt = ATfalse;
 ATbool interpret_seq = ATfalse;
+ATbool interpret_opt = ATfalse;
 
 static ATerm implodeTerm(PT_Tree t);
 static ATerm implodeLayout(PT_Tree t);
@@ -206,16 +207,57 @@ static ATerm implodeAlt(PT_Tree tree)
     index++;
   } while (PT_isSymbolAlt(rhs));
 
-  ATerror("implodeAlt: unexpected term");
+  if (PT_isEqualSymbol(chosen, rhs)) {
+    child = implodeTerm(PT_getArgsHead(PT_getTreeArgs(tree)));
+    return ATmake("alt(<int>,[<term>])", index, child);
+  }
+
   return PT_makeTermFromTree(tree);
+}
+
+static ATerm implodeSeqRecursive(PT_Args args)
+{
+  ATerm lhs;
+  ATerm rhs;
+
+  if (PT_isArgsEmpty(args)) {
+    return ATparse("TNil");
+  }
+
+  lhs = implodeTerm(PT_getArgsHead(args));
+  rhs = implodeSeqRecursive(PT_getArgsTail(args));
+
+  if (lhs == NULL) {
+    return rhs;
+  }
+
+  if (rhs == NULL) {
+    rhs = ATparse("TNil");
+  }
+    
+  return ATmake("TCons(<term>,<term>)", 
+		implodeTerm(PT_getArgsHead(args)),
+		implodeSeqRecursive(PT_getArgsTail(args)));
 }
 
 static ATerm implodeSeq(PT_Tree tree)
 {
-  ATwarning("WARNING: Sequences not supported by implodePT\n");
+  ATerm seq = implodeSeqRecursive(PT_getTreeArgs(tree));
 
-  return PT_makeTermFromTree(tree);
+  return seq;
 }
+
+static ATerm implodeOpt(PT_Tree tree)
+{
+  PT_Args args = PT_getTreeArgs(tree);
+
+  if (PT_isArgsEmpty(args)) {
+    return ATparse("None");
+  }
+
+  return ATmake("Some(<term>)", implodeTerm(PT_getArgsHead(args)));
+}
+
 
 static ATerm implodeVar(PT_Tree tree)
 {
@@ -267,8 +309,12 @@ static ATerm implodeTerm(PT_Tree tree)
   else if (interpret_alt && PT_isTreeAlt(tree)) {
     result = implodeAlt(tree);
   }
-  else if (PT_isTreeSeq(tree)) {
+  else if (interpret_seq && PT_isTreeSeq(tree)) {
     result = implodeSeq(tree);
+  }
+  else if (interpret_opt && PT_isTreeOpt(tree) && 
+	   (remove_layout == ATfalse || !PT_isTreeLayout(tree))) {
+    result = implodeOpt(tree);
   }
   else if (PT_isTreeAppl(tree)) {
     result = implodeApplication(tree);
