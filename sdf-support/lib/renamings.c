@@ -4,7 +4,7 @@
 SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 					      SDF_Symbols actuals)
 {
-  SDF_Layout layout = (SDF_Layout) PT_makeTreeLayoutEmpty();
+  SDF_Layout layout = SDF_makeLayoutEmpty();
   SDF_RenamingList renamingList;
   SDF_SymbolList formalList;
   SDF_SymbolList actualList;
