@@ -320,7 +320,7 @@ ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
 
   /*  Remember labels of productions in cycle */
   if (Cycle && ATgetType(t) == AT_APPL) {
-    if (ATisEqual(ATgetAFun(ATgetArgument(t, 0)), SG_Aprod_AFun)) {
+    if (ATisEqualAFun(ATgetAFun(ATgetArgument(t, 0)), SG_Aprod_AFun)) {
       Cycle = ATinsert(Cycle,
                       (ATerm) SG_GetATint(SG_GetApplProdLabel((tree) t), 0));
     }

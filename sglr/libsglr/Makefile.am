@@ -1,5 +1,7 @@
 # $Id$
 
+#CFLAGS	+= -DNO_SHARING
+
 include $(top_srcdir)/make_rules
 INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUS)/include \

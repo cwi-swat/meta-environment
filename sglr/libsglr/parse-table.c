@@ -124,13 +124,13 @@ actionkind SG_ActionKind(action a)
 {
   AFun fun = ATgetAFun(a);
 
-  if(ATisEqual(fun, SG_Reduce_AFun)) {
+  if(ATisEqualAFun(fun, SG_Reduce_AFun)) {
     return REDUCE;
-  } else if(ATisEqual(fun, SG_ReduceLA_AFun)) {
+  } else if(ATisEqualAFun(fun, SG_ReduceLA_AFun)) {
     return REDUCE_LA;
-  } else if(ATisEqual(fun, SG_Shift_AFun)) {
+  } else if(ATisEqualAFun(fun, SG_Shift_AFun)) {
     return SHIFT;
-  } else if(ATisEqual(fun, SG_Accept_AFun)) {
+  } else if(ATisEqualAFun(fun, SG_Accept_AFun)) {
     return ACCEPT;
   }
   return ERROR;
@@ -756,11 +756,11 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
   for (; !ATisEmpty(prios); prios = ATgetNext(prios)) {
     prio = ATgetFirst(prios);
     fun = ATgetAFun(prio);
-    if(ATisEqual(fun, SG_GtrPrio_AFun)) {
+    if(ATisEqualAFun(fun, SG_GtrPrio_AFun)) {
       ptype = P_GTR;
-    } else if(ATisEqual(fun, SG_LeftPrio_AFun)) {
+    } else if(ATisEqualAFun(fun, SG_LeftPrio_AFun)) {
       ptype = P_LEFT;
-    } else if(ATisEqual(fun, SG_RightPrio_AFun)) {
+    } else if(ATisEqualAFun(fun, SG_RightPrio_AFun)) {
       ptype = P_RIGHT;
     } else {
       ptype = P_IGNORE;
