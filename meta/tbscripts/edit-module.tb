@@ -15,8 +15,8 @@ in
   rec-msg(path(Path?)).
   snd-msg(get-sdf2-asfix(id(Module))).
   rec-msg(syntax(Syntax?)).
-  snd-msg(pp-module(Syntax)).
-  rec-msg(module-source(Src?)).
+  snd-msg(pp(Syntax)).
+  rec-msg(source(Src?)).
   create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
   snd-msg(open-language("Sdf2",
                         "/home/markvdb/NEW-META/lib/Sdf2.baf")).
