@@ -26,6 +26,16 @@
   ()
 )
 
+
+(defun reload-file (filename)
+  "Read the contents of the file on disk into the buffer editing this filename)"
+  (interactive "F")
+
+  (switch-to-buffer (get-file-buffer filename)) 
+  (revert-buffer nil t) 
+  ()
+)
+
 (defun move-editor-to-front (filename)
 	"Raise the frame in which filename is displayed to the front"
   (let ((buf (get-file-buffer filename)))
@@ -35,49 +45,6 @@
     )
   )
   () ; return nil
-)
-
-(defun edit-text (filename contents) 
-  "Open a buffer, initialize with contents. If buffer exists contents are replaced."
-  (interactive "F")
-  
-  (if (string= (buffer-file-name) nil)
-    (switch-to-buffer filename) ; if window is empty (e.g. *scratch*) use this
-    (switch-to-buffer-other-frame filename) ; otherwise start new toplevel window
-  )
-	
-	; first we clear the buffer, (removing any previous content!)
-	(erase-buffer (get-file-buffer filename))
-
-  ; then we insert our text
-	(insert-string contents (get-file-buffer filename))
-
-  (setq bufferlist (cons (buffer-name) bufferlist))
-  (TBvalue (concat "file-id(" (TBstring (buffer-name)) ")"))
-  ()
-)
-
-(defun replace-text (filename contents)
-  "Open a buffer, initialize with contents. If buffer exists contents are replaced."
-  (interactive "F")
- 
-  (switch-to-buffer filename) 
- 
-  ; first we clear the buffer, (removing any previous content!)
-  (erase-buffer (get-file-buffer filename))
- 
-  ; then we insert our text
-  (insert-string contents (get-file-buffer filename))
- 
-  ()
-)
-
-(defun replace-file (filename)
-  "Open a buffer, initialize with contents. If buffer exists contents are replaced."
-  (interactive "F")
-
-  (find-file filename) 
-  ()
 )
 
 (defun tb-set-char-pos (filename pos)
