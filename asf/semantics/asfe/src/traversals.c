@@ -121,7 +121,7 @@ createTraversalPattern(PT_Tree term)
   PT_Symbols symbols;
   PT_Symbol symbol, cleanSymbol;
   PT_Symbol traversed;
-  PT_Symbol accumulated;
+  PT_Symbol accumulated = NULL;
   PositionSymbolTuple symbolVisitorData;
   Traversal traversal;
 
@@ -145,28 +145,30 @@ createTraversalPattern(PT_Tree term)
   symbolVisitorData.symbol = NULL;
   PT_foreachSymbolInSymbols(symbols, getSymbol, 
                          (PT_SymbolVisitorData) &symbolVisitorData); 
-  accumulated = PT_getSymbolSymbol(symbolVisitorData.symbol);
-  
+ 
+  if (symbolVisitorData.symbol != NULL) {
+    accumulated = PT_getSymbolSymbol(symbolVisitorData.symbol);
+  }
+ 
+
+  traversal.type = UNDEFINED;
+ 
   if (PT_isEqualSymbol(traversed, symbol)) {
     traversal.type = TRANSFORMER;
   } 
-  else if(PT_isEqualSymbol(accumulated, cleanSymbol)) {
-    traversal.type = ACCUMULATOR;
-  }
-  else if(PT_isSymbolPair(cleanSymbol)) {
-    PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
-    PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
-    
-    if (PT_isEqualSymbol(PT_getSymbolSymbol(traversed),lhs) &&
-        PT_isEqualSymbol(accumulated,rhs)) {
-      traversal.type = COMBINATION;
+  else if(accumulated != NULL) {
+    if(PT_isEqualSymbol(accumulated, cleanSymbol)) {
+      traversal.type = ACCUMULATOR;
     }
-    else {
-      traversal.type = UNDEFINED;
+    else if(accumulated != NULL && PT_isSymbolPair(cleanSymbol)) {
+      PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
+      PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
+      
+      if (PT_isEqualSymbol(PT_getSymbolSymbol(traversed),lhs) &&
+	  PT_isEqualSymbol(accumulated,rhs)) {
+	traversal.type = COMBINATION;
+      }
     }
-  } 
-  else {
-    traversal.type = UNDEFINED;
   }
   
   traversal.prod = prod;
