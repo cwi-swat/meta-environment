@@ -59,12 +59,10 @@ IDEF=${TOOLBUS}/bin/idef2tif
 TIFS=${TOOLBUS}/bin/tifstoc
 
 tif:
-	${IDEF} unparsePT.idef
-	${TIFS} -tool unparsePT unparsePT.tifs
-	${IDEF} addPosInfo.idef
-	${TIFS} -tool addPosInfo addPosInfo.tifs 
-	${IDEF} apply-function.idef
-	${TIFS} -tool apply-function apply-function.tifs
+	for i in `ls *.idef`; do \
+	  ${IDEF} $$i; \
+	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
+	done
 
 tif-clean:
 	rm -f *.tifs *.tif.[ch]
