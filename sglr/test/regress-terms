@@ -37,13 +37,12 @@ do
 		out=$dir/`basename $base .$ext`.asfix2
 		if $SGLR -p $ptbl -i $file -to $out
 		then
-			Notify "Regression test for valid term $base \c"
 	                if diff -w $out $out.org	> /dev/null 2>&1
 	                then
-		                Notify "succeeded."
+				Notify "Regression test for valid term $base succeeded."
 		                rm -f $out
 	                else
-		                Notify "failed."
+				Notify "Regression test for valid term $base failed."
 				ERROR=1
 	                fi
 		else
@@ -58,13 +57,12 @@ do
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
 		$SGLR -p $ptbl -i $file -to $out
-		Notify "Regression test for error term $base \c"
 	        if diff -w $out $out.org	> /dev/null 2>&1
 	        then
-		        Notify "succeeded."
+			Notify "Regression test for error term $base succeeded."
 		        rm -f $out
 	        else
-		        Notify "failed."
+			Notify "Regression test for error term $base failed."
 			ERROR=1
 	        fi
 	done
