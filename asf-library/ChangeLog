@@ -1,3 +1,8 @@
+2003/09/22 (storm@cwi.nl)
+  * Added grammar for the C Preprocessor to the Sandbox.
+  * Added tentative ASCII module to basic/.
+  * Removed Hashtable, added Bounded Balanced Trees.
+
 2003/09/17 (jurgenv@cwi.nl)
   * Removed remaining unnecessary chmod calls in install and uninstall 
     targets.
