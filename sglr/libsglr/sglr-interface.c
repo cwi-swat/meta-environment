@@ -554,8 +554,9 @@ FILE *SG_OpenFile(char *prgname, char *std_error, char *FN)
   FILE *file;
 
   if (!FN || !strcmp(FN, "") || !strcmp(FN, "-")) {
-    if (!std_error || (FN && !strcmp(FN, "-")))
+    if (!std_error || (FN && !strcmp(FN, "-"))) {
       return stdin;
+    }
 
     return NULL;
   }

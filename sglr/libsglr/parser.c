@@ -421,19 +421,19 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
       SG_StacksToDotFile(active_stacks, sg_tokens_read);
     }
 
-    current_token = SG_NextToken(get_next_token);
-
     IF_DEBUG(
              fprintf(SG_log(), "Current token (#%ld): ", (long) sg_tokens_read);
              SG_PrintToken(SG_log(), current_token);
              fprintf(SG_log(), "\n");
              )
 
+    current_token = SG_NextToken(get_next_token);
+
+
     SG_ParseToken();
 
     IF_VERBOSE(
-      SG_PrintStatusBar("sglr: shifting", sg_tokens_read, sg_total_tokens, 
-			1000);
+      SG_PrintStatusBar("sglr: shifting", sg_tokens_read, sg_total_tokens) 
     )
 
     SG_Shifter();
@@ -1072,11 +1072,12 @@ tree SG_ParseResult(char *sort)
 }
 
 /* a function to print a status bar on a tty */
-void SG_PrintStatusBar(char *subject, long part, long whole, long freq)
+void SG_PrintStatusBar(char *subject, long part, long whole)
 {
   static char bar[]  = "==============================";
   static char daisy[] = "|/-\\";
   long double factor;
+  long freq = whole / 30;
 
   if(!isatty(fileno(stderr))) {
     return;

@@ -36,7 +36,7 @@ void   SG_PropagateUnreject(stack *st);
 char  *SG_ProdSort(production t);
 
 
-void SG_PrintStatusBar(char *subject, long part, long whole, long freq);
+void SG_PrintStatusBar(char *subject, long part, long whole);
 #define SG_PrintDotAndNewLine() if (isatty(fileno(stderr))) { fprintf(stderr, ".\n"); } 
 
 #ifdef DEBUG

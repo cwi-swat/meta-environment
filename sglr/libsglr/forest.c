@@ -1540,7 +1540,7 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
   
       IF_VERBOSE(
         SG_PrintStatusBar( "sglr: filtering", 
-			 SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK), 5);
+			 SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
       )
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
@@ -1608,7 +1608,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
    IF_VERBOSE(
       /* print 100% bar, the rest was solved by caching ambclusters */
       SG_PrintStatusBar("sglr: filtering", 
-	    SGnrAmb(SG_NR_ASK), SGnrAmb(SG_NR_ASK), 5);
+	    SGnrAmb(SG_NR_ASK), SGnrAmb(SG_NR_ASK));
       SG_PrintDotAndNewLine();
       )
 
