@@ -1,9 +1,11 @@
 package metastudio;
 
 import java.awt.BorderLayout;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JPanel;
-
 
 import aterm.ATerm;
 import aterm.ATermFactory;
@@ -21,10 +23,25 @@ import aterm.ATermFactory;
 public abstract class UserInterfacePanel extends JPanel implements UserInterfaceTif {
     private ATermFactory factory;
     private MultiBridge bridge;
+    private List valueChangedListeners;
+    
+    public void addValueChangedListener(ValueChangedListener l) {
+    	valueChangedListeners.add(l);
+    }
+    
+    protected void fireValueChangedListener() {
+        Iterator iter = valueChangedListeners.iterator();
+        
+        while (iter.hasNext()) {
+        	ValueChangedListener l = (ValueChangedListener) iter.next();
+        	l.valueChanged();
+        }
+    }
     
     public UserInterfacePanel(ATermFactory factory, MultiBridge bridge) {
         this.factory = factory;
         this.bridge = bridge;
+        this.valueChangedListeners = new LinkedList();
         bridge.addToolComponent(this);
         setLayout(new BorderLayout());
     }

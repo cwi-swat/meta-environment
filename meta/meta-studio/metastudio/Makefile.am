@@ -21,4 +21,5 @@ java_JAVA = \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
-	UserInterfacePanel.java
+	UserInterfacePanel.java \
+	ValueChangedListener.java
