@@ -259,11 +259,15 @@ void write_asfix_file(int cid,ATerm modname)
       ATerror("Not enough memory\n");
     sprintf(fname, "%s/%s.c", output_path, text);
     input = fopen(fname,"r");
-    if(!input)
+    if(!input) {
       write = ATtrue;
-    else
+    } else {
       write = ATfalse;
-    fclose(input);
+/* Only close input if we actually opened it. Linux fclose crashes on
+   closing NULL
+*/
+      fclose(input);
+    }
     free(fname);
 
     len = strlen(output_path) + 1 + strlen(text) + strlen(".asfix");
@@ -419,8 +423,7 @@ void reshuffle_modules(int cid,ATermList mods)
         add_section(newmodname,newsection);
         add_equations(newmodname,eqs);
         write_asfix_file(cid,newmodname);
-      }
-      else {
+      } else {
         add_section(newmod,newsection);
       }
       cffuncs = ATgetNext(cffuncs);
@@ -448,7 +451,6 @@ void process_next_module(int cid)
 {
   ATerm event;
 
-ATfprintf(stderr,"process_next_module entered\n");
   if(!ATisEmpty(modules_to_process)) {
     compiling = ATtrue;
     event = ATgetFirst(modules_to_process);
@@ -489,6 +491,7 @@ void compile_module(int cid, ATerm mod)
     modules_to_process = ATempty;
     imports = get_imported_modules(mod);
     reshuffle_modules(cid,imports);
+    ATfprintf(stderr,"Finished reshuffling\n");
   }
   else {
     ATfprintf(stderr,"Specification is incomplete and can not be compiled!\n");
