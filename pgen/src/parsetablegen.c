@@ -1,3 +1,5 @@
+/*{{{  includes */
+
 #include <assert.h>
 
 #include <SDFME-utils.h>
@@ -5,6 +7,8 @@
 #include "ksdf2table.h"
 #include "characters.h"
 #include "item.h"
+
+/*}}}  */
 
 /*{{{  global variables */
 

@@ -16,7 +16,7 @@ typedef struct
 {
   int max_size;
   int size;
-  CC_Class *classes;
+  CC_Class **classes;
 } CC_Set;
 
 extern ATerm empty_set;

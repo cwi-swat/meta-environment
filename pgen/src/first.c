@@ -9,8 +9,6 @@ extern int MAX_PROD;
 
 extern ATerm *nr_prod_table;
 
-static ATermTable first_table = NULL;
-
 static int max_first_sets = 0;
 static CC_Class **first_sets = NULL;
 
@@ -165,7 +163,6 @@ void init_prod_first(ATerm prod)
 
 void init_first()
 {
-  first_table = ATtableCreate(1024, 75);
   max_first_sets = 512;
   first_sets = (CC_Class **)calloc(max_first_sets, sizeof(CC_Class *));
   if (!first_sets) {
@@ -189,9 +186,6 @@ void destroy_first()
   free(first_sets);
   first_sets = NULL;
   max_first_sets = 0;
-
-  ATtableDestroy(first_table);
-  first_table = NULL;
 }
 
 /*}}}  */
@@ -216,12 +210,6 @@ CC_Class *get_first_set(ATerm symbol, ATbool create)
   if (create && first_sets[index] == NULL) {
     first_sets[index] = CC_makeClassEmpty();
   }
-  /*
-    ATermList first_set = (ATermList)ATtableGet(first_table, symbol);
-    assert(first_set);
-    first_sets[index] = CC_ClassFromTermList(first_set);
-  }
-  */
 
   return first_sets[index];
 }

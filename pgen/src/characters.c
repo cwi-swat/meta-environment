@@ -110,6 +110,10 @@ CC_Class *CC_alloc()
   c = (CC_Class *)free_nodes;
   free_nodes = free_nodes->next;
 
+  for (i=0; i<CC_LONGS; i++) {
+    (*c)[i] = 0L;
+  }
+
   return c;
 }
 
@@ -119,14 +123,7 @@ CC_Class *CC_alloc()
 
 CC_Class *CC_makeClassEmpty()
 {
-  CC_Class *c = CC_alloc();
-  int i;
-
-  for (i=0; i<CC_LONGS; i++) {
-    (*c)[i] = 0L;
-  }
-
-  return c;
+  return CC_alloc();
 }
 
 /*}}}  */
@@ -546,7 +543,7 @@ void CC_initSetWithSize(CC_Set *set, int size)
 {
   set->max_size = size;
   set->size = size;
-  set->classes = (CC_Class *)calloc(size, sizeof(CC_Class));
+  set->classes = (CC_Class **)calloc(size, sizeof(CC_Class *));
 }
 
 /*}}}  */
@@ -554,7 +551,12 @@ void CC_initSetWithSize(CC_Set *set, int size)
 
 void CC_flushSet(CC_Set *set)
 {
-  free(set->classes);
+  if (set->classes) {
+    CC_clearSet(set);
+
+    free(set->classes);
+  }
+
   set->classes = NULL;
   set->size = 0;
   set->max_size = 0;
@@ -565,7 +567,18 @@ void CC_flushSet(CC_Set *set)
 
 void CC_clearSet(CC_Set *set)
 {
-  set->size = 0;
+  int i;
+
+  if (set->classes) {
+    for (i=0; i<set->size; i++) {
+      if (set->classes[i]) {
+	CC_free(set->classes[i]);
+	set->classes[i] = NULL;
+      }
+    }
+
+    set->size = 0;
+  }
 }
 
 /*}}}  */
@@ -574,20 +587,20 @@ void CC_clearSet(CC_Set *set)
 CC_Class *CC_addToSet(CC_Set *set)
 {
   CC_Class *result;
-  int i;
 
-  if (set->size == set->max_size) {
+  if (set->size >= set->max_size) {
+    int old_size = set->max_size;
     set->max_size += SET_BLOCK_SIZE;
-    set->classes = (CC_Class *)realloc(set->classes, set->max_size*sizeof(CC_Class));
+    set->classes = (CC_Class **)realloc(set->classes,
+					set->max_size*sizeof(CC_Class *));
     if (!set->classes) {
       fprintf(stderr, "out of memory in CC_addToSet (%d)\n", set->max_size);
     }
+    memset(&set->classes[old_size], 0, SET_BLOCK_SIZE*sizeof(CC_Class *));
   }
 
-  result = &set->classes[set->size++];
-  for (i=0; i<CC_LONGS; i++) {
-    (*result)[i] = 0L;
-  }
+  result = CC_alloc();
+  set->classes[set->size++] = result;
 
   return result;
 }
@@ -598,7 +611,7 @@ CC_Class *CC_addToSet(CC_Set *set)
 CC_Class *CC_getFromSet(CC_Set *set, int elem)
 {
   assert(elem >= 0 && elem < set->size);
-  return &set->classes[elem];
+  return set->classes[elem];
 }
 
 /*}}}  */
@@ -608,21 +621,11 @@ void CC_copySet(CC_Set *source, CC_Set *dest)
 {
   int i;
 
-  if (source->size == 0) {
-    if (dest->classes != NULL) {
-      free(dest->classes);
-      dest->classes = NULL;
-    }
-  } else {
-    dest->classes = realloc(dest->classes, source->size*sizeof(CC_Class));
-    if (dest->classes == NULL) {
-      ATerror("out of memory in copySet\n");
-    }
-  }
-  dest->max_size = source->size;
-  dest->size = source->size;
+  CC_flushSet(dest);
   for (i=0; i<source->size; i++) {
-    CC_copy(&source->classes[i], &dest->classes[i]);
+    CC_Class *from = CC_getFromSet(source, i);
+    CC_Class *to = CC_addToSet(dest);
+    CC_copy(from, to);
   }
 }
 
@@ -682,27 +685,8 @@ void CC_partitionSet(CC_Set *set)
     }
   }
 
-  /* Remove empty trailer */
   CC_copySet(&result, set);
   CC_flushSet(&result);
-
-  /*
-  ATwarning(" = ");
-  CC_writeSetToFile(stderr, &result);
-  ATwarning("\n");
-  */
-
-  /*
-  CC_Class elems, bounds;
-  int i;
-
-  CC_clear(&bounds);
-  for (i=set->size-1; i>=0; i--) {
-    CC_addBoundaries(&set->classes[i], &bounds);
-  }
-
-  CC_writeToFile(stdout, &bounds);
-  */
 }
 
 /*}}}  */
@@ -721,13 +705,15 @@ void CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result)
 
   next = CC_addToSet(result);
   for (i=0; i<set->size; i++) {
-    if (CC_intersection(&set->classes[i], cc, next)) {
+    if (CC_intersection(CC_getFromSet(set, i), cc, next)) {
       next = CC_addToSet(result);
     }
   }
 
   /* Remove empty trailer */
   result->size--;
+  CC_free(result->classes[result->size]);
+  result->classes[result->size] = NULL;
 }
 
 /*}}}  */
@@ -747,13 +733,15 @@ void CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result)
 
   next = CC_addToSet(result);
   for (i=0; i<size; i++) {
-    if (CC_difference(&set->classes[i], cc, next)) {
+    if (CC_difference(CC_getFromSet(set, i), cc, next)) {
       next = CC_addToSet(result);
     }
   }
 
   /* Remove empty trailer */
   result->size--;
+  CC_free(result->classes[result->size]);
+  result->classes[result->size] = NULL;
 }
 
 /*}}}  */
