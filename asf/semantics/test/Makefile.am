@@ -17,6 +17,7 @@ TEST_MODULES=Bracket \
 	Pico-set \
 	Pico-typecheck \
 	Pico-Xml \
+	PlusStarVar \
 	RelationsTest \
 	ReturnsList \
 	SetAndElem \
