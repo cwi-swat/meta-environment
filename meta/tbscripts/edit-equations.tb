@@ -21,12 +21,12 @@ in
   snd-msg(get-eqs-asfix(Module)) .
   (
     rec-msg(eqs(Eqs?)) .
-    snd-msg(pp(Eqs)) .
-    rec-msg(source(Src?))
+    snd-msg(unparse(Eqs)) .
+    rec-msg(unparsed-text(Src?))
   +
     rec-msg(eqs-unchanged(Eqs?)) .
-    snd-msg(pp(Eqs)) .
-    rec-msg(source(Src?))
+    snd-msg(unparse(Eqs)) .
+    rec-msg(unparsed-text(Src?))
   +
     %% If there are no equations in the module-db, assume we
     %% want to create a new equations section.
@@ -37,7 +37,7 @@ in
     ) .
     snd-msg(open-eqs-text-file(Module)) .
     (
-      rec-msg(opened-file(raw, Module, Src?, Path?, Time?))
+      rec-msg(opened-file(Module, Src?, Path?, Time?))
     +
       rec-msg(error-opening(Module)) .
       snd-msg(create-new-equations(Module)) .

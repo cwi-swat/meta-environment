@@ -4,23 +4,23 @@
 
 process Retrieve-eqs(Eval: evaluator) is
 let
-  Id   : term,
-  Mod  : str,
-  Eqs  : list
+  Id       : term,
+  ModName  : str,
+  Eqs      : list
 in
   Id := process-id.
   (
-    rec-msg(retrieve-eqs(Mod?)).
-    snd-msg(eqs-available(Mod)).
+    rec-msg(retrieve-eqs(ModName?)).
+    snd-msg(eqs-available(ModName)).
     (
       rec-msg(eqs-not-available).
       snd-note(ui-status(stat(Id,"Retrieving equations"))).
-      snd-msg(process-eqs(Mod)).
-      rec-msg(eqs-processed(Mod)).
-      snd-msg(get-all-equations(Mod)).
+      snd-msg(process-eqs(ModName)).
+      rec-msg(eqs-processed(ModName)).
+      snd-msg(get-all-equations(ModName)).
       rec-msg(all-equations(Eqs?)).
-      snd-eval(Eval,add-equations(Mod,Eqs)).
-      rec-value(Eval,equ-added(Mod?)). 
+      snd-eval(Eval,add-equations(ModName, Eqs)).
+      rec-value(Eval,equ-added(ModName?)). 
       snd-note(ui-status(endstat(Id))).
       snd-msg(finished-retrieval)
     +

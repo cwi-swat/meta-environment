@@ -8,15 +8,15 @@ tool asource is {
 
 process Prettyprinter is
 let
-  PP: asource,
-  T: term, 
-  Src: term 
+  PP   : asource,
+  Tree : term, 
+  Text : term 
 in
   execute(asource,PP?).
-  ( rec-msg(pp(T?)).
-    snd-eval(PP,conssource(T)).
-    rec-value(PP,source(Src?)).
-    snd-msg(source(Src)) 
+  ( rec-msg(unparse(Tree?)).
+    snd-eval(PP,conssource(Tree)).
+    rec-value(PP,source(Text?)).
+    snd-msg(unparsed-text(Text)) 
   ) *
   delta
 endlet

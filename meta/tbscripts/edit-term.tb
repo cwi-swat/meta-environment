@@ -5,41 +5,26 @@ process Edit-term(Mod: str, Term: term) is
 let
   Tid   : int,
   Id    : term,
-  Rewr  : int,
   Str   : str,
-  Name  : term,
-  Name2 : term,
+  Name  : str,
   T     : term,
-  T1    : term,
-  T2    : term,
   Time  : term,
   Text  : str,
   Path  : str,
   Fid   : str,
-  TE    : text-edit,
-  Clst  : list,
-  Flst  : list,
-  Tslst : list,
-  Src   : str,
-  I     : int,
-  Ch    : int,
-  Li    : int,
-  Co    : int,
-  Char  : term
+  TE    : text-edit
 in
   Id := process-id.
   subscribe(disconnected(<term>)) .
-  /*snd-msg(set-parsetable(Mod)).
-  rec-msg(parsetable-set(Mod)).*/
-  snd-msg(Id,open-trm-file(Term)) .
+  snd-msg(open-trm-file(Term)) .
   (
-    rec-msg(Id,opened-file(raw,Name?,Text?,Path?,Time?)) .
+    rec-msg(opened-file(Name?, text(Text?), Path?, Time?)) .
     snd-note(ui-status(stat(Id,"Opening existing term..."))) .
-    create(Editor(Name,Text,Path,Mod,"term"), Tid?)
+    create(Editor(Name, Text, Path, Mod, "term"), Tid?)
     +
-    rec-msg(Id,error-opening(Str?)) .
+    rec-msg(error-opening(Name)) .
     snd-note(ui-status(stat(Id,"Creating new term..."))) .
-    create(Editor(id(Str),"",Str,Mod,"term"), Tid?)
+    create(Editor(Name, "", Name, Mod, "term"), Tid?)
   ) .
   snd-note(ui-status(endstat(Id))) .
   rec-note(disconnected(TE))

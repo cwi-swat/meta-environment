@@ -1,14 +1,14 @@
-#include "in-output.idef"
+#include "../../in-output/in-output.idef"
 
 process Test is
 let
-  Src: str,
+  Contents: term,
   Path: str,
   Time: int
 in
   snd-msg(open-eqs-text-file("Aap")) .
   (
-    rec-msg(opened-file(raw,"Aap",Src?,Path?,timestamp(Time?)))
+    rec-msg(opened-file("Aap", Contents?, Path?, timestamp(Time?)))
    + 
     rec-msg(error-opening("Aap"))
    +

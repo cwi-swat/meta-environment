@@ -1,23 +1,23 @@
-#include "in-output.idef"
-#include "module-db.idef"
-#include "file-creator.tb"
+#include "../../in-output/in-output.idef"
+#include "../../module-db/module-db.idef"
+#include "../file-creator.tb"
 
 process Test is
 let
-  Module: term,
+  SdfTree: term,
   Path : str,
   Time : term
 in
   %% Read an existing module in baf.
-  snd-msg(id("Test"), open-file("Empty")) .
+  snd-msg(open-file("Empty")) .
   (
-    rec-msg(id("Test"), opened-file(baf, "Empty", Module?, Path?, Time?))
+    rec-msg(opened-file("Empty", tree(SdfTree?), Path?, Time?))
   +
     shutdown("new-module-test-3 FAILED! (timeout in read)\n") delay(sec(5))
   ) .
 
   %% Update the module-db.
-  snd-msg(add-sdf2-module-to-db(Path, Module, Time, "unchanged")) .
+  snd-msg(add-sdf2-module-to-db(Path, SdfTree, Time, "unchanged")) .
   (
     rec-msg(need-modules([]))
   +

@@ -20,19 +20,19 @@ in
   snd-msg(get-sdf2-asfix(Module)).
   (
     rec-msg(syntax(Syntax?)).
-    snd-msg(pp(Syntax)).
-    rec-msg(source(Src?))
+    snd-msg(unparse(Syntax)).
+    rec-msg(unparsed-text(Src?))
   +
     rec-msg(syntax-unchanged(Syntax?)).
-    snd-msg(pp(Syntax)).
-    rec-msg(source(Src?))
+    snd-msg(unparse(Syntax)).
+    rec-msg(unparsed-text(Src?))
   +
     rec-msg(unavailable).
-    snd-msg(Id, open-file(Module)).
+    snd-msg(open-file(Module)).
     (
-      rec-msg(Id, opened-file(raw,Module,Src?,Path?,Time?))
+      rec-msg(opened-file(Module,text(Src?),Path?,Time?))
     +
-      rec-msg(Id, error-opening(Module)).
+      rec-msg(error-opening(Module)).
       Src := ""
     )
   ).

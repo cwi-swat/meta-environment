@@ -25,17 +25,17 @@ in
     snd-note(ui-status(stat(Id,"Reverting ..."))).
     snd-msg(revert-module-in-db(Str)).
     rec-msg(done).
-    snd-msg(Id,open-file(id(Str))). 
+    snd-msg(open-file(id(Str))). 
     (
-      rec-msg(Id, opened-file(asfix,Name2?,T?,Path?,Time?)).
+      rec-msg(opened-file(asfix,Name2?,T?,Path?,Time?)).
       snd-msg(add-module-to-db(T,Time)).
       rec-msg(need-modules(M1s?))
     +
-      rec-msg(Id, opened-file(baf,Name2?,T?,Path?,Time?)).
+      rec-msg(opened-file(Name2?,text(T?),Path?,Time?)).
       snd-msg(add-sdf2-module-to-db(Path,T,Time,"unchanged")).
       rec-msg(need-modules(M1s?))
     +
-      rec-msg(Id, opened-file(raw,Name2?,FT?,Path?,Time?)). 
+      rec-msg(opened-file(Name2?,text(FT?),Path?,Time?)). 
       snd-msg(open-sdf2-language).
       rec-msg(sdf2-language-opened). /* Beware here may occur a bug, brrr */
       snd-msg(Id,parse-string-as-asfix1("Sdf2","Module",FT)).

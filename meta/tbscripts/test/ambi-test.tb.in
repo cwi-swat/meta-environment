@@ -1,4 +1,4 @@
-#include "sglr.idef"
+#include "../../sglr/sglr/sglr.idef"
 
 process Test is
 let

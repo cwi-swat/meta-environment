@@ -4,7 +4,7 @@
 process ProcessEqs is
 let
   Id      : term,
-  Mod     : str,
+  ModName : str,
   Module  : term,
   Modules : list,
   Table   : str,
@@ -20,26 +20,30 @@ let
   Time1   : term,
   Time2   : term,
   ErrList : list,
-  Cycle   : list
+  Cycle   : list,
+  EqsText : str,
+  EqsTree : term
 in
   Id := process-id.
-  ( rec-msg(process-eqs(Mod?)).
-    snd-msg(update-eqs-for-modules(Mod)).
+  ( rec-msg(process-eqs(ModName?)).
+    snd-msg(eqs-available-for-modules(ModName)).
     rec-msg(eqs-for-modules(Modules?)).
     ( if not-equal(Modules, []) then
        Module  := first(Modules).
        Modules := next(Modules).
-       snd-msg(open-eqs-text-file(Module)).
-       ( rec-msg(opened-file(raw,Module,FT?,Path?,Time1?)).
+       /* Get the text representation of the unparsed equations section. 
+        */
+       snd-msg(get-eqs-text(Module)).
+       ( rec-msg(eqs-text(Module?, EqsText?)).
          snd-msg(set-parsetable(Module)).
          (
 	   rec-msg(parsetable-set(Module)).
            snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
-           snd-msg(Id,parse-string-as-asfix1(Module,"Equations",FT)).
-           ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
+           snd-msg(Id,parse-string-as-asfix1(Module, "Equations", EqsText)).
+           ( rec-msg(parse-result-asfix1(Id?, parse-tree(EqsTree?))).
              snd-note(ui-status(endstat(Id))). 
-             snd-msg(add-eqs-to-db(Module,Path,T1,Time1,"changed")).
-             rec-msg(done) 
+             snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
+             rec-msg(eqs-updated)
            + 
              rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                          ambiguities(I?)))).
@@ -81,7 +85,7 @@ in
       fi
     )*
     if equal(Modules,[]) then 
-      snd-msg(eqs-processed(Mod))
+      snd-msg(eqs-processed(ModName))
     fi 
   )* delta
 endlet

@@ -4,20 +4,17 @@
 
 process Rewrite(Eval: evaluator) is
 let
-  Id   : term,
-  Tid  : int,
-  NF   : term,
-  Mod  : str,
-  Term : term 
+  NormalForm : term,
+  ModName    : str,
+  Term       : term 
 in
-  Id := process-id. 
   ( 
-    rec-msg(rewrite(Mod?,Term?)). 
-    snd-msg(retrieve-eqs(Mod)).
+    rec-msg(rewrite(ModName?, Term?)). 
+    snd-msg(retrieve-eqs(ModName)).
     rec-msg(finished-retrieval). 
-    snd-eval(Eval, interpret(Mod,Term)).
-    rec-value(Eval,result(NF?)).
-    snd-msg(result(NF))
+    snd-eval(Eval, interpret(ModName, Term)).
+    rec-value(Eval,result(NormalForm?)).
+    snd-msg(result(NormalForm))
   ) * 
   delta
 endlet 
