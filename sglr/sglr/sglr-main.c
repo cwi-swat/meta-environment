@@ -81,7 +81,7 @@ char   *stackoutput       = NULL;
  *  ToolBus stubs
  */
 
-ATerm parse_file(int conn, char *L, char *G, char *FN)
+ATerm parse_file(int conn, ATerm L, char *G, char *FN)
 {
   return SGparseFile(program_name, L, G?(*G?G:0):NULL, FN);
 }

@@ -23,7 +23,6 @@
 process Parser is
   let
     P    : sglr,
-    L    : str,
     Lid  : term,
     G    : str,
     S    : str,
@@ -41,8 +40,8 @@ process Parser is
       (rec-msg(Id?, parse-string(Lid?, G?, S?)) .
        snd-eval(P, parse-string(Lid, G, S))
       +
-       rec-msg(parse-file(L?, G?, FN?, Id?)) .
-       snd-eval(P, parse-file(L, G, FN))
+       rec-msg(parse-file(Lid?, G?, FN?, Id?)) .
+       snd-eval(P, parse-file(Lid, G, FN))
       ).
       (
         rec-value(P, parsetree(T?, Amb?)) .
