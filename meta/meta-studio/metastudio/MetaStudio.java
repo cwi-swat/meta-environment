@@ -749,8 +749,7 @@ public class MetaStudio
 	//{{{ public void finishedOpeningModules(ATerm module)
 
 	public void finishedOpeningModules(ATerm module) {
-		String moduleName = ((ATermAppl) module).getName();
-		addMessage(styleMessage, null, "Module " + moduleName + " opened.");
+	  /* do nothing (this is for backward compatibility) */
 	}
 
 	//}}}
