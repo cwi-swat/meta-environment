@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Oct 25 11:26:32 CEST 2004 <kooiker@cwi.nl>
+ * configuration-manager/src/Makefile.am,
+   editors/text/common/Makefile.am:
+   - Added missing / in generated config files 
+
 Mon Oct 25 11:16:09 CEST 2004 <jong@cwi.nl>
  * meta/editors/swing/metaedit/{util,style}/Makefile.am:
    - fix distcheck issues

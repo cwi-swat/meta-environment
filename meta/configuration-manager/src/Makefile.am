@@ -72,7 +72,7 @@ absolute_srcdir=$(shell cd ${srcdir}; pwd)
 
 %: %.src Makefile
 	sed     's@__VERSION__@${API_VERSION}@g;\
-                 s@__PREFIX__@${prefix}share/meta@g' \
+                 s@__PREFIX__@${prefix}/share/meta@g' \
         < $< > $@ && chmod +x $@
 
 %.tb: %.tb.src Makefile
