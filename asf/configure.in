@@ -102,7 +102,7 @@ AC_SUBST(ASCLIB)
 
 dnl }}}
 
-AC_PACKAGE_REQUIRE(meta, general-meta,
+AC_PACKAGE_REQUIRE(meta, generic-meta,
    [  --with-meta=DIR  meta is in DIR])
 AC_SUBST(META)
 
