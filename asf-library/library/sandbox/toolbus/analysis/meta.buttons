@@ -52,7 +52,7 @@ buttons([
           reduce,
 
           apply("display-query", "List", 4),
-          push-modulename("ToolBusQuery"),
+          push-modulename("DisplayQuery"),
           reduce,
           execute-action("unparsePT"),
           show-list
@@ -77,7 +77,7 @@ buttons([
           reduce,
 
           apply("display-query", "List", 4),
-          push-modulename("ToolBusQuery"),
+          push-modulename("DisplayQuery"),
           reduce,
           execute-action("unparsePT"),
           show-list
@@ -102,7 +102,7 @@ buttons([
           reduce,
 
           apply("display-query", "List", 4),
-          push-modulename("ToolBusQuery"),
+          push-modulename("DisplayQuery"),
           reduce,
           execute-action("unparsePT"),
           show-list
