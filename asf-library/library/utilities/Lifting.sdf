@@ -8,4 +8,6 @@ exports
 context-free syntax
 
   lift-to-tree(Sort) -> Tree  {built-in("lift-to-tree")}
+  lower-from-tree(Tree) -> Sort {built-in("lower-from-tree")}
+
   lift-to-term(Sort) -> ATerm {built-in("lift-to-term")}
