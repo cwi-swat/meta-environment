@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Wed Mar 17 17:22:06 CET 2004 <markvdb@cwi.nl>
+ * Moved sdf specific buttons to the asfsdf-meta package.
+
 Wed Mar 17 CET 2004 <iversen@cwi.nl>
 
  * Added obtain-parse-table-hook in new process in 
