@@ -5,7 +5,7 @@ include_HEADERS         = ptable.h ptable-utils.h
 libptable_a_SOURCES 	= ptable.c ptable-utils.c
 
 CFLAGS += -DDISABLE_DYNAMIC_CHECKING                          
-INCLUDES                = -I${ATERM}/include -I${PT_SUPPORT}/include
+INCLUDES = -I${ATERM}/include -I${PT_SUPPORT}/include
 
 
 # Developers only, put location of ADT-support here:

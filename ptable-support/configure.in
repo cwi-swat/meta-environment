@@ -32,7 +32,7 @@ dnl }}}
 dnl {{{  Require pt-support library
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support library is in DIR])
-AC_SUBST(ATERM)
+AC_SUBST(PT_SUPPORT)
 
 dnl }}}
 dnl {{{  Optional package ToolBus
