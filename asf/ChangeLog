@@ -1,7 +1,12 @@
 # $Id$
 
+Wed Feb 11 15:00:11 CET 2004 <jurgenv@cwi.nl>
+ * Added a phase to asfc that removes unused variables after generating
+   the C code
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
+
 
 Mon Feb  9 11:39:22 CET 2004 <jurgenv@cwi.nl>
  * Added a prototype compiler from muASF to TOM+Java currently supporting
