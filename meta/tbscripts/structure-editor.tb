@@ -10,6 +10,10 @@ Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
 L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int, Char: term
 in
   Id := process-id.
+/* Only one language can currently be edited. It is: */
+  L := "Pico".
+/* And here we'll tell the parser to open it */
+  snd-msg(open-language(L,"/ufs/kuipers/petr/new-meta/sglr/tables/Pico.tbl")).
   execute(se, SE?).
   snd-eval(SE, newEditor(Text)).
   rec-value(SE,Fl?).
@@ -27,7 +31,7 @@ in
     Foc := first(Fl).
     snd-msg(TE,set-focus(Foc))
     +
-    rec-msg(event,parse).
+    rec-event(TE,parse).
     FF := []. (
       if not-equal(Fl,[]) then
         Foc:= first(Fl).
