@@ -101,3 +101,21 @@ equations
 	import1($RsfTuple*, $Rstore')
 
 [imp12]	import1( , $Rstore) = $Rstore
+
+%% ----- Merge two Rstores
+
+[merge-rstores-0]
+  merge-rstores(rstore(), $Rstore) = $Rstore
+
+[merge-rstores-1]
+  merge-rstores($Rstore, rstore()) = $Rstore
+
+[merge-rstores-2]
+  merge-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
+                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
+  = merge-rstores(rstore($VPair*),
+                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
+
+[default-merge-rstores]
+  merge-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))
+    = merge-rstores(rstore($VPair*), rstore(<$Var, $Val>, $VPair*1))
