@@ -1,24 +1,30 @@
+/*{{{  header */
+
 /*
 
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
+   ToolBus -- The ToolBus Application Architecture
+   Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+   The  Netherlands.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+/*{{{  schematic overview */
+
 /*
  * bc-adapter -- Generic adapter for ToolBus <-> bc connection
  *
@@ -30,7 +36,7 @@
  *
  * Purpose: pass term coming from ToolBus to bc, i.e.
  *
- *    eval(calc,"2+3")  ==> 2+3
+*    eval(calc,"2+3")  ==> 2+3
  *
  * where receiveTB is a function defined in the Tcl script
  * capable of interpreting its argument and executing
@@ -39,25 +45,41 @@
  *
  * Architecture:
  *
- *         ================== ToolBus
- *           |           ^
- *           v           |    (sockets)
- *         +---------------+
- *         |   bc-adapter  |
- *         +---------------+
- *           |           ^
- *           |           |
- *           |  +------+ |
- *           +->|  bc  |-+    (standard input/output)
- *              +------+
+*         ================== ToolBus
+*           |           ^
+*           v           |    (sockets)
+*         +---------------+
+*         |   bc-adapter  |
+*         +---------------+
+*           |           ^
+*           |           |
+*           |  +------+ |
+*           +->|  bc  |-+    (standard input/output)
+*              +------+
  *
  */
 
-#include "TB.h"
+/*}}}  */
+
+/*{{{  includes */
+
 #include <unistd.h>
+#include <signal.h>
+
+#include "TB.h"
+
+/*}}}  */
+
+/*{{{  variables */
 
 FILE *to_bc;  /* stream connected to std input of bc */
 FILE *from_bc; /* stream connected to std ouput of bc */
+
+int bc_pid;   /* process ID of bc process */
+
+/*}}}  */
+
+/*{{{  term *handle_input_from_toolbus(term *e) */
 
 term *handle_input_from_toolbus(term *e)
 {
@@ -71,6 +93,9 @@ term *handle_input_from_toolbus(term *e)
     return NULL;
   }
 }
+
+/*}}}  */
+/*{{{  term *handle_input_from_bc(int fd) */
 
 term *handle_input_from_bc(int fd)
 {
@@ -96,7 +121,9 @@ term *handle_input_from_bc(int fd)
   }
 } 
 
-int bc_pid;   /* process ID of bc process */
+/*}}}  */
+
+/*{{{  void connect_to_bc(TBcallbackChar handler) */
 
 void connect_to_bc(TBcallbackChar handler)
 {
@@ -140,20 +167,30 @@ void connect_to_bc(TBcallbackChar handler)
   }
 }
 
-#include <signal.h>
+/*}}}  */
+/*{{{  void interrupt_handler(int sig) */
 
-void interrupt_handler(int sig){ 
+void interrupt_handler(int sig)
+{ 
   kill(0, SIGKILL);  /* is this drastic?? */
-/*  kill(bc_pid, SIGKILL); */
-/*  kill(bc_pid+1, SIGKILL); */
+  /*  kill(bc_pid, SIGKILL); */
+  /*  kill(bc_pid+1, SIGKILL); */
   exit(-1);
 }
+
+/*}}}  */
+
+/*{{{  void usage(char *prg, int is_err) */
 
 void usage(char *prg, int is_err)
 {
   fprintf(stderr, "usage: %s -name <name>\n", prg);
   exit(is_err);
 }
+
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
@@ -178,3 +215,5 @@ int main(int argc, char *argv[])
   TBeventloop();
   return 0;
 }
+
+/*}}}  */

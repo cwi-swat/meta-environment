@@ -1,3 +1,5 @@
+/*{{{  header */
+
 /*
 
     ToolBus -- The ToolBus Application Architecture
@@ -19,6 +21,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+/*{{{  schematic overview */
+
 /* 
  * gen-adapter -- Generic adapter for ToolBus <-> cmd connection
  *
@@ -69,6 +75,10 @@
  *
  */
 
+/*}}}  */
+
+/*{{{  includes */
+
 #include "TB.h"
 #include <unistd.h>
 #include <sys/wait.h>
@@ -76,14 +86,23 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <signal.h>
 
-int cmd_pid;                /* process ID of cmd process */
-char *tmp_in  ="tmp_in";    /* temp file name for cmd input */
-char *tmp_out = "tmp_out";  /* temp file name for cmd output */
+/*}}}  */
+
+/*{{{  defines */
 
 #define MAXARG 20           /* # of args per command */
 #define MAXCMD 1024         /* max length of command */
 #define MAXOUTPUT 10000     /* max size of output of executed cmd */
+
+/*}}}  */
+
+/*{{{  variables */
+
+int cmd_pid;                /* process ID of cmd process */
+char *tmp_in  ="tmp_in";    /* temp file name for cmd input */
+char *tmp_out = "tmp_out";  /* temp file name for cmd output */
 
 char *cmd[MAXARG];          /* command array for exec */
 char **def_cmd = NULL;      /* default command array */
@@ -93,14 +112,17 @@ TBbool keepnewline = TBfalse;
 TBbool addnewline = TBfalse;
 TBbool obinary = TBfalse;
 
+/*}}}  */
+
 enum  _output_type{tb_string, tb_bstring, tb_term } output_type = tb_string;
 
 void exec_cmd(char *, int);
 
-
 /* Split a string into separate strings as needed by exec */
 
-split_args(char *s)
+/*{{{  void split_args(char *s) */
+
+void split_args(char *s)
 {
   int i = 0;
   char *cp = cmd_buf;
@@ -126,6 +148,10 @@ split_args(char *s)
   cmd[i+1] = NULL;
 }
 
+/*}}}  */
+
+/*{{{  term *handle_input_from_toolbus(term *e) */
+
 term *handle_input_from_toolbus(term *e)
 {
   char *txt, *cmd_txt, output[MAXOUTPUT], *outp;
@@ -150,7 +176,7 @@ term *handle_input_from_toolbus(term *e)
     goto exec_cmd;
   } else if(TBmatch(e, "rec-eval(input(%b))", &txt, &len)){
     the_cmd = def_cmd;
-  exec_cmd:
+exec_cmd:
 
     if(addnewline)
       txt[len++] = '\n';
@@ -175,40 +201,42 @@ term *handle_input_from_toolbus(term *e)
      */
     if( output_type != tb_term )
     {
-        while((n=fread(outp, 1, 512, from_cmd)) > 0){
-          if(outp + n > &output[MAXOUTPUT]) 
-    	err_fatal("Executed command produces too long output");
-          outp += n;
-        }
-        if(*(outp-1) == '\n' && !keepnewline) {
-          if(output_type == tb_bstring)
-            outp--;
-          else
-            *(outp-1) = '\0';
-        } else {
-          if(output_type != tb_bstring)
-            *outp++ = '\0';
-        }
-        fclose(from_cmd);
-        switch( output_type )
-        {
-           case tb_bstring:
-              return TBmake("snd-value(output(%b))", output, outp-output);
-           case tb_string:
-              return TBmake("snd-value(output(%s))", output);
-        }
+      while((n=fread(outp, 1, 512, from_cmd)) > 0){
+	if(outp + n > &output[MAXOUTPUT]) 
+	  err_fatal("Executed command produces too long output");
+	outp += n;
+      }
+      if(*(outp-1) == '\n' && !keepnewline) {
+	if(output_type == tb_bstring)
+	  outp--;
+	else
+	  *(outp-1) = '\0';
+      } else {
+	if(output_type != tb_bstring)
+	  *outp++ = '\0';
+      }
+      fclose(from_cmd);
+      switch( output_type )
+      {
+	case tb_bstring:
+	  return TBmake("snd-value(output(%b))", output, outp-output);
+	case tb_string:
+	  return TBmake("snd-value(output(%s))", output);
+	case tb_term:
+	  return NULL;
+      }
     }
     else
     {
-       /* Mon May  3 17:36:12 MET DST 1999 mdejonge
-        *
-        * Construct a term from the contents of the file tmp_out by using
-        * the function TBreadTerm.
-        */
-       term *t;
-       t = TBreadTerm( from_cmd );
-       fclose(from_cmd );
-       return TBmake( "snd-value(output(%t))", t );
+      /* Mon May  3 17:36:12 MET DST 1999 mdejonge
+       *
+       * Construct a term from the contents of the file tmp_out by using
+       * the function TBreadTerm.
+       */
+      term *t;
+      t = TBreadTerm( from_cmd );
+      fclose(from_cmd );
+      return TBmake( "snd-value(output(%t))", t );
     }
 
   } 
@@ -216,8 +244,12 @@ term *handle_input_from_toolbus(term *e)
   return NULL;
 }
 
+/*}}}  */
+
 #define READ 0
 #define WRITE 1
+
+/*{{{  void exec_cmd(char *inp, int len) */
 
 void exec_cmd(char *inp, int len)
 {
@@ -232,7 +264,7 @@ void exec_cmd(char *inp, int len)
     err_sys_fatal("Can't write to tmp input file");
   if(close(fd_to_cmd) < 0)
     err_sys_fatal("Can't close tmp input file");
-  
+
   close(0); close(1);
 
   if(open(tmp_in, O_RDONLY) < 0)
@@ -256,35 +288,46 @@ void exec_cmd(char *inp, int len)
   }
 }
 
-#include <signal.h>
+/*}}}  */
 
-void interrupt_handler(int sig){
+/*{{{  void interrupt_handler(int sig) */
+
+void interrupt_handler(int sig)
+{
   unlink(tmp_in);
   unlink(tmp_out);
   kill(0, SIGKILL);  /* is this drastic?? */
-/*  kill(cmd_pid, SIGKILL); */
-/*  kill(cmd_pid+1, SIGKILL); */
+  /*  kill(cmd_pid, SIGKILL); */
+  /*  kill(cmd_pid+1, SIGKILL); */
   exit(-1);
 }
+
+/*}}}  */
+
+/*{{{  void help(void) */
 
 void help(void)
 {
   char * str =
-"\n\
-Synopsis: gen-adapter [options]\n\
-\n\
-Options are:\n\
--help                 print this message\n\
--keepnewline          keep last newline of output generated by command\n\
--addnewline           add newline to standard input for command\n\
--binary-output        represent output as binary string\n\
--string-output        represent output as ordinary string (default)\n\
--term-output          represent output as toolbus term\n\
--cmd C1 ...           use C1 ... as the default command to execute\n";
+    "\n\
+    Synopsis: gen-adapter [options]\n\
+    \n\
+    Options are:\n\
+    -help                 print this message\n\
+    -keepnewline          keep last newline of output generated by command\n\
+    -addnewline           add newline to standard input for command\n\
+    -binary-output        represent output as binary string\n\
+    -string-output        represent output as ordinary string (default)\n\
+    -term-output          represent output as toolbus term\n\
+    -cmd C1 ...           use C1 ... as the default command to execute\n";
   fprintf(stderr, str);
 
   exit(0);
 }
+
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
@@ -322,3 +365,4 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+/*}}}  */
