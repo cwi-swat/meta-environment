@@ -4,6 +4,34 @@ definition
 module Main
 imports sdf2/syntax/Sdf2
 %%% $Id$
+           
+module sdf2/syntax/Character-Class
+imports sdf2/syntax/Character
+hiddens
+  sorts CharRange CharRanges OptCharRanges 
+exports
+  sorts CharClass
+  context-free syntax
+    Character                 -> CharRange
+    Character "-" Character   -> CharRange
+
+    CharRange                 -> CharRanges
+    CharRanges CharRanges     -> CharRanges {right,memo}
+    "(" CharRanges ")"        -> CharRanges {bracket}
+                              -> OptCharRanges
+    CharRanges                -> OptCharRanges
+    "[" OptCharRanges "]"     -> CharClass
+    "~" CharClass             -> CharClass
+    CharClass "/" CharClass   -> CharClass {left,memo}
+    CharClass "/\\" CharClass -> CharClass {left,memo}
+    CharClass "\\/" CharClass -> CharClass {left}
+   "(" CharClass ")"          -> CharClass {bracket}  
+  context-free priorities
+    "~" CharClass             -> CharClass >
+    CharClass "/" CharClass   -> CharClass >
+    CharClass "/\\" CharClass -> CharClass >
+    CharClass "\\/" CharClass -> CharClass           
+%%% $Id$
                   
 module sdf2/syntax/Aliases
 imports sdf2/syntax/Kernel
@@ -37,33 +65,30 @@ exports
   context-free syntax
     CharClass -> Symbol     
 %%% $Id$
-           
-module sdf2/syntax/Character-Class
-imports sdf2/syntax/Character
-hiddens
-  sorts CharRange CharRanges OptCharRanges 
+               
+module sdf2/syntax/Restrictions
+imports sdf2/syntax/CC
 exports
-  sorts CharClass
+  sorts Lookahead Lookaheads Restriction Restrictions
   context-free syntax
-    Character                 -> CharRange
-    Character "-" Character   -> CharRange
+    CharClass                    -> Lookahead
+    CharClass "." Lookaheads     -> Lookahead
+    Lookahead                    -> Lookaheads
+    Lookaheads "|" Lookaheads    -> Lookaheads {right}
+    "(" Lookaheads ")"           -> Lookaheads {bracket}
+    "[[" {Lookahead ","}* "]]"   -> Lookaheads
 
-    CharRange                 -> CharRanges
-    CharRanges CharRanges     -> CharRanges {right,memo}
-    "(" CharRanges ")"        -> CharRanges {bracket}
-                              -> OptCharRanges
-    CharRanges                -> OptCharRanges
-    "[" OptCharRanges "]"     -> CharClass
-    "~" CharClass             -> CharClass
-    CharClass "/" CharClass   -> CharClass {left,memo}
-    CharClass "/\\" CharClass -> CharClass {left,memo}
-    CharClass "\\/" CharClass -> CharClass {left}
-   "(" CharClass ")"          -> CharClass {bracket}  
-  context-free priorities
-    "~" CharClass             -> CharClass >
-    CharClass "/" CharClass   -> CharClass >
-    CharClass "/\\" CharClass -> CharClass >
-    CharClass "\\/" CharClass -> CharClass           
+    Symbols "-/-" Lookaheads     -> Restriction
+
+    Restriction*                 -> Restrictions
+    "restrictions" Restrictions  -> Grammar
+    "reject"                     -> Attribute
+    "prefer"                     -> Attribute
+    "avoid"                      -> Attribute 
+
+  context-free priorities    
+    CharClass "." Lookaheads    -> Lookahead >
+    Lookaheads "|" Lookaheads   -> Lookaheads
 %%% $Id$
                      
 module sdf2/syntax/Character
@@ -164,6 +189,10 @@ exports
     "(" Import ")"               -> Import {bracket}   
 
     "id" "(" ModuleName ")"      -> Attribute 
+
+  lexical restrictions
+    ModuleWord -/- [A-Za-z0-9\_\-]
+    ModuleId -/- [\/]
 %%% $Id$   
 
 module sdf2/syntax/Priority
@@ -222,31 +251,9 @@ exports
     "[" Renaming* "]"     -> Renamings
     Symbol     "=>" Symbol      -> Renaming
     Production "=>" Production  -> Renaming 
-%%% $Id$
-               
-module sdf2/syntax/Restrictions
-imports sdf2/syntax/CC
-exports
-  sorts Lookahead Lookaheads Restriction Restrictions
-  context-free syntax
-    CharClass                    -> Lookahead
-    CharClass "." Lookaheads     -> Lookahead
-    Lookahead                    -> Lookaheads
-    Lookaheads "|" Lookaheads    -> Lookaheads {right}
-    "(" Lookaheads ")"           -> Lookaheads {bracket}
-    "[[" {Lookahead ","}* "]]"   -> Lookaheads
-
-    Symbols "-/-" Lookaheads     -> Restriction
-
-    Restriction*                 -> Restrictions
-    "restrictions" Restrictions  -> Grammar
-    "reject"                     -> Attribute
-    "prefer"                     -> Attribute
-    "avoid"                      -> Attribute 
-
-  context-free priorities    
-    CharClass "." Lookaheads    -> Lookahead >
-    Lookaheads "|" Lookaheads   -> Lookaheads
+module sdf2/syntax/Sdf2-Syntax
+imports sdf2/syntax/Kernel
+        sdf2/syntax/Basic
 module sdf2/syntax/Sdf2-Syntax
 imports sdf2/syntax/Kernel
         sdf2/syntax/Basic
@@ -372,6 +379,31 @@ exports
     "(" Symbol ")"       -> Symbol {bracket}
     Symbol*              -> Symbols 
 %%% $Id$
+                                  
+module aterm/Literals
+imports aterm/Layout
+
+hiddens
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+
+exports
+  sorts Literal
+  lexical syntax
+    "\\" ~[012]                    -> AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]          -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]           -> DecimalEscChar
+    "\\" "2" "5" [0-5]             -> DecimalEscChar
+
+    AlphaNumericalEscChar          -> EscChar
+    DecimalEscChar                 -> EscChar
+
+    %% fixme: replace \013 by \r when Character definition allows it.
+    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
+    EscChar                        -> L-Char
+
+    "\"" L-Char* "\""              -> Literal
+%%% $Id$
                
 module aterm/ATerms
 imports aterm/Literals aterm/IntCon aterm/RealCon
@@ -418,31 +450,6 @@ exports
   context-free restrictions
     LAYOUT? -/- [\ \t\n\%]
 
-%%% $Id$
-                                  
-module aterm/Literals
-imports aterm/Layout
-
-hiddens
-  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
-
-exports
-  sorts Literal
-  lexical syntax
-    "\\" ~[012]                    -> AlphaNumericalEscChar
-
-    "\\" [01] [0-9] [0-9]          -> DecimalEscChar
-    "\\" "2" [0-4] [0-9]           -> DecimalEscChar
-    "\\" "2" "5" [0-5]             -> DecimalEscChar
-
-    AlphaNumericalEscChar          -> EscChar
-    DecimalEscChar                 -> EscChar
-
-    %% fixme: replace \013 by \r when Character definition allows it.
-    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
-    EscChar                        -> L-Char
-
-    "\"" L-Char* "\""              -> Literal
 %%% $Id$
                                                    
 module aterm/RealCon
