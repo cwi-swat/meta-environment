@@ -1,8 +1,8 @@
 # $Id$
 
-CFLAGS += -Werror
-
 SCRIPT = gnu-emacs.el
+
+# CFLAGS += -Werror
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \

@@ -1,6 +1,6 @@
 # $Id$
 
-CFLAGS += -Werror
+#CFLAGS += -Werror
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \

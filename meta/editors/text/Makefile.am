@@ -2,7 +2,7 @@
 
 SUBDIRS = common . gvim emacs xemacs
 
-CFLAGS += -Werror
+# CFLAGS += -Werror
 
 IDEF2TIF = $(TOOLBUS)/bin/idef2tif
 TIFSTOC = $(TOOLBUS)/bin/tifstoc
