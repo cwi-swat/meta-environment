@@ -259,11 +259,19 @@ ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
 }
 
 /*}}}  */
+/*{{{  ERR_Location ERR_makeLocationNoLocation() */
+
+ERR_Location ERR_makeLocationNoLocation()
+{
+  return (ERR_Location)(ATerm)ATmakeAppl0(ERR_afun6);
+}
+
+/*}}}  */
 /*{{{  ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset) */
 
 ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun6, (ATerm) (ATerm) ATmakeInt(startLine), (ATerm) (ATerm) ATmakeInt(startColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(startOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
+  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun7, (ATerm) (ATerm) ATmakeInt(startLine), (ATerm) (ATerm) ATmakeInt(startColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(startOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
 }
 
 /*}}}  */
@@ -271,7 +279,7 @@ ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine, int endCo
 
 ERR_Area ERR_makeAreaNoArea()
 {
-  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun7);
+  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun8);
 }
 
 /*}}}  */
@@ -980,6 +988,9 @@ ATbool ERR_isValidLocation(ERR_Location arg)
   if (ERR_isLocationLocation(arg)) {
     return ATtrue;
   }
+  else if (ERR_isLocationNoLocation(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -988,11 +999,43 @@ ATbool ERR_isValidLocation(ERR_Location arg)
 
 inline ATbool ERR_isLocationLocation(ERR_Location arg)
 {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, ERR_patternLocationLocation, NULL, NULL));
-#endif
-  return ATtrue;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationLocation, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isLocationNoLocation(ERR_Location arg) */
+
+inline ATbool ERR_isLocationNoLocation(ERR_Location arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationNoLocation);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1410,6 +1453,9 @@ ERR_Location ERR_visitLocation(ERR_Location arg, char* (*acceptFilename)(char*),
     return ERR_makeLocationLocation(
         acceptFilename ? acceptFilename(ERR_getLocationFilename(arg)) : ERR_getLocationFilename(arg),
         acceptArea ? acceptArea(ERR_getLocationArea(arg)) : ERR_getLocationArea(arg));
+  }
+  if (ERR_isLocationNoLocation(arg)) {
+    return ERR_makeLocationNoLocation();
   }
   ATabort("not a Location: %t\n", arg);
   return (ERR_Location)NULL;

@@ -85,6 +85,7 @@ ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head,
 					ERR_SubjectList tail);
 ERR_Subject ERR_makeSubjectSubject(char *id, ERR_Location Location);
 ERR_Location ERR_makeLocationLocation(char *filename, ERR_Area Area);
+ERR_Location ERR_makeLocationNoLocation();
 ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine,
 			  int endColumn, int startOffset, int endOffset);
 ERR_Area ERR_makeAreaNoArea();
@@ -155,6 +156,7 @@ ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location);
 
 ATbool ERR_isValidLocation(ERR_Location arg);
 inline ATbool ERR_isLocationLocation(ERR_Location arg);
+inline ATbool ERR_isLocationNoLocation(ERR_Location arg);
 ATbool ERR_hasLocationFilename(ERR_Location arg);
 char *ERR_getLocationFilename(ERR_Location arg);
 ERR_Location ERR_setLocationFilename(ERR_Location arg, char *filename);

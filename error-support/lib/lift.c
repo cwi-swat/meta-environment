@@ -84,19 +84,23 @@ PERR_Location ERR_liftLocation(ERR_Location location)
   PERR_Area pArea;
   PERR_OptLayout e;
 
-  filename = ERR_getLocationFilename(location);
-  area = ERR_getLocationArea(location);
+  if (ERR_isLocationLocation(location)) {
+    filename = ERR_getLocationFilename(location);
+    area = ERR_getLocationArea(location);
 
-  pFilename = ERR_liftStrCon(filename);
-  pArea = ERR_liftArea(area);
-  e = PERR_makeOptLayoutAbsent();
+    pFilename = ERR_liftStrCon(filename);
+    pArea = ERR_liftArea(area);
+    e = PERR_makeOptLayoutAbsent();
 
-  return PERR_makeLocationLocation(e,e,
-				  pFilename,
-				  e,e,
-				  pArea,
-				  e);
-  
+    return PERR_makeLocationLocation(e,e,
+				     pFilename,
+				     e,e,
+				     pArea,
+				     e);
+  }
+  else {
+    return PERR_makeLocationNoLocation();
+  }
 }
 
 /*}}}  */

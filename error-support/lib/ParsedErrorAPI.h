@@ -188,6 +188,7 @@ PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation,
 					PERR_OptLayout wsAfterComma,
 					PERR_Area Area,
 					PERR_OptLayout wsAfterArea);
+PERR_Location PERR_makeLocationNoLocation();
 PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea,
 			    PERR_OptLayout wsAfterParenOpen,
 			    PERR_NatCon startLine,
@@ -396,6 +397,7 @@ PERR_Subject PERR_setSubjectWsAfterLocation(PERR_Subject arg,
 
 ATbool PERR_isValidLocation(PERR_Location arg);
 inline ATbool PERR_isLocationLocation(PERR_Location arg);
+inline ATbool PERR_isLocationNoLocation(PERR_Location arg);
 ATbool PERR_hasLocationWsAfterLocation(PERR_Location arg);
 PERR_OptLayout PERR_getLocationWsAfterLocation(PERR_Location arg);
 PERR_Location PERR_setLocationWsAfterLocation(PERR_Location arg,
