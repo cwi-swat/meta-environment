@@ -1,5 +1,9 @@
 # $Id$
 
+2003/06/26 (iversen@cwi.nl)
+ * Added some type parameters to processes in module database
+ * Introduced hook to do something before collecting sdf2 definitions
+
 2003/06/26 (markvdb@cwi.nl)
  * The update-list takes a string as argument and not a term.
  * execute-action("unparsePT") is replaced by the button action unparse,
