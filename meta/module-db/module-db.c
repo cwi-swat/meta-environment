@@ -466,7 +466,8 @@ void mdb_validate_parse_tables(ATermList visited, ATerm modname)
 
 ATerm validate_parse_tables(int cid, ATerm modname)
 {
-  mdb_validate_parse_tables(ATempty,modname);
+  if(GetValue(new_modules_db,modname))
+    mdb_validate_parse_tables(ATempty,modname);
 
   return ATmake("snd-value(validation-done)");
 }
