@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(pgen, 1.6)
+AM_INIT_AUTOMAKE(pgen, 1.7beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -107,7 +107,6 @@ AC_OUTPUT(
    sdf-checker/spec/Makefile
    sdf-checker/src/Makefile
    test/Makefile
-   test/first/Makefile
    test/grammars/Makefile
    test/tables/Makefile 
 )

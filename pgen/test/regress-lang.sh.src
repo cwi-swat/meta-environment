@@ -17,7 +17,7 @@ COMPARE=__ATERM__/bin/atdiff
 SDF2TABLE=__TOP_BUILDDIR__/src/sdf2table.test
 
 reference=$mydir/tables
-dirs="$mydir/first $mydir/grammars"
+dirs="$mydir/grammars"
 
 
 ###

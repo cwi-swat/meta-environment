@@ -1,4 +1,8 @@
 $Id$
+2003/02/11
+ * Bumped into 1.7beta.
+ * Generate Sdf2.def from the asf/library Sdf2 definition.
+ * Moved Sdf2.sdf from test/first to test/grammars.
 
 2003/01/24 ({jong,jurgenv}@cwi.nl)
  * Removed obsolete ToolBus requirements

@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS    = first grammars tables
+SUBDIRS    = grammars tables
 
 EXTRA_DIST = lang-types regress-lang.sh.src 
 
