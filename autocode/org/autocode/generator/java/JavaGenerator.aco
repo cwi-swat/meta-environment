@@ -1,18 +1,23 @@
 
-application * {
-  generator java {
-    folding := true		// Enable folding support by default
+folding := true		// Enable folding support by default
 
-    plugin constructor {
-      class := "org.autocode.generator.java.ConstructorPlugin"
-    }
+plugin constructor {
+  class := "org.autocode.generator.java.ConstructorPlugin"
+}
 
-    plugin accessor {
-      class := "org.autocode.generator.java.AccessorPlugin"
-    }
+plugin accessor {
+  class := "org.autocode.generator.java.AccessorPlugin"
+}
+
+type * {
+  operations * {
+    access := public
+    abstract := false
+    static := false
+    final := false
   }
 
-  type * {
+  field * {
     operations * {
       access := public
       abstract := false
@@ -20,18 +25,9 @@ application * {
       final := false
     }
 
-    field * {
-      operations * {
-        access := public
-	abstract := false
-	static := false
-	final := false
-      }
-
-      access := private	// All attributes have private access by default
-      static := false	// and are not static
-      final := false	// nor final
-    }
+    access := private	  // All attributes have private access by default
+    static := false	  // and are not static
+    final := false	  // nor final
   }
 }
 

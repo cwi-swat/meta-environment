@@ -19,6 +19,6 @@ java_JAVA = ${MODULES:%=%.java}
 CLASSES = ${MODULES:%=%.class}
 
 PropertyParser.java: PropertyParser.jj
-	javacc $<
+	javacc -nostatic $<
 
 CLEANFILES = ${MODULES:%=%.java}

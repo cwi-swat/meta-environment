@@ -1,0 +1,29 @@
+application client-app {
+  generator java {
+    enabled := true
+    folding := true
+
+    @import "Client.add"
+    @import "Order.add"
+
+    type * {
+      access := private
+    }
+
+    type Client {
+      access := public
+      operation := { constructors }
+      interface := { Serializable, Runnable }
+  
+      field name {
+        access := public
+        static := true
+      }
+
+      operation constructor {
+        access := proctected
+      }
+    }
+  }
+}
+

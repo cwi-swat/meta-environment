@@ -66,11 +66,46 @@ public class PropertyTree
 
   //}}}
 
+  public String toString(int indent)
+  {
+    StringBuffer buf = new StringBuffer();
+
+    for (int i=0; i<indent; i++) {
+      buf.append("  ");
+    }
+    String prefix = buf.toString();
+
+    buf.append(key);
+    buf.append(" ");
+
+    if (type == SET) {
+      buf.append(":= ");
+      buf.append(value);
+      if (!properties.isEmpty()) {
+	throw new RuntimeException("SET tree must be empty: " +
+				   properties.toString());
+      }
+    } else if (properties.isEmpty()) {
+      buf.append("+= ");
+      buf.append(value);
+    } else {
+      buf.append(value);
+      buf.append(" {");
+      buf.append("\n");
+      buf.append(properties.toString(indent+1));
+      buf.append(prefix);
+      buf.append("}");
+    }
+    buf.append("\n");
+
+    return buf.toString();
+  }
+
   //{{{ public String toString()
 
   public String toString()
   {
-    return key + " " + value + " {" + properties.toString() + "}";
+    return toString(0);
   }
 
   //}}}

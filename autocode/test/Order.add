@@ -1,0 +1,8 @@
+enum Article { elements := { pen, pencil, note-book } }
+
+type Order
+{
+  id : integer
+  article : Article
+  amount : integer
+}

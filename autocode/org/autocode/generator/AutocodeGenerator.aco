@@ -1,5 +1,6 @@
-
-generator java {
-  class := "org.autocode.generator.java.JavaGenerator"
+application * {
+  generator java {
+    class := "org.autocode.generator.java.JavaGenerator"
+    enabled := false
+  }
 }
-

@@ -1,0 +1,6 @@
+type Client
+{
+  name: string
+  referrer: Client
+  order: list<Order>
+}

@@ -37,6 +37,15 @@ public class PropertyContext
 
   //}}}
 
+  //{{{ public PropertyForest getForest()
+
+  public PropertyForest getForest()
+  {
+    return forest;
+  }
+
+  //}}}
+
   //{{{ public Set getValueSet(String key)
 
   public Set getValueSet(String key)
@@ -49,6 +58,48 @@ public class PropertyContext
   }
 
   //}}}
+
+  //{{{ public int getInteger(String key)
+
+  public int getInteger(String key)
+  {
+    String value = getSingletonValue(key);
+    try {
+      return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("property " + key + " does not "
+				 + "have an integer value: " + value);
+    }
+  }
+
+  //}}}
+  //{{{ public boolean getBoolean(String key)
+
+  public boolean getBoolean(String key)
+  {
+    String value = getSingletonValue(key);
+    if (value.equals("true")) {
+      return true;
+    }
+
+    if (value.equals("false")) {
+      return false;
+    }
+
+    throw new IllegalArgumentException("property " + key + " does not "
+				       + "have a boolean value: " + value);
+  }
+
+  //}}}
+  //{{{ public String getString(String key)
+
+  public String getString(String key)
+  {
+    return getSingletonValue(key);
+  }
+
+  //}}}
+
   //{{{ public String getSingletonValue(String key)
 
   public String getSingletonValue(String key)
@@ -184,6 +235,37 @@ public class PropertyContext
     String[] pair = { key, value };
 
     path.add(pair);
+  }
+
+  //}}}
+
+  //{{{ private PropertyTree merge(PropertyForest forest, List path)
+
+  private PropertyTree merge(PropertyForest forest, List path)
+  {
+    PropertyForest properties;
+    String[] pair = (String[])path.get(0);
+    path = path.subList(1, path.size());
+    if (path.isEmpty()) {
+      properties = forest;
+    } else {
+      PropertyTree tree = merge(forest, path);
+      properties = new PropertyForest();
+      properties.addTree(tree);
+    }
+    return new PropertyTree(pair[0], pair[1], properties);
+  }
+
+  //}}}
+  //{{{ public void merge(PropertyForest forest)
+
+  public void merge(PropertyForest forest)
+  {
+    if (path.isEmpty()) {
+      this.forest.merge(forest);
+    } else {
+      this.forest.addTree(merge(forest, path));
+    }
   }
 
   //}}}

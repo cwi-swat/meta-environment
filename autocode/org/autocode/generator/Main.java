@@ -51,7 +51,7 @@ public class Main
     while (iter.hasNext()) {
       String fileName = (String)iter.next();
       reader = new FileReader(fileName);
-      PropertyParser.ReInit(reader);
+      parser.ReInit(reader);
       //parser = new PropertyParser(reader);
       forest.merge(parser.PropertyForest());
       reader.close();
@@ -62,27 +62,38 @@ public class Main
     }
 
     PropertyContext root = new PropertyContext(forest);
-    Set generators = root.getValueSet("generator");
 
     PropertyContext appContext = new PropertyContext(root, "application",
 						     application);
-    String generator = appContext.getSingletonValue("generator");
-    if (!generators.contains(generator)) {
-      throw new RuntimeException("no such generator: " + generator);
+    Set generators = appContext.getValueSet("generator");
+    System.out.println("generators: " + generators);
+
+    iter = generators.iterator();
+    while (iter.hasNext()) {
+      String generator = (String)iter.next();
+      PropertyContext genContext =
+	new PropertyContext(appContext, "generator", generator);
+
+      String className = genContext.getSingletonValue("class");
+      defaults = "/" + className.replace('.', '/') + ".aco";
+      stream = getClass().getResourceAsStream(defaults);
+      reader = new InputStreamReader(stream);
+      parser.ReInit(reader);
+      genContext.merge(parser.PropertyForest());
+      reader.close();
+
+      System.out.println("checking if enabled: " + generator);
+      System.out.println("forest::: ");
+      System.out.println(genContext.getForest());
+      if (genContext.getBoolean("enabled")) {
+	// Generator is active!
+	System.out.println("generator enabled: " + generator
+			   + ", " + className);
+      } else {
+	System.out.println("generator NOT enabled: " + generator);
+      }
     }
 
-    PropertyContext genContext = new PropertyContext(root, "generator",
-						     generator);
-    String className = genContext.getSingletonValue("class");
-
-    System.out.println("generator = " + generator + ", " + className);
-
-    defaults = "/" + className.replace('.', '/') + ".aco";
-    stream = getClass().getResourceAsStream(defaults);
-    reader = new InputStreamReader(stream);
-    PropertyParser.ReInit(reader);
-    forest.merge(parser.PropertyForest());
-    reader.close();
 
     /*
     Property plugins = def.getApplicationProperty("plugins", application);

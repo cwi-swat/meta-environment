@@ -4,6 +4,7 @@ package org.autocode.property.parser;
 
 import org.autocode.property.*;
 import java.util.*;
+import java.io.*;
 
 public class PropertyParser
 {
@@ -123,6 +124,7 @@ TOKEN :
 | <ADD: "+=">
 | <SET: ":=">
 | <ARROW: "->">
+| <IMPORT: "@import">
 }   
 
 //}}}
@@ -239,12 +241,12 @@ PropertyForest PropertyForest() :
 }
 
 //}}}
-//{{{ PropertyTree
+//{{{ PropertyTrees
 
 PropertyForest PropertyTrees() :
 {
   String key;
-  Token field;
+  Token file, field;
   PropertyTree fieldType;
   int treeType;
   List list;
@@ -253,6 +255,21 @@ PropertyForest PropertyTrees() :
   String value;
 }
 {
+  "@import" file=<STRING_LITERAL>
+  {
+    String fileName = unquote(file.image);
+    try {
+      FileReader reader = new FileReader(fileName);
+      PropertyParser parser = new PropertyParser(reader);
+      forest = parser.PropertyForest();
+      reader.close();
+      return forest;
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ParseException("imported file not found: " + fileName);
+    }
+  }
+|
   LOOKAHEAD(2)
   field=<IDENTIFIER> ":" fieldType=FieldType()
   {
