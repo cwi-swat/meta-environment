@@ -105,6 +105,26 @@ int main(int argc, char **argv)
   ATinit(argc, argv, &bottomOfStack);     
   PT_initMEPTApi();
 
+  if(!interpret_cons &&
+     !remove_layout &&
+     !remove_literals &&
+     !remove_injections &&
+     !remove_parsetree &&
+     !implode_lexicals &&
+     !interpret_alt &&
+     !interpret_seq &&
+     !interpret_opt) {
+    interpret_cons = ATtrue;
+    remove_layout = ATtrue;
+    remove_literals = ATtrue;
+    remove_injections = ATtrue;
+    remove_parsetree = ATtrue;
+    implode_lexicals = ATtrue;
+    interpret_alt = ATtrue;
+    interpret_seq = ATtrue;
+    interpret_opt = ATtrue;
+  }
+
   if (proceed) {
     ATerm inputTerm;
     PT_ParseTree tree;

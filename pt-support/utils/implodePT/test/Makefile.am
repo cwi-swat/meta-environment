@@ -33,20 +33,20 @@ Nesting_iter_sep1_flags= -X -l -p
 Nesting_iter_sep2_flags= -X -l -p 
 Nesting_iter_star_sep_flags= -X -l -p 
 Empty_iter_star_sep_flags= -X -l -p 
-Alt1a_flags= -X -l -L -c -I -p -A -q -O
-Alt1b_flags= -X -l -L -c -I -p -A -q -O
-Alt2a_flags= -X -l -L -c -I -p -A -q -O
-Alt2b_flags= -X -l -L -c -I -p -A -q -O
-Alt3a_flags= -X -l -L -c -I -p -A -q -O
-Alt3b_flags= -X -l -L -c -I -p -A -q -O
-Alt4a_flags= -X -l -L -c -I -p -A -q -O
-SeqOpt1_flags = -X -l -L -c -I -p -A -q -O
-SeqOpt2_flags = -X -l -L -c -I -p -A -q -O
-SeqOpt3_flags = -X -l -L -c -I -p -A -q -O
-Seq_flags = -X -l -L -c -I -p -A -q -O
-
-Var1_flags= -X -l -L  -c -I  -p  -A -q -O
-Var2_flags= -X -l -L  -c -I -p -A -q -O
+#Alt1a_flags= -X -l -L -c -I -p -A -q -O
+#Alt1b_flags= -X -l -L -c -I -p -A -q -O
+#Alt2a_flags= -X -l -L -c -I -p -A -q -O
+#Alt2b_flags= -X -l -L -c -I -p -A -q -O
+#Alt3a_flags= -X -l -L -c -I -p -A -q -O
+#Alt3b_flags= -X -l -L -c -I -p -A -q -O
+#Alt4a_flags= -X -l -L -c -I -p -A -q -O
+#SeqOpt1_flags = -X -l -L -c -I -p -A -q -O
+#SeqOpt2_flags = -X -l -L -c -I -p -A -q -O
+#SeqOpt3_flags = -X -l -L -c -I -p -A -q -O
+#Seq_flags = -X -l -L -c -I -p -A -q -O
+#
+#Var1_flags= -X -l -L  -c -I  -p  -A -q -O
+#Var2_flags= -X -l -L  -c -I -p -A -q -O
 
 EXTRA_DIST = tests.def \
 	     $(TEST_SET:%=%.trm) $(TEST_SET:%=%.in) \
