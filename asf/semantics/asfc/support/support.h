@@ -152,6 +152,7 @@ extern Symbol record_sym;
 #define quote4(s,t1,t2,t3,t4) (ATerm)(ATmakeAppl5(sym_quote4, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4))
 #define quote5(s,t1,t2,t3,t4,t5) (ATerm)(ATmakeAppl6(sym_quote5, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5))
 #define quote6(s,t1,t2,t3,t4,t5,t6) (ATerm)(ATmakeAppl(sym_quote6, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5, t6))
+#define quote7(s,t1,t2,t3,t4,t5,t6, t7) (ATerm)(ATmakeAppl(sym_quote7, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5, t6, t7))
 
 #define make_tuple1(t0) (ATerm)(t0)
 #define make_tuple2(t0,t1) (ATerm)(ATmakeList2(t0,t1))
@@ -199,6 +200,7 @@ extern Symbol sym_quote3;
 extern Symbol sym_quote4;
 extern Symbol sym_quote5;
 extern Symbol sym_quote6;
+extern Symbol sym_quote7;
 extern Symbol make_listsym;
 extern Symbol concsym;
 extern Symbol conssym;
