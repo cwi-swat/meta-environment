@@ -16,6 +16,8 @@ static void post_event(ATerm label, ATerm event, char *msg)
 }
 
 /*}}}  */
+/*{{{  static ATerm receive_ack(void) */
+
 static ATerm receive_ack(void)
 {
   ATerm ack;
@@ -30,8 +32,13 @@ static ATerm receive_ack(void)
    */
   ack = acknowledgement;
 
+  /* reset the acknowledgement for the next time */
+  acknowledgement = NULL;
+
   return ack;
 }
+
+/*}}}  */
 
 /*{{{  PT_Tree toolbus_event(ATerm builtin, PT_Tree input) */
 
@@ -40,10 +47,17 @@ PT_Tree toolbus_event(ATerm builtin, PT_Tree input)
   PT_Tree name = CO_getFunctionArgument(input,0);
   PT_Tree event = CO_getFunctionArgument(input,1);
   ATerm label = CO_unquoteAppl(ATparse(PT_yieldTree(name))); 
+  ATerm ack = NULL;
 
   post_event(label, (ATerm) event, PT_yieldTree(event));
+  ack = receive_ack();
 
-  return event;
+  if (ack == NULL) {
+    return input; 
+  }
+  else {
+    return event;
+  }
 }
 
 /*}}}  */
@@ -55,6 +69,7 @@ PT_Tree toolbus_term_event(ATerm builtin, PT_Tree input)
   PT_Tree event = CO_getFunctionArgument(input,1);
   ATerm label = CO_unquoteAppl(ATparse(PT_yieldTree(name))); 
   ATerm term = ATparse(PT_yieldTree(event));
+  ATerm ack = NULL;
   PT_Tree result = event;
 
   if (term == NULL) {
@@ -65,9 +80,9 @@ PT_Tree toolbus_term_event(ATerm builtin, PT_Tree input)
   }
 
   post_event(label, term, "term-event"); 
-  result = (PT_Tree) receive_ack();
+  ack = receive_ack();
 
-  if (result == NULL) {
+  if (ack == NULL) {
     return input; 
   }
   else {

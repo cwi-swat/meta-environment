@@ -35,7 +35,7 @@ static char myversion[] = "0.6";
 
 /* global tool id for ToolBus purposes */
 int toolbus_id = -1;
-
+ATerm acknowledgement = NULL;
 /*}}}  */
 
 /*{{{  void usage(char *prg, ATbool is_err) */
@@ -98,7 +98,11 @@ void rec_terminate(int cid, ATerm t)
 
 void rec_ack_event(int cid, ATerm t)
 {
-  /* do nothing */
+  /* Post acknowlegdment in global variable such that builtin can
+   * take it
+   */
+
+  acknowledgement = t;
 }
 
 /*}}}  */
