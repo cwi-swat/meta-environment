@@ -123,28 +123,6 @@ check() {
 
 # {{{ evaluate
 
-# evaluate() {
-#  if [ -z $RSTORE ]
-#  then
-#      if [ $USE_TESTSUITES = no ]
-#      then 
-#          $THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
-#	  -i $THE_RSCRIPT.pt $YIELD -r $EVALUATOR_RESULT \
-#	  | $OUTPUT
-#      else  
-#	  $TESTSUITES $VERBOSE -f $EVALUATOR_FUN \
-#	  -i $THE_RSCRIPT.pt -r TESTREPORT \
-#	  | $OUTPUT
-#      fi
-#  else
-#      parse_rstore
-#      $EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
-#	  -i $THE_RSCRIPT.pt $YIELD -i $PARSED_RSTORE -r $EVALUATOR_RESULT \
-#	  | $OUTPUT
-#  fi
-#  echo ""
-# }
-
 evaluate() {
     if test -n "$RSTORE" 
     then
@@ -157,6 +135,7 @@ evaluate() {
 	  -i $THE_RSCRIPT.pt $YIELD -r $EVALUATOR_RESULT \
 	  | $OUTPUT
     fi
+    echo ""
 }
    
 # }}}
