@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jul 14 13:46:17 2003
+ * Generated at Thu Jul 24 23:10:54 2003
  */
 
 #ifndef __Graph_dict_H
@@ -20,6 +20,7 @@ extern AFun afun25;
 extern AFun afun18;
 extern AFun afun20;
 extern AFun afun8;
+extern AFun afun28;
 extern AFun afun21;
 extern AFun afun0;
 extern AFun afun11;
@@ -69,6 +70,7 @@ extern ATerm patternAttributeLabel;
 extern ATerm patternAttributeListMulti;
 extern ATerm patternAttributeListEmpty;
 extern ATerm patternNodeIdDefault;
+extern ATerm patternNodeSubGraph;
 extern ATerm patternNodeDefault;
 extern ATerm patternNodeListMulti;
 extern ATerm patternNodeListEmpty;

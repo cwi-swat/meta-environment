@@ -1,5 +1,8 @@
 $Id$
 
+2003/08/01 (jurgenv@cwi.nl)
+ * Set to version 0.1.1
+
 Wed Jul 23 10:31:02 CEST 2003 <{jong,kooiker}@cwi.nl>
  * graph-support/utils/layoutgraph/layoutgraph.c:
    function layoutGraph() rewritten from scratch, without using fork/exec.

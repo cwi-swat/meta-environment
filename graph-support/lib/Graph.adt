@@ -6,6 +6,7 @@
 [NodeList, multi, [<head(Node)>,<[tail(NodeList)]>]],
 
 [Node, default, node(<id(NodeId)>,<attributes(AttributeList)>)],
+[Node, sub-graph, sub-graph(<id(NodeId)>,<graph(Graph)>)],
 
 [NodeId, default, <id(str)>],
 
