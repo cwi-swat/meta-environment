@@ -117,7 +117,7 @@ libsupport-dbg.a: $(OBJ_DBG)
 libsupport-prof.a: $(OBJ_PROF)
 	$(AR) cr $@ $(OBJ_PROF)
 
-depend:
+depend: rewriter.tif.c rewriter.tif.h
 	gcc -MM $(INCLUDES) $(CSRC) > /tmp/.gendep
 	cat /tmp/.gendep | sed "s/.o:/-cc.o:/"   >  .depend
 	cat /tmp/.gendep | sed "s/.o:/-gcc.o:/"  >> .depend

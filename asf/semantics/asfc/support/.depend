@@ -1,2 +1,20 @@
-support.o: support.c support.h
-rewriter.o: rewriter.c support.h rewriter.tif.h
+support-cc.o: support.c support.h \
+ /home/mdejonge/projects//include/deprecated.h \
+ /home/mdejonge/projects//include/aterm-macs.h
+rewriter-cc.o: rewriter.c support.h rewriter.tif.h
+rewriter.tif-cc.o: rewriter.tif.c rewriter.tif.h
+support-gcc.o: support.c support.h \
+ /home/mdejonge/projects//include/deprecated.h \
+ /home/mdejonge/projects//include/aterm-macs.h
+rewriter-gcc.o: rewriter.c support.h rewriter.tif.h
+rewriter.tif-gcc.o: rewriter.tif.c rewriter.tif.h
+support-dbg.o: support.c support.h \
+ /home/mdejonge/projects//include/deprecated.h \
+ /home/mdejonge/projects//include/aterm-macs.h
+rewriter-dbg.o: rewriter.c support.h rewriter.tif.h
+rewriter.tif-dbg.o: rewriter.tif.c rewriter.tif.h
+support-prof.o: support.c support.h \
+ /home/mdejonge/projects//include/deprecated.h \
+ /home/mdejonge/projects//include/aterm-macs.h
+rewriter-prof.o: rewriter.c support.h rewriter.tif.h
+rewriter.tif-prof.o: rewriter.tif.c rewriter.tif.h
