@@ -1,0 +1,7 @@
+process P is
+   if false then print ko
+   else 
+      if true then print ok else print ko fi
+   fi
+
+toolbus(P)

@@ -1,0 +1,4 @@
+process P is
+   if false then print ko else print ok fi
+
+toolbus(P)

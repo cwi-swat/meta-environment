@@ -11,9 +11,17 @@ import aterm.*;
  * Environments to maintain a relation between variables and their values.
  * The lifecyle of an environment consists of two phases: compile time and execution time.
  * 
- * During compile time (i.e. during compilation of a process definition) a vector is maintained
- * of all current variables. Each vector entry contains a var or rvar term correspodning to a variable.
- * The variable maxVar indicates the last addressable variable.
+ * During compile time (i.e. during compilation of a process definition) a vector (declVec) is maintained
+ * of all current variables. Each vector entry contains a var or rvar term corresponding to a variable.
+ * The variable maxVar indicates the last addressable variable. The situation is thus:
+ * 
+ *   var    var    var  ...    var     ...  var
+ *    0      1      2   ...  maxVar-1  ...  declVar.size()-1
+ *   \---------------------------/
+ *     visible in current scope
+ *   \---------------------------------------/
+ *     all variables declared in some scope
+ * 
  * Methods are:
  * - introduceVars
  * - introduceBindings
@@ -47,12 +55,15 @@ public class Environment {
   /**
    * Compile time methods
    */
-
+  
+  /**
+   * introduceVars adds a list of variables: each variables gets a new index assigned.
+   */
+  
   public void introduceVars(ATermList vars) throws ToolBusException {
     if (executing) {
       throw new ToolBusInternalError("introduceVars during execution");
     }
-    //System.err.println("Environment.add(" + vars + "), maxVar = " + maxVar + " declVec = " + declVec);
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
       if (TBTerm.isVar(var)) {
@@ -62,11 +73,16 @@ public class Environment {
         throw new ToolBusInternalError("env.add illegal var: " + var);
       }
     }
-    //System.err.println(declVec + ", maxVar = " + maxVar);
   }
+  
+  /**
+   * introduceBindings adds new variables for the case of formal/actual coorespondence
+   * in process calls. Special care is taken for result variables. A *formal* result
+   * variable gets the same index as the *actual* result variable. Both thus effectively
+   * share the same value.
+   */
 
   public void introduceBindings(ATermList vars, ATermList actuals) throws ToolBusException {
-    //System.err.println("Environment.add(" + vars + ", " + actuals + "), maxVar = " + maxVar + " declVec = " + declVec);
     if (executing) {
       throw new ToolBusInternalError("introduceBindings during execution");
     }
@@ -78,9 +94,8 @@ public class Environment {
       } else if (TBTerm.isResVar(var)) {
         ATerm actual = actuals.elementAt(i);
         if (!TBTerm.isResVar(actual)) {
-          throw new ToolBusInternalError("env.add illegal actual: " + actual);
+          throw new ToolBusInternalError("illegal actual: " + actual);
         }
-        //System.err.println("actual = " + actual);
         if (TBTerm.getVarType(var) != TBTerm.getVarType(actual)) {
           throw new ToolBusException("incompatible types for " + var + " and " + actual);
         }
@@ -88,20 +103,26 @@ public class Environment {
         declVec.addElement(TBTerm.setVarIndexAndType(var, index, TBTerm.getVarType(var)));
         maxVar++;
       } else {
-        throw new ToolBusInternalError("env.add illegal var: " + var);
+        throw new ToolBusInternalError("illegal var: " + var);
       }
     }
-    //System.out.println(declVec + ", maxVar = " + maxVar);
   }
+  /**
+   * removeVars: delete variables introduced by introduceVars and introduceBindings.
+   * Note that maxVar is decreased and that declVec[0], ... declVec[maxVar-1] become the
+   * visible variables.
+   */
 
   public void removeVars(int delta) {
     if (executing) {
       throw new ToolBusInternalError("removeVars during execution");
     }
-    //System.out.println("delete " + delta + " from " + this);
     maxVar -= delta;
-    //System.out.println("after delete: " + this +"; maxVar =" + maxVar);
   }
+  
+  /**
+   * getVarIndex: lookup of index allocated for given variable
+   */
 
   public int getVarIndex(ATerm var) throws ToolBusException {
     if (executing) {
@@ -122,6 +143,10 @@ public class Environment {
     }
     throw new ToolBusException("undeclared variable " + name);
   }
+  
+  /**
+   * getVarType: ookup declared type for given variable
+   */
 
   public ATerm getVarType(ATerm var) {
     if (executing) {
@@ -135,8 +160,10 @@ public class Environment {
         return TBTerm.getVarType((ATerm) declVec.elementAt(i));
     throw new ToolBusInternalError("Environment.getVarIndex: undeclared var " + var);
   }
-
- 
+  
+  /**
+   * setExecuting: switch to execution mode.
+   */
 
   public void setExecuting() {
     if (executing) {
@@ -151,11 +178,19 @@ public class Environment {
   /**
    * Execution time methods
    */
+  
+  /**
+   * assignVar: assign a value to a variable.
+   */
 
   public void assignVar(ATerm var, ATerm val) {
     //System.out.println("putVar(" + var + ", " + val +")");
     declVec.setElementAt(val, TBTerm.getVarIndex(var));
   }
+  
+  /**
+   * getValue: fetch value of a variable
+   */
 
   public ATerm getValue(ATerm var) throws ToolBusException {
 
@@ -167,12 +202,6 @@ public class Environment {
   }
 
   public String toString() {
-    //	String res = "env(";
-    //	for(int i = 0; i < vmax; i++){
-    //		if(i > 0) res = res + ", ";
-    //		res = res + dvec.elementAt(i);
-    //	}
-    //	return res + ")";
     return declVec.toString();
   }
 }

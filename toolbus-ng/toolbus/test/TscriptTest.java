@@ -70,14 +70,21 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("B2"));
     assertTrue(runTest("B3"));
   }
-  
-  public void testAssign(){
+
+  public void testAssign() {
     assertTrue(runTest("Assign0"));
     assertTrue(runTest("Assign1"));
     assertTrue(runTest("Assign2"));
     assertTrue(runTest("Assign3"));
     assertTrue(runTest("Assign4"));
-    
+  }
+
+  public void testIf() {
+    assertTrue(runTest("If0"));
+    assertTrue(runTest("If1"));
+    assertTrue(runTest("If2"));
+    assertTrue(runTest("If3"));
+    assertTrue(runTest("If4"));
   }
 
 }
