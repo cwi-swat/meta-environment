@@ -8,7 +8,7 @@ let
   Time    : term,
   Msg     : str
 in
-  snd-msg(open-asf-file("TestEqs", "__SRCDIR__/TestEqs.sdf")) .
+  snd-msg(open-asf-file("TestEqs", "__BUILDDIR__/TestEqs.sdf")) .
   (
     rec-msg(opened-file("TestEqs", text(EqsText?), Path?, Time?))
   +

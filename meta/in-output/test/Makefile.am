@@ -39,5 +39,6 @@ CLEANFILES = in-output-test ${TBSCRIPTS:.src=}
              s@__TOP_SRCDIR__@$(top_srcdir)@g;\
              s@__SRCDIR__@$(srcdir)@g;\
              s@__TOP_BUILDDIR__@$(top_builddir)@g;\
+             s@__BUILDDIR__@$(top_builddir)/in-output/test@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@
