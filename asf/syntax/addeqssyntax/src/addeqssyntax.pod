@@ -4,7 +4,7 @@ ADDEQSSYNTAX - Adds the "equation" syntax to an SDF definition
 
 =head1 SYNOPSIS
 
-B<addeqssyntax> [-B<bh>] [-B<m> I<module>] [-B<i> I<file>] [-B<o> I<file>] [-B<tvV>] file0 ...
+B<addeqssyntax> [-B<h>] [-B<m> I<module>] [-B<i> I<file>] [-B<o> I<file>] [-B<vV>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -13,10 +13,6 @@ B<addeqssyntax> adds to a parsed (AsFix1) SDF2 syntax definition the "equation" 
 A number of options can be supplied; these are as follows:
 
 =over 4
-
-=item B<-b>
-
-Write term output in BAF (Binary ATerm) format. This is the default.
 
 =item -B<h>
 
@@ -36,10 +32,6 @@ or from the named files supplied as arguments.
 Write output to F<file>.  By default, output is written to file with a
 name derived from the name of the input file for named files, and to
 standard output on input from standard input.
-
-=item B<-t>
-
-Write term output in plain text format.
 
 =item B<-v>
 
