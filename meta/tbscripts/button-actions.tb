@@ -1100,8 +1100,8 @@ let
   DirtyFoci  : term
 in
   Tree := error-tree.
-  snd-msg(get-dirty-focuses(EditorId)) .
-  rec-msg(dirty-focuses(DirtyFoci?)) .
+  snd-msg(se-get-dirty-focuses(EditorId)) .
+  rec-msg(se-dirty-focuses(DirtyFoci?)) .
   if equal(DirtyFoci, []) then
     snd-msg(se-get-tree(EditorId)) .
     (
@@ -1111,8 +1111,8 @@ in
     )
   else
     ParseTerm(EditorId, ModuleName) .
-    snd-msg(get-dirty-focuses(EditorId)) .
-    rec-msg(dirty-focuses(DirtyFoci?)) . 
+    snd-msg(se-get-dirty-focuses(EditorId)) .
+    rec-msg(se-dirty-focuses(DirtyFoci?)) . 
     if equal(DirtyFoci, []) then
       snd-msg(se-get-tree(EditorId)) .
       (
