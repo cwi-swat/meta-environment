@@ -19,7 +19,6 @@ COMPARE="__ATERM__/bin/atdiff"
 
 languages=$mydir/lang-types
 tables=$mydir/tables
-first=$mydir/first
 terms=$mydir/terms
 errterms=$mydir/erroneous
 
@@ -137,7 +136,7 @@ fi
 error=0
 for ext in $extensions
 do
-	files=`ls $first/*.$ext $terms/*.$ext 2>/dev/null`
+	files=`ls $terms/*.$ext 2>/dev/null`
 	errfiles=`ls $errterms/*.$ext 2>/dev/null`
 	lang=`egrep "^$ext( |	)" $languages | cut -f2`
 	ptbl=$tables/$lang.tbl

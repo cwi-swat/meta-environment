@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS    = erroneous first tables terms
+SUBDIRS    = erroneous tables terms
 
 EXTRA_DIST = lang-types regress-terms.sh.src
 

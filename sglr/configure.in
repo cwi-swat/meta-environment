@@ -91,7 +91,6 @@ AC_OUTPUT(
    sdf1tosdf2/sdf1tosdf2
    test/Makefile
    test/erroneous/Makefile
-   test/first/Makefile
    test/tables/Makefile
    test/terms/Makefile
 )

@@ -1,5 +1,9 @@
 $Id$
 
+2001/07/25 ({jong,markvdb,olivierp}@cwi.nl)
+ * Added Prefix term to test suite
+ * Moved Sdf2.sdf to test/terms dir.
+
 2001/07/24 (jurgenv@cwi.nl)
  * ambtracker functionality and tool moved to pt-support package
 
