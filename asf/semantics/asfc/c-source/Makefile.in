@@ -40,7 +40,7 @@ CC	= cc
 INCLUDE = -I../support -I$(includedir) -I$(ATERM)/../include
 CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
-        -lATerm-cc -lAsFix-cc -lATB-cc -L../support -lsupport-cc \
+        -L../support -lsupport-cc -lATerm-cc -lAsFix-cc -lATB-cc \
 	-lsocket -lnsl 
 LFLAGS	=  
 AR	= ar
@@ -58,7 +58,10 @@ EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
 RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
 
-all: libasfix2c.a
+all: AsFix2C libasfix2c.a
+
+AsFix2C : $(MODS)
+        $(CC) -o AsFix2C $(MODS) $(LIBS)
 
 libasfix2c.a: $(MODS)
 	$(AR) cr libasfix2c.a $(MODS)
