@@ -73,7 +73,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-eval(<user-interface>,decons-filename(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
 
@@ -95,7 +95,7 @@ abstract public class UserInterfaceTool
     Perror0 = factory.parse("rec-do(error(<str>))");
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PnewGraph0 = factory.parse("rec-do(new-graph(<term>))");
-    PupdateList0 = factory.parse("rec-do(update-list(<term>))");
+    PupdateList0 = factory.parse("rec-do(update-list(<str>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
     PdeconsFilename0 = factory.parse("rec-eval(decons-filename(<str>,<str>))");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
@@ -175,7 +175,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PupdateList0);
     if (result != null) {
-      updateList((ATerm)result.get(0));
+      updateList(factory.parse((String)result.get(0)));
       return null;
     }
     result = term.match(PendStatus0);

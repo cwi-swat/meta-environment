@@ -900,6 +900,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
       messageWindow.setVisible(true);
 
+      if (data instanceof ATermAppl) {
+        ATermAppl applData = (ATermAppl)data;
+        data = (ATerm)applData.getArguments().getFirst();
+        System.out.println("Depricated use of list with function symbol " 
+                           + applData.getAFun());
+      }
+
       if (data instanceof ATermList) {
 	  messageList.setContent((ATermList)data);
       }

@@ -58,7 +58,7 @@ let
   GraphId : str,
   ButtonName : list,
   Tree : term,
-  Lst : list,
+  Lst : str,
   ButtonList : list,
   Title : str,
   Answer : term,
