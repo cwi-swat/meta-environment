@@ -1,7 +1,7 @@
 /*
 
-    MEPT -- The ``Meta Environment Parse Tree'' Library
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+    MEPT -- The ``Meta Environment Parse Tree'' Library 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -29,10 +29,8 @@
 #include <aterm2.h>
 
 #include <MEPT-utils.h>
-#include <asfix2.h>
-#include <conversion.h>
 
-static char myname[] = "flattenPT";
+static char myname[] = "unparsePT";
 static char myversion[] = "1.0";
 
 /*
@@ -41,7 +39,7 @@ static char myversion[] = "1.0";
  explanation.
  */
 
-static char myarguments[] = "bhi:o:tvV";
+static char myarguments[] = "hi:o:vV";
 
 /*
  Usage: displays helpful usage information
@@ -50,11 +48,9 @@ void usage(void)
 {
   ATwarning("Usage: %s [%s]\n"
             "Options:\n"
-            "\t-b              output terms in BAF format (default)\n"
             "\t-h              display help information (usage)\n"
             "\t-i filename     input from file (default stdin)\n"
             "\t-o filename     output to file (default stdout)\n"
-            "\t-t              output terms in plaintext format\n"
             "\t-v              verbose mode\n"
             "\t-V              reveal program version (i.e. %s)\n",
             myname, myarguments, myversion);
@@ -70,14 +66,13 @@ int main(int argc, char **argv)
 {
   int c;
   ATerm bottomOfStack;
-  PT_ParseTree tree, flatTree;
 
   /*  Configuration items  */
-  char   *input="-";
-  char   *output="-";
-  ATbool bafmode=ATtrue;
-  ATbool verbose=ATfalse;
-  ATbool proceed=ATtrue;
+  char   *inputName = "-";
+  char   *outputName = "-";
+  FILE *outputFile = NULL; 
+  ATbool verbose = ATfalse;
+  ATbool proceed = ATtrue;
 
   extern char *optarg;
   extern int   optind;
@@ -86,15 +81,13 @@ int main(int argc, char **argv)
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
-      case 'b':  bafmode = ATtrue;                       break;
-      case 'i':  input=optarg;                           break;
-      case 'o':  output=optarg;                          break;
-      case 't':  bafmode = ATfalse;                      break;
-      case 'v':  verbose = ATtrue;                       break;
-      case 'V':  version(); proceed=ATfalse;             break;
+      case 'i':  inputName = optarg;             break;
+      case 'o':  outputName = optarg;            break;
+      case 'v':  verbose = ATtrue;               break;
+      case 'V':  version(); proceed = ATfalse;   break;
 
       case 'h':
-      default:   usage(); proceed=ATfalse;                     break;
+      default:   usage(); proceed = ATfalse;     break;
     }
   }
   argc -= optind;
@@ -102,21 +95,26 @@ int main(int argc, char **argv)
 
   ATinit(argc, argv, &bottomOfStack);       /* Initialize Aterm library */
   PT_initMEPTApi();
-  PT_initAsFix2Api();
 
-  if(proceed) {
-    tree = PT_makeParseTreeFromTerm(ATreadFromNamedFile(input));
-    flatTree = flattenPT(tree);
+  if (proceed) {
+    ATerm term;
 
-    if(!flatTree) {
-      ATerror("%s: conversion failed.", myname);
+    if (!strcmp(outputName, "") || !strcmp(outputName, "-")) {
+      outputFile = stdout;
+    } 
+    else if (!(outputFile = fopen(outputName, "w"))) {
+      ATerror("%s: cannot open %s for writing\n", argv[0], outputName);
     }
-    if(bafmode) {
-      ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(flatTree), output);
+
+    term = ATreadFromNamedFile(inputName);
+    if (term == NULL) {
+      ATerror("asource: parse error in input term.\n");
     }
     else {
-      ATwriteToNamedTextFile(PT_makeTermFromParseTree(flatTree), output);
-    }
+      char *text = yieldParseTree(PT_makeParseTreeFromTerm(term));
+      fprintf(outputFile, "%s", text);
+      fclose(outputFile);
+   }
   }
 
   return 0;

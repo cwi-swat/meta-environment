@@ -28,8 +28,8 @@
 
 #include <aterm2.h>
 
-#include <mept.h>
-#include "a2metoa1.h"
+#include <MEPT-utils.h>
+#include <conversion.h>
 
 static char myname[] = "a2metoa1";
 static char myversion[] = "0.0";
@@ -102,7 +102,8 @@ int main(int argc, char **argv)
   PT_initMEPTApi();
 
   if(proceed) {
-    translatedTerm = a2metoa1(ATreadFromNamedFile(input));
+    ATerm term = ATreadFromNamedFile(input);
+    translatedTerm = a2metoa1(PT_makeParseTreeFromTerm(term));
     if(!translatedTerm)
       ATerror("%s: conversion failed.", myname);
     if(bafmode)

@@ -4,7 +4,7 @@
 # $Id$
 #
 
-bin_PROGRAMS		= flattenPT a2metoa1
+bin_PROGRAMS		= a2metoa1 flattenPT unparsePT implodePT
 
 flattenPT_SOURCES	= flattenPT-main.c
 flattenPT_LDADD		= -L../libconversion -lconversion \
@@ -15,6 +15,14 @@ flattenPT_LDADD		= -L../libconversion -lconversion \
 a2metoa1_SOURCES	= a2metoa1-main.c
 a2metoa1_LDADD		= -L../libconversion -lconversion \
                           -L../libmept -lmept \
+			  -L${ATERM}/lib -lATerm
+
+unparsePT_SOURCES	= unparsePT-main.c
+unparsePT_LDADD		= -L../libmept -lmept \
+			  -L${ATERM}/lib -lATerm
+
+implodePT_SOURCES	= implodePT-main.c
+implodePT_LDADD		= -L../libmept -lmept \
 			  -L${ATERM}/lib -lATerm
 
 CFLAGS			= -g -Wall -O2

@@ -30,9 +30,8 @@
 
 ATbool interpret_cons = ATfalse;
 ATbool remove_layout = ATfalse;
-ATbool char_to_string = ATfalse;
-ATbool lexical_to_string = ATfalse;
-ATbool layout_to_string = ATfalse;
+ATbool lexical_to_string = ATtrue;
+ATbool layout_to_string = ATtrue;
 ATbool remove_literals = ATfalse;
  
 static PT_Tree implodeTerm(PT_Tree t);
@@ -66,7 +65,7 @@ static PT_Args implodeList(PT_Args list)
     PT_Tree argHead = PT_getArgsHead(list);
 
     if (PT_isTreeList(argHead)) {
-      PT_Args argList = PT_getTreeList(argHead);
+      PT_Args argList = PT_getTreeArgs(argHead);
 
       while (PT_hasArgsHead(argList)) {
         PT_Tree elem = PT_getArgsHead(argList);
@@ -165,9 +164,9 @@ static PT_Tree implodeApplication(PT_Tree tree)
   if (PT_prodHasIterSepAsRhs(prod) || PT_prodHasIterAsRhs(prod)) {
     newList = implodeList(args);
   }
-
-  newList = implodeArgs(args);
-
+  else {
+    newList = implodeArgs(args);
+  }
   return PT_makeTreeAppl(implodeProd(prod), newList);
 }
 
@@ -195,7 +194,17 @@ PT_ParseTree implodeParseTree(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
     PT_Tree newTree = PT_getParseTreeTree(tree);
-    return PT_setParseTreeTree(tree, implodeTerm(newTree));
+
+    if (PT_isTreeAppl(newTree)) {
+      PT_Production prod = PT_getTreeProd(newTree);
+      if (PT_prodHasSTARTAsRhs(prod)) {
+        PT_Args args = PT_getTreeArgs(newTree);
+        PT_Args newArgs = implodeArgs(args);
+        
+        newTree = PT_setTreeArgs(newTree, newArgs);
+        return PT_setParseTreeTree(tree, newTree);
+      }
+    }
   }
 
   ATerror("implodeParseTree: not a parsetree: %t\n", tree);

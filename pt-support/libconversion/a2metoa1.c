@@ -157,7 +157,7 @@ listToAsFix1(PT_Args list)
     PT_Tree argHead = PT_getArgsHead(list);
 
     if (PT_isTreeList(argHead)) {
-      PT_Args argList = PT_getTreeList(argHead);
+      PT_Args argList = PT_getTreeArgs(argHead);
 
       while (PT_hasArgsHead(argList)) {
 	PT_Tree elem = PT_getArgsHead(argList);
@@ -350,7 +350,7 @@ prodToAsFix1(PT_Production prod)
   ATerm attr, result, id = NULL, res_attr = NULL;
   PT_Symbol rhs;
   PT_Symbols lhsArgs;
-  PT_Attrs prodAttrs;
+  PT_Attributes prodAttrs;
   ATermList attrs;
   char *lit;
 
@@ -447,6 +447,7 @@ prodToAsFix1(PT_Production prod)
   return result;
 }
 
+/*
 static int
 lengthOfLexicals(PT_Args lexicals)
 {
@@ -544,7 +545,6 @@ lexicalsToString(PT_Args lexicals)
 
   assert(idx == len);
 
-  /* terminate string */
   buf[idx++] = '\0';
 
   strTerm = ATmake("<str>", buf);
@@ -553,12 +553,18 @@ lexicalsToString(PT_Args lexicals)
 
   return strTerm;
 }
+*/
 
 static ATerm
-layoutToAsFix1(PT_Tree t)
+treeToString(PT_Tree tree)
 {
-  PT_Args args = PT_getTreeArgs(t);
-  ATerm lexTree = lexicalsToString(args);
+  return ATmake("<str>", yieldTree(tree));
+}
+
+static ATerm
+layoutToAsFix1(PT_Tree tree)
+{
+  ATerm lexTree = treeToString(tree);
 
   return ATmakeTerm(asfix1_ws_pattern, lexTree);
 }
@@ -605,13 +611,14 @@ literalToAsFix1(PT_Tree t)
 }
 
 static ATerm
-varSymbolToAsFix1(PT_Production prod, PT_Args args)
+varSymbolToAsFix1(PT_Tree tree)
 {
-  PT_Symbol  sort;
-  char      *sep;
-  ATerm      newSortOrIter = NULL;
-  ATerm      varTerm = lexicalsToString(args);
-  PT_Symbol  sortOrIter = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+  PT_Symbol     sort;
+  char         *sep;
+  PT_Production prod = PT_getTreeProd(tree);
+  ATerm         newSortOrIter = NULL;
+  ATerm         varTerm = treeToString(tree);
+  PT_Symbol     sortOrIter = PT_getSymbolSymbol(PT_getProductionRhs(prod));
 
   if (PT_isSymbolIterPlus(sortOrIter)) {
     sort = PT_getSymbolSymbol(sortOrIter);
@@ -696,9 +703,6 @@ applicationToAsFix1(PT_Tree tree)
   PT_Production prod = PT_getTreeProd(tree);
   PT_Args args = PT_getTreeArgs(tree);
 
-/*
-ATwarning("applicationToAsFix1 entered with prod %t\n", prod);
-*/
   if (PT_isOptLayoutProd(prod)) {
     return layoutToAsFix1(tree);
   }
@@ -706,11 +710,11 @@ ATwarning("applicationToAsFix1 entered with prod %t\n", prod);
   if (PT_prodHasLexAsLhsAndCfAsRhs(prod)) {
     PT_Symbol sort = PT_getSymbolSymbol(PT_getProductionRhs(prod));
     return ATmakeTerm(pattern_asfix_lexterm,
-		      lexicalsToString(args), PT_makeTermFromSymbol(sort));
+		      treeToString(tree), PT_makeTermFromSymbol(sort));
   }
 
   if (PT_isVarDefault(prod)) {
-    return varSymbolToAsFix1(prod, args);
+    return varSymbolToAsFix1(tree);
   }
 
   if (PT_prodHasIterSepAsRhs(prod)) {
@@ -738,12 +742,6 @@ termToAsFix1(PT_Tree t)
   if (PT_isTreeLit(t)) {
     return literalToAsFix1(t);
   }
-
-/*
-  if (PT_isTreeLayout(t)) {
-    return layoutToAsFix1(t);
-  }
-*/
 
   if (!PT_isTreeAppl(t)) {
     ATerror("termToAsFix1: not an application term: %t\n", t);
