@@ -101,8 +101,13 @@ static void treeToSlices(PT_Tree tree)
 {
   ATerm categoryAnno = NULL;
 
-  if (PT_hasTreeArgs(tree)) {
+  if (PT_isTreeAppl(tree)) {
     argsToSlices(PT_getTreeArgs(tree));
+  }
+
+  if (PT_isTreeAmb(tree)) {
+    storeTree(tree, "Ambiguous");
+    return;
   }
 
   categoryAnno = PT_getTreeAnnotation(tree, ATparse("category"));
