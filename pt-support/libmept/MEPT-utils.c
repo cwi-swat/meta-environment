@@ -422,19 +422,24 @@ static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length)
 {
   if (PT_hasTreeString(tree)) {
     *length = strlen(PT_getTreeString(tree));
+    tree = PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
+                                ATmake("<int>", *length));
+  }
+  else if (PT_isTreeChar(tree)) {
+    *length = 1;
   }
   else if (PT_hasTreeArgs(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     args = annotateArgsWithLength(args, length);
     tree = PT_setTreeArgs(tree, args);
+    tree = PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
+                                ATmake("<int>", *length));
   }
   else {
-    ATerror("unknown tree type: %t\n", PT_makeTermFromTree(tree));
+    ATabort("annotateTreeWithLength: unknown tree type: %t\n", 
+            PT_makeTermFromTree(tree));
   }
-
-  return PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
-                              ATmake("<int>", *length));
-
+  return tree;
 }
 
 /*}}}  */
@@ -491,9 +496,14 @@ PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length)
 
 int PT_getTreeLengthAnno(PT_Tree tree)
 {
-  ATerm anno = PT_getTreeAnnotation(tree, ATparse(ANNO_LENGTH));
-  assert(anno);
-  return ATgetInt((ATermInt)anno);
+  if (PT_isTreeChar(tree)) {
+    return 1;
+  } 
+  else {
+    ATerm anno = PT_getTreeAnnotation(tree, ATparse(ANNO_LENGTH));
+    assert(anno);
+    return ATgetInt((ATermInt)anno);
+  }
 }
 
 /*}}}  */ 
@@ -525,7 +535,7 @@ PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
   return PT_makeArgsFromTerm((ATerm)arg_list);
 }
 
-PT_Tree PT_makeLayoutEmpty()
+PT_Tree PT_makeTreeLayoutEmpty()
 {
   PT_Symbol layoutSymbol = PT_makeSymbolCf(
                              PT_makeSymbolOpt(PT_makeSymbolLayout()));
@@ -536,4 +546,35 @@ PT_Tree PT_makeLayoutEmpty()
   return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
 }
 
+PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
+{
+  PT_Symbol layoutSymbolRhs = PT_makeSymbolCf(
+                                PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Symbol layoutSymbolLhs = PT_makeSymbolCf(PT_makeSymbolLayout());
+  PT_Symbols layoutLhs = PT_makeSymbolsList(layoutSymbolLhs, 
+                                            PT_makeSymbolsEmpty());
+  PT_Production optLayoutProd = PT_makeProductionDefault(
+                                  layoutLhs,
+                                  layoutSymbolRhs,
+                                  PT_makeAttributesNoAttrs());
+  return PT_makeTreeAppl(optLayoutProd, args);
+}
+
+ATbool PT_isTreeLayout(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isOptLayoutProd(prod);
+  }
+  return ATfalse;
+}
+
+ATbool PT_isTreeLexical(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isLexicalProd(prod);
+  }
+  return ATfalse;
+}
 /*}}}  */ 

@@ -80,7 +80,10 @@ int     PT_getTreeLengthAnno(PT_Tree tree);
 PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length);
 PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length);  
 
-PT_Tree PT_makeLayoutEmpty();
-ATbool  PT_isTreeLayout();
+ATbool PT_isTreeLexical(PT_Tree tree);
+
+PT_Tree PT_makeTreeLayoutEmpty();
+ATbool  PT_isTreeLayout(PT_Tree tree);
+PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args);
 
 #endif /* _ME_PT_H */ 
