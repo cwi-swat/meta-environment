@@ -7096,7 +7096,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_ActionScriptChecker,                   
                           resolve_ActionScriptChecker,                    
-                          init_ActionScriptChecker
+                          init_ActionScriptChecker, NULL, -1
 );}                                                        
 #endif                                                   
 

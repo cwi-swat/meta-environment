@@ -19,6 +19,7 @@ CLEANFILES = actionchecker ActionScriptChecker
 
 ActionScriptChecker_SOURCES = ActionScriptChecker.c
 ActionScriptChecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
+			-L$(SGLR)/lib -lsglr \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(ATERM)/lib -lATerm
