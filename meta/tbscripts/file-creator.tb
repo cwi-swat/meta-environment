@@ -6,6 +6,7 @@ process File-creator is
 let
   FileName   : str,
   ModuleName : str,
+  RealModule : str,
   ErrMsg     : str,
   Path       : str
 in
@@ -26,11 +27,11 @@ in
         rec-msg(syntax-module-not-exists(Path)) .
         snd-msg(create-empty-syntax-module(Path, ModuleName)) .
         (
-          rec-msg(module-created(ModuleName)) .
-      	  snd-msg(module-created)
+          rec-msg(module-created(Path?, RealModule?)) .
+      	  snd-msg(new-module-created(Path, RealModule))
         +
           rec-msg(module-creation-failed(ModuleName, ErrMsg?)) .
-          snd-msg(module-not-created(ErrMsg))
+          snd-msg(new-module-not-created(ErrMsg))
         )
       )
     )

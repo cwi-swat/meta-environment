@@ -1,5 +1,11 @@
 # $Id$
 
+2002/05/09 (jurgenv@cwi.nl)
+ * Enhanced support for compound module names. New compound module names
+   are computed automatically using the meta.conf path and the selected
+   file name. The shortest possible module name is computed using the most
+   specific path in the meta.conf file.
+
 2002/05/08 (markvdb@cwi.nl)
  * Replaced the fixed "parse" and "reduce" button by the
    new button mechanism.

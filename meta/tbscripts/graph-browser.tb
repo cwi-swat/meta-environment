@@ -48,8 +48,11 @@ let
   T       : str,
   FT      : str,
   Path    : str,
+  PathWithExt : str,
   ErrMsg  : str,
-  On      : term
+  On      : term,
+  ModuleName : str,
+  RealModuleName : str
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -58,21 +61,21 @@ in
   ( 
     /* Create a completely new module by a user */
     (
-      rec-event(UI, new-module(Path?, Str?)).
-      snd-msg(create-new-module(Path, Str)).
+      rec-event(UI, new-module(Path?, ModuleName?)).
+      snd-msg(create-new-module(Path, ModuleName)).
       (
-        rec-msg(module-not-created(ErrMsg?)).
+        rec-msg(new-module-not-created(ErrMsg?)).
 	snd-note(ui-status(errorf("%s",[ErrMsg])))
       +
-        rec-msg(module-created).
-	snd-msg(open-modules([Str])). 
+        rec-msg(new-module-created(PathWithExt?, RealModuleName?)).
+	snd-msg(open-initial-module(PathWithExt, RealModuleName)). 
 	( rec-note(import-graph(Mods?,Pairs?)).
           snd-do(UI,new-graph(Mods,Pairs))
         )*
-        rec-msg(finished-opening-modules).
-	snd-do(UI,finished-opening-modules(Str))
+        rec-msg(finished-opening-initial-module).
+	snd-do(UI,finished-opening-modules(ModuleName))
       ).
-      snd-ack-event(UI, new-module(Path, Str))
+      snd-ack-event(UI, new-module(Path, ModuleName))
     )
     +
     /* Add a new module by a user */

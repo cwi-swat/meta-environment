@@ -23,7 +23,8 @@ let
   SyntaxExt  : str,
   RulesExt   : str,
   TermExt    : str,
-  Stack      : list
+  Stack      : list,
+  RealName   : str
 in
   execute(in-output,IO?).
   (
@@ -89,8 +90,8 @@ in
     rec-msg(create-empty-syntax-module(Path?, Name?)) .
     snd-eval(IO, create-empty-syntax-module(Path, Name)) .
     (
-      rec-value(IO, creation-succeeded) .
-      snd-msg(module-created(Name))
+      rec-value(IO, creation-succeeded(Path?, RealName?)) .
+      snd-msg(module-created(Path, RealName))
     +
       rec-value(IO, creation-failed(Text?)) .
       snd-msg(module-creation-failed(Name, Text))

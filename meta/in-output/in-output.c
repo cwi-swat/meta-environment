@@ -416,14 +416,62 @@ ATerm exists_syntax_module(int cid, char *moduleName)
 }
 
 /*}}}  */
+/*{{{  char* create_compound_module_name(path, moduleName) */
+
+char* create_compound_module_name(const char* path, const char *moduleName)
+{
+  char *tmp = (char*) malloc(PATH_LEN * sizeof(char));
+  char *pathcpy = strdup(path);
+  int p = nr_paths;
+  char *longest = "";
+  int len;
+
+  assert(pathcpy && tmp && "out of memory");
+  tmp[0] = '\0';
+
+  pathcpy[strlen(pathcpy) - strlen(moduleName)] = '\0';
+
+  /* find the longest search path that matches the path of the new module */
+  for (--p; p >= 0; p--) {
+    if (strlen(paths[p]) < strlen(pathcpy)) {
+      char save = pathcpy[strlen(paths[p])];
+      pathcpy[strlen(paths[p])] = '\0';
+      if (!strcmp(paths[p], pathcpy) && strlen(longest) < strlen(paths[p])) {
+	longest=paths[p];
+      }
+      pathcpy[strlen(paths[p])] = save;
+    }
+  }
+
+  /* the rest of the path should be prefixed before the module name */
+  len = strlen(longest);
+  if (len > 0) {
+    strcpy(tmp, pathcpy + len + (pathcpy[len] == '/' ? 1 : 0));
+  }
+
+  strcpy(tmp+strlen(tmp),moduleName);
+
+  free(pathcpy);
+  return tmp;
+}
+
+/*}}}  */
 /*{{{  ATerm create_empty_syntax_module(int cid, char *moduleName) */
 
 ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
 {
   FILE *f;
   char txtFileName[PATH_LEN] = {'\0'};
+  char *compoundName = NULL;
+  ATerm result = NULL;
 
   /* Build syntax-text-filename from moduleName */
+  compoundName = create_compound_module_name(path, moduleName);
+
+  if (compoundName == NULL) {
+    return ATmake("snd-value(creation-failed(\"out of memory\"))");
+  }
+
   sprintf(txtFileName, "%s%s", path, syntax_ext);
 
   if (!(f = fopen(txtFileName, "w"))) {
@@ -431,18 +479,25 @@ ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
     if (run_verbose) {
       ATwarning("create_empty_syntax_module: %s\n", errmsg);
     }
-    return ATmake("snd-value(creation-failed(<str>))", errmsg);
+    result = ATmake("snd-value(creation-failed(<str>))", errmsg);
+  }
+  else {
+    /* Insert proper syntax syntax. */
+    fprintf(f, "module %s\n", compoundName);
+
+    ATwarning("created: %s, %s\n", txtFileName, compoundName);
+    result = ATmake("snd-value(creation-succeeded(<str>,<str>))", txtFileName,
+		    compoundName);
+    fclose(f);
   }
 
-  /* Insert proper syntax syntax. */
-  fprintf(f, "module %s\n", moduleName);
-
-  fclose(f);
-
-  return ATmake("snd-value(creation-succeeded)");
+  free (compoundName);
+  return result;
 }
 
 /*}}}  */
+
+
 /*{{{  ATerm exists_rules_section(int cid, char *moduleName) */
 
 ATerm exists_rules_section(int cid, char *name, char *syntaxPath)
