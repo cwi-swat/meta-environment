@@ -73,9 +73,9 @@ void rec_terminate(int cid, ATerm t) {
 
 /*{{{  static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree) */
 
-static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
+static PT_Tree addNormalizeFunction(const char *str, PT_ParseTree parseTree)
 {
-  SDF_ModuleName sdfModuleName = SDF_makeModuleName(str);
+  SDF_ModuleName sdfModuleName = SDF_makeModuleName((char*) str);
   PT_Tree ptModuleName = PT_makeTreeFromTerm(
                            SDF_makeTermFromModuleName(sdfModuleName));
   PT_Tree newTree = NULL;
@@ -104,7 +104,7 @@ static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 
 /*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
 
-static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
+static PT_ParseTree normalize(const char *topModule, PT_ParseTree parseTree)
 {
   PT_Tree tree = addNormalizeFunction(topModule, parseTree);
 
@@ -116,7 +116,7 @@ static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
 
 /*{{{  static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term) */
 
-static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
+static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term)
 {
   ATerm pt = NULL;
   PT_ParseTree ksdf;
@@ -160,7 +160,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 
 /*{{{  ATerm generate_table(int cid, ATerm sdf, char *name, char *ext) */
 
-ATerm generate_table(int cid, ATerm sdf, char *name)
+ATerm generate_table(int cid, ATerm sdf, const char *name)
 {
   ATerm pt, packed;
   ATerm unpackSdf;
