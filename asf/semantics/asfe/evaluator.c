@@ -515,7 +515,7 @@ ATwarning("arg_matching: %t\n with %t\n\n", arg1, arg2);
 			ok = (asfix_get_iter_sort(sym1) == asfix_get_iter_sort(sym2));
 		} else if(asfix_is_itersep(sym1) && asfix_is_itersep(sym2)) {
 			ok = (asfix_get_itersep_sort(sym1) == asfix_get_itersep_sort(sym2));
-			ok &= (asfix_get_itersep_sep(sym1) == asfix_get_itersep_sep(sym2));
+			ok = ok && (asfix_get_itersep_sep(sym1) == asfix_get_itersep_sep(sym2));
 		}
 
 		if(ok) {
