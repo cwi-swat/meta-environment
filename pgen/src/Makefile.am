@@ -41,7 +41,7 @@ parsetablegen_LDADD   = parsetablegen.tif.o \
                         -L$(PGEN)/c-source -lSdf2-Normalization \
                         -L$(PGEN)/c-lib -lnative \
                         -L$(ASC)/lib -lasc-support \
-                        -L$(TREE)/libasfix-old/libasfix -lAsFix \
+                        -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                         -L$(ATERM)/lib -lATB -lATerm \
                         $(SOCKLIBS)
 

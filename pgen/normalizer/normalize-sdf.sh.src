@@ -33,13 +33,13 @@
 #    -u don't unparse the output
 #    -V print version information
 
-ASFIX=__ASFIXBIN__
+PT_SUPPORT=__PT_SUPPORT__
 BINDIR=__BINDIR__
 SGLR=__SGLR__
 
 PKGDATA=__PKGDATADIR__
 
-PATH=${BINDIR}:${ASFIXBIN}:${SGLR}:${PATH}
+PATH=${BINDIR}:${PT_SUPPORT}/bin:${SGLR}:${PATH}
 
 SGLR=sglr
 ASOURCE=asource

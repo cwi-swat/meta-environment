@@ -34,16 +34,15 @@ normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
 normalizer_LDADD   = -L$(PGEN)/c-source -lSdf2-Normalization \
                      -L$(PGEN)/c-lib -lnative \
                      -L$(ASC)/lib -lasc-support \
-                     -L$(TREE)/libasfix-old/libasfix -lAsFix \
+                     -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                      -L$(ATERM)/lib -lATB -lATerm \
                      $(SOCKLIBS)
 
-ASFIXBIN=${TREE}/libasfix-old/libasfix/asfix-tools
 SGLRLOC=${SGLR}/sglr/sglr
 
 % : %.sh.src Makefile
 	sed 's@__PKGDATADIR__@$(pkgdatadir)@g;\
-	     s@__ASFIXBIN__@$(ASFIXBIN)@g;\
+	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__BINDIR__@$(bindir)@g;\
 	     s@__SGLR__@$(SGLRLOC)@g;\
 	     s@__VERSION__@$(VERSION)@g;'\
