@@ -168,9 +168,11 @@ ATerm get_module_id(int cid, ATerm atModule)
 
 /*{{{  ATerm make_sdf_definition(int cid, ATerm atModules) */
 
-ATerm make_sdf_definition(int cid, ATerm atModules)
+ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 {
-  ATermList list = (ATermList) atModules;
+  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  ATermList list = 
+    SDF_getTransitiveImportedModules((ATermList) atModules, id);
   SDF_ModuleList modules = SDF_makeModuleListEmpty();
   SDF_OptLayout space = SDF_makeLayoutSpace();
   SDF_SDF sdf;
