@@ -60,6 +60,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <aterm2.h>
 #include <AsFix.h>
 #include <AsFix-access.h>
