@@ -16,28 +16,27 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-EXTRA_DIST      = calc.tb ui-calc.tcl
-CLEANFILES      = *.tif.[ch] calc.tifs
+EXTRA_DIST      	= calc.tb ui-calc.tcl
+CLEANFILES      	= *.tif.[ch] calc.tifs
 
-noinst_PROGRAMS = clock log calc batch
+INCLUDES		= -I$(ATERM)/include
+noinst_PROGRAMS		= clock log calc batch
 
-clock_SOURCES   = clock.c clock.tif.c clock.tif.h
-clock_LDADD     = -L${top_builddir}/aterm -lATB \
-		-L$(ATERM)/lib -lATerm
+clock_SOURCES		= clock.tif.c clock.tif.h clock.c
+clock_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-log_SOURCES     = log.c log.tif.c log.tif.h
-log_LDADD       = -L${top_builddir}/aterm -lATB \
-		-L$(ATERM)/lib -lATerm
+log_SOURCES     	= log.tif.c log.tif.h log.c
+log_LDADD       	= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-calc_SOURCES    = calc.c calc.tif.c calc.tif.h
-calc_LDADD      = -L${top_builddir}/aterm -lATB \
-		-L$(ATERM)/lib -lATerm
+calc_SOURCES		= calc.tif.c calc.tif.h calc.c
+calc_LDADD		= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
-batch_SOURCES   = batch.c batch.tif.c batch.tif.h
-batch_LDADD     = -L${top_builddir}/aterm -lATB \
-		-L$(ATERM)/lib -lATerm
-
-INCLUDES        = -I$(ATERM)/include
+batch_SOURCES   	= batch.tif.c batch.tif.h batch.c
+batch_LDADD     	= -L${top_builddir}/aterm -lATB \
+			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: calc.tifs
 	${ATERM}/bin/tifstoc -tool $* $<
