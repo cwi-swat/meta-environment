@@ -24,7 +24,7 @@ CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CFLAGSPROF	= -pg ${CFLAGS}
 CPP		= @CPP@
-CPPFLAGS	= @CPP@ ${XCPPFLAGS}
+CPPFLAGS	= ${XCPPFLAGS}
 LDFLAGS         = -g
 LDFLAGSPROF     = ${LDFLAGS} -pg
 
@@ -54,7 +54,7 @@ XLIBS		= -L${A2TOA1DIR} -L${PARSERDIR} -L${TREE2DOTDIR} -L${libdir} -L$(ATERM)/l
 
 PROG		= dump-actions dump-gotos dump-priorities dump-productions
 OBJ		= ${addsuffix .o,${PROG}}
-SRC		= dump-parse-table.c
+SRC		= ${addsuffix .c,${PROG}}
 
 BINFILES	= ${PROG}
 INCLUDEFILES	=
@@ -85,11 +85,8 @@ distclean realclean spotless:	clean
 clean:
 	rm -f	core ${BINFILES} ${OBJ}
 
-
-dump-actions dump-gotos	\
-dump-priorities dump-productions:	${SRC}
-	${CC} -DPTPART=${subst dump-,,${basename $@}} ${CFLAGS} ${INCLUDES} $< ${LIBS} -o $@
-
+%:	%.c
+	${CC} ${CFLAGS} ${INCLUDES} $< ${LIBS} -o $@
 
 # ObTribute to Larry Wall
 love:
