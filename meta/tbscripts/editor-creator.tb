@@ -4,6 +4,13 @@
 
 */
 
+process DeleteAndKillEditor(EditorId : term) is
+  snd-msg(delete-text-editor(EditorId)) .
+  snd-msg(delete-structure-editor(EditorId)) .
+  snd-note(delete-editor(EditorId)) .
+  snd-msg(kill-editor(EditorId)) .
+  rec-msg(kill-editor-done(EditorId))
+
 process DeleteEditorsForModule(ModuleName: str) is
 let
   EditorId   : term,
@@ -14,11 +21,7 @@ in
   (
     if not-equal(EditorList, []) then
       EditorId := first(EditorList) .
-      snd-msg(delete-text-editor(EditorId)) .
-      snd-msg(delete-structure-editor(EditorId)) .
-      snd-note(delete-editor(EditorId)) .
-      snd-msg(kill-editor(EditorId)) .
-      rec-msg(kill-editor-done(EditorId)).
+      DeleteAndKillEditor(EditorId) .
       EditorList := next(EditorList)
     fi
   ) *
@@ -77,18 +80,20 @@ in
     snd-msg(edit-equations(ModuleName, EditorId))
   +
     %% Edit a Term from file
-    (rec-msg(edit-term-file(ModuleName?, FileName?)).
-     Tree := none
-     +
-     rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) 
+    (
+      rec-msg(edit-term-file(ModuleName?, FileName?)).
+      Tree := none
+    +
+      rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) 
     ).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?))
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
-      snd-msg(delete-text-editor(EditorId)) .
-      snd-msg(delete-structure-editor(EditorId))
+      DeleteAndKillEditor(EditorId) .
+      snd-msg(get-editor-id(FileName, ModuleName)) .
+      rec-msg(new-editor(FileName, EditorId?)) 
     ) .
     create(TextEditor("term", EditorId, ModuleName), Pid1?) .
     snd-msg(open-trm-file(FileName)) .
@@ -104,10 +109,7 @@ in
     snd-msg(edit-term-file(ModuleName, EditorId))
   +
     rec-msg(text-editor-disconnected(EditorId?)) .
-    snd-msg(kill-editor(EditorId)) .
-    rec-msg(kill-editor-done(EditorId)).
-    snd-msg(delete-structure-editor(EditorId)) .
-    snd-note(delete-editor(EditorId))
+    DeleteAndKillEditor(EditorId)
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
     DeleteEditorsForModule(ModuleName)

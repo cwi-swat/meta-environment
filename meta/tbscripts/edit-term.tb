@@ -223,7 +223,9 @@ let
   FuncName   : str,
   FunSym     : str,
   String     : str,
-  NrOfArgs   : int
+  NrOfArgs   : int,
+  Location   : int,
+  Integer    : int
 in
   subscribe(syntax-changed(ModuleName)) . 
   if equal(quote(Tree), none) then 
@@ -447,6 +449,11 @@ in
       +
         rec-msg(push-string(String?), Stack?, EditorId) .
 	RTree := quote(str(String)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack), EditorId)
+      +
+        rec-msg(push-integer(Integer?), Stack?, EditorId) .
+	RTree := quote(int(Integer)) .
         Stack := join(RTree, Stack) .
         snd-msg(stack(Stack), EditorId)
       +

@@ -1,8 +1,13 @@
 # $Id$
 
-2003/03/24 ({markvdb, iversen}@cwi.nl)
+2003/03/25 (markvdb@cwi.nl)
+ * Restructured the killing of editors, a new process introduced.
+   A number of small bugs are solved in this way. There is still
+   one major issue with respect reusing an existing term-editor.
 
-* Added button-action show-area, which takes a modulename as argument and an 
+2003/03/24 ({markvdb, iversen}@cwi.nl)
+ * Added button-action show-area, which takes a modulename as 
+   argument and an 
   aterm containing position info from the stack, and then highlights the 
   position, using the module to parse the file containing the position. 
 

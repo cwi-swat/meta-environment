@@ -118,7 +118,8 @@ in
   ) *
   (
     rec-disconnect(TE).
-    snd-msg(text-editor-disconnected(EditorId))
+    snd-msg(text-editor-disconnected(EditorId)) .
+    rec-msg(delete-text-editor(EditorId))
   +
     rec-msg(delete-text-editor(EditorId)) .
     snd-terminate(TE, "You have been zapped!")
