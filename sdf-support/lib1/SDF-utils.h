@@ -28,5 +28,14 @@ SDF_ProductionList SDF_getModuleLexicalProductionsGivenSymbol(SDF_Symbol symbol,
 SDF_ProductionList SDF_getModuleContextFreeProductions(SDF_Module module);
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList list1, 
                                             SDF_ProductionList list2);
+SDF_ProductionList  SDF_getGrammarKernelProductions(SDF_Grammar grammar);
+
+SDF_PriorityList SDF_concatPriorityList(SDF_PriorityList list1, 
+                                        SDF_PriorityList list2);
+SDF_PriorityList    SDF_getGrammarKernelPriorities(SDF_Grammar grammar);
+
+SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList list1, 
+                                              SDF_RestrictionList list2);
+SDF_RestrictionList SDF_getGrammarKernelRestrictions(SDF_Grammar grammar);
 
 #endif /* _SDF_UTILS_H */

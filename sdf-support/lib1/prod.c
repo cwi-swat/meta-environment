@@ -90,3 +90,32 @@ SDF_getModuleContextFreeProductions(SDF_Module module)
 }
 
 /*}}}  */
+/*{{{  collect_prods(SDF_Grammar grammar, SDF_Productions *prods) */
+
+static void
+collect_prods(SDF_Grammar grammar, SDF_ProductionList *prods)
+{
+  if (SDF_isGrammarSyntax(grammar)) {
+    SDF_Productions grammarProds = SDF_getGrammarProductions(grammar);
+    SDF_ProductionList lexProds = SDF_getProductionsList(grammarProds);
+
+    *prods = SDF_concatProductionList(*prods, lexProds);
+  }
+}
+
+/*}}}  */
+/*{{{  SDF_getModuleProductions(SDF_Module module) */
+
+SDF_ProductionList 
+SDF_getGrammarKernelProductions(SDF_Grammar grammar)
+{
+  SDF_ProductionList prods = SDF_makeProductionListEmpty();
+
+  SDFforeachGrammar(grammar,
+		    (SDFGrammarFunc)collect_prods,
+		    (void *)&prods);
+
+  return prods;
+}
+
+/*}}}  */

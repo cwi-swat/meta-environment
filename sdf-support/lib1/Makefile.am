@@ -9,7 +9,7 @@ include_HEADERS		= SDF.h SDF_dict.h SDF-utils.h
 libSDF_a_SOURCES	= SDF.c SDF_dict.c ${UTILSRCS}
 
 UTILSRCS		= get-imports.c get-module-name.c grammar.c prod.c \
-			sort.c SDF-utils.c
+			sort.c prio.c restrict.c SDF-utils.c
 
 EXTRA_DIST		= SDF.adt
 
