@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Wed Dec  1 09:54:14 CET 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.6
+
 Tue Nov 30 14:41:57 CET 2004 <kooiker@cwi.nl>
  * test/Makefile.am:
    - Reenabled generated tests by removing exit 1 in shellscript generator 
