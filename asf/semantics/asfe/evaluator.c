@@ -68,7 +68,7 @@ A first version of an INTERPRETER in ToolBus C.
 #include "evaluator.tif.c"
 
 /*}}}  */
-/*{{{  globals */
+/*{{{  defines */
 
 #ifdef PROFILING
 #define PROF_REWRITE		rewrite_steps++
@@ -76,20 +76,33 @@ A first version of an INTERPRETER in ToolBus C.
 #else
 #define PROF_REWRITE
 #endif
+
+#define is_fail_env(env)	(ATisEqual(env,fail_env))
+/*#define v_lookup(env,var)	(ATdictGet(env,var))*/
+#define v_is_slice(val)   (ATgetAFun((ATermAppl)val) == list_var)
+#define v_get_first(val)  ((ATermList)ATgetArgument((ATermAppl)val, 1))
+#define v_get_last(val)  ((ATermList)ATgetArgument((ATermAppl)val, 2))
+#define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env, \
+													(ATerm)ATmakeAppl2(plain_var, var,val)))
+#define v_put_list(env,var,start,end) \
+  ((ATerm)ATinsert((ATermList)env, \
+		 (ATerm)ATmakeAppl3(list_var, var, (ATerm)start, (ATerm)end)))
+#define get_term(cenv)		(ATgetFirst(cenv))
+#define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
+#define make_cenv(t,e)		(ATmakeList(2, t, e))
+
+/*}}}  */
+/*{{{  globals */
+
 static unsigned rewrite_steps = 0;
 
 
 ATerm fail_env;
 ATerm tmp1, tmp2, tmp3;
 
-ATerm equations_db = NULL;
+AFun list_var, plain_var;
 
-#define is_fail_env(env)	(ATisEqual(env,fail_env))
-#define v_lookup(var,env)	(ATdictGet(env,var))
-#define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env,(ATerm)ATmakeList2(var,val)))
-#define get_term(cenv)		(ATgetFirst(cenv))
-#define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
-#define make_cenv(t,e)		(ATmakeList(2, t, e))
+ATerm equations_db = NULL;
 
 /*}}}  */
 /*{{{  function declarations */
@@ -117,6 +130,111 @@ void rec_terminate(int cid, ATerm t)
 
 void create_equations_db(int cid)
 {
+}
+
+/*}}}  */
+
+/*{{{  ATerm v_lookup_plain(ATerm env, ATerm var) */
+
+/**
+	* Retrieve the value of a variable
+	*/
+
+ATerm v_lookup_plain(ATerm env, ATerm var)
+{
+	ATermList list = (ATermList)env;
+
+	while(!ATisEmpty(list)) {
+		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
+		if(ATisEqual(ATgetArgument(tuple, 0), var)) {
+			assert(ATgetAFun(tuple) == plain_var);
+			return ATgetArgument(tuple, 1);
+		}
+
+		list = ATgetNext(list);
+	}
+
+	return NULL;
+}
+
+/*}}}  */
+/*{{{  ATermAppl v_lookup_list(ATerm env, ATerm var) */
+
+/**
+	* Retrieve the value of a list variable
+	*/
+
+ATermAppl v_lookup_list(ATerm env, ATerm var)
+{
+	ATermList list = (ATermList)env;
+
+	while(!ATisEmpty(list)) {
+		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
+		if(ATisEqual(ATgetArgument(tuple, 0), var)) {
+			assert(ATgetAFun(tuple) == list_var);
+			return tuple;
+		}
+
+		list = ATgetNext(list);
+	}
+
+	return NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool v_is_bound(ATerm env, ATerm var) */
+
+/**
+	* See if a variable is bound.
+	*/
+
+ATbool v_is_bound(ATerm env, ATerm var)
+{
+	ATermList list = (ATermList)env;
+
+	while(!ATisEmpty(list)) {
+		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
+		if(ATisEqual(ATgetArgument(tuple, 0), var))
+			return ATtrue;
+		list = ATgetNext(list);
+	}
+
+	return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATermList prepend_slice(ATermAppl slice, ATermList list) */
+
+/**
+	* Prepend a slice to the front of a list
+	*/
+
+ATermList prepend(ATermList first, ATermList last, ATermList list)
+{
+	if(first == last)
+		return list;
+
+	return ATinsert(prepend(ATgetNext(first), last, list), ATgetFirst(first));
+}
+
+ATermList prepend_slice(ATermAppl slice, ATermList list)
+{
+	ATermList first = v_get_first(slice);
+	ATermList last  = v_get_last(slice);
+	
+	return prepend(first, last, list);
+}
+
+/*}}}  */
+/*{{{  ATermList append_slice(ATermList list, ATermAppl slice) */
+
+/**
+	* Append a slice to a list
+	*/
+
+ATermList append_slice(ATermList list, ATermAppl slice)
+{
+	return ATconcat(list, prepend_slice(slice, ATempty));
 }
 
 /*}}}  */
@@ -292,7 +410,7 @@ ATbool no_new_vars(ATerm trm, ATerm env)
   ATbool existing;
 
   if(asfix_is_var(trm)) {
-    if(ATdictGet(env,trm))
+    if(v_is_bound(env,trm))
       return ATtrue;
     else
       return ATfalse;
@@ -377,7 +495,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       newenv = fail_env;
   } 
   else if(asfix_is_var(arg1)) {
-    trm = v_lookup(arg1,newenv);
+    trm = v_lookup_plain(newenv, arg1);
     if(trm) {
       if(ATisEqual(arg2,trm))
         newenv = args_matching(newenv,conds,orgargs1,orgargs2);
@@ -429,15 +547,50 @@ ATerm args_matching(ATerm env, ATermList conds,
 
 
 /*}}}  */
-/*{{{  ATermList compare_sub_lists(ATermList elems1, ATermList elems2) */
+/*{{{  ATbool compare_lists(ATermAppl tuple, ATermList list) */
 
-ATerm compare_sub_lists(ATermList elems1, ATermList elems2)
+ATbool compare_lists(ATermAppl tuple, ATermList list)
+{
+	ATermList first, last;
+
+	assert(ATgetAFun(tuple) == list_var);
+	first  = v_get_first(tuple);
+	last   = v_get_last(tuple);
+
+	while(first != last) {
+		ATerm elem1, elem2;
+
+		if(ATisEmpty(list))
+			return ATfalse;
+
+		elem1 = ATgetFirst(first);
+		elem2 = ATgetFirst(list);
+
+		if(!ATisEqual(elem1, elem2))
+			return ATfalse;
+
+		first = ATgetNext(first);
+		list  = ATgetNext(list);
+	}
+
+	return ATisEmpty(list);
+}
+
+/*}}}  */
+/*{{{  ATermList compare_sub_lists(ATermAppl elems1, ATermList elems2) */
+
+ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2)
 {
   ATerm elem1, elem2;
+	ATermList first, last;
   ATbool match = ATtrue;
 
-  while(!ATisEmpty(elems1) && match) {
-    elem1 = ATgetFirst(elems1);
+	assert(ATgetAFun(tuple) == list_var);
+	first = v_get_first(tuple);
+	last  = v_get_last(tuple);
+
+  while(first != last && match) {
+    elem1 = ATgetFirst(first);
     if(!ATisEmpty(elems2)) {
       elem2 = ATgetFirst(elems2);
       match = ATisEqual(elem1,elem2);
@@ -445,15 +598,13 @@ ATerm compare_sub_lists(ATermList elems1, ATermList elems2)
     }
     else
       match = ATfalse;
-    elems1 = ATgetNext(elems1);
+    first = ATgetNext(first);
   };
-  if(!ATisEmpty(elems2)) {
-    elem2 = ATgetFirst(elems2);
-  };
+
   if(match)
-    return (ATerm) elems2;
+    return elems2;
   else
-    return fail_env;
+    return NULL;
 }
 
 
@@ -467,29 +618,26 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 {
   ATerm elem2;
   ATerm subenv, newenv;
-  ATermList subelems = ATempty;
+  ATermList last;
+	ATermList subelems = ATempty;
  
   if(asfix_is_star_var(elem)) {
-    newenv = v_put(env,elem, (ATerm)subelems);
+    newenv = v_put_list(env, elem, ATempty, ATempty);
     subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
   }
-  else
-/* A plus variable should at least contain one element! */
+  else {
+		/* A plus variable should at least contain one element! */
     subenv = fail_env;
-  while(is_fail_env(subenv) && !ATisEmpty(elems2)) {
-    if(!ATisEmpty(elems2)) {
-      elem2 = ATgetFirst(elems2);
-      subelems = ATappend(subelems,elem2);
-      elems2 = ATgetNext(elems2);
-      newenv = v_put(env, elem, (ATerm)subelems);
-      subenv = list_matching(asym,newenv,elems1,elems2,conds,args1,args2);
-   }
-   else
-     subenv = fail_env;
+	}
+	last  = elems2;
+  while(is_fail_env(subenv) && !ATisEmpty(last)) {
+		last   = ATgetNext(last);
+		newenv = v_put_list(env, elem, elems2, last);
+		subenv = list_matching(asym,newenv,elems1,last,conds,args1,args2);
   };
+ 
   return subenv;
 }
-
 
 /*}}}  */
 /*{{{  ATermList list_matching(ar,sym,env,elems1,elems2,conds,args1,args2) */
@@ -508,28 +656,20 @@ ATerm list_matching(ATerm sym,
     elem1 = ATgetFirst(elems1);
     if(ATgetLength(elems1) == 1) {
       if(asfix_is_list_var(elem1)) {
-				ATermList trms = (ATermList)v_lookup(elem1, env);
+				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
-          rlist = compare_sub_lists(trms, elems2);
-          if(ATisEmpty((ATermList) rlist)) {
+          if(compare_lists(trms, elems2))
             newenv = args_matching(env,conds,args1,args2);
-          }
           else
             newenv = fail_env;
-        } 
+        }
         else { /* TdictGet(env,elem1) == Tfalse */
-          if(asfix_is_plus_var(elem1)) {
-            if(!ATisEmpty(elems2)) {
-              newenv = v_put(env,elem1,(ATerm) elems2);
-              newenv = args_matching(newenv,conds,args1,args2);
-            }
-            else
-              newenv = fail_env;
-          }
-          else {
-            newenv = v_put(env, elem1, (ATerm)elems2);
-            newenv = args_matching(newenv,conds,args1,args2);
-          }
+          if(asfix_is_plus_var(elem1) && ATisEmpty(elems2)) {
+						newenv = fail_env;
+					} else {
+						newenv = v_put_list(env, elem1, (ATerm)elems2, ATempty);
+						newenv = args_matching(newenv,conds,args1,args2);
+					}
         }
       } 
       else { /*is_list_var(elem1) == Tfalse */
@@ -544,10 +684,10 @@ ATerm list_matching(ATerm sym,
     else { /* TlistSize(elems1) != 1 */
       elems1 = ATgetNext(elems1);
       if(asfix_is_list_var(elem1)) {
-				ATerm trms = v_lookup(elem1, env);
+				ATermAppl trms = v_lookup_list(env, elem1);
         if(trms) {
-          elems2 = (ATermList) compare_sub_lists((ATermList) trms,elems2);
-          if(!is_fail_env(elems2)) 
+          elems2 = compare_sub_lists(trms,elems2);
+          if(elems2) 
             newenv = list_matching(sym,env,elems1,elems2,conds,args1,args2);
           else
             newenv = fail_env;
@@ -791,11 +931,14 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
   if(len >= 32) {
     while(!ATisEmpty(elems)) {
       elem = ATgetFirst(elems);
-      newelem = rewrite(elem, env);
-      if(ATgetType(newelem) == AT_LIST)
-        newelems = ATconcat(newelems, (ATermList)newelem);
-      else
+			if(asfix_is_list_var(elem)) {
+				ATermAppl tuple = v_lookup_list(env, elem);
+				assert(tuple);
+				newelems = append_slice(newelems, tuple);
+			} else {
+				newelem = rewrite(elem, env);
         newelems = ATappend(newelems, newelem);
+			}
       elems = ATgetNext(elems);
     }
   } else {
@@ -803,14 +946,19 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
     int i = 0; 
     while(!ATisEmpty(elems)) {
       elem = ATgetFirst(elems);
-      newelem_table[i] = rewrite(elem, env);
+			if(asfix_is_list_var(elem)) {
+				newelem_table[i] = (ATerm)v_lookup_list(env, elem);
+				assert(newelem_table[i]);
+			} else {
+				newelem_table[i] = rewrite(elem, env);
+			}
       elems = ATgetNext(elems);
       i++;
     }
     for(--i; i>=0; i--) {
       newelem = newelem_table[i];
-      if(ATgetType(newelem) == AT_LIST) {
-        newelems = ATconcat((ATermList)newelem, newelems); 
+      if(ATgetAFun((ATermAppl)newelem) == list_var) {
+        newelems = prepend_slice((ATermAppl)newelem, newelems); 
       } else {
         newelems = ATinsert(newelems, newelem);
       } 
@@ -852,7 +1000,7 @@ ATerm rewrite(ATerm trm, ATerm env)
       rewtrm = select_and_rewrite(newtrm); 
     }
   } else if(asfix_is_var(trm)) {
-		rewtrm = v_lookup(trm,env);
+		rewtrm = v_lookup_plain(env, trm);
 		if(!rewtrm)
 			rewtrm = trm;
   } else if(asfix_is_list(trm)) {
@@ -884,6 +1032,11 @@ int main(int argc, char **argv)
 
   fail_env = ATparse("[fail]"); 
 	ATprotect(&fail_env);
+
+	list_var  = ATmakeAFun("*list-var*", 3, ATtrue);
+	plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
+	ATprotectAFun(list_var);
+	ATprotectAFun(plain_var);
 
   ATBeventloop();
 
