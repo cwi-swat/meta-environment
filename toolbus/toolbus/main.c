@@ -70,7 +70,8 @@ void bus_shutdown(term *arg)
   exit(0);
 }
 
-void interrupt_handler(int sig){
+void interrupt_handler(int sig)
+{
   bus_shutdown(mk_str("ToolBus interrupted"));
 }
 

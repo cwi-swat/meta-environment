@@ -1,0 +1,78 @@
+
+tool toolbus-adapter is {
+  command = "toolbus-adapter"
+}
+
+process TB-ADAPTER (TA : toolbus-adapter) is
+let
+  Script : str,
+  Args   : list,
+  Id     : int,
+  Port   : int,
+  Host   : str,
+  Instances : list,
+  Msg    : term
+in
+  ( rec-msg(toolbus-start(Script?, Args?)) .
+    snd-eval(TA, toolbus-start(Script, Args)) .
+    ( rec-value(TA, toolbus-started(Id?)) .
+      snd-msg(toolbus-started(Id))
+      +
+      rec-value(TA, toolbus-error) .
+      snd-msg(toolbus-error)
+    )
+    +
+    rec-msg(toolbus-stop(Id?)) .
+    snd-do(TA, toolbus-stop(Id))
+    +
+    rec-msg(toolbus-snd-msg(Id?, Msg?)) .
+    snd-eval(TA, toolbus-snd-msg(Id, Msg)) .
+    ( rec-value(TA, msg-sent) .
+      snd-msg(msg-sent)
+      +
+      rec-value(TA, toolbus-gone) .
+      snd-msg(toolbus-gone)
+    )
+    +
+    rec-msg(toolbus-get-location(Id?)) .
+    snd-eval(TA, toolbus-get-location(Id)) .
+    rec-value(TA, toolbus-location(Host?, Port?)) .
+    snd-msg(toolbus-location(Host, Port))
+    +
+    rec-msg(toolbus-get-instances) .
+    snd-eval(TA, toolbus-get-instances) .
+    rec-value(TA, toolbus-instances(Instances?)) .
+    snd-msg(toolbus-instances(Instances))
+    +
+    rec-event(TA, toolbus-rec-msg(Msg?)) .
+    snd-msg(Msg) .
+    snd-ack-event(TA, toolbus-rec-msg(Msg))
+    +
+    rec-event(TA, toolbus-stopped(Id?)) .
+    snd-note(toolbus-stopped(Id)) .
+    snd-ack-event(TA, toolbus-stopped(Id)) 
+    +
+    rec-event(TA, toolbus-stop) .
+    shutdown("stopped.") .
+    snd-ack-event(TA, toolbus-stop)
+  ) *
+  rec-disconnect(TA)
+endlet
+
+process TB-ADAPTER-CONNECT is
+let
+  TA : toolbus-adapter,
+  Pid : int
+in
+  ( rec-connect(TA?) .
+    create(TB-ADAPTER(TA), Pid?)
+  ) * delta
+endlet
+
+process TB-ADAPTER-EXECUTE is
+let
+  TA : toolbus-adapter
+in
+  execute(toolbus-adapter, TA?) .
+  TB-ADAPTER(TA)
+endlet

@@ -17,8 +17,28 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-SUBDIRS      = gen-adapter toolbus-adapter @EMACS_ADAPTER@ @JAVA_ADAPTER@ \
-		@PERL_ADAPTER@ @PYTHON_ADAPTER@ @TCLTK_ADAPTER@ @WISH_ADAPTER@
 
-DIST_SUBDIRS = gen-adapter toolbus-adapter emacs-adapter java-adapter \
-		perl-adapter python-adapter tcltk-adapter wish-adapter
+bin_PROGRAMS        	= toolbus-adapter
+
+include_HEADERS		= toolbus-adapter.tbi
+
+toolbus_adapter_SOURCES = toolbus-adapter.c
+toolbus_adapter_LDADD   = toolbus-adapter.tif.o -L$(ATERM)/lib -lATB -lATerm \
+			-L${top_builddir}/libtb -ltb
+
+INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
+			 -I${top_srcdir}/libtb -I$(ATERM)/include 
+
+toolbus-adapter.o: toolbus-adapter.tif.c toolbus-adapter.tif.h
+
+%.tif.c %.tif.h: %.tifs
+	${ATERM}/bin/tifstoc -tool $* $<
+
+%.tb: %.tbi
+	cp $< $@
+	echo "process DUMMY is delta" >> $@
+	echo "toolbus(DUMMY)" >> $@
+	
+%.tifs: %.tb
+	$(top_builddir)/toolbus/toolbus -gentifs $<
+
