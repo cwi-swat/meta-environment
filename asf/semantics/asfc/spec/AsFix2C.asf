@@ -26,7 +26,3 @@ equations
             ==============================================
             asfix2c(Amodule) = CProgram
 
-  [a2c-1'1] asfix2muasf(Amodule) = (Module1,Nametable),
-            muasf2muasf(Module1) = Module2
-            ==============================
-            asfix2muasf1(Amodule) = Module2

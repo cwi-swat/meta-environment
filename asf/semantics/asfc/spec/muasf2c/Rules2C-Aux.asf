@@ -363,6 +363,18 @@ equations
             make-select-stat(Aint+,Aint) =
               ATerm CConstant1 = identifier("a""r""g""_"Char+1)(CConstant2);
 
+  %% we make different select stats for ignored function symbols. Their
+  %% arguments are selected already, we only need the correct variables to be
+  %% declared. 
+
+  [miss-1'1] make-ignored-select-stat(Aint) =
+
+  [miss-1'2] make-atmp2(Aint+,Aint) = CConstant1,
+            make-atmp(Aint+) = CConstant2
+            =============================
+            make-ignored-select-stat(Aint+,Aint) =
+              ATerm CConstant1 = CConstant2;
+
   [mad-1'1] make-atmp2(Aint+,Aint) = CConstant
             ==================================
             make-array-decl(Aint+,Aint) =

@@ -332,6 +332,7 @@ equations
         remove-emb-cond(FunId2(Term1) != FunId(Term2), FunId has EmbeddingAt) =
           Term3 != Term4
 
+[default-rec] remove-emb-cond(Cond,FunIdHasEmbeddingAt) = Cond
 
 [rets-0] remove-emb-terms(Term, FunIdHasEmbeddingAt,IgnoreOrRemove) = 
            remove-emb-term(Term, FunIdHasEmbeddingAt,IgnoreOrRemove)

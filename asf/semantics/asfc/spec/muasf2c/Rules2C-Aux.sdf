@@ -77,7 +77,8 @@ exports
     make-atmp({IntCon ","}*)             -> Identifier
     make-atmp2({IntCon ","}+)            -> Identifier
     make-select-stat({IntCon ","}*)      -> Declaration-list-opt
-%%%    make-select-stat({IntCon ","}+,Bool) -> Declaration-list-opt
+    make-ignored-select-stat({IntCon ","}*) -> Declaration-list-opt
+
     make-array-decl({IntCon ","}+)       -> Declaration-list
     make-decl({IntCon ","}+)             -> Declaration-list
     make-tmp-array(IntCon)               -> Declaration-list-opt

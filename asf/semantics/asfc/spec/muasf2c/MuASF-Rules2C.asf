@@ -183,7 +183,18 @@ equations
 
   [ar2cs-2'5] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = true,
+              is-ignored-funid(Funid) = false,
               make-select-stat(Aint+) = Decl*,
+              list2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
+              =====================================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1) =
+                (Decl* ++d Stat*1,Aint2)
+
+  %% JURGEN
+  [ar2cs-2'5] get-first-vf-path(C-rule+) = (Funid,Aint+),
+              is-list-funid(Funid) = true,
+              is-ignored-funid(Funid) = true,
+              make-ignored-select-stat(Aint+) = Decl*,
               list2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
               =====================================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
@@ -203,10 +214,11 @@ equations
 [ar2cs-2'6'2] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
               is-ignored-funid(Funid) = true,
+              make-ignored-select-stat(Aint+) = Decl*,
               asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
               ================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
-                (Stat*1,Aint2)
+                (Decl* ++d Stat*1,Aint2)
 
   [ar2cs-2'7] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-list-funid(Funid) = true,
@@ -387,11 +399,14 @@ equations
 
   [dl2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-ignored-funid(Funid) = true,
+              make-atmp(Aint+) = Expression,
               make-c-temp(Aint1) = Expression2,
               listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = 
-                (Stat*2,Aint2)
+                (Stat*2,Aint2),
+              Expression2 = Expression; = Stat*1,
+              Stat*1 ++ Stat*2 = Stat*3
              ================================
-             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*2,Aint2)
+             list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*3,Aint2)
 
 %% When generating subparts of the matching automaton for list patterns it is assumed
 %% that the list patterns in the left hand side of the equations and of the
@@ -409,9 +424,23 @@ equations
   [lps2cs-1'3] select-on-same-list-pat(C-rule;C-rule+1) = (C-rule+2,C-rule*),
                listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),
                get-first-vf-path(C-rule+2) = (Funid,Aint+),
+               is-ignored-funid(Funid) = false,
                make-atmp(Aint+) = Expression,
                listpatterns2cstats(C-rule*,Expression1,Namepair*,Aint2) = (Stat*2,Aint3),
                Expression1 = arg_0(Expression); = Stat*3,
+               Stat*3 ++ Stat*2 = Stat*4,
+               Decl* ++d Stat*1 = Stat*5
+               =========================
+               listpatterns2cstats(C-rule;C-rule+1,Expression1,Namepair*,Aint1) =
+                 (Stat*5 ++ Stat*4,Aint3)
+
+ [lps2cs-1'4] select-on-same-list-pat(C-rule;C-rule+1) = (C-rule+2,C-rule*),
+               listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),
+               get-first-vf-path(C-rule+2) = (Funid,Aint+),
+               is-ignored-funid(Funid) = true,
+               make-atmp(Aint+) = Expression,
+               listpatterns2cstats(C-rule*,Expression1,Namepair*,Aint2) = (Stat*2,Aint3),
+               Expression1 = Expression; = Stat*3,
                Stat*3 ++ Stat*2 = Stat*4,
                Decl* ++d Stat*1 = Stat*5
                =========================
