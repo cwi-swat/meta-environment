@@ -26,35 +26,37 @@ PATH=__BINDIR__:$PATH
 findext () {
   case `basename $1` in
   *.c|*.tb|*.c.in|*.tb.in|*.h|*.h.in|*.java|*.idef)
-						ext=c-style;
- 						break;;
+						ext=c-style
+ 						;;
   *.el)
-						ext=lisp-style;
- 						break;;
+						ext=lisp-style
+ 						;;
   *.sdf|*.sdf2|*.syn|*.eqs|*.pico|*.tex|*.bib|*.ltx|*.sty|*.mtx|*.ps|*.eps)
-						ext=tex-style;
-						break;;
+						ext=tex-style
+						;;
   *.html)					ext=html
-						break;;
+						;;
   configure.in)					ext=autoconf
-						break;;
-  *.sh|*.pl|*.pl.src|*.tcl|*.sh.src|Makefile.in|Makefile.am|*.proto|*.in)
-						ext=sh-style;
-						break;;
-  [A-Z][A-Z][A-Z]*|ChangeLog)			ext=base;
-						break;;	
-  *.*)                                          ext=ignore;
-						break;;	
-  *)	        				ext=sh-style;
-						break;;
+						;;
+  *.sh|*.pl|*.pl.src|*.tcl|*.sh.src|Makefile.in|\
+  *.module-list|Makefile.am|*.proto|*.in)
+						ext=sh-style
+						;;
+  [A-Z][A-Z][A-Z]*|ChangeLog)			ext=base
+						;;	
+  *.*)                                          ext=ignore
+						;;	
+  *)	        				ext=sh-style
+						;;
   esac
 
   case "`file $1`" in
-  *"shell script"*|"perl commands text"|"commands text for @SHELL@")
-						script="-s";
-						break;;
-  *)						script="";
-						break;;
+  *"shell script"*|"perl commands text"|"commands text for @SHELL@"|\
+  *"PostScript"*)
+						script="-s"
+						;;
+  *)						script=""
+						;;
   esac
 }
 
