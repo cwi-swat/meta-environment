@@ -1,5 +1,9 @@
 $Id$
 
+2002/07/11 (jurgenv@cwi.nl)
+ * Moved entire normalizer specification to the asf-library such that 
+   (parts of it) can be reused by other tools.
+
 2002/07/02 (jurgenv@cwi.nl)
  * Added a lifting operator to SDF2. Example: `A` is replaced by "A" by
    the normalizer, or `A?` is replaced by ("A" "?") etc. This is a nice
