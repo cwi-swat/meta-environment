@@ -154,7 +154,6 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
     SDF_Renamings  renamings;
 
     import = SDF_getImportListHead(todo);
-ATwarning("import =%t\n", import);
     name = SDF_getImportModuleName(import);
     id   = SDF_removeModuleIdAnnotations(
 			    SDF_getModuleNameModuleId(name));
