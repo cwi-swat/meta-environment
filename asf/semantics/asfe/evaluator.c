@@ -59,6 +59,7 @@
 /*{{{  includes */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <aterm2.h>
 #include <AsFix.h>
 #include <AsFix-access.h>
@@ -102,6 +103,18 @@
 
 static unsigned rewrite_steps = 0;
 
+ATbool run_verbose;
+
+static char myname[] = "evaluator";
+static char myversion[] = "0.1";
+
+/*
+    The argument vector: list of option letters, colons denote option
+    arguments.  See Usage function, immediately below, for option
+    explanation.
+ */
+
+static char myarguments[] = "bthe:i:o:vV";
 
 ATerm fail_env;
 ATerm tmp1, tmp2, tmp3;
@@ -1034,17 +1047,89 @@ ATerm rewrite(ATerm trm, ATerm env)
 }
 
 /*}}}  */
+/*{{{  void usage(void)    
+ *     Usage: displays helpful usage information
+ */
 
-/*{{{  int main(int argc, char **argv) */
-
-int main(int argc, char **argv)
+void usage(void)
 {
+    static char *myargumentsexplained = NULL;
+
+    /*  Represent the argument string in a slightly friendlier manner  */
+    if(!myargumentsexplained && *myarguments) {
+        int  i, hyphen = 0;
+        char *ptr0, *ptr1;
+
+        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
+            if(*ptr0 == ':')
+                i++;
+        ptr1 = myargumentsexplained =
+            (char *) malloc(strlen(myarguments) + 8*i + 2);
+        for(ptr0 = myarguments; *ptr0; ptr0++)
+            if(!*(ptr0+1) || *(ptr0+1) != ':') {
+                if(!hyphen++) {
+                    *ptr1++ = ' ';
+                    *ptr1++ = '-';
+                }
+                *ptr1++ = *ptr0;            } else {
+                hyphen = 0;
+                if(*(ptr1-1) != ' ')
+                    *ptr1++ = ' ';
+                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
+                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
+            }
+        *ptr1++ = '\0';
+    }
+
+    ATwarning(
+        "Usage: %s%s . . .\n"
+        "Options:\n"
+        "\t-b              output terms in BAF format (default)\n"   
+        "\t-t              output terms in plaintext format\n"    
+        "\t-h              display help information (usage)\n"
+        "\t-e file         use the equations |file|\n"
+        "\t-i filename     input from file (default stdin)\n"
+        "\t-o filename     output to file (default stdout)\n"
+        "\t-v              verbose mode\n"
+        "\t-V              reveal program version (i.e. %s)\n",
+        myname, myargumentsexplained, myversion);
+}
+
+/*}}}  */
+/*{{{  void version(void) */
+
+void version(void)
+{
+    ATwarning("%s v%s\n", myname, myversion);
+}
+
+/*}}}  */
+/*{{{  int main(int argc, char *argv[]) */
+
+int main(int argc, char *argv[])
+{
+  FILE *iofile;
+
   int cid;
+  int c, toolbus_mode = 0;
+  char *input = "-";
+  char *output = "-";
+  char *eqsfile = "-";
+  int proceed = 1;
+  int bafmode = 1;
+  char *name = "Standalone";
+  
   ATerm bottomOfStack;
 
-  ATBinit(argc, argv, &bottomOfStack);
+  ATerm eqs, term, aterm, realterm, newterm, newaterm, result;
+  ATermList neweqs;
+
+  /*  Check whether we're a ToolBus process  */
+  for(c=1; !toolbus_mode && c<argc; c++)
+    toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
+
+
   AFinit(argc, argv, &bottomOfStack);
-  cid = ATBconnect(NULL, NULL, -1,evaluator_handler);
 
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
@@ -1057,8 +1142,75 @@ int main(int argc, char **argv)
   ATprotectAFun(list_var);
   ATprotectAFun(plain_var);
 
-  ATBeventloop();
+  if(toolbus_mode) {
+    #ifndef WIN32 /* Code with Toolbus calls, non Windows */
+      ATBinit(argc, argv, &bottomOfStack); 
+      cid = ATBconnect(NULL, NULL, -1,evaluator_handler); 
+      ATBeventloop();
+    #else
+      ATwarning("compiler: Toolbus cannot be used in Windows.\n");
+    #endif
+  } 
+  else {
+    while ((c = getopt(argc, argv, myarguments)) != -1) {
+      switch (c) {
+        case 'b':  bafmode = 1;                            break;
+        case 't':  bafmode = 0;                            break; 
+        case 'v':  run_verbose = ATtrue;                   break;
+        case 'e':  eqsfile=optarg;                         break;
+        case 'i':  input=optarg;                           break;
+        case 'o':  output=optarg;                          break;
+        case 'V':  version(); proceed = 0;                 break;
 
+        case 'h':
+        default:   usage(); proceed = 0;                   break;
+      }
+    }
+    argc -= optind;
+    argv += optind;
+
+    if(proceed) {
+      if (!(iofile = fopen(eqsfile, "r")))
+        ATerror("%s: cannot open %s\n", myname, eqsfile);
+
+      eqs = ATreadFromFile(iofile);
+
+      neweqs = RWprepareEqs((ATermList) eqs);
+      enter_equations(name, neweqs);
+
+      if (!strcmp(input, "") || !strcmp(input, "-"))
+        iofile = stdin;
+      else if (!(iofile = fopen(input, "r")))
+        ATerror("%s: cannot open %s\n", myname, input);
+ 
+      term = ATreadFromFile(iofile);
+
+      term = ATremoveAllAnnotations(term);
+      aterm = asfix_get_term(term);
+      realterm = RWprepareTerm(aterm);
+
+      /*rewrite_steps = 0;*/
+      select_equations(name);
+
+      if(run_verbose) ATwarning("rewriting...\n");
+      /*times(&start);*/
+      newterm = rewrite(realterm,(ATerm) ATempty);
+      /*times(&rewriting);*/
+
+      newaterm = RWrestoreTerm(newterm);
+      result = asfix_put_term(term,newaterm);
+
+      if (!strcmp(output, "") || !strcmp(output, "-"))
+        iofile = stdout;
+      else if (!(iofile = fopen(output, "w")))
+        ATerror("%s: cannot open %s\n", myname, output);
+
+      if(bafmode)
+        ATwriteToBinaryFile(result, iofile);
+      else
+        ATwriteToTextFile(result, iofile);  
+    }
+  }
   return 0;
 }
 
