@@ -5,7 +5,7 @@ imports basic/Locations
 
 exports
 
-sorts Producer Feedback Subject 
+sorts Feedback Subject 
 
 context-free syntax
 
