@@ -12,7 +12,7 @@ exports
 hiddens
   context-free syntax
     term2str(Term) -> String
-    terms2str({Term ","}+) -> String
+    terms2str({Term ","}*) -> String
 
 exports
   context-free syntax    
@@ -22,12 +22,19 @@ exports
 
 hiddens
   context-free syntax
-    make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}*) -> {Term ","}+ {traversal(trafo,top-down,break)}
-    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}*)        -> Term {traversal(trafo,top-down,break)}
+    make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}*)
+	-> {Term ","}+ {traversal(trafo,top-down,break)}
+
+    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}*)
+	-> Term {traversal(trafo,top-down,break)}
 
 hiddens
   variables
     "$Atom"[0-9]* 		-> Atom
+    "$String"			-> String
+    "$Int"			-> Int
+    "$Real"			-> Real
+    "$Bool"			-> Bool
     "Char*"[0-9]* 		-> CHAR*
     "$Term"[0-9]*		-> Term
     "$Terms"[0-9]*		-> {Term ","}*

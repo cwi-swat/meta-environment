@@ -128,7 +128,7 @@ buttons([
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
-	  execute-action("unparsePT"),
-	  show-list
+          execute-action("unparsePT"),
+          show-list
         ])
 ])
