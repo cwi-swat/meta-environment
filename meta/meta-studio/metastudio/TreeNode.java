@@ -27,58 +27,53 @@ public class TreeNode
 
     public TreeNode addChild(String p, StringTokenizer tokens)
     {
-	if (tokens.hasMoreTokens()) {
-	    String childName = tokens.nextToken();
-	    TreeNode childNode = null;
-	    int i = 0;
+	String childName = tokens.nextToken();
+	TreeNode childNode = null;
+	int i = 0;
 
-	    for (; i < children.size(); i++) {
-		TreeNode curNode = (TreeNode)getChild(i);
+	for (; i < children.size(); i++) {
+	    TreeNode curNode = (TreeNode)getChild(i);
 		
-		if (curNode.getName().equals(childName)) {
-		    childNode = curNode;
-		}
-		if (curNode.getName().compareTo(childName) > 0) {
-		    break;
-		}
+	    if (curNode.getName().equals(childName)) {
+		childNode = curNode;
 	    }
-
-	    if (tokens.hasMoreTokens()) {
-		if (childNode == null) {
-		    childNode = new TreeNode(childName, p, 
-					     !tokens.hasMoreTokens());
-		    children.add(i, childNode);
-		}
-		return childNode.addChild(p+childName+"/", tokens);
-	    }
-	    else {
-		if (childNode == null) {
-		    childNode = new TreeNode(childName, p, 
-					     !tokens.hasMoreTokens());
-		    children.add(i, childNode);
-		    
-		    return childNode;
-		}
-		return null;
+	    if (curNode.getName().compareTo(childName) > 0) {
+		break;
 	    }
 	}
-	return null;
+
+	if (tokens.hasMoreTokens()) {
+	    if (childNode == null) {
+		childNode = new TreeNode(childName, p, 
+					 !tokens.hasMoreTokens());
+		children.add(i, childNode);
+	    }
+	    return childNode.addChild(p+childName+"/", tokens);
+	}
+	else {
+	    if (childNode == null) {
+		childNode = new TreeNode(childName, p, 
+					 !tokens.hasMoreTokens());
+		children.add(i, childNode);
+		    
+		return childNode;
+	    }
+	    return null;
+	}
     }
 
     public void removeChild(StringTokenizer tokens) 
     {
-	if (tokens.hasMoreTokens()) {
-	    String childName = tokens.nextToken();
-	    int childIndex = getChild(childName);
-	    TreeNode childNode = getChild(childIndex);
+	String childName = tokens.nextToken();
+	int childIndex = getChild(childName);
+	TreeNode childNode = getChild(childIndex);
 	    
-	    if (childNode != null) {
-		if (tokens.hasMoreTokens()) {
-		    childNode.removeChild(tokens);
-		}
-		if (childNode.getChildCount() == 0) {
-		    children.remove(childIndex);
-		}
+	if (childNode != null) {
+	    if (tokens.hasMoreTokens()) {
+		childNode.removeChild(tokens);
+	    }
+	    if (childNode.getChildCount() == 0) {
+		children.remove(childIndex);
 	    }
 	}
     }
@@ -125,24 +120,24 @@ public class TreeNode
 
     public List makePath(StringTokenizer tokens, List result) {
 	result.add(this);
+
 	if (isLeaf()) {
 	    return result;
 	}
 
-	if (tokens.hasMoreTokens()) {
-	    String childName = tokens.nextToken();
-	    int childIndex = getChild(childName);
-	    TreeNode childNode = getChild(childIndex);
+	String childName = tokens.nextToken();
+	int childIndex = getChild(childName);
+	TreeNode childNode = getChild(childIndex);
 		
-	    if (childNode != null) {
-		if (tokens.hasMoreTokens()) {
-		    return childNode.makePath(tokens, result);
-		}
-		else {
-		    result.add(childNode);
-		}
+	if (childNode != null) {
+	    if (tokens.hasMoreTokens()) {
+		return childNode.makePath(tokens, result);
+	    }
+	    else {
+		result.add(childNode);
 	    }
 	}
+
 	return result;
     }
 

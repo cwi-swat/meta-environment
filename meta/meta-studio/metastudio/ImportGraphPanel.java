@@ -28,7 +28,6 @@ public class ImportGraphPanel
 	    if (node == null) {
 	      module = null;
 	    } else {
-		System.out.println("node.getName(): "+node.getName());
 	      module = moduleManager.getModule(node.getName());
 	    }
 	    moduleManager.selectModule(module);
