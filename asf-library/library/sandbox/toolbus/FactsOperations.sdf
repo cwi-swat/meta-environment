@@ -1,0 +1,40 @@
+module FactsOperations
+
+imports
+  FactsStructure
+
+exports
+  context-free syntax
+    make-facts(DeclarationFact, CreationFacts, InvocationFacts, SendFacts, ReceiveFacts) -> FactsStructure 
+
+  context-free syntax
+    get-declaration(FactsStructure) -> DeclarationFact
+    get-creations(FactsStructure)   -> CreationFacts
+    get-invocations(FactsStructure) -> InvocationFacts
+    get-sends(FactsStructure)       -> SendFacts
+    get-receives(FactsStructure) -> ReceiveFacts
+
+  context-free syntax
+    set-creations(FactsStructure, CreationFacts) -> FactsStructure
+    set-invocations(FactsStructure, InvocationFacts) -> FactsStructure
+    set-sends(FactsStructure, SendFacts) -> FactsStructure
+    set-receives(FactsStructure, ReceiveFacts) -> FactsStructure
+
+  context-free syntax
+    add-process-creation(FactsStructure, CreationFact)     -> FactsStructure
+    add-process-invocation(FactsStructure, InvocationFact) -> FactsStructure
+    add-send-message(FactsStructure, SendFact) -> FactsStructure
+    add-receive-message(FactsStructure, ReceiveFact) -> FactsStructure
+
+hiddens
+  variables
+    "FactsStructure"[0-9]* -> FactsStructure
+    "Declaration"[0-9]*  -> DeclarationFact
+    "Creations"[0-9]* -> Set[[CreationFact]]
+    "CreationFact"[0-9]* -> CreationFact
+    "Invocations"[0-9]* -> Set[[InvocationFact]]
+    "InvocationFact"[0-9]* -> InvocationFact
+    "Sends"[0-9]* -> Set[[SendFact]] 
+    "SendFact"[0-9]* -> SendFact 
+    "Receives"[0-9]* -> Set[[ReceiveFact]]
+    "ReceiveFact"[0-9]* -> ReceiveFact

@@ -1,0 +1,5 @@
+equations
+
+  [get-process-name-1] get-process-name(ProcessName) = ProcessName
+
+  [get-process-name-2] get-process-name(ProcessName(VarDecls)) = ProcessName

@@ -1,0 +1,13 @@
+module TscriptOperations
+
+imports
+  Tscript
+
+exports
+  context-free syntax
+    get-process-name(ProcessSignature) -> ProcessName
+
+hiddens
+  variables
+    "ProcessName"[0-9]* -> ProcessName
+    "VarDecls"[0-9]*     -> {VarDecl ","}*

@@ -1,0 +1,64 @@
+equations
+
+[ff-top]
+  find-facts(TscriptDefs, {}) = FactsStructureSet1%%,
+  %%find-facts(ProcessInvocations, {}) = Facts2
+  ===>
+  find-facts(TscriptDefs toolbus(ProcessInvocations)) = 
+    FactsStructureSet1 %%+ Facts2
+
+[ff-basic]
+  get-process-name(ProcessSignature) = ProcessName,
+  find-process-facts(ProcessExpr, 
+                     make-facts(process-declaration ProcessName,{},{},{},{})) = FactsStructure
+  ===>
+  find-facts(process ProcessSignature is ProcessExpr, FactsStructureSet) =
+  FactsStructureSet + { FactsStructure }
+
+[ff-create-basic]
+  find-process-facts(create(ProcessName, GenVar), CollectedFacts) =
+    add-process-creation(CollectedFacts, process-creation ProcessName)
+
+[ff-create-param]
+  find-process-facts(create(ProcessName(Terms), GenVar), CollectedFacts) =
+    add-process-creation(CollectedFacts, process-creation ProcessName)
+
+[ff-invocation-basic]
+  find-process-facts(ProcessName, CollectedFacts) =
+    add-process-invocation(CollectedFacts, process-invocation ProcessName)
+
+[ff-invocation-param]
+  find-process-facts(ProcessName(Terms), CollectedFacts) =
+  add-process-invocation(CollectedFacts, process-invocation ProcessName)
+
+[ff-send-basic]
+  find-process-facts( snd-msg(Id), CollectedFacts) =
+  add-send-message(CollectedFacts, send-atom Id)
+
+[ff-send-complex]
+  find-process-facts( snd-msg(Id(TermList)), CollectedFacts) = 
+  add-send-message(CollectedFacts, send-atom Id)
+
+[ff-recv-basic]
+  find-process-facts( rec-msg(Id), CollectedFacts) = 
+    add-receive-message(CollectedFacts, recv-atom Id)
+
+[ff-recv-complex]
+  find-process-facts( rec-msg(Id(TermList)), CollectedFacts) =     
+     add-receive-message(CollectedFacts, recv-atom Id)
+
+[get-var-decls-none]
+  get-var-decls( process ProcessName is ProcessExpr ) = get-var-decls( ProcessExpr )
+
+[get-var-decls-param]
+  get-var-decls( ProcessExpr ) = VarDecls1
+  ===>
+  get-var-decls( process ProcessName(VarDecls2) is ProcessExpr ) = VarDecls1, VarDecls2
+
+[get-var-decls-expr]
+  get-var-decls( let VarDecls in ProcessExpr endlet ) = VarDecls
+
+[default-get-var-decls-expr]
+  get-var-decls( ProcessExpr ) =
+
+['] lookup-var( Var, VarDecls1, Var : Term, VarDecls2 ) = Term

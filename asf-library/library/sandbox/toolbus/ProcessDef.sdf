@@ -1,11 +1,17 @@
 module ProcessDef
+
 imports ProcessExpr
 
 exports
-  sorts ProcessDef ProcessDefs
+  sorts ProcessDef ProcessDefs ProcessSignature
 
   context-free syntax
-    "process" ProcessName "is" ProcessExpr                        -> ProcessDef {cons("procDef")}
-    "process" ProcessName "(" {VarDecl ","}* ")" "is" ProcessExpr -> ProcessDef {cons("procDefArgs")}
-    ProcessDef*                                                   -> ProcessDefs {cons("procDefStar")}
+    ProcessName                        -> ProcessSignature
+    ProcessName "(" {VarDecl ","}* ")" -> ProcessSignature
+
+  context-free syntax
+    "process" ProcessSignature "is" ProcessExpr -> ProcessDef {cons("procDef")}
+
+  context-free syntax
+    ProcessDef*  -> ProcessDefs {cons("procDefStar")}
 

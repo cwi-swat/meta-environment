@@ -1,0 +1,10 @@
+process Editors is
+let
+  Pid : int
+in
+  create(EditorManager,Pid?) .
+  create(EditorCreator,Pid?) .
+  create(SE, Pid?)
+endlet
+
+toolbus(Editors)

@@ -19,17 +19,17 @@ buttons([
            push-filename("reduct.out"),
            push-modulename("Main"),
            activate-editor]),
-   button("Fact",
+   button("FindFacts",
           "term",
           ["ToolBus","Info"],
           [push-active-module,
            get-root,
            check-sort("Tscript"),
-           apply("find-facts", "Facts", 1),
-           push-modulename("Fact"),
+           apply("find-facts", "FactsStructureSet", 1),
+           push-modulename("FindFacts"),
            reduce,
            push-filename("reduct.out"),
-           push-modulename("Fact"),
+           push-modulename("FindFacts"),
            activate-editor])
 ])
 
