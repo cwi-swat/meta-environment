@@ -11,6 +11,7 @@ cat  << END_OF_FILE
 #include <stdlib.h>
 #include <assert.h>
 #include <MEPT-utils.h>
+#include <aterm2.h>
 #include "asf-builtins.h"
 
 static ATbool initialized = ATfalse;
@@ -45,8 +46,8 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
 
 `
 for b in \${BUILTIN_NAMES}; do
-  echo "  if (!strcmp(name, \"${b}\")) {"
-  echo "    result = ${b}(builtin, input);"
+  echo "  if (!strcmp(name, \"${b}\")) {" 
+  echo "    result = ${b}(builtin, input);" | sed 's/-/_/g'
   echo "  }"
 done
 `
