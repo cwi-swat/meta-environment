@@ -8,7 +8,7 @@
 
 module Remove-Lists
 
-imports RenameVars Normalize-Conds Trans-Set-Pats
+imports RenameVars Normalize-Conds Trans-Set-Pats 
 
 exports
   context-free syntax
