@@ -72,7 +72,8 @@ void enter_equation(equation_table *table, aterm *equation)
     lhsargs = t_list_next(lhsargs);
   }
 
-  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs)))
+  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs))
+        || asfix_is_default_equ(equation))
     first_ofs = t_empty(t_world(equation));
   else
     first_ofs = asfix_get_appl_ofs(t_list_first(lhsargs));
@@ -81,15 +82,28 @@ void enter_equation(equation_table *table, aterm *equation)
 /*  Tprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
   Tprintf(stderr, "\t hash-nr=%d\n", hnr); 
 */
-  entry->hnext = table->table[hnr];
-  table->table[hnr] = entry;
+
   entry->hashnr = hnr;
   entry->top_ofs = top_ofs;
   entry->first_ofs = first_ofs;
   entry->equation = equation;
   t_protect(equation);  
+  if(asfix_is_default_equ(equation)) {
+    equation_entry *cur = table->table[hnr];
+    entry->hnext = NULL;
+    if(cur) {
+      while(cur->hnext)
+        cur = cur->hnext;
+      cur->hnext = entry;
+    } else {
+      table->table[hnr] = entry;
+    }
+  } else {
+    entry->hnext = table->table[hnr];
+    table->table[hnr] = entry;
+  }
 }
-#line 142 "preparation.c.nw"
+#line 156 "preparation.c.nw"
 equation_entry *find_equation(equation_entry *from, aterm *top_ofs, 
                                                         aterm *first_ofs)
 {
@@ -112,7 +126,7 @@ equation_entry *find_equation(equation_entry *from, aterm *top_ofs,
 */
   return from;
 }
-#line 170 "preparation.c.nw"
+#line 184 "preparation.c.nw"
 void select_equations(aterm *module)
 {
   equation_table *cur = tables;
@@ -125,7 +139,7 @@ void select_equations(aterm *module)
 
   equations = cur;
 }
-#line 188 "preparation.c.nw"
+#line 202 "preparation.c.nw"
 void enter_equations(aterm *module, aterm_list *eqs)
 {
   equation_table *cur = tables;
@@ -152,7 +166,7 @@ void enter_equations(aterm *module, aterm_list *eqs)
   }
 }
 
-#line 531 "preparation.c.nw"
+#line 545 "preparation.c.nw"
 aterm *lexical_to_list(arena *ar, aterm *lextrm)
 {
   aterm *sort, *newtrm, *newlex, *newname, *newiter;
@@ -186,7 +200,7 @@ aterm *lexical_to_list(arena *ar, aterm *lextrm)
   free(sortstr);
   return newappl;
 }
-#line 573 "preparation.c.nw"
+#line 587 "preparation.c.nw"
 aterm *list_to_lexical(arena *ar, aterm *lexappl)
 {
   aterm *modname, *lit, *sort, *w[4], *prod, *sym, *lexlist;
@@ -215,7 +229,7 @@ aterm *list_to_lexical(arena *ar, aterm *lexappl)
   free(newlexstr);
   return newlexappl;
 }
-#line 236 "preparation.c.nw"
+#line 250 "preparation.c.nw"
 aterm *prepare_term(arena *ar, aterm *el, Tbool lexcons);
 
 aterm_list *prepare_list(arena *ar, aterm_list *l, Tbool lexcons)
@@ -232,7 +246,7 @@ aterm_list *prepare_list(arena *ar, aterm_list *l, Tbool lexcons)
   }
   return result;
 }
-#line 260 "preparation.c.nw"
+#line 274 "preparation.c.nw"
 aterm_list *prepare_conds(arena *ar, aterm_list *conds)
 {
   aterm *cond, *lhs, *w[2], *lit, *rhs;
@@ -255,7 +269,7 @@ aterm_list *prepare_conds(arena *ar, aterm_list *conds)
   }
   return newconds;
 }
-#line 291 "preparation.c.nw"
+#line 305 "preparation.c.nw"
 aterm_list *prepare_equ(arena *ar, aterm *equ)
 {
   aterm *w[6], *l[2], *modname, *tag, *lhs, *rhs;
@@ -299,7 +313,7 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
   assert(0);
   return NULL;  /* Silence the compiler */
 }
-#line 342 "preparation.c.nw"
+#line 356 "preparation.c.nw"
 aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 {
   aterm_list *args, *elems, *newargs, *result;
@@ -330,12 +344,12 @@ aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 
   return result;
 }
-#line 379 "preparation.c.nw"
+#line 393 "preparation.c.nw"
 aterm *RWprepareTerm(arena *ar, aterm *t)
 {
   return prepare_term(ar, t, Tfalse);
 }
-#line 391 "preparation.c.nw"
+#line 405 "preparation.c.nw"
 aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
 {
   aterm *el;
@@ -350,7 +364,7 @@ aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
   }
   return result;
 }
-#line 426 "preparation.c.nw"
+#line 440 "preparation.c.nw"
 aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
 {
   aterm *lit;
@@ -381,7 +395,7 @@ aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
   }
   return newl;
 }
-#line 465 "preparation.c.nw"
+#line 479 "preparation.c.nw"
 aterm_list *restore_args(arena *ar, aterm_list *l)
 {
   aterm *arg, *ws;
@@ -397,7 +411,7 @@ aterm_list *restore_args(arena *ar, aterm_list *l)
   }
   return newl;
 }
-#line 486 "preparation.c.nw"
+#line 500 "preparation.c.nw"
 aterm *RWrestoreTerm(arena *ar, aterm *t)
 {
   aterm_list *args, *elems;

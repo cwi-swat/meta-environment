@@ -114,7 +114,8 @@ void enter_equation(equation_table *table, aterm *equation)
     lhsargs = t_list_next(lhsargs);
   }
 
-  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs)))
+  if(t_is_empty(lhsargs) || asfix_is_var(t_list_first(lhsargs))
+	|| asfix_is_default_equ(equation))
     first_ofs = t_empty(t_world(equation));
   else
     first_ofs = asfix_get_appl_ofs(t_list_first(lhsargs));
@@ -123,13 +124,26 @@ void enter_equation(equation_table *table, aterm *equation)
 /*  Tprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
   Tprintf(stderr, "\t hash-nr=%d\n", hnr); 
 */
-  entry->hnext = table->table[hnr];
-  table->table[hnr] = entry;
+
   entry->hashnr = hnr;
   entry->top_ofs = top_ofs;
   entry->first_ofs = first_ofs;
   entry->equation = equation;
   t_protect(equation);  
+  if(asfix_is_default_equ(equation)) {
+    equation_entry *cur = table->table[hnr];
+    entry->hnext = NULL;
+    if(cur) {
+      while(cur->hnext)
+        cur = cur->hnext;
+      cur->hnext = entry;
+    } else {
+      table->table[hnr] = entry;
+    }
+  } else {
+    entry->hnext = table->table[hnr];
+    table->table[hnr] = entry;
+  }
 }
 @
 
