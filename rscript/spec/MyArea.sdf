@@ -1,7 +1,8 @@
 module MyArea
 
 imports ExtendedIntegers
-imports basic/Locations
+imports basic/LocationOperations
+imports basic/AreaOperations
 imports basic/Strings
 imports languages/aterm/syntax/IntCon 
 imports languages/aterm/syntax/Literals
