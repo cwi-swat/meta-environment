@@ -272,9 +272,9 @@ ATerm create_equations_dump_file(int cid, char *module, ATerm equations)
 		char *errmsg = strerror(errno);
 		if (run_verbose) {
 			ATwarning("create_equations_dump_file: %s\n", errmsg);
-			return ATmake("snd-value(create-equations-dump-file-failed(<str>, <str>))", 
+                }
+		return ATmake("snd-value(create-equations-dump-file-failed(<str>, <str>))", 
 										module, errmsg);
-		}
 	}
 
 	ATwriteToBinaryFile(equations, f);
@@ -493,7 +493,6 @@ ATerm read_parse_table(int cid, char *name, ATerm tableType)
 
     if ((full = find_in_path(fullname))) {
       if (!(t = ATreadFromNamedFile(full))) {
-ATwarning("error reading %s\n", full);
         if (run_verbose) {
           ATwarning("error reading %s\n", full);
         }
