@@ -18,12 +18,3 @@ context-free syntax
 
   read-bytes(file:String) -> BytesResult {built-in("read-bytes-from-file")}
   write-bytes(file:String,Bytes) -> WriteResult {built-in("write-bytes-to-file")}
-
-hiddens
-
-imports basic/Whitespace
-variables
-
- "Bytes"[0-9]* -> Bytes
- "String"[0-9]* -> String
- "Sort"[0-9]* -> Sort
