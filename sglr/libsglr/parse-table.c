@@ -715,7 +715,7 @@ ATbool SG_Injection(production prod)
 {
   production in;
 
-  if(ATmatch((ATerm) prod, "prod([<term>],cf(<term>),<term>)",
+  if(ATmatch((ATerm) prod, "prod([<term>],cf(sort(<term>)),<term>)",
              &in, NULL, NULL)) {
     if(ATmatch((ATerm) in, "lit(<str>)", NULL))
       return ATfalse;

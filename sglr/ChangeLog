@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/30 (markvdb@cs.vu.nl)
+ * Fixed the injection bug reported by Albert Hofkamp.
+   Added the corresponding regression test.
+
 2003/07/24 ({markvdb, jurgenv}@cwi.nl)
  * Improved the bug fix of 2003/07/23. Finally understood the
    problem, which is not caused by the combination of ambiguities
