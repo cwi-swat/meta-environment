@@ -1,5 +1,9 @@
 $Id$
 
+2003-03-28 <jurgenv@cwi.nl>
+ * Moved dot-adapter (actually the dot tool) to graph-support package
+ * removed dependency on graphviz
+
 2003-03-20 <jurgenv@cwi.nl>
  * removed dependency on shared-objects and jjtraveler. This is taken care
    of by aterm-java-config from now on.
