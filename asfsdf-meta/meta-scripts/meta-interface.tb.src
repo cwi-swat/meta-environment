@@ -55,7 +55,11 @@ in
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
       rec-msg(test-results(TestResults?)) .
       snd-note(ui-status(endstat(Id))) .
-      snd-note(ui-status(errorf("Failed tests are %t\n", [TestResults])))
+      if equal(TestResults, []) then
+        snd-note(ui-status(warning("All tests succeeded\n")))
+      else 
+        snd-note(ui-status(errorf("These tests failed: %t\n", [TestResults])))
+      fi
     +  
       rec-msg(equations-incomplete) .
       snd-note(ui-status(endstat(Id))) .
