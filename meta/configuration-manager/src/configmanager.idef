@@ -8,9 +8,6 @@
 #ifndef BUTTON_FILE
 #define BUTTON_FILE "meta.buttons"
 #endif
-#ifndef ASF_LIBRARY_PATH
-#define ASF_LIBRARY_PATH "."
-#endif
 
 process ProcessButtons(CMNG : configmanager) is
 let
@@ -20,13 +17,22 @@ in
   snd-msg(io-read-file(BUTTON_FILE)) .
   (
     rec-msg(io-file-contents(Contents?)) .
-    snd-eval(CMNG, process-button-file(BUTTON_FILE, Contents))
+    snd-eval(CMNG, process-button-file(Contents))
   +
     rec-msg(io-error-reading(ErrorMessage?)) .
-    snd-eval(CMNG, process-button-file(BUTTON_FILE, "buttons([])"))
+    snd-eval(CMNG, process-button-file("buttons([])"))
   ) .
-  rec-value(CMNG, buttons-processed) .
-  snd-note(search-paths-processed)
+  rec-value(CMNG, buttons-processed)
+endlet
+
+process ProcessStandardActions(CMNG : configmanager) is
+let
+  Contents : str
+in
+  snd-msg(actions-hook) .
+  rec-msg(actions-hook-result(Contents?)) .
+  snd-eval(CMNG, process-standard-actions(Contents)) .
+  rec-value(CMNG, standard-actions-processed)
 endlet
   
 process ConfigManager is
@@ -65,6 +71,7 @@ in
   rec-msg(library-location-hook-result(LibraryPath?)).
   snd-do(CMNG, register-library(LibraryPath)) .
   ProcessButtons(CMNG) .
+  ProcessStandardActions(CMNG) .
   (
     rec-msg(refresh-buttons) .
     ProcessButtons(CMNG) .

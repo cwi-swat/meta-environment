@@ -101,9 +101,9 @@ void register_library(int cid, char *path)
 }
 
 /*}}}  */
-/*{{{  ATerm process_button_file(int cid, char *filename, ATerm contents) */
+/*{{{  ATerm process_button_file(int cid, ATerm contents) */
 
-ATerm process_button_file(int cid, char *filename, char *contents)
+ATerm process_button_file(int cid, char *contents)
 {
   ATerm atButtons = ATreadFromString(contents);
   buttons = MB_makeButtonListEmpty();
@@ -113,6 +113,20 @@ ATerm process_button_file(int cid, char *filename, char *contents)
   }
   
   return ATmake("snd-value(buttons-processed)");
+}
+
+/*}}}  */
+/*{{{  ATerm process_standard_actions(int cid, ATerm contents) */
+
+ATerm process_standard_actions(int cid, char *contents)
+{
+  ATerm atActions = ATreadFromString(contents);
+
+  if (MB_isValidButtons(MB_ButtonsFromTerm(atActions))) {
+    standardButtons = MB_concatButtonList(MB_getButtonsList(MB_ButtonsFromTerm(atActions)),standardButtons);
+  }
+  
+  return ATmake("snd-value(standard-actions-processed)");
 }
 
 /*}}}  */
@@ -316,7 +330,7 @@ int main(int argc, char *argv[])
   ATprotect(&librarySearchPath);
 
   buttons = MB_makeButtonListEmpty();
-  standard = ATreadFromNamedFile(STANDARD_BUTTONS);
+  standard = ATreadFromNamedFile(STANDARD_META_BUTTONS);
 
   if (standard != NULL) {
     if (MB_isValidButtons(MB_ButtonsFromTerm(standard))) {
@@ -324,7 +338,7 @@ int main(int argc, char *argv[])
     }
   }
   else {
-    ATwarning("Could not read: " STANDARD_BUTTONS "\n");
+    ATwarning("Could not read: " STANDARD_META_BUTTONS "\n");
   }
 
   cid = ATBconnect(NULL, NULL, -1, configmanager_handler);

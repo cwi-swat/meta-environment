@@ -5,9 +5,9 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = configmanager
 
-pkgdata_DATA         = configmanager.idef standard.buttons
+pkgdata_DATA         = configmanager.idef standard.meta.buttons
 
-EXTRA_DIST        = configmanager.idef standard.buttons standard.buttons.src
+EXTRA_DIST        = configmanager.idef standard.meta.buttons
 
 #CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
 
@@ -23,10 +23,6 @@ configmanager_LDADD   = -L$(TOOLBUSLIB)/lib -lATB \
 INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
 			-DBINDIR=\"$(bindir)\" \
-                        -DSTANDARD_BUTTONS=\"$(pkgdatadir)/standard.buttons\"
+                        -DSTANDARD_META_BUTTONS=\"$(pkgdatadir)/standard.meta.buttons\"
 api:
 	adt-to-c -i buttons.adt --prefix MB_ -o MetaButtons
-
-standard.buttons:	standard.buttons.src Makefile
-			sed 's@__ASF_LIBRARY__@${prefix}/share/asf/library/@g' < $< > $@
-
