@@ -3,8 +3,7 @@
 /*{{{  process GetText(EditorId: term, Text: str?) */
 
 process GetText(EditorId: term, Text: str?) is
-  snd-msg(te-write-contents(EditorId))
-  . snd-msg(te-get-contents(EditorId))
+  snd-msg(te-get-contents(EditorId))
   . rec-msg(te-contents(EditorId, Text?))
 
 /*}}}  */
@@ -37,10 +36,17 @@ let
   Text: str,
   TextChanged: bool
 in 
-  IsStructureEditorRegistered(Sid, StructureEditor?)
-  . HasTextChanged(Sid, TextChanged?)
+  HasTextChanged(Sid, TextChanged?)
   .
-  if and(StructureEditor, not-equal(TextChanged, quote(true)))
+  if equal(TextChanged, quote(true))
+  then
+    snd-msg(te-write-contents(Sid))
+    . StructureEditor := false
+  else
+    IsStructureEditorRegistered(Sid, StructureEditor?)
+  fi
+  .
+  if equal(StructureEditor, quote(true))
   then
     snd-msg(parse-editor-ok(Sid))
   else

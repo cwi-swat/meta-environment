@@ -1015,7 +1015,6 @@ let
 in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing term %s", [Modulename])))
-  . snd-msg(te-write-contents(Sid))
   . GetParseTable(Modulename, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
@@ -1143,24 +1142,11 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process ParseTermIfNecessary(Sid: term, Modulename: str) is
-let
-  Registered: bool
-in
-  IsStructureEditorRegistered(Sid, Registered?)
-  .
-  if equal(Registered, false) then
-    ParseTerm(Sid, Modulename)
-  else
-    tau
-  fi
-endlet
-
 process GetTree(Sid: term, Modulename: str, Tree: term?, Available: bool?) is
 let
   Registered: bool
 in
-  ParseTermIfNecessary(Sid, Modulename)
+  ParseTerm(Sid, Modulename)
   . IsStructureEditorRegistered(Sid, Registered?)
   .
   if equal(Registered, true) then

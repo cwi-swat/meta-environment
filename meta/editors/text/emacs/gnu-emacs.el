@@ -64,7 +64,7 @@
 )
 
 (defun is-modified ()
-  (if (eq must-send-modified t)
+  (if (eq (buffer-modified-p) t)
     (send-to-hive "modified#1")
     (send-to-hive "modified#0")
   )
