@@ -1,0 +1,54 @@
+#! /bin/sh -m
+#
+# Note: -m enables 'monitor mode', making it possible to send 'SIGQUIT'
+# to Java processes in order to get a thread dump!
+#
+
+PROGRAM=java
+CLASS=trans.Adapter
+
+INSTALL_PATH=/export/scratch1/kooiker/meta/install
+ATERM=/share/aterm-1.3.1.jar
+SHARED_OBJ=/share/shared-objects-1.3.jar
+JJTRAVELER=/share/jjtraveler-0.4.1.jar
+TOOLBUS=/classes
+RUN=/bin
+
+CLASSPATH="-cp $INSTALL_PATH$ATERM:$INSTALL_PATH$SHARED_OBJ:$INSTALL_PATH$JJTRAVELER:$INSTALL_PATH$TOOLBUS:$INSTALL_PATH$RUN:."
+
+MPORT=
+MHOST=
+MTOOL=
+DPORT=
+DHOST=
+DTOOL=
+
+VERBOSE=
+
+usage="$0 -TB_MASKERADE_PORT <port> -TB_MASKERADE_HOST <host> -TB_MASKERADE_TOOL <name> -TB_DELEGATE_PORT <port> -TB_DELEGATE_HOST <host> -TB_DELEGATE_TOOL <name>"
+
+while :
+do
+	case "$1" in
+		-TB_MASKERADE_PORT) MPORT="-TB_MASKERADE_PORT $2" ;shift;shift
+				;;
+		-TB_MASKERADE_HOST) MHOST="-TB_MASKERADE_HOST $2" ;shift;shift
+				;;
+		-TB_MASKERADE_TOOL) MTOOL="-TB_MASKERADE_TOOL $2" ;shift;shift
+				;;
+		-TB_DELEGATE_PORT)  DPORT="-TB_DELEGATE_PORT $2" ;shift;shift
+				;;
+		-TB_DELEGATE_HOST)  DHOST="-TB_DELEGATE_HOST $2" ;shift;shift
+				;;
+		-TB_DELEGATE_TOOL)  DTOOL="-TB_DELEGATE_TOOL $2" ;shift;shift
+				;;	
+		-*)		echo "unknown option: $1"
+				echo "$usage" >&2
+				exit 1
+				;;
+		*) break
+	esac
+done
+
+#echo "exec: $CLASSPATH"
+$PROGRAM $CLASSPATH $CLASS $MPORT $MHOST $MTOOL $DPORT $DHOST $DTOOL
