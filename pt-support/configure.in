@@ -93,6 +93,7 @@ AC_OUTPUT(
   Makefile
   libconversion/Makefile
   libmept/Makefile
+  libptmept/Makefile
   libasfix2/Makefile
   utils/Makefile
   utils/implodePT/Makefile
