@@ -13,7 +13,8 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= $(prefix)/include
+includedir	= @includedir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
@@ -58,9 +59,10 @@ CSRC		= module-db.c af-reshuffle.c aft-reshuffle.c module-db.tif.c
 CHDR		= module-db.tif.h module-db.h
 OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= module-db genmakefile.sh
+BINFILES	= module-db
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= module-db.idef genmakefile.proto
+LIBFILES	= 
+DATAFILES	= module-db.idef
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	= module-db.h
 # Local includes
@@ -97,10 +99,11 @@ module-db: depend ${OBJ}
 
 # install target (install binaries, include files, and libraries)
 install: all
-	mkdir -p $(bindir) $(libdir) $(includedir)
+	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
