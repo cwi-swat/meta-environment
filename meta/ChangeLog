@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/24 (markvdb@cwi.nl)
+ * Repaired the printing of the text of a module.
+
 2003/07/22 ({markvdb,jurgenv}@cwi.nl)
  * Repaired a number of bugs concerning erroneous modules in conjunction
    with compound module names.
