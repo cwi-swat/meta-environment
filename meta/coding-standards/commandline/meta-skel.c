@@ -52,6 +52,7 @@ void usage(void)
                 *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
                 *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
             }
+        *ptr1++ = '\0';
     }
 
     fprintf(stderr,
@@ -80,6 +81,7 @@ int main(int argc, char **argv)
     char *output = "-";
     int bafmode=1;
     int verbose=0;
+    int proceed=1;
 
     extern char *optarg;
     extern int   optind;
@@ -104,16 +106,18 @@ int main(int argc, char **argv)
                 case 'v':  verbose = 1;                            break;
                 case 'i':  input=optarg;                           break;
                 case 'o':  output=optarg;                          break;
-                case 'V':  version();                              break;
+                case 'V':  version(); proceed=0;                   break;
 
                 case 'h':
-                default:   usage();                                break;
+                default:   usage(); proceed=0;                     break;
             }
         }
         argc -= optind;
         argv += optind;
 
-        /*  . . .  */
+        if(proceed) {
+          /*  . . .  */
+        }
     }
 
     return 0;
