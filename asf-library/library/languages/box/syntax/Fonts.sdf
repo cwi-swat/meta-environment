@@ -6,7 +6,7 @@ imports basic/Comments
 exports
   sorts FontId
   lexical syntax
-    [A-Za-z]+ -> FontId
+    [A-Za-z]+ -> FontId {cons("default")}
 
 exports
   sorts FontParam FontOption FontValue FontOperator
