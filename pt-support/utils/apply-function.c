@@ -80,7 +80,7 @@ ATerm apply_function_to_args(int cid, char *function, char *sort, ATerm args)
 
   while (!ATisEmpty(argsList)) {
     ATerm arg = ATgetFirst(argsList);
-    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(arg);
+    PT_ParseTree parseTree = PT_makeParseTreeFromTerm(ATBunpack(arg));
     argsList = ATgetNext(argsList);
     ptArgs = PT_makeArgsList(PT_getParseTreeTree(parseTree), ptArgs);
   }
@@ -88,7 +88,7 @@ ATerm apply_function_to_args(int cid, char *function, char *sort, ATerm args)
   newParseTree = PT_applyFunctionToArgsParseTree(function, sort, ptArgs);
  
   return ATmake("snd-value(tree(<term>))", 
-                PT_makeTermFromParseTree(newParseTree));
+                ATBpack(PT_makeTermFromParseTree(newParseTree)));
 }
 
 int 
