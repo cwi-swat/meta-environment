@@ -68,24 +68,31 @@ in
   Tree := none.
   Text := "".
   snd-msg(get-path-from-db(ModuleName)) .
-  rec-msg(path(Path?)) .
-  snd-msg(file-extension-hook(sdf)) .
-  rec-msg(file-extension-hook-result(Extension?)) .
-  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(get-sdf2-asfix(ModuleName)).
   (
-    rec-msg(syntax(Tree?))
-  +
-    rec-msg(unavailable).
-    snd-msg(io-read-file(FileName)) .
+    rec-msg(path(Path?)) .
+    snd-msg(file-extension-hook(sdf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    snd-msg(get-sdf2-asfix(ModuleName)).
     (
-      rec-msg(io-file-contents(Text?))
+      rec-msg(syntax(Tree?))
     +
-      rec-msg(io-error-reading(Message?))
-    )
-  ) .
-  CreateEditor(syntax-editor, ModuleName, FileName, Text, Tree)
+      rec-msg(unavailable).
+      snd-msg(io-read-file(FileName)) .
+      (
+	rec-msg(io-file-contents(Text?))
+      +
+	rec-msg(io-error-reading(Message?))
+      )
+    ) .
+    CreateEditor(syntax-editor, ModuleName, FileName, Text, Tree)
+  +
+    rec-msg(no-path) .
+    snd-note(ui-status(errorf("Internal error, could not open editor for %s",
+                       [ModuleName]))) .
+    snd-msg(editor-opened(ModuleName, no-editor))
+  )
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -102,35 +109,42 @@ in
   Tree := none .
   Text := "" .
   snd-msg(get-path-from-db(ModuleName)) .
-  rec-msg(path(Path?)) .
-  snd-msg(file-extension-hook(asf)) .
-  rec-msg(file-extension-hook-result(Extension?)) .
-  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(get-eqs-tree(ModuleName)) .
   (
-    rec-msg(tree(Tree?)) 
-  +
-    rec-msg(unavailable) .
-    snd-msg(get-eqs-text(ModuleName)) .
+    rec-msg(path(Path?)) .
+    snd-msg(file-extension-hook(asf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+    rec-msg(io-filename(FileName?)) .
+    snd-msg(get-eqs-tree(ModuleName)) .
     (
-      rec-msg(eqs-text(ModuleName, Text?)) 
+      rec-msg(tree(Tree?)) 
     +
-      rec-msg(no-eqs-text(ModuleName)) .
-      snd-msg(create-new-equations(ModuleName))  .
+      rec-msg(unavailable) .
+      snd-msg(get-eqs-text(ModuleName)) .
       (
-        rec-msg(new-equations-created)
+	rec-msg(eqs-text(ModuleName, Text?)) 
       +
-        rec-msg(new-equations-not-created) .
-	Status := failure
+	rec-msg(no-eqs-text(ModuleName)) .
+	snd-msg(create-new-equations(ModuleName))  .
+	(
+	  rec-msg(new-equations-created)
+	+
+	  rec-msg(new-equations-not-created) .
+	  Status := failure
+	)
       )
-    )
-  ) .
-  if equal(Status, success) then
-    CreateEditor(equations-editor, ModuleName, FileName, Text, Tree)
-  else
-    tau
-  fi   
+    ) .
+    if equal(Status, success) then
+      CreateEditor(equations-editor, ModuleName, FileName, Text, Tree)
+    else
+      tau
+    fi
+  +
+    rec-msg(no-path) .
+    snd-note(ui-status(errorf("Internal error, could not open editor for %s",
+                       [ModuleName]))) .
+    snd-msg(editor-opened(ModuleName, no-editor))
+  )
 endlet
 
 process TermEditorCreator (ModuleName : str, FileName : str, Tree : term) is
