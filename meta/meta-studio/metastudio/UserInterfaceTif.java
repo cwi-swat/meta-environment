@@ -1,6 +1,6 @@
 // Java tool interface UserInterfaceTif
 // This file is generated automatically, please do not edit!
-// generation time: Dec 18, 2003 3:17:45 PM
+// generation time: Dec 18, 2003 4:42:20 PM
 
 package metastudio;
 

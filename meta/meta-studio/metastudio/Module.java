@@ -11,9 +11,9 @@ public class Module implements Comparable {
 	private String _name;
 
 	private List _parent;
-
 	private List _child;
-	private ListModel childListModel;
+
+    private ListModel childListModel;
 	private ListModel parentListModel;
 
 	private int State = STATE_NORMAL;

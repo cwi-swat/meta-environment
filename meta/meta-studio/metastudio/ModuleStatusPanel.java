@@ -36,32 +36,35 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(border);
 
-        importsBox = makeComboBox(moduleManager, "Import", imports);
-        add(importsBox);
-        
-        importedByBox = makeComboBox(moduleManager, "Imported by", importedBy);
-        add(importedByBox);
-
-      
-        moduleManager.addModuleSelectionListener(this);
-    }
-
-    private JComboBox makeComboBox(final ModuleTreeModel moduleManager, String title, final List elems) {
-        final JComboBox box = new JComboBox();
-        box.setToolTipText(title);
-        box.setModel(new ComboBoxModel(elems));
-        box.addActionListener(new ActionListener() {
+        importsBox = new JComboBox();
+        importsBox.setToolTipText("imports");
+        importsBox.setModel(new ComboBoxModel(imports));
+        importsBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String selected = (String) box.getSelectedItem();
+                String selected = (String) importsBox.getSelectedItem();
                 if (selected != null) {
                   moduleManager.selectModule(selected);
                 }
             }
         });
+        add(importsBox);
         
-        return box;
-    }
+        importedByBox = new JComboBox();
+        importedByBox.setToolTipText("imported by");
+        importedByBox.setModel(new ComboBoxModel(importedBy));
+        importedByBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selected = (String) importedByBox.getSelectedItem();
+                if (selected != null) {
+                  moduleManager.selectModule(selected);
+                }
+            }
+        });
+        add(importedByBox);
 
+        moduleManager.addModuleSelectionListener(this);
+    }
+    
     public void moduleSelected(Module module) {
         if (module == null) {
             clearInfo();
@@ -104,5 +107,9 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         repaint();
         importsBox.repaint();
         importedByBox.repaint();
+    }
+
+    public void setModuleInfo(String module, List entries) {
+        // nothing to do ?
     }
 }
