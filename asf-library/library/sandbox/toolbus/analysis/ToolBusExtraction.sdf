@@ -6,6 +6,7 @@ imports MyPosInfo[Var]
 imports MyPosInfo[VarDecl]
 imports MyPosInfo[ProcessDef]
 imports MyPosInfo[ProcessName]
+imports MyPosInfo[ToolName]
 imports MyPosInfo[Atom]
 imports MyPosInfo[Term]
 
@@ -13,15 +14,18 @@ exports
   context-free syntax
     extractRelations(Tscript) -> RSTORE
 
+exports
+  sorts Path
+  context-free syntax
+    "[" {Integer ","}+ "]" -> Path 
+    path2str(Path) -> String
+
 hiddens
   context-free syntax
     extractRelations(TscriptDef*, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
     extractRelations(TscriptDef, RSTORE)
-	-> RSTORE {traversal(accu, top-down, break)}
-
-    extractRelations(ProcessDef, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
@@ -53,60 +57,67 @@ hiddens
   context-free syntax
     findProcessApplicationInBody(ProcessBody, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
+
     findProcessApplicationInBody(ProcessInvocation, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
+
     findProcessApplicationInBody(ProcessCreation, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    findMessages(ProcessDef, RSTORE, 
-                 {FormalParam ","}*, {VarDecl ","}*) -> 
-      RSTORE {traversal(accu, top-down, break)}
-    findMessages(Atom, RSTORE, 
-                 {FormalParam ","}*, {VarDecl ","}*) -> 
-      RSTORE {traversal(accu, top-down, break)}
+    findMessages(ProcessDef, RSTORE, {FormalParam ","}*, {VarDecl ","}*)
+	-> RSTORE {traversal(accu, top-down, break)}
 
-exports
-  sorts Path
-  context-free syntax
-    "[" {Integer ","}+ "]" -> Path 
-    path2str(Path) -> String
+    findMessages(Atom, RSTORE, {FormalParam ","}*, {VarDecl ","}*)
+	-> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractSignatureFromTerms({Term ","}+, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
-    extractSignatureFromTerm(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
-    addTermSignature(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
+    extractSignatureFromTerms({Term ","}+, Area, Path, {FormalParam ","}*,
+                              {VarDecl ","}*, RSTORE)
+	-> RSTORE
+
+    extractSignatureFromTerm(Term, Area, Path, {FormalParam ","}*,
+                             {VarDecl ","}*, RSTORE)
+	-> RSTORE
+
+    addTermSignature(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*,
+                     RSTORE)
+	-> RSTORE
     
 
 hiddens
   variables
-    "$Char*"[0-9]*              -> CHAR*
-    "$Area"[0-9]*		-> Area      
-    "$Rstore"[0-9]*		-> RSTORE
-    "$Tuple"[0-9]*		-> Elem # Elem
-    "$VarId"[0-9]*		-> Area
-    "$ProcessDefId"		-> Area
-    "$ProcessNameId"		-> Area
-    "$MessageId"		-> Area
-    "$Path"[0-9]*               -> Path
-    "$Step"[0-9]*               -> Integer
-    "$Steps"[0-9]*              -> {Integer ","}*
-    "$Stepplus"[0-9]*           -> {Integer ","}+
-
-    "$TscriptDefs"[0-9]*	-> TscriptDef*
-    "$ProcessDef"[0-9]*		-> ProcessDef
-    "$ProcessSignature"[0-9]*	-> ProcessSignature
-    "$ProcessBody"[0-9]*	-> ProcessBody
-    "$ProcessName"[0-9]*	-> ProcessName
-    "$FormalParams"[0-9]* 	-> {FormalParam ","}*
-    "$Atom"[0-9]*		-> Atom
-    "$Signature"[0-9]*		-> Term
-    "$Term"[0-9]*		-> Term
-    "$Type"[0-9]*		-> Term
-    "$Terms"[0-9]*		-> {Term ","}*
-    "$TermPlus"[0-9]*		-> {Term ","}+
-    "$Var"[0-9]*		-> Var
-    "$VarDecls"[0-9]*           -> {VarDecl ","}*  
-    "$Id"[0-9]*			-> Id
+    "$Area"[0-9]* -> Area      
+    "$Atom"[0-9]* -> Atom
+    "$Char*"[0-9]* -> CHAR*
+    "$FormalParams"[0-9]* -> {FormalParam ","}*
+    "$Id"[0-9]* -> Id
+    "$Includes" -> IncludeFile*
+    "$MessageId" -> Area
+    "$Path"[0-9]* -> Path
+    "$ProcessBody"[0-9]* -> ProcessBody
+    "$ProcessDef"[0-9]* -> ProcessDef
+    "$ProcessDefId" -> Area
+    "$ProcessName"[0-9]* -> ProcessName
+    "$ProcessNameId" -> Area
+    "$ProcessSignature"[0-9]* -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Signature"[0-9]* -> Term
+    "$Step"[0-9]* -> Integer
+    "$Stepplus"[0-9]* -> {Integer ","}+
+    "$Steps"[0-9]* -> {Integer ","}*
+    "$Term"[0-9]* -> Term
+    "$TermPlus"[0-9]* -> {Term ","}+
+    "$Terms"[0-9]* -> {Term ","}*
+    "$TscriptDefs"[0-9]* -> TscriptDef*
+    "$ToolAttribs" -> ToolAttrib*
+    "$ToolDef" -> ToolDef
+    "$ToolName" -> ToolName
+    "$ToolNameId" -> Area
+    "$Tuple"[0-9]* -> Elem # Elem
+    "$Type"[0-9]* -> Term
+    "$Var"[0-9]* -> Var
+    "$VarDecls"[0-9]* -> {VarDecl ","}*  
+    "$VarId"[0-9]* -> Area

@@ -7,6 +7,7 @@ exports
   context-free syntax
     var2str(Var) -> String
     processname2str(ProcessName) -> String
+    toolname2str(ToolName) -> String
     sign2str(Term) -> String
     term2str(Term) -> String
 

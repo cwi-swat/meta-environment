@@ -1,19 +1,38 @@
 module Tscript
 
-imports ProcessDef
-imports TComment
-imports ToolDef
+imports TscriptDef
 
 exports
   sorts Tscript
   context-free syntax
+%%    IncludeFile* TscriptDef* -> Tscript {cons("tscript")}
     TscriptDef* -> Tscript {cons("tscript")}
 
+exports
+  sorts IncludeFile
+  sorts LocalInclude
+  sorts SystemInclude
+
+  context-free syntax
+    LocalInclude -> IncludeFile
+    SystemInclude -> IncludeFile
+  %% Hack
+    IncludeFile -> LAYOUT
+
+  lexical syntax
+    "#include" [\ \t]* "<" FileName ">" -> SystemInclude
+    "#include" [\ \t]* "\"" FileName "\"" -> LocalInclude
+
+  lexical syntax
+    [a-zA-Z0-9\.\-]* -> FileName
+
 hiddens
-  sorts TscriptDef
+  sorts FileName
 
 exports
-  context-free syntax
-    ToolDef -> TscriptDef {cons("tooldefScript")}
-    ProcessDef -> TscriptDef {cons("procdefScript")}
-    "toolbus" "(" ProcessInvocation ")" -> TscriptDef
+  lexical syntax
+    "#ifdef" [\ \t]* Vname -> LAYOUT
+    "#ifndef" [\ \t]* Vname -> LAYOUT
+    "#else" -> LAYOUT
+    "#define" [\ \t]* Vname ~[\n]* [\n] -> LAYOUT
+    "#endif" -> LAYOUT

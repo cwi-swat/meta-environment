@@ -4,14 +4,19 @@ imports ProcessExpr VarDecls FormalParameters
 
 exports
   sorts ProcessSignature
+
   context-free syntax
-    ProcessName                            -> ProcessSignature
-    ProcessName "(" {FormalParam ","}* ")" -> ProcessSignature
+    ProcessName -> ProcessSignature
+    ProcessName "("{FormalParam"," }*")" -> ProcessSignature
 
   sorts ProcessBody
   context-free syntax
-    ProcessExpr                                    -> ProcessBody {cons("plainBody")}
-    "let" {VarDecl ","}* "in" ProcessExpr "endlet" -> ProcessBody {cons("letBody")}
+    ProcessExpr -> ProcessBody {cons("plainBody")}
+"let"
+  VarDecls
+"in" 
+  ProcessExpr
+"endlet" -> ProcessBody {cons("letBody")}
 
 hiddens
   sorts ProcessDef

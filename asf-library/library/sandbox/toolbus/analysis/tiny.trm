@@ -1,27 +1,15 @@
-process Editor1 is
+process P is
 let
-  Editor : term,
-  Aap : term,
-  Noot : term,
-  Pid : int
 in
-  snd-msg(open(Editor,Pid?)) .
-  create(EditorManager,Pid?) .
-  create(EditorCreator,Pid?) .
-  create(SE, Pid?)
+  snd-msg(data)
 endlet
 
-process Editor2 is
+process Q is
 let
-  Aap : term,
-  Editor : str,
-  Pid : int
+  T: str
 in
-  rec-msg(open(Editor,Pid?)) .
-  create(EditorManager,Pid?) .
-  create(EditorCreator,Pid?) .
-  create(SE, Pid?)
+  rec-msg(S)
 endlet
 
-toolbus(Editor1)
-
+toolbus(P)
+toolbus(Q)

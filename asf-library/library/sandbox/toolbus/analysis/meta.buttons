@@ -60,7 +60,7 @@ buttons([
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
-          push-string("\"UNUSED_VARS\""),
+          push-string("\"ALL_MESSAGES\""),
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),

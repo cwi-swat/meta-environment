@@ -9,41 +9,23 @@ imports basic/Strings
 exports
   context-free syntax
     remove-unused-variables(Tscript, Elem) -> Tscript
-    remove-unused-variable(Tscript, Area) -> Tscript
 
-hiddens
-  context-free syntax
-    ruv-tscript-defs(TscriptDef*, Area) -> TscriptDef*
-    ruv-tscript-def(TscriptDef, Area) -> TscriptDef
-    ruv-process-def(ProcessDef, Area) -> ProcessDef
-    ruv-var-decls(VarDecls, Area) -> VarDecls
+    remove-unused-variable(Tscript, Area)
+    -> Tscript {traversal(trafo, top-down, break)}
 
-hiddens
-  context-free syntax
-    get-variable-declarations(ProcessDef) -> VarDecls
-    set-variable-declarations(ProcessDef, VarDecls) -> ProcessDef
+    remove-unused-variable(ProcessBody, Area)
+    -> ProcessBody {traversal(trafo, top-down, break)}
 
-    get-variable-declarations(ProcessBody) -> VarDecls
-    set-variable-declarations(ProcessBody, VarDecls) -> ProcessBody
-
-hiddens
-  context-free syntax
-    get-process-body(ProcessDef) -> ProcessBody
-    set-process-body(ProcessDef, ProcessBody) -> ProcessDef
+    remove-unused-variable(VarDecls, Area)
+    -> VarDecls {traversal(trafo, top-down, break)}
 
 variables
   "$Area" -> Area
-  "$Elem"[0-9]* -> Elem
   "$Elems"[0-9]* -> {Elem ","}*
-  "$ProcessBody"[0-9]* -> ProcessBody
-  "$ProcessDef"[0-9]* -> ProcessDef
   "$ProcessExpr"[0-9]* -> ProcessExpr
-  "$ProcessSignature"[0-9]* -> ProcessSignature
   "$String"[0-9]* -> String
   "$Term" -> Term
   "$Tscript"[0-9]* -> Tscript
-  "$TscriptDef"[0-9]* -> TscriptDef
-  "$TscriptDefs"[0-9]* -> TscriptDef*
   "$Var"[0-9]* -> Var
-  "$VarDecl"[0-9]* -> VarDecl
-  "$VarDecls"[0-9]* -> {VarDecl ","}*
+  "$VarDecls"[0-9]* -> VarDecls
+  "$VarDecl*"[0-9]* -> {VarDecl ","}*

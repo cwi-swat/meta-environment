@@ -6,6 +6,9 @@ equations
   [processname2string]
     processname2str(processname(Char*)) = strcon(""" Char* """)
 
+  [toolname2string-0]
+    toolname2str(toolname(Char*)) = strcon(""" Char* """)
+
   [atom2string]
     sign2str($Term) = term2str($Term)
 

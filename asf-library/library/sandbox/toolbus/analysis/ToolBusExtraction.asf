@@ -1,195 +1,203 @@
 equations
 
-  [extractRelations-start]
-    extractRelations($TscriptDefs) = extractRelations($TscriptDefs, rstore())
+[extractRelations-start]
+  extractRelations($TscriptDefs)
+  = extractRelations($TscriptDefs, rstore())
 
-  [extractRelations-process]
-    $ProcessDef = process $ProcessSignature is $ProcessBody,
-    findVarInProcess($ProcessDef, $Rstore1, get-area($ProcessDef)) = $Rstore2,
-    findProcessInfoInProcessDef($ProcessDef, $Rstore2) = $Rstore3,
-    get-formal-parameters($ProcessSignature) = $FormalParams,
-    get-local-variables($ProcessBody) = $VarDecls,
-    findMessages($ProcessDef, $Rstore3, $FormalParams, $VarDecls) = 
-      $Rstore4
-    ===>
-    extractRelations($ProcessDef, $Rstore1) = $Rstore4
+[extractRelations-tool]
+  $ToolDef = tool $ToolName is { $ToolAttribs },
+  $ToolNameId = get-area($ToolName),
+  $Tuple = <$ToolNameId, toolname2str($ToolName)>,
+  $Rstore2 = add-tuple(TOOLS, $Tuple, $Rstore1)
+  ===>
+  extractRelations($ToolDef, $Rstore1) = $Rstore2
 
-  [extractRelations-tscriptdef]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
-    ===>
-    extractRelations(toolbus($ProcessName), $Rstore1) = $Rstore2
+[extractRelations-process]
+  $ProcessDef = process $ProcessSignature is $ProcessBody,
+  findVarInProcess($ProcessDef, $Rstore1, get-area($ProcessDef)) = $Rstore2,
+  findProcessInfoInProcessDef($ProcessDef, $Rstore2) = $Rstore3,
+  get-formal-parameters($ProcessSignature) = $FormalParams,
+  get-local-variables($ProcessBody) = $VarDecls,
+  findMessages($ProcessDef, $Rstore3, $FormalParams, $VarDecls) = $Rstore4
+  ===>
+  extractRelations($ProcessDef, $Rstore1) = $Rstore4
 
-  [extractRelations-tscriptdef-parameters]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
-    ===>
-    extractRelations(toolbus($ProcessName($Terms)), $Rstore1) = $Rstore2
+[extractRelations-tscriptdef]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+  ===>
+  extractRelations(toolbus($ProcessName), $Rstore1) = $Rstore2
 
-  [extractRelations-vardecl]
-    $Tuple = <$ProcessDefId, var2str($Var)>,
-    $Rstore2 = add-tuple(DECLS, $Tuple, $Rstore1),
-    $Tuple2 = <$Tuple, get-area($Var)>,
-    $Rstore3 = add-tuple(DECL_OCCURS, $Tuple2, $Rstore2)
-    ===>
-    findVarInProcess($Var : $Term, $Rstore1, $ProcessDefId) = $Rstore3
+[extractRelations-tscriptdef-parameters]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+  ===>
+  extractRelations(toolbus($ProcessName($Terms)), $Rstore1) = $Rstore2
 
-  [extractRelations-genvar]
-    $VarId = get-area($Var),
-    $Tuple = <$ProcessDefId, var2str($Var)>,
-    $Rstore2 = add-tuple(USES, $Tuple, $Rstore1),
-    $Tuple2 = <$Tuple, $VarId>,
-    $Rstore3 = add-tuple(USE_OCCURS, $Tuple2, $Rstore2)
-    ===>
-    findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore3
+[extractRelations-vardecl]
+  $Tuple = <$ProcessDefId, var2str($Var)>,
+  $Rstore2 = add-tuple(DECLS, $Tuple, $Rstore1),
+  $Tuple2 = <$Tuple, get-area($Var)>,
+  $Rstore3 = add-tuple(DECL_OCCURS, $Tuple2, $Rstore2)
+  ===>
+  findVarInProcess($Var : $Term, $Rstore1, $ProcessDefId) = $Rstore3
 
-  [extractRelations-genvar-result]
-    $VarId = get-area($Var),
-    $Tuple = <$ProcessDefId, var2str($Var)>,
-    $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
-    $Tuple2 = <$Tuple, $VarId>,
-    $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2)
-    ===>
-    findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3
+[extractRelations-genvar]
+  $VarId = get-area($Var),
+  $Tuple = <$ProcessDefId, var2str($Var)>,
+  $Rstore2 = add-tuple(USES, $Tuple, $Rstore1),
+  $Tuple2 = <$Tuple, $VarId>,
+  $Rstore3 = add-tuple(USE_OCCURS, $Tuple2, $Rstore2)
+  ===>
+  findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore3
 
-  [extractRelations-genvar-assign]
-    $VarId = get-area($Var),
-    $Tuple = <$ProcessDefId, var2str($Var)>,
-    $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
-    $Tuple2 = <$Tuple, $VarId>,
-    $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2),
-    $Rstore4 = findVarInProcess($Term, $Rstore3, $ProcessDefId)
-    ===>
-    findVarInProcess($Var := $Term, $Rstore1, $ProcessDefId) = $Rstore4
+[extractRelations-genvar-result]
+  $VarId = get-area($Var),
+  $Tuple = <$ProcessDefId, var2str($Var)>,
+  $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
+  $Tuple2 = <$Tuple, $VarId>,
+  $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2)
+  ===>
+  findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3
+
+[extractRelations-genvar-assign]
+  $VarId = get-area($Var),
+  $Tuple = <$ProcessDefId, var2str($Var)>,
+  $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
+  $Tuple2 = <$Tuple, $VarId>,
+  $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2),
+  $Rstore4 = findVarInProcess($Term, $Rstore3, $ProcessDefId)
+  ===>
+  findVarInProcess($Var := $Term, $Rstore1, $ProcessDefId) = $Rstore4
 
 
-  [findProcessInfoInProcessDef-start]
-    findProcessNameInSignature($ProcessSignature, $Rstore1) = $Rstore2,
-    findProcessApplicationInBody($ProcessBody, $Rstore2) = $Rstore3
-    ===>
-    findProcessInfoInProcessDef(process $ProcessSignature is $ProcessBody,
-                                $Rstore1) = $Rstore3
+[findProcessInfoInProcessDef-start]
+  findProcessNameInSignature($ProcessSignature, $Rstore1) = $Rstore2,
+  findProcessApplicationInBody($ProcessBody, $Rstore2) = $Rstore3
+  ===>
+  findProcessInfoInProcessDef(process $ProcessSignature is $ProcessBody,
+                              $Rstore1) = $Rstore3
 
-  [findProcessNameInSignature-processname]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
-    ===>
-    findProcessNameInSignature($ProcessName, $Rstore1) = $Rstore2
+[findProcessNameInSignature-processname]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
+  ===>
+  findProcessNameInSignature($ProcessName, $Rstore1) = $Rstore2
 
-  [findProcessNameInSignature-start]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
-    ===>
-    findProcessNameInSignature($ProcessName($FormalParams), $Rstore1) = 
-      $Rstore2
-      
-  [findProcessApplicationsInBody-create-basic]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
-    ===>
-    findProcessApplicationInBody(create($ProcessName, $Var?), 
-                                 $Rstore1) = $Rstore2
-      
-  [findProcessApplicationsInBody-create-arguments]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
-    ===>
-    findProcessApplicationInBody(create($ProcessName($Terms), $Var?), 
-                                 $Rstore1) = $Rstore2
+[findProcessNameInSignature-start]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSNAMES, $Tuple, $Rstore1)
+  ===>
+  findProcessNameInSignature($ProcessName($FormalParams), $Rstore1) = 
+    $Rstore2
+    
+[findProcessApplicationsInBody-create-basic]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
+  ===>
+  findProcessApplicationInBody(create($ProcessName, $Var?), 
+                               $Rstore1) = $Rstore2
+    
+[findProcessApplicationsInBody-create-arguments]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSCREATES, $Tuple, $Rstore1)
+  ===>
+  findProcessApplicationInBody(create($ProcessName($Terms), $Var?), 
+                               $Rstore1) = $Rstore2
 
-  [findProcessApplicationsInBody-invocation-basic]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
-    ===>
-    findProcessApplicationInBody($ProcessName, $Rstore1) = $Rstore2
+[findProcessApplicationsInBody-invocation-basic]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+  ===>
+  findProcessApplicationInBody($ProcessName, $Rstore1) = $Rstore2
 
-  [findProcessApplicationsInBody-invocation-arguments]
-    $ProcessNameId = get-area($ProcessName),
-    $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
-    $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
-    ===>
-    findProcessApplicationInBody($ProcessName($Terms), $Rstore1) = $Rstore2
+[findProcessApplicationsInBody-invocation-arguments]
+  $ProcessNameId = get-area($ProcessName),
+  $Tuple = <$ProcessNameId, processname2str($ProcessName)>,
+  $Rstore2 = add-tuple(PROCESSINVOCATIONS, $Tuple, $Rstore1)
+  ===>
+  findProcessApplicationInBody($ProcessName($Terms), $Rstore1) = $Rstore2
 
-  [findSendMsg] 
-    $Atom = snd-msg($TermPlus),
-    $MessageId = get-area($Atom),
-    $Signature = make-signature($Atom, $FormalParams, $VarDecls),
-    $Tuple = <$MessageId, sign2str($Signature)>,
-    $Rstore2 = add-tuple(SENDMESSAGES, $Tuple, $Rstore1),
-    $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
-                                         $FormalParams, $VarDecls, $Rstore2)
-    ===>
-    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
+[findSendMsg] 
+  $Atom = snd-msg($TermPlus),
+  $MessageId = get-area($Atom),
+  $Signature = make-signature($Atom, $FormalParams, $VarDecls),
+  $Tuple = <$MessageId, sign2str($Signature)>,
+  $Rstore2 = add-tuple(SENDMESSAGES, $Tuple, $Rstore1),
+  $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
+                                       $FormalParams, $VarDecls, $Rstore2)
+  ===>
+  findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
 
-  [findReceiveMsg] 
-    $Atom = rec-msg($TermPlus),
-    $MessageId = get-area($Atom),
-    $Signature = make-signature($Atom, $FormalParams, $VarDecls),
-    $Tuple = <$MessageId, sign2str($Signature)>,
-    $Rstore2 = add-tuple(RECEIVEMESSAGES, $Tuple, $Rstore1),
-    $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
-                                         $FormalParams, $VarDecls, $Rstore2)
-    ===>
-    findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
+[findReceiveMsg] 
+  $Atom = rec-msg($TermPlus),
+  $MessageId = get-area($Atom),
+  $Signature = make-signature($Atom, $FormalParams, $VarDecls),
+  $Tuple = <$MessageId, sign2str($Signature)>,
+  $Rstore2 = add-tuple(RECEIVEMESSAGES, $Tuple, $Rstore1),
+  $Rstore3 = extractSignatureFromTerms($TermPlus, $MessageId, [0], 
+                                       $FormalParams, $VarDecls, $Rstore2)
+  ===>
+  findMessages($Atom, $Rstore1, $FormalParams, $VarDecls) = $Rstore3
 
-  [extractSignatureFromTerms-single]
-    extractSignatureFromTerms($Term, $MessageId, $Path, 
-                              $FormalParams, $VarDecls, $Rstore) =
-      extractSignatureFromTerm($Term, $MessageId, $Path, 
-                               $FormalParams, $VarDecls, $Rstore)
-
-  [extractSignatureFromTerms-many]
+[extractSignatureFromTerms-single]
+  extractSignatureFromTerms($Term, $MessageId, $Path, 
+                            $FormalParams, $VarDecls, $Rstore) =
     extractSignatureFromTerm($Term, $MessageId, $Path, 
-                             $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
-    $Path = [$Steps, $Step],
-    extractSignatureFromTerms($TermPlus, $MessageId, [$Steps, $Step+1], 
-                              $FormalParams, $VarDecls, $Rstore2) = $Rstore3
-    ===>
-    extractSignatureFromTerms($Term, $TermPlus, $MessageId, $Path, 
-                              $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+                             $FormalParams, $VarDecls, $Rstore)
 
-  [extractSignatureFromTerm-compound]
-    $Term = $Id($TermPlus),
-    addTermSignature($Term, $MessageId, $Path, 
-                     $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
-    $Path = [$Stepplus],
-    extractSignatureFromTerms($TermPlus, $MessageId, [$Stepplus, 0], 
-                              $FormalParams, $VarDecls, $Rstore2) = $Rstore3
-    ===>
-    extractSignatureFromTerm($Term, $MessageId, $Path, 
-                             $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+[extractSignatureFromTerms-many]
+  extractSignatureFromTerm($Term, $MessageId, $Path, 
+                           $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
+  $Path = [$Steps, $Step],
+  extractSignatureFromTerms($TermPlus, $MessageId, [$Steps, $Step+1], 
+                            $FormalParams, $VarDecls, $Rstore2) = $Rstore3
+  ===>
+  extractSignatureFromTerms($Term, $TermPlus, $MessageId, $Path, 
+                            $FormalParams, $VarDecls, $Rstore1) = $Rstore3
 
-  [default-extractSignatureFromTerm-basic]
-    addTermSignature($Term, $MessageId, $Path, 
-                     $FormalParams, $VarDecls, $Rstore1) = $Rstore2
-    ===>
-    extractSignatureFromTerm($Term, $MessageId, $Path, 
-                             $FormalParams, $VarDecls, $Rstore1) = $Rstore2
+[extractSignatureFromTerm-compound]
+  $Term = $Id($TermPlus),
+  addTermSignature($Term, $MessageId, $Path, 
+                   $FormalParams, $VarDecls, $Rstore1) = $Rstore2,
+  $Path = [$Stepplus],
+  extractSignatureFromTerms($TermPlus, $MessageId, [$Stepplus, 0], 
+                            $FormalParams, $VarDecls, $Rstore2) = $Rstore3
+  ===>
+  extractSignatureFromTerm($Term, $MessageId, $Path, 
+                           $FormalParams, $VarDecls, $Rstore1) = $Rstore3
 
-  [addTermSignature-term]
-    $Type = getType($Term, $FormalParams, $VarDecls),
-    $Tuple1 = <path2str($Path), term2str($Type)>,
-    $Tuple2 = <$MessageId, $Tuple1>,
-    $Rstore2 = add-tuple(MSGTYPES, $Tuple2, $Rstore1),
-    $Tuple3 = <$Tuple2, get-area($Term)>,
-    $Rstore3 = add-tuple(MSGTYPE_OCCURS, $Tuple3, $Rstore2)
-    ===>    
-    addTermSignature($Term, $MessageId, $Path, 
-                     $FormalParams, $VarDecls, $Rstore1) = $Rstore3
+[default-extractSignatureFromTerm-basic]
+  addTermSignature($Term, $MessageId, $Path, 
+                   $FormalParams, $VarDecls, $Rstore1) = $Rstore2
+  ===>
+  extractSignatureFromTerm($Term, $MessageId, $Path, 
+                           $FormalParams, $VarDecls, $Rstore1) = $Rstore2
+
+[addTermSignature-term]
+  $Type = getType($Term, $FormalParams, $VarDecls),
+  $Tuple1 = <path2str($Path), term2str($Type)>,
+  $Tuple2 = <$MessageId, $Tuple1>,
+  $Rstore2 = add-tuple(MSGTYPES, $Tuple2, $Rstore1),
+  $Tuple3 = <$Tuple2, get-area($Term)>,
+  $Rstore3 = add-tuple(MSGTYPE_OCCURS, $Tuple3, $Rstore2)
+  ===>    
+  addTermSignature($Term, $MessageId, $Path, 
+                   $FormalParams, $VarDecls, $Rstore1) = $Rstore3
 
 
-  [path2str-basic]
-    path2str([natcon($Char*)]) = strcon(""" $Char* """)
+[path2str-basic]
+  path2str([natcon($Char*)]) = strcon(""" $Char* """)
 
-  [path2str-compound]
-    path2str([natcon($Char*), $Stepplus]) = 
-      strcon(""" $Char* """) 
-      || strcon(""" "," """) 
-      || path2str([$Stepplus])
+[path2str-compound]
+  path2str([natcon($Char*), $Stepplus]) = 
+    strcon(""" $Char* """) 
+    || strcon(""" "," """) 
+    || path2str([$Stepplus])

@@ -7,19 +7,28 @@ hiddens
     DetailsString DetailsChar
 
 exports
-  sorts ToolDef ToolDefs ToolName ToolAttrib ToolAttribName ToolAttribValue
+  sorts ToolDef ToolDefs ToolName ToolAttrib ToolAttribName
 
   lexical syntax
-    [a-z] [a-zA-Z0-9\-]*                                      -> ToolName
-    [a-z] [a-zA-Z\-]*                                         -> ToolAttribName
-    ~[\0-\31] \/ [\t\n]                                       -> DetailsChar
-    "<<" DetailsChar* ">>"                                    -> DetailsString
-    String                                                    -> ToolAttribValue
-    DetailsString                                             -> ToolAttribValue
+    [a-z] [a-zA-Z0-9\-]* -> ToolName
+    [a-z] [a-zA-Z\-]* -> ToolAttribName
+    ~[\0-\31] \/ [\t\n] -> DetailsChar
+    "<<" DetailsChar* ">>" -> DetailsString
+
+exports
+  sorts ToolAttribValue
+  lexical syntax
+    String -> ToolAttribValue
+    DetailsString -> ToolAttribValue
 
   context-free syntax
-    "tool" ToolName "is" "{" ToolAttrib* "}"                  -> ToolDef {cons("tooldef")}
-    "tool" ToolName "(" VarDecls ")" "is" "{" ToolAttrib* "}" -> ToolDef {cons("tooldefargs")}
-    ToolAttribName "=" ToolAttribValue                        -> ToolAttrib {cons("toolattrib")}
-    ToolDef*                                                  -> ToolDefs {cons("toolDefStar")}
+    "tool" ToolName "is" "{" ToolAttrib* "}"
+	-> ToolDef {cons("tooldef")}
+
+    "tool" ToolName "(" VarDecls ")" "is" "{" ToolAttrib* "}"
+	-> ToolDef {cons("tooldefargs")}
+
+    ToolAttribName "=" ToolAttribValue -> ToolAttrib {cons("toolattrib")}
+
+    ToolDef* -> ToolDefs {cons("toolDefStar")}
 

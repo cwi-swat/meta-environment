@@ -11,6 +11,7 @@ rel[<area,<str,str>>,area] MSGTYPES_OCCURS
 rel[area,str] PROCESSNAMES
 rel[area,str] PROCESSCREATES
 rel[area,str] PROCESSINVOCATIONS
+rel[area,str] TOOLS
 
 rel[area,str] USED_PROCESSES = PROCESSCREATES union PROCESSINVOCATIONS
 
@@ -18,16 +19,45 @@ rel[str,<area,str>] UNUSED_PROCESSES
   = {<"Unused process ",<N,V>> | <N,V> : PROCESSNAMES, V notin range(USED_PROCESSES)}
 
 rel[area,str] USED_VARS = USES union DEFS
-rel[area,str] UNUSED_VARS_PER_PROCESS = {<N,V> | <N,V> : DECLS, V notin range(domainR(USED_VARS,{N}))}
+
+rel[area,str] UNUSED_VARS_PER_PROCESS = {<N,V> | <N,V> : DECLS, V notin range(domainR(USED_VARS, {N}))}
+
 rel[str,<area,str>] UNUSED_VARS 
  = {<"Unused variable ",<N2,second(N1)>> | <N1,N2> : DECL_OCCURS, N1 in UNUSED_VARS_PER_PROCESS}
 
-rel[str,<area,str>] UNMATCHED_SENDS
- = {<"Unmatched send ",<N,V>> | <N,V> : SENDMESSAGES, V notin range(RECEIVEMESSAGES)} 
+rel[str,<area,str>] DEPRECATED_UNMATCHED_SENDS
+ = {<"Unmatched send ",<N,V>> | <N,V> : SENDMESSAGES, V notin range(RECEIVEMESSAGES)}
+
+
+rel[str,str] COMPATIBLE_TYPES = {<"str","str">, <"str", "term">, <"int", "int">, <"int", "term">, <"term", "term">}
+
+rel[area,area] MATCHING_PARAMS = {
+  <A1, A2> |
+  <A1, B1> : MSGTYPES,
+  <A2, B2> : MSGTYPES,
+  first(B1) == first(B2),
+  <second(B1), second(B2)> in COMPATIBLE_TYPES
+}
+
+rel[area,str] MATCHED_SENDS = {
+  <A1, V1> |
+  <A1, V1> : SENDMESSAGES,
+  <A2, V2> : RECEIVEMESSAGES,
+  V1 == V2,
+  <A1, A2> in MATCHING_PARAMS
+}
+
+rel[str,<area,str>] UNMATCHED_SENDS = {
+  <"Unmatched send ", <N,V>> | <N,V> : SENDMESSAGES \ MATCHED_SENDS
+}
+
 rel[str,<area,str>] UNMATCHED_RECEIVES
  = {<"Unmatched receive ",<N,V>> | <N,V> : RECEIVEMESSAGES, V notin range(SENDMESSAGES)}
 
-rel[str,<area,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
+rel[str,<area,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS1 union UNMATCHED_RECEIVES
+
+rel[str,<area,str>] TOOL_DEFINITIONS
+ = {<"Tool definition ", <N,V>> | <N,V> : TOOLS}
 
 rel[str,<area,str>] ALL_MESSAGES 
- = UNUSED_PROCESSES union UNMATCHED_MESSAGES union UNUSED_VARS
+ = UNUSED_VARS union UNUSED_PROCESSES union UNMATCHED_SENDS
