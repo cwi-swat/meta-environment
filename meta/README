@@ -59,7 +59,7 @@ Installation instructions:
     The Meta-Environment distribution depends on four other
     distributions.  Using CVS, you can get these distributions as
     follows (assuming you have accounts at both UvA and CWI.  External
-    distribution will be available at a later stage)
+    distribution will be available at a later stage):
 
     -- cd to the directory just above new-meta (new-meta/..)
     -- issue the following commands:
