@@ -37,7 +37,8 @@ equations
              asfrules2cfuncs(Funcdef*1,Rule+1,Rule+2,Namepair*) =
                (Funcdef*2,Decl* ++ Decl)
 
-  [ar2cf-3'1] get-funid(Rule) = funid(Char*),
+  [ar2cf-3'1] get-funid(Rule) = Funid,
+              remove-returns-list(Funid) = funid(Char*),
               is-list-funid(funid(Char*)) = false,
               is-memo(funid(Char*),Namepair*) = false,
               get-funargs(Rule) = Term+,
@@ -93,7 +94,8 @@ equations
                 ATerm identifier(Char*)(FormalArgs)
                 { Stat*9 }
 
- [ar2cf-3'2] get-funid(Rule) = funid(Char*),
+ [ar2cf-3'2] get-funid(Rule) = Funid,
+              remove-returns-list(Funid) = funid(Char*),
               is-memo(funid(Char*),Namepair*) = true,
               get-funargs(Rule) = Term+,
               funargs2cargs(Term+,0) = (FormalArgs,ActualArgs,Aint0),
@@ -129,7 +131,8 @@ equations
                 }
 
 
-  [ar2cf-3'3] get-funid(Rule) = funid(Char*),
+  [ar2cf-3'3] get-funid(Rule) = Funid,
+              remove-returns-list(Funid) = funid(Char*),
               get-funargs(Rule) = ,
               asfrules2cstats(Rule;Rule*,Namepair*) = (Stat*1,Aint1),
               %% Normal form construction
@@ -173,14 +176,14 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               asfrules2cstats(Rule+,Namepair*) =
                 asfrules2cstats(C-rule*1,C-rule*2,Namepair*,0,make-select-stat)
 
-[ar2cs-1'1]  Rule+ = Rule; Rule*,
-              get-funid(Rule) = Funid,
-              is-list-funid(Funid) = true,
-              make-c-rules(Rule+) = C-rule+
-             
-              ======================================================
-              asfrules2cstats(Rule+,Namepair*) =
-                list2cstats(C-rule+,Namepair*,0)
+%%[ar2cs-1'1]  Rule+ = Rule; Rule*,
+%%              get-funid(Rule) = Funid,
+%%              is-list-funid(Funid) = true,
+%%             make-c-rules(Rule+) = C-rule+
+%%             
+%%              ======================================================
+%%              asfrules2cstats(Rule+,Namepair*) =
+%%                list2cstats(C-rule+,Namepair*,0)
 
   [ar2cs-1'2] asfrules2cstats(,Namepair*) = (,0)
 

@@ -95,7 +95,8 @@ equations
 
   [mce-1'2] make-atmp(Aint+) = CConstant,
             is-char(Funid) = false,
-            get-funid(Funid,Namepair*) = funid(Char*)
+            get-funid(Funid,Namepair*) = Funid2,
+            remove-returns-list(Funid2) = funid(Char*)
             =========================================
             make-c-expression((Funid,Aint+),Namepair*) =
               check_sym(CConstant,identifier(Char* "s""y""m"))
@@ -107,7 +108,8 @@ equations
               is_char(Expression,ActualArg2)
 
   [mce-2'2] is-char(Funid) = false,
-            get-funid(Funid,Namepair*) = funid(Char*)
+            get-funid(Funid,Namepair*) = Funid2,
+            remove-returns-list(Funid2) = funid(Char*)
             =========================================
             make-c-expression(Funid,Expression,Namepair*) =
               check_sym(Expression,identifier(Char* "s""y""m"))

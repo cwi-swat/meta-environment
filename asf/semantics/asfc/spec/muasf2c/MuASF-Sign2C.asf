@@ -71,50 +71,54 @@ funcdef2cfuncs(funid(Char*1),Namepair*) =
 )
 
   [fd2c-2'2] is-list-funid(funid(Char*1)) = false,
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
              is-quoted-funid(funid(Char*2)) = true
              =====================================
              funcdef2cfuncs(funid(Char*1),Namepair*) =
-               (funid(Char*1),
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)();,
-                identifier(Char*1 "s""y""m") = ATmakeSymbol(identifier(Char*2),0,ATtrue);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+               (funid(Char*4),
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)();,
+                identifier(Char*4 "s""y""m") = ATmakeSymbol(identifier(Char*2),0,ATtrue);
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'3] is-external(Annos) = false,
              is-list-funid(funid(Char*1)) = false,
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
              is-quoted-funid(funid(Char*2)) = true
              =====================================
              funcdef2cfuncs(funid(Char*1) Annos,Namepair*) =
-               (funid(Char*1) Annos,
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)();,
-                identifier(Char*1 "s""y""m") = ATmakeSymbol(identifier(Char*2),0,ATtrue);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+               (funid(Char*4) Annos,
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)();,
+                identifier(Char*4 "s""y""m") = ATmakeSymbol(identifier(Char*2),0,ATtrue);
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'4] is-list-funid(funid(Char*1)) = false,
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
              is-quoted-funid(funid(Char*2)) = false
              ======================================
              funcdef2cfuncs(funid(Char*1),Namepair*) =
-               (funid(Char*1),
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)();,
-                identifier(Char*1 "s""y""m") = ATmakeSymbol(identifier(""" Char*2 """),0,ATfalse);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+               (funid(Char*4),
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)();,
+                identifier(Char*4 "s""y""m") = ATmakeSymbol(identifier(""" Char*2 """),0,ATfalse);
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'5] is-external(Annos) = false,
              is-list-funid(funid(Char*1)) = false,
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
              is-quoted-funid(funid(Char*2)) = false
              ======================================
              funcdef2cfuncs(funid(Char*1) Annos,Namepair*) =
-               (funid(Char*1) Annos,
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)();,
-                identifier(Char*1 "s""y""m") = ATmakeSymbol(identifier(""" Char*2 """),0,ATfalse);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+               (funid(Char*4) Annos,
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)();,
+                identifier(Char*4 "s""y""m") = ATmakeSymbol(identifier(""" Char*2 """),0,ATfalse);
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'6] funcdef2cfuncs(funid(Char*) {external},Namepair*) =
                (,static Symbol identifier(Char* "s""y""m");
@@ -136,61 +140,65 @@ funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
 
   [fd2c-2'8] is-list-funid(funid(Char*1)) = false,
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              is-quoted-funid(funid(Char*2)) = true,
              sigargs2cargs(Sigarg+,1) = FormalArgs,
              countsigargs(Sigarg+) = natcon(Char*3)
              ====================================
              funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
-               (funid(Char*1)(Sigarg+),
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)(FormalArgs);,
-                identifier(Char*1 "s""y""m") =
+               (funid(Char*4)(Sigarg+),
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)(FormalArgs);,
+                identifier(Char*4 "s""y""m") =
                   ATmakeSymbol(identifier(Char*2),integer-constant(Char*3),ATtrue);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'9] is-external(Annos) = false,
              is-list-funid(funid(Char*1)) = false,
+             remove-returns-list(funid(Char*1)) = funid(Char*4),
              np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
              is-quoted-funid(funid(Char*2)) = true,
              sigargs2cargs(Sigarg+,1) = FormalArgs,
              countsigargs(Sigarg+) = natcon(Char*3)
              ====================================
              funcdef2cfuncs(funid(Char*1)(Sigarg+) Annos,Namepair*) =
-               (funid(Char*1)(Sigarg+) Annos,
-                static Symbol identifier(Char*1 "s""y""m");
-                static ATerm identifier(Char*1)(FormalArgs);,
-                identifier(Char*1 "s""y""m") =
+               (funid(Char*4)(Sigarg+) Annos,
+                static Symbol identifier(Char*4 "s""y""m");
+                static ATerm identifier(Char*4)(FormalArgs);,
+                identifier(Char*4 "s""y""m") =
                   ATmakeSymbol(identifier(Char*2),integer-constant(Char*3),ATtrue);
-                ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+                ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'10] is-list-funid(funid(Char*1)) = false,
               np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
+              remove-returns-list(funid(Char*1)) = funid(Char*4),
               is-quoted-funid(funid(Char*2)) = false,
               sigargs2cargs(Sigarg+,1) = FormalArgs,
               countsigargs(Sigarg+) = natcon(Char*3)
               ======================================
               funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
-                (funid(Char*1)(Sigarg+),
-                 static Symbol identifier(Char*1 "s""y""m");
-                 static ATerm identifier(Char*1)(FormalArgs);,
-                 identifier(Char*1 "s""y""m") =
+                (funid(Char*4)(Sigarg+),
+                 static Symbol identifier(Char*4 "s""y""m");
+                 static ATerm identifier(Char*4)(FormalArgs);,
+                 identifier(Char*4 "s""y""m") =
                    ATmakeSymbol(identifier(""" Char*2 """),integer-constant(Char*3),ATfalse);
-                 ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+                 ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'11] is-external(Annos) = false,
               is-list-funid(funid(Char*1)) = false,
+              remove-returns-list(funid(Char*1)) = funid(Char*4),
               np-lookup(funid(Char*1),Namepair*) = funid(Char*2),
               is-quoted-funid(funid(Char*2)) = false,
               sigargs2cargs(Sigarg+,1) = FormalArgs,
               countsigargs(Sigarg+) = natcon(Char*3)
               ======================================
               funcdef2cfuncs(funid(Char*1)(Sigarg+) Annos,Namepair*) =
-                (funid(Char*1)(Sigarg+) Annos,
-                 static Symbol identifier(Char*1 "s""y""m");
-                 static ATerm identifier(Char*1)(FormalArgs);,
-                 identifier(Char*1 "s""y""m") =
+                (funid(Char*4)(Sigarg+) Annos,
+                 static Symbol identifier(Char*4 "s""y""m");
+                 static ATerm identifier(Char*4)(FormalArgs);,
+                 identifier(Char*4 "s""y""m") =
                    ATmakeSymbol(identifier(""" Char*2 """),integer-constant(Char*3),ATfalse);
-                 ATprotectSymbol(identifier(Char*1 "s""y""m"));)
+                 ATprotectSymbol(identifier(Char*4 "s""y""m"));)
 
   [fd2c-2'10] sigargs2cargs(Sigarg+,1) = FormalArgs
               =====================================
@@ -236,6 +244,12 @@ funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
                          register_prod(ATparse(identifier(Char*1)),
                          identifier("l" Char*2),identifier("l" Char*2 "s""y""m"));
 
+  [np2cs-2'2] is-list-funid(funid(Char*1)) = false
+              ====================================
+              namepair2rstats((funid(Char*1),funid(""""[""l" Char*2"]"""" Char*3),Term*)) =
+                register_prod(ATparse(identifier(Char*1)),
+                 identifier("l" Char*2 Char*3),identifier("l" Char*2 Char*3 "s""y""m"));
+
   [np2cs-2'3] is-quoted-funid(funid(Char*1)) = true
               =====================================
               namepair2rstats((funid(Char*1),funid("_" Char*2),Term*)) =
@@ -266,5 +280,8 @@ funcdef2cfuncs(funid(Char*1)(Sigarg+),Namepair*) =
   [np2ls-2'2] namepair2lstats((funid(Char*1),funid("l" Char*2),Term*)) =
 
   [np2ls-2'2] namepair2lstats((funid(Char*1),funid(""""{""l" Char*2 "}""""),Term*)) =
+
+  [np2ls-2'2] namepair2lstats((funid(Char*1),funid(""""[""l" Char*2 "]"""" Char*),Term*)) =
+
 
   [np2ls-2'3] namepair2lstats((funid(Char*1),funid("_" Char*2),Term*)) =

@@ -132,7 +132,7 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
   }
   else {
     
-    VERBOSE("transforming muasf to C");
+    VERBOSE("transforming MuASF to C");
 
     c_code = muasfToC(muasf); 
 
@@ -146,7 +146,7 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
       ATerror("Error: unable to open %s for writing\n", output);
     }
 
-    VERBOSE("pretty printing c code");
+    VERBOSE("pretty printing C code");
 
     ToC_code(saveName, c_code, fp , myversion);
     fclose(fp);

@@ -59,6 +59,10 @@ equations
 remove-funcdef(funid(""""{"Char*"}""""),Funcdef*) = 
 remove-funcdef1(funid(Char*),Funcdef*)
 
+[rd]
+remove-funcdef(funid(""""["Char*1"]""""Char*2),Funcdef*) =
+remove-funcdef1(funid(Char*1 Char*2),Funcdef*)
+
 [default-rd]
 remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
 

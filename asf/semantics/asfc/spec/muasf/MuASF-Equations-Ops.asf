@@ -104,6 +104,19 @@ equations
   [trli-1'2] remove-trans-from-list-id(funid(""" "{" Char+ "}" "-" "t""r""a""n""s" """)) =
                funid(""" "{" Char+ "}" """)
 
+%% functions for funid's that indicate that the function is returning a list
+[it]
+is-returns-list-funid(funid(""""[" Char+ "]"""" Char*)) = true
+
+[default-it]
+is-returns-list-funid(Funid) = false
+
+[rt]
+remove-returns-list(funid(""""[" Char+ "]"""" Char* )) = funid(Char+ Char*)
+
+[default-rt]
+remove-returns-list(Funid) = Funid
+
 %% functions to check whether we are dealing with an ignored function as part
 %% of an optimization
   [mrli-1'1] is-list-funid(funid("""Char+""")) = false

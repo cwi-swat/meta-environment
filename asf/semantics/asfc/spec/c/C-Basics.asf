@@ -67,6 +67,8 @@ equations
 
   [mci-1'1] make-call-id(funid(""""{" Char* "}"""")) = identifier(Char*)
 
+  [mci-1'2] make-call-id(funid(""""[" Char*1 "]"""" Char*2)) = identifier(Char*1 Char*2)
+
    [default-mci] make-call-id(funid(Char*)) = identifier(Char*)
 
 

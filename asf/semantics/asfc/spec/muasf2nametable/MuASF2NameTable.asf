@@ -36,7 +36,8 @@ rename-funcdef(Funid(Sigarg+),Nametable) =
 rename-funid(Funid,Nametable)(Sigarg+)
 
 [rn-7]
-rename-funid(Funid,(Namepair*,Funid2,Aint0,Aint1)) = pn-lookup(Funid,Namepair*)
+rename-funid(Funid,(Namepair*,Funid2,Aint0,Aint1)) = 
+pn-lookup(normal-prod(Funid),Namepair*)
 
 [rn-8]
 rename-rulesopt(rules Rule*,Nametable) = rules rename-rulelist(Rule*,Nametable)
@@ -152,7 +153,8 @@ funcdefs2table(Funcdef;Funcdef+,Nametable1) = Nametable3
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1), 
 Funid2 = construct-funid(Funid1, Aint0),
-nt-add(Funid1,Funid2,Nametable2) = Nametable3
+Funid3 = normal-prod(Funid1),
+nt-add(Funid3,Funid2,Nametable2) = Nametable3
 ===>
 funcdef2table(Funid1(Sigarg+),Nametable1) = Nametable3
 
@@ -161,7 +163,8 @@ Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
 Attrs = {Term+},
 Funid2 = construct-funid(Funid1, Aint0, Term+),
-nt-add(Funid1,Funid2,Term+,Nametable2) = Nametable3
+Funid3 = normal-prod(Funid1),
+nt-add(Funid3,Funid2,Term+,Nametable2) = Nametable3
 ===>
 funcdef2table(Funid1(Sigarg+) Attrs,Nametable1) = Nametable3
 
@@ -169,7 +172,8 @@ funcdef2table(Funid1(Sigarg+) Attrs,Nametable1) = Nametable3
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
 Funid2 = construct-funid(Funid1,Aint0),
-nt-add(Funid1,Funid2,Nametable2) = Nametable3
+Funid3 = normal-prod(Funid1),
+nt-add(Funid3,Funid2,Nametable2) = Nametable3
 ===>
 funcdef2table(Funid1,Nametable1) = Nametable3
 
@@ -178,7 +182,8 @@ Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
 Attrs = {Term+},
 Funid2 = construct-funid(Funid1,Aint0,Term+),
-nt-add(Funid1,Funid2,Term+,Nametable2) = Nametable3
+Funid3 = normal-prod(Funid1),
+nt-add(Funid3,Funid2,Term+,Nametable2) = Nametable3
 ===>
 funcdef2table(Funid1 Attrs,Nametable1) = Nametable3
 
@@ -195,7 +200,23 @@ construct-funid(funid(""""p""r""o""d""(" Char+3 ")""""),
                 natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
 funid("l""f""_" Char+2 "_" Char+)
 
+%% Function that return lists are prefixed with LIST by the frontend
+[cf-3]
+construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) =
+funid(""""[" "l""f""_" Char+ "]"""")
+
+[cf-4]
+construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")""""),
+                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
+funid(""""[""l""f""_" Char+2 "_" Char+ "]"""")
+
 [default-cf-2]
 construct-funid(Funid,Aint0, Term+) = 
 construct-funid(Funid,Aint0)
 
+[np-0] 
+normal-prod(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")"""")) =
+funid(""""p""r""o""d""(" Char+3 ")"""")
+
+[default-np]
+ normal-prod(Funid) = Funid

@@ -26,6 +26,8 @@ exports
     get-funargs(Rule)                 -> TermList
     is-list-funid(FunId)              -> Bool
     is-trans-list-funid(FunId)        -> Bool
+    is-returns-list-funid(FunId)      -> Bool {prefer}
+    remove-returns-list(FunId)        -> Bool
     is-list-var-term(Term)            -> Bool
     is-var-term(Term)                 -> Bool
     is-boolean-term(Term)             -> Bool

@@ -37,6 +37,7 @@ hiddens
     funcdef2table(FuncDef,NameTable)          -> NameTable
     construct-funid(FunId, IntCon) -> FunId
     construct-funid(FunId, IntCon,TermList) -> FunId
+    normal-prod(FunId) -> FunId
 
 hiddens
 

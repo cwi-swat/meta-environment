@@ -31,6 +31,12 @@ typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
 /*}}}  */
 
+/*{{{  macros */
+
+#define RETURNS_LIST "LIST"
+
+/*}}}  */
+
 /*{{{  abbreviations for arbitrary layout  */
 
 static MA_Layout sp  = NULL; /* space */
@@ -48,7 +54,6 @@ static MA_Layout stringToLayout(const char *str);
 static MA_FunId stringToFunId(const char *str);
 static MA_FunId intToFunId(int ch);
 static void initLayoutAbbreviations(void);
-static char* prodToEscapedString(PT_Production prod);
 static int getProdArity(PT_Production prod, LayoutOption layout);
 static MA_Term attrToTerm(PT_Attr attr);
 static MA_TermTerms attrsToTermList(PT_Attrs attrs);
@@ -158,15 +163,6 @@ static void initLayoutAbbreviations(void)
   sp = stringToLayout(" ");
   nl = stringToLayout("\n");
   nl2 = stringToLayout("\n\n");
-}
-
-/*}}}  */
-/*{{{  static char* prodToEscapedString(PT_Production prod) */
-
-static char* prodToEscapedString(PT_Production prod)
-{
-  char *strProd = ATwriteToString((ATerm) prod);
-  return escape(strProd,"\"\\", QUOTED);
 }
 
 /*}}}  */
@@ -313,10 +309,63 @@ static MA_Annotations attributesToAnnotations(PT_Attributes attributes)
 
 static MA_FunId prodToFunId(PT_Production prod)
 {
-  char *strProd = prodToEscapedString(prod);
-  MA_FunId result = stringToFunId(strProd);
+  char *strProd;
+  char *str;
+  char *escaped;
+
+  MA_FunId result;
+  ATbool returnsList = ATfalse;
+
+  /* find out if this production produces a list */
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbol rhs;
+
+    rhs = PT_getProductionRhs(prod);
+
+    if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+      rhs = PT_getSymbolSymbol(rhs);
+    }
+
+    if (PT_isSymbolIterPlus(rhs) ||
+	PT_isSymbolIterStar(rhs) ||
+	PT_isSymbolIterPlusSep(rhs) ||
+	PT_isSymbolIterStarSep(rhs)) {
+       returnsList = ATtrue;
+    }
+  }
+
+  strProd = strdup(ATwriteToString((ATerm) prod));
+
+  if (strProd == NULL) {
+    ATerror("Unable to allocate memory for string.\n"); 
+    return NULL;
+  }
+
+  str = (char*) malloc(strlen(strProd) + 
+		       (returnsList ? strlen(RETURNS_LIST) : 0) + 1);
+
+  if (str == NULL) {
+    ATerror("Unable to allocate memory for string.\n");
+    return NULL;
+  } 
+  else {
+    str[0] = '\0';
+  }
+
+  if (returnsList) {
+    strcat(str,RETURNS_LIST);
+  }
+
+  strcat(str,strProd);
+
+  escaped = escape(str,"\"\\", QUOTED);
+
+  result = stringToFunId(escaped);
+
   free(strProd);
-  
+  free(str);
+  free(escaped);
+
   return result;
 }
 

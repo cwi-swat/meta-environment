@@ -215,10 +215,24 @@ equations
               is-var-term(Term1) = false,
               get-funid(Term1) = Funid2,
               is-cons(Funid2) = false,
+              is-returns-list-funid(Funid2) = false,
               term2carg2(false,Term1,Cenv1,Cenv2,
                          Aint1,Expression1,Funid1,Namepair*) =
                 (ActualArg+,Stat*,Aint2),
               transform-call(make_list,make_list,Namepair*,ActualArg+) = Expression2
+              ======================================================================
+              term2carg2(true,Term1,Cenv1,Cenv2,Aint1,Expression1,Funid1,Namepair*) =
+                (Expression2,Stat*,Aint2)
+
+[t2ca-2'12]   Expression1 != result,
+              is-var-term(Term1) = false,
+              get-funid(Term1) = Funid2,
+              is-cons(Funid2) = false,
+              is-returns-list-funid(Funid2) = true,
+              term2carg2(false,Term1,Cenv1,Cenv2,
+                         Aint1,Expression1,Funid1,Namepair*) =
+                (ActualArg+,Stat*,Aint2),
+              transform-call(remove_list,remove_list,Namepair*,ActualArg+) = Expression2
               ======================================================================
               term2carg2(true,Term1,Cenv1,Cenv2,Aint1,Expression1,Funid1,Namepair*) =
                 (Expression2,Stat*,Aint2)
