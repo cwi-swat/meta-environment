@@ -96,10 +96,6 @@ AC_ARG_WITH(tide,
 AC_SUBST(TIDEDEF)
 AC_SUBST(USE_TIDE)
 
-dnl Our own version of libdir whose value is set dynamically
-AC_SUBST(INSTLIBDIR)
-INSTLIBDIR="$libdir"
-
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)

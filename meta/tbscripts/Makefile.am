@@ -10,7 +10,6 @@ TBSCRIPTS = \
   dump-parsetable.tb \
   editors.tb \
   file-creator.tb \
-  gen.tb \
   get-parsetable.tb \
   meta.tb \
   module-utils.tb \

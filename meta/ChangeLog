@@ -3,6 +3,10 @@
 Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
  * configure.in:
    - banish PERL :-)
+   - remove INSTLIBDIR substitution
+ * tbscripts:
+   - move "gen.tb" to ToolBus pkg, adapters/gen-adapter/generic-adapter.idef
+     it is the interface definition of the generic-adapter.
 
 Mon Sep  8 14:04:42 CEST 2003 <jong@cwi.nl>
  * editors/text/common/connector.c:
