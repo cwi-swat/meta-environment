@@ -34,7 +34,8 @@ CLEANFILES  = $(TESTS)
 
 % : %.sh.src
 	sed 's@__TOOLBUSBIN__@$(TOOLBUS)/bin@g;\
-	     s@__DATADIR__@$(datadir)@g;' < $< > $@ && \
+	     s@__DATADIR__@$(datadir)@g;\
+	     s@__SGLR__@/$(SGLR)@g' < $< > $@ && \
 	chmod +x $@
 
 %.tb : %.tb.src

@@ -19,7 +19,7 @@
 
    $Id$
 */
-#include "../../sglr/sglr/sglr.idef"
+#include "sglr.idef"
 
 #include "../sdf2-language.tb"
 
