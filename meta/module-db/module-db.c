@@ -201,7 +201,7 @@ ATermList modules_depend_on(ATerm name, ATermList mods);
 ATerm update_sdf2_module(int cid, ATerm asfix)
 {
   ATerm t[8];
-  ATerm modname, appl, entry;
+  ATerm oldasfix, modname, appl, entry;
   ATermList imports, unknowns, chg_mods;
   ATerm place;
   char  *path;
@@ -213,31 +213,38 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
     entry = GetValue(new_modules_db, modname);
     place = ATelementAt((ATermList)entry, path_syn_loc);
 
-    if(ATmatch(place,"<str>",&path)) {
-      entry = (ATerm) ATmakeList(7,ATmake("<str>",path),
-                                   asfix,
-                                   Mtrue,
-                                   ATparse("unavailable"),
-                                   ATparse("unavailable"),
-                                   Mtrue,
-                                   ATparse("unavailable"));
-      PutValue(new_modules_db, modname, entry);
-      chg_mods = modules_depend_on(modname,ATempty);
+    oldasfix = ATelementAt((ATermList)entry, syn_loc);
+    if(!ATisEqual(asfix,oldasfix)) {
+      if(ATmatch(place,"<str>",&path)) {
+        entry = (ATerm) ATmakeList(7,ATmake("<str>",path),
+                                     asfix,
+                                     Mtrue,
+                                     ATparse("unavailable"),
+                                     ATparse("unavailable"),
+                                     Mtrue,
+                                     ATparse("unavailable"));
+        PutValue(new_modules_db, modname, entry);
+        chg_mods = modules_depend_on(modname,ATempty);
 ATfprintf(stderr,"Changed modules are %t\n", chg_mods);
-      update_syntax_status_of_modules(chg_mods); 
-      imports = get_import_section_sdf2(appl);
+        update_syntax_status_of_modules(chg_mods); 
+        imports = get_import_section_sdf2(appl);
 ATfprintf(stderr,"Imported modules %t\n", imports);
-      unknowns = replace_imports(modname,imports);
+        unknowns = replace_imports(modname,imports);
 ATfprintf(stderr,"New modules %t\n", unknowns);
-      return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
-                    modname,unknowns);
+        return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
+                      modname,unknowns);
+      } else {
+         ATerror("no path available for %t\n", asfix);
+         return NULL;
+      }
     } else {
-       ATerror("no path available for %t\n", asfix);
-       return NULL;
+       return ATmake("snd-value(imports(<term>,need-modules([<list>])))",
+                     modname,ATempty);
     }
-  } else {
+  }
+  else {
     ATerror("not an asfix module: %t\n", asfix);
-    return NULL;
+    return NULL; 
   }
 }
 
