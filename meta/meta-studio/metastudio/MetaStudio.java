@@ -1,7 +1,5 @@
 package metastudio;
 
-/*{{{  imports */
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -15,11 +13,7 @@ import javax.swing.text.*;
 import metastudio.graph.*;
 import aterm.*;
 
-/*}}}  */
-
 public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, ModuleSelectionListener {
-  //{{{ constants
-
   private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
   private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
   private static final String PREF_MSGPANE_STATUS = "messagepane.status";
@@ -37,29 +31,16 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   private static final String PREF_TOOLBAR_TIDE = "toolbar.tide";
 
-  private static final int STATUS_MESSAGE = 0;
-  private static final int STATUS_ERROR = 1;
-
   private static final int NODE_BORDER_WIDTH = 5;
   private static final int NODE_BORDER_HEIGHT = 5;
 
-  private static final Color[] STATUS_COLOR = { Color.black, Color.red };
-
-  //}}}
-
   public static MetaGraphFactory factory;
-
-  private int prefix = 0;
 
   private UserInterfaceBridge bridge;
 
-  //{{{ UI components
-
-  //private JLabel msgLabel;
   private JMenuBar menuBar;
   private JMenu fileMenu;
   private JToolBar toolBar;
-  private List moduleActions;
   private JList moduleList;
   private JPopupMenu modulePopup;
   private JPopupMenu newModulePopup;
@@ -99,8 +80,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   
   private Frame topFrame;
 
-  //}}}
-
   private String currentModule;
   private ModuleManager moduleManager;
 
@@ -111,19 +90,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     MetaStudio studio = new MetaStudio(args);
     studio.bridge.run();
     System.out.println("Thank you for using " + Preferences.getString("metastudio.name"));
-  }
-
-  //}}}
-
-  //{{{ private static final Integer[] intObjectArray(int[] input)
-
-  private static final Integer[] intObjectArray(int[] input) {
-    Integer[] result = new Integer[input.length];
-    for (int i = 0; i < input.length; i++) {
-      result[i] = new Integer(input[i]);
-    }
-
-    return result;
   }
 
   //}}}

@@ -10,10 +10,6 @@ public class Preferences
 {
   static private String title;
   static private Properties properties;
-  static private ClassLoader loader;
-
-  //{{{ static public void initialize(String title, defaults, loader)
-
   static public void initialize(String title, Properties defaults)
   {
     Preferences.title = title;
