@@ -14,6 +14,7 @@ configuration interface
 
 requires
    asc-support	1.8
+   error-support 0.1
    asf-support	1.2
    sdf-support	2.0
    pt-support   1.0

@@ -4,6 +4,7 @@ TESTS		= test-chars
 
 INCLUDES	= -I${ATERM}/include \
 		-I${TOOLBUSLIB}/include \
+		-I${ERROR_SUPPORT}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
 		-I${ASF_SUPPORT}/include \
@@ -42,6 +43,7 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
                         -L$(ASF_SUPPORT)/lib -lASFME \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+                        -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                         -L$(TOOLBUSLIB)/lib -lATB \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)

@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/07 (jurgenv@cwi.nl)
+ * Added dependency on error-support because asc-support needs it.
+
 2003/12/18 (markvdb@cwi.nl)
  * Removed sdf2stats and improved the Sdf-Checker.
 
