@@ -23,7 +23,7 @@
 SUBDIRS         = terms
 
 TESTS           = reduce-test prepare-restore-test \
-                  equalModuloWhitespace-test whitespace-test
+                  equalModuloWhitespace-test whitespace-test regress-test
 
 EXTRA_DIST      = reduce-test.sh.src prepare-restore-test.sh.src \
                   equalModuloWhitespace-test.sh.src whitespace-test.sh.src \

@@ -1,0 +1,55 @@
+#! /bin/sh
+#
+#    Meta-Environment - An environment for language prototyping.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+#    $Id$
+
+toolbus=__TOOLBUS__
+datadir=__DATADIR__
+
+tests=0
+failed=0
+
+regress_test () {
+  eqs=$1
+  trm=$2
+  ref=$3 
+  res=$trm.res 
+  tests=`expr $tests + 1`
+  rm -f /tmp/$trm.res
+  ../src/evaluator -e $eqs -i $trm -o $res
+  ./equalModuloWhitespace $ref $res 
+  if [ $? != 0 ]; then
+    echo "Failed regression test: $eqs" 
+    failed=`expr $failed + 1`
+  else
+    printf .
+  fi
+}
+
+# Test whether equations are available that *should* be available.
+regress_test terms/Traversal-Typecheck.asf.baf terms/Traversal-Typecheck.trm.asfix1  terms/Traversal-Typecheck.ref.asfix1 
+
+echo ""
+
+if [ $failed != 0 ]; then
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi
