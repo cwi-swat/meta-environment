@@ -7,3 +7,8 @@ sorts NatCon
 lexical syntax
   
  [0-9]+ -> NatCon
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
