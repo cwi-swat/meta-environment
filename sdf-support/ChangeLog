@@ -2,6 +2,7 @@ $Id$
 
 2003/07/22 ({markvdb,jurgenv}@cwi.nl)
  * Changed is-valid-modulename-in-path to is-valid-modulename
+ * Made getTransitiveImports robust against incomplete specifications
 
 2003/07/18 (jurgenv@cwi.nl)
  * Removed an unnecessary ATBunpack
