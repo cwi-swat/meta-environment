@@ -19,6 +19,9 @@
 
 ------------------------------------------------------------------------------
 
+Date:   Tue Jul 17 10:24:44 CEST 2001
+- 0.18 released, version bumped to 0.19
+
 Date:   Thu Jul 12 10:49:22 CEST 2001
 - Moved Java-sources of ATB (ATerm ToolBus support)
   from ATerm-distribution to ToolBus distribution. (jong@cwi.nl)
