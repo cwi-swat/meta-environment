@@ -17,7 +17,7 @@ static char *resolve(char *, const char *);
    in a linked list pointed to by free_list.
 */
 
-#define NSEGMENT 3072                /* Max. # of segments */
+#define NSEGMENT 8192               /* Max. # of segments */
 static term *segments[NSEGMENT];    /* pointers to the segments */
 static int nsegment = 0;            /* number of segments in use */
 static int nterm;                   /* total number of terms */
@@ -145,6 +145,13 @@ void TBunprotect(term **pt)
 		       }\
 		     }
 
+/*
+   Fri Dec 19 11:43:06 MET 1997:
+     Replaced the old version of TBcollect with a new one which
+     has been contributed by Jan Friso Groote. This new version
+     fixes a number of problems with the old algorithm, which was
+     much too memory inefficient.
+*/
 /* Perform a complete garbage collection:
    - push all roots on the mark_stack
    - mark all terms that can be reached from there
@@ -158,12 +165,13 @@ void TBcollect()
   register term *t;
   register int i, nf;
   register term_list *fl;
+  static int l=0;
 
-  if(nfree >= nterm/20)
+  if ((nterm - nfree) < 1.5*l) /* de La Poutre regel */
     return;
 
   mark_sp = &mark_stack[0];
-  
+
   for(i = 0; i < nroot; i++){
     if(mark_roots[i]) {
       t = *mark_roots[i];
@@ -174,31 +182,31 @@ void TBcollect()
 
   fl = NULL;
   nf = 0;
-  for(i = 0; i < nsegment; i++){  
+  for(i = 0; i < nsegment; i++){
     register term *endt = &segments[i][segment_size(i)];
 
     for(t = &segments[i][0]; t < endt; t++){
       if(mark(t)){
-	mark(t) = TBfalse;
+        mark(t) = TBfalse;
       } else {
-	if(is_str(t))
-	  free(str_val(t));
-	else
-	  if(is_bstr(t))
-	    free(bstr_val(t));
+        if(is_str(t))
+          free(str_val(t));
+        else
+          if(is_bstr(t))
+            free(bstr_val(t));
 
-	t->trm_kind = t_list;
-	first(t) = NULL; 
-	next(t) = fl;
-	fl = t;
-	nf++; 
+        t->trm_kind = t_list;
+        first(t) = NULL;
+        next(t) = fl;
+        fl = t;
+        nf++;
       }
     }
   }
   free_list = fl;
   nfree = nf;
-  if(nfree < nterm/2)
-    add_segment();
+  l=nterm-nfree;
+
 /*
   {  extern char *tool_name;
      fprintf(stderr, "%s: TBcollect. completed (%d total, %d free)\n", 
