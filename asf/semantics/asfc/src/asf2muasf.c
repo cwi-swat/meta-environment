@@ -704,6 +704,9 @@ static MA_Cond conditionToCond(ASF_ASFCondition condition,
   else if (ASF_isASFConditionNegative(condition)) {
     result = MA_makeCondUnequal(maLhs,sp,sp,maRhs);
   }
+  else if (ASF_isASFConditionNoMatch(condition)) {
+    ATerror("conditionToCond: the compiler does not support !:= conditions yet\n");
+  }
   else {
     ATerror("conditionToCond: unable to process %s\n",
 	    PT_yieldTree((PT_Tree) condition));
