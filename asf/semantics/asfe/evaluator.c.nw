@@ -115,6 +115,7 @@ aterm_list *equations_db;
 aterm_list *active_rules;
 aterm_list *fail_env;
 arena Ar;
+aterm *tmp1, *tmp2, *tmp3;
 
 #define is_fail_env(env)	(t_equal(env,fail_env))
 #define v_lookup(var,env)	(TdictGet(env,var))
@@ -179,7 +180,9 @@ aterm *exists(int cid, aterm *name)
 void create_equations_db(int cid)
 {
   equations_db = t_empty(NULL);
-  Tprotect(equations_db);
+  active_rules = t_empty(NULL);
+  t_protect(equations_db);
+  t_protect(active_rules);
 }
 @
 
@@ -189,9 +192,9 @@ void create_equations_db(int cid)
 <<change_equations_db>>=
 void change_equations_db(aterm_list *db)
 {
-  Tunprotect(equations_db);
+  t_unprotect(equations_db);
   equations_db = db;
-  Tprotect(equations_db);
+  t_protect(equations_db);
 }
 @
 
@@ -201,9 +204,9 @@ void change_equations_db(aterm_list *db)
 <<change_active_rules>>=
 void change_active_rules(aterm_list *ar)
 {
-  Tunprotect(active_rules);
+  t_unprotect(active_rules);
   active_rules = ar;
-  Tprotect(active_rules);
+  t_protect(active_rules);
 }
 @
 
@@ -917,10 +920,10 @@ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
     }
     else {
       newtrm = asfix_put_appl_args(&local,trm,newargs);
-      Tprotect(newtrm);
+      t_protect(newtrm);
       TflushArena(&local);
       Tadd2Arena(&local, newtrm);
-      Tunprotect(newtrm);
+      t_unprotect(newtrm);
       rewtrm = select_and_rewrite(&local, newtrm);
     }
   }
@@ -960,7 +963,7 @@ int main(int argc, char **argv)
   TinitArena(NULL,&Ar);
   TBconnect(cid);
   fail_env = Tmake(&Ar,"[fail]");
-  Tprotect(fail_env);
+  t_protect(fail_env);
   TBeventloop();
 
   return 0;
