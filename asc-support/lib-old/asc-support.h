@@ -85,17 +85,27 @@ extern Symbol record_sym;
 #define singleton(t) (ATerm)(ATmakeList1((t)))
 #define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
 
+#define MEMO_OFF
+#define MEMO_MEM_INFO
+
 /* Macros to access the database */
+#ifndef MEMO_OFF
 #define get_result(db,k) (ATtableGet(db,k))
 #define put_result(db,k,v) (ATtablePut(db,k,v))
 #define get_table(db) (db)
+#ifdef MEMO_MEM_INFO
+#define create_table(db,v) (db = ATtableCreate(500,75), reg_memo_table(&db, #db))
+extern void reg_memo_table(ATermTable *db, char *name);
+extern void print_memo_table_sizes();
+#else
 #define create_table(db,v) (db = ATtableCreate(500,75))
-/*
+#endif
+#else
 #define get_result(db,k) (NULL)
 #define put_result(db,k,v)
 #define get_table(db) (db)
 #define create_table(db,v) (db = ATtableCreate(10,75))
-*/
+#endif
 
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))

@@ -46,7 +46,21 @@
 #endif
 
 /*}}}  */
-/*{{{  types needed for registering and resolving
+/*{{{  defines */
+
+#define MAX_STORE 10240
+#define MAGIC_HASH_CONST_APPL 3001
+#define MAGIC_HASH_CONST_LIST 4507
+
+#define HASH_PROD(prod, size) (((unsigned)(((int)(prod))>>2)) % (size))
+#define HASH_SYM(sym, size) (((unsigned)(((int)(sym))>>2)) % (size))
+
+#define MAX_MEMO_TABLES 1024
+
+/*}}}  */
+/*{{{  types needed for registering and resolving */
+
+/*
  *      MuASF function names. 
  */
 
@@ -58,16 +72,6 @@ typedef struct bucket
   funcptr func;
   Symbol sym;
 } bucket;
-
-/*}}}  */
-/*{{{  defines */
-
-#define MAX_STORE 10240
-#define MAGIC_HASH_CONST_APPL 3001
-#define MAGIC_HASH_CONST_LIST 4507
-
-#define HASH_PROD(prod, size) (((unsigned)(((int)(prod))>>2)) % (size))
-#define HASH_SYM(sym, size) (((unsigned)(((int)(sym))>>2)) % (size))
 
 /*}}}  */
 /*{{{  global variables */
@@ -181,6 +185,13 @@ static ATerm make_asfix_list(ATermList l, char *sort);
 static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep);
 static int get_list_length(ATermList chars);
 static ATermList terms_to_asfix(ATermList a, ATermAppl t, ATerm sort);
+
+/* Variables needed when counting memo table size */
+static int nr_memo_tables = 0;
+static ATermTable *memo_tables[MAX_MEMO_TABLES];
+static char *memo_table_names[MAX_MEMO_TABLES];
+
+
 
 /* Local macros */
 
@@ -664,6 +675,38 @@ static ATerm make_list_type(ATerm type, ATermList args)
 }
 /*}}}  */
 
+/*{{{  void reg_memo_table(ATermTable *db, char *name) */
+
+void reg_memo_table(ATermTable *db, char *name)
+{
+  memo_tables[nr_memo_tables] = db;
+  memo_table_names[nr_memo_tables] = name;
+
+  nr_memo_tables++;
+}
+
+/*}}}  */
+/*{{{  void print_memo_table_sizes() */
+
+void print_memo_table_sizes()
+{
+  int i, nr_key_nodes, nr_value_nodes;
+  ATermList keys, values;
+
+  for (i=0; i<nr_memo_tables; i++) {
+    keys = ATtableKeys(*memo_tables[i]);
+    values = ATtableValues(*memo_tables[i]);
+    nr_key_nodes = AT_calcUniqueSubterms(keys);
+    nr_value_nodes = AT_calcUniqueSubterms(values);
+
+    fprintf(stderr, "table %s has %d elements, %d + %d = %d unique nodes.\n",
+	    memo_table_names[i], ATgetLength(keys), 
+	    nr_key_nodes, nr_value_nodes, nr_key_nodes+nr_value_nodes);
+  }
+}
+
+/*}}}  */
+
 /*{{{  ATerm innermost( ATerm t) */
 
 /* This function is the core of the innermost reduction strategy. Given the
@@ -798,7 +841,9 @@ static ATermList innermost_list(ATermList l)
 
 /*}}}  */
 
-/*{{{
+/*{{{  ATerm traverse(Symbol func, int argc, int traverse_arg, ...) */
+
+/*
  * The traverse function descends outermostly into the argument indicated by traverse_arg,
  * calling func on every node. The other arguments carry information that is used by func.
  */
@@ -988,8 +1033,7 @@ static ATerm lanalyze(Symbol func, Symbol synthesizer, ATerm start, int traverse
   return t; 
 }
 
-/*}}} */
-
+/*}}}  */
 
 /*{{{  ATerm unquote(ATerm t) */
 
