@@ -1,8 +1,7 @@
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(toolbus, 1.1)
-
-ACLOCAL="${ACLOCAL} -I ."
+AC_PREREQ(2.59)
 
 dnl Which compiler to use?
 AC_PROG_CC
