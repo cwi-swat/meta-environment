@@ -137,18 +137,18 @@ ATerm SG_YieldAmbPT(ATerm t)
         if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
           /*  No ambiguity  */
           ret = (ATerm)ATmakeAppl2(SG_ApplAfun(),
-                                   SG_YieldPT(ATgetFirst(args)),
-                                   SG_YieldPT(ATelementAt(args, 1)));
+                                   SG_YieldAmbPT(ATgetFirst(args)),
+                                   SG_YieldAmbPT(ATelementAt(args, 1)));
         } else {
           /*  Ambiguous node  */
           SGnrAmb(SG_NRAMB_INC);
           ambs = (ATermList) ATgetFirst((ATermList)ambs);
           ret  = (ATerm)ATmake("amb(<list>)",
-                               (ATermList)SG_YieldPT((ATerm) ambs));
+                               (ATermList)SG_YieldAmbPT((ATerm) ambs));
         }
       } else {
         ret = (ATerm) ATmakeApplList(fun,
-                                    (ATermList) SG_YieldPT((ATerm)args));
+                                    (ATermList) SG_YieldAmbPT((ATerm)args));
       }
       return ret;
     case AT_LIST:
@@ -156,7 +156,7 @@ ATerm SG_YieldAmbPT(ATerm t)
       for(l = ATempty, args = (ATermList) t;
           !ATisEmpty(args); args = ATgetPrefix(args)) {
         t2 = ATgetLast(args);
-        l = ATinsert(l, SG_YieldPT(t2));
+        l = ATinsert(l, SG_YieldAmbPT(t2));
       }
       return (ATerm) l;
 /*

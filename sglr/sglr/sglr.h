@@ -24,7 +24,7 @@ enum SG_NrAmbKind {SG_NRAMB_ASK, SG_NRAMB_ZERO, SG_NRAMB_INC};
 int  SGnrAmb(int mode);
 
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
-void  SGtreeToDotFile(char *prg, char *fnam, ATerm t);
+void  SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress);
 
 FILE  *SGopenLog(char *program, char *fnam);
 FILE  *SGlog(void);
