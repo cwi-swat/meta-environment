@@ -1,5 +1,13 @@
 # $Id$
 
+Wed Mar 24 13:18:03 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - simplify implementation of move-cursor
+ * tbscripts/editors.tb:
+   - remove debug spam
+ * editors/structure/structure-editor.c:
+   - implement move-{left,right,up,down}
+
 Tue Mar 23 15:40:35 CET 2004 <{jong,kooiker}@cwi.nl>
  * editors/structure:
    - set-cursor-at-offset and get-focus-at-cursor are working again
