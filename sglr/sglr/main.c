@@ -129,7 +129,7 @@ batch (int argc, char **argv)
   if (generate_dot)
     tree_to_dotfile(dotoutput, parse_tree, suppress_lexicals);
 
-  fprintf(stderr, "parsing succeeded\n");
+  fprintf(stderr, "%s:  parsing succeeded\n", input_file_name);
 
   exit(0);
 }

@@ -332,11 +332,11 @@ tree_to_dotfile(char *file, term *t, bool suppress)
 
   fprintf(dot, "strict digraph ParseTree { \n"
 	       "\tordering=out;\n"
-/* These belong on dot's command line, really */
+/* These belong on dot's command line, really 
 	       "\tcenter=true;\n"
 	       "\tranksep=.44;\n"
 	       "\tnode[shape=plaintext fontname=\"Helvetica-Bold\" fontsize=12 height=.32];\n\n"
-/* */
+ */
 	  );
   tree_to_dot(dot, t, 0, NULL, suppress);
   fprintf(dot, "}\n");
