@@ -25,11 +25,7 @@ let
 in
   Description := first(args(Subject)) .
   Location := first(next(args(Subject))) .
-  if not(equal(Location,no-location)) then
-    ShowLocation(Location)
-  else
-     snd-note(ui-status(messagef("Subject %s has no source location", [Description])))
-  fi
+  ShowLocation(Location)
 endlet
 
 process ShowLocation(Location : term) is
@@ -38,9 +34,13 @@ let
   ModuleName : str,
   FileName : str
 in
-  FileName := first(args(Location)) .
-  snd-msg(edit-general(FileName)) .
-  rec-msg(editor-opened(ModuleName?, EditorId?)) .
-  snd-msg(set-cursor-at-error-location(EditorId, Location)) .
-  snd-msg(set-focus-at-error-location(EditorId, Location)) 
+  if not(equal(Location, no-location)) then
+    FileName := first(args(Location)) .
+    snd-msg(edit-general(FileName)) .
+    rec-msg(editor-opened(ModuleName?, EditorId?)) .
+    snd-msg(set-cursor-at-error-location(EditorId, Location)) .
+    snd-msg(set-focus-at-error-location(EditorId, Location)) 
+  else
+    tau
+  fi
 endlet  

@@ -281,6 +281,12 @@ in
           ReturnFailed(EditorId,Stack)
         fi
       +
+        rec-msg(get-focus-location, Stack?, EditorId?) .
+	snd-msg(get-focus-location(EditorId)) .
+	rec-msg(focus-location(EditorId, PosInfo?)) .
+	StackPushTerm(Stack, Stack?, PosInfo) .
+	ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(set-focus, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         ReplaceFocus(EditorId, STree) .
