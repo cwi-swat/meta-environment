@@ -19,6 +19,11 @@
 #
 #
 # $Id$
+2001/01/31 (mdejonge@cwi.nl)
+   * Added --with-wish and --with-xemacs configuration switches
+   * Extended PATH in meta script with location of wish and removed hard
+     path to wish in graph-browser
+
 2001/01/30 (mdejonge@cwi.nl)
    * Factored out stand-alone components from meta repository
 

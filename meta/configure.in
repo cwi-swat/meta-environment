@@ -117,26 +117,6 @@ AC_ARG_WITH(asc-support,
 
 AC_SUBST(ASC_SUPPORT)
 
-dnl ASFIX='${top_srcdir}/asfix'
-dnl ASFIXBIN='$(ASFIX)'
-dnl ASFIXINC='$(ASFIX)/libasfix'
-dnl ASFIXLIB='$(ASFIX)/libasfix'
-dnl 
-dnl AC_SUBST(ASFIX)
-dnl AC_SUBST(ASFIXBIN)
-dnl AC_SUBST(ASFIXINC)
-dnl AC_SUBST(ASFIXLIB)
-dnl 
-dnl ASC='${top_srcdir}/asc-support'
-dnl ASCBIN='$(ASC)'
-dnl ASCINC='$(ASC)'
-dnl ASCLIB='$(ASC)'
-dnl 
-dnl AC_SUBST(ASC)
-dnl AC_SUBST(ASCBIN)
-dnl AC_SUBST(ASCINC)
-dnl AC_SUBST(ASCLIB)
-
 dnl Our own version of libdir iwhose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -177,11 +157,57 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDEINC)
 AC_SUBST(USE_TIDE)
 
+dnl Try to locate at&t graphviz stuff
+AC_PATH_PROGS(GRAPHVIZ, dot, no)
+if  test "${GRAPHVIZ}" != "no"; then
+   GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\``
+fi
+
 dnl Handle --with-graphviz=... argument to configure
 AC_ARG_WITH(graphviz,
    [  --with-graphviz=DIR     graphviz package is in DIR],
    GRAPHVIZ=${withval})
+
+dnl Fail when graphviz was not specified and could not be found automatically.
+if test "${GRAPHVIZ}" = "no" ; then
+   AC_ERROR(Required \"graphviz\" package not found.)
+fi
 AC_SUBST(GRAPHVIZ)
+
+
+dnl Try to find a suitable wish version
+AC_PATH_PROGS(WISH,wish8.0 wish8.1 wish, no)
+if  test "${WISH}" != "no"; then
+   WISH=`dirname \`dirname ${WISH}\``
+fi
+
+dnl Handle --with-wish=... argument to configure
+AC_ARG_WITH( wish,
+   [  --with-wish=DIR         Wish package is in DIR],
+   WISH=${withval})
+
+dnl Fail when wish was not specified and could not be found automatically.
+if test "${WISH}" = "no" ; then
+   AC_ERROR(Required \"wish\" package not found.)
+fi
+AC_SUBST(WISH)
+
+dnl Try to find xemacs
+AC_PATH_PROGS(XEMACS,xemacs, no)
+if  test "${XEMACS}" != "no"; then
+   XEMACS=`dirname \`dirname ${XEMACS}\``
+fi
+
+dnl Handle --with-xemacs=... argument to configure
+AC_ARG_WITH( wish,
+   [  --with-xemacs=DIR       Xemacs is in DIR],
+   XEMACS=${withval})
+
+dnl Fail when xemacs was not specified and could not be found automatically.
+if test "${XEMACS}" = "no" ; then
+   AC_ERROR(Required \"xemacs\" package not found.)
+fi
+AC_SUBST(XEMACS)
 
 dnl Handle --with-debug-c-code to activate c debug info 
 dnl and shut off optimizations
@@ -191,9 +217,6 @@ AC_ARG_WITH(debug-c-code,
    CFLAGS="-Wall -g -O2"
 )
 AC_SUBST(CFLAGS)
-
-dnl Try to find a suitable wish version
-AC_PATH_PROGS(WISH,wish8.0 wish8.1 wish, /usr/bin/wish)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
