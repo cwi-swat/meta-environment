@@ -1,5 +1,19 @@
 # $Id$
 
+2003/05/21 ({markvdb,jurgenv}@cwi.nl)
+ * The coordination part of the old module-db is now implemented
+   in ToolBus scripts.
+ * Module renaming is now implemented in the sdf-support package, not
+   in module-db and asf-operations, or elan-operations any more. The
+   tool is called sdf-renaming. It takes a module and the current import
+   relation and returns a list of modules that are copies of the original
+   module with the appropriate renamings applied.
+ * Deactivated the module-db subtree in this package. It will remain here
+   for a while to do some browsing, but it is now officially dead code.
+ * The hook message postprocess-collected-semantics-hook-result has
+   been changed to take a <str> for a module name instead of a <term>.
+   Note: asfsdf-meta and elan-env should deal with this change.
+
 Fri May 23 09:40:00 CEST 2003 <jong@cwi.nl>
  * tbscripts/meta.tb: add #ifdef around #include of query-tool.idef
  * src/generic-meta.sh.src: add -I<path> to meta-query tool
