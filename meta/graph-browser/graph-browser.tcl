@@ -757,7 +757,8 @@ proc GetModuleInfo { modlist } {
 # returns id("m")
 #--
 proc ToId { mod } {
-    return [format "id(\"%s\")" $mod]
+    return [TBstring $mod]
+#    return [format "id(\"%s\")" $mod]
 }
 
 
@@ -767,7 +768,8 @@ proc ToId { mod } {
 # returns m
 #--
 proc StripId { trm } {
-    return [string range $trm 4 [expr [string length $trm] - 3]]
+    return [TCLstring $trm]
+#return [string range $trm 4 [expr [string length $trm] - 3]]
 }
 
 
