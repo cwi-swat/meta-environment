@@ -701,7 +701,7 @@ int typecheck(char *script, TBbool gen_tifs)
     TBwrite(tifs, TBmake("end-of-tifs"));
     if(close(tifs) < 0)
       err_sys_fatal("Can't close `%s'", tifs_name);
-    TBprintf(stderr, "Tool interfaces written to `%s'\n", tifs_name);
+    TBprintf(stdout, "Tool interfaces written to `%s'\n", tifs_name);
   }
   return nerror == 0;
 }
