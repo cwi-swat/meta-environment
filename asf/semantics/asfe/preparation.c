@@ -3,7 +3,7 @@
 #include <asfix.h>
 #include "preparation.h"
 
-#line 318 "preparation.c.nw"
+#line 325 "preparation.c.nw"
 aterm *lexical_to_list(arena *ar, aterm *lextrm)
 {
   aterm *sort, *newtrm, *newlex, *newname, *newiter;
@@ -37,7 +37,7 @@ aterm *lexical_to_list(arena *ar, aterm *lextrm)
   free(sortstr);
   return newappl;
 }
-#line 360 "preparation.c.nw"
+#line 367 "preparation.c.nw"
 aterm *list_to_lexical(arena *ar, aterm *lexappl)
 {
   aterm *modname, *lit, *sort, *w[4], *prod, *sym, *lexlist;
@@ -252,20 +252,27 @@ aterm_list *restore_args(arena *ar, aterm_list *l)
 aterm *RWrestoreTerm(arena *ar, aterm *t)
 {
   aterm_list *args, *elems;
-  aterm *sym;
+  aterm *sym, *result;
+  arena local;
+  
+  TinitArena(NULL, &local);
 
   if(asfix_is_appl(t)) {
     if(asfix_is_lex_constructor(t))
-      return list_to_lexical(ar, t);
+      return list_to_lexical(&local, t);
     args = asfix_get_appl_args(t);
-    return asfix_put_appl_args(ar, t, restore_args(ar, args));    
-  }
-
-  if(asfix_is_list(t)) {
+    result = asfix_put_appl_args(&local, t, restore_args(&local, args));    
+  } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
     sym   = asfix_get_list_sym(t);
-    return asfix_put_list_elems(ar, t, restore_list(ar, sym, elems));
+    return asfix_put_list_elems(&local, t, restore_list(&local, sym, elems));
+  } else {
+    TdestroyArena(&local);
+    return t;
   }
 
-  return t;
+  Tadd2Arena(ar, result);
+  TdestroyArena(&local);
+  
+  return result;
 }
