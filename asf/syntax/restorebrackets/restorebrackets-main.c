@@ -111,8 +111,18 @@ static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel,
           return AddBrackets(tree, pt);
         }
       }
-      else if (SG_IsRightAssociative(pt, fatherLabel) && argNr == 1) {
+      else if (SG_IsRightAssociative(pt, fatherLabel) && argNr == 0) {
         if (SG_IsRightAssociative(pt, sonLabel)) {
+          return AddBrackets(tree, pt);
+        }
+      }
+      else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 0) {
+        if (SG_IsNonAssocAssociative(pt, sonLabel)) {
+          return AddBrackets(tree, pt);
+        }
+      }
+      else if (SG_IsNonAssocAssociative(pt, fatherLabel) && argNr == 4) {
+        if (SG_IsNonAssocAssociative(pt, sonLabel)) {
           return AddBrackets(tree, pt);
         }
       }
