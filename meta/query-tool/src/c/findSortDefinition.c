@@ -1,11 +1,15 @@
 /* $Id$ */
 
+/*{{{  includes */
+
 #include <stdio.h>
 #include <assert.h>
 
 #include <PT2SDF.h>
 
 #include "findSortDefinition.h"
+
+/*}}}  */
 
 /*{{{  static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol) */
 

@@ -10,6 +10,11 @@
 #include "findProduction.h"
 
 /*}}}  */
+/*{{{  types */
+
+typedef ATbool (*predicate)(SDF_Production, SDF_Production);
+
+/*}}}  */
 
 /*{{{  static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2) */
 
@@ -70,6 +75,9 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
                           SDF_getSymbolsList(SDF_getProductionSymbols(p2)));
 }
 
+/*}}}  */
+/*{{{  static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2) */
+
 static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2)
 {
   SDF_Symbol rhs1, rhs2;
@@ -86,63 +94,30 @@ static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2)
 }
 
 /*}}}  */
-/*{{{  static ATerm findProductionInModule(SDF_Production needle, SDF_Module haystack) */
 
-static ATerm findProductionInModule(SDF_Production needle, SDF_Module haystack)
+/*{{{ static SDF_Production findProductionInModule(needle, haystack, predicate) */
+
+static SDF_Production findProductionInModule(SDF_Production needle, SDF_Module haystack, predicate pred)
 {
-  ATbool found = ATfalse;
-  ATerm posInfo = NULL;
   SDF_ProductionList productionList = SDF_getModuleProductions(haystack);
 
-  while (!SDF_isProductionListEmpty(productionList) && !found) {
+  while (!SDF_isProductionListEmpty(productionList)) {
     SDF_Production suspect = SDF_getProductionListHead(productionList);
 
-    found = productionsMatch(suspect, needle);
-
-    if (found) {
-      posInfo = ATgetAnnotation(SDF_ProductionToTerm(suspect), 
-                                ATmake("pos-info"));
+    if (pred(suspect, needle)) {
+      return suspect;
     }
 
     if (SDF_hasProductionListTail(productionList)) {
       productionList = SDF_getProductionListTail(productionList);
     }
-    else {
-      break;
-    }
   }
 
-  return posInfo;
+  return NULL;
 }
 
-static ATerm findLexicalProductionInModule(SDF_Production needle, 
-                                           SDF_Module haystack)
-{
-  ATbool found = ATfalse;
-  ATerm posInfo = NULL;
-  SDF_ProductionList productionList = SDF_getModuleLexicalProductions(haystack);
-
-  while (!SDF_isProductionListEmpty(productionList) && !found) {
-    SDF_Production suspect = SDF_getProductionListHead(productionList);
-
-    found = lexicalProductionsMatch(suspect, needle);
-
-    if (found) {
-      posInfo = ATgetAnnotation(SDF_ProductionToTerm(suspect), 
-                                ATmake("pos-info"));
-    }
-
-    if (SDF_hasProductionListTail(productionList)) {
-      productionList = SDF_getProductionListTail(productionList);
-    }
-    else {
-      break;
-    }
-  }
-
-  return posInfo;
-}
 /*}}}  */
+
 /*{{{  ATbool queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree) */
 
 ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
@@ -150,6 +125,9 @@ ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
   PT_Tree ptTree;
   PT_Production ptProduction;
   SDF_Production sdfProduction;
+  SDF_Production found = NULL;
+  ATerm pos = NULL;
+  predicate pred;
 
   /* Useless when SDFME/PT are compiled with -DDISABLE_DYNAMIC_CHECKING */
   assert(SDF_isValidModule(sdfModule));
@@ -163,15 +141,19 @@ ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
     assert(SDF_isValidProduction(sdfProduction));
 
     if (PT_isLexicalInjectionProd(ptProduction)) {
-      return findLexicalProductionInModule(sdfProduction, sdfModule);
+      pred = lexicalProductionsMatch;
     }
     else {
-      return findProductionInModule(sdfProduction, sdfModule);
+      pred = productionsMatch;
     }
+    found = findProductionInModule(sdfProduction, sdfModule, pred);
   }
-  else {
-    return NULL;
+
+  if (found != NULL) {
+    pos = ATgetAnnotation(SDF_ProductionToTerm(found), ATmake("pos-info"));
   }
+
+  return pos;
 }
 
 /*}}}  */

@@ -8,6 +8,9 @@ Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
    the focus on the entire file. This interferes with tools (e.g. the
    query tool) that need to set the focus on a different portion of
    the term.
+ * query-tool: some work done to simplify the findProduction code.
+   Instead of two almost identical copies, we now have one iteration
+   function which takes a predicate to do the actual (deep) comparison.
  * query-tool.tb: send query("FindProduction",..) not "FindSortDefinition"
    when asked to find a production.
 
