@@ -141,6 +141,8 @@ in
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,menu-event("Move",Str,Fid))
   ) *
-  rec-note(disconnected(TE)).
+  rec-note(disconnected(TE))
+/*.
   snd-terminate(SE,"Editor terminated")
+*/
 endlet
