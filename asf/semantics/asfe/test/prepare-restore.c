@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
 	
 	if(argc == 2) {
 		if(!strcmp(argv[1],"--no-whitespace") || !strcmp(argv[1],"-n")) {
-			keep_whitespace = ATfalse;
+			keep_layout = ATfalse;
 		} else {
 			usage = ATtrue;
 		}
 	} else if (argc == 1) {
-		keep_whitespace = ATtrue;
+		keep_layout = ATtrue;
 	} else {
 		usage = ATtrue;
 	}

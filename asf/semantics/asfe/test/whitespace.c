@@ -38,7 +38,7 @@ extern ATerm equations_db;
 extern ATerm fail_env;
 extern ATerm posinfo;
 extern AFun list_var, plain_var;
-extern ATbool keep_whitespace; 
+extern ATbool keep_layout; 
 extern ATermList rewrite_errors;
 extern ATerm rewrite(ATerm trm, ATerm env);
 
@@ -108,7 +108,7 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
 	char name[] = "Reduce_test";
 
 	/* set the global */
-	keep_whitespace = with_whitespace;
+	keep_layout = with_whitespace;
 
 	/* prepare equations */
 	preparedeqs =  RWprepareEqs((ATermList) eqs);
