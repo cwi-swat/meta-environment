@@ -1204,7 +1204,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 
 	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
+	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1 , NO_TRAVERSAL);
 	  if (!rhstrm) {
 	    return fail_env;
 	  }
@@ -1234,7 +1234,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
 	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
-	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
+	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1 , NO_TRAVERSAL);
 	  if (!rhstrm) {
 	    return fail_env;
 	  }
@@ -1268,7 +1268,7 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
       }
       else {
 	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
-	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
+	lhstrm = rewriteInnermost(lhs, newenv, depth + 1 , NO_TRAVERSAL);
 	if (!lhstrm) {
 	  return fail_env;
 	}
@@ -1345,11 +1345,13 @@ static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
         if (PT_isProductionList(top_ofs)) {
           env = listMatching((ATerm) ATempty, top_ofs, equargs, termargs,
                              conds, PT_makeArgsEmpty(),  PT_makeArgsEmpty(), 
-                             PT_getTreeAnnotation(entry->lhs, posinfo), depth); 
+                             PT_getTreeAnnotation(entry->lhs, posinfo), 
+			     depth); 
         }
         else {
           env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-	   		     PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+	   		     PT_getTreeAnnotation(entry->lhs, posinfo), 
+			     depth);
         }
 
         tagCurrentRule = entry->tag;
@@ -1647,7 +1649,7 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
   if (len > 32) {
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      newarg = rewriteRecursive(arg, env, depth + 1, extra);
+      newarg = rewriteRecursive(arg, env, depth /* + 1 */, extra);
       if (!newarg) {
 	return NULL;
       }
@@ -1660,7 +1662,7 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     int i = 0;
     while (PT_hasArgsHead(args)) {
       arg = PT_getArgsHead(args);
-      newarg_table[i] = rewriteRecursive(arg, env, depth + 1, extra);
+      newarg_table[i] = rewriteRecursive(arg, env, depth /* + 1 */, extra);
       if (!newarg_table[i]) {
 	return NULL;
       }
