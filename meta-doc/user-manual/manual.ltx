@@ -3979,15 +3979,19 @@ module CodeGenerator
 imports Statements AssemblyLanguage NextLabel 
   
 exports
+  context-free start-symbols Instrs
+
   context-free syntax
-    "tr" "(" Stats ")" -> Instrs
+    tr(Stats) -> Instrs
   
 hiddens
   sorts Instrs-lab 
   context-free syntax
-    Instrs # Label               -> Instrs-lab 
-    "tr" "(" Stats "," Label ")" -> Instrs-lab 
-    "tr" "(" Exp ")"             -> Instrs
+    Instrs # Label -> Instrs-lab 
+
+  context-free syntax
+    tr(Stats, Label) -> Instrs-lab 
+    tr(Exp)          -> Instrs
 
 hiddens
   variables
@@ -4012,45 +4016,52 @@ hiddens
 \begin{verbatim}
 equations 
 
-[1] tr(Stat-list, x) = <Instr-list, Label>
-    ======================================
+[1] <Instr-list, Label> := tr(Stat-list, x)
+    ====>
     tr(Stat-list) = Instr-list
 
-[2] tr(Stat, Label) = <Instr-list1, Label'>, 
-    tr(Stat-list, Label') = <Instr-list2, Label''>
-    ================================================================== 
+[2] <Instr-list1, Label'> := tr(Stat, Label),
+    <Instr-list2, Label''> := tr(Stat-list, Label')
+    ====>
     tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
 
-[3] tr(Exp) = Instr-list
-    ============================================================= 
+[3] Instr-list := tr(Exp)
+    ====>
     tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
 
-[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
-    Label'' = nextlabel(Label') 
-    ================================================================ 
+[4] Instr-list1 := tr(Exp), 
+    <Instr-list2, Label'> := tr(Stat-list, Label),
+    Label'' := nextlabel(Label')
+    ====>
     tr(if Exp then Stat-list fi, Label) =
     <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
 
-[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
-    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
-    ================================================================ 
+[5] Instr-list1 := tr(Exp), 
+    <Instr-list2, Label'> := tr(Stat-list, Label),
+    Label'' := nextlabel(Label'), 
+    Label''' := nextlabel(Label'')
+    ====>
     tr(while Exp do Stat-list od, Label) =
     <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
      goto Label''; label Label''', Label'''>
 
-[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
+[6] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
     tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
 
-[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
+[7] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
     tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
 
-[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
+[8] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====>
     tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
 
-[9] tr(Nat) = push Nat 
+[9] tr(Nat) = push Nat
+
 [10] tr(Id) = rvalue Id
 \end{verbatim}
 \end{IncCode}
