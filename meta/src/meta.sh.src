@@ -13,6 +13,7 @@ toolbus=__TOOLBUS__
 xemacs=__XEMACS__
 graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
+metastudio_def=__METASTUDIO_DEF__
 
 wish=__WISH__
 
@@ -127,13 +128,14 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x
 fi
 
 toolbus $xargs ${toolbusdefs} \
+   -I${toolbus}/share \
    -I${prefix}/share \
    -I${aterm}/share \
    -I${pt_support}/share \

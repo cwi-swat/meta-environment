@@ -4,6 +4,10 @@
 
 /*tool logger is { command = "tblog -logfile meta.log" }*/
 
+#ifdef METASTUDIO
+#include <dot-adapter.idef>
+#endif
+
 #include "sglr.idef"
 #include "text-editor.idef"
 #include "editor-creator.tb"
@@ -69,5 +73,10 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB,
 	Asf-Syntax, AddEqSyn, AddAPISyn, RemoveVars, Open-initial-module,
         Open-modules, Asfc, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
-        DumpParseTable, Compile-module, RenameModule) 
+        DumpParseTable, Compile-module, RenameModule
+#ifdef METASTUDIO
+	, DOT-ADAPTER)
+#else
+        )
+#endif
 

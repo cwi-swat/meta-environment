@@ -12,6 +12,7 @@ CLEANFILES  = meta meta.1 pt-dump eqs-dump
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
+	     s@__METASTUDIO_DEF__@$(METASTUDIO_DEF)@g;\
 	     s@__ATERM__@$(ATERM)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\

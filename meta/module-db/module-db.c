@@ -1475,17 +1475,16 @@ ATerm get_module_info(int cid, char *moduleName)
 {
   ATerm atName;
   char *path;
+  ATermList info = ATempty;
 
   atName = ATmake("<str>", moduleName);
   
   path = MDB_getEntryPath(MDB_EntryFromTerm(GetValue(modules_db, atName)));
   if (pathAvailable(path)) {
-    return ATmake("snd-value(module-info(<str>, path(<str>)))", 
-                  moduleName,path);
+    info = ATinsert(info, ATmake("[path,<str>]", path));
   }
-  else {
-    return ATmake("snd-value(no-module-info(<str>))", moduleName);
-  }
+
+  return ATmake("snd-value(module-info(<str>,<term>))", moduleName, info);
 }
 
 /*}}}  */
