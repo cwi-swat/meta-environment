@@ -18,9 +18,9 @@ values=$3
 unregister ()
 {
    if [ -f ${registry} ]; then
-      cp ${registry} ${registry}.bak
-      grep -v "${tag}:" ${registry}.bak > ${registry} || true
-      rm -f ${registry}.bak
+      cp ${registry} ${registry}.tmp
+      grep -v "${tag}:" ${registry}.tmp > ${registry} || true
+      rm -f ${registry}.tmp
    fi
 }
 
