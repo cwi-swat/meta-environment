@@ -46,6 +46,12 @@ lengthOfTree(PT_Tree tree)
     char *str = PT_getTreeString(tree);
     return strlen(str);
   }
+
+  if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    PT_Tree anyChild = PT_getArgsHead(args);
+    return lengthOfTree(anyChild);
+  }
   
   ATerror("lengthOfTree: unknown term %t\n", tree);
   return 0;
@@ -92,6 +98,11 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
     for (i = 0; i < len; i++) {
       buf[idx++] = lit[i];
     }
+  }
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    PT_Tree anyTree = PT_getArgsHead(args);
+    idx = yieldTreeRecursive(anyTree,idx,buf,bufSize);
   }
   else {
     ATerror("yieldTreeRecursive: unknown term %t\n", tree);
