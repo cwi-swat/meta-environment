@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/25 (jurgenv@cwi.nl)
+ * fixed a bug, a message received the wrong term structure
+ * removed some committed debug printf's
+
 2003/07/24 (markvdb@cwi.nl)
  * Repaired the printing of the text of a module.
  * Introduced the notions of "warning(f)" and "message(f)" which
