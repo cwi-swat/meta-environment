@@ -363,8 +363,6 @@ ATerm get_modification_status(int cid, ATerm editorId)
   SE_Editor editor = getEditor(editorId);
   char *status;
   
-  assert(editor);
-
   if (editor) {
     status = SE_getEditorModified(editor) ? "modified" : "unmodified";
   
