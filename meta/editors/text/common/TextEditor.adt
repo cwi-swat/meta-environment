@@ -6,7 +6,7 @@
   [Action, set-cursor-at-offset, action(set-cursor-at-offset(<offset(int)>))],
   [Action, set-focus-at-area, action(set-focus-at-area(<area(term)>))],
   [Action, clear-focus, action(clear-focus)],
-  [Action, set-focus, action(set-focus(<focus(term)>))],
+  [Action, set-focus, action(set-focus(<focus(term)>,<sort(str)>))],
   [Action, get-contents, action(get-contents(<focus(term)>))],
   [Action, set-actions, action(set-actions(<actions(ActionList)>))],
 

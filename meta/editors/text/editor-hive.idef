@@ -16,7 +16,8 @@ let
   Hive : editor-hive,
   Offset : int,
   MenuEvent : term,
-  Message : str
+  Message : str,
+  SortName: str
 in
 #ifdef ECLIPSE
   rec-connect(Hive?)
@@ -35,8 +36,8 @@ in
     rec-msg(te-reread-contents(EditorId?))
     . snd-do(Hive, reread-contents(EditorId))
   +
-    rec-msg(te-set-focus(EditorId?, Focus?))
-    . snd-do(Hive, set-focus(EditorId, Focus))
+    rec-msg(te-set-focus(EditorId?, Focus?, SortName?))
+    . snd-do(Hive, set-focus(EditorId, Focus, SortName))
   +
     rec-msg(te-get-focus-text(EditorId?, Focus?))
     /* TODO: separate writing and retrieval of contents */

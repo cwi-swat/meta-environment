@@ -13,7 +13,7 @@ void get_contents(int conn, ATerm, ATerm);
 void clear_focus(int conn, ATerm);
 void write_contents(int conn, ATerm);
 void display_message(int conn, ATerm, const char *);
-void set_focus(int conn, ATerm, ATerm);
+void set_focus(int conn, ATerm, ATerm, const char *);
 void set_cursor_at_offset(int conn, ATerm, int);
 void reread_contents(int conn, ATerm);
 void set_focus_at_area(int conn, ATerm, ATerm);

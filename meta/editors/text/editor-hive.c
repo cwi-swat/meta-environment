@@ -214,12 +214,12 @@ void clear_focus(int c, ATerm editorId)
 /*}}}  */
 /*{{{  void set_focus(int c, ATerm editorId, ATerm focus) */
 
-void set_focus(int c, ATerm editorId, ATerm focus)
+void set_focus(int c, ATerm editorId, ATerm focus, const char *sort)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetFocus(focus));
+    sendToEditor(process, TE_makeActionSetFocus(focus, sort));
   }
 }
 

@@ -215,7 +215,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
   LOC_Area area = LOC_AreaFromTerm(focusTerm);
   int start = LOC_getAreaOffset(area)+1;
   int length = LOC_getAreaLength(area);
-  char *s = "komt-later";
+  char *s = TE_getActionSort(edAction);
   char buf[BUFSIZ];
   char sort[BUFSIZ];
   char *p;

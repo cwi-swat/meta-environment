@@ -62,7 +62,7 @@ TE_Action TE_makeActionDisplayMessage(const char* message);
 TE_Action TE_makeActionSetCursorAtOffset(int offset);
 TE_Action TE_makeActionSetFocusAtArea(ATerm area);
 TE_Action TE_makeActionClearFocus();
-TE_Action TE_makeActionSetFocus(ATerm focus);
+TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort);
 TE_Action TE_makeActionGetContents(ATerm focus);
 TE_Action TE_makeActionSetActions(TE_ActionList actions);
 TE_ActionList TE_makeActionListEmpty();
@@ -112,6 +112,9 @@ TE_Action TE_setActionArea(TE_Action arg, ATerm area);
 ATbool TE_hasActionFocus(TE_Action arg);
 ATerm TE_getActionFocus(TE_Action arg);
 TE_Action TE_setActionFocus(TE_Action arg, ATerm focus);
+ATbool TE_hasActionSort(TE_Action arg);
+char* TE_getActionSort(TE_Action arg);
+TE_Action TE_setActionSort(TE_Action arg, const char* sort);
 ATbool TE_hasActionActions(TE_Action arg);
 TE_ActionList TE_getActionActions(TE_Action arg);
 TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions);
@@ -190,7 +193,7 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write);
 /*}}}  */
 /*{{{  sort visitors */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), char* (*acceptSort)(char*), TE_ActionList (*acceptActions)(TE_ActionList));
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu));
 TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*), char* (*acceptShortcut)(char*));
 TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*));

@@ -258,11 +258,11 @@ TE_Action TE_makeActionClearFocus()
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionSetFocus(ATerm focus) */
+/*{{{  TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort) */
 
-TE_Action TE_makeActionSetFocus(ATerm focus)
+TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun8, (ATerm) focus));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl2(TE_afun8, (ATerm) focus, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -604,7 +604,7 @@ inline ATbool TE_isActionSetFocus(TE_Action arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocus, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocus, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -794,6 +794,39 @@ TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
   }
 
   ATabort("Action has no Focus: %t\n", arg);
+  return (TE_Action)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionSort(TE_Action arg) */
+
+ATbool TE_hasActionSort(TE_Action arg)
+{
+  if (TE_isActionSetFocus(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* TE_getActionSort(TE_Action arg) */
+
+char* TE_getActionSort(TE_Action arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1)));
+}
+
+/*}}}  */
+/*{{{  TE_Action TE_setActionSort(TE_Action arg, const char* sort) */
+
+TE_Action TE_setActionSort(TE_Action arg, const char* sort)
+{
+  if (TE_isActionSetFocus(arg)) {
+    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))), 1), 0);
+  }
+
+  ATabort("Action has no Sort: %t\n", arg);
   return (TE_Action)NULL;
 }
 
@@ -1525,9 +1558,9 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
+/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), char* (*acceptSort)(char*), TE_ActionList (*acceptActions)(TE_ActionList)) */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), char* (*acceptSort)(char*), TE_ActionList (*acceptActions)(TE_ActionList))
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
@@ -1555,7 +1588,8 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
   }
   if (TE_isActionSetFocus(arg)) {
     return TE_makeActionSetFocus(
-        acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg));
+        acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg),
+        acceptSort ? acceptSort(TE_getActionSort(arg)) : TE_getActionSort(arg));
   }
   if (TE_isActionGetContents(arg)) {
     return TE_makeActionGetContents(
