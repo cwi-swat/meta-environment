@@ -1,3 +1,437 @@
 equations
 
-[om-0] optimize-muasf(Module) = Module
+%% optimize-muasf:
+%%
+%% This is the main function that will call
+%% all optimizations on MuASF1
+
+[om-0] optimize-recursive-list-functions(Module, Nametable) = (Module2, Nametable2)
+       ========================================
+       optimize-muasf(Module, Nametable) = (Module2, Nametable2)
+
+
+%% optimize-recursive-list-functions:
+%%
+%% This optimization locates certain recursive functions
+%% over lists, transforms them and adds helper functions.
+%% It is supposed to save time by removing the overhead
+%% of matching and building constructor symbols between
+%% recursive calls.
+
+[orlfs-0] Module = module Mname signature Funcdef* rules Rule*,
+          get-list-embedding(Rule*, Nametable) = FunIdHasEmbeddingAt,
+          FunIdHasEmbeddingAt != unavailable,
+          make-helper-rules(Rule*, FunIdHasEmbeddingAt) = Rule*2,
+          call-helper-rules(Rule*, FunIdHasEmbeddingAt) = Rule*3,
+          make-helper-signature(FunIdHasEmbeddingAt, Funcdef*) = Funcdef,
+          add-name-to-nametable(FunIdHasEmbeddingAt, Nametable) = Nametable2,
+          Module2 = module Mname signature Funcdef;Funcdef* rules Rule*2;Rule*3
+          ======================================
+          optimize-recursive-list-functions(Module, Nametable) = (Module2, Nametable2)
+
+%%[default-orlfs] optimize-recursive-list-functions(Module, Nametable) = 
+%%                  (Module, Nametable)
+
+%% get-list-embedding
+%%
+%% A function must satisfy the following requirements to be candidate
+%% for this optimization:
+%%
+%% 1. it should be recursive and unary (for the moment)
+%% 2. one of it's argument should be an (embedded) list
+%% 3. the embedding should be made of only constructors
+%% 4. the embedding should be part of the right-hand-side too
+%% 5. the embedding should be the same for the left-hand side of all rules
+%%
+%% It is this embedding that we are going to factorize out of 
+%% the recursive calls, so we return the embedding if all requiments
+%% are satisfied. We assume that only ONE function is defined!
+
+%% **** Requirement 1-4 are implemented so far ****
+
+[default-cr] get-list-embedding(Rule+, Nametable) = unavailable
+
+[cr-0] is-recursive(Rule+)                = true,                %% req 1
+       find-list-arg(Rule+, Nametable)    = FunIdHasEmbeddingAt, %% req 2,3
+       check-emb-lhs-rules(Rule+,FunIdHasEmbeddingAt) = true     %% req 4
+       ========================================================
+       get-list-embedding(Rule+, Nametable)    = FunIdHasEmbeddingAt
+
+%% The first requirement, is-recursive. We check if the right-hand-side
+%% contains the same FunId as the outermost FunId of the left-hand-side.
+%% Or the conditions contain this FunId. 
+
+[ir-0] is-recursive(FunId(Term+1) = Term2) = term-calls-function(FunId, Term2)
+
+[ir-2] is-recursive(default: FunId(Term+1) = Term2) = 
+         term-calls-function(FunId, Term2)
+
+[ir-1] is-recursive(Cond+ ==> FunId(Term+1) = Term2) = 
+         term-calls-function(FunId, Term2) \/ conds-call-function(FunId, Cond+)
+
+[ir-3] is-recursive(default: Cond+ ==> FunId(Term+1) = Term2) =
+         term-calls-function(FunId, Term2) \/ conds-call-function(FunId, Cond+) 
+
+[ir-4] is-recursive(Rule; Rule*) = is-recursive(Rule) \/ is-recursive(Rule*)
+
+[default-ir] is-recursive() = false
+
+[ccf-0] term-calls-function(FunId, Term1) = Bool1,
+        term-calls-function(FunId, Term2) = Bool2
+        ========================================
+        conds-call-function(FunId, Term1 != Term2) = Bool1 \/ Bool2
+
+[ccf-1] term-calls-function(FunId, Term1) = Bool1,
+        term-calls-function(FunId, Term2) = Bool2
+        ========================================
+        conds-call-function(FunId, Term1 == Term2) = Bool1 \/ Bool2
+
+[ccf-2] conds-call-function(FunId, Cond) = Bool1,
+        conds-call-function(FunId, Cond+) = Bool2
+        ========================================
+        conds-call-function(FunId, Cond & Cond+) = Bool1 \/ Bool2
+
+[default-ccf] conds-call-function(FunId, Cond) = false
+
+[tcf-0] term-calls-function(FunId, FunId(Term+)) = true
+
+[tcf-1] FunId != FunId2
+        ========================================
+        term-calls-function(FunId, FunId2(Term+)) = 
+          terms-call-function(FunId, Term+)
+
+[default-tcf] term-calls-function(FunId, Term) = false
+
+[tscf-0] terms-call-function(FunId, Term) = term-calls-function(FunId, Term)
+[tscf-1] terms-call-function(FunId, Term, Term+) = term-calls-function(FunId, Term) \/
+                                                  terms-call-function(FunId, Term+)
+
+
+%% Here we locate a single argument that is a list embedded in some unary
+%% constructor symbols. We return the outermost FunId, the embedding with the
+%% list FunId and the position of this argument. 
+
+[fla-0] find-list-arg(Rule, Nametable) = find-la-rule(Rule, Nametable)
+
+[fla-1] find-list-arg(Rule, Nametable) = FunIdHasEmbeddingAt,
+        FunIdHasEmbeddingAt != unavailable
+        ====
+        find-list-arg(Rule ; Rule+, Nametable) = FunIdHasEmbeddingAt
+
+[default-fla] find-list-arg(Rule+, Nametable) = FunIdHasEmbeddingAt
+              =====================================================
+              find-list-arg(Rule ; Rule+, Nametable) = FunIdHasEmbeddingAt
+
+[flar-0] find-la-rule(FunId(Term+1) = Term2, Nametable) = 
+           FunId has find-la-terms(Term+1,Nametable, 0)
+
+[flar-1] find-la-rule(default: FunId(Term+1) = Term2, Nametable) = 
+           FunId has find-la-terms(Term+1,Nametable, 0)
+
+[flar-2] find-la-rule(Cond+ ==> FunId(Term+1) = Term2, Nametable) = 
+           FunId has find-la-terms(Term+1,Nametable, 0)
+
+[flar-2] find-la-rule(default: Cond+ ==> FunId(Term+1) = Term2, Nametable) = 
+           FunId has find-la-terms(Term+1,Nametable, 0)
+
+%% We find the FIRST argument that meets our conditions: it's a
+%% list, possibly nested in unary constructors.
+
+[flats-0] find-la-term(Term) = [ FunId* FunId ],
+				  is-list-funid(FunId) = true,
+          are-constructors([FunId* FunId], Nametable) = true
+          ==============================================
+          find-la-terms(Term, Term*, Nametable, Int) = [FunId* FunId] at Int 
+
+[default-flats] find-la-terms(Term, Term+, Nametable, Int) = 
+                find-la-terms(Term+, Nametable, Int + 1)
+ 
+%% Collect unary FunId's for this argument:
+[flat-0] find-la-term(Term) = [FunId*]
+         ===================================
+         find-la-term(FunId(Term)) = [FunId FunId*]
+
+[default-flat] find-la-term(Term) = []
+
+
+%% We check if these FunId's are either list constructors or
+%% refer to productions that are annotated with the 'constructor'
+%% keyword in SDF
+
+[ac-0] are-constructors([FunId], Nametable) = is-constructor(FunId, Nametable)
+[ac-1] are-constructors([FunId FunId+], Nametable) = 
+         is-constructor(FunId, Nametable) /\ are-constructors([FunId+], Nametable)
+
+[ic-0] Nametable = (Namepair*1, 
+                     (FunId3, FunId, Term*1, constructor, Term*2),
+                    Namepair*2
+                   , FunId2, Int1, Int2) 
+       ==============================================================================
+       is-constructor(FunId, Nametable) = true
+
+[ic-1] is-list-funid(FunId) = true
+       ======================================
+       is-constructor(FunId, Nametable) = true
+
+[default-ic] is-constructor(FunId, Nametable) = false
+
+%% Here we check if all rules for FunId use the same embedding in the left-hand-side,
+%% at the same argument position.
+
+[cel-0] check-emb-lhs-rules(Rule; Rule+, FunIdHasEmbeddingAt) = 
+          check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt) /\ 
+          check-emb-lhs-rules(Rule+, FunIdHasEmbeddingAt)
+
+[cel-1] check-emb-lhs-rules(Rule,FunIdHasEmbeddingAt) = 
+           check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt)
+
+[celr-0] check-emb-lhs-rule(FunId(Term+) = Term2, FunId has EmbeddingAt) = 
+           check-emb-terms(Term+, EmbeddingAt)
+
+[celr-1] check-emb-lhs-rule(default: FunId(Term+) = Term2, FunId has EmbeddingAt) = 
+           check-emb-terms(Term+, EmbeddingAt) 
+
+[celr-2] check-emb-lhs-rule(Cond+ ==> FunId(Term+) = Term2, FunId has EmbeddingAt) = 
+           check-emb-terms(Term+, EmbeddingAt)
+
+[celr-3] check-emb-lhs-rule(default: Cond+ ==> FunId(Term+) = Term2, 
+                        FunId has EmbeddingAt) = 
+           check-emb-terms(Term+, EmbeddingAt)
+
+%% All other variaties are dangerous to transform
+[default-celr] check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt) = false
+
+
+%% locate the correct argument using the number. A term may be not specific at all:
+%% namely a variable, or it has the same embedding exaclty.
+
+[cets-0] is-var-term(Term) =  Bool1,
+         check-emb-term(Term, Embedding) = Bool2
+         =====
+         check-emb-terms(Term, Embedding at 0) = Bool1 \/ Bool2 
+
+[cets-1] is-var-term(Term) =  Bool1,
+         check-emb-term(Term, Embedding) = Bool2
+         ====
+         check-emb-terms(Term, Term+, Embedding at 0) = Bool1 \/ Bool2
+
+%% Skip to the next argument
+[cets-2] Int != 0 
+         ===========================================
+         check-emb-terms(Term, Term+, Embedding at Int) = 
+           check-emb-terms(Term+, Embedding at Int  - 1)
+
+%% Matching the embedding with the term:
+[cet-0] check-emb-term(FunId(Term), [FunId FunId+]) = 
+          check-emb-term(Term, [FunId+])
+
+[cet-1] check-emb-term(FunId(Term), [FunId]) = true
+
+[default-cet] check-emb-term(Term, [FunId+]) = false 
+
+
+%%
+%% make-helper-rules
+%%
+%% This function created the optimized version of a function by
+%% removing the embedding at the appropriate places, and in the process
+%% it also renames the FunId to FunId_recursive
+%%
+
+[mhr-0] make-helper-rules(Rule+, FunIdHasEmbeddingAt) =
+         remove-emb-rules(Rule+, FunIdHasEmbeddingAt)
+
+[rers-0] remove-emb-rules(Rule, FunIdHasEmbeddingAt) =
+           remove-emb-rule(Rule, FunIdHasEmbeddingAt)
+
+[rers-1] remove-emb-rule(Rule, FunIdHasEmbeddingAt) = Rule2,
+         remove-emb-rules(Rule+, FunIdHasEmbeddingAt) = Rule+2
+         ====
+         remove-emb-rules(Rule; Rule+, FunIdHasEmbeddingAt) =
+           Rule2; Rule+2
+
+[rer-0] remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
+        ====
+        remove-emb-rule(Term1 = Term2, FunIdHasEmbeddingAt) = Term3 = Term4
+
+[rer-1] remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
+        ====
+        remove-emb-rule(default: Term1 = Term2, FunIdHasEmbeddingAt) = 
+          default: Term3 = Term4
+
+[rer-2] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
+        remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
+        ====
+        remove-emb-rule(Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
+          Cond+2 ==> Term3 = Term4
+
+[rer-3] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
+        remove-emb-term(Term1, FunIdHasEmbeddingAt) = Term3,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term4
+        ====
+        remove-emb-rule(default: Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
+          default: Cond+2 ==> Term3 = Term4
+
+[recs-0] remove-emb-cond(Cond, FunIdHasEmbeddingAt) = Cond2,
+         remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2
+         ====
+         remove-emb-conds(Cond & Cond+, FunIdHasEmbeddingAt) = Cond2 & Cond+2
+
+[recs-1] remove-emb-conds(Cond, FunIdHasEmbeddingAt) = 
+           remove-emb-cond(Cond, FunIdHasEmbeddingAt)
+
+%% Conditions are somewhat complicated. If you rename an outermost function
+%% symbol on one side, the embedding needs to be removed on the other side too.
+%% If there is no renaming on either side, then the embedding should remain too.
+
+[rec-0] remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(Term2), FunId has EmbeddingAt) = Term4
+        ====
+        remove-emb-cond(FunId(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+          Term3 == Term4
+
+[rec-1] FunId != FunId2,
+        remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt) = FunId3(Term4),
+        Term4 != FunId2(Term2)
+        ====
+        remove-emb-cond(FunId(Term1) == FunId2(Term2), FunId has EmbeddingAt) =
+          Term3 == Term4
+
+[rec-2] FunId != FunId2,
+        remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt) = FunId3(Term4),
+        Term4 != FunId2(Term2)
+        ====
+        remove-emb-cond(FunId2(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+          Term3 == Term4
+
+[rec-3] remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(Term2), FunId has EmbeddingAt) = Term4
+        ====
+        remove-emb-cond(FunId(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+          Term3 != Term4
+
+[rec-4] FunId != FunId2,
+        remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt) = FunId3(Term4),
+        Term4 != FunId2(Term2)
+        ====
+        remove-emb-cond(FunId(Term1) == FunId2(Term2), FunId has EmbeddingAt) =
+          Term3 != Term4
+
+[rec-5] FunId != FunId2,
+        remove-emb-term(FunId(Term1), FunId has EmbeddingAt) = Term3,
+        remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt) = FunId3(Term4),
+        Term4 != FunId2(Term2)
+        ====
+        remove-emb-cond(FunId2(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+          Term3 != Term4
+
+
+[rets-0] remove-emb-terms(Term, FunIdHasEmbeddingAt) = 
+           remove-emb-term(Term, FunIdHasEmbeddingAt)
+
+[rets-1] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term2,
+         remove-emb-terms(Term+, FunIdHasEmbeddingAt) = Term+2
+         ====
+         remove-emb-terms(Term, Term+, FunIdHasEmbeddingAt) = Term2, Term+2
+          
+
+[ret-0] remove-emb-args(Term+, EmbeddingAt) = Term+2,
+        FunId2 = make-recursive-funid(FunId)
+        ====
+        remove-emb-term(FunId(Term+), FunId has EmbeddingAt) =
+         FunId2(Term+2)
+
+[ret-1] FunId1 != FunId2,
+        remove-emb-terms(Term+, FunId2 has EmbeddingAt) = Term+2
+        ====
+        remove-emb-term(FunId1(Term+), FunId2 has EmbeddingAt) = FunId1(Term+2) 
+
+[default-ret] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term
+
+[reas-0] remove-emb-args(Term, Term+, Embedding at 0) =
+          remove-emb-arg(Term, Embedding)
+
+[reas-1] remove-emb-args(Term, Embedding at 0) =
+          remove-emb-arg(Term, Embedding)
+
+[reas-2] Int != 0,
+         Term+2 = remove-emb-args(Term+, Embedding at Int - 1)
+         ====
+         remove-emb-args(Term, Term+, Embedding at Int) = Term, Term+2
+           
+
+[rea-0] remove-emb-arg(FunId(Term), [ FunId FunId+ ]) =
+          remove-emb-arg(Term, [ FunId+ ])
+
+[rea-1] remove-emb-arg(FunId(Term), [ FunId ]) = Term
+
+[default-rea] remove-emb-arg(Term, Embedding) = Term
+
+%%
+%% call-helper-rules
+%%
+%% This function removes the recursive calls in the right-hand-side and
+%% the conditions and replaces them by calls to the newly generated helper
+%% functions. 
+
+[chr-0] call-helper-rules(Rule+, FunIdHasEmbeddingAt) = 
+          change-calls-rules(Rule+, FunIdHasEmbeddingAt)
+
+[ccrs-0] change-calls-rules(Rule, FunIdHasEmbeddingAt) = 
+           change-calls-rule(Rule, FunIdHasEmbeddingAt)
+
+[ccrs-1] change-calls-rule(Rule, FunIdHasEmbeddingAt)= Rule2,
+         change-calls-rules(Rule+, FunIdHasEmbeddingAt) = Rule+2
+         ====
+         change-calls-rules(Rule; Rule+, FunIdHasEmbeddingAt) = Rule2 ; Rule+2
+
+[ccr-0] remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
+        ====
+        change-calls-rule(Term1 = Term2, FunIdHasEmbeddingAt) = 
+          Term1 = Term3
+
+[ccr-1] remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
+        ====
+        change-calls-rule(default: Term1 = Term2, FunIdHasEmbeddingAt) = 
+          default: Term1 = Term3
+
+[ccr-2] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
+        ====
+        change-calls-rule(Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
+          Cond+2 ==> Term1 = Term3
+
+[ccr-3] remove-emb-conds(Cond+, FunIdHasEmbeddingAt) = Cond+2,
+        remove-emb-term(Term2, FunIdHasEmbeddingAt) = Term3
+        ====
+        change-calls-rule(default: Cond+ ==> Term1 = Term2, FunIdHasEmbeddingAt) = 
+          default: Cond+2 ==> Term1 = Term3
+
+%% some utility functions
+
+[mrf] make-recursive-funid(funid(Char+)) = funid(Char+ "_""r""e""c""u""r""s""i""v""e")
+
+[mhs-0] make-recursive-funid(FunId) = FunId2
+        ====
+        make-helper-signature(FunId has EmbeddingAt, 
+                            Funcdef*1; FunId(SigArg+); Funcdef*2) = 
+          FunId2(SigArg+) {recursive(FunId)}
+      
+[mhs-0] make-recursive-funid(FunId) = FunId2
+        ====
+        make-helper-signature(FunId has EmbeddingAt, 
+                            Funcdef*1; FunId(SigArg+) {Term+}; 
+                            Funcdef*2) = FunId2(SigArg+) {Term+, recursive(FunId)}
+
+[ant-0] make-recursive-funid(FunId) = FunId2
+        ====
+        add-name-to-nametable(FunId has EmbeddingAt, 
+          (Namepair*1, (FunId1, FunId, Term*), Namepair*2, FunId0, Int1, Int2)) = 
+          (Namepair*1, (FunId1, FunId, Term*), (FunId1, FunId2, Term*), Namepair*2,
+           FunId0, Int1, Int2)

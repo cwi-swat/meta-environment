@@ -46,7 +46,6 @@ hiddens
     rem-listvars-from-rules({Rule ";"}*,IntCon)  -> FuncRuleTuple
     rem-listvars-from-rule(Rule,IntCon)          -> FuncRuleTuple
     rem-lists-from-simple-rule(Bool,Rule,IntCon) -> FuncRuleTuple
-    %%%rem-lists-from-simple-rule(Rule,AInt) -> FuncRuleTuple
     rem-lists-from-default-rule(Rule,IntCon)     -> FuncRuleTuple
     remove-simple-lists(Rule)                  -> Rule
 
