@@ -329,21 +329,9 @@ int SG_Batch (int argc, char **argv)
     return 2;
   }
 
-  if (!SGisParseTree(parse_tree)) {
+  if (SGisParseError(parse_tree)) {
     ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
-    ERR_Feedback feedback = ERR_getFeedbackListHead(
-                              ERR_getSummaryList(summary));
-    char *description = ERR_getFeedbackDescription(feedback);
-    ERR_Subject subject = ERR_getSubjectListHead(
-                            ERR_getFeedbackList(feedback));
-    ERR_Location location = ERR_getSubjectLocation(subject);
-    char *errorType = ERR_getSubjectDescription(subject);
-    ERR_Area area = ERR_getLocationArea(location);
-    int line = ERR_getAreaBeginLine(area);
-    int col = ERR_getAreaBeginColumn(area);
-
-    ATwarning("%s: %s in %s, line %d, col %d: %s\n",
-                program_name, description, input_file_name, line, col, errorType);
+    ERR_displayFeedback(summary);
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {

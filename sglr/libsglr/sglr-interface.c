@@ -222,7 +222,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
   SG_theText[SG_textEnd] = '\0';
 
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
-  ret = SG_Parse(prgname, pt, G?(*G?G:0):NULL, SG_GetChar, SG_textEnd);
+  ret = SG_Parse(FN, pt, G?(*G?G:0):NULL, SG_GetChar, SG_textEnd);
   SG_Free(SG_theText);
   return (ATerm) ret;
 }
@@ -300,6 +300,7 @@ ATbool SGisParseTree(ATerm t)
 
 ATbool SGisParseError(ATerm t)
 {
+/*
   ERR_Summary summary = ERR_SummaryFromTerm(t);
   if (ERR_isSummaryFeedback(summary)) {
     ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
@@ -311,9 +312,8 @@ ATbool SGisParseError(ATerm t)
     }
   }
   return ATfalse;
-/*
-  return ATgetAFun(t) == SG_ParseError_AFun;
 */
+  return ATgetAFun(t) == SG_ParseError_AFun;
 }
 
 

@@ -1026,7 +1026,6 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
       
       cycle = ATgetNext(cycle);
     }
-ATwarning("contentDescription = %s\n", contentDescription);
     sprintf(errorDescription, "Cycle");
   }
   else if (excess_ambs) {
