@@ -9,7 +9,7 @@ UTILSRCS		= explode.c
 EXTRA_DIST		= AsFix.def
 
 INCLUDES		= -I${ATERM}/include \
-                          -I${PT_SUPPORT}/include
+                          -I${top_srcdir}/libmept
 
 CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
 
