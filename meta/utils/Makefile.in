@@ -77,9 +77,9 @@ CSRC            = meta-paths.c meta-utils.c imports.c module-utils.c
 CHDR            = meta-utils.h module-utils.h libutil.h
 #All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= genmakefile.sh gen-table \
+BINFILES	= genmakefile.sh \
 		  parse-file parse-sdf2 ps-dot \
-                  sdf2table meta-paths normalize-sdf imports \
+                  meta-paths normalize-sdf imports \
                   insert-license insert-header
 LIBFILES	= 
 DATAFILES	= genmakefile.proto lang.types
@@ -106,10 +106,12 @@ test:	all
 	done
 
 %: %.sh.src Makefile
-	sed 's#__BINDIR__#$(bindir)#g' < $< >$@
+	sed 's#__BINDIR__#$(bindir)#g' < $< >$@ && \
+	chmod +x $@
 
 %: %.pl.src Makefile
-	sed 's#__PERL__#$(PERL)#g' < $< >$@
+	sed 's#__PERL__#$(PERL)#g' < $< >$@ && \
+	chmod +x $@
 
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
