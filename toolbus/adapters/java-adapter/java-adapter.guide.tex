@@ -36,7 +36,7 @@ is typically located somewhere in your {\tt CLASSPATH}, and two scripts called
 \subsection{\label{java-adapter}{\tt java-adapter}}
 
 \paragraph{Synopsis.} Execute {\tt java} as a \TB\ tool, 
-and load a specific {\tt Tool} class.}
+and load a specific {\tt Tool} class.
 
 \paragraph{Example.} {\tt java-adapter -class MyFirstTool}
 
@@ -60,12 +60,12 @@ geared towards a specific tool interface.
 
 \paragraph{Specific arguments.}
 \begin{itemize}
-\item {\tt -tool $Tool$}: The tool for which to generate the class (mandatory).
-\item {\tt -tifs $File$}: The tifs file from which to distill the tool's interface
+\item {\tt -tool \emp{Tool}}: The tool for which to generate the class (mandatory).
+\item {\tt -tifs \emp{File}}: The tifs file from which to distill the tool's interface
 	(mandatory).
-\item {\tt -package $Package$}: The fully qualified package name of the newly
+\item {\tt -package \emp{Package}}: The fully qualified package name of the newly
 	created class.
-\item {\tt -class $Name$}: The class name of the newly created class. If this
+\item {\tt -class \emp{Name}}: The class name of the newly created class. If this
     	option is not supplied the class name is deduced from the tool name
 	by capitalizing the first letter of the tool name and all letters
 	following a dash ({\tt -}), and removing all dashes.
@@ -90,7 +90,7 @@ javatif -tool hello -tifs hello2.tifs
 
 This generates the file Hello.java:
 
-\input{../demos/hello/Hello.java}
+\input{../demos/hello/Hello.java.tex}
 
 Now we subclass the {\tt Hello} class and override the following 
 abstract methods:
@@ -103,5 +103,13 @@ abstract methods:
 We have done this using the class {\tt HelloTool} in the
 file {\tt HelloTool.java}:
 
-\input{../demos/hello/HelloTool.java}
+\input{../demos/hello/HelloTool.java.tex}
 
+Now all we have to do is replace the tool definition in {\tt hello.tb}
+with:
+
+\begin{verbatim}
+tool is { command = "java-adapter -class HelloTool" }
+\end{verbatim}
+
+And we have rewritten the {\tt hello} demo in Java!
