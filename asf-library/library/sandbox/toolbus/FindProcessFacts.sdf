@@ -30,8 +30,8 @@ hiddens
 
   context-free syntax
     make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* )        -> Fact
-    make-signature({Term ","}+, {FormalParam ","}*, {VarDecl ","}* ) -> {Term ","}+
-    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}* )   -> Term
+    make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}* ) -> {Term ","}+ {traversal(trafo,top-down,break)}
+    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}* )        -> Term {traversal(trafo,top-down,break)}
 
   variables
     "TscriptDefs"                               -> TscriptDef*
@@ -59,3 +59,4 @@ hiddens
     "Table"[0-9\']*                               -> Table[[Var # Term]]
     "Var"                                         -> Var
     "SendFact"[0-9]*                              -> SendFact
+    "RecFact"[0-9]*                              -> ReceiveFact

@@ -35,48 +35,38 @@ equations
                         FormalParams, VarDecls) =
   add-process-invocation(CollectedFacts, process-invocation ProcessName)
 
-[ff-send-basic]
-  find-facts-in-process( snd-msg(Id), CollectedFacts,
-                        FormalParams,VarDecls) =
-  add-send-message(CollectedFacts, send-atom Id)
-
 [ff-send-complex]
-  make-signature(snd-msg(Id(TermList)), FormalParams, VarDecls) = SendFact
+  make-signature(snd-msg(TermPlus), FormalParams, VarDecls) = SendFact
   ===>
-  find-facts-in-process( snd-msg(Id(TermList)), CollectedFacts,
+  find-facts-in-process( snd-msg(TermPlus), CollectedFacts,
                         FormalParams,VarDecls) = 
   add-send-message(CollectedFacts, SendFact)
 
-[ff-recv-basic]
-  find-facts-in-process( rec-msg(Id), CollectedFacts,
-                        FormalParams,VarDecls) = 
-    add-receive-message(CollectedFacts, recv-atom Id)
-
 [ff-recv-complex]
-  find-facts-in-process( rec-msg(Id(TermList)), CollectedFacts,
+  make-signature(rec-msg(TermPlus), FormalParams, VarDecls) = RecFact
+  ===>
+  find-facts-in-process( rec-msg(TermPlus), CollectedFacts,
                         FormalParams,VarDecls) =     
-     add-receive-message(CollectedFacts, recv-atom Id)
+     add-receive-message(CollectedFacts, RecFact)
 
 [fpf-make-signature]
-  make-signature(TermPlus1, FormalParams, VarDecls) = TermPlus2
+  make-signature-term(TermPlus1, FormalParams, VarDecls) = TermPlus2
   ===>
   make-signature(snd-msg(TermPlus1), FormalParams, VarDecls) = send-atom TermPlus2
 
-[fpf-make-signature-term]
-  make-signature-term(Term, FormalParams, VarDecls) = SendFact
+[fpf-make-signature]
+  make-signature-term(TermPlus1, FormalParams, VarDecls) = TermPlus2
   ===>
-  make-signature(Term, FormalParams, VarDecls) = SendFact
-
-[fpf-make-signature-terms]
-  make-signature-term(Term, FormalParams, VarDecls) = SendFact1,
-  make-signature(TermPlus, FormalParams, VarDecls) = SendFact2
-  ===>
-  make-signature(Term, TermPlus, FormalParams, VarDecls) = SendFact1
+  make-signature(rec-msg(TermPlus1), FormalParams, VarDecls) = recv-atom TermPlus2
 
 [fpf-make-signature-term]
-  make-signature-term(Id, FormalParams, VarDecls) = Id
+  make-signature-term(Var, FormalParams1, Var : Term, FormalParams2, VarDecls) = Term
 
 [fpf-make-signature-term]
-  make-signature(TermPlus, FormalParams, VarDecls) = SendFact2
-  ===>
-  make-signature-term(Id(TermPlus), FormalParams, VarDecls) = Id
+  make-signature-term(Var?, FormalParams1, Var : Term?, FormalParams2, VarDecls) = Term
+
+[fpf-make-signature-term]
+  make-signature-term(Var, FormalParams, VarDecls1, Var : Term, VarDecls2) = Term
+
+[fpf-make-signature-term]
+  make-signature-term(Var?, FormalParams, VarDecls1, Var : Term, VarDecls2) = Term

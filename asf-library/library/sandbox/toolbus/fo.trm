@@ -1,2 +1,1 @@
-add-process-creation( 
-make-process-facts(process-declaration ProcessName,{},{},{},{}), process-creation EditorCreator)
+make-signature(snd-msg(result(Aap?, complex(Noot))),Noot:str,Aap:int)

@@ -1,8 +1,9 @@
 process Editors is
 let
+  Editor : term,
   Pid : int
 in
-  snd-msg(open(EditorManager,Pid?)) .
+  snd-msg(open(Editor,Pid?)) .
   create(EditorManager,Pid?) .
   create(EditorCreator,Pid?) .
   create(SE, Pid?)
