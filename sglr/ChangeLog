@@ -1,5 +1,13 @@
 $Id$
 
+2003/07/24 ({markvdb, jurgenv}@cwi.nl)
+ * Improved the bug fix of 2003/07/23. Finally understood the
+   problem, which is not caused by the combination of ambiguities
+   and cycles, but by the fact that the optimalization introduced
+   to inspect ambiguity clusters only once. This optimalization
+   causes the position information to be out of sync, which eventually
+   leads to not finding ambiguity clusters down the road.
+
 2003/07/23 (markvdb@cs.vu.nl)
  * Fixed a serious bug wrt the combination of ambiguities and
    cycles.
