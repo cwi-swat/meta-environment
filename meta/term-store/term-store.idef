@@ -1,6 +1,8 @@
 
 tool term-store is { command = "term-store" }
 
+toolbus(TermStore)
+
 process TermStore is
 let
  TS : term-store,
