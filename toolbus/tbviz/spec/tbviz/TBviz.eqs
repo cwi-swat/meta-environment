@@ -1,94 +1,23 @@
 equations
 
-[x] vizualize(tscript) =
-    digraph TBComm { build-graph(build-env(tscript),tscript)}
-
-[x] build-env(PDef SDefs toolbus(pis)) =  build-env(PDef) ++ build-env(SDefs toolbus(pis))
-[x] build-env(TDef SDefs toolbus(pis)) = build-env(SDefs toolbus(pis))
-[x] build-env(toolbus(pis)) =
-
-[x] build-env(process Pnm (VDecls) is P) = build-env(Pnm, P)
-[x] build-env(process Pnm is P) = build-env(Pnm, P)
-
-[x] build-env(Pnm, P1 + P2) = build-env(Pnm,P1) ++ build-env(Pnm,P2)
-[x] build-env(Pnm, P1 * P2) = build-env(Pnm,P1) ++ build-env(Pnm,P2)
-[x] build-env(Pnm, P1 . P2) = build-env(Pnm,P1) ++ build-env(Pnm,P2)
-%%[x] build-env(Pnm, (P)) = build-env(Pnm,P)
-[x] build-env(Pnm, if T then P1 else P2 fi) = build-env(Pnm,P1) ++ build-env(Pnm,P2)
-[x] build-env(Pnm, if T then P fi) = build-env(Pnm,P)
-[x] build-env(Pnm, let VDecls in P endlet) = build-env(Pnm,P)
-[x] build-env(Pnm, snd-msg(Ts)) = [Pnm, [Ts]]
-[default-x] build-env(Pnm,P) =
-
-[x] pairs1 ++ pairs2 = pairs1 pairs2
-[x] ++ =
-
-[x] build-graph(ge, PDef SDefs toolbus(pis)) =
-     build-graph(ge,PDef) ++ build-graph(ge,SDefs toolbus(pis))
-[x] build-graph(ge, TDef SDefs toolbus(pis)) = build-graph(ge, SDefs toolbus(pis))
-[x] build-graph(ge,toolbus(pis)) =
-
-[x] build-graph(ge, process Pnm (VDecls) is P) = build-graph(ge, Pnm, P)
-[x] build-graph(ge, process Pnm is P) = build-graph(ge,Pnm,P)
-
-[x] build-graph(ge,Pnm, P1 + P2) =
-build-graph(ge, Pnm,P1) ++ build-graph(ge, Pnm,P2)
-[x] build-graph(ge, Pnm, P1 * P2) =
-build-graph(ge, Pnm,P1) ++ build-graph(ge, Pnm,P2)
-[x] build-graph(ge, Pnm, P1 . P2) =
-     build-graph(ge,Pnm,P1) ++ build-graph(ge,Pnm,P2)
-[x] build-graph(ge,Pnm, if T then P1 else P2 fi) =
-     build-graph(ge,Pnm,P1) ++ build-graph(ge,Pnm,P2)
-[x] build-graph(ge,Pnm, if T then P fi) = build-graph(ge,Pnm,P)
-[x] build-graph(ge,Pnm, let VDecls in P endlet) = build-graph(ge,Pnm,P)
-[default-x] build-graph(ge,Pnm,P) =
-
-
-[x] lookup([Ts], ge1) = ge2
+[x] build-env(new-env,tscript) = genv,
+    match-env(genv,snd-Syn,rec-Syn) = dss1,
+    match-env(genv,snd-Broad, rec-Broad) = dss2,
+    match-env(genv,snd-Create, rec-Create) = dss3,
+    tool-comms(genv,rec-Event) = dss4,
+    tool-comms(genv,snd-Eval) = dss5,
+    tool-comms(genv,snd-Do) = dss6,
+    tool-comms(genv, rec-Value) = dss7
     =========================
-    build-graph(ge1,Pnm, rec-msg(Ts)) = mknod(Pnm,ge2)
-
-[x] mknod(Pnm1, [Pnm2, [Ts]] pairs) =
-      pn2ni(Pnm2) -> pn2ni(Pnm1) [label="Ts"] ; ++ mknod(Pnm1,pairs)
-[x] mknod(Pnm, ) =
-
-[x] mgm(T1, T2) = T3,
-    T3 != fail
-    ======================
-    lookup(T1, [Pnm, T2] pairs) =
-       [Pnm, T3] ++ lookup(T1, pairs)
-[x] mgm(T1, T2) = fail
-    ====================
-    lookup(T1, [Pnm, T2] pairs) = lookup(T1, pairs)
-[x] lookup(T, ) =
-
-[x] mgm(T,  T) = T
-[x] mgm([OptTs1],[OptTs2]) = [Ts]
-    =============================
-    mgm(Id(OptTs1), Id(OptTs2)) = Id(Ts)
-[x] mgm(T1,T2) = T3,
-    OptTs1 !=  ,
-    mgm([OptTs1],[OptTs2]) = [OptTs3]
-    ===================
-    mgm([T1,OptTs1],[T2,OptTs2]) = [T3, OptTs3]
-[x] mgm([T1],[T2])= [mgm(T1,T2)]
-[x] mgm(T, GenVar) = GenVar
-[x] mgm(GenVar, T) = GenVar
-
-[x] Ts, fail, OptTs = fail
-[x] fail, Ts = fail
-[x] Id(fail) = fail
-[x] [fail] = fail
-
-[default-x] mgm(T1,T2) = fail
-
-%%[x] oms() = []
-%%[x] oms(Id(OptTs)) = Id
-%%[x] oms(T,Ts) = oms(T)
-%%[x] oms(Id) = Id
-
-[x] pn2ni(processname(cs1 "-" cs2)) =
-      dotid(cs1 "_" cs2)
-[default-x] pn2ni(processname(cs)) = dotid(cs)
+    vizualize(tscript) =
+      digraph TBComm {
+        subgraph synchronous {dss1};
+        subgraph broadcast {dss2};
+        subgraph creation {dss3};
+        subgraph events {dss4};
+        subgraph evals {dss5};
+        subgraph dos {dss6};
+        subgraph values {dss7};
+      }
 
 [x] ds*1; ds; ds*2; ds; ds*3; = ds*1; ds; ds*2; ds*3 ;

@@ -1,0 +1,24 @@
+%%  MatchTable
+
+imports GraphEnv  Dot-operations PrettyPrint
+
+exports
+  context-free syntax
+    match-env(Genv,Type,Type) -> DotStats
+    tool-comms(Genv,Type) -> DotStats
+    match(Table,Table) -> DotStats
+    match(Pair, Table) -> DotStats
+    match(Pair, Pair) -> DotStats
+ %%    "\"" TERM-LIST "\""                          -> DotId
+hiddens
+  context-free syntax
+    fail                        -> TERM
+    mgm(TERM,TERM)              -> TERM
+    pn2ni(ProcessName)            -> DotId
+    id2ni(ID)      -> DotId
+    tl2di(TERM-LIST) -> DotId
+    match-args(TERM-LIST, VarDecls) -> Bool
+    get-stats(Table) -> DotStats
+    single-stat(Table) -> DotStats
+  variables
+    cs[0-9']*                     -> CHAR*

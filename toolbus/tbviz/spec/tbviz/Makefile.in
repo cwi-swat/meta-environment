@@ -18,7 +18,8 @@ exec_prefix 	= @exec_prefix@
 bindir 		= $(exec_prefix)/bin
 specdir         = $(exec_prefix)/spec/tbviz
 
-SPECFILES       = TBviz.eqs     TBviz.syn
+SPECFILES       = TBviz.eqs TBviz.syn GraphEnv.eqs MatchTable.eqs \
+                  PrettyPrint.eqs GraphEnv.syn MatchTable.syn PrettyPrint.syn
 
 TARGETFILES     = ${SPECFILES} ctasdf.conf   dump-it.ll
 DISTFILES	= Makefile.in ${TARGETFILES}

@@ -1,0 +1,12 @@
+%%  PrettyPrint
+
+imports Terms
+
+exports
+  context-free syntax
+     STRING "++" STRING                -> STRING  {assoc}
+     pp(TERM) -> STRING
+hiddens
+  variables
+     cs[0-9']*  -> CHAR*
+     c[0-9']* -> CHAR

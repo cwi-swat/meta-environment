@@ -1,0 +1,100 @@
+equations
+[x] new-env = snd-Syn() rec-Syn() snd-Broad() rec-Broad() snd-Create()
+      rec-Create() rec-Event() rec-Value() snd-Eval() snd-Do() var-Env()
+
+[x] get-table(type,genv) = table,
+    table = type'(pair*)
+    =============================
+    insert(pair,type,genv) = replace-table(type'(pair* pair), genv)
+
+[x] table ++ table* = table table*
+
+[x] build-env(genv, PDef) = genv'
+    =============================
+    build-env(genv, PDef SDefs toolbus(pis)) = build-env(genv', SDefs toolbus(pis))
+[x] build-env(genv, TDef SDefs toolbus(pis)) = build-env(genv, SDefs toolbus(pis))
+[x] build-env(genv, toolbus(pis)) = genv
+
+[x] insert([Pnm;VDecls], rec-Create, genv) = genv',
+    insert([Pnm;VDecls], var-Env, genv') = genv''
+    ==============================================
+    build-env(genv, process Pnm (VDecls) is P) = build-env(genv'', Pnm, P)
+[x] insert([Pnm; ], rec-Create, genv) = genv'
+    =========================================
+    build-env(genv, process Pnm is P) = build-env(genv', Pnm, P)
+%% Process composition
+[x] build-env(genv, Pnm, P1) = genv'
+    ===========================
+    build-env(genv, Pnm, P1 + P2) = build-env(genv', Pnm, P2)
+[x] build-env(genv, Pnm, P1) = genv'
+    ===========================
+    build-env(genv, Pnm, P1 || P2) = build-env(genv', Pnm, P2)
+[x] build-env(genv, Pnm, P1) = genv'
+    ===========================
+    build-env(genv, Pnm, P1 . P2) = build-env(genv', Pnm, P2)
+[x] build-env(genv, Pnm, P1) = genv'
+    ===========================
+    build-env(genv, Pnm, P1 * P2) = build-env(genv', Pnm, P2)
+%% Conditional processes
+[x] build-env(genv, Pnm, P1) = genv'
+    ================================
+    build-env(genv, Pnm, if T then P1 else P2 fi) = build-env(genv', Pnm, P2)
+[x] build-env(genv, Pnm, if T then P fi) = build-env(genv, Pnm, P)
+%% Let expressions
+[x] insert([Pnm;VDecls], var-Env, genv) = genv'
+    ===========================================
+    build-env(genv, Pnm, let VDecls in P endlet) = build-env(genv', Pnm, P)
+%% Atomic actions with time
+[x] build-env(genv, Pnm, A timeexpr) = build-env(genv, Pnm, A)
+
+%% Now start the atomic process we're interested in
+[x] build-env(genv, Pnm, snd-msg(Ts))   = insert([Pnm,Ts], snd-Syn, genv)
+[x] build-env(genv, Pnm, rec-msg(Ts))   = insert([Pnm,Ts], rec-Syn, genv)
+[x] build-env(genv, Pnm, snd-note(Ts))  = insert([Pnm,Ts], snd-Broad, genv)
+[x] build-env(genv, Pnm, rec-note(Ts))  = insert([Pnm,Ts], rec-Broad, genv)
+%% Dynamic process cretaion. Currently, both parallel (create(Pnm)) and
+%% sequential (Pnm) process creation are handled equal.
+%%
+%% First the parallel case
+[x] build-env(genv, Pnm, create(Pnm'(Ts), GenVar)) =
+      insert([Pnm,Pnm',Ts], snd-Create, genv)
+[x] build-env(genv, Pnm, create(Pnm', GenVar)) = insert([Pnm,Pnm',],snd-Create,genv)
+%% Then the sequential case:
+[x] build-env(genv, Pnm, Pnm'(Ts) ) =
+      insert([Pnm,Pnm',Ts], snd-Create, genv)
+[x] build-env(genv, Pnm, Pnm') = insert([Pnm,Pnm',],snd-Create,genv)
+%% For communicating wih tools, the variable that holds the toolname
+%% (always the first argument) is replaced
+%% by the toolname itself.
+[x] lookup-type(Var,Pnm,genv) = T'
+    =============================
+    build-env(genv, Pnm, rec-event(Var,Ts)) = insert([Pnm,T',Ts], rec-Event, genv)
+[x] lookup-type(Var,Pnm,genv) = T'
+    =============================
+    build-env(genv, Pnm, rec-value(Var,Ts)) = insert([Pnm,T',Ts], rec-Value, genv)
+[x] lookup-type(Var,Pnm,genv) = T'
+    =============================
+    build-env(genv, Pnm, snd-eval(Var,Ts))  = insert([Pnm,T',Ts], snd-Eval, genv)
+[x] lookup-type(Var,Pnm,genv) = T'
+    =============================
+    build-env(genv, Pnm, snd-do(Var,Ts))    = insert([Pnm,T',Ts], snd-Do, genv)
+[default-x] build-env(genv,Pnm,P) = genv
+
+[x] replace-table(type(pair*),type(pair*')table*) = type(pair*)table*
+[default-x] replace-table(type(pair*), type'(pair*') table*) =
+              type'(pair*') ++ replace-table(type(pair*), table*)
+
+%% get-table is a partial function. It is undefined if the table of type type
+%% does not occur in the genv.
+
+[x] get-table(type, type(pair*)table*) = type(pair*)
+[default-x] get-table(type, type'(pair*) table*) = get-table(type,table*)
+
+%% Look up the type of a Var in the var-Env of a certain process
+[x] lookup-type(Var,Pnm,table*1 var-Env(pair*1 [Pnm; VDecls1, Var: T, VDecls2] pair*2) table*2) =
+      T
+[x] lookup-type(Var,Pnm,table*1 var-Env(pair*1 [Pnm; VDecls1, Var: T?, VDecls2] pair*2) table*2) =
+      T
+%% We want only one variable environment per process
+[x] var-Env(pair*1 [Pnm; VDecls] pair*2 [Pnm; VDecls'] pair*3) =
+      var-Env(pair*1 [Pnm; VDecls, VDecls'] pair*2 pair*3)

@@ -1,35 +1,7 @@
 %%  TBviz
 
-imports Tscript Dot-operations
+imports MatchTable Dot-operations
 
 exports
   context-free syntax
     vizualize( Tscript ) -> DotGraph
-
-hiddens
-  sorts
-    Genv Pair
-  context-free syntax
-    "\"" TERM-LIST "\""                          -> DotId
-    build-graph( Genv, Tscript) -> DotStats
-    build-graph( Genv, ProcessDef )      -> DotStats
-    build-graph( Genv, ProcessName, ProcessExpr ) -> DotStats
-    lookup(TERM, Genv)       -> Genv
-    mknod(ProcessName, Genv)             -> DotStats
-   %% match(TERM, TERM)             -> BOOL
-    build-env( Tscript )         -> Genv
-    build-env( ProcessDef )              -> Genv
-    build-env( ProcessName, ProcessExpr )       -> Genv
-    Genv "++" Genv                -> Genv
-    "[" ProcessName "," TERM-LIST "]"    -> Pair
-    Pair*                         -> Genv
-    oms(TERM-LIST)                -> TERM
-    pn2ni(ProcessName)            -> DotId
-    fail                        -> TERM
-    t2d(TERM-LIST)              -> DotId
-  variables
-    pair [0-9']*                  -> Pair
-    pairs [0-9']*                 -> Pair*
-    ge[0-9']*                     -> Genv
-    c[0-9']*                      -> CHAR
-    cs[0-9']*                     -> CHAR*
