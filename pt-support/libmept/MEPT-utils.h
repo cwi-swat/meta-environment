@@ -144,7 +144,8 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
 ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr);
 ATbool PT_hasProductionBracketAttr(PT_Production prod);
 ATbool PT_hasProductionMemoAttr(PT_Production prod);
-ATbool PT_hasProductionTraverseAttr(PT_Production prod); 
+ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod); 
+ATbool PT_hasProductionTraversalAttribute(PT_Production prod); 
 
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
 PT_Symbol makeSymbolAllChars();
