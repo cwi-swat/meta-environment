@@ -1,4 +1,5 @@
-SUBDIRS=asf basic containers functions traversal aterm system sdf2
+SUBDIRS=asf basic containers functions traversal aterm system sdf2 \
+        strategies
 
 clean:
 	rm -f $(top_builddir)/src/*.lst

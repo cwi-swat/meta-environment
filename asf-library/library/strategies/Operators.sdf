@@ -35,7 +35,6 @@ context-free syntax
    some(Strategy,Term)   -> Term {built-in("strategy-some")}
    all(Strategy,Term)    -> Term {built-in("strategy-all")}
    one(Strategy,Term)    -> Term {built-in("strategy-one")}
-   thread(Strategy,Term) -> Term {built-in("strategy-thread")}
 
 context-free syntax
    subst(Strategy,StrategyVar,Strategy) -> Strategy {traversal(trafo,bottom-up)}

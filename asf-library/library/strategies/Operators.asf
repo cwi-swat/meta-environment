@@ -24,6 +24,4 @@ equations
 
 [] <one(S)> T  = one(S,T)
 
-[] <thread(S)> T = thread(S,T)
-
 [] subst(x,x,S) = S
