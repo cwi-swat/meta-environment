@@ -47,7 +47,7 @@ public class FeedbackListCellRenderer extends JLabel implements ListCellRenderer
 
     private String getTooltip(Feedback feedback) {
         SubjectList subjects = feedback.getList();
-        String tip = feedback.getProducerType();
+        String tip = feedback.getProducer();
         
         while (subjects.hasHead()) {
             Location loc = subjects.getHead().getLocation();
