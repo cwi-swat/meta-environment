@@ -9,7 +9,7 @@ let
   ModuleName : str
 in  
   (
-    rec-msg(add-api-syntax(ModuleName?, Syntax?)).
+    rec-msg(add-api-syntax(Syntax?)).
     execute(addapisyntax,AAS?).
     snd-eval(AAS,add-api-syntax(Syntax)).
     rec-value(AAS,extended-syntax(NewSyntax?)). 
