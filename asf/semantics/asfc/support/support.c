@@ -29,7 +29,7 @@ typedef struct bucket
 } bucket;
 
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
-#define MAX_STORE 1024
+#define MAX_STORE 10240
 static aterm *term_store[MAX_STORE];
 
 static int nr_entries = 0;
@@ -223,7 +223,6 @@ aterm_list *string2list(arena *ar,char *s)
     t_unprotect(tmp);
     t_unprotect(old);
   }
-
   Tadd2Arena(ar,result);
   t_unprotect(result);
   return result;
@@ -787,6 +786,64 @@ aterm_list *cons(aterm_list *l1, aterm_list *l2)
   t_unprotect(oldl1);
   return result;
 }
+
+int slice_length(aterm_list *l1, aterm_list *l2)
+{
+  int size = 0;
+  while(l1 != l2) {
+    size++;
+    l1 = t_list_next(l1);
+  }
+  return size;
+}
+
+aterm_list *append(aterm_list *l, aterm *t)
+{
+  int idx = TlistSize(l)-1;
+  aterm_list *old, *result = TbuildList(w, t, t_empty(w));
+  for( ; idx >= 0; idx--) {
+    old = result;
+    result = TbuildList(w, TlistIndex(l, idx), result);
+    t_unprotect(old);
+  }
+  return result;
+}
+
+aterm_list *slice(aterm_list *l1, aterm_list *l2)
+{
+  aterm_list *result, *old;
+  int i, len;
+
+  if(t_is_empty(l2)) {
+    t_protect(l1);
+    return l1;
+  }
+
+  len = MIN(MAX_STORE, slice_length(l1, l2));
+  for(i=0; i<len; i++) {
+    term_store[i] = t_list_first(l1);
+    l1 = t_list_next(l1);
+  }
+
+  result = t_empty(w);
+  t_protect(result);
+
+  while(l1 != l2) {
+    old = result;
+    result = append(result, t_list_first(l1));
+    l1 = t_list_next(l1); 
+    t_unprotect(old);
+  }
+
+  for(i=len-1; i>=0; i--) {
+    old = result;
+    result = TbuildList(w, term_store[i], result);
+    t_unprotect(old);
+  }
+
+  return result;
+}
+
 
 aterm *list_last(aterm_list *l)
 {

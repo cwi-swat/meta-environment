@@ -71,6 +71,7 @@ extern Tbool not_empty_list(aterm *l);
 extern Tbool is_single_element(aterm_list *l);
 extern aterm_list *make_list(aterm *t);
 extern aterm *ok(aterm *t);
+extern aterm_list *slice(aterm_list *l1, aterm_list *l2);
 
 extern aterm *make_nf0(asymbol *s);
 extern aterm *make_nf1(asymbol *s, aterm *t0);

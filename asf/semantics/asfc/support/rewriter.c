@@ -47,7 +47,7 @@ aterm *reduce(int cid, aterm *t)
   t = AFexpandTerm(ar, t);
   if(TmatchTerm(t, pattern_asfix_term, NULL, NULL,
                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    Tprintf(stderr,"Reducing ...\n");
+    Tprintf(stderr,"Reducing ... \n",trm);
     reduct = innermost(ar, trm);
     /*Tprintf(stdout, "%t\n", reduct);*/
     Tprintf(stderr,"Reducing finished.\n");
@@ -122,7 +122,7 @@ Tprintf(stderr,"Term read\n");
       t = AFexpandTerm(ar, t);
       if(TmatchTerm(t, pattern_asfix_term, NULL, NULL,
                     &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-Tprintf(stderr,"Reducing ...\n");
+Tprintf(stderr,"Reducing ... \n",trm);
         reduct = innermost(ar, trm);
         /*Tprintf(stdout, "%t\n", reduct);*/
 Tprintf(stderr,"Reducing finished.\n");
