@@ -20,7 +20,8 @@ exports
     unknown-constructor-used-in-priorities(ModuleId, Production)     -> Message
     literal-in-right-hand-side-not-allowed(ModuleId, Production)     -> Message
     only-sort-allowed-in-right-hand-side-of-lexical-function(ModuleId, Production)     -> Message
-    deprecated-symbol(ModuleId, Symbol)                              -> Message
+
+    deprecated-unquoted-symbol-notation(ModuleId, Symbol) -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages

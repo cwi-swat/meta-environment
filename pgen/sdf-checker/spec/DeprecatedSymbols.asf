@@ -1,14 +1,17 @@
 equations
 
-  [cs-1'1] check-for-deprecated-symbols(Definition) = 
-             check-for-deprecated-symbols(Definition, {})
+[cs-1'1]
+  check-for-deprecated-symbols(Definition) =
+    check-for-deprecated-symbols(Definition, {})
 
-  [cs-1'2] check-for-deprecated-symbols(Module, Msgs) = 
-             check-for-deprecated-symbols2(Module, Msgs, 
-                                           get-module-name(Module))
+[cs-1'2]
+  check-for-deprecated-symbols(Module, Msgs) =
+    check-for-deprecated-symbols2(Module, Msgs, get-module-name(Module))
 
-  [cl-2'1] check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
-             Msgs + deprecated-symbol($ModuleId, $Symbol1 # $Symbol2)
+[cl-2'1]
+  check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
+    Msgs + deprecated-unquoted-symbol-notation($ModuleId, $Symbol1 # $Symbol2)
 
-  [cl-2'2] check-for-deprecated-symbols2($UQLiteral, Msgs, $ModuleId) =
-             Msgs + deprecated-symbol($ModuleId, $UQLiteral)
+[cl-2'2]
+  check-for-deprecated-symbols2($UQLiteral, Msgs, $ModuleId) =
+    Msgs + deprecated-unquoted-symbol-notation($ModuleId, $UQLiteral)

@@ -1,5 +1,10 @@
 $Id$
 
+Thu Dec  4 15:17:29 CET 2003 <jong@cwi.nl>
+ * improved "deprecated-symbol" warning: the symbols aren't deprecated at
+   all, it's the notation (unquoted) that is deprecated. The message is
+   now: deprecated-unquoted-symbol-notation
+
 2003/10/17 (markvdb@cwi.nl)
  * Added a message on deprecated unquoted literals.
  * Added a message on usage of non Sort symbols in
