@@ -1,6 +1,6 @@
 /*{{{  includes */
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "chars.h"
