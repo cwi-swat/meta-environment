@@ -1,10 +1,9 @@
-/* A first version of the MODULE-MANAGER (or better TREE-MANAGER) in ToolBus C. 
+/* A first version of the COMPILER in ToolBus C. 
    This program is written by Mark van den Brand and
-   improved by Tobias Kuipers.
+   improved by Pieter Olivier.
 
    The following functions are available:
    void rec_terminate(aterm *t)
-   aterm *exists(aterm *name)
    aterm *get_section(aterm *name,aterm *module)
    void create_module_db()
    aterm_list *clear_module_db(aterm_list *db)
@@ -33,6 +32,7 @@ extern aterm *pattern_asfix_contextfreesyntax;
 extern aterm *pattern_asfix_exports;
 extern aterm *pattern_asfix_hiddens;
 extern aterm *pattern_asfix_id;
+extern aterm *pattern_asfix_module;
 
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
@@ -40,6 +40,7 @@ aterm *expand_to_asfix(arena *ar,aterm *mod,char *name);
 int print_source(FILE *f, aterm *term);
 void pp_rnx(FILE *f, aterm *t, int indent);
 aterm *asfix2rnx(arena *ar,aterm *asfix);
+aterm *asfix_trans(arena *ar,aterm *mod);
 void init_expansion_terms();
 void init_asfix_patterns();
 
@@ -49,12 +50,6 @@ FATAL_ERROR
 
 void change_modules_db(aterm *new_db)
 {
-  /*aterm *tmp = modules_db;
-  modules_db = new_db;
-  if(modules_db)
-    Tprotect(modules_db);
-  if(tmp)
-    Tunprotect(tmp);*/
   if(!t_equal(new_db, modules_db)) {
     if(modules_db)
       Tunprotect(modules_db);
@@ -121,7 +116,7 @@ int equal_args(aterm_list *args1,aterm_list *args2)
 
 int equal_attrs(aterm *attrs1,aterm *attrs2)
 {
-  aterm *w1[2],*w2[2];
+  aterm *w1[2],*w2[2], *l1[2],*l2[2];
   aterm_list *args1,*args2;
 
   if(TmatchTerm(attrs1,pattern_asfix_noattrs) &&
@@ -130,9 +125,9 @@ int equal_attrs(aterm *attrs1,aterm *attrs2)
   else if(!TmatchTerm(attrs1,pattern_asfix_noattrs) &&
           !TmatchTerm(attrs2,pattern_asfix_noattrs)) {
     if(TmatchTerm(attrs1, pattern_asfix_attrs,
-                  &w1[0],&args1,&w1[1])) {
+                  &l1[0],&w1[0],&args1,&w1[1],&l1[1])) {
       if(TmatchTerm(attrs2, pattern_asfix_attrs,
-                    &w2[0],&args2,&w2[1]))
+                    &l2[0],&w2[0],&args2,&w2[1],&l2[1]))
         return equal_args(args1,args2);
       else
         return Tfalse;
@@ -475,28 +470,16 @@ Tprintf(stderr,"Creating new module: %t\n",newmod);
   return result;
 }
 
-aterm *compile_modules(int cid,aterm_list *mods)
+void compile_module(int cid,arena *ar,aterm_list *newmods)
 {
-  char *text;
-  char *fname;
-  aterm *mod, *amod, *expmod, *result, *rnx;
-  aterm_list *newmods, *modlist;
-  FILE *output;
+  char *text, *fname;
+  aterm *mod, *amod, *expmod, *macmod, *rnx;
   int len;
-  arena local;
-  /* char *path = "/home/markvdb/NEW-META/new-meta/pico/";*/
-  char *path = "/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/";
-  struct tms start, compiling;
-  clock_t user, system;
+  FILE *output;
+  char *path = "/home/markvdb/NEW-META/new-meta/pico/";
+  /*char *path = "/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/";*/
 
-  TinitArena(t_world(mods), &local);
-
-  Tprintf(stderr,"Compiling ... %t\n",mods);
-  times(&start);
-  newmods = reshuffle_modules(&local,mods);
-  modlist = newmods;
-  Tprotect(modlist);
-  while(!t_is_empty(newmods)) {
+  if(!t_is_empty(newmods)) {
     mod = t_list_first(newmods);
     amod = TdictGet(modules_db,mod);
     assertp(TmatchTerm(mod,pattern_asfix_id,&text));
@@ -509,8 +492,9 @@ aterm *compile_modules(int cid,aterm_list *mods)
     fname = strcpy(fname,path);
     fname = strcat(fname,text);
     fname = strcat(fname,".rnx");
-    expmod = expand_to_asfix(&local,amod,fname);
-    rnx = asfix2rnx(&local,expmod);
+    macmod = asfix_trans(ar,amod);
+    expmod = expand_to_asfix(ar,macmod,fname);
+    rnx = asfix2rnx(ar,expmod);
     output = fopen(fname,"w");
     free(fname);
     if(!output) 
@@ -520,21 +504,55 @@ aterm *compile_modules(int cid,aterm_list *mods)
       Tprintf(output, "\n");
       fclose(output);
     }
-    /*print_source(stderr,amod); */
-    Tprintf(stderr,"Writing: %s\n", text);
+    Tprintf(stderr,"Writing: %s.rnx\n", text);
     newmods = t_list_next(newmods);
-    TflushArena(&local);
+    TBsend(cid,Tmake(TBgetArena(cid),
+                     "snd-event(compile(<term>,<term>,<list>))",
+                     mod,rnx,newmods));
   }
-  result = Tmake(TBgetArena(cid), "snd-value(ok)");
-  Tunprotect(modlist);
+  else
+    TBsend(cid,Tmake(TBgetArena(cid),"snd-event(done)"));
+}
+
+void compile_modules(int cid,aterm_list *mods)
+{
+  aterm_list *newmods;
+  arena local;
+  /*struct tms start, compiling;
+  clock_t user, system;*/
+
+  TinitArena(t_world(mods), &local);
+
+  Tprintf(stderr,"Compiling ... %t\n",mods);
+  /*times(&start);*/
+  newmods = reshuffle_modules(&local,mods);
+  compile_module(cid,&local,newmods);
   TdestroyArena(&local);
-  times(&compiling);
+  /*times(&compiling);
 
   user = compiling.tms_utime - start.tms_utime;
   system = compiling.tms_stime - start.tms_stime;
   fprintf(stderr, "compilation: %f user, %f system\n", 
 	 TICK2SEC(user), TICK2SEC(system));
-  return result;
+  return result;*/
+}
+
+void rec_ack_event(int cid,aterm *cterm)
+{
+  aterm *mod, *rnx;
+  aterm_list *newmods;
+  arena local;
+
+  if(Tmatch(cterm,"compile(<term>,<term>,<list>)",&mod,&rnx,&newmods)) {
+    TinitArena(t_world(cterm), &local);
+    compile_module(cid,&local,newmods);
+    TdestroyArena(&local);
+  }
+  else if(Tmatch(cterm,"done")) {
+    Tprintf(stderr,"Compilation completed\n");
+  }
+  else
+    exit(1);
 }
 
 void create_module_db(int cid)
@@ -547,8 +565,6 @@ void clear_module_db(int cid)
   change_modules_db(t_empty(NULL));
 }
 
-aterm *get_import_section(aterm_list *sections);
-
 aterm_list *add_module(int cid, aterm *asfix)
 {
   aterm *t[7]; 
@@ -560,8 +576,7 @@ aterm_list *add_module(int cid, aterm *asfix)
 
   TinitArena(t_world(asfix), &local);
 
-  if(Tmatch(asfix,
-     "module(<term>,<term>,<term>,<term>,<list>,<term>,<term>,<term>,<term>)",
+  if(TmatchTerm(asfix,pattern_asfix_module,
      &t[0], &t[1], &modname, &t[2], &sections, &t[3], &t[4], &t[5], &t[6])) {
     if(TdictGet(modules_db,modname) == Tfalse) {
       newasfix = AFexpandModule(&local, asfix);

@@ -56,10 +56,11 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= compiler.c asfix2rnx.c expander.c asfixprinter.c
-CHDR		= compiler.tif.c
+CSRC		= compiler.c asfix2rnx.c expander.c asfixprinter.c aprinter.c \
+                  to-epic.c rnx2asfix.c
+CHDR		= compiler.tif.c to-epic.tif.c
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler
+BINFILES	= compiler to-epic aprinter
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
@@ -68,7 +69,7 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler compiler.tif.c
+CLEANFILES	= compiler compiler.tif.c to-epic to-epic.tif.c aprinter
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -84,6 +85,15 @@ compiler.tif.c: $(top_srcdir)/toolbus/meta.tifs
 compiler: compiler.o asfix2rnx.o asfixprinter.o expander.o 
 	$(CC) -o compiler compiler.o asfix2rnx.o asfixprinter.o \
 	 expander.o $(LIBS)
+
+to-epic.tif.c: $(top_srcdir)/toolbus/meta.tifs
+	$(TOOLBUS)/bin/ctif -newstyle -tool to-epic -tifs $(top_srcdir)/toolbus/meta.tifs
+
+to-epic: to-epic.o asfixprinter.o rnx2asfix.o asfix2rnx.o
+	$(CC) -o to-epic to-epic.o asfixprinter.o rnx2asfix.o asfix2rnx.o $(LIBS)
+
+aprinter: aprinter.o asfixprinter.o
+	$(CC) -o aprinter aprinter.o asfixprinter.o $(LIBS)
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
