@@ -11,7 +11,6 @@ T1    : term,
 T2    : term,
   Text  : str,
   Path  : str,
-  Dir   : str,
   Fid   : str,
   TE    : text-edit,
   Clst  : list, 
@@ -31,13 +30,13 @@ in
   snd-msg(Id,open-trm-file(Term)).
   ( 
 /* Dit stuk is van Tobias
-    rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)).
+    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)).
     printf("Name: %t, Path: %t", Name, Path).
     create(Editor(Name,Text,Path,Id), Tid?).
     snd-note(ui-status(endstat(Id)))
     snd-msg(process-eqs(Mod)).
 Tot hier */
-    rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)). 
+    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)). 
     snd-msg(get-table-from-db(id(Mod))).
     ( rec-msg(table(Table?)).
       snd-note(ui-status(endstat(Id)))
@@ -80,7 +79,7 @@ Tot hier */
      )) 
 */ 
     +
-    rec-msg(Id,error-opening(Str?,Path?)). 
+    rec-msg(Id,error-opening(Str?)). 
     snd-msg(get-table-from-db(id(Mod))).
     ( rec-msg(table(Table?)).
       snd-note(ui-status(endstat(Id)))
@@ -93,7 +92,7 @@ Tot hier */
       rec-msg(done)
     ).
     snd-note(ui-status(stat(Id,"Creating new term"))).
-    create(Editor(id(Str),"",Path,Mod), Tid?). 
+    create(Editor(id(Str),"","",Mod), Tid?). 
     snd-msg(open-language(Mod,Table)).
     snd-note(ui-status(endstat(Id)))
   ).
