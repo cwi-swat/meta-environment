@@ -1,0 +1,16 @@
+module languages/asf/pretty/BoxMapping[X]
+
+imports languages/box/syntax/Box
+exports
+
+context-free syntax
+
+tobox( X )   -> Box {to-box}
+frombox( Box ) -> X {from-box}
+
+hiddens
+
+variables
+
+"X" -> X
+"Box" -> Box
