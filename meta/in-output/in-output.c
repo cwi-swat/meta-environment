@@ -34,6 +34,9 @@
 #include <atb-tool.h>
 #include <assert.h>
 
+/* FIXME This is a hack, due to JS (HDJ: why?)*/
+#include <sys/stat.h>
+
 #include "in-output.tif.h"
 
 #define	CURRENT_DIR "."
@@ -54,9 +57,6 @@
 #define EQS_TBL_EXT	".eqs.tbl"
 #define TRM_TBL_EXT	".trm.tbl"
 
-/* This is a hack, due to JS */
-#include <sys/stat.h>
-
 ATbool run_verbose = ATfalse;
 
 static char myversion[] = "1.2";
@@ -68,6 +68,19 @@ static char myversion[] = "1.2";
  */
 
 static char myarguments[] = "hvV";
+
+void usage(char *prg, ATbool is_err)
+{
+    ATwarning(
+	      "Usage: %s [options]\n"
+	      "Options:\n"
+	      "\t-h              display help information (usage)\n"
+	      "\t-v              verbose mode\n"
+	      "\t-V              reveal program version (i.e. %s)\n",
+	      prg, myversion);
+    exit(is_err ? 1 : 0);
+}
+
 
 int fileexists(const char *fname)
 {
@@ -204,14 +217,14 @@ char *find_in_path(char *target)
     return found ? filename : NULL;
 }
 
-ATerm open_error(char *n)
+ATerm open_error(char *error_message)
 {
-    return ATmake("snd-value(error-opening(<str>))", n);
+    return ATmake("snd-value(error-opening(<str>))", error_message);
 }
 
 ATerm read_term_from_named_file(char *fn, char *n)
 {
-    ATerm       t;
+    ATerm t;
     static char pn[PATH_LEN];
 
     if(!(t = ATreadFromNamedFile(fn))) {
@@ -220,9 +233,11 @@ ATerm read_term_from_named_file(char *fn, char *n)
 	}
 	return open_error(n);
     }
+
     /* FIXME: I see a magic "4" here? */
     strncpy(pn,fn,strlen(fn)-4);
     pn[strlen(fn)-4] = '\0';
+
     return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
 		  "timestamp(<int>)))",
 		  n, t, pn, filetime(fn));
@@ -469,6 +484,9 @@ void rec_terminate(int cid, ATerm arg)
 
 void add_path(char *pathname)
 {
+    /* Ward off illegal entries */
+    assert(pathname != NULL);
+
     if (nr_paths >= MAX_PATHS) {
 	if (run_verbose) {
 	    ATwarning("add_path(%s) failed, nr_paths exceeded (max = %d)\n",
@@ -531,7 +549,7 @@ char *expand_path(const char *relative_path)
     return absolute_path;
 }
 
-void read_conf(char *config_filename)
+void read_conf(const char *config_filename)
 {
     FILE *fd;
     char *absolute_path;
@@ -603,18 +621,6 @@ void read_conf(char *config_filename)
 	ATerror("panic: empty searchpath after parsing \"%s\"!\n",
 		config_filename);
     }
-}
-
-void usage(char *prg, ATbool is_err)
-{
-    ATwarning(
-	      "Usage: %s [options]\n"
-	      "Options:\n"
-	      "\t-h              display help information (usage)\n"
-	      "\t-v              verbose mode\n"
-	      "\t-V              reveal program version (i.e. %s)\n",
-	      prg, myversion);
-    exit(is_err ? 1 : 0);
 }
 
 void version(char *prg)

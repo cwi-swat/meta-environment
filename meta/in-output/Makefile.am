@@ -32,11 +32,8 @@ EXTRA_DIST        = in-output.idef
 CLEANFILES        = in-output.tifs in-output.tif.c in-output.tif.h
 
 in_output_SOURCES = in-output.c
-in_output_LDADD   = in-output.tif.o \
-                   -L$(ASCLIB) -lasc-support \
-                   -L$(ASFIXLIB) -lAsFix \
-                   -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+in_output_LDADD   = in-output.tif.o -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES          = -I$(ATERMINC)
 
-in-output.o : in-output.tif.h
+in-output.o: in-output.tif.h
