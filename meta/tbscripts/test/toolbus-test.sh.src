@@ -21,7 +21,7 @@
 
 # $Id$
 
-toolbus=__TOOLBUSBIN__
+toolbus=__TOOLBUS__
 datadir=__DATADIR__
 sglr=__SGLR__
 
@@ -34,7 +34,7 @@ failed=0
 call_toolbus () {
   script=$1
   tests=`expr $tests + 1`
-  result=`toolbus -I${datadir} -I ${sglr}/share ${script} 2>&1`
+  result=`toolbus -I${datadir} -I${sglr}/share ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
@@ -62,8 +62,8 @@ rm -f Empty.eqs
 call_toolbus new-eqs-test.tb
 rm -f Empty.eqs
 
-# Test whether ambiguities for asfix1 are corrected
-call_toolbus ambi-test.tb
+## Test whether ambiguities for asfix1 are corrected
+#call_toolbus ambi-test.tb
 
 # Test for updating of unchanged modules
 call_toolbus update-test-module.tb

@@ -34,7 +34,7 @@ failed=0
 call_toolbus () {
   script=$1
   tests=`expr $tests + 1`   
-  result=`${toolbus} -I${datadir} -I${sglr}/share ${script} 2>&1`
+  result=`toolbus -I${datadir} -I${sglr}/share ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
