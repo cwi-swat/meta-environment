@@ -2,36 +2,11 @@
   $Id$
 */
 
-process ApplyFunction(FuncName : str, SortName : str, ArgList : list, Tree: term?) is
-  snd-msg(apply-function(FuncName, SortName, ArgList)) .
-  rec-msg(tree(Tree?))
-
-process IfEqualTrees(Tree1 : term, Tree2 : term, Result : bool?) is
-  snd-msg(equal-trees(Tree1, Tree2)) .
-  (
-    rec-msg(true) .
-    Result := true
-  +
-    rec-msg(false) .
-    Result := false
-  )
-
-process Exists(FileName:str, Result: bool?) is
-  snd-msg(exists-file(FileName)) .
-  (
-    rec-msg(file-exists(FileName)) .
-    Result := true
-  +
-    rec-msg(file-not-exists(FileName)) .
-    snd-note(ui-status(errorf("%s does not exist", 
-                              [FileName]))) .
-    Result := false
-  )
-
 process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term
 in
+  snd-msg(invalidate-tree(EditorId)) .
   snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
     rec-msg(parse-ok(trm(ModuleName))) .
@@ -39,22 +14,6 @@ in
   +
     rec-msg(parse-failed(trm(ModuleName), ErrorFoci?))
   )
-endlet
-
-process ParseTerm2(EditorId: term, ModuleName: str) is
-let
-  ErrorFoci : term,
-  Text      : str,
-  Focus     : term,
-  Tree      : term,
-  Error     : term
-in
-  snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(set-focus(EditorId, Focus?)) .
-  snd-msg(get-focus-text(EditorId, Focus)) .
-  rec-msg(focus-text(EditorId, Text?)) .
-  ParseText(Text, ModuleName, "", Tree?, Error?) .
-  ProcessParseError(ModuleName, Error, "trm")
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
@@ -97,7 +56,6 @@ in
     snd-msg(get-tree(EditorId)) .
     rec-msg(tree(Tree?))
   else
-    snd-msg(invalidate-tree(EditorId)) .
     ParseTerm(EditorId, ModuleName) .
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) . 
@@ -287,7 +245,6 @@ in
         fi
       +
         rec-msg(parse-action(NewModName?), Stack?, EditorId) .
-        snd-msg(invalidate-tree(EditorId)) .
         ParseTerm(EditorId, NewModName) .
         snd-msg(stack(Stack), EditorId)
       +
