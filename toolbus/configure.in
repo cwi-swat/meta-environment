@@ -8,7 +8,7 @@ SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
 GEL_DEMOS="spec"
 EPIC_DEMOS=""
-SUBDIRS="src test \${XTRADIRS} adapters demos doc www"
+SUBDIRS="src test \${XTRADIRS} adapters demos doc www tbviz"
 XTRADIRS=""
 
 AC_SUBST(PRODUCT)
@@ -286,6 +286,13 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
 	adapters/java-adapter/toolbus/tide/Makefile \
+	tbviz/Makefile \
+	tbviz/sh/Makefile \
+	tbviz/sh/tbgraph \
+	tbviz/spec/Makefile \
+	tbviz/spec/dot/Makefile \
+	tbviz/spec/tbviz/Makefile \
+	tbviz/spec/toolbus/Makefile \
 	www/Makefile, \
 mkdir doc/adapters
 	) 

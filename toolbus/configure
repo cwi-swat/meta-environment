@@ -545,7 +545,7 @@ SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
 GEL_DEMOS="spec"
 EPIC_DEMOS=""
-SUBDIRS="src test \${XTRADIRS} adapters demos doc www"
+SUBDIRS="src test \${XTRADIRS} adapters demos doc www tbviz"
 XTRADIRS=""
 
 
@@ -2666,6 +2666,13 @@ trap 'rm -fr `echo "Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
 	adapters/java-adapter/toolbus/tide/Makefile \
+	tbviz/Makefile \
+	tbviz/sh/Makefile \
+	tbviz/sh/tbgraph \
+	tbviz/spec/Makefile \
+	tbviz/spec/dot/Makefile \
+	tbviz/spec/tbviz/Makefile \
+	tbviz/spec/toolbus/Makefile \
 	www/Makefile" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -2762,6 +2769,13 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile tide/Makefile tide/tide doc/
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
 	adapters/java-adapter/toolbus/tide/Makefile \
+	tbviz/Makefile \
+	tbviz/sh/Makefile \
+	tbviz/sh/tbgraph \
+	tbviz/spec/Makefile \
+	tbviz/spec/dot/Makefile \
+	tbviz/spec/tbviz/Makefile \
+	tbviz/spec/toolbus/Makefile \
 	www/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

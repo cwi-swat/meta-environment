@@ -30,7 +30,7 @@ all clean distclean install uninstall:
 	case $@ in \
 	  clean) ${CLEAN} ;;\
 	  distclean) ${CLEAN};rm -f Makefile config.status config.log config.cache; rm -f lib/* include/* bin/* ;;\
-	  install) SUBDIRS="src test ${XTRADIRS} adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(tidedir) $(bitmapdir) $(includedir) ;;\
+	  install) SUBDIRS="src test ${XTRADIRS} adapters tbviz";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(tidedir) $(bitmapdir) $(includedir) ;;\
 	  all) SUBDIRS="src test ${XTRADIRS} adapters";;\
 	esac; \
 	for SUBDIR in $$SUBDIRS; \
