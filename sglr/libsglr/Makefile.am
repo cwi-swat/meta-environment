@@ -24,8 +24,6 @@ INCLUDES		= -I${top_srcdir}/libtree2dot \
 			-I$(ATERM)/include \
 			-I$(PT_SUPPORT)/include
 
-#CFLAGS			+= -pg
-
 lib_LIBRARIES		= libsglr.a
 
 include_HEADERS		= sglr.h
@@ -37,3 +35,5 @@ noinst_HEADERS		= forest.h mem-alloc.h parse-table.h parser.h \
 libsglr_a_SOURCES	= sglr-interface.c forest.c parse-table.c parser.c \
 			stack.c rsrc-usage.c stack-collect.c multisets.c \
 			bitmap.c
+
+libsglr_a_INCLUDE       = $(INCLUDES)
