@@ -60,7 +60,7 @@ static char myversion[] = "1.1";
     explanation.
  */
 
-static char myarguments[] = "bhi:o:tvV";   
+static char myarguments[] = "bhm:i:o:tvV";   
 
 extern ATerm pattern_asfix_term;
 extern ATerm pattern_asfix_appl;
@@ -225,45 +225,18 @@ void rec_terminate(int cid, ATerm arg)
 
 void usage(void)
 {
-    static char *myargumentsexplained = NULL;
-
-    /*  Represent the argument string in a slightly friendlier manner  */
-    if(!myargumentsexplained && *myarguments) {
-        int  i, hyphen = 0;
-        char *ptr0, *ptr1;        
-
-        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
-            if(*ptr0 == ':')
-                i++;
-        ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 8*i + 2);
-        for(ptr0 = myarguments; *ptr0; ptr0++)
-            if(!*(ptr0+1) || *(ptr0+1) != ':') {
-                if(!hyphen++) {
-                    *ptr1++ = ' ';
-                    *ptr1++ = '-';
-                }
-                *ptr1++ = *ptr0;            } else {
-                hyphen = 0;
-                if(*(ptr1-1) != ' ')
-                    *ptr1++ = ' ';
-                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
-            }
-        *ptr1++ = '\0';
-    }        
-
     ATwarning(
-        "Usage: %s%s . . .\n"
+        "Usage: %s -bh -m file -i file -o file -tvV . . ."
         "Options:\n"
         "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
+	"\t-m module       topmodule of the specification (default: Main)\n"
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
-        myname, myargumentsexplained, myversion);
+        myname, myversion);
 }
 
 /*}}}  */    
@@ -283,6 +256,7 @@ int main(int argc, char *argv[])
 
   ATerm t = NULL, et, trm, reduct, asfix, file, modname;
 
+  char *moduleName = "";
   char *input = "-";
   char *output = "-"; 
   int cid;
@@ -317,6 +291,7 @@ int main(int argc, char *argv[])
       switch (c) {
         case 'b':  bafmode = 1;                            break;
         case 't':  bafmode = 0;                            break;
+	case 'm':  moduleName=optarg;                      break;
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
         case 'o':  output=optarg;                          break;
@@ -338,7 +313,11 @@ int main(int argc, char *argv[])
       t = ATreadFromFile(iofile);
       t = AFexpandTerm(t);
 
-      et = add_removevarsyntax_function_standalone(t);
+      if(!strcmp(moduleName,"")) {
+        et = add_removevarsyntax_function_standalone(t);
+      } else {
+      	et = add_removevarsyntax_function(moduleName,t);
+      }
 
       if(ATmatchTerm(et, pattern_asfix_term, NULL, NULL,
                      &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
