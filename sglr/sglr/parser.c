@@ -187,10 +187,11 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
   path      *paths = NULL;
   ATermList newsons = NULL;
 
+/*
   if (SG_DEBUG)
     ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %xd)\n",
               SG_ST_STATE(st), i, link_seen, (int) sons);
-
+*/
   if (st == NULL) {
     paths = NULL;
   } else if (i == 0 && link_seen) {
@@ -397,7 +398,6 @@ ATerm SG_Result(char *sort)
 void SG_ParseChar(void)
 {
   stack   *st;
-  ATbool  delayed = ATfalse;
 
   for_actor = active_stacks;
   for_actor_delayed = NULL;
@@ -535,11 +535,24 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   if((st1 = SG_FindStack(s, active_stacks)) != NULL) {
     if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
       /* ambiguity */
-      if(SG_DEBUG)  ATfprintf(SGlog(), "Direct link found\n");
-      if (!reject)      /* Don't bother to represent rejects prods -- J$ */
-        SG_Amb(SG_LK_TREE(nl), t);
-      else {
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d\n",
+                            SG_ST_STATE(st0), SG_ST_STATE(st1));
+      if (!reject) {      /* Don't bother to represent rejects prods -- J$ */
+/*
+  The existing stack may already be rejected; in this case, no amb-node
+  should be created, and the existing stack must be "unrejected".
+  However, if this stack was directly created by a reject
+  production, it may have to remain rejected.
+ */
+        if(SG_Rejected(st1)) {
+          SG_PropagateUnreject(st1);
+        } else {
+          SG_Amb(SG_LK_TREE(nl), t);
+        }
+      } else {
         SG_PropagateReject(st1);
+
 #ifdef DEBUG
         SG_ShowStackOffspring(st1);
 #endif
@@ -671,8 +684,15 @@ void SG_AddStackHist(stack *parent, stack *kid)
 void SG_PropagateReject(stack *st)
 {
   while(st != NULL) {
-    if(st == accepting_stack) accepting_stack = NULL;
     SG_MarkLinkRejected(st, head(SG_ST_LINKS(st)));
+    st = st->kid;
+  }
+}
+
+void SG_PropagateUnreject(stack *st)
+{
+  while(st != NULL) {
+    SG_MarkLinkUnrejected(st, head(SG_ST_LINKS(st)));
     st = st->kid;
   }
 }
@@ -710,7 +730,7 @@ void SG_ShowLinks(st_links *lks, int depth)
 void SG_ShowStackOffspring(stack *st)
 {
   while(st != NULL && st->kid != NULL) {
-    ATfprintf(stderr, "%xd%s created %xd%s\n",
+    ATfprintf(stderr, "\t%d%s created %d%s\n",
                      SG_ST_STATE(st), SG_Rejected(st)?"r":"",
                      SG_ST_STATE(st->kid), SG_Rejected(st->kid)?"r":"");
     st = st->kid;
@@ -720,7 +740,7 @@ void SG_ShowStackOffspring(stack *st)
 void SG_ShowStackAncestors(stack *st)
 {
   while(st != NULL && st->parent != NULL) {
-    ATfprintf(stderr, "%d%s induced %d%s\n",
+    ATfprintf(stderr, "\t%d%s induced %d%s\n",
                      SG_ST_STATE(st->parent), SG_Rejected(st->parent)?"r":"",
                      SG_ST_STATE(st), SG_Rejected(st)?"r":"");
     st = st->parent;

@@ -14,6 +14,7 @@ void SG_AddStackHist(stack *parent, stack *kid);
 void SG_ShowStackOffspring(stack *);
 void SG_ShowStackAncestors(stack *);
 void SG_PropagateReject(stack *st);
+void SG_PropagateUnreject(stack *st);
 
 typedef int label;
 

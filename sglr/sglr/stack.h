@@ -119,6 +119,7 @@ st_link  *SG_FindDirectLink(stack *, stack *);
 
 void     SG_MarkStackRejected(stack *, st_link *);
 void     SG_MarkLinkRejected(stack *, st_link *);
+void     SG_MarkLinkUnrejected(stack *, st_link *);
 void     SG_MarkLinkRejected2(stack *, st_link *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);

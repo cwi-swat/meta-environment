@@ -97,7 +97,7 @@ actions SG_LookupAction(parse_table *pt, state s, int token)
                                      (ATerm) ATmakeInt(token)));
   as = as ? as : ATempty;
 
-  if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %l\n", s, token, as);
+  if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, token, as);
 
   return as;
 }

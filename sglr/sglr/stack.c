@@ -313,6 +313,15 @@ void SG_MarkStackRejected(stack *st, st_link *l)
   SG_LK_REJECTED(l) = ATtrue;
 }
 
+void SG_MarkLinkUnrejected(stack *st, st_link *l)
+{
+  SG_LK_REJECTED(l) = ATfalse;
+/*
+  ATfprintf(stderr, "Link state %d ==> state %d rejected\n",
+           SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
+*/
+}
+
 void SG_MarkLinkRejected(stack *st, st_link *l)
 {
   SG_LK_REJECTED(l) = ATtrue;

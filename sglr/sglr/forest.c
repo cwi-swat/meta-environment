@@ -257,7 +257,7 @@ void SG_Amb(ATerm existing, ATerm new) {
   } else {
     /* Expand existing ambiguity */
     newtrms = ATinsert((ATermList) ATgetFirst(ambs), nw_cln);
-    newidxs = ATinsert((ATermList)  ATgetLast(ambs), nw_annot);
+    newidxs = ATinsert((ATermList) ATgetLast(ambs), nw_annot);
   }
   ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);
 
