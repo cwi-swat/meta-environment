@@ -1,0 +1,3 @@
+SUBDIRS = \
+	config \
+	src

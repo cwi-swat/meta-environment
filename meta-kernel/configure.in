@@ -1,0 +1,122 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(meta-kernel, 1.0)
+AC_PREREQ(2.13)
+
+dnl Let aclocal use macros in ./config directory
+ACLOCAL="${ACLOCAL} -I ./config"
+
+dnl Which compiler to use?
+AC_PROG_CC
+
+dnl Handle cflags option
+AC_ARG_WITH(cflags,
+  [  --with-cflags=CFLAGS    standard options of c compiler],
+  CFLAGS=${withval},
+  if test "a${GCC}" = "ayes"; then
+    CFLAGS="-Wall -g -O2"
+  fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl Handle --with-editor option
+AC_ARG_WITH(editor,
+  [  --with-editor=EDITOR    one of gvim, gnu-emacs (default: gnu-emacs)],
+  DEFAULT_EDITOR=${withval},
+  DEFAULT_EDITOR="gnu-emacs"
+)
+AC_SUBST(DEFAULT_EDITOR)
+
+dnl Setup LIBTOOL
+dnl AC_LIBTOOL_DLOPEN
+dnl AC_PROG_LIBTOOL
+dnl if test "x${LIBTOOL}" = "x"; then
+dnl  AC_MSG_ERROR([Cannot find libtool, bailing out])
+dnl fi
+dnl AC_SUBST(LIBTOOL)
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl Require ATerm Java library
+AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
+   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
+dnl ATERM_JAVA is not allowed in Makefile.am's
+JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
+AC_SUBST(JAVA_ATERM)
+
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
+dnl Require ToolBus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl This variable holds all external jarfiles
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes
+AC_SUBST(EXTERNAL_JARS)
+
+dnl Require sglr package
+AC_PACKAGE_REQUIRE(sglr, sglr,
+   [  --with-sglr=DIR         sglr is in DIR])
+AC_SUBST(SGLR)
+
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+dnl Require graph-support package
+AC_PACKAGE_REQUIRE(graph-support, tree2graph,
+   [  --with-graph-support=DIR   graph-support is in DIR])
+AC_SUBST(GRAPH_SUPPORT)
+
+dnl Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+AC_PATH_PROG(JAVA, java)
+if test "x${JAVA}" = "x"; then
+  AC_MSG_ERROR("make sure java version 1.4 or better is in your PATH")
+fi
+
+AC_SET_MAKE
+
+dnl Determine which libraries to use for programs using sockets
+NOSOCKLIBS=$LIBS
+dnl first, the socket functions
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  if test ${SOCKET_FOUND} = no; then
+    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
+  fi
+fi
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
+AC_CHECK_HEADER(getopt.h)
+
+AC_OUTPUT(
+  Makefile
+  config/Makefile
+  src/Makefile
+  src/sh/Makefile
+  src/toolbus/Makefile
+)

@@ -1,0 +1,36 @@
+/* $Id */
+
+#include "configuration-manager.idef"
+#include "editor-hive.idef"
+#include "editor-manager.idef"
+#include "generic-adapter.idef"
+#include "graph-converter.idef"
+#include "in-output.idef"
+#include "layout-graph.idef"
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
+#include "meta-studio.idef"
+
+#ifdef QUERY
+#include "DisplayQuery.idef" 
+#endif
+
+process InitKernel is
+let
+  Unused : term
+in
+  (
+    rec-msg(library-location-hook)
+    . snd-msg(library-location-hook-result(""))
+  +
+    rec-msg(actions-hook)
+    . snd-msg(actions-hook-result("buttons([])"))
+  +
+    rec-msg(environment-name-hook)
+    . snd-msg(environment-name-hook-result("Kernel environment"))
+  ) * delta
+endlet
+
+toolbus(InitKernel)
