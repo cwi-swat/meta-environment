@@ -59,8 +59,7 @@ CHDR		= rewriter.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= lib${TARGET}-${CC}.a
-ALLLIBFILES	= lib${TARGET}-cc.a lib${TARGET}-gcc.a \
+LIBFILES	= lib${TARGET}-cc.a lib${TARGET}-gcc.a \
 		  lib${TARGET}-prof.a lib${TARGET}-dbg.a
 OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
 OBJ_GCC         = $(patsubst %.c,%-gcc.o,$(CSRC))
@@ -72,7 +71,7 @@ INCLUDEFILES	= ${TARGET}.h
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= rewriter.tifs ${ALLLIBFILES}
+CLEANFILES	= rewriter.tifs ${LIBFILES}
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= config.* depend Makefile
 
@@ -82,8 +81,6 @@ DISTCLEANFILES	= config.* depend Makefile
 all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 lib: ${LIBFILES}
-
-libs: ${ALLLIBFILES}
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
