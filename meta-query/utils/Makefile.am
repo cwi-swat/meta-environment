@@ -1,10 +1,8 @@
 EXTRA_DIST = \
-	merge-rstores \
 	meta-query-config.src \
 	extract-relations
 
 bin_SCRIPTS = \
-	merge-rstores \
 	meta-query-config \
 	extract-relations
 
