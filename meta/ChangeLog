@@ -11,6 +11,7 @@
 
 2003/06/27 (markvdb@cwi.nl)
  * metastudio is able to deal with graphs with extra information.
+ * First prototype of connection between parsetree and editor.
 
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
