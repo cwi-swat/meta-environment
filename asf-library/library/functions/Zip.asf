@@ -1,5 +1,3 @@
 equations
 
-[] zip([HA,TA] [HB,TB]) = <HA,HB> : zip([TA] [TB])
-
-[default] zip([TA] [TB]) = []
+[] zip([TA] [TB]) = zipWith (tuple [TA] [TB])

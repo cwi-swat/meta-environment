@@ -1,0 +1,9 @@
+equations
+
+[] tuple(A B) = <A,B>
+[] tuple(A B C ) = <A,B,C>
+[] tuple(A B C D) = <A,B,C,D>
+[] tuple(A B C D E) = <A,B,C,D,E>
+[] tuple(A B C D E F) = <A,B,C,D,E,F>
+[] tuple(A B C D E F G) = <A,B,C,D,E,F,G>
+[] tuple(A B C D E F G H) = <A,B,C,D,E,F,G,H>

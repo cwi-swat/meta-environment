@@ -1,0 +1,4 @@
+equations
+
+[default] zipWith(f [TA] [TB]) = []
+[] zipWith(f [HA,TA] [HB,TB]) = f(HA HB) : zipWith(f [TA] [TB])

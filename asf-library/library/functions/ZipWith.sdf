@@ -1,0 +1,24 @@
+module functions/ZipWith[A B C]
+
+imports containers/List[A]
+imports containers/List[B]
+imports containers/List[C]
+
+exports
+
+context-free syntax
+
+zipWith -> ((A B => C) List[[A]] List[[B]] => List[[C]])
+
+hiddens
+
+imports basic/Whitespace
+
+sorts List[[C]] A B C List[[A]] List[[B]]
+
+variables
+
+"A" -> A
+"B" -> B
+"C" -> C
+"f" -> (A B => C)

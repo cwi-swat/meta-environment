@@ -1,0 +1,30 @@
+module functions/Tuple[A B C D E F G H]
+
+exports
+
+context-free syntax
+
+tuple -> (A B => A#B)
+tuple -> (A B C => A#B#C)
+tuple -> (A B C D => A#B#C#D)
+tuple -> (A B C D E => A#B#C#D#E)
+tuple -> (A B C D E F => A#B#C#D#E#F)
+tuple -> (A B C D E F G=> A#B#C#D#E#F#G)
+tuple -> (A B C D E F G H => A#B#C#D#E#F#G#H)
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A#B A#B#C A#B#C#D  A#B#C#D#E A#B#C#D#E#F A#B#C#D#E#F#G  A#B#C#D#E#F#G#H 
+variables
+
+"A" -> A
+"B" -> B
+"C" -> C
+"D" -> D
+"E" -> E
+"F" -> F
+"G" -> G
+"H" -> H
+

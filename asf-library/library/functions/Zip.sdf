@@ -1,8 +1,7 @@
 module functions/Zip[A B]
 
-imports containers/List[A]
-imports containers/List[B]
-imports containers/List[A#B]
+imports functions/ZipWith[A B A#B]
+imports functions/Tuple[A B]
 
 exports
 

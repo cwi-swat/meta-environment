@@ -18,8 +18,8 @@ exports
 
 %% Two special variables for head/tail construction/deconstruction
   variables
-   "H"[0-9\']* -> X
-   "T"[0-9\']* -> {X ","}*
+   "H"[A-Z0-9\']* -> X
+   "T"[A-Z0-9\']* -> {X ","}*
 
 imports 
   basic/Booleans
