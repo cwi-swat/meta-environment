@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/07 (markvdb@cwi.nl)
+ * Added "tuple" (<A,B>) besides A#B, but the latter is mapped to
+   pt-tuple instead of pt-pair.
+
 2003/10/02 (markvdb@cwi.nl)
  * Removed the set and perm symbol, in the library of course.
    Regenerated the Sdf.label.def and the rest.
