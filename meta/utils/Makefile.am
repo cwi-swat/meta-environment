@@ -40,7 +40,7 @@ EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      insert-license.sh.src test-help test-version \
                      lang.types perform-test.sh.src \
                      parse-sdf2.pod change-sdf2-ext \
-                     sdf2stats change-eqs-ext
+                     sdf2stats.sh.src change-eqs-ext
 
 CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
                      insert-license perform-test parse-sdf2.1 \
@@ -66,6 +66,7 @@ INCLUDES           = -I$(SDF_SUPPORT)/include \
 	sed 's@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
+	     s@__PGEN__@$(PGEN)@g;\
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \
