@@ -140,7 +140,7 @@ static ATermList checkNegativeCondition(ASF_Tag tag,
       !noNewVariables((PT_Tree)rhsCond, *variables)) {
     return ATmakeList1(
             makeMessage(
-              "uninstantiated variables introduced in negative condition", 
+              "negative condition introduces variable(s)", 
 	      tag,
 	      ASF_makeTermFromCondition(condition)));
   }
