@@ -86,6 +86,14 @@ in
   Top := first(args(TopTerm))
 endlet
 
+process StackPopInt(Stack : list, NewStack : list?, Top : int?) is
+let
+  TopTerm : term
+in
+  StackPopTerm(Stack, NewStack?, TopTerm?) .
+  Top := first(args(TopTerm))
+endlet
+
 process StackPushTerm(Stack : list, NewStack : list?, Top : term) is
   NewStack := join(Top, Stack)
 
@@ -174,9 +182,36 @@ in
         ReturnFailed(EditorId, Stack)
       fi
       +
+      /* TODO: use stack arguments instead of function arguments */
       rec-msg(rewrite(ExecName?), Stack?, EditorId?) .
       StackPopTerm(Stack,Stack?,STree?).
       snd-msg(rewrite(ExecName, STree)) .
+      rec-msg(normalform(ExecName, RTree?)) .
+      StackPushTerm(Stack,Stack?,RTree).
+      ReturnSuccess(EditorId,Stack)
+      +
+      rec-msg(apply-rewrite, Stack?, EditorId?) .
+      StackPopInt(Stack,Stack?,NrOfArgs?) .
+      StackPopString(Stack,Stack?,SortName?) .
+      StackPopString(Stack,Stack?,FuncName?) .
+      StackPopString(Stack,Stack?,ExecName?) .
+      ArgList := [] .
+      (
+        if greater(NrOfArgs, 0) then
+          StackPopTerm(Stack,Stack?,STree?).
+	  if equal(fun(STree), "str") then
+	    STree := first(args(STree))
+          else 
+	    tau
+          fi .
+          NrOfArgs := sub(NrOfArgs, 1) .
+          ArgList := join(ArgList, STree)
+        fi 
+      ) *
+      if equal(NrOfArgs, 0) then
+        tau
+      fi .
+      snd-msg(apply-rewrite(ExecName, FuncName, SortName, ArgList)) .
       rec-msg(normalform(ExecName, RTree?)) .
       StackPushTerm(Stack,Stack?,RTree).
       ReturnSuccess(EditorId,Stack)
@@ -390,7 +425,12 @@ in
         StackPopString(Stack,Stack?,FileName?) .
 	CloseEditor(ModuleName, FileName) .
 	ReturnSuccess(EditorId, Stack)
-      + 
+      +
+        rec-msg(debug-print-stack, Stack?, EditorId?) .
+	StackPopString(Stack, Stack?, ErrorMessage?) .
+	printf("%s: %t\n", ErrorMessage, Stack) .
+	ReturnSuccess(EditorId, Stack)
+      +
         rec-msg(send, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
         snd-msg(tree-send(STree)) .
