@@ -2,13 +2,18 @@ package metastudio.components.filedialog;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import metastudio.utils.ExtensionFilter;
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermFactory;
+import aterm.ATermList;
 
 public class FileDialog implements FileDialogTif, Runnable {
 	private FileDialogBridge bridge;
@@ -45,7 +50,7 @@ public class FileDialog implements FileDialogTif, Runnable {
             result = file.getAbsolutePath();
         }
 
-        return factory.make("file-name(<str>)", result);
+        return factory.make("snd-value(file-name(<str>))", result);
     }
 
     private File showFileBrowser(
@@ -65,20 +70,59 @@ public class FileDialog implements FileDialogTif, Runnable {
 
         return null;
     }
+    
+    public ATerm showQuestionDialog(String question) {
+    	int choice = JOptionPane.showConfirmDialog(parent, question);
 
-	/* (non-Javadoc)
-	 * @see metastudio.components.filedialog.FileDialogTif#recTerminate(aterm.ATerm)
-	 */
+    	if (choice == JOptionPane.YES_OPTION) {
+    		return factory.make("snd-value(answer(yes))");
+    	}
+    	if (choice == JOptionPane.NO_OPTION) {
+    		return factory.make("snd-value(answer(no))");
+    	}
+    	
+    	return factory.make("snd-value(answer(cancel))");
+    }
+    
+    public void showListChoice(String title, String question, ATerm choices) {
+    	Object answer = JOptionPane.showInputDialog(parent,question,title, JOptionPane.QUESTION_MESSAGE,
+    			null, getList((ATermList) choices), "");
+    	
+    	if (answer != null) {
+    		String str = (String) answer;
+    		bridge.postEvent(factory.make("list-choice(<str>,<str>)",
+    				title, str));
+    	}
+    	else {
+    		bridge.postEvent(factory.make("cancel-list-choice(<str>)",
+    				title));
+    	}
+    }
+    
+    private Object[] getList(ATermList aterms) {
+    	Set set = new TreeSet();
+    	
+    	for (int i = 0; !aterms.isEmpty(); i++, aterms = aterms.getNext()) {
+    		ATerm first = aterms.getFirst();
+    		if (first.getType() == ATerm.APPL) {
+    			ATermAppl appl = (ATermAppl) first;
+    			set.add(appl.getName());
+    		}
+    	}
+
+    	return set.toArray();
+    }
+
 	public void recTerminate(ATerm t0) {
-		// TODO Auto-generated method stub
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	public void run() {
+ 	public void run() {
 		bridge.run();
+		
+	}
+
+	public void recAckEvent(ATerm t0) {
 		
 	}
     

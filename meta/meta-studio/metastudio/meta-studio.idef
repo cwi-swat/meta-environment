@@ -2,11 +2,8 @@ tool user-interface is { command = "meta-studio" }
 
 process Ui is
 let
-  Answer: term,
   Arguments: list,
   EventList: list,
-  Choice: str,
-  Choices: list,
   EnvironmentName: str,
   Error: term,
   Event: term,
@@ -20,7 +17,6 @@ let
   Node: term,
   On: term,
   Path: str,
-  Question: str,
   Str: str,
   Title: str,
   Type: term,
@@ -81,11 +77,6 @@ in
       . snd-msg(ui-button-selected(Type, Event, ModuleId))
       . snd-ack-event(UI, button-selected(Type, ModuleId, Event))
     +
-      rec-msg(ask-question(Title?))
-      . snd-eval(UI, show-question-dialog(Title))
-      . rec-value(UI, answer(Answer?))
-      . snd-msg(ask-question-result(Answer))
-    +
       rec-msg(clear-history)
       . snd-do(UI, clear-history)
     +
@@ -96,17 +87,6 @@ in
       rec-event(UI, error-selected(Error?))
       . snd-msg(ui-error-selected(Error))
       . snd-ack-event(UI, error-selected(Error))
-    +
-      rec-msg(show-list-choice(Title?, Question?, Choices?))
-      . snd-do(UI, show-list-choice(Title, Question, Choices))
-    +
-      rec-event(UI,list-choice(Title, Choice?))
-      . snd-msg(list-choice(Title, Choice))
-      . snd-ack-event(UI, list-choice(Title, Choice))
-    +
-      rec-event(UI,cancel-list-choice(Title))
-      . snd-msg(cancel-list-choice(Title))
-      . snd-ack-event(UI, cancel-list-choice(Title))
     )
     *
     (

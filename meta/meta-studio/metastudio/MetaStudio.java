@@ -17,12 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import metastudio.components.ChoiceDialog;
 import metastudio.components.MainTabs;
 import metastudio.components.MenuBar;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
-import metastudio.components.QuestionDialog;
 import metastudio.components.ToolBar;
 import metastudio.components.filedialog.FileDialog;
 import metastudio.components.statusbar.StatusBar;
@@ -75,15 +73,12 @@ public class MetaStudio extends JFrame {
     }
     
     private void createPopupHandlers(String []args) {
-        new QuestionDialog(factory, getBridge(), this.getRootPane());
-        
         FileDialog fileDialog = new FileDialog(this.getRootPane(), factory, args);
         Thread fdThread = new Thread(fileDialog);
         fdThread.setName("file-dialog");
         fdThread.start();
         
         new ModulePopupMenu(factory, getBridge());
-        new ChoiceDialog(factory, getBridge(), this.getRootPane());
     }
     
     private void createContentPane(String[] args) {

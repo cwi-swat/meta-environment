@@ -6,6 +6,10 @@ let
   FileName: str,
   Path: str,
   Title: str,
+  Question : str,
+  Choices : list,
+  Choice : str,
+  Answer : term,
   T: file-dialog
 in
   rec-connect(T?)
@@ -15,6 +19,22 @@ in
       . snd-eval(T, show-file-dialog(Title, Path, Extension))
       . rec-value(T, file-name(FileName?))
       . snd-msg(ask-for-file-result(FileName))
+    +
+      rec-msg(ask-question(Title?))
+      . snd-eval(T, show-question-dialog(Title))
+      . rec-value(T, answer(Answer?))
+      . snd-msg(ask-question-result(Answer))
+    +
+       rec-msg(show-list-choice(Title?, Question?, Choices?))
+      . snd-do(T, show-list-choice(Title, Question, Choices))
+    +
+      rec-event(T,list-choice(Title, Choice?))
+      . snd-msg(list-choice(Title, Choice))
+      . snd-ack-event(T, list-choice(Title, Choice))
+    +
+      rec-event(T,cancel-list-choice(Title))
+      . snd-msg(cancel-list-choice(Title))
+      . snd-ack-event(T, cancel-list-choice(Title))
   )
   *
   rec-disconnect(T)

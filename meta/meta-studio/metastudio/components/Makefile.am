@@ -10,7 +10,6 @@ javadir = ${prefix}/classes/metastudio
 EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
-	ChoiceDialog.java \
 	HistoryPanel.java \
 	MainTabs.java \
 	MenuBar.java \
@@ -21,6 +20,5 @@ java_JAVA = \
 	ModuleSelectionListener.java \
 	ModuleTree.java \
 	ParseTreeBrowser.java \
-	QuestionDialog.java \
 	ToolBar.java \
 	TideControl.java 

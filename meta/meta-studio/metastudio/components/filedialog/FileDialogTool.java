@@ -1,6 +1,6 @@
 // Java tool interface class FileDialogTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 11:55:34 AM
+// generation time: Nov 25, 2004 1:17:38 PM
 
 package metastudio.components.filedialog;
 
@@ -17,7 +17,10 @@ abstract public class FileDialogTool
 
   //{{{  Patterns that are used to match against incoming terms
 
+  private ATerm PshowListChoice0;
+  private ATerm PshowQuestionDialog0;
   private ATerm PshowFileDialog0;
+  private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   //}}}
@@ -40,6 +43,9 @@ abstract public class FileDialogTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-eval(<file-dialog>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<file-dialog>,show-question-dialog(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<file-dialog>,show-list-choice(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<file-dialog>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<file-dialog>,<term>)"), new Boolean(true));
   }
 
@@ -49,7 +55,10 @@ abstract public class FileDialogTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
+    PshowListChoice0 = factory.parse("rec-do(show-list-choice(<str>,<str>,<term>))");
+    PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
+    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -62,9 +71,23 @@ abstract public class FileDialogTool
   {
     List result;
 
+    result = term.match(PshowListChoice0);
+    if (result != null) {
+      showListChoice((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      return null;
+    }
+    result = term.match(PshowQuestionDialog0);
+    if (result != null) {
+      return showQuestionDialog((String)result.get(0));
+    }
     result = term.match(PshowFileDialog0);
     if (result != null) {
       return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));
+    }
+    result = term.match(PrecAckEvent0);
+    if (result != null) {
+      recAckEvent((ATerm)result.get(0));
+      return null;
     }
     result = term.match(PrecTerminate0);
     if (result != null) {
