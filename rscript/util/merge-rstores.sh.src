@@ -54,7 +54,7 @@ test $VERBOSE == yes && echo " done."
 
 for f in $*; do
   if test $VERBOSE == yes; then echo -n "merging $f into ${RESULT} ..."; else echo -n "."; fi
-  $RSTORE -f merge-rstores -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
+  $RSTORE -f merge-rstores -r RSTORE -i ${RESULT}  -i $f -o ${RESULT}
   test $VERBOSE == yes && echo " done."
 done
 

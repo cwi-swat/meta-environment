@@ -19,6 +19,7 @@ exports
 %% The RSTORE itself, maps RVARs to RVALUEs
 
        "rstore" "(" {  <RVAR, REXPTYPE, RVALUE>  ","}* ")"	-> RSTORE {prefer}
+       "empty-rstore"						-> RSTORE
         assign(RVAR, RVALUE, RSTORE)				-> RSTORE
         assign(RVAR, REXPTYPE, RVALUE, RSTORE)			-> RSTORE
 	assign-when-undef(RVAR, REXPTYPE, RVALUE, RSTORE)	-> RSTORE
@@ -27,8 +28,8 @@ exports
 %% Extension functions on RSTOREs intended for fact extraction tools
 
 	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
-	add-tuple(RVAR, Tuple, RSTORE)  		-> RSTORE
-	add-tuples(RVAR, Bag[[Elem]], RSTORE)		-> RSTORE
+	add-tuple(RVAR, REXPTYPE, Tuple, RSTORE)  	-> RSTORE
+	add-tuples(RVAR, REXPTYPE, Bag[[Elem]], RSTORE)	-> RSTORE
 
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
