@@ -1,0 +1,53 @@
+module ExtractVariableDeclarations
+
+imports Rstore
+imports Tscript
+imports ToolBusOperations
+imports MyPosInfo[ProcessName]
+imports MyPosInfo[Var]
+
+exports
+  context-free syntax
+    extractVariableDeclarations(Tscript, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDeclarations(ProcessDef, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariableDeclarationsInScope(VarDecls, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDeclarationsInScope(VarDecl, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariableDeclarationsInScope({FormalParam ","}*, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableDeclarationsInScope(FormalParam, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addVariableDeclaration(Var, Term, Area, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "$FormalParam" -> FormalParam
+    "$FormalParams" -> {FormalParam ","}*
+    "$ProcessBody" -> ProcessBody
+    "$ProcessDef" -> ProcessDef
+    "$ProcessExpr" -> ProcessExpr
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Area
+    "$ProcessSignature" -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Term" -> Term
+    "$Tuple"[0-9]* -> Elem # Elem
+    "$Var" -> Var
+    "$VarDecl" -> VarDecl
+    "$VarDecls" -> {VarDecl ","}*
+    "$VarId" -> Area
