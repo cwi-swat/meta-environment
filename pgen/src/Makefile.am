@@ -60,7 +60,7 @@ CLEANFILES = \
 	sed 's@__BINDIR__@$(top_builddir)/src@g;\
              s@__ACTIVATE__@0@g;\
              s@__SGLR__@$(SGLR)@g;\
-             s@__DATADIR__@$(top_builddir)/grammar@g;' < $< > $@ && \
+             s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
 	chmod +x $@
 
 # and one sdf2table for installed binaries and data

@@ -173,6 +173,8 @@ equations
         [StartSymbolPairsSet, $Msgs5] := 
           get-start-symbols($Module, [symbolpairs(), ], $ModuleId),
 
+        $Msgs6 := check-CHAR-sort($Module, , $ModuleId),
+
         symbols($Symbol*3) := get-used-symbols($Module, symbols()),
         symbols($Symbol*4) := get-defined-symbols($Module, symbols()),
 
@@ -193,12 +195,12 @@ equations
         $String4 := symbols2str($Symbol*6),
         $String5 := "start-symbols in " || $String1 || " not defined in any right-hand",
 
-        $Msgs6 := get-messages(InfoMsgTuple1),
-        $Msgs7 := $Msgs6, 
+        $Msgs7 := get-messages(InfoMsgTuple1),
+        $Msgs8 := $Msgs7, 
                   make-warning($String3, $String2), 
                   make-warning($String5, $String4), 
         InfoMsgTuple3 := put-messages($Msgs1, $Msgs2, $Msgs3, 
-                                      $Msgs4, $Msgs5, $Msgs7, 
+                                      $Msgs4, $Msgs5, $Msgs6, $Msgs8, 
                                       InfoMsgTuple1),
 
         ModuleInfoTable3 := get-module-info(InfoMsgTuple3),
@@ -208,7 +210,20 @@ equations
         ModuleInfoTable5 := put-aliased-symbols-info($ModuleId, 
                                  symbolpairs(AliasedSymbolPair*2 AliasedSymbolPair*1), 
                                  ModuleInfoTable4),
-        ModuleInfoTable6 := put-used-symbols-info($ModuleId, symbols($Symbol*3), ModuleInfoTable5),
+        ModuleInfoTable6 := 
+          put-used-symbols-info($ModuleId, symbols($Symbol*3), ModuleInfoTable5),
         InfoMsgTuple4 :=  put-module-info(ModuleInfoTable6, InfoMsgTuple3)
         ====>
         check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4
+
+  [cSs-1'1] check-CHAR-sort(variables Prod*, $Msgs, $ModuleId) = $Msgs
+
+  [cSs-1'2] check-CHAR-sort(Prod, $Msgs, $ModuleId) =
+              check-CHAR-sort2(Prod, $Msgs, Prod, $ModuleId)
+
+  [cSs-2'1] $String1 := moduleid2str($ModuleId),
+            $String2 := production2str(Prod),
+            $String3 := "sort CHAR used in production rule in " || $String1
+            ====>
+            check-CHAR-sort2(CHAR, $Msgs, Prod, $ModuleId) =
+              $Msgs, make-warning($String3, $String2) 

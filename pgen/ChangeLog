@@ -1,7 +1,15 @@
 $Id$
 
+Thu Apr 15 13:03:25 CEST 2004 <markvdb@cwi.nl>
+ * Removed dependency on sglr at build time.
+
 Fri Mar 19 15:17:59 CET 2004 <j{ong,urgenv}@cwi.nl>
  * updated wrt changes in SDFME API
+
+Wed Apr 14 10:53:05 CEST 2004 <markvdb@cwi.nl>
+ * The use of CHAR in context-free and lexical syntax productions
+   yields a warning.
+ * Removed a non-terminating rewriting, fixed bug 125.
 
 Thu Mar 11 16:54:31 CET 2004 <markvdb@cwi.nl>
  * Improved an error message with respect of the definedness of a start

@@ -97,6 +97,13 @@ hiddens
   context-free syntax
     check-symbol(Symbol, Symbols-Msg-Tuple, ModuleId) -> Symbols-Msg-Tuple
 
+  context-free syntax
+    check-CHAR-sort(Module, {Error ","}*, ModuleId)                  -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort(Grammar, {Error ","}*, ModuleId)                 -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort(Production, {Error ","}*, ModuleId)              -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort2(Production, {Error ","}*, Production, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort2(Sort, {Error ","}*, Production, ModuleId)       -> {Error ","}* {traversal(accu, break, top-down)}
+
 hiddens
   variables
     "$Attributes"[0-9]* -> Attributes
@@ -128,6 +135,7 @@ hiddens
     "Import*"[0-9]*         -> Import*
   
     "Prod*"[0-9]*           -> Production*
+    "Prod"[0-9]*            -> Production
 
     "$Grammar"[0-9]*        -> Grammar
 
