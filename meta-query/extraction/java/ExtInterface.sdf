@@ -1,0 +1,29 @@
+module ExtInterface
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[CompilationUnit] 
+
+exports
+  context-free syntax
+    extractInterface(CompilationUnit) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractInterface(CompilationUnit, RSTORE)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    extractInterface(InterfaceDeclaration, RSTORE)
+    	-> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&CompilationUnit" -> CompilationUnit
+    "&ExtendsInterfaces" -> ExtendsInterfaces?
+    "&Identifier" -> Identifier
+    "&InterfaceBody" -> InterfaceBody
+    "&InterfaceDeclaration" -> InterfaceDeclaration
+    "&Modifiers" -> Modifier*
+    "&Rstore"[0-9]* -> RSTORE
+    "&Tuple" -> Elem # Elem

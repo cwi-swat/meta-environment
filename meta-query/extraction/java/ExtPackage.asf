@@ -1,7 +1,8 @@
 equations
 
 [extractPackage-start]
-  extractPackage(&CompilationUnit) = extractPackage(&CompilationUnit, rstore())
+  extractPackage(&CompilationUnit) 
+  = extractPackage(&CompilationUnit, rstore())
 
 [extractPackage-0]
   &PackageDeclaration = package &Name ;,

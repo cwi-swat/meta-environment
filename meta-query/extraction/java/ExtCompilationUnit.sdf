@@ -1,7 +1,6 @@
 module ExtCompilationUnit
 
 imports Rstore
-imports JavaOperations
 imports MyPosInfo[CompilationUnit]
 
 exports
