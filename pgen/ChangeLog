@@ -1,5 +1,28 @@
 $Id$
 
+Wed Jan 26 11:25:22 CET 2005 <jurgenv@cwi.nl>
+ * SGLR now produces structured lexicals because of changes in the 
+   flattener, also literals are no longer mapped to lit(<str>) trees.
+ * Structured lexicals in ASF, means a reimplementation of some of 
+   the functionality in the SDF normalizer. Nothing big though.
+ * Regression tests succeeed without ANY changes.
+ * Bootstrapped SDF2 normalizer and the Sdf2.baf parsetable
+ * TODO: reimplement and regenerate SDF-checker!!!!! (sdf2table is now broken)
+
+Wed Dec 29 08:58:03 CET 2004 <jurgenv@cwi.nl>
+ * Refactored SDF2 syntax definition:
+   - ATerm syntax now uses StrCon and IdCon for literals
+   - SDF2 does not reuse ATerm literals, but uses StrCon and IdCon
+     where appropriate (such as in labels, prefix functions).
+   - Unquoted literal symbols are syntactically disallowed from now on!
+   - Introduced new non-terminal: ATermAttribute, such that associativity
+     and other attributes (avoid, reject, bracket, prefer)
+     can be rejected from it. Nested occurrences (inside an ATerm attribute)
+     are now possible.
+ * Changed Sdf2-Normalization accordingly: 
+   - Quoting literals is not needed anymore.
+   - Normalization of literals simplified.
+
 Fri Nov 19 14:22:07 CET 2004 <jurgenv@cwi.nl>
  * Changed dependency on Tide to dependency on small package tide-support.
    (similar to toolbuslib a very small C package)

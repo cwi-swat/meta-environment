@@ -386,7 +386,7 @@ static ATerm getPriorityArgument(SDF_Priority prio)
   
   if (SDF_isNatConArgumentsSingle(nats)) {
     SDF_NatCon arg = SDF_getNatConArgumentsHead(nats);
-    char *value = SDF_getNatConString(arg);
+    char *value = PT_yieldTree((PT_Tree) arg);
     ATerm result = (ATerm)ATmakeInt(atoi(value));
 
     return result;
@@ -764,9 +764,9 @@ ATerm generate_parse_table(int version_nr, PT_ParseTree g)
   }
   else {
     ATwarning("parsetablegen: unexpected error in syntax definition!\n");
-    ATwarning("\tgrammar is: %s\n",
-	      PT_yieldTreeToString((PT_Tree) grammarTerm, ATfalse));
-    return NULL;
+    ATwarning("\tdumped grammar to ./parsetablegen.bug\n");
+    ATwriteToNamedTextFile((ATerm) grammarTerm, "./parsetablegen.bug");
+    return ATmake("parse-table(0,0,[],states([]),priorities([]))");
   }
 }
 

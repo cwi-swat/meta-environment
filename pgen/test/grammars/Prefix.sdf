@@ -9,5 +9,5 @@
     sorts A B
     context-free start-symbols A B
     context-free syntax
-      a -> A
+      "a" -> A
       "f" ( A ) -> B   
