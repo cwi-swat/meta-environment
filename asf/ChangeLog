@@ -1,5 +1,10 @@
 # $Id$
 
+Mon May 10 10:57:20 CEST 2004 <jurgenv@cwi.nl>
+ * added new warning: If lexical is exactly the same as the sort name
+   it is parsed over it was probably a variable!
+ * Bumped version to 1.9
+
 Tue Apr 27 14:42:13 CEST 2004 <jurgenv@cwi.nl>
  * From now on, compiled ASF can deal with annotations!
    - ATisEqual is replaced by ATisEqualModuloAnnotations
@@ -12,6 +17,9 @@ Tue Apr 27 14:42:13 CEST 2004 <jurgenv@cwi.nl>
      properly.
    - TODO: refactor asc_support_main to have an extra argument.
      This is not doable for release 1.5
+
+Thu May  6 21:09:33 CEST 2004 <markvdb@cwi.nl>
+ * Fixed the command line version of AsfSdf-Checker.
 
 Tue May  4 13:25:36 CEST 2004 <markvdb@cwi.nl>
  * Improved the clickable error messages and fixed bug 295.
