@@ -26,4 +26,4 @@ addeqssyntax_LDADD   = addeqssyntax.tif.o \
 
 CLEANFILES = addeqssyntax.tifs addeqssyntax.1
 
-addeqssyntax.o: addeqssyntax.tif.h $(top_builddir)/addeqssyntax/c-source/libAdd-Eqs-Syntax.a
+addeqssyntax.o: addeqssyntax.tif.h
