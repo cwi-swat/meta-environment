@@ -57,8 +57,13 @@ configuration([
   button("*",
          [description(term-editor, menu(["Actions", "Show Origin"]))],
          [get-focus-origin,
-          push-string("Origin"),
-          show-area]), 
+          dup,
+	  push-term(no-origin),
+	  if-equal(
+	    [push-string("No origin information available"),display-message],
+	    [push-string("Origin"), show-area]
+	  )
+	 ]),
   button("*",
          [description(term-editor, menu(["Actions","Dump ParseTable"]))],
          [push-active-module,

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Apr 19 11:45:32 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   upgrade "Show Origin" to properly deal with situations without origins
+
 Fri Apr 16 13:45:18 CEST 2004 <{jong,kooiker}@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:
    call get-focus-origin
