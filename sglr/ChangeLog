@@ -18,6 +18,9 @@
 
 $Id$
 
+2000/8/25 (jong@cwi.nl)
+  * In verbose mode, animated counter is only displayed if stderr is a tty.
+
 2000/8/09 (jurgenv@cwi.nl)
   * Fixed a major bug that caused sglr to dump core while reading parsetables
     in some infrequently occurring cases.
