@@ -212,11 +212,59 @@ void SG_ClearPath(register path *p)
 }
 
 /*
- Function |SG_FindPaths| yields all paths from stack |st| with length
- |i|, containing link |l| if |link_seen| is |ATtrue|.
+ Function |SG_FindAllPaths| yields all paths from stack |st| with length
+ |nrArgs|.
  */
 
-path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
+static path *SG_FindAllPaths(stack *st, int nrArgs, ATermList sons, path *paths)
+{
+  register st_links  *ls = NULL;
+  ATermList newsons = NULL;
+
+  if (!st) {
+    return paths;
+  }
+
+  if (nrArgs == 0) {
+    paths = SG_NewPath(st, sons, paths);
+  }
+  else if (nrArgs > 0) {
+    for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
+      st_link *l = SG_HEAD(ls);
+      newsons = ATinsert(sons, (ATerm) SG_LK_TREE(l));
+      paths = SG_FindAllPaths(SG_LK_STACK(l), nrArgs - 1, newsons, paths);
+    }
+  }
+  return paths;
+}
+
+/*
+ Function |SG_FindLinks| searches all paths from stack |st| with length
+ |nrArgs|, until link |l0| is found.
+ */
+
+static ATbool SG_FindLink(stack *st, int nrArgs, st_link *l0)
+{
+  register st_links  *ls = NULL;
+  st_link   *l1 = NULL;
+
+  if (nrArgs > 0) {
+    for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
+      l1 = SG_HEAD(ls);
+      if (l0 == l1 || SG_FindLink(SG_LK_STACK(l1), nrArgs - 1, l0)) {
+        return ATtrue;
+      }
+    }
+  }
+  return ATfalse;
+}
+
+/*
+ Function |SG_FindPaths| yields all paths from stack |st| with length
+ |nrArgs|, containing link |l0| if |link_seen| is |ATtrue|.
+ */
+
+static path *SG_FindPaths(stack *st, int nrArgs, st_link *l0, ATbool link_seen,
                    ATermList sons, path *paths)
 {
   register st_links  *ls = NULL;
@@ -227,18 +275,33 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
     return paths;
   }
 
-  if (i == 0 && link_seen) {
+  if (nrArgs == 0 && link_seen) {
     paths = SG_NewPath(st, sons, paths);
   }
-  else if (i > 0) {
+  else if (nrArgs > 0) {
     for (ls = SG_ST_LINKS(st); ls; ls = SG_TAIL(ls)) {
       l1 = SG_HEAD(ls);
-      newsons = ATinsert(sons?sons:ATempty, (ATerm) SG_LK_TREE(l1));
-      paths = SG_FindPaths(SG_LK_STACK(l1), i - 1, l0,
+      newsons = ATinsert(sons, (ATerm) SG_LK_TREE(l1));
+      paths = SG_FindPaths(SG_LK_STACK(l1), nrArgs - 1, l0,
                            link_seen || (l0 == l1), newsons, paths);
     }
   }
   return paths;
+}                        
+
+/*
+ Function |SG_FindLimitedPaths| first checks if the link |l0|
+ is present in the stack, if so it finds the appropriate paths.
+ */
+
+path *SG_FindLimitedPaths(stack *st, int nrArgs, st_link *l0)
+{
+  if (SG_FindLink(st, nrArgs, l0)) {
+    return SG_FindPaths(st, nrArgs, l0, ATfalse, ATempty, NULL);
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*
@@ -621,8 +684,8 @@ void SG_DoReductions(stack *st, action a)
 
   prod = SG_A_PROD(a);
 
-  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty, NULL);
-      ps; ps = SG_P_NEXT(ps)) {
+  fps = SG_FindAllPaths(st, SG_A_NR_ARGS(a), ATempty, NULL);
+  for(ps = fps; ps; ps = SG_P_NEXT(ps)) {
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
@@ -777,8 +840,8 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 
   prod = SG_A_PROD(a);
 
-  for(ps= fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse, ATempty, NULL);
-      ps; ps = SG_P_NEXT(ps)) {
+  fps = SG_FindLimitedPaths(st, SG_A_NR_ARGS(a), l);
+  for(ps = fps; ps; ps = SG_P_NEXT(ps)) {
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),

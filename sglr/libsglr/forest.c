@@ -713,26 +713,30 @@ int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
   static ATerm eager_attr = NULL, avoid_attr = NULL;
 
   attr = ATgetArgument(SG_LookupProduction(pt, ATgetInt(prodlbl)), 2);
-  if(!ATmatch(attr, "attrs([<list>])", &attrs))
+  if (!ATmatch(attr, "attrs([<list>])", &attrs)) { 
     return SG_PT_REGULAR;
+  }
 
-  if(!reject_attr)
+  if (!reject_attr) {
     reject_attr = ATmake("atr(<str>)", SG_REJECT_ATTR);
-  if(!eager_attr)
+  }
+  if (!eager_attr) {
     eager_attr = ATmake("atr(<str>)", SG_PREFER_ATTR);
-  if(!avoid_attr)
+  }
+  if (!avoid_attr) {
     avoid_attr = ATmake("atr(<str>)", SG_AVOID_ATTR);
+  }
 
-  for(; !ATisEmpty(attrs); attrs = ATgetNext(attrs)) {
+  for (; !ATisEmpty(attrs); attrs = ATgetNext(attrs)) {
     attr = ATgetFirst(attrs);
-    if(ATisEqual(attr, reject_attr)) {
+    if (ATisEqual(attr, reject_attr)) {
       return SG_PT_REJECT;
     }
 
-    if(ATisEqual(attr, eager_attr)) {
+    if (ATisEqual(attr, eager_attr)) {
       return SG_PT_EAGER;
     }
-    if(ATisEqual(attr, avoid_attr)) {
+    if (ATisEqual(attr, avoid_attr)) {
       return SG_PT_UNEAGER;
     }
 
@@ -1278,6 +1282,7 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
     }
   }
   
+/*
   if (!max) {
     if (SG_MultiSetGtr(pt, ms0, ms1)) {
       IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
@@ -1297,6 +1302,7 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
       }
     }
   }
+*/
   
   if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
