@@ -23,8 +23,8 @@ include ../make_rules
 lib_LIBRARIES    = libtree2dot.a
 noinst_LIBRARIES = libtree2dot-prof.a
 
-SRCS             = tree-to-dot.c
-HDRS             = tree-to-dot.h
+SRCS             = tree-to-dot.c sg_growbuf.c
+HDRS             = tree-to-dot.h sg_growbuf.h
 
 libtree2dot_a_SOURCES      = $(SRCS) $(HDRS)
 

@@ -36,128 +36,191 @@
 
 #include  "tree-to-dot.h"
 #include  "mem-alloc.h"
+#include  "sg_growbuf.h"
 
 ATerm prev_char_parent;
 char  prev_char;
 
-
-void SG_PrintChar(FILE *dot, int c)
+char *SG_EscapeChar(int c)
 {
+  static char  escbuf[8];
+
+  escbuf[0] = 0;
   switch(c) {
-    case '\r' : ATfprintf(dot, "\\\\r");
+    case '\r' : strcpy(escbuf, "\\\\r");
       break;
-    case '\n' : ATfprintf(dot, "\\\\n");
+    case '\n' : strcpy(escbuf, "\\\\n");
       break;
-    case 32   : ATfprintf(dot, "\\\\32");
+    case ' '  : strcpy(escbuf, "\\\\32");
       break;
-    case '\t' : ATfprintf(dot, "\\\\t");
+    case '\t' : strcpy(escbuf, "\\\\t");
       break;
 
       /*
        * Treat the next chars with extra care
        */
-    case '\\' : ATfprintf(dot, "\\\\");
+    case '\\' : strcpy(escbuf, "\\\\");
       break;
-    case '"'  : ATfprintf(dot, "\\\"");
+    case '"'  : strcpy(escbuf, "\\\"");
       break;
 
     default :
       if(isprint(c))
-        ATfprintf(dot, "%c", c);
+        sprintf(escbuf, "%c", c);
       else
-        ATfprintf(dot, "\\\\%i", c);
+        sprintf(escbuf, "\\\\%d", c);
   }
+  return escbuf;
 }
 
-void SG_PrintSymbol(FILE *dot, ATerm t)
+void SG_PrintChar(FILE *dot, int c)
+{
+  ATfprintf(dot, "%s", SG_EscapeChar(c));
+}
+
+
+sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t)
 {
   char *name;
   ATerm     arg, arg2;
   ATermList args;
   int  c1, c2;
-
+  
   if (ATmatch(t, "layout")) {
-    ATfprintf(dot, "L");
+    SG_AddStringToGrowBuf(gb, "L");
   } else if (ATmatch(t, "sort(<str>)", &name)) {
-    ATfprintf(dot, "%s", name);
+    SG_AddStringToGrowBuf(gb, name);
   } else if (ATmatch(t, "lit(<str>)", &name)) {
     int n;
-    ATfprintf(dot, "\\\"");
+    SG_AddStringToGrowBuf(gb, "\\\"");
     for(n = 0; name[n] != '\0'; n++) {
-      SG_PrintChar(dot, name[n]);
+      char *thischar = SG_EscapeChar(name[n]);
+      SG_AddStringToGrowBuf(gb, thischar);
     }
-    ATfprintf(dot, "\\\"");
+    SG_AddStringToGrowBuf(gb, "\\\"");
   } else if (ATmatch(t, "lex(<term>)", &arg)) {
-    ATfprintf(dot, "<");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "-LEX>");
+    SG_AddStringToGrowBuf(gb, "<");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "-LEX>");
   } else if (ATmatch(t, "cf(<term>)", &arg)) {
-    ATfprintf(dot, "<");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "-CF>");
+    SG_AddStringToGrowBuf(gb, "<");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "-CF>");
   } else if (ATmatch(t, "iter-star(<term>)", &arg)) {
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "*");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "*");
   } else if (ATmatch(t, "iter(<term>)", &arg)) {
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "+");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "+");
   } else if (ATmatch(t, "iter-sep(<term>,<term>)", &arg, &arg2)) {
-    ATfprintf(dot, "{");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "\\ ");
-    SG_PrintSymbol(dot, arg2);
-    ATfprintf(dot, "}+");
+    SG_AddStringToGrowBuf(gb, "{");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "\\ ");
+    SG_PrintSymbolToGrowBuf(gb, arg2);
+    SG_AddStringToGrowBuf(gb, "}+");
   } else if (ATmatch(t, "iter-star-sep(<term>,<term>)", &arg, &arg2)) {
-    ATfprintf(dot, "{");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "\\ ");
-    SG_PrintSymbol(dot, arg2);
-    ATfprintf(dot, "}*");
+    SG_AddStringToGrowBuf(gb, "{");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "\\ ");
+    SG_PrintSymbolToGrowBuf(gb, arg2);
+    SG_AddStringToGrowBuf(gb, "}*");
   } else if (ATmatch(t, "iter-n(<term>, <int>)", &arg, &c1)) {
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "%d+", c1);
+    char thissort[64];
+
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    sprintf(thissort, "%d+", c1);
+    SG_AddStringToGrowBuf(gb, thissort);
   } else if (ATmatch(t, "iter-sep-n(<term>,<term>,<int>)", &arg, &arg2, &c1)) {
-    ATfprintf(dot, "{");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "\\ ");
-    SG_PrintSymbol(dot, arg2);
-    ATfprintf(dot, "}%d+", c1);
+    char thissort[64];
+
+    SG_AddStringToGrowBuf(gb, "{");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "\\ ");
+    SG_PrintSymbolToGrowBuf(gb, arg2);
+    sprintf(thissort, "}%d+", c1);
+    SG_AddStringToGrowBuf(gb, thissort);
   } else if (ATmatch(t, "seq([<list>])", &args)) {
-    ATfprintf(dot, "(");
+    SG_AddStringToGrowBuf(gb, "(");
     while (!ATisEmpty(args)) {
       arg = ATgetFirst(args);
       args = ATgetNext(args);
-      SG_PrintSymbol(dot, arg);
-      if (args) ATfprintf(dot, "\\ ");
+      SG_PrintSymbolToGrowBuf(gb, arg);
+      if (args) SG_AddStringToGrowBuf(gb, "\\ ");
     }
-    ATfprintf(dot, ")");
+    SG_AddStringToGrowBuf(gb, ")");
   } else if (ATmatch(t, "opt(<term>)", &arg)) {
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "?");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "?");
   } else if (ATmatch(t, "alt(<term>,<term>)", &arg, &arg2)) {
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "|");
-    SG_PrintSymbol(dot, arg2);
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "|");
+    SG_PrintSymbolToGrowBuf(gb, arg2);
   } else if (ATmatch(t, "char-class([<list>])", &args)) {
-    ATfprintf(dot, "[");
+    SG_AddStringToGrowBuf(gb, "[");
     while (!ATisEmpty(args)) {
+      char *thischar = NULL;
       arg = ATgetFirst(args);
       args = ATgetNext(args);
       if (ATmatch(arg, "range(<int>,<int>)", &c1, &c2)) {
-        SG_PrintChar(dot, c1);
-        ATfprintf(dot, "-");
-        SG_PrintChar(dot, c2);
-      } else if (ATmatch(arg, "<int>", &c1))
-        SG_PrintChar(dot, c1);
+
+        thischar = SG_EscapeChar(c1);
+        SG_AddStringToGrowBuf(gb, thischar);
+        SG_AddStringToGrowBuf(gb, "-");
+        thischar = SG_EscapeChar(c2);
+        SG_AddStringToGrowBuf(gb, thischar);
+      } else if (ATmatch(arg, "<int>", &c1)) {
+        thischar = SG_EscapeChar(c1);
+        SG_AddStringToGrowBuf(gb, thischar);
+      }
     }
-    ATfprintf(dot, "]");
+    SG_AddStringToGrowBuf(gb, "]");
   } else if (ATmatch(t, "varsym(<term>)", &arg)) {
-    ATfprintf(dot, "<");
-    SG_PrintSymbol(dot, arg);
-    ATfprintf(dot, "-VAR>");
+    SG_AddStringToGrowBuf(gb, "<");
+    SG_PrintSymbolToGrowBuf(gb, arg);
+    SG_AddStringToGrowBuf(gb, "-VAR>");
   } else
     ATerror("SG_PrintSymbol: strange symbol %t\n", t);
+
+  return gb;
 }
+
+
+char *SG_PrintSymbolToString(ATerm t) 
+{
+  static sg_growbuf *gb = NULL;
+  char  *symbstr = NULL;
+
+  if(!gb) {
+	gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+  } else {
+    gb = SG_Reset_GrowBuf(gb);
+  }
+
+  SG_PrintSymbolToGrowBuf(gb, t);
+  SG_AddToGrowBuf(gb, "\0", 1);    /*  Null string termination  */
+  symbstr = strdup(SG_GetGrowBufContent(gb));
+  	
+  if(!symbstr) {
+    ATerror("error allocating string duplicate\n");
+    return NULL;
+  }
+
+  return symbstr;
+}
+
+void SG_PrintSymbol(FILE *dot, ATerm t) 
+{
+  static sg_growbuf *gb = NULL;
+
+  if(!gb) {
+    gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+  } else {
+    gb = SG_Reset_GrowBuf(gb);
+  }
+  	
+  SG_WriteGrowBuf(dot, SG_PrintSymbolToGrowBuf(gb, t));
+}
+
 
 void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
 {

@@ -18,22 +18,26 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-/*  $Id$  */
+/*
+ $Id$
+ */
 
-#ifndef _TREE_TO_DOT_H_
-#define _TREE_TO_DOT_H_ 1
 
-#include <stack.h>
+#include <ctype.h>
 
-void SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress);
-void SG_StacksToDotFile(stacks *, int);
-void SG_LinksToDot(FILE *, stack *);
+typedef struct _growbuf {
+  size_t  used;
+  size_t  size;
+  size_t  chunk_nmemb;
+  size_t  memb_size;
+  void    *data;
+} sg_growbuf;
 
-FILE  *SG_StackDot(void);
 
-ATerm      SG_TermYield(ATermAppl);
-ATerm      SG_DotTermYield(ATerm);
-
-char      *SG_PrintSymbolToString(ATerm t);
-
-#endif  /* _TREE_TO_DOT_H_ */
+sg_growbuf *SG_Create_GrowBuf(size_t initialnmemb, size_t chunknmemb, size_t size);
+sg_growbuf *SG_Reset_GrowBuf(sg_growbuf *buf);
+sg_growbuf *SG_AddToGrowBuf(sg_growbuf *buf, void *data, size_t nmembs);
+sg_growbuf *SG_AddStringToGrowBuf(sg_growbuf *buf, char *str);
+void *SG_GetGrowBufContent(sg_growbuf *buf);
+size_t SG_GetGrowBufUsed(sg_growbuf *buf);
+void SG_WriteGrowBuf(FILE *fd, sg_growbuf *buf);
