@@ -1,5 +1,5 @@
 #! /bin/sh
-$ $Id$
+# $Id$
 
 new=/tmp/$$.new
 old=/tmp/$$.old
