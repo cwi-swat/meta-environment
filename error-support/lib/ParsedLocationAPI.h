@@ -337,62 +337,48 @@ PLOC_StrCon PLOC_visitStrCon(PLOC_StrCon arg, char *(*acceptString) (char *));
 PLOC_NatCon PLOC_visitNatCon(PLOC_NatCon arg, char *(*acceptString) (char *));
 PLOC_Location PLOC_visitLocation(PLOC_Location arg,
 				 PLOC_OptLayout(*acceptWsAfterLocation)
-				  
 				 (PLOC_OptLayout),
 				 PLOC_OptLayout(*acceptWsAfterParenOpen)
-				  
 				 (PLOC_OptLayout),
 				 PLOC_StrCon(*acceptFilename) (PLOC_StrCon),
 				 PLOC_OptLayout(*acceptWsAfterFilename)
-				  
 				 (PLOC_OptLayout),
 				 PLOC_OptLayout(*acceptWsAfterComma)
-				  
 				 (PLOC_OptLayout),
 				 PLOC_Area(*acceptArea) (PLOC_Area),
 				 PLOC_OptLayout(*acceptWsAfterArea)
-				   (PLOC_OptLayout));
+				 (PLOC_OptLayout));
 PLOC_Area PLOC_visitArea(PLOC_Area arg,
 			 PLOC_OptLayout(*acceptWsAfterArea) (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterParenOpen)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptBeginLine) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterBeginLine)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterComma) (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptBeginColumn) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterBeginColumn)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterComma1)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptEndLine) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterEndLine)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterComma2)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptEndColumn) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterEndColumn)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterComma3)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptOffset) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterOffset)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_OptLayout(*acceptWsAfterComma4)
-			  
 			 (PLOC_OptLayout),
 			 PLOC_NatCon(*acceptLength) (PLOC_NatCon),
 			 PLOC_OptLayout(*acceptWsAfterLength)
-			   (PLOC_OptLayout));
+			 (PLOC_OptLayout));
 PLOC_Start PLOC_visitStart(PLOC_Start arg,
 			   PLOC_OptLayout(*acceptWsBefore) (PLOC_OptLayout),
 			   PLOC_Area(*acceptTopArea) (PLOC_Area),

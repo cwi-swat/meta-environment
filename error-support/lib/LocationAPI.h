@@ -30,12 +30,12 @@ void LOC_initLocationAPIApi(void);
 
 /*{{{  protect functions */
 
-void LOC_protectNormal(LOC_Normal *arg);
-void LOC_protectEscaped(LOC_Escaped *arg);
-void LOC_protectStrCon(LOC_StrCon *arg);
-void LOC_protectNatCon(LOC_NatCon *arg);
-void LOC_protectLocation(LOC_Location *arg);
-void LOC_protectArea(LOC_Area *arg);
+void LOC_protectNormal(LOC_Normal * arg);
+void LOC_protectEscaped(LOC_Escaped * arg);
+void LOC_protectStrCon(LOC_StrCon * arg);
+void LOC_protectNatCon(LOC_NatCon * arg);
+void LOC_protectLocation(LOC_Location * arg);
+void LOC_protectArea(LOC_Area * arg);
 
 /*}}}  */
 /*{{{  term conversion functions */
@@ -60,13 +60,14 @@ ATerm LOC_AreaToTerm(LOC_Area arg);
 /*}}}  */
 /*{{{  constructors */
 
-LOC_Normal LOC_makeNormalNormal(char* string);
-LOC_Escaped LOC_makeEscapedEscaped(char* string);
-LOC_StrCon LOC_makeStrConStrCon(char* string);
-LOC_NatCon LOC_makeNatConNatCon(char* string);
-LOC_Location LOC_makeLocationLocation(char* filename, LOC_Area Area);
+LOC_Normal LOC_makeNormalNormal(char *string);
+LOC_Escaped LOC_makeEscapedEscaped(char *string);
+LOC_StrCon LOC_makeStrConStrCon(char *string);
+LOC_NatCon LOC_makeNatConNatCon(char *string);
+LOC_Location LOC_makeLocationLocation(char *filename, LOC_Area Area);
 LOC_Location LOC_makeLocationNoLocation();
-LOC_Area LOC_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int offset, int length);
+LOC_Area LOC_makeAreaArea(int beginLine, int beginColumn, int endLine,
+			  int endColumn, int offset, int length);
 LOC_Area LOC_makeAreaNoArea();
 
 /*}}}  */
@@ -85,8 +86,8 @@ ATbool LOC_isEqualArea(LOC_Area arg0, LOC_Area arg1);
 ATbool LOC_isValidNormal(LOC_Normal arg);
 inline ATbool LOC_isNormalNormal(LOC_Normal arg);
 ATbool LOC_hasNormalString(LOC_Normal arg);
-char* LOC_getNormalString(LOC_Normal arg);
-LOC_Normal LOC_setNormalString(LOC_Normal arg, char* string);
+char *LOC_getNormalString(LOC_Normal arg);
+LOC_Normal LOC_setNormalString(LOC_Normal arg, char *string);
 
 /*}}}  */
 /*{{{  LOC_Escaped accessors */
@@ -94,8 +95,8 @@ LOC_Normal LOC_setNormalString(LOC_Normal arg, char* string);
 ATbool LOC_isValidEscaped(LOC_Escaped arg);
 inline ATbool LOC_isEscapedEscaped(LOC_Escaped arg);
 ATbool LOC_hasEscapedString(LOC_Escaped arg);
-char* LOC_getEscapedString(LOC_Escaped arg);
-LOC_Escaped LOC_setEscapedString(LOC_Escaped arg, char* string);
+char *LOC_getEscapedString(LOC_Escaped arg);
+LOC_Escaped LOC_setEscapedString(LOC_Escaped arg, char *string);
 
 /*}}}  */
 /*{{{  LOC_StrCon accessors */
@@ -103,8 +104,8 @@ LOC_Escaped LOC_setEscapedString(LOC_Escaped arg, char* string);
 ATbool LOC_isValidStrCon(LOC_StrCon arg);
 inline ATbool LOC_isStrConStrCon(LOC_StrCon arg);
 ATbool LOC_hasStrConString(LOC_StrCon arg);
-char* LOC_getStrConString(LOC_StrCon arg);
-LOC_StrCon LOC_setStrConString(LOC_StrCon arg, char* string);
+char *LOC_getStrConString(LOC_StrCon arg);
+LOC_StrCon LOC_setStrConString(LOC_StrCon arg, char *string);
 
 /*}}}  */
 /*{{{  LOC_NatCon accessors */
@@ -112,8 +113,8 @@ LOC_StrCon LOC_setStrConString(LOC_StrCon arg, char* string);
 ATbool LOC_isValidNatCon(LOC_NatCon arg);
 inline ATbool LOC_isNatConNatCon(LOC_NatCon arg);
 ATbool LOC_hasNatConString(LOC_NatCon arg);
-char* LOC_getNatConString(LOC_NatCon arg);
-LOC_NatCon LOC_setNatConString(LOC_NatCon arg, char* string);
+char *LOC_getNatConString(LOC_NatCon arg);
+LOC_NatCon LOC_setNatConString(LOC_NatCon arg, char *string);
 
 /*}}}  */
 /*{{{  LOC_Location accessors */
@@ -122,8 +123,8 @@ ATbool LOC_isValidLocation(LOC_Location arg);
 inline ATbool LOC_isLocationLocation(LOC_Location arg);
 inline ATbool LOC_isLocationNoLocation(LOC_Location arg);
 ATbool LOC_hasLocationFilename(LOC_Location arg);
-char* LOC_getLocationFilename(LOC_Location arg);
-LOC_Location LOC_setLocationFilename(LOC_Location arg, char* filename);
+char *LOC_getLocationFilename(LOC_Location arg);
+LOC_Location LOC_setLocationFilename(LOC_Location arg, char *filename);
 ATbool LOC_hasLocationArea(LOC_Location arg);
 LOC_Area LOC_getLocationArea(LOC_Location arg);
 LOC_Location LOC_setLocationArea(LOC_Location arg, LOC_Area Area);
@@ -156,12 +157,18 @@ LOC_Area LOC_setAreaLength(LOC_Area arg, int length);
 /*}}}  */
 /*{{{  sort visitors */
 
-LOC_Normal LOC_visitNormal(LOC_Normal arg, char* (*acceptString)(char*));
-LOC_Escaped LOC_visitEscaped(LOC_Escaped arg, char* (*acceptString)(char*));
-LOC_StrCon LOC_visitStrCon(LOC_StrCon arg, char* (*acceptString)(char*));
-LOC_NatCon LOC_visitNatCon(LOC_NatCon arg, char* (*acceptString)(char*));
-LOC_Location LOC_visitLocation(LOC_Location arg, char* (*acceptFilename)(char*), LOC_Area (*acceptArea)(LOC_Area));
-LOC_Area LOC_visitArea(LOC_Area arg, int (*acceptBeginLine)(int), int (*acceptBeginColumn)(int), int (*acceptEndLine)(int), int (*acceptEndColumn)(int), int (*acceptOffset)(int), int (*acceptLength)(int));
+LOC_Normal LOC_visitNormal(LOC_Normal arg, char *(*acceptString) (char *));
+LOC_Escaped LOC_visitEscaped(LOC_Escaped arg, char *(*acceptString) (char *));
+LOC_StrCon LOC_visitStrCon(LOC_StrCon arg, char *(*acceptString) (char *));
+LOC_NatCon LOC_visitNatCon(LOC_NatCon arg, char *(*acceptString) (char *));
+LOC_Location LOC_visitLocation(LOC_Location arg,
+			       char *(*acceptFilename) (char *),
+			       LOC_Area(*acceptArea) (LOC_Area));
+LOC_Area LOC_visitArea(LOC_Area arg, int (*acceptBeginLine) (int),
+		       int (*acceptBeginColumn) (int),
+		       int (*acceptEndLine) (int),
+		       int (*acceptEndColumn) (int),
+		       int (*acceptOffset) (int), int (*acceptLength) (int));
 
 /*}}}  */
 
