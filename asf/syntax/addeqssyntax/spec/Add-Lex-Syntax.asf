@@ -2,19 +2,19 @@ equations
 
   [alcf-1'1] add-lexical-constructor-function() =
 
-  [alcf-1'2] add-lcf-for-mod(Module) = Prod*1,
-             add-lexical-constructor-function(Module*) = Prod*2
+  [alcf-1'2] Prod*1 := add-lcf-for-mod(Module),
+             Prod*2 := add-lexical-constructor-function(Module*)
              ==================================================
              add-lexical-constructor-function(Module Module*) = Prod*1 Prod*2
 
-  [alfm-1'1] add-lcf-for-sections(Section*) = Prod*
+  [alfm-1'1] Prod* := add-lcf-for-sections(Section*)
              ======================================
              add-lcf-for-mod(module ModName ImpSection* Section*) = Prod*
 
   [alfs-1'1] add-lcf-for-sections() =
 
-  [alfs-1'2] add-lcf-for-section(Section) = Prod*1,
-             add-lcf-for-sections(Section*) = Prod*2
+  [alfs-1'2] Prod*1 := add-lcf-for-section(Section),
+             Prod*2 := add-lcf-for-sections(Section*)
              =======================================
              add-lcf-for-sections(Section Section*) = Prod*1 Prod*2
 
@@ -24,13 +24,13 @@ equations
   [alfs-2'2] add-lcf-for-section(hiddens Grammar) =
                add-lcf-for-grammar(Grammar)
 
-  [alfg-1'1] add-lcf-for-grammar(Grammar1) = Prod*1,
-             add-lcf-for-grammar(Grammar2) = Prod*2
+  [alfg-1'1] Prod*1 := add-lcf-for-grammar(Grammar1),
+             Prod*2 := add-lcf-for-grammar(Grammar2)
              ======================================
              add-lcf-for-grammar(Grammar1 Grammar2) = Prod*1 Prod*2
 
   [alfg-1'2] %%%add-lcf-for-productions(Prod*1,sort("L""A""Y""O""U""T")) = Prod*2
-             add-lcf-for-productions(Prod*1,LAYOUT) = Prod*2
+             Prod*2 := add-lcf-for-productions(Prod*1,LAYOUT)
              ===============================================
              add-lcf-for-grammar(lexical syntax Prod*1) = Prod*2
 
@@ -38,18 +38,18 @@ equations
 
   [alfp-1'1] add-lcf-for-productions(,Symbol*) =
 
-  [alfp-1'2] add-lcf-for-productions(Prod*1,Symbol*2 Symbol Symbol*3) = Prod*2
+  [alfp-1'2] Prod*2 := add-lcf-for-productions(Prod*1,Symbol*2 Symbol Symbol*3)
              =================================================================
              add-lcf-for-productions(Symbol*1 -> Symbol Attrs Prod*1,
                                      Symbol*2 Symbol Symbol*3) = Prod*2
 
-  [default-alfp-1'2] add-lcf-for-production(Symbol*1 -> Sort) = Prod,
-                     add-lcf-for-productions(Prod*1,Symbol*2 Sort) = Prod*2
+  [default-alfp-1'2] Prod := add-lcf-for-production(Symbol*1 -> Sort),
+                     Prod*2 := add-lcf-for-productions(Prod*1,Symbol*2 Sort)
                      ======================================================
                      add-lcf-for-productions(Symbol*1 -> Sort Attrs Prod*1,
                                              Symbol*2) = Prod Prod*2
 
-  [alfp-2'1] upper2lower(Sort) = qliteral(Char*)
+  [alfp-2'1] qliteral(Char*) := upper2lower(Sort)
              ==================================
              add-lcf-for-production(Symbol* -> Sort) =
                qliteral(""" Char* """) "(" CHAR* ")" -> Sort {cons("lexical-constructor")}
@@ -106,8 +106,8 @@ equations
 
   [u2l-1'26] upper2lower(sort("Z")) = qliteral("z")
 
-  [u2l-1'27] upper2lower(sort(Char1)) = qliteral(Char2),
-             upper2lower(sort(Char+1)) = qliteral(Char+2)
+  [u2l-1'27] qliteral(Char2) := upper2lower(sort(Char1)),
+             qliteral(Char+2) := upper2lower(sort(Char+1))
              ==============================================
              upper2lower(sort(Char1 Char+1)) = qliteral(Char2 Char+2)
 

@@ -2,8 +2,8 @@ equations
 
   [ceac-1'1] create-eqs-and-conds(, SymbolsSet) =
 
-  [ceac-1'2] eqs-and-conds-for-mod(Module, SymbolsSet1) = (SymbolsSet2,Prod*1),
-             create-eqs-and-conds(Module*, SymbolsSet1) = Prod*2
+  [ceac-1'2] (SymbolsSet2,Prod*1) := eqs-and-conds-for-mod(Module, SymbolsSet1),
+             Prod*2 := create-eqs-and-conds(Module*, SymbolsSet1)
              ===================================================
              create-eqs-and-conds(Module Module*, SymbolsSet1) = Prod*1 Prod*2
 
@@ -12,8 +12,8 @@ equations
 
   [eacfs-1'1] eqs-and-conds-for-sections(, SymbolsSet) = (SymbolsSet,)
 
-  [eacfs-1'2] eqs-and-conds-for-section(Section, SymbolsSet1) = (SymbolsSet2,Prod*1),
-              eqs-and-conds-for-sections(Section*, SymbolsSet2) = (SymbolsSet3,Prod*2)
+  [eacfs-1'2] (SymbolsSet2,Prod*1) := eqs-and-conds-for-section(Section, SymbolsSet1),
+              (SymbolsSet3,Prod*2) := eqs-and-conds-for-sections(Section*, SymbolsSet2)
               ========================================================================
               eqs-and-conds-for-sections(Section Section*, SymbolsSet1) = 
                 (SymbolsSet3,Prod*1 Prod*2)
@@ -24,8 +24,8 @@ equations
   [eacfs-2'2] eqs-and-conds-for-section(hiddens Grammar, SymbolsSet1) =
                 eqs-and-conds-for-grammar(Grammar, SymbolsSet1)
 
-  [eacfg-1'1] eqs-and-conds-for-grammar(Grammar1, SymbolsSet1) = (SymbolsSet2,Prod*1),
-              eqs-and-conds-for-grammar(Grammar2, SymbolsSet2) = (SymbolsSet3,Prod*2)
+  [eacfg-1'1] (SymbolsSet2,Prod*1) := eqs-and-conds-for-grammar(Grammar1, SymbolsSet1),
+              (SymbolsSet3,Prod*2) := eqs-and-conds-for-grammar(Grammar2, SymbolsSet2)
               =======================================================================
               eqs-and-conds-for-grammar(Grammar1 Grammar2, SymbolsSet1) = 
                 (SymbolsSet3,Prod*1 Prod*2)
@@ -38,10 +38,10 @@ equations
 
   [eacfg-1'4] eqs-and-conds-for-grammar(sorts ,SymbolsSet) = (SymbolsSet,)
 
-  [eacfg-1'5] includes(Symbol, SymbolsSet) = false,
-              add(Symbol,SymbolsSet) = SymbolsSet2,
-              eqs-and-conds-for-grammar(sorts Symbol*, SymbolsSet2) = 
-                (SymbolsSet3,Prod*)
+  [eacfg-1'5] includes(Symbol, SymbolsSet) == false,
+              SymbolsSet2 := add(Symbol,SymbolsSet),
+              (SymbolsSet3,Prod*) := 
+                eqs-and-conds-for-grammar(sorts Symbol*, SymbolsSet2)
               =======================================================
               eqs-and-conds-for-grammar(sorts Symbol Symbol*, SymbolsSet) = 
                (SymbolsSet3,  
@@ -54,9 +54,9 @@ equations
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")}
                  Prod*)
 
-  [eacfg-1'6] includes(Symbol, SymbolsSet) = true,
-              eqs-and-conds-for-grammar(sorts Symbol*, SymbolsSet) = 
-                (SymbolsSet2,Prod*)
+  [eacfg-1'6] includes(Symbol, SymbolsSet) == true,
+              (SymbolsSet2,Prod*) := 
+                eqs-and-conds-for-grammar(sorts Symbol*, SymbolsSet)
               =======================================================
               eqs-and-conds-for-grammar(sorts Symbol Symbol*, SymbolsSet) = 
                (SymbolsSet2, Prod*)  
@@ -65,15 +65,15 @@ equations
 
   [eacfp-1'1] eqs-and-conds-for-productions(, SymbolsSet) = (SymbolsSet,)
 
-  [eacfp-1'2] eqs-and-conds-for-production(Prod, SymbolsSet1) = (SymbolsSet2, Prod*2),
-              eqs-and-conds-for-productions(Prod*1, SymbolsSet2) = (SymbolsSet3, Prod*3)
+  [eacfp-1'2] (SymbolsSet2, Prod*2) := eqs-and-conds-for-production(Prod, SymbolsSet1),
+              (SymbolsSet3, Prod*3) := eqs-and-conds-for-productions(Prod*1, SymbolsSet2)
               ==========================================================================
               eqs-and-conds-for-productions(Prod Prod*1, SymbolsSet1) =
                 (SymbolsSet3, Prod*2 
                               Prod*3)
 
-  [eacfp-2'1] includes(Symbol, SymbolsSet1) = false,
-              add(Symbol, SymbolsSet1) = SymbolsSet2
+  [eacfp-2'1] includes(Symbol, SymbolsSet1) == false,
+              SymbolsSet2 := add(Symbol, SymbolsSet1)
               ======================================
               eqs-and-conds-for-production(Symbol* -> Symbol Attrs, SymbolsSet1) =
                 (SymbolsSet2,
@@ -85,8 +85,8 @@ equations
                  Symbol "!:=" Symbol -> ASF-Condition {cons("no-match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
-  [eacfp-2'2] includes(Symbol, SymbolsSet1) = false,
-              add(Symbol, SymbolsSet1) = SymbolsSet2
+  [eacfp-2'2] includes(Symbol, SymbolsSet1) == false,
+              SymbolsSet2 := add(Symbol, SymbolsSet1)
               ======================================
               eqs-and-conds-for-production(Literal(SymbolSep*) -> Symbol Attrs, 
                                            SymbolsSet1) =
@@ -99,12 +99,12 @@ equations
                  Symbol "!:=" Symbol -> ASF-Condition {cons("no-match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
-  [eacfp-2'2] includes(Symbol, SymbolsSet) = true
+  [eacfp-2'2] includes(Symbol, SymbolsSet) == true
               ===================================
               eqs-and-conds-for-production(Symbol* -> Symbol Attrs, SymbolsSet) =
                 (SymbolsSet,)
 
-  [eacfp-2'2] includes(Symbol, SymbolsSet) = true
+  [eacfp-2'2] includes(Symbol, SymbolsSet) == true
               ===================================
               eqs-and-conds-for-production(Literal(SymbolSep*) -> Symbol Attrs,
                                            SymbolsSet) =

@@ -8,6 +8,14 @@
    is then replaced by an equality condition between matchfailed and a call
    to the newly generated function.
  * Upgraded condition syntax in the compiler specification
+ * An ASF file is now an ASF-Module which consists of a list of ASF-Sections.
+   An ASF-Section is either an equations sections or a tests sections for now.
+ * Synchronized the three version of the ASF syntax, the one in
+   Add-Eqs-Syntax, the one in asf-support/lib/Asf.label.def and the one
+   in the asf-library
+ * Updated asfoperations tool to be able to extract a list of equations or
+   a list of tests from the new ASF module syntax
+ * Regenerated Add-Eqs-Syntax to deal with the new ASF module syntax
 
 2003/11/06 (jurgenv@cwi.nl)
  * Added "!:=" the condition operator that fails if a match succeeds and

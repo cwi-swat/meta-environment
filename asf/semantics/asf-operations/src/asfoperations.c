@@ -35,11 +35,10 @@ ATerm extract_equations(int cid, ATerm modules)
 
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     ATerm head = ATBunpack(ATgetFirst(list));
-    ASF_ASFEquations eqs = ASF_getStartTopASFEquations(ASF_StartFromTerm(head));
-   
-    if (ASF_hasASFEquationsList(eqs)) {
-      eqsList = ASF_unionASFConditionalEquationList(ASF_getASFEquationsList(eqs), eqsList);
-    }
+    ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
+
+    eqsList = ASF_unionASFConditionalEquationList(eqsList,
+		  ASF_getASFModuleEquationList(module));
   }
 
   return ATmake("snd-value(extract-equations-result(<term>))",
@@ -52,22 +51,21 @@ ATerm extract_equations(int cid, ATerm modules)
 ATerm extract_tests(int cid, ATerm modules)
 {
   ATermList list = (ATermList) modules;
-  ASF_ASFTestEquationTestList eqsList;
+  ASF_ASFTestEquationTestList testList;
 
-  eqsList = ASF_makeASFTestEquationTestListEmpty();
+  testList = ASF_makeASFTestEquationTestListEmpty();
 
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     ATerm head = ATBunpack(ATgetFirst(list));
-    ASF_ASFEquations eqs = ASF_getStartTopASFEquations(ASF_StartFromTerm(head));
+    ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
+
+    testList = ASF_concatASFTestEquationTestList(testList,
+		  ASF_getASFModuleTestList(module));
    
-    if (ASF_hasASFEquationsTestList(eqs)) {
-      eqsList = ASF_concatASFTestEquationTestList(
-	          ASF_getASFEquationsTestList(eqs), eqsList);
-    }
   }
 
   return ATmake("snd-value(extract-tests-result(<term>))",
-		ATBpack(ASF_ASFTestEquationTestListToTerm(eqsList)));
+		ATBpack(ASF_ASFTestEquationTestListToTerm(testList)));
 }
 
 /*}}}  */

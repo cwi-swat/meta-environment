@@ -2,85 +2,111 @@ equations
 
   [aem-1'1] add-equation-module(Sdf) = add-equation-module(Main,Sdf)
 
-  [aem-1'2] create-eqs-and-conds(Module*1, [LAYOUT]) = Prod*1,
-            add-lexical-constructor-function(Module*1) = Prod*2,
-            add-tagid-rejects(Module*1) = Prod*3,
+  [aem-1'2] Prod*1 := create-eqs-and-conds(Module*1, [LAYOUT]),
+            Prod*2 := add-lexical-constructor-function(Module*1),
+            Prod*3 := add-tagid-rejects(Module*1),
             %%add-var-lex-priorities(Module*1) = Prio*,
-            add-prefer-vars(Module*1) = Module*2,
-            add-eqs-to-module(ModName, Module*2) = Module*3
+            Module*2 := add-prefer-vars(Module*1),
+            Module*3 := add-eqs-to-module(ModName, Module*2)
             ===============================================
             add-equation-module(ModName, definition Module*1) =
-              definition
-              Module*3
-              module Characters
-              exports
-                sorts CHAR
-                lexical syntax
-                  [\"] ~[\257] [\"] -> CHAR {cons("default")}
 
-              module Equations
-              imports Characters
-              exports
-                sorts ASF-Tag 
-                      ASF-TagId 
-                      ASF-ConditionalEquation 
-                      ASF-Equation 
-                      ASF-Implies
-                      ASF-Condition 
-                      ASF-Equations
-                lexical syntax
-                  "===" [\=]* [\>]?   -> ASF-Implies {cons("default")}
-                  "=" -> ASF-Condition {reject}
-                  [shortchar("A")-shortchar("Z")
-                   shortchar("a")-shortchar("z")
-                   shortchar("0")-shortchar("9")
-                   shortchar("\""'")]                   -> ASF-TagId {avoid,cons("one-char")}
-                 [shortchar("A")-shortchar("Z")
-                   shortchar("a")-shortchar("z")
-                   shortchar("0")-shortchar("9")
-                   shortchar("\""'")]
-                  [shortchar("A")-shortchar("Z")
-                   shortchar("a")-shortchar("z")
-                   shortchar("0")-shortchar("9")
-                   shortchar("\""'")shortchar("\""-")]*
-                  [shortchar("A")-shortchar("Z")
-                   shortchar("a")-shortchar("z")
-                   shortchar("0")-shortchar("9")
-                   shortchar("\""'")]                   -> ASF-TagId {avoid,cons("many-chars")}
+definition
+              
+Module*3
+              
+module languages/asf/syntax/Characters
 
-                lexical restrictions
-                  ASF-Implies -/- [\=]
+exports sorts CHAR
+lexical syntax
+  [\"] ~[\257] [\"] -> CHAR {cons("default")}
 
-                context-free syntax
-                  {ASF-Condition ","}+          -> ASF-Conditions
-                                                -> ASF-Equations {cons("absent")}
-                  "equations" list:ASF-ConditionalEquation* -> ASF-Equations {cons("present")}
-                  "equations" list:ASF-ConditionalEquation* "tests" test-list:ASF-TestEquation* -> ASF-Equations {cons("present-with-tests")}
+  
+module languages/asf/syntax/Tags
 
-ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
-ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
-ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when")}
+exports 
+
+sorts ASF-TagId ASF-Tag
+
+lexical syntax
+
+    [A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("one-char")}
+    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("many-chars")}
+
+context-free syntax
+
+    "[" "]"           -> ASF-Tag {cons("empty")}
+    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
+
+    Prod*3
+
+module languages/asf/syntax/Module
+
+imports languages/asf/syntax/Equations 
+imports languages/asf/syntax/Tests 
+imports languages/asf/syntax/Characters 
+imports languages/asf/syntax/Constructors
+
+exports
+  sorts ASF-Module ASF-Section
+
+context-free syntax
+
+  list:ASF-Section* -> ASF-Module {cons("default")}
+
+  "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
+  "tests" test-list:ASF-TestEquation*       -> ASF-Section {cons("tests")}
+
+module languages/asf/syntax/Conditions
+
+exports 
+   sorts ASF-Condition ASF-Conditions
+
+   context-free syntax
+     list:{ASF-Condition ","}+ -> ASF-Conditions
+module languages/asf/syntax/Tests
+
+imports languages/asf/syntax/Equations
+
+exports
+
+sorts ASF-TestEquation
+
+context-free syntax
+    ASF-Tag ASF-Condition -> ASF-TestEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Condition -> ASF-TestEquation {cons("implies")}
+    ASF-Tag ASF-Condition "when" ASF-Conditions  -> ASF-TestEquation {cons("when")}
 
 
-                  ASF-Tag ASF-Equation                    -> ASF-ConditionalEquation {cons("simple")}
-                  ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
-                  ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
-                  "[" "]"                         -> ASF-Tag {cons("empty")}
-                  "[" ASF-TagId "]"               -> ASF-Tag {cons("not-empty")}
-                  Prod*3
+module languages/asf/syntax/Equations
+imports languages/asf/syntax/Conditions
+imports languages/asf/syntax/Tags
+exports
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation
 
+exports
+  lexical syntax
+    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
+  lexical restrictions
+    ASF-Implies -/- [\=]
 
-              module GEN-LexConsFuncs
-              imports Characters
-              exports
-                context-free syntax
-                  Prod*2
+  context-free syntax
 
-              module GEN-Equations
-              imports GEN-LexConsFuncs Equations
-              exports
-                context-free syntax
-                  Prod*1
+    ASF-Tag ASF-Equation -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
+
+    Prod*1
+
+module languages/asf/syntax/Constructors
+
+imports languages/asf/syntax/Characters
+exports
+
+context-free syntax
+
+  Prod*2       
+
 
   [aetm-1'1] add-eqs-to-module(ModuleId, Module*1
                                          module ModuleId
@@ -89,7 +115,7 @@ ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when
                                          Module*2) =
                Module*1
                module ModuleId
-               ImpSection* imports Import* GEN-Equations
+               ImpSection* imports Import* languages/asf/syntax/Module
                Section*
                Module*2
 
@@ -99,7 +125,7 @@ ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when
                                          Module*2) =
                Module*1
                module ModuleId
-               imports GEN-Equations
+               imports languages/asf/syntax/Module
                Section*
                Module*2
 
@@ -110,7 +136,7 @@ ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when
                                          Module*2) =
                Module*1
                module ModuleId[$Symbols]
-               ImpSection* imports Import* GEN-Equations
+               ImpSection* imports Import* languages/asf/syntax/Module
                Section*
                Module*2
 
@@ -120,7 +146,7 @@ ASF-Tag ASF-Condition "when" ASF-Conditions      -> ASF-TestEquation {cons("when
                                          Module*2) =
                Module*1
                module ModuleId[$Symbols]
-               imports GEN-Equations
+               imports languages/asf/syntax/Module
                Section*
                Module*2
 

@@ -1,46 +1,46 @@
 equations
 
-  [apv-1'1] add-pv-for-modules(Module*1) = Module*2
+  [apv-1'1] Module*2 := add-pv-for-modules(Module*1)
             =======================================
             add-prefer-vars(Module*1) = Module*2
 
-  [apfm-1'1] add-pv-for-module(Module1) = Module2
+  [apfm-1'1] Module2 := add-pv-for-module(Module1)
              ====================================
              add-pv-for-modules(Module1) = Module2
 
-  [apfm-1'2] add-pv-for-module(Module1) = Module2,
-             add-pv-for-modules(Module*1) = Module*2
+  [apfm-1'2] Module2 := add-pv-for-module(Module1),
+             Module*2 := add-pv-for-modules(Module*1)
              =======================================
              add-pv-for-modules(Module1 Module*1) = Module2 Module*2
 
-  [apfm-2'1] add-pv-for-sections(Section*1) = Section*2
+  [apfm-2'1] Section*2 := add-pv-for-sections(Section*1)
              ==========================================
              add-pv-for-module(module ModName ImpSection* Section*1) =
                module ModName ImpSection* Section*2
 
   [apfs-1'1] add-pv-for-sections() =
 
-  [apfs-1'2] add-pv-for-section(Section1) = Section2,
-             add-pv-for-sections(Section*1) = Section*2
+  [apfs-1'2] Section2 := add-pv-for-section(Section1),
+             Section*2 := add-pv-for-sections(Section*1)
              ==========================================
              add-pv-for-sections(Section1 Section*1) = Section2 Section*2
 
-  [apfs-2'1] add-pv-for-grammar(Grammar1) = Grammar2
+  [apfs-2'1] Grammar2 := add-pv-for-grammar(Grammar1)
              =======================================
              add-pv-for-section(exports Grammar1) =
                 exports Grammar2
 
-  [apfs-2'2] add-pv-for-grammar(Grammar1) = Grammar2
+  [apfs-2'2] Grammar2 := add-pv-for-grammar(Grammar1)
              =======================================
              add-pv-for-section(hiddens Grammar1) =
                hiddens Grammar2
 
-  [apfg-1'1] add-pv-for-grammar(Grammar1) = Grammar3,
-             add-pv-for-grammar(Grammar2) = Grammar4
+  [apfg-1'1] Grammar3 := add-pv-for-grammar(Grammar1),
+             Grammar4 := add-pv-for-grammar(Grammar2)
              =======================================
              add-pv-for-grammar(Grammar1 Grammar2) = Grammar3 Grammar4
 
-  [apfg-1'2] add-pv-for-variables(Prod*1) = Prod*2
+  [apfg-1'2] Prod*2 := add-pv-for-variables(Prod*1)
              =====================================
              add-pv-for-grammar(variables Prod*1) =
                variables Prod*2
@@ -49,7 +49,7 @@ equations
 
   [apfv-1'1] add-pv-for-variables() =
 
-  [apfv-1'2] add-pv-for-variables(Prod*1) = Prod*2
+  [apfv-1'2] Prod*2 := add-pv-for-variables(Prod*1)
              =====================================
              add-pv-for-variables(Symbol*1 -> Symbol1 Prod*1) =
                Symbol*1 -> Symbol1 {prefer}

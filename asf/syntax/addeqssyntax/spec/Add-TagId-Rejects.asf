@@ -2,19 +2,19 @@ equations
 
   [atir-1'1] add-tagid-rejects() =
 
-  [atir-1'2] add-tir-for-mod(Module) = Prod*1,
-             add-tagid-rejects(Module*) = Prod*2
+  [atir-1'2] Prod*1 := add-tir-for-mod(Module),
+             Prod*2 := add-tagid-rejects(Module*)
              ===================================
              add-tagid-rejects(Module Module*) = Prod*1 Prod*2
 
-  [atfm-1'1] add-tir-for-sections(Section*) = Prod*
+  [atfm-1'1] Prod* := add-tir-for-sections(Section*)
              ======================================
              add-tir-for-mod(module ModName ImpSection* Section*) = Prod*
 
   [atfs-1'1] add-tir-for-sections() =
 
-  [atfs-1'2] add-tir-for-section(Section) = Prod*1,
-             add-tir-for-sections(Section*) = Prod*2
+  [atfs-1'2] Prod*1 := add-tir-for-section(Section),
+             Prod*2 := add-tir-for-sections(Section*)
              =======================================
              add-tir-for-sections(Section Section*) = Prod*1 Prod*2
 
@@ -24,12 +24,12 @@ equations
   [atfs-2'2] add-tir-for-section(hiddens Grammar) =
                add-tir-for-grammar(Grammar)
 
-  [atfg-1'1] add-tir-for-grammar(Grammar1) = Prod*1,
-             add-tir-for-grammar(Grammar2) = Prod*2
+  [atfg-1'1] Prod*1 := add-tir-for-grammar(Grammar1),
+             Prod*2 := add-tir-for-grammar(Grammar2)
              ======================================
              add-tir-for-grammar(Grammar1 Grammar2) = Prod*1 Prod*2
 
-  [atfg-1'2] add-tir-for-productions(Prod*1) = Prod*2
+  [atfg-1'2] Prod*2 := add-tir-for-productions(Prod*1)
              ========================================
              add-tir-for-grammar(context-free syntax Prod*1) = Prod*2
 
@@ -37,37 +37,37 @@ equations
 
   [atfp-1'1] add-tir-for-productions() =
 
-  [atfp-1'2] add-tir-for-productions(Prod*1) = Prod*2
+  [atfp-1'2] Prod*2 := add-tir-for-productions(Prod*1)
              ========================================
              add-tir-for-productions(Symbol1 -> Symbol2 {reject} Prod*1) = Prod*2
 
-  [atfp-1'3] add-tir-for-symbol($Literal) = Prod*2,
-             add-tir-for-productions(Prod*1) = Prod*3
+  [atfp-1'3] Prod*2 := add-tir-for-symbol($Literal),
+             Prod*3 := add-tir-for-productions(Prod*1)
              ========================================
              add-tir-for-productions($Literal ( Symbol,* ) -> Symbol Attrs Prod*1) = Prod*2 Prod*3
 
-  [default-atfp-1'4] add-tir-for-production(Symbol*1 -> Symbol) = Prod*2,
-                     add-tir-for-productions(Prod*1) = Prod*3
+  [default-atfp-1'4] Prod*2 := add-tir-for-production(Symbol*1 -> Symbol),
+                     Prod*3 := add-tir-for-productions(Prod*1)
                      ========================================
                      add-tir-for-productions(Symbol*1 -> Symbol Attrs Prod*1) = Prod*2 Prod*3
 
-  [atfp-2'1] add-tir-for-symbols(Symbol*1) = Prod*2
+  [atfp-2'1] Prod*2 := add-tir-for-symbols(Symbol*1)
              ======================================
              add-tir-for-production(Symbol*1 -> Symbol) = Prod*2
 
   [atfs-1'1] add-tir-for-symbols() =
 
-  [atfs-1'2] add-tir-for-symbol(Symbol) = Prod*1,
-             add-tir-for-symbols(Symbol*1) = Prod*2
+  [atfs-1'2] Prod*1 := add-tir-for-symbol(Symbol),
+             Prod*2 := add-tir-for-symbols(Symbol*1)
              ======================================
              add-tir-for-symbols(Symbol Symbol*1) = Prod*1 Prod*2
 
-  [atfs-2'1] are-tagid-chars(qliteral(Char*)) = true
+  [atfs-2'1] are-tagid-chars(qliteral(Char*)) == true
              ======================================
              add-tir-for-symbol(qliteral(""" Char* """)) =
                qliteral(""" Char* """) -> ASF-TagId {reject}
 
-  [atfs-2'2] are-tagid-chars(qliteral(Char*)) = true
+  [atfs-2'2] are-tagid-chars(qliteral(Char*)) == true
              ======================================
              add-tir-for-symbol(uqliteral(Char*)) =
                qliteral(""" Char* """) -> ASF-TagId {reject}
@@ -203,8 +203,8 @@ equations
 
   [atc-1'64] are-tagid-chars(qliteral("-")) = true
 
-  [atc-1'65] are-tagid-chars(qliteral(Char1)) = true,
-             are-tagid-chars(qliteral(Char+1)) = true
+  [atc-1'65] are-tagid-chars(qliteral(Char1)) == true,
+             are-tagid-chars(qliteral(Char+1)) == true
              =======================================
              are-tagid-chars(qliteral(Char1 Char+1)) = true
 
