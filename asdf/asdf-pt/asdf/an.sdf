@@ -20,6 +20,10 @@ context-free syntax
   "give" DataOp		-> Action
   "check" DataOp	-> Action
 
+   PrefixAction Action		-> Action 
+   Action InfixAction Action	-> Action {left}
+
+
 lexical syntax
 
   "copy"		-> Action
@@ -58,33 +62,45 @@ lexical syntax
 
   "no-bindings"		-> Datum {prefer}
 
-context-free syntax
-	
-  PrefixAction Action		-> Action	
-
-  Action InfixAction Action	-> Action {left}
-	
-  Action	-> Datum {avoid}
 
 context-free priorities
 
-  { "result" Data                -> Action } 
-  >
-  { Action InfixAction Action     -> Action }
-
-context-free priorities
-
-  { Action Yielder    		-> Action }
-  >
-  { "give" Yielder         	-> Action }
-  >
   { PrefixAction Action 	-> Action }
   >
   { Action InfixAction Action	-> Action }
+
+context-free priorities
+
+  { PrefixDataOp Yielder 	-> Yielder }
   >
-  {PrefixDataOp Yielder		-> Yielder}
+  { Yielder InfixDataOp Yielder	-> Yielder }
+
+context-free priorities
+
+  { Action Yielder	-> Action }
   >
-  {Yielder InfixDataOp Yielder	-> Yielder} 
+  { "give" Yielder 	-> Action 
+    "check" Yielder	-> Action}
+
+context-free priorities
+
+  { Action Yielder	-> Action }
+  >
+  { Action InfixAction Action	-> Action }
+
+context-free priorities
+
+  { "(" Data ")"	-> Data }
+  >
+  {  Action		-> Data }
+
+
+
+context-free priorities
+
+  { Action   -> Data}
+  >
+  { Yielder InfixDataOp Yielder		-> Yielder {left}}
 
 %%%%%%%%%%%%%
 %% Full AN %%
@@ -123,13 +139,6 @@ context-free syntax
 
   "(" Action ")"		-> Action 
 	
-context-free priorities
-
-  {"check" Yielder     -> Action
-   "give" Yielder      -> Action}
-  >
-  {Action Yielder      -> Action}
-
 
 %%%%%%%%
 % Data %
@@ -149,14 +158,16 @@ context-free syntax
   Datum 	-> Data 
 
   "(" Data ")"	-> Data	{bracket}
-     
+
+  Action	-> Data
+
 lexical syntax
 
-  [0-9]+                  -> IntConst
-  "\""~[\"]*"\""          -> StrConst
-  [a-zA-Z][a-zA-Z0-9]*    -> IdConst
+%%  [0-9]+                  -> IntConst
+%%  "\""~[\"]*"\""          -> StrConst
+%%  [a-zA-Z][a-zA-Z0-9]*    -> IdConst
 
-  IntConst | StrConst | IdConst   -> Cons
+%%  IntConst | StrConst | IdConst   -> Cons
 
   "="			-> InfixDataOp
 

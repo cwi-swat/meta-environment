@@ -122,7 +122,7 @@ equations
     typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty, no] 
        
 
-[tca-catch] 
+[default-tca-catch] 
 
     AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
     AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, (), $EN),
@@ -130,7 +130,7 @@ equations
     ===================================================================
     typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END2] 
 
-[tca-catch] 
+[default-tca-catch] 
 
     AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
     $ER+ := typecheck-action($A2, (), $EN)
@@ -146,14 +146,14 @@ equations
   AR[nor=$TY1, exc=$TY2, $END] := typecheck-action($A, $TY, $EN),
   $TY2 != empty
   ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = AR[nor=(), exc=empty, yes]
+  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, yes]
 
 
 [tca-maybe-2] 
 
   AR[nor=$TY1, exc=empty, $END] := typecheck-action($A, $TY, $EN)
   ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = AR[nor=(), exc=empty, $END]
+  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, $END]
 
 [tca-maybe-3] 
 
@@ -166,7 +166,7 @@ equations
 
 
     AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, (), $EN),
+    AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY1, $EN),
     $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
     $TY7 := unify($TY3, $TY5, get-subtypes($EN))
     ==================================================================
@@ -175,7 +175,7 @@ equations
 [tca-else] 
 
     AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
-    $ER+ := typecheck-action($A2, (), $EN)
+    $ER+ := typecheck-action($A2, $TY1, $EN)
     ==================================================
     typecheck-action($A1 else $A2, $TY1, $EN) = $ER+
 
@@ -253,10 +253,9 @@ equations
 
 [tca-apply] 	  
 
-    subtype-of($TY1, action[using ($TY*) giving data raising data],
-					  get-subtypes($EN))  == yes
+    subtype-of($TY1, action, get-subtypes($EN))  == yes
     =================================================================
-    typecheck-action(apply, ($TY1, $TY*), $EN) = AR[nor=data, exc=data, no] 
+    typecheck-action(apply, ($TY1, $TY*), $EN) = AR[nor=data, exc=data, yes] 
 
 [default-tca-apply] 	  
 

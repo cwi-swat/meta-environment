@@ -10,7 +10,8 @@ equations
 	      <+, using (integer, integer) & giving integer>,
 	      <*, using (integer, integer) & giving integer>,
 	      <-, using (integer, integer) & giving integer>,
-	      <<, using (integer, integer) & giving integer>
+	      <<, using (integer, integer) & giving integer>,
+	      <else, using (action, action) & giving action>
 	      ]
 
 [brackets-1] ($TY) = $TY
@@ -37,10 +38,11 @@ equations
         typecheck-data($A, $EN) = action[using data giving $TY1 raising $TY2]
 
 
-[tcd-8] typecheck-data($TK, $EN) = token($TK)
+[tcd-8] typecheck-data(token($TK), $EN) = token($TK)
 
 [tcd-9] typecheck-data(no-bindings, $EN) = bindings
 
+[tcd-10] typecheck-data($VR, $EN) = data
 
 [tcdo-1] 
 	 [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN),
@@ -136,4 +138,4 @@ equations
 [tcdp-1] AR[nor=$TY2, exc=$TY3, $END] := typecheck-dataop($DO, $TY1, $EN),
 	 subtype-of($TY2, boolean,get-subtypes($EN)) == yes
 	 ===========================================================
-	 typecheck-datapred($DO, $TY1, $EN) = AR[nor=$TY1, exc=$TY3, no]
+	 typecheck-datapred($DO, $TY1, $EN) = AR[nor=$TY1, exc=(), no]

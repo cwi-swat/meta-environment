@@ -10,7 +10,7 @@ sorts
 
 context-free syntax
 
-  Token	-> Datum
+  token(Token)	-> Datum
 
 lexical syntax
 

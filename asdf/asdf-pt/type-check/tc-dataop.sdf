@@ -44,6 +44,8 @@ variables
   "$DF"[0-9]?"*"   -> {<DataOp, FunResult> "," }*
   "$FR"[0-9]?	   -> FunResult
 
+  "$VR"[0-9]?	   -> Variable
+
 sorts
 
   ExcepNoData SignatureEnv ActionType Type ErrorMessage	

@@ -47,7 +47,7 @@ equations
 [get-selectors-1] 
     
       get-selectors($ATY, uqliteral($CH+) : $SO, $LS*) = 
-		<prefixdataop($CH+), using sort-to-type($SO) & giving $ATY>:
+		<prefixdataop($CH+), using $ATY & giving sort-to-type($SO)>:
 		get-selectors($ATY, $LS*)
 
 [get-selectors-1] get-selectors($ATY, ) = []

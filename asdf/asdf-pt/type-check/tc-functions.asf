@@ -61,9 +61,43 @@ equations
 
 [default-function] typecheck-action($LT $CO, $TY1, $ENV) = 
 		error("Type error", 
-	          [localized("Unable to find semantic function with right type", 
+          [localized("Unable to find semantic function with right type", 
 			get-location($LT $CO))])
 
+[terminates-1] 
+
+     $AC == unfold
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to unfold", 
+			get-location($AC))])
+
+[terminates-2] 
+
+     $AC == enact
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to enact", 
+			get-location($AC))])
+
+[terminates-3] 
+
+     $AC == apply
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to apply", 
+			get-location($AC))])
+
+[terminates-3] 
+
+     $LT $CO := $AC,
+     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
+     $LT == get-fun-name($AFS1),
+     terminates($AFS1) == no
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function might not terminate due to semantic function not terminating", 
+			get-location($AC))])
 
 [feedback-0] yes $ANS = $ANS
 

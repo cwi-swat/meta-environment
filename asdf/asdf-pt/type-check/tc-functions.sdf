@@ -15,6 +15,13 @@ context-free syntax
   typecheck(AS-Module, TypeInfo)		-> Summary
   typecheck-definitions(FunctionDefs, Environment) -> Answers
 
+  terminates(AS-FunctionDef, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+
+  terminates(Action, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  
+
   gen-summary(Answers)	-> Summary
 
   {AS-FunctionDef ","}* 	-> SortWithPosition
@@ -60,6 +67,8 @@ variables
   "$SC"[0-9]?	-> StrCon
 
   "$SUM"	-> Summary
+
+  "$SS"[0-9]?	-> Signatures
 		
 sorts
 

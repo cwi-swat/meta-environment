@@ -10,6 +10,6 @@ exports
 
 context-free syntax
 
-  Action	-> Datum {avoid}
+  Action	-> Data
 
 

@@ -81,7 +81,9 @@ exports
     "using" Type	-> SingleFunResult
     "giving" Type	-> SingleFunResult
     "raising" Type	-> SingleFunResult
-    "failing"		-> SingleFunResult
+    "infallible" | "terminates" | "closed" | 
+    "stable" | "ineffective" | "uncreative" 	-> SingleFunResult
+    
 
     { SingleFunResult "&" }+	-> FunResult
 

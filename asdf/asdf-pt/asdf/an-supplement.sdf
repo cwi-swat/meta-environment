@@ -70,8 +70,8 @@ lexical syntax
   "close"		-> Data {reject}
   "recursively"		-> Data {reject}
 
-  "give" Yielder	-> Data {reject}
-  "check" Yielder	-> Data {reject}
+  "give"		-> Data {reject}
+  "check"		-> Data {reject}
   "bind"		-> Data {reject}
   "furthermore"		-> Data {reject}
   "before"		-> Data {reject}
@@ -106,8 +106,8 @@ lexical syntax
   "close"		-> PrefixDataOp {reject}
   "recursively"		-> PrefixDataOp {reject}
 
-  "give" Yielder	-> PrefixDataOp {reject}
-  "check" Yielder	-> PrefixDataOp {reject}
+  "give"		-> PrefixDataOp {reject}
+  "check"		-> PrefixDataOp {reject}
   "bind"		-> PrefixDataOp {reject}
   "furthermore"		-> PrefixDataOp {reject}
   "before"		-> PrefixDataOp {reject}
@@ -148,3 +148,5 @@ lexical syntax
   "furthermore"		-> Sort {reject}
   "before"		-> Sort {reject}
   "apply"		-> Sort {reject}
+
+  "n"			-> AtomicType {reject}

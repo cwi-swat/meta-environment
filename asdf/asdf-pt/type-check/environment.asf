@@ -41,6 +41,10 @@ equations
 
 [default-get-raising-1] get-raising($FS) = empty
 
+[terminates-1] terminates($LT : $SO -> $SFR1* & terminates & $SFR2*) = yes
+
+[default-terminates-1] terminates($FS) = no
+
 [remove-using-1] remove-using($SFR1* & using $TY & $SFR2*) = $SFR1* & $SFR2*
 
 [default-remove-using-1] remove-using($SFR+) = $SFR+
@@ -53,9 +57,9 @@ equations
 
 [default-remove-raising-1] remove-raising($SFR+) = $SFR+
 
-[rm-failing-1] remove-failing($SFR1* & failing & $SFR2*) = $SFR1* & $SFR2*
+[rm-infallible-1] remove-infallible($SFR1* & infallible & $SFR2*) = $SFR1* & $SFR2*
 
-[default-remove-failing-1] remove-failing($SFR+) = $SFR+
+[default-remove-infallible-1] remove-infallible($SFR+) = $SFR+
 
 [rm-action-1] remove-action($SFR1* & Action & $SFR2*) = $SFR1* & $SFR2*
 
@@ -102,8 +106,8 @@ equations
 
 [join-res-3] 
 	     
-    join-results($SFR1* & failing & $SFR2*, $FR, $STS) = 
-     failing & join-results($SFR1* & $SFR2*, Action & remove-failing($FR),$STS)
+    join-results($SFR1* & infallible & $SFR2*, $FR, $STS) = infallible & 
+         join-results($SFR1* & $SFR2*, Action & remove-infallible($FR),$STS)
 
 [join-res-4] 
 	     
