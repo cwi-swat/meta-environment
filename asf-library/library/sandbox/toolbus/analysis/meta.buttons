@@ -21,19 +21,6 @@ buttons([
          [show-area("Tscript")]),
   button("Tscript",
          ["term"],
-         ["ToolBus", "Extract Relations"],
-         [push-active-module,
-          get-root,
-          check-sort("Tscript"),
-          apply("extractRelations", "RSTORE", 1),
-          push-modulename("ToolBusExtraction"),
-          reduce,
-          push-filename("extracted-relations.trm"),
-          push-active-module,
-          activate-editor
-         ]),
-  button("Tscript",
-         ["term"],
          ["ToolBus", "Unused Variables"],
          [push-string("\"Unused variable \""),
           parse("basic/Strings", "String"),
@@ -45,7 +32,8 @@ buttons([
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
-	  parse("RscriptCalculator", "RSTORE"),
+          read-tree,
+          check-sort("RSTORE"),
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
@@ -65,7 +53,8 @@ buttons([
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
-	  parse("RscriptCalculator", "RSTORE"),
+          read-tree,
+          check-sort("RSTORE"),
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
@@ -85,7 +74,8 @@ buttons([
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
-	  parse("RscriptCalculator", "RSTORE"),
+          read-tree,
+          check-sort("RSTORE"),
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
@@ -105,11 +95,25 @@ buttons([
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
-	  parse("RscriptCalculator", "RSTORE"),
+          read-tree,
+          check-sort("RSTORE"),
 
           apply("display-query", "List", 4),
           rewrite("DisplayQuery"),
           execute-action("unparsePT"),
           show-list
-        ])
+        ]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Extract Relations"],
+         [push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+          push-filename("extracted-relations.trm"),
+          save-tree,
+          message("Saving done")
+         ])
 ])
