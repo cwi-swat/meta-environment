@@ -40,7 +40,7 @@ CC	= cc
 INCLUDE = -I../support -I$(includedir) -I$(ATERM)/../include
 CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus -L$(libdir) \
-        -lATerm-cc -lAsFix-cc -lATB-cc -L../support -lsupport-cc \
+	-L../support -lsupport-cc -lATerm-cc -lAsFix-cc -lATB-cc \
 	-lsocket -lnsl 
 LFLAGS	=  
 AR	= ar
