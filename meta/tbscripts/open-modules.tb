@@ -6,7 +6,7 @@ let
   Id   : term,
   Name : term,
   Str  : str,
-  Fn   : str,
+  Path : str,
   FT   : str,
   T    : term,
   M1s  : list,
@@ -27,7 +27,7 @@ in
         Name := first(Ms).
         Ms   := next(Ms).
        /* First we should check here whether this module has already been 
-        * opened...
+        * opened..
         */
         snd-msg(is-module-in-db(Name)). ( 
           rec-msg(exists-in-module-db(Name))
@@ -35,7 +35,7 @@ in
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(Id, open-file(Name)). ( 
-              rec-msg(Id, opened-file(asfix,Name,T?,Fn?)).
+              rec-msg(Id, opened-file(asfix,Name,T?,Path?)).
              /* Tell UI we added module Name */
               snd-msg(ui,open-module(Name)).
              /* Tell mdb we add module Name containing term T */
@@ -46,16 +46,22 @@ in
              /* Add those modules to the list */
               Ms := join(Ms,M1s)
               +
-              rec-msg(Id, opened-file(raw,Name,FT?,Fn?)).
+              rec-msg(Id, opened-file(baf,Name,T?,Path?)).
               snd-msg(ui,open-module(Name)).
-              snd-msg(open-language("Sdf2","Sdf2.baf")).
+              snd-msg(add-sdf2-module-to-db(Path,T)).
+              rec-msg(need-modules(M1s?)).
+              Ms := join(Ms,M1s)
+              +
+              rec-msg(Id, opened-file(raw,Name,FT?,Path?)).
+              snd-msg(ui,open-module(Name)).
+              snd-msg(open-language("Sdf2","/home/markvdb/NEW-META/lib/Sdf2.baf")).
               snd-msg(Id,parse-string("Sdf2","",FT)).
               ((
                 rec-msg(Id,parse-result(parsetree(T?,I?))).
                 if equal(I,0) then
                  snd-msg(Id,a2toa1(T)).
                  rec-msg(Id,converted(T1?)).
-                 snd-msg(add-sdf2-module-to-db(T1)).
+                 snd-msg(add-sdf2-module-to-db(Path,T1)).
                  rec-msg(need-modules(M1s?)).
                  Ms := join(Ms,M1s)
                 else

@@ -51,13 +51,14 @@ in
       snd-do(UI,delete-module(Str)) .
       snd-ack-event(UI, delete-module(Str))
     ) +
+    ( rec-event(UI,save-module(Str?)).
+      snd-msg(save-module(Str)).
+      rec-msg(saved-module(Str)).
+      snd-ack-event(UI,save-module(Str))
+    ) +
     ( rec-event(UI,edit-module(Str?)).
       create(Edit-module(Str),EM?).
       snd-ack-event(UI,edit-module(Str))
-    ) +
-    ( rec-event(UI,save-module(id(ModName?))).            /* Not yet implemented */
-      snd-note(ui-status(errorf("TB: not implemented: save-module(%s)",[ModName]))).
-      snd-ack-event(UI,save-module(id(ModName)))
     ) +
     ( rec-event(UI,revert-module(id(ModName?))).            /* Not yet implemented */ 
       snd-note(ui-status(errorf("TB: not implemented: revert-module(%s)",[ModName]))).
@@ -68,8 +69,9 @@ in
           ["example",""],["dir","/home/leon/asf+sdf/spec/"],["size","10kb"]])).
       snd-ack-event(UI,get-module-info(Str))
     ) +
-    ( rec-event(UI,save-all).                     /* Not yet implemented */
-      snd-note(ui-status(error("TB: not implemented: save-all"))).
+    ( rec-event(UI,save-all).                 
+      snd-msg(save-all).
+      rec-msg(saved).
       snd-ack-event(UI,save-all)
     ) +
     ( rec-event(UI,revert-all).                     /* Not yet implemented */

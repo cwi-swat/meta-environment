@@ -1,59 +1,75 @@
 process Edit-term(Mod: term, Term: term) is
 let
-Tid: int,
+Tid   : int,
 Id    : term,
 Rewr  : int,
 Str   : str,
 Name  : term,
+Name2 : term,
 T     : term,
-Text:  str,
-Fn    : str,
-Fid: str,
-TE: text-edit,
-Clst: list, Flst: list, Tslst: list,
-Src: str
+T1    : term,
+T2    : term,
+Text  : str,
+Path  : str,
+Fid   : str,
+TE    : text-edit,
+Clst  : list, 
+Flst  : list, 
+Tslst : list,
+Src   : str,
+Table : str,
+I     : int,
+  Ch      : int,
+  Li      : int,
+  Co      : int,
+  Char    : term
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening term editor"))).
-  snd-msg(Id,open-file(Term)).
-  ( rec-msg(Id,opened-file(asfix,Name?,T?,Fn?)).
+  snd-msg(Id,open-trm-file(Term)).
+  ( rec-msg(Id,opened-file(asfix,Name?,T?,Path?)).
 /* This is to dissappear. Currently, editing a term is synonym for 
  * rewriting a term, since we do not have an editor. In a later stage
  * the Rewrite process should be created by the editor/user.
  */
-    snd-msg(rewrite(Mod,T)).
-/* Again, a hack: Same as in rewrite and edit-module: */
+    snd-msg(rewrite(Mod,T))
+    + 
+    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)).
+    snd-msg(process-eqs(Mod)).
+    rec-msg(eqs-processed(Name2?)).
+    snd-msg(get-table-from-db(Mod)).
+    rec-msg(table(Table?)).
+    snd-note(ui-status(endstat(Id))).
+    snd-note(ui-status(stat(Id,"Parsing Term ..."))).
+    snd-msg(open-language(Mod,Table)).
+    snd-msg(Id,parse-string(Mod,"",Text)).
+    (( rec-msg(Id,parse-result(parsetree(T1?,I?))).
+       snd-note(ui-status(endstat(Id))).
+       if equal(I,0) then
+        snd-msg(Id,a2toa1(T1)).
+        rec-msg(Id,converted(T2?))
 /*
-    create(Editor(Term,"\"\"",Fn,Id),Tid?).
-    rec-msg(Id, editortool(TE?)).
-    snd-msg(pp-module(T)).
-    rec-msg(module-source(Src?)).
-printf("%s\n",Src).
-    snd-do(TE,inserttext(Src)).
+    snd-msg(rewrite(Mod,T))
+*/
+       else
+        printf("Parse of %t returned %d ambiguities",Mod,I).
+        printf("Term is: %t\n",T1)
+       fi
+     )
+     +
+     ( rec-msg(Id, parse-result(eof-error)). 
+       printf("EOF unexpected while parsing %t\n",Mod)
+     )
+     +
+     ( rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
+       printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co)
+     ))
+    +
+    rec-msg(error-opening(Str?)).
+/*    snd-note(ui-status(stat(Id,"Creating new term"))).
+    create(Editor(Name,"",Fn,Id),Tid?).*/
     snd-note(ui-status(endstat(Id)))
-    + (
-      rec-msg(Id,opened-file(raw,Name?,Text?,Fn?)).
-      create(Editor(Name,Text,Fn,Id), Tid?)
-      +
-      rec-msg(error-opening(Str?)).
-      snd-note(ui-status(stat(Id,"Creating new term"))).
-      create(Editor(Name,"",Fn,Id),Tid?).
-      snd-note(ui-status(endstat(Id)))
-    ).
-    rec-msg(Id,editortool(TE?,Fid?)).
-*/
-/* Send term specific stuff to text-editor */
-/*    snd-do(TE,tb-set-button("Reduce",reduce)). (
-      rec-event(TE,reduce).
-      snd-msg(TE,bring-up-to-date). (
-        rec-msg(TE,parsetree(T?)).
-        snd-msg(rewrite(Mod,T))
-        +
-        rec-msg(TE,cancel-parsing)
-      ) 
-    ) *
-*/
-    rec-disconnect(TE).
-    snd-note(disconnected(TE))
-  )
+  ).
+  rec-disconnect(TE).
+  snd-note(disconnected(TE))
 endlet

@@ -23,5 +23,6 @@
 #include "addeqsyn.tb"
 #include "module-db.idef"
 #include "process-eqs.tb"
+#include "save-module.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB,ProcessEqs)
+toolbus(Parser,Parsetrees,Prettyprinter,AsFix2toAsFix1,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules)

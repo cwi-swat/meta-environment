@@ -1,0 +1,54 @@
+process Save-modules is
+let
+  Id      : term,
+  Str     : term,
+  Syntax  : term,
+  Eqs     : term,
+  Module  : term,
+  Path    : str,
+  Modules : list
+in
+  Id := process-id. 
+  ( rec-msg(save-module(Module?)).
+    snd-msg(get-path-from-db(Module)).
+    rec-msg(path(Path?)).
+    snd-msg(get-sdf2-asfix(Module)).
+    rec-msg(syntax(Syntax?)).
+    snd-msg(save-sdf2-asfix(Module,Path,Syntax)).
+    rec-msg(save-done).
+    snd-msg(get-eqs-asfix(Module)).
+    ( rec-msg(eqs(Eqs?)).
+      snd-msg(save-eqs-asfix(Module,Path,Eqs)).
+      rec-msg(save-done)
+    +
+      rec-msg(no-eqs)
+    ).
+    snd-msg(saved-module(Module))
+    +
+    rec-msg(save-all).
+    snd-msg(get-all-modules).
+    rec-msg(all-modules(Modules?)).
+    ( if not-equal(Modules, []) then
+       Module := first(Modules).
+       Modules := next(Modules).
+       snd-msg(get-path-from-db(Module)).
+       rec-msg(path(Path?)).
+       snd-msg(get-sdf2-asfix(Module)).
+       rec-msg(syntax(Syntax?)).
+       snd-msg(save-sdf2-asfix(Module,Path,Syntax)).
+       rec-msg(save-done).
+       snd-msg(get-eqs-asfix(Module)).
+       ( rec-msg(eqs(Eqs?)).
+         snd-msg(save-eqs-asfix(Module,Path,Eqs)).
+         rec-msg(save-done)
+       +
+         rec-msg(no-eqs)
+       )
+      fi
+    )*
+    if equal(Modules,[]) then
+     snd-msg(saved)
+    fi
+  )*
+  delta
+endlet

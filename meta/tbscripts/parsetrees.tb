@@ -8,7 +8,6 @@ tool import-db is {
   command = "import-db"
 }
 tool compiler is {
-/*  command = "compiler -print-gc-info -termtable 2097143 -hashinfo" */
   command = "compiler -print-gc-info -termtable 20"
 }
 
