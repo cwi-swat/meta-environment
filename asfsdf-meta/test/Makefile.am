@@ -4,12 +4,9 @@ TEST_SPECS=Basic Demo
 
 TESTS=$(foreach s, ${TEST_SPECS}, $s.dump.sh)
 
-#EQSDUMP=${top_builddir}/src/eqs-dump
 GENMETA=${META}/bin/generic-meta -I ${ASF}/share/asf -p ${ASF}/bin \
 	-I ${top_builddir}/meta-scripts -I ${top_srcdir}/meta-scripts
 EQSDUMP=${GENMETA} -E
-
-#PTDUMP=${top_builddir}/src/pt-dump
 PTDUMP=${GENMETA} -P
 
 %.dump.sh: Makefile meta.conf
