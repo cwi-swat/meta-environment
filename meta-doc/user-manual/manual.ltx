@@ -247,49 +247,29 @@ internal format (syntax trees). The equations of the module are then used to
 reduce the terms into normal form. This result is, in its turn, converted back
 to textual form by pretty printing it.
 
-%%The reduction of a term can be monitored by using EDB (Equation
-%%Debugger), a debugging system that allows you to reduce a term
-%%step-by-step or to place breakpoints for interrupting the reduction
-%%process at specific moments.
-
-%%Finally, term editors can be customized by adding \emph{buttons} whose
-%%activation starts the evaluation of a function which is defined in the
-%%specification. In this way you can customize the user-interface of the
-%%application by adding, for instance, a typechecking or evaluation
-%%button to a term editor. (** check; not in Release 1.**)
-
 \subsection{About this Manual}
 
-This manual is intended for those users that want to try
-out the \ASmetaenv. This manual is
-still under development and we welcome all feed back and comments.
+This manual is intended for those users that want to write \asfsdf\
+specifications.
+This manual is still under development and we welcome all feed back and comments.
 
-%%In the sequel we will use \ASmetaenv\ to address the new
-%%system and old \ASmetaenv\ when addressing the old system.
-
-The focus of this manual will be on using the system to write a
-specification like a type checker or evaluator for the toy language
-PICO. It follows the user-interface to explain the capabilities of the
-system.  Topics that will be addressed include:
+The focus of this manual will be on how to write \asfsdf\ specifications,
+the \asfsdf\ language features are explained as well as some methodology
+in using \asfsdf\ when defining a (programming) language. In the last
+part of the manual we will address the following technical problems.
 \begin{itemize}
-\item How to start the system and exit it.
-\item How to create, open, and save a specification.
-\item How to edit the syntax and/or equations part of a module.
-\item How to edit a term.
-\item How to evaluate a term.
 \item How to compile a specification.
 \item How to parse a term outside the \ASmetaenv.
 \item How to rewrite a term using a compiled specification outside the
 \ASmetaenv.
 \item How to unparse parsed and/or normalized terms.
 \end{itemize}
+Finally, we assume the reader has read the \asfsdf\ guided tour and
+knows how to use the \ASmetaenv.
 
 \noindent We do \emph{not} explain in detail:
 
 \begin{itemize}
-\item The formalism \asfsdf. 
-We only give a quick introduction to \asfsdf.
-
 \item The architecture and implementation of the system.
 We only give a brief sketch of the underlying 
 technology and architecture of the \ASmetaenv.
@@ -355,6 +335,7 @@ overview of selected publications:
 \section*{Acknowledgements}
 Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
 
+\newpage
 \section{An Introduction to \asfsdf}
 \label{ASF+SDF}
 
@@ -402,7 +383,7 @@ equations
 \end{verbatim}
 
 A module consists of a module header, followed by a list of zero or more
-import sections, followed by zero or more hidden or exported
+import sections, followed by zero or more hidden or export
 sections and an optional equations section that defines conditional equations.
 \link*{Later}[In Section~\Ref]{ParametersRenamings}
 we will see that modules can alse be \emph{parameterized} and
@@ -450,6 +431,10 @@ can be a definition of one of the following:
 \item \link{Priorities}[ (Section~\Ref)]{Priorities}.
 \item \link{Variables}[ (Section~\Ref)]{Variables}.
 \end{itemize}
+
+Note that it is possible to have hidden imports as well, this means that
+the contents of a hidden imported module in some module $M$ is visible 
+in $M$ but is not exported to modules which import $M$.
 
 There are a number of related properties which have an effect across the
 various grammar items, these items are intermixed with the discussion
@@ -533,7 +518,7 @@ scope of a hiddens keyword, the exported entities are only visible in the
 importing module but they are not exported by the importing module.
 
 An imported module can be parameterized or decorated with renamings, see
-\link*{ParametersRenamings}[ Section~\Ref]{ParametersRenamings}
+\link*{ParametersRenamings}[Section~\Ref]{ParametersRenamings}
 for more details.
 
 \subsection{Symbols}
@@ -548,8 +533,11 @@ formalisms. The elementary symbols are:
   names always start with a capital letter and may be followed by letters
   and/or digits.  Hyphens (``{\tt -}'') may be embedded in a sort name.
 
-\item \emph{literal}: corresponds to a terminal, e.g.,  {\tt true} or  {\tt
-    "\&"}.
+\item \emph{literal}: corresponds to a terminal, e.g., {\tt true} or 
+{\tt "\&"}. It is advisable to quote always your terminals, also
+the terminals consisting of only letters. \emph{This is certainly needed
+in case of terminals starting with a capital letter, otherwise these
+literals are interpreted as sorts.}
   
 \item \emph{character class}: corresponds to a set of characters, 
 e.g., {\tt [a-z]}.
@@ -559,7 +547,7 @@ they are mainly used when describing the lexical syntax of a language.
 \end{itemize}
 
 Starting with the elementary symbols, more complex symbols can be constructed
-by way of operators that we will discuss now.
+by way of the following operators.
 
 \htmlmenu{1}
 
@@ -660,6 +648,10 @@ permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.  Valid
 instantiations are, for instance, {\tt true 3 x} and {\tt x 3 true}.  There
 are six valid instantiations for this permutation.
 
+This operator is deprecated and will disappear from \asfsdf\ specification 
+formalism in the near future. It is advisable not to use this operator
+any more.
+
 \subsubsection{Set}
 \label{SetOperator}
 
@@ -669,6 +661,10 @@ The set operator {\tt Set[...]} is an abbreviation for defining a set of
 elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
 definition {\tt "\{" \{Int ","\}* "\}"}. As a consequence, {\tt \{1, 2, 3\}} is
 a valid instantiation for the given definition.
+
+This operator is deprecated and will disappear from \asfsdf\ specification 
+formalism in the near future. It is advisable not to use this operator
+any more.
 
 \subsubsection{Function}
 \label{FunctionOperator}
@@ -693,7 +689,7 @@ These sort parameters can be instantiated via the parameters of
 the module name. A parameterized sort may have the form
 {\tt List[[X,Y]]} where {\tt X} and {\tt Y} are generic sorts
 which will be provided via the parameters of the module name.
-See \link*{Parameterization and Renamings}[ Section~\Ref]{ParametersRenamings}
+See \link*{Parameterization and Renamings}[Section~\Ref]{ParametersRenamings}
 for more details.
 The context-free syntax rule describing parameterized sorts is:
 \begin{verbatim}
@@ -732,6 +728,11 @@ aliases
   Bool # Int      -> Tuple3
 \end{verbatim}
 (The alias {\tt Tuple3} is redefined.)
+
+Note, the aliases are a convenient short hand for more complex symbols,
+but a drawback is that during parse table generation the aliases completely
+disappear. They are replaced by the actual symbols. This can have some
+unexpected behaviour when parsing or reducing terms.
 
 \subsection{Sorts}
 \label{Sorts}
@@ -862,6 +863,9 @@ constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
 added to the context-free syntax of the specification.  Here, `{\tt l}' is the
 name of sort `{\tt L}' written in lower-case letters.  In this way, you can
 get access to the characters of lexical tokens.
+
+The lexical constructor functions will be discussed in more detail
+in the section on equations XXX.
 
 \subsubsection{Character Classes}
 \label{CharacterClasses}
@@ -1117,7 +1121,7 @@ exports
 
 \index{alternative operator@alternative operator}
 Functions with the same result sort together define the lexical syntax of
-tokens of that sort. The left-hand sides of these function definitions form
+tokens for that sort. The left-hand sides of these function definitions form
 the alternatives for this function. Sometimes, it is more convenient to list
 these alternatives explicitly in a single left-hand side or to list
 alternative parts inside a left-hand side.  This is precisely the role of the
@@ -1365,7 +1369,8 @@ of the \link{above grammar}[ of Figure~\Ref]{CODE:simple-cf} is
 When a literal in a context-free function consists only of lower-case letters
 and digits and is not a keyword of \asfsdf, it need not be surrounded by
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-\link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}.
+\link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}. But is 
+better to always write the quotes.
 
 \subsubsection{Lists}
 
@@ -1548,7 +1553,7 @@ exports
 sorts}
 
 The combination of lists and optionals or empty producing sorts leads to
-cycles in the parse tree. Currently cycles are considered as parse errors.
+cycles in the parse tree. Cycles are considered parse errors.
 The parser will be produce an error message whenever during parsing
 a cycle is detected. No parse tree is constructed in such a case.
 Cycles will not lead to non-termination during parsing.
@@ -2663,10 +2668,9 @@ terms possibly containing variables.
 
 In the context of \asfsdf, an open term is any string that can be parsed
 according to one of the sorts in the specification (possibly including
-variables).  Recalling the {\tt Bool-example} specification
-given \link*{earlier}[ in Section~\Ref]{Bool-example}, 
-examples of (open) terms are `{\tt true}', 
-`{\tt not(false)}' and `{\tt true | Bool}'.
+variables).  
+Examples of (open) terms are `{\tt true}', `{\tt not(false)}',
+and `{\tt true | Bool}'.
 
 \W We will discuss the following aspects of equations:
 \W \htmlmenu{1}
@@ -3173,11 +3177,11 @@ fib(19)          &  10.4 & 3.3  \\ \hline
 %%\caption{Equations for conditions}
 %%\end{figure}   
 
-\subsubsection{Getters and Setters Functions}
-\label{GettersSetters}
-
-\index{getter functions@getter functions}
-\index{setter functions@setter functions}
+%%\subsubsection{Getters and Setters Functions}
+%%\label{GettersSetters}
+%%
+%%\index{getter functions@getter functions}
+%%\index{setter functions@setter functions}
 
 \subsubsection{Traversal Functions}
 \label{Traversal}
@@ -3202,7 +3206,7 @@ the size of its definition will grow accordingly.  This becomes even
 more dramatic if we realize that the traversal function will only do
 some real work (apart from traversing) for very few node categories.
 
-Traversal functions in \asfsdf~\cite{BKV01} solve this 
+Traversal functions in \asfsdf~\cite{BKV03} solve this 
 problem.
 We distinguish three kinds of traversal functions, defined as follows.
 
@@ -3244,7 +3248,8 @@ an accumulating transformer is a tuple consisting of the transformed
 first argument and accumulated value. An accumulating transformer
 is declared as follows:
 
-\[f(S_1 , S_2 , ..., S_n) \rightarrow S_1 \# S_2 \mbox{\{{\tt traversal(accutrafo)}\}}\]
+\[f(S_1 , S_2 , ..., S_n) \rightarrow S_1 \# S_2 \mbox{\{{\tt
+traversal(accu,trafo)}\}}\]
 
 An accumulating transformer is used to simultaneously extract information from a
 tree and transform it.
