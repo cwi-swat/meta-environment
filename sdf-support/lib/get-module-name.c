@@ -1,8 +1,9 @@
 #include "SDFME-utils.h"
+#include <string.h>
 
-/*{{{  char *SDF_getModuleName(SDF_Module sdfModule) */
+/*{{{  SDF_ModuleId SDF_getModuleName(SDF_Module sdfModule) */
 
-char *SDF_getModuleName(SDF_Module sdfModule)
+SDF_ModuleId SDF_getModuleName(SDF_Module sdfModule)
 {
   SDF_ModuleName moduleName;
   SDF_ModuleId   moduleId;
@@ -10,7 +11,7 @@ char *SDF_getModuleName(SDF_Module sdfModule)
   moduleName = SDF_getModuleModuleName(sdfModule);
   moduleId   = SDF_getModuleNameModuleId(moduleName);
 
-  return SDF_getModuleIdString(moduleId);
+  return moduleId;
 }
 
 /*}}}  */
@@ -18,7 +19,39 @@ char *SDF_getModuleName(SDF_Module sdfModule)
 
 SDF_ModuleId SDF_makeModuleId(const char *moduleStr)   
 {
-  return SDF_makeModuleIdWord(moduleStr);
+  const char *sep = "/";
+  char *token = NULL;
+  char *tmp = strdup(moduleStr);
+  SDF_LexModuleId id = NULL;
+  ATermList words = ATempty;
+
+  token = strtok(tmp, sep);
+
+  do {
+    words = ATinsert(words, ATmake("<str>", token));
+  } while ((token = strtok(NULL, sep)) != NULL);
+
+  for ( ; !ATisEmpty(words); words = ATgetNext(words)) {
+    char *str = ATgetName(ATgetAFun(ATgetFirst(words)));
+    SDF_LexModuleWord word = SDF_makeLexModuleWordWord(str);
+
+      
+    if (id == NULL) {
+      id = SDF_makeLexModuleIdLeaf(word);
+    }
+    else {
+      if (strlen(str) == 0 && ATgetLength(words) == 1) {
+	id = SDF_makeLexModuleIdRoot(id);
+      }
+      else if (strlen(str) != 0) {
+	id = SDF_makeLexModuleIdPath(word, id);
+      }
+    }
+  }
+
+  free(tmp);
+
+  return SDF_makeModuleIdLexToCf(id);
 }
 
 /*}}}  */

@@ -54,7 +54,7 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
   PT_Symbols ptSymbols;
   PT_Symbol  ptResult;
   PT_Attributes ptAttributes;
-  
+
   sdfResult  = SDF_getProductionResult(sdfProduction);
   sdfAttributes = SDF_getProductionAttributes(sdfProduction);
   ptResult  = SDFSymbolToPtSymbol(sdfResult);
@@ -150,7 +150,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     result = PT_makeSymbolSort(str); 
   }
   else if (SDF_isSymbolLit(sdfSymbol)) {
-    SDF_Literal sdfLit = SDF_getSymbolLiteral(sdfSymbol);
+    SDF_StrCon sdfLit = SDF_getSymbolString(sdfSymbol);
     char *str = unquote_str(PT_yieldTreeToString((PT_Tree) sdfLit, ATfalse));
     result = PT_makeSymbolLit(str);
   }
@@ -178,22 +178,6 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_Symbol ptSepSymbol = SDFSymbolToPtSymbol(sdfIterSep);
     result = PT_makeSymbolIterStarSep(ptIterSymbol, ptSepSymbol);
   } 
-  else if (SDF_isSymbolIterN(sdfSymbol)) {
-    SDF_Symbol sdfIterSymbol = SDF_getSymbolSymbol(sdfSymbol);
-    SDF_NatCon sdfN = SDF_getSymbolN(sdfSymbol);
-    PT_Symbol ptIterSymbol = SDFSymbolToPtSymbol(sdfIterSymbol);
-    int ptN = atoi(PT_yieldTreeToString((PT_Tree) sdfN, ATfalse));
-    result = PT_makeSymbolIterN(ptIterSymbol,ptN);
-  }
-  else if (SDF_isSymbolIterSepN(sdfSymbol)) {
-    SDF_Symbol sdfIterSymbol = SDF_getSymbolSymbol(sdfSymbol);
-    SDF_Symbol sdfIterSep = SDF_getSymbolSep(sdfSymbol);
-    SDF_NatCon sdfN = SDF_getSymbolN(sdfSymbol);
-    PT_Symbol ptIterSymbol = SDFSymbolToPtSymbol(sdfIterSymbol);
-    PT_Symbol ptSepSymbol = SDFSymbolToPtSymbol(sdfIterSep);
-    int ptN = atoi(PT_yieldTreeToString((PT_Tree) sdfN, ATfalse));
-    result = PT_makeSymbolIterSepN(ptIterSymbol,ptSepSymbol,ptN);
-  }
   else if (SDF_isSymbolCf(sdfSymbol)) {
     SDF_Symbol sdfSym = SDF_getSymbolSymbol(sdfSymbol);
     PT_Symbol ptSym = SDFSymbolToPtSymbol(sdfSym);
@@ -460,6 +444,7 @@ static PT_CharRange SDFCharRangeToPtCharRange(SDF_CharRange sdfCharRange)
 static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
 {
   PT_CharRanges result = PT_makeCharRangesEmpty();
+
 
   if (SDF_isCharRangesDefault(sdfCharRanges)) {
     SDF_CharRange sdfCharRange = SDF_getCharRangesCharRange(sdfCharRanges);

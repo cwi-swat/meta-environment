@@ -6,7 +6,7 @@ SDF_Import SDF_makeImport(const char *moduleName)
 {
   return SDF_makeImportModule(
            SDF_makeModuleNameUnparameterized(
-	     SDF_makeModuleIdWord(moduleName)));
+	     SDF_makeModuleId(moduleName)));
 }
 
 /*}}}  */

@@ -3,7 +3,7 @@
 
 #include "SDFME.h"
 
-char      *SDF_getModuleName(SDF_Module sdfModule);
+SDF_ModuleId SDF_getModuleName(SDF_Module sdfModule);
 SDF_Module SDF_setModuleName(SDF_Module sdfModule, const char *name);
 SDF_ModuleId SDF_makeModuleId(const char *moduleStr);
 SDF_ModuleName SDF_makeModuleName(const char *moduleStr);
@@ -68,5 +68,9 @@ SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l);
 
 SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l);
 SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l);
+
+SDF_LexStrCon SDF_makeLexStrCon(const char *str);
+SDF_StrCon SDF_makeStrCon(const char *str);
+SDF_Sort SDF_makeSort(const char *str);
 
 #endif /* _SDF_UTILS_H */

@@ -1,87 +1,48 @@
 definition
 module languages/aterm/syntax/ATerms
 
-imports languages/aterm/syntax/Literals 
-        languages/aterm/syntax/IntCon 
+imports languages/aterm/syntax/IntCon 
         languages/aterm/syntax/RealCon
+	basic/StrCon
+	basic/IdentifierCon
+
+exports
+  sorts AFun ATerm Annotation
+
+  context-free syntax
+	StrCon 	-> AFun {cons("quoted")}
+	IdCon 	-> AFun {cons("unquoted")}
+
+  context-free syntax
+	IntCon 					-> ATerm {cons("int")}
+	RealCon					-> ATerm {cons("real")}
+	fun:AFun 				-> ATerm {cons("fun")}
+	fun:AFun "(" args:{ATerm ","}+ ")" 	-> ATerm {cons("appl")}
+	"<" type:ATerm ">" 			-> ATerm {cons("placeholder")}
+	"[" elems:{ATerm ","}* "]" 		-> ATerm {cons("list")}
+	trm:ATerm Annotation 			-> ATerm {cons("annotated")}
+
+  context-free syntax
+	"{" annos:{ ATerm ","}+ "}" 		-> Annotation {cons("default")}
 
 hiddens
   context-free start-symbols 
     ATerm
-
-exports
-  sorts ATermList ACon AFun ATerm Ann
-
-  context-free syntax
-    "[" elems:{ ATerm ","}* "]"             -> ATermList {cons("not-empty")}
-    IntCon                                  -> ACon      {cons("int")}
-    RealCon                                 -> ACon      {cons("real")}
-    Literal                                 -> AFun
-    ACon                                    -> ATerm     {cons("constant")}
-    list:ATermList                          -> ATerm     {cons("list")}
-    fun:AFun                                -> ATerm     {cons("fun")}
-    fun:AFun "(" args:{ ATerm ","}+ ")"     -> ATerm     {cons("appl")}
-    "<" type:ATerm ">"                      -> ATerm {cons("placeholder")}
-    "{" annos:{ ATerm ","}+ "}"             -> Ann       {cons("annotation")}
-    ACon Ann                                -> ATerm     {cons("annotated-constant")}
-    list:ATermList Ann                      -> ATerm     {cons("annotated-list")}
-    fun:AFun Ann                            -> ATerm     {cons("annotated-fun")}
-    fun:AFun "(" args:{ ATerm ","}+ ")" Ann -> ATerm {cons("annotated-appl")}
-    "<" type:ATerm ">" Ann                  -> ATerm {cons("annotated-placeholder")}module languages/aterm/syntax/IntCon
+module languages/aterm/syntax/IntCon
 
 imports basic/Whitespace
+	basic/NatCon
 
 hiddens
   context-free start-symbols 
     IntCon
 
 exports
-
-  sorts NatCon IntCon
-  lexical syntax   
-    [0-9]+ -> NatCon  {cons("digits")}
+  sorts IntCon
   context-free syntax
     NatCon         -> IntCon {cons("natural")}
     pos:"+" NatCon -> IntCon {cons("positive")}
-    neg:"-" NatCon -> IntCon {cons("negative")}module languages/aterm/syntax/Literals
-
-imports basic/Whitespace
-
-hiddens
-  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
-  context-free start-symbols
-    Literal
-
-exports
-  sorts QLiteral
-  lexical syntax
-    "\\" ~[012]                    -> AlphaNumericalEscChar {cons("default")}
-
-    "\\" [01] [0-9] [0-9]          -> DecimalEscChar {cons("dec0_199")}
-    "\\" "2" [0-4] [0-9]           -> DecimalEscChar {cons("dec200_249")}
-    "\\" "2" "5" [0-5]             -> DecimalEscChar {cons("dec250_255")}
-
-    alpha:AlphaNumericalEscChar  -> EscChar {cons("alpha-numeric")}
-    decimal:DecimalEscChar       -> EscChar {cons("decimal")}
-
-    ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char {cons("normal")}
-    EscChar                      -> L-Char {cons("escaped")}
-
-    "\"" chars:L-Char* "\""        -> QLiteral {cons("quoted")}
-
-  sorts UQLiteral
-  lexical syntax
-    [a-z]                          -> UQLiteral {cons("one-char")}
-    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
-
-  sorts Literal
-  context-free syntax
-    QLiteral  -> Literal {cons("qlit")}
-    UQLiteral -> Literal {cons("uqlit")}
-
-  lexical restrictions
-    UQLiteral -/- [A-Za-z0-9]
-module languages/aterm/syntax/RealCon
+    neg:"-" NatCon -> IntCon {cons("negative")}module languages/aterm/syntax/RealCon
 
 imports languages/aterm/syntax/IntCon
 
@@ -96,7 +57,7 @@ exports
     "e" IntCon -> OptExp {cons("present")}
                -> OptExp {cons("absent")}
 
-    IntCon "." NatCon OptExp  -> RealCon {cons("real-con")}%%% $Id$
+    base:IntCon "." decimal:NatCon exp:OptExp  -> RealCon {cons("real-con")}%%% $Id$
                   
 module languages/sdf2/syntax/Aliases
 
@@ -145,10 +106,8 @@ module languages/sdf2/syntax/Character-Class
 
 imports languages/sdf2/syntax/Character
 
-hiddens
-  sorts CharRange CharRanges OptCharRanges 
 exports
-  sorts CharClass
+  sorts CharClass CharRange CharRanges OptCharRanges 
   context-free syntax 
     Character                           -> CharRange
     start:Character "-" end:Character   -> CharRange            {cons("range")}
@@ -176,14 +135,15 @@ exports
                      
 module languages/sdf2/syntax/Character
 
-imports basic/Comments
+
 
 exports
   sorts Character NumChar ShortChar
   lexical syntax
-    [\\] [0-9]+                     -> NumChar   {cons("digits")}
-    [a-zA-Z0-9]                     -> ShortChar {cons("regular")}
-    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+    [\\] number:[0-9]+                     -> NumChar   {cons("digits")}
+    character:[a-zA-Z0-9]                  -> ShortChar {cons("regular")}
+    [\\] escape:~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
+
   context-free syntax
     NumChar   -> Character {cons("numeric")}
     ShortChar -> Character {cons("short")}
@@ -215,9 +175,10 @@ imports languages/aterm/syntax/ATerms
         languages/sdf2/syntax/Grammars
 
 exports
-  sorts Attribute Attributes Production Productions
+  sorts Attribute ATermAttribute Attributes Production Productions
   context-free syntax
-    aterm:ATerm -> Attribute  {cons("term"),avoid}
+    aterm:ATerm    -> ATermAttribute  {cons("default")}
+    ATermAttribute -> Attribute       {cons("term")}
 
     "{" list:{Attribute ","}* "}" -> Attributes  {cons("attrs")}
                                   -> Attributes  {cons("no-attrs")}
@@ -232,12 +193,16 @@ exports
 module languages/sdf2/syntax/Labels
 
 imports languages/sdf2/syntax/Kernel 
-        languages/sdf2/syntax/Literals 
-        languages/aterm/syntax/ATerms
+        basic/StrCon
 
-exports
+exports 
+  sorts Label
+
   context-free syntax
-    label:Literal ":" Symbol -> Symbol  {cons("label")}
+    StrCon -> Label {cons("quoted")}
+    IdCon  -> Label {cons("unquoted")}
+
+    Label ":" Symbol -> Symbol  {cons("label")}
 module languages/sdf2/syntax/Lifting
 
 imports languages/sdf2/syntax/Kernel
@@ -250,14 +215,18 @@ exports
 module languages/sdf2/syntax/Literals
 
 imports languages/sdf2/syntax/Kernel 
-imports languages/aterm/syntax/Literals
+imports basic/StrCon
+imports basic/IdentifierCon
 
 exports
   context-free syntax
-    Literal  -> Symbol  {cons("lit")}
+    string:StrCon       -> Symbol  {cons("lit")}
 
-    function-symbol: Literal "(" arguments:{Symbol ","}* ")"
-      "->" result:Symbol Attributes -> Production  {avoid, cons("prod-fun")}
+    fun:IdCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
+	-> Production  {avoid, cons("unquoted-fun")}
+
+    str:StrCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
+	-> Production  {avoid, cons("quoted-fun")}
 %%% $Id$
                  
 module languages/sdf2/syntax/Modules
@@ -268,17 +237,17 @@ imports languages/sdf2/syntax/Kernel
 hiddens
   sorts ModuleWord
 exports
-  context-free start-symbols Module Definition
+  context-free start-symbols Module
 
   sorts ModuleId ModuleName Import Imports
         Section Sections Module Definition ImpSection
 
   lexical syntax    
-    [A-Za-z0-9\_\-]+ -> ModuleWord  {cons("word")}
+    letters:[A-Za-z0-9\_\-]+ -> ModuleWord  {cons("word")}
 
-    ModuleWord              -> ModuleId  {cons("word")}
-    "/" ModuleId            -> ModuleId  {cons("slash-word")}
-    ModuleWord "/" ModuleId -> ModuleId  {cons("word-slash-word")}
+    ModuleWord              -> ModuleId  {cons("leaf")}
+    sep:"/" basename:ModuleId            -> ModuleId  {cons("root")}
+    dirname:ModuleWord sep:"/" basename:ModuleId -> ModuleId  {cons("path")}
          
   context-free syntax
     list:Module* -> Definition
@@ -353,8 +322,8 @@ exports
     Symbol "*"                                    -> Symbol {cons("iter-star")}
     "{" Symbol sep:Symbol "}" "+"                 -> Symbol {cons("iter-sep")}
     "{" Symbol sep:Symbol "}" "*"                 -> Symbol {cons("iter-star-sep")}
-    Symbol  n:NatCon "+"                          -> Symbol {cons("iter-n")}
-    "{" Symbol sep:Symbol "}" n:NatCon "+"        -> Symbol {cons("iter-sep-n")}
+ %%   Symbol  n:NatCon "+"                          -> Symbol {cons("iter-n")}
+ %%   "{" Symbol sep:Symbol "}" n:NatCon "+"        -> Symbol {cons("iter-sep-n")}
     "<" head:Symbol "," rest:{Symbol ","}+ ">"    -> Symbol {cons("tuple")}
     "left":Symbol "#" "right":Symbol              -> Symbol {right,cons("pair")}
     "(" arguments:Symbols "=>" results:Symbol ")" -> Symbol {cons("func")}
@@ -364,8 +333,8 @@ exports
   context-free priorities
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol
-    Symbol "+"                -> Symbol
-    Symbol NatCon "+"         -> Symbol} >
+    Symbol "+"                -> Symbol} >
+%%    Symbol NatCon "+"         -> Symbol} >
     Symbol "#" Symbol         -> Symbol  >
     Symbol "|" Symbol         -> Symbol       
 %%% $Id$
@@ -413,87 +382,6 @@ exports
   context-free priorities    
     CharClass "." Lookaheads    -> Lookahead >
     Lookaheads "|" Lookaheads   -> Lookaheads
-%%% $Id$
-
-module languages/sdf2/syntax/Sdf2
-
-imports languages/sdf2/syntax/Sdf2-Syntax
-
-exports
-  lexical syntax
-    "LAYOUT"            -> Sort    {reject}
-
-  context-free syntax
-    "aliases"           -> UQLiteral {reject}
-    "lexical"           -> UQLiteral {reject}
-    "priorities"        -> UQLiteral {reject}
-    "context-free"      -> UQLiteral {reject}
-    "definition"        -> UQLiteral {reject}
-    "syntax"            -> UQLiteral {reject}
-    "variables"         -> UQLiteral {reject}
-    "module"            -> UQLiteral {reject}
-    "imports"           -> UQLiteral {reject}
-    "exports"           -> UQLiteral {reject}
-    "hiddens"           -> UQLiteral {reject}
-    "left"              -> UQLiteral {reject}
-    "right"             -> UQLiteral {reject}
-    "assoc"             -> UQLiteral {reject}
-    "non-assoc"         -> UQLiteral {reject}
-    "bracket"           -> UQLiteral {reject}
-    "sorts"             -> UQLiteral {reject}
-    "restrictions"      -> UQLiteral {reject}
-
-    "aliases"           -> ModuleName {reject}
-    "lexical"           -> ModuleName {reject}
-    "priorities"        -> ModuleName {reject}
-    "context-free"      -> ModuleName {reject}
-    "definition"        -> ModuleName {reject}
-    "syntax"            -> ModuleName {reject}
-    "variables"         -> ModuleName {reject}
-    "module"            -> ModuleName {reject}
-    "imports"           -> ModuleName {reject}
-    "exports"           -> ModuleName {reject}
-    "hiddens"           -> ModuleName {reject}
-    "left"              -> ModuleName {reject}
-    "right"             -> ModuleName {reject}
-    "assoc"             -> ModuleName {reject}
-    "non-assoc"         -> ModuleName {reject}
-    "bracket"           -> ModuleName {reject}
-    "sorts"             -> ModuleName {reject}
-    "bracket"           -> ModuleName {reject}
-    "sorts"             -> ModuleName {reject}
-    "restrictions"      -> ModuleName {reject}
-
-    Literal "(" {Symbol ","}* ")" -> Symbols {reject}
-
-  restrictions
-    <Sort -CF>
-    <UQLiteral -CF>
-    "aliases"
-    "lexical"
-    "priorities"
-    "context-free"
-    "definition"
-    "syntax"
-    "variables"
-    "module"
-    "imports"
-    "exports"
-    "hiddens"
-    "left"
-    "right"
-    "assoc"
-    "non-assoc"
-    "bracket"
-    "sorts"             -/- [A-Za-z0-9]
-    <NatCon -CF>        -/- [0-9]
-    <LAYOUT?-CF>        -/- [\ \t\n\%]
-    <NumChar -CF>       -/- [0-9]
-    <ModuleName -CF>    -/- [A-Za-z0-9\_\-]
-
-exports
-  context-free start-symbols
-    SDF Module
 module languages/sdf2/syntax/Sdf2-Syntax
 
 imports languages/sdf2/syntax/Kernel
@@ -526,7 +414,76 @@ exports
 
   context-free priorities
     Symbol "|" Symbol  -> Symbol >
-    Literal ":" Symbol -> Symbol                  
+    Label ":" Symbol -> Symbol                  
+%%% $Id$
+
+module languages/sdf2/syntax/Sdf2
+
+imports languages/sdf2/syntax/Sdf2-Syntax
+
+exports
+  lexical syntax
+    "LAYOUT"            -> Sort    {reject}
+
+  context-free syntax
+    "aliases"           -> ModuleName {reject}
+    "lexical"           -> ModuleName {reject}
+    "priorities"        -> ModuleName {reject}
+    "context-free"      -> ModuleName {reject}
+    "definition"        -> ModuleName {reject}
+    "syntax"            -> ModuleName {reject}
+    "variables"         -> ModuleName {reject}
+    "module"            -> ModuleName {reject}
+    "imports"           -> ModuleName {reject}
+    "exports"           -> ModuleName {reject}
+    "hiddens"           -> ModuleName {reject}
+    "left"              -> ModuleName {reject}
+    "right"             -> ModuleName {reject}
+    "assoc"             -> ModuleName {reject}
+    "non-assoc"         -> ModuleName {reject}
+    "bracket"           -> ModuleName {reject}
+    "sorts"             -> ModuleName {reject}
+    "bracket"           -> ModuleName {reject}
+    "sorts"             -> ModuleName {reject}
+    "restrictions"      -> ModuleName {reject}
+
+     StrCon "(" arguments:{Symbol ","}* ")" -> Symbols {reject}
+
+     Associativity -> Label   {reject}
+     Associativity -> ATermAttribute {reject}
+     "reject"      -> ATermAttribute {reject}
+     "prefer"      -> ATermAttribute {reject}
+     "avoid"       -> ATermAttribute {reject}
+     "bracket"     -> ATermAttribute {reject}
+     "id" "(" ModuleName ")" -> ATermAttribute {reject}
+
+  restrictions
+    <Sort -CF>
+    "aliases"
+    "lexical"
+    "priorities"
+    "context-free"
+    "definition"
+    "syntax"
+    "variables"
+    "module"
+    "imports"
+    "exports"
+    "hiddens"
+    "left"
+    "right"
+    "assoc"
+    "non-assoc"
+    "bracket"
+    "sorts"             -/- [A-Za-z0-9]
+    <NatCon -CF>        -/- [0-9]
+    <LAYOUT?-CF>        -/- [\ \t\n\%]
+    <NumChar -CF>       -/- [0-9]
+    <ModuleName -CF>    -/- [A-Za-z0-9\_\-]
+
+exports
+  context-free start-symbols
+    SDF Module
 %%% $Id$
                        
 module languages/sdf2/syntax/Sorts
@@ -536,8 +493,9 @@ imports languages/sdf2/syntax/Kernel
 exports
   sorts Sort
   lexical syntax
-    [A-Z]                          -> Sort {cons("one-char")}
-    [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort {cons("more-chars")}
+    head:[A-Z]                          -> Sort {cons("one-char")}
+    head:[A-Z] middle:[A-Za-z0-9\-]* last:[A-Za-z0-9] -> Sort 
+	{cons("more-chars")}
 
   context-free syntax
     Sort                                    -> Symbol  {cons("sort")}
@@ -552,10 +510,7 @@ module languages/sdf2/syntax/Start-Symbols
 imports languages/sdf2/syntax/Kernel
 
 exports
-  %% sorts StartSymbol
-
   context-free syntax
-    %%Symbol Attribute -> StartSymbol
   
     "start-symbols" Symbols                -> Grammar {cons("kernel-start-symbols")} 
     "lexical" "start-symbols" Symbols      -> Grammar {cons("lexical-start-symbols")}
@@ -578,9 +533,53 @@ module basic/Whitespace
 
 exports
   lexical syntax
-    [\ \t\n\r]	-> LAYOUT
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
   context-free restrictions
     LAYOUT? -/- [\ \t\n\r]
+module basic/StrCon
+
+exports
+
+sorts StrCon StrChar
+
+lexical syntax
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> StrChar {cons("decimal")}
+    ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
+
+    [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("default")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
+module basic/IdentifierCon
+
+exports
+
+sorts IdCon
+
+lexical syntax
+
+head:[A-Za-z] tail:[A-Za-z\-0-9]* -> IdCon {cons("default")}
+
+lexical restrictions
+
+IdCon -/- [A-Za-z\-0-9]
+
 module basic/Comments
 
 imports
@@ -588,7 +587,7 @@ imports
 
 exports
   lexical syntax
-    "%%" ~[\n]* "\n"	-> LAYOUT
-    "%" ~[\%\n]+ "%"	-> LAYOUT
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested")}
   context-free restrictions
     LAYOUT? -/- [\%]

@@ -1,5 +1,6 @@
 #include "SDFME-utils.h"
 #include "module-table.h"
+#include <MEPT-utils.h>
 #include <assert.h>
 #include <aterm2.h>
 #include <atb-tool.h>
@@ -741,10 +742,8 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
     SDF_ImportList imports = do_get_transitive_imports(module);
 
     if (imports_contains_id(imports, moduleId)) {
-      char *str = SDF_getModuleIdString(module);
-      ATerm mid = ATmake("<str>", str);
+      ATerm mid = ATmake("<str>", PT_yieldTree((PT_Tree) moduleId));
       dependingModules = ATinsert(dependingModules, mid);
-      free(str);
     }
   }
 

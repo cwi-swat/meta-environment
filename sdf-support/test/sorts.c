@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #include <SDFME-utils.h>
+#include <MEPT-utils.h>
 
 #define TEST_GRAMMAR_FILE SRC_DIR "/Booleans.pt"
 
@@ -30,7 +31,7 @@ int testSorts(void)
 
   symbol = SDF_getSymbolListHead(sorts);
   sort   = SDF_getSymbolSort(symbol);
-  str    = SDF_getSortString(sort);
+  str    = PT_yieldTree((PT_Tree) sort);
 
   assert(strcmp(str, "PICO-BOOL") == 0);
 

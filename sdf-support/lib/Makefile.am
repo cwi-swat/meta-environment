@@ -37,7 +37,12 @@ UTILSRCS = \
 LIBRARY = ../../asf-library/library
 ATERM_SDF = $(shell ls ${LIBRARY}/languages/aterm/syntax/*.sdf)
 SDF2_SDF = $(shell ls ${LIBRARY}/languages/sdf2/syntax/*.sdf)
-BASIC_SDF = ${LIBRARY}/basic/Whitespace.sdf ${LIBRARY}/basic/Comments.sdf
+BASIC_SDF = \
+	${LIBRARY}/basic/Whitespace.sdf \
+	${LIBRARY}/basic/StrCon.sdf \
+	${LIBRARY}/basic/NatCon.sdf \
+	${LIBRARY}/basic/IdentifierCon.sdf \
+	${LIBRARY}/basic/Comments.sdf
 
 
 # Developers only:

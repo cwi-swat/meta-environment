@@ -1,5 +1,12 @@
 $Id$
 
+Fri Dec 17 15:46:43 CET 2004 <jurgenv@cwi.nl>
+ * Regenerated sdf API with structured lexicals.
+ * Transformed SDFME-utils to deal with the changes. This means
+   a number of functions have been added that parse strings and
+   construct things like quoted literals, sort names, modulenames etc.
+ * Dealt with structured lexicals in the utils directory too.
+
 Fri Aug 27 14:52:49 CEST 2004 <jong@cwi.nl>
  * refactor to use new PT_yield functions in MEPT API
 

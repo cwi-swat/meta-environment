@@ -1,14 +1,14 @@
 #include "SDFME-utils.h"
+#include "MEPT-utils.h"
+#include <assert.h>
+#include <ctype.h>
 
 /*{{{  ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName) */
 
 ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
 {
   SDF_ModuleId modid = SDF_getModuleNameModuleId(moduleName);
-  char *lex = SDF_getModuleIdString(modid);
-  ATerm result = ATmake("<str>", lex);
-
-  free(lex);
+  ATerm result = ATmake("<str>", PT_yieldTree((PT_Tree) modid));
 
   return result;
 }
@@ -118,7 +118,7 @@ SDF_OptLayout SDF_makeLayoutEmpty()
 
 SDF_OptLayout SDF_makeLayoutSpace()
 {
-  return SDF_makeOptLayoutPresent(" ");
+  return SDF_makeOptLayoutPresent(SDF_makeLayoutLexToCf(SDF_makeLexLayoutListSingle(SDF_makeLexLayoutWhitespace(' '))));
 }
 
 /*}}}  */
@@ -126,7 +126,7 @@ SDF_OptLayout SDF_makeLayoutSpace()
 
 SDF_OptLayout SDF_makeLayoutNewline()
 {
-  return SDF_makeOptLayoutPresent("\n");
+  return SDF_makeOptLayoutPresent(SDF_makeLayoutLexToCf(SDF_makeLexLayoutListSingle(SDF_makeLexLayoutWhitespace('\n'))));
 }
 
 /*}}}  */
@@ -188,6 +188,93 @@ SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l)
   else {
     return SDF_makeSymbolListMany(r, SDF_makeLayoutSpace(), l);
   }
+}
+
+/*}}}  */
+
+
+/*{{{  SDF_LexStrCon SDF_makeLexStrCon(const char* str) */
+
+SDF_LexStrCon SDF_makeLexStrCon(const char* str)
+{
+  int len = strlen(str);
+  int i;
+  SDF_LexStrCharChars list = SDF_makeLexStrCharCharsEmpty();
+
+  for (i = len - 1; i >= 0; i--) {
+    SDF_LexStrChar ch;
+
+    switch(str[i]) {
+      case '\n':
+	ch = SDF_makeLexStrCharNewline();
+	break;
+      case '\t':
+	ch = SDF_makeLexStrCharTab();
+	break;
+      case '"':
+	ch = SDF_makeLexStrCharQuote();
+	break;
+      case '\\':
+	ch = SDF_makeLexStrCharBackslash();
+	break;
+      default:
+	if (isprint(str[i])) {
+	  ch = SDF_makeLexStrCharNormal(str[i]);
+	}
+	else {
+	  int value = str[i];
+	  int a, b, c;
+
+	  c = value % 10;
+	  value /= 10;
+	  b = value % 10;
+	  value /= 10;
+	  a = value;
+
+	  ch = SDF_makeLexStrCharDecimal(a,b,c);
+	}
+    }
+
+    list = SDF_makeLexStrCharCharsMany(ch, list);
+  }
+
+
+  return SDF_makeLexStrConDefault(list);
+}
+
+/*}}}  */
+/*{{{  SDF_QLiteral SDF_makeQLiteral(const char *str)  */
+
+SDF_StrCon SDF_makeStrCon(const char *str) 
+{
+  return SDF_makeStrConLexToCf(SDF_makeLexStrCon(str));
+}
+
+/*}}}  */
+
+/*{{{  SDF_Sort SDF_makeSort(const char *str) */
+
+SDF_Sort SDF_makeSort(const char *str)
+{
+  SDF_LexSort lex;
+
+  if (strlen(str) == 1) {
+    lex = SDF_makeLexSortOneChar(str[0]);
+  }
+  else if (strlen(str) > 1) {
+    char *tmp = strdup(str);
+    char head = str[0];
+    char last = str[strlen(str) - 1];
+    tmp[strlen(str) - 1] = '\0';
+
+    lex = SDF_makeLexSortMoreChars(head, tmp+1, last);
+  }
+  else {
+    assert("str has length 0");
+    return NULL;
+  }
+ 
+  return SDF_makeSortLexToCf(lex); 
 }
 
 /*}}}  */

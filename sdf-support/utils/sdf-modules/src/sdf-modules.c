@@ -10,6 +10,7 @@
 #include <limits.h>
 
 #include <SDFME-utils.h>
+#include <MEPT-utils.h>
 #include "sdf-modules.tif.h"
 #include "sdf-imports.h"
 #include "plain-imports.h"
@@ -71,7 +72,7 @@ ATerm get_all_needed_module_names(int cid, ATerm pairs, const char* name)
 ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name) 
 {
   ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(name);
+  SDF_ModuleId id = SDF_makeModuleId(name);
   SDF_ImportList imports;
  
   imports = SI_getTransitiveImports(list, id);
@@ -124,8 +125,9 @@ ATerm get_module_id(int cid, ATerm atModule)
 {
   SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module module = SDF_getStartTopModule(start);
+  SDF_ModuleId id = SDF_getModuleName(module);
 
-  return ATmake("snd-value(module-id(<str>))", SDF_getModuleName(module));
+  return ATmake("snd-value(module-id(<str>))", PT_yieldTree((PT_Tree) id));
 }
 
 /*}}}  */
@@ -379,6 +381,7 @@ int main(int argc, char *argv[])
 
   ATBinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
+  PT_initMEPTApi();
 
   cid = ATBconnect(NULL, NULL, -1, sdf_modules_handler);
 

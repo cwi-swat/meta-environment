@@ -28,6 +28,7 @@ pt2sdf_LDADD = \
 
 LDLIBS = \
 	-L../lib -lSDFME \
+	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ATERM)/lib -lATerm
 
 grammars_SOURCES = grammars.c

@@ -51,7 +51,7 @@ static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr)
     SDF_ModuleId sdfModuleId;
     SDF_ModuleName sdfModuleName;
 
-    sdfModuleId = SDF_makeModuleIdWord(str);
+    sdfModuleId = SDF_makeModuleId(str);
     sdfModuleName = SDF_makeModuleNameUnparameterized(sdfModuleId);
 
     result = SDF_makeAttributeId(SDF_makeLayoutEmpty(),
@@ -131,49 +131,6 @@ static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes)
 
 /*}}}  */
 
-
-/*{{{  char* escape(const char* str, const char* escaped_chars, QuotedOption quoted) */
- 
-typedef enum { QUOTED, UNQUOTED } QuotedOption;
-
-static char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
-{
-  int i,j,e;
-  int len = strlen(str);
-  char *escaped = (char*) malloc(2 * len * sizeof(char) + (quoted ? 2 : 0) + 1);
- 
-  if (escaped == NULL) {
-    ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
-    return NULL;
-  }
- 
-  i = 0;
-  j = 0;
- 
-  if (quoted == QUOTED) {
-    escaped[j++] = '\"';
-  }
- 
-  for (; i < len; i++, j++) {
-    for (e = 0; escaped_chars[e]; e++) {
-      if (str[i] == escaped_chars[e]) {
-        escaped[j++] = '\\';
-      }
-    }
-    escaped[j] = str[i];
-  }
- 
-  if (quoted == QUOTED) {
-    escaped[j++] = '\"';
-  }
- 
-  escaped[j] = '\0';
- 
-  return escaped;
-}
- 
-/*}}}  */
-
 /*{{{  static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol) */
 
 SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
@@ -182,9 +139,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 
   if (PT_isSymbolLit(ptSymbol)) {
     char *str = PT_getSymbolString(ptSymbol);
-    char *qstr = escape(str, "\"\\", QUOTED);
-    SDF_Literal lit = SDF_makeLiteralQlit(SDF_makeQLiteralQuoted(qstr));
-    free(qstr);
+    SDF_StrCon lit = SDF_makeStrCon(str);
 
     result = SDF_makeSymbolLit(lit);
   }
@@ -246,7 +201,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
   }
   else if (PT_isSymbolSort(ptSymbol)) {
     char *str = PT_getSymbolSort(ptSymbol);
-    SDF_Sort sort = SDF_makeSortMoreChars(str);
+    SDF_Sort sort = SDF_makeSort(str);
 
     result = SDF_makeSymbolSort(sort);
   }
@@ -281,39 +236,6 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
                                        sdfSep,
                                        SDF_makeLayoutEmpty(),
                                        SDF_makeLayoutEmpty());
-  }
-  else if (PT_isSymbolIterN(ptSymbol)) { 
-    char str[BUFSIZ];
-    SDF_Symbol sdfSymbol = PTSymbolToSDFSymbol(PT_getSymbolSymbol(ptSymbol));
-    int nr = PT_getSymbolNumber(ptSymbol);
-    SDF_NatCon sdfNatCon;
-    sprintf(str, "%d", nr);
-    
-    sdfNatCon = SDF_makeNatConDigits(str);
-
-    result = SDF_makeSymbolIterN(sdfSymbol, 
-                                 SDF_makeLayoutSpace(),
-                                 sdfNatCon,
-                                 SDF_makeLayoutEmpty());
-  }
-  else if (PT_isSymbolIterSepN(ptSymbol)) { 
-    char str[BUFSIZ];
-    SDF_Symbol sdfSymbol = PTSymbolToSDFSymbol(PT_getSymbolSymbol(ptSymbol));
-    SDF_Symbol sdfSep = PTSymbolToSDFSymbol(PT_getSymbolSeparator(ptSymbol));
-    int nr = PT_getSymbolNumber(ptSymbol);
-    SDF_NatCon sdfNatCon;
-    sprintf(str, "%d", nr);
-    
-    sdfNatCon = SDF_makeNatConDigits(str);
-
-    result = SDF_makeSymbolIterSepN(SDF_makeLayoutEmpty(),
-                                    sdfSymbol, 
-                                    SDF_makeLayoutSpace(),
-                                    sdfSep,
-                                    SDF_makeLayoutEmpty(),
-                                    SDF_makeLayoutEmpty(),
-                                    sdfNatCon,
-                                    SDF_makeLayoutEmpty());
   }
   else if (PT_isSymbolLayout(ptSymbol)) {
     ATabort("PTSymbolToSDFSymbol: layout.\n");
