@@ -39,28 +39,33 @@ in
     snd-eval(TE, edit-text("*reduct*", Text))
   ) .
   rec-value(TE, file-id(Fid?)) .
-  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse")) .
+  if not-equal(EditorType, "term") then
+    snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse"))
+  else
+    snd-msg(get-auxilary-buttons(EditorType, ModuleName)) .
+    rec-msg(button-list(ModuleName, ButtonList?)) .
+    (
+      if not-equal(ButtonList, []) then
+        ButtonName := first(ButtonList) .
+        snd-do(TE, tb-add-menu-item("Term-Actions", ButtonName)) .
+        ButtonList := next(ButtonList)
+      fi
+    )*
+    if equal(ButtonList, []) then
+      tau
+    fi
+  fi .
+/*
   if equal(EditorType, "term") then
     snd-do(TE, tb-add-menu-item("Meta-Environment", "Reduce"))
   else
     tau
   fi .
+*/
   snd-do(TE, tb-add-menu-item("Move", "Left")) .
   snd-do(TE, tb-add-menu-item("Move", "Right")) .
   snd-do(TE, tb-add-menu-item("Move", "Up")) .
   snd-do(TE, tb-add-menu-item("Move", "Down")) .
-  snd-msg(get-auxilary-buttons(EditorType, ModuleName)) .
-  rec-msg(button-list(ModuleName, ButtonList?)) .
-  (
-    if not-equal(ButtonList, []) then
-      ButtonName := first(ButtonList) .
-      snd-do(TE, tb-add-menu-item("Extra-Meta", ButtonName)) .
-      ButtonList := next(ButtonList)
-    fi
-  )*
-  if equal(ButtonList, []) then
-    tau
-  fi .
   (
     rec-msg(set-focus(EditorId,
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
@@ -115,9 +120,9 @@ in
     snd-msg(move-focus(EditorId, Direction)) .
     snd-ack-event(TE, menu-event("Move", Direction, Fid))
   +
-    rec-event(TE, menu-event("Extra-Meta", ButtonName?, Fid)) .
+    rec-event(TE, menu-event("Term-Actions", ButtonName?, Fid)) .
     snd-msg(extra-button-action(EditorId, ButtonName)) .
-    snd-ack-event(TE, menu-event("Extra-Meta", ButtonName, Fid))
+    snd-ack-event(TE, menu-event("Term-Actions", ButtonName, Fid))
   ) *
   (
     rec-disconnect(TE).

@@ -22,7 +22,7 @@ let
   Nonterminal  : str,
   Tree         : term,
   ModifiedStatus : term,
-  Msg          : term
+  Msg            : term
 in 
   execute(se, SE?) .
   (

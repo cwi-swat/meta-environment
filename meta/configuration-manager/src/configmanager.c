@@ -85,6 +85,11 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
     localButtons = ATgetNext(localButtons);
   }
 
+  if (strcmp(editortype, "term") == 0) {
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Reduce"));
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
+  }
+
   return ATmake("snd-value(button-names(<term>))", buttonNames);
 }
 
@@ -106,7 +111,21 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
     }
     localButtons = ATgetNext(localButtons);
   }
-
+  if (ATisEmpty(buttonActions)) {
+    if (strcmp(buttonName, "Parse") == 0) {
+      buttonActions = ATinsert(buttonActions, 
+                               ATmake("parse-action(<str>)", moduleName));
+    }
+    if (strcmp(buttonName, "Reduce") == 0) {
+      buttonActions = ATinsert(buttonActions, 
+                               ATmake("activate-editor(<str>,\"reduct.out\")",
+                                      moduleName));
+      buttonActions = ATinsert(buttonActions, 
+                               ATmake("reduce-action(<str>)", moduleName));
+      buttonActions = ATinsert(buttonActions, 
+                               ATmake("get-tree-action(<str>)", moduleName));
+    }
+  }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
 }
 

@@ -1,5 +1,10 @@
 # $Id$
 
+2002/05/08 (markvdb@cwi.nl)
+ * Replaced the fixed "parse" and "reduce" button by the
+   new button mechanism.
+ * "Meta-Environment" ==> "Term-Actions"
+
 2002/05/08 (jurgenv@cwi.nl)
  * Added check on module name consistency
  * Support for compound module names improved (not done yet, because

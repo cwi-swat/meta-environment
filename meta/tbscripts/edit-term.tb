@@ -24,54 +24,6 @@ in
   )  
 endlet
 
-process ReduceTerm(EditorId: term, ModuleName: str) is
-let
-  Id          : int,
-  Text        : str,
-  Path        : str,
-  Tree        : term,
-  NormalForm  : term,
-  FileName    : term,
-  ErrList     : list,
-  Equations   : term,
-  Table       : term
-in
-  Id := process-id .
-  snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  snd-msg(process-eqs(ModuleName)) .
-  rec-msg(eqs-processed(ModuleName)) .
-  snd-msg(get-all-equations(ModuleName)) .
-  (
-    rec-msg(all-equations(Equations?)) .
-    snd-note(ui-status(endstat(Id))).
-
-    snd-note(ui-status(stat(Id, "Rewriting"))) .
-    snd-msg(get-tree(EditorId)) . 
-    rec-msg(tree(Tree?)) .
-    snd-msg(rewrite(ModuleName, Equations, Tree)).
-    (
-      rec-msg(rewrite-result(NormalForm?)) .
-      snd-msg(unparse(NormalForm)) .
-      rec-msg(unparsed-text(Text?)) .
-
-      %% FIXME: improve using user-configuration.
-      FileName := "reduct.out" .
-
-      snd-msg(save-text-file(FileName, Text)) .
-      rec-msg(save-done(FileName)) .
-      snd-msg(edit-term-file-with-tree(ModuleName, FileName, NormalForm))
-    +
-      rec-msg(rewrite-errors(ErrList?)) .
-      snd-msg(display-rewrite-errors(ErrList))
-    ) .
-    snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(equations-incomplete) .
-    snd-note(ui-status(endstat(Id))).
-    snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
-  )
-endlet
-
 process ParseFile(FileName: str, ModuleName: str, Tree: term?) is
 let
   Id        : term,
@@ -183,12 +135,15 @@ endlet
 
 process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
 let 
-  Id          : int 
+  Id       : int,
+  TreeSort : str 
 in
   Id := process-id .
   snd-msg(check-tree-sort(Sort, Tree)) .
   ( 
-    rec-msg(sort-not-ok) .
+    rec-msg(wrong-sort(TreeSort?)) .
+    snd-note(ui-status(errorf("top sort %s of tree does not match %s", 
+                              [TreeSort, Sort]))) .
     RTree := error-tree
   +
     rec-msg(sort-ok) .
@@ -205,7 +160,7 @@ in
   rec-msg(tree(RTree?))
 endlet
 
-process PlainReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
+process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
   Id          : int,
   ErrList     : list,
@@ -249,12 +204,14 @@ let
   TimeStamp   : term
 in
   Id := process-id .
-  snd-msg(unparse(Tree)) . 
-  rec-msg(unparsed-text(Text?)) .
+  if not-equal(Tree, error-tree) then
+    snd-msg(unparse(Tree)) . 
+    rec-msg(unparsed-text(Text?)) .
  
-  snd-msg(save-text-file(FileName, Text)) .
-  rec-msg(save-done(FileName)) .
-  snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
+    snd-msg(save-text-file(FileName, Text)) .
+    rec-msg(save-done(FileName)) .
+    snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
+  fi
 endlet
 
 process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
@@ -293,30 +250,6 @@ in
       (
         rec-note(syntax-changed(ModuleName)) .
         snd-msg(invalidate-tree(EditorId))
-      +
-        rec-msg(parse-focus(EditorId)) .
-        ParseTerm(EditorId, ModuleName) 
-      +
-        rec-msg(parse-buffer(EditorId)) .
-        snd-msg(invalidate-tree(EditorId)) .
-        ParseTerm(EditorId, ModuleName)
-      +
-        rec-msg(reduce(EditorId)) .
-        snd-msg(get-dirty-focuses(EditorId)) .
-        rec-msg(dirty-focuses(DirtyFoci?)) .
-        if equal(DirtyFoci, []) then
-          ReduceTerm(EditorId, ModuleName)
-        else
-          snd-msg(invalidate-tree(EditorId)) .
-          ParseTerm(EditorId, ModuleName) .
-	  snd-msg(get-dirty-focuses(EditorId)) .
-	  rec-msg(dirty-focuses(DirtyFoci?)) . 
-	  if equal(DirtyFoci, []) then
-            ReduceTerm(EditorId, ModuleName)
-          else 
-            tau
-          fi
-        fi
       +
         rec-msg(extra-button-action(EditorId, ButtonName?)) .
         snd-msg(get-dirty-focuses(EditorId)) .
@@ -357,6 +290,11 @@ in
           snd-msg(error-stack)
         fi
       +
+        rec-msg(parse-action(NewModName?), Stack?) .
+        snd-msg(invalidate-tree(EditorId)) .
+        ParseTerm(EditorId, NewModName) .
+        snd-msg(stack(Stack))
+      +
         rec-msg(get-tree-action(NewModName?), Stack?) .
         GetTree(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
@@ -395,7 +333,7 @@ in
         rec-msg(reduce-action(NewModName?), Stack?) .
         STree := first(Stack) .
         Stack := next(Stack) .
-        PlainReduceTerm(STree, NewModName, RTree?) .
+        ReduceTerm(STree, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))

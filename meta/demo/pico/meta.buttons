@@ -114,6 +114,18 @@ buttons([
 
   button("Pico-Booleans",
           "term",
+          "Reduce2",
+          [get-tree-action("Pico-Booleans"),
+           reduce-action("Pico-Booleans"),
+           activate-editor("Pico-Booleans", "reduct.out")]),
+
+  button("Pico-Booleans",
+          "term",
+          "Parse2",
+          [parse-action("Pico-Booleans")]),
+
+  button("Pico-Booleans",
+          "term",
           "ReduceFocus",
           [get-focus-action("Pico-Booleans"),
            reduce-action("Pico-Booleans"),
