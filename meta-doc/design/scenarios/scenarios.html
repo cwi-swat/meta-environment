@@ -24,7 +24,8 @@ Sofar, we have developed scenarios for the following tasks:
 	a Module</A>
 <LI> <A HREF="#UpdatingEquations">Scenario for Updating the Equations of
 	a Module</A>
-<LI> <A HREF="#Shutdown">Scenario for shutting down the system</A>
+<LI> <A HREF="#RewritingTerms">Scenario for Reducing Terms</A>
+<LI> <A HREF="#Shutdown">Scenario for Shutting down the System</A>
 </UL>
 
 
@@ -166,8 +167,9 @@ should also be able to change terms.
 
 
 Some components in the system can change the syntax of a module. 
-The most prominent one is the <EM>hybrid editor</EM>, that can be used
-to edit the SDF definition of a module. But in the future other components
+The most prominent one is the <EM>hybrid editor</EM> and
+the <EM>control tool</EM>, that can be used
+to edit the Sdf definition of a module. But in the future other components
 should also be able to change the syntax of modules.
 
 <OL>
@@ -206,7 +208,72 @@ to change the equations of a module.
      assigned to the equations.
 </OL>
 
-<H2><A NAME="Shutdown">Scenario for Shutting Down the System,</A></H2>
+<A NAME="RewritingTerms">
+<H2>Scenario for Reducing Terms</H2>
+</A>
+Case: a user wants to reduce a term over a certain module, this action will
+be activated by pressing, e.g., the "Reduce"-button on a <EM>term editor</EM>.
+<OL>
+<LI> After indication by the user, it is first checked by
+the <EM>term editor</EM> whether the term must be parsed.
+<LI> If the text must be parsed a parse request is generated, see
+<A HREF="#ParsingTerms">scenario for parsing terms</A>.
+<LI> The <EM>term editor</EM> generates then a rewrite request, unless
+the text in the editor could not be parsed.
+This rewrite request contains the term, a unique identification for
+it (URL?), and the name of
+the module over which the text has to be rewritten.
+<LI> The <EM>interpreter</EM> intercepts this request and check if it
+already has the equations for this module.
+<LI> The <EM>interpreter</EM> generates a requesting the most up-to-date
+equations for the given top module. This request contains a list
+of version numbers for the modules on which the old equations were based.
+<LI> The <EM>module database</EM> intercepts the request for the
+new equations, and checks if it is up-to-date.
+If not, the <EM>module database</EM> retrieves the newest equations
+for the given top module and sends it back.
+<LI> The <EM>interpreter</EM> now knows it has the correct equations,
+so it rewrites the term.
+<LI> The normal form containing an unique identification of the term is
+generated.
+<LI> The unparser intercepts this normal form and updates the layout, see
+<A NAME="Unparser">scenario for unparsing terms</A>.
+<LI> The term database intercepts the "unparsed" normal form, stores
+the term with the unique identification in its database, and creates
+a new term editor to visualize the textual representation of the term.
+</OL>
+
+<A NAME="Compile">
+<H2>Scenario for Compiling Specifications</H2>
+</A>
+Case: a user wants to compile a specification.
+<OL>
+<LI> The <EM>control tool</EM> generates a request to compile a specification.
+This request contains the name of the module for
+which the C executable must be build.
+<LI> The <EM>module database</EM> intercepts this request,
+the module database calculates the transitive closure of the import relation
+and uses this result to retrieve the needed modules. 
+Given this set of modules a reshuffling of functions and equations is performed
+<EM>all</EM> equations with the same outermost function symbol are moved
+to a new unique module together with the corresponding syntax function.
+<LI> The <EM>module database</EM> generates a number of compile module
+request containing the new created modules.
+<LI> The <EM>compiler</EM> intercepts these requests.
+For each request the following actions are performed:
+<OL>
+<LI> It checks whether for the given module the C code already exists.
+<LI> If so, this module can be ignored.
+<LI> If not, the C code must be generated and the module and the C code
+are stored on disk.
+</OL>
+<LI> When all compile requests are handled, a compile ready note is 
+broadcasted.
+</OL>
+
+<A NAME="Shutdown">
+<H2>Scenario for Shutting Down the System</H2>
+</A>
 
 Shutting down a distributed system is not trivial. Some components might
 have changed data that must be saved, and sometimes confirmation from
