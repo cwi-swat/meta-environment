@@ -45,6 +45,7 @@ extern AFun afun_right_prio;
 extern AFun afun_assoc_prio;
 extern AFun afun_non_assoc_prio;
 extern AFun afun_gtr_prio;
+extern AFun afun_arg_gtr_prio;
 extern AFun afun_lit;
 
 extern ATerm eof_token;

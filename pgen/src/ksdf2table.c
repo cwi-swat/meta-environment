@@ -6,6 +6,7 @@
 #include <aterm2.h>
 
 #include "ksdf2table.h" 
+#include "priorities.h" 
 #include "flatten.h"
 #include "statistics.h"
 #include "characters.h"
@@ -516,27 +517,26 @@ static ATerm process_priorities(SDF_PriorityList prios)
 
 /* Calculate the transitive closure of the chain priorities */
   for (localIdx1=0; localIdx1<=max_idx; localIdx1++) {    
-    ATermAppl prioentry1 = 
-      (ATermAppl)ATindexedSetGetElem(priority_table, localIdx1);
-    ATerm rightnr1 = ATgetArgument(prioentry1, 1);
+    ATerm prioentry1 = ATindexedSetGetElem(priority_table, localIdx1);
+    ATerm rightnr1 = getPrioRight(prioentry1);
 
     for (localIdx2=0; localIdx2<=max_idx; localIdx2++) {    
-      ATermAppl prioentry2 = 
-                  (ATermAppl)ATindexedSetGetElem(priority_table, localIdx2);
-      ATerm leftnr2 = ATgetArgument(prioentry2, 0);
+      ATerm prioentry2 = ATindexedSetGetElem(priority_table, localIdx2);
+      ATerm leftnr2 = getPrioLeft(prioentry2);
 
-      if (ATisEqual(rightnr1, leftnr2)) {
-        ATerm leftnr1 = ATgetArgument(prioentry1, 0);
-        ATerm rightnr2 = ATgetArgument(prioentry2, 1);
-        prioentry = (ATerm)ATmakeAppl2(afun_gtr_prio, 
-                                       leftnr1, rightnr2);
-        idx = ATindexedSetPut(priority_table, prioentry, &isnew);
-        if (isnew) {
-          if (idx > max_idx) {
-            max_idx = idx;
-          } 
-	  prioentries = ATinsert(prioentries, prioentry);
-	  cnt++;
+      if (!isPrioArgument(prioentry2)) {
+        if (ATisEqual(rightnr1, leftnr2)) {
+          ATerm rightnr2 = getPrioRight(prioentry2);
+
+          prioentry = setPrioRight(prioentry1, rightnr2);
+          idx = ATindexedSetPut(priority_table, prioentry, &isnew);
+          if (isnew) {
+            if (idx > max_idx) {
+              max_idx = idx;
+            } 
+	    prioentries = ATinsert(prioentries, prioentry);
+	    cnt++;
+          }
         }
       }
     }
