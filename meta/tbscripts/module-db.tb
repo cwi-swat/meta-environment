@@ -98,17 +98,17 @@ in
     snd-msg(module-db-cleared)
   +
     rec-msg(delete-module-from-db(Name?)).
-    MDB-GetAllDependingModules(Name, DependingModules?) .
+    GetDependingModules(Name, DependingModules?) .
     MDB-RemoveImportFromModules(Name, DependingModules) .
     snd-msg(ts-remove-value-from-all-tables(Name)) .
     snd-msg(changed-modules(DependingModules))
   +
-    rec-msg(close-module-in-db(Name?)) .
-    MDB-GetAllDependingModules(Name, DependingModules?) .
-    MDB-InvalidateModule(Name, sdf) .
-    MDB-InvalidateModules(DependingModules, sdf) .
-    snd-msg(ts-remove-value-from-all-tables(Name)) .
-    snd-msg(changed-modules(DependingModules))
+    rec-msg(close-module-in-db(Name?))
+    . GetDependingModules(Name, DependingModules?)
+    . MDB-InvalidateModule(Name, sdf)
+    . MDB-InvalidateModules(DependingModules, sdf)
+    . snd-msg(ts-remove-value-from-all-tables(Name))
+    . snd-msg(module-closed(Name))
   +
     rec-msg(is-module-in-db(Name?)) .
     snd-msg(ts-contains-key("module-path", Name)) .
@@ -251,10 +251,6 @@ in
       snd-msg(no-table)
     )
   +
-    rec-msg(get-all-depending-modules(Name?)).
-    MDB-GetAllDependingModules(Name, DependingModules?) .
-    snd-msg(all-depending-modules(DependingModules))
-  +
     rec-msg(get-all-imported-module-names(Name?)).
     MDB-GetAllImportedModulenames(Name, Modulenames?) .
     snd-msg(all-imported-module-names(Modulenames))
@@ -352,7 +348,7 @@ in
     )
   +
     rec-msg(invalidate-parse-tables(Name?)).
-    MDB-GetAllDependingModules(Name, DependingModules?) .
+    GetDependingModules(Name, DependingModules?) .
     MDB-InvalidateModule(Name, sdf) .
     MDB-InvalidateModules(DependingModules, sdf)
   +
@@ -414,17 +410,6 @@ in
   snd-msg(ts-put-str-value("extensions", "term", TermExt))
 endlet
  
-process MDB-GetAllDependingModules(Name : str, DependingModules : list?) is
-let
-  Pairs : list
-in
-    snd-msg(ts-get-key-value-pairs("import-relations")) .
-    rec-msg(ts-pairs(Pairs?)) .
-    snd-msg(sm-get-all-depending-module-names(Pairs, Name)) .
-    Pairs := [] .
-    rec-msg(sm-all-depending-module-names(DependingModules?)) 
-endlet
-
 process MDB-GetDependingModules(Name : str, DependingModules : list?) is
 let
   Pairs : list
@@ -472,7 +457,7 @@ in
   snd-msg(sm-get-imported-module-names(Syntax)) .
   rec-msg(sm-imported-module-names(Modules?)) .
   snd-msg(ts-put-term-value("import-relations", Name, Modules)) .
-  MDB-GetAllDependingModules(Name, Modules?) .
+  GetDependingModules(Name, Modules?) .
   MDB-InvalidateModule(Name, sdf) .
   MDB-InvalidateModules(Modules, sdf)
 endlet
@@ -526,7 +511,7 @@ let
   Syntax : term,
   Tree : term
 in
-  MDB-GetAllDependingModules(OldName, Modules?) .
+  GetDependingModules(OldName, Modules?) .
   Changed := [] .
   if not(equal(Modules,[])) then
     Module := first(Modules) .
@@ -645,11 +630,23 @@ in
 endlet
 
 process MDB-InvalidateModule(Module : str, Type : term) is
-  snd-msg(ts-remove-value("asf-tree", Module)) .
-  snd-msg(ts-remove-value("asf-parse-table", Module)) .
-  snd-msg(ts-remove-value("term-parse-table", Module)) .
-  snd-msg(invalidate-other-tables-hook(Module, Type)) .
-  rec-msg(other-tables-invalidated-hook)
+let
+  Directory: str,
+  Extension: str,
+  Path: str
+in
+  snd-msg(ts-get-str-value("module-path", Module))
+  . rec-msg(ts-value(Directory?))
+  . snd-msg(file-extension-hook(Type))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . BuildPath(Directory, Module, Extension, Path?)
+  . snd-msg(ts-remove-value("path-modulename", Path))
+  . snd-msg(ts-remove-value("asf-tree", Module))
+  . snd-msg(ts-remove-value("asf-parse-table", Module))
+  . snd-msg(ts-remove-value("term-parse-table", Module))
+  . snd-msg(invalidate-other-tables-hook(Module, Type))
+  . rec-msg(other-tables-invalidated-hook)
+endlet
 
 process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
   MDB-AddPosInfo(Module, sdf, In, Out?)
@@ -676,6 +673,6 @@ process MDB-InvalidateEntry(Name : str, Text : str, DependingModules : list?) is
   snd-msg(ts-put-str-value("sdf-text", Name, Text)) .
   snd-msg(ts-remove-value("sdf-tree", Name)) .
   snd-msg(ts-put-term-value("import-relations", Name, [])) .
-  MDB-GetAllDependingModules(Name, DependingModules?) .
+  GetDependingModules(Name, DependingModules?) .
   MDB-InvalidateModule(Name, sdf) .
   MDB-InvalidateModules(DependingModules, sdf)

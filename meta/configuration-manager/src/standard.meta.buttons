@@ -15,9 +15,9 @@ configuration([
 	   dup,
 	   push-term(yes),
 	   if-equal([pop,
-		     close-module(recursive)], 
+		     close-module(true)], 
 		    [push-term(no),
-		     if-equal([close-module(top)],
+		     if-equal([close-module(false)],
 		     [])])
 	   ]),
    button("*",

@@ -158,6 +158,7 @@ let
   Pid: int,
   PosInfo : term,
   Query : str,
+  Recursive: bool,
   RTree : term,
   Sid: term,
   SList	: list,
@@ -692,15 +693,11 @@ in
 	  . ReturnSuccess(EditorId, Stack)	
         fi
       + 
-	rec-msg(close-module(Mode?), Stack?, EditorId?) .
-	StackIsEmpty(Stack, Empty?) .
-	if equal(Empty, true) then
-	  ReturnSuccess(EditorId, Stack)
-        else
-          StackPopString(Stack,Stack?,Modulename?) .
-          snd-msg(close-module(Modulename, Mode)) .           
-	  ReturnSuccess(EditorId, Stack)	
-        fi
+	rec-msg(close-module(Recursive?), Stack?, EditorId?)
+	. StackPopString(Stack, Stack?, Modulename?)
+	. CloseModule(Modulename, Recursive)
+	. DrawImportGraph()
+	. ReturnSuccess(EditorId, Stack)
       + 
 	rec-msg(delete-module, Stack?, EditorId?) .
 	StackIsEmpty(Stack, Empty?) .

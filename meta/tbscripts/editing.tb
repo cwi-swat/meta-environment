@@ -298,10 +298,10 @@ let
 in
   snd-msg(em-get-sessions-by-modulename(Modulename))
   . rec-msg(em-sessions(Modulename, Sids?))
-  . printf("session ids: %t\n", Sids)
   .
   (
-    if not-equal(Sids, []) then
+    if not-equal(Sids, [])
+    then
       Sid := first(Sids)
       . DeleteSession(Sid)
       . Sids := next(Sids)

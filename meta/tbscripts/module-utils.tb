@@ -39,84 +39,106 @@ in
     . snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1])))
     . RevertModule(ModuleName1)
     . snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(close-module(ModuleName1?, Option1?)).
-    snd-note(ui-status(statf(Id, 
-             "Closing %s",[ModuleName1]))).
-    DoCloseModule(ModuleName1, Option1).
-    snd-note(ui-status(endstat(Id)))
-  ) *
+  )
+  *
   delta
 endlet
 
-process DoCloseModule(ModuleName : str, Recursive : term) is
+process CloseModule(ModuleId: str, Recursive: bool) is
 let
-  Status : term,
-  Changed : list
+  Changed: list,
+  Depending: list,
+  Id: int,
+  ToBeClosed: list
 in
-  Status := success.
-  if equal(Recursive,recursive) then
-    DoRecursiveCloseModule(ModuleName, Status?)
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Closing %s", [ModuleId])))
+  .
+  if equal(Recursive, quote(true))
+  then
+    ComputeModulesToBeClosed(ModuleId, ToBeClosed?)
+    .
+    if equal(ToBeClosed, [])
+    then
+      Error("Unable to close %s, it would break some import(s).", [ModuleId])
+    else
+      CloseModules(ToBeClosed)
+    fi
   else 
-    SoftCloseModuleInDB(ModuleName, Status?)
-  fi.
-  if not(equal(Status, success)) then
-    snd-note(ui-status(errorf("Module %s not closed because other modules depend on it", [ModuleName])))
-  else
-    DrawImportGraph()
+    GetDependingModules(ModuleId, Depending?)
+    .
+    if equal(Depending, [])
+    then
+      CloseModules([ModuleId])
+    else
+      Error("Unable to close %s, it would break the import of: %t",
+            [ModuleId, Depending])
+    fi
+  fi
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process CloseModules(ToBeClosed: list) is
+let
+  ModuleId: str,
+  Modules: list
+in
+  Modules := ToBeClosed
+  .
+  if not-equal(Modules, [])
+  then
+    ModuleId := first(Modules)
+    . DeleteSessions(ModuleId)
+    . snd-msg(close-module-in-db(ModuleId))
+    . rec-msg(module-closed(ModuleId))
+    . Modules := next(Modules)
+  fi
+  *
+  if equal(Modules, [])
+  then
+    tau
   fi
 endlet
 
-
-process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
+process GetDependingModules(ModuleId: str, DependingModules: list?) is
 let
-  TransitiveImports : list,
-  Runner : list,
-  StillNeededModules : list,
-  Import : str,
-  ToBeClosed : list
+  ImportRelations: list
 in
-  snd-msg(get-all-imported-module-names(ModuleName)) .
-  rec-msg(all-imported-module-names(TransitiveImports?)) .
-  GetNeededModules(TransitiveImports, StillNeededModules?) .
-  ToBeClosed := diff(TransitiveImports, StillNeededModules) .
-  if not(equal(ToBeClosed, [])) then
-    Import := first(ToBeClosed) .
-    ToBeClosed := next(ToBeClosed) .
-    HardCloseModuleInDB(Import)
-  fi *
-  if equal(ToBeClosed, []) then
-    snd-msg(is-module-in-db(ModuleName)) .
-    (
-      rec-msg(not-exists-in-module-db(ModuleName)) .
-      Status := success
-    +
-      rec-msg(exists-in-module-db(ModuleName)) .
-      Status := module-not-closed
-    )
-  fi
+  snd-msg(ts-get-key-value-pairs("import-relations"))
+  . rec-msg(ts-pairs(ImportRelations?))
+  . snd-msg(sm-get-all-depending-module-names(ImportRelations, ModuleId))
+  . rec-msg(sm-all-depending-module-names(DependingModules?)) 
 endlet
 
-process GetNeededModules(Modules : list, Needed : list?) is
+process ComputeModulesToBeClosed(ModuleId: str, ToBeClosed: list?) is
 let
-  Runner : list,
-  Head : str,
-  Depending : list
+  Depending: list,
+  CurModule: str,
+  Imports: list,
+  Needed: list,
+  Runner: list
 in
-  Needed := [] .
-  Runner := Modules .
-  if not(equal(Runner, [])) then
-    Head := first(Runner) .
-    Runner := next(Runner) .
-    MDB-GetAllDependingModules(Head, Depending?) .
-    if not(subset(Depending, Modules)) then
-       Needed := join(Head, Needed) 
+  snd-msg(get-all-imported-module-names(ModuleId))
+  . rec-msg(all-imported-module-names(Imports?))
+  . Needed := []
+  . Runner := Imports
+  .
+  if not-equal(Runner, [])
+  then
+    CurModule := first(Runner)
+    . GetDependingModules(CurModule, Depending?)
+    . Runner := next(Runner)
+    .
+    if not(subset(Depending, Imports))
+    then
+       Needed := join(CurModule, Needed) 
     else
        tau
     fi
-  fi *
+  fi
+  *
   if equal(Runner, []) then
-    tau
+    ToBeClosed := diff(Imports, Needed)
   fi
 endlet  
 
@@ -395,38 +417,10 @@ in
   )
 endlet
 
-process SoftCloseModuleInDB(ModuleName : str, Status : term?) is
-let 
-  Depending : list,
-  Changed : list
-in
-  snd-msg(get-all-depending-modules(ModuleName)).
-  rec-msg(all-depending-modules(Depending?)).
-  if equal(Depending,[]) then
-    HardCloseModuleInDB(ModuleName).
-    Status := success
-  else
-    Status := modules-depend-on-this-module
-  fi
-endlet
-
-process HardCloseModuleInDB(ModuleName : str) is
-let
-  Changed : list
-in
-  DeleteSessions(ModuleName).
-  snd-msg(close-module-in-db(ModuleName)).
-  rec-msg(changed-modules(Changed?))
-endlet
-
 process CloseModuleInDBandInvalidateDependingModules(ModuleName : str) is
-let
-  Changed : list
-in
   DeleteEditorAndInvalidateDependingModules(ModuleName).
-  snd-msg(close-module-in-db(ModuleName)).
-  rec-msg(changed-modules(Changed?)) 
-endlet
+  snd-msg(close-module-in-db(ModuleName))
+    . rec-msg(module-closed(ModuleName))
 
   
 process RenameModuleInDB(Old : str, New : str, Path : str, Changed : list?)
@@ -479,8 +473,7 @@ let
   Depending: list
 in
   DeleteSessions(Modulename)
-  . snd-msg(get-all-depending-modules(Modulename))
-  . rec-msg(all-depending-modules(Depending?))
+  . GetDependingModules(Modulename, Depending?)
   . MDB-InvalidateModules(Depending, sdf)
   . snd-msg(notify-about-changed-modules(Depending, sdf))
   . rec-msg(notify-about-changed-modules-done)
@@ -492,8 +485,7 @@ let
   Mod : str
 in
   DeleteSessions(Modulename)
-  . snd-msg(get-all-depending-modules(Modulename))
-  . rec-msg(all-depending-modules(Depending?))
+  . GetDependingModules(Modulename, Depending?)
   . if not-equal(Depending, []) then
     Mod := first(Depending)
     . DeleteSessions(Mod)
@@ -566,8 +558,8 @@ in
     )
   +
     rec-msg(io-file-not-exists) .
-    snd-msg(close-module-in-db(ModuleName)) .
-    rec-msg(changed-modules(DependingModules?))
+    snd-msg(close-module-in-db(ModuleName))
+    . rec-msg(module-closed(ModuleName))
   )
 endlet
 
