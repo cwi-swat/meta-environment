@@ -26,7 +26,7 @@ parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = parsetablegen.tif.o \
                         -L$(top_builddir)/c-source -lSdf2-Normalization \
                         -L$(top_builddir)/c-lib -lnative \
-                        -L$(ASC)/lib -lasc-support \
+                        -L$(ASC_SUPPORT)/lib -lasc-support \
                         -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                         -L$(PT_SUPPORT)/lib -lPT \
                         -L$(SDF_SUPPORT)/lib -lSDF \
