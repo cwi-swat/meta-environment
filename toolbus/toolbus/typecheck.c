@@ -807,6 +807,7 @@ int typecheck(char *script, TBbool gen_tifs, char *output)
     else {
       tifs_name = output;
     }
+    
 
     tifs = creat(tifs_name, 0666);
     if(tifs < 0){
@@ -919,8 +920,9 @@ int typecheck(char *script, TBbool gen_tifs, char *output)
       }
     }
     TBwrite(tifs, TBmake("end-of-tifs"));
-    if(close(tifs) < 0)
+    if(close(tifs) < 0) {
       err_sys_fatal("Can't close `%s'", tifs_name);
+    }
     TBprintf(stdout, "Tool interfaces written to `%s'\n", tifs_name);
   }
   return nerror == 0;

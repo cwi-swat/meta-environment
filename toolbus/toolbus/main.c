@@ -283,10 +283,10 @@ int main(int argc, char *argv[])
     } else if(streq(argv[i], "-TB_USE_SOCKETS")) {
       WellKnownLocalSocket  = atoi(argv[++i]);
       WellKnownGlobalSocket = atoi(argv[++i]);
-    } else if(streq(argv[i], "-gentifs")){
-      gen_tifs = TBtrue;
     } else if(streq(argv[i], "-output")){
       output = strdup(argv[++i]);
+    } else if(streq(argv[i], "-gentifs")){
+      gen_tifs = TBtrue;
     } else if((argv[i][0] == '-') && ((argv[i][1] == 'I') || (argv[i][1] == 'D'))){
 
     } else if(streq(argv[i], "-fixed-seed")) {
@@ -321,6 +321,7 @@ int main(int argc, char *argv[])
     /* HDJ: Don't init_monitoring() until WellKnownPort has been established!
      * monitor = init_monitoring();
      */
+
     if(typecheck(sname, gen_tifs, output)){
  
       if (TBverbose) TBmsg("typechecking completed\n");
