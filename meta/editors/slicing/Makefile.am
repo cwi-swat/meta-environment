@@ -8,6 +8,7 @@ noinst_HEADERS = \
 
 libslicing_a_SOURCES = \
 	Slicing.c  \
+	Slicing_dict.c  \
 	slice-tree.c
 
 INCLUDES = \
