@@ -208,6 +208,7 @@ extern Symbol symbol_ceq_impl;
 extern Symbol symbol_asfix_appl;
 extern Symbol symbol_prod;
 extern Symbol symbol_appl;
+extern Symbol symbol_term;
 extern Symbol symbol_lex;
 extern Symbol symbol_asfix_list;
 extern Symbol symbol_iter_sep;
