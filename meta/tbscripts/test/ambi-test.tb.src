@@ -26,9 +26,9 @@ let
   Err: list,
   NoOfAmbs: int
 in
-  snd-msg(open-language("Sdf2","__DATADIR__/Sdf2.baf")).
-  rec-msg(language-opened("Sdf2")).
-  snd-msg("aap", parse-string-as-asfix1("Sdf2","","imports")).
+  snd-msg(open-language("Ambi","./AmbiLanguage.baf")).
+  rec-msg(language-opened("Ambi")).
+  snd-msg("aap", parse-string-as-asfix1("Ambi","","a")).
  (
   rec-msg(parse-result-asfix1("aap",parse-error(Err?,ambiguities(NoOfAmbs?))))
  +
