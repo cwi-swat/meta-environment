@@ -36,7 +36,7 @@ libLocationAPI_a_SOURCES = \
 #CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 INCLUDES = -I${ATERM}/include
 
-BASIC_MODULES = StrCon NatCon
+BASIC_MODULES = StrCon NatCon Whitespace
 LOCATION_MODULES = Locations Areas Slices
 ERROR_MODULES = Errors
 

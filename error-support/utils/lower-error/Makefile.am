@@ -3,6 +3,7 @@ bin_PROGRAMS=lower-error
 
 INCLUDES=\
 	-I${top_srcdir}/lib \
+	-I${PT_SUPPORT}/include \
 	-I${ATERM}/include
 
 lower_error_SOURCES=\
@@ -10,6 +11,7 @@ lower_error_SOURCES=\
 
 lower_error_LDADD=\
 	-L${top_builddir}/lib -lErrorAPI \
+	-L${PT_SUPPORT}/lib -lmept \
 	-L${ATERM}/lib -lATerm
 
 ERRORS=example
