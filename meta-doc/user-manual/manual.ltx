@@ -691,7 +691,7 @@ close all imported modules as well. This can be done via
 \begin{center}
 \begin{Label}{FIG:refactor-menu}
 
-\T \includegraphics[width=4cm]{refactor-menu}
+\T \includegraphics[width=3cm]{refactor-menu}
 \W \htmlimage{refactor-menu.gif}
 \caption{Refactor menu}
 
@@ -1132,7 +1132,7 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 move the cursor (a single character-sized rectangle).  You
 have selected `{\tt false}' as new focus and the blue background
 appears. 
-This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm2}.
+This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm3}.
 
 \begin{figure}
 \begin{center}
@@ -1341,57 +1341,14 @@ If you save the changes the files `{\tt Booleans.sdf}' and `{\tt
 
 More features of the  \ASmetaenv\  can be studied by looking at the
 Pico specification. Pico is a toy language used demonstration purposes.
-
-
-
-
-
-\begin{itemize}
-
-
-
-\item Open an editor for the \link{syntax}[ (Figure~\Ref)]{FIG:Pico-Booleans-sdf}
-      of {\tt Pico-Booleans}.
-
-\begin{figure}[t]
-\begin{center}
-\begin{Label}{FIG:Pico-Booleans-sdf}
-
-\T \includegraphics[width=12cm]{Pico-Booleans_sdf2}
-\W \htmlimage{Pico-Booleans.sdf2.gif}
-\caption{Editor for syntax of {\tt Pico-Booleans}}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-\item Open an editor for the \link{equations}[ (Figure~\Ref)]{FIG:Pico-Booleans-eqs}.
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:Pico-Booleans-eqs}
-
-\T \includegraphics[width=12cm]{Pico-Booleans_asf}
-\W \htmlimage{Pico-Booleans.asf.gif}
-\caption{Editor for equations of {\tt Pico-Booleans}}
-
-\end{Label}
-\end{center}
-\end{figure}
-
-\item Study the differences in syntax and equations between with {\tt Booleans}
-and {\tt Pico-Booleans}.
-
-\end{itemize}
-
-Now we turn our attention to the complete Pico specification.
+We turn our attention to the complete Pico language.
 
 \begin{itemize}
   
 \item Leave the \ASmetaenv.  This is done by
 selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
 
-\item Go to {\tt pico}, and type \link{{\tt meta}}[ (Section~\Ref)]{StartingMeta} at the command line.
+\item Restart the \ASmetaenv\ by entering \link{{\tt meta}}[ (Section~\Ref)]{StartingMeta} at the command line.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
   selecting the {\tt Open...} button.  In the dialog window that appears, click
@@ -1440,17 +1397,8 @@ selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
 
 \begin{itemize}
   
-\item A module {\tt Layout} is imported, in which the 
-sort {\tt LAYOUT} has been specified.
-  
 \item In the context-free section the list constructs 
 `{\tt \{ID-TYPE ","\}*}' and `{\tt \{STATEMENT ","\}*}' are used. 
-In fact, the sort {\tt SERIES}
-  could have been left out entirely and be replaced by 
-`{\tt \{STATEMENT ","\}*}' all through the specification. 
-{\tt SERIES} is only used for
-  abbreviation in the syntax rules. Also, variables over list constructs are
-  declared.
 
 \item  The Pico-syntax module contains no equations.
 
@@ -1460,13 +1408,13 @@ In fact, the sort {\tt SERIES}
 
 \begin{itemize}
   
-\item Open a term-editor for the Pico-program `{\tt small.pico}': select {\tt
+\item Open a term-editor for the Pico-program `{\tt fac.pico}': select {\tt
     Pico-syntax} in the module pane and push the {\tt term} button in the
-  button pane. A dialog window pops up and type `{\tt small.pico}' as name of
+  button pane. A dialog window pops up and type `{\tt fac.pico}' as name of
   the term.
 
 \item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
-  editor. As a result, {\tt small.pico} is parsed.
+  editor. As a result, {\tt fac.pico} is parsed.
 
 \item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
   editor.
@@ -1481,8 +1429,8 @@ This has the following effects:
   
 \item All the equations that are valid for this editor are parsed and compiled
   into a rewrite system.  In this case that means the equations of the
-  imported modules {\tt Pico-Booleans}, {\tt Pico-Integers}, {\tt Pico-Strings} and {\tt
-    Pico-Types}. This takes some time.
+  imported modules {\tt basic/Booleans}, {\tt basic/Integers}, and {\tt
+basic/Strings}. This may take some time.
   
 \item The term in the editor is reduced. As no equation can be applied to
   reduce this term, the term itself is returned in the shell window from which
@@ -1499,17 +1447,7 @@ are necessary to arrive at a specification which can be interpreted.
 \item Verify this by pushing the {\tt Reduce} button once more.
 \end{itemize}
 
-\begin{itemize}
-
-\item Load the module {\tt Pico-typecheck} in the Meta-Environment.
-
-\item Open a term editor for the term {\tt smalltc.pico}.
-
-\item Reduce this term.
-
-\end{itemize}
-
-This has the following effects:
+Push the {\tt TypeCheck} button.  This has the following effects:
 
 \begin{itemize}
 

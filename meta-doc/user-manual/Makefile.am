@@ -15,8 +15,8 @@ EXTRA_DIST = $(wildcard *.ltx) \
 MANUAL	= manual.ltx
 
 PSJES = Bool-example_asf.ps Bool-example_sdf2.ps Bool-example_trm.ps \
-	Bool-example_trm3.ps Pico-Booleans_asf.ps \
-	Pico-Booleans_sdf2.ps \
+	Bool-example_trm3.ps \
+	pico-syntax-term-actions-menu.ps \
 	open-file.ps file-menu.ps refactor-menu.ps select-window.ps \
 	meta-Bool-example.ps meta-Pico-syntax.ps \
 	meta-env-menu1.ps meta-env-menu2.ps meta-pico.ps \
