@@ -20,7 +20,7 @@ exports
  
   context-free syntax
 
-      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)}            
+      label(PROGRAM, Integer)     -> PROGRAM # Integer   {traversal(accu, trafo, bottom-up, continue)} 
       label(STATEMENT, Integer)   -> STATEMENT # Integer {traversal(accu, trafo, bottom-up, continue)} 
 
       collect(PROGRAM,   RSTORE)  -> RSTORE  {traversal(accu,bottom-up,continue)}            
