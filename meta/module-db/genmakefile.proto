@@ -1,6 +1,9 @@
 #
+# $Id$
+#
+# Template for Makefile(.in) for use with genmakefile.sh
+#
 # You might want to change some of the variables below:
-
 #     STD_CC_FLAGS: default compiler flags
 #     STD_LD_FLAGS: default linker flags
 
@@ -27,6 +30,7 @@ PROFILE_LD_FLAGS=-pg
 
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
 
+VPATH           = @srcdir@
 srcdir          = @srcdir@
 top_srcdir      = @top_srcdir@
 
@@ -69,11 +73,6 @@ INCLUDES        = @INCLUDES@ $(XINCLUDES)
 LIBS            = @LIBS@ $(XLIBS)
 SOCKLIBS        = @SOCKLIBS@
 
-INSTALL		= @INSTALL@
-INSTALL_DATA	= @INSTALL_DATA@
-INSTALL_PROG	= @INSTALL_PROG@
-UNINSTALL	= @UNINSTALL@
-
 ATERM           = @ATERM@
 
 XINCLUDES       = -I$(ATERM)/include -I$(includedir)
@@ -93,19 +92,6 @@ INCLUDEFILES=
 # Make rules
 
 all:	${BINFILES}
-
-# install target (install binaries, include files, and libraries)
-install:	all
-	mkdir -p $(bindir) $(libdir) $(includedir)
-	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
-	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
-	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
-
-# uninstall target (remove all files installed by 'install' target)
-uninstall:
-	@$(UNINSTALL) $(bindir) $(BINFILES)
-	@$(UNINSTALL) $(libdir) $(LIBFILES)
-	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 %-$(CC).o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
