@@ -85,7 +85,7 @@ UNINSTALL       = @UNINSTALL@
 ATERM           = @ATERM@
 NEW_META        = ${top_srcdir}
 
-XINCLUDES       = -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
+XINCLUDES       = -I$(ATERM)/include -I$(NEW_META)/asc-support -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
 
 SPEC_SRCS=$(shell grep -v '^\#' $(srcdir)/ParseTable-Generator.module-list)
