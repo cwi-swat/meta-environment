@@ -1034,7 +1034,7 @@ aterm_list *list_prefix(aterm_list *l)
 #endif
 
 /*}}}  */
-/*{{{  aterm *term_equal(aterm *t1, aterm *t2) */
+/*{{{  Tbool term_equal(aterm *t1, aterm *t2) */
 
 /* Test for equality on terms. */
 
@@ -1766,137 +1766,6 @@ aterm *make_nf15(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 }
 
 /*}}}  */
-
-/*}}}  */
-/*{{{  Select arguments of application */
-
-#define tail_1(l) (t_list_next(l))
-#define tail_2(l) (t_list_next(tail_1(l)))
-#define tail_3(l) (t_list_next(tail_2(l)))
-#define tail_4(l) (t_list_next(tail_3(l)))
-#define tail_5(l) (t_list_next(tail_4(l)))
-#define tail_6(l) (t_list_next(tail_5(l)))
-#define tail_7(l) (t_list_next(tail_6(l)))
-#define tail_8(l) (t_list_next(tail_7(l)))
-#define tail_9(l) (t_list_next(tail_8(l)))
-#define tail_10(l) (t_list_next(tail_9(l)))
-#define tail_11(l) (t_list_next(tail_10(l)))
-#define tail_12(l) (t_list_next(tail_11(l)))
-#define tail_13(l) (t_list_next(tail_12(l)))
-#define tail_14(l) (t_list_next(tail_13(l)))
-#define tail_15(l) (t_list_next(tail_14(l)))
-
-aterm *arg_0(aterm *appl)
-{
-  aterm *result = t_list_first(t_appl_args(appl));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_1(aterm *appl)
-{
-  aterm *result = t_list_first(tail_1(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_2(aterm *appl)
-{
-  aterm *result = t_list_first(tail_2(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_3(aterm *appl)
-{
-  aterm *result = t_list_first(tail_3(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_4(aterm *appl)
-{
-  aterm *result = t_list_first(tail_4(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_5(aterm *appl)
-{
-  aterm *result = t_list_first(tail_5(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_6(aterm *appl)
-{
-  aterm *result = t_list_first(tail_6(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_7(aterm *appl)
-{
-  aterm *result = t_list_first(tail_7(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_8(aterm *appl)
-{
-  aterm *result = t_list_first(tail_8(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_9(aterm *appl)
-{
-  aterm *result = t_list_first(tail_9(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_10(aterm *appl)
-{
-  aterm *result = t_list_first(tail_3(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_11(aterm *appl)
-{
-  aterm *result = t_list_first(tail_11(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_12(aterm *appl)
-{
-  aterm *result = t_list_first(tail_12(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_13(aterm *appl)
-{
-  aterm *result = t_list_first(tail_13(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_14(aterm *appl)
-{
-  aterm *result = t_list_first(tail_14(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
-
-aterm *arg_15(aterm *appl)
-{
-  aterm *result = t_list_first(tail_15(t_appl_args(appl)));
-  /*t_protect(result);*/
-  return result;
-}
 
 /*}}}  */
 /*{{{  Converting back to readable C-code */

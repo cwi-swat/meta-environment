@@ -14,6 +14,38 @@
 #define singleton(t) (TbuildList(w, (t), t_empty(w)))
 #define check_sym(t,s) (t_appl_sym(t) == (s))
 
+#define tail_1(l) (t_list_next(l))
+#define tail_2(l) (t_list_next(tail_1(l)))
+#define tail_3(l) (t_list_next(tail_2(l)))
+#define tail_4(l) (t_list_next(tail_3(l)))
+#define tail_5(l) (t_list_next(tail_4(l)))
+#define tail_6(l) (t_list_next(tail_5(l)))
+#define tail_7(l) (t_list_next(tail_6(l)))
+#define tail_8(l) (t_list_next(tail_7(l)))
+#define tail_9(l) (t_list_next(tail_8(l)))
+#define tail_10(l) (t_list_next(tail_9(l)))
+#define tail_11(l) (t_list_next(tail_10(l)))
+#define tail_12(l) (t_list_next(tail_11(l)))
+#define tail_13(l) (t_list_next(tail_12(l)))
+#define tail_14(l) (t_list_next(tail_13(l)))
+#define tail_15(l) (t_list_next(tail_14(l)))
+
+#define arg_0(t) (t_list_first(t_appl_args(t)))
+#define arg_1(t) (t_list_first(tail_1(t_appl_args(t))))
+#define arg_2(t) (t_list_first(tail_2(t_appl_args(t))))
+#define arg_3(t) (t_list_first(tail_3(t_appl_args(t))))
+#define arg_4(t) (t_list_first(tail_4(t_appl_args(t))))
+#define arg_5(t) (t_list_first(tail_5(t_appl_args(t))))
+#define arg_6(t) (t_list_first(tail_6(t_appl_args(t))))
+#define arg_7(t) (t_list_first(tail_7(t_appl_args(t))))
+#define arg_8(t) (t_list_first(tail_8(t_appl_args(t))))
+#define arg_9(t) (t_list_first(tail_9(t_appl_args(t))))
+#define arg_10(t) (t_list_first(tail_10(t_appl_args(t))))
+#define arg_11(t) (t_list_first(tail_11(t_appl_args(t))))
+#define arg_12(t) (t_list_first(tail_12(t_appl_args(t))))
+#define arg_14(t) (t_list_first(tail_13(t_appl_args(t))))
+#define arg_15(t) (t_list_first(tail_14(t_appl_args(t))))
+
 typedef aterm *(*funcptr)();
 
 extern asymbol *oksym;
@@ -76,22 +108,6 @@ extern aterm *make_nf15(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		       aterm *t9, aterm *t10, aterm *t11, aterm *t12,
 		       aterm *t13, aterm *t14);
 
-extern aterm *arg_0(aterm *appl);
-extern aterm *arg_1(aterm *appl);
-extern aterm *arg_2(aterm *appl);
-extern aterm *arg_3(aterm *appl);
-extern aterm *arg_4(aterm *appl);
-extern aterm *arg_5(aterm *appl);
-extern aterm *arg_6(aterm *appl);
-extern aterm *arg_7(aterm *appl);
-extern aterm *arg_8(aterm *appl);
-extern aterm *arg_9(aterm *appl);
-extern aterm *arg_10(aterm *appl);
-extern aterm *arg_11(aterm *appl);
-extern aterm *arg_12(aterm *appl);
-extern aterm *arg_13(aterm *appl);
-extern aterm *arg_14(aterm *appl);
-extern aterm *arg_15(aterm *appl);
 
 extern void ToC_code(aterm *asfix, FILE *file);
 
