@@ -9,19 +9,6 @@ Name2 : term,
 T     : term,
 T1    : term,
 T2    : term,
-/* Dit stuk is van Tobias
-Text  : str,
-Dir   : str,
-Path  : str,
-Fid   : str,
-TE    : text-edit,
-Clst  : list, 
-Flst  : list, 
-Tslst : list,
-Src   : str,
-Table : str,
-I     : int,
-tot hier */
   Text  : str,
   Path  : str,
   Dir   : str,
@@ -39,6 +26,7 @@ tot hier */
   Char    : term
 in
   Id := process-id.
+  subscribe(disconnected(<term>)).
   snd-note(ui-status(stat(Id,"Opening term editor"))).
   snd-msg(Id,open-trm-file(Term)).
   ( rec-msg(Id,opened-file(asfix,Name?,T?,Path?)).
@@ -108,6 +96,5 @@ Tot hier */
     create(Editor(Name,"",Fn,Id),Tid?).*/
 /*    snd-note(ui-status(endstat(Id)))*/
   ).
-  rec-disconnect(TE).
-  snd-note(disconnected(TE))
+  rec-note(disconnected(TE))
 endlet
