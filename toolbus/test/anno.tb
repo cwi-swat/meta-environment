@@ -14,8 +14,8 @@ process ANNOBOUNCE is
 let 
   T : term
 in 
-  rec-msg(anno(f(T?))) .
-  snd-msg(anno(f(T)))
+  rec-msg(anno(T?)) .
+  snd-msg(anno(T))
 endlet
 
 toolbus(ANNOTEST, ANNOBOUNCE)

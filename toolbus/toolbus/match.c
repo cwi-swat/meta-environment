@@ -92,7 +92,8 @@ TBbool match(term *t1,                 /* pattern */
 
   b = match1(substitute(t1, l1), substitute(t2, l2));
 
-  MATCHDB(TBmsg(" ... %s\n", (b) ? "true" : "false"));
+  MATCHDB(TBmsg(" ... %s (env1=%t,env2=%t)\n", 
+		(b) ? "true" : "false", Bindings1, Bindings2));
 
   return b;
 }
@@ -119,8 +120,9 @@ static TBbool match1(term *t1, term *t2)
       return TBfalse;
   }
 
-  if(is_anno(t2))
+  if(is_anno(t2)) {
     return match1(t1, anno_term(t2));
+  }
 
   switch(tkind(t1)){
   case t_bool: 
@@ -164,6 +166,15 @@ static TBbool match1(term *t1, term *t2)
     } else
       goto t2_is_result_var;
   case t_anno:
+    if(is_result_var(t2)){
+      v2 = value(t2, Bindings2);
+      if(require_type(var_type(v2), t1)){
+	Bindings2 = mk_env(v2, t1, Bindings2);
+	return TBtrue;
+      } else {
+	return TBfalse;
+      }
+    }
     return match1(anno_term(t1), t2);
   case t_list:
     if(is_list(t2))
