@@ -1,7 +1,7 @@
 How to use the new ASF2C compiler.
 
 Add to your paths:
-/home/gipe/petr/bin 
+/home/gipe/petr/bin
 /home/gipe/petr/lib
 
 Create in the directory in which you start the new meta environment a

@@ -1,100 +1,55 @@
 process Edit-term(Mod: str, Term: term) is
 let
-Tid   : int,
-Id    : term,
-Rewr  : int,
-Str   : str,
-Name  : term,
-Name2 : term,
-T     : term,
-T1    : term,
-T2    : term,
+  Tid   : int,
+  Id    : term,
+  Rewr  : int,
+  Str   : str,
+  Name  : term,
+  Name2 : term,
+  T     : term,
+  T1    : term,
+  T2    : term,
   Text  : str,
   Path  : str,
   Fid   : str,
   TE    : text-edit,
-  Clst  : list, 
-  Flst  : list, 
+  Clst  : list,
+  Flst  : list,
   Tslst : list,
   Src   : str,
   Table : str,
   I     : int,
-  Ch      : int,
-  Li      : int,
-  Co      : int,
-  Char    : term
+  Ch    : int,
+  Li    : int,
+  Co    : int,
+  Char  : term
 in
   Id := process-id.
-  subscribe(disconnected(<term>)).
-  snd-note(ui-status(stat(Id,"Opening term editor"))).
-  snd-msg(Id,open-trm-file(Term)).
-  ( 
-/* Dit stuk is van Tobias
-    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)).
-    printf("Name: %t, Path: %t", Name, Path).
-    create(Editor(Name,Text,Path,Id), Tid?).
-    snd-note(ui-status(endstat(Id)))
-    snd-msg(process-eqs(Mod)).
-Tot hier */
-    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)). 
-    snd-msg(get-table-from-db(id(Mod))).
-    ( rec-msg(table(Table?)).
-      snd-note(ui-status(endstat(Id)))
+  subscribe(disconnected(<term>)) .
+  snd-msg(get-table-from-db(id(Mod))) .
+  (
+    rec-msg(table(Table?))
+  +
+    rec-msg(no-table) .
+    snd-msg(generate-parsetable(id(Mod))) .
+    rec-msg(parsetable(Table?)) .
+    snd-msg(Id,locate-parse-table-file(id(Mod))) .
+    rec-msg(Id,located-parse-table-file(id(Mod),Table?)) .
+    snd-msg(add-table-to-db(id(Mod),Table)) .
+    rec-msg(done)
+  ) .
+  printf("parsetable for %t: %t\n", Mod, Table) .
+  snd-msg(Id,open-trm-file(Term)) .
+  (
+    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)) .
+    snd-note(ui-status(stat(Id,"Opening existing term..."))) .
+    create(Editor(Name,Text,Path,Mod), Tid?)
     +
-      rec-msg(no-table).
-      snd-note(ui-status(endstat(Id))).
-      snd-msg(generate-parsetable(id(Mod))).
-      rec-msg(parsetable(Table?)).
-      snd-msg(add-table-to-db(id(Mod),Table)).
-      rec-msg(done)
-    ).
-/*    snd-note(ui-status(stat(Id,"Parsing Term ..."))).*/
-    create(Editor(Name,Text,Path,Mod), Tid?).
-    snd-msg(open-language(Mod,Table)).
-    snd-note(ui-status(endstat(Id)))
-/*    snd-msg(Id,parse-string(Mod,"",Text)).
-    (( rec-msg(Id,parse-result(parsetree(T1?,I?))). 
-       if equal(I,0) then
-        snd-msg(Id,a2toa1(T1)).
-        rec-msg(Id,converted(T2?)).
-        snd-msg(rewrite(Mod,T2))
-       else
-        printf("Parse of %t returned %d ambiguities",Mod,I).
-        printf("Term is: %t\n",T1)
-       fi.
-       snd-note(ui-status(endstat(Id)))
-     )
-     +
-     ( rec-msg(Id, parse-result(eof-error)). 
-       printf("EOF unexpected while parsing %t\n",Mod).
-       snd-note(ui-status(endstat(Id)))
-     )
-     +
-     ( rec-msg(Id, parse-result(parse-error([character(Ch?),
-                                             line(Li?),
-                                             col(Co?),
-                                             char(Char?)]))).
-       printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
-       snd-note(ui-status(endstat(Id)))
-     )) 
-*/ 
-    +
-    rec-msg(Id,error-opening(Str?)). 
-    snd-msg(get-table-from-db(id(Mod))).
-    ( rec-msg(table(Table?)).
-      snd-note(ui-status(endstat(Id)))
-    +
-      rec-msg(no-table).
-      snd-note(ui-status(endstat(Id))).
-      snd-msg(generate-parsetable(id(Mod))).
-      rec-msg(parsetable(Table?)).
-      snd-msg(add-table-to-db(id(Mod),Table)).
-      rec-msg(done)
-    ).
-    snd-note(ui-status(stat(Id,"Creating new term"))).
-    create(Editor(id(Str),"","",Mod), Tid?). 
-    snd-msg(open-language(Mod,Table)).
-    snd-note(ui-status(endstat(Id)))
-  ).
+    rec-msg(Id,error-opening(Str?)) .
+    snd-note(ui-status(stat(Id,"Creating new term..."))) .
+    create(Editor(id(Str),"",Str,Mod), Tid?)
+  ) .
+  snd-msg(open-language(Mod,Table)) .
+  snd-note(ui-status(endstat(Id))) .
   rec-note(disconnected(TE))
 endlet

@@ -1,4 +1,4 @@
-#!/bin/sh
+#! @SHELL@
 # $Id$
 
 prefix=@prefix@
@@ -50,7 +50,7 @@ do
 		then
 			rm -f $af1name
 		else
-			echo "Error rewriting $f"	>&2	
+			echo "Error rewriting $f"	>&2
 			ERROR=1
 		fi
 	else

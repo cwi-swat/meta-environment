@@ -10,7 +10,36 @@ T    : term,
 Text : str
 in
   execute(in-output,IO?).
-  ( rec-msg(Id?,open-file(id(Name?))).
+  (
+    rec-msg(Id?,locate-parse-table-file(id(Name?))).
+    snd-eval(IO,locate-parse-table-file(Name)).
+    ( rec-value(IO,located-parse-table-file(Name?,Path?)).
+      snd-msg(Id,located-parse-table-file(id(Name),Path))
+      +
+      rec-value(IO,unavailable-parse-table(Name?)).
+      snd-msg(Id,error-locating(Name))
+    )
+  +
+    rec-msg(Id?,read-parse-table(id(Name?))).
+    snd-eval(IO,read-parse-table(Name)).
+    (
+      rec-value(IO,table-on-disk(Text?)).
+      snd-msg(Id,table-on-disk(Text))
+    +
+      rec-value(IO,error-opening(Name?)).
+      snd-msg(Id,no-table-on-disk)
+    )
+  +
+    rec-msg(Id?,open-trm-file(id(Name?))).
+    snd-eval(IO,open-trm-file(Name)).
+    ( rec-value(IO,opened-file("raw",Name,Text?,Path?)).
+      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
+      +
+      rec-value(IO,error-opening(Name?)).
+      snd-msg(Id, error-opening(Name))
+    )
+  +
+    rec-msg(Id?,open-file(id(Name?))).
     snd-eval(IO, open-old-asfix-file(Name)).
     ( rec-value(IO,opened-file("asfix",Name?,T?,Path?)).
       snd-msg(Id,opened-file(asfix,id(Name),T,Path))
@@ -40,25 +69,6 @@ in
     snd-eval(IO,open-eqs2-text-file(Name)).
     ( rec-value(IO,opened-file("raw",Name?,Text?,Path?)).
       snd-msg(Id,opened-file(raw,id(Name),Text,Path)) 
-      +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(Id, error-opening(Name))
-    )
-  +
-    rec-msg(Id?,read-parse-table(id(Name?))).
-    snd-eval(IO,read-parse-table(Name)).
-    (
-      rec-value(IO,table-on-disk(Text?)).
-      snd-msg(Id,table-on-disk(Text))
-    +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(Id,no-table-on-disk)
-    )
-  +
-    rec-msg(Id?,open-trm-file(id(Name?))).
-    snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file("raw",Name,Text?,Path?)).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
       +
       rec-value(IO,error-opening(Name?)).
       snd-msg(Id, error-opening(Name))

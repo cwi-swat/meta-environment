@@ -9,12 +9,12 @@ Installation instructions:
    To compile this distribution you will need the following items:
 
     -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
-    -- noweb (The noweb set of literate programming utilities, from 
+    -- noweb (The noweb set of literate programming utilities, from
          <http://www.cs.virginia.edu/~nr/noweb/>)
-    -- jdk (The Java Development Kit, from 
+    -- jdk (The Java Development Kit, from
          <http://www.javasoft.com/products/jdk/>). Make sure you get version
          1.1 or higher.
-    -- wish (A user-interface system, part of Tcl/Tk, from 
+    -- wish (A user-interface system, part of Tcl/Tk, from
          <http://www.tclconsortium.org/software/index.vet>). Make sure you
          get version 8.0.1 or higher.
     -- tcldot (A graph visualization library from AT&T. Part of their graphviz
@@ -23,9 +23,9 @@ Installation instructions:
          the only directory from the distribution that is used. Remember
          the location, you'll need it later.
          (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
-    -- xemacs (A text editor for X-windows systems, available from 
+    -- xemacs (A text editor for X-windows systems, available from
          <http://www.xemacs.org/>). Make sure you get version 20.4 or newer,
-         and make sure your installation includes an executable named 
+         and make sure your installation includes an executable named
          "gnuclient". Then add the line
            (gnuserv-start)
          to your ~/.emacs file.
@@ -53,21 +53,6 @@ Installation instructions:
        Usual disclaimers about operating heavy machinery and
        controlling nuclear facilities severely apply.
 
-  * Platform support
-
-    The new-meta environment has been installed successfully on
-    the following platforms:
-
-    -- Sun Sparc & Solaris >= 2.4
-    -- SGI mips & IRIX >= 6.2
-    -- IBM/Motorola PowerPC & Linux >= 2.0, MkLinux 3.0
-    -- Intel iX86 & Linux >= 2.0
-    -- Intel iX86 & Solaris >= 2.6
-
-    The new-meta environment has been tried without success on
-    the following platforms:
-
-    -- Digital Alpha & OSF1 v4.0
 
   * Dependencies
 
@@ -77,61 +62,65 @@ Installation instructions:
     distribution will be available at a later stage)
 
     -- cd to the directory just above new-meta (new-meta/..)
-    -- issue the following commands: 
+    -- issue the following commands:
          $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
          $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
        (and, if you hadn't done so already)
          $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
 
-    Now everything is set up for configuration and compilation.
+    You should now have a directory containing the `aterm', `toolbus'
+    and `new-meta' directories.  If so, then everything is set up for
+    configuration and compilation.
 
 
   * Configuring and compiling: final installation
 
+    Let's assume the `aterm', `toolbus' and `new-meta' directories are
+    all located in a directory `/path/to/meta'.  We also assume that
+    the `make' command is in fact GNU make (you may have use `gmake' or
+    `gnumake', depending on your site's configuration).  Furthermore,
+    you should make sure that your java installation's setup is correct,
+    and that your CLASSPATH variable points to the Java classes that
+    came with your JDK.
+
     Here is the basic set-up.  These commands are the minimal config
     options for the Meta-Environment to compile.  Note that the order
     of execution is significant.  This will install everything in the
-    directory new-meta/../{bin,lib,include}.
+    directories /path/to/meta/{bin,lib,include}.
 
-    Make sure that your PATH points to the above new-meta/../bin
+    Make sure that your PATH points to the above /path/to/meta/bin
     directory, for instance by typing:
 
-      $ PATH=/path/to/new-meta/../bin:${PATH}; export PATH
+      $ PATH=/path/to/meta/bin:${PATH}; export PATH
     for the sh family of shells, or alternatively (for csh-ish shells):
-      % setenv PATH /path/to/new-meta/../bin:${PATH}
+      % setenv PATH /path/to/meta/bin:${PATH}
       (in shells of the csh-family)
 
-    If there are no configure files in the sub-directories: toolbus, aterm, 
-    and new-met, please run autoconf to generate the configure file in each 
+    If there are no configure files in the sub-directories: toolbus, aterm,
+    and new-met, please run autoconf to generate the configure file in each
     of these sub-directories.
 
     Then proceed as follows:
 
-      $ cd [the_directory_where_you've_put_the_aforementioned_distributions]
+      $ cd /path/to/meta
       $ cd toolbus
-      $ ./configure --prefix=/path/to/new-meta/.. --with-java
-      $ gmake install
-      $ cd ..
-      $ cd aterm
+      $ ./configure --prefix=/path/to/meta --with-java
+      $ make install
+      $ cd ../aterm
       $ autoconf
-      $ ./configure --prefix=/path/to/new-meta/..
-      $ gmake install
-      $ cd ..
-      $ cd new-meta
-      $ ./configure --with-aterm=/path/to/new-meta/.. --with-toolbus=/path/to/new-meta/.. --with-tcldot=/path/to/directory/Tcldot (see above)
-      $ gmake install
-      $ cd ..
+      $ ./configure --prefix=/path/to/meta
+      $ make install
+      $ cd ../new-meta
+      $ ./configure --prefix=/path/to/meta --with-toolbus=/path/to/meta \
+                    --with-tcldot=/path/to/Tcldot            # see above
+      $ make install
 
     At this point, everything should be configured, compiled, and
-    installed.
-
-    If you now add the path to the directory new-meta/../bin to your PATH
-    (see above), you are al set up. Furthermore, you should make sure
-    that your java installation's setup is correct, and that your CLASSPATH
-    variable points to the Java classes that came with your JDK.
+    installed.  Once you have added the path to the directory
+    /path/to/meta/bin to your PATH (see above), you are all set up.
 
 
-The Meta-Environment development team wishes you happy environmentaling; 
+The Meta-Environment development team wishes you happy environmentaling;
 and may all your grammars be context free.
 
 

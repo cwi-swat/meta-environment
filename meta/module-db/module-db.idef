@@ -23,7 +23,7 @@ execute(module-db, Mdb?).
 /* And initialize it */
 snd-do(Mdb, create-module-db).
 (
-/* When compiling modules, they need to be reshuffled such that a new 
+/* When compiling modules, they need to be reshuffled such that a new
    module is generated for each context-free function in the spec
 */
   rec-msg(reshuffle-module(Name?)).

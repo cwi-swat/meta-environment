@@ -49,4 +49,4 @@
 
 .c.o:
 	$(CC) $(CFLAGS) $(DEFS) $(INCLUDES) -c $<
- 
+

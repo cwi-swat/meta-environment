@@ -18,7 +18,7 @@ TOOLBUS='\$(prefix)'
 ATERM='\$(prefix)'
 NEWATERM='\$(prefix)'
 
-dnl Installation scripts 
+dnl Installation scripts
 INSTALL='$(top_srcdir)/install-sh'
 INSTALL_PROG='$(top_srcdir)/install-prog-sh'
 INSTALL_DATA='$(top_srcdir)/install-data-sh'
@@ -30,25 +30,24 @@ AC_SUBST(UNINSTALL)
 
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
-AR=ar
-AC_SUBST(AR)
+AC_PATH_PROG(AR,ar,ar)
 
 dnl Which compiler to use?
 AC_PROG_CC
 AC_AIX
 
-dnl Where to locate the bourne shell?
-SHELL=/bin/sh
-AC_SUBST(SHELL)
+dnl Where to locate a bourne-compatible shell?
+SHELL=""
+AC_PATH_PROG(SHELL,sh,/bin/sh)
+
+dnl where is perl?
+AC_PATH_PROG(PERL,perl,/opt/bin/perl)
 
 dnl Check for noweb components.
 dnl Use 'true' if 'noweb', 'noweave', or 'notangle' do not exist.
 AC_CHECK_PROG(NOWEB,noweb,noweb,true)
 AC_CHECK_PROG(NOWEAVE,noweave,noweave,)
 AC_CHECK_PROG(NOTANGLE,notangle,notangle,)
-AC_SUBST(NOWEB)
-AC_SUBST(NOWEAVE)
-AC_SUBST(NOTANGLE)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
@@ -91,8 +90,6 @@ dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish8.0, we'll assume that "wish"
 dnl is at version 8 or higher (as it is in a _normal_ setup)
 AC_CHECK_PROG(WISH, wish8.0, wish8.0, wish)
-AC_SUBST(WISH)
-
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
@@ -122,7 +119,7 @@ AC_CHECK_HEADER(getopt.h)
 
 
 AC_SUBST(SOCKLIBS)
- 
+
 dnl Which files need updating?
 AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	Makefile.skel \
@@ -151,9 +148,12 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	pgen/addeqs/c-source/Makefile \
 	utils/Makefile \
 	utils/gen-table \
+	utils/idef2tif \
 	utils/parse-sdf2 \
 	utils/ps-dot \
 	utils/sdf2table \
-, chmod +x meta install-prog-sh install-data-sh; \
-  chmod +x graph-browser/graph-browser editor/editor \
+  , chmod +x meta install-prog-sh install-data-sh; \
+    chmod +x graph-browser/graph-browser editor/editor; \
+    chmod +x utils/gen-table utils/idef2tif \
+             utils/parse-sdf2 utils/ps-dot utils/sdf2table 
 )

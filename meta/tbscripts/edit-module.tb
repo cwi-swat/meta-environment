@@ -18,7 +18,6 @@ in
   snd-msg(pp(Syntax)).
   rec-msg(source(Src?)).
   create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
-  snd-msg(open-language("Sdf2",
-                        "/home/markvdb/NEW-META/lib/Sdf2.baf")).
+  snd-msg(open-language("Sdf2", "/opt/petr/lib/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet

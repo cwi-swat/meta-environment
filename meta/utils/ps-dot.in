@@ -1,10 +1,11 @@
-#!/bin/sh
+#! @SHELL@
 # $Id$
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=${exec_prefix}/bin
 libdir=${exec_prefix}/lib
+PERL=@PERL@
 
 PATH="$PATH:$bindir"
 
@@ -29,14 +30,11 @@ DOTCMD="dot -Tps							\
 	  -Nshape=plaintext -Nfontname=Helvetica-Bold			\
 	  -Nfontsize=10 -Nheight=.25"
 
-
-# echo Dot command: $DOTCMD
-
 for f in $*
 do
 	o=`dirname $f`/`basename $f .dot`.ps
 	# PS interprets '\' too, but dot doesn't escape them
 	# Note: because '\' is the dot escape too, it occurs as `\\'
-	perl -p -e 's#\\\\#\\\\\\\\$1#g;' < $f				|
-	$DOTCMD								> $o
+	${PERL} -p -e 's#\\\\#\\\\\\\\$1#g;' < $f				|
+	${DOTCMD}								> $o
 done

@@ -1,4 +1,6 @@
-#!/bin/sh
+#! @SHELL@
+# $Id$
+
 prefix=@prefix@
 libdir=@prefix@/lib
 classdir=@prefix@/classes

@@ -18,7 +18,7 @@ Descriptions
     Name
 
       gen-table
-    
+
     Synopsis
 
       gen-table [-v] AsFix-File-0 ... AsFix-File-n
@@ -67,7 +67,7 @@ Descriptions
     Name
 
       sdf2table
-    
+
     Synopsis
 
       sdf2table [-v] Sdf2-File-0 ... Sdf2-File-n
@@ -84,7 +84,7 @@ Descriptions
     Name
 
       Sdf2.baf
-    
+
     Description
 
       This is the parse table for SDF2.  Except from the fact that it

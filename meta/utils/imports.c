@@ -11,7 +11,7 @@
  *      <module> AsFix representation of ASF+SDF module
  *
  */
- 
+
 #include <aterm2.h>
 #include <AsFix-fun.h>
 #include <AsFix-expand.h>
@@ -53,7 +53,7 @@ extern char* optarg;
    "         -s  stop when a module cannot be found\n"\
    "\n"
 
-/* Command line options used by imports */ 
+/* Command line options used by imports */
 static char* opt_string = "hlrs";
 
 
@@ -82,16 +82,16 @@ int main( int argc, char* argv[] )
    char      buffer[_POSIX_PATH_MAX];
    int       options;
    int      c;
-   
+
    /* initialize variables */
    options = 0;
    long_listing = ATfalse;
-   
+
    /* parse command line options. */
    while(1 )
    {
       c = getopt( argc, argv, opt_string );
-      if( c == -1 ) 
+      if( c == -1 )
          break;
       switch( c )
       {
@@ -112,8 +112,8 @@ int main( int argc, char* argv[] )
             exit( 1 );
        }
     }
-     
-    /* make sure, there are still two file arguments available */    
+
+    /* make sure, there are still two file arguments available */
     if( argc - optind != 2 )
     {
        usage();
@@ -125,7 +125,7 @@ int main( int argc, char* argv[] )
 
    /* Obtain list of imported modules */
    imports = getImports( argv[optind], argv[optind + 1], options );
-   
+
    /* traverse list of modules. Depending on value of long_listing we have
     * to remove location and extension from file names */
    while( ATisEmpty( imports ) == ATfalse )

@@ -11,7 +11,7 @@
  *      <module> AsFix representation of ASF+SDF module
  *
  */
- 
+
 #include "aterm2.h"
 #include "AsFix-fun.h"
 #include "AsFix-expand.h"
@@ -62,7 +62,7 @@ ATermList _getImports( char* path )
    ATerm module;
    int n;
    char* s;
-   
+
    /* initialize list of imported modules */
    imports = ATmakeList0();
 
@@ -78,21 +78,21 @@ ATermList _getImports( char* path )
    module = ATreadFromFile( f );
 
    if( module == NULL )
-   {  
+   {
       FAIL( "readFromFile" );
       exit( 1 );
-   }  
+   }
    fclose( f );
 
    /* Test whether asfix term represents a module */
    if( strcmp( ATgetName( ATgetSymbol( module ) ), "module" ) != 0 )
-   {  
+   {
       fprintf( stderr,
          "AsFix term %s does not represent an ASF+SDF module.\n",
          path );
       exit( 1 );
-   }  
-   
+   }
+
    /* Obtain list of sections from module */
    sections = (ATermList)ATgetArgument( module, p_module_sections );
 
@@ -131,14 +131,14 @@ ATermList _getImports( char* path )
       n--;
    }
    return imports;
-   
+
 }
 /*
  * Return a list of modules that are imported by the module
  * topModule. The behavior of getImports is controlled by options:
  *
  * FailWhenNotFound: we stop collecting modules names as soon as
- *                   a module could not be located. 
+ *                   a module could not be located.
  * Recursive:        a list of modules is constructing by traversing the
  *                   modules recursively.
  * These options can be 'or-ed' together.
@@ -163,8 +163,8 @@ ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options
 
    /* Create empty imports list */
    imports = ATmakeList0();
-   
-      
+
+
    /* open meta.conf-paths file */
    if( metaPathsOpen( &mp, metaPathsFile ) == -1 )
    {
@@ -173,7 +173,7 @@ ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options
    }
 
 
-   /* 
+   /*
     * construct file name from topModule name by appending the extension
     * ".asfix" to it
     */
@@ -229,7 +229,7 @@ ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options
              */
             if( options & FailWhenNotFound )
                return imports;
-         } 
+         }
          else
          {
             t = ATmake( "<str>", path );
@@ -244,7 +244,7 @@ ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options
       if( !(options & Recursive ) )
          return ATgetNext( imports );
    }
-   
-   /* we are done. Return teh list of modules. */
+
+   /* we are done. Return the list of modules. */
    return imports;
 }

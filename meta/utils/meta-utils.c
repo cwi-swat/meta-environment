@@ -1,15 +1,15 @@
 /*
  * $Id$
  * (C) 1999, Merijn de jonge (mdejonge@wins.uva.nl)
- * 
+ *
  * meta-paths: Locate files using search path defined in meta-paths file
- * 
+ *
  * usage: meta-paths <meta.conf-file> <file>
- * 
- *    <meta.conf-file> File which defines search path. 
+ *
+ *    <meta.conf-file> File which defines search path.
  *    <file>           Name of file to search for.
  *
- */    
+ */
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-     
+
 #include "meta-utils.h"
 
 #define FAIL1(x,y) fprintf(stderr,   \
@@ -47,15 +47,15 @@ static char* dirname( char* path )
    /* not found :-> return empty string */
    if( ptr == NULL )
       strcpy( dirname_buf, "" );
-   /* otherwise, break strigng after '/' and return strign up 
-    * to and including '/' 
+   /* otherwise, break strigng after '/' and return strign up
+    * to and including '/'
     */
    else
       *(ptr+1) = '\0';
    return dirname_buf;
 }
-   
-/* 
+
+/*
  * Open and read meta.conf_paths file "path". Structure mp holds
  * entries of "path" on funtion return.
  * -1 is returned on error
@@ -69,16 +69,16 @@ int metaPathsOpen( meta_paths* mp, char* path )
    char* dn;
    char tmp[_POSIX_PATH_MAX];
    int length;
-      
+
    /* "." and ".." entries are resolved using basename path */
    dn = dirname( path );
-   
+
    f = fopen( path, "r");
    if( f == NULL )
    {
       return -1;
    }
-   
+
    mp->nr_entries = 0;
 
    /* read and parse meta.conf-paths file. */
@@ -105,7 +105,7 @@ int metaPathsOpen( meta_paths* mp, char* path )
          /* make sure last character is '/' */
          if( ptr1[length - 1] != '/' )
             strcat( ptr1, "/" );
-            
+
          /* "." and ".." entries are resolved using basename path as follows:
           * (note: bn is either empty or its last caharacter is '/')
           *
@@ -133,13 +133,13 @@ int metaPathsOpen( meta_paths* mp, char* path )
          }
       }
    }
-   
+
    fclose( f );
    return 0;
 }
 
 /*
- * Free allocated memory used to store entries of meta.conf_paths file 
+ * Free allocated memory used to store entries of meta.conf_paths file
  */
 void metaPathsClose( meta_paths* mp )
 {
@@ -158,7 +158,7 @@ static void metaPathsPrint( meta_paths* mp )
    for( i=0;i< mp->nr_entries ; i++ )
    {
       printf( "%d \"%s\"\n", i, mp->meta_entries[i] );
-   }   
+   }
 }
 
 /*
@@ -170,7 +170,7 @@ char* metaPathsLocate( meta_paths* mp, char* path )
 {
    int i;
    struct stat stat_buf;
-   
+
    for( i = 0; i < mp->nr_entries; i++ )
    {
       /* note that mp->meta_entries[i] already contaisn '/' as last

@@ -28,4 +28,4 @@ To profile using gcc:
   gprof /home/olivierp/test/program gmon.out > gprof.out
 
 If all went well, gprof.out now contains readable profiling information!
-   
+

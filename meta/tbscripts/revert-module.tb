@@ -30,8 +30,7 @@ in
       rec-msg(need-modules(M1s?))
     +
       rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)). 
-      snd-msg(open-language("Sdf2",
-                            "/home/markvdb/NEW-META/lib/Sdf2.baf")).
+      snd-msg(open-language("Sdf2", "/opt/petr/lib/Sdf2.baf")).
       snd-msg(Id,parse-string("Sdf2","",FT)).
       ((
         rec-msg(Id,parse-result(parsetree(T?,I?))).

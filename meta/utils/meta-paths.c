@@ -1,22 +1,22 @@
 /*
  * $Id$
  * (C) 1999, Merijn de jonge (mdejonge@wins.uva.nl)
- * 
+ *
  * meta-paths: Locate files using search path defined in meta.conf-paths file
- * 
+ *
  * usage: meta-paths <meta.conf-paths-file> <file>
- * 
- *    <meta.conf-paths-file> File which defines search path. 
+ *
+ *    <meta.conf-paths-file> File which defines search path.
  *    <file>           Name of file to search for.
  *
- */    
+ */
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-     
+
 #include "meta-utils.h"
 
 #define USAGE_MSG \
@@ -48,9 +48,9 @@ int main( int argc, char*argv[])
    char* meta_paths_file;
    char* file;
    meta_paths mp;
- 
+
    /* Check command line arguments */
-   if( argc == 2 && 
+   if( argc == 2 &&
        (strcmp( argv[1], "-h" ) == 0 ||
         strcmp( argv[1], "-help" ) == 0 ) )
    {
@@ -60,13 +60,13 @@ int main( int argc, char*argv[])
 
    if( argc != 3 )
    {
-      usage();     
+      usage();
       return 1;
    }
- 
+
    meta_paths_file = argv[1];
    file           = argv[2];
-  
+
    if( metaPathsOpen( &mp, meta_paths_file ) == - 1)
    {
       FAIL1( "metaPathsOpen", meta_paths_file );
@@ -86,7 +86,6 @@ int main( int argc, char*argv[])
 
    /* Clean up allocated space */
    metaPathsClose( &mp );
- 
+
    return 0;
 }
-
