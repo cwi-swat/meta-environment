@@ -10,32 +10,36 @@
 #include "parser.h"
 #include "sglr.h"
 
-void DumpProd(FILE *out, ATermTable prods, ATerm prod)
+void DumpOne(FILE *out, ATermTable tbl, ATerm key)
 {
   ATerm     val;
 
-  if(!prods)
+  if(!tbl)
     return;
 
-  val = ATtableGet(prods, prod);
+  if((val = ATtableGet(tbl, key)) == NULL)
+    return;
+
+/*
   if(ATgetType(val) != AT_INT)
-    ATfprintf(out,"%t: %t\n", prod, val);
+ */
+    ATfprintf(out,"%t: %t\n", key, val);
 }
 
-void DumpAllProds(ATermTable prods)
+void DumpAll(ATermTable tbl)
 {
   FILE      *out;
   ATermList keys;
 
-  if(!prods)
+  if(!tbl)
     return;
 
   if (NULL == (out = popen ("sort -n", "w")))
     out = stdout;
 
-  for(keys = ATtableKeys(prods); keys && !ATisEmpty(keys);
+  for(keys = ATtableKeys(tbl); keys && !ATisEmpty(keys);
       keys = ATgetNext(keys)) {
-    DumpProd(out, prods, ATgetFirst(keys));
+    DumpOne(out, tbl, ATgetFirst(keys));
   }
   if(out != stdout)
     pclose(out);
@@ -65,7 +69,7 @@ int main (int argc, char **argv)
       pt_name = argv[1];
       break;
   }
-  if(ATmatch(SGopenLanguage("dump-prods", 0, pt_name, pt_name),
+  if(ATmatch(SGopenLanguage("dump", 0, pt_name, pt_name),
              "snd-value(open-language-failed(<str>,<str>))", &err, NULL)) {
     ATfprintf(stderr, "could not open %s as a parse table\n", err);
     return 1;
@@ -76,8 +80,8 @@ int main (int argc, char **argv)
     return 1;
   }
   if(requested)
-    DumpProd(stdout, pt->productions, requested);
+    DumpOne(stdout, pt->PTPART, requested);
   else
-    DumpAllProds(pt->productions);
+    DumpAll(pt->PTPART);
   return 0;
 }

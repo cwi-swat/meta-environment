@@ -67,6 +67,7 @@ SGLRLIBA2TOA1GC = libsglr-a2toa1-gc.a
 SGLRLIBPROF     = libsglr-prof.a
 SGLRLIBS        = ${SGLRLIB} ${SGLRLIBA2TOA1} ${SGLRLIBGC} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
+DUMPC		= dump-parse-table.c
 LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
 LIBOBJ          = ${patsubst %.c,%.o,${LIBSRC}}
 LIBOBJA2TOA1    = ${patsubst %.c,%-a2toa1.o,${LIBSRC}}
@@ -74,7 +75,8 @@ LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRC}}
 LIBOBJA2TOA1GC  = ${patsubst %.c,%-a2toa1-gc.o,${LIBSRC}}
 LIBOBJPROF      = ${patsubst %.c,%-prof.o,${LIBSRC}}
 
-PROG            = sglr dump-prods
+PROG            = sglr ${DUMP}
+DUMP		= dump-actions dump-gotos dump-priorities dump-productions
 PURE            = ${patsubst %,%.pure,${PROG}}
 PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-a2toa1-gc sglr-prof
 PUREPROGS       = ${patsubst %,%.pure,${PROGS}}
@@ -84,7 +86,7 @@ CSRC            = sglr-main.c
 OBJ             = ${patsubst %.c,%.o,${CSRC}}
 OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
-all:	depend ${PROG}
+all:	${PROG}
 
 .SILENT:	depend
 
@@ -117,7 +119,7 @@ distclean realclean spotless:	clean
 
 clean:
 	rm -f	core depend sglr.tifs sglr.tif.[ch]
-	rm -f	${OBJ} ${LIBOBJ}
+	rm -f	${DUMP} ${OBJ} ${LIBOBJ}
 	rm -f	${OBJA2TOA1} ${LIBOBJA2TOA1}
 	rm -f	${LIBOBJA2TOA1GC}
 	rm -f	${LIBOBJGC}
@@ -187,6 +189,12 @@ sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
 dump-prods:	dump-prods.o ${SGLRLIB}
 	${CC} ${LDFLAGS} $< ${SGLRLIB} ${LIBS} -o $@	
 
+dump-actions dump-priorities	\
+dump-gotos dump-productions:	${DUMPC} ${SGLRLIB}
+	${CC}	${CFLAGS} ${INCLUDES} ${LDFLAGS}	\
+		${DUMPC} -DPTPART=${subst dump-,,$@}	\
+		${SGLRLIB} ${LIBS} -o $@	
+
 # ObTribute to Larry Wall
 love:
 	@echo "not war"
@@ -202,8 +210,8 @@ getopt1.o: getopt1.c
 	${CC} -O3 -c $<
 
 # Handle dependencies
-depend: ${CSRC} ${GETOPTSRC} ${LIBSRC} sglr.tif.c
-	makedepend ${INCLUDES} ${CSRC} ${GETOPTC} -f -		>	$@
+depend: ${CSRC} ${LIBSRC} ${GETOPTC} ${DUMPC} sglr.tif.c
+	makedepend ${INCLUDES} ${CSRC} ${GETOPTC} ${DUMPC} -f -	>	$@
 	makedepend ${INCLUDES} ${LIBSRC} -f -			>	$@.tmp
 	cat	$@.tmp						>>	$@
 	sed -e 's/^\([^ :]*\).o:/\1-a2toa1.o:/'	$@.tmp		>>	$@
