@@ -235,33 +235,33 @@ ATprotect ( & constant29 ) ;
 }
 ATerm lf_31 ( ATerm arg0 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_31sym , ATmakeAppl ( lf_31sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_list_30sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg0 ) ) ;
+( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-FUNC_EXIT ( lf_31_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( lf_31_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 }
@@ -270,42 +270,42 @@ FUNC_EXIT ( make_nf1 ( lf_31sym , arg0 ) ) ;
 }
 ATerm lf_31_recursive ( ATerm arg0 ) {
 {
-ATerm tmp [ 6 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_31_recursivesym , ATmakeAppl ( lf_31_recursivesym , arg0 ) ) ;
-( tmp [ 0 ] = arg0 ) ;
+( tmp [ 1 ] = arg0 ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-( tmp [ 1 ] = lf_31_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_31_recursivesym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 2 ] = lf_31_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 1 ] ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_31_recursivesym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_31_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ;
-FUNC_EXIT ( tmp [ 5 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
+( tmp [ 4 ] = list_tail ( tmp [ 4 ] ) ) ;
+( tmp [ 6 ] = lf_31_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 4 ] ) ) ) ) ) ;
+FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_31_recursivesym , lf_list_30 ( arg0 ) ) ) ;

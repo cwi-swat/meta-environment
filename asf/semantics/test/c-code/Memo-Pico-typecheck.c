@@ -2145,30 +2145,30 @@ FUNC_EXIT ( make_nf1 ( lf_10sym , arg0 ) ) ;
 }
 ATerm lf_7 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
-ATerm tmp [ 3 ] ;
+ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_7sym , ATmakeAppl ( lf_7sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg2 , lf_2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , lf_list_1sym ) ) {
-( tmp [ 0 ] = arg_0 ( atmp20 ) ) ;
+( tmp [ 1 ] = arg_0 ( atmp20 ) ) ;
 {
 ATerm atmp20010 ;
 ATerm atmp2000 [ 2 ] ;
-( atmp2000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp2000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp20010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp2000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp2000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp20010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( check_sym ( atmp20010 , lf_4sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp20010 ) ) ;
-( tmp [ 2 ] = arg_1 ( atmp20010 ) ) ;
-if ( term_equal ( arg0 , tmp [ 1 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf2 ( lf_4sym , arg0 , arg1 ) ) , tmp [ 0 ] ) ) ) ) ) ;
+( tmp [ 2 ] = arg_0 ( atmp20010 ) ) ;
+( tmp [ 3 ] = arg_1 ( atmp20010 ) ) ;
+if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
+FUNC_EXIT ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , cons ( slice ( atmp2000 [ 0 ] , atmp2000 [ 1 ] ) , cons ( make_list ( make_nf2 ( lf_4sym , arg0 , arg1 ) ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 ( atmp2000 [ 1 ] = list_tail ( atmp2000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp2000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp2000 [ 1 ] ) ;
 }
 }
 }
@@ -2185,31 +2185,31 @@ ATerm result = get_result ( table , interm ) ;
 if ( result ) return result ;
 else {
 {
-ATerm tmp [ 3 ] ;
+ATerm tmp [ 4 ] ;
 if ( check_sym ( arg1 , lf_2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf_list_1sym ) ) {
-( tmp [ 0 ] = arg_0 ( atmp10 ) ) ;
+( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
 ATerm atmp1000 [ 2 ] ;
-( atmp1000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp1000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp10010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp1000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp1000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( check_sym ( atmp10010 , lf_4sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp10010 ) ) ;
-( tmp [ 2 ] = arg_1 ( atmp10010 ) ) ;
-if ( term_equal ( arg0 , tmp [ 1 ] ) ) {
-( result = tmp [ 2 ] ) ;
+( tmp [ 2 ] = arg_0 ( atmp10010 ) ) ;
+( tmp [ 3 ] = arg_1 ( atmp10010 ) ) ;
+if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
+( result = tmp [ 3 ] ) ;
 put_result ( table , interm , result ) ;
 return result ;
 }
 }
 ( atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp1000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp1000 [ 1 ] ) ;
 }
 }
 }

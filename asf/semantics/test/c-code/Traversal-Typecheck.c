@@ -311,29 +311,29 @@ ATprotect ( & constant32 ) ;
 }
 ATerm lf_45 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_45sym , ATmakeAppl ( lf_45sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_44sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf_list_43sym ) ) {
-( tmp [ 0 ] = arg_0 ( atmp00 ) ) ;
+( tmp [ 1 ] = arg_0 ( atmp00 ) ) ;
 {
 ATerm atmp00010 ;
 ATerm atmp0000 [ 2 ] ;
-( atmp0000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp0000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp00010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp0000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp0000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp00010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( check_sym ( arg1 , lf_list_33sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_45_recursive ( cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , tmp [ 0 ] ) , lf_trafo_td_41 ( lf_list_33 ( make_list ( atmp10 ) ) , atmp00010 ) ) ) ;
+FUNC_EXIT ( lf_45_recursive ( cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , tmp [ 1 ] ) , lf_trafo_td_41 ( lf_list_33 ( make_list ( atmp10 ) ) , atmp00010 ) ) ) ;
 }
 }
 ( atmp0000 [ 1 ] = list_tail ( atmp0000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp0000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp0000 [ 1 ] ) ;
 }
 }
 }
@@ -344,7 +344,7 @@ FUNC_EXIT ( make_nf2 ( lf_45sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_45_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_45_recursivesym , ATmakeAppl ( lf_45_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm ltmp [ 2 ] ;
@@ -352,25 +352,25 @@ lbl_lf_45_recursive : ltmp [ 0 ] = arg0 ;
 ( ltmp [ 1 ] = arg1 ) ;
 {
 ATerm atmp00 = arg0 ;
-( tmp [ 0 ] = atmp00 ) ;
+( tmp [ 1 ] = atmp00 ) ;
 {
 ATerm atmp00010 ;
 ATerm atmp0000 [ 2 ] ;
-( atmp0000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp0000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp00010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp0000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp0000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp00010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( check_sym ( ltmp [ 1 ] , lf_list_33sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-( arg0 = cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , tmp [ 0 ] ) ) ;
+( arg0 = cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , tmp [ 1 ] ) ) ;
 ( arg1 = lf_trafo_td_41 ( lf_list_33 ( make_list ( atmp10 ) ) , atmp00010 ) ) ;
 goto lbl_lf_45_recursive ;
 }
 }
 ( atmp0000 [ 1 ] = list_tail ( atmp0000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp0000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp0000 [ 1 ] ) ;
 }
 }
 }

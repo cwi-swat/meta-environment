@@ -240,29 +240,29 @@ ATprotect ( & constant29 ) ;
 }
 ATerm lf_accu_bu_33 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_accu_bu_33sym , ATmakeAppl ( lf_accu_bu_33sym , arg0 , arg1 ) ) ;
 ( arg1 = call_kids_accu ( lf_accu_bu_33 , arg0 , arg1 , ATempty ) ) ;
 if ( check_sym ( arg1 , lf_32sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf_list_31sym ) ) {
-( tmp [ 0 ] = arg_0 ( atmp10 ) ) ;
+( tmp [ 1 ] = arg_0 ( atmp10 ) ) ;
 {
 ATerm atmp10010 ;
 ATerm atmp1000 [ 2 ] ;
-( atmp1000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp1000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp10010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp1000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp1000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp10010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( arg0 , atmp10010 ) ) {
 if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"PICO-STR-CON\"))" ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_32sym , make_nf1 ( lf_list_31sym , cons ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) , cons ( make_list ( arg0 ) , tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_32sym , make_nf1 ( lf_list_31sym , cons ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) , cons ( make_list ( arg0 ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 }
 ( atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp1000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp1000 [ 1 ] ) ;
 }
 }
 }

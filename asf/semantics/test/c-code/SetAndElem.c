@@ -64,33 +64,33 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_8 ( ATerm arg0 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_8sym , ATmakeAppl ( lf_8sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_list_6sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg0 ) ) ;
+( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-FUNC_EXIT ( lf_8_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( lf_8_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 }
@@ -99,42 +99,42 @@ FUNC_EXIT ( make_nf1 ( lf_8sym , arg0 ) ) ;
 }
 ATerm lf_8_recursive ( ATerm arg0 ) {
 {
-ATerm tmp [ 6 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_8_recursivesym , ATmakeAppl ( lf_8_recursivesym , arg0 ) ) ;
-( tmp [ 0 ] = arg0 ) ;
+( tmp [ 1 ] = arg0 ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-( tmp [ 1 ] = lf_8_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_8_recursivesym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 2 ] = lf_8_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 1 ] ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_8_recursivesym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_8_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ;
-FUNC_EXIT ( tmp [ 5 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
+( tmp [ 4 ] = list_tail ( tmp [ 4 ] ) ) ;
+( tmp [ 6 ] = lf_8_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 4 ] ) ) ) ) ) ;
+FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_8_recursivesym , lf_list_6 ( arg0 ) ) ) ;
@@ -142,23 +142,23 @@ FUNC_EXIT ( make_nf1 ( lf_8_recursivesym , lf_list_6 ( arg0 ) ) ) ;
 }
 ATerm lf_7 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_7sym , ATmakeAppl ( lf_7sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_list_6sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg1 ) ) ;
+( tmp [ 1 ] = arg_0 ( arg1 ) ) ;
 {
 ATerm atmp1010 ;
 ATerm atmp100 [ 2 ] ;
-( atmp100 [ 0 ] = tmp [ 0 ] ) ;
-( atmp100 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp1010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp100 [ 0 ] = tmp [ 1 ] ) ;
+( atmp100 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp1010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( arg0 , atmp1010 ) ) {
 FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_3sym ) ) ;
 }
 ( atmp100 [ 1 ] = list_tail ( atmp100 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp100 [ 1 ] ) ;
+( tmp [ 1 ] = atmp100 [ 1 ] ) ;
 }
 }
 }
@@ -173,33 +173,33 @@ FUNC_EXIT ( make_nf2 ( lf_7sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_5 ( ATerm arg0 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_5sym , ATmakeAppl ( lf_5sym , arg0 ) ) ;
 if ( check_sym ( arg0 , lf_list_1sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg0 ) ) ;
+( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-FUNC_EXIT ( lf_5_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+FUNC_EXIT ( lf_5_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( atmp0010 ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 }
@@ -208,42 +208,42 @@ FUNC_EXIT ( make_nf1 ( lf_5sym , arg0 ) ) ;
 }
 ATerm lf_5_recursive ( ATerm arg0 ) {
 {
-ATerm tmp [ 6 ] ;
+ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_5_recursivesym , ATmakeAppl ( lf_5_recursivesym , arg0 ) ) ;
-( tmp [ 0 ] = arg0 ) ;
+( tmp [ 1 ] = arg0 ) ;
 {
 ATerm atmp001110 ;
 ATerm atmp00110 [ 2 ] ;
 ATerm atmp0010 ;
 ATerm atmp000 [ 2 ] ;
-( atmp000 [ 0 ] = tmp [ 0 ] ) ;
-( atmp000 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp0010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
-( atmp00110 [ 0 ] = tmp [ 0 ] ) ;
-( atmp00110 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp000 [ 0 ] = tmp [ 1 ] ) ;
+( atmp000 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp0010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp00110 [ 0 ] = tmp [ 1 ] ) ;
+( atmp00110 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp001110 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-( tmp [ 1 ] = lf_5_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_5_recursivesym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 2 ] = lf_5_recursive ( cons ( make_list ( atmp0010 ) , tmp [ 1 ] ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_5_recursivesym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_5_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ;
-FUNC_EXIT ( tmp [ 5 ] ) ;
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+( tmp [ 5 ] = list_head ( tmp [ 4 ] ) ) ;
+( tmp [ 4 ] = list_tail ( tmp [ 4 ] ) ) ;
+( tmp [ 6 ] = lf_5_recursive ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 4 ] ) ) ) ) ) ;
+FUNC_EXIT ( tmp [ 6 ] ) ;
 }
 }
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp00110 [ 1 ] ) ;
+( tmp [ 1 ] = atmp00110 [ 1 ] ) ;
 }
 ( atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp000 [ 1 ] ) ;
+( tmp [ 1 ] = atmp000 [ 1 ] ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_5_recursivesym , lf_list_1 ( arg0 ) ) ) ;
@@ -251,23 +251,23 @@ FUNC_EXIT ( make_nf1 ( lf_5_recursivesym , lf_list_1 ( arg0 ) ) ) ;
 }
 ATerm lf_2 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_2sym , ATmakeAppl ( lf_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_list_1sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg1 ) ) ;
+( tmp [ 1 ] = arg_0 ( arg1 ) ) ;
 {
 ATerm atmp1010 ;
 ATerm atmp100 [ 2 ] ;
-( atmp100 [ 0 ] = tmp [ 0 ] ) ;
-( atmp100 [ 1 ] = tmp [ 0 ] ) ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-( atmp1010 = list_head ( tmp [ 0 ] ) ) ;
-( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+( atmp100 [ 0 ] = tmp [ 1 ] ) ;
+( atmp100 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp1010 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( term_equal ( arg0 , atmp1010 ) ) {
 FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_3sym ) ) ;
 }
 ( atmp100 [ 1 ] = list_tail ( atmp100 [ 1 ] ) ) ;
-( tmp [ 0 ] = atmp100 [ 1 ] ) ;
+( tmp [ 1 ] = atmp100 [ 1 ] ) ;
 }
 }
 }

@@ -35,6 +35,9 @@ CLEANFILES = *.out *.c ${TEST_MODULES}
 check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
 	rm -f *.out *.c
 
+asfe.test: ${TEST_MODULES:=.asfe.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
+asfc.test: ${TEST_MODULES:=.asfc.test} 
+
 %.test: %.asfe.test %.asfc.test
 	@printf "Testing $*, comparing asfe and asfc: "
 	@set -e; for i in *.asfc.out; do \
