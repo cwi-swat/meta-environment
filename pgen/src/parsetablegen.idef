@@ -33,10 +33,16 @@ let
   Syntax    : term,
   Name      : str,
   Extension : str,
-  Table     : str
+  Table     : term
 in
   (
-    rec-msg(generate-parsetable(Syntax?, Name?, Extension?)) .
+    (
+      rec-msg(generate-parsetable(Syntax?, eqs(Name?))) .
+      Extension := "eqs.tbl"
+    +
+      rec-msg(generate-parsetable(Syntax?, trm(Name?))) .
+      Extension := "trm.tbl"
+    ) .
     execute(parsetablegen,GENTABLE?) .
     snd-eval(GENTABLE, generate-table(Syntax, Name, Extension)) .
     rec-value(GENTABLE, generation-finished(Table?)) .

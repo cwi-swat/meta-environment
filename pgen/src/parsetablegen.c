@@ -36,7 +36,7 @@ static char *ptchars;
 static int ptsize = 0;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "1.2";
+static char myversion[] = "1.3";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -316,7 +316,8 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 
     fclose(file);
   }
-  return ATmake("snd-value(generation-finished(<str>))",full);
+  /*return ATmake("snd-value(generation-finished(<str>))",full);*/
+  return ATmake("snd-value(generation-finished(<term>))",ATBpack(pt));
 }
 
 /*}}}  */
