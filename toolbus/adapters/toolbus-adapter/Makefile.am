@@ -29,7 +29,8 @@ INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
 toolbus_adapter_SOURCES = toolbus-adapter.c toolbus-adapter.tif.c \
 			toolbus-adapter.tif.h
 
-toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb -lATB \
+toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb \
+			-L${top_builddir}/aterm -lATB \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
