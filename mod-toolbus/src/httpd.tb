@@ -14,7 +14,7 @@ process Httpd is
 let
   MYTOOL  : modToolbus,
   Id      : int,
-  Request  : term,
+  Request  : list,
   S       : str
 in  
   %% loop, waiting for modToolbus tools to connect
@@ -23,9 +23,9 @@ in
     rec-connect(MYTOOL?) .
     printf( "Connected\n") .
     rec-event( MYTOOL, request(Request?) ) .
-    printf( "Event received: %t\n", Request ) .
     snd-ack-event( MYTOOL, request(Request) ) .
-    snd-do(MYTOOL, reply(html([head(),body([p([sexual,gypsies]),p([live,at,covent,garden])])])) ) .
+    printf( "Request received: %t\n", Request ) .
+    snd-do(MYTOOL, reply-html(html([head(),body([p(Request)])]))) .
     rec-disconnect( MYTOOL ) 
   )*
   delta

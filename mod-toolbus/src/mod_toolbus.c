@@ -21,6 +21,7 @@
 
 #define VERBOSE
 #define TOOLBUS_PORT 11000 
+#define SEND_BUF_SIZE 11000
  
 /* Apache httpd */
 #include "httpd.h"
@@ -33,6 +34,7 @@
 
 /* homegrown encoders and decoders */
 #include "aterm-html.h"
+#include "parse-args.h"
 #include "utf8.h"
 
 /* getpid() calls need these */
@@ -101,15 +103,16 @@ static int http_req_handler( request_rec *http_req )
   
   /* toolbus communication */
   ATerm tb_event_to_send;
+  ATerm tb_args;
     
-  #define SEND_BUF_SIZE 1000
-  char send_buf[SEND_BUF_SIZE];      /* params to send to toolbus */
-  char send_buf_ascii[SEND_BUF_SIZE];    /* same after UTF-8 decode */
+  char args_ascii[SEND_BUF_SIZE];  
   
   /* these are used for control flow in the toolbus section */
   int count;
 
-  
+  /* init toolbus  module */
+  ATBinit( tb_init_argc, tb_init_argv, &BottomOfStack );
+ 
   /* update global variable so the toolbus handler can use it too */
   global_http_req = http_req;
     
@@ -135,24 +138,15 @@ static int http_req_handler( request_rec *http_req )
    *  read event to send from HTTP request arguments, validate
    *  filter, and prepare it to be sent to the toolbus
    */
-  if( read_HTTP_GET_arg( global_http_req->args, SEND_COMMAND_STRING, send_buf ) )
-  {
-    ap_rprintf( global_http_req, 
-      "missing \"%s\" argument exting.\n", SEND_COMMAND_STRING );  
+  utf8_to_ascii(args_ascii , global_http_req->args );
+  fprintf( stderr, "args: %s\n", global_http_req->args  );
+  fprintf( stderr, "send_buf_ascii %s\n", args_ascii );
+
+  if ((tb_args = parseHTTPArgs(args_ascii)) == NULL) {
+    ap_rprintf(global_http_req, "parse error in %s\n", args_ascii);
     return OK;
   }
-  utf8_to_ascii( send_buf_ascii, send_buf );
-  fprintf( stderr, "send_buf: %s\n", send_buf );
-  fprintf( stderr, "send_buf_ascii %s\n", send_buf_ascii );
-  if( validate_tb_event( send_buf_ascii ) != 0 )
-  {
-    /*** disconnect and exit gracefully here! ***/
-    ap_rprintf( global_http_req, 
-      "malformed toolbus term \"<font color=\"red\">%s</font>\"<br>\n", 
-      send_buf_ascii );  
-    return OK;
-  }
-    
+
   /*
    *  The toolbus part starts here.
    *  We connect to the toolbus and send an event to it.
@@ -172,9 +166,7 @@ static int http_req_handler( request_rec *http_req )
       "global_is_tb_session_done >0 before toolbus_handler() called." );  
   }
   
-  /* init toolbus  module */
-  ATBinit( tb_init_argc, tb_init_argv, &BottomOfStack );
-  
+
   /* connect to toolbus and install our handler: toolbus_handler() */
   if( (tb_conn = ATBconnect( NULL, NULL, TOOLBUS_PORT, toolbus_handler )) >= 0 )
   {
@@ -199,15 +191,10 @@ static int http_req_handler( request_rec *http_req )
       {
         if( count ) /* send an event to the toolbus */
         { 
-          /* 
-           *  send term from HTTP GET to toolbus
-           */
-          tb_event_to_send = ATreadFromString( send_buf_ascii );
-          ATBwriteTerm( tb_conn, 
-            ATmake( "snd-event(request(<term>))", tb_event_to_send ) );
-          ATfprintf( stderr, "\nsending event to toolbus: %t\n",
-            ATmake( "snd-event(request(<term>))", tb_event_to_send ) );
-          fflush( stderr );
+          ATBwriteTerm(tb_conn, ATmake("snd-event(request(<term>))", tb_args));
+          ATfprintf(stderr, "\nsending event to toolbus: %t\n",
+		    ATmake( "snd-event(request(<term>))", tb_args ) );
+          fflush(stderr);
           count --;
         } 
       }
@@ -225,6 +212,7 @@ static int http_req_handler( request_rec *http_req )
      
   fprintf( stderr,"mod_toolbus: leaving handler\n");
   fflush( stderr );
+
   return OK;
 }
 
@@ -239,7 +227,7 @@ ATerm toolbus_handler( int tb_conn, ATerm input )
   ATerm myterm;    /* general purpose */
   ATerm myterm2;    /* general purpose */
   char html_buf[HTML_BUF_SIZE];
-
+  char *html_text;
     
   ATfprintf( stderr, "mod_toolbus: toolbus_handler(): received: %t\n", 
     input );
@@ -265,11 +253,18 @@ ATerm toolbus_handler( int tb_conn, ATerm input )
     rv = NULL;
   }
   /* toolbus asked us to display an HTML page encoded as an ATerm  */
-  else if( ATmatch( input, "rec-do(reply(<term>))", &myterm ) )
+  else if( ATmatch( input, "rec-do(reply-html(<term>))", &myterm ) )
   {
-    ATfprintf( stderr, "mod_toolbus: toolbus_handler(): rec-do(reply())\n" );
+    ATfprintf(stderr, "mod_toolbus: toolbus_handler(): rec-do(reply-html())\n" );
     ATparseHTML( myterm, html_buf, HTML_BUF_SIZE );
     ap_rprintf( global_http_req, html_buf );  
+    global_is_tb_session_done ++;  /* after this we're done */
+    rv = NULL;
+  }
+  else if( ATmatch( input, "rec-do(reply-text(<str>))", &html_text ) )
+  {
+    ATfprintf(stderr, "mod_toolbus: toolbus_handler(): rec-do(reply-text())\n" );
+    ap_rprintf( global_http_req, html_text );  
     global_is_tb_session_done ++;  /* after this we're done */
     rv = NULL;
   }
@@ -453,3 +448,5 @@ module AP_MODULE_DECLARE_DATA toolbus_module =
   NULL,
   mod_toolbus_register_hooks,      /* callback for registering hooks */
 };
+
+
