@@ -26,19 +26,19 @@
 #include "meta-interface.tb"
 
 /* Tool interfaces */
-#include "position-annotator.idef"
 #include "apply-function.idef"
 #include "configuration-manager.idef"
 #include "editor-hive.idef"
 #include "editor-manager.idef"
 #include "generic-adapter.idef" 
+#include "graph-converter.idef"
 #include "in-output.idef"
 #include "layout-graph.idef"
 #include "parsetablegen.idef"
+#include "position-annotator.idef"
 #include "restorebrackets.idef"
-#include "structure-editor.idef"
 #include "sglr.idef"
-#include "graph-converter.idef"
+#include "structure-editor.idef"
 #include "unparser.idef"
 
 #ifdef QUERY
@@ -47,19 +47,19 @@
 
 process META is
 let 
-  Id      : term,
-  Syntax  : str,
+  Id : term,
+  Syntax : str,
   Semantics : str,
   Term : str,
   Sort : term,
-  Pid  : int
+  Pid : int
 in
   Id := process-id .
   (
     rec-msg(get-file-extensions) .
     snd-msg(file-extensions-hook).
-    rec-msg(file-extensions-hook-result(Syntax?,Semantics?,Term?)).
-    snd-msg(set-file-extensions(syntax(Syntax),rules(Semantics),term(Term)))
+    rec-msg(file-extensions-hook-result(Syntax?, Semantics?, Term?)).
+    snd-msg(set-file-extensions(syntax(Syntax), rules(Semantics), term(Term)))
   +
     rec-msg(get-rules-top-sort) .
     snd-msg(semantics-top-sort-hook).
