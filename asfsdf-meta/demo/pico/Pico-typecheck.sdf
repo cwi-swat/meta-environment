@@ -15,6 +15,9 @@ exports
     "tce"(EXP, TENV)               -> TYPE
 
 hiddens
+  context-free start-symbols
+    Boolean
+
   variables
     "Decls"[0-9\']*   -> DECLS
     "Exp"[0-9\']*     -> EXP

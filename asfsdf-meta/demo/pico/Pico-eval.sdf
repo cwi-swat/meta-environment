@@ -20,6 +20,9 @@ exports
     "eve"(EXP, VENV)              -> VALUE
 
 hiddens
+  context-free start-symbols
+    VALUE-ENV
+
   variables
     "Decls"[0-9\']*   -> DECLS
     "Exp"[0-9\']*     -> EXP
