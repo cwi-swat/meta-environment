@@ -377,7 +377,7 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
   else {
     return (PT_Tree) CO_makeWriteResultFailure(l,l,
 			       makeGeneralError("write-term-to-file",
-						(char*) sys_errlist[errno]),l);
+						strerror(errno)),l);
   }
 
   return tree_arg;
@@ -465,7 +465,8 @@ static PT_Tree read_bytes_from_file(PT_Tree input)
 
   return (PT_Tree) 
     CO_makeBytesResultFailure(l,l,makeGeneralError("read-bytes-from-file",
-						   (char*)sys_errlist[errno]),
+						   strerror(errno)),
+
 			      l);
 }
 
@@ -509,7 +510,7 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
     return (PT_Tree) 
       CO_makeWriteResultFailure(l,l,
 				makeGeneralError("write-bytes-to-file",
-				(char*) sys_errlist[errno]),
+				strerror(errno)),
 				l);
   } 
 
