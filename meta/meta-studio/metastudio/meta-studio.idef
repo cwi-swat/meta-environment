@@ -236,7 +236,7 @@ in
    ( rec-event(UI, layout-graph(Graph?)) .
      snd-msg(layout-graph(Graph)) .
      rec-msg(graph-layouted(LayoutedGraph?)) .
-     snd-do(UI, graph-layouted("import", LayoutedGraph)) .
+     snd-do(UI, graph-layouted(LayoutedGraph)) .
      snd-ack-event(UI, layout-graph(Graph))
    )
   ) *
