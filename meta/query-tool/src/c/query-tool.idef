@@ -8,10 +8,17 @@ in
   (
     rec-msg(query("FindSortDefinition", Module?, Tree?)) .
     execute(query-tool, QT?) .
-    snd-eval(QT, query(Module, Tree)) .
+    snd-eval(QT, query("symbol", Module, Tree)) .
     rec-value(QT, result(Term?)) .
     snd-terminate(QT,"done") .
     snd-msg(result("FindSortDefinition", Term))
+  +
+    rec-msg(query("FindProduction", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query("production", Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindProduction", Term))
   ) *
   delta
 endlet

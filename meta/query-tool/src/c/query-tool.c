@@ -81,9 +81,10 @@ ATerm findProduction(ATerm atModule, ATerm atTree)
 
 /*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
 
-ATerm query(int cid, ATerm atModule, ATerm atTree)
+ATerm query(int cid, char *type, ATerm atModule, ATerm atTree)
 {
-  return findSortDefinition(atModule, atTree);
+  /*return findSortDefinition(atModule, atTree);*/
+  return findProduction(atModule, atTree);
 }
 
 /*}}}  */

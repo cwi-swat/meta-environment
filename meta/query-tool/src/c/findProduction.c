@@ -11,18 +11,47 @@
 
 static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
 {
-  SDF_Symbol symbols1;
-  SDF_Symbol symbols2;
+  SDF_Symbol symbol1;
+  SDF_Symbol symbol2;
+  ATbool equalLists = ATtrue;
 
-  while (!SDF_isSymbolListEmpty(s1)) {
+  while (!SDF_isSymbolListEmpty(s1) && equalLists) {
     if (SDF_isSymbolListEmpty(s2)) {
-      return ATfalse;
+      equalLists = ATfalse;
     }
-    symbols1 = SDF_getSymbolListHead(s1);
-    symbols2 = SDF_getSymbolListHead(s2);
+    symbol1 = SDF_getSymbolListHead(s1);
+    symbol2 = SDF_getSymbolListHead(s2);
+
+    if (SDF_isEqualSymbol(symbol1, symbol2)) {
+      equalLists = ATtrue;
+    }
+    else if (SDF_isSymbolLit(symbol1) &&
+	     SDF_isSymbolLit(symbol2)) {
+      equalLists = ATtrue;
+    }
+    else {
+      equalLists = ATfalse;
+    }
+
+    if (SDF_hasSymbolListTail(s1)) {
+      s1 = SDF_getSymbolListTail(s1);
+      if (SDF_hasSymbolListTail(s2)) {
+        s2 = SDF_getSymbolListTail(s2);
+      }
+      else {
+        equalLists = ATfalse;
+	break;
+      }
+    }
+    else {
+      if (SDF_hasSymbolListTail(s2)) {
+        equalLists = ATfalse;
+      }
+      break;
+    }
   }
 
-  return ATfalse;
+  return equalLists;
 }
 
 /*}}}  */
