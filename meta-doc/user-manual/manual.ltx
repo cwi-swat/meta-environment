@@ -487,8 +487,8 @@ The {\tt Graph} menu is used for setting options for the display of the graph
 in the import pane.  It is shown in Figure \ref{FIG:graph-menu}.
 
 
-{\tt View All} (** wat doet die eigenlijk? **)
-
+{\tt View All} enlarges the import pane to enable the display of the whole
+import graph.
 
 {\tt Autoresize after loading} defines the size of the import pane
 after loading a specification. When enabled (check box red), the
@@ -647,12 +647,12 @@ gives more details on the compilation of \asfsdf\ specifications.
 {\tt Info} gives module information  not yet implemented).
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=compiler-warning.ps,width=3cm}}
+  \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
   \caption{\label{FIG:compiler-warning}Warning ({\tt Compile module...})}
 \end{figure}
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=compiler-dir.ps,width=3cm}}
+  \centerline{\epsfig{file=compiler-dir.ps,width=4cm}}
   \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
 \end{figure}
 
@@ -797,7 +797,7 @@ pico contains:
 
 \begin{itemize}
 
-\item Go to directory pico. 
+\item Go to directory {\tt pico}. 
 \item Type the command {\tt meta}. The main window of the Meta-environment
   will appear as shown in Figure~\ref{FIG:meta-start}.
   
@@ -1409,20 +1409,24 @@ expressions results in a value.
 
 \section{An Introduction to \asfsdf} \label{ASF+SDF}
 
-\asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
-Specification Formalism) and \sdf\ (Syntax Definition Formalism). 
-\asf\ is based on the notion of a module consisting of a signature 
-defining the abstract syntax of functions and a set of conditional 
-equations defining their semantics. Modules can be imported in other 
-modules and can be parameterized. \sdf\ allows the simultaneous 
-definition of concrete (i.e., lexical and context-free) and 
-abstract syntax and implicitly defines a translation from
-text strings to abstract syntax trees. In fact we will describe here
-\sdf2 instead of \sdf. \sdf2 is more powerful and offers some special
-features to write more concise context-free grammar definitions. On the
-other hand some built-in features of \sdf, like lexical disambiguation,
-have disappeared, and a specification writer has to take care of
-this explicitly.
+\asfsdf\ is the result of the marriage of two formalisms \asf\
+(Algebraic Specification Formalism) and \sdf\ (Syntax Definition
+Formalism).  \asf\ is based on the notion of a module consisting of a
+signature defining the abstract syntax of functions and a set of
+conditional equations defining their semantics. Modules can be
+imported in other modules. \sdf\ allows the simultaneous definition of
+concrete (i.e., lexical and context-free) and abstract syntax and
+implicitly defines a translation from text strings to abstract syntax
+trees\footnote{In fact we will describe here \sdf2\ instead of \sdf. \sdf2 is
+more powerful and offers some special features to write more concise
+context-free grammar definitions. On the other hand some built-in
+features of \sdf, like lexical disambiguation, have disappeared, and a
+specification writer has to take care of this explicitly.
+
+\sdf2 offers a number of language features which are not
+yet supported by the various components of the \ASmetaenv. In fact the 
+current version of the \ASmetaenv\ supports only the so-called 
+\sdf1 features of \sdf2.}
 
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
@@ -1462,18 +1466,22 @@ equations
   <Conditional-equation>*
 \end{verbatim}
 
-A module consists of a module header, followed by a list of zero or more
-import sections,  followed by a list of zero or more
-sections (that define sorts, lexical syntax, context-free syntax,
-priority relations, and variables) and conditional
-equations. These conditional equations are optional. In fact these
-conditional equations are physically stored in a separate file, see Section ??.
+A module consists of a module header, followed by a list of zero or
+more import sections, followed by a list of zero or more syntax sections
+(that define sorts, lexical syntax, context-free syntax, priority
+relations, and variables) and an optional equations section that
+defines conditional equations. 
 
-Each \emph{Section} starts with one of the keywords {\tt exports} or 
-{\tt hiddens} followed by a non-empty list of grammars: 
-{\tt exports} makes all entities in the section visible
-to other modules, {\tt hiddens} makes all entities in the section 
-local to the module. A Section has the form:
+Conceptually, a module is a single unit but for technical reasons the
+syntax sections and the equations section are stored in physically
+separate files.  For each module $M$ in a specification two files
+exist: `{\tt $M$.sdf2}' contains the syntax sections of $M$ and `{\tt
+$M$.eqs}' contains the equations section of $M$.
+
+Each {\tt <Section>} starts with one of the keywords {\tt exports} or
+  {\tt hiddens}: {\tt exports} makes all entities in the section
+  visible to other modules, {\tt hiddens} makes all entities in the
+  section local to the module. A Section has the form:
 
 \begin{verbatim}
 exports-or-hiddens
@@ -1617,7 +1625,7 @@ character code of $c_1$ is larger than that of $c_2$.
 
 By prefixing a character class with `{\tt \~{}}', it is complemented. Such a
 complemented character class accepts all characters not in the original class.
-      
+
 \paragraph{Escape Conventions}
 
 Characters with a special meaning in \asfsdf\ may cause problems when they are
