@@ -1,0 +1,138 @@
+Error recovery in the Login example
+-----------------------------------
+
+
+The challenge here is as follows:
+(1) Model part of the login process.
+(2) There are two tools:
+		- the client tool: a user interface for connecting to the system.
+		- the authentication tool that checks passwords.
+(3) Both tools may crash
+(4) Write a script that is robust
+
+
+The script without error recovery:
+
+tool CLIENT is
+...
+(
+  @snd-msg login(Name?, Password?) {
+    } 
+    ( @rec-msg login-succeeded . LOGGED-IN
+    +
+      @rec-msg login-failed
+    )
+
+) * delta
+
+
+tool Authentication is
+
+   @rec-msg login(Name?, Password?) {
+   	
+   } ( @snd-msg login-succeeded
+     + @snd-msg login-failed
+     )
+     
+General analysis
+----------------
+
+In the case of remote procedure calls we have the simple situation:
+
+   |
+   | ----- call   ---->|
+                       |
+                       |
+   |<----result/-------|
+         exception
+         
+The situation with general messages is that we can have five cases:
+
+(a) all goes well:
+
+   Sender            Receiver
+
+   |-------msg--------->|
+   |                    |
+   |                    |
+   |<------reply--------|
+   
+(b) sender aborts: tricky case since it changes the normal flow of actions
+
+   |-------msg--------->|
+   |                    |
+   |                    |
+   |------abort-------->|
+   
+   
+(c) receiver aborts: simple case since the occurrence of an abort is just
+    another reply to be considered by the sender
+
+   |-------msg--------->|
+   |                    |
+   |                    |
+   |<-----abort---------|  
+   
+   
+(d) sender aborts and then receiver aborts: hard case, since this requires exception handling
+    during recovery
+
+   |-------msg--------->|
+   |                    |
+   |-------abort------->|
+   |                    |
+   |<-----abort---------|  
+   
+(e) receiver aborts and then sender aborts: hard case, since this requires exception handling
+    during recovery
+
+   |-------msg--------->|
+   |                    |
+   |<------abort--------|
+   |                    |
+   |-----abort--------->|  
+     
+
+Now try to extend the login example with error recovery for these cases
+-----------------------------------------------------------------------
+
+For better understanding, all @ primitives are expanded.
+The cases (d) and (e) are not yet handled.
+
+tool CLIENT is
+...
+(
+  rec-event login(Name?, Password?) . snd-msg (Name, Password) {
+    } 
+    ( rec-msg login-succeeded . LOGGED-IN
+    +
+      rec-msg login-failed
+    +
+      rec-msg authentication-aborted	// Authentication tool crashes
+    ) >>
+    (rec-disconnect .  					// the client tool crashes
+    snd-msg client-aborted) .			// inform authentication about it
+
+  snd-ack-event login
+
+) * delta
+ 
+tool Authentication is
+
+   rec-msg login(Name?, Password?) . 
+   ( snd-eval (Name, Pasword) .
+     (  rec-msg client-aborted . 		// client tool crahes; just consume results of snd-eval
+   										// NOTE: this does not fit our @rec-msg {} @snd-msg scheme!
+   		(rec-value login-succeeded + rec-value login-failed)
+   	
+     + rec-value login-succeeded . snd-msg login-succeeded
+    
+     + rec-value login-failed . snd-msg login-failed
+     )   
+   ) >>   
+   rec-disconnect .						// the authentication tool disconnects
+   snd-msg authentication-aborted		// inform client about abort
+   Authentication() . 					// restart it (perhaps add max retry counter?)
+ 
+     
+   
