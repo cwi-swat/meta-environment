@@ -35,6 +35,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private static final int NODE_BORDER_WIDTH = 5;
   private static final int NODE_BORDER_HEIGHT = 5;
 
+  private static final String FILE_MENU_BUTTON_TYPE = "studio-menubar";
+  private static final String MODULE_POPUP_BUTTON_TYPE = "module-popup";
+  private static final String NEW_MODULE_POPUP_BUTTON_TYPE = "new-module-popup";
+
   public static MetaGraphFactory factory;
 
   private UserInterfaceBridge bridge;
@@ -45,6 +49,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private JList moduleList;
   private JPopupMenu modulePopup;
   private JPopupMenu newModulePopup;
+  private JComponent component;
+
+  private int mouseX;
+  private int mouseY;
 
   private JScrollPane historyPane;
 
@@ -140,82 +148,99 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent ev) {
-        doQuit();
+	  bridge.sendEvent(factory.parse("quit"));
       }
     });
+
+    //}}}
+    //{{{ Create module list
+
+    moduleList = new JList();
+    moduleList.setModel(moduleManager.getListModel());
+    ListSelectionListener moduleListListener = new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent event) {
+        /*
+        int index = event.getLastIndex();
+        String selectedModule
+          = (String)moduleList.getModel().getElementAt(index);
+          */
+        String selectedModule = (String) moduleList.getSelectedValue();
+        moduleManager.selectModule(moduleManager.getModule(selectedModule));
+      }
+    };
+    moduleList.addListSelectionListener(moduleListListener);
+
+    moduleList.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        checkModulePopup(e);
+      }
+      public void mouseReleased(MouseEvent e) {
+        checkModulePopup(e);
+      }
+    });
+
+    JScrollPane listPane = new JScrollPane(moduleList);
+
+    color = Preferences.getColor(PREF_TREEPANE_BACKGROUND);
+    moduleList.setBackground(color);
 
     //}}}
     //{{{ Create actions
 
     actionNewModule =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_NEW_MODULE + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_NEW_MODULE + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doNewModule();
-      }
-    };
-
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_NEW_MODULE + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_NEW_MODULE + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"New Module\"]"),
+			 moduleList, bridge, factory);
+    
     actionOpenModule =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_OPEN_MODULE + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_OPEN_MODULE + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doOpenModule();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_OPEN_MODULE + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_OPEN_MODULE + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Open Module\"]"),
+			 moduleList, bridge, factory);
 
     actionOpenLibModule =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_OPEN_LIB_MODULE + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_OPEN_LIB_MODULE + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doOpenLibModule();
-      }
-    };
-
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_OPEN_LIB_MODULE + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_OPEN_LIB_MODULE + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Open Library Module\"]"),
+			 moduleList, bridge, factory);
+    
     actionSaveAll =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_SAVE_ALL + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_SAVE_ALL + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doSaveAll();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_SAVE_ALL + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_SAVE_ALL + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Save All\"]"),
+			 moduleList, bridge, factory);
 
     actionClearAll =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_CLEAR_ALL + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_CLEAR_ALL + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doClearAll();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_CLEAR_ALL + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_CLEAR_ALL + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Close All\"]"),
+			 moduleList, bridge, factory);
 
     actionRefreshButtons =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_REFRESH_BUTTONS + ".text")) {
-      public void actionPerformed(ActionEvent event) {
-        doRefreshButtons();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_REFRESH_BUTTONS + ".text"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Refresh Buttons\"]"),
+			 moduleList, bridge, factory);
 
     actionClearHistory =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_CLEAR_HISTORY + ".text")) {
-      public void actionPerformed(ActionEvent event) {
-        doClearHistory();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_CLEAR_HISTORY + ".text"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Clear History\"]"),
+			 moduleList, bridge, factory);
 
     actionQuit =
-      new AbstractAction(
-        Preferences.getString(PREF_TOOLBAR_QUIT + ".text"),
-        Preferences.getIcon(PREF_TOOLBAR_QUIT + ".icon")) {
-      public void actionPerformed(ActionEvent event) {
-        doQuit();
-      }
-    };
+	new ButtonAction(Preferences.getString(PREF_TOOLBAR_QUIT + ".text"),
+			 Preferences.getIcon(PREF_TOOLBAR_QUIT + ".icon"),
+			 FILE_MENU_BUTTON_TYPE,
+			 (ATermList)factory.make("[\"Exit\"]"),
+			 moduleList, bridge, factory);
+
 
     //}}}
     //{{{ Create module menu
@@ -235,159 +260,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-syntax")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("edit-module(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-equations")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("edit-eqs-module(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-term") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doEditTerm((String) values[i]);
-        }
-      }
-    });
-
-    modulePopup.addSeparator();
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.save-module")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("save-module(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.revert-module")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("revert-module(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.close-module") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        String option;
-        int choice = JOptionPane.showConfirmDialog(topFrame, "Do you want to recursively close the imported modules?");
-
-	if (choice != JOptionPane.CANCEL_OPTION) {
-	  option = (choice == JOptionPane.YES_OPTION ? "recursive" : "top");
-	  Object[] values = moduleList.getSelectedValues();
-	  for (int i = 0; i < values.length; i++) {
-	    bridge.postEvent(factory.make("close-module(<str>," + option + ")", (String) values[i]));
-	  }
-	}
-      }
-    });
-
-    JMenu refactorMenu = new JMenu(Preferences.getString("text.refactor"));
-
-    refactorMenu.add(new AbstractAction(Preferences.getString("text.copy-module") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doCopyModule((String) values[i]);
-        }
-      }
-    });
-
-    refactorMenu.add(new AbstractAction(Preferences.getString("text.delete-module") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        int choice = JOptionPane.showConfirmDialog(topFrame, "Are you sure you want delete this module (from disk)?");
-
-        if (choice == JOptionPane.YES_OPTION) {
-          Object[] values = moduleList.getSelectedValues();
-          for (int i = 0; i < values.length; i++) {
-            bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
-          }
-        }
-      }
-    });
-
-    refactorMenu.add(new AbstractAction(Preferences.getString("text.rename") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doRenameModule((String) values[i]);
-        }
-      }
-    });
-
-    refactorMenu.add(new AbstractAction(Preferences.getString("text.add-import") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doAddImport((String) values[i]);
-        }
-      }
-    });
-
-    refactorMenu.add(new AbstractAction(Preferences.getString("text.remove-import") + "...") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doRemoveImport((String) values[i]);
-        }
-      }
-    });
-    modulePopup.add(refactorMenu);
-
-    modulePopup.addSeparator();
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.compile-module")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("compile-module(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.dump-equations")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("dump-equations(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.dump-parsetable")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("dump-parse-table(<str>)", (String) values[i]));
-        }
-      }
-    });
-
-    modulePopup.addSeparator();
-
-    modulePopup.add(new AbstractAction(Preferences.getString("text.print-module")) {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("print-module(<str>)", (String) values[i]));
-        }
-      }
-    });
 
     //}}}
 
@@ -405,23 +277,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
       public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
         importGraphPanel.setDragEnabled(true);
-      }
-    });
-
-    newModulePopup.add(new AbstractAction("Create this module") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("new-module(<str>,<str>)", (String) values[i], (String) values[i]));
-        }
-      }
-    });
-    newModulePopup.add(new AbstractAction("Delete this module") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
-        }
       }
     });
 
@@ -514,38 +369,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     scaleBox.addActionListener(listener);
 
     toolBar.add(scaleBox);
-
-    //}}}
-    //{{{ Create module list
-
-    moduleList = new JList();
-    moduleList.setModel(moduleManager.getListModel());
-    ListSelectionListener moduleListListener = new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent event) {
-        /*
-        int index = event.getLastIndex();
-        String selectedModule
-          = (String)moduleList.getModel().getElementAt(index);
-          */
-        String selectedModule = (String) moduleList.getSelectedValue();
-        moduleManager.selectModule(moduleManager.getModule(selectedModule));
-      }
-    };
-    moduleList.addListSelectionListener(moduleListListener);
-
-    moduleList.addMouseListener(new MouseAdapter() {
-      public void mousePressed(MouseEvent e) {
-        checkModulePopup(e);
-      }
-      public void mouseReleased(MouseEvent e) {
-        checkModulePopup(e);
-      }
-    });
-
-    JScrollPane listPane = new JScrollPane(moduleList);
-
-    color = Preferences.getColor(PREF_TREEPANE_BACKGROUND);
-    moduleList.setBackground(color);
 
     //}}}
     
@@ -1122,16 +945,15 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     if (showPopup) {
       Module module;
-      JComponent component;
-      int x = e.getX();
-      int y = e.getY();
+      mouseX = e.getX();
+      mouseY = e.getY();
 
       if (e.getSource() == moduleList) {
         component = moduleList;
         currentModule = (String) moduleList.getSelectedValue();
       } else if (e.getSource() == importGraphPanel) {
         component = importGraphPanel;
-        Node node = importGraphPanel.getNodeAt(x, y);
+        Node node = importGraphPanel.getNodeAt(mouseX, mouseY);
 
         if (node != null) {
           currentModule = node.getLabel();
@@ -1147,17 +969,133 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         moduleManager.selectModule(module);
 
         switch (module.getState()) {
-          case Module.STATE_NORMAL :
-            modulePopup.show(component, x, y);
+	  case Module.STATE_NORMAL :
+	    showModulePopup(MODULE_POPUP_BUTTON_TYPE);
             break;
           case Module.STATE_NEW :
-            newModulePopup.show(component, x, y);
+	    showModulePopup(NEW_MODULE_POPUP_BUTTON_TYPE);
             break;
         }
       }
     }
   }
 
+  //}}}
+
+  //{{{ private void showModulePopup(JComponent component, int x, int y)
+
+  private void showModulePopup(String buttonType) 
+  {
+      bridge.postEvent(factory.make("get-buttons(<str>,<str>)", buttonType, currentModule));
+	
+  }
+  //}}}
+
+  //{{{ public void buttonsFound(String buttonType, String moduleName, ATerm buttons)
+
+  public void buttonsFound(String buttonType, String moduleName, ATerm buttons)
+  {
+      if (buttonType.equals(MODULE_POPUP_BUTTON_TYPE)) {
+	  modulePopup.removeAll();
+	  addPopupMenuItems(modulePopup, buttonType, moduleName, 
+			    (ATermList)buttons, factory.makeList());
+	  modulePopup.show(component, mouseX, mouseY);
+      }
+      else if(buttonType.equals(NEW_MODULE_POPUP_BUTTON_TYPE)) {
+	  newModulePopup.removeAll();
+	  addPopupMenuItems(newModulePopup, buttonType, moduleName, 
+			    (ATermList)buttons, factory.makeList());
+	  newModulePopup.show(component, mouseX, mouseY);
+      }
+      else if(buttonType.equals(FILE_MENU_BUTTON_TYPE)) {
+      // addMenuItems(fileMenu, buttonType, moduleName, buttons, factory.makeList());
+      }
+  }
+  //}}}
+
+  //{{{ public void addPopupMenuItems(JPopupMenu menu, String buttonType, String moduleName, ATermList buttonList, ATermList prefixButtonName)
+    
+  public void addPopupMenuItems(JPopupMenu menu, String buttonType, String moduleName, 
+				ATermList buttonList, ATermList prefixButtonName)
+  {
+
+      for(int i = buttonList.getLength()-1; i >= 0 ; i--) {
+	  ATermList buttonName = (ATermList)(buttonList.elementAt(i));
+	  ATermAppl unquotedName = (ATermAppl)(buttonName.getFirst());
+
+	  if(buttonName.getLength() == 1) {
+	      menu.add(new ButtonAction(unquotedName.getName(),
+					buttonType, prefixButtonName.concat(buttonName),
+					moduleList, bridge, factory));
+	  }
+	  else {
+	      JMenu nextLevel = new JMenu(unquotedName.getName());
+	      ATermList menuName = (ATermList)(buttonList.elementAt(i));
+	      ATermAppl unquotedMenu = (ATermAppl)(menuName.getFirst());
+	      ATermList subMenu = factory.makeList();
+	      int j;
+	      boolean contLoop = true;
+	      
+	      for (j = i-1; unquotedName.isEqual(unquotedMenu) && contLoop; j--) {
+		  subMenu = subMenu.insert(menuName.getNext());
+		  if (j < 0) {
+		      contLoop = false;
+		  }
+		  else {
+		      menuName = (ATermList)(buttonList.elementAt(j));
+		      unquotedMenu = (ATermAppl)(menuName.getFirst());
+		  }
+	      }
+	      
+	      addMenuItems(nextLevel, buttonType, moduleName, 
+			   subMenu, prefixButtonName.insertAt(unquotedName, prefixButtonName.getLength()));
+	      menu.add(nextLevel);
+	      i = j+2;
+	  }
+      }
+  }      
+  //}}}
+
+  //{{{ public void addMenuItems(JMenu menu, String buttonType, String moduleName, ATerm buttons)
+    
+  public void addMenuItems(JMenu menu, String buttonType, String moduleName, 
+			   ATermList buttonList, ATermList prefixButtonName)
+  {
+      for(int i = buttonList.getLength()-1; i >= 0 ; i--) {
+	  ATermList buttonName = (ATermList)(buttonList.elementAt(i));
+	  ATermAppl unquotedName = (ATermAppl)(buttonName.getFirst());
+
+	  if(buttonName.getLength() == 1) {
+	      menu.add(new ButtonAction(unquotedName.getName(),
+					buttonType, prefixButtonName.concat(buttonName),
+					moduleList, bridge, factory));
+	  }
+	  else {
+	      JMenu nextLevel = new JMenu(unquotedName.getName());
+	      ATermList menuName = (ATermList)(buttonList.elementAt(i));
+	      ATermAppl unquotedMenu = (ATermAppl)(menuName.getFirst());
+	      ATermList subMenu = factory.makeList();
+	      int j;
+	      boolean contLoop = true;
+	      
+	      for (j = i-1; unquotedName.isEqual(unquotedMenu) && contLoop; j--) {
+		  subMenu = subMenu.insert(menuName.getNext());
+		  if (j < 0) {
+		      contLoop = false;
+		  }
+		  else {
+		      menuName = (ATermList)(buttonList.elementAt(j));
+		      unquotedMenu = (ATermAppl)(menuName.getFirst());
+		  }
+	      }
+	      
+	      addMenuItems(nextLevel, buttonType, moduleName, 
+			   subMenu, prefixButtonName.insertAt(unquotedName, prefixButtonName.getLength()));
+	      menu.add(nextLevel);
+	      i = j+2;
+	  }
+      }
+  }      
   //}}}
 
   //{{{ private File showFileBrowser(String label, String location, String extension, String desc)
@@ -1178,218 +1116,74 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ private File showModuleBrowser(String label, String location)
 
-  private File showModuleBrowser(String label, String location)
+  //{{{ public ATerm deconsFilename(String filename, String extension)
+  
+  public ATerm deconsFilename(String filename, String extension)
   {
-    String extension = Preferences.getString("module.extension");
-    String description = Preferences.getString("module.extension.description");
-    return showFileBrowser(label, location, extension, description);
-  }
-
-  //}}}
-  //{{{ private File showTermBrowser()
-
-  private File showTermBrowser(String label, String location)
-  {
-    String extension = Preferences.getString("term.extension");
-    String description = Preferences.getString("term.extension.description");
-    return showFileBrowser(label, location, extension, description);
-  }
-
-  //}}}
-
-  //{{{ String getFileModule(File file)
-
-  String getFileModule(File file, String extension) {
-    String module = file.getName();
-    if (module.endsWith(extension)) {
-      module = module.substring(0, module.length() - extension.length());
+    if (filename.endsWith(extension)) {
+      filename = filename.substring(0, filename.length() - extension.length());
     }
-
-    return module;
-  }
-
-  //}}}
-  //{{{ String getFilePath(File file, String module, String extension)
-
-  String getFilePath(File file, String module, String extension) {
-    String path = file.getPath();
-
-    if (path.endsWith(extension)) {
-      path = path.substring(0, path.length() - extension.length());
+    else {
+	extension = "";
     }
+    
+    String path = filename;
+    int lastIndex = path.lastIndexOf('/');
 
-    if (path.endsWith(module)) {
-      path = path.substring(0, path.length() - module.length());
+    if (lastIndex >= 0) {
+      path = path.substring(0, lastIndex+1);
+      filename = filename.substring(lastIndex+1, filename.length());
     }
-
-    return path;
+         
+    return factory.make("snd-value(file-name(<str>,<str>,<str>))", path, filename, extension);
   }
 
   //}}}
 
-  //{{{ void doNewModule()
+  //{{{   public ATerm showFileDialog(String label, String loc, String extension)
 
-  void doNewModule() {
-    String label = Preferences.getString("text.new-module");
-    String location = System.getProperty("user.dir");
+    public ATerm showFileDialog(String label, String loc, String extension) {
 
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module,  extension);
-
-      ATerm event = factory.make("new-module(<str>,<str>,<str>)", path, module, extension);
-      bridge.postEvent(event);
+	String location;
+	
+	if (!loc.equals("")) {
+	      location = loc;
+	}
+	else {
+	    location = System.getProperty("user.dir");
+	}
+	
+	File file = showFileBrowser(label, location, extension, "*"+extension);
+	if (file != null) {
+	    return factory.make("snd-value(file-name(<str>))", file.getAbsolutePath());
+	}
+	else {
+	    return factory.make("snd-value(file-name(<str>))", "");
+	}
     }
-  }
-
+    
   //}}}
-  //{{{ void doOpenModule()
 
-  void doOpenModule() {
-    String label = Preferences.getString("text.open-module");
-    String location = System.getProperty("user.dir");
+  //{{{   public ATerm showQuestionDialog(String question)
 
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
+    public ATerm showQuestionDialog(String question) 
+    {
+        String option;
+        int choice = JOptionPane.showConfirmDialog(topFrame, question);
 
-      ATerm event = factory.make("open-module(<str>,<str>,<str>)", path, module, extension);
-      bridge.postEvent(event);
+	if (choice == JOptionPane.YES_OPTION) {
+	    return factory.make("snd-value(answer(yes))");	    
+	}
+	if (choice == JOptionPane.NO_OPTION) {
+	    return factory.make("snd-value(answer(no))");	    
+	}
+
+	return factory.make("snd-value(answer(cancel))");	    
     }
-  }
-
-  //}}}
-  //{{{ void doOpenLibModule()
-
-  void doOpenLibModule() {
-    String label = Preferences.getString("text.open-lib-module");
-    String location = Preferences.getString("library.dir");
-
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
-
-      ATerm event = factory.make("open-module(<str>,<str>,<str>)", path, module,extension);
-      bridge.postEvent(event);
-    }
-  }
-
-  //}}}
-  //{{{ void doRenameModule(String oldModule)
-
-  void doRenameModule(String oldModule) {
-    String label = Preferences.getString("text.rename");
-    String location = System.getProperty("user.dir");
-
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
-
-      ATerm event = factory.make("rename-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
-      bridge.postEvent(event);
-    }
-  }
-
-  //}}}
-  //{{{ void doCopyModule(String oldModule)
-
-  void doCopyModule(String oldModule) {
-    String label = Preferences.getString("text.copy-module");
-    String location = System.getProperty("user.dir");
-
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
-
-      ATerm event = factory.make("copy-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
-      bridge.postEvent(event);
-    }
-  }
-
+    
   //}}}
 
-  //{{{ void doAddImport(String oldModule)
-
-  void doAddImport(String oldModule)
-  {
-    String label = Preferences.getString("text.add-import");
-    String location = System.getProperty("user.dir");
-
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
-
-      ATerm event = factory.make("import-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
-      bridge.postEvent(event);
-    }
-  }
-
-  //}}}
-  //{{{ void doRemoveImport(String oldModule)
-
-  void doRemoveImport(String oldModule)
-  {
-    String label = Preferences.getString("text.remove-import");
-    String location = System.getProperty("user.dir");
-
-    /*
-    System.out.println("oldModule: " + oldModule);
-    Module cur = moduleManager.getModule(oldModule);
-    JComboBox imports = new JComboBox(cur.fetchChildrenArray());
-    JFrame frame = new JFrame("Remove Import");
-    frame.getContentPane().add(imports);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
-    frame.setVisible(true);
-    */
-
-    File file = showModuleBrowser(label, location);
-    if (file != null) {
-      String extension = Preferences.getString("module.extension");
-      String module = getFileModule(file, extension);
-      String path = getFilePath(file, module, extension);
-
-      ATerm event = factory.make("unimport-module(<str>,<str>,<str>,<str>)", oldModule, module, path, extension);
-      bridge.postEvent(event);
-    }
-  }
-
-  //}}}
-
-  //{{{ void doEditTerm(String module)
-
-  void doEditTerm(String module) {
-    String label = Preferences.getString("text.edit-term");
-    String location = System.getProperty("user.dir");
-
-    File file = showTermBrowser(label, location);
-    if (file != null) {
-      bridge.postEvent(factory.make("edit-term(<str>,<str>)", module, file.getAbsolutePath()));
-    }
-  }
-
-  //}}}
-  //{{{ void doSaveAll()
-
-  void doSaveAll() {
-    bridge.sendEvent(factory.parse("save-all"));
-  }
-
-  //}}}
   //{{{ void doClearAll()
 
   void doClearAll() {
@@ -1400,28 +1194,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ void doRefreshButtons()
+  //{{{ void clearHistory()
 
-  void doRefreshButtons() {
-    bridge.sendEvent(factory.parse("refresh-buttons"));
-  }
-
-  //}}}
-  //{{{ void doClearHistory()
-
-  void doClearHistory() {
+  public void clearHistory() {
     try {
       historyDoc.remove(0, historyDoc.getLength());
     } catch (BadLocationException e) {
       System.err.println(e.getMessage());
     }
-  }
-
-  //}}}
-  //{{{ void doQuit()
-
-  void doQuit() {
-    bridge.sendEvent(factory.parse("quit"));
   }
 
   //}}}

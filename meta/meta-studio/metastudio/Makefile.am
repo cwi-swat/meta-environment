@@ -44,4 +44,5 @@ java_JAVA = \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
         MessageWindow.java \
-	MessageList.java
+	MessageList.java \
+        ButtonAction.java

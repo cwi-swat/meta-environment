@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: May 26, 2003 10:13:54 PM
+// generation time: Jun 3, 2003 1:08:20 PM
 
 package metastudio;
 
@@ -99,6 +99,32 @@ public class UserInterfaceBridge
   }
 
   //}}}
+  //{{{  public void buttonsFound(String s0, String s1, ATerm t2)
+
+  public void buttonsFound(String s0, String s1, ATerm t2)
+  {
+    if (tool != null) {
+      tool.buttonsFound(s0, s1, t2);
+    }
+    else {
+      throw new UnsupportedOperationException("method `buttonsFound' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void clearHistory()
+
+  public void clearHistory()
+  {
+    if (tool != null) {
+      tool.clearHistory();
+    }
+    else {
+      throw new UnsupportedOperationException("method `clearHistory' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public void deleteModules(ATerm t0)
 
   public void deleteModules(ATerm t0)
@@ -173,6 +199,45 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `endStatus' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public ATerm deconsFilename(String s0, String s1)
+
+  public ATerm deconsFilename(String s0, String s1)
+  {
+    if (tool != null) {
+      return tool.deconsFilename(s0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `deconsFilename' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public ATerm showQuestionDialog(String s0)
+
+  public ATerm showQuestionDialog(String s0)
+  {
+    if (tool != null) {
+      return tool.showQuestionDialog(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showQuestionDialog' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public ATerm showFileDialog(String s0, String s1, String s2)
+
+  public ATerm showFileDialog(String s0, String s1, String s2)
+  {
+    if (tool != null) {
+      return tool.showFileDialog(s0, s1, s2);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showFileDialog' not supported.");
     }
   }
 

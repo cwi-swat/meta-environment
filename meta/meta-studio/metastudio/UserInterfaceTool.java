@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: May 26, 2003 10:13:54 PM
+// generation time: Jun 3, 2003 1:08:20 PM
 
 package metastudio;
 
@@ -23,12 +23,17 @@ abstract public class UserInterfaceTool
   private ATerm Perrorf0;
   private ATerm PgraphLayouted0;
   private ATerm PinitializeUi0;
+  private ATerm PbuttonsFound0;
+  private ATerm PclearHistory0;
   private ATerm PdeleteModules0;
   private ATerm Perror0;
   private ATerm PdisplayGraph0;
   private ATerm PnewGraph0;
   private ATerm PupdateList0;
   private ATerm PendStatus0;
+  private ATerm PdeconsFilename0;
+  private ATerm PshowQuestionDialog0;
+  private ATerm PshowFileDialog0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -62,6 +67,11 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,buttons-found(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<user-interface>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<user-interface>,decons-filename(<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,update-list(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
@@ -79,12 +89,17 @@ abstract public class UserInterfaceTool
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
     PgraphLayouted0 = factory.parse("rec-do(graph-layouted(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>,<str>,<str>,<str>,<str>))");
+    PbuttonsFound0 = factory.parse("rec-do(buttons-found(<str>,<str>,<term>))");
+    PclearHistory0 = factory.parse("rec-do(clear-history)");
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PnewGraph0 = factory.parse("rec-do(new-graph(<term>))");
     PupdateList0 = factory.parse("rec-do(update-list(<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
+    PdeconsFilename0 = factory.parse("rec-eval(decons-filename(<str>,<str>))");
+    PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
+    PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -128,6 +143,16 @@ abstract public class UserInterfaceTool
       initializeUi((String)result.get(0), (String)result.get(1), (String)result.get(2), (String)result.get(3), (String)result.get(4));
       return null;
     }
+    result = term.match(PbuttonsFound0);
+    if (result != null) {
+      buttonsFound((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      return null;
+    }
+    result = term.match(PclearHistory0);
+    if (result != null) {
+      clearHistory();
+      return null;
+    }
     result = term.match(PdeleteModules0);
     if (result != null) {
       deleteModules((ATerm)result.get(0));
@@ -157,6 +182,18 @@ abstract public class UserInterfaceTool
     if (result != null) {
       endStatus((ATerm)result.get(0));
       return null;
+    }
+    result = term.match(PdeconsFilename0);
+    if (result != null) {
+      return deconsFilename((String)result.get(0), (String)result.get(1));
+    }
+    result = term.match(PshowQuestionDialog0);
+    if (result != null) {
+      return showQuestionDialog((String)result.get(0));
+    }
+    result = term.match(PshowFileDialog0);
+    if (result != null) {
+      return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));
     }
     result = term.match(PrecAckEvent0);
     if (result != null) {
