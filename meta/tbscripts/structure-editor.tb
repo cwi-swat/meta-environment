@@ -10,7 +10,8 @@ process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
 let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
-  Char: term, G: str, ErrList: list, Cycle: list, Src:str
+  Char: term, G: str, ErrList: list, Cycle: list, Src:str,
+  Fun: str, Args: list
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
@@ -47,9 +48,21 @@ printf("newEditor is started\n").
         rec-msg(TE,focus-text(Str?)).
         snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
           rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
-/*        printf("Replacement term: %t\n",T).*/
-          snd-eval(SE,replaceFocus(Fid, T)).
-          rec-value(SE,Fl?)
+/* The parser should return two different top-level function symbols for
+   succesfull parses, and for parse errors. Until that happens, this is 
+   a workaround
+*/
+          Fun := fun(T).
+          if equal(Fun,"parse-error") then
+/*          rec-msg(parse-result-asfix1(Id,parse-tree(parse-error(ErrList?,plain)))).  */
+            Args := args(T).
+            ErrList := index(Args,1).
+            snd-msg(set-error-focus(Fid,Foc,ErrList)). 
+            FF := join(FF,Foc)
+          else
+            snd-eval(SE,replaceFocus(Fid, T)).
+            rec-value(SE,Fl?)
+          fi
         + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,ambiguities(I?)))).
           printf("Parse of %s returned %d ambiguities",Str,I).
           printf("Term is: %t\n",T).
@@ -75,9 +88,7 @@ printf("newEditor is started\n").
       else
         /* Some parses were ambiguous */
         snd-eval(SE,setFocus(Fid, FF)).
-        rec-value(SE,Fl?).
-        Foc := first(Fl).
-        snd-msg(TE,set-focus(Fid,Foc))
+        rec-value(SE,Fl?)
       fi
     fi.
     /* Finished parsing operations */

@@ -7,10 +7,15 @@ let
   T  : term,
   T1 : term,
   T2 : term,
+  T3 : term,
+  T4 : term,
+  T5 : term,
+  T6 : term,
   Str: str,
   St : int,
   Ln : int,
-  I  : int
+  I  : int,
+  Pos: int
 in  
 ( printf("Process Focus is running").
 (
@@ -32,6 +37,11 @@ in
   snd-eval(TE,tb-get-focus-text(Fid,St,Ln)).
   rec-value(TE,focus-text(Fid,Str?)).
   snd-msg(TE,focus-text(Str))
+  + 
+  rec-msg(set-error-focus(Fid,focus(T1?,T2?,area(start(St?),T3?)),[T4?,T5?,T6?,char(I?)])).
+  Pos := add(St,I).
+  snd-do(TE,tb-set-char-pos(Fid,Pos)).
+  snd-do(TE,tb-set-msg("Parse error near cursor"))
 )
 ) *
 delta

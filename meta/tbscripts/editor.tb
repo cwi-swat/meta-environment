@@ -22,19 +22,24 @@ in
    The editor binary is executed from the Edit-master process, which knows
    about its tool id.
 */
-  Id := process-id .
-  snd-note(ui-status(stat(Id,"Starting text editor"))) .
-  snd-msg(get-editor-tool-id) .
-  rec-msg(editor-tool-id(TE?)) .
-  snd-eval(TE,tb-init(Filename)) .
-  rec-value(TE,file-id(Fid?)) .
-  snd-do(TE,tb-add-menu-item("Meta-Environment", "Parse")) .
-  snd-do(TE,tb-add-menu-item("Meta-Environment", "Reduce")) .
-  snd-note(ui-status(endstat(Id))) .
-  create(Structure-editor(TE, Fid, Text, Module), Tid?) .
-  create(Focus(TE, Fid), Tid?) .
-  (
-    rec-note(language-available(L?)) .
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Starting text editor"))).
+  snd-msg(get-editor-tool-id).
+  rec-msg(editor-tool-id(TE?)).
+  snd-eval(TE,tb-init(Filename)).
+  rec-value(TE,file-id(Fid?)).
+  snd-do(TE,tb-add-menu-item("Meta-Environment", "Parse")).
+  snd-do(TE,tb-add-menu-item("Meta-Environment", "Reduce")).
+/*  snd-do(TE,tb-add-menu-item("Meta-Environment", "Show Tree")).
+  snd-do(TE,tb-add-menu-item("Move", "Left")).
+  snd-do(TE,tb-add-menu-item("Move", "Right")).
+  snd-do(TE,tb-add-menu-item("Move", "Up")).
+  snd-do(TE,tb-add-menu-item("Move", "Down")).
+*/
+  snd-note(ui-status(endstat(Id))).
+  create(Structure-editor(TE, Fid, Text, Module), Tid?).
+  create(Focus(TE, Fid), Tid?). (
+    rec-note(language-available(L?)).
     snd-do(TE,registerlang(L))
   ) *
   rec-note(disconnected(TE))
