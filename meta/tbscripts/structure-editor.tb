@@ -53,10 +53,11 @@ in
             rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
             snd-eval(SE,replaceFocus(Fid, T)).
             rec-value(SE,Fl?)
-          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))).
+          + (rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))) +
+	    rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))).
             snd-msg(set-error-focus(Fid,Foc,ErrList)).
             FF := join(FF,Foc)
-          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
+	  + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
                                                        ambiguities(I?)))).
             printf("Parse of %s returned %d ambiguities",Str,I).
             printf("Term is: %t\n",T).
@@ -65,10 +66,7 @@ in
             printf("Parse of %s returned a cycle\n",Str).
             printf("Cycle is: %t\n",Cycle).
             FF :=join(FF,Foc)
-          + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof))).
-            printf("Error parsing %s\n",Str).
-            printf("Error: %l\n", ErrList).
-            FF := join(FF,Foc)
+         
           )
         else 
           tau
