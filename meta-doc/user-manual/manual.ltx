@@ -2913,7 +2913,7 @@ language of coordinates and drawing commands presented
 in Figure \ref{CODE:simple-cf}.
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:simple-cf}.
+below.
 \end{ifhtml}
 
 \begin{figure}
@@ -2947,7 +2947,7 @@ is presented
 in Figure \ref{CODE:simple-bnf}.
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:simple-bnf}.
+below.
 \end{ifhtml}
 
 \begin{figure}
@@ -2964,13 +2964,7 @@ in Figure \ref{CODE:simple-bnf}.
 When a literal in a context-free function consists only of lower-case letters
 and digits and is not a keyword of \asfsdf, it need not be surrounded with
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-definition given 
-\begin{iftex}
-in Figure \ref{CODE:simple-cf}.
-\end{iftex}
-\begin{ifhtml}
-\link{here}[]{CODE:simple-cf}.
-\end{ifhtml}
+\link{definition}[ given in Figure \ref{CODE:simple-cf}]{CODE:simple-cf}.
 
 \subsubsection{Lists}
 
@@ -2989,7 +2983,7 @@ context-free function as well as in the right-hand side of a
 Figure \ref{CODE:pascal-ids} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:pascal-ids} for an example of
+Below an example is given of
 \end{ifhtml}
 how lists can be used to define 
 the syntax of a list of identifiers (occurring in a declaration
@@ -3049,7 +3043,7 @@ sort {\tt SORT-B} is required.
 In Figure~\ref{CODE:inj-exp} 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:inj-exp} for an example of how 
+In the example below
 \end{ifhtml}
 the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
 
@@ -3098,8 +3092,7 @@ when using this operators.
 In Figure~\ref{CODE:lists-usage} two different lists are defined, 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:lists-usage} for an example of the
-definition of two different lists, 
+The example below demonstrates the definition of two different lists, 
 \end{ifhtml}
 {\tt LIST1} represents a list of naturals separated
 by commas whereas {\tt LIST2} represents a list of naturals terminated
@@ -3120,8 +3113,8 @@ exports
     [0-9]+   -> NAT
 
   context-free syntax
-    {NAT ","}+   -> LIST1
-    (LIST ",")+  -> LIST2
+    {NAT ","}+ -> LIST1
+    (NAT ",")+ -> LIST2
 \end{verbatim}
 \end{IncCode}
 \caption{Definition of two list variants}
@@ -3132,24 +3125,11 @@ The choice between two symbols can be defined in two different ways: by two
 separate syntax rules or by a single syntax rule using an alternative
 operator. 
 \begin{iftex}
-See Figure~\ref{CODE:alternative-alternatives}
+See Figure~\ref{CODE:alternative-alternatives} for an example.
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:alternative-alternatives}
+Below an example of the alternative usages is given.
 \end{ifhtml}
-for an example.
-
-The definition of the binary operators {\tt "|"} and {\tt "\&"} can
-be made more concise as shown by {\tt Bool2}, however, it is now
-impossible to express that {\tt "\&"} has a higher priority
-than {\tt "|"}, see 
-\begin{iftex}
-Section~\ref{Priorities} 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Priorities}[]{Priorities}
-\end{ifhtml}
-for more details on priority definitions.
 
 \begin{figure}
 \label{CODE:alternative-alternatives}
@@ -3175,6 +3155,19 @@ exports
 \caption{Two ways of defining {\tt |} and {\tt \&}}
 \end{figure}
 
+The definition of the binary operators {\tt "|"} and {\tt "\&"} can
+be made more concise as shown by {\tt Bool2}, however, it is now
+impossible to express that {\tt "\&"} has a higher priority
+than {\tt "|"}, see 
+\begin{iftex}
+Section~\ref{Priorities} 
+\end{iftex}
+\begin{ifhtml}
+Section \link{Priorities}[]{Priorities}
+\end{ifhtml}
+for more details on priority definitions.
+
+
 \subsubsection{Lists in combination with optionals or empty producing
 sorts}
 
@@ -3182,11 +3175,11 @@ The combination of lists and optionals or empty producing sorts leads to
 cycles in the parse tree. 
 \begin{iftex}
 See Figure \ref{CODE:listcycle} 
+for an example of such a specification.
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:listcycle}
+An erroneous specification is given below.
 \end{ifhtml}
-for an example of such a specification.
 
 \begin{figure}
 \label{CODE:listcycle}
@@ -3211,12 +3204,14 @@ exports
 \subsection{Attributes of Lexical and Context-free Functions}
 \label{Attributes}
 
+\index{attribute@attribute}
 The definition of a lexical or context-free functions may be followed by
 \emph{attributes} that define additional (syntactic or semantic) properties of
 that function.  The following syntax-related attributes exist:
 
 \begin{itemize}
 
+\index{bracket attribute@bracket attribute}
 \item {\tt bracket} allows the definitions of parenthesis and other
 kinds of brackets that are mostly used for overruling the priorities
 of operators in expressions
@@ -3227,6 +3222,10 @@ of operators in expressions
 (Section \link{Bracket Functions}[]{BracketFunctions}).
 \end{ifhtml}
 
+\index{left attribute@left attribute}
+\index{right attribute@right attribute}
+\index{non-assoc attribute@non-assoc attribute}
+\index{assoc attribute@assoc attribute}
 \item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
 are used to define the associativity of functions 
 \begin{iftex}
@@ -3236,6 +3235,7 @@ are used to define the associativity of functions
 (Section \link{Priorities}[]{Priorities}).
 \end{ifhtml}
 
+\index{prefer attribute@prefer attribute}
 \item {\tt prefer} is used to indicate that the attributed function should
 always be preferred over other functions (without this attribute)
 in certain cases of syntactic ambiguity
@@ -3247,6 +3247,7 @@ in certain cases of syntactic ambiguity
 Parses}[]{PreferAvoidReject}).
 \end{ifhtml}
 
+\index{avoid attribute@avoid attribute}
 \item {\tt avoid} is used to indicate that a function should
 only be used as a last resort in certain cases of
 syntactic ambiguity
@@ -3258,6 +3259,7 @@ syntactic ambiguity
 Parses}[]{PreferAvoidReject}).
 \end{ifhtml}
 
+\index{reject attribute@reject attribute}
 \item {\tt reject} can be used to explicitly forbid certain syntactic
   constructs
 \begin{iftex}
@@ -3274,11 +3276,13 @@ Parses}[]{PreferAvoidReject}).
 
 \begin{itemize}
 
+\index{constructor attribute@constructor attribute}
 \item {\tt constructor} declares a function to be a \emph{constructor
 function}, this means that for this function \emph{no} equations
 may be defined with this function as outermost function symbol
 in the left hand side.
 
+\index{memo attribute@memo attribute}
 \item {\tt memo} declares a function to be a \emph{memo function} for
 which all calls and results will be cached during evaluation
 \begin{iftex}
@@ -3307,6 +3311,7 @@ that greatly simply the specification of functions that have to visit
 \subsection{Priorities}
 \label{Priorities}
 
+\index{priorities@priorities}
 The context-free syntax defined in an \asfsdf\ specification may be 
 ambiguous: there are sentences which have more than one associated tree. 
 The common example is the arithmetic expression in which definitions 
@@ -3319,6 +3324,7 @@ three mechanisms for defining associativity and priority:
 the \link{`{\tt context-free priorities}' section}[, see
 Section~\ref{RelativePriorities})]{RelativePriorities}).
 
+\index{associativity@associativity}
 \item Associativity of functions (defined as 
 \link{attributes following the function declaration}[, see
 Section~\ref{AssociativeFunctions}]{AssociativeFunctions}).
@@ -3336,6 +3342,7 @@ and then the various forms of defining priorities.
 \subsubsection{Bracket Functions}
 \label{BracketFunctions}
 
+\index{bracket functions@bracket functions}
 A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
 and $close$ are literals acting as opening and closing parenthesis for sort
 $S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions.
@@ -3390,6 +3397,7 @@ functions are declared for the argument and result sorts of
 \subsubsection{Relative Priorities}
 \label{RelativePriorities}
 
+\index{relative priorities@relative priorities}
 The relative priority of two functions is defined 
 in the `{\tt context-free priorities}' section 
 by including {\tt $F$ > $G$},
@@ -3406,6 +3414,7 @@ Note that this tells us nothing about the priority relation between $G$ and $H$.
 \subsubsection{Associative Functions}
 \label{AssociativeFunctions}
 
+\index{associativity functions@associativity functions}
 Associativity attributes can be attached to binary functions of the form 
 `{\tt $S$ $op$ $S$ -> $S$}', where $op$ is a symbol or empty. 
 Without associativity attributes, nested occurrences of such 
@@ -3477,6 +3486,7 @@ exports
 \subsubsection{Groups of Associative Functions}
 \label{GroupAssoc}
 
+\index{associativity groups@associativity groups}
 Groups of associative functions define how to accept or reject trees
 containing related occurrences of different functions with the same priority.
 They are defined by prefixing a list of context-free functions in a priority
@@ -3537,6 +3547,11 @@ exports
 \label{ContextFreeRestrictions}
 \label{LexicalRestrictions}
 
+\index{restrictions@restrictions}
+\index{lexical restrictions@lexical restrictions}
+\index{context-free restrictions@context-free restrictions}
+\index{{\tt -/-}@{\tt -/-}}
+\index{{\tt <Lookaheads>}@{\tt <Lookaheads>}}
 Lexical syntax can be highly ambiguous.  Consider 
 \link{a simple lexical definition for identifiers}[ like the one in
 Figure~\ref{CODE:repetition}]{CODE:repetition}.  When
@@ -3820,8 +3835,13 @@ This is achieved by defining a restriction on this lexical sort. This
 can be done in either the 
 \link{lexical restrictions or the context-free restrictions section}[ (see
 Section \ref{Restrictions})]{Restrictions}.
-Figure \ref{CODE:restrict-id} shows how to enforce the longest match
-for the sort {\tt Id}.
+\begin{iftex}
+Figure \ref{CODE:restrict-id} 
+\end{iftex}
+\begin{ifhtml}
+The specification below
+\end{ifhtml}
+shows how to enforce the longest match for the sort {\tt Id}.
 
 \begin{figure}
 \label{CODE:restrict-id}
@@ -3901,10 +3921,9 @@ and is only used when no alternative exists.
 \begin{iftex}Figure \ref{CODE:avoid-id} shows
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:avoid-id} for an example of
+The next example shows
 \end{ifhtml}
-how the lexical 
-definition of {\tt Id} is attributed with {\tt avoid}.
+how the lexical definition of {\tt Id} is attributed with {\tt avoid}.
 
 Although the first approach is more tedious, it allows more flexibility
 than the second one.
@@ -4121,7 +4140,7 @@ parameters of this module.
 Figure~\ref{CODE:generic-pairs} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:generic-pairs} for 
+The next specification is 
 \end{ifhtml}
 an example of an parameterized module. In this example the
 formal parameters are used in the parameterized sorts as well,
@@ -4158,7 +4177,7 @@ to be replaced by actual parameters.
 Figure~\ref{CODE:importing-pairs} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:importing-pairs} for 
+The specification below contains
 \end{ifhtml}
 an example of a rather complicated importation of an parameterized module. 
 The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
@@ -4187,7 +4206,7 @@ that it is not necessary to give the a module formal parameters.
 Figure~\ref{CODE:pairs} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:pairs} for 
+The specification below shows
 \end{ifhtml}
 an example of the {\tt Pair} module without parameters. 
 
@@ -4222,9 +4241,9 @@ symbol renaming.
 Figure~\ref{CODE:renaming-pairs} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:renaming-pairs} for 
+The following specification is 
 \end{ifhtml}
-the example of a rather complicated importation of the module {\tt Pair}
+an example of a rather complicated importation of the module {\tt Pair}
 using renamings. 
 
 \begin{figure}
@@ -4244,6 +4263,7 @@ imports Booleans Pair[X => Bool Y => Bool]
 \subsection{Variables}
 \label{Variables}
 
+\index{variables@variables}
 Variables are declared in the `{\tt variables}' section of a module.  Like all
 other entities in a 
 \link{module---except equations---variables may be exported}[
@@ -4256,9 +4276,15 @@ allowed in the \link{lexical syntax}[ (Section
 \ref{lexical-syntax})]{lexical-syntax} except that sorts
 are not allowed. A variable may represent any symbol. 
 
-In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
-are examples of variables declared by the naming schemes in the {\tt
-  variables} section.
+\begin{iftex}
+In Figure \ref{CODE:variables},
+\end{iftex}
+\begin{ifhtml}
+In the next specification,
+\end{ifhtml}
+`{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
+are examples of variables declared by the naming schemes in 
+the {\tt variables} section.
 Strings that occur in the left-hand side of variable declarations
 should {\em always} be quoted.
 
@@ -4343,6 +4369,8 @@ hiddens
 \subsection{Equations}
 \label{Equations}
 
+\index{equations@equations}
+\index{Asf+Sdf@\asfsdf}
 With equations a meaning or semantics may be added to functions declared in
 the lexical and context-free syntax sections. 
 In particular, equations consist of two \emph{open terms}, i.e.
@@ -4357,6 +4385,7 @@ examples of open terms are `{\tt true}',
 
 \subsubsection{Unconditional Equations}
 
+\index{unconditional equations@unconditional equations}
 An equality then consists of two open $L$ (lefthand side) and $R$ (righthand
 side) such that:
 
@@ -4387,6 +4416,7 @@ signs ({\tt -}) starting with a letter or a digit.
 
 \subsubsection{Conditional Equations}
 
+\index{conditional equations@conditional equations}
 An unconditional equation is a special case of a \emph{conditional equation},
 i.e., an equality with one or more associated conditions (premises).  The
 equality is sometimes called the \emph{conclusion} of the conditional
@@ -4486,6 +4516,9 @@ equations
 \subsubsection{Executing Equations}
 \label{ExecutingEquations}
 
+\index{leftmost-innermost@leftmost-innermost}
+\index{rewrite rules@rewrite rules}
+\index{default equations@default equations}
 In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
 above equation is thus executed as the rewrite rule $L \rightarrow R$. This
 can be used to reduce some initial closed term (i.e., not containing
@@ -4522,13 +4555,15 @@ further reductions are possible and a normal form is reached (if any).
 
 \subsubsection{List Matching}
 
+\index{list matching@list matching}
+\index{associative matching@associative matching}
 List matching, also known as associative matching, is a powerful
 mechanism to describe complex functionality in a compact way.  
 \begin{iftex}
 See Figure \ref{CODE:sets} for
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:sets} for an example of
+The example below gives
 \end{ifhtml}
 a compact specification to remove double elements from a set.
 
@@ -4638,6 +4673,7 @@ lexical constructor function.
 \subsubsection{Default Equations}
 \label{DefaultEquations}
 
+\index{default equations@default equations}
 The evaluation strategy for normalizing terms given the equations is
 based on innermost rewriting. All equations have the same priority.
 Given the outermost function symbol of a redex the set of equations with
@@ -4652,7 +4688,7 @@ be a special equation which will only be applied if no other rule matches.
 Figure \ref{CODE:types} shows
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:types} for
+The specification below gives
 \end{ifhtml}
 an example of the use of a default equation.
 
@@ -4691,6 +4727,7 @@ equations
 \subsubsection{Memo Functions}
 \label{MemoFunctions}
 
+\index{memo functions@memo functions}
 Rewriting as execution model is not very efficient. Memo functions
 improve the efficiency of \asfsdf\ specifications.  Given a set of
 argument values for some function the normal form can be obtained via
@@ -4706,7 +4743,9 @@ argument values is normalized and stored in the memo-table.
 There is some overhead involved in accessing the memo-table.  Therefore,
 it is not wise to add the memo attribute to each function.  With respect
 to the operational behaviour adding a memo attribute does not have any
-effect.  In Figure~\ref{CODE:fib} the Fibonacci function is decorated with
+effect.  
+The \link{Fibonacci function}[, in Figure~\ref{CODE:fib},]{CODE:fib}
+is decorated with
 the memo attribute, improving its efficiency.
 For 
 \link{some figures}[, see Table~\ref{TABLE:fibn},]{TABLE:fibn}
@@ -4805,9 +4844,15 @@ equations
 \subsubsection{Getters and Setters Functions}
 \label{GettersSetters}
 
+\index{getter functions@getter functions}
+\index{setter functions@setter functions}
+
 \subsubsection{Traversal Functions}
 \label{Traversal}
 
+\index{traversal functions@traversal functions}
+\index{accumulator@accumulator}
+\index{transformer@transformer}
 Program analysis and program transformation usually take the syntax
 tree of a program as starting point.  One common
 problem that one encounters is how to express the \emph{traversal} of
@@ -4926,7 +4971,7 @@ exports
 \end{figure}     
 
 \begin{figure}
-\label{FIG:sum} 
+\label{FIG:inc}
 \begin{IncCode}
 \begin{verbatim}
 module Tree-inc
@@ -4939,10 +4984,10 @@ equations
 \end{verbatim}
 \end{IncCode}
 \caption{The transformer {\tt inc} increments all numbers in a tree}
-\label{FIG:inc}
 \end{figure}  
 
 \begin{figure}
+\label{FIG:sum} 
 \begin{IncCode}
 \begin{verbatim}
 module Tree-sum
