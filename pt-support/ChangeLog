@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jan 27 09:25:45 CET 2005 <jurgenv@cwi.nl>
+ * Bumped to 2.0
+
 Mon Dec 27 16:13:04 CET 2004 <jurgenv@cwi.nl>
  * Having "structured lexicals" result in many changes:
 	- flattening reimplemented; only lists are flattened. One routine
