@@ -298,7 +298,7 @@ production SG_LookupProduction(parse_table *pt, int token)
 
 void SG_AddProduction(ATermTable tbl, int pr_num, production prod)
 {
-  ATerm key, prev;
+  ATerm key;
 
   key = (ATerm) ATmakeInt(pr_num);
 /*
