@@ -174,5 +174,6 @@ AC_OUTPUT(
    query-tool/Makefile
    query-tool/src/Makefile
    query-tool/src/c/Makefile
+   query-tool/src/c/terms/Makefile
    query-tool/src/spec/Makefile
 )
