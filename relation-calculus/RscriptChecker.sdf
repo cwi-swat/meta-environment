@@ -15,6 +15,7 @@ imports Rstore
 exports
     sorts ERROR ERRORS REXPTYPE # TENV TENV DCLRVARS  
           Boolean # Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
+	  List[[REXPTYPE]]
 
     context-free syntax
 
@@ -55,6 +56,7 @@ exports
         "No" "definition" for RVAR with argument REXPTYPE       -> ERROR
 	"No" "definition" for field RVAR			-> ERROR
 	RVAR exceeds number of targets of generator		-> ERROR
+	"Field name" RVAR "used at different record positions"	-> ERROR
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
@@ -99,13 +101,11 @@ exports
 
 	check-eqs(INITVAR*, EQU*, TENV)				-> TENV
 
-	check-duplicate-fields({DCLRVAR ","}*, TENV)		-> TENV
+	check-duplicate-fields({DCLRVAR ","}*, Integer, TENV)	-> TENV
 	get-field-type(REXPTYPE, RVAR, TENV)			-> REXPTYPE # TENV
+	get-field-index(RVAR, List[[REXPTYPE]])			-> Integer
+	get-field-index1(RVAR, {DCLRVAR ","}*, Integer)		-> Integer
 	
-%%	require-and-store-bag-type(REXP, RVAR, REXPTYPE, TENV) 	-> TENV
-%%	require-and-store-rel-type(REXP, TARGET, TARGET, REXPTYPE, TENV) 	-> TENV
-%%	require-and-store-nrel-type(REXP, {TARGET ","}*, REXPTYPE, TENV) 	-> TENV
-
 	compat-cmp(REXP, REXPTYPE, REXPTYPE, TENV)		-> TENV
 	check-cmp(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
 
@@ -116,12 +116,12 @@ exports
 
 	compat-comp(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
 	compat-prod(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	compat-im(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	compat-lim(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
+	compat-rim(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
 	compat-trans(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
 	compat-size(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
 
         container-type(REXPTYPE)				-> REXPTYPE
-%%        container-iter-type(REXPTYPE)				-> REXPTYPE
         
         "[" { DCLRVAR ","}* "]"					-> DCLRVARS
 
@@ -138,7 +138,6 @@ exports
 
         match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]])	-> Boolean #  Table[[RVAR,REXPTYPE]]
         substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
-
 
 hiddens
     imports basic/Comments
@@ -217,4 +216,6 @@ hiddens
       "$Eq+" [0-9\']*		-> EQU+
 
       "$Rstore" [0-9\']*             -> RSTORE
+
+      "$ListOfTypes" [0-9\']*	     -> List[[REXPTYPE]]
 	

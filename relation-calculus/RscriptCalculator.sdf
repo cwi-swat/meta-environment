@@ -32,7 +32,8 @@ exports
 
 	eval-lt(RVALUE, RVALUE)					-> Boolean
 	eval-le(RVALUE, RVALUE)					-> Boolean
-	eval-im(RVALUE, RVALUE)					-> Elem
+	eval-rim(RVALUE, RVALUE)				-> Elem
+	eval-lim(RVALUE, RVALUE)				-> Elem
 	evalx-test(Boolean, REXP, RSTORE)			-> Elem
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
@@ -73,8 +74,6 @@ exports
 	min1(BagIterator[[Elem]])				-> Integer
 	min2(BagIterator[[Elem]], Integer)			-> Integer
 
-	head(Tuple)						-> Elem
-	tail(Tuple)						-> Elem
 
 hiddens
 %%  imports asf/syntax/Comments

@@ -27,7 +27,9 @@ equations
 	rel[int,<int,str>] OUT init DEF
   satisfy
 	IN  =  {<S, OP> | int S : STATEMENTS, int P : PRED-OF[S], <int,str> OP : OUT[P]}
-	OUT =  {<S, OS> | int S : STATEMENTS, <int,str> OS : DEF[S] union (IN[S] \ KILL[S])}
+	OUT =  {<S, OS> | int S : STATEMENTS, <int,str> OS : DEF[S] union  (IN[S] \ (KILL[S]))}
+
+%% priorities!
 
 end equations
 
@@ -52,7 +54,7 @@ equations
 	rel[int,<int,str>] LIN init {}
 	rel[int,<int,str>] LOUT init DEF
   satisfy
-	LIN  =  { < S, I> | int S : STATEMENTS,  <int,str> I : USE[S] union (LOUT[S] \ DEF[S])}
+	LIN  =  { < S, I> | int S : STATEMENTS,  <int,str> I : USE[S] union (LOUT[S] \ (DEF[S]))}
 	LOUT =  { < S, O> | int S : STATEMENTS,  <int,str> O : LIN[S] }
 end equations
 

@@ -2,13 +2,13 @@
 
 %% --- Simplify n-ary tuples
 
-[st1]	$Exps = $Exp'
-	=============================================================
-	<$Exp1, $Exp2, $Exps> = <$Exp1, <$Exp2, $Exp'>>
+%%[st1]	$Exps = $Exp'
+%%	=============================================================
+%%	<$Exp1, $Exp2, $Exps> = <$Exp1, <$Exp2, $Exp'>>
 
-[st2]	$Exps1 = $Exp', $Exps2
-	=============================================================
-	<$Exp1, $Exp2, $Exps1> = <$Exp1, <$Exp2, $Exp', $Exps2>>
+%%[st2]	$Exps1 = $Exp', $Exps2
+%%	=============================================================
+%%	<$Exp1, $Exp2, $Exps1> = <$Exp1, <$Exp2, $Exp', $Exps2>>
 
 %% ---- Equality on RVALUEs
 
@@ -65,19 +65,21 @@
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
 [S8]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, evalx($Exp, $Rstore), $Rstore)
-[S8]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, evalx($Exp, $Rstore), $Rstore)
+[S9]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, evalx($Exp, $Rstore), $Rstore)
 
-[S9]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 
+[S10]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 
 						= assign($Var1,
 						<extract-rvars($DclRvar+),
 						$Exp>, $Rstore)
 
-[S10]  eval-rstat(type $Var = < $DclRvar+ >, $Rstore) = eval-fields($DclRvar+, $Rstore, 1)
+[S11]  eval-rstat(type $Var = < $DclRvar+ >, $Rstore) = eval-fields($DclRvar+,
+$Rstore, 1)
+[S12]  eval-rstat(type $Var = $Etype, $Rstore) = $Rstore
 
 [default-assert]	
 	eval-rstat(assert $String : $Exp, $Rstore) = $Rstore
 
-[S10]	$Elem =  value($Var, $Rstore)
+[S13]	$Elem =  value($Var, $Rstore)
 	=======================================================
 	eval-rstat(yield $Var, $Rstore) = add-elem(YIELD, rvar2str($Var), $Rstore)
 
@@ -187,14 +189,18 @@
 %% ---- Eval tuples
 
 [ET1]	$Elem1 = evale($Exp1, $Rstore),
-	$Elem2 = evale(<$Exp2, $Exp+>, $Rstore)
-	==================================================
-	evalx(<$Exp1, $Exp2, $Exp+>, $Rstore) = <$Elem1, $Elem2>
-
-[ET2]	$Elem1 = evale($Exp1, $Rstore),
 	$Elem2 = evale($Exp2, $Rstore)
 	==================================================
 	evalx(<$Exp1, $Exp2>, $Rstore) = <$Elem1, $Elem2>
+
+[ET2]	$Elem = evale($Exp1, $Rstore),
+	<$Elem+> = evale(<$Exp2, $Exp+>, $Rstore)
+	==================================================
+	evalx(<$Exp1, $Exp2, $Exp+>, $Rstore) = <$Elem, $Elem+>
+
+[ET3]	$Elem = evale($Exp, $Rstore)
+	==================================================
+	evalx(<$Exp>, $Rstore) = <$Elem>
 
 %% ---- Eval bags
 
@@ -289,45 +295,40 @@
 
 [CP1]	evalx($Exp1 x $Exp2, $Rstore)		= product(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
 
-[FLd1]	evalx($Exp @ $Var, $Rstore)		= select-field(evalt($Exp, $Rstore), evali($Var, $Rstore))
+[FLd1]	evalx($Exp . $Var, $Rstore)		= select-field(evalt($Exp, $Rstore), evali($Var, $Rstore))
 
 %% ---- aux function for field selection
 
-[hd]	head(<$Elem1, $Elem2>) = $Elem1
+[sel1]	select-field(<$Elem1, $Elem*>, 1) = $Elem1
 
-[tl]	tail(<$Elem1, $Elem2>) = $Elem2
+[sel2]	select-field(<$Elem1, $Elem2, $Elem*>, 2) = $Elem2
 
-[sel]	select-field($Elem, 1) = head($Elem)
-
-[sel3]	$Integer > 1 = true
+[sel2]	$Integer > 2 = true
 	===================================================
-	select-field($Elem, $Integer) = select-field(tail($Elem), $Integer - 1)
+	select-field(<$Elem1, $Elem2, $Elem+>, $Integer) =
+	select-field(<$Elem2, $Elem+>, $Integer - 1)
 
-[default-sel]	select-field(<$Elem1, $Elem2>, 1) = $Elem1
+%% ---- aux functions for evaluating image operator  [ ]
 
-[default-sel]	select-field(<$Elem1, $Elem2>, 2) = $Elem2 
+[elim1]	eval-lim($Rel, $Elem)			= limage($Rel, $Elem)%% when is-rel($Rel) = true
+[elim2]	eval-lim($Rel, $Bag)			= limage($Rel,  $Bag)%% when is-rel($Rel) = true
 
+[erim1]	eval-rim($Rel, $Elem)			= rimage($Rel, $Elem)%% when is-rel($Rel) = true
+[erim2]	eval-rim($Rel, $Bag)			= rimage($Rel, $Bag) %% when is-rel($Rel) = true
 
+[IM1]	evalx($Exp1 [ -, $Exp2], $Rstore)	= eval-lim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
-%% ---- aux functions for evaluating image operator .
+[IM2]	evalx($Exp1 [ $Exp2, - ], $Rstore)	= eval-rim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
-[eim1]	eval-im($Rel, $Elem)			= limage($Rel, $Elem) when is-rel($Rel) = true
-[eim2]	eval-im($Elem, $Rel)			= rimage($Elem, $Rel) when is-rel($Rel) = true
+[IM3]	evalx($Exp1 [ $Exp2 ], $Rstore)		= eval-rim(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
-[eim3]	eval-im($Bag, $Rel)			= rimage($Bag,  $Rel) when is-rel($Rel) = true
-[eim4]	eval-im($Rel, $Bag)			= limage($Rel,  $Bag) when is-rel($Rel) = true
-
-[default-eim]
-	eval-im($Val1, $Val2)			= empty-bag		%%XXX
-
-[IM1]	evalx($Exp1 . $Exp2, $Rstore)		= eval-im(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
-
-%% ---- [ ]
-[IM2]	evalx($Exp1 [ $Exp2 ], $Rstore)		= evalx($Exp2 . $Exp1, $Rstore)
+%% ---- Closures
 
 [TC1]	evalx($Exp +, $Rstore)			= trans-closure(evalb($Exp, $Rstore))
 
 [RTC1]	evalx($Exp *, $Rstore)			= rtrans-closure(evalb($Exp, $Rstore))
+
+%% ---- Size
 
 [SZ1]	evalx(# $Exp, $Rstore)			= size(evalb($Exp, $Rstore))
 
@@ -362,9 +363,9 @@
 
 [eat-1a]	
 	$Val = evalx($Exp1, $Rstore),
-	$Val' =  match-rvars($Target1, $Target+, $Val, $Exp2, $Rstore)
+	$Val' =  match-rvars($Target+, $Val, $Exp2, $Rstore)
 	======================================================================
-	evalx({ <$Target1, $Target+> <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
+	evalx({ <$Target+> <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
 
 %% ---- Simple generator, match and extract one target  T : E
 
@@ -375,17 +376,17 @@
 
 %% ---- Simple generator, match and extract two targets <T1, T2> : E
 
-[ei2-1]	$Bag = evalx($Exp1, $Rstore)
-	=======================================
-	evalx({ <$Target1, $Target2> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target1, $Target2, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
+%%[ei2-1]	$Bag = evalx($Exp1, $Rstore)
+%%	=======================================
+%%	evalx({ <$Target1, $Target2> : $Exp1 :: $Exp2 }, $Rstore) = 
+%%	eval-itern($Target1, $Target2, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
 
 %% ---- Simple generator, match and extract N targets <T1, T2, ...> : E
 
 [ei2-1]	$Bag = evalx($Exp1, $Rstore)
 	=======================================
-	evalx({ <$Target1, $Target2, $Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target1, $Target2, $Target+, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
+	evalx({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
+	eval-itern($Target+, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
 
 %% ---- eval-itern: the workhorse for comprehensions
 
@@ -405,25 +406,34 @@
 
 %% ---- Assign to list of variables
 
-[mv1]	$Rstore' = assign($Var, $Elem1, $Rstore) 
+[mv1]	$Rstore' = assign($Var, $Elem, $Rstore) 
 	=====================================================
-	match-rvars($Etype $Var, $Target+, <$Elem1, $Elem2>, $Exp, $Rstore) =
-	match-rvars($Target+, $Elem2, $Exp, $Rstore')
+	match-rvars($Etype $Var, $Target+, <$Elem, $Elem+>, $Exp, $Rstore) =
+	match-rvars($Target+, <$Elem+>, $Exp, $Rstore')
 
 [mv2]	$Val = evalx($Exp1, $Rstore),	
-	equal-rval($Val, $Elem1) = true
+	equal-rval($Val, $Elem) = true
 	=====================================================
-	match-rvars($Exp1, $Target+, <$Elem1, $Elem2>, $Exp2, $Rstore) =
-	match-rvars($Target+, $Elem2, $Exp2, $Rstore)
+	match-rvars($Exp1, $Target+, <$Elem, $Elem+>, $Exp2, $Rstore) =
+	match-rvars($Target+, <$Elem+>, $Exp2, $Rstore)
 
-[mv3]	$Rstore' = assign($Var, $Elem1, $Rstore) 
+[mv3]	$Rstore' = assign($Var, $Elem, $Rstore) 
 	=====================================================
-	match-rvars($Etype $Var, $Elem1, $Exp, $Rstore) = evalx($Exp, $Rstore')
+	match-rvars($Etype $Var, <$Elem>, $Exp, $Rstore) = evalx($Exp,$Rstore')
 
 [mv4]	$Val = evalx($Exp1, $Rstore),	
-	equal-rval($Val, $Elem1) = true
+	equal-rval($Val, $Elem) = true
 	=====================================================
-	match-rvars($Exp1, $Elem1, $Exp2, $Rstore) = evalx($Exp2, $Rstore)
+	match-rvars($Exp1, <$Elem>, $Exp2, $Rstore) = evalx($Exp2, $Rstore)
+
+[mv5]	$Rstore' = assign($Var, $Elem, $Rstore) 
+	=====================================================
+	match-rvars($Etype $Var, $Elem, $Exp, $Rstore) = evalx($Exp,$Rstore')
+
+[mv6]	$Val = evalx($Exp1, $Rstore),	
+	equal-rval($Val, $Elem) = true
+	=====================================================
+	match-rvars($Exp1, $Elem, $Exp2, $Rstore) = evalx($Exp2, $Rstore)
 
 [default-mv]
 	match-rvars($Target+, $Elem, $Exp, $Rstore) = *undefined* 
@@ -445,9 +455,9 @@
 	evalx(exists($Target : $Exp | $Test), $Rstore) = $BoolCon
 
 [EXB3]	$Bag = evalb($Exp, $Rstore),
-	$BoolCon = exists($Target1, $Target+, mk-iterator($Bag), $Test, $Rstore)
+	$BoolCon = exists($Target+, mk-iterator($Bag), $Test, $Rstore)
 	=========================================
-	evalx(exists(<$Target1, $Target+> : $Exp | $Test), $Rstore) = $BoolCon
+	evalx(exists(<$Target+> : $Exp | $Test), $Rstore) = $BoolCon
 
 [ex1]	is-empty-iter($BagIter) = false,
 	$Elem = head($BagIter),

@@ -44,7 +44,7 @@ rel[str,str] PRED ={
 bag[str] VERTICES = carrier(PRED)
 
 rel[str,bag[str]] DOMINATES =
-   { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  V : VERTICES}
+   { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  str V : VERTICES}
 
 bag[str] Empty = {}	%% define as constant to avoid ambiguities when using
 			%% {} in an expression
