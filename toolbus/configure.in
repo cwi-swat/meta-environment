@@ -233,8 +233,19 @@ AC_HEADER_CHECK(ctype.h,:, echo "*** no ctype.h";exit)
 AC_HEADER_CHECK(errno.h,:, echo "*** no errno.h";exit)
 AC_HEADER_CHECK(netdb.h,:, echo "*** no netdb.h";exit)
 AC_HEADER_CHECK(netinet/in.h,:, echo "*** no netinet/in.h";exit)
-AC_HEADER_CHECK(netinet/tcp.h,:, echo "*** no netinet/tcp.h";exit)
-AC_HEADER_CHECK(signal.h,:, echo "*** no sihnal.h";exit)
+
+dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
+dnl you need to include standards.h aswell.
+AC_MSG_CHECKING("for netinet/tcp.h")
+AC_TRY_CPP(
+[#ifdef sgi
+#include <standards.h>
+#endif
+#include <netinet/tcp.h>
+],AC_MSG_RESULT("yes"), echo "*** no netinet/tcp.h";exit)
+
+dnl AC_HEADER_CHECK(netinet/tcp.h,:, echo "*** no netinet/tcp.h";exit)
+AC_HEADER_CHECK(signal.h,:, echo "*** no signal.h";exit)
 AC_HEADER_CHECK(stdarg.h,:, echo "*** no stdarg.h";exit)
 AC_HEADER_CHECK(stdio.h,:, echo "*** no stdio.h";exit)
 AC_HEADER_CHECK(stdlib.h,:, echo "*** no stdlib.h";exit)
