@@ -32,38 +32,61 @@ void   PT_initMEPTApi(void);
 
 ATerm PT_makeParseTreeTree(ATerm tree, ATerm cnt);
 ATerm PT_makeTreeAppl(ATerm prod, ATermList args);
+ATerm PT_makeTreeAmb(ATermList args);
 ATerm PT_makeSymbolLit(char *str);
 ATerm PT_makeSymbolLex(ATerm arg);
 ATerm PT_makeSymbolCf(ATerm arg);
 ATerm PT_makeSymbolOpt(ATerm arg);
 ATerm PT_makeSymbolSort(ATerm arg);
+ATerm PT_makeSymbolVarSym(ATerm arg);
 ATerm PT_makeSymbolLayout();
+ATerm PT_makeLayout(ATermList args);
 
 ATbool PT_isParseTreeTree(ATerm arg);
 ATbool PT_isTreeAppl(ATerm arg);
+ATbool PT_isTreeAmb(ATerm arg);
 ATbool PT_isProductionDefault(ATerm arg);
 ATbool PT_isSymbolLit(ATerm arg);
 ATbool PT_isSymbolLex(ATerm arg);
 ATbool PT_isSymbolCf(ATerm arg);
+ATbool PT_isSymbolIterPlus(ATerm arg);
+ATbool PT_isSymbolIterStar(ATerm arg);
+ATbool PT_isSymbolIterPlusSep(ATerm arg);
+ATbool PT_isSymbolIterStarSep(ATerm arg);
 ATbool PT_isSymbolOpt(ATerm arg);
 ATbool PT_isSymbolSort(ATerm arg);
+ATbool PT_isSymbolVarSym(ATerm arg);
 ATbool PT_isSymbolLayout(ATerm arg);
+ATbool PT_isLayout(ATerm arg);
 
 ATerm     PT_getParseTreeTree(ATerm arg);
 ATerm     PT_getParseTreeAmbCnt(ATerm arg);
 ATerm     PT_getTreeProd(ATerm arg);
 ATermList PT_getTreeArgs(ATerm arg);
+ATermList PT_getAmbArgs(ATerm arg);
 ATerm     PT_getProductionRhs(ATerm arg);
+ATermList PT_getProductionLhs(ATerm arg);
 char     *PT_getLitString(ATerm arg);
 ATerm     PT_getLexSymbol(ATerm arg);
 ATerm     PT_getCfSymbol(ATerm arg);
 ATerm     PT_getOptSymbol(ATerm arg);
+ATerm     PT_getIterPlusSymbol(ATerm arg);
+ATerm     PT_getIterStarSymbol(ATerm arg);
+ATerm     PT_getIterPlusSepSymbol(ATerm arg);
+ATerm     PT_getIterStarSepSymbol(ATerm arg);
+ATerm     PT_getIterPlusSepSeparator(ATerm arg);
+ATerm     PT_getIterStarSepSeparator(ATerm arg);
 ATerm     PT_getSortSymbol(ATerm arg);
+ATerm     PT_getVarSymSymbol(ATerm arg);
+ATermList PT_getLayoutElems(ATerm arg);
 
 ATbool PT_prodHasLitAsRhs(ATerm arg);
 ATbool PT_prodHasLexSortAsRhs(ATerm arg);
 ATbool PT_prodHasLexLayoutAsRhs(ATerm arg);
 ATbool PT_prodHasCfLayoutAsRhs(ATerm arg);
 ATbool PT_prodHasCfOptLayoutAsRhs(ATerm arg);
+ATbool PT_prodHasVarSymAsRhs(ATerm arg);
+ATbool PT_prodHasVarSymAsLhs(ATerm arg);
+ATbool PT_prodHasLexAsLhs(ATerm arg);
 
 #endif /* _ME_PT_H */ 
