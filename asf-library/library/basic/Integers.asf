@@ -157,6 +157,54 @@ equations
    [168] max(Int1, Int2) = Int1 when Int1 > Int2 == true
    [default] max(Int1, Int2) = Int2
 
+%% Division, remainder
+
+   [qr-0] 
+   n3 rem n4 := quotrem(n1,n2)
+   ===>
+   quotrem(-n1,n2) = -n3 rem -n4 
+
+   [qr-1] 
+   n3 rem n4 := quotrem(n1,n2)
+   ===>
+   quotrem(-n1,-n2)  = n3 rem -n4
+
+   [qr-2] 
+   n3 rem n4 := quotrem(n1,n2)
+   ===>
+   quotrem(n1,-n2)   = -n3 rem n4 
+
+   [default] 
+   n2 > 0 == true,
+   n2 > n1 == true
+   ===>
+   quotrem(n1,n2) = 0 rem n1 
+
+   [default] 
+   n2 > 0 == true, 
+   n2 > n1 == false,
+   n3 rem n4 := quotrem(n1-n2,n2)
+   ===>
+   quotrem(n1,n2) = n3+1 rem n4
+ 
+   [div-0] Int1 / Int2 = Int3 when Int3 rem Int4 := quotrem(Int1,Int2) 
+   [mod-0] Int1 mod Int2 = Int4 when Int3 rem Int4 := quotrem(Int1,Int2)
+
+%% even, odd
+ 
+   [even-minus] even(-n) = even(n)
+   [even-0] even(natcon(x "0")) = true
+   [even-1] even(natcon(x "1")) = false
+   [even-2] even(natcon(x "2")) = true
+   [even-3] even(natcon(x "3")) = false
+   [even-4] even(natcon(x "4")) = true
+   [even-5] even(natcon(x "5")) = false
+   [even-6] even(natcon(x "6")) = true
+   [even-7] even(natcon(x "7")) = false
+   [even-8] even(natcon(x "8")) = true
+   [even-9] even(natcon(x "9")) = false
+   [odd-0] odd(Int) = not(even(Int))
+
 tests
 
 [sanity] 0 != 1
