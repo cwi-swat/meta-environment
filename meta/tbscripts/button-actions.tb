@@ -147,9 +147,9 @@ let
   Location : term,
   Message : str,
   Mode : term,
-  ModuleName : str,
+  Modulename : str,
   Name : str,
-  NewModuleName : str,
+  NewModulename : str,
   NrOfArgs : int,
   Origin: term,
   OutStr : str,
@@ -280,8 +280,8 @@ in
     ReturnSuccess(EditorId, Stack)
     +
     rec-msg(parse-action, Stack?, EditorId?) .
-    StackPopString(Stack,Stack?,ModuleName?) .
-    ParseTerm(EditorId, ModuleName) .
+    StackPopString(Stack,Stack?,Modulename?) .
+    ParseTerm(EditorId, Modulename) .
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-syntax-action, Stack?, EditorId?).
@@ -289,8 +289,8 @@ in
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-equations-action, Stack?, EditorId?).
-    StackPopString(Stack,Stack?,ModuleName?) .
-    ParseEquations(EditorId,ModuleName).
+    StackPopString(Stack,Stack?,Modulename?) .
+    ParseEquations(EditorId,Modulename).
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(unparse, Stack?, EditorId?) .
@@ -300,8 +300,8 @@ in
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(get-root, Stack?, EditorId?)
-    . StackPopString(Stack, Stack?, ModuleName?)
-    . GetTree(EditorId, ModuleName, RTree?, Available?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . GetTree(EditorId, Modulename, RTree?, Available?)
     .
     if equal(Available, true)
     then
@@ -355,9 +355,9 @@ in
         fi
       +
         rec-msg(reduce, Stack?, EditorId?)
-        . StackPopString(Stack, Stack?, ModuleName?)
+        . StackPopString(Stack, Stack?, Modulename?)
         . StackPopTerm(Stack, Stack?, STree?)
-        . ReduceTerm(STree, ModuleName, RTree?)
+        . ReduceTerm(STree, Modulename, RTree?)
         .
 	if not-equal(RTree, error-tree)
 	then
@@ -376,16 +376,16 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
+          StackPopString(Stack,Stack?,Modulename?) .
           StackPopTerm(Stack,Stack?,STree?) .
-          snd-msg(run-asf-tests(ModuleName)) .
+          snd-msg(run-asf-tests(Modulename)) .
           ReturnSuccess(EditorId,Stack)
         fi
       +
         rec-msg(pretty-print, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
+        StackPopString(Stack,Stack?,Modulename?) .
         StackPopTerm(Stack,Stack?,STree?) .
-	PrettyPrintTerm(ModuleName, STree, RTree?) .
+	PrettyPrintTerm(Modulename, STree, RTree?) .
         if not-equal(RTree, error-tree) then
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
@@ -393,12 +393,12 @@ in
           ReturnAbort(EditorId,Stack)
         fi
       +
-        rec-msg(get-other-focus(ModuleName?), Stack?, EditorId?) .
+        rec-msg(get-other-focus(Modulename?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         FunSym := fun(STree) .
         if equal(FunSym, "path") then
           FilePath := first(args(STree)) .
-          snd-msg(check-editor-id(FilePath, ModuleName)) .
+          snd-msg(check-editor-id(FilePath, Modulename)) .
           (
             rec-msg(existing-editor(EditorId2?)).
             GetFocus(EditorId2, RTree?) .
@@ -421,15 +421,15 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(activate-editor, Stack?, Sid?) .
-        StackPopString(Stack, Stack?, ModuleName?) .
+        StackPopString(Stack, Stack?, Modulename?) .
         StackPopString(Stack, Stack?, Filename?) .
         StackPopTerm(Stack, Stack?, STree?) .
         FunSym := fun(STree) .
         if equal(FunSym, "str") then
           String := first(args(STree)) .
-          ActivateEditorWithString(String, ModuleName, Filename)
+          ActivateEditorWithString(String, Modulename, Filename)
         else
-          ActivateEditorWithTree(STree, ModuleName, Filename) 
+          ActivateEditorWithTree(STree, Modulename, Filename) 
         fi .    
         ReturnSuccess(Sid, Stack)
       +
@@ -452,18 +452,18 @@ in
         StackPushTerm(Stack,Stack?,RTree) .
         ReturnSuccess(EditorId,Stack)
       +
-        rec-msg(parse(ModuleName?, SortName?), Stack?, EditorId?) .
+        rec-msg(parse(Modulename?, SortName?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?) .
           FunSym := fun(STree) .
           if or(equal(FunSym, "file"), equal(FunSym, "path")) then
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
-            /*ParseText(String, FilePath, ModuleName, SortName, RTree?, Error?) .*/
+            /*ParseText(String, FilePath, Modulename, SortName, RTree?, Error?) .*/
             printf("button-actions.tb:parse error ignored: %t\n", Error)
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
-              /*ParseText(String, "Unknown", ModuleName, SortName, RTree?, Error?) .*/
+              /*ParseText(String, "Unknown", Modulename, SortName, RTree?, Error?) .*/
 	      printf("button-actions.tb:parse error ignored: %t\n", Error)
             else
               RTree := error-tree
@@ -516,8 +516,8 @@ in
         rec-msg(push-active-module, Stack?, EditorId?) .
         subscribe(delete-editor(EditorId)) .
         snd-msg(em-get-modulename(EditorId)) .
-	rec-msg(em-modulename(EditorId, ModuleName?)) .
-	StackPushString(Stack, Stack?, ModuleName) .
+	rec-msg(em-modulename(EditorId, Modulename?)) .
+	StackPushString(Stack, Stack?, Modulename) .
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(push-modulename(String?), Stack?, EditorId?) .
@@ -560,14 +560,14 @@ in
       +
         rec-msg(show-tree, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
-        StackPopString(Stack,Stack?, ModuleName?) .
-        ShowTree(ModuleName, STree, false) .
+        StackPopString(Stack,Stack?, Modulename?) .
+        ShowTree(Modulename, STree, false) .
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-full-tree, Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
-        StackPopString(Stack,Stack?, ModuleName?) .
-        ShowTree(ModuleName, STree, true) .
+        StackPopString(Stack,Stack?, Modulename?) .
+        ShowTree(Modulename, STree, true) .
         ReturnSuccess(EditorId,Stack)
       +
 
@@ -639,9 +639,9 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?)
-	  . create(EditSyntax(ModuleName), Pid?)
-	  . rec-msg(syntax-editor-started(ModuleName, Sid?))
+          StackPopString(Stack,Stack?,Modulename?)
+	  . create(EditSyntax(Modulename), Pid?)
+	  . rec-msg(syntax-editor-started(Modulename, Sid?))
 	  . ReturnSuccess(EditorId, Stack)
 	fi   
       +
@@ -651,7 +651,7 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack, Stack?, ModuleName?)
+          StackPopString(Stack, Stack?, Modulename?)
 	  . create(EditEquations(Modulename), Pid?)
 	  . rec-msg(equations-editor-started(Modulename, Sid?))
 	  . ReturnSuccess(EditorId, Stack)
@@ -662,9 +662,9 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(save-asfsdf-module(ModuleName)).
-          rec-msg(saved-asfsdf-module(ModuleName)).
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(save-asfsdf-module(Modulename)).
+          rec-msg(saved-asfsdf-module(Modulename)).
 	  ReturnSuccess(EditorId, Stack)	
 	fi   
       + 
@@ -674,9 +674,9 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack, Stack?, ModuleName?)
-          . snd-msg(revert-module(ModuleName))
-          . rec-msg(module-reverted(ModuleName))
+          StackPopString(Stack, Stack?, Modulename?)
+          . snd-msg(revert-module(Modulename))
+          . rec-msg(module-reverted(Modulename))
 	  . ReturnSuccess(EditorId, Stack)	
         fi
       + 
@@ -685,8 +685,8 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-          snd-msg(close-module(ModuleName, Mode)) .           
+          StackPopString(Stack,Stack?,Modulename?) .
+          snd-msg(close-module(Modulename, Mode)) .           
 	  ReturnSuccess(EditorId, Stack)	
         fi
       + 
@@ -695,32 +695,32 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-          snd-msg(delete-module(ModuleName)) .           
+          StackPopString(Stack,Stack?,Modulename?) .
+          snd-msg(delete-module(Modulename)) .           
 	  ReturnSuccess(EditorId, Stack)	
         fi
       + 
 	rec-msg(open-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(open-initial-module(Path, ModuleName, Extension)) .           
+       	StackPopString(Stack, Stack?, Modulename?) .
+        snd-msg(open-initial-module(Path, Modulename, Extension)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(new-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(create-new-module(Path, ModuleName, sdf)) .           
-	rec-msg(new-module-created(Path?, ModuleName?)) .
+       	StackPopString(Stack, Stack?, Modulename?) .
+        snd-msg(create-new-module(Path, Modulename, sdf)) .           
+	rec-msg(new-module-created(Path?, Modulename?)) .
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(create-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
+       	StackPopString(Stack, Stack?, Modulename?) .
 	snd-msg(io-relative-to-absolute(["."])) .
 	rec-msg(io-absolute-directories([Path?])) .
-        snd-msg(create-new-module(Path, ModuleName, sdf)) .           
-	rec-msg(new-module-created(Path?, ModuleName?)) .
+        snd-msg(create-new-module(Path, Modulename, sdf)) .           
+	rec-msg(new-module-created(Path?, Modulename?)) .
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(prompt-for-file(String?, Path?, Extension?), Stack?, EditorId?) .
@@ -730,12 +730,12 @@ in
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(prompt-for-file(String?,Path?), Stack?, EditorId?) .
-	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(get-modulename-extension(ModuleName)) .
+	StackPopString(Stack, Stack?, Modulename?) .
+	snd-msg(get-modulename-extension(Modulename)) .
 	(
-	  rec-msg(modulename-extension(ModuleName, Extension?)) 
+	  rec-msg(modulename-extension(Modulename, Extension?)) 
 	+
-	  rec-msg(no-modulename-extension(ModuleName)) .
+	  rec-msg(no-modulename-extension(Modulename)) .
 	  snd-msg(file-extension-hook(trm)) .
 	  rec-msg(file-extension-hook-result(Extension?))
         ) .
@@ -758,9 +758,9 @@ in
 	  snd-msg(edit-general(Filename))
 	  . ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?)
-	  . create(EditTerm(Filename, ModuleName), Pid?)
-	  . rec-msg(term-editor-started(Filename, ModuleName, Sid?))
+          StackPopString(Stack,Stack?,Modulename?)
+	  . create(EditTerm(Filename, Modulename), Pid?)
+	  . rec-msg(term-editor-started(Filename, Modulename, Sid?))
 	  . ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -786,37 +786,37 @@ in
         rec-msg(copy-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModuleName?) .
+       	StackPopString(Stack, Stack?, NewModulename?) .
 	StackIsEmpty(Stack, Empty?) .
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-       	  StackPopString(Stack, Stack?, ModuleName?) .
-	  snd-msg(copy-module(ModuleName, NewModuleName, Path)) .
+       	  StackPopString(Stack, Stack?, Modulename?) .
+	  snd-msg(copy-module(Modulename, NewModulename, Path)) .
 	  ReturnSuccess(EditorId, Stack)	
 	fi
       +
         rec-msg(rename-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, Extension?) .
        	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModuleName?) .
+       	StackPopString(Stack, Stack?, NewModulename?) .
 	StackIsEmpty(Stack, Empty?) .
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-       	  StackPopString(Stack, Stack?, ModuleName?) .
-	  snd-msg(rename-module(ModuleName, NewModuleName, Path)) .
+       	  StackPopString(Stack, Stack?, Modulename?) .
+	  snd-msg(rename-module(Modulename, NewModulename, Path)) .
 	  ReturnSuccess(EditorId, Stack)	
 	fi
       +
         rec-msg(import-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	ImportModule(ModuleName) .
+       	StackPopString(Stack, Stack?, Modulename?) .
+	ImportModule(Modulename) .
 	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(unimport-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, ModuleName?) .
-	UnImportModule(ModuleName) .
+       	StackPopString(Stack, Stack?, Modulename?) .
+	UnImportModule(Modulename) .
 	ReturnSuccess(EditorId, Stack)
       +
 	rec-msg(compile-module, Stack?, EditorId?) .
@@ -824,9 +824,9 @@ in
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(compile-module(ModuleName)) .
-	  rec-msg(compilation-ready(ModuleName)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(compile-module(Modulename)) .
+	  rec-msg(compilation-ready(Modulename)) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -836,8 +836,8 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(dump-equations-given-file(ModuleName, Path)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(dump-equations-given-file(Modulename, Path)) .
 	  rec-msg(equations-dumped) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
@@ -848,8 +848,8 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(dump-sdf-definition(ModuleName, Path)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(dump-sdf-definition(Modulename, Path)) .
 	  rec-msg(sdf-definition-dumped) .
 	  ReturnSuccess(EditorId, Stack)
         fi
@@ -860,8 +860,8 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(dump-parse-table-given-file(ModuleName, Path, trm)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(dump-parse-table-given-file(Modulename, Path, trm)) .
 	  rec-msg(parse-table-dumped) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
@@ -872,8 +872,8 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(dump-parse-table-given-file(ModuleName, Path, eqs)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(dump-parse-table-given-file(Modulename, Path, eqs)) .
 	  rec-msg(parse-table-dumped) .
 	  ReturnSuccess(EditorId, Stack)	
         fi
@@ -884,9 +884,9 @@ in
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,Path?) .
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(print-module(ModuleName, Path)) .
-	  rec-msg(module-printed(ModuleName)) .
+          StackPopString(Stack,Stack?,Modulename?) .
+	  snd-msg(print-module(Modulename, Path)) .
+	  rec-msg(module-printed(Modulename)) .
 	  ReturnSuccess(EditorId, Stack)	
 	fi
       +
@@ -922,8 +922,8 @@ in
          */
         rec-msg(asfsdfapigen, Stack?, EditorId?) .
 	StackPopString(Stack, Stack?, Path?) .
-	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(asfsdfapigen(ModuleName, Path)) .
+	StackPopString(Stack, Stack?, Modulename?) .
+	snd-msg(asfsdfapigen(Modulename, Path)) .
 	rec-msg(asfsdfapigen-done) .
 	ReturnSuccess(EditorId, Stack)
       +
@@ -981,14 +981,14 @@ endlet
 /* below here are implementations of button actions */
 /****************************************************/
 
-process ShowTree(ModuleName: str, Tree: term, ShowLeafs : term) is
+process ShowTree(Modulename: str, Tree: term, ShowLeafs : term) is
 let
   Graph : term,
   Id : int
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Computing graph layout..."))) .
-  snd-msg(tree2graph(ModuleName, Tree, ShowLeafs)) .
+  snd-msg(tree2graph(Modulename, Tree, ShowLeafs)) .
   rec-msg(graph(Graph?)) .
   snd-msg(display-graph("parsetree", Graph)).
   snd-note(ui-status(endstat(Id)))
@@ -998,7 +998,7 @@ process UnParseTerm(Tree : term, Text : str?) is
   snd-msg(unparse(Tree)) .
   rec-msg(unparsed-text(Text?))
 
-process ParseTerm(Sid: term, ModuleName: str) is
+process ParseTerm(Sid: term, Modulename: str) is
 let
   Id: int,
   Nonterminal: term,
@@ -1006,8 +1006,8 @@ let
   Table: term
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Parsing term %s", [ModuleName])))
-  . GetParseTable(ModuleName, trm, false, Table?)
+  . snd-note(ui-status(statf(Id, "Parsing term %s", [Modulename])))
+  . GetParseTable(Modulename, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
@@ -1102,7 +1102,7 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process ParseEquations(Sid: term, ModuleName: str) is
+process ParseEquations(Sid: term, Modulename: str) is
 let
   Id: int,
   Nonterminal: term,
@@ -1112,9 +1112,9 @@ let
   Tree: term
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Parsing equations of %s", [ModuleName])))
+  . snd-note(ui-status(statf(Id, "Parsing equations of %s", [Modulename])))
   . GetText(Sid, Text?)
-  . GetParseTable(ModuleName, eqs, true, Table?)
+  . GetParseTable(Modulename, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
@@ -1123,9 +1123,9 @@ in
     rec-msg(parse-editor-ok(Sid))
     . snd-msg(se-get-parse-tree(Sid))
     . rec-msg(se-parse-tree(Sid, Tree?))
-    . snd-msg(postprocess-semantics-hook(ModuleName, Tree))
-    . rec-msg(postprocess-semantics-hook-result(ModuleName, Tree?))
-    . snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree)))
+    . snd-msg(postprocess-semantics-hook(Modulename, Tree))
+    . rec-msg(postprocess-semantics-hook-result(Modulename, Tree?))
+    . snd-msg(update-eqs-tree-in-db(Modulename, tree(Tree)))
     . rec-msg(eqs-updated)
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid, "Parse successful"))
@@ -1234,7 +1234,7 @@ in
   )
 endlet
 
-process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
+process ReduceTerm(Tree: term, Modulename: str, NormalForm: term?) is
 let
   Summary: term,
   Equations: term,
@@ -1243,16 +1243,16 @@ let
   Specification: term
 in
   Id := process-id .
-  snd-msg(open-modules([ModuleName], sdf)) .
+  snd-msg(open-modules([Modulename], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  create(GetSpecification(ModuleName), Pid?)
+  create(GetSpecification(Modulename), Pid?)
   .
   (
     rec-msg(specification(Specification?)) .
     GetSpecificationEquations(Specification, Equations?) .
     snd-note(ui-status(endstat(Id))).
-    snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
+    snd-msg(interpret-term-hook(Modulename, Equations, Tree)).
     rec-msg(interpret-term-hook-result(NormalForm?))
   +
     rec-msg(specification-incomplete(Summary?)) .
@@ -1264,18 +1264,21 @@ endlet
 
 process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
 let
-  Text        : str,
-  EditorId    : term,
-  NewModulename : str,
-  ErrorMessage : str
+  ErrorMessage: str,
+  NewModulename: str,
+  Pid: int,
+  Sid: term,
+  Text: str
 in
-  if not-equal(Tree, error-tree) then
+  if not-equal(Tree, error-tree)
+  then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
     snd-msg(io-write-text-file(Filename, [Text])) .
     (
       rec-msg(io-file-written) .
-      snd-msg(edit-term(Filename, Modulename))
+      create(EditTerm(Filename, Modulename), Pid?)
+      . rec-msg(term-editor-started(Filename, Modulename, Sid?))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
@@ -1283,16 +1286,18 @@ in
   fi
 endlet
 
-process ActivateEditorWithString(Text: str, ModuleName: str, Filename: str) is
+process ActivateEditorWithString(Text: str, Modulename: str, Filename: str) is
 let
-  EditorId    : term,
-  NewModuleName : str,
-  ErrorMessage : str
+  ErrorMessage: str,
+  NewModulename: str,
+  Pid: int,
+  Sid: term
 in
   snd-msg(io-write-text-file(Filename, [Text])) .
   (
     rec-msg(io-file-written) .
-    snd-msg(edit-term-file(ModuleName, Filename))
+    create(EditTerm(Filename, Modulename), Pid?)
+    . rec-msg(term-editor-started(Filename, Modulename, Sid?))
   +
     rec-msg(io-file-not-written(ErrorMessage?)) .
     snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
@@ -1300,35 +1305,35 @@ in
 
 endlet
 
-process ImportModule(ModuleName : str) is
+process ImportModule(Modulename : str) is
 let
   Choices : list,
   Chosen : str
 in
   snd-msg(get-all-module-names) .
   rec-msg(all-module-names(Choices?)) .
-  snd-msg(show-list-choice(ModuleName, "Choose a module to import", Choices)) .
+  snd-msg(show-list-choice(Modulename, "Choose a module to import", Choices)) .
   (
-    rec-msg(list-choice(ModuleName, Chosen?)) .
-    snd-msg(import-module(ModuleName, Chosen))
+    rec-msg(list-choice(Modulename, Chosen?)) .
+    snd-msg(import-module(Modulename, Chosen))
   +
-    rec-msg(cancel-list-choice(ModuleName)) 
+    rec-msg(cancel-list-choice(Modulename)) 
   )
 endlet  
 
-process UnImportModule(ModuleName : str) is
+process UnImportModule(Modulename : str) is
 let
   Choices : list,
   Chosen : str
 in
-  snd-msg(get-imported-modules(ModuleName)) .
+  snd-msg(get-imported-modules(Modulename)) .
   rec-msg(imported-modules(Choices?)) .
-  snd-msg(show-list-choice(ModuleName, "Choose a module to remove from the imports", Choices)) .
+  snd-msg(show-list-choice(Modulename, "Choose a module to remove from the imports", Choices)) .
   (
-    rec-msg(list-choice(ModuleName, Chosen?)) .
-    snd-msg(unimport-module(ModuleName, Chosen)) 
+    rec-msg(list-choice(Modulename, Chosen?)) .
+    snd-msg(unimport-module(Modulename, Chosen)) 
   +
-    rec-msg(cancel-list-choice(ModuleName)) 
+    rec-msg(cancel-list-choice(Modulename)) 
   )
 endlet  
 
@@ -1341,9 +1346,7 @@ in
   .
   (
     rec-msg(session(Pid, Sid?))
-    . printf("before ShowLocation\n")
     . ShowLocation(Sid, Location, Message)
-    . printf("after ShowLocation\n")
   +
     rec-msg(no-such-session(Pid))
   )

@@ -1,6 +1,10 @@
 # $Id$
 
 Mon Apr 19 09:49:45 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - remove EditorCreator: each process that wishes to create an
+     editing session does so by create()'ing the appropriate EditXYZ
+     process and synchronizing by rec-msg(XYZ-editor-started)
  * editors/text/gvim/connector.c:
    - reinstate "magical"  when sending to gvim, to ensure
      gvim is in command-mode before issuing command-actions

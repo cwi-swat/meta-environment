@@ -4,22 +4,21 @@
 
 process StandAloneAsfEditor is
 let
-  ModuleName : str,
-  EditorId   : term,
-  Pid : int
-
+  ModuleName: str,
+  Pid: int,
+  Sid: term
 in
-  create(StatusDisplay, Pid?) .
-  create(MetaCreator, Pid?) .
-  rec-msg(creation-finished) .
-  InitializeTermStore(TERMSTORENAME) .
-  subscribe(delete-editor(<term>)) .
-  snd-msg(open-modules([MODULENAME], sdf)) .
-  rec-msg(finished-opening-modules) .
-  snd-msg(edit-term-file(MODULENAME,INFILENAME)) .
-  rec-msg(editor-opened(ModuleName?, EditorId?)) .
-  rec-note(delete-editor(EditorId)) .
-  shutdown("")
+  create(StatusDisplay, Pid?)
+  . create(MetaCreator, Pid?)
+  . rec-msg(creation-finished)
+  . InitializeTermStore(TERMSTORENAME)
+  . subscribe(delete-editor(<term>))
+  . snd-msg(open-modules([MODULENAME], sdf))
+  . rec-msg(finished-opening-modules)
+  . create(EditTerm(MODULENAME, INFILENAME), Pid?)
+  . rec-msg(term-editor-created(MODULENAME, INFILENAME, Sid?))
+  . rec-note(delete-editor(Sid))
+  . shutdown("")
 endlet
 
 toolbus(StandAloneAsfEditor)

@@ -574,8 +574,8 @@ in
     .
     if equal(Available, true)
     then
-      create(EditTerm(Filename, Modulename), Pid?)
-      . rec-msg(term-editor-started(Filename, Modulename, Sid?))
+      create(EditTerm(Path, Modulename), Pid?)
+      . rec-msg(term-editor-started(Path, Modulename, Sid?))
     else
       snd-note(ui-status(errorf("Unable to determine modulename for: %s",
       [Path])))

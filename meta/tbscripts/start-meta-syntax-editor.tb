@@ -4,21 +4,21 @@
 
 process StandAloneSyntaxEditor is
 let
-  ModuleName : str,
-  EditorId   : term,
-  Pid : int
+  ModuleName: str,
+  Pid: int,
+  Sid: term
 in
-  create(StatusDisplay, Pid?) .
-  create(MetaCreator, Pid?) .
-  rec-msg(creation-finished) .
-  InitializeTermStore(TERMSTORENAME) .
-  subscribe(delete-editor(<term>)) .
-  snd-msg(open-modules([MODULENAME], sdf)) .
-  rec-msg(finished-opening-modules) .
-  snd-msg(edit-syntax(MODULENAME)) .
-  rec-msg(editor-opened(ModuleName?, EditorId?)) .
-  rec-note(delete-editor(EditorId)) .
-  shutdown("")
+  create(StatusDisplay, Pid?)
+  . create(MetaCreator, Pid?)
+  . rec-msg(creation-finished)
+  . InitializeTermStore(TERMSTORENAME)
+  . subscribe(delete-editor(<term>))
+  . snd-msg(open-modules([MODULENAME], sdf))
+  . rec-msg(finished-opening-modules)
+  . create(EditSyntax(MODULENAME), Pid?)
+  . rec-msg(syntax-editor-started(MODULENAME, Sid?))
+  . rec-note(delete-editor(Sid))
+  . shutdown("")
 endlet   
 
 toolbus(StandAloneSyntaxEditor)
