@@ -20,15 +20,19 @@
 #
 # $Id$
 
+include ${top_srcdir}/make_rules
+
 SUBDIRS     = asfix asc-support sglr pgen compiler asfix2c-compiler editor \
               evaluator graph-browser in-output module-db utils toolbus \
               stred grammars demo doc
 
-EXTRA_DIST  = make_rules meta.sh.src
+EXTRA_DIST  = make_rules meta.sh.src meta.pod
 
 bin_SCRIPTS = meta
 
-CLEANFILES  = meta
+man_MANS    = meta.1
+
+CLEANFILES  = meta meta.1
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
