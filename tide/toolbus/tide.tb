@@ -185,7 +185,7 @@ process CONTROL is
 let
   Control : tide-control
 in
-#ifdef PASSIVE
+#ifdef TIDE_PASSIVE
   rec-connect(Control?) .
 #else
   execute(tide-control, Control?) .
