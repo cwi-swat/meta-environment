@@ -16,6 +16,7 @@ import metastudio.graph.*;
 import aterm.*;
 
 public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, ModuleSelectionListener  {
+    // TODO: move preference constants to Preferences class
   private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
   private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
   private static final String PREF_MSGPANE_STATUS = "messagepane.status";
@@ -29,7 +30,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private static ATerm ACTION_MENUBAR;
   private static ATerm ACTION_TOOLBAR;
   private static ATerm ACTION_MODULE_POPUP;
-  private static ATerm ACTION_NEW_MODULE_POPUP; // XXX
+  private static ATerm ACTION_NEW_MODULE_POPUP; // TODO: to be removed
 
   public static MetaGraphFactory factory;
 
@@ -160,11 +161,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       // do nothing
     }
 
+    // TODO: apification
     ACTION_MENUBAR = factory.parse("studio-menubar");
     ACTION_TOOLBAR = factory.parse("studio-toolbar");
     ACTION_MODULE_POPUP = factory.parse("module-popup");
     ACTION_NEW_MODULE_POPUP = factory.parse("new-module-popup");
 
+    // TODO: method extraction for every fold
+    
     //{{{ Create ToolBus bridge
 
     bridge = new UserInterfaceBridge(factory, this);
@@ -761,9 +765,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   private void addToolBarAction(final ATermAppl action) {
     /* APIGEN */
-    String label = ((ATermAppl)action.getArgument(0)).getName(); // XXX
-    String name = ((ATermAppl)action.getArgument(1)).getName();  // XXX
-    String path = "/images/" + name; // XXX
+    String label = ((ATermAppl)action.getArgument(0)).getName(); // TODO: apification
+    String name = ((ATermAppl)action.getArgument(1)).getName();  // TODO: apification
+    String path = "/images/" + name; // TODO: externalize string?
     URL url = path.getClass().getResource(path);
     if (url == null) {
       error("Unable to get icon: " + path);
@@ -846,7 +850,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   private JMenu addMenuName(JMenu menu, String name) {
-    JMenu[] children = (JMenu[]) menu.getSubElements();	// FIXME TODO XXX YYY
+    JMenu[] children = (JMenu[]) menu.getSubElements();	// TODO: this is illegal code, the cast is wrong
     JMenu location = findMenuLocation(children, name);
 
     if (location == null) {
@@ -898,6 +902,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
 
+  // TODO: change algorithm, do it in two parts: first find tree structure, then
+  // build the menu
+  
   // The next two methods (addPopupMenuItems, addMenuItems) are exactly the
   // same. The reason is that JPopupMenu and JMenu have the same methods,
   // but are in different hierarchies. Also, we did not succeed in making
@@ -936,7 +943,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
 	  if (buttonNamePrefix.isEqual(menuNamePrefix)) {
 	    apifyMe = factory.make("menu(<term>)",
-					 curList.getNext()); // XXX
+					 curList.getNext()); // TODO: apification
 	    subMenu = subMenu.insert(apifyMe);
 	    buttons = buttons.remove(cur);
 	  }
@@ -989,8 +996,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	  ATerm menuNamePrefix = curList.getFirst();
 
 	  if (buttonNamePrefix.isEqual(menuNamePrefix)) {
-	    ATerm apifyMe = factory.make("menu(<term>)",
-					 curList.getNext()); // XXX
+	    ATerm apifyMe = factory.make("menu(<term>)", curList.getNext()); // TODO: apification
 	    subMenu = subMenu.insert(apifyMe);
 	    buttons = buttons.remove(cur);
 	  }
