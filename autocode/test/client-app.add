@@ -46,7 +46,7 @@ application client-app {
 
     @import "Order.add"
     type Order {
-      operation := { constructor, equals }
+      operation := { constructor, equals, hash-code }
       field * {
 	operation := { get, set }
       }
