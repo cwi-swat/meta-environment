@@ -18,7 +18,7 @@
 #
 # $Id$
 
-SUBDIRS    = pgen addeqs
+SUBDIRS    = pgen addeqs removevars
 
 EXTRA_DIST = make_rules
 
