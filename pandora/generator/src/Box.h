@@ -20,8 +20,8 @@ typedef struct _BOX_SpaceSymbol *BOX_SpaceSymbol;
 typedef struct _BOX_SOption *BOX_SOption;
 typedef struct _BOX_SOptions *BOX_SOptions;
 typedef struct _BOX_SOptionList *BOX_SOptionList;
-typedef struct _BOX_BoxList *BOX_BoxList;
 typedef struct _BOX_Box *BOX_Box;
+typedef struct _BOX_BoxList *BOX_BoxList;
 typedef struct _BOX_Start *BOX_Start;
 typedef struct _BOX_OptLayout *BOX_OptLayout;
 
@@ -32,25 +32,24 @@ typedef struct _BOX_OptLayout *BOX_OptLayout;
 
 /*}}}  */
 
-/*{{{  protect macros */
-
-#define BOX_protectNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectNormal(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectEscaped(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectSpaceSymbol(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectSOption(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectSOptions(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectSOptionList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectBoxList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectBoxList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectBox(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
-#define BOX_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
-
-/*}}}  */
 void BOX_initBoxApi(void);
 
+/*{{{  protect functions */
+
+void BOX_protectNatCon(BOX_NatCon *arg);
+void BOX_protectNormal(BOX_Normal *arg);
+void BOX_protectEscaped(BOX_Escaped *arg);
+void BOX_protectStrCon(BOX_StrCon *arg);
+void BOX_protectSpaceSymbol(BOX_SpaceSymbol *arg);
+void BOX_protectSOption(BOX_SOption *arg);
+void BOX_protectSOptions(BOX_SOptions *arg);
+void BOX_protectSOptionList(BOX_SOptionList *arg);
+void BOX_protectBox(BOX_Box *arg);
+void BOX_protectBoxList(BOX_BoxList *arg);
+void BOX_protectStart(BOX_Start *arg);
+void BOX_protectOptLayout(BOX_OptLayout *arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 BOX_NatCon BOX_NatConFromTerm(ATerm t);
@@ -69,12 +68,10 @@ BOX_SOptions BOX_SOptionsFromTerm(ATerm t);
 ATerm BOX_SOptionsToTerm(BOX_SOptions arg);
 BOX_SOptionList BOX_SOptionListFromTerm(ATerm t);
 ATerm BOX_SOptionListToTerm(BOX_SOptionList arg);
-BOX_BoxList BOX_BoxListFromTerm(ATerm t);
-ATerm BOX_BoxListToTerm(BOX_BoxList arg);
-BOX_BoxList BOX_BoxListFromTerm(ATerm t);
-ATerm BOX_BoxListToTerm(BOX_BoxList arg);
 BOX_Box BOX_BoxFromTerm(ATerm t);
 ATerm BOX_BoxToTerm(BOX_Box arg);
+BOX_BoxList BOX_BoxListFromTerm(ATerm t);
+ATerm BOX_BoxListToTerm(BOX_BoxList arg);
 BOX_Start BOX_StartFromTerm(ATerm t);
 ATerm BOX_StartToTerm(BOX_Start arg);
 BOX_OptLayout BOX_OptLayoutFromTerm(ATerm t);
@@ -124,23 +121,19 @@ BOX_SOptions BOX_makeSOptionsDefault(BOX_SOptionList list);
 BOX_SOptionList BOX_makeSOptionListEmpty();
 BOX_SOptionList BOX_makeSOptionListSingle(BOX_SOption head);
 BOX_SOptionList BOX_makeSOptionListMany(BOX_SOption head, BOX_OptLayout wsAfterHead, BOX_SOptionList tail);
-BOX_BoxList BOX_makeBoxListTaeke(BOX_BoxList list);
-BOX_BoxList BOX_makeBoxListIstar(BOX_OptLayout wsAfterIStar, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
+BOX_Box BOX_makeBoxString(BOX_StrCon StrCon);
+BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList);
+BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList);
+BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList);
+BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList);
+BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox);
+BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox);
 BOX_BoxList BOX_makeBoxListEmpty();
 BOX_BoxList BOX_makeBoxListSingle(BOX_Box head);
 BOX_BoxList BOX_makeBoxListMany(BOX_Box head, BOX_OptLayout wsAfterHead, BOX_BoxList tail);
-BOX_Box BOX_makeBoxString(BOX_StrCon StrCon);
-BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
-BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
-BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
-BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
-BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox);
-BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox);
-BOX_Box BOX_makeBoxLST(BOX_OptLayout wsAfterLST, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList);
 BOX_Start BOX_makeStartSOptions(BOX_OptLayout wsBefore, BOX_SOptions topSOptions, BOX_OptLayout wsAfter, int ambCnt);
 BOX_Start BOX_makeStartSOption(BOX_OptLayout wsBefore, BOX_SOption topSOption, BOX_OptLayout wsAfter, int ambCnt);
 BOX_Start BOX_makeStartSpaceSymbol(BOX_OptLayout wsBefore, BOX_SpaceSymbol topSpaceSymbol, BOX_OptLayout wsAfter, int ambCnt);
-BOX_Start BOX_makeStartBoxList(BOX_OptLayout wsBefore, BOX_BoxList topBoxList, BOX_OptLayout wsAfter, int ambCnt);
 BOX_Start BOX_makeStartBox(BOX_OptLayout wsBefore, BOX_Box topBox, BOX_OptLayout wsAfter, int ambCnt);
 BOX_Start BOX_makeStartEscaped(BOX_OptLayout wsBefore, BOX_Escaped topEscaped, BOX_OptLayout wsAfter, int ambCnt);
 BOX_Start BOX_makeStartNormal(BOX_OptLayout wsBefore, BOX_Normal topNormal, BOX_OptLayout wsAfter, int ambCnt);
@@ -160,9 +153,8 @@ ATbool BOX_isEqualSpaceSymbol(BOX_SpaceSymbol arg0, BOX_SpaceSymbol arg1);
 ATbool BOX_isEqualSOption(BOX_SOption arg0, BOX_SOption arg1);
 ATbool BOX_isEqualSOptions(BOX_SOptions arg0, BOX_SOptions arg1);
 ATbool BOX_isEqualSOptionList(BOX_SOptionList arg0, BOX_SOptionList arg1);
-ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1);
-ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1);
 ATbool BOX_isEqualBox(BOX_Box arg0, BOX_Box arg1);
+ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1);
 ATbool BOX_isEqualStart(BOX_Start arg0, BOX_Start arg1);
 ATbool BOX_isEqualOptLayout(BOX_OptLayout arg0, BOX_OptLayout arg1);
 
@@ -256,51 +248,6 @@ BOX_SOptionList BOX_getSOptionListTail(BOX_SOptionList arg);
 BOX_SOptionList BOX_setSOptionListTail(BOX_SOptionList arg, BOX_SOptionList tail);
 
 /*}}}  */
-/*{{{  BOX_BoxList accessors */
-
-ATbool BOX_isValidBoxList(BOX_BoxList arg);
-inline ATbool BOX_isBoxListTaeke(BOX_BoxList arg);
-inline ATbool BOX_isBoxListIstar(BOX_BoxList arg);
-ATbool BOX_hasBoxListList(BOX_BoxList arg);
-BOX_BoxList BOX_getBoxListList(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListList(BOX_BoxList arg, BOX_BoxList list);
-ATbool BOX_hasBoxListWsAfterIStar(BOX_BoxList arg);
-BOX_OptLayout BOX_getBoxListWsAfterIStar(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListWsAfterIStar(BOX_BoxList arg, BOX_OptLayout wsAfterIStar);
-ATbool BOX_hasBoxListSOptions(BOX_BoxList arg);
-BOX_SOptions BOX_getBoxListSOptions(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListSOptions(BOX_BoxList arg, BOX_SOptions SOptions);
-ATbool BOX_hasBoxListWsAfterSOptions(BOX_BoxList arg);
-BOX_OptLayout BOX_getBoxListWsAfterSOptions(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListWsAfterSOptions(BOX_BoxList arg, BOX_OptLayout wsAfterSOptions);
-ATbool BOX_hasBoxListWsAfterBracketOpen(BOX_BoxList arg);
-BOX_OptLayout BOX_getBoxListWsAfterBracketOpen(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListWsAfterBracketOpen(BOX_BoxList arg, BOX_OptLayout wsAfterBracketOpen);
-ATbool BOX_hasBoxListBoxList(BOX_BoxList arg);
-BOX_BoxList BOX_getBoxListBoxList(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListBoxList(BOX_BoxList arg, BOX_BoxList BoxList);
-ATbool BOX_hasBoxListWsAfterBoxList(BOX_BoxList arg);
-BOX_OptLayout BOX_getBoxListWsAfterBoxList(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListWsAfterBoxList(BOX_BoxList arg, BOX_OptLayout wsAfterBoxList);
-
-/*}}}  */
-/*{{{  BOX_BoxList accessors */
-
-ATbool BOX_isValidBoxList(BOX_BoxList arg);
-inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg);
-inline ATbool BOX_isBoxListSingle(BOX_BoxList arg);
-inline ATbool BOX_isBoxListMany(BOX_BoxList arg);
-ATbool BOX_hasBoxListHead(BOX_BoxList arg);
-BOX_Box BOX_getBoxListHead(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head);
-ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg);
-BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead);
-ATbool BOX_hasBoxListTail(BOX_BoxList arg);
-BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg);
-BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail);
-
-/*}}}  */
 /*{{{  BOX_Box accessors */
 
 ATbool BOX_isValidBox(BOX_Box arg);
@@ -311,7 +258,6 @@ inline ATbool BOX_isBoxHV(BOX_Box arg);
 inline ATbool BOX_isBoxHOV(BOX_Box arg);
 inline ATbool BOX_isBoxI(BOX_Box arg);
 inline ATbool BOX_isBoxWD(BOX_Box arg);
-inline ATbool BOX_isBoxLST(BOX_Box arg);
 ATbool BOX_hasBoxStrCon(BOX_Box arg);
 BOX_StrCon BOX_getBoxStrCon(BOX_Box arg);
 BOX_Box BOX_setBoxStrCon(BOX_Box arg, BOX_StrCon StrCon);
@@ -327,12 +273,12 @@ BOX_Box BOX_setBoxWsAfterSOptions(BOX_Box arg, BOX_OptLayout wsAfterSOptions);
 ATbool BOX_hasBoxWsAfterBracketOpen(BOX_Box arg);
 BOX_OptLayout BOX_getBoxWsAfterBracketOpen(BOX_Box arg);
 BOX_Box BOX_setBoxWsAfterBracketOpen(BOX_Box arg, BOX_OptLayout wsAfterBracketOpen);
-ATbool BOX_hasBoxBoxList(BOX_Box arg);
-BOX_BoxList BOX_getBoxBoxList(BOX_Box arg);
-BOX_Box BOX_setBoxBoxList(BOX_Box arg, BOX_BoxList BoxList);
-ATbool BOX_hasBoxWsAfterBoxList(BOX_Box arg);
-BOX_OptLayout BOX_getBoxWsAfterBoxList(BOX_Box arg);
-BOX_Box BOX_setBoxWsAfterBoxList(BOX_Box arg, BOX_OptLayout wsAfterBoxList);
+ATbool BOX_hasBoxList(BOX_Box arg);
+BOX_BoxList BOX_getBoxList(BOX_Box arg);
+BOX_Box BOX_setBoxList(BOX_Box arg, BOX_BoxList list);
+ATbool BOX_hasBoxWsAfterList(BOX_Box arg);
+BOX_OptLayout BOX_getBoxWsAfterList(BOX_Box arg);
+BOX_Box BOX_setBoxWsAfterList(BOX_Box arg, BOX_OptLayout wsAfterList);
 ATbool BOX_hasBoxWsAfterV(BOX_Box arg);
 BOX_OptLayout BOX_getBoxWsAfterV(BOX_Box arg);
 BOX_Box BOX_setBoxWsAfterV(BOX_Box arg, BOX_OptLayout wsAfterV);
@@ -354,9 +300,23 @@ BOX_Box BOX_setBoxWsAfterBox(BOX_Box arg, BOX_OptLayout wsAfterBox);
 ATbool BOX_hasBoxWsAfterWD(BOX_Box arg);
 BOX_OptLayout BOX_getBoxWsAfterWD(BOX_Box arg);
 BOX_Box BOX_setBoxWsAfterWD(BOX_Box arg, BOX_OptLayout wsAfterWD);
-ATbool BOX_hasBoxWsAfterLST(BOX_Box arg);
-BOX_OptLayout BOX_getBoxWsAfterLST(BOX_Box arg);
-BOX_Box BOX_setBoxWsAfterLST(BOX_Box arg, BOX_OptLayout wsAfterLST);
+
+/*}}}  */
+/*{{{  BOX_BoxList accessors */
+
+ATbool BOX_isValidBoxList(BOX_BoxList arg);
+inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg);
+inline ATbool BOX_isBoxListSingle(BOX_BoxList arg);
+inline ATbool BOX_isBoxListMany(BOX_BoxList arg);
+ATbool BOX_hasBoxListHead(BOX_BoxList arg);
+BOX_Box BOX_getBoxListHead(BOX_BoxList arg);
+BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head);
+ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg);
+BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg);
+BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead);
+ATbool BOX_hasBoxListTail(BOX_BoxList arg);
+BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg);
+BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail);
 
 /*}}}  */
 /*{{{  BOX_Start accessors */
@@ -365,7 +325,6 @@ ATbool BOX_isValidStart(BOX_Start arg);
 inline ATbool BOX_isStartSOptions(BOX_Start arg);
 inline ATbool BOX_isStartSOption(BOX_Start arg);
 inline ATbool BOX_isStartSpaceSymbol(BOX_Start arg);
-inline ATbool BOX_isStartBoxList(BOX_Start arg);
 inline ATbool BOX_isStartBox(BOX_Start arg);
 inline ATbool BOX_isStartEscaped(BOX_Start arg);
 inline ATbool BOX_isStartNormal(BOX_Start arg);
@@ -389,9 +348,6 @@ BOX_Start BOX_setStartTopSOption(BOX_Start arg, BOX_SOption topSOption);
 ATbool BOX_hasStartTopSpaceSymbol(BOX_Start arg);
 BOX_SpaceSymbol BOX_getStartTopSpaceSymbol(BOX_Start arg);
 BOX_Start BOX_setStartTopSpaceSymbol(BOX_Start arg, BOX_SpaceSymbol topSpaceSymbol);
-ATbool BOX_hasStartTopBoxList(BOX_Start arg);
-BOX_BoxList BOX_getStartTopBoxList(BOX_Start arg);
-BOX_Start BOX_setStartTopBoxList(BOX_Start arg, BOX_BoxList topBoxList);
 ATbool BOX_hasStartTopBox(BOX_Start arg);
 BOX_Box BOX_getStartTopBox(BOX_Start arg);
 BOX_Start BOX_setStartTopBox(BOX_Start arg, BOX_Box topBox);
@@ -429,9 +385,9 @@ BOX_SpaceSymbol BOX_visitSpaceSymbol(BOX_SpaceSymbol arg);
 BOX_SOption BOX_visitSOption(BOX_SOption arg, BOX_SpaceSymbol (*acceptSpaceSymbol)(BOX_SpaceSymbol), BOX_OptLayout (*acceptWsAfterSpaceSymbol)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterEquals)(BOX_OptLayout), BOX_NatCon (*acceptNatCon)(BOX_NatCon));
 BOX_SOptions BOX_visitSOptions(BOX_SOptions arg, BOX_SOptionList (*acceptList)(BOX_SOptionList));
 BOX_SOptionList BOX_visitSOptionList(BOX_SOptionList arg, BOX_SOption (*acceptHead)(BOX_SOption), BOX_OptLayout (*acceptWsAfterHead)(BOX_OptLayout));
+BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout));
 BOX_BoxList BOX_visitBoxList(BOX_BoxList arg, BOX_Box (*acceptHead)(BOX_Box), BOX_OptLayout (*acceptWsAfterHead)(BOX_OptLayout));
-BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptBoxList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterBoxList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterLST)(BOX_OptLayout));
-BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_BoxList (*acceptTopBoxList)(BOX_BoxList), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon));
+BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon));
 BOX_OptLayout BOX_visitOptLayout(BOX_OptLayout arg, char* (*acceptString)(char*));
 
 /*}}}  */

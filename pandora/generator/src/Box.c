@@ -52,9 +52,8 @@ typedef struct ATerm _BOX_SpaceSymbol;
 typedef struct ATerm _BOX_SOption;
 typedef struct ATerm _BOX_SOptions;
 typedef struct ATerm _BOX_SOptionList;
-typedef struct ATerm _BOX_BoxList;
-typedef struct ATerm _BOX_BoxList;
 typedef struct ATerm _BOX_Box;
+typedef struct ATerm _BOX_BoxList;
 typedef struct ATerm _BOX_Start;
 typedef struct ATerm _BOX_OptLayout;
 
@@ -69,6 +68,70 @@ void BOX_initBoxApi(void)
 
 /*}}}  */
 
+/*{{{  protect functions */
+
+void BOX_protectNatCon(BOX_NatCon *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectNormal(BOX_Normal *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectEscaped(BOX_Escaped *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectStrCon(BOX_StrCon *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectSpaceSymbol(BOX_SpaceSymbol *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectSOption(BOX_SOption *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectSOptions(BOX_SOptions *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectSOptionList(BOX_SOptionList *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectBox(BOX_Box *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectBoxList(BOX_BoxList *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectStart(BOX_Start *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void BOX_protectOptLayout(BOX_OptLayout *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 /*{{{  BOX_NatCon BOX_NatConFromTerm(ATerm t) */
@@ -199,38 +262,6 @@ ATerm BOX_SOptionListToTerm(BOX_SOptionList arg)
 }
 
 /*}}}  */
-/*{{{  BOX_BoxList BOX_BoxListFromTerm(ATerm t) */
-
-BOX_BoxList BOX_BoxListFromTerm(ATerm t)
-{
-  return (BOX_BoxList)t;
-}
-
-/*}}}  */
-/*{{{  ATerm BOX_BoxListToTerm(BOX_BoxList arg) */
-
-ATerm BOX_BoxListToTerm(BOX_BoxList arg)
-{
-  return (ATerm)arg;
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_BoxListFromTerm(ATerm t) */
-
-BOX_BoxList BOX_BoxListFromTerm(ATerm t)
-{
-  return (BOX_BoxList)t;
-}
-
-/*}}}  */
-/*{{{  ATerm BOX_BoxListToTerm(BOX_BoxList arg) */
-
-ATerm BOX_BoxListToTerm(BOX_BoxList arg)
-{
-  return (ATerm)arg;
-}
-
-/*}}}  */
 /*{{{  BOX_Box BOX_BoxFromTerm(ATerm t) */
 
 BOX_Box BOX_BoxFromTerm(ATerm t)
@@ -242,6 +273,22 @@ BOX_Box BOX_BoxFromTerm(ATerm t)
 /*{{{  ATerm BOX_BoxToTerm(BOX_Box arg) */
 
 ATerm BOX_BoxToTerm(BOX_Box arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  BOX_BoxList BOX_BoxListFromTerm(ATerm t) */
+
+BOX_BoxList BOX_BoxListFromTerm(ATerm t)
+{
+  return (BOX_BoxList)t;
+}
+
+/*}}}  */
+/*{{{  ATerm BOX_BoxListToTerm(BOX_BoxList arg) */
+
+ATerm BOX_BoxListToTerm(BOX_BoxList arg)
 {
   return (ATerm)arg;
 }
@@ -536,19 +583,59 @@ BOX_SOptionList BOX_makeSOptionListMany(BOX_SOption head, BOX_OptLayout wsAfterH
 }
 
 /*}}}  */
-/*{{{  BOX_BoxList BOX_makeBoxListTaeke(BOX_BoxList list) */
+/*{{{  BOX_Box BOX_makeBoxString(BOX_StrCon StrCon) */
 
-BOX_BoxList BOX_makeBoxListTaeke(BOX_BoxList list)
+BOX_Box BOX_makeBoxString(BOX_StrCon StrCon)
 {
-  return (BOX_BoxList)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun29)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl1(BOX_afun7, (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm) list)));
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun13)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun28)))))), (ATerm)ATmakeList1((ATerm) StrCon));
 }
 
 /*}}}  */
-/*{{{  BOX_BoxList BOX_makeBoxListIstar(BOX_OptLayout wsAfterIStar, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
+/*{{{  BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList) */
 
-BOX_BoxList BOX_makeBoxListIstar(BOX_OptLayout wsAfterIStar, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
+BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList)
 {
-  return (BOX_BoxList)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun32))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun33)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterIStar), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun32))));
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun31)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl1(BOX_afun7, (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterH), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))));
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList) */
+
+BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList)
+{
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun32))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun32)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl1(BOX_afun7, (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun32))));
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList) */
+
+BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList)
+{
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun33))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun33)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl1(BOX_afun7, (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterHV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun33))));
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList) */
+
+BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList list, BOX_OptLayout wsAfterList)
+{
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun34))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun34)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl1(BOX_afun7, (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun8, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterHOV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun34))));
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox) */
+
+BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox)
+{
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun35))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun35)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterBox), (ATerm) Box), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterI), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun35))));
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox) */
+
+BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox)
+{
+  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun36))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun36)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun29))), (ATerm) wsAfterBox), (ATerm) Box), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterWD), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun36))));
 }
 
 /*}}}  */
@@ -579,75 +666,11 @@ BOX_BoxList BOX_makeBoxListMany(BOX_Box head, BOX_OptLayout wsAfterHead, BOX_Box
 }
 
 /*}}}  */
-/*{{{  BOX_Box BOX_makeBoxString(BOX_StrCon StrCon) */
-
-BOX_Box BOX_makeBoxString(BOX_StrCon StrCon)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun13)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun34)))))), (ATerm)ATmakeList1((ATerm) StrCon));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
-
-BOX_Box BOX_makeBoxH(BOX_OptLayout wsAfterH, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun35))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun35)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterH), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun35))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
-
-BOX_Box BOX_makeBoxV(BOX_OptLayout wsAfterV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun36))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun36)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun36))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
-
-BOX_Box BOX_makeBoxHV(BOX_OptLayout wsAfterHV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun37))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun37)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterHV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun37))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
-
-BOX_Box BOX_makeBoxHOV(BOX_OptLayout wsAfterHOV, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun38))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun38)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterHOV), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun38))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox) */
-
-BOX_Box BOX_makeBoxI(BOX_OptLayout wsAfterI, BOX_SOptions SOptions, BOX_OptLayout wsAfterSOptions, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun39))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun39)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBox), (ATerm) Box), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterSOptions), (ATerm) SOptions), (ATerm) wsAfterI), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun39))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox) */
-
-BOX_Box BOX_makeBoxWD(BOX_OptLayout wsAfterWD, BOX_OptLayout wsAfterBracketOpen, BOX_Box Box, BOX_OptLayout wsAfterBox)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun40))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun40)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBox), (ATerm) Box), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterWD), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun40))));
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_makeBoxLST(BOX_OptLayout wsAfterLST, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList) */
-
-BOX_Box BOX_makeBoxLST(BOX_OptLayout wsAfterLST, BOX_OptLayout wsAfterBracketOpen, BOX_BoxList BoxList, BOX_OptLayout wsAfterBoxList)
-{
-  return (BOX_Box)(ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun41))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27))), (ATerm)ATmakeAppl1(BOX_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(BOX_afun18, (ATerm)ATmakeAppl1(BOX_afun19, (ATerm)ATmakeAppl0(BOX_afun41)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun30))), (ATerm) wsAfterBoxList), (ATerm) BoxList), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun31))), (ATerm) wsAfterLST), (ATerm)ATmakeAppl1(BOX_afun14, (ATerm)ATmakeAppl0(BOX_afun41))));
-}
-
-/*}}}  */
 /*{{{  BOX_Start BOX_makeStartSOptions(BOX_OptLayout wsBefore, BOX_SOptions topSOptions, BOX_OptLayout wsAfter, int ambCnt) */
 
 BOX_Start BOX_makeStartSOptions(BOX_OptLayout wsBefore, BOX_SOptions topSOptions, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSOptions), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun26)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSOptions), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -655,7 +678,7 @@ BOX_Start BOX_makeStartSOptions(BOX_OptLayout wsBefore, BOX_SOptions topSOptions
 
 BOX_Start BOX_makeStartSOption(BOX_OptLayout wsBefore, BOX_SOption topSOption, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun25)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSOption), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun25)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSOption), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -663,15 +686,7 @@ BOX_Start BOX_makeStartSOption(BOX_OptLayout wsBefore, BOX_SOption topSOption, B
 
 BOX_Start BOX_makeStartSpaceSymbol(BOX_OptLayout wsBefore, BOX_SpaceSymbol topSpaceSymbol, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun16)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSpaceSymbol), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
-}
-
-/*}}}  */
-/*{{{  BOX_Start BOX_makeStartBoxList(BOX_OptLayout wsBefore, BOX_BoxList topBoxList, BOX_OptLayout wsAfter, int ambCnt) */
-
-BOX_Start BOX_makeStartBoxList(BOX_OptLayout wsBefore, BOX_BoxList topBoxList, BOX_OptLayout wsAfter, int ambCnt)
-{
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun28)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topBoxList), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun16)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSpaceSymbol), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -679,7 +694,7 @@ BOX_Start BOX_makeStartBoxList(BOX_OptLayout wsBefore, BOX_BoxList topBoxList, B
 
 BOX_Start BOX_makeStartBox(BOX_OptLayout wsBefore, BOX_Box topBox, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topBox), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun27)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topBox), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -687,7 +702,7 @@ BOX_Start BOX_makeStartBox(BOX_OptLayout wsBefore, BOX_Box topBox, BOX_OptLayout
 
 BOX_Start BOX_makeStartEscaped(BOX_OptLayout wsBefore, BOX_Escaped topEscaped, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun12)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topEscaped), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun12)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topEscaped), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -695,7 +710,7 @@ BOX_Start BOX_makeStartEscaped(BOX_OptLayout wsBefore, BOX_Escaped topEscaped, B
 
 BOX_Start BOX_makeStartNormal(BOX_OptLayout wsBefore, BOX_Normal topNormal, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun11)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNormal), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun11)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNormal), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -703,7 +718,7 @@ BOX_Start BOX_makeStartNormal(BOX_OptLayout wsBefore, BOX_Normal topNormal, BOX_
 
 BOX_Start BOX_makeStartStrCon(BOX_OptLayout wsBefore, BOX_StrCon topStrCon, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun13)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topStrCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun13)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topStrCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -711,7 +726,7 @@ BOX_Start BOX_makeStartStrCon(BOX_OptLayout wsBefore, BOX_StrCon topStrCon, BOX_
 
 BOX_Start BOX_makeStartNatCon(BOX_OptLayout wsBefore, BOX_NatCon topNatCon, BOX_OptLayout wsAfter, int ambCnt)
 {
-  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun42, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun4)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun43)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNatCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (BOX_Start)(ATerm)ATmakeAppl2(BOX_afun37, (ATerm)ATmakeAppl2(BOX_afun0, (ATerm)ATmakeAppl3(BOX_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun4)))), (ATerm)ATmakeAppl1(BOX_afun5, (ATerm)ATmakeAppl1(BOX_afun22, (ATerm)ATmakeAppl0(BOX_afun23)))), (ATerm)ATmakeAppl1(BOX_afun3, (ATerm)ATmakeAppl0(BOX_afun38)), (ATerm)ATmakeAppl0(BOX_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNatCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -775,17 +790,12 @@ ATbool BOX_isEqualSOptionList(BOX_SOptionList arg0, BOX_SOptionList arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1)
-{
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1)
-{
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
 ATbool BOX_isEqualBox(BOX_Box arg0, BOX_Box arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool BOX_isEqualBoxList(BOX_BoxList arg0, BOX_BoxList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1585,493 +1595,6 @@ BOX_SOptionList BOX_setSOptionListTail(BOX_SOptionList arg, BOX_SOptionList tail
 /*}}}  */
 
 /*}}}  */
-/*{{{  BOX_BoxList accessors */
-
-/*{{{  ATbool BOX_isValidBoxList(BOX_BoxList arg) */
-
-ATbool BOX_isValidBoxList(BOX_BoxList arg)
-{
-  if (BOX_isBoxListTaeke(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxListTaeke(BOX_BoxList arg) */
-
-inline ATbool BOX_isBoxListTaeke(BOX_BoxList arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListTaeke, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxListIstar(BOX_BoxList arg) */
-
-inline ATbool BOX_isBoxListIstar(BOX_BoxList arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListIstar, NULL, NULL, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListList(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListList(BOX_BoxList arg)
-{
-  if (BOX_isBoxListTaeke(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_getBoxListList(BOX_BoxList arg) */
-
-BOX_BoxList BOX_getBoxListList(BOX_BoxList arg)
-{
-  
-    return (BOX_BoxList)ATgetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), 1);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListList(BOX_BoxList arg, BOX_BoxList list) */
-
-BOX_BoxList BOX_setBoxListList(BOX_BoxList arg, BOX_BoxList list)
-{
-  if (BOX_isBoxListTaeke(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), (ATerm)((ATerm) list), 1), 0), 1);
-  }
-
-  ATabort("BoxList has no List: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListWsAfterIStar(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListWsAfterIStar(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxListWsAfterIStar(BOX_BoxList arg) */
-
-BOX_OptLayout BOX_getBoxListWsAfterIStar(BOX_BoxList arg)
-{
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListWsAfterIStar(BOX_BoxList arg, BOX_OptLayout wsAfterIStar) */
-
-BOX_BoxList BOX_setBoxListWsAfterIStar(BOX_BoxList arg, BOX_OptLayout wsAfterIStar)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterIStar), 1), 1);
-  }
-
-  ATabort("BoxList has no WsAfterIStar: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListSOptions(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListSOptions(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_SOptions BOX_getBoxListSOptions(BOX_BoxList arg) */
-
-BOX_SOptions BOX_getBoxListSOptions(BOX_BoxList arg)
-{
-  
-    return (BOX_SOptions)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListSOptions(BOX_BoxList arg, BOX_SOptions SOptions) */
-
-BOX_BoxList BOX_setBoxListSOptions(BOX_BoxList arg, BOX_SOptions SOptions)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) SOptions), 2), 1);
-  }
-
-  ATabort("BoxList has no SOptions: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListWsAfterSOptions(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListWsAfterSOptions(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxListWsAfterSOptions(BOX_BoxList arg) */
-
-BOX_OptLayout BOX_getBoxListWsAfterSOptions(BOX_BoxList arg)
-{
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListWsAfterSOptions(BOX_BoxList arg, BOX_OptLayout wsAfterSOptions) */
-
-BOX_BoxList BOX_setBoxListWsAfterSOptions(BOX_BoxList arg, BOX_OptLayout wsAfterSOptions)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterSOptions), 3), 1);
-  }
-
-  ATabort("BoxList has no WsAfterSOptions: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListWsAfterBracketOpen(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListWsAfterBracketOpen(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxListWsAfterBracketOpen(BOX_BoxList arg) */
-
-BOX_OptLayout BOX_getBoxListWsAfterBracketOpen(BOX_BoxList arg)
-{
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListWsAfterBracketOpen(BOX_BoxList arg, BOX_OptLayout wsAfterBracketOpen) */
-
-BOX_BoxList BOX_setBoxListWsAfterBracketOpen(BOX_BoxList arg, BOX_OptLayout wsAfterBracketOpen)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBracketOpen), 5), 1);
-  }
-
-  ATabort("BoxList has no WsAfterBracketOpen: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListBoxList(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListBoxList(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_getBoxListBoxList(BOX_BoxList arg) */
-
-BOX_BoxList BOX_getBoxListBoxList(BOX_BoxList arg)
-{
-  
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListBoxList(BOX_BoxList arg, BOX_BoxList BoxList) */
-
-BOX_BoxList BOX_setBoxListBoxList(BOX_BoxList arg, BOX_BoxList BoxList)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 6), 1);
-  }
-
-  ATabort("BoxList has no BoxList: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListWsAfterBoxList(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListWsAfterBoxList(BOX_BoxList arg)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxListWsAfterBoxList(BOX_BoxList arg) */
-
-BOX_OptLayout BOX_getBoxListWsAfterBoxList(BOX_BoxList arg)
-{
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListWsAfterBoxList(BOX_BoxList arg, BOX_OptLayout wsAfterBoxList) */
-
-BOX_BoxList BOX_setBoxListWsAfterBoxList(BOX_BoxList arg, BOX_OptLayout wsAfterBoxList)
-{
-  if (BOX_isBoxListIstar(arg)) {
-    return (BOX_BoxList)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 7), 1);
-  }
-
-  ATabort("BoxList has no WsAfterBoxList: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
-/*{{{  BOX_BoxList accessors */
-
-/*{{{  ATbool BOX_isValidBoxList(BOX_BoxList arg) */
-
-ATbool BOX_isValidBoxList(BOX_BoxList arg)
-{
-  if (BOX_isBoxListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg) */
-
-inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg)
-{
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, BOX_patternBoxListEmpty));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxListSingle(BOX_BoxList arg) */
-
-inline ATbool BOX_isBoxListSingle(BOX_BoxList arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxListMany(BOX_BoxList arg) */
-
-inline ATbool BOX_isBoxListMany(BOX_BoxList arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListMany, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListHead(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListHead(BOX_BoxList arg)
-{
-  if (BOX_isBoxListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_Box BOX_getBoxListHead(BOX_BoxList arg) */
-
-BOX_Box BOX_getBoxListHead(BOX_BoxList arg)
-{
-  if (BOX_isBoxListSingle(arg)) {
-    return (BOX_Box)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (BOX_Box)ATgetFirst((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head) */
-
-BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head)
-{
-  if (BOX_isBoxListSingle(arg)) {
-    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (BOX_isBoxListMany(arg)) {
-    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("BoxList has no Head: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg)
-{
-  if (BOX_isBoxListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg) */
-
-BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg)
-{
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)arg, 1);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead) */
-
-BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead)
-{
-  if (BOX_isBoxListMany(arg)) {
-    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterHead), 1);
-  }
-
-  ATabort("BoxList has no WsAfterHead: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasBoxListTail(BOX_BoxList arg) */
-
-ATbool BOX_hasBoxListTail(BOX_BoxList arg)
-{
-  if (BOX_isBoxListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg) */
-
-BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg)
-{
-  
-    return (BOX_BoxList)ATgetTail((ATermList)arg, 2);
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail) */
-
-BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail)
-{
-  if (BOX_isBoxListMany(arg)) {
-    return (BOX_BoxList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 2);
-  }
-
-  ATabort("BoxList has no Tail: %t\n", arg);
-  return (BOX_BoxList)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
 /*{{{  BOX_Box accessors */
 
 /*{{{  ATbool BOX_isValidBox(BOX_Box arg) */
@@ -2097,9 +1620,6 @@ ATbool BOX_isValidBox(BOX_Box arg)
     return ATtrue;
   }
   else if (BOX_isBoxWD(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxLST(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2252,28 +1772,6 @@ inline ATbool BOX_isBoxWD(BOX_Box arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxWD, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isBoxLST(BOX_Box arg) */
-
-inline ATbool BOX_isBoxLST(BOX_Box arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxLST, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2508,9 +2006,6 @@ ATbool BOX_hasBoxWsAfterBracketOpen(BOX_Box arg)
   else if (BOX_isBoxWD(arg)) {
     return ATtrue;
   }
-  else if (BOX_isBoxLST(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -2533,9 +2028,6 @@ BOX_OptLayout BOX_getBoxWsAfterBracketOpen(BOX_Box arg)
   }
   else if (BOX_isBoxI(arg)) {
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-  }
-  else if (BOX_isBoxWD(arg)) {
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
   }
   else 
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
@@ -2564,18 +2056,15 @@ BOX_Box BOX_setBoxWsAfterBracketOpen(BOX_Box arg, BOX_OptLayout wsAfterBracketOp
   else if (BOX_isBoxWD(arg)) {
     return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBracketOpen), 3), 1);
   }
-  else if (BOX_isBoxLST(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBracketOpen), 3), 1);
-  }
 
   ATabort("Box has no WsAfterBracketOpen: %t\n", arg);
   return (BOX_Box)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool BOX_hasBoxBoxList(BOX_Box arg) */
+/*{{{  ATbool BOX_hasBoxList(BOX_Box arg) */
 
-ATbool BOX_hasBoxBoxList(BOX_Box arg)
+ATbool BOX_hasBoxList(BOX_Box arg)
 {
   if (BOX_isBoxH(arg)) {
     return ATtrue;
@@ -2587,64 +2076,55 @@ ATbool BOX_hasBoxBoxList(BOX_Box arg)
     return ATtrue;
   }
   else if (BOX_isBoxHOV(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxLST(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  BOX_BoxList BOX_getBoxBoxList(BOX_Box arg) */
+/*{{{  BOX_BoxList BOX_getBoxList(BOX_Box arg) */
 
-BOX_BoxList BOX_getBoxBoxList(BOX_Box arg)
+BOX_BoxList BOX_getBoxList(BOX_Box arg)
 {
   if (BOX_isBoxH(arg)) {
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6);
+    return (BOX_BoxList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
   }
   else if (BOX_isBoxV(arg)) {
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6);
+    return (BOX_BoxList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
   }
   else if (BOX_isBoxHV(arg)) {
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6);
-  }
-  else if (BOX_isBoxHOV(arg)) {
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6);
+    return (BOX_BoxList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
   }
   else 
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (BOX_BoxList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
 }
 
 /*}}}  */
-/*{{{  BOX_Box BOX_setBoxBoxList(BOX_Box arg, BOX_BoxList BoxList) */
+/*{{{  BOX_Box BOX_setBoxList(BOX_Box arg, BOX_BoxList list) */
 
-BOX_Box BOX_setBoxBoxList(BOX_Box arg, BOX_BoxList BoxList)
+BOX_Box BOX_setBoxList(BOX_Box arg, BOX_BoxList list)
 {
   if (BOX_isBoxH(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 6), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)((ATerm) list), 1), 6), 1);
   }
   else if (BOX_isBoxV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 6), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)((ATerm) list), 1), 6), 1);
   }
   else if (BOX_isBoxHV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 6), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)((ATerm) list), 1), 6), 1);
   }
   else if (BOX_isBoxHOV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 6), 1);
-  }
-  else if (BOX_isBoxLST(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) BoxList), 4), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)((ATerm) list), 1), 6), 1);
   }
 
-  ATabort("Box has no BoxList: %t\n", arg);
+  ATabort("Box has no List: %t\n", arg);
   return (BOX_Box)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool BOX_hasBoxWsAfterBoxList(BOX_Box arg) */
+/*{{{  ATbool BOX_hasBoxWsAfterList(BOX_Box arg) */
 
-ATbool BOX_hasBoxWsAfterBoxList(BOX_Box arg)
+ATbool BOX_hasBoxWsAfterList(BOX_Box arg)
 {
   if (BOX_isBoxH(arg)) {
     return ATtrue;
@@ -2656,18 +2136,15 @@ ATbool BOX_hasBoxWsAfterBoxList(BOX_Box arg)
     return ATtrue;
   }
   else if (BOX_isBoxHOV(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isBoxLST(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxWsAfterBoxList(BOX_Box arg) */
+/*{{{  BOX_OptLayout BOX_getBoxWsAfterList(BOX_Box arg) */
 
-BOX_OptLayout BOX_getBoxWsAfterBoxList(BOX_Box arg)
+BOX_OptLayout BOX_getBoxWsAfterList(BOX_Box arg)
 {
   if (BOX_isBoxH(arg)) {
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
@@ -2676,37 +2153,31 @@ BOX_OptLayout BOX_getBoxWsAfterBoxList(BOX_Box arg)
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
   }
   else if (BOX_isBoxHV(arg)) {
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
-  }
-  else if (BOX_isBoxHOV(arg)) {
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
   }
   else 
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
 }
 
 /*}}}  */
-/*{{{  BOX_Box BOX_setBoxWsAfterBoxList(BOX_Box arg, BOX_OptLayout wsAfterBoxList) */
+/*{{{  BOX_Box BOX_setBoxWsAfterList(BOX_Box arg, BOX_OptLayout wsAfterList) */
 
-BOX_Box BOX_setBoxWsAfterBoxList(BOX_Box arg, BOX_OptLayout wsAfterBoxList)
+BOX_Box BOX_setBoxWsAfterList(BOX_Box arg, BOX_OptLayout wsAfterList)
 {
   if (BOX_isBoxH(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 7), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterList), 7), 1);
   }
   else if (BOX_isBoxV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 7), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterList), 7), 1);
   }
   else if (BOX_isBoxHV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 7), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterList), 7), 1);
   }
   else if (BOX_isBoxHOV(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 7), 1);
-  }
-  else if (BOX_isBoxLST(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBoxList), 5), 1);
+    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterList), 7), 1);
   }
 
-  ATabort("Box has no WsAfterBoxList: %t\n", arg);
+  ATabort("Box has no WsAfterList: %t\n", arg);
   return (BOX_Box)NULL;
 }
 
@@ -2960,36 +2431,197 @@ BOX_Box BOX_setBoxWsAfterWD(BOX_Box arg, BOX_OptLayout wsAfterWD)
 }
 
 /*}}}  */
-/*{{{  ATbool BOX_hasBoxWsAfterLST(BOX_Box arg) */
 
-ATbool BOX_hasBoxWsAfterLST(BOX_Box arg)
+/*}}}  */
+/*{{{  BOX_BoxList accessors */
+
+/*{{{  ATbool BOX_isValidBoxList(BOX_BoxList arg) */
+
+ATbool BOX_isValidBoxList(BOX_BoxList arg)
 {
-  if (BOX_isBoxLST(arg)) {
+  if (BOX_isBoxListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (BOX_isBoxListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (BOX_isBoxListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  BOX_OptLayout BOX_getBoxWsAfterLST(BOX_Box arg) */
+/*{{{  inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg) */
 
-BOX_OptLayout BOX_getBoxWsAfterLST(BOX_Box arg)
+inline ATbool BOX_isBoxListEmpty(BOX_BoxList arg)
 {
-  
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, BOX_patternBoxListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  BOX_Box BOX_setBoxWsAfterLST(BOX_Box arg, BOX_OptLayout wsAfterLST) */
+/*{{{  inline ATbool BOX_isBoxListSingle(BOX_BoxList arg) */
 
-BOX_Box BOX_setBoxWsAfterLST(BOX_Box arg, BOX_OptLayout wsAfterLST)
+inline ATbool BOX_isBoxListSingle(BOX_BoxList arg)
 {
-  if (BOX_isBoxLST(arg)) {
-    return (BOX_Box)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterLST), 1), 1);
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool BOX_isBoxListMany(BOX_BoxList arg) */
+
+inline ATbool BOX_isBoxListMany(BOX_BoxList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, BOX_patternBoxListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool BOX_hasBoxListHead(BOX_BoxList arg) */
+
+ATbool BOX_hasBoxListHead(BOX_BoxList arg)
+{
+  if (BOX_isBoxListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (BOX_isBoxListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  BOX_Box BOX_getBoxListHead(BOX_BoxList arg) */
+
+BOX_Box BOX_getBoxListHead(BOX_BoxList arg)
+{
+  if (BOX_isBoxListSingle(arg)) {
+    return (BOX_Box)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (BOX_Box)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head) */
+
+BOX_BoxList BOX_setBoxListHead(BOX_BoxList arg, BOX_Box head)
+{
+  if (BOX_isBoxListSingle(arg)) {
+    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (BOX_isBoxListMany(arg)) {
+    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
-  ATabort("Box has no WsAfterLST: %t\n", arg);
-  return (BOX_Box)NULL;
+  ATabort("BoxList has no Head: %t\n", arg);
+  return (BOX_BoxList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg) */
+
+ATbool BOX_hasBoxListWsAfterHead(BOX_BoxList arg)
+{
+  if (BOX_isBoxListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg) */
+
+BOX_OptLayout BOX_getBoxListWsAfterHead(BOX_BoxList arg)
+{
+  
+    return (BOX_OptLayout)ATelementAt((ATermList)arg, 1);
+}
+
+/*}}}  */
+/*{{{  BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead) */
+
+BOX_BoxList BOX_setBoxListWsAfterHead(BOX_BoxList arg, BOX_OptLayout wsAfterHead)
+{
+  if (BOX_isBoxListMany(arg)) {
+    return (BOX_BoxList)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterHead), 1);
+  }
+
+  ATabort("BoxList has no WsAfterHead: %t\n", arg);
+  return (BOX_BoxList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool BOX_hasBoxListTail(BOX_BoxList arg) */
+
+ATbool BOX_hasBoxListTail(BOX_BoxList arg)
+{
+  if (BOX_isBoxListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg) */
+
+BOX_BoxList BOX_getBoxListTail(BOX_BoxList arg)
+{
+  
+    return (BOX_BoxList)ATgetTail((ATermList)arg, 2);
+}
+
+/*}}}  */
+/*{{{  BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail) */
+
+BOX_BoxList BOX_setBoxListTail(BOX_BoxList arg, BOX_BoxList tail)
+{
+  if (BOX_isBoxListMany(arg)) {
+    return (BOX_BoxList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 2);
+  }
+
+  ATabort("BoxList has no Tail: %t\n", arg);
+  return (BOX_BoxList)NULL;
 }
 
 /*}}}  */
@@ -3008,9 +2640,6 @@ ATbool BOX_isValidStart(BOX_Start arg)
     return ATtrue;
   }
   else if (BOX_isStartSpaceSymbol(arg)) {
-    return ATtrue;
-  }
-  else if (BOX_isStartBoxList(arg)) {
     return ATtrue;
   }
   else if (BOX_isStartBox(arg)) {
@@ -3090,28 +2719,6 @@ inline ATbool BOX_isStartSpaceSymbol(BOX_Start arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, BOX_patternStartSpaceSymbol, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool BOX_isStartBoxList(BOX_Start arg) */
-
-inline ATbool BOX_isStartBoxList(BOX_Start arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, BOX_patternStartBoxList, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -3243,9 +2850,6 @@ ATbool BOX_hasStartWsBefore(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return ATtrue;
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return ATtrue;
-  }
   else if (BOX_isStartBox(arg)) {
     return ATtrue;
   }
@@ -3278,9 +2882,6 @@ BOX_OptLayout BOX_getStartWsBefore(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return (BOX_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return (BOX_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
-  }
   else if (BOX_isStartBox(arg)) {
     return (BOX_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
   }
@@ -3309,9 +2910,6 @@ BOX_Start BOX_setStartWsBefore(BOX_Start arg, BOX_OptLayout wsBefore)
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsBefore), 0), 1), 0);
   }
   else if (BOX_isStartSpaceSymbol(arg)) {
-    return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsBefore), 0), 1), 0);
-  }
-  else if (BOX_isStartBoxList(arg)) {
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsBefore), 0), 1), 0);
   }
   else if (BOX_isStartBox(arg)) {
@@ -3381,9 +2979,6 @@ ATbool BOX_hasStartWsAfter(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return ATtrue;
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return ATtrue;
-  }
   else if (BOX_isStartBox(arg)) {
     return ATtrue;
   }
@@ -3416,9 +3011,6 @@ BOX_OptLayout BOX_getStartWsAfter(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
   else if (BOX_isStartBox(arg)) {
     return (BOX_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
   }
@@ -3447,9 +3039,6 @@ BOX_Start BOX_setStartWsAfter(BOX_Start arg, BOX_OptLayout wsAfter)
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsAfter), 2), 1), 0);
   }
   else if (BOX_isStartSpaceSymbol(arg)) {
-    return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsAfter), 2), 1), 0);
-  }
-  else if (BOX_isStartBoxList(arg)) {
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsAfter), 2), 1), 0);
   }
   else if (BOX_isStartBox(arg)) {
@@ -3486,9 +3075,6 @@ ATbool BOX_hasStartAmbCnt(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return ATtrue;
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return ATtrue;
-  }
   else if (BOX_isStartBox(arg)) {
     return ATtrue;
   }
@@ -3521,9 +3107,6 @@ int BOX_getStartAmbCnt(BOX_Start arg)
   else if (BOX_isStartSpaceSymbol(arg)) {
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
   }
-  else if (BOX_isStartBoxList(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
   else if (BOX_isStartBox(arg)) {
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
   }
@@ -3552,9 +3135,6 @@ BOX_Start BOX_setStartAmbCnt(BOX_Start arg, int ambCnt)
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(ambCnt)), 1);
   }
   else if (BOX_isStartSpaceSymbol(arg)) {
-    return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(ambCnt)), 1);
-  }
-  else if (BOX_isStartBoxList(arg)) {
     return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(ambCnt)), 1);
   }
   else if (BOX_isStartBox(arg)) {
@@ -3640,39 +3220,6 @@ BOX_Start BOX_setStartTopSpaceSymbol(BOX_Start arg, BOX_SpaceSymbol topSpaceSymb
   }
 
   ATabort("Start has no TopSpaceSymbol: %t\n", arg);
-  return (BOX_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool BOX_hasStartTopBoxList(BOX_Start arg) */
-
-ATbool BOX_hasStartTopBoxList(BOX_Start arg)
-{
-  if (BOX_isStartBoxList(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  BOX_BoxList BOX_getStartTopBoxList(BOX_Start arg) */
-
-BOX_BoxList BOX_getStartTopBoxList(BOX_Start arg)
-{
-  
-    return (BOX_BoxList)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
-}
-
-/*}}}  */
-/*{{{  BOX_Start BOX_setStartTopBoxList(BOX_Start arg, BOX_BoxList topBoxList) */
-
-BOX_Start BOX_setStartTopBoxList(BOX_Start arg, BOX_BoxList topBoxList)
-{
-  if (BOX_isStartBoxList(arg)) {
-    return (BOX_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) topBoxList), 1), 1), 0);
-  }
-
-  ATabort("Start has no TopBoxList: %t\n", arg);
   return (BOX_Start)NULL;
 }
 
@@ -4066,25 +3613,68 @@ BOX_SOptionList BOX_visitSOptionList(BOX_SOptionList arg, BOX_SOption (*acceptHe
 }
 
 /*}}}  */
-/*{{{  BOX_BoxList BOX_visitBoxList(BOX_BoxList arg, BOX_BoxList (*acceptList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterIStar)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBoxList)(BOX_OptLayout)) */
+/*{{{  BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout)) */
 
-BOX_BoxList BOX_visitBoxList(BOX_BoxList arg, BOX_BoxList (*acceptList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterIStar)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBoxList)(BOX_OptLayout))
+BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout))
 {
-  if (BOX_isBoxListTaeke(arg)) {
-    return BOX_makeBoxListTaeke(
-        acceptList ? acceptList(BOX_getBoxListList(arg)) : BOX_getBoxListList(arg));
+  if (BOX_isBoxString(arg)) {
+    return BOX_makeBoxString(
+        acceptStrCon ? acceptStrCon(BOX_getBoxStrCon(arg)) : BOX_getBoxStrCon(arg));
   }
-  if (BOX_isBoxListIstar(arg)) {
-    return BOX_makeBoxListIstar(
-        acceptWsAfterIStar ? acceptWsAfterIStar(BOX_getBoxListWsAfterIStar(arg)) : BOX_getBoxListWsAfterIStar(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxListSOptions(arg)) : BOX_getBoxListSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxListWsAfterSOptions(arg)) : BOX_getBoxListWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxListWsAfterBracketOpen(arg)) : BOX_getBoxListWsAfterBracketOpen(arg),
-        BOX_visitBoxList(BOX_getBoxListBoxList(arg), acceptList, acceptWsAfterIStar, acceptSOptions, acceptWsAfterSOptions, acceptWsAfterBracketOpen, acceptWsAfterBoxList),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxListWsAfterBoxList(arg)) : BOX_getBoxListWsAfterBoxList(arg));
+  if (BOX_isBoxH(arg)) {
+    return BOX_makeBoxH(
+        acceptWsAfterH ? acceptWsAfterH(BOX_getBoxWsAfterH(arg)) : BOX_getBoxWsAfterH(arg),
+        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
+        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        acceptList ? acceptList(BOX_getBoxList(arg)) : BOX_getBoxList(arg),
+        acceptWsAfterList ? acceptWsAfterList(BOX_getBoxWsAfterList(arg)) : BOX_getBoxWsAfterList(arg));
   }
-  ATabort("not a BoxList: %t\n", arg);
-  return (BOX_BoxList)NULL;
+  if (BOX_isBoxV(arg)) {
+    return BOX_makeBoxV(
+        acceptWsAfterV ? acceptWsAfterV(BOX_getBoxWsAfterV(arg)) : BOX_getBoxWsAfterV(arg),
+        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
+        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        acceptList ? acceptList(BOX_getBoxList(arg)) : BOX_getBoxList(arg),
+        acceptWsAfterList ? acceptWsAfterList(BOX_getBoxWsAfterList(arg)) : BOX_getBoxWsAfterList(arg));
+  }
+  if (BOX_isBoxHV(arg)) {
+    return BOX_makeBoxHV(
+        acceptWsAfterHV ? acceptWsAfterHV(BOX_getBoxWsAfterHV(arg)) : BOX_getBoxWsAfterHV(arg),
+        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
+        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        acceptList ? acceptList(BOX_getBoxList(arg)) : BOX_getBoxList(arg),
+        acceptWsAfterList ? acceptWsAfterList(BOX_getBoxWsAfterList(arg)) : BOX_getBoxWsAfterList(arg));
+  }
+  if (BOX_isBoxHOV(arg)) {
+    return BOX_makeBoxHOV(
+        acceptWsAfterHOV ? acceptWsAfterHOV(BOX_getBoxWsAfterHOV(arg)) : BOX_getBoxWsAfterHOV(arg),
+        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
+        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        acceptList ? acceptList(BOX_getBoxList(arg)) : BOX_getBoxList(arg),
+        acceptWsAfterList ? acceptWsAfterList(BOX_getBoxWsAfterList(arg)) : BOX_getBoxWsAfterList(arg));
+  }
+  if (BOX_isBoxI(arg)) {
+    return BOX_makeBoxI(
+        acceptWsAfterI ? acceptWsAfterI(BOX_getBoxWsAfterI(arg)) : BOX_getBoxWsAfterI(arg),
+        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
+        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        BOX_visitBox(BOX_getBoxBox(arg), acceptStrCon, acceptWsAfterH, acceptSOptions, acceptWsAfterSOptions, acceptWsAfterBracketOpen, acceptList, acceptWsAfterList, acceptWsAfterV, acceptWsAfterHV, acceptWsAfterHOV, acceptWsAfterI, acceptWsAfterBox, acceptWsAfterWD),
+        acceptWsAfterBox ? acceptWsAfterBox(BOX_getBoxWsAfterBox(arg)) : BOX_getBoxWsAfterBox(arg));
+  }
+  if (BOX_isBoxWD(arg)) {
+    return BOX_makeBoxWD(
+        acceptWsAfterWD ? acceptWsAfterWD(BOX_getBoxWsAfterWD(arg)) : BOX_getBoxWsAfterWD(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
+        BOX_visitBox(BOX_getBoxBox(arg), acceptStrCon, acceptWsAfterH, acceptSOptions, acceptWsAfterSOptions, acceptWsAfterBracketOpen, acceptList, acceptWsAfterList, acceptWsAfterV, acceptWsAfterHV, acceptWsAfterHOV, acceptWsAfterI, acceptWsAfterBox, acceptWsAfterWD),
+        acceptWsAfterBox ? acceptWsAfterBox(BOX_getBoxWsAfterBox(arg)) : BOX_getBoxWsAfterBox(arg));
+  }
+  ATabort("not a Box: %t\n", arg);
+  return (BOX_Box)NULL;
 }
 
 /*}}}  */
@@ -4110,81 +3700,9 @@ BOX_BoxList BOX_visitBoxList(BOX_BoxList arg, BOX_Box (*acceptHead)(BOX_Box), BO
 }
 
 /*}}}  */
-/*{{{  BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptBoxList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterBoxList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterLST)(BOX_OptLayout)) */
+/*{{{  BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon)) */
 
-BOX_Box BOX_visitBox(BOX_Box arg, BOX_StrCon (*acceptStrCon)(BOX_StrCon), BOX_OptLayout (*acceptWsAfterH)(BOX_OptLayout), BOX_SOptions (*acceptSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfterSOptions)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBracketOpen)(BOX_OptLayout), BOX_BoxList (*acceptBoxList)(BOX_BoxList), BOX_OptLayout (*acceptWsAfterBoxList)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterHOV)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterI)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterBox)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterWD)(BOX_OptLayout), BOX_OptLayout (*acceptWsAfterLST)(BOX_OptLayout))
-{
-  if (BOX_isBoxString(arg)) {
-    return BOX_makeBoxString(
-        acceptStrCon ? acceptStrCon(BOX_getBoxStrCon(arg)) : BOX_getBoxStrCon(arg));
-  }
-  if (BOX_isBoxH(arg)) {
-    return BOX_makeBoxH(
-        acceptWsAfterH ? acceptWsAfterH(BOX_getBoxWsAfterH(arg)) : BOX_getBoxWsAfterH(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        acceptBoxList ? acceptBoxList(BOX_getBoxBoxList(arg)) : BOX_getBoxBoxList(arg),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxWsAfterBoxList(arg)) : BOX_getBoxWsAfterBoxList(arg));
-  }
-  if (BOX_isBoxV(arg)) {
-    return BOX_makeBoxV(
-        acceptWsAfterV ? acceptWsAfterV(BOX_getBoxWsAfterV(arg)) : BOX_getBoxWsAfterV(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        acceptBoxList ? acceptBoxList(BOX_getBoxBoxList(arg)) : BOX_getBoxBoxList(arg),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxWsAfterBoxList(arg)) : BOX_getBoxWsAfterBoxList(arg));
-  }
-  if (BOX_isBoxHV(arg)) {
-    return BOX_makeBoxHV(
-        acceptWsAfterHV ? acceptWsAfterHV(BOX_getBoxWsAfterHV(arg)) : BOX_getBoxWsAfterHV(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        acceptBoxList ? acceptBoxList(BOX_getBoxBoxList(arg)) : BOX_getBoxBoxList(arg),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxWsAfterBoxList(arg)) : BOX_getBoxWsAfterBoxList(arg));
-  }
-  if (BOX_isBoxHOV(arg)) {
-    return BOX_makeBoxHOV(
-        acceptWsAfterHOV ? acceptWsAfterHOV(BOX_getBoxWsAfterHOV(arg)) : BOX_getBoxWsAfterHOV(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        acceptBoxList ? acceptBoxList(BOX_getBoxBoxList(arg)) : BOX_getBoxBoxList(arg),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxWsAfterBoxList(arg)) : BOX_getBoxWsAfterBoxList(arg));
-  }
-  if (BOX_isBoxI(arg)) {
-    return BOX_makeBoxI(
-        acceptWsAfterI ? acceptWsAfterI(BOX_getBoxWsAfterI(arg)) : BOX_getBoxWsAfterI(arg),
-        acceptSOptions ? acceptSOptions(BOX_getBoxSOptions(arg)) : BOX_getBoxSOptions(arg),
-        acceptWsAfterSOptions ? acceptWsAfterSOptions(BOX_getBoxWsAfterSOptions(arg)) : BOX_getBoxWsAfterSOptions(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        BOX_visitBox(BOX_getBoxBox(arg), acceptStrCon, acceptWsAfterH, acceptSOptions, acceptWsAfterSOptions, acceptWsAfterBracketOpen, acceptBoxList, acceptWsAfterBoxList, acceptWsAfterV, acceptWsAfterHV, acceptWsAfterHOV, acceptWsAfterI, acceptWsAfterBox, acceptWsAfterWD, acceptWsAfterLST),
-        acceptWsAfterBox ? acceptWsAfterBox(BOX_getBoxWsAfterBox(arg)) : BOX_getBoxWsAfterBox(arg));
-  }
-  if (BOX_isBoxWD(arg)) {
-    return BOX_makeBoxWD(
-        acceptWsAfterWD ? acceptWsAfterWD(BOX_getBoxWsAfterWD(arg)) : BOX_getBoxWsAfterWD(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        BOX_visitBox(BOX_getBoxBox(arg), acceptStrCon, acceptWsAfterH, acceptSOptions, acceptWsAfterSOptions, acceptWsAfterBracketOpen, acceptBoxList, acceptWsAfterBoxList, acceptWsAfterV, acceptWsAfterHV, acceptWsAfterHOV, acceptWsAfterI, acceptWsAfterBox, acceptWsAfterWD, acceptWsAfterLST),
-        acceptWsAfterBox ? acceptWsAfterBox(BOX_getBoxWsAfterBox(arg)) : BOX_getBoxWsAfterBox(arg));
-  }
-  if (BOX_isBoxLST(arg)) {
-    return BOX_makeBoxLST(
-        acceptWsAfterLST ? acceptWsAfterLST(BOX_getBoxWsAfterLST(arg)) : BOX_getBoxWsAfterLST(arg),
-        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(BOX_getBoxWsAfterBracketOpen(arg)) : BOX_getBoxWsAfterBracketOpen(arg),
-        acceptBoxList ? acceptBoxList(BOX_getBoxBoxList(arg)) : BOX_getBoxBoxList(arg),
-        acceptWsAfterBoxList ? acceptWsAfterBoxList(BOX_getBoxWsAfterBoxList(arg)) : BOX_getBoxWsAfterBoxList(arg));
-  }
-  ATabort("not a Box: %t\n", arg);
-  return (BOX_Box)NULL;
-}
-
-/*}}}  */
-/*{{{  BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_BoxList (*acceptTopBoxList)(BOX_BoxList), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon)) */
-
-BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_BoxList (*acceptTopBoxList)(BOX_BoxList), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon))
+BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptLayout), BOX_SOptions (*acceptTopSOptions)(BOX_SOptions), BOX_OptLayout (*acceptWsAfter)(BOX_OptLayout), int (*acceptAmbCnt)(int), BOX_SOption (*acceptTopSOption)(BOX_SOption), BOX_SpaceSymbol (*acceptTopSpaceSymbol)(BOX_SpaceSymbol), BOX_Box (*acceptTopBox)(BOX_Box), BOX_Escaped (*acceptTopEscaped)(BOX_Escaped), BOX_Normal (*acceptTopNormal)(BOX_Normal), BOX_StrCon (*acceptTopStrCon)(BOX_StrCon), BOX_NatCon (*acceptTopNatCon)(BOX_NatCon))
 {
   if (BOX_isStartSOptions(arg)) {
     return BOX_makeStartSOptions(
@@ -4204,13 +3722,6 @@ BOX_Start BOX_visitStart(BOX_Start arg, BOX_OptLayout (*acceptWsBefore)(BOX_OptL
     return BOX_makeStartSpaceSymbol(
         acceptWsBefore ? acceptWsBefore(BOX_getStartWsBefore(arg)) : BOX_getStartWsBefore(arg),
         acceptTopSpaceSymbol ? acceptTopSpaceSymbol(BOX_getStartTopSpaceSymbol(arg)) : BOX_getStartTopSpaceSymbol(arg),
-        acceptWsAfter ? acceptWsAfter(BOX_getStartWsAfter(arg)) : BOX_getStartWsAfter(arg),
-        acceptAmbCnt ? acceptAmbCnt(BOX_getStartAmbCnt(arg)) : BOX_getStartAmbCnt(arg));
-  }
-  if (BOX_isStartBoxList(arg)) {
-    return BOX_makeStartBoxList(
-        acceptWsBefore ? acceptWsBefore(BOX_getStartWsBefore(arg)) : BOX_getStartWsBefore(arg),
-        acceptTopBoxList ? acceptTopBoxList(BOX_getStartTopBoxList(arg)) : BOX_getStartTopBoxList(arg),
         acceptWsAfter ? acceptWsAfter(BOX_getStartWsAfter(arg)) : BOX_getStartWsAfter(arg),
         acceptAmbCnt ? acceptAmbCnt(BOX_getStartAmbCnt(arg)) : BOX_getStartAmbCnt(arg));
   }

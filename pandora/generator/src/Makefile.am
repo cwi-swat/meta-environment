@@ -1,34 +1,20 @@
 # $Id$
 
-#SUBDIRS=examples
+CFLAGS += -Werror
 
 INCLUDES = \
-	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include
 
 bin_PROGRAMS = pandora 
 
 noinst_HEADERS = pandora.h Box.h
 
-#pkgdata_DATA = ptpretty.idef
-#EXTRA_DIST = ptpretty.idef
-
-pandora_SOURCES = main.c pandora.c Box.c
+pandora_SOURCES = main.c pandora.c Box.c Box_dict.c
 pandora_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm  \
-	$(SOCKLIBS)
+	-L$(ATERM)/lib -lATerm 
 
-#tif:
-#	for i in `ls *.idef`; do \
-#          idef2tif $$i; \
-#          tifstoc -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
-#        done
-#
-#tif-clean:
-#	rm -f *.tifs *.tif.[ch]
-#
+api:
+	unparsePT < Box.def.pt > Box.def
+	sdf2-to-c -i Box.def --prefix BOX_ -v
