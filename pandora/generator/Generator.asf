@@ -1,18 +1,24 @@
 equations
 
 [generatePP-start]
-  ImpSection = imports languages/box/syntax/box,
-  Grammar = syntax generateProductions(Module0, ),
-  Section = exports Grammar,
-  Module1 = module test ImpSection Section
+  ImpSection := imports languages/box/syntax/box,
+  Grammar := syntax generateProductions(Module0, ),
+  Section := exports Grammar,
+  Module1 := module test ImpSection Section
   ===>
   PPgenerator(Module0) = Module1
 
 [generateProductions-0]
-  Grammar = context-free syntax Productions
+  context-free syntax Productions := Grammar
   ===>
   generateProductions(Grammar, Production*) 
     = generateProd(Productions, Production*)
 
 [generateProductions-1]
+  lexical syntax Productions := Grammar
+  ===>
+  generateProductions(Grammar, Production*) 
+    = generateProd(Productions, Production*)
+
+[generateProductions-2]
   generateProd(Production, Production*) = Production Production*
