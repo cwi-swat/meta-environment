@@ -1,46 +1,52 @@
 # $Id$
 
+Fri May  9 11:10:03 CEST 2003 <jong@cwi.nl>
+ * Add "Clear History" functionalty to MetaStudio, clearing the bottom
+   right message pane.
+ * Fix indentation level of this ChangeLog which managed to sneak to a
+   deeper level again, and since everybody copies the previous one...
+
 2003/05/07 (markvdb@cs.vu.nl)
-  * Fixed the annoying behaviour of closing and opening the
-    term editor in the demos of Jorgen Iversen and Paul Klint.
-    A new button action `close-editor' has been introduced.
+ * Fixed the annoying behaviour of closing and opening the
+   term editor in the demos of Jorgen Iversen and Paul Klint.
+   A new button action `close-editor' has been introduced.
 
 2003/04/29 ({iversen,jurgenv}@cwi.nl)
-  * Added a new widget to the MetaStudio: a message list
-  * Fixed a number of typos and wrong messages in the ToolBus scripts
-    that were introduced recently by jurgenv.
-  * Added a new type of 'editor' to the button language: message-list.
+ * Added a new widget to the MetaStudio: a message list
+ * Fixed a number of typos and wrong messages in the ToolBus scripts
+   that were introduced recently by jurgenv.
+ * Added a new type of 'editor' to the button language: message-list.
 
 2003/04/28 (markvdb@cs.vu.nl)
-  * Clean up the new button language a bit.
-  * Tested it on the boolean transformations.
-  * Given some button actions more appropriate names.
+ * Clean up the new button language a bit.
+ * Tested it on the boolean transformations.
+ * Given some button actions more appropriate names.
 
 2003/04/25 (jurgenv@cwi.nl)
-  * Deadlock problems caused by dissappearing text editors partially solved by 
-    changing the idef of text-editor to use only notes.
-  * Processes that send messages to editors made more robust against 
-    non-existing editors, or they now listen to notes that declare an
-    editor dead.
-  * This solved the memory leak introduced by a workaround for the
-    previous problem that lead to eternally waiting Text-Editor processes.
-  * Replaced assert statements in structure editor by proper handling
-    of non-existing editors. 
-  * Replaced some assert statements in editor-manager too.
-  * All buttons in editors are now handled via the button-language.
-    The text-editor knows nothing about the details of buttons anymore.
-  * Button names are now list of strings. For example: ["Action","Parse"].
-    This will add the "Parse" button to the menu "Action".
-    Note that all button scripts will have to be adapted to deal with this.
-  * The button language was changed. All actions that had a modulename
-    as a direct argument now read it from the stack as a string.
-  * Added a new primitive to the button language: 'push-modulename' that
-    pushed the modulename of the current editor onto the stack
-  * The standard Meta-Environment buttons are now completely externalized
-    from the configuration-manager. A file called 'standard.buttons' is
-    installed and the configuration-manager reads it in when the 
-    Meta-Environment starts up.
-  * Used ApiGen to reimplement configuration manager
+ * Deadlock problems caused by dissappearing text editors partially solved by 
+   changing the idef of text-editor to use only notes.
+ * Processes that send messages to editors made more robust against 
+   non-existing editors, or they now listen to notes that declare an
+   editor dead.
+ * This solved the memory leak introduced by a workaround for the
+   previous problem that lead to eternally waiting Text-Editor processes.
+ * Replaced assert statements in structure editor by proper handling
+   of non-existing editors. 
+ * Replaced some assert statements in editor-manager too.
+ * All buttons in editors are now handled via the button-language.
+   The text-editor knows nothing about the details of buttons anymore.
+ * Button names are now list of strings. For example: ["Action","Parse"].
+   This will add the "Parse" button to the menu "Action".
+   Note that all button scripts will have to be adapted to deal with this.
+ * The button language was changed. All actions that had a modulename
+   as a direct argument now read it from the stack as a string.
+ * Added a new primitive to the button language: 'push-modulename' that
+   pushed the modulename of the current editor onto the stack
+ * The standard Meta-Environment buttons are now completely externalized
+   from the configuration-manager. A file called 'standard.buttons' is
+   installed and the configuration-manager reads it in when the 
+   Meta-Environment starts up.
+ * Used ApiGen to reimplement configuration manager
 
 2003/04/25 (jurgenv@cwi.nl)
  * Refactored button-actions to use StackPush/Pop operations

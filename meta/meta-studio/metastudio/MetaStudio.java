@@ -27,6 +27,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private static final String PREF_TOOLBAR_SAVE_ALL = "toolbar.save-all";
   private static final String PREF_TOOLBAR_CLEAR_ALL = "toolbar.clear-all";
   private static final String PREF_TOOLBAR_REFRESH_BUTTONS = "toolbar.refresh-buttons";
+  private static final String PREF_TOOLBAR_CLEAR_HISTORY = "toolbar.clear-history";
   private static final String PREF_TOOLBAR_QUIT = "toolbar.quit";
 
   private static final String PREF_TOOLBAR_TIDE = "toolbar.tide";
@@ -63,6 +64,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private Action actionSaveAll;
   private Action actionClearAll;
   private Action actionRefreshButtons;
+  private Action actionClearHistory;
   private Action actionQuit;
 
   private JTabbedPane graphPane;
@@ -195,6 +197,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         Preferences.getString(PREF_TOOLBAR_REFRESH_BUTTONS + ".text")) {
       public void actionPerformed(ActionEvent event) {
         doRefreshButtons();
+      }
+    };
+
+    actionClearHistory =
+      new AbstractAction(
+        Preferences.getString(PREF_TOOLBAR_CLEAR_HISTORY + ".text")) {
+      public void actionPerformed(ActionEvent event) {
+        doClearHistory();
       }
     };
 
@@ -430,6 +440,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     fileMenu.add(actionClearAll).setIcon(null);
     fileMenu.addSeparator();
     fileMenu.add(actionRefreshButtons).setIcon(null);
+    fileMenu.add(actionClearHistory).setIcon(null);
     fileMenu.addSeparator();
     fileMenu.add(actionQuit).setIcon(null);
 
@@ -1383,6 +1394,17 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   void doRefreshButtons() {
     bridge.sendEvent(factory.parse("refresh-buttons"));
+  }
+
+  //}}}
+  //{{{ void doClearHistory()
+
+  void doClearHistory() {
+    try {
+      historyDoc.remove(0, historyDoc.getLength());
+    } catch (BadLocationException e) {
+      System.err.println(e.getMessage());
+    }
   }
 
   //}}}
