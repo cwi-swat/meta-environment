@@ -132,7 +132,7 @@ SOCKLIBS        = @SOCKLIBS@
 ATERM           = @ATERM@
 
 XINCLUDES       = -I\$(ATERM)/include -I\$(includedir)
-XLIBS           = \$(GELLIBS) -L\$(prefix)/lib \$(SOCKLIBS) 
+XLIBS           = -L\$(prefix)/lib \$(SOCKLIBS) 
 
 SPEC_SRCS=`cat $1.module-list |\
           grep -v '#' | awk '{printf "\\\\\n          %s", $1;}'`
