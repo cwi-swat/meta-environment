@@ -71,7 +71,6 @@
   (setq must-send-modified ())
   (let ((modified (buffer-modified-p)))
     (overlay-put (make-overlay start end nil nil) 'face 'bold)
-;   (put-text-property start end 'face 'bold)
     (set-buffer-modified-p modified)
   )
   (setq must-send-modified t)
