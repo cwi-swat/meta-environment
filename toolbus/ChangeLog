@@ -1,5 +1,14 @@
 $Id$
 
+2003-02-12 <olivierp@cwi.nl>
+ * Added the '-m' option to the shell: SIGQUIT is now passed on to the
+   child processes, so a thread dump can be forced by sending this signal
+   to the Java child!
+ * Introduced the notion of 'swing' tools: if you supply the '-swing'
+   option to tifstojava SwingTool will be subclassed instead of AbstractTool.
+   This causes all toolbus callbacks to be called from within the Swing
+   event thread instead of the ToolBus thread.
+
 2003-01-23 <{jong,jurgenv}@cwi.nl>
  * Recover missing ChangeLog entries
  * Compatibalize --with-java option in all meta-pkgs
