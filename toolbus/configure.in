@@ -145,6 +145,15 @@ fi,
 ADAPTERS="${ADAPTERS} wish-adapter"
 )
 
+AC_ARG_WITH(emacs,
+[  --with-emacs		   include Emacs Lisp support (emacs-adapter)],
+if test ${withval} = "yes"
+then
+  ADAPTERS="${ADAPTERS} emacs-adapter"
+fi,
+ADAPTERS="${ADAPTERS} emacs-adapter"
+)
+
 AC_ARG_WITH(tcltk,
 [  --with-tcltk=<Tcl/Tk dir>	   include Tcl/Tk support (tcltk-adapter)],
 ADAPTERS="${ADAPTERS} tcltk-adapter"
@@ -275,6 +284,7 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	demos/swipl-ttt/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \
+	adapters/emacs-adapter/Makefile \
 	adapters/tcltk-adapter/Makefile \
 	adapters/perl-adapter/Makefile \
 	adapters/python-adapter/Makefile \
