@@ -20,7 +20,6 @@ import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import aterm.ATermFactory;
 
-
 // TODO: white color, and only last name in border
 public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionListener {
     private static final String NOT_IMPORTED = "not imported";
@@ -59,9 +58,9 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
         add(importedByMenu, BorderLayout.SOUTH);
 
         setMaximumSize(
-                new Dimension(
-                        (int) getMaximumSize().getWidth(),
-                        importsMenu.getHeight() + importedByMenu.getHeight()));
+            new Dimension(
+                (int) getMaximumSize().getWidth(),
+                importsMenu.getHeight() + importedByMenu.getHeight()));
         clearInfo();
 
         moduleManager.addModuleSelectionListener(this);
@@ -115,10 +114,10 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
     private void clearInfo() {
         imports.clear();
         importsMenu.setText(NO_IMPORTS);
-        
+
         importedBy.clear();
         importedByMenu.setText(NOT_IMPORTED);
-        
+
         setTitles(NO_MODULE_NAME);
     }
 
@@ -145,7 +144,8 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
     }
 
     private void setTitles(String title) {
-        border.setTitle(title);
+        int slash = title.lastIndexOf('/');
+        border.setTitle(slash > 0 ? title.substring(slash + 1) : title);
 
         if (imports.size() > 0) {
             importsMenu.setText(IMPORTS);
