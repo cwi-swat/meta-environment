@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/toolbuslib
    info=http://www.cwi.nl/projects/MetaEnv/toolbuslib
    description='The toolbuslib is a package that contains libraries to
                 build ToolBus client applications.'
