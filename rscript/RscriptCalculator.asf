@@ -7,6 +7,9 @@
 [VL1]	value($Var, [<$Var, $Val>, $VPair*]) = $Val
 [VL2]	$Var != $Var' ===> value($Var, [<$Var', $Val>, $VPair*]) = value($Var, [$VPair*])
 
+%% Added by Mark van den Brand on 9th of July 2003
+[VL3]   value($Var, []) = *empty*
+
 %% Assign value to variable
 
 [ASG1]  assign($Var, $Val, [$VPair*1, <$Var, $Val'>, $VPair*2]) = [$VPair*1, <$Var, $Val>, $VPair*2]
