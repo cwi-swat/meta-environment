@@ -68,6 +68,7 @@ static TBbool add_segment(void)
 
   for(t = &segments[nsegment][0]; t < &segments[nsegment][nelem]; t++){
     t->trm_kind = t_list;
+    mark(t) = TBtrue;
     first(t) = NULL;
     next(t) = free_list;
     free_list = t;

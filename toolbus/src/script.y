@@ -330,14 +330,15 @@ term *use_var(char *str, int lino)
  
 %%
 
-term : INT                       { $$.u.term =  mk_int(atoi($1.u.string)); }
-     | REAL                      { $$.u.term =  mk_real(atof($1.u.string)); }
-     | STRING                    { $$.u.term =  mk_str($1.u.string); }
+term : INT                       { $$.u.term =  mk_int(atoi($1.u.string)); free($1.u.string); }
+     | REAL                      { $$.u.term =  mk_real(atof($1.u.string)); free($1.u.string); }
+     | STRING                    { $$.u.term =  mk_str($1.u.string); free($1.u.string); }
      | var
      | result_var
-     | IDENT                     { $$.u.term = mk_appl(TBlookup($1.u.string),NULL); }
+     | IDENT                     { $$.u.term = mk_appl(TBlookup($1.u.string),NULL); free($1.u.string);}
      | IDENT '(' term_list ')'   { $$.u.term = mk_appl(TBlookup($1.u.string), $3.u.term_list);
                                    range($$,$1,$4);
+				   free($1.u.string);
                                  }    
      | '[' term_list ']'         { $$.u.term_list = $2.u.term_list; range($$,$1,$3);}
      | '<' type '>'              { $$.u.term = mk_placeholder($2.u.term); range($$,$1,$3); }
@@ -345,11 +346,13 @@ term : INT                       { $$.u.term =  mk_int(atoi($1.u.string)); }
 
 result_var : NAME '?'            { $$.u.term = assign_var($1.u.string, $1.lino);
                                    range($$,$1,$2);
+				   free($1.u.string);
                                  }
     ;
 
 var :  NAME                      { $$.u.term = use_var($1.u.string, $1.lino);
                                    range($$,$1,$1);
+				   free($1.u.string);
                                  } 
     ;
 
@@ -498,6 +501,7 @@ create:
 		     mk_coords(script_name, $1.lino, $1.pos, $7.elino, $7.epos));
            tc_create($$.u.proc);
            range($$,$1,$7);
+	   free($3.u.string);
          }
      ;
 read_print:
@@ -532,6 +536,7 @@ assign:
 		   mk_coords(script_name, $1.lino, $1.pos, $3.elino, $3.epos));
            tc_assign($$.u.proc);
            range($$,$1,$3);
+	   free($1.u.string);
          }
      ;
    
@@ -592,6 +597,7 @@ proc_call :
            tc_call(current_def_name, $$.u.proc, 
 		   mk_coords(script_name, $1.lino, $1.pos, $2.elino, $2.epos));
            range($$,$1,$2);
+	   free($1.u.string);
          }
      ;
 
@@ -615,6 +621,7 @@ form_decl:
        NAME ':' type opt_result        
                              { $$.u.term = mk_formal($1.u.string, current_def_name, $3.u.term);
                                var_result($$.u.term) = $4.u.bool;
+			       free($1.u.string);
                              }
 
 form_list:   
@@ -631,7 +638,7 @@ type:
 
 
 var_decl:
-       NAME ':' type         { $$.u.term = mk_var($1.u.string, current_def_name, $3.u.term); }
+       NAME ':' type         { $$.u.term = mk_var($1.u.string, current_def_name, $3.u.term); free($1.u.string);}
 
 var_list:   
        var_decl              { $$.u.term_list =  mk_list1($1.u.term); range($$,$1,$1); }     
@@ -669,6 +676,7 @@ proc_def:
        proc_def_name formals IS proc
      
          { add_proc_def($1.u.string, current_formals, current_vars, $4.u.proc, script_name, $1.lino);
+	   free(current_def_name);
            current_def_name = "";
            current_formals = NULL;
            current_vars = NULL;
@@ -699,7 +707,14 @@ tool_def:
      tool_def_name formals IS '{' host command details '}'
          { add_tool_def($1.u.string, $2.u.term_list, $5.u.string,
                     $6.u.string, $7.u.string, script_name, $1.lino);
-           current_def_name = "";
+	   free(current_def_name);
+	   current_def_name = "";
+	   if(strlen($5.u.string) > 0)
+	     free($5.u.string);
+	   if(strlen($6.u.string) > 0)
+	     free($6.u.string);
+	   if(strlen($7.u.string) > 0)
+	     free($7.u.string);
            range($$,$1,$8);
          } 
      ;                        
@@ -717,6 +732,7 @@ proc_call_in_tb :
 		     mk_coords(script_name, $1.lino, $1.pos, $2.elino, $2.epos));
            tc_create($$.u.proc);
            range($$,$1,$2);
+	   free($1.u.string);
          }
      ;
 
