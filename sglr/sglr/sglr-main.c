@@ -44,13 +44,6 @@
 #ifndef WIN32  /*  Limited platform  */
 #include <atb-tool.h>
 #include "sglr.tif.c"
-#else
-void intel_inside(void)
-{
-  char x[4]={0xf0,0x0f,0xc7,0xc8};
-  void(*fun)()=(void *)x;
-  fun();
-}
 #endif
 
 #include "getopt.h"
@@ -480,9 +473,6 @@ int main (int argc, char **argv)
                   )
       cid = ATBconnect(NULL, NULL, -1, sglr_handler);
     ATBeventloop();
-#else  /*  Limited platform  */
-    /*  intel_inside();  */
-    ATerror("%s: platform lacks ToolBus functionality\n", argv[0]);
 #endif
   } else {
     char  *ATlibArgv[] = { program_name,
