@@ -1,3 +1,8 @@
+2003/02/07 (jurgenv@cwi.nl)
+ * Added new builtin get-term-anno to be able to retrieve posinfo information
+   using asfe
+ * Bumped to 1.7beta
+
 2003/01/22 ({jong,jurgenv}@cwi.nl)
  * ToolBus support /required/ not /optional/ !!
 
