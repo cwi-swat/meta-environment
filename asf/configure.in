@@ -135,9 +135,6 @@ AC_OUTPUT(
    syntax/addeqssyntax/Makefile
    syntax/addeqssyntax/spec/Makefile
    syntax/addeqssyntax/src/Makefile
-   syntax/addapisyntax/Makefile
-   syntax/addapisyntax/spec/Makefile
-   syntax/addapisyntax/src/Makefile
    syntax/removevarsyntax/Makefile
    syntax/removevarsyntax/spec/Makefile
    syntax/removevarsyntax/src/Makefile

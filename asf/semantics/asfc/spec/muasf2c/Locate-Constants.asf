@@ -1,49 +1,49 @@
 equations
 
-  [lcid-1'1] modname2iname(Modid) = CConstant
+  [lcid-1'1] CConstant := modname2iname(Modid)
              ================================
              locate-constants-in-decls(Modid,) =
                void CConstant()
                  {
                  }
 
-  [lcid-1'2] modname2iname(Modid) = CConstant,
-             locate-constants-in-decllist(Decl+1,(,0)) =
-               (ce-pair*,Decl+2,Aint),
-             make-init-function(Modid,ce-pair*) = Decl+3
+  [lcid-1'2] CConstant := modname2iname(Modid),
+             (ce-pair*,Decl+2,Aint) :=
+               locate-constants-in-decllist(Decl+1,(,0)),
+             Decl+3 := make-init-function(Modid,ce-pair*)
              ===========================================
              locate-constants-in-decls(Modid,Decl+1) =
                  Decl+3 ++ Decl+2
 
-  [lcid-2'1] locate-constants-in-decl(Decl1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Decl2,Aint2)
+  [lcid-2'1] (ce-pair*2,Decl2,Aint2) :=
+               locate-constants-in-decl(Decl1,(ce-pair*1,Aint1))
              =========================
              locate-constants-in-decllist(Decl1,(ce-pair*1,Aint1)) =
                (ce-pair*2,Decl2,Aint2)
 
-  [lcid-2'2] locate-constants-in-decllist(Decl+1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Decl+2,Aint2),
-             locate-constants-in-decl(Decl1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,Decl2,Aint3)
+  [lcid-2'2] (ce-pair*2,Decl+2,Aint2) :=
+               locate-constants-in-decllist(Decl+1,(ce-pair*1,Aint1)),
+             (ce-pair*3,Decl2,Aint3) :=
+               locate-constants-in-decl(Decl1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-decllist(Decl+1 Decl1,(ce-pair*1,Aint1)) =
                (ce-pair*3,Decl+2 Decl2,Aint3)
 
-  [lcid-3'1] locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat*2,Aint2)
+  [lcid-3'1] (ce-pair*2,Stat*2,Aint2) :=
+               locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1))
              ==========================
              locate-constants-in-decl(ATerm Ident() { Stat*1 },(ce-pair*1,Aint1)) =
                (ce-pair*2,ATerm Ident() { Stat*2 },Aint2)
 
-  [lcid-3'2] locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat*2,Aint2)
+  [lcid-3'2] (ce-pair*2,Stat*2,Aint2) :=
+               locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1))
              ==========================
              locate-constants-in-decl(ATerm Ident(FormalArgs) { Stat*1 },(ce-pair*1,Aint1)) =
                (ce-pair*2,ATerm Ident(FormalArgs) { Stat*2 },Aint2)
 
-  [lcid-3'3] locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat*2,Aint2),
-             Ident = identifier(Char*)
+  [lcid-3'3] (ce-pair*2,Stat*2,Aint2) :=
+               locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1)),
+             identifier(Char*) := Ident
              ==========================
              locate-constants-in-decl(ATerm Ident(FormalArgs) { Decl+ Stat*1 },(ce-pair*1,Aint1)) =
                ((identifier("t""a""b""l""e""_" Char*),NULL),ce-pair*2,
@@ -51,22 +51,22 @@ equations
 
   [lcis-1'1] locate-constants-in-stats(,(ce-pair*,Aint)) = (ce-pair*,,Aint)
 
-  [lcis-1'2] locate-constants-in-statlist(Stat+1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat+2,Aint2)
+  [lcis-1'2] (ce-pair*2,Stat+2,Aint2) :=
+               locate-constants-in-statlist(Stat+1,(ce-pair*1,Aint1))
              ==========================
              locate-constants-in-stats(Stat+1,(ce-pair*1,Aint1)) = (ce-pair*2,Stat+2,Aint2)
 
 
-  [lcis-2'1] locate-constants-in-stat(Stat1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat2,Aint2)
+  [lcis-2'1] (ce-pair*2,Stat2,Aint2) :=
+               locate-constants-in-stat(Stat1,(ce-pair*1,Aint1))
              =========================
              locate-constants-in-statlist(Stat1,(ce-pair*1,Aint1)) =
                (ce-pair*2,Stat2,Aint2)
 
-  [lcis-2'2] locate-constants-in-statlist(Stat+1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat+2,Aint2),
-             locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,Stat2,Aint3)
+  [lcis-2'2] (ce-pair*2,Stat+2,Aint2) :=
+               locate-constants-in-statlist(Stat+1,(ce-pair*1,Aint1)),
+             (ce-pair*3,Stat2,Aint3) :=
+               locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-statlist(Stat+1 Stat1,(ce-pair*1,Aint1)) =
                (ce-pair*3,Stat+2 Stat2,Aint3)
@@ -77,45 +77,45 @@ equations
   [lcis-3'1] locate-constants-in-stat(CONS_ENTRY(Expression1,Expression2) ;,(ce-pair*,Aint)) =
                (ce-pair*,CONS_ENTRY(Expression1,Expression2) ;,Aint)
 
-  [default-lcis-3'1] flatten-list-of-chars(Expression1) = Expression2,
-                     locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-                       (ce-pair*2,Expression3,Aint2)
+  [default-lcis-3'1] Expression2 := flatten-list-of-chars(Expression1),
+                     (ce-pair*2,Expression3,Aint2) :=
+                       locate-constants-in-expression(Expression2,(ce-pair*1,Aint1))
                      ===============================
                      locate-constants-in-stat(Expression1 ;,(ce-pair*1,Aint1)) =
                        (ce-pair*2,Expression3 ;,Aint2)
 
-  [lcis-3'2] locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat*2,Aint2)
+  [lcis-3'2] (ce-pair*2,Stat*2,Aint2) :=
+               locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1))
              ==========================
              locate-constants-in-stat({Decl* Stat*1},(ce-pair*1,Aint1)) =
                (ce-pair*2,{Decl* Stat*2},Aint2)
 
-  [lcis-3'3] flatten-list-of-chars(Expression1) = Expression2,
-             locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Expression3,Aint2),
-             locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,Stat2,Aint3)
+  [lcis-3'3] Expression2 := flatten-list-of-chars(Expression1),
+             (ce-pair*2,Expression3,Aint2) :=
+               locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)),
+             (ce-pair*3,Stat2,Aint3) :=
+               locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-stat(if (Expression1) Stat1,(ce-pair*1,Aint1)) =
                (ce-pair*3,if (Expression3) Stat2,Aint3)
 
-  [lcis-3'4] flatten-list-of-chars(Expression1) = Expression2,
-             locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Expression3,Aint2),
-             locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,Stat3,Aint3),
-             locate-constants-in-stat(Stat2,(ce-pair*3,Aint3)) =
-               (ce-pair*4,Stat4,Aint4)
+  [lcis-3'4] Expression2 := flatten-list-of-chars(Expression1),
+             (ce-pair*2,Expression3,Aint2) :=
+               locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)),
+             (ce-pair*3,Stat3,Aint3) :=
+               locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)),
+             (ce-pair*4,Stat4,Aint4) :=
+               locate-constants-in-stat(Stat2,(ce-pair*3,Aint3))
              =========================
              locate-constants-in-stat(if (Expression1) Stat1 else Stat2,
                (ce-pair*1,Aint1)) =
                (ce-pair*4,if (Expression3) Stat3 else Stat4,Aint4)
 
-  [lcis-3'5] flatten-list-of-chars(Expression1) = Expression2,
-             locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Expression3,Aint2),
-             locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,Stat2,Aint3)
+  [lcis-3'5] Expression2 := flatten-list-of-chars(Expression1),
+             (ce-pair*2,Expression3,Aint2) :=
+               locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)),
+             (ce-pair*3,Stat2,Aint3) :=
+               locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-stat(while (Expression1) Stat1,(ce-pair*1,Aint1)) =
                (ce-pair*3,while (Expression3) Stat2,Aint3)
@@ -130,30 +130,30 @@ equations
   [default-lcis-3'7] locate-constants-in-stat(Stat,(ce-pair*,Aint)) =
                        (ce-pair*,Stat,Aint)
 
-  [lcie-1'1] is-integer(Expression) = false,
-             is-make-char-function-call(Expression) = false,
-             expression-contains-variables(Expression) = false,
-             is-sym-symbol(Expression) = false,
-             add-to-ce-pairs(Expression,ce-pair*1,Aint1) = (ce-pair*2,Ident,Aint2)
+  [lcie-1'1] is-integer(Expression) == false,
+             is-make-char-function-call(Expression) == false,
+             expression-contains-variables(Expression) == false,
+             is-sym-symbol(Expression) == false,
+             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs(Expression,ce-pair*1,Aint1)
              =====================================================================
              locate-constants-in-expression(FUNC_EXIT(Expression),(ce-pair*1,Aint1)) =
                (ce-pair*2,FUNC_EXIT_CONST(Ident,Expression),Aint2)
 
-  [lcie-1'1] is-integer(Expression) = false,
-             is-make-char-function-call(Expression) = false,
-             expression-contains-variables(Expression) = false,
-             is-sym-symbol(Expression) = false,
-             add-to-ce-pairs(Expression,ce-pair*1,Aint1) = (ce-pair*2,Ident,Aint2)
+  [lcie-1'1] is-integer(Expression) == false,
+             is-make-char-function-call(Expression) == false,
+             expression-contains-variables(Expression) == false,
+             is-sym-symbol(Expression) == false,
+             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs(Expression,ce-pair*1,Aint1)
              =====================================================================
              locate-constants-in-expression(CONS_EXIT(Expression),(ce-pair*1,Aint1)) =
                (ce-pair*2,CONS_EXIT_CONST(Ident,Expression),Aint2)
 
-  [lcie-1'2] is-integer(Expression) = false,
-             is-exit-func(Expression) = false,
-             is-make-char-function-call(Expression) = false,
-             expression-contains-variables(Expression) = false,
-             is-sym-symbol(Expression) = false,
-             add-to-ce-pairs(Expression,ce-pair*1,Aint1) = (ce-pair*2,Ident,Aint2)
+  [lcie-1'2] is-integer(Expression) == false,
+             is-exit-func(Expression) == false,
+             is-make-char-function-call(Expression) == false,
+             expression-contains-variables(Expression) == false,
+             is-sym-symbol(Expression) == false,
+             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs(Expression,ce-pair*1,Aint1)
              =====================================================================
              locate-constants-in-expression(Expression,(ce-pair*1,Aint1)) =
                (ce-pair*2,(Ident ? Ident : (Ident = Expression)),Aint2)
@@ -162,15 +162,15 @@ equations
              Prime != identifier("c""h""e""c""k""_""s""y""m"),
              Prime != identifier("F""U""N""C""_""E""X""I""T"),
              Prime != identifier("C""O""N""S""_""E""X""I""T"),
-             expression-contains-variables(Prime(ActualArg*1)) = true,
-             locate-constants-in-expressions(ActualArg*1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,ActualArg*2,Aint2)
+             expression-contains-variables(Prime(ActualArg*1)) == true,
+             (ce-pair*2,ActualArg*2,Aint2) :=
+               locate-constants-in-expressions(ActualArg*1,(ce-pair*1,Aint1))
              ==============================
              locate-constants-in-expression(Prime(ActualArg*1),(ce-pair*1,Aint1)) =
                (ce-pair*2,Prime(ActualArg*2),Aint2)
 
-  [lcie-1'3] locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Expression3,Aint2)
+  [lcie-1'3] (ce-pair*2,Expression3,Aint2) :=
+               locate-constants-in-expression(Expression2,(ce-pair*1,Aint1))
              ===============================
              locate-constants-in-expression(Expression1 = Expression2,(ce-pair*1,Aint1)) =
                (ce-pair*2,Expression1 = Expression3,Aint2)
@@ -180,17 +180,17 @@ equations
 
   [lcie-2'1] locate-constants-in-expressions(,(ce-pair*,Aint)) = (ce-pair*,,Aint)
 
-  [lcie-2'2] locate-constants-in-expression(ActualArg1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,ActualArg2,Aint2),
-             locate-constants-in-expressions(ActualArg*1,(ce-pair*2,Aint2)) =
-               (ce-pair*3,ActualArg*2,Aint3)
+  [lcie-2'2] (ce-pair*2,ActualArg2,Aint2) :=
+               locate-constants-in-expression(ActualArg1,(ce-pair*1,Aint1)),
+             (ce-pair*3,ActualArg*2,Aint3) :=
+               locate-constants-in-expressions(ActualArg*1,(ce-pair*2,Aint2))
              ===============================
              locate-constants-in-expressions(ActualArg1, ActualArg*1,(ce-pair*1,Aint1)) =
                (ce-pair*3,ActualArg2, ActualArg*2,Aint3)
 
   [ecv-1'1] expression-contains-variables((ATerm) ATmakeList(ActualArgs+)) = false
 
-  [ecv-1'2] expressions-contain-variables(ActualArg*1) = Bool
+  [ecv-1'2] Bool := expressions-contain-variables(ActualArg*1)
             =================================================
             expression-contains-variables(Prime(ActualArg*1)) = Bool
 
@@ -202,8 +202,8 @@ equations
 
   [escv-2'1] expressions-contain-variables() = false
 
-  [escv-2'2] expression-contains-variables(ActualArg1) = Bool1,
-             expressions-contain-variables(ActualArg*1) = Bool2
+  [escv-2'2] Bool1 := expression-contains-variables(ActualArg1),
+             Bool2 := expressions-contain-variables(ActualArg*1)
              ==================================================
              expressions-contain-variables(ActualArg1, ActualArg*1) = Bool1 \/ Bool2
 
@@ -229,12 +229,12 @@ equations
 
   [default-iss-1'1] is-sym-symbol(Expression) = false
 
-  [mn2cn-1'1] make-call-id(funid(Char*1)) = identifier(Char*2)
+  [mn2cn-1'1] identifier(Char*2) := make-call-id(funid(Char*1))
               ================================================
               modname2iname(modid(Char*1)) = identifier("i""n""i""t""_" Char*2)
 
-  [mif-1'1] modname2iname(Modid) = CConstant,
-            make-statements-function(ce-pair*) = (,Decl*,Stat*)
+  [mif-1'1] CConstant := modname2iname(Modid),
+            (,Decl*,Stat*) := make-statements-function(ce-pair*)
             ===================================================
             make-init-function(Modid,ce-pair*) =
               Decl* ++
@@ -245,11 +245,11 @@ equations
 
   [msf-1'1] make-statements-function() = (,,)
 
-  [msf-1'2] make-stats-function(ce-pair+) = (,Decl+,Stat+)
+  [msf-1'2] (,Decl+,Stat+) := make-stats-function(ce-pair+)
             ==============================================
             make-statements-function(ce-pair+) = (,Decl+,Stat+)
 
-  [msf-2'1] Ident = identifier("t""a""b""l""e" Char*)
+  [msf-2'1] identifier("t""a""b""l""e" Char*) := Ident
             =========================================
             make-stats-function((Ident,Expression)) =
               (,static ATermTable Ident;, create_table(Ident,0);)
@@ -257,21 +257,21 @@ equations
   [default-msf-2'2] make-stats-function((Ident,Expression)) =
               (,static ATerm Ident = NULL ;, ATprotect(&Ident);)
 
-  [msf-2'3] Ident = identifier("t""a""b""l""e" Char*),
-            make-stats-function(ce-pair+) = (,Decl+,Stat+)
+  [msf-2'3] identifier("t""a""b""l""e" Char*) := Ident,
+            (,Decl+,Stat+) := make-stats-function(ce-pair+)
             ==============================================
             make-stats-function(ce-pair+,(Ident,Expression)) =
               (,Decl+ ATermTable Ident;, Stat+ create_table(Ident,0);)
 
-  [default-msf-2'4] make-stats-function(ce-pair+) = (,Decl+,Stat+)
+  [default-msf-2'4] (,Decl+,Stat+) := make-stats-function(ce-pair+)
                     ==============================================
                     make-stats-function(ce-pair+,(Ident,Expression)) =
 %%%              (,Decl+ static ATerm Ident  = NULL ;, Stat+ ATprotect(&Ident); Ident = Expression ;)
                     (,Decl+ static ATerm Ident  = NULL ;, Stat+ ATprotect(&Ident);)
 
-  [acep-1'1] Aint1 = natcon(Char*),
-             succ(Aint1) = Aint2,
-             identifier("c""o""n""s""t""a""n""t" Char*) = Ident
+  [acep-1'1] natcon(Char*) := Aint1,
+             Aint2 := succ(Aint1),
+             Ident := identifier("c""o""n""s""t""a""n""t" Char*)
              ==================================================
              add-to-ce-pairs(Expression,,Aint1) = ((Ident,Expression),Ident,Aint2)
 
@@ -279,40 +279,40 @@ equations
                ((Ident,Expression),ce-pair*,Ident,Aint)
 
   [acep-1'3] Expression1 != Expression2,
-             add-to-ce-pairs(Expression1,ce-pair*1,Aint1) =
-               (ce-pair*2,Ident2,Aint2)
+             (ce-pair*2,Ident2,Aint2) :=
+               add-to-ce-pairs(Expression1,ce-pair*1,Aint1)
              ===============================
              add-to-ce-pairs(Expression1,(Ident1,Expression2),ce-pair*1,Aint1) =
                ((Ident1,Expression2),ce-pair*2,Ident2,Aint2)
 
-  [flc-1'1] flatten-list-of-chars(Arg2) = Arg3
+  [flc-1'1] Arg3 := flatten-list-of-chars(Arg2)
             ==================================
             flatten-list-of-chars(cons(make_list(make_char(Arg1)),Arg2)) =
               compose-list-of-chars(Arg1,Arg3)
 
-  [default-flc-1'2] flatten-arguments(ActualArg*1) = ActualArg*2
+  [default-flc-1'2] ActualArg*2 := flatten-arguments(ActualArg*1)
                     ============================================
                     flatten-list-of-chars(Prime(ActualArg*1)) = Prime(ActualArg*2)
 
-  [flc-1'3] flatten-list-of-chars(Expression2) = Expression3
+  [flc-1'3] Expression3 := flatten-list-of-chars(Expression2)
             ================================================
             flatten-list-of-chars(Expression1 = Expression2) = (Expression1 = Expression3)
 
-  [default-flc-1'4] is-function-call(Expression) = false
+  [default-flc-1'4] is-function-call(Expression) == false
                     ====================================
                     flatten-list-of-chars(Expression) = Expression
 
   [fa-1'1] flatten-arguments() =
 
-  [fa-1'2] flatten-list-of-chars(ActualArg1) = ActualArg2,
-           flatten-arguments(ActualArg*1) = ActualArg*2
+  [fa-1'2] ActualArg2 := flatten-list-of-chars(ActualArg1),
+           ActualArg*2 := flatten-arguments(ActualArg*1)
            ============================================
            flatten-arguments(ActualArg1,ActualArg*1) = ActualArg2,ActualArg*2
 
   [clc-1'1] compose-list-of-chars(Arg1,make_list(make_char(Arg2))) =
               (ATerm) ATmakeList (2, char_table[Arg1], char_table[Arg2] )
 
-  [clc-1'2] succ(natcon(Char*1)) = natcon(Char*2)
+  [clc-1'2] natcon(Char*2) := succ(natcon(Char*1))
             =====================================
             compose-list-of-chars(Arg1,(ATerm) ATmakeList(integer-constant(Char*1), ActualArgs+)) =
               (ATerm) ATmakeList (integer-constant(Char*2), char_table[Arg1], ActualArgs+)

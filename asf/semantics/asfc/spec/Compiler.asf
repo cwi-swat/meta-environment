@@ -1,9 +1,9 @@
 equations
 
 [comp]
-muasf2nametable(Module) = (Module2, Nametable),
-muasf2muasf(Module2, Nametable) = (Module3, Nametable2),
-muasf2c(Module3, Nametable2) = CProgram
+(Module2, Nametable) := muasf2nametable(Module),
+(Module3, Nametable2) := muasf2muasf(Module2, Nametable),
+CProgram := muasf2c(Module3, Nametable2)
 ===>
 compile-muasf(Module) = CProgram
 

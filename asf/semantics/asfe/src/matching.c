@@ -83,6 +83,41 @@ ATerm getConditionSign(ASF_ASFCondition cond)
 
 /*}}}  */
 
+/*{{{  static ATerm matchEqualityCondition(ASF_ASFCondition cond, */
+
+static ATerm matchEqualityCondition(ASF_ASFCondition cond,
+				    PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ASFConditionList conds,
+				    ATerm env, 
+				    int depth)
+{
+  PT_Tree lhstrm, rhstrm;
+
+  /* assuming that none of the sides introduce new variables */
+
+  TIDE_STEP(lhs, env, depth);
+  lhstrm = rewriteInnermost(lhs, env, depth + 1, NO_TRAVERSAL);
+
+  if (!lhstrm) {
+    return fail_env;
+  }
+
+  TIDE_STEP(rhs, env, depth);
+  rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
+
+  if (!rhstrm) {
+    return fail_env;
+  }
+
+  TIDE_STEP(getConditionSign(cond), env, depth);
+  if (isAsFixEqual(lhstrm, rhstrm)) {
+    return matchConditions(conds, env, depth);
+  }
+
+  return fail_env;
+}
+
+/*}}}  */
 /*{{{  static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,  */
 
 static ATerm matchNegativeCondition(ASF_ASFCondition cond,
@@ -118,6 +153,71 @@ static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 }
 
 /*}}}  */
+/*{{{  static ATerm matchMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs,  */
+
+static ATerm matchMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ASFConditionList conds,
+				    ATerm env, int depth)
+{
+  PT_Tree rhstrm = NULL;
+
+  TIDE_STEP(rhs, env, depth);
+  rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
+
+  if (!rhstrm) {
+    return fail_env;
+  }
+
+  TIDE_STEP(lhs, env, depth);
+  env = matchArgument(env, lhs, rhstrm, conds, 
+		      PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+		      NULL, depth);
+
+  TIDE_STEP(getConditionSign(cond), env, depth);
+
+  if (!is_fail_env(env)) {
+    return matchConditions(conds, env, depth);
+  }
+  else {
+    return fail_env;
+  }
+}
+
+/*}}}  */
+/*{{{  static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs,  */
+
+static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
+				    ASF_ASFConditionList conds,
+				    ATerm env, int depth)
+{
+  PT_Tree rhstrm = NULL;
+  ATerm oldEnv = env;
+  ATerm result = fail_env;
+
+  TIDE_STEP(rhs, env, depth);
+  rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
+
+  if (!rhstrm) {
+    return fail_env;
+  }
+
+  TIDE_STEP(lhs, env, depth);
+  result = matchArgument(env, lhs, rhstrm, conds, 
+			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
+			 NULL, depth);
+
+  TIDE_STEP(getConditionSign(cond), result, depth);
+
+  if (is_fail_env(result)) {
+    return matchConditions(conds, oldEnv, depth);
+  }
+  else {
+    return fail_env;
+  }
+}
+
+/*}}}  */
+/* deprecated syntax "=", still supported for now but will dissappear */
 /*{{{  static ATerm matchPositiveCondition(PT_Tree lhs, PT_Tree rhs,  */
 
 static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
@@ -167,39 +267,7 @@ static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree 
 }
 
 /*}}}  */
-/*{{{  static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs,  */
 
-static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs, 
-				    ASF_ASFConditionList conds,
-				    ATerm env, int depth)
-{
-  PT_Tree rhstrm;
-  ATerm oldEnv = env;
-  ATerm result = fail_env;
-
-  TIDE_STEP(rhs, env, depth);
-  rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
-
-  if (!rhstrm) {
-    return fail_env;
-  }
-
-  TIDE_STEP(lhs, env, depth);
-  result = matchArgument(env, lhs, rhstrm, conds, 
-			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
-			 NULL, depth);
-
-  TIDE_STEP(getConditionSign(cond), result, depth);
-
-  if (is_fail_env(result)) {
-    return matchConditions(conds, oldEnv, depth);
-  }
-  else {
-    return fail_env;
-  }
-}
-
-/*}}}  */
 /*{{{  static ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds, */
 
 ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
@@ -211,8 +279,14 @@ ATerm matchCondition(ASF_ASFCondition cond, ASF_ASFConditionList conds,
   if (ASF_isASFConditionPositive(cond)) {
     return matchPositiveCondition(cond, lhs, rhs, conds, env, depth);
   }
+  else if (ASF_isASFConditionMatch(cond)) {
+    return matchMatchCondition(cond, lhs, rhs, conds, env, depth);
+  }
   else if (ASF_isASFConditionNoMatch(cond)) {
     return matchNoMatchCondition(cond, lhs, rhs, conds, env, depth);
+  }
+  else if (ASF_isASFConditionEquality(cond)) {
+    return matchEqualityCondition(cond, lhs, rhs, conds, env, depth);
   }
   else {
     return matchNegativeCondition(cond, lhs, rhs, conds, env, depth);

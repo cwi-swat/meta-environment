@@ -4,7 +4,7 @@ equations
 add-list-cons(Module) = alc-module(Module)
 
 [alc-0]
-alc-rulesopt(Rulesopt) = Rulesopt2
+Rulesopt2 := alc-rulesopt(Rulesopt)
 ===>
 alc-module(module Modid Signopt Rulesopt) = module Modid Signopt Rulesopt2
 
@@ -12,7 +12,7 @@ alc-module(module Modid Signopt Rulesopt) = module Modid Signopt Rulesopt2
 alc-rulesopt() =
 
 [alc-2]
-alc-rulelist(Rulelist) = Rulelist2
+Rulelist2 := alc-rulelist(Rulelist)
 ===>
 alc-rulesopt(rules Rulelist) = rules Rulelist2
 
@@ -22,57 +22,57 @@ alc-rulelist() =
 [alc-4] alc-rulelist(Rule) = alc-rule(Rule)
 
 [alc-5]
-alc-rule(Rule) = Rule2,
-alc-rulelist(Rule*) = Rule*2
+Rule2 := alc-rule(Rule),
+Rule*2 := alc-rulelist(Rule*)
 ===>
 alc-rulelist(Rule; Rule*) = Rule2; Rule*2
 
 [alc-6]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2)
 ===>
 alc-rule(Term1 = Term2) = Term3 = Term4
 
 [alc-7]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2)
 ===>
 alc-rule(default: Term1 = Term2) = default: Term3 = Term4
 
 [alc-8]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4,
-alc-condlist(Condlist) = Condlist2
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2),
+Condlist2 := alc-condlist(Condlist)
 ===>
 alc-rule(Condlist ==> Term1 = Term2) = Condlist2 ==> Term3 = Term4
 
 [alc-9]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4,
-alc-condlist(Condlist) = Condlist2
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2),
+Condlist2 := alc-condlist(Condlist)
 ===>
 alc-rule(default: Condlist ==> Term1 = Term2) = default: Condlist2 ==> Term3 = Term4
 
 [alc-10]
-is-list-funid(Funid) = true,
-alc-termlist(Term+) = Term+2,
-list-to-conslist(Term+2) = Term
+is-list-funid(Funid) == true,
+Term+2 := alc-termlist(Term+),
+Term := list-to-conslist(Term+2)
 ===>
 alc-term(Funid(Term+)) = Funid(Term)
 
 [alc-11]
-is-list-funid(Funid) = false,
-alc-termlist(Term+) = Term+2
+is-list-funid(Funid) == false,
+Term+2 := alc-termlist(Term+)
 ===>
 alc-term(Funid(Term+)) = Funid(Term+2)
 
 [alc-11'2]
-is-list-funid(Funid) = true
+is-list-funid(Funid) == true
 ===>
 alc-term(Funid) = Funid(null)
 
 [alc-12]
-is-list-funid(Funid) = false
+is-list-funid(Funid) == false
 ===>
 alc-term(Funid) = Funid
 
@@ -87,8 +87,8 @@ alc-termlist(Term) = alc-term(Term)
 
 
 [alc-14]
-alc-term(Term) = Term2,
-alc-termlist(Term+) = Term+2
+Term2 := alc-term(Term),
+Term+2 := alc-termlist(Term+)
 ===>
 alc-termlist(Term, Term+) = Term2, Term+2
 
@@ -96,25 +96,25 @@ alc-termlist(Term, Term+) = Term2, Term+2
 alc-condlist(Cond) = alc-cond(Cond)
 
 [alc-16]
-alc-cond(Cond) = Cond2,
-alc-condlist(Cond+) = Cond+2
+Cond2 := alc-cond(Cond),
+Cond+2 := alc-condlist(Cond+)
 ===>
 alc-condlist(Cond & Cond+) = Cond2 & Cond+2
 
 [alc-17]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2)
 ===>
 alc-cond(Term1 == Term2) = Term3 == Term4
 
 [alc-17]
-alc-term(Term1) = Term3,
-alc-term(Term2) = Term4
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2)
 ===>
 alc-cond(Term1 != Term2) = Term3 != Term4
 
 [l2cl-1]
-list-to-conslist(Term+) = Term2
+Term2 := list-to-conslist(Term+)
 ======>
 list-to-conslist(Term, Term+) = cons(Term, Term2)
 

@@ -1,18 +1,18 @@
 equations
 
 [m2m-1'1]
-Module1 = module Modid signature Funcdef+ rules Rule+,
-add-builtin-equations(Module1) = Module111,
-fix-tupled-traversals(Module111) = Module11,
-find-constructors(Module11,Nametable) = (Module2, Nametable2),
-add-list-cons(Module2) = Module3,
-add-type-checks(Module3,Nametable) = Module31,
-remove-types(Module31) = Module32,
-optimize-muasf(Module32,Nametable2) = <Module4, Nametable3>,
-make-matching-conds(Module4) = Module5,
-make-left-linear(Module5) = Module6,
-remove-list-matching(Module6) = Module7,
-normalize-conditions(Module7) = Module8
+module Modid signature Funcdef+ rules Rule+ := Module1,
+Module111 := add-builtin-equations(Module1),
+Module11 := fix-tupled-traversals(Module111),
+(Module2, Nametable2) := find-constructors(Module11,Nametable),
+Module3 := add-list-cons(Module2),
+Module31 := add-type-checks(Module3,Nametable),
+Module32 := remove-types(Module31),
+<Module4, Nametable3> := optimize-muasf(Module32,Nametable2),
+Module5 := make-matching-conds(Module4),
+Module6 := make-left-linear(Module5),
+Module7 := remove-list-matching(Module6),
+Module8 := normalize-conditions(Module7)
 ===>
 muasf2muasf(Module1, Nametable) =  (Module8, Nametable3)
 

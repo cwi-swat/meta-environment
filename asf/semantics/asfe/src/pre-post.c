@@ -34,18 +34,11 @@ ASF_ASFCondition prepareCondition(ASF_ASFCondition cond)
   rhs = ASFtoPT(ASF_getASFConditionRhs(cond));
   rhs = RWprepareTerm(rhs, ATfalse);
   
-  if (ASF_isASFConditionNegative(cond)) { 
-    cond = ASF_setASFConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
-    cond = ASF_setASFConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
-  }
-  else {
-    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
-    ASF_Symbol sym = ASF_getASFConditionLhsSymbol(cond);
-    /* for the time being we map the new condition syntax to the old one */
-    /* When the old one is removed, the code of asfe can be simplified */
-    cond = ASF_makeASFConditionPositive(sym,
-					sym,
-					PTtoASF(lhs),e,e,PTtoASF(rhs));
+  cond = ASF_setASFConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
+  cond = ASF_setASFConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
+
+  if (ASF_isASFConditionPositive(cond)) {
+    RWsetError("Using deprecated condition syntax \"=\"", PT_makeTreeLit(""));
   }
 
   return cond;

@@ -1,4 +1,3 @@
 # $Id$
 
-SUBDIRS = filtereqssyntax addeqssyntax removevarsyntax \
-          asfsdf-checker addapisyntax 
+SUBDIRS = filtereqssyntax addeqssyntax removevarsyntax asfsdf-checker 

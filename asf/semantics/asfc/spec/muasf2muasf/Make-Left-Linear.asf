@@ -6,8 +6,8 @@ equations
 %% an environment. This information is needed
 %% to retrieve the type of an variable.
 
-  [mll-1'1] make-l-l-ruleopt(Rulesopt1) = Rule*,
-            create-new-rulesopt(Rule*) = Rulesopt2
+  [mll-1'1] Rule* := make-l-l-ruleopt(Rulesopt1),
+            Rulesopt2 := create-new-rulesopt(Rule*)
             ======================================
             make-left-linear(module Modid
                                     Signopt
@@ -26,12 +26,12 @@ equations
   [mro-1'3] make-l-l-ruleopt(rules Rule+1) =
               make-l-l-rules(Rule+1,[])
 
-  [mrules-1'1] make-l-l-rule(Rule1,SpecVarenv) = Rule2
+  [mrules-1'1] Rule2 := make-l-l-rule(Rule1,SpecVarenv)
                =======================================
                make-l-l-rules(Rule1,SpecVarenv) = Rule2
 
-  [mrules-1'2] make-l-l-rule(Rule1,SpecVarenv) = Rule2,
-               make-l-l-rules(Rule+1,SpecVarenv) = Rule+2
+  [mrules-1'2] Rule2 := make-l-l-rule(Rule1,SpecVarenv),
+               Rule+2 := make-l-l-rules(Rule+1,SpecVarenv)
                ==========================================
                make-l-l-rules(Rule1; Rule+1,SpecVarenv) =
                  Rule2; Rule+2
@@ -40,32 +40,32 @@ equations
 %% in which the variables used in the left-hand side or in
 %% the right-hand side of a matching condition.
 %% First, two equations to deal with rewrite rules without conditions.
-  [mrule-1'1] make-l-l-lhs(Term1,SpecVarenv,[1,]) =
-                (Term3,Cond*,RuleVarenv)
+  [mrule-1'1] (Term3,Cond*,RuleVarenv) :=
+                make-l-l-lhs(Term1,SpecVarenv,[1,])
               ==========================
               make-l-l-rule(Term1 = Term2,SpecVarenv) =
                 make-conditional-rule(Cond*,Term3 = Term2)
 
-  [mrule-1'2] make-l-l-lhs(Term1,SpecVarenv,[1,]) =
-                (Term3,Cond*,RuleVarenv)
+  [mrule-1'2] (Term3,Cond*,RuleVarenv) :=
+                make-l-l-lhs(Term1,SpecVarenv,[1,])
               ==========================
               make-l-l-rule(default:Term1 = Term2,SpecVarenv) =
                 make-conditional-rule(Cond*,default:Term3 = Term2)
 
 %% If a rule has conditions, all right-hand sides of the condition
 %% should be checked and changed, as well.
-  [mrule-1'3] make-l-l-lhs(Term1,SpecVarenv,[1,]) =
-                (Term3,Cond*2,RuleVarenv1),
-              make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv1) =
-                (Cond+3,RuleVarenv2)
+  [mrule-1'3] (Term3,Cond*2,RuleVarenv1) :=
+                make-l-l-lhs(Term1,SpecVarenv,[1,]),
+              (Cond+3,RuleVarenv2) :=
+                make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv1)
               ======================
               make-l-l-rule(Cond+1 ==> Term1 = Term2,SpecVarenv) =
                 Cond*2 & Cond+3 ==> Term3 = Term2
 
-  [mrule-1'4] make-l-l-lhs(Term1,SpecVarenv,[1,]) =
-                (Term3,Cond*2,RuleVarenv1),
-              make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv1) =
-                (Cond+3,RuleVarenv2)
+  [mrule-1'4] (Term3,Cond*2,RuleVarenv1) :=
+                make-l-l-lhs(Term1,SpecVarenv,[1,]),
+              (Cond+3,RuleVarenv2) :=
+                make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv1)
               ======================
               make-l-l-rule(default:Cond+1 ==> Term1 = Term2,SpecVarenv) =
                 default:Cond*2 & Cond+3 ==> Term3 = Term2
@@ -79,8 +79,8 @@ equations
                 (Funid,,RuleVarenv)
 
 %% If a term is a function it arguments are inspected.
-  [mterm-1'2] make-l-l-terms(Term+1,SpecVarenv,RuleVarenv1) =
-                (Term+2,Cond*,RuleVarenv2)
+  [mterm-1'2] (Term+2,Cond*,RuleVarenv2) :=
+                make-l-l-terms(Term+1,SpecVarenv,RuleVarenv1)
               =======================================
               make-l-l-term(Funid(Term+1),SpecVarenv,RuleVarenv1) =
                 (Funid(Term+2),Cond*,RuleVarenv2)
@@ -88,9 +88,9 @@ equations
 %% If a term is a simple or list variable it is first checked whether it is
 %% a fresh one, fresh variables are ok and are inserted
 %% in the list of used variables.
-  [mterm-1'3] Term = Var,
-              includes(Var,RuleVarenv1) = false,
-              enter(Var,RuleVarenv1) = RuleVarenv2
+  [mterm-1'3] Var := Term,
+              includes(Var,RuleVarenv1) == false,
+              RuleVarenv2 := enter(Var,RuleVarenv1)
               ====================================
               make-l-l-term(Term,SpecVarenv,RuleVarenv1) =
                 (Term,,RuleVarenv2)
@@ -98,12 +98,12 @@ equations
 %% If the variable is already in the {\tt RuleVarenv} a
 %% fresh variable name is created and a condition with
 %% a check whether the two variables represent the same term.
-  [mterm-1'5] Term1 = Var1,
-              includes(Var1,RuleVarenv1) = true,
-              get-int(RuleVarenv1) = Aint,
-              newvar(Aint,Var1) = Var2,
-              put-int(succ(Aint),RuleVarenv1) = RuleVarenv2,
-              make-eq-cond(Var1,Var2) = Cond
+  [mterm-1'5] Var1 := Term1,
+              includes(Var1,RuleVarenv1) == true,
+              Aint := get-int(RuleVarenv1),
+              Var2 := newvar(Aint,Var1),
+              RuleVarenv2 := put-int(succ(Aint),RuleVarenv1),
+              Cond := make-eq-cond(Var1,Var2)
               ==============================
               make-l-l-term(Term1,SpecVarenv,RuleVarenv1) =
                 (Var2,Cond,RuleVarenv2)
@@ -113,10 +113,10 @@ equations
   [mterms-1'1] make-l-l-terms(Term1,SpecVarenv,RuleVarenv1) =
                  make-l-l-term(Term1,SpecVarenv,RuleVarenv1)
 
-  [mterms-1'2] make-l-l-term(Term1,SpecVarenv,RuleVarenv1) =
-                 (Term2,Cond*1,RuleVarenv2),
-               make-l-l-terms(Term+1,SpecVarenv,RuleVarenv2) =
-                 (Term+2,Cond*2,RuleVarenv3)
+  [mterms-1'2] (Term2,Cond*1,RuleVarenv2) :=
+                 make-l-l-term(Term1,SpecVarenv,RuleVarenv1),
+               (Term+2,Cond*2,RuleVarenv3) :=
+                 make-l-l-terms(Term+1,SpecVarenv,RuleVarenv2)
                =============================
                make-l-l-terms(Term1,Term+1,SpecVarenv,RuleVarenv1) =
                  (Term2,Term+2,Cond*1 & Cond*2,RuleVarenv3)
@@ -126,10 +126,10 @@ equations
   [mconds-1'1] make-l-l-conds(Cond,SpecVarenv,RuleVarenv1) =
                  make-l-l-cond(Cond,SpecVarenv,RuleVarenv1)
 
-  [mconds-1'2] make-l-l-cond(Cond1,SpecVarenv,RuleVarenv1) =
-                 (Cond*1,RuleVarenv2),
-               make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv2) =
-                 (Cond*2,RuleVarenv3)
+  [mconds-1'2] (Cond*1,RuleVarenv2) :=
+                 make-l-l-cond(Cond1,SpecVarenv,RuleVarenv1),
+               (Cond*2,RuleVarenv3) :=
+                 make-l-l-conds(Cond+1,SpecVarenv,RuleVarenv2)
                ======================
                make-l-l-conds(Cond1 & Cond+1,SpecVarenv,RuleVarenv1) =
                  (Cond*1 & Cond*2,RuleVarenv3)
@@ -137,8 +137,8 @@ equations
 %% Dealing with the matching conditions. The right-hand side
 %% of a matching condition may ``re-use'' a variable. Therefore,
 %% this side is checked.
-  [mcond-1'1] make-l-l-term(Term2,SpecVarenv,RuleVarenv1) =
-                 (Term3,Cond*,RuleVarenv2)
+  [mcond-1'1] (Term3,Cond*,RuleVarenv2) :=
+                 make-l-l-term(Term2,SpecVarenv,RuleVarenv1)
                ===========================
                make-l-l-cond(Term1 =: Term2,SpecVarenv,RuleVarenv1) =
                  (Term1 =: Term3 & Cond*,RuleVarenv2)

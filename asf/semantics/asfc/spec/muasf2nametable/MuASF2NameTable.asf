@@ -1,10 +1,10 @@
 equations
 
 [m2n]
-create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)) = Nametable,
-rename-signatureopt(Signopt, Nametable) = Signopt3,
-rename-rulesopt(Rulesopt, Nametable) = Rulesopt2,
-Module2 = module modid(Char*) Signopt3 Rulesopt2
+Nametable := create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)),
+Signopt3 := rename-signatureopt(Signopt, Nametable),
+Rulesopt2 := rename-rulesopt(Rulesopt, Nametable),
+Module2 := module modid(Char*) Signopt3 Rulesopt2
 ===>
 muasf2nametable(module modid(Char*) Signopt Rulesopt) = (Module2, Nametable)
 
@@ -19,8 +19,8 @@ rename-signatureopt(,Nametable) =
 rename-funcdeflist(, Nametable) = 
 
 [rn-2]
-rename-funcdef(Funcdef, Nametable) = Funcdef2,
-rename-funcdeflist(Funcdef*, Nametable) = Funcdef*2
+Funcdef2 := rename-funcdef(Funcdef, Nametable),
+Funcdef*2 := rename-funcdeflist(Funcdef*, Nametable)
 ===>
 rename-funcdeflist(Funcdef; Funcdef*, Nametable) = Funcdef2; Funcdef*2
 
@@ -52,46 +52,46 @@ rename-rulesopt(,Nametable) =
 rename-rulelist(,Nametable) =
 
 [rn-10]
-rename-rule(Rule,Nametable) = Rule2,
-rename-rulelist(Rule*,Nametable) = Rule*2
+Rule2 := rename-rule(Rule,Nametable),
+Rule*2 := rename-rulelist(Rule*,Nametable)
 ===>
 rename-rulelist(Rule; Rule*,Nametable) = Rule2 ; Rule*2
 
 [rn-11]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable)
 ===>
 rename-rule(Term1 = Term2,Nametable) =
 Term3 = Term4
 
 
 [rn-12]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable)
 ===>
 rename-rule(default: Term1 = Term2,Nametable) =
 default: Term3 = Term4
 
 
 [rn-13]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4,
-rename-condlist(Condlist,Nametable) = Condlist2
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable),
+Condlist2 := rename-condlist(Condlist,Nametable)
 ===>
 rename-rule(Condlist ==> Term1 = Term2,Nametable) =
 Condlist2 ==> Term3 = Term4
 
 [rn-14]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4,
-rename-condlist(Condlist,Nametable) = Condlist2
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable),
+Condlist2 := rename-condlist(Condlist,Nametable)
 ===>
 rename-rule(default: Condlist ==> Term1 = Term2,Nametable) =
 default: Condlist2 ==> Term3 = Term4
 
 [rn-15]
-rename-cond(Cond,Nametable) = Cond2,
-rename-condlist(Cond*,Nametable) = Cond*2
+Cond2 := rename-cond(Cond,Nametable),
+Cond*2 := rename-condlist(Cond*,Nametable)
 ===>
 rename-condlist(Cond & Cond*,Nametable) = Cond2 & Cond*2
 
@@ -99,15 +99,15 @@ rename-condlist(Cond & Cond*,Nametable) = Cond2 & Cond*2
 rename-condlist(,Nametable) =
 
 [rn-17]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable)
 ===>
 rename-cond(Term1 == Term2,Nametable) =
 Term3 == Term4
 
 [rn-18]
-rename-term(Term1,Nametable) = Term3,
-rename-term(Term2,Nametable) = Term4
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable)
 ===>
 rename-cond(Term1 != Term2,Nametable) =
 Term3 != Term4
@@ -116,8 +116,8 @@ Term3 != Term4
 rename-term(Funid,Nametable) = rename-funid(Funid,Nametable)
 
 [rn-20]
-rename-funid(Funid,Nametable) = Funid2,
-rename-termlist(Term+,Nametable) = Term+2
+Funid2 := rename-funid(Funid,Nametable),
+Term+2 := rename-termlist(Term+,Nametable)
 ===>
 rename-term(Funid(Term+),Nametable) = Funid2(Term+2)
 
@@ -132,8 +132,8 @@ rename-term(Term,Nametable) = Term
 rename-termlist(Term,Nametable) = rename-term(Term,Nametable)
 
 [rn-22]
-rename-term(Term,Nametable) = Term2,
-rename-termlist(Term+,Nametable) = Term+2
+Term2 := rename-term(Term,Nametable),
+Term+2 := rename-termlist(Term+,Nametable)
 ===>
 rename-termlist(Term, Term+,Nametable) = Term2, Term+2
 
@@ -145,7 +145,7 @@ create-name-table(,Nametable) = Nametable
 create-name-table(signature ,Nametable) = Nametable
 
 [cnt-1'3] 
-funcdefs2table(Funcdef+,Nametable1) = Nametable2
+Nametable2 := funcdefs2table(Funcdef+,Nametable1)
 ===>
 create-name-table(signature Funcdef+,Nametable1) = Nametable2
 
@@ -154,46 +154,46 @@ funcdefs2table(Funcdef,Nametable) =
 funcdef2table(Funcdef,Nametable)
 
 [f2t-1'2]
-funcdef2table(Funcdef,Nametable1) = Nametable2,
-funcdefs2table(Funcdef+,Nametable2) = Nametable3
+Nametable2 := funcdef2table(Funcdef,Nametable1),
+Nametable3 := funcdefs2table(Funcdef+,Nametable2)
 ===>
 funcdefs2table(Funcdef;Funcdef+,Nametable1) = Nametable3
 
 [f2t-2'1]
-Nametable1 = (Namepair*, Funid, Aint0, Aint1),
-Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1), 
-Funid2 = construct-funid(Funid1, Aint0),
-Funid3 = normal-prod(Funid1),
-nt-add(Funid3,Funid2,Nametable2) = Nametable3
+(Namepair*, Funid, Aint0, Aint1) := Nametable1,
+Nametable2 := (Namepair*, Funid, succ(Aint0), Aint1), 
+Funid2 := construct-funid(Funid1, Aint0),
+Funid3 := normal-prod(Funid1),
+Nametable3 := nt-add(Funid3,Funid2,Nametable2)
 ===>
 funcdef2table(Funid1(Sigarg+),Nametable1) = Nametable3
 
 [f2t-2'2]
-Nametable1 = (Namepair*, Funid, Aint0, Aint1),
-Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
-Attrs = {Term+},
-Funid2 = construct-funid(Funid1, Aint0, Term+),
-Funid3 = normal-prod(Funid1),
-nt-add(Funid3,Funid2,Term+,Nametable2) = Nametable3
+(Namepair*, Funid, Aint0, Aint1) := Nametable1,
+Nametable2 := (Namepair*, Funid, succ(Aint0), Aint1),
+{Term+} := Attrs,
+Funid2 := construct-funid(Funid1, Aint0, Term+),
+Funid3 := normal-prod(Funid1),
+Nametable3 := nt-add(Funid3,Funid2,Term+,Nametable2)
 ===>
 funcdef2table(Funid1(Sigarg+) Attrs,Nametable1) = Nametable3
 
 [f2t-2'3]
-Nametable1 = (Namepair*, Funid, Aint0, Aint1),
-Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
-Funid2 = construct-funid(Funid1,Aint0),
-Funid3 = normal-prod(Funid1),
-nt-add(Funid3,Funid2,Nametable2) = Nametable3
+(Namepair*, Funid, Aint0, Aint1) := Nametable1,
+Nametable2 := (Namepair*, Funid, succ(Aint0), Aint1),
+Funid2 := construct-funid(Funid1,Aint0),
+Funid3 := normal-prod(Funid1),
+Nametable3 := nt-add(Funid3,Funid2,Nametable2)
 ===>
 funcdef2table(Funid1,Nametable1) = Nametable3
 
 [f2t-2'4]
-Nametable1 = (Namepair*, Funid, Aint0, Aint1),
-Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
-Attrs = {Term+},
-Funid2 = construct-funid(Funid1,Aint0,Term+),
-Funid3 = normal-prod(Funid1),
-nt-add(Funid3,Funid2,Term+,Nametable2) = Nametable3
+(Namepair*, Funid, Aint0, Aint1) := Nametable1,
+Nametable2 := (Namepair*, Funid, succ(Aint0), Aint1),
+{Term+} := Attrs,
+Funid2 := construct-funid(Funid1,Aint0,Term+),
+Funid3 := normal-prod(Funid1),
+Nametable3 := nt-add(Funid3,Funid2,Term+,Nametable2)
 ===>
 funcdef2table(Funid1 Attrs,Nametable1) = Nametable3
 
@@ -211,16 +211,16 @@ construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+
 funid(""""[" "l""f""_" Char+ "]"""")
 
 [cf-3]
-strategy-id(Term+) = funid(Char*1),
-type-id(Term+)  = funid(Char*2)
+funid(Char*1) := strategy-id(Term+),
+funid(Char*2)  := type-id(Term+)
 ====>
 construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+),
                 Term*1,traversal(Term+),Term*2) =
 funid(""""[" "l""f""_" Char*2 "_" Char*1 "_" Char+ "]"""")
 
 [cf-5]
-strategy-id(Term+) = funid(Char*1),
-type-id(Term+)  = funid(Char*2)
+funid(Char*1) := strategy-id(Term+),
+funid(Char*2)  := type-id(Term+)
 ====>
 construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
                 Term*1,traversal(Term+),Term*2) =

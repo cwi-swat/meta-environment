@@ -1,7 +1,7 @@
 equations
 
 [find-constr] 
-fc-funcdeflist(Funcdef*,Rule*,Nametable) = <Funcdef*2, Nametable2>
+<Funcdef*2, Nametable2> := fc-funcdeflist(Funcdef*,Rule*,Nametable)
 ===>
 find-constructors(module Modid signature Funcdef* rules Rule*,Nametable) =
 (module Modid signature Funcdef*2 rules Rule*, Nametable2)
@@ -10,22 +10,22 @@ find-constructors(module Modid signature Funcdef* rules Rule*,Nametable) =
 fc-funcdeflist(,Rule*,Nametable) = <,Nametable>
 
 [fc-1]
-fc-funcdef(Funcdef,Rule*,Nametable) = <Funcdef2,Nametable2>,
-fc-funcdeflist(Funcdef*,Rule*,Nametable2) = <Funcdef*2,Nametable3>
+<Funcdef2,Nametable2> := fc-funcdef(Funcdef,Rule*,Nametable),
+<Funcdef*2,Nametable3> := fc-funcdeflist(Funcdef*,Rule*,Nametable2)
 ===>
 fc-funcdeflist(Funcdef; Funcdef*,Rule*,Nametable) =
 <Funcdef2; Funcdef*2, Nametable3>
 
 [fc-2]
-has-rule(Funcdef,Rule*)               = false,
-add-attr(Funcdef,constructor)         = Funcdef2,
-get-funcdef-funid(Funcdef) = Funid,
-add-attr(Funid,Nametable,constructor) = Nametable2
+has-rule(Funcdef,Rule*)               == false,
+Funcdef2         := add-attr(Funcdef,constructor),
+Funid := get-funcdef-funid(Funcdef),
+Nametable2 := add-attr(Funid,Nametable,constructor)
 ===>
 fc-funcdef(Funcdef,Rule*,Nametable) = <Funcdef2, Nametable2>
 
 [fc-3]
-has-rule(Funcdef,Rule*) = true
+has-rule(Funcdef,Rule*) == true
 ===>
 fc-funcdef(Funcdef,Rule*,Nametable) = <Funcdef, Nametable>
 
@@ -33,7 +33,7 @@ fc-funcdef(Funcdef,Rule*,Nametable) = <Funcdef, Nametable>
 has-rule(Funcdef, ) = false
 
 [hr]
-get-funcdef-funid(Funcdef) = get-funid(Rule)
+get-funcdef-funid(Funcdef) == get-funid(Rule)
 ===>
 has-rule(Funcdef,Rule; Rule*) = true
 
@@ -61,7 +61,7 @@ add-attr(Funid(Sigarg+) { Term+ }, Term) =
 Funid(Sigarg+) {Term, Term+}
 
 [aca-nt]
-Nametable = (Namepair*1,(Funid, Funid1, Term*), Namepair*2,Funid0,Aint0,Aint1)
+(Namepair*1,(Funid, Funid1, Term*), Namepair*2,Funid0,Aint0,Aint1) := Nametable
 ===>
 add-attr(Funid1,Nametable,Term) = 
 (Namepair*1,(Funid,Funid1,Term,Term*),Namepair*2,Funid0,Aint0,Aint1)

@@ -1,5 +1,17 @@
 # $Id$
 
+2003/11/06 (jurgenv@cwi.nl)
+ * Added "!:=" the condition operator that fails if a match succeeds and
+   succeeds when a match fails.
+ * Added implementation of "!:=" to the interpreter
+ * Added checking of "!:=" operator to asf-checker. The variables that
+   are used in the left-hand side of this operator are not instantiated
+   so they may not be used afterwards by the other conditions or the
+   right-hand side.
+ * Removed addapisyntax functionality because it is never used. It should
+   be replaced in the future by a specification generator that takes
+   an annotated SDF2 definition and generates an ASF module with some
+   setters and getters etc.
 
 2003/11/05 (jurgenv@cwi.nl)
  * Added asfupgrader, a tool that upgrades the old condition syntax 

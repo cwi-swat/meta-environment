@@ -6,8 +6,8 @@ equations
 %% all optimizations on MuASF1
 
 [om-0] 
-optimize-per-function(Rule*,Funcdef*,Nametable) = <Rule*2,Funcdef*2,Nametable2>,
-Module2 = module Modid signature Funcdef*2 rules Rule*2
+<Rule*2,Funcdef*2,Nametable2> := optimize-per-function(Rule*,Funcdef*,Nametable),
+Module2 := module Modid signature Funcdef*2 rules Rule*2
 ===>
 optimize-muasf(module Modid signature Funcdef* rules Rule*, Nametable) = 
 <Module2, Nametable2>
@@ -16,10 +16,10 @@ optimize-muasf(module Modid signature Funcdef* rules Rule*, Nametable) =
 optimize-muasf(Module,Nametable) = <Module,Nametable>
 
 [opf]
-get-funid(Rule) = Funid,
-select-on-ofs(Funid,Rule; Rule*) = (Rule*1, Rule*2),
-optimize-function(Rule*1,Funcdef*,Nametable) = <Rule*3,Funcdef*2,Nametable2>,
-optimize-per-function(Rule*2,Funcdef*2,Nametable2) = <Rule*4,Funcdef*3,Nametable3>
+Funid := get-funid(Rule),
+(Rule*1, Rule*2) := select-on-ofs(Funid,Rule; Rule*),
+<Rule*3,Funcdef*2,Nametable2> := optimize-function(Rule*1,Funcdef*,Nametable),
+<Rule*4,Funcdef*3,Nametable3> := optimize-per-function(Rule*2,Funcdef*2,Nametable2)
 ===>
 optimize-per-function(Rule; Rule*, Funcdef*, Nametable) = <
 Rule*3; Rule*4,Funcdef*3,Nametable3>
@@ -28,7 +28,7 @@ Rule*3; Rule*4,Funcdef*3,Nametable3>
 optimize-per-function(,Funcdef*,Nametable) = <,Funcdef*,Nametable>
 
 [of]
-optimize-recursive-list-function(Rule*,Funcdef*,Nametable) = RFN
+RFN := optimize-recursive-list-function(Rule*,Funcdef*,Nametable)
 ===>
 optimize-function(Rule*,Funcdef*,Nametable) = RFN
 
