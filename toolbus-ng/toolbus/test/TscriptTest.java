@@ -86,5 +86,9 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("If3"));
     assertTrue(runTest("If4"));
   }
+  
+  public void testIter(){
+    assertTrue(runTest("Iter0"));
+  }
 
 }
