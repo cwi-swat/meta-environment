@@ -1,32 +1,41 @@
-How to use the new ASF2C compiler.
+                         $Id$
 
-Add to your paths:
-/home/gipe/petr/bin
-/home/gipe/petr/lib
+Using ASC -- the latest and greatest ASF2C compiler.
 
-Create in the directory in which you start the new meta environment a
-file ".msm-paths". This file should contain paths to all directories
-containing the AsFix files of your specification.
-E.g.:
+First, make sure your PATH contains:
+  /home/gipe/petr/bin
+  /home/gipe/petr/lib
+
+Create a file "meta.conf" in the directory where you start the new meta environment.  This file should contain paths to all directories
+containing the AsFix files of your specification.  E.g.:
 /home/markvdb/AsFix2C/muASF-lists/
 /home/markvdb/AsFix2C/muASF-lists/trans/
 ...
 
-Initialize the variable COMPILER_OUTPUT to the directory to which the
-C files must be written:
-setenv COMPILER_OUTPUT /home/markvdb/AsFix2C/muASF-lists/asfixfiles1
+Set the variable COMPILER_OUTPUT to the directory to which you want
+the output (i.e. the C files and their companions) to be written, e.g.:
+  % setenv COMPILER_OUTPUT $HOME/AsFix2C/muASF-lists/compiled	(csh-ish)
+or
+  $ COMPILER_OUTPUT=$HOME/AsFix2C/muASF-lists/compiled
+  $ export COMPILER_OUTPUT					(sh-ish)
 
-Start the new Meta-Environment by "meta [-TB_PORT xxxx]"
 
-Read the specification by selecting "Add module" under "Specification".
-When the status is "idle" again, select the top module "Top" of the
-specification, click with the right mouse button and select in the
-pull down menu the entry "Compile module". After some time the status
-is idle again and a bunch of C files is generated in the directory
-"COMPILER_OUTPUT".
+Start the new Meta-Environment:
+  $ meta [-TB_PORT nnnn]
 
-By "gmake -f Makefile-Top" all C files of the specification are compiled
-and a executable "Top" is generated.
+Open the specification ("Open", in the "File" menu). When the status is
+"idle" again, select the top module of your specification; you can do so
+either in the graph or in the displayed list of modules.  Now choose
+"Compile module"; after some time the system returns to idleness again,
+at which point you'll find a bunch of freshly generated  C files in the directory you chose for "COMPILER_OUTPUT".
 
-If there are any problems contact Mark van den Brand
-(Mark.van.den.Brand@cwi.nl).
+If you go to that directory:
+  $ cd $COMPILER_OUTPUT
+you can build the executable using the GNU make utility:
+  $ gmake
+Note that GNU make may go by other names on your systems, such as
+"make", or "gnumake".  The executable that is built is carries the
+name of the module you chose to compile.
+
+In case of problems, don't hesitate tocontact Mark van den Brand
+<mailto:Mark.van.den.Brand@cwi.nl>.
