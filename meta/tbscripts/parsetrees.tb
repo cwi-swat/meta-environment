@@ -41,6 +41,7 @@ in
   create(Retrieve-eqs(Eval), Tid?).
   create(Open-modules(Eval),Tid?).
   create(Rewrite(Eval), Tid?).
+  create(Evaluator(Eval), Tid?).
   create(Compiler(Com), Tid?).
   create(PGen(Pgen), Tid?).
   create(AddEqSyn(Addsyn), Tid?).

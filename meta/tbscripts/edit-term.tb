@@ -44,17 +44,16 @@ in
       rec-msg(no-table).
       snd-note(ui-status(endstat(Id))).
       snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
-      snd-msg(generate-parsetable(id(Name2))).
+      snd-msg(generate-parsetable(Mod)).
       rec-msg(parsetable(Table?)).
-      snd-msg(add-table-to-db(id(Name2),Table)).
+      snd-msg(add-table-to-db(Mod,Table)).
       rec-msg(done).
       snd-note(ui-status(endstat(Id)))
     ).
     snd-note(ui-status(stat(Id,"Parsing Term ..."))).
     snd-msg(open-language(Mod,Table)).
     snd-msg(Id,parse-string(Mod,"",Text)).
-    (( rec-msg(Id,parse-result(parsetree(T1?,I?))).
-       snd-note(ui-status(endstat(Id))).
+    (( rec-msg(Id,parse-result(parsetree(T1?,I?))). 
        if equal(I,0) then
         snd-msg(Id,a2toa1(T1)).
         rec-msg(Id,converted(T2?)).
@@ -62,15 +61,18 @@ in
        else
         printf("Parse of %t returned %d ambiguities",Mod,I).
         printf("Term is: %t\n",T1)
-       fi
+       fi.
+       snd-note(ui-status(endstat(Id)))
      )
      +
      ( rec-msg(Id, parse-result(eof-error)). 
-       printf("EOF unexpected while parsing %t\n",Mod)
+       printf("EOF unexpected while parsing %t\n",Mod).
+       snd-note(ui-status(endstat(Id)))
      )
      +
      ( rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
-       printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co)
+       printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
+       snd-note(ui-status(endstat(Id)))
      ))
     +
     rec-msg(error-opening(Str?)).

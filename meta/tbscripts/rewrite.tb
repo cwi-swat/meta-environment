@@ -7,34 +7,17 @@ Id: term,
 Tid:int,
 NF  : term,
 Mod: term,
-Term: term,
-TE: text-edit,
-Clst: list, Flst: list, Tslst: list,
-Src: str
+Term: term 
 in
   Id := process-id.
   (
     rec-msg(rewrite(Mod?,Term?)).
     snd-msg(retrieve-eqs(Mod)).
     rec-msg(finished-retrieval).
+    snd-note(ui-status(stat(Id,"Rewriting ..."))).
     snd-eval(Eval, interpret(Mod,Term)).
-    rec-value(Eval,result(NF?))
+    rec-value(Eval,result(NF?)).
+    snd-note(ui-status(endstat(Id)))
   ) * 
   delta
-endlet
-
-/*  snd-note(ui-status(stat(Id,"Rewriting"))).
-  snd-msg(eqdb,exists(Mod)).
-  ( rec-msg(rewr,exists(Tmp?))
-    +
-    rec-msg(rewr,notexists(Tmp?)).
-    create(Retrieve-eqs(Mod), Retr?).
-    rec-msg(rewr,finished-retrieval)
-  ).
-  snd-msg(eqdb,rewrite(Mod,T)).
-  rec-msg(rewr,done(Rt?)).
-*//*  snd-msg(text,view-mod(Rt)). */
-/*  snd-msg(se,nf(Rt)).
-  snd-note(ui-status(endstat(Id)))
-endlet
-*/
+endlet 

@@ -8,17 +8,25 @@ Mod: term,
 Mods: list,
 Eqs: list
 in
-  Id := process-id. (
+  Id := process-id.
+  (
     rec-msg(retrieve-eqs(Mod?)).
-    snd-note(ui-status(stat(Id,"Retrieving equations"))).
-    snd-msg(get-all-imported-modules(Mod)).
-    rec-msg(all-imported-modules(Mods?)).
-    snd-msg(get-all-equations(Mods)).
-    rec-msg(all-equations(Eqs?)).
-    snd-eval(Eval,add-equations(Mod,Eqs)).
-    rec-value(Eval,equ-added(Mod)).
-    snd-msg(finished-retrieval).
-    snd-note(ui-status(endstat(Id)))
+    snd-msg(eqs-available(Mod)).
+    (
+      rec-msg(eqs-not-available).
+      snd-note(ui-status(stat(Id,"Retrieving equations"))).
+      snd-msg(get-all-imported-modules(Mod)).
+      rec-msg(all-imported-modules(Mods?)).
+      snd-msg(get-all-equations(Mods)).
+      rec-msg(all-equations(Eqs?)).
+      snd-eval(Eval,add-equations(Mod,Eqs)).
+      rec-value(Eval,equ-added(Mod)). 
+      snd-note(ui-status(endstat(Id))).
+      snd-msg(finished-retrieval)
+    +
+      rec-msg(eqs-available).
+      snd-msg(finished-retrieval)
+    )
   ) *
   delta
 endlet

@@ -5,8 +5,10 @@ process Open-modules(Eval: evaluator) is
 let
   Id   : term,
   Name : term,
+  Name2 : term,
   Str  : str,
   Path : str,
+  Table : str,
   FT   : str,
   T    : term,
   M1s  : list,
@@ -35,9 +37,9 @@ in
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(Id, open-file(Name)). ( 
-              rec-msg(Id, opened-file(asfix,Name,T?,Path?)).
+              rec-msg(Id, opened-file(asfix,Name2?,T?,Path?)).
              /* Tell UI we added module Name */
-              snd-msg(ui,open-module(Name)).
+              snd-msg(ui,open-module(Name2)).
              /* Tell mdb we add module Name containing term T */
               snd-msg(add-module-to-db(T)).
              /* mdb returns the imports section of Name as well as the
@@ -46,15 +48,32 @@ in
              /* Add those modules to the list */
               Ms := join(Ms,M1s)
               +
-              rec-msg(Id, opened-file(baf,Name,T?,Path?)).
-              snd-msg(ui,open-module(Name)).
+              rec-msg(Id, opened-file(baf,Name2?,T?,Path?)).
+              snd-msg(ui,open-module(Name2)).
               snd-msg(add-sdf2-module-to-db(Path,T)).
               rec-msg(need-modules(M1s?)).
-              Ms := join(Ms,M1s)
+              Ms := join(Ms,M1s).
+              snd-msg(Id, read-parse-table(Name)).
+              ( 
+                rec-msg(Id, table-on-disk(Table?)).
+                snd-msg(add-table-to-db(Name,Table)).
+                rec-msg(done)
               +
-              rec-msg(Id, opened-file(raw,Name,FT?,Path?)).
-              snd-msg(ui,open-module(Name)).
-              snd-msg(open-language("Sdf2","/home/markvdb/NEW-META/lib/Sdf2.baf")).
+                rec-msg(Id, no-table-on-disk)
+              ).
+              snd-msg(Id,open-eqs2-asfix-file(Name)).
+              (
+                rec-msg(Id?,opened-file(baf,Name2?,T?,Path?)).
+                snd-msg(add-eqs-to-db(Name2,T)).
+                rec-msg(done)
+              +
+                rec-msg(Id?,error-opening(Name2?))
+              )
+              +
+              rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)).
+              snd-msg(ui,open-module(Name2)).
+              snd-msg(open-language("Sdf2",
+                                    "/home/markvdb/NEW-META/lib/Sdf2.baf")).
               snd-msg(Id,parse-string("Sdf2","",FT)).
               ((
                 rec-msg(Id,parse-result(parsetree(T?,I?))).

@@ -3,13 +3,13 @@ let
 Name      : term,
 NewSyntax : term,
 Syntax    : term
-in
-( rec-msg(add-eqs-syntax(Name?)).
-  snd-msg(retrieve-syntax(Name)).
-  rec-msg(total-syntax(Syntax?)).
-  snd-eval(AES,reduce(Syntax)).
-  rec-value(AES,reduct(NewSyntax?)). 
-  snd-msg(updated-syntax(NewSyntax))
-)*
-delta
+in  
+  ( rec-msg(add-eqs-syntax(Name?)).
+    snd-msg(retrieve-syntax(Name)).
+    rec-msg(total-syntax(Syntax?)).
+    snd-eval(AES,reduce(Syntax)).
+    rec-value(AES,reduct(NewSyntax?)). 
+    snd-msg(updated-syntax(NewSyntax))
+  )*
+  delta
 endlet

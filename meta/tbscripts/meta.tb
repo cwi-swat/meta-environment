@@ -8,6 +8,7 @@
 #include "parser.tb"
 #include "prettyprinter.tb"
 #include "rewrite.tb"
+#include "evaluator.tb"
 #include "io.tb"
 #include "parsetrees.tb"
 #include "open-modules.tb"

@@ -24,14 +24,21 @@ printf("ProcessEqs started\n").
     ( if not-equal(Modules, []) then
        Module  := first(Modules).
        Modules := next(Modules).
-       snd-msg(Id,open-eqs2-file(Module)).
+       snd-msg(Id,open-eqs2-text-file(Module)).
        ( rec-msg(Id, opened-file(raw,id(Mname?),FT?,Path?)).
-         snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
-         snd-msg(generate-parsetable(id(Mname))).
-         rec-msg(parsetable(Table?)).
-         snd-msg(add-table-to-db(id(Mname),Table)).
-         rec-msg(done).
-         snd-note(ui-status(endstat(Id))).
+         snd-msg(get-table-from-db(Module)).
+         ( rec-msg(table(Table?)).
+           snd-note(ui-status(endstat(Id)))
+         +
+           rec-msg(no-table).
+           snd-note(ui-status(endstat(Id))).
+           snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
+           snd-msg(generate-parsetable(id(Mname))).
+           rec-msg(parsetable(Table?)).
+           snd-msg(add-table-to-db(id(Mname),Table)).
+           rec-msg(done).
+           snd-note(ui-status(endstat(Id)))
+         ).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
          snd-msg(open-language(Mname,Table)).
          snd-msg(Id,parse-string(Mname,"",FT)).
@@ -60,12 +67,11 @@ printf("ProcessEqs started\n").
             printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
             snd-msg(add-eqs-to-db(id(Mname),error)).
             rec-msg(done) 
-         ))
+         )) 
        +
-       ( rec-msg(Id, error-opening(Mod?)).
-         snd-msg(add-eqs-to-db(Module,no-equations)).
-         rec-msg(done)
-       )
+       rec-msg(Id, error-opening(Mod?)).
+       snd-msg(add-eqs-to-db(Module,no-equations)).
+       rec-msg(done)
       )
       fi
     )*
