@@ -76,7 +76,7 @@ store-lexical-value(Location, lex(sort(qliteral("""Char*"""))), Tree*, RSTORE) =
 RSTORE3
 when
   Tree := appl(list(sort("dummy")),[Tree*]),
-  String := unparse-to-string(lower-from-tree(Tree)),
+  String := tree-to-string(Tree),
   RSTORE2 := add-tuple(LEXICALS, <Location, String>,RSTORE),
   RSTORE3 := add-tuple(rvar("""Char*"_""V""A""L""U""E""S""""),
                <Location,String>,RSTORE2)

@@ -2,7 +2,7 @@ module BasicFactExtraction[X]
 
 imports Rstore
 imports utilities/Lifting[X]
-imports utilities/Parsing[X]
+imports TreeYield
 
 exports
 
