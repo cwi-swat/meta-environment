@@ -13,12 +13,14 @@ Decl*2 ++
 Decl*3
 
  
-[fds2cf-1'1] funcdefs2cfuncs() =
+[fds2cf-1'1] 
+funcdefs2cfuncs() =
 
-[fds2cf-1'2] funcdef2cfuncs(Funcdef) = Decl,
-               funcdefs2cfuncs(Funcdef*) = Decl*
-               =================================
-               funcdefs2cfuncs(Funcdef;Funcdef*) = Decl* ++ Decl
+[fds2cf-1'2] 
+funcdef2cfuncs(Funcdef) = Decl,
+funcdefs2cfuncs(Funcdef*) = Decl*
+===>
+funcdefs2cfuncs(Funcdef;Funcdef*) = Decl* ++ Decl
 
 [fd2c-1'1] sigargs2cstats(funid(Char*),) = Stat*
              =====================================

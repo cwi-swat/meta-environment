@@ -60,16 +60,14 @@ equations
 
   [mct-1'1] make-c-temp(natcon(Char*)) = tmp[integer-constant(Char*)]
 
-  [mci-1'1] identifier("e" Char*) = CConstant
-            %%make-c-name(funid("e" Char*)) = CConstant
-            =========================================
-            make-call-id(funid("e" Char*)) = (*CConstant)
+%% not needed anymore
+%%  [mci-1'1] identifier("e" Char*) = CConstant
+%%            =========================================
+%%            make-call-id(funid("e" Char*)) = (*CConstant)
 
-  %% [default-mci-1'3] make-call-id(Funid) = make-c-name(Funid)
+  [mci-1'1] make-call-id(funid(""""{" Char* "}"""")) = identifier(Char*)
 
-  [default-mci-debug] make-call-id(funid(Char*)) = identifier(Char*)
-
-
+   [mci-debug] make-call-id(funid(Char*)) = identifier(Char*)
 
   [min-1'1] make-id-name(identifier("_")) = funid("-")
 

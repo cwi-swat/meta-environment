@@ -164,43 +164,51 @@ funcdefs2table(Funcdef;Funcdef+,Nametable1) = Nametable3
 [f2t-2'1]
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1), 
-Funid2 = construct-funid(Aint0),
-nt-add(funid(Char*),Funid2,Nametable2) = Nametable3
+Funid2 = construct-funid(Funid1, Aint0),
+nt-add(Funid1,Funid2,Nametable2) = Nametable3
 ===>
-funcdef2table(funid(Char*)(Sigarg+),Nametable1) = Nametable3
+funcdef2table(Funid1(Sigarg+),Nametable1) = Nametable3
 
 [f2t-2'2]
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
 Attrs = {Term+},
-Funid2 = construct-funid(Aint0, Term+),
-nt-add(funid(Char*),Funid2,Term+,Nametable2) = Nametable3
+Funid2 = construct-funid(Funid1, Aint0, Term+),
+nt-add(Funid1,Funid2,Term+,Nametable2) = Nametable3
 ===>
-funcdef2table(funid(Char*)(Sigarg+) Attrs,Nametable1) = Nametable3
+funcdef2table(Funid1(Sigarg+) Attrs,Nametable1) = Nametable3
 
 [f2t-2'3]
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
-Funid2 = construct-funid(Aint0),
-nt-add(funid(Char*),Funid2,Nametable2) = Nametable3
+Funid2 = construct-funid(Funid1,Aint0),
+nt-add(Funid1,Funid2,Nametable2) = Nametable3
 ===>
-funcdef2table(funid(Char*),Nametable1) = Nametable3
+funcdef2table(Funid1,Nametable1) = Nametable3
 
 [f2t-2'4]
 Nametable1 = (Namepair*, Funid, Aint0, Aint1),
 Nametable2 = (Namepair*, Funid, succ(Aint0), Aint1),
 Attrs = {Term+},
-Funid2 = construct-funid(Aint0,Term+),
-nt-add(funid(Char*),Funid2,Term+,Nametable2) = Nametable3
+Funid2 = construct-funid(Funid1,Aint0,Term+),
+nt-add(Funid1,Funid2,Term+,Nametable2) = Nametable3
 ===>
-funcdef2table(funid(Char*) Attrs,Nametable1) = Nametable3
+funcdef2table(Funid1 Attrs,Nametable1) = Nametable3
 
 [cf-0]
-construct-funid(natcon(Char+)) = funid("l""f""_" Char+)
+construct-funid(funid(""""l""i""s""t""(" Char+2 ")""""),natcon(Char+)) = 
+funid(""""{" "l""f""_""l""i""s""t""_" Char+ "}"""")
 
 [cf-1]
-construct-funid(natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
+construct-funid(funid(""""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) = 
+funid("l""f""_" Char+)
+
+[cf-2]
+construct-funid(funid(""""p""r""o""d""(" Char+3 ")""""),
+                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
 funid("l""f""_" Char+2 "_" Char+)
 
 [default-cf-2]
-construct-funid(Aint0, Term+) = construct-funid(Aint0)
+construct-funid(Funid,Aint0, Term+) = 
+construct-funid(Funid,Aint0)
+

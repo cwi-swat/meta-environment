@@ -38,8 +38,8 @@ hiddens
   context-free syntax
     funcdefs2table({FuncDef ";"}+,NameTable)  -> NameTable
     funcdef2table(FuncDef,NameTable)          -> NameTable
-    construct-funid(IntCon) -> FunId
-    construct-funid(IntCon,TermList) -> FunId
+    construct-funid(FunId, IntCon) -> FunId
+    construct-funid(FunId, IntCon,TermList) -> FunId
 
 hiddens
 
