@@ -1,0 +1,26 @@
+spec
+  Path =
+    Non_Empty_List [ sort Name ]
+    with
+    NeList[Elem]
+           |-> Path,
+    __ __
+           |-> __/__ ,
+    first
+           |-> the_first_name_of__ ,
+    rest
+           |-> the_last_part_of__
+then
+  ops
+    the_first_part_of__ : Path ->? Path;
+    the_last_name_of__ : Path -> Name
+  vars
+    n : Name; p : Path
+  axioms
+    def(the_first_part_of p) <=> not  (p e Name);
+    not (p e Name) =>
+        the_first_part_of (n/p) =e= n/the_first_part_of p;
+    p e Name => the_first_part_of (n/p) =e= n;
+    the_last_name_of n = n;
+    the_last_name_of (n/p) = the_last_name_of p
+end
