@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.ModuleSelectionListener;
 import metastudio.data.Module;
@@ -27,7 +27,7 @@ public class ImportGraphPanel
 
     public ImportGraphPanel(
         MetaGraphFactory factory,
-        UserInterfaceBridge bridge,
+        MultiBridge bridge,
         final ModuleTreeModel moduleManager) {
         super(factory, bridge, "import");
         this.manager = moduleManager;

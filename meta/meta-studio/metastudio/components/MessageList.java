@@ -8,7 +8,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -20,7 +20,7 @@ public class MessageList extends ToolComponent implements ListSelectionListener 
 	private String moduleName;
 	private ATermList data;
 
-	public MessageList(PureFactory factory, UserInterfaceBridge bridge) {
+	public MessageList(PureFactory factory, MultiBridge bridge) {
         super(factory, bridge);
         
 		list = new JList();

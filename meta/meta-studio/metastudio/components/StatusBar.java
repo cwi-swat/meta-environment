@@ -10,10 +10,9 @@ import java.util.ListIterator;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
-
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.ATermList;
@@ -24,10 +23,7 @@ public class StatusBar extends ToolComponent {
     private List statusMessages;
     private HistoryPanel history;
 
-    public StatusBar(
-        ATermFactory factory,
-        UserInterfaceBridge bridge,
-        HistoryPanel history) {
+    public StatusBar(ATermFactory factory, MultiBridge bridge, HistoryPanel history) {
         super(factory, bridge);
 
         this.history = history;

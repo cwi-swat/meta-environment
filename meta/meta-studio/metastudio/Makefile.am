@@ -17,6 +17,7 @@ jtif:
 
 java_JAVA = \
 	MetaStudio.java \
+	MultiBridge.java \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java

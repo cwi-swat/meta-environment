@@ -11,7 +11,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleSelectionModel;
 import metastudio.data.ModuleTreeModel;
@@ -23,7 +23,7 @@ public class ModuleTree extends ToolComponent {
 
     public ModuleTree(
         ATermFactory factory,
-        UserInterfaceBridge bridge,
+        MultiBridge bridge,
         final ModuleTreeModel manager) {
         super(factory, bridge);
 

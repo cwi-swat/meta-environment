@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 
@@ -41,17 +39,16 @@ import metastudio.components.graphs.ZoomableGraphPanel;
 import metastudio.data.ModuleTreeModel;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
-import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 public class MetaStudio
     extends JFrame
-    implements UserInterfaceTif, Runnable {
+    implements Runnable {
 
     private static PureFactory factory;
     private static MetaGraphFactory metaGraphFactory;
 
-    private UserInterfaceBridge bridge;
+    private MultiBridge bridge;
 
     private ToolBar toolBar;
 
@@ -70,8 +67,6 @@ public class MetaStudio
 
     private ModuleTreeModel moduleManager;
 
-    private LinkedList toolComponents;
-
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
         studio.bridge.run();
@@ -79,13 +74,13 @@ public class MetaStudio
 
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar(factory, bridge, this);
-        addToolComponent(menuBar);
+
         return menuBar;
     }
 
     private ToolBar createToolBar() {
         ToolBar toolBar = new ToolBar(factory, bridge);
-        addToolComponent(toolBar);
+        bridge.addToolComponent(toolBar);
         return toolBar;
     }
 
@@ -93,8 +88,6 @@ public class MetaStudio
         graphPanels = new HashMap();
 
         factory = new PureFactory();
-
-        toolComponents = new LinkedList();
 
         metaGraphFactory = new MetaGraphFactory(factory);
         moduleManager = new ModuleTreeModel();
@@ -113,9 +106,9 @@ public class MetaStudio
     }
 
     private void createPopupHandlers() {
-        addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
-        addToolComponent(new FileDialog(factory, bridge));
-        addToolComponent(new ModulePopupMenu(factory, bridge));
+        bridge.addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
+        bridge.addToolComponent(new FileDialog(factory, bridge));
+        bridge.addToolComponent(new ModulePopupMenu(factory, bridge));
     }
 
     private void initializeProperties() throws IOException {
@@ -159,11 +152,11 @@ public class MetaStudio
 
         if (historyPanel == null) {
             historyPanel = new HistoryPanel(factory, bridge);
-            addToolComponent(historyPanel);
+            bridge.addToolComponent(historyPanel);
         }
 
         StatusBar bar = new StatusBar(factory, bridge, historyPanel);
-        addToolComponent(bar);
+        bridge.addToolComponent(bar);
         container.add(bar, BorderLayout.SOUTH);
 
         return container;
@@ -235,16 +228,16 @@ public class MetaStudio
 
         if (historyPanel == null) {
             historyPanel = new HistoryPanel(factory, bridge);
-            addToolComponent(historyPanel);
+            bridge.addToolComponent(historyPanel);
         }
         messageTabs.insertTab("history", null, historyPanel, "Execution history", 0);
 
         messageList = new MessageList(factory, bridge);
-        getToolComponents().add(messageList);
+        bridge.addToolComponent(messageList);
         messageTabs.insertTab("messages", null, messageList, "Message list", 1);
 
         feedbackList = new FeedbackList(factory, bridge);
-        getToolComponents().add(feedbackList);
+        bridge.addToolComponent(feedbackList);
         messageTabs.insertTab("errors", null, feedbackList, "Clickable messages", 2);
 
         return messageTabs;
@@ -290,7 +283,7 @@ public class MetaStudio
     private void createToolBusBridge(String[] args)
         throws UnknownHostException, IOException {
 
-        bridge = new UserInterfaceBridge(factory, this);
+        bridge = new MultiBridge(factory);
         bridge.init(args);
         bridge.connect();
         bridge.setLockObject(getTreeLock());
@@ -298,207 +291,15 @@ public class MetaStudio
 
     private void addGraphPanel(ZoomableGraphPanel panel, String id) {
         graphPanels.put(id, panel);
-        addToolComponent(panel);
+        bridge.addToolComponent(panel);
     }
 
     public void run() {
+
     }
 
     public void initializeUi(String name) {
         setTitle(name);
         Preferences.setString("metastudio.name", name);
-    }
-
-    public void newGraph(ATerm importRelations) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.newGraph(importRelations);
-        }
-    }
-
-
-    public void displayGraph(String id, ATerm graphTerm) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.displayGraph(id, graphTerm);
-        }
-    }
-
-    public void graphLayouted(String id, ATerm graphTerm) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.graphLayouted(id, graphTerm);
-        }
-    }
-    
-    public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.buttonsFound(buttonType, moduleName, buttons);
-        }
-    }
-
-    
-    public void addStatus(ATerm id, String message) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatus(id, message);
-        }
-    }
-
-    public void addStatusf(ATerm id, String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatusf(id, format, args);
-        }
-    }
-
-    public void endStatus(ATerm id) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.endStatus(id);
-        }
-    }
-
-    public void displayFeedbackSummary(ATerm t0) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.displayFeedbackSummary(t0);
-        }
-    }
-
-    public void updateList(String moduleName, String actions) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.updateList(moduleName, actions);
-        }
-    }
-
-    public void errorf(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.errorf(format, args);
-        }
-    }
-
-    public void error(String message) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.error(message);
-        }
-    }
-
-    public void messagef(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.messagef(format, args);
-        }
-    }
-
-    public void message(String message) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.message(message);
-        }
-    }
-
-    public void warningf(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.warningf(format, args);
-        }
-    }
-
-    public void warning(String message) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.warning(message);
-        }
-    }
-
-    public void clearHistory() {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.clearHistory();
-        }
-    }
-
-    public ATerm showQuestionDialog(String question) {
-        ATerm result = null;
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            result = tif.showQuestionDialog(question);
-
-            if (result != null) {
-                return factory.make("snd-value(<term>)", result);
-            }
-        }
-
-        throw new UnsupportedOperationException("not implemented");
-    }
-
-    public ATerm showFileDialog(String label, String loc, String extension) {
-        ATerm result = null;
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            result = tif.showFileDialog(label, loc, extension);
-
-            if (result != null) {
-                return factory.make("snd-value(<term>)", result);
-            }
-        }
-
-        throw new UnsupportedOperationException("not implemented");
-    }
-
-    public void recAckEvent(ATerm event) {
-    }
-
-    public void recTerminate(ATerm t0) {
-        System.exit(0);
-    }
-
-    private LinkedList getToolComponents() {
-        return toolComponents;
-    }
-
-    private void addToolComponent(UserInterfaceTif tool) {
-        getToolComponents().add(new UserInterfaceBridge(factory, tool));
     }
 }

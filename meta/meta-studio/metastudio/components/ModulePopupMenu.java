@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -30,7 +30,7 @@ public class ModulePopupMenu extends ToolComponent {
     private static int _x;
     private static int _y;
 
-    public ModulePopupMenu(ATermFactory factory, UserInterfaceBridge bridge) {
+    public ModulePopupMenu(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
         ACTION_MODULE_POPUP = factory.parse("module-popup");

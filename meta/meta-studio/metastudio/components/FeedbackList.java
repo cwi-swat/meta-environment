@@ -10,12 +10,10 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import metastudio.UserInterfaceBridge;
-import metastudio.data.*;
-
+import metastudio.MultiBridge;
+import metastudio.data.ListModel;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
-
 import errorapi.Factory;
 import errorapi.types.Feedback;
 import errorapi.types.Summary;
@@ -24,7 +22,7 @@ public class FeedbackList extends ToolComponent implements MouseListener {
     private JList list;
     private List data;
 
-    public FeedbackList(aterm.ATermFactory factory, UserInterfaceBridge bridge) {
+    public FeedbackList(aterm.ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
         this.data = new LinkedList();

@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -20,7 +20,7 @@ public class ToolBar extends ToolComponent {
     private JToolBar toolBar;
     private static ATerm ACTION_TOOLBAR;
 
-    public ToolBar(ATermFactory factory, UserInterfaceBridge bridge) {
+    public ToolBar(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
         
         ACTION_TOOLBAR = factory.parse("studio-toolbar");

@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.components.ToolComponent;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
@@ -30,7 +30,7 @@ public class ZoomableGraphPanel extends ToolComponent {
 
     public ZoomableGraphPanel(
         MetaGraphFactory factory,
-        UserInterfaceBridge bridge,
+        MultiBridge bridge,
         String id) {
         super(factory.getPureFactory(), bridge);
         this.factory = factory;

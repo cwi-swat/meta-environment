@@ -4,14 +4,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
     private GraphPanel panel;
     
-    public ParseTreePanel(MetaGraphFactory factory, final UserInterfaceBridge bridge) {
+    public ParseTreePanel(MetaGraphFactory factory, final MultiBridge bridge) {
         super(factory, bridge,"parsetree");
         this.panel = getGraphPanel();
         

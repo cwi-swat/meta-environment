@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.UserInterfaceTif;
 
 import aterm.ATerm;
@@ -22,11 +22,12 @@ import aterm.ATermFactory;
  */
 public abstract class ToolComponent extends JPanel implements UserInterfaceTif {
     private ATermFactory factory;
-    private UserInterfaceBridge bridge;
+    private MultiBridge bridge;
     
-    public ToolComponent(ATermFactory factory, UserInterfaceBridge bridge) {
+    public ToolComponent(ATermFactory factory, MultiBridge bridge) {
         this.factory = factory;
         this.bridge = bridge;
+        bridge.addToolComponent(this);
         setLayout(new BorderLayout());
     }
     
@@ -38,7 +39,7 @@ public abstract class ToolComponent extends JPanel implements UserInterfaceTif {
         return factory;
     }
     
-    protected UserInterfaceBridge getBridge() {
+    protected MultiBridge getBridge() {
         return bridge;
     }
 

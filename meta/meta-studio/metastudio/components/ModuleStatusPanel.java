@@ -15,7 +15,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import aterm.ATermFactory;
@@ -38,7 +38,7 @@ public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionL
 
     public ModuleStatusPanel(
         ATermFactory factory,
-        UserInterfaceBridge bridge,
+        MultiBridge bridge,
         final ModuleTreeModel moduleManager) {
         super(factory, bridge);
 

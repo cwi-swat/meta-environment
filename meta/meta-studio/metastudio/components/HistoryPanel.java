@@ -13,7 +13,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import metastudio.utils.Preferences;
 import metastudio.utils.StringFormatter;
 import aterm.ATerm;
@@ -30,7 +30,7 @@ public class HistoryPanel extends ToolComponent {
     public Style styleWarning;
     public Style styleMessage;
     
-    public HistoryPanel(ATermFactory factory, UserInterfaceBridge bridge) {
+    public HistoryPanel(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
         
         createHistoryDocument();

@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -25,10 +25,11 @@ public class MenuBar extends ToolComponent {
     private JMenuBar bar;
     private Map map;
 
-    public MenuBar(ATermFactory factory, UserInterfaceBridge bridge, JFrame parent) {
+    public MenuBar(ATermFactory factory, MultiBridge bridge, JFrame parent) {
         super(factory, bridge);
         bar = new JMenuBar();
         parent.setJMenuBar(bar);
+
         
         ACTION_MENUBAR = factory.parse("studio-menubar");
 

@@ -3,14 +3,14 @@ package metastudio.components;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import metastudio.UserInterfaceBridge;
+import metastudio.MultiBridge;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
 public class QuestionDialog extends ToolComponent {
     private JComponent parent;
     
-    public QuestionDialog(ATermFactory factory, UserInterfaceBridge bridge, JComponent parent) {
+    public QuestionDialog(ATermFactory factory, MultiBridge bridge, JComponent parent) {
         super(factory, bridge);
         this.parent = parent;
     }
