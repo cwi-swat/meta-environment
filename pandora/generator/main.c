@@ -113,8 +113,8 @@ ATerm pretty_print(int cid, ATerm input)
     return ATmake("snd-value(pretty-printed(<term>))", value);
   }
   else {
-    ERR_Summary summary = ERR_makeSummaryFeedback("pandora","all", 
-						  ERR_makeFeedbackListEmpty());
+    ERR_Summary summary = ERR_makeSummarySummary("pandora","all", 
+						  ERR_makeErrorListEmpty());
     return ATmake("snd-value(pretty-print-error(<term>))", summary);
   }
 }
