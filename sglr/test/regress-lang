@@ -97,7 +97,7 @@ do
         -v)
             verbose=1; shift;;
         -U)
-            update =1; shift;;
+            update=1; shift;;
         -V)
             Version; shift;;
         --)
