@@ -1,12 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <MEPT-utils.h>
-#include <aterm2.h>
+#include "common.h"
+
+/*{{{  PT_Tree read_term_from_file(ATerm builtin, PT_Tree input) */
 
 PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
 {
-  PT_Tree file_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
+  PT_Tree file_arg = CO_getFunctionArgument(input, 0);
   char *filestr = NULL;
   ATerm term;
   PT_ParseTree pt = NULL;
@@ -44,10 +42,13 @@ PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
   return result;
 }
 
+/*}}}  */
+/*{{{  PT_Tree write_term_to_file(ATerm builtin, PT_Tree input) */
+
 PT_Tree write_term_to_file(ATerm builtin, PT_Tree input)
 {
-  PT_Tree file_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
-  PT_Tree tree_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+  PT_Tree file_arg = CO_getFunctionArgument(input, 0);
+  PT_Tree tree_arg = CO_getFunctionArgument(input, 1);
   PT_ParseTree pt = PT_makeValidParseTreeFromTree(tree_arg);
   char *filestr = NULL;
 
@@ -60,3 +61,5 @@ PT_Tree write_term_to_file(ATerm builtin, PT_Tree input)
 
   return tree_arg;
 }
+
+/*}}}  */

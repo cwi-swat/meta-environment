@@ -5,18 +5,20 @@ BUILTIN_NAMES=\
 	      read-term-from-file write-term-to-file\
 	      shell \
 	      hashtable-lookup hashtable-store hashtable-delete \
-	      strategy-some strategy-all strategy-one
+	      strategy-some strategy-all strategy-one \
+              toolbus-event
 
-BUILTIN_SOURCES=\
+BUILTIN_SOURCES=common.c \
                 annos.c \
 		fileio.c \
 		hashtable.c \
 		normalize.c \
 		shell.c \
-		traversal.c
+		traversal.c \
+                toolbus.c
 
 noinst_LIBRARIES=libasf-builtins.a
-noinst_HEADERS=asf-builtins.h
+noinst_HEADERS=asf-builtins.h common.h
 libasf_builtins_a_SOURCES=forward.c ${BUILTIN_SOURCES}
 
 # To check whether we implemented all the builtins mentioned we
@@ -25,7 +27,8 @@ libasf_builtins_a_SOURCES=forward.c ${BUILTIN_SOURCES}
 noinst_PROGRAMS=link-test
 link_test_SOURCES=$(BUILTIN_SOURCES) link-test.c
 link_test_LDADD=-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
-		-L${ATERM}/lib -lATerm
+		-L${ATERM}/lib -lATerm \
+                -L${TOOLBUSLIB} -lATB 
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
