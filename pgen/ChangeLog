@@ -18,6 +18,11 @@
 
 $Id$
 
+2000/4/25 (markvdb@cwi.nl)
+   * upgraded to version 0.4
+   * Serious memory leak fixed: tables containing gotosets were not
+     destroyed.
+
 2000/4/13 (mdejonge@cwi.nl)
    * no longer perform normalize-normalize-check
 
