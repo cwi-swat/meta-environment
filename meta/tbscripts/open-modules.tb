@@ -125,12 +125,24 @@ in
       rec-msg(parse-table(Type, ParseTable?))
       . snd-msg(syntax-top-sort-hook(Type))
       . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-      . create(OpenSyntaxParseHandler(Path), Pid?)
+      /* Motivation for the get-open-syntax-parse-handler-hook
+         The choice of syntax parse handler is dependent of the type of module,
+         which needs to be parsed. */
+      . snd-msg(get-open-syntax-parse-handler-hook(Type, Path))
+      . rec-msg(get-open-syntax-parse-handler-hook-result(Pid?))
       . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
         rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
-        . SetModuleSyntaxText(ModuleId, Text)
+	.
+	if equal(Type, sdf) then
+	  SetModuleSyntaxText(ModuleId, Text)
+	else
+        /* Motivation for the set-module-syntax-text-hook
+           Which table the module text needs to be saved in is depending on the
+           type of module. */
+	  snd-msg(set-module-syntax-text-hook(Type, ModuleId, Text))	
+	fi
       +
         rec-msg(open-syntax-parse-handler-done(Pid))
       )

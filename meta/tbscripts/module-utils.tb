@@ -382,7 +382,7 @@ process RemoveImportInDB(Mod: str, Import: str) is
   snd-msg(remove-import-in-db(Mod, Import))
   . rec-msg(remove-import-done)
 
-process CheckSyntaxConsistency(ModuleName: str, Path: str) is
+process CheckSyntaxConsistency(ModuleName: str, Path: str, Type: term) is
 let
   FileName: str,
   FileText: str,
@@ -390,11 +390,9 @@ let
   DependingModules: list,
   Imports: list,
   Error: term,
-  Extension: str,
-  Type: term
+  Extension: str
 in
-  Type := quote(sdf)
-  . snd-msg(file-extension-hook(Type))
+  snd-msg(file-extension-hook(Type))
   . rec-msg(file-extension-hook-result(Extension?))
   . snd-msg(io-get-filename(Path, ModuleName, Extension))
   . rec-msg(io-filename(FileName?))
@@ -467,14 +465,21 @@ in
   )
 endlet
 
+
 process CheckModuleConsistency(ModuleName: str) is
 let
-  Path: str
+  Directory: str,
+  Extension: str,
+  Path: str,
+  Type: term
 in
   snd-msg(get-path-from-db(ModuleName))
   . rec-msg(path(Path?))
-  . CheckSyntaxConsistency(ModuleName, Path)
-  . CheckEquationConsistency(ModuleName, Path)
+  /* Motivation for the do-consistency-check-hook
+     How to do consistency check is package dependent. E.g. an ASDF module
+     should not be checked the same way as an asf+sdf module. */
+  . snd-msg(do-consistency-check-hook(ModuleName, Path))
+  . rec-msg(do-consistency-check-hook-result)
 endlet
 
 process InitializeTermStore(Name: str) is
@@ -486,14 +491,17 @@ process InitializeTermStore(Name: str) is
     tau
   fi
 
+
 process TermStoreActivation is
 let
+  Checking: bool,
   TermStoreContents: term,
   Error: term,
   ModuleNames: list,
   ModuleName: str,
   Name: str,
-  Id: int
+  Id: int,
+  Pairs: list
 in
   Id := process-id
   . snd-msg(get-termstore-name)
@@ -509,21 +517,37 @@ in
       rec-msg(io-term(TermStoreContents?))
       . snd-msg(ts-load-snapshot(TermStoreContents))
       . rec-msg(ts-snapshot-loaded)
-      . snd-msg(get-all-module-names)
-      . rec-msg(all-module-names(ModuleNames?))
-      . snd-note(ui-status(stat(Id,
-                                "Checking consistency of term-store content")))
+      /* Motivation for the termstore-consistency-check-hook
+         When loading an initial termstore as is the case in the ASDF package,
+         we might not need the consistency check. */
+      . snd-msg(termstore-consistency-check-hook)
+      . rec-msg(termstore-consistency-check-hook-result(Checking?))
       .
-      if not-equal(ModuleNames, []) then
-        ModuleName := first(ModuleNames)
-        . ModuleNames := next(ModuleNames)
-        . CheckModuleConsistency(ModuleName)
-      fi
-      *
-      if equal(ModuleNames, []) then
+      if equal(Checking, quote(true)) then
+      /* Motivation for the get-modulenames-for-consistency-checking-hook
+         It might not bee all modules, which should be included in an
+         consistency check. E.g. if an initial termstore is part of a given
+         termstore, one might not want to do consistency check of the modules
+         of the initial termstore, because, they should never change doing the
+         lifetime of a meta env. distribution. */
+	snd-msg(get-modulenames-for-consistency-checking-hook)
+	. rec-msg(get-modulenames-for-consistency-checking-hook-result(ModuleNames?))
+	. snd-note(ui-status(stat(Id,
+                                "Checking consistency of term-store content")))
+	.
+	if not-equal(ModuleNames, []) then
+	  ModuleName := first(ModuleNames)
+	  . ModuleNames := next(ModuleNames)
+	  . CheckModuleConsistency(ModuleName)
+	fi
+	*
+	if equal(ModuleNames, []) then
+	  tau
+	fi
+	. snd-note(ui-status(endstat(Id)))
+      else
         tau
       fi
-      . snd-note(ui-status(endstat(Id)))
     +
       rec-msg(io-error-reading(Error?))
     )
@@ -533,6 +557,7 @@ in
     . snd-note(ui-status(errorf("Termstore %s does not exist!", [Name])))
   )
 endlet
+
 
 process TermStoreName is
 let

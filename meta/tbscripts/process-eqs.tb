@@ -13,11 +13,18 @@ endlet
 
 process ParseEquationsText(ModuleId: str, Text: str) is
 let
+  Checking: term,
   Nonterminal: term,
   Pid: int,
   Table: term
 in
-  GetParseTable(ModuleId, eqs, true, Table?)
+  /* Motivation for the get-parse-equation-checking-hook
+     Since the asf which we generate should be valid under any circumstance
+     it is not necessary to check it. Therefor we need to be able to disable
+     the checking option to GetParseTable in ParseEquationsText. */
+  snd-msg(get-parse-equation-checking-hook)
+  . rec-msg(get-parse-equation-checking-hook-result(Checking?))
+  . GetParseTable(ModuleId, eqs, Checking, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
   . create(ParseEquationsHandler(ModuleId), Pid?)
@@ -64,8 +71,12 @@ in
     . snd-msg(equations(ModuleId, Equations))
   +
     rec-msg(ts-no-value)
-    . BuildEquationsFilename(ModuleId, Filename?)
-    . ReadFile(Filename, Text?)
+    /* Motivation for the get-asf-equations-text-hook
+       The asf generated for the asdf modules should not be saved on the
+       disk, and therefor we can not use the previous implementation.
+       We need to load the text from the termstore. */
+    . snd-msg(get-asf-equations-text-hook(ModuleId))
+    . rec-msg(get-asf-equations-text-hook-result(Text?))
     .
     if equal(Text, "") then
       snd-msg(no-equations(ModuleId))
