@@ -21,6 +21,10 @@
 # $Id$
 
 2000/7/31 ({jong,olivierp}@cwi.nl)
+   * Replaced obsolete -at-symboltable option in sglr-main.c with
+     -at-afuntable
+
+2000/7/31 ({jong,olivierp}@cwi.nl)
    * Fixed bug in in-output that caused characters after % signs to dissappear
 
 2000/7/31 (jurgenv@cwi.nl)
