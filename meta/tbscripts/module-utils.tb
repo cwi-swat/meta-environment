@@ -39,6 +39,9 @@ let
   Status : term,
   Changed : list
 in
+  if equal(Recursive,recursive) then
+    printf("Recursive closing is not yet implemented, sorry!\n")
+  fi.
   Status := success.
   CloseModuleInDB(ModuleName, Status?).
   CloseModuleInUI(ModuleName)
@@ -46,10 +49,14 @@ endlet
 
 
 process DoRevertModule(ModuleName : str) is
-  CloseModuleInDB(ModuleName).
+let
+  Status : term
+in
+  CloseModuleInDB(ModuleName, Status?).
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules).
   snd-msg(module-reverted(ModuleName))
+endlet
 
 process DoDeleteModule(ModuleName : str) is
 let
