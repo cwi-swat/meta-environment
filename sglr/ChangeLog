@@ -1,5 +1,8 @@
 $Id$
 
+2001/12/21 (jurgenv@cwi.nl)
+ * Improved ambiguity reporting of sglr's -v switch.
+
 2001/12/17 (vandenbr@loria.fr)
  * SGLR ignored the non-assoc attribute when processing the
    parse table.
