@@ -27,7 +27,6 @@ endlet
 
 process ModuleDB is
 let
-  Pid       : int,
   Path      : str,
   Table     : term,
   ModuleId  : term,
@@ -46,9 +45,6 @@ let
   DependingModules : list,
   ModuleNames : list
 in
-  create(SdfModules, Pid?) .
-  create(SdfRenaming, Pid?) .
-  create(TermStore, Pid?) .
   MDB-InitializeModuleDb() .
   MDB-InitializeFileExtensions() .
   (
