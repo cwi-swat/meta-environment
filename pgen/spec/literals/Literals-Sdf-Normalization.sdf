@@ -8,6 +8,7 @@ exports
     literals(SymbolSet)    -> Productions
     chars(Literal)         -> Symbols
     symbols({Symbol ","}*) -> Symbols
+
 hiddens
   variables
     "c"[0-9\']*         -> CHAR

@@ -153,9 +153,9 @@ equations
 %% \paragraph{Labels}
 
   [0] r[[ L : _A ]] = r[[ _A ]]
-  [0] <L : _A -LEX> = L : <_A -LEX>
-  [0] <L : _A -CF>  = L : <_A -CF>
-  [0] <L : _A -VAR> = L : <_A -VAR>
+  [0] <L : _A -LEX> = <_A -LEX>
+  [0] <L : _A -CF>  = <_A -CF>
+  [0] <L : _A -VAR> = <_A -VAR>
 
 %% \paragraph{Hiding Productions}
 
