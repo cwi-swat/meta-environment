@@ -41,7 +41,7 @@ in
       + rec-note(import-relations(irels(Pairs?))).
         snd-do(UI,add-imports(Pairs))
       + rec-msg(cannot-open-module(ModName?)).
-        snd-do(UI,open-empty-module(id(ModName))).
+        snd-do(UI,open-empty-module(ModName)).
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
       )*
       rec-msg(finished-opening-modules).
@@ -52,7 +52,7 @@ in
       snd-do(UI,open-module(Str1))
     ) + 
     ( rec-msg(cannot-open-module(ModName?)).
-      snd-do(UI,open-empty-module(id(ModName))).
+      snd-do(UI,open-empty-module(ModName)).
       snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
     ) +
     ( rec-event(UI,delete-module(Str?)).
@@ -66,18 +66,18 @@ in
       rec-msg(saved-module(Str)).
       snd-ack-event(UI,save-module(Str))
     ) +
-    ( rec-event(UI,edit-module(id(ModName?))).
+    ( rec-event(UI,edit-module(ModName?)).
       create(Edit-module(ModName),EM?).
-      snd-ack-event(UI,edit-module(id(ModName)))
+      snd-ack-event(UI,edit-module(ModName))
     ) +
-    ( rec-event(UI,edit-eqs-module(id(ModName?))).
+    ( rec-event(UI,edit-eqs-module(ModName?)).
       create(Edit-eqs-module(ModName),EM?).
-      snd-ack-event(UI,edit-eqs-module(id(ModName)))
+      snd-ack-event(UI,edit-eqs-module(ModName))
     ) +
-    ( rec-event(UI,revert-module(id(ModName?))).
+    ( rec-event(UI,revert-module(ModName?)).
       snd-msg(revert-module(ModName)).           
       rec-msg(reverted-module(ModName?)).
-      snd-ack-event(UI,revert-module(id(ModName)))
+      snd-ack-event(UI,revert-module(ModName))
     ) +
     ( rec-event(UI,get-module-info(Str?)).          /* Not yet implemented */ 
       snd-do(UI,module-info(Str,[["sorry","not implemented"],

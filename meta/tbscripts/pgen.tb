@@ -26,7 +26,7 @@ in
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
     execute(pgen,PGEN?) .
     snd-msg(add-eqs-syntax(Str)) .
-    rec-msg(updated-syntax(Syntax?)) .
+    rec-msg(extended-syntax(Syntax?)) .
     snd-msg(add-pgen-func(Str,Syntax)) .
     rec-msg(decorated-syntax(NewSyntax?)) .
     snd-eval(PGEN,reduce-and-asource(NewSyntax,Str,"tbl")) .

@@ -8,11 +8,11 @@ let
   Syntax    : term
 in  
   ( rec-msg(add-eqs-syntax(Name?)).
-    snd-msg(retrieve-syntax(Name)).
-    rec-msg(total-syntax(Syntax?)).
+    snd-msg(get-all-sdf2-definitions(Name)).
+    rec-msg(syntax-with-rewrite-function(Syntax?)).
     snd-eval(AES,reduce(Syntax)).
     rec-value(AES,reduct(NewSyntax?)). 
-    snd-msg(updated-syntax(NewSyntax))
+    snd-msg(extended-syntax(NewSyntax))
   )*
   delta
 endlet

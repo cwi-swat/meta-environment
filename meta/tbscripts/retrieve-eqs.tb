@@ -7,7 +7,6 @@ let
   Id   : term,
   Mod  : term,
   Tmod : term,
-  Mods : list,
   Eqs  : list
 in
   Id := process-id.
@@ -19,9 +18,7 @@ in
       snd-note(ui-status(stat(Id,"Retrieving equations"))).
       snd-msg(process-eqs(Mod)).
       rec-msg(eqs-processed(Tmod?)).
-      snd-msg(get-all-imported-modules(Mod)).
-      rec-msg(all-imported-modules(Mods?)).
-      snd-msg(get-all-equations(Mods)).
+      snd-msg(get-all-equations(Mod)).
       rec-msg(all-equations(Eqs?)).
       snd-eval(Eval,add-equations(Mod,Eqs)).
       rec-value(Eval,equ-added(Mod?)). 
