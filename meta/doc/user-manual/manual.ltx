@@ -12,6 +12,8 @@
 \makeindex
 
 \newcommand{\ASmetaenv}{{\sc Asf}+{\sc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\sc Sdf}}
+\newcommand{\asf}{{\sc Asf}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 
@@ -145,8 +147,22 @@ Topics that will be addressed are:
 \item How to unparse parse and/or normalized terms.
 \end{itemize}
 
+The first version of the \ASmetaenv\ supports not full \sdf2. Furthermore
+this manual is restricted to the usage of the \ASmetaenv\ and abstracts
+from \sdf, \sdf2, and \asf. How to use the separate tools, like SGLR, compiled
+specification, etc., will be addressed in the final sections.
+
 \section{Starting the system}
 
+The \ASmetaenv\ can be invoked via the command {\tt meta}.
+The exact usage is {\tt meta -b -c dir -dh -i file -o file -t -T portnumber -vV}.
+Search paths can initialized via creating a file ``meta.conf''. This file
+may contain a list of absolute and/or relative paths. See the meta.conf
+file in the demo directory for an example.
+
+After invoking the \ASmetaenv\ the screen presented in Figure \ref{??} pops
+up.
+ 
 \section{Opening a specification}
 
 \section{Saving a specification}
