@@ -1,6 +1,4 @@
-/*
-  $Id$
- */
+/* $Id$ */
 
 #include <stdlib.h>
 #include <aterm2.h>
@@ -40,30 +38,74 @@ static void version(const char *msg)
 
 /*}}}  */
 
-/*{{{  ATerm get_all_imports(int cid, ATerm atModules, char* name)  */
+/*{{{  static ATermList importsToModuleList(SDF_ImportList imports) */
 
-ATerm get_all_imports(int cid, ATerm atModules, char* name) 
+static ATermList importsToModuleList(SDF_ImportList imports)
+{
+  ATermList modules = ATempty;
+
+  while (!SDF_isImportListEmpty(imports)) {
+    SDF_Import import = SDF_getImportListHead(imports);
+    SDF_ModuleId id = SDF_getModuleNameModuleId(
+			SDF_getImportModuleName(import));
+    ATerm name = ATmake("<str>", SDF_getCHARLISTString(
+                                   SDF_getModuleIdChars(id)));
+
+    if (ATindexOf(modules, name, 0) < 0) {
+      modules = ATinsert(modules, name);
+    }
+
+    if (SDF_hasImportListTail(imports)) {
+      imports = SDF_getImportListTail(imports);
+    }
+    else {
+      break;
+    }
+  }
+
+  return modules;
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)  */
+
+ATerm get_all_needed_modules(int cid, ATerm atModules, char* name) 
 {
   ATermList list = (ATermList) atModules;
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
   imports = SDF_getTransitiveImports(list, id);
-ATwarning("get_all_imports returns al list of import trees, not names\n");
-  return ATmake("snd-value(all-imports(<term>))", imports);
+
+  return ATmake("snd-value(all-needed-modules(<term>))", 
+		importsToModuleList(imports));
 }
 
 /*}}}  */
-/*{{{  ATerm get_all_imports(int cid, ATerm atModules, char* name)  */
+/*{{{  ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)  */
 
-ATerm get_imports(int cid, ATerm atModule)
+ATerm get_all_needed_imports(int cid, ATerm atModules, char* name) 
+{
+  ATermList list = (ATermList) atModules;
+  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  SDF_ImportList imports;
+ 
+  imports = SDF_getTransitiveImports(list, id);
+
+  return ATmake("snd-value(all-needed-imports(<term>))", imports);
+}
+
+/*}}}  */
+/*{{{  ATerm get_imports(int cid, ATerm atModule) */
+
+ATerm get_imported_modules(int cid, ATerm atModule)
 {
   SDF_Start start = SDF_StartFromTerm(atModule);
   SDF_Module module = SDF_getStartTopModule(start);
-
   ATermList imports = SDF_getImports(module);
  
-  return ATmake("snd-value(imports(<term>))", imports);
+  return ATmake("snd-value(imported-modules(<term>))", imports);
 }
 
 /*}}}  */
