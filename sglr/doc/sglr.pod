@@ -58,12 +58,6 @@ So, do not use these options to tweak your language implementations! It is
 highly probable that there will be no backward compatibility for them in 
 future versions.
 
-=item -B<g>
-
-Toggles garbage collection, which is on by default.  Present as an aid
-for development of the built-in garbage collector only; no other
-relevance whatsoever.
-
 =item -B<i> I<file>
 
 Read input from F<file>; by default, input is read from stdin.
