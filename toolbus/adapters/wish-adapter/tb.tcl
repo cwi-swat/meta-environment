@@ -21,6 +21,8 @@ proc TCLstring {txt} {
   if [regexp {^"[0-9]+:(.*)"$} $txt txt res] {
 	return $res
   } elseif [regexp {^"(.*)"$} $txt txt res] {
+        regsub -all {\\\\} $res {\\} res
+        regsub -all  {\\"} $res {"}  res
 	return $res
   } else {
 	return $txt
@@ -55,7 +57,7 @@ proc TBevent {txt} {
 proc TBpost {event} {
   global TBack 
 
-  regexp {([-a-zA-Z_0-9]+)\(} $event ev func
+  regexp {([-a-zA-Z_0-9]+)} $event ev func
   if { ![info exists TBack($func)] || !$TBack($func) } {
     TBevent $event
     set TBack($func) 1 
@@ -68,7 +70,7 @@ proc TBpost {event} {
 proc TBack {event} {
   global TBack
 
-  regexp {([-a-zA-Z_0-9]+)\(} $event ev func
+  regexp {([-a-zA-Z_0-9]+)} $event ev func
   if { [info exists TBack($func)] && $TBack($func) } {
     if { $TBack($func,q) == {} } {
       set TBack($func) 0
