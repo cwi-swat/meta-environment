@@ -1,3 +1,6 @@
+2001/12/19 (jurgenv@cwi.nl)
+ * Bumped version to 0.7beta
+
 2001/11/29 (jurgenv@cwi.nl)
  * Adapted library to cope with new production attributes (no 
    automatic quoting anymore).
