@@ -1,210 +1,233 @@
 #include "Errors.h"
 #include "ParsedErrors.h"
 
+/*{{{  static PME_String ME_liftString(const char *str) */
 
-/*{{{  PME_Producer ME_liftProducer(ME_Producer producer)  */
-
-PME_Producer ME_liftProducer(ME_Producer producer) 
+static PME_String ME_liftString(const char *str)
 {
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
-  char *id = ME_getProducerId(producer);
-  char *type = ME_getProducerType(producer);
-
-  return PME_makeProducerProducer(e,e,
-				  PME_makeStringString(id),
-				  e,e,
-				  PME_makeStringString(type),
-				  e);
+  ATerm quotedAppl = (ATerm) ATmakeAppl0(ATmakeAFun(str, 0, ATtrue));
+  return PME_makeStringString(ATwriteToString(quotedAppl));
 }
 
 /*}}}  */
-/*{{{  PME_Description ME_liftDescription(ME_Description description) */
+/*{{{  static PME_NatCon ME_liftNatCon(int natcon) */
 
-PME_Description ME_liftDescription(ME_Description description)
+static PME_NatCon ME_liftNatCon(int natcon)
 {
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
-  char *str = ME_getDescriptionString(description);
-
-  return PME_makeDescriptionDescription(e,e,
-					PME_makeStringString(str),
-					e);
-
-}
-
-/*}}}  */
-/*{{{  PME_Subjects ME_liftSubjects(ME_Subjects subjects) */
-
-PME_Subjects ME_liftSubjects(ME_Subjects subjects)
-{
-  ATerror("not yet implemented");
+  ATerm atint = (ATerm) ATmakeInt(natcon);
+  return PME_makeNatConString(ATwriteToString(atint));
 }
 
 /*}}}  */
 
-/*{{{  PME_Information ME_liftFeedbackInfo(ME_Information info) */
+/*{{{  PME_Area ME_liftArea(ME_Area area) */
 
-PME_Information ME_liftFeedbackInfo(ME_Information info)
+PME_Area ME_liftArea(ME_Area area)
 {
-  char *id;
-  ME_Producer producer;
-  ME_Description description;
-  ME_Subjects subjects;
-  PME_String pid;
-  PME_Producer pproducer;
-  PME_Description pdescription;
-  PME_Subjects psubjects;
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
+  int startLine;
+  int startColumn;
+  int endLine;
+  int endColumn;
+  int startOffset;
+  int endOffset;
+  PME_NatCon pStartLine;
+  PME_NatCon pStartColumn;
+  PME_NatCon pEndLine;
+  PME_NatCon pEndColumn;
+  PME_NatCon pStartOffset;
+  PME_NatCon pEndOffset;
+  PME_OptLayout e;
 
-  id = ME_getInformationId(info);
-  producer = ME_getInformationProducer(info);
-  description = ME_getInformationDescription(info);
-  subjects = ME_getInformationSubjects(info);
+  if (ME_isAreaArea(area)) {
+    startLine = ME_getAreaStartLine(area);
+    startColumn = ME_getAreaStartColumn(area);
+    endLine = ME_getAreaEndLine(area);
+    endColumn = ME_getAreaEndColumn(area);
+    startOffset = ME_getAreaStartOffset(area);
+    endOffset = ME_getAreaEndOffset(area);
 
-  pid = PME_makeStringString(id);
-  pproducer = ME_liftProducer(producer);
-  pdescription = ME_liftDescription(description);
-  psubjects = ME_liftSubjects(subjects);
+    pStartLine = ME_liftNatCon(startLine);
+    pStartColumn = ME_liftNatCon(startColumn);
+    pEndLine = ME_liftNatCon(endLine);
+    pEndColumn = ME_liftNatCon(endColumn);
+    pStartOffset = ME_liftNatCon(startOffset);
+    pEndOffset = ME_liftNatCon(endOffset);
+    e = PME_makeOptLayoutAbsent();
 
-  return PME_makeInformationInformation(e,e,
-					pid,
-					e,e,
-					pproducer,
-					e,e,
-					pdescription,
-					e,e,
-					psubjects,
-					e);
-}
-
-/*}}}  */
-/*{{{  PME_Warning ME_liftFeedbackWarning(ME_Warning warning) */
-
-PME_Warning ME_liftFeedbackWarning(ME_Warning warning)
-{
-  char *id;
-  ME_Producer producer;
-  ME_Description description;
-  ME_Subjects subjects;
-  PME_String pid;
-  PME_Producer pproducer;
-  PME_Description pdescription;
-  PME_Subjects psubjects;
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
-
-  id = ME_getWarningId(warning);
-  producer = ME_getWarningProducer(warning);
-  description = ME_getWarningDescription(warning);
-  subjects = ME_getWarningSubjects(warning);
-
-  pid = PME_makeStringString(id);
-  pproducer = ME_liftProducer(producer);
-  pdescription = ME_liftDescription(description);
-  psubjects = ME_liftSubjects(subjects);
-
-  return PME_makeWarningWarning(e,e,
-				pid,
-				e,e,
-				pproducer,
-				e,e,
-				pdescription,
-				e,e,
-				psubjects,
-				e);
-}
-
-/*}}}  */
-/*{{{  PME_Error ME_liftFeedbackError(ME_Error error) */
-
-PME_Error ME_liftFeedbackError(ME_Error error)
-{
-  char *id;
-  ME_Producer producer;
-  ME_Description description;
-  ME_Subjects subjects;
-  PME_String pid;
-  PME_Producer pproducer;
-  PME_Description pdescription;
-  PME_Subjects psubjects;
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
-
-  id = ME_getErrorId(error);
-  producer = ME_getErrorProducer(error);
-  description = ME_getErrorDescription(error);
-  subjects = ME_getErrorSubjects(error);
-
-  pid = PME_makeStringString(id);
-  pproducer = ME_liftProducer(producer);
-  pdescription = ME_liftDescription(description);
-  psubjects = ME_liftSubjects(subjects);
-
-  return PME_makeErrorError(e,e,
-			    pid,
+    return PME_makeAreaArea(e,e,
+			    pStartLine,
 			    e,e,
-			    pproducer,
+			    pStartColumn,
 			    e,e,
-			    pdescription,
+			    pEndLine,
 			    e,e,
-			    psubjects,
+			    pEndColumn,
+			    e,e,
+			    pStartOffset,
+			    e,e,
+			    pEndOffset,
 			    e);
+  }
+  else {
+    return PME_makeAreaNoArea();
+  }
 }
 
 /*}}}  */
-/*{{{  PME_FatalError ME_liftFeedbackFatalError(ME_FatalError fatalError) */
+/*{{{  PME_Location ME_liftLocation(ME_Location location) */
 
-PME_FatalError ME_liftFeedbackFatalError(ME_FatalError fatalError)
+PME_Location ME_liftLocation(ME_Location location)
+{
+  char *filename;
+  ME_Area area;
+  PME_String pFilename;
+  PME_Area pArea;
+  PME_OptLayout e;
+
+  filename = ME_getLocationFilename(location);
+  area = ME_getLocationArea(location);
+
+  pFilename = ME_liftString(filename);
+  pArea = ME_liftArea(area);
+  e = PME_makeOptLayoutAbsent();
+
+  return PME_makeLocationLocation(e,e,
+				  pFilename,
+				  e,e,
+				  pArea,
+				  e);
+  
+}
+
+/*}}}  */
+/*{{{  PME_Subject ME_liftSubject(ME_Subject subject) */
+
+PME_Subject ME_liftSubject(ME_Subject subject)
 {
   char *id;
-  ME_Producer producer;
-  ME_Description description;
-  ME_Subjects subjects;
-  PME_String pid;
-  PME_Producer pproducer;
-  PME_Description pdescription;
-  PME_Subjects psubjects;
+  ME_Location location;
+  PME_String pId;
+  PME_Location pLocation;
   PME_OptLayout e = PME_makeOptLayoutAbsent();
 
-  id = ME_getFatalErrorId(fatalError);
-  producer = ME_getFatalErrorProducer(fatalError);
-  description = ME_getFatalErrorDescription(fatalError);
-  subjects = ME_getFatalErrorSubjects(fatalError);
+  id = ME_getSubjectId(subject);
+  pId = ME_liftString(id);
 
-  pid = PME_makeStringString(id);
-  pproducer = ME_liftProducer(producer);
-  pdescription = ME_liftDescription(description);
-  psubjects = ME_liftSubjects(subjects);
-
-  return PME_makeFatalErrorFatalError(e,e,
-				      pid,
-				      e,e,
-				      pproducer,
-				      e,e,
-				      pdescription,
-				      e,e,
-				      psubjects,
+  if (ME_hasSubjectLocation(subject)) {
+    location = ME_getSubjectLocation(subject);
+    pLocation = ME_liftLocation(location);
+    return PME_makeSubjectLocatable(e,e,
+				    pId,
+				    e,e,
+				    pLocation,
+				    e);
+  }
+  else {
+    return PME_makeSubjectUnlocatable(e,e,
+				      pId,
 				      e);
+  }
 }
 
 /*}}}  */
+/*{{{  PME_SubjectList ME_liftSubjects(ME_SubjectList subjects) */
 
+PME_SubjectList ME_liftSubjects(ME_SubjectList subjects)
+{
+  PME_SubjectList pSubjects = PME_makeSubjectListEmpty();
+  PME_OptLayout e = PME_makeOptLayoutAbsent();
+
+  for ( ; !ME_isSubjectListEmpty(subjects); 
+	subjects = ME_getSubjectListTail(subjects)) {
+    ME_Subject subject = ME_getSubjectListHead(subjects);
+    PME_Subject pSubject = ME_liftSubject(subject);
+    pSubjects = PME_makeSubjectListMany(pSubject,e,e,pSubjects);
+  }
+
+  return pSubjects;
+}
+
+/*}}}  */
 /*{{{  PME_Feedback ME_liftFeedback(ME_Feedback feedback) */
 
 PME_Feedback ME_liftFeedback(ME_Feedback feedback)
 {
+  char *id;
+  char *producerId;
+  char *producerType;
+  char *description;
+  ME_SubjectList subjects;
+  PME_String pId;
+  PME_String pProducerId;
+  PME_String pProducerType;
+  PME_String pDescription;
+  PME_SubjectList pSubjects;
+  PME_OptLayout e;
+
+  id = ME_getFeedbackId(feedback);
+  producerId = ME_getFeedbackProducerId(feedback);
+  producerType = ME_getFeedbackProducerType(feedback);
+  description = ME_getFeedbackDescription(feedback);
+  subjects = ME_getFeedbackList(feedback);
+
+  pId = ME_liftString(id);
+  pProducerId = ME_liftString(producerId);
+  pProducerType = ME_liftString(producerType);
+  pDescription = ME_liftString(description);
+  pSubjects = ME_liftSubjects(subjects);
+  e = PME_makeOptLayoutAbsent();
+
   if (ME_isFeedbackInfo(feedback)) {
-    ME_Information info = ME_getFeedbackInformation(feedback);
-    return PME_makeFeedbackInfo(ME_liftFeedbackInfo(info));
+    return PME_makeFeedbackInfo(e,e,
+				pId, 
+				e,e,
+				pProducerId,
+				e,e,
+				pProducerType,
+				e,e,
+				pDescription,
+				e,e,e,
+				pSubjects,
+				e,e);
   }
   else if (ME_isFeedbackWarning(feedback)) {
-    ME_Warning warning = ME_getFeedbackWarning(feedback);
-    return PME_makeFeedbackWarning(ME_liftFeedbackWarning(warning));
+    return PME_makeFeedbackWarning(e,e,
+				   pId, 
+				   e,e,
+				   pProducerId,
+				   e,e,
+				   pProducerType,
+				   e,e,
+				   pDescription,
+				   e,e,e,
+				   pSubjects,
+				   e,e);
   }
   else if (ME_isFeedbackError(feedback)) {
-    ME_Error error = ME_getFeedbackError(feedback);
-    return PME_makeFeedbackError(ME_liftFeedbackError(error));
+    return PME_makeFeedbackError(e,e,
+				 pId, 
+				 e,e,
+				 pProducerId,
+				 e,e,
+				 pProducerType,
+				 e,e,
+				 pDescription,
+				 e,e,e,
+				 pSubjects,
+				 e,e);
   }
   else if (ME_isFeedbackFatalError(feedback)) {
-    ME_FatalError fatalError = ME_getFeedbackFatalError(feedback);
-    return PME_makeFeedbackFatalError(ME_liftFeedbackFatalError(fatalError));
+    return PME_makeFeedbackFatalError(e,e,
+				      pId, 
+				      e,e,
+				      pProducerId,
+				      e,e,
+				      pProducerType,
+				      e,e,
+				      pDescription,
+				      e,e,e,
+				      pSubjects,
+				      e,e);
   }
   else {
     ATerror("unknown feedback type: %t\n", feedback);

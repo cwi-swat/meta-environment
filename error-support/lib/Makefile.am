@@ -33,10 +33,12 @@ MetaErrors.impl.def: Makefile
 api: parsed-api imploded-api 
 
 parsed-api: MetaErrors.def Makefile  
-	sdf2-to-c --input $< --prefix PME_ --output ParsedErrors	
+	sdf2-to-c --input $< --prefix PME_ --output ParsedErrors
+	indent ParsedErrors.h
 
 imploded-api: MetaErrors.impl.def Makefile 
-	sdf2-to-c --imploded --input $< --prefix ME_ --output Errors	
+	sdf2-to-c --imploded --input $< --prefix ME_ --output Errors
+	indent Errors.h
 
 api-clean:
 	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict
