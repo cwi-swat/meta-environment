@@ -620,7 +620,6 @@ int read_from_stdin()
 {
   int c;
   char *ptr;
-  int n = 10;
   int Flags = 0;
 
   ptr = &buffer[LENSPEC];
@@ -630,10 +629,10 @@ int read_from_stdin()
    */ 
   clearerr(stdin); 
 
-  while((c = fgetc(stdin)) != '\n' && n-- > 0 ){
+  while((c = fgetc(stdin)) != '\n' ){
     if(c > 0){
       *ptr++ = c;
-    }
+    } 
   }
   *ptr++ = '\0';
 
