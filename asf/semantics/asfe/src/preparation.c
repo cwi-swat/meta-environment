@@ -117,6 +117,7 @@ void flush_equations(equation_table * table)
 /*}}}  */
 /*{{{  void destroy_equation_table(equation_table * table) */
 
+
 /*
 Free all memory associated with an equation table.
 */
@@ -201,7 +202,7 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
 				    DEPTH_OF_EQUATION_SIDES_IN_EQUATION,
 				    start_line, start_col);
     equation = ASF_EquationFromTerm(PT_TreeToTerm(tree));
-    ATwarning("equation: %s\n", PT_yieldTree(tree));
+
     equ = ASF_setCondEquationEquation(equ, equation);
   }
 
@@ -425,6 +426,7 @@ equation_table *find_equation_table(char *modname)
   return cur;
 }
 
+
 /*}}}  */
 /*{{{  void enter_equations(char *modname, ASF_CondEquationList eqsList) */
 
@@ -570,6 +572,7 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   int i, l;
   ATerm annos = AT_getAnnotations(PT_makeTermFromTree(lextrm));
 
+
   lexProd = PT_getTreeProd(lextrm);
   rhs = PT_getProductionRhs(lexProd);
   sort = PT_getSymbolSymbol(rhs);
@@ -628,7 +631,6 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
     newPTtree = PT_makeTreeFromTerm(
                  AT_setAnnotations(PT_makeTermFromTree(newPTtree), annos));
   }
-
   return newPTtree;
 }
 
@@ -639,7 +641,6 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
   PT_Args args, newargs;
-
   extern ATerm ASF_patternTreeLexicalConstructor;
 
   if (ATmatchTerm(PT_makeTermFromTree(tree), ASF_patternTreeLexicalConstructor, 
@@ -775,11 +776,7 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
   PT_Args args;
 
   if (PT_isTreeAppl(tree)) {
-    extern ATerm ASF_patternTreeLexicalConstructor;
-    if (ATmatchTerm(PT_makeTermFromTree(tree),
-		    ASF_patternTreeLexicalConstructor,
-		    NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-    /* <PO> Was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) { */
+    if (ASF_isTreeLexicalConstructorFunction(PTtoASF(tree))) { 
       return listToLexical(tree);
     }
 
