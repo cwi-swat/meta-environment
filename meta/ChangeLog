@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Feb 17 10:00:23 CET 2003 <jong@cwi.nl>
+ * text-editor.idef: fix rec-event for Queries acknowledged a Move event
+
 Thu Feb 13 15:04:43 CET 2003 <{jong,olivierp}@cwi.nl>
  * Several patches to fix "make distcheck"
 
