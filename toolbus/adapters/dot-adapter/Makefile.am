@@ -17,7 +17,7 @@ libGraph_a_SOURCES = Graph.c Graph_dict.c
 term2dot_SOURCES = term2dot.c
 term2dot_LDADD = \
 	-L${top_builddir}/adapters/dot-adapter -lGraph \
-	-L${top_builddir}/aterm -lATB \
+	-L${TOOLBUSLIB}/aterm -lATB \
 	-L$(ATERM)/lib -lATerm
 
 
