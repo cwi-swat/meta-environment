@@ -401,9 +401,8 @@ process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-process CheckSanity(Path: str, RequestedModuleId: str, Valid: bool?) is
+process GetModuleByPath(Path: str, ModuleId: str?, Available: bool?) is
 let
-  CurrentModuleId: str,
   Sid: term
 in
   snd-msg(em-get-session-by-path(Path))
@@ -411,12 +410,26 @@ in
   (
     rec-msg(em-session(Path, Sid?))
     . snd-msg(em-get-modulename(Sid))
-    . rec-msg(em-modulename(Sid, CurrentModuleId?))
-    . Valid := equal(CurrentModuleId, RequestedModuleId)
+    . rec-msg(em-modulename(Sid, ModuleId?))
+    . Available := true
   +
     rec-msg(em-no-such-session(Path))
-    . Valid := true
+    . Available := false
   )
+endlet
+
+process CheckSanity(Path: str, RequestedModuleId: str, Valid: bool?) is
+let
+  Available: bool,
+  CurrentModuleId: str
+in
+  GetModuleByPath(Path, CurrentModuleId?, Available?)
+  . 
+  if equal(Available, true) then
+    Valid := equal(CurrentModuleId, RequestedModuleId)
+  else
+    Valid := true
+  fi
 endlet
 
 process EditTerm(Path: str, ModuleId: str) is
@@ -505,6 +518,10 @@ in
   if equal(EditorType, term-editor) then
     GetModuleByExtension(Path, ModuleId?, Available?)
     .
+    if equal(Available, false) then
+      GetModuleByPath(Path, ModuleId?, Available?)
+    fi
+    . 
     if equal(Available, true) then
       create(EditTerm(Path, ModuleId), Pid?)
       .

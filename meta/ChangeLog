@@ -1,9 +1,14 @@
 # $Id$
 
 Thu Mar 24 11:25:35 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - When the modulename for a termfile cannot be determined by its extension
+     we now check if the termfile is already being edited, so we can get the
+     modulename by its path (closes #456). 
+   - Refactor -> Extract to process of GetModuleByPath
  * tbscripts/button-actions.tb:
    - Guard open module en close module use cases to prevent updating graph
-   panel (closes #432)
+     panel (closes #432)
  * tbscripts/{graph-utils,open-modules}.tb:
    - More generic name for start-open-modules-batch: start-modules-batch
 
