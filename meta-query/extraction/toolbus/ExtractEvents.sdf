@@ -21,9 +21,6 @@ exports
     extractProcessEvents(Atom, RSTORE, Area)
     -> RSTORE {traversal(accu, top-down, break)}
 
-hiddens
-  sorts <Elem, Elem>
-
   context-free syntax
     addProcessEvent(AtomArgs, Area, RSTORE) -> RSTORE
 
