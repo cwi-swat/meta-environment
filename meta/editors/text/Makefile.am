@@ -28,7 +28,6 @@ noinst_HEADERS = editor-hive.tif.h
 
 editor_hive_SOURCES = \
 	editor-hive.c \
-	editor-hive.h \
 	editor-hive.tif.c
 
 editor_hive_LDADD = \
