@@ -1,5 +1,8 @@
 $Id$
 
+Mon Oct 18 19:31:02 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed CLASSPATH for running tifstojava
+
 Wed Jul 21 09:46:25 CEST 2004 <kooiker@cwi.nl>
  * src: removed unused toolbus-java-config.sh.src, already present in root 
 

@@ -2,6 +2,5 @@
 
 javadir=__PREFIX__/classes
 jars=__EXTERNAL_JARS__
-javadir=${prefix}/classes
 
 java -classpath ${javadir}:${jars}:${CLASSPATH} toolbus.JavaTif $@
