@@ -3,18 +3,6 @@ include ${top_srcdir}/make_rules
 SUBDIRS = graph
 
 ACSOURCES	= Module.java
-java_JAVA	= \
-	ExtensionFilter.java \
-	ListListModel.java \
-	MetaStudio.java \
-	ImportGraphPanel.java \
-	ModuleManager.java \
-	ModuleSelectionListener.java \
-	ModuleStatusPanel.java \
-	Preferences.java \
-	${ACSOURCES} \
-	${GENSOURCES}
-
 GENSOURCES	= UserInterfaceTif.java UserInterfaceTool.java \
 		UserInterfaceBridge.java
 
@@ -39,3 +27,20 @@ jtif:
 	${IDEF} meta-studio.idef
 	${TOOLBUS}/bin/tifstojava -tool user-interface -tifs meta-studio.tifs \
 		-package metastudio -swing
+
+java_JAVA = \
+	${ACSOURCES} \
+	${GENSOURCES} \
+	ExtensionFilter.java \
+	ImportGraphPanel.java \
+	ListListModel.java \
+	MetaStudio.java \
+	Module.java \
+	ModuleManager.java \
+	ModuleSelectionListener.java \
+	ModuleStatusPanel.java \
+	ParseTreePanel.java \
+	Preferences.java \
+	UserInterfaceBridge.java \
+	UserInterfaceTif.java \
+	UserInterfaceTool.java
