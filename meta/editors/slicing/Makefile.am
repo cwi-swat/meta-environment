@@ -1,8 +1,8 @@
 # $Id$
 
-lib_LIBRARIES = libslicing.a
+noinst_LIBRARIES = libslicing.a
 
-include_HEADERS = \
+noinst_HEADERS = \
 	Slicing.h \
 	Slicing-utils.h
 
