@@ -26,8 +26,8 @@ where
 	%% The set of mutually recursive dataflow equations that has to be solved:
 
 	solve {
-       		IN =  rel {S x OUT[P] | S : STATEMENT, P : PRED-OF[S]},
-        	OUT = rel {S x (GEN[S] union (IN[S] \ KILL[S])) | S : STATEMENT }
+       		IN =  {S x OUT[P] | S : STATEMENT, P : PRED-OF[S]},
+        	OUT = {S x (GEN[S] union (IN[S] \ KILL[S])) | S : STATEMENT }
 	}
 endwhere
 
@@ -42,7 +42,7 @@ rel[int,int] post-dominators(
 = domainR(DOMINATES, CONTROL-STATEMENT)
 where
   	rel[int,int] DOMINATES =
-  	rel { S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) | 
+  	{ S x (STATEMENT \ {ROOT, S} \ range(reachX({ROOT}, {S}, PRED))) | 
    	 S : STATEMENT }
 endwhere
 
@@ -125,7 +125,7 @@ rel[str,int] USE	= {<"i", 5>, <"n", 5>, <"sum", 6>, <"i", 6>,
 			   <"product", 7>, <"i", 7>, <"i", 8>, <"sum", 9>, 
 			   <"product", 10>}
 
-bag[int] CONTROL-STATEMENT = { 5 }
+bag[int] CONTROL-STATEMENT = [ 5 ]
 
 bag[<str,int>] Example1 = 
 	BackwardSlice(ROOT, CONTROL-STATEMENT, PRED, USE, DEF, <"sum",9>)

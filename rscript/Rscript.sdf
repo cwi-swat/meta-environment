@@ -29,10 +29,10 @@ exports
 
      Bag[[Elem]]                   	    	-> Elem  
      Rel[[Elem]]                           	-> Elem  
+     Tuple					-> Elem
 
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
-     Tuple					-> REXP
      REXP # REXP			     	-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
      "["  {REXP ","}* "]"                     	-> REXP {avoid}
@@ -89,18 +89,17 @@ exports
      REXP					-> FROM
      TARGET "<-" REXP				-> FROM {prefer}
 
-%% quantifiers
+%% Quantifiers
 
      "exists" "(" FROM "|" REXP ")"		-> REXP
      "forall" "(" FROM "|" REXP	")"		-> REXP
 
-%% functions
+%% Functions
 
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
      "(" REXP ")"                             	-> REXP {bracket}
 
-
-%% let expressions
+%% Let expressions
 
      REXP "where" RSTAT+ "endwhere"		-> REXP
 
