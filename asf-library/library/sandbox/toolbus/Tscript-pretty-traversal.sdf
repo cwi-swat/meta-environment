@@ -1,0 +1,106 @@
+module Tscript-pretty-traversal
+
+imports languages/box/syntax/Box
+imports Tscript
+
+exports
+  context-free syntax
+    prettyprint(Tscript) -> Tscript
+
+hiddens
+  context-free syntax
+    ppAtom(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppAtom(Atom)
+      -> Atom {traversal(trafo, top-down, break)}
+
+    ppGenVar(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppGenVar(GenVar)
+      -> GenVar {traversal(trafo, top-down, break)}
+
+    ppProcessBody(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppProcessBody(ProcessBody)
+      -> ProcessBody {traversal(trafo, top-down, break)}
+
+    ppProcessDef(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppProcessDef(ProcessDef)
+      -> ProcessDef {traversal(trafo, top-down, break)}
+
+    ppProcessExpr(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppProcessExpr(ProcessExpr) 
+      -> ProcessExpr {traversal(trafo, top-down, break)}
+
+    ppProcessSignature(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppProcessSignature(ProcessSignature)
+      -> ProcessSignature {traversal(trafo, top-down, break)}
+
+    ppTscriptDefs(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+
+    ppVarDecl(Tscript)
+      -> Tscript {traversal(trafo, top-down, break)}
+    ppVarDecl(VarDecl)
+      -> VarDecl {traversal(trafo, top-down, break)}
+
+  context-free syntax
+    atomargs2box(AtomArgs) -> Box {to-box}
+    genvar2box(GenVar) -> Box {to-box} 
+    id2box(Id) -> Box {to-box}
+    formalparam2box(FormalParam) -> Box {to-box}
+    formalparams2box({FormalParam ","}*) -> Box {to-box}
+    processbody2box(ProcessBody) -> Box {to-box}
+    processexpr2box(ProcessExpr) -> Box {to-box}
+    processinvocation2box(ProcessInvocation) -> Box {to-box}
+    processname2box(ProcessName) -> Box {to-box}
+    processsignature2box(ProcessSignature) -> Box {to-box}
+    term2box(Term) -> Box {to-box}
+    termlist2box({Term ","}*) -> Box {to-box}
+    tscriptdef2box(TscriptDef) -> Box {to-box}
+    tscriptdefs2box(TscriptDef*) -> Box {to-box}
+    var2box(Var) -> Box {to-box}
+
+    box2atom(Box) -> Atom {from-box}
+    box2formalparam(Box) -> FormalParam {from-box}
+    box2genvar(Box) -> GenVar {from-box}
+    box2processcreation(Box) -> ProcessCreation {from-box}
+    box2processbody(Box) -> ProcessBody {from-box}
+    box2processdef(Box) -> ProcessDef {from-box}
+    box2processexpr(Box) -> ProcessExpr {from-box}
+    box2processinvocation(Box) -> ProcessInvocation {from-box}
+    box2processsignature(Box) -> ProcessSignature {from-box}
+    box2term(Box) -> Term {from-box}
+    box2tscript(Box) -> Tscript {from-box}
+    box2vardecl(Box) -> VarDecl {from-box}
+
+hiddens
+  context-free start-symbols Box
+
+  variables
+    "AtomArgs" -> AtomArgs
+    "Box" -> Box
+    "Box*" -> Box*
+    "FormalParam" -> FormalParam
+    "FormalParam*" -> {FormalParam ","}*
+    "FormalParam+" -> {FormalParam ","}+
+    "GenVar"[0-9]* -> GenVar
+    "Id" -> Id
+    "ProcessBody"[0-9]* -> ProcessBody
+    "ProcessDef"[0-9]* -> ProcessDef
+    "ProcessExpr"[0-9]* -> ProcessExpr
+    "ProcessInvocation" -> ProcessInvocation
+    "ProcessName" -> ProcessName
+    "ProcessSignature"[0-9]* -> ProcessSignature
+    "Term" -> Term
+    "Term*" -> {Term ","}*
+    "Term+" -> {Term ","}+
+    "Tscript"[0-9]* -> Tscript
+    "TscriptDef" -> TscriptDef
+    "TscriptDef*" -> TscriptDef*
+    "TscriptDef+" -> TscriptDef+
+    "Var" -> Var
+    "VarDecl"[0-9]* -> VarDecl
