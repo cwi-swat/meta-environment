@@ -6,7 +6,7 @@ imports
 
 exports
   context-free syntax
-    "[" {X ","}* "]"	-> List[[X]]  {constructor}
+    "[" {X ","}* "]"	-> List[[X]]  
 
   context-free syntax
     length( List[[X]] )	 -> Integer
