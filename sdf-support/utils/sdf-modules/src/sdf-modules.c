@@ -97,7 +97,7 @@ ATerm get_all_depending_module_names(int cid, ATerm pairs, char* name)
 
 ATerm get_module_id(int cid, ATerm atModule)
 {
-  SDF_Start start = SDF_StartFromTerm(atModule);
+  SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module module = SDF_getStartTopModule(start);
 
   return ATmake("snd-value(module-id(<str>))", SDF_getModuleName(module));

@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/18 ({jong,markvdb}@cwi.nl)
+ * Added explicit ATBpack to parsetrees.
+
 2003/06/17 (markvdb@cwi.nl)
  * Again fixed a non-termination bug in the transitive closuer calculation
    of imports.
