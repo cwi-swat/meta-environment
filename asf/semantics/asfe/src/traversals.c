@@ -643,7 +643,6 @@ PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
   PT_Tree reduct;
 
   if (traversal->type == ACCUMULATOR) {
-    ATwarning("updating accumulator with %s\n", PT_yieldTree(rhs));
     *traversal = updateAccumulator(*traversal, rhs);
     reduct = orig;
   } 

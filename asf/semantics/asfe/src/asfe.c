@@ -1539,131 +1539,6 @@ static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
 }
 
 /*}}}  */
-#ifdef JURGEN
-/*{{{  static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth */
-
-static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
-					Traversal* traversal)
-{
-  PT_Tree reduct = FAIL;
-
-  if (PT_hasTreeArgs(trm)) {
-    PT_Tree travtrm;
-    reduct = rewriteArgs(trm, env, depth, traversal);
-
-    if (traversal->continuation == CONTINUE) {
-      if (reduct != FAIL) {
-	trm = reduct; /* continue with rewritten args */
-      }
- 	
-      travtrm = makeTraversalAppl(trm, *traversal);
-
-      reduct = rewriteTop(travtrm, env, depth, traversal);
-
-      if (reduct != FAIL) {
-	reduct = makeTraversalReduct(trm, reduct, traversal);
-      }
-      else {
-	reduct = trm;
-      }
-    }
-    else if (traversal->continuation == BREAK) {
-      if (reduct == FAIL) {
-	travtrm = makeTraversalAppl(trm, *traversal);
-
-	reduct = rewriteTop(travtrm, env, depth, traversal);
-
-	if (reduct != FAIL) {
-	  reduct = makeTraversalReduct(trm, reduct, traversal);
-	}
-      }
-    }
-    else {
-      ATerror("unknown continuation type for traversal: %d\n",
-	      traversal->continuation);
-    }
-  }
-
-  return reduct;
-}
-
-/*}}}  */
-/*{{{  static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,  */
-static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, 
-				       Traversal* traversal)
-{
-  PT_Tree reduct = FAIL;
-
-  if (PT_hasTreeArgs(trm)) {
-    PT_Tree travtrm = makeTraversalAppl(trm, *traversal);
-
-    reduct = rewriteTop(travtrm, env, depth, traversal);
-
-    if (reduct != FAIL) {
-      reduct = makeTraversalReduct(trm, reduct, traversal);
-    }
-
-    if (traversal->continuation == CONTINUE) {
-      PT_Tree reduct_args = FAIL;
-      PT_Tree reduct_top  = FAIL;
-
-      if (reduct != FAIL) {
-	trm = reduct;
-      }
-
-      reduct_args = rewriteArgs(trm, env, depth, traversal);
-
-      if (reduct_args == FAIL) {
-	reduct_args = trm;
-      }
-      else {
-	reduct_args = makeTraversalReduct(trm, reduct_args, traversal);
-      }
-
-      reduct_top = rewriteTop(reduct_args, env, depth, traversal);
-
-      if (reduct_top != FAIL) {
-	reduct = makeTraversalReduct(trm, reduct_top, traversal);
-      }
-      else {
-	reduct = reduct_args;
-      }
-    }
-    else if (traversal->continuation == BREAK) {
-      PT_Tree reduct_args = FAIL;
-      PT_Tree reduct_top = FAIL;
-
-      if (reduct == FAIL) {
-	reduct_args = rewriteArgs(trm, env, depth, traversal);
-
-	if (reduct_args != FAIL) {
-	  reduct_top = rewriteTop(reduct_args, env, depth, traversal);
-	}
-
-	if (reduct_top != FAIL) {
-	  reduct = makeTraversalReduct(trm, reduct_top, traversal);
-	}
-	else {
-	  if (reduct_args != FAIL) {
-	    reduct = makeTraversalReduct(trm, reduct_args, traversal);
-	  }
-	}
-      }
-      else {
-	reduct = makeTraversalReduct(trm, reduct, traversal);
-      }
-    }
-    else {
-      ATerror("unknown continuation type for traversal: %d\n",
-	      traversal->continuation);
-    }
-  }
-
-  return reduct;
-}
-
-/*}}}  */
-#endif JURGEN
 /*{{{  static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth, */
 
 static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
@@ -1675,15 +1550,15 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
     PT_Tree travtrm, reduct_args;
     reduct_args = rewriteArgs(trm, env, depth, traversal);
 
-    travtrm = makeTraversalAppl(reduct_args == FAIL ?
+    if ((traversal->continuation == BREAK && reduct_args == FAIL) ||
+	traversal->continuation == CONTINUE) {
+      travtrm = makeTraversalAppl(reduct_args == FAIL ?
 				  trm : reduct_args, *traversal);
 
-    reduct = rewriteTop(travtrm, env, depth, traversal);
-
-    if (reduct != FAIL) {
-      reduct = makeTraversalReduct(trm, reduct, traversal);
+      reduct = rewriteTop(travtrm, env, depth, traversal);
     }
-    else {
+
+    if (reduct == FAIL) {
       reduct = reduct_args;
     }
 
@@ -1706,8 +1581,10 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
     travtrm = makeTraversalAppl(trm, *traversal);
     reduct_top = rewriteTop(travtrm, env, depth, traversal);
 
-    if (reduct_top == FAIL) {
-      reduct_args = rewriteArgs(trm, env, depth, traversal);
+    if ((traversal->continuation == BREAK && reduct_top == FAIL) ||
+	traversal->continuation == CONTINUE) {
+      reduct_args = rewriteArgs(reduct_top == FAIL ?
+				trm : reduct_top, env, depth, traversal);
 
       if (reduct_args != FAIL) {
 	reduct = rewriteTop(reduct_args, env, depth, traversal);
@@ -1715,10 +1592,13 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
 	if (reduct == FAIL) {
 	  reduct = reduct_args;
 	}
+      } 
+      else {
+	reduct = reduct_top;
       }
     }
-    else { 
-      reduct = makeTraversalReduct(trm, reduct_top, traversal);
+    else {
+      reduct = reduct_top;
     }
   }
 
@@ -1759,6 +1639,10 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
 
   if (PT_isEqualTree(reduct,trm)) {
     reduct = FAIL;
+  }
+
+  if (reduct != FAIL && extra != NULL) {
+    reduct = makeTraversalReduct(trm, reduct, extra);
   }
 
   return reduct;
