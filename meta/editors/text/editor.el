@@ -45,9 +45,9 @@
 
 (defun move-editor-to-front (filename)
 	"Raise the frame in which filename is displayed to the front"
-	(let ((buf (get-file-buffer filename)))
+  (let ((buf (get-file-buffer filename)))
     (if (bufferp buf) ; if the buffer exists
-		  (raise-frame (window-frame (get-buffer-window buf t)))
+      (raise-frame (window-frame (get-buffer-window buf t)))
       () ; else do nothing
     )
   )
