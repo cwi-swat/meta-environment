@@ -33,6 +33,7 @@ testsetclean:
 
 %.sh :
 	(\
+	   echo '#!/bin/sh' ;\
 	   echo 'set -e' ;\
 	   echo 'cat $(srcdir)/in/$*.in | \
                  ${IMPLODE} $($(subst -,_,$*)_flags) -o $*.tested' ;\
