@@ -9,6 +9,6 @@ EXTRA_DIST = program-check.m4 reconf DEVELOPERS-INFO package
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $ < $@
+	cp $< $@
 
 
