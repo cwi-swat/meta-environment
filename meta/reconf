@@ -1,23 +1,6 @@
 #! /bin/sh
-#
-# $Id$
-#
-# For each individual package in the Asf+Sdf Meta-Environment
-# distribution that is controlled by automake, run "reconf" for
-# that package prior to "configure".
 
-# Tell aclocal where it can find libtool.m4
-#if [ -f ./libtool ]; then
-#  echo "removing generated ./libtool"
-#  rm -f ./libtool
-#fi
-#
-#LIBTOOL=`which libtool`
-#LIBTOOL=`dirname ${LIBTOOL}`
-#LIBTOOL=`dirname ${LIBTOOL}`
-##LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
-
-libtoolize --force --copy
+libtoolize --force --copy --automake
 aclocal -I ./config
 autoconf
 automake -a
