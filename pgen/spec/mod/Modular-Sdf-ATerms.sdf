@@ -1,0 +1,12 @@
+module Modular-Sdf-ATerms
+imports Modular-Sdf-Syntax Modular-Sdf-Tree-Constructors
+        Kernel-Sdf-ATerms Renaming-Sdf-ATerms
+exports
+  context-free syntax
+    atermlist(Definition) -> ATermList
+    aterm(Module)         -> ATerm
+    atermlist(Sections)   -> ATermList
+    aterm(ModuleName)     -> ATerm
+hiddens
+  variables
+    "c+" -> CHAR+

@@ -1,0 +1,4 @@
+equations
+
+  [] aterm(<START>) = sort("<START>")
+  [] aterm(<Start>) = sort("<Start>")

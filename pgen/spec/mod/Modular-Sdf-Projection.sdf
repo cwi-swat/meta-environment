@@ -1,0 +1,11 @@
+module Modular-Sdf-Projection
+imports
+        Modular-Sdf-Section
+exports
+  context-free syntax
+    Import "(-" Imports                      -> Bool
+    Imports "++" Imports                     -> Imports {assoc}
+    "proj" "_" ModuleName "(" Definition ")" -> Sections
+
+    "Exp"(Sections)                          -> Grammar
+    "Hid"(Sections)                          -> Grammar

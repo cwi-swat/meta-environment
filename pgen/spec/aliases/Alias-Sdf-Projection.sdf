@@ -1,0 +1,7 @@
+module Alias-Sdf-Projection
+imports Alias-Sdf-Syntax
+exports
+  context-free syntax
+    Aliases "++" Aliases -> Aliases {right}
+    "Al"  (Grammar)      -> Aliases
+    "~Al" (Grammar)      -> Grammar

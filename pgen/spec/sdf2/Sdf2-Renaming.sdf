@@ -1,0 +1,10 @@
+module Sdf2-Renaming
+imports Sdf2-Syntax
+        Priority-Sdf-Renaming
+        Regular-Sdf-Renaming
+        Literals-Sdf-Renaming
+        CC-Sdf-Renaming
+        Sorts-Sdf-Renaming
+        Restrictions-Sdf-Renaming
+        Modular-Sdf-Renaming
+        Alias-Sdf-Renaming

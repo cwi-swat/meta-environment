@@ -1,0 +1,7 @@
+module Literals-Sdf-Renaming
+
+imports Kernel-Sdf-Renaming Literals-Sdf-Syntax
+hiddens
+  variables
+    "L" -> Literal
+

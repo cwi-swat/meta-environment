@@ -1,0 +1,17 @@
+module Symbol-Sets
+imports
+        Symbols-Projection
+exports
+  sorts SymbolSet
+  context-free syntax
+    "{" Symbols "}"          -> SymbolSet
+    SymbolSet "||" SymbolSet -> SymbolSet {right}
+    SymbolSet "/" SymbolSet  -> SymbolSet {left}
+    "(" SymbolSet ")"        -> SymbolSet {bracket}
+    Symbol "(-" SymbolSet    -> Bool
+  priorities
+    SymbolSet "/" SymbolSet -> SymbolSet  >
+    SymbolSet "||" SymbolSet -> SymbolSet
+  variables
+    "'u"[0-9\']* -> SymbolSet
+

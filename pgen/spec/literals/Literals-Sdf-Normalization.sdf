@@ -1,0 +1,18 @@
+module Literals-Sdf-Normalization
+imports
+        Literals-Sdf-Syntax
+        CC-Sdf-Normalization
+exports
+  context-free syntax
+    "l[[" Grammar "]]"     -> Grammar
+    literals(SymbolSet)    -> Productions
+    chars(Literal)         -> Symbols
+    symbols({Symbol ","}*) -> Symbols
+ variables
+    "c"[0-9\']*     -> CHAR
+    "c+"[0-9\']*  -> CHAR+
+    "c*"[0-9\']*  -> CHAR*
+    "L"            -> Literal
+    "UQL"          -> UQLiteral
+    "'g"[0-9\']*    -> {Symbol ","}*
+    "'g+"[0-9\']* -> {Symbol ","}+

@@ -1,0 +1,125 @@
+module Parse-Table
+imports
+        Vertices
+        Actions
+        Symbol-Tables
+        Sdf2-ATerms
+        Goto-Earley
+exports
+  sorts Parse-Table
+  context-free syntax
+    new-table                   -> Parse-Table
+    Parse-Table "[" states  "]" -> States
+    Parse-Table "[" grammar "]" -> Grammar
+    Parse-Table "[" follow  "]" -> Symbol-Table
+    Parse-Table "[" labels  "]" -> Label-Table
+    Parse-Table "[" init    "]" -> Int
+
+    Parse-Table "[" states  ":=" States       "]" -> Parse-Table
+    Parse-Table "[" grammar ":=" Grammar      "]" -> Parse-Table
+    Parse-Table "[" follow  ":=" Symbol-Table "]" -> Parse-Table
+    Parse-Table "[" labels  ":=" Label-Table  "]" -> Parse-Table
+    Parse-Table "[" init    ":=" Int          "]" -> Parse-Table
+
+    Parse-Table "[" Vertex "]" -> Parse-Table-Int
+
+    parse-table(Grammar, Symbol-Table, Label-Table, Int, States) -> Parse-Table
+  variables
+    "pt"[0-9\']* -> Parse-Table
+
+exports
+  sorts Parse-Table-Int
+  context-free syntax
+    "<" Parse-Table "," Int ">" -> Parse-Table-Int
+
+exports
+  sorts States State-List
+  context-free syntax
+    new-states                      -> States
+    States "[" last "]"             -> Int
+    States "[" Int "]"              -> State
+    States "[" Vertex "]"           -> States-Int
+    States "[" last ":=" Int "]"    -> States
+    States "[" Int ":=" State "]"   -> States
+
+    states(Int, State-List)         -> States
+    "[" {State ","}* "]"            -> State-List
+  variables
+    "sts"[0-9\']*    -> States
+    "stl"[0-9\']*    -> State-List
+    "state*"[0-9\']* -> {State ","}*
+
+exports
+  sorts States-Int
+  context-free syntax
+    "<" States "," Int ">" -> States-Int
+
+exports
+  sorts State
+  context-free syntax
+    new-state             -> State
+
+    State "[" kernel  "]" -> Vertex
+    State "[" closure "]" -> Vertex
+    State "[" id "]"      -> Int
+    State "[" actions "]" -> Action-Table
+    State "[" gotos "]"   -> Goto-Table
+
+    State "[" kernel  ":=" Vertex "]"       -> State
+    State "[" closure ":=" Vertex "]"       -> State
+    State "[" id      ":=" Int "]"          -> State
+    State "[" actions ":=" Action-Table "]" -> State
+    State "[" gotos   ":=" Goto-Table "]"   -> State
+
+    state-rec(Int, Vertex, Vertex, Goto-Table, Action-Table) -> State
+  variables
+    "state"[0-9\']* -> State
+
+exports
+  sorts Goto-Table Goto-Entry Goto-Entries
+  context-free syntax
+    new-goto-table                        -> Goto-Table
+    Goto-Table "[" CharClass "]"          -> Int
+    Goto-Table "[" CharClass ":=" Int "]" -> Goto-Table
+
+    gotos(Goto-Entries)                   -> Goto-Table
+    "[" {Goto-Entry ","}* "]"             -> Goto-Entries
+    goto(CharClass, Int)                  -> Goto-Entry
+  variables
+    "gt"[0-9\']*  -> Goto-Table
+    "ge"[0-9\']* -> Goto-Entry
+    "ge*"[0-9\']* -> {Goto-Entry ","}*
+
+exports
+  sorts Parse-Table-Goto-Table
+  context-free syntax
+    "<" Parse-Table "," Goto-Table ">" -> Parse-Table-Goto-Table
+
+exports
+  sorts Action-Table Action-Entries Action-Entry
+  context-free syntax
+    new-action-table                             -> Action-Table
+    Action-Table "[" Label "]"                   -> ActionSet
+    Action-Table "[" LabelSet ":=" ActionSet "]" -> Action-Table %%%{memo}
+
+    actions(Action-Entries)                      -> Action-Table
+    "[" {Action-Entry ","}* "]"                  -> Action-Entries
+    action(LabelSet, ActionSet)                  -> Action-Entry
+  variables
+    "at"[0-9\']*  -> Action-Table
+    "ae"[0-9\']*  -> Action-Entry
+    "ae*"[0-9\']* -> {Action-Entry ","}*
+
+exports
+  sorts Label-Table Label-Entry Label-Entries
+  context-free syntax
+    new-label-table                    -> Label-Table
+    Label-Table "[" Label "]"          -> CharClass
+    Label-Table "[" Label ":=" Int "]" -> Label-Table
+
+    labels(Label-Entries)              -> Label-Table
+    "[" {Label-Entry ","}* "]"         -> Label-Entries
+    label(Label, CharClass)            -> Label-Entry
+  variables
+    "lt"[0-9\']*  -> Label-Table
+    "le*"[0-9\']* -> {Label-Entry ","}*

@@ -1,0 +1,66 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Leading zeros are redundant.
+
+  [zeros] numchar("\" "0" c+) = numchar("\" c+)
+
+%% The constant $\topchar$ denotes the highest character. In this
+%% setting we define top to be \Char{255} such that all byte represented
+%% characters can be handled.
+
+  [botch] \BOT = \0
+  [topch] \TOP = \255
+  [EOFch] \EOF = \256
+  [LABch] \LABEL_START = \257
+
+%% All \ASCII{} symbols preceded by a backslash are translated to
+%% their corresponding \ASCII{} code. Digits and letters have
+%% the usual encoding except for \verb|\t| and \verb|\n|, which
+%% conventionally denote tab and newline.
+
+   [sc009] \t = \9  [sc010] \n = \10 [sc013] \r = \13
+
+   [sc032] \  = \32 [sc033] \! = \33 [sc034] \" = \34
+   [sc035] \# = \35 [sc036] \$ = \36 [sc037] \% = \37
+   [sc038] \& = \38 [sc039] \' = \39 [sc040] \( = \40
+   [sc041] \) = \41 [sc042] \* = \42 [sc043] \+ = \43
+   [sc044] \, = \44 [sc045] \- = \45 [sc046] \. = \46
+   [sc047] \/ = \47
+
+   [ac048] 0 = \48 [ac049] 1 = \49 [ac050] 2 = \50
+   [ac051] 3 = \51 [ac052] 4 = \52 [ac053] 5 = \53
+   [ac054] 6 = \54 [ac055] 7 = \55 [ac056] 8 = \56
+   [ac057] 9 = \57
+
+   [sc058] \: = \58 [sc059] \; = \59 [sc060] \< = \60
+   [sc061] \= = \61 [sc059] \> = \62 [sc063] \? = \63
+   [sc064] \@ = \64
+
+   [ac065] A = \65 [ac066] B = \66 [ac067] C = \67
+   [ac065] D = \68 [ac069] E = \69 [ac070] F = \70
+   [ac071] G = \71 [ac072] H = \72 [ac073] I = \73
+   [ac074] J = \74 [ac075] K = \75 [ac073] L = \76
+   [ac074] M = \77 [ac078] N = \78 [ac079] O = \79
+   [ac080] P = \80 [ac081] Q = \81 [ac082] R = \82
+   [ac083] S = \83 [ac081] T = \84 [ac082] U = \85
+   [ac086] V = \86 [ac087] W = \87 [ac088] X = \88
+   [ac089] Y = \89 [ac090] Z = \90
+
+   [sc091] \[ = \91 [sc092] \\ = \92 [sc093] \] = \93
+   [sc094] \^ = \94 [sc095] \_ = \95 [sc096] \` = \96
+
+   [ac097] a = \97 [ac098] b = \98 [ac099] c = \99
+   [ac100] d = \100 [ac101] e = \101 [ac102] f = \102
+   [ac103] g = \103 [ac104] h = \104 [ac105] i = \105
+   [ac106] j = \106 [ac107] k = \107 [ac108] l = \108
+   [ac109] m = \109 [ac110] n = \110 [ac111] o = \111
+   [ac112] p = \112 [ac113] q = \113 [ac114] r = \114
+   [ac115] s = \115 [ac116] t = \116 [ac117] u = \117
+   [ac118] v = \118 [ac119] w = \119 [ac120] x = \120
+   [ac121] y = \121 [ac122] z = \122
+
+   [sc123] \{ = \123 [sc124] \| = \124 [sc125] \} = \125
+   [sc126] \~ = \126

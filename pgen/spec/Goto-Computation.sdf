@@ -1,0 +1,34 @@
+module Goto-Computation
+imports
+        Parse-Table
+%%%     Grammar-Syntax
+exports
+  context-free syntax
+    table "[[" Grammar "]]" -> Parse-Table
+    goto  "[[" Grammar "]]" "(" Vertex "," Label ")" -> Vertex
+
+%% The following functions are parameters of the computation.
+
+  context-free syntax
+    init-table "[[" Grammar "]]"                        -> Parse-Table %% {parameter}
+    init     "[[" Grammar "]]"                          -> Vertex %% {parameter}
+    shift    "[[" Grammar "]]" "(" Vertex "," Label")"  -> Vertex   %% {parameter}
+    closure  "[[" Grammar "]]" "(" Vertex ")"           -> Vertex   %% {parameter}
+    outgoing "[[" Grammar "]]" "(" Vertex ")"           -> LabelSet %% {parameter}
+    actions  "[[" Grammar "]]" "(" Parse-Table "," Vertex "," Goto-Table ")" -> Action-Table %% {parameter}
+
+%% The computation of the goto graph is performed by the followin auxiliary functions:
+
+hiddens
+  context-free syntax
+    goto-graph "[[" Grammar "]]" "(" Parse-Table ")"         -> Parse-Table
+    goto-graph "[[" Grammar "]]" "(" Parse-Table "," Int ")" -> Parse-Table
+    vertex     "[[" Grammar "]]" "(" Parse-Table "," Int ")" -> Parse-Table
+    gotos      "[[" Grammar "]]" "(" Parse-Table "," Vertex "," LabelSet ")" -> Parse-Table-Goto-Table
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+module Alias-Sdf-Renaming
+imports Kernel-Sdf-Renaming Alias-Sdf-Projection
+exports
+  context-free syntax
+    "(" Aliases ")a" Renamings -> Aliases

@@ -1,0 +1,24 @@
+module Action-PCC
+imports
+        Action-Earley
+        Goto-PCC
+        Follow-Priorities
+exports
+  context-free syntax
+    union(LabelSet)   -> CharClass {memo}
+    char-class(Label) -> CharClass
+
+    init-labels"[[" Productions "]]" "(" Int ")" -> Label-Table
+
+    add-action(Action-Entry, Action-Table) -> Action-Table
+
+hiddens
+  sorts CC-LA
+  context-free syntax
+    nm-union(LabelSet)   -> CharClass
+    nm-shifts( Goto-Table) -> Action-Table
+
+    restrict(CharClass, Lookaheads, Int, Int, Production, Action-Table) -> Action-Table
+    "(" CharClass"," Lookaheads ")" -> CC-LA
+  variables
+    [ij] -> Int

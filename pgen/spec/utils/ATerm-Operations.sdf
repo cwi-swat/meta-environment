@@ -1,0 +1,60 @@
+module ATerm-Operations
+imports ATerms Booleans
+exports
+  context-free syntax
+    is-list(ATerm)                           -> Bool
+    is-con(ATerm)                            -> Bool
+    is-fun(ATerm)                            -> Bool
+    is-app(ATerm)                            -> Bool
+
+    is-lit(ATerm)                            -> Bool
+    is-int(ATerm)                            -> Bool
+    is-real(ATerm)                           -> Bool
+
+    aterms(ATerm)                            -> ATerms
+    atermlist(ATerm)                         -> ATermList
+    literal(ATerm)                           -> Literal
+
+exports
+  context-free syntax
+    ATerm "==" ATerm                         -> Bool
+    if Bool then ATerm else ATerm fi         -> ATerm
+    if Bool then ATermList else ATermList fi -> ATermList
+    ATerms "++a" ATerms                      -> ATerms {right}
+    fail                                     -> AFun
+    "(" ATerm ")"                            -> ATerm {bracket}
+    "(" ATerms ")"                           -> ATerms {bracket}
+    "(" ATermList ")"                        -> ATermList {bracket}
+context-free  priorities
+    ATerm "," ATerms -> ATerms
+  > ATerms "++a" ATerms -> ATerms
+
+exports
+  context-free syntax
+    apply(ATerm, ATerms)                     -> ATerm
+    applyf                                   -> AFun
+    holds(ATerm, ATerms)                     -> Bool
+
+    eq                                       -> AFun
+    identity(ATerm)                          -> ATerm
+    identity                                 -> AFun
+    yes(ATerm)                               -> Bool
+    yes                                      -> AFun
+    comp                                     -> AFun
+  variables
+    "Pred" [0-9\']* -> ATerm
+    "Fun"  [0-9\']* -> ATerm
+hiddens
+  variables
+    "Args" [0-9\']* -> ATerms
+
+
+exports
+  context-free syntax
+    term(ATerm)               -> ATerm
+    termf                     -> AFun
+    ann(ATerm)                -> ATermList
+    ATerm "@" ATermList       -> ATerm
+    set-ann(ATerm, ATermList) -> ATerm
+    has-ann(ATerm)            -> Bool
+

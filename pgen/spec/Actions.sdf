@@ -1,0 +1,24 @@
+module Actions
+imports Labels Integers Character-Class-Syntax
+exports
+  sorts Action Actions ActionSet
+  context-free syntax
+    shift(Int)                   -> Action
+    reduce(Int, Int, Label, Lookaheads) -> Action
+    reduce(Int, Int, Int, Lookaheads)   -> Action
+    accept                       -> Action
+    error                        -> Action
+
+    Action*                        -> Actions
+    Actions "++" Actions           -> Actions {assoc}
+
+   "{" Actions "}"                 -> ActionSet
+   ActionSet "||" ActionSet        -> ActionSet {assoc}
+   "(" ActionSet ")"               -> ActionSet {bracket}
+   acts(ActionSet)                 -> Actions
+  variables
+    [a][0-9\']*          -> Action
+    [a]"*"[0-9\']*       -> Action*
+    [a]"+"[0-9\']*       -> Action+
+    "'Fa"[0-9\']*        -> ActionSet
+    "as"[0-9\']*         -> ActionSet

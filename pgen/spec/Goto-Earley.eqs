@@ -1,0 +1,47 @@
+%%%% $Id$
+
+equations
+
+%%
+%% Shifting a label for a set of items, entails shifting each individual items with
+%% that label leading to a, possibly empty, set of items. If no other equations are
+%% defined for shifting an item it always yields the empty set of items [sh3].
+
+  [sh1]         shift[[_G]]({I}, l)       = shift[[_G]](I, l)
+%%%  [sh2]         shift[[_G]]({I+1 I+2}, l) = shift[[_G]]({I+1}, l) || shift[[_G]]({I+2}, l)
+  [sh2]         shift[[_G]]({I I+}, l) = shift[[_G]](I, l) || shift[[_G]]({I+}, l)
+
+%% Closure: loop over items in the set. for each item add the set of items that is predicted
+%% for it. Do not predict items that were already handled [cl2].
+
+  [cl0] closure[[_G]](_I)         = closure[[_G]]({}, _I)
+  [cl1] closure[[_G]](_I, {})     = _I
+  [cl2] closure[[_G]](_I, {I I*}) = closure[[_G]](_I, {I*}) when I (- _I = true
+  [default-cl3] closure[[_G]](_I, {I I*}) = closure[[_G]]({I} || _I, pred[[_G]](I) || {I*})
+  [default-pred] pred[[_G]](I)            = {}
+
+%% The set of outgoing edges from a vertex is the set of labels predicted for a set of items.
+%% The set is tranformed by means of \fun{trans-labels}.
+
+  [out0]         outgoing[[_G]](_I)         = trans-labels[[_G]](predicted[[_G]](_I))
+  [kpr0]         predicted[[_G]]({})        = {}
+  [kpr0]         predicted[[_G]]({I})       = predicted[[_G]](I)
+%%%Mark: 13-07-1999  [kpr1]         predicted[[_G]]({I+1 I+2}) = predicted[[_G]]({I+1}) + predicted[[_G]]({I+2})
+  [kpr1]         predicted[[_G]]({I I+}) = predicted[[_G]](I) + predicted[[_G]]({I+})
+
+%%%  [default-kpr2] predicted[[_G]](I)         = {}
+
+%% The function \fun{initial} produces the item set with all productions in $\Grammar$
+%% for symbol $\Sym{A}$.
+
+  [pc-init3]         initial[[]](_A)             = {}
+  [pc-init2]         initial[['a -> _A! p*]](_A) =  {[.'a -> _A!]} || initial[[p*]](_A)
+  [default-pc-init3] initial[[p p*]](_A)         = initial[[p*]](_A)
+
+%% Computing the goto graph for symbol $\Sym{A}$ is now a question
+%% of applying the generic
+%% function \fun{goto-graph} to the closure of the initial set of items for symbol $\Sym{A}$.
+
+  [INIT] init[[_G]] = closure[[_G]](initial[[P(_G)]](top-sort[[_G]]))
+
+%%%

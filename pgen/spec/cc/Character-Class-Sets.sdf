@@ -1,0 +1,19 @@
+module Character-Class-Sets
+imports Character-Class-Normalization
+exports
+  sorts CharClassSet
+  context-free syntax
+    "{" CharClass* "}"              -> CharClassSet
+    CharClassSet "++"  CharClassSet -> CharClassSet {assoc}
+    CharClassSet "/"   CharClassSet -> CharClassSet {left}
+    CharClassSet "/\\" CharClassSet -> CharClassSet {left}
+    CharClassSet ":" CharClass      -> CharClassSet
+    "(" CharClassSet ")"            -> CharClassSet {bracket}
+  priorities
+    CharClassSet "/\\" CharClassSet  -> CharClassSet >
+    CharClassSet "/"   CharClassSet  -> CharClassSet >
+    CharClassSet "++"  CharClassSet -> CharClassSet
+  variables
+    "cc*"[0-9\']* -> CharClass*
+    "cc+"[0-9\']* -> CharClass+
+    "ccs"[0-9\']* -> CharClassSet

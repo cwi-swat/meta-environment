@@ -1,0 +1,12 @@
+equations
+
+%% \noindent
+%% Encoding attributes.
+
+  [0] aterm( constructor ) = atr("constructor")
+  [0] aterm( memo)         = atr("memo")
+
+%% Decoding attributes.
+
+  [0] attribute(atr("constructor")) = constructor
+  [0] attribute(atr("memo"))        = memo

@@ -1,0 +1,40 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Encoding productions and attributes.
+
+  [] aterm('a -> _A!)          = prod(atermlist('a), aterm(_A), aterm(!))
+  [] aterm( )                  = no-attrs
+  [] aterm({ attr* })          = attrs(atermlist(attr*))
+  [] atermlist(attr*)          = [ ] when {attr*} = {}
+  [] atermlist(attr)           = [aterm(attr)]
+  [] atermlist(attr+1, attr+2) = atermlist(attr+1) ++ atermlist(attr+2)
+
+%% Decoding productions and attributes.
+
+  [] production(prod(Tl, T, T')) = symbols(Tl) -> symbol(T) attributes(T')
+  [] attributes(no-attrs)      =
+  [] attributes(attrs(Tl))     = attributes(Tl)
+  [] attributes([])            = {}
+  [] attributes([T])           = {attribute(T)}
+  [] attributes([T,Ts])        = {attribute(T)} ++ attributes([Ts])
+
+%% where we have the requirement that
+
+  [] attribute(aterm(attr))    = attr
+
+%% Encoding grammars and lists of productions.
+
+  [] aterm(syntax p*)   = syntax(atermlist(p*))
+  [] atermlist(p)       = [aterm(p)]
+  [] atermlist(p*)      = [] when p* =
+  [] atermlist(p+1 p+2) = atermlist(p+1) ++ atermlist(p+2)
+
+%% Decoding of grammars and lists of productions.
+
+  [] grammar(syntax(Tl)) = syntax productions(Tl)
+  [] productions([])     =
+  [] productions([T])    = production(T)
+  [] productions([T,Ts]) = production(T) ++ productions([Ts])

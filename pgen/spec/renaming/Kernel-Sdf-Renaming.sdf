@@ -1,0 +1,11 @@
+module Kernel-Sdf-Renaming
+imports Renaming-Sdf-Projection Kernel-Sdf-Projection
+exports
+  context-free syntax
+    "(" Symbol      ")" Renamings  -> Symbol
+    "[" Symbol      "]" Renamings  -> Symbol
+    "(" Symbols     ")*" Renamings -> Symbols
+    "(" Production  ")" Renamings  -> Production
+    "(" Productions ")*" Renamings -> Productions
+    "(" Grammar     ")" Renamings  -> Grammar
+

@@ -1,0 +1,26 @@
+%%%% $Id$
+%%%%
+%%%% This file is part of the ASF+SDF specification
+%%%%
+%%%%          "A Family of Parser Generators"
+%%%% by
+%%%%                    Eelco Visser
+%%%%
+%%%% copyright (c) Eelco Visser, 1996
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:visser@fwi.uva.nl http://adam.fwi.uva.nl/~visser/
+equations
+
+  [v-eq]    v1 == v2 = _I1 == _I2 when v1 = _I1, v2 = _I2
+  [v-union] v1 || v2  = _I1 || _I2  when v1 = _I1, v2 = _I2
+
+  [empty0] empty({}) = true
+  [empty1] empty({I+}) = false
+
+  [lbls] labels()        =
+%%%Mark: 13-07-1999  [lbls] labels('a+ 'b+) = labels('a+) ++ labels('b+)
+  [lbls] labels(_A 'b+) = labels(_A) ++ labels('b+)
+  [lbls] labels(_A)      = _A
+  [lbls] labels({'a})    = {labels('a)}

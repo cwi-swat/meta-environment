@@ -1,0 +1,39 @@
+%%%% $Id$
+%%%%
+%%%% This file is part of the ASF+SDF specification
+%%%%
+%%%%          "A Family of Parser Generators"
+%%%% by
+%%%%                    Eelco Visser
+%%%%
+%%%% copyright (c) Eelco Visser, 1996
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:visser@fwi.uva.nl http://adam.fwi.uva.nl/~visser/
+equations
+
+
+%% \paragraph{Lookup}
+
+  [f0] first(_T, l*)        = first(_T, l*, {'e})
+  [f1] first(_T, , ls)      = ls
+  [f2] first(_T, l l*, ls0) = ls1 when  _T (l) = ls1, 'e (- ls1 = false
+  [f3] first(_T, l l*, ls0) = ls1 / {'e} + first(_T, l*, ls0)
+                                when _T (l) = ls1, 'e (- ls1 = true
+%% \paragraph{Initialization}
+
+   [inf0]         init-first({})     = []
+   [inf1]         init-first({l l*}) = [<l,{l}>] ++ init-first({l*})
+%% \paragraph{Table}
+
+   [ftG] first-table[[_G]] = first-table(P(_G))
+   [ftP] first-table(p*)   = close(p*, [],init-first(labels(symbols(p*))))
+
+   [close1]         close(p*, _T, _T)   = _T
+   [default-close2] close(p*, _T1, _T2) = close(p*, _T2, step(p*, _T2))
+
+   [step1] step(, _T)             = _T
+   [step2] step('a -> _A! p*, _T) = step(p*, [<_A, first(_T, labels('a))>] ++ _T)
+
+%%%

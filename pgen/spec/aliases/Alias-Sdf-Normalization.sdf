@@ -1,0 +1,7 @@
+module Alias-Sdf-Normalization
+imports Alias-Sdf-Projection Kernel-Sdf-Normalization Kernel-Sdf-Renaming
+exports
+  context-free syntax
+    "a[[" Grammar "]]" -> Grammar
+    rn(Aliases)        -> Renamings
+    symbols(Aliases)   -> SymbolSet

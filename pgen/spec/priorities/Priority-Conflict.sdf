@@ -1,0 +1,5 @@
+module Priority-Conflict
+imports Earley-Items Priority-Sdf-Projection
+exports
+  context-free syntax
+    cnf"[[" Priorities "]]" "(" Item "," Production ")" -> Bool {memo}

@@ -1,0 +1,5 @@
+module Restrictions-Sdf-Renaming
+imports Restrictions-Sdf-Syntax Kernel-Sdf-Renaming
+exports
+  context-free syntax
+    "(" Restrictions ")" Renamings -> Restrictions

@@ -1,0 +1,30 @@
+equations
+
+%% \noindent
+%% Encoding grammars.
+
+  [] aterm(lexical syntax p*)      = lexical-syntax(atermlist(p*))
+  [] aterm(context-free syntax p*) = context-free-syntax(atermlist(p*))
+  [] aterm(variables p*)           = variables(atermlist(p*))
+  [] aterm(lexical variables p*)   = lexical-variables(atermlist(p*))
+
+%% Encoding symbols.
+
+  [] aterm(< _A -LEX>) = lex(aterm(_A))
+  [] aterm(< _A -CF>)  = cf(aterm(_A))
+  [] aterm(< _A -VAR>) = varsym(aterm(_A))
+  [] aterm(LAYOUT)     = layout
+
+%% Decoding grammars.
+
+  [] grammar(lexical-syntax(Tl))      = lexical syntax productions(Tl)
+  [] grammar(context-free-syntax(Tl)) = context-free syntax productions(Tl)
+  [] grammar(variables(Tl))           = variables productions(Tl)
+  [] grammar(lexical-variables(Tl))   = lexical variables productions(Tl)
+
+%% Decoding symbols.
+
+  [] symbol(lex(T))     = <symbol(T)-LEX>
+  [] symbol(cf(T))      = <symbol(T)-CF>
+  [] symbol(varsym(T))  = <symbol(T)-VAR>
+  [] symbol(layout)     = LAYOUT

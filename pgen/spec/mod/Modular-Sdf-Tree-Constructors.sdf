@@ -1,0 +1,6 @@
+module Modular-Sdf-Tree-Constructors
+imports ATerms
+exports
+  context-free syntax
+    "module" -> AFun
+    "id"     -> AFun

@@ -1,0 +1,7 @@
+module Symbols-Projection
+imports Symbols Booleans Integers
+exports
+  context-free syntax
+    Symbols "++" Symbols -> Symbols {assoc}
+    "|" Symbols "|"      -> Int
+    Symbol "(-" Symbols  -> Bool %%%{memo}

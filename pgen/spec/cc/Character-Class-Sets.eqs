@@ -1,0 +1,50 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "A Family of Syntax Definition Formalisms"
+%%%%
+%%%% Copyright (c) Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:visser@fwi.uva.nl http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%% \noindent
+%% Remove empty classes
+
+   [rme] {cc*1 [] cc*2} = {cc*1 cc*2}
+
+%% Concatenation
+
+   [cnc] {cc*1} ++ {cc*2} = {cc*1 cc*2}
+
+%% The difference $ccs_1/ccs_2$ takes the difference of each class in $ccs_1$ with all
+%% classes in $ccs_2$.
+
+   [dif1] ccs / {}          = ccs
+   [dif2] {} / ccs          = {}
+   [dif3] {cc} / {cc'}      = {cc / cc'}
+%%%Mark: 13-07-1999   [dif4] ccs / {cc+1 cc+2} = ccs / {cc+1} / {cc+2}
+%%%Mark: 13-07-1999   [dif5] {cc+1 cc+2} / ccs = {cc+1} / ccs ++ {cc+2} / ccs
+   [dif4] ccs / {cc cc+2} = ccs / {cc} / {cc+2}
+   [dif5] {cc cc+} / ccs = {cc} / ccs ++ {cc+} / ccs
+
+%% The pairwise intersection $ccs_1\And{}ccs_2$ is the set of  classes
+%% $ccs_3$ that contains the intersection of each pair of classes in $ccs_1$
+%% and $ccs_2$.
+
+   [int1] ccs /\ {}          = {}
+   [int2] {} /\ ccs          = {}
+   [int3] {cc} /\ {cc'}      = {cc /\ cc'}
+%%%Mark: 13-07-1999   [int4] ccs /\ {cc+1 cc+2} = ccs /\ {cc+1} ++ ccs /\ {cc+2}
+%%%Mark: 13-07-1999   [int5] {cc+1 cc+2} /\ ccs = {cc+1} /\ ccs ++ {cc+2} /\ ccs
+   [int4] ccs /\ {cc cc+} = ccs /\ {cc} ++ ccs /\ {cc+}
+   [int5] {cc cc+} /\ ccs = {cc} /\ ccs ++ {cc+} /\ ccs
+
+%% The partitioning of two sets.
+
+   [prt] ccs : cc = ccs /\ {cc} ++ ccs / {cc} ++ {cc} / ccs

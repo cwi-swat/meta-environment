@@ -1,0 +1,18 @@
+module Regular-Sdf-Tree-Constructors
+imports ATerms
+exports
+  context-free syntax
+    "empty"         -> AFun
+    "seq"           -> AFun
+    "opt"           -> AFun
+    "iter"          -> AFun
+    "iter-star"     -> AFun
+    "iter-sep"      -> AFun
+    "iter-star-sep" -> AFun
+    "iter-n"        -> AFun
+    "iter-sep-n"    -> AFun
+    "set"           -> AFun
+    "pair"          -> AFun
+    "func"          -> AFun
+    "alt"           -> AFun
+    "perm"          -> AFun

@@ -1,0 +1,21 @@
+equations
+
+%% Encoding character classes.
+
+  [] aterm([cr*])          = char-class(atermlist(cr*))
+  [] atermlist(cr*)        = [] when cr* =
+  [] atermlist(cr+1 cr+2)  = atermlist(cr+1) ++ atermlist(cr+2)
+  [] atermlist(cr)         = [aterm(_c)] when cr = _c
+  [] atermlist(_c1-_c2)    = [range(aterm(_c1), aterm(_c2))]
+  [] aterm(_c)             = int(_c)
+
+%% Decoding character classes.
+
+  [] symbol(char-class([]))      = []
+  [] symbol(char-class([Ts]))    = [ranges([Ts])]
+  [] ranges([T])                 = range(T)
+  [] ranges([T,Ts])              = range(T) ranges([Ts])
+  [] range(n)                    = character(n)
+  [] range(range(n1,n2))         = character(n1) - character(n2)
+  [] character(n)                = char(n)
+  [] symbol(n)                   = [char(n)]

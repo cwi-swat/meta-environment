@@ -1,0 +1,21 @@
+%%%% $Id$
+
+equations
+
+%%%  [] filter-follow[[_G]](st) = filter(R(_G), st)
+
+  []
+        filter(restr*, []) = []
+  []
+        proj__A(restr*) = cc
+        ==================================================================================
+        filter(restr*, [<_A, ls> sp*]) = [<_A, {union(ls) / cc}>] ++ filter(restr*, [sp*])
+  []
+        proj__A(restr*) = cc
+        =======================================================================================
+        filter(restr*, [<'a -> _A!, ls> sp*]) = [<'a -> _A!, {union(ls) / cc}>] ++ filter(restr*, [sp*])
+
+  [] {} / cc         = {}
+  [] ls / []         = ls
+  [] {cc l*} / [cr+]  =  {cc /  [cr+]} + {l*} / [cr+]
+  [default-] {l l*} / [cr+]  = {l} + {l*} / [cr+]

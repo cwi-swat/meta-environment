@@ -1,0 +1,11 @@
+equations
+
+%% Encoding of grammars.
+
+  [0] aterm((/))     = empty-grammar
+  [0] aterm(_G1 _G2) = conc-grammars(aterm(_G1), aterm(_G2))
+
+%% Decoding of grammars.
+
+  [0] grammar(empty-grammar) = (/)
+  [0] grammar(conc-grammars(T1, T2)) = grammar(T1) grammar(T2)

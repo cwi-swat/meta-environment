@@ -1,0 +1,16 @@
+module Symbol-Tables
+imports Labels
+exports
+  sorts Symbol-Table  STPair
+  context-free syntax
+    "<" Label "," LabelSet ">"     -> STPair
+    "[" STPair* "]"                -> Symbol-Table
+    Symbol-Table "++" Symbol-Table -> Symbol-Table {right}
+    Symbol-Table "(" Label ")"     -> LabelSet
+    new-symbol-table -> Symbol-Table
+  variables
+    "sp"[0-9\']*         -> STPair
+    "sp*"[0-9\']*      -> STPair*
+    "sp+"[0-9\']*      -> STPair+
+    "st"[0-9\']*         -> Symbol-Table
+    "_F"[0-9\']*         -> Symbol-Table

@@ -1,0 +1,10 @@
+module Action-Earley
+imports Goto-Earley Follow-Earley Restrictions-Sdf-Projection
+exports
+  context-free syntax
+    shifts( Goto-Table) -> Action-Table %% {parameter}
+    reductions(Label-Table, Symbol-Table, Restrictions, Vertex, Action-Table) -> Action-Table %% {parameter}
+    init-labels "[[" Grammar "]]" -> Label-Table
+    filter"[[" Grammar "]]" "(" Action-Table ")" -> Action-Table
+    filter-follow "[[" Grammar "]]" "(" Symbol-Table ")" -> Symbol-Table %% {parameter}
+    filter-follow "[[" Grammar "]]" -> Symbol-Table %% {parameter}

@@ -1,0 +1,25 @@
+%%%% $Id$
+
+equations
+
+  [0] normalize[[definition d]](Main,<START>) = _G,
+      table[[_G]] = pt
+      ================
+      parse-table(definition d) = aterm(pt)
+
+  [0] normalize[[definition d]](ModName,<START>) = _G,
+      table[[_G]] = pt
+      ================
+      parse-table(ModName, definition d) = aterm(pt)
+
+  [0] table[[_G]] = pt
+      ================
+      parse-table(_G) = aterm(pt)
+
+  [0] draw-table(definition d) = graph(table[[normalize[[definition d]](Main,<START>)]])
+
+  [0] normalize(definition d) = normalize[[definition d]](Main,<START>)
+
+  [0] normalize(ModName, definition d) = normalize[[definition d]](ModName,<START>)
+
+%%%

@@ -1,0 +1,6 @@
+module Modular-Sdf-Renaming
+imports
+        Modular-Sdf-Projection
+exports
+  context-free syntax
+    "(" Imports  ")" Renamings    -> Imports

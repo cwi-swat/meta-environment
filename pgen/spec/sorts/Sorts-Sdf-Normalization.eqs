@@ -1,0 +1,9 @@
+%%%% $Id$
+
+equations
+
+  [0] sorts                  = (/)
+  [0] sorts 'a   <> sorts 'b = <sorts 'a 'b, (/)>
+  [0] syntax p*  <> sorts 'a = <sorts 'a, syntax p*>
+
+%%

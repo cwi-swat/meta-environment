@@ -1,0 +1,9 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Encoding and decoding sorts.
+
+  [0] aterm(sort(c+)) = sort(literal(""" c+ """))
+  [0] symbol(sort(literal(""" c+ """))) = sort(c+)

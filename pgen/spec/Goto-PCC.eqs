@@ -1,0 +1,91 @@
+%%%% $Id$
+
+equations
+
+  [0] top-sort[[_G]] = <Start>
+
+%%
+%% \paragraph{Shift}
+%%
+%% The function shift computes the kernel of the item set after shifting
+%% the dot over items that match the shifted label. If the label is a character
+%% class, the shift is only done when the predicted symbol is a character
+%% class that is a superset of the shifted characterclass.
+%% If the shifted label is a production, the result symbol of that production
+%% should match the predicted symbol and there should be no conflict between
+%% the two productions.
+
+  [pcsh0]
+        shift[[_G]](['a . _B 'b -> _A!2], _B) = {['a _B . 'b -> _A!2]}
+  [pcsh1]
+        cc1 (= cc2 = true
+        ===============================================================
+        shift[[_G]](['a . cc2 'b -> _A!], cc1) = {['a cc2 . 'b -> _A!]}
+  [pcsh2]
+        cnf[[Pr(_G)]](['a . _B 'b -> _A!2], 'c -> _B!1) = false
+        ======================================================================
+        shift[[_G]](['a . _B 'b -> _A!2], 'c -> _B!1) = {['a _B . 'b -> _A!2]}
+  [default-sh3]
+        shift[[_G]](I, l) = {}
+
+%% \paragraph{Closure}
+
+  [pcl1]
+        pred[[_G]](['a . _B 'b -> _A!1]) = pred[[Pr(_G)]](P__B(P(_G)), ['a . _B 'b -> _A!1])
+  [default-pcl2]
+        pred[[_G]](I) = {}
+  [0]
+        pred[[pr*]]( , I) = {}
+  [0]
+%%%Mark: 13-07-1999        pred[[pr*]](p+1 p+2, I) = pred[[pr*]](p+1, I) || pred[[pr*]](p+2, I)
+        pred[[pr*]](p p+, I) = pred[[pr*]](p, I) || pred[[pr*]](p+, I)
+  [0]
+        cnf[[pr*]](['a . _B 'b -> _A!1], 'c -> _B!2) = false
+        ==============================================================
+        pred[[pr*]]('c -> _B!2, ['a . _B 'b -> _A!1]) = {[.'c -> _B!2]}
+  [default-pred]
+        pred[[pr*]](p, I) = {}
+
+%% \paragraph{Partitioning Charactersets}
+%%
+%% The transitions that are possible from a given set of items are
+%% the productions that have an initial item in the set and the
+%% charactersets that are after the dot in an item. The transitions
+%% corresponding to a symbol that is after a dot but is not
+%% a character class, always correspond to a transition with an
+%% initial production. The function \fun{predicted2} yields the
+%% list of initial productions and predicted character classes.
+
+  [pc-pr1]         predicted[[_G]](['a+ . cc 'b -> _A!]) = {cc}
+  [default-pc-pr2] predicted[[_G]](['a+ . _B 'b -> _A!]) = {}
+  [pc-pr3]         predicted[[_G]](['a+ .       -> _A!]) = {}
+  [pc-pr4]         predicted[[_G]]([    .       -> _A!]) = {-> _A!}
+  [pc-pr5]         predicted[[_G]]([    . cc 'b -> _A!]) = {cc 'b -> _A! cc}
+  [default-pc-pr6] predicted[[_G]]([    . _B 'b -> _A!]) = {_B 'b -> _A!}
+
+%% Some of the character classes that are predicted by an item set
+%% can overlap. This would lead to wrong transitions in the goto-graph.
+%% The function \fun{predicted} first computes the predicted character
+%% classes and initial productions and then partitions the set of character
+%% classes.
+
+  [pc-pr9] trans-labels[[_G]]({l*}) = {lbls(partition(l*)) ++ prods(l*)}
+
+%% where the function \fun{prods} yields the productions
+%% in a list of labels, the \fun{partition}
+%% produces a partitioning of the character classes in a list
+%% of labels, and the function \fun{lbls} translates a set of
+%% character classes to a list of labels.
+
+  [pc-prods1]   prods()          =
+  [pc-prods2]   prods(p l*)      = p ++ prods(l*)
+  [pc-prods3]   prods(cc l*)     = prods(l*)
+  [pc-part1]    partition()      = {}
+  [pc-part2]    partition(p l*)  = partition(l*)
+  [pc-part3]    partition(cc l*) = partition(l*) : cc
+  [lbls1]       lbls({})         =
+  [lbls2]       lbls({cc cc*})   = cc ++ lbls({cc*})
+
+
+
+%%%

@@ -1,0 +1,39 @@
+%%%% $Id$
+
+equations
+
+  [l-conc]         l*1 ++ l*2   = l*1 l*2
+  [l-eq]           l == l       = true
+  [default-l-neq]  l == l'      = false
+%%%  [l-less]         l < l        = false
+%%% [l-leq]          l [= l       = true
+
+%%%  [0]        {l*1 l l*2 l l*3} = {l*1 l l*2 l*3}
+
+  [0] ls1 + ls2 = ls1 nm-+ ls2
+
+  [mn-0]           {}        nm-+ ls          = ls
+  [mn-0]           ls        nm-+ {}          = ls
+
+%%%  [0]           {l+1 l+2} + ls          = {l+1} + {l+2} + ls
+%%%  [0]           {l}       + {l*1 l l*2} = {l*1 l l*2}
+%%%  [default-0]   {l}       + {l*}        = {l l*}
+  [mn-0]           {l*} nm-+ ls = ls1
+                   ==================
+                   {l l*} nm-+ ls          = l +1 ls1
+
+%%%  [0]           l       +1 {l*1 l l*2} = {l*1 l l*2}
+%%%  [default-0]   l       +1 {l*}        = {l l*}
+
+  [0]           l       +1 ls          = ls  when l (- ls = true
+  [default-0]   l       +1 {l*}        = {l l*}
+
+  [0]           l (- {l*1 l l*2}  = true
+  [default-0]   l (- {l*}         = false
+
+  [0] ls1 / ls2 = ls1 nm-/ ls2
+  [nm-0]           {} nm-/ ls           = {}
+  [nm-0]           {l l*} nm-/ ls       = {l*} nm-/ ls when l (- ls = true
+  [default-nm-0]   {l l*1} nm-/ ls      = {l l*2}   when {l*1} nm-/ ls = {l*2}
+
+%%%

@@ -1,0 +1,39 @@
+module Dot-Graphs
+imports Layout
+exports
+  sorts Id Graph Stmt-List Stmt Attr-Stmt Attr Attr-List Node-Stmt
+        Node-Id Opt-Attrs Edge-Stmt EdgeRHS SubGraph EdgeOp
+  lexical syntax
+    [A-Za-z\_][A-Za-z0-9\_]* -> Id
+    "\"" ~[\n\"]* "\""     -> Id
+  context-free syntax
+    "graph"   Id "{" Stmt-List "}"      -> Graph
+    "digraph" Id "{" Stmt-List "}"      -> Graph
+    "strict" "graph"   Id "{" Stmt-List "}"  -> Graph
+    "strict" "digraph" Id "{" Stmt-List "}"  -> Graph
+    {Stmt ";"}* ";"                 -> Stmt-List
+    Attr-Stmt                       -> Stmt
+    Node-Stmt                       -> Stmt
+    Edge-Stmt                       -> Stmt
+    SubGraph                        -> Stmt
+    Id "=" Id                       -> Stmt
+    graph "[" Attr-List "]"         -> Attr-Stmt
+    node  "[" Attr-List "]"         -> Attr-Stmt
+    edge  "[" Attr-List "]"         -> Attr-Stmt
+    Id "=" Id                       -> Attr
+    Attr*                           -> Attr-List
+    Node-Id Opt-Attrs               -> Node-Stmt
+    Id                              -> Node-Id
+    Id ":" Id                       -> Node-Id
+    "[" Attr-List "]"               -> Opt-Attrs
+                                    -> Opt-Attrs
+    Node-Id  EdgeRHS Opt-Attrs      -> Edge-Stmt
+    SubGraph  EdgeRHS Opt-Attrs     -> Edge-Stmt
+    EdgeOp Node-Id                  -> EdgeRHS
+    EdgeOp Node-Id EdgeRHS          -> EdgeRHS
+    EdgeOp SubGraph                 -> EdgeRHS
+    EdgeOp SubGraph EdgeRHS         -> EdgeRHS
+    "subgraph" Id "{" Stmt-List "}" -> SubGraph
+    "subgraph" Id                   -> SubGraph
+    "->"                            -> EdgeOp
+    "--"                            -> EdgeOp

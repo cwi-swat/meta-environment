@@ -1,0 +1,48 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% The follow table is computed from the first table.
+
+  [fo1] follow-table[[_G]]     = follow-table[[_G]](first-table[[_G]])
+  [fo2] follow-table[[_G]](Fi) = close[[_G]](Fi, [], step[[_G]](P(_G), Fi, []))
+
+  [fcl1]         close[[_G]](Fi, _T, _T)   = _T
+  [default-fcl2] close[[_G]](Fi, _T1, _T2) = close[[_G]](Fi, _T2, step[[_G]](P(_G), Fi,_T2))
+
+%%%  [st-1] step[[_G]](p*, Fi, Fo) = nm-step[[_G]](p*, Fi, Fo)
+
+  [st-1] step[[_G]](            , Fi, Fo) = Fo
+  [st-2] step[[_G]]('a -> _A! p*, Fi, Fo) = step[[_G]](p*, Fi, prod[[_G]]([ . 'a -> _A!], Fi, Fo))
+
+  [pr-1]
+        prod[[_G]](['a . -> _A!], Fi, Fo) = Fo
+  [pr-3]
+        Fo' = sons[[_G]](P(_G), ['a . _B 'b -> _A!], first(Fi, labels('b), Fo('a _B 'b -> _A!)) )
+        =========================================================================================
+        prod[[_G]](['a . _B 'b -> _A!], Fi, Fo) = prod[[_G]](['a _B . 'b -> _A!], Fi, Fo' ++ Fo)
+
+  [sns1] sons[[_G]](p*, I, ls) = nm-sons[[_G]](p*, I, ls)
+  [nm-sns1] nm-sons[[_G]](, I, ls) = []
+%%%  [0]
+%%%        sons[[_G]](p+1 p+2, I, ls) = sons[[_G]](p+1, I, ls) ++ sons[[_G]](p+2, I, ls)
+%%%  [sns2]
+%%%        Fo = follows[[_G]]('c -> _B!1, ['a . _B 'b -> _A!2], ls)
+%%%        ========================================================
+%%%        sons[[_G]]('c -> _B!1, ['a . _B 'b -> _A!2], ls) =  Fo
+%%%  [default-sns3]
+%%%        sons[[_G]](p, I, ls) = []
+  [nm-0]
+        nm-sons[[_G]](p p*, I, ls) = sons1[[_G]](p, I, ls) ++ nm-sons[[_G]](p*, I, ls)
+  [sns2]
+        Fo = follows[[_G]]('c -> _B!1, ['a . _B 'b -> _A!2], ls)
+        ========================================================
+        sons1[[_G]]('c -> _B!1, ['a . _B 'b -> _A!2], ls) =  Fo
+  [default-sns3]
+        sons1[[_G]](p, I, ls) = []
+
+  [default-0]
+        follows[[_G]](p, I, ls) = []
+
+%%%

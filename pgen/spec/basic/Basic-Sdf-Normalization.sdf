@@ -1,0 +1,19 @@
+module Basic-Sdf-Normalization
+imports Basic-Sdf-Syntax Regular-Sdf-Syntax Priority-Sdf-Syntax Kernel-Sdf-Normalization
+exports
+  context-free syntax
+    "b[[" Grammar "]]"          -> Grammar
+    "b-aux[[" Grammar "]]"      -> Grammar
+
+    "<" Symbols     "-LEXs"">" -> Symbols
+    "<" Production  "-LEX" ">" -> Production
+    "<" Productions "-LEXs"">" -> Productions
+    "<" Grammar     "-LEX" ">" -> Grammar
+
+    "<" Symbols     "-CFs" ">" -> Symbols
+    "<" Production  "-CF"  ">" -> Production
+    "<" Productions "-CFs" ">" -> Productions
+    "<" Grammar     "-CF"  ">" -> Grammar
+
+    "<" Productions "-VARs"    ">" -> Productions
+    "<" Productions "-LEXVARs" ">" -> Productions

@@ -1,0 +1,4 @@
+module Restrictions-Sdf-ATerms
+imports
+        Kernel-Sdf-ATerms
+        Restrictions-Sdf-Syntax

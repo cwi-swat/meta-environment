@@ -1,0 +1,50 @@
+module ATerm-Lists
+
+imports ATerm-Operations Integers
+exports
+  context-free syntax
+    ATerm ":" ATermList              -> ATermList
+    consf                            -> AFun
+    ATermList "++" ATermList         -> ATermList {right}
+    concf                            -> AFun
+    concat(ATermList)                -> ATermList
+    concatf                          -> AFun
+    empty(ATermList)                 -> Bool
+    emptyp                           -> AFun
+    first(ATermList)                 -> ATerm
+    firstf                           -> AFun
+    rest(ATermList)                  -> ATermList
+    restf                            -> AFun
+    size(ATermList)                  -> IntCon
+    sizef                            -> AFun
+    index(ATermList, Int)            -> ATerm
+    indexf                           -> AFun
+    replace(ATermList, Int, ATerm)   -> ATermList
+    replacef                         -> AFun
+    delete(ATermList, ATerm)         -> ATermList
+    deletef                          -> AFun
+    delete1(ATermList, ATerm)        -> ATermList
+    delete1f                         -> AFun
+context-free  priorities
+    ATerm ":" ATermList              -> ATermList
+  > ATermList "++" ATermList         -> ATermList
+
+exports
+  context-free syntax
+    for-all(ATerm, ATermList)        -> Bool
+    for-allp                         -> AFun
+    for-some(ATerm, ATermList)       -> Bool
+    for-somep                        -> AFun
+    filter(ATerm, ATermList)         -> ATermList
+    filterf                          -> AFun
+    map(ATerm, ATermList)            -> ATermList
+    mapf                             -> AFun
+    zip(ATerm, ATermList, ATermList) -> ATermList
+    zipf                             -> AFun
+    foldr(ATerm, ATerm, ATermList)   -> ATerm
+    foldrf                           -> AFun
+    foldl(ATerm, ATerm, ATermList)   -> ATerm
+    foldlf                           -> AFun
+    foldr-zip(ATerm, ATerm, ATerm, ATermList, ATermList) -> ATerm
+    foldr-zipf                       -> AFun
+%%}

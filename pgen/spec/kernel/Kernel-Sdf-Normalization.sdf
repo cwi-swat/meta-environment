@@ -1,0 +1,21 @@
+module Kernel-Sdf-Normalization
+imports
+        Kernel-Sdf-Projection
+        Grammar-Normalization
+exports
+  context-free syntax
+    "k" "[[" Grammar "]]" -> Grammar
+    merge(Productions)    -> Productions
+hiddens
+  sorts
+    Prod-Tuple
+  context-free syntax
+    "(" Production "," Productions ")" -> Prod-Tuple
+    new-merge(Productions,Productions) -> Productions
+    attr-collect(Production,Productions) -> Productions
+    prod-contains(Production,Productions) -> Bool
+
+
+exports
+  context-free syntax
+    "filter-attributes" ( Attributes ) -> Attributes

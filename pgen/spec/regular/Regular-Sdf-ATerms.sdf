@@ -1,0 +1,3 @@
+module Regular-Sdf-ATerms
+imports Regular-Sdf-Tree-Constructors Kernel-Sdf-ATerms
+        Regular-Sdf-Syntax

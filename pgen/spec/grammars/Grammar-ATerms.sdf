@@ -1,0 +1,6 @@
+module Grammar-ATerms
+imports Grammar-Tree-Constructors Grammar-Syntax
+exports
+  context-free syntax
+    aterm(Grammar) -> ATerm
+    grammar(ATerm) -> Grammar

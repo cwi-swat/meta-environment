@@ -1,0 +1,142 @@
+%%%% $Id$
+
+equations
+
+%% Parse tables
+
+  [0] Pr(_G) = pr*
+      ============
+      aterm(parse-table(_G, st, lt, z, sts)) =
+        parse-table(z, aterm(lt), aterm(sts), prios2aterm(pr*,lt))
+
+%% States
+
+  [0] aterm(states(z, [state*])) = states(atermlist([state*]))
+
+  [0] atermlist([state*]) = [] when [state*] = []
+  [0] atermlist([state, state*]) = aterm(state) : atermlist([state*])
+
+  [0] aterm(state-rec(z, _I1, _I2, gt, at)) = state-rec(z, aterm(gt), aterm(at)%, aterm(_I2)%)
+
+%%% action table
+
+  [0] aterm(actions([ae*])) = actions(atermlist([ae*]))
+  [0] atermlist([action({cc}, 'Fa), ae*]) = action(aterm(cc), aterm('Fa)) : atermlist([ae*])
+  [0] atermlist([ae*])                    = [] when [ae*] = []
+
+%% actions
+
+  [0] aterm({a*})                 = [] when {a*} = {}
+%%%Mark: 13-07-1999  [0] aterm({a+1 a+2})            = aterm({a+1}) ++ aterm({a+2})
+  [0] aterm({a a+})            = aterm({a}) ++ aterm({a+})
+  [0] aterm({shift(z)})           = [shift(z)]
+  [0] aterm({reduce(z1, z2, 'a -> _A!, [[]])}) = [reduce(z1, z2, special-attr(!))]
+  [default-] aterm({reduce(z1, z2, 'a -> _A!, las)}) = [reduce(z1, z2, special-attr(!), aterm-las(las))]
+  [0] aterm({reduce(z1, z2, z3, [[]])}) = [reduce(z1, z2, z3)]
+  [default-] aterm({reduce(z1, z2, z3, las)}) = [reduce(z1, z2, z3, aterm-las(las))]
+  [0] aterm({accept})             = [accept]
+  [0] aterm({error})              = [error]
+
+%% lookaheads
+
+  [] aterm-la(cc)           = look(aterm(cc), [])
+  [] aterm-la(cc . las)     = look(aterm(cc), aterm-las(las))
+  [] aterm-las([[]])        = []
+  [] aterm-las([[la, la*]]) = [aterm-la(la)] ++ aterm-las([[la*]])
+
+%% does list of attributes contain a reject attribute? 0 if no, 1 if yes
+
+  [0] special-attr()                 = 0
+  [0] special-attr({reject, attr*})  = 1
+  [0] special-attr({prefer, attr*})  = 2
+  [0] special-attr({avoid, attr*})   = 4
+  [0] special-attr({})               = 0
+  [0] special-attr({attr, attr*})    = special-attr({attr*})
+        when attr != reject, attr != prefer, attr != avoid
+
+%% goto table
+
+  [0] aterm(gotos([ge*]))           = atermlist([ge*])
+  [0] atermlist([goto(cc, z), ge*]) = goto(aterm(cc), z) : atermlist([ge*])
+  [0] atermlist([ge*])              = [] when [ge*] = []
+
+%% label table
+
+  [] aterm(labels([le*]))             = atermlist([le*])
+  [] atermlist([label(p, [_c]), le*]) = label(aterm(p), int(_c)) : atermlist([le*])
+  [] atermlist([le*])                 = [] when [le*] = []
+
+%%% item sets
+
+  [0] aterm({I*})                      = [] when {I*} =
+  [0] aterm({I+1 I+2})                 = aterm({I+1}) ++ aterm({I+2})
+  [0] aterm({['a . 'b -> _A]})         = [item(atermlist('a),atermlist('b), aterm(_A), no-attrs)]
+  [0] aterm({['a . 'b -> _A {attr+}]}) =  [item(atermlist('a),atermlist('b), aterm(_A), attrs(aterm({attr+})))]
+
+%% \paragraph{Attributes}
+
+  [0] aterm( cons(T) )  = cons(T)
+
+
+%% Transformation of the collection of priorities.
+
+  [p2a-1'1] prs2aterm(pr*,lt) = Tl
+            ======================
+            prios2aterm(pr*,lt) = priorities(Tl)
+
+  [p2a-2'1] pr2aterm(pr,lt) = Tl1,
+            prs2aterm(pr*,lt) = Tl2
+            ======================
+            prs2aterm(pr,pr*,lt) = Tl1 ++ Tl2
+
+  [p2a-2'3] prs2aterm( ,lt) = []
+
+  [p2a-3'1] lookup-in-labeltable(p1,lt) = T1,
+            T1 != -1,
+            lookup-in-labeltable(p2,lt) = T2,
+            T2 != -1
+            ================================
+            pr2aterm(p1 > p2,lt) = [gtr-prio(T1,T2)]
+
+  [p2a-3'2] lookup-in-labeltable(p1,lt) = T1,
+            T1 != -1,
+            lookup-in-labeltable(p2,lt) = T2,
+            T2 != -1
+            ================================
+            pr2aterm(p1 left p2,lt) = [left-prio(T1,T2)]
+
+  [p2a-3'3] lookup-in-labeltable(p1,lt) = T1,
+            T1 != -1,
+            lookup-in-labeltable(p2,lt) = T2,
+            T2 != -1
+            ================================
+            pr2aterm(p1 right p2,lt) = [right-prio(T1,T2)]
+
+  [p2a-3'4] lookup-in-labeltable(p1,lt) = T1,
+            T1 != -1,
+            lookup-in-labeltable(p2,lt) = T2,
+            T2 != -1
+            ================================
+            pr2aterm(p1 assoc p2,lt) = [assoc-prio(T1,T2)]
+
+  [p2a-3'5] lookup-in-labeltable(p1,lt) = T1,
+            T1 != -1,
+            lookup-in-labeltable(p2,lt) = T2,
+            T2 != -1
+            ================================
+            pr2aterm(p1 non-assoc p2,lt) = [non-assoc-prio(T1,T2)]
+
+  [default-3'6] pr2aterm(pr,lt) = []
+
+  [lilt-1'1] lookup-in-labeltable(p,labels([le*])) =
+               lookup-in-labels(p,[le*])
+
+  [lilt-2'1] lookup-in-labels('a -> _A!1,[ ]) = -1
+
+  [lilt-2'2] lookup-in-labels('a -> _A!1,[label('a -> _A!2, [_c]), le*]) = int(_c)
+
+  [lilt-2'3] p1 != p2
+             ========
+             lookup-in-labels(p1,[label(p2, [_c]), le*]) =
+               lookup-in-labels(p1,[le*])
+%%%

@@ -1,0 +1,13 @@
+equations
+
+%% \noindent
+%% The function \fun{Al} gives all alias declarations of a grammar,
+%% \fun{$\NonAl$} the grammar without alias declarations.
+
+  [0]         al*1 ++ al*2     = al*1 al*2
+  [0]         Al(aliases al*)  = al*
+  [0]         Al(_G1 _G2)      = Al(_G1) ++ Al(_G2)
+  [default-0] Al(_G)           =
+  [0]         ~Al(aliases al*) = (/)
+  [0]         ~Al(_G1 _G2)     = ~Al(_G1) ~Al(_G2)
+  [default-0] ~Al(_G)          = _G

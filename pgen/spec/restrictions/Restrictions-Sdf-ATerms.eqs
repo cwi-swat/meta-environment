@@ -1,0 +1,3 @@
+equations
+
+  [0] aterm( reject ) = atr("reject")

@@ -1,0 +1,6 @@
+module Grammar-Tree-Constructors
+imports ATerms
+exports
+  context-free syntax
+    "empty-grammar" -> AFun
+    "conc-grammars" -> AFun

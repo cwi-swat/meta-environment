@@ -1,0 +1,11 @@
+module CC-Sdf-ATerms
+imports Kernel-Sdf-ATerms CC-Sdf-Syntax CC-Sdf-Tree-Constructors
+        Character-Arithmetic
+exports
+  context-free syntax
+    atermlist(OptCharRanges) -> ATermList
+    aterm(Character)         -> NatCon
+    ranges(ATermList)        -> CharRanges
+    range(ATerm)             -> CharRange
+    character(ATerm)         -> Character
+

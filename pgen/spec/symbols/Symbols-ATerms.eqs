@@ -1,0 +1,21 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Encoding lists of symbols.
+
+  [0] atermlist(_A)      = [aterm(_A)]
+  [0] atermlist('a)      = [] when 'a =
+%%%Mark: 13-07-1999  [0] atermlist('a+ 'b+) = atermlist('a+) ++ atermlist('b+)
+  [0] atermlist(_A 'b+) = atermlist(_A) ++ atermlist('b+)
+
+%% Decoding lists of symbols.
+
+  [0] symbols([])      =
+  [0] symbols([T])     = symbol(T)
+  [0] symbols([T, Ts]) = symbol(T) ++ symbols([Ts])
+
+%% where we have the requirement that
+
+  [0] symbol(aterm(_A)) = _A

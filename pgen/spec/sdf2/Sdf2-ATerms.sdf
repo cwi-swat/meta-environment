@@ -1,0 +1,12 @@
+module Sdf2-ATerms
+imports Sdf2-Tree-Constructors
+        Sdf2-Syntax
+        Basic-Sdf-ATerms
+        Modular-Sdf-ATerms
+        Regular-Sdf-ATerms
+        Priority-Sdf-ATerms
+        CC-Sdf-ATerms
+        Sorts-Sdf-ATerms
+        Literals-Sdf-ATerms
+        Label-Sdf-ATerms
+        Restrictions-Sdf-ATerms

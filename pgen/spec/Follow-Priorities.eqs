@@ -1,0 +1,26 @@
+%%%% $Id$
+%%%%
+%%%% This file is part of the ASF+SDF specification
+%%%%
+%%%%          "A Family of Parser Generators"
+%%%% by
+%%%%                    Eelco Visser
+%%%%
+%%%% copyright (c) Eelco Visser, 1996
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:visser@fwi.uva.nl http://adam.fwi.uva.nl/~visser/
+equations
+
+%%
+%% If $\gamma\to\Sym{B}$ can be a direct descendant of $[\alpha.\Sym{B}\beta\to\Sym{A}]$,
+%% then all symbols that can start $\beta$ can follow $\gamma\to\Sym{B}$.
+
+  [0]
+        cnf[[Pr(_G)]](['a . _B 'b -> _A!2], 'c -> _B!1) = false
+        ==========================================================================
+        follows[[_G]]('c -> _B!1  , ['a . _B 'b -> _A!2], ls) = [<'c -> _B!1, ls>]
+
+%%%  [0]
+%%%        follows[[_G]](p, I, ls) = [<p, ls>]

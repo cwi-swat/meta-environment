@@ -1,0 +1,36 @@
+module Table-To-ATerm
+imports
+        Parse-Table
+        Parse-Table-Constructors
+        Priority-Sdf-Projection
+exports
+  context-free syntax
+    aterm(Parse-Table)          -> ATerm
+    aterm(States)               -> ATerm
+    atermlist(State-List)       -> ATermList
+    aterm(State)                -> ATerm
+    aterm(Action-Table)         -> ATerm
+    atermlist(Action-Entries)   -> ATermList
+    aterm(Goto-Table)           -> ATerm
+    atermlist(Goto-Entries)     -> ATermList
+    aterm(ItemSet)              -> ATermList
+    aterm(Label-Table)          -> ATerm
+    atermlist(Label-Entries)    -> ATermList
+    aterm(ActionSet)            -> ATermList
+    aterm-las(Lookaheads)           -> ATermList
+    aterm-la(Lookahead)            -> ATerm
+
+  context-free syntax
+    prios2aterm(Priorities,Label-Table)    -> ATerm
+    prs2aterm({Priority ","}*,Label-Table) -> ATermList
+    pr2aterm(Priority,Label-Table)         -> ATermList
+
+    special-attr(Attributes) -> NatCon
+
+hiddens
+  context-free syntax
+    lookup-in-labeltable(Production,Label-Table) -> ATerm
+    lookup-in-labels(Production,Label-Entries)   -> ATerm
+hiddens
+  variables
+    "c+" -> CHAR+

@@ -1,0 +1,3 @@
+module Priority-Sdf-ATerms
+imports Kernel-Sdf-ATerms
+        Priority-Sdf-Syntax

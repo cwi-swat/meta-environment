@@ -1,0 +1,18 @@
+module Kernel-Sdf-ATerms
+imports
+        Kernel-Sdf-Projection
+        Kernel-Sdf-Tree-Constructors
+        Symbols-ATerms
+        Grammar-ATerms
+exports
+  context-free syntax
+    aterm(Production)           -> ATerm
+    aterm(Attributes)           -> ATerm
+    atermlist({Attribute ","}*) -> ATermList
+    aterm(Attribute)            -> ATerm
+    atermlist(Productions)      -> ATermList
+
+    production(ATerm)           -> Production
+    attributes(ATerm)           -> Attributes
+    attribute(ATerm)            -> Attribute
+    productions(ATermList)      -> Productions

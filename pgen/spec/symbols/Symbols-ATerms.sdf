@@ -1,0 +1,8 @@
+module Symbols-ATerms
+imports Symbols-Projection ATerm-Lists
+exports
+  context-free syntax
+    aterm(Symbol)       -> ATerm
+    atermlist(Symbols)  -> ATermList
+    symbol(ATerm)       -> Symbol
+    symbols(ATermList)  -> Symbols

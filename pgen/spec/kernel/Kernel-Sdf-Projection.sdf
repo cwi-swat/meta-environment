@@ -1,0 +1,25 @@
+module Kernel-Sdf-Projection
+imports
+        Kernel-Sdf-Syntax
+        Symbol-Sets
+exports
+  context-free syntax
+    Productions "++" Productions                 -> Productions {right}
+    Attributes "++" Attributes                   -> Attributes {right}
+    Production "(-" Productions                  -> Bool
+    Productions "(=" Productions                 -> Bool
+    Production "~=" Production                   -> Bool
+
+    "P"(Grammar)                                 -> Productions {memo}
+    "~P" "(" Grammar ")"                         -> Grammar
+    "P" "_" Symbol "(" Productions ")"           -> Productions {memo}
+
+    symbols(Productions)                         -> SymbolSet
+    symbols(Grammar)                             -> SymbolSet
+
+    reachable(SymbolSet, SymbolSet, Productions) -> Productions
+    reachable(SymbolSet, Grammar)                -> Grammar
+hiddens
+  context-free syntax
+    "nm-P" "_" Symbol "(" Productions ")"        -> Productions
+    "nm-P"(Grammar)                              -> Productions

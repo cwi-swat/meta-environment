@@ -1,0 +1,6 @@
+module Restrictions-Sdf-Normalization
+imports Restrictions-Sdf-Syntax CC-Sdf-Normalization
+
+hiddens
+  context-free syntax
+    head(Lookahead) -> CharClass

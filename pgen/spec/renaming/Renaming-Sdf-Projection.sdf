@@ -1,0 +1,8 @@
+module Renaming-Sdf-Projection
+imports Renaming-Sdf-Syntax
+exports
+  context-free syntax
+    Renamings "++" Renamings                -> Renamings {right}
+    "proj" "_" Symbol     "(" Renamings ")" -> Symbol
+    "proj" "_" Production "(" Renamings ")" -> Production
+    "(" Symbols "=>" Symbols ")"            -> Renamings

@@ -1,0 +1,5 @@
+module Grammar-Projection
+imports Grammar-Syntax Booleans
+exports
+  context-free syntax
+    "if" Bool "then" Grammar "else" Grammar "fi" -> Grammar %% {delaying2,delaying3}

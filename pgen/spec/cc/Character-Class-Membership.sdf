@@ -1,0 +1,10 @@
+module Character-Class-Membership
+imports
+        Character-Class-Syntax
+        Character-Arithmetic
+exports
+  context-free syntax
+    Character "in" OptCharRanges -> Bool
+    Character "in" CharClass     -> Bool
+    CharClass "sub" CharClass    -> Bool
+    CharClass "equiv" CharClass  -> Bool
