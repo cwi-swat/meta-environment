@@ -77,7 +77,7 @@
 
 FILE *to_perl;  /* file descriptor connected to std input of perl */
 term *tname = NULL;
-char tmpname[512];
+char tmpname[512] = "perl-adapterXXXXXX";
 
 /*}}}  */
 
@@ -266,12 +266,19 @@ void connect_to_perl(char *script, TBcallbackTerm handler)
   int perl2ui[2];
   int pid;
   int old_stdin, old_stdout, from_perl;
+  int fd;
   FILE *ftmp;
 
-  tmpnam(tmpname);
-
-  if(!(ftmp = fopen(tmpname, "w")))
-    err_sys_fatal("Can't create `%s'", tmpname);
+  fd = mkstemp(tmpname);
+  if (fd == -1) {
+    perror("mkstemp");
+    exit(1);
+  }
+  ftmp = fdopen(fd, "w");
+  if (ftmp == NULL) {
+    perror("fdopen");
+    exit(1);
+  }
 
   copy_file(ftmp, script);
   copy_file(ftmp, TBPERL);

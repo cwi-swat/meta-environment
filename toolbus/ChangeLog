@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb 26 09:38:06 CET 2003 <jong@cwi.nl>
+ * fix perl-adapter: use mkstemp instead of unsafe tmpnam.
+   Closes some security-conscious user reports.
+
 Tue Feb 25 12:42:59 CET 2003 <jong@cwi.nl>
  * fix java-adapter: do not generate import statements for unused imports.
 
