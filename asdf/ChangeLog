@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Thu Sep 9 14:36:54 CET 2004 (fagidiot@daimi.au.dk)
+* General update of the Action environment package.
+  Primarily the sdf and asf in asdf-pt.
+* See the file changes.
+	
 Wed Sep 1 14:36:54 CET 2004 (fagidiot@daimi.au.dk)
 * General update of the Action environment package.
   Is now working with the current version of the Meta-Env.
