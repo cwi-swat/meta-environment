@@ -31,14 +31,20 @@ AC_SUBST(ATERM)
 
 
 dnl }}}
-dnl {{{  pt-support
+dnl {{{  ATerm Java Library
 
-dnl Require pt-support package
-AC_PACKAGE_REQUIRE(pt-support, unparsePT,
-   [  --with-pt-support=DIR   pt-support is in DIR])
-AC_SUBST(PT_SUPPORT)
+dnl Require ATerm Java library
+AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
+   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
+dnl ATERM_JAVA is not allowed in Makefile.am's
+JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
+AC_SUBST(JAVA_ATERM)
 
-
+dnl }}}
+dnl {{{  toolbus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
 dnl }}}
 dnl {{{  error-support
 
@@ -49,12 +55,24 @@ AC_SUBST(ERROR_SUPPORT)
 
 
 dnl }}}
-dnl {{{  toolbus library
-AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
-AC_SUBST(TOOLBUSLIB)
-dnl }}}
+dnl {{{  pt-support
 
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+
+dnl }}}
+dnl {{{  graph-support
+
+dnl Require graph-support package
+AC_PACKAGE_REQUIRE(graph-support, graph-support-config,
+   [  --with-graph-support=DIR   graph-support is in DIR])
+AC_SUBST(GRAPH_SUPPORT)
+
+
+dnl }}}
 dnl {{{  Require socket/gethostname
 
 NOSOCKLIBS=$LIBS
@@ -81,6 +99,10 @@ LIBS=$NOSOCKLIBS
 
 dnl }}}
 
+dnl This variable holds all external jarfiles
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/graph-support-config\`
+AC_SUBST(EXTERNAL_JARS)
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -100,6 +122,8 @@ AC_CONFIG_FILES([Makefile
   utils/sdf-modules/src/Makefile
   utils/sdf-renaming/Makefile
   utils/sdf-renaming/src/Makefile
+  utils/import-graph/Makefile
+  utils/import-graph/sdf/Makefile
   test/Makefile
 ])
 AC_OUTPUT

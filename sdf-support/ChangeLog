@@ -1,5 +1,8 @@
 $Id$
 
+Tue May 25 16:12:23 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * use java Graph API to implement import-relations to graph
+
 Mon May 17 11:37:15 CEST 2004 <{markvdb,jurgenv}@cwi.nl>
  * Regenerated due to extension of SDF grammar in order to
    represent priority definitions.

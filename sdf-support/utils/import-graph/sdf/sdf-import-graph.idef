@@ -1,0 +1,21 @@
+tool sdf-import-graph is {
+  command = "java-adapter -class sdf.ImportGraph"
+}
+
+process SdfImportGraph is
+let
+  Graph: term,
+  ImportRelation: list
+in
+  execute(sdf-import-graph, SIG?)
+  .
+  (
+    rec-msg(sig-import-relation-to-graph(ImportRelation?))
+    . snd-eval(SIG, import-relation-to-graph(ImportRelation))
+    . rec-value(SIG, graph(Graph?))
+    . snd-msg(sig-graph(ImportRelation, Graph))
+  )
+  * delta
+endlet
+
+toolbus(SdfImportGraph)
