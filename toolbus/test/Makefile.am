@@ -41,7 +41,7 @@ INCLUDES        = -I$(top_srcdir)/libtb
 
 %-fail : %.tb
 	echo 'trap "rm -f tmp" 0' > $@
-	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>&1 >/dev/null \\' >> $@
+	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>&1 >/dev/null \' >> $@
 	echo "| sed 's/^[^,]*, //' > tmp" >> $@
 	echo 'diff $<.out tmp' >> $@
 	chmod +x $@
