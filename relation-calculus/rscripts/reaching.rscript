@@ -51,6 +51,29 @@ assert "OUT": OUT == {<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>
                       <6, <5, "j">>, <6, <4, "i">>, <7, <7, "i">>, <7, <5, "j">>,
                       <7, <3, "a">>, <7, <6, "a">>}
 
+rel[stat, def] reaching-definitions(rel[stat,var] DEFS, rel[stat,stat] PRED) = 
+   IN
+where
+	bag[stat] STATEMENT = carrier(PRED)
+
+	rel[stat,def] DEF  = {<S,<S,V>> | <stat S, var V> : DEFS}
+
+	rel[stat,def] KILL = 
+ 	   {<S1, <S2, V>> | <stat S1, var V> : DEFS, <stat S2, V> : DEFS, S1 != S2}
+
+	%% The set of mutually recursive dataflow equations that has to be solved:
+
+	equations 
+	   initial
+		rel[stat,def] IN init {}
+
+		rel[stat,def] OUT init DEF
+	   satisfy
+       		IN =  {<S, D> | int S : STATEMENT, stat P : predecessor(PRED,S), def D : OUT[P]}
+        	OUT = {<S, D> |  int S : STATEMENT, def D : DEF[S] union (IN[S] \ KILL[S])}
+	end equations
+end where
+
 %% Live variables
 
 equations
