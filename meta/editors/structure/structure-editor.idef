@@ -13,7 +13,8 @@ let
   ParseTree: term,
   SE: structure-editor,
   Sort: str,
-  Tree: term
+  Tree: term,
+  Slices : list
 in
   execute(structure-editor, SE?)
   .
@@ -31,6 +32,17 @@ in
     . snd-eval(SE, get-parse-tree(EditorId))
     . rec-value(SE, parse-tree(ParseTree?))
     . snd-msg(se-parse-tree(EditorId, ParseTree))
+  +
+    rec-msg(se-get-tree-slices(EditorId?))
+    . snd-eval(SE, get-tree-slices(EditorId)) 
+    . 
+    (
+      rec-value(SE, tree-slices(Slices?)) 
+      . snd-msg(tree-slices(EditorId, Slices))
+    +
+      rec-value(SE, no-tree-slices) 
+      . snd-msg(no-tree-slices(EditorId))
+    )
   +
     rec-msg(se-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(SE, set-cursor-at-offset(EditorId, Offset))

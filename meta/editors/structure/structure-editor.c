@@ -11,6 +11,7 @@
 #include <Location.h>
 
 #include "StructureEditor.h"
+#include "Slicing-utils.h"
 
 #include "structure-editor.tif.h"
 
@@ -383,6 +384,25 @@ void move_cursor(int cid, ATerm editorId, ATerm move)
 }
 
 /*}}}  */
+/*{{{  ATerm get_syntax_slices(int cid, ATerm editorId)  */
+
+ATerm get_tree_slices(int cid, ATerm editorId) 
+{
+  SE_StructureEditor editor;
+
+  editor = getEditor(editorId);
+  if (editor != NULL) {
+    SE_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
+    S_Slices slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
+
+    return ATmake("snd-value(tree-slices(<term>))", S_SlicesToTerm(slices));
+  }
+
+  return ATmake("snd-value(no-tree-slices)"); 
+}
+
+/*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm message) */
 
 void rec_terminate(int cid, ATerm message)

@@ -16,6 +16,7 @@ IDEF2TIF = $(TOOLBUS)/bin/idef2tif
 TIFSTOC = $(TOOLBUS)/bin/tifstoc
 
 INCLUDES = \
+	-I$(top_srcdir)/editors/slicing \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
@@ -32,6 +33,7 @@ structure_editor_SOURCES = \
 
 structure_editor_LDADD = \
 	-L$(top_builddir)/editors/structure -lStructureEditor \
+	-L$(top_builddir)/editors/slicing -lslicing \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
