@@ -23,8 +23,6 @@
 toolbus="__TOOLBUS__/bin/toolbus -I__TOP_SRCDIR__/in-output"
 datadir=__DATADIR__
 
-set -x
-
 tests=0
 failed=0
 
