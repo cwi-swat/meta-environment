@@ -1,7 +1,5 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
-
 INCLUDES		= -I${ATERM}/include \
 			-I${PT_SUPPORT}/include \
 			-I${ASC_SUPPORT}/include

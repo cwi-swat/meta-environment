@@ -1,6 +1,6 @@
 # $Id$
 
-INCLUDES = -I$(ATERM)/include -I$(PT_SUPPORT)/include
+#INCLUDES = -I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 POD2MAN=pod2man
 POD2TXT=pod2text
