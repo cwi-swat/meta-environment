@@ -12,10 +12,6 @@
 
 /*}}}  */
 
-static ATerm getPosInfo(PT_Tree tree) 
-{
-  return ATgetAnnotation(PT_TreeToTerm(tree),ATmake("pos-info"));
-}
 /*{{{  SE_Steps stepUp(SE_Steps steps) */
 
 SE_Steps stepUp(SE_Steps steps)
@@ -193,12 +189,14 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
 static SE_Steps getStepsInTreeAtPosInfo(PT_Tree tree, ATerm posInfo)
 {
   SE_Steps steps = SE_makeStepsEmpty();
-  ATerm localPosInfo;
+  ERR_Location localPosInfo;
 
-  localPosInfo = getPosInfo(tree);
+  localPosInfo = PT_getTreeLocation(tree);
 
-  if (ATisEqual(localPosInfo, posInfo)) {
-    return steps;
+  if (localPosInfo != NULL) {
+    if (ATisEqual((ATerm) localPosInfo, posInfo)) {
+      return steps;
+    }
   }
   
   if (PT_isTreeAppl(tree)) {

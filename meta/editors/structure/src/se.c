@@ -6,6 +6,7 @@
 
 #include <atb-tool.h>
 #include <MEPT-utils.h>
+#include <ErrorAPI-utils.h>
 
 #include "se.tif.h"
 #include "EditorData.h"
@@ -531,6 +532,7 @@ main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
 
   PT_initMEPTApi();
+  ERR_initErrorApi();
   SE_initEditorDataApi();
 
 
