@@ -1,4 +1,8 @@
 
+2002/12/10 (jurgenv@cwi.nl tvdstorm@science.uva.nl)
+ * Fixed a bug in implodePT (concerning list variables)
+ * Removed isTreeListInjection function from pt-support
+
 2002/10/28 (vinju@loria.fr)
  * Removed implicit make rules for generation of ToolBus interfaces
 

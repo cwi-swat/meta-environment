@@ -647,6 +647,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
       newArgs = flattenCharClassList(tree, PT_makeArgsEmpty());
       return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
+
     return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 
   } 

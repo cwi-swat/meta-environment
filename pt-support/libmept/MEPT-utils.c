@@ -334,20 +334,6 @@ ATbool PT_isTreeApplList(PT_Tree tree)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isTreeListInjection(PT_Tree tree) */
-
-ATbool PT_isTreeListInjection(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_prodHasIterAsRhs(prod) || PT_prodHasIterSepAsRhs(prod)) {
-      return PT_isProductionInjection(prod);
-    }
-  }
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  ATbool PT_prodHasSTARTAsRhs(PT_Production prod) */
 
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
@@ -857,6 +843,8 @@ PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 
 /*}}}  */
 
+/*{{{  ATbool PT_isTreeVar(PT_Tree tree)  */
+
 ATbool PT_isTreeVar(PT_Tree tree) 
 {
   if (PT_isTreeAppl(tree)) {
@@ -865,6 +853,9 @@ ATbool PT_isTreeVar(PT_Tree tree)
   }
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeVarList(PT_Tree tree) */
 
 ATbool PT_isTreeVarList(PT_Tree tree)
 {
@@ -884,6 +875,7 @@ ATbool PT_isTreeVarList(PT_Tree tree)
   return ATfalse;
 }
 
+/*}}}  */
 /*{{{  ATbool PT_isTreeVarListStar(PT_Tree tree) */
 
 ATbool PT_isTreeVarListStar(PT_Tree tree)
