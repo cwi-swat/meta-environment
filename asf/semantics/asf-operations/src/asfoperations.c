@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include <MEPT-utils.h>
+#include <PTMEPT.h>
 #include <ASFME-utils.h>
 #include <asfnormalization.h>
 
@@ -152,7 +153,10 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
+
+  /*ATsetChecking(ATtrue);*/
 
   if (toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */

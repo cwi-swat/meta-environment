@@ -28,19 +28,32 @@ static void initialize() {
 
 ASF_ASFModule normalize(ASF_ASFModule input)
 {
-  PT_Tree term = PT_applyFunctionToTree("normalize", 
+  ASF_ASFModule lifted;
+  PT_Tree applied;
+  ATerm reduct;
+  PT_ParseTree asfix;
+  ASF_ASFModule lowered;
+
+  ATwarning("lifting\n");
+  lifted = ASF_liftModule(input);
+  ATwarning("lifting done\n");
+
+  ATwarning("normalizing\n");
+  applied = PT_applyFunctionToTree("normalize", 
 					"ASF-Module",
 					1,
-					input);
+					(PT_Tree) lifted);
 
   initialize();
+  reduct = innermost(applied);
+  asfix = toasfix(reduct);
 
-  ATerm reduct = innermost(term);
+  ATwarning("normalizing done\n");
 
+  ATwarning("lowering\n");
+  lowered = ASF_lowerModule(ASF_getStartTopASFModule((ASF_Start) asfix));
+  ATwarning("lowering done\n");
 
-  PT_ParseTree asfix = toasfix(reduct);
-
-
-  return ASF_getStartTopASFModule((ASF_Start) asfix);
+  return lowered;
 }
 

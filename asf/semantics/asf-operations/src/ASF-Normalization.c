@@ -28,77 +28,77 @@ static ATerm lf_12 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_13sym ;
 static ATerm lf_13 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_14sym ;
-static ATerm lf_14 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_14 ( ATerm arg1 ) ;
 static Symbol lf_15sym ;
-static ATerm lf_15 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_15 ( ATerm arg1 ) ;
 static Symbol lf_16sym ;
-static ATerm lf_16 ( ATerm arg1 ) ;
-static Symbol lf_17sym ;
-static ATerm lf_17 ( ) ;
+static ATerm lf_16 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lt_17sym ;
+static ATerm lt_17 ( ATerm arg1 ) ;
 static Symbol lf_18sym ;
 static ATerm lf_18 ( ATerm arg1 ) ;
 static Symbol lt_19sym ;
 static ATerm lt_19 ( ATerm arg1 ) ;
-static Symbol lf_20sym ;
-static ATerm lf_20 ( ATerm arg1 ) ;
+static Symbol lt_20sym ;
+static ATerm lt_20 ( ATerm arg1 ) ;
 static Symbol lf_21sym ;
 static ATerm lf_21 ( ATerm arg1 ) ;
 static Symbol lf_22sym ;
 static ATerm lf_22 ( ATerm arg1 ) ;
 static Symbol lf_23sym ;
-static ATerm lf_23 ( ATerm arg1 ) ;
+static ATerm lf_23 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_24sym ;
-static ATerm lf_24 ( ATerm arg1 ) ;
+static ATerm lf_24 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_25sym ;
-static ATerm lf_25 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_25 ( ATerm arg1 ) ;
 static Symbol lf_26sym ;
 static ATerm lf_26 ( ATerm arg1 ) ;
-static Symbol lf_list_27sym ;
-static ATerm lf_list_27 ( ) ;
+static Symbol lf_27sym ;
+static ATerm lf_27 ( ATerm arg1 ) ;
 static Symbol lf_28sym ;
 static ATerm lf_28 ( ATerm arg1 ) ;
 static Symbol lf_29sym ;
-static ATerm lf_29 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_list_30sym ;
-static ATerm lf_list_30 ( ) ;
+static ATerm lf_29 ( ATerm arg1 ) ;
+static Symbol lf_30sym ;
+static ATerm lf_30 ( ATerm arg1 ) ;
 static Symbol lf_31sym ;
 static ATerm lf_31 ( ATerm arg1 ) ;
-static Symbol lt_32sym ;
-static ATerm lt_32 ( ATerm arg1 ) ;
+static Symbol lf_32sym ;
+static ATerm lf_32 ( ATerm arg1 ) ;
 static Symbol lf_33sym ;
 static ATerm lf_33 ( ATerm arg1 ) ;
 static Symbol lf_34sym ;
-static ATerm lf_34 ( ATerm arg1 ) ;
-static Symbol lf_35sym ;
-static ATerm lf_35 ( ATerm arg1 ) ;
+static ATerm lf_34 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_list_35sym ;
+static ATerm lf_list_35 ( ) ;
 static Symbol lf_36sym ;
-static ATerm lf_36 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_36 ( ATerm arg1 ) ;
 static Symbol lf_37sym ;
 static ATerm lf_37 ( ATerm arg1 ) ;
-static Symbol lt_38sym ;
-static ATerm lt_38 ( ATerm arg1 ) ;
-static Symbol lf_39sym ;
-static ATerm lf_39 ( ATerm arg1 ) ;
+static Symbol lf_38sym ;
+static ATerm lf_38 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol lf_list_39sym ;
+static ATerm lf_list_39 ( ) ;
 static Symbol lf_40sym ;
-static ATerm lf_40 ( ) ;
+static ATerm lf_40 ( ATerm arg1 ) ;
 static Symbol lf_41sym ;
 static ATerm lf_41 ( ATerm arg1 ) ;
 static Symbol lf_42sym ;
 static ATerm lf_42 ( ATerm arg1 ) ;
-static Symbol lf_43sym ;
-static ATerm lf_43 ( ATerm arg1 ) ;
-static Symbol lf_list_44sym ;
-static ATerm lf_list_44 ( ) ;
+static Symbol lf_list_43sym ;
+static ATerm lf_list_43 ( ) ;
+static Symbol lf_44sym ;
+static ATerm lf_44 ( ATerm arg1 ) ;
 static Symbol lf_45sym ;
-static ATerm lf_45 ( ATerm arg1 ) ;
+static ATerm lf_45 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_46sym ;
 static ATerm lf_46 ( ATerm arg1 ) ;
 static Symbol lf_47sym ;
-static ATerm lf_47 ( ATerm arg1 ) ;
+static ATerm lf_47 ( ) ;
 static Symbol lf_48sym ;
 static ATerm lf_48 ( ATerm arg1 ) ;
 static Symbol lf_49sym ;
-static ATerm lf_49 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_49 ( ATerm arg1 ) ;
 static Symbol lf_list_50sym ;
 static ATerm lf_list_50 ( ) ;
 static Symbol lf_51sym ;
@@ -110,155 +110,121 @@ static ATerm lf_53 ( ATerm arg1 ) ;
 static Symbol lf_54sym ;
 static ATerm lf_54 ( ATerm arg1 ) ;
 static Symbol lf_55sym ;
-static ATerm lf_55 ( ATerm arg1 ) ;
-static Symbol lf_56sym ;
-static ATerm lf_56 ( ATerm arg1 ) ;
-static Symbol lt_57sym ;
-static ATerm lt_57 ( ATerm arg1 ) ;
+static ATerm lf_55 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_list_56sym ;
+static ATerm lf_list_56 ( ) ;
+static Symbol lf_57sym ;
+static ATerm lf_57 ( ATerm arg1 ) ;
 static Symbol lf_58sym ;
-static ATerm lf_58 ( ATerm arg1 ) ;
+static ATerm lf_58 ( ) ;
 static Symbol lf_59sym ;
-static ATerm lf_59 ( ATerm arg1 ) ;
-static Symbol lt_60sym ;
-static ATerm lt_60 ( ATerm arg1 ) ;
+static ATerm lf_59 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_60sym ;
+static ATerm lf_60 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_61sym ;
-static ATerm lf_61 ( ATerm arg1 ) ;
-static Symbol lt_62sym ;
-static ATerm lt_62 ( ATerm arg1 ) ;
-static Symbol lf_63sym ;
-static ATerm lf_63 ( ATerm arg1 ) ;
-static Symbol lf_64sym ;
-static ATerm lf_64 ( ATerm arg1 ) ;
+static ATerm lf_61 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_62sym ;
+static ATerm lf_62 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lt_63sym ;
+static ATerm lt_63 ( ATerm arg1 ) ;
+static Symbol lt_64sym ;
+static ATerm lt_64 ( ATerm arg1 ) ;
 static Symbol lf_65sym ;
-static ATerm lf_65 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_65 ( ATerm arg1 ) ;
 static Symbol lf_66sym ;
 static ATerm lf_66 ( ATerm arg1 ) ;
 static Symbol lf_67sym ;
-static ATerm lf_67 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_68sym ;
-static ATerm lf_68 ( ATerm arg1 ) ;
+static ATerm lf_67 ( ) ;
+static Symbol lt_68sym ;
+static ATerm lt_68 ( ATerm arg1 ) ;
 static Symbol lf_69sym ;
 static ATerm lf_69 ( ATerm arg1 ) ;
-static Symbol lf_70sym ;
-static ATerm lf_70 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lt_70sym ;
+static ATerm lt_70 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_71sym ;
 static ATerm lf_71 ( ATerm arg1 ) ;
 static Symbol lf_72sym ;
 static ATerm lf_72 ( ATerm arg1 ) ;
 static Symbol lf_73sym ;
-static ATerm lf_73 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_73 ( ) ;
 static Symbol lf_74sym ;
-static ATerm lf_74 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_74 ( ATerm arg1 ) ;
 static Symbol lf_75sym ;
-static ATerm lf_75 ( ATerm arg1 ) ;
+static ATerm lf_75 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_76sym ;
 static ATerm lf_76 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_77sym ;
-static ATerm lf_77 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static ATerm lf_77 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_78sym ;
-static ATerm lf_78 ( ATerm arg1 ) ;
+static ATerm lf_78 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol lf_79sym ;
 static ATerm lf_79 ( ATerm arg1 ) ;
-static Symbol lf_80sym ;
-static ATerm lf_80 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
-static Symbol lf_list_81sym ;
-static ATerm lf_list_81 ( ) ;
+static Symbol lt_80sym ;
+static ATerm lt_80 ( ATerm arg1 ) ;
+static Symbol lf_81sym ;
+static ATerm lf_81 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_82sym ;
-static ATerm lf_82 ( ATerm arg1 ) ;
+static ATerm lf_82 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_83sym ;
-static ATerm lf_83 ( ATerm arg1 ) ;
+static ATerm lf_83 ( ) ;
 static Symbol lf_84sym ;
 static ATerm lf_84 ( ATerm arg1 ) ;
 static Symbol lf_85sym ;
-static ATerm lf_85 ( ) ;
+static ATerm lf_85 ( ATerm arg1 ) ;
 static Symbol lf_86sym ;
 static ATerm lf_86 ( ) ;
 static Symbol lf_87sym ;
-static ATerm lf_87 ( ) ;
+static ATerm lf_87 ( ATerm arg1 ) ;
 static Symbol lf_88sym ;
-static ATerm lf_88 ( ) ;
-static Symbol lf_89sym ;
-static ATerm lf_89 ( ATerm arg1 ) ;
+static ATerm lf_88 ( ATerm arg1 ) ;
+static Symbol lf_list_89sym ;
+static ATerm lf_list_89 ( ) ;
 static Symbol lf_90sym ;
 static ATerm lf_90 ( ATerm arg1 ) ;
 static Symbol lf_91sym ;
-static ATerm lf_91 ( ATerm arg1 ) ;
+static ATerm lf_91 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_92sym ;
-static ATerm lf_92 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_92 ( ATerm arg1 ) ;
 static Symbol lf_93sym ;
 static ATerm lf_93 ( ATerm arg1 ) ;
 static Symbol lf_94sym ;
 static ATerm lf_94 ( ATerm arg1 ) ;
 static Symbol lf_95sym ;
-static ATerm lf_95 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_96sym ;
-static ATerm lf_96 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_95 ( ATerm arg1 ) ;
+static Symbol lf_list_96sym ;
+static ATerm lf_list_96 ( ) ;
 static Symbol lf_97sym ;
-static ATerm lf_97 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_98sym ;
-static ATerm lf_98 ( ) ;
+static ATerm lf_97 ( ATerm arg1 ) ;
+static Symbol lf_list_98sym ;
+static ATerm lf_list_98 ( ) ;
 static Symbol lf_99sym ;
 static ATerm lf_99 ( ATerm arg1 ) ;
 static Symbol lf_100sym ;
 static ATerm lf_100 ( ATerm arg1 ) ;
 static Symbol lf_101sym ;
-static ATerm lf_101 ( ) ;
+static ATerm lf_101 ( ATerm arg1 ) ;
 static Symbol lf_102sym ;
 static ATerm lf_102 ( ATerm arg1 ) ;
 static Symbol lf_103sym ;
 static ATerm lf_103 ( ATerm arg1 ) ;
-static Symbol lf_list_104sym ;
-static ATerm lf_list_104 ( ) ;
+static Symbol lf_104sym ;
+static ATerm lf_104 ( ATerm arg1 ) ;
 static Symbol lf_105sym ;
 static ATerm lf_105 ( ATerm arg1 ) ;
-static Symbol lf_106sym ;
-static ATerm lf_106 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_107sym ;
-static ATerm lf_107 ( ATerm arg1 ) ;
-static Symbol lf_108sym ;
-static ATerm lf_108 ( ATerm arg1 ) ;
-static Symbol lf_109sym ;
-static ATerm lf_109 ( ATerm arg1 ) ;
+static Symbol lf_returns_list106sym ;
+static ATerm lf_returns_list106 ( ATerm arg1 ) ;
+static Symbol lf_list_107sym ;
+static ATerm lf_list_107 ( ) ;
+static Symbol lf_returns_list108sym ;
+static ATerm lf_returns_list108 ( ATerm arg1 ) ;
+static Symbol lf_list_109sym ;
+static ATerm lf_list_109 ( ) ;
 static Symbol lf_110sym ;
 static ATerm lf_110 ( ATerm arg1 ) ;
-static Symbol lf_list_111sym ;
-static ATerm lf_list_111 ( ) ;
-static Symbol lf_112sym ;
-static ATerm lf_112 ( ATerm arg1 ) ;
-static Symbol lf_list_113sym ;
-static ATerm lf_list_113 ( ) ;
-static Symbol lf_114sym ;
-static ATerm lf_114 ( ATerm arg1 ) ;
-static Symbol lf_115sym ;
-static ATerm lf_115 ( ATerm arg1 ) ;
-static Symbol lf_116sym ;
-static ATerm lf_116 ( ATerm arg1 ) ;
-static Symbol lf_117sym ;
-static ATerm lf_117 ( ATerm arg1 ) ;
-static Symbol lf_118sym ;
-static ATerm lf_118 ( ATerm arg1 ) ;
-static Symbol lf_119sym ;
-static ATerm lf_119 ( ATerm arg1 ) ;
-static Symbol lf_120sym ;
-static ATerm lf_120 ( ATerm arg1 ) ;
-static Symbol lf_121sym ;
-static ATerm lf_121 ( ATerm arg1 ) ;
-static Symbol lf_122sym ;
-static ATerm lf_122 ( ATerm arg1 ) ;
-static Symbol lf_returns_list123sym ;
-static ATerm lf_returns_list123 ( ATerm arg1 ) ;
-static Symbol lf_list_124sym ;
-static ATerm lf_list_124 ( ) ;
-static Symbol lf_returns_list125sym ;
-static ATerm lf_returns_list125 ( ATerm arg1 ) ;
-static Symbol lf_list_126sym ;
-static ATerm lf_list_126 ( ) ;
-static Symbol lf_127sym ;
-static ATerm lf_127 ( ATerm arg1 ) ;
-static Symbol lf_returns_list128sym ;
-static ATerm lf_returns_list128 ( ATerm arg1 ) ;
-static Symbol lf_list_129sym ;
-static ATerm lf_list_129 ( ) ;
+static Symbol lf_returns_list111sym ;
+static ATerm lf_returns_list111 ( ATerm arg1 ) ;
+static Symbol lf_list_112sym ;
+static ATerm lf_list_112 ( ) ;
 void register_ASF_Normalization ( ) {
 lt_1sym = ATmakeSymbol ( "prod([lit(\"BRACKETS\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,bottom-up,continue)),id(\"languages/asf/normalization/Brackets\")]))"
  , 1 , ATtrue ) ;
@@ -287,354 +253,303 @@ lf_12sym = ATmakeSymbol ( "prod([lit(\"gt\"),cf(opt(layout)),lit(\"(\"),cf(opt(l
 ATprotectSymbol ( lf_12sym ) ;
 lf_13sym = ATmakeSymbol ( "prod([cf(sort(\"NATURAL\")),cf(opt(layout)),lit(\"-//\"),cf(opt(layout)),cf(sort(\"NATURAL\"))],cf(sort(\"NATURAL\")),attrs([id(\"basic/Integers\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_13sym ) ;
-lf_14sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"*\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
+lf_14sym = ATmakeSymbol ( "prod([lit(\"reserved-chars\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_14sym ) ;
-lf_15sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"-\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
+lf_15sym = ATmakeSymbol ( "prod([lit(\"sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"sort\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_15sym ) ;
-lf_16sym = ATmakeSymbol ( "prod([lit(\"opt\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"opt\"))]))" , 1 , ATtrue ) ;
+lf_16sym = ATmakeSymbol ( "prod([lit(\"parameterized-sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"parameterized-sort\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_16sym ) ;
-lf_17sym = ATmakeSymbol ( "prod([lit(\"layout\")],cf(sort(\"Symbol\")),attrs([term(cons(\"layout\"))]))" , 0 , ATtrue ) ;
-ATprotectSymbol ( lf_17sym ) ;
+lt_17sym = ATmakeSymbol ( "prod([lit(\"DECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_17sym ) ;
 lf_18sym = ATmakeSymbol ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_18sym ) ;
-lt_19sym = ATmakeSymbol ( "prod([lit(\"RECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lt_19sym = ATmakeSymbol ( "prod([lit(\"UNWRAP\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lt_19sym ) ;
-lf_20sym = ATmakeSymbol ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_20sym ) ;
+lt_20sym = ATmakeSymbol ( "prod([lit(\"RECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_20sym ) ;
 lf_21sym = ATmakeSymbol ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_21sym ) ;
-lf_22sym = ATmakeSymbol ( "prod([lit(\"digits\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_22sym = ATmakeSymbol ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_22sym ) ;
-lf_23sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"Tree\")),attrs([term(cons(\"char\"))]))" , 1 , ATtrue ) ;
+lf_23sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"*\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_23sym ) ;
-lf_24sym = ATmakeSymbol ( "prod([lit(\"iter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter\"))]))" , 1 , ATtrue ) ;
+lf_24sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"-\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_24sym ) ;
-lf_25sym = ATmakeSymbol ( "prod([lit(\"range\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"CharRange\")),attrs([term(cons(\"range\"))]))" , 2 , ATtrue ) ;
+lf_25sym = ATmakeSymbol ( "prod([lit(\"digits\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_25sym ) ;
-lf_26sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"CharRanges\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
+lf_26sym = ATmakeSymbol ( "prod([lit(\"remove-tag\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_26sym ) ;
-lf_list_27sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_27sym ) ;
-lf_28sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"CharRange\")),attrs([term(cons(\"character\"))]))" , 1 , ATtrue ) ;
+lf_27sym = ATmakeSymbol ( "prod([lit(\"is-layout-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_27sym ) ;
+lf_28sym = ATmakeSymbol ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_28sym ) ;
-lf_29sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
+lf_29sym = ATmakeSymbol ( "prod([lit(\"is-layout-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_29sym ) ;
-lf_list_30sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_30sym ) ;
-lf_31sym = ATmakeSymbol ( "prod([cf(sort(\"StrCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"quoted\"))]))" , 1 , ATtrue ) ;
+lf_30sym = ATmakeSymbol ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_30sym ) ;
+lf_31sym = ATmakeSymbol ( "prod([lit(\"lit\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lit\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_31sym ) ;
-lt_32sym = ATmakeSymbol ( "prod([lit(\"DECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lt_32sym ) ;
-lf_33sym = ATmakeSymbol ( "prod([lit(\"varsym\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"varsym\"))]))" , 1 , ATtrue ) ;
+lf_32sym = ATmakeSymbol ( "prod([lit(\"varsym\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"varsym\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_32sym ) ;
+lf_33sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"Tree\")),attrs([term(cons(\"char\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_33sym ) ;
-lf_34sym = ATmakeSymbol ( "prod([lit(\"sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"sort\"))]))" , 1 , ATtrue ) ;
+lf_34sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_34sym ) ;
-lf_35sym = ATmakeSymbol ( "prod([lit(\"char-class\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"CharRanges\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"char-class\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_35sym ) ;
-lf_36sym = ATmakeSymbol ( "prod([lit(\"parameterized-sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"parameterized-sort\"))]))" , 2 , ATtrue ) ;
+lf_list_35sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_35sym ) ;
+lf_36sym = ATmakeSymbol ( "prod([cf(sort(\"StrCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"quoted\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_36sym ) ;
-lf_37sym = ATmakeSymbol ( "prod([lit(\"lex\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lex\"))]))" , 1 , ATtrue ) ;
+lf_37sym = ATmakeSymbol ( "prod([lex(sort(\"StrCon\"))],cf(sort(\"StrCon\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_37sym ) ;
-lt_38sym = ATmakeSymbol ( "prod([lit(\"UNWRAP\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lt_38sym ) ;
-lf_39sym = ATmakeSymbol ( "prod([lit(\"cf\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"cf\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_39sym ) ;
-lf_40sym = ATmakeSymbol ( "prod([lit(\"no-attrs\")],cf(sort(\"Attributes\")),attrs([term(cons(\"no-attrs\"))]))" , 0 , ATtrue ) ;
+lf_38sym = ATmakeSymbol ( "prod([char-class([34]),lex(iter-star(sort(\"StrChar\"))),char-class([34])],lex(sort(\"StrCon\")),attrs([term(cons(\"default\"))]))" , 3 , ATtrue ) ;
+ATprotectSymbol ( lf_38sym ) ;
+lf_list_39sym = ATmakeSymbol ( "list(lex(iter-star(sort(\"StrChar\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_39sym ) ;
+lf_40sym = ATmakeSymbol ( "prod([char-class([range(32,33),range(35,91),range(93,255)])],lex(sort(\"StrChar\")),attrs([term(cons(\"normal\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_40sym ) ;
-lf_41sym = ATmakeSymbol ( "prod([lit(\"remove-tag\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_41sym = ATmakeSymbol ( "prod([lit(\"char-class\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"CharRanges\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"char-class\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_41sym ) ;
-lf_42sym = ATmakeSymbol ( "prod([lit(\"attrs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attrs\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" , 1 , ATtrue ) ;
+lf_42sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"CharRanges\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_42sym ) ;
-lf_43sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-sep(sort(\"Attr\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Attrs\")),attrs([term(cons(\"many\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_43sym ) ;
-lf_list_44sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"Attr\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_44sym ) ;
-lf_45sym = ATmakeSymbol ( "prod([lit(\"term\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ATerm\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attr\")),attrs([term(cons(\"term\"))]))" , 1 , ATtrue ) ;
+lf_list_43sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_43sym ) ;
+lf_44sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"CharRange\")),attrs([term(cons(\"character\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_44sym ) ;
+lf_45sym = ATmakeSymbol ( "prod([lit(\"range\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"CharRange\")),attrs([term(cons(\"range\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_45sym ) ;
-lf_46sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" , 1 , ATtrue ) ;
+lf_46sym = ATmakeSymbol ( "prod([lit(\"iter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_46sym ) ;
-lf_47sym = ATmakeSymbol ( "prod([cf(sort(\"IdCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"unquoted\"))]))" , 1 , ATtrue ) ;
+lf_47sym = ATmakeSymbol ( "prod([lit(\"no-attrs\")],cf(sort(\"Attributes\")),attrs([term(cons(\"no-attrs\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_47sym ) ;
-lf_48sym = ATmakeSymbol ( "prod([lex(sort(\"IdCon\"))],cf(sort(\"IdCon\")),no-attrs)" , 1 , ATtrue ) ;
+lf_48sym = ATmakeSymbol ( "prod([lit(\"attrs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attrs\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_48sym ) ;
-lf_49sym = ATmakeSymbol ( "prod([char-class([range(65,90),range(97,122)]),lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)])))],lex(sort(\"IdCon\")),attrs([term(cons(\"default\"))]))" , 2 , ATtrue ) ;
+lf_49sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-sep(sort(\"Attr\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Attrs\")),attrs([term(cons(\"many\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_49sym ) ;
-lf_list_50sym = ATmakeSymbol ( "list(lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)]))))" , 1 , ATtrue ) ;
+lf_list_50sym = ATmakeSymbol ( "list(cf(iter-sep(sort(\"Attr\"),lit(\",\"))))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_list_50sym ) ;
-lf_51sym = ATmakeSymbol ( "prod([lit(\"is-layout-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_51sym = ATmakeSymbol ( "prod([lit(\"term\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ATerm\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attr\")),attrs([term(cons(\"term\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_51sym ) ;
-lf_52sym = ATmakeSymbol ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_52sym = ATmakeSymbol ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_52sym ) ;
-lf_53sym = ATmakeSymbol ( "prod([lit(\"is-layout-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_53sym = ATmakeSymbol ( "prod([cf(sort(\"IdCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"unquoted\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_53sym ) ;
-lf_54sym = ATmakeSymbol ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" , 1 , ATtrue ) ;
+lf_54sym = ATmakeSymbol ( "prod([lex(sort(\"IdCon\"))],cf(sort(\"IdCon\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_54sym ) ;
-lf_55sym = ATmakeSymbol ( "prod([lit(\"lift-to-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(built-in(\"lift-to-tree\"))]))" , 1 , ATtrue ) ;
+lf_55sym = ATmakeSymbol ( "prod([char-class([range(65,90),range(97,122)]),lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)])))],lex(sort(\"IdCon\")),attrs([term(cons(\"default\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_55sym ) ;
-lf_56sym = ATmakeSymbol ( "prod([lit(\"lift-to-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(built-in(\"lift-to-tree\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_56sym ) ;
-lt_57sym = ATmakeSymbol ( "prod([lit(\"LIFT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Lifting\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lt_57sym ) ;
-lf_58sym = ATmakeSymbol ( "prod([lit(\"lower-from-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),attrs([term(built-in(\"lower-from-tree\"))]))" , 1 , ATtrue ) ;
+lf_list_56sym = ATmakeSymbol ( "list(lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)]))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_56sym ) ;
+lf_57sym = ATmakeSymbol ( "prod([lit(\"lex\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lex\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_57sym ) ;
+lf_58sym = ATmakeSymbol ( "prod([lit(\"variable-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_58sym ) ;
-lf_59sym = ATmakeSymbol ( "prod([lit(\"lower-from-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),attrs([term(built-in(\"lower-from-tree\"))]))" , 1 , ATtrue ) ;
+lf_59sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"negative\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_59sym ) ;
-lt_60sym = ATmakeSymbol ( "prod([lit(\"LOWER\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Lifting\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lt_60sym ) ;
-lf_61sym = ATmakeSymbol ( "prod([lit(\"list\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
+lf_60sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"==\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"equality\"))]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_60sym ) ;
+lf_61sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"!:=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"no-match\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_61sym ) ;
-lt_62sym = ATmakeSymbol ( "prod([lit(\"lists\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/ListResults\")]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lt_62sym ) ;
-lf_63sym = ATmakeSymbol ( "prod([lit(\"is-inequality\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_63sym ) ;
-lf_64sym = ATmakeSymbol ( "prod([lit(\"is-non-assignment\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_64sym ) ;
-lf_65sym = ATmakeSymbol ( "prod([lit(\"set-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" , 2 , ATtrue ) ;
+lf_62sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\":=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"match\"))]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_62sym ) ;
+lt_63sym = ATmakeSymbol ( "prod([lit(\"match-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_63sym ) ;
+lt_64sym = ATmakeSymbol ( "prod([lit(\"fix-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_64sym ) ;
+lf_65sym = ATmakeSymbol ( "prod([lit(\"normalize-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_65sym ) ;
-lf_66sym = ATmakeSymbol ( "prod([lit(\"get-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" , 1 , ATtrue ) ;
+lf_66sym = ATmakeSymbol ( "prod([lit(\"layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_66sym ) ;
-lf_67sym = ATmakeSymbol ( "prod([lit(\"set-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" , 2 , ATtrue ) ;
+lf_67sym = ATmakeSymbol ( "prod([lit(\"space\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_67sym ) ;
-lf_68sym = ATmakeSymbol ( "prod([lit(\"get-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_68sym ) ;
-lf_69sym = ATmakeSymbol ( "prod([lit(\"get-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" , 1 , ATtrue ) ;
+lt_68sym = ATmakeSymbol ( "prod([lit(\"build-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_68sym ) ;
+lf_69sym = ATmakeSymbol ( "prod([lit(\"is-lexical-constructor\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_69sym ) ;
-lf_70sym = ATmakeSymbol ( "prod([lit(\"set-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_70sym ) ;
-lf_71sym = ATmakeSymbol ( "prod([lit(\"equation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" , 1 , ATtrue ) ;
+lt_70sym = ATmakeSymbol ( "prod([lit(\"find-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([term(traversal(accu,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lt_70sym ) ;
+lf_71sym = ATmakeSymbol ( "prod([lit(\"cf\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"cf\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_71sym ) ;
-lf_72sym = ATmakeSymbol ( "prod([lit(\"get-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" , 1 , ATtrue ) ;
+lf_72sym = ATmakeSymbol ( "prod([lit(\"opt\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"opt\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_72sym ) ;
-lf_73sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),cf(sort(\"Annotation\"))],cf(sort(\"Tree\")),attrs([term(cons(\"annotated\"))]))" , 2 , ATtrue ) ;
+lf_73sym = ATmakeSymbol ( "prod([lit(\"layout\")],cf(sort(\"Symbol\")),attrs([term(cons(\"layout\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_73sym ) ;
-lf_74sym = ATmakeSymbol ( "prod([lit(\"set-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" , 2 , ATtrue ) ;
+lf_74sym = ATmakeSymbol ( "prod([lit(\"is-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Layout\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_74sym ) ;
-lf_75sym = ATmakeSymbol ( "prod([lit(\"is-assignment\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" , 1 , ATtrue ) ;
+lf_75sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Equation\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_75sym ) ;
-lf_76sym = ATmakeSymbol ( "prod([lit(\"appl\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
+lf_76sym = ATmakeSymbol ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),cf(sort(\"Annotation\"))],cf(sort(\"Tree\")),attrs([term(cons(\"annotated\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_76sym ) ;
-lf_77sym = ATmakeSymbol ( "prod([lit(\"prod\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"default\"))]))" , 3 , ATtrue ) ;
+lf_77sym = ATmakeSymbol ( "prod([lit(\"appl\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(cons(\"appl\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_77sym ) ;
-lf_78sym = ATmakeSymbol ( "prod([lit(\"lit\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lit\"))]))" , 1 , ATtrue ) ;
+lf_78sym = ATmakeSymbol ( "prod([lit(\"prod\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"default\"))]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_78sym ) ;
-lf_79sym = ATmakeSymbol ( "prod([lex(sort(\"StrCon\"))],cf(sort(\"StrCon\")),no-attrs)" , 1 , ATtrue ) ;
+lf_79sym = ATmakeSymbol ( "prod([lit(\"list\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_79sym ) ;
-lf_80sym = ATmakeSymbol ( "prod([char-class([34]),lex(iter-star(sort(\"StrChar\"))),char-class([34])],lex(sort(\"StrCon\")),attrs([term(cons(\"default\"))]))" , 3 , ATtrue ) ;
-ATprotectSymbol ( lf_80sym ) ;
-lf_list_81sym = ATmakeSymbol ( "list(lex(iter-star(sort(\"StrChar\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_81sym ) ;
-lf_82sym = ATmakeSymbol ( "prod([char-class([range(32,33),range(35,91),range(93,255)])],lex(sort(\"StrChar\")),attrs([term(cons(\"normal\"))]))" , 1 , ATtrue ) ;
+lt_80sym = ATmakeSymbol ( "prod([lit(\"lists\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/ListResults\")]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lt_80sym ) ;
+lf_81sym = ATmakeSymbol ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"or\"))]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_81sym ) ;
+lf_82sym = ATmakeSymbol ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"and\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_82sym ) ;
-lf_83sym = ATmakeSymbol ( "prod([lit(\"is-equality\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" , 1 , ATtrue ) ;
+lf_83sym = ATmakeSymbol ( "prod([lit(\"false\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"false\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_83sym ) ;
-lf_84sym = ATmakeSymbol ( "prod([lit(\"condition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" , 1 , ATtrue ) ;
+lf_84sym = ATmakeSymbol ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"not\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_84sym ) ;
-lf_85sym = ATmakeSymbol ( "prod([lit(\"\\\\BOT\")],cf(sort(\"CHAR\")),attrs([term(cons(\"bot\"))]))" , 0 , ATtrue ) ;
+lf_85sym = ATmakeSymbol ( "prod([cf(sort(\"BoolCon\"))],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"constant\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_85sym ) ;
-lf_86sym = ATmakeSymbol ( "prod([lit(\"\\\\TOP\")],cf(sort(\"CHAR\")),attrs([term(cons(\"top\"))]))" , 0 , ATtrue ) ;
+lf_86sym = ATmakeSymbol ( "prod([lit(\"true\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"true\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_86sym ) ;
-lf_87sym = ATmakeSymbol ( "prod([lit(\"\\\\EOF\")],cf(sort(\"CHAR\")),attrs([term(cons(\"eof\"))]))" , 0 , ATtrue ) ;
+lf_87sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Symbols\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_87sym ) ;
-lf_88sym = ATmakeSymbol ( "prod([lit(\"\\\\LABEL_START\")],cf(sort(\"CHAR\")),attrs([term(cons(\"label_start\"))]))" , 0 , ATtrue ) ;
+lf_88sym = ATmakeSymbol ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_88sym ) ;
-lf_89sym = ATmakeSymbol ( "prod([char-class([range(48,57),range(65,90),range(97,122)])],lex(sort(\"ASF-ShortChar\")),attrs([term(cons(\"regular\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_89sym ) ;
-lf_90sym = ATmakeSymbol ( "prod([cf(sort(\"ASF-NumChar\"))],cf(sort(\"CHAR\")),attrs([term(cons(\"numeric\"))]))" , 1 , ATtrue ) ;
+lf_list_89sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_89sym ) ;
+lf_90sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Args\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_90sym ) ;
-lf_91sym = ATmakeSymbol ( "prod([lex(sort(\"ASF-NumChar\"))],cf(sort(\"ASF-NumChar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_91sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"+\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_91sym ) ;
-lf_92sym = ATmakeSymbol ( "prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort(\"ASF-NumChar\")),attrs([term(cons(\"digits\"))]))" , 2 , ATtrue ) ;
+lf_92sym = ATmakeSymbol ( "prod([cf(sort(\"NATURAL\"))],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_92sym ) ;
-lf_93sym = ATmakeSymbol ( "prod([cf(sort(\"ASF-ShortChar\"))],cf(sort(\"CHAR\")),attrs([term(cons(\"short\"))]))" , 1 , ATtrue ) ;
+lf_93sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"NATURAL\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_93sym ) ;
-lf_94sym = ATmakeSymbol ( "prod([lex(sort(\"ASF-ShortChar\"))],cf(sort(\"ASF-ShortChar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_94sym = ATmakeSymbol ( "prod([lex(sort(\"NatCon\"))],cf(sort(\"NatCon\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_94sym ) ;
-lf_95sym = ATmakeSymbol ( "prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort(\"ASF-ShortChar\")),attrs([term(cons(\"escaped\"))]))" , 2 , ATtrue ) ;
+lf_95sym = ATmakeSymbol ( "prod([lex(iter(char-class([range(48,57)])))],lex(sort(\"NatCon\")),attrs([term(cons(\"digits\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_95sym ) ;
-lf_96sym = ATmakeSymbol ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"or\"))]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_96sym ) ;
-lf_97sym = ATmakeSymbol ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"and\"))]))" , 2 , ATtrue ) ;
+lf_list_96sym = ATmakeSymbol ( "list(lex(iter(char-class([range(48,57)]))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_96sym ) ;
+lf_97sym = ATmakeSymbol ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_97sym ) ;
-lf_98sym = ATmakeSymbol ( "prod([lit(\"false\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"false\"))]))" , 0 , ATtrue ) ;
-ATprotectSymbol ( lf_98sym ) ;
-lf_99sym = ATmakeSymbol ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"not\"))]))" , 1 , ATtrue ) ;
+lf_list_98sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_98sym ) ;
+lf_99sym = ATmakeSymbol ( "prod([lit(\"list-results\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_99sym ) ;
-lf_100sym = ATmakeSymbol ( "prod([cf(sort(\"BoolCon\"))],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"constant\"))]))" , 1 , ATtrue ) ;
+lf_100sym = ATmakeSymbol ( "prod([lit(\"remove-brackets\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_100sym ) ;
-lf_101sym = ATmakeSymbol ( "prod([lit(\"true\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"true\"))]))" , 0 , ATtrue ) ;
+lf_101sym = ATmakeSymbol ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_101sym ) ;
-lf_102sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Symbols\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
+lf_102sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_102sym ) ;
-lf_103sym = ATmakeSymbol ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
+lf_103sym = ATmakeSymbol ( "prod([lit(\"normalize-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_103sym ) ;
-lf_list_104sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_104sym ) ;
-lf_105sym = ATmakeSymbol ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Args\")),attrs([term(cons(\"list\"))]))" , 1 , ATtrue ) ;
+lf_104sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"ASF-Section\")))],cf(sort(\"ASF-Module\")),attrs([term(cons(\"default\"))]))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_104sym ) ;
+lf_105sym = ATmakeSymbol ( "prod([lit(\"equations\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"equations\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_105sym ) ;
-lf_106sym = ATmakeSymbol ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"+\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_106sym ) ;
-lf_107sym = ATmakeSymbol ( "prod([cf(sort(\"NATURAL\"))],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_107sym ) ;
-lf_108sym = ATmakeSymbol ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"NATURAL\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_108sym ) ;
-lf_109sym = ATmakeSymbol ( "prod([lex(sort(\"NatCon\"))],cf(sort(\"NatCon\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_109sym ) ;
-lf_110sym = ATmakeSymbol ( "prod([lex(iter(char-class([range(48,57)])))],lex(sort(\"NatCon\")),attrs([term(cons(\"digits\"))]))" , 1 , ATtrue ) ;
+lf_returns_list106sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-ConditionalEquation\"))),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_returns_list106sym ) ;
+lf_list_107sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-ConditionalEquation\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_107sym ) ;
+lf_returns_list108sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-Section\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-Section\"))),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_returns_list108sym ) ;
+lf_list_109sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-Section\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_109sym ) ;
+lf_110sym = ATmakeSymbol ( "prod([lit(\"tests\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"tests\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_110sym ) ;
-lf_list_111sym = ATmakeSymbol ( "list(lex(iter(char-class([range(48,57)]))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_111sym ) ;
-lf_112sym = ATmakeSymbol ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_112sym ) ;
-lf_list_113sym = ATmakeSymbol ( "list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_113sym ) ;
-lf_114sym = ATmakeSymbol ( "prod([lit(\"lower-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_114sym ) ;
-lf_115sym = ATmakeSymbol ( "prod([lit(\"list-results\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_115sym ) ;
-lf_116sym = ATmakeSymbol ( "prod([lit(\"remove-brackets\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_116sym ) ;
-lf_117sym = ATmakeSymbol ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_117sym ) ;
-lf_118sym = ATmakeSymbol ( "prod([lit(\"lift-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_118sym ) ;
-lf_119sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_119sym ) ;
-lf_120sym = ATmakeSymbol ( "prod([lit(\"normalize-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_120sym ) ;
-lf_121sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"ASF-Section\")))],cf(sort(\"ASF-Module\")),attrs([term(cons(\"default\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_121sym ) ;
-lf_122sym = ATmakeSymbol ( "prod([lit(\"equations\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"equations\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_122sym ) ;
-lf_returns_list123sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-ConditionalEquation\"))),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_returns_list123sym ) ;
-lf_list_124sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-ConditionalEquation\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_124sym ) ;
-lf_returns_list125sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-Section\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-Section\"))),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_returns_list125sym ) ;
-lf_list_126sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-Section\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_126sym ) ;
-lf_127sym = ATmakeSymbol ( "prod([lit(\"tests\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"tests\"))]))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_127sym ) ;
-lf_returns_list128sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-TestEquation\"))),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_returns_list128sym ) ;
-lf_list_129sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-TestEquation\"))))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_list_129sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-TestEquation\"))))" ) , lf_list_129 , lf_list_129sym ) ;
-register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-TestEquation\"))),no-attrs)" ) , lf_returns_list128 , lf_returns_list128sym ) ;
-register_prod ( ATparse ( "prod([lit(\"tests\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"tests\"))]))" ) , lf_127 , lf_127sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-Section\"))))" ) , lf_list_126 , lf_list_126sym ) ;
-register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-Section\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-Section\"))),no-attrs)" ) , lf_returns_list125 , lf_returns_list125sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-ConditionalEquation\"))))" ) , lf_list_124 , lf_list_124sym ) ;
-register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-ConditionalEquation\"))),no-attrs)" ) , lf_returns_list123 , lf_returns_list123sym ) ;
-register_prod ( ATparse ( "prod([lit(\"equations\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"equations\"))]))" ) , lf_122 , lf_122sym ) ;
-register_prod ( ATparse ( "prod([cf(iter-star(sort(\"ASF-Section\")))],cf(sort(\"ASF-Module\")),attrs([term(cons(\"default\"))]))" ) , lf_121 , lf_121sym ) ;
-register_prod ( ATparse ( "prod([lit(\"normalize-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_120 , lf_120sym ) ;
-register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_119 , lf_119sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lift-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_118 , lf_118sym ) ;
-register_prod ( ATparse ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_117 , lf_117sym ) ;
-register_prod ( ATparse ( "prod([lit(\"remove-brackets\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_116 , lf_116sym ) ;
-register_prod ( ATparse ( "prod([lit(\"list-results\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_115 , lf_115sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lower-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_114 , lf_114sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))))" ) , lf_list_113 , lf_list_113sym ) ;
-register_prod ( ATparse ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_112 , lf_112sym ) ;
-register_prod ( ATparse ( "list(lex(iter(char-class([range(48,57)]))))" ) , lf_list_111 , lf_list_111sym ) ;
-register_prod ( ATparse ( "prod([lex(iter(char-class([range(48,57)])))],lex(sort(\"NatCon\")),attrs([term(cons(\"digits\"))]))" ) , lf_110 , lf_110sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"NatCon\"))],cf(sort(\"NatCon\")),no-attrs)" ) , lf_109 , lf_109sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"NATURAL\")),no-attrs)" ) , lf_108 , lf_108sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"NATURAL\"))],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_107 , lf_107sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"+\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_106 , lf_106sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Args\")),attrs([term(cons(\"list\"))]))" ) , lf_105 , lf_105sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))))" ) , lf_list_104 , lf_list_104sym ) ;
-register_prod ( ATparse ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_103 , lf_103sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Symbols\")),attrs([term(cons(\"list\"))]))" ) , lf_102 , lf_102sym ) ;
-register_prod ( ATparse ( "prod([lit(\"true\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"true\"))]))" ) , lf_101 , lf_101sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"BoolCon\"))],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"constant\"))]))" ) , lf_100 , lf_100sym ) ;
-register_prod ( ATparse ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"not\"))]))" ) , lf_99 , lf_99sym ) ;
-register_prod ( ATparse ( "prod([lit(\"false\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"false\"))]))" ) , lf_98 , lf_98sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"and\"))]))" ) , lf_97 , lf_97sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"or\"))]))" ) , lf_96 , lf_96sym ) ;
-register_prod ( ATparse ( "prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort(\"ASF-ShortChar\")),attrs([term(cons(\"escaped\"))]))" ) , lf_95 , lf_95sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"ASF-ShortChar\"))],cf(sort(\"ASF-ShortChar\")),no-attrs)" ) , lf_94 , lf_94sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"ASF-ShortChar\"))],cf(sort(\"CHAR\")),attrs([term(cons(\"short\"))]))" ) , lf_93 , lf_93sym ) ;
-register_prod ( ATparse ( "prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort(\"ASF-NumChar\")),attrs([term(cons(\"digits\"))]))" ) , lf_92 , lf_92sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"ASF-NumChar\"))],cf(sort(\"ASF-NumChar\")),no-attrs)" ) , lf_91 , lf_91sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"ASF-NumChar\"))],cf(sort(\"CHAR\")),attrs([term(cons(\"numeric\"))]))" ) , lf_90 , lf_90sym ) ;
-register_prod ( ATparse ( "prod([char-class([range(48,57),range(65,90),range(97,122)])],lex(sort(\"ASF-ShortChar\")),attrs([term(cons(\"regular\"))]))" ) , lf_89 , lf_89sym ) ;
-register_prod ( ATparse ( "prod([lit(\"\\\\LABEL_START\")],cf(sort(\"CHAR\")),attrs([term(cons(\"label_start\"))]))" ) , lf_88 , lf_88sym ) ;
-register_prod ( ATparse ( "prod([lit(\"\\\\EOF\")],cf(sort(\"CHAR\")),attrs([term(cons(\"eof\"))]))" ) , lf_87 , lf_87sym ) ;
-register_prod ( ATparse ( "prod([lit(\"\\\\TOP\")],cf(sort(\"CHAR\")),attrs([term(cons(\"top\"))]))" ) , lf_86 , lf_86sym ) ;
-register_prod ( ATparse ( "prod([lit(\"\\\\BOT\")],cf(sort(\"CHAR\")),attrs([term(cons(\"bot\"))]))" ) , lf_85 , lf_85sym ) ;
-register_prod ( ATparse ( "prod([lit(\"condition\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" ) , lf_84 , lf_84sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-equality\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" ) , lf_83 , lf_83sym ) ;
-register_prod ( ATparse ( "prod([char-class([range(32,33),range(35,91),range(93,255)])],lex(sort(\"StrChar\")),attrs([term(cons(\"normal\"))]))" ) , lf_82 , lf_82sym ) ;
-register_prod ( ATparse ( "list(lex(iter-star(sort(\"StrChar\"))))" ) , lf_list_81 , lf_list_81sym ) ;
-register_prod ( ATparse ( "prod([char-class([34]),lex(iter-star(sort(\"StrChar\"))),char-class([34])],lex(sort(\"StrCon\")),attrs([term(cons(\"default\"))]))" ) , lf_80 , lf_80sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"StrCon\"))],cf(sort(\"StrCon\")),no-attrs)" ) , lf_79 , lf_79sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lit\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lit\"))]))" ) , lf_78 , lf_78sym ) ;
-register_prod ( ATparse ( "prod([lit(\"prod\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"default\"))]))" ) , lf_77 , lf_77sym ) ;
-register_prod ( ATparse ( "prod([lit(\"appl\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(cons(\"appl\"))]))" ) , lf_76 , lf_76sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-assignment\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" ) , lf_75 , lf_75sym ) ;
-register_prod ( ATparse ( "prod([lit(\"set-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" ) , lf_74 , lf_74sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),cf(sort(\"Annotation\"))],cf(sort(\"Tree\")),attrs([term(cons(\"annotated\"))]))" ) , lf_73 , lf_73sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" ) , lf_72 , lf_72sym ) ;
-register_prod ( ATparse ( "prod([lit(\"equation\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" ) , lf_71 , lf_71sym ) ;
-register_prod ( ATparse ( "prod([lit(\"set-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" ) , lf_70 , lf_70sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-lhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" ) , lf_69 , lf_69sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" ) , lf_68 , lf_68sym ) ;
-register_prod ( ATparse ( "prod([lit(\"set-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),no-attrs)" ) , lf_67 , lf_67sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" ) , lf_66 , lf_66sym ) ;
-register_prod ( ATparse ( "prod([lit(\"set-rhs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),no-attrs)" ) , lf_65 , lf_65sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-non-assignment\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" ) , lf_64 , lf_64sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-inequality\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),no-attrs)" ) , lf_63 , lf_63sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lists\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/ListResults\")]))" ) , lt_62 , lt_62sym ) ;
-register_prod ( ATparse ( "prod([lit(\"list\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"list\"))]))" ) , lf_61 , lf_61sym ) ;
-register_prod ( ATparse ( "prod([lit(\"LOWER\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Lifting\")]))" ) , lt_60 , lt_60sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lower-from-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Condition\")),attrs([term(built-in(\"lower-from-tree\"))]))" ) , lf_59 , lf_59sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lower-from-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Equation\")),attrs([term(built-in(\"lower-from-tree\"))]))" ) , lf_58 , lf_58sym ) ;
-register_prod ( ATparse ( "prod([lit(\"LIFT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Lifting\")]))" ) , lt_57 , lt_57sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lift-to-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Equation\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(built-in(\"lift-to-tree\"))]))" ) , lf_56 , lf_56sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lift-to-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Condition\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(built-in(\"lift-to-tree\"))]))" ) , lf_55 , lf_55sym ) ;
-register_prod ( ATparse ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_54 , lf_54sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-layout-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_53 , lf_53sym ) ;
-register_prod ( ATparse ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_52 , lf_52sym ) ;
-register_prod ( ATparse ( "prod([lit(\"is-layout-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_51 , lf_51sym ) ;
-register_prod ( ATparse ( "list(lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)]))))" ) , lf_list_50 , lf_list_50sym ) ;
-register_prod ( ATparse ( "prod([char-class([range(65,90),range(97,122)]),lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)])))],lex(sort(\"IdCon\")),attrs([term(cons(\"default\"))]))" ) , lf_49 , lf_49sym ) ;
-register_prod ( ATparse ( "prod([lex(sort(\"IdCon\"))],cf(sort(\"IdCon\")),no-attrs)" ) , lf_48 , lf_48sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"IdCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"unquoted\"))]))" ) , lf_47 , lf_47sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" ) , lf_46 , lf_46sym ) ;
-register_prod ( ATparse ( "prod([lit(\"term\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ATerm\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attr\")),attrs([term(cons(\"term\"))]))" ) , lf_45 , lf_45sym ) ;
-register_prod ( ATparse ( "list(cf(iter-sep(sort(\"Attr\"),lit(\",\"))))" ) , lf_list_44 , lf_list_44sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-sep(sort(\"Attr\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Attrs\")),attrs([term(cons(\"many\"))]))" ) , lf_43 , lf_43sym ) ;
-register_prod ( ATparse ( "prod([lit(\"attrs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attrs\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" ) , lf_42 , lf_42sym ) ;
-register_prod ( ATparse ( "prod([lit(\"remove-tag\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_41 , lf_41sym ) ;
-register_prod ( ATparse ( "prod([lit(\"no-attrs\")],cf(sort(\"Attributes\")),attrs([term(cons(\"no-attrs\"))]))" ) , lf_40 , lf_40sym ) ;
-register_prod ( ATparse ( "prod([lit(\"cf\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"cf\"))]))" ) , lf_39 , lf_39sym ) ;
-register_prod ( ATparse ( "prod([lit(\"UNWRAP\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_38 , lt_38sym ) ;
-register_prod ( ATparse ( "prod([lit(\"lex\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lex\"))]))" ) , lf_37 , lf_37sym ) ;
-register_prod ( ATparse ( "prod([lit(\"parameterized-sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"parameterized-sort\"))]))" ) , lf_36 , lf_36sym ) ;
-register_prod ( ATparse ( "prod([lit(\"char-class\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"CharRanges\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"char-class\"))]))" ) , lf_35 , lf_35sym ) ;
-register_prod ( ATparse ( "prod([lit(\"sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"sort\"))]))" ) , lf_34 , lf_34sym ) ;
-register_prod ( ATparse ( "prod([lit(\"varsym\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"varsym\"))]))" ) , lf_33 , lf_33sym ) ;
-register_prod ( ATparse ( "prod([lit(\"DECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_32 , lt_32sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"StrCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"quoted\"))]))" ) , lf_31 , lf_31sym ) ;
-register_prod ( ATparse ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" ) , lf_list_30 , lf_list_30sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" ) , lf_29 , lf_29sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"CharRange\")),attrs([term(cons(\"character\"))]))" ) , lf_28 , lf_28sym ) ;
-register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))))" ) , lf_list_27 , lf_list_27sym ) ;
-register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"CharRanges\")),attrs([term(cons(\"list\"))]))" ) , lf_26 , lf_26sym ) ;
-register_prod ( ATparse ( "prod([lit(\"range\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"CharRange\")),attrs([term(cons(\"range\"))]))" ) , lf_25 , lf_25sym ) ;
-register_prod ( ATparse ( "prod([lit(\"iter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter\"))]))" ) , lf_24 , lf_24sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"Tree\")),attrs([term(cons(\"char\"))]))" ) , lf_23 , lf_23sym ) ;
-register_prod ( ATparse ( "prod([lit(\"digits\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_22 , lf_22sym ) ;
+lf_returns_list111sym = ATmakeSymbol ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-TestEquation\"))),no-attrs)" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_returns_list111sym ) ;
+lf_list_112sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"ASF-TestEquation\"))))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_list_112sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-TestEquation\"))))" ) , lf_list_112 , lf_list_112sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-TestEquation\"))),no-attrs)" ) , lf_returns_list111 , lf_returns_list111sym ) ;
+register_prod ( ATparse ( "prod([lit(\"tests\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-TestEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"tests\"))]))" ) , lf_110 , lf_110sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-Section\"))))" ) , lf_list_109 , lf_list_109sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-Section\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-Section\"))),no-attrs)" ) , lf_returns_list108 , lf_returns_list108sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star(sort(\"ASF-ConditionalEquation\"))))" ) , lf_list_107 , lf_list_107sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"ASF-ConditionalEquation\"))),no-attrs)" ) , lf_returns_list106 , lf_returns_list106sym ) ;
+register_prod ( ATparse ( "prod([lit(\"equations\"),cf(opt(layout)),cf(iter-star(sort(\"ASF-ConditionalEquation\")))],cf(sort(\"ASF-Section\")),attrs([term(cons(\"equations\"))]))" ) , lf_105 , lf_105sym ) ;
+register_prod ( ATparse ( "prod([cf(iter-star(sort(\"ASF-Section\")))],cf(sort(\"ASF-Module\")),attrs([term(cons(\"default\"))]))" ) , lf_104 , lf_104sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_103 , lf_103sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_102 , lf_102sym ) ;
+register_prod ( ATparse ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_101 , lf_101sym ) ;
+register_prod ( ATparse ( "prod([lit(\"remove-brackets\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_100 , lf_100sym ) ;
+register_prod ( ATparse ( "prod([lit(\"list-results\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_99 , lf_99sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))))" ) , lf_list_98 , lf_list_98sym ) ;
+register_prod ( ATparse ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_97 , lf_97sym ) ;
+register_prod ( ATparse ( "list(lex(iter(char-class([range(48,57)]))))" ) , lf_list_96 , lf_list_96sym ) ;
+register_prod ( ATparse ( "prod([lex(iter(char-class([range(48,57)])))],lex(sort(\"NatCon\")),attrs([term(cons(\"digits\"))]))" ) , lf_95 , lf_95sym ) ;
+register_prod ( ATparse ( "prod([lex(sort(\"NatCon\"))],cf(sort(\"NatCon\")),no-attrs)" ) , lf_94 , lf_94sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"NATURAL\")),no-attrs)" ) , lf_93 , lf_93sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"NATURAL\"))],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_92 , lf_92sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"+\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_91 , lf_91sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Tree\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Args\")),attrs([term(cons(\"list\"))]))" ) , lf_90 , lf_90sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))))" ) , lf_list_89 , lf_list_89sym ) ;
+register_prod ( ATparse ( "prod([lit(\"length\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"INTEGER\")),no-attrs)" ) , lf_88 , lf_88sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"Symbol\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Symbols\")),attrs([term(cons(\"list\"))]))" ) , lf_87 , lf_87sym ) ;
+register_prod ( ATparse ( "prod([lit(\"true\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"true\"))]))" ) , lf_86 , lf_86sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"BoolCon\"))],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"constant\"))]))" ) , lf_85 , lf_85sym ) ;
+register_prod ( ATparse ( "prod([lit(\"not\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([term(cons(\"not\"))]))" ) , lf_84 , lf_84sym ) ;
+register_prod ( ATparse ( "prod([lit(\"false\")],cf(sort(\"BoolCon\")),attrs([term(cons(\"false\"))]))" ) , lf_83 , lf_83sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"&\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"and\"))]))" ) , lf_82 , lf_82sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"BOOLEAN\")),cf(opt(layout)),lit(\"|\"),cf(opt(layout)),cf(sort(\"BOOLEAN\"))],cf(sort(\"BOOLEAN\")),attrs([assoc(left),term(cons(\"or\"))]))" ) , lf_81 , lf_81sym ) ;
+register_prod ( ATparse ( "prod([lit(\"lists\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/ListResults\")]))" ) , lt_80 , lt_80sym ) ;
+register_prod ( ATparse ( "prod([lit(\"list\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"list\"))]))" ) , lf_79 , lf_79sym ) ;
+register_prod ( ATparse ( "prod([lit(\"prod\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Production\")),attrs([term(cons(\"default\"))]))" ) , lf_78 , lf_78sym ) ;
+register_prod ( ATparse ( "prod([lit(\"appl\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Production\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([term(cons(\"appl\"))]))" ) , lf_77 , lf_77sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),cf(sort(\"Annotation\"))],cf(sort(\"Tree\")),attrs([term(cons(\"annotated\"))]))" ) , lf_76 , lf_76sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Equation\")),no-attrs)" ) , lf_75 , lf_75sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Layout\")]))" ) , lf_74 , lf_74sym ) ;
+register_prod ( ATparse ( "prod([lit(\"layout\")],cf(sort(\"Symbol\")),attrs([term(cons(\"layout\"))]))" ) , lf_73 , lf_73sym ) ;
+register_prod ( ATparse ( "prod([lit(\"opt\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"opt\"))]))" ) , lf_72 , lf_72sym ) ;
+register_prod ( ATparse ( "prod([lit(\"cf\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"cf\"))]))" ) , lf_71 , lf_71sym ) ;
+register_prod ( ATparse ( "prod([lit(\"find-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([term(traversal(accu,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" ) , lt_70 , lt_70sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-lexical-constructor\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Layout\")]))" ) , lf_69 , lf_69sym ) ;
+register_prod ( ATparse ( "prod([lit(\"build-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" ) , lt_68 , lt_68sym ) ;
+register_prod ( ATparse ( "prod([lit(\"space\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" ) , lf_67 , lf_67sym ) ;
+register_prod ( ATparse ( "prod([lit(\"layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" ) , lf_66 , lf_66sym ) ;
+register_prod ( ATparse ( "prod([lit(\"normalize-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ASF-Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ASF-Module\")),no-attrs)" ) , lf_65 , lf_65sym ) ;
+register_prod ( ATparse ( "prod([lit(\"fix-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" ) , lt_64 , lt_64sym ) ;
+register_prod ( ATparse ( "prod([lit(\"match-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(trafo,top-down,break)),id(\"languages/asf/normalization/Layout\")]))" ) , lt_63 , lt_63sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\":=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"match\"))]))" ) , lf_62 , lf_62sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"!:=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"no-match\"))]))" ) , lf_61 , lf_61sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"==\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"equality\"))]))" ) , lf_60 , lf_60sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Tree\")),cf(opt(layout)),lit(\"!=\"),cf(opt(layout)),cf(sort(\"Tree\"))],cf(sort(\"ASF-Condition\")),attrs([term(cons(\"negative\"))]))" ) , lf_59 , lf_59sym ) ;
+register_prod ( ATparse ( "prod([lit(\"variable-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Layout\")]))" ) , lf_58 , lf_58sym ) ;
+register_prod ( ATparse ( "prod([lit(\"lex\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lex\"))]))" ) , lf_57 , lf_57sym ) ;
+register_prod ( ATparse ( "list(lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)]))))" ) , lf_list_56 , lf_list_56sym ) ;
+register_prod ( ATparse ( "prod([char-class([range(65,90),range(97,122)]),lex(iter-star(char-class([45,range(48,57),range(65,90),range(97,122)])))],lex(sort(\"IdCon\")),attrs([term(cons(\"default\"))]))" ) , lf_55 , lf_55sym ) ;
+register_prod ( ATparse ( "prod([lex(sort(\"IdCon\"))],cf(sort(\"IdCon\")),no-attrs)" ) , lf_54 , lf_54sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"IdCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"unquoted\"))]))" ) , lf_53 , lf_53sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"AFun\"))],cf(sort(\"ATerm\")),attrs([term(cons(\"fun\"))]))" ) , lf_52 , lf_52sym ) ;
+register_prod ( ATparse ( "prod([lit(\"term\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ATerm\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attr\")),attrs([term(cons(\"term\"))]))" ) , lf_51 , lf_51sym ) ;
+register_prod ( ATparse ( "list(cf(iter-sep(sort(\"Attr\"),lit(\",\"))))" ) , lf_list_50 , lf_list_50sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-sep(sort(\"Attr\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"Attrs\")),attrs([term(cons(\"many\"))]))" ) , lf_49 , lf_49sym ) ;
+register_prod ( ATparse ( "prod([lit(\"attrs\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attrs\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([term(cons(\"attrs\"))]))" ) , lf_48 , lf_48sym ) ;
+register_prod ( ATparse ( "prod([lit(\"no-attrs\")],cf(sort(\"Attributes\")),attrs([term(cons(\"no-attrs\"))]))" ) , lf_47 , lf_47sym ) ;
+register_prod ( ATparse ( "prod([lit(\"iter\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"iter\"))]))" ) , lf_46 , lf_46sym ) ;
+register_prod ( ATparse ( "prod([lit(\"range\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"NatCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"CharRange\")),attrs([term(cons(\"range\"))]))" ) , lf_45 , lf_45sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"CharRange\")),attrs([term(cons(\"character\"))]))" ) , lf_44 , lf_44sym ) ;
+register_prod ( ATparse ( "list(cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))))" ) , lf_list_43 , lf_list_43sym ) ;
+register_prod ( ATparse ( "prod([lit(\"[\"),cf(opt(layout)),cf(iter-star-sep(sort(\"CharRange\"),lit(\",\"))),cf(opt(layout)),lit(\"]\")],cf(sort(\"CharRanges\")),attrs([term(cons(\"list\"))]))" ) , lf_42 , lf_42sym ) ;
+register_prod ( ATparse ( "prod([lit(\"char-class\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"CharRanges\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"char-class\"))]))" ) , lf_41 , lf_41sym ) ;
+register_prod ( ATparse ( "prod([char-class([range(32,33),range(35,91),range(93,255)])],lex(sort(\"StrChar\")),attrs([term(cons(\"normal\"))]))" ) , lf_40 , lf_40sym ) ;
+register_prod ( ATparse ( "list(lex(iter-star(sort(\"StrChar\"))))" ) , lf_list_39 , lf_list_39sym ) ;
+register_prod ( ATparse ( "prod([char-class([34]),lex(iter-star(sort(\"StrChar\"))),char-class([34])],lex(sort(\"StrCon\")),attrs([term(cons(\"default\"))]))" ) , lf_38 , lf_38sym ) ;
+register_prod ( ATparse ( "prod([lex(sort(\"StrCon\"))],cf(sort(\"StrCon\")),no-attrs)" ) , lf_37 , lf_37sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"StrCon\"))],cf(sort(\"AFun\")),attrs([term(cons(\"quoted\"))]))" ) , lf_36 , lf_36sym ) ;
+register_prod ( ATparse ( "list(cf(iter-sep(sort(\"ATerm\"),lit(\",\"))))" ) , lf_list_35 , lf_list_35sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"AFun\")),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-sep(sort(\"ATerm\"),lit(\",\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"ATerm\")),attrs([term(cons(\"appl\"))]))" ) , lf_34 , lf_34sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"NatCon\"))],cf(sort(\"Tree\")),attrs([term(cons(\"char\"))]))" ) , lf_33 , lf_33sym ) ;
+register_prod ( ATparse ( "prod([lit(\"varsym\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"varsym\"))]))" ) , lf_32 , lf_32sym ) ;
+register_prod ( ATparse ( "prod([lit(\"lit\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"lit\"))]))" ) , lf_31 , lf_31sym ) ;
+register_prod ( ATparse ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_30 , lf_30sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-layout-symbol\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_29 , lf_29sym ) ;
+register_prod ( ATparse ( "prod([lit(\"remove-layout\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_28 , lf_28sym ) ;
+register_prod ( ATparse ( "prod([lit(\"is-layout-tree\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_27 , lf_27sym ) ;
+register_prod ( ATparse ( "prod([lit(\"remove-tag\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Attributes\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Attributes\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_26 , lf_26sym ) ;
+register_prod ( ATparse ( "prod([lit(\"digits\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_25 , lf_25sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"-\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_24 , lf_24sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"*\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_23 , lf_23sym ) ;
+register_prod ( ATparse ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_22 , lf_22sym ) ;
 register_prod ( ATparse ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbols\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_21 , lf_21sym ) ;
-register_prod ( ATparse ( "prod([lit(\"get-cons-args\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Args\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Args\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_20 , lf_20sym ) ;
-register_prod ( ATparse ( "prod([lit(\"RECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_19 , lt_19sym ) ;
+register_prod ( ATparse ( "prod([lit(\"RECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_20 , lt_20sym ) ;
+register_prod ( ATparse ( "prod([lit(\"UNWRAP\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_19 , lt_19sym ) ;
 register_prod ( ATparse ( "prod([lit(\"constructors\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),no-attrs)" ) , lf_18 , lf_18sym ) ;
-register_prod ( ATparse ( "prod([lit(\"layout\")],cf(sort(\"Symbol\")),attrs([term(cons(\"layout\"))]))" ) , lf_17 , lf_17sym ) ;
-register_prod ( ATparse ( "prod([lit(\"opt\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Symbol\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"opt\"))]))" ) , lf_16 , lf_16sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"-\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_15 , lf_15sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"INTEGER\")),cf(opt(layout)),lit(\"*\"),cf(opt(layout)),cf(sort(\"INTEGER\"))],cf(sort(\"INTEGER\")),attrs([assoc(left)]))" ) , lf_14 , lf_14sym ) ;
+register_prod ( ATparse ( "prod([lit(\"DECONSTRUCT\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),sort(\"***TRAVERSED***\"),cf(opt(layout)),lit(\")\")],sort(\"***TRAVERSED***\"),attrs([term(traversal(bottom-up,trafo,continue)),id(\"languages/asf/normalization/Constructors\")]))" ) , lt_17 , lt_17sym ) ;
+register_prod ( ATparse ( "prod([lit(\"parameterized-sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"Symbols\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"parameterized-sort\"))]))" ) , lf_16 , lf_16sym ) ;
+register_prod ( ATparse ( "prod([lit(\"sort\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"StrCon\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Symbol\")),attrs([term(cons(\"sort\"))]))" ) , lf_15 , lf_15sym ) ;
+register_prod ( ATparse ( "prod([lit(\"reserved-chars\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Tree\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Tree\")),attrs([id(\"languages/asf/normalization/Constructors\")]))" ) , lf_14 , lf_14sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"NATURAL\")),cf(opt(layout)),lit(\"-//\"),cf(opt(layout)),cf(sort(\"NATURAL\"))],cf(sort(\"NATURAL\")),attrs([id(\"basic/Integers\")]))" ) , lf_13 , lf_13sym ) ;
 register_prod ( ATparse ( "prod([lit(\"gt\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"NATURAL\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"NATURAL\")),cf(opt(layout)),lit(\")\")],cf(sort(\"BOOLEAN\")),attrs([id(\"basic/Integers\")]))" ) , lf_12 , lf_12sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"NATURAL\")),cf(opt(layout)),lit(\">-\"),cf(opt(layout)),cf(sort(\"NATURAL\"))],cf(sort(\"NATURAL\")),attrs([id(\"basic/Integers\")]))" ) , lf_11 , lf_11sym ) ;
@@ -651,44 +566,34 @@ register_prod ( ATparse ( "prod([lit(\"BRACKETS\"),cf(opt(layout)),lit(\"(\"),cf
 }
 void resolve_ASF_Normalization ( ) {
 }
-static ATermTable table_lf_returns_list128 ;
-ATermTable table_lf_returns_list123 ;
-ATermTable table_lf_returns_list125 ;
-ATermTable table_lf_119 ;
-ATermTable table_lf_112 ;
-ATermTable table_lf_103 ;
-ATermTable table_lf_91 ;
-ATermTable table_lf_83 ;
-ATermTable table_lf_75 ;
-ATermTable table_lf_74 ;
-ATermTable table_lf_72 ;
-ATermTable table_lf_70 ;
+static ATermTable table_lf_returns_list111 ;
+ATermTable table_lf_returns_list106 ;
+ATermTable table_lf_returns_list108 ;
+ATermTable table_lf_102 ;
+ATermTable table_lf_97 ;
+ATermTable table_lf_88 ;
+ATermTable table_lt_80 ;
+ATermTable table_lt_70 ;
+ATermTable table_lt_68 ;
+ATermTable table_lt_63 ;
 ATermTable table_lf_69 ;
-ATermTable table_lf_68 ;
-ATermTable table_lf_67 ;
-ATermTable table_lf_66 ;
-ATermTable table_lf_65 ;
-ATermTable table_lf_64 ;
-ATermTable table_lf_63 ;
-ATermTable table_lt_62 ;
-ATermTable table_lt_57 ;
-ATermTable table_lf_54 ;
-ATermTable table_lf_52 ;
-ATermTable table_lf_41 ;
-ATermTable table_lt_38 ;
-ATermTable table_lt_32 ;
-ATermTable table_lt_19 ;
-ATermTable table_lf_21 ;
-ATermTable table_lf_20 ;
+ATermTable table_lf_30 ;
+ATermTable table_lf_28 ;
+ATermTable table_lf_26 ;
+ATermTable table_lf_25 ;
 ATermTable table_lf_22 ;
-ATermTable table_lf_108 ;
-ATermTable table_lf_106 ;
+ATermTable table_lf_21 ;
+ATermTable table_lt_20 ;
+ATermTable table_lt_17 ;
+ATermTable table_lt_19 ;
+ATermTable table_lf_93 ;
+ATermTable table_lf_91 ;
 ATermTable table_lf_13 ;
 ATermTable table_lf_12 ;
 ATermTable table_lf_11 ;
 ATermTable table_lf_10 ;
-ATermTable table_lf_15 ;
-ATermTable table_lf_14 ;
+ATermTable table_lf_24 ;
+ATermTable table_lf_23 ;
 ATermTable table_lf_7 ;
 ATermTable table_lt_1 ;
 static ATerm constant0 = NULL ;
@@ -754,233 +659,35 @@ static ATerm constant59 = NULL ;
 static ATerm constant60 = NULL ;
 static ATerm constant61 = NULL ;
 static ATerm constant62 = NULL ;
-static ATerm constant63 = NULL ;
-static ATerm constant64 = NULL ;
-static ATerm constant65 = NULL ;
-static ATerm constant66 = NULL ;
-static ATerm constant67 = NULL ;
-static ATerm constant68 = NULL ;
-static ATerm constant69 = NULL ;
-static ATerm constant70 = NULL ;
-static ATerm constant71 = NULL ;
-static ATerm constant72 = NULL ;
-static ATerm constant73 = NULL ;
-static ATerm constant74 = NULL ;
-static ATerm constant75 = NULL ;
-static ATerm constant76 = NULL ;
-static ATerm constant77 = NULL ;
-static ATerm constant78 = NULL ;
-static ATerm constant79 = NULL ;
-static ATerm constant80 = NULL ;
-static ATerm constant81 = NULL ;
-static ATerm constant82 = NULL ;
-static ATerm constant83 = NULL ;
-static ATerm constant84 = NULL ;
-static ATerm constant85 = NULL ;
-static ATerm constant86 = NULL ;
-static ATerm constant87 = NULL ;
-static ATerm constant88 = NULL ;
-static ATerm constant89 = NULL ;
-static ATerm constant90 = NULL ;
-static ATerm constant91 = NULL ;
-static ATerm constant92 = NULL ;
-static ATerm constant93 = NULL ;
-static ATerm constant94 = NULL ;
-static ATerm constant95 = NULL ;
-static ATerm constant96 = NULL ;
-static ATerm constant97 = NULL ;
-static ATerm constant98 = NULL ;
-static ATerm constant99 = NULL ;
-static ATerm constant100 = NULL ;
-static ATerm constant101 = NULL ;
-static ATerm constant102 = NULL ;
-static ATerm constant103 = NULL ;
-static ATerm constant104 = NULL ;
-static ATerm constant105 = NULL ;
-static ATerm constant106 = NULL ;
-static ATerm constant107 = NULL ;
-static ATerm constant108 = NULL ;
-static ATerm constant109 = NULL ;
-static ATerm constant110 = NULL ;
-static ATerm constant111 = NULL ;
-static ATerm constant112 = NULL ;
-static ATerm constant113 = NULL ;
-static ATerm constant114 = NULL ;
-static ATerm constant115 = NULL ;
-static ATerm constant116 = NULL ;
-static ATerm constant117 = NULL ;
-static ATerm constant118 = NULL ;
-static ATerm constant119 = NULL ;
-static ATerm constant120 = NULL ;
-static ATerm constant121 = NULL ;
-static ATerm constant122 = NULL ;
-static ATerm constant123 = NULL ;
-static ATerm constant124 = NULL ;
-static ATerm constant125 = NULL ;
-static ATerm constant126 = NULL ;
-static ATerm constant127 = NULL ;
-static ATerm constant128 = NULL ;
-static ATerm constant129 = NULL ;
-static ATerm constant130 = NULL ;
-static ATerm constant131 = NULL ;
-static ATerm constant132 = NULL ;
-static ATerm constant133 = NULL ;
-static ATerm constant134 = NULL ;
-static ATerm constant135 = NULL ;
-static ATerm constant136 = NULL ;
-static ATerm constant137 = NULL ;
-static ATerm constant138 = NULL ;
-static ATerm constant139 = NULL ;
-static ATerm constant140 = NULL ;
-static ATerm constant141 = NULL ;
-static ATerm constant142 = NULL ;
-static ATerm constant143 = NULL ;
-static ATerm constant144 = NULL ;
-static ATerm constant145 = NULL ;
-static ATerm constant146 = NULL ;
-static ATerm constant147 = NULL ;
-static ATerm constant148 = NULL ;
-static ATerm constant149 = NULL ;
-static ATerm constant150 = NULL ;
-static ATerm constant151 = NULL ;
-static ATerm constant152 = NULL ;
-static ATerm constant153 = NULL ;
-static ATerm constant154 = NULL ;
-static ATerm constant155 = NULL ;
-static ATerm constant156 = NULL ;
-static ATerm constant157 = NULL ;
-static ATerm constant158 = NULL ;
-static ATerm constant159 = NULL ;
-static ATerm constant160 = NULL ;
-static ATerm constant161 = NULL ;
-static ATerm constant162 = NULL ;
-static ATerm constant163 = NULL ;
-static ATerm constant164 = NULL ;
-static ATerm constant165 = NULL ;
-static ATerm constant166 = NULL ;
-static ATerm constant167 = NULL ;
-static ATerm constant168 = NULL ;
-static ATerm constant169 = NULL ;
-static ATerm constant170 = NULL ;
-static ATerm constant171 = NULL ;
-static ATerm constant172 = NULL ;
-static ATerm constant173 = NULL ;
-static ATerm constant174 = NULL ;
-static ATerm constant175 = NULL ;
-static ATerm constant176 = NULL ;
-static ATerm constant177 = NULL ;
-static ATerm constant178 = NULL ;
-static ATerm constant179 = NULL ;
-static ATerm constant180 = NULL ;
-static ATerm constant181 = NULL ;
-static ATerm constant182 = NULL ;
-static ATerm constant183 = NULL ;
-static ATerm constant184 = NULL ;
-static ATerm constant185 = NULL ;
-static ATerm constant186 = NULL ;
-static ATerm constant187 = NULL ;
-static ATerm constant188 = NULL ;
-static ATerm constant189 = NULL ;
-static ATerm constant190 = NULL ;
-static ATerm constant191 = NULL ;
-static ATerm constant192 = NULL ;
-static ATerm constant193 = NULL ;
-static ATerm constant194 = NULL ;
-static ATerm constant195 = NULL ;
-static ATerm constant196 = NULL ;
-static ATerm constant197 = NULL ;
-static ATerm constant198 = NULL ;
-static ATerm constant199 = NULL ;
-static ATerm constant200 = NULL ;
-static ATerm constant201 = NULL ;
-static ATerm constant202 = NULL ;
-static ATerm constant203 = NULL ;
-static ATerm constant204 = NULL ;
-static ATerm constant205 = NULL ;
-static ATerm constant206 = NULL ;
-static ATerm constant207 = NULL ;
-static ATerm constant208 = NULL ;
-static ATerm constant209 = NULL ;
-static ATerm constant210 = NULL ;
-static ATerm constant211 = NULL ;
-static ATerm constant212 = NULL ;
-static ATerm constant213 = NULL ;
-static ATerm constant214 = NULL ;
-static ATerm constant215 = NULL ;
-static ATerm constant216 = NULL ;
-static ATerm constant217 = NULL ;
-static ATerm constant218 = NULL ;
-static ATerm constant219 = NULL ;
-static ATerm constant220 = NULL ;
-static ATerm constant221 = NULL ;
-static ATerm constant222 = NULL ;
-static ATerm constant223 = NULL ;
-static ATerm constant224 = NULL ;
-static ATerm constant225 = NULL ;
-static ATerm constant226 = NULL ;
-static ATerm constant227 = NULL ;
-static ATerm constant228 = NULL ;
-static ATerm constant229 = NULL ;
-static ATerm constant230 = NULL ;
-static ATerm constant231 = NULL ;
-static ATerm constant232 = NULL ;
-static ATerm constant233 = NULL ;
-static ATerm constant234 = NULL ;
-static ATerm constant235 = NULL ;
-static ATerm constant236 = NULL ;
-static ATerm constant237 = NULL ;
-static ATerm constant238 = NULL ;
-static ATerm constant239 = NULL ;
-static ATerm constant240 = NULL ;
-static ATerm constant241 = NULL ;
-static ATerm constant242 = NULL ;
-static ATerm constant243 = NULL ;
-static ATerm constant244 = NULL ;
-static ATerm constant245 = NULL ;
-static ATerm constant246 = NULL ;
-static ATerm constant247 = NULL ;
-static ATerm constant248 = NULL ;
-static ATerm constant249 = NULL ;
-static ATerm constant250 = NULL ;
 void init_ASF_Normalization ( ) {
-create_table ( table_lf_returns_list128 , 0 ) ;
-create_table ( table_lf_returns_list123 , 0 ) ;
-create_table ( table_lf_returns_list125 , 0 ) ;
-create_table ( table_lf_119 , 0 ) ;
-create_table ( table_lf_112 , 0 ) ;
-create_table ( table_lf_103 , 0 ) ;
-create_table ( table_lf_91 , 0 ) ;
-create_table ( table_lf_83 , 0 ) ;
-create_table ( table_lf_75 , 0 ) ;
-create_table ( table_lf_74 , 0 ) ;
-create_table ( table_lf_72 , 0 ) ;
-create_table ( table_lf_70 , 0 ) ;
+create_table ( table_lf_returns_list111 , 0 ) ;
+create_table ( table_lf_returns_list106 , 0 ) ;
+create_table ( table_lf_returns_list108 , 0 ) ;
+create_table ( table_lf_102 , 0 ) ;
+create_table ( table_lf_97 , 0 ) ;
+create_table ( table_lf_88 , 0 ) ;
+create_table ( table_lt_80 , 0 ) ;
+create_table ( table_lt_70 , 0 ) ;
+create_table ( table_lt_68 , 0 ) ;
+create_table ( table_lt_63 , 0 ) ;
 create_table ( table_lf_69 , 0 ) ;
-create_table ( table_lf_68 , 0 ) ;
-create_table ( table_lf_67 , 0 ) ;
-create_table ( table_lf_66 , 0 ) ;
-create_table ( table_lf_65 , 0 ) ;
-create_table ( table_lf_64 , 0 ) ;
-create_table ( table_lf_63 , 0 ) ;
-create_table ( table_lt_62 , 0 ) ;
-create_table ( table_lt_57 , 0 ) ;
-create_table ( table_lf_54 , 0 ) ;
-create_table ( table_lf_52 , 0 ) ;
-create_table ( table_lf_41 , 0 ) ;
-create_table ( table_lt_38 , 0 ) ;
-create_table ( table_lt_32 , 0 ) ;
-create_table ( table_lt_19 , 0 ) ;
-create_table ( table_lf_21 , 0 ) ;
-create_table ( table_lf_20 , 0 ) ;
+create_table ( table_lf_30 , 0 ) ;
+create_table ( table_lf_28 , 0 ) ;
+create_table ( table_lf_26 , 0 ) ;
+create_table ( table_lf_25 , 0 ) ;
 create_table ( table_lf_22 , 0 ) ;
-create_table ( table_lf_108 , 0 ) ;
-create_table ( table_lf_106 , 0 ) ;
+create_table ( table_lf_21 , 0 ) ;
+create_table ( table_lt_20 , 0 ) ;
+create_table ( table_lt_17 , 0 ) ;
+create_table ( table_lt_19 , 0 ) ;
+create_table ( table_lf_93 , 0 ) ;
+create_table ( table_lf_91 , 0 ) ;
 create_table ( table_lf_13 , 0 ) ;
 create_table ( table_lf_12 , 0 ) ;
 create_table ( table_lf_11 , 0 ) ;
 create_table ( table_lf_10 , 0 ) ;
-create_table ( table_lf_15 , 0 ) ;
-create_table ( table_lf_14 , 0 ) ;
+create_table ( table_lf_24 , 0 ) ;
+create_table ( table_lf_23 , 0 ) ;
 create_table ( table_lf_7 , 0 ) ;
 create_table ( table_lt_1 , 0 ) ;
 ATprotect ( & constant0 ) ;
@@ -1046,219 +753,11 @@ ATprotect ( & constant59 ) ;
 ATprotect ( & constant60 ) ;
 ATprotect ( & constant61 ) ;
 ATprotect ( & constant62 ) ;
-ATprotect ( & constant63 ) ;
-ATprotect ( & constant64 ) ;
-ATprotect ( & constant65 ) ;
-ATprotect ( & constant66 ) ;
-ATprotect ( & constant67 ) ;
-ATprotect ( & constant68 ) ;
-ATprotect ( & constant69 ) ;
-ATprotect ( & constant70 ) ;
-ATprotect ( & constant71 ) ;
-ATprotect ( & constant72 ) ;
-ATprotect ( & constant73 ) ;
-ATprotect ( & constant74 ) ;
-ATprotect ( & constant75 ) ;
-ATprotect ( & constant76 ) ;
-ATprotect ( & constant77 ) ;
-ATprotect ( & constant78 ) ;
-ATprotect ( & constant79 ) ;
-ATprotect ( & constant80 ) ;
-ATprotect ( & constant81 ) ;
-ATprotect ( & constant82 ) ;
-ATprotect ( & constant83 ) ;
-ATprotect ( & constant84 ) ;
-ATprotect ( & constant85 ) ;
-ATprotect ( & constant86 ) ;
-ATprotect ( & constant87 ) ;
-ATprotect ( & constant88 ) ;
-ATprotect ( & constant89 ) ;
-ATprotect ( & constant90 ) ;
-ATprotect ( & constant91 ) ;
-ATprotect ( & constant92 ) ;
-ATprotect ( & constant93 ) ;
-ATprotect ( & constant94 ) ;
-ATprotect ( & constant95 ) ;
-ATprotect ( & constant96 ) ;
-ATprotect ( & constant97 ) ;
-ATprotect ( & constant98 ) ;
-ATprotect ( & constant99 ) ;
-ATprotect ( & constant100 ) ;
-ATprotect ( & constant101 ) ;
-ATprotect ( & constant102 ) ;
-ATprotect ( & constant103 ) ;
-ATprotect ( & constant104 ) ;
-ATprotect ( & constant105 ) ;
-ATprotect ( & constant106 ) ;
-ATprotect ( & constant107 ) ;
-ATprotect ( & constant108 ) ;
-ATprotect ( & constant109 ) ;
-ATprotect ( & constant110 ) ;
-ATprotect ( & constant111 ) ;
-ATprotect ( & constant112 ) ;
-ATprotect ( & constant113 ) ;
-ATprotect ( & constant114 ) ;
-ATprotect ( & constant115 ) ;
-ATprotect ( & constant116 ) ;
-ATprotect ( & constant117 ) ;
-ATprotect ( & constant118 ) ;
-ATprotect ( & constant119 ) ;
-ATprotect ( & constant120 ) ;
-ATprotect ( & constant121 ) ;
-ATprotect ( & constant122 ) ;
-ATprotect ( & constant123 ) ;
-ATprotect ( & constant124 ) ;
-ATprotect ( & constant125 ) ;
-ATprotect ( & constant126 ) ;
-ATprotect ( & constant127 ) ;
-ATprotect ( & constant128 ) ;
-ATprotect ( & constant129 ) ;
-ATprotect ( & constant130 ) ;
-ATprotect ( & constant131 ) ;
-ATprotect ( & constant132 ) ;
-ATprotect ( & constant133 ) ;
-ATprotect ( & constant134 ) ;
-ATprotect ( & constant135 ) ;
-ATprotect ( & constant136 ) ;
-ATprotect ( & constant137 ) ;
-ATprotect ( & constant138 ) ;
-ATprotect ( & constant139 ) ;
-ATprotect ( & constant140 ) ;
-ATprotect ( & constant141 ) ;
-ATprotect ( & constant142 ) ;
-ATprotect ( & constant143 ) ;
-ATprotect ( & constant144 ) ;
-ATprotect ( & constant145 ) ;
-ATprotect ( & constant146 ) ;
-ATprotect ( & constant147 ) ;
-ATprotect ( & constant148 ) ;
-ATprotect ( & constant149 ) ;
-ATprotect ( & constant150 ) ;
-ATprotect ( & constant151 ) ;
-ATprotect ( & constant152 ) ;
-ATprotect ( & constant153 ) ;
-ATprotect ( & constant154 ) ;
-ATprotect ( & constant155 ) ;
-ATprotect ( & constant156 ) ;
-ATprotect ( & constant157 ) ;
-ATprotect ( & constant158 ) ;
-ATprotect ( & constant159 ) ;
-ATprotect ( & constant160 ) ;
-ATprotect ( & constant161 ) ;
-ATprotect ( & constant162 ) ;
-ATprotect ( & constant163 ) ;
-ATprotect ( & constant164 ) ;
-ATprotect ( & constant165 ) ;
-ATprotect ( & constant166 ) ;
-ATprotect ( & constant167 ) ;
-ATprotect ( & constant168 ) ;
-ATprotect ( & constant169 ) ;
-ATprotect ( & constant170 ) ;
-ATprotect ( & constant171 ) ;
-ATprotect ( & constant172 ) ;
-ATprotect ( & constant173 ) ;
-ATprotect ( & constant174 ) ;
-ATprotect ( & constant175 ) ;
-ATprotect ( & constant176 ) ;
-ATprotect ( & constant177 ) ;
-ATprotect ( & constant178 ) ;
-ATprotect ( & constant179 ) ;
-ATprotect ( & constant180 ) ;
-ATprotect ( & constant181 ) ;
-ATprotect ( & constant182 ) ;
-ATprotect ( & constant183 ) ;
-ATprotect ( & constant184 ) ;
-ATprotect ( & constant185 ) ;
-ATprotect ( & constant186 ) ;
-ATprotect ( & constant187 ) ;
-ATprotect ( & constant188 ) ;
-ATprotect ( & constant189 ) ;
-ATprotect ( & constant190 ) ;
-ATprotect ( & constant191 ) ;
-ATprotect ( & constant192 ) ;
-ATprotect ( & constant193 ) ;
-ATprotect ( & constant194 ) ;
-ATprotect ( & constant195 ) ;
-ATprotect ( & constant196 ) ;
-ATprotect ( & constant197 ) ;
-ATprotect ( & constant198 ) ;
-ATprotect ( & constant199 ) ;
-ATprotect ( & constant200 ) ;
-ATprotect ( & constant201 ) ;
-ATprotect ( & constant202 ) ;
-ATprotect ( & constant203 ) ;
-ATprotect ( & constant204 ) ;
-ATprotect ( & constant205 ) ;
-ATprotect ( & constant206 ) ;
-ATprotect ( & constant207 ) ;
-ATprotect ( & constant208 ) ;
-ATprotect ( & constant209 ) ;
-ATprotect ( & constant210 ) ;
-ATprotect ( & constant211 ) ;
-ATprotect ( & constant212 ) ;
-ATprotect ( & constant213 ) ;
-ATprotect ( & constant214 ) ;
-ATprotect ( & constant215 ) ;
-ATprotect ( & constant216 ) ;
-ATprotect ( & constant217 ) ;
-ATprotect ( & constant218 ) ;
-ATprotect ( & constant219 ) ;
-ATprotect ( & constant220 ) ;
-ATprotect ( & constant221 ) ;
-ATprotect ( & constant222 ) ;
-ATprotect ( & constant223 ) ;
-ATprotect ( & constant224 ) ;
-ATprotect ( & constant225 ) ;
-ATprotect ( & constant226 ) ;
-ATprotect ( & constant227 ) ;
-ATprotect ( & constant228 ) ;
-ATprotect ( & constant229 ) ;
-ATprotect ( & constant230 ) ;
-ATprotect ( & constant231 ) ;
-ATprotect ( & constant232 ) ;
-ATprotect ( & constant233 ) ;
-ATprotect ( & constant234 ) ;
-ATprotect ( & constant235 ) ;
-ATprotect ( & constant236 ) ;
-ATprotect ( & constant237 ) ;
-ATprotect ( & constant238 ) ;
-ATprotect ( & constant239 ) ;
-ATprotect ( & constant240 ) ;
-ATprotect ( & constant241 ) ;
-ATprotect ( & constant242 ) ;
-ATprotect ( & constant243 ) ;
-ATprotect ( & constant244 ) ;
-ATprotect ( & constant245 ) ;
-ATprotect ( & constant246 ) ;
-ATprotect ( & constant247 ) ;
-ATprotect ( & constant248 ) ;
-ATprotect ( & constant249 ) ;
-ATprotect ( & constant250 ) ;
 }
-ATerm lf_59 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_59sym , ATmakeAppl ( lf_59sym , arg0 ) ) ;
-FUNC_EXIT ( innermost ( ASC_lower_from_tree ( parse_sort ( "cf(sort(\"ASF-Condition\"))" ) , arg0 ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_59sym , arg0 ) ) ;
-}
-ATerm lf_58 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_58sym , ATmakeAppl ( lf_58sym , arg0 ) ) ;
-FUNC_EXIT ( innermost ( ASC_lower_from_tree ( parse_sort ( "cf(sort(\"ASF-Equation\"))" ) , arg0 ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_58sym , arg0 ) ) ;
-}
-ATerm lf_56 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_56sym , ATmakeAppl ( lf_56sym , arg0 ) ) ;
-FUNC_EXIT ( innermost ( ASC_lift_to_tree ( parse_sort ( "cf(sort(\"Tree\"))" ) , arg0 ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_56sym , arg0 ) ) ;
-}
-ATerm lf_55 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_55sym , ATmakeAppl ( lf_55sym , arg0 ) ) ;
-FUNC_EXIT ( innermost ( ASC_lift_to_tree ( parse_sort ( "cf(sort(\"Tree\"))" ) , arg0 ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_55sym , arg0 ) ) ;
-}
-ATerm lf_116 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_116sym , ATmakeAppl ( lf_116sym , arg0 ) ) ;
+ATerm lf_100 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_100sym , ATmakeAppl ( lf_100sym , arg0 ) ) ;
 FUNC_EXIT ( lt_1 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_116sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_100sym , arg0 ) ) ;
 }
 ATerm lt_1 ( ATerm arg0 ) {
 ATerm tmp [ 7 ] ;
@@ -1268,72 +767,77 @@ if ( check_sym ( arg0 , lf_76sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp_0_0 , lf_77sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_102sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_78sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0 ) ) ;
+if ( check_sym ( atmp_0_0_0_0 , lf_87sym ) ) {
+ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_0_0 , lf_list_89sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
 {
-ATerm atmp_0_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+ATerm atmp_0_0_0_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
 while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( atmp_0_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+ATerm atmp_0_0_0_1 = arg_1 ( atmp_0_0_0 ) ;
 {
-ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_2 , lf_42sym ) ) {
-ATerm atmp_0_0_2_0 = arg_0 ( atmp_0_0_2 ) ;
-if ( check_sym ( atmp_0_0_2_0 , lf_43sym ) ) {
-ATerm atmp_0_0_2_0_0 = arg_0 ( atmp_0_0_2_0 ) ;
-if ( check_sym ( atmp_0_0_2_0_0 , lf_list_44sym ) ) {
-( tmp [ 3 ] = arg_0 ( atmp_0_0_2_0_0 ) ) ;
+ATerm atmp_0_0_0_2 = arg_2 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_2 , lf_48sym ) ) {
+ATerm atmp_0_0_0_2_0 = arg_0 ( atmp_0_0_0_2 ) ;
+if ( check_sym ( atmp_0_0_0_2_0 , lf_49sym ) ) {
+ATerm atmp_0_0_0_2_0_0 = arg_0 ( atmp_0_0_0_2_0 ) ;
+if ( check_sym ( atmp_0_0_0_2_0_0 , lf_list_50sym ) ) {
+( tmp [ 3 ] = arg_0 ( atmp_0_0_0_2_0_0 ) ) ;
 {
-ATerm atmp_0_0_2_0_0_0_0 [ 2 ] ;
-( atmp_0_0_2_0_0_0_0 [ 0 ] = tmp [ 3 ] ) ;
-( atmp_0_0_2_0_0_0_0 [ 1 ] = tmp [ 3 ] ) ;
+ATerm atmp_0_0_0_2_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_2_0_0_0_0 [ 0 ] = tmp [ 3 ] ) ;
+( atmp_0_0_0_2_0_0_0_0 [ 1 ] = tmp [ 3 ] ) ;
 while ( not_empty_list ( tmp [ 3 ] ) ) {
 ( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
 ( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf_2sym ) ) {
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_105sym ) ) {
-ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
-if ( check_sym ( atmp_0_1_0 , lf_list_113sym ) ) {
-( tmp [ 6 ] = arg_0 ( atmp_0_1_0 ) ) ;
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_list_98sym ) ) {
+( tmp [ 6 ] = arg_0 ( atmp_0_0_1_0 ) ) ;
 {
-ATerm atmp_0_1_0_0_1_0 ;
-ATerm atmp_0_1_0_0_0 [ 2 ] ;
-( atmp_0_1_0_0_0 [ 0 ] = tmp [ 6 ] ) ;
-( atmp_0_1_0_0_0 [ 1 ] = tmp [ 6 ] ) ;
+ATerm atmp_0_0_1_0_0_1_0 ;
+ATerm atmp_0_0_1_0_0_0 [ 2 ] ;
+( atmp_0_0_1_0_0_0 [ 0 ] = tmp [ 6 ] ) ;
+( atmp_0_0_1_0_0_0 [ 1 ] = tmp [ 6 ] ) ;
 while ( not_empty_list ( tmp [ 6 ] ) ) {
-( atmp_0_1_0_0_1_0 = list_head ( tmp [ 6 ] ) ) ;
+( atmp_0_0_1_0_0_1_0 = list_head ( tmp [ 6 ] ) ) ;
 ( tmp [ 6 ] = list_tail ( tmp [ 6 ] ) ) ;
-if ( term_equal ( atmp_0_0_0_0_0_1_0 , atmp_0_0_1 ) ) {
-if ( term_equal ( lf_103 ( make_nf1 ( lf_list_104sym , slice ( atmp_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0 [ 1 ] ) ) ) , lf_112 ( make_nf1 ( lf_list_113sym , slice ( atmp_0_1_0_0_0 [ 0 ] , atmp_0_1_0_0_0 [ 1 ] ) ) ) ) ) {
-FUNC_EXIT ( atmp_0_1_0_0_1_0 ) ;
-}
-}
-( atmp_0_1_0_0_0 [ 1 ] = list_tail ( atmp_0_1_0_0_0 [ 1 ] ) ) ;
-( tmp [ 6 ] = atmp_0_1_0_0_0 [ 1 ] ) ;
+{
+if ( term_equal ( atmp_0_0_0_0_0_0_1_0 , atmp_0_0_0_1 ) ) {
+if ( term_equal ( lf_88 ( make_nf1 ( lf_list_89sym , slice ( atmp_0_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ) , lf_97 ( make_nf1 ( lf_list_98sym , slice ( atmp_0_0_1_0_0_0 [ 0 ] , atmp_0_0_1_0_0_0 [ 1 ] ) ) ) ) ) {
+FUNC_EXIT ( atmp_0_0_1_0_0_1_0 ) ;
 }
 }
 }
-}
-}
-( atmp_0_0_2_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_2_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 3 ] = atmp_0_0_2_0_0_0_0 [ 1 ] ) ;
+( atmp_0_0_1_0_0_0 [ 1 ] = list_tail ( atmp_0_0_1_0_0_0 [ 1 ] ) ) ;
+( tmp [ 6 ] = atmp_0_0_1_0_0_0 [ 1 ] ) ;
 }
 }
 }
 }
 }
+( atmp_0_0_0_2_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_2_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 3 ] = atmp_0_0_0_2_0_0_0_0 [ 1 ] ) ;
 }
 }
-( atmp_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0_0 [ 1 ] ) ;
+}
+}
+}
+}
+}
+( atmp_0_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_0_0_0_0 [ 1 ] ) ;
+}
 }
 }
 }
@@ -1344,7 +848,7 @@ FUNC_EXIT ( arg0 ) ;
 }
 ATerm lf_3 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_3sym , ATmakeAppl ( lf_3sym , arg0 , arg1 ) ) ;
-if ( term_equal ( lf_7 ( arg0 , arg1 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
+if ( term_equal ( lf_7 ( arg0 , arg1 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
 FUNC_EXIT ( arg0 ) ;
 }
 FUNC_EXIT ( arg1 ) ;
@@ -1352,19 +856,19 @@ FUNC_EXIT ( make_nf2 ( lf_3sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_9 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_9sym , ATmakeAppl ( lf_9sym , arg0 ) ) ;
-if ( term_equal ( arg0 , ( constant1 ? constant1 : ( constant1 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg0 , ( constant1 ? constant1 : ( constant1 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
 FUNC_EXIT ( make_nf1 ( lf_9sym , arg0 ) ) ;
 }
 ATerm lf_4 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_4sym , ATmakeAppl ( lf_4sym , arg0 , arg1 ) ) ;
-FUNC_EXIT ( lf_99 ( lf_7 ( arg0 , arg1 ) ) ) ;
+FUNC_EXIT ( lf_84 ( lf_7 ( arg0 , arg1 ) ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_4sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_5 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_5sym , ATmakeAppl ( lf_5sym , arg0 , arg1 ) ) ;
-FUNC_EXIT ( lf_99 ( lf_6 ( arg0 , arg1 ) ) ) ;
+FUNC_EXIT ( lf_84 ( lf_6 ( arg0 , arg1 ) ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_5sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_6 ( ATerm arg0 , ATerm arg1 ) {
@@ -1373,69 +877,69 @@ if ( ! term_equal ( arg0 , arg1 ) ) {
 FUNC_EXIT ( lf_7 ( arg0 , arg1 ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 FUNC_EXIT ( make_nf2 ( lf_6sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_7 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_7sym , ATmakeAppl ( lf_7sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_107sym ) ) {
+if ( check_sym ( arg0 , lf_92sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
 ( tmp [ 0 ] = lf_12 ( atmp_0_0 , atmp_1_0 ) ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
 }
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , lf_9sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
+if ( check_sym ( arg1 , lf_92sym ) ) {
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_7 ( make_nf1 ( lf_107sym , atmp_1_0 ) , make_nf1 ( lf_107sym , atmp_0_0 ) ) ) ;
+FUNC_EXIT ( lf_7 ( make_nf1 ( lf_92sym , atmp_1_0 ) , make_nf1 ( lf_92sym , atmp_0_0 ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_7sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_8 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_8sym , ATmakeAppl ( lf_8sym , arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_107sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_92sym , arg0 ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_8sym , arg0 ) ) ;
 }
-ATerm lf_14 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_23 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 10 ] ;
-FUNC_ENTRY ( lf_14sym , ATmakeAppl ( lf_14sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_107sym ) ) {
+FUNC_ENTRY ( lf_23sym , ATmakeAppl ( lf_23sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg0 , lf_92sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_93sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_94sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_95sym ) ) {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_93sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 3 ] = arg_0 ( atmp_1_0_0_0_0 ) ) ;
 {
 ATerm atmp_1_0_0_0_0_0_1 ;
@@ -1447,19 +951,19 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 while ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( is_single_element ( tmp [ 3 ] ) ) {
 ( atmp_1_0_0_0_0_0_1 = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 4 ] = lf_14 ( arg0 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , slice ( atmp_1_0_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_107sym ) ) {
+( tmp [ 4 ] = lf_23 ( arg0 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , slice ( atmp_1_0_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_92sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_93sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_94sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_95sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_list_96sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 if ( not_empty_list ( tmp [ 9 ] ) ) {
-FUNC_EXIT ( lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( tmp [ 9 ] , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) , lf_14 ( arg0 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( atmp_1_0_0_0_0_0_1 ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( tmp [ 9 ] , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) , lf_23 ( arg0 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( atmp_1_0_0_0_0_0_1 ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1483,20 +987,20 @@ FUNC_EXIT ( lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make
 }
 }
 {
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_93sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_1_0_0_0_0_0 = arg_0 ( atmp_1_0_0_0_0 ) ;
 if ( is_single_element ( atmp_1_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_1_0_0_0_0_0 ) ) ;
-if ( term_equal ( lf_12 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_106 ( arg0 , lf_14 ( arg0 , lf_15 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) ;
+if ( term_equal ( lf_12 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_91 ( arg0 , lf_23 ( arg0 , lf_24 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1506,46 +1010,46 @@ FUNC_EXIT ( lf_106 ( arg0 , lf_14 ( arg0 , lf_15 ( make_nf1 ( lf_107sym , lf_108
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-( tmp [ 0 ] = lf_14 ( arg0 , make_nf1 ( lf_107sym , atmp_1_0 ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_107sym ) ) {
+( tmp [ 0 ] = lf_23 ( arg0 , make_nf1 ( lf_92sym , atmp_1_0 ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_92sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_9 ( tmp [ 1 ] ) ) ;
 }
 }
-if ( term_equal ( arg1 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( arg0 ) ;
 }
 }
 }
 if ( check_sym ( arg0 , lf_9sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
-( tmp [ 0 ] = lf_14 ( make_nf1 ( lf_107sym , atmp_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
+( tmp [ 0 ] = lf_23 ( make_nf1 ( lf_92sym , atmp_0_0 ) , arg1 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_92sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_9 ( tmp [ 1 ] ) ) ;
 }
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_14 ( make_nf1 ( lf_107sym , atmp_0_0 ) , make_nf1 ( lf_107sym , atmp_1_0 ) ) ) ;
+FUNC_EXIT ( lf_23 ( make_nf1 ( lf_92sym , atmp_0_0 ) , make_nf1 ( lf_92sym , atmp_1_0 ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_14sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_23sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_15 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_24 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_15sym , ATmakeAppl ( lf_15sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_107sym ) ) {
+FUNC_ENTRY ( lf_24sym , ATmakeAppl ( lf_24sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg0 , lf_92sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
 ( tmp [ 0 ] = lf_12 ( atmp_0_0 , atmp_1_0 ) ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_107sym , lf_11 ( atmp_0_0 , atmp_1_0 ) ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf1 ( lf_92sym , lf_11 ( atmp_0_0 , atmp_1_0 ) ) ) ;
 }
 else {
 FUNC_EXIT ( lf_9 ( lf_11 ( atmp_1_0 , atmp_0_0 ) ) ) ;
@@ -1553,61 +1057,61 @@ FUNC_EXIT ( lf_9 ( lf_11 ( atmp_1_0 , atmp_0_0 ) ) ) ;
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_106 ( arg0 , make_nf1 ( lf_107sym , atmp_1_0 ) ) ) ;
+FUNC_EXIT ( lf_91 ( arg0 , make_nf1 ( lf_92sym , atmp_1_0 ) ) ) ;
 }
 }
 if ( check_sym ( arg0 , lf_9sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
-( tmp [ 0 ] = lf_106 ( make_nf1 ( lf_107sym , atmp_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
+( tmp [ 0 ] = lf_91 ( make_nf1 ( lf_92sym , atmp_0_0 ) , arg1 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_92sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_9 ( tmp [ 1 ] ) ) ;
 }
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_15 ( make_nf1 ( lf_107sym , atmp_1_0 ) , make_nf1 ( lf_107sym , atmp_0_0 ) ) ) ;
+FUNC_EXIT ( lf_24 ( make_nf1 ( lf_92sym , atmp_1_0 ) , make_nf1 ( lf_92sym , atmp_0_0 ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_15sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_24sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_10 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_10sym , ATmakeAppl ( lf_10sym , arg0 , arg1 ) ) ;
 ( tmp [ 0 ] = lf_12 ( arg0 , arg1 ) ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
+if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
 FUNC_EXIT ( lf_11 ( arg0 , arg1 ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant1 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
 FUNC_EXIT ( make_nf2 ( lf_10sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_11 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 23 ] ;
 FUNC_ENTRY ( lf_11sym , ATmakeAppl ( lf_11sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_108sym ) ) {
+if ( check_sym ( arg0 , lf_93sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_94sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_95sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( arg1 , lf_108sym ) ) {
+if ( check_sym ( arg1 , lf_93sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
 if ( is_single_element ( atmp_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0 ) ) ;
 if ( is_single_element ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 1 ] = list_head ( atmp_1_0_0_0_0 ) ) ;
-FUNC_EXIT ( lf_13 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_13 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
 }
 }
 {
@@ -1620,28 +1124,28 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 2 ] = list_prefix ( atmp_1_0_0_0_0 ) ) ;
 ( tmp [ 3 ] = list_last ( atmp_1_0_0_0_0 ) ) ;
-( tmp [ 4 ] = lf_13 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_108sym ) ) {
+( tmp [ 4 ] = lf_13 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_93sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_94sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_95sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_list_96sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( is_single_element ( tmp [ 8 ] ) ) {
 ( tmp [ 9 ] = list_head ( tmp [ 8 ] ) ) ;
-( tmp [ 10 ] = lf_11 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 10 ] , lf_108sym ) ) {
+( tmp [ 10 ] = lf_11 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 10 ] , lf_93sym ) ) {
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
-if ( check_sym ( tmp [ 11 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 11 ] , lf_94sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-if ( check_sym ( tmp [ 12 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 12 ] , lf_95sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 13 ] , lf_list_96sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( not_empty_list ( tmp [ 14 ] ) ) {
-FUNC_EXIT ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list ( tmp [ 14 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list ( tmp [ 14 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1652,42 +1156,42 @@ FUNC_EXIT ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf
 }
 }
 }
-( tmp [ 4 ] = lf_13 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_108sym ) ) {
+( tmp [ 4 ] = lf_13 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_93sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_94sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_95sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_list_96sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( is_single_element ( tmp [ 8 ] ) ) {
 ( tmp [ 9 ] = list_head ( tmp [ 8 ] ) ) ;
-( tmp [ 10 ] = lf_13 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 10 ] , lf_108sym ) ) {
+( tmp [ 10 ] = lf_13 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 10 ] , lf_93sym ) ) {
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
-if ( check_sym ( tmp [ 11 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 11 ] , lf_94sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-if ( check_sym ( tmp [ 12 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 12 ] , lf_95sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 13 ] , lf_list_96sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
 if ( is_single_element ( tmp [ 14 ] ) ) {
 ( tmp [ 15 ] = list_head ( tmp [ 14 ] ) ) ;
-( tmp [ 16 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 16 ] , lf_107sym ) ) {
+( tmp [ 16 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 16 ] , lf_92sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
-( tmp [ 18 ] = lf_11 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) , tmp [ 17 ] ) ) ;
-if ( check_sym ( tmp [ 18 ] , lf_108sym ) ) {
+( tmp [ 18 ] = lf_11 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) , tmp [ 17 ] ) ) ;
+if ( check_sym ( tmp [ 18 ] , lf_93sym ) ) {
 ( tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ) ;
-if ( check_sym ( tmp [ 19 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 19 ] , lf_94sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
-if ( check_sym ( tmp [ 20 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 20 ] , lf_95sym ) ) {
 ( tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ) ;
-if ( check_sym ( tmp [ 21 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 21 ] , lf_list_96sym ) ) {
 ( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( not_empty_list ( tmp [ 22 ] ) ) {
-FUNC_EXIT ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list ( tmp [ 22 ] ) , make_list ( tmp [ 15 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list ( tmp [ 22 ] ) , make_list ( tmp [ 15 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1718,7 +1222,7 @@ FUNC_EXIT ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf
 }
 }
 }
-if ( term_equal ( arg1 , ( constant1 ? constant1 : ( constant1 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( arg1 , ( constant1 ? constant1 : ( constant1 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( arg0 ) ;
 }
 FUNC_EXIT ( make_nf2 ( lf_11sym , arg0 , arg1 ) ) ;
@@ -1726,39 +1230,39 @@ FUNC_EXIT ( make_nf2 ( lf_11sym , arg0 , arg1 ) ) ;
 ATerm lf_12 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 8 ] ;
 FUNC_ENTRY ( lf_12sym , ATmakeAppl ( lf_12sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_108sym ) ) {
+if ( check_sym ( arg0 , lf_93sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_94sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_95sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( arg1 , lf_108sym ) ) {
+if ( check_sym ( arg1 , lf_93sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
 if ( is_single_element ( atmp_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0 ) ) ;
 if ( is_single_element ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 1 ] = list_head ( atmp_1_0_0_0_0 ) ) ;
-( tmp [ 2 ] = lf_13 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_108sym ) ) {
+( tmp [ 2 ] = lf_13 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_93sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_94sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_95sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_list_96sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 ( tmp [ 7 ] = list_head ( tmp [ 6 ] ) ) ;
-if ( ! term_equal ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 7 ] ) ) ) ) , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+if ( ! term_equal ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 7 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 }
 }
@@ -1776,14 +1280,14 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 {
 if ( is_single_element ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 2 ] = list_head ( atmp_1_0_0_0_0 ) ) ;
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 if ( not_empty_list ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 2 ] = list_prefix ( atmp_1_0_0_0_0 ) ) ;
 if ( not_empty_list ( tmp [ 2 ] ) ) {
 ( tmp [ 3 ] = list_last ( atmp_1_0_0_0_0 ) ) ;
 if ( term_equal ( tmp [ 0 ] , tmp [ 2 ] ) ) {
-FUNC_EXIT ( lf_12 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_12 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1799,7 +1303,7 @@ FUNC_EXIT ( lf_12 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_
 }
 {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0 ) ) ;
 {
 ATerm atmp_0_0_0_0_0_1 ;
@@ -1811,13 +1315,13 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( is_single_element ( tmp [ 1 ] ) ) {
 ( atmp_0_0_0_0_0_1 = list_head ( tmp [ 1 ] ) ) ;
-if ( check_sym ( arg1 , lf_108sym ) ) {
+if ( check_sym ( arg1 , lf_93sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 3 ] = arg_0 ( atmp_1_0_0_0 ) ) ;
 {
 ATerm atmp_1_0_0_0_0_1 ;
@@ -1829,8 +1333,8 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 while ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( is_single_element ( tmp [ 3 ] ) ) {
 ( atmp_1_0_0_0_0_1 = list_head ( tmp [ 3 ] ) ) ;
-if ( term_equal ( lf_12 ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , slice ( atmp_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , slice ( atmp_1_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+if ( term_equal ( lf_12 ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , slice ( atmp_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , slice ( atmp_1_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 }
 ( atmp_1_0_0_0_0_0 [ 1 ] = list_tail ( atmp_1_0_0_0_0_0 [ 1 ] ) ) ;
@@ -1858,28 +1362,28 @@ FUNC_EXIT ( make_nf2 ( lf_12sym , arg0 , arg1 ) ) ;
 ATerm lf_13 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 8 ] ;
 FUNC_ENTRY ( lf_13sym , ATmakeAppl ( lf_13sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_108sym ) ) {
+if ( check_sym ( arg0 , lf_93sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_94sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_95sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( arg1 , lf_108sym ) ) {
+if ( check_sym ( arg1 , lf_93sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
 if ( is_single_element ( atmp_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0 ) ) ;
 if ( is_single_element ( atmp_1_0_0_0_0 ) ) {
 ( tmp [ 1 ] = list_head ( atmp_1_0_0_0_0 ) ) ;
 if ( term_equal ( tmp [ 0 ] , tmp [ 1 ] ) ) {
-FUNC_EXIT_CONST ( constant1 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -1889,190 +1393,190 @@ FUNC_EXIT_CONST ( constant1 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110s
 }
 if ( is_single_element ( atmp_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0 ) ) ;
-if ( term_equal ( arg1 , ( constant1 ? constant1 : ( constant1 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT ( lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant1 ? constant1 : ( constant1 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT ( lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
-( tmp [ 0 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
+( tmp [ 0 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 0 ] ) ) {
-if ( term_equal ( arg1 , ( constant6 ? constant6 : ( constant6 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant6 ? constant6 : ( constant6 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant12 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant12 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant10 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant10 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant8 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant8 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant6 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant6 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant13 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant13 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant13 ? constant13 : ( constant13 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant13 ? constant13 : ( constant13 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 1 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
+( tmp [ 1 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 1 ] ) ) {
-if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant12 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant12 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant10 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant10 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant8 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant8 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant6 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant6 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant6 ? constant6 : ( constant6 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant6 ? constant6 : ( constant6 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 2 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
+( tmp [ 2 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant12 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant12 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant10 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant10 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant8 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant8 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant8 ? constant8 : ( constant8 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 3 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
+( tmp [ 3 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant12 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant12 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant10 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant10 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant10 ? constant10 : ( constant10 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 4 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
+( tmp [ 4 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 4 ] ) ) {
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant12 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant12 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant12 ? constant12 : ( constant12 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 5 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
+( tmp [ 5 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 5 ] ) ) {
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant11 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant11 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant11 ? constant11 : ( constant11 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 6 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
+( tmp [ 6 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 6 ] ) ) {
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant9 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant9 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant9 ? constant9 : ( constant9 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 7 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
+( tmp [ 7 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 7 ] ) ) {
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant7 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant7 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
-if ( term_equal ( arg0 , ( constant7 ? constant7 : ( constant7 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
-if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant4 , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
+if ( term_equal ( arg0 , ( constant7 ? constant7 : ( constant7 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( arg1 , ( constant4 ? constant4 : ( constant4 = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant4 , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_13sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_106 ( ATerm arg0 , ATerm arg1 ) {
+ATerm lf_91 ( ATerm arg0 , ATerm arg1 ) {
 ATerm tmp [ 19 ] ;
-FUNC_ENTRY ( lf_106sym , ATmakeAppl ( lf_106sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_107sym ) ) {
+FUNC_ENTRY ( lf_91sym , ATmakeAppl ( lf_91sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg0 , lf_92sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_93sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_94sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_95sym ) ) {
 {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
 {
 ATerm atmp_0_0_0_0_0_0_1 ;
@@ -2084,15 +1588,15 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 while ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( is_single_element ( tmp [ 1 ] ) ) {
 ( atmp_0_0_0_0_0_0_1 = list_head ( tmp [ 1 ] ) ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_93sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 3 ] = arg_0 ( atmp_1_0_0_0_0 ) ) ;
 {
 ATerm atmp_1_0_0_0_0_0_1 ;
@@ -2104,35 +1608,35 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 while ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( is_single_element ( tmp [ 3 ] ) ) {
 ( atmp_1_0_0_0_0_0_1 = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 4 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( atmp_0_0_0_0_0_0_1 ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( atmp_1_0_0_0_0_0_1 ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_107sym ) ) {
+( tmp [ 4 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( atmp_0_0_0_0_0_0_1 ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( atmp_1_0_0_0_0_0_1 ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_92sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_93sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_94sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_95sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 8 ] , lf_list_96sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 ( tmp [ 10 ] = tmp [ 9 ] ) ;
 ( tmp [ 11 ] = tmp [ 9 ] ) ;
 while ( not_empty_list ( tmp [ 9 ] ) ) {
 if ( is_single_element ( tmp [ 9 ] ) ) {
 ( tmp [ 12 ] = list_head ( tmp [ 9 ] ) ) ;
-( tmp [ 13 ] = lf_106 ( lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , slice ( atmp_0_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , slice ( atmp_1_0_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list_char ( 48 ) , slice ( tmp [ 10 ] , tmp [ 11 ] ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_107sym ) ) {
+( tmp [ 13 ] = lf_91 ( lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , slice ( atmp_0_0_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , slice ( atmp_1_0_0_0_0_0_0 [ 0 ] , atmp_1_0_0_0_0_0_0 [ 1 ] ) ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list_char ( 48 ) , slice ( tmp [ 10 ] , tmp [ 11 ] ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 13 ] , lf_92sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( check_sym ( tmp [ 14 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 14 ] , lf_93sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-if ( check_sym ( tmp [ 15 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 15 ] , lf_94sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
-if ( check_sym ( tmp [ 16 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 16 ] , lf_95sym ) ) {
 ( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
-if ( check_sym ( tmp [ 17 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 17 ] , lf_list_96sym ) ) {
 ( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
 if ( not_empty_list ( tmp [ 18 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( tmp [ 18 ] , make_list ( tmp [ 12 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( tmp [ 18 ] , make_list ( tmp [ 12 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -2169,17 +1673,17 @@ FUNC_EXIT ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf
 }
 {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_0_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0_0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp_1_0 , lf_108sym ) ) {
+if ( check_sym ( atmp_1_0 , lf_93sym ) ) {
 ATerm atmp_1_0_0 = arg_0 ( atmp_1_0 ) ;
-if ( check_sym ( atmp_1_0_0 , lf_109sym ) ) {
+if ( check_sym ( atmp_1_0_0 , lf_94sym ) ) {
 ATerm atmp_1_0_0_0 = arg_0 ( atmp_1_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_1_0_0_0 , lf_95sym ) ) {
 ATerm atmp_1_0_0_0_0 = arg_0 ( atmp_1_0_0_0 ) ;
-if ( check_sym ( atmp_1_0_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_1_0_0_0_0 , lf_list_96sym ) ) {
 ATerm atmp_1_0_0_0_0_0 = arg_0 ( atmp_1_0_0_0_0 ) ;
 if ( not_empty_list ( atmp_1_0_0_0_0_0 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp_1_0_0_0_0_0 ) ) ;
@@ -2187,33 +1691,33 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_last ( atmp_1_0_0_0_0_0 ) ) ;
 if ( is_single_element ( atmp_0_0_0_0_0_0 ) ) {
 ( tmp [ 2 ] = list_head ( atmp_0_0_0_0_0_0 ) ) ;
-( tmp [ 3 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 2 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_107sym ) ) {
+( tmp [ 3 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 2 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_92sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_93sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_94sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_95sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_list_96sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 ( tmp [ 9 ] = list_prefix ( tmp [ 8 ] ) ) ;
 ( tmp [ 10 ] = list_last ( tmp [ 8 ] ) ) ;
-( tmp [ 11 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 11 ] , lf_107sym ) ) {
+( tmp [ 11 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 11 ] , lf_92sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-if ( check_sym ( tmp [ 12 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 12 ] , lf_93sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 13 ] , lf_94sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( check_sym ( tmp [ 14 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 14 ] , lf_95sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-if ( check_sym ( tmp [ 15 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 15 ] , lf_list_96sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( not_empty_list ( tmp [ 16 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -2235,33 +1739,33 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_last ( atmp_0_0_0_0_0_0 ) ) ;
 if ( is_single_element ( atmp_1_0_0_0_0_0 ) ) {
 ( tmp [ 2 ] = list_head ( atmp_1_0_0_0_0_0 ) ) ;
-( tmp [ 3 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_107sym ) ) {
+( tmp [ 3 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 1 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_92sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_93sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 5 ] , lf_94sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 6 ] , lf_95sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 7 ] , lf_list_96sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 ( tmp [ 9 ] = list_prefix ( tmp [ 8 ] ) ) ;
 ( tmp [ 10 ] = list_last ( tmp [ 8 ] ) ) ;
-( tmp [ 11 ] = lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 11 ] , lf_107sym ) ) {
+( tmp [ 11 ] = lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( tmp [ 0 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list_char ( 48 ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 11 ] , lf_92sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-if ( check_sym ( tmp [ 12 ] , lf_108sym ) ) {
+if ( check_sym ( tmp [ 12 ] , lf_93sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_109sym ) ) {
+if ( check_sym ( tmp [ 13 ] , lf_94sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( check_sym ( tmp [ 14 ] , lf_110sym ) ) {
+if ( check_sym ( tmp [ 14 ] , lf_95sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-if ( check_sym ( tmp [ 15 ] , lf_list_111sym ) ) {
+if ( check_sym ( tmp [ 15 ] , lf_list_96sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
 if ( not_empty_list ( tmp [ 16 ] ) ) {
-FUNC_EXIT ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , cons ( make_list ( tmp [ 16 ] ) , make_list ( tmp [ 10 ] ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -2290,319 +1794,319 @@ FUNC_EXIT ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf
 {
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-FUNC_EXIT ( lf_15 ( arg0 , make_nf1 ( lf_107sym , atmp_1_0 ) ) ) ;
+FUNC_EXIT ( lf_24 ( arg0 , make_nf1 ( lf_92sym , atmp_1_0 ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( arg1 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( arg0 ) ;
 }
 }
 }
 if ( check_sym ( arg0 , lf_9sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_107sym ) ) {
-FUNC_EXIT ( lf_15 ( arg1 , make_nf1 ( lf_107sym , atmp_0_0 ) ) ) ;
+if ( check_sym ( arg1 , lf_92sym ) ) {
+FUNC_EXIT ( lf_24 ( arg1 , make_nf1 ( lf_92sym , atmp_0_0 ) ) ) ;
 }
 if ( check_sym ( arg1 , lf_9sym ) ) {
 ATerm atmp_1_0 = arg_0 ( arg1 ) ;
-( tmp [ 0 ] = lf_106 ( make_nf1 ( lf_107sym , atmp_0_0 ) , make_nf1 ( lf_107sym , atmp_1_0 ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_107sym ) ) {
+( tmp [ 0 ] = lf_91 ( make_nf1 ( lf_92sym , atmp_0_0 ) , make_nf1 ( lf_92sym , atmp_1_0 ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_92sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 FUNC_EXIT ( lf_9 ( tmp [ 1 ] ) ) ;
 }
 }
 }
-if ( check_sym ( arg1 , lf_107sym ) ) {
-if ( term_equal ( arg0 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
+if ( check_sym ( arg1 , lf_92sym ) ) {
+if ( term_equal ( arg0 , ( constant2 ? constant2 : ( constant2 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
 }
-( tmp [ 0 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+( tmp [ 0 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 0 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant15 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant15 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant30 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 56 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant30 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 56 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 1 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+( tmp [ 1 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 1 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant15 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant15 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 2 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+( tmp [ 2 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 2 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant17 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 3 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+( tmp [ 3 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant19 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 4 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
+( tmp [ 4 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 4 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant21 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 5 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+( tmp [ 5 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 5 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant23 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 6 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
+( tmp [ 6 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 6 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant25 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 7 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ;
+( tmp [ 7 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 7 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant24 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant24 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant27 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
 }
 }
-( tmp [ 8 ] = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ;
+( tmp [ 8 ] = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ;
 if ( term_equal ( arg0 , tmp [ 8 ] ) ) {
-if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant14 ? constant14 : ( constant14 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant29 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant16 ? constant16 : ( constant16 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant14 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 56 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant18 ? constant18 : ( constant18 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant16 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 55 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant20 ? constant20 : ( constant20 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant18 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 54 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant22 ? constant22 : ( constant22 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant20 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 53 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant24 ? constant24 : ( constant24 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant22 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 52 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant24 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant26 ? constant26 : ( constant26 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant24 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 51 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant26 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant5 ? constant5 : ( constant5 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant26 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+if ( term_equal ( arg1 , ( constant29 ? constant29 : ( constant29 = make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant28 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_106sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_91sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_108 ( ATerm arg0 ) {
+ATerm lf_93 ( ATerm arg0 ) {
 ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lf_108sym , ATmakeAppl ( lf_108sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_109sym ) ) {
+FUNC_ENTRY ( lf_93sym , ATmakeAppl ( lf_93sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_94sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_110sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_95sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_list_111sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_list_96sym ) ) {
 ( tmp [ 1 ] = arg_0 ( atmp_0_0_0 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
 if ( is_char ( tmp [ 2 ] , 48 ) ) {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 3 ] = lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , tmp [ 1 ] ) ) ) ) ) ;
+( tmp [ 3 ] = lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , tmp [ 1 ] ) ) ) ) ) ;
 FUNC_EXIT ( tmp [ 3 ] ) ;
 }
 }
@@ -2610,174 +2114,576 @@ FUNC_EXIT ( tmp [ 3 ] ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_108sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_93sym , arg0 ) ) ;
 }
-ATerm lf_53 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_53sym , ATmakeAppl ( lf_53sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_39sym ) ) {
+ATerm lf_29 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_29sym , ATmakeAppl ( lf_29sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_71sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_16sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_72sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_17sym ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+if ( check_sym ( atmp_0_0_0 , lf_73sym ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 }
 }
-if ( check_sym ( arg0 , lf_37sym ) ) {
+if ( check_sym ( arg0 , lf_57sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_16sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_72sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_17sym ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
+if ( check_sym ( atmp_0_0_0 , lf_73sym ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
 }
 }
 }
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_53sym , arg0 ) ) ;
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_29sym , arg0 ) ) ;
 }
-ATerm lf_51 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_51sym , ATmakeAppl ( lf_51sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_73sym ) ) {
+ATerm lf_27 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_27sym , ATmakeAppl ( lf_27sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_76sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
 {
-FUNC_EXIT ( lf_51 ( atmp_0_0 ) ) ;
+FUNC_EXIT ( lf_27 ( atmp_0_0 ) ) ;
 }
 }
+if ( check_sym ( arg0 , lf_77sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_78sym ) ) {
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_71sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_72sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+if ( check_sym ( atmp_0_0_1_0_0 , lf_73sym ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+}
+}
+{
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_57sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_72sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+if ( check_sym ( atmp_0_0_1_0_0 , lf_73sym ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+}
+}
+}
+}
+}
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_27sym , arg0 ) ) ;
+}
+ATerm lf_14 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_14sym , ATmakeAppl ( lf_14sym , arg0 ) ) ;
+if ( term_equal ( arg0 , ( constant31 ? constant31 : ( constant31 = make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant32 , make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
+}
+if ( term_equal ( arg0 , ( constant33 ? constant33 : ( constant33 = make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant34 , make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( arg0 , ( constant35 ? constant35 : ( constant35 = make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant36 , make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ;
+}
+FUNC_EXIT ( arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_14sym , arg0 ) ) ;
+}
+ATerm lt_19 ( ATerm arg0 ) {
+ATerm tmp [ 1 ] ;
+FUNC_ENTRY ( lt_19sym , ATmakeAppl ( lt_19sym , arg0 ) ) ;
+( arg0 = call_kids_trafo ( lt_19 , arg0 , ATmakeList ( 0 ) ) ) ;
+if ( check_sym ( arg0 , lf_16sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+if ( check_sym ( atmp_0_1 , lf_87sym ) ) {
+ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
+if ( check_sym ( atmp_0_1_0 , lf_list_89sym ) ) {
+ATerm atmp_0_1_0_0 = arg_0 ( atmp_0_1_0 ) ;
+if ( term_equal ( atmp_0_0 , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
+if ( is_single_element ( atmp_0_1_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_1_0_0 ) ) ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
+}
+}
+}
+}
+}
+}
+if ( check_sym ( arg0 , lf_71sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+FUNC_EXIT ( lf_57 ( atmp_0_0 ) ) ;
+}
+FUNC_EXIT ( arg0 ) ;
+}
+ATerm lf_71 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_71sym , ATmakeAppl ( lf_71sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_41sym ) ) {
+FUNC_EXIT ( arg0 ) ;
+}
+if ( check_sym ( arg0 , lf_31sym ) ) {
+FUNC_EXIT ( arg0 ) ;
+}
+FUNC_EXIT ( make_nf1 ( lf_71sym , arg0 ) ) ;
+}
+ATerm lf_57 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_57sym , ATmakeAppl ( lf_57sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_41sym ) ) {
+FUNC_EXIT ( arg0 ) ;
+}
+if ( check_sym ( arg0 , lf_31sym ) ) {
+FUNC_EXIT ( arg0 ) ;
+}
+FUNC_EXIT ( make_nf1 ( lf_57sym , arg0 ) ) ;
+}
+ATerm lt_17 ( ATerm arg0 ) {
+ATerm tmp [ 27 ] ;
+FUNC_ENTRY ( lt_17sym , ATmakeAppl ( lt_17sym , arg0 ) ) ;
+( arg0 = call_kids_trafo ( lt_17 , arg0 , ATmakeList ( 0 ) ) ) ;
 if ( check_sym ( arg0 , lf_76sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp_0_0 , lf_77sym ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_39sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_16sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( check_sym ( atmp_0_0_1_0_0 , lf_17sym ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-}
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_37sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_16sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( check_sym ( atmp_0_0_1_0_0 , lf_17sym ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-}
-}
-}
-}
-}
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_51sym , arg0 ) ) ;
-}
-ATerm lf_22 ( ATerm arg0 ) {
-ATerm tmp [ 11 ] ;
-FUNC_ENTRY ( lf_22sym , ATmakeAppl ( lf_22sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_105sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_113sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_single_element ( atmp_0_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_0 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_23sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = lf_15 ( make_nf1 ( lf_107sym , lf_108 ( tmp [ 1 ] ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_107sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_108sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_23sym , tmp [ 4 ] ) ) ;
-}
-}
-}
-}
-if ( not_empty_list ( atmp_0_0_0 ) ) {
-( tmp [ 0 ] = list_prefix ( atmp_0_0_0 ) ) ;
-( tmp [ 1 ] = list_last ( atmp_0_0_0 ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_23sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = lf_22 ( make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , make_list ( tmp [ 0 ] ) ) ) ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_23sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_15 ( make_nf1 ( lf_107sym , lf_108 ( tmp [ 2 ] ) ) , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_107sym ) ) {
-( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_108sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = lf_106 ( lf_14 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) , make_nf1 ( lf_107sym , lf_108 ( tmp [ 4 ] ) ) ) , make_nf1 ( lf_107sym , lf_108 ( tmp [ 7 ] ) ) ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_107sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 9 ] , lf_108sym ) ) {
-( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_23sym , tmp [ 10 ] ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_22sym , arg0 ) ) ;
-}
-ATerm lf_20 ( ATerm arg0 ) {
-ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_20sym , ATmakeAppl ( lf_20sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_105sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_113sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
+if ( check_sym ( atmp_0_0_0 , lf_78sym ) ) {
+ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_0 , lf_87sym ) ) {
+ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_0_0 , lf_list_89sym ) ) {
+ATerm atmp_0_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0_0 ) ;
 {
-ATerm atmp_0_0_0_1_1_1_1_1_1 ;
-ATerm atmp_0_0_0_1_1_1_1_1_0 ;
-ATerm atmp_0_0_0_1_1_1_1_0 [ 2 ] ;
-ATerm atmp_0_0_0_1_1_1_0 ;
-ATerm atmp_0_0_0_1_1_0 ;
-ATerm atmp_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0 ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-( atmp_0_0_0_1_1_1_1_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_1_1_1_1_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_1_1_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( is_single_element ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_1_1_1_1_1 = list_head ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( lf_52 ( make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , slice ( atmp_0_0_0_1_1_1_1_0 [ 0 ] , atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ) ) ) ) ;
-}
-( atmp_0_0_0_1_1_1_1_0 [ 1 ] = list_tail ( atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ;
-}
-}
-}
+ATerm atmp_0_0_0_1 = arg_1 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_1 , lf_71sym ) ) {
+ATerm atmp_0_0_0_1_0 = arg_0 ( atmp_0_0_0_1 ) ;
+{
+ATerm atmp_0_0_0_2 = arg_2 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_2 , lf_47sym ) ) {
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_list_98sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+if ( is_single_element ( atmp_0_0_0_0_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0_0 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_71sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_16sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_87sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( check_sym ( tmp [ 4 ] , lf_list_89sym ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
+if ( is_single_element ( tmp [ 5 ] ) ) {
+( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
+if ( is_single_element ( atmp_0_0_1_0_0 ) ) {
+( tmp [ 7 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
+if ( term_equal ( tmp [ 6 ] , atmp_0_0_0_1_0 ) ) {
+FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_57 ( tmp [ 6 ] ) ) ) ) , lf_71 ( tmp [ 6 ] ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( tmp [ 7 ] ) ) ) ) , atmp_0_1 ) ) ;
 }
 }
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_20sym , arg0 ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
+{
+ATerm atmp_0_0_0_1 = arg_1 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_1 , lf_71sym ) ) {
+ATerm atmp_0_0_0_1_0 = arg_0 ( atmp_0_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_0_1_0 , lf_16sym ) ) {
+ATerm atmp_0_0_0_1_0_0 = arg_0 ( atmp_0_0_0_1_0 ) ;
+{
+ATerm atmp_0_0_0_1_0_1 = arg_1 ( atmp_0_0_0_1_0 ) ;
+if ( check_sym ( atmp_0_0_0_1_0_1 , lf_87sym ) ) {
+ATerm atmp_0_0_0_1_0_1_0 = arg_0 ( atmp_0_0_0_1_0_1 ) ;
+if ( check_sym ( atmp_0_0_0_1_0_1_0 , lf_list_89sym ) ) {
+ATerm atmp_0_0_0_1_0_1_0_0 = arg_0 ( atmp_0_0_0_1_0_1_0 ) ;
+{
+ATerm atmp_0_0_0_2 = arg_2 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_2 , lf_47sym ) ) {
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_list_98sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+if ( term_equal ( atmp_0_0_0_0 , ( constant38 ? constant38 : ( constant38 = make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( atmp_0_0_0_1_0_0 , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
+if ( is_single_element ( atmp_0_0_0_1_0_1_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0_1_0_1_0_0 ) ) ;
+if ( is_single_element ( atmp_0_0_1_0_0 ) ) {
+( tmp [ 1 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_76sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_77sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 5 ] = arg_1 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 5 ] , lf_90sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( check_sym ( tmp [ 6 ] , lf_list_98sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+if ( term_equal ( tmp [ 4 ] , ( constant39 ? constant39 : ( constant39 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_32sym , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf0 ( lf_47sym ) ) ) ) ) ) {
+if ( is_single_element ( tmp [ 7 ] ) ) {
+( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
+if ( check_sym ( tmp [ 8 ] , lf_76sym ) ) {
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+( tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ) ;
+if ( check_sym ( tmp [ 9 ] , lf_77sym ) ) {
+( tmp [ 11 ] = arg_0 ( tmp [ 9 ] ) ) ;
+( tmp [ 12 ] = arg_1 ( tmp [ 9 ] ) ) ;
+if ( check_sym ( tmp [ 11 ] , lf_78sym ) ) {
+( tmp [ 13 ] = arg_0 ( tmp [ 11 ] ) ) ;
+( tmp [ 14 ] = arg_1 ( tmp [ 11 ] ) ) ;
+( tmp [ 15 ] = arg_2 ( tmp [ 11 ] ) ) ;
+if ( term_equal ( tmp [ 14 ] , ( constant40 ? constant40 : ( constant40 = make_nf1 ( lf_32sym , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_32sym , lf_57 ( tmp [ 0 ] ) ) ) ) ) , lf_57 ( tmp [ 0 ] ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , tmp [ 13 ] , make_nf1 ( lf_32sym , lf_57 ( tmp [ 0 ] ) ) , tmp [ 15 ] ) , tmp [ 12 ] ) ) ) ) ) , atmp_0_1 ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+ATerm atmp_0_0_0_2 = arg_2 ( atmp_0_0_0 ) ;
+{
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_list_98sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+{
+if ( term_equal ( atmp_0_0_0_0 , ( constant38 ? constant38 : ( constant38 = make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( term_equal ( atmp_0_0_0_1_0_0 , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
+if ( is_single_element ( atmp_0_0_0_1_0_1_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0_1_0_1_0_0 ) ) ;
+if ( is_single_element ( atmp_0_0_1_0_0 ) ) {
+( tmp [ 1 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_76sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_77sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 5 ] = arg_1 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 5 ] , lf_90sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( check_sym ( tmp [ 6 ] , lf_list_98sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+if ( term_equal ( tmp [ 4 ] , ( constant41 ? constant41 : ( constant41 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 110 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 105 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 99 ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( is_single_element ( tmp [ 7 ] ) ) {
+( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
+if ( check_sym ( tmp [ 8 ] , lf_76sym ) ) {
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+( tmp [ 10 ] = arg_1 ( tmp [ 8 ] ) ) ;
+if ( check_sym ( tmp [ 9 ] , lf_77sym ) ) {
+( tmp [ 11 ] = arg_0 ( tmp [ 9 ] ) ) ;
+( tmp [ 12 ] = arg_1 ( tmp [ 9 ] ) ) ;
+if ( check_sym ( tmp [ 12 ] , lf_90sym ) ) {
+( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
+if ( check_sym ( tmp [ 13 ] , lf_list_98sym ) ) {
+( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
+if ( term_equal ( tmp [ 11 ] , ( constant42 ? constant42 : ( constant42 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_57 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf0 ( lf_47sym ) ) ) ) ) ) {
+if ( is_single_element ( tmp [ 14 ] ) ) {
+( tmp [ 15 ] = list_head ( tmp [ 14 ] ) ) ;
+if ( check_sym ( tmp [ 15 ] , lf_76sym ) ) {
+( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
+( tmp [ 17 ] = arg_1 ( tmp [ 15 ] ) ) ;
+if ( check_sym ( tmp [ 16 ] , lf_77sym ) ) {
+( tmp [ 18 ] = arg_0 ( tmp [ 16 ] ) ) ;
+( tmp [ 19 ] = arg_1 ( tmp [ 16 ] ) ) ;
+if ( check_sym ( tmp [ 19 ] , lf_90sym ) ) {
+( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
+if ( check_sym ( tmp [ 20 ] , lf_list_98sym ) ) {
+( tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ) ;
+if ( term_equal ( tmp [ 18 ] , ( constant43 ? constant43 : ( constant43 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , cons ( make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) , make_list ( lf_57 ( make_nf1 ( lf_46sym , make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_57 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 100 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 105 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 103 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 105 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 115 ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( not_empty_list ( tmp [ 21 ] ) ) {
+( tmp [ 22 ] = list_head ( tmp [ 21 ] ) ) ;
+if ( term_equal ( tmp [ 22 ] , ( constant44 ? constant44 : ( constant44 = make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) {
+( tmp [ 23 ] = list_tail ( tmp [ 21 ] ) ) ;
+if ( is_single_element ( tmp [ 23 ] ) ) {
+( tmp [ 24 ] = list_head ( tmp [ 23 ] ) ) ;
+if ( check_sym ( tmp [ 24 ] , lf_77sym ) ) {
+( tmp [ 25 ] = arg_0 ( tmp [ 24 ] ) ) ;
+( tmp [ 26 ] = arg_1 ( tmp [ 24 ] ) ) ;
+if ( term_equal ( tmp [ 25 ] , ( constant45 ? constant45 : ( constant45 = make_nf1 ( lf_79sym , lf_57 ( make_nf1 ( lf_46sym , make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT ( lf_25 ( tmp [ 26 ] ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+if ( term_equal ( atmp_0_0_0_1_0_0 , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
+if ( is_single_element ( atmp_0_0_0_1_0_1_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0_1_0_1_0_0 ) ) ;
+if ( check_sym ( atmp_0_0_0_2 , lf_48sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0_0_2 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_49sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_list_50sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 4 ] = tmp [ 3 ] ) ;
+( tmp [ 5 ] = tmp [ 3 ] ) ;
+while ( not_empty_list ( tmp [ 3 ] ) ) {
+( tmp [ 6 ] = list_head ( tmp [ 3 ] ) ) ;
+( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
+if ( term_equal ( tmp [ 6 ] , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_51sym , make_nf1 ( lf_52sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 108 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
+( tmp [ 7 ] = lf_21 ( atmp_0_0_0_0 ) ) ;
+( tmp [ 8 ] = lt_19 ( tmp [ 7 ] ) ) ;
+( tmp [ 9 ] = lt_19 ( tmp [ 0 ] ) ) ;
+( tmp [ 10 ] = lf_26 ( atmp_0_0_0_2 ) ) ;
+( tmp [ 11 ] = lf_22 ( atmp_0_0_1 ) ) ;
+( tmp [ 12 ] = lt_20 ( tmp [ 11 ] ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , tmp [ 8 ] , lf_57 ( tmp [ 9 ] ) , tmp [ 10 ] ) , tmp [ 12 ] ) , atmp_0_1 ) ) ;
+}
+( tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ) ;
+( tmp [ 3 ] = tmp [ 5 ] ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_list_98sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+{
+( tmp [ 0 ] = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_71 ( make_nf2 ( lf_16sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_nf0 ( lf_47sym ) ) ) ;
+if ( term_equal ( atmp_0_0_0 , tmp [ 0 ] ) ) {
+if ( is_single_element ( atmp_0_0_1_0_0 ) ) {
+( tmp [ 1 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_76sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+{
+if ( check_sym ( tmp [ 2 ] , lf_77sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 2 ] ) ) ;
+( tmp [ 5 ] = arg_1 ( tmp [ 2 ] ) ) ;
+{
+if ( check_sym ( tmp [ 5 ] , lf_90sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+{
+if ( check_sym ( tmp [ 6 ] , lf_list_98sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 115 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 4 ] , tmp [ 8 ] ) ) {
+if ( is_single_element ( tmp [ 7 ] ) ) {
+( tmp [ 9 ] = list_head ( tmp [ 7 ] ) ) ;
+if ( check_sym ( tmp [ 9 ] , lf_76sym ) ) {
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
+( tmp [ 11 ] = arg_1 ( tmp [ 9 ] ) ) ;
+{
+if ( check_sym ( tmp [ 10 ] , lf_77sym ) ) {
+( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
+( tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ) ;
+{
+if ( check_sym ( tmp [ 13 ] , lf_90sym ) ) {
+( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
+{
+if ( check_sym ( tmp [ 14 ] , lf_list_98sym ) ) {
+( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
+( tmp [ 16 ] = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_57 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf0 ( lf_47sym ) ) ) ;
+if ( term_equal ( tmp [ 12 ] , tmp [ 16 ] ) ) {
+if ( is_single_element ( tmp [ 15 ] ) ) {
+( tmp [ 17 ] = list_head ( tmp [ 15 ] ) ) ;
+if ( check_sym ( tmp [ 17 ] , lf_76sym ) ) {
+( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
+( tmp [ 19 ] = arg_1 ( tmp [ 17 ] ) ) ;
+{
+if ( check_sym ( tmp [ 18 ] , lf_77sym ) ) {
+( tmp [ 20 ] = arg_0 ( tmp [ 18 ] ) ) ;
+( tmp [ 21 ] = arg_1 ( tmp [ 18 ] ) ) ;
+{
+if ( check_sym ( tmp [ 21 ] , lf_90sym ) ) {
+( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
+{
+if ( check_sym ( tmp [ 22 ] , lf_list_98sym ) ) {
+( tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ) ;
+if ( term_equal ( tmp [ 20 ] , ( constant47 ? constant47 : ( constant47 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 53 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 48 ] ) ) ) ) ) ) , make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 55 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_57 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 103 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 108 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( is_single_element ( tmp [ 23 ] ) ) {
+( tmp [ 24 ] = list_head ( tmp [ 23 ] ) ) ;
+FUNC_EXIT ( tmp [ 24 ] ) ;
+}
+}
+if ( term_equal ( tmp [ 20 ] , ( constant48 ? constant48 : ( constant48 = make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , cons ( make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) , make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 55 ] ) ) ) ) ) ) , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 52 ] ) ) ) ) ) ) , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 49 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 54 ] ) ) ) ) ) ) , cons ( make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) , cons ( make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) , cons ( make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) , make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 51 ] ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 53 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_57 ( make_nf1 ( lf_15sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 111 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 115 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 99 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 112 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 100 ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+if ( not_empty_list ( tmp [ 23 ] ) ) {
+( tmp [ 24 ] = list_head ( tmp [ 23 ] ) ) ;
+if ( term_equal ( tmp [ 24 ] , ( constant44 ? constant44 : ( constant44 = make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) {
+( tmp [ 25 ] = list_tail ( tmp [ 23 ] ) ) ;
+if ( is_single_element ( tmp [ 25 ] ) ) {
+( tmp [ 26 ] = list_head ( tmp [ 25 ] ) ) ;
+FUNC_EXIT ( lf_14 ( tmp [ 26 ] ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+FUNC_EXIT ( arg0 ) ;
+}
+ATerm lf_101 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_101sym , ATmakeAppl ( lf_101sym , arg0 ) ) ;
+FUNC_EXIT ( lt_17 ( arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_101sym , arg0 ) ) ;
+}
+ATerm lf_18 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_18sym , ATmakeAppl ( lf_18sym , arg0 ) ) ;
+FUNC_EXIT ( lt_17 ( arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_18sym , arg0 ) ) ;
+}
+ATerm lt_20 ( ATerm arg0 ) {
+ATerm tmp [ 4 ] ;
+FUNC_ENTRY ( lt_20sym , ATmakeAppl ( lt_20sym , arg0 ) ) ;
+( arg0 = call_kids_trafo ( lt_20 , arg0 , ATmakeList ( 0 ) ) ) ;
+if ( check_sym ( arg0 , lf_77sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_78sym ) ) {
+ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+( tmp [ 0 ] = lf_30 ( atmp_0_0_0 ) ) ;
+( tmp [ 1 ] = lt_19 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = lt_19 ( atmp_0_0_1 ) ) ;
+( tmp [ 3 ] = lf_28 ( atmp_0_1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , tmp [ 1 ] , tmp [ 2 ] , atmp_0_0_2 ) , tmp [ 3 ] ) ) ;
+}
+}
+}
+}
+{
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_79sym ) ) {
+ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+( tmp [ 0 ] = lt_19 ( atmp_0_0_0 ) ) ;
+( tmp [ 1 ] = lf_28 ( atmp_0_1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_77sym , make_nf1 ( lf_79sym , tmp [ 0 ] ) , tmp [ 1 ] ) ) ;
+}
+}
+}
+}
+FUNC_EXIT ( arg0 ) ;
 }
 ATerm lf_21 ( ATerm arg0 ) {
 ATerm tmp [ 27 ] ;
 FUNC_ENTRY ( lf_21sym , ATmakeAppl ( lf_21sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_102sym ) ) {
+if ( check_sym ( arg0 , lf_87sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_104sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_list_89sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
 if ( not_empty_list ( atmp_0_0_0 ) ) {
 ( tmp [ 0 ] = list_head ( atmp_0_0_0 ) ) ;
@@ -2797,42 +2703,42 @@ if ( not_empty_list ( tmp [ 7 ] ) ) {
 ( tmp [ 10 ] = list_prefix ( tmp [ 8 ] ) ) ;
 if ( not_empty_list ( tmp [ 8 ] ) ) {
 ( tmp [ 11 ] = list_last ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_78sym ) ) {
+if ( check_sym ( tmp [ 0 ] , lf_31sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 0 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant31 ? constant31 : ( constant31 = lf_39 ( make_nf1 ( lf_16sym , make_nf0 ( lf_17sym ) ) ) ) ) ) ) {
-if ( check_sym ( tmp [ 4 ] , lf_78sym ) ) {
+if ( term_equal ( tmp [ 2 ] , ( constant49 ? constant49 : ( constant49 = lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) ) ) ) ) {
+if ( check_sym ( tmp [ 4 ] , lf_31sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_79sym ) ) {
+if ( check_sym ( tmp [ 13 ] , lf_37sym ) ) {
 ( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( check_sym ( tmp [ 14 ] , lf_80sym ) ) {
+if ( check_sym ( tmp [ 14 ] , lf_38sym ) ) {
 ( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
 ( tmp [ 16 ] = arg_1 ( tmp [ 14 ] ) ) ;
 ( tmp [ 17 ] = arg_2 ( tmp [ 14 ] ) ) ;
 if ( term_equal ( tmp [ 15 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 16 ] , lf_list_81sym ) ) {
+if ( check_sym ( tmp [ 16 ] , lf_list_39sym ) ) {
 ( tmp [ 18 ] = arg_0 ( tmp [ 16 ] ) ) ;
 if ( term_equal ( tmp [ 17 ] , make_char ( 34 ) ) ) {
 if ( is_single_element ( tmp [ 18 ] ) ) {
 ( tmp [ 19 ] = list_head ( tmp [ 18 ] ) ) ;
-if ( term_equal ( tmp [ 19 ] , ( constant32 ? constant32 : ( constant32 = make_nf1 ( lf_82sym , make_char ( 40 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 6 ] , ( constant31 ? constant31 : ( constant31 = lf_39 ( make_nf1 ( lf_16sym , make_nf0 ( lf_17sym ) ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 11 ] , ( constant31 ? constant31 : ( constant31 = lf_39 ( make_nf1 ( lf_16sym , make_nf0 ( lf_17sym ) ) ) ) ) ) ) {
-if ( check_sym ( tmp [ 9 ] , lf_78sym ) ) {
+if ( term_equal ( tmp [ 19 ] , ( constant50 ? constant50 : ( constant50 = make_nf1 ( lf_40sym , make_char ( 40 ) ) ) ) ) ) {
+if ( term_equal ( tmp [ 6 ] , ( constant49 ? constant49 : ( constant49 = lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) ) ) ) ) {
+if ( term_equal ( tmp [ 11 ] , ( constant49 ? constant49 : ( constant49 = lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) ) ) ) ) {
+if ( check_sym ( tmp [ 9 ] , lf_31sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 9 ] ) ) ;
-if ( check_sym ( tmp [ 20 ] , lf_79sym ) ) {
+if ( check_sym ( tmp [ 20 ] , lf_37sym ) ) {
 ( tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ) ;
-if ( check_sym ( tmp [ 21 ] , lf_80sym ) ) {
+if ( check_sym ( tmp [ 21 ] , lf_38sym ) ) {
 ( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 ( tmp [ 23 ] = arg_1 ( tmp [ 21 ] ) ) ;
 ( tmp [ 24 ] = arg_2 ( tmp [ 21 ] ) ) ;
 if ( term_equal ( tmp [ 22 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 23 ] , lf_list_81sym ) ) {
+if ( check_sym ( tmp [ 23 ] , lf_list_39sym ) ) {
 ( tmp [ 25 ] = arg_0 ( tmp [ 23 ] ) ) ;
 if ( term_equal ( tmp [ 24 ] , make_char ( 34 ) ) ) {
 if ( is_single_element ( tmp [ 25 ] ) ) {
 ( tmp [ 26 ] = list_head ( tmp [ 25 ] ) ) ;
-if ( term_equal ( tmp [ 26 ] , ( constant33 ? constant33 : ( constant33 = make_nf1 ( lf_82sym , make_char ( 41 ) ) ) ) ) ) {
-FUNC_EXIT ( lf_54 ( make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( tmp [ 10 ] ) ) ) ) ) ;
+if ( term_equal ( tmp [ 26 ] , ( constant51 ? constant51 : ( constant51 = make_nf1 ( lf_40sym , make_char ( 41 ) ) ) ) ) ) {
+FUNC_EXIT ( lf_30 ( make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( tmp [ 10 ] ) ) ) ) ) ;
 }
 }
 }
@@ -2863,541 +2769,439 @@ FUNC_EXIT ( lf_54 ( make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list
 }
 FUNC_EXIT ( make_nf1 ( lf_21sym , arg0 ) ) ;
 }
-ATerm lt_19 ( ATerm arg0 ) {
-ATerm tmp [ 4 ] ;
-FUNC_ENTRY ( lt_19sym , ATmakeAppl ( lt_19sym , arg0 ) ) ;
-( arg0 = call_kids_trafo ( lt_19 , arg0 , ATmakeList ( 0 ) ) ) ;
-if ( check_sym ( arg0 , lf_76sym ) ) {
+ATerm lf_22 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_22sym , ATmakeAppl ( lf_22sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_90sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_61sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0 , lf_list_98sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
 {
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-( tmp [ 0 ] = lt_38 ( atmp_0_0_0 ) ) ;
-( tmp [ 1 ] = lf_52 ( atmp_0_1 ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf1 ( lf_61sym , tmp [ 0 ] ) , tmp [ 1 ] ) ) ;
+ATerm atmp_0_0_0_1_1_1_1_1_1 ;
+ATerm atmp_0_0_0_1_1_1_1_1_0 ;
+ATerm atmp_0_0_0_1_1_1_1_0 [ 2 ] ;
+ATerm atmp_0_0_0_1_1_1_0 ;
+ATerm atmp_0_0_0_1_1_0 ;
+ATerm atmp_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0 ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp_0_0_0_1_1_1_1_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_0_1_1_1_1_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_1_1_1_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( is_single_element ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_1_1_1_1_1 = list_head ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( lf_28 ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , slice ( atmp_0_0_0_1_1_1_1_0 [ 0 ] , atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ) ) ) ) ;
+}
+( atmp_0_0_0_1_1_1_1_0 [ 1 ] = list_tail ( atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_1_1_1_1_0 [ 1 ] ) ;
 }
 }
-{
+}
+}
+}
+}
+}
+}
+FUNC_EXIT ( make_nf1 ( lf_22sym , arg0 ) ) ;
+}
+ATerm lf_25 ( ATerm arg0 ) {
+ATerm tmp [ 11 ] ;
+FUNC_ENTRY ( lf_25sym , ATmakeAppl ( lf_25sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_90sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_77sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_list_98sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-( tmp [ 0 ] = lf_54 ( atmp_0_0_0 ) ) ;
-( tmp [ 1 ] = lt_38 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = lt_38 ( atmp_0_0_1 ) ) ;
-( tmp [ 3 ] = lf_52 ( atmp_0_1 ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , tmp [ 1 ] , tmp [ 2 ] , atmp_0_0_2 ) , tmp [ 3 ] ) ) ;
+if ( not_empty_list ( atmp_0_0_0 ) ) {
+( tmp [ 0 ] = list_prefix ( atmp_0_0_0 ) ) ;
+( tmp [ 1 ] = list_last ( atmp_0_0_0 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_33sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = lf_25 ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( tmp [ 0 ] ) ) ) ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_33sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+( tmp [ 5 ] = lf_24 ( make_nf1 ( lf_92sym , lf_93 ( tmp [ 2 ] ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 5 ] , lf_92sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( check_sym ( tmp [ 6 ] , lf_93sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = lf_91 ( lf_23 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) , make_nf1 ( lf_92sym , lf_93 ( tmp [ 4 ] ) ) ) , make_nf1 ( lf_92sym , lf_93 ( tmp [ 7 ] ) ) ) ) ;
+if ( check_sym ( tmp [ 8 ] , lf_92sym ) ) {
+( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
+if ( check_sym ( tmp [ 9 ] , lf_93sym ) ) {
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_33sym , tmp [ 10 ] ) ) ;
 }
 }
+}
+}
+}
+}
+}
+if ( is_single_element ( atmp_0_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0 ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_33sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = lf_24 ( make_nf1 ( lf_92sym , lf_93 ( tmp [ 1 ] ) ) , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_92sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_93sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_33sym , tmp [ 4 ] ) ) ;
+}
+}
+}
+}
+}
+}
+FUNC_EXIT ( make_nf1 ( lf_25sym , arg0 ) ) ;
+}
+ATerm lf_26 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_26sym , ATmakeAppl ( lf_26sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_48sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_49sym ) ) {
+ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_0 , lf_list_50sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0_0 ) ) ;
+{
+ATerm atmp_0_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+( atmp_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( term_equal ( atmp_0_0_0_0_1_0 , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_51sym , make_nf1 ( lf_52sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 108 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , cons ( slice ( atmp_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
+}
+( atmp_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_0_0 [ 1 ] ) ;
+}
+}
+}
+( tmp [ 1 ] = arg_0 ( atmp_0_0_0 ) ) ;
+{
+ATerm atmp_0_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+if ( term_equal ( atmp_0_0_0_0_1_0 , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_51sym , make_nf1 ( lf_52sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 108 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , cons ( slice ( atmp_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
+}
+}
+( atmp_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_0_0 [ 1 ] ) ;
+}
+}
+}
+}
+}
+if ( term_equal ( arg0 , ( constant52 ? constant52 : ( constant52 = make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf1 ( lf_52sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 108 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant53 , make_nf0 ( lf_47sym ) ) ;
+}
+FUNC_EXIT ( make_nf1 ( lf_26sym , arg0 ) ) ;
+}
+ATerm lf_28 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_28sym , ATmakeAppl ( lf_28sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_90sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_list_98sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
+{
+ATerm atmp_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( term_equal ( lf_27 ( atmp_0_0_0_1_0 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_28 ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , cons ( slice ( atmp_0_0_0_0 [ 0 ] , atmp_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
+}
+( atmp_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_0 [ 1 ] ) ;
+}
+}
+}
+}
+if ( check_sym ( arg0 , lf_90sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_list_98sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
+FUNC_EXIT ( arg0 ) ;
+}
+}
+FUNC_EXIT ( make_nf1 ( lf_28sym , arg0 ) ) ;
+}
+ATerm lf_30 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_30sym , ATmakeAppl ( lf_30sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_87sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_list_89sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
+{
+ATerm atmp_0_0_0_1_0 ;
+ATerm atmp_0_0_0_0 [ 2 ] ;
+( atmp_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( term_equal ( lf_29 ( atmp_0_0_0_1_0 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( lf_30 ( make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , cons ( slice ( atmp_0_0_0_0 [ 0 ] , atmp_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
+}
+( atmp_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_0_0 [ 1 ] ) ;
 }
 }
 }
 }
 FUNC_EXIT ( arg0 ) ;
+FUNC_EXIT ( make_nf1 ( lf_30sym , arg0 ) ) ;
 }
-ATerm lf_18 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_18sym , ATmakeAppl ( lf_18sym , arg0 ) ) ;
-FUNC_EXIT ( lt_32 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_18sym , arg0 ) ) ;
+ATerm lf_58 ( ) {
+FUNC_ENTRY ( lf_58sym , ATmakeAppl0 ( lf_58sym ) ) ;
+FUNC_EXIT_CONST ( constant54 , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_32sym , make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) ) ) ) , lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_31sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 76 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 89 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 79 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 85 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 84 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 63 ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) , make_nf1 ( lf_32sym , make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 51 ] ) ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_31sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , make_list ( make_nf1 ( lf_40sym , make_char ( 63 ) ) ) ) , make_char ( 34 ) ) ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 51 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant55 , make_nf0 ( lf_58sym ) ) ;
 }
-ATerm lf_117 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_117sym , ATmakeAppl ( lf_117sym , arg0 ) ) ;
-FUNC_EXIT ( lt_32 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_117sym , arg0 ) ) ;
+ATerm lf_66 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_66sym , ATmakeAppl ( lf_66sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf0 ( lf_73sym ) ) ) ) ) , lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_57 ( make_nf1 ( lf_46sym , make_nf0 ( lf_73sym ) ) ) ) ) ) , lf_71 ( make_nf0 ( lf_73sym ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf1 ( lf_79sym , lf_57 ( make_nf1 ( lf_46sym , make_nf0 ( lf_73sym ) ) ) ) , arg0 ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_66sym , arg0 ) ) ;
 }
-ATerm lt_32 ( ATerm arg0 ) {
-ATerm tmp [ 21 ] ;
-FUNC_ENTRY ( lt_32sym , ATmakeAppl ( lt_32sym , arg0 ) ) ;
-( arg0 = call_kids_trafo ( lt_32 , arg0 , ATmakeList ( 0 ) ) ) ;
-if ( check_sym ( arg0 , lf_76sym ) ) {
+ATerm lf_67 ( ) {
+FUNC_ENTRY ( lf_67sym , ATmakeAppl0 ( lf_67sym ) ) ;
+FUNC_EXIT_CONST ( constant56 , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_71 ( make_nf0 ( lf_73sym ) ) ) ) ) , lf_71 ( make_nf1 ( lf_72sym , make_nf0 ( lf_73sym ) ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( lf_57 ( make_nf1 ( lf_46sym , make_nf0 ( lf_73sym ) ) ) ) ) ) , lf_71 ( make_nf0 ( lf_73sym ) ) , make_nf0 ( lf_47sym ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf1 ( lf_79sym , lf_57 ( make_nf1 ( lf_46sym , make_nf0 ( lf_73sym ) ) ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( make_nf1 ( lf_41sym , make_nf1 ( lf_42sym , make_nf1 ( lf_list_43sym , cons ( make_list ( make_nf2 ( lf_45sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 57 ) ) ) ) ) , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) , cons ( make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) , make_list ( make_nf1 ( lf_44sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_57 ( make_nf0 ( lf_73sym ) ) , make_nf1 ( lf_48sym , make_nf1 ( lf_49sym , make_nf1 ( lf_list_50sym , make_list ( make_nf1 ( lf_51sym , make_nf2 ( lf_34sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 99 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_35sym , make_list ( make_nf1 ( lf_52sym , make_nf1 ( lf_36sym , make_nf1 ( lf_37sym , make_nf3 ( lf_38sym , make_char ( 34 ) , make_nf1 ( lf_list_39sym , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 119 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 105 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 116 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 115 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 112 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 97 ) ) ) , cons ( make_list ( make_nf1 ( lf_40sym , make_char ( 99 ) ) ) , make_list ( make_nf1 ( lf_40sym , make_char ( 101 ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( make_nf1 ( lf_33sym , make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant57 , make_nf0 ( lf_67sym ) ) ;
+}
+ATerm lf_69 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_69sym , ATmakeAppl ( lf_69sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_77sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_77sym ) ) {
+if ( check_sym ( atmp_0_0 , lf_78sym ) ) {
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+{
+ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_2 , lf_48sym ) ) {
+ATerm atmp_0_0_2_0 = arg_0 ( atmp_0_0_2 ) ;
+if ( check_sym ( atmp_0_0_2_0 , lf_49sym ) ) {
+ATerm atmp_0_0_2_0_0 = arg_0 ( atmp_0_0_2_0 ) ;
+if ( check_sym ( atmp_0_0_2_0_0 , lf_list_50sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_0_0_2_0_0 ) ) ;
+{
+ATerm atmp_0_0_2_0_0_0_1_0 ;
+ATerm atmp_0_0_2_0_0_0_0 [ 2 ] ;
+( atmp_0_0_2_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
+( atmp_0_0_2_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
+while ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_2_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+{
+if ( term_equal ( atmp_0_0_1 , ( constant58 ? constant58 : ( constant58 = lf_57 ( make_nf0 ( lf_73sym ) ) ) ) ) ) {
+if ( term_equal ( atmp_0_0_2_0_0_0_1_0 , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_51sym , make_nf1 ( lf_52sym , make_nf1 ( lf_53sym , make_nf1 ( lf_54sym , make_nf2 ( lf_55sym , make_char ( 108 ) , make_nf1 ( lf_list_56sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+}
+}
+( atmp_0_0_2_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_2_0_0_0_0 [ 1 ] ) ) ;
+( tmp [ 1 ] = atmp_0_0_2_0_0_0_0 [ 1 ] ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_69sym , arg0 ) ) ;
+}
+ATerm lt_63 ( ATerm arg0 ) {
+ATerm tmp [ 5 ] ;
+FUNC_ENTRY ( lt_63sym , ATmakeAppl ( lt_63sym , arg0 ) ) ;
+( tmp [ 0 ] = get_sort ( arg0 ) ) ;
+if ( term_equal ( tmp [ 0 ] , parse_sort ( "cf(sort(\"Tree\"))" ) ) ) {
+( tmp [ 1 ] = lf_74 ( arg0 ) ) ;
+if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+( tmp [ 2 ] = lt_70 ( arg0 , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_90sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_list_98sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+FUNC_EXIT ( lf_66 ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , tmp [ 4 ] ) ) ) ) ;
+}
+}
+}
+if ( term_equal ( ( constant59 ? constant59 : ( constant59 = make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) , lt_70 ( arg0 , ( constant59 ? constant59 : ( constant59 = make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant60 , lf_58 ( ) ) ;
+}
+}
+}
+FUNC_EXIT ( call_kids_trafo ( lt_63 , arg0 , ATmakeList ( 0 ) ) ) ;
+}
+ATerm lt_64 ( ATerm arg0 ) {
+FUNC_ENTRY ( lt_64sym , ATmakeAppl ( lt_64sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_75sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_75sym , lt_63 ( atmp_0_0 ) , lt_68 ( atmp_0_1 ) ) ) ;
+}
+}
+if ( check_sym ( arg0 , lf_62sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_62sym , lt_63 ( atmp_0_0 ) , lt_68 ( atmp_0_1 ) ) ) ;
+}
+}
+if ( check_sym ( arg0 , lf_61sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_61sym , lt_63 ( atmp_0_0 ) , lt_68 ( atmp_0_1 ) ) ) ;
+}
+}
+if ( check_sym ( arg0 , lf_60sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_60sym , lt_68 ( atmp_0_0 ) , lt_68 ( atmp_0_1 ) ) ) ;
+}
+}
+if ( check_sym ( arg0 , lf_59sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+{
+ATerm atmp_0_1 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_59sym , lt_68 ( atmp_0_0 ) , lt_68 ( atmp_0_1 ) ) ) ;
+}
+}
+FUNC_EXIT ( call_kids_trafo ( lt_64 , arg0 , ATmakeList ( 0 ) ) ) ;
+}
+ATerm lf_65 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_65sym , ATmakeAppl ( lf_65sym , arg0 ) ) ;
+FUNC_EXIT ( lt_64 ( arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_65sym , arg0 ) ) ;
+}
+ATerm lt_68 ( ATerm arg0 ) {
+ATerm tmp [ 5 ] ;
+FUNC_ENTRY ( lt_68sym , ATmakeAppl ( lt_68sym , arg0 ) ) ;
+( tmp [ 0 ] = get_sort ( arg0 ) ) ;
+if ( term_equal ( tmp [ 0 ] , parse_sort ( "cf(sort(\"Tree\"))" ) ) ) {
+( tmp [ 1 ] = lf_74 ( arg0 ) ) ;
+if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+if ( term_equal ( ( constant59 ? constant59 : ( constant59 = make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) , lt_70 ( arg0 , ( constant59 ? constant59 : ( constant59 = make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant61 , lf_67 ( ) ) ;
+}
+( tmp [ 2 ] = lt_70 ( arg0 , make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_90sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_list_98sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+FUNC_EXIT ( lf_66 ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , tmp [ 4 ] ) ) ) ) ;
+}
+}
+}
+}
+}
+FUNC_EXIT ( call_kids_trafo ( lt_68 , arg0 , ATmakeList ( 0 ) ) ) ;
+}
+ATerm lt_70 ( ATerm arg0 , ATerm arg1 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lt_70sym , ATmakeAppl ( lt_70sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_90sym ) ) {
+ATerm atmp_1_0 = arg_0 ( arg1 ) ;
+if ( check_sym ( atmp_1_0 , lf_list_98sym ) ) {
+( tmp [ 1 ] = arg_0 ( atmp_1_0 ) ) ;
+if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"Tree\"))" ) ) ) {
+if ( term_equal ( lf_69 ( arg0 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , cons ( make_list ( arg0 ) , tmp [ 1 ] ) ) ) ) ;
+}
+}
+}
+}
+FUNC_EXIT ( call_kids_accu ( lt_70 , arg0 , arg1 , ATmakeList ( 0 ) ) ) ;
+}
+ATerm lf_74 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_74sym , ATmakeAppl ( lf_74sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_77sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_78sym ) ) {
+ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
+if ( check_sym ( atmp_0_0_1 , lf_71sym ) ) {
+ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_1_0 , lf_72sym ) ) {
+ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
+if ( check_sym ( atmp_0_0_1_0_0 , lf_73sym ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+}
+}
+}
+}
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_74sym , arg0 ) ) ;
+}
+ATerm lt_80 ( ATerm arg0 ) {
+ATerm tmp [ 8 ] ;
+FUNC_ENTRY ( lt_80sym , ATmakeAppl ( lt_80sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_75sym ) ) {
+ATerm atmp_0_0 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
 ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_102sym ) ) {
+if ( check_sym ( atmp_0_0_0 , lf_77sym ) ) {
 ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_list_104sym ) ) {
+if ( check_sym ( atmp_0_0_0_0 , lf_79sym ) ) {
 ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
 {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_39sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-{
-ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_2 , lf_40sym ) ) {
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_105sym ) ) {
-ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
-if ( check_sym ( atmp_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_1_0_0 = arg_0 ( atmp_0_1_0 ) ;
-if ( is_single_element ( atmp_0_0_0_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_0_0_0 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_39sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_36sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_102sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_list_104sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant34 ? constant34 : ( constant34 = make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
-if ( is_single_element ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( atmp_0_1_0_0 ) ) {
-( tmp [ 7 ] = list_head ( atmp_0_1_0_0 ) ) ;
-if ( term_equal ( tmp [ 6 ] , atmp_0_0_1_0 ) ) {
-FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( lf_37 ( tmp [ 6 ] ) ) ) ) , lf_39 ( tmp [ 6 ] ) , make_nf0 ( lf_40sym ) ) , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , make_list ( tmp [ 7 ] ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
+ATerm atmp_0_0_0_1 = arg_1 ( atmp_0_0_0 ) ;
+if ( check_sym ( atmp_0_0_0_1 , lf_90sym ) ) {
+ATerm atmp_0_0_0_1_0 = arg_0 ( atmp_0_0_0_1 ) ;
+if ( check_sym ( atmp_0_0_0_1_0 , lf_list_98sym ) ) {
+ATerm atmp_0_0_0_1_0_0 = arg_0 ( atmp_0_0_0_1_0 ) ;
 {
 ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_39sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_36sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-{
-ATerm atmp_0_0_1_0_1 = arg_1 ( atmp_0_0_1_0 ) ;
-if ( check_sym ( atmp_0_0_1_0_1 , lf_102sym ) ) {
-ATerm atmp_0_0_1_0_1_0 = arg_0 ( atmp_0_0_1_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0_1_0 , lf_list_104sym ) ) {
-ATerm atmp_0_0_1_0_1_0_0 = arg_0 ( atmp_0_0_1_0_1_0 ) ;
-{
-ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_2 , lf_40sym ) ) {
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_105sym ) ) {
-ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
-if ( check_sym ( atmp_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_1_0_0 = arg_0 ( atmp_0_1_0 ) ;
-if ( term_equal ( atmp_0_0_0 , ( constant35 ? constant35 : ( constant35 = make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) {
-if ( term_equal ( atmp_0_0_1_0_0 , ( constant34 ? constant34 : ( constant34 = make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
-if ( is_single_element ( atmp_0_0_1_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_1_0_0 ) ) ;
-if ( is_single_element ( atmp_0_1_0_0 ) ) {
-( tmp [ 1 ] = list_head ( atmp_0_1_0_0 ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_76sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_105sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_list_113sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant36 ? constant36 : ( constant36 = make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( make_nf1 ( lf_33sym , lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) , lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf0 ( lf_40sym ) ) ) ) ) ) {
-if ( is_single_element ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_76sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_77sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
-( tmp [ 10 ] = arg_1 ( tmp [ 7 ] ) ) ;
-( tmp [ 11 ] = arg_2 ( tmp [ 7 ] ) ) ;
-if ( term_equal ( tmp [ 10 ] , ( constant37 ? constant37 : ( constant37 = make_nf1 ( lf_33sym , lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( make_nf1 ( lf_33sym , lf_37 ( tmp [ 0 ] ) ) ) ) ) , lf_37 ( tmp [ 0 ] ) , make_nf0 ( lf_40sym ) ) , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , make_list ( make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , tmp [ 9 ] , make_nf1 ( lf_33sym , lf_37 ( tmp [ 0 ] ) ) , tmp [ 11 ] ) , tmp [ 8 ] ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0_2 = arg_2 ( atmp_0_0 ) ;
 {
 ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_105sym ) ) {
-ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
-if ( check_sym ( atmp_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_1_0_0 = arg_0 ( atmp_0_1_0 ) ;
-if ( term_equal ( atmp_0_0_0 , ( constant35 ? constant35 : ( constant35 = make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) {
-if ( term_equal ( atmp_0_0_1_0_0 , ( constant34 ? constant34 : ( constant34 = make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
-if ( is_single_element ( atmp_0_0_1_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_1_0_0 ) ) ;
-if ( is_single_element ( atmp_0_1_0_0 ) ) {
-( tmp [ 1 ] = list_head ( atmp_0_1_0_0 ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_76sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_105sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_list_113sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant38 ? constant38 : ( constant38 = make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_42sym , make_nf1 ( lf_43sym , make_nf1 ( lf_list_44sym , make_list ( make_nf1 ( lf_45sym , make_nf2 ( lf_29sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 99 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_30sym , make_list ( make_nf1 ( lf_46sym , make_nf1 ( lf_31sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 110 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 101 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 114 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 105 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 99 ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
-if ( is_single_element ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_76sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_105sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 9 ] , lf_list_113sym ) ) {
-( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
-if ( term_equal ( tmp [ 7 ] , ( constant39 ? constant39 : ( constant39 = make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( lf_37 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) , lf_39 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf0 ( lf_40sym ) ) ) ) ) ) {
-if ( is_single_element ( tmp [ 10 ] ) ) {
-( tmp [ 11 ] = list_head ( tmp [ 10 ] ) ) ;
-if ( check_sym ( tmp [ 11 ] , lf_76sym ) ) {
-( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-( tmp [ 13 ] = arg_1 ( tmp [ 11 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf_105sym ) ) {
-( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( check_sym ( tmp [ 14 ] , lf_list_113sym ) ) {
-( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
-if ( term_equal ( tmp [ 12 ] , ( constant40 ? constant40 : ( constant40 = make_nf3 ( lf_77sym , make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , cons ( make_list ( make_nf1 ( lf_35sym , make_nf1 ( lf_26sym , make_nf1 ( lf_list_27sym , make_list ( make_nf1 ( lf_28sym , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) ) , make_list ( lf_37 ( make_nf1 ( lf_24sym , make_nf1 ( lf_35sym , make_nf1 ( lf_26sym , make_nf1 ( lf_list_27sym , make_list ( make_nf2 ( lf_25sym , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_37 ( make_nf1 ( lf_34sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 70 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 45 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 78 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 117 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 109 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 104 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 97 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 114 ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) , make_nf1 ( lf_42sym , make_nf1 ( lf_43sym , make_nf1 ( lf_list_44sym , make_list ( make_nf1 ( lf_45sym , make_nf2 ( lf_29sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 99 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 3 , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , make_nf1 ( lf_list_30sym , make_list ( make_nf1 ( lf_46sym , make_nf1 ( lf_31sym , make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 100 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 105 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 103 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 105 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 116 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 115 ) ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
-if ( not_empty_list ( tmp [ 15 ] ) ) {
-( tmp [ 16 ] = list_head ( tmp [ 15 ] ) ) ;
-if ( term_equal ( tmp [ 16 ] , ( constant41 ? constant41 : ( constant41 = make_nf1 ( lf_23sym , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ) ) {
-( tmp [ 17 ] = list_tail ( tmp [ 15 ] ) ) ;
-if ( is_single_element ( tmp [ 17 ] ) ) {
-( tmp [ 18 ] = list_head ( tmp [ 17 ] ) ) ;
-if ( check_sym ( tmp [ 18 ] , lf_76sym ) ) {
-( tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ) ;
-( tmp [ 20 ] = arg_1 ( tmp [ 18 ] ) ) ;
-if ( term_equal ( tmp [ 19 ] , ( constant42 ? constant42 : ( constant42 = make_nf1 ( lf_61sym , lf_37 ( make_nf1 ( lf_24sym , make_nf1 ( lf_35sym , make_nf1 ( lf_26sym , make_nf1 ( lf_list_27sym , make_list ( make_nf2 ( lf_25sym , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) , make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT ( lf_22 ( tmp [ 20 ] ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( term_equal ( atmp_0_0_1_0_0 , ( constant34 ? constant34 : ( constant34 = make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
-if ( is_single_element ( atmp_0_0_1_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_1_0_0 ) ) ;
-if ( check_sym ( atmp_0_0_2 , lf_42sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_2 ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_43sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_list_44sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = tmp [ 3 ] ) ;
-( tmp [ 5 ] = tmp [ 3 ] ) ;
-while ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , ( constant43 ? constant43 : ( constant43 = make_nf1 ( lf_45sym , make_nf1 ( lf_46sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 108 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
-( tmp [ 7 ] = lf_21 ( atmp_0_0_0 ) ) ;
-( tmp [ 8 ] = lt_38 ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = lt_38 ( tmp [ 0 ] ) ) ;
-( tmp [ 10 ] = lf_41 ( atmp_0_0_2 ) ) ;
-( tmp [ 11 ] = lf_20 ( atmp_0_1 ) ) ;
-( tmp [ 12 ] = lt_19 ( tmp [ 11 ] ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , tmp [ 8 ] , lf_37 ( tmp [ 9 ] ) , tmp [ 10 ] ) , tmp [ 12 ] ) ) ;
-}
-( tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ) ;
-( tmp [ 3 ] = tmp [ 5 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( arg0 ) ;
-}
-ATerm lf_37 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_37sym , ATmakeAppl ( lf_37sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_78sym ) ) {
-FUNC_EXIT ( arg0 ) ;
-}
-if ( check_sym ( arg0 , lf_35sym ) ) {
-FUNC_EXIT ( arg0 ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_37sym , arg0 ) ) ;
-}
-ATerm lf_39 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_39sym , ATmakeAppl ( lf_39sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_78sym ) ) {
-FUNC_EXIT ( arg0 ) ;
-}
-if ( check_sym ( arg0 , lf_35sym ) ) {
-FUNC_EXIT ( arg0 ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_39sym , arg0 ) ) ;
-}
-ATerm lt_38 ( ATerm arg0 ) {
-ATerm tmp [ 1 ] ;
-FUNC_ENTRY ( lt_38sym , ATmakeAppl ( lt_38sym , arg0 ) ) ;
-( arg0 = call_kids_trafo ( lt_38 , arg0 , ATmakeList ( 0 ) ) ) ;
-if ( check_sym ( arg0 , lf_39sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_37 ( atmp_0_0 ) ) ;
-}
-if ( check_sym ( arg0 , lf_36sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-{
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_102sym ) ) {
-ATerm atmp_0_1_0 = arg_0 ( atmp_0_1 ) ;
-if ( check_sym ( atmp_0_1_0 , lf_list_104sym ) ) {
-ATerm atmp_0_1_0_0 = arg_0 ( atmp_0_1_0 ) ;
-if ( term_equal ( atmp_0_0 , ( constant34 ? constant34 : ( constant34 = make_nf1 ( lf_79sym , make_nf3 ( lf_80sym , make_char ( 34 ) , make_nf1 ( lf_list_81sym , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 67 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 72 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 65 ) ) ) , cons ( make_list ( make_nf1 ( lf_82sym , make_char ( 82 ) ) ) , make_list ( make_nf1 ( lf_82sym , make_char ( 83 ) ) ) ) ) ) ) ) , make_char ( 34 ) ) ) ) ) ) ) {
-if ( is_single_element ( atmp_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_1_0_0 ) ) ;
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( arg0 ) ;
-}
-ATerm lf_41 ( ATerm arg0 ) {
-ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_41sym , ATmakeAppl ( lf_41sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_42sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_43sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_list_44sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-( atmp_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( term_equal ( atmp_0_0_0_0_1_0 , ( constant43 ? constant43 : ( constant43 = make_nf1 ( lf_45sym , make_nf1 ( lf_46sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 108 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_42sym , make_nf1 ( lf_43sym , make_nf1 ( lf_list_44sym , cons ( slice ( atmp_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
-}
-( atmp_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( atmp_0_0_0_0_1_0 , ( constant43 ? constant43 : ( constant43 = make_nf1 ( lf_45sym , make_nf1 ( lf_46sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 108 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_42sym , make_nf1 ( lf_43sym , make_nf1 ( lf_list_44sym , cons ( slice ( atmp_0_0_0_0_0 [ 0 ] , atmp_0_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
-}
-}
-( atmp_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-}
-if ( term_equal ( arg0 , ( constant44 ? constant44 : ( constant44 = make_nf1 ( lf_42sym , make_nf1 ( lf_43sym , make_nf1 ( lf_list_44sym , make_list ( make_nf1 ( lf_45sym , make_nf1 ( lf_46sym , make_nf1 ( lf_47sym , make_nf1 ( lf_48sym , make_nf2 ( lf_49sym , make_char ( 108 ) , make_nf1 ( lf_list_50sym , ( ATerm ) ATmakeList ( 18 , char_table [ 101 ] , char_table [ 120 ] , char_table [ 105 ] , char_table [ 99 ] , char_table [ 97 ] , char_table [ 108 ] , char_table [ 45 ] , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 99 ] , char_table [ 116 ] , char_table [ 111 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant45 , make_nf0 ( lf_40sym ) ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_41sym , arg0 ) ) ;
-}
-ATerm lf_52 ( ATerm arg0 ) {
-ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_52sym , ATmakeAppl ( lf_52sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_105sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_113sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( term_equal ( lf_51 ( atmp_0_0_0_1_0 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_52 ( make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , cons ( slice ( atmp_0_0_0_0 [ 0 ] , atmp_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
-}
-( atmp_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-if ( check_sym ( arg0 , lf_105sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_113sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
-FUNC_EXIT ( arg0 ) ;
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_52sym , arg0 ) ) ;
-}
-ATerm lf_54 ( ATerm arg0 ) {
-ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_54sym , ATmakeAppl ( lf_54sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_102sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( term_equal ( lf_53 ( atmp_0_0_0_1_0 ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT ( lf_54 ( make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , cons ( slice ( atmp_0_0_0_0 [ 0 ] , atmp_0_0_0_0 [ 1 ] ) , tmp [ 1 ] ) ) ) ) ) ;
-}
-( atmp_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-FUNC_EXIT ( arg0 ) ;
-FUNC_EXIT ( make_nf1 ( lf_54sym , arg0 ) ) ;
-}
-ATerm lt_57 ( ATerm arg0 ) {
-ATerm tmp [ 1 ] ;
-FUNC_ENTRY ( lt_57sym , ATmakeAppl ( lt_57sym , arg0 ) ) ;
-( tmp [ 0 ] = get_sort ( arg0 ) ) ;
-if ( term_equal ( tmp [ 0 ] , parse_sort ( "cf(sort(\"ASF-Equation\"))" ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_71sym , lf_56 ( arg0 ) ) ) ;
-}
-if ( term_equal ( tmp [ 0 ] , parse_sort ( "cf(sort(\"ASF-Condition\"))" ) ) ) {
-FUNC_EXIT ( make_nf1 ( lf_84sym , lf_55 ( arg0 ) ) ) ;
-}
-FUNC_EXIT ( call_kids_trafo ( lt_57 , arg0 , ATmakeList ( 0 ) ) ) ;
-}
-ATerm lf_114 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_114sym , ATmakeAppl ( lf_114sym , arg0 ) ) ;
-FUNC_EXIT ( lt_60 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_114sym , arg0 ) ) ;
-}
-ATerm lf_118 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_118sym , ATmakeAppl ( lf_118sym , arg0 ) ) ;
-FUNC_EXIT ( lt_57 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_118sym , arg0 ) ) ;
-}
-ATerm lt_60 ( ATerm arg0 ) {
-FUNC_ENTRY ( lt_60sym , ATmakeAppl ( lt_60sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-FUNC_EXIT ( lf_59 ( make_nf2 ( lf_73sym , atmp_0_0_0 , atmp_0_0_1 ) ) ) ;
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_59 ( atmp_0_0 ) ) ;
-}
-}
-if ( check_sym ( arg0 , lf_71sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-FUNC_EXIT ( lf_58 ( make_nf2 ( lf_73sym , atmp_0_0_0 , atmp_0_0_1 ) ) ) ;
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_58 ( atmp_0_0 ) ) ;
-}
-}
-FUNC_EXIT ( call_kids_trafo ( lt_60 , arg0 , ATmakeList ( 0 ) ) ) ;
-}
-ATerm lt_62 ( ATerm arg0 ) {
-ATerm tmp [ 12 ] ;
-FUNC_ENTRY ( lt_62sym , ATmakeAppl ( lt_62sym , arg0 ) ) ;
-if ( term_equal ( get_sort ( arg0 ) , parse_sort ( "cf(sort(\"ASF-Equation\"))" ) ) ) {
-( tmp [ 0 ] = lf_69 ( arg0 ) ) ;
+if ( is_single_element ( atmp_0_0_0_1_0_0 ) ) {
+( tmp [ 0 ] = list_head ( atmp_0_0_0_1_0_0 ) ) ;
 if ( check_sym ( tmp [ 0 ] , lf_76sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_61sym ) ) {
+if ( check_sym ( tmp [ 1 ] , lf_77sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_105sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 4 ] , lf_list_113sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-if ( is_single_element ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , lf_76sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
-if ( check_sym ( tmp [ 7 ] , lf_77sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
-( tmp [ 10 ] = arg_1 ( tmp [ 7 ] ) ) ;
-( tmp [ 11 ] = arg_2 ( tmp [ 7 ] ) ) ;
-if ( term_equal ( tmp [ 3 ] , tmp [ 10 ] ) ) {
-FUNC_EXIT ( lf_70 ( arg0 , make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , tmp [ 9 ] , tmp [ 3 ] , tmp [ 11 ] ) , tmp [ 8 ] ) ) ) ;
+( tmp [ 4 ] = arg_1 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_78sym ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
+( tmp [ 6 ] = arg_1 ( tmp [ 3 ] ) ) ;
+( tmp [ 7 ] = arg_2 ( tmp [ 3 ] ) ) ;
+if ( term_equal ( atmp_0_0_0_0_0 , tmp [ 6 ] ) ) {
+FUNC_EXIT ( make_nf2 ( lf_75sym , make_nf2 ( lf_76sym , make_nf2 ( lf_77sym , make_nf3 ( lf_78sym , tmp [ 5 ] , atmp_0_0_0_0_0 , tmp [ 7 ] ) , tmp [ 4 ] ) , atmp_0_0_1 ) , atmp_0_1 ) ) ;
 }
 }
 }
@@ -3407,2016 +3211,131 @@ FUNC_EXIT ( lf_70 ( arg0 , make_nf2 ( lf_76sym , make_nf3 ( lf_77sym , tmp [ 9 ]
 }
 }
 }
-FUNC_EXIT ( call_kids_trafo ( lt_62 , arg0 , ATmakeList ( 0 ) ) ) ;
 }
-ATerm lf_115 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_115sym , ATmakeAppl ( lf_115sym , arg0 ) ) ;
-FUNC_EXIT ( lt_62 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_115sym , arg0 ) ) ;
 }
-ATerm lf_63 ( ATerm arg0 ) {
-ATerm tmp [ 11 ] ;
-FUNC_ENTRY ( lf_63sym , ATmakeAppl ( lf_63sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_77sym ) ) {
-ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_102sym ) ) {
-ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-{
-if ( check_sym ( atmp_0_0_0_0_0_0_1_0 , lf_78sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp_0_0_0_0_0_0_1_0 ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_79sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_80sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
-( tmp [ 6 ] = arg_2 ( tmp [ 3 ] ) ) ;
-if ( term_equal ( tmp [ 4 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 5 ] , lf_list_81sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , make_char ( 34 ) ) ) {
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = list_tail ( tmp [ 7 ] ) ) ;
-if ( is_single_element ( tmp [ 9 ] ) ) {
-( tmp [ 10 ] = list_head ( tmp [ 9 ] ) ) ;
-if ( term_equal ( tmp [ 8 ] , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_82sym , make_char ( 33 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 10 ] , ( constant47 ? constant47 : ( constant47 = make_nf1 ( lf_82sym , make_char ( 61 ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
 }
 }
 }
-}
-}
-}
-}
-}
-}
-}
-}
-( atmp_0_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-if ( check_sym ( arg0 , lf_84sym ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_63sym , arg0 ) ) ;
-}
-ATerm lf_64 ( ATerm arg0 ) {
-ATerm tmp [ 13 ] ;
-FUNC_ENTRY ( lf_64sym , ATmakeAppl ( lf_64sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_77sym ) ) {
-ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_102sym ) ) {
-ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-{
-if ( check_sym ( atmp_0_0_0_0_0_0_1_0 , lf_78sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp_0_0_0_0_0_0_1_0 ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_79sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_80sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
-( tmp [ 6 ] = arg_2 ( tmp [ 3 ] ) ) ;
-if ( term_equal ( tmp [ 4 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 5 ] , lf_list_81sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , make_char ( 34 ) ) ) {
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = list_tail ( tmp [ 7 ] ) ) ;
-if ( not_empty_list ( tmp [ 9 ] ) ) {
-( tmp [ 10 ] = list_head ( tmp [ 9 ] ) ) ;
-( tmp [ 11 ] = list_tail ( tmp [ 9 ] ) ) ;
-if ( is_single_element ( tmp [ 11 ] ) ) {
-( tmp [ 12 ] = list_head ( tmp [ 11 ] ) ) ;
-if ( term_equal ( tmp [ 8 ] , ( constant46 ? constant46 : ( constant46 = make_nf1 ( lf_82sym , make_char ( 33 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 10 ] , ( constant48 ? constant48 : ( constant48 = make_nf1 ( lf_82sym , make_char ( 58 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 12 ] , ( constant47 ? constant47 : ( constant47 = make_nf1 ( lf_82sym , make_char ( 61 ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-( atmp_0_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-if ( check_sym ( arg0 , lf_84sym ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_64sym , arg0 ) ) ;
-}
-ATerm lf_65 ( ATerm arg0 , ATerm arg1 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_65sym , ATmakeAppl ( lf_65sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-( tmp [ 0 ] = lf_65 ( make_nf1 ( lf_84sym , atmp_0_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_84sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_84sym , make_nf2 ( lf_73sym , tmp [ 1 ] , atmp_0_0_1 ) ) ) ;
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_84sym , make_nf2 ( lf_76sym , atmp_0_0_0 , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , cons ( make_list ( tmp [ 0 ] ) , cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( arg1 ) ) ) ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_65sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_66 ( ATerm arg0 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_66sym , ATmakeAppl ( lf_66sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-FUNC_EXIT ( lf_66 ( make_nf1 ( lf_84sym , atmp_0_0_0 ) ) ) ;
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( tmp [ 8 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_66sym , arg0 ) ) ;
-}
-ATerm lf_67 ( ATerm arg0 , ATerm arg1 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_67sym , ATmakeAppl ( lf_67sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_71sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-( tmp [ 0 ] = lf_67 ( make_nf1 ( lf_71sym , atmp_0_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_71sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_71sym , make_nf2 ( lf_73sym , tmp [ 1 ] , atmp_0_0_1 ) ) ) ;
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_71sym , make_nf2 ( lf_76sym , atmp_0_0_0 , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , cons ( make_list ( tmp [ 0 ] ) , cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( arg1 ) ) ) ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_67sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_68 ( ATerm arg0 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_68sym , ATmakeAppl ( lf_68sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_71sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-FUNC_EXIT ( lf_68 ( make_nf1 ( lf_71sym , atmp_0_0_0 ) ) ) ;
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( tmp [ 8 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_68sym , arg0 ) ) ;
-}
-ATerm lf_69 ( ATerm arg0 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_69sym , ATmakeAppl ( lf_69sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_71sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-FUNC_EXIT ( lf_69 ( make_nf1 ( lf_71sym , atmp_0_0_0 ) ) ) ;
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_69sym , arg0 ) ) ;
-}
-ATerm lf_70 ( ATerm arg0 , ATerm arg1 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_70sym , ATmakeAppl ( lf_70sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_71sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_71sym , make_nf2 ( lf_76sym , atmp_0_0_0 , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , cons ( make_list ( arg1 ) , cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-( tmp [ 0 ] = lf_70 ( make_nf1 ( lf_71sym , atmp_0_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_71sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_71sym , make_nf2 ( lf_73sym , tmp [ 1 ] , atmp_0_0_1 ) ) ) ;
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_70sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_72 ( ATerm arg0 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_72sym , ATmakeAppl ( lf_72sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-FUNC_EXIT ( lf_72 ( make_nf1 ( lf_84sym , atmp_0_0_0 ) ) ) ;
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_72sym , arg0 ) ) ;
-}
-ATerm lf_74 ( ATerm arg0 , ATerm arg1 ) {
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_74sym , ATmakeAppl ( lf_74sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_1 , lf_105sym ) ) {
-ATerm atmp_0_0_1_0 = arg_0 ( atmp_0_0_1 ) ;
-if ( check_sym ( atmp_0_0_1_0 , lf_list_113sym ) ) {
-ATerm atmp_0_0_1_0_0 = arg_0 ( atmp_0_0_1_0 ) ;
-if ( not_empty_list ( atmp_0_0_1_0_0 ) ) {
-( tmp [ 0 ] = list_head ( atmp_0_0_1_0_0 ) ) ;
-( tmp [ 1 ] = list_tail ( atmp_0_0_1_0_0 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = list_tail ( tmp [ 3 ] ) ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( is_single_element ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_84sym , make_nf2 ( lf_76sym , atmp_0_0_0 , make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , cons ( make_list ( arg1 ) , cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_73sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-( tmp [ 0 ] = lf_74 ( make_nf1 ( lf_84sym , atmp_0_0_0 ) , arg1 ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_84sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_84sym , make_nf2 ( lf_73sym , tmp [ 1 ] , atmp_0_0_1 ) ) ) ;
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_74sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_75 ( ATerm arg0 ) {
-ATerm tmp [ 11 ] ;
-FUNC_ENTRY ( lf_75sym , ATmakeAppl ( lf_75sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_77sym ) ) {
-ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_102sym ) ) {
-ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-{
-if ( check_sym ( atmp_0_0_0_0_0_0_1_0 , lf_78sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp_0_0_0_0_0_0_1_0 ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_79sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_80sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
-( tmp [ 6 ] = arg_2 ( tmp [ 3 ] ) ) ;
-if ( term_equal ( tmp [ 4 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 5 ] , lf_list_81sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , make_char ( 34 ) ) ) {
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = list_tail ( tmp [ 7 ] ) ) ;
-if ( is_single_element ( tmp [ 9 ] ) ) {
-( tmp [ 10 ] = list_head ( tmp [ 9 ] ) ) ;
-if ( term_equal ( tmp [ 8 ] , ( constant48 ? constant48 : ( constant48 = make_nf1 ( lf_82sym , make_char ( 58 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 10 ] , ( constant47 ? constant47 : ( constant47 = make_nf1 ( lf_82sym , make_char ( 61 ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-( atmp_0_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-if ( check_sym ( arg0 , lf_84sym ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_75sym , arg0 ) ) ;
-}
-ATerm lf_83 ( ATerm arg0 ) {
-ATerm tmp [ 11 ] ;
-FUNC_ENTRY ( lf_83sym , ATmakeAppl ( lf_83sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_84sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_76sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( check_sym ( atmp_0_0_0 , lf_77sym ) ) {
-ATerm atmp_0_0_0_0 = arg_0 ( atmp_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0 , lf_102sym ) ) {
-ATerm atmp_0_0_0_0_0 = arg_0 ( atmp_0_0_0_0 ) ;
-if ( check_sym ( atmp_0_0_0_0_0 , lf_list_104sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_0_0_0_0 ) ) ;
-{
-ATerm atmp_0_0_0_0_0_0_1_0 ;
-ATerm atmp_0_0_0_0_0_0_0 [ 2 ] ;
-( atmp_0_0_0_0_0_0_0 [ 0 ] = tmp [ 1 ] ) ;
-( atmp_0_0_0_0_0_0_0 [ 1 ] = tmp [ 1 ] ) ;
-while ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0_0_0_0_1_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-{
-if ( check_sym ( atmp_0_0_0_0_0_0_1_0 , lf_78sym ) ) {
-( tmp [ 2 ] = arg_0 ( atmp_0_0_0_0_0_0_1_0 ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_79sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_80sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
-( tmp [ 6 ] = arg_2 ( tmp [ 3 ] ) ) ;
-if ( term_equal ( tmp [ 4 ] , make_char ( 34 ) ) ) {
-if ( check_sym ( tmp [ 5 ] , lf_list_81sym ) ) {
-( tmp [ 7 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , make_char ( 34 ) ) ) {
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-( tmp [ 8 ] = list_head ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = list_tail ( tmp [ 7 ] ) ) ;
-if ( is_single_element ( tmp [ 9 ] ) ) {
-( tmp [ 10 ] = list_head ( tmp [ 9 ] ) ) ;
-if ( term_equal ( tmp [ 8 ] , ( constant47 ? constant47 : ( constant47 = make_nf1 ( lf_82sym , make_char ( 61 ) ) ) ) ) ) {
-if ( term_equal ( tmp [ 10 ] , ( constant47 ? constant47 : ( constant47 = make_nf1 ( lf_82sym , make_char ( 61 ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-( atmp_0_0_0_0_0_0_0 [ 1 ] = list_tail ( atmp_0_0_0_0_0_0_0 [ 1 ] ) ) ;
-( tmp [ 1 ] = atmp_0_0_0_0_0_0_0 [ 1 ] ) ;
-}
-}
-}
-}
-}
-}
-}
-if ( check_sym ( arg0 , lf_84sym ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-FUNC_EXIT ( make_nf1 ( lf_83sym , arg0 ) ) ;
-}
-ATerm lf_91 ( ATerm arg0 ) {
-ATerm tmp [ 3 ] ;
-FUNC_ENTRY ( lf_91sym , ATmakeAppl ( lf_91sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_92sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( is_char ( atmp_0_0 , 92 ) ) {
-ATerm atmp_0_1 = arg_1 ( arg0 ) ;
-if ( check_sym ( atmp_0_1 , lf_list_111sym ) ) {
-( tmp [ 1 ] = arg_0 ( atmp_0_1 ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( is_char ( tmp [ 2 ] , 48 ) ) {
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-FUNC_EXIT ( lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , tmp [ 1 ] ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_91sym , arg0 ) ) ;
-}
-ATerm lf_85 ( ) {
-FUNC_ENTRY ( lf_85sym , ATmakeAppl0 ( lf_85sym ) ) ;
-FUNC_EXIT_CONST ( constant49 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
-FUNC_EXIT_CONST ( constant50 , make_nf0 ( lf_85sym ) ) ;
-}
-ATerm lf_86 ( ) {
-FUNC_ENTRY ( lf_86sym , ATmakeAppl0 ( lf_86sym ) ) ;
-FUNC_EXIT_CONST ( constant51 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-FUNC_EXIT_CONST ( constant52 , make_nf0 ( lf_86sym ) ) ;
-}
-ATerm lf_87 ( ) {
-FUNC_ENTRY ( lf_87sym , ATmakeAppl0 ( lf_87sym ) ) ;
-FUNC_EXIT_CONST ( constant53 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-FUNC_EXIT_CONST ( constant54 , make_nf0 ( lf_87sym ) ) ;
-}
-ATerm lf_88 ( ) {
-FUNC_ENTRY ( lf_88sym , ATmakeAppl0 ( lf_88sym ) ) ;
-FUNC_EXIT_CONST ( constant55 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-FUNC_EXIT_CONST ( constant56 , make_nf0 ( lf_88sym ) ) ;
-}
-ATerm lf_93 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_93sym , ATmakeAppl ( lf_93sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_94sym ) ) {
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_95sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 92 ) ) {
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 255 ) ) {
-FUNC_EXIT_CONST ( constant51 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 254 ) ) {
-FUNC_EXIT_CONST ( constant57 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 253 ) ) {
-FUNC_EXIT_CONST ( constant58 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 252 ) ) {
-FUNC_EXIT_CONST ( constant59 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 251 ) ) {
-FUNC_EXIT_CONST ( constant60 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 250 ) ) {
-FUNC_EXIT_CONST ( constant61 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 53 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 249 ) ) {
-FUNC_EXIT_CONST ( constant62 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 248 ) ) {
-FUNC_EXIT_CONST ( constant63 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 247 ) ) {
-FUNC_EXIT_CONST ( constant64 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 246 ) ) {
-FUNC_EXIT_CONST ( constant65 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 245 ) ) {
-FUNC_EXIT_CONST ( constant66 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 244 ) ) {
-FUNC_EXIT_CONST ( constant67 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 243 ) ) {
-FUNC_EXIT_CONST ( constant68 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 242 ) ) {
-FUNC_EXIT_CONST ( constant69 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 241 ) ) {
-FUNC_EXIT_CONST ( constant70 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 240 ) ) {
-FUNC_EXIT_CONST ( constant71 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 52 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 239 ) ) {
-FUNC_EXIT_CONST ( constant72 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 238 ) ) {
-FUNC_EXIT_CONST ( constant73 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 237 ) ) {
-FUNC_EXIT_CONST ( constant74 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 236 ) ) {
-FUNC_EXIT_CONST ( constant75 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 235 ) ) {
-FUNC_EXIT_CONST ( constant76 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 234 ) ) {
-FUNC_EXIT_CONST ( constant77 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 233 ) ) {
-FUNC_EXIT_CONST ( constant78 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 232 ) ) {
-FUNC_EXIT_CONST ( constant79 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 231 ) ) {
-FUNC_EXIT_CONST ( constant80 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 230 ) ) {
-FUNC_EXIT_CONST ( constant81 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 51 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 229 ) ) {
-FUNC_EXIT_CONST ( constant82 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 228 ) ) {
-FUNC_EXIT_CONST ( constant83 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 227 ) ) {
-FUNC_EXIT_CONST ( constant84 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 226 ) ) {
-FUNC_EXIT_CONST ( constant85 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 225 ) ) {
-FUNC_EXIT_CONST ( constant86 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 224 ) ) {
-FUNC_EXIT_CONST ( constant87 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 223 ) ) {
-FUNC_EXIT_CONST ( constant88 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 222 ) ) {
-FUNC_EXIT_CONST ( constant89 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 221 ) ) {
-FUNC_EXIT_CONST ( constant90 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 220 ) ) {
-FUNC_EXIT_CONST ( constant91 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 50 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 219 ) ) {
-FUNC_EXIT_CONST ( constant92 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 218 ) ) {
-FUNC_EXIT_CONST ( constant93 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 217 ) ) {
-FUNC_EXIT_CONST ( constant94 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 216 ) ) {
-FUNC_EXIT_CONST ( constant95 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 215 ) ) {
-FUNC_EXIT_CONST ( constant96 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 214 ) ) {
-FUNC_EXIT_CONST ( constant97 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 213 ) ) {
-FUNC_EXIT_CONST ( constant98 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 212 ) ) {
-FUNC_EXIT_CONST ( constant99 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 211 ) ) {
-FUNC_EXIT_CONST ( constant100 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 210 ) ) {
-FUNC_EXIT_CONST ( constant101 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 209 ) ) {
-FUNC_EXIT_CONST ( constant102 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 208 ) ) {
-FUNC_EXIT_CONST ( constant103 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 207 ) ) {
-FUNC_EXIT_CONST ( constant104 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 206 ) ) {
-FUNC_EXIT_CONST ( constant105 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 205 ) ) {
-FUNC_EXIT_CONST ( constant106 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 204 ) ) {
-FUNC_EXIT_CONST ( constant107 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 203 ) ) {
-FUNC_EXIT_CONST ( constant108 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 202 ) ) {
-FUNC_EXIT_CONST ( constant109 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 201 ) ) {
-FUNC_EXIT_CONST ( constant110 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 200 ) ) {
-FUNC_EXIT_CONST ( constant111 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 50 ] , char_table [ 48 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 199 ) ) {
-FUNC_EXIT_CONST ( constant112 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 198 ) ) {
-FUNC_EXIT_CONST ( constant113 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 197 ) ) {
-FUNC_EXIT_CONST ( constant114 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 196 ) ) {
-FUNC_EXIT_CONST ( constant115 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 195 ) ) {
-FUNC_EXIT_CONST ( constant116 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 194 ) ) {
-FUNC_EXIT_CONST ( constant117 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 193 ) ) {
-FUNC_EXIT_CONST ( constant118 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 192 ) ) {
-FUNC_EXIT_CONST ( constant119 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 191 ) ) {
-FUNC_EXIT_CONST ( constant120 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 190 ) ) {
-FUNC_EXIT_CONST ( constant121 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 57 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 189 ) ) {
-FUNC_EXIT_CONST ( constant122 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 188 ) ) {
-FUNC_EXIT_CONST ( constant123 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 187 ) ) {
-FUNC_EXIT_CONST ( constant124 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 186 ) ) {
-FUNC_EXIT_CONST ( constant125 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 185 ) ) {
-FUNC_EXIT_CONST ( constant126 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 184 ) ) {
-FUNC_EXIT_CONST ( constant127 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 183 ) ) {
-FUNC_EXIT_CONST ( constant128 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 182 ) ) {
-FUNC_EXIT_CONST ( constant129 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 181 ) ) {
-FUNC_EXIT_CONST ( constant130 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 180 ) ) {
-FUNC_EXIT_CONST ( constant131 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 56 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 179 ) ) {
-FUNC_EXIT_CONST ( constant132 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 178 ) ) {
-FUNC_EXIT_CONST ( constant133 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 177 ) ) {
-FUNC_EXIT_CONST ( constant134 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 176 ) ) {
-FUNC_EXIT_CONST ( constant135 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 175 ) ) {
-FUNC_EXIT_CONST ( constant136 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 174 ) ) {
-FUNC_EXIT_CONST ( constant137 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 173 ) ) {
-FUNC_EXIT_CONST ( constant138 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 172 ) ) {
-FUNC_EXIT_CONST ( constant139 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 171 ) ) {
-FUNC_EXIT_CONST ( constant140 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 170 ) ) {
-FUNC_EXIT_CONST ( constant141 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 169 ) ) {
-FUNC_EXIT_CONST ( constant142 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 168 ) ) {
-FUNC_EXIT_CONST ( constant143 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 167 ) ) {
-FUNC_EXIT_CONST ( constant144 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 166 ) ) {
-FUNC_EXIT_CONST ( constant145 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 165 ) ) {
-FUNC_EXIT_CONST ( constant146 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 164 ) ) {
-FUNC_EXIT_CONST ( constant147 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 163 ) ) {
-FUNC_EXIT_CONST ( constant148 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 162 ) ) {
-FUNC_EXIT_CONST ( constant149 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 161 ) ) {
-FUNC_EXIT_CONST ( constant150 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 126 ) ) {
-FUNC_EXIT_CONST ( constant151 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 125 ) ) {
-FUNC_EXIT_CONST ( constant152 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 124 ) ) {
-FUNC_EXIT_CONST ( constant153 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 123 ) ) {
-FUNC_EXIT_CONST ( constant154 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 96 ) ) {
-FUNC_EXIT_CONST ( constant155 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 95 ) ) {
-FUNC_EXIT_CONST ( constant156 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 94 ) ) {
-FUNC_EXIT_CONST ( constant157 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 93 ) ) {
-FUNC_EXIT_CONST ( constant158 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 92 ) ) {
-FUNC_EXIT_CONST ( constant159 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 91 ) ) {
-FUNC_EXIT_CONST ( constant160 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 64 ) ) {
-FUNC_EXIT_CONST ( constant161 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 63 ) ) {
-FUNC_EXIT_CONST ( constant162 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 62 ) ) {
-FUNC_EXIT_CONST ( constant163 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 61 ) ) {
-FUNC_EXIT_CONST ( constant164 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 60 ) ) {
-FUNC_EXIT_CONST ( constant165 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 59 ) ) {
-FUNC_EXIT_CONST ( constant166 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 58 ) ) {
-FUNC_EXIT_CONST ( constant167 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 47 ) ) {
-FUNC_EXIT_CONST ( constant168 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 46 ) ) {
-FUNC_EXIT_CONST ( constant169 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 45 ) ) {
-FUNC_EXIT_CONST ( constant170 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 44 ) ) {
-FUNC_EXIT_CONST ( constant171 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 43 ) ) {
-FUNC_EXIT_CONST ( constant172 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 42 ) ) {
-FUNC_EXIT_CONST ( constant173 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 41 ) ) {
-FUNC_EXIT_CONST ( constant174 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 40 ) ) {
-FUNC_EXIT_CONST ( constant175 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 39 ) ) {
-FUNC_EXIT_CONST ( constant176 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 38 ) ) {
-FUNC_EXIT_CONST ( constant177 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 37 ) ) {
-FUNC_EXIT_CONST ( constant178 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 36 ) ) {
-FUNC_EXIT_CONST ( constant179 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 35 ) ) {
-FUNC_EXIT_CONST ( constant180 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 34 ) ) {
-FUNC_EXIT_CONST ( constant181 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 33 ) ) {
-FUNC_EXIT_CONST ( constant182 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 32 ) ) {
-FUNC_EXIT_CONST ( constant183 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 114 ) ) {
-FUNC_EXIT_CONST ( constant184 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 110 ) ) {
-FUNC_EXIT_CONST ( constant185 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_1 = arg_1 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_1 , 116 ) ) {
-FUNC_EXIT_CONST ( constant186 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , make_list ( make_char ( 57 ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-{
-ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp_0_0 , lf_89sym ) ) {
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 122 ) ) {
-FUNC_EXIT_CONST ( constant187 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 121 ) ) {
-FUNC_EXIT_CONST ( constant188 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 120 ) ) {
-FUNC_EXIT_CONST ( constant189 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 119 ) ) {
-FUNC_EXIT_CONST ( constant190 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 118 ) ) {
-FUNC_EXIT_CONST ( constant191 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 117 ) ) {
-FUNC_EXIT_CONST ( constant192 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 116 ) ) {
-FUNC_EXIT_CONST ( constant193 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 115 ) ) {
-FUNC_EXIT_CONST ( constant194 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 114 ) ) {
-FUNC_EXIT_CONST ( constant195 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 113 ) ) {
-FUNC_EXIT_CONST ( constant196 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 112 ) ) {
-FUNC_EXIT_CONST ( constant197 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 111 ) ) {
-FUNC_EXIT_CONST ( constant198 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 110 ) ) {
-FUNC_EXIT_CONST ( constant199 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 109 ) ) {
-FUNC_EXIT_CONST ( constant200 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 108 ) ) {
-FUNC_EXIT_CONST ( constant201 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 107 ) ) {
-FUNC_EXIT_CONST ( constant202 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 106 ) ) {
-FUNC_EXIT_CONST ( constant203 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 105 ) ) {
-FUNC_EXIT_CONST ( constant204 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 104 ) ) {
-FUNC_EXIT_CONST ( constant205 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 103 ) ) {
-FUNC_EXIT_CONST ( constant206 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 102 ) ) {
-FUNC_EXIT_CONST ( constant207 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 101 ) ) {
-FUNC_EXIT_CONST ( constant208 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 100 ) ) {
-FUNC_EXIT_CONST ( constant209 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 48 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 99 ) ) {
-FUNC_EXIT_CONST ( constant210 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 98 ) ) {
-FUNC_EXIT_CONST ( constant211 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 97 ) ) {
-FUNC_EXIT_CONST ( constant212 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 90 ) ) {
-FUNC_EXIT_CONST ( constant213 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 89 ) ) {
-FUNC_EXIT_CONST ( constant214 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 88 ) ) {
-FUNC_EXIT_CONST ( constant215 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 87 ) ) {
-FUNC_EXIT_CONST ( constant216 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 86 ) ) {
-FUNC_EXIT_CONST ( constant217 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 85 ) ) {
-FUNC_EXIT_CONST ( constant218 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 84 ) ) {
-FUNC_EXIT_CONST ( constant219 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 83 ) ) {
-FUNC_EXIT_CONST ( constant220 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 82 ) ) {
-FUNC_EXIT_CONST ( constant221 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 81 ) ) {
-FUNC_EXIT_CONST ( constant222 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 80 ) ) {
-FUNC_EXIT_CONST ( constant223 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 56 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 79 ) ) {
-FUNC_EXIT_CONST ( constant224 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 78 ) ) {
-FUNC_EXIT_CONST ( constant225 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 77 ) ) {
-FUNC_EXIT_CONST ( constant226 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 76 ) ) {
-FUNC_EXIT_CONST ( constant227 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 75 ) ) {
-FUNC_EXIT_CONST ( constant228 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 74 ) ) {
-FUNC_EXIT_CONST ( constant229 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 73 ) ) {
-FUNC_EXIT_CONST ( constant230 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 72 ) ) {
-FUNC_EXIT_CONST ( constant231 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 71 ) ) {
-FUNC_EXIT_CONST ( constant232 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 70 ) ) {
-FUNC_EXIT_CONST ( constant233 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 55 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 69 ) ) {
-FUNC_EXIT_CONST ( constant234 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 68 ) ) {
-FUNC_EXIT_CONST ( constant235 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 67 ) ) {
-FUNC_EXIT_CONST ( constant236 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 66 ) ) {
-FUNC_EXIT_CONST ( constant237 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 65 ) ) {
-FUNC_EXIT_CONST ( constant238 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 54 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 57 ) ) {
-FUNC_EXIT_CONST ( constant239 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 55 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 56 ) ) {
-FUNC_EXIT_CONST ( constant240 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 54 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 55 ) ) {
-FUNC_EXIT_CONST ( constant241 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 53 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 54 ) ) {
-FUNC_EXIT_CONST ( constant242 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 52 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 53 ) ) {
-FUNC_EXIT_CONST ( constant243 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 51 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 52 ) ) {
-FUNC_EXIT_CONST ( constant244 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 50 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 51 ) ) {
-FUNC_EXIT_CONST ( constant245 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 49 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 50 ) ) {
-FUNC_EXIT_CONST ( constant246 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 53 ] , char_table [ 48 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 49 ) ) {
-FUNC_EXIT_CONST ( constant247 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 57 ] ) ) ) ) ) ) ;
-}
-{
-ATerm atmp_0_0_0 = arg_0 ( atmp_0_0 ) ;
-if ( is_char ( atmp_0_0_0 , 48 ) ) {
-FUNC_EXIT_CONST ( constant248 , make_nf1 ( lf_90sym , lf_91 ( make_nf2 ( lf_92sym , make_char ( 92 ) , make_nf1 ( lf_list_111sym , ( ATerm ) ATmakeList ( 2 , char_table [ 52 ] , char_table [ 56 ] ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_93sym , arg0 ) ) ;
-}
-ATerm lf_96 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_96sym , ATmakeAppl ( lf_96sym , arg0 , arg1 ) ) ;
-if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ) ) ) {
-FUNC_EXIT ( arg1 ) ;
-}
-if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
-FUNC_EXIT ( make_nf2 ( lf_96sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_97 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_97sym , ATmakeAppl ( lf_97sym , arg0 , arg1 ) ) ;
-if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT ( arg1 ) ;
-}
-FUNC_EXIT ( make_nf2 ( lf_97sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( call_kids_trafo ( lt_80 , arg0 , ATmakeList ( 0 ) ) ) ;
 }
 ATerm lf_99 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_99sym , ATmakeAppl ( lf_99sym , arg0 ) ) ;
-if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ;
-}
-if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_100sym , make_nf0 ( lf_98sym ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_100sym , make_nf0 ( lf_101sym ) ) ) ;
-}
+FUNC_EXIT ( lt_80 ( arg0 ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_99sym , arg0 ) ) ;
 }
-ATerm lf_103 ( ATerm arg0 ) {
+ATerm lf_81 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_81sym , ATmakeAppl ( lf_81sym , arg0 , arg1 ) ) ;
+if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ) ) ) {
+FUNC_EXIT ( arg1 ) ;
+}
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+FUNC_EXIT ( make_nf2 ( lf_81sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_82 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_82sym , ATmakeAppl ( lf_82sym , arg0 , arg1 ) ) ;
+if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+}
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT ( arg1 ) ;
+}
+FUNC_EXIT ( make_nf2 ( lf_82sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_84 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_84sym , ATmakeAppl ( lf_84sym , arg0 ) ) ;
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant3 , make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ;
+}
+if ( term_equal ( arg0 , ( constant3 ? constant3 : ( constant3 = make_nf1 ( lf_85sym , make_nf0 ( lf_83sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_85sym , make_nf0 ( lf_86sym ) ) ) ;
+}
+FUNC_EXIT ( make_nf1 ( lf_84sym , arg0 ) ) ;
+}
+ATerm lf_88 ( ATerm arg0 ) {
 ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_103sym , ATmakeAppl ( lf_103sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_list_104sym ) ) {
+FUNC_ENTRY ( lf_88sym , ATmakeAppl ( lf_88sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_list_89sym ) ) {
 ( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
 {
 ATerm atmp_0_0_0 ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( atmp_0_0_0 = list_head ( tmp [ 1 ] ) ) ;
 ( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) , lf_103 ( make_nf1 ( lf_list_104sym , tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) , lf_88 ( make_nf1 ( lf_list_89sym , tmp [ 1 ] ) ) ) ) ;
 }
 }
 ( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
-if ( term_equal ( make_nf1 ( lf_102sym , arg0 ) , ( constant249 ? constant249 : ( constant249 = make_nf1 ( lf_102sym , make_nf1 ( lf_list_104sym , make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+if ( term_equal ( make_nf1 ( lf_87sym , arg0 ) , ( constant62 ? constant62 : ( constant62 = make_nf1 ( lf_87sym , make_nf1 ( lf_list_89sym , make_list ( null ( ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
 }
 }
+FUNC_EXIT ( make_nf1 ( lf_88sym , arg0 ) ) ;
+}
+ATerm lf_97 ( ATerm arg0 ) {
+ATerm tmp [ 2 ] ;
+FUNC_ENTRY ( lf_97sym , ATmakeAppl ( lf_97sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_list_98sym ) ) {
+( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
+{
+ATerm atmp_0_0_0 ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+( atmp_0_0_0 = list_head ( tmp [ 1 ] ) ) ;
+( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( lf_91 ( make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) , lf_97 ( make_nf1 ( lf_list_98sym , tmp [ 1 ] ) ) ) ) ;
+}
+}
+( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
+if ( term_equal ( make_nf1 ( lf_90sym , arg0 ) , ( constant59 ? constant59 : ( constant59 = make_nf1 ( lf_90sym , make_nf1 ( lf_list_98sym , make_list ( null ( ) ) ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_92sym , lf_93 ( make_nf1 ( lf_94sym , make_nf1 ( lf_95sym , make_nf1 ( lf_list_96sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+}
+}
+FUNC_EXIT ( make_nf1 ( lf_97sym , arg0 ) ) ;
+}
+ATerm lf_102 ( ATerm arg0 ) {
+ATerm tmp [ 3 ] ;
+FUNC_ENTRY ( lf_102sym , ATmakeAppl ( lf_102sym , arg0 ) ) ;
+( tmp [ 0 ] = lf_101 ( arg0 ) ) ;
+( tmp [ 1 ] = lf_100 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = lf_99 ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( tmp [ 2 ] ) ;
+FUNC_EXIT ( make_nf1 ( lf_102sym , arg0 ) ) ;
+}
+ATerm lf_103 ( ATerm arg0 ) {
+FUNC_ENTRY ( lf_103sym , ATmakeAppl ( lf_103sym , arg0 ) ) ;
+FUNC_EXIT ( lf_102 ( arg0 ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_103sym , arg0 ) ) ;
 }
-ATerm lf_112 ( ATerm arg0 ) {
-ATerm tmp [ 2 ] ;
-FUNC_ENTRY ( lf_112sym , ATmakeAppl ( lf_112sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_list_113sym ) ) {
-( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
-{
-ATerm atmp_0_0_0 ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-( atmp_0_0_0 = list_head ( tmp [ 1 ] ) ) ;
-( tmp [ 1 ] = list_tail ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( lf_106 ( make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 49 ) ) ) ) ) ) ) , lf_112 ( make_nf1 ( lf_list_113sym , tmp [ 1 ] ) ) ) ) ;
-}
-}
-( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
-if ( term_equal ( make_nf1 ( lf_105sym , arg0 ) , ( constant250 ? constant250 : ( constant250 = make_nf1 ( lf_105sym , make_nf1 ( lf_list_113sym , make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant2 , make_nf1 ( lf_107sym , lf_108 ( make_nf1 ( lf_109sym , make_nf1 ( lf_110sym , make_nf1 ( lf_list_111sym , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
-}
-}
-FUNC_EXIT ( make_nf1 ( lf_112sym , arg0 ) ) ;
-}
-ATerm lf_119 ( ATerm arg0 ) {
+ATerm lf_returns_list108 ( ATerm arg0 ) {
 ATerm tmp [ 5 ] ;
-FUNC_ENTRY ( lf_119sym , ATmakeAppl ( lf_119sym , arg0 ) ) ;
-( tmp [ 0 ] = lf_118 ( arg0 ) ) ;
-( tmp [ 1 ] = lf_117 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = lf_116 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = lf_115 ( tmp [ 2 ] ) ) ;
-( tmp [ 4 ] = lf_114 ( tmp [ 3 ] ) ) ;
-FUNC_EXIT ( tmp [ 4 ] ) ;
-FUNC_EXIT ( make_nf1 ( lf_119sym , arg0 ) ) ;
-}
-ATerm lf_120 ( ATerm arg0 ) {
-FUNC_ENTRY ( lf_120sym , ATmakeAppl ( lf_120sym , arg0 ) ) ;
-FUNC_EXIT ( lf_119 ( arg0 ) ) ;
-FUNC_EXIT ( make_nf1 ( lf_120sym , arg0 ) ) ;
-}
-ATerm lf_returns_list125 ( ATerm arg0 ) {
-ATerm tmp [ 5 ] ;
-FUNC_ENTRY ( lf_returns_list125sym , ATmakeAppl ( lf_returns_list125sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_list_126sym ) ) {
+FUNC_ENTRY ( lf_returns_list108sym , ATmakeAppl ( lf_returns_list108sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_list_109sym ) ) {
 ( tmp [ 1 ] = arg_0 ( arg0 ) ) ;
-( tmp [ 2 ] = lf_120 ( make_nf1 ( lf_121sym , arg0 ) ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_121sym ) ) {
+( tmp [ 2 ] = lf_103 ( make_nf1 ( lf_104sym , arg0 ) ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf_104sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_list_126sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_list_109sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 FUNC_EXIT ( make_list ( tmp [ 4 ] ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_returns_list125sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_returns_list108sym , arg0 ) ) ;
 }
-ATerm lf_returns_list123 ( ATerm arg0 ) {
+ATerm lf_returns_list106 ( ATerm arg0 ) {
 ATerm tmp [ 5 ] ;
-FUNC_ENTRY ( lf_returns_list123sym , ATmakeAppl ( lf_returns_list123sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_list_124sym ) ) {
+FUNC_ENTRY ( lf_returns_list106sym , ATmakeAppl ( lf_returns_list106sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_list_107sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-( tmp [ 0 ] = make_nf1 ( lf_list_126sym , make_list ( lf_returns_list125 ( make_nf1 ( lf_list_126sym , make_list ( make_nf1 ( lf_122sym , make_nf1 ( lf_list_124sym , make_list ( atmp_0_0 ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_list_126sym ) ) {
+( tmp [ 0 ] = make_nf1 ( lf_list_109sym , make_list ( lf_returns_list108 ( make_nf1 ( lf_list_109sym , make_list ( make_nf1 ( lf_105sym , make_nf1 ( lf_list_107sym , make_list ( atmp_0_0 ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_list_109sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( is_single_element ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_122sym ) ) {
+if ( check_sym ( tmp [ 2 ] , lf_105sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_list_124sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_list_107sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 FUNC_EXIT ( make_list ( tmp [ 4 ] ) ) ;
 }
@@ -5424,21 +3343,21 @@ FUNC_EXIT ( make_list ( tmp [ 4 ] ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_returns_list123sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_returns_list106sym , arg0 ) ) ;
 }
-ATerm lf_returns_list128 ( ATerm arg0 ) {
+ATerm lf_returns_list111 ( ATerm arg0 ) {
 ATerm tmp [ 5 ] ;
-FUNC_ENTRY ( lf_returns_list128sym , ATmakeAppl ( lf_returns_list128sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_list_129sym ) ) {
+FUNC_ENTRY ( lf_returns_list111sym , ATmakeAppl ( lf_returns_list111sym , arg0 ) ) ;
+if ( check_sym ( arg0 , lf_list_112sym ) ) {
 ATerm atmp_0_0 = arg_0 ( arg0 ) ;
-( tmp [ 0 ] = make_nf1 ( lf_list_126sym , make_list ( lf_returns_list125 ( make_nf1 ( lf_list_126sym , make_list ( make_nf1 ( lf_127sym , make_nf1 ( lf_list_129sym , make_list ( atmp_0_0 ) ) ) ) ) ) ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , lf_list_126sym ) ) {
+( tmp [ 0 ] = make_nf1 ( lf_list_109sym , make_list ( lf_returns_list108 ( make_nf1 ( lf_list_109sym , make_list ( make_nf1 ( lf_110sym , make_nf1 ( lf_list_112sym , make_list ( atmp_0_0 ) ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 0 ] , lf_list_109sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 if ( is_single_element ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = list_head ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf_127sym ) ) {
+if ( check_sym ( tmp [ 2 ] , lf_110sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_list_129sym ) ) {
+if ( check_sym ( tmp [ 3 ] , lf_list_112sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
 FUNC_EXIT ( make_list ( tmp [ 4 ] ) ) ;
 }
@@ -5446,239 +3365,231 @@ FUNC_EXIT ( make_list ( tmp [ 4 ] ) ) ;
 }
 }
 }
-FUNC_EXIT ( make_nf1 ( lf_returns_list128sym , arg0 ) ) ;
+FUNC_EXIT ( make_nf1 ( lf_returns_list111sym , arg0 ) ) ;
 }
-ATerm lf_list_129 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_129sym , ATmakeAppl ( lf_list_129sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_129sym , arg0 ) ) ;
-}
-ATerm lf_127 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_127sym , ATmakeAppl ( lf_127sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_127sym , arg0 ) ) ;
-}
-ATerm lf_list_126 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_126sym , ATmakeAppl ( lf_list_126sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_126sym , arg0 ) ) ;
-}
-ATerm lf_list_124 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_124sym , ATmakeAppl ( lf_list_124sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_124sym , arg0 ) ) ;
-}
-ATerm lf_122 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_122sym , ATmakeAppl ( lf_122sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_122sym , arg0 ) ) ;
-}
-ATerm lf_121 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_121sym , ATmakeAppl ( lf_121sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_121sym , arg0 ) ) ;
-}
-ATerm lf_list_113 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_113sym , ATmakeAppl ( lf_list_113sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_113sym , arg0 ) ) ;
-}
-ATerm lf_list_111 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_111sym , ATmakeAppl ( lf_list_111sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_111sym , arg0 ) ) ;
+ATerm lf_list_112 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_112sym , ATmakeAppl ( lf_list_112sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_112sym , arg0 ) ) ;
 }
 ATerm lf_110 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_110sym , ATmakeAppl ( lf_110sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_110sym , arg0 ) ) ;
 }
-ATerm lf_109 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_109sym , ATmakeAppl ( lf_109sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_109sym , arg0 ) ) ;
+ATerm lf_list_109 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_109sym , ATmakeAppl ( lf_list_109sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_109sym , arg0 ) ) ;
 }
-ATerm lf_107 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_107sym , ATmakeAppl ( lf_107sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_107sym , arg0 ) ) ;
+ATerm lf_list_107 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_107sym , ATmakeAppl ( lf_list_107sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_107sym , arg0 ) ) ;
 }
 ATerm lf_105 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_105sym , ATmakeAppl ( lf_105sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_105sym , arg0 ) ) ;
 }
-ATerm lf_list_104 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_104sym , ATmakeAppl ( lf_list_104sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_104sym , arg0 ) ) ;
+ATerm lf_104 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_104sym , ATmakeAppl ( lf_104sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_104sym , arg0 ) ) ;
 }
-ATerm lf_102 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_102sym , ATmakeAppl ( lf_102sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_102sym , arg0 ) ) ;
+ATerm lf_list_98 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_98sym , ATmakeAppl ( lf_list_98sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_98sym , arg0 ) ) ;
 }
-ATerm lf_101 ( ) {
-CONS_ENTRY ( lf_101sym , ATmakeAppl0 ( lf_101sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_101sym ) ) ;
+ATerm lf_list_96 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_96sym , ATmakeAppl ( lf_list_96sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_96sym , arg0 ) ) ;
 }
-ATerm lf_100 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_100sym , ATmakeAppl ( lf_100sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_100sym , arg0 ) ) ;
-}
-ATerm lf_98 ( ) {
-CONS_ENTRY ( lf_98sym , ATmakeAppl0 ( lf_98sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_98sym ) ) ;
-}
-ATerm lf_95 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_95sym , ATmakeAppl ( lf_95sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_95sym , arg0 , arg1 ) ) ;
+ATerm lf_95 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_95sym , ATmakeAppl ( lf_95sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_95sym , arg0 ) ) ;
 }
 ATerm lf_94 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_94sym , ATmakeAppl ( lf_94sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_94sym , arg0 ) ) ;
 }
-ATerm lf_92 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_92sym , ATmakeAppl ( lf_92sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_92sym , arg0 , arg1 ) ) ;
+ATerm lf_92 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_92sym , ATmakeAppl ( lf_92sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_92sym , arg0 ) ) ;
 }
 ATerm lf_90 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_90sym , ATmakeAppl ( lf_90sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_90sym , arg0 ) ) ;
 }
-ATerm lf_89 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_89sym , ATmakeAppl ( lf_89sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_89sym , arg0 ) ) ;
+ATerm lf_list_89 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_89sym , ATmakeAppl ( lf_list_89sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_89sym , arg0 ) ) ;
 }
-ATerm lf_84 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_84sym , ATmakeAppl ( lf_84sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_84sym , arg0 ) ) ;
+ATerm lf_87 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_87sym , ATmakeAppl ( lf_87sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_87sym , arg0 ) ) ;
 }
-ATerm lf_82 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_82sym , ATmakeAppl ( lf_82sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_82sym , arg0 ) ) ;
+ATerm lf_86 ( ) {
+CONS_ENTRY ( lf_86sym , ATmakeAppl0 ( lf_86sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_86sym ) ) ;
 }
-ATerm lf_list_81 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_81sym , ATmakeAppl ( lf_list_81sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_81sym , arg0 ) ) ;
+ATerm lf_85 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_85sym , ATmakeAppl ( lf_85sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_85sym , arg0 ) ) ;
 }
-ATerm lf_80 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-CONS_ENTRY ( lf_80sym , ATmakeAppl ( lf_80sym , arg0 , arg1 , arg2 ) ) ;
-CONS_EXIT ( make_nf3 ( lf_80sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_83 ( ) {
+CONS_ENTRY ( lf_83sym , ATmakeAppl0 ( lf_83sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_83sym ) ) ;
 }
 ATerm lf_79 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_79sym , ATmakeAppl ( lf_79sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_79sym , arg0 ) ) ;
 }
-ATerm lf_78 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_78sym , ATmakeAppl ( lf_78sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_78sym , arg0 ) ) ;
+ATerm lf_78 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+CONS_ENTRY ( lf_78sym , ATmakeAppl ( lf_78sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_78sym , arg0 , arg1 , arg2 ) ) ;
 }
-ATerm lf_77 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-CONS_ENTRY ( lf_77sym , ATmakeAppl ( lf_77sym , arg0 , arg1 , arg2 ) ) ;
-CONS_EXIT ( make_nf3 ( lf_77sym , arg0 , arg1 , arg2 ) ) ;
+ATerm lf_77 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_77sym , ATmakeAppl ( lf_77sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_77sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_76 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_76sym , ATmakeAppl ( lf_76sym , arg0 , arg1 ) ) ;
 CONS_EXIT ( make_nf2 ( lf_76sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_73 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_73sym , ATmakeAppl ( lf_73sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_73sym , arg0 , arg1 ) ) ;
+ATerm lf_75 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_75sym , ATmakeAppl ( lf_75sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_75sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_71 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_71sym , ATmakeAppl ( lf_71sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_71sym , arg0 ) ) ;
+ATerm lf_73 ( ) {
+CONS_ENTRY ( lf_73sym , ATmakeAppl0 ( lf_73sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_73sym ) ) ;
 }
-ATerm lf_61 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_61sym , ATmakeAppl ( lf_61sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_61sym , arg0 ) ) ;
+ATerm lf_72 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_72sym , ATmakeAppl ( lf_72sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_72sym , arg0 ) ) ;
+}
+ATerm lf_62 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_62sym , ATmakeAppl ( lf_62sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_62sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_61 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_61sym , ATmakeAppl ( lf_61sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_61sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_60 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_60sym , ATmakeAppl ( lf_60sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_60sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_59 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_59sym , ATmakeAppl ( lf_59sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_59sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_list_56 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_56sym , ATmakeAppl ( lf_list_56sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_56sym , arg0 ) ) ;
+}
+ATerm lf_55 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_55sym , ATmakeAppl ( lf_55sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_55sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_54 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_54sym , ATmakeAppl ( lf_54sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_54sym , arg0 ) ) ;
+}
+ATerm lf_53 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_53sym , ATmakeAppl ( lf_53sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_53sym , arg0 ) ) ;
+}
+ATerm lf_52 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_52sym , ATmakeAppl ( lf_52sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_52sym , arg0 ) ) ;
+}
+ATerm lf_51 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_51sym , ATmakeAppl ( lf_51sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_51sym , arg0 ) ) ;
 }
 ATerm lf_list_50 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_list_50sym , ATmakeAppl ( lf_list_50sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_list_50sym , arg0 ) ) ;
 }
-ATerm lf_49 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_49sym , ATmakeAppl ( lf_49sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_49sym , arg0 , arg1 ) ) ;
+ATerm lf_49 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_49sym , ATmakeAppl ( lf_49sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_49sym , arg0 ) ) ;
 }
 ATerm lf_48 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_48sym , ATmakeAppl ( lf_48sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_48sym , arg0 ) ) ;
 }
-ATerm lf_47 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_47sym , ATmakeAppl ( lf_47sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_47sym , arg0 ) ) ;
+ATerm lf_47 ( ) {
+CONS_ENTRY ( lf_47sym , ATmakeAppl0 ( lf_47sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_47sym ) ) ;
 }
 ATerm lf_46 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_46sym , ATmakeAppl ( lf_46sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_46sym , arg0 ) ) ;
 }
-ATerm lf_45 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_45sym , ATmakeAppl ( lf_45sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_45sym , arg0 ) ) ;
+ATerm lf_45 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_45sym , ATmakeAppl ( lf_45sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_45sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_list_44 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_44sym , ATmakeAppl ( lf_list_44sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_44sym , arg0 ) ) ;
+ATerm lf_44 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_44sym , ATmakeAppl ( lf_44sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_44sym , arg0 ) ) ;
 }
-ATerm lf_43 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_43sym , ATmakeAppl ( lf_43sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_43sym , arg0 ) ) ;
+ATerm lf_list_43 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_43sym , ATmakeAppl ( lf_list_43sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_43sym , arg0 ) ) ;
 }
 ATerm lf_42 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_42sym , ATmakeAppl ( lf_42sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_42sym , arg0 ) ) ;
 }
-ATerm lf_40 ( ) {
-CONS_ENTRY ( lf_40sym , ATmakeAppl0 ( lf_40sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_40sym ) ) ;
+ATerm lf_41 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_41sym , ATmakeAppl ( lf_41sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_41sym , arg0 ) ) ;
 }
-ATerm lf_36 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_36sym , ATmakeAppl ( lf_36sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_36sym , arg0 , arg1 ) ) ;
+ATerm lf_40 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_40sym , ATmakeAppl ( lf_40sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_40sym , arg0 ) ) ;
 }
-ATerm lf_35 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_35sym , ATmakeAppl ( lf_35sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_35sym , arg0 ) ) ;
+ATerm lf_list_39 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_39sym , ATmakeAppl ( lf_list_39sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_39sym , arg0 ) ) ;
 }
-ATerm lf_34 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_34sym , ATmakeAppl ( lf_34sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_34sym , arg0 ) ) ;
+ATerm lf_38 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
+CONS_ENTRY ( lf_38sym , ATmakeAppl ( lf_38sym , arg0 , arg1 , arg2 ) ) ;
+CONS_EXIT ( make_nf3 ( lf_38sym , arg0 , arg1 , arg2 ) ) ;
+}
+ATerm lf_37 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_37sym , ATmakeAppl ( lf_37sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_37sym , arg0 ) ) ;
+}
+ATerm lf_36 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_36sym , ATmakeAppl ( lf_36sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_36sym , arg0 ) ) ;
+}
+ATerm lf_list_35 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_list_35sym , ATmakeAppl ( lf_list_35sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_list_35sym , arg0 ) ) ;
+}
+ATerm lf_34 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_34sym , ATmakeAppl ( lf_34sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_34sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_33 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_33sym , ATmakeAppl ( lf_33sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_33sym , arg0 ) ) ;
 }
+ATerm lf_32 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_32sym , ATmakeAppl ( lf_32sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_32sym , arg0 ) ) ;
+}
 ATerm lf_31 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_31sym , ATmakeAppl ( lf_31sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_31sym , arg0 ) ) ;
 }
-ATerm lf_list_30 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_30sym , ATmakeAppl ( lf_list_30sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_30sym , arg0 ) ) ;
+ATerm lf_16 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_16sym , ATmakeAppl ( lf_16sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_16sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_29 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_29sym , ATmakeAppl ( lf_29sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_29sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_28 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_28sym , ATmakeAppl ( lf_28sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_28sym , arg0 ) ) ;
-}
-ATerm lf_list_27 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_list_27sym , ATmakeAppl ( lf_list_27sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_list_27sym , arg0 ) ) ;
-}
-ATerm lf_26 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_26sym , ATmakeAppl ( lf_26sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_26sym , arg0 ) ) ;
-}
-ATerm lf_25 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_25sym , ATmakeAppl ( lf_25sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_25sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_24 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_24sym , ATmakeAppl ( lf_24sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_24sym , arg0 ) ) ;
-}
-ATerm lf_23 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_23sym , ATmakeAppl ( lf_23sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_23sym , arg0 ) ) ;
-}
-ATerm lf_17 ( ) {
-CONS_ENTRY ( lf_17sym , ATmakeAppl0 ( lf_17sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_17sym ) ) ;
-}
-ATerm lf_16 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_16sym , ATmakeAppl ( lf_16sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_16sym , arg0 ) ) ;
+ATerm lf_15 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_15sym , ATmakeAppl ( lf_15sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_15sym , arg0 ) ) ;
 }
 ATerm lf_2 ( ) {
 CONS_ENTRY ( lf_2sym , ATmakeAppl0 ( lf_2sym ) ) ;
