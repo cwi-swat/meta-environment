@@ -20,6 +20,7 @@
 #include <sys/times.h>
 #include <limits.h>
 #include "compiler.tif.c"
+#include "support/support.h"
 
 extern aterm *pattern_asfix_iter;
 extern aterm *pattern_asfix_itersep;
@@ -37,6 +38,7 @@ extern aterm *pattern_asfix_hiddens;
 extern aterm *pattern_asfix_id;
 extern aterm *pattern_asfix_module;
 extern aterm *pattern_asfix_lexcaller;
+extern aterm *pattern_asfix_term;
 
 #define TICK2SEC(t)		(((double)(t))/CLK_TCK)
 
@@ -48,6 +50,14 @@ aterm *asfix_trans(arena *ar,aterm *mod);
 void init_expansion_terms();
 void init_asfix_patterns();
 aterm_list *get_equations_for_func(arena *ar,aterm *func,aterm_list *mods);
+aterm *AFcollapseModule(arena *ar, aterm *module);
+
+aterm *make_caller_prod(arena *ar,aterm *sort);
+aterm *innermost(arena *ar, aterm *t);
+aterm *toasfix(arena *ar, aterm *t, aterm *f, aterm *n);
+void init_patterns(arena *ar);
+
+int print_term_source(FILE *f, aterm *term);
 
 aterm_list *modules_db;
 
@@ -116,7 +126,7 @@ int equal_args(aterm_list *args1,aterm_list *args2)
     args1 = t_list_next(args1);
     args2 = t_list_next(args2);
   }
-  return equal;
+  return equal && t_is_empty(args1) && t_is_empty(args2);
 }
 
 int equal_attrs(aterm *attrs1,aterm *attrs2)
@@ -164,7 +174,7 @@ int equal_prod(aterm *prod1,aterm *prod2)
   return Tfalse;
 }
 
-aterm *make_caller_prod(arena *ar,aterm *sort)
+/*aterm *make_caller_prod(arena *ar,aterm *sort)
 {
   aterm *prod;
   char *text;
@@ -178,10 +188,11 @@ aterm *make_caller_prod(arena *ar,aterm *sort)
   }
   for(i=0; text[i]; i++)
     text[i] = tolower(text[i]);
-  prod = TmakeTerm(ar, pattern_asfix_lexcaller, text, sort);
+  prod = TmakeTerm(ar, pattern_asfix_lexcaller,
+                   TmakeTerm(ar, pattern_asfix_l,text), sort);
   free(text);
   return prod;
-}
+}*/
 
 aterm *remove_func_from_module(arena *ar,aterm *func, aterm *amod);
 /* The function {\tt get_lex_funcs_for_sort} traverse a list
@@ -583,31 +594,16 @@ Tprintf(stderr,"Reshuffling sort: %t\n",sort);
                                        newsection));
       amod = AFputModuleSections(&local,amod,sections);
       change_modules_db(TdictPut(&local,modules_db,mod,amod));
-      prod = make_caller_prod(&local,sort);
-      neweqs = get_equations_for_func(&local,prod,mods);
-      if(!t_is_empty(neweqs)) {
-        oldamod = TdictGet(modules_db,mod);
-        eqs = AFgetModuleEqs(oldamod);
-        eqs = TlistConcat(&local,
-                          TlistAppend(&local,eqs,pattern_asfix_nlws),
-                          neweqs);
-        amod = AFputModuleEqs(&local,amod,eqs);
-        change_modules_db(TdictPut(&local,modules_db,mod,amod));
-      }
     }
-    funcs = get_cf_funcs_for_sort(&local,sort,mods);
-    if(!t_is_empty(funcs)) {
-      newsubsection = AFinitContextFreeSyntaxSection(&local);
-      newsubsection = AFputSectionArgs(&local,newsubsection,funcs);
-      newsection = AFinitExportSection(&local);
-      newsection = AFputSectionArgs(&local,newsection,
-                                    TmkList_n(&local,1,newsubsection));
+    prod = make_caller_prod(&local,sort);
+    neweqs = get_equations_for_func(&local,prod,mods);
+    if(!t_is_empty(neweqs)) {
       oldamod = TdictGet(modules_db,mod);
-      sections = AFgetModuleSections(oldamod);
-      if(!t_is_empty(sections))
-        sections = TlistAppend(&local,sections,pattern_asfix_nlws);
-      sections = TlistAppend(&local,sections,newsection);
-      amod = AFputModuleSections(&local,amod,sections);
+      eqs = AFgetModuleEqs(oldamod);
+      eqs = TlistConcat(&local,
+                        TlistAppend(&local,eqs,pattern_asfix_nlws),
+                        neweqs);
+      amod = AFputModuleEqs(&local,amod,eqs);
       change_modules_db(TdictPut(&local,modules_db,mod,amod));
     }
     sorts = t_list_next(sorts);
@@ -618,7 +614,7 @@ aterm_list *reshuffle_modules(arena *ar,aterm_list *mods)
 {
   arena local;
 
-  aterm *mod, *newmod, *oldamod, *newamod, *cffunc;
+  aterm *mod, *newmod, *oldamod, *newamod, *cffunc, *amod;
   aterm_list *orgmods, *cffuncs, *eqs;
   aterm *newsubsection,*newsection;
   aterm *result;
@@ -630,16 +626,17 @@ aterm_list *reshuffle_modules(arena *ar,aterm_list *mods)
   while(!t_is_empty(mods)) {
     mod = t_list_first(mods);
     reshuffle_per_sort(&local,mod,orgmods);
+Tprintf(stderr,"reshuffle_per_sort finished\n");
     oldamod = TdictGet(modules_db,mod);
     cffuncs = AFgetModuleCFfuncs(&local, oldamod);
     cffuncs = asfix_filter_layout(&local,cffuncs);
     while(!t_is_empty(cffuncs)) {
       cffunc = t_list_first(cffuncs);
       eqs = get_equations_for_func(&local,cffunc,orgmods);
-      /*if(!t_is_empty(eqs)) {*/
-        /*oldamod = TdictGet(modules_db,mod);
+      if(!t_is_empty(eqs)) {
+        oldamod = TdictGet(modules_db,mod);
         amod = remove_func_from_module(&local,cffunc,oldamod);
-        change_modules_db(TdictPut(&local,modules_db,mod,amod));*/
+        change_modules_db(TdictPut(&local,modules_db,mod,amod));
         newamod = AFinitModule(&local);
         newmod = unique_new_name(&local,mod);
 Tprintf(stderr,"Creating new module: %t\n",newmod);
@@ -655,9 +652,20 @@ Tprintf(stderr,"Creating new module: %t\n",newmod);
                                       TmkList_n(&local,1,newsection));
         change_modules_db(TdictPut(&local,modules_db,newmod,newamod));
         newmods = TlistAppend(&local,newmods,newmod);
-      /*}*/
+      }
       cffuncs = t_list_next(cffuncs);
     }
+    mods = t_list_next(mods);
+  };
+  mods = orgmods;
+  while(!t_is_empty(mods)) {
+    mod = t_list_first(mods);
+    newamod = TdictGet(modules_db,mod);
+    newmod = unique_new_name(&local,mod);
+Tprintf(stderr,"Creating new module: %t\n",newmod);
+    newamod = AFputModuleName(&local,newamod,newmod);
+    change_modules_db(TdictPut(&local,modules_db,newmod,newamod));
+    newmods = TlistAppend(&local,newmods,newmod);
     mods = t_list_next(mods);
   };
   result = TlistConcat(&local,orgmods,newmods);
@@ -666,80 +674,224 @@ Tprintf(stderr,"Creating new module: %t\n",newmod);
   return result;
 }
 
+void ToC_code(aterm *asfix, FILE *file)
+{
+  int c, prev = ' ';
+  int instring = 0;
+  int escaped = 0;
+  int firststring = 1;
+  static char *buf = NULL;
+  char *bp;
+  static int bufsize = -1;
+
+  int size3 = 0, size2, size = AFsourceSize(asfix);
+  if(size > bufsize) {
+    if(buf)
+      free(buf);
+    buf = (char *)malloc(size+1);
+    if(!buf)
+      fatal_error("out of memory in PrettyPrint");
+    bufsize = size;
+  }
+  size2 = AFsource(asfix, buf);
+  if(size2 != size)
+    fatal_error("sizes don't match: %d != %d in PrettyPrint", size, size2);
+ 
+  bp = buf;
+  do {
+    size3++;
+    c = *bp++;
+  } while(c != '#');
+
+  while(c != '"') {
+    fputc(c, file);
+    size3++;
+    c = *bp++;
+  }
+  fputc(' ', file);
+  fputc(c, file);
+  size3++;
+  c = *bp++;
+
+   while(c != '"') {
+    fputc(c, file);
+    size3++;
+    c = *bp++;
+  }
+  fputs("\"\n", file);
+
+  do {
+    size3++;
+    c = *bp++;
+    if(c >= 0) {
+      if(!instring && c == '\n')
+        c = ' ';
+      if(!(instring || prev != ' ' || c != ' '))
+        ;
+      else
+        fputc(c, file);
+      prev = c;
+    }
+    if(instring) {
+      if(!escaped && c == '"') {
+        instring = 0;
+        if(firststring) {
+          firststring = 0;
+          fputc('\n', file);
+        }
+      }
+      escaped = 0;
+      if(!escaped && c == '\\')
+        escaped = 1;
+    } else {
+      if(c == '"')
+        instring = 1;
+      else {
+        if(c == ';' || c == '}' || c == '{') {
+          fputc('\n', file);
+          prev = ' ';
+        }
+      }
+    }
+  } while(size3 != size);
+}
+
 void compile_module(int cid,arena *ar,aterm_list *newmods)
 {
   char *text, *fname;
-  aterm *mod, *amod, *expmod, *macmod, *rnx;
+  aterm *mod, *amod, *expmod, *reduct, *cmod;
+  aterm *aname, *idname, *file, *modname, *trm;
   int len;
-  FILE *output;
-  char *path = "/home/markvdb/NEW-META/new-meta/pico/";
-  /*char *path = "/home/markvdb/AsFix2EP/muASF2/asfixfiles/reshuffle/";*/
+  FILE *output, *input;
+  arena local, rewrite_arena;
+  aterm *oldmod;
+  Tbool write;
 
+  /*char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";*/
+  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles3/";
+
+  TinitArena(NULL, &local);
+
+Tprintf(stderr,"compile_module entered\n");
   if(!t_is_empty(newmods)) {
-    mod = t_list_first(newmods);
-    amod = TdictGet(modules_db,mod);
-    assertp(TmatchTerm(mod,pattern_asfix_id,&text));
-    len = strlen(path) + strlen(text) + strlen(".rnx");
-    fname = malloc(len + 1);
-    if(!fname) {
-      fprintf(stderr,"Not enough memory\n");
-      exit(1);
+    do {
+      mod = t_list_first(newmods);
+      amod = TdictGet(modules_db,mod);
+      assertp(TmatchTerm(mod,pattern_asfix_id,&text));
+      newmods = t_list_next(newmods);
+    } while (strncmp(text,"AUX-",4) != 0);
+    if(strncmp(text,"AUX-",4) == 0) {
+      len = strlen(path) + strlen(text) + strlen(".asfix");
+      fname = malloc(len + 1);
+      if(!fname) {
+        fprintf(stderr,"Not enough memory\n");
+        exit(1);
+      }
+      fname = strcpy(fname,path);
+      fname = strcat(fname,text);
+      fname = strcat(fname,".asfix");
+/* Check whether it is necessary to generate new C code. */
+      input = fopen(fname,"r");
+      if(input) {
+        TreadTermFile(input,&local,&oldmod);
+        write = !t_equal(oldmod,amod);
+      }
+      else 
+        write = Ttrue;
+      if (write) {
+        output = fopen(fname,"w");
+        if(!output) 
+          Tprintf(stderr,"Cannot open file %s\n",fname);
+        else {
+          Tprintf(output,"%t",amod);
+          Tprintf(output, "\n");
+          fclose(output);
+        }
+        Tprintf(stderr,"Writing: %s.asfix\n", text);
+        expmod = expand_to_asfix(ar,amod,fname);
+
+Tprintf(stderr,"Reducing ...\n");
+
+        assertp(TmatchTerm(expmod, pattern_asfix_term, NULL, NULL,
+                &file, NULL, &modname, NULL, &trm, NULL, NULL));
+       
+        TinitArena(w, &rewrite_arena);
+        reduct = innermost(&rewrite_arena, trm);
+	Tadd2Arena(ar, reduct);
+	TdestroyArena(&rewrite_arena);
+
+Tprintf(stderr,"Reducing finished.\n");
+
+        aname  = Tmake(ar,"l(<str>)",fname);
+        idname = TmakeSimple(ar,"id(\"AsFix2C\")");
+        cmod = toasfix(ar, reduct, aname, idname);
+        free(fname);
+        len = strlen(path) + strlen(text) + strlen(".c");
+        fname = malloc(len + 1);
+        if(!fname) {
+          fprintf(stderr,"Not enough memory\n");
+          exit(1);
+        }
+        fname = strcpy(fname,path);
+        fname = strcat(fname,text);
+        fname = strcat(fname,".c");
+        output = fopen(fname,"w");
+        free(fname);
+        if(!output) 
+          Tprintf(stderr,"Cannot open file %s\n", fname);
+        else {
+          /*AFsourceToFile(cmod,output);*/
+          ToC_code(cmod,output);
+          Tprintf(output, "\n");
+          fclose(output);
+        }
+        Tprintf(stderr,"Writing: %s.c\n", text);
+      }
+      else
+        free(fname);
+      TdestroyArena(&local);
+      TBsend(cid,Tmake(TBgetArena(cid),
+                       "snd-event(compile(<term>,<list>))",
+                       mod,newmods));
     }
-    fname = strcpy(fname,path);
-    fname = strcat(fname,text);
-    fname = strcat(fname,".rnx");
-    macmod = asfix_trans(ar,amod);
-    expmod = expand_to_asfix(ar,macmod,fname);
-    rnx = asfix2rnx(ar,expmod);
-    output = fopen(fname,"w");
-    free(fname);
-    if(!output) 
-      Tprintf(stderr,"Cannot open file\n");
-    else {
-      pp_rnx(output,rnx,0);
-      Tprintf(output, "\n");
-      fclose(output);
-    }
-    Tprintf(stderr,"Writing: %s.rnx\n", text);
-    newmods = t_list_next(newmods);
-    TBsend(cid,Tmake(TBgetArena(cid),
-                     "snd-event(compile(<term>,<term>,<list>))",
-                     mod,rnx,newmods));
   }
-  else
+  else {
+    TdestroyArena(&local);
     TBsend(cid,Tmake(TBgetArena(cid),"snd-event(done)"));
+  }
 }
 
 void compile_modules(int cid,aterm_list *mods)
 {
   aterm_list *newmods;
   arena local;
-  /*struct tms start, compiling;
+/*  struct tms start, compiling;
   clock_t user, system;*/
 
   TinitArena(t_world(mods), &local);
 
-  Tprintf(stderr,"Compiling ... %t\n",mods);
-  /*times(&start);*/
+  Tprintf(stderr,"Reshuffling ... %t\n",mods);
+/*  times(&start);*/
   newmods = reshuffle_modules(&local,mods);
+  Tprintf(stderr,"Compiling ... %t\n",newmods);
   compile_module(cid,&local,newmods);
   TdestroyArena(&local);
-  /*times(&compiling);
+/*  times(&compiling);
 
   user = compiling.tms_utime - start.tms_utime;
   system = compiling.tms_stime - start.tms_stime;
   fprintf(stderr, "compilation: %f user, %f system\n", 
-	 TICK2SEC(user), TICK2SEC(system));
-  return result;*/
+	 TICK2SEC(user), TICK2SEC(system));*/
+  /* return result;*/
 }
 
 void rec_ack_event(int cid,aterm *cterm)
 {
-  aterm *mod, *rnx;
+  aterm *mod;
   aterm_list *newmods;
   arena local;
 
-  if(Tmatch(cterm,"compile(<term>,<term>,<list>)",&mod,&rnx,&newmods)) {
+  if(Tmatch(cterm,"compile(<term>,<list>)",&mod,&newmods)) {
     TinitArena(t_world(cterm), &local);
     compile_module(cid,&local,newmods);
     TdestroyArena(&local);
@@ -808,11 +960,19 @@ int main(int argc, char **argv)
 
   TBinit(argc, argv);
   AFinit(NULL);
+  w = TcreateWorld(4096, 1024, 4194301, 0);
+
   cid = TBnewConnection(NULL, NULL, NULL, -1, 
 			 compiler_handler, compiler_check_in_sign);
   TBconnect(cid);
   init_expansion_terms();
   init_asfix_patterns();
+  init_patterns(TBgetArena(cid));
+
+  c_rehash(INITIAL_TABLE_SIZE);
+  register_all();
+  resolve_all();
+
   TBeventloop();
 
   return 0;

@@ -546,7 +546,7 @@ void init_expansion_terms()
                         TmkList_n(&local,5,TmakeSimple(&local, "sort(\"ATerm\")"),
                                        TmakeSimple(&local, "w(\"\")"),
                                        TmakeSimple(&local, "ql(\",\")"),
-                                       TmakeSimple(&local, "w(\"\n\")"),
+                                       TmakeSimple(&local, "w(\"\")"),
                                        TmakeSimple(&local, "sort(\"ATerms\")")),
                         TmakeSimple(&local, "sort(\"ATerms\")"),
                         TmakeSimple(&local, "no-attrs"));
@@ -774,6 +774,9 @@ aterm *expand_asfix_literal(arena *ar, aterm *l)
   char *text;
   aterm *appl;
 
+  if(!TmatchTerm(l,pattern_asfix_l,&text)){
+    Tprintf(stderr,"expand_asfix_literal entered wit %t\n",l);
+  }
   assertp(TmatchTerm(l,pattern_asfix_l,&text));
   appl = make_afun_to_aterm_appl(ar,
                                  make_literal_to_afun_appl(ar,
@@ -1004,19 +1007,27 @@ aterm *expand_asfix_prod(arena *ar, aterm *prod);
 aterm *expand_asfix_appl(arena *ar, aterm *appl)
 {
   aterm *prod, *w, *applargs;
-  aterm *args;
+  aterm *args, *result;
+
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
 
   assertp(TmatchTerm(appl,pattern_asfix_appl,
                    &prod,&w,&applargs));
-  args = make_aterm_aterms_to_aterms_appl(ar,
-             expand_asfix_prod(ar,prod),
-             make_aterm_aterms_to_aterms_appl(ar,
-               expand_asfix_ws(ar,w),
-               make_aterm_to_aterms_appl(ar,
-                 expand_asfix_argslist(ar,applargs))));
-  return make_afun_aterms_to_aterm_appl(ar,
+  args = make_aterm_aterms_to_aterms_appl(&local,
+             expand_asfix_prod(&local,prod),
+             make_aterm_aterms_to_aterms_appl(&local,
+               expand_asfix_ws(&local,w),
+               make_aterm_to_aterms_appl(&local,
+                 expand_asfix_argslist(&local,applargs))));
+  result = make_afun_aterms_to_aterm_appl(&local,
                                           term_appl_appl,
                                           args);
+  
+  Tadd2Arena(ar,result);
+  TdestroyArena(&local);
+  return result;
 }
 
 aterm *expand_asfix_list(arena *ar, aterm *list)
@@ -1078,41 +1089,49 @@ aterm *expand_asfix_lex(arena *ar, aterm *lex)
 aterm *expand_asfix_term(arena *ar, aterm *term)
 {
   char *text;
-  aterm *t[9];
+  aterm *t[9], *result;
+
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
 
   if(TmatchTerm(term,pattern_asfix_sort,&text))
-    return expand_asfix_sort(ar,term);
+    result = expand_asfix_sort(&local,term);
   else if(TmatchTerm(term,pattern_asfix_l,&text))
-    return expand_asfix_literal(ar,term);
+    result = expand_asfix_literal(&local,term);
   else if(TmatchTerm(term,pattern_asfix_ql,&text))
-    return expand_asfix_qliteral(ar,term);
+    result = expand_asfix_qliteral(&local,term);
   else if(TmatchTerm(term,pattern_asfix_iter,
                  &t[0],&t[1],&t[2]))
-    return expand_asfix_iter(ar,term);
+    result = expand_asfix_iter(&local,term);
   else if(TmatchTerm(term,pattern_asfix_itersep,
                  &t[0],&t[1],&t[2],&t[3],&t[4],&t[5],&t[6],&t[7],&t[8]))
-    return expand_asfix_itersep(ar,term);
+    result = expand_asfix_itersep(&local,term);
   else if(TmatchTerm(term,pattern_asfix_neg,
                  &t[0],&t[1],&t[2]))
-    return expand_asfix_neg(ar,term);
+    result = expand_asfix_neg(&local,term);
   else if(TmatchTerm(term,pattern_asfix_charclass,&text))
-    return expand_asfix_charclass(ar,term);
+    result = expand_asfix_charclass(&local,term);
   else if(TmatchTerm(term,pattern_asfix_appl,
                  &t[0],&t[1],&t[2]))
-    return expand_asfix_appl(ar,term);
+    result = expand_asfix_appl(&local,term);
   else if(TmatchTerm(term,pattern_asfix_var,
                  &text,&t[0]))
-    return expand_asfix_var(ar,term);
+    result = expand_asfix_var(&local,term);
   else if(TmatchTerm(term,pattern_asfix_list,
                  &t[0],&t[1],&t[2]))
-    return expand_asfix_list(ar,term);
+    result = expand_asfix_list(&local,term);
   else if(TmatchTerm(term,pattern_asfix_lex,
                  &text,&t[0]))
-    return expand_asfix_lex(ar,term);
+    result = expand_asfix_lex(&local,term);
   else {
     Tprintf(stderr,"\n\nUnknown term type: %t", term);
     exit(1);
   }
+
+  Tadd2Arena(ar,result);
+  TdestroyArena(&local);
+  return result;
 }
 
 aterm *expand_asfix_args(arena *ar, aterm *args)
@@ -1929,8 +1948,8 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
 
   esp = term_ws;
   aname  = Tmake(ar,"l(<str>)",name);
-  idname = TmakeSimple(ar,"id(\"AsFix2Epic\")");
-  fname = TmakeSimple(ar,"l(\"asfix2epic\")");
+  idname = TmakeSimple(ar,"id(\"AsFix2C\")");
+  fname = TmakeSimple(ar,"l(\"asfix2c\")");
   osym = term_open;
   csym = term_close;
   cprod = AFmakeProd(ar,idname,
@@ -1941,7 +1960,7 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
                                     TmakeSimple(ar,"sort(\"ATerm\")"),
                                     esp,
                                     csym),
-                     TmakeSimple(ar, "sort(\"EpModule\")"),
+                     TmakeSimple(ar, "sort(\"CProgram\")"),
                      TmakeSimple(ar, "no-attrs"));
   cappl = AFmakeAppl(ar,cprod,
                      TmkList_n(ar,7,fname,
@@ -1966,7 +1985,16 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
 
 aterm *expand_to_asfix(arena *ar, aterm *mod, char *name)
 {
-  aterm *args;
-  args = expand_asfix_module(ar,mod);
-  return make_term(ar,name,args);
+  aterm *args, *result;
+
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
+
+  args = expand_asfix_module(&local,mod);
+  result = make_term(&local,name,args);
+
+  Tadd2Arena(ar,result);
+  TdestroyArena(&local);
+  return result;
 }

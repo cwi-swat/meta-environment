@@ -60,8 +60,10 @@ int print_asfix_term(FILE *f, aterm *arg)
   else if(Tmatch(arg,"char-class(<str>)",&text))
     Tprintf(f,"%s",text);
   else if(Tmatch(arg,"appl(<term>,<term>,<list>)",
-                 NULL,NULL,&args))
+                 NULL,&w[0],&args)) {
+    print_asfix_ws(f,w[0]);
     print_asfix_args(f,args);
+  }
   else if(Tmatch(arg,"iter(<term>,<term>,<term>)",
                  &t[0],&w[0],&l[0])) {
     print_asfix_term(f,t[0]);
