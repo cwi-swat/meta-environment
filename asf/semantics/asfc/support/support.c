@@ -690,7 +690,7 @@ void init_patterns(arena *ar)
   pattern_asfix_lex  = TmakeSimple(ar, "lex(<str>,<term>)");
   pattern_asfix_l    = TmakeSimple(ar, "l(<str>)");
   pattern_asfix_ql   = TmakeSimple(ar, "ql(<str>)");
-  pattern_asfix_ws   = TmakeSimple(ar, "ws(<str>)");
+  pattern_asfix_ws   = TmakeSimple(ar, "w(<str>)");
   pattern_asfix_sort = TmakeSimple(ar, "sort(<str>)");
   pattern_listtype   = TmakeSimple(ar, "listtype(sort(<str>))");
   pattern_listtype_sep = TmakeSimple(ar, "listtype(sort(<str>),ql(<str>))");
