@@ -1,5 +1,8 @@
 $Id$
 
+Thu Aug 19 11:25:08 CEST 2004 <jong@cwi.nl>
+ * repair configure.in: sdf-idioms dir is not in sdf2 subdir
+
 Wed Aug 11 15:10:23 CEST 2004 <jurgenv@cwi.nl>
  * Added languages/sdf-idioms, a package of sdf modules that each
    demonstrate one particular SDF idiom.
