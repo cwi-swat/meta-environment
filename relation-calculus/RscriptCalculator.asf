@@ -626,11 +626,11 @@ $Rstore, 1)
 
 [pw02]	is-empty-iter($BagIter) = true
 	====================================================
-	power0($BagIter) = insert(empty-bag, empty-bag)						%%XXX
+	power0($BagIter) = insert(empty-bag, empty-bag)
 
-[pw11]	power1($BagIter) = diff(power0($BagIter), insert(empty-bag, empty-bag))				%%XXX
+[pw11]	power1($BagIter) = diff(power0($BagIter), insert(empty-bag, empty-bag))	
 
-
+%% ---- all-nodes-from
 
 [chain-bag-1]
 	chain-bag({}) = {}
@@ -662,6 +662,7 @@ $Rstore, 1)
 [all-paths-top]
 	all-paths-from($Bag1, $Bag2) = chain-each(all-nodes-from($Bag1, $Bag2))
 
+%% ---- Access functions for areas
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 
@@ -708,7 +709,7 @@ $Rstore, 1)
 [max11] is-empty-iter($BagIter) = false,
 	$Integer = head($BagIter)
 	========================================
-	max1($BagIter) = max2(tail($BagIter), $Integer)	%%XXX
+	max1($BagIter) = max2(tail($BagIter), $Integer)
 
 [max12]	is-empty-iter($BagIter) = true
 	======================================
@@ -722,14 +723,14 @@ $Rstore, 1)
 	$Integer1 = head($BagIter),
 	$Integer1 > $Integer2 = true
 	===========================================================================
-	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer1)	%%XXX
+	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer1)
 
 [max22]	is-empty-iter($BagIter) = true
 	======================================
-	max2($BagIter, $Integer) = $Integer   %%XXX
+	max2($BagIter, $Integer) = $Integer
 
 [default-max2]
-	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer2)	%%XXX
+	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer2)
 
 [max-1]	$Bag = evalx($Exp, $Rstore)
 	========================================
@@ -744,23 +745,23 @@ $Rstore, 1)
 
 [min12]	is-empty-iter($BagIter) = true
 	========================================
-	min1($BagIter) = 0			%%XXX
+	min1($BagIter) = 0
 
 [default-min1]
-	min1($BagIter) = min1(tail($BagIter))	%%XXX
+	min1($BagIter) = min1(tail($BagIter))
 
 [min21]	is-empty-iter($BagIter) = false,
 	$Integer1 = head($BagIter),
 	$Integer1 < $Integer2 = true
 	===========================================================================
-	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer1)	%%XXX
+	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer1)
 
 [min22]	is-empty-iter($BagIter) = true
 	========================================
-	min2($BagIter, $Integer) = $Integer   %%XXX
+	min2($BagIter, $Integer) = $Integer
 
 [default-min2]
-	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer2)	%%XXX
+	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer2)
 
 [min-1]	$Bag = evalx($Exp, $Rstore)
 	========================================

@@ -13,13 +13,12 @@ equations
 [default-ins]
 	insert($Elem, {$Elem*}) = {$Elem*, $Elem}
 
+%%%%% --- equality 
 
-%% --- equality 
+%%%[eq1]	elem-equal($Elem,$Elem) = true
 
-[eq1]	elem-equal($Elem,$Elem) = true
-
-[default-eq2]	
-	elem-equal($Elem1,$Elem2) = false
+%%%[default-eq2]	
+%%%	elem-equal($Elem1,$Elem2) = false
 
 %% --- delete($Elem, $Bag)
 
