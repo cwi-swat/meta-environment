@@ -9,6 +9,7 @@
 #include "values.h"
 #include "traversalfunctions.h"
 #include "debug.h"
+#include "errors.h"
 
 /*
 #ifdef USE_TIDE
@@ -421,6 +422,13 @@ static ATerm matchArgument(ATerm env,
 			   ATerm lhs_posinfo, int depth)
 {
   ATerm newenv = fail_env;
+
+  if (depth > MAX_DEPTH) {
+    char tmp[256];
+    sprintf(tmp, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
+    RWsetError(tmp, PT_makeTreeLit(""));
+    return fail_env;
+  }
 
   /* equality check is cheap, so try this first */
   if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
