@@ -601,7 +601,7 @@ in
   MDB-StoreModuleTree(NewName, Syntax) .
   Syntax := no-tree .
   snd-msg(ts-put-str-value("module-paths", NewName, NewPath)) .
-  printf("HIER MOET NOG IETS MET path-modulename ") .
+  MDB-RegisterPath(NewPath, NewName) .
   snd-msg(ts-put-str-value("active-modules", NewName, NewPath)) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
