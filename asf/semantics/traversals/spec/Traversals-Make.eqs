@@ -52,28 +52,28 @@ equations
 
 [cps-0] create_productions(TraversalProduction, []) =
 
-[cps-1] create_production(TraversalProduction, Symbol) = Production,
-				create_productions(TraversalProduction, [Symbol*]) = Production*
+[cps-1] create_production(TraversalProduction, Symbol) = Production*1,
+				create_productions(TraversalProduction, [Symbol*]) = Production*2
 				===============================================================
 				create_productions(TraversalProduction, [ Symbol Symbol* ]) = 
-				Production
-        Production*
+				Production*1
+        Production*2
 
 %% Create a sort preserving transformation:
 
-[cp-0] create_production(Literal "(" Symbol1 "," Symbol* ")" -> Symbol1 Attributes, Symbol) = 
-					Literal "(" Symbol "," Symbol* ")" -> Symbol Attributes
+[cp-0] create_production(Literal "(" Symbol1 "," Symbol* ")" -> Symbol1 Attributes, Sort) = 
+					Literal "(" Sort "," Symbol* ")" -> Sort Attributes
 
-[cp-1] create_production(Literal "(" Symbol1 ")" -> Symbol1 Attributes, Symbol) =
-          Literal "(" Symbol ")" -> Symbol Attributes
+[cp-1] create_production(Literal "(" Symbol1 ")" -> Symbol1 Attributes, Sort) =
+          Literal "(" Sort ")" -> Sort Attributes
 
 %% Create an analyze 
 
-[cp-2] create_production( Literal "(" Symbol1 "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes, Symbol) = 
-					Literal "(" Symbol "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes								 
+[cp-2] create_production( Literal "(" Symbol1 "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes, Sort) = 
+					Literal "(" Sort "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes								 
 
-[cp-3] create_production( Literal "(" Symbol1 "," Symbol2 ")" -> Symbol2 Attributes, Symbol) = 
-					Literal "(" Symbol "," Symbol2 ")" -> Symbol2 Attributes	
+[cp-3] create_production( Literal "(" Symbol1 "," Symbol2 ")" -> Symbol2 Attributes, Sort) = 
+					Literal "(" Sort "," Symbol2 ")" -> Symbol2 Attributes	
 
 %% Only prefix format traversals are allowed currently
 [defaukt-cp] create_production( Production, Symbol ) = 
