@@ -10,10 +10,11 @@ lexical syntax
 [a-z] -> StrategyVar
 
 context-free syntax
-    (X=>X)                         	 -> Strategy   {cons("rule")}
-    "fail"                     	   	 -> X          {cons("fail")}
+    (X=>X) ":" X                     -> X          {cons("rule")}
+    (X=>X)                         	 -> Strategy   {cons("func-name")}
     "<" Strategy ">" X 				    	 -> X          {cons("apply")}
- 
+    "fail"                     	   	 -> X          {cons("fail")}    
+
 context-free syntax
     "fail"                         -> Strategy {cons("fail")}
     "id"                           -> Strategy {cons("id")}
@@ -48,6 +49,7 @@ context-free syntax
 variables
 
 "f"[0-9\']* -> (X=>X)
+"r"[0-9\']* -> (X=>X)
 "S"[0-9\']* -> Strategy
 "T"[0-9\']* -> X
 "x"[0-9\']* -> StrategyVar
