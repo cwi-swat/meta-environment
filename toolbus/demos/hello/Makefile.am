@@ -40,7 +40,7 @@ hello_gen_LDADD   = -L$(ATERM)/lib -lATerm -lATB
 printer_SOURCES   = printer.c
 printer_LDADD     = -L$(top_builddir)/libtb -ltb
 
-INCLUDES          = -I$(ATERM)/include -I.
+INCLUDES          = -I$(ATERM)/include -I. -I../../libtb
 
 %.tif.c: hello2.tifs
 	$(ATERM)/bin/tifstoc -tool $* $<
