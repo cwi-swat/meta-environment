@@ -262,18 +262,7 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     reduct = FAIL;
   }
   else {
-    if (!PT_isProductionInjection(prod)) {
-      reduct = PT_setTreeArgs(trm, newargs);
-    }
-    else {
-      PT_Tree localArg = PT_getArgsHead(newargs);
-      ATerm annos = PT_getTreeAnnotations(localArg);
-
-      reduct = PT_setTreeArgs(trm, newargs);
-      if (annos) {
-        reduct = PT_setTreeAnnotations(reduct, annos);
-      }
-    }
+    reduct = PT_setTreeArgs(trm, newargs);
   }
 
   return reduct;

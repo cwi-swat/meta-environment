@@ -1,4 +1,8 @@
+$Id$
 
+Wed Mar 23 15:15:07 CET 2005 <kooiker@cwi.nl>
+ * semantics/asfe/src/reduction.c:
+   - Removed check on injection in rewriteArgs
 
 Fri Feb 18 10:28:03 CET 2005 <jurgenv@cwi.nl>
  * When called from  the Meta-Environment, the compiler always produces a 
