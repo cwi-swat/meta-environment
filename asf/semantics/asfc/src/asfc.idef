@@ -26,31 +26,20 @@
 process Compiler is
 let
   COM           : compiler,
-  ModuleName    : str,
   OutputDir     : str,
-  AuxModuleName : str,
-  AuxModuleTree : term
+  ModuleName    : str,
+  Tree          : term
 in
   /* Start the compiler */
   execute(compiler, COM?) .
   (
-    /* Handle a request to compile a module */
-    rec-msg(compile-module(ModuleName?, OutputDir?)) .
-    snd-do(COM, set-output-dir(OutputDir)) .
-    snd-msg(process-eqs(ModuleName)) .
-    rec-msg(eqs-processed(ModuleName)) .
-    snd-msg(reshuffle-module(ModuleName, OutputDir)) .
-    (
-      /* During reshuffling, new sub-modules are created.
-       * Each time such a module is created, we get a message
-       * so we can start the compilation of that sub-module.
-       */
-      rec-msg(new-aux-module(AuxModuleName?, AuxModuleTree?)) .
-      snd-eval(COM, generate-code(AuxModuleName, AuxModuleTree)) .
-      rec-value(COM, c-code-ready)
-    ) *
-    rec-msg(reshuffle-done) .
-    snd-msg(compile-done)
+    rec-msg(compiler-output-dir(OutputDir?)).
+    snd-do(COM, set-output-dir(OutputDir))
+  +
+    rec-msg(generate-code(ModuleName?, Tree?)).
+    snd-eval(COM, generate-code(ModuleName, Tree)).
+    rec-value(COM, c-code-ready).
+    snd-msg(generate-code-done(ModuleName))
   ) *
   delta
 endlet

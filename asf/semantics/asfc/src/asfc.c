@@ -308,8 +308,6 @@ ATerm generate_code(int cid, char *modname, ATerm module)
     fclose(output);
   }
 
-	ATwarning("Writing: %s\n", fname);
-
   free(fname);
 
   return ATmake("snd-value(c-code-ready)");
