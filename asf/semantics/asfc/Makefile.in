@@ -60,7 +60,7 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 CSRC		= compiler.c expander.c asfixprinter.c asfix-trans.c init-patterns.c
 CHDR		= compiler.tif.c compiler.tif.h
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler 
+BINFILES	= compiler genmakefile.sh
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
