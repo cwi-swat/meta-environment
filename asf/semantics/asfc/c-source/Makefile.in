@@ -56,6 +56,7 @@ REGALL	:= $(patsubst %,register_%,$(INIT))
 EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
 RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
+CLEANFILES = AsFix2C libasfix2c.a
 
 all: AsFix2C libasfix2c.a
 
@@ -72,4 +73,6 @@ init.o: init.c
 init.c:
 	../mk-init.sh >> $@
 
+clean: 
+	rm -f *.o *~ $(CLEANFILES)
 install:
