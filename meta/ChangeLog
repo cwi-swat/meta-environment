@@ -1,5 +1,10 @@
 # $Id$
 
+2002/10/29 (vinju@loria.fr)
+ * Removed implicit generation of ToolBus interface. *.tif.[ch] files 
+   have been added to the repository
+ * Added dependency on aterm-java package
+
 2002/10/12 (vinju@loria.fr)
  * Added Close Module to the Meta-Environment interface. You can close
    modules that are not imported by other modules. It also asks if you
