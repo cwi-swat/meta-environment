@@ -2,8 +2,12 @@
 
 include ${top_srcdir}/make_rules
 
-SUBDIRS     = config editors graph-browser src \
-              in-output module-db utils tbscripts demo \
-              configuration-manager
+SUBDIRS		= config editors ${UI_PACKAGE} src \
+		in-output module-db utils tbscripts demo \
+		configuration-manager
+
+DIST_SUBDIRS	= config editors graph-browser meta-studio src \
+		in-output module-db utils tbscripts demo \
+		configuration-manager
 
 EXTRA_DIST = make_rules
