@@ -3,8 +3,6 @@
 
 process StandaloneEqsDumper is
 let
-  ModuleName : str,
-  Path       : str,
   Equations  : term,
   Pid : int
 in
@@ -12,19 +10,8 @@ in
   create(MetaCreator, Pid?) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
-  snd-msg(get-all-equations(MODULENAME)) .
-  (
-    rec-msg(all-equations(Equations?)) .
-    LocateFile(MODULENAME, ".sdf", Path?) .
-    if equal(OUTFILENAME, "") then
-      WriteEquations(Path,MODULENAME, ".eqs", Equations) 
-    else 
-      WriteEquations(Path, OUTFILENAME, "", Equations) 
-    fi
-  +
-    rec-msg(equations-incomplete) .
-    printf("Specification incomplete for %s\n", MODULENAME)
-  ) .
+  snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME)) .
+  rec-msg(equations-dumped) .
   shutdown("")
 endlet   
 

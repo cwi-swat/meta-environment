@@ -1,41 +1,46 @@
-/*
-  $Id$
- */
-
-process WriteEquations(Path : str, ModuleName : str, Extension : str, 
-                       Equations : term) is
-let
-  Message : str,
-  FileName : str
-in
-  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
-  rec-msg(io-filename(FileName?)) .
-  snd-msg(io-write-term-file(FileName, Equations)) .
-  (
-    rec-msg(io-file-written)
-  +
-    rec-msg(io-file-not-written(Message?))
-  )
-endlet
+/* $Id$ */
 
 process DumpEquations is
 let
+  Id : int,
   ModuleName   : str,
   Equations    : term,
-  Path         : str
+  Path         : str,
+  FileName : str,
+  ErrorMessage : str
 in
+  Id := process-id .
   (
-    rec-msg(dump-equations(ModuleName?)) .
-    snd-msg(get-path-from-db(ModuleName)) .
-    rec-msg(path(Path?)) .
+    (
+      rec-msg(dump-equations(ModuleName?)) .
+      FileName := ""
+    +
+      rec-msg(dump-equations-given-file(ModuleName?, FileName?))
+    ) .
+    snd-note(ui-status(statf(Id,"Dumping equations for %s", [ModuleName]))) .
     snd-msg(get-all-equations(ModuleName)) .
     (
       rec-msg(all-equations(Equations?)) .
-      WriteEquations(Path,ModuleName, ".eqs", Equations)
+      if equal(FileName, "") then 
+        snd-msg(get-path-from-db(ModuleName)) .
+        rec-msg(path(Path?)) .
+        snd-msg(io-get-filename(Path, ModuleName, ".eqs")) .
+	rec-msg(io-filename(FileName?)) 
+      else
+        tau
+      fi .
+      snd-msg(io-write-term-file(FileName, Equations)) .
+      (
+        rec-msg(io-file-written)
       +
+        rec-msg(io-file-not-written(ErrorMessage?)) .
+	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
+      )
+    +
       rec-msg(equations-incomplete) .
       snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))
     ) .
+    snd-note(ui-status(endstat(Id))) .
     snd-msg(equations-dumped)
   ) * delta
 

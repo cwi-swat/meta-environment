@@ -20,9 +20,7 @@ in
     +
       rec-msg(dump-parse-table-given-file(ModuleName?, FileName?)) 
     ) .
-    snd-note(ui-status(statf(Id, 
-                             "Dumping parse table for %s",
-			     [ModuleName]))) .
+    snd-note(ui-status(statf(Id,"Dumping parse table for %s",[ModuleName]))) .
     snd-msg(get-parsetable(trm(ModuleName))) .
     (
       rec-msg(parse-table(Table?)) .
