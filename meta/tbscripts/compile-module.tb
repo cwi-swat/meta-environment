@@ -26,7 +26,7 @@
 process Compile-module is
 let
   ModuleName    : str,
-  OutputDir     : str,
+  OutputFile    : str,
   ErrorMsg      : str,
   Id            : term,
   Syntax        : term,
@@ -34,31 +34,22 @@ let
 in
     Id := process-id.
     (
-      rec-msg(compile-module(ModuleName?, OutputDir?)) .
+      rec-msg(compile-module(ModuleName?, OutputFile?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
-      snd-msg(get-all-sdf2-definitions(trm(ModuleName))) .
+      snd-msg(process-eqs(ModuleName)) .
+      rec-msg(eqs-processed(ModuleName)) .
+      snd-msg(get-all-equations(ModuleName)) .
       (
-        rec-msg(syntax(Syntax?)) .
-        snd-msg(process-eqs(ModuleName)) .
-        rec-msg(eqs-processed(ModuleName)) .
-        snd-msg(get-all-equations-for-compiler(ModuleName)) .
-        (
-          rec-msg(all-equations(Equations?)) .
-          snd-msg(compiler-output-dir(OutputDir)) .
-          snd-msg(compile-module(ModuleName, Syntax, Equations)) .
-          rec-msg(compilation-done(ModuleName))
-        +
-          rec-msg(equations-incomplete) .
-          snd-note(ui-status(errorf("Equations incomplete for %s",
-                                    [ModuleName])))
-        )
+        rec-msg(all-equations(Equations?)) .
+        snd-msg(compile-module(ModuleName, Equations, OutputFile)) .
+        rec-msg(compilation-done(ModuleName))
       +
-        rec-msg(no-syntax(ErrorMsg?)) .
-        snd-note(ui-status(errorf("Syntax incomplete for %s", [ModuleName])))
+        rec-msg(equations-incomplete) .
+        snd-note(ui-status(errorf("Equations incomplete for %s",
+                                  [ModuleName])))
       ) .
       snd-msg(compilation-ready(ModuleName)) .
       snd-note(ui-status(endstat(Id))) 
-    )*
+    ) *
     delta
-
 endlet

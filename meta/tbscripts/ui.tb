@@ -22,7 +22,7 @@ let
   Mods    : list,
   ModName : str,
   FileName : str,
-  OutputDir : str,
+  OutputFile : str,
   T       : str,
   FT      : str,
   Path    : str,
@@ -128,10 +128,10 @@ in
       rec-msg(cleared-all).
       snd-ack-event(UI,clear-all)
    ) +
-   ( rec-event(UI, compile-module(Str?, OutputDir?)).
-     snd-msg(compile-module(Str, OutputDir)).
+   ( rec-event(UI, compile-module(Str?, OutputFile?)).
+     snd-msg(compile-module(Str, OutputFile)).
      rec-msg(compilation-ready(Str)).
-     snd-ack-event(UI, compile-module(Str, OutputDir))
+     snd-ack-event(UI, compile-module(Str, OutputFile))
    ) +
    ( rec-event(UI, rename-module(Str?, Str1?)) .
      snd-msg(rename-module(Str, Str1)) .
