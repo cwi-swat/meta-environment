@@ -27,6 +27,9 @@ Author:  Merijn de Jonge
 -Made documentation (in README) more up-to-date
 -LaTeX documentation now works with LaTeX2e
 -Generate LaTeX demo files in directory ./doc not in ./demos/*/
+-Documentation sources stored in a deeper directory (doc/src) to make a
+ clearer distribution. The directory ./doc now only contains the postscript
+ files.
 ------------------------------------------------------------------------------
 
 Date:   Tue Mar  7 18:08:23 MET 2000

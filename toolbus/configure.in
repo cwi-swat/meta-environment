@@ -217,6 +217,7 @@ AC_OUTPUT(Makefile
           adapters/java-adapter/toolbus/tool/Makefile
           tbviz/Makefile
           doc/Makefile
+          doc/src/Makefile
           demos/Makefile 
           demos/auction/Makefile 
           demos/calc/Makefile
