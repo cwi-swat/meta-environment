@@ -30,7 +30,7 @@ noinst_HEADERS = chars.h \
                  c-compiler.h
 
 asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
-               -L$(PT_SUPPORT)/lib -lmept  \
+               -L$(PT_SUPPORT)/lib -lmept -lconversion -lasfix2  \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
                -L$(TOOLBUSLIB)/lib -lATB \
@@ -40,7 +40,9 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
           -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
           -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
-          -DATERM=\"$(ATERM)\"
+          -DATERM=\"$(ATERM)\" \
+          -DCOMPILER=\"$(CC)\" \
+          -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
 INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \

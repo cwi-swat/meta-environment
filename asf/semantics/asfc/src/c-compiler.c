@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include <aterm1.h>
 
-#define COMPILER "gcc"
-#define OPTIMIZE_FLAGS "-g -O2"
-
 extern ATbool run_verbose;
 
 void call_c_compiler(const char* binary, const char* name, const char* source)
@@ -12,8 +9,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
   char commandline[1024];
 
   sprintf(commandline,
-         COMPILER " " OPTIMIZE_FLAGS " "
-	 " %s "
+         COMPILER " " COMPILERFLAGS " %s "
 	 "-o %s "
 	 "%s \\\n"
 	 "  -I" ASC_SUPPORT "/include \\\n"
@@ -26,7 +22,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
 	 "  -DASF_MAIN"
 	 "\n",
-	 run_verbose ? "-Wall" : "",
+	 run_verbose ? "" : "-Wno-unused",
 	 binary, 
 	 source
 	 );
