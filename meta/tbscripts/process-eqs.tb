@@ -67,8 +67,7 @@ in
   rec-msg(sm-all-needed-imports(Imports?))  
 endlet
 
-
-process GetEquations is
+process GetSpecification is
 let
   ModuleName   : str,
   Equations    : term,
@@ -83,10 +82,11 @@ let
   ImportTuple  : term,
   ModuleNames : list,
   RenamedEquations : list,
-  ImportedModuleName : str
+  ImportedModuleName : str,
+  Specification : term
 in
   (
-    rec-msg(get-all-equations(ModuleName?)) .
+    rec-msg(get-specification(ModuleName?)) .
     ParseAllEquations(ModuleName) .
     snd-msg(all-equations-available(ModuleName)) .
     (
@@ -112,15 +112,36 @@ in
       fi
       *
       if equal(ModuleNames,[]) then  
-        snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
-	NewEquations := [] .
-	rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-	snd-msg(all-equations(AllEquations)) .
-	AllEquations := no-tree
+        Specification := NewEquations .
+	snd-msg(specification(Specification)) .
+	NewEquations := []
       fi 
     +
       rec-msg(equations-incomplete) .
-      snd-msg(equations-incomplete)
+      snd-msg(specification-incomplete)
     )
   )*delta
+endlet
+
+process GetEquations is
+let
+  ModuleName   : str,
+  Equations    : term,
+  AllEquations : term,
+  NewEquations : term
+in
+  (
+    rec-msg(get-all-equations(ModuleName?)) .
+    snd-msg(get-specification(ModuleName)) .
+    rec-msg(specification(NewEquations?)) .
+    snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
+    NewEquations := [] .
+    rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
+    snd-msg(all-equations(AllEquations)) .
+    AllEquations := no-tree
+  +
+    rec-msg(specification-incomplete) .
+    snd-msg(equations-incomplete)
+  )
+  * delta
 endlet
