@@ -537,10 +537,10 @@ in
         rec-msg(editor-opened(ModuleName,EditorId2?)) .
 	ReturnSuccess(EditorId, Stack)
       +
-	rec-msg(save-module, Stack?, EditorId?) .
+	rec-msg(dump-module, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(save-module(ModuleName)).
-        rec-msg(saved-module(ModuleName)).
+	snd-msg(save-asfsdf-module(ModuleName)).
+        rec-msg(saved-asfsdf-module(ModuleName)).
 	ReturnSuccess(EditorId, Stack)	
       + 
 	rec-msg(revert-module, Stack?, EditorId?) .

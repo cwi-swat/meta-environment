@@ -17,43 +17,6 @@ let
 in
   Id := process-id. 
   (
-    rec-msg(save-module(Module?)).
-    snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-path-from-db(Module)).
-    rec-msg(path(Path?)).
-    snd-msg(io-get-filename(Path, Module, ".trm.tbl")) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(get-table-from-db(trm(Module))).
-    (
-      rec-msg(table(Table?)). 
-      snd-msg(io-write-term-file(FileName, Table)).
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
-      )
-    +
-      rec-msg(no-table)
-    ).
-    snd-msg(io-get-filename(Path, Module, ".asf.tbl")) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(get-table-from-db(eqs(Module))).
-    (
-      rec-msg(table(Table?)).
-      snd-msg(io-write-term-file(FileName, Table)) .
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
-      )
-    +
-      rec-msg(no-table)
-    ).
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(saved-module(Module))
-  +
     rec-msg(save-sdf-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
@@ -120,7 +83,6 @@ in
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-asfsdf-module(Module))
-    
   +
     rec-msg(save-all) .
     snd-msg(ts-get-snapshot) .
