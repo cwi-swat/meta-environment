@@ -1,5 +1,8 @@
 $Id$
 
+Wed Apr 14 10:53:11 CEST 2004 <m336@cwi.nl>
+ * lib/*.c: call SGLR functions with a parsetable, not a "language"
+
 Tue Mar 23 09:39:34 CET 2004 <{jong,kooiker}@cwi.nl>
  * lib/*.c: updated wrt new MEPT api
 

@@ -94,7 +94,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
   if (tableBaf != NULL) {
     ATerm parseTable = ATreadFromBinaryString(tableBaf, tableSize);
     if (parseTable != NULL) {
-      setParseTable(parseTable);
+      setParseTable((SGLR_ParseTable)parseTable);
     }
   }
 

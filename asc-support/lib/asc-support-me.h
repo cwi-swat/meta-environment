@@ -2,9 +2,10 @@
 #define ASC_SUPPORT_H
 
 #include <aterm2.h> 
-#include <asc-builtins.h>
-
 #include <atb-tool.h>
+#include <sglr.h>
+
+#include "asc-builtins.h"
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
@@ -294,7 +295,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 /*}}}  */
 
 ATerm innermost(PT_Tree tree);
-ATerm getParseTable();
-void setParseTable(ATerm tbl);
+SGLR_ParseTable getParseTable();
+void setParseTable(SGLR_ParseTable tbl);
 
 #endif  /* ASC_SUPPORT_H */

@@ -32,7 +32,7 @@ static char* getFilename(PT_Tree str)
 
 /*{{{  static CO_Feedback makeGeneralError(char *producer, char *msg) */
 
-static CO_Feedback makeGeneralError(char *producer, char *msg)
+static CO_Feedback makeGeneralError(const char *producer, const char *msg)
 {
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListEmpty());
 
@@ -40,9 +40,9 @@ static CO_Feedback makeGeneralError(char *producer, char *msg)
 }
 
 /*}}}  */
-/*{{{  static CO_Feedback makeParseErrorFeedback(char *producer, char *file,  */
+/*{{{  static CO_Feedback makeParseError(const char *producer, const char *file, ATerm t) */
 
-static CO_Feedback makeParseError(char *producer, char *file, ATerm t)
+static CO_Feedback makeParseError(const char *producer, const char *file, ATerm t)
 {
   int line = getErrorInfo(t, LINE);
   int col = getErrorInfo(t, COLUMN);
@@ -112,30 +112,25 @@ static char* getSort(PT_Symbol type)
 
 /*}}}  */
 
-/*{{{  static ATbool initParser(char *toolname, ATerm language) */
+/*{{{  static void initParser(void) */
 
-static ATbool initParser(char *toolname, ATerm language)
+static void initParser(void)
 {
-  ATerm pt = getParseTable();
+  static ATbool initialized = ATfalse;
 
-  if (pt != NULL) {
+  if (!initialized) {
     SGinitParser(ATfalse);
     SG_ASFIX2ME_ON();
     SG_OUTPUT_ON();
     SG_TOOLBUS_OFF();
-
-    SGopenLanguageFromTerm(toolname, language, getParseTable());
-
-    return ATtrue;
+    initialized = ATtrue;
   }
-
-  return ATfalse;
 }
 
 /*}}}  */
-/*{{{  static PT_Tree parse_result(char *builtin, char *file, ATerm result) */
+/*{{{  static PT_Tree parse_result(const char *builtin, const char *file, ATerm result) */
 
-static PT_Tree parse_result(char *builtin, char *file, ATerm result)
+static PT_Tree parse_result(const char *builtin, const char *file, ATerm result)
 {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
@@ -208,6 +203,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
   ATerm language = ATmake("<str>", toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
+  SGLR_ParseTable parseTable;
 
   if (sort == NULL) {
     return  (PT_Tree) CO_makeParseResultFailure(l,l,
@@ -215,7 +211,10 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
 	       	l);
   }
 
-  if (initParser(toolname, language)) {
+  initParser();
+  parseTable = getParseTable();
+
+  if (parseTable != NULL) {
     char *filename = getFilename(file);
     ATerm result = SGparseFile(toolname, language, sort, filename);
     return parse_result(toolname, filename, result);
@@ -251,10 +250,10 @@ PT_Tree ASC_parse_file(ATerm type, ATerm aterm)
 
 static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
-  char  toolname[] = "parse-bytes";
-  ATerm language = ATparse(toolname);
+  const char *toolname = "parse-bytes";
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
+  SGLR_ParseTable parseTable;
 
   if (sort == NULL) {
     return  (PT_Tree) CO_makeParseResultFailure(l,l,
@@ -262,8 +261,10 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 	       	l);
   }
 
-  if (initParser(toolname, language)) {
-    ATerm result = SGparseString(language, sort, PT_yieldTree(bytes), "Unknown"); 
+  initParser();
+  parseTable = getParseTable();
+  if (parseTable != NULL) {
+    ATerm result = SGparseString(PT_yieldTree(bytes), parseTable, sort, NULL); 
     return parse_result(toolname, "anonymous", result);
   }
 

@@ -1,20 +1,22 @@
-#include <aterm2.h>
 #include <stdio.h>
+#include <aterm2.h>
 
-static ATerm parseTable = NULL;
+#include "asc-support-me.h"
 
-/*{{{  void setParseTable(ATerm pt)  */
+static SGLR_ParseTable parseTable = NULL;
 
-void setParseTable(ATerm pt) 
+/*{{{  void setParseTable(SGLR_ParseTable pt)  */
+
+void setParseTable(SGLR_ParseTable pt) 
 {
-  ATprotect(&parseTable);
+  ATprotect((ATerm *)((void *)&parseTable));
   parseTable = pt;
 }
 
 /*}}}  */
-/*{{{  ATerm getParseTable()  */
+/*{{{  SGLR_ParseTable getParseTable()  */
 
-ATerm getParseTable() 
+SGLR_ParseTable getParseTable() 
 {
   return parseTable;
 }
