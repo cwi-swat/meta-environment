@@ -44,6 +44,8 @@ char  prev_char;
 void SG_PrintChar(FILE *dot, int c)
 {
   switch(c) {
+    case '\r' : ATfprintf(dot, "\\\\r");
+      break;
     case '\n' : ATfprintf(dot, "\\\\n");
       break;
     case 32   : ATfprintf(dot, "\\\\32");
