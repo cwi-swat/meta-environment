@@ -13,10 +13,13 @@
 #include "traversalfunctions.h"
 #include "errors.h"
 #include "asf-api.h"
+#include "debug.h"
 
+/*
 #ifdef USE_TIDE
 #include "debug.h"
 #endif
+*/
 
 static MemoTable memo_table = NULL;
 static unsigned rewrite_steps = 0;

@@ -8,10 +8,13 @@
 #include "environment.h"
 #include "values.h"
 #include "traversalfunctions.h"
+#include "debug.h"
 
+/*
 #ifdef USE_TIDE
 #include "debug.h"
 #endif
+*/
 
 /* This algorithm matches a term against an ASF equation.
  *
