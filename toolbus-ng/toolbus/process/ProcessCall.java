@@ -101,7 +101,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   }
 
   public boolean contains(StateElement b) {
-    System.out.println(this +" contains " + b);
+    //System.out.println(this +" contains " + b);
     return startState.contains(b);
   }
 
@@ -112,7 +112,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   }
 
   public boolean execute() throws ToolBusException {
-    System.out.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
+    //System.out.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
     Environment env = processInstance.getEnv();
     ATermList formals1 = formals;
     ATermList actuals1 = actuals;
@@ -123,7 +123,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
       actuals1 = actuals1.getNext();
       if (!TBTerm.isResVar(formal)) {
         env.putVar(formal, TBTerm.substitute(actual, env));
-        System.out.println(formal + " gets value " + env.getVar(formal));
+        //System.out.println(formal + " gets value " + env.getVar(formal));
       }
     }
     startState = PE.getStartState();

@@ -22,7 +22,7 @@ public class ProcessInstance {
   private ToolBus toolbus;
   private ToolInstance toolinstance;
 
- public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
+  public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
     String name = call.getName();
     toolbus = TB;
     definition = TB.getProcessDefinition(name);
@@ -44,18 +44,20 @@ public class ProcessInstance {
 
     toolinstance = definition.createToolInstance();
 
-    System.out.println(processId + ": " + call);
-    System.out.println(processId + ": atoms: =" + elements);
-    System.out.println(processId + ": prefix = " + currentState);
-    for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
-      Atom a = (Atom) it.next();
-      System.out.println(processId + ": " + a + " --> " + a.getFollow());
+    if(ToolBus.isVerbose()) {
+      System.out.println(processId + ": " + call);
+      System.out.println(processId + ": atoms: =" + elements);
+      System.out.println(processId + ": prefix = " + currentState);
+      for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
+        Atom a = (Atom) it.next();
+        System.out.println(processId + ": " + a + " --> " + a.getFollow());
+      }
     }
   }
-  
-   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
+
+  public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
     this(TB, new ProcessCall(name, actuals));
-   }
+  }
 
   public Environment getEnv() {
     return env;

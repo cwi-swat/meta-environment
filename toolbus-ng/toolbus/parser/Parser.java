@@ -102,12 +102,12 @@ public class Parser {
     Funs.put("negint", new Integer(negint));
     Funs.put("id", new Integer(id));
   }
-  
-  private ATerm unquote(ATerm type){
+
+  private ATerm unquote(ATerm type) {
     AFun afun = factory.makeAFun(((ATermAppl) type).getName(), 0, false);
     return factory.makeAppl(afun);
   }
-  
+
   private ATerm mkSomeVar(String V, ATerm name, ATerm type) {
     AFun afun = factory.makeAFun(V, 3, false);
     ATerm cargs[] = new ATerm[] { factory.makeInt(-1), unquote(type), name };
@@ -169,7 +169,7 @@ public class Parser {
     if (shouldBuildArgs(index)) {
       for (int i = 0; i < args.length; i++) {
         oargs[i] = build(args[i]);
-        System.out.println("oargs[" + i + "] = " + oargs[i]);
+        //System.out.println("oargs[" + i + "] = " + oargs[i]);
       }
     }
 
@@ -188,6 +188,8 @@ public class Parser {
         return mkResVar(args[0], factory.make("none"));
 
       case apply : // apply(name, arglist)
+        if (args.length == 1)
+          return args[0];
         if (args.length != 2) {
           throw new ToolBusException("apply: wrong number of args");
         }
@@ -202,7 +204,6 @@ public class Parser {
           realargs = realargs.append((ATerm) build(fargs.elementAt(i)));
         }
 
-        System.out.println("fname = " + fname + "; fargs = " + fargs + " ; realargs = " + realargs);
         return factory.makeAppl(afun, realargs);
 
       case natcon : // natcon(str)
@@ -283,7 +284,11 @@ public class Parser {
         return new Print((ATerm) oargs[0]);
 
       case RecMsg :
-        return new RecMsg((ATerm) oargs[0]);
+        if (oargs.length == 1) {
+          return new RecMsg((ATerm) oargs[0]);
+        } else {
+          return new RecMsg((ATerm) oargs[0], (ATerm) oargs[1]);
+        }
 
       case RecVal :
         return new RecVal((ATerm) oargs[0]);
@@ -320,14 +325,14 @@ public class Parser {
 
     for (int i = 0; i < decls.getLength(); i++) {
       ProcessDefinition def = (ProcessDefinition) build(decls.elementAt(i));
-      System.out.println(def);
+      //System.out.println(def);
       toolbus.addProcessDefinition(def);
     }
     ATermList calls = (ATermList) interm.getChildAt(1);
 
     for (int i = 0; i < calls.getLength(); i++) {
       ProcessCall call = (ProcessCall) build(calls.elementAt(i));
-      System.out.println(call);
+      //System.out.println(call);
       toolbus.addProcess(call);
     }
 

@@ -8,34 +8,41 @@ import java.util.Vector;
 import toolbus.*;
 import toolbus.process.*;
 
+import aterm.*;
 import aterm.ATerm;
 
 abstract class MsgAtom extends Atom {
 
   private State partners = new State(); // communication partners in other processes
   private Ref msg;
-  private Ref var;
+  private Ref qual;
+
+  private ATerm matchPattern;
 
   public MsgAtom(ATerm msg) {
     super();
     this.msg = new Ref(msg);
-    this.var = new Ref(TBTerm.TermPlaceholder);
-    setAtomArgs(this.msg, this.var);
+    this.qual = new Ref(TBTerm.TermPlaceholder);
+    setAtomArgs(this.msg, this.qual);
   }
 
-  public MsgAtom(ATerm msg, ATerm var) {
+  public MsgAtom(ATerm msg, ATerm qual) {
     super();
     this.msg = new Ref(msg);
-    this.var = new Ref(var);
-    setAtomArgs(this.msg, this.var);
+    this.qual = new Ref(qual);
+    setAtomArgs(this.msg, this.qual);
   }
 
   public ATerm getMsg() {
     return msg.value;
   }
 
-  public ATerm getVar() {
-    return var.value;
+  public ATerm getQual() {
+    return qual.value;
+  }
+  
+  public ATerm getMatchPattern(){
+    return matchPattern;
   }
 
   public boolean canCommunicate(MsgAtom a) {
@@ -44,7 +51,6 @@ abstract class MsgAtom extends Atom {
   }
 
   public void addMsgPartner(StateElement a) {
-    System.out.println(this +" addMsgPartner " + a);
     partners.add(a);
   }
 
@@ -56,8 +62,22 @@ abstract class MsgAtom extends Atom {
     return partners.size() > 0;
   }
 
-  public MatchResult matchArgs(MsgAtom b) throws ToolBusException {
-    return TBTerm.match(msg.value, getEnv(), b.getMsg(), b.getEnv());
+  public MatchResult matchPartner(MsgAtom b) throws ToolBusException {
+    return TBTerm.match(matchPattern, getEnv(), b.getMatchPattern(), b.getEnv());
+  }
+
+  public void compile(ProcessInstance processInstance, State follow) throws ToolBusException {
+    super.compile(processInstance, follow);
+    ATermFactory factory = getQual().getFactory();
+    if (this instanceof SndMsg) {
+      matchPattern =
+        factory.makeList(getMsg(), factory.makeList(getQual(), factory.makeList(processInstance.getProcessId())));
+    } else {
+      matchPattern =
+        factory.makeList(getMsg(), factory.makeList(processInstance.getProcessId(), factory.makeList(getQual())));
+    }
+    
+    System.out.println(matchPattern);
   }
 
   public boolean execute() throws ToolBusException {
@@ -73,10 +93,12 @@ abstract class MsgAtom extends Atom {
         MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
         ProcessInstance pb = b.getProcess();
         if (pb.contains(b) && b.isEnabled()) {
-          MatchResult r = matchArgs(b);
+          MatchResult r = matchPartner(b);
           if (r.matches()) {
-            System.out.println(
-              "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+            if (ToolBus.isVerbose()) {
+              System.out.println(
+                "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+            }
             r.getLeft().update(pa.getEnv());
             r.getRight().update(pb.getEnv());
 

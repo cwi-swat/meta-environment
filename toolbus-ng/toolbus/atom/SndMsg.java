@@ -13,8 +13,12 @@ public class SndMsg extends MsgAtom {
     super(msg);
   }
   
+  public SndMsg(ATerm msg, ATerm qual) {
+    super(msg, qual);
+  }
+  
   public ProcessExpression copy(){
-    return new SndMsg(getMsg());
+    return new SndMsg(getMsg(), getQual());
   }
 
 }

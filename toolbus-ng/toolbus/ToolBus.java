@@ -17,6 +17,8 @@ public class ToolBus {
   private Vector processes;
   private Vector procdefs;
   private Parser parser;
+  
+  private static boolean verbose = false;
 
   public ToolBus() {
     this.factory = TBTerm.factory;
@@ -31,6 +33,14 @@ public class ToolBus {
 
   public Vector getProcesses() {
     return processes;
+  }
+  
+  public static void setVerbose(boolean b){
+    verbose = b;
+  }
+  
+  public static boolean isVerbose(){
+    return verbose;
   }
 
   public static int nextInt(int n) {
