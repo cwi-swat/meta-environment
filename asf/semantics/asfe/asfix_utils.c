@@ -21,7 +21,14 @@
 
 #include "asfix_utils.h"
 
+/* the KEEP_WHITESPACE macro is supposed to be set at the commandline
+ * of the compiler.
+ */
+#ifdef KEEP_WHITESPACE
+ATbool keep_whitespace = ATtrue;
+#else
 ATbool keep_whitespace = ATfalse;
+#endif
 
 extern ATerm tagCurrentRule;
 
