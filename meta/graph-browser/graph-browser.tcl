@@ -323,11 +323,9 @@ proc module-info { mod infolist } {
 # pops up a formatted error window which cannot be ignored
 #---
 proc errorf {fmt args} {
-    set nwargs ""
+# Why do we need to strip of a list layer here??
+    set nwargs [lindex $args 0]
     set fmt [TCLstring $fmt]
-    foreach arg $args {
-        set nwargs "$nwargs [TCLstring $arg]"
-    }
 
     set errormsg [eval "format \"$fmt\" $nwargs"]
 
