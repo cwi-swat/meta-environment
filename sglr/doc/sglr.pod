@@ -4,7 +4,7 @@ B<SGLR> - the B<S>cannerless B<G>eneralized B<LR> parser
 
 =head1 SYNOPSIS
 
-B<sglr> B<-p> file [-B<12?bcdfghlnPstvVx>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+B<sglr> -B<p> file [-B<12?bcdfghlnPstvVx>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
 
 =head1 DESCRIPTION
 
@@ -134,7 +134,7 @@ Returns an error on unsuccesful parses.
 
 =head1 SEE ALSO
 
-L<tree2dot>, L<dot>, L<ParseTable-Generator>
+L<a2toa1>, L<tree2dot>, L<dot>, L<ParseTable-Generator>
 
 =head1 REFERENCES
 

@@ -1,10 +1,12 @@
 #! gmake
+# $Id$
 
 CENTER="Meta-Environment Documentation"
 RELEASE="1.0"
 
-target=sglr
-files=${target}.7 ${target}.txt ${target}.html ${target}.bok
+target=sglr tree2dot
+files=	${addsuffix .7,${target}} ${addsuffix .txt,${target}} \
+	${addsuffix .html,${target}} ${addsuffix .bok,${target}}
 
 all:	${files}
 
@@ -22,14 +24,9 @@ test:	all
 	-pod2html $< > $@
 	-rm -f pod2html-*
 
+
 %.bok: %.pod
 	-pod2docbook $< > $@
-
-%.mf: %.pod
-	-pod2mf $< > $@
-
-%.ps: %.7
-	-groff -man -etp -Tps -C $< > $@
 
 clean:
 	-rm -f ${files}

@@ -1,0 +1,69 @@
+=head1 NAME
+
+B<TREE2DOT> - Parse Trees to DOT converter
+
+=head1 SYNOPSIS
+
+B<tree2dot>[-B<x>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>]
+
+=head1 DESCRIPTION
+
+The B<tree2dot> converter renders parse trees as dot graphs.
+
+A number of options can be supplied; these are as follows:
+
+=over 4
+
+=item -B<D> I<file>, -B<o> I<file>
+
+Write dot output to F<file>.  By default, output goes to stdout.
+
+=item -B<i> I<file>
+
+Read parse forest from F<file>; by default, input is read from stdin.
+
+=item -B<h>
+
+Displays concise usage information.
+
+=item -B<x>
+
+Excludes lexical subtrees.  By default, the full, unabbreviated parse
+forest is entirely rendered; pruning out the lexical detail can
+substantially reduce the size of the resulting graph.
+
+=back
+
+
+=head1 EXAMPLES
+
+    $ tree2dot < Test.asfix2 > Test.dot
+    $ tree2dot -x -i Test.asfix2 > Test.dot
+    $ tree2dot -o Test.dot < Test.asfix2
+    $ tree2dot -i Test.asfix2-o Test.dot
+    $ cat MyCode.cod | sglr -p Term.tbl | tree2dot | dot -Tps > MyCode.ps
+
+
+=head1 EXIT STATUS
+
+Returns an error if for some reason the dot representation could not
+be generated.
+
+=head1 SEE ALSO
+
+L<sglr>, L<dot>, L<a2toa1>
+
+=head1 KNOWN BUGS
+
+Supports AsFix2 parse forests only; AsFix1 input may cause weird things
+to happen.
+
+=head1 NOTES
+
+In a different context altogether, B<tree2dot> runs as a C<ToolBus> client;
+its C<ToolBus> API is described in F<chickenwings.spicy>.
+
+
+=head1 AUTHOR
+
+Jeroen Scheerder <S<js@cwi.nl>>
