@@ -1,4 +1,7 @@
 
+2002/10/28 (vinju@loria.fr)
+ * Removed implicit make rules for generation of ToolBus interfaces
+
 2002/10/04 (vinju@loria.fr)
  * Removed complex parsetree pattern from MEPT.adt. It is now a true
    signature definition of AsFix. Missing functionality replaced by
