@@ -448,7 +448,8 @@ prodToAsFix1(PT_Production prod)
   }
 
   if (!id) {
-    ATwarning("prodToAsFix1: id(<ModuleName>) required in attrs list\n");
+    ATwarning("prodToAsFix1: id(<ModuleName>) required in attrs list of %t\n",
+               prod);
     id = ATparse("id(\"Unknown\")");
   }
   result = ATmake("prod(<term>,w(\"\"),<term>,w(\"\"),"
@@ -672,6 +673,27 @@ termToAsFix1(PT_Tree tree, ATbool inList)
 static ATerm
 treeToAsFix1(PT_Tree tree)
 {
+  PT_Tree layoutBeforeTree, applTree, layoutAfterTree;
+  PT_Args args;
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_prodHasSTARTAsRhs(prod)) {
+      args = PT_getTreeArgs(tree);
+
+      layoutBeforeTree = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+      applTree = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+      layoutAfterTree = PT_getArgsHead(args); 
+
+      return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
+                    "<term>,<term>,<term>,no-abbreviations)",
+                    layoutToAsFix1(layoutBeforeTree),
+                    termToAsFix1(applTree, ATfalse),
+                    layoutToAsFix1(layoutAfterTree));
+    }
+  }                                              
   return termToAsFix1(tree, ATfalse);
 }
 
