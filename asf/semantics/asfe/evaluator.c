@@ -61,6 +61,7 @@ A first version of an INTERPRETER in ToolBus C.
 #include <atb-tool.h>
 #include <string.h>
 #include <sys/times.h>
+#include <time.h>
 #include <limits.h>
 #include <assert.h>
 #include "preparation.h"
