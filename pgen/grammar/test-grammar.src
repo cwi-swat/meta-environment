@@ -1,5 +1,6 @@
+#! /bin/sh
 #
-#    PGEN - the SDF2 parse table generator.
+#    Meta-Environment - An environment for language prototyping.
 #    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -16,10 +17,16 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-# $Id$
+#
+# $Id$)
+#
+# test generated sdf2  parse-table by parsing an sdf2 input file
 
-SUBDIRS    = c-lib c-source normalizer src grammar
+SGLR=__SGLR__
+srcdir=__SRCDIR__
+PATH=${SGLR}:$PATH
 
-EXTRA_DIST = make_rules
+sglr -p ./Sdf2.baf -1 -i ${srcdir}/Sdf2.sdf2 -o /dev/null
 
-test: check
+
+

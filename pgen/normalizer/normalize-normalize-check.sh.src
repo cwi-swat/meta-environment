@@ -1,6 +1,7 @@
-#
+#! /bin/sh
+
 #    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,11 +16,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
+
 # $Id$
+#
+# Author: Merijn de Jonge (mdejonge@cwi.nl)
 
-SUBDIRS    = c-lib c-source normalizer src grammar
+# This script tests the normalizer by executing the normalizer twice and
+# checking whether the output of the second run equals the output of the
+# first run.
 
-EXTRA_DIST = make_rules
+normalizer=./normalize-sdf
+input=normalize-test.sdf
 
-test: check
+tmp=/tmp/normalize-sdf-test.$$
+trap "rm -f $tmp.*" 0 1 2 3 4 5 6 7 8 9 10
+
+${normalizer} -i ${input} -o ${tmp}.out1 2>/dev/null >/dev/null
+
+${normalizer} -i ${tmp}.out1 -o ${tmp}.out2 2>/dev/null >/dev/null
+
+diff ${tmp}.out1 ${tmp}.out2 2>/dev/null >/dev/null
