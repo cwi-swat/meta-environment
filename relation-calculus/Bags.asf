@@ -22,8 +22,6 @@ equations
 
 [ssup-1] Bag1 > Bag2 = Bag2 < Bag1
 
-%%[un-1] {E*1} union {E*2} = {E*1, E*2}
-
 [un-2] {} union {E*} = {E*}
 [un-3] {E*} union {} = {E*}
 
