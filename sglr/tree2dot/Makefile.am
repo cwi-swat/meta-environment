@@ -29,7 +29,7 @@ tree2dot_SOURCES = $(SRCS) $(HDRS)
 
 LDADD            =  -L${SGLR}/libtree2dot -ltree2dot \
                     -L${SGLR}/libsglr -lsglr \
-                    -L$(TREE)/libasfix-old/libasfix -lAsFix \
+                    -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 INCLUDES+=-I${SGLR}/libsglr

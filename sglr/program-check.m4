@@ -44,7 +44,7 @@ dnl found or to the program as specified with the --with-wish switch.
 AC_DEFUN(AC_PACKAGE_REQUIRE,
 [AC_PACKAGE_REQUIRE1([$1],[$2],[$3],
     dnl Program found; evaluate <actions_of_found>
-    [translit($1,`a-z',`A-Z')=`dirname \`dirname $translit($1,`a-z',`A-Z')\``])
+    [translit($1,-a-z,_A-Z)=`dirname \`dirname $translit($1,a-z-,A-Z_)\``])
 ])
 
 dnl AC_PROGRAM_REQUIRE
@@ -83,10 +83,10 @@ AC_DEFUN(AC_PACKAGE_REQUIRE1,
    dnl Add configuration switch
    AC_ARG_WITH($1, [$3],
       dnl switch was specified
-      translit($1,`a-z',`A-Z')=${withval},
+      translit($1,a-z-,A-Z_)=${withval},
       dnl If switch not specified, try to find the program automatically
       [
-         AC_PATH_PROGS(translit($1,`a-z',`A-Z'),$2,
+         AC_PATH_PROGS(translit($1,a-z-,A-Z_),$2,
          [
             dnl Not found; abort configuration
             AC_ERROR(Required \"$1\" program not found.)

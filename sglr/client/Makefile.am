@@ -29,7 +29,7 @@ HDRS         =
 
 parse_client_SOURCES = $(SRCS) $(HDRS)
 
-LDADD        = -L$(TREE)/libasfix-old/libasfix -lAsFix \
+LDADD        = -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                -L$(ATERM)/lib -lATerm \
                -lATB $(SOCKLIBS)
 
