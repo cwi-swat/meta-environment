@@ -1,12 +1,4 @@
 buttons([
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Rscript")]),
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Tscript")]),
   button("Rscript",
          ["term"],
          ["Rscript", "Check Rscript"],
@@ -28,6 +20,7 @@ buttons([
 	  apply("display-result", "List", 1),
 	  rewrite("DisplayQuery"),
 	  unparse,
+          push-active-module,
 	  show-list
 	]),
   button("Tscript",
