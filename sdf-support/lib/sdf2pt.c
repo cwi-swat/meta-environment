@@ -224,8 +224,8 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     result = PT_makeSymbolCharClass(ptCR);
   }
   else {
-    ATerror("SDFSymbolToPtSymbol: unable to flatten symbol: %s\n", 
-	    PT_yieldTree((PT_Tree) sdfSymbol));
+    ATerror("SDFSymbolToPtSymbol: unable to flatten symbol %t: %s\n", 
+	    sdfSymbol, PT_yieldTree((PT_Tree) sdfSymbol));
     result = NULL;
   }
 	    
@@ -409,8 +409,6 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
     return PT_concatCharRanges(ptLeft, ptRight);
   }
   else {
-    ATwarning("SDFCharRangesToPtCharRanges: unable to flatten %t\n",
-	     sdfCharRanges);
     ATerror("SDFCharRangesToPtCharRanges: unable to flatten %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharRanges));
     result = NULL;
