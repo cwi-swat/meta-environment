@@ -65,7 +65,7 @@ extern Symbol record_sym;
 
   /*{{{ muasf terms  */
 
-#ifdef ASC_WITH_ANNOS
+#ifdef ASF_WITH_ANNOS
 #define pt_get_annos(t1) (PT_getTreeAnnotations((PT_Tree) t1))
 #define term_equal(t1,t2) (ATisEqualModuloAnnotations(t1,t2))
 #else
@@ -302,8 +302,8 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 /*}}}  */
 
 ATerm innermost(PT_Tree tree);
-SGLR_ParseTable getParseTable();
-void setParseTable(SGLR_ParseTable tbl);
+ATerm getParseTable();
+void setParseTable(ATerm tbl);
 void setKeepAnnotations(ATbool on);
 
 #endif  /* ASC_SUPPORT_H */

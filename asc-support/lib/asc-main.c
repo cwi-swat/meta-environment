@@ -11,11 +11,12 @@
 #include <sys/resource.h>
 #include <unistd.h>
 
-#include "asc-support2-me.h"
+#include <atb-tool.h>
 #include <ASFME.h>
+
+#include "asc-support2-me.h"
 #include "Library.h"
 
-#include <atb-tool.h>
 /*}}}  */
 /*{{{  globals */
 
@@ -94,7 +95,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
   if (tableBaf != NULL) {
     ATerm parseTable = ATreadFromBinaryString(tableBaf, tableSize);
     if (parseTable != NULL) {
-      setParseTable((SGLR_ParseTable)parseTable);
+      setParseTable(parseTable);
     }
   }
 

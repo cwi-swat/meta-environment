@@ -34,8 +34,14 @@ LIBRARY_MODULES=\
 	basic/Booleans \
 	basic/StrCon \
         basic/BoolCon \
-	utilities/Measure \
-	utilities/IOResults
+        basic/NatCon \
+	basic/BytesCon \
+	basic/Errors \
+	basic/Locations \
+	basic/Areas \
+	basic/ReadWriteCon \
+	basic/ParsetreeCon 
+	
 
 lib_LIBRARIES = libasc-support-me.a 
 

@@ -38,7 +38,8 @@ lexical syntax
     "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
     "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
 
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")}
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" 
+       -> StrCon {cons("default")}
 module basic/BoolCon
 
 exports
@@ -47,43 +48,145 @@ sorts BoolCon
 context-free syntax
 
     "true"  -> BoolCon {cons("true")}
-    "false" -> BoolCon {cons("false")}module utilities/Measure
+    "false" -> BoolCon {cons("false")}
+
+hiddens
+context-free start-symbols
+  BoolCon
+module basic/NatCon
 
 exports
 
-sorts Measure
+sorts NatCon
 
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("default")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
+module basic/BytesCon
+
+%% This module defines a lexical sort Bytes without defining any
+%% particular syntax for it. The Bytes sort is used to store any
+%% characters using lexical constructor functions.
+
+exports 
+  sorts Bytes Byte
+
+%% It is essential to hide this the following syntax,
+%% since ~[] is ambiguous with all languages
+
+hiddens 
+  lexical syntax
+    ~[]   -> Byte  {cons("byte")}
+    Byte* -> Bytes {cons("bytes")}
+
+context-free start-symbols
+  Bytes
+module basic/Errors
+
+imports basic/Locations
+imports basic/StrCon
+
+hiddens
+  context-free start-symbols
+    Summary Error
+
+exports
+
+sorts Subject
 context-free syntax
-  "less"     -> Measure {cons("less")}
-  "greater"  -> Measure {cons("greater")}
-  "equal"    -> Measure {cons("equal")}
-module utilities/IOResults[Sort]
+  "subject" "(" description:StrCon ")" -> Subject {cons("subject")}
 
-imports basic/Bytes
-imports basic/Integers
-imports basic/Feedback
+  "localized" "(" description:StrCon "," Location ")"
+    -> Subject {cons("localized")}
+
+
+sorts Error
+context-free syntax
+  "info" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("info")}
+
+  "warning" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("warning")}
+
+  "error" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("error")}
+
+  "fatal" "(" description:StrCon "," "[" {Subject ","}* "]" ")"
+    -> Error {cons("fatal")}
+
+
+sorts Summary
+context-free syntax
+  "summary" "(" producer:StrCon "," id:StrCon "," 
+   "[" {Error ","}* "]" ")"  -> Summary {cons("summary")}
+
+module basic/Locations
+
+imports basic/Areas
+imports basic/StrCon
+
+exports
+
+sorts Location
+context-free syntax
+
+  "file" "(" filename:StrCon ")" -> Location {cons("file")}
+
+  "area-in-file" "(" filename:StrCon "," Area ")"
+    -> Location {cons("area-in-file")}
+module basic/Areas
+
+imports basic/NatCon
+
+exports
+
+sorts Area
+context-free syntax
+
+  "area" "("
+    begin-line:NatCon "," 
+    begin-column:NatCon ","
+    end-line:NatCon ","
+    end-column:NatCon ","
+    offset:NatCon ","
+    length:NatCon ")"
+  -> Area {cons("area")}
+module basic/ReadWriteCon
+
+imports basic/BytesCon
+imports basic/Errors
 
 exports 
 
-sorts ParseResult
+sorts Read Write
+
+context-free syntax
+
+  "read" "(" value:Bytes ")"    -> Read  {cons("success")}
+  "read-error" "(" Summary ")"  -> Read  {cons("failure")}
+
+  "written"                     -> Write {cons("success")}
+  "write-error" "(" Summary ")" -> Write {cons("failure")}
+module basic/ParsetreeCon[X]
+
+imports basic/BytesCon
+imports basic/NatCon
+imports basic/Errors
+
+exports 
+
 context-free syntax
 
   "parse-tree" "(" left-layout:Bytes  "," 
-                   tree:Sort          "," 
+                   tree:X             "," 
                    right-layout:Bytes ","
                    amb-cnt:NatCon
-               ")"                   -> ParseResult {cons("success")}
+               ")"                   -> Parsetree[[X]] {cons("success")}
 
-  "parse-error" "(" Feedback ")"     -> ParseResult {cons("failure")}
+  "parse-error" "(" Summary ")"      -> Parsetree[[X]] {cons("failure")}
  
-sorts BytesResult
-context-free syntax
-
-  "bytes" "(" value:Bytes ")" -> BytesResult {cons("success")}
-  "bytes-error" "(" Feedback ")" -> BytesResult {cons("failure")}
-
-sorts WriteResult
-context-free syntax
-
-  "written" -> WriteResult {cons("success")}
-  "write-error" "(" Feedback ")" -> WriteResult {cons("failure")}

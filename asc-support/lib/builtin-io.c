@@ -30,34 +30,27 @@ static char* getFilename(PT_Tree str)
 
 /*}}}  */
 
-/*{{{  static CO_Feedback makeGeneralError(char *producer, char *msg) */
+/*{{{  static CO_Error makeGeneralError(const char *msg) */
 
-static CO_Feedback makeGeneralError(const char *producer, const char *msg)
+static CO_Summary makeGeneralError(const char *msg)
 {
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListEmpty());
+  ERR_ErrorList list = ERR_makeErrorListSingle(error);
+  ERR_Summary summary = ERR_makeSummarySummary("asf-builtins","asf-builtins",
+					       list);
 
-  return (CO_Feedback) ERR_liftError(error);
+
+  return (CO_Summary) ERR_liftSummary(summary);
 }
 
 /*}}}  */
-/*{{{  static CO_Feedback makeParseError(const char *producer, const char *file, ATerm t) */
+/*{{{  static CO_Summary makeParseError(ATerm t) */
 
-static CO_Feedback makeParseError(const char *producer, const char *file, ATerm t)
+static CO_Summary makeParseError(ATerm t)
 {
-  int line = getErrorInfo(t, LINE);
-  int col = getErrorInfo(t, COLUMN);
-  int offset = getErrorInfo(t, OFFSET);
-  ERR_Subject subject;
-  ERR_Area area;
-  ERR_Location location;
-  ERR_Error error;
-  
-  area = ERR_makeAreaArea(line, col, line, col, offset, 1);
-  location = ERR_makeLocationAreaInFile(file, area);
-  subject = ERR_makeSubjectLocalized("cursor", location);
-  error = ERR_makeErrorError("parse-error", ERR_makeSubjectListSingle(subject));
+  ERR_Summary summary = ERR_SummaryFromTerm(t);
 
-  return (CO_Feedback) ERR_liftError(error);
+  return (CO_Summary) ERR_liftSummary(summary);
 }
 
 /*}}}  */
@@ -114,7 +107,7 @@ static char* getSort(PT_Symbol type)
 
 /*{{{  static void initParser(void) */
 
-static void initParser(void)
+static void initParser(const char *toolname, ATerm language)
 {
   static ATbool initialized = ATfalse;
 
@@ -123,73 +116,68 @@ static void initParser(void)
     SG_ASFIX2ME_ON();
     SG_OUTPUT_ON();
     SG_TOOLBUS_OFF();
+
     initialized = ATtrue;
+    
+    SG_FILTER_INJECTIONCOUNT_OFF(); 
+    SG_FILTER_EAGERNESS_OFF();
+
+    SGopenLanguageFromTerm(toolname, language, getParseTable());
   }
 }
 
 /*}}}  */
-/*{{{  static PT_Tree parse_result(const char *builtin, const char *file, ATerm result) */
+/*{{{  static PT_Tree parse_result(const char *sort, const char *file, ATerm result) */
 
-static PT_Tree parse_result(const char *builtin, const char *file, ATerm result)
+static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
 {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   if (result == NULL) {
-    return (PT_Tree) CO_makeParseResultFailure(l,l,
-	       makeGeneralError(builtin, "unknown error during parsing"),l);
+    return (PT_Tree) CO_makeParsetreeFailure(sort, l, l,
+	       makeGeneralError("unknown error during parsing"),l);
   }
 
   if (SGisParseTree(result)) {
     PT_ParseTree pt = PT_ParseTreeFromTerm(result);
     int ambs = PT_getParseTreeAmbCnt(pt);
     PT_Tree tree = PT_getParseTreeTree(pt);
-    PT_Tree before = PT_getParseTreeLayoutBeforeTree(pt);
-    PT_Tree after = PT_getParseTreeLayoutAfterTree(pt);
-    PT_Tree tmp;
-    PT_Symbol symbol;
+    PT_Tree before;
+    PT_Tree after;
 
     if (PT_isTreeAmb(tree)) {
-      tmp = PT_getArgsHead(PT_getTreeArgs(tree));
+      CO_Summary error = makeGeneralError("parse tree is ambiguous at the top");
+      return (PT_Tree) CO_makeParsetreeFailure(sort, l,l, error,l);
+    }
+    else if (PT_isTreeAppl(tree)) {
+      before = PT_getParseTreeLayoutBeforeTree(pt);
+      after = PT_getParseTreeLayoutAfterTree(pt);
+
+      return (PT_Tree)
+	CO_makeParsetreeSuccess(sort, 
+				sort,
+				l, l,
+				(CO_Bytes) unparse_to_bytes(before),
+				l, l,
+				(ATerm) tree,
+				l, l, 
+				(CO_Bytes) unparse_to_bytes(after),
+				l, l,
+				(CO_NatCon) make_natcon(ambs),
+				l);
     }
     else {
-      tmp = tree;
-    }
-
-    if (PT_isTreeAppl(tmp)) {
-      PT_Production prod = PT_getTreeProd(tmp);
-
-      symbol = PT_getProductionRhs(prod);
-
-      if (PT_isSymbolCf(symbol)) {
-	symbol = PT_getSymbolSymbol(symbol);
-
-	if (PT_isSymbolSort(symbol)) {
-	  return (PT_Tree)
-	    CO_makeParseResultSuccess(PT_getSymbolString(symbol),
-					l, l,
-					(CO_Bytes) unparse_to_bytes(before),
-					l, l,
-					(ATerm) tree,
-					l, l, 
-					(CO_Bytes) unparse_to_bytes(after),
-					l, l,
-					(CO_NatCon) make_natcon(ambs),
-					l);
-	}
-      }
-    }
-    {
-      CO_Feedback error = makeGeneralError(builtin,
-					   "result is not a valid parse tree");
-      return (PT_Tree) CO_makeParseResultFailure(l,l, error,l);
+      CO_Summary error = makeGeneralError( "result is not a valid parse tree");
+      return (PT_Tree) CO_makeParsetreeFailure(sort, l,l, error,l);
     }
   }
   else if (SGisParseError(result)) {
-    return (PT_Tree) makeParseError(builtin, file, result);
+    return (PT_Tree) CO_makeParsetreeFailure(sort, l, l,
+					       makeParseError(result), l);
   }
 
-  return (PT_Tree) 
-    makeGeneralError(builtin, "unknown parse tree format");
+  return (PT_Tree) CO_makeParsetreeFailure(sort, l,l, 
+			     makeGeneralError("unknown parse tree format"),l);
 }
 
 /*}}}  */
@@ -202,25 +190,26 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
   ATerm language = ATmake("<str>", toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
-  SGLR_ParseTable parseTable;
+  ATerm parseTable;
 
   if (sort == NULL) {
-    return  (PT_Tree) CO_makeParseResultFailure(l,l,
-		makeGeneralError(toolname, "complex symbols are not supported"),
+    return  (PT_Tree) CO_makeParsetreeFailure(sort,
+						l,l,
+		makeGeneralError("complex symbols are not supported"),
 	       	l);
   }
 
-  initParser();
+  initParser(toolname, language);
   parseTable = getParseTable();
 
   if (parseTable != NULL) {
     char *filename = getFilename(file);
     ATerm result = SGparseFile(toolname, language, sort, filename);
-    return parse_result(toolname, filename, result);
+    return parse_result(sort, filename, result);
   }
 
-  return (PT_Tree) CO_makeParseResultFailure(l,l,
-					     makeGeneralError(toolname, 
+  return (PT_Tree) CO_makeParsetreeFailure(sort, l,l,
+					     makeGeneralError(
 					      "no parsetable available"),
 					     l);
 }
@@ -249,27 +238,30 @@ PT_Tree ASC_parse_file(ATerm type, ATerm aterm)
 
 static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
 {
-  const char *toolname = "parse-bytes";
+  const char toolname[] = "parse-bytes";
+  ATerm language = ATparse(toolname);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
-  char *sort = getSort(type);
-  SGLR_ParseTable parseTable;
+  const char *sort = getSort(type);
+  ATerm parseTable;
 
   if (sort == NULL) {
-    return  (PT_Tree) CO_makeParseResultFailure(l,l,
-		makeGeneralError(toolname, "complex symbols are not supported"),
+    return  (PT_Tree) CO_makeParsetreeFailure(sort, l,l,
+		makeGeneralError("complex symbols are not supported"),
 	       	l);
   }
 
-  initParser();
+  initParser(toolname, language);
   parseTable = getParseTable();
   if (parseTable != NULL) {
-    ATerm result = SGparseString(PT_yieldTree(bytes), parseTable, sort, NULL); 
+    ATerm result = SGparseString(PT_yieldTree(bytes), 
+				 (SGLR_ParseTable) parseTable, 
+				 sort, NULL); 
     return parse_result(toolname, "anonymous", result);
   }
 
-  return (PT_Tree) CO_makeParseResultFailure(l,l,
-					     makeGeneralError(toolname, "no parsetable available"),
-					     l);
+  return (PT_Tree) CO_makeParsetreeFailure(sort, l,l,
+		     makeGeneralError("no parsetable available"),
+		     l);
 }
 
 /*}}}  */
@@ -307,7 +299,7 @@ PT_Tree ASFE_unparse_to_bytes(PT_Symbol type, PT_Tree tree)
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   return (PT_Tree)
-        CO_makeBytesResultSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
+        CO_makeReadSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
 }
 
 /*}}}  */
@@ -318,8 +310,7 @@ PT_Tree ASC_unparse_to_bytes(ATerm type, ATerm input)
   PT_Tree tree = muASFToTree(input);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
-  return (PT_Tree)
-        CO_makeBytesResultSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
+  return (PT_Tree) CO_makeReadSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
 }
 
 /*}}}  */
@@ -355,17 +346,25 @@ PT_Tree ASC_unparse_to_file(ATerm type, ATerm afile, ATerm input)
 
 /*{{{  static PT_Tree read_term_from_file(PT_Tree file_arg) */
 
-static PT_Tree read_term_from_file(PT_Tree file_arg)
+static PT_Tree read_term_from_file(PT_Symbol type, PT_Tree file_arg)
 {
-  char *filestr = NULL;
+  const char *filestr = NULL;
   ATerm term;
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
+  const char *sort = getSort(type);
+
+  if (sort == NULL) {
+    return  (PT_Tree) CO_makeParsetreeFailure(sort, l,l,
+		makeGeneralError("complex symbols are not supported"),
+	       	l);
+  }
 
   SG_InitPTGlobals();
   filestr = getFilename(file_arg);
 
   term = ATreadFromNamedFile(filestr);
 
-  return parse_result("read-term-from-file", filestr, term);
+  return parse_result(sort, filestr, term);
 }
 
 /*}}}  */
@@ -373,7 +372,7 @@ static PT_Tree read_term_from_file(PT_Tree file_arg)
 
 PT_Tree ASFE_read_term_from_file(PT_Symbol symbol, PT_Tree file_arg)
 {
-  return read_term_from_file(file_arg); 
+  return read_term_from_file(symbol, file_arg); 
 }
 
 /*}}}  */
@@ -383,7 +382,7 @@ PT_Tree ASC_read_term_from_file(ATerm type, ATerm afile_arg)
 {
   PT_Tree file_arg = muASFToTree(afile_arg);
 
-  return read_term_from_file(file_arg);
+  return read_term_from_file((PT_Symbol) type, file_arg);
 }
 
 /*}}}  */
@@ -399,12 +398,11 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
   filestr = getFilename(file_arg);
 
   if (ATwriteToNamedTextFile(PT_ParseTreeToTerm(pt), filestr)) {
-    return (PT_Tree) CO_makeWriteResultSuccess();
+    return (PT_Tree) CO_makeWriteSuccess();
   }
   else {
-    return (PT_Tree) CO_makeWriteResultFailure(l,l,
-			       makeGeneralError("write-term-to-file",
-						strerror(errno)),l);
+    return (PT_Tree) CO_makeWriteFailure(l,l, 
+					 makeGeneralError(strerror(errno)),l);
   }
 
   return tree_arg;
@@ -484,14 +482,11 @@ static PT_Tree read_bytes_from_file(PT_Tree input)
 
   if (buf != NULL) {
     return (PT_Tree) 
-      CO_makeBytesResultSuccess(l,l,(CO_Bytes) make_bytes(buf),l);
+      CO_makeReadSuccess(l,l,(CO_Bytes) make_bytes(buf),l);
   }
 
   return (PT_Tree) 
-    CO_makeBytesResultFailure(l,l,makeGeneralError("read-bytes-from-file",
-						   strerror(errno)),
-
-			      l);
+    CO_makeReadFailure(l,l,makeGeneralError(strerror(errno)), l);
 }
 
 /*}}}  */
@@ -530,13 +525,10 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
   }
   else {
     return (PT_Tree) 
-      CO_makeWriteResultFailure(l,l,
-				makeGeneralError("write-bytes-to-file",
-				strerror(errno)),
-				l);
+      CO_makeWriteFailure(l,l, makeGeneralError(strerror(errno)), l);
   } 
 
-  return (PT_Tree) CO_makeWriteResultSuccess();
+  return (PT_Tree) CO_makeWriteSuccess();
 }
 
 /*}}}  */

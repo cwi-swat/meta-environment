@@ -3,20 +3,20 @@
 
 #include "asc-support-me.h"
 
-static SGLR_ParseTable parseTable = NULL;
+static ATerm parseTable = NULL;
 
-/*{{{  void setParseTable(SGLR_ParseTable pt)  */
+/*{{{  void setParseTable(ATerm pt)  */
 
-void setParseTable(SGLR_ParseTable pt) 
+void setParseTable(ATerm pt) 
 {
   ATprotect((ATerm *)((void *)&parseTable));
   parseTable = pt;
 }
 
 /*}}}  */
-/*{{{  SGLR_ParseTable getParseTable()  */
+/*{{{  ATerm getParseTable()  */
 
-SGLR_ParseTable getParseTable() 
+ATerm getParseTable() 
 {
   return parseTable;
 }

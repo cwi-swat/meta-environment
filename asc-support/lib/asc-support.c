@@ -908,7 +908,7 @@ ATerm get_sort(ATerm tree)
     Symbol sym = get_sym(tree);
 
     if (sym) {
-      return ATgetArgument((ATermAppl) lookup_prod(sym),1); 
+      return PT_SymbolToTerm(PT_getProductionRhs(PT_ProductionFromTerm(lookup_prod(sym)))); 
     }
   }
 

@@ -1,5 +1,13 @@
 $Id$
 
+Mon May  3 19:36:50 CEST 2004 <jurgenv@cwi.nl>
+ * Had to bring builtin-io.c up-to-date with all kinds of changes in 
+   error-support and sglr.
+ * Regenerated CO_ library using the new functionality for dealing with
+   parameterized result sorts of builtin functions. ParseResult[[Sort]]
+   is returned by the parsing builtins, and the Sort is used for selecting
+   the type-correct parse tree.
+
 Tue Apr 27 14:37:06 CEST 2004 <jurgenv@cwi.nl>
  * From now on, compiled ASF can deal with annotations!
    - ATisEqual is replaced by ATisEqualModuloAnnotations
