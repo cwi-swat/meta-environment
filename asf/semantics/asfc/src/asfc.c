@@ -298,6 +298,7 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottom);
+  /*ATsetChecking(ATtrue);*/
   PT_initMEPTApi();
   ASF_initASFMEApi();
   MA_initMuASFApi();

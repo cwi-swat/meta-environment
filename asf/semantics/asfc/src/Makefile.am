@@ -50,9 +50,7 @@ DEFINES = -DASC_SUPPORT="\"$(ASC_SUPPORT)\"" \
           -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
           -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
           -DCOMPILER="\"$(CC)\"" \
-          -DCOMPILERFLAGS="\"-g -O0 -Wall\""
-
-#          -DCOMPILERFLAGS="\"$(CFLAGS)\""
+          -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
 INCLUDES  = $(DEFINES) \
             -I$(ASC_SUPPORT)/include \
