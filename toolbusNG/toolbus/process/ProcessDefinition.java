@@ -49,7 +49,7 @@ public class ProcessDefinition {
   }
 
   public ATermList getCompiledFormals(Environment env) throws ToolBusException {
-    return (ATermList) TBTerm.compileVars(formals, env);
+    return (ATermList) TBTerm.resolveVars(formals, env);
   }
 
   public ProcessExpression expand(ProcessInstance P, Stack calls, ATermList actuals) throws ToolBusException {

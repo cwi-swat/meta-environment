@@ -31,10 +31,9 @@ public class Assign extends Atom {
       throw new ToolBusException("left-hand side of := should be a variable");
     ATerm vartype = TBTerm.getVarType(var.value);
 
-    ATerm exptype = TBTerm.checkType(exp.value, this.getEnv());
+    ATerm exptype = FunctionDescriptors.checkType(exp.value, this.getEnv());
 
-
-    if (!TBTerm.checkCompatible(vartype, exptype) )// lhs = term!
+    if (!TBTerm.assignCompatible(vartype, exptype) )// lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
   }
 
@@ -44,7 +43,7 @@ public class Assign extends Atom {
     Environment e = this.getEnv();
     ProcessInstance p = this.getProcess();
 
-    ATerm newval = TBTerm.eval(exp.value, p);
+    ATerm newval = FunctionDescriptors.eval(exp.value, p);
     
     //System.err.println(exp.value + "   " + newval);
     e.putVar(var.value, newval);

@@ -59,7 +59,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   }
 
   public void setTest(ATerm test) throws ToolBusException {
-    this.test = TBTerm.compileVars(test, env);
+    this.test = TBTerm.resolveVars(test, env);
   }
 
   public ToolBus getToolBus() {
@@ -118,7 +118,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     //System.err.println(this.getClass().getName() + ": compiling");
     for (int i = 0; i < atomArgs.length; i++) {
       //System.err.println("atomArg[" + i + "] = " + atomArgs[i]);
-      ATerm arg = TBTerm.compileVars(atomArgs[i].value, env);
+      ATerm arg = TBTerm.resolveVars(atomArgs[i].value, env);
       atomArgs[i].value = arg;
     }
   }
@@ -127,7 +127,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     if (test == null)
       return true;
     else {
-      boolean res = TBTerm.isTrue(TBTerm.eval(test, getProcess()));
+      boolean res = TBTerm.isTrue(FunctionDescriptors.eval(test, getProcess()));
       //System.err.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
       return res;
     }

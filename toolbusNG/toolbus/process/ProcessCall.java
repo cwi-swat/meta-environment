@@ -53,7 +53,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
     //System.err.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
     Environment env = P.getEnv();
-    actuals = (ATermList) TBTerm.compileVars(actuals, env);
+    actuals = (ATermList) TBTerm.resolveVars(actuals, env);
     //System.err.println("actuals = " + actuals);
     //System.err.println("definiton = " + definition);
     definition.enterScope(env, actuals);

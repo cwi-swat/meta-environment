@@ -37,7 +37,7 @@ public class Create extends Atom {
       return false;
     String name = ((ATermAppl) pcall.value).getName();
     ATermList cargs = ((ATermAppl) pcall.value).getArguments();
-    ATermList evargs = (ATermList) TBTerm.eval(cargs, getProcess());
+    ATermList evargs = (ATermList) FunctionDescriptors.eval(cargs, getProcess());
 
     ToolBus TB = getProcess().getToolBus();
 
