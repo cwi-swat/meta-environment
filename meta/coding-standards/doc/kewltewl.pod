@@ -1,0 +1,25 @@
+=head1 NAME
+
+B<KEWLTEWL> - the B<K>ewlest B<T>ewl ever built
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 USAGE
+
+=head1 SEE ALSO
+
+=head1 EXAMPLES
+
+=head1 EXIT STATUS
+
+=head1 SEE ALSO
+
+=head1 KNOWN BUGS
+
+=head1 NOTES
+
+=head1 AUTHOR
+
+My Name <S<mn@cwi.nl>>
