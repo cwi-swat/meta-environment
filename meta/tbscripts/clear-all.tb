@@ -31,7 +31,7 @@ in
   Id := process-id.
   (
     rec-msg(clear-all) .
-    snd-note(ui-status(stat(Id,"Clearing ..."))) .
+    snd-note(ui-status(stat(Id,"Clearing"))) .
     snd-msg(get-all-modules) .
     rec-msg(all-modules(Modules?)) .
     (

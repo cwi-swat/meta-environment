@@ -30,7 +30,7 @@ in
   Id := process-id. 
   (
     rec-msg(close-module(ModuleName?)) .
-    snd-note(ui-status(stat(Id, "Closing ..."))) .
+    snd-note(ui-status(statf(Id, "Closing %s",[ModuleName]))) .
     snd-msg(delete-editors-for-module(ModuleName)) .
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(ChangedModules?)) .

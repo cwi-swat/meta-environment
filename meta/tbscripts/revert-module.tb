@@ -29,7 +29,7 @@ in
   Id := process-id. 
   (
     rec-msg(revert-module(ModuleName?)) .
-    snd-note(ui-status(stat(Id,"Reverting ..."))) .
+    snd-note(ui-status(statf(Id,"Reverting %s",[ModuleName]))) .
     snd-msg(close-module(ModuleName)) .
     rec-msg(module-closed(ModuleName)) .
     snd-msg(open-modules([ModuleName])) .
