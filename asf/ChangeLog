@@ -1,3 +1,8 @@
+2001/08/19 (jurgenv@cwi.nl)
+ * Generalized the optimization for recursive list functions to
+   any recursive function.
+ * addeqssyntax adds syntax for each declared symbol too.
+
 2001/07/18 (jurgenv@cwi.nl)
  * Fixed optimization of recursive list functions. In combination
    with automatic constructor detection, a large speedup can be
