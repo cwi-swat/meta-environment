@@ -175,9 +175,47 @@ def scan_bstring(str, xtra):
         len = string.atoi(str[2:8])
         return ('bstr', str[9:len], len+xtra)
 
+def simplify_args(L):
+	if len(L) == 0:
+		return ""
+	if len(L) == 1:
+		return str(simplify(L[0]))
+	return str(simplify(L[0])) + "," + simplify_args(L[1:])
+
+def simplify(Term):
+	if Term == []:
+		return []
+	if Term[0] == 'list':
+		L = []
+		for T in Term[1]:
+			S = simplify(T)
+			L.append(S)
+		return L
+	if Term[0] == 'str':
+		return Term[1]
+	if Term[0] == 'bool':
+		return Term[1]
+	if Term[0] == 'int':
+		return Term[1]
+	if Term[0] == 'real':
+		return Term[1]
+	if Term[0] == 'appl':
+		if len(Term[2]) == 0:
+			return Term[1]
+		else:
+			return Term[1] + "(" + simplify_args(Term[2]) + ")"
+	if Term[0] == 'placeholder':
+		return "<" + str(simplify(Term[1])) + ">"
+	if Term[0] == 'var':
+		return Term[1]
+
+	# Some more sophisticated simplifications can be made here?
+
+	return Term
 def test_parser(str):
         R = parse(str)
         print "Parsing '%s' results in: " % str, R
+	print "  simplified: ", simplify(R)
 def test_it():
         test_parser("abc")
         test_parser("justTesting")

@@ -440,11 +440,12 @@ def dispatch_user(T):
                                 exec cmd in globals()
                         except SystemExit, arg:
                                 sys.exit(arg)
-                        except:
-                                TB.error("error while calling %s in module %s"\
+			except:
+				TB.error("error while calling %s in module %s:"\
                                         % (fun, TB.module))
+				traceback.print_exc()
                         else:
-                                return R
+				return R
 	else:
 		raise TBillterm, (T, "Term must be an application")
 
@@ -869,6 +870,7 @@ def exit():
 <<scan_string>>
 <<scan_bstring>>
 
+<<simplify>>
 <<testing>>
 @
 
@@ -1153,6 +1155,53 @@ def scan_bstring(str, xtra):
 
 %}}}
 
+%{{{ simplify
+
+<<simplify>>=
+<<simplify_args>>
+
+def simplify(Term):
+	if Term == []:
+		return []
+	if Term[0] == 'list':
+		L = []
+		for T in Term[1]:
+			S = simplify(T)
+			L.append(S)
+		return L
+	if Term[0] == 'str':
+		return Term[1]
+	if Term[0] == 'bool':
+		return Term[1]
+	if Term[0] == 'int':
+		return Term[1]
+	if Term[0] == 'real':
+		return Term[1]
+	if Term[0] == 'appl':
+		if len(Term[2]) == 0:
+			return Term[1]
+		else:
+			return Term[1] + "(" + simplify_args(Term[2]) + ")"
+	if Term[0] == 'placeholder':
+		return "<" + str(simplify(Term[1])) + ">"
+	if Term[0] == 'var':
+		return Term[1]
+
+	# Some more sophisticated simplifications can be made here?
+
+	return Term
+@	
+
+<<simplify_args>>=
+def simplify_args(L):
+	if len(L) == 0:
+		return ""
+	if len(L) == 1:
+		return str(simplify(L[0]))
+	return str(simplify(L[0])) + "," + simplify_args(L[1:])
+@
+%}}}
+
 %{{{ testing
 
 The rest of this file contains test functions.
@@ -1173,6 +1222,7 @@ The rest of this file contains test functions.
 def test_parser(str):
         R = parse(str)
         print "Parsing '%s' results in: " % str, R
+	print "  simplified: ", simplify(R)
 @
 
 %}}}

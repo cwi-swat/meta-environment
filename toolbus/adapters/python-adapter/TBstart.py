@@ -241,11 +241,12 @@ def dispatch_user(T):
                                 exec cmd in globals()
                         except SystemExit, arg:
                                 sys.exit(arg)
-                        except:
-                                TB.error("error while calling %s in module %s"\
+			except:
+				TB.error("error while calling %s in module %s:"\
                                         % (fun, TB.module))
+				traceback.print_exc()
                         else:
-                                return R
+				return R
 	else:
 		raise TBillterm, (T, "Term must be an application")
 
