@@ -6,6 +6,7 @@ Revision='$Revision$'
 #  Some global variables, that might require occasional modification
 ###
 
+update=0
 verbose=0
 
 cd `dirname $0`;
@@ -29,7 +30,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="hvV"
+myarguments="hvUV"
 
 if [ $myarguments ] ; then
     myargsexplained=$myarguments
@@ -50,6 +51,7 @@ Usage: $myname$myargsexplained . . .
 Options:
     -h              display help information (usage)
     -v              verbose mode
+    -v              update outdated originals
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
 }
@@ -76,6 +78,8 @@ do
             Usage; shift;;
         -v)
             verbose=1; shift;;
+        -U)
+            update =1; shift;;
         -V)
             Version; shift;;
         --)
@@ -124,7 +128,11 @@ RegressGenTable () {
 	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
 	        then
 		        Notify "Regress test for $1 succeeded"
-		        ${RM} -f $ptbl
+		        if [ $update -eq 0 ] ; then
+				${RM} -f $ptbl
+			else
+				${MV} $ptbl $reference/$ptbl
+			fi
 	        else
 		        Error "Regress test for $1 failed"
 	        fi
