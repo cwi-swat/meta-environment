@@ -33,7 +33,8 @@ exports
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
 
-	RSTORE "[|" RSTAT* "|]"				-> RSTORE
+	"[|" RSTAT* "|]"				-> RSTORE
+	"[|" RSTAT* "|]" "yield" RVAR			-> Elem
         "[|" REXP "|]"                                  -> RVALUE
 
 %% Import a Rigi RSF file

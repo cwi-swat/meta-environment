@@ -1,4 +1,14 @@
 equations
 
+[cvt-1] convert2error(<$StrCon, $Loc>) = error("Uninitialized variable", [localized($StrCon, $Loc)])
+
+[cvt-2] convert2errorlist({<$String, $Loc>, $Elem*}) = 
+	convert2error(<$String, $Loc>),  convert2errorlist({$Elem*})
+
+[cvt-3] convert2errorlist({}) = 
+
+[cvt-4]	convert2summary($Elem) = summary("PicoQuery", "PicoQuery", [convert2errorlist($Elem)])
+
+
 [pq1] pico-query($Script, $Rstore, $StrCon) =
       convert2summary(eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon))

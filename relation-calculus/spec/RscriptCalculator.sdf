@@ -12,8 +12,10 @@ exports
 
         eval-rscript(RSCRIPT)                 				-> RSTORE
         eval-rscript-and-yield(RSCRIPT, StrCon)             		-> Elem
+        eval-rscript-and-yield(RSCRIPT, RVAR)             		-> Elem
 	eval-rscript-with-rstore(RSCRIPT,RSTORE)			-> RSTORE
         eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, StrCon)   	-> Elem
+        eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, RVAR)   	-> Elem
 
 %% should be hidden
 
