@@ -1189,33 +1189,42 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
 {
   static char bar[]  = "==============================";
   static char daisy[] = "|/-\\";
-  long double factor;
-  long freq = whole / 30;
- 
-  freq = (freq != 0) ? freq : 1; /* watching out for 0 divisions */
+  static int len = -1;
+  static int is_a_tty = -1;
+  static int last_step = 0;
+  int step = 0;
 
-  if(!isatty(fileno(stderr))) {
+  if (is_a_tty == -1) {
+    is_a_tty = isatty(fileno(stderr));
+    len = strlen(bar);
+  }
+
+  if (!is_a_tty) {
     return;
   }
 
-  factor = (long double) part / (long double) whole;
+  step = (len*part)/whole;
 
-  if(whole == 0.0 || (part % freq && part != whole)) {
+  if (last_step > step) {
+    last_step = 0;
+  }
+
+  if (step == 0) {
     return;
   }
 
-  factor = (long double) part / (long double) whole;
+  if (last_step != step) {
+    fprintf(stderr,"\r%-20s [%-30.*s] %c %ld/%ld (%3d%%)",
+	    subject,
+	    step,
+	    bar,
+	    part != whole ? daisy[step & 0x11] : ' ',
+	    part,
+	    whole,
+	    (int)((part*100)/whole));
 
-
-  fprintf(stderr,"\r%-20s [%-30.*s] %c %ld/%ld (%3d%%)",
-                 subject,
-                 (int) ((double) 30 * factor),
-                 bar,
-		 part != whole ? daisy[(part / freq) % 4] : ' ',
-                 part,
-                 whole,
-                 (int) (factor * 100)
-         );
+    last_step = step;
+  }
 
   return;
 }
