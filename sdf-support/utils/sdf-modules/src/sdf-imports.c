@@ -83,6 +83,7 @@ static void collect_imports_list(SDF_Grammar grammar, SDF_ImportList *imports)
   if (SDF_hasGrammarImpSection(grammar)) {
     SDF_ImpSection impsection = SDF_getGrammarImpSection(grammar);
     *imports = SDF_concatImportList(*imports, 
+				    SDF_makeLayoutSpace(),
 				    getImpsectionImportsList(impsection));
   }
 }
@@ -565,7 +566,7 @@ static SDF_Renamings concatRenamings(SDF_Renamings r1, SDF_Renamings r2)
   SDF_OptLayout space = SDF_makeLayoutSpace();
 
   return SDF_makeRenamingsRenamings(space,
-				    SDF_concatRenamingList(l1, l2),
+				    SDF_concatRenamingList(l1, space, l2),
 				    space);
 }
 
@@ -740,9 +741,10 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
     SDF_ImportList imports = do_get_transitive_imports(module);
 
     if (imports_contains_id(imports, moduleId)) {
-      ATerm mid = ATmake("<str>", 
-			 SDF_getCHARLISTString(SDF_getModuleIdChars(module)));
+      char *str = SDF_getModuleIdString(module);
+      ATerm mid = ATmake("<str>", str);
       dependingModules = ATinsert(dependingModules, mid);
+      free(str);
     }
   }
 

@@ -60,7 +60,7 @@ ATerm get_all_needed_module_names(int cid, ATerm pairs, const char* name)
 ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name) 
 {
   ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString((char*) name));
+  SDF_ModuleId id = SDF_makeModuleIdWord(name);
   SDF_ImportList imports;
  
   imports = SI_getTransitiveImports(list, id);

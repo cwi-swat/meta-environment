@@ -45,7 +45,7 @@ static void version(const char *msg)
 
 static SDF_ImportList getRelevantImports(const char *moduleName, SDF_ImportList imports)
 {
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString((char*) moduleName));
+  SDF_ModuleId id = SDF_makeModuleIdWord(moduleName);
   SDF_ImportList relevantImports = SDF_makeImportListEmpty();
 
   while (!SDF_isImportListEmpty(imports)) {
@@ -59,6 +59,7 @@ static SDF_ImportList getRelevantImports(const char *moduleName, SDF_ImportList 
 
     if (SDF_isEqualModuleId(id, importId)) {
       relevantImports = SDF_concatImportList(relevantImports,
+					     SDF_makeLayoutSpace(),
 					     SDF_makeImportListSingle(import));
     }
 
