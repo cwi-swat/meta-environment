@@ -8,10 +8,10 @@
 
 #include "module-db.tif.h"
 
-#define GetValue(db,k) (ATdictGet(db,k))
-#define PutValue(db,k,v) (ATdictPut(db,k,v))
-#define RemoveKey(db,k) (ATdictRemove(db,k))
-#define CreateValueStore() (ATdictCreate())
+#define GetValue(db,k) (ATtableGet(db,k))
+#define PutValue(db,k,v) (ATtablePut(db,k,v))
+#define RemoveKey(db,k) (ATtableRemove(db,k))
+#define CreateValueStore(i1,i2) (ATtableCreate(i1,i2))
 
 void AFinitAsFixPatterns();
 

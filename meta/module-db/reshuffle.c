@@ -4,8 +4,8 @@
 #include "module-db.h"
 
 
-extern ATerm modules_db;
-ATerm compile_db = NULL;
+extern ATermTable modules_db;
+ATermTable compile_db;
 ATermList modules_to_process;
 ATbool compiling = ATfalse;
 ATbool reshuffling = ATfalse;
@@ -20,7 +20,7 @@ void initialize_output_path(ATerm name)
      output_path = getenv( "COMPILER_OUTPUT" );
 }
 
-void change_compile_db(ATerm new_db)
+void change_compile_db(ATermTable new_db)
 {
   if(!ATisEqual(new_db, compile_db))
     compile_db = new_db;
@@ -194,7 +194,7 @@ void add_section(ATerm module, ATerm section)
   }
   else
     newmodule = AFputModuleSections(newmodule,ATmakeList1(section));
-  change_compile_db(PutValue(compile_db,module,newmodule));
+  PutValue(compile_db,module,newmodule);
 }
 
 ATerm unique_new_name(ATerm name)
@@ -227,7 +227,7 @@ ATerm create_new_module(ATerm modname)
   ATerm newmodname = unique_new_name(modname);
 ATfprintf(stderr,"Creating new module: %t\n",newmodname);
   newmodule = AFputModuleName(newmodule,newmodname);
-  change_compile_db(PutValue(compile_db,newmodname,newmodule));
+  PutValue(compile_db,newmodname,newmodule);
   return newmodname;
 }
 
@@ -235,7 +235,7 @@ void add_equations(ATerm module, ATermList eqs)
 {
   ATerm newmodule = GetValue(compile_db,module);
   newmodule = AFputModuleEqs(newmodule,eqs);
-  change_compile_db(PutValue(compile_db,module,newmodule));
+  PutValue(compile_db,module,newmodule);
 }
 
 void write_asfix_file(int cid,ATerm modname)
@@ -350,15 +350,13 @@ void reshuffle_lexical_constructor_functions(int cid,
   }
 }
 
-extern ATermList GetallKeys(ATermList compile_db);
-
 void gen_makefile(ATerm name)
 {
   char *text, *mtext;
   char buf[1024];
   FILE *output;
   ATerm module;
-  ATermList modules = GetallKeys((ATermList) compile_db);
+  ATermList modules = ATtableKeys(compile_db);
 
   if(ATmatchTerm(name,pattern_asfix_id,&text)) {
 
@@ -394,7 +392,7 @@ void reshuffle_modules(int cid,ATermList mods)
   ATermList cffuncs, eqs, orgmods;
   ATerm newsubsection, newsection;
 
-  change_compile_db(CreateValueStore());
+  compile_db = CreateValueStore(500,75);
   orgmods = mods;
   reshuffling = ATtrue;
   while(!ATisEmpty(mods)) {

@@ -13,29 +13,11 @@
 
 #include "module-db.h"
 
-ATerm modules_db = NULL;
-ATerm import_db = NULL;
-ATerm trans_db = NULL;
-extern ATerm compile_db;
+ATermTable modules_db;
+ATermTable import_db;
+ATermTable trans_db;
+extern ATermTable compile_db;
 extern ATerm modules_to_process;
-
-void change_modules_db(ATerm new_db)
-{
-  if(!ATisEqual(new_db, modules_db))
-    modules_db = new_db;
-}
-
-void change_import_db(ATerm new_db)
-{
-  if(!ATisEqual(new_db, import_db))
-    import_db = new_db;
-}
-
-void change_trans_db(ATerm new_db)
-{
-  if(!ATisEqual(new_db, trans_db))
-    trans_db = new_db;
-}
 
 void rec_terminate(int cid, ATerm t) 
 {
@@ -84,21 +66,20 @@ ATerm get_equations(int cid,ATerm mods)
 
 void create_module_db(int cid)
 {
-  change_modules_db(CreateValueStore());
-  change_import_db(CreateValueStore());
-  change_trans_db(CreateValueStore());
+  modules_db = CreateValueStore(100,75);
+  import_db = CreateValueStore(100,75);
+  trans_db = CreateValueStore(100,75);
 }
 
 void clear_module_db(int cid)
 {
-  change_modules_db(CreateValueStore());
-  change_import_db(CreateValueStore());
-  change_trans_db(CreateValueStore());
+  modules_db = CreateValueStore(100,75);
+  import_db = CreateValueStore(100,75);
+  trans_db = CreateValueStore(100,75);
 }
 
 ATermList get_import_section(ATermList sections);
 ATermList add_imports(ATerm name, ATermList mods);
-ATermList GetallKeys(ATermList modules_db);
 
 ATerm add_module(int cid, ATerm asfix)
 {
@@ -111,8 +92,9 @@ ATerm add_module(int cid, ATerm asfix)
                  &t[0], &t[1], &modname, &t[2], 
                  &sections, &t[3], &t[4], &t[5], &t[6])) {
     if(GetValue(modules_db,modname) == ATfalse) {
+ATfprintf(stderr,"AFexpandModule called for %t\n", modname);
       newasfix = AFexpandModule(asfix);
-      change_modules_db(PutValue(modules_db,modname,newasfix));
+      PutValue(modules_db,modname,newasfix);
     };
     imports = get_import_section(sections);
     unknowns = add_imports(modname,imports);
@@ -148,9 +130,9 @@ ATfprintf(stderr, "gives: %t\n", imports);
 ATerm delete_module(int cid, ATerm name)
 {
 ATfprintf(stderr, "Deleting: %t\n", name);
-  change_modules_db(RemoveKey(modules_db,name));
-  change_import_db(RemoveKey(import_db,name));
-  change_trans_db(CreateValueStore());
+  RemoveKey(modules_db,name);
+  RemoveKey(import_db,name);
+  trans_db = CreateValueStore(100,75);
   return ATmake("snd-value(deleted(<term>))",name);
 }
 
@@ -173,9 +155,9 @@ ATermList add_imports(ATerm name, ATermList mods)
 {
   ATermList unknowns = ATempty;
 
-  change_trans_db(CreateValueStore());
+  trans_db = CreateValueStore(100,75);
   if(!GetValue(import_db,name)) {
-    change_import_db(PutValue(import_db, name, (ATerm) mods));
+    PutValue(import_db, name, (ATerm) mods);
     unknowns = select_unknowns(mods);
   }
   return unknowns;
@@ -231,7 +213,7 @@ ATermList get_imported_modules(ATerm name)
   value = GetValue(trans_db,name);
   if (!value) {
     result = calc_trans(ATmakeList1(name));
-    change_trans_db(PutValue(trans_db, name, (ATerm) result));
+    PutValue(trans_db, name, (ATerm) result);
     return result;
   }
   else
@@ -244,22 +226,9 @@ ATerm get_all_imported_modules(int cid, ATerm name)
   return ATmake("snd-value(all-imports([<list>]))",result);
 }
 
-ATermList GetallKeys(ATermList db)
-{
-  ATermList result = ATempty;
-  ATermList pair;
-
-  while(!ATisEmpty(db)) {
-    pair = (ATermList) ATgetFirst(db);
-    result = ATappend(result,ATgetFirst(pair));
-    db = ATgetNext(db);
-  }
-  return result;
-}
-
 ATerm get_all_modules(int cid)
 {
-  ATermList list = GetallKeys((ATermList) import_db);
+  ATermList list = ATtableKeys(import_db);
 
   return ATmake("snd-value(all-modules([<list>]))",list);
 }
@@ -268,7 +237,7 @@ ATermList imported_by(ATerm name)
 {
   ATerm module, pair;
   ATermList result = ATempty;
-  ATermList modules = GetallKeys((ATermList) import_db);
+  ATermList modules = ATtableKeys(import_db);
 
   while (!ATisEmpty(modules)) {
     module = ATgetFirst(modules);
@@ -307,10 +276,6 @@ int main(int argc, char **argv)
 
   AFinitAsFixPatterns();
 
-  ATprotect(&modules_db);
-  ATprotect(&import_db);
-  ATprotect(&trans_db);
-  ATprotect(&compile_db);
   ATprotect(&modules_to_process);
 
   ATBeventloop();
