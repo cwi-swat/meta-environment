@@ -4,4 +4,10 @@ exports
   context-free syntax
     Symbols "++" Symbols -> Symbols {assoc}
     "|" Symbols "|"      -> Int
-    Symbol "(-" Symbols  -> Bool %%%{memo}
+    Symbol "(-" Symbols  -> Bool
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+

@@ -9,9 +9,13 @@ exports
     SymbolSet "/" SymbolSet  -> SymbolSet {left}
     "(" SymbolSet ")"        -> SymbolSet {bracket}
     Symbol "(-" SymbolSet    -> Bool
-  priorities
+  context-free priorities
     SymbolSet "/" SymbolSet -> SymbolSet  >
     SymbolSet "||" SymbolSet -> SymbolSet
+hiddens
   variables
-    "'u"[0-9\']* -> SymbolSet
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    "'u"[0-9\']*        -> SymbolSet
 

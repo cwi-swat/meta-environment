@@ -6,3 +6,12 @@ exports
     atermlist(Symbols)  -> ATermList
     symbol(ATerm)       -> Symbol
     symbols(ATermList)  -> Symbols
+
+hiddens
+  variables
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    "Ts"  [0-9\']*    -> ATerms
+    "Tl"  [0-9\']*    -> ATermList
+    "T"   [0-9\']*    -> ATerm
