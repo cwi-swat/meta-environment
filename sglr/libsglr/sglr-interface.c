@@ -591,7 +591,7 @@ char *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize)
     }
     buf = SG_Realloc(buf, *fsize, sizeof(char));
   }
-  IF_STATISTICS(fprintf(SG_log(), "Read %ld input tokens from %s in %.6fs\n",
+  IF_STATISTICS(fprintf(SG_log(), "Read %ld input tokens from \"%s\" in %.6fs\n",
                         (long) *fsize, fnam, SG_Timer()));
 
   return buf;

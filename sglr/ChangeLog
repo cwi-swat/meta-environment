@@ -18,6 +18,9 @@
 
 $Id$
 
+2000/9/18 (mdejonge@cwi.nl)
+  * All file references in sglr-stats.txt are now quoted
+
 2000/8/25 (jong@cwi.nl)
   * In verbose mode, animated counter is only displayed if stderr is a tty.
 
