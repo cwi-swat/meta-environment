@@ -534,6 +534,10 @@ the available mouse operations.
 
 {\tt Online Help} (***)
 
+{\tt JitterBug Activated} opens in an active {\tt Netscape} window a page
+to enter a bug report. This offers the users of the \ASmetaenv\ an online
+facility to report bugs to the developers.
+
 \section{The Panes of the Main Window}
 
 The two left-most panes of the main window give two, alternative,
@@ -2879,8 +2883,9 @@ equations
 
 \subsection{Sorting}
 
-The use of list structures is illustrated by the following specification of
-the "Dutch National Flag" problem: given an arbitrary list of the colours red,
+The use of list structures is illustrated by the specification of
+the "Dutch National Flag" problem presented in Figure \ref{CODE:flag}: 
+given an arbitrary list of the colours red,
 white and blue, sort them in the order as they appear in the Dutch National
 Flag. We want:
 
@@ -2891,27 +2896,38 @@ In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
 permit a succinct formulation of the search for adjacent colours that are in
 the wrong order.
 
-\begin{verbatim}
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module Flag
+
+imports Layout
+
 exports
   sorts Color Flag 
-  lexical syntax
-    [\ \n] -> LAYOUT 
+
   context-free syntax
-    red            -> Color 
-    white          -> Color 
-    blue           -> Color 
+    "red"          -> Color 
+    "white"        -> Color 
+    "blue"         -> Color 
     "{" Color+ "}" -> Flag 
 
 variables
-    Cs[12] -> Color* 
-    C -> Color 
+    "Cs"[0-9]* -> Color* 
+    "C"[0-9]*  -> Color 
 
+%% Flag.eqs
 equations
-[1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
-[2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
-[3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
-\end{verbatim}
+
+  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
+
+  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
+
+  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for sorting}\label{CODE:flag}
+\end{figure} 
 
 \subsection{Code Generation}
 
@@ -2964,53 +2980,75 @@ label xxx
 
 \noindent First, define {\tt NAT} (numbers) and {\tt ID} (identifiers):
 
-\begin{verbatim}
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module BasicNotions 
 exports
-  sorts NAT ID 
+  sorts Nat Id 
   lexical syntax
-    [\ \t\n]       -> LAYOUT 
-    [0-9]+         -> NAT 
-    [a-z][a-z0-9]* -> ID
+    [0-9]+         -> Nat 
+    [a-z][a-z0-9]* -> Id
 
 variables
-  Nat [0-9']* -> NAT 
-  Id [0-9']*  -> ID
-\end{verbatim}
+  "Nat"[0-9\']* -> Nat 
+  "Id"[0-9\']*  -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
+\end{figure}
 
 \noindent Next, define the expressions and statements of our little source language:
 
-\begin{verbatim}
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module Expressions 
-  imports BasicNotions 
+
+imports BasicNotions
+
   exports
-    sorts EXP 
+    sorts Exp 
     context-free syntax
-      NAT -> EXP 
-      ID -> EXP 
-      EXP "+" EXP -> EXP {left}
-      EXP "-" EXP -> EXP {left}
-      EXP "*" EXP -> EXP {left}
+      Nat         -> Exp 
+      Id          -> Exp 
+      Exp "+" Exp -> Exp {left}
+      Exp "-" Exp -> Exp {left}
+      Exp "*" Exp -> Exp {left}
 
-variables
-  Exp [0-9']* -> EXP 
-priorities
-  "*" > {left: "+", "-"}
+  variables
+    "Exp"[0-9\']* -> Exp 
 
+  context-free priorities
+    Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
+                                Exp "-" Exp -> Exp}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Expressions}\label{CODE:expressions}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module Statements 
-  imports Expressions 
-  exports
-    sorts STAT STATS 
-    context-free syntax
-      ID ":=" EXP           -> STAT 
-      if EXP then STATS fi  -> STAT 
-      while EXP do STATS od -> STAT
-      { STAT ";" }+         -> STATS 
 
-    variables
-      Stat [0-9']*      -> STAT 
-      Stat-list [0-9']* -> {STAT ";"}+
-\end{verbatim}
+imports Expressions 
+
+exports
+  sorts Stat Stats 
+  context-free syntax
+    Id ":=" Exp           -> Stat 
+    if Exp then Stats fi  -> Stat 
+    while Exp do Stats od -> Stat
+    {Stat ";"}+           -> Stats 
+
+  variables
+    "Stat"[0-9\']*  -> Stat
+    "Stat+"[0-9\']* -> {Stat ";"}+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Statements}\label{CODE:statements}
+\end{figure}
 
 \noindent The instructions of the stack machine are defined as follows:
 
