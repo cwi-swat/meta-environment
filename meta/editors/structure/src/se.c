@@ -67,7 +67,8 @@ ATerm new_editor_given_text(int cid, ATerm editorId, char *text)
 
   putEditor(editorId, editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(SE_getEditorFocus(editor)));
+  return ATmake("snd-value(initial-focus(<term>))",
+		SE_makeTermFromFocus(SE_getEditorFocus(editor)));
 }
 
 /*}}}  */
@@ -83,7 +84,8 @@ ATerm new_editor_given_tree(int cid, ATerm editorId, ATerm t)
   editor = newEditorGivenTree(parse_tree, SORT_TERM, FOCUS_PARSED);
   putEditor(editorId, editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(SE_getEditorFocus(editor)));
+  return ATmake("snd-value(initial-focus(<term>))",
+		SE_makeTermFromFocus(SE_getEditorFocus(editor)));
 }
 
 /*}}}  */
@@ -111,7 +113,7 @@ ATerm insert_chars(int cid, ATerm editorId, int location, char *text)
 
   focus = SE_getEditorFocus(editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(focus));
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
 
 /*}}}  */
@@ -128,7 +130,7 @@ ATerm delete_chars(int cid, ATerm editorId, int location, int count)
 
   focus = SE_getEditorFocus(editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(focus));
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
 
 /*}}}  */
@@ -201,7 +203,7 @@ ATerm move_focus(int cid, ATerm editorId, ATerm direction)
 
   focus = SE_getEditorFocus(new_editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(focus));
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
 
 /*}}}  */
@@ -223,7 +225,7 @@ ATerm set_focus(int cid, ATerm editorId, int location)
 
   putEditor(editorId, editor);
 
-  return ATmake("snd-value(<term>)", SE_makeTermFromFocus(focus));
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
 }
 
 /*}}}  */
@@ -282,7 +284,8 @@ ATerm get_parse_tree(int cid, ATerm editorId)
   
   parse_tree = SE_getEditorParseTree(editor);
 
-  return ATmake("snd-value(<term>)", PT_makeTermFromParseTree(parse_tree));
+  return ATmake("snd-value(parse-tree(<term>))",
+		PT_makeTermFromParseTree(parse_tree));
 }
 
 /*}}}  */
@@ -299,10 +302,10 @@ ATerm get_focus_sort(int cid, char *nonterminal, ATerm f)
   sort = SE_getFocusSort(focus);
 
   if (strcmp(sort, SORT_UNPARSED) != 0) {
-    return ATmake("snd-value(<str>)", sort);
+    return ATmake("snd-value(focus-sort(<str>))", sort);
   }
 
-  return ATmake("snd-value(<str>)", nonterminal);
+  return ATmake("snd-value(focus-sort(<str>))", nonterminal);
 }
 
 /*}}}  */
@@ -323,7 +326,7 @@ ATerm calc_error_location(int cid, ATerm f, ATerm error)
 
   errorPos = ATgetInt((ATermInt) ATgetArgument((ATermAppl) posTerm, 0));
 
-  return ATmake("snd-value(<int>)", start + errorPos);
+  return ATmake("snd-value(error-position(<int>))", start + errorPos);
 }
 
 /*}}}  */

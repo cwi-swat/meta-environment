@@ -249,19 +249,19 @@ snd-do(Mdb, create-module-db).
   rec-msg(get-sdf2-asfix(Name?)).
   snd-eval(Mdb, get-asfix(Name, sdf2)).
   (
-    rec-value(Mdb, syntax(Syntax?)).
+    rec-value(Mdb, asfix(syntax(Syntax?))).
     snd-msg(syntax(Syntax))
   +
-    rec-value(Mdb, syntax-unchanged(Syntax?)).
+    rec-value(Mdb, asfix(syntax-unchanged(Syntax?))).
     snd-msg(syntax-unchanged(Syntax))
   +
-    rec-value(Mdb, unavailable).
+    rec-value(Mdb, asfix(unavailable)) .
     snd-msg(unavailable)
   )
 +
   rec-msg(get-eqs-tree(Name?)).
   snd-eval(Mdb, get-asfix(Name, eqs)).
-  rec-value(Mdb, EqsTree?).
+  rec-value(Mdb, asfix(EqsTree?)).
   snd-msg(EqsTree)
 +
 /* Validate the parse table */

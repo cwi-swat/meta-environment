@@ -647,7 +647,7 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   asfix = ATelementAt((ATermList)entry, location);
   if(ATisEqual(isChanged, Mtrue)) {
     if(ATisEqual(asfix, ATparse("unavailable"))) {
-	return ATmake("snd-value(unavailable)");
+	return ATmake("snd-value(asfix(unavailable))");
     } else {
       isChanged = Mfalse;
       entry = (ATerm)ATreplace((ATermList)entry,
@@ -655,10 +655,10 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
                                updated_location);
       PutValue(modules_db, modname, entry);
       if (module_type == sdf2) {
-	return ATmake("snd-value(syntax(<term>))", ATBpack(asfix));
+	return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(asfix));
       }
       else if (module_type == eqs) {
-	return ATmake("snd-value(tree(<term>))", ATBpack(asfix));
+	return ATmake("snd-value(asfix(tree(<term>)))", ATBpack(asfix));
       }
     }
   } else {
@@ -666,13 +666,13 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
       if (module_type == eqs) {
 	asfix = ATelementAt((ATermList)entry, location);
 	if(ATisEqual(asfix, ATparse("unavailable"))) {
-	  return ATmake("snd-value(unavailable)");
+	  return ATmake("snd-value(asfix(unavailable))");
 	} else {
-	    return ATmake("snd-value(tree(<term>))", ATBpack(asfix));
+	    return ATmake("snd-value(asfix(tree(<term>)))", ATBpack(asfix));
 	}
       } 
       else if (module_type == sdf2) {
-	return ATmake("snd-value(syntax-unchanged(<term>))", ATBpack(asfix));
+	return ATmake("snd-value(asfix(syntax-unchanged(<term>)))", ATBpack(asfix));
       }
   }
   /* we never get here */
