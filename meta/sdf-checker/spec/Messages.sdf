@@ -1,0 +1,22 @@
+module Messages
+
+imports SymbolSetOperations
+
+exports 
+  sorts Message Messages
+
+  context-free syntax
+    "none"					   -> Message
+    undeclared(ModuleName, SymbolsSet)		   -> Message
+    not-implemented(ModuleName, SymbolsSet)	   -> Message
+    declared-but-undefined(ModuleName, SymbolsSet) -> Message
+    "{" Message* "}"                               -> Messages
+    Messages "+" Message			   -> Messages
+
+hiddens
+  variables
+    "$ModuleName"[0-9]* -> ModuleName
+
+    "$Msg"[0-9]*        -> Message
+    "$Msg*"[0-9]*       -> Message*
+    "$Msgs"[0-9]*       -> Messages

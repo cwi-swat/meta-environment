@@ -1,0 +1,27 @@
+module ImportRelations
+
+imports ImportOperations
+
+exports
+  context-free syntax
+    closure(ImportRelations)                        -> ImportRelations
+    expand(ModuleName, Definition)		    -> Module
+    expand(ModuleName, Definition, ImportRelations) -> Module
+
+
+hiddens
+  variables
+    "$Definition"[0-9]*	     -> Definition
+
+    "$Module"[0-9]*          -> Module
+    "$Module*"[0-9]*         -> Module*
+    "$ModuleName"[0-9]*      -> ModuleName
+
+    "$Import"[0-9]*          -> Import
+    "$Import*"[0-9]*         -> Import*
+
+    "$Grammar"[0-9]*         -> Grammar
+
+    "$ImportRelation"[0-9]*  -> ImportRelation
+    "$ImportRelation*"[0-9]* -> {ImportRelation ","}*
+    "$ImportRelations"[0-9]* -> ImportRelations

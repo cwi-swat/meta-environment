@@ -1,0 +1,40 @@
+equations
+
+%% Type checking rules for an (expanded) SDF module
+
+  [tc1] get-declared-symbols(sorts $Symbol*1, symbols($Symbol*2)) =
+       	  symbols($Symbol*1 $Symbol*2)
+  
+  [tc2] get-used-symbols($Sort, symbols($Symbol*)) = symbols($Sort $Symbol*)
+
+  [tc3] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+                            symbols($Symbol*)) =
+	  symbols( $Symbol $Symbol*)
+
+%% Check one module
+	
+  [cm1] get-module-name($Module) = $ModuleName,
+        expand($ModuleName,  $Definition) = $Module1,
+        get-declared-symbols($Module1, symbols()) = symbols($Symbol*1),
+        get-used-symbols($Module1, symbols()) = symbols($Symbol*2),
+        get-defined-symbols($Module1, symbols()) = symbols($Symbol*3),
+
+        $Msgs1 = $Msgs + 
+                 undeclared($ModuleName, 
+                            diff(symbols($Symbol*2), symbols($Symbol*1))) +
+	         declared-but-undefined($ModuleName, 
+                            diff(symbols($Symbol*1), symbols($Symbol*3)))
+        =================================================================
+        check-module($Module, $Definition, $Msgs) = $Msgs1
+ 
+%% Check a list of modules
+ 
+ [cms1] check-module($Module, $Definition, $Msgs) = $Msgs1
+        ==================================================
+        check-modules($Module $Module*, $Definition,  $Msgs) =
+          check-modules($Module*, $Definition, $Msgs1)
+
+ [cms2] check-modules( , $Definition, $Msgs) = $Msgs
+
+ [cd1] check-definition($Definition) = 
+	check-modules($Definition, $Definition, {})

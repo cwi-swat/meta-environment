@@ -1,0 +1,37 @@
+module  Sdf-Checker
+
+imports ImportRelations Messages
+exports
+  context-free syntax
+    get-declared-symbols(Module, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
+    get-declared-symbols(Grammar, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
+    get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traverse(accu)}
+    get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traverse(accu)}
+    get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
+    get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traverse(accu)}
+
+    check-module(Module, Definition, Messages)	    -> Messages
+    check-modules(Definition, Definition, Messages) -> Messages		
+    check-definition(Definition)		    -> Messages
+
+
+
+  variables
+    "$Attributes" [0-9]*                -> Attributes
+    "$Definition" [0-9]*		-> Definition
+
+    "$Module" [0-9]*        		-> Module
+    "$Module*" [0-9]*       		-> Module*
+    "$ModuleName" [0-9\']*   		-> ModuleName
+
+    "$Sort"  [0-9]*      		-> Sort
+    "$Symbol*" [0-9]*      		-> Symbol*
+    "$Symbol"  [0-9]*      		-> Symbol
+    "$Symbols"                          -> Symbols
+
+    "$Msg" [0-9\']*                     -> Message
+    "$Msg*" [0-9\']*                   	-> Message*
+    "$Msgs" [0-9\']*                    -> Messages
+
+
+ 

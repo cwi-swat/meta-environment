@@ -1,0 +1,27 @@
+module ModuleOperations
+
+imports Sdf2
+
+exports
+  context-free syntax
+    get-module(ModuleName, Definition) -> Module
+    get-module-name(Module)            -> ModuleName
+    Module "+" Section                 -> Module
+
+  context-free syntax
+    get-export-grammar(Module, Grammar, Definition) 
+                                                -> Grammar {traverse(accu)}
+    get-export-grammar(Section, Grammar, Definition) 
+                                                -> Grammar {traverse(accu)}
+    get-export-grammar1(ModuleName, Definition) -> Grammar
+
+hiddens
+  variables
+    "$Definition"[0-9]*  -> Definition
+    "$ImpSection*"[0-9]* -> ImpSection*
+    "$Section"[0-9]*	 -> Section
+    "$Section*"[0-9]*    -> Section*
+    "$Sections"[0-9]*    -> Sections
+    "$ModuleName"[0-9]*  -> ModuleName
+    "$Module*"[0-9]*     -> Module*
+    "$Grammar" [0-9]*    -> Grammar

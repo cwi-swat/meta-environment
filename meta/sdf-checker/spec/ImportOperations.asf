@@ -1,0 +1,42 @@
+equations
+
+  [x] get-exported-import-relations($Definition, $ImportRelations) =
+        get-exported-import-relations1($Definition, $ImportRelations)
+
+  [x] get-exported-import-relations1($Module, {$ImportRelation*}) =
+	{[get-module-name($Module) : 
+          get-exported-imports($Module,imports())], $ImportRelation*}
+
+  [x] get-hidden-import-relations($Module, {$ImportRelation*}) =
+	{[get-module-name($Module) : 
+          get-hidden-imports($Module,imports())],  $ImportRelation*}
+
+  [x] get-exported-imports(imports $Import*1, imports($Import*2)) = 
+        imports($Import*1 $Import*2)
+  [x] get-exported-imports(exports $Grammar, $ImportsSet) = 
+        get-imports($Grammar, $ImportsSet)
+  [x] get-exported-imports(hiddens $Grammar, $ImportsSet) = $ImportsSet
+
+  [x] get-hidden-imports(imports $Import*1,$ImportsSet) = $ImportsSet
+  [x] get-hidden-imports(exports $Grammar, $ImportsSet) = $ImportsSet
+  [x] get-hidden-imports(hiddens $Grammar, $ImportsSet) = 
+        get-imports($Grammar, $ImportsSet)
+
+  [x] get-imports(imports $Import*1, imports($Import*2)) = 
+        imports($Import*1 $Import*2)
+
+  [x] imports($Import*1 $ModuleName $Import*2 $ModuleName $Import*3) =
+        imports($Import*1 $ModuleName $Import*2 $Import*3)
+
+  [x] get-imports($ModuleName, {$ImportRelation*1, 
+                                [$ModuleName : imports($Import*)], 
+                                $ImportRelation*2}) =
+        imports($Import*)
+  [default-x] get-imports($ModuleName, {$ImportRelation*}) = imports()
+
+  [x] expand-imports(imports($ModuleName $Import*), $Grammar, $Definition) =
+	expand-imports(imports($Import*), 
+		       $Grammar get-export-grammar1($ModuleName, $Definition), 
+	               $Definition)
+
+  [x] expand-imports(imports(), $Grammar, $Definition) = $Grammar

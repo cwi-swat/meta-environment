@@ -1,0 +1,16 @@
+module SymbolSetOperations
+
+imports Sdf2
+
+exports 
+  sorts SymbolsSet
+
+  context-free syntax
+    symbols(Symbol*)             -> SymbolsSet
+    diff(SymbolsSet, SymbolsSet) -> SymbolsSet
+
+hiddens
+  variables
+    "$Symbol*"[0-9]*    -> Symbol*
+    "$Symbol"[0-9]*     -> Symbol
+    "$Symbols"[0-9]*    -> Symbols
