@@ -1,3 +1,7 @@
+2003/04/01 (markvdb@cwi.nl)
+  * Set no longer re-use the List module. 
+  * Square brackets are replaced by curly brackets.
+
 2002/10/12 (jurgenv@cwi.nl)
   * Moved entire library to asf package. We will maintain this ChangeLog
     since the library is such an isolated subtree in the package.

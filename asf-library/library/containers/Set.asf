@@ -1,3 +1,8 @@
 equations
 
-[dup] [X*1, X, X*2, X, X*3] = [X,X*1,X*2,X*3]
+  [dup] {X*1, X, X*2, X, X*3} = {X*1, X, X*2, X*3}
+
+  [concat] {X*1} + {X*2} = {X*1,X*2}
+
+  [el] elem(X, {X*1, X, X*2}) = true
+  [default-el] elem(X, {X*1}) = false

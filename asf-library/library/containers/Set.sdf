@@ -1,19 +1,23 @@
 module containers/Set[X]
 
-imports containers/List[List[[X]] => Set[[X]]]
-
 imports basic/Whitespace
 
 exports
-context-free syntax
+  context-free syntax
+    "{" { X ","}* "}"      -> Set[[X]]
+    Set[[X]] "+" Set[[X]]  -> Set[[X]] {left}
+
+    elem(X, Set[[X]])      -> Boolean
+
+
 
 hiddens
+  imports basic/Booleans
 
-sorts X Set[[X]] Integer
+  sorts X Set[[X]]
 
-variables
-"S" -> Set[[X]]
-"X"[0-9]* -> X
-"X*"[0-9]* -> {X ","}*
+  variables
+    "X"[0-9]*  -> X
+    "X*"[0-9]* -> {X ","}*
 
 
