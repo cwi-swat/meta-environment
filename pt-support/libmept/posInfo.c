@@ -135,6 +135,20 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
     (current->curDepth)--;
     tree = PT_setTreeArgs(tree, args);
   }
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    PT_Args new = PT_makeArgsEmpty();
+    PT_Position save = *current;
+
+    for (;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+      *current = save;
+      new = PT_makeArgsList(PT_addTreePosInfo(arg, current), new);
+      
+    }
+
+    tree = PT_makeTreeAmb(PT_reverseArgs(new));
+  }
   else if (PT_isTreeLit(tree)) {
     char *str = PT_getTreeString(tree);
     len = strlen(str);

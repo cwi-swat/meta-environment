@@ -10,7 +10,7 @@
 #include <MEPT-utils.h>
 
 static char myname[] = "implodePT";
-static char myversion[] = "1.0";
+static char myversion[] = "1.1";
 
 /*
  The argument vector: list of option letters, colons denote option
@@ -18,7 +18,7 @@ static char myversion[] = "1.0";
  explanation.
  */
 
-static char myarguments[] = "aAbchi:lOo:ptvILVqX";
+static char myarguments[] = "aAbchi:lOo:pPtvILVqX";
 
 /*
  Usage: displays helpful usage information
@@ -38,6 +38,7 @@ void usage(void)
           "\t-o filename     output to file (default stdout)\n"
           "\t-O              interpret optionals\n"
           "\t-p              remove parsetree\n"
+	  "\t-P              interpret layout-place-holder annotation\n"
           "\t-t              output terms in plaintext format\n"
           "\t-v              verbose mode\n"
           "\t-I              remove injections\n"
@@ -79,6 +80,7 @@ int main(int argc, char **argv)
   extern ATbool interpret_alt;
   extern ATbool interpret_seq;
   extern ATbool interpret_opt;
+  extern ATbool interpret_layout_place_holder;
 
   /*  Commandline mode  */
 
@@ -93,6 +95,7 @@ int main(int argc, char **argv)
       case 'o':  output=optarg;                          break;
       case 'O':  interpret_opt = ATtrue;                 break;
       case 'p':  remove_parsetree = ATtrue;              break;
+      case 'P':  interpret_layout_place_holder = ATtrue; break;
       case 't':  bafmode = ATfalse;                      break;
       case 'v':  verbose = ATtrue;                       break;
       case 'I':  remove_injections = ATtrue;             break;
@@ -117,7 +120,8 @@ int main(int argc, char **argv)
      !implode_lexicals &&
      !interpret_alt &&
      !interpret_seq &&
-     !interpret_opt) {
+     !interpret_opt 
+     ) {
     interpret_cons = ATtrue;
     remove_layout = ATtrue;
     remove_literals = ATtrue;

@@ -18,6 +18,9 @@ ATbool keep_annotations = ATtrue;
 ATbool interpret_alt = ATfalse;
 ATbool interpret_seq = ATfalse;
 ATbool interpret_opt = ATfalse;
+ATbool interpret_layout_place_holder = ATfalse;
+
+#define DIRTY_LAYOUT_MARKER "layout-place-holder"
 
 static ATerm implodeTerm(PT_Tree t);
 static ATerm implodeLayout(PT_Tree t);
@@ -127,13 +130,20 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
 static ATerm implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
-    char *str = PT_yieldTree(tree);
-
-    if (strlen(str) > 0) {
-      return ATmake("layout([<str>])>", str);
+    if (interpret_layout_place_holder &&
+	PT_getTreeAnnotation(tree, ATparse(DIRTY_LAYOUT_MARKER)) != NULL) {
+      return ATparse("layout(" DIRTY_LAYOUT_MARKER ")");
     }
     else {
-      return ATmake("layout([])");
+
+      char *str = PT_yieldTree(tree);
+
+      if (strlen(str) > 0) {
+	return ATmake("layout([<str>])>", str);
+      }
+      else {
+	return ATmake("layout([])");
+      }
     }
   }
   else {
@@ -306,7 +316,6 @@ static ATerm implodeTerm(PT_Tree tree)
   PT_Args args;
   ATerm result = NULL;
   ATerm annos = ATgetAnnotations((ATerm)tree);
-  tree = (PT_Tree) ATremoveAnnotations((ATerm) tree);
 
   if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
