@@ -4,12 +4,12 @@
 VERBOSE=1
 ERROR=0
 
-SGLR="sglr"
-#COMPARE="diff -w"
-COMPARE="cmp"
-
 cd `dirname $0`;
 mydir=`pwd`
+
+SGLR="sglr"
+COMPARE="$mydir/trmdiff"
+
 languages=$mydir/lang-types
 tables=$mydir/tables
 first=$mydir/first

@@ -3,12 +3,12 @@
 
 VERBOSE=1
 
-#COMPARE="diff -w"
-COMPARE="cmp"
 cd `dirname $0`;
 mydir=`pwd`
-reference=$mydir/tables
 
+COMPARE="$mydir/trmdiff"
+
+reference=$mydir/tables
 dirs="first grammars"
 
 Notify () {
@@ -17,7 +17,7 @@ Notify () {
 	fi
 }
 
-RegressGenTable() {
+RegressGenTable () {
 	ptbl=`basename $1 .sdf2`.tbl
 	if [ ! -f $reference/$ptbl ] ; then
 		Notify "No reference table for $ptbl"
