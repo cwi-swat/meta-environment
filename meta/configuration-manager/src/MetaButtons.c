@@ -201,9 +201,9 @@ MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail)
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_makeButtonDefault(char* module, MB_ButtonDescriptionList descriptions, ATerm actions) */
+/*{{{  MB_Button MB_makeButtonDefault(char * module, MB_ButtonDescriptionList descriptions, ATerm actions) */
 
-MB_Button MB_makeButtonDefault(char* module, MB_ButtonDescriptionList descriptions, ATerm actions)
+MB_Button MB_makeButtonDefault(char * module, MB_ButtonDescriptionList descriptions, ATerm actions)
 {
   return (MB_Button)(ATerm)ATmakeAppl3(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)descriptions, (ATerm)actions);
 }
@@ -265,11 +265,19 @@ MB_ButtonType MB_makeButtonTypeMessageList()
 }
 
 /*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeTreePanel() */
+
+MB_ButtonType MB_makeButtonTypeTreePanel()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun7);
+}
+
+/*}}}  */
 /*{{{  MB_ButtonType MB_makeButtonTypeModulePopup() */
 
 MB_ButtonType MB_makeButtonTypeModulePopup()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun7);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun8);
 }
 
 /*}}}  */
@@ -277,7 +285,7 @@ MB_ButtonType MB_makeButtonTypeModulePopup()
 
 MB_ButtonType MB_makeButtonTypeNewModulePopup()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun8);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun9);
 }
 
 /*}}}  */
@@ -285,7 +293,7 @@ MB_ButtonType MB_makeButtonTypeNewModulePopup()
 
 MB_ButtonType MB_makeButtonTypeStudioMenubar()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun9);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun10);
 }
 
 /*}}}  */
@@ -293,7 +301,7 @@ MB_ButtonType MB_makeButtonTypeStudioMenubar()
 
 MB_ButtonType MB_makeButtonTypeStudioToolbar()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun10);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun11);
 }
 
 /*}}}  */
@@ -301,7 +309,15 @@ MB_ButtonType MB_makeButtonTypeStudioToolbar()
 
 MB_ButtonType MB_makeButtonTypeWildcard()
 {
-  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun11);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun12);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_makeButtonArgsClick() */
+
+MB_ButtonArgs MB_makeButtonArgsClick()
+{
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl0(MB_afun13);
 }
 
 /*}}}  */
@@ -309,15 +325,15 @@ MB_ButtonType MB_makeButtonTypeWildcard()
 
 MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list)
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl1(MB_afun12, (ATerm)list);
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl1(MB_afun14, (ATerm)list);
 }
 
 /*}}}  */
-/*{{{  MB_ButtonArgs MB_makeButtonArgsIcon(char* title, char* path) */
+/*{{{  MB_ButtonArgs MB_makeButtonArgsIcon(char * title, char * path) */
 
-MB_ButtonArgs MB_makeButtonArgsIcon(char* title, char* path)
+MB_ButtonArgs MB_makeButtonArgsIcon(char * title, char * path)
 {
-  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun13, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)));
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun15, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -329,9 +345,9 @@ MB_MenuTitles MB_makeMenuTitlesEmpty()
 }
 
 /*}}}  */
-/*{{{  MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail) */
+/*{{{  MB_MenuTitles MB_makeMenuTitlesMany(char * head, MB_MenuTitles tail) */
 
-MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail)
+MB_MenuTitles MB_makeMenuTitlesMany(char * head, MB_MenuTitles tail)
 {
   return (MB_MenuTitles)(ATerm)ATinsert((ATermList)tail, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)));
 }
@@ -341,7 +357,7 @@ MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail)
 
 MB_ModuleName MB_makeModuleNameWildcard()
 {
-  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun11);
+  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun12);
 }
 
 /*}}}  */
@@ -605,18 +621,18 @@ ATbool MB_hasButtonModule(MB_Button arg)
 }
 
 /*}}}  */
-/*{{{  char* MB_getButtonModule(MB_Button arg) */
+/*{{{  char * MB_getButtonModule(MB_Button arg) */
 
-char* MB_getButtonModule(MB_Button arg)
+char * MB_getButtonModule(MB_Button arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char* module) */
+/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char * module) */
 
-MB_Button MB_setButtonModule(MB_Button arg, char* module)
+MB_Button MB_setButtonModule(MB_Button arg, char * module)
 {
   if (MB_isButtonDefault(arg)) {
     return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), 0);
@@ -920,6 +936,9 @@ ATbool MB_isValidButtonType(MB_ButtonType arg)
   else if (MB_isButtonTypeMessageList(arg)) {
     return ATtrue;
   }
+  else if (MB_isButtonTypeTreePanel(arg)) {
+    return ATtrue;
+  }
   else if (MB_isButtonTypeModulePopup(arg)) {
     return ATtrue;
   }
@@ -1019,6 +1038,28 @@ inline ATbool MB_isButtonTypeMessageList(MB_ButtonType arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeMessageList);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeTreePanel(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeTreePanel(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeTreePanel);
       last_gc = ATgetGCCount();
     }
 
@@ -1145,13 +1186,38 @@ inline ATbool MB_isButtonTypeWildcard(MB_ButtonType arg)
 
 ATbool MB_isValidButtonArgs(MB_ButtonArgs arg)
 {
-  if (MB_isButtonArgsMenu(arg)) {
+  if (MB_isButtonArgsClick(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonArgsMenu(arg)) {
     return ATtrue;
   }
   else if (MB_isButtonArgsIcon(arg)) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonArgsClick(MB_ButtonArgs arg) */
+
+inline ATbool MB_isButtonArgsClick(MB_ButtonArgs arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonArgsClick);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1243,18 +1309,18 @@ ATbool MB_hasButtonArgsTitle(MB_ButtonArgs arg)
 }
 
 /*}}}  */
-/*{{{  char* MB_getButtonArgsTitle(MB_ButtonArgs arg) */
+/*{{{  char * MB_getButtonArgsTitle(MB_ButtonArgs arg) */
 
-char* MB_getButtonArgsTitle(MB_ButtonArgs arg)
+char * MB_getButtonArgsTitle(MB_ButtonArgs arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char* title) */
+/*{{{  MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char * title) */
 
-MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char* title)
+MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char * title)
 {
   if (MB_isButtonArgsIcon(arg)) {
     return (MB_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), 0);
@@ -1276,18 +1342,18 @@ ATbool MB_hasButtonArgsPath(MB_ButtonArgs arg)
 }
 
 /*}}}  */
-/*{{{  char* MB_getButtonArgsPath(MB_ButtonArgs arg) */
+/*{{{  char * MB_getButtonArgsPath(MB_ButtonArgs arg) */
 
-char* MB_getButtonArgsPath(MB_ButtonArgs arg)
+char * MB_getButtonArgsPath(MB_ButtonArgs arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char* path) */
+/*{{{  MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char * path) */
 
-MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char* path)
+MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char * path)
 {
   if (MB_isButtonArgsIcon(arg)) {
     return (MB_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)), 1);
@@ -1357,18 +1423,18 @@ ATbool MB_hasMenuTitlesHead(MB_MenuTitles arg)
 }
 
 /*}}}  */
-/*{{{  char* MB_getMenuTitlesHead(MB_MenuTitles arg) */
+/*{{{  char * MB_getMenuTitlesHead(MB_MenuTitles arg) */
 
-char* MB_getMenuTitlesHead(MB_MenuTitles arg)
+char * MB_getMenuTitlesHead(MB_MenuTitles arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
 }
 
 /*}}}  */
-/*{{{  MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char* head) */
+/*{{{  MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char * head) */
 
-MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char* head)
+MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char * head)
 {
   if (MB_isMenuTitlesMany(arg)) {
     return (MB_MenuTitles)ATreplace((ATermList)arg, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)), 0);
@@ -1473,9 +1539,9 @@ MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_B
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm)) */
+/*{{{  MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm)) */
 
-MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm))
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm))
 {
   if (MB_isButtonDefault(arg)) {
     return MB_makeButtonDefault(
@@ -1535,6 +1601,9 @@ MB_ButtonType MB_visitButtonType(MB_ButtonType arg)
   if (MB_isButtonTypeMessageList(arg)) {
     return MB_makeButtonTypeMessageList();
   }
+  if (MB_isButtonTypeTreePanel(arg)) {
+    return MB_makeButtonTypeTreePanel();
+  }
   if (MB_isButtonTypeModulePopup(arg)) {
     return MB_makeButtonTypeModulePopup();
   }
@@ -1555,10 +1624,13 @@ MB_ButtonType MB_visitButtonType(MB_ButtonType arg)
 }
 
 /*}}}  */
-/*{{{  MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char* (*acceptTitle)(char*), char* (*acceptPath)(char*)) */
+/*{{{  MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char * (*acceptTitle)(char *), char * (*acceptPath)(char *)) */
 
-MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char* (*acceptTitle)(char*), char* (*acceptPath)(char*))
+MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char * (*acceptTitle)(char *), char * (*acceptPath)(char *))
 {
+  if (MB_isButtonArgsClick(arg)) {
+    return MB_makeButtonArgsClick();
+  }
   if (MB_isButtonArgsMenu(arg)) {
     return MB_makeButtonArgsMenu(
         acceptList ? acceptList(MB_getButtonArgsList(arg)) : MB_getButtonArgsList(arg));
@@ -1573,9 +1645,9 @@ MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(
 }
 
 /*}}}  */
-/*{{{  MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char* (*acceptHead)(char*)) */
+/*{{{  MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char * (*acceptHead)(char *)) */
 
-MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char* (*acceptHead)(char*))
+MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char * (*acceptHead)(char *))
 {
   if (MB_isMenuTitlesEmpty(arg)) {
     return MB_makeMenuTitlesEmpty();

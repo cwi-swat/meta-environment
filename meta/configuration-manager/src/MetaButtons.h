@@ -51,7 +51,7 @@ ATerm MB_ModuleNameToTerm(MB_ModuleName arg);
 MB_Buttons MB_makeButtonsList(MB_ButtonList list);
 MB_ButtonList MB_makeButtonListEmpty();
 MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail);
-MB_Button MB_makeButtonDefault(char* module, MB_ButtonDescriptionList descriptions, ATerm actions);
+MB_Button MB_makeButtonDefault(char * module, MB_ButtonDescriptionList descriptions, ATerm actions);
 MB_ButtonDescriptionList MB_makeButtonDescriptionListEmpty();
 MB_ButtonDescriptionList MB_makeButtonDescriptionListMany(MB_ButtonDescription head, MB_ButtonDescriptionList tail);
 MB_ButtonDescription MB_makeButtonDescriptionDefault(MB_ButtonType type, MB_ButtonArgs args);
@@ -59,15 +59,17 @@ MB_ButtonType MB_makeButtonTypeTerm();
 MB_ButtonType MB_makeButtonTypeEquations();
 MB_ButtonType MB_makeButtonTypeSyntax();
 MB_ButtonType MB_makeButtonTypeMessageList();
+MB_ButtonType MB_makeButtonTypeTreePanel();
 MB_ButtonType MB_makeButtonTypeModulePopup();
 MB_ButtonType MB_makeButtonTypeNewModulePopup();
 MB_ButtonType MB_makeButtonTypeStudioMenubar();
 MB_ButtonType MB_makeButtonTypeStudioToolbar();
 MB_ButtonType MB_makeButtonTypeWildcard();
+MB_ButtonArgs MB_makeButtonArgsClick();
 MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list);
-MB_ButtonArgs MB_makeButtonArgsIcon(char* title, char* path);
+MB_ButtonArgs MB_makeButtonArgsIcon(char * title, char * path);
 MB_MenuTitles MB_makeMenuTitlesEmpty();
-MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail);
+MB_MenuTitles MB_makeMenuTitlesMany(char * head, MB_MenuTitles tail);
 MB_ModuleName MB_makeModuleNameWildcard();
 
 /*}}}  */
@@ -111,8 +113,8 @@ MB_ButtonList MB_setButtonListTail(MB_ButtonList arg, MB_ButtonList tail);
 ATbool MB_isValidButton(MB_Button arg);
 inline ATbool MB_isButtonDefault(MB_Button arg);
 ATbool MB_hasButtonModule(MB_Button arg);
-char* MB_getButtonModule(MB_Button arg);
-MB_Button MB_setButtonModule(MB_Button arg, char* module);
+char * MB_getButtonModule(MB_Button arg);
+MB_Button MB_setButtonModule(MB_Button arg, char * module);
 ATbool MB_hasButtonDescriptions(MB_Button arg);
 MB_ButtonDescriptionList MB_getButtonDescriptions(MB_Button arg);
 MB_Button MB_setButtonDescriptions(MB_Button arg, MB_ButtonDescriptionList descriptions);
@@ -153,6 +155,7 @@ inline ATbool MB_isButtonTypeTerm(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeEquations(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeSyntax(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeMessageList(MB_ButtonType arg);
+inline ATbool MB_isButtonTypeTreePanel(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeModulePopup(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeNewModulePopup(MB_ButtonType arg);
 inline ATbool MB_isButtonTypeStudioMenubar(MB_ButtonType arg);
@@ -163,17 +166,18 @@ inline ATbool MB_isButtonTypeWildcard(MB_ButtonType arg);
 /*{{{  MB_ButtonArgs accessors */
 
 ATbool MB_isValidButtonArgs(MB_ButtonArgs arg);
+inline ATbool MB_isButtonArgsClick(MB_ButtonArgs arg);
 inline ATbool MB_isButtonArgsMenu(MB_ButtonArgs arg);
 inline ATbool MB_isButtonArgsIcon(MB_ButtonArgs arg);
 ATbool MB_hasButtonArgsList(MB_ButtonArgs arg);
 MB_MenuTitles MB_getButtonArgsList(MB_ButtonArgs arg);
 MB_ButtonArgs MB_setButtonArgsList(MB_ButtonArgs arg, MB_MenuTitles list);
 ATbool MB_hasButtonArgsTitle(MB_ButtonArgs arg);
-char* MB_getButtonArgsTitle(MB_ButtonArgs arg);
-MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char* title);
+char * MB_getButtonArgsTitle(MB_ButtonArgs arg);
+MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char * title);
 ATbool MB_hasButtonArgsPath(MB_ButtonArgs arg);
-char* MB_getButtonArgsPath(MB_ButtonArgs arg);
-MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char* path);
+char * MB_getButtonArgsPath(MB_ButtonArgs arg);
+MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char * path);
 
 /*}}}  */
 /*{{{  MB_MenuTitles accessors */
@@ -182,8 +186,8 @@ ATbool MB_isValidMenuTitles(MB_MenuTitles arg);
 inline ATbool MB_isMenuTitlesEmpty(MB_MenuTitles arg);
 inline ATbool MB_isMenuTitlesMany(MB_MenuTitles arg);
 ATbool MB_hasMenuTitlesHead(MB_MenuTitles arg);
-char* MB_getMenuTitlesHead(MB_MenuTitles arg);
-MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char* head);
+char * MB_getMenuTitlesHead(MB_MenuTitles arg);
+MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char * head);
 ATbool MB_hasMenuTitlesTail(MB_MenuTitles arg);
 MB_MenuTitles MB_getMenuTitlesTail(MB_MenuTitles arg);
 MB_MenuTitles MB_setMenuTitlesTail(MB_MenuTitles arg, MB_MenuTitles tail);
@@ -199,12 +203,12 @@ inline ATbool MB_isModuleNameWildcard(MB_ModuleName arg);
 
 MB_Buttons MB_visitButtons(MB_Buttons arg, MB_ButtonList (*acceptList)(MB_ButtonList));
 MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_Button));
-MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm));
+MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm));
 MB_ButtonDescriptionList MB_visitButtonDescriptionList(MB_ButtonDescriptionList arg, MB_ButtonDescription (*acceptHead)(MB_ButtonDescription));
 MB_ButtonDescription MB_visitButtonDescription(MB_ButtonDescription arg, MB_ButtonType (*acceptType)(MB_ButtonType), MB_ButtonArgs (*acceptArgs)(MB_ButtonArgs));
 MB_ButtonType MB_visitButtonType(MB_ButtonType arg);
-MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char* (*acceptTitle)(char*), char* (*acceptPath)(char*));
-MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char* (*acceptHead)(char*));
+MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char * (*acceptTitle)(char *), char * (*acceptPath)(char *));
+MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char * (*acceptHead)(char *));
 MB_ModuleName MB_visitModuleName(MB_ModuleName arg);
 
 /*}}}  */

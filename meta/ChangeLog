@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/10 (markvdb@cwi.nl)
+ * Removed the explicit Show Source information.
+
 Thu Jul 10 15:45:49 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
  * started 0.3beta
  * images/*gif restored and renamed

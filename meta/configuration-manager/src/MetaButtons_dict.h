@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jul  7 16:56:05 2003
+ * Generated at Thu Jul 10 17:59:30 2003
  */
 
 #ifndef __MetaButtons_dict_H
@@ -7,31 +7,35 @@
 
 #include <aterm2.h>
 
-extern AFun MB_afun8;
 extern AFun MB_afun0;
-extern AFun MB_afun11;
-extern AFun MB_afun5;
+extern AFun MB_afun1;
+extern AFun MB_afun2;
 extern AFun MB_afun3;
+extern AFun MB_afun4;
+extern AFun MB_afun5;
+extern AFun MB_afun6;
+extern AFun MB_afun7;
+extern AFun MB_afun8;
 extern AFun MB_afun9;
 extern AFun MB_afun10;
-extern AFun MB_afun4;
-extern AFun MB_afun13;
-extern AFun MB_afun2;
-extern AFun MB_afun7;
+extern AFun MB_afun11;
 extern AFun MB_afun12;
-extern AFun MB_afun6;
-extern AFun MB_afun1;
+extern AFun MB_afun13;
+extern AFun MB_afun14;
+extern AFun MB_afun15;
 
 extern ATerm MB_patternModuleNameWildcard;
 extern ATerm MB_patternMenuTitlesMany;
 extern ATerm MB_patternMenuTitlesEmpty;
 extern ATerm MB_patternButtonArgsIcon;
 extern ATerm MB_patternButtonArgsMenu;
+extern ATerm MB_patternButtonArgsClick;
 extern ATerm MB_patternButtonTypeWildcard;
 extern ATerm MB_patternButtonTypeStudioToolbar;
 extern ATerm MB_patternButtonTypeStudioMenubar;
 extern ATerm MB_patternButtonTypeNewModulePopup;
 extern ATerm MB_patternButtonTypeModulePopup;
+extern ATerm MB_patternButtonTypeTreePanel;
 extern ATerm MB_patternButtonTypeMessageList;
 extern ATerm MB_patternButtonTypeSyntax;
 extern ATerm MB_patternButtonTypeEquations;

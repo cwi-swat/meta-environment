@@ -19,12 +19,14 @@
  [ButtonType, equations, equations-editor],
  [ButtonType, syntax, syntax-editor],
  [ButtonType, message-list, message-list],
+ [ButtonType, tree-panel, tree-panel],
  [ButtonType, module-popup, module-popup],
  [ButtonType, new-module-popup, new-module-popup],
  [ButtonType, studio-menubar, studio-menubar],
  [ButtonType, studio-toolbar, studio-toolbar],
  [ButtonType, wildcard, "*"],
 
+ [ButtonArgs, click, click],
  [ButtonArgs, menu, menu(<list(MenuTitles)>)],
  [ButtonArgs, icon, icon(<title(str)>, <path(str)>)],
 
