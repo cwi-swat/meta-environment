@@ -1742,7 +1742,7 @@ trap 'rm -fr `echo "Makefile Makefile.skel meta \
 	toolbus/open-modules.tb toolbus/revert-module.tb \
 	toolbus/help.tb \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/idef2tif utils/normalize-sdf utils/parse-sdf2 \
+        utils/idef2tif utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
   " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -1862,7 +1862,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
 	toolbus/open-modules.tb toolbus/revert-module.tb \
 	toolbus/help.tb \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/idef2tif utils/normalize-sdf utils/parse-sdf2 \
+        utils/idef2tif utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
   "}
 EOF
